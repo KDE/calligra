@@ -24,11 +24,10 @@
 
 #include <QLineEdit>
 #include <QLocale>
-#include <QValidator>
+#include <QDoubleValidator>
 #include <QKeyEvent>
 
 #include <kdebug.h>
-#include <knumvalidator.h>
 #include <kglobal.h>
 
 #include <math.h>
@@ -208,7 +207,7 @@ QString DurationSpinBox::textFromValue ( double value ) const
 QValidator::State DurationSpinBox::validate ( QString & input, int & pos ) const
 {
     //kDebug(planDbg())<<input;
-    KDoubleValidator validator( minimum(), maximum(), decimals(), 0 );
+    QDoubleValidator validator( minimum(), maximum(), decimals(), 0 );
     if ( input.isEmpty() ) {
         return validator.validate ( input, pos );
     }
