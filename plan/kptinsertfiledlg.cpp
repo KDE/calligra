@@ -23,7 +23,6 @@
 
 #include <klocale.h>
 #include <kio/netaccess.h>
-#include <kdebug.h>
 
 namespace KPlato
 {

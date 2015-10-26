@@ -106,7 +106,7 @@ void ResourceAllocationEditor::updateReadWrite( bool readwrite )
 
 void ResourceAllocationEditor::setGuiActive( bool activate )
 {
-    kDebug(planDbg())<<activate;
+    debugPlan<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
     if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
@@ -116,7 +116,7 @@ void ResourceAllocationEditor::setGuiActive( bool activate )
 
 void ResourceAllocationEditor::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
-    //kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
+    //debugPlan<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
     if ( index.isValid() ) {
         QObject *obj = m_view->model()->object( index );
@@ -149,13 +149,13 @@ ResourceGroup *ResourceAllocationEditor::currentResourceGroup() const
 
 void ResourceAllocationEditor::slotCurrentChanged(  const QModelIndex & )
 {
-    //kDebug(planDbg())<<curr.row()<<","<<curr.column();
+    //debugPlan<<curr.row()<<","<<curr.column();
 //    slotEnableActions();
 }
 
 void ResourceAllocationEditor::slotSelectionChanged( const QModelIndexList& )
 {
-    //kDebug(planDbg())<<list.count();
+    //debugPlan<<list.count();
     updateActionsEnabled();
 }
 
@@ -179,14 +179,14 @@ void ResourceAllocationEditor::setupGui()
 
 void ResourceAllocationEditor::slotSplitView()
 {
-    kDebug(planDbg());
+    debugPlan;
     m_view->setViewSplitMode( ! m_view->isViewSplit() );
     emit optionsModified();
 }
 
 void ResourceAllocationEditor::slotOptions()
 {
-    kDebug(planDbg());
+    debugPlan;
     SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, m_view, this );
     dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
@@ -198,14 +198,14 @@ void ResourceAllocationEditor::slotOptions()
 
 bool ResourceAllocationEditor::loadContext( const KoXmlElement &context )
 {
-    kDebug(planDbg())<<objectName();
+    debugPlan<<objectName();
     ViewBase::loadContext( context );
     return m_view->loadContext( model()->columnMap(), context );
 }
 
 void ResourceAllocationEditor::saveContext( QDomElement &context ) const
 {
-    kDebug(planDbg())<<objectName();
+    debugPlan<<objectName();
     ViewBase::saveContext( context );
     m_view->saveContext( model()->columnMap(), context );
 }

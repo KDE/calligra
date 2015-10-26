@@ -20,9 +20,9 @@
 #include <QList>
 #include <QString>
 #include <QStringList>
+#include <QDebug>
 
 #include <klocale.h>
-#include <kdebug.h>
 
 #include "TjMessageHandler.h"
 #include "Scenario.h"
@@ -537,7 +537,7 @@ Project::pass2(bool noDepCheck)
      * scenarios. */
     if (scenarioList.count() > 1)
     {
-        kWarning()<<"TODO";
+        qWarning()<<"TODO";
 /*        for (ScenarioListIterator sli(scenarioList[0]->getSubListIterator());
              *sli; ++sli)
             overlayScenario(0, (*sli)->getSequenceNo() - 1);*/

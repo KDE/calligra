@@ -19,12 +19,20 @@
 
 #include "kptdebug.h"
 
-int planDbg() {
-    static int s_area = KDebug::registerArea( "plan" );
-    return s_area;
+const QLoggingCategory &PLANDEPEDITOR_LOG()
+{
+    static const QLoggingCategory category("calligra.plan.dependencyeditor");
+    return category;
 }
 
-int planDependencyEditorDbg() {
-    static int s_area = KDebug::registerArea( "plan (Dependency Editor)" );
-    return s_area;
+const QLoggingCategory &PLANXML_LOG()
+{
+    static const QLoggingCategory category("calligra.plan.xml");
+    return category;
+}
+
+const QLoggingCategory &PLAN_LOG()
+{
+    static const QLoggingCategory category("calligra.plan");
+    return category;
 }

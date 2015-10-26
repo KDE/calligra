@@ -41,7 +41,6 @@
 
 #include <kfiledialog.h>
 #include <klocale.h>
-#include <kdebug.h>
 #include <kstandarddirs.h>
 #include <klibloader.h>
 #include <kmessagebox.h>
@@ -60,7 +59,7 @@
 KPlatoWork_MainWindow::KPlatoWork_MainWindow()
     : KParts::MainWindow()
 {
-    kDebug(planworkDbg())<<this;
+    debugPlanWork<<this;
 
     m_part = new KPlatoWork::Part( this, this );
 
@@ -88,7 +87,7 @@ KPlatoWork_MainWindow::KPlatoWork_MainWindow()
 
 KPlatoWork_MainWindow::~KPlatoWork_MainWindow()
 {
-    kDebug(planworkDbg());
+    debugPlanWork;
 }
 
 void KPlatoWork_MainWindow::setCaption( const QString & )
@@ -121,7 +120,7 @@ QString KPlatoWork_MainWindow::configFile() const
 //called from slotFileSave(), slotFileSaveAs(), queryClose(), slotEmailFile()
 bool KPlatoWork_MainWindow::saveDocument( bool saveas, bool silent )
 {
-    kDebug(planworkDbg())<<saveas<<silent;
+    debugPlanWork<<saveas<<silent;
     KPlatoWork::Part *doc = rootDocument();
     if ( doc == 0 ) {
         return true;

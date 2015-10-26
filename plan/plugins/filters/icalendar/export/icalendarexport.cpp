@@ -37,7 +37,6 @@
 #include <QTextStream>
 #include <QFile>
 
-#include <kdebug.h>
 #include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
@@ -57,7 +56,7 @@ ICalendarExport::ICalendarExport(QObject* parent, const QVariantList &)
 
 KoFilter::ConversionStatus ICalendarExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    kDebug(planDbg()) << from << to;
+    debugPlan << from << to;
     if ( ( from != "application/x-vnd.kde.plan" ) || ( to != "text/calendar" ) ) {
         return KoFilter::NotImplemented;
     }
@@ -67,28 +66,28 @@ KoFilter::ConversionStatus ICalendarExport::convert(const QByteArray& from, cons
     }
     if ( batch ) {
         //TODO
-        kDebug(planDbg()) << "batch";
+        debugPlan << "batch";
         return KoFilter::UsageError;
     }
-    kDebug(planDbg())<<"online:"<<m_chain->inputDocument();
+    debugPlan<<"online:"<<m_chain->inputDocument();
     MainDocument *doc = dynamic_cast<MainDocument*>( m_chain->inputDocument() );
     if (doc == 0) {
-        kError() << "Cannot open Plan document";
+        errorPlan << "Cannot open Plan document";
         return KoFilter::InternalError;
     }
     if (m_chain->outputFile().isEmpty()) {
-        kError() << "Output filename is empty";
+        errorPlan << "Output filename is empty";
         return KoFilter::InternalError;
     }
     QFile file(m_chain->outputFile());
     if (! file.open(QIODevice::WriteOnly)) {
-        kError() << "Failed to open output file:" << file.fileName();
+        errorPlan << "Failed to open output file:" << file.fileName();
         return KoFilter::StorageCreationError;
     }
 
     KoFilter::ConversionStatus status = convert(doc->getProject(), file);
     file.close();
-    //kDebug(planDbg()) << "Finished with status:"<<status;
+    //debugPlan << "Finished with status:"<<status;
     return status;
 }
 
@@ -103,16 +102,16 @@ KoFilter::ConversionStatus ICalendarExport::convert(const Project &project, QFil
     foreach(const ScheduleManager *m, lst) {
         if (! baselined) {
             id = lst.last()->scheduleId();
-            //kDebug(planDbg())<<"last:"<<id;
+            //debugPlan<<"last:"<<id;
             break;
         }
         if (m->isBaselined()) {
             id = m->scheduleId();
-            //kDebug(planDbg())<<"baselined:"<<id;
+            //debugPlan<<"baselined:"<<id;
             break;
         }
     }
-    //kDebug(planDbg())<<id;
+    //debugPlan<<id;
     createTodos(cal, &project, id);
 
     KCalCore::ICalFormat format;

@@ -55,7 +55,7 @@ Account::Account(const QString& name, const QString& description)
 }
 
 Account::~Account() {
-    //kDebug(planDbg())<<m_name;
+    //debugPlan<<m_name;
     if (findAccount() == this) {
         removeId(); // only remove myself (I may be just a working copy)
     }
@@ -127,7 +127,7 @@ void Account::take(Account *account) {
     } else {
         m_list->take(account);
     }
-    //kDebug(planDbg())<<account->name();
+    //debugPlan<<account->name();
 }
 
 bool Account::isChildOf( const Account *account) const
@@ -173,7 +173,7 @@ bool Account::load(KoXmlElement &element, Project &project) {
                 m_accountList.append(child);
             } else {
                 // TODO: Complain about this
-                kWarning()<<"Loading failed";
+                warnPlan<<"Loading failed";
                 delete child;
             }
         }
@@ -342,7 +342,7 @@ bool Account::insertId(Account *account) {
 }
 
 void Account::deleteCostPlace(CostPlace *cp) {
-    //kDebug(planDbg());
+    //debugPlan;
     int i = m_costPlaces.indexOf(cp);
     if (i != -1)
         m_costPlaces.removeAt(i);
@@ -395,7 +395,7 @@ EffortCostMap Account::plannedCost( const Account::CostPlace &cp, const QDate &s
     EffortCostMap ec;
     if ( cp.node() ) {
         Node &node = *(cp.node());
-        //kDebug(planDbg())<<"n="<<n->name();
+        //debugPlan<<"n="<<n->name();
         if (cp.running()) {
             ec += node.plannedEffortCostPrDay(start, end, id);
         }
@@ -442,7 +442,7 @@ EffortCostMap Account::actualCost(const QDate &start, const QDate &end, long id)
                 continue;
             }
             if (n->runningAccount() == 0) {
-                //kDebug(planDbg())<<"default, running:"<<n->name();
+                //debugPlan<<"default, running:"<<n->name();
                 ec += n->actualEffortCostPrDay(start, end, id);
             }
             Task *t = dynamic_cast<Task*>( n ); // only tasks have completion
@@ -455,7 +455,7 @@ EffortCostMap Account::actualCost(const QDate &start, const QDate &end, long id)
                     }
                 }
                 if (n->shutdownAccount() == 0 && t->completion().isFinished()) {
-                    //kDebug(planDbg())<<"default, shutdown:"<<n->name();
+                    //debugPlan<<"default, shutdown:"<<n->name();
                     const QDate finishDate = t->completion().finishTime().date();
                     if ( ( ! start.isValid() || finishDate >= start ) &&
                         ( ! end.isValid() || finishDate <= end ) ) {
@@ -614,13 +614,13 @@ void Account::CostPlace::setShutdown(bool on ) {
 
 //TODO
 bool Account::CostPlace::load(KoXmlElement &element, Project &project) {
-    //kDebug(planDbg());
+    //debugPlan;
     m_objectId = element.attribute("object-id");
     if (m_objectId.isEmpty()) {
         // check old format
         m_objectId = element.attribute("node-id");
         if (m_objectId.isEmpty()) {
-            kError()<<"No object id";
+            errorPlan<<"No object id";
             return false;
         }
     }
@@ -628,7 +628,7 @@ bool Account::CostPlace::load(KoXmlElement &element, Project &project) {
     if (m_node == 0) {
         m_resource = project.findResource(m_objectId);
         if ( m_resource == 0 ) {
-            kError()<<"Cannot find object with id: "<<m_objectId;
+            errorPlan<<"Cannot find object with id: "<<m_objectId;
             return false;
         }
     }
@@ -642,7 +642,7 @@ bool Account::CostPlace::load(KoXmlElement &element, Project &project) {
 }
 
 void Account::CostPlace::save(QDomElement &element) const {
-    //kDebug(planDbg());
+    //debugPlan;
     QDomElement me = element.ownerDocument().createElement("costplace");
     element.appendChild(me);
     me.setAttribute("object-id", m_objectId);
@@ -672,7 +672,7 @@ Accounts::Accounts(Project &project)
 }
 
 Accounts::~Accounts() {
-    //kDebug(planDbg());
+    //debugPlan;
     while (!m_accountList.isEmpty()) {
         delete m_accountList.takeFirst();
     }
@@ -713,7 +713,7 @@ void Accounts::insert(Account *account, Account *parent, int index) {
         emit accountToBeAdded( parent, i );
         parent->insert( account, i );
     }
-    //kDebug(planDbg())<<account->name();
+    //debugPlan<<account->name();
     emit accountAdded( account );
 }
 
@@ -726,7 +726,7 @@ void Accounts::take(Account *account){
         emit accountToBeRemoved( account );
         account->parent()->take(account);
         emit accountRemoved( account );
-        //kDebug(planDbg())<<account->name();
+        //debugPlan<<account->name();
         return;
     }
     int i = m_accountList.indexOf(account);
@@ -735,7 +735,7 @@ void Accounts::take(Account *account){
         m_accountList.removeAt(i);
         emit accountRemoved( account );
     }
-    //kDebug(planDbg())<<account->name();
+    //debugPlan<<account->name();
 }
     
 bool Accounts::load(KoXmlElement &element, Project &project) {
@@ -751,7 +751,7 @@ bool Accounts::load(KoXmlElement &element, Project &project) {
                 insert(child);
             } else {
                 // TODO: Complain about this
-                kWarning()<<"Loading failed";
+                warnPlan<<"Loading failed";
                 delete child;
             }
         }
@@ -759,7 +759,7 @@ bool Accounts::load(KoXmlElement &element, Project &project) {
     if (element.hasAttribute("default-account")) {
         m_defaultAccount = findAccount(element.attribute("default-account"));
         if (m_defaultAccount == 0) {
-            kWarning()<<"Could not find default account.";
+            warnPlan<<"Could not find default account.";
         }
     }
     return true;
@@ -831,23 +831,23 @@ bool Accounts::insertId(Account *account) {
     Q_ASSERT(account);
     Account *a = findAccount(account->name());
     if (a == 0) {
-        //kDebug(planDbg())<<"'"<<account->name()<<"' inserted";
+        //debugPlan<<"'"<<account->name()<<"' inserted";
         m_idDict.insert(account->name(), account);
         return true;
     }
     if (a == account) {
-        kDebug(planDbg())<<"'"<<a->name()<<"' already exists";
+        debugPlan<<"'"<<a->name()<<"' already exists";
         return true;
     }
     //TODO: Create unique id?
-    kWarning()<<"Insert failed, creating unique id";
+    warnPlan<<"Insert failed, creating unique id";
     account->setName( uniqueId( account->name() ) ); // setName() calls insertId !!
     return false;
 }
 
 bool Accounts::removeId(const QString &id) {
     bool res = m_idDict.remove(id);
-    //kDebug(planDbg())<<id<<": removed="<<res;
+    //debugPlan<<id<<": removed="<<res;
     return res;
 }
 
@@ -889,13 +889,13 @@ QList<Node*> Accounts::allNodes() const
 
 #ifndef NDEBUG
 void Accounts::printDebug(const QString& indent) {
-    kDebug(planDbg())<<indent<<"Accounts:"<<m_accountList.count()<<" children";
+    debugPlan<<indent<<"Accounts:"<<m_accountList.count()<<" children";
     foreach( Account *a, m_accountList ) {
         a->printDebug( indent + "    !" );
     }
 }
 void Account::printDebug(const QString& indent) {
-    kDebug(planDbg())<<indent<<"--- Account:"<<m_name<<":"<<m_accountList.count()<<" children";
+    debugPlan<<indent<<"--- Account:"<<m_name<<":"<<m_accountList.count()<<" children";
     foreach( Account *a, m_accountList ) {
         a->printDebug( indent + "    !" );
     }

@@ -81,7 +81,7 @@ int ResourceModel::propertyCount() const
 
 QVariant ResourceModel::name( const Resource *res, int role ) const
 {
-    //kDebug(planDbg())<<res->name()<<","<<role;
+    //debugPlan<<res->name()<<","<<role;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
@@ -109,7 +109,7 @@ QVariant ResourceModel::name( const Resource *res, int role ) const
 
 QVariant ResourceModel::name( const  ResourceGroup *res, int role ) const
 {
-    //kDebug(planDbg())<<res->name()<<","<<role;
+    //debugPlan<<res->name()<<","<<role;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
@@ -404,7 +404,7 @@ QVariant ResourceModel::data( const Resource *resource, int property, int role )
         case ResourceOvertimeRate: result = overtimeRate( resource, role ); break;
         case ResourceAccount: result = account( resource, role ); break;
         default:
-            kDebug(planDbg())<<"data: invalid display value: property="<<property;
+            debugPlan<<"data: invalid display value: property="<<property;
             break;
     }
     return result;
@@ -427,7 +427,7 @@ QVariant ResourceModel::data( const ResourceGroup *group, int property, int role
                 if ( property < propertyCount() ) {
                     result = QString();
                 } else {
-                    kDebug(planDbg())<<"data: invalid display value column"<<property;
+                    debugPlan<<"data: invalid display value column"<<property;
                     return QVariant();
                 }
             }
@@ -509,7 +509,7 @@ ResourceItemModel::~ResourceItemModel()
 
 void ResourceItemModel::slotResourceToBeInserted( const ResourceGroup *group, int row )
 {
-    //kDebug(planDbg())<<group->name()<<","<<row;
+    //debugPlan<<group->name()<<","<<row;
     Q_ASSERT( m_group == 0 );
     m_group = const_cast<ResourceGroup*>(group);
     beginInsertRows( index( group ), row, row );
@@ -517,7 +517,7 @@ void ResourceItemModel::slotResourceToBeInserted( const ResourceGroup *group, in
 
 void ResourceItemModel::slotResourceInserted( const Resource *resource )
 {
-    //kDebug(planDbg())<<resource->name();
+    //debugPlan<<resource->name();
     Q_ASSERT( resource->parentGroup() == m_group );
 #ifdef NDEBUG
     Q_UNUSED(resource)
@@ -529,7 +529,7 @@ void ResourceItemModel::slotResourceInserted( const Resource *resource )
 
 void ResourceItemModel::slotResourceToBeRemoved( const Resource *resource )
 {
-    //kDebug(planDbg())<<resource->name();
+    //debugPlan<<resource->name();
     Q_ASSERT( m_resource == 0 );
 #ifdef NDEBUG
     Q_UNUSED(resource)
@@ -541,7 +541,7 @@ void ResourceItemModel::slotResourceToBeRemoved( const Resource *resource )
 
 void ResourceItemModel::slotResourceRemoved( const Resource *resource )
 {
-    //kDebug(planDbg())<<resource->name();
+    //debugPlan<<resource->name();
     Q_ASSERT( resource == m_resource );
 #ifdef NDEBUG
     Q_UNUSED(resource)
@@ -552,7 +552,7 @@ void ResourceItemModel::slotResourceRemoved( const Resource *resource )
 
 void ResourceItemModel::slotResourceGroupToBeInserted( const ResourceGroup *group, int row )
 {
-    //kDebug(planDbg())<<group->name();
+    //debugPlan<<group->name();
     Q_ASSERT( m_group == 0 );
     m_group = const_cast<ResourceGroup*>(group);
     beginInsertRows( QModelIndex(), row, row );
@@ -560,7 +560,7 @@ void ResourceItemModel::slotResourceGroupToBeInserted( const ResourceGroup *grou
 
 void ResourceItemModel::slotResourceGroupInserted( const ResourceGroup *group )
 {
-    //kDebug(planDbg())<<group->name();
+    //debugPlan<<group->name();
     Q_ASSERT( group == m_group );
 #ifdef NDEBUG
     Q_UNUSED(group)
@@ -571,7 +571,7 @@ void ResourceItemModel::slotResourceGroupInserted( const ResourceGroup *group )
 
 void ResourceItemModel::slotResourceGroupToBeRemoved( const ResourceGroup *group )
 {
-    //kDebug(planDbg())<<group->name();
+    //debugPlan<<group->name();
     Q_ASSERT( m_group == 0 );
     m_group = const_cast<ResourceGroup*>(group);
     int row = index( group ).row();
@@ -580,7 +580,7 @@ void ResourceItemModel::slotResourceGroupToBeRemoved( const ResourceGroup *group
 
 void ResourceItemModel::slotResourceGroupRemoved( const ResourceGroup *group )
 {
-    //kDebug(planDbg())<<group->name();
+    //debugPlan<<group->name();
     Q_ASSERT( group == m_group );
 #ifdef NDEBUG
     Q_UNUSED(group)
@@ -653,11 +653,11 @@ Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
 {
     Qt::ItemFlags flags = ItemModelBase::flags( index );
     if ( !m_readWrite ) {
-        //kDebug(planDbg())<<"read only"<<flags;
+        //debugPlan<<"read only"<<flags;
         return flags &= ~Qt::ItemIsEditable;
     }
     if ( !index.isValid() ) {
-        //kDebug(planDbg())<<"invalid"<<flags;
+        //debugPlan<<"invalid"<<flags;
         return flags;
     }
     Resource *r = qobject_cast<Resource*>( object ( index ) );
@@ -690,7 +690,7 @@ Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
             default:
                 flags |= Qt::ItemIsEditable;
         }
-        //kDebug(planDbg())<<"resource"<<flags;
+        //debugPlan<<"resource"<<flags;
     } else if ( qobject_cast<ResourceGroup*>( object( index ) ) ) {
         flags |= Qt::ItemIsDropEnabled;
         switch ( index.column() ) {
@@ -698,7 +698,7 @@ Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
             case ResourceModel::ResourceType: flags |= Qt::ItemIsEditable; break;
             default: flags &= ~Qt::ItemIsEditable;
         }
-        //kDebug(planDbg())<<"group"<<flags;
+        //debugPlan<<"group"<<flags;
     }
     return flags;
 }
@@ -709,7 +709,7 @@ QModelIndex ResourceItemModel::parent( const QModelIndex &index ) const
     if ( !index.isValid() || m_project == 0 ) {
         return QModelIndex();
     }
-    //kDebug(planDbg())<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
+    //debugPlan<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
 
     Resource *r = qobject_cast<Resource*>( object( index ) );
     if ( r && r->parentGroup() ) {
@@ -792,7 +792,7 @@ int ResourceItemModel::rowCount( const QModelIndex &parent ) const
 
 QVariant ResourceItemModel::name( const  ResourceGroup *res, int role ) const
 {
-    //kDebug(planDbg())<<res->name()<<","<<role;
+    //debugPlan<<res->name()<<","<<role;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
@@ -1201,7 +1201,7 @@ bool ResourceItemModel::dropAllowed( const QModelIndex &index, int dropIndicator
 {
     Q_UNUSED(data);
 
-    //kDebug(planDbg())<<index<<data;
+    //debugPlan<<index<<data;
     // TODO: if internal, don't allow dropping on my own parent
     switch ( dropIndicatorPosition ) {
         case ItemModelBase::OnItem:
@@ -1233,7 +1233,7 @@ void ResourceItemModel::slotDataArrived( KIO::Job *job, const QByteArray &data  
 void ResourceItemModel::slotJobFinished( KJob *job )
 {
     if ( job->error() || ! m_dropDataMap.contains( job ) ) {
-        kDebug(planDbg())<<(job->error() ? "Job error":"Error: no such job");
+        debugPlan<<(job->error() ? "Job error":"Error: no such job");
     } else if ( KMimeType::findByContent( m_dropDataMap[ job ].data )->is( "text/x-vcard" ) ) {
         ResourceGroup *g = 0;
         if ( m_dropDataMap[ job ].parent.isValid() ) {
@@ -1242,7 +1242,7 @@ void ResourceItemModel::slotJobFinished( KJob *job )
             g = qobject_cast<ResourceGroup*>( object( index( m_dropDataMap[ job ].row, m_dropDataMap[ job ].column, m_dropDataMap[ job ].parent ) ) );
         }
         if ( g == 0 ) {
-            kDebug(planDbg())<<"No group"<<m_dropDataMap[ job ].row<<m_dropDataMap[ job ].column<<m_dropDataMap[ job ].parent;
+            debugPlan<<"No group"<<m_dropDataMap[ job ].row<<m_dropDataMap[ job ].column<<m_dropDataMap[ job ].parent;
         } else {
             createResources( g, m_dropDataMap[ job ].data );
         }
@@ -1285,7 +1285,7 @@ bool ResourceItemModel::createResources( ResourceGroup *group, const QByteArray 
 
 bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
 {
-    kDebug(planDbg())<<row<<column<<parent;
+    debugPlan<<row<<column<<parent;
     if (action == Qt::IgnoreAction) {
         return true;
     }
@@ -1299,12 +1299,12 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         g = qobject_cast<ResourceGroup*>( object( index( row, column, parent ) ) );
     }
     if ( g == 0 ) {
-        kDebug(planDbg())<<"No group"<<row<<column<<parent;
+        debugPlan<<"No group"<<row<<column<<parent;
         return false;
     }
-    kDebug(planDbg())<<data->formats()<<g->name();
+    debugPlan<<data->formats()<<g->name();
     if ( data->hasFormat( "application/x-vnd.kde.plan.resourceitemmodel.internal" ) ) {
-        kDebug(planDbg())<<action<<Qt::MoveAction;
+        debugPlan<<action<<Qt::MoveAction;
         if ( action == Qt::MoveAction ) {
             MacroCommand *m = 0;
             QByteArray encodedData = data->data( "application/x-vnd.kde.plan.resourceitemmodel.internal" );
@@ -1362,7 +1362,7 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         bool result = false;
         foreach ( const QUrl &url, urls ) {
             if ( url.scheme() != "akonadi" || ! KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, 0 ) ) {
-                kDebug(planDbg())<<url<<"is not 'akonadi' or does not exist";
+                debugPlan<<url<<"is not 'akonadi' or does not exist";
                 continue;
             }
             KIO::TransferJob *job = KIO::get( url, KIO::NoReload, KIO::HideProgressInfo );
@@ -1396,7 +1396,7 @@ QList<Resource*> ResourceItemModel::resourceList( QDataStream &stream )
             lst << r;
         }
     }
-    kDebug(planDbg())<<lst;
+    debugPlan<<lst;
     return lst;
 }
 
@@ -1408,7 +1408,7 @@ QMimeData *ResourceItemModel::mimeData( const QModelIndexList & indexes ) const
     QList<int> rows;
     foreach (const QModelIndex &index, indexes) {
         if ( index.isValid() && !rows.contains( index.row() ) ) {
-            //kDebug(planDbg())<<index.row();
+            //debugPlan<<index.row();
             Resource *r = ::qobject_cast<Resource*>( object( index ) );
             if ( r ) {
                 rows << index.row();
@@ -1429,7 +1429,7 @@ QMimeData *ResourceItemModel::mimeData( const QModelIndexList & indexes ) const
 
 QModelIndex ResourceItemModel::insertGroup( ResourceGroup *g )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     emit executeCommand( new AddResourceGroupCmd( m_project, g, kundo2_i18n( "Add resource group" ) ) );
     int row = m_project->resourceGroups().indexOf( g );
     if ( row != -1 ) {
@@ -1440,7 +1440,7 @@ QModelIndex ResourceItemModel::insertGroup( ResourceGroup *g )
 
 QModelIndex ResourceItemModel::insertResource( ResourceGroup *g, Resource *r, Resource * /*after*/ )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     emit executeCommand( new AddResourceCmd( g, r, kundo2_i18n( "Add resource" ) ) );
     int row = g->indexOf( r );
     if ( row != -1 ) {
@@ -1535,7 +1535,7 @@ Project *AllocatedResourceItemModel::project() const
 
 void AllocatedResourceItemModel::setProject( Project *project )
 {
-    kDebug(planDbg())<<this->project()<<"="<<project;
+    debugPlan<<this->project()<<"="<<project;
     Project *p =this->project();
     if ( p ) {
         disconnect(p, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)));
@@ -1544,7 +1544,7 @@ void AllocatedResourceItemModel::setProject( Project *project )
     if ( project ) {
         connect(project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)));
     }
-    kDebug(planDbg())<<rowCount()<<":"<<sourceModel()->rowCount();
+    debugPlan<<rowCount()<<":"<<sourceModel()->rowCount();
 }
 
 void AllocatedResourceItemModel::reset()
@@ -1556,7 +1556,7 @@ void AllocatedResourceItemModel::reset()
 
 void AllocatedResourceItemModel::slotNodeChanged( Node *n )
 {
-    kDebug(planDbg())<<(n==m_task)<<n<<n->name();
+    debugPlan<<(n==m_task)<<n<<n->name();
     if ( n != m_task ) {
         return;
     }
@@ -1570,10 +1570,10 @@ Task *AllocatedResourceItemModel::task() const
 
 void AllocatedResourceItemModel::setTask( Task *task )
 {
-    kDebug(planDbg())<<m_task<<"="<<task<<(task?task->name():"");
+    debugPlan<<m_task<<"="<<task<<(task?task->name():"");
     m_task = task;
     reset();
-    kDebug(planDbg())<<rowCount()<<":"<<sourceModel()->rowCount();
+    debugPlan<<rowCount()<<":"<<sourceModel()->rowCount();
 }
 
 QObject* AllocatedResourceItemModel::object(const QModelIndex& idx) const
@@ -1721,7 +1721,7 @@ bool AllocatedResourceItemModel::filterAcceptsRow( int source_row, const QModelI
         ResourceGroupRequest *gr = req.find( g );
         result = (bool) gr && ( gr->units() > 0 || gr->count() > 0 );
     }
-    kDebug(planDbg())<<result<<":"<<source_parent<<idx;
+    debugPlan<<result<<":"<<source_parent<<idx;
     return result;
 }
 

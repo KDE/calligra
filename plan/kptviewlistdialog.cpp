@@ -164,14 +164,14 @@ void AddViewPanel::viewtypeChanged( int idx )
 
 void AddViewPanel::categoryChanged()
 {
-    kDebug(planDbg())<<widget.category->currentText();
+    debugPlan<<widget.category->currentText();
     fillAfter( m_categories.value( widget.category->currentText() ) );
     changed();
 }
 
 void AddViewPanel::fillAfter( ViewListItem *cat )
 {
-    kDebug(planDbg())<<cat;
+    debugPlan<<cat;
     widget.insertAfter->clear();
     if ( cat ) {
         widget.insertAfter->addItem( i18n( "Top" ) );
@@ -258,7 +258,7 @@ bool AddViewPanel::ok()
             v = m_view->createReportView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
         default:
-            kError()<<"Unknown view type!";
+            errorPlan<<"Unknown view type!";
             break;
     }
     emit viewCreated( v );
@@ -336,7 +336,7 @@ bool EditViewPanel::ok()
 
     ViewListItem *cat = m_viewlist.addCategory( c, n );
     if ( cat == 0 ) {
-        kWarning()<<"No category";
+        warnPlan<<"No category";
         return false;
     }
     if ( widget.viewname->text() != m_item->text( 0 ) ) {
@@ -360,14 +360,14 @@ void EditViewPanel::changed()
 
 void EditViewPanel::categoryChanged()
 {
-    kDebug(planDbg())<<widget.category->currentText();
+    debugPlan<<widget.category->currentText();
     fillAfter( m_categories.value( widget.category->currentText() ) );
     changed();
 }
 
 void EditViewPanel::fillAfter( ViewListItem *cat )
 {
-    kDebug(planDbg())<<cat;
+    debugPlan<<cat;
     widget.insertAfter->clear();
     if ( cat ) {
         widget.insertAfter->addItem( i18n( "Top" ) );
@@ -457,7 +457,7 @@ void EditCategoryPanel::changed()
 
 void EditCategoryPanel::fillAfter()
 {
-    kDebug(planDbg());
+    debugPlan;
     widget.insertAfter->clear();
     widget.insertAfter->addItem( i18n( "Top" ) );
     int idx = 0;
@@ -573,14 +573,14 @@ void AddReportsViewPanel::viewtypeChanged( int idx )
 
 void AddReportsViewPanel::categoryChanged()
 {
-    kDebug(planDbg())<<widget.category->currentText();
+    debugPlan<<widget.category->currentText();
     fillAfter( m_categories.value( widget.category->currentText() ) );
     changed();
 }
 
 void AddReportsViewPanel::fillAfter( ViewListItem *cat )
 {
-    kDebug(planDbg())<<cat;
+    debugPlan<<cat;
     widget.insertAfter->clear();
     if ( cat ) {
         widget.insertAfter->addItem( i18n( "Top" ) );
@@ -616,7 +616,7 @@ bool AddReportsViewPanel::ok()
             v = m_view->createReportView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
         default:
-            kError()<<"Unknown view type!";
+            errorPlan<<"Unknown view type!";
             break;
     }
     emit viewCreated( v );

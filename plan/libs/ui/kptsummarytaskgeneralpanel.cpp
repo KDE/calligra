@@ -31,8 +31,6 @@
 #include <akonadi/contact/emailaddressselection.h>
 #endif
 
-#include <kdebug.h>
-
 namespace KPlato
 {
 

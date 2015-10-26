@@ -62,7 +62,7 @@ QString ReportSourceEditor::selectFromTag() const
 void ReportSourceEditor::setSourceData( const QDomElement &element )
 {
     if ( element.tagName() != "data-source" ) {
-        kDebug(planDbg())<<"no source element";
+        debugPlan<<"no source element";
         ui_source->setCurrentIndex( 0 );
         return;
     }
@@ -75,7 +75,7 @@ void ReportSourceEditor::setSourceData( const QDomElement &element )
             return;
         }
     }
-    kDebug(planDbg())<<"no source";
+    debugPlan<<"no source";
     ui_source->setCurrentIndex( 0 );
 }
 

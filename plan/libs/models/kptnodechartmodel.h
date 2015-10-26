@@ -47,7 +47,7 @@ public:
     explicit ChartProxyModel(QObject *parent = 0) : QSortFilterProxyModel( parent ) {}
 
     QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const {
-        //if ( role == Qt::DisplayRole && orientation == Qt::Vertical ) kDebug()<<"fetch:"<<orientation<<section<<mapToSource( index(0, section) ).column()<<m_rejects;
+        //if ( role == Qt::DisplayRole && orientation == Qt::Vertical ) debugPlan<<"fetch:"<<orientation<<section<<mapToSource( index(0, section) ).column()<<m_rejects;
         return QSortFilterProxyModel::headerData( section, orientation, role );
     }
 
@@ -55,13 +55,13 @@ public:
         if ( role == Qt::DisplayRole && ! m_zerocolumns.isEmpty() ) {
             int column = mapToSource( index ).column();
             if ( m_zerocolumns.contains( column ) ) {
-                //kDebug()<<"zero:"<<index.column()<<mapToSource( index ).column();
+                //debugPlan<<"zero:"<<index.column()<<mapToSource( index ).column();
                 return QVariant();
             }
         }
-        //if ( role == Qt::DisplayRole ) kDebug()<<"fetch:"<<index.column()<<mapToSource( index ).column()<<m_rejects;
+        //if ( role == Qt::DisplayRole ) debugPlan<<"fetch:"<<index.column()<<mapToSource( index ).column()<<m_rejects;
         QVariant v = QSortFilterProxyModel::data( index, role );
-        //if ( role == Qt::DisplayRole ) kDebug(planDbg())<<index.row()<<","<<index.column()<<"("<<columnCount()<<")"<<v;
+        //if ( role == Qt::DisplayRole ) debugPlan<<index.row()<<","<<index.column()<<"("<<columnCount()<<")"<<v;
         return v;
     }
     void setRejectColumns( const QList<int> &columns ) { m_rejects = columns; invalidateFilter(); }
@@ -73,7 +73,7 @@ public:
 
 protected:
     bool filterAcceptsColumn ( int source_column, const QModelIndex &/*source_parent */) const {
-        //kDebug()<<this<<source_column<<m_rejects<<(! m_rejects.contains( source_column ));
+        //debugPlan<<this<<source_column<<m_rejects<<(! m_rejects.contains( source_column ));
         return ! m_rejects.contains( source_column );
     }
 

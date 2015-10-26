@@ -60,7 +60,6 @@
 #include <kstandardguiitem.h>
 #include <kguiitem.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
 #include <ktoolbar.h>
 #include <kfiledialog.h>
 #include <kpushbutton.h>
@@ -128,7 +127,7 @@ ReportPrintingDialog::~ReportPrintingDialog()
 
 void ReportPrintingDialog::startPrinting( RemovePolicy removePolicy )
 {
-    kDebug(planDbg());
+    debugPlan;
     QPainter p( &printer() );
     printPage( 1,  p );
     if ( removePolicy == DeleteWhenDone ) {
@@ -160,7 +159,7 @@ QAbstractPrintDialog::PrintDialogOptions ReportPrintingDialog::printDialogOption
 ReportView::ReportView(KoPart *part, KoDocument *doc, QWidget *parent )
     : ViewBase(part, doc, parent )
 {
-//    kDebug(planDbg())<<"--------------- ReportView ------------------";
+//    debugPlan<<"--------------- ReportView ------------------";
     setObjectName("ReportView");
 
     QLayout *l = new QHBoxLayout( this );
@@ -279,7 +278,7 @@ ReportWidget::ReportWidget(KoPart *part, KoDocument *doc, QWidget *parent )
     : ViewBase(part, doc, parent ),
     m_reportdatamodels( Report::createBaseReportDataModels() )
 {
-//    kDebug(planDbg())<<"--------------- ReportWidget ------------------";
+//    debugPlan<<"--------------- ReportWidget ------------------";
 
     m_preRenderer = 0;
     setObjectName("ReportWidget");
@@ -412,10 +411,10 @@ void ReportWidget::slotExportFinished( int result )
 
 void ReportWidget::exportToOdtTable( KoReportRendererContext &context )
 {
-    kDebug(planDbg())<<"Export to odt:"<<context.destinationUrl;
+    debugPlan<<"Export to odt:"<<context.destinationUrl;
     KoReportRendererBase *renderer = m_factory.createInstance("odttable");
     if ( renderer == 0 ) {
-        kError()<<"Cannot create odt (table) renderer";
+        errorPlan<<"Cannot create odt (table) renderer";
         return;
     }
     if (!renderer->render(context, m_reportDocument)) {
@@ -425,10 +424,10 @@ void ReportWidget::exportToOdtTable( KoReportRendererContext &context )
 
 void ReportWidget::exportToOdtFrames( KoReportRendererContext &context )
 {
-    kDebug(planDbg())<<"Export to odt:"<<context.destinationUrl;
+    debugPlan<<"Export to odt:"<<context.destinationUrl;
     KoReportRendererBase *renderer = m_factory.createInstance("odtframes");
     if ( renderer == 0 ) {
-        kError()<<"Cannot create odt (frames) renderer";
+        errorPlan<<"Cannot create odt (frames) renderer";
         return;
     }
     if (!renderer->render(context, m_reportDocument)) {
@@ -438,11 +437,11 @@ void ReportWidget::exportToOdtFrames( KoReportRendererContext &context )
 
 void ReportWidget::exportToOds( KoReportRendererContext &context )
 {
-    kDebug(planDbg())<<"Export to ods:"<<context.destinationUrl;
+    debugPlan<<"Export to ods:"<<context.destinationUrl;
     KoReportRendererBase *renderer;
     renderer = m_factory.createInstance("ods");
     if ( renderer == 0 ) {
-        kError()<<"Cannot create ods renderer";
+        errorPlan<<"Cannot create ods renderer";
         return;
     }
     if (!renderer->render(context, m_reportDocument)) {
@@ -452,11 +451,11 @@ void ReportWidget::exportToOds( KoReportRendererContext &context )
 
 void ReportWidget::exportToHtml( KoReportRendererContext &context )
 {
-    kDebug(planDbg())<<"Export to html:"<<context.destinationUrl;
+    debugPlan<<"Export to html:"<<context.destinationUrl;
     KoReportRendererBase *renderer;
     renderer = m_factory.createInstance("htmltable");
     if ( renderer == 0 ) {
-        kError()<<"Cannot create html renderer";
+        errorPlan<<"Cannot create html renderer";
         return;
     }
     if (!renderer->render(context, m_reportDocument)) {
@@ -466,11 +465,11 @@ void ReportWidget::exportToHtml( KoReportRendererContext &context )
 
 void ReportWidget::exportToXHtml( KoReportRendererContext &context )
 {
-    kDebug(planDbg())<<"Export to xhtml:"<<context.destinationUrl;
+    debugPlan<<"Export to xhtml:"<<context.destinationUrl;
     KoReportRendererBase *renderer;
     renderer = m_factory.createInstance("htmlcss");
     if ( renderer == 0 ) {
-        kError()<<"Cannot create xhtml css renderer";
+        errorPlan<<"Cannot create xhtml css renderer";
         return;
     }
     if (!renderer->render(context, m_reportDocument)) {
@@ -508,14 +507,14 @@ void ReportWidget::setGuiActive( bool active ) // virtual slot
 void ReportWidget::slotRefreshView()
 {
     if ( ! isVisible() ) {
-        kDebug(planDbg())<<"Not visible";
+        debugPlan<<"Not visible";
         return;
     }
     delete m_preRenderer;
     QDomElement e = m_design.documentElement();
     m_preRenderer = new KoReportPreRenderer( e.firstChildElement( "report:content" ) );
     if ( ! m_preRenderer->isValid()) {
-        kDebug(planDbg())<<"Invalid design document";
+        debugPlan<<"Invalid design document";
         return;
     }
     ReportData *rd = createReportData( e );
@@ -921,7 +920,7 @@ void ReportDesignPanel::populateToolbar( KToolBar *tb )
 
 void ReportDesignPanel::slotPropertySetChanged()
 {
-    kDebug(planDbg())<<m_propertyeditor;
+    debugPlan<<m_propertyeditor;
     if ( m_propertyeditor ) {
         m_propertyeditor->changeSet( m_designer->itemPropertySet() );
     }
@@ -961,8 +960,8 @@ QDomDocument ReportDesignPanel::document() const
         m_sourceeditor->sourceData( e );
     }
     e.appendChild( m_designer->document() );
-/*    kDebug(planDbg())<<"ReportDesignerView::document:";
-    kDebug(planDbg())<<document.toString();*/
+/*    debugPlan<<"ReportDesignerView::document:";
+    debugPlan<<document.toString();*/
     return document;
 }
 
@@ -1161,8 +1160,8 @@ QDomDocument ReportDesigner::document() const
         m_sourceeditor->sourceData( e );
     }
     e.appendChild( m_designer->document() );
-    /*    kDebug(planDbg())<<"ReportDesignerView::document:";
-     *    kDebug(planDbg())<<document.toString();*/
+    /*    debugPlan<<"ReportDesignerView::document:";
+     *    debugPlan<<document.toString();*/
     return document;
 }
 
@@ -1330,7 +1329,7 @@ void ReportDesigner::slotSectionToggled( bool on )
         on ? m_designer->insertSection( KRSectionData::PageFooterAny )
         : m_designer->removeSection( KRSectionData::PageFooterAny );
     } else {
-        kDebug(planDbg())<<"unknown section";
+        debugPlan<<"unknown section";
     }
 }
 
@@ -1345,7 +1344,7 @@ bool ReportDesigner::loadContext(const KoXmlElement& context)
         KoXml::asQDomElement( doc, e );
         setData( doc );
     } else {
-        kDebug(planDbg())<<"Invalid context xml";
+        debugPlan<<"Invalid context xml";
         setData( QDomDocument() ); // create an empty designer
     }
     return true;
@@ -1627,7 +1626,7 @@ QVariant GroupSectionEditor::HeaderItem::data( int role ) const
 
 void GroupSectionEditor::HeaderItem::setData( const QVariant &value, int role )
 {
-    kDebug(planDbg())<<value<<role;
+    debugPlan<<value<<role;
     if ( role == Qt::EditRole ) {
         group->setGroupHeaderVisible( value.toInt() == 1 );
         return;

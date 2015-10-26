@@ -20,8 +20,6 @@
 
 #include "kptdatetime.h"
 
-#include <kdebug.h>
-
 namespace KPlato
 {
 
@@ -61,14 +59,14 @@ void DateTime::add(const Duration &duration) {
         DateTime x = addMSecs(duration.milliseconds());
         setDate( x.date() );
         setTime( x.time() );
-        //kDebug(planDbg())<<toString();
+        //debugPlan<<toString();
     }
 }
 
 void DateTime::subtract(const Duration &duration) {
     if (isValid() && duration.m_ms) {
         *this = addMSecs(-duration.m_ms);
-        //kDebug(planDbg())<<toString();
+        //debugPlan<<toString();
     }
 }
 
@@ -78,7 +76,7 @@ Duration DateTime::duration(const DateTime &dt) const {
         qint64 x = msecsTo( dt ); //NOTE: this does conversion to UTC (expensive)
         dur.m_ms = x < 0 ? -x : x;
     }
-    //kDebug(planDbg())<<dur.milliseconds();
+    //debugPlan<<dur.milliseconds();
     return dur;
 }
 

@@ -353,7 +353,7 @@ MacroCommand *LocaleConfigMoney::buildCommand()
     if ( m_locale->negativeMonetarySignPosition() != m_cmbMonNegMonSignPos->currentIndex() ) {
         m->addCommand( new ModifyNegativeMonetarySignPositionCmd( m_locale, m_cmbMonNegMonSignPos->currentIndex() ) );
     }
-    kDebug(planDbg())<<"buildCommand:"<<m->isEmpty();
+    debugPlan<<"buildCommand:"<<m->isEmpty();
     if ( m->isEmpty() ) {
         delete m;
         return 0;

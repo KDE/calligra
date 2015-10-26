@@ -272,12 +272,12 @@ void NodeTreeView::slotDropAllowed( const QModelIndex &index, int dropIndicatorP
 TaskEditor::TaskEditor(KoPart *part, KoDocument *doc, QWidget *parent)
     : ViewBase(part, doc, parent )
 {
-    kDebug(planDbg())<<"----------------- Create TaskEditor ----------------------";
+    debugPlan<<"----------------- Create TaskEditor ----------------------";
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new TaskEditorTreeView( this );
     l->addWidget( m_view );
-    kDebug(planDbg())<<m_view->actionSplitView();
+    debugPlan<<m_view->actionSplitView();
     setupGui();
 
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
@@ -316,7 +316,7 @@ TaskEditor::TaskEditor(KoPart *part, KoDocument *doc, QWidget *parent)
     }
     for ( int i = 0; i < show.count(); ++i ) {
         int sec = m_view->slaveView()->header()->visualIndex( show[ i ] );
-        //kDebug(planDbg())<<"move section:"<<i<<show[i]<<sec;
+        //debugPlan<<"move section:"<<i<<show[i]<<sec;
         if ( i != sec ) {
             m_view->slaveView()->header()->moveSection( sec, i );
         }
@@ -341,7 +341,7 @@ TaskEditor::TaskEditor(KoPart *part, KoDocument *doc, QWidget *parent)
 
 void TaskEditor::slotProjectShown( bool on )
 {
-    kDebug(planDbg())<<proxyModel();
+    debugPlan<<proxyModel();
     QModelIndex idx;
     if ( proxyModel() ) {
         if ( proxyModel()->rowCount() > 0 ) {
@@ -366,7 +366,7 @@ void TaskEditor::updateReadWrite( bool rw )
 
 void TaskEditor::setProject( Project *project )
 {
-    kDebug(planDbg())<<project;
+    debugPlan<<project;
     m_view->setProject( project );
     ViewBase::setProject( project );
 }
@@ -449,7 +449,7 @@ void TaskEditor::setTaskModules(const QStringList& files)
 
 void TaskEditor::setGuiActive( bool activate )
 {
-    kDebug(planDbg())<<activate;
+    debugPlan<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
     if ( activate && !m_view->selectionModel()->currentIndex().isValid() && m_view->model()->rowCount() > 0 ) {
@@ -459,13 +459,13 @@ void TaskEditor::setGuiActive( bool activate )
 
 void TaskEditor::slotCurrentChanged( const QModelIndex &curr, const QModelIndex & )
 {
-    kDebug(planDbg())<<curr.row()<<","<<curr.column();
+    debugPlan<<curr.row()<<","<<curr.column();
     slotEnableActions();
 }
 
 void TaskEditor::slotSelectionChanged( const QModelIndexList &list)
 {
-    kDebug(planDbg())<<list.count();
+    debugPlan<<list.count();
     slotEnableActions();
     emit taskSelected( dynamic_cast<Task*>( selectedNode() ) );
 }
@@ -525,7 +525,7 @@ void TaskEditor::slotContextMenuRequested( const QModelIndex& index, const QPoin
     if ( node == 0 ) {
         return;
     }
-    kDebug(planDbg())<<node->name()<<" :"<<pos;
+    debugPlan<<node->name()<<" :"<<pos;
     QString name;
     switch ( node->type() ) {
         case Node::Type_Project:
@@ -548,13 +548,13 @@ void TaskEditor::slotContextMenuRequested( const QModelIndex& index, const QPoin
         slotHeaderContextMenuRequested( pos );
         return;
     }
-    kDebug(planDbg())<<name;
+    debugPlan<<name;
     emit requestPopupMenu( name, pos );
 }
 
 void TaskEditor::setScheduleManager( ScheduleManager *sm )
 {
-    //kDebug(planDbg())<<endl;
+    //debugPlan<<endl;
     m_view->baseModel()->setScheduleManager( sm );
 }
 
@@ -565,7 +565,7 @@ void TaskEditor::slotEnableActions()
 
 void TaskEditor::updateActionsEnabled( bool on )
 {
-//     kDebug(planDbg())<<selectedRowCount()<<selectedNode()<<currentNode();
+//     debugPlan<<selectedRowCount()<<selectedNode()<<currentNode();
     if ( ! on ) {
         menuAddTask->setEnabled( false );
         actionAddTask->setEnabled( false );
@@ -762,7 +762,7 @@ void TaskEditor::setupGui()
 
 void TaskEditor::slotSplitView()
 {
-    kDebug(planDbg());
+    debugPlan;
     m_view->setViewSplitMode( ! m_view->isViewSplit() );
     emit optionsModified();
 }
@@ -770,7 +770,7 @@ void TaskEditor::slotSplitView()
 
 void TaskEditor::slotOptions()
 {
-    kDebug(planDbg());
+    debugPlan;
     SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, m_view, this );
     dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
@@ -781,7 +781,7 @@ void TaskEditor::slotOptions()
 
 void TaskEditor::slotAddTask()
 {
-    kDebug(planDbg());
+    debugPlan;
     if ( selectedRowCount() == 0 || ( selectedRowCount() == 1 && selectedNode() == 0 ) ) {
         m_view->closePersistentEditor( m_view->selectionModel()->currentIndex() );
         Task *t = m_view->project()->createTask( m_view->project()->taskDefaults() );
@@ -803,7 +803,7 @@ void TaskEditor::slotAddTask()
 
 void TaskEditor::slotAddMilestone()
 {
-    kDebug(planDbg());
+    debugPlan;
     if ( selectedRowCount() == 0  || ( selectedRowCount() == 1 && selectedNode() == 0 ) ) {
         // None selected or only project selected: insert under main project
         m_view->closePersistentEditor( m_view->selectionModel()->currentIndex() );
@@ -828,7 +828,7 @@ void TaskEditor::slotAddMilestone()
 
 void TaskEditor::slotAddSubMilestone()
 {
-    kDebug(planDbg());
+    debugPlan;
     Node *parent = selectedNode();
     if ( parent == 0 && selectedRowCount() == 1 ) {
         // project selected
@@ -847,7 +847,7 @@ void TaskEditor::slotAddSubMilestone()
 
 void TaskEditor::slotAddSubtask()
 {
-    kDebug(planDbg());
+    debugPlan;
     Node *parent = selectedNode();
     if ( parent == 0 && selectedRowCount() == 1 ) {
         // project selected
@@ -874,7 +874,7 @@ void TaskEditor::edit( const QModelIndex &i )
 
 void TaskEditor::slotDeleteTask()
 {
-    //kDebug(planDbg());
+    //debugPlan;
     QList<Node*> lst = selectedNodes();
     while ( true ) {
         // remove children of selected tasks, as parents delete their children
@@ -895,7 +895,7 @@ void TaskEditor::slotDeleteTask()
         }
         lst.removeAt( lst.indexOf( ch ) );
     }
-    //foreach ( Node* n, lst ) { kDebug(planDbg())<<n->name(); }
+    //foreach ( Node* n, lst ) { debugPlan<<n->name(); }
     emit deleteTaskList( lst );
     QModelIndex i = m_view->selectionModel()->currentIndex();
     if ( i.isValid() ) {
@@ -906,7 +906,7 @@ void TaskEditor::slotDeleteTask()
 
 void TaskEditor::slotIndentTask()
 {
-    kDebug(planDbg());
+    debugPlan;
     Node *n = selectedNode();
     if ( n ) {
         emit indentTask();
@@ -919,7 +919,7 @@ void TaskEditor::slotIndentTask()
 
 void TaskEditor::slotUnindentTask()
 {
-    kDebug(planDbg());
+    debugPlan;
     Node *n = selectedNode();
     if ( n ) {
         emit unindentTask();
@@ -931,7 +931,7 @@ void TaskEditor::slotUnindentTask()
 
 void TaskEditor::slotMoveTaskUp()
 {
-    kDebug(planDbg());
+    debugPlan;
     Node *n = selectedNode();
     if ( n ) {
         emit moveTaskUp();
@@ -943,7 +943,7 @@ void TaskEditor::slotMoveTaskUp()
 
 void TaskEditor::slotMoveTaskDown()
 {
-    kDebug(planDbg());
+    debugPlan;
     Node *n = selectedNode();
     if ( n ) {
         emit moveTaskDown();
@@ -955,7 +955,7 @@ void TaskEditor::slotMoveTaskDown()
 
 bool TaskEditor::loadContext( const KoXmlElement &context )
 {
-    kDebug(planDbg());
+    debugPlan;
     ViewBase::loadContext( context );
     bool show = (bool)(context.attribute( "show-project", "0" ).toInt() );
     actionShowProject->setChecked( show );
@@ -1071,7 +1071,7 @@ void TaskView::draw()
 
 void TaskView::setGuiActive( bool activate )
 {
-    kDebug(planDbg())<<activate;
+    debugPlan<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
     if ( activate && !m_view->selectionModel()->currentIndex().isValid() && m_view->model()->rowCount() > 0 ) {
@@ -1081,13 +1081,13 @@ void TaskView::setGuiActive( bool activate )
 
 void TaskView::slotCurrentChanged(  const QModelIndex &curr, const QModelIndex & )
 {
-    kDebug(planDbg())<<curr.row()<<","<<curr.column();
+    debugPlan<<curr.row()<<","<<curr.column();
     slotEnableActions();
 }
 
 void TaskView::slotSelectionChanged( const QModelIndexList &list)
 {
-    kDebug(planDbg())<<list.count();
+    debugPlan<<list.count();
     slotEnableActions();
 }
 
@@ -1147,9 +1147,9 @@ void TaskView::slotContextMenuRequested( const QModelIndex& index, const QPoint&
             default:
                 break;
         }
-    } else kDebug(planDbg())<<"No node: "<<index;
+    } else debugPlan<<"No node: "<<index;
     if ( name.isEmpty() ) {
-        kDebug(planDbg())<<"No menu";
+        debugPlan<<"No menu";
         slotHeaderContextMenuRequested( pos );
         return;
     }
@@ -1158,7 +1158,7 @@ void TaskView::slotContextMenuRequested( const QModelIndex& index, const QPoint&
 
 void TaskView::setScheduleManager( ScheduleManager *sm )
 {
-    //kDebug(planDbg())<<endl;
+    //debugPlan<<endl;
     m_view->baseModel()->setScheduleManager( sm );
 }
 
@@ -1189,14 +1189,14 @@ void TaskView::setupGui()
 
 void TaskView::slotSplitView()
 {
-    kDebug(planDbg());
+    debugPlan;
     m_view->setViewSplitMode( ! m_view->isViewSplit() );
     emit optionsModified();
 }
 
 void TaskView::slotOptions()
 {
-    kDebug(planDbg());
+    debugPlan;
     SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, m_view, this );
     dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
@@ -1230,7 +1230,7 @@ KoPrintJob *TaskView::createPrintJob()
 WorkPackageTreeView::WorkPackageTreeView( QWidget *parent )
     : DoubleTreeViewBase( parent )
 {
-    kDebug(planDbg())<<"----------"<<this<<"----------";
+    debugPlan<<"----------"<<this<<"----------";
     m = new WorkPackageProxyModel( this );
     setModel( m );
     //setSelectionBehavior( QAbstractItemView::SelectItems );
@@ -1363,7 +1363,7 @@ void TaskWorkPackageView::updateReadWrite( bool rw )
 
 void TaskWorkPackageView::setGuiActive( bool activate )
 {
-    kDebug(planDbg())<<activate;
+    debugPlan<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
     if ( activate && !m_view->selectionModel()->currentIndex().isValid() && m_view->model()->rowCount() > 0 ) {
@@ -1378,13 +1378,13 @@ void TaskWorkPackageView::slotRefreshView()
 
 void TaskWorkPackageView::slotCurrentChanged(  const QModelIndex &curr, const QModelIndex & )
 {
-    kDebug(planDbg())<<curr.row()<<","<<curr.column();
+    debugPlan<<curr.row()<<","<<curr.column();
     slotEnableActions();
 }
 
 void TaskWorkPackageView::slotSelectionChanged( const QModelIndexList &list)
 {
-    kDebug(planDbg())<<list.count();
+    debugPlan<<list.count();
     slotEnableActions();
 }
 
@@ -1444,9 +1444,9 @@ void TaskWorkPackageView::slotContextMenuRequested( const QModelIndex& index, co
             default:
                 break;
         }
-    } else kDebug(planDbg())<<"No node: "<<index;
+    } else debugPlan<<"No node: "<<index;
     if ( name.isEmpty() ) {
-        kDebug(planDbg())<<"No menu";
+        debugPlan<<"No menu";
         slotHeaderContextMenuRequested( pos );
         return;
     }
@@ -1455,7 +1455,7 @@ void TaskWorkPackageView::slotContextMenuRequested( const QModelIndex& index, co
 
 void TaskWorkPackageView::setScheduleManager( ScheduleManager *sm )
 {
-    //kDebug(planDbg())<<endl;
+    //debugPlan<<endl;
     m_view->baseModel()->setScheduleManager( sm );
 }
 
@@ -1523,14 +1523,14 @@ void TaskWorkPackageView::slotWorkPackageSent( const QList<Node*> &nodes, Resour
 
 void TaskWorkPackageView::slotSplitView()
 {
-    kDebug(planDbg());
+    debugPlan;
     m_view->setViewSplitMode( ! m_view->isViewSplit() );
     emit optionsModified();
 }
 
 void TaskWorkPackageView::slotOptions()
 {
-    kDebug(planDbg());
+    debugPlan;
     SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, m_view, this );
     dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
@@ -1541,7 +1541,7 @@ void TaskWorkPackageView::slotOptions()
 
 bool TaskWorkPackageView::loadContext( const KoXmlElement &context )
 {
-    kDebug(planDbg());
+    debugPlan;
     ViewBase::loadContext( context );
     return m_view->loadContext( m_view->baseModel()->columnMap(), context );
 }

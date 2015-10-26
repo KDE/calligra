@@ -19,10 +19,9 @@
 
 #include "kptcontext.h"
 #include "kptview.h"
+#include "kptdebug.h"
 
 #include <QDomDocument>
-
-#include <kdebug.h>
 
 namespace KPlato
 {
@@ -65,14 +64,14 @@ bool Context::load( const KoXmlDocument &document ) {
     KoXmlElement elm = m_document.documentElement();
     QString value = elm.attribute( "mime", QString() );
     if ( value.isEmpty() ) {
-        kError() << "No mime type specified!";
+        errorPlan << "No mime type specified!";
 //        setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
         return false;
     } else if ( value != "application/x-vnd.kde.plan" ) {
         if ( value == "application/x-vnd.kde.kplato" ) {
             // accept, since we forgot to change kplato to plan for so long...
         } else {
-            kError() << "Unknown mime type " << value;
+            errorPlan << "Unknown mime type " << value;
 //        setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.kplato, got %1", value ) );
             return false;
         }

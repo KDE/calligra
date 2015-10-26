@@ -23,9 +23,8 @@
 #include "kptproject.h"
 #include "kptcommand.h"
 
-
 #include <klocale.h>
-#include <kdebug.h>
+
 
 namespace KPlato
 {
@@ -107,17 +106,17 @@ void AddRelationDialog::slotOk() {
     accept();
 }
 void AddRelationDialog::slotFinishStartToggled(bool ch) {
-    //kDebug(planDbg())<<ch;
+    //debugPlan<<ch;
     if (ch && m_relation->type() != Relation::FinishStart)
         enableButtonOk(true);
 }
 void AddRelationDialog::slotFinishFinishToggled(bool ch) {
-    //kDebug(planDbg())<<ch;
+    //debugPlan<<ch;
     if (ch && m_relation->type() != Relation::FinishFinish)
         enableButtonOk(true);
 }
 void AddRelationDialog::slotStartStartToggled(bool ch) {
-    //kDebug(planDbg())<<ch;
+    //debugPlan<<ch;
     if (ch && m_relation->type() != Relation::StartStart)
         enableButtonOk(true);
 }
@@ -182,7 +181,7 @@ MacroCommand *ModifyRelationDialog::buildCommand() {
             cmd = new MacroCommand( s );
         cmd->addCommand(new ModifyRelationTypeCmd(m_relation, (Relation::Type)(selectedRelationType())));
         
-        //kDebug(planDbg())<<m_panel->relationType->selectedId();
+        //debugPlan<<m_panel->relationType->selectedId();
     }
     Duration d(m_panel->lag->value(), m_panel->lag->unit());
     if (m_relation->lag() != d) {

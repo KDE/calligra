@@ -29,7 +29,7 @@
 
 #include <QDir>
 #include <QTest>
-#include <kdebug.h>
+
 #include <kconfiggroup.h>
 
 #include "debug.cpp"

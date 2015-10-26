@@ -173,7 +173,7 @@ void MainProjectPanel::slotEndDateClicked()
 
 void MainProjectPanel::enableDateTime()
 {
-    kDebug(planDbg());
+    debugPlan;
     startTime->setEnabled(true);
     startDate->setEnabled(true);
     endTime->setEnabled(true);

@@ -20,8 +20,6 @@
 #include "kptcolorsconfigpanel.h"
 #include "plansettings.h"
 
-#include <kdebug.h>
-
 namespace KPlato
 {
 

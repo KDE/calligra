@@ -165,7 +165,7 @@ QVariant DocumentModel::data( const Document *doc, int property, int role ) cons
         case Property_SendAs: result = sendAs( doc, role ); break;
         case Property_Status: result = status( doc, role ); break;
         default:
-            //kDebug(planDbg())<<"Invalid property number: "<<property;
+            //debugPlan<<"Invalid property number: "<<property;
             return result;
     }
     return result;
@@ -186,7 +186,7 @@ bool DocumentModel::setData( Document *doc, int property, const QVariant & /*val
         //case 1: return setType( doc, value, role );
         //case 2: result = status( doc, role ); break;
         default:
-            //kDebug(planDbg())<<"Invalid property number: "<<property;
+            //debugPlan<<"Invalid property number: "<<property;
             break;
     }
     return false;
@@ -261,7 +261,7 @@ void DocumentItemModel::slotDocumentRemoved( Document *doc )
 
 void DocumentItemModel::setDocuments( Documents *docs )
 {
-    //kDebug(planDbg())<<m_documents<<docs;
+    //debugPlan<<m_documents<<docs;
     if ( m_documents ) {
     }
     m_documents = docs;
@@ -284,7 +284,7 @@ Qt::ItemFlags DocumentItemModel::flags( const QModelIndex &index ) const
         }
         return flags;
     }
-    //kDebug(planDbg())<<index<<m_readWrite;
+    //debugPlan<<index<<m_readWrite;
     if ( m_readWrite ) {
         flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         switch ( index.column() ) {
@@ -321,7 +321,7 @@ QModelIndex DocumentItemModel::index( int row, int column, const QModelIndex &pa
         return QModelIndex();
     }
     if ( m_documents == 0 || column < 0 || column >= columnCount() || row < 0 ) {
-        //kDebug(planDbg())<<"No index for"<<row<<","<<column;
+        //debugPlan<<"No index for"<<row<<","<<column;
         return QModelIndex();
     }
     if ( row >= m_documents->count() ) {
@@ -466,8 +466,8 @@ QAbstractItemDelegate *DocumentItemModel::createDelegate( int column, QWidget *p
 {
     switch ( column ) {
         //case 0: return new KUrlDelegate( parent ); //???????
-        case DocumentModel::Property_Type: { kDebug(planDbg())<< column; return new EnumDelegate( parent ); }
-        case DocumentModel::Property_SendAs: { kDebug(planDbg())<< column; return new EnumDelegate( parent ); }
+        case DocumentModel::Property_Type: { debugPlan<< column; return new EnumDelegate( parent ); }
+        case DocumentModel::Property_SendAs: { debugPlan<< column; return new EnumDelegate( parent ); }
         default: break;
     }
     return 0;
@@ -475,17 +475,17 @@ QAbstractItemDelegate *DocumentItemModel::createDelegate( int column, QWidget *p
 
 int DocumentItemModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
-    //kDebug(planDbg())<<m_model.propertyCount();
+    //debugPlan<<m_model.propertyCount();
     return m_model.propertyCount();
 }
 
 int DocumentItemModel::rowCount( const QModelIndex &parent ) const
 {
     if ( m_documents == 0 || parent.isValid() ) {
-        //kDebug(planDbg())<<parent;
+        //debugPlan<<parent;
         return 0;
     }
-    //kDebug(planDbg())<<parent<<": "<<m_documents->count();
+    //debugPlan<<parent<<": "<<m_documents->count();
     return m_documents->count();
 }
 
@@ -518,7 +518,7 @@ bool DocumentItemModel::dropAllowed( const QModelIndex &index, int dropIndicator
     Q_UNUSED(index);
     Q_UNUSED(dropIndicatorPosition);
     Q_UNUSED(data);
-    //kDebug(planDbg());
+    //debugPlan;
     return true;
 }
 
@@ -535,7 +535,7 @@ bool DocumentItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
 {
     Q_UNUSED(row);
     Q_UNUSED(parent);
-    //kDebug(planDbg())<<action;
+    //debugPlan<<action;
     if (action == Qt::IgnoreAction) {
         return true;
     }

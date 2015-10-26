@@ -23,7 +23,6 @@
 #include "kptfactory.h"
 
 #include <klocale.h>
-#include <kdebug.h>
 
 namespace KPlato
 {

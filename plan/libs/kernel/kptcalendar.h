@@ -23,6 +23,7 @@
 
 #include "kptdatetime.h"
 #include "kptduration.h"
+#include "kptdebug.h"
 #include "kplatokernel_export.h"
 
 #include <QPair>
@@ -30,7 +31,6 @@
 #include <QMap>
 
 #include <ktimezone.h>
-#include <kdebug.h>
 
 #include <KoXmlReaderForward.h>
 
@@ -155,7 +155,7 @@ protected:
         int s = QTime( 0, 0, 0 ).msecsTo( first );
         if ( ( s + second ) > 86400000 ) {
             second = 86400000 - s;
-            kError()<<"Overflow, limiting length to"<<second;
+            errorPlan<<"Overflow, limiting length to"<<second;
         }
     }
 };

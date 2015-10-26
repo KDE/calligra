@@ -31,8 +31,6 @@
 #include "kptresourceallocationmodel.h"
 #include "kptresourceappointmentsmodel.h"
 
-#include <kdebug.h>
-
 #include <QSortFilterProxyModel>
 #include <QString>
 #include <QStringList>
@@ -130,7 +128,7 @@ bool ReportData::open()
     if ( basemodel ) {
         basemodel->setProject( m_project );
         basemodel->setScheduleManager( m_schedulemanager );
-    } else kError()<<"No item model";
+    } else errorPlan<<"No item model";
 
     if ( ! m_sortlist.isEmpty() ) {
         QAbstractItemModel *sourcemodel = m_model.sourceModel();
@@ -300,7 +298,7 @@ KoReportData* ReportData::data(const QString &source)
         r->setProject( m_project );
         r->setScheduleManager( m_schedulemanager );
     }
-    kDebug(planDbg())<<this<<m_subdatasources<<r;
+    debugPlan<<this<<m_subdatasources<<r;
     return r;
 }
 
@@ -582,7 +580,7 @@ int ChartReportData::firstRow()
             row = m_startdate.daysTo( s );
             m_startdate = s;
         }
-        kDebug(planDbg())<<s<<row;
+        debugPlan<<s<<row;
     }
     return row;
 }
@@ -614,7 +612,7 @@ int ChartReportData::lastRow() const
         if ( last.isValid() && e < last ) {
             row -= ( e.daysTo( last ) );
         }
-        kDebug(planDbg())<<last<<e<<row;
+        debugPlan<<last<<e<<row;
     }
     return row > m_firstrow ? row : m_firstrow;
 }
@@ -657,7 +655,7 @@ qint64 ChartReportData::recordCount() const
 QVariant ChartReportData::value ( unsigned int i ) const
 {
     if ( m_fakedata ) {
-        kDebug(planDbg())<<m_row<<i;
+        debugPlan<<m_row<<i;
         return QVariant( ( int )( m_row * i ) );
     }
     QVariant value;
@@ -677,7 +675,7 @@ QVariant ChartReportData::value ( unsigned int i ) const
         } else {
             // data
             value = m_model.index( row, i - 1 ).data();
-            kDebug(planDbg())<<this<<row<<m_model.headerData( row, Qt::Vertical, Qt::EditRole )<<i<<"="<<value;
+            debugPlan<<this<<row<<m_model.headerData( row, Qt::Vertical, Qt::EditRole )<<i<<"="<<value;
         }
     }
     return value;
@@ -685,7 +683,7 @@ QVariant ChartReportData::value ( unsigned int i ) const
 
 QVariant ChartReportData::value( const QString &name ) const
 {
-    kDebug(planDbg())<<name;
+    debugPlan<<name;
     if ( m_expressions.contains( name ) ) {
         return m_expressions[ name ];
     }
@@ -705,27 +703,27 @@ QStringList ChartReportData::fieldNames() const
     } else {
         int count = m_model.columnCount();
         for ( int i = 0; i < count; ++i ) {
-//             kDebug(planDbg())<<this<<i<<"("<<count<<"):"<<m_model.headerData( i, Qt::Horizontal ).toString();
+//             debugPlan<<this<<i<<"("<<count<<"):"<<m_model.headerData( i, Qt::Horizontal ).toString();
             names << m_model.headerData( i, Qt::Horizontal ).toString();
         }
     }
-//     kDebug(planDbg())<<this<<names;
+//     debugPlan<<this<<names;
     return names;
 }
 
 void ChartReportData::addExpression( const QString &field, const QVariant &/*value*/, char /*relation*/ )
 {
-//     kDebug(planDbg())<<field<<value<<relation;
+//     debugPlan<<field<<value<<relation;
     QStringList lst = field.split( '=', QString::SkipEmptyParts );
     if ( lst.count() == 2 ) {
         QString key = lst[ 0 ].trimmed().toLower();
         if ( m_keywords.contains( key ) ) {
             m_expressions.insert( key, lst[ 1 ].trimmed() );
         } else {
-            kWarning()<<"unknown key:"<<key;
+            warnPlan<<"unknown key:"<<key;
         }
     } else {
-        kWarning()<<"Invalid key or data:"<<field;
+        warnPlan<<"Invalid key or data:"<<field;
     }
 }
 

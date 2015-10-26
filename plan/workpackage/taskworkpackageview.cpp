@@ -101,7 +101,7 @@ TaskWorkPackageTreeView::TaskWorkPackageTreeView( Part *part, QWidget *parent )
     slaveView()->setDefaultColumns( show );
     masterView()->setFocus();
 
-    kDebug(planworkDbg())<<PlanWorkSettings::self()->taskWorkPackageView();
+    debugPlanWork<<PlanWorkSettings::self()->taskWorkPackageView();
     masterView()->header()->setClickable( true );
     slaveView()->header()->setSortIndicatorShown( true );
 
@@ -175,7 +175,7 @@ void TaskWorkPackageTreeView::setProject( Project *project )
 
 void TaskWorkPackageTreeView::slotActivated( const QModelIndex &index )
 {
-    kDebug(planworkDbg())<<index.column();
+    debugPlanWork<<index.column();
 }
 
 void TaskWorkPackageTreeView::dragMoveEvent(QDragMoveEvent */*event*/)
@@ -197,7 +197,7 @@ void TaskWorkPackageTreeView::dragMoveEvent(QDragMoveEvent */*event*/)
     }
     Node *dn = model()->node( index );
     if ( dn == 0 ) {
-        kError()<<"no node to drop on!"
+        errorPlanWork<<"no node to drop on!"
         return; // hmmm
     }
     switch ( dropIndicatorPosition() ) {
@@ -249,7 +249,7 @@ Document *AbstractView::currentDocument() const
 
 void AbstractView::slotHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug(planworkDbg());
+    debugPlanWork;
     QList<QAction*> lst = contextActionList();
     if ( ! lst.isEmpty() ) {
         QMenu::exec( lst, pos, lst.first() );
@@ -263,7 +263,7 @@ void AbstractView::slotContextMenuRequested( const QModelIndex &/*index*/, const
 
 void AbstractView::slotContextMenuRequested( Node *node, const QPoint& pos )
 {
-    kDebug(planworkDbg())<<node->name()<<" :"<<pos;
+    debugPlanWork<<node->name()<<" :"<<pos;
     QString name;
     switch ( node->type() ) {
         case Node::Type_Task:
@@ -278,7 +278,7 @@ void AbstractView::slotContextMenuRequested( Node *node, const QPoint& pos )
         default:
             break;
     }
-    kDebug(planworkDbg())<<name;
+    debugPlanWork<<name;
     if ( name.isEmpty() ) {
         slotHeaderContextMenuRequested( pos );
         return;
@@ -288,7 +288,7 @@ void AbstractView::slotContextMenuRequested( Node *node, const QPoint& pos )
 
 void AbstractView::slotContextMenuRequested( Document *doc, const QPoint& pos )
 {
-    kDebug(planworkDbg())<<doc->url()<<" :"<<pos;
+    debugPlanWork<<doc->url()<<" :"<<pos;
     QString name;
     switch ( doc->type() ) {
         case Document::Type_Product:
@@ -298,7 +298,7 @@ void AbstractView::slotContextMenuRequested( Document *doc, const QPoint& pos )
             name = "viewdocument_popup";
             break;
     }
-    kDebug(planworkDbg())<<name;
+    debugPlanWork<<name;
     if ( name.isEmpty() ) {
         slotHeaderContextMenuRequested( pos );
         return;
@@ -329,7 +329,7 @@ KoPrintJob *AbstractView::createPrintJob()
 TaskWorkPackageView::TaskWorkPackageView( Part *part, QWidget *parent )
     : AbstractView( part, parent )
 {
-    kDebug(planworkDbg())<<"-------------------- creating TaskWorkPackageView -------------------";
+    debugPlanWork<<"-------------------- creating TaskWorkPackageView -------------------";
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new TaskWorkPackageTreeView( part, this );
@@ -376,7 +376,7 @@ Document *TaskWorkPackageView::currentDocument() const
 
 void TaskWorkPackageView::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
-    kDebug(planworkDbg())<<index<<pos;
+    debugPlanWork<<index<<pos;
     if ( ! index.isValid() ) {
         slotHeaderContextMenuRequested( pos );
         return;
@@ -416,7 +416,7 @@ void TaskWorkPackageView::setupGui()
 
 void TaskWorkPackageView::slotSplitView()
 {
-    kDebug(planworkDbg());
+    debugPlanWork;
     m_view->setViewSplitMode( ! m_view->isViewSplit() );
     saveContext();
 }
@@ -424,7 +424,7 @@ void TaskWorkPackageView::slotSplitView()
 
 void TaskWorkPackageView::slotOptions()
 {
-    kDebug(planworkDbg());
+    debugPlanWork;
     QPointer<SplitItemViewSettupDialog> dlg = new SplitItemViewSettupDialog( 0, m_view, this );
     dlg->exec();
     delete dlg;
@@ -437,7 +437,7 @@ bool TaskWorkPackageView::loadContext()
     doc.setContent( PlanWorkSettings::self()->taskWorkPackageView() );
     KoXmlElement context = doc.namedItem( "TaskWorkPackageViewSettings" ).toElement();
     if ( context.isNull() ) {
-        kDebug(planworkDbg())<<"No settings";
+        debugPlanWork<<"No settings";
         return false;
     }
     return m_view->loadContext( itemModel()->columnMap(), context );
@@ -451,7 +451,7 @@ void TaskWorkPackageView::saveContext()
     m_view->saveContext( itemModel()->columnMap(), context );
     PlanWorkSettings::self()->setTaskWorkPackageView( doc.toString() );
     PlanWorkSettings::self()->writeConfig();
-    kDebug(planworkDbg())<<endl<<doc.toString();
+    debugPlanWork<<endl<<doc.toString();
 }
 
 //-------------------------------------------
@@ -684,7 +684,7 @@ GanttView::GanttView( Part *part, QWidget *parent )
       m_ganttdelegate( new GanttItemDelegate( this ) ),
       m_itemmodel( new TaskWorkPackageModel( part, this ) )
 {
-    kDebug(planworkDbg())<<"------------------- create GanttView -----------------------";
+    debugPlanWork<<"------------------- create GanttView -----------------------";
     m_itemmodel->setObjectName( "Gantt model" );
     graphicsView()->setItemDelegate( m_ganttdelegate );
     GanttTreeView *tv = new GanttTreeView( this );
@@ -706,7 +706,7 @@ GanttView::GanttView( Part *part, QWidget *parent )
             tv->hideColumn( i );
         }
     }
-    kDebug(planworkDbg())<<"mapping roles";
+    debugPlanWork<<"mapping roles";
     KGantt::ProxyModel *m = static_cast<KGantt::ProxyModel*>( ganttProxyModel() );
 
     m->setRole( KGantt::ItemTypeRole, KGantt::ItemTypeRole ); // To provide correct format
@@ -717,7 +717,7 @@ GanttView::GanttView( Part *part, QWidget *parent )
     m->setColumn( KGantt::StartTimeRole, TaskWorkPackageModel::NodeStartTime );
     m->setColumn( KGantt::EndTimeRole, TaskWorkPackageModel::NodeEndTime );
     m->setColumn( KGantt::TaskCompletionRole, TaskWorkPackageModel::NodeCompleted );
-    kDebug(planworkDbg())<<"roles mapped";
+    debugPlanWork<<"roles mapped";
 
     KGantt::DateTimeGrid *g = static_cast<KGantt::DateTimeGrid*>( grid() );
     g->setDayWidth( 30 );
@@ -751,7 +751,7 @@ void GanttView::slotSelectionChanged( const QItemSelection &selected, const QIte
 
 void GanttView::slotRowsInserted( const QModelIndex &parent, int start, int end )
 {
-    kDebug(planworkDbg())<<parent<<start<<end;
+    debugPlanWork<<parent<<start<<end;
     if ( ! parent.isValid() ) {
         for ( int i = start; i <= end; ++i ) {
             updateDateTimeGrid( m_itemmodel->workPackage( i ) );
@@ -770,7 +770,7 @@ void GanttView::slotRowsRemoved( const QModelIndex &/*parent*/, int /*start*/, i
 
 void GanttView::updateDateTimeGrid( WorkPackage *wp )
 {
-    kDebug(planworkDbg())<<wp;
+    debugPlanWork<<wp;
     if ( ! wp || ! wp->project() || ! wp->project()->childNode( 0 ) ) {
         return;
     }
@@ -842,7 +842,7 @@ void GanttView::saveContext(  QDomElement &context ) const
 TaskWPGanttView::TaskWPGanttView( Part *part, QWidget *parent )
     : AbstractView( part, parent )
 {
-    kDebug(planworkDbg())<<"-------------------- creating TaskWPGanttView -------------------";
+    debugPlanWork<<"-------------------- creating TaskWPGanttView -------------------";
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new GanttView( part, this );
@@ -877,7 +877,7 @@ Node *TaskWPGanttView::currentNode() const
 
 void TaskWPGanttView::slotContextMenuRequested( const QModelIndex &idx, const QPoint& pos )
 {
-    kDebug(planworkDbg())<<idx<<pos;
+    debugPlanWork<<idx<<pos;
     if ( ! idx.isValid() ) {
         slotHeaderContextMenuRequested( pos );
         return;
@@ -902,7 +902,7 @@ void TaskWPGanttView::setupGui()
 
 void TaskWPGanttView::slotOptions()
 {
-    kDebug(planworkDbg());
+    debugPlanWork;
     QPointer<ItemViewSettupDialog> dlg = new ItemViewSettupDialog( 0, m_view->treeView(), true, this );
     dlg->exec();
     delete dlg;
@@ -915,7 +915,7 @@ bool TaskWPGanttView::loadContext()
     doc.setContent( PlanWorkSettings::self()->taskWPGanttView() );
     KoXmlElement context = doc.namedItem( "TaskWPGanttViewSettings" ).toElement();
     if ( context.isNull() ) {
-        kDebug(planworkDbg())<<"No settings";
+        debugPlanWork<<"No settings";
         return false;
     }
     return m_view->loadContext( context );
@@ -929,7 +929,7 @@ void TaskWPGanttView::saveContext()
     m_view->saveContext( context );
     PlanWorkSettings::self()->setTaskWPGanttView( doc.toString() );
     PlanWorkSettings::self()->writeConfig();
-    kDebug(planworkDbg())<<endl<<doc.toString();
+    debugPlanWork<<endl<<doc.toString();
 }
 
 } // namespace KPlatoWork

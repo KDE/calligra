@@ -171,7 +171,7 @@ void TaskStatusTreeView::dragMoveEvent(QDragMoveEvent */*event*/)
     }
     Node *dn = model()->node( index );
     if ( dn == 0 ) {
-        kError()<<"no node to drop on!"
+        errorPlan<<"no node to drop on!"
         return; // hmmm
     }
     switch ( dropIndicatorPosition() ) {
@@ -199,7 +199,7 @@ TaskStatusView::TaskStatusView(KoPart *part, KoDocument *doc, QWidget *parent )
     : ViewBase(part, doc, parent),
     m_id( -1 )
 {
-    kDebug(planDbg())<<"-------------------- creating TaskStatusView -------------------";
+    debugPlan<<"-------------------- creating TaskStatusView -------------------";
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new TaskStatusTreeView( this );
@@ -220,7 +220,7 @@ void TaskStatusView::updateReadWrite( bool rw )
 
 void TaskStatusView::setScheduleManager( ScheduleManager *sm )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     static_cast<TaskStatusItemModel*>( m_view->model() )->setScheduleManager( sm );
 }
 
@@ -242,14 +242,14 @@ void TaskStatusView::draw( Project &project )
 
 void TaskStatusView::setGuiActive( bool activate )
 {
-    kDebug(planDbg())<<activate;
+    debugPlan<<activate;
 //    updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
 }
 
 void TaskStatusView::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
-    kDebug(planDbg())<<index<<pos;
+    debugPlan<<index<<pos;
     if ( ! index.isValid() ) {
         slotHeaderContextMenuRequested( pos );
         return;
@@ -264,7 +264,7 @@ void TaskStatusView::slotContextMenuRequested( const QModelIndex &index, const Q
 
 void TaskStatusView::slotContextMenuRequested( Node *node, const QPoint& pos )
 {
-    kDebug(planDbg())<<node->name()<<" :"<<pos;
+    debugPlan<<node->name()<<" :"<<pos;
     QString name;
     switch ( node->type() ) {
         case Node::Type_Task:
@@ -279,7 +279,7 @@ void TaskStatusView::slotContextMenuRequested( Node *node, const QPoint& pos )
         default:
             break;
     }
-    kDebug(planDbg())<<name;
+    debugPlan<<name;
     if ( name.isEmpty() ) {
         slotHeaderContextMenuRequested( pos );
         return;
@@ -298,7 +298,7 @@ void TaskStatusView::setupGui()
 
 void TaskStatusView::slotSplitView()
 {
-    kDebug(planDbg());
+    debugPlan;
     m_view->setViewSplitMode( ! m_view->isViewSplit() );
     emit optionsModified();
 }
@@ -310,7 +310,7 @@ void TaskStatusView::slotRefreshView()
 
 void TaskStatusView::slotOptions()
 {
-    kDebug(planDbg());
+    debugPlan;
     TaskStatusViewSettingsDialog *dlg = new TaskStatusViewSettingsDialog( this, m_view, this );
     dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
@@ -321,7 +321,7 @@ void TaskStatusView::slotOptions()
 
 bool TaskStatusView::loadContext( const KoXmlElement &context )
 {
-    kDebug(planDbg());
+    debugPlan;
     ViewBase::loadContext( context );
     m_view->setPeriod( context.attribute( "period", QString("%1").arg( m_view->defaultPeriod() ) ).toInt() );
 
@@ -415,7 +415,7 @@ ProjectStatusView::ProjectStatusView(KoPart *part, KoDocument *doc, QWidget *par
     : ViewBase(part, doc, parent),
     m_project( 0 )
 {
-    kDebug(planDbg())<<"-------------------- creating ProjectStatusView -------------------";
+    debugPlan<<"-------------------- creating ProjectStatusView -------------------";
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new PerformanceStatusBase( this );
@@ -430,7 +430,7 @@ ProjectStatusView::ProjectStatusView(KoPart *part, KoDocument *doc, QWidget *par
 
 void ProjectStatusView::setScheduleManager( ScheduleManager *sm )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     m_view->setScheduleManager( sm );
     m_view->model()->clearNodes();
     if ( m_project ) {
@@ -447,7 +447,7 @@ void ProjectStatusView::setProject( Project *project )
 
 void ProjectStatusView::setGuiActive( bool activate )
 {
-    kDebug(planDbg())<<activate;
+    debugPlan<<activate;
 //    updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
 }
@@ -469,7 +469,7 @@ void ProjectStatusView::slotOptions()
 
 bool ProjectStatusView::loadContext( const KoXmlElement &context )
 {
-    kDebug(planDbg());
+    debugPlan;
     ViewBase::loadContext( context );
     return m_view->loadContext( context );
 }
@@ -508,7 +508,7 @@ QList<QWidget*> PerformanceStatusPrintingDialog::createOptionWidgets() const
 
 void PerformanceStatusPrintingDialog::printPage( int page, QPainter &painter )
 {
-    //kDebug(planDbg())<<page<<printer().pageRect()<<printer().paperRect()<<printer().margins()<<printer().fullPage();
+    //debugPlan<<page<<printer().pageRect()<<printer().paperRect()<<printer().margins()<<printer().fullPage();
     painter.save();
     QRect rect = printer().pageRect();
     rect.moveTo( 0, 0 ); // the printer already has margins set
@@ -527,7 +527,7 @@ void PerformanceStatusPrintingDialog::printPage( int page, QPainter &painter )
     if ( rect.height() > rect.width() && r > 0.0 ) {
         rect.setHeight( rect.width() / r );
     }
-    kDebug(planDbg())<<s<<rect;
+    debugPlan<<s<<rect;
     m_chart->ui_chart->paint( &painter, rect );
     painter.restore();
 }
@@ -734,7 +734,7 @@ void PerformanceStatusBase::setupChart()
 #endif
     }
     ui_stack->setCurrentIndex( 0 );
-    kDebug(planDbg())<<"Planes:"<<ui_chart->coordinatePlanes();
+    debugPlan<<"Planes:"<<ui_chart->coordinatePlanes();
     foreach ( AbstractCoordinatePlane *pl, ui_chart->coordinatePlanes() ) {
         CartesianCoordinatePlane *p = dynamic_cast<CartesianCoordinatePlane*>( pl );
         if ( p == 0 ) continue;
@@ -777,7 +777,7 @@ void PerformanceStatusBase::setupChart( ChartContents &cc )
     int effort_start_column = 3; // proxy column number
 
     const PerformanceChartInfo &info = m_chartinfo;
-    kDebug(planDbg())<<"cost="<<info.showCost<<"effort="<<info.showEffort;
+    debugPlan<<"cost="<<info.showCost<<"effort="<<info.showEffort;
     static_cast<AbstractCartesianDiagram*>( cc.effortplane->diagram() )->takeAxis( cc.dateaxis );
     static_cast<AbstractCartesianDiagram*>( cc.costplane->diagram() )->takeAxis( cc.dateaxis );
     static_cast<AbstractCartesianDiagram*>( cc.piplane->diagram() )->takeAxis( cc.dateaxis );
@@ -870,31 +870,31 @@ void PerformanceStatusBase::setupChart( ChartContents &cc )
         cc.piproxy.setRejectColumns( reject );
     }
 #if 0
-    kDebug(planDbg())<<"Effort:"<<info.showEffort;
+    debugPlan<<"Effort:"<<info.showEffort;
     if ( info.showEffort && cc.effortproxy.rowCount() > 0 ) {
-        kDebug(planDbg())<<"Effort:"<<info.showEffort<<"columns ="<<cc.effortproxy.columnCount()
+        debugPlan<<"Effort:"<<info.showEffort<<"columns ="<<cc.effortproxy.columnCount()
             <<"reject="<<cc.effortproxy.rejectColumns()
             <<"zero="<<cc.effortproxy.zeroColumns();
         int row = cc.effortproxy.rowCount()-1;
         for ( int i = 0; i < cc.effortproxy.columnCount(); ++i ) {
-            kDebug(planDbg())<<"data ("<<row<<","<<i<<":"<<cc.effortproxy.index(row,i).data().toString()<<(cc.effortplane->diagram()->isHidden(i)?"hide":"show");
+            debugPlan<<"data ("<<row<<","<<i<<":"<<cc.effortproxy.index(row,i).data().toString()<<(cc.effortplane->diagram()->isHidden(i)?"hide":"show");
         }
     }
-    kDebug(planDbg())<<"Cost:"<<info.showCost;
+    debugPlan<<"Cost:"<<info.showCost;
     if ( info.showCost && cc.costproxy.rowCount() > 0 ) {
-        kDebug(planDbg())<<"Cost:"<<info.showCost<<"columns ="<<cc.costproxy.columnCount()
+        debugPlan<<"Cost:"<<info.showCost<<"columns ="<<cc.costproxy.columnCount()
             <<"reject="<<cc.costproxy.rejectColumns()
             <<"zero="<<cc.costproxy.zeroColumns();
         int row = cc.costproxy.rowCount()-1;
         for ( int i = 0; i < cc.costproxy.columnCount(); ++i ) {
-            kDebug(planDbg())<<"data ("<<row<<","<<i<<":"<<cc.costproxy.index(row,i).data().toString()<<(cc.costplane->diagram()->isHidden(i)?"hide":"show");
+            debugPlan<<"data ("<<row<<","<<i<<":"<<cc.costproxy.index(row,i).data().toString()<<(cc.costplane->diagram()->isHidden(i)?"hide":"show");
         }
     }
 
     foreach( AbstractCoordinatePlane *p, ui_chart->coordinatePlanes() ) {
-        kDebug(planDbg())<<p<<"refrences:"<<p->referenceCoordinatePlane();
+        debugPlan<<p<<"refrences:"<<p->referenceCoordinatePlane();
         foreach ( AbstractDiagram *d, p->diagrams() ) {
-            kDebug(planDbg())<<p<<"diagram:"<<d;
+            debugPlan<<p<<"diagram:"<<d;
         }
     }
 #endif
@@ -902,19 +902,19 @@ void PerformanceStatusBase::setupChart( ChartContents &cc )
 
 void PerformanceStatusBase::contextMenuEvent( QContextMenuEvent *event )
 {
-    kDebug(planDbg())<<event->globalPos();
+    debugPlan<<event->globalPos();
     emit customContextMenuRequested( event->globalPos() );
 }
 
 void PerformanceStatusBase::slotUpdate()
 {
-    //kDebug(planDbg());
+    //debugPlan;
     refreshChart();
 }
 
 void PerformanceStatusBase::setScheduleManager( ScheduleManager *sm )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     m_manager = sm;
     m_chartmodel.setScheduleManager( sm );
     static_cast<PerformanceDataCurrentDateModel*>( ui_performancetable->model() )->setScheduleManager( sm );
@@ -937,7 +937,7 @@ void PerformanceStatusBase::setProject( Project *project )
 
 void PerformanceStatusBase::slotLocaleChanged()
 {
-    kDebug(planDbg());
+    debugPlan;
     KLocale *locale = m_project ? m_project->locale() : KLocale::global();
     if ( locale ) {
         m_linechart.costaxis->setTitleText( i18nc( "Chart axis title 1=currency symbol", "Cost (%1)", m_project->locale()->currencySymbol() ) );
@@ -954,7 +954,7 @@ void PerformanceStatusBase::slotLocaleChanged()
 
 bool PerformanceStatusBase::loadContext( const KoXmlElement &context )
 {
-    kDebug(planDbg());
+    debugPlan;
     m_chartinfo.showBarChart = context.attribute( "show-bar-chart", "0" ).toInt();
     m_chartinfo.showLineChart = context.attribute( "show-line-chart", "1" ).toInt();
     m_chartinfo.showTableView = context.attribute( "show-table-view", "0" ).toInt();
@@ -977,8 +977,8 @@ bool PerformanceStatusBase::loadContext( const KoXmlElement &context )
     m_chartinfo.showSpiEffort = context.attribute( "show-spi-effort", "1" ).toInt();
     m_chartinfo.showCpiEffort = context.attribute( "show-cpi-effort", "1" ).toInt();
 
-    kDebug(planDbg())<<"Cost:"<<m_chartinfo.showCost<<"bcws="<<m_chartinfo.showBCWSCost<<"bcwp="<<m_chartinfo.showBCWPCost<<"acwp="<<m_chartinfo.showACWPCost;
-    kDebug(planDbg())<<"Effort:"<<m_chartinfo.showCost<<"bcws="<<m_chartinfo.showBCWSCost<<"bcwp="<<m_chartinfo.showBCWPCost<<"acwp="<<m_chartinfo.showACWPCost;
+    debugPlan<<"Cost:"<<m_chartinfo.showCost<<"bcws="<<m_chartinfo.showBCWSCost<<"bcwp="<<m_chartinfo.showBCWPCost<<"acwp="<<m_chartinfo.showACWPCost;
+    debugPlan<<"Effort:"<<m_chartinfo.showCost<<"bcws="<<m_chartinfo.showBCWSCost<<"bcwp="<<m_chartinfo.showBCWPCost<<"acwp="<<m_chartinfo.showACWPCost;
     setupChart();
     return true;
 }
@@ -1044,7 +1044,7 @@ PerformanceStatusTreeView::PerformanceStatusTreeView( QWidget *parent )
 
 void PerformanceStatusTreeView::slotSelectionChanged( const QItemSelection&, const QItemSelection& )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     QList<Node*> nodes;
     foreach ( const QModelIndex &i, m_tree->selectionModel()->selectedIndexes() ) {
         Node *n = nodeModel()->node( i );
@@ -1079,7 +1079,7 @@ void PerformanceStatusTreeView::setProject( Project *project )
 
 bool PerformanceStatusTreeView::loadContext( const KoXmlElement &context )
 {
-    kDebug(planDbg());
+    debugPlan;
 
     bool res = false;
     res = m_chart->loadContext( context.namedItem( "chart" ).toElement() );
@@ -1126,7 +1126,7 @@ void PerformanceStatusTreeView::resizeSplitters()
 PerformanceStatusView::PerformanceStatusView(KoPart *part, KoDocument *doc, QWidget *parent )
     : ViewBase(part, doc, parent )
 {
-    kDebug(planDbg())<<"-------------------- creating PerformanceStatusView -------------------";
+    debugPlan<<"-------------------- creating PerformanceStatusView -------------------";
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new PerformanceStatusTreeView( this );
@@ -1142,7 +1142,7 @@ PerformanceStatusView::PerformanceStatusView(KoPart *part, KoDocument *doc, QWid
 
 void PerformanceStatusView::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
-    kDebug(planDbg())<<index<<pos;
+    debugPlan<<index<<pos;
     if ( ! index.isValid() ) {
         slotHeaderContextMenuRequested( pos );
         return;
@@ -1162,7 +1162,7 @@ Node *PerformanceStatusView::currentNode() const
 
 void PerformanceStatusView::slotContextMenuRequested( Node *node, const QPoint& pos )
 {
-    kDebug(planDbg())<<node->name()<<" :"<<pos;
+    debugPlan<<node->name()<<" :"<<pos;
     QString name;
     switch ( node->type() ) {
         case Node::Type_Task:
@@ -1177,7 +1177,7 @@ void PerformanceStatusView::slotContextMenuRequested( Node *node, const QPoint& 
         default:
             break;
     }
-    //kDebug(planDbg())<<name;
+    //debugPlan<<name;
     if ( name.isEmpty() ) {
         slotHeaderContextMenuRequested( pos );
         return;
@@ -1188,7 +1188,7 @@ void PerformanceStatusView::slotContextMenuRequested( Node *node, const QPoint& 
 
 void PerformanceStatusView::setScheduleManager( ScheduleManager *sm )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     m_view->setScheduleManager( sm );
 }
 
@@ -1199,7 +1199,7 @@ void PerformanceStatusView::setProject( Project *project )
 
 void PerformanceStatusView::setGuiActive( bool activate )
 {
-    kDebug(planDbg())<<activate;
+    debugPlan<<activate;
 //    updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
 }
@@ -1212,7 +1212,7 @@ void PerformanceStatusView::setupGui()
 
 void PerformanceStatusView::slotOptions()
 {
-    kDebug(planDbg());
+    debugPlan;
     PerformanceStatusViewSettingsDialog *dlg = new PerformanceStatusViewSettingsDialog( this, m_view, this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
@@ -1222,7 +1222,7 @@ void PerformanceStatusView::slotOptions()
 
 bool PerformanceStatusView::loadContext( const KoXmlElement &context )
 {
-    kDebug(planDbg());
+    debugPlan;
     ViewBase::loadContext( context );
     return m_view->loadContext( context );
 }
@@ -1336,7 +1336,7 @@ void PerformanceStatusViewSettingsPanel::switchStackWidget()
     } else if ( ui_showindices->isChecked() ) {
         ui_stackWidget->setCurrentIndex( 1 );
     }
-    //kDebug(planDbg())<<sender()<<ui_stackWidget->currentIndex();
+    //debugPlan<<sender()<<ui_stackWidget->currentIndex();
 }
 
 //-----------------
@@ -1385,7 +1385,7 @@ ProjectStatusViewSettingsDialog::ProjectStatusViewSettingsDialog( ViewBase *base
 
 void ProjectStatusViewSettingsDialog::slotOk()
 {
-    kDebug(planDbg());
+    debugPlan;
     m_base->setPageLayout( m_pagelayout->pageLayout() );
     m_base->setPrintingOptions( m_headerfooter->options() );
 }

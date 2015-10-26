@@ -103,7 +103,7 @@ bool CheckStateItemDelegate::editorEvent( QEvent *event, QAbstractItemModel *mod
 {
     Q_ASSERT(event);
     Q_ASSERT(model);
-    kDebug(planDbg());
+    debugPlan;
 
     Qt::ItemFlags flags = model->flags(index);
     if ( ! ( option.state & QStyle::State_Enabled ) || ! ( flags & Qt::ItemIsEnabled ) ) {
@@ -173,7 +173,7 @@ void DateTimeCalendarDelegate::setModelData(QWidget *editor, QAbstractItemModel 
 
 void DateTimeCalendarDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
-    kDebug(planDbg())<<editor<<":"<<option.rect<<","<<editor->sizeHint();
+    debugPlan<<editor<<":"<<option.rect<<","<<editor->sizeHint();
     QRect r = option.rect;
     //r.setHeight(r.height() 50);
     editor->setGeometry(r);
@@ -223,7 +223,7 @@ void ProgressBarDelegate::paint( QPainter *painter, const QStyleOptionViewItem &
                 o.backgroundColor = opt.palette.color( cg, ( opt.state & QStyle::State_Selected )
                                                 ? QPalette::Highlight : QPalette::Window );
                 style->drawPrimitive( QStyle::PE_FrameFocusRect, &o, painter, opt.widget );
-                //kDebug(planDbg())<<"Focus"<<o.rect<<opt.rect<<pbOption.rect;
+                //debugPlan<<"Focus"<<o.rect<<opt.rect<<pbOption.rect;
                 painter->restore();
             }
         } else {
@@ -264,7 +264,7 @@ QWidget *ProgressBarDelegate::createEditor( QWidget *parent, const QStyleOptionV
     Slider *slider = new Slider( parent );
     slider->setRange( 0, 100 );
     slider->setOrientation( Qt::Horizontal );
-    //kDebug(planDbg())<<slider->minimumSizeHint()<<slider->minimumSize();
+    //debugPlan<<slider->minimumSizeHint()<<slider->minimumSize();
     return slider;
 }
 
@@ -283,7 +283,7 @@ void ProgressBarDelegate::setModelData( QWidget *editor, QAbstractItemModel *mod
 void ProgressBarDelegate::updateEditorGeometry( QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex & ) const
 {
     editor->setGeometry( option.rect );
-    //kDebug(planDbg())<<editor->minimumSizeHint()<<editor->minimumSize()<<editor->geometry()<<editor->size();
+    //debugPlan<<editor->minimumSizeHint()<<editor->minimumSize()<<editor->geometry()<<editor->size();
 }
 
 Slider::Slider( QWidget *parent )
@@ -403,7 +403,7 @@ void EnumDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 
 void EnumDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
-    kDebug(planDbg())<<editor<<":"<<option.rect<<","<<editor->sizeHint();
+    debugPlan<<editor<<":"<<option.rect<<","<<editor->sizeHint();
     QRect r = option.rect;
     //r.setHeight(r.height() 50);
     editor->setGeometry(r);
@@ -465,7 +465,7 @@ void RequieredResourceDelegate::setModelData(QWidget *editor, QAbstractItemModel
 
 void RequieredResourceDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
-    kDebug(planDbg())<<editor<<":"<<option.rect<<","<<editor->sizeHint();
+    debugPlan<<editor<<":"<<option.rect<<","<<editor->sizeHint();
     QRect r = option.rect;
     r.setWidth( qMax( 100, r.width() ) );
     editor->setGeometry(r);
@@ -505,7 +505,7 @@ void DurationSpinBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *
 
 void DurationSpinBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
-    kDebug(planDbg())<<editor<<":"<<option.rect<<","<<editor->sizeHint();
+    debugPlan<<editor<<":"<<option.rect<<","<<editor->sizeHint();
     QRect r = option.rect;
     //r.setHeight(r.height() + 50);
     editor->setGeometry(r);
@@ -544,7 +544,7 @@ void SpinBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 
 void SpinBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
-    kDebug(planDbg())<<editor<<":"<<option.rect<<","<<editor->sizeHint();
+    debugPlan<<editor<<":"<<option.rect<<","<<editor->sizeHint();
     QRect r = option.rect;
     //r.setHeight(r.height() + 50);
     editor->setGeometry(r);
@@ -683,13 +683,13 @@ void ItemModelBase::setScheduleManager( ScheduleManager *sm )
 
 void ItemModelBase::slotLayoutChanged()
 {
-    kDebug(planDbg());
+    debugPlan;
     emit layoutChanged();
 }
 
 void ItemModelBase::slotLayoutToBeChanged()
 {
-    kDebug(planDbg());
+    debugPlan;
     emit layoutAboutToBeChanged();
 }
 

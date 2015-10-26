@@ -46,7 +46,6 @@
 #include <QAction>
 
 #include <klocale.h>
-#include <kdebug.h>
 #include <ktoolbar.h>
 
 #include <kxmlguifactory.h>
@@ -86,7 +85,7 @@ View::View( Part *part,  QWidget *parent, KActionCollection *collection )
     m_manager( 0 )
 {
     m_readWrite = part->isReadWrite();
-    kDebug(planworkDbg())<<m_readWrite;
+    debugPlanWork<<m_readWrite;
 
     // Add sub views
     createViews();
@@ -152,7 +151,7 @@ View::View( Part *part,  QWidget *parent, KActionCollection *collection )
 
 
     updateReadWrite( m_readWrite );
-    //kDebug(planworkDbg())<<" end";
+    //debugPlanWork<<" end";
 
     loadContext();
     slotCurrentChanged( currentIndex() );
@@ -175,13 +174,13 @@ void View::slotCurrentChanged( int index )
 
 void View::slotViewList()
 {
-    kDebug(planworkDbg());
+    debugPlanWork;
     setCurrentIndex( 0 );
 }
 
 void View::slotViewGantt()
 {
-    kDebug(planworkDbg());
+    debugPlanWork;
     setCurrentIndex( 1 );
 }
 
@@ -219,7 +218,7 @@ TaskWPGanttView *View::createGanttView()
 
 void View::setupPrinter( QPrinter &/*printer*/, QPrintDialog &/*printDialog */)
 {
-    //kDebug(planworkDbg());
+    //debugPlanWork;
 }
 
 void View::print( QPrinter &/*printer*/, QPrintDialog &/*printDialog*/ )
@@ -235,17 +234,17 @@ void View::slotSelectionChanged()
 
 void View::slotEditCut()
 {
-    //kDebug(planworkDbg());
+    //debugPlanWork;
 }
 
 void View::slotEditCopy()
 {
-    //kDebug(planworkDbg());
+    //debugPlanWork;
 }
 
 void View::slotEditPaste()
 {
-    //kDebug(planworkDbg());
+    //debugPlanWork;
 }
 
 void View::slotProgressChanged( int )
@@ -263,7 +262,7 @@ ScheduleManager *View::currentScheduleManager() const
 
 void View::updateReadWrite( bool readwrite )
 {
-    kDebug(planworkDbg())<<m_readWrite<<"->"<<readwrite;
+    debugPlanWork<<m_readWrite<<"->"<<readwrite;
     m_readWrite = readwrite;
 
 //    actionTaskProgress->setEnabled( readwrite );
@@ -290,7 +289,7 @@ void View::slotPopupMenu( const QString& name, const QPoint & pos )
     AbstractView *v = currentView();
     if ( v ) {
         lst = v->contextActionList();
-        kDebug(planworkDbg())<<lst;
+        debugPlanWork<<lst;
         if ( ! lst.isEmpty() ) {
             menu->addSeparator();
             foreach ( QAction *a, lst ) {
@@ -306,14 +305,14 @@ void View::slotPopupMenu( const QString& name, const QPoint & pos )
 
 bool View::loadContext()
 {
-    kDebug(planworkDbg());
+    debugPlanWork;
     setCurrentIndex( PlanWorkSettings::self()->currentView() );
     return true;
 }
 
 void View::saveContext() const
 {
-    kDebug(planworkDbg());
+    debugPlanWork;
     PlanWorkSettings::self()->setCurrentView( currentIndex() );
     PlanWorkSettings::self()->writeConfig();
 }
@@ -325,9 +324,9 @@ void View::slotEditDocument()
 
 void View::slotEditDocument( Document *doc )
 {
-    kDebug(planworkDbg())<<doc;
+    debugPlanWork<<doc;
     if ( doc == 0 ) {
-        kDebug(planworkDbg())<<"No document";
+        debugPlanWork<<"No document";
         return;
     }
     if ( doc->type() != Document::Type_Product ) {
@@ -357,7 +356,7 @@ void View::slotPackageSettings()
     if ( dia->exec() == QDialog::Accepted && dia ) {
         KUndo2Command *cmd = dia->buildCommand();
         if ( cmd ) {
-            kDebug(planworkDbg());
+            debugPlanWork;
             part()->addCommand( cmd );
         }
     }
@@ -371,7 +370,7 @@ void View::slotSendPackage()
         KMessageBox::error(0, i18n("No work package is selected" ) );
         return;
     }
-    kDebug(planworkDbg())<<node->name();
+    debugPlanWork<<node->name();
     WorkPackage *wp = part()->findWorkPackage( node );
     if ( wp == 0 ) {
         KMessageBox::error(0, i18n("Cannot find work package" ) );
@@ -439,7 +438,7 @@ Document *View::currentDocument() const
 
 void View::slotTaskProgress()
 {
-    kDebug(planworkDbg());
+    debugPlanWork;
     Task *n = qobject_cast<Task*>( currentNode() );
     if ( n == 0 ) {
         return;
@@ -456,7 +455,7 @@ void View::slotTaskProgress()
 
 void View::slotTaskCompletion()
 {
-    kDebug(planworkDbg());
+    debugPlanWork;
     WorkPackage *wp = m_part->findWorkPackage( currentNode() );
     if ( wp == 0 ) {
         return;
@@ -473,7 +472,7 @@ void View::slotTaskCompletion()
 
 void View::slotRemoveSelectedPackages()
 {
-    kDebug(planworkDbg());
+    debugPlanWork;
     QList<Node*> lst = currentView()->selectedNodes();
     if ( lst.isEmpty() ) {
         return;
@@ -483,7 +482,7 @@ void View::slotRemoveSelectedPackages()
 
 void View::slotRemoveCurrentPackage()
 {
-    kDebug(planworkDbg());
+    debugPlanWork;
     Node *n = currentNode();
     if ( n == 0 ) {
         return;

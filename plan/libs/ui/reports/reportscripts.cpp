@@ -75,7 +75,7 @@ QVariant ProjectAccess::BCWP() const
         double r = m_reportdata->project()->bcwp( QDate::currentDate(), id );
         return KLocale::global()->formatNumber( r, 2 ).toUtf8();
     }
-    kWarning()<<"No report data or project"<<m_reportdata;
+    warnPlan<<"No report data or project"<<m_reportdata;
     return QVariant();
 }
 
@@ -106,7 +106,7 @@ QVariant ProjectAccess::CPI() const
 
 QVariant ProjectAccess::SPI() const
 {
-    kDebug(planDbg())<<"ProjectAccess::SPI:";
+    debugPlan<<"ProjectAccess::SPI:";
     if ( m_reportdata && m_reportdata->project() ) {
         int id = m_reportdata->scheduleManager() ? m_reportdata->scheduleManager()->scheduleId() : BASELINESCHEDULE;
         double r = m_reportdata->project()->schedulePerformanceIndex( QDate::currentDate(), id );

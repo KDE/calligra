@@ -27,7 +27,6 @@
 #include <KoIcon.h>
 
 #include <klocale.h>
-#include <kdebug.h>
 
 #include <QPushButton>
 #include <QLineEdit>

@@ -26,8 +26,6 @@
 #include "kpttask.h"
 #include "kptschedule.h"
 
-#include <kdebug.h>
-
 #include <QTest>
 #include <QStringList>
 #include <QString>

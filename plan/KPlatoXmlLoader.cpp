@@ -28,7 +28,6 @@
 
 #include <kmessagebox.h>
 #include <ktimezone.h>
-#include <kdebug.h>
 
 extern int kplatoXmlDebugArea();
 
@@ -59,7 +58,7 @@ QString KPlatoXmlLoader::timeTag() const
 
 bool KPlatoXmlLoader::load( const KoXmlElement& plan )
 {
-    kDebug(kplatoXmlDebugArea())<<"plan";
+    debugPlanXml<<"plan";
     QString syntaxVersion = plan.attribute( "version" );
     m_loader.setVersion( syntaxVersion );
     if ( syntaxVersion.isEmpty() ) {
@@ -102,7 +101,7 @@ bool KPlatoXmlLoader::load( const KoXmlElement& plan )
                 }
             } else {
                 m_loader.addMsg( XMLLoaderObject::Errors, "Loading of project failed" );
-                kError()<<"Loading of project failed";
+                errorPlanXml <<"Loading of project failed";
                 //TODO add some ui here
             }
         }
@@ -114,7 +113,7 @@ bool KPlatoXmlLoader::load( const KoXmlElement& plan )
 
 bool KPlatoXmlLoader::loadWorkpackage( const KoXmlElement& plan )
 {
-    kDebug(kplatoXmlDebugArea());
+    debugPlanXml;
     bool ok = false;
     if ( m_loader.workVersion() > KPLATOWORK_MAX_FILE_SYNTAX_VERSION ) {
         int ret = KMessageBox::warningContinueCancel(

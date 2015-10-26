@@ -48,7 +48,6 @@
 #include <kactionmenu.h>
 #include <kstandardaction.h>
 #include <klocale.h>
-#include <kdebug.h>
 #include <ktoolbar.h>
 #include <kconfigdialogmanager.h>
 #include <kxmlguifactory.h>
@@ -155,7 +154,7 @@ void ConfigDialog::updateSettings()
     foreach ( KRichTextWidget *w, findChildren<KRichTextWidget*>( kcfg ) ) {
         KConfigSkeletonItem *item = m_config->findItem( w->objectName().mid(5) );
         if ( ! item ) {
-            kWarning() << "The setting '" <<  w->objectName().mid(5)  << "' has disappeared!";
+            warnPlan << "The setting '" <<  w->objectName().mid(5)  << "' has disappeared!";
             continue;
         }
         if ( ! item->isEqual( QVariant( w->toHtml() ) ) ) {
@@ -174,7 +173,7 @@ void ConfigDialog::updateWidgets()
     foreach ( KRichTextWidget *w, findChildren<KRichTextWidget*>( kcfg ) ) {
         KConfigSkeletonItem *item = m_config->findItem( w->objectName().mid(5) );
         if ( ! item ) {
-            kWarning() << "The setting '" <<  w->objectName().mid(5)  << "' has disappeared!";
+            warnPlan << "The setting '" <<  w->objectName().mid(5)  << "' has disappeared!";
             continue;
         }
         if ( ! item->isEqual( QVariant( w->toHtml() ) ) ) {
@@ -208,7 +207,7 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
         m_readWrite( false ),
         m_partpart (part)
 {
-    //kDebug(planDbg());
+    //debugPlan;
 
     doc->registerView( this );
 
@@ -397,12 +396,12 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
             insertChildClient(plugin);
         } else {
             if(!error.isEmpty()) {
-                kWarning() << " Error loading plugin was : ErrNoLibrary" << error;
+                warnPlan << " Error loading plugin was : ErrNoLibrary" << error;
             }
         }
     }
 
-    //kDebug(planDbg())<<" end";
+    //debugPlan<<" end";
 }
 
 View::~View()
@@ -473,7 +472,7 @@ void View::slotCreateTemplate()
 
 void View::slotCreateNewProject()
 {
-    kDebug(planDbg());
+    debugPlan;
     if ( KMessageBox::Continue == KMessageBox::warningContinueCancel( this,
                       i18nc( "@info",
                              "<note>This action cannot be undone.</note><nl/><nl/>"
@@ -492,10 +491,10 @@ void View::createViews()
 {
     Context *ctx = getPart()->context();
     if ( ctx && ctx->isLoaded() ) {
-        kDebug(planDbg())<<"isLoaded";
+        debugPlan<<"isLoaded";
         KoXmlNode n = ctx->context().namedItem( "categories" );
         if ( n.isNull() ) {
-            kWarning()<<"No categories";
+            warnPlan<<"No categories";
         } else {
             n = n.firstChild();
             for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -506,7 +505,7 @@ void View::createViews()
                 if (e.tagName() != "category") {
                     continue;
                 }
-                kDebug(planDbg())<<"category: "<<e.attribute( "tag" );
+                debugPlan<<"category: "<<e.attribute( "tag" );
                 ViewListItem *cat;
                 QString cn = e.attribute( "name" );
                 QString ct = e.attribute( "tag" );
@@ -537,14 +536,14 @@ void View::createViews()
                         }
                     }
                     if ( v && settings.isElement() ) {
-                        kDebug(planDbg())<<" settings";
+                        debugPlan<<" settings";
                         v->loadContext( settings.toElement() );
                     }
                 }
             }
         }
     } else {
-        kDebug(planDbg())<<"Default";
+        debugPlan<<"Default";
         ViewListItem *cat;
         QString ct = "Editors";
         cat = m_viewlist->addCategory( ct, defaultCategoryInfo( ct ).name );
@@ -644,7 +643,7 @@ ViewBase *View::createView( ViewListItem *cat, const QString &type, const QStrin
     } else if ( type == "ReportView" ) {
         v = createReportView( cat, tag, name, tip, index );
     } else  {
-        kWarning()<<"Unknown viewtype: "<<type;
+        warnPlan<<"Unknown viewtype: "<<type;
     }
     return v;
 }
@@ -720,7 +719,7 @@ ViewInfo View::defaultViewInfo( const QString &type ) const
         vi.name = i18n( "Report" );
         vi.tip = i18nc( "@info:tooltip", "View report" );
     } else  {
-        kWarning()<<"Unknown viewtype: "<<type;
+        warnPlan<<"Unknown viewtype: "<<type;
     }
     return vi;
 }
@@ -1434,7 +1433,7 @@ void View::slotRefreshView()
 
 void View::slotViewSelector( bool show )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     m_viewlist->setVisible( show );
 }
 
@@ -1482,7 +1481,7 @@ void View::slotProjectWorktimeFinished( int result )
     if ( result == QDialog::Accepted) {
         KUndo2Command * cmd = dia->buildCommand();
         if ( cmd ) {
-            //kDebug(planDbg())<<"Modifying calendar(s)";
+            //debugPlan<<"Modifying calendar(s)";
             getPart() ->addCommand( cmd ); //also executes
         }
     }
@@ -1490,13 +1489,13 @@ void View::slotProjectWorktimeFinished( int result )
 }
 
 void View::slotSelectionChanged( ScheduleManager *sm ) {
-    kDebug(planDbg())<<sm;
+    debugPlan<<sm;
     if ( sm == 0 ) {
         return;
     }
     int idx = m_scheduleActions.values().indexOf( sm->expected() );
     if ( idx < 0 ) {
-        kDebug(planDbg())<<sm<<"could not find schedule"<<sm->expected();
+        debugPlan<<sm<<"could not find schedule"<<sm->expected();
         return;
     }
     QAction *a = m_scheduleActions.keys().at( idx );
@@ -1516,7 +1515,7 @@ QList<QAction*> View::sortedActionList()
 
 void View::slotScheduleRemoved( const MainSchedule *sch )
 {
-    kDebug(planDbg())<<sch<<sch->name();
+    debugPlan<<sch<<sch->name();
     QAction *a = 0;
     QAction *checked = m_scheduleActionGroup->checkedAction();
     QMapIterator<QAction*, Schedule*> i( m_scheduleActions );
@@ -1546,7 +1545,7 @@ void View::slotScheduleAdded( const MainSchedule *sch )
         return; // Only view expected
     }
     MainSchedule *s = const_cast<MainSchedule*>( sch );
-//     kDebug(planDbg())<<sch->name()<<" deleted="<<sch->isDeleted()<<"scheduled="<<sch->isScheduled();
+//     debugPlan<<sch->name()<<" deleted="<<sch->isDeleted()<<"scheduled="<<sch->isScheduled();
     QAction *checked = m_scheduleActionGroup->checkedAction();
     if ( ! sch->isDeleted() && sch->isScheduled() ) {
         unplugActionList( "view_schedule_list" );
@@ -1565,7 +1564,7 @@ void View::slotScheduleAdded( const MainSchedule *sch )
 
 void View::slotScheduleChanged( MainSchedule *sch )
 {
-//     kDebug(planDbg())<<sch->name()<<" deleted="<<sch->isDeleted()<<"scheduled="<<sch->isScheduled();
+//     debugPlan<<sch->name()<<" deleted="<<sch->isDeleted()<<"scheduled="<<sch->isScheduled();
     if ( sch->isDeleted() || ! sch->isScheduled() ) {
         slotScheduleRemoved( sch );
         return;
@@ -1585,7 +1584,7 @@ QAction *View::addScheduleAction( Schedule *sch )
         actionCollection()->addAction(n, act );
         m_scheduleActions.insert( act, sch );
         m_scheduleActionGroup->addAction( act );
-        //kDebug(planDbg())<<"Add:"<<n;
+        //debugPlan<<"Add:"<<n;
         connect( act, SIGNAL(destroyed(QObject*)), SLOT(slotActionDestroyed(QObject*)) );
     }
     return act;
@@ -1603,7 +1602,7 @@ void View::slotViewScheduleManager()
 
 void View::slotViewSchedule( QAction *act )
 {
-    //kDebug(planDbg())<<act;
+    //debugPlan<<act;
     ScheduleManager *sm = 0;
     if ( act != 0 ) {
         Schedule *sch = m_scheduleActions.value( act, 0 );
@@ -1623,14 +1622,14 @@ void View::slotViewSchedule( QAction *act )
 
 void View::slotActionDestroyed( QObject *o )
 {
-    //kDebug(planDbg())<<o->name();
+    //debugPlan<<o->name();
     m_scheduleActions.remove( static_cast<QAction*>( o ) );
 //    slotViewSchedule( m_scheduleActionGroup->checkedAction() );
 }
 
 void View::slotPlugScheduleActions()
 {
-    //kDebug(planDbg())<<activeScheduleId();
+    //debugPlan<<activeScheduleId();
     long id = activeScheduleId();
     unplugActionList( "view_schedule_list" );
     foreach( QAction *act, m_scheduleActions.keys() ) {
@@ -1842,7 +1841,7 @@ void View::slotAddSubMilestoneFinished( int result )
 
 void View::slotDefineWBS()
 {
-    //kDebug(planDbg());
+    //debugPlan;
     Project &p = getProject();
     WBSDefinitionDialog *dia = new WBSDefinitionDialog( p, p.wbsDefinition(), this );
     connect(dia, SIGNAL(finished(int)), SLOT(slotDefineWBSFinished(int)));
@@ -1853,7 +1852,7 @@ void View::slotDefineWBS()
 
 void View::slotDefineWBSFinished( int result )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     WBSDefinitionDialog *dia = qobject_cast<WBSDefinitionDialog*>( sender() );
     if ( dia == 0 ) {
         return;
@@ -1869,7 +1868,7 @@ void View::slotDefineWBSFinished( int result )
 
 void View::slotConfigure()
 {
-    //kDebug(planDbg());
+    //debugPlan;
     if( KConfigDialog::showDialog("Plan Settings") ) {
         return;
     }
@@ -1943,14 +1942,14 @@ ResourceGroup *View::currentResourceGroup()
 
 void View::slotOpenNode()
 {
-    //kDebug(planDbg());
+    //debugPlan;
     Node * node = currentNode();
     slotOpenNode( node );
 }
 
 void View::slotOpenNode( Node *node )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     if ( !node )
         return ;
 
@@ -2077,7 +2076,7 @@ void View::setActiveSchedule( long id )
 
 void View::slotTaskProgress()
 {
-    //kDebug(planDbg());
+    //debugPlan;
     Node * node = currentNode();
     if ( !node )
         return ;
@@ -2150,7 +2149,7 @@ void View::slotMilestoneProgressFinished( int result )
 
 void View::slotTaskDescription()
 {
-    //kDebug(planDbg());
+    //debugPlan;
     Node * node = currentNode();
     if ( !node )
         return ;
@@ -2196,7 +2195,7 @@ void View::slotTaskDescriptionFinished( int result )
 
 void View::slotDeleteTask( QList<Node*> lst )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     foreach ( Node *n, lst ) {
         if ( n->isScheduled() ) {
             int res = KMessageBox::warningContinueCancel( this, i18n( "A task that has been scheduled will be deleted. This will invalidate the schedule." ) );
@@ -2215,7 +2214,7 @@ void View::slotDeleteTask( QList<Node*> lst )
     while ( !lst.isEmpty() ) {
         Node *node = lst.takeFirst();
         if ( node == 0 || node->parentNode() == 0 ) {
-            kDebug(planDbg()) << ( node ?"Task is main project" :"No current task" );
+            debugPlan << ( node ?"Task is main project" :"No current task" );
             continue;
         }
         bool del = true;
@@ -2226,7 +2225,7 @@ void View::slotDeleteTask( QList<Node*> lst )
             }
         }
         if ( del ) {
-            //kDebug(planDbg())<<num<<": delete:"<<node->name();
+            //debugPlan<<num<<": delete:"<<node->name();
             cmd->addCommand( new NodeDeleteCmd( node, kundo2_i18n( "Delete task" ) ) );
             num++;
         }
@@ -2240,9 +2239,9 @@ void View::slotDeleteTask( QList<Node*> lst )
 
 void View::slotDeleteTask( Node *node )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     if ( node == 0 || node->parentNode() == 0 ) {
-        kDebug(planDbg()) << ( node ?"Task is main project" :"No current task" );
+        debugPlan << ( node ?"Task is main project" :"No current task" );
         return ;
     }
     if ( node->isScheduled() ) {
@@ -2257,16 +2256,16 @@ void View::slotDeleteTask( Node *node )
 
 void View::slotDeleteTask()
 {
-    //kDebug(planDbg());
+    //debugPlan;
     return slotDeleteTask( currentNode() );
 }
 
 void View::slotIndentTask()
 {
-    //kDebug(planDbg());
+    //debugPlan;
     Node * node = currentNode();
     if ( node == 0 || node->parentNode() == 0 ) {
-        kDebug(planDbg()) << ( node ?"Task is main project" :"No current task" );
+        debugPlan << ( node ?"Task is main project" :"No current task" );
         return ;
     }
     if ( getProject().canIndentTask( node ) ) {
@@ -2277,10 +2276,10 @@ void View::slotIndentTask()
 
 void View::slotUnindentTask()
 {
-    //kDebug(planDbg());
+    //debugPlan;
     Node * node = currentNode();
     if ( node == 0 || node->parentNode() == 0 ) {
-        kDebug(planDbg()) << ( node ?"Task is main project" :"No current task" );
+        debugPlan << ( node ?"Task is main project" :"No current task" );
         return ;
     }
     if ( getProject().canUnindentTask( node ) ) {
@@ -2291,18 +2290,18 @@ void View::slotUnindentTask()
 
 void View::slotMoveTaskUp()
 {
-    //kDebug(planDbg());
+    //debugPlan;
 
     Node * task = currentNode();
     if ( 0 == task ) {
         // is always != 0. At least we would get the Project, but you never know who might change that
         // so better be careful
-        kError() << "No current task" << endl;
+        errorPlan << "No current task" << endl;
         return ;
     }
 
     if ( Node::Type_Project == task->type() ) {
-        kDebug(planDbg()) <<"The root node cannot be moved up";
+        debugPlan <<"The root node cannot be moved up";
         return ;
     }
     if ( getProject().canMoveTaskUp( task ) ) {
@@ -2313,7 +2312,7 @@ void View::slotMoveTaskUp()
 
 void View::slotMoveTaskDown()
 {
-    //kDebug(planDbg());
+    //debugPlan;
 
     Node * task = currentNode();
     if ( 0 == task ) {
@@ -2323,7 +2322,7 @@ void View::slotMoveTaskDown()
     }
 
     if ( Node::Type_Project == task->type() ) {
-        kDebug(planDbg()) <<"The root node cannot be moved down";
+        debugPlan <<"The root node cannot be moved down";
         return ;
     }
     if ( getProject().canMoveTaskDown( task ) ) {
@@ -2334,7 +2333,7 @@ void View::slotMoveTaskDown()
 
 void View::slotAddRelation( Node *par, Node *child )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     Relation * rel = new Relation( par, child );
     AddRelationDialog *dia = new AddRelationDialog( getProject(), rel, this );
     connect(dia, SIGNAL(finished(int)), SLOT(slotAddRelationFinished(int)));
@@ -2360,7 +2359,7 @@ void View::slotAddRelationFinished( int result )
 
 void View::slotAddRelation( Node *par, Node *child, int linkType )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     if ( linkType == Relation::FinishStart ||
             linkType == Relation::StartStart ||
             linkType == Relation::FinishFinish ) {
@@ -2373,7 +2372,7 @@ void View::slotAddRelation( Node *par, Node *child, int linkType )
 
 void View::slotModifyRelation( Relation *rel )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     ModifyRelationDialog *dia = new ModifyRelationDialog( getProject(), rel, this );
     connect(dia, SIGNAL(finished(int)), SLOT(slotModifyRelationFinished(int)));
     dia->show();
@@ -2398,7 +2397,7 @@ void View::slotModifyRelationFinished( int result )
 
 void View::slotModifyRelation( Relation *rel, int linkType )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     if ( linkType == Relation::FinishStart ||
             linkType == Relation::StartStart ||
             linkType == Relation::FinishFinish ) {
@@ -2434,7 +2433,7 @@ void View::slotDeleteRelation()
 
 void View::slotEditResource()
 {
-    //kDebug(planDbg());
+    //debugPlan;
     slotEditResource( currentResource() );
 }
 
@@ -2452,7 +2451,7 @@ void View::slotEditResource( Resource *resource )
 
 void View::slotEditResourceFinished( int result )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     ResourceDialog *dia = qobject_cast<ResourceDialog*>( sender() );
     if ( dia == 0 ) {
         return ;
@@ -2477,7 +2476,7 @@ void View::slotDeleteResourceGroup( ResourceGroup *group )
 
 void View::slotDeleteResourceObjects( QObjectList lst )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     foreach ( QObject *o, lst ) {
         Resource *r = qobject_cast<Resource*>( o );
         if ( r && r->isScheduled() ) {
@@ -2561,16 +2560,16 @@ KoPart *View::getKoPart() const
 
 void View::slotConnectNode()
 {
-    //kDebug(planDbg());
+    //debugPlan;
     /*    NodeItem *curr = ganttview->currentItem();
         if (curr) {
-            kDebug(planDbg())<<"node="<<curr->getNode().name();
+            debugPlan<<"node="<<curr->getNode().name();
         }*/
 }
 
 QMenu * View::popupMenu( const QString& name )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     if ( factory() )
         return ( ( QMenu* ) factory() ->container( name, this ) );
     return 0L;
@@ -2578,7 +2577,7 @@ QMenu * View::popupMenu( const QString& name )
 
 void View::slotUpdate()
 {
-    //kDebug(planDbg())<<"calculate="<<calculate;
+    //debugPlan<<"calculate="<<calculate;
 
 //    m_updateResourceview = true;
     m_updateResourceAssignmentView = true;
@@ -2601,9 +2600,9 @@ void View::slotGuiActivated( ViewBase *view, bool activate )
             m_dockers.append( ds );
             ds->activate( mainWindow() );
         }
-        kDebug(planDbg())<<"Added dockers:"<<view<<m_dockers;
+        debugPlan<<"Added dockers:"<<view<<m_dockers;
     } else {
-        kDebug(planDbg())<<"Remove dockers:"<<view<<m_dockers;
+        debugPlan<<"Remove dockers:"<<view<<m_dockers;
         while ( ! m_dockers.isEmpty() ) {
             m_dockers.takeLast()->deactivate( mainWindow() );
         }
@@ -2776,7 +2775,7 @@ void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
         }
     }
     if ( item && item->type() == ViewListItem::ItemType_SubView ) {
-        //kDebug(planDbg())<<"Activate:"<<item;
+        //debugPlan<<"Activate:"<<item;
         m_tab->setCurrentWidget( item->view() );
         // Add sub-view specific gui
         ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
@@ -2799,7 +2798,7 @@ KoPageLayout View::pageLayout() const
 
 QPrintDialog *View::createPrintDialog( KoPrintJob *printJob, QWidget *parent )
 {
-    kDebug(planDbg())<<printJob;
+    debugPlan<<printJob;
     KoPrintingDialog *job = dynamic_cast<KoPrintingDialog*>( printJob );
     if ( ! job ) {
         return 0;
@@ -2836,7 +2835,7 @@ void View::updateView( QWidget * )
 
 void View::slotRenameNode( Node *node, const QString& name )
 {
-    //kDebug(planDbg())<<name;
+    //debugPlan<<name;
     if ( node ) {
         KUndo2MagicString s = kundo2_i18n( "Modify name" );
         switch( node->type() ) {
@@ -2854,13 +2853,13 @@ void View::slotPopupMenu( const QString& menuname, const QPoint & pos )
 {
     QMenu * menu = this->popupMenu( menuname );
     if ( menu ) {
-        //kDebug(planDbg())<<menu<<":"<<menu->actions().count();
+        //debugPlan<<menu<<":"<<menu->actions().count();
         ViewBase *v = qobject_cast<ViewBase*>( m_tab->currentWidget() );
-        kDebug(planDbg())<<v<<menuname;
+        debugPlan<<v<<menuname;
         QList<QAction*> lst;
         if ( v ) {
             lst = v->contextActionList();
-            kDebug(planDbg())<<lst;
+            debugPlan<<lst;
             if ( ! lst.isEmpty() ) {
                 menu->addSeparator();
                 foreach ( QAction *a, lst ) {
@@ -2877,7 +2876,7 @@ void View::slotPopupMenu( const QString& menuname, const QPoint & pos )
 
 void View::slotPopupMenu( const QString& menuname, const QPoint &pos, ViewListItem *item )
 {
-    //kDebug(planDbg())<<menuname;
+    //debugPlan<<menuname;
     m_viewlistItem = item;
     slotPopupMenu( menuname, pos );
 }
@@ -2892,19 +2891,19 @@ bool View::loadContext()
     QString cv = n.attribute( "current-view" );
     if ( ! cv.isEmpty() ) {
         m_viewlist->setSelected( m_viewlist->findItem( cv ) );
-    } else kDebug(planDbg())<<"No current view";
+    } else debugPlan<<"No current view";
 
     long id = n.attribute( "current-schedule", "-1" ).toLong();
     if ( id != -1 ) {
         setActiveSchedule( id );
-    } else kDebug(planDbg())<<"No current schedule";
+    } else debugPlan<<"No current schedule";
 
     return true;
 }
 
 void View::saveContext( QDomElement &me ) const
 {
-    //kDebug(planDbg());
+    //debugPlan;
     long id = activeScheduleId();
     if ( id != -1 ) {
         me.setAttribute( "current-schedule", (qlonglong)id );
@@ -2923,7 +2922,7 @@ bool View::loadWorkPackage( Project &project, const QUrl &url )
 
 void View::setLabel( ScheduleManager *sm )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     Schedule *s = sm == 0 ? 0 : sm->expected();
     if ( s && !s->isDeleted() && s->isScheduled() ) {
         m_estlabel->setText( sm->name() );
@@ -2935,22 +2934,22 @@ void View::setLabel( ScheduleManager *sm )
 void View::slotWorkPackageLoaded()
 {
     // QDebug support for KDateTime only available with kdelibs4support >=5.12.0
-//     kDebug(planDbg())<<getPart()->workPackages();
+//     debugPlan<<getPart()->workPackages();
 }
 
 void View::slotMailWorkpackage( Node *node, Resource *resource )
 {
-    kDebug(planDbg());
+    debugPlan;
     QTemporaryFile tmpfile(QDir::tempPath() + QLatin1String("/calligraplanwork_XXXXXX") + QLatin1String( ".planwork" ));
     tmpfile.setAutoRemove( false );
     if ( ! tmpfile.open() ) {
-        kDebug(planDbg())<<"Failed to open file";
+        debugPlan<<"Failed to open file";
         KMessageBox::error(0, i18n("Failed to open temporary file" ) );
         return;
     }
     QUrl url = QUrl::fromLocalFile( tmpfile.fileName() );
     if ( ! getPart()->saveWorkPackageUrl( url, node, activeScheduleId(), resource ) ) {
-        kDebug(planDbg())<<"Failed to save to file";
+        debugPlan<<"Failed to save to file";
         KMessageBox::error(0, i18nc( "@info", "Failed to save to temporary file:<br/> <filename>%1</filename>", url.url() ) );
         return;
     }
@@ -2968,9 +2967,9 @@ void View::slotMailWorkpackage( Node *node, Resource *resource )
 
 void View::slotMailWorkpackages( const QList<Node*> &nodes, Resource *resource )
 {
-    kDebug(planDbg());
+    debugPlan;
     if ( resource == 0 ) {
-        kWarning()<<"No resource, we don't handle node->leader() yet";
+        warnPlan<<"No resource, we don't handle node->leader() yet";
         return;
     }
     QString to = resource->name() + " <" + resource->email() + '>';
@@ -2982,13 +2981,13 @@ void View::slotMailWorkpackages( const QList<Node*> &nodes, Resource *resource )
         QTemporaryFile tmpfile(QDir::tempPath() + QLatin1String("/calligraplanwork_XXXXXX") + QLatin1String( ".planwork" ));
         tmpfile.setAutoRemove( false );
         if ( ! tmpfile.open() ) {
-            kDebug(planDbg())<<"Failed to open file";
+            debugPlan<<"Failed to open file";
             KMessageBox::error(0, i18n("Failed to open temporary file" ) );
             return;
         }
         QUrl url = QUrl::fromLocalFile( tmpfile.fileName() );
         if ( ! getPart()->saveWorkPackageUrl( url, n, activeScheduleId(), resource ) ) {
-            kDebug(planDbg())<<"Failed to save to file";
+            debugPlan<<"Failed to save to file";
             KMessageBox::error(0, i18nc( "@info", "Failed to save to temporary file:<br><filename>%1</filename>", url.url() ) );
             return;
         }
@@ -3029,9 +3028,9 @@ void View::slotCurrencyConfigFinished( int result )
 
 void View::saveTaskModule( const QUrl &url, Project *project )
 {
-    kDebug(planDbg())<<url<<project;
+    debugPlan<<url<<project;
     const QString dir = KoResourcePaths::saveLocation( "plan_taskmodules" );
-    kDebug(planDbg())<<"dir="<<dir;
+    debugPlan<<"dir="<<dir;
     if ( ! dir.isEmpty() ) {
         MainDocument part(getKoPart());
         part.insertProject( *project, 0, 0 );
@@ -3039,15 +3038,15 @@ void View::saveTaskModule( const QUrl &url, Project *project )
         part.getProject().setLeader( project->leader() );
         part.getProject().setDescription( project->description() );
         part.saveNativeFormat( dir + url.fileName() );
-        kDebug(planDbg())<<dir + url.fileName();
+        debugPlan<<dir + url.fileName();
     } else {
-        kDebug(planDbg())<<"Could not find a location";
+        debugPlan<<"Could not find a location";
     }
 }
 
 void View::removeTaskModule( const QUrl &url )
 {
-    kDebug(planDbg())<<url;
+    debugPlan<<url;
 }
 
 QString View::standardTaskStatusReport() const

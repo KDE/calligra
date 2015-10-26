@@ -40,8 +40,6 @@
 #include <klocale.h>
 #include <kactioncollection.h>
 
-#include <kdebug.h>
-
 #include <KoDocument.h>
 
 
@@ -127,7 +125,7 @@ DocumentsEditor::DocumentsEditor(KoPart *part, KoDocument *doc, QWidget *parent)
 
 void DocumentsEditor::updateReadWrite( bool readwrite )
 {
-    kDebug(planDbg())<<isReadWrite()<<"->"<<readwrite;
+    debugPlan<<isReadWrite()<<"->"<<readwrite;
     ViewBase::updateReadWrite( readwrite );
     m_view->setReadWrite( readwrite );
     updateActionsEnabled( readwrite );
@@ -144,7 +142,7 @@ void DocumentsEditor::draw()
 
 void DocumentsEditor::setGuiActive( bool activate )
 {
-    kDebug(planDbg())<<activate;
+    debugPlan<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
     if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
@@ -154,7 +152,7 @@ void DocumentsEditor::setGuiActive( bool activate )
 
 void DocumentsEditor::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
-    //kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
+    //debugPlan<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
     if ( index.isValid() ) {
         Document *obj = m_view->model()->document( index );
@@ -167,7 +165,7 @@ void DocumentsEditor::slotContextMenuRequested( const QModelIndex &index, const 
 
 void DocumentsEditor::slotHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug(planDbg());
+    debugPlan;
     QList<QAction*> lst = contextActionList();
     if ( ! lst.isEmpty() ) {
         QMenu::exec( lst, pos,  lst.first() );
@@ -181,13 +179,13 @@ Document *DocumentsEditor::currentDocument() const
 
 void DocumentsEditor::slotCurrentChanged(  const QModelIndex & )
 {
-    //kDebug(planDbg())<<curr.row()<<","<<curr.column();
+    //debugPlan<<curr.row()<<","<<curr.column();
 //    slotEnableActions();
 }
 
 void DocumentsEditor::slotSelectionChanged( const QModelIndexList &list )
 {
-    kDebug(planDbg())<<list.count();
+    debugPlan<<list.count();
     updateActionsEnabled( true );
 }
 
@@ -237,7 +235,7 @@ void DocumentsEditor::setupGui()
 
 void DocumentsEditor::slotOptions()
 {
-    kDebug(planDbg());
+    debugPlan;
     ItemViewSettupDialog dlg( this, m_view/*->masterView()*/ );
     dlg.exec();
 }
@@ -248,7 +246,7 @@ void DocumentsEditor::slotEditDocument()
     if ( dl.isEmpty() ) {
         return;
     }
-    kDebug(planDbg())<<dl;
+    debugPlan<<dl;
     emit editDocument( dl.first() );
 }
 
@@ -258,13 +256,13 @@ void DocumentsEditor::slotViewDocument()
     if ( dl.isEmpty() ) {
         return;
     }
-    kDebug(planDbg())<<dl;
+    debugPlan<<dl;
     emit viewDocument( dl.first() );
 }
 
 void DocumentsEditor::slotAddDocument()
 {
-    //kDebug(planDbg());
+    //debugPlan;
     QList<Document*> dl = m_view->selectedDocuments();
     Document *after = 0;
     if ( dl.count() > 0 ) {
@@ -281,7 +279,7 @@ void DocumentsEditor::slotAddDocument()
 void DocumentsEditor::slotDeleteSelection()
 {
     QList<Document*> lst = m_view->selectedDocuments();
-    //kDebug(planDbg())<<lst.count()<<" objects";
+    //debugPlan<<lst.count()<<" objects";
     if ( ! lst.isEmpty() ) {
         emit deleteDocumentList( lst );
     }

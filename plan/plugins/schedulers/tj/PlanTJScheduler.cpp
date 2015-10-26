@@ -48,7 +48,6 @@
 
 #include <kglobal.h>
 #include <klocale.h>
-#include <kdebug.h>
 
 #include <iostream>
 
@@ -85,7 +84,7 @@ KLocale *PlanTJScheduler::locale() const
 
 void PlanTJScheduler::slotMessage( int type, const QString &msg, TJ::CoreAttributes *object )
 {
-//     kDebug(planDbg())<<"PlanTJScheduler::slotMessage:"<<msg;
+//     debugPlan<<"PlanTJScheduler::slotMessage:"<<msg;
     Schedule::Log log;
     if ( object &&  object->getType() == CA_Task && m_taskmap.contains( static_cast<TJ::Task*>( object ) ) ) {
         log = Schedule::Log( static_cast<Node*>( m_taskmap[ static_cast<TJ::Task*>( object ) ] ), type, msg );
@@ -173,14 +172,14 @@ void PlanTJScheduler::run()
     logInfo( m_project, 0, "Start scheduling", 1 );
     bool r = solve();
     if ( ! r ) {
-        kDebug(planDbg())<<"Scheduling failed";
+        debugPlan<<"Scheduling failed";
         result = 2;
         logError( m_project, 0, i18nc( "@info/plain" , "Failed to schedule project" ) );
         setProgress( PROGRESS_MAX_VALUE );
         return;
     }
     if ( m_haltScheduling ) {
-        kDebug(planDbg())<<"Scheduling halted";
+        debugPlan<<"Scheduling halted";
         logInfo( m_project, 0, "Scheduling halted" );
         deleteLater();
         return;
@@ -203,7 +202,7 @@ bool PlanTJScheduler::check()
 
 bool PlanTJScheduler::solve()
 {
-    kDebug(planDbg())<<"PlanTJScheduler::solve()";
+    debugPlan<<"PlanTJScheduler::solve()";
     TJ::Scenario *sc = m_tjProject->getScenario( 0 );
     if ( ! sc ) {
         if ( locale() ) {
@@ -412,7 +411,7 @@ bool PlanTJScheduler::taskFromTJ( TJ::Task *job, Task *task )
     }
     Schedule *cs = task->currentSchedule();
     Q_ASSERT( cs );
-    kDebug(planDbg())<<"taskFromTJ:"<<task<<task->name()<<cs->id();
+    debugPlan<<"taskFromTJ:"<<task<<task->name()<<cs->id();
     time_t s = job->getStart( 0 );
     if ( s < m_tjProject->getStart() || s > m_tjProject->getEnd() ) {
         m_project->currentSchedule()->setSchedulingError( true );
@@ -548,7 +547,7 @@ void PlanTJScheduler::calcPertValues( Task *t )
         m_project->currentSchedule()->setSchedulingError( true );
         logError( t, 0, i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", t->constraintToString( true ), t->negativeFloat().toString( Duration::Format_i18nHour ) ) );
     }
-    kDebug(planDbg())<<t->name()<<t->startTime()<<t->endTime();
+    debugPlan<<t->name()<<t->startTime()<<t->endTime();
     Duration negativefloat;
     foreach ( const Relation *r, t->dependParentNodes() + t->parentProxyRelations() ) {
         if ( r->parent()->endTime() + r->lag() > t->startTime() ) {
@@ -591,7 +590,7 @@ bool PlanTJScheduler::exists( QList<CalendarDay*> &lst, CalendarDay *day )
 TJ::Resource *PlanTJScheduler::addResource( KPlato::Resource *r)
 {
     if ( m_resourcemap.values().contains( r ) ) {
-        kDebug(planDbg())<<r->name()<<"already exist";
+        debugPlan<<r->name()<<"already exist";
         return m_resourcemap.key( r );
     }
     TJ::Resource *res = new TJ::Resource( m_tjProject, r->id(), r->name(), 0 );
@@ -626,7 +625,7 @@ TJ::Resource *PlanTJScheduler::addResource( KPlato::Resource *r)
                     shift->setWorkingHours( toTJDayOfWeek( date.dayOfWeek() ), ivs );
                     TJ::Interval interval = toTJInterval( ivstart, ivend, tjGranularity() );
                     if (!res->addShift( interval, shift )) {
-                        kWarning()<<"Failed to add shift:"<<r->name()<<interval<<ivs;
+                        warnPlan<<"Failed to add shift:"<<r->name()<<interval<<ivs;
                     } else {
 //                        qDebug()<<r->name()<<"add shift:"<<date<<interval<<ivs;
                     }
@@ -651,7 +650,7 @@ TJ::Resource *PlanTJScheduler::addResource( KPlato::Resource *r)
         shift->setWorkingHours( toTJDayOfWeek( date.dayOfWeek() ), ivs );
         TJ::Interval interval = toTJInterval( ivstart, ivend, tjGranularity() );
         if (!res->addShift( interval, shift )) {
-            kWarning()<<"Failed to add shift:"<<r->name()<<interval<<ivs;
+            warnPlan<<"Failed to add shift:"<<r->name()<<interval<<ivs;
         } else {
 //            qDebug()<<r->name()<<"add shift:"<<date<<interval<<ivs;
         }
@@ -710,7 +709,7 @@ void PlanTJScheduler::addWorkingTime( KPlato::Task *task, TJ::Task *job )
                     shift->setWorkingHours( toTJDayOfWeek( date.dayOfWeek() ), ivs );
                     TJ::Interval interval = toTJInterval( ivstart, ivend, tjGranularity() );
                     if ( ! job->addShift( interval, shift ) ) {
-                        kWarning()<<"Failed to add shift:"<<task->name()<<interval<<ivs;
+                        warnPlan<<"Failed to add shift:"<<task->name()<<interval<<ivs;
                     } else {
 //                        qDebug()<<task->name()<<"add shift:"<<date<<interval<<ivs;
                     }
@@ -735,7 +734,7 @@ void PlanTJScheduler::addWorkingTime( KPlato::Task *task, TJ::Task *job )
         shift->setWorkingHours( toTJDayOfWeek( date.dayOfWeek() ), ivs );
         TJ::Interval interval = toTJInterval( ivstart, ivend, tjGranularity() );
         if ( ! job->addShift( interval, shift ) ) {
-            kWarning()<<"Failed to add shift:"<<task->name()<<interval<<ivs;
+            warnPlan<<"Failed to add shift:"<<task->name()<<interval<<ivs;
         } else {
 //            qDebug()<<task->name()<<"add shift:"<<date<<interval<<ivs;
         }
@@ -747,7 +746,7 @@ void PlanTJScheduler::addWorkingTime( KPlato::Task *task, TJ::Task *job )
 
 void PlanTJScheduler::addTasks()
 {
-    kDebug(planDbg());
+    debugPlan;
     QList<Node*> list = m_project->allNodes();
     for (int i = 0; i < list.count(); ++i) {
         Node *n = list.at(i);
@@ -800,7 +799,7 @@ void PlanTJScheduler::addDependencies( KPlato::Task *task )
                 break;
             case Relation::FinishFinish:
             case Relation::StartStart:
-                kWarning()<<"Dependency type not handled. Using FinishStart.";
+                warnPlan<<"Dependency type not handled. Using FinishStart.";
                 if ( locale() ) {
                     logWarning( task, 0, i18nc( "@info/plain" , "Dependency type '%1' not handled. Using FinishStart.", r->typeToString( true ) ) );
                 }
@@ -942,7 +941,7 @@ TJ::Task *PlanTJScheduler::addFinishNotLater( Node *task )
 
 void PlanTJScheduler::addRequests()
 {
-    kDebug(planDbg());
+    debugPlan;
     QMap<TJ::Task*, Task*> ::const_iterator it = m_taskmap.constBegin();
     for ( ; it != m_taskmap.constEnd(); ++it ) {
         addRequest( it.key(), it.value() );
@@ -951,7 +950,7 @@ void PlanTJScheduler::addRequests()
 
 void PlanTJScheduler::addRequest( TJ::Task *job, Task *task )
 {
-    kDebug(planDbg());
+    debugPlan;
     if ( task->type() == Node::Type_Milestone || task->estimate() == 0 || ( m_recalculate && task->completion().isFinished() ) ) {
         job->setMilestone( true );
         job->setDuration( 0, 0.0 );

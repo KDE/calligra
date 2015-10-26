@@ -32,8 +32,6 @@
 
 #include <QList>
 
-#include <kdebug.h>
-
 
 class KoDocument;
 

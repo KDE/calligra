@@ -73,7 +73,7 @@ int ResourceAllocationModel::propertyCount() const
 
 QVariant ResourceAllocationModel::name( const Resource *res, int role ) const
 {
-    //kDebug(planDbg())<<res->name()<<","<<role;
+    //debugPlan<<res->name()<<","<<role;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
@@ -88,7 +88,7 @@ QVariant ResourceAllocationModel::name( const Resource *res, int role ) const
 
 QVariant ResourceAllocationModel::name( const  ResourceGroup *res, int role ) const
 {
-    //kDebug(planDbg())<<res->name()<<","<<role;
+    //debugPlan<<res->name()<<","<<role;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
@@ -289,7 +289,7 @@ QVariant ResourceAllocationModel::data( const ResourceGroup *group, const Resour
         case RequestMaximum: result = maximum( resource, role ); break;
         case RequestRequired: result = required( resource, role ); break;
         default:
-            kDebug(planDbg())<<"data: invalid display value: property="<<property;
+            debugPlan<<"data: invalid display value: property="<<property;
             break;
     }
     return result;
@@ -311,7 +311,7 @@ QVariant ResourceAllocationModel::data( const ResourceGroup *group, int property
                 if ( property < propertyCount() ) {
                     result = QString();
                 } else {
-                    kDebug(planDbg())<<"data: invalid display value column"<<property;
+                    debugPlan<<"data: invalid display value column"<<property;
                     return QVariant();
                 }
             }
@@ -373,52 +373,52 @@ ResourceAllocationItemModel::~ResourceAllocationItemModel()
 
 void ResourceAllocationItemModel::slotResourceToBeInserted( const ResourceGroup *group, int row )
 {
-    //kDebug(planDbg())<<group->name()<<","<<row;
+    //debugPlan<<group->name()<<","<<row;
     beginInsertRows( index( group ), row, row );
 }
 
 void ResourceAllocationItemModel::slotResourceInserted( const Resource */*resource */)
 {
-    //kDebug(planDbg())<<resource->name();
+    //debugPlan<<resource->name();
     endInsertRows();
     emit layoutChanged(); //HACK to make the right view react! Bug in qt?
 }
 
 void ResourceAllocationItemModel::slotResourceToBeRemoved( const Resource *resource )
 {
-    //kDebug(planDbg())<<resource->name();
+    //debugPlan<<resource->name();
     int row = index( resource ).row();
     beginRemoveRows( index( resource->parentGroup() ), row, row );
 }
 
 void ResourceAllocationItemModel::slotResourceRemoved( const Resource */*resource */)
 {
-    //kDebug(planDbg())<<resource->name();
+    //debugPlan<<resource->name();
     endRemoveRows();
 }
 
 void ResourceAllocationItemModel::slotResourceGroupToBeInserted( const ResourceGroup */*group*/, int row )
 {
-    //kDebug(planDbg())<<group->name();
+    //debugPlan<<group->name();
     beginInsertRows( QModelIndex(), row, row );
 }
 
 void ResourceAllocationItemModel::slotResourceGroupInserted( const ResourceGroup */*group */)
 {
-    //kDebug(planDbg())<<group->name();
+    //debugPlan<<group->name();
     endInsertRows();
 }
 
 void ResourceAllocationItemModel::slotResourceGroupToBeRemoved( const ResourceGroup *group )
 {
-    //kDebug(planDbg())<<group->name();
+    //debugPlan<<group->name();
     int row = index( group ).row();
     beginRemoveRows( QModelIndex(), row, row );
 }
 
 void ResourceAllocationItemModel::slotResourceGroupRemoved( const ResourceGroup */*group */)
 {
-    //kDebug(planDbg())<<group->name();
+    //debugPlan<<group->name();
     endRemoveRows();
 }
 
@@ -536,11 +536,11 @@ Qt::ItemFlags ResourceAllocationItemModel::flags( const QModelIndex &index ) con
 {
     Qt::ItemFlags flags = ItemModelBase::flags( index );
     if ( !m_readWrite ) {
-        //kDebug(planDbg())<<"read only"<<flags;
+        //debugPlan<<"read only"<<flags;
         return flags &= ~Qt::ItemIsEditable;
     }
     if ( !index.isValid() ) {
-        //kDebug(planDbg())<<"invalid"<<flags;
+        //debugPlan<<"invalid"<<flags;
         return flags;
     }
     switch ( index.column() ) {
@@ -572,7 +572,7 @@ QModelIndex ResourceAllocationItemModel::parent( const QModelIndex &index ) cons
     if ( !index.isValid() || m_project == 0 ) {
         return QModelIndex();
     }
-    //kDebug(planDbg())<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
+    //debugPlan<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
 
     Resource *r = qobject_cast<Resource*>( object( index ) );
     if ( r && r->parentGroup() ) {

@@ -25,7 +25,6 @@
 #include <klocale.h>
 #include <ktextedit.h>
 #include <kactioncollection.h>
-#include <kdebug.h>
 
 namespace KPlato
 {

@@ -33,7 +33,6 @@
 
 #include <kactioncollection.h>
 #include <ktextedit.h>
-#include <kdebug.h>
 
 namespace KPlato
 {

@@ -97,7 +97,7 @@ void SchedulerPlugin::stopCalculation( ScheduleManager *sm )
 
 void SchedulerPlugin::haltCalculation( ScheduleManager *sm )
 {
-    kDebug(planDbg())<<"SchedulerPlugin::haltCalculation:"<<sm;
+    debugPlan<<"SchedulerPlugin::haltCalculation:"<<sm;
     foreach ( SchedulerThread *j, m_jobs ) {
         if ( sm == j->mainManager() ) {
             haltCalculation( j );
@@ -115,11 +115,11 @@ void SchedulerPlugin::stopCalculation( SchedulerThread *job )
 
 void SchedulerPlugin::haltCalculation( SchedulerThread *job )
 {
-    kDebug(planDbg())<<"SchedulerPlugin::haltCalculation:"<<job<<m_jobs.contains( job );
+    debugPlan<<"SchedulerPlugin::haltCalculation:"<<job<<m_jobs.contains( job );
     disconnect(this, 0, job, 0 );
     job->haltScheduling();
     if ( m_jobs.contains( job ) ) {
-        kDebug(planDbg())<<"SchedulerPlugin::haltCalculation: remove"<<job;
+        debugPlan<<"SchedulerPlugin::haltCalculation: remove"<<job;
         m_jobs.removeAt( m_jobs.indexOf( job ) );
     }
 }
@@ -215,7 +215,7 @@ void SchedulerPlugin::updateProject( const Project *tp, const ScheduleManager *t
     Q_CHECK_PTR( tm );
     Q_CHECK_PTR( mp );
     Q_CHECK_PTR( sm );
-    //kDebug(planDbg())<<"SchedulerPlugin::updateProject:"<<tp<<tp->name()<<"->"<<mp<<mp->name()<<sm;
+    //debugPlan<<"SchedulerPlugin::updateProject:"<<tp<<tp->name()<<"->"<<mp<<mp->name()<<sm;
     Q_ASSERT( tp != mp && tm != sm );
     long sid = tm->scheduleId();
     Q_ASSERT( sid == sm->scheduleId() );
@@ -246,10 +246,10 @@ void SchedulerPlugin::updateProject( const Project *tp, const ScheduleManager *t
 
 void SchedulerPlugin::updateNode( const Node *tn, Node *mn, long sid, XMLLoaderObject &status ) const
 {
-    //kDebug(planDbg())<<"SchedulerPlugin::updateNode:"<<tn<<tn->name()<<"->"<<mn<<mn->name();
+    //debugPlan<<"SchedulerPlugin::updateNode:"<<tn<<tn->name()<<"->"<<mn<<mn->name();
     NodeSchedule *s = static_cast<NodeSchedule*>( tn->schedule( sid ) );
     if ( s == 0 ) {
-        kWarning()<<"SchedulerPlugin::updateNode:"<<"Task:"<<tn->name()<<"could not find schedule with id:"<<sid;
+        warnPlan<<"SchedulerPlugin::updateNode:"<<"Task:"<<tn->name()<<"could not find schedule with id:"<<sid;
         return;
     }
     QDomDocument doc( "tmp" );
@@ -292,7 +292,7 @@ void SchedulerPlugin::updateResource( const Resource *tr, Resource *r, XMLLoader
     if ( cr == 0 || c == 0 ) {
         return;
     }
-    kDebug(planDbg())<<"cr:"<<cr->cacheVersion()<<"c"<<c->cacheVersion();
+    debugPlan<<"cr:"<<cr->cacheVersion()<<"c"<<c->cacheVersion();
     c->setCacheVersion( cr->cacheVersion() );
 }
 
@@ -352,7 +352,7 @@ SchedulerThread::SchedulerThread( Project *project, ScheduleManager *manager, QO
 
 SchedulerThread::~SchedulerThread()
 {
-    kDebug(planDbg())<<"SchedulerThread::~SchedulerThread:"<<QThread::currentThreadId();
+    debugPlan<<"SchedulerThread::~SchedulerThread:"<<QThread::currentThreadId();
     delete m_project;
     m_project = 0;
     KGlobal::deref();
@@ -388,7 +388,7 @@ int SchedulerThread::progress() const
 
 void SchedulerThread::slotAddLog( const KPlato::Schedule::Log &log )
 {
-//     kDebug(planDbg())<<log;
+//     debugPlan<<log;
     QMutexLocker m( &m_logMutex );
     m_logs << log;
 }
@@ -443,13 +443,13 @@ Project *SchedulerThread::project() const
 
 void SchedulerThread::stopScheduling()
 {
-    kDebug(planDbg())<<"SchedulerThread::stopScheduling:";
+    debugPlan<<"SchedulerThread::stopScheduling:";
     m_stopScheduling = true;
 }
 
 void SchedulerThread::haltScheduling()
 {
-    kDebug(planDbg())<<"SchedulerThread::haltScheduling:";
+    debugPlan<<"SchedulerThread::haltScheduling:";
     m_haltScheduling = true;
 }
 

@@ -221,7 +221,7 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
 
 QVariant GanttItemDelegate::data( const QModelIndex& idx, int column, int role ) const
 {
-    //kDebug(planDbg())<<idx<<column<<role;
+    //debugPlan<<idx<<column<<role;
     QModelIndex i = idx.model()->index( idx.row(), column, idx.parent() );
     return i.data( role );
 }
@@ -241,7 +241,7 @@ QString GanttItemDelegate::itemText( const QModelIndex& idx, int type ) const
         }
         txt += '(' + data( idx, NodeModel::NodeAssignments, Qt::DisplayRole ).toString() + ')';
     }
-    //kDebug(planDbg())<<txt;
+    //debugPlan<<txt;
     return txt;
 }
 
@@ -287,7 +287,7 @@ QRectF GanttItemDelegate::itemNegativeFloatRect( const KGantt::StyleOptionGanttI
 
 bool GanttItemDelegate::hasStartConstraint( const QModelIndex& idx ) const
 {
-    //kDebug(planDbg())<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt();
+    //debugPlan<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt();
     switch ( data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt() ) {
         case Node::FixedInterval:
         case Node::StartNotEarlier:
@@ -321,7 +321,7 @@ QRectF GanttItemDelegate::itemStartConstraintRect( const KGantt::StyleOptionGant
 
 bool GanttItemDelegate::hasEndConstraint( const QModelIndex& idx ) const
 {
-    //kDebug(planDbg())<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt();
+    //debugPlan<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt();
     switch ( data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt() ) {
         case Node::FixedInterval:
         case Node::FinishNotLater:
@@ -355,7 +355,7 @@ QRectF GanttItemDelegate::itemEndConstraintRect( const KGantt::StyleOptionGanttI
 
 KGantt::Span GanttItemDelegate::itemBoundingSpan( const KGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const
 {
-    //kDebug(planDbg())<<opt<<idx;
+    //debugPlan<<opt<<idx;
     if ( !idx.isValid() ) return KGantt::Span();
 
     QRectF optRect = opt.itemRect;
@@ -488,7 +488,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt::StyleOp
                     << NodeModel::NodeSchedulingError;
                 foreach ( int i, lst ) {
                     QVariant v = data( idx, i, Qt::EditRole );
-                    //kDebug(planDbg())<<idx.data(NodeModel::NodeName).toString()<<": showSchedulingError"<<i<<v;
+                    //debugPlan<<idx.data(NodeModel::NodeName).toString()<<": showSchedulingError"<<i<<v;
                     if (  v.toBool() ) {
                         QVariant br = data( idx, i, Role::Foreground );
                         painter->setBrush( br.isValid() ? br.value<QBrush>() : m_schedulingErrorBrush );
@@ -526,7 +526,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt::StyleOp
             }
             painter->restore();
             if ( showTimeConstraint ) {
-                //kDebug(planDbg())<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<r<<boundingRect;
+                //debugPlan<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<r<<boundingRect;
                 painter->save();
                 painter->setBrush( QBrush( Qt::darkGray ) );
                 painter->setPen( Qt::black );
@@ -598,7 +598,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt::StyleOp
         }
         break;
     case KGantt::TypeEvent:
-        //kDebug(planDbg()) << opt.boundingRect << opt.itemRect;
+        //debugPlan << opt.boundingRect << opt.itemRect;
         if ( opt.boundingRect.isValid() ) {
             pw-=1;
             painter->save();
@@ -632,7 +632,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt::StyleOp
                     << NodeModel::NodeSchedulingError;
                 foreach ( int i, lst ) {
                     QVariant v = data( idx, i, Qt::EditRole );
-                    //kDebug(planDbg())<<idx.data(NodeModel::NodeName).toString()<<": showSchedulingError"<<i<<v;
+                    //debugPlan<<idx.data(NodeModel::NodeName).toString()<<": showSchedulingError"<<i<<v;
                     if (  v.toBool() ) {
                         QVariant br = data( idx, i, Role::Foreground );
                         painter->setBrush( br.isValid() ? br.value<QBrush>() : m_schedulingErrorBrush );
@@ -672,7 +672,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt::StyleOp
             painter->restore();
 
             if ( showTimeConstraint ) {
-                //kDebug(planDbg())<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<r<<boundingRect;
+                //debugPlan<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<r<<boundingRect;
                 painter->save();
                 painter->setBrush( QBrush( Qt::darkGray ) );
                 painter->setPen( Qt::black );
@@ -819,7 +819,7 @@ void GanttItemDelegate::paintConstraintItem( QPainter* painter, const  QStyleOpt
     if ( data( c.startIndex(), NodeModel::NodeCriticalPath ).toBool() &&
          data( c.endIndex(), NodeModel::NodeCriticalPath ).toBool() )
     {
-        //kDebug(planDbg())<<data( c.startIndex(), NodeModel::NodeName ).toString()<<data( c.endIndex(), NodeModel::NodeName ).toString()<<"critical path";
+        //debugPlan<<data( c.startIndex(), NodeModel::NodeName ).toString()<<data( c.endIndex(), NodeModel::NodeName ).toString()<<"critical path";
         QPen pen( Qt::red );
         c.setData( KGantt::Constraint::ValidConstraintPen, pen );
         // FIXME How to make sure it's not obscured by other constraints?

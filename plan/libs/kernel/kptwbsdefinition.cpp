@@ -19,8 +19,9 @@
 
 #include "kptwbsdefinition.h"
 
+#include "kptdebug.h"
+
 #include <klocale.h>
-#include <kdebug.h>
 
 #include <KoXmlReader.h>
 
@@ -154,7 +155,7 @@ QString WBSDefinition::toRoman( int n, bool upper ) const
     static const QString RNThousands[] = {"", "m", "mm", "mmm"};
 
     if (n < 0) { // should never happen, but better not crash if it does
-        kWarning() << "intToRoman called with negative number: n=" << n;
+        warnPlan << "intToRoman called with negative number: n=" << n;
         return QString::number(n);
     }
 
@@ -223,7 +224,7 @@ bool WBSDefinition::loadXML(KoXmlElement &element, XMLLoaderObject & ) {
                 int lvl = el.attribute( "level", "-1" ).toInt();
                 if ( lvl >= 0 ) {
                     setLevelsDef( lvl, d );
-                } else kError()<<"Invalid levels definition";
+                } else errorPlan<<"Invalid levels definition";
             }
         }
     }

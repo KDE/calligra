@@ -40,7 +40,7 @@ namespace KPlato
 
 QVariant RelationModel::parentName( const Relation *r, int role ) const
 {
-    //kDebug(planDbg())<<r<<", "<<role<<endl;
+    //debugPlan<<r<<", "<<role<<endl;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
@@ -56,7 +56,7 @@ QVariant RelationModel::parentName( const Relation *r, int role ) const
 
 QVariant RelationModel::childName( const Relation *r, int role ) const
 {
-    //kDebug(planDbg())<<r<<", "<<role<<endl;
+    //debugPlan<<r<<", "<<role<<endl;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
@@ -72,7 +72,7 @@ QVariant RelationModel::childName( const Relation *r, int role ) const
 
 QVariant RelationModel::type( const Relation *r, int role ) const
 {
-    //kDebug(planDbg())<<r<<", "<<role<<endl;
+    //debugPlan<<r<<", "<<role<<endl;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
@@ -119,7 +119,7 @@ QVariant RelationModel::data( const Relation *r, int property, int role ) const
         case 2: result = type( r, role ); break;
         case 3: result = lag( r, role ); break;
         default:
-            //kDebug(planDbg())<<"Invalid property number: "<<property<<endl;
+            //debugPlan<<"Invalid property number: "<<property<<endl;
             return result;
     }
     return result;
@@ -167,7 +167,7 @@ RelationItemModel::~RelationItemModel()
 
 void RelationItemModel::slotRelationToBeAdded( Relation *relation, int, int )
 {
-    kDebug(planDbg());
+    debugPlan;
     if ( m_node == 0 || m_node != relation->child() ) {
         return;
     }
@@ -178,7 +178,7 @@ void RelationItemModel::slotRelationToBeAdded( Relation *relation, int, int )
 
 void RelationItemModel::slotRelationAdded( Relation *relation )
 {
-    kDebug(planDbg());
+    debugPlan;
     if ( m_node == 0 || m_node != relation->child() ) {
         return;
     }
@@ -192,13 +192,13 @@ void RelationItemModel::slotRelationToBeRemoved( Relation *relation )
     }
     m_removedRelation = relation;
     int row = m_node->dependParentNodes().indexOf( relation );
-    kDebug(planDbg())<<row;
+    debugPlan<<row;
     beginRemoveRows( QModelIndex(), row, row );
 }
 
 void RelationItemModel::slotRelationRemoved( Relation *relation )
 {
-    kDebug(planDbg());
+    debugPlan;
     if ( m_removedRelation != relation ) {
         return;
     }
@@ -208,7 +208,7 @@ void RelationItemModel::slotRelationRemoved( Relation *relation )
 
 void RelationItemModel::slotRelationModified( Relation *relation )
 {
-    kDebug(planDbg());
+    debugPlan;
     if ( m_node == 0 || ! m_node->dependParentNodes().contains( relation ) ) {
         return;
     }
@@ -231,7 +231,7 @@ void RelationItemModel::slotNodeRemoved( Node *node )
 
 void RelationItemModel::slotLayoutChanged()
 {
-    //kDebug(planDbg())<<node->name()<<endl;
+    //debugPlan<<node->name()<<endl;
     emit layoutAboutToBeChanged();
     emit layoutChanged();
 }
@@ -320,7 +320,7 @@ bool RelationItemModel::setType( Relation *r, const QVariant &value, int role )
     switch ( role ) {
         case Qt::EditRole:
             Relation::Type v = Relation::Type( value.toInt() );
-            //kDebug(planDbg())<<v<<r->type();
+            //debugPlan<<v<<r->type();
             if ( v == r->type() ) {
                 return false;
             }
@@ -336,7 +336,7 @@ bool RelationItemModel::setLag( Relation *r, const QVariant &value, int role )
         case Qt::EditRole: {
             Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
             Duration d( value.toList()[0].toDouble(), unit );
-            kDebug(planDbg())<<value.toList()[0].toDouble()<<","<<unit<<" ->"<<d.toString();
+            debugPlan<<value.toList()[0].toDouble()<<","<<unit<<" ->"<<d.toString();
             if ( d == r->lag() ) {
                 return false;
             }

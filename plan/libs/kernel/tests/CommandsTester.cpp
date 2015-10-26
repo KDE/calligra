@@ -26,7 +26,6 @@
 #include <kptresource.h>
 
 #include <QTest>
-#include <kdebug.h>
 
 namespace KPlato {
 

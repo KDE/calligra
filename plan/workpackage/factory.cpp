@@ -27,7 +27,6 @@
 #include <kcomponentdata.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
 

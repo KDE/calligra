@@ -25,7 +25,6 @@
 #include <QModelIndex>
 
 #include <QTest>
-#include <kdebug.h>
 
 #include "../../kernel/tests/debug.cpp"
 

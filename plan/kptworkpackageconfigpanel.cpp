@@ -23,8 +23,6 @@
 #include "kptmycombobox_p.h"
 #include "plansettings.h"
 
-#include <kdebug.h>
-
 namespace KPlato
 {
 

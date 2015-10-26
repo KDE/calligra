@@ -32,7 +32,6 @@
 #include <klocale.h>
 
 #include <KoVBox.h>
-#include <kdebug.h>
 
 namespace KPlato
 {
@@ -89,7 +88,7 @@ void TaskDialog::setButtonOkEnabled(bool enabled) {
 
 void TaskDialog::slotCurrentChanged( KPageWidgetItem *current, KPageWidgetItem */*prev*/ )
 {
-    //kDebug(planDbg())<<current->widget()<<m_descriptionTab->parent();
+    //debugPlan<<current->widget()<<m_descriptionTab->parent();
     // HACK: KPageDialog grabs focus when a tab is clicked.
     // KRichTextWidget still flashes the caret so the user thinks it has the focus.
     // For now, just give the KRichTextWidget focus.

@@ -91,26 +91,26 @@ Qt::ItemFlags TaskWorkPackageModel::flags( const QModelIndex &index ) const
 
 void TaskWorkPackageModel::slotNodeToBeInserted( Node *parent, int row )
 {
-    //kDebug(planworkDbg())<<parent->name()<<"; "<<row;
+    //debugPlanWork<<parent->name()<<"; "<<row;
     beginInsertRows( indexForNode( parent ), row, row );
 }
 
 void TaskWorkPackageModel::slotNodeInserted( Node */*node*/ )
 {
-    //kDebug(planworkDbg())<<node->parentNode()->name()<<"-->"<<node->name();
+    //debugPlanWork<<node->parentNode()->name()<<"-->"<<node->name();
     endInsertRows();
 }
 
 void TaskWorkPackageModel::slotNodeToBeRemoved( Node *node )
 {
-    //kDebug(planworkDbg())<<node->name();
+    //debugPlanWork<<node->name();
     int row = indexForNode( node ).row();
     beginRemoveRows( indexForNode( node->parentNode() ), row, row );
 }
 
 void TaskWorkPackageModel::slotNodeRemoved( Node */*node*/ )
 {
-    //kDebug(planworkDbg())<<node->name();
+    //debugPlanWork<<node->name();
     endRemoveRows();
 }
 
@@ -120,7 +120,7 @@ void TaskWorkPackageModel::slotNodeChanged( Node *node )
         return;
     }
     int row = indexForNode( node ).row();
-    kDebug(planworkDbg())<<node->name()<<row;
+    debugPlanWork<<node->name()<<row;
     emit dataChanged( createIndex( row, 0, node->parentNode() ), createIndex( row, columnCount()-1, node->parentNode() ) );
 }
 
@@ -173,7 +173,7 @@ void TaskWorkPackageModel::removeWorkPackage( WorkPackage *package, int row )
 {
     beginRemoveRows( QModelIndex(), row, row );
     Project *project = package->project();
-    kDebug(planworkDbg())<<package->project();
+    debugPlanWork<<package->project();
     if ( project ) {
         disconnect( project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );
         disconnect( project, SIGNAL(nodeToBeAdded(Node*,int)), this, SLOT(slotNodeToBeInserted(Node*,int)) );
@@ -252,15 +252,15 @@ QVariant TaskWorkPackageModel::projectManager( const Node *node, int role ) cons
 int TaskWorkPackageModel::rowCount( const QModelIndex &parent ) const
 {
     if ( ! parent.isValid() ) {
-        //kDebug(planworkDbg())<<parent<<"nodes:"<<m_part->workPackageCount();
+        //debugPlanWork<<parent<<"nodes:"<<m_part->workPackageCount();
         return m_part->workPackageCount(); // == no of nodes (1 node pr wp)
     }
     Node *n = nodeForIndex( parent );
     if ( n ) {
-        //kDebug(planworkDbg())<<parent<<"docs:"<<n->documents().count();
+        //debugPlanWork<<parent<<"docs:"<<n->documents().count();
         return n->documents().count();
     }
-    //kDebug(planworkDbg())<<parent<<"rows:"<<0;
+    //debugPlanWork<<parent<<"rows:"<<0;
     return 0; // documents have no children
 }
 
@@ -325,7 +325,7 @@ QVariant TaskWorkPackageModel::status( Node *n, int role ) const
 QVariant TaskWorkPackageModel::nodeData( Node *n, int column, int role ) const
 {
     if ( role >= Qt::UserRole ) {
-//        kDebug(planworkDbg())<<this<<n->name()<<column<<role;
+//        debugPlanWork<<this<<n->name()<<column<<role;
         switch ( role ) {
         case KGantt::ItemTypeRole:
             switch ( n->type() ) {
@@ -333,10 +333,10 @@ QVariant TaskWorkPackageModel::nodeData( Node *n, int column, int role ) const
             default: break;
             }
         case KGantt::StartTimeRole:
-            kDebug(planworkDbg())<<this<<n->name()<<"start:"<<n->startTime();
+            debugPlanWork<<this<<n->name()<<"start:"<<n->startTime();
             return m_nodemodel.data( n, NodeModel::NodeStartTime, Qt::EditRole );
         case KGantt::EndTimeRole:
-            kDebug(planworkDbg())<<this<<n->name()<<"end:"<<n->endTime();
+            debugPlanWork<<this<<n->name()<<"end:"<<n->endTime();
             return m_nodemodel.data( n, NodeModel::NodeEndTime, Qt::EditRole );
         default: break;
         }
@@ -368,7 +368,7 @@ QVariant TaskWorkPackageModel::nodeData( Node *n, int column, int role ) const
         case ProjectManager: return projectManager( n, role );
 
         default:
-            //kDebug(planworkDbg())<<"Invalid column number: "<<index.column()<<endl;
+            //debugPlanWork<<"Invalid column number: "<<index.column()<<endl;
             break;
     }
     return "";
@@ -376,7 +376,7 @@ QVariant TaskWorkPackageModel::nodeData( Node *n, int column, int role ) const
 
 QVariant TaskWorkPackageModel::documentData( Document *doc, int column, int role ) const
 {
-    //kDebug(planworkDbg())<<doc->url().fileName()<<column<<role;
+    //debugPlanWork<<doc->url().fileName()<<column<<role;
     if ( role == Qt::DisplayRole ) {
         switch ( column ) {
             case NodeName: return doc->name();
@@ -421,7 +421,7 @@ bool TaskWorkPackageModel::setCompletion( Node *node, const QVariant &value, int
             // new entry so calculate used/remaining based on completion
             Duration planned = static_cast<Task*>( node )->plannedEffort( m_nodemodel.id() );
             Duration actual = ( planned * value.toInt() ) / 100;
-            kDebug(planworkDbg())<<planned.toString()<<value.toInt()<<actual.toString();
+            debugPlanWork<<planned.toString()<<value.toInt()<<actual.toString();
             NamedCommand *cmd = new ModifyCompletionActualEffortCmd( c, date, actual );
             cmd->execute();
             m->addCommand( cmd );
@@ -598,7 +598,7 @@ QVariant TaskWorkPackageModel::headerData( int section, Qt::Orientation orientat
         case ProjectManager: return i18n( "Project Manager" );
 
         default:
-            //kDebug(planworkDbg())<<"Invalid column number: "<<index.column()<<endl;
+            //debugPlanWork<<"Invalid column number: "<<index.column()<<endl;
             break;
     }
     }
@@ -636,7 +636,7 @@ Node *TaskWorkPackageModel::nodeForIndex( const QModelIndex &index ) const
 {
     WorkPackage *wp = ptrToWorkPackage( index );
     if ( wp ) {
-        //kDebug(planworkDbg())<<index<<parent->node()->name();
+        //debugPlanWork<<index<<parent->node()->name();
         return wp->node();
     }
     return 0;
@@ -647,7 +647,7 @@ Document *TaskWorkPackageModel::documentForIndex( const QModelIndex &index ) con
     if ( index.isValid() ) {
         Node *parent = ptrToNode( index );
         if ( parent && index.row() < parent->documents().count() ) {
-            //kDebug(planworkDbg())<<index<<parent->name();
+            //debugPlanWork<<index<<parent->name();
             return parent->documents().value( index.row() );
         }
     }

@@ -33,8 +33,6 @@
 #include <QList>
 #include <QSharedData>
 
-#include <kdebug.h>
-
 class QDomElement;
 
 namespace KPlato

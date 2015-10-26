@@ -31,8 +31,6 @@
 #include "kptnode.h"
 #include "kptresource.h"
 
-#include <kdebug.h>
-
 #include <KoXmlReaderForward.h>
 
 class QDomElement;

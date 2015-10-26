@@ -24,7 +24,6 @@
 #include "kptcommand.h"
 
 #include <QTest>
-#include <kdebug.h>
 
 #include "debug.cpp"
 

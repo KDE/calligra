@@ -30,7 +30,6 @@
 
 #include <QComboBox>
 
-#include <kdebug.h>
 #include <klocale.h>
 
 #include "debugarea.h"
@@ -63,7 +62,7 @@ void TaskCompletionDialog::slotChanged( bool )
 
 KUndo2Command *TaskCompletionDialog::buildCommand()
 {
-    //kDebug(planworkDbg());
+    //debugPlanWork;
     return m_panel->buildCommand();
 }
 
@@ -72,7 +71,7 @@ TaskCompletionPanel::TaskCompletionPanel(WorkPackage &p, ScheduleManager *sm, QW
     : QWidget(parent),
       m_package( &p )
 {
-    //kDebug(planworkDbg());
+    //debugPlanWork;
     setupUi(this);
 
     addEntryBtn->setIcon(koIcon("list-add"));
@@ -228,18 +227,18 @@ void TaskCompletionPanel::setFinished() {
 }
 
 void TaskCompletionPanel::slotFinishedChanged(bool state) {
-    kDebug(planworkDbg())<<state;
+    debugPlanWork<<state;
     m_completion.setFinished( state );
     if (state) {
-        kDebug(planworkDbg())<<state;
+        debugPlanWork<<state;
         setFinished();
         Completion::Entry *e = m_completion.entry( m_completion.finishTime().date() );
         if ( e == 0 ) {
-            kDebug(planworkDbg())<<"no entry on this date, just add one:"<<m_completion.finishTime().date();
+            debugPlanWork<<"no entry on this date, just add one:"<<m_completion.finishTime().date();
             e = new Completion::Entry( 100, Duration::zeroDuration, m_package->node()->plannedEffort() );
             m_completion.addEntry( m_completion.finishTime().date(), e );
             entryTable->setCompletion( &m_completion );
-            kDebug(planworkDbg())<<"Entry added:"<<m_completion.finishTime().date()<<m_completion.entry( m_completion.finishTime().date() );
+            debugPlanWork<<"Entry added:"<<m_completion.finishTime().date()<<m_completion.entry( m_completion.finishTime().date() );
         } else {
             // row exists, use model to update to respect calculation mode
             int row = entryTable->model()->rowCount() - 1;
@@ -299,7 +298,7 @@ void TaskCompletionPanel::slotCalculateEffort()
 
 void TaskCompletionPanel::slotEntryAdded( const QDate& date )
 {
-    kDebug(planworkDbg())<<date;
+    debugPlanWork<<date;
 }
 
 void TaskCompletionPanel::slotSelectionChanged( const QItemSelection &sel )
@@ -350,7 +349,7 @@ QVariant CompletionEntryItemModel::actualEffort ( int row, int role ) const
             if ( row > 0 ) {
                 v -= m_completion->entry( date( row - 1 ).toDate() )->totalPerformed;
             }
-            //kDebug(planworkDbg())<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+            //debugPlanWork<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
             return v.format();
         }
         case Qt::EditRole: {
@@ -358,7 +357,7 @@ QVariant CompletionEntryItemModel::actualEffort ( int row, int role ) const
             if ( row > 0 ) {
                 v -= m_completion->entry( date( row - 1 ).toDate() )->totalPerformed;
             }
-            //kDebug(planworkDbg())<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+            //debugPlanWork<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
             return v.toDouble( Duration::Unit_h );
         }
         case Role::DurationScales: {
@@ -411,7 +410,7 @@ QVariant CompletionEntryItemModel::data( const QModelIndex &idx, int role ) cons
 
 bool CompletionEntryItemModel::setData( const QModelIndex &idx, const QVariant &value, int role )
 {
-    //kDebug(planworkDbg());
+    //debugPlanWork;
     switch ( role ) {
         case Qt::EditRole: {
             if ( idx.column() == Property_Date ) {
@@ -475,7 +474,7 @@ bool CompletionEntryItemModel::setData( const QModelIndex &idx, const QVariant &
                     return false;
                 }
                 e->remainingEffort = d;
-                kDebug(planworkDbg())<<value<<d.format()<<e->remainingEffort.format();
+                debugPlanWork<<value<<d.format()<<e->remainingEffort.format();
                 emit dataChanged( idx, idx );
                 return true;
             }

@@ -21,10 +21,26 @@
 #define KPTDEBUG_H
 
 #include "kplatokernel_export.h"
-#include <kdebug.h>
 
-KPLATOKERNEL_EXPORT int planDbg();
+#include <QDebug>
+#include <QLoggingCategory>
 
-KPLATOKERNEL_EXPORT int planDependencyEditorDbg();
+extern const KPLATOKERNEL_EXPORT QLoggingCategory &PLAN_LOG();
+
+#define debugPlan qCDebug(PLAN_LOG)
+#define warnPlan qCWarning(PLAN_LOG)
+#define errorPlan qCCritical(PLAN_LOG)
+
+extern const KPLATOKERNEL_EXPORT QLoggingCategory &PLANDEPEDITOR_LOG();
+
+#define debugPlanDepEditor qCDebug(PLANDEPEDITOR_LOG)
+#define warnPlanDepEditor qCWarning(PLANDEPEDITOR_LOG)
+#define errorPlanDepEditor qCCritical(PLANDEPEDITOR_LOG)
+
+extern const KPLATOKERNEL_EXPORT QLoggingCategory &PLANXML_LOG();
+
+#define debugPlanXml qCDebug(PLANXML_LOG)
+#define warnPlanXml qCWarning(PLANXML_LOG)
+#define errorPlanXml qCCritical(PLANXML_LOG)
 
 #endif

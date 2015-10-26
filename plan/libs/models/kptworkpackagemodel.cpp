@@ -291,31 +291,31 @@ void WorkPackageProxyModel::sourceDataChanged(const QModelIndex &start, const QM
 
 void WorkPackageProxyModel::sourceModelAboutToBeReset()
 {
-//    kDebug(planDbg());
+//    debugPlan;
     beginResetModel();
     detachTasks();
 }
 
 void WorkPackageProxyModel::sourceModelReset()
 {
-//    kDebug(planDbg());
+//    debugPlan;
     attachTasks();
     for ( int r = 0; r < rowCount(); ++r ) {
-        kDebug(planDbg())<<index( r, 0 ).data();
+        debugPlan<<index( r, 0 ).data();
     }
     endResetModel();
 }
 
 void WorkPackageProxyModel::sourceRowsAboutToBeInserted(const QModelIndex &parent, int start, int end )
 {
-    kDebug(planDbg())<<parent<<start<<end;
+    debugPlan<<parent<<start<<end;
     Q_ASSERT( ! parent.isValid() );
     beginInsertRows( QModelIndex(), start, end );
 }
 
 void WorkPackageProxyModel::sourceRowsInserted(const QModelIndex &parent, int start, int end)
 {
-    kDebug(planDbg())<<parent<<start<<end<<":"<<rowCount();
+    debugPlan<<parent<<start<<end<<":"<<rowCount();
     Q_ASSERT( ! parent.isValid() );
     for ( int r = start; r <= end; ++r ) {
         QModelIndex i = index( r, 0 );
@@ -329,14 +329,14 @@ void WorkPackageProxyModel::sourceRowsInserted(const QModelIndex &parent, int st
 
 void WorkPackageProxyModel::sourceRowsAboutToBeRemoved(const QModelIndex &parent, int start, int end )
 {
-    kDebug(planDbg())<<parent<<start<<end;
+    debugPlan<<parent<<start<<end;
     Q_ASSERT( ! parent.isValid() );
     beginInsertRows( QModelIndex(), start, end );
 }
 
 void WorkPackageProxyModel::sourceRowsRemoved(const QModelIndex &parent, int start, int end)
 {
-    kDebug(planDbg())<<parent<<start<<end;
+    debugPlan<<parent<<start<<end;
     Q_ASSERT( ! parent.isValid() );
     for ( int r = start; r <= end; ++r ) {
         QModelIndex i = index( r, 0 );
@@ -372,9 +372,9 @@ int WorkPackageProxyModel::rowCount( const QModelIndex &parent ) const
         Task *task = taskFromIndex( parent );
         rows = task ? task->workPackageLogCount() : 0;
     }
-//    kDebug(planDbg())<<rows;
+//    debugPlan<<rows;
     for ( int r = 0; r < rows; ++r ) {
-//        kDebug(planDbg())<<r<<index( r, 0 ).data();
+//        debugPlan<<r<<index( r, 0 ).data();
     }
     return rows;
 }
@@ -410,7 +410,7 @@ QModelIndex WorkPackageProxyModel::parent( const QModelIndex &child ) const
         idx = m_nodemodel->index( static_cast<Node*>( child.internalPointer() ) );
         idx = mapFromBaseModel( idx );
     }
-//    kDebug(planDbg())<<child<<idx;
+//    debugPlan<<child<<idx;
     return idx;
 }
 
@@ -428,9 +428,9 @@ QModelIndex WorkPackageProxyModel::index(int row, int column, const QModelIndex 
         }
     }
 /*    if ( ! idx.isValid() ) {
-        kDebug(planDbg())<<"not valid:"<<parent<<row<<column<<idx;
+        debugPlan<<"not valid:"<<parent<<row<<column<<idx;
     } else {
-        kDebug(planDbg())<<parent<<row<<column<<idx;
+        debugPlan<<parent<<row<<column<<idx;
     }*/
     return idx;
 }
@@ -446,7 +446,7 @@ QVariant WorkPackageProxyModel::data( const QModelIndex &idx, int role ) const
             value = m_model.data( task->workPackageAt( idx.row() ), idx.column(), role );
         }
     }
-//    kDebug(planDbg())<<idx<<value;
+//    debugPlan<<idx<<value;
     return value;
 }
 
@@ -459,7 +459,7 @@ Task *WorkPackageProxyModel::taskFromIndex( const QModelIndex &idx ) const
         QVariant obj = data( idx, Role::Object );
         task = qobject_cast<Task*>( obj.value<QObject*>() );
     }
-//    kDebug(planDbg())<<idx<<task;
+//    debugPlan<<idx<<task;
     return task;
 }
 
@@ -481,13 +481,13 @@ QModelIndex WorkPackageProxyModel::mapFromBaseModel( const QModelIndex &idx ) co
 }
 void WorkPackageProxyModel::setProject( Project *project )
 {
-    kDebug(planDbg())<<project;
+    debugPlan<<project;
     m_nodemodel->setProject( project );
 }
 
 void WorkPackageProxyModel::setScheduleManager(ScheduleManager *sm)
 {
-    kDebug(planDbg())<<sm;
+    debugPlan<<sm;
     m_nodemodel->setScheduleManager( sm );
 }
 
@@ -503,7 +503,7 @@ void WorkPackageProxyModel::detachTasks( Task *task )
         disconnect(task, SIGNAL(workPackageAdded(Node*)), this, SLOT(workPackageAdded(Node*)));
         disconnect(task, SIGNAL(workPackageToBeRemoved(Node*,int)), this, SLOT(workPackageToBeRemoved(Node*,int)));
         disconnect(task, SIGNAL(workPackageRemoved(Node*)), this, SLOT(workPackageRemoved(Node*)));
-//        kDebug(planDbg())<<task;
+//        debugPlan<<task;
     } else {
         for ( int r = 0; r < rowCount(); ++r ) {
             Task *t = taskFromIndex( index( r, 0 ) );
@@ -521,7 +521,7 @@ void WorkPackageProxyModel::attachTasks( Task *task )
         connect(task, SIGNAL(workPackageAdded(Node*)), this, SLOT(workPackageAdded(Node*)));
         connect(task, SIGNAL(workPackageToBeRemoved(Node*,int)), this, SLOT(workPackageToBeRemoved(Node*,int)));
         connect(task, SIGNAL(workPackageRemoved(Node*)), this, SLOT(workPackageRemoved(Node*)));
-//        kDebug(planDbg())<<task;
+//        debugPlan<<task;
     } else {
         for ( int r = 0; r < rowCount(); ++r ) {
             Task *t = taskFromIndex( index( r, 0 ) );
@@ -535,7 +535,7 @@ void WorkPackageProxyModel::attachTasks( Task *task )
 void WorkPackageProxyModel::workPackageToBeAdded(Node *node, int row )
 {
     QModelIndex idx = indexFromTask( node );
-    kDebug(planDbg())<<node<<row<<idx;
+    debugPlan<<node<<row<<idx;
     beginInsertRows( idx, row, row );
 }
 

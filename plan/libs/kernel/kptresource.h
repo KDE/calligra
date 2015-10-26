@@ -36,8 +36,6 @@
 #include <QString>
 #include <QList>
 
-#include <kdebug.h>
-
 
 /// The main namespace.
 namespace KPlato

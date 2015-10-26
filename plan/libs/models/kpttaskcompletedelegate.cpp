@@ -22,8 +22,6 @@
 #include "kptnodeitemmodel.h"
 #include "kptnode.h"
 
-#include <kdebug.h>
-
 #include <QModelIndex>
 #include <QApplication>
 #include <QStyleOptionViewItem>
@@ -47,7 +45,7 @@ void TaskCompleteDelegate::paint( QPainter *painter, const QStyleOptionViewItem 
 {
     QModelIndex typeidx = index.model()->index( index.row(), NodeModel::NodeType, index.parent() );
     if ( ! typeidx.isValid() ) {
-        kError()<<"Cannot find nodetype for index:"<<index;
+        errorPlan<<"Cannot find nodetype for index:"<<index;
         return;
     }
     int type = typeidx.data( Qt::EditRole ).toInt();
@@ -60,7 +58,7 @@ void TaskCompleteDelegate::paint( QPainter *painter, const QStyleOptionViewItem 
         style = opt.widget ? opt.widget->style() : QApplication::style();
         style->drawPrimitive( QStyle::PE_PanelItemViewItem, &opt, painter );
 
-        //kDebug(planDbg())<<"Draw something else, type="<<type<<index.model()->index( index.row(), NodeModel::NodeName, index.parent() ).data().toString();
+        //debugPlan<<"Draw something else, type="<<type<<index.model()->index( index.row(), NodeModel::NodeName, index.parent() ).data().toString();
 
         ItemDelegate::paint( painter, option, index );
     }

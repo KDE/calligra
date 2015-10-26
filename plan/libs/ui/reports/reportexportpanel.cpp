@@ -22,8 +22,6 @@
 
 #include <KoIcon.h>
 
-#include <kdebug.h>
-
 namespace KPlato
 {
 

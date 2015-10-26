@@ -67,7 +67,7 @@ Duration::Duration(const qint64 value, Duration::Unit unit) {
     else if (unit == Unit_w) m_ms = (qint64)(value * ( 1000 * 60 * 60 * 24 * 7 ));
     else if (unit == Unit_M) m_ms = (qint64)(value * (qint64)( 1000 * 60 * 60 ) * ( 24 * 30 ));
     else if (unit == Unit_Y) m_ms = (qint64)(value * (qint64)( 1000 * 60 * 60 ) * ( 24 * 365 ));
-    else kError()<<"Unknown unit: "<<unit;
+    else errorPlan<<"Unknown unit: "<<unit;
 }
 
 void Duration::add(const Duration &delta) {
@@ -77,7 +77,7 @@ void Duration::add(const Duration &delta) {
 void Duration::add(qint64 delta) {
     qint64 tmp = m_ms + delta;
     if (tmp < 0) {
-        kDebug(planDbg())<<"Underflow"<<(long int)delta<<" from"<<this->toString();
+        debugPlan<<"Underflow"<<(long int)delta<<" from"<<this->toString();
         m_ms = 0;
         return;
     }
@@ -86,7 +86,7 @@ void Duration::add(qint64 delta) {
 
 void Duration::subtract(const Duration &delta) {
     if (m_ms < delta.m_ms) {
-        kDebug(planDbg())<<"Underflow"<<delta.toString()<<" from"<<this->toString();
+        debugPlan<<"Underflow"<<delta.toString()<<" from"<<this->toString();
         m_ms = 0;
         return;
     }
@@ -96,7 +96,7 @@ void Duration::subtract(const Duration &delta) {
 Duration Duration::operator*(int value) const {
     Duration dur(*this);
     if (value < 0) {
-        kDebug(planDbg())<<"Underflow"<<value<<" from"<<this->toString();
+        debugPlan<<"Underflow"<<value<<" from"<<this->toString();
     }
     else {
         dur.m_ms = m_ms * value; //FIXME
@@ -107,7 +107,7 @@ Duration Duration::operator*(int value) const {
 Duration Duration::operator/(int value) const {
     Duration dur(*this);
     if (value <= 0) {
-        kDebug(planDbg())<<"Underflow"<<value<<" from"<<this->toString();
+        debugPlan<<"Underflow"<<value<<" from"<<this->toString();
     }
     else {
         dur.m_ms = m_ms / value; //FIXME
@@ -129,7 +129,7 @@ Duration Duration::operator*(const Duration value) const {
 
 double Duration::operator/(const Duration &d) const {
     if (d == zeroDuration) {
-        kDebug(planDbg())<<"Divide by zero:"<<this->toString();
+        debugPlan<<"Divide by zero:"<<this->toString();
         return 0.0;
     }
     return (double)(m_ms) / (double)(d.m_ms);
@@ -220,7 +220,7 @@ QString Duration::toString(Format format) const {
             result = KLocale::global()->formatNumber(toDouble(Unit_h), 2);
             break;
         default:
-            kFatal()<<"Unknown format"<<endl;
+            qFatal("Unknown format");
             break;
     }
     return result;
@@ -265,7 +265,7 @@ Duration Duration::fromString(const QString &s, Format format, bool *ok) {
             break;
         }
         default:
-            kFatal()<<"Unknown format"<<endl;
+            qFatal("Unknown format");
             break;
     }
     return tmp;
@@ -294,7 +294,7 @@ Duration::Unit Duration::unitFromString( const QString &u )
 {
     int i = unitList().indexOf( u );
     if ( i < 0 ) {
-        kError()<<"Illegal unit: "<<u;
+        errorPlan<<"Illegal unit: "<<u;
         return Unit_ms;
     }
     return (Duration::Unit)( i ); 
@@ -310,11 +310,11 @@ bool Duration::valueFromString( const QString &value, double &rv, Unit &unit ) {
             v.remove( s );
             bool ok;
             rv = v.toDouble( &ok );
-            kError()<<value<<" -> "<<v<<", "<<s<<" = "<<ok<<endl;
+            errorPlan<<value<<" -> "<<v<<", "<<s<<" = "<<ok<<endl;
             return ok;
         }
     }
-    kError()<<"Illegal format, no unit: "<<value<<endl;
+    errorPlan<<"Illegal format, no unit: "<<value<<endl;
     return false;
 }
 

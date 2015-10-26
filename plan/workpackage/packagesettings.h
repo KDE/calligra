@@ -28,7 +28,6 @@
 #include <KoDialog.h>
 
 #include <klocale.h>
-#include <kdebug.h>
 
 class KUndo2Command;
 

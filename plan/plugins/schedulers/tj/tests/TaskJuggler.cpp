@@ -41,7 +41,6 @@
 #include <kconfiggroup.h>
 
 #include <QTest>
-#include <kdebug.h>
 
 #include "tests/DateTimeTester.h"
 

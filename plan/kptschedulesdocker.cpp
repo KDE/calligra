@@ -67,7 +67,7 @@ void SchedulesDocker::slotSelectionChanged()
 
 void SchedulesDocker::setProject( Project *project )
 {
-    kDebug(planDbg())<<project;
+    debugPlan<<project;
     m_model.setProject( project );
 }
 

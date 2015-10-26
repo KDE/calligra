@@ -66,7 +66,7 @@ int ChartItemModel::rowCount( const QModelIndex &/*parent */) const
 QModelIndex ChartItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
     if ( m_project == 0 || row < 0 || column < 0 ) {
-        //kDebug(planDbg())<<"No project"<<m_project<<" or illegal row, column"<<row<<column;
+        //debugPlan<<"No project"<<m_project<<" or illegal row, column"<<row<<column;
         return QModelIndex();
     }
     if ( parent.isValid() ) {
@@ -169,7 +169,7 @@ QVariant ChartItemModel::data( const QModelIndex &index, int role ) const
             default: break;
             }
         }
-        //kDebug(planDbg())<<index<<role<<result;
+        //debugPlan<<index<<role<<result;
         return result;
     } else if ( role == Qt::EditRole ) {
         switch ( index.column() ) {
@@ -185,7 +185,7 @@ QVariant ChartItemModel::data( const QModelIndex &index, int role ) const
         case CPIEffort: result = cpiEffort( index.row() ); break;
         default: break;
         }
-        //kDebug(planDbg())<<index<<role<<result;
+        //debugPlan<<index<<role<<result;
         return result;
     } else if ( role == Qt::ForegroundRole ) {
         double v = 0.0;
@@ -205,7 +205,7 @@ QVariant ChartItemModel::data( const QModelIndex &index, int role ) const
     }  else if ( role == KChart::DatasetPenRole ) {
         return headerData( index.column(), Qt::Horizontal, role );
     }
-    //kDebug(planDbg())<<index<<role<<result;
+    //debugPlan<<index<<role<<result;
     return result;
 }
 
@@ -283,7 +283,7 @@ QVariant ChartItemModel::headerData( int section, Qt::Orientation orientation, i
         QPen p;
         p.setBrush( headerData( section, orientation, KChart::DatasetBrushRole ).value<QBrush>() );
         result = p;
-        //kDebug(planDbg())<<section<<"DatasetPenRole"<<result;
+        //debugPlan<<section<<"DatasetPenRole"<<result;
         return result;
     }
     return ItemModelBase::headerData(section, orientation, role);
@@ -320,7 +320,7 @@ void ChartItemModel::setScheduleManager( ScheduleManager *sm )
 
 void ChartItemModel::setNodes( const QList<Node*> &nodes )
 {
-    kDebug(planDbg())<<nodes;
+    debugPlan<<nodes;
     m_nodes = nodes;
     calculate();
     reset();
@@ -352,7 +352,7 @@ void ChartItemModel::slotNodeRemoved( Node *node )
 
 void ChartItemModel::slotNodeChanged( Node *node )
 {
-    //kDebug(planDbg())<<this<<node;
+    //debugPlan<<this<<node;
     if ( m_nodes.contains( node ) ) {
         calculate();
         reset();
@@ -397,7 +397,7 @@ QDate ChartItemModel::endDate() const
 
 void ChartItemModel::calculate()
 {
-    //kDebug(planDbg())<<m_project<<m_manager<<m_nodes;
+    //debugPlan<<m_project<<m_manager<<m_nodes;
     m_bcws.clear();
     m_acwp.clear();
     if ( m_manager ) {
@@ -417,8 +417,8 @@ void ChartItemModel::calculate()
             }
         }
     }
-    //kDebug(planDbg())<<"bcwp"<<m_bcws;
-    //kDebug(planDbg())<<"acwp"<<m_acwp;
+    //debugPlan<<"bcwp"<<m_bcws;
+    //debugPlan<<"acwp"<<m_acwp;
 }
 
 void ChartItemModel::setLocalizeValues( bool on )

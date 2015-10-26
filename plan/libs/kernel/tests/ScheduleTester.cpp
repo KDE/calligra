@@ -21,9 +21,7 @@
 #include "kptdatetime.h"
 #include "kptschedule.h"
 
-
 #include <QTest>
-#include <kdebug.h>
 
 namespace QTest
 {

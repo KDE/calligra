@@ -101,7 +101,7 @@ void AccountsviewConfigDialog::enableOkButton(bool enabled)
 
 void AccountsviewConfigDialog::slotOk()
 {
-    kDebug(planDbg());
+    debugPlan;
     m_treeview->setPeriodType( m_panel->ui_periodBox->currentIndex() );
     m_treeview->setCumulative( m_panel->ui_cumulative->isChecked() );
     m_treeview->setShowMode( m_panel->ui_showBox->currentIndex() );

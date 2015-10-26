@@ -190,7 +190,7 @@ void ResourceDialogImpl::slotUseRequiredChanged( int state )
 void ResourceDialogImpl::slotAvailableFromChanged(const QDateTime&) {
     if (availableUntil->dateTime() < availableFrom->dateTime()) {
         disconnect(availableUntil, SIGNAL(dateTimeChanged(QDateTime)), this,  SLOT(slotAvailableUntilChanged(QDateTime)));
-        //kDebug(planDbg())<<"From:"<<availableFrom->dateTime().toString()<<" until="<<availableUntil->dateTime().toString();
+        //debugPlan<<"From:"<<availableFrom->dateTime().toString()<<" until="<<availableUntil->dateTime().toString();
         availableUntil->setDateTime(availableFrom->dateTime());
         connect(availableUntil, SIGNAL(dateTimeChanged(QDateTime)), SLOT(slotAvailableUntilChanged(QDateTime)));
     }
@@ -199,7 +199,7 @@ void ResourceDialogImpl::slotAvailableFromChanged(const QDateTime&) {
 void ResourceDialogImpl::slotAvailableUntilChanged(const QDateTime&) {
     if (availableFrom->dateTime() > availableUntil->dateTime()) {
         disconnect(availableFrom, SIGNAL(dateTimeChanged(QDateTime)), this,  SLOT(slotAvailableFromChanged(QDateTime)));
-        //kDebug(planDbg())<<"Until:"<<availableUntil->dateTime().toString()<<" from="<<availableFrom->dateTime().toString();
+        //debugPlan<<"Until:"<<availableUntil->dateTime().toString()<<" from="<<availableFrom->dateTime().toString();
         availableFrom->setDateTime(availableUntil->dateTime());
         connect(availableFrom, SIGNAL(dateTimeChanged(QDateTime)), SLOT(slotAvailableFromChanged(QDateTime)));
     }
@@ -448,7 +448,7 @@ MacroCommand *ResourceDialog::buildCommand(Resource *original, Resource &resourc
         m->addCommand(new ResourceModifyAccountCmd(*original, original->account(), resource.account()));
     }
     if ( resource.type() == Resource::Type_Team ) {
-        //kDebug(planDbg())<<original->teamMembers()<<resource.teamMembers();
+        //debugPlan<<original->teamMembers()<<resource.teamMembers();
         foreach ( const QString &id, resource.teamMemberIds() ) {
             if ( ! original->teamMemberIds().contains( id ) ) {
                 if (!m) m = new MacroCommand(n);

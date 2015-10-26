@@ -73,37 +73,37 @@ TaskStatusItemModel::~TaskStatusItemModel()
     
 void TaskStatusItemModel::slotAboutToBeReset()
 {
-    kDebug(planDbg());
+    debugPlan;
     clear();
 }
 
 void TaskStatusItemModel::slotReset()
 {
-    kDebug(planDbg());
+    debugPlan;
     refresh();
 }
 
 void TaskStatusItemModel::slotNodeToBeInserted( Node *, int )
 {
-    //kDebug(planDbg())<<node->name();
+    //debugPlan<<node->name();
     clear();
 }
 
 void TaskStatusItemModel::slotNodeInserted( Node * /*node*/ )
 {
-    //kDebug(planDbg())<<node->getParent->name()<<"-->"<<node->name();
+    //debugPlan<<node->getParent->name()<<"-->"<<node->name();
     refresh();
 }
 
 void TaskStatusItemModel::slotNodeToBeRemoved( Node * /*node*/ )
 {
-    //kDebug(planDbg())<<node->name();
+    //debugPlan<<node->name();
     clear();
 }
 
 void TaskStatusItemModel::slotNodeRemoved( Node * /*node*/ )
 {
-    //kDebug(planDbg())<<node->name();
+    //debugPlan<<node->name();
     refresh();
 }
 
@@ -118,7 +118,7 @@ void TaskStatusItemModel::slotNodeToBeMoved(Node *node, int pos, Node *newParent
 
 void TaskStatusItemModel::slotNodeMoved( Node * /*node*/ )
 {
-    //kDebug(planDbg())<<node->name();
+    //debugPlan<<node->name();
     refresh();
 }
 
@@ -176,7 +176,7 @@ void TaskStatusItemModel::clear()
             //FIXME: gives error msg:
             // Can't select indexes from different model or with different parents
             QModelIndex i = index( l );
-            kDebug(planDbg())<<i<<0<<c-1;
+            debugPlan<<i<<0<<c-1;
             beginRemoveRows( i, 0, c-1 );
             l->clear();
             endRemoveRows();
@@ -230,7 +230,7 @@ void TaskStatusItemModel::refresh()
     foreach ( NodeMap *l, m_top ) {
         int c = l->count();
         if ( c > 0 ) {
-            kDebug(planDbg())<<index(l)<<0<<c-1;
+            debugPlan<<index(l)<<0<<c-1;
             beginInsertRows( index( l ), 0, c-1 );
             endInsertRows();
         }
@@ -287,7 +287,7 @@ QModelIndex TaskStatusItemModel::parent( const QModelIndex &index ) const
     if ( !index.isValid() ) {
         return QModelIndex();
     }
-    //kDebug(planDbg())<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
+    //debugPlan<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
     int row = m_top.indexOf( static_cast<NodeMap*>( index.internalPointer() ) );
     if ( row != -1 ) {
         return QModelIndex(); // top level has no parent
@@ -311,7 +311,7 @@ QModelIndex TaskStatusItemModel::parent( const QModelIndex &index ) const
 
 QModelIndex TaskStatusItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
-    //kDebug(planDbg())<<row<<column<<parent;
+    //debugPlan<<row<<column<<parent;
     if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
         return QModelIndex();
     }
@@ -326,7 +326,7 @@ QModelIndex TaskStatusItemModel::index( int row, int column, const QModelIndex &
         return QModelIndex();
     }
     if ( row >= rowCount( parent ) ) {
-        kWarning()<<"Row >= rowCount, Qt4.4 asks, so we need to handle it"<<parent<<row<<column;
+        warnPlan<<"Row >= rowCount, Qt4.4 asks, so we need to handle it"<<parent<<row<<column;
         return QModelIndex();
     }
     QModelIndex i = createIndex(row, column, l->values().value( row ) );
@@ -400,7 +400,7 @@ bool TaskStatusItemModel::setCompletion( Node *node, const QVariant &value, int 
         if ( c.entrymode() == Completion::EnterCompleted ) {
             Duration planned = static_cast<Task*>( node )->plannedEffort( m_nodemodel.id() );
             Duration actual = ( planned * value.toInt() ) / 100;
-            kDebug(planDbg())<<planned.toString()<<value.toInt()<<actual.toString();
+            debugPlan<<planned.toString()<<value.toInt()<<actual.toString();
             NamedCommand *cmd = new ModifyCompletionActualEffortCmd( c, date, actual );
             cmd->execute();
             m->addCommand( cmd );
@@ -612,15 +612,15 @@ int TaskStatusItemModel::columnCount( const QModelIndex & ) const
 int TaskStatusItemModel::rowCount( const QModelIndex &parent ) const
 {
     if ( ! parent.isValid() ) {
-        //kDebug(planDbg())<<"top="<<m_top.count()<<m_top;
+        //debugPlan<<"top="<<m_top.count()<<m_top;
         return m_top.count();
     }
     NodeMap *l = list( parent );
     if ( l ) {
-        //kDebug(planDbg())<<"list"<<parent.row()<<":"<<l->count()<<l<<m_topNames.value( parent.row() );
+        //debugPlan<<"list"<<parent.row()<<":"<<l->count()<<l<<m_topNames.value( parent.row() );
         return l->count();
     }
-    //kDebug(planDbg())<<"node"<<parent.row();
+    //debugPlan<<"node"<<parent.row();
     return 0; // nodes don't have children
 }
 
@@ -643,7 +643,7 @@ QMimeData *TaskStatusItemModel::mimeData( const QModelIndexList & indexes ) cons
     QList<int> rows;
     foreach (const QModelIndex &index, indexes) {
         if ( index.isValid() && !rows.contains( index.row() ) ) {
-            //kDebug(planDbg())<<index.row();
+            //debugPlan<<index.row();
             Node *n = node( index );
             if ( n ) {
                 rows << index.row();
@@ -713,7 +713,7 @@ TaskStatusItemModel::TaskStatus TaskStatusItemModel::taskStatus(const Task *task
 
 void TaskStatusItemModel::slotNodeChanged( Node *node )
 {
-    kDebug(planDbg());
+    debugPlan;
     if (node == 0 || node->type() == Node::Type_Project ||
         (node->type() != Node::Type_Task && node->type() != Node::Type_Milestone)) {
         return;
@@ -747,7 +747,7 @@ void TaskStatusItemModel::slotNodeChanged( Node *node )
 
 void TaskStatusItemModel::slotWbsDefinitionChanged()
 {
-    kDebug(planDbg());
+    debugPlan;
     foreach ( NodeMap *l, m_top ) {
         for ( int row = 0; row < l->count(); ++row ) {
             emit dataChanged( createIndex( row, NodeModel::NodeWBSCode, l->values().value( row ) ), createIndex( row, NodeModel::NodeWBSCode, l->values().value( row ) ) );
@@ -757,7 +757,7 @@ void TaskStatusItemModel::slotWbsDefinitionChanged()
 
 void TaskStatusItemModel::slotLayoutChanged()
 {
-    //kDebug(planDbg())<<node->name();
+    //debugPlan<<node->name();
     emit layoutAboutToBeChanged();
     emit layoutChanged();
 }

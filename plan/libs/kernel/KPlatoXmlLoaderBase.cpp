@@ -34,14 +34,8 @@
 
 #include <ktimezone.h>
 #include <ksystemtimezone.h>
-#include <kdebug.h>
 
 using namespace KPlato;
-
-KPLATOKERNEL_EXPORT int kplatoXmlDebugArea() {
-    static int s_area = KDebug::registerArea( "plan (kplato xml)" );
-    return s_area;
-}
 
 KPlatoXmlLoaderBase::KPlatoXmlLoaderBase()
 {
@@ -49,7 +43,7 @@ KPlatoXmlLoaderBase::KPlatoXmlLoaderBase()
 
 bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, XMLLoaderObject &status )
 {
-    kDebug(kplatoXmlDebugArea())<<"project";
+    debugPlanXml<<"project";
     // load locale first
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -90,7 +84,7 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
     KTimeZone tz = KSystemTimeZones::zone( element.attribute( "timezone" ) );
     if ( tz.isValid() ) {
         project->setTimeZone( tz );
-    } else kWarning()<<"No timezone specified, using default (local)";
+    } else warnPlanXml<<"No timezone specified, using default (local)";
     status.setProjectSpec( project->timeSpec() );
 
     // Allow for both numeric and text
@@ -99,7 +93,7 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
     if ( ! ok )
         project->setConstraint( s );
     if ( project->constraint() != Node::MustStartOn && project->constraint() != Node::MustFinishOn ) {
-        kError() << "Illegal constraint: " << project->constraintToString();
+        errorPlanXml << "Illegal constraint: " << project->constraintToString();
         project->setConstraint( Node::MustStartOn );
     }
     s = element.attribute( "start-time" );
@@ -112,7 +106,7 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
     }
     // Load the project children
     // Do calendars first, they only refrence other calendars
-    //kDebug(kplatoXmlDebugArea())<<"Calendars--->";
+    //debugPlanXml<<"Calendars--->";
     n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
         if ( ! n.isElement() ) {
@@ -128,7 +122,7 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
                 cals.append( child ); // temporary, reorder later
             } else {
                 // TODO: Complain about this
-                kError() << "Failed to load calendar";
+                errorPlanXml << "Failed to load calendar";
                 delete child;
             }
         } else if ( e.tagName() == "standard-worktime" ) {
@@ -137,7 +131,7 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
             if ( load( child, e, status ) ) {
                 project->setStandardWorktime( child );
             } else {
-                kError() << "Failed to load standard worktime";
+                errorPlanXml << "Failed to load standard worktime";
                 delete child;
             }
         }
@@ -152,25 +146,25 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
             if ( c->parentId().isEmpty() ) {
                 project->addCalendar( c, status.baseCalendar() ); // handle pre 0.6 version
                 added = true;
-                //kDebug(kplatoXmlDebugArea())<<"added to project:"<<c->name();
+                //debugPlanXml<<"added to project:"<<c->name();
             } else {
                 Calendar *par = project->calendar( c->parentId() );
                 if ( par ) {
                     project->addCalendar( c, par );
                     added = true;
-                    //kDebug(kplatoXmlDebugArea())<<"added:"<<c->name()<<" to parent:"<<par->name();
+                    //debugPlanXml<<"added:"<<c->name()<<" to parent:"<<par->name();
                 } else {
                     lst.append( c ); // treat later
-                    //kDebug(kplatoXmlDebugArea())<<"treat later:"<<c->name();
+                    //debugPlanXml<<"treat later:"<<c->name();
                 }
             }
         }
         cals = lst;
     } while ( added );
     if ( ! cals.isEmpty() ) {
-        kError()<<"All calendars not saved!";
+        errorPlanXml<<"All calendars not saved!";
     }
-    //kDebug(kplatoXmlDebugArea())<<"Calendars<---";
+    //debugPlanXml<<"Calendars<---";
     // Resource groups and resources, can reference calendars
     n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -198,7 +192,7 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
         }
         KoXmlElement e = n.toElement();
         if ( e.tagName() == "project" ) {
-            //kDebug(kplatoXmlDebugArea())<<"Sub project--->";
+            //debugPlanXml<<"Sub project--->";
 /*                // Load the subproject
             Project * child = new Project( this );
             if ( child->load( e ) ) {
@@ -210,7 +204,7 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
                 delete child;
             }*/
         } else if ( e.tagName() == "task" ) {
-            //kDebug(kplatoXmlDebugArea())<<"Task--->";
+            //debugPlanXml<<"Task--->";
             // Load the task (and resourcerequests).
             // Depends on resources already loaded
             Task *child = new Task( project );
@@ -227,31 +221,31 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
     // These go last
     n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
-        kDebug(kplatoXmlDebugArea())<<n.isElement();
+        debugPlanXml<<n.isElement();
         if ( ! n.isElement() ) {
             continue;
         }
         KoXmlElement e = n.toElement();
         if ( e.tagName() == "accounts" ) {
-            //kDebug(kplatoXmlDebugArea())<<"Accounts--->";
+            //debugPlanXml<<"Accounts--->";
             // Load accounts
             // References tasks
             if ( ! load( project->accounts(), e, status ) ) {
-                kError() << "Failed to load accounts";
+                errorPlanXml << "Failed to load accounts";
             }
         } else if ( e.tagName() == "relation" ) {
-            //kDebug(kplatoXmlDebugArea())<<"Relation--->";
+            //debugPlanXml<<"Relation--->";
             // Load the relation
             // References tasks
             Relation * child = new Relation();
             if ( ! load( child, e, status ) ) {
                 // TODO: Complain about this
-                kError() << "Failed to load relation";
+                errorPlanXml << "Failed to load relation";
                 delete child;
             }
-            //kDebug(kplatoXmlDebugArea())<<"Relation<---";
+            //debugPlanXml<<"Relation<---";
         } else if ( e.tagName() == "schedules" ) {
-            kDebug(kplatoXmlDebugArea())<<"Project schedules & task appointments--->";
+            debugPlanXml<<"Project schedules & task appointments--->";
             // References tasks and resources
             KoXmlNode sn = e.firstChild();
             for ( ; ! sn.isNull(); sn = sn.nextSibling() ) {
@@ -259,7 +253,7 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
                     continue;
                 }
                 KoXmlElement el = sn.toElement();
-                //kDebug(kplatoXmlDebugArea())<<el.tagName()<<" Version="<<status.version();
+                //debugPlanXml<<el.tagName()<<" Version="<<status.version();
                 ScheduleManager *sm = 0;
                 bool add = false;
                 if ( status.version() <= "0.5" ) {
@@ -279,16 +273,16 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
                         if ( add )
                             project->addScheduleManager( sm );
                     } else {
-                        kError() << "Failed to load schedule manager";
+                        errorPlanXml << "Failed to load schedule manager";
                         delete sm;
                     }
                 } else {
-                    kDebug(kplatoXmlDebugArea())<<"No schedule manager ?!";
+                    debugPlanXml<<"No schedule manager ?!";
                 }
             }
-            kDebug(kplatoXmlDebugArea())<<"Project schedules & task appointments<---";
+            debugPlanXml<<"Project schedules & task appointments<---";
         } else if ( e.tagName() == "resource-teams" ) {
-            //kDebug(kplatoXmlDebugArea())<<"Resource teams--->";
+            //debugPlanXml<<"Resource teams--->";
             // References other resources
             KoXmlNode tn = e.firstChild();
             for ( ; ! tn.isNull(); tn = tn.nextSibling() ) {
@@ -300,19 +294,19 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
                     Resource *r = project->findResource( el.attribute( "team-id" ) );
                     Resource *tm = project->findResource( el.attribute( "member-id" ) );
                     if ( r == 0 || tm == 0 ) {
-                        kError()<<"resource-teams: cannot find resources";
+                        errorPlanXml<<"resource-teams: cannot find resources";
                         continue;
                     }
                     if ( r == tm ) {
-                        kError()<<"resource-teams: a team cannot be a member of itself";
+                        errorPlanXml<<"resource-teams: a team cannot be a member of itself";
                         continue;
                     }
                     r->addTeamMemberId( tm->id() );
                 } else {
-                    kError()<<"resource-teams: unhandled tag"<<el.tagName();
+                    errorPlanXml<<"resource-teams: unhandled tag"<<el.tagName();
                 }
             }
-            //kDebug(kplatoXmlDebugArea())<<"Resource teams<---";
+            //debugPlanXml<<"Resource teams<---";
         } else if ( e.tagName() == "wbs-definition" ) {
             load( project->wbsDefinition(), e, status );
         } else if ( e.tagName() == "locale" ) {
@@ -328,7 +322,7 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
         } else if ( e.tagName() == "task" ) {
             // handled earlier
         } else {
-            kWarning()<<"Unhandled tag:"<<e.tagName();
+            warnPlanXml<<"Unhandled tag:"<<e.tagName();
         }
     }
     // set schedule parent
@@ -336,13 +330,13 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
         project->setParentSchedule( s );
     }
 
-    kDebug(kplatoXmlDebugArea())<<"Project loaded:"<<project<<project->name()<<project->allNodes();
+    debugPlanXml<<"Project loaded:"<<project<<project->name()<<project->allNodes();
     return true;
 }
 
 bool KPlatoXmlLoaderBase::load( Task *task, const KoXmlElement &element, XMLLoaderObject &status )
 {
-    kDebug(kplatoXmlDebugArea())<<"task";
+    debugPlanXml<<"task";
     QString s;
     bool ok = false;
     task->setId( element.attribute("id") );
@@ -350,7 +344,7 @@ bool KPlatoXmlLoaderBase::load( Task *task, const KoXmlElement &element, XMLLoad
     task->setName( element.attribute("name") );
     task->setLeader( element.attribute("leader") );
     task->setDescription( element.attribute("description") );
-    //kDebug(kplatoXmlDebugArea())<<m_name<<": id="<<m_id;
+    //debugPlanXml<<m_name<<": id="<<m_id;
 
     // Allow for both numeric and text
     QString constraint = element.attribute("scheduling","0");
@@ -408,16 +402,16 @@ bool KPlatoXmlLoaderBase::load( Task *task, const KoXmlElement &element, XMLLoad
             // Handle multiple requests to same group gracefully (Not really allowed)
             ResourceGroupRequest *r = task->requests().findGroupRequestById( e.attribute( "group-id" ) );
             if ( r ) {
-                kWarning()<<"Multiple requests to same group, loading into existing group";
+                warnPlanXml<<"Multiple requests to same group, loading into existing group";
                 if ( ! load( r, e, status ) ) {
-                    kError()<<"Failed to load resource request";
+                    errorPlanXml<<"Failed to load resource request";
                 }
             } else {
                 r = new ResourceGroupRequest();
                 if ( load( r, e, status ) ) {
                     task->addRequest(r);
                 } else {
-                    kError()<<"Failed to load resource request";
+                    errorPlanXml<<"Failed to load resource request";
                     delete r;
                 }
             }
@@ -438,7 +432,7 @@ bool KPlatoXmlLoaderBase::load( Task *task, const KoXmlElement &element, XMLLoad
                         sch->setNode( task );
                         task->addSchedule( sch );
                     } else {
-                        kError()<<"Failed to load schedule";
+                        errorPlanXml<<"Failed to load schedule";
                         delete sch;
                     }
                 }
@@ -457,20 +451,20 @@ bool KPlatoXmlLoaderBase::load( Task *task, const KoXmlElement &element, XMLLoad
                     if ( loadWpLog( wp, el, status ) ) {
                         task->addWorkPackage( wp );
                     } else {
-                        kError()<<"Failed to load logged workpackage";
+                        errorPlanXml<<"Failed to load logged workpackage";
                         delete wp;
                     }
                 }
             }
         }
     }
-    //kDebug(kplatoXmlDebugArea())<<m_name<<" loaded";
+    //debugPlanXml<<m_name<<" loaded";
     return true;
 }
 
 bool KPlatoXmlLoaderBase::load( Calendar *calendar, const KoXmlElement &element, XMLLoaderObject &status )
 {
-    kDebug(kplatoXmlDebugArea())<<"calendar"<<element.text();
+    debugPlanXml<<"calendar"<<element.text();
     //bool ok;
     calendar->setId( element.attribute( "id" ) );
     calendar->setParentId( element.attribute( "parent" ) );
@@ -478,7 +472,7 @@ bool KPlatoXmlLoaderBase::load( Calendar *calendar, const KoXmlElement &element,
     KTimeZone tz = KSystemTimeZones::zone( element.attribute( "timezone" ) );
     if ( tz.isValid() ) {
         calendar->setTimeZone( tz );
-    } else kWarning()<<"No timezone specified, use default (local)";
+    } else warnPlanXml<<"No timezone specified, use default (local)";
     bool dc = (bool)element.attribute( "default","0" ).toInt();
     if ( dc ) {
         status.project().setDefaultCalendar( calendar );
@@ -499,19 +493,19 @@ bool KPlatoXmlLoaderBase::load( Calendar *calendar, const KoXmlElement &element,
             if ( load( day, e, status ) ) {
                 if ( ! day->date().isValid() ) {
                     delete day;
-                    kError()<<calendar->name()<<": Failed to load calendarDay - Invalid date";
+                    errorPlanXml<<calendar->name()<<": Failed to load calendarDay - Invalid date";
                 } else {
                     CalendarDay *d = calendar->findDay( day->date() );
                     if ( d ) {
                         // already exists, keep the new
                         delete calendar->takeDay(d);
-                        kWarning()<<calendar->name()<<" Load calendarDay - Date already exists";
+                        warnPlanXml<<calendar->name()<<" Load calendarDay - Date already exists";
                     }
                     calendar->addDay( day );
                 }
             } else {
                 delete day;
-                kError()<<"Failed to load calendarDay";
+                errorPlanXml<<"Failed to load calendarDay";
                 return true; // don't throw away the whole calendar
             }
         }
@@ -521,13 +515,13 @@ bool KPlatoXmlLoaderBase::load( Calendar *calendar, const KoXmlElement &element,
 
 bool KPlatoXmlLoaderBase::load( CalendarDay *day, const KoXmlElement &element, XMLLoaderObject &status )
 {
-    kDebug(kplatoXmlDebugArea())<<"day";
+    debugPlanXml<<"day";
     bool ok=false;
     day->setState( QString( element.attribute( "state", "-1" ) ).toInt( &ok ) );
     if ( day->state() < 0 ) {
         return false;
     }
-    //kDebug(kplatoXmlDebugArea())<<" state="<<m_state;
+    //debugPlanXml<<" state="<<m_state;
     QString s = element.attribute( "date" );
     if ( ! s.isEmpty() ) {
         day->setDate( QDate::fromString( s, Qt::ISODate ) );
@@ -543,10 +537,10 @@ bool KPlatoXmlLoaderBase::load( CalendarDay *day, const KoXmlElement &element, X
         }
         KoXmlElement e = n.toElement();
         if ( e.tagName() == "interval" ) {
-            //kDebug(kplatoXmlDebugArea())<<"Interval start="<<e.attribute("start")<<" end="<<e.attribute("end");
+            //debugPlanXml<<"Interval start="<<e.attribute("start")<<" end="<<e.attribute("end");
             QString st = e.attribute("start");
             if (st.isEmpty() ) {
-                kError()<<"Empty interval";
+                errorPlanXml<<"Empty interval";
                 continue;
             }
             QTime start = QTime::fromString( st );
@@ -554,7 +548,7 @@ bool KPlatoXmlLoaderBase::load( CalendarDay *day, const KoXmlElement &element, X
             if ( status.version() <= "0.6.1" ) {
                 QString en = e.attribute( "end" );
                 if ( en.isEmpty() ) {
-                    kError()<<"Invalid interval end";
+                    errorPlanXml<<"Invalid interval end";
                     continue;
                 }
                 QTime end = QTime::fromString( en );
@@ -563,7 +557,7 @@ bool KPlatoXmlLoaderBase::load( CalendarDay *day, const KoXmlElement &element, X
                 length = e.attribute("length", "0").toInt();
             }
             if ( length <= 0 ) {
-                kError()<<"Invalid interval length";
+                errorPlanXml<<"Invalid interval length";
                 continue;
             }
             day->addInterval( new TimeInterval( start, length ) );
@@ -574,16 +568,16 @@ bool KPlatoXmlLoaderBase::load( CalendarDay *day, const KoXmlElement &element, X
 
 bool KPlatoXmlLoaderBase::load( CalendarWeekdays *weekdays, const KoXmlElement& element, XMLLoaderObject& status)
 {
-    kDebug(kplatoXmlDebugArea())<<"weekdays";
+    debugPlanXml<<"weekdays";
     bool ok;
     int dayNo = QString( element.attribute( "day","-1" ) ).toInt( &ok );
     if (dayNo < 0 || dayNo > 6) {
-        kError()<<"Illegal weekday: "<<dayNo;
+        errorPlanXml<<"Illegal weekday: "<<dayNo;
         return true; // we continue anyway
     }
     CalendarDay *day = weekdays->weekday( dayNo + 1 );
     if ( day == 0 ) {
-        kError()<<"No weekday: "<<dayNo;
+        errorPlanXml<<"No weekday: "<<dayNo;
         return false;
     }
     if ( ! load( day, element, status ) ) {
@@ -595,7 +589,7 @@ bool KPlatoXmlLoaderBase::load( CalendarWeekdays *weekdays, const KoXmlElement& 
 
 bool KPlatoXmlLoaderBase::load( StandardWorktime *swt, const KoXmlElement &element, XMLLoaderObject &status )
 {
-    kDebug(kplatoXmlDebugArea())<<"swt";
+    debugPlanXml<<"swt";
     swt->setYear( Duration::fromString( element.attribute( "year" ), Duration::Format_Hour ) );
     swt->setMonth( Duration::fromString( element.attribute( "month" ), Duration::Format_Hour ) );
     swt->setWeek( Duration::fromString( element.attribute( "week" ), Duration::Format_Hour ) );
@@ -610,8 +604,8 @@ bool KPlatoXmlLoaderBase::load( StandardWorktime *swt, const KoXmlElement &eleme
         if ( e.tagName() == "calendar" ) {
             // pre 0.6 version stored base calendar in standard worktime
             if ( status.version() >= "0.6" ) {
-                kWarning()<<"Old format, calendar in standard worktime";
-                kWarning()<<"Tries to load anyway";
+                warnPlanXml<<"Old format, calendar in standard worktime";
+                warnPlanXml<<"Tries to load anyway";
             }
             // try to load anyway
             Calendar *calendar = new Calendar;
@@ -622,7 +616,7 @@ bool KPlatoXmlLoaderBase::load( StandardWorktime *swt, const KoXmlElement &eleme
                 status.setBaseCalendar( calendar );
             } else {
                 delete calendar;
-                kError()<<"Failed to load calendar";
+                errorPlanXml<<"Failed to load calendar";
             }
         }
     }
@@ -631,23 +625,23 @@ bool KPlatoXmlLoaderBase::load( StandardWorktime *swt, const KoXmlElement &eleme
 
 bool KPlatoXmlLoaderBase::load( Relation *relation, const KoXmlElement &element, XMLLoaderObject &status )
 {
-    kDebug(kplatoXmlDebugArea())<<"relation";
+    debugPlanXml<<"relation";
     relation->setParent( status.project().findNode( element.attribute( "parent-id" ) ) );
     if (relation->parent() == 0) {
-        kWarning()<<"Parent node == 0, cannot find id:"<<element.attribute( "parent-id" );
+        warnPlanXml<<"Parent node == 0, cannot find id:"<<element.attribute( "parent-id" );
         return false;
     }
     relation->setChild( status.project().findNode( element.attribute( "child-id" ) ) );
     if ( relation->child() == 0 ) {
-        kWarning()<<"Child node == 0, cannot find id:"<<element.attribute( "child-id" );
+        warnPlanXml<<"Child node == 0, cannot find id:"<<element.attribute( "child-id" );
         return false;
     }
     if ( relation->child() == relation->parent() ) {
-        kWarning()<<"Parent node == child node";
+        warnPlanXml<<"Parent node == child node";
         return false;
     }
     if ( ! relation->parent()->legalToLink( relation->child() ) ) {
-        kWarning()<<"Realation is not legal:"<<relation->parent()->name()<<"->"<<relation->child()->name();
+        warnPlanXml<<"Realation is not legal:"<<relation->parent()->name()<<"->"<<relation->child()->name();
         return false;
     }
     relation->setType( element.attribute("type") );
@@ -655,21 +649,21 @@ bool KPlatoXmlLoaderBase::load( Relation *relation, const KoXmlElement &element,
     relation->setLag( Duration::fromString( element.attribute( "lag" ) ) );
 
     if ( ! relation->parent()->addDependChildNode( relation ) ) {
-        kError()<<"Failed to add relation: Child="<<relation->child()->name()<<" parent="<<relation->parent()->name();
+        errorPlanXml<<"Failed to add relation: Child="<<relation->child()->name()<<" parent="<<relation->parent()->name();
         return false;
     }
     if ( ! relation->child()->addDependParentNode( relation ) ) {
         relation->parent()->takeDependChildNode( relation );
-        kError()<<"Failed to add relation: Child="<<relation->child()->name()<<" parent="<<relation->parent()->name();
+        errorPlanXml<<"Failed to add relation: Child="<<relation->child()->name()<<" parent="<<relation->parent()->name();
         return false;
     }
-    //kDebug(kplatoXmlDebugArea())<<"Added relation: Child="<<relation->child()->name()<<" parent="<<relation->parent()->name();
+    //debugPlanXml<<"Added relation: Child="<<relation->child()->name()<<" parent="<<relation->parent()->name();
     return true;
 }
 
 bool KPlatoXmlLoaderBase::load( ResourceGroup *rg, const KoXmlElement &element, XMLLoaderObject &status )
 {
-    kDebug(kplatoXmlDebugArea())<<"resource-group";
+    debugPlanXml<<"resource-group";
     rg->setId( element.attribute( "id" ) );
     rg->setName( element.attribute( "name" ) );
     rg->setType( element.attribute( "type" ) );
@@ -696,7 +690,7 @@ bool KPlatoXmlLoaderBase::load( ResourceGroup *rg, const KoXmlElement &element, 
 
 bool KPlatoXmlLoaderBase::load( Resource *resource, const KoXmlElement &element, XMLLoaderObject &status )
 {
-    kDebug(kplatoXmlDebugArea())<<"resource";
+    debugPlanXml<<"resource";
     const KLocale *locale = status.project().locale();
     QString s;
     resource->setId( element.attribute( "id" ) );
@@ -724,7 +718,7 @@ bool KPlatoXmlLoaderBase::load( Resource *resource, const KoXmlElement &element,
         if (e.nodeName() == "resource") {
             QString id = e.attribute( "id" );
             if ( id.isEmpty() ) {
-                kWarning()<<"Missing resource id";
+                warnPlanXml<<"Missing resource id";
                 continue;
             }
             resource->addRequiredId( id );
@@ -735,7 +729,7 @@ bool KPlatoXmlLoaderBase::load( Resource *resource, const KoXmlElement &element,
         if ( e.nodeName() == "project" ) {
             QString id = e.attribute( "id" );
             if ( id.isEmpty() ) {
-                kError()<<"Missing project id";
+                errorPlanXml<<"Missing project id";
                 continue;
             }
             resource->clearExternalAppointments( id ); // in case...
@@ -752,7 +746,7 @@ bool KPlatoXmlLoaderBase::load( Resource *resource, const KoXmlElement &element,
 
 bool KPlatoXmlLoaderBase::load( Accounts &accounts, const KoXmlElement &element, XMLLoaderObject &status )
 {
-    kDebug(kplatoXmlDebugArea())<<"accounts";
+    debugPlanXml<<"accounts";
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
         if ( ! n.isElement() ) {
@@ -765,7 +759,7 @@ bool KPlatoXmlLoaderBase::load( Accounts &accounts, const KoXmlElement &element,
                 accounts.insert( child );
             } else {
                 // TODO: Complain about this
-                kWarning()<<"Loading failed";
+                warnPlanXml<<"Loading failed";
                 delete child;
             }
         }
@@ -773,7 +767,7 @@ bool KPlatoXmlLoaderBase::load( Accounts &accounts, const KoXmlElement &element,
     if (element.hasAttribute("default-account")) {
         accounts.setDefaultAccount( accounts.findAccount( element.attribute( "default-account" ) ) );
         if ( accounts.defaultAccount() == 0) {
-            kWarning()<<"Could not find default account.";
+            warnPlanXml<<"Could not find default account.";
         }
     }
     return true;
@@ -781,7 +775,7 @@ bool KPlatoXmlLoaderBase::load( Accounts &accounts, const KoXmlElement &element,
 
 bool KPlatoXmlLoaderBase::load(Account* account, const KoXmlElement& element, XMLLoaderObject& status)
 {
-    kDebug(kplatoXmlDebugArea())<<"account";
+    debugPlanXml<<"account";
     account->setName( element.attribute( "name" ) );
     account->setDescription( element.attribute( "description" ) );
     KoXmlNode n = element.firstChild();
@@ -803,7 +797,7 @@ bool KPlatoXmlLoaderBase::load(Account* account, const KoXmlElement& element, XM
                 account->insert( child );
             } else {
                 // TODO: Complain about this
-                kWarning()<<"Loading failed";
+                warnPlanXml<<"Loading failed";
                 delete child;
             }
         }
@@ -813,13 +807,13 @@ bool KPlatoXmlLoaderBase::load(Account* account, const KoXmlElement& element, XM
 
 bool KPlatoXmlLoaderBase::load(Account::CostPlace* cp, const KoXmlElement& element, XMLLoaderObject& status)
 {
-    kDebug(kplatoXmlDebugArea())<<"cost-place";
+    debugPlanXml<<"cost-place";
     cp->setObjectId( element.attribute( "object-id" ) );
     if ( cp->objectId().isEmpty() ) {
         // check old format
         cp->setObjectId( element.attribute( "node-id" ) );
         if ( cp->objectId().isEmpty() ) {
-            kError()<<"No object id";
+            errorPlanXml<<"No object id";
             return false;
         }
     }
@@ -827,7 +821,7 @@ bool KPlatoXmlLoaderBase::load(Account::CostPlace* cp, const KoXmlElement& eleme
     if ( cp->node() == 0) {
         cp->setResource( status.project().findResource( cp->objectId() ) );
         if ( cp->resource() == 0 ) {
-            kError()<<"Cannot find object with id: "<<cp->objectId();
+            errorPlanXml<<"Cannot find object with id: "<<cp->objectId();
             return false;
         }
     }
@@ -842,7 +836,7 @@ bool KPlatoXmlLoaderBase::load(Account::CostPlace* cp, const KoXmlElement& eleme
 
 bool KPlatoXmlLoaderBase::load( ScheduleManager *manager, const KoXmlElement &element, XMLLoaderObject &status )
 {
-    kDebug(kplatoXmlDebugArea())<<"schedule-manager";
+    debugPlanXml<<"schedule-manager";
     MainSchedule *sch = 0;
     if ( status.version() <= "0.5" ) {
         manager->setUsePert( false );
@@ -871,7 +865,7 @@ bool KPlatoXmlLoaderBase::load( ScheduleManager *manager, const KoXmlElement &el
             continue;
         }
         KoXmlElement e = n.toElement();
-        //kDebug(kplatoXmlDebugArea())<<e.tagName();
+        //debugPlanXml<<e.tagName();
         if ( e.tagName() == "schedule" ) {
             sch = loadMainSchedule( manager, e, status );
             if ( sch && sch->type() == Schedule::Expected ) {
@@ -885,7 +879,7 @@ bool KPlatoXmlLoaderBase::load( ScheduleManager *manager, const KoXmlElement &el
             if ( load( sm, e, status ) ) {
                 status.project().addScheduleManager( sm, manager );
             } else {
-                kError()<<"Failed to load schedule manager";
+                errorPlanXml<<"Failed to load schedule manager";
                 delete sm;
             }
         }
@@ -895,7 +889,7 @@ bool KPlatoXmlLoaderBase::load( ScheduleManager *manager, const KoXmlElement &el
 
 bool KPlatoXmlLoaderBase::load( Schedule *schedule, const KoXmlElement& element, XMLLoaderObject& /*status*/ )
 {
-    kDebug(kplatoXmlDebugArea())<<"schedule";
+    debugPlanXml<<"schedule";
     schedule->setName( element.attribute( "name" ) );
     schedule->setType( element.attribute( "type" ) );
     schedule->setId( element.attribute( "id" ).toLong() );
@@ -905,7 +899,7 @@ bool KPlatoXmlLoaderBase::load( Schedule *schedule, const KoXmlElement& element,
 
 MainSchedule* KPlatoXmlLoaderBase::loadMainSchedule( ScheduleManager* /*manager*/, const KoXmlElement& element, XMLLoaderObject& status )
 {
-    kDebug(kplatoXmlDebugArea())<<"main-schedule";
+    debugPlanXml<<"main-schedule";
     MainSchedule *sch = new MainSchedule();
     if ( loadMainSchedule( sch, element, status ) ) {
         status.project().addSchedule( sch );
@@ -914,7 +908,7 @@ MainSchedule* KPlatoXmlLoaderBase::loadMainSchedule( ScheduleManager* /*manager*
         // If it's here, it's scheduled!
         sch->setScheduled( true );
     } else {
-        kError() << "Failed to load schedule";
+        errorPlanXml << "Failed to load schedule";
         delete sch;
         sch = 0;
     }
@@ -923,7 +917,7 @@ MainSchedule* KPlatoXmlLoaderBase::loadMainSchedule( ScheduleManager* /*manager*
 
 bool KPlatoXmlLoaderBase::loadMainSchedule( MainSchedule *ms, const KoXmlElement &element, XMLLoaderObject &status )
 {
-    kDebug(kplatoXmlDebugArea());
+    debugPlanXml;
     QString s;
     load( ms, element, status );
 
@@ -950,7 +944,7 @@ bool KPlatoXmlLoaderBase::loadMainSchedule( MainSchedule *ms, const KoXmlElement
             Appointment * child = new Appointment();
             if ( ! load( child, el, status, *ms ) ) {
                 // TODO: Complain about this
-                kError() << "Failed to load appointment" << endl;
+                errorPlanXml << "Failed to load appointment" << endl;
                 delete child;
             }
         } else if ( el.tagName() == "criticalpath-list" ) {
@@ -977,7 +971,7 @@ bool KPlatoXmlLoaderBase::loadMainSchedule( MainSchedule *ms, const KoXmlElement
                     if ( node ) {
                         lst.append( node );
                     } else {
-                        kError()<<"Failed to find node id="<<s;
+                        errorPlanXml<<"Failed to find node id="<<s;
                     }
                 }
                 ms->m_pathlists.append( lst );
@@ -990,7 +984,7 @@ bool KPlatoXmlLoaderBase::loadMainSchedule( MainSchedule *ms, const KoXmlElement
 
 bool KPlatoXmlLoaderBase::loadNodeSchedule(NodeSchedule* schedule, const KoXmlElement &element, XMLLoaderObject& status)
 {
-    kDebug(kplatoXmlDebugArea())<<"node-schedule";
+    debugPlanXml<<"node-schedule";
     QString s;
     load( schedule, element, status );
     s = element.attribute( "earlystart" );
@@ -1045,7 +1039,7 @@ bool KPlatoXmlLoaderBase::loadNodeSchedule(NodeSchedule* schedule, const KoXmlEl
 
 bool KPlatoXmlLoaderBase::load( WBSDefinition &def, const KoXmlElement &element, XMLLoaderObject &/*status*/ )
 {
-    kDebug(kplatoXmlDebugArea())<<"wbs-def";
+    debugPlanXml<<"wbs-def";
     def.setProjectCode( element.attribute( "project-code" ) );
     def.setProjectSeparator( element.attribute( "project-separator" ) );
     def.setLevelsDefEnabled( (bool)element.attribute( "levels-enabled", "0" ).toInt() );
@@ -1071,7 +1065,7 @@ bool KPlatoXmlLoaderBase::load( WBSDefinition &def, const KoXmlElement &element,
                 int lvl = el.attribute( "level", "-1" ).toInt();
                 if ( lvl >= 0 ) {
                     def.setLevelsDef( lvl, d );
-                } else kError()<<"Invalid levels definition";
+                } else errorPlanXml<<"Invalid levels definition";
             }
         }
     }
@@ -1080,7 +1074,7 @@ bool KPlatoXmlLoaderBase::load( WBSDefinition &def, const KoXmlElement &element,
 
 bool KPlatoXmlLoaderBase::load( Documents &documents, const KoXmlElement &element, XMLLoaderObject &status )
 {
-    kDebug(kplatoXmlDebugArea())<<"documents";
+    debugPlanXml<<"documents";
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
         if ( ! n.isElement() ) {
@@ -1090,7 +1084,7 @@ bool KPlatoXmlLoaderBase::load( Documents &documents, const KoXmlElement &elemen
         if (e.tagName() == "document") {
             Document *doc = new Document();
             if ( ! load( doc, e, status ) ) {
-                kWarning()<<"Failed to load document";
+                warnPlanXml<<"Failed to load document";
                 status.addMsg( XMLLoaderObject::Errors, "Failed to load document" );
                 delete doc;
             } else {
@@ -1104,7 +1098,7 @@ bool KPlatoXmlLoaderBase::load( Documents &documents, const KoXmlElement &elemen
 
 bool KPlatoXmlLoaderBase::load( Document *document, const KoXmlElement &element, XMLLoaderObject &status )
 {
-    kDebug(kplatoXmlDebugArea())<<"document";
+    debugPlanXml<<"document";
     Q_UNUSED(status);
     document->setUrl( QUrl( element.attribute( "url" ) ) );
     document->setType( ( Document::Type )( element.attribute( "type" ).toInt() ) );
@@ -1115,7 +1109,7 @@ bool KPlatoXmlLoaderBase::load( Document *document, const KoXmlElement &element,
 
 bool KPlatoXmlLoaderBase::load( Estimate* estimate, const KoXmlElement& element, XMLLoaderObject& status )
 {
-    kDebug(kplatoXmlDebugArea())<<"estimate";
+    debugPlanXml<<"estimate";
     estimate->setType( element.attribute( "type") );
     estimate->setRisktype( element.attribute( "risk" ) );
     if ( status.version() <= "0.6" ) {
@@ -1142,10 +1136,10 @@ bool KPlatoXmlLoaderBase::load( Estimate* estimate, const KoXmlElement& element,
 
 bool KPlatoXmlLoaderBase::load( ResourceGroupRequest* gr, const KoXmlElement& element, XMLLoaderObject& status )
 {
-    kDebug(kplatoXmlDebugArea())<<"resourcegroup-request";
+    debugPlanXml<<"resourcegroup-request";
     gr->setGroup( status.project().findResourceGroup(element.attribute("group-id")) );
     if ( gr->group() == 0 ) {
-        kError()<<"The referenced resource group does not exist: group id="<<element.attribute("group-id");
+        errorPlanXml<<"The referenced resource group does not exist: group id="<<element.attribute("group-id");
         return false;
     }
     gr->group()->registerRequest( gr );
@@ -1162,7 +1156,7 @@ bool KPlatoXmlLoaderBase::load( ResourceGroupRequest* gr, const KoXmlElement& el
             if ( load( r, e, status ) ) {
                 gr->addResourceRequest( r );
             } else {
-                kError()<<"Failed to load resource request";
+                errorPlanXml<<"Failed to load resource request";
                 delete r;
             }
         }
@@ -1176,10 +1170,10 @@ bool KPlatoXmlLoaderBase::load( ResourceGroupRequest* gr, const KoXmlElement& el
 
 bool KPlatoXmlLoaderBase::load( ResourceRequest *rr, const KoXmlElement& element, XMLLoaderObject& status)
 {
-    kDebug(kplatoXmlDebugArea())<<"resource-request";
+    debugPlanXml<<"resource-request";
     rr->setResource( status.project().resource(element.attribute("resource-id")) );
     if (rr->resource() == 0) {
-        kWarning()<<"The referenced resource does not exist: resource id="<<element.attribute("resource-id");
+        warnPlanXml<<"The referenced resource does not exist: resource id="<<element.attribute("resource-id");
         return false;
     }
     rr->setUnits( element.attribute("units").toInt() );
@@ -1191,12 +1185,12 @@ bool KPlatoXmlLoaderBase::load( ResourceRequest *rr, const KoXmlElement& element
         if (e.nodeName() == "resource") {
             QString id = e.attribute( "id" );
             if ( id.isEmpty() ) {
-                kError()<<"Missing project id";
+                errorPlanXml<<"Missing project id";
                 continue;
             }
             Resource *r = status.project().resource(id);
             if (r == 0) {
-                kWarning()<<"The referenced resource does not exist: resource id="<<element.attribute("resource-id");
+                warnPlanXml<<"The referenced resource does not exist: resource id="<<element.attribute("resource-id");
             } else {
                 if ( r != rr->resource() ) {
                     required << r;
@@ -1211,7 +1205,7 @@ bool KPlatoXmlLoaderBase::load( ResourceRequest *rr, const KoXmlElement& element
 
 bool KPlatoXmlLoaderBase::load( WorkPackage &wp, const KoXmlElement& element, XMLLoaderObject& status )
 {
-    kDebug(kplatoXmlDebugArea())<<"workpackage";
+    debugPlanXml<<"workpackage";
     Q_UNUSED(status);
     wp.setOwnerName( element.attribute( "owner" ) );
     wp.setOwnerId( element.attribute( "owner-id" ) );
@@ -1220,7 +1214,7 @@ bool KPlatoXmlLoaderBase::load( WorkPackage &wp, const KoXmlElement& element, XM
 
 bool KPlatoXmlLoaderBase::loadWpLog( WorkPackage *wp, KoXmlElement& element, XMLLoaderObject& status )
 {
-    kDebug(kplatoXmlDebugArea())<<"wplog";
+    debugPlanXml<<"wplog";
     wp->setOwnerName( element.attribute( "owner" ) );
     wp->setOwnerId( element.attribute( "owner-id" ) );
     wp->setTransmitionStatus( wp->transmitionStatusFromString( element.attribute( "status" ) ) );
@@ -1230,7 +1224,7 @@ bool KPlatoXmlLoaderBase::loadWpLog( WorkPackage *wp, KoXmlElement& element, XML
 
 bool KPlatoXmlLoaderBase::load( Completion &completion, const KoXmlElement& element, XMLLoaderObject& status )
 {
-    kDebug(kplatoXmlDebugArea())<<"completion";
+    debugPlanXml<<"completion";
     QString s;
     completion.setStarted( (bool)element.attribute("started", "0").toInt() );
     completion.setFinished( (bool)element.attribute("finished", "0").toInt() );
@@ -1264,7 +1258,7 @@ bool KPlatoXmlLoaderBase::load( Completion &completion, const KoXmlElement& elem
                         date = QDate::fromString( s, Qt::ISODate );
                     }
                     if ( !date.isValid() ) {
-                        kWarning()<<"Invalid date: "<<date<<s;
+                        warnPlanXml<<"Invalid date: "<<date<<s;
                         continue;
                     }
                     Completion::Entry *entry = new Completion::Entry( e.attribute("percent-finished", "0").toInt(), Duration::fromString(e.attribute("remaining-effort")),  Duration::fromString(e.attribute("performed-effort")) );
@@ -1276,7 +1270,7 @@ bool KPlatoXmlLoaderBase::load( Completion &completion, const KoXmlElement& elem
                                 QString id = el.attribute( "id" );
                                 Resource *r = status.project().resource( id );
                                 if ( r == 0 ) {
-                                    kWarning()<<"Cannot find resource, id="<<id;
+                                    warnPlanXml<<"Cannot find resource, id="<<id;
                                     continue;
                                 }
                                 Completion::UsedEffort *ue = new Completion::UsedEffort();
@@ -1292,7 +1286,7 @@ bool KPlatoXmlLoaderBase::load( Completion &completion, const KoXmlElement& elem
 
 bool KPlatoXmlLoaderBase::load( Completion::UsedEffort* ue, const KoXmlElement& element, XMLLoaderObject& /*status*/)
 {
-    kDebug(kplatoXmlDebugArea())<<"used-effort";
+    debugPlanXml<<"used-effort";
     KoXmlElement e;
     forEachElement(e, element) {
         if (e.tagName() == "actual-effort") {
@@ -1310,31 +1304,31 @@ bool KPlatoXmlLoaderBase::load( Completion::UsedEffort* ue, const KoXmlElement& 
 
 bool KPlatoXmlLoaderBase::load( Appointment *appointment, const KoXmlElement& element, XMLLoaderObject& status, Schedule &sch )
 {
-    kDebug(kplatoXmlDebugArea())<<"appointment";
+    debugPlanXml<<"appointment";
     Node *node = status.project().findNode(element.attribute("task-id"));
     if (node == 0) {
-        kError()<<"The referenced task does not exists: "<<element.attribute("task-id");
+        errorPlanXml<<"The referenced task does not exists: "<<element.attribute("task-id");
         return false;
     }
     Resource *res = status.project().resource(element.attribute("resource-id"));
     if (res == 0) {
-        kError()<<"The referenced resource does not exists: resource id="<<element.attribute("resource-id");
+        errorPlanXml<<"The referenced resource does not exists: resource id="<<element.attribute("resource-id");
         return false;
     }
     if (!res->addAppointment( appointment, sch ) ) {
-        kError()<<"Failed to add appointment to resource: "<<res->name();
+        errorPlanXml<<"Failed to add appointment to resource: "<<res->name();
         return false;
     }
     if ( ! node->addAppointment( appointment, sch ) ) {
-        kError()<<"Failed to add appointment to node: "<<node->name();
+        errorPlanXml<<"Failed to add appointment to node: "<<node->name();
         appointment->resource()->takeAppointment( appointment );
         return false;
     }
-    //kDebug(kplatoXmlDebugArea())<<"res="<<m_resource<<" node="<<m_node;
+    //debugPlanXml<<"res="<<m_resource<<" node="<<m_node;
     AppointmentIntervalList lst = appointment->intervals();
     load( lst, element, status );
     if ( lst.isEmpty() ) {
-        kError()<<"Appointment interval list is empty (added anyway): "<<node->name()<<res->name();
+        errorPlanXml<<"Appointment interval list is empty (added anyway): "<<node->name()<<res->name();
         return false;
     }
     appointment->setIntervals( lst );
@@ -1343,7 +1337,7 @@ bool KPlatoXmlLoaderBase::load( Appointment *appointment, const KoXmlElement& el
 
 bool KPlatoXmlLoaderBase::load(AppointmentIntervalList& lst, const KoXmlElement& element, XMLLoaderObject& status)
 {
-    kDebug(kplatoXmlDebugArea())<<"appointment-interval-list";
+    debugPlanXml<<"appointment-interval-list";
     KoXmlElement e;
     forEachElement(e, element) {
         if (e.tagName() == "interval") {
@@ -1351,7 +1345,7 @@ bool KPlatoXmlLoaderBase::load(AppointmentIntervalList& lst, const KoXmlElement&
             if ( load( a, e, status ) ) {
                 lst.add(a);
             } else {
-                kError()<<"Could not load interval";
+                errorPlanXml<<"Could not load interval";
             }
         }
     }
@@ -1373,6 +1367,6 @@ bool KPlatoXmlLoaderBase::load(AppointmentInterval& interval, const KoXmlElement
     if (ok) {
         interval.setLoad( l );
     }
-    kDebug(kplatoXmlDebugArea())<<"interval:"<<interval;
+    debugPlanXml<<"interval:"<<interval;
     return interval.isValid();
 }

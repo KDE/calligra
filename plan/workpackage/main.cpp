@@ -23,7 +23,6 @@
 #include "application.h"
 
 #include <kcmdlineargs.h>
-#include <kdebug.h>
 
 #include <QFile>
 

@@ -124,7 +124,7 @@ void PlanTJPlugin::stopCalculation( SchedulerThread *sch )
 
 void PlanTJPlugin::slotStarted( SchedulerThread */*job*/ )
 {
-//    kDebug(planDbg())<<"PlanTJPlugin::slotStarted:";
+//    debugPlan<<"PlanTJPlugin::slotStarted:";
 }
 
 void PlanTJPlugin::slotFinished( SchedulerThread *j )
@@ -132,7 +132,7 @@ void PlanTJPlugin::slotFinished( SchedulerThread *j )
     PlanTJScheduler *job = static_cast<PlanTJScheduler*>( j );
     Project *mp = job->mainProject();
     ScheduleManager *sm = job->mainManager();
-    //kDebug(planDbg())<<"PlanTJPlugin::slotFinished:"<<mp<<sm<<job->isStopped();
+    //debugPlan<<"PlanTJPlugin::slotFinished:"<<mp<<sm<<job->isStopped();
     if ( job->isStopped() ) {
         sm->setCalculationResult( ScheduleManager::CalculationCanceled );
     } else {

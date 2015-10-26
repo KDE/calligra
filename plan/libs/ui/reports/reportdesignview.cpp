@@ -21,7 +21,6 @@
 
 #include "kexireportdesignview.h"
 #include <core/MainWindowIface.h>
-#include <kdebug.h>
 #include <QScrollArea>
 #include <core/Window.h>
 #include "reportentityselector.h"
@@ -105,30 +104,30 @@ tristate ReportDesignView::storeData ( bool dontAsk ) {
     QDomElement conndata = srcsel->connectionData();
 
     if (conndata.isNull())
-        kDebug(planDbg()) << "Null conn data!";
+        debugPlan << "Null conn data!";
     
     root.appendChild ( _rd->document() );
     root.appendChild(conndata);
     doc.appendChild ( root );
 
     QString src  = doc.toString();
-    kDebug(planDbg()) << src;
+    debugPlan << src;
 
     DB::Connection *conn = MainWindowIface::global()->project()->dbConnection();
 
     if ( storeDataBlock ( src, "pgzreport_layout" ) ) {
-        kDebug(planDbg()) << "Saved OK";
+        debugPlan << "Saved OK";
         setDirty ( false );
         return true;
     } else {
-        kDebug(planDbg()) << "NOT Saved OK";
+        debugPlan << "NOT Saved OK";
     }
 
     return false;
 }
 
 tristate ReportDesignView::beforeSwitchTo ( ::ViewMode mode, bool &dontStore ) {
-    kDebug(planDbg()) << mode;
+    debugPlan << mode;
     dontStore = true;
     if ( _rd && mode == ::DataViewMode ) {
         tempData()->reportDefinition = _rd->document();
@@ -138,7 +137,7 @@ tristate ReportDesignView::beforeSwitchTo ( ::ViewMode mode, bool &dontStore ) {
 }
 
 tristate ReportDesignView::afterSwitchFrom ( ::ViewMode mode ) {
-    kDebug(planDbg()) << tempData()->document;
+    debugPlan << tempData()->document;
     if ( tempData()->document.isEmpty() ) {
         _rd = new ReportDesigner ( this );
     } else {
@@ -159,7 +158,7 @@ tristate ReportDesignView::afterSwitchFrom ( ::ViewMode mode ) {
                 srcsel->setConnectionData(conn);
             }
         } else {
-            kDebug(planDbg()) << "no koreport section";
+            debugPlan << "no koreport section";
 
             //TODO remove...just create a blank document
             //Temp - allow load old style report definitions (no data)

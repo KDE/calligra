@@ -41,7 +41,6 @@
 
 #include <kcmdlineargs.h>
 #include <kcomponentdata.h>
-#include <kdebug.h>
 
 #include <kiconloader.h>
 #include <klibloader.h>
@@ -70,15 +69,15 @@ KPlatoWork_Application::~KPlatoWork_Application()
 
 int KPlatoWork_Application::newInstance()
 {
-    kDebug(planworkDbg())<<"starting------------------------";
+    debugPlanWork<<"starting------------------------";
     int status = KUniqueApplication::newInstance(); // bring up window (if any)
     if ( status != 0 ) {
         return status;
     }
     QList<KMainWindow*> lst = KMainWindow::memberList();
-    kDebug(planworkDbg())<<"windows"<<lst.count();
+    debugPlanWork<<"windows"<<lst.count();
     if ( lst.count() > 1 ) {
-        kDebug(planworkDbg())<<"windows"<<lst.count();
+        debugPlanWork<<"windows"<<lst.count();
         return 1; // should never happen
     }
     if ( lst.isEmpty() ) {
@@ -102,6 +101,6 @@ int KPlatoWork_Application::newInstance()
     }
     args->clear();
     // not calling this before since the program will quit there.
-    kDebug(planworkDbg())<<"started------------------------";
+    debugPlanWork<<"started------------------------";
     return 0;
 }

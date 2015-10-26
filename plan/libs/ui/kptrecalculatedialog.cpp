@@ -19,7 +19,6 @@
 
 #include "kptrecalculatedialog.h"
 
-#include <kdebug.h>
 
 namespace KPlato
 {

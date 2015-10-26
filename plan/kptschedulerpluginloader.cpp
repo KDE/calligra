@@ -25,8 +25,6 @@
 
 #include <KoJsonTrader.h>
 
-#include <kdebug.h>
-
 #include <QPluginLoader>
 #include <QLocale>
 
@@ -74,7 +72,7 @@ QJsonValue readLocalValue(const QJsonObject &json, const QString &key)
 
 void SchedulerPluginLoader::loadAllPlugins()
 {
-    kDebug(planDbg()) << "Load all plugins";
+    debugPlan << "Load all plugins";
     const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Plan/SchedulerPlugin", QString());
 
     foreach(QPluginLoader *pluginLoader, offers) {
@@ -82,7 +80,7 @@ void SchedulerPluginLoader::loadAllPlugins()
  
         if (!factory)
         {
-            kError() << "KPluginFactory could not load the plugin:" << pluginLoader->fileName();
+            errorPlan << "KPluginFactory could not load the plugin:" << pluginLoader->fileName();
             continue;
         }
  
@@ -94,12 +92,12 @@ void SchedulerPluginLoader::loadAllPlugins()
             const QString name = readLocalValue(json, QLatin1String("Name")).toString();
             const QString comment = readLocalValue(json, QLatin1String("Description")).toString();
 
-            kDebug(planDbg()) << "Load plugin:" << name << ", " << comment;
+            debugPlan << "Load plugin:" << name << ", " << comment;
             plugin->setName( name );
             plugin->setComment( comment );
             emit pluginLoaded( pluginLoader->fileName(), plugin);
         } else {
-           kDebug(planDbg()) << "KPluginFactory could not create SchedulerPlugin:" << pluginLoader->fileName();
+           debugPlan << "KPluginFactory could not create SchedulerPlugin:" << pluginLoader->fileName();
         }
     }
 }

@@ -25,7 +25,6 @@
 #include "kptfactory.h"
 #include "kptdebug.h"
 
-#include <kdebug.h>
 #include <kcomponentdata.h>
 
 #include <QBrush>
@@ -36,7 +35,7 @@ namespace KPlato
 
 Config::Config()
 {
-    kDebug(planDbg())<<"Leader:"<<KPlatoSettings::leader();
+    debugPlan<<"Leader:"<<KPlatoSettings::leader();
 }
 
 Config::~Config()

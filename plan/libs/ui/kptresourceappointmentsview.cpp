@@ -136,7 +136,7 @@ ResourceAppointmentsTreeView::ResourceAppointmentsTreeView( QWidget *parent )
 
 bool ResourceAppointmentsTreeView::loadContext( const KoXmlElement &context )
 {
-    kDebug(planDbg());
+    debugPlan;
     KoXmlElement e = context.namedItem( "common" ).toElement();
     if ( ! e.isNull() ) {
         model()->setShowInternalAppointments( (bool)( e.attribute( "show-internal-appointments", "0" ).toInt() ) );
@@ -147,7 +147,7 @@ bool ResourceAppointmentsTreeView::loadContext( const KoXmlElement &context )
 
 void ResourceAppointmentsTreeView::saveContext( QDomElement &settings ) const
 {
-    kDebug(planDbg());
+    debugPlan;
     QDomElement e = settings.ownerDocument().createElement( "common" );
     settings.appendChild( e );
     e.setAttribute( "show-internal-appointments", model()->showInternalAppointments() );
@@ -156,7 +156,7 @@ void ResourceAppointmentsTreeView::saveContext( QDomElement &settings ) const
 
 void ResourceAppointmentsTreeView::slotRefreshed()
 {
-    //kDebug(planDbg())<<model()->columnCount()<<", "<<m_leftview->header()->count()<<", "<<m_rightview->header()->count()<<", "<<m_leftview->header()->hiddenSectionCount()<<", "<<m_rightview->header()->hiddenSectionCount();
+    //debugPlan<<model()->columnCount()<<", "<<m_leftview->header()->count()<<", "<<m_rightview->header()->count()<<", "<<m_leftview->header()->hiddenSectionCount()<<", "<<m_rightview->header()->hiddenSectionCount();
     ResourceAppointmentsItemModel *m = model();
     setModel( 0 );
     setModel( m );
@@ -176,7 +176,7 @@ QModelIndex ResourceAppointmentsTreeView::currentIndex() const
 ResourceAppointmentsView::ResourceAppointmentsView(KoPart *part, KoDocument *doc, QWidget *parent)
     : ViewBase(part, doc, parent)
 {
-    kDebug(planDbg())<<"------------------- ResourceAppointmentsView -----------------------";
+    debugPlan<<"------------------- ResourceAppointmentsView -----------------------";
 
     setupGui();
 
@@ -220,7 +220,7 @@ void ResourceAppointmentsView::draw()
 
 void ResourceAppointmentsView::setGuiActive( bool activate )
 {
-    kDebug(planDbg())<<activate;
+    debugPlan<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
     if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
@@ -230,7 +230,7 @@ void ResourceAppointmentsView::setGuiActive( bool activate )
 
 void ResourceAppointmentsView::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
-    kDebug(planDbg())<<index<<pos;
+    debugPlan<<index<<pos;
     QString name;
     if ( index.isValid() ) {
         Node *n = m_view->model()->node( index );
@@ -264,13 +264,13 @@ ResourceGroup *ResourceAppointmentsView::currentResourceGroup() const
 
 void ResourceAppointmentsView::slotCurrentChanged(  const QModelIndex & )
 {
-    //kDebug(planDbg())<<curr.row()<<", "<<curr.column();
+    //debugPlan<<curr.row()<<", "<<curr.column();
 //    slotEnableActions();
 }
 
 void ResourceAppointmentsView::slotSelectionChanged( const QModelIndexList& )
 {
-    //kDebug(planDbg())<<list.count();
+    //debugPlan<<list.count();
     updateActionsEnabled();
 }
 
@@ -305,7 +305,7 @@ void ResourceAppointmentsView::setupGui()
 
 void ResourceAppointmentsView::slotOptions()
 {
-    kDebug(planDbg());
+    debugPlan;
     ResourceAppointmentsSettingsDialog *dlg = new ResourceAppointmentsSettingsDialog( this, m_view->model(), this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
@@ -316,7 +316,7 @@ void ResourceAppointmentsView::slotOptions()
 
 void ResourceAppointmentsView::slotAddResource()
 {
-    //kDebug(planDbg());
+    //debugPlan;
 /*    QList<ResourceGroup*> gl = m_view->selectedGroups();
     if ( gl.count() > 1 ) {
         return;
@@ -345,7 +345,7 @@ void ResourceAppointmentsView::slotAddResource()
 
 void ResourceAppointmentsView::slotAddGroup()
 {
-    //kDebug(planDbg());
+    //debugPlan;
 /*    ResourceGroup *g = new ResourceGroup();
     QModelIndex i = m_view->model()->insertGroup( g );
     if ( i.isValid() ) {
@@ -357,7 +357,7 @@ void ResourceAppointmentsView::slotAddGroup()
 void ResourceAppointmentsView::slotDeleteSelection()
 {
 /*    QObjectList lst = m_view->selectedObjects();
-    //kDebug(planDbg())<<lst.count()<<" objects";
+    //debugPlan<<lst.count()<<" objects";
     if ( ! lst.isEmpty() ) {
         emit deleteObjectList( lst );
     }*/

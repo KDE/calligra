@@ -45,7 +45,7 @@ namespace KPlato
 TaskProgressPanel::TaskProgressPanel( Task &task, ScheduleManager *sm, StandardWorktime *workTime, QWidget *parent )
     : TaskProgressPanelImpl( task, parent )
 {
-    kDebug(planDbg());
+    debugPlan;
     started->setChecked(m_completion.isStarted());
     finished->setChecked(m_completion.isFinished());
     startTime->setDateTime(m_completion.startTime());
@@ -53,7 +53,7 @@ TaskProgressPanel::TaskProgressPanel( Task &task, ScheduleManager *sm, StandardW
     finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime() ) ) );
     
     if (workTime) {
-        kDebug(planDbg())<<"daylength="<<workTime->durationDay().hours();
+        debugPlan<<"daylength="<<workTime->durationDay().hours();
         m_dayLength = workTime->durationDay().hours();
         setEstimateScales(m_dayLength);
     }
@@ -145,12 +145,12 @@ MacroCommand *TaskProgressPanel::buildCommand( const Project &project, Completio
                 continue;
             }
             if ( cmd == 0 ) cmd = new MacroCommand( c );
-            kDebug(planDbg())<<"modify entry "<<d;
+            debugPlan<<"modify entry "<<d;
             Completion::Entry *e = new Completion::Entry( *( curr.entry( d ) ) );
             cmd->addCommand( new ModifyCompletionEntryCmd(org, d, e ) );
         } else {
             if ( cmd == 0 ) cmd = new MacroCommand( c );
-            kDebug(planDbg())<<"remove entry "<<d;
+            debugPlan<<"remove entry "<<d;
             cmd->addCommand( new RemoveCompletionEntryCmd(org, d ) );
         }
     }
@@ -158,7 +158,7 @@ MacroCommand *TaskProgressPanel::buildCommand( const Project &project, Completio
         if ( ! orgdates.contains( d ) ) {
             if ( cmd == 0 ) cmd = new MacroCommand( c );
             Completion::Entry *e = new Completion::Entry( * ( curr.entry( d ) ) );
-            kDebug(planDbg())<<"add entry "<<d<<e;
+            debugPlan<<"add entry "<<d<<e;
             cmd->addCommand( new AddCompletionEntryCmd(org, d, e ) );
         }
     }
@@ -166,7 +166,7 @@ MacroCommand *TaskProgressPanel::buildCommand( const Project &project, Completio
     foreach ( const Resource *res, map.keys() ) {
         Resource *r = project.findResource( res->id() );
         if ( r == 0 ) {
-            kWarning()<<"Can't find resource:"<<res->id()<<res->name();
+            warnPlan<<"Can't find resource:"<<res->id()<<res->name();
             continue;
         }
         Completion::UsedEffort *ue = map[ r ];
@@ -198,7 +198,7 @@ void TaskProgressPanel::setEstimateScales( int day )
 
 void TaskProgressPanel::slotWeekNumberChanged( int index )
 {
-    kDebug(planDbg())<<index<<","<<m_weekOffset;
+    debugPlan<<index<<","<<m_weekOffset;
     QDate date = QDate( m_year, 1, 1 ).addDays( Qt::Monday - QDate( m_year, 1, 1 ).dayOfWeek() );
     date = date.addDays( index * 7 );
     resourceTable->setCurrentMonday( date );
@@ -206,14 +206,14 @@ void TaskProgressPanel::slotWeekNumberChanged( int index )
 
 void TaskProgressPanel::slotAddResource()
 {
-    kDebug(planDbg());
+    debugPlan;
     resourceTable->addResource();
     addResource->setEnabled( resourceTable->hasFreeResources() );
 }
 
 void TaskProgressPanel::slotEntryAdded( const QDate &date )
 {
-    kDebug(planDbg())<<date;
+    debugPlan<<date;
 }
 
 //-------------------------------------
@@ -292,12 +292,12 @@ void TaskProgressPanelImpl::setFinished() {
 }
 
 void TaskProgressPanelImpl::slotFinishedChanged(bool state) {
-    kDebug(planDbg())<<state;
+    debugPlan<<state;
     m_completion.setFinished( state );
     if (state) {
-        kDebug(planDbg())<<state;
+        debugPlan<<state;
         setFinished();
-        kDebug(planDbg())<<finishTime->dateTime();
+        debugPlan<<finishTime->dateTime();
         slotCalculateEffort();
     }   
     enableWidgets();
@@ -358,10 +358,10 @@ void TaskProgressPanelImpl::slotCalculateEffort()
 
 void TaskProgressPanelImpl::slotPrevWeekBtnClicked()
 {
-    kDebug(planDbg());
+    debugPlan;
     int i = weekNumber->currentIndex();
     if ( i == 0 ) {
-        kDebug(planDbg())<<i;
+        debugPlan<<i;
         int decr = m_firstIsPrevYear ? 2 : 1;
         setYear( ui_year->value() - 1 );
         if ( m_lastIsNextYear ) {
@@ -376,9 +376,9 @@ void TaskProgressPanelImpl::slotPrevWeekBtnClicked()
 void TaskProgressPanelImpl::slotNextWeekBtnClicked()
 {
     int i = weekNumber->currentIndex();
-    kDebug(planDbg())<<i<<weekNumber->count();
+    debugPlan<<i<<weekNumber->count();
     if ( i == weekNumber->count() - 1 ) {
-        kDebug(planDbg())<<i;
+        debugPlan<<i;
         int index = m_lastIsNextYear ? 1 : 0;
         setYear( ui_year->value() + 1 );
         if ( m_firstIsPrevYear ) {
@@ -392,13 +392,13 @@ void TaskProgressPanelImpl::slotNextWeekBtnClicked()
 
 void TaskProgressPanelImpl::setYear( int year )
 {
-    kDebug(planDbg());
+    debugPlan;
     ui_year->setValue( year );
 }
 
 void TaskProgressPanelImpl::slotFillWeekNumbers( int year )
 {
-    kDebug(planDbg());
+    debugPlan;
     weekNumber->clear();
     m_year = year;
     m_weekOffset = 1;
@@ -406,19 +406,19 @@ void TaskProgressPanelImpl::slotFillWeekNumbers( int year )
     QDate date( year, 1, 1 );
     int wn = date.weekNumber( &y );
     m_firstIsPrevYear = false;
-    kDebug(planDbg())<<date<<wn<<y<<year;
+    debugPlan<<date<<wn<<y<<year;
     if ( y < year ) {
         weekNumber->addItem( i18nc( "Week number (year)", "Week %1 (%2)", wn, y ) );
         m_weekOffset = 0;
         m_firstIsPrevYear = true;
-        kDebug(planDbg())<<"Added last week of prev year";
+        debugPlan<<"Added last week of prev year";
     }
     for ( int i=1; i <= 52; ++i ) {
         weekNumber->addItem( i18nc( "Week number", "Week %1", i ) );
     }
     date = QDate( year, 12, 31 );
     wn = date.weekNumber( &y );
-    kDebug(planDbg())<<date<<wn<<y<<year;
+    debugPlan<<date<<wn<<y<<year;
     m_lastIsNextYear = false;
     if ( wn == 53 ) {
         weekNumber->addItem( i18nc( "Week number", "Week %1", wn ) );

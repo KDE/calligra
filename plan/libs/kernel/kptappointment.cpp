@@ -40,7 +40,7 @@ class Resource;
 AppointmentInterval::AppointmentInterval()
     : d( new AppointmentIntervalData() )
 {
-    //kDebug(planDbg())<<this;
+    //debugPlan<<this;
 }
 
 AppointmentInterval::AppointmentInterval( const AppointmentInterval &interval )
@@ -51,14 +51,14 @@ AppointmentInterval::AppointmentInterval( const AppointmentInterval &interval )
 AppointmentInterval::AppointmentInterval( const DateTime &start, const DateTime &end, double load )
     : d( new AppointmentIntervalData() )
 {
-    //kDebug(planDbg())<<this;
+    //debugPlan<<this;
     setStartTime( start );
     setEndTime( end );
     setLoad( load );
 }
 
 AppointmentInterval::~AppointmentInterval() {
-    //kDebug(planDbg())<<this;
+    //debugPlan<<this;
 }
 
 const DateTime &AppointmentInterval::startTime() const
@@ -112,14 +112,14 @@ Duration AppointmentInterval::effort(const DateTime &start, const DateTime &end)
 
 Duration AppointmentInterval::effort(const QDate &time, bool upto) const {
     DateTime t( time );
-    //kDebug(planDbg())<<time<<upto<<t<<d->start<<d->end;
+    //debugPlan<<time<<upto<<t<<d->start<<d->end;
     if (upto) {
         if (t <= d->start) {
             return Duration::zeroDuration;
         }
         DateTime e = (t < d->end ? t : d->end);
         Duration eff = (e - d->start) * d->load / 100;
-        //kDebug(planDbg())<<d->toString();
+        //debugPlan<<d->toString();
         return eff;
     }
     // from time till end
@@ -131,7 +131,7 @@ Duration AppointmentInterval::effort(const QDate &time, bool upto) const {
 }
 
 bool AppointmentInterval::loadXML(KoXmlElement &element, XMLLoaderObject &status) {
-    //kDebug(planDbg());
+    //debugPlan;
     bool ok;
     QString s = element.attribute("start");
     if (!s.isEmpty())
@@ -142,7 +142,7 @@ bool AppointmentInterval::loadXML(KoXmlElement &element, XMLLoaderObject &status
     d->load = element.attribute("load", "100").toDouble(&ok);
     if (!ok) d->load = 100;
     if ( ! isValid() ) {
-        kError()<<"AppointmentInterval::loadXML: Invalid interval:"<<*this<<element.attribute("start")<<element.attribute("end");
+        errorPlan<<"AppointmentInterval::loadXML: Invalid interval:"<<*this<<element.attribute("start")<<element.attribute("end");
     }
     return isValid();
 }
@@ -163,7 +163,7 @@ bool AppointmentInterval::isValid() const {
 }
 
 AppointmentInterval AppointmentInterval::firstInterval(const AppointmentInterval &interval, const DateTime &from) const {
-    //kDebug(planDbg())<<interval.startTime().toString()<<" -"<<interval.endTime().toString()<<" from="<<from.toString();
+    //debugPlan<<interval.startTime().toString()<<" -"<<interval.endTime().toString()<<" from="<<from.toString();
     DateTime f = from;
     DateTime s1 = d->start;
     DateTime e1 = d->end;
@@ -207,7 +207,7 @@ AppointmentInterval AppointmentInterval::firstInterval(const AppointmentInterval
             a.setEndTime(e2);
         a.setLoad(d->load + interval.load());
     }
-    //kDebug(planDbg())<<a.startTime().toString()<<" -"<<a.endTime().toString()<<" load="<<a.load();
+    //debugPlan<<a.startTime().toString()<<" -"<<a.endTime().toString()<<" load="<<a.load();
     return a;
 }
 
@@ -219,14 +219,14 @@ bool AppointmentInterval::operator==( const AppointmentInterval &interval ) cons
 bool AppointmentInterval::operator<( const AppointmentInterval &other ) const
 {
     if ( d->start < other.d->start ) {
-        //kDebug(planDbg())<<"this start"<<d->start<<" < "<<other.d->start;
+        //debugPlan<<"this start"<<d->start<<" < "<<other.d->start;
         return true;
     } else if ( other.d->start < d->start ) {
-        //kDebug(planDbg())<<"other start"<<other.d->start<<" < "<<d->start;
+        //debugPlan<<"other start"<<other.d->start<<" < "<<d->start;
         return false;
     }
     // Start is assumed equal
-    //kDebug(planDbg())<<"this end"<<d->end<<" < "<<other.d->end;
+    //debugPlan<<"this end"<<d->end<<" < "<<other.d->end;
     return d->end < other.d->end;
 }
 
@@ -300,7 +300,7 @@ void AppointmentIntervalList::subtract( const DateTime &st, const DateTime &et, 
 
 void AppointmentIntervalList::subtract( const AppointmentInterval &interval )
 {
-    //kDebug(planDbg())<<st<<et<<load;
+    //debugPlan<<st<<et<<load;
     if ( m_map.isEmpty() ) {
         return;
     }
@@ -311,7 +311,7 @@ void AppointmentIntervalList::subtract( const AppointmentInterval &interval )
     const DateTime et = interval.endTime();
     Q_ASSERT( st < et );
     const double load = interval.load();
-//     kDebug(planDbg())<<"subtract:"<<*this<<endl<<"minus"<<interval;
+//     debugPlan<<"subtract:"<<*this<<endl<<"minus"<<interval;
     for ( QDate date = st.date(); date <= et.date(); date = date.addDays( 1 ) ) {
         if ( ! m_map.contains( date ) ) {
             continue;
@@ -321,45 +321,45 @@ void AppointmentIntervalList::subtract( const AppointmentInterval &interval )
         m_map.remove( date );
         foreach ( const AppointmentInterval &vi, v ) {
             if ( ! vi.intersects( interval ) ) {
-                //kDebug(planDbg())<<"subtract: not intersect:"<<vi<<interval;
+                //debugPlan<<"subtract: not intersect:"<<vi<<interval;
                 l.insert( 0, vi );
-                //if ( ! l.at(0).isValid() ) { kDebug(planDbg())<<vi<<interval<<l.at(0); qFatal( "Invalid interval" ); }
+                //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<interval<<l.at(0); qFatal( "Invalid interval" ); }
                 continue;
             }
             if ( vi < interval ) {
-                //kDebug(planDbg())<<"subtract: vi<interval"<<vi<<interval;
+                //debugPlan<<"subtract: vi<interval"<<vi<<interval;
                 if ( vi.startTime() < st ) {
                     l.insert( 0, AppointmentInterval( vi.startTime(), st, vi.load() ) );
-                    //if ( ! l.at(0).isValid() ) { kDebug(planDbg())<<vi<<interval<<l.at(0); qFatal( "Invalid interval" ); }
+                    //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<interval<<l.at(0); qFatal( "Invalid interval" ); }
                 }
                 if ( vi.load() > load ) {
                     l.insert( 0, AppointmentInterval( st, qMin( vi.endTime(), et ), vi.load() - load ) );
-                    //if ( ! l.at(0).isValid() ) { kDebug(planDbg())<<vi<<interval<<l.at(0); qFatal( "Invalid interval" ); }
+                    //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<interval<<l.at(0); qFatal( "Invalid interval" ); }
                 }
             } else if ( interval < vi ) {
-                //kDebug(planDbg())<<"subtract: interval<vi"<<vi<<interval;
+                //debugPlan<<"subtract: interval<vi"<<vi<<interval;
                 if ( vi.load() > load ) {
-                    //kDebug(planDbg())<<"subtract: interval<vi vi.load > load"<<vi.load()<<load;
+                    //debugPlan<<"subtract: interval<vi vi.load > load"<<vi.load()<<load;
                     l.insert( 0, AppointmentInterval( vi.startTime(), qMin( vi.endTime(), et ), vi.load() - load ) );
-                    //if ( ! l.at(0).isValid() ) { kDebug(planDbg())<<vi<<interval<<l.at(0); qFatal( "Invalid interval" ); }
+                    //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<interval<<l.at(0); qFatal( "Invalid interval" ); }
                 }
                 if ( et < vi.endTime() ) {
-                    //kDebug(planDbg())<<"subtract: interval<vi et < vi.endTime"<<et<<vi.endTime();
+                    //debugPlan<<"subtract: interval<vi et < vi.endTime"<<et<<vi.endTime();
                     l.insert( 0, AppointmentInterval( et, vi.endTime(), vi.load() ) );
-                    //if ( ! l.at(0).isValid() ) { kDebug(planDbg())<<vi<<interval<<l.at(0); qFatal( "Invalid interval" ); }
+                    //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<interval<<l.at(0); qFatal( "Invalid interval" ); }
                 }
             } else if ( vi.load() > load ) {
-                //kDebug(planDbg())<<"subtract: vi==interval"<<vi<<interval;
+                //debugPlan<<"subtract: vi==interval"<<vi<<interval;
                 l.insert( 0, AppointmentInterval( st, et, vi.load() - load ) );
-                //if ( ! l.at(0).isValid() ) { kDebug(planDbg())<<vi<<interval<<l.at(0); qFatal( "Invalid interval" ); }
+                //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<interval<<l.at(0); qFatal( "Invalid interval" ); }
             }
         }
         foreach ( const AppointmentInterval &i, l ) {
-            //if ( ! i.isValid() ) { kDebug(planDbg())<<interval<<i; qFatal( "Invalid interval" ); }
+            //if ( ! i.isValid() ) { debugPlan<<interval<<i; qFatal( "Invalid interval" ); }
             m_map.insert( date, i );
         }
     }
-    //kDebug(planDbg())<<"subtract:"<<interval<<" result="<<endl<<*this;
+    //debugPlan<<"subtract:"<<interval<<" result="<<endl<<*this;
 }
 
 AppointmentIntervalList &AppointmentIntervalList::operator+=( const AppointmentIntervalList &lst )
@@ -407,24 +407,24 @@ void AppointmentIntervalList::add( const AppointmentInterval &ai )
     QList<AppointmentInterval> lst;
     if ( date == ed ) {
         lst << ai;
-        //if ( ! lst.last().isValid() ) { kDebug(planDbg())<<lst.last()<<ai; qFatal( "Add Invalid interval" ); }
+        //if ( ! lst.last().isValid() ) { debugPlan<<lst.last()<<ai; qFatal( "Add Invalid interval" ); }
     } else {
         // split intervals into separate dates
         QTime t1 = ai.startTime().time();
         while ( date < ed ) {
             lst << AppointmentInterval( DateTime( date, t1 ), DateTime( date.addDays( 1 ) ), load );
-            //if ( ! lst.last().isValid() ) { kDebug(planDbg())<<lst.last()<<ai; qFatal( "Add Invalid interval" ); }
-            //kDebug(planDbg())<<"split:"<<date<<lst.last();
+            //if ( ! lst.last().isValid() ) { debugPlan<<lst.last()<<ai; qFatal( "Add Invalid interval" ); }
+            //debugPlan<<"split:"<<date<<lst.last();
             date = date.addDays( 1 );
             t1 = QTime();
         }
         if ( ai.endTime().time() != QTime( 0, 0, 0 ) ) {
             lst << AppointmentInterval( DateTime( ed ), ai.endTime(), load );
-            //if ( ! lst.last().isValid() ) { kDebug(planDbg())<<lst.last()<<ai; qFatal( "Add Invalid interval" ); }
+            //if ( ! lst.last().isValid() ) { debugPlan<<lst.last()<<ai; qFatal( "Add Invalid interval" ); }
         }
     }
     foreach ( AppointmentInterval li, lst ) {
-        //if ( ! li.isValid() ) { kDebug(planDbg())<<li; qFatal( "Add Invalid interval" ); }
+        //if ( ! li.isValid() ) { debugPlan<<li; qFatal( "Add Invalid interval" ); }
         date = li.startTime().date();
         if ( ! m_map.contains( date ) ) {
             m_map.insert( date, li );
@@ -436,66 +436,66 @@ void AppointmentIntervalList::add( const AppointmentInterval &ai )
         foreach ( const AppointmentInterval &vi, v ) {
             if ( ! li.isValid() ) {
                 l.insert( 0, vi );
-                //if ( ! l.at(0).isValid() ) { kDebug(planDbg())<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
+                //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
                 continue;
             }
             if ( ! li.intersects( vi ) ) {
-                //kDebug(planDbg())<<"not intersects:"<<li<<vi;
+                //debugPlan<<"not intersects:"<<li<<vi;
                 if ( li < vi ) {
                     if ( ! l.contains( li ) ) {
-                        //kDebug(planDbg())<<"li < vi:"<<"insert li"<<li;
+                        //debugPlan<<"li < vi:"<<"insert li"<<li;
                         l.insert( 0, li );
-                        //if ( ! l.at(0).isValid() ) { kDebug(planDbg())<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
+                        //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
                         li = AppointmentInterval();
                     }
-                    //kDebug(planDbg())<<"li < vi:"<<"insert vi"<<vi;
+                    //debugPlan<<"li < vi:"<<"insert vi"<<vi;
                     l.insert( 0, vi );
-                    //if ( ! l.at(0).isValid() ) { kDebug(planDbg())<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
+                    //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
                 } else if ( vi < li ) {
-                    //kDebug(planDbg())<<"vi < li:"<<"insert vi"<<vi;
+                    //debugPlan<<"vi < li:"<<"insert vi"<<vi;
                     l.insert( 0, vi );
-                    //if ( ! l.at(0).isValid() ) { kDebug(planDbg())<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
+                    //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
                 } else { Q_ASSERT( false ); }
             } else {
-                //kDebug(planDbg())<<"overlap, merge"<<li<<vi;
+                //debugPlan<<"overlap, merge"<<li<<vi;
                 if ( li < vi ) {
-                    //kDebug(planDbg())<<"li < vi:";
+                    //debugPlan<<"li < vi:";
                     l.insert( 0, AppointmentInterval( li.startTime(), vi.startTime(), li.load() ) );
-                    //if ( ! l.at(0).isValid() ) { kDebug(planDbg())<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
+                    //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
                     l.insert( 0, AppointmentInterval( vi.startTime(), qMin( vi.endTime(), li.endTime() ), vi.load() + li.load() ) );
-                    //if ( ! l.at(0).isValid() ) { kDebug(planDbg())<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
+                    //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
                     li.setStartTime( l.at( 0 ).endTime() ); // if more of li, it may overlap with next vi
                     if ( l.at( 0 ).endTime() < vi.endTime() ) {
                         l.insert( 0, AppointmentInterval( l.at( 0 ).endTime(), vi.endTime(), vi.load() ) );
-                        //if ( ! l.at(0).isValid() ) { kDebug(planDbg())<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
-                        //kDebug(planDbg())<<"li < vi: vi rest:"<<l.at( 0 );
+                        //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
+                        //debugPlan<<"li < vi: vi rest:"<<l.at( 0 );
                     }
                 } else if ( vi < li ) {
-                    //kDebug(planDbg())<<"vi < li:";
+                    //debugPlan<<"vi < li:";
                     if ( vi.startTime() < li.startTime() ) {
                         l.insert( 0, AppointmentInterval( vi.startTime(), li.startTime(), vi.load() ) );
-                        //if ( ! l.at(0).isValid() ) { kDebug(planDbg())<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
+                        //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
                     }
                     l.insert( 0, AppointmentInterval( li.startTime(), qMin( vi.endTime(), li.endTime() ), vi.load() + li.load() ) );
-                    //if ( ! l.at(0).isValid() ) { kDebug(planDbg())<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
+                    //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
                     li.setStartTime( l.at( 0 ).endTime() ); // if more of li, it may overlap with next vi
                     if ( l.at( 0 ).endTime() < vi.endTime() ) {
                         l.insert( 0, AppointmentInterval( l.at( 0 ).endTime(), vi.endTime(), vi.load() ) );
-                        //if ( ! l.at(0).isValid() ) { kDebug(planDbg())<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
-                        //kDebug(planDbg())<<"vi < li: vi rest:"<<l.at( 0 );
+                        //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
+                        //debugPlan<<"vi < li: vi rest:"<<l.at( 0 );
                     }
                 } else {
-                    //kDebug(planDbg())<<"vi == li:";
+                    //debugPlan<<"vi == li:";
                     li.setLoad( vi.load() + li.load() );
                     l.insert( 0, li );
-                    //if ( ! l.at(0).isValid() ) { kDebug(planDbg())<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
+                    //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
                     li = AppointmentInterval();
                 }
             }
         }
         // If there is a rest of li, it must be inserted
         if ( li.isValid() ) {
-            //kDebug(planDbg())<<"rest:"<<li;
+            //debugPlan<<"rest:"<<li;
             l.insert( 0, li );
         }
         foreach( const AppointmentInterval &i, l ) {
@@ -543,7 +543,7 @@ bool AppointmentIntervalList::loadXML( KoXmlElement &element, XMLLoaderObject &s
             if (a.loadXML(e, status)) {
                 add(a);
             } else {
-                kError()<<"AppointmentIntervalList::loadXML:"<<"Could not load interval"<<a;
+                errorPlan<<"AppointmentIntervalList::loadXML:"<<"Could not load interval"<<a;
             }
         }
     }
@@ -562,7 +562,7 @@ QDebug operator<<( QDebug dbg, const KPlato::AppointmentIntervalList &i )
 ////
 Appointment::Appointment()
     : m_extraRepeats(), m_skipRepeats() {
-    //kDebug(planDbg())<<"("<<this<<")";
+    //debugPlan<<"("<<this<<")";
     m_resource=0;
     m_node=0;
     m_calculationMode = Schedule::Scheduling;
@@ -573,7 +573,7 @@ Appointment::Appointment()
 Appointment::Appointment(Schedule *resource, Schedule *node, const DateTime &start, const DateTime &end, double load)
     : m_extraRepeats(),
       m_skipRepeats() {
-    //kDebug(planDbg())<<"("<<this<<")";
+    //debugPlan<<"("<<this<<")";
     m_node = node;
     m_resource = resource;
     m_calculationMode = Schedule::Scheduling;
@@ -586,7 +586,7 @@ Appointment::Appointment(Schedule *resource, Schedule *node, const DateTime &sta
 Appointment::Appointment(Schedule *resource, Schedule *node, const DateTime &start, Duration duration, double load)
     : m_extraRepeats(),
       m_skipRepeats() {
-    //kDebug(planDbg())<<"("<<this<<")";
+    //debugPlan<<"("<<this<<")";
     m_node = node;
     m_resource = resource;
     m_calculationMode = Schedule::Scheduling;
@@ -604,7 +604,7 @@ Appointment::Appointment( const Appointment &app)
 
 
 Appointment::~Appointment() {
-    //kDebug(planDbg())<<"("<<this<<")";
+    //debugPlan<<"("<<this<<")";
     detach();
 }
 
@@ -615,14 +615,14 @@ void Appointment::clear()
 
 AppointmentIntervalList Appointment::intervals( const DateTime &start, const DateTime &end ) const
 {
-    //kDebug(planDbg())<<start<<end;
+    //debugPlan<<start<<end;
     AppointmentIntervalList lst;
     QMultiMap<QDate, AppointmentInterval>::const_iterator it = m_intervals.map().lowerBound( start.date() );
     for ( ; it != m_intervals.map().constEnd() && it.key() <= end.date(); ++it ) {
         AppointmentInterval ai = it.value().interval( start, end );
         if ( ai.isValid() ) {
             lst.add( ai );
-            //kDebug(planDbg())<<ai.startTime().toString()<<ai.endTime().toString();
+            //debugPlan<<ai.startTime().toString()<<ai.endTime().toString();
         }
     }
     return lst;
@@ -638,7 +638,7 @@ void Appointment::setIntervals(const AppointmentIntervalList &lst) {
 void Appointment::addInterval(const AppointmentInterval &a) {
     Q_ASSERT( a.isValid() );
     m_intervals.add(a);
-    //if ( m_resource && m_resource->resource() && m_node && m_node->node() ) kDebug(planDbg())<<"Mode="<<m_calculationMode<<":"<<m_resource->resource()->name()<<" to"<<m_node->node()->name()<<""<<a.startTime()<<a.endTime();
+    //if ( m_resource && m_resource->resource() && m_node && m_node->node() ) debugPlan<<"Mode="<<m_calculationMode<<":"<<m_resource->resource()->name()<<" to"<<m_node->node()->name()<<""<<a.startTime()<<a.endTime();
 }
 void Appointment::addInterval(const DateTime &start, const DateTime &end, double load) {
     Q_ASSERT( start < end );
@@ -661,7 +661,7 @@ double Appointment::maxLoad() const {
 
 DateTime Appointment::startTime() const {
     if ( isEmpty() ) {
-        //kDebug(planDbg())<<"empty list";
+        //debugPlan<<"empty list";
         return DateTime();
     }
     return m_intervals.map().values().first().startTime();
@@ -669,7 +669,7 @@ DateTime Appointment::startTime() const {
 
 DateTime Appointment::endTime() const {
     if ( isEmpty() ) {
-        //kDebug(planDbg())<<"empty list";
+        //debugPlan<<"empty list";
         return DateTime();
     }
     return m_intervals.map().values().last().endTime();
@@ -680,30 +680,30 @@ bool Appointment::isBusy(const DateTime &/*start*/, const DateTime &/*end*/) {
 }
 
 bool Appointment::loadXML(KoXmlElement &element, XMLLoaderObject &status, Schedule &sch) {
-    //kDebug(planDbg())<<project.name();
+    //debugPlan<<project.name();
     Node *node = status.project().findNode(element.attribute("task-id"));
     if (node == 0) {
-        kError()<<"The referenced task does not exists: "<<element.attribute("task-id");
+        errorPlan<<"The referenced task does not exists: "<<element.attribute("task-id");
         return false;
     }
     Resource *res = status.project().resource(element.attribute("resource-id"));
     if (res == 0) {
-        kError()<<"The referenced resource does not exists: resource id="<<element.attribute("resource-id");
+        errorPlan<<"The referenced resource does not exists: resource id="<<element.attribute("resource-id");
         return false;
     }
     if (!res->addAppointment(this, sch)) {
-        kError()<<"Failed to add appointment to resource: "<<res->name();
+        errorPlan<<"Failed to add appointment to resource: "<<res->name();
         return false;
     }
     if (!node->addAppointment(this, sch)) {
-        kError()<<"Failed to add appointment to node: "<<node->name();
+        errorPlan<<"Failed to add appointment to node: "<<node->name();
         m_resource->takeAppointment(this);
         return false;
     }
-    //kDebug(planDbg())<<"res="<<m_resource->resource()->name()<<" node="<<m_node->node()->name();
+    //debugPlan<<"res="<<m_resource->resource()->name()<<" node="<<m_node->node()->name();
     m_intervals.loadXML( element, status );
     if (isEmpty()) {
-        kError()<<"Appointment is empty (added anyway): "<<node->name()<<res->name();
+        errorPlan<<"Appointment is empty (added anyway): "<<node->name()<<res->name();
         return false;
     }
     return true;
@@ -711,23 +711,23 @@ bool Appointment::loadXML(KoXmlElement &element, XMLLoaderObject &status, Schedu
 
 void Appointment::saveXML(QDomElement &element) const {
     if (isEmpty()) {
-        kError()<<"Incomplete appointment data: No intervals";
+        errorPlan<<"Incomplete appointment data: No intervals";
     }
     if (m_resource == 0 || m_resource->resource() == 0) {
-        kError()<<"Incomplete appointment data: No resource";
+        errorPlan<<"Incomplete appointment data: No resource";
         return;
     }
     if (m_node == 0 || m_node->node() == 0) {
-        kError()<<"Incomplete appointment data: No node";
+        errorPlan<<"Incomplete appointment data: No node";
         return; // shouldn't happen
     }
-    //kDebug(planDbg());
+    //debugPlan;
     QDomElement me = element.ownerDocument().createElement("appointment");
     element.appendChild(me);
 
     me.setAttribute("resource-id", m_resource->resource()->id());
     me.setAttribute("task-id", m_node->node()->id());
-    //kDebug(planDbg())<<m_resource->resource()->name()<<m_node->node()->name();
+    //debugPlan<<m_resource->resource()->name()<<m_node->node()->name();
     m_intervals.saveXML( me );
 }
 
@@ -779,7 +779,7 @@ Duration Appointment::plannedEffortTo(const QDate& date, EffortCostCalculationTy
             d += i.effort(e, true); // upto e, not including
         }
     }
-    //kDebug(planDbg())<<date<<d.toString();
+    //debugPlan<<date<<d.toString();
     return d;
 }
 
@@ -792,17 +792,17 @@ Duration Appointment::plannedEffortTo( const Resource *resource, const QDate& da
 }
 
 EffortCostMap Appointment::plannedPrDay(const QDate& pstart, const QDate& pend, EffortCostCalculationType type) const {
-    //kDebug(planDbg())<<m_node->id()<<","<<m_resource->id();
+    //debugPlan<<m_node->id()<<","<<m_resource->id();
     EffortCostMap ec;
     QDate start = pstart.isValid() ? pstart : startTime().date();
     QDate end = pend.isValid() ? pend : endTime().date();
     double rate = m_resource && m_resource->resource() ? m_resource->normalRatePrHour() : 0.0;
     Resource::Type rt = m_resource && m_resource->resource() ? m_resource->resource()->type() : Resource::Type_Work;
     Duration zero;
-    //kDebug(planDbg())<<rate<<m_intervals.count();
+    //debugPlan<<rate<<m_intervals.count();
     QMultiMap<QDate, AppointmentInterval>::const_iterator it = m_intervals.map().lowerBound( start );
     for ( ; it != m_intervals.map().constEnd() && it.key() <= end; ++it ) {
-        //kDebug(planDbg())<<start<<end<<dt;
+        //debugPlan<<start<<end<<dt;
         Duration eff;
         switch ( type ) {
             case ECCT_All:
@@ -875,19 +875,19 @@ double Appointment::plannedCostTo(const QDate &date, EffortCostCalculationType t
 }
 
 bool Appointment::attach() {
-    //kDebug(planDbg())<<"("<<this<<")";
+    //debugPlan<<"("<<this<<")";
     if (m_resource && m_node) {
         m_resource->attatch(this);
         m_node->attatch(this);
         return true;
     }
-    kWarning()<<"Failed: "<<(m_resource ? "" : "resource=0 ")
+    warnPlan<<"Failed: "<<(m_resource ? "" : "resource=0 ")
                                        <<(m_node ? "" : "node=0");
     return false;
 }
 
 void Appointment::detach() {
-    //kDebug(planDbg())<<"("<<this<<")"<<m_calculationMode<<":"<<m_resource<<","<<m_node;
+    //debugPlan<<"("<<this<<")"<<m_calculationMode<<":"<<m_resource<<","<<m_node;
     if (m_resource) {
         m_resource->takeAppointment(this, m_calculationMode); // takes from node also
     }
@@ -952,7 +952,7 @@ void Appointment::copy(const Appointment &app) {
 }
 
 void Appointment::merge(const Appointment &app) {
-    //kDebug(planDbg())<<this<<(m_node ? m_node->node()->name() : "no node")<<(app.node() ? app.node()->node()->name() : "no node");
+    //debugPlan<<this<<(m_node ? m_node->node()->name() : "no node")<<(app.node() ? app.node()->node()->name() : "no node");
     if ( app.isEmpty() ) {
         return;
     }
@@ -964,7 +964,7 @@ void Appointment::merge(const Appointment &app) {
     QList<AppointmentInterval> lst1 = m_intervals.map().values();
     AppointmentInterval i1;
     QList<AppointmentInterval> lst2 = app.intervals().map().values();
-    //kDebug(planDbg())<<"add"<<lst1.count()<<" intervals to"<<lst2.count()<<" intervals";
+    //debugPlan<<"add"<<lst1.count()<<" intervals to"<<lst2.count()<<" intervals";
     AppointmentInterval i2;
     int index1 = 0, index2 = 0;
     DateTime from;
@@ -974,7 +974,7 @@ void Appointment::merge(const Appointment &app) {
             if (!from.isValid() || from < i2.startTime())
                 from = i2.startTime();
             result.append(AppointmentInterval(from, i2.endTime(), i2.load()));
-            //kDebug(planDbg())<<"Interval+ (i2):"<<from<<" -"<<i2.endTime();
+            //debugPlan<<"Interval+ (i2):"<<from<<" -"<<i2.endTime();
             from = i2.endTime();
             ++index2;
             continue;
@@ -984,7 +984,7 @@ void Appointment::merge(const Appointment &app) {
             if (!from.isValid() || from < i1.startTime())
                 from = i1.startTime();
             result.append(AppointmentInterval(from, i1.endTime(), i1.load()));
-            //kDebug(planDbg())<<"Interval+ (i1):"<<from<<" -"<<i1.endTime();
+            //debugPlan<<"Interval+ (i1):"<<from<<" -"<<i1.endTime();
             from = i1.endTime();
             ++index1;
             continue;
@@ -997,7 +997,7 @@ void Appointment::merge(const Appointment &app) {
         }
         result.append(AppointmentInterval(i)); 
         from = i.endTime();
-        //kDebug(planDbg())<<"Interval+ (i):"<<i.startTime()<<" -"<<i.endTime()<<" load="<<i.load();
+        //debugPlan<<"Interval+ (i):"<<i.startTime()<<" -"<<i.endTime()<<" load="<<i.load();
         if (i.endTime() >= i1.endTime()) {
             ++index1;
         }
@@ -1009,7 +1009,7 @@ void Appointment::merge(const Appointment &app) {
     foreach ( const AppointmentInterval &i, result ) {
         m_intervals.add( i );
     }
-    //kDebug(planDbg())<<this<<":"<<m_intervals.count();
+    //debugPlan<<this<<":"<<m_intervals.count();
     return;
 }
 

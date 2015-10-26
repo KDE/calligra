@@ -22,7 +22,6 @@
 #include <kptduration.h>
 
 #include <QTest>
-#include <kdebug.h>
 
 #include <QMultiMap>
 

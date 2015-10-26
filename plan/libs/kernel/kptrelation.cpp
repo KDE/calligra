@@ -36,7 +36,7 @@ Relation::Relation(Node *parent, Node *child, Type type, Duration lag) {
     m_child=child;
     m_type=type;
     m_lag=lag;
-    //kDebug(planDbg())<<this;
+    //debugPlan<<this;
 }
 
 Relation::Relation(Node *parent, Node *child, Type type) {
@@ -44,7 +44,7 @@ Relation::Relation(Node *parent, Node *child, Type type) {
     m_child=child;
     m_type=type;
     m_lag=Duration();
-    //kDebug(planDbg())<<this;
+    //debugPlan<<this;
 }
 
 Relation::Relation(Relation *rel) {
@@ -52,11 +52,11 @@ Relation::Relation(Relation *rel) {
     m_child=rel->child();
     m_type=rel->type();
     m_lag=rel->lag();
-    //kDebug(planDbg())<<this;
+    //debugPlan<<this;
 }
 
 Relation::~Relation() {
-    //kDebug(planDbg())<<"("<<this<<") parent:"<<(m_parent ? m_parent->name():"none")<<" child:"<<(m_child ? m_child->name():"None");
+    //debugPlan<<"("<<this<<") parent:"<<(m_parent ? m_parent->name():"none")<<" child:"<<(m_child ? m_child->name():"None");
     if (m_parent)
         m_parent->takeDependChildNode(this);
     if (m_child)
@@ -114,11 +114,11 @@ bool Relation::load(KoXmlElement &element, Project &project) {
         return false;
     }
     if (m_child == m_parent) {
-        kDebug(planDbg())<<"child == parent";
+        debugPlan<<"child == parent";
         return false;
     }
     if (m_child == m_parent) {
-        kDebug(planDbg())<<"child == parent";
+        debugPlan<<"child == parent";
         return false;
     }
     if (!m_parent->legalToLink(m_child))
@@ -129,16 +129,16 @@ bool Relation::load(KoXmlElement &element, Project &project) {
     m_lag = Duration::fromString(element.attribute("lag"));
 
     if (!m_parent->addDependChildNode(this)) {
-        kError()<<"Failed to add relation: Child="<<m_child->name()<<" parent="<<m_parent->name()<<endl;
+        errorPlan<<"Failed to add relation: Child="<<m_child->name()<<" parent="<<m_parent->name()<<endl;
         return false;
     }
     if (!m_child->addDependParentNode(this)) {
         m_parent->takeDependChildNode(this);
-        kError()<<"Failed to add relation: Child="<<m_child->name()<<" parent="<<m_parent->name()<<endl;
+        errorPlan<<"Failed to add relation: Child="<<m_child->name()<<" parent="<<m_parent->name()<<endl;
         return false;
     }
 
-    //kDebug(planDbg())<<"Added relation: Child="<<m_child->name()<<" parent="<<m_parent->name();
+    //debugPlan<<"Added relation: Child="<<m_child->name()<<" parent="<<m_parent->name();
     return true;
 }
 
@@ -171,9 +171,9 @@ void Relation::save(QDomElement &element) const {
 void Relation::printDebug(const QByteArray& _indent) { 
     QString indent = _indent;
     indent += "  ";
-    kDebug(planDbg())<<indent<<"  Parent:"<<m_parent->name();
-    kDebug(planDbg())<<indent<<"  Child:"<<m_child->name();
-    kDebug(planDbg())<<indent<<"  Type:"<<m_type;
+    debugPlan<<indent<<"  Parent:"<<m_parent->name();
+    debugPlan<<indent<<"  Child:"<<m_child->name();
+    debugPlan<<indent<<"  Type:"<<m_type;
 }
 #endif
 

@@ -25,7 +25,6 @@
 
 #include <klocale.h>
 
-#include <kdebug.h>
 
 namespace KPlato
 {

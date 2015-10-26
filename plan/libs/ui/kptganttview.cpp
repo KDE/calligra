@@ -45,8 +45,6 @@
 #include <KoXmlReader.h>
 #include <KoPageLayoutWidget.h>
 
-#include <kdebug.h>
-
 #include <QSplitter>
 #include <QVBoxLayout>
 #include <QHeaderView>
@@ -149,7 +147,7 @@ GanttViewSettingsDialog::GanttViewSettingsDialog( GanttViewBase *gantt, GanttIte
 
 void GanttViewSettingsDialog::slotOk()
 {
-    kDebug(planDbg());
+    debugPlan;
     m_gantt->setPrintingOptions( m_printingoptions->options());
     ItemViewSettupDialog::slotOk();
 }
@@ -168,7 +166,7 @@ bool GanttPrintingOptions::loadContext( const KoXmlElement &settings )
         printRowLabels = (bool)( e.attribute( "print-rowlabels", "0" ).toInt() );
         singlePage = (bool)( e.attribute( "print-singlepage", "0" ).toInt() );
     }
-    kDebug()<<"..........."<<printRowLabels<<singlePage;
+    debugPlan <<"..........."<<printRowLabels<<singlePage;
     return true;
 }
 
@@ -223,7 +221,7 @@ GanttPrintingDialog::GanttPrintingDialog( ViewBase *view, GanttViewBase *gantt )
         ++m_vertPages;
         c -= printer().pageRect().height();
     }
-    kDebug(planDbg())<<m_sceneRect<<printer().pageRect()<<m_horPages<<m_vertPages;
+    debugPlan<<m_sceneRect<<printer().pageRect()<<m_horPages<<m_vertPages;
     printer().setFromTo( documentFirstPage(), documentLastPage() );
 }
 
@@ -246,7 +244,7 @@ GanttPrintingDialog::GanttPrintingDialog( ViewBase *view, GanttViewBase *gantt )
 
 QList<QWidget*> GanttPrintingDialog::createOptionWidgets() const
 {
-    //kDebug(planDbg());
+    //debugPlan;
     GanttPrintingOptionsWidget *w = new GanttPrintingOptionsWidget();
     w->setPrintRowLabels( m_gantt->m_printOptions.printRowLabels );
     connect(w->ui_printRowLabels, SIGNAL(toggled(bool)), SLOT(slotPrintRowLabelsToogled(bool)));
@@ -270,14 +268,14 @@ void GanttPrintingDialog::slotSinglePageToogled( bool on )
 
 int GanttPrintingDialog::documentLastPage() const
 {
-    //kDebug(planDbg())<<m_gantt->m_printOptions.singlePage<<m_horPages<<m_vertPages;
+    //debugPlan<<m_gantt->m_printOptions.singlePage<<m_horPages<<m_vertPages;
     return m_gantt->m_printOptions.singlePage ? documentFirstPage() : m_horPages * m_vertPages;
 }
 
 
 void GanttPrintingDialog::printPage( int page, QPainter &painter )
 {
-    kDebug(planDbg())<<"page:"<<page<<"first"<<documentFirstPage()<<"last:"<<documentLastPage();
+    debugPlan<<"page:"<<page<<"first"<<documentFirstPage()<<"last:"<<documentLastPage();
     QRectF sourceRect = m_sceneRect;
     int p = page - documentFirstPage();
     QRectF pageRect = printer().pageRect();
@@ -290,7 +288,7 @@ void GanttPrintingDialog::printPage( int page, QPainter &painter )
         qreal hh = vert == 0 ? m_headerHeight : 0;
         qreal ho = vert > 0 ? m_headerHeight : 0;
         sourceRect = QRectF( sourceRect.x() + ( pageRect.width() * hor ), sourceRect.y() + ( ( pageRect.height() * vert ) - ho ), pageRect.width(), pageRect.height() - hh );
-        kDebug(planDbg())<<p<<hor<<vert<<sourceRect;
+        debugPlan<<p<<hor<<vert<<sourceRect;
     }
     painter.setClipRect( pageRect.adjusted( -1.0, -1.0, 1.0, 1.0 ) );
     // QT5TODO
@@ -373,7 +371,7 @@ NodeGanttViewBase::NodeGanttViewBase( QWidget *parent )
     m_project( 0 ),
     m_ganttdelegate( new GanttItemDelegate( this ) )
 {
-    kDebug(planDbg())<<"------------------- create NodeGanttViewBase -----------------------";
+    debugPlan<<"------------------- create NodeGanttViewBase -----------------------";
     graphicsView()->setItemDelegate( m_ganttdelegate );
     GanttTreeView *tv = new GanttTreeView( this );
     tv->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -440,7 +438,7 @@ bool NodeGanttViewBase::loadContext( const KoXmlElement &settings )
 
 void NodeGanttViewBase::saveContext( QDomElement &settings ) const
 {
-    kDebug(planDbg());
+    debugPlan;
     treeView()->saveContext( model()->columnMap(), settings );
 
     QDomElement e = settings.ownerDocument().createElement( "ganttchart" );
@@ -466,7 +464,7 @@ MyKGanttView::MyKGanttView( QWidget *parent )
     : NodeGanttViewBase( parent ),
     m_manager( 0 )
 {
-    kDebug(planDbg())<<"------------------- create MyKGanttView -----------------------";
+    debugPlan<<"------------------- create MyKGanttView -----------------------";
     GanttItemModel *gm = new GanttItemModel( this );
     setItemModel( gm );
     treeView()->createItemDelegates( gm );
@@ -571,7 +569,7 @@ void MyKGanttView::addDependency( Relation *rel )
 {
     QModelIndex par = sfModel()->mapFromSource( model()->index( rel->parent() ) );
     QModelIndex ch = sfModel()->mapFromSource( model()->index( rel->child() ) );
-//    kDebug(planDbg())<<"addDependency() "<<model()<<par.model();
+//    debugPlan<<"addDependency() "<<model()<<par.model();
     if ( par.isValid() && ch.isValid() ) {
         KGantt::Constraint con( par, ch, KGantt::Constraint::TypeSoft,
                                  static_cast<KGantt::Constraint::RelationType>( rel->type() )/*NOTE!!*/
@@ -616,7 +614,7 @@ GanttView::GanttView(KoPart *part, KoDocument *doc, QWidget *parent, bool readWr
     m_readWrite( readWrite ),
     m_project( 0 )
 {
-    kDebug(planDbg()) <<" ---------------- KPlato: Creating GanttView ----------------";
+    debugPlan <<" ---------------- KPlato: Creating GanttView ----------------";
 
     QVBoxLayout *l = new QVBoxLayout( this );
     l->setMargin( 0 );
@@ -630,7 +628,7 @@ GanttView::GanttView(KoPart *part, KoDocument *doc, QWidget *parent, bool readWr
 
     updateReadWrite( readWrite );
     //connect( m_gantt->constraintModel(), SIGNAL(constraintAdded(Constraint)), this, SLOT(update()) );
-    kDebug(planDbg()) <<m_gantt->constraintModel();
+    debugPlan <<m_gantt->constraintModel();
 
     connect( m_gantt->treeView(), SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
@@ -644,7 +642,7 @@ KoPrintJob *GanttView::createPrintJob()
 
 void GanttView::setZoom( double )
 {
-    //kDebug(planDbg()) <<"setting gantt zoom:" << zoom;
+    //debugPlan <<"setting gantt zoom:" << zoom;
     //m_gantt->setZoomFactor(zoom,true); NO!!! setZoomFactor() is something else
 }
 
@@ -660,7 +658,7 @@ void GanttView::setupGui()
 
 void GanttView::slotOptions()
 {
-    kDebug(planDbg());
+    debugPlan;
     GanttViewSettingsDialog *dlg = new GanttViewSettingsDialog( m_gantt, m_gantt->delegate(), this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
@@ -734,7 +732,7 @@ void GanttView::setProject( Project *project )
 
 void GanttView::setScheduleManager( ScheduleManager *sm )
 {
-    //kDebug(planDbg())<<id<<endl;
+    //debugPlan<<id<<endl;
     m_gantt->setScheduleManager( sm );
 }
 
@@ -758,7 +756,7 @@ Node *GanttView::currentNode() const
 
 void GanttView::slotContextMenuRequested( const QModelIndex &idx, const QPoint &pos )
 {
-    kDebug(planDbg());
+    debugPlan;
     QString name;
     Node *node = m_gantt->model()->node( m_gantt->sfModel()->mapToSource( idx ) );
     if ( node ) {
@@ -775,10 +773,10 @@ void GanttView::slotContextMenuRequested( const QModelIndex &idx, const QPoint &
             default:
                 break;
         }
-    } else kDebug(planDbg())<<"No node";
+    } else debugPlan<<"No node";
     if ( name.isEmpty() ) {
         slotHeaderContextMenuRequested( pos );
-        kDebug(planDbg())<<"No menu";
+        debugPlan<<"No menu";
         return;
     }
     emit requestPopupMenu( name, pos );
@@ -786,7 +784,7 @@ void GanttView::slotContextMenuRequested( const QModelIndex &idx, const QPoint &
 
 bool GanttView::loadContext( const KoXmlElement &settings )
 {
-    kDebug(planDbg());
+    debugPlan;
     ViewBase::loadContext( settings );
     bool show = (bool)(settings.attribute( "show-project", "0" ).toInt() );
     actionShowProject->setChecked( show );
@@ -797,7 +795,7 @@ bool GanttView::loadContext( const KoXmlElement &settings )
 
 void GanttView::saveContext( QDomElement &settings ) const
 {
-    kDebug(planDbg());
+    debugPlan;
     ViewBase::saveContext( settings );
     settings.setAttribute( "show-project", actionShowProject->isChecked() );
 
@@ -832,7 +830,7 @@ MilestoneGanttViewSettingsDialog::MilestoneGanttViewSettingsDialog( GanttViewBas
 
 void MilestoneGanttViewSettingsDialog::slotOk()
 {
-    kDebug(planDbg());
+    debugPlan;
     m_gantt->setPrintingOptions( m_printingoptions->options());
     ItemViewSettupDialog::slotOk();
 }
@@ -842,7 +840,7 @@ MilestoneKGanttView::MilestoneKGanttView( QWidget *parent )
     : NodeGanttViewBase( parent ),
     m_manager( 0 )
 {
-    kDebug(planDbg())<<"------------------- create MilestoneKGanttView -----------------------";
+    debugPlan<<"------------------- create MilestoneKGanttView -----------------------";
     MilestoneItemModel *mm = new MilestoneItemModel( this );
     setItemModel( mm );
     treeView()->createItemDelegates( mm );
@@ -906,7 +904,7 @@ void MilestoneKGanttView::slotProjectCalculated( ScheduleManager *sm )
 
 void MilestoneKGanttView::setScheduleManager( ScheduleManager *sm )
 {
-    //kDebug(planDbg())<<id<<endl;
+    //debugPlan<<id<<endl;
     model()->setScheduleManager( 0 );
     m_manager = sm;
     KGantt::DateTimeGrid *g = static_cast<KGantt::DateTimeGrid*>( grid() );
@@ -919,7 +917,7 @@ void MilestoneKGanttView::setScheduleManager( ScheduleManager *sm )
             }
             if ( ! start.isValid() || start > nt ) {
                 start = nt;
-                kDebug(planDbg())<<n->name()<<start;
+                debugPlan<<n->name()<<start;
             }
         }
         if ( ! start.isValid() ) {
@@ -943,7 +941,7 @@ MilestoneGanttView::MilestoneGanttView(KoPart *part, KoDocument *doc, QWidget *p
         m_readWrite( readWrite ),
         m_project( 0 )
 {
-    kDebug(planDbg()) <<" ---------------- Plan: Creating Milesone GanttView ----------------";
+    debugPlan <<" ---------------- Plan: Creating Milesone GanttView ----------------";
 
     QVBoxLayout *l = new QVBoxLayout( this );
     l->setMargin( 0 );
@@ -970,7 +968,7 @@ MilestoneGanttView::MilestoneGanttView(KoPart *part, KoDocument *doc, QWidget *p
 
 void MilestoneGanttView::setZoom( double )
 {
-    //kDebug(planDbg()) <<"setting gantt zoom:" << zoom;
+    //debugPlan <<"setting gantt zoom:" << zoom;
     //m_gantt->setZoomFactor(zoom,true); NO!!! setZoomFactor() is something else
 }
 
@@ -989,7 +987,7 @@ void MilestoneGanttView::setProject( Project *project )
 
 void MilestoneGanttView::setScheduleManager( ScheduleManager *sm )
 {
-    //kDebug(planDbg())<<id<<endl;
+    //debugPlan<<id<<endl;
     m_gantt->setScheduleManager( sm );
 }
 
@@ -1018,7 +1016,7 @@ void MilestoneGanttView::setupGui()
 
 void MilestoneGanttView::slotContextMenuRequested( const QModelIndex &idx, const QPoint &pos )
 {
-    kDebug(planDbg());
+    debugPlan;
     QString name;
     Node *node = m_gantt->model()->node( m_gantt->sfModel()->mapToSource( idx ) );
     if ( node ) {
@@ -1035,9 +1033,9 @@ void MilestoneGanttView::slotContextMenuRequested( const QModelIndex &idx, const
             default:
                 break;
         }
-    } else kDebug(planDbg())<<"No node";
+    } else debugPlan<<"No node";
     if ( name.isEmpty() ) {
-        kDebug(planDbg())<<"No menu";
+        debugPlan<<"No menu";
         slotHeaderContextMenuRequested( pos );
         return;
     }
@@ -1046,7 +1044,7 @@ void MilestoneGanttView::slotContextMenuRequested( const QModelIndex &idx, const
 
 void MilestoneGanttView::slotOptions()
 {
-    kDebug(planDbg());
+    debugPlan;
     MilestoneGanttViewSettingsDialog *dlg =  new MilestoneGanttViewSettingsDialog( m_gantt, this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
@@ -1056,14 +1054,14 @@ void MilestoneGanttView::slotOptions()
 
 bool MilestoneGanttView::loadContext( const KoXmlElement &settings )
 {
-    kDebug(planDbg());
+    debugPlan;
     ViewBase::loadContext( settings );
     return m_gantt->loadContext( settings );
 }
 
 void MilestoneGanttView::saveContext( QDomElement &settings ) const
 {
-    kDebug(planDbg());
+    debugPlan;
     ViewBase::saveContext( settings );
     return m_gantt->saveContext( settings );
 }
@@ -1097,7 +1095,7 @@ ResourceAppointmentsGanttView::ResourceAppointmentsGanttView(KoPart *part, KoDoc
     m_project( 0 ),
     m_model( new ResourceAppointmentsGanttModel( this ) )
 {
-    kDebug(planDbg()) <<" ---------------- KPlato: Creating ResourceAppointmentsGanttView ----------------";
+    debugPlan <<" ---------------- KPlato: Creating ResourceAppointmentsGanttView ----------------";
 
     m_gantt = new GanttViewBase( this );
     m_gantt->graphicsView()->setItemDelegate( new ResourceGanttItemDelegate( m_gantt ) );
@@ -1140,7 +1138,7 @@ ResourceAppointmentsGanttView::~ResourceAppointmentsGanttView()
 
 void ResourceAppointmentsGanttView::setZoom( double )
 {
-    //kDebug(planDbg()) <<"setting gantt zoom:" << zoom;
+    //debugPlan <<"setting gantt zoom:" << zoom;
     //m_gantt->setZoomFactor(zoom,true); NO!!! setZoomFactor() is something else
 }
 
@@ -1157,7 +1155,7 @@ void ResourceAppointmentsGanttView::setProject( Project *project )
 
 void ResourceAppointmentsGanttView::setScheduleManager( ScheduleManager *sm )
 {
-    //kDebug(planDbg())<<id<<endl;
+    //debugPlan<<id<<endl;
     m_model->setScheduleManager( sm );
 }
 
@@ -1174,7 +1172,7 @@ Node *ResourceAppointmentsGanttView::currentNode() const
 
 void ResourceAppointmentsGanttView::slotContextMenuRequested( const QModelIndex &idx, const QPoint &pos )
 {
-    kDebug(planDbg());
+    debugPlan;
     QString name;
     if ( idx.isValid() ) {
         Node *n = m_model->node( idx );
@@ -1191,7 +1189,7 @@ void ResourceAppointmentsGanttView::slotContextMenuRequested( const QModelIndex 
 
 void ResourceAppointmentsGanttView::slotOptions()
 {
-    kDebug(planDbg());
+    debugPlan;
     QPointer<ItemViewSettupDialog> dlg = new ResourceAppointmentsGanttViewSettingsDialog( this, treeView() );
 //     dlg->addPrintingOptions();
     dlg->exec();
@@ -1200,7 +1198,7 @@ void ResourceAppointmentsGanttView::slotOptions()
 
 bool ResourceAppointmentsGanttView::loadContext( const KoXmlElement &settings )
 {
-    kDebug(planDbg());
+    debugPlan;
     ViewBase::loadContext( settings );
     m_gantt->loadContext( settings );
     return treeView()->loadContext( m_model->columnMap(), settings );
@@ -1208,7 +1206,7 @@ bool ResourceAppointmentsGanttView::loadContext( const KoXmlElement &settings )
 
 void ResourceAppointmentsGanttView::saveContext( QDomElement &settings ) const
 {
-    kDebug(planDbg());
+    debugPlan;
     ViewBase::saveContext( settings );
     m_gantt->saveContext( settings );
     treeView()->saveContext( m_model->columnMap(), settings );

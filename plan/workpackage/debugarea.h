@@ -21,8 +21,14 @@
 #define PLANWORK_DEBUGAREA
 
 #include "kplatowork_export.h"
-#include <kdebug.h>
 
-KPLATOWORK_EXPORT int planworkDbg();
+#include <QDebug>
+#include <QLoggingCategory>
+
+extern const KPLATOWORK_EXPORT QLoggingCategory &PLANWORK_LOG();
+
+#define debugPlanWork qCDebug(PLANWORK_LOG)
+#define warnPlanWork qCWarning(PLANWORK_LOG)
+#define errorPlanWork qCCritical(PLANWORK_LOG)
 
 #endif

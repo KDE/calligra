@@ -28,7 +28,7 @@
 #include <QList>
 
 #include <klocale.h>
-#include <kdebug.h>
+
 
 namespace KPlato
 {
@@ -36,7 +36,7 @@ namespace KPlato
 IntervalEdit::IntervalEdit( CalendarDay *day, QWidget *parent)
     : IntervalEditImpl(parent)
 {
-    //kDebug(planDbg());
+    //debugPlan;
     if ( day ) {
         const QList<TimeInterval*> &intervals = day->timeIntervals();
         setIntervals( intervals );
@@ -164,12 +164,12 @@ IntervalEditDialog::IntervalEditDialog( Calendar *calendar, const QList<Calendar
     m_calendar( calendar ),
     m_days( days )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     setCaption( i18n("Edit Work Intervals") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
-    //kDebug(planDbg())<<&p;
+    //debugPlan<<&p;
     m_panel = new IntervalEdit( days.value( 0 ), this );
     setMainWidget( m_panel );
     enableButtonOk( false );
@@ -183,12 +183,12 @@ IntervalEditDialog::IntervalEditDialog( Calendar *calendar, const QList<QDate> &
     m_calendar( calendar ),
     m_dates( dates )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     setCaption( i18n("Edit Work Intervals") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
-    //kDebug(planDbg())<<&p;
+    //debugPlan<<&p;
     foreach ( const QDate &d, dates ) {
         CalendarDay *day = calendar->findDay( d );
         if ( day ) {
@@ -249,7 +249,7 @@ MacroCommand *IntervalEditDialog::buildCommand()
 
 MacroCommand *IntervalEditDialog::buildCommand( Calendar *calendar, CalendarDay *day )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     const QList<TimeInterval*> lst = m_panel->intervals();
     if ( lst == day->timeIntervals() ) {
         return 0;
@@ -259,7 +259,7 @@ MacroCommand *IntervalEditDialog::buildCommand( Calendar *calendar, CalendarDay 
     CalendarModifyStateCmd *c = new CalendarModifyStateCmd( calendar, day, CalendarDay::Undefined );
     if (cmd == 0) cmd = new MacroCommand(KUndo2MagicString());
     cmd->addCommand(c);
-    //kDebug(planDbg())<<"Set Undefined";
+    //debugPlan<<"Set Undefined";
 
     foreach ( TimeInterval *i, lst ) {
         CalendarAddTimeIntervalCmd *c = new CalendarAddTimeIntervalCmd( calendar, day, i );

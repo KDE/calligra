@@ -13,6 +13,8 @@
 
 #include "CoreAttributesList.h"
 
+#include <QDebug>
+
 namespace TJ
 {
 

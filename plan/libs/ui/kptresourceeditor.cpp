@@ -168,14 +168,14 @@ void ResourceEditor::updateReadWrite( bool readwrite )
 
 void ResourceEditor::setProject( Project *project )
 {
-    kDebug(planDbg())<<project;
+    debugPlan<<project;
     m_view->setProject( project );
     ViewBase::setProject( project );
 }
 
 void ResourceEditor::setGuiActive( bool activate )
 {
-    kDebug(planDbg())<<activate;
+    debugPlan<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
     if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
@@ -185,7 +185,7 @@ void ResourceEditor::setGuiActive( bool activate )
 
 void ResourceEditor::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
-    //kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
+    //debugPlan<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
     if ( index.isValid() ) {
         QObject *obj = m_view->model()->object( index );
@@ -218,13 +218,13 @@ ResourceGroup *ResourceEditor::currentResourceGroup() const
 
 void ResourceEditor::slotCurrentChanged(  const QModelIndex & )
 {
-    //kDebug(planDbg())<<curr.row()<<","<<curr.column();
+    //debugPlan<<curr.row()<<","<<curr.column();
 //    slotEnableActions();
 }
 
 void ResourceEditor::slotSelectionChanged( const QModelIndexList& )
 {
-    //kDebug(planDbg())<<list.count();
+    //debugPlan<<list.count();
     updateActionsEnabled();
 }
 
@@ -298,14 +298,14 @@ void ResourceEditor::setupGui()
 
 void ResourceEditor::slotSplitView()
 {
-    kDebug(planDbg());
+    debugPlan;
     m_view->setViewSplitMode( ! m_view->isViewSplit() );
     emit optionsModified();
 }
 
 void ResourceEditor::slotOptions()
 {
-    kDebug(planDbg());
+    debugPlan;
     SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, m_view, this );
     dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
@@ -317,7 +317,7 @@ void ResourceEditor::slotOptions()
 
 void ResourceEditor::slotAddResource()
 {
-    //kDebug(planDbg());
+    //debugPlan;
     QList<ResourceGroup*> gl = m_view->selectedGroups();
     if ( gl.count() > 1 ) {
         return;
@@ -351,7 +351,7 @@ void ResourceEditor::slotAddResource()
 
 void ResourceEditor::slotAddGroup()
 {
-    //kDebug(planDbg());
+    //debugPlan;
     m_view->closePersistentEditor( m_view->selectionModel()->currentIndex() );
     ResourceGroup *g = new ResourceGroup();
     QModelIndex i = m_view->model()->insertGroup( g );
@@ -365,7 +365,7 @@ void ResourceEditor::slotAddGroup()
 void ResourceEditor::slotDeleteSelection()
 {
     QObjectList lst = m_view->selectedObjects();
-    //kDebug(planDbg())<<lst.count()<<" objects";
+    //debugPlan<<lst.count()<<" objects";
     if ( ! lst.isEmpty() ) {
         emit deleteObjectList( lst );
         QModelIndex i = m_view->selectionModel()->currentIndex();
@@ -378,14 +378,14 @@ void ResourceEditor::slotDeleteSelection()
 
 bool ResourceEditor::loadContext( const KoXmlElement &context )
 {
-    kDebug(planDbg())<<objectName();
+    debugPlan<<objectName();
     ViewBase::loadContext( context );
     return m_view->loadContext( model()->columnMap(), context );
 }
 
 void ResourceEditor::saveContext( QDomElement &context ) const
 {
-    kDebug(planDbg())<<objectName();
+    debugPlan<<objectName();
     ViewBase::saveContext( context );
     m_view->saveContext( model()->columnMap(), context );
 }

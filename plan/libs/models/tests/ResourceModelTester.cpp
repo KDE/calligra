@@ -30,7 +30,6 @@
 #include <QModelIndex>
 
 #include <QTest>
-#include <kdebug.h>
 
 namespace QTest
 {

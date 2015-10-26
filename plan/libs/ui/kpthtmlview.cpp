@@ -69,12 +69,12 @@ void HtmlView::updateReadWrite( bool /*readwrite */)
 
 void HtmlView::setGuiActive( bool activate )
 {
-    kDebug(planDbg())<<activate;
+    debugPlan<<activate;
 }
 
 void HtmlView::slotContextMenuRequested( const QModelIndex &/*index*/, const QPoint& /*pos */)
 {
-    //kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
+    //debugPlan<<index.row()<<","<<index.column()<<":"<<pos;
 }
 
 void HtmlView::slotEnableActions( bool on )

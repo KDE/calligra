@@ -25,7 +25,6 @@
 #include <QSortFilterProxyModel>
 
 #include <QTest>
-#include <kdebug.h>
 
 namespace KPlato
 {
