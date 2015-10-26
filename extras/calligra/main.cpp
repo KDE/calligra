@@ -22,10 +22,10 @@
 #include <QApplication>
 #include <QUrl>
 #include <QDebug>
+#include <QMimeDatabase>
 
 #include <KAboutData>
 #include <klocalizedstring.h>
-#include <kmimetype.h>
 #include <kmimetypetrader.h>
 #include <KServiceTypeTrader>
 #include <krun.h>
@@ -77,13 +77,13 @@ static int handleUrls(const QStringList& files)
         // convert to an url
         const bool startsWithProtocol = (withProtocolChecker.indexIn(file) == 0);
         QUrl url = startsWithProtocol ? QUrl::fromUserInput(file) : QUrl::fromLocalFile(file);
-        KMimeType::Ptr mimetype = KMimeType::findByUrl(url);
-        if (mimetype->name() == KMimeType::defaultMimeType()) {
+        const QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(url);
+        if (mimetype.isDefault()) {
             KMessageBox::error(0, i18nc("@info", "Mimetype for <filename>%1</filename> not found!",
                                         url.toString()));
             return 1;
         }
-        qDebug() << url << mimetype->name();
+        qDebug() << url << mimetype.name();
         /* 
             Find apps marked with Calligra/Applications service type
             and having given mimetype on the X-Calligra-Default-MimeTypes list.
@@ -95,13 +95,13 @@ static int handleUrls(const QStringList& files)
             by Flow and Karbon already; out of these two, Karbon is selected
             for opening the document.
         */
-        const QString constraint = QString("'%1' in [X-Calligra-DefaultMimeTypes]").arg(mimetype->name());
+        const QString constraint = QString("'%1' in [X-Calligra-DefaultMimeTypes]").arg(mimetype.name());
         qDebug() << constraint;
         KService::List services;
         KService::List offers = KServiceTypeTrader::self()->query("Calligra/Application");
         foreach(KService::Ptr offer, offers) {
             QStringList defaultMimeTypes = offer->property("X-Calligra-DefaultMimeTypes").toStringList();
-            if (defaultMimeTypes.contains(mimetype->name())) {
+            if (defaultMimeTypes.contains(mimetype.name())) {
                 services << offer;
             }
         }
@@ -121,19 +121,19 @@ static int handleUrls(const QStringList& files)
         }
         //if (!ok) {
         // if above not found or app cannot be executed:
-        KService::List mimeServices = mimeTrader->query(mimetype->name(), "Calligra/Application");
+        KService::List mimeServices = mimeTrader->query(mimetype.name(), "Calligra/Application");
         qDebug() << "Found" << mimeServices.count() << "services by MimeType field:";
         foreach (KService::Ptr service, mimeServices) {
             //qDebug() << "-" << service->name() << service->property("X-DBUS-ServiceName", QVariant::String);
             qDebug() << "-" << service->name() << service->hasServiceType("Calligra/Application")
-                << service->hasMimeType(mimetype->name());
+                << service->hasMimeType(mimetype.name());
             //QVariant isCalligraApp = service->property("X-Calligra-App", QVariant::Bool);
             /*if (isCalligraApp.isValid() && isCalligraApp.toBool()) {
                 qDebug() << "FOUND:" << service->name();
             }*/
         }
         if (mimeServices.isEmpty()) {
-            service = mimeTrader->preferredService(mimetype->name());
+            service = mimeTrader->preferredService(mimetype.name());
             qDebug() << "mimeTrader->preferredService():" << service->name();
             if (service) {
                 KGuiItem openItem(KStandardGuiItem::open());
