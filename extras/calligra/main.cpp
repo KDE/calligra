@@ -20,6 +20,7 @@
 #include <QTextStream>
 #include <QCommandLineParser>
 #include <QApplication>
+#include <QUrl>
 
 #include <KAboutData>
 #include <klocalizedstring.h>
@@ -31,7 +32,6 @@
 #include <ktoolinvocation.h>
 #include <kmessagebox.h>
 #include <kguiitem.h>
-#include <kurl.h>
 
 #include <calligraversion.h>
 
@@ -53,7 +53,7 @@ static void showWelcomeWindow()
 {
 }
 
-static bool startService(KService::Ptr service, const KUrl& url)
+static bool startService(KService::Ptr service, const QUrl& url)
 {
     kDebug() << "service->entryPath():" << service->entryPath();
     QString error;
@@ -71,16 +71,16 @@ static bool startService(KService::Ptr service, const KUrl& url)
 static int handleUrls(const QStringList& files)
 {
     KMimeTypeTrader* mimeTrader = KMimeTypeTrader::self();
-    KUrl::List notHandledUrls;
+    QList<QUrl> notHandledUrls;
     const QRegExp withProtocolChecker( QStringLiteral("^[a-zA-Z]+:") );
     foreach(const QString& file, files) {
         // convert to an url
         const bool startsWithProtocol = (withProtocolChecker.indexIn(file) == 0);
-        KUrl url = startsWithProtocol ? QUrl::fromUserInput(file) : QUrl::fromLocalFile(file);
+        QUrl url = startsWithProtocol ? QUrl::fromUserInput(file) : QUrl::fromLocalFile(file);
         KMimeType::Ptr mimetype = KMimeType::findByUrl(url);
         if (mimetype->name() == KMimeType::defaultMimeType()) {
             KMessageBox::error(0, i18nc("@info", "Mimetype for <filename>%1</filename> not found!",
-                                        url.prettyUrl()));
+                                        url.toString()));
             return 1;
         }
         kDebug() << url << mimetype->name();
@@ -112,7 +112,7 @@ static int handleUrls(const QStringList& files)
             service = services.first();
             kDebug() << "-" << service->name() << service->property("X-Calligra-DefaultMimeTypes");
 #if 0
-            ok = KRun::run(*service.data(), KUrl::List() << url, 0);
+            ok = KRun::run(*service.data(), QList<QUrl>() << url, 0);
             kDebug() << "KRun::run:" << ok;
 #else
             startService(service, url);
