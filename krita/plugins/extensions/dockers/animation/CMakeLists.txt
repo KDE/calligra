@@ -17,6 +17,7 @@ set(KRITA_ANIMATIONDOCKER_PART_SRCS
     timeline_node_list_keeper.cpp
 
     kis_draggable_tool_button.cpp
+    kis_animation_utils.cpp
 )
 
 kde4_add_ui_files(KRITA_ANIMATIONDOCKER_PART_SRCS

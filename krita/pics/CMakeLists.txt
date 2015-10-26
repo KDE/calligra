@@ -44,7 +44,12 @@ light_onionOff.svg
 
 dark_prevframe.png
 dark_nextframe.png
-dark_playpause.png
+dark_prevkeyframe.png
+dark_nextkeyframe.png
+dark_firstframe.png
+dark_lastframe.png
+dark_animation_play.png
+dark_animation_pause.svg
 dark_addblankframe.png
 dark_addduplicateframe.png
 dark_deletekeyframe.png
@@ -55,7 +60,12 @@ dark_onionOff.svg
 
 light_prevframe.png
 light_nextframe.png
-light_playpause.png
+light_prevkeyframe.png
+light_nextkeyframe.png
+light_firstframe.png
+light_lastframe.png
+light_animation_play.png
+light_animation_pause.svg
 light_addblankframe.png
 light_addduplicateframe.png
 light_deletekeyframe.png

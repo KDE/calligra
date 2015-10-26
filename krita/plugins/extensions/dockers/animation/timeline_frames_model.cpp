@@ -37,6 +37,8 @@
 #include "kis_animation_player.h"
 #include <commands/kis_node_property_list_command.h>
 
+#include "kis_animation_utils.h"
+
 
 struct TimelineFramesModel::Private
 {
@@ -101,7 +103,7 @@ struct TimelineFramesModel::Private
 
         if (!content) return false;
 
-        KisKeyframe *frame = content->keyframeAt(column);
+        KisKeyframeSP frame = content->keyframeAt(column);
         return frame;
     }
 
@@ -136,51 +138,14 @@ struct TimelineFramesModel::Private
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return false;
 
-        KisKeyframeChannel *content =
-            dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
-
-        if (!content) {
-            dummy->node()->enableAnimation();
-            content =
-                dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
-            if (!content) return false;
-        }
-
-        if (copy) {
-            if (content->keyframeAt(column)) return false;
-
-            KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Copy Keyframe"));
-            KisKeyframeSP srcFrame = content->activeKeyframeAt(column);
-
-            content->copyKeyframe(srcFrame.data(), column, cmd);
-            image->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
-        } else {
-            KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Add Keyframe"));
-            content->addKeyframe(column, cmd);
-            image->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
-        }
-
-        return true;
+        return KisAnimationUtils::createKeyframeLazy(image, dummy->node(), column, copy);
     }
 
     bool removeKeyframe(int row, int column) {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return false;
 
-        KisKeyframeChannel *content =
-            dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
-
-        if (!content) return false;
-
-        KisKeyframe *keyframe = content->keyframeAt(column);
-
-        if (!keyframe) return false;
-
-        KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Remove Keyframe"));
-        content->deleteKeyframe(keyframe, cmd);
-        image->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
-
-        return true;
+        return KisAnimationUtils::removeKeyframe(image, dummy->node(), column);
     }
 
     bool moveKeyframe(int srcRow, int srcColumn, int dstRow, int dstColumn) {
@@ -189,21 +154,7 @@ struct TimelineFramesModel::Private
         KisNodeDummy *dummy = converter->dummyFromRow(srcRow);
         if (!dummy) return false;
 
-        KisKeyframeChannel *content =
-            dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
-
-        if (!content) return false;
-
-        KisKeyframe *srcKeyframe = content->keyframeAt(srcColumn);
-        KisKeyframe *dstKeyframe = content->keyframeAt(dstColumn);
-
-        if (!srcKeyframe || dstKeyframe) return false;
-
-        KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Move Keyframe"));
-        content->moveKeyframe(srcKeyframe, dstColumn, cmd);
-        image->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
-
-        return true;
+        return KisAnimationUtils::moveKeyframe(image, dummy->node(), srcColumn, dstColumn);
     }
 
     bool addNewLayer(int row) {
