@@ -21,10 +21,10 @@
 #define KPlato_ProjectTester_h
 
 #include <QObject>
+#include <QTemporaryDir>
 
 #include "kptproject.h"
 #include "kptdatetime.h"
-#include <ktempdir.h>
 
 namespace KPlato
 {
@@ -76,7 +76,7 @@ private:
     Project *m_project;
     Calendar *m_calendar;
     Task *m_task;
-    KTempDir m_tmp;
+    QTemporaryDir m_tmp;
 };
 
 } //namespace KPlato
