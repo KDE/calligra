@@ -394,7 +394,7 @@ void AnimationDocker::updatePlayPauseIcon()
     bool isPlaying = m_canvas && m_canvas->animationPlayer() && m_canvas->animationPlayer()->isPlaying();
 
     m_playPauseAction->setIcon(isPlaying ?
-                               themedIcon("animation_pause") :
+                               themedIcon("animation_stop") :
                                themedIcon("animation_play"));
 }
 
