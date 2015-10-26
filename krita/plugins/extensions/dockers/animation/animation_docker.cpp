@@ -403,8 +403,8 @@ void AnimationDocker::updateLazyFrameIcon()
     KisImageConfig cfg;
 
     m_lazyFrameAction->setIcon(cfg.lazyFrameCreationEnabled() ?
-                               themedIcon("quickopen") :
-                               themedIcon("quickopen-function"));
+                               themedIcon("lazyframeOn") :
+                               themedIcon("lazyframeOff"));
 }
 
 void AnimationDocker::slotUpdateIcons()
