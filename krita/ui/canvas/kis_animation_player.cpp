@@ -43,7 +43,7 @@ public:
 
     KisCanvas2 *canvas;
 
-    QVector<KisSignalAutoConnectionSP> cancelStrokeConnections;
+    KisSignalAutoConnectionsStore cancelStrokeConnections;
 };
 
 KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
@@ -55,7 +55,6 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
     m_d->playbackSpeed = 1.0;
 
     m_d->timer = new QTimer(this);
-
     connect(m_d->timer, SIGNAL(timeout()), this, SLOT(slotUpdate()));
 }
 
@@ -64,31 +63,30 @@ KisAnimationPlayer::~KisAnimationPlayer()
 
 void KisAnimationPlayer::connectCancelSignals()
 {
-    m_d->cancelStrokeConnections.append(
-        toQShared(new KisSignalAutoConnection(
-                      m_d->canvas->image().data(), SIGNAL(sigUndoDuringStrokeRequested()),
-                      this, SLOT(slotCancelPlayback()))));
+    m_d->cancelStrokeConnections.addConnection(
+        m_d->canvas->image().data(), SIGNAL(sigUndoDuringStrokeRequested()),
+        this, SLOT(slotCancelPlayback()));
 
-    m_d->cancelStrokeConnections.append(
-        toQShared(new KisSignalAutoConnection(
-                      m_d->canvas->image().data(), SIGNAL(sigStrokeCancellationRequested()),
-                      this, SLOT(slotCancelPlayback()))));
+    m_d->cancelStrokeConnections.addConnection(
+        m_d->canvas->image().data(), SIGNAL(sigStrokeCancellationRequested()),
+        this, SLOT(slotCancelPlayback()));
 
-    m_d->cancelStrokeConnections.append(
-        toQShared(new KisSignalAutoConnection(
-                      m_d->canvas->image().data(), SIGNAL(sigStrokeEndRequested()),
-                      this, SLOT(slotCancelPlayback()))));
+    m_d->cancelStrokeConnections.addConnection(
+        m_d->canvas->image().data(), SIGNAL(sigStrokeEndRequested()),
+        this, SLOT(slotCancelPlayback()));
 
-    m_d->cancelStrokeConnections.append(
-        toQShared(new KisSignalAutoConnection(
-                      m_d->canvas->image()->animationInterface(), SIGNAL(sigFramerateChanged()),
-                      this, SLOT(slotUpdatePlaybackTimer()))));
+    m_d->cancelStrokeConnections.addConnection(
+        m_d->canvas->image()->animationInterface(), SIGNAL(sigFramerateChanged()),
+        this, SLOT(slotUpdatePlaybackTimer()));
 
-    m_d->cancelStrokeConnections.append(
-        toQShared(new KisSignalAutoConnection(
-                      m_d->canvas->image()->animationInterface(), SIGNAL(sigRangeChanged()),
-                      this, SLOT(slotUpdatePlaybackTimer()))));
+    m_d->cancelStrokeConnections.addConnection(
+        m_d->canvas->image()->animationInterface(), SIGNAL(sigRangeChanged()),
+        this, SLOT(slotUpdatePlaybackTimer()));
+}
 
+void KisAnimationPlayer::disconnectCancelSignals()
+{
+    m_d->cancelStrokeConnections.clear();
 }
 
 void KisAnimationPlayer::slotUpdatePlaybackTimer()
@@ -105,11 +103,6 @@ void KisAnimationPlayer::slotUpdatePlaybackTimer()
     m_d->currentFrame = qBound(m_d->firstFrame, m_d->currentFrame, m_d->lastFrame);
 
     m_d->timer->start(qreal(1000) / m_d->fps / m_d->playbackSpeed);
-}
-
-void KisAnimationPlayer::disconnectCancelSignals()
-{
-    m_d->cancelStrokeConnections.clear();
 }
 
 void KisAnimationPlayer::play()
