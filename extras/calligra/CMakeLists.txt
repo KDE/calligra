@@ -1,7 +1,6 @@
 include_directories( ${KOMAIN_INCLUDES})
 
 set(calligra_SRCS
-    KoServiceLocator.cpp
     main.cpp
 )
 

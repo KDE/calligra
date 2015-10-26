@@ -25,8 +25,8 @@
 #include <KAboutData>
 #include <klocalizedstring.h>
 #include <kmimetype.h>
-#include <KoServiceLocator.h>
 #include <kmimetypetrader.h>
+#include <KServiceTypeTrader>
 #include <kdebug.h>
 #include <krun.h>
 #include <ktoolinvocation.h>
@@ -37,7 +37,7 @@
 
 static void listApplicationNames()
 {
-    const KService::List services = KoServiceLocator::instance()->entries("Calligra/Application");
+    const KService::List services = KServiceTypeTrader::self()->query("Calligra/Application");
     QTextStream out(stdout, QIODevice::WriteOnly);
     QStringList names;
     foreach (KService::Ptr service, services) {
@@ -98,7 +98,7 @@ static int handleUrls(const QStringList& files)
         const QString constraint = QString("'%1' in [X-Calligra-DefaultMimeTypes]").arg(mimetype->name());
         kDebug() << constraint;
         KService::List services;
-        KService::List offers = KoServiceLocator::instance()->entries("Calligra/Application");
+        KService::List offers = KServiceTypeTrader::self()->query("Calligra/Application");
         foreach(KService::Ptr offer, offers) {
             QStringList defaultMimeTypes = offer->property("X-Calligra-DefaultMimeTypes").toStringList();
             if (defaultMimeTypes.contains(mimetype->name())) {
