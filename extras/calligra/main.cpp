@@ -21,13 +21,13 @@
 #include <QCommandLineParser>
 #include <QApplication>
 #include <QUrl>
+#include <QDebug>
 
 #include <KAboutData>
 #include <klocalizedstring.h>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
 #include <KServiceTypeTrader>
-#include <kdebug.h>
 #include <krun.h>
 #include <ktoolinvocation.h>
 #include <kmessagebox.h>
@@ -55,7 +55,7 @@ static void showWelcomeWindow()
 
 static bool startService(KService::Ptr service, const QUrl& url)
 {
-    kDebug() << "service->entryPath():" << service->entryPath();
+    qDebug() << "service->entryPath():" << service->entryPath();
     QString error;
     QString serviceName;
     int pid = 0;
@@ -64,7 +64,7 @@ static bool startService(KService::Ptr service, const QUrl& url)
     );
     // could not check result - does not work for custom KDEDIRS: ok = res == 0;
     //ok = true;
-    kDebug() << "KToolInvocation::startServiceByDesktopPath:" << res << pid << error << serviceName;
+    qDebug() << "KToolInvocation::startServiceByDesktopPath:" << res << pid << error << serviceName;
     return res == 0;
 }
 
@@ -83,7 +83,7 @@ static int handleUrls(const QStringList& files)
                                         url.toString()));
             return 1;
         }
-        kDebug() << url << mimetype->name();
+        qDebug() << url << mimetype->name();
         /* 
             Find apps marked with Calligra/Applications service type
             and having given mimetype on the X-Calligra-Default-MimeTypes list.
@@ -96,7 +96,7 @@ static int handleUrls(const QStringList& files)
             for opening the document.
         */
         const QString constraint = QString("'%1' in [X-Calligra-DefaultMimeTypes]").arg(mimetype->name());
-        kDebug() << constraint;
+        qDebug() << constraint;
         KService::List services;
         KService::List offers = KServiceTypeTrader::self()->query("Calligra/Application");
         foreach(KService::Ptr offer, offers) {
@@ -110,10 +110,10 @@ static int handleUrls(const QStringList& files)
         //bool ok = false;
         if (!services.isEmpty()) {
             service = services.first();
-            kDebug() << "-" << service->name() << service->property("X-Calligra-DefaultMimeTypes");
+            qDebug() << "-" << service->name() << service->property("X-Calligra-DefaultMimeTypes");
 #if 0
             ok = KRun::run(*service.data(), QList<QUrl>() << url, 0);
-            kDebug() << "KRun::run:" << ok;
+            qDebug() << "KRun::run:" << ok;
 #else
             startService(service, url);
             return 0;
@@ -122,19 +122,19 @@ static int handleUrls(const QStringList& files)
         //if (!ok) {
         // if above not found or app cannot be executed:
         KService::List mimeServices = mimeTrader->query(mimetype->name(), "Calligra/Application");
-        kDebug() << "Found" << mimeServices.count() << "services by MimeType field:";
+        qDebug() << "Found" << mimeServices.count() << "services by MimeType field:";
         foreach (KService::Ptr service, mimeServices) {
-            //kDebug() << "-" << service->name() << service->property("X-DBUS-ServiceName", QVariant::String);
-            kDebug() << "-" << service->name() << service->hasServiceType("Calligra/Application")
+            //qDebug() << "-" << service->name() << service->property("X-DBUS-ServiceName", QVariant::String);
+            qDebug() << "-" << service->name() << service->hasServiceType("Calligra/Application")
                 << service->hasMimeType(mimetype->name());
             //QVariant isCalligraApp = service->property("X-Calligra-App", QVariant::Bool);
             /*if (isCalligraApp.isValid() && isCalligraApp.toBool()) {
-                kDebug() << "FOUND:" << service->name();
+                qDebug() << "FOUND:" << service->name();
             }*/
         }
         if (mimeServices.isEmpty()) {
             service = mimeTrader->preferredService(mimetype->name());
-            kDebug() << "mimeTrader->preferredService():" << service->name();
+            qDebug() << "mimeTrader->preferredService():" << service->name();
             if (service) {
                 KGuiItem openItem(KStandardGuiItem::open());
                 openItem.setText(i18nc("@action:button", "Open with <application>%1</application>",
