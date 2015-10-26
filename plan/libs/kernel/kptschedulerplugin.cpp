@@ -26,8 +26,6 @@
 
 #include "KoXmlReader.h"
 
-#include <kglobal.h>
-
 
 namespace KPlato
 {
@@ -336,8 +334,6 @@ SchedulerThread::SchedulerThread( Project *project, ScheduleManager *manager, QO
     m_haltScheduling( false ),
     m_progress( 0 )
 {
-    KGlobal::ref(); // keep locale around
-
     manager->createSchedules(); // creates expected() to get log messages during calculation
 
     QDomDocument document( "kplato" );
@@ -355,7 +351,6 @@ SchedulerThread::~SchedulerThread()
     debugPlan<<"SchedulerThread::~SchedulerThread:"<<QThread::currentThreadId();
     delete m_project;
     m_project = 0;
-    KGlobal::deref();
 }
 
 void SchedulerThread::setMaxProgress( int value )
