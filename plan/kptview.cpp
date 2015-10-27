@@ -43,6 +43,8 @@
 #include <QTimer>
 #include <QDockWidget>
 #include <QMenu>
+#include <QTemporaryFile>
+#include <QFileDialog>
 
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -52,8 +54,6 @@
 #include <kconfigdialogmanager.h>
 #include <kxmlguifactory.h>
 #include <ktoggleaction.h>
-#include <QTemporaryFile>
-#include <kfiledialog.h>
 #include <kconfigdialog.h>
 #include <ktoolinvocation.h>
 #include <krun.h>
@@ -2693,7 +2693,7 @@ void View::slotCreateReportView( ReportDesignDialog *dlg )
 
 void View::slotOpenReportFile()
 {
-    KFileDialog *dlg = new KFileDialog( QUrl(), QString(), this );
+    QFileDialog *dlg = new QFileDialog(this);
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOpenReportFileFinished(int)));
     dlg->show();
     dlg->raise();
@@ -2702,11 +2702,11 @@ void View::slotOpenReportFile()
 
 void View::slotOpenReportFileFinished( int result )
 {
-    KFileDialog *fdlg = qobject_cast<KFileDialog*>( sender() );
+    QFileDialog *fdlg = qobject_cast<QFileDialog*>( sender() );
     if ( fdlg == 0 || result != QDialog::Accepted ) {
         return;
     }
-    QString fn = fdlg->selectedFile();
+    QString fn = fdlg->selectedFiles().value(0);
     if ( fn.isEmpty() ) {
         return;
     }

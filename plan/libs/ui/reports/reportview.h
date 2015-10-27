@@ -180,17 +180,14 @@ private Q_SLOTS:
     void firstPage();
     void lastPage();
 
-    void slotExport();
-    void slotExportFinished( int result );
+    void exportAsTextDocument();
+    void exportAsSpreadsheet();
+    void exportAsWebPage();
 
 private:
     ReportData *createReportData( const QDomElement &connection );
     ReportData *createReportData( const QString &type );
-    void exportToOdtTable( KReportRendererContext &context );
-    void exportToOdtFrames( KReportRendererContext &context );
-    void exportToOds( KReportRendererContext &context );
-    void exportToHtml( KReportRendererContext &context );
-    void exportToXHtml( KReportRendererContext &context );
+    QUrl getExportFileName(const QString &mimetype);
 
 private:
     KReportPreRenderer *m_preRenderer;

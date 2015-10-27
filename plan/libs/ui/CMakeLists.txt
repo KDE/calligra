@@ -27,7 +27,6 @@ set(kplatoui_LIB_SRCS
     reports/reportdata.cpp
     reports/reportsourceeditor.cpp
     reports/reportscripts.cpp
-    reports/reportexportpanel.cpp
 
     kptganttitemdelegate.cpp
 
@@ -88,7 +87,6 @@ set(kplatoui_LIB_SRCS
 ki18n_wrap_ui(kplatoui_LIB_SRCS
     reports/reportsourceeditor.ui
     reports/reportnavigator.ui
-    reports/reportexportpanel.ui
     reports/reportsectionswidget.ui
     reports/reportgroupsectionswidget.ui
     reports/reporttoolswidget.ui

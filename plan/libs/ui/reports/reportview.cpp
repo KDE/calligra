@@ -26,7 +26,6 @@
 #include "reportdata.h"
 #include "reportsourceeditor.h"
 #include "reportscripts.h"
-#include "reportexportpanel.h"
 #include "ui_reportsectionswidget.h"
 #include "ui_reporttoolswidget.h"
 
@@ -55,13 +54,13 @@
 #include "KoIcon.h"
 #include <KoXmlReader.h>
 
+#include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kstandardaction.h>
 #include <kstandardguiitem.h>
 #include <kguiitem.h>
 #include <kmessagebox.h>
 #include <ktoolbar.h>
-#include <kfiledialog.h>
 #include <kpushbutton.h>
 
 #include <QCloseEvent>
@@ -82,7 +81,8 @@
 #include <QStackedWidget>
 #include <QAction>
 #include <qpushbutton.h>
-
+#include <QMimeDatabase>
+#include <QFileDialog>
 
 namespace KPlato
 {
@@ -338,24 +338,6 @@ KoPrintJob *ReportWidget::createPrintJob()
     return new ReportPrintingDialog( this, m_reportDocument );
 }
 
-void ReportWidget::slotExport()
-{
-    ReportExportPanel *p = new ReportExportPanel();
-    p->setObjectName( "ReportExportPanel" );
-    KFileDialog *dia = new KFileDialog( QUrl(), QString(), this, p );
-    dia->setOperationMode( KFileDialog::Saving );
-    dia->setMode( KFile::File );
-    dia->setConfirmOverwrite( true );
-    dia->setInlinePreviewShown( true );
-    dia->setWindowTitle( i18nc( "@title:window", "Export Report" ) );
-//    dia->setFilter( QString( "*.ods|%1\n*|%2" ).arg( i18n( "Open document spreadsheet" ) ).arg( i18n( "All Files" ) ) );
-
-    connect(dia, SIGNAL(finished(int)), SLOT(slotExportFinished(int)));
-    dia->show();
-    dia->raise();
-    dia->activateWindow();
-}
-
 KoPageLayout ReportWidget::pageLayout() const
 {
     KoPageLayout p = ViewBase::pageLayout();
@@ -379,51 +361,22 @@ KoPageLayout ReportWidget::pageLayout() const
     return p;
 }
 
-void ReportWidget::slotExportFinished( int result )
+QUrl ReportWidget::getExportFileName(const QString &mimetype)
 {
-    //TODO confirm overwrite
-    KFileDialog *dia = dynamic_cast<KFileDialog*>( sender() );
-    if ( dia == 0 ) {
-        return;
-    }
-    ReportExportPanel *p = dia->findChild<ReportExportPanel*>("ReportExportPanel");
-    Q_ASSERT( p );
-    if ( p && result == QDialog::Accepted ) {
-        KReportRendererContext context;
-        context.destinationUrl = dia->selectedUrl();
-        if (! context.destinationUrl.isValid() ) {
-            KMessageBox::error(this, i18nc( "@info", "Cannot export report. Invalid url:<br>file:<br><filename>%1</filename>", context.destinationUrl.url() ), i18n( "Not Saved" ) );
-        } else {
-            switch ( p->selectedFormat() ) {
-                case Reports::EF_OdtTable: exportToOdtTable( context ); break;
-                case Reports::EF_OdtFrames: exportToOdtFrames( context ); break;
-                case Reports::EF_Ods: exportToOds( context ); break;
-                case Reports::EF_Html: exportToHtml( context ); break;
-                case Reports::EF_XHtml: exportToXHtml( context ); break;
-                default:
-                    KMessageBox::error(this, i18n("Cannot export report. Unknown file format"), i18n( "Not Saved" ) );
-                    break;
-            }
-        }
-    }
-    dia->deleteLater();
+    const QString filterString = QMimeDatabase().mimeTypeForName(mimetype).filterString();
+
+    const QString result = QFileDialog::getSaveFileName(this, i18nc("@title:window", "Export Report"), QString(), filterString);
+    return result.isEmpty() ? QUrl() : QUrl::fromLocalFile(result);
 }
 
-void ReportWidget::exportToOdtTable( KReportRendererContext &context )
+void ReportWidget::exportAsTextDocument()
 {
-    debugPlan<<"Export to odt:"<<context.destinationUrl;
-    KReportRendererBase *renderer = m_factory.createInstance("odttable");
-    if ( renderer == 0 ) {
-        errorPlan<<"Cannot create odt (table) renderer";
+    KReportRendererContext context;
+    context.destinationUrl = getExportFileName(QStringLiteral("application/vnd.oasis.opendocument.text"));
+    if (!context.destinationUrl.isValid()) {
         return;
     }
-    if (!renderer->render(context, m_reportDocument)) {
-        KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.toDisplayString()) , i18n("Export to text document failed"));
-    }
-}
 
-void ReportWidget::exportToOdtFrames( KReportRendererContext &context )
-{
     debugPlan<<"Export to odt:"<<context.destinationUrl;
     KReportRendererBase *renderer = m_factory.createInstance("odtframes");
     if ( renderer == 0 ) {
@@ -435,8 +388,14 @@ void ReportWidget::exportToOdtFrames( KReportRendererContext &context )
     }
 }
 
-void ReportWidget::exportToOds( KReportRendererContext &context )
+void ReportWidget::exportAsSpreadsheet()
 {
+    KReportRendererContext context;
+    context.destinationUrl = getExportFileName(QStringLiteral("application/vnd.oasis.opendocument.spreadsheet"));
+    if (!context.destinationUrl.isValid()) {
+        return;
+    }
+
     debugPlan<<"Export to ods:"<<context.destinationUrl;
     KReportRendererBase *renderer;
     renderer = m_factory.createInstance("ods");
@@ -449,31 +408,25 @@ void ReportWidget::exportToOds( KReportRendererContext &context )
     }
 }
 
-void ReportWidget::exportToHtml( KReportRendererContext &context )
+void ReportWidget::exportAsWebPage()
 {
+    KReportRendererContext context;
+    context.destinationUrl = getExportFileName(QStringLiteral("text/html"));
+    if (!context.destinationUrl.isValid()) {
+        return;
+    }
+
     debugPlan<<"Export to html:"<<context.destinationUrl;
     KReportRendererBase *renderer;
-    renderer = m_factory.createInstance("htmltable");
+    //QT5TODO: perhaps also support "htmltable", with similar question switch like kexi
+    //Though plugins should rather not be hardcoded at all in the future.
+    renderer = m_factory.createInstance("htmlcss");
     if ( renderer == 0 ) {
         errorPlan<<"Cannot create html renderer";
         return;
     }
     if (!renderer->render(context, m_reportDocument)) {
         KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.toDisplayString()) , i18n("Export to HTML failed"));
-    }
-}
-
-void ReportWidget::exportToXHtml( KReportRendererContext &context )
-{
-    debugPlan<<"Export to xhtml:"<<context.destinationUrl;
-    KReportRendererBase *renderer;
-    renderer = m_factory.createInstance("htmlcss");
-    if ( renderer == 0 ) {
-        errorPlan<<"Cannot create xhtml css renderer";
-        return;
-    }
-    if (!renderer->render(context, m_reportDocument)) {
-        KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.toDisplayString()) , i18n("Export to XHTML failed"));
     }
 }
 
@@ -489,11 +442,27 @@ void ReportWidget::setupGui()
     connect(a, SIGNAL(triggered()), this, SIGNAL(editReportDesign()));
     addAction( name, a );
 
-    a = new QAction(koIcon("document-export"), i18n("Export"), this);
-    a->setToolTip( i18nc( "@info:tooltip", "Export to file" ) );
-    a->setWhatsThis( i18nc( "@info:whatsthis", "Exports the report to a supported file format." ) );
-    connect(a, SIGNAL(triggered()), this, SLOT(slotExport()));
-    addAction( name, a );
+    KActionMenu *exportMenu = new KActionMenu(koIcon("document-export"), i18nc("@title:menu","E&xport As"), this);
+    exportMenu->setToolTip( i18nc( "@info:tooltip", "Export to file" ) );
+    exportMenu->setDelayed(false);
+
+    a = new QAction(koIcon("application-vnd.oasis.opendocument.text"), i18n("Text Document..."), this);
+    a->setToolTip(i18n("Export the report as a text document (in OpenDocument Text format)"));
+    connect(a, SIGNAL(triggered()), this, SLOT(exportAsTextDocument()));
+    exportMenu->addAction(a);
+
+    a = new QAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"), i18n("Spreadsheet..."), this);
+    a->setToolTip(i18n("Export the report as a spreadsheet (in OpenDocument Spreadsheet format)"));
+    connect(a, SIGNAL(triggered()), this, SLOT(exportAsSpreadsheet()));
+    exportMenu->addAction(a);
+
+    a = new QAction(koIcon("text-html"), i18n("Web Page..."), this);
+    a->setObjectName("export_as_web_page");
+    a->setToolTip(i18n("Export the report as a web page (in HTML format)"));
+    connect(a, SIGNAL(triggered()), this, SLOT(exportAsWebPage()));
+    exportMenu->addAction(a);
+
+    addAction( name, exportMenu );
 }
 
 void ReportWidget::setGuiActive( bool active ) // virtual slot
@@ -696,22 +665,12 @@ void ReportDesignDialog::slotButtonClicked( int button )
 
 void ReportDesignDialog::slotSaveToFile()
 {
-    QPointer<KFileDialog> dialog = new KFileDialog(QUrl(), QString(), this);
-    dialog->exec();
-    if ( ! dialog ) {
+    const QString fileName = QFileDialog::getSaveFileName(this);
+    if (fileName.isEmpty()) {
         return;
     }
-    QUrl url(dialog->selectedUrl());
-    delete dialog;
 
-    if (url.isEmpty()) {
-        return;
-    }
-    if ( ! url.isLocalFile() ) {
-        KMessageBox::sorry( this, i18n( "Can only save to a local file." ) );
-        return;
-    }
-    QFile file( url.toLocalFile() );
+    QFile file( fileName );
     if ( ! file.open( QIODevice::WriteOnly ) ) {
         KMessageBox::sorry( this, i18nc( "@info", "Cannot open file:<br/><filename>%1</filename>", file.fileName() ) );
         return;
