@@ -30,13 +30,13 @@
 #include "ui_reportsectionswidget.h"
 #include "ui_reporttoolswidget.h"
 
-#include "KoReportPage"
-#include "KoReportPreRenderer"
-#include "renderobjects.h"
-#include <KoReportDesigner>
-#include "reportsection.h"
-#include "reportsectiondetail.h"
-#include "reportsectiondetailgroup.h"
+#include <KReportPage>
+#include <KReportPreRenderer>
+#include <KReportRenderObjects>
+#include <KReportDesigner>
+#include <KReportDesignerSection>
+#include <KReportDesignerSectionDetail>
+#include <KReportDesignerSectionDetailGroup>
 #include <KPropertyEditorView>
 
 #include "kptglobal.h"
@@ -95,10 +95,10 @@ ReportPrintingDialog::ReportPrintingDialog( ViewBase *view, ORODocument *reportD
     printer().setFromTo( documentFirstPage(), documentLastPage() );
     m_context.printer = &printer();
     m_context.painter = 0;
-    KoReportRendererFactory factory;
+    KReportRendererFactory factory;
     m_renderer = factory.createInstance( "print" );
 
-    //FIXME: This should be done by KoReportPrintRender but setupPrinter() is private
+    //FIXME: This should be done by KReportPrintRender but setupPrinter() is private
     QPrinter *pPrinter = &printer();
     pPrinter->setCreator("Plan");
     pPrinter->setDocName(reportDocument->title());
@@ -111,7 +111,7 @@ ReportPrintingDialog::ReportPrintingDialog( ViewBase *view, ORODocument *reportD
     else
         pPrinter->setPageSize(KoPageFormat::printerPageSize(KoPageFormat::formatFromString(reportDocument->pageOptions().getPageSize())));
 
-    //FIXME: There is something wrong with koreport margins
+    //FIXME: There is something wrong with KReport margins
     qreal left = reportDocument->pageOptions().getMarginLeft();
     qreal top = reportDocument->pageOptions().getMarginTop();
     qreal right = reportDocument->pageOptions().getMarginRight();
@@ -359,7 +359,7 @@ void ReportWidget::slotExport()
 KoPageLayout ReportWidget::pageLayout() const
 {
     KoPageLayout p = ViewBase::pageLayout();
-    ReportPageOptions opt = m_reportDocument->pageOptions();
+    KReportPageOptions opt = m_reportDocument->pageOptions();
     p.orientation = opt.isPortrait() ? KoPageFormat::Portrait : KoPageFormat::Landscape;
 
     if (opt.getPageSize().isEmpty()) {
@@ -389,7 +389,7 @@ void ReportWidget::slotExportFinished( int result )
     ReportExportPanel *p = dia->findChild<ReportExportPanel*>("ReportExportPanel");
     Q_ASSERT( p );
     if ( p && result == QDialog::Accepted ) {
-        KoReportRendererContext context;
+        KReportRendererContext context;
         context.destinationUrl = dia->selectedUrl();
         if (! context.destinationUrl.isValid() ) {
             KMessageBox::error(this, i18nc( "@info", "Cannot export report. Invalid url:<br>file:<br><filename>%1</filename>", context.destinationUrl.url() ), i18n( "Not Saved" ) );
@@ -409,10 +409,10 @@ void ReportWidget::slotExportFinished( int result )
     dia->deleteLater();
 }
 
-void ReportWidget::exportToOdtTable( KoReportRendererContext &context )
+void ReportWidget::exportToOdtTable( KReportRendererContext &context )
 {
     debugPlan<<"Export to odt:"<<context.destinationUrl;
-    KoReportRendererBase *renderer = m_factory.createInstance("odttable");
+    KReportRendererBase *renderer = m_factory.createInstance("odttable");
     if ( renderer == 0 ) {
         errorPlan<<"Cannot create odt (table) renderer";
         return;
@@ -422,10 +422,10 @@ void ReportWidget::exportToOdtTable( KoReportRendererContext &context )
     }
 }
 
-void ReportWidget::exportToOdtFrames( KoReportRendererContext &context )
+void ReportWidget::exportToOdtFrames( KReportRendererContext &context )
 {
     debugPlan<<"Export to odt:"<<context.destinationUrl;
-    KoReportRendererBase *renderer = m_factory.createInstance("odtframes");
+    KReportRendererBase *renderer = m_factory.createInstance("odtframes");
     if ( renderer == 0 ) {
         errorPlan<<"Cannot create odt (frames) renderer";
         return;
@@ -435,10 +435,10 @@ void ReportWidget::exportToOdtFrames( KoReportRendererContext &context )
     }
 }
 
-void ReportWidget::exportToOds( KoReportRendererContext &context )
+void ReportWidget::exportToOds( KReportRendererContext &context )
 {
     debugPlan<<"Export to ods:"<<context.destinationUrl;
-    KoReportRendererBase *renderer;
+    KReportRendererBase *renderer;
     renderer = m_factory.createInstance("ods");
     if ( renderer == 0 ) {
         errorPlan<<"Cannot create ods renderer";
@@ -449,10 +449,10 @@ void ReportWidget::exportToOds( KoReportRendererContext &context )
     }
 }
 
-void ReportWidget::exportToHtml( KoReportRendererContext &context )
+void ReportWidget::exportToHtml( KReportRendererContext &context )
 {
     debugPlan<<"Export to html:"<<context.destinationUrl;
-    KoReportRendererBase *renderer;
+    KReportRendererBase *renderer;
     renderer = m_factory.createInstance("htmltable");
     if ( renderer == 0 ) {
         errorPlan<<"Cannot create html renderer";
@@ -463,10 +463,10 @@ void ReportWidget::exportToHtml( KoReportRendererContext &context )
     }
 }
 
-void ReportWidget::exportToXHtml( KoReportRendererContext &context )
+void ReportWidget::exportToXHtml( KReportRendererContext &context )
 {
     debugPlan<<"Export to xhtml:"<<context.destinationUrl;
-    KoReportRendererBase *renderer;
+    KReportRendererBase *renderer;
     renderer = m_factory.createInstance("htmlcss");
     if ( renderer == 0 ) {
         errorPlan<<"Cannot create xhtml css renderer";
@@ -512,7 +512,7 @@ void ReportWidget::slotRefreshView()
     }
     delete m_preRenderer;
     QDomElement e = m_design.documentElement();
-    m_preRenderer = new KoReportPreRenderer( e.firstChildElement( "report:content" ) );
+    m_preRenderer = new KReportPreRenderer( e.firstChildElement( "report:content" ) );
     if ( ! m_preRenderer->isValid()) {
         debugPlan<<"Invalid design document";
         return;
@@ -526,7 +526,7 @@ void ReportWidget::slotRefreshView()
     m_pageSelector->setMaximum( m_reportDocument ? m_reportDocument->pages() : 1 );
     m_pageSelector->setCurrentPage( 1 );
 
-    m_reportPage = new KoReportPage(this, m_reportDocument);
+    m_reportPage = new KReportPage(this, m_reportDocument);
     m_reportPage->setObjectName("ReportPage");
 
     m_reportScene->setSceneRect(0,0,m_reportPage->rect().width() + 40, m_reportPage->rect().height() + 40);
@@ -787,7 +787,7 @@ ReportDesignPanel::ReportDesignPanel( QWidget *parent )
     l->addWidget( m_propertyeditor );
 
     QScrollArea *sa = new QScrollArea( sp1 );
-    m_designer = new KoReportDesigner( sa );
+    m_designer = new KReportDesigner( sa );
     sa->setWidget( m_designer );
 
     m_designer->setReportData( createReportData( m_sourceeditor->selectFromTag() ) );
@@ -836,9 +836,9 @@ ReportDesignPanel::ReportDesignPanel( const QDomElement &element, const QList<Re
     QScrollArea *sa = new QScrollArea( sp1 );
     QDomElement e = element.firstChildElement( "report:content" );
     if ( e.isNull() ) {
-        m_designer = new KoReportDesigner( sa );
+        m_designer = new KReportDesigner( sa );
     } else {
-        m_designer = new KoReportDesigner( sa, e );
+        m_designer = new KReportDesigner( sa, e );
     }
     sa->setWidget( m_designer );
 
@@ -1118,9 +1118,9 @@ void ReportDesigner::setData()
     delete m_designer;
     QDomElement e = m_original.documentElement().firstChildElement( "report:content" );
     if ( e.isNull() ) {
-        m_designer = new KoReportDesigner( m_scrollarea );
+        m_designer = new KReportDesigner( m_scrollarea );
     } else {
-        m_designer = new KoReportDesigner( m_scrollarea, e );
+        m_designer = new KReportDesigner( m_scrollarea, e );
     }
     m_scrollarea->setWidget( m_designer );
 
@@ -1293,41 +1293,41 @@ void ReportDesigner::slotSectionToggled( bool on )
 {
     QString n = sender()->objectName();
     if ( n == "reportheader" ) {
-        on ? m_designer->insertSection( KRSectionData::ReportHeader )
-           : m_designer->removeSection( KRSectionData::ReportHeader );
+        on ? m_designer->insertSection( KReportSectionData::ReportHeader )
+           : m_designer->removeSection( KReportSectionData::ReportHeader );
     } else if ( n == "reportfooter" ) {
-        on ? m_designer->insertSection( KRSectionData::ReportFooter )
-        : m_designer->removeSection( KRSectionData::ReportFooter );
+        on ? m_designer->insertSection( KReportSectionData::ReportFooter )
+        : m_designer->removeSection( KReportSectionData::ReportFooter );
     } else if ( n == "headerFirstpage" ) {
-        on ? m_designer->insertSection( KRSectionData::PageHeaderFirst )
-        : m_designer->removeSection( KRSectionData::PageHeaderFirst );
+        on ? m_designer->insertSection( KReportSectionData::PageHeaderFirst )
+        : m_designer->removeSection( KReportSectionData::PageHeaderFirst );
     } else if ( n == "headerLastpage" ) {
-        on ? m_designer->insertSection( KRSectionData::PageHeaderLast )
-        : m_designer->removeSection( KRSectionData::PageHeaderLast );
+        on ? m_designer->insertSection( KReportSectionData::PageHeaderLast )
+        : m_designer->removeSection( KReportSectionData::PageHeaderLast );
     } else if ( n == "headerOddpages" ) {
-        on ? m_designer->insertSection( KRSectionData::PageHeaderOdd )
-        : m_designer->removeSection( KRSectionData::PageHeaderOdd );
+        on ? m_designer->insertSection( KReportSectionData::PageHeaderOdd )
+        : m_designer->removeSection( KReportSectionData::PageHeaderOdd );
     } else if ( n == "headerEvenpages" ) {
-        on ? m_designer->insertSection( KRSectionData::PageHeaderEven )
-        : m_designer->removeSection( KRSectionData::PageHeaderEven );
+        on ? m_designer->insertSection( KReportSectionData::PageHeaderEven )
+        : m_designer->removeSection( KReportSectionData::PageHeaderEven );
     } else if ( n == "headerAllpages" ) {
-        on ? m_designer->insertSection( KRSectionData::PageHeaderAny )
-        : m_designer->removeSection( KRSectionData::PageHeaderAny );
+        on ? m_designer->insertSection( KReportSectionData::PageHeaderAny )
+        : m_designer->removeSection( KReportSectionData::PageHeaderAny );
     } else if ( n == "footerFirstpage" ) {
-        on ? m_designer->insertSection( KRSectionData::PageFooterFirst )
-        : m_designer->removeSection( KRSectionData::PageFooterFirst );
+        on ? m_designer->insertSection( KReportSectionData::PageFooterFirst )
+        : m_designer->removeSection( KReportSectionData::PageFooterFirst );
     } else if ( n == "footerLastpage" ) {
-        on ? m_designer->insertSection( KRSectionData::PageFooterLast )
-        : m_designer->removeSection( KRSectionData::PageFooterLast );
+        on ? m_designer->insertSection( KReportSectionData::PageFooterLast )
+        : m_designer->removeSection( KReportSectionData::PageFooterLast );
     } else if ( n == "footerOddpages" ) {
-        on ? m_designer->insertSection( KRSectionData::PageFooterOdd )
-        : m_designer->removeSection( KRSectionData::PageFooterOdd );
+        on ? m_designer->insertSection( KReportSectionData::PageFooterOdd )
+        : m_designer->removeSection( KReportSectionData::PageFooterOdd );
     } else if ( n == "footerEvenpages" ) {
-        on ? m_designer->insertSection( KRSectionData::PageFooterEven )
-        : m_designer->removeSection( KRSectionData::PageFooterEven );
+        on ? m_designer->insertSection( KReportSectionData::PageFooterEven )
+        : m_designer->removeSection( KReportSectionData::PageFooterEven );
     } else if ( n == "footerAllpages" ) {
-        on ? m_designer->insertSection( KRSectionData::PageFooterAny )
-        : m_designer->removeSection( KRSectionData::PageFooterAny );
+        on ? m_designer->insertSection( KReportSectionData::PageFooterAny )
+        : m_designer->removeSection( KReportSectionData::PageFooterAny );
     } else {
         debugPlan<<"unknown section";
     }
@@ -1416,17 +1416,17 @@ void GroupSectionEditor::clear()
     model.setHeaderData( 4, Qt::Horizontal, i18nc( "@info:tooltip", "Insert page break" ), Qt::ToolTipRole );
 }
 
-void GroupSectionEditor::setData( KoReportDesigner *d, ReportData *rd )
+void GroupSectionEditor::setData( KReportDesigner *d, ReportData *rd )
 {
     clear();
     designer = d;
     reportdata = rd;
-    ReportSectionDetail *sd = designer->detailSection();
+    KReportDesignerSectionDetail *sd = designer->detailSection();
     if ( ! sd ) {
         return;
     }
     for (int i = 0; i < sd->groupSectionCount(); i++) {
-        ReportSectionDetailGroup *g = sd->groupSection( i );
+        KReportDesignerSectionDetailGroup *g = sd->groupSection( i );
         ColumnItem *ci = new ColumnItem( g );
         ci->names = rd->fieldNames();
         ci->keys = rd->fieldKeys();
@@ -1442,11 +1442,11 @@ void GroupSectionEditor::setData( KoReportDesigner *d, ReportData *rd )
 
 void GroupSectionEditor::slotAddRow()
 {
-    ReportSectionDetail *sd = designer->detailSection();
+    KReportDesignerSectionDetail *sd = designer->detailSection();
     if ( ! sd ) {
         return;
     }
-    ReportSectionDetailGroup * g = new ReportSectionDetailGroup( reportdata->fieldKeys().value( 0 ), sd, sd );
+    KReportDesignerSectionDetailGroup * g = new KReportDesignerSectionDetailGroup( reportdata->fieldKeys().value( 0 ), sd, sd );
 
     sd->insertGroupSection( sd->groupSectionCount(), g );
 
@@ -1464,7 +1464,7 @@ void GroupSectionEditor::slotAddRow()
 
 void GroupSectionEditor::slotRemoveRows()
 {
-    ReportSectionDetail *sd = designer->detailSection();
+    KReportDesignerSectionDetail *sd = designer->detailSection();
     if ( ! sd ) {
         return;
     }
@@ -1483,7 +1483,7 @@ void GroupSectionEditor::slotRemoveRows()
 
 void GroupSectionEditor::slotMoveRowUp()
 {
-    ReportSectionDetail *sd = designer->detailSection();
+    KReportDesignerSectionDetail *sd = designer->detailSection();
     if ( ! sd ) {
         return;
     }
@@ -1497,7 +1497,7 @@ void GroupSectionEditor::slotMoveRowUp()
     }
     foreach ( int row, rows ) {
         QList<QStandardItem*> items = model.takeRow( row );
-        ReportSectionDetailGroup *g = sd->groupSection( row );
+        KReportDesignerSectionDetailGroup *g = sd->groupSection( row );
         bool showgh = g->groupHeaderVisible();
         bool showgf = g->groupFooterVisible();
         sd->removeGroupSection( row );
@@ -1515,7 +1515,7 @@ void GroupSectionEditor::slotMoveRowUp()
 
 void GroupSectionEditor::slotMoveRowDown()
 {
-    ReportSectionDetail *sd = designer->detailSection();
+    KReportDesignerSectionDetail *sd = designer->detailSection();
     if ( ! sd ) {
         return;
     }
@@ -1530,7 +1530,7 @@ void GroupSectionEditor::slotMoveRowDown()
     for ( int i = rows.count() - 1; i >= 0; --i ) {
         int row = rows.at( i );
         QList<QStandardItem*> items = model.takeRow( row );
-        ReportSectionDetailGroup *g = sd->groupSection( row );
+        KReportDesignerSectionDetailGroup *g = sd->groupSection( row );
         bool showgh = g->groupHeaderVisible();
         bool showgf = g->groupFooterVisible();
         sd->removeGroupSection( row );
@@ -1546,7 +1546,7 @@ void GroupSectionEditor::slotMoveRowDown()
 }
 
 //----------------
-GroupSectionEditor::ColumnItem::ColumnItem( ReportSectionDetailGroup *g )
+GroupSectionEditor::ColumnItem::ColumnItem( KReportDesignerSectionDetailGroup *g )
     : Item( g )
 {
 }
@@ -1572,7 +1572,7 @@ void GroupSectionEditor::ColumnItem::setData( const QVariant &value, int role )
 }
 
 //---------------------
-GroupSectionEditor::SortItem::SortItem( ReportSectionDetailGroup *g )
+GroupSectionEditor::SortItem::SortItem( KReportDesignerSectionDetailGroup *g )
     : Item( g )
 {
     names << i18n( "Ascending" ) << i18n( "Descending" );
@@ -1605,7 +1605,7 @@ void GroupSectionEditor::SortItem::setData( const QVariant &value, int role )
 }
 
 //---------------------
-GroupSectionEditor::HeaderItem::HeaderItem( ReportSectionDetailGroup *g )
+GroupSectionEditor::HeaderItem::HeaderItem( KReportDesignerSectionDetailGroup *g )
     : Item( g )
 {
     names << i18n( "No" ) << i18n( "Yes" );
@@ -1638,7 +1638,7 @@ void GroupSectionEditor::HeaderItem::setData( const QVariant &value, int role )
 }
 
 //---------------------
-GroupSectionEditor::FooterItem::FooterItem( ReportSectionDetailGroup *g )
+GroupSectionEditor::FooterItem::FooterItem( KReportDesignerSectionDetailGroup *g )
     : Item( g )
 {
     names << i18n( "No" ) << i18n( "Yes" );
@@ -1670,7 +1670,7 @@ void GroupSectionEditor::FooterItem::setData( const QVariant &value, int role )
 }
 
 //---------------------
-GroupSectionEditor::PageBreakItem::PageBreakItem( ReportSectionDetailGroup *g )
+GroupSectionEditor::PageBreakItem::PageBreakItem( KReportDesignerSectionDetailGroup *g )
     : Item( g )
 {
     names << i18n( "None" ) << i18n( "After footer" ) << i18n( "Before header" );
@@ -1691,7 +1691,7 @@ QVariant GroupSectionEditor::PageBreakItem::data( int role ) const
 void GroupSectionEditor::PageBreakItem::setData( const QVariant &value, int role )
 {
     if ( role == Qt::EditRole ) {
-        group->setPageBreak( (ReportSectionDetailGroup::PageBreak)( value.toInt() ) );
+        group->setPageBreak( (KReportDesignerSectionDetailGroup::PageBreak)( value.toInt() ) );
         return;
     }
     return Item::setData( value, role );

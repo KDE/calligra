@@ -406,7 +406,7 @@ QStringList KexiDBReportData::dataSources() const
     return qs;
 }
 
-KoReportData* KexiDBReportData::data(const QString& source)
+KReportData* KexiDBReportData::data(const QString& source)
 {
     return new KexiDBReportData(source, d->connection);
 }

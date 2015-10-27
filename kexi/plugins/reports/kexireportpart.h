@@ -23,7 +23,7 @@
 #include <core/kexipart.h>
 #include <core/KexiWindowData.h>
 
-#include <KoReportData>
+#include <KReportData>
 #include <QDomElement>
 
 

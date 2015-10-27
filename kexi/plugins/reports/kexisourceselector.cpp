@@ -166,7 +166,7 @@ QDomElement KexiSourceSelector::connectionData()
     return conndata;
 }
 
-KoReportData* KexiSourceSelector::sourceData()
+KReportData* KexiSourceSelector::sourceData()
 {
     if (d->kexiDBData) {
         delete d->kexiDBData;

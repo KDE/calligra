@@ -33,10 +33,10 @@
 
 //! @todo KEXI3 #include "../scripting/kexiscripting/kexiscriptadaptor.h"
 
-#include <KoReportPage>
-#include <renderobjects>
-#include <KoReportPreRenderer>
-#include <krscripthandler>
+#include <KReportPage>
+#include <KReportRenderObjects>
+#include <KReportPreRenderer>
+#include <KReportScriptHandler>
 #include "krscriptfunctions.h"
 
 #include <KIO/NetAccess>
@@ -173,12 +173,12 @@ void KexiReportView::slotPrintReport()
 {
     QPrinter printer(QPrinter::HighResolution);
     QPainter painter;
-    KoReportRendererBase *renderer;
+    KReportRendererBase *renderer;
 
     renderer = m_factory.createInstance("print");
     QPointer<QPrintDialog> dialog = new QPrintDialog(&printer, this);
     if (dialog->exec() == QDialog::Accepted) {
-        KoReportRendererContext cxt;
+        KReportRendererContext cxt;
         cxt.printer = &printer;
         cxt.painter = &painter;
 
@@ -190,9 +190,9 @@ void KexiReportView::slotPrintReport()
 
 void KexiReportView::slotExportAsPdf()
 {
-    QScopedPointer<KoReportRendererBase> renderer(m_factory.createInstance("print"));
+    QScopedPointer<KReportRendererBase> renderer(m_factory.createInstance("print"));
     if (renderer) {
-        KoReportRendererContext cxt;
+        KReportRendererContext cxt;
 
         cxt.destinationUrl = getExportUrl(QLatin1String("application/pdf"),
                                           xi18n("Export Report as PDF"),
@@ -278,8 +278,8 @@ void KexiReportView::openExportedDocument(const QUrl &destination)
 
 void KexiReportView::slotExportAsSpreadsheet()
 {
-    KoReportRendererBase *renderer;
-    KoReportRendererContext cxt;
+    KReportRendererBase *renderer;
+    KReportRendererContext cxt;
 
     renderer = m_factory.createInstance("ods");
 
@@ -304,8 +304,8 @@ void KexiReportView::slotExportAsSpreadsheet()
 
 void KexiReportView::slotExportAsTextDocument()
 {
-    KoReportRendererBase *renderer;
-    KoReportRendererContext cxt;
+    KReportRendererBase *renderer;
+    KReportRendererContext cxt;
 
     renderer = m_factory.createInstance("odt");
 
@@ -330,8 +330,8 @@ void KexiReportView::slotExportAsTextDocument()
 
 void KexiReportView::slotExportAsWebPage()
 {
-    KoReportRendererContext cxt;
-    KoReportRendererBase *renderer;
+    KReportRendererContext cxt;
+    KReportRendererBase *renderer;
 
     const QString dialogTitle = xi18n("Export Report as Web Page");
     cxt.destinationUrl = getExportUrl(QLatin1String("text/html"),
@@ -387,9 +387,9 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 
         qDebug() << tempData()->reportDefinition.tagName();
 
-        m_preRenderer = new KoReportPreRenderer(tempData()->reportDefinition);
+        m_preRenderer = new KReportPreRenderer(tempData()->reportDefinition);
         if (m_preRenderer->isValid()) {
-            KoReportData *reportData = 0;
+            KReportData *reportData = 0;
             if (!tempData()->connectionDefinition.isNull())  {
                 reportData = sourceData(tempData()->connectionDefinition);
             }
@@ -433,9 +433,9 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
     return true;
 }
 
-KoReportData* KexiReportView::sourceData(QDomElement e)
+KReportData* KexiReportView::sourceData(QDomElement e)
 {
-    KoReportData *kodata = 0;
+    KReportData *kodata = 0;
 
     if (e.attribute("type") == "internal" && !e.attribute("source").isEmpty()) {
         kodata = new KexiDBReportData(e.attribute("source"), KexiMainWindowIface::global()->project()->dbConnection());

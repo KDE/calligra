@@ -25,8 +25,8 @@
 #include <KDbConnection>
 #include <KDbCursor>
 
-#include <KoReportData>
-#include <kreportgrouptracker>
+#include <KReportData>
+#include <KReportGroupTracker>
 
 /**
  @author
@@ -35,13 +35,13 @@ class KRScriptFunctions : public KReportGroupTracker
 {
     Q_OBJECT
 public:
-    KRScriptFunctions(const KoReportData *, KDbConnection*);
+    KRScriptFunctions(const KReportData *, KDbConnection*);
 
     ~KRScriptFunctions();
 
 private:
     KDbConnection *m_connection;
-    const KoReportData *m_cursor;
+    const KReportData *m_cursor;
     QString m_source;
     qreal math(const QString &, const QString &);
 

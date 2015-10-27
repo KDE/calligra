@@ -25,8 +25,8 @@
 
 #include <KPropertySet>
 
-#include <KoReportDesigner>
-#include <KoReportData>
+#include <KReportDesigner>
+#include <KReportData>
 
 class QScrollArea;
 class KexiSourceSelector;
@@ -50,7 +50,7 @@ Q_SIGNALS:
     void itemInserted(const QString& entity);
 
 private:
-    KoReportDesigner *m_reportDesigner;
+    KReportDesigner *m_reportDesigner;
     KPropertySet *m_propertySet;
     KexiReportPart::TempData* tempData() const;
     QScrollArea * m_scrollArea;
@@ -78,7 +78,7 @@ private Q_SLOTS:
     void slotDesignerPropertySetChanged();
 
 public Q_SLOTS:
-    void slotSetData(KoReportData*);
+    void slotSetData(KReportData*);
 };
 
 #endif

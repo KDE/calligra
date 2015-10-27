@@ -31,7 +31,7 @@
 
 #include "ui_reportnavigator.h"
 
-#include <KoReportRendererBase>
+#include <KReportRendererBase>
 
 #include <KoDialog.h>
 
@@ -41,11 +41,11 @@ class KoDocument;
 class KoShape;
 struct KoPageLayout;
 
-class KoReportPage;
-class KoReportPreRenderer;
+class KReportPage;
+class KReportPreRenderer;
 class ORODocument;
-class KoReportDesigner;
-class KoReportRendererBase;
+class KReportDesigner;
+class KReportRendererBase;
 
 class KPropertyEditorView;
 class KPropertySet;
@@ -93,8 +93,8 @@ public Q_SLOTS:
 
 protected:
     ORODocument *m_reportDocument;
-    KoReportRendererContext m_context;
-    KoReportRendererBase *m_renderer;
+    KReportRendererContext m_context;
+    KReportRendererBase *m_renderer;
 };
 
 //-------------------
@@ -186,19 +186,19 @@ private Q_SLOTS:
 private:
     ReportData *createReportData( const QDomElement &connection );
     ReportData *createReportData( const QString &type );
-    void exportToOdtTable( KoReportRendererContext &context );
-    void exportToOdtFrames( KoReportRendererContext &context );
-    void exportToOds( KoReportRendererContext &context );
-    void exportToHtml( KoReportRendererContext &context );
-    void exportToXHtml( KoReportRendererContext &context );
+    void exportToOdtTable( KReportRendererContext &context );
+    void exportToOdtFrames( KReportRendererContext &context );
+    void exportToOds( KReportRendererContext &context );
+    void exportToHtml( KReportRendererContext &context );
+    void exportToXHtml( KReportRendererContext &context );
 
 private:
-    KoReportPreRenderer *m_preRenderer;
-    KoReportRendererFactory m_factory;
+    KReportPreRenderer *m_preRenderer;
+    KReportRendererFactory m_factory;
     ORODocument *m_reportDocument;
     QGraphicsView *m_reportView;
     QGraphicsScene *m_reportScene;
-    KoReportPage *m_reportPage;
+    KReportPage *m_reportPage;
     ReportNavigator *m_pageSelector;
     int m_currentPage;
     int m_pageCount;
@@ -313,7 +313,7 @@ protected Q_SLOTS:
 
 private:
     QScrollArea *m_scrollarea;
-    KoReportDesigner *m_designer;
+    KReportDesigner *m_designer;
     ReportSourceEditor *m_sourceeditor;
     KPropertyEditorView *m_propertyeditor;
     QList<ReportData*> m_reportdatamodels;

@@ -26,12 +26,12 @@
 #include <KDbUtils>
 
 #include <config-kreport.h>
-#include <KoReportData>
+#include <KReportData>
 
 /**
 
 */
-class KexiDBReportData : public KoReportData
+class KexiDBReportData : public KReportData
 {
 public:
     KexiDBReportData(const QString &objectName, KDbConnection *conn);
@@ -69,7 +69,7 @@ public:
     virtual QStringList scriptList() const;
     virtual QString scriptCode(const QString& script) const;
     virtual QStringList dataSources() const;
-    virtual KoReportData* data(const QString&);
+    virtual KReportData* data(const QString&);
 
 private:
     class Private;

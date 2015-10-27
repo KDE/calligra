@@ -24,13 +24,13 @@
 #include <KDbConnection>
 
 #include <config-kreport.h>
-#include <KoReportRendererBase>
+#include <KReportRendererBase>
 
 #include <core/KexiView.h>
 #include <core/KexiRecordNavigatorHandler.h>
 #include "kexireportpart.h"
 
-class KoReportPreRenderer;
+class KReportPreRenderer;
 class ORODocument;
 class KReportView;
 //! @todo KEXI3 class KexiScriptAdaptor;
@@ -63,7 +63,7 @@ public:
     virtual int recordCount() const;
 
 private:
-    KoReportPreRenderer *m_preRenderer;
+    KReportPreRenderer *m_preRenderer;
     ORODocument *m_reportDocument;
     KReportView *m_reportView;
 
@@ -72,10 +72,10 @@ private:
 #endif
 
     KexiReportPart::TempData* tempData() const;
-    KoReportData* sourceData(QDomElement e);
+    KReportData* sourceData(QDomElement e);
     //! @todo KEXI3 KexiScriptAdaptor *m_kexi;
     KRScriptFunctions *m_functions;
-    KoReportRendererFactory m_factory;
+    KReportRendererFactory m_factory;
 
     //! @todo KEXI3 add equivalent of kfiledialog:/// for lastExportPathOrVariable
     QUrl getExportUrl(const QString &mimetype, const QString &caption,

@@ -92,7 +92,7 @@ KexiView* KexiReportPart::createView(QWidget *parent, KexiWindow* window,
 
     } else if (viewMode == Kexi::DesignViewMode) {
         view = new KexiReportDesignView(parent, d->sourceSelector);
-        connect(d->sourceSelector, SIGNAL(setData(KoReportData*)), view, SLOT(slotSetData(KoReportData*)));
+        connect(d->sourceSelector, SIGNAL(setData(KReportData*)), view, SLOT(slotSetData(KReportData*)));
         connect(view, SIGNAL(itemInserted(QString)), this, SLOT(slotItemInserted(QString)));
     }
     return view;
@@ -101,7 +101,7 @@ KexiView* KexiReportPart::createView(QWidget *parent, KexiWindow* window,
 void KexiReportPart::initPartActions()
 {
     KexiMainWindowIface *win = KexiMainWindowIface::global();
-    QList<QAction*> reportActions = KoReportDesigner::itemActions(&d->toolboxActionGroup);
+    QList<QAction*> reportActions = KReportDesigner::itemActions(&d->toolboxActionGroup);
 
     foreach(QAction* action, reportActions) {
         connect(action, SIGNAL(triggered(bool)), this, SLOT(slotToolboxActionTriggered(bool)));

@@ -24,7 +24,7 @@
 
 #include <QDebug>
 
-KRScriptFunctions::KRScriptFunctions(const KoReportData* kodata, KDbConnection* conn)
+KRScriptFunctions::KRScriptFunctions(const KReportData* kodata, KDbConnection* conn)
 {
     m_cursor = kodata;
     m_connection = conn;

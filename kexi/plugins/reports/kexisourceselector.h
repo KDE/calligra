@@ -23,7 +23,7 @@
 
 #include <KDbConnection>
 
-#include <KoReportData>
+#include <KReportData>
 
 #include "kexidbreportdata.h"
 #ifdef HAVE_KEXI_MIGRATE
@@ -40,12 +40,12 @@ public:
     explicit KexiSourceSelector(KexiProject* project, QWidget* parent = 0);
     ~KexiSourceSelector();
 
-    KoReportData* sourceData();
+    KReportData* sourceData();
     void setConnectionData(QDomElement);
     QDomElement connectionData();
 
 Q_SIGNALS:
-    void setData(KoReportData*);
+    void setData(KReportData*);
 
 private Q_SLOTS:
     void setDataClicked();

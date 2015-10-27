@@ -151,7 +151,7 @@ tristate KexiReportDesignView::afterSwitchFrom(Kexi::ViewMode mode)
     Q_UNUSED(mode);
 
     if (tempData()->reportDefinition.isNull()) {
-        m_reportDesigner = new KoReportDesigner(this);
+        m_reportDesigner = new KReportDesigner(this);
     } else {
         if (m_reportDesigner) {
             m_scrollArea->takeWidget();
@@ -159,7 +159,7 @@ tristate KexiReportDesignView::afterSwitchFrom(Kexi::ViewMode mode)
             m_reportDesigner = 0;
         }
 
-        m_reportDesigner = new KoReportDesigner(this, tempData()->reportDefinition);
+        m_reportDesigner = new KReportDesigner(this, tempData()->reportDefinition);
         m_sourceSelector->setConnectionData(tempData()->connectionDefinition);
     }
     connect(m_reportDesigner, SIGNAL(itemInserted(QString)), this, SIGNAL(itemInserted(QString)));
@@ -199,7 +199,7 @@ KexiReportPart::TempData* KexiReportDesignView::tempData() const
     return static_cast<KexiReportPart::TempData*>(window()->data());
 }
 
-void KexiReportDesignView::slotSetData(KoReportData* kodata)
+void KexiReportDesignView::slotSetData(KReportData* kodata)
 {
     m_reportDesigner->setReportData(kodata);
     tempData()->connectionDefinition = m_sourceSelector->connectionData();

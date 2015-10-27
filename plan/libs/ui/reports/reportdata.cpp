@@ -289,7 +289,7 @@ void ReportData::setSorting(const QList<SortedField>& lst )
     m_sortlist = lst;
 }
 
-KoReportData* ReportData::data(const QString &source)
+KReportData* ReportData::data(const QString &source)
 {
     ReportData *r = Report::findReportData( m_subdatasources, source );
     if ( r ) {

@@ -23,7 +23,7 @@
 
 #include "kplatoui_export.h"
 
-#include <KReport/KoReportData>
+#include <KReport/KReportData>
 
 #include "kptitemmodelbase.h"
 #include "kptnodechartmodel.h"
@@ -47,7 +47,7 @@ namespace Report
     KPLATOUI_EXPORT ReportData *findReportData( const QList<ReportData*> &lst, const QString &type );
 }
 
-class KPLATOUI_EXPORT ReportData : public QObject, public KoReportData
+class KPLATOUI_EXPORT ReportData : public QObject, public KReportData
 {
     Q_OBJECT
 public:
@@ -117,7 +117,7 @@ public:
     //!Allow a driver to create a new instance with a new data source
     //!source is a driver specific identifier
     //!Owner of the returned pointer is the caller
-    virtual KoReportData* data(const QString &source);
+    virtual KReportData* data(const QString &source);
 
     void setModel( QAbstractItemModel *model );
     QAbstractItemModel *model() const;

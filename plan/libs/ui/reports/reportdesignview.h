@@ -25,7 +25,7 @@
 #include <QDomDocument>
 #include <KPropertySet>
 #include <kexireportpart.h>
-#include "koreport/wrtembed/reportdesigner.h"
+#include <KReportDesigner>
 
 class KoReportData;
 class QScrollArea;
