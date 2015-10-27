@@ -106,10 +106,12 @@ quint8 KisBaseNode::opacity() const
 
 void KisBaseNode::setOpacity(quint8 val)
 {
-    if (opacity() != val) {
-        nodeProperties().setProperty("opacity", val);
-    }
+    if (opacity() == val) return;
+
+    nodeProperties().setProperty("opacity", val);
+
     baseNodeChangedCallback();
+    baseNodeInvalidateAllFramesCallback();
 }
 
 quint8 KisBaseNode::percentOpacity() const
@@ -132,8 +134,11 @@ const QString& KisBaseNode::compositeOpId() const
  */
 void KisBaseNode::setCompositeOp(const QString& compositeOp)
 {
+    if (m_d->compositeOp == compositeOp) return;
+
     m_d->compositeOp = compositeOp;
     baseNodeChangedCallback();
+    baseNodeInvalidateAllFramesCallback();
 }
 
 KisDocumentSectionModel::PropertyList KisBaseNode::sectionModelProperties() const
@@ -164,6 +169,7 @@ void KisBaseNode::mergeNodeProperties(const KoProperties & properties)
         m_d->properties.setProperty(iter.key(), iter.value());
     }
     baseNodeChangedCallback();
+    baseNodeInvalidateAllFramesCallback();
 }
 
 bool KisBaseNode::check(const KoProperties & properties) const
@@ -203,12 +209,16 @@ bool KisBaseNode::visible(bool recursive) const
 
 void KisBaseNode::setVisible(bool visible, bool loading)
 {
+    const bool isVisible = m_d->properties.boolProperty("visible", true);
+    if (!loading && isVisible == visible) return;
+
     m_d->properties.setProperty("visible", visible);
     notifyParentVisibilityChanged(visible);
 
     if (!loading) {
         emit visibilityChanged(visible);
         baseNodeChangedCallback();
+        baseNodeInvalidateAllFramesCallback();
     }
 }
 
@@ -219,6 +229,9 @@ bool KisBaseNode::userLocked() const
 
 void KisBaseNode::setUserLocked(bool locked)
 {
+    const bool isLocked = m_d->properties.boolProperty("locked", true);
+    if (isLocked == locked) return;
+
     m_d->properties.setProperty("locked", locked);
     emit userLockingChanged(locked);
     baseNodeChangedCallback();

@@ -303,7 +303,10 @@ void KisImage::nodeChanged(KisNode* node)
     KisNodeGraphListener::nodeChanged(node);
     requestStrokeEnd();
     m_d->signalRouter->emitNodeChanged(node);
+}
 
+void KisImage::invalidateAllFrames()
+{
     invalidateFrames(KisTimeRange::infinite(0), QRect());
 }
 

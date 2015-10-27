@@ -280,7 +280,12 @@ bool KisGroupLayer::passThroughMode() const
 
 void KisGroupLayer::setPassThroughMode(bool value)
 {
+    if (m_d->passThroughMode == value) return;
+
     m_d->passThroughMode = value;
+
+    baseNodeChangedCallback();
+    baseNodeInvalidateAllFramesCallback();
 }
 
 KisDocumentSectionModel::PropertyList KisGroupLayer::sectionModelProperties() const

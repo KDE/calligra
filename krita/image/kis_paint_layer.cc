@@ -246,6 +246,8 @@ void KisPaintLayer::setAlphaLocked(bool lock)
         m_d->paintChannelFlags &= colorSpace()->channelFlags(true, false);
     else
         m_d->paintChannelFlags |= colorSpace()->channelFlags(false, true);
+
+    baseNodeChangedCallback();
 }
 
 bool KisPaintLayer::onionSkinEnabled() const
@@ -261,6 +263,8 @@ void KisPaintLayer::setOnionSkinEnabled(bool state)
     }
 
     nodeProperties().setProperty("onionskin", state);
+
+    baseNodeChangedCallback();
 }
 
 void KisPaintLayer::enableAnimation()

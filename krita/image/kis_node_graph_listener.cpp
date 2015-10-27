@@ -77,6 +77,10 @@ void KisNodeGraphListener::nodeChanged(KisNode * /*node*/)
 {
 }
 
+void KisNodeGraphListener::invalidateAllFrames()
+{
+}
+
 void KisNodeGraphListener::notifySelectionChanged()
 {
 }
