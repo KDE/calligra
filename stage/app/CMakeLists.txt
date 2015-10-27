@@ -12,10 +12,11 @@ kde4_add_app_icon(stage_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-ap
 
 kde4_add_kdeinit_executable(calligrastage ${stage_KDEINIT_SRCS})
 
-if (Q_WS_MAC)
+if (APPLE)
    set_target_properties(calligrastage PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
    set_target_properties(calligrastage PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.stage")
    set_target_properties(calligrastage PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Calligra Stage 2")
+   install( FILES ${CMAKE_CURRENT_BINARY_DIR}/stage_KDEINIT_SRCS.icns DESTINATION ${BUNDLE_INSTALL_DIR}/calligrastage.app/Contents/Resources)
 endif ()
 
 target_link_libraries(kdeinit_calligrastage komain )
