@@ -33,6 +33,7 @@
 #include "kis_undo_adapter.h"
 #include <KoIcon.h>
 #include "kis_thread_safe_signal_compressor.h"
+#include "kis_layer_properties_icons.h"
 
 
 struct KisSelectionMask::Private
@@ -113,7 +114,7 @@ void KisSelectionMask::accept(KisProcessingVisitor &visitor, KisUndoAdapter *und
 KisDocumentSectionModel::PropertyList KisSelectionMask::sectionModelProperties() const
 {
     KisDocumentSectionModel::PropertyList l = KisBaseNode::sectionModelProperties();
-    l << KisDocumentSectionModel::Property(i18n("Active"), koIcon("local_selection_active"), koIcon("local_selection_inactive"), active());
+    l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::selectionActive, active());
     return l;
 }
 

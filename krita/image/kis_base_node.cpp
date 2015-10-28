@@ -24,6 +24,7 @@
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
 #include "kis_paint_device.h"
+#include "kis_layer_properties_icons.h"
 
 struct KisBaseNode::Private
 {
@@ -144,8 +145,8 @@ void KisBaseNode::setCompositeOp(const QString& compositeOp)
 KisDocumentSectionModel::PropertyList KisBaseNode::sectionModelProperties() const
 {
     KisDocumentSectionModel::PropertyList l;
-    l << KisDocumentSectionModel::Property(i18n("Visible"), themedIcon("visible"), themedIcon("novisible"), visible(), m_d->hack_visible.isInStasis, m_d->hack_visible.stateInStasis);
-    l << KisDocumentSectionModel::Property(i18n("Locked"), themedIcon("layer-locked"), themedIcon("layer-unlocked"), userLocked());
+    l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::visible, visible(), m_d->hack_visible.isInStasis, m_d->hack_visible.stateInStasis);
+    l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::locked, userLocked());
     return l;
 }
 

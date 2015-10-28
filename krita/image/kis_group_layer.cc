@@ -36,6 +36,7 @@
 #include "kis_clone_layer.h"
 #include "kis_selection_mask.h"
 #include "kis_psd_layer_style.h"
+#include "kis_layer_properties_icons.h"
 
 
 struct KisGroupLayer::Private
@@ -291,8 +292,9 @@ void KisGroupLayer::setPassThroughMode(bool value)
 KisDocumentSectionModel::PropertyList KisGroupLayer::sectionModelProperties() const
 {
     KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
-    // XXX: get right icons
-    l << KisDocumentSectionModel::Property(i18n("Pass Through"), themedIcon("passthrough-enabled"), themedIcon("passthrough-disabled"), passThroughMode());
+
+    l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::passThrough, passThroughMode());
+
     return l;
 }
 
