@@ -57,7 +57,6 @@
 #include <commands/KWShapeCreateCommand.h>
 
 #include <KActionCollection>
-#include <KDebug>
 #include <KService>
 
 #include <QMimeDatabase>
@@ -70,6 +69,7 @@
 #include <QTextDocumentFragment>
 #include <QSvgRenderer>
 #include <QApplication>
+#include <QDebug>
 
 class CQTextDocumentCanvas::Private
 {
@@ -781,7 +781,7 @@ void CQTextDocumentCanvas::findMatchFound(const KoFindMatch &match)
 
 void CQTextDocumentCanvas::findNoMatchFound()
 {
-    kDebug() << "Match for " << d->searchTerm << " not found";
+    qDebug() << "Match for " << d->searchTerm << " not found";
 }
 
 void CQTextDocumentCanvas::updateCanvas()
