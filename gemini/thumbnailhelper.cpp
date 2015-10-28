@@ -18,20 +18,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <kapplication.h>
-#include <k4aboutdata.h>
-#include <kcmdlineargs.h>
-
 #include <QFile>
 #include <QDir>
 #include <QProcessEnvironment>
 #include <QDesktopServices>
 #include <QDebug>
 #include <QTimer>
+#include <QCommandLineParser>
+#include <QApplication>
+
+#include <KAboutData>
+#include <KLocalizedString>
+
+#include <calligraversion.h>
 
 #include "ThumbnailHelperImpl.h"
-
-#include <CalligraVersionWrapper.h>
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -43,32 +44,35 @@ int main( int argc, char** argv )
     SetErrorMode(SEM_NOGPFAULTERRORBOX); 
 #endif
 
-    QString version = CalligraVersionWrapper::versionString(true);
+    KAboutData aboutData("calligrageminithumbnailer",
+                         i18n("Calligra Gemini Thumbnailer"),
+                         QStringLiteral(CALLIGRA_VERSION_STRING),
+                         i18n("Calligra Gemini: Writing and Presenting at Home and on the Go"),
+                         KAboutLicense::GPL,
+                         i18n("(c) 1999-%1 The Calligra team and KO GmbH.\n").arg(CALLIGRA_YEAR),
+                         QString(),
+                         QStringLiteral("https://www.calligra.org"),
+                         QStringLiteral("submit@bugs.kde.org"));
 
-    K4AboutData aboutData("calligrageminithumbnailer",
-                         "calligrawords",
-                         ki18n("Calligra Gemini Thumbnailer"),
-                         version.toLatin1(),
-                         ki18n("Calligra Gemini: Writing and Presenting at Home and on the Go"),
-                         K4AboutData::License_GPL,
-                         ki18n("(c) 1999-%1 The Calligra team and KO GmbH.\n").subs(CalligraVersionWrapper::versionYear()),
-                         KLocalizedString(),
-                         "https://www.calligra.org",
-                         "submit@bugs.kde.org");
+#if defined HAVE_X11
+    QApplication::setAttribute(Qt::AA_X11InitThreads);
+#endif
 
-    KCmdLineArgs::init (argc, argv, &aboutData);
+    QApplication app(argc, argv);
+    KAboutData::setApplicationData(aboutData);
 
-    KCmdLineOptions options;
-    options.add( "in <local-url>", ki18n( "Document to thumbnail" ) );
-    options.add( "out <local-url>", ki18n( "The full path for the thumbnail file" ) );
-    options.add( "width <pixels>", ki18n( "The width in pixels of the thumbnail" ) );
-    options.add( "height <pixels>", ki18n( "The height in pixels of the thumbnail" ) );
-    KCmdLineArgs::addCmdLineOptions( options );
+    QCommandLineParser parser;
+    aboutData.setupCommandLine(&parser);
+    parser.addHelpOption();
+    parser.addVersionOption();
 
-    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("in"), i18n("Document to thumbnail"), QStringLiteral("local-url")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("out"), i18n("The full path for the thumbnail file"), QStringLiteral("local-url")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("width"), i18n("The width in pixels of the thumbnail"), QStringLiteral("pixels")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("height"), i18n("The height in pixels of the thumbnail"), QStringLiteral("pixels")));
 
-    KApplication app;
-    app.setApplicationName("calligrageminithumbnailer");
+    parser.process(app);
+    aboutData.processCommandLine(&parser);
 
 #ifdef Q_OS_WIN
     QDir appdir(app.applicationDirPath());
@@ -92,12 +96,8 @@ int main( int argc, char** argv )
     app.addLibraryPath(appdir.absolutePath() + "/lib/kde4");
 #endif
 
-#if defined HAVE_X11
-    QApplication::setAttribute(Qt::AA_X11InitThreads);
-#endif
-
-    QString inFile = args->getOption("in");
-    QString outFile = args->getOption("out");
+    QString inFile = parser.value("in");
+    QString outFile = parser.value("out");
     // Only create the thunbnail if:
     // 1) The infile exists and
     // 2) The outfile does /not/ exist
@@ -109,7 +109,7 @@ int main( int argc, char** argv )
     }
     else {
         ThumbnailHelperImpl helper;
-        helper.convert(inFile, outFile, args->getOption("width").toInt(), args->getOption("height").toInt());
+        helper.convert(inFile, outFile, parser.value("width").toInt(), parser.value("height").toInt());
     }
     QTimer::singleShot(0, &app, SLOT(quit()));
 
