@@ -43,11 +43,9 @@
 
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <kcmdlineargs.h>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
 #include <kaction.h>
-#include <kaboutdata.h>
 #include <ktoolbar.h>
 #include <kmessagebox.h>
 #include <KConfigGroup>

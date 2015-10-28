@@ -18,6 +18,7 @@
  */
 
 #include <QApplication>
+#include <QCommandLineParser>
 #include <QFontDatabase>
 #include <QFile>
 #include <QStringList>
@@ -29,55 +30,53 @@
 #include <QSplashScreen>
 #include <QDebug>
 
-#include <kapplication.h>
-#include <k4aboutdata.h>
-#include <kcmdlineargs.h>
-#include <kstandarddirs.h>
-#include <kglobal.h>
-#include <kiconloader.h>
+#include <KIconLoader>
+#include <KLocalizedString>
+#include <KAboutData>
 
 #include "MainWindow.h"
 
 //#include "sketch/SketchInputContext.h"
 
-#include <CalligraVersionWrapper.h>
-#include <calligragitversion.h>
+#include <calligraversion.h>
 
 int main( int argc, char** argv )
 {
-    QString version = CalligraVersionWrapper::versionString(true);
+    KAboutData aboutData(QStringLiteral("calligragemini"),
+                         i18n("Calligra Gemini"),
+                         QStringLiteral(CALLIGRA_VERSION_STRING),
+                         i18n("Calligra Gemini: Writing and Presenting at Home and on the Go"),
+                         KAboutLicense::GPL,
+                         i18n("(c) 1999-%1 The Calligra team and KO GmbH.\n").arg(CALLIGRA_YEAR),
+                         QString(),
+                         QStringLiteral("https://www.calligra.org"),
+                         QStringLiteral("submit@bugs.kde.org"));
 
-    K4AboutData aboutData("calligragemini",
-                         "calligrawords",
-                         ki18n("Calligra Gemini"),
-                         version.toLatin1(),
-                         ki18n("Calligra Gemini: Writing and Presenting at Home and on the Go"),
-                         K4AboutData::License_GPL,
-                         ki18n("(c) 1999-%1 The Calligra team and KO GmbH.\n").subs(CalligraVersionWrapper::versionYear()),
-                         KLocalizedString(),
-                         "https://www.calligra.org",
-                         "submit@bugs.kde.org");
+#if defined HAVE_X11
+    QApplication::setAttribute(Qt::AA_X11InitThreads);
+#endif
 
-    KCmdLineArgs::init (argc, argv, &aboutData);
+    QApplication app(argc, argv);
+    KAboutData::setApplicationData(aboutData);
 
-    KCmdLineOptions options;
-    options.add( "+[files]", ki18n( "Document to open" ) );
-    options.add( "vkb", ki18n( "Use the virtual keyboard" ) );
-    KCmdLineArgs::addCmdLineOptions( options );
+    QCommandLineParser parser;
+    aboutData.setupCommandLine(&parser);
+    parser.addHelpOption();
+    parser.addVersionOption();
 
-    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+    parser.addPositionalArgument(QStringLiteral("[file(s)]"), i18n("Document to open"));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("vkb"), i18n("Use the virtual keyboard")));
+
+    parser.process(app);
+    aboutData.processCommandLine(&parser);
+
     QStringList fileNames;
-    if (args->count() > 0) {
-        for (int i = 0; i < args->count(); ++i) {
-            QString fileName = args->arg(i);
-            if (QFile::exists(fileName)) {
-                fileNames << fileName;
-            }
+    foreach(const QString &fileName, parser.positionalArguments()) {
+        if (QFile::exists(fileName)) {
+            fileNames << fileName;
         }
     }
 
-    KApplication app;
-    app.setApplicationName("calligragemini");
     KIconLoader::global()->addAppDir("calligrawords");
     KIconLoader::global()->addAppDir("words");
     KIconLoader::global()->addAppDir("calligrastage");
@@ -135,13 +134,9 @@ int main( int argc, char** argv )
 //     splash.showMessage(".");
     app.processEvents();
 
-#if defined HAVE_X11
-    QApplication::setAttribute(Qt::AA_X11InitThreads);
-#endif
-
     MainWindow window(fileNames);
 
-    if (args->isSet("vkb")) {
+    if (parser.isSet("vkb")) {
 //        app.setInputContext(new SketchInputContext(&app));
     }
 
