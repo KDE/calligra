@@ -46,7 +46,6 @@
 #include <KoPAPageBase.h>
 #include <stage/part/KPrDocument.h>
 
-#include <KDebug>
 #include <KActionCollection>
 #include <KService>
 
@@ -56,6 +55,7 @@
 #include <QTextFrame>
 #include <QTextLayout>
 #include <QApplication>
+
 
 
 class CQPresentationCanvas::Private

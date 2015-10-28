@@ -43,8 +43,6 @@
 #include <KoZoomHandler.h>
 #include <KoPart.h>
 
-#include <KDebug>
-
 #include <QGraphicsItem>
 
 //TODO: Cleanup code that is not called

@@ -37,7 +37,6 @@
 #include <sheets/Map.h>
 #include <sheets/Sheet.h>
 #include <KoShape.h>
-#include <KDebug>
 #include <KActionCollection>
 #include <QGraphicsWidget>
 #include <QTextFrame>
