@@ -66,7 +66,6 @@ target_link_libraries(calligrageminithumbnailhelper
     Qt5::Gui
     Qt5::Core
     komain
-    KF5::KDELibs4Support
 )
 
 # Calligra Gemini application
