@@ -30,6 +30,7 @@ public:
 
     void composite(const KisPaintDeviceSP sourceDevice, KisPaintDeviceSP targetDevice, const QRect &rect);
 
+    QRect calculateFullExtent(const KisPaintDeviceSP device);
     QRect calculateExtent(const KisPaintDeviceSP device);
 
 public slots:
