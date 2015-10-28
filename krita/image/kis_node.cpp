@@ -85,9 +85,9 @@ public:
             : graphListener(0)
             , nodeProgressProxy(0)
             , busyProgressIndicator(0)
-            , projectionLeaf(new KisProjectionLeaf(node))
             , animated(false)
             , useInTimeline(false)
+            , projectionLeaf(new KisProjectionLeaf(node))
     {
     }
 
