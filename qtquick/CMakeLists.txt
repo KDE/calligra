@@ -80,7 +80,6 @@ target_link_libraries(calligraqtquickcomponentsplugin
     Qt5::Declarative
     Qt5::OpenGL
     Qt5::Svg
-    KF5::KDELibs4Support
     komain
     kotextlayout
     wordsprivate
