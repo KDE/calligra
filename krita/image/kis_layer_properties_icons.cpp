@@ -72,8 +72,8 @@ KisLayerPropertiesIcons *KisLayerPropertiesIcons::instance()
 void KisLayerPropertiesIcons::updateIcons()
 {
     m_d->icons.clear();
-    m_d->icons.insert(locked.id(), IconsPair(themedIcon("visible"), themedIcon("novisible")));
-    m_d->icons.insert(visible.id(), IconsPair(themedIcon("layer-locked"), themedIcon("layer-unlocked")));
+    m_d->icons.insert(locked.id(), IconsPair(themedIcon("layer-locked"), themedIcon("layer-unlocked")));
+    m_d->icons.insert(visible.id(), IconsPair(themedIcon("visible"), themedIcon("novisible")));
     m_d->icons.insert(layerStyle.id(), IconsPair(koIcon("layer-style-enabled"), koIcon("layer-style-disabled")));
     m_d->icons.insert(inheritAlpha.id(), IconsPair(themedIcon("transparency-disabled"), themedIcon("transparency-enabled")));
     m_d->icons.insert(alphaLocked.id(), IconsPair(koIcon("transparency-locked"), koIcon("transparency-unlocked")));
