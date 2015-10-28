@@ -257,12 +257,12 @@ macro (KDE4_ADD_KDEINIT_EXECUTABLE _target_NAME )
 
       set_target_properties(kdeinit_${_target_NAME} PROPERTIES OUTPUT_NAME kdeinit4_${_target_NAME})
 
-      if (Q_WS_MAC)
+      if (APPLE)
 	      list(FIND _SRCS *.icns _icon_position)
 	      if(NOT _res_position EQUAL -1)
 		      list(GET _SRCS ${_icon_position} _resourcefile)
 	      endif(NOT _res_position EQUAL -1)
-      endif (Q_WS_MAC)
+      endif (APPLE)
       kde4_add_executable(${_target_NAME} "${_nogui}" ${CMAKE_CURRENT_BINARY_DIR}/${_target_NAME}_dummy.cpp ${_resourcefile})
       target_link_libraries(${_target_NAME} kdeinit_${_target_NAME})
    endif(WIN32)
@@ -314,12 +314,12 @@ macro (KDE4_ADD_UNIT_TEST _test_NAME)
       # .bat because of rpath handling
       set(_executable "${loc}.bat")
     else(WIN32)
-      if (Q_WS_MAC AND NOT _nogui)
+      if (APPLE AND NOT _nogui)
         set(_executable ${EXECUTABLE_OUTPUT_PATH}/${_test_NAME}.app/Contents/MacOS/${_test_NAME})
-      else (Q_WS_MAC AND NOT _nogui)
+      else (APPLE AND NOT _nogui)
         # .shell because of rpath handling
         set(_executable "${loc}.shell")
-      endif (Q_WS_MAC AND NOT _nogui)
+      endif (APPLE AND NOT _nogui)
     endif(WIN32)
 
     if (using_qtest AND KDE4_TEST_OUTPUT STREQUAL "xml")
@@ -412,9 +412,9 @@ macro (KDE4_ADD_EXECUTABLE _target_NAME)
 
    # determine additional parameters for add_executable()
    # for GUI apps, create a bundle on OSX
-   if (Q_WS_MAC)
+   if (APPLE)
       set(_add_executable_param MACOSX_BUNDLE)
-   endif (Q_WS_MAC)
+   endif (APPLE)
 
    # for GUI apps, this disables the additional console under Windows
    if (WIN32)

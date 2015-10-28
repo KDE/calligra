@@ -57,10 +57,11 @@ ecm_install_icons(ICONS ${karbon_app_icons} DESTINATION ${ICON_INSTALL_DIR})
 
 kf5_add_kdeinit_executable( karbon ${karbon_KDEINIT_SRCS})
 
-if (Q_OS_MAC)
+if (APPLE)
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.karbon")
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Karbon")
+   install( FILES ${CMAKE_CURRENT_BINARY_DIR}/karbon_KDEINIT_SRCS.icns DESTINATION ${BUNDLE_INSTALL_DIR}/karbon.app/Contents/Resources)
 endif()
 
 target_link_libraries(kdeinit_karbon karbonui)

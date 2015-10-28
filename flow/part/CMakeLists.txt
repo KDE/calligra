@@ -55,3 +55,6 @@ install( FILES flow.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
 ### GUI files ###
 install( FILES flow.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/flow)
 install( FILES flowrc DESTINATION ${CONFIG_INSTALL_DIR} )
+if(APPLE)
+   install( FILES ${CMAKE_CURRENT_BINARY_DIR}/flow_KDEINIT_SRCS.icns DESTINATION ${BUNDLE_INSTALL_DIR}/calligraflow.app/Contents/Resources)
+endif()

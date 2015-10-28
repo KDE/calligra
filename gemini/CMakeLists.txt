@@ -94,6 +94,9 @@ install(FILES     calligragemini.qml                   DESTINATION ${DATA_INSTAL
 #install(FILES     calligragemini.rc                    DESTINATION ${DATA_INSTALL_DIR}/calligragemini)
 install(DIRECTORY qml                                       DESTINATION ${DATA_INSTALL_DIR}/calligragemini)
 install(DIRECTORY themes                                    DESTINATION ${DATA_INSTALL_DIR}/calligragemini)
+if(APPLE)
+   install( FILES ${CMAKE_CURRENT_BINARY_DIR}/calligragemini_SRCS.icns DESTINATION ${BUNDLE_INSTALL_DIR}/calligragemini.app/Contents/Resources)
+endif()
 
 add_subdirectory(pics)
 add_subdirectory(cloud)

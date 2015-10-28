@@ -232,10 +232,11 @@ set(author_KDEINIT_SRCS author/main.cpp )
 
 kf5_add_kdeinit_executable( calligraauthor ${author_KDEINIT_SRCS})
 
-if (Q_WS_MAC)
+if (APPLE)
    set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/../app/Info.plist.template)
    set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.author")
    set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Author")
+   install( FILES ${CMAKE_CURRENT_BINARY_DIR}/author_KDEINIT_SRCS.icns DESTINATION ${BUNDLE_INSTALL_DIR}/calligraauthor.app/Contents/Resources)
 endif ()
 
 target_link_libraries(kdeinit_calligraauthor  komain)
