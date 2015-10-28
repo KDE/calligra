@@ -48,9 +48,9 @@
 
 #include <KDebug>
 #include <KActionCollection>
-#include <KMimeType>
 #include <KService>
 
+#include <QMimeDatabase>
 #include <QGraphicsWidget>
 #include <QTextDocument>
 #include <QTextFrame>
@@ -273,7 +273,7 @@ void CQPresentationCanvas::openFile(const QString& uri)
         d->document->undoStack()->clear();
 
         if (ok) {
-            QString mimeType = KMimeType::findByUrl( url, 0, true )->name();
+            QString mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
             // in case this is a open document template remove the -template from the end
             mimeType.remove( QRegExp( "-template$" ) );
             d->document->setMimeTypeAfterLoading(mimeType);
