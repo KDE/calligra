@@ -49,6 +49,7 @@
 #include <ktoolbar.h>
 #include <kmessagebox.h>
 #include <KConfigGroup>
+#include <KSharedConfig>
 
 #include <gemini/ViewModeSwitchEvent.h>
 #include <KoCanvasBase.h>
@@ -234,7 +235,7 @@ public:
         KoGlobal::initialize();
 
         // The default theme is not what we want for Gemini
-        KConfigGroup group(KGlobal::config(), "theme");
+        KConfigGroup group(KSharedConfig::openConfig(), "theme");
         if(group.readEntry("Theme", "no-theme-is-set") == QLatin1String("no-theme-is-set")) {
             group.writeEntry("Theme", "Krita-dark");
         }

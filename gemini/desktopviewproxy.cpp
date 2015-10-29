@@ -31,10 +31,8 @@
 #include <klocalizedstring.h>
 #include <krecentfilesaction.h>
 #include <kactioncollection.h>
-#include <kglobal.h>
-
-#include <boost/config/posix_features.hpp>
 #include <KConfigGroup>
+#include <KSharedConfig>
 
 #include <KoMainWindow.h>
 #include <KoFilterManager.h>
@@ -96,7 +94,7 @@ DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent)
     recent->disconnect(d->desktopView);
     connect(recent, SIGNAL(urlSelected(QUrl)), this, SLOT(slotFileOpenRecent(QUrl)));
     recent->clear();
-    recent->loadEntries(KGlobal::config()->group("RecentFiles"));
+    recent->loadEntries(KSharedConfig::openConfig()->group("RecentFiles"));
 
     connect(d->desktopView, SIGNAL(documentSaved()), this, SIGNAL(documentSaved()));
 }
