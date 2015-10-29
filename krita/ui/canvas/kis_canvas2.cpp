@@ -196,6 +196,10 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
 
 KisCanvas2::~KisCanvas2()
 {
+    if (m_d->animationPlayer->isPlaying()) {
+        m_d->animationPlayer->forcedStopOnExit();
+    }
+
     delete m_d;
 }
 
