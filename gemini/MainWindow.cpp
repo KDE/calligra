@@ -41,9 +41,7 @@
 #include <QUrl>
 #include <QStandardPaths>
 
-#include <kglobal.h>
 #include <kiconloader.h>
-#include <kstandarddirs.h>
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <ktoolbar.h>
@@ -187,20 +185,12 @@ public:
         // for now, the app in bin/ and we still use the env.bat script
         appdir.cdUp();
 
+        // QT5TODO: adapt to QML_IMPORT_PATH usage and install to ${QML_INSTALL_DIR}
         touchView->engine()->addImportPath(appdir.canonicalPath() + "/imports");
         touchView->engine()->addImportPath(appdir.canonicalPath() + "/lib/calligra/imports");
         touchView->engine()->addImportPath(appdir.canonicalPath() + "/lib64/calligra/imports");
         QString mainqml = appdir.canonicalPath() + "/share/apps/calligragemini/calligragemini.qml";
 #else
-        QStringList dirs = KGlobal::dirs()->findDirs("lib", "calligra/imports");
-        dirs.append(KGlobal::dirs()->findDirs("lib", "qml"));
-        if(dirs.length() < 1) {
-            KMessageBox::sorry(q, i18n("The Calligra Qt Quick components were not found. This means your installation is broken."));
-        } else {
-            Q_FOREACH(QString dir, dirs) {
-                touchView->engine()->addImportPath(dir);
-            }
-        }
         QString mainqml = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("calligragemini/calligragemini.qml"));
 #endif
 

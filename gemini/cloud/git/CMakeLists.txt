@@ -22,5 +22,5 @@ target_link_libraries(calligrageminigitplugin
     komain
 )
 
-install(TARGETS calligrageminigitplugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/Calligra/Gemini/Git)
-install(FILES   qmldir                  DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/Calligra/Gemini/Git)
+install(TARGETS calligrageminigitplugin DESTINATION ${QML_INSTALL_DIR}/Calligra/Gemini/Git)
+install(FILES   qmldir                  DESTINATION ${QML_INSTALL_DIR}/Calligra/Gemini/Git)
