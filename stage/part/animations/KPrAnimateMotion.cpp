@@ -95,7 +95,7 @@ KoPathShape *KPrAnimateMotion::path()
     return m_motionPath;
 }
 
-KoPathShape *KPrAnimateMotion::getPath(qreal zoom, QSizeF pageSize, bool absolutePosition) const
+KoPathShape *KPrAnimateMotion::getPath(qreal zoom, const QSizeF &pageSize, bool absolutePosition) const
 {
     QPointF point = m_motionPath->position();
     qreal xCorrection = pageSize.width() * zoom / (m_currentZoom * m_currentPageSize.width());

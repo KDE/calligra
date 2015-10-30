@@ -204,7 +204,7 @@ void KPrAnimationCache::next()
 
 
 
-void KPrAnimationCache::setPageSize(const QSizeF size)
+void KPrAnimationCache::setPageSize(const QSizeF &size)
 {
     m_pageSize = size;
 }

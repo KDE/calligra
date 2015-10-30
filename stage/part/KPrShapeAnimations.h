@@ -78,7 +78,7 @@ public:
 
 
 
-    void init(const QList<KPrAnimationStep *> animations);
+    void init(const QList<KPrAnimationStep *> &animations);
     /**
      * Add animation to the animations
      *

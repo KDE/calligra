@@ -292,7 +292,7 @@ bool KPrShapeAnimations::setData(const QModelIndex &index, const QVariant &value
     return false;
 }
 
-void KPrShapeAnimations::init(const QList<KPrAnimationStep *> animations)
+void KPrShapeAnimations::init(const QList<KPrAnimationStep *> &animations)
 {
     m_shapeAnimations = animations;
 }

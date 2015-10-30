@@ -38,7 +38,7 @@ public:
     virtual void init(KPrAnimationCache *animationCache, int step);
     QPainterPath pathOutline();
     KoPathShape *path();
-    KoPathShape *getPath(qreal zoom, QSizeF pageSize, bool absolutePosition = true) const;
+    KoPathShape *getPath(qreal zoom, const QSizeF &pageSize, bool absolutePosition = true) const;
 
     QSizeF currentPageSize();
     qreal currentZoom();

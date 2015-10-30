@@ -30,7 +30,7 @@ class KoShapeManager;
 class KPrAnimationData
 {
 public:
-    KPrAnimationData( KoCanvasBase * canvas, KoShapeManager * shapeManager, QRectF boundingRect )
+    KPrAnimationData( KoCanvasBase * canvas, KoShapeManager * shapeManager, const QRectF &boundingRect )
     : m_canvas( canvas )
     , m_shapeManager( shapeManager )
     , m_boundingRect( boundingRect )
@@ -49,7 +49,7 @@ public:
 class KPrAnimationDataTranslate : public KPrAnimationData
 {
 public:
-    KPrAnimationDataTranslate( KoCanvasBase * canvas, KoShapeManager * shapeManager, QRectF boundingRect )
+    KPrAnimationDataTranslate( KoCanvasBase * canvas, KoShapeManager * shapeManager, const QRectF &boundingRect )
     : KPrAnimationData( canvas, shapeManager, boundingRect )
     {}
 

@@ -162,7 +162,7 @@ public:
 
     // ending and animation will just activate the values of the step
     QSizeF pageSize() const;
-    void setPageSize(const QSizeF size);
+    void setPageSize(const QSizeF &size);
     qreal zoom() const;
     void setZoom(const qreal zoom);
     void clear();
