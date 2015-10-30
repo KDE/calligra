@@ -26,7 +26,6 @@
 #include <KSharedConfig>
 #include <kconfiggroup.h>
 #include <kconfig.h>
-#include <klocale.h>
 
 
 // Much of this is a gui-less clone of KRecentFilesAction, so the format of
