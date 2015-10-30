@@ -514,6 +514,8 @@ void TestShapeAnimations::cleanStepSubStepData()
     foreach(MockShapeAnimation *animation, m_animation) {
         animation->setStep(0);
         animation->setSubStep(0);
+        animation->setStepIndex(-1);
+        animation->setSubStepIndex(-1);
     }
 }
 
