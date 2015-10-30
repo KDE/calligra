@@ -299,6 +299,7 @@ void KPrShapeAnimations::init(const QList<KPrAnimationStep *> &animations)
 
 void KPrShapeAnimations::add(KPrShapeAnimation *animation)
 {
+    // TODO: what is the purpose of this empty KPrAnimationStep?
     if (m_shapeAnimations.isEmpty()) {
         m_shapeAnimations.append(new KPrAnimationStep());
     }
