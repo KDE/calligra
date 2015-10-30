@@ -80,7 +80,7 @@ target_link_libraries(calligragemini
     Qt5::Gui
     Qt5::Core
     ${GLEW_LIBRARIES}
-    KF5::KDELibs4Support
+    KF5::IconThemes
     komain
     wordsprivate
     calligrastageprivate
