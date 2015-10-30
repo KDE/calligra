@@ -73,15 +73,6 @@ public:
     virtual void init(KPrAnimationCache *animationCache, int step);
 
     virtual void deactivate();
-    /**
-     * @return true if this shape animation change the visibility
-     */
-    bool visibilityChange();
-
-    /**
-     * @return true if this shape animation enable visibility of the shape
-     */
-    bool visible();
 
     /**
      * Read the value from the first KPrAnimationBase object

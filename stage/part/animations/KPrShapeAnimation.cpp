@@ -119,16 +119,6 @@ void KPrShapeAnimation::init(KPrAnimationCache *animationCache, int step)
     }
 }
 
-bool KPrShapeAnimation::visibilityChange()
-{
-    return true;
-}
-
-bool KPrShapeAnimation::visible()
-{
-    return true;
-}
-
 QPair<int, int> KPrShapeAnimation::timeRange() const
 {
     const int INVALID_START = 99999;
