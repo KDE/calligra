@@ -44,7 +44,7 @@ class KPrAnimationCache
 public:
     KPrAnimationCache();
 
-    virtual ~KPrAnimationCache();
+    ~KPrAnimationCache();
 
     /**
      * Tells if a value has ever been set
