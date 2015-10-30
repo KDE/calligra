@@ -25,9 +25,8 @@
 #include <QRunnable>
 #include <QThreadPool>
 #include <QTimer>
+#include <QLocale>
 
-#include <KGlobal>
-#include <KLocale>
 #include <KSharedConfig>
 #include <KConfigGroup>
 
@@ -201,12 +200,8 @@ QVariant DocumentListModel::data(const QModelIndex &index, int role) const
 
 QString DocumentListModel::prettyTime(QDateTime theTime)
 {
-    if( theTime.date().day() == QDateTime::currentDateTime().date().day() )
-        return KLocale::global()->formatDateTime( theTime, KLocale::FancyShortDate );
-    else if( theTime.daysTo( QDateTime::currentDateTime() ) < 7 )
-        return KLocale::global()->formatDate( theTime.date(), KLocale::FancyShortDate );
-    else
-        return KLocale::global()->formatDate( theTime.date(), KLocale::ShortDate );
+    // QT5TODO: used to be KLocale::FancyShortDate, but no such thing with QLocale (also static anyway)
+    return QLocale().toString(theTime, QLocale::ShortFormat);
 }
 
 QVariant DocumentListModel::headerData(int section, Qt::Orientation orientation, int role) const
