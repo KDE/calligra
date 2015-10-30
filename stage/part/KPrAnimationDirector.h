@@ -95,15 +95,8 @@ public:
      */
     void navigateToPage( int index );
 
-    /**
-     * Get the animation for the shape
-     *
-     * @param shape which should be animated
-     * @return pair of the animation and the animation data for the shape or a 0, 0 if there is no animation
-     */
-    KPrShapeAnimation shapeAnimation( KoShape * shape );
-
     void deactivate();
+
 protected:
     // set the page to be shon and update the UI
     void updateActivePage( KoPAPageBase * page );
