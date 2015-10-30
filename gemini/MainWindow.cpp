@@ -34,6 +34,7 @@
 #include <QMessageBox>
 #include <QToolButton>
 #include <QMenuBar>
+#include <QAction>
 #include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QFileInfo>
@@ -43,7 +44,6 @@
 
 #include <kiconloader.h>
 #include <kactioncollection.h>
-#include <kaction.h>
 #include <ktoolbar.h>
 #include <kmessagebox.h>
 #include <KConfigGroup>
@@ -149,8 +149,8 @@ public:
     bool temporaryFile;
     ViewModeSynchronisationObject* syncObject;
 
-    KAction* toDesktop;
-    KAction* toTouch;
+    QAction* toDesktop;
+    QAction* toTouch;
     QToolButton* switcher;
     QAction* alternativeSaveAction;
     QTimer* fullScreenThrottle;
@@ -203,14 +203,14 @@ public:
         touchView->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
         touchView->setResizeMode( QQuickView::SizeRootObjectToView );
 
-        toDesktop = new KAction(q);
+        toDesktop = new QAction(q);
         toDesktop->setEnabled(true);
         toDesktop->setText(tr("Switch to Desktop"));
         // useful for monkey-testing to crash...
         //toDesktop->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
         //q->addAction(toDesktop);
-        //connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchDesktopForced()));
-        connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchToDesktop()));
+        //connect(toDesktop, SIGNAL(triggered(bool)), q, SLOT(switchDesktopForced()));
+        connect(toDesktop, SIGNAL(triggered(bool)), q, SLOT(switchToDesktop()));
         touchView->engine()->rootContext()->setContextProperty("switchToDesktopAction", toDesktop);
     }
 
@@ -242,7 +242,7 @@ public:
             return;
         }
 
-        toTouch = new KAction(desktopView);
+        toTouch = new QAction(desktopView);
         toTouch->setEnabled(false);
         toTouch->setText(tr("Switch to Touch"));
         toTouch->setIcon(koIcon("system-reboot"));
