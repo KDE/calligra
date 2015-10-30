@@ -22,9 +22,6 @@
 #include "CloudAccountsModel.h"
 #include "PropertyContainer.h"
 
-#include <KGlobal>
-#include <KStandardDirs>
-
 #include <QDebug>
 #include <QByteArray>
 #include <QDataStream>
@@ -32,6 +29,7 @@
 #include <QMetaObject>
 #include <QMetaProperty>
 #include <QFile>
+#include <QStandardPaths>
 
 struct AccountEntry {
 public:
@@ -83,7 +81,7 @@ public:
     Private(CloudAccountsModel* qq)
         : q(qq)
     {
-        dataFile = KStandardDirs::locateLocal("config", "calligrageminicloudaccounts");
+        dataFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QStringLiteral("/calligrageminicloudaccounts");
         loadList();
     }
     ~Private()
