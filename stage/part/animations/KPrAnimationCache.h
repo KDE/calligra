@@ -118,7 +118,6 @@ public:
      */
     QVariant value(QTextBlockUserData *textBlockUserData, const QString &id, const QVariant &defaultValue) const;
 
-    QVariant value(int step, KoShape *shape, const QString &id, const QVariant &defaultValue) const;
     QVariant value(int step, KoShape *shape, const QString &id) const;
 
     // 1. Init cache with values that take effect even before the animation is started
