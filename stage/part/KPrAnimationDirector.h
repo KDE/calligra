@@ -137,7 +137,7 @@ protected:
     void clearAnimations();
 
     // check if there is a set animation in m_animations
-    bool hasAnimation();
+    bool hasAnimation() const;
 
     void updatePageAnimation();
     void updateStepAnimation();

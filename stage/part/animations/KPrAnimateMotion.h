@@ -36,12 +36,12 @@ public:
     virtual bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
     virtual bool saveOdf(KoPASavingContext & paContext) const;
     virtual void init(KPrAnimationCache *animationCache, int step);
-    QPainterPath pathOutline();
-    KoPathShape *path();
+    QPainterPath pathOutline() const;
+    KoPathShape *path() const;
     KoPathShape *getPath(qreal zoom, const QSizeF &pageSize, bool absolutePosition = true) const;
 
-    QSizeF currentPageSize();
-    qreal currentZoom();
+    QSizeF currentPageSize() const;
+    qreal currentZoom() const;
 
 protected:
     virtual void next(int currentTime);

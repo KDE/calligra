@@ -239,10 +239,10 @@ public:
      *
      * @param index of the animation
      */
-    KoShape *shapeByIndex(const QModelIndex &index);
+    KoShape *shapeByIndex(const QModelIndex &index) const;
 
     /// Return the first animation index for the given shape
-    QModelIndex indexByShape(KoShape* shape);
+    QModelIndex indexByShape(KoShape* shape) const;
 
     /**
      * @brief Set begin time for the animation on index
@@ -268,7 +268,7 @@ public:
      */
     void insertNewAnimation(KPrShapeAnimation *newAnimation, const QModelIndex &previousAnimation);
 
-    QModelIndex indexByAnimation(KPrShapeAnimation *animation);
+    QModelIndex indexByAnimation(KPrShapeAnimation *animation) const;
 
     void resyncStepsWithAnimations();
 
@@ -297,8 +297,8 @@ private:
     QImage createThumbnail(KoShape *shape, const QSize &thumbSize) const;
     void setTimeRangeIncrementalChange(KPrShapeAnimation *item, const int begin,
                                        const int duration, TimeUpdated updatedTimes);
-    QList<KPrShapeAnimation *> getWithPreviousSiblings(KPrShapeAnimation *animation);
-    QList<KPrAnimationSubStep *> getSubSteps(int start, int end, KPrAnimationStep *step);
+    QList<KPrShapeAnimation *> getWithPreviousSiblings(KPrShapeAnimation *animation) const;
+    QList<KPrAnimationSubStep *> getSubSteps(int start, int end, KPrAnimationStep *step) const;
     bool createTriggerEventEditCmd(KPrShapeAnimation *animation, KPrShapeAnimation::NodeType oldType,
                                    KPrShapeAnimation::NodeType newType);
 

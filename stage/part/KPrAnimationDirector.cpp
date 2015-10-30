@@ -473,7 +473,7 @@ void KPrAnimationDirector::previousStep()
 }
 
 
-bool KPrAnimationDirector::hasAnimation()
+bool KPrAnimationDirector::hasAnimation() const
 {
     return m_animations.size() > 0;
 }

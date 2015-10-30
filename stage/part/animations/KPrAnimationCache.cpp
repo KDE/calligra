@@ -39,21 +39,21 @@ KPrAnimationCache::~KPrAnimationCache()
 }
 
 
-bool KPrAnimationCache::hasValue(KoShape *shape, const QString &id)
+bool KPrAnimationCache::hasValue(KoShape *shape, const QString &id) const
 {
     if (m_currentShapeValues.contains(shape))
         return m_currentShapeValues.value(shape).contains(id);
     return false;
 }
 
-bool KPrAnimationCache::hasValue(int step, QTextBlockUserData *textBlockData, const QString &id)
+bool KPrAnimationCache::hasValue(int step, QTextBlockUserData *textBlockData, const QString &id) const
 {
     if (m_textBlockDataValuesStack[step].contains(textBlockData))
         return m_textBlockDataValuesStack[step].value(textBlockData).contains(id);
     return false;
 }
 
-bool KPrAnimationCache::hasValue(int step, KoShape *shape, const QString &id)
+bool KPrAnimationCache::hasValue(int step, KoShape *shape, const QString &id) const
 {
     if (m_shapeValuesStack[step].contains(shape))
         return m_shapeValuesStack[step].value(shape).contains(id);
@@ -70,14 +70,14 @@ void KPrAnimationCache::setValue(int step, QTextBlockUserData *textBlockData, co
     m_textBlockDataValuesStack[step][textBlockData][id] = value;
 }
 
-QVariant KPrAnimationCache::value(KoShape *shape, const QString &id, const QVariant &defaultValue)
+QVariant KPrAnimationCache::value(KoShape *shape, const QString &id, const QVariant &defaultValue) const
 {
     if (m_currentShapeValues.contains(shape))
         return m_currentShapeValues.value(shape).value(id, defaultValue);
     return defaultValue;
 }
 
-QVariant KPrAnimationCache::value(int step, KoShape *shape, const QString &id)
+QVariant KPrAnimationCache::value(int step, KoShape *shape, const QString &id) const
 {
     if (m_shapeValuesStack[step].contains(shape))
         return m_shapeValuesStack[step].value(shape).value(id);
@@ -85,7 +85,7 @@ QVariant KPrAnimationCache::value(int step, KoShape *shape, const QString &id)
 }
 
 
-QVariant KPrAnimationCache::value(QTextBlockUserData *textBlockData, const QString &id, const QVariant &defaultValue)
+QVariant KPrAnimationCache::value(QTextBlockUserData *textBlockData, const QString &id, const QVariant &defaultValue) const
 {
     if (m_currentTextBlockDataValues.contains(textBlockData))
         return m_currentTextBlockDataValues.value(textBlockData).value(id, defaultValue);

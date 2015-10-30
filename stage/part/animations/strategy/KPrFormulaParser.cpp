@@ -154,12 +154,12 @@ Token TokenStack::pop()
     return (topIndex > 0) ? Token(at(--topIndex)) : Token();
 }
 
-const Token& TokenStack::top()
+const Token& TokenStack::top() const
 {
     return top(0);
 }
 
-const Token& TokenStack::top(unsigned index)
+const Token& TokenStack::top(unsigned index) const
 {
     if (topIndex > index)
         return at(topIndex -index - 1);

@@ -792,7 +792,7 @@ QModelIndex KPrShapeAnimations::removeAnimationByIndex(const QModelIndex &index)
     return QModelIndex();
 }
 
-KoShape *KPrShapeAnimations::shapeByIndex(const QModelIndex &index)
+KoShape *KPrShapeAnimations::shapeByIndex(const QModelIndex &index) const
 {
     if (index.isValid()) {
         KPrShapeAnimation *animation = animationByRow(index.row());
@@ -803,7 +803,7 @@ KoShape *KPrShapeAnimations::shapeByIndex(const QModelIndex &index)
     return 0;
 }
 
-QModelIndex KPrShapeAnimations::indexByShape(KoShape *shape)
+QModelIndex KPrShapeAnimations::indexByShape(KoShape *shape) const
 {
     int rowCount = 0;
     foreach (KPrAnimationStep *step, m_shapeAnimations) {
@@ -1086,7 +1086,7 @@ void KPrShapeAnimations::setTimeRangeIncrementalChange(KPrShapeAnimation *item, 
     }
 }
 
-QModelIndex KPrShapeAnimations::indexByAnimation(KPrShapeAnimation *animation)
+QModelIndex KPrShapeAnimations::indexByAnimation(KPrShapeAnimation *animation) const
 {
     int rowCount = 0;
     foreach (KPrAnimationStep *step, m_shapeAnimations) {
@@ -1140,7 +1140,7 @@ KPrShapeAnimation::NodeType KPrShapeAnimations::triggerEventByIndex(const QModel
     return nodeType;
 }
 
-QList<KPrShapeAnimation *> KPrShapeAnimations::getWithPreviousSiblings(KPrShapeAnimation *animation)
+QList<KPrShapeAnimation *> KPrShapeAnimations::getWithPreviousSiblings(KPrShapeAnimation *animation) const
 {
     bool startAdding = false;
     QList<KPrShapeAnimation *> siblings = QList<KPrShapeAnimation *>();
@@ -1163,7 +1163,7 @@ QList<KPrShapeAnimation *> KPrShapeAnimations::getWithPreviousSiblings(KPrShapeA
     return siblings;
 }
 
-QList<KPrAnimationSubStep *> KPrShapeAnimations::getSubSteps(int start, int end, KPrAnimationStep *step)
+QList<KPrAnimationSubStep *> KPrShapeAnimations::getSubSteps(int start, int end, KPrAnimationStep *step) const
 {
     QList<KPrAnimationSubStep *>movedSubSteps = QList<KPrAnimationSubStep *>();
     for (int i = start; i < end; i++) {

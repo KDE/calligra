@@ -84,13 +84,13 @@ void KPrAnimateMotion::init(KPrAnimationCache *animationCache, int step)
     }
 }
 
-QPainterPath KPrAnimateMotion::pathOutline()
+QPainterPath KPrAnimateMotion::pathOutline() const
 {
     QPainterPath path = m_motionPath->outline();
     return path;
 }
 
-KoPathShape *KPrAnimateMotion::path()
+KoPathShape *KPrAnimateMotion::path() const
 {
     return m_motionPath;
 }
@@ -121,12 +121,12 @@ KoPathShape *KPrAnimateMotion::getPath(qreal zoom, const QSizeF &pageSize, bool 
     return m_motionPath;
 }
 
-QSizeF KPrAnimateMotion::currentPageSize()
+QSizeF KPrAnimateMotion::currentPageSize() const
 {
     return m_currentPageSize;
 }
 
-qreal KPrAnimateMotion::currentZoom()
+qreal KPrAnimateMotion::currentZoom() const
 {
     return m_currentZoom;
 }
