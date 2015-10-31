@@ -27,8 +27,9 @@
 #include <QTest>
 
 // KoProgressUpdater signal timer has interval of 250 ms, see PROGRESSUPDATER_GUITIMERINTERVAL
+// Also is the timer of type Qt::CoarseTimer, which "tr[ies] to keep accuracy within 5% of the desired interval",
 // so wait a little longer
-#define WAIT_FOR_PROGRESSUPDATER_UI_UPDATES 255
+#define WAIT_FOR_PROGRESSUPDATER_UI_UPDATES 275
 
 class TestWeaverJob : public ThreadWeaver::Job
 {
