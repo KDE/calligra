@@ -248,8 +248,30 @@ void BasicElement::writeMathML( KoXmlWriter* writer, const QString& ns ) const
 
 void BasicElement::writeMathMLAttributes( KoXmlWriter* writer ) const
 {
-    foreach( const QString &value, m_attributes )
-        writer->addAttribute( m_attributes.key( value ).toLatin1(), value );
+    // Ensure consistent ordering of attributes:
+    // create list of attributes pointers sorted by attribute name, with a first, z last, prefix included
+    typedef QHash<QString,QString>::ConstIterator ConstAttributeIterator;
+
+    QVector<ConstAttributeIterator> sits;
+    sits.reserve(m_attributes.size());
+    // insert iterators by bubble-sorting
+    ConstAttributeIterator it = m_attributes.constBegin();
+    while (it != m_attributes.constEnd()) {
+        QVector<ConstAttributeIterator>::Iterator sit = sits.begin();
+        while (sit != sits.end()) {
+            if (sit->key() > it.key()) {
+                break;
+            }
+            ++sit;
+        }
+        sits.insert(sit, it);
+        ++it;
+    }
+
+    // finally write all attributes, by estimated sorting
+    foreach(ConstAttributeIterator it, sits) {
+        writer->addAttribute( it.key().toLatin1(), it.value() );
+    }
 }
 
 void BasicElement::writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const
