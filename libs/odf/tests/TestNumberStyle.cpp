@@ -81,7 +81,7 @@ void TestNumberStyle::testTime()
     f.formatStr = "hh:mm:ss";
     QCOMPARE(KoOdfNumberStyles::format("0.524259259259", f), QString("12:34:56"));
     QCOMPARE(KoOdfNumberStyles::format("test", f), QString("test"));
-    QCOMPARE(KoOdfNumberStyles::format("123", f), QString("13:54:25"));
+    QCOMPARE(KoOdfNumberStyles::format("123", f), QString("00:00:00"));
     QCOMPARE(KoOdfNumberStyles::format("1.23", f), QString("05:31:12"));
 }
 
