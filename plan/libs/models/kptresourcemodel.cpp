@@ -35,11 +35,11 @@
 #include <KoIcon.h>
 
 #include <QMimeData>
+#include <QMimeDatabase>
 #include <QStringList>
 
 #include <klocale.h>
 #include <kio/netaccess.h>
-#include <kmimetype.h>
 #include <kio/job.h>
 
 #ifdef PLAN_KCONTACTS_FOUND
@@ -1233,7 +1233,7 @@ void ResourceItemModel::slotJobFinished( KJob *job )
 {
     if ( job->error() || ! m_dropDataMap.contains( job ) ) {
         debugPlan<<(job->error() ? "Job error":"Error: no such job");
-    } else if ( KMimeType::findByContent( m_dropDataMap[ job ].data )->is( "text/x-vcard" ) ) {
+    } else if ( QMimeDatabase().mimeTypeForData( m_dropDataMap[ job ].data ).inherits(QStringLiteral("text/x-vcard") ) ) {
         ResourceGroup *g = 0;
         if ( m_dropDataMap[ job ].parent.isValid() ) {
             g = qobject_cast<ResourceGroup*>( object( m_dropDataMap[ job ].parent ) );

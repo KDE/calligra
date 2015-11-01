@@ -33,7 +33,6 @@
 #include <QFileInfo>
 #include <QProcess>
 
-#include <kmimetype.h>
 #include <kservice.h>
 #include <kparts/readwritepart.h>
 

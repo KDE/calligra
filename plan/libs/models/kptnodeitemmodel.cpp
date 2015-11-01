@@ -35,12 +35,12 @@
 #include <KoIcon.h>
 
 #include <QMimeData>
+#include <QMimeDatabase>
 #include <QModelIndex>
 #include <QByteArray>
 
 #include <klocale.h>
 #include <krichtextwidget.h>
-#include <kmimetype.h>
 
 #include <KGanttGlobal>
 
@@ -3905,9 +3905,9 @@ bool NodeItemModel::dropUrlMimeData( const QMimeData *data, Qt::DropAction actio
         QList<QUrl> urls = data->urls();
         debugPlan<<urls;
         foreach ( const QUrl &url, urls ) {
-            KMimeType::Ptr mime = KMimeType::findByUrl( url );
-            debugPlan<<url<<mime->name();
-            if ( mime->is( "application/x-vnd.kde.plan" ) ) {
+            const QMimeType mime = QMimeDatabase().mimeTypeForUrl( url );
+            debugPlan<<url<<mime.name();
+            if ( mime.inherits( "application/x-vnd.kde.plan" ) ) {
                 importProjectFile( url, action, row, column, parent );
             }
         }
@@ -4952,9 +4952,9 @@ bool TaskModuleModel::dropMimeData( const QMimeData *data, Qt::DropAction /*acti
         QList<QUrl> urls = data->urls();
         debugPlan<<urls;
         foreach ( const QUrl &url, urls ) {
-            KMimeType::Ptr mime = KMimeType::findByUrl( url );
-            debugPlan<<url<<mime->name();
-            if ( mime->is( "application/x-vnd.kde.plan" ) || mime->is( "application/xml" ) ) {
+            const QMimeType mime = QMimeDatabase().mimeTypeForUrl( url );
+            debugPlan<<url<<mime.name();
+            if ( mime.inherits(QStringLiteral("application/x-vnd.kde.plan")) || mime.inherits(QStringLiteral("application/xml")) ) {
                 importProject( url );
             }
         }

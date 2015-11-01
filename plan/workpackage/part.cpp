@@ -50,13 +50,13 @@
 #include <kundo2qstack.h>
 #include <QPointer>
 #include <QUrl>
+#include <QMimeDatabase>
 
 #include <kcomponentdata.h>
 #include <KLocalizedString>
 #include <kmessagebox.h>
 #include <kparts/partmanager.h>
 #include <kopenwithdialog.h>
-#include <kmimetype.h>
 #include <kmimetypetrader.h>
 //#include <kserviceoffer.h>
 #include <krun.h>
@@ -235,8 +235,8 @@ bool DocumentChild::editDoc()
         return false;
     }
     QUrl filename = QUrl::fromLocalFile( filePath() );
-    KMimeType::Ptr mimetype = KMimeType::findByUrl( filename, 0, true );
-    KService::Ptr service = KMimeTypeTrader::self()->preferredService( mimetype->name() );
+    const QMimeType mimetype = QMimeDatabase().mimeTypeForUrl( filename );
+    KService::Ptr service = KMimeTypeTrader::self()->preferredService( mimetype.name() );
     bool editing = startProcess( service, filename );
     if ( editing ) {
         m_type = Type_Other; // FIXME: try to be more specific
