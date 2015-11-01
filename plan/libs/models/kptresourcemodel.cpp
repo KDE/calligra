@@ -37,7 +37,6 @@
 #include <QMimeData>
 #include <QStringList>
 
-#include <kglobal.h>
 #include <klocale.h>
 #include <kio/netaccess.h>
 #include <kmimetype.h>

@@ -22,8 +22,6 @@
 #include "reportdata.h"
 #include "kptdebug.h"
 
-#include <kglobal.h>
-
 
 namespace KPlato
 {

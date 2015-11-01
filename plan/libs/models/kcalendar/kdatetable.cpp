@@ -37,7 +37,6 @@
 
 #include <kconfig.h>
 #include <kcolorscheme.h>
-#include <kglobal.h>
 #include <klocale.h>
 #include <knotification.h>
 #include <kcalendarsystem.h>

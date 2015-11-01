@@ -37,7 +37,6 @@
 #include <QDate>
 #include <QList>
 
-#include <kglobal.h>
 #include <klocale.h>
 
 #include <KGanttGlobal>

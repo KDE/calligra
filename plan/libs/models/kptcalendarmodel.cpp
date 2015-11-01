@@ -35,7 +35,6 @@
 #include <QMimeData>
 #include <QPainter>
 
-#include <kglobal.h>
 #include <klocale.h>
 #include <kcalendarsystem.h>
 #include <ksystemtimezone.h>

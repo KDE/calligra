@@ -27,7 +27,7 @@
 #include <QDoubleValidator>
 #include <QKeyEvent>
 
-#include <kglobal.h>
+#include <klocale.h>
 
 #include <math.h>
 #include <limits.h>

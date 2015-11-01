@@ -25,7 +25,7 @@
 #include "kptproject.h"
 
 #include <klocale.h>
-#include <kglobal.h>
+
 
 namespace KPlato
 {

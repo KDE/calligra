@@ -34,7 +34,6 @@
 #include <KoIcon.h>
 
 #include <kcalendarsystem.h>
-#include <kglobal.h>
 #include <klocale.h>
 
 namespace KPlato

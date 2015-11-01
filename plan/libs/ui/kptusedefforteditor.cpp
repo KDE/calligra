@@ -24,7 +24,6 @@
 #include <QDate>
 #include <QHeaderView>
 
-#include <kglobal.h>
 #include <klocale.h>
 #include <kcalendarsystem.h>
 

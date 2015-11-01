@@ -31,7 +31,6 @@
 #include <QModelIndex>
 #include <QWidget>
 
-#include <kglobal.h>
 #include <klocale.h>
 
 

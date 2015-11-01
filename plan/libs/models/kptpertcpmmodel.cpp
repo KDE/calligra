@@ -30,7 +30,6 @@
 #include <QStringList>
 #include <QMimeData>
 
-#include <kglobal.h>
 #include <klocale.h>
 
 

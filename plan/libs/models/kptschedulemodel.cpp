@@ -38,8 +38,6 @@
 #include <QObject>
 #include <QStringList>
 
-
-#include <kglobal.h>
 #include <klocale.h>
 
 

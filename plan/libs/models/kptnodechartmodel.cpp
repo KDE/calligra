@@ -24,8 +24,6 @@
 #include "kptresource.h"
 #include "kptdebug.h"
 
-#include <kglobal.h>
-
 #include <QVariant>
 #include <QPen>
 

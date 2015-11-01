@@ -25,7 +25,6 @@
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
-#include <kglobal.h>
 
 #include <KoIcon.h>
 #include "calligraversion.h"

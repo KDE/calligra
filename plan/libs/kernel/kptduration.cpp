@@ -22,7 +22,6 @@
 #include "kptdatetime.h"
 #include "kptdebug.h"
 
-#include <kglobal.h>
 #include <klocale.h>
 
 #include <QRegExp>

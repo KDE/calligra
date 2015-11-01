@@ -23,7 +23,6 @@
 #include "kptschedule.h"
 #include "kptxmlloaderobject.h"
 
-#include <kglobal.h>
 
 namespace KPlato
 {

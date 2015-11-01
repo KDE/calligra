@@ -28,8 +28,6 @@
 
 #include "kptdebug.h"
 
-#include <kglobal.h>
-
 #include <QApplication>
 
 KPLATO_SCHEDULERPLUGIN_EXPORT(PlanTJPlugin, "plantjscheduler.json")

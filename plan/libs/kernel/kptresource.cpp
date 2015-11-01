@@ -32,7 +32,6 @@
 
 #include <KoXmlReader.h>
 
-#include <kglobal.h>
 #include <klocale.h>
 
 

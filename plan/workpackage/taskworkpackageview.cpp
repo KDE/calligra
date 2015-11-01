@@ -48,8 +48,6 @@
 #include <QPointer>
 #include <QAction>
 
-#include <kglobal.h>
-
 #include "debugarea.h"
 
 using namespace KPlato;

@@ -55,7 +55,6 @@
 #include <QPushButton>
 
 #include <klocale.h>
-#include <kglobal.h>
 #include <ktoggleaction.h>
 
 #include <KGanttGlobal>

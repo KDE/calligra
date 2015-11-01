@@ -32,7 +32,6 @@
 #include <QMenu>
 #include <QAction>
 
-#include <kglobal.h>
 #include <klocale.h>
 
 #include <math.h>

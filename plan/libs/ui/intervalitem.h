@@ -23,7 +23,7 @@
 #include <QTreeWidgetItem>
 
 #include <klocale.h>
-#include <kglobal.h>
+
 
 namespace KPlato
 {

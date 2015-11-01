@@ -20,7 +20,6 @@
 #include <string>
 #include <stdlib.h>
 
-#include <kglobal.h>
 #include <klocale.h>
 
 #include <QMap>

@@ -38,7 +38,6 @@
 #include <QModelIndex>
 #include <QByteArray>
 
-#include <kglobal.h>
 #include <klocale.h>
 #include <krichtextwidget.h>
 #include <kmimetype.h>

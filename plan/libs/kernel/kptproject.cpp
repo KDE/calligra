@@ -35,7 +35,6 @@
 
 #include <QDateTime>
 
-#include <kglobal.h>
 #include <kdatetime.h>
 #include <ksystemtimezone.h>
 #include <ktimezone.h>

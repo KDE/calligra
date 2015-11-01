@@ -39,7 +39,6 @@
 
 #include <kcalendarsystem.h>
 #include <kdialog.h>
-#include <kglobal.h>
 #include <klineedit.h>
 #include <klocale.h>
 #include <knotification.h>

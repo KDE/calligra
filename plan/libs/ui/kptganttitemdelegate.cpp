@@ -29,7 +29,6 @@
 #include <QPainter>
 
 #include <klocale.h>
-#include <kglobal.h>
 
 #include <KGanttGlobal>
 #include <KGanttStyleOptionGanttItem>
