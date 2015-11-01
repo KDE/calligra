@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2015 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (c) 2015 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,22 +16,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 #ifndef KORESOURCEPATHS_H
 #define KORESOURCEPATHS_H
 
-#include <QScopedPointer>
 #include <QString>
-#include <QStringList>
 
 #include <kowidgets_export.h>
 
-class KOWIDGETS_EXPORT KoResourcePaths
+class QStringList;
+
+
+namespace KoResourcePaths
 {
-public:
-
-    KoResourcePaths();
-    virtual ~KoResourcePaths();
-
     enum SearchOption { NoSearchOptions = 0,
                         Recursive = 1,
                         NoDuplicates = 2,
@@ -56,8 +54,8 @@ public:
      * @param priority if true, the directory is added before any other,
      * otherwise after
      */
-    static void addResourceType(const char *type, const char *basetype,
-                                const QString &relativeName, bool priority = true);
+    KOWIDGETS_EXPORT void addResourceType(const char *type, const char *basetype,
+                                          const QString &relativeName, bool priority = true);
 
 
     /**
@@ -75,7 +73,7 @@ public:
      * @param priority if true, the directory is added before any other,
      * otherwise after
      */
-    static void addResourceDir(const char *type, const QString &dir, bool priority = true);
+    KOWIDGETS_EXPORT void addResourceDir(const char *type, const QString &dir, bool priority = true);
 
     /**
      * Tries to find a resource in the following order:
@@ -101,7 +99,7 @@ public:
      *         argument, or QString() if not found.
      */
 
-    static QString findResource(const char *type, const QString &fileName);
+    KOWIDGETS_EXPORT QString findResource(const char *type, const QString &fileName);
 
     /**
      * Tries to find all directories whose names consist of the
@@ -121,7 +119,7 @@ public:
      * @return A list of matching directories, or an empty
      *         list if the resource specified is not found.
      */
-    static QStringList findDirs(const char *type, const QString &reldir);
+    KOWIDGETS_EXPORT QStringList findDirs(const char *type, const QString &reldir);
 
     /**
      * Tries to find all resources with the specified type.
@@ -143,9 +141,9 @@ public:
      * @return List of all the files whose filename matches the
      *         specified filter.
      */
-    static QStringList findAllResources(const char *type,
-                                        const QString &filter = QString(),
-                                        SearchOptions options = NoSearchOptions);
+    KOWIDGETS_EXPORT QStringList findAllResources(const char *type,
+                                 const QString &filter = QString(),
+                                 SearchOptions options = NoSearchOptions);
 
     /**
      * @param type The type of resource
@@ -155,7 +153,7 @@ public:
      * Note, that the directories are assured to exist beside the save
      * location, which may not exist, but is returned anyway.
      */
-    static QStringList resourceDirs(const char *type);
+    KOWIDGETS_EXPORT QStringList resourceDirs(const char *type);
 
     /**
      * Finds a location to save files into for the given type
@@ -174,7 +172,7 @@ public:
      * @return A path where resources of the specified type should be
      *         saved, or QString() if the resource type is unknown.
      */
-    static QString saveLocation(const char *type, const QString &suffix = QString(), bool create = true);
+    KOWIDGETS_EXPORT QString saveLocation(const char *type, const QString &suffix = QString(), bool create = true);
 
     /**
      * This function is just for convenience. It simply calls
@@ -186,7 +184,7 @@ public:
      * @return A full path to the filename specified in the second
      *         argument, or QString() if not found
      **/
-    static QString locate(const char *type, const QString &filename);
+    KOWIDGETS_EXPORT QString locate(const char *type, const QString &filename);
 
     /**
      * This function is much like locate. However it returns a
@@ -201,34 +199,8 @@ public:
      * @return A full path to the filename specified in the second
      *         argument, or QString() if not found
      **/
-    static QString locateLocal(const char *type, const QString &filename, bool createDir = false);
-
-private:
-
-    void addResourceTypeInternal(const QString &type, const QString &basetype,
-                                 const QString &relativeName, bool priority);
-
-    void addResourceDirInternal(const QString &type, const QString &absdir, bool priority);
-
-    QString findResourceInternal(const QString &type, const QString &fileName);
-
-    QStringList findDirsInternal(const QString &type, const QString &relDir);
-
-    QStringList findAllResourcesInternal(const QString &type,
-                                         const QString &filter = QString(),
-                                         SearchOptions options = NoSearchOptions) const;
-
-    QStringList resourceDirsInternal(const QString &type);
-
-    QString saveLocationInternal(const QString &type, const QString &suffix = QString(), bool create = true);
-
-    QString locateInternal(const QString &type, const QString &filename);
-
-    QString locateLocalInternal(const QString &type, const QString &filename, bool createDir = false);
-
-    class Private;
-    QScopedPointer<Private> d;
-};
+    KOWIDGETS_EXPORT QString locateLocal(const char *type, const QString &filename, bool createDir = false);
+}
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoResourcePaths::SearchOptions)
 
