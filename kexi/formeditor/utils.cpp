@@ -194,14 +194,13 @@ void VerticalWidgetList::sort()
 
 // ----
 
-QMimeData *KFormDesigner::deepCopyOfClipboardData()
+QMimeData *KFormDesigner::deepCopyOfMimeData(const QMimeData *data)
 {
-    //QClipboard *cb = QApplication::clipboard();
-    QMimeData *data = new QMimeData();
+    QMimeData *newData = new QMimeData();
     foreach(const QString& format, data->formats()) {
-        data->setData(format, data->data(format));
+        newData->setData(format, data->data(format));
     }
-    return data;
+    return newData;
 }
 
 void KFormDesigner::copyToClipboard(const QString& xml)
