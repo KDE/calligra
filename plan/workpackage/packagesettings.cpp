@@ -22,7 +22,8 @@
 
 #include <QComboBox>
 
-#include <klocale.h>
+#include <KLocalizedString>
+
 
 namespace KPlatoWork
 {

@@ -27,8 +27,6 @@
 #include <QList>
 #include <QUrl>
 
-#include <klocale.h>
-
 class KoStore;
 
 class QDomElement;

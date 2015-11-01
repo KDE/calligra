@@ -27,7 +27,7 @@
 #include <KoComponentData.h>
 
 #include <kiconloader.h>
-#include <klocale.h>
+
 
 namespace KPlato
 {

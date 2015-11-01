@@ -40,7 +40,7 @@
 #include <KoDocument.h>
 
 #include <kfiledialog.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kstandarddirs.h>
 #include <klibloader.h>
 #include <kmessagebox.h>

@@ -45,7 +45,7 @@
 #include <QMenu>
 #include <QAction>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <ktoolbar.h>
 
 #include <kxmlguifactory.h>

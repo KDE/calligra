@@ -27,8 +27,6 @@
 
 #include <KoDialog.h>
 
-#include <klocale.h>
-
 class KUndo2Command;
 
 namespace KPlatoWork

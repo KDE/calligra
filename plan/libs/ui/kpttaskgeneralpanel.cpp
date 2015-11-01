@@ -27,7 +27,7 @@
 #include "kptdatetime.h"
 #include "kptproject.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #ifdef PLAN_KDEPIMLIBS_FOUND
 #include <akonadi/contact/emailaddressselectiondialog.h>

@@ -40,7 +40,7 @@
 #include <QDragMoveEvent>
 #include <QAction>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kactioncollection.h>
 
 namespace KPlato

@@ -31,6 +31,7 @@
 
 #include <QString>
 #include <QList>
+#include <QMultiMap>
 #include <QSharedData>
 
 class QDomElement;

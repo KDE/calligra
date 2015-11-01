@@ -35,8 +35,6 @@
 #include <QGraphicsItem>
 #include <QTimer>
 
-#include <klocale.h>
-
 #include <kpagedialog.h>
 
 class KoPageLayoutWidget;

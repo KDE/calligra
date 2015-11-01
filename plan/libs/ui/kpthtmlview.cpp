@@ -24,7 +24,6 @@
 #include <QVBoxLayout>
 #include <QUrl>
 
-#include <klocale.h>
 #include <khtmlview.h>
 
 #include "kptdebug.h"

@@ -29,8 +29,6 @@
 
 #include <KoDialog.h>
 
-#include <klocale.h>
-
 #include <QWidget>
 
 class KUndo2Command;

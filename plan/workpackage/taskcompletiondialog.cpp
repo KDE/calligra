@@ -28,9 +28,9 @@
 
 #include <KoIcon.h>
 
-#include <QComboBox>
+#include <KLocalizedString>
 
-#include <klocale.h>
+#include <QComboBox>
 
 #include "debugarea.h"
 

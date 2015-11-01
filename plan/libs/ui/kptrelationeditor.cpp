@@ -35,8 +35,6 @@
 #include <QMenu>
 #include <QAction>
 
-#include <klocale.h>
-
 
 namespace KPlato
 {

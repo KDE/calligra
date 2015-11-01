@@ -13,7 +13,7 @@
 
 #include "Resource.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <assert.h>
 

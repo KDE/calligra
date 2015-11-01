@@ -44,7 +44,7 @@
 
 #include <kiconloader.h>
 #include <klibloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 
 #include "debugarea.h"

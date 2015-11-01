@@ -22,7 +22,7 @@
 #define KPLATOWORK_ABOUTDATA
 
 #include <k4aboutdata.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <calligraversion.h>
 
 namespace KPlatoWork

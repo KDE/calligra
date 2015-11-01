@@ -19,15 +19,15 @@
 
 #include "kptmainprojectpanel.h"
 
-#include <klocale.h>
 #include "kptdebug.h"
+
+#include <KLocalizedString>
 
 #ifdef PLAN_KDEPIMLIBS_FOUND
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>
 #include <akonadi/contact/emailaddressselection.h>
 #endif
-
 
 #include "kptproject.h"
 #include "kptcommand.h"

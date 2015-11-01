@@ -22,7 +22,8 @@
 #include "kptdocumentspanel.h"
 #include "kpttask.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
+
 
 namespace KPlato
 {

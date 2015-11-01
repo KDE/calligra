@@ -44,8 +44,7 @@
 #include <QAction>
 #include <QMenu>
 
-#include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 

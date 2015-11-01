@@ -28,7 +28,6 @@
 #include "kpttask.h"
 #include "kptschedule.h"
 
-#include <klocale.h>
 #include <kconfiggroup.h>
 
 #include <QDir>

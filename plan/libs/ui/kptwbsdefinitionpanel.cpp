@@ -24,7 +24,6 @@
 #include "kptdebug.h"
 
 #include <kcombobox.h>
-#include <klocale.h>
 
 #include <QComboBox>
 #include <QTableWidget>

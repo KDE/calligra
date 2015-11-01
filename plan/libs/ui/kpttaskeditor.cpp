@@ -43,7 +43,7 @@
 #include <QAction>
 
 #include <kactionmenu.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 

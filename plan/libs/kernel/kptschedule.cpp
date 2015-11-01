@@ -31,9 +31,9 @@
 
 #include <KoXmlReader.h>
 
-#include <QStringList>
+#include <KLocalizedString>
 
-#include <klocale.h>
+#include <QStringList>
 
 
 namespace KPlato

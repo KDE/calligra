@@ -22,7 +22,7 @@
 #define KPTABOUTDATA_H
 
 #include <KAboutData>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <calligraversion.h>
 

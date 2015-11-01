@@ -19,7 +19,7 @@
 
 #include "kpttreecombobox.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <QModelIndex>
 #include <QTreeView>

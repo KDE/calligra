@@ -22,8 +22,7 @@
 
 #include "kplatokernel_export.h"
 
-
-#include <klocale.h>
+#include <Qt> // for things in Qt namespace
 
 // The Plan file syntax is used in parts of the KPlatoWork file, so:
 // * If you change PLAN_FILE_SYNTAX_VERSION, change PLANWORK_FILE_SYNTAX_VERSION too!

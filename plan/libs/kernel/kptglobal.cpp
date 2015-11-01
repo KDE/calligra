@@ -19,7 +19,7 @@
 
 #include "kptglobal.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 namespace KPlato
 {

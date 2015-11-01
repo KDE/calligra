@@ -31,9 +31,10 @@
 #include "kptdatetime.h"
 #include "kptdebug.h"
 
+#include <KLocalizedString>
+
 #include <QStringList>
 
-#include <klocale.h>
 
 namespace KPlato
 {

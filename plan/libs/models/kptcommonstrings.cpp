@@ -19,8 +19,9 @@
 
 #include "kptcommonstrings.h"
 
-#include <klocale.h>
 #include <kundo2magicstring.h>
+
+#include <KLocalizedString>
 
 namespace KPlato
 {

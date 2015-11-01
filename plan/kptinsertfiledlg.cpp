@@ -21,7 +21,7 @@
 #include "kptnode.h"
 #include "kptproject.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kio/netaccess.h>
 
 namespace KPlato

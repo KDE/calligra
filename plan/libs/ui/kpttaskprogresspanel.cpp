@@ -25,7 +25,7 @@
 #include <QDate>
 
 #include <kdatetime.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "kpttask.h"
 #include "kptcommand.h"

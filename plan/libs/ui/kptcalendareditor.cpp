@@ -43,7 +43,7 @@
 #include <QAction>
 #include <QMenu>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kactioncollection.h>
 
 #include <KoDocument.h>

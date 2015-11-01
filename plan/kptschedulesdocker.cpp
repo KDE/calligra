@@ -22,7 +22,7 @@
 #include "kptschedule.h"
 #include <kptdebug.h>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <QAbstractItemView>
 #include <QModelIndex>

@@ -21,9 +21,9 @@
 
 #include "kptdebug.h"
 
-#include <klocale.h>
-
 #include <KoXmlReader.h>
+
+#include <KLocalizedString>
 
 #include <QStringList>
 

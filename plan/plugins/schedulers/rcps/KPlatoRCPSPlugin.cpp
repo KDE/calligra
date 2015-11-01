@@ -26,14 +26,13 @@
 
 #include "kptproject.h"
 #include "kptschedule.h"
+#include <kptschedulerplugin.h>
 
 #include <librcps.h>
 
-#include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <QApplication>
-#include <kptschedulerplugin.h>
 
 #ifndef PLAN_NOPLUGIN
 KPLATO_SCHEDULERPLUGIN_EXPORT(KPlatoRCPSPlugin, "planrcpsscheduler.json")

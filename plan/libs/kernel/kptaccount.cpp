@@ -19,17 +19,15 @@
 
 #include "kptaccount.h"
 
-#include <QString>
-#include <QDate>
-
-#include <klocale.h>
-
 #include "kptduration.h"
 #include "kptproject.h"
 #include "kptdebug.h"
 
 #include <KoXmlReader.h>
 
+#include <KLocalizedString>
+
+#include <QDate>
 
 namespace KPlato
 {

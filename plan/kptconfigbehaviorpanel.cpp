@@ -22,8 +22,6 @@
 #include "kptdatetime.h"
 #include "kptfactory.h"
 
-#include <klocale.h>
-
 namespace KPlato
 {
 

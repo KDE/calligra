@@ -22,9 +22,8 @@
 
 #include "kplatomodels_export.h"
 
-#include <klocale.h>
-
 class KUndo2MagicString;
+class QString;
 
 namespace KPlato
 {

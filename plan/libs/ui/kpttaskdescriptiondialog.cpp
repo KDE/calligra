@@ -22,7 +22,7 @@
 #include "kpttask.h"
 #include "kptcommand.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <ktextedit.h>
 #include <kactioncollection.h>
 

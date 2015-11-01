@@ -23,7 +23,7 @@
 #include "kptcommand.h"
 #include "kpttaskdescriptiondialog.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #ifdef PLAN_KDEPIMLIBS_FOUND
 #include <akonadi/contact/emailaddressselectiondialog.h>

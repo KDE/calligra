@@ -24,7 +24,8 @@
 #include "kptview.h"
 #include "kptdebug.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
+
 
 namespace KPlato
 {

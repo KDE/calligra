@@ -37,7 +37,6 @@
 
 #include <cstdlib>
 #include <QDir>
-#include <klocale.h>
 #include <kconfiggroup.h>
 
 #include <QTest>

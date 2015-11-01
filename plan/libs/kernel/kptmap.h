@@ -28,8 +28,6 @@
 #include <QString>
 #include <QPair>
 
-#include <kglobal.h>
-#include <klocale.h>
 
 namespace KPlato
 {

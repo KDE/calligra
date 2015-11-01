@@ -24,6 +24,8 @@
 #include "kptcommonstrings.h"
 #include "kptdebug.h"
 
+#include <KLocalizedString>
+
 #include <QMimeData>
 
 

@@ -38,11 +38,12 @@
 #include <KoDocument.h>
 #include <KoXmlReader.h>
 
+#include <KLocalizedString>
+
 #include <QList>
 #include <QVBoxLayout>
 #include <QTabWidget>
 
-#include <klocale.h>
 
 namespace KPlato
 {

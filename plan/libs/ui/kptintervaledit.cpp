@@ -24,10 +24,10 @@
 
 #include <KoIcon.h>
 
+#include <KLocalizedString>
+
 #include <QTreeWidget>
 #include <QList>
-
-#include <klocale.h>
 
 
 namespace KPlato

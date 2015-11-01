@@ -29,9 +29,9 @@
 #include "kpttask.h"
 #include "kptproject.h"
 
-#include <klocale.h>
-
 #include <KoVBox.h>
+
+#include <KLocalizedString>
 
 namespace KPlato
 {

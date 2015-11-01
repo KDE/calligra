@@ -29,11 +29,12 @@
 
 #include <KoDocument.h>
 
+#include <KLocalizedString>
+
 #include <QSplitter>
 #include <QStringList>
 #include <QCursor>
 
-#include <klocale.h>
 
 namespace KPlato
 {

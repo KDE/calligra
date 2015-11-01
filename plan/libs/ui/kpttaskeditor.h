@@ -26,8 +26,6 @@
 #include "kptnodeitemmodel.h"
 #include "kptviewbase.h"
 
-#include <klocale.h>
-
 class KoDocument;
 
 class KActionMenu;

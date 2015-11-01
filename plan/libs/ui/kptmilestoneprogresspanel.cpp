@@ -22,7 +22,7 @@
 #include <QCheckBox>
 #include <QDateTime>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "kpttask.h"
 #include "kptcommand.h"

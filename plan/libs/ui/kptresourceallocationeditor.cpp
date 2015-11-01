@@ -38,7 +38,6 @@
 #include <QVBoxLayout>
 #include <QAction>
 
-#include <klocale.h>
 
 namespace KPlato
 {

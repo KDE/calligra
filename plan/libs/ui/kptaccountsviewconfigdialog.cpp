@@ -26,11 +26,11 @@
 
 #include "KoPageLayoutWidget.h"
 
+#include <KLocalizedString>
+
 #include <QPushButton>
 #include <QCheckBox>
 #include <QString>
-
-#include <klocale.h>
 
 
 namespace KPlato

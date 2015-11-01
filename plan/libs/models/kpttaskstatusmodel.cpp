@@ -30,10 +30,10 @@
 #include "kptnodeitemmodel.h"
 #include "kptdebug.h"
 
+#include <KLocalizedString>
+
 #include <QMimeData>
 #include <QModelIndex>
-
-#include <klocale.h>
 
 
 namespace KPlato

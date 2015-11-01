@@ -30,8 +30,6 @@
 #include "kpttaskeditor.h"
 #include "kptcommand.h"
 
-#include <klocale.h>
-
 #include <QTreeWidget>
 
 #include "ui_kptresourceassignmentview.h"

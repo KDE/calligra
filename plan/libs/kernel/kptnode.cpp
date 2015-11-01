@@ -29,9 +29,9 @@
 
 #include <KoXmlReader.h>
 
-#include <QListIterator>
+#include <KLocalizedString>
 
-#include <klocale.h>
+#include <QListIterator>
 
 
 namespace KPlato

@@ -53,7 +53,7 @@
 
 #include <kglobal.h>
 #include <kcomponentdata.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 #include <kparts/partmanager.h>
 #include <kopenwithdialog.h>

@@ -37,7 +37,7 @@
 #include <QVBoxLayout>
 #include <QAction>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kactioncollection.h>
 
 #include <KoDocument.h>

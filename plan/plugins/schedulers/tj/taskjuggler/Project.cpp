@@ -22,7 +22,7 @@
 #include <QStringList>
 #include <QDebug>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "TjMessageHandler.h"
 #include "Scenario.h"

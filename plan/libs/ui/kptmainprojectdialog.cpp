@@ -23,7 +23,7 @@
 #include "kptmainprojectpanel.h"
 #include "kptcommand.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 
 namespace KPlato

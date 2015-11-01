@@ -30,7 +30,7 @@
 #include <QModelIndex>
 #include <QVBoxLayout>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kurlrequesterdialog.h>
 #include <kmessagebox.h>
 

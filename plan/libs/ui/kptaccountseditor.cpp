@@ -40,7 +40,7 @@
 #include <QMenu>
 #include <QAction>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kactioncollection.h>
 
 
