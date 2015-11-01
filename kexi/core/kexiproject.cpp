@@ -300,6 +300,13 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
 
     if (!d->data->connectionData()->databaseName().isEmpty()) {
         QFileInfo finfo(d->data->connectionData()->databaseName());
+        if (!finfo.exists()) {
+            KMessageBox::sorry(0, xi18nc("@info", "Could not open project file. "
+                                         "The file <filename>%1</filename> does not exist.",
+                                         QDir::toNativeSeparators(finfo.absoluteFilePath())),
+                                         xi18nc("@title:window", "Could Not Open File"));
+            return cancelled;
+        }
         if (!d->data->isReadOnly() && !finfo.isWritable()) {
             if (KexiProject::askForOpeningNonWritableFileAsReadOnly(0, finfo)) {
                 d->data->setReadOnly(true);
