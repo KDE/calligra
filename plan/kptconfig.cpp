@@ -25,8 +25,6 @@
 #include "kptfactory.h"
 #include "kptdebug.h"
 
-#include <kcomponentdata.h>
-
 #include <QBrush>
 
 

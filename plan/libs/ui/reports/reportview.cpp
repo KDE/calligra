@@ -61,7 +61,6 @@
 #include <kguiitem.h>
 #include <kmessagebox.h>
 #include <ktoolbar.h>
-#include <kpushbutton.h>
 
 #include <QCloseEvent>
 #include <QPainter>

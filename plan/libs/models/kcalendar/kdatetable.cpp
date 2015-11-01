@@ -40,7 +40,6 @@
 #include <klocale.h>
 #include <knotification.h>
 #include <kcalendarsystem.h>
-#include <kshortcut.h>
 #include <kstandardshortcut.h>
 #include "kdatepicker.h"
 #include "kactioncollection.h"

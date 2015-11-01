@@ -46,7 +46,6 @@
 
 #include <KLocalizedString>
 #include <kactioncollection.h>
-#include <ktabwidget.h>
 
 #include <ktoggleaction.h>
 

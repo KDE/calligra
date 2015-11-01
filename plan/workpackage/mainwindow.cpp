@@ -41,8 +41,6 @@
 
 #include <kfiledialog.h>
 #include <KLocalizedString>
-#include <kstandarddirs.h>
-#include <klibloader.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 

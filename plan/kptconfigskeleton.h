@@ -25,7 +25,6 @@
 #include <kconfigskeleton.h>
 #include "kptfactory.h"
 
-#include <kcomponentdata.h>
 
 class KPLATO_EXPORT KPlatoConfigSkeleton : public KConfigSkeleton
 {

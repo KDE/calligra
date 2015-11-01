@@ -40,7 +40,6 @@
 #include <KoView.h>
 
 #include <kcmdlineargs.h>
-#include <kcomponentdata.h>
 
 #include <kiconloader.h>
 #include <klibloader.h>

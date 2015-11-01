@@ -25,8 +25,8 @@
 
 #include "KoPageLayoutWidget.h"
 
+#include <QPushButton>
 
-#include <kpushbutton.h>
 
 namespace KPlato
 {

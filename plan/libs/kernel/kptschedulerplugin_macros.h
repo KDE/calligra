@@ -20,7 +20,6 @@
 #ifndef KPTSCHEDULERPLUGIN_MACROS_H
 #define KPTSCHEDULERPLUGIN_MACROS_H
 
-#include <kdemacros.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
  

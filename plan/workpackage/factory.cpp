@@ -26,7 +26,6 @@
 
 #include <kcomponentdata.h>
 #include <kiconloader.h>
-#include <kstandarddirs.h>
 
 
 namespace KPlatoWork

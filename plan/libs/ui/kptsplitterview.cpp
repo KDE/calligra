@@ -22,8 +22,6 @@
 #include "KoDocument.h"
 #include <KoXmlReader.h>
 
-#include <ktabwidget.h>
-
 #include <QVBoxLayout>
 #include <QSplitter>
 #include <QTabWidget>
