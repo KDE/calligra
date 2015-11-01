@@ -29,6 +29,8 @@ class KoResourceTaggingTest : public QObject
 
 private Q_SLOTS:
 
+    void initTestCase();
+
     // tests
     void testInitialization();
     void testTagging();
