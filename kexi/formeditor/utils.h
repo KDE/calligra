@@ -122,8 +122,8 @@ KFORMEDITOR_EXPORT QSize getSizeFromChildren(QWidget *widget, const char *inheri
 //! @return mimetype for the forms XML format
 inline QString mimeType() { return "application/x-kexi-form"; }
 
-//! @returns deep copy of the current clipboard contents (for all formats)
-KFORMEDITOR_EXPORT QMimeData *deepCopyOfClipboardData();
+//! @return deep copy of the mime data @a data (for all formats)
+KFORMEDITOR_EXPORT QMimeData *deepCopyOfMimeData(const QMimeData *data);
 
 //! Copies @a xml data to the clipboard both in the plain text format and forms XML format
 KFORMEDITOR_EXPORT void copyToClipboard(const QString& xml);

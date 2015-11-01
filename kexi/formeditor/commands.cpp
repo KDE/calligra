@@ -1585,7 +1585,8 @@ void CutWidgetCommand::execute()
 {
     DeleteWidgetCommand::execute();
     delete d2->data;
-    d2->data = KFormDesigner::deepCopyOfClipboardData(); // save clipboard contents
+    QClipboard *cb = QApplication::clipboard();
+    d2->data = KFormDesigner::deepCopyOfMimeData(cb->mimeData()); // save clipboard contents
     // d->domDoc has been filled in DeleteWidgetCommand ctor
     KFormDesigner::copyToClipboard(d->domDoc.toString());
 }
@@ -1594,7 +1595,7 @@ void CutWidgetCommand::undo()
 {
     DeleteWidgetCommand::undo();
     QClipboard *cb = QApplication::clipboard();
-    cb->setMimeData( d2->data ); // restore prev. clipboard contents
+    cb->setMimeData(KFormDesigner::deepCopyOfMimeData(d2->data)); // restore prev. clipboard contents
 }
 
 KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const CutWidgetCommand &c)
