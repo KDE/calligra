@@ -22,9 +22,9 @@
 #include "ScriptingPart.h"
 #include "Module.h"
 
+#include <QStandardPaths>
 #include <klocale.h>
 #include <kpluginfactory.h>
-#include <kstandarddirs.h>
 // kross
 #include <kross/core/manager.h>
 #include <kross/core/interpreter.h>
@@ -68,7 +68,7 @@ KPlatoScriptingPart::KPlatoScriptingPart(QObject* parent, const QStringList& arg
     , d(new Private())
 {
     //setComponentData(ScriptingPart::componentData());
-    setXMLFile(KStandardDirs::locate("data", "plan/viewplugins/scripting.rc"), true);
+    setXMLFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "plan/viewplugins/scripting.rc"), true);
     kDebug(planScriptingDebugArea()) <<"PlanScripting plugin. Class:" << metaObject()->className() <<", Parent:" <<(parent?parent->metaObject()->className():"0");
 
 }

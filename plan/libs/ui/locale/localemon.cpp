@@ -30,10 +30,10 @@
 
 #include <QCheckBox>
 #include <QComboBox>
+#include <QStandardPaths>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kstandarddirs.h>
 #include <klocale.h>
 
 
@@ -101,8 +101,8 @@ void LocaleConfigMoney::save()
 {
   KSharedConfig::Ptr config = KSharedConfig::openConfig();
   KConfigGroup group(config, "Locale");
-  KConfig ent(KStandardDirs::locate("locale",
-                           QString::fromLatin1("l10n/%1/entry.desktop")
+  KConfig ent(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                           QString::fromLatin1("locale/l10n/%1/entry.desktop")
                            .arg(m_locale->country())));
   KConfigGroup entGrp = ent.group("KCM Locale");
 

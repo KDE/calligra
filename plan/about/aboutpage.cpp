@@ -27,10 +27,10 @@
 #include <QDir>
 #include <QString>
 #include <QUrl>
+#include <QStandardPaths>
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kstandarddirs.h>
 #include <khtml_part.h>
 
 KPlatoAboutPage::KPlatoAboutPage()
@@ -45,7 +45,7 @@ KPlatoAboutPage::~KPlatoAboutPage()
 QString KPlatoAboutPage::main()
 {
     KIconLoader *iconloader = KIconLoader::global();
-    QString res = loadFile( KStandardDirs::locate( "data", "plan/about/main.html" ));
+    QString res = loadFile( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "plan/about/main.html" ));
     if ( res.isEmpty() ) {
         return res;
     }
@@ -55,9 +55,9 @@ QString KPlatoAboutPage::main()
 
     QString icon_path = "<img width='16' height='16' src=\"" + continue_icon_path + "\">";
 
-    res = res.arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage.css" ) );
+    res = res.arg( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kf5/infopage/kde_infopage.css" ) );
     if ( qApp->layoutDirection() == Qt::RightToLeft )
-    res = res.arg( "@import \"%1\";" ).arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage_rtl.css" ) );
+    res = res.arg( "@import \"%1\";" ).arg( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kf5/infopage/kde_infopage_rtl.css" ) );
     else
     res = res.arg( "" );
 
@@ -80,7 +80,7 @@ QString KPlatoAboutPage::main()
 QString KPlatoAboutPage::intro()
 {
     KIconLoader *iconloader = KIconLoader::global();
-    QString res = loadFile( KStandardDirs::locate( "data", "plan/about/intro.html" ));
+    QString res = loadFile( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "plan/about/intro.html" ));
     if ( res.isEmpty() ) {
         return res;
     }
@@ -88,9 +88,9 @@ QString KPlatoAboutPage::intro()
         (QApplication::isRightToLeft() ? koIconNameCStr("go-previous") : koIconNameCStr("go-next"));
     const QString continue_icon_path = iconloader->iconPath(continue_icon_id, KIconLoader::Small);
 
-    res = res.arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage.css" ) );
+    res = res.arg( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kf5/infopage/kde_infopage.css" ) );
     if ( qApp->layoutDirection() == Qt::RightToLeft )
-	res = res.arg( "@import \"%1\";" ).arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage_rtl.css" ) );
+	res = res.arg( "@import \"%1\";" ).arg( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kf5/infopage/kde_infopage_rtl.css" ) );
     else
         res = res.arg( "" );
 
@@ -110,7 +110,7 @@ QString KPlatoAboutPage::intro()
 QString KPlatoAboutPage::tips()
 {
     
-    QString res = loadFile( KStandardDirs::locate( "data", "plan/about/tips.html" ));
+    QString res = loadFile( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "plan/about/tips.html" ));
     if ( res.isEmpty() ) {
         return res;
     }
@@ -134,9 +134,9 @@ QString KPlatoAboutPage::tips()
         (QApplication::isRightToLeft() ? koIconNameCStr("go-previous") : koIconNameCStr("go-next"));
     const QString continue_icon_path = iconloader->iconPath(continue_icon_id, KIconLoader::Small);
 
-    res = res.arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage.css" ) );
+    res = res.arg( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kf5/infopage/kde_infopage.css" ) );
     if ( qApp->layoutDirection() == Qt::RightToLeft )
-        res = res.arg( "@import \"%1\";" ).arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage_rtl.css" ) );
+        res = res.arg( "@import \"%1\";" ).arg( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kf5/infopage/kde_infopage_rtl.css" ) );
     else
         res = res.arg( "" );
 
@@ -156,7 +156,7 @@ QString KPlatoAboutPage::tips()
 
 QString KPlatoAboutPage::tutorial( const QString &header, const QString &text, const QString &nextpage, const QString &nexttext )
 {
-    QString res = loadFile( KStandardDirs::locate( "data", "plan/about/tutorial.html" ));
+    QString res = loadFile( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "plan/about/tutorial.html" ));
     if ( res.isEmpty() ) {
         return res;
     }
@@ -164,9 +164,9 @@ QString KPlatoAboutPage::tutorial( const QString &header, const QString &text, c
     const char *const nextIconName = QApplication::isRightToLeft() ? koIconNameCStr("go-previous") : koIconNameCStr("go-next");
     const QString next_icon_path = KIconLoader::global()->iconPath(nextIconName, KIconLoader::Small );
 
-    res = res.arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage.css" ) );
+    res = res.arg( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kf5/infopage/kde_infopage.css" ) );
     if ( qApp->layoutDirection() == Qt::RightToLeft )
-        res = res.arg( "@import \"%1\";" ).arg( KStandardDirs::locate( "data", "kf5/infopage/kde_infopage_rtl.css" ) );
+        res = res.arg( "@import \"%1\";" ).arg( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kf5/infopage/kde_infopage_rtl.css" ) );
     else
         res = res.arg( "" );
 

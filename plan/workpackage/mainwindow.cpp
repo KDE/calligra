@@ -111,7 +111,7 @@ bool KPlatoWork_MainWindow::openDocument(const QUrl & url)
 
 QString KPlatoWork_MainWindow::configFile() const
 {
-  //return readConfigFile( KStandardDirs::locate( "data", "koshell/koshell_shell.rc" ) );
+  //return readConfigFile( QStandardPaths::locate(QStandardPaths::GenericDataLocation "koshell/koshell_shell.rc" ) );
   return QString(); // use UI standards only for now
 }
 

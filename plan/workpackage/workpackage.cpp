@@ -42,7 +42,6 @@
 
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kdatetime.h>
 
 #include <QDomDocument>
@@ -667,8 +666,8 @@ QUrl WorkPackage::extractFile( const Document *doc )
 QUrl WorkPackage::extractFile( const Document *doc, KoStore *store )
 {
     //FIXME: should use a special tmp dir
-    QString tmp = KStandardDirs::locateLocal( "tmp", QString(), false );
-    const QUrl url = QUrl::fromLocalFile( tmp + doc->url().fileName() );
+    QString tmp = QDir::tempPath() + QLatin1Char('/') + doc->url().fileName();
+    const QUrl url = QUrl::fromLocalFile( tmp );
     debugPlanWork<<"Extract: "<<doc->url().fileName()<<" -> "<<url.path();
     if ( ! store->extractFile( doc->url().fileName(), url.path() ) ) {
         KMessageBox::error( 0, i18n( "<p>Work package <b>'%1'</b></p><p>Could not extract file:</p><p>%2</p>", node()->name(), doc->url().fileName() ) );
