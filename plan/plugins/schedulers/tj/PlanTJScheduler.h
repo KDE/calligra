@@ -32,7 +32,6 @@
 #include <QMap>
 #include <QList>
 
-class KLocale;
 class QDateTime;
 
 namespace TJ
@@ -120,7 +119,6 @@ protected:
 
 
 private:
-    KLocale *locale() const;
     ulong tjGranularity() const;
 
 private:

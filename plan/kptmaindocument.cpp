@@ -74,10 +74,6 @@ MainDocument::MainDocument(KoPart *part)
 {
     Q_ASSERT(part);
     m_config.setReadWrite( true );
-    KLocale *locale = KLocale::global();
-    if ( locale ) {
-        m_config.setLocale( new KLocale( *locale ) );
-    }
 
     loadSchedulerPlugins();
 

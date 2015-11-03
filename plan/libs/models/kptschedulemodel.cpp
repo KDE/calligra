@@ -37,8 +37,9 @@
 
 #include <QObject>
 #include <QStringList>
+#include <QLocale>
 
-#include <klocale.h>
+#include <KFormat>
 
 
 namespace KPlato
@@ -569,7 +570,7 @@ QVariant ScheduleItemModel::projectStart( const QModelIndex &index, int role ) c
     switch ( role ) {
         case Qt::DisplayRole:
             if ( sm->isScheduled() ) {
-                return KLocale::global()->formatDateTime( sm->expected()->start() );
+                return QLocale().toString( sm->expected()->start(), QLocale::ShortFormat );
             }
             break;
         case Qt::EditRole:
@@ -579,9 +580,9 @@ QVariant ScheduleItemModel::projectStart( const QModelIndex &index, int role ) c
             break;
         case Qt::ToolTipRole:
             if ( sm->isScheduled() ) {
-                return i18nc( "@info:tooltip", "Planned start: %1<nl/>Target start: %2", KLocale::global()->formatDateTime( sm->expected()->start() ), KLocale::global()->formatDateTime( m_project->constraintStartTime() ) );
+                return i18nc( "@info:tooltip", "Planned start: %1<nl/>Target start: %2", QLocale().toString( sm->expected()->start(), QLocale::ShortFormat ), QLocale().toString( m_project->constraintStartTime(), QLocale::ShortFormat ) );
             } else {
-                return i18nc( "@info:tooltip", "Target start: %1", KLocale::global()->formatDateTime( m_project->constraintStartTime() ) );
+                return i18nc( "@info:tooltip", "Target start: %1", QLocale().toString( m_project->constraintStartTime(), QLocale::ShortFormat ) );
             }
             break;
         case Qt::TextAlignmentRole:
@@ -605,7 +606,7 @@ QVariant ScheduleItemModel::projectEnd( const QModelIndex &index, int role ) con
     switch ( role ) {
         case Qt::DisplayRole:
             if ( sm->isScheduled() ) {
-                return KLocale::global()->formatDateTime( sm->expected()->end() );
+                return QLocale().toString( sm->expected()->end(), QLocale::ShortFormat );
             }
             break;
         case Qt::EditRole:
@@ -615,9 +616,9 @@ QVariant ScheduleItemModel::projectEnd( const QModelIndex &index, int role ) con
             break;
         case Qt::ToolTipRole:
             if ( sm->isScheduled() ) {
-                return i18nc( "@info:tooltip", "Planned finish: %1<nl/>Target finish: %2", KLocale::global()->formatDateTime( sm->expected()->end() ), KLocale::global()->formatDateTime( m_project->constraintEndTime() ) );
+                return i18nc( "@info:tooltip", "Planned finish: %1<nl/>Target finish: %2", QLocale().toString( sm->expected()->end(), QLocale::ShortFormat ), QLocale().toString( m_project->constraintEndTime(), QLocale::ShortFormat ) );
             } else {
-                return i18nc( "@info:tooltip", "Target finish: %1", KLocale::global()->formatDateTime( m_project->constraintEndTime() ) );
+                return i18nc( "@info:tooltip", "Target finish: %1", QLocale().toString( m_project->constraintEndTime(), QLocale::ShortFormat ) );
             }
             break;
         case Qt::TextAlignmentRole:
@@ -782,7 +783,7 @@ QVariant ScheduleItemModel::granularity(const QModelIndex &index, int role) cons
             }
             int idx = sm->granularity();
             qulonglong g = idx < lst.count() ? lst[ idx ] : lst.last();
-            return KLocale::global()->formatDuration( g );
+            return KFormat().formatDuration( g );
         }
         case Qt::ToolTipRole: {
             QList<long unsigned int> lst = sm->supportedGranularities();
@@ -791,7 +792,7 @@ QVariant ScheduleItemModel::granularity(const QModelIndex &index, int role) cons
             }
             int idx = sm->granularity();
             qulonglong g = idx < lst.count() ? lst[ idx ] : lst.last();
-            return i18nc( "@info:tooltip", "Selected scheduling granularity: %1", KLocale::global()->formatDuration( g ) );
+            return i18nc( "@info:tooltip", "Selected scheduling granularity: %1", KFormat().formatDuration( g ) );
         }
         case Qt::TextAlignmentRole:
             return Qt::AlignRight;
@@ -800,8 +801,9 @@ QVariant ScheduleItemModel::granularity(const QModelIndex &index, int role) cons
             return QVariant();
         case Role::EnumList: {
             QStringList sl;
+            KFormat format;
             foreach ( long unsigned int v, sm->supportedGranularities() ) {
-                sl << KLocale::global()->formatDuration( v );
+                sl << format.formatDuration( v );
             }
             return sl;
         }

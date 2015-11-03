@@ -152,20 +152,30 @@ QVariant ChartItemModel::data( const QModelIndex &index, int role ) const
         if ( ! m_localizeValues ) {
             return data( index, Qt::EditRole );
         } else {
-            KLocale *l = project() ? project()->locale() : KLocale::global();
+            QLocale locale;
+            // TODO: temporary workaround while KLocale/money logic still used
+            KLocale *klocale;
+            KLocale *tmpklocale = 0;
+            if (project()) {
+                klocale = project()->locale();
+            } else {
+                tmpklocale = new KLocale( QLocale::languageToString(locale.language()), QLocale::countryToString(locale.country()) );
+                klocale = tmpklocale;
+            }
             switch ( index.column() ) {
-            case BCWSCost: result = l->formatMoney( bcwsCost( index.row() ), 0 ); break;
-            case BCWPCost: result = l->formatMoney( bcwpCost( index.row() ), 0 ); break;
-            case ACWPCost: result = l->formatMoney( acwpCost( index.row() ), 0 ); break;
-            case BCWSEffort: result = l->formatNumber( bcwsEffort( index.row() ), 0 ); break;
-            case BCWPEffort: result = l->formatNumber( bcwpEffort( index.row() ), 0 ); break;
-            case ACWPEffort: result = l->formatNumber( acwpEffort( index.row() ), 0 ); break;
-            case SPICost: result = l->formatNumber( spiCost( index.row() ), 2 ); break;
-            case CPICost: result = l->formatNumber( cpiCost( index.row() ), 2 ); break;
-            case SPIEffort: result = l->formatNumber( spiEffort( index.row() ), 2 ); break;
-            case CPIEffort: result = l->formatNumber( cpiEffort( index.row() ), 2 ); break;
+            case BCWSCost: result = klocale->formatMoney( bcwsCost( index.row() ), 0 ); break;
+            case BCWPCost: result = klocale->formatMoney( bcwpCost( index.row() ), 0 ); break;
+            case ACWPCost: result = klocale->formatMoney( acwpCost( index.row() ), 0 ); break;
+            case BCWSEffort: result = locale.toString( bcwsEffort( index.row() ), 'f', 0 ); break;
+            case BCWPEffort: result = locale.toString( bcwpEffort( index.row() ), 'f', 0 ); break;
+            case ACWPEffort: result = locale.toString( acwpEffort( index.row() ), 'f', 0 ); break;
+            case SPICost: result = locale.toString( spiCost( index.row() ), 'f', 2 ); break;
+            case CPICost: result = locale.toString( cpiCost( index.row() ), 'f', 2 ); break;
+            case SPIEffort: result = locale.toString( spiEffort( index.row() ), 'f', 2 ); break;
+            case CPIEffort: result = locale.toString( cpiEffort( index.row() ), 'f', 2 ); break;
             default: break;
             }
+            delete tmpklocale;
         }
         //debugPlan<<index<<role<<result;
         return result;

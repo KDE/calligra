@@ -397,7 +397,7 @@ void PrintingDialog::paint( QPainter &p, const PrintingOptions::Data &options, c
     QRect managerRect;
     QString manager = project.leader();
     QRect dateRect;
-    QString date = KLocale::global()->formatDate( QDate::currentDate() );
+    QString date = QLocale().toString(QDate::currentDate(), QLocale::ShortFormat);
 
     QRect rect_1 = rect;
     QRect rect_2 = rect;

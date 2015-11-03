@@ -51,6 +51,7 @@ class TaskCostPanel : public TaskCostPanelImpl {
     Q_OBJECT
 public:
     TaskCostPanel(Task &task, Accounts &accounts, QWidget *parent=0, const char *name=0);
+    ~TaskCostPanel();
 
     MacroCommand *buildCommand();
 
@@ -69,6 +70,7 @@ private:
     Account *m_oldstartup;
     Account *m_oldshutdown;
     const KLocale *m_locale;
+    bool m_localeIsOwn;
 };
 
 } //KPlato namespace

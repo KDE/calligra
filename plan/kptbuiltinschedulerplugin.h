@@ -25,8 +25,6 @@
 
 #include "kptschedule.h"
 
-class KLocale;
-
 
 namespace KPlato
 {
@@ -65,8 +63,6 @@ class KPlatoScheduler : public SchedulerThread
 public:
     KPlatoScheduler( Project *project, ScheduleManager *sm, QObject *parent = 0 );
     ~KPlatoScheduler();
-
-    KLocale *locale() const;
 
 public Q_SLOTS:
     /// Stop scheduling.

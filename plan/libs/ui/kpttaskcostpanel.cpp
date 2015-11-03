@@ -33,16 +33,18 @@ namespace KPlato
 TaskCostPanel::TaskCostPanel(Task &task, Accounts &accounts, QWidget *p, const char *n)
     : TaskCostPanelImpl(p, n),
       m_task(task),
-      m_accounts(accounts),
-      m_locale( 0 )
+      m_accounts(accounts)
 {
     const Project *project = qobject_cast<const Project*>( task.projectNode() );
     if ( project ) {
         m_locale = project->locale();
+        m_localeIsOwn = false;
+    } else {
+        QLocale locale;
+        m_locale = new KLocale( QLocale::languageToString(locale.language()), QLocale::countryToString(locale.country()) );
+        m_localeIsOwn = true;
     }
-    if ( m_locale == 0 ) {
-        m_locale = KLocale::global();
-    }
+
     m_accountList << i18n("None");
     m_accountList += accounts.costElements();
 
@@ -53,6 +55,14 @@ TaskCostPanel::TaskCostPanel(Task &task, Accounts &accounts, QWidget *p, const c
     }
     setStartValues(task);
 }
+
+TaskCostPanel::~TaskCostPanel()
+{
+    if (m_localeIsOwn) {
+        delete m_locale;
+    }
+}
+
 
 void TaskCostPanel::setStartValues(Task &task) {
     runningAccount->addItems(m_accountList);

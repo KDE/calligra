@@ -31,8 +31,7 @@
 #include <QAbstractItemView>
 #include <QMenu>
 #include <QAction>
-
-#include <klocale.h>
+#include <QLocale>
 
 #include <math.h>
 
@@ -138,14 +137,13 @@ void PertResult::draw()
             return;
         }
         widget.scheduleName->setText( model()->manager()->name() );
-        KLocale *locale =  KLocale::global();
         Duration f;
         foreach ( Node *n, m_project->allNodes() ) {
             if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
                 f += static_cast<Task*>( n )->positiveFloat( id );
             }
         }
-        widget.totalFloat->setText( locale->formatNumber( f.toDouble( Duration::Unit_h ) ) );
+        widget.totalFloat->setText( QLocale().toString( f.toDouble( Duration::Unit_h ), 'f', 2 ) );
     }
 }
 

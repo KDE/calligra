@@ -1128,7 +1128,7 @@ DateTime Task::calculateEarlyFinish(int use) {
     timer.start();
     cs->logDebug( QString( "Start calculate forward: %1 " ).arg( constraintToString( true ) ) );
 #endif
-    KLocale *locale = KLocale::global();
+    QLocale locale;
     cs->logInfo( i18n( "Calculate early finish " ) );
     //debugPlan<<"------>"<<m_name<<""<<cs->earlyStart;
     if (type() == Node::Type_Task) {
@@ -1296,13 +1296,13 @@ DateTime Task::calculateEarlyFinish(int use) {
     cs->insertForwardNode( this );
     cs->earlyFinish = cs->earlyStart + m_durationForward;
     foreach ( const Appointment *a, cs->appointments( Schedule::CalculateForward ) ) {
-        cs->logInfo( i18n( "Resource %1 booked from %2 to %3", a->resource()->resource()->name(), locale->formatDateTime( a->startTime() ), locale->formatDateTime( a->endTime() ) ) );
+        cs->logInfo( i18n( "Resource %1 booked from %2 to %3", a->resource()->resource()->name(), locale.toString(a->startTime(), QLocale::ShortFormat), locale.toString(a->endTime(), QLocale::ShortFormat) ) );
     }
     // clean up temporary usage
     cs->startTime = DateTime();
     cs->endTime = DateTime();
     cs->duration = Duration::zeroDuration;
-    cs->logInfo( i18n( "Early finish calculated: %1", locale->formatDateTime( cs->earlyFinish ) ) );
+    cs->logInfo( i18n( "Early finish calculated: %1", locale.toString(cs->earlyFinish, QLocale::ShortFormat) ) );
     cs->incProgress();
 #ifndef PLAN_NLOGDEBUG
     cs->logDebug( QString( "Finished calculate forward: %1 ms" ).arg( timer.elapsed() ) );
@@ -1393,7 +1393,7 @@ DateTime Task::calculateLateStart(int use) {
     timer.start();
     cs->logDebug( QString( "Start calculate backward: %1 " ).arg( constraintToString( true ) ) );
 #endif
-    KLocale *locale = KLocale::global();
+    QLocale locale;
     cs->logInfo( i18n( "Calculate late start" ) );
     cs->logDebug( QString( "%1: late finish= %2" ).arg( constraintToString() ).arg( cs->lateFinish.toString() ) );
     //debugPlan<<m_name<<" id="<<cs->id()<<" mode="<<cs->calculationMode()<<": latestFinish="<<cs->lateFinish;
@@ -1540,13 +1540,13 @@ DateTime Task::calculateLateStart(int use) {
     cs->insertBackwardNode( this );
     cs->lateStart = cs->lateFinish - m_durationBackward;
     foreach ( const Appointment *a, cs->appointments( Schedule::CalculateBackward ) ) {
-        cs->logInfo( i18n( "Resource %1 booked from %2 to %3", a->resource()->resource()->name(), locale->formatDateTime( a->startTime() ), locale->formatDateTime( a->endTime() ) ) );
+        cs->logInfo( i18n( "Resource %1 booked from %2 to %3", a->resource()->resource()->name(), locale.toString(a->startTime(), QLocale::ShortFormat), locale.toString(a->endTime(), QLocale::ShortFormat) ) );
     }
     // clean up temporary usage
     cs->startTime = DateTime();
     cs->endTime = DateTime();
     cs->duration = Duration::zeroDuration;
-    cs->logInfo( i18n( "Late start calculated: %1", locale->formatDateTime( cs->lateStart ) ) );
+    cs->logInfo( i18n( "Late start calculated: %1", locale.toString(cs->lateStart, QLocale::ShortFormat) ) );
     cs->incProgress();
 #ifndef PLAN_NLOGDEBUG
     cs->logDebug( QString( "Finished calculate backward: %1 ms" ).arg( timer.elapsed() ) );
@@ -1636,8 +1636,8 @@ DateTime Task::scheduleFromStartTime(int use) {
     QTime timer;
     timer.start();
     cs->logInfo( i18n( "Start schedule forward: %1 ", constraintToString( true ) ) );
-    KLocale *locale = KLocale::global();
-    cs->logInfo( i18n( "Schedule from start %1", locale->formatDateTime( cs->startTime ) ) );
+    QLocale locale;
+    cs->logInfo( i18n( "Schedule from start %1", locale.toString(cs->startTime, QLocale::ShortFormat) ) );
     //debugPlan<<m_name<<" startTime="<<cs->startTime;
     if(type() == Node::Type_Task) {
         if ( cs->recalculate() && completion().isFinished() ) {
@@ -1673,7 +1673,7 @@ DateTime Task::scheduleFromStartTime(int use) {
                 } else {
                     cs->positiveFloat = Duration::zeroDuration;
                 }
-                cs->logInfo( i18n( "Scheduled: %1 to %2", locale->formatDateTime( cs->startTime ), locale->formatDateTime( cs->endTime ) ) );
+                cs->logInfo( i18n( "Scheduled: %1 to %2", locale.toString(cs->startTime, QLocale::ShortFormat), locale.toString(cs->endTime, QLocale::ShortFormat) ) );
                 return cs->endTime;
             }
             cs->startTime = workTimeAfter( cs->startTime, cs );
@@ -1943,7 +1943,7 @@ DateTime Task::scheduleFromStartTime(int use) {
         cs->logError( i18n( "Failed to schedule within project target time" ) );
     }
     foreach ( const Appointment *a, cs->appointments() ) {
-        cs->logInfo( i18n( "Resource %1 booked from %2 to %3", a->resource()->resource()->name(), locale->formatDateTime( a->startTime() ), locale->formatDateTime( a->endTime() ) ) );
+        cs->logInfo( i18n( "Resource %1 booked from %2 to %3", a->resource()->resource()->name(), locale.toString(a->startTime(), QLocale::ShortFormat), locale.toString(a->endTime(), QLocale::ShortFormat) ) );
     }
     if ( cs->startTime < cs->earlyStart ) {
         cs->logWarning( i18n( "Starting earlier than early start" ) );
@@ -1951,7 +1951,7 @@ DateTime Task::scheduleFromStartTime(int use) {
     if ( cs->endTime > cs->lateFinish ) {
         cs->logWarning( i18n( "Finishing later than late finish" ) );
     }
-    cs->logInfo( i18n( "Scheduled: %1 to %2", locale->formatDateTime( cs->startTime ), locale->formatDateTime( cs->endTime ) ) );
+    cs->logInfo( i18n( "Scheduled: %1 to %2", locale.toString(cs->startTime, QLocale::ShortFormat), locale.toString(cs->endTime, QLocale::ShortFormat) ) );
     m_visitedForward = true;
     cs->incProgress();
     m_requests.resetDynamicAllocations();
@@ -2039,7 +2039,7 @@ DateTime Task::scheduleFromEndTime(int use) {
     timer.start();
     cs->logDebug( QString( "Start schedule backward: %1 " ).arg( constraintToString( true ) ) );
 #endif
-    KLocale *locale = KLocale::global();
+    QLocale locale;
     cs->logInfo( i18n( "Schedule from end time: %1", cs->endTime.toString() ) );
     if (type() == Node::Type_Task) {
         cs->duration = m_estimate->value(use, pert);
@@ -2300,7 +2300,7 @@ DateTime Task::scheduleFromEndTime(int use) {
         cs->logError( i18n( "Failed to schedule within project target time" ) );
     }
     foreach ( const Appointment *a, cs->appointments() ) {
-        cs->logInfo( i18n( "Resource %1 booked from %2 to %3", a->resource()->resource()->name(), locale->formatDateTime( a->startTime() ), locale->formatDateTime( a->endTime() ) ) );
+        cs->logInfo( i18n( "Resource %1 booked from %2 to %3", a->resource()->resource()->name(), locale.toString(a->startTime(), QLocale::ShortFormat ), locale.toString(a->endTime(), QLocale::ShortFormat) ) );
     }
     if ( cs->startTime < cs->earlyStart ) {
         cs->logWarning( i18n( "Starting earlier than early start" ) );
@@ -2308,7 +2308,7 @@ DateTime Task::scheduleFromEndTime(int use) {
     if ( cs->endTime > cs->lateFinish ) {
         cs->logWarning( i18n( "Finishing later than late finish" ) );
     }
-    cs->logInfo( i18n( "Scheduled: %1 to %2", locale->formatDateTime( cs->startTime ), locale->formatDateTime( cs->endTime ) ) );
+    cs->logInfo( i18n( "Scheduled: %1 to %2", locale.toString(cs->startTime, QLocale::ShortFormat), locale.toString(cs->endTime, QLocale::ShortFormat) ) );
     m_visitedBackward = true;
     cs->incProgress();
     m_requests.resetDynamicAllocations();

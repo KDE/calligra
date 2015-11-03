@@ -37,8 +37,8 @@
 #include <QMimeData>
 #include <QMimeDatabase>
 #include <QStringList>
+#include <QLocale>
 
-#include <klocale.h>
 #include <kio/netaccess.h>
 #include <kio/job.h>
 
@@ -276,16 +276,16 @@ QVariant ResourceModel::availableFrom( const Resource *res, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return KLocale::global()->formatDateTime( res->availableFrom() );
+            return QLocale().toString( res->availableFrom(), QLocale::ShortFormat );
         case Qt::EditRole:
             return res->availableFrom();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::ToolTipRole: {
             if ( res->availableFrom().isValid() ) {
-                return i18nc( "infor:tooltip", "Available from: %1", KLocale::global()->formatDateTime( res->availableFrom(), KLocale::LongDate, KLocale::TimeZone ) );
+                return i18nc( "infor:tooltip", "Available from: %1", QLocale().toString( res->availableFrom(), QLocale::LongFormat ) );
             }
-            return i18nc( "infor:tooltip", "Available from project target start time: %1", KLocale::global()->formatDateTime( m_project->constraintStartTime(), KLocale::LongDate, KLocale::TimeZone ) );
+            return i18nc( "infor:tooltip", "Available from project target start time: %1", QLocale().toString( m_project->constraintStartTime(), QLocale::LongFormat ) );
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -298,16 +298,16 @@ QVariant ResourceModel::availableUntil( const Resource *res, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return KLocale::global()->formatDateTime( res->availableUntil() );
+            return QLocale().toString( res->availableUntil(), QLocale::ShortFormat );
         case Qt::EditRole:
             return res->availableUntil();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::ToolTipRole: {
             if ( res->availableUntil().isValid() ) {
-                return i18nc( "infor:tooltip", "Available until: %1", KLocale::global()->formatDateTime( res->availableUntil(), KLocale::LongDate, KLocale::TimeZone ) );
+                return i18nc( "infor:tooltip", "Available until: %1", QLocale().toString( res->availableUntil(), QLocale::LongFormat ) );
             }
-            return i18nc( "infor:tooltip", "Available from project target finish time: %1", KLocale::global()->formatDateTime( m_project->constraintEndTime(), KLocale::LongDate, KLocale::TimeZone ) );
+            return i18nc( "infor:tooltip", "Available from project target finish time: %1", QLocale().toString( m_project->constraintEndTime(), QLocale::LongFormat ) );
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:

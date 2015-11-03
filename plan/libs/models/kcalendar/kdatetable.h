@@ -2,6 +2,7 @@
     This file is part of the KDE libraries
     Copyright (C) 1997 Tim D. Gilman (tdgilman@best.org)
               (C) 1998-2001 Mirko Boehm (mirko@kde.org)
+              (C) 2007 John Layt <john@layt.net>
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
     License as published by the Free Software Foundation; either
@@ -17,19 +18,17 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
+
 #ifndef KPTDATETBL_H
 #define KPTDATETBL_H
 
 #include "kplatomodels_export.h"
 
-#include <QValidator>
-#include <QLineEdit>
-#include <QDateTime>
-#include <QHash>
+#include <QWidget>
+#include <QDate>
 #include <QList>
 #include <QStyleOptionViewItem>
 #include <QStyleOptionHeader>
-#include <QFrame>
 
 class QMenu;
 
@@ -43,18 +42,6 @@ class KDateTableWeekNumberDelegate;
 
 class StyleOptionHeader;
 class StyleOptionViewItem;
-
-/**
-* Validates user-entered dates.
-*/
-class  KDateValidator : public QValidator
-{
-public:
-    KDateValidator(QWidget* parent=0);
-    virtual State validate(QString&, int&) const;
-    virtual void fixup ( QString & input ) const;
-    State date(const QString&, QDate&) const;
-};
 
 /**
  * Date selection table.
@@ -97,7 +84,7 @@ public:
      * to be done there anyway. The size is stored in maxCell. The
      * sizeHint() simply returns a multiple of maxCell.
      */
-    virtual QSize sizeHint() const;
+    QSize sizeHint() const Q_DECL_OVERRIDE;
     /**
      * Set the font size of the date table.
      */
@@ -105,8 +92,9 @@ public:
     /**
      * Select and display this date.
      */
-    bool setDate(const QDate&);
+    bool setDate(const QDate &date);
 
+    // KDE5 remove the const & from the returned QDate
     /**
      * @returns the selected date.
      */
@@ -131,7 +119,8 @@ public:
      * Makes a given date be painted with a given foregroundColor, and background
      * (a rectangle, or a circle/ellipse) in a given color.
      */
-    void setCustomDatePainting( const QDate &date, const QColor &fgColor, BackgroundMode bgMode=NoBgMode, const QColor &bgColor=QColor());
+    void setCustomDatePainting( const QDate &date, const QColor &fgColor,
+                                BackgroundMode bgMode=NoBgMode, const QColor &bgColor = QColor());
 
     /**
      * Unsets the custom painting of a date so that the date is painted as usual.
@@ -147,9 +136,13 @@ public:
     void setModel( KDateTableDataModel *model );
     KDateTableDataModel *model() const;
     
+    // datetable takes ownership of delegate
     void setDateDelegate( KDateTableDateDelegate *delegate );
+    // datetable takes ownership of delegate
     void setDateDelegate( const QDate &date, KDateTableDateDelegate *delegate );
+    // datetable takes ownership of delegate
     void setWeekDayDelegate( KDateTableWeekDayDelegate *delegate );
+    // datetable takes ownership of delegate
     void setWeekNumberDelegate( KDateTableWeekNumberDelegate *delegate );
     void setWeekNumbersEnabled( bool enable );
     
@@ -162,7 +155,8 @@ public:
     
 protected:
     /**
-     * calculate the position of the cell in the matrix for the given date. The result is the 0-based index.
+     * calculate the position of the cell in the matrix for the given date.
+     * The result is the 0-based index.
      */
     virtual int posFromDate( const QDate &date ); 
     /**
@@ -171,23 +165,26 @@ protected:
      */
     virtual QDate dateFromPos( int pos ); 
 
-    virtual void paintEvent(QPaintEvent *e);
+    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
     /**
      * React on mouse clicks that select a date.
      */
-    virtual void mousePressEvent(QMouseEvent *);
-    virtual void wheelEvent( QWheelEvent * e );
-    virtual void keyPressEvent( QKeyEvent *e );
-    virtual void focusInEvent( QFocusEvent *e );
-    virtual void focusOutEvent( QFocusEvent *e );
+    void mousePressEvent(QMouseEvent *e ) Q_DECL_OVERRIDE;
+    void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
+    void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
+    void focusInEvent(QFocusEvent *e) Q_DECL_OVERRIDE;
+    void focusOutEvent(QFocusEvent *e) Q_DECL_OVERRIDE;
 
-    virtual bool event( QEvent *e );
+    /**
+     * Cell highlight on mouse hovering
+     */
+    bool event(QEvent *e) Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     /**
      * The selected date changed.
      */
-    void dateChanged(const QDate&);
+    void dateChanged(const QDate &date);
     /**
      * This function behaves essentially like the one above.
      * The selected date changed.
@@ -215,9 +212,7 @@ Q_SIGNALS:
 
     //----->
     void selectionChanged( const QList<QDate>& );
-    
-    void focusChanged( QFocusEvent *e );
-    
+
 protected Q_SLOTS:
     void slotReset();
     void slotDataChanged( const QDate &start, const QDate &end );
@@ -236,9 +231,9 @@ private:
     friend class KDateTablePrivate;
     KDateTablePrivate * const d;
 
+    void initWidget(const QDate &date);
     void initAccels();
     void paintCell(QPainter *painter, int row, int col);
-    void init();
     
     Q_DISABLE_COPY(KDateTable)
 };

@@ -260,10 +260,10 @@ QVariant NodeModel::constraintStartTime( const Node *node, int role ) const
     if ( node->type() == Node::Type_Project ) {
         switch ( role ) {
             case Qt::DisplayRole: {
-                return KLocale::global()->formatDateTime( node->constraintStartTime() );
+                return QLocale().toString( node->constraintStartTime(), QLocale::ShortFormat );
             }
             case Qt::ToolTipRole: {
-                return KLocale::global()->formatDateTime( node->constraintStartTime(), KLocale::LongDate, KLocale::TimeZone );
+                return QLocale().toString( node->constraintStartTime(), QLocale::LongFormat );
             }
             case Qt::EditRole:
                 return node->constraintStartTime();
@@ -275,7 +275,7 @@ QVariant NodeModel::constraintStartTime( const Node *node, int role ) const
     } else if ( node->type() != Node::Type_Summarytask ) {
         switch ( role ) {
             case Qt::DisplayRole: {
-                QString s = KLocale::global()->formatDateTime( node->constraintStartTime() );
+                QString s = QLocale().toString( node->constraintStartTime(), QLocale::ShortFormat );
                 switch ( node->constraint() ) {
                     case Node::StartNotEarlier:
                     case Node::MustStartOn:
@@ -289,7 +289,7 @@ QVariant NodeModel::constraintStartTime( const Node *node, int role ) const
             case Qt::ToolTipRole: {
                 int c = node->constraint();
                 if ( c == Node::MustStartOn || c == Node::StartNotEarlier || c == Node::FixedInterval  ) {
-                    return KLocale::global()->formatDateTime( node->constraintStartTime(), KLocale::LongDate, KLocale::TimeZone );
+                    return QLocale().toString( node->constraintStartTime(), QLocale::LongFormat );
                 }
                 break;
             }
@@ -308,10 +308,10 @@ QVariant NodeModel::constraintEndTime( const Node *node, int role ) const
     if ( node->type() == Node::Type_Project ) {
         switch ( role ) {
             case Qt::DisplayRole: {
-                return KLocale::global()->formatDateTime( node->constraintEndTime() );
+                return QLocale().toString( node->constraintEndTime(), QLocale::ShortFormat );
             }
             case Qt::ToolTipRole: {
-                return KLocale::global()->formatDateTime( node->constraintEndTime(), KLocale::LongDate, KLocale::TimeZone  );
+                return QLocale().toString( node->constraintEndTime(), QLocale::LongFormat );
             }
             case Qt::EditRole:
                 return node->constraintEndTime();
@@ -323,7 +323,7 @@ QVariant NodeModel::constraintEndTime( const Node *node, int role ) const
     } else if ( node->type() != Node::Type_Summarytask ) {
         switch ( role ) {
             case Qt::DisplayRole: {
-                QString s = KLocale::global()->formatDateTime( node->constraintEndTime() );
+                QString s = QLocale().toString( node->constraintEndTime(), QLocale::ShortFormat );
                 switch ( node->constraint() ) {
                     case Node::FinishNotLater:
                     case Node::MustFinishOn:
@@ -337,7 +337,7 @@ QVariant NodeModel::constraintEndTime( const Node *node, int role ) const
             case Qt::ToolTipRole: {
                 int c = node->constraint();
                 if ( c == Node::FinishNotLater || c == Node::MustFinishOn || c == Node::FixedInterval ) {
-                    return KLocale::global()->formatDateTime( node->constraintEndTime(), KLocale::LongDate, KLocale::TimeZone  );
+                    return QLocale().toString( node->constraintEndTime(), QLocale::LongFormat );
                 }
                 break;
             }
@@ -449,7 +449,7 @@ QVariant NodeModel::estimate( const Node *node, int role ) const
         case Qt::DisplayRole:
             if ( node->type() == Node::Type_Task  || node->type() == Node::Type_Milestone ) {
                 Duration::Unit unit = node->estimate()->unit();
-                QString s = KLocale::global()->formatNumber( node->estimate()->expectedEstimate(), m_prec ) +  Duration::unitToString( unit, true );
+                QString s = QLocale().toString( node->estimate()->expectedEstimate(), 'f', m_prec ) +  Duration::unitToString( unit, true );
                 if ( node->constraint() == Node::FixedInterval && node->estimate()->type() == Estimate::Type_Duration ) {
                     s = '(' + s + ')';
                 }
@@ -459,7 +459,7 @@ QVariant NodeModel::estimate( const Node *node, int role ) const
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
                 Duration::Unit unit = node->estimate()->unit();
-                QString s = KLocale::global()->formatNumber( node->estimate()->expectedEstimate(), m_prec ) +  Duration::unitToString( unit, true );
+                QString s = QLocale().toString( node->estimate()->expectedEstimate(), 'f', m_prec ) +  Duration::unitToString( unit, true );
                 Estimate::Type t = node->estimate()->type();
                 if ( node->constraint() == Node::FixedInterval && t == Estimate::Type_Duration ) {
                     s = i18nc( "@info:tooltip", "Not applicable, constraint is Fixed Interval" );
@@ -510,7 +510,7 @@ QVariant NodeModel::optimisticRatio( const Node *node, int role ) const
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
                 Duration::Unit unit = node->estimate()->unit();
-                QString s = KLocale::global()->formatNumber( node->estimate()->optimisticEstimate(), m_prec ) +  Duration::unitToString( unit, true );
+                QString s = QLocale().toString( node->estimate()->optimisticEstimate(), 'f', m_prec ) +  Duration::unitToString( unit, true );
                 Estimate::Type t = node->estimate()->type();
                 if ( node->constraint() == Node::FixedInterval && t == Estimate::Type_Duration ) {
                     s = i18nc( "@info:tooltip", "Not applicable, constraint is Fixed Interval" );
@@ -557,7 +557,7 @@ QVariant NodeModel::pessimisticRatio( const Node *node, int role ) const
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
                 Duration::Unit unit = node->estimate()->unit();
-                QString s = KLocale::global()->formatNumber( node->estimate()->pessimisticEstimate(), m_prec ) +  Duration::unitToString( unit, true );
+                QString s = QLocale().toString( node->estimate()->pessimisticEstimate(), 'f', m_prec ) +  Duration::unitToString( unit, true );
                 Estimate::Type t = node->estimate()->type();
                 if ( node->constraint() == Node::FixedInterval && t == Estimate::Type_Duration ) {
                     s = i18nc( "@info:tooltip", "Not applicable, constraint is Fixed Interval" );
@@ -752,10 +752,10 @@ QVariant NodeModel::startTime( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return KLocale::global()->formatDateTime( node->startTime( id() ) );
+            return QLocale().toString( node->startTime( id() ), QLocale::ShortFormat );
         case Qt::ToolTipRole:
             //debugPlan<<node->name()<<", "<<role;
-            return i18nc( "@info:tooltip", "Scheduled start: %1", KLocale::global()->formatDateTime( node->startTime( id() ), KLocale::LongDate, KLocale::TimeZone ) );
+            return i18nc( "@info:tooltip", "Scheduled start: %1", QLocale().toString( node->startTime( id() ), QLocale::LongFormat ) );
         case Qt::EditRole:
             return node->startTime( id() );
         case Qt::StatusTipRole:
@@ -769,10 +769,10 @@ QVariant NodeModel::endTime( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return KLocale::global()->formatDateTime( node->endTime( id() ) );
+            return QLocale().toString( node->endTime( id() ), QLocale::ShortFormat );
         case Qt::ToolTipRole:
             //debugPlan<<node->name()<<", "<<role;
-            return i18nc( "@info:tooltip", "Scheduled finish: %1", KLocale::global()->formatDateTime( node->endTime( id() ), KLocale::LongDate, KLocale::TimeZone ) );
+            return i18nc( "@info:tooltip", "Scheduled finish: %1", QLocale().toString( node->endTime( id() ), QLocale::LongFormat ) );
         case Qt::EditRole:
             return node->endTime( id() );
         case Qt::StatusTipRole:
@@ -789,22 +789,22 @@ QVariant NodeModel::duration( const Node *node, int role ) const
             if ( node->type() == Node::Type_Task ) {
                 Duration::Unit unit = node->estimate()->unit();
                 double v = node->duration( id() ).toDouble( unit );
-                return QVariant(KLocale::global()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ));
+                return QVariant(QLocale().toString( v, 'f', m_prec ) +  Duration::unitToString( unit, true ));
             } else if ( node->type() == Node::Type_Project ) {
                 Duration::Unit unit = Duration::Unit_d;
                 double v = node->duration( id() ).toDouble( unit );
-                return QVariant(KLocale::global()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ));
+                return QVariant(QLocale().toString( v, 'f', m_prec ) +  Duration::unitToString( unit, true ));
             }
             break;
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
                 Duration::Unit unit = node->estimate()->unit();
                 double v = node->duration( id() ).toDouble( unit );
-                return i18nc( "@info:tooltip", "Scheduled duration: %1", KLocale::global()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ) );
+                return i18nc( "@info:tooltip", "Scheduled duration: %1", QLocale().toString( v, 'f', m_prec ) +  Duration::unitToString( unit, true ) );
             } else if ( node->type() == Node::Type_Project ) {
                 Duration::Unit unit = Duration::Unit_d;
                 double v = node->duration( id() ).toDouble( unit );
-                return i18nc( "@info:tooltip", "Scheduled duration: %1", KLocale::global()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ) );
+                return i18nc( "@info:tooltip", "Scheduled duration: %1", QLocale().toString( v, 'f', m_prec ) +  Duration::unitToString( unit, true ) );
             }
             break;
         case Qt::EditRole: {
@@ -824,7 +824,7 @@ QVariant NodeModel::varianceDuration( const Node *node, int role ) const
             if ( node->type() == Node::Type_Task ) {
                 Duration::Unit unit = node->estimate()->unit();
                 double v = node->variance( id(), unit );
-                return KLocale::global()->formatNumber( v );
+                return QLocale().toString( v, 'f', 2 );
             }
             break;
         case Qt::EditRole:
@@ -837,7 +837,7 @@ QVariant NodeModel::varianceDuration( const Node *node, int role ) const
             if ( node->type() == Node::Type_Task ) {
                 Duration::Unit unit = node->estimate()->unit();
                 double v = node->variance( id(), unit );
-                return i18nc( "@info:tooltip", "PERT duration variance: %1", KLocale::global()->formatNumber( v ) );
+                return i18nc( "@info:tooltip", "PERT duration variance: %1", QLocale().toString( v ,'f', 2 ) );
             }
             break;
         case Qt::StatusTipRole:
@@ -857,7 +857,7 @@ QVariant NodeModel::varianceEstimate( const Estimate *est, int role ) const
             Duration::Unit unit = est->unit();
             double v = est->variance( unit );
             //debugPlan<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
-            return KLocale::global()->formatNumber( v );
+            return QLocale().toString( v, 'f', 2 );
         }
         case Qt::EditRole: {
             if ( est == 0 ) {
@@ -871,7 +871,7 @@ QVariant NodeModel::varianceEstimate( const Estimate *est, int role ) const
             }
             Duration::Unit unit = est->unit();
             double v = est->variance( unit );
-            return i18nc( "@info:tooltip", "PERT estimate variance: %1", KLocale::global()->formatNumber( v ) + Duration::unitToString( unit, true ) );
+            return i18nc( "@info:tooltip", "PERT estimate variance: %1", QLocale().toString( v, 'f', 2 ) + Duration::unitToString( unit, true ) );
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -892,7 +892,7 @@ QVariant NodeModel::optimisticDuration( const Node *node, int role ) const
             Duration::Unit unit = node->estimate()->unit();
             double v = d.toDouble( unit );
                 //debugPlan<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
-            return QVariant(KLocale::global()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ));
+            return QVariant(QLocale().toString( v,'f', m_prec ) +  Duration::unitToString( unit, true ));
             break;
         }
         case Qt::EditRole: {
@@ -913,7 +913,7 @@ QVariant NodeModel::optimisticDuration( const Node *node, int role ) const
             Duration::Unit unit = node->estimate()->unit();
             double v = d.toDouble( unit );
             //debugPlan<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
-            return i18nc( "@info:tooltip", "PERT optimistic duration: %1", KLocale::global()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ) );
+            return i18nc( "@info:tooltip", "PERT optimistic duration: %1", QLocale().toString( v, 'f', m_prec ) +  Duration::unitToString( unit, true ) );
             break;
         }
         case Qt::StatusTipRole:
@@ -931,7 +931,7 @@ QVariant NodeModel::optimisticEstimate( const Estimate *est, int role ) const
                 return QVariant();
             }
             Duration::Unit unit = est->unit();
-            return QVariant(KLocale::global()->formatNumber( est->optimisticEstimate(), m_prec ) +  Duration::unitToString( unit, true ));
+            return QVariant(QLocale().toString( est->optimisticEstimate(), 'f', m_prec ) +  Duration::unitToString( unit, true ));
             break;
         }
         case Qt::EditRole: {
@@ -945,7 +945,7 @@ QVariant NodeModel::optimisticEstimate( const Estimate *est, int role ) const
                 return QVariant();
             }
             Duration::Unit unit = est->unit();
-            return i18nc( "@info:tooltip", "Optimistic estimate: %1", KLocale::global()->formatNumber( est->optimisticEstimate(), m_prec ) +  Duration::unitToString( unit, true ) );
+            return i18nc( "@info:tooltip", "Optimistic estimate: %1", QLocale().toString( est->optimisticEstimate(), 'f', m_prec ) +  Duration::unitToString( unit, true ) );
             break;
         }
         case Qt::StatusTipRole:
@@ -964,7 +964,7 @@ QVariant NodeModel::pertExpected( const Estimate *est, int role ) const
             }
             Duration::Unit unit = est->unit();
             double v = Estimate::scale( est->pertExpected(), unit, est->scales() );
-            return QVariant(KLocale::global()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ));
+            return QVariant(QLocale().toString( v, 'f', m_prec ) +  Duration::unitToString( unit, true ));
         }
         case Qt::EditRole: {
             if ( est == 0 ) {
@@ -978,7 +978,7 @@ QVariant NodeModel::pertExpected( const Estimate *est, int role ) const
             }
             Duration::Unit unit = est->unit();
             double v = Estimate::scale( est->pertExpected(), unit, est->scales() );
-            return i18nc( "@info:tooltip", "PERT expected estimate: %1", KLocale::global()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ) );
+            return i18nc( "@info:tooltip", "PERT expected estimate: %1", QLocale().toString( v, 'f', m_prec ) +  Duration::unitToString( unit, true ) );
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -999,7 +999,7 @@ QVariant NodeModel::pessimisticDuration( const Node *node, int role ) const
             Duration::Unit unit = node->estimate()->unit();
             double v = d.toDouble( unit );
             //debugPlan<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
-            return QVariant(KLocale::global()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ));
+            return QVariant(QLocale().toString( v, 'f', m_prec ) +  Duration::unitToString( unit, true ));
             break;
         }
         case Qt::EditRole: {
@@ -1019,7 +1019,7 @@ QVariant NodeModel::pessimisticDuration( const Node *node, int role ) const
             Duration::Unit unit = node->estimate()->unit();
             double v = d.toDouble( unit );
             //debugPlan<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
-            return i18nc( "@info:tooltip", "PERT pessimistic duration: %1", KLocale::global()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ) );
+            return i18nc( "@info:tooltip", "PERT pessimistic duration: %1", QLocale().toString( v, 'f', m_prec ) +  Duration::unitToString( unit, true ) );
             break;
         }
         case Qt::StatusTipRole:
@@ -1037,7 +1037,7 @@ QVariant NodeModel::pessimisticEstimate( const Estimate *est, int role ) const
                 return QVariant();
             }
             Duration::Unit unit = est->unit();
-            return QVariant(KLocale::global()->formatNumber( est->pessimisticEstimate(), m_prec ) +  Duration::unitToString( unit, true ));
+            return QVariant(QLocale().toString( est->pessimisticEstimate(), 'f', m_prec ) +  Duration::unitToString( unit, true ));
             break;
         }
         case Qt::EditRole: {
@@ -1051,7 +1051,7 @@ QVariant NodeModel::pessimisticEstimate( const Estimate *est, int role ) const
                 return QVariant();
             }
             Duration::Unit unit = est->unit();
-            return i18nc( "@info:tooltip", "Pessimistic estimate: %1", KLocale::global()->formatNumber( est->pessimisticEstimate(), m_prec ) +  Duration::unitToString( unit, true ) );
+            return i18nc( "@info:tooltip", "Pessimistic estimate: %1", QLocale().toString( est->pessimisticEstimate(), 'f', m_prec ) +  Duration::unitToString( unit, true ) );
             break;
         }
         case Qt::StatusTipRole:
@@ -1069,9 +1069,9 @@ QVariant NodeModel::earlyStart( const Node *node, int role ) const
     const Task *t = static_cast<const Task*>( node );
     switch ( role ) {
         case Qt::DisplayRole:
-            return KLocale::global()->formatDateTime( t->earlyStart( id() ) );
+            return QLocale().toString( t->earlyStart( id() ), QLocale::ShortFormat );
         case Qt::ToolTipRole:
-            return KLocale::global()->formatDate( t->earlyStart( id() ).date() );
+            return QLocale().toString( t->earlyStart( id() ).date(), QLocale::ShortFormat );
         case Qt::EditRole:
             return t->earlyStart( id() );
         case Qt::StatusTipRole:
@@ -1089,9 +1089,9 @@ QVariant NodeModel::earlyFinish( const Node *node, int role ) const
     const Task *t = static_cast<const Task*>( node );
     switch ( role ) {
         case Qt::DisplayRole:
-            return KLocale::global()->formatDateTime( t->earlyFinish( id() ) );
+            return QLocale().toString( t->earlyFinish( id() ), QLocale::ShortFormat );
         case Qt::ToolTipRole:
-            return KLocale::global()->formatDate( t->earlyFinish( id() ).date() );
+            return QLocale().toString( t->earlyFinish( id() ).date(), QLocale::ShortFormat );
         case Qt::EditRole:
             return t->earlyFinish( id() );
         case Qt::StatusTipRole:
@@ -1109,9 +1109,9 @@ QVariant NodeModel::lateStart( const Node *node, int role ) const
     const Task *t = static_cast<const Task*>( node );
     switch ( role ) {
         case Qt::DisplayRole:
-            return KLocale::global()->formatDateTime( t->lateStart( id() ) );
+            return QLocale().toString( t->lateStart( id() ), QLocale::ShortFormat );
         case Qt::ToolTipRole:
-            return KLocale::global()->formatDate( t->lateStart( id() ).date() );
+            return QLocale().toString( t->lateStart( id() ).date(), QLocale::ShortFormat );
         case Qt::EditRole:
             return t->lateStart( id() );
         case Qt::StatusTipRole:
@@ -1129,9 +1129,9 @@ QVariant NodeModel::lateFinish( const Node *node, int role ) const
     const Task *t = static_cast<const Task*>( node );
     switch ( role ) {
         case Qt::DisplayRole:
-            return KLocale::global()->formatDateTime( t->lateFinish( id() ) );
+            return QLocale().toString( t->lateFinish( id() ), QLocale::ShortFormat );
         case Qt::ToolTipRole:
-            return KLocale::global()->formatDate( t->lateFinish( id() ).date() );
+            return QLocale().toString( t->lateFinish( id() ).date(), QLocale::ShortFormat );
         case Qt::EditRole:
             return t->lateFinish( id() );
         case Qt::StatusTipRole:
@@ -1419,12 +1419,12 @@ QVariant NodeModel::startedTime( const Node *node, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
             if ( t->completion().isStarted() ) {
-                return KLocale::global()->formatDateTime( t->completion().startTime() );
+                return QLocale().toString( t->completion().startTime(), QLocale::ShortFormat );
             }
             break;
         case Qt::ToolTipRole:
             if ( t->completion().isStarted() ) {
-                return i18nc( "@info:tooltip", "Actual start: %1", KLocale::global()->formatDate( t->completion().startTime().date(), KLocale::LongDate ) );
+                return i18nc( "@info:tooltip", "Actual start: %1", QLocale().toString( t->completion().startTime().date(), QLocale::LongFormat ) );
             }
             break;
         case Qt::EditRole:
@@ -1451,7 +1451,7 @@ QVariant NodeModel::isStarted( const Node *node, int role ) const
             return t->completion().isStarted();
         case Qt::ToolTipRole:
             if ( t->completion().isStarted() ) {
-                return i18nc( "@info:tooltip", "The task started at: %1", KLocale::global()->formatDate( t->completion().startTime().date(), KLocale::LongDate ) );
+                return i18nc( "@info:tooltip", "The task started at: %1", QLocale().toString( t->completion().startTime().date(), QLocale::LongFormat ) );
             }
             return i18nc( "@info:tooltip", "The task is not started" );
         case Qt::StatusTipRole:
@@ -1470,12 +1470,12 @@ QVariant NodeModel::finishedTime( const Node *node, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
             if ( t->completion().isFinished() ) {
-                return KLocale::global()->formatDateTime( t->completion().finishTime() );
+                return QLocale().toString( t->completion().finishTime(), QLocale::ShortFormat );
             }
             break;
         case Qt::ToolTipRole:
             if ( t->completion().isFinished() ) {
-                return i18nc( "@info:tooltip", "Actual finish: %1", KLocale::global()->formatDateTime( t->completion().finishTime(), KLocale::LongDate, KLocale::TimeZone ) );
+                return i18nc( "@info:tooltip", "Actual finish: %1", QLocale().toString( t->completion().finishTime(), QLocale::LongFormat ) );
             }
             break;
         case Qt::EditRole:
@@ -1502,7 +1502,7 @@ QVariant NodeModel::isFinished( const Node *node, int role ) const
             return t->completion().isFinished();
         case Qt::ToolTipRole:
             if ( t->completion().isFinished() ) {
-                return i18nc( "@info:tooltip", "The task finished at: %1", KLocale::global()->formatDate( t->completion().finishTime().date(), KLocale::LongDate ) );
+                return i18nc( "@info:tooltip", "The task finished at: %1", QLocale().toString( t->completion().finishTime().date(), QLocale::LongFormat ) );
             }
             return i18nc( "@info:tooltip", "The task is not finished" );
         case Qt::StatusTipRole:
@@ -1514,12 +1514,11 @@ QVariant NodeModel::isFinished( const Node *node, int role ) const
 
 QVariant NodeModel::plannedEffortTo( const Node *node, int role ) const
 {
-    KLocale *l = KLocale::global();
     switch ( role ) {
         case Qt::DisplayRole:
             return node->plannedEffortTo( m_now, id() ).format();
         case Qt::ToolTipRole:
-            return i18nc( "@info:tooltip", "Planned effort until %1: %2", l->formatDate( m_now ), node->plannedEffortTo( m_now, id() ).toString( Duration::Format_i18nHour ) );
+            return i18nc( "@info:tooltip", "Planned effort until %1: %2", QLocale().toString( m_now, QLocale::ShortFormat ), node->plannedEffortTo( m_now, id() ).toString( Duration::Format_i18nHour ) );
         case Qt::EditRole:
             return node->plannedEffortTo( m_now, id() ).toDouble( Duration::Unit_h );
         case Role::DurationUnit:
@@ -1533,13 +1532,12 @@ QVariant NodeModel::plannedEffortTo( const Node *node, int role ) const
 
 QVariant NodeModel::actualEffortTo( const Node *node, int role ) const
 {
-    KLocale *l = KLocale::global();
     switch ( role ) {
         case Qt::DisplayRole:
             return node->actualEffortTo( m_now ).format();
         case Qt::ToolTipRole:
             //debugPlan<<m_now<<node;
-            return i18nc( "@info:tooltip", "Actual effort used up to %1: %2", l->formatDate( m_now ), node->actualEffortTo( m_now ).toString( Duration::Format_i18nHour ) );
+            return i18nc( "@info:tooltip", "Actual effort used up to %1: %2", QLocale().toString( m_now, QLocale::ShortFormat ), node->actualEffortTo( m_now ).toString( Duration::Format_i18nHour ) );
         case Qt::EditRole:
             return node->actualEffortTo( m_now ).toDouble( Duration::Unit_h );
         case Role::DurationUnit:
@@ -1591,7 +1589,7 @@ QVariant NodeModel::plannedCostTo( const Node *node, int role ) const
         case Qt::DisplayRole:
             return l->formatMoney( node->plannedCostTo( m_now, id() ) );
         case Qt::ToolTipRole:
-            return i18nc( "@info:tooltip", "Planned cost until %1: %2", l->formatDate( m_now ), l->formatMoney( node->plannedCostTo( m_now, id() ) ) );
+            return i18nc( "@info:tooltip", "Planned cost until %1: %2", QLocale().toString( m_now, QLocale::ShortFormat ), l->formatMoney( node->plannedCostTo( m_now, id() ) ) );
         case Qt::EditRole:
             return node->plannedCostTo( m_now );
         case Qt::StatusTipRole:
@@ -1608,7 +1606,7 @@ QVariant NodeModel::actualCostTo( const Node *node, int role ) const
         case Qt::DisplayRole:
             return l->formatMoney( node->actualCostTo( id(), m_now ).cost() );
         case Qt::ToolTipRole:
-            return i18nc( "@info:tooltip", "Actual cost until %1: %2", l->formatDate( m_now ), l->formatMoney( node->actualCostTo( id(), m_now ).cost() ) );
+            return i18nc( "@info:tooltip", "Actual cost until %1: %2", QLocale().toString( m_now, QLocale::ShortFormat ), l->formatMoney( node->actualCostTo( id(), m_now ).cost() ) );
         case Qt::EditRole:
             return node->actualCostTo( id(), m_now ).cost();
         case Qt::StatusTipRole:
@@ -1921,7 +1919,7 @@ QVariant NodeModel::nodeBCWS( const Node *node, int role ) const
         case Qt::EditRole:
             return node->bcws( m_now, id() );
         case Qt::ToolTipRole:
-            return i18nc( "@info:tooltip", "Budgeted Cost of Work Scheduled at %1: %2", m_now.toString(), m_project->locale()->formatMoney( node->bcws( m_now, id() ), QString(), 0 ) );
+            return i18nc( "@info:tooltip", "Budgeted Cost of Work Scheduled at %1: %2", QLocale().toString( m_now, QLocale::ShortFormat ), m_project->locale()->formatMoney( node->bcws( m_now, id() ), QString(), 0 ) );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1937,7 +1935,7 @@ QVariant NodeModel::nodeBCWP( const Node *node, int role ) const
         case Qt::EditRole:
             return node->bcwp( id() );
         case Qt::ToolTipRole:
-            return i18nc( "@info:tooltip", "Budgeted Cost of Work Performed at %1: %2", m_now.toString(), m_project->locale()->formatMoney( node->bcwp( id() ), QString(), 0 ) );
+            return i18nc( "@info:tooltip", "Budgeted Cost of Work Performed at %1: %2", QLocale().toString( m_now, QLocale::ShortFormat ), m_project->locale()->formatMoney( node->bcwp( id() ), QString(), 0 ) );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1953,7 +1951,7 @@ QVariant NodeModel::nodeACWP( const Node *node, int role ) const
         case Qt::EditRole:
             return node->acwp( m_now, id() ).cost();
         case Qt::ToolTipRole:
-            return i18nc( "@info:tooltip", "Actual Cost of Work Performed at %1: %2", m_now.toString(), m_project->locale()->formatMoney( node->acwp( m_now, id() ).cost() ) );
+            return i18nc( "@info:tooltip", "Actual Cost of Work Performed at %1: %2", QLocale().toString( m_now, QLocale::ShortFormat ), m_project->locale()->formatMoney( node->acwp( m_now, id() ).cost() ) );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1965,11 +1963,11 @@ QVariant NodeModel::nodePerformanceIndex( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return KLocale::global()->formatNumber( node->schedulePerformanceIndex( m_now, id() ), 2 );
+            return QLocale().toString( node->schedulePerformanceIndex( m_now, id() ), 'f', 2 );
         case Qt::EditRole:
             return node->schedulePerformanceIndex( m_now, id() );
         case Qt::ToolTipRole:
-            return i18nc( "@info:tooltip", "Schedule Performance Index at %1: %2", m_now.toString(), KLocale::global()->formatNumber( node->schedulePerformanceIndex( m_now, id() ), 2 ) );
+            return i18nc( "@info:tooltip", "Schedule Performance Index at %1: %2", m_now.toString(), QLocale().toString( node->schedulePerformanceIndex( m_now, id() ), 'f', 2 ) );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -2105,7 +2103,7 @@ QVariant NodeModel::wpTransmitionTime( const Node *node, int role ) const
             if ( t->wpTransmitionStatus() == WorkPackage::TS_None ) {
                 return i18nc( "Not available", "NA" );
             }
-            return KLocale::global()->formatDateTime( t->wpTransmitionTime() );
+            return QLocale().toString( t->wpTransmitionTime(), QLocale::ShortFormat );
         }
         case Qt::ToolTipRole: {
             const Task *task = dynamic_cast<const Task*>( node );

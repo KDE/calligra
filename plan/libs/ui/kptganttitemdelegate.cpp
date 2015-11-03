@@ -27,8 +27,9 @@
 #include <QModelIndex>
 #include <QApplication>
 #include <QPainter>
+#include <QLocale>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <KGanttGlobal>
 #include <KGanttStyleOptionGanttItem>
@@ -980,9 +981,10 @@ void ResourceGanttItemDelegate::paintResourceItem( QPainter* painter, const KGan
     Appointment tot = *external + *internal;
     painter->save();
     // TODO check load vs units properly, it's not as simple as below!
+    QLocale locale;
     foreach ( const AppointmentInterval &i, tot.intervals().map() ) {
         int il = i.load();
-        QString txt = KLocale::global()->formatNumber( (double)il / (double)rl, 1 );
+        QString txt = locale.toString( (double)il / (double)rl, 'f', 1 );
         QPen pen = painter->pen();
         if ( il > rl ) {
             painter->setBrush( m_overloadBrush );

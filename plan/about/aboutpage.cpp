@@ -30,7 +30,8 @@
 #include <QStandardPaths>
 
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KFormat>
+#include <KLocalizedString>
 #include <khtml_part.h>
 
 KPlatoAboutPage::KPlatoAboutPage()
@@ -199,7 +200,7 @@ QString KPlatoAboutPage::tutorial1()
             "<li>Calculate the schedule by selecting <em>Calculate</em> in the toolbar.</li>"
             "</ul>"
             "The task should now have been scheduled to start %1 with a duration of 8 hours. You can check this by selecting the Gantt chart <em>Views->Gantt</em>."
-        , KLocale::global()->formatDateTime( m_project->startTime(), KLocale::FancyLongDate ) ),
+        , KFormat().formatRelativeDateTime(m_project->startTime(), QLocale::LongFormat) ),
         "tutorial2",
         i18n( "Next: Resource allocation" )
     );
@@ -223,7 +224,7 @@ QString KPlatoAboutPage::tutorial2()
             "Now you need to schedule the project again with the new allocation:"
             "<br/>Select the schedules editor <em>Editors->Schedules</em> and calculate the schedule by selecting <em>Calculate</em> in the toolbar."
             "<p>The task should be scheduled to start %1 with a duration of 8 hours. You can check this by selecting the Gantt chart <em>Views->Gantt</em>.<p>"
-        , KLocale::global()->formatDateTime( dt, KLocale::FancyLongDate ) ),
+        , KFormat().formatRelativeDateTime(dt, QLocale::LongFormat) ),
         "main",
         i18n( "Next: Introduction" )
     );

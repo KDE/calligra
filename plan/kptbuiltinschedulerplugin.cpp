@@ -123,11 +123,6 @@ KPlatoScheduler::~KPlatoScheduler()
     qDebug()<<"KPlatoScheduler::~KPlatoScheduler:"<<QThread::currentThreadId();
 }
 
-KLocale *KPlatoScheduler::locale() const
-{
-    return KLocale::global();
-}
-
 void KPlatoScheduler::stopScheduling()
 {
     m_stopScheduling = true;

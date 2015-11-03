@@ -31,8 +31,10 @@
 #include <QString>
 #include <QTimer>
 #include <QMutexLocker>
+#include <QLocale>
 
-#include <klocale.h>
+#include <KLocalizedString>
+#include <KFormat>
 
 #include <iostream>
 
@@ -92,11 +94,6 @@ KPlatoRCPSScheduler::~KPlatoRCPSScheduler()
     qDeleteAll( m_duration_info_list );
     qDeleteAll( m_weight_info_list );
     rcps_problem_free( m_problem );
-}
-
-KLocale *KPlatoRCPSScheduler::locale() const
-{
-    return KLocale::global();
 }
 
 int KPlatoRCPSScheduler::progress_callback( int generations, struct rcps_fitness fitness, void *arg )
@@ -436,17 +433,17 @@ void KPlatoRCPSScheduler::run()
         m_project->setCurrentSchedule( m_manager->expected()->id() );
 
         m_schedule->setPhaseName( 0, i18n( "Init" ) );
-        if ( ! m_backward && locale() ) {
-            m_schedule->logDebug( QString( "Schedule project using RCPS Scheduler, starting at %1, granularity %2 sec" ).arg( QDateTime::currentDateTime().toString() ).arg( m_timeunit ), 0 );
+        QLocale locale;
+        if ( ! m_backward ) {
+            m_schedule->logDebug( QString( "Schedule project using RCPS Scheduler, starting at %1, granularity %2 sec" ).arg( locale.toString(QDateTime::currentDateTime(), QLocale::ShortFormat) ).arg( m_timeunit ), 0 );
             if ( m_recalculate ) {
-                m_schedule->logInfo( i18n( "Re-calculate project from start time: %1", locale()->formatDateTime( m_starttime ) ), 0 );
+                m_schedule->logInfo( i18n( "Re-calculate project from start time: %1", locale.toString(m_starttime, QLocale::ShortFormat) ), 0 );
             } else {
-                m_schedule->logInfo( i18n( "Schedule project from start time: %1", locale()->formatDateTime( m_starttime ) ), 0 );
+                m_schedule->logInfo( i18n( "Schedule project from start time: %1", locale.toString(m_starttime, QLocale::ShortFormat) ), 0 );
             }
-        }
-        if ( m_backward && locale() ) {
-            m_schedule->logDebug( QString( "Schedule project backward using RCPS Scheduler, starting at %1, granularity %2 sec" ).arg( locale()->formatDateTime( QDateTime::currentDateTime() ) ).arg( m_timeunit ), 0 );
-            m_schedule->logInfo( i18n( "Schedule project from end time: %1", locale()->formatDateTime( m_starttime ) ), 0 );
+        } else {
+            m_schedule->logDebug( QString( "Schedule project backward using RCPS Scheduler, starting at %1, granularity %2 sec" ).arg( locale.toString( QDateTime::currentDateTime(), QLocale::ShortFormat) ).arg( m_timeunit ), 0 );
+            m_schedule->logInfo( i18n( "Schedule project from end time: %1", locale.toString(m_starttime, QLocale::ShortFormat) ), 0 );
         }
 
         m_managerMutex.unlock();
@@ -457,9 +454,7 @@ void KPlatoRCPSScheduler::run()
  
     result = kplatoToRCPS();
     if ( result != 0 ) {
-        if ( locale() ) {
-            m_schedule->logError( i18n( "Failed to build a valid RCPS project" ) );
-        }
+        m_schedule->logError( i18n( "Failed to build a valid RCPS project" ) );
         setProgress( PROGRESS_MAX_VALUE );
         return;
     }
@@ -521,6 +516,7 @@ void KPlatoRCPSScheduler::taskFromRCPSForward( struct rcps_job *job, Task *task,
     if ( m_haltScheduling || m_manager == 0 ) {
         return;
     }
+    QLocale locale;
     Schedule *cs = task->currentSchedule();
     Q_ASSERT( cs );
     struct rcps_mode *mode = rcps_mode_get(job, rcps_job_getmode_res(job));
@@ -542,9 +538,7 @@ void KPlatoRCPSScheduler::taskFromRCPSForward( struct rcps_job *job, Task *task,
     }
     DateTime start = m_starttime.addSecs(st * m_timeunit);
     DateTime end = start + Duration( dur * m_timeunit * 1000 );
-    if ( locale() ) {
-        cs->logDebug( QString( "Task '%1' start=%2, duration=%3: %4 - %5" ).arg( rcps_job_getname(job) ).arg( st ).arg( dur ).arg( locale()->formatDateTime( start ) ).arg( locale()->formatDateTime( end ) ), 1 );
-    }
+    cs->logDebug( QString( "Task '%1' start=%2, duration=%3: %4 - %5" ).arg( rcps_job_getname(job) ).arg( st ).arg( dur ).arg( locale.toString(start, QLocale::ShortFormat) ).arg( locale.toString(end, QLocale::ShortFormat ) ), 1 );
     task->setStartTime( start );
     task->setEndTime( end );
     for ( int reqs = 0; reqs < rcps_request_count(mode); ++reqs ) {
@@ -568,13 +562,13 @@ void KPlatoRCPSScheduler::taskFromRCPSForward( struct rcps_job *job, Task *task,
     if ( m_recalculate ) {
         if ( task->completion().isFinished() ) {
             task->copySchedule();
-            if ( locale() && m_manager ) {
-                cs->logDebug( QString( "Task is completed, copied schedule: %2 to %3" ).arg( task->name() ).arg( locale()->formatDateTime( task->startTime() ) ).arg( locale()->formatDateTime( task->endTime() ) ), 1 );
+            if ( m_manager ) {
+                cs->logDebug( QString( "Task is completed, copied schedule: %2 to %3" ).arg( task->name() ).arg( locale.toString(task->startTime(), QLocale::ShortFormat) ).arg( locale.toString(task->endTime(), QLocale::ShortFormat) ), 1 );
             }
         } else if ( task->completion().isStarted() ) {
             task->copyAppointments( DateTime(), start );
-            if ( locale() && m_manager ) {
-                cs->logDebug( QString( "Task is %4% completed, copied appointments from %2 to %3" ).arg( task->name() ).arg( locale()->formatDateTime( task->startTime() ) ).arg( locale()->formatDateTime( start ) ).arg( task->completion().percentFinished() ), 1 );
+            if ( m_manager ) {
+                cs->logDebug( QString( "Task is %4% completed, copied appointments from %2 to %3" ).arg( task->name() ).arg( locale.toString(task->startTime(), QLocale::ShortFormat) ).arg( locale.toString(start, QLocale::ShortFormat) ).arg( task->completion().percentFinished() ), 1 );
             }
         }
     }
@@ -601,9 +595,7 @@ void KPlatoRCPSScheduler::taskFromRCPSForward( struct rcps_job *job, Task *task,
         }
     } //else  Fixed duration
     task->setDuration( task->endTime() - task->startTime() );
-    if ( locale() ) {
-        cs->logInfo( i18n( "Scheduled task to start at %1 and finish at %2", locale()->formatDateTime( task->startTime() ), locale()->formatDateTime( task->endTime() ) ), 1 );
-    }
+    cs->logInfo( i18n( "Scheduled task to start at %1 and finish at %2", locale.toString(task->startTime(), QLocale::ShortFormat), locale.toString(task->endTime(), QLocale::ShortFormat ) ), 1 );
 }
 
 void KPlatoRCPSScheduler::kplatoFromRCPS()
@@ -650,10 +642,11 @@ void KPlatoRCPSScheduler::kplatoFromRCPSForward()
     
     calculatePertValues( resourcemap );
 
-    cs->logInfo( i18n( "Project scheduled to start at %1 and finish at %2", locale()->formatDateTime( projectstart ), locale()->formatDateTime( end ) ), 1 );
+    QLocale locale;
+    cs->logInfo( i18n( "Project scheduled to start at %1 and finish at %2", locale.toString(projectstart, QLocale::ShortFormat), locale.toString(end, QLocale::ShortFormat) ), 1 );
 
     if ( m_manager ) {
-        if ( locale() ) cs->logDebug( QString( "Project scheduling finished at %1" ).arg( QDateTime::currentDateTime().toString() ), 1 );
+        cs->logDebug( QString( "Project scheduling finished at %1" ).arg( QDateTime::currentDateTime().toString() ), 1 );
         m_project->finishCalculation( *m_manager );
         m_manager->scheduleChanged( cs );
     }
@@ -664,6 +657,7 @@ void KPlatoRCPSScheduler::taskFromRCPSBackward( struct rcps_job *job, Task *task
     if ( m_haltScheduling || m_manager == 0 ) {
         return;
     }
+    QLocale locale;
     Schedule *cs = task->currentSchedule();
     Q_ASSERT( cs );
     struct rcps_mode *mode = rcps_mode_get( job, rcps_job_getmode_res( job ) );
@@ -685,9 +679,7 @@ void KPlatoRCPSScheduler::taskFromRCPSBackward( struct rcps_job *job, Task *task
     }
     DateTime end = fromRcpsTime( st );
     DateTime start = fromRcpsTime( st + dur );
-    if ( locale() ) {
-        cs->logDebug( QString( "Task '%1' start=%2, duration=%3: %4 - %5" ).arg( rcps_job_getname(job) ).arg( st ).arg( dur ).arg( locale()->formatDateTime( start ) ).arg( locale()->formatDateTime( end ) ), 1 );
-    }
+    cs->logDebug( QString( "Task '%1' start=%2, duration=%3: %4 - %5" ).arg( rcps_job_getname(job) ).arg( st ).arg( dur ).arg( locale.toString(start, QLocale::ShortFormat) ).arg( locale.toString(end, QLocale::ShortFormat) ), 1 );
     task->setStartTime( start );
     task->setEndTime( end );
     for ( int reqs = 0; reqs < rcps_request_count( mode ); ++reqs ) {
@@ -711,13 +703,13 @@ void KPlatoRCPSScheduler::taskFromRCPSBackward( struct rcps_job *job, Task *task
     if ( m_recalculate ) {
         if ( task->completion().isFinished() ) {
             task->copySchedule();
-            if ( locale() && m_manager ) {
-                cs->logDebug( QString( "Task is completed, copied schedule: %2 to %3" ).arg( task->name() ).arg( locale()->formatDateTime( task->startTime() ) ).arg( locale()->formatDateTime( task->endTime() ) ), 1 );
+            if ( m_manager ) {
+                cs->logDebug( QString( "Task is completed, copied schedule: %2 to %3" ).arg( task->name() ).arg( locale.toString(task->startTime(), QLocale::ShortFormat) ).arg( locale.toString(task->endTime(), QLocale::ShortFormat) ), 1 );
             }
         } else if ( task->completion().isStarted() ) {
             task->copyAppointments( DateTime(), start );
-            if ( locale() && m_manager ) {
-                cs->logDebug( QString( "Task is %4% completed, copied appointments from %2 to %3" ).arg( task->name() ).arg( locale()->formatDateTime( task->startTime() ) ).arg( locale()->formatDateTime( start ) ).arg( task->completion().percentFinished() ), 1 );
+            if ( m_manager ) {
+                cs->logDebug( QString( "Task is %4% completed, copied appointments from %2 to %3" ).arg( task->name() ).arg( locale.toString(task->startTime(), QLocale::ShortFormat) ).arg( locale.toString(start, QLocale::ShortFormat) ).arg( task->completion().percentFinished() ), 1 );
             }
         }
     }
@@ -744,14 +736,13 @@ void KPlatoRCPSScheduler::taskFromRCPSBackward( struct rcps_job *job, Task *task
         }
     } //else  Fixed duration
     task->setDuration( task->endTime() - task->startTime() );
-    if ( locale() ) {
-        cs->logInfo( i18n( "Scheduled task to start at %1 and finish at %2", locale()->formatDateTime( task->startTime() ), locale()->formatDateTime( task->endTime() ) ), 1 );
-    }
+    cs->logInfo( i18n( "Scheduled task to start at %1 and finish at %2", locale.toString(task->startTime(), QLocale::ShortFormat), locale.toString(task->endTime(), QLocale::ShortFormat) ), 1 );
 }
 
 
 void KPlatoRCPSScheduler::kplatoFromRCPSBackward()
 {
+    QLocale locale;
     //debugPlan<<"KPlatoRCPSScheduler::kplatoFromRCPSBackward:";
     MainSchedule *cs = static_cast<MainSchedule*>( m_project->currentSchedule() );
     QMap<Node*, QList<ResourceRequest*> > resourcemap;
@@ -777,17 +768,17 @@ void KPlatoRCPSScheduler::kplatoFromRCPSBackward()
     DateTime end = fromRcpsTime( rcps_job_getstart_res( m_jobstart ) );
     m_project->setStartTime( projectstart );
     m_project->setEndTime( end );
-    cs->logInfo( i18n( "Project scheduled to start at %1 and finish at %2", locale()->formatDateTime( projectstart ), locale()->formatDateTime( end ) ), 1 );
+    cs->logInfo( i18n( "Project scheduled to start at %1 and finish at %2", locale.toString(projectstart, QLocale::ShortFormat), locale.toString(end, QLocale::ShortFormat) ), 1 );
     if ( projectstart < m_project->constraintStartTime() ) {
         cs->setConstraintError( true );
-        cs->logError( i18n( "Must start project early in order to finish in time: %1", locale()->formatDateTime( m_project->constraintStartTime() ) ), 1 );
+        cs->logError( i18n( "Must start project early in order to finish in time: %1", locale.toString(m_project->constraintStartTime(), QLocale::ShortFormat) ), 1 );
     }
     adjustSummaryTasks( m_schedule->summaryTasks() );
 
     calculatePertValues( resourcemap );
 
     if ( m_manager ) {
-        if ( locale() ) cs->logDebug( QString( "Project scheduling finished at %1" ).arg( QDateTime::currentDateTime().toString() ), 1 );
+        cs->logDebug( QString( "Project scheduling finished at %1" ).arg( QDateTime::currentDateTime().toString() ), 1 );
         m_project->finishCalculation( *m_manager );
         m_manager->scheduleChanged( cs );
     }
@@ -855,7 +846,7 @@ void KPlatoRCPSScheduler::calculatePertValues( const QMap<Node*, QList<ResourceR
         }
         if ( t->negativeFloat() != 0 ) {
             n->schedule()->setConstraintError( true );
-            n->schedule()->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", n->constraintToString( true ), locale()->formatDuration( t->negativeFloat().milliseconds() ) ) );
+            n->schedule()->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", n->constraintToString( true ), KFormat().formatDuration( t->negativeFloat().milliseconds() ) ) );
         }
 
     }
@@ -911,9 +902,8 @@ Duration KPlatoRCPSScheduler::calculateLateStuff( const QMap<Node*, QList<Resour
     task->setPositiveFloat( pf );
     task->setLateFinish( task->endTime() + pf );
     task->setLateStart( task->lateFinish() - ( task->endTime() - task->startTime() ) );
-    if ( locale() ) {
-        cs->logDebug( QString( "Late start %1, late finish %2, positive float %3" ).arg( locale()->formatDateTime( task->lateStart() ) ).arg( locale()->formatDateTime( task->lateFinish() ) ).arg( pf.toString() ), 2 );
-    }
+    QLocale locale;
+    cs->logDebug( QString( "Late start %1, late finish %2, positive float %3" ).arg( locale.toString(task->lateStart(), QLocale::ShortFormat ) ).arg( locale.toString(task->lateFinish(), QLocale::ShortFormat) ).arg( pf.toString() ), 2 );
     return pf;
 }
 
@@ -964,9 +954,8 @@ Duration KPlatoRCPSScheduler::calculateEarlyStuff( const QMap<Node*, QList<Resou
     }
     task->setEarlyStart( task->startTime() - tot );
     task->setEarlyFinish( task->earlyStart() + ( task->endTime() - task->startTime() ) );
-    if ( locale() ) {
-        cs->logDebug( QString( "Early start %1, early finish %2" ).arg( locale()->formatDateTime( task->earlyStart() ) ).arg( locale()->formatDateTime( task->earlyFinish() ) ), 2 );
-    }
+    QLocale locale;
+    cs->logDebug( QString( "Early start %1, early finish %2" ).arg( locale.toString(task->earlyStart(), QLocale::ShortFormat) ).arg( locale.toString(task->earlyFinish(), QLocale::ShortFormat) ), 2 );
     return tot;
 }
 

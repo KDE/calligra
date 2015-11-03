@@ -39,6 +39,7 @@
 #include <ksystemtimezone.h>
 #include <ktimezone.h>
 #include <krandom.h>
+#include <KFormat>
 
 
 namespace KPlato
@@ -158,13 +159,13 @@ void Project::calculate( const DateTime &dt )
         return ;
     }
     stopcalculation = false;
-    KLocale *locale = KLocale::global();
+    QLocale locale;
     DateTime time = dt.isValid() ? dt : DateTime( QDateTime::currentDateTime() );
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
     Estimate::Use estType = ( Estimate::Use ) cs->type();
     if ( type() == Type_Project ) {
         cs->setPhaseName( 0, i18n( "Init" ) );
-        cs->logInfo( i18n( "Schedule project from: %1", locale->formatDateTime( dt ) ), 0 );
+        cs->logInfo( i18n( "Schedule project from: %1", locale.toString(dt, QLocale::ShortFormat) ), 0 );
         initiateCalculation( *cs );
         initiateCalculationLists( *cs ); // must be after initiateCalculation() !!
         propagateEarliestStart( time );
@@ -182,13 +183,13 @@ void Project::calculate( const DateTime &dt )
         cs->setPhaseName( 3, i18n( "Schedule" ) );
         cs->logInfo( i18n( "Schedule tasks forward" ), 3 );
         cs->endTime = scheduleForward( cs->startTime, estType );
-        cs->logInfo( i18n( "Scheduled finish: %1", locale->formatDateTime( cs->endTime ) ), 3 );
+        cs->logInfo( i18n( "Scheduled finish: %1", locale.toString(cs->endTime, QLocale::ShortFormat) ), 3 );
         if ( cs->endTime > m_constraintEndTime ) {
-            cs->logError( i18n( "Could not finish project in time: %1", locale->formatDateTime( m_constraintEndTime ) ), 3 );
+            cs->logError( i18n( "Could not finish project in time: %1", locale.toString(m_constraintEndTime, QLocale::ShortFormat) ), 3 );
         } else if ( cs->endTime == m_constraintEndTime ) {
-            cs->logWarning( i18n( "Finished project exactly on time: %1", locale->formatDateTime( m_constraintEndTime ) ), 3 );
+            cs->logWarning( i18n( "Finished project exactly on time: %1", locale.toString(m_constraintEndTime, QLocale::ShortFormat) ), 3 );
         } else {
-            cs->logInfo( i18n( "Finished project before time: %1", locale->formatDateTime( m_constraintEndTime ) ), 3 );
+            cs->logInfo( i18n( "Finished project before time: %1", locale.toString(m_constraintEndTime, QLocale::ShortFormat) ), 3 );
         }
         calcCriticalPath( false );
         calcResourceOverbooked();
@@ -262,7 +263,7 @@ void Project::calculate()
     if ( cs->manager() ) {
         backwards = cs->manager()->schedulingDirection();
     }
-    KLocale *locale = KLocale::global();
+    QLocale locale;
     Estimate::Use estType = ( Estimate::Use ) cs->type();
     if ( type() == Type_Project ) {
         QTime timer; timer.start();
@@ -270,7 +271,7 @@ void Project::calculate()
         initiateCalculationLists( *cs ); // must be after initiateCalculation() !!
         if ( ! backwards ) {
             cs->setPhaseName( 0, i18n( "Init" ) );
-            cs->logInfo( i18n( "Schedule project forward from: %1", locale->formatDateTime( m_constraintStartTime ) ), 0 );
+            cs->logInfo( i18n( "Schedule project forward from: %1", locale.toString(m_constraintStartTime, QLocale::ShortFormat) ), 0 );
             cs->startTime = m_constraintStartTime;
             cs->earlyStart = m_constraintStartTime;
             // Calculate from start time
@@ -279,7 +280,7 @@ void Project::calculate()
             cs->logInfo( i18n( "Calculate late finish" ), 1 );
             cs->lateFinish = calculateForward( estType );
 //            cs->lateFinish = checkEndConstraints( cs->lateFinish );
-            cs->logInfo( i18n( "Late finish calculated: %1", locale->formatDateTime( cs->lateFinish ) ), 1 );
+            cs->logInfo( i18n( "Late finish calculated: %1", locale.toString(cs->lateFinish, QLocale::ShortFormat) ), 1 );
             propagateLatestFinish( cs->lateFinish );
             cs->setPhaseName( 2, i18nc( "Schedule project backward", "Backward" ) );
             cs->logInfo( i18n( "Calculate early start" ), 2 );
@@ -288,31 +289,31 @@ void Project::calculate()
             cs->logInfo( i18n( "Schedule tasks forward" ), 3 );
             cs->endTime = scheduleForward( cs->startTime, estType );
             cs->duration = cs->endTime - cs->startTime;
-            cs->logInfo( i18n( "Scheduled finish: %1", locale->formatDateTime( cs->endTime ) ), 3 );
+            cs->logInfo( i18n( "Scheduled finish: %1", locale.toString(cs->endTime, QLocale::ShortFormat) ), 3 );
             if ( cs->endTime > m_constraintEndTime ) {
                 cs->constraintError = true;
-                cs->logError( i18n( "Could not finish project in time: %1", locale->formatDateTime( m_constraintEndTime ) ), 3 );
+                cs->logError( i18n( "Could not finish project in time: %1", locale.toString(m_constraintEndTime, QLocale::ShortFormat) ), 3 );
             } else if ( cs->endTime == m_constraintEndTime ) {
-                cs->logWarning( i18n( "Finished project exactly on time: %1", locale->formatDateTime( m_constraintEndTime ) ), 3 );
+                cs->logWarning( i18n( "Finished project exactly on time: %1", locale.toString(m_constraintEndTime, QLocale::ShortFormat) ), 3 );
             } else {
-                cs->logInfo( i18n( "Finished project before time: %1", locale->formatDateTime( m_constraintEndTime ) ), 3 );
+                cs->logInfo( i18n( "Finished project before time: %1", locale.toString(m_constraintEndTime, QLocale::ShortFormat) ), 3 );
             }
             calcCriticalPath( false );
         } else {
             cs->setPhaseName( 0, i18n( "Init" ) );
-            cs->logInfo( i18n( "Schedule project backward from: %1", locale->formatDateTime( m_constraintEndTime ) ), 0 );
+            cs->logInfo( i18n( "Schedule project backward from: %1", locale.toString(m_constraintEndTime, QLocale::ShortFormat) ), 0 );
             // Calculate from end time
             propagateLatestFinish( m_constraintEndTime );
             cs->setPhaseName( 1, i18nc( "Schedule project backward", "Backward" ) );
             cs->logInfo( i18n( "Calculate early start" ), 1 );
             cs->earlyStart = calculateBackward( estType );
 //            cs->earlyStart = checkStartConstraints( cs->earlyStart );
-            cs->logInfo( i18n( "Early start calculated: %1", locale->formatDateTime( cs->earlyStart ) ), 1 );
+            cs->logInfo( i18n( "Early start calculated: %1", locale.toString(cs->earlyStart, QLocale::ShortFormat) ), 1 );
             propagateEarliestStart( cs->earlyStart );
             cs->setPhaseName( 2, i18nc( "Schedule project forward", "Forward" ) );
             cs->logInfo( i18n( "Calculate late finish" ), 2 );
             cs->lateFinish = qMax( m_constraintEndTime, calculateForward( estType ) );
-            cs->logInfo( i18n( "Late finish calculated: %1", locale->formatDateTime( cs->lateFinish ) ), 2 );
+            cs->logInfo( i18n( "Late finish calculated: %1", locale.toString(cs->lateFinish, QLocale::ShortFormat) ), 2 );
             cs->setPhaseName( 3, i18n( "Schedule" ) );
             cs->logInfo( i18n( "Schedule tasks backward" ), 3 );
             cs->startTime = scheduleBackward( cs->lateFinish, estType );
@@ -330,18 +331,18 @@ void Project::calculate()
                 cs->logError( i18n( "Failed to finish project within target time" ), 3 );
             }
             cs->duration = cs->endTime - cs->startTime;
-            cs->logInfo( i18n( "Scheduled start: %1, target time: %2", locale->formatDateTime( cs->startTime ), locale->formatDateTime( m_constraintStartTime) ), 3 );
+            cs->logInfo( i18n( "Scheduled start: %1, target time: %2", locale.toString(cs->startTime, QLocale::ShortFormat), locale.toString(m_constraintStartTime, QLocale::ShortFormat) ), 3 );
             if ( cs->startTime < m_constraintStartTime ) {
                 cs->constraintError = true;
-                cs->logError( i18n( "Must start project early in order to finish in time: %1", locale->formatDateTime( m_constraintStartTime) ), 3 );
+                cs->logError( i18n( "Must start project early in order to finish in time: %1", locale.toString(m_constraintStartTime, QLocale::ShortFormat) ), 3 );
             } else if ( cs->startTime == m_constraintStartTime ) {
-                cs->logWarning( i18n( "Start project exactly on time: %1", locale->formatDateTime( m_constraintStartTime ) ), 3 );
+                cs->logWarning( i18n( "Start project exactly on time: %1", locale.toString(m_constraintStartTime, QLocale::ShortFormat) ), 3 );
             } else {
-                cs->logInfo( i18n( "Can start project later than time: %1", locale->formatDateTime( m_constraintStartTime ) ), 3 );
+                cs->logInfo( i18n( "Can start project later than time: %1", locale.toString(m_constraintStartTime, QLocale::ShortFormat) ), 3 );
             }
             calcCriticalPath( true );
         }
-        cs->logInfo( i18n( "Calculation took: %1", locale->formatDuration( timer.elapsed() ) ) );
+        cs->logInfo( i18n( "Calculation took: %1", KFormat().formatDuration( timer.elapsed() ) ) );
         //makeAppointments();
         calcResourceOverbooked();
         cs->notScheduled = false;

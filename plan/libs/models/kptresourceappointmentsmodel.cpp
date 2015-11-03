@@ -34,10 +34,11 @@
 #include "kptdatetime.h"
 #include "kptdebug.h"
 
+#include <KFormat>
+
 #include <QDate>
 #include <QList>
-
-#include <klocale.h>
+#include <QLocale>
 
 #include <KGanttGlobal>
 
@@ -605,7 +606,7 @@ QVariant ResourceAppointmentsItemModel::total( const Resource *res, int role ) c
                     }
                 }
             }
-            return KLocale::global()->formatNumber( d.toDouble( Duration::Unit_h ), 1 );
+            return QLocale().toString( d.toDouble( Duration::Unit_h ), 'f', 1 );
         }
         case Qt::EditRole:
         case Qt::ToolTipRole:
@@ -639,14 +640,14 @@ QVariant ResourceAppointmentsItemModel::total( const Resource *res, const QDate 
                     }
                 }
             }
-            QString ds = KLocale::global()->formatNumber( d.toDouble( Duration::Unit_h ), 1 );
+            QString ds = QLocale().toString( d.toDouble( Duration::Unit_h ), 'f', 1 );
             Duration avail = res->effort( 0, DateTime( date, QTime(0,0,0) ), Duration( 1.0, Duration::Unit_d ) );
-            QString avails = KLocale::global()->formatNumber( avail.toDouble( Duration::Unit_h ), 1 );
+            QString avails = QLocale().toString( avail.toDouble( Duration::Unit_h ), 'f', 1 );
             return QString( "%1(%2)").arg( ds).arg( avails );
         }
         case Qt::EditRole:
         case Qt::ToolTipRole:
-            return i18n( "The total booking on %1, along with the maximum hours for the resource", KLocale::global()->formatDate( date ) );
+            return i18n( "The total booking on %1, along with the maximum hours for the resource", QLocale().toString( date, QLocale::ShortFormat ) );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -674,7 +675,7 @@ QVariant ResourceAppointmentsItemModel::total( const Appointment *a, int role ) 
             } else if ( m_externalEffortMap.contains( a ) ) {
                 d = m_externalEffortMap[ a ].totalEffort();
             }
-            return KLocale::global()->formatNumber( d.toDouble( Duration::Unit_h ), 1 );
+            return QLocale().toString( d.toDouble( Duration::Unit_h ), 'f', 1 );
         }
         case Qt::ToolTipRole: {
             if ( m_effortMap.contains( a ) ) {
@@ -710,22 +711,22 @@ QVariant ResourceAppointmentsItemModel::assignment( const Appointment *a, const 
                     return QVariant();
                 }
                 d = m_effortMap[ a ].effortOnDate( date );
-                return KLocale::global()->formatNumber( d.toDouble( Duration::Unit_h ), 1 );
+                return QLocale().toString( d.toDouble( Duration::Unit_h ), 'f', 1 );
             } else  if ( m_externalEffortMap.contains( a ) ) {
                 if ( date < m_externalEffortMap[ a ].startDate() || date > m_externalEffortMap[ a ].endDate() ) {
                     return QVariant();
                 }
                 d = m_externalEffortMap[ a ].effortOnDate( date );
-                return KLocale::global()->formatNumber( d.toDouble( Duration::Unit_h ), 1 );
+                return QLocale().toString( d.toDouble( Duration::Unit_h ), 'f', 1 );
             }
             return QVariant();
         }
         case Qt::EditRole:
         case Qt::ToolTipRole: {
             if ( m_effortMap.contains( a ) ) {
-                return i18n( "Booking by this task on %1", KLocale::global()->formatDate( date ) );
+                return i18n( "Booking by this task on %1", QLocale().toString( date, QLocale::ShortFormat ) );
             } else if ( m_externalEffortMap.contains( a ) ) {
-                return i18n( "Booking by external project on %1",KLocale::global()->formatDate( date ) );
+                return i18n( "Booking by external project on %1",QLocale().toString( date, QLocale::ShortFormat ) );
             }
             return QVariant();
         }
@@ -920,7 +921,7 @@ QVariant ResourceAppointmentsItemModel::headerData( int section, Qt::Orientation
                 default: {
                     //debugPlan<<section<<", "<<startDate()<<endDate();
                     QDate d = startDate().addDays( section - 2 );
-                    return i18n( "Bookings on %1", KLocale::global()->formatDate( d ) );
+                    return i18n( "Bookings on %1", QLocale().toString( d, QLocale::ShortFormat ) );
                 }
                 return QVariant();
             }
@@ -1189,8 +1190,8 @@ QVariant ResourceAppointmentsRowModel::Private::appointmentData( int column, int
         switch ( column ) {
             case ResourceAppointmentsRowModel::Name: return a->node()->node()->name();
             case ResourceAppointmentsRowModel::Type: return a->node()->node()->typeToString( true );
-            case ResourceAppointmentsRowModel::StartTime: return KLocale::global()->formatDateTime( a->startTime() );
-            case ResourceAppointmentsRowModel::EndTime: return KLocale::global()->formatDateTime( a->endTime() );
+            case ResourceAppointmentsRowModel::StartTime: return QLocale().toString( a->startTime(), QLocale::ShortFormat );
+            case ResourceAppointmentsRowModel::EndTime: return QLocale().toString( a->endTime(), QLocale::ShortFormat );
             case ResourceAppointmentsRowModel::Load: return " ";
         }
     } else if ( role == Qt::ToolTipRole ) {
@@ -1198,8 +1199,8 @@ QVariant ResourceAppointmentsRowModel::Private::appointmentData( int column, int
         return i18nc( "@info:tooltip", "%1: %2<nl/>%3: %4",
                                 n->wbsCode(),
                                 n->name(),
-                                KLocale::global()->formatDateTime( a->startTime() ),
-                                KLocale::global()->formatDuration( ( a->endTime() - a->startTime() ).milliseconds() )
+                                QLocale().toString( a->startTime(), QLocale::ShortFormat ),
+                                KFormat().formatDuration( ( a->endTime() - a->startTime() ).milliseconds() )
                             );
     } else if ( role == Role::Maximum ) {
         return a->resource()->resource()->units(); //TODO: Maximum Load
@@ -1214,8 +1215,8 @@ QVariant ResourceAppointmentsRowModel::Private::externalData( int column, int ro
         switch ( column ) {
             case ResourceAppointmentsRowModel::Name: return a->auxcilliaryInfo();
             case ResourceAppointmentsRowModel::Type: return i18n( "Project" );
-            case ResourceAppointmentsRowModel::StartTime: return KLocale::global()->formatDateTime( a->startTime() );
-            case ResourceAppointmentsRowModel::EndTime: return KLocale::global()->formatDateTime( a->endTime() );
+            case ResourceAppointmentsRowModel::StartTime: return QLocale().toString( a->startTime(), QLocale::ShortFormat );
+            case ResourceAppointmentsRowModel::EndTime: return QLocale().toString( a->endTime(), QLocale::ShortFormat );
             case ResourceAppointmentsRowModel::Load: return " ";
         }
     } else if ( role == Qt::ForegroundRole ) {
@@ -1249,8 +1250,8 @@ QVariant ResourceAppointmentsRowModel::Private::intervalData( int column, int ro
         switch ( column ) {
             case ResourceAppointmentsRowModel::Name: return QVariant();
             case ResourceAppointmentsRowModel::Type: return i18n( "Interval" );
-            case ResourceAppointmentsRowModel::StartTime: return KLocale::global()->formatDateTime( interval.startTime() );
-            case ResourceAppointmentsRowModel::EndTime: return KLocale::global()->formatDateTime( interval.endTime() );
+            case ResourceAppointmentsRowModel::StartTime: return QLocale().toString( interval.startTime(), QLocale::ShortFormat );
+            case ResourceAppointmentsRowModel::EndTime: return QLocale().toString( interval.endTime(), QLocale::ShortFormat );
             case ResourceAppointmentsRowModel::Load: return interval.load();
         }
     } else if ( role == Qt::ToolTipRole ) {
@@ -1259,8 +1260,8 @@ QVariant ResourceAppointmentsRowModel::Private::intervalData( int column, int ro
         return i18nc( "@info:tooltip", "%1: %2<nl/>%3: %4<nl/>Assigned: %5<nl/>Available: %6",
                                 n->wbsCode(),
                                 n->name(),
-                                KLocale::global()->formatDateTime( a->startTime() ),
-                                KLocale::global()->formatDuration( ( a->endTime() - a->startTime() ).milliseconds() ),
+                                QLocale().toString( a->startTime(), QLocale::ShortFormat ),
+                                KFormat().formatDuration( ( a->endTime() - a->startTime() ).milliseconds() ),
                                 interval.load(),
                                 a->resource()->resource()->units()
                             );

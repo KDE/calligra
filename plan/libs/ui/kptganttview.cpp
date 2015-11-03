@@ -53,8 +53,8 @@
 #include <QPainter>
 #include <QTabWidget>
 #include <QPushButton>
+#include <QLocale>
 
-#include <klocale.h>
 #include <ktoggleaction.h>
 
 #include <KGanttGlobal>
@@ -321,26 +321,20 @@ GanttTreeView::GanttTreeView( QWidget* parent )
 GanttViewBase::GanttViewBase( QWidget *parent )
     : KGantt::View( parent )
 {
-    const KLocale *locale = KLocale::global();
-    if ( locale ) {
-        KGantt::DateTimeGrid *g = static_cast<KGantt::DateTimeGrid*>( grid() );
+    KGantt::DateTimeGrid *g = static_cast<KGantt::DateTimeGrid*>( grid() );
 
-        // ISO Week numbering always uses Monday as first day of week
-        const int firstWeekDay = (locale->weekNumberSystem() == KLocale::IsoWeekNumber)
-            ? Qt::Monday
-            : locale->weekStartDay();
+    QLocale locale;
 
-        g->setWeekStart( static_cast<Qt::DayOfWeek>( firstWeekDay ) );
-        int ws = locale->workingWeekStartDay();
-        int we = locale->workingWeekEndDay();
-        QSet<Qt::DayOfWeek> fd;
-        for ( int i = Qt::Monday; i <= Qt::Sunday; ++i ) {
-            if ( i < ws || i > we ) {
-                fd << static_cast<Qt::DayOfWeek>( i );
-            }
+    g->setWeekStart( locale.firstDayOfWeek() );
+
+    const QList<Qt::DayOfWeek> weekdays = locale.weekdays();
+    QSet<Qt::DayOfWeek> fd;
+    for ( int i = Qt::Monday; i <= Qt::Sunday; ++i ) {
+        if (!weekdays.contains(static_cast<Qt::DayOfWeek>(i))) {
+            fd << static_cast<Qt::DayOfWeek>( i );
         }
-        g->setFreeDays( fd );
     }
+    g->setFreeDays( fd );
 }
 
 GanttTreeView *GanttViewBase::treeView() const

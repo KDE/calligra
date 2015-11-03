@@ -40,7 +40,6 @@
 #include <QUrl>
 #include <QTimer>
 
-#include <klocale.h>
 #include <kmessagebox.h>
 #include <kdatetime.h>
 
@@ -58,7 +57,6 @@ WorkPackage::WorkPackage( bool fromProjectStore )
     m_fromProjectStore( fromProjectStore ),
     m_modified( false)
 {
-    m_config.setLocale( new KLocale( *( KLocale::global() ) ) );
     m_project->setConfig( &m_config );
 }
 
@@ -70,7 +68,6 @@ WorkPackage::WorkPackage( Project *project, bool fromProjectStore )
     Q_ASSERT( project );
     Q_ASSERT ( project->childNode( 0 ) );
 
-    m_config.setLocale( new KLocale( *( KLocale::global() ) ) );
     m_project->setConfig( &m_config );
 
     if ( ! project->scheduleManagers().isEmpty() ) {

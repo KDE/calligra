@@ -21,6 +21,7 @@
 
 #include <klocale.h>
 
+#include <QLocale>
 #include <QApplication>
 #include <QBrush>
 #include <QColor>
@@ -30,9 +31,10 @@ namespace KPlato
 {
 
 ConfigBase::ConfigBase()
-    : m_taskDefaults( new Task() ),
-    m_locale( 0 )
+    : m_taskDefaults( new Task() )
 {
+    QLocale locale;
+    m_locale = new KLocale( QLocale::languageToString(locale.language()), QLocale::countryToString(locale.country()) );
     m_readWrite = true;
     // set some reasonable defaults
     m_taskDefaults->estimate()->setType( Estimate::Type_Effort );
@@ -140,22 +142,14 @@ QBrush ConfigBase::milestoneFinishedColor() const
     return gradientBrush( Qt::gray );
 }
 
-void ConfigBase::setLocale( KLocale *locale )
-{
-    if ( locale != m_locale ) {
-        delete m_locale;
-        m_locale = locale;
-    }
-}
-
 const KLocale *ConfigBase::locale() const
 {
-    return m_locale ? m_locale : KLocale::global();
+    return m_locale;
 }
 
 KLocale *ConfigBase::locale()
 {
-    return m_locale ? m_locale : KLocale::global();
+    return m_locale;
 }
 
 //static

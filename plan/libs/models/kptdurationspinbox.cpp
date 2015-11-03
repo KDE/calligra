@@ -26,8 +26,7 @@
 #include <QLocale>
 #include <QDoubleValidator>
 #include <QKeyEvent>
-
-#include <klocale.h>
+#include <QLocale>
 
 #include <math.h>
 #include <limits.h>
@@ -186,9 +185,9 @@ void DurationSpinBox::editorTextChanged( const QString &text ) {
 
 double DurationSpinBox::valueFromText( const QString & text ) const
 {
-    QString s = extractValue( text ).remove( KLocale::global()->thousandsSeparator() );
+    QString s = extractValue( text );
     bool ok = false;
-    double v = KLocale::global()->readNumber( s, &ok );
+    double v = QLocale().toDouble( s, &ok );
     if ( ! ok ) {
         v = QDoubleSpinBox::valueFromText( s );
     }
@@ -197,7 +196,7 @@ double DurationSpinBox::valueFromText( const QString & text ) const
 
 QString DurationSpinBox::textFromValue ( double value ) const
 {
-    QString s = KLocale::global()->formatNumber( qMin( qMax( minimum(), value ), maximum() ), decimals() );
+    QString s = QLocale().toString( qMin( qMax( minimum(), value ), maximum() ), 'f', decimals() );
     s += Duration::unitToString( m_unit, true );
     //debugPlan<<2<<value<<s;
     return s;

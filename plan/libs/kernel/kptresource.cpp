@@ -33,6 +33,7 @@
 #include <KoXmlReader.h>
 
 #include <klocale.h>
+#include <QLocale>
 
 
 namespace KPlato
@@ -836,8 +837,6 @@ DateTimeInterval Resource::requiredAvailable(Schedule *node, const DateTime &sta
 
 void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateTime &end, int load, const QList<Resource*> &required ) {
     //debugPlan<<"node id="<<node->id()<<" mode="<<node->calculationMode()<<""<<from<<" -"<<end;
-    KLocale *locale = KLocale::global();
-    Q_UNUSED(locale);
     if (!from.isValid() || !end.isValid()) {
         m_currentSchedule->logWarning( i18n( "Make appointments: Invalid time" ) );
         return;
@@ -864,7 +863,7 @@ void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateT
 
 void Resource::makeAppointment(Schedule *node, int load, const QList<Resource*> &required) {
     //debugPlan<<m_name<<": id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<node->node()->name()<<": id="<<node->id()<<" mode="<<node->calculationMode()<<""<<node->startTime;
-    KLocale *locale = KLocale::global();
+    QLocale locale;
     if (!node->startTime.isValid()) {
         m_currentSchedule->logWarning( i18n( "Make appointments: Node start time is not valid" ) );
         return;
@@ -909,7 +908,7 @@ void Resource::makeAppointment(Schedule *node, int load, const QList<Resource*> 
     DateTime end = node->endTime;
     time = availableAfter(time, end);
     if (!time.isValid()) {
-        m_currentSchedule->logWarning( i18n( "Resource %1 not available in interval: %2 to %3", m_name, locale->formatDateTime( node->startTime ), locale->formatDateTime( end ) ) );
+        m_currentSchedule->logWarning( i18n( "Resource %1 not available in interval: %2 to %3", m_name, locale.toString(node->startTime, QLocale::ShortFormat), locale.toString(end, QLocale::ShortFormat) ) );
         node->resourceNotAvailable = true;
         return;
     }
@@ -925,7 +924,7 @@ void Resource::makeAppointment(Schedule *node, int load, const QList<Resource*> 
         }
     }
     if (!end.isValid()) {
-        m_currentSchedule->logWarning( i18n( "Resource %1 not available in interval: %2 to %3", m_name, locale->formatDateTime( time ), locale->formatDateTime( node->endTime ) ) );
+        m_currentSchedule->logWarning( i18n( "Resource %1 not available in interval: %2 to %3", m_name, locale.toString(time, QLocale::ShortFormat), locale.toString(node->endTime, QLocale::ShortFormat) ) );
         node->resourceNotAvailable = true;
         return;
     }
@@ -2412,7 +2411,7 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
         ns->logDebug( "Resources: " + ( nl.isEmpty() ? QString( "None" ) : nl.join( ", " ) ) );
     }
 #endif
-    KLocale *locale = KLocale::global();
+    QLocale locale;
     Duration e;
     if (_effort == Duration::zeroDuration) {
         return e;
@@ -2548,7 +2547,7 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
         ns->logError( i18n( "Could not match effort. Want: %1 got: %2", _effort.toString( Duration::Format_Hour ), e.toString( Duration::Format_Hour ) ) );
         foreach (ResourceRequest *r, lst) {
             Resource *res = r->resource();
-            ns->logInfo( i18n( "Resource %1 available from %2 to %3", res->name(), locale->formatDateTime( r->availableFrom() ), locale->formatDateTime( r->availableUntil() ) ) );
+            ns->logInfo( i18n( "Resource %1 available from %2 to %3", res->name(), locale.toString(r->availableFrom(), QLocale::ShortFormat), locale.toString(r->availableUntil(), QLocale::ShortFormat) ) );
         }
 
     }

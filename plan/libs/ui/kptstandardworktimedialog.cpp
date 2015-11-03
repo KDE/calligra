@@ -25,8 +25,7 @@
 #include "kptdebug.h"
 
 #include <QTreeWidgetItem>
-
-#include <klocale.h>
+#include <QLocale>
 
 
 namespace KPlato
@@ -46,7 +45,7 @@ public:
         if (day->state() == CalendarDay::NonWorking) {
             setHours();
         } else {
-            setText(1, KLocale::global()->formatNumber(day->duration().toDouble(Duration::Unit_h)));
+            setText(1, QLocale().toString(day->duration().toDouble(Duration::Unit_h), 'f', 2));
         }
     }
     ~WeekdayListItem() {
@@ -58,7 +57,7 @@ public:
     }
     void setIntervals(QList<TimeInterval*> intervals) {
         day->setIntervals(intervals);
-        setText(1, KLocale::global()->formatNumber(day->duration().toDouble(Duration::Unit_h)));
+        setText(1, QLocale().toString(day->duration().toDouble(Duration::Unit_h), 'f', 2));
     }
     void setState(int st) {
         day->setState(st+1);

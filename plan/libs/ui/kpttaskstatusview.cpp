@@ -43,7 +43,6 @@
 #include <QAction>
 
 #include <klocale.h>
-#include <kcalendarsystem.h>
 
 #include <KChartChart>
 #include <KChartAbstractCoordinatePlane>
@@ -353,8 +352,9 @@ TaskStatusViewSettingsPanel::TaskStatusViewSettingsPanel( TaskStatusTreeView *vi
     setupUi( this );
 
     QStringList lst;
+    QLocale locale;
     for ( int i = 1; i <= 7; ++i ) {
-        lst << KLocale::global()->calendar()->weekDayName( i );
+        lst << locale.dayName( i, QLocale::ShortFormat );
     }
     weekdays->addItems( lst );
     period->setValue( view->period() );
@@ -937,17 +937,14 @@ void PerformanceStatusBase::setProject( Project *project )
 void PerformanceStatusBase::slotLocaleChanged()
 {
     debugPlan;
-    KLocale *locale = m_project ? m_project->locale() : KLocale::global();
-    if ( locale ) {
-        m_linechart.costaxis->setTitleText( i18nc( "Chart axis title 1=currency symbol", "Cost (%1)", m_project->locale()->currencySymbol() ) );
-        m_linechart.effortaxis->setTitleText( i18nc( "Chart axis title", "Effort (hours)" ) );
+    KLocale *locale = m_project->locale();
+    const QString currencySymbol = locale ? locale->currencySymbol() : QString();
 
-        m_barchart.costaxis->setTitleText( i18nc( "Chart axis title 1=currency symbol", "Cost (%1)", m_project->locale()->currencySymbol() ) );
-        m_barchart.effortaxis->setTitleText( i18nc( "Chart axis title", "Effort (hours)" ) );
-    }
-    if ( m_project == 0 ) {
-        return;
-    }
+    m_linechart.costaxis->setTitleText( i18nc( "Chart axis title 1=currency symbol", "Cost (%1)", currencySymbol ) );
+    m_linechart.effortaxis->setTitleText( i18nc( "Chart axis title", "Effort (hours)" ) );
+
+    m_barchart.costaxis->setTitleText( i18nc( "Chart axis title 1=currency symbol", "Cost (%1)", currencySymbol ) );
+    m_barchart.effortaxis->setTitleText( i18nc( "Chart axis title", "Effort (hours)" ) );
 }
 
 

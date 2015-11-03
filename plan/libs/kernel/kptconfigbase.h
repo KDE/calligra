@@ -64,7 +64,6 @@ public:
     virtual QBrush milestoneCriticalColor() const;
     virtual QBrush milestoneFinishedColor() const;
 
-    void setLocale( KLocale *locale );
     const KLocale *locale() const;
     KLocale *locale();
 

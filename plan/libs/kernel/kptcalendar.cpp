@@ -31,9 +31,9 @@
 #include <KoXmlReader.h>
 
 #include <kdatetime.h>
-#include <klocale.h>
 #include <ktimezone.h>
 #include <ksystemtimezone.h>
+#include <KLocalizedString>
 
 
 namespace KPlato

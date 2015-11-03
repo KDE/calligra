@@ -32,8 +32,6 @@
 
 class ProgressInfo;
 
-class KLocale;
-
 struct rcps_fitness;
 
 namespace KPlato
@@ -142,7 +140,6 @@ protected:
     void setWeights();
 
 private:
-    KLocale *locale() const;
     int toRcpsTime( const DateTime &time ) const;
     DateTime fromRcpsTime( int time ) const;
 

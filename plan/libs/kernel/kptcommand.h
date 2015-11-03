@@ -33,6 +33,7 @@
 #include "kpttask.h"
 #include "kptwbsdefinition.h"
 
+class KLocale;
 class QString;
 /**
  * @file

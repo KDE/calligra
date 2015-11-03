@@ -30,8 +30,7 @@
 
 #include <QModelIndex>
 #include <QWidget>
-
-#include <klocale.h>
+#include <QLocale>
 
 
 namespace KPlato
@@ -96,7 +95,7 @@ QVariant RelationModel::lag( const Relation *r, int role ) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
             Duration::Unit unit = Duration::Unit_h;
-            return QVariant(KLocale::global()->formatNumber( r->lag().toDouble( unit ), 1 ) +  Duration::unitToString( unit, true ));
+            return QVariant(QLocale().toString( r->lag().toDouble( unit ), 'f', 1 ) +  Duration::unitToString( unit, true ));
         }
         case Qt::EditRole:
             return r->lag().toDouble( Duration::Unit_h );
