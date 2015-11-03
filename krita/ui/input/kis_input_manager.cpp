@@ -103,7 +103,6 @@ public:
     void addTouchShortcut( KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture );
     void addWheelShortcut(KisAbstractInputAction* action, int index, const QList< Qt::Key >& modifiers, KisShortcutConfiguration::MouseWheelMovement wheelAction);
     bool processUnhandledEvent(QEvent *event);
-    Qt::Key workaroundShiftAltMetaHell(const QKeyEvent *keyEvent);
     void setupActions();
     void saveTouchEvent( QTouchEvent* event );
     bool handleKisTabletEvent(QObject *object, KisTabletEvent *tevent);
@@ -410,19 +409,6 @@ bool KisInputManager::Private::processUnhandledEvent(QEvent *event)
     return retval && !forwardAllEventsToTool;
 }
 
-Qt::Key KisInputManager::Private::workaroundShiftAltMetaHell(const QKeyEvent *keyEvent)
-{
-    Qt::Key key = (Qt::Key)keyEvent->key();
-
-    if (keyEvent->key() == Qt::Key_Meta &&
-            keyEvent->modifiers().testFlag(Qt::ShiftModifier)) {
-
-        key = Qt::Key_Alt;
-    }
-
-    return key;
-}
-
 bool KisInputManager::Private::tryHidePopupPalette()
 {
     if (canvas->isPopupPaletteVisible()) {
@@ -666,7 +652,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         d->debugEvent<QKeyEvent, false>(event);
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
 
-        Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
+        Qt::Key key = KisExtendedModifiersMapper::workaroundShiftAltMetaHell(keyEvent);
 
         if (!keyEvent->isAutoRepeat()) {
             retval = d->matcher.keyPressed(key);
@@ -690,7 +676,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
 
         if (!keyEvent->isAutoRepeat()) {
-            Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
+            Qt::Key key = KisExtendedModifiersMapper::workaroundShiftAltMetaHell(keyEvent);
             retval = d->matcher.keyReleased(key);
         }
         break;
