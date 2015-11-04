@@ -2654,7 +2654,7 @@ KUndo2Command *NodeModel::setConstraintStartTime( Node *node, const QVariant &va
     switch ( role ) {
         case Qt::EditRole: {
             QDateTime dt = value.toDateTime();
-            dt.setTime( QTime( dt.time().hour(), dt.time().minute() ) ); // reset possible secs/msecs
+            dt.setTime( QTime( dt.time().hour(), dt.time().minute(), 0 ) ); // reset possible secs/msecs
             if ( dt != node->constraintStartTime() ) {
                 return new NodeModifyConstraintStartTimeCmd( *node, dt, kundo2_i18n( "Modify constraint start time" ) );
             }
@@ -2671,7 +2671,7 @@ KUndo2Command *NodeModel::setConstraintEndTime( Node *node, const QVariant &valu
     switch ( role ) {
         case Qt::EditRole: {
             QDateTime dt = value.toDateTime();
-            dt.setTime( QTime( dt.time().hour(), dt.time().minute() ) ); // reset possible secs/msecs
+            dt.setTime( QTime( dt.time().hour(), dt.time().minute(), 0 ) ); // reset possible secs/msecs
             if ( dt != node->constraintEndTime() ) {
                 return new NodeModifyConstraintEndTimeCmd( *node, dt, kundo2_i18n( "Modify constraint end time" ) );
             }

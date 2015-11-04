@@ -29,7 +29,7 @@ RecalculateDialogImpl::RecalculateDialogImpl (QWidget *parent)
     setupUi(this);
 
     QDateTime ct = QDateTime::currentDateTime();
-    ct.setTime( QTime( ct.time().hour(), ct.time().minute() ) ); // clear secs/msecs
+    ct.setTime( QTime( ct.time().hour(), ct.time().minute(), 0 ) ); // clear secs/msecs
     dateTimeEdit->setDateTime( ct );
     btnCurrent->setChecked( true );
     dateTimeEdit->setEnabled( false );
