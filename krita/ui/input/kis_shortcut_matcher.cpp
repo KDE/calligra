@@ -189,7 +189,7 @@ bool KisShortcutMatcher::buttonReleased(Qt::MouseButton button, QMouseEvent *eve
         return retval;
     }
 
-    if (m_d->runningShortcut) {
+    if (m_d->runningShortcut && !m_d->readyShortcut) {
         retval = tryEndRunningShortcut(button, event);
         DEBUG_BUTTON_ACTION("ended", button);
     }
