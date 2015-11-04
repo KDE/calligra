@@ -516,6 +516,7 @@ void KexiComboBoxBase::slotRecordSelected(KDbRecordData*)
         const int visibleColumn = visibleColumnIndex();
         if (data && visibleColumn != -1 /* && (int)item->size() >= visibleColumn --already checked*/) {
             valueToSet = data->at(qMin(visibleColumn, data->count() - 1)/*sanity*/);
+            popup()->tableView()->ensureCellVisible(popup()->tableView()->highlightedRecordNumber(), -1);
         }
     } else {
         //use 'enum hints' model
