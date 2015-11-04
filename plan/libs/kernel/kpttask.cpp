@@ -3690,7 +3690,7 @@ bool WorkPackage::loadLoggedXML(KoXmlElement &element, XMLLoaderObject &status )
     m_ownerName = element.attribute( "owner" );
     m_ownerId = element.attribute( "owner-id" );
     m_transmitionStatus = transmitionStatusFromString( element.attribute( "status" ) );
-    m_transmitionTime = DateTime( DateTime::fromString( element.attribute( "time" ) ) );
+    m_transmitionTime = DateTime( QDateTime::fromString( element.attribute( "time" ), Qt::ISODate ) );
     return m_completion.loadXML( element, status );
 }
 

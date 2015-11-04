@@ -1218,7 +1218,7 @@ bool KPlatoXmlLoaderBase::loadWpLog( WorkPackage *wp, KoXmlElement& element, XML
     wp->setOwnerName( element.attribute( "owner" ) );
     wp->setOwnerId( element.attribute( "owner-id" ) );
     wp->setTransmitionStatus( wp->transmitionStatusFromString( element.attribute( "status" ) ) );
-    wp->setTransmitionTime( DateTime( KDateTime::fromString( element.attribute( "time" ) ) ) );
+    wp->setTransmitionTime( DateTime( QDateTime::fromString( element.attribute( "time" ), Qt::ISODate ) ) );
     return load( wp->completion(), element, status );
 }
 
