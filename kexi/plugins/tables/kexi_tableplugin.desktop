@@ -40,6 +40,7 @@ Name[zh_CN]=表
 Name[zh_TW]=Table
 Comment=Kexi plugin for handling tables
 Comment[ca]=Connector del Kexi per gestionar taules
+Comment[ca@valencia]=Connector del Kexi per gestionar taules
 Comment[de]=Kexi-Modul für die Bearbeitung von Tabellen
 Comment[en_GB]=Kexi plugin for handling tables
 Comment[es]=Complemento de Kexi para manejar tablas

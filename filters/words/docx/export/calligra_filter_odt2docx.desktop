@@ -3,6 +3,7 @@ Type=Service
 Name=MS Word DOCX Export Filter
 Name[bs]=MS Word DOCX izvozni filter
 Name[ca]=Filtre d'exportació DOCX per al Word de MS
+Name[ca@valencia]=Filtre d'exportació DOCX per al Word de MS
 Name[cs]=Exportní filtr MS Word DOCX
 Name[da]=MS Word DOCX-eksportfilter
 Name[de]=MS Word DOCX-Exportfilter

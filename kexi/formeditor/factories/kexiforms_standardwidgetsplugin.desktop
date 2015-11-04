@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Standard Widgets
 Name[ca]=Estris estàndards
+Name[ca@valencia]=Estris estàndards
 Name[cs]=Standardní widgety
 Name[en_GB]=Standard Widgets
 Name[es]=Elementos gráficos estándar
@@ -15,6 +16,7 @@ Name[uk]=Стандартні віджети
 Name[x-test]=xxStandard Widgetsxx
 Comment=Kexi plugin providing standard form widgets
 Comment[ca]=Connecto del Kexi que proporciona estris estàndard de formularis
+Comment[ca@valencia]=Connecto del Kexi que proporciona estris estàndard de formularis
 Comment[en_GB]=Kexi plugin providing standard form widgets
 Comment[es]=Complemento de Kexi que proporciona elementos gráficos de formularios estándares
 Comment[it]=Estensione che fornisce oggetti dei moduli standard di Kexi
