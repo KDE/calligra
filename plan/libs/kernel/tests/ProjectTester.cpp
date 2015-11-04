@@ -72,8 +72,8 @@ void ProjectTester::initTestCase()
     m_project = new Project();
     m_project->setId( m_project->uniqueNodeId() );
     m_project->registerNodeId( m_project );
-    m_project->setConstraintStartTime( DateTime::fromString( "2012-02-01T00:00", KDateTime::LocalZone ) );
-    m_project->setConstraintEndTime( DateTime::fromString( "2013-02-01T00:00", KDateTime::LocalZone ) );
+    m_project->setConstraintStartTime( QDateTime::fromString( "2012-02-01T00:00", Qt::ISODate ) );
+    m_project->setConstraintEndTime( QDateTime::fromString( "2013-02-01T00:00", Qt::ISODate ) );
     // standard worktime defines 8 hour day as default
     QVERIFY( m_project->standardWorktime() );
     QCOMPARE( m_project->standardWorktime()->day(), 8.0 );
@@ -2815,7 +2815,7 @@ void ProjectTester::fixedInterval()
     p.setName( "P1" );
     p.setId( p.uniqueNodeId() );
     p.registerNodeId( &p );
-    DateTime st = DateTime::fromString( "2010-10-20T08:00", KDateTime::LocalZone );
+    DateTime st = QDateTime::fromString( "2010-10-20T08:00", Qt::ISODate );
     p.setConstraintStartTime( st );
     p.setConstraintEndTime( st.addDays( 5 ) );
 
@@ -2877,7 +2877,7 @@ void ProjectTester::estimateDuration()
     p.setName( "P1" );
     p.setId( p.uniqueNodeId() );
     p.registerNodeId( &p );
-    DateTime st = QDateTime::fromString( "2010-10-20 08:00" );
+    DateTime st = QDateTime::fromString( "2010-10-20 08:00", Qt::TextDate );
     p.setConstraintStartTime( st );
     p.setConstraintEndTime( st.addDays( 5 ) );
 
@@ -2940,7 +2940,7 @@ void ProjectTester::startStart()
     p.setName( "P1" );
     p.setId( p.uniqueNodeId() );
     p.registerNodeId( &p );
-    DateTime st = QDateTime::fromString( "2010-10-20 00:00:00", Qt::ISODate );
+    DateTime st = QDateTime::fromString( "2010-10-20T00:00:00", Qt::ISODate );
     p.setConstraintStartTime( st );
     p.setConstraintEndTime( st.addDays( 5 ) );
 
