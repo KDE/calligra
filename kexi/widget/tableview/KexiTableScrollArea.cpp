@@ -1819,6 +1819,19 @@ void KexiTableScrollArea::slotRecordRepaintRequested(KDbRecordData* data)
     updateRecord(m_data->indexOf(data));
 }
 
+void KexiTableScrollArea::verticalScrollBarValueChanged(int v)
+{
+    KexiDataAwareObjectInterface::verticalScrollBarValueChanged(v);
+    const QPoint posInViewport = viewport()->mapFromGlobal(QCursor::pos())
+                                 - QPoint(contentsMargins().left(), contentsMargins().top());
+    //qDebug() << posInViewport << contentsRect().size() - QSize(leftMargin(), topMargin())
+    //         << QRect(QPoint(0, 0), contentsRect().size() - QSize(leftMargin(), topMargin()));
+    const int record = recordNumberAt(posInViewport.y() + verticalScrollBar()->value());
+    if (record >= 0) {
+        setHighlightedRecordNumber(record);
+    }
+}
+
 #ifdef KEXI_TABLE_PRINT_SUPPORT
 void
 KexiTableScrollArea::print(QPrinter & /*printer*/ , QPrintDialog & /*printDialog*/)
