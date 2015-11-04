@@ -319,8 +319,9 @@ public Q_SLOTS:
     void setHighlightedRecordNumber(int record);
 
     /*! Ensures that cell at \a record and \a column is visible.
-     If \a column is -1, current column number is used. \a record and \a column, if not -1, must
-     be between 0 and recordCount()-1 (or columnCount()-1 accordingly). */
+     If \a column is -1, current column number is used.
+     If \a record is -1, current record number is used.
+     \a record and \a column, if not -1, must be between 0 and recordCount()-1 (or columnCount()-1 accordingly). */
     virtual void ensureCellVisible(int record, int column);
 
     /*! Ensures that column \a col is visible.

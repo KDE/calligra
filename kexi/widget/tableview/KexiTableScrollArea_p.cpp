@@ -38,7 +38,7 @@ KexiTableScrollArea::Private::Private(KexiTableScrollArea* t)
     navigatorEnabled = true;
     contextMenuEnabled = true;
     skipKeyPress = false;
-    ensureCellVisibleOnShow = QPoint(-1, -1);
+    ensureCellVisibleOnShow = QPoint(-17, -17); // because (-1, -1) means "current cell"
     internal_bottomMargin = 0;
     highlightedRecord = -1;
     moveCursorOnMouseRelease = false;

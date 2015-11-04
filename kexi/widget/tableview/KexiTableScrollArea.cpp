@@ -1423,9 +1423,9 @@ void KexiTableScrollArea::showEvent(QShowEvent *e)
     updateGeometries();
 
     //now we can ensure cell's visibility ( if there was such a call before show() )
-    if (d->ensureCellVisibleOnShow != QPoint(-1, -1)) {
+    if (d->ensureCellVisibleOnShow != QPoint(-17, -17)) { // because (-1, -1) means "current cell"
         ensureCellVisible(d->ensureCellVisibleOnShow.y(), d->ensureCellVisibleOnShow.x());
-        d->ensureCellVisibleOnShow = QPoint(-1, -1); //reset the flag
+        d->ensureCellVisibleOnShow = QPoint(-17, -17); //reset the flag
     }
     if (d->firstShowEvent) {
         ensureVisible(0, 0, 0, 0); // needed because for small geometries contents were moved 1/2 of row height up
@@ -1705,10 +1705,19 @@ void KexiTableScrollArea::ensureCellVisible(int record, int column)
         d->ensureCellVisibleOnShow = QPoint(record, column);
         return;
     }
+    if (column == -1) {
+        column = m_curColumn;
+    }
+    if (record == -1) {
+        record = m_curRecord;
+    }
+    if (column < 0 || record < 0) {
+        return;
+    }
 
     //quite clever: ensure the cell is visible:
-    QRect r(columnPos(column == -1 ? m_curColumn : column) - 1, recordPos(record) + (d->appearance.fullRecordSelection ? 1 : 0) - 1,
-            columnWidth(column == -1 ? m_curColumn : column)  + 2, recordHeight() + 2);
+    QRect r(columnPos(column) - 1, recordPos(record) + (d->appearance.fullRecordSelection ? 1 : 0) - 1,
+            columnWidth(column)  + 2, recordHeight() + 2);
 
     if (navPanelWidgetVisible() && horizontalScrollBar()->isHidden()) {
         //a hack: for visible navigator: increase height of the visible rect 'r'
