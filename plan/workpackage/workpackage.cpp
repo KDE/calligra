@@ -39,11 +39,11 @@
 #include <QDir>
 #include <QUrl>
 #include <QTimer>
+#include <QDateTime>
+#include <QDomDocument>
 
 #include <kmessagebox.h>
-#include <kdatetime.h>
 
-#include <QDomDocument>
 
 #include "debugarea.h"
 
@@ -480,7 +480,7 @@ QDomDocument WorkPackage::saveXML()
 
     // Work package info
     QDomElement wp = document.createElement( "workpackage" );
-    wp.setAttribute( "time-tag", KDateTime::currentLocalDateTime().toString( KDateTime::ISODate ) );
+    wp.setAttribute( "time-tag", QDateTime::currentDateTime().toString( Qt::ISODate ) );
     m_settings.saveXML( wp );
     Task *t = qobject_cast<Task*>( node() );
     if ( t ) {

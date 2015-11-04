@@ -2932,8 +2932,7 @@ void View::setLabel( ScheduleManager *sm )
 
 void View::slotWorkPackageLoaded()
 {
-    // QDebug support for KDateTime only available with kdelibs4support >=5.12.0
-//     debugPlan<<getPart()->workPackages();
+    debugPlan<<getPart()->workPackages();
 }
 
 void View::slotMailWorkpackage( Node *node, Resource *resource )

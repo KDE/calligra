@@ -115,7 +115,7 @@ public:
     /// Load the workpackage from @p url into @p project. Return true if successful, else false.
     bool loadWorkPackage( Project &project, const QUrl &url );
     Package *loadWorkPackageXML( Project& project, QIODevice*, const KoXmlDocument& document, const QUrl& url );
-    QMap<KDateTime, Package*> workPackages() const { return m_workpackages; }
+    QMap<QDateTime, Package*> workPackages() const { return m_workpackages; }
 
     void insertFile( const QString &filename, Node *parent, Node *after = 0 );
     bool insertProject( Project &project, Node *parent, Node *after );
@@ -199,9 +199,9 @@ private:
     bool m_loadingTemplate;
 
     QMap<QString, SchedulerPlugin*> m_schedulerPlugins;
-    QMap<KDateTime, Package*> m_workpackages;
+    QMap<QDateTime, Package*> m_workpackages;
     QFileInfoList m_infoList;
-    QMap<KDateTime, Project*> m_mergedPackages;
+    QMap<QDateTime, Project*> m_mergedPackages;
 
     KPlatoAboutPage m_aboutPage;
 

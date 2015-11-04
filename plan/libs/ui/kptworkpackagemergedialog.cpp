@@ -85,7 +85,7 @@ WorkPackageMergePanel::WorkPackageMergePanel( QWidget *parent )
     setupUi( this );
 }
 
-WorkPackageMergeDialog::WorkPackageMergeDialog( const QString &text, const QMap<KDateTime, Package*> &list, QWidget *parent )
+WorkPackageMergeDialog::WorkPackageMergeDialog( const QString &text, const QMap<QDateTime, Package*> &list, QWidget *parent )
     : KoDialog( parent ),
     m_packages( list.values() )
 {
@@ -111,7 +111,7 @@ WorkPackageMergeDialog::WorkPackageMergeDialog( const QString &text, const QMap<
         items << new QStandardItem();
         items << new QStandardItem( p->project->childNode( 0 )->name() );
         items << new QStandardItem( static_cast<Task*>( p->project->childNode( 0 ) )->workPackage().ownerName() );
-        items << new QStandardItem( QLocale().toString(p->timeTag.dateTime(), QLocale::ShortFormat) );
+        items << new QStandardItem( QLocale().toString(p->timeTag, QLocale::ShortFormat) );
 
         if ( p->toTask ) {
             items[ CheckColumn ]->setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable );

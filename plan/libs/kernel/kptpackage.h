@@ -38,7 +38,7 @@ public:
     Package();
     QUrl url;
     Project *project;
-    KDateTime timeTag;
+    QDateTime timeTag;
     QString ownerId;
     QString ownerName;
 

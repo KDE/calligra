@@ -319,7 +319,7 @@ QDomDocument MainDocument::saveWorkPackageXML( const Node *node, long id, Resour
         wp.setAttribute( "owner", resource->name() );
         wp.setAttribute( "owner-id", resource->id() );
     }
-    wp.setAttribute( "time-tag", KDateTime::currentLocalDateTime().toString( KDateTime::ISODate ) );
+    wp.setAttribute( "time-tag", QDateTime::currentDateTime().toString( Qt::ISODate ) );
     doc.appendChild( wp );
 
     // Save the project
@@ -484,7 +484,7 @@ Package *MainDocument::loadWorkPackageXML( Project &project, QIODevice *, const 
             return 0;
         }
         package = loader.package();
-        package->timeTag = KDateTime::fromString( loader.timeTag(), KDateTime::ISODate );
+        package->timeTag = QDateTime::fromString( loader.timeTag(), Qt::ISODate );
     } else if ( value != "application/x-vnd.kde.plan.work" ) {
         debugPlan << "Unknown mime type " << value;
         setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.plan.work, got %1", value ) );
@@ -521,11 +521,10 @@ Package *MainDocument::loadWorkPackageXML( Project &project, QIODevice *, const 
                     //TODO add some ui here
                 }
             } else if ( e.tagName() == "workpackage" ) {
-                package->timeTag = KDateTime::fromString( e.attribute( "time-tag" ), KDateTime::ISODate );
+                package->timeTag = QDateTime::fromString( e.attribute( "time-tag" ), Qt::ISODate );
                 package->ownerId = e.attribute( "owner-id" );
                 package->ownerName = e.attribute( "owner" );
-                // QDebug support for KDateTime only available with kdelibs4support >=5.12.0
-//                 debugPlan<<"workpackage:"<<package->timeTag<<package->ownerId<<package->ownerName;
+                debugPlan<<"workpackage:"<<package->timeTag<<package->ownerId<<package->ownerName;
                 KoXmlElement elem;
                 forEachElement( elem, e ) {
                     if ( elem.tagName() != "settings" ) {
@@ -639,7 +638,7 @@ void MainDocument::checkForWorkPackage()
         }
         // all files read
         // remove other projects
-        QMutableMapIterator<KDateTime, Package*> it( m_workpackages );
+        QMutableMapIterator<QDateTime, Package*> it( m_workpackages );
         while ( it.hasNext() ) {
             it.next();
             Package *package = it.value();
