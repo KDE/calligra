@@ -512,7 +512,7 @@ void PertCpmView::slotFinishTimeChanged( const QDateTime &dt )
     double var = model()->variance( Qt::EditRole ).toDouble();
     double dev = sqrt( var );
     DateTime et = m_project->endTime( current_schedule->scheduleId() );
-    DateTime t = DateTime( KDateTime( dt ) );
+    DateTime t = DateTime( dt );
     double d = ( et - t ).toDouble();
     d = t < et ? -d : d;
     double z = d / dev;

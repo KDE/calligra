@@ -251,14 +251,13 @@ void TaskCompletionPanel::slotFinishedChanged(bool state) {
 
 void TaskCompletionPanel::slotFinishTimeChanged( const QDateTime &dt )
 {
-    m_completion.setFinishTime( KDateTime( dt, KDateTime::Spec(KDateTime::LocalZone) ) );
+    m_completion.setFinishTime( dt );
 }
 
 void TaskCompletionPanel::slotStartTimeChanged( const QDateTime &dt )
 {
-    m_completion.setStartTime( KDateTime( dt, KDateTime::Spec(KDateTime::LocalZone) ) );
+    m_completion.setStartTime( dt );
     finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime() ) ) );
-    
 }
 
 void TaskCompletionPanel::slotAddEntry()

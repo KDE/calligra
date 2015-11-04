@@ -342,7 +342,7 @@ void ScheduleEditor::slotCalculateSchedule()
             return;
         }
         sm->setRecalculate( true );
-        sm->setRecalculateFrom( DateTime( KDateTime( dlg.dateTime() ) ) );
+        sm->setRecalculateFrom( DateTime( dlg.dateTime() ) );
     }
     emit calculateSchedule( m_view->project(), sm );
 }

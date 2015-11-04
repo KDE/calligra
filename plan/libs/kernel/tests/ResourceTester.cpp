@@ -49,7 +49,7 @@ void ResourceTester::testAvailable()
     QVERIFY( ! r.availableUntil().isValid() );
     
     QDateTime qt = QDateTime::currentDateTime();
-    DateTime dt = KDateTime( qt );
+    DateTime dt = DateTime( qt );
     qDebug()<<"dt"<<dt;
     
     r.setAvailableFrom( qt );

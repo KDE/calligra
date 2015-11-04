@@ -23,8 +23,8 @@
 #include <KoIcon.h>
 
 #include <QDate>
+#include <QDateTime>
 
-#include <kdatetime.h>
 #include <KLocalizedString>
 
 #include "kpttask.h"
@@ -277,7 +277,7 @@ void TaskProgressPanelImpl::slotStartedChanged(bool state) {
     if (state) {
         QTime t = QTime::currentTime();
         t.setHMS( t.hour(), t.minute(), 0 );
-        m_completion.setStartTime( KDateTime( QDateTime( QDate::currentDate(), t ) ) );
+        m_completion.setStartTime( QDateTime(QDate::currentDate(), t, Qt::LocalTime) );
         startTime->setDateTime( m_completion.startTime() );
         slotCalculateEffort();
     }
@@ -287,7 +287,7 @@ void TaskProgressPanelImpl::slotStartedChanged(bool state) {
 void TaskProgressPanelImpl::setFinished() {
     QTime t = QTime::currentTime();
     t.setHMS( t.hour(), t.minute(), 0 );
-    finishTime->setDateTime( QDateTime( QDate::currentDate(), t ) );
+    finishTime->setDateTime( QDateTime(QDate::currentDate(), t, Qt::LocalTime) );
     slotFinishTimeChanged( finishTime->dateTime() );
 }
 
@@ -308,7 +308,7 @@ void TaskProgressPanelImpl::slotFinishTimeChanged( const QDateTime &dt )
     if ( ! m_completion.isFinished() ) {
         return;
     }
-    m_completion.setFinishTime( KDateTime( dt, KDateTime::Spec(KDateTime::LocalZone) ) );
+    m_completion.setFinishTime( dt );
     if ( m_completion.percentFinished() < 100 ) {
         m_completion.setPercentFinished( dt.date(), 100 );
     }
@@ -317,7 +317,7 @@ void TaskProgressPanelImpl::slotFinishTimeChanged( const QDateTime &dt )
 
 void TaskProgressPanelImpl::slotStartTimeChanged( const QDateTime &dt )
 {
-    m_completion.setStartTime( KDateTime( dt, KDateTime::Spec(KDateTime::LocalZone) ) );
+    m_completion.setStartTime( dt );
     finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime() ) ) );
     
 }
