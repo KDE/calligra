@@ -846,7 +846,7 @@ bool MainDocument::completeLoading( KoStore *store )
     if ( m_loadingTemplate ) {
         //debugPlan<<"Loading template, generate unique ids";
         m_project->generateUniqueIds();
-        m_project->setConstraintStartTime( KDateTime( KDateTime::currentLocalDateTime().date(), QTime( 0, 0, 0 ) ) );
+        m_project->setConstraintStartTime( QDateTime(QDate::currentDate(), QTime(0, 0, 0), Qt::LocalTime) );
         m_project->setConstraintEndTime( m_project->constraintStartTime().addYears( 2 ) );
     } else if ( isImporting() ) {
         // NOTE: I don't think this is a good idea.
@@ -1040,7 +1040,7 @@ void MainDocument::createNewProject()
 
     m_project->generateUniqueIds();
     Duration dur = m_project->constraintEndTime() - m_project->constraintStartTime();
-    m_project->setConstraintStartTime( KDateTime( KDateTime::currentLocalDateTime().date(), QTime( 0, 0, 0 ) ) );
+    m_project->setConstraintStartTime( QDateTime(QDate::currentDate(), QTime(0, 0, 0), Qt::LocalTime) );
     m_project->setConstraintEndTime( m_project->constraintStartTime() +  dur );
 
     while ( m_project->numScheduleManagers() > 0 ) {

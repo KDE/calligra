@@ -214,7 +214,7 @@ void TaskCompletionPanel::slotChanged()
 void TaskCompletionPanel::slotStartedChanged(bool state) {
     m_completion.setStarted( state );
     if (state) {
-        m_completion.setStartTime( KDateTime::currentLocalDateTime() );
+        m_completion.setStartTime( QDateTime::currentDateTime() );
         startTime->setDateTime( m_completion.startTime() );
         slotCalculateEffort();
     }
