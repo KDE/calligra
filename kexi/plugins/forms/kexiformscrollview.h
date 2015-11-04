@@ -181,8 +181,8 @@ public Q_SLOTS:
     /*! Handles verticalScrollBar()'s valueChanged(int) signal.
      Called when vscrollbar's value has been changed. */
     //! @todo unused for now, will be used for continuous forms
-    virtual void vScrollBarValueChanged(int v) {
-        KexiDataAwareObjectInterface::vScrollBarValueChanged(v);
+    virtual void verticalScrollBarValueChanged(int v) {
+        KexiDataAwareObjectInterface::verticalScrollBarValueChanged(v);
     }
 
 Q_SIGNALS:

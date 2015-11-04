@@ -776,7 +776,7 @@ protected:
     /*! Handles verticalScrollBar()'s valueChanged(int) signal.
      Called when vscrollbar's value has been changed.
      Call this method from the subclass. */
-    virtual void vScrollBarValueChanged(int v);
+    virtual void verticalScrollBarValueChanged(int v);
 
     /*! Changes 'record editing' >=0 there's currently edited record, else -1.
      * Can be reimplemented with calling superclass setRecordEditing()
@@ -945,9 +945,9 @@ protected:
     /*! Displays passive error popup label used when invalid data has been entered. */
     QPointer<KexiContextMessageWidget> m_errorMessagePopup;
 
-    /*! Used to enable/disable execution of vScrollBarValueChanged()
-     when users navigate through records using keyboard, so vscrollbar tooltips are not visible. */
-    bool m_vScrollBarValueChanged_enabled;
+    /*! Used to enable/disable execution of verticalScrollBarValueChanged()
+     when users navigate through records using keyboard, so scrollbar tooltips are not visible. */
+    bool m_verticalScrollBarValueChanged_enabled;
 
     /*! True, if vscrollbar tooltips are enabled (true by default). */
     bool m_scrollbarToolTipsEnabled;

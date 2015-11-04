@@ -76,7 +76,7 @@ KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
     m_contextMenuEnabled = true;
     m_recordWillBeDeleted = -1;
     m_alsoUpdateNextRecord = false;
-    m_vScrollBarValueChanged_enabled = true;
+    m_verticalScrollBarValueChanged_enabled = true;
     m_scrollbarToolTipsEnabled = true;
     m_recentSearchDirection = KexiSearchAndReplaceViewInterface::Options::DefaultSearchDirection;
 
@@ -164,7 +164,7 @@ void KexiDataAwareObjectInterface::setData(KDbTableViewData *data, bool owner)
             QObject::connect(m_data, SIGNAL(recordRepaintRequested(KDbRecordData*)),
                              thisObject, SLOT(slotRecordRepaintRequested(KDbRecordData*)));
             QObject::connect(verticalScrollBar(), SIGNAL(valueChanged(int)),
-                             thisObject, SLOT(vScrollBarValueChanged(int)));
+                             thisObject, SLOT(verticalScrollBarValueChanged(int)));
         }
     }
 
@@ -443,9 +443,9 @@ void KexiDataAwareObjectInterface::selectLastRecord()
 
 void KexiDataAwareObjectInterface::selectRecord(int record)
 {
-    m_vScrollBarValueChanged_enabled = false; //disable tooltip
+    m_verticalScrollBarValueChanged_enabled = false; //disable tooltip
     setCursorPosition(record, -1);
-    m_vScrollBarValueChanged_enabled = true;
+    m_verticalScrollBarValueChanged_enabled = true;
 }
 
 void KexiDataAwareObjectInterface::selectPreviousRecord()
@@ -1569,10 +1569,10 @@ bool KexiDataAwareObjectInterface::handleKeyPress(QKeyEvent *e, int *currentReco
     return true;
 }
 
-void KexiDataAwareObjectInterface::vScrollBarValueChanged(int v)
+void KexiDataAwareObjectInterface::verticalScrollBarValueChanged(int v)
 {
     Q_UNUSED(v);
-    if (!m_vScrollBarValueChanged_enabled)
+    if (!m_verticalScrollBarValueChanged_enabled)
         return;
 
     if (m_scrollbarToolTipsEnabled && verticalScrollBar()->isSliderDown()) {

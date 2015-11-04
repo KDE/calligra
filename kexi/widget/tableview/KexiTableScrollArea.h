@@ -490,8 +490,8 @@ protected Q_SLOTS:
 
     /*! Handles verticalScrollBar()'s valueChanged(int) signal.
      Called when vscrollbar's value has been changed. */
-    virtual void vScrollBarValueChanged(int v) {
-        KexiDataAwareObjectInterface::vScrollBarValueChanged(v);
+    virtual void verticalScrollBarValueChanged(int v) {
+        KexiDataAwareObjectInterface::verticalScrollBarValueChanged(v);
     }
 
     //! for navigator

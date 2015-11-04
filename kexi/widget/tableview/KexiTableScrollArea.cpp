@@ -1223,12 +1223,12 @@ void KexiTableScrollArea::keyPressEvent(QKeyEvent* e)
         }
     }
 
-    m_vScrollBarValueChanged_enabled = false;
+    m_verticalScrollBarValueChanged_enabled = false;
 
     // if focus cell changes, repaint
     setCursorPosition(curRow, curCol, DontEnsureCursorVisibleIfPositionUnchanged);
 
-    m_vScrollBarValueChanged_enabled = true;
+    m_verticalScrollBarValueChanged_enabled = true;
 
     e->accept();
 }
