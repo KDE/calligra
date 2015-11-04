@@ -33,13 +33,13 @@ DateTime::DateTime( const QDate &date )
 {
 }
 
-DateTime::DateTime( const QDate &date, const QTime &time, Qt::TimeSpec spec)
-    : QDateTime( date, time, spec)
+DateTime::DateTime( const QDate &date, const QTime &time)
+    : QDateTime( date, time, Qt::LocalTime)
 {
 }
 
 DateTime::DateTime( const QDateTime& other )
-    : QDateTime( other )
+    : QDateTime( other.toLocalTime() )
 {
 }
 

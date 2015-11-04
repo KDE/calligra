@@ -46,10 +46,10 @@ public:
     DateTime();
     /// Constructs a datetime with the given date, a valid time(00:00:00.000), and sets the timeSpec() to Qt::LocalTime.
     explicit DateTime( const QDate & );
-    ///Constructs a datetime with the given date and time, using the time specification defined by @p spec.
+    ///Constructs a datetime with the given date and time, and sets the timeSpec() to Qt::LocalTime.
     /// If date is valid and time is not, the time will be set to midnight.
-    DateTime( const QDate &, const QTime &, Qt::TimeSpec spec = Qt::LocalTime );
-    /// Constructs a copy of the @p other datetime.
+    DateTime( const QDate &, const QTime &);
+    /// Constructs a copy of the @p other datetime, converting the timeSpec() to Qt::LocalTime.
     DateTime( const QDateTime &other );
 
     /// Constructs a datetime from @p dt with timespec @p spec
