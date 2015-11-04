@@ -24,10 +24,10 @@
 #include <kptmap.h>
 #include "kptappointment.h"
 
-#include <ksystemtimezone.h>
-#include <kdatetime.h>
 #include <kconfiggroup.h>
 
+#include <QTimeZone>
+#include <QDateTime>
 #include <QDir>
 
 #include <QTest>
@@ -215,14 +215,13 @@ void CalendarTester::testTimezone()
     QVERIFY(t.findDay(wdate) == day);
 
     // local zone: Europe/Berlin ( 1 hours from London )
-    KTimeZone lo = KSystemTimeZones::zone("Europe/London");
+    QTimeZone lo("Europe/London");
     QVERIFY( lo.isValid() );
-    KDateTime dt1 = KDateTime( wdate, t1, lo ).addSecs( -2 * 3600 );
-    KDateTime dt2 = KDateTime( wdate, t2, lo ).addSecs( 0 * 3600 );
+    QDateTime dt1 = QDateTime( wdate, t1, lo ).addSecs( -2 * 3600 );
+    QDateTime dt2 = QDateTime( wdate, t2, lo ).addSecs( 0 * 3600 );
 
-    // QDebug support for KDateTime only available with kdelibs4support >=5.12.0
-//     qDebug()<<KDateTime( wdt1 )<<KDateTime( wdt2 );
-//     qDebug()<<dt1<<dt2<<"("<<dt1.toLocalZone()<<dt2.toLocalZone()<<")";
+    qDebug()<<QDateTime( wdt1 )<<QDateTime( wdt2 );
+    qDebug()<<dt1<<dt2<<"("<<dt1.toLocalTime()<<dt2.toLocalTime()<<")";
     QCOMPARE(t.firstAvailableAfter( DateTime( dt1 ), after ), wdt1 );
     QCOMPARE(t.firstAvailableBefore( DateTime( dt2 ), before ), wdt2 );
 
@@ -230,14 +229,13 @@ void CalendarTester::testTimezone()
     QCOMPARE( t.effort( DateTime( dt1 ), DateTime( dt2 ) ).toString(), e.toString() );
 
     // local zone: Europe/Berlin ( 9 hours from America/Los_Angeles )
-    KTimeZone la = KSystemTimeZones::zone("America/Los_Angeles");
+    QTimeZone la("America/Los_Angeles");
     QVERIFY( la.isValid() );
-    KDateTime dt3 = KDateTime( wdate, t1, la ).addSecs( -10 * 3600 );
-    KDateTime dt4 = KDateTime( wdate, t2, la ).addSecs( -8 * 3600 );
+    QDateTime dt3 = QDateTime( wdate, t1, la ).addSecs( -10 * 3600 );
+    QDateTime dt4 = QDateTime( wdate, t2, la ).addSecs( -8 * 3600 );
 
-    // QDebug support for KDateTime only available with kdelibs4support >=5.12.0
-//     qDebug()<<KDateTime( wdt1 )<<KDateTime( wdt2 );
-//     qDebug()<<dt3<<dt4<<"("<<dt3.toLocalZone()<<dt4.toLocalZone()<<")";
+    qDebug()<<QDateTime( wdt1 )<<QDateTime( wdt2 );
+    qDebug()<<dt3<<dt4<<"("<<dt3.toLocalTime()<<dt4.toLocalTime()<<")";
     QCOMPARE(t.firstAvailableAfter( DateTime( dt3 ), after ), wdt1 );
     QCOMPARE(t.firstAvailableBefore( DateTime( dt4 ), before ), wdt2 );
 
@@ -246,13 +244,12 @@ void CalendarTester::testTimezone()
     QString s = "Test Cairo:";
     qDebug()<<s;
     // local zone: Europe/Berlin ( 1 hour from cairo )
-    KTimeZone ca = KSystemTimeZones::zone("Africa/Cairo");
-    KDateTime dt5 = KDateTime( wdate, t1, ca ).addSecs( 0 * 3600 );
-    KDateTime dt6 = KDateTime( wdate, t2, ca ).addSecs( 2 * 3600 );
+    QTimeZone ca("Africa/Cairo");
+    QDateTime dt5 = QDateTime( wdate, t1, ca ).addSecs( 0 * 3600 );
+    QDateTime dt6 = QDateTime( wdate, t2, ca ).addSecs( 2 * 3600 );
 
-    // QDebug support for KDateTime only available with kdelibs4support >=5.12.0
-//     qDebug()<<KDateTime( wdt1 )<<KDateTime( wdt2 );
-//     qDebug()<<dt5<<dt6<<"("<<dt5.toLocalZone()<<dt6.toLocalZone()<<")";
+    qDebug()<<QDateTime( wdt1 )<<QDateTime( wdt2 );
+    qDebug()<<dt5<<dt6<<"("<<dt5.toLocalTime()<<dt6.toLocalTime()<<")";
     QCOMPARE(t.firstAvailableAfter( DateTime( dt5 ), after ), wdt1 );
     QCOMPARE(t.firstAvailableBefore( DateTime( dt6 ), before ), wdt2 );
 
