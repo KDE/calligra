@@ -89,7 +89,7 @@ TaskCompletionPanel::TaskCompletionPanel(WorkPackage &p, ScheduleManager *sm, QW
     finished->setChecked(m_completion.isFinished());
     startTime->setDateTime(m_completion.startTime());
     finishTime->setDateTime(m_completion.finishTime());
-    finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime() ) ) );
+    finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime(), Qt::LocalTime) ) );
     
     scheduledEffort = p.node()->estimate()->expectedValue();
     
@@ -257,7 +257,7 @@ void TaskCompletionPanel::slotFinishTimeChanged( const QDateTime &dt )
 void TaskCompletionPanel::slotStartTimeChanged( const QDateTime &dt )
 {
     m_completion.setStartTime( dt );
-    finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime() ) ) );
+    finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime(), Qt::LocalTime) ) );
 }
 
 void TaskCompletionPanel::slotAddEntry()
@@ -273,7 +273,7 @@ void TaskCompletionPanel::slotAddEntry()
 
 void TaskCompletionPanel::slotEntryChanged()
 {
-    finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime() ) ) );
+    finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime(), Qt::LocalTime) ) );
     if ( ! finished->isChecked() && ! m_completion.isFinished() && m_completion.percentFinished() == 100 ) {
         finished->setChecked( true );
     }

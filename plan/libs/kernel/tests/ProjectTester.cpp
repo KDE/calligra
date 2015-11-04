@@ -198,7 +198,7 @@ void ProjectTester::schedule()
     m_project->addResourceGroup( g );
     Resource *r = new Resource();
     r->setName( "R1" );
-    r->setAvailableFrom( QDateTime( yesterday, QTime() ) );
+    r->setAvailableFrom( QDateTime( yesterday, QTime(), Qt::LocalTime ) );
     r->setCalendar( m_calendar );
     m_project->addResource( g, r );
 
@@ -352,8 +352,8 @@ void ProjectTester::schedule()
 
     s = "Calculate forward, Task: ASAP, Resource available tomorrow --------";
     qDebug()<<endl<<"Testing:"<<s;
-    r->setAvailableFrom( QDateTime( tomorrow, QTime() ) );
-    qDebug()<<"Tomorrow:"<<QDateTime( tomorrow, QTime() )<<r->availableFrom();
+    r->setAvailableFrom( QDateTime( tomorrow, QTime(), Qt::LocalTime ) );
+    qDebug()<<"Tomorrow:"<<QDateTime( tomorrow, QTime(), Qt::LocalTime )<<r->availableFrom();
     r->setUnits( 100 );
     rr->setUnits( 100 );
     sm = m_project->createScheduleManager( "Test Plan" );
@@ -377,7 +377,7 @@ void ProjectTester::schedule()
     qDebug()<<endl<<"Testing:"<<s;
     m_project->setConstraintStartTime( DateTime( today, QTime(0,0,0) ) );
     t->setConstraint( Node::ALAP );
-    r->setAvailableFrom( QDateTime( yesterday, QTime() ) );
+    r->setAvailableFrom( QDateTime( yesterday, QTime(), Qt::LocalTime ) );
     sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
     sm->createSchedules();
@@ -397,7 +397,7 @@ void ProjectTester::schedule()
 
     s = "Calculate forward, Task: MustStartOn -----------------------------------";
     qDebug()<<endl<<"Testing:"<<s;
-    r->setAvailableFrom( QDateTime( yesterday, QTime() ) );
+    r->setAvailableFrom( QDateTime( yesterday, QTime(), Qt::LocalTime ) );
     t->setConstraint( Node::MustStartOn );
     t->setConstraintStartTime( DateTime( nextweek, t1 ) );
     sm = m_project->createScheduleManager( "Test Plan" );

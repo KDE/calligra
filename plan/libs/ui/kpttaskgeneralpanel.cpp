@@ -91,12 +91,12 @@ void TaskGeneralPanel::setStartValues( Task &task ) {
         setStartDateTime(task.constraintStartTime());
     } else {
         QDate date = QDate::currentDate();
-        setStartDateTime(QDateTime(date, QTime()));
+        setStartDateTime(QDateTime(date, QTime(), Qt::LocalTime));
     }
     if (task.constraintEndTime().isValid()) {
         setEndDateTime(task.constraintEndTime());
     } else {
-        setEndDateTime(QDateTime(startDate().addDays(1), QTime()));
+        setEndDateTime(QDateTime(startDate().addDays(1), QTime(), Qt::LocalTime));
     }
     //debugPlan<<"Estimate:"<<task.estimate()->expected().toString();
     setEstimate(task.estimate()->expectedEstimate());
@@ -484,13 +484,13 @@ void TaskGeneralPanelImpl::scheduleTypeChanged( int value )
 
 QDateTime TaskGeneralPanelImpl::startDateTime()
 {
-    return QDateTime(startDate(), startTime());
+    return QDateTime(startDate(), startTime(), Qt::LocalTime);
 }
 
 
 QDateTime TaskGeneralPanelImpl::endDateTime()
 {
-    return QDateTime(endDate(), endTime());
+    return QDateTime(endDate(), endTime(), Qt::LocalTime);
 }
 
 void TaskGeneralPanelImpl::setStartTime( const QTime &time )

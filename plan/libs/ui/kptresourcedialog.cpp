@@ -274,7 +274,7 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     } else {
         dia->ui_rbfromunlimited->click();
     }
-    dia->availableFrom->setDateTime( dt.isValid() ? dt : QDateTime( QDate::currentDate(), QTime( 0, 0, 0 ) ) );
+    dia->availableFrom->setDateTime( dt.isValid() ? dt : QDateTime( QDate::currentDate(), QTime( 0, 0, 0 ), Qt::LocalTime ) );
     dia->availableFrom->setEnabled( dt.isValid() );
 
     dt = resource->availableUntil();
@@ -283,7 +283,7 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     } else {
         dia->ui_rbuntilunlimited->click();
     }
-    dia->availableUntil->setDateTime( dt.isValid() ? dt : QDateTime( QDate::currentDate().addYears( 2 ), QTime( 0, 0, 0 ) ) );
+    dia->availableUntil->setDateTime( dt.isValid() ? dt : QDateTime( QDate::currentDate().addYears( 2 ), QTime( 0, 0, 0 ), Qt::LocalTime ) );
     dia->availableUntil->setEnabled( dt.isValid() );
     dia->rateEdit->setText(project.locale()->formatMoney(resource->normalRate()));
     dia->overtimeEdit->setText(project.locale()->formatMoney(resource->overtimeRate()));

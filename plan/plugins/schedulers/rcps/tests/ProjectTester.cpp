@@ -204,7 +204,7 @@ void ProjectTester::oneTask()
     ResourceGroup *g = new ResourceGroup();
     m_project->addResourceGroup( g );
     Resource *r = new Resource();
-    r->setAvailableFrom( QDateTime( yesterday, QTime() ) );
+    r->setAvailableFrom( QDateTime( yesterday, QTime(), Qt::LocalTime ) );
     r->setCalendar( m_calendar );
     m_project->addResource( g, r );
 

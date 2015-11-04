@@ -50,7 +50,7 @@ TaskProgressPanel::TaskProgressPanel( Task &task, ScheduleManager *sm, StandardW
     finished->setChecked(m_completion.isFinished());
     startTime->setDateTime(m_completion.startTime());
     finishTime->setDateTime(m_completion.finishTime());
-    finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime() ) ) );
+    finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime(), Qt::LocalTime) ) );
     
     if (workTime) {
         debugPlan<<"daylength="<<workTime->durationDay().hours();
@@ -318,13 +318,13 @@ void TaskProgressPanelImpl::slotFinishTimeChanged( const QDateTime &dt )
 void TaskProgressPanelImpl::slotStartTimeChanged( const QDateTime &dt )
 {
     m_completion.setStartTime( dt );
-    finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime() ) ) );
+    finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime(), Qt::LocalTime) ) );
     
 }
 
 void TaskProgressPanelImpl::slotEntryChanged()
 {
-    finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime() ) ) );
+    finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime(), Qt::LocalTime) ) );
 }
 
 void TaskProgressPanelImpl::enableWidgets() {

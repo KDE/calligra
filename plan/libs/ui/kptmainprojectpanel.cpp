@@ -183,13 +183,13 @@ void MainProjectPanel::enableDateTime()
 
 QDateTime MainProjectPanel::startDateTime()
 {
-    return QDateTime(startDate->date(), startTime->time());
+    return QDateTime(startDate->date(), startTime->time(), Qt::LocalTime);
 }
 
 
 QDateTime MainProjectPanel::endDateTime()
 {
-    return QDateTime(endDate->date(), endTime->time());
+    return QDateTime(endDate->date(), endTime->time(), Qt::LocalTime);
 }
 
 

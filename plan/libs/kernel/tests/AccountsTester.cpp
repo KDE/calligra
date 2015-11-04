@@ -66,7 +66,7 @@ void AccountsTester::init()
     ResourceGroup *g = new ResourceGroup();
     project->addResourceGroup( g );
     r = new Resource();
-    r->setAvailableFrom( QDateTime( yesterday, QTime() ) );
+    r->setAvailableFrom( QDateTime( yesterday, QTime(), Qt::LocalTime ) );
     r->setCalendar( c );
     r->setNormalRate( 100.0 );
     project->addResource( g, r );
