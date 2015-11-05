@@ -203,6 +203,7 @@ KisNode::KisNode(const KisNode & rhs)
 KisNode::~KisNode()
 {
     if (m_d->busyProgressIndicator) {
+        m_d->busyProgressIndicator->endUpdatesBeforeDestroying();
         m_d->busyProgressIndicator->deleteLater();
     }
 
