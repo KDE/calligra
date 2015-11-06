@@ -36,6 +36,7 @@
   <summary xml:lang="en-GB">Visual database apps builder</summary>
   <summary xml:lang="es">Constructor visual de aplicaciones de base de datos</summary>
   <summary xml:lang="fi">Visuaalinen tietokantasovellusten luonti</summary>
+  <summary xml:lang="fr">Constructeur d'applications de bases de données visuel</summary>
   <summary xml:lang="it">Generatore visuale di applicazioni di banche dati</summary>
   <summary xml:lang="nl">Visuele database van bouwer van apps</summary>
   <summary xml:lang="pt">Construtor visual de aplicações de bases de dados</summary>
@@ -56,6 +57,7 @@
     <p xml:lang="en-GB">Kexi is a visual database applications builder. It can be used for designing database applications, inserting and editing data, performing queries, and processing data. Forms can be created to provide a custom interface to your data. All database objects - tables, queries, forms, reports, etc. - are stored in the database, making it easy to share data and design.</p>
     <p xml:lang="es">Kexi es un creador visual de aplicaciones de bases de datos. Se puede usar para diseñar aplicaciones de bases de datos, insertar y editar datos, realizar consultas y procesar datos. Se pueden crear formularios para proporcionar una interfaz personalizada para sus datos. Todos los objetos de la base de datos (tablas, consultas, formularios, informes, etc.) se almacenan en la base de datos, facilitando el intercambio de datos y diseños.</p>
     <p xml:lang="fi">Kexi on ohjelma tietokantasovellusten luomiseen visuaalisesti. Se on osa Calligra-ohjelmistoa. Sen avulla voi suunnitella tietokantasovelluksia, lisätä ja muokata tietoja, suorittaa kyselyjä ja käsitellä tietoja. Voit luoda lomakkeita mukauttaaksesi tietojesi käyttöliittymää. Kaikki tietokantaoliot – taulukot, kyselyt, lomakkeet, raportit jne. – tallennetaan tietokantaan, joten tiedon jako ja suunnittelu on helppoa.</p>
+    <p xml:lang="fr">Kexi est un constructeur d'applications de bases de données visuel. Il peut être utilisé pour concevoir des applications de base de données, insérer et éditer des données, effectuer des requêtes, et traiter des données. Des formulaires peuvent être créés pour fournir une interface personnalisée pour vos données. Tous les objets de bases de données (tables, requêtes, formulaires, rapports, etc) sont stockés dans la base de données, rendant facile le partage de données et de design.</p>
     <p xml:lang="it">Kexi è uno strumento visuale per la creazione di banche dati. Può essere utilizzato per progettare applicazioni che usano banche dati, inserire e modificare dati, eseguire query ed elaborare dati. Puoi creare moduli per fornire un'interfaccia personalizzata ai tuoi dati. Tutti gli oggetti di una banca dati - tabelle, query, moduli, rapporti - sono memorizzati nella banca dati stessa, semplificando la condivisione dei dati e la progettazione.</p>
     <p xml:lang="nl">Kexi is een bouwer van toepassingen met een database op een visuele manier. Het kan gebruikt worden voor het ontwerpen van toepassingen met een database, gegevens invoeren en bewerken, zoekopdrachten uitvoeren en gegevens verwerken. Formulieren kunnen gemaakt worden om een aangepast interface naar uw gegevens te bieden. Alle database-objecten - tabellen, zoekopdrachten, formulieren, rapporten, etc. - worden opgeslagen in de database, waarmee het gemakkelijk wordt gegevens en ontwerp te delen.</p>
     <p xml:lang="pt">O Kexi é um criador de bases de dados visuais, que pode ser usado para desenhar aplicações de bases de dados, inserir e editar dados, executar pesquisas e processar os dados. Poderá criar formulários para oferecer uma interface personalizada para os seus dados. Todos os objectos da base de dados - tabelas, pesquisas, formulários, relatórios, etc. - são guardados na base de dados, tornando simples a partilha e o desenho dos dados.</p>
@@ -138,6 +140,7 @@
       <li xml:lang="en-GB">Supports SQLite, MySQL, PostgreSQL, xBase, and Sybase/MS SQL Server databases</li>
       <li xml:lang="es">Permite usar servidores de bases de datos SQLite, MySQL, PostgreSQL, xBase y Sybase/MS SQL</li>
       <li xml:lang="fi">SQLite-, MySQL-, PostgreSQL-, xBase- ja Sybase/MS SQL Server -tietokantojen tuki</li>
+      <li xml:lang="fr">Prend en charge les bases de données SQLite, MySQL, PostgreSQL, xBase et Sybase/MS SQL Server</li>
       <li xml:lang="it">Supporta SQLite, MySQL, PostgreSQL, xBase e banche dati Sybase/MS SQL Server</li>
       <li xml:lang="nl">Ondersteunt databases SQLite, MySQL, PostgreSQL, xBase en Sybase/MS SQL Server</li>
       <li xml:lang="pt">Suporta bases de dados SQLite, MySQL, PostgreSQL, xBase e Sybase/MS SQL Server</li>
@@ -152,6 +155,7 @@
       <li xml:lang="en-GB">The only multiplatform visual tool that can easily import data from MS Access databases</li>
       <li xml:lang="es">La única herramienta gráfica multiplataforma que puede importar con facilidad datos de las bases de datos de MS Access</li>
       <li xml:lang="fi">Ainoa useampialustainen visuaalinen työkalu, jolla voi helposti tuoda tietoja MS Access -tietokannoista</li>
+      <li xml:lang="fr">Le seul outil visuel multi plate-formes qui importe les bases de données de MS Access</li>
       <li xml:lang="it">Il solo strumento grafico multipiattaforma in grado di importare facilmente da banche dati MS Access</li>
       <li xml:lang="nl">Het enige multiplatform visuele hulpmiddel die gemakkelijk gegevens kan importeren uit MS Access databases</li>
       <li xml:lang="pt">A única ferramenta gráfica multi-plataforma que consegue importar facilmente bases de dados MS Access</li>
@@ -166,6 +170,7 @@
       <li xml:lang="en-GB">Support for query design in dedicated SQL view</li>
       <li xml:lang="es">Permite el diseño de consultas en vista SQL dedicada</li>
       <li xml:lang="fi">Kyselyn suunnittelun tuki SQL-näkymässä</li>
+      <li xml:lang="fr">Prise en charge de la conception de requêtes dans une vue SQL dédiée</li>
       <li xml:lang="it">Supporta la progettazione di query in una vista SQL dedicata</li>
       <li xml:lang="nl">Ondersteuning voor ontwerp van zoekopdrachten in een gerichte SQL-weergave</li>
       <li xml:lang="pt">Suporta o desenho de pesquisas numa área de SQL dedicada</li>
