@@ -203,22 +203,22 @@ void CommandsTester::testCalendarModifyNameCmd()
 void CommandsTester::testCalendarModifyParentCmd()
 {
     Calendar *calendar1 = new Calendar();
-    calendar1->setTimeZone(KTimeZone("t1"));
+    calendar1->setTimeZone(QTimeZone("Europe/Berlin"));
     Calendar *calendar2 = new Calendar();
-    calendar2->setTimeZone(KTimeZone("t2"));
+    calendar2->setTimeZone(QTimeZone("Africa/Cairo"));
     m_project->addCalendar(calendar1);
     m_project->addCalendar(calendar2);
     QVERIFY(m_project->calendarCount() == 2);
-    QVERIFY(calendar1->timeZone().name() == "t1");
-    QVERIFY(calendar2->timeZone().name() == "t2");
+    QVERIFY(calendar1->timeZone().id() == "Europe/Berlin");
+    QVERIFY(calendar2->timeZone().id() == "Africa/Cairo");
 
     CalendarModifyParentCmd *cmd1 = new CalendarModifyParentCmd(m_project, calendar1, calendar2);
     cmd1->execute();
     QVERIFY(calendar2->childAt(0) == calendar1);
-    QVERIFY(calendar1->timeZone().name() == "t2");
+    QVERIFY(calendar1->timeZone().id() == "Africa/Cairo");
     cmd1->unexecute();
     QVERIFY(!calendar2->childCount());
-    QVERIFY(calendar1->timeZone().name() == "t1");
+    QVERIFY(calendar1->timeZone().id() == "Europe/Berlin");
 
     delete cmd1;
     m_project->takeCalendar(calendar1);
@@ -230,16 +230,16 @@ void CommandsTester::testCalendarModifyParentCmd()
 void CommandsTester::testCalendarModifyTimeZoneCmd()
 {
     Calendar *calendar1 = new Calendar();
-    calendar1->setTimeZone(KTimeZone("t1"));
+    calendar1->setTimeZone(QTimeZone("Europe/Berlin"));
     m_project->addCalendar(calendar1);
     QVERIFY(m_project->calendarCount() == 1);
-    QVERIFY(calendar1->timeZone().name() == "t1");
+    QVERIFY(calendar1->timeZone().id() == "Europe/Berlin");
 
-    CalendarModifyTimeZoneCmd *cmd1 = new CalendarModifyTimeZoneCmd(calendar1, KTimeZone("t2"));
+    CalendarModifyTimeZoneCmd *cmd1 = new CalendarModifyTimeZoneCmd(calendar1, QTimeZone("Africa/Cairo"));
     cmd1->execute();
-    QVERIFY(calendar1->timeZone().name() == "t2");
+    QVERIFY(calendar1->timeZone().id() == "Africa/Cairo");
     cmd1->unexecute();
-    QVERIFY(calendar1->timeZone().name() == "t1");
+    QVERIFY(calendar1->timeZone().id() == "Europe/Berlin");
 
     delete cmd1;
     m_project->takeCalendar(calendar1);

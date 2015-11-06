@@ -35,9 +35,8 @@
 #include <QMimeData>
 #include <QPainter>
 #include <QLocale>
+#include <QTimeZone>
 
-#include <ksystemtimezone.h>
-#include <ktimezone.h>
 #include <KFormat>
 
 
@@ -325,18 +324,18 @@ QVariant CalendarItemModel::timeZone( const Calendar *a, int role ) const
         case Qt::DisplayRole:
         case Qt::EditRole:
         case Qt::ToolTipRole:
-            return i18n( a->timeZone().name().toUtf8() );
+            return i18n( a->timeZone().id() );
         case Role::EnumList: {
             QStringList lst;
-            foreach ( const KTimeZone &tz, KSystemTimeZones::timeZones()->zones() ) {
-                lst << i18n( tz.name().toUtf8() );
+            foreach ( const QByteArray &id, QTimeZone::availableTimeZoneIds() ) {
+                lst << i18n( id );
             }
             lst.sort();
             return lst;
         }
         case Role::EnumListValue: {
             QStringList lst = timeZone( a, Role::EnumList ).toStringList();
-            return lst.indexOf( i18n ( a->timeZone().name().toUtf8() ) );
+            return lst.indexOf( i18n ( a->timeZone().id() ) );
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -354,10 +353,10 @@ bool CalendarItemModel::setTimeZone( Calendar *a, const QVariant &value, int rol
             }
             QStringList lst = timeZone( a, Role::EnumList ).toStringList();
             QString name = lst.value( value.toInt() );
-            KTimeZone tz;
-            foreach ( const QString &s, KSystemTimeZones::timeZones()->zones().keys() ) {
-                if ( name == i18n( s.toUtf8() ) ) {
-                    tz = KSystemTimeZones::zone( s );
+            QTimeZone tz;
+            foreach ( const QByteArray &id, QTimeZone::availableTimeZoneIds() ) {
+                if ( name == i18n( id ) ) {
+                    tz = QTimeZone( id );
                     break;
                 }
             }

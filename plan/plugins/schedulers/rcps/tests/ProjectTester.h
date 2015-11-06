@@ -21,7 +21,6 @@
 #define KPlato_ProjectTester_h
 
 #include <QObject>
-#include <QTemporaryDir>
 
 #include "kptproject.h"
 #include "kptdatetime.h"
@@ -45,10 +44,6 @@ private Q_SLOTS:
     void startNotEarlier();
 
 private:
-    void initTimezone();
-    void cleanupTimezone();
-
-    QTemporaryDir m_tmp;
     Project *m_project;
     Calendar *m_calendar;
     Task *m_task;

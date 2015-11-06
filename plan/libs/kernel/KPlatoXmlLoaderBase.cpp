@@ -32,8 +32,8 @@
 
 #include <KoXmlReader.h>
 
-#include <ktimezone.h>
-#include <ksystemtimezone.h>
+#include <QTimeZone>
+
 
 using namespace KPlato;
 
@@ -81,11 +81,12 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
     project->registerNodeId( project );
     project->setLeader( element.attribute( "leader" ) );
     project->setDescription( element.attribute( "description" ) );
-    KTimeZone tz = KSystemTimeZones::zone( element.attribute( "timezone" ) );
+    QTimeZone tz( element.attribute( "timezone" ).toLatin1() );
+
     if ( tz.isValid() ) {
         project->setTimeZone( tz );
     } else warnPlanXml<<"No timezone specified, using default (local)";
-    status.setProjectSpec( project->timeSpec() );
+    status.setProjectTimeZone( project->timeZone() );
 
     // Allow for both numeric and text
     s = element.attribute( "scheduling", "0" );
@@ -98,11 +99,11 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
     }
     s = element.attribute( "start-time" );
     if ( ! s.isEmpty() ) {
-        project->setConstraintStartTime( DateTime::fromString( s, project->timeSpec() ) );
+        project->setConstraintStartTime( DateTime::fromString( s, project->timeZone() ) );
     }
     s = element.attribute( "end-time" );
     if ( ! s.isEmpty() ) {
-        project->setConstraintEndTime( DateTime::fromString( s, project->timeSpec() ) );
+        project->setConstraintEndTime( DateTime::fromString( s, project->timeZone() ) );
     }
     // Load the project children
     // Do calendars first, they only refrence other calendars
@@ -354,11 +355,11 @@ bool KPlatoXmlLoaderBase::load( Task *task, const KoXmlElement &element, XMLLoad
     }
     s = element.attribute("constraint-starttime");
     if ( ! s.isEmpty() ) {
-        task->setConstraintStartTime( DateTime::fromString( s, status.projectSpec() ) );
+        task->setConstraintStartTime( DateTime::fromString( s, status.projectTimeZone() ) );
     }
     s = element.attribute("constraint-endtime");
     if ( ! s.isEmpty() ) {
-        task->setConstraintEndTime( DateTime::fromString( s, status.projectSpec() ) );
+        task->setConstraintEndTime( DateTime::fromString( s, status.projectTimeZone() ) );
     }
     task->setStartupCost( element.attribute("startup-cost", "0.0").toDouble() );
     task->setShutdownCost( element.attribute("shutdown-cost", "0.0").toDouble() );
@@ -469,7 +470,7 @@ bool KPlatoXmlLoaderBase::load( Calendar *calendar, const KoXmlElement &element,
     calendar->setId( element.attribute( "id" ) );
     calendar->setParentId( element.attribute( "parent" ) );
     calendar->setName( element.attribute( "name","" ) );
-    KTimeZone tz = KSystemTimeZones::zone( element.attribute( "timezone" ) );
+    QTimeZone tz( element.attribute( "timezone" ).toLatin1() );
     if ( tz.isValid() ) {
         calendar->setTimeZone( tz );
     } else warnPlanXml<<"No timezone specified, use default (local)";
@@ -702,11 +703,11 @@ bool KPlatoXmlLoaderBase::load( Resource *resource, const KoXmlElement &element,
     resource->setUnits( element.attribute( "units", "100" ).toInt() );
     s = element.attribute( "available-from" );
     if ( ! s.isEmpty() ) {
-        resource->setAvailableFrom( DateTime::fromString( s, status.projectSpec() ) );
+        resource->setAvailableFrom( DateTime::fromString( s, status.projectTimeZone() ) );
     }
     s = element.attribute( "available-until" );
     if ( ! s.isEmpty() ) {
-        resource->setAvailableUntil( DateTime::fromString( s, status.projectSpec() ) );
+        resource->setAvailableUntil( DateTime::fromString( s, status.projectTimeZone() ) );
     }
     resource->setNormalRate( locale->readMoney( element.attribute( "normal-rate" ) ) );
     resource->setOvertimeRate( locale->readMoney( element.attribute( "overtime-rate" ) ) );
@@ -858,7 +859,7 @@ bool KPlatoXmlLoaderBase::load( ScheduleManager *manager, const KoXmlElement &el
     manager->setBaselined( (bool)( element.attribute( "baselined" ).toInt() ) );
     manager->setSchedulerPluginId( element.attribute( "scheduler-plugin-id" ) );
     manager->setRecalculate( (bool)( element.attribute( "recalculate" ).toInt() ) );
-    manager->setRecalculateFrom( DateTime::fromString( element.attribute( "recalculate-from" ), status.projectSpec() ) );
+    manager->setRecalculateFrom( DateTime::fromString( element.attribute( "recalculate-from" ), status.projectTimeZone() ) );
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
         if ( ! n.isElement() ) {
@@ -923,11 +924,11 @@ bool KPlatoXmlLoaderBase::loadMainSchedule( MainSchedule *ms, const KoXmlElement
 
     s = element.attribute( "start" );
     if ( !s.isEmpty() ) {
-        ms->startTime = DateTime::fromString( s, status.projectSpec() );
+        ms->startTime = DateTime::fromString( s, status.projectTimeZone() );
     }
     s = element.attribute( "end" );
     if ( !s.isEmpty() ) {
-        ms->endTime = DateTime::fromString( s, status.projectSpec() );
+        ms->endTime = DateTime::fromString( s, status.projectTimeZone() );
     }
     ms->duration = Duration::fromString( element.attribute( "duration" ) );
     ms->constraintError = element.attribute( "scheduling-conflict", "0" ).toInt();
@@ -992,35 +993,35 @@ bool KPlatoXmlLoaderBase::loadNodeSchedule(NodeSchedule* schedule, const KoXmlEl
         s = element.attribute( "earlieststart" );
     }
     if ( ! s.isEmpty() ) {
-        schedule->earlyStart = DateTime::fromString( s, status.projectSpec() );
+        schedule->earlyStart = DateTime::fromString( s, status.projectTimeZone() );
     }
     s = element.attribute( "latefinish" );
     if ( s.isEmpty() ) { // try version < 0.6
         s = element.attribute( "latestfinish" );
     }
     if ( ! s.isEmpty() ) {
-        schedule->lateFinish = DateTime::fromString( s, status.projectSpec() );
+        schedule->lateFinish = DateTime::fromString( s, status.projectTimeZone() );
     }
     s = element.attribute( "latestart" );
     if ( ! s.isEmpty() ) {
-        schedule->lateStart = DateTime::fromString( s, status.projectSpec() );
+        schedule->lateStart = DateTime::fromString( s, status.projectTimeZone() );
     }
     s = element.attribute( "earlyfinish" );
     if ( ! s.isEmpty() ) {
-        schedule->earlyFinish = DateTime::fromString( s, status.projectSpec() );
+        schedule->earlyFinish = DateTime::fromString( s, status.projectTimeZone() );
     }
     s = element.attribute( "start" );
     if ( ! s.isEmpty() )
-        schedule->startTime = DateTime::fromString( s, status.projectSpec() );
+        schedule->startTime = DateTime::fromString( s, status.projectTimeZone() );
     s = element.attribute( "end" );
     if ( !s.isEmpty() )
-        schedule->endTime = DateTime::fromString( s, status.projectSpec() );
+        schedule->endTime = DateTime::fromString( s, status.projectTimeZone() );
     s = element.attribute( "start-work" );
     if ( !s.isEmpty() )
-        schedule->workStartTime = DateTime::fromString( s, status.projectSpec() );
+        schedule->workStartTime = DateTime::fromString( s, status.projectTimeZone() );
     s = element.attribute( "end-work" );
     if ( !s.isEmpty() )
-        schedule->workEndTime = DateTime::fromString( s, status.projectSpec() );
+        schedule->workEndTime = DateTime::fromString( s, status.projectTimeZone() );
     schedule->duration = Duration::fromString( element.attribute( "duration" ) );
 
     schedule->inCriticalPath = element.attribute( "in-critical-path", "0" ).toInt();
@@ -1230,11 +1231,11 @@ bool KPlatoXmlLoaderBase::load( Completion &completion, const KoXmlElement& elem
     completion.setFinished( (bool)element.attribute("finished", "0").toInt() );
     s = element.attribute("startTime");
     if (!s.isEmpty()) {
-        completion.setStartTime( DateTime::fromString(s, status.projectSpec()) );
+        completion.setStartTime( DateTime::fromString(s, status.projectTimeZone()) );
     }
     s = element.attribute("finishTime");
     if (!s.isEmpty()) {
-        completion.setFinishTime( DateTime::fromString(s, status.projectSpec() ) );
+        completion.setFinishTime( DateTime::fromString(s, status.projectTimeZone() ) );
     }
     completion.setEntrymode( element.attribute( "entrymode" ) );
     if (status.version() < "0.6") {
@@ -1357,11 +1358,11 @@ bool KPlatoXmlLoaderBase::load(AppointmentInterval& interval, const KoXmlElement
     bool ok;
     QString s = element.attribute("start");
     if (!s.isEmpty()) {
-        interval.setStartTime( DateTime::fromString(s, status.projectSpec()) );
+        interval.setStartTime( DateTime::fromString(s, status.projectTimeZone()) );
     }
     s = element.attribute("end");
     if (!s.isEmpty()) {
-        interval.setEndTime( DateTime::fromString(s, status.projectSpec()) );
+        interval.setEndTime( DateTime::fromString(s, status.projectTimeZone()) );
     }
     double l = element.attribute("load", "100").toDouble(&ok);
     if (ok) {

@@ -21,7 +21,6 @@
 #define KPlato_TaskJuggler_h
 
 #include <QObject>
-#include <QTemporaryDir>
 
 namespace TJ {
     class Project;
@@ -51,11 +50,6 @@ private Q_SLOTS:
     void units();
 
 private:
-    void initTimezone();
-    void cleanupTimezone();
-
-private:
-    QTemporaryDir m_tmp;
     TJ::Project *project;
 };
 

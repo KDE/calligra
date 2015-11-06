@@ -19,12 +19,11 @@
 #ifndef KPTDATETIME_H
 #define KPTDATETIME_H
 
-#include <kdatetime.h>
-
 #include "kplatokernel_export.h"
 #include "kptduration.h"
 
 #include <QDateTime>
+#include <QTimeZone>
 
 /// The main namespace.
 namespace KPlato
@@ -49,13 +48,17 @@ public:
     ///Constructs a datetime with the given date and time, and sets the timeSpec() to Qt::LocalTime.
     /// If date is valid and time is not, the time will be set to midnight.
     DateTime( const QDate &, const QTime &);
+    ///Constructs a datetime with the given date and time in the given timezone, and sets the timeSpec() to Qt::LocalTime.
+    /// If date is valid and time is not, the time will be set to midnight.
+    DateTime( const QDate &, const QTime &, const QTimeZone &timeZone);
     /// Constructs a copy of the @p other datetime, converting the timeSpec() to Qt::LocalTime.
     DateTime( const QDateTime &other );
+    /// Constructs a copy of the @p other datetime.
+    DateTime( const DateTime &other );
+    /// Constructs a datetime from @p dt, reinterpreting it to be from timezone @p timeZone.
+    /// dt must be of timespec LocalTime.
+    DateTime( const QDateTime &dt, const QTimeZone &timeZone );
 
-    /// Constructs a datetime from @p dt with timespec @p spec
-    DateTime( const QDateTime &dt, const KDateTime::Spec &spec );
-    /// Constructs a copy of the @p dt KDateTime.
-    DateTime( const KDateTime &dt );
     /**
      * Adds the duration @p duration to the datetime
      */
@@ -80,7 +83,7 @@ public:
     /**
      * Parse a datetime string and return a DateTime.
      */
-    static DateTime fromString(const QString dts, const KDateTime::Spec &spec=KDateTime::LocalZone);
+    static DateTime fromString(const QString &dts, const QTimeZone &timeZone = QTimeZone::systemTimeZone());
 private:
 
     Duration duration(const DateTime &dt) const;

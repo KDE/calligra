@@ -279,10 +279,10 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
 
     s = element.attribute("constraint-starttime");
     if (!s.isEmpty())
-        m_constraintStartTime = DateTime::fromString(s, status.projectSpec());
+        m_constraintStartTime = DateTime::fromString(s, status.projectTimeZone());
     s = element.attribute("constraint-endtime");
     if (!s.isEmpty())
-        m_constraintEndTime = DateTime::fromString(s, status.projectSpec());
+        m_constraintEndTime = DateTime::fromString(s, status.projectTimeZone());
 
     m_startupCost = element.attribute("startup-cost", "0.0").toDouble();
     m_shutdownCost = element.attribute("shutdown-cost", "0.0").toDouble();
@@ -3471,11 +3471,11 @@ bool Completion::loadXML( KoXmlElement &element, XMLLoaderObject &status )
     m_finished = (bool)element.attribute("finished", "0").toInt();
     s = element.attribute("startTime");
     if (!s.isEmpty()) {
-        m_startTime = DateTime::fromString(s, status.projectSpec());
+        m_startTime = DateTime::fromString(s, status.projectTimeZone());
     }
     s = element.attribute("finishTime");
     if (!s.isEmpty()) {
-        m_finishTime = DateTime::fromString(s, status.projectSpec());
+        m_finishTime = DateTime::fromString(s, status.projectTimeZone());
     }
     setEntrymode( element.attribute( "entrymode" ) );
     if (status.version() < "0.6") {

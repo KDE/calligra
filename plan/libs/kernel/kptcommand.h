@@ -189,15 +189,15 @@ private:
 class KPLATOKERNEL_EXPORT CalendarModifyTimeZoneCmd : public NamedCommand
 {
 public:
-    CalendarModifyTimeZoneCmd( Calendar *cal, const KTimeZone &value, const KUndo2MagicString& name = KUndo2MagicString() );
+    CalendarModifyTimeZoneCmd( Calendar *cal, const QTimeZone &value, const KUndo2MagicString& name = KUndo2MagicString() );
     ~CalendarModifyTimeZoneCmd();
     void execute();
     void unexecute();
 
 private:
     Calendar *m_cal;
-    KTimeZone m_newvalue;
-    KTimeZone m_oldvalue;
+    QTimeZone m_newvalue;
+    QTimeZone m_oldvalue;
     MacroCommand *m_cmd;
 };
 
@@ -457,7 +457,7 @@ private:
     Node &m_node;
     QDateTime newTime;
     DateTime oldTime;
-    KDateTime::Spec m_spec;
+    QTimeZone m_timeZone;
 };
 class KPLATOKERNEL_EXPORT NodeModifyConstraintEndTimeCmd : public NamedCommand
 {
@@ -470,7 +470,7 @@ private:
     Node &m_node;
     QDateTime newTime;
     DateTime oldTime;
-    KDateTime::Spec m_spec;
+    QTimeZone m_timeZone;
 };
 class KPLATOKERNEL_EXPORT NodeModifyStartTimeCmd : public NamedCommand
 {
@@ -483,7 +483,7 @@ private:
     Node &m_node;
     QDateTime newTime;
     DateTime oldTime;
-    KDateTime::Spec m_spec;
+    QTimeZone m_timeZone;
 };
 class KPLATOKERNEL_EXPORT NodeModifyEndTimeCmd : public NamedCommand
 {
@@ -496,7 +496,7 @@ private:
     Node &m_node;
     QDateTime newTime;
     DateTime oldTime;
-    KDateTime::Spec m_spec;
+    QTimeZone m_timeZone;
 };
 class KPLATOKERNEL_EXPORT NodeModifyIdCmd : public NamedCommand
 {
@@ -963,7 +963,7 @@ private:
     Resource *m_resource;
     QDateTime m_newvalue;
     DateTime m_oldvalue;
-    KDateTime::Spec m_spec;
+    QTimeZone m_timeZone;
 };
 class KPLATOKERNEL_EXPORT ModifyResourceAvailableUntilCmd : public NamedCommand
 {
@@ -976,7 +976,7 @@ private:
     Resource *m_resource;
     QDateTime m_newvalue;
     DateTime m_oldvalue;
-    KDateTime::Spec m_spec;
+    QTimeZone m_timeZone;
 };
 
 class KPLATOKERNEL_EXPORT ModifyResourceNormalRateCmd : public NamedCommand
@@ -1163,7 +1163,7 @@ private:
     Completion &m_completion;
     DateTime oldvalue;
     QDateTime newvalue;
-    KDateTime::Spec m_spec;
+    QTimeZone m_timeZone;
 };
 
 class KPLATOKERNEL_EXPORT ModifyCompletionFinishTimeCmd : public NamedCommand
@@ -1177,7 +1177,7 @@ private:
     Completion &m_completion;
     DateTime oldvalue;
     QDateTime newvalue;
-    KDateTime::Spec m_spec;
+    QTimeZone m_timeZone;
 };
 
 class KPLATOKERNEL_EXPORT AddCompletionEntryCmd : public NamedCommand
@@ -1484,7 +1484,7 @@ private:
     Project &m_node;
     QDateTime newTime;
     DateTime oldTime;
-    KDateTime::Spec m_spec;
+    QTimeZone m_timeZone;
 };
 
 class KPLATOKERNEL_EXPORT ProjectModifyEndTimeCmd : public NamedCommand
@@ -1498,7 +1498,7 @@ private:
     Project &m_node;
     QDateTime newTime;
     DateTime oldTime;
-    KDateTime::Spec m_spec;
+    QTimeZone m_timeZone;
 };
 
 

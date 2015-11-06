@@ -32,15 +32,9 @@ class SchedulerTester : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void initTestCase();
-    void cleanupTestCase();
-
     void test();
 
 private:
-    void initTimezone();
-    void cleanupTimezone();
-    void removeDir(const QString &dir);
     QStringList data();
     void testProject(const QString &fname, const KoXmlDocument &doc );
     void compare( const QString &fname, Node *n, long id1, long id2 );

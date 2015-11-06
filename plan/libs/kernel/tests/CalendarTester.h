@@ -29,18 +29,12 @@ class CalendarTester : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void initTestCase();
-    void cleanupTestCase();
-
     void testSingleDay();
     void testWeekdays();
     void testCalendarWithParent();
     void testTimezone();
     void workIntervals();
     void workIntervalsFullDays();
-
-private:
-    void removeDir(const QString &dir);
 };
 
 } //namespace KPlato

@@ -40,15 +40,8 @@ public:
 static
 void print( Calendar *c, const QString &str, bool full = true ) {
     Q_UNUSED(full);
-    QString s;
-    switch ( c->timeSpec().type() ) {
-        case KDateTime::Invalid: s = "Invalid"; break;
-        case KDateTime::UTC: s = "UTC"; break;
-        case KDateTime::OffsetFromUTC: s = "OffsetFromUTC"; break;
-        case KDateTime::TimeZone: s = "TimeZone: " + c->timeSpec().timeZone().name(); break;
-        case KDateTime::LocalZone: s = "LocalZone"; break;
-        case KDateTime::ClockTime: s = "Clocktime"; break;
-    }
+    QTimeZone tz = c->timeZone();
+    QString s = tz.isValid() ? QString::fromLatin1(tz.id()) : QStringLiteral("LocalTime");
 
     qDebug()<<"Debug info: Calendar"<<c->name()<<s<<str;
     for ( int wd = 1; wd <= 7; ++wd ) {

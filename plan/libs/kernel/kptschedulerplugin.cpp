@@ -221,7 +221,7 @@ void SchedulerPlugin::updateProject( const Project *tp, const ScheduleManager *t
     XMLLoaderObject status;
     status.setVersion( PLAN_FILE_SYNTAX_VERSION );
     status.setProject( mp );
-    status.setProjectSpec( mp->timeSpec() );
+    status.setProjectTimeZone( mp->timeZone() );
 
     foreach ( const Node *tn, tp->allNodes() ) {
         Node *mn = mp->findNode( tn->id() );

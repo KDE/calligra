@@ -59,10 +59,10 @@ public:
 
     QString mimetype() const { return m_mimetype; }
     void setMimetype( const QString &mime ) { m_mimetype = mime; }
-    
-    const KDateTime::Spec &projectSpec() const { return m_projectSpec; }
-    void setProjectSpec( const KDateTime::Spec &spec ) { m_projectSpec = spec; }
-    
+
+    const QTimeZone &projectTimeZone() const { return m_projectTimeZone; }
+    void setProjectTimeZone( const QTimeZone &timeZone ) { m_projectTimeZone = timeZone; }
+
     void startLoad() {
         m_timer.start();
         m_starttime = QDateTime::currentDateTime();
@@ -127,8 +127,8 @@ protected:
     QString m_version;
     QString m_workversion;
     QString m_mimetype;
-    KDateTime::Spec m_projectSpec;
-    
+    QTimeZone m_projectTimeZone;
+
     Calendar *m_baseCalendar; // help to handle version < 0.6
 
     QPointer<KoUpdater> m_updater;

@@ -29,18 +29,12 @@ class WorkInfoCacheTester : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void initTestCase();
-    void cleanupTestCase();
-
     void basics();
     void addAfter();
     void addBefore();
     void addMiddle();
     void fullDay();
     void timeZone();
-
-private:
-    void removeDir(const QString &dir);
 };
 
 } //namespace KPlato

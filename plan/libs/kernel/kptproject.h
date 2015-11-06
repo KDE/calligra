@@ -40,9 +40,9 @@
 #include <QList>
 #include <QHash>
 #include <QPointer>
+#include <QTimeZone>
 
 #include <klocale.h>
-#include <ktimezone.h>
 
 
 /// The main namespace.
@@ -428,12 +428,10 @@ public:
     void sendScheduleRemoved( const MainSchedule *sch );
     void sendScheduleToBeRemoved( const MainSchedule *sch );
 
-    /// Return the time spec used in this project
-    const KDateTime::Spec &timeSpec() const { return m_spec; }
     /// Return the time zone used in this project
-    KTimeZone timeZone() const { return m_spec.timeZone(); }
+    QTimeZone timeZone() const { return m_timeZone; }
     /// Set the time zone to be used in this project
-    void setTimeZone( const KTimeZone &tz ) { m_spec = KDateTime::Spec( tz ); }
+    void setTimeZone( const QTimeZone &tz ) { m_timeZone = tz; }
     
     /**
      * Add a relation between the nodes specified in the relation rel.
@@ -675,8 +673,8 @@ private:
     QMap<QString, ScheduleManager*> m_managerIdMap;
 
     QList<ScheduleManager*> m_managers;
-    KDateTime::Spec m_spec;
-    
+    QTimeZone m_timeZone;
+
     WBSDefinition m_wbsDefinition;
     
     ConfigBase emptyConfig;

@@ -593,8 +593,8 @@ TJ::Resource *PlanTJScheduler::addResource( KPlato::Resource *r)
         res->setEfficiency( (double)(r->units()) / 100. );
     }
     Calendar *cal = r->calendar();
-    QDateTime start = qMax( r->availableFrom(), m_project->constraintStartTime() );
-    QDateTime end = m_project->constraintEndTime();
+    DateTime start = qMax( r->availableFrom(), m_project->constraintStartTime() );
+    DateTime end = m_project->constraintEndTime();
     if ( r->availableUntil().isValid() && end > r->availableUntil() ) {
         end = r->availableUntil();
     }
@@ -680,8 +680,8 @@ void PlanTJScheduler::addWorkingTime( KPlato::Task *task, TJ::Task *job )
     }
     int id = 0;
     Calendar *cal = task->estimate()->calendar();
-    QDateTime start = m_project->constraintStartTime();
-    QDateTime end = m_project->constraintEndTime();
+    DateTime start = m_project->constraintStartTime();
+    DateTime end = m_project->constraintEndTime();
 
     AppointmentIntervalList lst = cal->workIntervals( start, end, 1.0 );
     QMultiMap<QDate, AppointmentInterval>::const_iterator mapend = lst.map().constEnd();

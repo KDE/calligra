@@ -527,10 +527,10 @@ bool Resource::load(KoXmlElement &element, XMLLoaderObject &status) {
     m_units = element.attribute("units", "100").toInt();
     s = element.attribute("available-from");
     if (!s.isEmpty())
-        m_availableFrom = DateTime::fromString(s, status.projectSpec());
+        m_availableFrom = DateTime::fromString(s, status.projectTimeZone());
     s = element.attribute("available-until");
     if (!s.isEmpty())
-        m_availableUntil = DateTime::fromString(s, status.projectSpec());
+        m_availableUntil = DateTime::fromString(s, status.projectTimeZone());
         
     cost.normalRate = locale->readMoney(element.attribute("normal-rate"));
     cost.overtimeRate = locale->readMoney(element.attribute("overtime-rate"));
@@ -793,16 +793,14 @@ ResourceSchedule *Resource::createSchedule(Schedule *parent) {
     return sch;
 }
 
-KDateTime::Spec Resource::timeSpec() const
+QTimeZone Resource::timeZone() const
 {
     Calendar *cal = calendar();
-    if ( cal ) {
-        return cal->timeSpec();
-    }
-    if ( m_project ) {
-        return m_project->timeSpec();
-    }
-    return KDateTime::Spec::LocalZone();
+
+    return
+        cal ?       cal->timeZone() :
+        m_project ? m_project->timeZone() :
+        /* else */  QTimeZone();
 }
 
 DateTimeInterval Resource::requiredAvailable(Schedule *node, const DateTime &start, const DateTime &end ) const
@@ -970,11 +968,11 @@ void Resource::calendarIntervals( const DateTime &from, const DateTime &until ) 
     }
     if ( ! m_workinfocache.isValid() ) {
         // First time
-//         debugPlan<<"First time:"<<from<<until;
+        debugPlan<<"First time:"<<from<<until;
         m_workinfocache.start = from;
         m_workinfocache.end = until;
         m_workinfocache.intervals = cal->workIntervals( from, until, m_units );
-//         debugPlan<<"calendarIntervals (first):"<<m_workinfocache.intervals;
+        debugPlan<<"calendarIntervals (first):"<<m_workinfocache.intervals;
     } else {
         if ( from < m_workinfocache.start ) {
 //             debugPlan<<"Add to start:"<<from<<m_workinfocache.start;

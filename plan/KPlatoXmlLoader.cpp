@@ -27,7 +27,7 @@
 #include "KoXmlReader.h"
 
 #include <kmessagebox.h>
-#include <ktimezone.h>
+
 
 extern int kplatoXmlDebugArea();
 

@@ -783,35 +783,35 @@ bool NodeSchedule::loadXML( const KoXmlElement &sch, XMLLoaderObject &status )
         s = sch.attribute( "earlieststart" );
     }
     if ( !s.isEmpty() ) {
-        earlyStart = DateTime::fromString( s, status.projectSpec() );
+        earlyStart = DateTime::fromString( s, status.projectTimeZone() );
     }
     s = sch.attribute( "latefinish" );
     if ( s.isEmpty() ) { // try version < 0.6
         s = sch.attribute( "latestfinish" );
     }
     if ( !s.isEmpty() ) {
-        lateFinish = DateTime::fromString( s, status.projectSpec() );
+        lateFinish = DateTime::fromString( s, status.projectTimeZone() );
     }
     s = sch.attribute( "latestart" );
     if ( !s.isEmpty() ) {
-        lateStart = DateTime::fromString( s, status.projectSpec() );
+        lateStart = DateTime::fromString( s, status.projectTimeZone() );
     }
     s = sch.attribute( "earlyfinish" );
     if ( !s.isEmpty() ) {
-        earlyFinish = DateTime::fromString( s, status.projectSpec() );
+        earlyFinish = DateTime::fromString( s, status.projectTimeZone() );
     }
     s = sch.attribute( "start" );
     if ( !s.isEmpty() )
-        startTime = DateTime::fromString( s, status.projectSpec() );
+        startTime = DateTime::fromString( s, status.projectTimeZone() );
     s = sch.attribute( "end" );
     if ( !s.isEmpty() )
-        endTime = DateTime::fromString( s, status.projectSpec() );
+        endTime = DateTime::fromString( s, status.projectTimeZone() );
     s = sch.attribute( "start-work" );
     if ( !s.isEmpty() )
-        workStartTime = DateTime::fromString( s, status.projectSpec() );
+        workStartTime = DateTime::fromString( s, status.projectTimeZone() );
     s = sch.attribute( "end-work" );
     if ( !s.isEmpty() )
-        workEndTime = DateTime::fromString( s, status.projectSpec() );
+        workEndTime = DateTime::fromString( s, status.projectTimeZone() );
     duration = Duration::fromString( sch.attribute( "duration" ) );
 
     inCriticalPath = sch.attribute( "in-critical-path", "0" ).toInt();
@@ -1276,10 +1276,10 @@ bool MainSchedule::loadXML( const KoXmlElement &sch, XMLLoaderObject &status )
 
     s = sch.attribute( "start" );
     if ( !s.isEmpty() )
-        startTime = DateTime::fromString( s, status.projectSpec() );
+        startTime = DateTime::fromString( s, status.projectTimeZone() );
     s = sch.attribute( "end" );
     if ( !s.isEmpty() )
-        endTime = DateTime::fromString( s, status.projectSpec() );
+        endTime = DateTime::fromString( s, status.projectTimeZone() );
 
     duration = Duration::fromString( sch.attribute( "duration" ) );
     constraintError = sch.attribute( "scheduling-conflict", "0" ).toInt();
@@ -1926,7 +1926,7 @@ bool ScheduleManager::loadXML( KoXmlElement &element, XMLLoaderObject &status )
         status.project().schedulerPlugins().value( m_schedulerPluginId )->setGranularity( g );
     }
     m_recalculate = (bool)(element.attribute( "recalculate" ).toInt());
-    m_recalculateFrom = DateTime::fromString( element.attribute( "recalculate-from" ), status.projectSpec() );
+    m_recalculateFrom = DateTime::fromString( element.attribute( "recalculate-from" ), status.projectTimeZone() );
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
         if ( ! n.isElement() ) {

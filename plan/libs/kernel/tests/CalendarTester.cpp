@@ -24,11 +24,8 @@
 #include <kptmap.h>
 #include "kptappointment.h"
 
-#include <kconfiggroup.h>
-
 #include <QTimeZone>
 #include <QDateTime>
-#include <QDir>
 
 #include <QTest>
 
@@ -37,73 +34,17 @@
 namespace KPlato
 {
 
-void CalendarTester::initTestCase()
+QTimeZone createTimeZoneWithOffsetFromSystem(int hours, const QString & name)
 {
-    QString kdehome = qgetenv("KDEHOME");
-    QDir d(kdehome);
-    d.mkpath("calendartest");
-    d.cd("calendartest");
-
-    QString dataDir = d.path();
-    qDebug()<<dataDir;
-    QFile f;
-    f.setFileName(dataDir + QLatin1String( "/zone.tab" ) );
-    f.open(QIODevice::WriteOnly);
-    QTextStream fStream(&f);
-    fStream << "DE  +5230+01322 Europe/Berlin\n"
-               "EG  +3003+03115 Africa/Cairo\n"
-               "FR  +4852+00220 Europe/Paris\n"
-               "GB  +512830-0001845 Europe/London   Great Britain\n"
-               "US  +340308-1181434 America/Los_Angeles Pacific Time\n";
-    f.close();
-    QVERIFY(QFile::exists( dataDir + QLatin1String("/zone.tab")));
-    QDir dir(dataDir);
-    QVERIFY(dir.mkdir("Africa"));
-    QFile::copy(QFINDTESTDATA("zoneinfo/Cairo"), dataDir + QLatin1String("/Africa/Cairo"));
-    QVERIFY(QFile::exists( dataDir + QLatin1String("/Africa/Cairo")));
-    QVERIFY(dir.mkdir("America"));
-    QFile::copy(QFINDTESTDATA("zoneinfo/Los_Angeles"), dataDir + QLatin1String("/America/Los_Angeles"));
-    QVERIFY(QFile::exists( dataDir + QLatin1String("/America/Los_Angeles")));
-    QVERIFY(dir.mkdir("Europe"));
-    QFile::copy(QFINDTESTDATA("zoneinfo/Berlin"), dataDir + QLatin1String("/Europe/Berlin"));
-    QVERIFY(QFile::exists( dataDir + QLatin1String("/Europe/Berlin")));
-    QFile::copy(QFINDTESTDATA("zoneinfo/London"),dataDir + QLatin1String("/Europe/London"));
-    QVERIFY(QFile::exists( dataDir + QLatin1String("/Europe/London")));
-    QFile::copy(QFINDTESTDATA("zoneinfo/Paris"), dataDir + QLatin1String("/Europe/Paris"));
-    QVERIFY(QFile::exists( dataDir + QLatin1String("/Europe/Paris")));
-
-    // NOTE: QTEST_KDEMAIN_CORE puts the config file in QDir::homePath() + "/.kde-unit-test"
-    //       and hence, this is common to all unit tests
-    KConfig config("ktimezonedrc");
-    KConfigGroup group(&config, "TimeZones");
-    group.writeEntry("ZoneinfoDir", dataDir);
-    group.writeEntry("Zonetab", QString(dataDir + QLatin1String("/zone.tab")));
-    group.writeEntry("LocalZone", QString::fromLatin1("Europe/Berlin"));
-    config.sync();
-}
-
-void CalendarTester::cleanupTestCase()
-{
-    QString kdehome = qgetenv("KDEHOME");
-    removeDir( kdehome + "/calendartest/Africa" );
-    removeDir( kdehome + "/calendartest/America" );
-    removeDir( kdehome + "/calendartest/Europe" );
-    removeDir( kdehome + "/calendartest" );
-    removeDir( kdehome + "/share/config" );
-    QDir().rmpath(kdehome +"/share/calendartest");
-}
-
-void CalendarTester::removeDir(const QString &dir)
-{
-    QDir local(dir);
-    foreach(const QString &file, local.entryList(QDir::Files))
-        if(!local.remove(file))
-            qWarning("%s: removing failed", qPrintable( file ));
-        QCOMPARE((int)local.entryList(QDir::Files).count(), 0);
-    local.cdUp();
-    QString subd = dir;
-    subd.remove(QRegExp("^.*/"));
-    local.rmpath(subd);
+    QTimeZone systemTimeZone = QTimeZone::systemTimeZone();
+    int systemOffsetSeconds = systemTimeZone.standardTimeOffset(QDateTime(QDate(1980, 1, 1), QTime(), Qt::UTC));
+    int offsetSeconds = systemOffsetSeconds + 3600 * hours;
+    if (offsetSeconds >= (14*3600) ) {
+        offsetSeconds -= (24*3600);
+    } else if (offsetSeconds <= -(14*3600) ) {
+        offsetSeconds += (24*3600);
+    }
+    return QTimeZone(name.toLatin1(), offsetSeconds, name, name);
 }
 
 void CalendarTester::testSingleDay() {
@@ -215,7 +156,7 @@ void CalendarTester::testTimezone()
     QVERIFY(t.findDay(wdate) == day);
 
     // local zone: Europe/Berlin ( 1 hours from London )
-    QTimeZone lo("Europe/London");
+    QTimeZone lo = createTimeZoneWithOffsetFromSystem(-1, "DummyLondon");
     QVERIFY( lo.isValid() );
     QDateTime dt1 = QDateTime( wdate, t1, lo ).addSecs( -2 * 3600 );
     QDateTime dt2 = QDateTime( wdate, t2, lo ).addSecs( 0 * 3600 );
@@ -229,7 +170,7 @@ void CalendarTester::testTimezone()
     QCOMPARE( t.effort( DateTime( dt1 ), DateTime( dt2 ) ).toString(), e.toString() );
 
     // local zone: Europe/Berlin ( 9 hours from America/Los_Angeles )
-    QTimeZone la("America/Los_Angeles");
+    QTimeZone la = createTimeZoneWithOffsetFromSystem(-9, "DummyLos_Angeles");
     QVERIFY( la.isValid() );
     QDateTime dt3 = QDateTime( wdate, t1, la ).addSecs( -10 * 3600 );
     QDateTime dt4 = QDateTime( wdate, t2, la ).addSecs( -8 * 3600 );
@@ -244,7 +185,7 @@ void CalendarTester::testTimezone()
     QString s = "Test Cairo:";
     qDebug()<<s;
     // local zone: Europe/Berlin ( 1 hour from cairo )
-    QTimeZone ca("Africa/Cairo");
+    QTimeZone ca = createTimeZoneWithOffsetFromSystem(1, "DummyCairo");
     QDateTime dt5 = QDateTime( wdate, t1, ca ).addSecs( 0 * 3600 );
     QDateTime dt6 = QDateTime( wdate, t2, ca ).addSecs( 2 * 3600 );
 

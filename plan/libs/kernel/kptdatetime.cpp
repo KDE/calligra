@@ -38,18 +38,34 @@ DateTime::DateTime( const QDate &date, const QTime &time)
 {
 }
 
+DateTime::DateTime(const QDate &date, const QTime &time, const QTimeZone &timeZone)
+    : QDateTime( timeZone.isValid() ? QDateTime(date, time, timeZone).toLocalTime() : QDateTime(date, time, Qt::LocalTime) )
+{
+}
+
 DateTime::DateTime( const QDateTime& other )
     : QDateTime( other.toLocalTime() )
 {
 }
 
-DateTime::DateTime( const QDateTime &dt, const KDateTime::Spec &spec )
-    : QDateTime( KDateTime( dt, spec ).toLocalZone().dateTime() )
+DateTime::DateTime( const DateTime& other )
+    : QDateTime( other )
 {
 }
 
-DateTime::DateTime( const KDateTime &dt )
-    : QDateTime( dt.toLocalZone().dateTime() )
+static QDateTime fromTimeZone(const QDateTime &dt, const QTimeZone &timeZone)
+{
+    Q_ASSERT(dt.timeSpec() == Qt::LocalTime);
+    QDateTime result(dt);
+    if (timeZone.isValid()) {
+        result.setTimeZone(timeZone);
+        result = result.toLocalTime();
+    }
+    return result;
+}
+
+DateTime::DateTime( const QDateTime &dt, const QTimeZone &timeZone )
+    : QDateTime( fromTimeZone(dt, timeZone) )
 {
 }
 
@@ -102,23 +118,22 @@ DateTime& DateTime::operator-=(const Duration &duration) {
     return *this;
 }
 
-DateTime DateTime::fromString( const QString dts, const KDateTime::Spec &spec )
+DateTime DateTime::fromString( const QString &dts, const QTimeZone &timeZone )
 {
     if (dts.isEmpty()) {
         return DateTime();
     }
-    KDateTime dt = KDateTime::fromString(dts);
+    QDateTime dt = QDateTime::fromString(dts, Qt::ISODate);
     if ( ! dt.isValid() ) {
         // try to parse in qt default format (used in early version)
-        dt = KDateTime( QDateTime::fromString(dts), spec ).toLocalZone();
-        return dt.dateTime();
+        dt = QDateTime::fromString(dts, Qt::TextDate);
+        if (timeZone.isValid()) {
+            dt.setTimeZone(timeZone);
+        }
+        return DateTime(dt);
     }
-    if ( dt.isClockTime() ) {
-        // timezone offset missing, set to spec
-        return DateTime( dt.toLocalZone().dateTime() );
-    }
-    DateTime t = DateTime( dt.toTimeSpec( spec ).toLocalZone().dateTime() );
-    return t;
+
+    return DateTime(dt);
 }
 
 }  //KPlato namespace

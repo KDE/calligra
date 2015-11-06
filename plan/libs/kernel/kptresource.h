@@ -312,8 +312,8 @@ public:
 
     Project *project() const { return m_project; }
     /// Return the resources timespec. Defaults to local.
-    KDateTime::Spec timeSpec() const;
-    
+    QTimeZone timeZone() const;
+
     /**
      * Get the calendar for this resource.
      * Working resources may have a default calendar if the a calendar is marked as default,

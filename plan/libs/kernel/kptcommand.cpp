@@ -269,7 +269,7 @@ void CalendarModifyParentCmd::unexecute()
     m_project->addCalendar( m_cal, m_oldvalue, m_oldindex );
 }
 
-CalendarModifyTimeZoneCmd::CalendarModifyTimeZoneCmd( Calendar *cal, const KTimeZone &value, const KUndo2MagicString& name )
+CalendarModifyTimeZoneCmd::CalendarModifyTimeZoneCmd( Calendar *cal, const QTimeZone &value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_cal( cal ),
         m_newvalue( value ),
@@ -835,12 +835,12 @@ NodeModifyConstraintStartTimeCmd::NodeModifyConstraintStartTimeCmd( Node &node, 
         oldTime( node.constraintStartTime() )
 {
     if ( node.projectNode() ) {
-        m_spec = static_cast<Project*>( node.projectNode() )->timeSpec();
+        m_timeZone = static_cast<Project*>( node.projectNode() )->timeZone();
     }
 }
 void NodeModifyConstraintStartTimeCmd::execute()
 {
-    m_node.setConstraintStartTime( DateTime( newTime, m_spec ) );
+    m_node.setConstraintStartTime( DateTime( newTime, m_timeZone ) );
 
 }
 void NodeModifyConstraintStartTimeCmd::unexecute()
@@ -856,12 +856,12 @@ NodeModifyConstraintEndTimeCmd::NodeModifyConstraintEndTimeCmd( Node &node, cons
         oldTime( node.constraintEndTime() )
 {
     if ( node.projectNode() ) {
-        m_spec = static_cast<Project*>( node.projectNode() )->timeSpec();
+        m_timeZone = static_cast<Project*>( node.projectNode() )->timeZone();
     }
 }
 void NodeModifyConstraintEndTimeCmd::execute()
 {
-    m_node.setConstraintEndTime( DateTime( newTime, m_spec ) );
+    m_node.setConstraintEndTime( DateTime( newTime, m_timeZone ) );
 }
 void NodeModifyConstraintEndTimeCmd::unexecute()
 {
@@ -874,11 +874,11 @@ NodeModifyStartTimeCmd::NodeModifyStartTimeCmd( Node &node, const QDateTime& dt,
         newTime( dt ),
         oldTime( node.startTime() )
 {
-    m_spec = static_cast<Project*>( node.projectNode() )->timeSpec();
+    m_timeZone = static_cast<Project*>( node.projectNode() )->timeZone();
 }
 void NodeModifyStartTimeCmd::execute()
 {
-    m_node.setStartTime( DateTime( newTime, m_spec ) );
+    m_node.setStartTime( DateTime( newTime, m_timeZone ) );
 
 
 }
@@ -895,11 +895,11 @@ NodeModifyEndTimeCmd::NodeModifyEndTimeCmd( Node &node, const QDateTime& dt, con
         newTime( dt ),
         oldTime( node.endTime() )
 {
-    m_spec = static_cast<Project*>( node.projectNode() )->timeSpec();
+    m_timeZone = static_cast<Project*>( node.projectNode() )->timeZone();
 }
 void NodeModifyEndTimeCmd::execute()
 {
-    m_node.setEndTime( DateTime( newTime, m_spec ) );
+    m_node.setEndTime( DateTime( newTime, m_timeZone ) );
 
 
 }
@@ -1697,11 +1697,11 @@ ModifyResourceAvailableFromCmd::ModifyResourceAvailableFromCmd( Resource *resour
         m_newvalue( value )
 {
     m_oldvalue = resource->availableFrom();
-    m_spec = resource->timeSpec();
+    m_timeZone = resource->timeZone();
 }
 void ModifyResourceAvailableFromCmd::execute()
 {
-    m_resource->setAvailableFrom( DateTime( m_newvalue, m_spec ) );
+    m_resource->setAvailableFrom( DateTime( m_newvalue, m_timeZone ) );
 }
 void ModifyResourceAvailableFromCmd::unexecute()
 {
@@ -1714,11 +1714,11 @@ ModifyResourceAvailableUntilCmd::ModifyResourceAvailableUntilCmd( Resource *reso
         m_newvalue( value )
 {
     m_oldvalue = resource->availableUntil();
-    m_spec = resource->timeSpec();
+    m_timeZone = resource->timeZone();
 }
 void ModifyResourceAvailableUntilCmd::execute()
 {
-    m_resource->setAvailableUntil( DateTime( m_newvalue, m_spec ) );
+    m_resource->setAvailableUntil( DateTime( m_newvalue, m_timeZone ) );
 }
 void ModifyResourceAvailableUntilCmd::unexecute()
 {
@@ -2072,11 +2072,11 @@ ModifyCompletionStartTimeCmd::ModifyCompletionStartTimeCmd( Completion &completi
         oldvalue( m_completion.startTime() ),
         newvalue( value )
 {
-    m_spec = static_cast<Project*>( completion.node()->projectNode() )->timeSpec();
+    m_timeZone = static_cast<Project*>( completion.node()->projectNode() )->timeZone();
 }
 void ModifyCompletionStartTimeCmd::execute()
 {
-    m_completion.setStartTime( DateTime( newvalue, m_spec ) );
+    m_completion.setStartTime( DateTime( newvalue, m_timeZone ) );
 
 
 }
@@ -2093,11 +2093,11 @@ ModifyCompletionFinishTimeCmd::ModifyCompletionFinishTimeCmd( Completion &comple
         oldvalue( m_completion.finishTime() ),
         newvalue( value )
 {
-    m_spec = static_cast<Project*>( completion.node()->projectNode() )->timeSpec();
+    m_timeZone = static_cast<Project*>( completion.node()->projectNode() )->timeZone();
 }
 void ModifyCompletionFinishTimeCmd::execute()
 {
-    m_completion.setFinishTime( DateTime( newvalue, m_spec ) );
+    m_completion.setFinishTime( DateTime( newvalue, m_timeZone ) );
 
 
 }
@@ -2585,12 +2585,12 @@ ProjectModifyStartTimeCmd::ProjectModifyStartTimeCmd( Project &node, const QDate
         newTime( dt ),
         oldTime( node.startTime() )
 {
-    m_spec = node.timeSpec();
+    m_timeZone = node.timeZone();
 }
 
 void ProjectModifyStartTimeCmd::execute()
 {
-    m_node.setConstraintStartTime( DateTime( newTime, m_spec ) );
+    m_node.setConstraintStartTime( DateTime( newTime, m_timeZone ) );
 }
 void ProjectModifyStartTimeCmd::unexecute()
 {
@@ -2603,12 +2603,12 @@ ProjectModifyEndTimeCmd::ProjectModifyEndTimeCmd( Project &node, const QDateTime
         newTime( dt ),
         oldTime( node.endTime() )
 {
-    m_spec = node.timeSpec();
+    m_timeZone = node.timeZone();
 }
 void ProjectModifyEndTimeCmd::execute()
 {
-    m_node.setEndTime( DateTime( newTime, m_spec ) );
-    m_node.setConstraintEndTime( DateTime( newTime, m_spec ) );
+    m_node.setEndTime( DateTime( newTime, m_timeZone ) );
+    m_node.setConstraintEndTime( DateTime( newTime, m_timeZone ) );
 }
 void ProjectModifyEndTimeCmd::unexecute()
 {

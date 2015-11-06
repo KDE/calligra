@@ -35,9 +35,6 @@
 
 #include <QDateTime>
 
-#include <kdatetime.h>
-#include <ksystemtimezone.h>
-#include <ktimezone.h>
 #include <krandom.h>
 #include <KFormat>
 
@@ -72,11 +69,7 @@ void Project::init()
     m_refCount = 1; // always used by crateor
     m_constraint = Node::MustStartOn;
     m_standardWorktime = new StandardWorktime();
-    m_spec = KDateTime::Spec::LocalZone();
-    if ( !m_spec.timeZone().isValid() ) {
-        m_spec.setType( KTimeZone() );
-    }
-    //debugPlan<<m_spec.timeZone();
+    //debugPlan<<m_timeZone;
     if ( m_parent == 0 ) {
         // set sensible defaults for a project wo parent
         m_constraintStartTime = DateTime( QDate::currentDate() );
@@ -969,11 +962,11 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
     registerNodeId( this );
     m_leader = element.attribute( "leader" );
     m_description = element.attribute( "description" );
-    KTimeZone tz = KSystemTimeZones::zone( element.attribute( "timezone" ) );
+    QTimeZone tz( element.attribute( "timezone" ).toLatin1() );
     if ( tz.isValid() ) {
-        m_spec = KDateTime::Spec( tz );
+        m_timeZone = tz;
     } else warnPlan<<"No timezone specified, using default (local)";
-    status.setProjectSpec( m_spec );
+    status.setProjectTimeZone( m_timeZone );
     
     // Allow for both numeric and text
     s = element.attribute( "scheduling", "0" );
@@ -987,10 +980,10 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
     }
     s = element.attribute( "start-time" );
     if ( !s.isEmpty() )
-        m_constraintStartTime = DateTime::fromString( s, m_spec );
+        m_constraintStartTime = DateTime::fromString( s, m_timeZone );
     s = element.attribute( "end-time" );
     if ( !s.isEmpty() )
-        m_constraintEndTime = DateTime::fromString( s, m_spec );
+        m_constraintEndTime = DateTime::fromString( s, m_timeZone );
 
     status.setProgress( 10 );
 
@@ -1245,7 +1238,7 @@ void Project::save( QDomElement &element ) const
     me.setAttribute( "leader", m_leader );
     me.setAttribute( "id", m_id );
     me.setAttribute( "description", m_description );
-    me.setAttribute( "timezone", m_spec.timeZone().name() );
+    me.setAttribute( "timezone", m_timeZone.isValid() ? QString::fromLatin1(m_timeZone.id()) : QString() );
     
     me.setAttribute( "scheduling", constraintToString() );
     me.setAttribute( "start-time", m_constraintStartTime.toString( Qt::ISODate ) );
@@ -1329,8 +1322,8 @@ void Project::saveWorkPackageXML( QDomElement &element, const Node *node, long i
     me.setAttribute( "leader", m_leader );
     me.setAttribute( "id", m_id );
     me.setAttribute( "description", m_description );
-    me.setAttribute( "timezone", m_spec.timeZone().name() );
-    
+    me.setAttribute( "timezone", m_timeZone.isValid() ? QString::fromLatin1(m_timeZone.id()) : QString() );
+
     me.setAttribute( "scheduling", constraintToString() );
     me.setAttribute( "start-time", m_constraintStartTime.toString( Qt::ISODate ) );
     me.setAttribute( "end-time", m_constraintEndTime.toString( Qt::ISODate ) );

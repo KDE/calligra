@@ -135,10 +135,10 @@ bool AppointmentInterval::loadXML(KoXmlElement &element, XMLLoaderObject &status
     bool ok;
     QString s = element.attribute("start");
     if (!s.isEmpty())
-        d->start = DateTime::fromString(s, status.projectSpec());
+        d->start = DateTime::fromString(s, status.projectTimeZone());
     s = element.attribute("end");
     if (!s.isEmpty())
-        d->end = DateTime::fromString(s, status.projectSpec());
+        d->end = DateTime::fromString(s, status.projectTimeZone());
     d->load = element.attribute("load", "100").toDouble(&ok);
     if (!ok) d->load = 100;
     if ( ! isValid() ) {
