@@ -33,6 +33,7 @@ namespace QTest
             case Qt::LocalTime: s = " LocalTime"; break;
             case Qt::UTC: s = " UTC"; break;
             case Qt::OffsetFromUTC: s = " OffsetFromUTC"; break;
+            case Qt::TimeZone: s = " TimeZone (" + dt.timeZone().id() + ')'; break;
         }
         return toString( QString( "%1T%2 %3" ).arg( dt.date().toString(Qt::ISODate) ).arg( dt.time().toString( "hh:mm:ss.zzz" ) ).arg( s ) );
     }
