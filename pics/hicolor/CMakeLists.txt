@@ -1,34 +1,16 @@
 ecm_install_icons(
     ICONS
         16-actions-borderpainter.png
-        16-actions-frame_edit.png
-        16-actions-frame_formula.png
-        16-actions-frame_image.png
-        16-actions-frame_query.png
-        16-actions-frame_spreadsheet.png
-        16-actions-frame_text.png
-        16-actions-inline_image.png
-        16-actions-inline_table.png
         16-actions-insert-pagebreak.png
         22-actions-artistictext-attach-path.png
         22-actions-artistictext-detach-path.png
         22-actions-artistictext-tool.png
         22-actions-edittext.png
-        22-actions-frame_chart.png
-        22-actions-frame_edit.png
-        22-actions-frame_formula.png
-        22-actions-frame_image.png
-        22-actions-frame_query.png
-        22-actions-frame_spreadsheet.png
-        22-actions-frame_text.png
-        22-actions-inline_image.png
-        22-actions-inline_table.png
         22-actions-select.png
         24-actions-insert-pagebreak.png
         32-actions-insert-endnote.png
         32-actions-insert-footnote.png
         32-actions-insert-pagebreak.png
-        48-actions-format-line-spacing-simple.png
         sc-actions-artistictext-attach-path.svg
         sc-actions-artistictext-detach-path.svg
         sc-actions-artistictext-tool.svg
