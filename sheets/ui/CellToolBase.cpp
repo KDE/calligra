@@ -417,13 +417,13 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- misc style attribute actions --
 
-    action = new KAction(koIconWanted("no icon in Kate, so perhaps not really needed", "format-text-uppercase/"), i18n("Upper Case"), this);
+    action = new KAction(koIconWanted("no icon in Kate, but LO has one", "format-text-uppercase"), i18n("Upper Case"), this);
     action->setIconText(i18n("Upper"));
     addAction("toUpperCase", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toUpperCase()));
     action->setToolTip(i18n("Convert all letters to upper case"));
 
-    action = new KAction(koIconWanted("no icon in Kate, so perhaps not really needed", "format-text-lowercase/"), i18n("Lower Case"), this);
+    action = new KAction(koIconWanted("no icon in Kate, but LO has one", "format-text-lowercase"), i18n("Lower Case"), this);
     action->setIconText(i18n("Lower"));
     addAction("toLowerCase", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toLowerCase()));
