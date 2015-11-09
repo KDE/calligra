@@ -1024,7 +1024,8 @@ void KexiTableScrollArea::contentsMouseMoveEvent(QMouseEvent *e)
 static bool overrideEditorShortcutNeeded(QKeyEvent *e)
 {
     //perhaps more to come...
-    return e->key() == Qt::Key_Delete && e->modifiers() == Qt::ControlModifier;
+    return (e->key() == Qt::Key_Delete && e->modifiers() == Qt::ControlModifier)
+            || (e->key() == Qt::Key_Insert && e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier));
 }
 
 bool KexiTableScrollArea::shortCutPressed(QKeyEvent *e, const QString &action_name)

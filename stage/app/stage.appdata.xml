@@ -6,6 +6,7 @@
   <name>Stage</name>
   <name xml:lang="bs">Stage</name>
   <name xml:lang="ca">Stage</name>
+  <name xml:lang="ca-valencia">Stage</name>
   <name xml:lang="cs">Stage</name>
   <name xml:lang="da">Stage</name>
   <name xml:lang="de">Stage</name>
@@ -28,6 +29,7 @@
   <summary>Presentation</summary>
   <summary xml:lang="bs">Prezentacija</summary>
   <summary xml:lang="ca">Presentació</summary>
+  <summary xml:lang="ca-valencia">Presentació</summary>
   <summary xml:lang="cs">Prezentace</summary>
   <summary xml:lang="de">Präsentation</summary>
   <summary xml:lang="en-GB">Presentation</summary>
@@ -55,6 +57,7 @@
     </p>
     <p xml:lang="bs">Calligra Stage je lagana ali fleksibilna prezentacijska aplikacija. Možete lako kreirati prezentacije s dosta elemenata, iz grafike i teksta, dijagrama i slika. Calligra Stage se može proširivati kroz sistem dodataka, tako da je lako dodati nove efekte, nove sadržajne elemente ili čak nove načine upravljanja prezentacijom. Zbog integracije sa Calligra, sva moć i fleksibilnost od Calligra sadržaja elemenata su dostupni u Stage.</p>
     <p xml:lang="ca">L'Stage del Calligra és una aplicació de presentació flexible i fàcil d'utilitzar. Podeu crear presentacions fàcilment que continguin una gran varietat d'elements, des de gràfics a text, des de diagrames a imatges. L'Stage del Calligra és ampliable mitjançant un sistema de connectors, de manera que és senzill afegir efectes nous, elements de contingut nous o inclús noves maneres de gestionar les presentacions. Gràcies a la integració amb el Calligra, tota la potència i la flexibilitat dels elements de contingut del Calligra són disponibles per l'Stage.</p>
+    <p xml:lang="ca-valencia">L'Stage del Calligra és una aplicació de presentació flexible i fàcil d'utilitzar. Podeu crear presentacions fàcilment que continguen una gran varietat d'elements, des de gràfics a text, des de diagrames a imatges. L'Stage del Calligra és ampliable mitjançant un sistema de connectors, de manera que és senzill afegir efectes nous, elements de contingut nous o inclús noves maneres de gestionar les presentacions. Gràcies a la integració amb el Calligra, tota la potència i la flexibilitat dels elements de contingut del Calligra són disponibles per l'Stage.</p>
     <p xml:lang="en-GB">Calligra Stage is an easy to use yet still flexible presentation application. You can easily create presentations containing a rich variety of elements, from graphics to text, from charts to images. Calligra Stage is extensible through a plugin system, so it is easy to add new effects, new content elements or even new ways of managing your presentation. Because of the integration with Calligra, all the power and flexibility of the Calligra content elements are available to Stage.</p>
     <p xml:lang="es">Calligra Stage es un aplicación para presentaciones, fácil de utilizar y flexible. Permite crear fácilmente presentaciones que contengan una amplia variedad de elementos, desde gráficos a texto, desde diagramas a imágenes. Calligra Stage es extensible a través de un sistema de complementos, por lo que es fácil añadir nuevos efectos, nuevos elementos de contenido e incluso nuevas maneras de gestionar las presentaciones. Debido a su integración con Calligra, toda la potencia y flexibilidad de los elementos de contenido de Calligra están disponibles para Stage.</p>
     <p xml:lang="et">Calligra Stage on hõlpsasti kasutatav, aga väga paindlik esitluste rakendus. Selle abil saab vähese vaevaga luua rikkalikult elemente sisaldavaid esitlusi, milles leidub kõike alates graafikast tekstini ja diagrammidest piltideni. Calligra Stage'i saab laiendada pluginate abil, mis võimaldab lihtsalt lisada uusi efekte, uusi sisuelemente või isegi päris uusi viise esitlusi hallata. Calligraga lõimimise tõttu saab Stage paindlikult ära kasutada kõiki Calligra sisuelementide võimalusi.</p>
@@ -73,6 +76,7 @@
     <p>Features:</p>
     <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
+    <p xml:lang="ca-valencia">Característiques:</p>
     <p xml:lang="cs">Vlastnosti:</p>
     <p xml:lang="de">Funktionen:</p>
     <p xml:lang="en-GB">Features:</p>
@@ -95,6 +99,7 @@
       <li>Multiple master slides</li>
       <li xml:lang="bs">Više master slajdova</li>
       <li xml:lang="ca">Múltiples diapositives mestres</li>
+      <li xml:lang="ca-valencia">Múltiples diapositives mestres</li>
       <li xml:lang="de">Mehrere Folienmaster</li>
       <li xml:lang="en-GB">Multiple master slides</li>
       <li xml:lang="es">Múltiples diapositivas maestras</li>
@@ -114,6 +119,7 @@
       <li>Easily switch between slides during a presentation</li>
       <li xml:lang="bs">Lako prebacujte između slajdova tokom prezentacije</li>
       <li xml:lang="ca">Canvi senzill entre dispositives durant una presentació</li>
+      <li xml:lang="ca-valencia">Canvi senzill entre dispositives durant una presentació</li>
       <li xml:lang="de">Einfacher Wechsel zwischen Folien während einer Präsentation</li>
       <li xml:lang="en-GB">Easily switch between slides during a presentation</li>
       <li xml:lang="es">Permite cambiar fácilmente entre diapositivas durante una presentación</li>
@@ -133,6 +139,7 @@
       <li>Add notes for your slide</li>
       <li xml:lang="bs">Dodajte zabilješke za vaš slajd</li>
       <li xml:lang="ca">Permet afegir notes a les dispositives</li>
+      <li xml:lang="ca-valencia">Permet afegir notes a les dispositives</li>
       <li xml:lang="de">Hinzufügen von Notizen zu Folien</li>
       <li xml:lang="en-GB">Add notes for your slide</li>
       <li xml:lang="es">Permite añadir notas a una diapositiva</li>
@@ -152,6 +159,7 @@
       <li>Supports most ODF file transitions</li>
       <li xml:lang="bs">Podržava većinu tranzicija ODF datoteka</li>
       <li xml:lang="ca">Accepta la majoria de les transicions de fitxer ODF</li>
+      <li xml:lang="ca-valencia">Accepta la majoria de les transicions de fitxer ODF</li>
       <li xml:lang="de">Unterstützt die meisten ODF-Dateiübergänge</li>
       <li xml:lang="en-GB">Supports most ODF file transitions</li>
       <li xml:lang="es">Implementa la mayoría de las transiciones de archivo de ODF</li>

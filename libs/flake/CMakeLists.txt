@@ -102,6 +102,7 @@ set(flake_SRCS
     KoSnapData.cpp
     SnapGuideConfigWidget.cpp
     KoShapeShadow.cpp
+    KoSharedLoadingData.cpp
     KoSharedSavingData.cpp
     KoViewConverter.cpp
     KoInputDeviceHandler.cpp

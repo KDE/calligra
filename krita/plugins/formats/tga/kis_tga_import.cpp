@@ -67,9 +67,13 @@ static QDataStream & operator>> (QDataStream & s, TgaHeader & head)
     s >> head.pixel_size;
     s >> head.flags;
 
-    /*qDebug() << "id_length: " << head.id_length << " - colormap_type: " << head.colormap_type << " - image_type: " << head.image_type;
-    qDebug() << "colormap_index: " << head.colormap_index << " - colormap_length: " << head.colormap_length << " - colormap_size: " << head.colormap_size;
-    qDebug() << "x_origin: " << head.x_origin << " - y_origin: " << head.y_origin << " - width:" << head.width << " - height:" << head.height << " - pixelsize: " << head.pixel_size << " - flags: " << head.flags;*/
+    qDebug() << "id_length: " << head.id_length << " - colormap_type: " << head.colormap_type
+             << " - image_type: " << head.image_type;
+    qDebug() << "colormap_index: " << head.colormap_index << " - colormap_length: "
+             << head.colormap_length << " - colormap_size: " << head.colormap_size;
+    qDebug() << "x_origin: " << head.x_origin << " - y_origin: " << head.y_origin
+             << " - width:" << head.width << " - height:" << head.height
+             << " - pixelsize: " << head.pixel_size << " - flags: " << head.flags;
 
     return s;
 }
@@ -121,8 +125,6 @@ static bool loadTGA(QDataStream & s, const TgaHeader & tga, QImage &img)
 
     TgaHeaderInfo info(tga);
 
-    // Bits 0-3 are the numbers of alpha bits (can be zero!)
-    const int numAlphaBits = tga.flags & 0xf;
     // However alpha exists only in the 32 bit format.
     if ((tga.pixel_size == 32) && (tga.flags & 0xf)) {
         img = QImage(tga.width, tga.height, QImage::Format_ARGB32);
@@ -225,7 +227,7 @@ static bool loadTGA(QDataStream & s, const TgaHeader & tga, QImage &img)
             } else if (tga.pixel_size == 32) {
                 for (int x = 0; x < tga.width; x++) {
                     // ### TODO: verify with images having really some alpha data
-                    const uchar alpha = (src[3] << (8 - numAlphaBits));
+                    const uchar alpha = src[3];
                     scanline[x] = qRgba(src[2], src[1], src[0], alpha);
                     src += 4;
                 }

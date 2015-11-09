@@ -2,6 +2,7 @@
 Type=Service
 Name=Karbon JPEG/PNG Export Filter
 Name[ca]=Filtre d'exportació JPEG/PNG per al Karbon
+Name[ca@valencia]=Filtre d'exportació JPEG/PNG per al Karbon
 Name[cs]=Exportní filtr do formátu JPEG/PNG pro Karbon
 Name[de]=Karbon JPEG-/PNG-Exportfilter
 Name[en_GB]=Karbon JPEG/PNG Export Filter

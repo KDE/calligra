@@ -56,7 +56,7 @@ set(thumbnailhelper_SRCS
 if (WIN32)
     set(calligragemini_SRCS ${calligragemini_SRCS} calligrageminiwin.rc)
 else ()
-    kde4_add_app_icon(calligragemini_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/calligragemini.png")
+    kde4_add_app_icon(calligragemini_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-calligragemini.png")
 endif ()
 
 # Thumbnail helper application
@@ -94,6 +94,9 @@ install(FILES     calligragemini.qml                   DESTINATION ${DATA_INSTAL
 #install(FILES     calligragemini.rc                    DESTINATION ${DATA_INSTALL_DIR}/calligragemini)
 install(DIRECTORY qml                                       DESTINATION ${DATA_INSTALL_DIR}/calligragemini)
 install(DIRECTORY themes                                    DESTINATION ${DATA_INSTALL_DIR}/calligragemini)
+if(APPLE)
+   install( FILES ${CMAKE_CURRENT_BINARY_DIR}/calligragemini_SRCS.icns DESTINATION ${BUNDLE_INSTALL_DIR}/calligragemini.app/Contents/Resources)
+endif()
 
 add_subdirectory(pics)
 add_subdirectory(cloud)
