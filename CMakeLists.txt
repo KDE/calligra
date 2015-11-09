@@ -395,7 +395,7 @@ macro_log_feature(KChart_FOUND "KChart" "Library for creating business charts (p
 ##
 ## Test for KDb
 ##
-macro_optional_find_package(KDb 1.0.0)
+macro_optional_find_package(KDb 2.96.1)
 macro_log_feature(KDb_FOUND "KDb" "A database connectivity and creation framework"
                             "http://community.kde.org/KDb" FALSE "" "Required by Kexi and its plugins")
 
