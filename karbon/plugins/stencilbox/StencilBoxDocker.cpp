@@ -252,14 +252,18 @@ bool StencilBoxDocker::addCollection(const QString& path)
         // find data file path
         QString filename = dir.absoluteFilePath(stencil);
         filename.chop(7); // remove 'desktop'
-        QString source = filename;
-        if (QFile(filename+"odg").exists())
-            source += "odg";
-        else if (QFile(filename+"svgz").exists())
-            source += "svgz";
-        else if (QFile(filename+"svg").exists())
-            source += "svg";
-        else {
+        static const char * const suffix[3] = { "odg", "svgz", "svg"};
+        static const int suffixCount = sizeof(suffix)/sizeof(suffix[0]);
+
+        QString source;
+        for (int i = 0; i < suffixCount; ++i) {
+            source = filename + QLatin1String(suffix[i]);
+            if (QFile::exists(source)) {
+                break;
+            }
+            source.clear();
+        }
+        if (source.isEmpty()) {
             debugStencilBox << filename << "not found";
             continue;
         }
@@ -273,8 +277,9 @@ bool StencilBoxDocker::addCollection(const QString& path)
         temp.name = name;
         temp.toolTip = name;
 
-        if (QFile(filename+"png").exists()) {
-            temp.icon = QIcon(filename+"png");
+        const QString thumbnailFile = filename + QStringLiteral("png");
+        if (QFile::exists(thumbnailFile)) {
+            temp.icon = QIcon(thumbnailFile);
         } else {
             // generate icon using factory
             QPixmap pix(32, 32);
