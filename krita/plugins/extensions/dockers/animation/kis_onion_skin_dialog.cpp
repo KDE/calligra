@@ -74,6 +74,8 @@ KisOnionSkinDialog::KisOnionSkinDialog(QWidget *parent) :
 
     loadSettings();
     KisOnionSkinCompositor::instance()->configChanged();
+
+    resize(sizeHint());
 }
 
 KisOnionSkinDialog::~KisOnionSkinDialog()
