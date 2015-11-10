@@ -408,7 +408,7 @@ KexiTableDesignerView::createPropertySet(int record, const KDbField& field, bool
 
     set->addProperty(prop = new KProperty("primaryKey", QVariant(field.isPrimaryKey()),
                                                      xi18n("Primary Key")));
-    prop->setIcon("key");
+    prop->setIcon(koIconName("key"));
 
     set->addProperty(prop = new KProperty("unique", QVariant(field.isUniqueKey()),
                                                      xi18n("Unique")));
@@ -421,7 +421,7 @@ KexiTableDesignerView::createPropertySet(int record, const KDbField& field, bool
 
     set->addProperty(prop = new KProperty("autoIncrement", QVariant(field.isAutoIncrement()),
                                                      xi18n("Autonumber")));
-    prop->setIcon("autonumber");
+    prop->setIcon(koIconName("autonumber"));
 
     set->addProperty(prop = new KProperty("indexed", QVariant(field.isIndexed()),
                                                      xi18n("Indexed")));
