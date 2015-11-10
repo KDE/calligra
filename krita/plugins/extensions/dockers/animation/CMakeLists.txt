@@ -21,6 +21,11 @@ set(KRITA_ANIMATIONDOCKER_PART_SRCS
     kis_draggable_tool_button.cpp
     kis_animation_utils.cpp
     kis_custom_modifiers_catcher.cpp
+
+    kis_equalizer_column.cpp
+    kis_equalizer_slider.cpp
+    kis_equalizer_button.cpp
+    kis_equalizer_widget.cpp
 )
 
 kde4_add_ui_files(KRITA_ANIMATIONDOCKER_PART_SRCS
