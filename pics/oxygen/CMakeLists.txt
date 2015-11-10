@@ -12,7 +12,6 @@ ecm_install_icons(
         32-actions-shape-choose.png
         32-actions-table.png
         32-mimetypes-x-shape-connection.png
-        32-mimetypes-x-shape-formula.png
         32-mimetypes-x-shape-image.png
         32-mimetypes-x-shape-text.png
         48-actions-table.png
