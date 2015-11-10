@@ -6,12 +6,9 @@ ecm_install_icons(ICONS
     16-actions-aopos2grid.png
     16-actions-autofield.png
     16-actions-autonumber.png
-    16-actions-business_user.png
     16-actions-button.png
-    16-actions-button_no.png
     16-actions-check.png
     16-actions-clear_table_contents.png
-    16-actions-close.png
     16-actions-combo.png
     16-actions-database-import.png
     16-actions-delete_table_row.png
@@ -19,7 +16,6 @@ ecm_install_icons(ICONS
     16-actions-form_action.png
     16-actions-form_newobj.png
     16-actions-frame.png
-    16-actions-grid.png
     16-actions-groupbox.png
     16-actions-insert_table_row.png
     16-actions-key.png
@@ -52,7 +48,6 @@ ecm_install_icons(ICONS
     16-actions-textedit.png
     16-actions-unknown_widget.png
     16-actions-widgets.png
-    22-actions-alignobjs.png
     22-actions-aobottom.png
     22-actions-aofit.png
     22-actions-aogrid.png
@@ -65,11 +60,9 @@ ecm_install_icons(ICONS
     22-actions-aotop.png
     22-actions-aowidest.png
     22-actions-autofield.png
-    22-actions-business_user.png
     22-actions-button.png
     22-actions-check.png
     22-actions-clear_table_contents.png
-    22-actions-close.png
     22-actions-combo.png
     22-actions-database-import.png
     22-actions-dateedit.png
@@ -77,10 +70,8 @@ ecm_install_icons(ICONS
     22-actions-delete_table_row.png
     22-actions-form.png
     22-actions-form_action.png
-    22-actions-form_edit.png
     22-actions-form_newobj.png
     22-actions-frame.png
-    22-actions-grid.png
     22-actions-groupbox.png
     22-actions-insert_table_row.png
     22-actions-key.png
@@ -120,18 +111,13 @@ ecm_install_icons(ICONS
     22-actions-textedit.png
     22-actions-timeedit.png
     22-actions-unknown_widget.png
-    22-actions-urlrequest.png
     22-actions-widgets.png
-    22-actions-widgetstack.png
-    32-actions-business_user.png
     32-actions-clear_table_contents.png
-    32-actions-close.png
     32-actions-database-import.png
     32-actions-delete_table_row.png
     32-actions-form.png
     32-actions-form_action.png
     32-actions-form_newobj.png
-    32-actions-grid.png
     32-actions-insert_table_row.png
     32-actions-key.png
     32-actions-macro.png
@@ -149,7 +135,6 @@ ecm_install_icons(ICONS
     48-actions-database-import.png
     48-actions-form_action.png
     48-actions-key.png
-    64-actions-business_user.png
     64-actions-form_action.png
     DESTINATION ${DATA_INSTALL_DIR}/kexi/icons
     THEME hicolor
@@ -158,7 +143,6 @@ ecm_install_icons(ICONS
 install(FILES
         calligra-logo-white-glow.png
         calligra-logo-black-glow.png
-        external-link.png
         DESTINATION ${DATA_INSTALL_DIR}/kexi/pics)
 
 add_subdirectory(oxygen)
