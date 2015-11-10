@@ -49,6 +49,9 @@ StencilShapeFactory(const QString& id,
     : KoShapeFactoryBase(id, name)
     , m_properties(props)
 {
+    // ensures ShapeCollectionDocker ignores the stencil shapes for now,
+    // exclusively available by StencilBox
+    setFamily("stencil");
 }
 
 StencilShapeFactory::

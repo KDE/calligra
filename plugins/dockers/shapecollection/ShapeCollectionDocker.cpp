@@ -198,10 +198,16 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget* parent)
     connect(m_closeCollectionButton, SIGNAL(clicked()),
             this, SLOT(removeCurrentCollection()));
 
-    if(! KoResourcePaths::resourceDirs("app_shape_collections").isEmpty())
-    {
-        buildAddCollectionMenu();
-    }
+    // QT5TODO: app_shape_collections was only used with Flow in 2.x times
+    // Now the StencilBoxDocker parses all the stencils and adds them to the KoShapeRegistry,
+    // worse, sometimes does it before and sometimes after this constructor is run.
+    // As temporary solution StencilBoxDocker only shows all stencils, and only those,
+    // while all other shapes are only available by this docker.
+    // See family "stencil"
+//     if(! KoResourcePaths::resourceDirs("app_shape_collections").isEmpty())
+//     {
+//         buildAddCollectionMenu();
+//     }
 
     m_collectionView = new QListView (m_moreShapesContainer);
     containerLayout->addWidget(m_collectionView, 0, 2, -1, 1);
@@ -248,6 +254,10 @@ void ShapeCollectionDocker::loadDefaultShapes()
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(id);
         // don't show hidden factories
         if ( factory->hidden() ) {
+            continue;
+        }
+        // don't show stencil factories for now, exclusively available by StencilBox
+        if ( factory->family() == QLatin1String("stencil") ) {
             continue;
         }
         bool oneAdded = false;
