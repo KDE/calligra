@@ -244,8 +244,8 @@ KexiStandardFormWidgetsFactory::KexiStandardFormWidgetsFactory(QObject *parent, 
     wLine->setDescription(xi18n("A line to be used as a separator"));
     wLine->setAutoSaveProperties(QList<QByteArray>() << "orientation");
     wLine->setInternalProperty("orientationSelectionPopup", true);
-    wLine->setInternalProperty("orientationSelectionPopup:horizontalIcon", "line_horizontal");
-    wLine->setInternalProperty("orientationSelectionPopup:verticalIcon", "line_vertical");
+    wLine->setInternalProperty("orientationSelectionPopup:horizontalIcon", koIconName("line_horizontal"));
+    wLine->setInternalProperty("orientationSelectionPopup:verticalIcon", koIconName("line_vertical"));
     wLine->setInternalProperty("orientationSelectionPopup:horizontalText", xi18n("Insert &Horizontal Line"));
     wLine->setInternalProperty("orientationSelectionPopup:verticalText", xi18n("Insert &Vertical Line"));
     addClass(wLine);
