@@ -34,8 +34,8 @@ ecm_install_icons( ICONS
     16-actions-multirow.png
     16-actions-oscilloscope.png
     16-actions-percent.png
-    16-actions-precminus.png
-    16-actions-precplus.png
+    16-actions-prec_minus.png
+    16-actions-prec_plus.png
     16-actions-removecell.png
     16-actions-removecomment.png
     16-actions-resizecol.png
