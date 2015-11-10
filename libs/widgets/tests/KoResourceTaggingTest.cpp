@@ -32,10 +32,9 @@
 void KoResourceTaggingTest::initTestCase()
 {
     // use global png files as dummy pattern dir for now
-    const QFileInfo file(QFINDTESTDATA("../../../pics/hicolor/16-actions-frame_edit.png"));
+    const QFileInfo file(QFINDTESTDATA("../../../pics/hicolor/16-actions-borderpainter.png"));
     Q_ASSERT(file.exists());
     KoResourcePaths::addResourceDir("ko_patterns", file.absolutePath());
-    qDebug() << "++++++" << KoResourcePaths::resourceDirs("ko_patterns") << file.absolutePath();
 }
 
 void KoResourceTaggingTest::testInitialization()
