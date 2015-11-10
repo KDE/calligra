@@ -32,7 +32,6 @@ ecm_install_icons( ICONS
     16-actions-middle.png
     16-actions-money.png
     16-actions-multirow.png
-    16-actions-oscilloscope.png
     16-actions-percent.png
     16-actions-prec_minus.png
     16-actions-prec_plus.png
