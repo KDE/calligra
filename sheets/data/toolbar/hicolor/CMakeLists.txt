@@ -16,7 +16,6 @@ ecm_install_icons( ICONS
     16-actions-border_vertical.png
     16-actions-cell_edit.png
     16-actions-cell_layout.png
-    16-actions-chart.png
     16-actions-comment.png
     16-actions-deletecell.png
     16-actions-delete_table.png
@@ -27,7 +26,6 @@ ecm_install_icons( ICONS
     16-actions-hide_table_row.png
     16-actions-insertcellcopy.png
     16-actions-insertcell.png
-    16-actions-insert_link.png
     16-actions-mergecell-horizontal.png
     16-actions-mergecell.png
     16-actions-mergecell-vertical.png
@@ -64,8 +62,6 @@ ecm_install_icons( ICONS
     22-actions-border_up.png
     22-actions-border_vertical.png
     22-actions-funct.png
-    22-actions-insert_chart.png
-    22-actions-insert_link.png
     22-actions-mergecell-horizontal.png
     22-actions-mergecell.png
     22-actions-mergecell-vertical.png
