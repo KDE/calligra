@@ -15,13 +15,11 @@ ecm_install_icons( ICONS
     16-actions-onetwomatrix.png
     16-actions-over.png
     16-actions-paren.png
-    16-actions-prod.png
     16-actions-root.png
     16-actions-rsub.png
     16-actions-rsubup.png
     16-actions-rsup.png
     16-actions-sqrt.png
-    16-actions-sum.png
     16-actions-under.png
     16-actions-vector.png
     22-actions-abs.png
@@ -42,7 +40,6 @@ ecm_install_icons( ICONS
     22-actions-onetwomatrix.png
     22-actions-over.png
     22-actions-paren.png
-    22-actions-prod.png
     22-actions-remcol.png
     22-actions-remrow.png
     22-actions-root.png
@@ -50,7 +47,6 @@ ecm_install_icons( ICONS
     22-actions-rsubup.png
     22-actions-rsup.png
     22-actions-sqrt.png
-    22-actions-sum.png
     22-actions-under.png
     22-actions-vector.png
     32-actions-abs.png
@@ -69,13 +65,11 @@ ecm_install_icons( ICONS
     32-actions-onetwomatrix.png
     32-actions-over.png
     32-actions-paren.png
-    32-actions-prod.png
     32-actions-root.png
     32-actions-rsub.png
     32-actions-rsubup.png
     32-actions-rsup.png
     32-actions-sqrt.png
-    32-actions-sum.png
     32-actions-under.png
     32-actions-vector.png
 
