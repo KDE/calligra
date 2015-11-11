@@ -41,7 +41,7 @@ ChartToolFactory::ChartToolFactory()
 {
     setToolTip (i18n("Chart editing"));
     setToolType (dynamicToolType());
-    setIconName(koIconName("kchart"));
+    setIconName(koIconNameNeededWithSubs("enables editing of a given chart of any type", "edit-chart", "office-chart-bar"));
     setPriority (1);
     setActivationShapeId (ChartShapeId);
 }
