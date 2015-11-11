@@ -90,6 +90,7 @@ elsewhereUsedIcons = (
     "application-x-sqlite3",
     "calligra-logo-black-glow",
     "calligra-logo-white-glow",
+    "layout-elements", # stage UI element
     "tableview_pen", "tableview_plus", "tableview_pointer", # kexi xpm bases
     "questionmark", # for unknown shapes
     "cursor_shear", "cursor_rotate", "cursor_connect", "zoom_out_cursor", "zoom_in_cursor" # cursor images

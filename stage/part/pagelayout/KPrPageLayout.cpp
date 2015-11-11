@@ -28,9 +28,8 @@
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoPASavingContext.h>
-#include <KoIcon.h>
-#include <KIconLoader>
 
+#include <QStandardPaths>
 #include <QBuffer>
 #include <QSize>
 #include <QPainter>
@@ -132,8 +131,6 @@ QList<KPrPlaceholder *> KPrPageLayout::placeholders() const
 
 QPixmap KPrPageLayout::thumbnail() const
 {
-    KIconLoader * loader = KIconLoader::global();
-
     QSvgRenderer renderer;
 
     QSize size( 80, 60 );
@@ -141,7 +138,8 @@ QPixmap KPrPageLayout::thumbnail() const
     pic.fill();
     QPainter p( &pic );
 
-    QString file = loader->iconPath( koIconName("layout-elements"), KIconLoader::User );
+    // TODO: use QStandardPaths for that instead
+    QString file = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("stage/pics/layout-elements.svg"));
     if ( renderer.load( file ) ) {
         QList<KPrPlaceholder *>::const_iterator it( m_placeholders.begin() );
         for ( ; it != m_placeholders.end(); ++it ) {
