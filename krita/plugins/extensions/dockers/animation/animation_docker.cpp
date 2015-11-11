@@ -26,7 +26,6 @@
 #include "kis_action_manager.h"
 #include "kis_image_animation_interface.h"
 #include "kis_animation_player.h"
-#include "kis_onion_skin_dialog.h"
 #include "kis_time_range.h"
 #include "kundo2command.h"
 #include "kis_post_execution_undo_adapter.h"
@@ -42,7 +41,7 @@ AnimationDocker::AnimationDocker()
     : QDockWidget(i18n("Animation"))
     , m_canvas(0)
     , m_animationWidget(new Ui_WdgAnimation)
-    , m_onionSkinOptions(new KisOnionSkinDialog())
+    , m_mainWindow(0)
 {
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
@@ -193,6 +192,8 @@ void AnimationDocker::setMainWindow(KisViewManager *view)
     actionManager->addAction("delete_keyframe", m_deleteKeyframeAction);
 
     connect(view->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotUpdateIcons()));
+
+    m_mainWindow = view->mainWindow();
 }
 
 void AnimationDocker::slotAddBlankFrame()
@@ -247,7 +248,12 @@ void AnimationDocker::slotUIFramerateChanged()
 
 void AnimationDocker::slotOnionSkinOptions()
 {
-    m_onionSkinOptions->show();
+    if (m_mainWindow) {
+        QDockWidget *docker = m_mainWindow->dockWidget("OnionSkinsDocker");
+        if (docker) {
+            docker->setVisible(!docker->isVisible());
+        }
+    }
 }
 
 void AnimationDocker::slotGlobalTimeChanged()
