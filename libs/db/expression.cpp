@@ -318,6 +318,9 @@ bool NArgExpr::validate(ParseInfo& parseInfo)
         const Field::Type type0 = list[0]->type(); // cache: evaluating type of expressions can be expensive
         const Field::Type type1 = list[1]->type();
         const Field::Type type2 = list[2]->type();
+        if (type0 == Field::Null || type1 == Field::Null || type2 == Field::Null) {
+            return true;
+        }
         if (!(!Field::isNumericType(type0) || !Field::isNumericType(type1) || !Field::isNumericType(type1))) {
             return true;
         } else if (!(!Field::isTextType(type0) || !Field::isTextType(type1) || !Field::isTextType(type2))) {
