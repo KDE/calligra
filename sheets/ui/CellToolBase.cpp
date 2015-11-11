@@ -819,7 +819,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setToolTip(i18n("Check the spelling"));
     addAction("tools_spelling", action);
 
-    action = new KAction(koIcon("inspector"), i18n("Run Inspector..."), this);
+    action = new KAction(koIconWanted("not used in UI, but devs might do, so nice to have", "inspector"), i18n("Run Inspector..."), this);
     addAction("inspector", action);
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(inspector()));
