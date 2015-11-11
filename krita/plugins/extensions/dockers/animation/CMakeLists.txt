@@ -4,7 +4,7 @@ set(KRITA_ANIMATIONDOCKER_PART_SRCS
     animation_dockers.cpp
     animation_docker.cpp
     timeline_docker.cpp
-    kis_onion_skin_dialog.cpp
+    onion_skins_docker.cpp
 
     timeline_layers_header.cpp
     timeline_ruler_header.cpp
@@ -30,7 +30,7 @@ set(KRITA_ANIMATIONDOCKER_PART_SRCS
 
 kde4_add_ui_files(KRITA_ANIMATIONDOCKER_PART_SRCS
     wdg_animation.ui
-    kis_onion_skin_dialog.ui
+    onion_skins_docker.ui
 )
 
 kde4_add_plugin(kritaanimationdocker ${KRITA_ANIMATIONDOCKER_PART_SRCS})
