@@ -214,15 +214,15 @@ void TextTool::createActions()
     bool useAdvancedText = !(canvas()->resourceManager()->intResource(KoCanvasResourceManager::ApplicationSpeciality)
                              & KoCanvasResourceManager::NoAdvancedText);
 
-    m_actionConfigureSection = new QAction(koIcon("configure"), i18n("Configure current section"), this); //FIXME: Find another icon for this.
+    m_actionConfigureSection = new QAction(koIconNeededWithSubs("", "configure-text-section", "configure"), i18n("Configure current section"), this);
     addAction("configure_section", m_actionConfigureSection);
     connect(m_actionConfigureSection, SIGNAL(triggered(bool)), this, SLOT(configureSection()));
 
-    m_actionInsertSection = new QAction(koIcon("insert-text"), i18n("Insert new section"), this); //FIXME: Find another icon for this.
+    m_actionInsertSection = new QAction(koIconNeededWithSubs("", "insert-text-section", "insert-text"), i18n("Insert new section"), this);
     addAction("insert_section", m_actionInsertSection);
     connect(m_actionInsertSection, SIGNAL(triggered(bool)), this, SLOT(insertNewSection()));
 
-    m_actionSplitSections = new QAction(koIcon("split"), i18n("Insert paragraph between sections"), this); //FIXME: Find another icon for this.
+    m_actionSplitSections = new QAction(koIconNeededWithSubs("", "text-section-split", "split"), i18n("Insert paragraph between sections"), this);
     addAction("split_sections", m_actionSplitSections);
     connect(m_actionSplitSections, SIGNAL(triggered(bool)), this, SLOT(splitSections()));
 
