@@ -28,6 +28,9 @@
 #include <QThread>
 #include <QApplication>
 
+#include "kis_global.h"
+#include <cmath>
+
 #ifdef Q_OS_MAC
 #include <errno.h>
 #endif
@@ -226,7 +229,7 @@ void KisImageConfig::setSwapDir(const QString &swapDir)
 
 int KisImageConfig::numberOfOnionSkins() const
 {
-    return m_config.readEntry("numberOfOnionSkins", 1);
+    return m_config.readEntry("numberOfOnionSkins", 10);
 }
 
 void KisImageConfig::setNumberOfOnionSkins(int value)
@@ -246,7 +249,15 @@ void KisImageConfig::setOnionSkinTintFactor(int value)
 
 int KisImageConfig::onionSkinOpacity(int offset) const
 {
-    return m_config.readEntry("onionSkinOpacity_" + QString::number(offset), 128);
+    int value = m_config.readEntry("onionSkinOpacity_" + QString::number(offset), -1);
+
+    if (value < 0) {
+        const int num = numberOfOnionSkins();
+        const qreal dx = qreal(qAbs(offset)) / num;
+        value = 0.7 * exp(-pow2(dx) / 0.5) * 255;
+    }
+
+    return value;
 }
 
 void KisImageConfig::setOnionSkinOpacity(int offset, int value)
