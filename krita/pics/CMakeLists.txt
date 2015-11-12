@@ -49,7 +49,7 @@ dark_nextkeyframe.png
 dark_firstframe.png
 dark_lastframe.png
 dark_animation_play.png
-dark_animation_stop.svg
+dark_animation_stop.png
 dark_addblankframe.png
 dark_addduplicateframe.png
 dark_deletekeyframe.png
@@ -67,7 +67,7 @@ light_nextkeyframe.png
 light_firstframe.png
 light_lastframe.png
 light_animation_play.png
-light_animation_stop.svg
+light_animation_stop.png
 light_addblankframe.png
 light_addduplicateframe.png
 light_deletekeyframe.png
