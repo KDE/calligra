@@ -49,8 +49,8 @@ XlsxXmlDocumentReaderContext::XlsxXmlDocumentReaderContext(
     const XlsxComments& _comments,
     const XlsxStyles& _styles,
     MSOOXML::MsooXmlRelationships& _relationships,
-    QString _file,
-    QString _path
+    const QString &_file,
+    const QString &_path
     )
         : MSOOXML::MsooXmlReaderContext(&_relationships)
         , import(&_import)

@@ -136,7 +136,7 @@ QAction* KPrPresentationDrawWidget::buildActionSize( int size )
     return action;
 }
 
-QAction* KPrPresentationDrawWidget::buildActionColor( QColor color, QString name )
+QAction* KPrPresentationDrawWidget::buildActionColor( const QColor &color, const QString &name )
 {
     QAction *action;
     action = new QAction( buildIconColor ( color ) , name, this );
@@ -158,7 +158,7 @@ QIcon KPrPresentationDrawWidget::buildIconSize( int size )
     return thumbIcon;
 }
 
-QIcon KPrPresentationDrawWidget::buildIconColor( QColor color )
+QIcon KPrPresentationDrawWidget::buildIconColor( const QColor &color )
 {
     QPixmap thumbPixmap( QSize ( 24, 20 ) );
     thumbPixmap.fill( color );

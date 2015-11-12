@@ -135,7 +135,7 @@ public:
     // This function will create the fill style and fill the appropriate styles
     // and filePath if needed.
     // Number is used to index to correct style, color is the color which should be used when making the styles
-    virtual void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color) = 0;
+    virtual void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, const QColor &color) = 0;
 
     virtual DrawingMLFillBase* clone() const = 0;
 };
@@ -143,7 +143,7 @@ public:
 class KOMSOOXML_EXPORT DrawingMLSolidFill : public DrawingMLFillBase
 {
 public:
-    void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color);
+    void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, const QColor &color);
 
     DrawingMLSolidFill* clone() const { return new DrawingMLSolidFill(*this); }
 };
@@ -152,7 +152,7 @@ class KOMSOOXML_EXPORT DrawingMLBlipFill : public DrawingMLFillBase
 {
 public:
     explicit DrawingMLBlipFill(const QString &filePath);
-    void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color);
+    void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, const QColor &color);
 
     DrawingMLBlipFill* clone() const { return new DrawingMLBlipFill(*this); }
 
@@ -164,9 +164,9 @@ class KOMSOOXML_EXPORT DrawingMLGradientFill : public DrawingMLFillBase
 {
 public:
     // Simplified gradient constructor
-    DrawingMLGradientFill(QVector<qreal> shadeModifier, QVector<qreal> tintModifier, QVector<qreal> satModifier,
-                          QVector<int> alphaModifier, QVector<int> gradPositions, QString gradAngle);
-    void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color);
+    DrawingMLGradientFill(const QVector<qreal> &shadeModifier, const QVector<qreal> &tintModifier, const QVector<qreal> &satModifier,
+                          const QVector<int> &alphaModifier, const QVector<int> &gradPositions, const QString &gradAngle);
+    void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, const QColor &color);
 
     DrawingMLGradientFill* clone() const { return new DrawingMLGradientFill(*this); }
 

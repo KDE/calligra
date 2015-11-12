@@ -918,7 +918,7 @@ public:
     void setFormat( Format format );
 
     QString imagePath() const;
-    void setImagePath( QString imagePath );
+    void setImagePath( const QString &imagePath );
 
     unsigned imageSize() const;
     void setImageSize( unsigned imageSize );

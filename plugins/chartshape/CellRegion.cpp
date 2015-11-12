@@ -283,7 +283,7 @@ static QString columnName(uint column);
  * Makes sure that quotes are added if name contains spaces or special
  * characters. May also be used to escape certain characters if needed.
  */
-static QString formatTableName(QString name)
+static QString formatTableName(const QString &name)
 {
     static const QList<QChar> specialChars =
         QList<QChar>() << ' ' << '\t' << '-' << '\'';
@@ -293,7 +293,7 @@ static QString formatTableName(QString name)
         containsSpecialChars = containsSpecialChars || name.contains(c);
 
     if(containsSpecialChars)
-        name.prepend('\'').append('\'');
+        return QLatin1Char('\'') + name + QLatin1Char('\'');
 
     return name;
 }

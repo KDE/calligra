@@ -786,7 +786,7 @@ APPLIXSPREADImport::specCharfind(QChar a, QChar b)
  *  function:   writePen                                                      *
  ******************************************************************************/
 void
-APPLIXSPREADImport::writePen(QString &str, int penwidth, int penstyle, QString framecolor)
+APPLIXSPREADImport::writePen(QString &str, int penwidth, int penstyle, const QString &framecolor)
 {
     str += "     <pen width=\"" +
 
@@ -932,7 +932,7 @@ APPLIXSPREADImport::readColormap(QTextStream &stream,  QList<t_mycolor*> &mcol)
  *  function:   readColormap                                                  *
  ******************************************************************************/
 void
-APPLIXSPREADImport::readView(QTextStream &stream, QString instr, t_rc &rc)
+APPLIXSPREADImport::readView(QTextStream &stream, const QString &instr, t_rc &rc)
 {
     QString rowcolstr;
     QString mystr, tabname;
@@ -1043,7 +1043,7 @@ APPLIXSPREADImport::readView(QTextStream &stream, QString instr, t_rc &rc)
  *  function:   filterSHFGBG                                                  *
  ******************************************************************************/
 void
-APPLIXSPREADImport::filterSHFGBG(QString it, int *style, int *bgcolor,
+APPLIXSPREADImport::filterSHFGBG(const QString &it, int *style, int *bgcolor,
                                  int *fgcolor)
 {
     QString tmpstr;
@@ -1128,7 +1128,7 @@ APPLIXSPREADImport::filterSHFGBG(QString it, int *style, int *bgcolor,
  *  function:   filterSHFGBG                                                  *
  ******************************************************************************/
 void
-APPLIXSPREADImport::transPenFormat(QString it, int *PenWidth, int *PenStyle)
+APPLIXSPREADImport::transPenFormat(const QString &it, int *PenWidth, int *PenStyle)
 {
 
     if (it[1] == '1') {

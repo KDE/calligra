@@ -412,7 +412,7 @@ bool ExportEpub2::isWmf(QByteArray &content)
 KoFilter::ConversionStatus ExportEpub2::extractMediaFiles(EpubFile *epubFile)
 {
     QByteArray mediaContent;
-    foreach (QString mediaId, m_mediaFilesList.keys()) {
+    foreach (const QString &mediaId, m_mediaFilesList.keys()) {
         QString mediaSrc = m_mediaFilesList.value(mediaId);
         // Remove scheme (file://) from the path
         QUrl mediaPath(mediaSrc);

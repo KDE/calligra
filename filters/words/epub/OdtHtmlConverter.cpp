@@ -1092,7 +1092,7 @@ void OdtHtmlConverter::writeMediaOverlayDocumentFile()
 
     writer.startElement("body");
 
-    foreach (QString mediaReference, m_mediaFilesList.keys()) {
+    foreach (const QString &mediaReference, m_mediaFilesList.keys()) {
         writer.startElement("par");
 
         writer.startElement("text");

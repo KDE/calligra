@@ -30,7 +30,7 @@ KoStyle::~KoStyle()
 {
 }
 
-void KoStyle::setName(QString name)
+void KoStyle::setName(const QString &name)
 {
     m_name = name;
 }

@@ -2026,7 +2026,7 @@ void PptxXmlSlideReader::saveCurrentStyles()
 #endif
 }
 
-void PptxXmlSlideReader::saveBodyPropertiesHelper(QString id, PptxSlideProperties* slideProperties)
+void PptxXmlSlideReader::saveBodyPropertiesHelper(const QString &id, PptxSlideProperties* slideProperties)
 {
     slideProperties->textShapePositions[id] = m_shapeTextPosition;
     slideProperties->textLeftBorders[id] = m_shapeTextLeftOff;
@@ -2093,7 +2093,7 @@ void PptxXmlSlideReader::saveCurrentGraphicStyles()
     }
 }
 
-void PptxXmlSlideReader::inheritBodyPropertiesHelper(QString id, PptxSlideProperties* slideProperties)
+void PptxXmlSlideReader::inheritBodyPropertiesHelper(const QString &id, PptxSlideProperties* slideProperties)
 {
     QString position, left, right, top, bottom;
 

@@ -47,14 +47,14 @@
 
 using namespace MSOOXML;
 
-DrawingMLGradientFill::DrawingMLGradientFill(QVector<qreal> shadeModifier, QVector<qreal> tintModifier, QVector<qreal> satModifier,
-    QVector<int> alphaModifier, QVector<int> gradPositions, QString gradAngle)
+DrawingMLGradientFill::DrawingMLGradientFill(const QVector<qreal> &shadeModifier, const QVector<qreal> &tintModifier, const QVector<qreal> &satModifier,
+    const QVector<int> &alphaModifier, const QVector<int> &gradPositions, const QString &gradAngle)
     : m_shadeModifier(shadeModifier),m_tintModifier(tintModifier), m_satModifier(satModifier),
      m_alphaModifier(alphaModifier), m_gradPosition(gradPositions), m_gradAngle(gradAngle)
 {
 }
 
-void DrawingMLGradientFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color)
+void DrawingMLGradientFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, const QColor &color)
 {
     KoGenStyle gradientStyle = KoGenStyle(KoGenStyle::LinearGradientStyle);
 
@@ -83,7 +83,7 @@ DrawingMLBlipFill::DrawingMLBlipFill(const QString &filePath) : m_filePath(fileP
 {
 }
 
-void DrawingMLBlipFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color)
+void DrawingMLBlipFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, const QColor &color)
 {
     Q_UNUSED(color)
 
@@ -98,7 +98,7 @@ void DrawingMLBlipFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyl
     graphicStyle->addProperty("draw:fill-image-name", fillImageName);
 }
 
-void DrawingMLSolidFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color)
+void DrawingMLSolidFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, const QColor &color)
 {
     if (color.isValid()) {
         QBrush brush(color, Qt::SolidPattern);
@@ -264,7 +264,7 @@ DrawingMLTheme::DrawingMLTheme()
 // ---------------------------------------------------
 
 MsooXmlThemesReaderContext::MsooXmlThemesReaderContext(DrawingMLTheme& t, MSOOXML::MsooXmlRelationships* rel,
-        MSOOXML::MsooXmlImport* imp, QString pathName, QString fileName)
+        MSOOXML::MsooXmlImport* imp, const QString &pathName, const QString &fileName)
         : MsooXmlReaderContext()
         , theme(&t), relationships(rel), import(imp), path(pathName), file(fileName)
 {

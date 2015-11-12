@@ -28,18 +28,18 @@ MobiFile::MobiFile()
 {
 }
 
-void MobiFile::addContentRawText(QByteArray content)
+void MobiFile::addContentRawText(const QByteArray &content)
 {
     m_textContent = content;
 }
 
-void MobiFile:: addContentImage(int id, QByteArray content)
+void MobiFile:: addContentImage(int id, const QByteArray &content)
 {
     m_imageContent.insert(id, content);
 }
 
 
-KoFilter::ConversionStatus MobiFile::writeMobiFile(QString outputFile, MobiHeaderGenerator &headerGenerator)
+KoFilter::ConversionStatus MobiFile::writeMobiFile(const QString &outputFile, MobiHeaderGenerator &headerGenerator)
 {
     QFile mobi(outputFile);
     if (!mobi.open(QIODevice::WriteOnly)) {

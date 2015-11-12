@@ -329,7 +329,7 @@ Sheet* PivotMain::filter()
 }
 
 //This helps the filter function in analyzing the data(condition) received from Add Filter dialog.
-bool PivotMain::checkCondition(QString field,QString condition,QString value,int line)
+bool PivotMain::checkCondition(const QString &field , const QString &condition, const QString &value, int line)
 {
   Sheet *const sheet1 = d->selection->lastSheet();
   const QRect range2 = d->selection->lastRange();
@@ -695,7 +695,7 @@ void PivotMain::Summarize()
   
 }//Summarize
 
-QVector<QString> PivotMain::ValueData(QString str)
+QVector<QString> PivotMain::ValueData(const QString &str)
 {
   
       Sheet *const sheet = d->selection->lastSheet();

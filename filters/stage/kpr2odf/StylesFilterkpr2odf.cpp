@@ -787,7 +787,7 @@ const QString Filterkpr2odf::createStrokeDashStyle(int strokeStyle)
     return m_styles.insert(style, "stroke");
 }
 
-const QString Filterkpr2odf::createHatchStyle(int brushStyle, QString fillColor)
+const QString Filterkpr2odf::createHatchStyle(int brushStyle, const QString &fillColor)
 {
     KoGenStyle style(KoGenStyle::HatchStyle);
 

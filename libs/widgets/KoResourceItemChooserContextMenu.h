@@ -33,11 +33,11 @@ class ContextMenuExistingTagAction : public QAction
 {
     Q_OBJECT
 public:
-    explicit ContextMenuExistingTagAction( KoResource * resource, QString tag, QObject* parent = 0);
+    explicit ContextMenuExistingTagAction( KoResource * resource, const QString &tag, QObject* parent = 0);
     ~ContextMenuExistingTagAction();
 
 Q_SIGNALS:
-    void triggered(KoResource * resource, QString tag);
+    void triggered(KoResource * resource, const QString &tag);
 
 protected Q_SLOTS:
     void onTriggered();

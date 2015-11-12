@@ -58,7 +58,7 @@ public:
         ColValue = 1,
         ColSize
     };
-    KoRdfPrefixMappingTreeWidgetItem(KoRdfPrefixMapping *mapping, QString key, int type = Type)
+    KoRdfPrefixMappingTreeWidgetItem(KoRdfPrefixMapping *mapping, const QString &key, int type = Type)
         : QTreeWidgetItem(type)
         , m_mapping(mapping)
         , m_key(key) {

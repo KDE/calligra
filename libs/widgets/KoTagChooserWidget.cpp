@@ -118,22 +118,22 @@ void KoTagChooserWidget::setCurrentIndex(int index)
     d->comboBox->setCurrentIndex(index);
 }
 
-int KoTagChooserWidget::findIndexOf(QString tagName)
+int KoTagChooserWidget::findIndexOf(const QString &tagName)
 {
     return d->comboBox->findText(tagName);
 }
 
-void KoTagChooserWidget::addReadOnlyItem(QString tagName)
+void KoTagChooserWidget::addReadOnlyItem(const QString &tagName)
 {
     d->readOnlyTags.append(tagName);
 }
 
-void KoTagChooserWidget::insertItem(QString tagName)
+void KoTagChooserWidget::insertItem(const QString &tagName)
 {
     QStringList tags = allTags();
     tags.append(tagName);
     tags.sort();
-    foreach (QString readOnlyTag, d->readOnlyTags) {
+    foreach (const QString &readOnlyTag, d->readOnlyTags) {
         tags.prepend(readOnlyTag);
     }
 
@@ -145,7 +145,7 @@ void KoTagChooserWidget::insertItem(QString tagName)
 
 }
 
-void KoTagChooserWidget::insertItemAt(int index, QString tag)
+void KoTagChooserWidget::insertItemAt(int index, const QString &tag)
 {
     d->comboBox->insertItem(index,tag);
 }
@@ -185,7 +185,7 @@ void KoTagChooserWidget::clear()
     d->comboBox->clear();
 }
 
-void KoTagChooserWidget::removeItem(QString item)
+void KoTagChooserWidget::removeItem(const QString &item)
 {
     int pos = d->comboBox->findText(item);
     if (pos >= 0) {

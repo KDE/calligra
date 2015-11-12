@@ -113,7 +113,7 @@ public:
     void setProperty(PropertyType type, const QVariant &value);
 
     std::map<std::pair<unsigned, QString>, QString>& namedAreas();
-    void setNamedArea(unsigned sheet, QString name, QString formula);
+    void setNamedArea(unsigned sheet, const QString &name, const QString &formula);
 
     QList<QRect> filterRanges(unsigned sheet) const;
     QList<QRect> filterRanges(const Sheet* sheet) const;

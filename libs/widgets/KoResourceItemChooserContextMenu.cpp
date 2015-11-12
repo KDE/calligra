@@ -103,7 +103,7 @@ void KoLineEditAction::setVisible(bool showAction)
     defaultWidget()->setVisible(showAction);
 }
 
-ContextMenuExistingTagAction::ContextMenuExistingTagAction(KoResource* resource, QString tag, QObject* parent)
+ContextMenuExistingTagAction::ContextMenuExistingTagAction(KoResource* resource, const QString &tag, QObject* parent)
     : QAction(parent)
     , m_resource(resource)
     , m_tag(tag)

@@ -65,7 +65,7 @@ void KPrPresentationToolAdaptor::highlightPresentation(int pointx, int pointy)
     }
 }
 
-void KPrPresentationToolAdaptor::startDrawPresentation(int pointx, int pointy, int penSize, QString color)
+void KPrPresentationToolAdaptor::startDrawPresentation(int pointx, int pointy, int penSize, const QString &color)
 {
     if (m_viewModePresentation.isActivated()) {
         if (! dynamic_cast< KPrPresentationDrawStrategy* >(m_tool->strategy())) {

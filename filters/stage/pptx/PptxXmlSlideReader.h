@@ -276,8 +276,8 @@ protected:
 
 private:
 
-    void saveBodyPropertiesHelper(QString id, PptxSlideProperties* slideProperties);
-    void inheritBodyPropertiesHelper(QString id, PptxSlideProperties* slideProperties);
+    void saveBodyPropertiesHelper(const QString &id, PptxSlideProperties* slideProperties);
+    void inheritBodyPropertiesHelper(const QString &id, PptxSlideProperties* slideProperties);
 
     void init();
 

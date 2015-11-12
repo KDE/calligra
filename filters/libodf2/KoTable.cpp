@@ -206,7 +206,7 @@ void KoTable::setProtected(bool isProtected)
     m_protected = isProtected;
 }
 
-void KoTable::setProtectionKey(QString password, QString protectionAlgorithmUri)
+void KoTable::setProtectionKey(const QString &password, const QString &protectionAlgorithmUri)
 {
     m_protectionKey = password;
     m_protectionAlgorithm = protectionAlgorithmUri;

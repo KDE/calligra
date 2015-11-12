@@ -181,7 +181,7 @@ GNUMERICFilter::GNUMERICFilter(QObject* parent, const QVariantList &)
 }
 
 /* This converts GNUmeric's color string "0:0:0" to a QColor. */
-void  convert_string_to_qcolor(QString color_string, QColor * color)
+void  convert_string_to_qcolor(const QString &color_string, QColor * color)
 {
     int red, green, blue, first_col_pos, second_col_pos;
 

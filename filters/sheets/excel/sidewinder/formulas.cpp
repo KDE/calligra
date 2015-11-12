@@ -1508,7 +1508,7 @@ FormulaTokens FormulaDecoder::decodeFormula(unsigned size, unsigned pos, const u
 
 typedef std::vector<QString> UStringStack;
 
-static void mergeTokens(UStringStack* stack, unsigned count, QString mergeString)
+static void mergeTokens(UStringStack* stack, unsigned count, const QString &mergeString)
 {
     if (!stack) return;
     if (stack->size() < count) return;

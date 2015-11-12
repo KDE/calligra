@@ -43,7 +43,7 @@ public:
                                  const XlsxComments& _comments,
                                  const XlsxStyles& _styles,
                                  MSOOXML::MsooXmlRelationships& _relationships,
-                                 QString _file, QString _path);
+                                 const QString &_file, const QString &_path);
     XlsxImport *import;
     MSOOXML::DrawingMLTheme *themes;
     const QVector<QString>* sharedStrings;

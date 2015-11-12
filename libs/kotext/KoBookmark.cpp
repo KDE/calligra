@@ -132,7 +132,7 @@ void KoBookmark::saveOdf(KoShapeSavingContext &context, int position, TagType ta
     // else nothing
 }
 
-QString KoBookmark::createUniqueBookmarkName(const KoBookmarkManager* bmm, QString bookmarkName, bool isEndMarker)
+QString KoBookmark::createUniqueBookmarkName(const KoBookmarkManager* bmm, const QString &bookmarkName, bool isEndMarker)
 {
     QString ret = bookmarkName;
     int uniqID = 0;

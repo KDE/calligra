@@ -32,11 +32,11 @@
 class LabelAction : public QWidgetAction
 {
 public:
-    LabelAction(QString label);
+    LabelAction(const QString &label);
     QLabel *m_label;
 };
 
-LabelAction::LabelAction(QString label)
+LabelAction::LabelAction(const QString &label)
  : QWidgetAction(0)
 {
     m_label = new QLabel(label);

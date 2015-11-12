@@ -30,10 +30,10 @@ class MobiFile : public FileCollector
 public:
     MobiFile();
 
-    void addContentRawText(QByteArray content);
-    void addContentImage(int id, QByteArray content);
+    void addContentRawText(const QByteArray &content);
+    void addContentImage(int id, const QByteArray &content);
 
-    KoFilter::ConversionStatus writeMobiFile(QString filename, MobiHeaderGenerator &headerGenerator);
+    KoFilter::ConversionStatus writeMobiFile(const QString &filename, MobiHeaderGenerator &headerGenerator);
 
 private:
     void writeRecord0(QDataStream &out, MobiHeaderGenerator &headers);

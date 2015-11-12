@@ -163,7 +163,7 @@ void WMFImportParser::setMatrix(Libwmf::WmfDeviceContext &/*context*/, const QMa
     debugWmf << "combine =" << combine;
 }
 
-void WMFImportParser::setPixel(Libwmf::WmfDeviceContext &context, int x, int y, QColor color)
+void WMFImportParser::setPixel(Libwmf::WmfDeviceContext &context, int x, int y, const QColor &color)
 {
     Q_UNUSED(context);
     Q_UNUSED(x);

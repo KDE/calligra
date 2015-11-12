@@ -249,7 +249,7 @@ public:
         KoSection *dataSec; ///< Pointer to KoSection.
         KoSectionEnd *dataSecEnd; ///< Pointer to KoSectionEnd.
 
-        SectionHandle(QString _name, KoSection *_data)
+        SectionHandle(const QString &_name, KoSection *_data)
             : name(_name)
             , type(SectionOpen)
             , dataSec(_data)
@@ -257,7 +257,7 @@ public:
         {
         }
 
-        SectionHandle(QString _name, KoSectionEnd *_data)
+        SectionHandle(const QString &_name, KoSectionEnd *_data)
             : name(_name)
             , type(SectionClose)
             , dataSec(0)

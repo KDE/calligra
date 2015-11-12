@@ -36,8 +36,8 @@ class PivotMain : public KDialog
 
     public:
       explicit PivotMain(QWidget* parent,Selection* selection);
-      QVector<QString> ValueData(QString str);
-      bool checkCondition(QString field,QString condition,QString value,int line);
+      QVector<QString> ValueData(const QString &str);
+      bool checkCondition(const QString &field , const QString &condition, const QString &value, int line);
       Sheet* filter();
       ~PivotMain();
 

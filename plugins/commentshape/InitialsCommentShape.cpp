@@ -66,7 +66,7 @@ void InitialsCommentShape::paint(QPainter& painter, const KoViewConverter& conve
     painter.drawText(QRectF(initialsBoxPoint, initialsBoxSize), Qt::AlignCenter, m_initials);
 }
 
-void InitialsCommentShape::setInitials(QString initials)
+void InitialsCommentShape::setInitials(const QString &initials)
 {
     m_initials = initials;
 }

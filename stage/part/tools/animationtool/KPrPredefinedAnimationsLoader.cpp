@@ -262,7 +262,7 @@ void KPrPredefinedAnimationsLoader::readDefaultAnimations()
     }
 }
 
-QString KPrPredefinedAnimationsLoader::animationName(const QString id) const
+QString KPrPredefinedAnimationsLoader::animationName(const QString &id) const
 {
     QStringList descriptionList = id.split(QLatin1Char('-'));
     if (descriptionList.count() > 2) {
@@ -275,7 +275,7 @@ QString KPrPredefinedAnimationsLoader::animationName(const QString id) const
     return QString();
 }
 
-QIcon KPrPredefinedAnimationsLoader::loadAnimationIcon(const QString id)
+QIcon KPrPredefinedAnimationsLoader::loadAnimationIcon(const QString &id)
 {
     // Animation icon names examples: zoom_animation, spiral_in_animation
     // If an specific animation icon does not exist then return a generic
@@ -292,7 +292,7 @@ QIcon KPrPredefinedAnimationsLoader::loadAnimationIcon(const QString id)
     return koIcon("unrecognized_animation");
 }
 
-QIcon KPrPredefinedAnimationsLoader::loadSubTypeIcon(const QString mainId, const QString subTypeId)
+QIcon KPrPredefinedAnimationsLoader::loadSubTypeIcon(const QString &mainId, const QString &subTypeId)
 {
     Q_UNUSED(mainId);
     QIcon icon;

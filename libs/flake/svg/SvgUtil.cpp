@@ -58,20 +58,25 @@ QSizeF SvgUtil::toUserSpace(const QSizeF &size)
     return QSizeF(toUserSpace(size.width()), toUserSpace(size.height()));
 }
 
-double SvgUtil::toPercentage(QString s)
+double SvgUtil::toPercentage(const QString &s)
 {
-    if (s.endsWith('%'))
-        return s.remove('%').toDouble();
-    else
-        return s.toDouble() * 100.0;
+    if (s.endsWith(QLatin1Char('%'))) {
+        QString s_(s);
+        s_.chop(1);
+        return s_.toDouble();
+    }
+
+    return s.toDouble() * 100.0;
 }
 
-double SvgUtil::fromPercentage(QString s)
+double SvgUtil::fromPercentage(const QString &s)
 {
-    if (s.endsWith('%'))
-        return s.remove('%').toDouble() / 100.0;
-    else
-        return s.toDouble();
+    if (s.endsWith(QLatin1Char('%'))) {
+        QString s_(s);
+        s_.chop(1);
+        return s_.toDouble() / 100.0;
+    }
+    return s.toDouble();
 }
 
 QPointF SvgUtil::objectToUserSpace(const QPointF &position, const QRectF &objectBound)

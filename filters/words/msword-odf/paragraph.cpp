@@ -161,7 +161,7 @@ void Paragraph::updateBgColor(const QString& val)
 }
 
 void Paragraph::addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
-                             QString fontName, const wvWare::StyleSheet& styles,
+                             const QString &fontName, const wvWare::StyleSheet& styles,
                              bool addCompleteElement)
 {
     // Check for column break in this text string
@@ -1053,7 +1053,7 @@ void Paragraph::getDropCapData(QString *string, int *type, int *lines, qreal *di
 }
 
 
-void Paragraph::addDropCap(QString &string, int type, int lines, qreal distance, QString style)
+void Paragraph::addDropCap(QString &string, int type, int lines, qreal distance, const QString &style)
 {
     debugMsDoc << "combining drop cap paragraph: " << string;
     if (m_dropCapStatus == IsDropCapPara)

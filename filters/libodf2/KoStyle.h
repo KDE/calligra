@@ -43,7 +43,7 @@ public:
 
     QString saveOdf(KoGenStyles& styles) const;
 
-    void setName(QString name);
+    void setName(const QString &name);
     QString name() const;
 
     void setAutoStyleInStylesDotXml(bool b);

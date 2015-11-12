@@ -63,9 +63,9 @@ public Q_SLOTS:
     void updateSize( int size );
 
 private :
-    QIcon buildIconColor( QColor );
+    QIcon buildIconColor( const QColor& );
     QIcon buildIconSize( int );
-    QAction* buildActionColor( QColor, QString );
+    QAction* buildActionColor( const QColor&, const QString& );
     QAction* buildActionSize( int );
 
     bool m_draw;

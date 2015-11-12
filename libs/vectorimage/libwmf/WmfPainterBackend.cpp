@@ -447,7 +447,7 @@ void WmfPainterBackend::setMatrix(WmfDeviceContext &context, const QMatrix &wm, 
 //                         Drawing
 
 
-void WmfPainterBackend::setPixel(WmfDeviceContext &context, int x, int y, QColor color)
+void WmfPainterBackend::setPixel(WmfDeviceContext &context, int x, int y, const QColor &color)
 {
 #if DEBUG_WMFPAINT
     debugVectorImage << x << y << color;

@@ -58,7 +58,7 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
 #endif
 
         foreach(const QDir& dir, searchDirs) {
-            foreach(QString entry, dir.entryList()) {
+            foreach(const QString &entry, dir.entryList()) {
                 QFileInfo info(dir, entry);
                 if (info.isDir() && info.fileName().contains("lib")) {
                     QDir libDir(info.absoluteFilePath());
@@ -71,7 +71,7 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
 
                     // on debian at least the actual libdir is a subdir named like "lib/x86_64-linux-gnu"
                     // so search there for the calligra subdir which will contain our plugins
-                    foreach(QString subEntry, libDir.entryList()) {
+                    foreach(const QString &subEntry, libDir.entryList()) {
                         QFileInfo subInfo(libDir, subEntry);
                         if (subInfo.isDir()) {
                             if (QDir(subInfo.absoluteFilePath()).entryList(QStringList() << "calligra").size() > 0) {

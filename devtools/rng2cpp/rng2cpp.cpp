@@ -1360,7 +1360,7 @@ void Files::closeNamespace()
 /**
  * Write the header files.
  */
-void write(const RNGItemList& items, QString outdir)
+void write(const RNGItemList& items, const QString &outdir)
 {
     Files files(outdir);
 

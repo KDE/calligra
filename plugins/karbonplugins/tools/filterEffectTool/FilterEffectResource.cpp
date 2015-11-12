@@ -30,10 +30,10 @@
 #include <QBuffer>
 #include <QCryptographicHash>
 
-double fromPercentage(QString s)
+double fromPercentage(const QString &s)
 {
     if (s.endsWith('%'))
-        return s.remove('%').toDouble() / 100.0;
+        return QString(s).remove('%').toDouble() / 100.0;
     else
         return s.toDouble();
 }
