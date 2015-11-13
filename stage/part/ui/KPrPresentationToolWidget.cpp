@@ -42,7 +42,7 @@ KPrPresentationToolWidget::KPrPresentationToolWidget( QWidget *parent )
     m_uiWidget.blackButton->setIconSize( size );
     // Set the buttons Icon
     // TODO add tooltip
-    m_uiWidget.penButton->setIcon(koIcon("pen") );
+    m_uiWidget.penButton->setIcon(koIcon("draw-freehand") );
     m_uiWidget.highLightButton->setIcon(koIcon("highlight"));
     m_uiWidget.blackButton->setIcon(koIcon("black"));
 }
