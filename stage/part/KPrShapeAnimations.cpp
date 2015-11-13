@@ -128,14 +128,11 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
             case StepCount: return QVariant();
             case TriggerEvent:
                 if (nodeType == KPrShapeAnimation::OnClick)
-                    return koIcon("onclick").pixmap(KIconLoader::SizeSmall,
-                                                   KIconLoader::SizeSmall);
+                    return koIcon("onclick");
                 if (nodeType == KPrShapeAnimation::AfterPrevious)
-                    return koIcon("after_previous").pixmap(KIconLoader::SizeSmall,
-                                                          KIconLoader::SizeSmall);
+                    return koIcon("after_previous");
                 if (nodeType == KPrShapeAnimation::WithPrevious)
-                    return koIcon("with_previous").pixmap(KIconLoader::SizeSmall,
-                                                         KIconLoader::SizeSmall);
+                    return koIcon("with_previous");
             case Name: return QVariant();
             case ShapeThumbnail: return getAnimationShapeThumbnail(thisAnimation);
             case AnimationIcon:  return getAnimationIcon(thisAnimation);
