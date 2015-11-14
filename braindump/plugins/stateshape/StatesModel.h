@@ -29,7 +29,7 @@ class StatesModel : public QAbstractListModel
 {
 public:
     enum Role {
-        SortRole = 0xF14eb9a0
+        SortRole = 0x514eb9a0
     };
 public:
     StatesModel();
