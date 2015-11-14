@@ -203,10 +203,10 @@
            <Type>Int</Type>
        </Parameter>
        <Help>
-           <Text>The COMBINA() function calculates the count of possible combinations. The first parameter is the total count of elements. The second parameter is the count of elements to choose. Both parameters should be positive and the first parameter should not be less than the second. Otherwise the function returns an error.</Text>
-           <Syntax>COMBIN(total;chosen)</Syntax>
-           <Example>COMBIN(12;5) returns 792</Example>
-           <Example>COMBIN(5;5) returns 1</Example>
+           <Text>The COMBINA() function calculates the count of possible combinations allowing repetition. The first parameter is the total count of elements. The second parameter is the count of elements to choose allowing repetition. Both parameters should be positive and the first parameter should not be less than the second. Otherwise the function returns an error.</Text>
+           <Syntax>COMBINA(total;chosen)</Syntax>
+           <Example>COMBINA(12;5) returns 4368</Example>
+           <Example>COMBINA(5;5) returns 126</Example>
        </Help>
    </Function>
 
@@ -417,7 +417,8 @@
                The intervals include the upper boundaries.
                The returned array is a column vector and has one more element than the second parameter;
                the last element represents the number of all elements greater than the last value in second parameter.
-                   If the second parameter is empty, all values in the first parameter are counted.</Text>
+                   If the second parameter is empty, all values in the first parameter are counted.</Text> 
+<Text>Note that the data must be in columns and since the result is a column-array, use Ctrl+Alt+Enter (instead of just Enter) to display the array elements in separate cells. </Text>
                    <Syntax>FREQUENCY(Range data; Range bins)</Syntax>
                </Help>
            </Function>
@@ -1040,7 +1041,7 @@
                    <Text>Order specifies how to rank the numbers:</Text>
                    <Text>If 0 or omitted, Data is ranked in descending order.</Text>
                    <Text>If not 0, Data is ranked in ascending order.</Text>
-                   <Syntax>RSQ(Value; Data; Order)</Syntax>
+                   <Syntax>RANK(Value; Data; Order)</Syntax>
                    <Example>RANK (2;{1;2;3}) equals 2</Example>
                </Help>
            </Function>
@@ -1318,7 +1319,7 @@
                </Parameter>
                <Help>
                    <Text>The STEYX() function calculates the standard error of the predicted y value for each x in the regression.</Text>
-                   <Syntax>SLOPE(y;x)</Syntax>
+                   <Syntax>STEYX(y;x)</Syntax>
                </Help>
            </Function>
 
@@ -1429,6 +1430,7 @@
            <Help>
                <Text>The TREND() function calculates a sequence of values based on a linear regression of known value pairs.</Text>
                <Text>Constraints: COUNT(knownY) = COUNT(knownX).</Text>
+               <Text>Since the result is an array, use Ctrl+Alt+Enter (instead of just Enter) to display the values in separate cells.</Text>
                <Syntax>TREND(knownY[;knownX[;newX[;allowOffset = TRUE]]])</Syntax>
            </Help>
            <Related>INTERSECTION</Related>
@@ -1448,7 +1450,7 @@
                <Type>Float</Type>
            </Parameter>
            <Help>
-               <Text>The TRIMMEAN() function calculates the mean of a data set's fraction.</Text>
+               <Text>The TRIMMEAN() function calculates the mean of a data set with the smallest and largest values omitted to eliminate possible outliers. The total fraction of measurements which are to be excluded is set by the second parameter (cutOffFraction).</Text>
                <Syntax>TRIMMEAN(dataSet; cutOffFraction)</Syntax>
            </Help>
            <Related>AVERAGE</Related>
@@ -1468,20 +1470,20 @@
                <Type>Float</Type>
            </Parameter>
            <Parameter>
-               <Comment>type The type of t-test to perform. Set this to 1 for a paired t-test, 2 or 3 for an unpaired t-test.</Comment>
-               <Type>Int</Type>
+              <Comment>mode Whether to look up 1-tailed (mode = 1) or 2-tailed (mode = 2) probability for t.</Comment>
+           <Type>Int</Type>
            </Parameter>
            <Parameter>
-               <Comment>mode Whether to look up 1-tailed (mode = 1) or 2-tailed (mode = 2) probability for t.</Comment>
-               <Type>Int</Type>
+  <Comment>type The type of t-test to perform. Set this to 1 for a paired t-test, 2 or 3 for an unpaired t-test.</Comment>
+                <Type>Int</Type>
            </Parameter>
            <Help>
                <Text>The TTEST() function calculates the probability of a t-test given two ranges of data to compare.</Text>
                <Text>A t-test compares two sets of data and establishes the likelihood that any difference between the two is caused by some variable having an effect. For example, given two sets of data, one containing the speed at which 30 tall people can run and the other containing the speed at which 30 short people can run, a t-test can tell you how likely it is that any speed difference between the two groups of people is due to their height.</Text>
-               <Text>Paired tests (type = 1, see Syntax below) are only suitable when both sets of data values are drawn from the same source (i.e. each source of data has provided an item in the first data range and an item in the second data range). In the running speed example, this is impossible since one person cannot be both short and tall: each person can only provide data for one group or the other. In such cases, where the values in each data set are drawn from different sources, an unpaired t-test is appropriate (type = 2 or type = 3). For unpaired t-tests, the two data ranges need not be equally sized; for paired t-tests the two ranges are required to contain the same number of cells.</Text>
-               <Text>When your sets of data values are not drawn from the same source, choosing the appropriate type of unpaired test depends upon the variance within each of your two samples. If the variances of the two samples are similar, you can use an unpaired t-test for samples with similar variances (type = 2); where the variances are not sufficiently similar you must use an unpaired t-test for samples with differing variances (type = 3).</Text>
                <Text>The mode parameter is used to indicate whether you require the difference between the two data sets to be in a specific direction or not. For example, if we are predicting that tall people will be able to run faster than short people, we would use a one-tailed test (mode = 1); however, if we are predicting that one group will be able to run faster than the other but not which one will actually be fastest, we would use a two-tailed test (mode = 2).</Text>
-               <Syntax>TTEST(x; y; type; mode)</Syntax>
+              <Text>Paired tests (type = 1, see Syntax below) are only suitable when both sets of data values are drawn from the same source (i.e. each source of data has provided an item in the first data range and an item in the second data range). In the running speed example, this is impossible since one person cannot be both short and tall: each person can only provide data for one group or the other. In such cases, where the values in each data set are drawn from different sources, an unpaired t-test is appropriate (type = 2 or type = 3). For unpaired t-tests, the two data ranges need not be equally sized; for paired t-tests the two ranges are required to contain the same number of cells.</Text>
+               <Text>When your sets of data values are not drawn from the same source, choosing the appropriate type of unpaired test depends upon the variance within each of your two samples. If the variances of the two samples are similar, you can use an unpaired t-test for samples with similar variances (type = 2); where the variances are not sufficiently similar you must use an unpaired t-test for samples with differing variances (type = 3).</Text>
+               <Syntax>TTEST(x; y; mode; type)</Syntax>
            </Help>
            <Related>TDIST</Related>
        </Function>
@@ -1510,7 +1512,7 @@
                <Type range="true">Float</Type>
            </Parameter>
            <Help>
-               <Text>The VAR() function calculates the estimates variance based on a sample.</Text>
+               <Text>The VAR() function calculates the variance based on a sample.</Text>
                <Syntax>VAR(value;value;...)</Syntax>
                <Example>VAR(12;5;7) equals 13</Example>
                <Example>VAR(15;80;3) equals 1716.333...</Example>
@@ -1546,7 +1548,7 @@
                <Type range="true">Float</Type>
            </Parameter>
            <Help>
-               <Text>The VARA() function calculates the variance based on a sample.</Text>
+               <Text>The VARA() function calculates the variance based on a sample allowing numbers, text and logical values to be included in the calculation, too. If the cell contains text or the argument evaluates to FALSE, it is counted as value zero (0). If the argument evaluates to TRUE, it is counted as one (1). Note that empty cells are not counted.</Text>
                <Syntax>VARA(value;value;...)</Syntax>
                <Example>VARA(12;5;7) equals 13</Example>
                <Example>VARA(15;80;3) equals 1716.333...</Example>
@@ -1581,7 +1583,7 @@
                <Type range="true">Float</Type>
            </Parameter>
            <Help>
-               <Text>The VARIANCE() function calculates the estimates variance based on a sample. It's the same as the VAR function.</Text>
+               <Text>The VARIANCE() function calculates the variance based on a sample. It is the same as the VAR function.</Text>
                <Syntax>VARIANCE(value;value;...)</Syntax>
                <Example>VARIANCE(12;5;7) equals 13</Example>
                <Example>VARIANCE(15;80;3) equals 1716.333...</Example>
@@ -1652,7 +1654,7 @@
                <Type range="true">Float</Type>
            </Parameter>
            <Help>
-               <Text>The VARPA() function calculates the variance based on an entire population. Text and boolean values that evaluate to FALSE are counted as 0, boolean value that evaluate to TRUE are counted as 1.</Text>
+               <Text>The VARPA() function calculates the variance based on an entire population. Text and boolean values that evaluate to FALSE are counted as 0, boolean value that evaluate to TRUE are counted as 1. Empty cells are not counted.</Text>
                <Syntax>VARPA(value;value;...)</Syntax>
                <Example>VARPA(12;5;7) equals 8.666...</Example>
                <Example>VARPA(15;80;3) equals 1144.22...</Example>
@@ -1709,16 +1711,10 @@
            </Parameter>
            <Help>
                <Text>The ZTEST() function calculates the two tailed probability of a z-test with normal distribution.</Text>
+             <Text>Performs a test of the null hypothesis, that the sample is a true sample of a normally distributed random variable with mean, mean, and standard deviation, sigma (standardDeviation). A return value of 1 indicates, that the null hypothesis is rejected, i.e. the sample is not a random sample of the normal distribution. If sigma is omitted, it is estimated from sample, using STDEV.</Text>
+
                <Syntax>ZTEST(x; mean; standardDeviation)</Syntax>
-               <!--FIXME remove wordwrap, leads to strange looking translation messages-->
-               <Text>Performs a test of the null hypothesis, that sample is a sample
-                   of a normal distributed random variable with mean mean and standard
-                   deviation sigma. A return value of 1 indicates, that the null
-                   hypothesis is rejected, i.e. the sample is not a random sample of
-                   the normal distribution.
-                   If sigma is omitted, it is estimated from sample, using STDEV.
-               </Text>
-           </Help>
+                          </Help>
        </Function>
 
 

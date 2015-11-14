@@ -2908,48 +2908,49 @@ Value func_ttest(valVector args, ValueCalc* calc, FuncExtra*)
 
         t = calc->div(calc->mul(mean, calc->sqrt(dof)), sigma);
     } else if (type == 2) {
-        // independent, equal variances
+        // independent, equal variances (revised by Jon Cooper)
         dof = calc->sub(calc->add(Value(numX), Value(numY)), 2);
 
         Value avgX = calc->avg(x);
         Value avgY = calc->avg(y);
-        Value varX, varY;
+        Value varX, varY; // summed dev-squares
         calc->arrayWalk(x, varX, calc->awFunc("devsq"), avgX);
         calc->arrayWalk(y, varY, calc->awFunc("devsq"), avgY);
-        varX = calc->div(varX, calc->sub(Value(numX), 1));
-        varY = calc->div(varY, calc->sub(Value(numX), 1));
 
-        Value numerator = calc->sub(calc->avg(x), calc->avg(y));
+        Value numerator = calc->sub(avgX, avgY);
 
-        Value denominator = calc->div(varX, numX);
-        denominator = calc->add(denominator, calc->div(varY, numY));
+        Value pooled_variance = calc->add(varX, varY); 
+        pooled_variance = calc->div(pooled_variance, dof);
+
+        Value denominator = calc->add(calc->div(pooled_variance,Value(numX)), calc->div(pooled_variance,Value(numY)));
         denominator = calc->sqrt(denominator);
 
         t = calc->div(numerator, denominator);
     } else {
-        // independent, unequal variances
+        // independent, unequal variances (revised by Jon Cooper)
 
         Value avgX = calc->avg(x);
         Value avgY = calc->avg(y);
         Value varX, varY;
         calc->arrayWalk(x, varX, calc->awFunc("devsq"), avgX);
         calc->arrayWalk(y, varY, calc->awFunc("devsq"), avgY);
-        varX = calc->div(varX, calc->sub(Value(numX), (double)1));
-        varY = calc->div(varY, calc->sub(Value(numX), (double)1));
 
-        Value numerator = calc->add(Value(numX), Value(numY));
-        numerator = calc->div(calc->mul(Value(numX), calc->mul(Value(numY), calc->sub(numerator, (double)2))), numerator);
-        numerator = calc->mul(calc->sub(calc->avg(x), calc->avg(y)), calc->sqrt(numerator));
+        varX = calc->div(varX,calc->sub(Value(numX),1));
+        varY = calc->div(varY,calc->sub(Value(numY),1));
 
-        Value denominator = calc->mul(calc->sub(Value(numX), (double)1), varX);
-        denominator = calc->add(denominator, calc->mul(calc->sub(Value(numY), (double)1), varY));
+        Value numerator = calc->sub(avgX, avgY);
+        Value denominator = calc->add(calc->div(varX,Value(numX)), calc->div(varY,Value(numY)));
         denominator = calc->sqrt(denominator);
-
         t = calc->div(numerator, denominator);
 
-        // inspired from Gnumeric
-        dof = calc->div(Value(1.0), calc->add(Value(1.0), calc->div(calc->mul(varY, numX), calc->mul(varX, numY))));
-        dof = calc->div(Value(1.0), calc->add(calc->div(calc->sqr(dof), calc->sub(Value(numX), (double)1)), calc->div(calc->sqr(calc->sub(Value(1), dof)), calc->sub(Value(numY), (double)1))));
+        numerator = calc->add(calc->div(varX,Value(numX)),calc->div(varY,Value(numY)));
+        numerator = calc->pow(numerator,2);
+
+        Value denominator1 = calc->div(calc->pow(calc->div(varX,Value(numX)),2),calc->sub(Value(numX),1));
+        Value denominator2 = calc->div(calc->pow(calc->div(varY,Value(numY)),2),calc->sub(Value(numY),1));
+        denominator = calc->add(denominator1,denominator2);
+        dof = calc->div(numerator,denominator);
+
     }
 
     valVector tmp(3);
