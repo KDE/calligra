@@ -261,7 +261,7 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
     const QString driverName = cg.readEntry("engine").toLower();
     if (driverName.isEmpty()) {
         m_result = KDbResult(xi18n("No valid \"engine\" field specified in group <resource>%1</resource> "
-                                   "of file <filename>%1</filename>.", groupKey, fileName));
+                                   "of file <filename>%2</filename>.", groupKey, fileName));
         return false;
     }
 
