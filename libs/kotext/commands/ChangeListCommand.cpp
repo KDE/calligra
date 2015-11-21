@@ -76,8 +76,8 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, const KoListLeve
         llp.setLabelFollowedBy(KoListStyle::ListTab);
         llp.setDisplayLevel(levelProperties.displayLevel());
 
-        llp.setTabStopPosition(MARGIN_DEFAULT*(lev+2));
-        llp.setMargin(MARGIN_DEFAULT*(lev+2));
+        llp.setTabStopPosition(MARGIN_DEFAULT*(lev+1));
+        llp.setMargin(MARGIN_DEFAULT*(lev+1));
         llp.setTextIndent(- MARGIN_DEFAULT);
 
         listStyle.setLevelProperties(llp);
