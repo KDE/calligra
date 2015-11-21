@@ -403,8 +403,10 @@ double Token::asFloat() const
 
 QString Token::asString() const
 {
-    if (isString()) return m_text.mid(1, m_text.length() - 2);
-    else return QString();
+    if (!isString()) return QString();
+    QString res = m_text.mid(1, m_text.length() - 2);
+    res = res.replace("\"\"", "\"");   // double quotes to single quotes
+    return res;
 }
 
 QString Token::asError() const
@@ -982,15 +984,14 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             else {
                 *out++ = *data++;
                 // check for escaped ""
-                if (data->isNull() || *data != QChar('"', 0)) {
+                if ((!data->isNull()) && (*data == QChar('"', 0))) {
+                    *out++ = *data++;
+                } else {
                     token.resize(out - outStart);
                     tokens.append(Token(Token::String, token, tokenStart - start));
                     token.resize(length);
                     out = outStart;
                     state = Start;
-                }
-                else {
-                    ++data;
                 }
             }
             break;
