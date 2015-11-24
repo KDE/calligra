@@ -27,7 +27,7 @@ endif()
 
 # define common versions of Calligra applications, used to generate calligraversion.h
 # update these version for every release:
-set(CALLIGRA_VERSION_STRING "2.9.9")
+set(CALLIGRA_VERSION_STRING "2.9.9 Animation Edition (beta)")
 set(CALLIGRA_VERSION_MAJOR 2)
 set(CALLIGRA_STABLE_VERSION_MINOR 9)
 set(CALLIGRA_VERSION_RELEASE 9)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
