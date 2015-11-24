@@ -720,7 +720,7 @@ void KisViewManager::createActions()
     actionManager()->addAction("wrap_around_mode", d->wrapAroundAction);
     d->wrapAroundAction->setShortcut(QKeySequence(Qt::Key_W));
 
-    d->levelOfDetailAction = new KisAction(i18n("Fast Preview Mode (LOD)"), this);
+    d->levelOfDetailAction = new KisAction(i18n("Instant Preview Mode"), this);
     d->levelOfDetailAction->setCheckable(true);
     d->levelOfDetailAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager()->addAction("level_of_detail_mode", d->levelOfDetailAction);

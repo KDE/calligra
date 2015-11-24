@@ -256,7 +256,7 @@ void KisCanvasController::slotToggleLevelOfDetailMode(bool value)
     int result = levelOfDetailMode();
 
     m_d->view->viewManager()->showFloatingMessage(
-        i18n("Fast Preview Mode (LOD): %1", result ?
+        i18n("Instant Preview Mode: %1", result ?
              i18n("ON") : i18n("OFF")),
              QIcon(), 500, KisFloatingMessage::Low);
 }
