@@ -21,14 +21,12 @@ Copyright 2011 Paul Mendez <paulestebanms@gmail.com>
 
 #include "KoContextBarButton.h"
 
-// KDE
-#include <kiconloader.h>
-#include <QIcon>
-
 // Qt
+#include <QIcon>
 #include <QStyleOptionToolButton>
 #include <QStylePainter>
 #include <QPainterPath>
+#include <QApplication>
 
 /** How lighter is the border of context bar buttons */
 const int CONTEXTBAR_BORDER_LIGHTNESS = 140;
@@ -48,7 +46,7 @@ KoContextBarButton::KoContextBarButton(const QString &iconName, QWidget* parent)
 , m_fadingValue(0)
 , m_fadingTimeLine(0)
 {
-    const int size = IconSize(KIconLoader::Small);
+    const int size = QApplication::style()->pixelMetric(QStyle::PM_ButtonIconSize);
     setIconSize(QSize(size, size));
     setAutoRaise(true);
     setIcon(QIcon::fromTheme(iconName));
