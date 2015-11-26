@@ -52,7 +52,7 @@ KoViewItemContextBar::KoViewItemContextBar(QAbstractItemView *parent)
 
     m_ContextBar = new QWidget(m_view->viewport());
     m_ContextBar->hide();
-    m_ToggleSelectionButton = new KoContextBarButton("list-add");
+    m_ToggleSelectionButton = new KoContextBarButton(koIconName("list-add"));
 
     m_Layout = new QHBoxLayout(m_ContextBar);
     m_Layout->setMargin(2);
