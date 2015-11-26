@@ -134,6 +134,9 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
     KisDistanceInformation distanceInfo(m_d->lastOutlinePos.pushThroughHistory(savedCursorPos), 0);
 
     if (!m_d->painterInfos.isEmpty()) {
+        settings = m_d->resources->currentPaintOpPreset()->settings();
+        info = m_d->previousPaintInformation;
+
         /**
          * When LoD mode is active it may happen that the helper has
          * already started a stroke, but it painted noting, because
@@ -142,8 +145,6 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
          * painted with this distance information object.
          */
         if (m_d->painterInfos.first()->dragDistance->isStarted()) {
-            settings = m_d->resources->currentPaintOpPreset()->settings();
-            info = m_d->previousPaintInformation;
             distanceInfo = *m_d->painterInfos.first()->dragDistance;
         }
     }
