@@ -58,8 +58,7 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
                     context.odfLoadingContext().useStylesAutoStyles());
     }
 
-    KoTextShapeData *text = qobject_cast<KoTextShapeData*>(shape->userData());
-    if (text) {
+    if (shape->shapeId() == "TextShape_SHAPEID") {
         KoXmlElement textBox(KoXml::namedItemNS(element, KoXmlNS::draw, "text-box"));
         if (!textBox.isNull()) {
             QString nextName = textBox.attributeNS(KoXmlNS::draw, "chain-next-name");
