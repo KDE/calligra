@@ -1109,28 +1109,28 @@ void KoBorder::saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type) const
     QString leftBorderLineWidth = QString("%1pt %2pt %3pt")
                                     .arg(QString::number(innerBorderWidth(LeftBorder)),
                                          QString::number(borderSpacing(LeftBorder)),
-                                         QString::number(outerborderWidth(LeftBorder)));
+                                         QString::number(outerBorderWidth(LeftBorder)));
     QString rightBorderLineWidth = QString("%1pt %2pt %3pt")
                                      .arg(QString::number(innerBorderWidth(RightBorder)),
                                           QString::number(borderSpacing(RightBorder)),
-                                          QString::number(outerborderWidth(RightBorder)));
+                                          QString::number(outerBorderWidth(RightBorder)));
     QString topBorderLineWidth = QString("%1pt %2pt %3pt")
                                    .arg(QString::number(innerBorderWidth(TopBorder)),
                                         QString::number(borderSpacing(TopBorder)),
-                                        QString::number(outerborderWidth(TopBorder)));
+                                        QString::number(outerBorderWidth(TopBorder)));
     QString bottomBorderLineWidth = QString("%1pt %2pt %3pt")
                                       .arg(QString::number(innerBorderWidth(BottomBorder)),
                                            QString::number(borderSpacing(BottomBorder)),
-                                           QString::number(outerborderWidth(BottomBorder)));
+                                           QString::number(outerBorderWidth(BottomBorder)));
 
     QString tlbrBorderLineWidth = QString("%1pt %2pt %3pt")
                                    .arg(QString::number(innerBorderWidth(TlbrBorder)),
                                         QString::number(borderSpacing(TlbrBorder)),
-                                        QString::number(outerborderWidth(TlbrBorder)));
+                                        QString::number(outerBorderWidth(TlbrBorder)));
     QString trblBorderLineWidth = QString("%1pt %2pt %3pt")
                                       .arg(QString::number(innerBorderWidth(BltrBorder)),
                                            QString::number(borderSpacing(BltrBorder)),
-                                           QString::number(outerborderWidth(BltrBorder)));
+                                           QString::number(outerBorderWidth(BltrBorder)));
 
     if (leftBorderLineWidth == rightBorderLineWidth
         && leftBorderLineWidth == topBorderLineWidth
