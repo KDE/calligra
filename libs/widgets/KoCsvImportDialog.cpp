@@ -318,12 +318,8 @@ void KoCsvImportDialog::Private::fillTable()
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    for (row = 0; row < dialog->m_sheet->rowCount(); ++row) {
-        for (column = 0; column < dialog->m_sheet->columnCount(); ++column) {
-            if(QTableWidgetItem* item = dialog->m_sheet->item(row, column))
-                item->setText("");
-        }
-    }
+    dialog->m_sheet->setRowCount(0);
+    dialog->m_sheet->setColumnCount(0);
 
     int maxColumn = 1;
     row = column = 1;
@@ -502,6 +498,7 @@ void KoCsvImportDialog::Private::fillTable()
                 state = InQuotedField;
                 break;
             }
+            state = InNormalField;
          case InNormalField :
             if (x == '\n')
             {
@@ -547,6 +544,7 @@ void KoCsvImportDialog::Private::fillTable()
       ++row;
       field.clear();
     }
+    if (row) row--;  // row is higher by 1, so reduce it
 
     columnsAdjusted = true;
     adjustRows( row - startRow );
