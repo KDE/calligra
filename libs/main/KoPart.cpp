@@ -289,13 +289,11 @@ void KoPart::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)
     if (d->templatesResourcePath.isEmpty())
         debugMain << "showStartUpWidget called, but setTemplatesResourcePath() never called. This will not show a lot";
 #endif
-
     if (!alwaysShow) {
         KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
         QString fullTemplateName = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
         if (!fullTemplateName.isEmpty()) {
-            QUrl url(fullTemplateName);
-            QFileInfo fi(url.toLocalFile());
+            QFileInfo fi(fullTemplateName);
             if (!fi.exists()) {
                 const QString templatesResourcePath = this->templatesResourcePath();
                 QString desktopfile = KoResourcePaths::findResource("data", templatesResourcePath + "*/" + fullTemplateName);
