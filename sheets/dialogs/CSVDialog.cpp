@@ -198,10 +198,7 @@ void CSVDialog::accept()
     if (!command->execute(m_selection->canvas()))
         delete command;
 
-    const CellDamage::Changes changes = CellDamage::Appearance | CellDamage::Value | CellDamage::Formula;
-    sheet->map()->addDamage(new CellDamage(sheet, Region(range, sheet), changes));
-    m_selection->clear();
-    m_selection->add(range, sheet);
+    m_selection->initialize(range, sheet);
     m_selection->emitModified();
     KoCsvImportDialog::accept();
 }
