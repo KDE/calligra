@@ -136,6 +136,8 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType, const KAboutData 
 {
     KAboutData::setApplicationData( aboutData );
 
+    setWindowIcon(QIcon::fromTheme(aboutData.programIconName()));
+    
     KoApplication::KoApp = this;
 
     d->nativeMimeType = nativeMimeType;

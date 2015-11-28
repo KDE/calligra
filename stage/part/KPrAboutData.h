@@ -38,6 +38,7 @@ KAboutData * newKPresenterAboutData()
         QString(),
         QStringLiteral("https://www.calligra.org/stage/"));
     aboutData->setProductName("calligrastage"); // for bugs.kde.org
+    aboutData->setProgramIconName("calligrastage");
     aboutData->setOrganizationDomain( "kde.org" );
     aboutData->addAuthor(i18n("Thorsten Zachmann"), i18n("Maintainer"), "zachmann@kde.org");
     aboutData->addAuthor(i18n("Laurent Montel"), i18n("Former maintainer"), "montel@kde.org");

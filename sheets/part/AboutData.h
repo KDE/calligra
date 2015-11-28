@@ -45,6 +45,7 @@ static KAboutData * newAboutData()
         QString(),
         QStringLiteral("https://www.calligra.org/sheets/"));
     aboutData->setProductName("calligrasheets"); // for bugs.kde.org
+    aboutData->setProgramIconName("calligrasheets");
     aboutData->addAuthor(i18n("Torben Weis"), i18n("Original Author"), "weis@kde.org");
     aboutData->addAuthor(i18n("Marijn Kruisselbrink"), i18n("Maintainer"), "mkruisselbrink@kde.org");
     aboutData->addAuthor(i18n("Sebastian Sauer"), i18n("ODS and Excel, functions, scripting"), "mail@dipe.org");
