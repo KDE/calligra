@@ -470,7 +470,6 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format, bool emitSignal) cons
                 format.setProperty(it.key(), it.value());
             }
             else {
-                debugText << "setProperty" << it.key() << it.value();
                 format.setProperty(it.key(), it.value());
             }
 
