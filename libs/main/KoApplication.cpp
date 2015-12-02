@@ -466,7 +466,9 @@ bool KoApplication::start()
             const QString fileUrl = fileUrls.at(argNumber);
             // convert to an url
             const bool startsWithProtocol = (withProtocolChecker.indexIn(fileUrl) == 0);
-            const QUrl url = startsWithProtocol ? QUrl::fromUserInput(fileUrl) : QUrl::fromLocalFile(fileUrl);
+            const QUrl url = startsWithProtocol ?
+                QUrl::fromUserInput(fileUrl) :
+                QUrl::fromLocalFile(QDir::current().absoluteFilePath(fileUrl));
 
             // For now create an empty document
             QString errorMsg;
