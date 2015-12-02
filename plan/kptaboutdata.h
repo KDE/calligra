@@ -47,6 +47,7 @@ KAboutData * newAboutData()
 
     aboutData->setProductName( "calligraplan" ); // for bugs.kde.org
     aboutData->setOrganizationDomain("calligra.org");
+    aboutData->setProgramIconName("calligraplan");
 
     return aboutData;
 }
