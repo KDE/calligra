@@ -107,3 +107,5 @@ X-KDE-NativeMimeType=application/x-vnd.kde.plan
 X-DocPath=http://userbase.kde.org/Plan/Manual
 Categories=Qt;KDE;Office;
 X-KDE-StartupNotify=true
+X-DBUS-StartupType=Multi
+X-DBUS-ServiceName=org.calligra.plan

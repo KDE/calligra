@@ -37,7 +37,7 @@ KAboutData * newWordsAboutData()
         QString(),
         QStringLiteral("https://www.calligra.org/words/"));
     aboutData->setProductName("calligrawords"); // for bugs.kde.org
-    aboutData->setOrganizationDomain( "kde.org" );
+    aboutData->setOrganizationDomain("calligra.org");
     aboutData->setProgramIconName("calligrawords");
     aboutData->addAuthor(i18n("Pierre Ducroquet"), i18n("Co maintainer"), "");
     aboutData->addAuthor(i18n("C. Boemann"), i18n("Co maintainer"), "cbo@boemann.dk");

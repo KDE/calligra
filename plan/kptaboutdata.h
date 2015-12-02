@@ -46,6 +46,7 @@ KAboutData * newAboutData()
     aboutData->addAuthor(i18n("Raphael Langerhorst"),QString(),"raphael.langerhorst@kdemail.net");
 
     aboutData->setProductName( "calligraplan" ); // for bugs.kde.org
+    aboutData->setOrganizationDomain("calligra.org");
 
     return aboutData;
 }

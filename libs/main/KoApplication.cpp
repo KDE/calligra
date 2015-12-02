@@ -52,6 +52,7 @@
 #include <krecentdirs.h>
 #include <KAboutData>
 #include <KSharedConfig>
+#include <KDBusService>
 
 #include <QFile>
 #include <QWidget>
@@ -148,6 +149,8 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType, const KAboutData 
     KoGlobal::initialize();
 
 #ifndef QT_NO_DBUS
+    KDBusService service(KDBusService::Multiple);
+
     new KoApplicationAdaptor(this);
     QDBusConnection::sessionBus().registerObject("/application", this);
 #endif

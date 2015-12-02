@@ -38,7 +38,7 @@ KAboutData * newAuthorAboutData()
         QString(),
         QStringLiteral("https://www.calligra.org/author/"));
     aboutData->setProductName("calligraauthor"); // for bugs.kde.org
-    aboutData->setOrganizationDomain( "kde.org" );
+    aboutData->setOrganizationDomain("calligra.org");
     //                          Name             Function               email (if any)
     aboutData->addAuthor(i18n("Inge Wallin"), i18n("Co-maintainer"), "");
     aboutData->addAuthor(i18n("Gopalakrishna Bhat"), i18n("Co-maintainer"), "");

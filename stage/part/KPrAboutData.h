@@ -30,7 +30,7 @@ KAboutData * newKPresenterAboutData()
 {
     KAboutData *aboutData = new KAboutData(
         QStringLiteral("stage"),
-        i18nc("application name", "Stage"),
+        i18nc("application name", "Calligra Stage"),
         QStringLiteral(CALLIGRA_VERSION_STRING),
         i18n("Calligra Presentation Tool"),
         KAboutLicense::LGPL,
@@ -39,7 +39,7 @@ KAboutData * newKPresenterAboutData()
         QStringLiteral("https://www.calligra.org/stage/"));
     aboutData->setProductName("calligrastage"); // for bugs.kde.org
     aboutData->setProgramIconName("calligrastage");
-    aboutData->setOrganizationDomain( "kde.org" );
+    aboutData->setOrganizationDomain("calligra.org");
     aboutData->addAuthor(i18n("Thorsten Zachmann"), i18n("Maintainer"), "zachmann@kde.org");
     aboutData->addAuthor(i18n("Laurent Montel"), i18n("Former maintainer"), "montel@kde.org");
     aboutData->addAuthor(i18n("Reginald Stadlbauer"),i18n("Original author"), "reggie@kde.org");

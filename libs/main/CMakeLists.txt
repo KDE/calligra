@@ -101,6 +101,7 @@ PRIVATE
     KF5::ItemViews
     KF5::KIOFileWidgets
     KF5::IconThemes
+    KF5::DBusAddons
 )
 
 if( KF5_Activities_FOUND )
