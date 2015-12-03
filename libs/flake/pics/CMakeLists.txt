@@ -22,7 +22,7 @@ ecm_install_icons( ICONS
     sc-actions-snap-boundingbox.svg
     sc-actions-snap-extension.svg
     DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
-    THEME oxygen
+    THEME hicolor
 )
 
 install( FILES
@@ -31,4 +31,3 @@ install( FILES
     questionmark.png
     DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
 )
-

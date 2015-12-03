@@ -29,5 +29,5 @@ install(FILES
 ecm_install_icons( ICONS
     22-actions-backgroundtool.png
     DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
-    THEME oxygen
+    THEME hicolor
 )

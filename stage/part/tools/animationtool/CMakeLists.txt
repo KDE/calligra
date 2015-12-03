@@ -39,6 +39,6 @@ install(TARGETS calligrastagetoolanimation  DESTINATION ${CALLIGRA_PLUGIN_INSTAL
 ecm_install_icons( ICONS
     16-actions-animation-stage.png
     DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
-    THEME oxygen
+    THEME hicolor
 )
 
