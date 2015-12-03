@@ -181,7 +181,8 @@ KoPAView::~KoPAView()
     delete d->zoomController;
     // Delete only the view mode normal, let the derived class delete
     // the currently active view mode if it is not view mode normal
-    delete d->viewModeNormal;
+    // using a delete here can cause a crash if an object is deleted
+    d->viewModeNormal->deleteLater();
 
     delete d;
 }
