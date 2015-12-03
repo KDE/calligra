@@ -159,11 +159,6 @@ namespace KisAnimationUtils {
 
             if (!content) continue;
 
-            KisKeyframeSP dstKeyframe = content->keyframeAt(dstTime);
-            if (dstKeyframe) {
-                content->deleteKeyframe(dstKeyframe, cmd.data());
-            }
-
             KisKeyframeSP srcKeyframe = content->keyframeAt(srcTime);
             if (srcKeyframe) {
                 if (copy) {
