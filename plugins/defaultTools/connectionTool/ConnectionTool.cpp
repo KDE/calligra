@@ -22,9 +22,6 @@
 
 #include "ConnectionTool.h"
 
-#include <QPointF>
-#include <QKeyEvent>
-#include <QPainter>
 
 #include "AddConnectionPointCommand.h"
 #include "RemoveConnectionPointCommand.h"
@@ -52,12 +49,16 @@
 #include <KoStrokeConfigWidget.h>
 
 #include <KoIcon.h>
+#include <kundo2command.h>
+
+#include <klocalizedstring.h>
 
 #include <QAction>
-#include <klocalizedstring.h>
 #include <QDebug>
-#include <KoResourcePaths.h>
-#include <kundo2command.h>
+#include <QStandardPaths>
+#include <QPointF>
+#include <QKeyEvent>
+#include <QPainter>
 
 
 ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
@@ -71,7 +72,7 @@ ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     , m_resetPaint(true)
 {
     QPixmap connectPixmap;
-    connectPixmap.load(KoResourcePaths::locate("data", "calligra/icons/cursor_connect.png"));
+    connectPixmap.load(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligra/cursors/cursor_connect.png"));
     m_connectCursor = QCursor(connectPixmap, 4, 1);
 
     m_editConnectionPoint = new QAction(i18n("Edit connection points"), this);

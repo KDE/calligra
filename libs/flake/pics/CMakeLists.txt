@@ -28,6 +28,10 @@ ecm_install_icons( ICONS
 install( FILES
     zoom_in_cursor.png
     zoom_out_cursor.png
+    DESTINATION ${DATA_INSTALL_DIR}/calligra/cursors
+)
+
+install( FILES
     questionmark.png
-    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    DESTINATION ${DATA_INSTALL_DIR}/calligra/pics
 )
