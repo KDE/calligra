@@ -202,7 +202,7 @@ calligra_define_product(OKULAR_GENERATOR_WORDPERFECT "Plugin for Okular extended
 # developer utils
 calligra_define_product(APP_SLIDECOMPARE "slidecompare"  REQUIRES LIB_CALLIGRA LIB_KOMAIN FILTER_PPT_TO_ODP)
 calligra_define_product(APP_DEVTOOLS "Tools for developers")
-calligra_define_product(APP_CSTESTER "cstester" UNPORTED REQUIRES PART_SHEETS PART_STAGE PART_WORDS)
+calligra_define_product(APP_CSTESTER "cstester" REQUIRES PART_SHEETS PART_STAGE PART_WORDS)
 
 
 #############################################

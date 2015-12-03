@@ -74,13 +74,12 @@ KoDocument* openFile(const QString &filename)
     KoDocument *document = part->document();
 
     if (0 != document) {
-        KUrl url;
-        url.setPath(filename);
+        QUrl url = QUrl::fromLocalFile(filename);
 
         document->setCheckAutoSaveFile(false);
         document->setAutoErrorHandlingEnabled(false);
 
-        if (document->openUrl(filename)) {
+        if (document->openUrl(url)) {
             document->setReadWrite(false);
         }
         else {
@@ -111,8 +110,7 @@ QString saveFile(KoDocument *document, const QString &filename, const QString &o
     QString extension = mime->mainExtension();
     saveAs += extension;
 
-    KUrl url;
-    url.setPath(saveAs);
+    QUrl url = QUrl::fromLocalFile(saveAs);
     document->setOutputMimeType(mimetype, 0);
     document->saveAs(url);
     kDebug(31000) << "save done";
