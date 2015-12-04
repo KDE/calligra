@@ -29,7 +29,6 @@
 #include <QPainter>
 #include <QKeyEvent>
 #include <QAbstractTextDocumentLayout>
-#include <QCursor>
 #include <QDesktopServices>
 #include <QUrl>
 #include <QDBusConnection>

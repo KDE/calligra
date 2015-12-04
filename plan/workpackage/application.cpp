@@ -25,7 +25,6 @@
 #include "part.h"
 #include "mainwindow.h"
 
-#include <QCursor>
 #include <QSplitter>
 #include <QLabel>
 

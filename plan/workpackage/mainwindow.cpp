@@ -27,7 +27,6 @@
 
 #include "kptdocuments.h"
 
-#include <QCursor>
 #include <QSplitter>
 #include <QLabel>
 #include <QWidget>
