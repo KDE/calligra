@@ -4,10 +4,14 @@ install( FILES
          layout-elements.svg
          DESTINATION ${DATA_INSTALL_DIR}/stage/pics)
 
+install( FILES
+    pen.png
+    DESTINATION ${DATA_INSTALL_DIR}/stage/cursors
+)
+
 ecm_install_icons( ICONS
     16-actions-black.png
     16-actions-highlight.png
-    16-actions-pen.png
 
     DESTINATION ${DATA_INSTALL_DIR}/stage/icons
     THEME hicolor

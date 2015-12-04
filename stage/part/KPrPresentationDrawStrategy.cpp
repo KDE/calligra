@@ -22,10 +22,8 @@
 
 #include <QKeyEvent>
 #include <QApplication>
+#include <QStandardPaths>
 
-#include <kiconloader.h>
-
-#include <KoIcon.h>
 #include <KoPACanvasBase.h>
 
 #include "KPrPresentationTool.h"
@@ -35,9 +33,7 @@ KPrPresentationDrawStrategy::KPrPresentationDrawStrategy( KPrPresentationTool * 
 : KPrPresentationStrategyBase( tool )
 {
     m_widget = new KPrPresentationDrawWidget(canvas());
-    // TODO
-    KIconLoader iconLoader(QLatin1String("stage"));
-    QPixmap pix(iconLoader.loadIcon(koIconName("pen"), KIconLoader::Small));
+    QPixmap pix(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "stage/cursors/pen.png"));
     const qreal factor = 1.2;
     const int oldWidth = pix.width();
     const int oldHeight = pix.height();
