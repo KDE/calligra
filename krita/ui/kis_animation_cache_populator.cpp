@@ -271,7 +271,7 @@ struct KisAnimationCachePopulator::Private
     QString debugStateToString(State newState) {
         QString str = "<unknown>";
 
-        switch (state) {
+        switch (newState) {
         case WaitingForIdle:
             str = "WaitingForIdle";
             break;
