@@ -47,6 +47,9 @@ public:
 
     void setCellTool(CellToolBase* cellTool);
 
+    int cursorPosition() const;
+    void setCursorPosition(int pos);
+
     QAction* applyAction() const;
     QAction* cancelAction() const;
 Q_SIGNALS:

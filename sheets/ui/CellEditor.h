@@ -64,6 +64,9 @@ public:
     int cursorPosition() const;
     void setCursorPosition(int pos);
 
+    bool captureArrowKeys() const;
+    void setCaptureArrowKeys(bool capture);
+
     QPoint globalCursorPosition() const;
     QAbstractItemModel *model();
 

@@ -86,7 +86,7 @@ public:
 
     virtual void deleteSelection();
 
-    virtual bool createEditor(bool clear = true, bool focus = true);
+    virtual bool createEditor(bool clear = true, bool focus = true, bool captureArrows = false);
     virtual CellEditorBase* editor() const;
 
     /**

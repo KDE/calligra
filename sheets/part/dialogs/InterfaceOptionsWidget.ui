@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>326</width>
-    <height>264</height>
+    <width>349</width>
+    <height>261</height>
    </rect>
   </property>
   <layout class="QFormLayout" name="formLayout">
@@ -31,7 +31,7 @@
    <item row="1" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Function shown in status bar:</string>
+      <string>Func&amp;tion shown in status bar:</string>
      </property>
      <property name="buddy">
       <cstring>m_statusBarFunction</cstring>
@@ -48,7 +48,7 @@
    <item row="2" column="0">
     <widget class="QLabel" name="label_6">
      <property name="text">
-      <string>Unit:</string>
+      <string>&amp;Unit:</string>
      </property>
      <property name="buddy">
       <cstring>m_unit</cstring>
@@ -65,7 +65,7 @@
    <item row="3" column="0">
     <widget class="QLabel" name="m_indentationLabel">
      <property name="text">
-      <string>Indentation step:</string>
+      <string>I&amp;ndentation step:</string>
      </property>
      <property name="buddy">
       <cstring>m_indentationStep</cstring>
@@ -79,20 +79,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0" colspan="2">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>318</width>
-       <height>16</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="5" column="0" colspan="2">
+   <item row="4" column="0" colspan="2">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Colors</string>
@@ -101,7 +88,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Grid:</string>
+         <string>&amp;Grid:</string>
         </property>
         <property name="buddy">
          <cstring>m_gridColor</cstring>
@@ -208,7 +195,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Page Outline:</string>
+         <string>Page Out&amp;line:</string>
         </property>
         <property name="buddy">
          <cstring>m_pageOutlineColor</cstring>
@@ -315,28 +302,31 @@
      </layout>
     </widget>
    </item>
-   <item row="4" column="0" colspan="2">
-    <widget class="QCheckBox" name="m_captureAllArrowKeys">
-     <property name="whatsThis">
-      <string>Captures all navigation keys, i.e. the arrow keys, page up/down, tabulator and backward tabulator key, while editing a cell with the embedded editor. The embedded editor is the one appearing directly in the cell. If captured, these keys are used for navigating in the editor. Otherwise, they are used for cell navigation.</string>
+   <item row="5" column="0" colspan="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
      </property>
-     <property name="text">
-      <string>Capture all navigation keys while editing</string>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>318</width>
+       <height>16</height>
+      </size>
      </property>
-    </widget>
+    </spacer>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KColorCombo</class>
-   <extends>QComboBox</extends>
-   <header>kcolorcombo.h</header>
-  </customwidget>
-  <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KColorCombo</class>
+   <extends>QComboBox</extends>
+   <header>kcolorcombo.h</header>
   </customwidget>
   <customwidget>
    <class>KoUnitDoubleSpinBox</class>

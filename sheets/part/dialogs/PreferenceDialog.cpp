@@ -83,7 +83,6 @@ public:
     MethodOfCalc oldFunction;
     KoUnit oldUnit;
     double oldIndentationStep;
-    bool oldCaptureAllArrowKeys;
     QColor oldGridColor;
     QColor oldPageOutlineColor;
 
@@ -158,13 +157,6 @@ void PreferenceDialog::Private::applyInterfaceOptions()
         oldIndentationStep = value;
     }
 
-    const bool capture = interfaceOptions.m_captureAllArrowKeys->isChecked();
-    if (capture != view->doc()->map()->settings()->captureAllArrowKeys()) {
-        view->doc()->map()->settings()->setCaptureAllArrowKeys(capture);
-        config->group("Editor").writeEntry("CaptureAllArrowKeys", capture);
-        oldCaptureAllArrowKeys = capture;
-    }
-
     const QColor gridColor = interfaceOptions.m_gridColor->color();
     if (gridColor != view->doc()->map()->settings()->gridColor()) {
         view->doc()->map()->settings()->setGridColor(gridColor);
@@ -213,7 +205,6 @@ void PreferenceDialog::Private::defaultInterfaceOptions()
     interfaceOptions.m_statusBarFunction->setCurrentIndex(0);
     interfaceOptions.m_unit->setCurrentIndex(0);
     interfaceOptions.m_indentationStep->changeValue(10.0);
-    interfaceOptions.m_captureAllArrowKeys->setChecked(true);
     interfaceOptions.m_gridColor->setColor(Qt::lightGray);
     interfaceOptions.m_pageOutlineColor->setColor(Qt::red);
 #if 0 // CALLIGRA_SHEETS_COMPLETION_MODE_SETTING
@@ -230,7 +221,6 @@ void PreferenceDialog::Private::resetInterfaceOptions()
     oldFunction = view->doc()->map()->settings()->getTypeOfCalc();
     oldUnit = view->doc()->unit();
     oldIndentationStep = view->doc()->map()->settings()->indentValue();
-    oldCaptureAllArrowKeys = view->doc()->map()->settings()->captureAllArrowKeys();
 
     const KConfigGroup colorGroup = config->group("KSpread Color");
     oldGridColor = colorGroup.readEntry("GridColor", QColor(Qt::lightGray));
@@ -242,7 +232,6 @@ void PreferenceDialog::Private::resetInterfaceOptions()
     interfaceOptions.m_statusBarFunction->setCurrentIndex(functionIndex);
     interfaceOptions.m_unit->setCurrentIndex(oldUnit.indexInListForUi(KoUnit::ListAll));
     interfaceOptions.m_indentationStep->changeValue(oldIndentationStep);
-    interfaceOptions.m_captureAllArrowKeys->setChecked(oldCaptureAllArrowKeys);
     interfaceOptions.m_gridColor->setColor(oldGridColor);
     interfaceOptions.m_pageOutlineColor->setColor(oldPageOutlineColor);
 }

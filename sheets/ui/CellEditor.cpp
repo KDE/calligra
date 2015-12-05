@@ -249,7 +249,7 @@ CellEditor::CellEditor(CellToolBase *cellTool,QHash<int,QString> &wordList, QWid
     d->selection = cellTool->selection();
     d->textEdit = this;
     d->globalCursorPos = QPoint();
-    d->captureAllKeyEvents = d->selection->activeSheet()->map()->settings()->captureAllArrowKeys();
+    d->captureAllKeyEvents = false;
     d->selectionChangedLocked = false;
     d->currentToken = 0;
     d->wordCollection = &wordList;
@@ -305,6 +305,16 @@ Selection* CellEditor::selection() const
 QPoint CellEditor::globalCursorPosition() const
 {
     return d->globalCursorPos;
+}
+
+bool CellEditor::captureArrowKeys() const
+{
+    return d->captureAllKeyEvents;
+}
+
+void CellEditor::setCaptureArrowKeys(bool capture)
+{
+    d->captureAllKeyEvents = capture;
 }
 
 //AutoCompletion Functions

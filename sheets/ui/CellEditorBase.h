@@ -48,6 +48,8 @@ public:
     virtual void copy() = 0;
     virtual void paste() = 0;
     virtual void setActiveSubRegion(int index) = 0;
+    virtual bool captureArrowKeys() const = 0;
+    virtual void setCaptureArrowKeys(bool capture) = 0;
 };
 
 } // namespace Sheets

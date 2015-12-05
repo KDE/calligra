@@ -988,7 +988,7 @@ void CellToolBase::mouseDoubleClickEvent(KoPointerEvent* event)
     Q_UNUSED(event)
     cancelCurrentStrategy();
     scrollToCell(selection()->cursor());
-    createEditor(false /* keep content */);
+    createEditor(false /* keep content */, true, true /*full editing*/);
 }
 
 void CellToolBase::keyPressEvent(QKeyEvent* event)
@@ -1385,7 +1385,7 @@ void CellToolBase::setLastEditorWithFocus(Editor editor)
     d->lastEditorWithFocus = editor;
 }
 
-bool CellToolBase::createEditor(bool clear, bool focus)
+bool CellToolBase::createEditor(bool clear, bool focus, bool captureArrows)
 {
     const Cell cell(selection()->activeSheet(), selection()->marker());
     if (selection()->activeSheet()->isProtected() && !cell.style().notProtected())
@@ -1468,9 +1468,14 @@ bool CellToolBase::createEditor(bool clear, bool focus)
         selection()->update();
     }
 
+    d->cellEditor->setCaptureArrowKeys(captureArrows);
+
     if (!clear && !cell.isNull()) {
         d->cellEditor->setText(cell.userInput());
-        d->cellEditor->setCursorPosition(d->cellEditor->toPlainText().length());  // place cursor at the end
+        // place cursor at the end
+        int pos = d->cellEditor->toPlainText().length();
+        d->cellEditor->setCursorPosition(pos);
+        if (d->externalEditor) d->externalEditor->setCursorPosition(pos);
     }
     return true;
 }
@@ -2699,7 +2704,7 @@ void CellToolBase::autoSum()
                                           QPoint(selection()->marker().x(), end)), selection()->activeSheet());
                 const QString str = region.name(selection()->activeSheet());
 
-                createEditor();
+                createEditor(true, true, true);
                 editor()->setText("=SUM(" + str + ')');
                 editor()->setCursorPosition(5 + str.length());
                 return;
@@ -2712,7 +2717,7 @@ void CellToolBase::autoSum()
                                           QPoint(end, selection()->marker().y())), selection()->activeSheet());
                 const QString str = region.name(selection()->activeSheet());
 
-                createEditor();
+                createEditor(true, true, true);
                 editor()->setText("=SUM(" + str + ')');
                 editor()->setCursorPosition(5 + str.length());
                 return;
@@ -2723,7 +2728,7 @@ void CellToolBase::autoSum()
     if ((sel.width() > 1) && (sel.height() > 1))
         sel = QRect();
 
-    createEditor();
+    createEditor(true, true, true);
 
     const Region region(sel, selection()->activeSheet());
     if (region.isValid()) {
@@ -2936,14 +2941,21 @@ void CellToolBase::edit()
 {
     // Not yet in edit mode?
     if (!editor()) {
-        createEditor(false /* keep content */);
+        createEditor(false /* keep content */, true, true /*capture arrow keys*/);
+        return;
+    }
+
+    // If the editor doesn't allow cursor movement, enable it now (enters real editing mode)
+    if (!editor()->captureArrowKeys()) {
+        editor()->setCaptureArrowKeys(true);
+        return;
+    }
+
+    // Switch focus.
+    if (editor()->widget()->hasFocus()) {
+        if (d->externalEditor) d->externalEditor->setFocus();
     } else {
-        // Switch focus.
-        if (editor()->widget()->hasFocus()) {
-            if (d->externalEditor) d->externalEditor->setFocus();
-        } else {
-            editor()->widget()->setFocus();
-        }
+        editor()->widget()->setFocus();
     }
 }
 

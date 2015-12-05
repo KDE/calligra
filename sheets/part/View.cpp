@@ -987,7 +987,6 @@ void View::initConfig()
     const KConfigGroup colorGroup = config->group("KSpread Color");
     doc()->map()->settings()->setGridColor(colorGroup.readEntry("GridColor", QColor(Qt::lightGray)));
     doc()->map()->settings()->changePageOutlineColor(colorGroup.readEntry("PageOutlineColor", QColor(Qt::red)));
-    doc()->map()->settings()->setCaptureAllArrowKeys(config->group("Editor").readEntry("CaptureAllArrowKeys", true));
 
     initCalcMenu();
     calcStatusBarOp();

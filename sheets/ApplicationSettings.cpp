@@ -36,7 +36,6 @@ public:
     bool rowHeader              : 1;
     bool showStatusBar          : 1;
     bool showTabBar             : 1;
-    bool captureAllArrowKeys    : 1;
 };
 
 ApplicationSettings::ApplicationSettings()
@@ -54,7 +53,6 @@ ApplicationSettings::ApplicationSettings()
     d->rowHeader = true;
     d->showStatusBar = true;
     d->showTabBar = true;
-    d->captureAllArrowKeys = true;
 }
 
 ApplicationSettings::~ApplicationSettings()
@@ -190,12 +188,3 @@ void ApplicationSettings::changePageOutlineColor(const QColor& color)
     d->pageOutlineColor = color;
 }
 
-void ApplicationSettings::setCaptureAllArrowKeys(bool capture)
-{
-    d->captureAllArrowKeys = capture;
-}
-
-bool ApplicationSettings::captureAllArrowKeys() const
-{
-    return d->captureAllArrowKeys;
-}

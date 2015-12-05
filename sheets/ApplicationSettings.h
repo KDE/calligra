@@ -169,9 +169,6 @@ public:
     QColor pageOutlineColor() const;
     void changePageOutlineColor(const QColor& color);
 
-    void setCaptureAllArrowKeys(bool capture);
-    bool captureAllArrowKeys() const;
-
 private:
     class Private;
     Private * const d;

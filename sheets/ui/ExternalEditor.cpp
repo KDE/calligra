@@ -129,6 +129,18 @@ void ExternalEditor::setText(const QString &text)
     blockSignals(false);
 }
 
+int ExternalEditor::cursorPosition() const
+{
+    return textCursor().position();
+}
+
+void ExternalEditor::setCursorPosition(int pos)
+{
+    QTextCursor textCursor(this->textCursor());
+    textCursor.setPosition(pos);
+    setTextCursor(textCursor);
+}
+
 void ExternalEditor::keyPressEvent(QKeyEvent *event)
 {
     Q_ASSERT(d->cellTool);
@@ -138,7 +150,7 @@ void ExternalEditor::keyPressEvent(QKeyEvent *event)
 
     // Create the embedded editor, if necessary.
     if (!d->cellTool->editor()) {
-        d->cellTool->createEditor(false /* keep content */, false /* no focus */);
+        d->cellTool->createEditor(false /* keep content */, false /* no focus */, true /*capture arrows */);
     }
 
     // the Enter and Esc key are handled by the embedded editor
@@ -164,7 +176,7 @@ void ExternalEditor::focusInEvent(QFocusEvent* event)
     // when the external editor gets focus, create also the internal editor
     // this in turn means that ranges will be instantly highlighted right
     if (!d->cellTool->editor())
-        d->cellTool->createEditor(false /* keep content */, false /* no focus */);
+        d->cellTool->createEditor(false /* keep content */, false /* no focus */, true /*capture arrows */);
     KTextEdit::focusInEvent(event);
 }
 
