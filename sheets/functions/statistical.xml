@@ -1428,10 +1428,13 @@
                <Type>Boolean</Type>
            </Parameter>
            <Help>
-               <Text>The TREND() function calculates a sequence of values based on a linear regression of known value pairs.</Text>
+               <Text>The TREND() function calculates a sequence of Y-values based on a linear regression of known X- and Y-value pairs. For the input parameters, the user must firstly select a cell-range containing the Y-values, followed by the cell-range of the corresponding X-values. </Text>
+               <Text>The line of best fit may be extrapolated to a different X-range, which is specified as the 3rd parameter. However, the input X-range should be given again if no extrapolation is required. </Text>
+               <Text>The regression line can be forced to intersect the origin (X=0, Y=0) by setting the 4th parameter, allowOffset, to FALSE or 0. Setting this parameter to TRUE or 1 (the default) allows the best-fit line to intersect the vertical axis at a non-zero value of Y. </Text>
+               <Text>Note that since the result of this function is a row of calculated Y-values, plotting the data will be facilitated if the X- and Y- values are also in rows, rather than columns.</Text>
                <Text>Constraints: COUNT(knownY) = COUNT(knownX).</Text>
                <Text>Since the result is an array, use Ctrl+Alt+Enter (instead of just Enter) to display the values in separate cells.</Text>
-               <Syntax>TREND(knownY[;knownX[;newX[;allowOffset = TRUE]]])</Syntax>
+               <Syntax>TREND(known Y-range; [known X-range; [new X-range; [allowOffset=TRUE/FALSE]]])</Syntax>
            </Help>
            <Related>INTERSECTION</Related>
            <Related>SLOPE</Related>
