@@ -85,7 +85,6 @@ KoVersionDialog::KoVersionDialog(QWidget* parent, KoDocument *doc)
     connect(m_pAdd, SIGNAL(clicked()), this, SLOT(slotAdd()));
     connect(m_pOpen, SIGNAL(clicked()), this, SLOT(slotOpen()));
     connect(m_pModify, SIGNAL(clicked()), this, SLOT(slotModify()));
-    connect(list, SIGNAL(itemActivated(QTreeWidgetItem *, int)), this, SLOT(slotOpen()));
 
     updateButton();
 
