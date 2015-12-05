@@ -287,12 +287,13 @@ void KoToolProxy::mousePressEvent(KoPointerEvent *ev)
         d->multiClickGlobalPoint = globalPoint;
     }
 
-    if (d->multiClickCount && d->multiClickTimeStamp.elapsed() < QApplication::doubleClickInterval()) {
+    if (d->multiClickCount && d->multiClickTimeStamp.elapsed() < QApplication::doubleClickInterval() && d->multiClickButton == ev->button()) {
         // One more multiclick;
         d->multiClickCount++;
     } else {
         d->multiClickTimeStamp.start();
         d->multiClickCount = 1;
+        d->multiClickButton = ev->button();
     }
 
     if (d->activeTool) {
