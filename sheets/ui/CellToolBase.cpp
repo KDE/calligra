@@ -1468,8 +1468,10 @@ bool CellToolBase::createEditor(bool clear, bool focus)
         selection()->update();
     }
 
-    if (!clear && !cell.isNull())
+    if (!clear && !cell.isNull()) {
         d->cellEditor->setText(cell.userInput());
+        d->cellEditor->setCursorPosition(d->cellEditor->toPlainText().length());  // place cursor at the end
+    }
     return true;
 }
 
