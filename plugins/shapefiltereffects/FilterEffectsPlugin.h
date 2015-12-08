@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KARBONFILTEREFFECTSPLUGIN_H
-#define KARBONFILTEREFFECTSPLUGIN_H
+#ifndef FILTEREFFECTSPLUGIN_H
+#define FILTEREFFECTSPLUGIN_H
 
 #include <QObject>
 
@@ -30,4 +30,4 @@ public:
     ~FilterEffectsPlugin() {}
 };
 
-#endif // KARBONFILTEREFFECTSPLUGIN_H
+#endif // FILTEREFFECTSPLUGIN_H

@@ -34,7 +34,7 @@
 
 #include <kpluginfactory.h>
 
-K_PLUGIN_FACTORY_WITH_JSON(FilterEffectsPluginFacory, "karbon_filtereffects.json",
+K_PLUGIN_FACTORY_WITH_JSON(FilterEffectsPluginFacory, "calligra_filtereffects.json",
                            registerPlugin<FilterEffectsPlugin>();)
 
 FilterEffectsPlugin::FilterEffectsPlugin(QObject *parent, const QList<QVariant>&)
@@ -52,4 +52,5 @@ FilterEffectsPlugin::FilterEffectsPlugin(QObject *parent, const QList<QVariant>&
     KoFilterEffectRegistry::instance()->add(new MorphologyEffectFactory());
     KoFilterEffectRegistry::instance()->add(new ConvolveMatrixEffectFactory());
 }
+
 #include <FilterEffectsPlugin.moc>

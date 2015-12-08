@@ -80,6 +80,10 @@ if(SHOULD_BUILD_PLUGIN_SEMANTICITEMS)
     add_subdirectory( semanticitems )
 endif()
 
+if(SHOULD_BUILD_PLUGIN_SHAPEFILTEREFFECTS)
+    add_subdirectory( shapefiltereffects )
+endif()
+
 if(SHOULD_BUILD_PLUGIN_KARBONPLUGINS)
     add_subdirectory( karbonplugins )
 endif()

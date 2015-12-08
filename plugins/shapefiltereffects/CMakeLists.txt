@@ -2,7 +2,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"KarbonFilterEffects\")
 
 include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} )
 
-set(karbon_filtereffects_PART_SRCS
+set(calligra_filtereffects_PART_SRCS
     FilterEffectsPlugin.cpp
     BlurEffect.cpp
     BlurEffectFactory.cpp
@@ -40,10 +40,10 @@ set(karbon_filtereffects_PART_SRCS
     MatrixDataModel.cpp
     )
 
-add_library(karbon_filtereffects MODULE ${karbon_filtereffects_PART_SRCS})
+add_library(calligra_filtereffects MODULE ${calligra_filtereffects_PART_SRCS})
 
-kcoreaddons_desktop_to_json(karbon_filtereffects karbon_filtereffects.desktop)
+kcoreaddons_desktop_to_json(calligra_filtereffects calligra_filtereffects.desktop)
 
-target_link_libraries(karbon_filtereffects flake kowidgets)
+target_link_libraries(calligra_filtereffects flake kowidgets)
 
-install(TARGETS karbon_filtereffects  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filtereffects  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
