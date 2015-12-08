@@ -45,7 +45,7 @@ set(kformdesigner_LIBS
   kowidgets # KoFileDialog
 
   KDb
-  KProperty
+  KPropertyWidgets
 )
 
 if(KFD_SIGSLOTS)

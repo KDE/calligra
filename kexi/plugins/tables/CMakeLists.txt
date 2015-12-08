@@ -24,7 +24,7 @@ target_link_libraries(kexi_tableplugin
         kundo2
 
         KDb
-        KProperty
+        KPropertyWidgets
 
         KF5::CoreAddons
 

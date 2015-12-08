@@ -22,10 +22,10 @@
 
 #include "kexiextwidgets_export.h"
 
-#include <KPropertyFactory>
+#include <KPropertyWidgetsFactory>
 
 //! Kexi-specific custom property factory for the KProperty library
-class KEXIEXTWIDGETS_EXPORT KexiCustomPropertyFactory : public KPropertyFactory
+class KEXIEXTWIDGETS_EXPORT KexiCustomPropertyFactory : public KPropertyWidgetsFactory
 {
 public:
     enum PropertyType {

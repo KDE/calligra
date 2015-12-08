@@ -24,7 +24,7 @@ target_link_libraries(kexi_formplugin
     kformdesigner
     kexiformutils
 
-    KProperty
+    KPropertyWidgets
 )
 
 install(TARGETS kexi_formplugin DESTINATION ${KEXI_PLUGIN_INSTALL_DIR})
@@ -100,7 +100,7 @@ target_link_libraries(kexiformutils
         kexiguiutils
 
         KDb
-        KProperty
+        KPropertyWidgets
 
         Qt5::Gui
         Qt5::Xml

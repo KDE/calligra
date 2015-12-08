@@ -59,7 +59,7 @@ target_link_libraries(kexicore
         kowidgetutils # KoGroupButton
 
         KDb
-        KProperty
+        KPropertyWidgets
 )
 
 set_target_properties(kexicore PROPERTIES

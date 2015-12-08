@@ -411,10 +411,10 @@ macro_log_feature(KReport_WITH_SCRIPTING_FOUND "KReport" "A framework for the cr
                                                "http://community.kde.org/KReport" FALSE "" "Required by Kexi and Plan")
 
 ##
-## Test for KProperty
+## Test for KPropertyWidgets
 ##
-macro_optional_find_package(KProperty 2.96.0)
-macro_log_feature(KProperty_FOUND "KProperty" "A property editing framework with editor widget"
+macro_optional_find_package(KPropertyWidgets 2.98.0)
+macro_log_feature(KPropertyWidgets_FOUND "KPropertyWidgets" "A property editing framework with editor widget"
                                   "http://community.kde.org/KProperty" FALSE "" "Required by Kexi")
 
 ##
@@ -900,7 +900,7 @@ calligra_drop_product_on_bad_condition( PART_SHEETS
 calligra_drop_product_on_bad_condition( APP_KEXI
     KDb_FOUND "KDb not found"
     KReport_WITH_SCRIPTING_FOUND "KReport with scripting support not found"
-    KProperty_FOUND "KProperty not found"
+    KPropertyWidgets_FOUND "KPropertyWidgets not found"
     Qt5UiTools_FOUND "Qt5UiTools not found"
 )
 
@@ -985,7 +985,7 @@ calligra_drop_product_on_bad_condition( APP_PLAN
     KGantt_FOUND "KGantt devel not found"
     KChart_FOUND "KChart devel not found"
     KReport_FOUND "KReport not found"
-    KProperty_FOUND "KProperty not found"
+    KPropertyWidgets_FOUND "KPropertyWidgets not found"
 )
 
 calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT

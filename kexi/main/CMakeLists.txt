@@ -56,7 +56,7 @@ PRIVATE
 #TODO: KEXI3    keximigrate
 
     KDb
-    KProperty
+    KPropertyWidgets
 
     KF5::KIOWidgets
     KF5::XmlGui #KActionCollection...

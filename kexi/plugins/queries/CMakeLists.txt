@@ -22,7 +22,7 @@ target_link_libraries(kexi_queryplugin
         kexiutils
 
         KDb
-        KProperty
+        KPropertyWidgets
 
         Qt5::Gui
         Qt5::Xml

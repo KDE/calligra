@@ -22,7 +22,7 @@ target_link_libraries(
     kexiguiutils
 
     KDb
-    KProperty
+    KPropertyWidgets
 
     KF5::KIOWidgets
     KF5::XmlGui #KActionCollection...

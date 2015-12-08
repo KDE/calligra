@@ -20,7 +20,7 @@
 #include "KexiCustomPropertyFactory.h"
 #include "KexiCustomPropertyFactory_p.h"
 
-#include <KPropertyFactory>
+#include <KPropertyWidgetsFactory>
 //! @todo KEXI3 #include <KCustomProperty>
 
 #include <KDb>
@@ -100,7 +100,7 @@ public:
 //---------------
 
 KexiCustomPropertyFactory::KexiCustomPropertyFactory()
-        : KPropertyFactory()
+        : KPropertyWidgetsFactory()
 {
 //! @todo addEditor( KexiCustomPropertyFactory::PixmapId, new KexiImagePropertyEditorDelegate );
     addEditor( KexiCustomPropertyFactory::Identifier, new KexiIdentifierPropertyEditorDelegate );
@@ -108,7 +108,7 @@ KexiCustomPropertyFactory::KexiCustomPropertyFactory()
 
 void KexiCustomPropertyFactory::init()
 {
-    if (KPropertyFactoryManager::self()->isEditorForTypeAvailable(KexiCustomPropertyFactory::PixmapId))
+    if (KPropertyWidgetsFactoryManager::self()->isEditorForTypeAvailable(KexiCustomPropertyFactory::PixmapId))
         return; //already registered
-    KPropertyFactoryManager::self()->registerFactory( new KexiCustomPropertyFactory );
+    KPropertyWidgetsFactoryManager::self()->registerFactory( new KexiCustomPropertyFactory );
 }

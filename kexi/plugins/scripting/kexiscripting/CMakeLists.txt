@@ -25,7 +25,7 @@ target_link_libraries(kexi_scriptplugin
         kexiutils
 
         KDb
-        KProperty
+        KPropertyWidgets
 
         KF5::KIOWidgets
         Qt5::Gui

@@ -132,7 +132,7 @@ ki18n_wrap_ui(kplatoui_LIB_SRCS
 add_library(kplatoui SHARED ${kplatoui_LIB_SRCS})
 generate_export_header(kplatoui)
 
-target_link_libraries(kplatoui komain kplatokernel kplatomodels KProperty KReport KChart KGantt KF5::KHtml )
+target_link_libraries(kplatoui komain kplatokernel kplatomodels KPropertyWidgets KReport KChart KGantt KF5::KHtml )
 if(KF5AkonadiContact_FOUND)
     target_link_libraries(kplatoui KF5::AkonadiContact)
 endif()

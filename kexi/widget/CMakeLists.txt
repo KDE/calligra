@@ -90,7 +90,7 @@ target_link_libraries(kexiextendedwidgets
         kexicore
 
         KDb
-        KProperty
+        KPropertyWidgets
 
         KF5::TextWidgets # KTextEdit
         KF5::Codecs # KCharsets

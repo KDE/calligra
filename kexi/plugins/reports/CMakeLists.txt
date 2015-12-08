@@ -36,7 +36,7 @@ target_link_libraries(kexi_reportplugin
 
         KDb
         KReport
-        KProperty
+        KPropertyWidgets
 
         KF5::KrossCore
         KF5::KDELibs4Support
