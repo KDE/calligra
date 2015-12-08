@@ -220,7 +220,7 @@ endif()
 
 find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport
                                            Script Svg Test Concurrent)
-find_package(Qt5 5.3.0 COMPONENTS UiTools Sql WebKit WebKitWidgets DBus Declarative Qml Quick OpenGL X11Extras)
+find_package(Qt5 5.3.0 COMPONENTS UiTools Sql WebKit WebKitWidgets DBus Declarative Qml Quick OpenGL)
 
 set(HAVE_OPENGL ${Qt5OpenGL_FOUND})
 
