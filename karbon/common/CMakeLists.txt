@@ -1,6 +1,5 @@
 set(karboncommon_LIB_SRCS
     KarbonGlobal.cpp
-    KarbonCursor.cpp
     KarbonOutlinePaintingStrategy.cpp
 
     commands/KarbonBooleanCommand.cpp
