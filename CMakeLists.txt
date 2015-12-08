@@ -229,9 +229,7 @@ set(QT_QTQUICK_FOUND ${Qt5Quick_FOUND})
 
 set(QT_QTTEST_LIBRARY Qt5::Test)
 
-set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
-
-
+set(HAVE_OPENGL ${Qt5OpenGL_FOUND})
 
 
 include (MacroLibrary)
@@ -980,7 +978,7 @@ calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
 )
 
 calligra_drop_product_on_bad_condition( PART_QTQUICK
-    QT_QTOPENGL_FOUND "Qt OpenGL not found"
+    Qt5OpenGL_FOUND "Qt OpenGL not found"
     QT_QTDECLARATIVE_FOUND "QtDeclarative not found"
 )
 
@@ -989,7 +987,7 @@ calligra_drop_product_on_bad_condition( PART_COMPONENTS
 )
 
 calligra_drop_product_on_bad_condition( APP_SLIDECOMPARE
-    QT_QTOPENGL_FOUND "Qt OpenGL not found"
+    Qt5OpenGL_FOUND "Qt OpenGL not found"
 )
 
 #############################################
