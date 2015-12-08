@@ -1,7 +1,5 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"calligrafilters\")
 
-include(CheckIncludeFiles)
-
 # for xpdf:
 check_include_files(ndir.h HAVE_NDIR_H)
 check_include_files(sys/dir.h HAVE_SYS_DIR_H)

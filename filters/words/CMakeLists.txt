@@ -7,8 +7,6 @@ if( ICONV_FOUND )
     set( ICONV_REQUIRES_CONST ${ICONV_SECOND_ARGUMENT_IS_CONST} )
 endif()
 
-include( CheckIncludeFile )
-
 check_include_file( sys/iconv.h HAVE_SYS_ICONV_H )
 
 # Add "COMPILE_DEFINITIONS definitions" to TRY_RUN only if we have compile definitions

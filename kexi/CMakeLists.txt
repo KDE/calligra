@@ -1,7 +1,5 @@
 project(kexi)
 
-include(CheckFunctionExists)
-
 set(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS true)
 
 option(KEXI_MOBILE "Compile a mobile version of Kexi" OFF)

@@ -135,7 +135,6 @@ option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binar
 
 # get the special macros
 include(CalligraProductSetMacros)
-include(MacroJPEG)
 
 # get the definitions of products, features and product sets
 include(CalligraProducts.cmake)
@@ -155,31 +154,39 @@ endif ()
 # finally choose products/features to build
 calligra_set_productset(${PRODUCTSET})
 
- ########################
-#########################
-## Look for KDE and Qt ##
-#########################
-########################
+ ##########################
+###########################
+## Look for ECM, Qt, KF5 ##
+###########################
+##########################
 
 find_package(ECM 1.7.0 REQUIRED NOMODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+
+# CMake macros
+include(CMakePackageConfigHelpers)
+include(WriteBasicConfigVersionFile)
+include(CheckFunctionExists)
+include(CheckTypeSize)
+include(CheckIncludeFile)
+include(GenerateExportHeader)
+include(FeatureSummary)
+# ECM macros
 include(ECMOptionalAddSubdirectory)
 include(ECMInstallIcons)
 include(ECMAddAppIcon)
 include(ECMSetupVersion)
+include(ECMMarkAsTest)
 include(ECMMarkNonGuiExecutable)
 include(ECMGenerateHeaders)
-include(GenerateExportHeader)
-include(ECMMarkAsTest)
-
-include(CMakePackageConfigHelpers)
-include(WriteBasicConfigVersionFile)
-include(CheckFunctionExists)
-
+# ECM KDE macros
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
-include(FeatureSummary)
+# own macros
+include(MacroLibrary)
+include(MacroJPEG)
+
 
 find_package(KF5 5.7.0 REQUIRED COMPONENTS 
         Archive 
@@ -220,12 +227,6 @@ find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSup
 find_package(Qt5 5.3.0 COMPONENTS UiTools Sql WebKit WebKitWidgets DBus Declarative Qml Quick OpenGL)
 
 set(HAVE_OPENGL ${Qt5OpenGL_FOUND})
-
-
-include (MacroLibrary)
-include (MacroAdditionalCleanFiles)
-include (MacroAddFileDependencies)
-include (ECMInstallIcons)
 
 if (GHNS)
     find_package(Attica)

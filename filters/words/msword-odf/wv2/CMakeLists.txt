@@ -50,14 +50,12 @@ check_include_file( stdint.h HAVE_STDINT_H ) # Not really needed because CHECK_T
 check_include_file( sys/types.h HAVE_SYS_TYPES_H ) # Not really needed because CHECK_TYPE_SIZE already performs this test
 check_include_file( sys/stat.h HAVE_SYS_STAT_H )
 
-include( CheckTypeSize )
 check_type_size( char SIZEOF_CHAR )
 check_type_size( short SIZEOF_SHORT )
 check_type_size( long SIZEOF_LONG )
 check_type_size( int SIZEOF_INT )
 check_type_size( "void *" SIZEOF_VOID_P )
 
-include( CheckFunctionExists )
 if( NOT MSVC )
   # libm does not exist on MSVC
   set( CMAKE_REQUIRED_LIBRARIES m )
