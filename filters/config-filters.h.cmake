@@ -1,9 +1,3 @@
-/* ImageMagick is available */
-#cmakedefine HAVE_MAGICK 1
-
-/* ImageMagick Version 6 */
-#define HAVE_MAGICK6 1
-
 /* Define if you have isinf */
 #define HAVE_FUNC_ISINF 1
 
@@ -25,10 +19,6 @@
 
 /* Define to 1 if you have the `mkstemp' function. */
 #cmakedefine HAVE_MKSTEMP 1
-
-/* GetMagickInfoList has different number of arguments with versions >= 6.1.3
-   */
-/* #undef HAVE_OLD_GETMAGICKINFOLIST */
 
 /* Define to 1 if you have the <paper.h> header file. */
 /* #undef HAVE_PAPER_H */
