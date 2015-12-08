@@ -35,6 +35,7 @@
 #include "kis_selection.h"
 #include <kis_debug.h>
 #include <kis_layer_composition.h>
+#include "kis_keyframe_channel.h"
 
 #include "kis_undo_stores.h"
 
@@ -286,7 +287,7 @@ struct FlattenTestImage
     {
 
         image = p.image;
-
+        undoStore = p.undoStore;
         layer1 = p.layer;
 
         layer5 = new KisPaintLayer(p.image, "paint5", 0.4 * OPACITY_OPAQUE_U8);
@@ -380,6 +381,7 @@ struct FlattenTestImage
     TestUtil::MaskParent p;
 
     KisImageSP image;
+    KisSurrogateUndoStore *undoStore;
     KisPaintLayerSP layer1;
 
     KisPaintLayerSP layer2;
@@ -447,6 +449,23 @@ void KisImageTest::testFlattenLayer()
 
 #include <metadata/kis_meta_data_merge_strategy_registry.h>
 
+#include "kis_layer_utils.h"
+
+template<class ContainerTest>
+KisLayerSP mergeHelper(ContainerTest &p, KisLayerSP layer)
+{
+    KisNodeSP parent = layer->parent();
+    const int newIndex = parent->index(layer) - 1;
+
+    p.image->mergeDown(layer, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
+
+    //KisLayerUtils::mergeDown(p.image, layer, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
+    p.image->waitForDone();
+
+    KisLayerSP newLayer = dynamic_cast<KisLayer*>(parent->at(newIndex).data());
+    return newLayer;
+}
+
 void KisImageTest::testMergeDown()
 {
     FlattenTestImage p;
@@ -459,8 +478,7 @@ void KisImageTest::testMergeDown()
         QCOMPARE(p.layer5->compositeOpId(), COMPOSITE_OVER);
         QCOMPARE(p.layer5->alphaChannelDisabled(), true);
 
-        KisLayerSP newLayer = p.image->mergeDown(p.layer5, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
-        p.image->waitForDone();
+        KisLayerSP newLayer = mergeHelper(p, p.layer5);
 
         QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
         QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer5_layerproj"));
@@ -473,8 +491,7 @@ void KisImageTest::testMergeDown()
         QCOMPARE(p.layer2->compositeOpId(), COMPOSITE_ADD);
         QCOMPARE(p.layer2->alphaChannelDisabled(), false);
 
-        KisLayerSP newLayer = p.image->mergeDown(p.layer2, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
-        p.image->waitForDone();
+        KisLayerSP newLayer = mergeHelper(p, p.layer2);
 
         QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
         QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "02_layer2_layerproj"));
@@ -488,8 +505,7 @@ void KisImageTest::testMergeDown()
         QCOMPARE(p.group1->compositeOpId(), COMPOSITE_ADD);
         QCOMPARE(p.group1->alphaChannelDisabled(), false);
 
-        KisLayerSP newLayer = p.image->mergeDown(p.group1, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
-        p.image->waitForDone();
+        KisLayerSP newLayer = mergeHelper(p, p.group1);
 
         QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
         QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "03_group1_mergedown_layerproj"));
@@ -511,8 +527,7 @@ void KisImageTest::testMergeDownDestinationInheritsAlpha()
         QCOMPARE(p.layer2->compositeOpId(), COMPOSITE_ADD);
         QCOMPARE(p.layer2->alphaChannelDisabled(), false);
 
-        KisLayerSP newLayer = p.image->mergeDown(p.layer2, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
-        p.image->waitForDone();
+        KisLayerSP newLayer = mergeHelper(p, p.layer2);
 
         QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
         QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer2_layerproj"));
@@ -537,8 +552,7 @@ void KisImageTest::testMergeDownDestinationCustomCompositeOp()
         QCOMPARE(p.group1->compositeOpId(), COMPOSITE_ADD);
         QCOMPARE(p.group1->alphaChannelDisabled(), false);
 
-        KisLayerSP newLayer = p.image->mergeDown(p.layer6, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
-        p.image->waitForDone();
+        KisLayerSP newLayer = mergeHelper(p, p.layer6);
 
         QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
         QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer6_layerproj"));
@@ -563,8 +577,7 @@ void KisImageTest::testMergeDownDestinationSameCompositeOpLayerStyle()
         QCOMPARE(p.layer2->compositeOpId(), COMPOSITE_ADD);
         QCOMPARE(p.layer2->alphaChannelDisabled(), false);
 
-        KisLayerSP newLayer = p.image->mergeDown(p.group1, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
-        p.image->waitForDone();
+        KisLayerSP newLayer = mergeHelper(p, p.group1);
 
         QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
         QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_group1_layerproj"));
@@ -589,8 +602,7 @@ void KisImageTest::testMergeDownDestinationSameCompositeOp()
         QCOMPARE(p.layer7->compositeOpId(), COMPOSITE_ADD);
         QCOMPARE(p.layer7->alphaChannelDisabled(), false);
 
-        KisLayerSP newLayer = p.image->mergeDown(p.layer8, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
-        p.image->waitForDone();
+        KisLayerSP newLayer = mergeHelper(p, p.layer8);
 
         QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
         QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer8_layerproj"));
@@ -598,6 +610,59 @@ void KisImageTest::testMergeDownDestinationSameCompositeOp()
         QCOMPARE(newLayer->compositeOpId(), COMPOSITE_ADD);
         QCOMPARE(newLayer->exactBounds(), QRect(50, 350, 50, 100));
         QCOMPARE(newLayer->alphaChannelDisabled(), false);
+    }
+}
+#include "kis_image_animation_interface.h"
+void KisImageTest::testMergeDownMultipleFrames()
+{
+    FlattenTestImage p;
+
+    TestUtil::ExternalImageChecker img("flatten", "imagetest");
+    TestUtil::ExternalImageChecker chk("mergedown_simple", "imagetest");
+
+    QSet<int> initialFrames;
+    {
+        KisLayerSP l = p.layer5;
+        l->enableAnimation();
+        KisKeyframeChannel *channel = l->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        channel->addKeyframe(10);
+        channel->addKeyframe(20);
+        channel->addKeyframe(30);
+
+        QCOMPARE(channel->keyframeCount(), 4);
+        initialFrames = KisLayerUtils::fetchLayerFramesRecursive(l);
+        QCOMPARE(initialFrames.size(), 4);
+    }
+
+    {
+        QCOMPARE(p.layer5->compositeOpId(), COMPOSITE_OVER);
+        QCOMPARE(p.layer5->alphaChannelDisabled(), true);
+
+        KisLayerSP newLayer = mergeHelper(p, p.layer5);
+
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+        QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer5_layerproj"));
+
+        QCOMPARE(newLayer->compositeOpId(), COMPOSITE_OVER);
+        QCOMPARE(newLayer->alphaChannelDisabled(), false);
+
+        QVERIFY(newLayer->isAnimated());
+
+        QSet<int> newFrames = KisLayerUtils::fetchLayerFramesRecursive(newLayer);
+        QCOMPARE(newFrames, initialFrames);
+
+        foreach (int frame, newFrames) {
+            KisImageAnimationInterface *interface = p.image->animationInterface();
+            int savedSwitchedTime = 0;
+            interface->saveAndResetCurrentTime(frame, &savedSwitchedTime);
+            QCOMPARE(newLayer->exactBounds(), QRect(100,100,100,100));
+            interface->restoreCurrentTime(&savedSwitchedTime);
+        }
+
+        p.undoStore->undo();
+        p.image->waitForDone();
+
+         QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
     }
 }
 
@@ -693,25 +758,24 @@ void testMergeCrossColorSpaceImpl(bool useProjectionColorSpace, bool swapSpaces)
 
     p.image->initialRefreshGraph();
 
-
     {
-        KisLayerSP newLayer = p.image->mergeDown(layer3, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
-        p.image->waitForDone();
+        KisLayerSP newLayer = mergeHelper(p, layer3);
 
         QCOMPARE(newLayer->colorSpace(), p.image->colorSpace());
 
         p.undoStore->undo();
+        p.image->waitForDone();
     }
 
     {
         layer2->disableAlphaChannel(true);
 
-        KisLayerSP newLayer = p.image->mergeDown(layer3, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
-        p.image->waitForDone();
+        KisLayerSP newLayer = mergeHelper(p, layer3);
 
         QCOMPARE(newLayer->colorSpace(), p.image->colorSpace());
 
         p.undoStore->undo();
+        p.image->waitForDone();
     }
 }
 
