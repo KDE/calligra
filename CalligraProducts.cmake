@@ -531,9 +531,6 @@ calligra_define_productset(OKULAR "Okular generators"
         OKULAR_GENERATOR_WORDPERFECT
 )
 
-calligra_define_productset(KRITA "Temp placeholder for CI"
-)
-
 
 # How to add another product?
 # ===========================
