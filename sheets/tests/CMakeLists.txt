@@ -208,7 +208,7 @@ target_link_libraries(TestPasteCommand calligrasheetscommon Qt5::Test)
 
 # set(BenchmarkCluster_SRCS BenchmarkCluster.cpp ../Cluster.cpp) # explicit Cluster.cpp for no extra symbol visibility
 # kde4_add_executable(BenchmarkCluster TEST ${BenchmarkCluster_SRCS})
-# target_link_libraries(BenchmarkCluster calligrasheetscommon ${QT_QTTEST_LIBRARY})
+# target_link_libraries(BenchmarkCluster calligrasheetscommon Qt5::Test)
 
 ########### next target ###############
 

@@ -16,7 +16,7 @@ target_link_libraries(ScriptingTester
         kokross
         ${KDE4_KDECORE_LIBS}
         ${QT_QTGUI_LIBRARY}
-        ${QT_QTTEST_LIBRARY}
+        Qt5::Test
 )
 
 

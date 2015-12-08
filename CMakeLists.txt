@@ -222,8 +222,6 @@ find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSup
                                            Script Svg Test Concurrent)
 find_package(Qt5 5.3.0 COMPONENTS UiTools Sql WebKit WebKitWidgets DBus Declarative Qml Quick OpenGL X11Extras)
 
-set(QT_QTTEST_LIBRARY Qt5::Test)
-
 set(HAVE_OPENGL ${Qt5OpenGL_FOUND})
 
 
