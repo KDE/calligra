@@ -319,10 +319,6 @@ if (NOT Boost_FOUND)
     message(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, sheets.")
 endif ()
 
-if (APPLE)
-   find_package(Carbon REQUIRED)
-endif ()
-
  ###########################
 ############################
 ## Optional dependencies  ##
