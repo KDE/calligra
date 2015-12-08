@@ -985,7 +985,6 @@ calligra_drop_product_on_bad_condition( PART_QTQUICK
 )
 
 calligra_drop_product_on_bad_condition( PART_COMPONENTS
-    QT_QTOPENGL_FOUND "Qt OpenGL not found"
     QT_QTQUICK_FOUND "QtQuick not found"
 )
 
