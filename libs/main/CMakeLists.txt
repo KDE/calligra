@@ -71,7 +71,7 @@ set(komain_LIB_SRCS
     MainDebug.cpp
 )
 
-if( QT_QTDBUS_FOUND )
+if( Qt5DBus_FOUND )
     set(komain_LIB_SRCS ${komain_LIB_SRCS}
         KoApplicationAdaptor.cpp
         KoViewAdaptor.cpp
@@ -159,7 +159,7 @@ install( FILES
     komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 
-if( QT_QTDBUS_FOUND )
+if( Qt5DBus_FOUND )
     install( FILES
         KoApplicationAdaptor.h
         KoViewAdaptor.h

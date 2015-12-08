@@ -133,7 +133,7 @@ set( calligrastageprivate_LIB_SRCS
      tools/KPrPlaceholderToolFactory.cpp
    )
 
-if(QT_QTDBUS_FOUND)
+if(Qt5DBus_FOUND)
 set( calligrastageprivate_LIB_SRCS
      ${calligrastageprivate_LIB_SRCS}
      KPrViewAdaptor.cpp

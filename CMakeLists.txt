@@ -222,7 +222,6 @@ find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSup
                                            Script Svg Test Concurrent)
 find_package(Qt5 5.3.0 COMPONENTS UiTools Sql WebKit WebKitWidgets DBus Declarative Qml Quick OpenGL X11Extras)
 
-set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
 set(QT_QTWEBKIT_FOUND ${Qt5WebKit_FOUND})
 set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
 set(QT_QTQUICK_FOUND ${Qt5Quick_FOUND})

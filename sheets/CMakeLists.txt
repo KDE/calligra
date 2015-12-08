@@ -220,7 +220,7 @@ set (calligrasheetscommon_LIB_SRCS
     ${ui_DIR_SRCS}
     )
 
-if(QT_QTDBUS_FOUND)
+if(Qt5DBus_FOUND)
 set (calligrasheetscommon_LIB_SRCS
     ${calligrasheetscommon_LIB_SRCS}
     ${interfaces_DIR_SRCS}
