@@ -69,5 +69,3 @@ void QuickStateHandler::activate()
     layout->inlineTextObjectManager()->insertInlineObject(cursor, anchor);
     canvas->shapeManager()->add(shape);
 }
-
-#include "QuickStateHandler.moc"

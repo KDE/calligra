@@ -182,5 +182,3 @@ bool Layout::event(QEvent * e)
         return QObject::event(e);
     }
 }
-
-#include "Layout.moc"

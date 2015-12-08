@@ -86,5 +86,3 @@ void RootSection::setCurrentSection(Section* _section)
 {
     m_currentSection = _section;
 }
-
-#include "RootSection.moc"

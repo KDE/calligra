@@ -228,5 +228,3 @@ void SectionsBoxDock::insertedSection(const QModelIndex& parent, int idx)
     m_wdgSectionsBox.listSections->setCurrentIndex(index);
     slotSectionActivated(index);
 }
-
-#include "SectionsBoxDock.moc"

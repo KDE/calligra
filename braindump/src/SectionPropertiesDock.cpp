@@ -81,5 +81,3 @@ void SectionPropertiesDock::layoutChanged(int index)
                               new ChangeLayoutCommand(m_currentSection,
                                       m_wdgSectionProperties.comboBoxLayout->itemData(index).toString()));
 }
-
-#include "SectionPropertiesDock.moc"

@@ -353,5 +353,3 @@ QRect Canvas::viewToWidget(const QRect& r) const
 {
     return r.translated(m_origin);
 }
-
-#include "Canvas.moc"

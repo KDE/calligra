@@ -412,5 +412,3 @@ void View::ungroupSelection()
     }
     m_canvas->addCommand(cmd);
 }
-
-#include "View.moc"

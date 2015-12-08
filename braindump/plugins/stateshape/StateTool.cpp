@@ -108,5 +108,3 @@ QList<QPointer<QWidget> > StateTool::createOptionWidgets()
     widgets.append(widget);
     return widgets;
 }
-
-#include "StateTool.moc"

@@ -356,5 +356,3 @@ QString SectionsIO::structureFileName()
 {
     return m_directory + "structure.xml";
 }
-
-#include "SectionsIO.moc"

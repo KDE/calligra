@@ -198,5 +198,3 @@ void WebShape::setZoom(qreal _zoom)
 {
     m_zoom = _zoom;
 }
-
-#include "WebShape.moc"
