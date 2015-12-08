@@ -222,9 +222,6 @@ find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSup
                                            Script Svg Test Concurrent)
 find_package(Qt5 5.3.0 COMPONENTS UiTools Sql WebKit WebKitWidgets DBus Declarative Qml Quick OpenGL X11Extras)
 
-set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
-set(QT_QTQUICK_FOUND ${Qt5Quick_FOUND})
-
 set(QT_QTTEST_LIBRARY Qt5::Test)
 
 set(HAVE_OPENGL ${Qt5OpenGL_FOUND})
@@ -977,11 +974,11 @@ calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
 
 calligra_drop_product_on_bad_condition( PART_QTQUICK
     Qt5OpenGL_FOUND "Qt OpenGL not found"
-    QT_QTDECLARATIVE_FOUND "QtDeclarative not found"
+    Qt5Declarative_FOUND "QtDeclarative not found"
 )
 
 calligra_drop_product_on_bad_condition( PART_COMPONENTS
-    QT_QTQUICK_FOUND "QtQuick not found"
+    Qt5Quick_FOUND "QtQuick not found"
 )
 
 calligra_drop_product_on_bad_condition( APP_SLIDECOMPARE
