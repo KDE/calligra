@@ -998,7 +998,6 @@ calligra_drop_product_on_bad_condition( PART_COMPONENTS
 
 calligra_drop_product_on_bad_condition( APP_GEMINI
     USEOPENGL "USEOPENGL set to FALSE"
-    QT_QTOPENGL_FOUND "Qt OpenGL not found"
 )
 
 calligra_drop_product_on_bad_condition( APP_SLIDECOMPARE
