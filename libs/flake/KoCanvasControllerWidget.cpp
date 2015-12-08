@@ -45,10 +45,6 @@
 
 #include <KoConfig.h>
 
-#ifdef HAVE_OPENGL
-#include <QOpenGLWidget>
-#endif
-
 #include <math.h>
 
 void KoCanvasControllerWidget::Private::setDocumentOffset()
@@ -64,23 +60,12 @@ void KoCanvasControllerWidget::Private::setDocumentOffset()
     QWidget *canvasWidget = canvas->canvasWidget();
 
     if (canvasWidget) {
-        bool isCanvasOpenGL = false;
         QWidget *canvasWidget = canvas->canvasWidget();
-        if (canvasWidget) {
-#ifdef HAVE_OPENGL
-            if (qobject_cast<QOpenGLWidget*>(canvasWidget) != 0) {
-                isCanvasOpenGL = true;
-            }
-#endif
-        }
-
-        if (!isCanvasOpenGL) {
-            QPoint diff = q->documentOffset() - pt;
-            if (q->canvasMode() == Spreadsheet && canvasWidget->layoutDirection() == Qt::RightToLeft) {
-                canvasWidget->scroll(-diff.x(), diff.y());
-            } else {
-                canvasWidget->scroll(diff.x(), diff.y());
-            }
+        QPoint diff = q->documentOffset() - pt;
+        if (q->canvasMode() == Spreadsheet && canvasWidget->layoutDirection() == Qt::RightToLeft) {
+            canvasWidget->scroll(-diff.x(), diff.y());
+        } else {
+            canvasWidget->scroll(diff.x(), diff.y());
         }
     }
 

@@ -219,12 +219,16 @@ ki18n_wrap_ui(flake_SRCS
 add_library(flake SHARED ${flake_SRCS})
 generate_export_header(flake BASE_NAME flake)
 
-target_link_libraries(flake pigmentcms kowidgetutils koodf kundo2 KF5::IconThemes Qt5::Svg)
-target_link_libraries(flake LINK_INTERFACE_LIBRARIES pigmentcms kowidgetutils koodf kundo2)
-
-if(HAVE_OPENGL)
-    target_link_libraries(flake ${OPENGL_LIBRARIES} Qt5::OpenGL)
-endif()
+target_link_libraries(flake
+    PUBLIC
+        pigmentcms
+        kowidgetutils
+        koodf
+        kundo2
+    PRIVATE
+        KF5::IconThemes
+        Qt5::Svg
+)
 
 set_target_properties(flake PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
