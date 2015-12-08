@@ -28,7 +28,6 @@ set(karbonui_SRCS
     dockers/KarbonLayerSortingModel.cpp
 
     widgets/KarbonCanvas.cpp
-    widgets/KarbonGradientWidget.cpp
     widgets/KarbonSmallStylePreview.cpp
     widgets/KarbonPaletteBarWidget.cpp
     widgets/KarbonPaletteWidget.cpp
