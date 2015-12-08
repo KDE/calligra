@@ -189,12 +189,9 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS
         ConfigWidgets 
         CoreAddons
         DBusAddons
-        Emoticons 
-        GlobalAccel
         GuiAddons 
         I18n 
         IconThemes 
-        ItemModels 
         ItemViews
         KDELibs4Support
         KIO 
