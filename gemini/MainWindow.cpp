@@ -38,7 +38,6 @@
 #include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QFileInfo>
-#include <QGLWidget>
 #include <QUrl>
 #include <QStandardPaths>
 

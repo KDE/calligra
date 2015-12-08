@@ -76,10 +76,8 @@ add_executable(calligragemini ${calligragemini_SRCS})
 target_link_libraries(calligragemini
     Qt5::Quick
     Qt5::Qml
-    Qt5::OpenGL
     Qt5::Gui
     Qt5::Core
-    ${GLEW_LIBRARIES}
     KF5::IconThemes
     komain
     wordsprivate
