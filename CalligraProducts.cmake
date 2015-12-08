@@ -130,6 +130,7 @@ calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligr
 calligra_define_product(PLUGIN_VECTORSHAPE "Vectorgraphic shape plugin"  REQUIRES LIB_CALLIGRA LIB_KOVECTORIMAGE)
 calligra_define_product(PLUGIN_SEMANTICITEMS "Semantic items plugins" REQUIRES FEATURE_RDF LIB_CALLIGRA)
 calligra_define_product(PLUGIN_SHAPEFILTEREFFECTS "Default shape filtereffects plugin" REQUIRES LIB_CALLIGRA)
+calligra_define_product(PLUGIN_STENCILSDOCKER "Stencils docker plugin" REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_KARBONPLUGINS "Semantic items plugins" REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_CALLIGRAGEMINI_GIT "Git support plugin for Calligra Gemini" UNPORTED)
 
@@ -390,6 +391,7 @@ calligra_define_productset(KARBON "Full Karbon (for Desktop)"
     REQUIRES
         APP_KARBON
         PLUGIN_KARBONPLUGINS
+        PLUGIN_STENCILSDOCKER
         PLUGIN_SHAPEFILTEREFFECTS
     OPTIONAL
         # extras

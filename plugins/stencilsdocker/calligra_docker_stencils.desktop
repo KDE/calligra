@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Calligra Stencils Docker plugin
+X-KDE-ServiceTypes=Calligra/Dock
+Type=Service
+X-KDE-PluginInfo-Name=calligra_docker_stencils
+X-KDE-Library=calligra_docker_stencils
+X-Flake-MinVersion=28
+X-Flake-PluginVersion=28

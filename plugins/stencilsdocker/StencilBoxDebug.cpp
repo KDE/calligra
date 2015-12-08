@@ -1,5 +1,5 @@
-/* This file is part of the Calligra project
- * Copyright (C) 2014 Yue Liu <yue.liu@mail.com>
+/*
+ * Copyright (c) 2015 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,25 +16,11 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef STENCILBOXDOCKERFACTORY_H
-#define STENCILBOXDOCKERFACTORY_H
 
-#include "StencilBoxDocker.h"
-#include <KoDockFactoryBase.h>
-#include <QDockWidget>
+#include "StencilBoxDebug.h"
 
-class StencilBoxDockerFactory : public KoDockFactoryBase
+const QLoggingCategory &STENCILBOX_LOG()
 {
-public:
-    QString id() const {
-        return QString("StencilBox");
-    }
-    QDockWidget* createDockWidget() {
-        return new StencilBoxDocker();
-    }
-    DockPosition defaultDockPosition() const {
-        return DockLeft;
-    }
-};
-
-#endif //STENCILBOXDOCKERFACTORY_H
+    static const QLoggingCategory category("calligra.plugin.stencilboxdock");
+    return category;
+}

@@ -18,6 +18,7 @@
  */
 
 #include "CollectionTreeWidget.h"
+
 #include "StencilListView.h"
 #include "CollectionItemModel.h"
 #include "StencilBoxDebug.h"

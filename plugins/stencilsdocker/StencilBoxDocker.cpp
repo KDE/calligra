@@ -125,7 +125,7 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
 #ifdef GHNS
 void StencilBoxDocker::getHotNewStuff()
 {
-    KNS3::DownloadDialog dialog("karbon_stencils.knsrc", this);
+    KNS3::DownloadDialog dialog("calligra_stencils.knsrc", this);
     dialog.exec();
     if(!dialog.installedEntries().isEmpty()) {
         KMessageBox::information(0, i18n("Stencils successfully installed."));
@@ -138,7 +138,7 @@ void StencilBoxDocker::getHotNewStuff()
 
 void StencilBoxDocker::manageStencilsFolder()
 {
-    const QString destination = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/karbon/stencils");
+    const QString destination = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/calligra/stencils");
     QDir().mkpath(destination);
     QFile file(destination + "/readme.txt");
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -173,7 +173,7 @@ If CS-KeepAspectRatio=1, the stencil added to canvas will have geometry aspect r
 \n\
 foo.png\n\
 \n\
-Should have size 32x32 pixel, if the png file is not included, Karbon will render the ODG/SVG file as the icon,\n\
+Should have size 32x32 pixel, if the png file is not included, the ODG/SVG file will be rendered as the icon,\n\
 but it won't look good under small pixels when the stencil stroke is complicated.\n");
         file.close();
     }
@@ -205,7 +205,7 @@ void StencilBoxDocker::reapplyFilter()
 /// Load shape collections to m_modelMap and register in the KoShapeRegistry
 void StencilBoxDocker::loadShapeCollections()
 {
-    const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("karbon/stencils"), QStandardPaths::LocateDirectory);
+    const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("calligra/stencils"), QStandardPaths::LocateDirectory);
     foreach(const QString& path, dirs)
     {
         debugStencilBox << path;

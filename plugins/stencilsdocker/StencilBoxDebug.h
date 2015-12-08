@@ -1,5 +1,5 @@
-/* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+/*
+ * Copyright (c) 2015 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,19 +16,18 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef STENCIL_BOX_PLUGIN_H
-#define STENCIL_BOX_PLUGIN_H
 
-#include <QObject>
-#include <QVariantList>
+#ifndef STENCILBOX_DEBUG_H
+#define STENCILBOX_DEBUG_H
 
-class StencilBoxPlugin : public QObject {
-    Q_OBJECT
+#include <QDebug>
+#include <QLoggingCategory>
 
-public:
-    StencilBoxPlugin(QObject * parent, const QVariantList & );
-    ~StencilBoxPlugin() {}
-};
+
+extern const QLoggingCategory &STENCILBOX_LOG();
+
+#define debugStencilBox qCDebug(STENCILBOX_LOG)
+#define warnStencilBox qCWarning(STENCILBOX_LOG)
+#define errorStencilBox qCCritical(STENCILBOX_LOG)
 
 #endif
-

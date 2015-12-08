@@ -16,13 +16,15 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 #include "StencilBoxPlugin.h"
+
 #include "StencilBoxDockerFactory.h"
 
 #include <KoDockRegistry.h>
 #include <kpluginfactory.h>
 
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "karbon_stencilbox.json",
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_docker_stencils.json",
                            registerPlugin<StencilBoxPlugin>();)
 
 StencilBoxPlugin::StencilBoxPlugin(QObject *parent, const QVariantList&)

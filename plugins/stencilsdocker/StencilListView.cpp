@@ -18,6 +18,7 @@
  */
 
 #include "StencilListView.h"
+
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QDebug>

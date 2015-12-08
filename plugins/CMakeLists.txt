@@ -84,6 +84,10 @@ if(SHOULD_BUILD_PLUGIN_SHAPEFILTEREFFECTS)
     add_subdirectory( shapefiltereffects )
 endif()
 
+if(SHOULD_BUILD_PLUGIN_STENCILSDOCKER)
+    add_subdirectory( stencilsdocker)
+endif()
+
 if(SHOULD_BUILD_PLUGIN_KARBONPLUGINS)
     add_subdirectory( karbonplugins )
 endif()
