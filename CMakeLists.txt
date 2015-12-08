@@ -312,11 +312,6 @@ endif ()
 
 find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
-find_package(PNG REQUIRED)
-if (APPLE)
-    # this is not added correctly on OSX -- see http://forum.kde.org/viewtopic.php?f=139&t=101867&p=221242#p221242
-    include_directories(${PNG_INCLUDE_DIR})
-endif()
 
 add_definitions(-DBOOST_ALL_NO_LIB)
 find_package(Boost REQUIRED COMPONENTS system) # for pigment and stage
