@@ -24,6 +24,12 @@ if(NOT ${CMAKE_VERSION} VERSION_LESS 3.3.0)
     cmake_policy(SET CMP0063 OLD)
 endif()
 
+# ensure out-of-source build
+string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_BINARY_DIR}" isBuildInSource)
+if(isBuildInSource)
+    message(FATAL_ERROR "Compiling Calligra inside the source directory is not possible. Please refer to the build instruction https://community.kde.org/Calligra/Building/3")
+endif()
+
 # QT5TODO: remove KDE4_BUILD_TESTS once all kde4_add_unit_test have been converted
 # transitional forward compatibility:
 # BUILD_TESTING is cmake standard, KDE4_BUILD_TESTS not used by ECM/KF5, but only
@@ -76,7 +82,6 @@ set(GENERIC_CALLIGRA_LIB_SOVERSION "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
                       "${CMAKE_SOURCE_DIR}/cmake/modules")
-LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/transitional")
 
 message("Module path:" ${CMAKE_MODULE_PATH})
 
@@ -184,7 +189,10 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
 # own macros
-include(MacroLibrary)
+include(MacroBoolTo01)
+include(MacroLogFeature)
+include(MacroOptionalFindPackage)
+include(MacroEnsureVersion)
 include(MacroJPEG)
 
 
@@ -239,8 +247,6 @@ if (GHNS)
         message(STATUS "WARNING: You are compiling with Get Hot New Stuff enabled. Do not do that when building distribution packages. GHNS is unusable these days until someone starts maintaining it again.")
     endif ()
 endif ()
-
-macro_ensure_out_of_source_build("Compiling Calligra inside the source directory is not possible. Please refer to the build instruction http://community.kde.org/Calligra/Building/Building_Calligra")
 
 find_package(X11)
 if(X11_FOUND)
