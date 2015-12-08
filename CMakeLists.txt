@@ -114,8 +114,6 @@ message(STATUS "Release build: ${RELEASE_BUILD}")
 #############
 ############
 
-# FIXME: find if that still needs to be an option
-option(USEOPENGL "Allow the use of OpenGL" ON)
 option(GHNS "support Get Hot New Stuff" OFF)
 option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." ON)
 
@@ -222,7 +220,7 @@ endif()
 
 find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport
                                            Script Svg Test Concurrent)
-find_package(Qt5 5.3.0 COMPONENTS UiTools Sql WebKit WebKitWidgets DBus Declarative Qml Quick X11Extras)
+find_package(Qt5 5.3.0 COMPONENTS UiTools Sql WebKit WebKitWidgets DBus Declarative Qml Quick OpenGL X11Extras)
 
 set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
 set(QT_QTWEBKIT_FOUND ${Qt5WebKit_FOUND})
@@ -231,10 +229,7 @@ set(QT_QTQUICK_FOUND ${Qt5Quick_FOUND})
 
 set(QT_QTTEST_LIBRARY Qt5::Test)
 
-if (USEOPENGL)
-    find_package(Qt5 5.3.0 REQUIRED OpenGL)
-    set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
-endif ()
+set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
 
 
 
@@ -985,23 +980,16 @@ calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
 )
 
 calligra_drop_product_on_bad_condition( PART_QTQUICK
-    USEOPENGL "USEOPENGL set to FALSE"
     QT_QTOPENGL_FOUND "Qt OpenGL not found"
     QT_QTDECLARATIVE_FOUND "QtDeclarative not found"
 )
 
 calligra_drop_product_on_bad_condition( PART_COMPONENTS
-    USEOPENGL "USEOPENGL set to FALSE"
     QT_QTOPENGL_FOUND "Qt OpenGL not found"
     QT_QTQUICK_FOUND "QtQuick not found"
 )
 
-calligra_drop_product_on_bad_condition( APP_GEMINI
-    USEOPENGL "USEOPENGL set to FALSE"
-)
-
 calligra_drop_product_on_bad_condition( APP_SLIDECOMPARE
-    USEOPENGL "USEOPENGL set to FALSE"
     QT_QTOPENGL_FOUND "Qt OpenGL not found"
 )
 
