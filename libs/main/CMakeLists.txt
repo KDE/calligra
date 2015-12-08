@@ -105,7 +105,7 @@ PRIVATE
 )
 
 if( KF5_Activities_FOUND )
-    target_link_libraries(komain PUBLIC KF5::Activities)
+    target_link_libraries(komain PRIVATE KF5::Activities)
 endif()
 
 if (APPLE)
