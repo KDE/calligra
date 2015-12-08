@@ -222,7 +222,6 @@ find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSup
                                            Script Svg Test Concurrent)
 find_package(Qt5 5.3.0 COMPONENTS UiTools Sql WebKit WebKitWidgets DBus Declarative Qml Quick OpenGL X11Extras)
 
-set(QT_QTWEBKIT_FOUND ${Qt5WebKit_FOUND})
 set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
 set(QT_QTQUICK_FOUND ${Qt5Quick_FOUND})
 
@@ -584,8 +583,8 @@ macro_log_feature(Qt5Sql_FOUND "Qt Sql"
 ##
 ## Test for Qt Webkit
 ##
-macro_log_feature(QT_QTWEBKIT_FOUND "Qt Webkit" "Qt binding for Webkit, the HTML engine." "http://qt.io" FALSE "" "Required for the web shape, web Kexi widget and web report element")
-if(QT_QTWEBKIT_FOUND)
+macro_log_feature(Qt5WebKit_FOUND "Qt Webkit" "Qt binding for Webkit, the HTML engine." "http://qt.io" FALSE "" "Required for the web shape, web Kexi widget and web report element")
+if(Qt5WebKit_FOUND)
     add_definitions( -DCAN_USE_QTWEBKIT )
 endif()
 
