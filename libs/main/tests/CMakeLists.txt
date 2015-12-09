@@ -27,7 +27,8 @@ komain_add_unit_test(filterGraphTest filter_graph.cpp  LINK_LIBRARIES komain)
 ########### next target ###############
 
 set(rtreetestapp_SRCS rtreetestapp.cpp Tool.cpp )
-kde4_add_executable(rtreetestapp TEST ${rtreetestapp_SRCS})
+add_executable(rtreetestapp ${rtreetestapp_SRCS})
+ecm_mark_as_test(rtreetestapp)
 target_link_libraries(rtreetestapp komain Qt5::Test )
 
 ########### next target ###############

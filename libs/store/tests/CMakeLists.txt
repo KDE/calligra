@@ -22,7 +22,8 @@ kostore_add_unit_test(TestKoXmlVector ${xmlvectortest_SRCS}  LINK_LIBRARIES Qt5:
 ########### next target ###############
 
 set(storedroptest_SRCS storedroptest.cpp )
-kde4_add_executable(storedroptest TEST ${storedroptest_SRCS})
+add_executable(storedroptest ${storedroptest_SRCS})
+ecm_mark_as_test(storedroptest)
 target_link_libraries(storedroptest kostore KF5::I18n Qt5::Widgets)
 
 

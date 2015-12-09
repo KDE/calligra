@@ -218,7 +218,8 @@ remove_definitions("-DCALLIGRA_SHEETS_UNIT_TEST")
 ########### next target ###############
 
 set(TestGraphicsView_SRCS TestGraphicsView.cpp)
-kde4_add_executable(TestGraphicsView TEST ${TestGraphicsView_SRCS})
+add_executable(TestGraphicsView ${TestGraphicsView_SRCS})
+ecm_mark_as_test(TestGraphicsView)
 target_link_libraries(TestGraphicsView calligrasheetscommon)
 
 ########### next target ###############
@@ -252,17 +253,20 @@ sheets_add_unit_test(PasteCommand
 ########### Benchmarks ###############
 
 # set(BenchmarkCluster_SRCS BenchmarkCluster.cpp ../Cluster.cpp) # explicit Cluster.cpp for no extra symbol visibility
-# kde4_add_executable(BenchmarkCluster TEST ${BenchmarkCluster_SRCS})
+# add_executable(BenchmarkCluster ${BenchmarkCluster_SRCS})
+# ecm_mark_as_test(BenchmarkCluster)
 # target_link_libraries(BenchmarkCluster calligrasheetscommon Qt5::Test)
 
 ########### next target ###############
 
 set(BenchmarkPointStorage_SRCS BenchmarkPointStorage.cpp)
-kde4_add_executable(BenchmarkPointStorage TEST ${BenchmarkPointStorage_SRCS})
+add_executable(BenchmarkPointStorage ${BenchmarkPointStorage_SRCS})
+ecm_mark_as_test(BenchmarkPointStorage)
 target_link_libraries(BenchmarkPointStorage Qt5::Test KF5::KDELibs4Support)
 
 ########### next target ###############
 
 set(BenchmarkRTree_SRCS BenchmarkRTree.cpp)
-kde4_add_executable(BenchmarkRTree TEST ${BenchmarkRTree_SRCS})
+add_executable(BenchmarkRTree ${BenchmarkRTree_SRCS})
+ecm_mark_as_test(BenchmarkRTree)
 target_link_libraries(BenchmarkRTree KF5::KDELibs4Support Qt5::Test)

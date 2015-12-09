@@ -35,7 +35,8 @@ pigment_add_unit_test(TestKoColorSpaceMaths TestKoColorSpaceMaths.cpp  LINK_LIBR
 
 ########### next target ###############
 set(CCSGraph_GRAPH CCSGraph.cpp)
-kde4_add_executable(CCSGraph ${CCSGraph_GRAPH})
+add_executable(CCSGraph ${CCSGraph_GRAPH})
+ecm_mark_as_test(CCSGraph)
 target_link_libraries(CCSGraph  pigmentcms KF5::I18n )
 
 ########### next target ###############
