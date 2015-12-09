@@ -228,7 +228,8 @@ install(TARGETS authorpart DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 set(author_KDEINIT_SRCS author/main.cpp )
 
-#kde4_add_app_icon(author_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/author/hi*-app-calligraauthor.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/*-apps-calligraauthor.png")
+ecm_add_app_icon(author_KDEINIT_SRCS ICONS ${ICONS_SRCS})
 
 kf5_add_kdeinit_executable( calligraauthor ${author_KDEINIT_SRCS})
 
