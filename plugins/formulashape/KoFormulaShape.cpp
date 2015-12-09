@@ -20,9 +20,10 @@
 
 #include "KoFormulaShape.h"
 
+#include <QUrl>
+
 #include <kmessagebox.h>
 #include <kguiitem.h>
-#include <kurl.h>
 
 #include <KoStore.h>
 #include <KoDocumentEntry.h>
@@ -156,7 +157,7 @@ bool KoFormulaShape::loadEmbeddedDocument( KoStore *store,
 #define INTERNAL_PROTOCOL "intern"
 #define STORE_PROTOCOL "tar"
 
-    if (KUrl::isRelativeUrl( url )) {
+    if (QUrl::fromUserInput(url).isRelative()) {
         if ( url.startsWith( "./" ) )
             tmpURL = QString( INTERNAL_PROTOCOL ) + ":/" + url.mid( 2 );
         else
@@ -170,7 +171,7 @@ bool KoFormulaShape::loadEmbeddedDocument( KoStore *store,
         path = store->currentPath();
         if ( !path.isEmpty() && !path.endsWith( '/' ) )
             path += '/';
-        QString relPath = KUrl( tmpURL ).path();
+        QString relPath = QUrl::fromUserInput(tmpURL).path();
         path += relPath.mid( 1 ); // remove leading '/'
     }
     if ( !path.endsWith( '/' ) )
@@ -199,18 +200,18 @@ bool KoFormulaShape::loadEmbeddedDocument( KoStore *store,
     bool res = true;
     if ( tmpURL.startsWith( STORE_PROTOCOL )
          || tmpURL.startsWith( INTERNAL_PROTOCOL )
-         || KUrl::isRelativeUrl( tmpURL ) )
+         || QUrl::fromUserInput(tmpURL).isRelative() )
     {
         if ( isOdf ) {
             store->pushDirectory();
             Q_ASSERT( tmpURL.startsWith( INTERNAL_PROTOCOL ) );
-            QString relPath = KUrl( tmpURL ).path().mid( 1 );
+            QString relPath = QUrl::fromUserInput(tmpURL).path().mid( 1 );
             store->enterDirectory( relPath );
             res = m_document->loadOasisFromStore( store );
             store->popDirectory();
         } else {
             if ( tmpURL.startsWith( INTERNAL_PROTOCOL ) )
-                tmpURL = KUrl( tmpURL ).path().mid( 1 );
+                tmpURL = QUrl::fromUserInput(tmpURL).path().mid( 1 );
             res = m_document->loadFromStore( store, tmpURL );
         }
         m_document->setStoreInternal( true );
@@ -218,7 +219,7 @@ bool KoFormulaShape::loadEmbeddedDocument( KoStore *store,
     else {
         // Reference to an external document. Hmmm...
         m_document->setStoreInternal( false );
-        KUrl url( tmpURL );
+        QUrl url = QUrl::fromUserInput(tmpURL);
         if ( !url.isLocalFile() ) {
             //QApplication::restoreOverrideCursor();
 
