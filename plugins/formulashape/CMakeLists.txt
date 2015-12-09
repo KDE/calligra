@@ -63,8 +63,7 @@ set( kformula_LIB_SRCS
 add_library(kformula SHARED ${kformula_LIB_SRCS})
 generate_export_header(kformula EXPORT_MACRO_NAME KOFORMULA_EXPORT)
 
-target_link_libraries(kformula komain KF5::KDELibs4Support)
-target_link_libraries(kformula LINK_INTERFACE_LIBRARIES komain KF5::KDELibs4Support)
+target_link_libraries(kformula  PUBLIC komain)
 
 set_target_properties(kformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
