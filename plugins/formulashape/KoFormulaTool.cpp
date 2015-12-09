@@ -37,10 +37,10 @@
 #include <QKeyEvent>
 #include <QAction>
 #include <QPainter>
-#include <kurl.h>
 #include <QFile>
 #include <QSignalMapper>
-#include <kfiledialog.h>
+#include <QFileDialog>
+
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
@@ -367,13 +367,13 @@ void KoFormulaTool::resetFormulaEditor() {
 
 void KoFormulaTool::loadFormula()
 {
-    // get an url
-    KUrl url = KFileDialog::getOpenUrl();
-    if( url.isEmpty() || !shape() )
+    // get an filepath
+    const QString fileName = QFileDialog::getOpenFileName();
+    if( fileName.isEmpty() || !shape() )
         return;
 
-    // open the file the url points to
-    QFile file( url.path() );
+    // open the file the filepath points to
+    QFile file( fileName );
     if( !file.open( QIODevice::ReadOnly | QIODevice::Text ) )
         return;
 
@@ -392,11 +392,11 @@ void KoFormulaTool::loadFormula()
 
 void KoFormulaTool::saveFormula()
 {
-    KUrl url = KFileDialog::getSaveUrl();
-    if( url.isEmpty() || !shape() )
+    const QString filePath = QFileDialog::getSaveFileName();
+    if( filePath.isEmpty() || !shape() )
         return;
 
-    QFile file( url.path() );
+    QFile file( filePath );
     KoXmlWriter writer( &file );
     KoGenStyles styles;
     KoEmbeddedDocumentSaver embeddedSaver;
