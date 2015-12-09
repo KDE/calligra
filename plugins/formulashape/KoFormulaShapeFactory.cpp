@@ -19,7 +19,6 @@
 #include "KoFormulaShapeFactory.h"
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
 
 #include <KoIcon.h>
 #include <KoShapeFactoryBase.h>
@@ -27,6 +26,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
 
+#include "FormulaDebug.h"
 #include "KoFormulaShape.h"
 
 

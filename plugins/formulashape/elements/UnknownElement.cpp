@@ -21,12 +21,14 @@
 */
 
 #include "UnknownElement.h"
+
 #include "AttributeManager.h"
 #include "FormulaCursor.h"
+#include "FormulaDebug.h"
 
 #include <KoXmlReader.h>
+
 #include <QPainter>
-#include <kdebug.h>
 
 UnknownElement::UnknownElement( BasicElement* parent ) : BasicElement( parent )
 {

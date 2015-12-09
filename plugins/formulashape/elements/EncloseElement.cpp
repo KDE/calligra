@@ -18,9 +18,11 @@
 */
 
 #include "EncloseElement.h"
+
 #include "AttributeManager.h"
+#include "FormulaDebug.h"
+
 #include <QPainter>
-#include "kdebug.h"
 
 EncloseElement::EncloseElement( BasicElement* parent ) : RowElement( parent )
 {

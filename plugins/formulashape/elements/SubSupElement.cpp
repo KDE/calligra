@@ -19,12 +19,15 @@
 */
 
 #include "SubSupElement.h"
+
 #include "FormulaCursor.h"
 #include "AttributeManager.h"
+#include "FormulaDebug.h"
+
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
+
 #include <QPainter>
-#include <kdebug.h>
 
 SubSupElement::SubSupElement( BasicElement* parent, ElementType elementType )
     : FixedElement( parent )
@@ -172,12 +175,12 @@ bool SubSupElement::readMathMLContent( const KoXmlElement& parent )
                 loadElement(tmp, &m_superScript);
             }
             else {
-                kDebug(39001) << "Too many arguments to "
+                debugFormula  << "Too many arguments to "
                               << ElementFactory::elementName(m_elementType);
             }
             break;
         default:
-            kDebug(39001) << "Too many arguments to "
+            debugFormula  << "Too many arguments to "
                           << ElementFactory::elementName(m_elementType);
         }
         counter++;
@@ -185,7 +188,7 @@ bool SubSupElement::readMathMLContent( const KoXmlElement& parent )
 
     // Check for too few arguments.
     if ((counter < 3 && m_elementType == SubSupScript) || (counter < 2)) {
-        kDebug(39001) << "Not enough arguments to "<< ElementFactory::elementName(m_elementType);
+        debugFormula << "Not enough arguments to "<< ElementFactory::elementName(m_elementType);
         return false;
     }
 

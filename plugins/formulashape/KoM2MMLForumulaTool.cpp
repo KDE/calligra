@@ -32,13 +32,12 @@
 #include <QSpacerItem>
 #include <QWidget>
 
-#include <kdebug.h>
-
 #include <KoCanvasBase.h>
 #include <KoIcon.h>
 #include <KoXmlReader.h>
 
 #include <AnnotationElement.h>
+#include "FormulaDebug.h"
 #include "KoFormulaShape.h"
 #include "FormulaCommand.h"
 #include "FormulaCommandUpdate.h"
@@ -201,7 +200,7 @@ void KoM2MMLFormulaTool::setMathML(const QString& mathml, const QString& mode)
     annot->setAttribute("mode", mode);
     formulaElement->insertChild(0, annot);
     
-    kDebug() << mathml;
+    debugFormula << mathml;
     
     canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, new FormulaCommandLoad(m_formulaShape->formulaData(), formulaElement)));
     m_errorLabel->setText("");

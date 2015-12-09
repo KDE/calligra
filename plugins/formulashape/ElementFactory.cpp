@@ -47,13 +47,13 @@
 #include "UnderOverElement.h"
 #include "SquareRootElement.h"
 #include "UnknownElement.h"
+#include "FormulaDebug.h"
 
-#include <kdebug.h>
 
 BasicElement* ElementFactory::createElement( const QString& tagName,
                                              BasicElement* parent )
 {
-//    kWarning( DEBUGID ) << "Creating element: " << tagName;
+//    warnFormulaElement << "Creating element: " << tagName;
     if ( tagName == "mi" )
         return new IdentifierElement( parent );
     else if ( tagName == "mo" )
@@ -111,7 +111,7 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
     else if ( tagName == "annotation" )
           return new AnnotationElement( parent );
 
-    kWarning( DEBUGID ) << "Do not know how to create the following element: " << tagName;
+    warnFormulaElement << "Do not know how to create the following element: " << tagName;
     return new UnknownElement( parent );
 }
 
@@ -181,7 +181,7 @@ QString ElementFactory::elementName( ElementType type )
         case Annotation:
             return "annotation";
         default:
-            kWarning( DEBUGID ) << "Invalid element type " << type;
+            warnFormulaElement << "Invalid element type " << type;
     }
 
     return QString();

@@ -21,6 +21,7 @@
 */
 
 #include "FormulaEditor.h"
+
 #include "BasicElement.h"
 #include "RowElement.h"
 #include "FixedElement.h"
@@ -33,12 +34,13 @@
 #include "IdentifierElement.h"
 #include "ElementFactory.h"
 #include "FormulaCommand.h"
+#include "FormulaDebug.h"
+
 #include <QPainter>
 #include <QPen>
 #include <algorithm>
 #include <QObject>
 
-#include <kdebug.h>
 #include <klocalizedstring.h>
 #include <kundo2command.h>
 #include <KoOdfLoadingContext.h>
@@ -96,7 +98,7 @@ FormulaCommand* FormulaEditor::insertMathML( const QString& data )
     BasicElement* element=ElementFactory::createElement(tmpDocument.documentElement().tagName(),0);
     element->readMathML( tmpDocument.documentElement() );     // and load the new formula
     FormulaCommand* command=insertElement( element );
-    kDebug()<<"Inserting "<< tmpDocument.documentElement().tagName();
+    debugFormula << "Inserting "<< tmpDocument.documentElement().tagName();
     if (command==0) {
         delete element;
     }

@@ -18,6 +18,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/plugins/formulashape
 ########### KFormula Library ###############
 
 set( kformula_LIB_SRCS
+   FormulaDebug.cpp
    AttributeManager.cpp
    FormulaRenderer.cpp
    FormulaData.cpp

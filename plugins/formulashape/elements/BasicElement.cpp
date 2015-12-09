@@ -22,15 +22,18 @@
 */
 
 #include "BasicElement.h"
+
 #include "AttributeManager.h"
+#include "FormulaCursor.h"
+#include "TableDataElement.h"
+#include "FormulaDebug.h"
+
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
+
 #include <QPainter>
 #include <QVariant>
 
-#include <kdebug.h>
-#include "FormulaCursor.h"
-#include "TableDataElement.h"
 
 BasicElement::BasicElement( BasicElement* p ) : m_parentElement( p )
 {
@@ -138,7 +141,7 @@ bool BasicElement::replaceChild( BasicElement* oldelement, BasicElement* newelem
 
 const QList<BasicElement*> BasicElement::childElements() const
 {
-    kWarning( 39001) << "Returning no elements from BasicElement";
+    warnFormula << "Returning no elements from BasicElement";
     return QList<BasicElement*>();
 }
 
@@ -477,7 +480,7 @@ void BasicElement::writeElementTree(int indent, bool wrong) const
     if (wrong) {
         s+=" -> wrong parent !!!";
     }
-    kDebug()<<s;
+    debugFormula << s;
     foreach (BasicElement* tmp, childElements()) {
         if (tmp->parentElement()!=this) {
             tmp->writeElementTree(indent+1,true);

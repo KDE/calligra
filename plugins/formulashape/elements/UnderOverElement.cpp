@@ -19,10 +19,13 @@
 */
 
 #include "UnderOverElement.h"
+
 #include "FormulaCursor.h"
 #include "AttributeManager.h"
+#include "FormulaDebug.h"
+
 #include <KoXmlReader.h>
-#include <kdebug.h>
+
 #include <QPainter>
 
 
@@ -141,7 +144,7 @@ bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
         } else if ((counter==2 && m_elementType==UnderOver) || (counter==1 && m_elementType==Over)) {
             loadElement(tmp,&m_overElement);
         } else if ((counter==3 && m_elementType==UnderOver) || (counter==2)) {
-            kDebug(39001) << "Too many arguments to "
+            debugFormula  << "Too many arguments to "
                           << ElementFactory::elementName(m_elementType)
                           << "counter =" << counter;
             return false;
@@ -150,7 +153,7 @@ bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
     }
     
     if ((counter<3 && m_elementType==UnderOver) || (counter<2)) {
-        kDebug(39001) << "Not enough arguments to "
+        debugFormula  << "Not enough arguments to "
 
                       << ElementFactory::elementName(m_elementType)
                       << "counter =" << counter

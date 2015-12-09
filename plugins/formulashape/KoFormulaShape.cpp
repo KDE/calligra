@@ -20,7 +20,6 @@
 
 #include "KoFormulaShape.h"
 
-#include <kdebug.h>
 #include <kmessagebox.h>
 #include <kguiitem.h>
 #include <kurl.h>
@@ -35,6 +34,7 @@
 #include <KoXmlNS.h>
 #include <KoDocumentResourceManager.h>
 
+#include "FormulaDebug.h"
 #include "FormulaDocument.h"
 #include "FormulaData.h"
 #include "FormulaElement.h"
@@ -95,7 +95,7 @@ FormulaRenderer* KoFormulaShape::formulaRenderer() const
 
 bool KoFormulaShape::loadOdf( const KoXmlElement& element, KoShapeLoadingContext &context )
 {
-    kDebug() <<"Loading ODF in Formula";
+    debugFormula <<"Loading ODF in Formula";
     loadOdfAttributes(element, context, OdfAllAttributes);
     return loadOdfFrame(element, context);
 }
@@ -116,7 +116,7 @@ bool KoFormulaShape::loadOdfFrameElement(const KoXmlElement &element,
     // It's not a frame:object, so it must be inline.
     const KoXmlElement& topLevelElement = KoXml::namedItemNS(element, KoXmlNS::math, "math");
     if (topLevelElement.isNull()) {
-        kWarning() << "no math element as first child";
+        warnFormula << "no math element as first child";
         return false;
     }
 
@@ -137,7 +137,7 @@ bool KoFormulaShape::loadEmbeddedDocument( KoStore *store,
                                            const KoOdfLoadingContext &odfLoadingContext)
 {
     if ( !objectElement.hasAttributeNS( KoXmlNS::xlink, "href" ) ) {
-        kError() << "Object element has no valid xlink:href attribute";
+        errorFormula << "Object element has no valid xlink:href attribute";
         return false;
     }
 
@@ -177,19 +177,19 @@ bool KoFormulaShape::loadEmbeddedDocument( KoStore *store,
         path += '/';
 
     const QString mimeType = odfLoadingContext.mimeTypeForPath( path );
-    //kDebug(35001) << "path for manifest file=" << path << "mimeType=" << mimeType;
+    //debugFormula << "path for manifest file=" << path << "mimeType=" << mimeType;
     if ( mimeType.isEmpty() ) {
-        //kDebug(35001) << "Manifest doesn't have media-type for" << path;
+        //debugFormula << "Manifest doesn't have media-type for" << path;
         return false;
     }
 
     const bool isOdf = mimeType.startsWith( "application/vnd.oasis.opendocument" );
     if ( !isOdf ) {
         tmpURL += "/maindoc.xml";
-        //kDebug(35001) << "tmpURL adjusted to" << tmpURL;
+        //debugFormula << "tmpURL adjusted to" << tmpURL;
     }
 
-    //kDebug(35001) << "tmpURL=" << tmpURL;
+    //debugFormula << "tmpURL=" << tmpURL;
     QString errorMsg;
     KoDocumentEntry e = KoDocumentEntry::queryByMimeType( mimeType );
     if ( e.isEmpty() ) {
@@ -254,12 +254,12 @@ bool KoFormulaShape::loadOdfEmbedded( const KoXmlElement &topLevelElement,
                                       KoShapeLoadingContext &context )
 {
     Q_UNUSED(context);
-    kDebug(31000) << topLevelElement.nodeName();
+    debugFormula << topLevelElement.nodeName();
 
 #if 0
     const KoXmlElement &topLevelElement = KoXml::namedItemNS(element, "http://www.w3.org/1998/Math/MathML", "math");
     if (topLevelElement.isNull()) {
-        kWarning() << "no math element as first child";
+        warnFormula << "no math element as first child";
         return false;
     }
 #endif
@@ -278,7 +278,7 @@ void KoFormulaShape::saveOdf( KoShapeSavingContext& context ) const
 {
     // FIXME: Add saving of embedded document if m_isInline is false;
 
-    kDebug() <<"Saving ODF in Formula";
+    debugFormula << "Saving ODF in Formula";
     KoXmlWriter& writer = context.xmlWriter();
     writer.startElement("draw:frame");
     saveOdfAttributes(context, OdfAllAttributes);

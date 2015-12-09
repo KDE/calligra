@@ -23,13 +23,16 @@
 */
 
 #include "RootElement.h"
+
 #include "AttributeManager.h"
 #include "FormulaCursor.h"
 #include "RowElement.h"
+#include "FormulaDebug.h"
+
 #include <KoXmlReader.h>
+
 #include <QPainter>
 #include <QPen>
-#include <kdebug.h>
 
 RootElement::RootElement( BasicElement* parent ) : FixedElement( parent )
 {
@@ -174,12 +177,12 @@ bool RootElement::readMathMLContent( const KoXmlElement& element )
         } else if (counter==1) {
             loadElement(tmp, &m_exponent);
         } else {
-            kDebug(39001) << "Too many arguments to mroot";
+            debugFormula << "Too many arguments to mroot";
         }
         counter++;
     }
     if (counter < 2) {
-        kDebug(39001) << "Not enough arguments to mroot";
+        debugFormula << "Not enough arguments to mroot";
     }
 
     return true;

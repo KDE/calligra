@@ -18,10 +18,12 @@
 */
 
 #include "SquareRootElement.h"
+
 #include "AttributeManager.h"
+#include "FormulaDebug.h"
+
 #include <QPainter>
 #include <QPen>
-#include <kdebug.h>
 
 SquareRootElement::SquareRootElement( BasicElement* parent ) : RowElement( parent )
 {

@@ -30,7 +30,6 @@
 #include <KoSelection.h>
 #include <KoCanvasBase.h>
 #include <KoUnit.h>
-#include <kdebug.h>
 #include <FormulaEditor.h>
 
 class MockCanvas : public KoCanvasBase

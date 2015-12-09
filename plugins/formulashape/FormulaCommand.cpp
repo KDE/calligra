@@ -21,14 +21,16 @@
 */
 
 #include "FormulaCommand.h"
+
 #include "FormulaCursor.h"
-#include <klocalizedstring.h> 
 #include "TokenElement.h"
 #include "BasicElement.h"
 #include "TableElement.h"
 #include "TableRowElement.h"
 #include "TableDataElement.h"
-#include <kdebug.h>
+#include "FormulaDebug.h"
+
+#include <klocalizedstring.h>
 
 FormulaCommand::FormulaCommand(KUndo2Command* parent)
               : KUndo2Command(parent)

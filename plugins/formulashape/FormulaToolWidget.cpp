@@ -19,18 +19,18 @@
 */
 
 #include "FormulaToolWidget.h"
+
 #include "KoFormulaTool.h"
 #include "KoFormulaShape.h"
 #include "ElementFactory.h"
 #include "BasicElement.h"
+#include "FormulaCursor.h"
+#include "FormulaDebug.h"
+
 #include <QWidgetAction>
 #include <QTableWidget>
-
 #include <QAction>
-
 #include <QMenu>
-#include <kdebug.h>
-#include "FormulaCursor.h"
 
 FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
                   : QTabWidget( parent )

@@ -40,7 +40,6 @@ class AttributeManager;
 class FormulaCursor;
 class QPainterPath;
 class TableDataElement;
-#define DEBUGID 40000
 
 /**
  * @short The base class for all elements of a formula
@@ -286,14 +285,14 @@ public:
     /// @return the formula element that is a descendant of this element
     BasicElement* formulaElement();
 
-    /** writes the child element tree to kDebug()
+    /** writes the child element tree to qDebug()
      *  only for debugging purpose
      *  @param wrong indicates, if the parent is set wrong
      *  @param indent indention level
      */
     virtual void writeElementTree(int indent=0, bool wrong=false) const;
 
-    /// return the content of the element to kDebug(), only for debugging
+    /// return the content of the element to qDebug(), only for debugging
     virtual const QString writeElementContent() const;
     
     /// @return the first TableDataElement among the elements ancestors or 0 if there is none

@@ -25,7 +25,6 @@
 // Qt
 #include <QWidget>
 #include <QIODevice>
-#include <QDebug>
 #include <QPainter>
 
 // Calligra
@@ -40,9 +39,9 @@
 #include <KoGenStyles.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoView.h>
-#include <kdebug.h>
 
 // KFormula
+#include "FormulaDebug.h"
 #include "KoFormulaShape.h"
 #include "FormulaPart.h"
 
@@ -81,10 +80,10 @@ bool FormulaDocument::loadOdf( KoOdfReadStore &odfStore )
     KoXmlDocument doc = odfStore.contentDoc();
     KoXmlElement  bodyElement = doc.documentElement();
 
-    kDebug(31000) << bodyElement.nodeName();
+    debugFormula << bodyElement.nodeName();
 
     if (bodyElement.localName() != "math" || bodyElement.namespaceURI() != KoXmlNS::math) {
-        kError(35001) << "No <math:math> element found.";
+        errorFormula << "No <math:math> element found.";
         return false;
     }
 

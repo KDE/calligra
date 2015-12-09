@@ -21,8 +21,9 @@
 
 #include "TextElement.h"
 #include "AttributeManager.h"
+#include "FormulaDebug.h"
+
 #include <QFontMetricsF>
-#include <kdebug.h>
 
 TextElement::TextElement( BasicElement* parent ) : TokenElement( parent )
 {}

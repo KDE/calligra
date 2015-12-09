@@ -21,12 +21,15 @@
 */
 
 #include "FractionElement.h"
+
 #include "FormulaCursor.h"
 #include "AttributeManager.h"
+#include "FormulaDebug.h"
+
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
+
 #include <QPainter>
-#include <kdebug.h>
 
 FractionElement::FractionElement( BasicElement* parent ) : FixedElement( parent )
 {
@@ -267,12 +270,12 @@ bool FractionElement::readMathMLContent( const KoXmlElement& parent )
         } else if (counter==1) {
             loadElement(tmp,&m_denominator);
         } else {
-            kDebug(39001) << "Too many arguments to mfrac";
+            debugFormula << "Too many arguments to mfrac";
         }
         counter++;
     }
     if (counter<2) {
-        kDebug(39001) << "Not enough arguments to mfrac";
+        debugFormula << "Not enough arguments to mfrac";
     }
     return true;
 }

@@ -19,12 +19,15 @@
 */
 
 #include "MultiscriptElement.h"
+
 #include "AttributeManager.h"
+#include "FormulaCursor.h"
+#include "FormulaDebug.h"
+
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
+
 #include <QPainter>
-#include "FormulaCursor.h"
-#include "kdebug.h"
 
 MultiscriptElement::MultiscriptElement( BasicElement* parent ) : FixedElement( parent )
 {
@@ -413,7 +416,7 @@ bool MultiscriptElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& o
         }
         int pair=groupposition/2;
         if (newcursor.direction()==MoveUp || newcursor.direction()==MoveDown) {
-//             kDebug()<<groupposition<<" - "<<prescriptCount<< "-" <<pair;
+//             debugFormula << groupposition<<" - "<<prescriptCount<< "-" <<pair;
             if (prescript) {
                 if (m_preScripts[pair*2] && m_preScripts[pair*2+1]) {
                     return moveVertSituation(newcursor,oldcursor,
@@ -482,7 +485,7 @@ bool MultiscriptElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& o
                     }
                 }
                 if ((i>=0) && m_preScripts[i]) {
-//                    kDebug()<<"Going from "<< groupposition <<" to " <<i;
+//                    debugFormula << "Going from "<< groupposition <<" to " <<i;
                     return moveHorSituation(newcursor,oldcursor,
                                              childElements().indexOf(m_preScripts[groupposition]),
                                              childElements().indexOf(m_preScripts[i]));

@@ -19,22 +19,25 @@
  */
 
 #include "KoFormulaTool.h"
+
 #include "KoFormulaShape.h"
 #include "FormulaToolWidget.h"
 #include "BasicElement.h"
 #include "FormulaEditor.h"
+#include "FormulaDebug.h"
+
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoSelection.h>
 #include <KoShapeController.h>
 #include <KoIcon.h>
+
 #include <klocalizedstring.h>
+
 #include <QKeyEvent>
 #include <QAction>
 #include <QPainter>
-#include <kdebug.h>
 #include <kurl.h>
-
 #include <QFile>
 #include <QSignalMapper>
 #include <kfiledialog.h>
@@ -98,7 +101,7 @@ void KoFormulaTool::activate(ToolActivation toolActivation, const QSet<KoShape*>
             m_cursorList.removeAll(editor);
             if (formulaData->formulaElement()->hasDescendant(editor->cursor().currentElement())) {
                 if (editor->cursor().isAccepted()) {
-                    kDebug()<<"Found old cursor";
+                    debugFormula << "Found old cursor";
                     m_formulaEditor=editor;
                     break;
                 }
@@ -122,7 +125,7 @@ void KoFormulaTool::deactivate()
     disconnect(m_signalMapper,0,this,0);
     if (canvas()) {
         m_cursorList.append(m_formulaEditor);
-        kDebug()<<"Appending cursor";
+        debugFormula << "Appending cursor";
     }
     if (m_cursorList.count() > 20) { // don't let it grow indefinitely
         //TODO: is this save?
@@ -136,10 +139,10 @@ void KoFormulaTool::deactivate()
 void KoFormulaTool::updateCursor(FormulaCommand* command, bool undo)
 {
     if (command!=0) {
-        kDebug()<<"Going to change cursor";
+        debugFormula << "Going to change cursor";
         command->changeCursor(m_formulaEditor->cursor(),undo);
     } else {
-        kDebug()<<"Going to reset cursor";
+        debugFormula << "Going to reset cursor";
         resetFormulaEditor();
     }
     repaintCursor();
@@ -209,7 +212,7 @@ void KoFormulaTool::mouseMoveEvent( KoPointerEvent *event )
     }
     // Check if the event is valid means inside the shape
     if( !m_formulaShape->boundingRect().contains( event->point ) )
-        kDebug() << "Getting most probably invalid mouseMoveEvent";
+        debugFormula << "Getting most probably invalid mouseMoveEvent";
     
     // transform the global coordinates into shape coordinates
     QPointF p = m_formulaShape->absoluteTransformation(0).inverted().map( event->point );
@@ -501,7 +504,7 @@ bool KoFormulaTool::paste()
 {
     const QMimeData* data=QApplication::clipboard()->mimeData();
     if (data->hasFormat("text/plain")) {
-        kDebug()<< data->text();
+        debugFormula << data->text();
         FormulaCommand* command=m_formulaEditor->insertText(data->text());
         if (command!=0) {
             canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape,command));

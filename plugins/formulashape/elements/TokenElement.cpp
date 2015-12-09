@@ -18,14 +18,17 @@
 */
 
 #include "TokenElement.h"
+
 #include "AttributeManager.h"
 #include "FormulaCursor.h"
 #include "Dictionary.h"
 #include "GlyphElement.h"
+#include "FormulaDebug.h"
+
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
+
 #include <QPainter>
-#include <kdebug.h>
 
 TokenElement::TokenElement( BasicElement* parent ) : BasicElement( parent )
 {

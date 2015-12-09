@@ -22,14 +22,17 @@
 */
 
 #include "TableRowElement.h"
+
 #include "TableElement.h"
 #include "FormulaCursor.h"
 #include "TableDataElement.h"
 #include "AttributeManager.h"
+#include "FormulaDebug.h"
+
 #include <KoXmlReader.h>
+
 #include <QStringList>
 #include <QPainter>
-#include <kdebug.h>
 
 TableRowElement::TableRowElement( BasicElement* parent ) : BasicElement( parent )
 {}
@@ -69,7 +72,7 @@ void TableRowElement::layout( const AttributeManager* am )
             // TableElement::determineDimensions so that it pays attention to baseline.
             // Axis as alignment option is ignored as it is tought to be an option for
             // the table itsself.
-//         kDebug() << horizontalAlign[ i ]<<","<<Axis;
+//         debugFormula << horizontalAlign[ i ]<<","<<Axis;
         if( horizontalAlign[ i ] == Center ) {
             hOffset = ( parentTable->columnWidth( i ) - m_data[ i ]->width() ) / 2;
         }

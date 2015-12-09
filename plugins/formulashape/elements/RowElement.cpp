@@ -21,13 +21,16 @@
 */
 
 #include "RowElement.h"
+
 #include "FormulaCursor.h"
+#include "FormulaDebug.h"
+
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
+
 #include <QPainter>
 
-#include <kdebug.h>
 
 RowElement::RowElement( BasicElement* parent ) : BasicElement( parent )
 {}
