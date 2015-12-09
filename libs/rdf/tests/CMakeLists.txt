@@ -1,10 +1,14 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories( ${KORDF_INCLUDES} )
 
-set(TestKoDocumentRdf_SRCS TestKoDocumentRdf.cpp )
-kde4_add_unit_test(TestKoDocumentRdf TESTNAME libs-kordf-TestKoDocumentRdf ${TestKoDocumentRdf_SRCS})
-target_link_libraries(TestKoDocumentRdf kordf Qt5::Test)
+# call: kordf_add_unit_test(<test-name> <sources> LINK_LIBRARIES <library> [<library> [...]] [GUI])
+macro(KORDF_ADD_UNIT_TEST _TEST_NAME)
+    ecm_add_test( ${ARGN}
+        TEST_NAME "${_TEST_NAME}"
+        NAME_PREFIX "libs-kordf-"
+    )
+endmacro()
 
-set(rdf_test_SRCS rdf_test.cpp )
-kde4_add_unit_test(rdf_test TESTNAME libs-kordf-rdf_test ${rdf_test_SRCS})
-target_link_libraries(rdf_test kordf Qt5::Test)
+kordf_add_unit_test(TestKoDocumentRdf TestKoDocumentRdf.cpp  LINK_LIBRARIES kordf Qt5::Test)
+
+kordf_add_unit_test(rdf_test rdf_test.cpp  LINK_LIBRARIES kordf Qt5::Test)
