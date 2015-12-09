@@ -1,29 +1,42 @@
 enable_testing()
 
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
+
+# call: formulashape_add_unit_test(<test-name> <sources> LINK_LIBRARIES <library> [<library> [...]] [GUI])
+macro(FORMULASHAPE_ADD_UNIT_TEST _TEST_NAME)
+    ecm_add_test( ${ARGN}
+        TEST_NAME "${_TEST_NAME}"
+        NAME_PREFIX "shapes-formula-"
+    )
+endmacro()
+
 ########### AttributeManager Test ###############
 
- set( TestAttributeManager_SRCS TestAttributeManager.cpp )
- kde4_add_unit_test( TestAttributeManager TESTNAME kformula-AttributeManager  ${TestAttributeManager_SRCS} )
- target_link_libraries( TestAttributeManager kformula Qt5::Test )
+formulashape_add_unit_test(AttributeManager
+    TestAttributeManager.cpp
+    LINK_LIBRARIES kformula Qt5::Test
+)
 
 ########### Load Test ###############
 
-set(TestLoad_SRCS TestLoad.cpp)
-kde4_add_unit_test(TestLoad TESTNAME kformula-Load  ${TestLoad_SRCS})
-target_link_libraries(TestLoad kformula Qt5::Test)
+formulashape_add_unit_test(Load
+    TestLoad.cpp
+    LINK_LIBRARIES kformula Qt5::Test
+)
 
 ########### Load and Save Test ###############
 
-set(TestLoadAndSave_SRCS TestLoadAndSave.cpp)
-kde4_add_unit_test(TestLoadAndSave TESTNAME kformula-LoadAndSave  ${TestLoadAndSave_SRCS})
-target_link_libraries(TestLoadAndSave kformula Qt5::Test)
+formulashape_add_unit_test(LoadAndSave
+    TestLoadAndSave.cpp
+    LINK_LIBRARIES kformula Qt5::Test
+)
 
 ########### Layout Test ###############
 
-#set(TestLayout_SRCS TestLayout.cpp)
-#kde4_add_unit_test(TestLayout TESTNAME kformula-Layout  ${TestLayout_SRCS})
-#target_link_libraries(TestLayout kformula Qt5::Test)
+# formulashape_add_unit_test(Layout
+#     TestLayout.cpp
+#     LINK_LIBRARIES kformula Qt5::Test
+# )
 
 ########### Cursor Test ###############
 
@@ -48,5 +61,7 @@ qt5_wrap_ui( TestCursor_SRCS
     ../FormulaToolWidget.ui
 )
 
-kde4_add_unit_test(TestCursor TESTNAME kformula-Cursor  ${TestCursor_SRCS})
-target_link_libraries(TestCursor kformula KF5::KIOWidgets Qt5::Test)
+formulashape_add_unit_test(Cursor
+    ${TestCursor_SRCS}
+    LINK_LIBRARIES kformula KF5::KIOWidgets Qt5::Test
+)

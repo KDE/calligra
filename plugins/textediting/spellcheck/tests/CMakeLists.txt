@@ -10,8 +10,8 @@ set(TestSpellCheck_SRCS
     ../SpellCheckDebug.cpp
 )
 
-kde4_add_unit_test(TestSpellCheck TESTNAME textedit-TestSpellCheck ${TestSpellCheck_SRCS})
-
-target_link_libraries(TestSpellCheck kotext KF5::SonnetCore Qt5::Test)
-
-########### last target ###############
+ecm_add_test( ${TestSpellCheck_SRCS}
+    TEST_NAME "TestSpellCheck"
+    NAME_PREFIX "textediting-spellcheck-"
+    LINK_LIBRARIES kotext KF5::SonnetCore Qt5::Test
+)
