@@ -52,5 +52,8 @@ set(TestFormulaParser_SRCS
     TestFormulaParser.cpp
 )
 
-kde4_add_unit_test(TestFormulaParser TESTNAME sheets-xlsx-FormulaParser ${TestFormulaParser_SRCS})
-target_link_libraries(TestFormulaParser komsooxml calligrasheetscommon Qt5::Test)
+ecm_add_test( ${TestFormulaParser_SRCS}
+    TEST_NAME "FormulaParser"
+    NAME_PREFIX "filter-xlsx2ods-"
+    LINK_LIBRARIES komsooxml calligrasheetscommon Qt5::Test
+)
