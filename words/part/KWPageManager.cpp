@@ -364,6 +364,7 @@ QList<KWPage> KWPageManager::pages(const QString &pageStyle) const
             continue;
         answer << KWPage(d, it.key());
     }
+    qSort(answer.begin(), answer.end());
     return answer;
 }
 
