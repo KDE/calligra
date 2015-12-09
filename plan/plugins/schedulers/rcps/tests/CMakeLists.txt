@@ -8,9 +8,8 @@ set(ProjectTester_SRCS ProjectTester.cpp ../KPlatoRCPSScheduler.cpp ../KPlatoRCP
  
 add_definitions(-DPLAN_NOPLUGIN)
 
-kde4_add_unit_test(ProjectTester TESTNAME Plan-RCPSTester  ${ProjectTester_SRCS})
- 
-target_link_libraries(ProjectTester  rcps_plan planprivate kplatokernel Qt5::Test)
- 
-
-########### next target ###############
+ecm_add_test( ${ProjectTester_SRCS}
+    TEST_NAME "RCPSTester"
+    NAME_PREFIX "plan-schedulers-rcps-"
+    LINK_LIBRARIES rcps_plan planprivate kplatokernel Qt5::Test
+)

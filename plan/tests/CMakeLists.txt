@@ -1,6 +1,14 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories( .. ${KPLATO_INCLUDES} ${KOODF_INCLUDES})
 
+# call: plan_add_unit_test(<test-name> <sources> LINK_LIBRARIES <library> [<library> [...]] [GUI])
+macro(PLAN_ADD_UNIT_TEST _TEST_NAME)
+    ecm_add_test( ${ARGN}
+        TEST_NAME "${_TEST_NAME}"
+        NAME_PREFIX "plan-"
+    )
+endmacro()
+
 ########### test files ###############
 
 set(test_files version-0-6.kplato project_stats1.kplato pert1.kplato)
@@ -10,23 +18,18 @@ foreach(it ${test_files})
         COMMENT "Copy test file ${it}" VERBATIM
     )
 endforeach(it)
- 
+
 ########### next target ###############
 
 # NOTE: .kplato files is no longer native, so need some magic to run this test 
-# set(InsertFileTester_SRCS InsertFileTester.cpp)
-#  
-# kde4_add_unit_test(InsertFileTester TESTNAME Plan-InsertFileTester  ${InsertFileTester_SRCS})
-#  
-# target_link_libraries(InsertFileTester  planprivate kplatokernel komain Qt5::Test)
- 
+# plan_add_unit_test(InsertFileTester
+#     InsertFileTester.cpp
+#     LINK_LIBRARIES planprivate kplatokernel komain Qt5::Test
+# )
 
 ########## next target ###############
 
-set(InsertProjectTester_SRCS InsertProjectTester.cpp)
- 
-kde4_add_unit_test(InsertProjectTester TESTNAME Plan-InsertProjectTester  ${InsertProjectTester_SRCS})
-
-target_link_libraries(InsertProjectTester  planprivate kplatokernel komain Qt5::Test)
-
-########## next target ###############
+plan_add_unit_test(InsertProjectTester
+    InsertProjectTester.cpp
+    LINK_LIBRARIES planprivate kplatokernel komain Qt5::Test
+)
