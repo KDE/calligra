@@ -840,10 +840,7 @@ void KisLayerManager::flattenLayer()
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    KisLayerSP newLayer = image->flattenLayer(layer);
-    if (newLayer) {
-        newLayer->setDirty();
-    }
+    image->flattenLayer(layer);
     m_view->updateGUI();
 }
 

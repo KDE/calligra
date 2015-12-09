@@ -989,21 +989,6 @@ void KisImage::flatten()
     setModified();
 }
 
-bool checkIsSourceForClone(KisNodeSP src, const QList<KisNodeSP> &nodes)
-{
-    foreach (KisNodeSP node, nodes) {
-        if (node == src) continue;
-
-        KisCloneLayer *clone = dynamic_cast<KisCloneLayer*>(node.data());
-
-        if (clone && KisNodeSP(clone->copyFrom()) == src) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 void KisImage::mergeMultipleLayers(QList<KisNodeSP> mergedNodes, KisNodeSP putAfter)
 {
     if (!KisLayerUtils::tryMergeSelectionMasks(this, mergedNodes, putAfter)) {
@@ -1016,55 +1001,9 @@ void KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrategy* str
     KisLayerUtils::mergeDown(this, layer, strategy);
 }
 
-KisLayerSP KisImage::flattenLayer(KisLayerSP layer)
+void KisImage::flattenLayer(KisLayerSP layer)
 {
-    if (!layer->firstChild()) return layer;
-
-    refreshHiddenArea(layer, bounds());
-
-    bool resetComposition = false;
-
-    KisPaintDeviceSP mergedDevice;
-
-    lock();
-    if (layer->layerStyle()) {
-        mergedDevice = new KisPaintDevice(layer->colorSpace());
-        mergedDevice->prepareClone(layer->projection());
-
-        QRect updateRect = layer->projection()->extent() | bounds();
-
-        KisPainter gc(mergedDevice);
-        layer->projectionPlane()->apply(&gc, updateRect);
-
-        resetComposition = true;
-
-    } else {
-        mergedDevice = new KisPaintDevice(*layer->projection());
-    }
-    unlock();
-
-    KisPaintLayerSP newLayer = new KisPaintLayer(this, layer->name(), layer->opacity(), mergedDevice);
-
-    if (!resetComposition) {
-        newLayer->setCompositeOp(layer->compositeOp()->id());
-        newLayer->setChannelFlags(layer->channelFlags());
-    }
-
-    undoAdapter()->beginMacro(kundo2_i18n("Flatten Layer"));
-    undoAdapter()->addCommand(new KisImageLayerAddCommand(this, newLayer, layer->parent(), layer));
-    undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, layer));
-
-    QList<const KisMetaData::Store*> srcs;
-    srcs.append(layer->metaData());
-
-    const KisMetaData::MergeStrategy* strategy = KisMetaData::MergeStrategyRegistry::instance()->get("Smart");
-    QList<double> scores;
-    scores.append(1.0); //Just give some score, there only is one layer
-    strategy->merge(newLayer->metaData(), srcs, scores);
-
-    undoAdapter()->endMacro();
-
-    return newLayer;
+    KisLayerUtils::flattenLayer(this, layer);
 }
 
 
