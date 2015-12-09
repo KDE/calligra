@@ -6,32 +6,30 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
 endif()
 
-########### next target ###############
-
-set(TestBorder_test_SRCS TestBorder.cpp)
-kde4_add_unit_test(TestBorder TESTNAME libs-kotext-TestBorder  ${TestBorder_test_SRCS})
-target_link_libraries(TestBorder kotext  Qt5::Test)
-
-########### next target ###############
-
-set(TestKoTableColumnAndRowStyleManager_test_SRCS TestKoTableColumnAndRowStyleManager.cpp)
-kde4_add_unit_test(TestKoTableColumnAndRowStyleManager TESTNAME libs-kotext-KoTableColumnAndRowStyleManager ${TestKoTableColumnAndRowStyleManager_test_SRCS})
-target_link_libraries(TestKoTableColumnAndRowStyleManager kotext  Qt5::Test)
+# call: kotext_add_unit_test(<test-name> <sources> LINK_LIBRARIES <library> [<library> [...]] [GUI])
+macro(KOTEXT_ADD_UNIT_TEST _TEST_NAME)
+    ecm_add_test( ${ARGN}
+        TEST_NAME "${_TEST_NAME}"
+        NAME_PREFIX "libs-kotext-"
+    )
+endmacro()
 
 ########### next target ###############
 
-set(TestKoTextEditor_test_SRCS TestKoTextEditor.cpp)
-kde4_add_unit_test(TestKoTextEditor TESTNAME libs-kotext-TestKoTextEditor  ${TestKoTextEditor_test_SRCS})
-target_link_libraries(TestKoTextEditor kotext  Qt5::Test)
+kotext_add_unit_test(TestBorder TestBorder.cpp  LINK_LIBRARIES kotext Qt5::Test)
 
 ########### next target ###############
 
-set(TestKoBookmarkManager_test_SRCS TestKoBookmarkManager.cpp)
-kde4_add_unit_test(TestKoBookmarkManager TESTNAME libs-kotext-TestKoBookmarkManager  ${TestKoBookmarkManager_test_SRCS})
-target_link_libraries(TestKoBookmarkManager kotext  Qt5::Test)
+kotext_add_unit_test(TestKoTableColumnAndRowStyleManager TestKoTableColumnAndRowStyleManager.cpp  LINK_LIBRARIES kotext Qt5::Test)
 
 ########### next target ###############
 
-set(TestKoInlineTextObjectManager_test_SRCS TestKoInlineTextObjectManager.cpp)
-kde4_add_unit_test(TestKoInlineTextObjectManager TESTNAME libs-kotext-TestKoInlineTextObjectManager  ${TestKoInlineTextObjectManager_test_SRCS})
-target_link_libraries(TestKoInlineTextObjectManager kotext  Qt5::Test)
+kotext_add_unit_test(TestKoTextEditor TestKoTextEditor.cpp  LINK_LIBRARIES kotext Qt5::Test)
+
+########### next target ###############
+
+kotext_add_unit_test(TestKoBookmarkManager TestKoBookmarkManager.cpp  LINK_LIBRARIES kotext Qt5::Test)
+
+########### next target ###############
+
+kotext_add_unit_test(TestKoInlineTextObjectManager TestKoInlineTextObjectManager.cpp  LINK_LIBRARIES kotext Qt5::Test)

@@ -5,38 +5,34 @@ include_directories(
 
 add_definitions(-DSPECS_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/specs/")
 
-########### next target ###############
-
-set(TestStyles_test_SRCS TestStyles.cpp)
-kde4_add_unit_test(TestStyles TESTNAME libs-kotext-styles-TestStyles  ${TestStyles_test_SRCS})
-target_link_libraries(TestStyles kotext Qt5::Test)
-
-########### next target ###############
-
-set(TestListStyly_test_SRCS TestListStyle.cpp)
-kde4_add_unit_test(TestListStyle TESTNAME libs-kotext-styles-TestListStyle  ${TestListStyly_test_SRCS})
-target_link_libraries(TestListStyle kotext Qt5::Test)
+# call: kotext_styles_add_unit_test(<test-name> <sources> LINK_LIBRARIES <library> [<library> [...]] [GUI])
+macro(KOTEXT_STYLES_ADD_UNIT_TEST _TEST_NAME)
+    ecm_add_test( ${ARGN}
+        TEST_NAME "${_TEST_NAME}"
+        NAME_PREFIX "libs-kotext-styles-"
+    )
+endmacro()
 
 ########### next target ###############
 
-set(TestSectionStyle_test_SRCS TestSectionStyle.cpp)
-kde4_add_unit_test(TestSectionStyle TESTNAME libs-kotext-styles-TestSectionStyle ${TestSectionStyle_test_SRCS})
-target_link_libraries(TestSectionStyle kotext Qt5::Test)
+kotext_styles_add_unit_test(TestStyles TestStyles.cpp  LINK_LIBRARIES kotext Qt5::Test)
 
 ########### next target ###############
 
-set(TestTableCellStyle_test_SRCS TestTableCellStyle.cpp)
-kde4_add_unit_test(TestTableCellStyle TESTNAME libs-kotext-styles-TestTableCellStyle ${TestTableCellStyle_test_SRCS})
-target_link_libraries(TestTableCellStyle kotext Qt5::Test)
+kotext_styles_add_unit_test(TestListStyle TestListStyle.cpp  LINK_LIBRARIES kotext Qt5::Test)
 
 ########### next target ###############
 
-set(TestStyleManager_test_SRCS TestStyleManager.cpp)
-kde4_add_unit_test(TestStyleManager TESTNAME libs-kotext-styles-TestStyleManager ${TestStyleManager_test_SRCS})
-target_link_libraries(TestStyleManager kotext Qt5::Test)
+kotext_styles_add_unit_test(TestSectionStyle TestSectionStyle.cpp  LINK_LIBRARIES kotext Qt5::Test)
 
 ########### next target ###############
 
-#set(TestOpenDocumentStyle_test_SRCS TestOpenDocumentStyle.cpp)
-#kde4_add_unit_test(TestOpenDocumentStyle TESTNAME libs-kotext-styles-TestOpenDocumentStyle ${TestOpenDocumentStyle_test_SRCS})
-#target_link_libraries(TestOpenDocumentStyle kotext Qt5::Test ${QT_XML_LIBRARY})
+kotext_styles_add_unit_test(TestTableCellStyle TestTableCellStyle.cpp  LINK_LIBRARIES kotext Qt5::Test)
+
+########### next target ###############
+
+kotext_styles_add_unit_test(TestStyleManager TestStyleManager.cpp  LINK_LIBRARIES kotext Qt5::Test)
+
+########### next target ###############
+
+#kotext_styles_add_unit_test(TestOpenDocumentStyle TestOpenDocumentStyle.cpp  LINK_LIBRARIES kotext ${QT_XML_LIBRARY} Qt5::Test)

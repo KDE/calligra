@@ -6,14 +6,21 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
 endif()
 
+# call: kotextlayout_add_unit_test(<test-name> <sources> LINK_LIBRARIES <library> [<library> [...]] [GUI])
+macro(KOTEXTLAYOUT_ADD_UNIT_TEST _TEST_NAME)
+    ecm_add_test( ${ARGN}
+        TEST_NAME "${_TEST_NAME}"
+        NAME_PREFIX "libs-kotextlayout-"
+    )
+endmacro()
+
 ########### next target ###############
 
 set(TestDocumentLayout_test_SRCS
  TestDocumentLayout.cpp
  MockRootAreaProvider.cpp
 )
-kde4_add_unit_test(TestDocumentLayout TESTNAME libs-textlayout-TestDocumentLayout ${TestDocumentLayout_test_SRCS})
-target_link_libraries(TestDocumentLayout kotext kotextlayout Qt5::Test)
+kotextlayout_add_unit_test(TestDocumentLayout ${TestDocumentLayout_test_SRCS}  LINK_LIBRARIES kotext kotextlayout Qt5::Test)
 
 ########### next target ###############
 
@@ -21,8 +28,7 @@ set(TestBlockLayout_test_SRCS
  TestBlockLayout.cpp
  MockRootAreaProvider.cpp
 )
-kde4_add_unit_test(TestBlockLayout TESTNAME libs-textlayout-TestBlockLayout  ${TestBlockLayout_test_SRCS})
-target_link_libraries(TestBlockLayout kotext kotextlayout Qt5::Test)
+kotextlayout_add_unit_test(TestBlockLayout ${TestBlockLayout_test_SRCS}  LINK_LIBRARIES kotext kotextlayout Qt5::Test)
 
 ########### next target ###############
 
@@ -30,11 +36,9 @@ set(TestTableLayout_test_SRCS
  TestTableLayout.cpp
  MockRootAreaProvider.cpp
 )
-kde4_add_unit_test(TestTableLayout TESTNAME libs-textlayout-TestTableLayout  ${TestTableLayout_test_SRCS})
-target_link_libraries(TestTableLayout kotext kotextlayout Qt5::Test)
+kotextlayout_add_unit_test(TestTableLayout ${TestTableLayout_test_SRCS}  LINK_LIBRARIES kotext kotextlayout Qt5::Test)
 
 ########### next target ###############
 
 set(TestKoTableColumnAndRowStyleManager_test_SRCS TestKoTableColumnAndRowStyleManager.cpp)
-kde4_add_unit_test(TestKoTableColumnAndRowStyleManager TESTNAME libs-textlayout-KoTableColumnAndRowStyleManager ${TestKoTableColumnAndRowStyleManager_test_SRCS})
-target_link_libraries(TestKoTableColumnAndRowStyleManager kotext  Qt5::Test)
+kotextlayout_add_unit_test(TestKoTableColumnAndRowStyleManager ${TestKoTableColumnAndRowStyleManager_test_SRCS}  LINK_LIBRARIES kotext Qt5::Test)

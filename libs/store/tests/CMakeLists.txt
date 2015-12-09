@@ -1,17 +1,23 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories( ${KOODF_INCLUDES} )
 
+# call: kostore_add_unit_test(<test-name> <sources> LINK_LIBRARIES <library> [<library> [...]] [GUI])
+macro(KOSTORE_ADD_UNIT_TEST _TEST_NAME)
+    ecm_add_test( ${ARGN}
+        TEST_NAME "${_TEST_NAME}"
+        NAME_PREFIX "libs-kostore-"
+    )
+endmacro()
+
 ########### next target ###############
 
 set(lzftest_SRCS ../KoLZF.cpp TestKoLZF.cpp )
-kde4_add_unit_test(TestKoLZF TESTNAME libs-odf-TestKoLZF ${lzftest_SRCS})
-target_link_libraries(TestKoLZF Qt5::Test)
+kostore_add_unit_test(TestKoLZF ${lzftest_SRCS}  LINK_LIBRARIES Qt5::Test)
 
 ########### next target ###############
 
 set(xmlvectortest_SRCS ../KoLZF.cpp TestKoXmlVector.cpp )
-kde4_add_unit_test(TestKoXmlVector TESTNAME libs-odf-TestKoXmlVector ${xmlvectortest_SRCS})
-target_link_libraries(TestKoXmlVector Qt5::Test)
+kostore_add_unit_test(TestKoXmlVector ${xmlvectortest_SRCS}  LINK_LIBRARIES Qt5::Test)
 
 ########### next target ###############
 

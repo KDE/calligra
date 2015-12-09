@@ -3,26 +3,28 @@ include_directories( ${KOMAIN_INCLUDES} )
 
 add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
 
+# call: komain_add_unit_test(<test-name> <sources> LINK_LIBRARIES <library> [<library> [...]] [GUI])
+macro(KOMAIN_ADD_UNIT_TEST _TEST_NAME)
+    ecm_add_test( ${ARGN}
+        TEST_NAME "${_TEST_NAME}"
+        NAME_PREFIX "libs-komain-"
+    )
+endmacro()
+
 ########### next target ###############
 
 set(priorityqueue_test_SRCS priorityqueue_test.cpp ../MainDebug.cpp)
-kde4_add_unit_test(priorityqueue_test TESTNAME libs-komain-priorityQueueTest ${priorityqueue_test_SRCS})
-target_link_libraries(priorityqueue_test KF5::I18n Qt5::Test)
+komain_add_unit_test(priorityQueueTest ${priorityqueue_test_SRCS}  LINK_LIBRARIES KF5::I18n Qt5::Test)
 
 ########### next target ###############
 
-set(filterchain_test_SRCS filterchain_test.cpp )
-kde4_add_unit_test(filterchain_test TESTNAME libs-komain-filterchainTest ${filterchain_test_SRCS})
-target_link_libraries(filterchain_test  komain)
+komain_add_unit_test(filterchainTest filterchain_test.cpp  LINK_LIBRARIES komain)
 
 ########### next target ###############
 
-set(filter_graph_SRCS filter_graph.cpp )
-kde4_add_unit_test(filter_graph TESTNAME libs-komain-filterGraphTest ${filter_graph_SRCS})
-target_link_libraries(filter_graph  komain)
+komain_add_unit_test(filterGraphTest filter_graph.cpp  LINK_LIBRARIES komain)
 
 ########### next target ###############
-
 
 set(rtreetestapp_SRCS rtreetestapp.cpp Tool.cpp )
 kde4_add_executable(rtreetestapp TEST ${rtreetestapp_SRCS})
@@ -30,13 +32,9 @@ target_link_libraries(rtreetestapp komain Qt5::Test )
 
 ########### next target ###############
 
-set(documentstructuretest_SRCS documentstructuretest.cpp )
-kde4_add_unit_test(DocumentStructureTest TESTNAME libs-komain-DocumentStructureTest ${documentstructuretest_SRCS})
-target_link_libraries(DocumentStructureTest komain  Qt5::Test)
+komain_add_unit_test(DocumentStructureTest documentstructuretest.cpp  LINK_LIBRARIES komain Qt5::Test)
 
 ########### next target ###############
 
-set(findmatch_test_SRCS testfindmatch.cpp )
-kde4_add_unit_test(testfindmatch TESTNAME libs-komain-testfindmatch ${findmatch_test_SRCS})
-target_link_libraries(testfindmatch komain Qt5::Test)
+komain_add_unit_test(testfindmatch testfindmatch.cpp  LINK_LIBRARIES komain Qt5::Test)
 
