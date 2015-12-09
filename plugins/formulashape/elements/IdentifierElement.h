@@ -20,7 +20,7 @@
 #ifndef IDENTIFIERELEMENT_H
 #define IDENTIFIERELEMENT_H
 
-#include "kformula_export.h"
+#include "koformula_export.h"
 #include "TokenElement.h"
 
 /**

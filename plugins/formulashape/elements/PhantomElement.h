@@ -21,7 +21,7 @@
 #define PHANTOMELEMENT_H
 
 #include "RowElement.h"
-#include "kformula_export.h"
+#include "koformula_export.h"
 
 /**
  * @short Implementation of the MathML mphantom element

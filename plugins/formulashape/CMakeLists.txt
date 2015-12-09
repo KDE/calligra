@@ -15,9 +15,9 @@ include_directories( ${CMAKE_SOURCE_DIR}/plugins/formulashape
                      ${KOMAIN_INCLUDES}
 )
 
-########### KFormula Library ###############
+########### KoFormula Library ###############
 
-set( kformula_LIB_SRCS
+set( koformula_LIB_SRCS
    FormulaDebug.cpp
    AttributeManager.cpp
    FormulaRenderer.cpp
@@ -60,14 +60,14 @@ set( kformula_LIB_SRCS
    elements/UnknownElement.cpp
 )
 
-add_library(kformula SHARED ${kformula_LIB_SRCS})
-generate_export_header(kformula EXPORT_MACRO_NAME KOFORMULA_EXPORT)
+add_library(koformula SHARED ${koformula_LIB_SRCS})
+generate_export_header(koformula EXPORT_MACRO_NAME KOFORMULA_EXPORT)
 
-target_link_libraries(kformula  PUBLIC komain)
+target_link_libraries(koformula  PUBLIC komain)
 
-set_target_properties(kformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+set_target_properties(koformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
-install(TARGETS kformula ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS koformula ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### FormulaShape Plugin ###############
 
@@ -112,10 +112,10 @@ ki18n_wrap_ui( formulashape_PART_SRCS
 add_library(calligra_shape_formular MODULE ${formulashape_PART_SRCS})
 kcoreaddons_desktop_to_json(calligra_shape_formular calligra_shape_formular.desktop)
 
-target_link_libraries(calligra_shape_formular kformula ${M2MML_TOOL_LIBRARIES})
+target_link_libraries(calligra_shape_formular koformula ${M2MML_TOOL_LIBRARIES})
 
 
-#set_target_properties(kformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+#set_target_properties(koformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS calligra_shape_formular  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 add_subdirectory( pics ) 

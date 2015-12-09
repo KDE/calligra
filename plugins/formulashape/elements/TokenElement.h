@@ -21,7 +21,7 @@
 #ifndef TOKENELEMENT_H
 #define TOKENELEMENT_H
 
-#include "kformula_export.h"
+#include "koformula_export.h"
 #include "BasicElement.h"
 #include <QPainterPath>
 #include <QFont>

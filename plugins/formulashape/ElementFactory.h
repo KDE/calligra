@@ -23,7 +23,7 @@
 #define ELEMENTFACTORY_H
 
 #include <QString>
-#include "kformula_export.h"
+#include "koformula_export.h"
 
 class BasicElement;
 

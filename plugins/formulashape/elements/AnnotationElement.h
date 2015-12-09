@@ -22,7 +22,7 @@
 #define ANNOTATIONELEMENT_H
 
 #include "BasicElement.h"
-#include "kformula_export.h"
+#include "koformula_export.h"
 
 /**
  * @short Implementation of the MathML annotation element

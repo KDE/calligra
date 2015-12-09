@@ -22,7 +22,7 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-#include "kformula_export.h"
+#include "koformula_export.h"
 
 
 extern const KOFORMULA_EXPORT QLoggingCategory &FORMULA_LOG();

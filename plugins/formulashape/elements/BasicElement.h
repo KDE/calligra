@@ -24,7 +24,7 @@
 #ifndef BASICELEMENT_H
 #define BASICELEMENT_H
 
-#include "kformula_export.h"
+#include "koformula_export.h"
 #include "ElementFactory.h"
 
 #include <QHash>

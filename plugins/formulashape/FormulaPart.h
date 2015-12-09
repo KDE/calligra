@@ -22,7 +22,7 @@
 
 #include <KoPart.h>
 
-#include "kformula_export.h"
+#include "koformula_export.h"
 
 class KoView;
 
