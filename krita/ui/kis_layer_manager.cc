@@ -291,13 +291,13 @@ void KisLayerManager::activateLayer(KisLayerSP layer)
 void KisLayerManager::setup(KisActionManager* actionManager)
 {
     m_imageFlatten = new KisAction(i18n("&Flatten image"), this);
-    m_imageFlatten->setActivationFlags(KisAction::ACTIVE_LAYER);
+    m_imageFlatten->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("flatten_image", m_imageFlatten);
     m_imageFlatten->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_E));
     connect(m_imageFlatten, SIGNAL(triggered()), this, SLOT(flattenImage()));
 
     m_imageMergeLayer = new KisAction(i18n("&Merge with Layer Below"), this);
-    m_imageMergeLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
+    m_imageMergeLayer->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("merge_layer", m_imageMergeLayer);
     m_imageMergeLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
     connect(m_imageMergeLayer, SIGNAL(triggered()), this, SLOT(mergeLayer()));
@@ -308,7 +308,7 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     connect(m_flattenLayer, SIGNAL(triggered()), this, SLOT(flattenLayer()));
 
     KisAction * action = new KisAction(i18n("Rename current layer"), this);
-    action->setActivationFlags(KisAction::ACTIVE_LAYER);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("RenameCurrentLayer", action);
     action->setShortcut(KShortcut(Qt::Key_F2));
     connect(action, SIGNAL(triggered()), this, SLOT(layerProperties()));
@@ -811,7 +811,7 @@ void KisLayerManager::mergeLayer()
 
     QList<KisNodeSP> selectedNodes = m_view->nodeManager()->selectedNodes();
     if (selectedNodes.size() > 1) {
-        image->mergeMultipleLayers(selectedNodes, layer);
+        image->mergeMultipleLayers(selectedNodes, m_view->activeNode());
 
     } else if (!tryMergeSelectionMasks(m_view->activeNode(), image)) {
 
