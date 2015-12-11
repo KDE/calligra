@@ -4,6 +4,7 @@ install( FILES
     BD-EuroTemplate.kra
     Comics-USTemplate.kra
     Manga-JpTemplate.kra
+    storyboard.kra
 DESTINATION ${DATA_INSTALL_DIR}/krita/templates/comics/.source)
 
 install( FILES  
@@ -12,4 +13,5 @@ install( FILES
     BD-EuroTemplate.desktop
     Comics-USTemplate.desktop
     Manga-JpTemplate.desktop
+    storyboard.desktop
 DESTINATION ${DATA_INSTALL_DIR}/krita/templates/comics)

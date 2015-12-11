@@ -139,12 +139,6 @@ void Parser::init()
     d->initialized = true;
 }
 
-/*moved to Driver
-bool Parser::isReservedKeyword(const QByteArray& str)
-{
-  return _reservedKeywords->contains(str.toUpper());
-}*/
-
 bool
 Parser::parse(const QString &statement)
 {

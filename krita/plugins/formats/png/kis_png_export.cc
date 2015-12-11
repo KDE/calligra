@@ -90,6 +90,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
     KDialog* kdb = new KDialog(0);
     kdb->setCaption(i18n("PNG Export Options"));
     kdb->setModal(false);
+    kdb->setButtons(KDialog::Ok | KDialog::Cancel);
 
     KisImageWSP image = input->image();
     qApp->processEvents(); // For vector layers to be updated
@@ -125,7 +126,8 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
 
     if (qApp->applicationName() != "qttest") {
 
-        bool sRGB = cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive);
+        bool sRGB = (cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive)
+                     && !cs->profile()->name().contains(QLatin1String("g10")));
 
         KisWdgOptionsPNG* wdg = new KisWdgOptionsPNG(kdb);
 
@@ -173,7 +175,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
         if (hasVisibleWidgets()) {
             if (!m_chain->manager()->getBatchMode()) {
                 if (kdb->exec() == QDialog::Rejected) {
-                    return KisImportExportFilter::OK; // FIXME Cancel doesn't exist :(
+                    return KisImportExportFilter::UserCancelled;
                 }
             }
         }

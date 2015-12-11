@@ -1,0 +1,23 @@
+[Desktop Entry]
+Type=Link
+URL=.source/storyboard.kra
+Icon=template_comics_empty
+Name=Storyboard
+Name[ca]=Guió il·lustrat
+Name[ca@valencia]=Guió il·lustrat
+Name[en_GB]=Storyboard
+Name[es]=Guion gráfico
+Name[nl]=Storyboard
+Name[sv]=Bildmanus
+Name[uk]=Сценарій
+Name[x-test]=xxStoryboardxx
+Comment=template for creating storyboards
+Comment[ca]=plantilla per a crear guions il·lustrats
+Comment[ca@valencia]=plantilla per a crear guions il·lustrats
+Comment[en_GB]=template for creating storyboards
+Comment[es]=plantilla para crear guiones gráficos
+Comment[nl]=sjabloon voor het maken van storyboards
+Comment[sv]=mall för att skapa bildmanus
+Comment[uk]=шаблон для створення сценаріїв
+Comment[x-test]=xxtemplate for creating storyboardsxx
+X-Krita-Version=28

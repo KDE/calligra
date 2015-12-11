@@ -106,6 +106,7 @@ public:
     }
 
     KisFixedPoint& operator/=(const KisFixedPoint& x) {
+        Q_ASSERT(x.d > 0);
         d <<= 8;
         d /= x.d;
         return *this;

@@ -169,6 +169,10 @@ public:
             supportSrc.from256Frac(filterStrategy->intSupport() / realScale);
             supportDst.from256Frac(filterStrategy->intSupport());
             m_weightsPositionScale = KisFixedPoint(realScale);
+            // Avoid a division by zero error: https://bugs.kde.org/show_bug.cgi?id=356156
+            if (m_weightsPositionScale == 0) {
+                m_weightsPositionScale = 1;
+            }
         } else {
             supportSrc.from256Frac(filterStrategy->intSupport());
             supportDst.from256Frac(filterStrategy->intSupport());
