@@ -573,7 +573,7 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
                                           filterStrategy,
                                           shapesCorrection);
 
-    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+    applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::CONCURRENT);
 
     if (resolutionChanged) {
         KUndo2Command *parent =
@@ -607,7 +607,7 @@ void KisImage::scaleNode(KisNodeSP node, qreal sx, qreal sy, KisFilterStrategy *
                                           0, 0,
                                           filterStrategy);
 
-    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+    applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::CONCURRENT);
     applicator.end();
 }
 
@@ -668,7 +668,7 @@ void KisImage::rotateImpl(const KUndo2MagicString &actionName,
                                               offset.x(), offset.y(),
                                               filter);
 
-    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+    applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::CONCURRENT);
 
     if (sizeChanged) {
         applicator.applyCommand(new KisImageResizeCommand(this, newSize));
@@ -738,7 +738,7 @@ void KisImage::shearImpl(const KUndo2MagicString &actionName,
                                               offset.x(), offset.y(),
                                               filter);
 
-    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+    applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::CONCURRENT);
 
     if (resizeImage) {
         applicator.applyCommand(new KisImageResizeCommand(this, newSize));
