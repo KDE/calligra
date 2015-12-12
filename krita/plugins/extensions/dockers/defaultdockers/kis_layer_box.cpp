@@ -212,6 +212,24 @@ KisLayerBox::KisLayerBox()
     connect(action, SIGNAL(triggered()), this, SLOT(slotRightClicked()));
     m_actions.append(action);
 
+    action  = new ButtonAction(m_wdgLayerBox->bnRaise, this);
+    action->setText(i18n("Move Layer or Mask Up"));
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
+    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    action->setObjectName("move_layer_up");
+    action->setShortcut(KShortcut(Qt::ControlModifier + Qt::Key_PageUp));
+    connect(action, SIGNAL(triggered()), this, SLOT(slotLowerClicked()));
+    m_actions.append(action);
+
+    action  = new ButtonAction(m_wdgLayerBox->bnLower, this);
+    action->setText(i18n("Move Layer or Mask down"));
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
+    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    action->setObjectName("move_layer_down");
+    action->setShortcut(KShortcut(Qt::ControlModifier + Qt::Key_PageDown));
+    connect(action, SIGNAL(triggered()), this, SLOT(slotRaiseClicked()));
+    m_actions.append(action);
+
     m_propertiesAction  = new ButtonAction(m_wdgLayerBox->bnProperties, themedIcon("properties"), i18n("&Properties..."),this);
     m_propertiesAction->setActivationFlags(KisAction::ACTIVE_NODE);
     m_propertiesAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
@@ -220,8 +238,8 @@ KisLayerBox::KisLayerBox()
     m_actions.append(m_propertiesAction);
 
     // NOTE: this is _not_ a mistake. The layerbox shows the layers in the reverse order
-    connect(m_wdgLayerBox->bnRaise, SIGNAL(clicked()), SLOT(slotLowerClicked()));
-    connect(m_wdgLayerBox->bnLower, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
+    connect(m_wdgLayerBox->bnRaise, SIGNAL(triggered()), SLOT(slotLowerClicked()));
+    connect(m_wdgLayerBox->bnLower, SIGNAL(triggered()), SLOT(slotRaiseClicked()));
     // END NOTE
 
     if (cfg.sliderLabels()) {
