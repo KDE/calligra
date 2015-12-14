@@ -18,6 +18,8 @@
 
 #include "kis_dab_cache.h"
 
+#include <qnumeric.h>
+
 #include <KoColor.h>
 #include "kis_color_source.h"
 #include "kis_paint_device.h"
