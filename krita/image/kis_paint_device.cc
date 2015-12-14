@@ -232,8 +232,10 @@ public:
             data = new Data(srcData, false);
         }
 
-        data->setX(offset.x());
-        data->setY(offset.y());
+        if (!copy) {
+            data->setX(offset.x());
+            data->setY(offset.y());
+        }
 
         int frameId = nextFreeFrameId++;
 
