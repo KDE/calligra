@@ -82,7 +82,7 @@ Info::Private::Private()
         : broken(false)
         , isVisibleInNavigator(false)
         , idStoredInPartDatabase(false)
-        , isPropertyEditorAlwaysVisibleInDesignMode(false)
+        , isPropertyEditorAlwaysVisibleInDesignMode(true)
 {
 }
 
