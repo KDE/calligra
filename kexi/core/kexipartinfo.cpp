@@ -32,10 +32,13 @@
 
 using namespace KexiPart;
 
-static bool isTrue(KPluginMetaData *metaData, const char* fieldName)
+static bool isTrue(KPluginMetaData *metaData, const char* fieldName, bool defaultValue = false)
 {
-    return 0 == metaData->value(QLatin1String(fieldName))
-                .compare(QLatin1String("true"), Qt::CaseInsensitive);
+    QString s = metaData->value(QLatin1String(fieldName));
+    if (s.isEmpty()) {
+        return defaultValue;
+    }
+    return 0 == s.compare(QLatin1String("true"), Qt::CaseInsensitive);
 }
 
 Info::Private::Private(Info *info, const QJsonObject &rootObject)
@@ -48,7 +51,7 @@ Info::Private::Private(Info *info, const QJsonObject &rootObject)
     , isPrintingSupported(isTrue(info, "X-Kexi-SupportsPrinting"))
     , isExecuteSupported(isTrue(info, "X-Kexi-SupportsExecution"))
     , isPropertyEditorAlwaysVisibleInDesignMode(
-          isTrue(info, "X-Kexi-PropertyEditorAlwaysVisibleInDesignMode"))
+          isTrue(info, "X-Kexi-PropertyEditorAlwaysVisibleInDesignMode", true))
 {
     groupName = info->readTranslatedString(rootObject, "X-Kexi-GroupName", untranslatedGroupName);
     const QStringList serviceTypes = info->serviceTypes();
@@ -81,7 +84,7 @@ Info::Private::Private()
     , isDataExportSupported(false)
     , isPrintingSupported(false)
     , isExecuteSupported(false)
-    , isPropertyEditorAlwaysVisibleInDesignMode(false)
+    , isPropertyEditorAlwaysVisibleInDesignMode(true)
 {
 }
 
