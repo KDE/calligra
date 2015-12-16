@@ -72,6 +72,7 @@ public:
     void renderCanvasGL() const;
     void renderDecorations(QPainter *painter);
 
+    bool needsFpsDebugging() const;
 
 
 private Q_SLOTS:

@@ -73,6 +73,8 @@
 #include <QGLFormat>
 #endif
 
+#include "kis_fps_decoration.h"
+
 #include <kis_favorite_resource_manager.h>
 #include <kis_popup_palette.h>
 
@@ -431,6 +433,9 @@ void KisCanvas2::createOpenGLCanvas()
 
     setCanvasWidget(canvasWidget);
 
+    if (canvasWidget->needsFpsDebugging() && !decoration(KisFpsDecoration::idTag)) {
+        addDecoration(new KisFpsDecoration(imageView()));
+    }
 #else
     qFatal("Bad use of createOpenGLCanvas(). It shouldn't have happened =(");
 #endif
