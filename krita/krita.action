@@ -339,6 +339,7 @@
     <Action name="first_frame" icon="" text="First Frame" whatsThis="" toolTip="" iconText="" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="last_frame" icon="" text="Last Frame" whatsThis="" toolTip="" iconText="" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="lazy_frame" icon="" text="Auto Frame Mode" whatsThis="" toolTip="" iconText="" shortcut="" defaultShortcut="" isCheckable="true" statusTip=""/>
+    <Action name="show_in_timeline" icon="" text="Show in Timeline" whatsThis="" toolTip="" iconText="" shortcut="" defaultShortcut="" isCheckable="true" statusTip=""/>
     <Action name="" icon="show_tool_options" text="Show Tool Options" whatsThis="" toolTip="Show Tool Options" iconText="Show Tool Options" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="" icon="show_tool_options" text="Show Brush Editor" whatsThis="" toolTip="Show Brush Editor" iconText="Show Brush Editor" shortcut="i" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="" icon="show_tool_options" text="Show Brush Presets" whatsThis="" toolTip="Show Brush Presets" iconText="Show Brush Presets" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
