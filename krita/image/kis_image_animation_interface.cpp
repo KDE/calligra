@@ -46,7 +46,7 @@ struct KisImageAnimationInterface::Private
     bool externalFrameActive;
     bool frameInvalidationBlocked;
 
-    KisTimeRange currentRange;
+    KisTimeRange fullClipRange;
     KisTimeRange playbackRange;
     int framerate;
     int cachedLastFrameValue;
@@ -59,7 +59,7 @@ KisImageAnimationInterface::KisImageAnimationInterface(KisImage *image)
     m_d->image = image;
 
     m_d->framerate = 24;
-    m_d->currentRange = KisTimeRange::fromTime(0, 100);
+    m_d->fullClipRange = KisTimeRange::fromTime(0, 100);
 
     connect(this, SIGNAL(sigInternalRequestTimeSwitch(int)), SLOT(switchCurrentTimeAsync(int)));
 }
@@ -78,19 +78,19 @@ int KisImageAnimationInterface::currentUITime() const
     return m_d->currentUITime;
 }
 
-const KisTimeRange& KisImageAnimationInterface::currentRange() const
+const KisTimeRange& KisImageAnimationInterface::fullClipRange() const
 {
-    return m_d->currentRange;
+    return m_d->fullClipRange;
 }
 
-void KisImageAnimationInterface::setRange(const KisTimeRange range) {
-    m_d->currentRange = range;
-    emit sigRangeChanged();
+void KisImageAnimationInterface::setFullClipRange(const KisTimeRange range) {
+    m_d->fullClipRange = range;
+    emit sigFullClipRangeChanged();
 }
 
 const KisTimeRange& KisImageAnimationInterface::playbackRange() const
 {
-    return m_d->playbackRange.isValid() ? m_d->playbackRange : m_d->currentRange;
+    return m_d->playbackRange.isValid() ? m_d->playbackRange : m_d->fullClipRange;
 }
 
 void KisImageAnimationInterface::setPlaybackRange(const KisTimeRange range)
@@ -251,7 +251,7 @@ int KisImageAnimationInterface::totalLength()
 
     int lastKey = m_d->cachedLastFrameValue;
 
-    lastKey  = std::max(lastKey, m_d->currentRange.end());
+    lastKey  = std::max(lastKey, m_d->fullClipRange.end());
     lastKey  = std::max(lastKey, m_d->currentUITime);
 
     return lastKey + 1;
