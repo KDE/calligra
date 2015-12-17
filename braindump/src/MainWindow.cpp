@@ -96,6 +96,21 @@ MainWindow::~MainWindow()
     delete view;
 }
 
+void MainWindow::closeEvent(QCloseEvent *e)
+{
+    Q_UNUSED(e);
+    const int scnum = QApplication::desktop()->screenNumber(parentWidget());
+    QRect desk = QApplication::desktop()->screenGeometry(scnum);
+
+    if(QApplication::desktop()->isVirtualDesktop()) {
+        desk = QApplication::desktop()->screenGeometry(QApplication::desktop()->screen());
+    }
+
+    KConfigGroup config(KSharedConfig::openConfig(), qApp->applicationName());
+    config.writeEntry(QString::fromLatin1("Width %1").arg(desk.width()), width());
+    config.writeEntry(QString::fromLatin1("Height %1").arg(desk.height()), height());
+}
+
 void MainWindow::setupActions()
 {
     KStandardAction::quit(qApp, SLOT(closeAllWindows()), actionCollection());

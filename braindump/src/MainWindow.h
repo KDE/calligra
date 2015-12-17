@@ -47,6 +47,8 @@ public:
     QList<KoCanvasObserverBase*> canvasObservers() const;
 public Q_SLOTS:
     void forceDockTabFonts();
+protected:
+    void closeEvent(QCloseEvent *e);
 private:
     RootSection* m_doc;
     View* view;
