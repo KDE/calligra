@@ -156,3 +156,8 @@ bool KisAbstractInputAction::isShortcutRequired(int shortcut) const
     Q_UNUSED(shortcut);
     return false;
 }
+
+bool KisAbstractInputAction::isAvailable() const
+{
+    return true;
+}

@@ -55,6 +55,11 @@ public:
      */
     int shortcutIndex() const;
 
+    /**
+     * Returns true if the shortcut is enabled at the moment
+     */
+    bool isAvailable() const;
+
 protected:
     bool compareKeys(const QList<Qt::Key> &keys1,
                      const QList<Qt::Key> &keys2);
