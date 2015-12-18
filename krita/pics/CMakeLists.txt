@@ -60,6 +60,7 @@ dark_onionOff.svg
 dark_lazyframeOn.png
 dark_lazyframeOff.png
 dark_dropframe.png
+dark_droppedframes.png
 
 light_prevframe.png
 light_nextframe.png
@@ -79,6 +80,7 @@ light_onionOff.svg
 light_lazyframeOn.png
 light_lazyframeOff.png
 light_dropframe.png
+light_droppedframes.png
 
 mirrorAxis-HorizontalMove.png
 mirrorAxis-VerticalMove.png
