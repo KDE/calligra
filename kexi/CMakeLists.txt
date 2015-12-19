@@ -64,21 +64,8 @@ add_subdirectory( kexiutils )
 macro_optional_find_package(MySQL)
 macro_log_feature(MYSQL_FOUND "libmysqlclient" "MySQL Client Library" "http://www.mysql.com" FALSE "" "Required by Kexi MySQL migration driver")
 
-set (PQXX_MIN_VERSION "3.0.0")
-set (PQXX_MAX_VERSION "5.0.0")
-
 macro_optional_find_package(CalligraPostgreSQL)
 macro_log_feature(POSTGRESQL_FOUND "libpq" "C application programmer's interface to PostgreSQL" "http://www.postgresql.org" FALSE "" "Required by Kexi PostgreSQL migration driver")
-
-pkg_check_modules (PQXX libpqxx)
-
-if (POSTGRESQL_FOUND AND PQXX_FOUND)
-   if (PQXX_VERSION VERSION_GREATER PQXX_MIN_VERSION AND PQXX_VERSION VERSION_LESS PQXX_MAX_VERSION)
-      macro_log_feature(PQXX_FOUND "libpqxx" "Official C++ client API for PostgreSQL" "http://pqxx.org/development/libpqxx/" FALSE "" "Required by Kexi PostgreSQL migration driver")
-   else ()
-      macro_log_feature(FALSE "libpqxx" "Official C++ client API for PostgreSQL, version >= ${PQXX_MIN_VERSION} and older than ${PQXX_MAX_VERSION}" "http://pqxx.org/development/libpqxx/" FALSE "" "Required by Kexi PostgreSQL migration driver")
-   endif ()
-endif ()
 
 macro_optional_find_package(FreeTDS)
 macro_log_feature(FREETDS_FOUND "FreeTDS" "Open source implementation of the TDS (Tabular Data Stream) protocol" "http://www.freetds.org" FALSE "" "Required by Kexi Sybase migration driver")
