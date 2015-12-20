@@ -87,11 +87,6 @@ void ChartDatabaseSelector::save()
                     d->widget.m_dataInRows->isChecked() ? Qt::Horizontal : Qt::Vertical);
 }
 
-KAction* ChartDatabaseSelector::createAction()
-{
-    return 0;
-}
-
 void ChartDatabaseSelector::showEvent(QShowEvent* event)
 {
     Q_UNUSED(event);

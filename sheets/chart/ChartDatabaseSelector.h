@@ -23,8 +23,6 @@
 
 #include <KoShapeConfigWidgetBase.h>
 
-class KAction;
-
 namespace Calligra
 {
 namespace Sheets
@@ -44,8 +42,6 @@ public:
     void open(KoShape *shape);
     /// reimplemented
     void save();
-    /// reimplemented
-    KAction *createAction();
 
     /// reimplemented
     virtual bool showOnShapeCreate() {
