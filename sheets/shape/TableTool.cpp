@@ -31,11 +31,12 @@
 #include <QToolBar>
 #include <QPushButton>
 #include <QUrl>
+#include <QMimeDatabase>
+#include <QFileDialog>
 
 #include <kcombobox.h>
 #include <kdebug.h>
 #include <KLocalizedString>
-#include <kfiledialog.h>
 #include <kpagedialog.h>
 
 #include <KoCanvasBase.h>
@@ -95,7 +96,10 @@ TableTool::~TableTool()
 
 void TableTool::importDocument()
 {
-    QString file = KFileDialog::getOpenFileName(QUrl(), "application/vnd.oasis.opendocument.spreadsheet", 0, "Import");
+    const QString filterString =
+        QMimeDatabase().mimeTypeForName("application/vnd.oasis.opendocument.spreadsheet").filterString();
+    // TODO: i18n for title
+    QString file = QFileDialog::getOpenFileName(0, "Import", QString(), filterString);
     if (file.isEmpty())
         return;
 #if 0 // FIXME Stefan: Port!
@@ -115,7 +119,10 @@ void TableTool::importDocument()
 
 void TableTool::exportDocument()
 {
-    QString file = KFileDialog::getSaveFileName(QUrl(), "application/vnd.oasis.opendocument.spreadsheet", 0, "Export");
+    const QString filterString =
+        QMimeDatabase().mimeTypeForName("application/vnd.oasis.opendocument.spreadsheet").filterString();
+    // TODO: i18n for title
+    QString file = QFileDialog::getSaveFileName(0, "Export", QString(), filterString);
     if (file.isEmpty())
         return;
 #if 0 // FIXME Stefan: Port!
