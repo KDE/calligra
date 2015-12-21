@@ -25,8 +25,6 @@
 #include "FunctionModuleRegistry.h"
 #include "ValueCalc.h"
 
-#include <klocale.h>
-
 using namespace Calligra::Sheets;
 
 // prototypes (sort alphabetically)

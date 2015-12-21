@@ -26,10 +26,10 @@
 // Calligra
 #include <KoIcon.h>
 
-// KDE
+// KF5
 #include <kdebug.h>
 #include <kdialog.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <ktextedit.h>
 
 // Qt

@@ -34,7 +34,7 @@
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QGridLayout>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <QLabel>
 
 #include <kmessagebox.h>

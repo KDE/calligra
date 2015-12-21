@@ -57,7 +57,7 @@
 #include <QThread>
 #endif
 
-// KDE
+// KF5
 #include <kcolorutils.h>
 #include <klocale.h>
 

@@ -24,7 +24,7 @@
 #include "Style.h"
 #include "Region.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <QPen>
 

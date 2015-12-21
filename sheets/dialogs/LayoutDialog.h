@@ -39,7 +39,6 @@
 #include <QPushButton>
 
 #include <kpagedialog.h>
-#include <klocale.h>
 
 #include "RowColumnFormat.h"
 #include "Style.h"
@@ -62,6 +61,7 @@ class QListWidget;
 class QCheckBox;
 class KColorButton;
 class KComboBox;
+class KLocale;
 
 namespace Calligra
 {

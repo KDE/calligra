@@ -26,7 +26,7 @@
 #include "Sheet.h"
 #include "Validity.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 using namespace Calligra::Sheets;
 

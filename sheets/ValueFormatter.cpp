@@ -29,7 +29,7 @@
 
 #include <kcalendarsystem.h>
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <float.h>
 #include <math.h>

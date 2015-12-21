@@ -29,7 +29,7 @@
 #include <QListWidget>
 
 // KDE
-#include <klocale.h>
+#include <KLocalizedString>
 
 // Sheets
 #include "calligra_sheets_limits.h"

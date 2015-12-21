@@ -29,9 +29,6 @@
 #include <QWriteLocker>
 #endif
 
-// KDE
-#include <klocale.h>
-
 // Calligra
 #include <KoXmlWriter.h>
 

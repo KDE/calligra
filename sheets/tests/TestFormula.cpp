@@ -18,8 +18,6 @@
 */
 #include "TestFormula.h"
 
-#include <klocale.h>
-
 #include "TestKspreadCommon.h"
 
 using namespace Calligra::Sheets;

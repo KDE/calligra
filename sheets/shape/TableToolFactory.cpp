@@ -20,7 +20,7 @@
 // Local
 #include "TableToolFactory.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <KoIcon.h>
 #include "TableShape.h"

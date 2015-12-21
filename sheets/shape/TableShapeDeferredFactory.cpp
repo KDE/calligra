@@ -23,7 +23,6 @@
 #include <QStringList>
 
 #include <kpluginfactory.h>
-#include <klocale.h>
 
 #include <KoDocumentResourceManager.h>
 #include <KoToolRegistry.h>

@@ -30,9 +30,9 @@
 #include <QListWidget>
 #include <QVector>
 
-// KDE
+// KF5
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 
 // Sheets

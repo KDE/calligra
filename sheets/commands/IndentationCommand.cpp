@@ -21,7 +21,7 @@
 #include "IndentationCommand.h"
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "ApplicationSettings.h"
 #include "Cell.h"

@@ -23,7 +23,7 @@
 
 #include <QApplication>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kpassivepopup.h>
 
 #include <KoCanvasBase.h>

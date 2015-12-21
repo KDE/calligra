@@ -33,8 +33,8 @@
 // Calligra
 #include <KoUnit.h>
 
-// KDE
-#include <klocale.h>
+// KF5
+#include <KLocalizedString>
 
 using namespace Calligra::Sheets;
 

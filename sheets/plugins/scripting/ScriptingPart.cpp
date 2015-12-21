@@ -28,7 +28,7 @@
 #include <kpluginfactory.h>
 #include <kstandarddirs.h>
 #include <kcmdlineargs.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 // KSpread
 #include <part/Doc.h>

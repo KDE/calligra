@@ -28,7 +28,7 @@
 #include <QStyle>
 
 // KF5
-#include <klocale.h>
+#include <KLocalizedString>
 
 // Calligra
 #include <KoFontComboBox.h>

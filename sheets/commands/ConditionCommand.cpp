@@ -20,7 +20,7 @@
 // Local
 #include "ConditionCommand.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "CellStorage.h"
 #include "ConditionsStorage.h"

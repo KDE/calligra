@@ -19,7 +19,7 @@
 
 #include "NamedAreaCommand.h"
 
-#include "klocale.h"
+#include "KLocalizedString"
 
 #include "Damages.h"
 #include "FormulaStorage.h"

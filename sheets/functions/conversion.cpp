@@ -27,8 +27,6 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
-#include <klocale.h>
-
 #include <QByteArray>
 
 using namespace Calligra::Sheets;

@@ -18,8 +18,6 @@
 */
 #include "TestUtil.h"
 
-#include <klocale.h>
-
 #include "TestKspreadCommon.h"
 #include <Util.h>
 

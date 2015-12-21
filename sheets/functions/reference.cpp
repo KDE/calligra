@@ -35,8 +35,6 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
-#include <klocale.h>
-
 using namespace Calligra::Sheets;
 
 // prototypes (sorted alphabetically)

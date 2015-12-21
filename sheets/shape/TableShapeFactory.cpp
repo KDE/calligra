@@ -23,7 +23,7 @@
 #include <QStringList>
 
 #include <kpluginfactory.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <KoIcon.h>
 #include <KoDocumentResourceManager.h>

@@ -29,7 +29,7 @@
 #include <QListWidget>
 #include <QVBoxLayout>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "Damages.h"
 #include "Map.h"

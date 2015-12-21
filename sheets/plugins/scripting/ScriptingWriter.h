@@ -25,7 +25,7 @@
 
 #include <QString>
 #include <QObject>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <part/Doc.h>
 #include <Sheet.h>

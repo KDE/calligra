@@ -19,7 +19,7 @@
 
 #include "ApplyFilterCommand.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "CellStorage.h"
 #include "Damages.h"

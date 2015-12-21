@@ -25,7 +25,7 @@
 #include "SpecialPasteDialog.h"
 
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "commands/PasteCommand.h"
 #include "Map.h"

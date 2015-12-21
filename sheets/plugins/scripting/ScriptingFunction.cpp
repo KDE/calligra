@@ -23,7 +23,7 @@
 #include <QDomDocument>
 #include <QPointer>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 //#include <Doc.h>
 //#include <View.h>

@@ -24,7 +24,7 @@
 #include "ValueStorage.h"
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <QString>
 #include <QTextStream>

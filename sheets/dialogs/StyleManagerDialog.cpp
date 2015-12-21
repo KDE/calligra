@@ -29,7 +29,7 @@
 #include <kpushbutton.h>
 #include <kcombobox.h>
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "Cell.h"
 #include "LayoutDialog.h"

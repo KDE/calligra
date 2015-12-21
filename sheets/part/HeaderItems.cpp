@@ -56,8 +56,8 @@
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsSceneWheelEvent>
 
-// KDE
-#include <klocale.h>
+// KF5
+#include <KLocalizedString>
 
 // Calligra
 #include <KoCanvasController.h>

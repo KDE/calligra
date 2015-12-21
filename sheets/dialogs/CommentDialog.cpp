@@ -27,7 +27,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <ktextedit.h>
 
 // Sheets

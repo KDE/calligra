@@ -40,7 +40,7 @@
 #include <kdesktopfile.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <krecentdocument.h>
 #include <kurlrequester.h>
 #include <kurlcompletion.h>

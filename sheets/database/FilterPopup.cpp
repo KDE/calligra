@@ -26,7 +26,7 @@
 #include <QScrollArea>
 #include <QVBoxLayout>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "CellStorage.h"
 #include "Database.h"

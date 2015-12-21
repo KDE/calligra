@@ -28,7 +28,7 @@
 
 #include <KoCanvasBase.h>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kcalendarsystem.h>
 #include <kmessagebox.h>
 

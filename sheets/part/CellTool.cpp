@@ -46,7 +46,7 @@
 #include <QPainter>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>

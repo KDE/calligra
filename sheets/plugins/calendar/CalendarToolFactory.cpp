@@ -23,7 +23,7 @@
 #include "CalendarTool.h"
 
 #include <kpluginfactory.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 using namespace Calligra::Sheets;
 

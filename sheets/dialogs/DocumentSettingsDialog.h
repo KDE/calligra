@@ -31,9 +31,9 @@
 #include <QLabel>
 
 #include <kpagedialog.h>
-#include <klocale.h>
 
 class KoVBox;
+class KLocale;
 class QCheckBox;
 class QSpinBox;
 class QComboBox;

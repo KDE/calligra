@@ -20,7 +20,7 @@
 // Local
 #include "CellToolFactory.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <KoIcon.h>
 #include "CellTool.h"

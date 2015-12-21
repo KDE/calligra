@@ -31,7 +31,7 @@
 
 #include <QDir>
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "CalculationSettings.h"
 #include "Function.h"

@@ -26,7 +26,7 @@
 #include <QApplication>
 #include <QGroupBox>
 #include <QVBoxLayout>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <kdebug.h>
 #include <QRadioButton>

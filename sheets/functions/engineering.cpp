@@ -28,8 +28,6 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
-#include <klocale.h>
-
 // used by the CONVERT function
 #include <QMap>
 

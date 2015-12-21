@@ -24,7 +24,7 @@
 #include <QGridLayout>
 #include <QPointer>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kcharselect.h>
 #include <kdebug.h>
 #include <kstandardguiitem.h>

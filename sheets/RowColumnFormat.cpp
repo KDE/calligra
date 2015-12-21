@@ -27,7 +27,6 @@
 #include <stdio.h>
 
 #include <kdebug.h>
-#include <klocale.h>
 
 #include <KoXmlNS.h>
 #include <KoUnit.h>

@@ -26,7 +26,7 @@
 #include <QVBoxLayout>
 
 #include <kcombobox.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 using namespace Calligra::Sheets;
 

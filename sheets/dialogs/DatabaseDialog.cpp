@@ -37,7 +37,7 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <klineedit.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 #include <knumvalidator.h>
 #include <ktextedit.h>

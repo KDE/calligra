@@ -21,7 +21,7 @@
 #include "CommentCommand.h"
 
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "CellStorage.h"
 #include "Sheet.h"

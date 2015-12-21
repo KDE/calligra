@@ -22,7 +22,7 @@
 
 #include <kcombobox.h>
 #include <kdialog.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <KoVBox.h>
 
 #include "Sheet.h"

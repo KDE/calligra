@@ -33,7 +33,7 @@
 
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "ui/Selection.h"
 #include "Sheet.h"

@@ -54,8 +54,8 @@
 #include <QToolTip>
 #include <QScrollBar>
 
-// KDE
-#include <klocale.h>
+// KF5
+#include <KLocalizedString>
 
 // Calligra
 #include <KoCanvasController.h>

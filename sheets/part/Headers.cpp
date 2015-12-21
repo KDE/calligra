@@ -50,8 +50,8 @@
 #include <QTextLayout>
 #include <QToolTip>
 
-// KDE
-#include <klocale.h>
+// KF5
+#include <KLocalizedString>
 #include <kmessagebox.h>
 
 // Calligra

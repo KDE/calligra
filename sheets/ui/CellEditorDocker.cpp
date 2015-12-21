@@ -25,7 +25,7 @@
 #include <QToolButton>
 
 // KF5
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <kdebug.h>
 

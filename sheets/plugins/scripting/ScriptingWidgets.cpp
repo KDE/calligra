@@ -26,7 +26,7 @@
 #include <QTreeView>
 #include <QStandardItemModel>
 #include <QStandardItem>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 
 #include <part/View.h>
