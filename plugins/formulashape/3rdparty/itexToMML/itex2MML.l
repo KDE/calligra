@@ -1,5 +1,5 @@
-/*             itex2MML 1.4.10
- *   itex2MML.l last modified 6/16/2012
+/*             itex2MML 1.5.1
+ *   itex2MML.l last modified 1/5/2014
  */
 
 %{
@@ -29,6 +29,11 @@ int itex2MML_inoptarg[itex2MML_optarg_depth];
 int itex2MML_optarg_ind = 0;
 int itex2MML_env_start = 0;
 
+#define YY_USER_ACTION itex2MML_capture_eqn_src();
+# define itex2MML_eqn_bufsize 131072
+char itex2MML_eqn_src[itex2MML_eqn_bufsize];
+char * itex2MML_eqn_end = itex2MML_eqn_src;
+
 int itex2MML_rowposn = 0;
 int itex2MML_displaymode = 0;
 
@@ -50,7 +55,7 @@ int itex2MML_displaymode = 0;
 
 
 "$"{1,2} |
-"\\]"           {BEGIN(INITIAL); return ENDMATH;}
+"\\]"           {itex2MML_eqn_src[itex2MML_eqn_end-itex2MML_eqn_src-yyleng]=0; itex2MML_eqn_end=itex2MML_eqn_src; yylval=itex2MML_copy_escaped(itex2MML_eqn_src); BEGIN(INITIAL); return ENDMATH;}
 
 
 "^"            return SUP;
@@ -115,9 +120,9 @@ int itex2MML_displaymode = 0;
 "\\}"           {yylval=itex2MML_copy_string("}"); return RIGHTDELIM;}
 
 "\\vert" |
-"|"             {yylval=itex2MML_copy_string("&VerticalBar;"); return OTHERDELIM;}
+"|"             {yylval=itex2MML_copy_string("&vert;"); return OTHERDELIM;}
 "\\Vert" |
-"\\|"           {yylval=itex2MML_copy_string("&DoubleVerticalBar;"); return OTHERDELIM;}
+"\\|"           {yylval=itex2MML_copy_string("&Vert;"); return OTHERDELIM;}
 
 "\\setminus"   {yylval=itex2MML_copy_string("&setminus;"); return MO;}
 "\\backslash"   {yylval=itex2MML_copy_string("&bsol;"); return MO;}
@@ -127,13 +132,17 @@ int itex2MML_displaymode = 0;
 
 "\\lfloor" |
 "\\lceil"  |
+"\\lmoustache" |
 "\\lang"   |
 "\\langle"      {yylval=itex2MML_copy2(yytext, ";"); if (yylval != itex2MML_empty_string) yylval[0]='&'; return LEFTDELIM;}
+"\\llangle"     {yylval=itex2MML_copy_string("&Lang;"); return LEFTDELIM;}
 
 "\\rfloor" |
 "\\rceil"  |
+"\\rmoustache" |
 "\\rang"   |
 "\\rangle"      {yylval=itex2MML_copy2(yytext, ";"); if (yylval != itex2MML_empty_string) yylval[0]='&'; return RIGHTDELIM;}
+"\\rrangle"     {yylval=itex2MML_copy_string("&Rang;"); return RIGHTDELIM;}
 
 "/"             {yylval=itex2MML_copy_string(yytext); return OTHERDELIM;}
 
@@ -366,6 +375,10 @@ int itex2MML_displaymode = 0;
 "\\nleftrightarrow"     |
 "\\nRightarrow"         |
 "\\nrightarrow"         |
+"\\rightharpoonup"      |
+"\\rightharpoondown"    |
+"\\leftharpoonup"       |
+"\\leftharpoondown"     |
 "\\downharpoonleft"     |
 "\\downharpoonright"    |
 "\\leftrightharpoons"   |
@@ -816,6 +829,8 @@ int itex2MML_displaymode = 0;
 "\\tooltip"       {BEGIN(PLAINTEXT); return TOOLTIP;}
 
 "\\toggle"        {return TOGGLE;}
+"\\begintoggle"   {return TOGGLESTART;}
+"\\endtoggle"     {return TOGGLEEND;}
 
 "\\mathraisebox"  {BEGIN(RAISEBOX1); return RAISEBOX;}
 
@@ -839,6 +854,9 @@ int itex2MML_displaymode = 0;
 "\\scriptscriptsize"     {return SCSCSIZE;}
 
 "\\mathit"       {return ITALICS;}
+
+"\\mathsf"       {return SANS;}
+"\\mathtt"       {return TT;}
 
 "\\boldsymbol" |
 "\\mathbf"       {return BOLD;}
@@ -907,7 +925,12 @@ int itex2MML_displaymode = 0;
 "\\qquad"       {return QQUAD;}
 
 "\\!" |
-"\\negspace"    {return NEGSPACE;}
+"\\negspace" |
+"\\negthinspace"    {return NEGSPACE;}
+
+"\\negmedspace"   {return NEGMEDSPACE;}
+
+"\\negthickspace" {return NEGTHICKSPACE;}
 
 "\\phantom"     {return PHANTOM;}
 
@@ -939,7 +962,7 @@ int itex2MML_displaymode = 0;
 <OPTARG>{
 "[" {if(itex2MML_optarg_ind < itex2MML_optarg_depth - 1 && itex2MML_inoptarg[itex2MML_optarg_ind] !=1 ){itex2MML_optarg_ind++; itex2MML_inoptarg[itex2MML_optarg_ind]=1;}; BEGIN(MATH); return OPTARGOPEN;}
 [\n\r\t ]+    ;
-.   {BEGIN(MATH); unput(yytext[0]);}
+.   {itex2MML_eqn_src[itex2MML_eqn_end-itex2MML_eqn_src]=0; --itex2MML_eqn_end; BEGIN(MATH); unput(yytext[0]);}
 }
 
 <RAISEBOX1>{
@@ -954,12 +977,12 @@ int itex2MML_displaymode = 0;
 
 <TEXTOPTARG1>{
 \[[^\]]*?\] {yylval=itex2MML_copy_string(yytext+1); if ((yyleng > 1) && (yylval != itex2MML_empty_string)) yylval[yyleng-2]='\0'; BEGIN(TEXTOPTARG); return TEXTSTRING;}
-. {BEGIN(MATH); unput(yytext[0]);}
+. {itex2MML_eqn_src[itex2MML_eqn_end-itex2MML_eqn_src]=0; --itex2MML_eqn_end; BEGIN(MATH); unput(yytext[0]);}
 }
 
 <TEXTOPTARG>{
 \[[^\]]*?\] {yylval=itex2MML_copy_string(yytext+1); if ((yyleng > 1) && (yylval != itex2MML_empty_string)) yylval[yyleng-2]='\0'; BEGIN(MATH); return TEXTSTRING;}
-. {BEGIN(MATH); unput(yytext[0]);}
+. {itex2MML_eqn_src[itex2MML_eqn_end-itex2MML_eqn_src]=0; --itex2MML_eqn_end; BEGIN(MATH); unput(yytext[0]);}
 }
 
 <MATHENV>{
@@ -995,7 +1018,7 @@ int itex2MML_displaymode = 0;
 }
 
 <SVGENV>{
-"\\end\{svg" {yylval=itex2MML_copy_string(yytext); yylval[yyleng-8]=0; BEGIN(SVGEND); return XMLSTRING;}
+"\\end\{svg" {itex2MML_do_capture_eqn(); yylval=itex2MML_copy_string(yytext); yylval[yyleng-8]=0; BEGIN(SVGEND); return XMLSTRING;}
 (.|\n) {yymore();}
 }
 
@@ -1083,6 +1106,21 @@ void itex2MML_setup (const char * buffer, unsigned long length)
 
 	s_itex2MML_buffer = buffer;
 	s_itex2MML_length = length;
+}
+
+int itex2MML_capture_eqn_src()
+{
+	if (YY_START != INITIAL && YY_START != SVGENV)
+		itex2MML_do_capture_eqn();
+}
+
+int itex2MML_do_capture_eqn()
+{
+	if (itex2MML_eqn_bufsize - (itex2MML_eqn_end-itex2MML_eqn_src+yyleng) > 1)
+	{
+		strcpy(itex2MML_eqn_end, yytext);
+		itex2MML_eqn_end += yyleng;
+	}
 }
 
 static int s_itex2MML_read (char * buffer, int max_size)

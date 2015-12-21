@@ -63,7 +63,7 @@ set(formulashape_PART_SRCS
 
 add_library(calligra_shape_formular MODULE ${formulashape_PART_SRCS})
 kcoreaddons_desktop_to_json(calligra_shape_formular calligra_shape_formular.desktop)
-
+target_compile_options(calligra_shape_formular PRIVATE -Wno-error=implicit-function-declaration)
 target_link_libraries(calligra_shape_formular koformula ${M2MML_TOOL_LIBRARIES})
 
 
