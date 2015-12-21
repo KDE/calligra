@@ -46,7 +46,7 @@ CalendarTool::CalendarTool(KoCanvasBase* canvas)
 {
     setObjectName(QLatin1String("CalendarTool"));
     /*
-        KAction* importAction = new KAction(koIcon("document-import"), i18n("Import OpenDocument Spreadsheet File"), this);
+        QAction* importAction = new QAction(koIcon("document-import"), i18n("Import OpenDocument Spreadsheet File"), this);
         importAction->setIconText(i18n("Import"));
         addAction("import", importAction);
         connect(importAction, SIGNAL(triggered()), this, SLOT(importDocument()));*/

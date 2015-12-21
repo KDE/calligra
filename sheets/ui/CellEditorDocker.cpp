@@ -24,8 +24,7 @@
 #include <QResizeEvent>
 #include <QToolButton>
 
-// KDE
-#include <kaction.h>
+// KF5
 #include <klocale.h>
 
 #include <kdebug.h>

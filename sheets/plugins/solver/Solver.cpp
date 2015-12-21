@@ -23,7 +23,6 @@
 #include <kdebug.h>
 #include <kpluginfactory.h>
 #include <ktextedit.h>
-#include <kaction.h>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
 #include <Formula.h>

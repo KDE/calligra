@@ -35,7 +35,6 @@
 #include <kcombobox.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kaction.h>
 #include <kfiledialog.h>
 #include <kpagedialog.h>
 
@@ -77,12 +76,12 @@ TableTool::TableTool(KoCanvasBase* canvas)
     d->selection = new Selection(canvas);
     d->tableShape = 0;
 
-    KAction* importAction = new KAction(koIcon("document-import"), i18n("Import OpenDocument Spreadsheet File"), this);
+    QAction* importAction = new QAction(koIcon("document-import"), i18n("Import OpenDocument Spreadsheet File"), this);
     importAction->setIconText(i18n("Import"));
     addAction("import", importAction);
     connect(importAction, SIGNAL(triggered()), this, SLOT(importDocument()));
 
-    KAction* exportAction = new KAction(koIcon("document-export"), i18n("Export OpenDocument Spreadsheet File"), this);
+    QAction* exportAction = new QAction(koIcon("document-export"), i18n("Export OpenDocument Spreadsheet File"), this);
     exportAction->setIconText(i18n("Export"));
     addAction("export", exportAction);
     connect(exportAction, SIGNAL(triggered()), this, SLOT(exportDocument()));

@@ -23,11 +23,11 @@
 #include <QDomElement>
 #include <QHBoxLayout>
 #include <QToolButton>
+#include <QWidgetAction>
 
 #include <QStyle>
 
-// KDE
-#include <kaction.h>
+// KF5
 #include <klocale.h>
 
 // Calligra
