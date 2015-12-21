@@ -34,14 +34,14 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QListWidget>
+#include <QPushButton>
 
-// KDE
+// KF5
 #include <kcombobox.h>
 #include <kdebug.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>
-#include <kpushbutton.h>
 
 #include <KoCanvasBase.h>
 
