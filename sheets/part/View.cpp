@@ -70,10 +70,10 @@
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
 #include <kxmlguifactory.h>
-#include <kservicetypetrader.h>
 
 // Calligra includes
 #include <KoComponentData.h>
+#include <KoJsonTrader.h>
 #include <KoGlobal.h>
 #include <KoColor.h>
 #include <KoCanvasControllerWidget.h>
@@ -567,27 +567,15 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
 
     d->initActions();
 
-    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Sheets/ViewPlugin"),
-                                                              QString::fromLatin1("(Type == 'Service') and "
-                                                                                  "([X-Sheets-Version] == 28)"));
+    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Sheets/ViewPlugin", QString());
 
-    KService::List::ConstIterator iter;
-    for(iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
-
-        KService::Ptr service = *iter;
-
-        QString error;
-        KXMLGUIClient* plugin =
-                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
-        if(plugin) {
+    foreach(QPluginLoader *pluginLoader, offers) {
+        KPluginFactory *factory = qobject_cast<KPluginFactory *>(pluginLoader->instance());
+        KXMLGUIClient *plugin = dynamic_cast<KXMLGUIClient*>(factory->create<QObject>(this, QVariantList()));
+        if (plugin) {
             insertChildClient(plugin);
-        } else {
-            if(!error.isEmpty()) {
-                kWarning() << " Error loading plugin was : ErrNoLibrary" << error;
-            }
         }
     }
-
 
     // Connect updateView() signal to View::update() in order to repaint its
     // child widgets: the column/row headers and the select all button.

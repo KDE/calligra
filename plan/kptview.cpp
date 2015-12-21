@@ -56,13 +56,13 @@
 #include <kconfigdialog.h>
 #include <ktoolinvocation.h>
 #include <krun.h>
-#include <kservicetypetrader.h>
 #include <khelpclient.h>
 
 #include <KoDocumentEntry.h>
 #include <KoTemplateCreateDia.h>
 #include <KoPart.h>
 #include <KoComponentData.h>
+#include <KoJsonTrader.h>
 
 #include "kptviewbase.h"
 #include "kptaccountsview.h"
@@ -380,23 +380,12 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
     // create views after dockers hidden, views take time for large projects
     QTimer::singleShot( 100, this, SLOT(initiateViews()) );
 
-    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Plan/ViewPlugin"),
-                                                              QString::fromLatin1("(Type == 'Service') and "
-                                                                                  "([X-Plan-Version] == 28)"));
-
-    KService::List::ConstIterator iter;
-    for(iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
-
-        KService::Ptr service = *iter;
-        QString error;
-        KXMLGUIClient* plugin =
-                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
-        if(plugin) {
+    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Plan/ViewPlugin", QString());
+    foreach(QPluginLoader *pluginLoader, offers) {
+        KPluginFactory *factory = qobject_cast<KPluginFactory *>(pluginLoader->instance());
+        KXMLGUIClient *plugin = dynamic_cast<KXMLGUIClient*>(factory->create<QObject>(this, QVariantList()));
+        if (plugin) {
             insertChildClient(plugin);
-        } else {
-            if(!error.isEmpty()) {
-                warnPlan << " Error loading plugin was : ErrNoLibrary" << error;
-            }
         }
     }
 
