@@ -29,9 +29,9 @@
 #include <KoToolBase.h>
 
 #include <kmessagebox.h>
-#include <kmimetype.h>
 #include <krun.h>
 
+#include <QMimeDatabase>
 #include <QTimer>
 #include <QUrl>
 
@@ -93,7 +93,7 @@ void HyperlinkStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
             }
         }
     } else {
-        const QString type = KMimeType::findByUrl(url, 0, url.isLocalFile())->name();
+        const QString type = QMimeDatabase().mimeTypeForUrl(url).name();
         if (!Util::localReferenceAnchor(d->url)) {
             const bool executable = KRun::isExecutableFile(url, type);
             if (executable) {
