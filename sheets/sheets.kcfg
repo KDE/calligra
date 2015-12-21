@@ -93,9 +93,9 @@
       <label></label>
       <whatsthis></whatsthis>
       <!-- kspread_view.cc:2098 -->
-      <!--             doc()->setCompletionMode((KGlobalSettings::Completion)config->readNumEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto))); -->
+      <!--             doc()->setCompletionMode((KCompletion::CompletionMode)config->readNumEntry("Completion Mode",(int)(KCompletion::CompletionAuto))); -->
       <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:510 -->
-      <!--       tmpCompletion=( KGlobalSettings::Completion)config->readNumEntry( "Completion Mode" ,KGlobalSettings::CompletionAuto) ; -->
+      <!--       tmpCompletion=( KCompletion::CompletionMode)config->readNumEntry( "Completion Mode" ,KCompletion::CompletionAuto) ; -->
       <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:511 -->
       <!--       config->writeEntry( "Completion Mode", (int)tmpCompletion); -->
       <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:636 -->

@@ -956,7 +956,7 @@ void View::initConfig()
     doc()->map()->settings()->setShowColumnHeader(parameterGroup.readEntry("Column Header", true));
     doc()->map()->settings()->setShowRowHeader(parameterGroup.readEntry("Row Header", true));
     if (!configFromDoc)
-        doc()->map()->settings()->setCompletionMode((KGlobalSettings::Completion)parameterGroup.readEntry("Completion Mode", (int)(KCompletion::CompletionAuto)));
+        doc()->map()->settings()->setCompletionMode((KCompletion::CompletionMode)parameterGroup.readEntry("Completion Mode", (int)(KCompletion::CompletionAuto)));
     doc()->map()->settings()->setMoveToValue((Calligra::Sheets::MoveTo)parameterGroup.readEntry("Move", (int)(Bottom)));
     doc()->map()->settings()->setIndentValue(parameterGroup.readEntry("Indent", 10.0));
     doc()->map()->settings()->setTypeOfCalc((MethodOfCalc)parameterGroup.readEntry("Method of Calc", (int)(SumOfNumber)));

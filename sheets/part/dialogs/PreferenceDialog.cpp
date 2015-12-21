@@ -40,7 +40,7 @@
 #include <KConfigGroup>
 #include <kcombobox.h>
 #include <kconfig.h>
-#include <kglobalsettings.h>
+#include <KCompletion>
 #include <knuminput.h>
 
 #include <KoConfigAuthorPage.h>
@@ -172,22 +172,22 @@ void PreferenceDialog::Private::applyInterfaceOptions()
     }
 
 #if 0 // CALLIGRA_SHEETS_COMPLETION_MODE_SETTING
-    KGlobalSettings::Completion tmpCompletion = KGlobalSettings::CompletionNone;
+    KCompletion::CompletionMode tmpCompletion = KCompletion::CompletionNone;
     switch (typeCompletion->currentIndex()) {
     case 0:
-        tmpCompletion = KGlobalSettings::CompletionNone;
+        tmpCompletion = KCompletion::CompletionNone;
         break;
     case 1:
-        tmpCompletion = KGlobalSettings::CompletionShell;
+        tmpCompletion = KCompletion::CompletionShell;
         break;
     case 2:
-        tmpCompletion = KGlobalSettings::CompletionPopup;
+        tmpCompletion = KCompletion::CompletionPopup;
         break;
     case 3:
-        tmpCompletion = KGlobalSettings::CompletionAuto;
+        tmpCompletion = KCompletion::CompletionAuto;
         break;
     case 4:
-        tmpCompletion = KGlobalSettings::CompletionMan;
+        tmpCompletion = KCompletion::CompletionMan;
         break;
     }
 

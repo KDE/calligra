@@ -22,9 +22,8 @@
 #ifndef CALLIGRA_SHEETS_CELL_EDITOR
 #define CALLIGRA_SHEETS_CELL_EDITOR
 
-#include <kglobalsettings.h>
+#include <KCompletion>
 #include <ktextedit.h>
-
 
 #include "calligra_sheets_export.h"
 #include "CellEditorBase.h"
@@ -104,7 +103,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void  slotTextChanged();
-    void  slotCompletionModeChanged(KGlobalSettings::Completion _completion);
+    void  slotCompletionModeChanged(KCompletion::CompletionMode _completion);
     void  slotCursorPositionChanged();
     void insertCompletion(const QString &completion);
 

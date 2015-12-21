@@ -20,7 +20,7 @@
 #ifndef KSPREADAPPLICATIONSETTINGS
 #define KSPREADAPPLICATIONSETTINGS
 
-#include <kglobalsettings.h>
+#include <KCompletion>
 
 #include <QColor>
 #include <QObject>
@@ -149,13 +149,13 @@ public:
     /**
      * @return completion mode
      */
-    KGlobalSettings::Completion completionMode() const;
+    KCompletion::CompletionMode completionMode() const;
 
     /**
      * Sets the completion mode.
      * @param mode the mode to be set
      */
-    void setCompletionMode(KGlobalSettings::Completion mode);
+    void setCompletionMode(KCompletion::CompletionMode mode);
 
     Calligra::Sheets::MoveTo moveToValue() const;
     void setMoveToValue(Calligra::Sheets::MoveTo moveTo);

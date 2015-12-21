@@ -973,7 +973,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
     addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::show_horizontal_scrollbar", ksdoc->map()->settings()->showHorizontalScrollBar());
     addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::show_vertical_scrollbar", ksdoc->map()->settings()->showVerticalScrollBar());
     addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::show_notebook_tabs", ksdoc->map()->settings()->showTabBar());
-    if (ksdoc->map()->settings()->completionMode() == KGlobalSettings::CompletionAuto)
+    if (ksdoc->map()->settings()->completionMode() == KCompletion::CompletionAuto)
         addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::do_auto_completion", "true");
     else
         addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::do_auto_completion", "false");

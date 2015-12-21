@@ -275,7 +275,7 @@ void set_document_attributes(Doc * ksdoc, QDomElement * docElem)
         } else if (gmr_name.toElement().text() == "WorkbookView::show_notebook_tabs") {
             ksdoc->map()->settings()->setShowTabBar(gmr_value.toElement().text().toLower() == "true" ? true : false);
         } else if (gmr_name.toElement().text() == "WorkbookView::do_auto_completion") {
-            ksdoc->map()->settings()->setCompletionMode(KGlobalSettings::CompletionAuto);
+            ksdoc->map()->settings()->setCompletionMode(KCompletion::CompletionAuto);
         } else if (gmr_name.toElement().text() == "WorkbookView::is_protected") {
             //TODO protect document ???
             //ksdoc->map()->isProtected()

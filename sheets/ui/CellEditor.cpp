@@ -462,7 +462,7 @@ void CellEditor::setEditorFont(QFont const & font, bool updateSize, const KoView
     }
 }
 
-void CellEditor::slotCompletionModeChanged(KGlobalSettings::Completion _completion)
+void CellEditor::slotCompletionModeChanged(KCompletion::CompletionMode _completion)
 {
     selection()->activeSheet()->map()->settings()->setCompletionMode(_completion);
 }
