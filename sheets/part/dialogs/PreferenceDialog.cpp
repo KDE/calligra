@@ -41,7 +41,6 @@
 #include <kcombobox.h>
 #include <kconfig.h>
 #include <KCompletion>
-#include <knuminput.h>
 
 #include <KoConfigAuthorPage.h>
 #include <KoUnit.h>

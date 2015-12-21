@@ -38,7 +38,6 @@
 #include <QLabel>
 
 #include <kmessagebox.h>
-#include <knumvalidator.h>
 
 #include <QRadioButton>
 #include <QCheckBox>
