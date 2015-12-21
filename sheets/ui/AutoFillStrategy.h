@@ -40,7 +40,7 @@ public:
     /**
      * Constructor.
      */
-    AutoFillStrategy(CellToolBase *cellTool, const QPointF position, Qt::KeyboardModifiers modifiers);
+    AutoFillStrategy(CellToolBase *cellTool, const QPointF &position, Qt::KeyboardModifiers modifiers);
 
     /**
      * Destructor.

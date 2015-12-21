@@ -35,7 +35,7 @@ public:
 };
 
 PasteStrategy::PasteStrategy(CellToolBase *cellTool,
-                             const QPointF documentPos, Qt::KeyboardModifiers modifiers)
+                             const QPointF &documentPos, Qt::KeyboardModifiers modifiers)
         : SelectionStrategy(cellTool, documentPos, modifiers)
         , d(new Private)
 {

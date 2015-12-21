@@ -46,7 +46,7 @@ public:
 };
 
 HyperlinkStrategy::HyperlinkStrategy(CellToolBase *cellTool,
-                                     const QPointF documentPos, Qt::KeyboardModifiers modifiers,
+                                     const QPointF& documentPos, Qt::KeyboardModifiers modifiers,
                                      const QString& url, const QRectF& textRect)
         : AbstractSelectionStrategy(cellTool, documentPos, modifiers)
         , d(new Private)

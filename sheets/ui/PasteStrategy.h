@@ -41,7 +41,7 @@ public:
     /**
      * Constructor.
      */
-    PasteStrategy(CellToolBase *cellTool, const QPointF position, Qt::KeyboardModifiers modifiers);
+    PasteStrategy(CellToolBase *cellTool, const QPointF &position, Qt::KeyboardModifiers modifiers);
 
     /**
      * Destructor.

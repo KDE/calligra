@@ -40,7 +40,7 @@ public:
     /**
      * Constructor.
      */
-    MergeStrategy(CellToolBase *cellTool, const QPointF position, Qt::KeyboardModifiers modifiers);
+    MergeStrategy(CellToolBase *cellTool, const QPointF &position, Qt::KeyboardModifiers modifiers);
 
     /**
      * Destructor.

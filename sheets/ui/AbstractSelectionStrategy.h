@@ -48,7 +48,7 @@ public:
     /**
      * Constructor.
      */
-    AbstractSelectionStrategy(CellToolBase *cellTool, const QPointF position, Qt::KeyboardModifiers modifiers);
+    AbstractSelectionStrategy(CellToolBase *cellTool, const QPointF &position, Qt::KeyboardModifiers modifiers);
 
     /**
      * Destructor.

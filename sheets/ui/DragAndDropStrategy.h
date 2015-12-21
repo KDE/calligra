@@ -40,7 +40,7 @@ public:
     /**
      * Constructor.
      */
-    DragAndDropStrategy(CellToolBase *cellTool, const QPointF position, Qt::KeyboardModifiers modifiers);
+    DragAndDropStrategy(CellToolBase *cellTool, const QPointF &position, Qt::KeyboardModifiers modifiers);
 
     /**
      * Destructor.
