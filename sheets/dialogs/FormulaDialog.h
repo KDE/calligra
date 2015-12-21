@@ -37,7 +37,7 @@
 
 class QLabel;
 class QPushButton;
-class KTabWidget;
+class QTabWidget;
 class KTextBrowser;
 class QStringListModel;
 class QSortFilterProxyModel;
@@ -143,7 +143,7 @@ private:
     Selection* m_selection;
     CellEditorBase* m_editor;
 
-    KTabWidget* m_tabwidget;
+    QTabWidget* m_tabwidget;
     KTextBrowser* m_browser;
     QWidget* m_input;
 

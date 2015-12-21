@@ -28,7 +28,7 @@
 // Local
 #include "FormulaDialog.h"
 
-#include <ktabwidget.h>
+#include <QTabWidget>
 #include <QApplication>
 #include <QCloseEvent>
 #include <QGridLayout>
@@ -137,7 +137,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     result = new KLineEdit(page);
     grid1->addWidget(result, 4, 0, 1, -1);
 
-    m_tabwidget = new KTabWidget(page);
+    m_tabwidget = new QTabWidget(page);
     m_tabwidget->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     grid1->addWidget(m_tabwidget, 0, 1, 4, 1);
 
