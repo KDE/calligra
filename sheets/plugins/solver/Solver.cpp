@@ -20,11 +20,13 @@
 // Local
 #include "Solver.h"
 
+#include <QStandardPaths>
+
 #include <kdebug.h>
 #include <kpluginfactory.h>
 #include <ktextedit.h>
-#include <kstandarddirs.h>
 #include <kactioncollection.h>
+
 #include <Formula.h>
 #include <Cell.h>
 #include <part/Doc.h>
@@ -58,7 +60,7 @@ Solver::Solver(QObject* parent, const QVariantList& args)
 {
     Q_UNUSED(args)
 
-    setXMLFile(KStandardDirs::locate("data", "sheets/viewplugins/solver.rc"), true);
+    setXMLFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "sheets/viewplugins/solver.rc"), true);
 
     d->dialog = 0;
     d->view = qobject_cast<View*>(parent);

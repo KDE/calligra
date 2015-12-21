@@ -133,10 +133,10 @@
 #include <kmessagebox.h>
 #include <kreplace.h>
 #include <kstandardaction.h>
-#include <kstandarddirs.h>
 #include <ktoggleaction.h>
 
 // Qt
+#include <QStandardPaths>
 #include <QBuffer>
 #include <QHash>
 #include <QMenu>
@@ -1154,7 +1154,7 @@ QList<QPointer<QWidget> >  CellToolBase::createOptionWidgets()
 {
     QList<QPointer<QWidget> > widgets;
 
-    QString xmlName = KStandardDirs::locate("data", "sheets/CellToolOptionWidgets.xml");
+    QString xmlName = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "sheets/CellToolOptionWidgets.xml");
     kDebug() << xmlName;
     if (xmlName.isEmpty()) {
         kWarning() << "couldn't find CellToolOptionWidgets.xml file";

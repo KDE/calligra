@@ -21,11 +21,10 @@
 #include "Factory.h"
 
 #include <kdebug.h>
-#include <kstandarddirs.h>
-#include <kglobal.h>
 
 #include <KoDockRegistry.h>
 #include <KoComponentData.h>
+#include <KoResourcePaths.h>
 
 #include "AboutData.h"
 #include "Doc.h"
@@ -77,7 +76,7 @@ const KoComponentData &Factory::global()
     if (!s_global) {
         s_global = new KoComponentData(*aboutData());
 
-        KGlobal::dirs()->addResourceType("sheet-styles", "data", "sheets/sheetstyles/");
+        KoResourcePaths::addResourceType("sheet-styles", "data", "sheets/sheetstyles/");
 
         KoDockRegistry *dockRegistry = KoDockRegistry::instance();
         dockRegistry->add(new CellEditorDockerFactory);
