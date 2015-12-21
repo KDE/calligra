@@ -128,7 +128,6 @@
 #include <kfind.h>
 #include <kfontaction.h>
 #include <kfontsizeaction.h>
-#include <kinputdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kreplace.h>
@@ -137,6 +136,7 @@
 
 // Qt
 #include <QStandardPaths>
+#include <QInputDialog>
 #include <QBuffer>
 #include <QHash>
 #include <QMenu>
@@ -1675,8 +1675,9 @@ void CellToolBase::createStyleFromCell()
     QString styleName("");
 
     while (true) {
-        styleName = KInputDialog::getText(i18n("Create Style From Cell"),
-                                          i18n("Enter name:"), styleName, &ok, canvas()->canvasWidget());
+        styleName = QInputDialog::getText(canvas()->canvasWidget(),
+                                          i18n("Create Style From Cell"),
+                                          i18n("Enter name:"), QLineEdit::Normal, styleName, &ok);
 
         if (!ok) // User pushed an OK button.
             return;
