@@ -60,10 +60,9 @@
 #include <QInputDialog>
 #include <QTimer>
 
-// KDE includes
+// KF5 includes
 #include <kactioncollection.h>
 #include <kconfig.h>
-#include <kglobalsettings.h>
 #include <kdebug.h>
 
 #include <kmessagebox.h>

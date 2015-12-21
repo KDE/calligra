@@ -51,7 +51,6 @@
 #include <kcombobox.h>
 #include <kdebug.h>
 #include <ktextbrowser.h>
-#include <kglobalsettings.h>
 
 #include <knumvalidator.h>
 #include <QEvent>
