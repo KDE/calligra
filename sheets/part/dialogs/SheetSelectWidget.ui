@@ -290,9 +290,6 @@ It is even possible to print a sheet more than once. Just insert the desired she
   <tabstop>ButtonMoveDown</tabstop>
   <tabstop>ButtonMoveBottom</tabstop>
  </tabstops>
- <includes>
-  <include location="global" >kdialog.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

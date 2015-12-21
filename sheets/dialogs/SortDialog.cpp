@@ -315,7 +315,7 @@ void SortDialog::Private::initCriteria(Qt::Orientation orientation, SortDialog *
 
 
 SortDialog::SortDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
         , d(new Private(this))
 {
     d->selection = selection;
@@ -511,7 +511,7 @@ void SortDialog::accept()
     command->execute(d->selection->canvas());
 
     d->selection->emitModified();
-    KDialog::accept();
+    KoDialog::accept();
 }
 
 void SortDialog::slotButtonClicked(int button)
@@ -521,7 +521,7 @@ void SortDialog::slotButtonClicked(int button)
         const Qt::Orientation orientation = horizontal ? Qt::Vertical : Qt::Horizontal;
         d->initCriteria(orientation, this);
     }
-    KDialog::slotButtonClicked(button);
+    KoDialog::slotButtonClicked(button);
 }
 
 void SortDialog::useHeaderChanged(bool enable)

@@ -133,9 +133,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
- <includes>
-  <include location="global" >kdialog.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

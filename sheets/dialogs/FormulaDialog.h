@@ -33,7 +33,7 @@
 #include <QListView>
 
 #include <kcompletion.h>
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class QLabel;
 class QPushButton;
@@ -56,7 +56,7 @@ class Selection;
  * \ingroup UI
  * Dialog to compose a formula.
  */
-class FormulaDialog : public KDialog
+class FormulaDialog : public KoDialog
 {
     Q_OBJECT
 public:

@@ -59,7 +59,7 @@ public:
     int filtersize;
 };
 PivotMain::PivotMain(QWidget* parent, Selection* selection) :
-    KDialog(parent),
+    KoDialog(parent),
     d(new Private)
 {
     QWidget* widget = new QWidget(this);

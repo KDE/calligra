@@ -42,7 +42,7 @@
 using namespace Calligra::Sheets;
 
 StyleManagerDialog::StyleManagerDialog(QWidget* parent, Selection* selection, StyleManager* manager)
-        : KDialog(parent)
+        : KoDialog(parent)
         , m_selection(selection)
         , m_styleManager(manager)
 {

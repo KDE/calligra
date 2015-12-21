@@ -66,7 +66,7 @@ public:
 
 
 GoalSeekDialog::GoalSeekDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
         , d(new Private)
 {
     d->selection = selection;

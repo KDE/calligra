@@ -26,7 +26,7 @@
 #ifndef CALLIGRA_SHEETS_SERIES_DIALOG
 #define CALLIGRA_SHEETS_SERIES_DIALOG
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class QRadioButton;
 class KDoubleNumInput;
@@ -42,7 +42,7 @@ class Sheet;
  * \ingroup UI
  * Dialog to insert a value series.
  */
-class SeriesDialog : public KDialog
+class SeriesDialog : public KoDialog
 {
     Q_OBJECT
 public:

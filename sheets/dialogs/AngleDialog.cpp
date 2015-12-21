@@ -43,7 +43,7 @@
 using namespace Calligra::Sheets;
 
 AngleDialog::AngleDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Change Angle"));
     setModal(true);

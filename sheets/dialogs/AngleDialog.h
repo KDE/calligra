@@ -24,7 +24,7 @@
 #ifndef CALLIGRA_SHEETS_ANGLE_DIALOG
 #define CALLIGRA_SHEETS_ANGLE_DIALOG
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class KIntNumInput;
 
@@ -38,7 +38,7 @@ class Selection;
  * \ingroup UI
  * Dialog to rotate the cell contents.
  */
-class AngleDialog : public KDialog
+class AngleDialog : public KoDialog
 {
     Q_OBJECT
 public:

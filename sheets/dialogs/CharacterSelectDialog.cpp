@@ -43,7 +43,7 @@ public:
 /******************************************************************/
 
 CharacterSelectDialog::CharacterSelectDialog(QWidget *parent, const QString &name, const QChar &_chr, const QString &_font, bool _modal)
-        : KDialog(parent),
+        : KoDialog(parent),
         d(new Private())
 {
     setCaption(i18n("Select Character"));
@@ -57,11 +57,11 @@ CharacterSelectDialog::CharacterSelectDialog(QWidget *parent, const QString &nam
     KGuiItem okItem = KStandardGuiItem::ok(); // start from std item to keep the OK icon...
     okItem.setText(i18n("&Insert"));
     okItem.setWhatsThis(i18n("Insert the selected character in the text"));
-    setButtonGuiItem(KDialog::Ok, okItem);
+    setButtonGuiItem(KoDialog::Ok, okItem);
 }
 
 CharacterSelectDialog::CharacterSelectDialog(QWidget *parent, const QString &name, const QString &_font, const QChar &_chr, bool _modal)
-        : KDialog(parent),
+        : KoDialog(parent),
         d(new Private())
 {
     setCaption(i18n("Select Character"));
@@ -105,7 +105,7 @@ CharacterSelectDialog::~CharacterSelectDialog()
 
 void CharacterSelectDialog::closeDialog()
 {
-    KDialog::close();
+    KoDialog::close();
 }
 
 // static

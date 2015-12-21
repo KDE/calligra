@@ -74,7 +74,7 @@ public:
 };
 
 AutoFormatDialog::AutoFormatDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
         , d(new Private())
 {
     setCaption(i18n("Sheet Style"));

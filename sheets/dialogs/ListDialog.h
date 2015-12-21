@@ -22,7 +22,7 @@
 #ifndef CALLIGRA_SHEETS_LIST_DIALOG
 #define CALLIGRA_SHEETS_LIST_DIALOG
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 namespace Calligra
 {
@@ -33,7 +33,7 @@ namespace Sheets
  * \ingroup UI
  * Dialog to edit custom value lists.
  */
-class ListDialog: public KDialog
+class ListDialog: public KoDialog
 {
     Q_OBJECT
 public:

@@ -35,7 +35,7 @@
 using namespace Calligra::Sheets;
 
 SpecialPasteDialog::SpecialPasteDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent),
+        : KoDialog(parent),
         m_selection(selection)
 {
     setButtons(Ok | Cancel);

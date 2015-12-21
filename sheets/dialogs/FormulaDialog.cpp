@@ -65,7 +65,7 @@
 using namespace Calligra::Sheets;
 
 FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBase* editor, const QString& formulaName)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Function"));
     setButtons(Ok | Cancel);

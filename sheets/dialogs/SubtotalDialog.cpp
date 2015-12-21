@@ -53,7 +53,7 @@ public:
 };
 
 SubtotalDialog::SubtotalDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
         , d(new Private)
 {
     d->selection = selection;
@@ -179,18 +179,18 @@ void SubtotalDialog::accept()
         }
     }
 
-    KDialog::accept();
+    KoDialog::accept();
 }
 
 void SubtotalDialog::reject()
 {
-    KDialog::reject();
+    KoDialog::reject();
 }
 
 void SubtotalDialog::slotUser1()
 {
     removeSubtotalLines();
-    KDialog::accept();
+    KoDialog::accept();
 }
 
 void SubtotalDialog::removeSubtotalLines()

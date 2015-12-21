@@ -231,9 +231,6 @@ The default font is set for all cells in the Format -> Style Manager menu with t
   <tabstop>strike</tabstop>
   <tabstop>example_label</tabstop>
  </tabstops>
- <includes>
-  <include location="global" >kdialog.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

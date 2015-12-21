@@ -26,7 +26,7 @@
 #ifndef CALLIGRA_SHEETS_RESIZE2_DIALOG
 #define CALLIGRA_SHEETS_RESIZE2_DIALOG
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class KoUnitDoubleSpinBox;
 
@@ -40,7 +40,7 @@ class Selection;
  * \ingroup UI
  * Dialog to resize rows.
  */
-class ResizeRow: public KDialog
+class ResizeRow: public KoDialog
 {
     Q_OBJECT
 
@@ -61,7 +61,7 @@ protected:
  * \ingroup UI
  * Dialog to resize columns.
  */
-class ResizeColumn: public KDialog
+class ResizeColumn: public KoDialog
 {
     Q_OBJECT
 

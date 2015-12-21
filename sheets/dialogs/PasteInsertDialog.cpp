@@ -40,7 +40,7 @@
 using namespace Calligra::Sheets;
 
 PasteInsertDialog::PasteInsertDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Paste Inserting Cells"));
     setObjectName(QLatin1String("PasteInsertDialog"));

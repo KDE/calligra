@@ -22,7 +22,7 @@
 #ifndef PIVOTMAIN_H
 #define PIVOTMAIN_H
 
-#include <KDialog>
+#include <KoDialog.h>
 #include<QListWidgetItem>
 
 #include <sheets/Sheet.h>
@@ -30,7 +30,7 @@ namespace Calligra{
   namespace Sheets{
 
 class Selection;
-class PivotMain : public KDialog
+class PivotMain : public KoDialog
     {
 	Q_OBJECT
 

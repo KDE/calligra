@@ -45,7 +45,7 @@
 using namespace Calligra::Sheets;
 
 ShowColRow::ShowColRow(QWidget* parent, Selection* selection, Type _type)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setModal(true);
     setButtons(Ok | Cancel);

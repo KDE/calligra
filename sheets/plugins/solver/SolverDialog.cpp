@@ -26,7 +26,7 @@ using namespace Calligra::Sheets::Plugins;
 using namespace Calligra::Sheets;
 
 SolverDialog::SolverDialog(Selection* selection, QWidget* parent)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Function Optimizer"));
     setButtons(Ok | Cancel | Details);

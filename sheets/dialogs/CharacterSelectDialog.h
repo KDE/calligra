@@ -21,7 +21,7 @@
 #ifndef CALLIGRA_SHEETS_CHARACTER_SELECT_DIALOG
 #define CALLIGRA_SHEETS_CHARACTER_SELECT_DIALOG
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class QWidget;
 
@@ -33,7 +33,7 @@ namespace Sheets
 /**
  * A dialog for selecting a character.
  */
-class CharacterSelectDialog : public KDialog
+class CharacterSelectDialog : public KoDialog
 {
     Q_OBJECT
 

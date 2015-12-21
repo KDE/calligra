@@ -45,7 +45,7 @@
 using namespace Calligra::Sheets;
 
 InsertDialog::InsertDialog(QWidget* parent, Selection* selection, Mode _mode)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption("");
     setButtons(Ok | Cancel);

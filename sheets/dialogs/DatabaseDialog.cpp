@@ -35,7 +35,6 @@
 
 #include <kcombobox.h>
 #include <kdebug.h>
-#include <kdialog.h>
 #include <klineedit.h>
 #include <KLocalizedString>
 #include <kmessagebox.h>
@@ -55,7 +54,6 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QVariant>
-#include <QWidget>
 #include <QListWidget>
 #include <QTreeWidget>
 

@@ -25,10 +25,10 @@
 
 // Calligra
 #include <KoIcon.h>
+#include <KoDialog.h>
 
 // KF5
 #include <kdebug.h>
-#include <kdialog.h>
 #include <KLocalizedString>
 #include <ktextedit.h>
 
@@ -44,7 +44,7 @@ class Q_DECL_HIDDEN RegionSelector::Private
 public:
     Selection* selection;
     QDialog* parentDialog;
-    KDialog* dialog;
+    KoDialog* dialog;
     KTextEdit* textEdit;
     QToolButton* button;
     FormulaEditorHighlighter* highlighter;
@@ -150,7 +150,7 @@ void RegionSelector::switchDisplayMode(bool state)
     if (d->displayMode == Widget) {
         d->displayMode = Dialog;
 
-        d->dialog = new KDialog(d->parentDialog->parentWidget(), Qt::Tool);
+        d->dialog = new KoDialog(d->parentDialog->parentWidget(), Qt::Tool);
         d->dialog->resize(d->parentDialog->width(), 20);
         d->dialog->move(d->parentDialog->pos());
         d->dialog->setButtons(0);

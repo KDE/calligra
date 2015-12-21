@@ -25,7 +25,7 @@
 #ifndef CALLIGRA_SHEETS_SHOW_DIALOG
 #define CALLIGRA_SHEETS_SHOW_DIALOG
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class QListWidget;
 
@@ -40,7 +40,7 @@ class Selection;
  * Dialog to show a hidden sheet.
  * \todo Rename to ShowSheetDialog.
  */
-class ShowDialog: public KDialog
+class ShowDialog: public KoDialog
 {
     Q_OBJECT
 public:

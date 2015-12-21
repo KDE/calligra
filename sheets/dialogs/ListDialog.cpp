@@ -56,7 +56,7 @@ public:
 static const int numBuiltinLists = 4;
 
 ListDialog::ListDialog(QWidget* parent)
-        : KDialog(parent)
+        : KoDialog(parent)
         , d(new Private)
 {
     setCaption(i18n("Custom Lists"));

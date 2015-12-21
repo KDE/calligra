@@ -22,7 +22,7 @@
 #ifndef PIVOTFILTERS_H
 #define PIVOTFILTERS_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include<QtGui>
 #include<QString>
@@ -34,7 +34,7 @@ namespace Calligra{
     namespace Sheets{
 
     class Selection;    
-    class PivotFilters : public KDialog
+    class PivotFilters : public KoDialog
     
     {
     Q_OBJECT

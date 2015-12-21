@@ -29,7 +29,7 @@
 #ifndef CALLIGRA_SHEETS_CONSOLIDATE_DIALOG
 #define CALLIGRA_SHEETS_CONSOLIDATE_DIALOG
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 namespace Calligra
 {
@@ -51,7 +51,7 @@ class Sheet;
  * \li optionally you can link to the source data: then, formulas are used in
  * the target cell range. Otherwise, only the formula results get stored.
  */
-class ConsolidateDialog : public KDialog
+class ConsolidateDialog : public KoDialog
 {
     Q_OBJECT
 public:

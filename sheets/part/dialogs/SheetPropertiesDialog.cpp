@@ -21,8 +21,8 @@
 #include "SheetPropertiesDialog.h"
 
 #include <kcombobox.h>
-#include <kdialog.h>
 #include <KLocalizedString>
+
 #include <KoVBox.h>
 
 #include "Sheet.h"
@@ -30,7 +30,7 @@
 using namespace Calligra::Sheets;
 
 SheetPropertiesDialog::SheetPropertiesDialog(QWidget* parent):
-        KDialog(parent)
+        KoDialog(parent)
 {
     setCaption(i18n("Sheet Properties"));
     setObjectName(QLatin1String("sheetPropertiesDialog"));

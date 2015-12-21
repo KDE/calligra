@@ -34,7 +34,7 @@ public:
 
 
 PivotSubTotals::PivotSubTotals(QWidget* parent,Selection* selection):
-    KDialog(parent),
+    KoDialog(parent),
     d(new Private)
     {
   

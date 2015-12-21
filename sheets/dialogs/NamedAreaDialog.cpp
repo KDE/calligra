@@ -58,11 +58,11 @@
 using namespace Calligra::Sheets;
 
 NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
         , m_selection(selection)
 {
-    setButtons(KDialog::Ok | KDialog::Close);
-    setButtonText(KDialog::Ok, i18n("&Select"));
+    setButtons(KoDialog::Ok | KoDialog::Close);
+    setButtonText(KoDialog::Ok, i18n("&Select"));
     setCaption(i18n("Named Areas"));
     setModal(true);
     setObjectName(QLatin1String("NamedAreaDialog"));
@@ -227,7 +227,7 @@ void NamedAreaDialog::slotRemove()
 
 
 EditNamedAreaDialog::EditNamedAreaDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
         , m_selection(selection)
 {
     setButtons(Ok | Cancel);

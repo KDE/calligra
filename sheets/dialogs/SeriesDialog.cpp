@@ -48,7 +48,7 @@
 using namespace Calligra::Sheets;
 
 SeriesDialog::SeriesDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Series"));
     setButtons(Ok | Cancel);
@@ -119,8 +119,8 @@ SeriesDialog::SeriesDialog(QWidget* parent, Selection* selection)
 
 void SeriesDialog::slotButtonClicked(int button)
 {
-    if (button != KDialog::Ok) {
-        KDialog::slotButtonClicked(button);
+    if (button != KoDialog::Ok) {
+        KoDialog::slotButtonClicked(button);
         return;
     }
 

@@ -20,7 +20,7 @@
 #ifndef KSPREAD_SOLVER_DIALOG
 #define KSPREAD_SOLVER_DIALOG
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include "ui_SolverMainWidget.h"
 #include "ui_SolverDetailsWidget.h"
@@ -40,7 +40,7 @@ namespace Plugins
  * \class SolverDialog
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */
-class SolverDialog : public KDialog, public Ui::Solver, public Ui::SolverDetails
+class SolverDialog : public KoDialog, public Ui::Solver, public Ui::SolverDetails
 {
     Q_OBJECT
 

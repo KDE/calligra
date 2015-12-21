@@ -25,7 +25,7 @@
 #ifndef CALLIGRA_SHEETS_SPECIAL_PASTE_DIALOG
 #define CALLIGRA_SHEETS_SPECIAL_PASTE_DIALOG
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include "ui_SpecialPasteWidget.h"
 
@@ -39,7 +39,7 @@ class Selection;
  * \ingroup UI
  * Dialog for the special paste action.
  */
-class SpecialPasteDialog : public KDialog, public Ui::SpecialPasteWidget
+class SpecialPasteDialog : public KoDialog, public Ui::SpecialPasteWidget
 {
     Q_OBJECT
 public:

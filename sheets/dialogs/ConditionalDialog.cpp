@@ -250,11 +250,11 @@ void ConditionalWidget::slotTextChanged3(const QString & text)
  * Sets conditional cell formattings.
  */
 ConditionalDialog::ConditionalDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent),
+        : KoDialog(parent),
         m_selection(selection),
         m_dlg(new ConditionalWidget(this))
 {
-    setButtons(KDialog::Ok | KDialog::Cancel);
+    setButtons(KoDialog::Ok | KoDialog::Cancel);
     setCaption(i18n("Conditional Styles"));
 
     QStringList list(m_selection->activeSheet()->map()->styleManager()->styleNames());

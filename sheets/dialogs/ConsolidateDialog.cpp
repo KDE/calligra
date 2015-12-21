@@ -37,9 +37,8 @@
 #include <QPushButton>
 #include <QListWidget>
 
-//KDE Includes
+// KF5
 #include <kdebug.h>
-#include <kdialog.h>
 #include <kmessagebox.h>
 
 #include <KoIcon.h>
@@ -77,7 +76,7 @@ public:
 
 
 ConsolidateDialog::ConsolidateDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
         , d(new Private)
 {
     d->selection = selection;
@@ -455,7 +454,7 @@ void ConsolidateDialog::accept()
     // execute the cumulating parent command
     map->addCommand(command);
 
-    KDialog::accept();
+    KoDialog::accept();
 }
 
 void ConsolidateDialog::slotAdd()

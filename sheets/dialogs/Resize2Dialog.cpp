@@ -52,7 +52,7 @@
 using namespace Calligra::Sheets;
 
 ResizeRow::ResizeRow(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Resize Row"));
     setModal(true);
@@ -109,7 +109,7 @@ void ResizeRow::slotDefault()
 }
 
 ResizeColumn::ResizeColumn(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Resize Column"));
     setModal(true);

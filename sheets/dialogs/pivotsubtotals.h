@@ -22,14 +22,14 @@
 #ifndef PIVOTSUBTOTALS_H
 #define PIVOTSUBTOTALS_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 namespace Calligra;
   namespace Sheets{
 
 class Selection;
 
-class PivotSubTotals : public KDialog
+class PivotSubTotals : public KoDialog
 {
     Q_OBJECT
 

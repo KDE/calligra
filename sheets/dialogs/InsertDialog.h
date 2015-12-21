@@ -27,7 +27,7 @@
 #ifndef CALLIGRA_SHEETS_INSERT_DIALOG
 #define CALLIGRA_SHEETS_INSERT_DIALOG
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class QRadioButton;
 
@@ -41,7 +41,7 @@ class Selection;
  * \ingroup UI
  * Dialog to insert/remove cell by shifting other cells.
  */
-class InsertDialog : public KDialog
+class InsertDialog : public KoDialog
 {
     Q_OBJECT
 public:

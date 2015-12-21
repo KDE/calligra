@@ -20,9 +20,7 @@
 #ifndef SHEET_PROPERTIES_DIALOG
 #define SHEET_PROPERTIES_DIALOG
 
-#include <QWidget>
-
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include <ui_SheetPropertiesWidget.h>
 
@@ -43,7 +41,7 @@ public:
  * \ingroup UI
  * Dialog to set sheet properties.
  */
-class SheetPropertiesDialog : public KDialog
+class SheetPropertiesDialog : public KoDialog
 {
     Q_OBJECT
 

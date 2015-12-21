@@ -25,7 +25,7 @@
 
 #include <QList>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class QListWidget;
 class QListWidgetItem;
@@ -40,7 +40,7 @@ class Selection;
  * \ingroup UI
  * Dialog to show hidden columns/rows.
  */
-class ShowColRow: public KDialog
+class ShowColRow: public KoDialog
 {
     Q_OBJECT
 public:

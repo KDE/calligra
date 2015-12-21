@@ -353,9 +353,6 @@ Vertical text puts your text vertically.</string>
   <tabstop>defaultWidth</tabstop>
   <tabstop>defaultHeight</tabstop>
  </tabstops>
- <includes>
-  <include location="global">kdialog.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

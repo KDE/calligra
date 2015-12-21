@@ -2518,7 +2518,7 @@ void CellToolBase::insertHyperlink()
         }
     }
 
-    if (dialog->exec() == KDialog::Accepted) {
+    if (dialog->exec() == KoDialog::Accepted) {
         cell = Cell(selection()->activeSheet(), marker);
 
         LinkCommand* command = new LinkCommand(cell, dialog->text(), dialog->link());
@@ -3427,7 +3427,7 @@ void CellToolBase::slotHighlight(const QString &/*text*/, int /*matchingIndex*/,
     kDebug() << " baseDialog :" << dialog;
     QRect globalRect(d->findPos, d->findEnd);
     globalRect.moveTopLeft(canvas()->canvasWidget()->mapToGlobal(globalRect.topLeft()));
-    KDialog::avoidArea(dialog, QRect(d->findPos, d->findEnd));
+    KoDialog::avoidArea(dialog, QRect(d->findPos, d->findEnd));
 }
 
 void CellToolBase::slotReplace(const QString &newText, int, int, int)
@@ -3472,7 +3472,7 @@ void CellToolBase::inspector()
 void CellToolBase::qTableView()
 {
 #ifndef NDEBUG
-    QPointer<KDialog> dialog = new KDialog(canvas()->canvasWidget());
+    QPointer<KoDialog> dialog = new KoDialog(canvas()->canvasWidget());
     QTableView* const view = new QTableView(dialog);
     SheetModel* const model = new SheetModel(selection()->activeSheet());
     view->setModel(model);

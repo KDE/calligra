@@ -252,9 +252,6 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
   <tabstop>comboBox_2</tabstop>
   <tabstop>lineEdit_2</tabstop>
  </tabstops>
- <includes>
-  <include location="global">kdialog.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

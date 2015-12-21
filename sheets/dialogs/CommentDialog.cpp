@@ -40,7 +40,7 @@
 using namespace Calligra::Sheets;
 
 CommentDialog::CommentDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Cell Comment"));
     setModal(true);
