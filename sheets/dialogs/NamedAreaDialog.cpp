@@ -88,11 +88,11 @@ NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
     // list buttons
     QVBoxLayout *listButtonLayout = new QVBoxLayout();
 
-    m_newButton = new KPushButton(i18n("&New..."), widget);
+    m_newButton = new QPushButton(i18n("&New..."), widget);
     listButtonLayout->addWidget(m_newButton);
-    m_editButton = new KPushButton(i18n("&Edit..."), widget);
+    m_editButton = new QPushButton(i18n("&Edit..."), widget);
     listButtonLayout->addWidget(m_editButton);
-    m_removeButton = new KPushButton(i18n("&Remove"), widget);
+    m_removeButton = new QPushButton(i18n("&Remove"), widget);
     listButtonLayout->addWidget(m_removeButton);
     listButtonLayout->addStretch(1);
 

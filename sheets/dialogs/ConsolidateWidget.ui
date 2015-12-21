@@ -68,14 +68,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
    <item row="2" column="1">
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="1">
-      <widget class="KPushButton" name="m_addButton">
+      <widget class="QPushButton" name="m_addButton">
        <property name="text">
         <string>Add</string>
        </property>
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="KPushButton" name="m_removeButton">
+      <widget class="QPushButton" name="m_removeButton">
        <property name="text">
         <string>Remove</string>
        </property>
@@ -89,11 +89,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
-  </customwidget>
   <customwidget>
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>

@@ -40,7 +40,6 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <knumvalidator.h>
-#include <kpushbutton.h>
 #include <ktextedit.h>
 
 #include <QCheckBox>
@@ -155,7 +154,7 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     //  m_databaseList = new KComboBox( tablesFrame );
     //  Layout21->addWidget( m_databaseList );
 
-    //  m_connectButton = new KPushButton( tablesFrame, "m_connectButton" );
+    //  m_connectButton = new QPushButton( tablesFrame, "m_connectButton" );
     //  m_connectButton->setText( i18n( "&Connect" ) );
     //  Layout21->addWidget( m_connectButton );
 

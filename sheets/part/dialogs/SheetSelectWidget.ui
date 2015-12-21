@@ -146,7 +146,7 @@ It is even possible to print a sheet more than once. Just insert the desired she
     </spacer>
    </item>
    <item row="4" column="1" >
-    <widget class="KPushButton" name="ButtonSelectAll" >
+    <widget class="QPushButton" name="ButtonSelectAll" >
      <property name="enabled" >
       <bool>false</bool>
      </property>
@@ -159,7 +159,7 @@ It is even possible to print a sheet more than once. Just insert the desired she
     </widget>
    </item>
    <item row="4" column="3" >
-    <widget class="KPushButton" name="ButtonMoveTop" >
+    <widget class="QPushButton" name="ButtonMoveTop" >
      <property name="enabled" >
       <bool>false</bool>
      </property>
@@ -172,7 +172,7 @@ It is even possible to print a sheet more than once. Just insert the desired she
     </widget>
    </item>
    <item row="5" column="1" >
-    <widget class="KPushButton" name="ButtonSelect" >
+    <widget class="QPushButton" name="ButtonSelect" >
      <property name="enabled" >
       <bool>false</bool>
      </property>
@@ -185,7 +185,7 @@ It is even possible to print a sheet more than once. Just insert the desired she
     </widget>
    </item>
    <item row="5" column="3" >
-    <widget class="KPushButton" name="ButtonMoveUp" >
+    <widget class="QPushButton" name="ButtonMoveUp" >
      <property name="enabled" >
       <bool>false</bool>
      </property>
@@ -198,7 +198,7 @@ It is even possible to print a sheet more than once. Just insert the desired she
     </widget>
    </item>
    <item row="6" column="1" >
-    <widget class="KPushButton" name="ButtonRemove" >
+    <widget class="QPushButton" name="ButtonRemove" >
      <property name="enabled" >
       <bool>false</bool>
      </property>
@@ -211,7 +211,7 @@ It is even possible to print a sheet more than once. Just insert the desired she
     </widget>
    </item>
    <item row="6" column="3" >
-    <widget class="KPushButton" name="ButtonMoveDown" >
+    <widget class="QPushButton" name="ButtonMoveDown" >
      <property name="enabled" >
       <bool>false</bool>
      </property>
@@ -224,7 +224,7 @@ It is even possible to print a sheet more than once. Just insert the desired she
     </widget>
    </item>
    <item row="7" column="1" >
-    <widget class="KPushButton" name="ButtonRemoveAll" >
+    <widget class="QPushButton" name="ButtonRemoveAll" >
      <property name="enabled" >
       <bool>false</bool>
      </property>
@@ -237,7 +237,7 @@ It is even possible to print a sheet more than once. Just insert the desired she
     </widget>
    </item>
    <item row="7" column="3" >
-    <widget class="KPushButton" name="ButtonMoveBottom" >
+    <widget class="QPushButton" name="ButtonMoveBottom" >
      <property name="enabled" >
       <bool>false</bool>
      </property>
@@ -278,13 +278,6 @@ It is even possible to print a sheet more than once. Just insert the desired she
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
- <customwidgets>
-  <customwidget>
-   <class>KPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
-  </customwidget>
- </customwidgets>
  <tabstops>
   <tabstop>ListViewAvailable</tabstop>
   <tabstop>ButtonSelectAll</tabstop>

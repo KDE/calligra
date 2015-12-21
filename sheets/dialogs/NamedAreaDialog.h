@@ -32,7 +32,7 @@
 class KComboBox;
 class QLabel;
 class KLineEdit;
-class KPushButton;
+class QPushButton;
 class QListWidget;
 
 namespace Calligra
@@ -65,9 +65,9 @@ private:
     Selection*      m_selection;
     QListWidget*    m_list;
     QLabel*         m_rangeName;
-    KPushButton*    m_newButton;
-    KPushButton*    m_editButton;
-    KPushButton*    m_removeButton;
+    QPushButton*    m_newButton;
+    QPushButton*    m_editButton;
+    QPushButton*    m_removeButton;
 };
 
 

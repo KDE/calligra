@@ -73,11 +73,11 @@ StyleManagerDialog::StyleManagerDialog(QWidget* parent, Selection* selection, St
     // list buttons
     QVBoxLayout *listButtonLayout = new QVBoxLayout();
 
-    m_newButton = new KPushButton(i18n("&New..."), this);
+    m_newButton = new QPushButton(i18n("&New..."), this);
     listButtonLayout->addWidget(m_newButton);
-    m_modifyButton = new KPushButton(i18n("&Modify..."), this);
+    m_modifyButton = new QPushButton(i18n("&Modify..."), this);
     listButtonLayout->addWidget(m_modifyButton);
-    m_deleteButton = new KPushButton(i18n("&Delete..."), this);
+    m_deleteButton = new QPushButton(i18n("&Delete..."), this);
     listButtonLayout->addWidget(m_deleteButton);
     listButtonLayout->addStretch(1);
 
