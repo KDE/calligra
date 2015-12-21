@@ -38,7 +38,7 @@
 #include <QToolButton>
 #include <QWidget>
 #include <QWheelEvent>
-#include <kglobalsettings.h>
+#include <QFontDatabase>
 
 // TODO
 // improvement possibilities
@@ -348,7 +348,7 @@ void TabBarPrivate::updateButtons()
 
 QFont TabBarPrivate::font(bool selected)
 {
-    QFont f = KGlobalSettings::menuFont();
+    QFont f = QFontDatabase::systemFont(QFontDatabase::TitleFont);
     if (selected) f.setBold(true);
     return f;
 }

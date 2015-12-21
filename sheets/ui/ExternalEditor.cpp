@@ -31,10 +31,10 @@
 
 // KF5
 #include <kdebug.h>
-#include <kglobalsettings.h>
 
 // Qt
 #include <QApplication>
+#include <QFontDatabase>
 #include <QFocusEvent>
 #include <QKeyEvent>
 
@@ -58,7 +58,7 @@ ExternalEditor::ExternalEditor(QWidget *parent)
     d->highlighter = 0;
     d->isArray = false;
 
-    setCurrentFont(KGlobalSettings::generalFont());
+    setCurrentFont(QFontDatabase::systemFont(QFontDatabase::GeneralFont));
 
     // Try to immitate KLineEdit regarding the margins and size.
     document()->setDocumentMargin(1);
