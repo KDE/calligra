@@ -10,10 +10,6 @@
             name="pyvcardimport"
             interpreter="python"
             file="extensions/vcardimport.py" />
-        <script text="Kexi Database" comment="Import from a Kexi Project File"
-            name="pykexidbimport"
-            interpreter="python"
-            file="extensions/kexidbimport.py" />
     </collection>
 
     <collection name="export" text="Export" comment="Export content">
@@ -21,10 +17,6 @@
             name="pycsvexport"
             interpreter="python"
             file="extensions/csvexport.py" />
-        <script text="Kexi Database" comment="Export to a Kexi Project File"
-            name="pykexidbexport"
-            interpreter="python"
-            file="extensions/kexidbexport.py" />
         <script text="HTML File" comment="Export to a HTML File"
             name="pyhtmlexport"
             interpreter="python"

@@ -139,12 +139,6 @@ Reference Guide
 
 --------------------------------------------------------------------------------
 
-Kexi
-
-The Handbook is at advanced stage already; see doc/kexi/README.
-
---------------------------------------------------------------------------------
-
 Flow
 
 Introduction

@@ -56,11 +56,6 @@ there are almost no screenshots and only very little actual text.
 It's also questionable if we should include tips on how you should do
 presentations. If so, it ought to be an appendix, not a running chapter.
 
-Kexi
-
-Current Kexi Handbook is being developed and is accessible online at
-http://userbase.kde.org/Kexi/Handbook
-
 Flow
 
 Screenshots are missing, a toolbars and menus description should be added.

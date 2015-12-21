@@ -33,8 +33,6 @@ if (SHOULD_BUILD_PLUGIN_TEXTEDITING)
     add_subdirectory( textediting )
 endif()
 
-add_subdirectory( kexi )
-
 if (SHOULD_BUILD_PLUGIN_DEFAULTTOOLS)
     add_subdirectory( defaultTools )
 endif ()

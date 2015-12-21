@@ -94,7 +94,6 @@ calligra_define_product(APP_STAGE "Stage app (for Desktop)"  REQUIRES PART_STAGE
 calligra_define_product(APP_SHEETS "Sheets app (for Desktop)" REQUIRES PART_SHEETS)
 calligra_define_product(APP_AUTHOR "Author app (for Desktop)"  REQUIRES PART_WORDS)
 calligra_define_product(APP_KARBON "Karbon app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
-calligra_define_product(APP_KEXI "Kexi app (for Desktop)" REQUIRES LIB_CALLIGRA)
 calligra_define_product(APP_FLOW "Flow app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOMAIN LIB_KOPAGEAPP)
 calligra_define_product(APP_PLAN "Plan app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
 calligra_define_product(APP_BRAINDUMP "Braindump app (for Desktop)" REQUIRES LIB_CALLIGRA LIB_KOMAIN)
@@ -118,7 +117,6 @@ calligra_define_product(PLUGIN_SPACENAVIGATOR "SpaceNavigator input plugin"  REQ
 calligra_define_product(PLUGIN_ARTISTICTEXTSHAPE "Artistic shape plugin" REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_DOCKERS "Default dockers plugin" REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_TEXTEDITING "Textediting plugins"  REQUIRES LIB_CALLIGRA)
-calligra_define_product(PLUGIN_KEXI_SPREADSHEETMIGRATION "Import from ODS plugin for Kexi" UNPORTED  REQUIRES APP_KEXI PART_SHEETS)
 calligra_define_product(PLUGIN_DEFAULTTOOLS "Default Flake tools plugin" REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_PATHSHAPES "Path shape plugins" REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_VARIABLES "Text variables plugin"  REQUIRES LIB_CALLIGRA)
@@ -411,13 +409,6 @@ calligra_define_productset(KARBON "Full Karbon (for Desktop)"
         PLUGIN_VECTORSHAPE
         # filters
         FILTERS_KARBON
-)
-calligra_define_productset(KEXI "Full Kexi (for Desktop)"
-    REQUIRES
-        APP_KEXI
-    OPTIONAL
-        FEATURE_SCRIPTING
-        PLUGIN_KEXI_SPREADSHEETMIGRATION
 )
 calligra_define_productset(PLAN "Full Plan (for Desktop)"
     REQUIRES

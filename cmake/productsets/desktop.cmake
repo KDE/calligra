@@ -7,7 +7,6 @@ calligra_define_productset(DESKTOP "Calligra for Desktop"
         BRAINDUMP
         FLOW
         KARBON
-        KEXI
         PLAN
         SHEETS
         STAGE

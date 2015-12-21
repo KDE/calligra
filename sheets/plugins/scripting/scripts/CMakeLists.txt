@@ -5,7 +5,6 @@ install(FILES
 install(FILES
     csvimport.py csvexport.py csvoptions.ui
     vcardimport.py
-    kexidbimport.py kexidbexport.py
     htmlexport.py htmlexportinfos.ui
     odfpyexport.py
     logger.py

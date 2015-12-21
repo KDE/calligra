@@ -364,13 +364,6 @@ macro_optional_find_package(KChart 2.6.0)
 macro_log_feature(KChart_FOUND "KChart" "Library for creating business charts (part of KDiagram)" "http://www.kde.org/" FALSE "" "Required by Chart shape and Plan")
 
 ##
-## Test for KDb
-##
-macro_optional_find_package(KDb 2.96.1)
-macro_log_feature(KDb_FOUND "KDb" "A database connectivity and creation framework"
-                            "http://community.kde.org/KDb" FALSE "" "Required by Kexi and its plugins")
-
-##
 ## Test for KReport
 ##
 macro_optional_find_package(KReport 2.96.1)
@@ -378,14 +371,14 @@ if (KReport_FOUND AND KREPORT_SCRIPTING)
     set(KReport_WITH_SCRIPTING_FOUND TRUE)
 endif()
 macro_log_feature(KReport_WITH_SCRIPTING_FOUND "KReport" "A framework for the creation and generation of reports in multiple formats (scripting support required)"
-                                               "http://community.kde.org/KReport" FALSE "" "Required by Kexi and Plan")
+                                               "http://community.kde.org/KReport" FALSE "" "Required by Plan")
 
 ##
 ## Test for KPropertyWidgets
 ##
 macro_optional_find_package(KPropertyWidgets 2.98.0)
 macro_log_feature(KPropertyWidgets_FOUND "KPropertyWidgets" "A property editing framework with editor widget"
-                                  "http://community.kde.org/KProperty" FALSE "" "Required by Kexi")
+                                  "http://community.kde.org/KProperty" FALSE "" "Required by Plan")
 
 ##
 ## Test for eigen3
@@ -436,7 +429,7 @@ else()
         message( WARNING "MarbleControlBox.h not found, could not properly set the SETMARBLEWIDGET define." )
     endif()
 endif()
-macro_log_feature(MARBLE_FOUND "Marble" "KDE World Globe Widget library" "https://marble.kde.org/" FALSE "${MARBLE_MIN_VERSION}" "Required by RDF, Kexi Forms and Reports to show locations on a map")
+macro_log_feature(MARBLE_FOUND "Marble" "KDE World Globe Widget library" "https://marble.kde.org/" FALSE "${MARBLE_MIN_VERSION}" "Required by RDF to show locations on a map")
 
 ##
 ## Test for lcms
@@ -571,7 +564,7 @@ macro_log_feature(Qt5Sql_FOUND "Qt Sql"
 ##
 ## Test for Qt Webkit
 ##
-macro_log_feature(Qt5WebKit_FOUND "Qt Webkit" "Qt binding for Webkit, the HTML engine." "http://qt.io" FALSE "" "Required for the web shape, web Kexi widget and web report element")
+macro_log_feature(Qt5WebKit_FOUND "Qt Webkit" "Qt binding for Webkit, the HTML engine." "http://qt.io" FALSE "" "Required for the web shape")
 if(Qt5WebKit_FOUND)
     add_definitions( -DCAN_USE_QTWEBKIT )
 endif()
@@ -867,13 +860,6 @@ calligra_drop_product_on_bad_condition( PART_SHEETS
     EIGEN3_FOUND "Eigen devel not found"
 )
 
-calligra_drop_product_on_bad_condition( APP_KEXI
-    KDb_FOUND "KDb not found"
-    KReport_WITH_SCRIPTING_FOUND "KReport with scripting support not found"
-    KPropertyWidgets_FOUND "KPropertyWidgets not found"
-    Qt5UiTools_FOUND "Qt5UiTools not found"
-)
-
 calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODP
     Okular5_FOUND "Okular devel not found"
 )
@@ -985,7 +971,6 @@ calligra_drop_product_on_bad_condition( APP_SLIDECOMPARE
 calligra_drop_products_on_old_flag(braindump APP_BRAINDUMP)
 calligra_drop_products_on_old_flag(flow APP_FLOW)
 calligra_drop_products_on_old_flag(karbon APP_KARBON)
-calligra_drop_products_on_old_flag(kexi APP_KEXI)
 calligra_drop_products_on_old_flag(plan  APP_PLAN)
 calligra_drop_products_on_old_flag(sheets PART_SHEETS APP_SHEETS)
 calligra_drop_products_on_old_flag(stage  PART_STAGE APP_STAGE)
@@ -998,7 +983,7 @@ calligra_drop_products_on_old_flag(words  PART_WORDS APP_WORDS)
 # If a product does not build due to some temporary brokeness disable it here,
 # by calling calligra_disable_product with the product id and the reason,
 # e.g.:
-# calligra_disable_product(APP_KEXI "isn't buildable at the moment")
+# calligra_disable_product(APP_FOO "isn't buildable at the moment")
 
 #############################################
 ####     Calculate buildable products    ####
@@ -1028,10 +1013,6 @@ if (SHOULD_BUILD_APP_FLOW)
 endif ()
 
 add_subdirectory(stage)
-
-if(SHOULD_BUILD_APP_KEXI)
-    add_subdirectory(kexi)
-endif()
 
 if(SHOULD_BUILD_APP_PLAN)
     add_subdirectory(plan)

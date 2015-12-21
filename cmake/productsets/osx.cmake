@@ -12,7 +12,6 @@ calligra_define_productset(OSX "Calligra for OS X Desktop"
         SHEETS
         STAGE
         WORDS
-        KEXI
         # features
         FEATURE_SCRIPTING
         FEATURE_RDF
