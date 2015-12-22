@@ -303,7 +303,6 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_anchor(const QString& refe
         if (isEndElement() && name() == reference) {
             break;
         }
-        kDebug() << *this;
         if (isStartElement()) {
             // twoCellAnchor does define the 'from' and 'to' elements which do define the anchor-points
             TRY_READ_IF(from)
