@@ -69,12 +69,12 @@ void ToolRegistry::loadTools()
     foreach(KPluginInfo pluginInfo, pluginInfos) {
         KPluginFactory *factory = KPluginLoader(*pluginInfo.service()).factory();
         if (!factory) {
-            kDebug(36002) << "Unable to create plugin factory for" << pluginInfo.name();
+            debugSheetsFormula << "Unable to create plugin factory for" << pluginInfo.name();
             continue;
         }
         CellToolFactory* toolFactory = new CellToolFactory("KSpreadCellToolId");
         if (!toolFactory) {
-            kDebug(36002) << "Unable to create tool factory for" << pluginInfo.name();
+            debugSheetsFormula << "Unable to create tool factory for" << pluginInfo.name();
             continue;
         }
         pluginInfo.load(); // load activation state

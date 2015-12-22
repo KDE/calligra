@@ -31,12 +31,12 @@
 #include "StyleManager.h"
 #include "ValueConverter.h"
 #include "ValueParser.h"
+#include "SheetsDebug.h"
 
 // commands
 #include "commands/ConditionCommand.h"
 
 #include <kcombobox.h>
-#include <kdebug.h>
 #include <klineedit.h>
 #include <KLocalizedString>
 #include <kmessagebox.h>
@@ -292,10 +292,10 @@ void ConditionalDialog::init()
 
             it1 = conditionList.begin();
             while (it1 != conditionList.end()) {
-                kDebug() << "Here";
+                debugSheets << "Here";
                 found = false;
                 for (it2 = otherList.begin(); !found && it2 != otherList.end(); ++it2) {
-                    kDebug() << "Found:" << found;
+                    debugSheets << "Found:" << found;
                     found = ((*it1).value1 == (*it2).value1 &&
                              (*it1).value2 == (*it2).value2 &&
                              (*it1).cond == (*it2).cond);
@@ -316,7 +316,7 @@ void ConditionalDialog::init()
         }
     }
 
-    kDebug() << "Conditions:" << conditionList.size();
+    debugSheets << "Conditions:" << conditionList.size();
 
     m_dlg->m_condition_2->setEnabled(false);
     m_dlg->m_condition_3->setEnabled(false);
@@ -335,7 +335,7 @@ void ConditionalDialog::init()
 
 void ConditionalDialog::init(Conditional const & tmp, int numCondition)
 {
-    kDebug() << "Adding" << numCondition;
+    debugSheets << "Adding" << numCondition;
     KComboBox * cb  = 0;
     KComboBox * sb  = 0;
     KLineEdit * kl1 = 0;
@@ -449,7 +449,7 @@ Conditional::Type ConditionalDialog::typeOfCondition(KComboBox const * const cb)
         result = Conditional::DifferentTo;
         break;
     default:
-        kDebug(36001) << "Error in list";
+        debugSheets << "Error in list";
         break;
     }
 
@@ -514,12 +514,12 @@ bool ConditionalDialog::getCondition(Conditional & newCondition, const KComboBox
 
 void ConditionalDialog::slotOk()
 {
-    kDebug() << "slotOk";
+    debugSheets << "slotOk";
 
     if (!checkInputData())
         return;
 
-    kDebug() << "Input data is valid";
+    debugSheets << "Input data is valid";
 
     QLinkedList<Conditional> newList;
 
@@ -537,7 +537,7 @@ void ConditionalDialog::slotOk()
                      m_dlg->m_secondValue_3, m_dlg->m_style_3))
         newList.append(newCondition);
 
-    kDebug() << "Setting conditional list";
+    debugSheets << "Setting conditional list";
     CondtionCommand* manipulator = new CondtionCommand();
     manipulator->setSheet(m_selection->activeSheet());
     manipulator->setConditionList(newList);

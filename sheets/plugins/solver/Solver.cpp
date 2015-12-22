@@ -22,7 +22,6 @@
 
 #include <QStandardPaths>
 
-#include <kdebug.h>
 #include <kpluginfactory.h>
 #include <ktextedit.h>
 #include <kactioncollection.h>
@@ -65,7 +64,7 @@ Solver::Solver(QObject* parent, const QVariantList& args)
     d->dialog = 0;
     d->view = qobject_cast<View*>(parent);
     if (!d->view) {
-        kError() << "Solver: Parent object is not a Calligra::Sheets::View! Quitting." << endl;
+        errorSheets << "Solver: Parent object is not a Calligra::Sheets::View! Quitting." << endl;
         return;
     }
 
@@ -107,7 +106,7 @@ void Solver::optimize()
     if (!formulaCell.isFormula())
         return;
 
-    kDebug() << formulaCell.userInput();
+    debugSheets << formulaCell.userInput();
     s_formula = new Formula(sheet);
     if (d->dialog->minimizeButton->isChecked()) {
         s_formula->setExpression(formulaCell.userInput());
@@ -173,7 +172,7 @@ void Solver::optimize()
         status = gsl_multimin_test_size(size, epsilon);
 
         if (status == GSL_SUCCESS) {
-            kDebug() << "converged to minimum after" << iteration << " iteration(s) at";
+            debugSheets << "converged to minimum after" << iteration << " iteration(s) at";
         }
 
         for (int i = 0; i < dimension; ++i) {

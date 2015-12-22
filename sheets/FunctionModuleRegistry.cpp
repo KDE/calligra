@@ -19,10 +19,10 @@
 
 #include "FunctionModuleRegistry.h"
 
+#include "SheetsDebug.h"
 #include "Function.h"
 #include "FunctionRepository.h"
 
-#include <kdebug.h>
 #include <kglobal.h>
 #include <KSharedConfig>
 
@@ -68,7 +68,7 @@ void FunctionModuleRegistry::Private::registerFunctionModule(FunctionModule* mod
     const QString fileName = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
                                                     QStringLiteral("sheets/functions/")+module->descriptionFileName());
     if (fileName.isEmpty()) {
-        kDebug(36002) << module->descriptionFileName() << "not found.";
+        debugSheetsFormula << module->descriptionFileName() << "not found.";
         return;
     }
     FunctionRepository::self()->loadFunctionDescriptions(fileName);
@@ -108,18 +108,18 @@ void FunctionModuleRegistry::loadFunctionModules()
 {
 #ifndef SHEETS_NO_PLUGINMODULES
     QList<QPluginLoader *> offers = KoJsonTrader::self()->query("CalligraSheets/Plugin", QString());
-    kDebug(36002) << offers.count() << "function modules found.";
+    debugSheetsFormula << offers.count() << "function modules found.";
     foreach (QPluginLoader *loader, offers) {
 
         QJsonObject meta = loader->metaData().value("MetaData").toObject().value("KPlugin").toObject();
         int version = meta.value("X-CalligraSheets-InterfaceVersion").toInt();
         if (version != 0) {
-            kDebug(36002) << "Skipping" << loader->fileName() << ", because interface version is" << version;
+            debugSheetsFormula << "Skipping" << loader->fileName() << ", because interface version is" << version;
             continue;
         }
         QString category = meta.value("Category").toString();
         if (category != "FunctionModule") {
-            kDebug(36002) << "Skipping" << loader->fileName() << ", because category is " << category;
+            debugSheetsFormula << "Skipping" << loader->fileName() << ", because category is " << category;
             continue;
         }
 
@@ -127,12 +127,12 @@ void FunctionModuleRegistry::loadFunctionModules()
         KPluginFactory* factory = qobject_cast<KPluginFactory *>(loader->instance());
         FunctionModule* module = qobject_cast<FunctionModule *>(factory->create());
         if (!module) {
-            kDebug(36002) << "Unable to create function module for" << loader->fileName();
+            debugSheetsFormula << "Unable to create function module for" << loader->fileName();
             continue;
         }
         QString name = meta.value("Name").toString();
         add(name, module);
-        kDebug(36002) << "Loaded" << name;
+        debugSheetsFormula << "Loaded" << name;
 
         // Delays the function registration until the user needs one.
         if (d->repositoryInitialized) {

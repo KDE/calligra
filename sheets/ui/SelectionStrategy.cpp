@@ -72,7 +72,7 @@ SelectionStrategy::SelectionStrategy(CellToolBase *cellTool,
     const int row = sheet->topRow(position.y(), ypos);
     // Check boundaries.
     if (col > KS_colMax || row > KS_rowMax) {
-        kDebug(36005) << "col or row is out of range:" << "col:" << col << " row:" << row;
+        debugSheetsUI << "col or row is out of range:" << "col:" << col << " row:" << row;
     } else {
         d->startCell = Cell(sheet, col, row);
         if (selection->referenceSelectionMode()) {
@@ -138,7 +138,7 @@ void SelectionStrategy::handleMouseMove(const QPointF &documentPos,
         const int row = sheet->topRow(position.y(), ypos);
         // Check boundaries.
         if (col > KS_colMax || row > KS_rowMax) {
-            kDebug(36005) << "col or row is out of range:" << "col:" << col << " row:" << row;
+            debugSheetsUI << "col or row is out of range:" << "col:" << col << " row:" << row;
         } else if (!(d->startCell == Cell(sheet, col, row))) {
             const QRect range = selection()->activeElement()->rect();
             const QPoint offset = d->startCell.cellPosition() - range.topLeft();

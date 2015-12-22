@@ -31,10 +31,9 @@
 #include <QGroupBox>
 #include <QVBoxLayout>
 
-
-#include <kdebug.h>
 #include <KLocalizedString>
 
+#include "SheetsDebug.h"
 #include "ui/Selection.h"
 #include "Sheet.h"
 
@@ -74,7 +73,7 @@ InsertDialog::InsertDialog(QWidget* parent, Selection* selection, Mode _mode)
         vbox->addWidget(rb4 = new QRadioButton(i18n("Remove columns")));
         setWindowTitle(i18n("Remove Cells"));
     } else
-        kDebug(36001) << "Error in kspread_dlg_InsertDialog";
+        debugSheets << "Error in kspread_dlg_InsertDialog";
     grp->setLayout(vbox);
     lay1->addWidget(grp);
 
@@ -143,7 +142,7 @@ void InsertDialog::slotOk()
             manipulator->execute(m_selection->canvas());
         }
     } else {
-        kDebug(36001) << "Error in kspread_dlg_InsertDialog";
+        debugSheets << "Error in kspread_dlg_InsertDialog";
     }
 
     accept();

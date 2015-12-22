@@ -20,7 +20,8 @@
 // Local
 #include "BorderColorCommand.h"
 
-#include <kdebug.h>
+#include <QPen>
+
 #include <KLocalizedString>
 
 #include "Cell.h"
@@ -28,8 +29,6 @@
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleStorage.h"
-
-#include <QPen>
 
 using namespace Calligra::Sheets;
 

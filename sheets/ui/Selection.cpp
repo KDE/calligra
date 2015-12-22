@@ -21,12 +21,11 @@
 // Local
 #include "Selection.h"
 
-#include <kdebug.h>
-
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoViewConverter.h>
 
+#include "SheetsDebug.h"
 #include "Cell.h"
 #include "CellStorage.h"
 #include "RowColumnFormat.h"
@@ -185,7 +184,7 @@ void Selection::initialize(const QPoint& point, Sheet* sheet)
         // d->activeElement = d->activeSubRegionStart + 1;
         // d->activeSubRegionLength = 0;
     } else {
-        kWarning() << "Unable to insert" << topLeft << "in" << sheet->sheetName();
+        warnSheets << "Unable to insert" << topLeft << "in" << sheet->sheetName();
     }
     Element* element = cells()[d->activeSubRegionStart];
     // we end up with one element in the subregion
@@ -260,7 +259,7 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
         // d->activeElement = d->activeSubRegionStart + 1;
         // d->activeSubRegionLength = 0;
     } else {
-        kWarning() << "Unable to insert" << topLeft << "in" << sheet->sheetName();
+        warnSheets << "Unable to insert" << topLeft << "in" << sheet->sheetName();
     }
     Element* element = cells()[d->activeSubRegionStart];
     // we end up with one element in the subregion
@@ -497,7 +496,7 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
         return;
     }
 
-    kDebug() ;
+    debugSheets ;
 
     if (!sheet) {
         if (d->originSheet) {
@@ -756,13 +755,13 @@ void Selection::clearSubRegion()
 void Selection::fixSubRegionDimension()
 {
     if (d->activeSubRegionStart > cells().count()) {
-        kDebug() << "start position" << d->activeSubRegionStart << "exceeds list" << cells().count();
+        debugSheets << "start position" << d->activeSubRegionStart << "exceeds list" << cells().count();
         d->activeSubRegionStart = 0;
         d->activeSubRegionLength = cells().count();
         return;
     }
     if (d->activeSubRegionStart + d->activeSubRegionLength > cells().count()) {
-        kDebug() << "subregion (" << d->activeSubRegionStart << ".."
+        debugSheets << "subregion (" << d->activeSubRegionStart << ".."
         << d->activeSubRegionStart + d->activeSubRegionLength
         << ") exceeds list" << cells().count();
         d->activeSubRegionLength = cells().count() - d->activeSubRegionStart;
@@ -1104,10 +1103,10 @@ void Selection::scrollToCursor()
 
 void Selection::dump() const
 {
-    kDebug() << *this;
-    kDebug() << "d->activeElement:" << d->activeElement;
-    kDebug() << "d->activeSubRegionStart:" << d->activeSubRegionStart;
-    kDebug() << "d->activeSubRegionLength:" << d->activeSubRegionLength;
+    debugSheets << *this;
+    debugSheets << "d->activeElement:" << d->activeElement;
+    debugSheets << "d->activeSubRegionStart:" << d->activeSubRegionStart;
+    debugSheets << "d->activeSubRegionLength:" << d->activeSubRegionLength;
 }
 
 /***************************************************************************

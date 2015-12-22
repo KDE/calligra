@@ -228,12 +228,12 @@ Map* MapModel::map() const
 
 void MapModel::addSheet(Sheet* sheet)
 {
-    kDebug() << "Added sheet:" << sheet->sheetName();
+    debugSheets << "Added sheet:" << sheet->sheetName();
     emit layoutChanged();
 }
 
 void MapModel::removeSheet(Sheet *sheet)
 {
-    kDebug() << "Removed sheet:" << sheet->sheetName();
+    debugSheets << "Removed sheet:" << sheet->sheetName();
     emit layoutChanged();
 }

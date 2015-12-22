@@ -20,6 +20,7 @@
 #include "PixmapCachingSheetView.h"
 
 #include "CellView.h"
+#include "SheetsDebug.h"
 
 #include "../Sheet.h"
 #include "../part/CanvasBase.h"
@@ -27,7 +28,6 @@
 #include <QCache>
 #include <QPainter>
 
-#include <kdebug.h>
 
 #ifdef CALLIGRA_SHEETS_MT
 #include <ThreadWeaver/Job>
@@ -74,17 +74,17 @@ TileDrawingJob::TileDrawingJob(const Sheet *sheet, SheetView* sheetView, CanvasB
     : m_sheet(sheet), m_sheetView(sheetView), m_canvas(canvas), m_scale(scale), m_x(x), m_y(y)
     , m_image(TILESIZE, TILESIZE, QImage::Format_ARGB32)
 {
-    kDebug() << "new job for " << x << "," << y << " " << m_scale;
+    debugSheets << "new job for " << x << "," << y << " " << m_scale;
 }
 
 TileDrawingJob::~TileDrawingJob()
 {
-    kDebug() << "end job for " << m_x << "," << m_y << " " << m_scale;
+    debugSheets << "end job for " << m_x << "," << m_y << " " << m_scale;
 }
 
 void TileDrawingJob::run()
 {
-    kDebug() << "start draw for " << m_x << "," << m_y << " " << m_scale;
+    debugSheets << "start draw for " << m_x << "," << m_y << " " << m_scale;
     const bool rtl = m_sheet->layoutDirection() == Qt::RightToLeft;
 
     m_image.fill(QColor(255, 255, 255, 0).rgba());
@@ -113,13 +113,13 @@ void TileDrawingJob::run()
     const int bottom = m_sheet->bottomRow(docRect.bottom());
     QRect cellRect(left, top, right - left + 1, bottom - top + 1);
 
-    kDebug() << globalPixelRect << docRect;
-    kDebug() << cellRect;
+    debugSheets << globalPixelRect << docRect;
+    debugSheets << cellRect;
 
     m_sheetView->SheetView::paintCells(pixmapPainter, docRect, QPointF(loffset, toffset), 0, cellRect);
 
     //m_image.save(QString("/tmp/tile%1_%2.png").arg(m_x).arg(m_y));
-    kDebug() << "end draw for " << m_x << "," << m_y << " " << m_scale;
+    debugSheets << "end draw for " << m_x << "," << m_y << " " << m_scale;
 }
 
 

@@ -26,7 +26,6 @@
 
 #include <KLocalizedString>
 #include <kcharselect.h>
-#include <kdebug.h>
 #include <kstandardguiitem.h>
 
 using namespace Calligra::Sheets;

@@ -22,12 +22,13 @@
 // built-in text functions
 #include "TextModule.h"
 
-// please keep it in alphabetical order
-#include <QRegExp>
-#include <klocale.h>
-#include <kdebug.h>
 #include <math.h>
 
+#include <QRegExp>
+
+#include <klocale.h>
+
+#include "SheetsDebug.h"
 #include "CalculationSettings.h"
 #include "Function.h"
 #include "FunctionModuleRegistry.h"
@@ -807,7 +808,7 @@ void lclAppendDigit(QString& rText, qint32 nDigit)
     case 7: rText += QString::fromUtf8(UTF8_TH_7); break;
     case 8: rText += QString::fromUtf8(UTF8_TH_8); break;
     case 9: rText += QString::fromUtf8(UTF8_TH_9); break;
-    default: kDebug() << "lclAppendDigit - illegal digit"; break;
+    default: debugSheets << "lclAppendDigit - illegal digit"; break;
     }
 }
 
@@ -824,7 +825,7 @@ void lclAppendPow10(QString& rText, qint32 nDigit, qint32 nPow10)
     case 3: rText += QString::fromUtf8(UTF8_TH_1E3); break;
     case 4: rText += QString::fromUtf8(UTF8_TH_1E4); break;
     case 5: rText += QString::fromUtf8(UTF8_TH_1E5); break;
-    default: kDebug() << "lclAppendPow10 - illegal power"; break;
+    default: debugSheets << "lclAppendPow10 - illegal power"; break;
     }
 }
 

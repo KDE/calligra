@@ -18,8 +18,6 @@
 */
 #include "BenchmarkRTree.h"
 
-#include <kdebug.h>
-
 // #include "rtree.h"
 #include "RTree.h"
 

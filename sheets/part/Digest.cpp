@@ -44,7 +44,7 @@
 
 #include <KoConfig.h> // WORDS_BIGENDIAN
 
-#include <kdebug.h>
+#include "SheetsDebug.h"
 
 typedef quint8 sal_uInt8;
 typedef quint16 sal_uInt16;

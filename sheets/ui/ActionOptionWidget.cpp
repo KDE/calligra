@@ -85,7 +85,7 @@ ActionOptionWidget::ActionOptionWidget(CellToolBase* cellTool, const QDomElement
             QString actionName = action.attribute("name");
             QAction* a = cellTool->action(actionName);
             if (!a) {
-                kWarning() << "unknown action" << actionName << "in CellToolOptionWidgets.xml";
+                warnSheets << "unknown action" << actionName << "in CellToolOptionWidgets.xml";
                 continue;
             }
             QWidgetAction* wa = qobject_cast<QWidgetAction *>(a);

@@ -27,8 +27,6 @@
 #include <KoTextDocumentLayout.h>
 #include <KoTextShapeData.h>
 
-#include <kdebug.h>
-
 #include <QList>
 
 using namespace Calligra::Sheets;

@@ -75,9 +75,6 @@
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsSceneDragDropEvent>
 
-// KDE
-#include <kdebug.h>
-
 // Calligra
 #include <KoCanvasController.h>
 #include <KoShapeManager.h>
@@ -90,6 +87,7 @@
 #include <KoCanvasResourceManager.h>
 
 // Sheets
+#include "SheetsDebug.h"
 #include "CalculationSettings.h"
 #include "CellStorage.h"
 #include "Damages.h"
@@ -260,7 +258,7 @@ KoZoomHandler* CanvasItem::zoomHandler() const
 SheetView* CanvasItem::sheetView(const Sheet* sheet) const
 {
     if (!d->sheetViews.contains(sheet)) {
-        kDebug(36004) << "Creating SheetView for" << sheet->sheetName();
+        debugSheetsRender << "Creating SheetView for" << sheet->sheetName();
         d->sheetViews.insert(sheet, new SheetView(sheet));
         d->sheetViews[ sheet ]->setViewConverter(zoomHandler());
         connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(QSizeF)),
@@ -414,7 +412,7 @@ void CanvasItem::handleDamages(const QList<Damage*>& damages)
 
         if (damage->type() == Damage::Cell) {
             CellDamage* cellDamage = static_cast<CellDamage*>(damage);
-            kDebug(36007) << "Processing\t" << *cellDamage;
+            debugSheetsDamage << "Processing\t" << *cellDamage;
             Sheet* const damagedSheet = cellDamage->sheet();
 
             if (cellDamage->changes() & CellDamage::Appearance) {
@@ -427,7 +425,7 @@ void CanvasItem::handleDamages(const QList<Damage*>& damages)
 
         if (damage->type() == Damage::Sheet) {
             SheetDamage* sheetDamage = static_cast<SheetDamage*>(damage);
-            kDebug(36007) << *sheetDamage;
+            debugSheetsDamage << *sheetDamage;
             const SheetDamage::Changes changes = sheetDamage->changes();
             if (changes & (SheetDamage::Name | SheetDamage::Shown)) {
 //                d->tabBar->setTabs(doc()->map()->visibleSheets());
@@ -458,7 +456,7 @@ void CanvasItem::handleDamages(const QList<Damage*>& damages)
 
         if (damage->type() == Damage::Selection) {
             SelectionDamage* selectionDamage = static_cast<SelectionDamage*>(damage);
-            kDebug(36007) << "Processing\t" << *selectionDamage;
+            debugSheetsDamage << "Processing\t" << *selectionDamage;
             const Region region = selectionDamage->region();
 
             if (paintMode == Clipped) {
@@ -470,7 +468,7 @@ void CanvasItem::handleDamages(const QList<Damage*>& damages)
             continue;
         }
 
-        kDebug(36007) << "Unhandled\t" << *damage;
+        debugSheetsDamage << "Unhandled\t" << *damage;
     }
 
     // At last repaint the dirty cells.

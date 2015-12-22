@@ -38,12 +38,12 @@
 #include <QListWidget>
 
 // KF5
-#include <kdebug.h>
 #include <kmessagebox.h>
 
 #include <KoIcon.h>
 
 // Sheets
+#include "SheetsDebug.h"
 #include <Global.h>
 #include "calligra_sheets_limits.h"
 #include <Localization.h>
@@ -511,7 +511,7 @@ void ConsolidateDialog::Private::setContent(Sheet *sheet, int row, int column,
         Formula formula(sheet);
         formula.setExpression(text);
         if (!formula.isValid()) {
-            kDebug() << "Invalid formula:" << text;
+            debugSheets << "Invalid formula:" << text;
             return; // Quit before creating/adding the sub-command.
         }
         value = formula.eval();

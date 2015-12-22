@@ -46,7 +46,6 @@
 #include <QPainter>
 #include <QGraphicsItem>
 
-#include <kdebug.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
@@ -69,6 +68,7 @@
 #include <KoView.h>
 #include <KoUnit.h>
 
+#include "SheetsDebug.h"
 #include "BindingManager.h"
 #include "CalculationSettings.h"
 #include "Canvas.h"
@@ -465,12 +465,12 @@ void Doc::loadPaper(KoXmlElement const & paper)
 
 bool Doc::completeLoading(KoStore* store)
 {
-    kDebug(36001) << "------------------------ COMPLETING --------------------";
+    debugSheets << "------------------------ COMPLETING --------------------";
 
     setModified(false);
     bool ok = map()->completeLoading(store);
 
-    kDebug(36001) << "------------------------ COMPLETION DONE --------------------";
+    debugSheets << "------------------------ COMPLETION DONE --------------------";
     return ok;
 }
 

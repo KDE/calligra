@@ -23,8 +23,7 @@
 #include <QRegExp>
 #include <QStringList>
 
-#include <kdebug.h>
-
+#include "SheetsDebug.h"
 #include "Cell.h"
 #include "calligra_sheets_limits.h"
 #include "Map.h"
@@ -147,7 +146,7 @@ Region::Region(const QRect& rect, Sheet* sheet)
 
     Q_ASSERT(!rect.isNull());
     if (rect.isNull()) {
-        kError(36001) << "Region::Region(const QRect&): QRect is empty!" << endl;
+        errorSheets << "Region::Region(const QRect&): QRect is empty!" << endl;
         return;
     }
     add(rect, sheet);
@@ -159,7 +158,7 @@ Region::Region(const QPoint& point, Sheet* sheet)
 
     Q_ASSERT(!point.isNull());
     if (point.isNull()) {
-        kError(36001) << "Region::Region(const QPoint&): QPoint is empty!" << endl;
+        errorSheets << "Region::Region(const QPoint&): QPoint is empty!" << endl;
         return;
     }
     add(point, sheet);
@@ -189,7 +188,7 @@ Region::Region(int x, int y, Sheet* sheet)
 
     Q_ASSERT(isValid(QPoint(x, y)));
     if (!isValid(QPoint(x, y))) {
-        kError(36001) << "Region::Region(" << x << ", " << y << "): Coordinates are invalid!" << endl;
+        errorSheets << "Region::Region(" << x << ", " << y << "): Coordinates are invalid!" << endl;
         return;
     }
     add(QPoint(x, y), sheet);
@@ -201,7 +200,7 @@ Region::Region(int x, int y, int width, int height, Sheet* sheet)
 
     Q_ASSERT(isValid(QRect(x, y, width, height)));
     if (!isValid(QRect(x, y, width, height))) {
-        kError(36001) << "Region::Region(" << x << ", " << y << ", " << width << ", " << height << "): Dimensions are invalid!" << endl;
+        errorSheets << "Region::Region(" << x << ", " << y << ", " << width << ", " << height << "): Dimensions are invalid!" << endl;
         return;
     }
     add(QRect(x, y, width, height), sheet);

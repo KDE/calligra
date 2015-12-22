@@ -23,9 +23,13 @@
 
 #include <ctype.h>
 
-#include <kdebug.h>
+#include <QPen>
+
 #include <KCharsets>
 
+#include <KoUnit.h>
+
+#include "SheetsDebug.h"
 #include "Formula.h"
 #include "calligra_sheets_limits.h"
 #include "Localization.h"
@@ -34,9 +38,6 @@
 #include "Region.h"
 #include "Sheet.h"
 #include "Style.h"
-
-#include <QPen>
-#include <KoUnit.h>
 
 using namespace Calligra::Sheets;
 
@@ -58,7 +59,7 @@ int Calligra::Sheets::Util::decodeColumnLabelText(const QString &labelText)
             break;
     }
     if (labelTextLength == 0) {
-        kWarning(36001) << "No column label text found for col:" << labelText;
+        warnSheets << "No column label text found for col:" << labelText;
         return 0;
     }
     for (uint i = 0; i < labelTextLength; i++) {
@@ -322,7 +323,7 @@ QString Calligra::Sheets::Odf::convertRangeToRef(const QString & sheetName, cons
 
 QString Calligra::Sheets::Odf::encodePen(const QPen & pen)
 {
-//     kDebug()<<"encodePen( const QPen & pen ) :"<<pen;
+//     debugSheets<<"encodePen( const QPen & pen ) :"<<pen;
     // NOTE Stefan: QPen api docs:
     //              A line width of zero indicates a cosmetic pen. This means
     //              that the pen width is always drawn one pixel wide,
@@ -348,7 +349,7 @@ QString Calligra::Sheets::Odf::encodePen(const QPen & pen)
         break;
     default: break;
     }
-    //kDebug() << " encodePen :" << s;
+    //debugSheets << " encodePen :" << s;
     if (pen.color().isValid()) {
         s += ' ' + Style::colorName(pen.color());
     }
@@ -384,7 +385,7 @@ QPen Calligra::Sheets::Odf::decodePen(const QString &border)
     else if (_style == "dot-dot-dash")
         pen.setStyle(Qt::DashDotDotLine);
     else
-        kDebug() << " style undefined :" << _style;
+        debugSheets << " style undefined :" << _style;
 
     if (_color.isEmpty())
         pen.setColor(QColor());

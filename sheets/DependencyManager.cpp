@@ -57,7 +57,7 @@ void DependencyManager::Private::dump() const
             debugStr << (*rit)->name();
         }
 
-        kDebug(36002) << cell.name() << " consumes values of:" << debugStr.join(",");
+        debugSheetsFormula << cell.name() << " consumes values of:" << debugStr.join(",");
     }
 
     foreach(Sheet* sheet, consumers.keys()) {
@@ -69,14 +69,14 @@ void DependencyManager::Private::dump() const
         }
         foreach(const QString &uniqueKey, table.uniqueKeys()) {
             QStringList debugStr(table.values(uniqueKey));
-            kDebug(36002) << uniqueKey << " provides values for:" << debugStr.join(",");
+            debugSheetsFormula << uniqueKey << " provides values for:" << debugStr.join(",");
         }
     }
 
     foreach(const Cell &cell, depths.keys()) {
         QString cellName = cell.name();
         while (cellName.count() < 4) cellName.prepend(' ');
-        kDebug(36002) << "depth(" << cellName << " ) =" << depths[cell];
+        debugSheetsFormula << "depth(" << cellName << " ) =" << depths[cell];
     }
 }
 
@@ -101,7 +101,7 @@ void DependencyManager::regionChanged(const Region& region)
 {
     if (region.isEmpty())
         return;
-    kDebug(36002) << "DependencyManager::regionChanged" << region.name();
+    debugSheetsFormula << "DependencyManager::regionChanged" << region.name();
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
         const QRect range = (*it)->rect();
@@ -304,7 +304,7 @@ void DependencyManager::updateFormula(const Cell& cell, const Region::Element* o
         if (token.type() == Token::Cell || token.type() == Token::Range) {
             // FIXME Stefan: Special handling for named areas
             const Region region(token.text(), sheet->map(), sheet);
-            //kDebug(36002) << region.name();
+            //debugSheetsFormula << region.name();
 
             // the offset contains a sheet, only if it was an intersheet move.
             if ((oldLocation->sheet() == region.firstSheet()) &&
@@ -332,7 +332,7 @@ Calligra::Sheets::Region DependencyManager::Private::consumingRegion(const Cell&
 {
     QHash<Sheet*, RTree<Cell>*>::ConstIterator cit = consumers.constFind(cell.sheet());
     if (cit == consumers.constEnd()) {
-        //kDebug(36002) << "No consumer tree found for the cell's sheet.";
+        //debugSheetsFormula << "No consumer tree found for the cell's sheet.";
         return Region();
     }
 
@@ -457,7 +457,7 @@ void DependencyManager::Private::generateDepths(Cell cell, QSet<Cell>& computedD
 
     //prevent infinite recursion (circular dependencies)
     if (processedCells.contains(cell) || cell.value() == Value::errorCIRCLE()) {
-        kDebug(36002) << "Circular dependency at" << cell.fullName();
+        debugSheetsFormula << "Circular dependency at" << cell.fullName();
         cell.setValue(Value::errorCIRCLE());
         depths.insert(cell, 0);
         return;
@@ -497,7 +497,7 @@ int DependencyManager::Private::computeDepth(Cell cell) const
 
     //prevent infinite recursion (circular dependencies)
     if (processedCells.contains(cell) || cell.value() == Value::errorCIRCLE()) {
-        kDebug(36002) << "Circular dependency at" << cell.fullName();
+        debugSheetsFormula << "Circular dependency at" << cell.fullName();
         cell.setValue(Value::errorCIRCLE());
         return 0;
     }

@@ -22,7 +22,6 @@
 
 #include <QBrush>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include "Cell.h"

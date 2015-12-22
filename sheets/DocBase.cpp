@@ -235,7 +235,7 @@ bool DocBase::loadOdf(KoOdfReadStore & odfStore)
     KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "spreadsheet");
 
     if (body.isNull()) {
-        kError(32001) << "No office:spreadsheet found!" << endl;
+        errorSheetsODF << "No office:spreadsheet found!" << endl;
         KoXmlElement childElem;
         QString localName;
         forEachElement(childElem, realBody) {
@@ -324,7 +324,7 @@ void DocBase::loadOdfIgnoreList(const KoOasisSettings& settings)
     KoOasisSettings::Items configurationSettings = settings.itemSet("configuration-settings");
     if (!configurationSettings.isNull()) {
         const QString ignorelist = configurationSettings.parseConfigItemString("SpellCheckerIgnoreList");
-        //kDebug()<<" ignorelist :"<<ignorelist;
+        //debugSheets<<" ignorelist :"<<ignorelist;
         d->spellListIgnoreAll = ignorelist.split(',', QString::SkipEmptyParts);
     }
 }

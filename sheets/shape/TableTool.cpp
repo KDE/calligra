@@ -21,8 +21,6 @@
 #include "TableTool.h"
 #include "SheetsEditor.h"
 
-#include <KoIcon.h>
-
 #include <QApplication>
 #include <QGridLayout>
 #include <QLabel>
@@ -35,14 +33,15 @@
 #include <QFileDialog>
 
 #include <kcombobox.h>
-#include <kdebug.h>
 #include <KLocalizedString>
 #include <kpagedialog.h>
 
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoSelection.h>
+#include <KoIcon.h>
 
+#include "SheetsDebug.h"
 #include "AutoFillStrategy.h"
 #include "Cell.h"
 #include "calligra_sheets_limits.h"
@@ -150,7 +149,7 @@ void TableTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sh
             break;
     }
     if (!d->tableShape) {
-        kWarning() << "No table shape found in selection.";
+        warnSheets << "No table shape found in selection.";
         emit done();
         return;
     }

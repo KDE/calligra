@@ -20,7 +20,6 @@
 // Local
 #include "IndentationCommand.h"
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include "ApplicationSettings.h"

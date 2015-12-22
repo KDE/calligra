@@ -241,7 +241,7 @@ void RowHeader::mouseRelease(KoPointerEvent * _ev)
         // Norbert
         bool m_frozen = false;
         if (m_frozen) {
-            kDebug(36001) << "selected: T" << rect.top() << " B" << rect.bottom();
+            debugSheets << "selected: T" << rect.top() << " B" << rect.bottom();
 
             int i;
             QList<int> hiddenRows;
@@ -386,7 +386,7 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
 //     ElapsedTime et( "Painting vertical header", ElapsedTime::PrintOnlyTime );
 
     // FIXME Stefan: Make use of clipping. Find the repaint call after the scrolling.
-    // kDebug(36004) << event->rect();
+    // debugSheetsRender << event->rect();
 
     // painting rectangle
     const QRectF paintRect = m_pCanvas->zoomHandler()->viewToDocument(painterRect);
@@ -568,11 +568,11 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
     if (sheet->layoutDirection() == Qt::RightToLeft) {
         int tmpCol = sheet->leftColumn(m_pCanvas->xOffset(), x);
 
-        kDebug() << "evPos:" << ev_PosX << ", x:" << x << ", COL:" << tmpCol;
+        debugSheets << "evPos:" << ev_PosX << ", x:" << x << ", COL:" << tmpCol;
         while (ev_PosX > x && (!m_bResize) && tmpCol <= KS_colMax) {
             double w = sheet->columnFormat(tmpCol)->width();
 
-            kDebug() << "evPos:" << ev_PosX << ", x:" << x << ", w:" << w << ", COL:" << tmpCol;
+            debugSheets << "evPos:" << ev_PosX << ", x:" << x << ", w:" << w << ", COL:" << tmpCol;
 
             ++tmpCol;
             if (tmpCol > KS_colMax)
@@ -593,11 +593,11 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
         qreal tmp2;
         tmpCol = sheet->leftColumn(dWidth - ev_PosX + 1, tmp2);
         if (sheet->columnFormat(tmpCol)->isHiddenOrFiltered() && tmpCol == 0) {
-            kDebug() << "No resize:" << tmpCol << "," << sheet->columnFormat(tmpCol)->isHiddenOrFiltered();
+            debugSheets << "No resize:" << tmpCol << "," << sheet->columnFormat(tmpCol)->isHiddenOrFiltered();
             m_bResize = false;
         }
 
-        kDebug() << "Resize:" << m_bResize;
+        debugSheets << "Resize:" << m_bResize;
     } else {
         int col = sheet->leftColumn(m_pCanvas->xOffset(), x);
 
@@ -628,7 +628,7 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
         qreal tmp;
         if (sheet->layoutDirection() == Qt::RightToLeft) {
             m_iResizedColumn = sheet->leftColumn(ev_PosX - 1, tmp);
-            // kDebug() <<"RColumn:" << m_iResizedColumn <<", PosX:" << ev_PosX;
+            // debugSheets <<"RColumn:" << m_iResizedColumn <<", PosX:" << ev_PosX;
 
             if (!sheet->isProtected())
                 paintSizeIndicator(_ev->pos().x());
@@ -639,7 +639,7 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
                 paintSizeIndicator(_ev->pos().x());
         }
 
-        // kDebug() <<"Column:" << m_iResizedColumn;
+        // debugSheets <<"Column:" << m_iResizedColumn;
     } else {
         if (_ev->button() != Qt::RightButton) {
             m_bSelection = true;
@@ -740,7 +740,7 @@ void ColumnHeader::mouseRelease(KoPointerEvent * _ev)
         // Norbert
         bool m_frozen = false;
         if (m_frozen) {
-            kDebug(36001) << "selected: L" << rect.left() << " R" << rect.right();
+            debugSheets << "selected: L" << rect.left() << " R" << rect.right();
 
             int i;
             QList<int> hiddenCols;
@@ -936,7 +936,7 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
 //     ElapsedTime et( "Painting horizontal header", ElapsedTime::PrintOnlyTime );
 
     // FIXME Stefan: Make use of clipping. Find the repaint call after the scrolling.
-    // kDebug(36004) << event->rect();
+    // debugSheetsRender << event->rect();
 
     // painting rectangle
     const QRectF paintRect = m_pCanvas->zoomHandler()->viewToDocument(painterRect);

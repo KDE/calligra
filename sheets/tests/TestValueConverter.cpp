@@ -694,7 +694,7 @@ void TestValueConverter::testAsDateTime()
         QVERIFY(result.asFloat() >= expected.asFloat() - 1.0/(24*60*60));
         QCOMPARE(result.format(), expected.format());
     } else {
-      kDebug() << result << " != " << expected;
+      qDebug() << result << " != " << expected;
         QCOMPARE(result, expected);
         QCOMPARE(result.format(), expected.format());
     }

@@ -474,7 +474,7 @@ void RectStorage<T>::garbageCollection()
             currentPair.second == T() &&
             pair.second == T() &&
             pair.first == currentPair.first) {
-        kDebug(36001) << "RectStorage: removing default data at" << Region(currentPair.first.toRect()).name();
+        debugSheets << "RectStorage: removing default data at" << Region(currentPair.first.toRect()).name();
         m_tree.remove(currentPair.first.toRect(), currentPair.second);
         triggerGarbageCollection();
         return; // already done
@@ -502,7 +502,7 @@ void RectStorage<T>::garbageCollection()
         if (zIndex != currentZIndex &&
                 (pair.second == currentPair.second || pair.second == T()) &&
                 pair.first.toRect().contains(currentPair.first.toRect())) {
-            kDebug(36001) << "RectStorage: removing data at" << Region(currentPair.first.toRect()).name();
+            debugSheets << "RectStorage: removing data at" << Region(currentPair.first.toRect()).name();
             m_tree.remove(currentPair.first.toRect(), currentPair.second);
             break;
         }
@@ -565,7 +565,7 @@ template<typename T>
 void RectStorageLoader<T>::run()
 {
     static int total = 0;
-    kDebug(36001) << "Loading conditional styles";
+    debugSheets << "Loading conditional styles";
     QTime t; t.start();
 
     QList<QPair<QRegion, T> > treeData;
@@ -590,7 +590,7 @@ void RectStorageLoader<T>::run()
     m_storage->m_tree.load(treeData);
     int e = t.elapsed();
     total += e;
-    kDebug(36001) << "Time: " << e << total;
+    debugSheets << "Time: " << e << total;
 }
 
 template<typename T>

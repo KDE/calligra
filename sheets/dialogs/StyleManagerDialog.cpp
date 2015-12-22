@@ -27,7 +27,7 @@
 #include <QVBoxLayout>
 
 #include <kcombobox.h>
-#include <kdebug.h>
+#include "SheetsDebug.h"
 #include <KLocalizedString>
 
 #include "Cell.h"
@@ -177,7 +177,7 @@ void StyleManagerDialog::slotDisplayMode(int mode)
 
 void StyleManagerDialog::slotOk()
 {
-    kDebug() ;
+    debugSheets ;
     QTreeWidgetItem* item = m_styleList->currentItem();
 
     if (!item) {

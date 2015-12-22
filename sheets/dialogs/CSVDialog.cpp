@@ -34,7 +34,6 @@
 
 #include <KoCanvasBase.h>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 #include <kmessagebox.h>
 

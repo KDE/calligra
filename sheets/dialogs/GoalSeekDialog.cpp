@@ -258,14 +258,14 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
         d->sourceCell.setValue(Value(startA));
         const double targetValueA = numToDouble(formula.eval().asFloat());
         resultA = targetValueA - _goal;
-//         kDebug() << "Target A:" << targetValueA << "," << d->targetCell.userInput() << "Calc:" << resultA;
+//         debugSheets << "Target A:" << targetValueA << "," << d->targetCell.userInput() << "Calc:" << resultA;
 
         d->sourceCell.setValue(Value(startB));
         const double targetValueB = numToDouble(formula.eval().asFloat());
         resultB = targetValueB - _goal;
-//         kDebug() << "Target B:" << targetValueB << "," << d->targetCell.userInput() << "Calc:" << resultB;
+//         debugSheets << "Target B:" << targetValueB << "," << d->targetCell.userInput() << "Calc:" << resultB;
 
-//         kDebug() <<"Iteration:" << iterations <<", StartA:" << startA
+//         debugSheets <<"Iteration:" << iterations <<", StartA:" << startA
 //                  << ", ResultA: " << resultA << " (eps: " << eps << "), StartB: "
 //                  << startB << ", ResultB: " << resultB << endl;
 
@@ -275,7 +275,7 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
         // values we have something like a horizontal line
         // => can't get zero.
         if (resultB == resultA) {
-//         kDebug() <<" resultA == resultB";
+//         debugSheets <<" resultA == resultB";
             if (fabs(resultA) < eps) {
                 ok = true;
                 break;
@@ -289,12 +289,12 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
         x = (startA * resultB - startB * resultA) / (resultB - resultA);
 
         if (fabs(x) > 100000000) {
-//             kDebug() <<"fabs(x) > 100000000:" << x;
+//             debugSheets <<"fabs(x) > 100000000:" << x;
             ok = false;
             break;
         }
 
-//         kDebug() <<"X:" << x <<", fabs (resultA):" << fabs(resultA) <<", Real start:" << startA <<", Real result:" << resultA <<", Iteration:" << iterations;
+//         debugSheets <<"X:" << x <<", fabs (resultA):" << fabs(resultA) <<", Real start:" << startA <<", Real result:" << resultA <<", Iteration:" << iterations;
 
         --iterations;
         if (iterations % 20 == 0)

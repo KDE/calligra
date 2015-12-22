@@ -97,7 +97,7 @@ int PrintJob::Private::setupPages(const QPrinter& printer, bool forceRecreation)
         for (int i = 0; i < sheetNames.count(); ++i) {
             Sheet* sheet = view->doc()->map()->findSheet(sheetNames[i]);
             if (sheet == 0) {
-                kWarning(36005) << i18n("Sheet %1 could not be found for printing", sheetNames[i]);
+                warnSheetsUI << i18n("Sheet %1 could not be found for printing", sheetNames[i]);
                 continue;
             }
             pageManagers.insert(sheet, sheet->print());
@@ -186,7 +186,7 @@ void PrintJob::Private::printHeaderFooter(QPainter &painter, Sheet *sheet, int p
     const QString footMid = "FooterMid";
     const QString footRight = "FooterRight";
 #endif // debug header/footer
-    kDebug() << headLeft << headMid << headRight << footLeft << footMid << footRight;
+    debugSheets << headLeft << headMid << headRight << footLeft << footMid << footRight;
 
     qreal textWidth;
     const qreal headFootDistance = MM_TO_POINT(5.0 /*mm*/);
@@ -274,11 +274,11 @@ PrintJob::PrintJob(View *view)
                              QPrinter::Point);
     printer().setFullPage(true);
 
-    //kDebug(36005) <<"Iterating through available sheets and initializing list of available sheets.";
+    //debugSheetsUI <<"Iterating through available sheets and initializing list of available sheets.";
     QList<Sheet*> sheetList = d->view->doc()->map()->sheetList();
     for (int i = sheetList.count() - 1; i >= 0; --i) {
         Sheet* sheet = sheetList[ i ];
-        //kDebug(36005) <<"Adding" << sheet->sheetName();
+        //debugSheetsUI <<"Adding" << sheet->sheetName();
         d->sheetSelectPage->prependAvailableSheet(sheet->sheetName());
     }
 }
@@ -413,7 +413,7 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
     // See first comment in preparePage() about the distinction between the
     // printing of the sheet contents and shapes.
 
-    kDebug(36004) << "Printing page" << pageNumber;
+    debugSheetsRender << "Printing page" << pageNumber;
     int sheetPageNumber = pageNumber;
     Sheet* sheet = d->getSheetPageNumber(&sheetPageNumber);
 
@@ -435,7 +435,7 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
     const PrintSettings *const settings = pageManager->settings();
     const KoPageLayout pageLayout = settings->pageLayout();
     const double zoom = settings->zoom();
-    kDebug() << "printing page" << sheetPageNumber << "; cell range" << cellRange;
+    debugSheets << "printing page" << sheetPageNumber << "; cell range" << cellRange;
 
     if (settings->printHeaders()) {
         painter.save();

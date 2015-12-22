@@ -23,7 +23,7 @@
 
 #include <QRect>
 
-#include <kdebug.h>
+#include "SheetsDebug.h"
 
 #include "CellStorage.h"
 #include "Map.h"
@@ -138,7 +138,7 @@ bool BindingModel::setCellRegion(const QString& regionName)
     const Map* const map = m_region.firstSheet()->map();
     const Region region = Region(regionName, map);
     if (!region.isValid()) {
-        kDebug() << qPrintable(regionName) << "is not a valid region.";
+        debugSheets << qPrintable(regionName) << "is not a valid region.";
         return false;
     }
     // Clear the old binding.
@@ -187,7 +187,7 @@ void BindingModel::emitDataChanged(const QRect& rect)
 {
     const QPoint tl = rect.topLeft();
     const QPoint br = rect.bottomRight();
-    //kDebug(36005) << "emit QAbstractItemModel::dataChanged" << QString("%1:%2").arg(tl).arg(br);
+    //debugSheetsUI << "emit QAbstractItemModel::dataChanged" << QString("%1:%2").arg(tl).arg(br);
     emit dataChanged(index(tl.y(), tl.x()), index(br.y(), br.x()));
 }
 
@@ -242,7 +242,7 @@ QVariant BindingModel::data(const QModelIndex& index, int role) const
             return variant;
         }
     }
-    //kDebug() << index.column() <<"," << index.row() <<"," << variant;
+    //debugSheets << index.column() <<"," << index.row() <<"," << variant;
     return QVariant();
 }
 

@@ -24,8 +24,9 @@
 #include <QDomElement>
 #include <QDomNode>
 
-#include <kdebug.h>
 #include <KLocalizedString>
+
+#include "SheetsDebug.h"
 
 using namespace Calligra::Sheets;
 

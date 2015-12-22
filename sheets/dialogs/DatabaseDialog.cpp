@@ -28,13 +28,13 @@
 #include "ui/Selection.h"
 #include "Sheet.h"
 #include "Util.h"
+#include "SheetsDebug.h"
 
 #include "commands/DataManipulators.h"
 
 #include <KoCanvasBase.h>
 
 #include <kcombobox.h>
-#include <kdebug.h>
 #include <klineedit.h>
 #include <KLocalizedString>
 #include <kmessagebox.h>
@@ -985,7 +985,7 @@ void DatabaseDialog::startingRegion_clicked()
 
 void DatabaseDialog::connectButton_clicked()
 {
-    qWarning("DatabaseDialog::connectButton_clicked(): Not implemented yet!");
+    warnSheets << "DatabaseDialog::connectButton_clicked(): Not implemented yet!";
 }
 
 void DatabaseDialog::databaseNameChanged(const QString & s)
@@ -1028,7 +1028,7 @@ void DatabaseDialog::tableViewClicked(QListWidgetItem *)
 //     QCheckListItem * i = (QCheckListItem *) item;
 //     i->setChecked( !i->isChecked() );
 //   }
-//   kDebug() <<"clicked";
+//   debugSheets <<"clicked";
 }
 
 #endif // QT_NO_SQL

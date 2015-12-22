@@ -36,13 +36,13 @@
 #include "Map.h"
 #include "Value.h"
 #include "CellStorage.h"
+#include "SheetsDebug.h"
 
 // Calligra
 #include <KoDpi.h>
 #include <KoUnit.h>
 #include <KoViewConverter.h>
-// KDE
-#include <kdebug.h>
+// KF5
 #include <ktextedit.h>
 
 // Qt
@@ -90,7 +90,7 @@ void CellEditor::Private::updateActiveSubRegion(const Tokens &tokens)
     }
 
     const int cursorPosition = textEdit->textCursor().position() - 1; // without '='
-    kDebug() << "cursorPosition:" << cursorPosition << "textLength:" << textEdit->toPlainText().length() - 1;
+    debugSheets << "cursorPosition:" << cursorPosition << "textLength:" << textEdit->toPlainText().length() - 1;
 
     uint rangeCounter = 0; // counts the ranges in the sub-region
     uint currentRange = 0; // range index denoting the current range
@@ -234,7 +234,7 @@ void CellEditor::Private::updateActiveSubRegion(const Tokens &tokens)
     }
 
     const int regionLength = regionEnd - regionStart + 1;
-    kDebug() << "currentRange:" << currentRange << "regionStart:" << regionStart
+    debugSheets << "currentRange:" << currentRange << "regionStart:" << regionStart
     << "regionEnd:" << regionEnd << "regionLength:" << regionLength;
 
     selection->setActiveSubRegion(regionStart, regionLength, currentRange);
@@ -706,7 +706,7 @@ void CellEditor::focusInEvent(QFocusEvent *event)
      KTextEdit::focusInEvent(event);
     // If the focussing is user induced.
     if (event->reason() != Qt::OtherFocusReason) {
-        kDebug() << "induced by user";
+        debugSheets << "induced by user";
         d->cellTool->setLastEditorWithFocus(CellToolBase::EmbeddedEditor);
     }
     KTextEdit::focusInEvent(event);

@@ -63,7 +63,6 @@
 // KF5 includes
 #include <kactioncollection.h>
 #include <kconfig.h>
-#include <kdebug.h>
 
 #include <kmessagebox.h>
 #include <kstandardaction.h>
@@ -92,6 +91,7 @@
 #include <KoIcon.h>
 
 // Sheets includes
+#include "SheetsDebug.h"
 #include "ApplicationSettings.h"
 #include "BindingManager.h"
 #include "CalculationSettings.h"
@@ -890,7 +890,7 @@ SheetView* View::sheetView(const Sheet* sheet) const
 {
     SheetView *sheetView = d->sheetViews.value(sheet);
     if (!sheetView) {
-        kDebug(36004) << "View: Creating SheetView for" << sheet->sheetName();
+        debugSheetsRender << "View: Creating SheetView for" << sheet->sheetName();
         sheetView = new SheetView(sheet);
         d->sheetViews.insert(sheet, sheetView);
         sheetView->setViewConverter(zoomHandler());
@@ -1289,7 +1289,7 @@ void View::changeSheet(const QString& _name)
 
     Sheet *t = doc()->map()->findSheet(_name);
     if (!t) {
-        kDebug() << "Unknown sheet" << _name;
+        debugSheets << "Unknown sheet" << _name;
         return;
     }
     setActiveSheet(t, false /* False: Endless loop because of setActiveTab() => do the visual area update manually*/);
@@ -1603,7 +1603,7 @@ void View::nextSheet()
 {
     Sheet * t = doc()->map()->nextSheet(activeSheet());
     if (!t) {
-        kDebug(36001) << "Unknown sheet";
+        debugSheets << "Unknown sheet";
         return;
     }
     selection()->emitCloseEditor(true); // save changes
@@ -1616,7 +1616,7 @@ void View::previousSheet()
 {
     Sheet * t = doc()->map()->previousSheet(activeSheet());
     if (!t) {
-        kDebug(36001) << "Unknown sheet";
+        debugSheets << "Unknown sheet";
         return;
     }
     selection()->emitCloseEditor(true); // save changes
@@ -1629,7 +1629,7 @@ void View::firstSheet()
 {
     Sheet *t = doc()->map()->sheet(0);
     if (!t) {
-        kDebug(36001) << "Unknown sheet";
+        debugSheets << "Unknown sheet";
         return;
     }
     selection()->emitCloseEditor(true); // save changes
@@ -1642,7 +1642,7 @@ void View::lastSheet()
 {
     Sheet *t = doc()->map()->sheet(doc()->map()->count() - 1);
     if (!t) {
-        kDebug(36001) << "Unknown sheet";
+        debugSheets << "Unknown sheet";
         return;
     }
     selection()->emitCloseEditor(true); // save changes
@@ -1796,7 +1796,7 @@ void View::slotChangeSelection(const Calligra::Sheets::Region& changedRegion)
 
     if (d->selection->referenceSelectionMode()) {
         doc()->map()->addDamage(new SelectionDamage(changedRegion));
-        kDebug(36002) << "Choice:" << *selection();
+        debugSheetsFormula << "Choice:" << *selection();
         return;
     }
 
@@ -2025,8 +2025,8 @@ void View::saveCurrentSheetSelection()
     if (d->activeSheet != 0) {
         d->savedAnchors.remove(d->activeSheet);
         d->savedAnchors.insert(d->activeSheet, d->selection->anchor());
-        kDebug(36005) << " Current scrollbar vert value:" << d->vertScrollBar->value();
-        kDebug(36005) << "Saving marker pos:" << d->selection->marker();
+        debugSheetsUI << " Current scrollbar vert value:" << d->vertScrollBar->value();
+        debugSheetsUI << "Saving marker pos:" << d->selection->marker();
         d->savedMarkers.remove(d->activeSheet);
         d->savedMarkers.insert(d->activeSheet, d->selection->marker());
         d->savedOffsets.remove(d->activeSheet);
@@ -2047,7 +2047,7 @@ void View::handleDamages(const QList<Damage*>& damages)
 
         if (damage->type() == Damage::Cell) {
             CellDamage* cellDamage = static_cast<CellDamage*>(damage);
-            kDebug(36007) << "Processing\t" << *cellDamage;
+            debugSheetsDamage << "Processing\t" << *cellDamage;
             Sheet* const damagedSheet = cellDamage->sheet();
 
             if (cellDamage->changes() & CellDamage::Appearance) {
@@ -2060,7 +2060,7 @@ void View::handleDamages(const QList<Damage*>& damages)
 
         if (damage->type() == Damage::Sheet) {
             SheetDamage* sheetDamage = static_cast<SheetDamage*>(damage);
-            kDebug(36007) << *sheetDamage;
+            debugSheetsDamage << *sheetDamage;
             const SheetDamage::Changes changes = sheetDamage->changes();
             if (changes & (SheetDamage::Name | SheetDamage::Shown)) {
                 d->tabBar->setTabs(doc()->map()->visibleSheets());
@@ -2091,7 +2091,7 @@ void View::handleDamages(const QList<Damage*>& damages)
 
         if (damage->type() == Damage::Selection) {
             SelectionDamage* selectionDamage = static_cast<SelectionDamage*>(damage);
-            kDebug(36007) << "Processing\t" << *selectionDamage;
+            debugSheetsDamage << "Processing\t" << *selectionDamage;
             const Region region = selectionDamage->region();
 
             if (paintMode == Clipped) {
@@ -2103,7 +2103,7 @@ void View::handleDamages(const QList<Damage*>& damages)
             continue;
         }
 
-        kDebug(36007) << "Unhandled\t" << *damage;
+        debugSheetsDamage << "Unhandled\t" << *damage;
     }
 
     // At last repaint the dirty cells.

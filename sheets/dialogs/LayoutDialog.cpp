@@ -51,7 +51,6 @@
 #include <knuminput.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
-#include <kdebug.h>
 #include <klineedit.h>
 #include <knumvalidator.h>
 
@@ -60,6 +59,7 @@
 #include <KoUnitDoubleSpinBox.h>
 #include <KoUnit.h>
 
+#include "SheetsDebug.h"
 #include "CalculationSettings.h"
 #include "Cell.h"
 #include "CellStorage.h"
@@ -1750,7 +1750,7 @@ CellFormatPageFont::CellFormatPageFont(QWidget* parent, CellFormatDialog *_dlg)
 
     if (dlg->bTextFontFamily) {
         selFont.setFamily(dlg->fontFamily);
-        // kDebug(36001) <<"Family =" << dlg->fontFamily;
+        // debugSheets <<"Family =" << dlg->fontFamily;
 
         if (family_combo->findItems(dlg->fontFamily, Qt::MatchExactly).size() == 0) {
             family_combo->insertItem(0, "");
@@ -1925,7 +1925,7 @@ void CellFormatPageFont::setCombos()
 
     combo = size_combo;
     if (dlg->bTextFontSize) {
-//      kDebug(36001) <<"SIZE=" << dlg->fontSize;
+//      debugSheets <<"SIZE=" << dlg->fontSize;
         selFont.setPointSize(dlg->fontSize);
         number_of_entries = size_combo->count();
         string.setNum(dlg->fontSize);
@@ -1933,7 +1933,7 @@ void CellFormatPageFont::setCombos()
         for (int i = 0; i < number_of_entries ; i++) {
             if (string == (QString) combo->itemText(i)) {
                 combo->setCurrentIndex(i);
-                // kDebug(36001) <<"Found Size" << string.data() <<" setting to item" i;
+                // debugSheets <<"Found Size" << string.data() <<" setting to item" i;
                 break;
             }
         }
@@ -2695,7 +2695,7 @@ void CellFormatPageBorder::slotChangeStyle(int)
             preview->setPattern(preview->getColor(), penSize, Qt::SolidLine);
             break;
         default:
-            kDebug(36001) << "Error in combobox";
+            debugSheets << "Error in combobox";
             break;
         }
     }
@@ -3466,7 +3466,7 @@ void CellFormatPagePattern::init()
     } else if (dlg->brushStyle == Qt::NoBrush) {
         brush15->slotSelect();
     } else
-        kDebug(36001) << "Error in brushStyle";
+        debugSheets << "Error in brushStyle";
 }
 
 void CellFormatPagePattern::slotSetColorButton(const QColor &_color)

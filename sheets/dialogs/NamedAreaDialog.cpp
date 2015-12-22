@@ -38,7 +38,6 @@
 
 // KF5
 #include <kcombobox.h>
-#include <kdebug.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>

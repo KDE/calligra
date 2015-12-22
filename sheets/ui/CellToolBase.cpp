@@ -953,7 +953,7 @@ void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
     const int row = this->selection()->activeSheet()->topRow(position.y(), ypos);
     // Check boundaries.
     if (col < 1 || row < 1 || col > maxCol() || row > maxRow()) {
-        kDebug(36005) << "col or row is out of range:" << "col:" << col << " row:" << row;
+        debugSheetsUI << "col or row is out of range:" << "col:" << col << " row:" << row;
     } else {
         const Cell cell = Cell(selection()->activeSheet(), col, row).masterCell();
         SheetView* const sheetView = this->sheetView(selection()->activeSheet());
@@ -1155,15 +1155,15 @@ QList<QPointer<QWidget> >  CellToolBase::createOptionWidgets()
     QList<QPointer<QWidget> > widgets;
 
     QString xmlName = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "sheets/CellToolOptionWidgets.xml");
-    kDebug() << xmlName;
+    debugSheets << xmlName;
     if (xmlName.isEmpty()) {
-        kWarning() << "couldn't find CellToolOptionWidgets.xml file";
+        warnSheets << "couldn't find CellToolOptionWidgets.xml file";
         return widgets;
     }
 
     QFile f(xmlName);
     if (!f.open(QIODevice::ReadOnly)) {
-        kWarning() << "couldn't open CellToolOptionWidgets.xml file";
+        warnSheets << "couldn't open CellToolOptionWidgets.xml file";
         return widgets;
     }
 
@@ -1172,7 +1172,7 @@ QList<QPointer<QWidget> >  CellToolBase::createOptionWidgets()
     int errorLine, errorCol;
     if (!doc.setContent(&f, &errorMsg, &errorLine, &errorCol)) {
         f.close();
-        kWarning() << "couldn't parse CellToolOptionWidgets.xml file:" << errorMsg << "on line" << errorLine << "column" << errorCol;
+        warnSheets << "couldn't parse CellToolOptionWidgets.xml file:" << errorMsg << "on line" << errorLine << "column" << errorCol;
         return widgets;
     }
     f.close();
@@ -1230,7 +1230,7 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
     const int row = this->selection()->activeSheet()->topRow(position.y(), ypos);
     // Check boundaries.
     if (col > maxCol() || row > maxRow()) {
-        kDebug(36005) << "col or row is out of range:" << "col:" << col << " row:" << row;
+        debugSheetsUI << "col or row is out of range:" << "col:" << col << " row:" << row;
     } else {
         // Context menu with the right mouse button.
         if (event->button() == Qt::RightButton) {
@@ -1656,7 +1656,7 @@ void CellToolBase::styleDialog()
 
 void CellToolBase::setStyle(const QString& stylename)
 {
-    kDebug() << "CellToolBase::setStyle(" << stylename << ")";
+    debugSheets << "CellToolBase::setStyle(" << stylename << ")";
     if (selection()->activeSheet()->map()->styleManager()->style(stylename)) {
         StyleCommand* command = new StyleCommand();
         command->setSheet(selection()->activeSheet());
@@ -3034,7 +3034,7 @@ bool CellToolBase::paste()
         QString errorMessage;
         bool ok = odfStore.loadAndParse("content.xml", doc, errorMessage);
         if (!ok) {
-            kError(32001) << "Error parsing content.xml: " << errorMessage << endl;
+            errorSheetsODF << "Error parsing content.xml: " << errorMessage << endl;
 	    delete store;
             return false;
         }
@@ -3051,14 +3051,14 @@ bool CellToolBase::paste()
         KoXmlElement content = doc.documentElement();
         KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
         if (realBody.isNull()) {
-            kDebug(36005) << "Invalid OASIS OpenDocument file. No office:body tag found.";
+            debugSheetsUI << "Invalid OASIS OpenDocument file. No office:body tag found.";
 	    delete store;
             return false;
         }
         KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "spreadsheet");
 
         if (body.isNull()) {
-            kError(36005) << "No office:spreadsheet found!" << endl;
+            errorSheetsODF << "No office:spreadsheet found!" << endl;
             KoXmlElement childElem;
             QString localName;
             forEachElement(childElem, realBody) {
@@ -3093,7 +3093,7 @@ bool CellToolBase::paste()
         {
             insertFromClipboard();
        } else {
-            //kDebug(36005) <<"Pasting. Rect=" << selection()->lastRange() <<" bytes";
+            //debugSheetsUI <<"Pasting. Rect=" << selection()->lastRange() <<" bytes";
             PasteCommand *const command = new PasteCommand();
             command->setSheet(selection()->activeSheet());
             command->add(*selection());
@@ -3206,8 +3206,8 @@ void CellToolBase::initFindReplace()
     d->findStart = QPoint(colStart, rowStart);
     d->findPos = (d->findOptions & KFind::FromCursor) ? selection()->marker() : d->findStart;
     d->findEnd = QPoint(colEnd, rowEnd);
-    //kDebug() << d->findPos <<" to" << d->findEnd;
-    //kDebug() <<"leftcol=" << d->findLeftColumn <<" rightcol=" << d->findRightColumn;
+    //debugSheets << d->findPos <<" to" << d->findEnd;
+    //debugSheets <<"leftcol=" << d->findLeftColumn <<" rightcol=" << d->findRightColumn;
 }
 
 void CellToolBase::findNext()
@@ -3227,7 +3227,7 @@ void CellToolBase::findNext()
             else
                 findObj->setData(cell.userInput());
             d->findPos = QPoint(cell.column(), cell.row());
-            //kDebug() <<"setData(cell" << d->findPos << ')';
+            //debugSheets <<"setData(cell" << d->findPos << ')';
         }
 
         // Let KFind inspect the text fragment, and display a dialog if a match is found
@@ -3301,7 +3301,7 @@ Cell CellToolBase::findNextCell()
     int col = d->findPos.x();
     int row = d->findPos.y();
     int maxRow = sheet->cellStorage()->rows();
-//     kWarning() <<"findNextCell starting at" << col << ',' << row <<"   forw=" << forw;
+//     warnSheets <<"findNextCell starting at" << col << ',' << row <<"   forw=" << forw;
 
     if (d->directionValue == FindOption::Row) {
         while (!cell && (row >= d->findTopRow) && (row <= d->findBottomRow) && (forw ? row <= maxRow : row >= 0)) {
@@ -3320,7 +3320,7 @@ Cell CellToolBase::findNextCell()
                 col = d->findRightColumn;
                 --row;
             }
-            //kWarning() <<"next row:" << col << ',' << row;
+            //warnSheets <<"next row:" << col << ',' << row;
         }
     } else {
         while (!cell && (forw ? col <= d->findRightColumn : col >= d->findLeftColumn)) {
@@ -3339,14 +3339,14 @@ Cell CellToolBase::findNextCell()
                 row = d->findBottomRow;
                 --col;
             }
-            //kDebug() <<"next row:" << col << ',' << row;
+            //debugSheets <<"next row:" << col << ',' << row;
         }
     }
     // if (!cell)
     // No more next cell - TODO go to next sheet (if not looking in a selection)
     // (and make d->findEnd(max, max) in that case...)
-//    if (cell.isNull()) kWarning()<<"returning null"<<endl;
-//    else kWarning() <<" returning" << cell;
+//    if (cell.isNull()) warnSheets<<"returning null"<<endl;
+//    else warnSheets <<" returning" << cell;
 
     return cell;
 }
@@ -3358,7 +3358,7 @@ void CellToolBase::findPrevious()
         find();
         return;
     }
-    //kDebug() <<"findPrevious";
+    //debugSheets <<"findPrevious";
     int opt = d->findOptions;
     bool forw = !(opt & KFind::FindBackwards);
     if (forw)
@@ -3425,7 +3425,7 @@ void CellToolBase::slotHighlight(const QString &/*text*/, int /*matchingIndex*/,
         dialog = d->find->findNextDialog();
     else
         dialog = d->replace->replaceNextDialog();
-    kDebug() << " baseDialog :" << dialog;
+    debugSheets << " baseDialog :" << dialog;
     QRect globalRect(d->findPos, d->findEnd);
     globalRect.moveTopLeft(canvas()->canvasWidget()->mapToGlobal(globalRect.topLeft()));
     KoDialog::avoidArea(dialog, QRect(d->findPos, d->findEnd));

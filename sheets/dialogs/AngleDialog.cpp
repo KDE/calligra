@@ -27,7 +27,6 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 #include <knuminput.h>
 

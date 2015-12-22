@@ -60,7 +60,7 @@ void PasteCommandTest::testKSpreadSnippet()
     command->setPasteFC(true);
     command->execute(&canvas);
 
-    kDebug() << Cell(sheet, 2, 4).value() << Cell(sheet, 1, 3).value() << Value(3);
+    qDebug() << Cell(sheet, 2, 4).value() << Cell(sheet, 1, 3).value() << Value(3);
     QCOMPARE(Cell(sheet, 2, 4).value(), Value(3));
 }
 

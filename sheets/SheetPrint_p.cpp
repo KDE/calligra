@@ -86,11 +86,11 @@ void SheetPrint::Private::calculateHorizontalPageParameters(int _column)
             x += m_dPrintRepeatColumnsWidth;
             offset = m_dPrintRepeatColumnsWidth;
         }
-        kDebug() << "startCol:" << startCol << "col:" << col << "x:" << x
+        debugSheets << "startCol:" << startCol << "col:" << col << "x:" << x
                  << "offset:" << offset << repeatedColumns;
 
         while ((col <= _column) && (col < printRange.right())) {
-            kDebug() << "loop:" << "startCol:" << startCol << "col:" << col
+            debugSheets << "loop:" << "startCol:" << startCol << "col:" << col
                      << "x:" << x << "offset:" << offset;
             // end of page?
             if (x > printWidth || m_pSheet->columnFormat(col)->hasPageBreak()) {
@@ -104,7 +104,7 @@ void SheetPrint::Private::calculateHorizontalPageParameters(int _column)
                 startCol = col;
                 x = m_pSheet->columnFormat(col)->width();
                 if (col >= repeatedColumns.first) {
-                    kDebug() << "col >= repeatedColumns.first:" << col << repeatedColumns.first;
+                    debugSheets << "col >= repeatedColumns.first:" << col << repeatedColumns.first;
                     x += m_dPrintRepeatColumnsWidth;
                     offset = m_dPrintRepeatColumnsWidth;
                 }
@@ -115,7 +115,7 @@ void SheetPrint::Private::calculateHorizontalPageParameters(int _column)
 
         // Iterate to the end of the page.
         while (m_lnewPageListX.last().endItem() == 0) {
-            kDebug() << "loop to end" << "col:" << col << "x:" << x << "offset:" << offset
+            debugSheets << "loop to end" << "col:" << col << "x:" << x << "offset:" << offset
                         << "m_maxCheckedNewPageX:" << m_maxCheckedNewPageX;
             if (x > printWidth || m_pSheet->columnFormat(col)->hasPageBreak()) {
                 // Now store into the previous entry the enditem and the width
@@ -133,7 +133,7 @@ void SheetPrint::Private::calculateHorizontalPageParameters(int _column)
         }
     }
 
-    kDebug() << "m_maxCheckedNewPageX:" << m_maxCheckedNewPageX;
+    debugSheets << "m_maxCheckedNewPageX:" << m_maxCheckedNewPageX;
     if (_column > m_maxCheckedNewPageX) {
         m_maxCheckedNewPageX = _column;
         m_lnewPageListX.last().setEndItem(_column);
@@ -244,7 +244,7 @@ void SheetPrint::Private::calculateVerticalPageParameters(int _row)
 
 void SheetPrint::Private::calculateZoomForPageLimitX()
 {
-    kDebug() << "Calculating zoom for X limit";
+    debugSheets << "Calculating zoom for X limit";
     const int horizontalPageLimit = m_settings->pageLimits().width();
     if (horizontalPageLimit == 0)
         return;
@@ -266,10 +266,10 @@ void SheetPrint::Private::calculateZoomForPageLimitX()
     //calculating a factor for scaling the zoom down makes it lots faster
     double factor = (double)horizontalPageLimit / (double)currentPages +
                     1 - (double)currentPages / ((double)currentPages + 1); //add possible error;
-    kDebug() << "Calculated factor for scaling m_settings->zoom():" << factor;
+    debugSheets << "Calculated factor for scaling m_settings->zoom():" << factor;
     m_settings->setZoom(m_settings->zoom()*factor);
 
-    kDebug() << "New exact zoom:" << m_settings->zoom();
+    debugSheets << "New exact zoom:" << m_settings->zoom();
 
     if (m_settings->zoom() < 0.01)
         m_settings->setZoom(0.01);
@@ -278,20 +278,20 @@ void SheetPrint::Private::calculateZoomForPageLimitX()
 
     m_settings->setZoom((((int)(m_settings->zoom()*100 + 0.5)) / 100.0));
 
-    kDebug() << "New rounded zoom:" << m_settings->zoom();
+    debugSheets << "New rounded zoom:" << m_settings->zoom();
 
     q->updateHorizontalPageParameters(0);   // clear all parameters
     calculateHorizontalPageParameters(printRange.right());
     currentPages = m_lnewPageListX.count();
 
-    kDebug() << "Number of pages with this zoom:" << currentPages;
+    debugSheets << "Number of pages with this zoom:" << currentPages;
 
     while ((currentPages > horizontalPageLimit) && (m_settings->zoom() > 0.01)) {
         m_settings->setZoom(m_settings->zoom() - 0.01);
         q->updateHorizontalPageParameters(0);   // clear all parameters
         calculateHorizontalPageParameters(printRange.right());
         currentPages = m_lnewPageListX.count();
-        kDebug() << "Looping -0.01; current zoom:" << m_settings->zoom();
+        debugSheets << "Looping -0.01; current zoom:" << m_settings->zoom();
     }
 
     if (m_settings->zoom() < origZoom) {
@@ -304,7 +304,7 @@ void SheetPrint::Private::calculateZoomForPageLimitX()
 
 void SheetPrint::Private::calculateZoomForPageLimitY()
 {
-    kDebug() << "Calculating zoom for Y limit";
+    debugSheets << "Calculating zoom for Y limit";
     const int verticalPageLimit = m_settings->pageLimits().height();
     if (verticalPageLimit == 0)
         return;
@@ -325,10 +325,10 @@ void SheetPrint::Private::calculateZoomForPageLimitY()
 
     double factor = (double)verticalPageLimit / (double)currentPages +
                     1 - (double)currentPages / ((double)currentPages + 1); //add possible error
-    kDebug() << "Calculated factor for scaling m_settings->zoom():" << factor;
+    debugSheets << "Calculated factor for scaling m_settings->zoom():" << factor;
     m_settings->setZoom(m_settings->zoom()*factor);
 
-    kDebug() << "New exact zoom:" << m_settings->zoom();
+    debugSheets << "New exact zoom:" << m_settings->zoom();
 
     if (m_settings->zoom() < 0.01)
         m_settings->setZoom(0.01);
@@ -337,20 +337,20 @@ void SheetPrint::Private::calculateZoomForPageLimitY()
 
     m_settings->setZoom((((int)(m_settings->zoom()*100 + 0.5)) / 100.0));
 
-    kDebug() << "New rounded zoom:" << m_settings->zoom();
+    debugSheets << "New rounded zoom:" << m_settings->zoom();
 
     q->updateVerticalPageParameters(0);   // clear all parameters
     calculateVerticalPageParameters(printRange.bottom());
     currentPages = m_lnewPageListY.count();
 
-    kDebug() << "Number of pages with this zoom:" << currentPages;
+    debugSheets << "Number of pages with this zoom:" << currentPages;
 
     while ((currentPages > verticalPageLimit) && (m_settings->zoom() > 0.01)) {
         m_settings->setZoom(m_settings->zoom() - 0.01);
         q->updateVerticalPageParameters(0);   // clear all parameters
         calculateVerticalPageParameters(printRange.bottom());
         currentPages = m_lnewPageListY.count();
-        kDebug() << "Looping -0.01; current zoom:" << m_settings->zoom();
+        debugSheets << "Looping -0.01; current zoom:" << m_settings->zoom();
     }
 
     if (m_settings->zoom() < origZoom) {

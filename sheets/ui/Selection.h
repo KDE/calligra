@@ -26,7 +26,7 @@
 
 #include <KoToolSelection.h>
 
-#include <kdebug.h>
+#include "SheetsDebug.h"
 
 #include <sheets/Region.h>
 

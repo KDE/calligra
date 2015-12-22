@@ -21,12 +21,13 @@
 *   OTHER DEALINGS IN THE SOFTWARE.                                       *
 ***************************************************************************/
 
-#include <CalendarToolWidget.h>
+#include "CalendarToolWidget.h"
+
+#include "SheetsDebug.h"
 
 #include <KoIcon.h>
 
 #include <kdatepicker.h>
-#include <kdebug.h>
 
 #include <QPushButton>
 
@@ -87,7 +88,7 @@ bool CalendarToolWidget::buildDatePickerFrame()
 
 void CalendarToolWidget::datePickerDeleted()
 {
-    kDebug() << "date picker deleted";
+    debugSheets << "date picker deleted";
     m_datePicker = 0;
 }
 

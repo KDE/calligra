@@ -31,7 +31,7 @@
 #include <QVector>
 
 // KF5
-#include <kdebug.h>
+#include "SheetsDebug.h"
 #include <KLocalizedString>
 #include <kmessagebox.h>
 
@@ -123,21 +123,21 @@ void SubtotalDialog::accept()
     bool addRow;
     if (!d->detailsWidget.m_summaryOnly->isChecked()) {
         int y = top + 1;
-        kDebug() << "Starting in row" << y;
+        debugSheets << "Starting in row" << y;
         while (y <= bottom) {
             addRow = true;
             newText = Cell(sheet, mainCol, y).displayText();
 
             if (ignoreEmptyCells && (newText.length() == 0)) {
                 ++y;
-                kDebug() << "Still the same ->" << y;
+                debugSheets << "Still the same ->" << y;
                 continue;
             }
 
             if (newText != oldText) {
                 int saveY = y;
                 for (int x = 0; x < numOfCols; ++x) {
-                    kDebug() << "Column:" << x << "," << columns[x];
+                    debugSheets << "Column:" << x << "," << columns[x];
                     if (columns[x] != -1) {
                         if (!addSubtotal(mainCol, columns[x], y - 1, lastChangedRow, addRow, oldText + result))
                             reject();
@@ -195,7 +195,7 @@ void SubtotalDialog::slotUser1()
 
 void SubtotalDialog::removeSubtotalLines()
 {
-    kDebug() << "Removing subtotal lines";
+    debugSheets << "Removing subtotal lines";
 
     Sheet *const sheet = d->selection->lastSheet();
     QRect range = d->selection->lastRange();
@@ -208,7 +208,7 @@ void SubtotalDialog::removeSubtotalLines()
     QString text;
 
     for (int y = range.bottom(); y >= t; --y) {
-        kDebug() << "Checking row:" << y;
+        debugSheets << "Checking row:" << y;
         bool containsSubtotal = false;
         for (int x = l; x <= r; ++x) {
             cell = Cell(sheet, x, y);
@@ -223,7 +223,7 @@ void SubtotalDialog::removeSubtotalLines()
         }
 
         if (containsSubtotal) {
-            kDebug() << "Line" << y << " contains a subtotal";
+            debugSheets << "Line" << y << " contains a subtotal";
             QRect rect(l, y, range.width(), 1);
 
             ShiftManipulator* manipulator = new ShiftManipulator();
@@ -237,7 +237,7 @@ void SubtotalDialog::removeSubtotalLines()
     }
 
     d->selection->initialize(range, sheet);
-    kDebug() << "Done removing subtotals";
+    debugSheets << "Done removing subtotals";
 }
 
 void SubtotalDialog::fillColumnBoxes()
@@ -295,7 +295,7 @@ bool SubtotalDialog::addSubtotal(int mainCol, int column, int row, int topRow,
     Sheet *const sheet = d->selection->lastSheet();
     QRect range = d->selection->lastRange();
 
-    kDebug() << "Adding subtotal:" << mainCol << "," << column << ", Rows:" << row << "," << topRow
+    debugSheets << "Adding subtotal:" << mainCol << "," << column << ", Rows:" << row << "," << topRow
     << ": addRow: " << addRow << ", Text: " << text << endl;
     if (addRow) {
         QRect rect(range.left(), row + 1, range.width(), 1);

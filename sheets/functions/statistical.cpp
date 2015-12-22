@@ -26,10 +26,9 @@
 #include "FunctionModuleRegistry.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
+#include "SheetsDebug.h"
 
 #include <Formula.h>
-
-#include <kdebug.h>
 
 // needed for MODE
 #include <QList>
@@ -526,7 +525,7 @@ static double GetValue(const QString& formula, const double x)
 
     expr.replace(QString("x"), QString::number(x, 'g', 12));
 
-    //kDebug()<<"expression"<<expr;
+    //debugSheets<<"expression"<<expr;
     f.setExpression(expr);
     Value result = f.eval();
 
@@ -562,16 +561,16 @@ Value InverseIterator::exec(double unknown, double x0, double x1, bool& converge
     convergenceError = false; // reset error flag
     double eps = 1.0E-7;      // define Epsilon
 
-    kDebug() << "searching for " << unknown << " in interval x0=" << x0 << " x1=" << x1;
+    debugSheets << "searching for " << unknown << " in interval x0=" << x0 << " x1=" << x1;
 
     if (x0 > x1)
-        kDebug() << "InverseIterator: wrong interval";
+        debugSheets << "InverseIterator: wrong interval";
 
     double f0 = unknown - getValue(x0);
     double f1 = unknown - getValue(x1);
 
-    kDebug() << " f(" << x0 << ") =" << f0;
-    kDebug() << " f(" << x1 << ") =" << f1;
+    debugSheets << " f(" << x0 << ") =" << f0;
+    debugSheets << " f(" << x1 << ") =" << f1;
 
     double xs;
     int i;
@@ -599,7 +598,7 @@ Value InverseIterator::exec(double unknown, double x0, double x1, bool& converge
         return Value(x1);
 
     // simple iteration
-    //kDebug()<<"simple iteration f0="<<f0<<" f1="<<f1;
+    //debugSheets<<"simple iteration f0="<<f0<<" f1="<<f1;
 
     double x00 = x0;
     double x11 = x1;
@@ -630,7 +629,7 @@ Value InverseIterator::exec(double unknown, double x0, double x1, bool& converge
             }
             return Value(xs);
         }
-        // kDebug()<<"probe no. "<<i<<" : "<<xs<<" error diff ="<<fs;
+        // debugSheets<<"probe no. "<<i<<" : "<<xs<<" error diff ="<<fs;
     }
 
     // error no convergence - set flag
@@ -951,7 +950,7 @@ Value func_binomdist(valVector args, ValueCalc *calc, FuncExtra *)
     double p = calc->conv()->asFloat(args[2]).asFloat();
     bool kum = calc->conv()->asInteger(args[3]).asInteger();
 
-    kDebug() << "x= " << x << " n= " << n << " p= " << p;
+    debugSheets << "x= " << x << " n= " << n << " p= " << p;
 
     // check constraints
     if (n < 0.0 || x < 0.0 || x > n || p < 0.0 || p > 1.0)
@@ -963,7 +962,7 @@ Value func_binomdist(valVector args, ValueCalc *calc, FuncExtra *)
 
     if (kum) {
         // calculation of binom-distribution
-        kDebug() << "calc distribution";
+        debugSheets << "calc distribution";
         if (n == x)
             res = 1.0;
         else {
@@ -993,7 +992,7 @@ Value func_binomdist(valVector args, ValueCalc *calc, FuncExtra *)
             }
         }
     } else { // density
-        kDebug() << "calc density";
+        debugSheets << "calc density";
         q = 1.0 - p;
         factor = pow(q, n);
         if (factor == 0.0) {
@@ -1462,7 +1461,7 @@ Value func_gauss(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    kDebug() << "GROWTH"; // Debug
+    debugSheets << "GROWTH"; // Debug
     Value known_Y = args[0];
 
     // default
@@ -1473,14 +1472,14 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
 
     // check constraints
     if (known_Y.isEmpty()) {
-        kDebug() << "known_Y is empty";
+        debugSheets << "known_Y is empty";
         return Value::errorNA();
     }
 
     // check if array known_Y contains only numbers
     for (uint i = 0; i < known_Y.count(); ++i) {
         if (!known_Y.element(i).isNumber()) {
-            kDebug() << "count_Y (" << i << ") is non Value";
+            debugSheets << "count_Y (" << i << ") is non Value";
             return Value::errorNA();
         }
     }
@@ -1498,13 +1497,13 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
     // get size Y-Matrix
     rows_Y = known_Y.rows();
     cols_Y = known_Y.columns();
-    kDebug() << "Y has " << rows_Y << " rows";
-    kDebug() << "Y has " << cols_Y << " cols";
+    debugSheets << "Y has " << rows_Y << " rows";
+    debugSheets << "Y has " << cols_Y << " cols";
 
     // convert all Value in known_Y into log
     for (uint r = 0; r < rows_Y; ++r)
         for (uint c = 0; c < cols_Y; ++c) {
-            kDebug() << "col " << c << " row " << r << " log of Y(" << known_Y.element(c, r) << ") Value=" << calc->log(known_Y.element(c, r)); // Debug
+            debugSheets << "col " << c << " row " << r << " log of Y(" << known_Y.element(c, r) << ") Value=" << calc->log(known_Y.element(c, r)); // Debug
             known_Y.setElement(c, r, calc->ln(known_Y.element(c, r)));
         }
 
@@ -1521,15 +1520,15 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
 
         rows_X = known_Y.rows();
         cols_X = known_X.columns();
-        kDebug() << "X has " << rows_X << " rows";
-        kDebug() << "X has " << cols_X << " cols";
+        debugSheets << "X has " << rows_X << " rows";
+        debugSheets << "X has " << cols_X << " cols";
 
         //
         // check if array known_X contains only numbers
         //
         for (uint i = 0; i < known_X.count(); ++i) {
             if (!known_X.element(i).isNumber()) {
-                kDebug() << "count_X (" << i << ") is non Value";
+                debugSheets << "count_X (" << i << ") is non Value";
                 return Value::errorNA();
             }
         }
@@ -1541,18 +1540,18 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
             nCase = 1;
 
         else if (cols_Y != 1 && rows_Y != 1) {
-            kDebug() << "Y-Matrix only has one row or column";
+            debugSheets << "Y-Matrix only has one row or column";
             return Value::errorNA(); // TODO which errortype VALUE?
         } else if (cols_Y == 1) {
             //
             // row alignment
             //
             if (rows_X != rows_Y) {
-                kDebug() << "--> row aligned";
-                kDebug() << "row sizes not equal";
+                debugSheets << "--> row aligned";
+                debugSheets << "row sizes not equal";
                 return Value::errorNA();
             } else {
-                kDebug() << "--> row aligned";
+                debugSheets << "--> row aligned";
                 nCase = 2; // row alignment
             }
         }
@@ -1561,11 +1560,11 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
         // only column alignment left
         //
         else if (cols_X != cols_Y) {
-            kDebug() << "--> col aligned";
-            kDebug() << "col sizes not equal";
+            debugSheets << "--> col aligned";
+            debugSheets << "col sizes not equal";
             return Value::errorNA();
         } else {
-            kDebug() << "--> col aligned";
+            debugSheets << "--> col aligned";
             nCase = 3; // column alignment
         }
     } else
@@ -1574,7 +1573,7 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
         // the sequence 1,2,3... n (n number of counts knownY) in one row.
         //
     {
-        kDebug() << "fill X-Matrix with 0,1,2,3 .. sequence";
+        debugSheets << "fill X-Matrix with 0,1,2,3 .. sequence";
         const int known_Y_count = known_Y.count();
         for (int i = 0; i < known_Y_count; ++i)
             known_X.setElement(i, 0, Value(i));
@@ -1590,7 +1589,7 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
     uint cols_newX, rows_newX;
 
     if (args.count() < 3) {
-        kDebug() << "no newX-Matrix --> copy X-Matrix";
+        debugSheets << "no newX-Matrix --> copy X-Matrix";
         cols_newX = cols_X;
         rows_newX = rows_X;
         newX = known_X;
@@ -1601,23 +1600,23 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
         rows_newX = newX.rows();
 
         if ((nCase == 2 && cols_X != cols_newX) || (nCase == 3 && rows_X != rows_newX)) {
-            kDebug() << "newX does not fit...";
+            debugSheets << "newX does not fit...";
             return Value::errorNA();
         }
 
         // check if array newX contains only numbers
         for (uint i = 0; i < newX.count(); ++i) {
             if (!newX.element(i).isNumber()) {
-                kDebug() << "newX (" << i << ") is non Value";
+                debugSheets << "newX (" << i << ") is non Value";
                 return Value::errorNA();
             }
         }
     }
 
-    kDebug() << "known_X = " << known_X;
-    kDebug() << "newX = " << newX;
-    kDebug() << "newX has " << rows_newX << " rows";
-    kDebug() << "newX has " << cols_newX << " cols";
+    debugSheets << "known_X = " << known_X;
+    debugSheets << "newX = " << newX;
+    debugSheets << "newX has " << rows_newX << " rows";
+    debugSheets << "newX has " << cols_newX << " cols";
 
     // create the resulting matrix
     Value res(Value::Array);
@@ -1626,7 +1625,7 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
     // simple regression
     //
     if (nCase == 1) {
-        kDebug() << "Simple regression detected"; // Debug
+        debugSheets << "Simple regression detected"; // Debug
 
         double count   = 0.0;
         double sumX    = 0.0;
@@ -1653,7 +1652,7 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
         }
 
         if (count < 1.0) {
-            kDebug() << "count less than 1.0";
+            debugSheets << "count less than 1.0";
             return Value::errorNA();
         } else {
             double f1 = count * sumXY - sumX * sumY;
@@ -1677,17 +1676,17 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
                 for (uint r = 0; r < rows_newX; ++r) {
                     double result = 0.0;
                     result = exp(newX.element(c, r).asFloat() * m + b);
-                    kDebug() << "res(" << c << "," << r << ") = " << result;
+                    debugSheets << "res(" << c << "," << r << ") = " << result;
                     res.setElement(c, r, Value(result));
                 }
             }
         }
-        kDebug() << res;
+        debugSheets << res;
     } else {
         if (nCase == 2) {
-            kDebug() << "column alignment";
+            debugSheets << "column alignment";
         } else {
-            kDebug() << "row alignment";
+            debugSheets << "row alignment";
         }
     }
 
@@ -2322,7 +2321,7 @@ Value func_rank(valVector args, ValueCalc *calc, FuncExtra*)
         else
             val = array[i];
 
-        //kDebug()<<"count ="<<count<<" val = "<<val<<" x = "<<x;
+        //debugSheets<<"count ="<<count<<" val = "<<val<<" x = "<<x;
 
         if (x == val) {
             valid = true;
@@ -2366,7 +2365,7 @@ Value func_rsq(valVector args, ValueCalc *calc, FuncExtra*)
             valA = calc->conv()->asFloat(matrixA.element(v)).asFloat();
             valB = calc->conv()->asFloat(matrixB.element(v)).asFloat();
             ++count;
-            //kDebug()<<"valA ="<<valA<<" valB ="<<valB;
+            //debugSheets<<"valA ="<<valA<<" valB ="<<valB;
 
             // value A
             sumA    += valA;        // add sum

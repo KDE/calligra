@@ -32,7 +32,7 @@
 #ifndef ELAPSED_TIME_P_H
 #define ELAPSED_TIME_P_H
 
-#include <kdebug.h>
+#include "SheetsDebug.h"
 #include <QTime>
 
 namespace Calligra
@@ -60,7 +60,7 @@ public:
             : m_name(name) {
         m_time.start();
         if (mode != PrintOnlyTime) {
-            kDebug(36001) << QString("*** (" + name + ")... Starting measuring...");
+            debugSheets << QString("*** (" + name + ")... Starting measuring...");
         }
     }
 
@@ -72,9 +72,9 @@ public:
         milliSec -= sec * 1000;
 
         if (m_name.isNull())
-            kDebug(36001) << QString("*** Elapsed time: %1 min %2 sec %3 msec").arg(min).arg(sec).arg(milliSec);
+            debugSheets << QString("*** Elapsed time: %1 min %2 sec %3 msec").arg(min).arg(sec).arg(milliSec);
         else
-            kDebug(36001) << QString("*** (%1) Elapsed time: %2 min %3 sec %4 msec").arg(m_name).arg(min).arg(sec).arg(milliSec);
+            debugSheets << QString("*** (%1) Elapsed time: %2 min %3 sec %4 msec").arg(m_name).arg(min).arg(sec).arg(milliSec);
     }
 
 private:

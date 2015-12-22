@@ -27,8 +27,7 @@
 #include <QSharedDataPointer>
 #include <QString>
 
-#include <kdebug.h>
-
+#include "SheetsDebug.h"
 #include "calligra_sheets_export.h"
 
 inline uint qHash(const QPoint& point)
@@ -659,7 +658,7 @@ Q_DECLARE_TYPEINFO(Calligra::Sheets::Region, Q_MOVABLE_TYPE);
 
 
 /***************************************************************************
-  kDebug support
+  QDebug support
 ****************************************************************************/
 
 inline QDebug operator<<(QDebug str, const Calligra::Sheets::Region& r)

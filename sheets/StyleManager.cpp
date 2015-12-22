@@ -26,7 +26,6 @@
 #include <QPen>
 #include <QStringList>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include <KoGenStyle.h>
@@ -34,6 +33,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
+#include "SheetsDebug.h"
 #include "CalculationSettings.h"
 #include "Condition.h"
 #include "Map.h"
@@ -54,7 +54,7 @@ StyleManager::~StyleManager()
 
 void StyleManager::saveOdf(KoGenStyles &mainStyles)
 {
-    kDebug(36003) << "StyleManager: Saving default cell style";
+    debugSheetsODF << "StyleManager: Saving default cell style";
     KoGenStyle defStyle = KoGenStyle(KoGenStyle::TableCellStyle, "table-cell");
     defaultStyle()->saveOdf(defStyle, mainStyles, this);
 
@@ -62,7 +62,7 @@ void StyleManager::saveOdf(KoGenStyles &mainStyles)
 
     CustomStyles::ConstIterator end = m_styles.constEnd();
     for (CustomStyles::ConstIterator it(m_styles.constBegin()); it != end; ++it) {
-        kDebug(36003) << "StyleManager: Saving common cell style" << it.key();
+        debugSheetsODF << "StyleManager: Saving common cell style" << it.key();
         KoGenStyle customStyle = KoGenStyle(KoGenStyle::TableCellStyle, "table-cell");
         const QString oasisName = (*it)->saveOdf(customStyle, mainStyles, this);
         m_oasisStyles[(*it)->name()] = oasisName;
@@ -77,7 +77,7 @@ void StyleManager::loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* ma
     // loading default style first
     const KoXmlElement* defStyle = stylesReader.defaultStyle("table-cell");
     if (defStyle) {
-        kDebug(36003) << "StyleManager: Loading default cell style";
+        debugSheetsODF << "StyleManager: Loading default cell style";
         Conditions conditions;
         defaultStyle()->loadOdf(stylesReader, *defStyle, "Default", conditions, this, map->parser());
         defaultStyle()->setType(Style::BUILTIN);
@@ -94,7 +94,7 @@ void StyleManager::loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* ma
                         bool ok;
                         const int precision = n.toElement().attributeNS(KoXmlNS::style, "decimal-places").toInt(&ok);
                         if (ok && precision > -1) {
-                            kDebug(36003) << "Default decimal precision:" << precision;
+                            debugSheetsODF << "Default decimal precision:" << precision;
                             map->calculationSettings()->setDefaultDecimalPrecision(precision);
                         }
                     }
@@ -116,7 +116,7 @@ void StyleManager::loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* ma
 
         // then replace by user-visible one (if any)
         const QString name = styleElem->attributeNS(KoXmlNS::style, "display-name", oasisName);
-        kDebug(36003) << " StyleManager: Loading common cell style:" << oasisName << " (display name:" << name << ")";
+        debugSheetsODF << " StyleManager: Loading common cell style:" << oasisName << " (display name:" << name << ")";
 
         if (!name.isEmpty()) {
             // The style's parent name will be set in Style::loadOdf(..).
@@ -129,7 +129,7 @@ void StyleManager::loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* ma
             insertStyle(style);
             // insert it into the map sorted the OpenDocument name
             m_oasisStyles[oasisName] = style->name();
-            kDebug(36003) << "Style" << style->name() << ":" << style;
+            debugSheetsODF << "Style" << style->name() << ":" << style;
         }
     }
 
@@ -139,14 +139,14 @@ void StyleManager::loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* ma
             const QString parentOdfName = style->parentName();
             const CustomStyle* parentStyle = this->style(m_oasisStyles.value(parentOdfName));
             if (!parentStyle) {
-                kWarning(36003) << parentOdfName << " not found.";
+                warnSheetsODF << parentOdfName << " not found.";
                 continue;
             }
             style->setParentName(m_oasisStyles.value(parentOdfName));
-            kDebug(36003) << style->name() << " (" << style << ") gets" << style->parentName() << " (" << parentOdfName << ") as parent.";
+            debugSheetsODF << style->name() << " (" << style << ") gets" << style->parentName() << " (" << parentOdfName << ") as parent.";
         } else {
             style->setParentName("Default");
-            kDebug(36003) << style->name() << " (" << style << ") has" << style->parentName() << " as parent.";
+            debugSheetsODF << style->name() << " (" << style << ") has" << style->parentName() << " as parent.";
         }
     }
 }
@@ -202,7 +202,7 @@ bool StyleManager::loadXML(KoXmlElement const & styles)
             if (style->type() == Style::AUTO)
                 style->setType(Style::CUSTOM);
             insertStyle(style);
-            kDebug(36003) << "Style" << name << ":" << style;
+            debugSheetsODF << "Style" << name << ":" << style;
         }
 
         e = e.nextSibling().toElement();
@@ -284,7 +284,7 @@ void StyleManager::takeStyle(CustomStyle * style)
     CustomStyles::iterator i(m_styles.find(style->name()));
 
     if (i != m_styles.end()) {
-        kDebug(36003) << "Erasing style entry for" << style->name();
+        debugSheetsODF << "Erasing style entry for" << style->name();
         m_styles.erase(i);
     }
 }
@@ -381,12 +381,12 @@ Styles StyleManager::loadOdfAutoStyles(KoOdfStylesReader& stylesReader,
     foreach(KoXmlElement* element, stylesReader.autoStyles("table-cell")) {
         if (element->hasAttributeNS(KoXmlNS::style , "name")) {
             QString name = element->attributeNS(KoXmlNS::style , "name" , QString());
-            kDebug(36003) << "StyleManager: Preloading automatic cell style:" << name;
+            debugSheetsODF << "StyleManager: Preloading automatic cell style:" << name;
             autoStyles.remove(name);
             Conditions conditions;
             autoStyles[name].loadOdfStyle(stylesReader, *(element), conditions, this, parser);
             if (!conditions.isEmpty()) {
-                kDebug() << "\t\tCONDITIONS";
+                debugSheets << "\t\tCONDITIONS";
                 conditionalStyles[name] = conditions;
             }
 
@@ -394,11 +394,11 @@ Styles StyleManager::loadOdfAutoStyles(KoOdfStylesReader& stylesReader,
                 const QString parentOdfName = element->attributeNS(KoXmlNS::style, "parent-style-name", QString());
                 const CustomStyle* parentStyle = style(m_oasisStyles.value(parentOdfName));
                 if (!parentStyle) {
-                    kWarning(36003) << parentOdfName << " not found.";
+                    warnSheetsODF << parentOdfName << " not found.";
                     continue;
                 }
                 autoStyles[name].setParentName(parentStyle->name());
-                kDebug(36003) << "\t parent-style-name:" << autoStyles[name].parentName();
+                debugSheetsODF << "\t parent-style-name:" << autoStyles[name].parentName();
             }
         }
     }
@@ -421,8 +421,8 @@ QString StyleManager::openDocumentName(const QString& name) const
 
 void StyleManager::dump() const
 {
-    kDebug(36006) << "Custom styles:";
+    debugSheetsStyle << "Custom styles:";
     foreach(const QString &name, m_styles.keys()) {
-        kDebug(36006) << name;
+        debugSheetsStyle << name;
     }
 }

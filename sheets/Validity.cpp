@@ -239,7 +239,7 @@ void Validity::loadOdfValidation(Cell* const cell, const QString& validationName
     Validity validity;
     if (element.hasAttributeNS(KoXmlNS::table, "condition")) {
         QString valExpression = element.attributeNS(KoXmlNS::table, "condition", QString());
-        kDebug(36003) << " element.attribute( table:condition )" << valExpression;
+        debugSheetsODF << " element.attribute( table:condition )" << valExpression;
         //Condition ::= ExtendedTrueCondition | TrueFunction 'and' TrueCondition
         //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
         //ExtendedTrueCondition ::= ExtendedGetFunction | cell-content-text-length() Operator Value
@@ -256,7 +256,7 @@ void Validity::loadOdfValidation(Cell* const cell, const QString& validationName
         if (valExpression.contains("cell-content-text-length()")) {
             //"cell-content-text-length()>45"
             valExpression = valExpression.remove("oooc:cell-content-text-length()");
-            kDebug(36003) << " valExpression = :" << valExpression;
+            debugSheetsODF << " valExpression = :" << valExpression;
             setRestriction(Validity::TextLength);
 
             loadOdfValidationCondition(valExpression, cell->sheet()->map()->parser());
@@ -268,7 +268,7 @@ void Validity::loadOdfValidation(Cell* const cell, const QString& validationName
             setRestriction(Validity::TextLength);
             setCondition(Conditional::Between);
             valExpression.remove("oooc:cell-content-text-length-is-between(");
-            kDebug(36003) << " valExpression :" << valExpression;
+            debugSheetsODF << " valExpression :" << valExpression;
             valExpression.remove(')');
             QStringList listVal = valExpression.split(',', QString::SkipEmptyParts);
             loadOdfValidationValue(listVal, cell->sheet()->map()->parser());
@@ -276,15 +276,15 @@ void Validity::loadOdfValidation(Cell* const cell, const QString& validationName
             setRestriction(Validity::TextLength);
             setCondition(Conditional::Different);
             valExpression.remove("oooc:cell-content-text-length-is-not-between(");
-            kDebug(36003) << " valExpression :" << valExpression;
+            debugSheetsODF << " valExpression :" << valExpression;
             valExpression.remove(')');
-            kDebug(36003) << " valExpression :" << valExpression;
+            debugSheetsODF << " valExpression :" << valExpression;
             QStringList listVal = valExpression.split(',', QString::SkipEmptyParts);
             loadOdfValidationValue(listVal, cell->sheet()->map()->parser());
         } else if (valExpression.contains("cell-content-is-in-list(")) {
             setRestriction(Validity::List);
             valExpression.remove("oooc:cell-content-is-in-list(");
-            kDebug(36003) << " valExpression :" << valExpression;
+            debugSheetsODF << " valExpression :" << valExpression;
             valExpression.remove(')');
             setValidityList(valExpression.split(';',  QString::SkipEmptyParts));
 
@@ -304,7 +304,7 @@ void Validity::loadOdfValidation(Cell* const cell, const QString& validationName
                 setRestriction(Validity::Time);
                 valExpression.remove("oooc:cell-content-is-time() and ");
             }
-            kDebug(36003) << "valExpression :" << valExpression;
+            debugSheetsODF << "valExpression :" << valExpression;
 
             if (valExpression.contains("cell-content()")) {
                 valExpression.remove("cell-content()");
@@ -329,7 +329,7 @@ void Validity::loadOdfValidation(Cell* const cell, const QString& validationName
         }
     }
     if (element.hasAttributeNS(KoXmlNS::table, "allow-empty-cell")) {
-        kDebug(36003) << " element.hasAttribute( table:allow-empty-cell ) :" << element.hasAttributeNS(KoXmlNS::table, "allow-empty-cell");
+        debugSheetsODF << " element.hasAttribute( table:allow-empty-cell ) :" << element.hasAttributeNS(KoXmlNS::table, "allow-empty-cell");
         setAllowEmptyCell(((element.attributeNS(KoXmlNS::table, "allow-empty-cell", QString()) == "true") ? true : false));
     }
     if (element.hasAttributeNS(KoXmlNS::table, "base-cell-address")) {
@@ -339,16 +339,16 @@ void Validity::loadOdfValidation(Cell* const cell, const QString& validationName
     KoXmlElement help = KoXml::namedItemNS(element, KoXmlNS::table, "help-message");
     if (!help.isNull()) {
         if (help.hasAttributeNS(KoXmlNS::table, "title")) {
-            kDebug(36003) << "help.attribute( table:title ) :" << help.attributeNS(KoXmlNS::table, "title", QString());
+            debugSheetsODF << "help.attribute( table:title ) :" << help.attributeNS(KoXmlNS::table, "title", QString());
             setTitleInfo(help.attributeNS(KoXmlNS::table, "title", QString()));
         }
         if (help.hasAttributeNS(KoXmlNS::table, "display")) {
-            kDebug(36003) << "help.attribute( table:display ) :" << help.attributeNS(KoXmlNS::table, "display", QString());
+            debugSheetsODF << "help.attribute( table:display ) :" << help.attributeNS(KoXmlNS::table, "display", QString());
             setDisplayValidationInformation(((help.attributeNS(KoXmlNS::table, "display", QString()) == "true") ? true : false));
         }
         KoXmlElement attrText = KoXml::namedItemNS(help, KoXmlNS::text, "p");
         if (!attrText.isNull()) {
-            kDebug(36003) << "help text :" << attrText.text();
+            debugSheetsODF << "help text :" << attrText.text();
             setMessageInfo(attrText.text());
         }
     }
@@ -366,11 +366,11 @@ void Validity::loadOdfValidation(Cell* const cell, const QString& validationName
             else if (str == "stop")
                 setAction(Validity::Stop);
             else
-                kDebug(36003) << "validation : message type unknown  :" << str;
+                debugSheetsODF << "validation : message type unknown  :" << str;
         }
 
         if (error.hasAttributeNS(KoXmlNS::table, "display")) {
-            kDebug(36003) << " display message :" << error.attributeNS(KoXmlNS::table, "display", QString());
+            debugSheetsODF << " display message :" << error.attributeNS(KoXmlNS::table, "display", QString());
             setDisplayMessage((error.attributeNS(KoXmlNS::table, "display", QString()) == "true"));
         }
         KoXmlElement attrText = KoXml::namedItemNS(error, KoXmlNS::text, "p");
@@ -383,7 +383,7 @@ void Validity::loadOdfValidation(Cell* const cell, const QString& validationName
 void Validity::loadOdfValidationValue(const QStringList &listVal, const ValueParser *parser)
 {
     bool ok = false;
-    kDebug(36003) << " listVal[0] :" << listVal[0] << " listVal[1] :" << listVal[1];
+    debugSheetsODF << " listVal[0] :" << listVal[0] << " listVal[1] :" << listVal[1];
 
     if (restriction() == Validity::Date) {
         setMinimumValue(parser->tryParseDate(listVal[0]));
@@ -396,7 +396,7 @@ void Validity::loadOdfValidationValue(const QStringList &listVal, const ValuePar
         if (!ok) {
             setMinimumValue(Value(listVal[0].toInt(&ok)));
             if (!ok)
-                kDebug(36003) << " Try to parse this value :" << listVal[0];
+                debugSheetsODF << " Try to parse this value :" << listVal[0];
 
 #if 0
             if (!ok)
@@ -408,7 +408,7 @@ void Validity::loadOdfValidationValue(const QStringList &listVal, const ValuePar
         if (!ok) {
             setMaximumValue(Value(listVal[1].toInt(&ok)));
             if (!ok)
-                kDebug(36003) << " Try to parse this value :" << listVal[1];
+                debugSheetsODF << " Try to parse this value :" << listVal[1];
 
 #if 0
             if (!ok)
@@ -442,7 +442,7 @@ void Validity::loadOdfValidationCondition(QString &valExpression, const ValuePar
         value = valExpression.remove(0, 1);
         setCondition(Conditional::Equal);
     } else
-        kDebug(36003) << " I don't know how to parse it :" << valExpression;
+        debugSheetsODF << " I don't know how to parse it :" << valExpression;
     if (restriction() == Validity::Date) {
         setMinimumValue(parser->tryParseDate(value));
     } else if (restriction() == Validity::Date) {
@@ -453,7 +453,7 @@ void Validity::loadOdfValidationCondition(QString &valExpression, const ValuePar
         if (!ok) {
             setMinimumValue(Value(value.toInt(&ok)));
             if (!ok)
-                kDebug(36003) << " Try to parse this value :" << value;
+                debugSheetsODF << " Try to parse this value :" << value;
 
 #if 0
             if (!ok)
@@ -746,16 +746,16 @@ QHash<QString, KoXmlElement> Validity::preloadValidities(const KoXmlElement& bod
 {
     QHash<QString, KoXmlElement> validities;
     KoXmlNode validation = KoXml::namedItemNS(body, KoXmlNS::table, "content-validations");
-    kDebug() << "validation.isNull?" << validation.isNull();
+    debugSheets << "validation.isNull?" << validation.isNull();
     if (!validation.isNull()) {
         KoXmlElement element;
         forEachElement(element, validation) {
             if (element.tagName() ==  "content-validation" && element.namespaceURI() == KoXmlNS::table) {
                 const QString name = element.attributeNS(KoXmlNS::table, "name", QString());
                 validities.insert(name, element);
-                kDebug() << " validation found:" << name;
+                debugSheets << " validation found:" << name;
             } else {
-                kDebug() << " Tag not recognized:" << element.tagName();
+                debugSheets << " Tag not recognized:" << element.tagName();
             }
         }
     }

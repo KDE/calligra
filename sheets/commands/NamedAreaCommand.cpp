@@ -73,7 +73,7 @@ bool NamedAreaCommand::preProcessing()
 
 bool NamedAreaCommand::mainProcessing()
 {
-    kDebug() ;
+    debugSheets ;
     if (!m_reverse) {
         if (!m_oldArea.isEmpty())
             m_sheet->map()->namedAreaManager()->remove(m_areaName);

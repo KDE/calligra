@@ -67,7 +67,7 @@ void AbstractSelectionStrategy::handleMouseMove(const QPointF& documentPos, Qt::
     int row = selection->activeSheet()->topRow(position.y(), ypos);
     // Check boundaries.
     if (col < 1 || col > KS_colMax || row < 1 || row > KS_rowMax) {
-        kDebug(36005) << "col or row is out of range:" << "col:" << col << " row:" << row;
+        debugSheetsUI << "col or row is out of range:" << "col:" << col << " row:" << row;
         return;
     }
     // Test whether mouse is over the Selection.handle

@@ -24,10 +24,10 @@
 #include "Number.h"
 #include "ValueConverter.h"
 #include "CalculationSettings.h"
+#include "SheetsDebug.h"
 
 #include <QRegExp>
 
-#include <kdebug.h>
 #include <errno.h>
 #include <float.h>
 #include <math.h>
@@ -1401,7 +1401,7 @@ Value ValueCalc::GetGammaDist(Value _x, Value _alpha, Value _beta)
     double beta  = numToDouble(converter->toFloat(_beta));    // beta
 
     // debug info
-//   kDebug()<<"GetGammaDist( x="<<x<<", alpha="<<alpha<<", beta="<<beta<<" )";
+//   debugSheets<<"GetGammaDist( x="<<x<<", alpha="<<alpha<<", beta="<<beta<<" )";
 
     int lower_tail = 1; //
     int pearson;      // flag is set if pearson was used
@@ -1413,7 +1413,7 @@ Value ValueCalc::GetGammaDist(Value _x, Value _alpha, Value _beta)
     long n;
 
     x /= beta;
-//   kDebug()<<"-> x=x/beta ="<<x;
+//   debugSheets<<"-> x=x/beta ="<<x;
 
     // check constraints
     if (x <= 0.0)
@@ -1426,7 +1426,7 @@ Value ValueCalc::GetGammaDist(Value _x, Value _alpha, Value _beta)
 
         pearson = 1; // set flag -> use pearson's series expansion.
         res = alpha * ::log(x) - x - ::log(GetGamma(Value(alpha + 1.0)).asFloat());
-//     kDebug()<<"Pearson  res="<<res;
+//     debugSheets<<"Pearson  res="<<res;
 
         //                 x           x           x
         // sum = 1.0 + --------- +  --------- * --------- + ...
@@ -1446,7 +1446,7 @@ Value ValueCalc::GetGammaDist(Value _x, Value _alpha, Value _beta)
 // TODO use GetLogGamma?
         res = alpha * ::log(x) - x - ::log(GetGamma(Value(alpha)).asFloat());
 
-//     kDebug()<<"Continued fraction expression res="<<res;
+//     debugSheets<<"Continued fraction expression res="<<res;
 
         //
         //
@@ -1460,17 +1460,17 @@ Value ValueCalc::GetGammaDist(Value _x, Value _alpha, Value _beta)
         pn4 = x * b;
         sum = pn3 / pn4;
         for (n = 1; ; ++n) {
-//       kDebug()<<"n="<<n<<" sum="<< sum;
+//       debugSheets<<"n="<<n<<" sum="<< sum;
             a += 1.0; // =   n+1 -alpha
             b += 2.0; // = 2(n+1)-alph+x
             an = a * n;
             pn5 = b * pn3 - an * pn1;
             pn6 = b * pn4 - an * pn2;
-//       kDebug()<<"a ="<<a<<" an="<<an<<" b="<<b<<" pn5="<<pn5<<" pn6="<<pn6;
+//       debugSheets<<"a ="<<a<<" an="<<an<<" b="<<b<<" pn5="<<pn5<<" pn6="<<pn6;
             if (fabs(pn6) > 0.0) {
                 osum = sum;
                 sum = pn5 / pn6;
-//         kDebug()<<"sum ="<<sum<<" osum="<<osum;
+//         debugSheets<<"sum ="<<sum<<" osum="<<osum;
                 if (fabs(osum - sum) <= DBL_EPSILON * fmin(1.0, sum))
                     break;
             }
@@ -1480,7 +1480,7 @@ Value ValueCalc::GetGammaDist(Value _x, Value _alpha, Value _beta)
             pn4 = pn6;
             if (fabs(pn5) >= xlarge) {
                 // re-scale the terms in continued fraction if they are large
-                kDebug() << "the terms are to large -> rescaleling by " << xlarge;
+                debugSheets << "the terms are to large -> rescaleling by " << xlarge;
                 pn1 /= xlarge;
                 pn2 /= xlarge;
                 pn3 /= xlarge;
@@ -1501,7 +1501,7 @@ Value ValueCalc::GetGammaDist(Value _x, Value _alpha, Value _beta)
 Value ValueCalc::GetBeta(Value _x, Value _alpha,
                          Value _beta)
 {
-//   kDebug()<<"GetBeta: x= " << _x << " alpha= " << _alpha << " beta=" << _beta;
+//   debugSheets<<"GetBeta: x= " << _x << " alpha= " << _alpha << " beta=" << _beta;
     if (equal(_beta, Value(1.0)))
         return pow(_x, _alpha);
     else if (equal(_alpha, Value(1.0)))
@@ -1952,7 +1952,7 @@ Value ValueCalc::sumIf(const Value &range, const Condition &cond)
 
     if (!range.isArray()) {
         if (matches(cond, range.element(0, 0))) {
-            //kDebug()<<"return non array value "<<range;
+            //debugSheets<<"return non array value "<<range;
             return range;
         }
         return Value(0.0);
@@ -1974,7 +1974,7 @@ Value ValueCalc::sumIf(const Value &range, const Condition &cond)
                 res = add(res, tmp);
             } else if (matches(cond, v)) {
                 if (v.isNumber()) {// only add numbers, no conversion from string allowed
-                    //kDebug()<<"add "<<v;
+                    //debugSheets<<"add "<<v;
                     res = add(res, v);
                 }
             }
@@ -1990,7 +1990,7 @@ Value ValueCalc::sumIf(const Cell &sumRangeStart, const Value &range, const Cond
 
     if (!range.isArray()) {
         if (matches(cond, range.element(0, 0))) {
-            //kDebug()<<"return non array value "<<range;
+            //debugSheets<<"return non array value "<<range;
             return sumRangeStart.value();
         }
         return Value(0.0);
@@ -2090,7 +2090,7 @@ Value ValueCalc::averageIf(const Value &range, const Condition &cond)
                 res = add(res, tmp);
             } else if (matches(cond, v)) {
                 if (v.isNumber()) {// only add numbers, no conversion from string allowed
-                    //kDebug()<<"add "<<v;
+                    //debugSheets<<"add "<<v;
                     res = add(res, v);
                     ++cnt;
                 }
@@ -2128,7 +2128,7 @@ Value ValueCalc::averageIf(const Cell &avgRangeStart, const Value &range, const 
             if (matches(cond, v)) {
                 Value val = Cell(avgRangeStart.sheet(), avgRangeStart.column() + c, avgRangeStart.row() + r).value();
                 if (val.isNumber()) {// only add numbers, no conversion from string allowed
-                    //kDebug()<<"add "<<val;
+                    //debugSheets<<"add "<<val;
                     res = add(res, val);
                     ++cnt;
                 }

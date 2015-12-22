@@ -22,13 +22,13 @@
 // Sheets
 #include "FormulaEditorHighlighter.h"
 #include "Selection.h"
+#include "SheetsDebug.h"
 
 // Calligra
 #include <KoIcon.h>
 #include <KoDialog.h>
 
 // KF5
-#include <kdebug.h>
 #include <KLocalizedString>
 #include <ktextedit.h>
 
@@ -145,7 +145,7 @@ bool RegionSelector::eventFilter(QObject* object, QEvent* event)
 void RegionSelector::switchDisplayMode(bool state)
 {
     Q_UNUSED(state)
-    kDebug() ;
+    debugSheets ;
 
     if (d->displayMode == Widget) {
         d->displayMode = Dialog;

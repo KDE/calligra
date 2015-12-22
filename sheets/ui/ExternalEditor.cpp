@@ -25,12 +25,10 @@
 #include "FormulaEditorHighlighter.h"
 #include "Map.h"
 #include "Sheet.h"
+#include "SheetsDebug.h"
 
 // Calligra
 #include <KoIcon.h>
-
-// KF5
-#include <kdebug.h>
 
 // Qt
 #include <QApplication>
@@ -169,7 +167,7 @@ void ExternalEditor::focusInEvent(QFocusEvent* event)
     Q_ASSERT(d->cellTool);
     // If the focussing is user induced.
     if (event->reason() != Qt::OtherFocusReason) {
-        kDebug() << "induced by user";
+        debugSheets << "induced by user";
         d->cellTool->setLastEditorWithFocus(CellToolBase::ExternalEditor);
     }
     // when the external editor gets focus, create also the internal editor

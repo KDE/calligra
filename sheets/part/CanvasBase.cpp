@@ -74,9 +74,6 @@
 #include <QTextStream>
 #include <QToolTip>
 
-// KDE
-#include <kdebug.h>
-
 // Calligra
 #include <KoCanvasController.h>
 #include <KoShapeManager.h>
@@ -86,6 +83,7 @@
 #include <KoUnit.h>
 
 // Sheets
+#include "SheetsDebug.h"
 #include "CellStorage.h"
 #include "Doc.h"
 #include "Global.h"
@@ -314,15 +312,15 @@ void CanvasBase::mousePressed(KoPointerEvent* event)
         const QPointF offset(this->offset().x(), this->offset().y());
         documentPosition = viewConverter()->viewToDocument(position) + offset;
         /*XXX TODO
-        kDebug() << "----------------------------";
-        kDebug() << "event->pos():" << event->pos();
-        kDebug() << "event->globalPos():" << event->globalPos();
-        kDebug() << "position:" << position;
-        kDebug() << "offset:" << offset;
-        kDebug() << "documentPosition:" << documentPosition;
+        debugSheets << "----------------------------";
+        debugSheets << "event->pos():" << event->pos();
+        debugSheets << "event->globalPos():" << event->globalPos();
+        debugSheets << "position:" << position;
+        debugSheets << "offset:" << offset;
+        debugSheets << "documentPosition:" << documentPosition;
         event = new QMouseEvent(QEvent::MouseButtonPress, position, mapToGlobal(position), event->button(), event->buttons(), event->modifiers());
-        kDebug() << "newEvent->pos():" << event->pos();
-        kDebug() << "newEvent->globalPos():" << event->globalPos();*/
+        debugSheets << "newEvent->pos():" << event->pos();
+        debugSheets << "newEvent->globalPos():" << event->globalPos();*/
     }
 
     event = new KoPointerEvent(event, documentPosition);
@@ -529,10 +527,10 @@ bool CanvasBase::dragMove(const QMimeData* mimeData, const QPointF& eventPos, co
     QRect dragMarkingRect;
     if (mimeData->hasFormat("application/x-kspread-snippet")) {
         if (source == canvasWidget()) {
-            kDebug(36005) << "source == this";
+            debugSheetsUI << "source == this";
             dragMarkingRect = selection()->boundingRect();
         } else {
-            kDebug(36005) << "source != this";
+            debugSheetsUI << "source != this";
             QByteArray data = mimeData->data("application/x-kspread-snippet");
             QString errorMsg;
             int errorLine;
@@ -540,7 +538,7 @@ bool CanvasBase::dragMove(const QMimeData* mimeData, const QPointF& eventPos, co
             QDomDocument doc;
             if (!doc.setContent(data, false, &errorMsg, &errorLine, &errorColumn)) {
                 // an error occurred
-                kDebug(36005) << "CanvasBase::daragMoveEvent: an error occurred" << endl
+                debugSheetsUI << "CanvasBase::daragMoveEvent: an error occurred" << endl
                 << "line: " << errorLine << " col: " << errorColumn
                 << ' ' << errorMsg << endl;
                 dragMarkingRect = QRect(1, 1, 1, 1);
@@ -552,7 +550,7 @@ bool CanvasBase::dragMove(const QMimeData* mimeData, const QPointF& eventPos, co
             }
         }
     } else { // if ( mimeData->hasText() )
-        kDebug(36005) << "has text";
+        debugSheetsUI << "has text";
         dragMarkingRect = QRect(1, 1, 1, 1);
     }
 #else
@@ -587,7 +585,7 @@ bool CanvasBase::dragMove(const QMimeData* mimeData, const QPointF& eventPos, co
     const int col = sheet->leftColumn(eventPosX, tmp);
     const int row = sheet->topRow(eventPosY, tmp);
     dragMarkingRect.moveTo(QPoint(col, row));
-    kDebug(36005) << "MARKING RECT =" << dragMarkingRect;
+    debugSheetsUI << "MARKING RECT =" << dragMarkingRect;
 #endif
     return true;
 }

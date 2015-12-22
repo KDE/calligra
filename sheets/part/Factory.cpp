@@ -20,7 +20,7 @@
 // Local
 #include "Factory.h"
 
-#include <kdebug.h>
+#include "SheetsDebug.h"
 
 #include <KoDockRegistry.h>
 #include <KoComponentData.h>
@@ -39,7 +39,7 @@ KAboutData* Factory::s_aboutData = 0;
 Factory::Factory()
     : KPluginFactory()
 {
-    //kDebug(36001) <<"Factory::Factory()";
+    //debugSheets <<"Factory::Factory()";
     // Create our instance, so that it becomes KGlobal::instance if the
     // main app is Calligra Sheets.
     (void)global();
@@ -47,7 +47,7 @@ Factory::Factory()
 
 Factory::~Factory()
 {
-    //kDebug(36001) <<"Factory::~Factory()";
+    //debugSheets <<"Factory::~Factory()";
     delete s_aboutData;
     s_aboutData = 0;
     delete s_global;

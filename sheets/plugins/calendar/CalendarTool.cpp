@@ -148,14 +148,14 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
         }
 
         if (yearheader) {
-            kDebug() << "inserting year" + QString::number(current.year());
+            debugSheets << "inserting year" + QString::number(current.year());
             setText(sheet, row, colstart + 6, cs->formatDate(current, KLocale::Year, KLocale::LongNumber));
 
             row += 2;
             yearheader = false;
         }
         if (monthheader) {
-            kDebug() << "inserting month" + QString::number(current.month());
+            debugSheets << "inserting month" + QString::number(current.month());
             setText(sheet, row, colstart + 6, cs->monthName(current, KCalendarSystem::LongName));
             row += 2;
             //we always have the week number in the first column
@@ -185,7 +185,7 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
         col += 2;
     }
     sheet->doc()->endMacro();
-    kDebug() << "inserting calendar completed";
+    debugSheets << "inserting calendar completed";
 }
 
 QWidget* CalendarTool::createOptionWidget()

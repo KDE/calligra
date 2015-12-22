@@ -58,7 +58,7 @@ void PageManager::layoutPages()
     preparePage(pageNumber);
 
     if (settings.pageOrder() == PrintSettings::LeftToRight) {
-//         kDebug() << "processing printRanges" << settings.printRegion();
+//         debugSheets << "processing printRanges" << settings.printRegion();
         // iterate over the print ranges
         Region::ConstIterator end = settings.printRegion().constEnd();
         for (Region::ConstIterator it = settings.printRegion().constBegin(); it != end; ++it) {
@@ -67,7 +67,7 @@ void PageManager::layoutPages()
 
             // limit the print range to the used area
             const QRect printRange = (*it)->rect() & sheet->usedArea(true);
-//             kDebug() << "processing printRange" << printRange;
+//             debugSheets << "processing printRange" << printRange;
 
             int rows = 0;
             double height = 0.0;
@@ -81,7 +81,7 @@ void PageManager::layoutPages()
                 else if (height + sheet->rowFormats()->visibleHeight(row + 1) <= size(pageNumber).height())
                     continue;
 
-//                 kDebug() << "1. done: row" << row << "rows" << rows << "height" << height;
+//                 debugSheets << "1. done: row" << row << "rows" << rows << "height" << height;
 
                 int columns = 0;
                 double width = 0.0;
@@ -94,7 +94,7 @@ void PageManager::layoutPages()
                     if (width + sheet->columnFormat(col + 1)->visibleWidth() <= size(pageNumber).width())
                         continue;
 
-//                     kDebug() << "col" << col << "columns" << columns << "width" << width;
+//                     debugSheets << "col" << col << "columns" << columns << "width" << width;
                     const QRect cellRange(col - columns + 1, row - rows + 1, columns, rows);
                     if (pageNeedsPrinting(cellRange)) {
                         d->pages.append(cellRange);
@@ -122,7 +122,7 @@ void PageManager::layoutPages()
             }
         }
     } else { // if (settings.pageOrder() == PrintSettings::TopToBottom)
-//         kDebug() << "processing printRanges" << settings.printRegion();
+//         debugSheets << "processing printRanges" << settings.printRegion();
         // iterate over the print ranges
         Region::ConstIterator end = settings.printRegion().constEnd();
         for (Region::ConstIterator it = settings.printRegion().constBegin(); it != end; ++it) {
@@ -131,7 +131,7 @@ void PageManager::layoutPages()
 
             // limit the print range to the used area
             const QRect printRange = (*it)->rect() & sheet->usedArea();
-            kDebug() << "processing printRange" << printRange;
+            debugSheets << "processing printRange" << printRange;
 
             int columns = 0;
             double width = 0.0;
@@ -145,7 +145,7 @@ void PageManager::layoutPages()
                 else if (width + sheet->columnFormat(col + 1)->visibleWidth() <= size(pageNumber).width())
                     continue;
 
-//                 kDebug() << "1. done: col" << col << "columns" << columns << "width" << width;
+//                 debugSheets << "1. done: col" << col << "columns" << columns << "width" << width;
 
                 int rows = 0;
                 double height = 0.0;
@@ -158,7 +158,7 @@ void PageManager::layoutPages()
                     if (height + sheet->rowFormats()->visibleHeight(row + 1) <= size(pageNumber).height())
                         continue;
 
-//                     kDebug() << "row" << row << "rows" << rows << "height" << height;
+//                     debugSheets << "row" << row << "rows" << rows << "height" << height;
                     const QRect cellRange(col - columns + 1, row - rows + 1, columns, rows);
                     if (pageNeedsPrinting(cellRange)) {
                         d->pages.append(cellRange);
@@ -186,14 +186,14 @@ void PageManager::layoutPages()
             }
         }
     }
-    kDebug() << d->pages.count() << "page(s) created";
+    debugSheets << d->pages.count() << "page(s) created";
 }
 
 void PageManager::setPrintSettings(const PrintSettings& settings, bool force)
 {
     if (!force && settings == d->settings)
         return;
-    kDebug() << (d->pages.isEmpty() ? "Creating" : "Recreating") << "pages...";
+    debugSheets << (d->pages.isEmpty() ? "Creating" : "Recreating") << "pages...";
     d->settings = settings;
     layoutPages();
 }

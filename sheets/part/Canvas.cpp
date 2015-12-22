@@ -74,8 +74,7 @@
 #include <QToolTip>
 #include <QWidget>
 
-// KDE
-#include <kdebug.h>
+// KF5
 #include <kxmlguifactory.h>
 
 // Calligra
@@ -87,6 +86,7 @@
 #include <KoPointerEvent.h>
 
 // Sheets
+#include "SheetsDebug.h"
 #include "CellStorage.h"
 #include "Doc.h"
 #include "Global.h"
@@ -171,15 +171,15 @@ void Canvas::mousePressEvent(QMouseEvent* event)
         const QPoint position(QWidget::width() - event->x(), event->y());
         const QPointF offset(this->offset().x(), this->offset().y());
         documentPosition = viewConverter()->viewToDocument(position) + offset;
-        kDebug() << "----------------------------";
-        kDebug() << "event->pos():" << event->pos();
-        kDebug() << "event->globalPos():" << event->globalPos();
-        kDebug() << "position:" << position;
-        kDebug() << "offset:" << offset;
-        kDebug() << "documentPosition:" << documentPosition;
+        debugSheets << "----------------------------";
+        debugSheets << "event->pos():" << event->pos();
+        debugSheets << "event->globalPos():" << event->globalPos();
+        debugSheets << "position:" << position;
+        debugSheets << "offset:" << offset;
+        debugSheets << "documentPosition:" << documentPosition;
         event = new QMouseEvent(QEvent::MouseButtonPress, position, mapToGlobal(position), event->button(), event->buttons(), event->modifiers());
-        kDebug() << "newEvent->pos():" << event->pos();
-        kDebug() << "newEvent->globalPos():" << event->globalPos();
+        debugSheets << "newEvent->pos():" << event->pos();
+        debugSheets << "newEvent->globalPos():" << event->globalPos();
     }
 
 #if 0  // This is disabled for now as per irc, as it blocks resize.

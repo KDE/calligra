@@ -25,11 +25,6 @@
 #include "FunctionDescription.h"
 #include "FunctionRepository.h"
 
-// Calligra
-
-// KDE
-#include <kdebug.h>
-
 // Qt
 #include <QApplication>
 #include <QDesktopWidget>

@@ -20,14 +20,11 @@
 // Local
 #include "SheetSelectPage.h"
 
-// standard C/C++ includes
-// Qt includes
-// KDE includes
-#include <kdebug.h>
-
-// Calligra includes
+// Calligra
 #include <KoIcon.h>
+
 // Sheets
+#include "SheetsDebug.h"
 
 using namespace Calligra::Sheets;
 
@@ -103,7 +100,7 @@ void SheetSelectPage::setOptions( const QMap<QString,QString>& opts )
   QStringList::iterator it;
   for (it = sheetlist.begin(); it != sheetlist.end(); ++it)
   {
-    kDebug() <<" adding sheet to list of printed sheets:" << *it;
+    debugSheets <<" adding sheet to list of printed sheets:" << *it;
     this->prependSelectedSheet(*it);
   }
 }
@@ -112,7 +109,7 @@ void SheetSelectPage::setOptions( const QMap<QString,QString>& opts )
 void SheetSelectPage::setAvailableSheets(const QStringList& sheetlist)
 {
     foreach(const QString &sname, sheetlist) {
-        kDebug() << " adding sheet to list of printed sheets:" << sname;
+        debugSheets << " adding sheet to list of printed sheets:" << sname;
         this->prependSelectedSheet(sname);
     }
 

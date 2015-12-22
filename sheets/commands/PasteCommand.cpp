@@ -154,7 +154,7 @@ bool PasteCommand::isApproved() const
     if (supports(m_mimeData)) {
         return AbstractRegionCommand::isApproved();
     }
-    kWarning() << "Unrecognized MIME type(s):" << m_mimeData->formats().join(", ");
+    warnSheets << "Unrecognized MIME type(s):" << m_mimeData->formats().join(", ");
     return false;
 }
 
@@ -196,7 +196,7 @@ bool PasteCommand::unknownShiftDirection(const QMimeData *mimeData)
     KoXmlDocument d;
     if (!d.setContent(byteArray, false, &errorMsg, &errorLine, &errorColumn)) {
         // an error occurred
-        kDebug() << "An error occurred."
+        debugSheets << "An error occurred."
         << "line:" << errorLine << "col:" << errorColumn << errorMsg;
         return false;
     }
@@ -232,13 +232,13 @@ bool PasteCommand::mainProcessing()
             if (m_mimeData->hasFormat("application/x-kspread-snippet")) {
                 m_xmlDocument = new KoXmlDocument(true);
                 const QByteArray data = m_mimeData->data("application/x-kspread-snippet");
-                kDebug(36005) << "Parsing" << data.size() << "bytes";
+                debugSheetsUI << "Parsing" << data.size() << "bytes";
                 QString errorMsg;
                 int errorLine;
                 int errorColumn;
                 if (!m_xmlDocument->setContent(data, false, &errorMsg, &errorLine, &errorColumn)) {
                     // an error occurred
-                    kDebug(36005) << "An error occurred." << "line:" << errorLine
+                    debugSheetsUI << "An error occurred." << "line:" << errorLine
                     << "col:" << errorColumn << errorMsg;
                     return false;
                 }
@@ -305,10 +305,10 @@ bool PasteCommand::processXmlData(Element *element, KoXmlDocument *data)
     const int xOffset = noRowsInClipboard ? pasteArea.left() - 1 : 0;
     const int yOffset = noColumnsInClipboard ? pasteArea.top() - 1 : 0;
 
-    kDebug(36005) << "selected size (col x row):" << pasteArea.width() << 'x' << pasteArea.height();
-    kDebug(36005) << "source size (col x row):" << sourceWidth << 'x' << sourceHeight;
-    kDebug(36005) << "paste area size (col x row):" << pasteWidth << 'x' << pasteHeight;
-    kDebug(36005) << "xOffset:" << xOffset << "yOffset:" << yOffset;
+    debugSheetsUI << "selected size (col x row):" << pasteArea.width() << 'x' << pasteArea.height();
+    debugSheetsUI << "source size (col x row):" << sourceWidth << 'x' << sourceHeight;
+    debugSheetsUI << "paste area size (col x row):" << pasteWidth << 'x' << pasteHeight;
+    debugSheetsUI << "xOffset:" << xOffset << "yOffset:" << yOffset;
 
     // Determine the shift direction, if needed.
     if (m_insertMode == ShiftCells) {
@@ -552,7 +552,7 @@ bool PasteCommand::processXmlData(Element *element, KoXmlDocument *data)
             // tile the selection with the clipboard contents
             for (int roff = 0; row + roff <= pasteHeight; roff += sourceHeight) {
                 for (int coff = 0; col + coff <= pasteWidth; coff += sourceWidth) {
-                    kDebug(36005) << "cell at" << (col + xOffset + coff) << ',' << (row + yOffset + roff)
+                    debugSheetsUI << "cell at" << (col + xOffset + coff) << ',' << (row + yOffset + roff)
                     << " with roff,coff=" << roff << ',' << coff
                     << ", xOffset:" << xOffset << ", yOffset:" << yOffset << endl;
 

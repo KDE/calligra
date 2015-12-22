@@ -24,10 +24,9 @@
 #include <QRect>
 #include <QVector>
 
-#include <kdebug.h>
-
 #include <KoRTree.h>
 
+#include "SheetsDebug.h"
 #include "calligra_sheets_limits.h"
 
 // Use dynamic_cast instead of cached root node

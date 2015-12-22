@@ -25,9 +25,7 @@
 // Local
 #include "MapAdaptor.h"
 
-
-#include <kdebug.h>
-
+#include "SheetsDebug.h"
 #include "Map.h"
 #include "Sheet.h"
 
@@ -53,11 +51,11 @@ QString MapAdaptor::sheetByIndex(int index)
 {
     Sheet* t = m_map->sheetList().at(index);
     if (!t) {
-        kDebug(36001) << "+++++ No table found at index" << index;
+        debugSheets << "+++++ No table found at index" << index;
         return QString();
     }
 
-    kDebug(36001) << "+++++++ Returning table" << t->QObject::objectName();
+    debugSheets << "+++++++ Returning table" << t->QObject::objectName();
 
     return t->objectName();
 }

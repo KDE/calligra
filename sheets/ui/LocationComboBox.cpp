@@ -25,13 +25,9 @@
 #include "NamedAreaManager.h"
 #include "Selection.h"
 #include "Sheet.h"
+#include "SheetsDebug.h"
 
 #include "commands/NamedAreaCommand.h"
-
-// Calligra
-
-// KDE
-#include <kdebug.h>
 
 // Qt
 #include <QKeyEvent>
@@ -153,7 +149,7 @@ void LocationComboBox::addCompletionItem(const QString &_item)
 {
     if (completionList.items().contains(_item) == 0) {
         completionList.addItem(_item);
-        kDebug(36005) << _item;
+        debugSheetsUI << _item;
     }
 }
 

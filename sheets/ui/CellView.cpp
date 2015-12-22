@@ -1370,7 +1370,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF& paintRect,
     if ((paintBorder & LeftBorder) && leftPen.style() != Qt::NoPen) {
         painter.setPen(leftPen);
 
-        //kDebug(36004) <<"    painting left border of cell" << name();
+        //debugSheetsRender <<"    painting left border of cell" << name();
 
         // If we are on paper printout, we limit the length of the lines.
         // On paper, we always have full cells, on screen not.
@@ -1389,7 +1389,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF& paintRect,
     if ((paintBorder & RightBorder) && rightPen.style() != Qt::NoPen) {
         painter.setPen(rightPen);
 
-        //kDebug(36004) <<"    painting right border of cell" << name();
+        //debugSheetsRender <<"    painting right border of cell" << name();
 
         // If we are on paper printout, we limit the length of the lines.
         // On paper, we always have full cells, on screen not.
@@ -1409,7 +1409,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF& paintRect,
     if ((paintBorder & TopBorder) && topPen.style() != Qt::NoPen) {
         painter.setPen(topPen);
 
-        //kDebug(36004) <<"    painting top border of cell" << name()
+        //debugSheetsRender <<"    painting top border of cell" << name()
         //       << " [" << coordinate.x() << "," << coordinate.x() + d->width
         //       << ": " << coordinate.x() + d->width - coordinate.x() << "]" << endl;
 
@@ -1430,7 +1430,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF& paintRect,
     if ((paintBorder & BottomBorder) && bottomPen.style() != Qt::NoPen) {
         painter.setPen(bottomPen);
 
-        //kDebug(36004) <<"    painting bottom border of cell" << name()
+        //debugSheetsRender <<"    painting bottom border of cell" << name()
         //       << " [" << coordinate.x() << "," << coordinate.x() + d->width
         //       << ": " << coordinate.x() + d->width - coordinate.x() << "]" << endl;
 

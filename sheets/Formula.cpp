@@ -1793,7 +1793,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
                 entry.reg = region;
                 entry.regIsNamedOrLabeled = map->namedAreaManager()->contains(c);
             } else {
-                kWarning() << "Unhandled non singular region in Opcode::Cell with rects=" << region.rects();
+                warnSheets << "Unhandled non singular region in Opcode::Cell with rects=" << region.rects();
             }
             entry.val = val1;
             stack.push(entry);

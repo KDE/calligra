@@ -799,7 +799,7 @@ bool CellToolBase::Private::formatKeyPress(QKeyEvent * _ev)
 
 QRect CellToolBase::Private::moveDirection(Calligra::Sheets::MoveTo direction, bool extendSelection)
 {
-    kDebug(36005) << "Canvas::moveDirection";
+    debugSheetsUI << "Canvas::moveDirection";
 
     register Sheet * const sheet = q->selection()->activeSheet();
     if (!sheet)

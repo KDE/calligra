@@ -228,6 +228,8 @@ set (calligrasheetscommon_LIB_SRCS
 endif()
 
 set (calligrasheetsodf_LIB_SRCS
+    SheetsDebug.cpp
+
     part/Digest.cpp
     ApplicationSettings.cpp
     Binding.cpp

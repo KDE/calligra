@@ -154,7 +154,7 @@ bool ViewAdaptor::showSheet(const QString& sheetName)
 {
     Sheet *const sheet = m_view->doc()->map()->findSheet(sheetName);
     if (!sheet) {
-        kDebug(36001) << "Unknown sheet" << sheetName;
+        debugSheets << "Unknown sheet" << sheetName;
         return false;
     }
     m_view->selection()->emitCloseEditor(true); // save changes

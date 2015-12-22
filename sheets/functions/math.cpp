@@ -29,8 +29,7 @@
 #include <math.h>
 #include <qmath.h>
 
-#include <kdebug.h>
-
+#include "SheetsDebug.h"
 #include "FunctionModuleRegistry.h"
 #include "Function.h"
 #include "FunctionRepository.h"
@@ -1412,7 +1411,7 @@ Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *)
 
   double oldCol = args[1]->doubleValue();
   double oldRow = args[3]->doubleValue();
-  kDebug() <<"Old values: Col:" << oldCol <<", Row:" << oldRow;
+  debugSheets <<"Old values: Col:" << oldCol <<", Row:" << oldRow;
 
   Cell * cell;
   Sheet * sheet = ((Interpreter *) context.interpreter() )->sheet();
@@ -1426,12 +1425,12 @@ Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *)
   {
     cell = Cell( sheet, point.pos.x(), point.pos.y() );
     cell->setValue( args[2]->doubleValue() );
-    kDebug() <<"Setting value" << args[2]->doubleValue() <<" on cell" << point.pos.x()
+    debugSheets <<"Setting value" << args[2]->doubleValue() <<" on cell" << point.pos.x()
               << ", " << point.pos.y() << endl;
 
     cell = Cell( sheet, point2.pos.x(), point.pos.y() );
     cell->setValue( args[4]->doubleValue() );
-    kDebug() <<"Setting value" << args[4]->doubleValue() <<" on cell" << point2.pos.x()
+    debugSheets <<"Setting value" << args[4]->doubleValue() <<" on cell" << point2.pos.x()
               << ", " << point2.pos.y() << endl;
   }
 
@@ -1439,10 +1438,10 @@ Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *)
   cell1->calc( false );
 
   double d = cell1->value().asFloat();
-  kDebug() <<"Cell:" << point3.pos.x() <<";" << point3.pos.y() <<" with value"
+  debugSheets <<"Cell:" << point3.pos.x() <<";" << point3.pos.y() <<" with value"
             << d << endl;
 
-  kDebug() <<"Resetting old values";
+  debugSheets <<"Resetting old values";
 
   cell = Cell( sheet, point.pos.x(), point.pos.y() );
   cell->setValue( oldCol );

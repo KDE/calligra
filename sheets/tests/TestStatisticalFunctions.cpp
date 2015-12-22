@@ -51,23 +51,23 @@ bool TestStatisticalFunctions::TestArray(const QString& formula, const QString& 
     double epsilon = DBL_EPSILON * pow(10.0, (double)(accuracy));
 
     Value Array = evaluate(_Array);
-//   kDebug()<<"Array = "<<Array;
+//   qDebug()<<"Array = "<<Array;
 
     Value result = evaluate(formula);
 
     // test match size
     if (checkSize)
         if (Array.rows() != result.rows() || Array.columns() != result.columns()) {
-            kDebug() << "Array size do not match";
+            qDebug() << "Array size do not match";
             return false;
         }
 
     // if checkSize is disabled the count of Array array could be lower than result array
     for (int e = 0; e < (int)Array.count(); e++) {
-        kDebug() << "check element (" << e << ") " << (double)Array.element(e).asFloat() << " " << (double)result.element(e).asFloat();
+        qDebug() << "check element (" << e << ") " << (double)Array.element(e).asFloat() << " " << (double)result.element(e).asFloat();
         bool res = (long double) fabsl(Array.element(e).asFloat() - result.element(e).asFloat()) < epsilon;
         if (!res) {
-            kDebug() << "check failed -->" << "Element(" << e << ") " << (double)Array.element(e).asFloat() << " to" << (double) result.element(e).asFloat() << "  diff =" << (double)(Array.element(e).asFloat() - result.element(e).asFloat());
+            qDebug() << "check failed -->" << "Element(" << e << ") " << (double)Array.element(e).asFloat() << " to" << (double) result.element(e).asFloat() << "  diff =" << (double)(Array.element(e).asFloat() - result.element(e).asFloat());
             return false;
         }
     }
@@ -89,9 +89,9 @@ Value TestStatisticalFunctions::TestDouble(const QString& formula, const Value& 
     bool res = fabs(v2.asFloat() - result.asFloat()) < epsilon;
 
     if (!res)
-        kDebug(36002) << "check failed -->" << "Epsilon =" << epsilon << "" << (double)v2.asFloat() << " to" << (double)result.asFloat() << "  diff =" << (double)(v2.asFloat() - result.asFloat());
+        qDebug() << "check failed -->" << "Epsilon =" << epsilon << "" << (double)v2.asFloat() << " to" << (double)result.asFloat() << "  diff =" << (double)(v2.asFloat() - result.asFloat());
 //   else
-//     kDebug(36002)<<"check -->" <<"  diff =" << v2.asFloat()-result.asFloat();
+//     qDebug()<<"check -->" <<"  diff =" << v2.asFloat()-result.asFloat();
     if (res)
         return v2;
     else

@@ -144,7 +144,7 @@ FilterPopup::FilterPopup(QWidget* parent, const Cell& cell, Database* database)
         d->fieldNumber = cell.column() - database->range().lastRange().left();
     else // Qt::Horizontal
         d->fieldNumber = cell.row() - database->range().lastRange().top();
-    kDebug() << "FilterPopup for fieldNumber" << d->fieldNumber;
+    debugSheets << "FilterPopup for fieldNumber" << d->fieldNumber;
 }
 
 FilterPopup::~FilterPopup()
@@ -180,7 +180,7 @@ void FilterPopup::updateFilter(Filter* filter) const
         const Filter::Composition composition = (comparison == Filter::Match)
                                                 ? Filter::OrComposition : Filter::AndComposition;
         const QList<QString> values = (comparison == Filter::Match) ? matchList : notMatchList;
-        kDebug() << "adding conditions for fieldNumber" << d->fieldNumber;
+        debugSheets << "adding conditions for fieldNumber" << d->fieldNumber;
         Filter subFilter;
         for (int i = 0; i < values.count(); ++i)
             subFilter.addCondition(composition, d->fieldNumber, comparison, values[i]);

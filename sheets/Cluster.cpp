@@ -23,8 +23,7 @@
 
 #include <stdlib.h>
 
-#include <kdebug.h>
-
+#include "SheetsDebug.h"
 #include "Cell.h"
 #include "RowColumnFormat.h"
 
@@ -100,7 +99,7 @@ void Cluster::clear()
 Cell* Cluster::lookup(int x, int y) const
 {
     if (x >= CALLIGRA_SHEETS_CLUSTER_MAX || x < 0 || y >= CALLIGRA_SHEETS_CLUSTER_MAX || y < 0) {
-        kDebug(36001) << "Cluster::lookup: invalid column or row value (col:"
+        debugSheets << "Cluster::lookup: invalid column or row value (col:"
         << x << "  | row: " << y << ")" << endl;
         return 0;
     }
@@ -120,7 +119,7 @@ Cell* Cluster::lookup(int x, int y) const
 void Cluster::insert(Cell* cell, int x, int y)
 {
     if (x >= CALLIGRA_SHEETS_CLUSTER_MAX || x < 0 || y >= CALLIGRA_SHEETS_CLUSTER_MAX || y < 0) {
-        kDebug(36001) << "Cluster::insert: invalid column or row value (col:"
+        debugSheets << "Cluster::insert: invalid column or row value (col:"
         << x << "  | row: " << y << ")" << endl;
         return;
     }
@@ -159,7 +158,7 @@ void Cluster::insert(Cell* cell, int x, int y)
 void Cluster::remove(int x, int y)
 {
     if (x >= CALLIGRA_SHEETS_CLUSTER_MAX || x < 0 || y >= CALLIGRA_SHEETS_CLUSTER_MAX || y < 0) {
-        kDebug(36001) << "Cluster::remove: invalid column or row value (col:"
+        debugSheets << "Cluster::remove: invalid column or row value (col:"
         << x << "  | row: " << y << ")" << endl;
         return;
     }
@@ -243,7 +242,7 @@ bool Cluster::insertShiftRight(const QPoint& marker, bool& work)
 
     if (marker.x() >= CALLIGRA_SHEETS_CLUSTER_MAX || marker.x() < 0 ||
             marker.y() >= CALLIGRA_SHEETS_CLUSTER_MAX || marker.y() < 0) {
-        kDebug(36001) << "Cluster::insertShiftRight: invalid column or row value (col:"
+        debugSheets << "Cluster::insertShiftRight: invalid column or row value (col:"
         << marker.x() << "  | row: " << marker.y() << ")" << endl;
         return false;
     }
@@ -295,7 +294,7 @@ bool Cluster::insertShiftDown(const QPoint& marker, bool& work)
 
     if (marker.x() >= CALLIGRA_SHEETS_CLUSTER_MAX || marker.x() < 0 ||
             marker.y() >= CALLIGRA_SHEETS_CLUSTER_MAX || marker.y() < 0) {
-        kDebug(36001) << "Cluster::insertShiftDown: invalid column or row value (col:"
+        debugSheets << "Cluster::insertShiftDown: invalid column or row value (col:"
         << marker.x() << "  | row: " << marker.y() << ")" << endl;
         return false;
     }
@@ -345,7 +344,7 @@ bool Cluster::insertShiftDown(const QPoint& marker, bool& work)
 bool Cluster::insertColumn(int col)
 {
     if (col >= CALLIGRA_SHEETS_CLUSTER_MAX || col < 0) {
-        kDebug(36001) << "Cluster::insertColumn: invalid column value (col:"
+        debugSheets << "Cluster::insertColumn: invalid column value (col:"
         << col << ")" << endl;
         return false;
     }
@@ -372,7 +371,7 @@ bool Cluster::insertColumn(int col)
 bool Cluster::insertRow(int row)
 {
     if (row >= CALLIGRA_SHEETS_CLUSTER_MAX || row < 0) {
-        kDebug(36001) << "Cluster::insertRow: invalid row value (row:"
+        debugSheets << "Cluster::insertRow: invalid row value (row:"
         << row << ")" << endl;
         return false;
     }
@@ -402,7 +401,7 @@ void Cluster::removeShiftUp(const QPoint& marker, bool& work)
 
     if (marker.x() >= CALLIGRA_SHEETS_CLUSTER_MAX || marker.x() < 0 ||
             marker.y() >= CALLIGRA_SHEETS_CLUSTER_MAX || marker.y() < 0) {
-        kDebug(36001) << "Cluster::removeShiftUp: invalid column or row value (col:"
+        debugSheets << "Cluster::removeShiftUp: invalid column or row value (col:"
         << marker.x() << "  | row: " << marker.y() << ")" << endl;
         return;
     }
@@ -445,7 +444,7 @@ void Cluster::removeShiftLeft(const QPoint& marker, bool& work)
 
     if (marker.x() >= CALLIGRA_SHEETS_CLUSTER_MAX || marker.x() < 0 ||
             marker.y() >= CALLIGRA_SHEETS_CLUSTER_MAX || marker.y() < 0) {
-        kDebug(36001) << "Cluster::removeShiftLeft: invalid column or row value (col:"
+        debugSheets << "Cluster::removeShiftLeft: invalid column or row value (col:"
         << marker.x() << "  | row: " << marker.y() << ")" << endl;
         return;
     }
@@ -485,7 +484,7 @@ void Cluster::removeShiftLeft(const QPoint& marker, bool& work)
 void Cluster::removeColumn(int col)
 {
     if (col >= CALLIGRA_SHEETS_CLUSTER_MAX || col < 0) {
-        kDebug(36001) << "Cluster::removeColumn: invalid column value (col:"
+        debugSheets << "Cluster::removeColumn: invalid column value (col:"
         << col << ")" << endl;
         return;
     }
@@ -511,7 +510,7 @@ void Cluster::removeColumn(int col)
 void Cluster::removeRow(int row)
 {
     if (row >= CALLIGRA_SHEETS_CLUSTER_MAX || row < 0) {
-        kDebug(36001) << "Cluster::removeRow: invalid row value (row:"
+        debugSheets << "Cluster::removeRow: invalid row value (row:"
         << row << ")" << endl;
         return;
     }
@@ -537,7 +536,7 @@ void Cluster::removeRow(int row)
 void Cluster::clearColumn(int col)
 {
     if (col >= CALLIGRA_SHEETS_CLUSTER_MAX || col < 0) {
-        kDebug(36001) << "Cluster::clearColumn: invalid column value (col:"
+        debugSheets << "Cluster::clearColumn: invalid column value (col:"
         << col << ")" << endl;
         return;
     }
@@ -559,7 +558,7 @@ void Cluster::clearColumn(int col)
 void Cluster::clearRow(int row)
 {
     if (row >= CALLIGRA_SHEETS_CLUSTER_MAX || row < 0) {
-        kDebug(36001) << "Cluster::clearRow: invalid row value (row:"
+        debugSheets << "Cluster::clearRow: invalid row value (row:"
         << row << ")" << endl;
         return;
     }
@@ -798,7 +797,7 @@ ColumnCluster::~ColumnCluster()
 ColumnFormat* ColumnCluster::lookup(int col)
 {
     if (col >= CALLIGRA_SHEETS_CLUSTER_MAX || col < 0) {
-        kDebug(36001) << "ColumnCluster::lookup: invalid column value (col:"
+        debugSheets << "ColumnCluster::lookup: invalid column value (col:"
         << col << ")" << endl;
         return 0;
     }
@@ -816,7 +815,7 @@ ColumnFormat* ColumnCluster::lookup(int col)
 const ColumnFormat* ColumnCluster::lookup(int col) const
 {
     if (col >= CALLIGRA_SHEETS_CLUSTER_MAX || col < 0) {
-        kDebug(36001) << "ColumnCluster::lookup: invalid column value (col:"
+        debugSheets << "ColumnCluster::lookup: invalid column value (col:"
         << col << ")" << endl;
         return 0;
     }
@@ -856,7 +855,7 @@ void ColumnCluster::clear()
 void ColumnCluster::insertElement(ColumnFormat* lay, int col)
 {
     if (col >= CALLIGRA_SHEETS_CLUSTER_MAX || col < 0) {
-        kDebug(36001) << "ColumnCluster::insertElement: invalid column value (col:"
+        debugSheets << "ColumnCluster::insertElement: invalid column value (col:"
         << col << ")" << endl;
         return;
     }
@@ -888,7 +887,7 @@ void ColumnCluster::insertElement(ColumnFormat* lay, int col)
 void ColumnCluster::removeElement(int col)
 {
     if (col >= CALLIGRA_SHEETS_CLUSTER_MAX || col < 0) {
-        kDebug(36001) << "ColumnCluster::removeElement: invalid column value (col:"
+        debugSheets << "ColumnCluster::removeElement: invalid column value (col:"
         << col << ")" << endl;
         return;
     }
@@ -925,7 +924,7 @@ void ColumnCluster::removeElement(int col)
 bool ColumnCluster::insertColumn(int col)
 {
     if (col >= CALLIGRA_SHEETS_CLUSTER_MAX || col < 0) {
-        kDebug(36001) << "ColumnCluster::insertColumn: invalid column value (col:"
+        debugSheets << "ColumnCluster::insertColumn: invalid column value (col:"
         << col << ")" << endl;
         return false;
     }
@@ -970,7 +969,7 @@ bool ColumnCluster::insertColumn(int col)
 bool ColumnCluster::removeColumn(int column)
 {
     if (column >= CALLIGRA_SHEETS_CLUSTER_MAX || column < 0) {
-        kDebug(36001) << "ColumnCluster::removeColumn: invalid column value (col:"
+        debugSheets << "ColumnCluster::removeColumn: invalid column value (col:"
         << column << ")" << endl;
         return false;
     }
@@ -1019,7 +1018,7 @@ bool ColumnCluster::autoDelete() const
 ColumnFormat* ColumnCluster::next(int col) const
 {
     if (col >= CALLIGRA_SHEETS_CLUSTER_MAX || col < 0) {
-        kDebug(36001) << "ColumnCluster::next: invalid column value (col:"
+        debugSheets << "ColumnCluster::next: invalid column value (col:"
         << col << ")" << endl;
         return 0;
     }
@@ -1106,7 +1105,7 @@ RowCluster::~RowCluster()
 const RowFormat* RowCluster::lookup(int row) const
 {
     if (row >= CALLIGRA_SHEETS_CLUSTER_MAX || row < 0) {
-        kDebug(36001) << "RowCluster::lookup: invalid row value (row:"
+        debugSheets << "RowCluster::lookup: invalid row value (row:"
         << row << ")" << endl;
         return 0;
     }
@@ -1124,7 +1123,7 @@ const RowFormat* RowCluster::lookup(int row) const
 RowFormat* RowCluster::lookup(int row)
 {
     if (row >= CALLIGRA_SHEETS_CLUSTER_MAX || row < 0) {
-        kDebug(36001) << "RowCluster::lookup: invalid row value (row:"
+        debugSheets << "RowCluster::lookup: invalid row value (row:"
         << row << ")" << endl;
         return 0;
     }
@@ -1164,7 +1163,7 @@ void RowCluster::clear()
 void RowCluster::insertElement(RowFormat* lay, int row)
 {
     if (row >= CALLIGRA_SHEETS_CLUSTER_MAX || row < 0) {
-        kDebug(36001) << "RowCluster::insertElement: invalid row value (row:"
+        debugSheets << "RowCluster::insertElement: invalid row value (row:"
         << row << ")" << endl;
         return;
     }
@@ -1196,7 +1195,7 @@ void RowCluster::insertElement(RowFormat* lay, int row)
 void RowCluster::removeElement(int row)
 {
     if (row >= CALLIGRA_SHEETS_CLUSTER_MAX || row < 0) {
-        kDebug(36001) << "RowCluster::removeElement: invalid row value (row:"
+        debugSheets << "RowCluster::removeElement: invalid row value (row:"
         << row << ")" << endl;
         return;
     }
@@ -1233,7 +1232,7 @@ void RowCluster::removeElement(int row)
 bool RowCluster::insertRow(int row)
 {
     if (row >= CALLIGRA_SHEETS_CLUSTER_MAX || row < 0) {
-        kDebug(36001) << "RowCluster::insertRow: invalid row value (row:"
+        debugSheets << "RowCluster::insertRow: invalid row value (row:"
         << row << ")" << endl;
         return false;
     }
@@ -1278,7 +1277,7 @@ bool RowCluster::insertRow(int row)
 bool RowCluster::removeRow(int row)
 {
     if (row >= CALLIGRA_SHEETS_CLUSTER_MAX || row < 0) {
-        kDebug(36001) << "RowCluster::removeRow: invalid row value (row:"
+        debugSheets << "RowCluster::removeRow: invalid row value (row:"
         << row << ")" << endl;
         return false;
     }

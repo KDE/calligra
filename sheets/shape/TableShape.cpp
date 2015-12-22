@@ -24,8 +24,6 @@
 
 #include <QPainter>
 
-#include <kdebug.h>
-
 #include <KoGenStyles.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeContainer.h>
@@ -33,6 +31,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoXmlNS.h>
 
+#include <SheetsDebug.h>
 #include <CellView.h>
 #include <Damages.h>
 #include <GenValidationStyle.h>
@@ -153,7 +152,7 @@ void TableShape::paint(QPainter& painter, const KoViewConverter& converter, KoSh
 {
 #ifndef NDEBUG
     if (KoShape::parent()) {
-        kDebug(36001) << KoShape::parent()->name() <<  KoShape::parent()->shapeId() << KoShape::parent()->boundingRect();
+        debugSheets << KoShape::parent()->name() <<  KoShape::parent()->shapeId() << KoShape::parent()->boundingRect();
     }
 #endif
     const QRectF paintRect = QRectF(QPointF(0.0, 0.0), size());
@@ -168,7 +167,7 @@ void TableShape::paint(QPainter& painter, const KoViewConverter& converter, KoSh
 
 bool TableShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    //kDebug() << "LOADING TABLE SHAPE";
+    //debugSheets << "LOADING TABLE SHAPE";
     if (sheet() && element.namespaceURI() == KoXmlNS::table && element.localName() == "table") {
         // pre-load auto styles
         KoOdfLoadingContext& odfContext = context.odfLoadingContext();

@@ -24,11 +24,6 @@
 #include "Selection.h"
 #include "Sheet.h"
 
-// Calligra
-
-// KDE
-#include <kdebug.h>
-
 // Qt
 #include <QApplication>
 #include <QTextEdit>

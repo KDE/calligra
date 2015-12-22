@@ -29,8 +29,7 @@
 #include <QTextStream>
 #include <QVariant>
 
-#include <kdebug.h>
-
+#include "SheetsDebug.h"
 #include "Number.h"
 
 using namespace std;
@@ -531,7 +530,7 @@ CALLIGRA_SHEETS_ODF_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Sh
 CALLIGRA_SHEETS_ODF_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Sheets::Value value);
 
 /***************************************************************************
-  kDebug support
+  QDebug support
 ****************************************************************************/
 
 CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::Value& v);

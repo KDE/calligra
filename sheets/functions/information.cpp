@@ -30,9 +30,9 @@
 #endif
 
 #include <QDir>
-#include <kdebug.h>
 #include <KLocalizedString>
 
+#include "SheetsDebug.h"
 #include "CalculationSettings.h"
 #include "Function.h"
 #include "FunctionModuleRegistry.h"
@@ -179,7 +179,7 @@ Value func_errortype(valVector args, ValueCalc *, FuncExtra *)
         return Value(103);
     } else {
         // something I didn't think of...
-        kDebug() << "Unexpected error type";
+        debugSheets << "Unexpected error type";
         return Value(0);
     }
 }

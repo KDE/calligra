@@ -159,7 +159,7 @@ const Calligra::Sheets::Region& SelectionDamage::region() const
 
 
 /***************************************************************************
-  kDebug support
+  QDebug support
 ****************************************************************************/
 
 QDebug operator<<(QDebug str, const Calligra::Sheets::Damage& d)

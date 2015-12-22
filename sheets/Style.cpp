@@ -26,7 +26,6 @@
 #include <QHash>
 #include <QPen>
 
-#include <kdebug.h>
 #include <klocale.h>
 
 #include <KoGenStyles.h>
@@ -38,6 +37,7 @@
 #include <KoXmlNS.h>
 #include <KoOdfWorkaround.h>
 
+#include "SheetsDebug.h"
 #include "Condition.h"
 #include "Currency.h"
 #include "Global.h"
@@ -292,7 +292,7 @@ void Style::loadOdfDataStyle(KoOdfStylesReader &stylesReader, const QString &sty
             theStyle->setFormatType(Format::Scientific);
             break;
         case KoOdfNumberStyles::Currency:
-            kDebug(36003) << " currency-symbol:" << dataStyle.currencySymbol;
+            debugSheetsODF << " currency-symbol:" << dataStyle.currencySymbol;
             if (!dataStyle.currencySymbol.isEmpty())
                 theStyle->setCurrency(numberCurrency(dataStyle.currencySymbol));
             else
@@ -358,7 +358,7 @@ void Style::loadOdfDataStyle(KoOdfStylesReader &stylesReader, const QString &sty
 void Style::loadOdfParagraphProperties(KoOdfStylesReader& stylesReader, const KoStyleStack& styleStack)
 {
     Q_UNUSED(stylesReader);
-    kDebug(36003) << "\t paragraph-properties";
+    debugSheetsODF << "\t paragraph-properties";
     if (styleStack.hasProperty(KoXmlNS::fo, "text-align")) {
         QString str = styleStack.property(KoXmlNS::fo, "text-align");
         if (str == "center")
@@ -371,7 +371,7 @@ void Style::loadOdfParagraphProperties(KoOdfStylesReader& stylesReader, const Ko
             setHAlign(Style::Justified);
         else
             setHAlign(Style::HAlignUndefined);
-        kDebug(36003) << "\t\t text-align:" << str;
+        debugSheetsODF << "\t\t text-align:" << str;
     }
 
     if (styleStack.hasProperty(KoXmlNS::fo, "margin-left")) {
@@ -403,12 +403,12 @@ void Style::loadOdfTableCellProperties(KoOdfStylesReader& stylesReader, const Ko
     if (styleStack.hasProperty(KoXmlNS::fo, "background-color")) {
         str = styleStack.property(KoXmlNS::fo, "background-color");
         if (str == "transparent") {
-            kDebug(36003) << "\t\t fo:background-color: transparent";
+            debugSheetsODF << "\t\t fo:background-color: transparent";
             setBackgroundColor(QColor());
         } else {
             QColor color(str);
             if (color.isValid()) {
-                kDebug(36003) << "\t\t fo:background-color:" << color.name();
+                debugSheetsODF << "\t\t fo:background-color:" << color.name();
                 setBackgroundColor(color);
             }
         }
@@ -448,7 +448,7 @@ void Style::loadOdfTableCellProperties(KoOdfStylesReader& stylesReader, const Ko
     if (styleStack.hasProperty(KoXmlNS::style, "rotation-angle")) {
         bool ok;
         int a = styleStack.property(KoXmlNS::style, "rotation-angle").toInt(&ok);
-        kDebug(36003) << " rotation-angle :" << a;
+        debugSheetsODF << " rotation-angle :" << a;
         if (a != 0) {
             setAngle(-a);
         }
@@ -489,24 +489,24 @@ void Style::loadOdfTableCellProperties(KoOdfStylesReader& stylesReader, const Ko
     if (styleStack.hasProperty(KoXmlNS::draw, "style-name") || styleStack.hasProperty(KoXmlNS::calligra, "fill-style-name")) {
         QString styleName = styleStack.hasProperty(KoXmlNS::calligra, "fill-style-name") ? styleStack.property(KoXmlNS::calligra, "fill-style-name")
                 : styleStack.property(KoXmlNS::draw, "style-name");
-        kDebug(36003) << " style name :" << styleName;
+        debugSheetsODF << " style name :" << styleName;
 
         const KoXmlElement * style = stylesReader.findStyle(styleName, "graphic");
-        kDebug(36003) << " style :" << style;
+        debugSheetsODF << " style :" << style;
         if (style) {
             KoStyleStack drawStyleStack;
             drawStyleStack.push(*style);
             drawStyleStack.setTypeProperties("graphic");
             if (drawStyleStack.hasProperty(KoXmlNS::draw, "fill")) {
                 const QString fill = drawStyleStack.property(KoXmlNS::draw, "fill");
-                kDebug(36003) << " load object gradient fill type :" << fill;
+                debugSheetsODF << " load object gradient fill type :" << fill;
 
                 if (fill == "solid" || fill == "hatch") {
-                    kDebug(36003) << " Style ******************************************************";
+                    debugSheetsODF << " Style ******************************************************";
                     setBackgroundBrush(KoOdfGraphicStyles::loadOdfFillStyle(drawStyleStack, fill, stylesReader));
 
                 } else
-                    kDebug(36003) << " fill style not supported into kspread :" << fill;
+                    debugSheetsODF << " fill style not supported into kspread :" << fill;
             }
         }
     }
@@ -520,31 +520,31 @@ void Style::loadOdfTextProperties(KoOdfStylesReader& stylesReader, const KoStyle
     // style:text-underline="double"
     // style:text-underline-color="font-color"
     // fo:font-weight="bold"
-    kDebug(36003) << "\t text-properties";
+    debugSheetsODF << "\t text-properties";
     if (styleStack.hasProperty(KoXmlNS::fo, "font-family")) {
         setFontFamily(styleStack.property(KoXmlNS::fo, "font-family"));     // FIXME Stefan: sanity check
-        kDebug(36003) << "\t\t fo:font-family:" << fontFamily();
+        debugSheetsODF << "\t\t fo:font-family:" << fontFamily();
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "font-size")) {
         setFontSize((int) KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "font-size"), 10.0));       // FIXME Stefan: fallback to default
-        kDebug(36003) << "\t\t fo:font-size:" << fontSize();
+        debugSheetsODF << "\t\t fo:font-size:" << fontSize();
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "font-style")) {
         if (styleStack.property(KoXmlNS::fo, "font-style") == "italic") {   // "normal", "oblique"
             setFontItalic(true);
-            kDebug(36003) << "\t\t fo:font-style:" << "italic";
+            debugSheetsODF << "\t\t fo:font-style:" << "italic";
         }
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "font-weight")) {
         if (styleStack.property(KoXmlNS::fo, "font-weight") == "bold") {   // "normal", "100", "200", ...
             setFontBold(true);
-            kDebug(36003) << "\t\t fo:font-weight:" << "bold";
+            debugSheetsODF << "\t\t fo:font-weight:" << "bold";
         }
     }
     if (styleStack.hasProperty(KoXmlNS::style, "text-underline-style")) {
         if (styleStack.property(KoXmlNS::style, "text-underline-style") != "none") {
             setFontUnderline(true);
-            kDebug(36003) << "\t\t style:text-underline-style:" << "solid (actually: !none)";
+            debugSheetsODF << "\t\t style:text-underline-style:" << "solid (actually: !none)";
         }
     }
     if (styleStack.hasProperty(KoXmlNS::style, "text-underline-width")) {
@@ -557,25 +557,25 @@ void Style::loadOdfTextProperties(KoOdfStylesReader& stylesReader, const KoStyle
         QColor color = QColor(styleStack.property(KoXmlNS::fo, "color"));
         if (color.isValid()) {
             setFontColor(color);
-            kDebug(36003) << "\t\t fo:color:" << color.name();
+            debugSheetsODF << "\t\t fo:color:" << color.name();
         }
     }
     if (styleStack.hasProperty(KoXmlNS::style, "text-line-through-style")) {
         if (styleStack.property(KoXmlNS::style, "text-line-through-style") != "none"
                 /*&& styleStack.property("text-line-through-style")=="solid"*/) {
             setFontStrikeOut(true);
-            kDebug(36003) << "\t\t text-line-through-style:" << "solid (actually: !none)";
+            debugSheetsODF << "\t\t text-line-through-style:" << "solid (actually: !none)";
         }
     }
     if (styleStack.hasProperty(KoXmlNS::style, "font-name")) {
         QString fontName = styleStack.property(KoXmlNS::style, "font-name");
-        kDebug(36003) << "\t\t style:font-name:" << fontName;
+        debugSheetsODF << "\t\t style:font-name:" << fontName;
         const KoXmlElement * style = stylesReader.findStyle(fontName);
         // TODO: sanity check that it is a font-face style?
-        kDebug(36003) << "\t\t\t style:" <<  style;
+        debugSheetsODF << "\t\t\t style:" <<  style;
         if (style) {
             setFontFamily(style->attributeNS(KoXmlNS::svg, "font-family"));
-            kDebug(36003) << "\t\t\t svg:font-family:" << fontFamily();
+            debugSheetsODF << "\t\t\t svg:font-family:" << fontFamily();
         }
     }
 }
@@ -678,7 +678,7 @@ Format::Type Style::dateType(const QString &_f)
     else if (_format == dateFormat)
         return Format::TextDate;
     else {
-        kDebug() << "Unhandled date format=" << _format;
+        debugSheets << "Unhandled date format=" << _format;
         return Format::ShortDate;
     }
 }
@@ -752,7 +752,7 @@ QString Style::saveOdfStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles,
                                    int _precision, const QString& symbol,
                                    bool thousandsSep)
 {
-//  kDebug(36003) ;
+//  debugSheetsODF ;
     QString styleName;
     QString valueType;
     switch (_style) {
@@ -1065,7 +1065,7 @@ QString Style::saveOdfStyleNumericDate(KoGenStyles&mainStyles, Format::Type _sty
         format = "dddd d MMM yyyy";
         break;
     default:
-        kDebug(36003) << "this date format is not defined ! :" << _style;
+        debugSheetsODF << "this date format is not defined ! :" << _style;
         break;
     }
     return KoOdfNumberStyles::saveOdfDateStyle(mainStyles, format, locale, _prefix, _postfix);
@@ -1137,7 +1137,7 @@ QString Style::saveOdfStyleNumericTime(KoGenStyles& mainStyles, Format::Type _st
         format = "h:mm";
         break;
     default:
-        kDebug(36003) << "time format not defined :" << _style;
+        debugSheetsODF << "time format not defined :" << _style;
         break;
     }
     return KoOdfNumberStyles::saveOdfTimeStyle(mainStyles, format, locale, _prefix, _postfix);
@@ -1180,7 +1180,7 @@ QString Style::saveOdfStyleNumericFraction(KoGenStyles &mainStyles, Format::Type
         format = "# \?\?\?/\?\?\?";
         break;
     default:
-        kDebug(36003) << " fraction format not defined :" << formatType;
+        debugSheetsODF << " fraction format not defined :" << formatType;
         break;
     }
 
@@ -1232,11 +1232,11 @@ void Style::saveOdfStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
 {
 #ifndef NDEBUG
     //if (type() == BUILTIN )
-    //  kDebug(36006) <<"BUILTIN";
+    //  debugSheetsStyle <<"BUILTIN";
     //else if (type() == CUSTOM )
-    //  kDebug(36006) <<"CUSTOM";
+    //  debugSheetsStyle <<"CUSTOM";
     //else if (type() == AUTO )
-    //  kDebug(36006) <<"AUTO";
+    //  debugSheetsStyle <<"AUTO";
 #endif
 
     if (!isDefault() && hasAttribute(NamedStyleKey)) {
@@ -1676,7 +1676,7 @@ bool Style::loadXML(KoXmlElement& format, Paste::Mode mode)
     if (format.hasAttribute("precision")) {
         int i = format.attribute("precision").toInt(&ok);
         if (i < -1) {
-            kDebug(36003) << "Value out of range Cell::precision=" << i;
+            debugSheetsODF << "Value out of range Cell::precision=" << i;
             return false;
         }
         // special handling for precision
@@ -2513,9 +2513,9 @@ Style Style::operator-(const Style& other) const
 void Style::merge(const Style& style)
 {
     const QList<SharedSubStyle> subStyles(style.subStyles());
-//     kDebug(36006) <<"merging" << subStyles.count() <<" attributes.";
+//     debugSheetsStyle <<"merging" << subStyles.count() <<" attributes.";
     for (int i = 0; i < subStyles.count(); ++i) {
-//         kDebug(36006) << subStyles[i]->debugData();
+//         debugSheetsStyle << subStyles[i]->debugData();
         insertSubStyle(subStyles[i]);
     }
 }

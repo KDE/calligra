@@ -45,14 +45,14 @@
 #include "Map.h"
 #include "ui/Selection.h"
 #include "Sheet.h"
+#include "SheetsDebug.h"
 
 #include <KoIcon.h>
 
 #include <kcombobox.h>
-#include <kdebug.h>
 #include <ktextbrowser.h>
-
 #include <knumvalidator.h>
+
 #include <QEvent>
 #include <QLabel>
 #include <QPushButton>
@@ -251,7 +251,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
 
     // Was a function name passed along with the constructor ? Then activate it.
     if (!formulaName.isEmpty()) {
-        kDebug() << "formulaName=" << formulaName;
+        debugSheets << "formulaName=" << formulaName;
 #if 0
         QList<QListWidgetItem *> items = functions->findItems(formulaName, Qt::MatchFixedString);
         if (items.count() > 0) {
@@ -289,7 +289,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
 
 FormulaDialog::~FormulaDialog()
 {
-    kDebug(36001) << "FormulaDialog::~FormulaDialog()";
+    debugSheets << "FormulaDialog::~FormulaDialog()";
 }
 
 void FormulaDialog::slotPressReturn()
@@ -623,7 +623,7 @@ void FormulaDialog::slotDoubleClicked(QModelIndex item)
     }
 
     if (m_desc->params() > 5)
-        kDebug(36001) << "Error in param->nb_param";
+        debugSheets << "Error in param->nb_param";
     refresh_result = true;
 
     //
@@ -744,7 +744,7 @@ void FormulaDialog::slotActivated(const QString& category)
     else
         lst = FunctionRepository::self()->functionNames(category);
 
-    kDebug(36001) << "category:" << category << " (" << lst.count() << "functions)";
+    debugSheets << "category:" << category << " (" << lst.count() << "functions)";
 
     functionsModel->setStringList(lst);
 

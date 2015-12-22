@@ -22,8 +22,8 @@
 #include "CalculationSettings.h"
 #include "CellStorage.h"
 #include "ValueStorage.h"
+#include "SheetsDebug.h"
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include <QString>
@@ -234,7 +234,7 @@ bool Value::operator==(const Value& o) const
     case Error:   return (!d->ps && !o.d->ps) || ((d->ps && o.d->ps) && (*o.d->ps == *d->ps));
     default: break;
     }
-    kWarning() << "Unhandled type in Value::operator==: " << d->type;
+    warnSheets << "Unhandled type in Value::operator==: " << d->type;
     return false;
 }
 
@@ -996,7 +996,7 @@ uint qHash(const Value& value)
 } // namespace Calligra
 
 /***************************************************************************
-  kDebug support
+  QDebug support
 ****************************************************************************/
 
 QDebug operator<<(QDebug str, const Calligra::Sheets::Value& v)

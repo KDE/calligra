@@ -30,7 +30,7 @@
 #ifndef KSPREAD_GLOBAL_H
 #define KSPREAD_GLOBAL_H
 
-#include <kdebug.h>
+#include "SheetsDebug.h"
 
 namespace Calligra
 {

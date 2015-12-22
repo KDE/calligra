@@ -28,7 +28,6 @@
 #include <QVBoxLayout>
 #include <KLocalizedString>
 
-#include <kdebug.h>
 #include <QRadioButton>
 #include <QCheckBox>
 

@@ -21,6 +21,7 @@
 // Local
 #include "FunctionRepository.h"
 
+#include "SheetsDebug.h"
 #include "Function.h"
 #include "FunctionDescription.h"
 #include "FunctionModuleRegistry.h"
@@ -30,7 +31,6 @@
 #include <QFile>
 #include <QHash>
 
-#include <kdebug.h>
 #include <kglobal.h>
 #include <KLocalizedString>
 
@@ -56,7 +56,7 @@ FunctionRepository* FunctionRepository::self()
         FunctionModuleRegistry::instance()->registerFunctions();
 
 #ifndef NDEBUG
-        kDebug(36005) << "functions registered:" << s_instance->d->functions.count()
+        debugSheetsUI << "functions registered:" << s_instance->d->functions.count()
                       << "descriptions loaded:" << s_instance->d->descriptions.count();
 
         // Verify, that every function has a description.
@@ -68,9 +68,9 @@ FunctionRepository* FunctionRepository::self()
                 missingDescriptions << it.key();
         }
         if (missingDescriptions.count() > 0) {
-            kDebug(36005) << "No function descriptions found for:";
+            debugSheetsUI << "No function descriptions found for:";
             foreach(const QString& missingDescription, missingDescriptions) {
-                kDebug(36005) << "\t" << missingDescription;
+                debugSheetsUI << "\t" << missingDescription;
             }
         }
 #endif
@@ -186,7 +186,7 @@ void FunctionRepository::loadFunctionDescriptions(const QString& filename)
                     if (d->functions.contains(desc->name()))
                         d->descriptions.insert(desc->name(), desc);
                     else {
-                        kDebug(36005) << "Description for unknown function" << desc->name() << "found.";
+                        debugSheetsUI << "Description for unknown function" << desc->name() << "found.";
                         delete desc;
                     }
                 }

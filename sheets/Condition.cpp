@@ -24,6 +24,7 @@
 
 #include <float.h>
 
+#include "SheetsDebug.h"
 #include "CalculationSettings.h"
 #include "Cell.h"
 #include "Formula.h"
@@ -39,9 +40,8 @@
 #include "ValueParser.h"
 
 #include <KoGenStyles.h>
-
 #include <KoXmlNS.h>
-#include <kdebug.h>
+
 #include <QDomDocument>
 
 using namespace Calligra::Sheets;
@@ -124,7 +124,7 @@ bool Conditions::currentCondition(const Cell& cell, Conditional & condition) con
     QLinkedList<Conditional>::const_iterator it;
     for (it = d->conditionList.begin(); it != d->conditionList.end(); ++it) {
         condition = *it;
-//         kDebug() << "Checking condition resulting in applying" << it->styleName;
+//         debugSheets << "Checking condition resulting in applying" << it->styleName;
 
         // The first value of the condition is always used and has to be
         // comparable to the cell's value.
@@ -406,11 +406,11 @@ QDomElement Conditions::saveConditions(QDomDocument &doc, ValueConverter *conver
 Conditional Conditions::loadOdfCondition(const QString &conditionValue, const QString &applyStyleName,
                                          const QString& baseCellAddress, const ValueParser *parser)
 {
-    //kDebug(36003) << "\tcondition:" << conditionValue;
+    //debugSheetsODF << "\tcondition:" << conditionValue;
     Conditional newCondition;
     loadOdfConditionValue(conditionValue, newCondition, parser);
     if (!applyStyleName.isNull()) {
-        //kDebug(36003) << "\tstyle:" << applyStyleName;
+        //debugSheetsODF << "\tstyle:" << applyStyleName;
         newCondition.styleName = applyStyleName;
     }
     newCondition.baseCellAddress = baseCellAddress;
@@ -420,7 +420,7 @@ Conditional Conditions::loadOdfCondition(const QString &conditionValue, const QS
 
 void Conditions::loadOdfConditions(const KoXmlElement &element, const ValueParser *parser, const StyleManager *styleManager)
 {
-    kDebug(36003) << "Loading conditional styles";
+    debugSheetsODF << "Loading conditional styles";
     KoXmlNode node(element);
 
     while (!node.isNull()) {
@@ -497,9 +497,9 @@ void Conditions::loadOdfCondition(QString &valExpression, Conditional &newCondit
         value = valExpression.remove(0, 1);
         newCondition.cond = Conditional::Equal;
     } else {
-        kWarning() << " I don't know how to parse it :" << valExpression;
+        warnSheets << " I don't know how to parse it :" << valExpression;
     }
-    //kDebug(36003) << "\tvalue:" << value;
+    //debugSheetsODF << "\tvalue:" << value;
 
     if (value.length() > 1 && value[0] == '"' && value[value.length()-1] == '"') {
         newCondition.value1 = Value(value.mid(1, value.length()-2));
@@ -510,7 +510,7 @@ void Conditions::loadOdfCondition(QString &valExpression, Conditional &newCondit
 
 void Conditions::loadOdfValidationValue(const QStringList &listVal, Conditional &newCondition, const ValueParser *parser)
 {
-    kDebug(36003) << " listVal[0] :" << listVal[0] << " listVal[1] :" << listVal[1];
+    debugSheetsODF << " listVal[0] :" << listVal[0] << " listVal[1] :" << listVal[1];
     newCondition.value1 = parser->parse(listVal[0]);
     newCondition.value2 = parser->parse(listVal[1]);
 }

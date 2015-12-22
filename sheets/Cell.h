@@ -656,7 +656,7 @@ Q_DECLARE_TYPEINFO(Calligra::Sheets::Cell, Q_MOVABLE_TYPE);
 Q_DECLARE_METATYPE(Calligra::Sheets::Cell)
 
 /***************************************************************************
-  kDebug support
+  QDebug support
 ****************************************************************************/
 
 inline QDebug operator<<(QDebug str, const Calligra::Sheets::Cell& cell)

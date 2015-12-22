@@ -264,7 +264,7 @@ public:
             else if (string == "bottom percent")
                 operation = BottomPercent;
             else {
-                kDebug() << "table:operator: unknown value";
+                debugSheets << "table:operator: unknown value";
                 return false;
             }
         }
@@ -342,7 +342,7 @@ public:
         const Sheet* sheet = database.range().lastSheet();
         const QRect range = database.range().lastRange();
         const int start = database.orientation() == Qt::Vertical ? range.left() : range.top();
-//         kDebug() <<"index:" << index <<" start:" << start <<" fieldNumber:" << fieldNumber;
+//         debugSheets <<"index:" << index <<" start:" << start <<" fieldNumber:" << fieldNumber;
         const Value value = database.orientation() == Qt::Vertical
                             ? sheet->cellStorage()->value(start + fieldNumber, index)
                             : sheet->cellStorage()->value(index, start + fieldNumber);
@@ -350,14 +350,14 @@ public:
         switch (operation) {
         case Match: {
             const bool result = QString::compare(this->value, testString, caseSensitivity) == 0;
-//                 kDebug() <<"Match" << this->value <<"?" << testString <<"" << result;
+//                 debugSheets <<"Match" << this->value <<"?" << testString <<"" << result;
             if (result)
                 return true;
             break;
         }
         case NotMatch: {
             const bool result = QString::compare(this->value, testString, caseSensitivity) != 0;
-//                 kDebug() <<"Not Match" << this->value <<"?" << testString <<"" << result;
+//                 debugSheets <<"Not Match" << this->value <<"?" << testString <<"" << result;
             if (result)
                 return true;
             break;
@@ -378,7 +378,7 @@ public:
     }
     virtual void removeConditions(int fieldNumber) {
         if (this->fieldNumber == fieldNumber) {
-//             kDebug() <<"removing condition for fieldNumber" << fieldNumber;
+//             debugSheets <<"removing condition for fieldNumber" << fieldNumber;
             this->fieldNumber = -1;
         }
     }
@@ -638,7 +638,7 @@ QHash<QString, Filter::Comparison> Filter::conditions(int fieldNumber) const
 void Filter::removeConditions(int fieldNumber)
 {
     if (fieldNumber == -1) {
-//         kDebug() <<"removing all conditions";
+//         debugSheets <<"removing all conditions";
         delete d->condition;
         d->condition = 0;
         return;
@@ -759,9 +759,9 @@ bool Filter::operator==(const Filter& other) const
 void Filter::dump() const
 {
     if (d->condition)
-        kDebug() << "Condition:" + d->condition->dump();
+        debugSheets << "Condition:" + d->condition->dump();
     else
-        kDebug() << "Condition: 0";
+        debugSheets << "Condition: 0";
 }
 
 bool AbstractCondition::listsAreEqual(const QList<AbstractCondition *> &a, const QList<AbstractCondition *> &b)

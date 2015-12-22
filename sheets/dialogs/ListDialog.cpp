@@ -28,7 +28,6 @@
 #include <QPushButton>
 
 #include <KSharedConfig>
-#include <kdebug.h>
 #include <kmessagebox.h>
 #include <ktextedit.h>
 

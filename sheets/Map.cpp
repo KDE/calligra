@@ -393,7 +393,7 @@ void Map::loadOdfSettings(KoOasisSettings &settings)
     KoOasisSettings::Items firstView = viewMap.entry(0);
 
     KoOasisSettings::NamedMap sheetsMap = firstView.namedMap("Tables");
-    kDebug() << " loadOdfSettings( KoOasisSettings &settings ) exist :" << !sheetsMap.isNull();
+    debugSheets << " loadOdfSettings( KoOasisSettings &settings ) exist :" << !sheetsMap.isNull();
     if (!sheetsMap.isNull()) {
         foreach(Sheet* sheet, d->lstSheets) {
             sheet->loadOdfSettings(sheetsMap);
@@ -401,7 +401,7 @@ void Map::loadOdfSettings(KoOasisSettings &settings)
     }
 
     QString activeSheet = firstView.parseConfigItemString("ActiveTable");
-    kDebug() << " loadOdfSettings( KoOasisSettings &settings ) activeSheet :" << activeSheet;
+    debugSheets << " loadOdfSettings( KoOasisSettings &settings ) activeSheet :" << activeSheet;
 
     if (!activeSheet.isEmpty()) {
         // Used by View's constructor
@@ -551,14 +551,14 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
     // load default column style
     const KoXmlElement* defaultColumnStyle = odfContext.stylesReader().defaultStyle("table-column");
     if (defaultColumnStyle) {
-//       kDebug() <<"style:default-style style:family=\"table-column\"";
+//       debugSheets <<"style:default-style style:family=\"table-column\"";
         KoStyleStack styleStack;
         styleStack.push(*defaultColumnStyle);
         styleStack.setTypeProperties("table-column");
         if (styleStack.hasProperty(KoXmlNS::style, "column-width")) {
             const double width = KoUnit::parseValue(styleStack.property(KoXmlNS::style, "column-width"), -1.0);
             if (width != -1.0) {
-//           kDebug() <<"\tstyle:column-width:" << width;
+//           debugSheets <<"\tstyle:column-width:" << width;
                 d->defaultColumnFormat->setWidth(width);
             }
         }
@@ -567,14 +567,14 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
     // load default row style
     const KoXmlElement* defaultRowStyle = odfContext.stylesReader().defaultStyle("table-row");
     if (defaultRowStyle) {
-//       kDebug() <<"style:default-style style:family=\"table-row\"";
+//       debugSheets <<"style:default-style style:family=\"table-row\"";
         KoStyleStack styleStack;
         styleStack.push(*defaultRowStyle);
         styleStack.setTypeProperties("table-row");
         if (styleStack.hasProperty(KoXmlNS::style, "row-height")) {
             const double height = KoUnit::parseValue(styleStack.property(KoXmlNS::style, "row-height"), -1.0);
             if (height != -1.0) {
-//           kDebug() <<"\tstyle:row-height:" << height;
+//           debugSheets <<"\tstyle:row-height:" << height;
                 d->defaultRowFormat->setHeight(height);
             }
         }
@@ -598,8 +598,8 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
     while (!sheetNode.isNull()) {
         KoXmlElement sheetElement = sheetNode.toElement();
         if (!sheetElement.isNull()) {
-            //kDebug()<<"  Map::loadOdf tableElement is not null";
-            //kDebug()<<"tableElement.nodeName() :"<<sheetElement.nodeName();
+            //debugSheets<<"  Map::loadOdf tableElement is not null";
+            //debugSheets<<"tableElement.nodeName() :"<<sheetElement.nodeName();
 
             // make it slightly faster
             KoXml::load(sheetElement);
@@ -632,7 +632,7 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
             // make it slightly faster
             KoXml::load(sheetElement);
 
-            //kDebug()<<"tableElement.nodeName() bis :"<<sheetElement.nodeName();
+            //debugSheets<<"tableElement.nodeName() bis :"<<sheetElement.nodeName();
             if (sheetElement.nodeName() == "table:table") {
                 if (!sheetElement.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
                     QString name = sheetElement.attributeNS(KoXmlNS::table, "name", QString());
@@ -868,13 +868,13 @@ void Map::addDamage(Damage* damage)
 
 #ifndef NDEBUG
     if (damage->type() == Damage::Cell) {
-        kDebug(36007) << "Adding\t" << *static_cast<CellDamage*>(damage);
+        debugSheetsDamage << "Adding\t" << *static_cast<CellDamage*>(damage);
     } else if (damage->type() == Damage::Sheet) {
-        kDebug(36007) << "Adding\t" << *static_cast<SheetDamage*>(damage);
+        debugSheetsDamage << "Adding\t" << *static_cast<SheetDamage*>(damage);
     } else if (damage->type() == Damage::Selection) {
-        kDebug(36007) << "Adding\t" << *static_cast<SelectionDamage*>(damage);
+        debugSheetsDamage << "Adding\t" << *static_cast<SelectionDamage*>(damage);
     } else {
-        kDebug(36007) << "Adding\t" << *damage;
+        debugSheetsDamage << "Adding\t" << *damage;
     }
 #endif
 
@@ -908,7 +908,7 @@ void Map::handleDamages(const QList<Damage*>& damages)
 
         if (damage->type() == Damage::Cell) {
             CellDamage* cellDamage = static_cast<CellDamage*>(damage);
-            kDebug(36007) << "Processing\t" << *cellDamage;
+            debugSheetsDamage << "Processing\t" << *cellDamage;
             Sheet* const damagedSheet = cellDamage->sheet();
             const Region& region = cellDamage->region();
             const CellDamage::Changes changes = cellDamage->changes();
@@ -939,7 +939,7 @@ void Map::handleDamages(const QList<Damage*>& damages)
 
         if (damage->type() == Damage::Sheet) {
             SheetDamage* sheetDamage = static_cast<SheetDamage*>(damage);
-            kDebug(36007) << "Processing\t" << *sheetDamage;
+            debugSheetsDamage << "Processing\t" << *sheetDamage;
 //             Sheet* damagedSheet = sheetDamage->sheet();
 
             if (sheetDamage->changes() & SheetDamage::PropertiesChanged) {
@@ -949,7 +949,7 @@ void Map::handleDamages(const QList<Damage*>& damages)
 
         if (damage->type() == Damage::Workbook) {
             WorkbookDamage* workbookDamage = static_cast<WorkbookDamage*>(damage);
-            kDebug(36007) << "Processing\t" << *damage;
+            debugSheetsDamage << "Processing\t" << *damage;
 
             workbookChanges |= workbookDamage->changes();
             if (workbookDamage->changes() & WorkbookDamage::Formula) {
@@ -960,7 +960,7 @@ void Map::handleDamages(const QList<Damage*>& damages)
             }
             continue;
         }
-//         kDebug(36007) <<"Unhandled\t" << *damage;
+//         debugSheetsDamage <<"Unhandled\t" << *damage;
     }
 
     // Update the named areas.

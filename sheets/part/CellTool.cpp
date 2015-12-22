@@ -45,7 +45,6 @@
 
 #include <QPainter>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include <KoCanvasBase.h>
@@ -55,6 +54,7 @@
 #include <KoShapeManager.h>
 #include <KoViewConverter.h>
 
+#include "SheetsDebug.h"
 #include "Cell.h"
 #include "Canvas.h"
 #include "Doc.h"

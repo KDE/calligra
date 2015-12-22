@@ -26,9 +26,9 @@
 #include "Cell.h"
 #include "Localization.h"
 #include "ValueConverter.h"
+#include "SheetsDebug.h"
 
 #include <kcalendarsystem.h>
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include <float.h>
@@ -150,7 +150,7 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
     if (!postfix.isEmpty())
         result = Value(result.asString() + ' ' + postfix);
 
-    //kDebug() <<"ValueFormatter says:" << str;
+    //debugSheets <<"ValueFormatter says:" << str;
     return result;
 }
 
@@ -336,7 +336,7 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
     default :
         //other formatting?
         // This happens with Format::Custom...
-        kDebug(36001) << "Wrong usage of ValueFormatter::createNumberFormat fmt=" << fmt << "";
+        debugSheets << "Wrong usage of ValueFormatter::createNumberFormat fmt=" << fmt << "";
         break;
     }
 
@@ -416,7 +416,7 @@ QString ValueFormatter::fractionFormat(Number value, Format::Type fmtType)
         limit = 999;
         break;
     default:
-        kDebug(36001) << "Error in Fraction format";
+        debugSheets << "Error in Fraction format";
         return prefix + QString::number((double) numToDouble(value));
         break;
     } /* switch */

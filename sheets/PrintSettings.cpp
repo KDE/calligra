@@ -326,7 +326,7 @@ const QPair<int, int>& PrintSettings::repeatedColumns() const
 void PrintSettings::setRepeatedColumns(const QPair<int, int>& repeatedColumns)
 {
     d->repeatedColumns = repeatedColumns;
-    kDebug() << repeatedColumns;
+    debugSheets << repeatedColumns;
 }
 
 const QPair<int, int>& PrintSettings::repeatedRows() const

@@ -32,11 +32,11 @@
 #include "CalculationSettings.h"
 
 #include "Localization.h"
+#include "SheetsDebug.h"
 
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
-#include <kdebug.h>
 
 using namespace Calligra::Sheets;
 
@@ -90,7 +90,7 @@ CalculationSettings::~CalculationSettings()
 void CalculationSettings::loadOdf(const KoXmlElement& body)
 {
     KoXmlNode settings = KoXml::namedItemNS(body, KoXmlNS::table, "calculation-settings");
-    kDebug() << "Calculation settings found?" << !settings.isNull();
+    debugSheets << "Calculation settings found?" << !settings.isNull();
     if (!settings.isNull()) {
         KoXmlElement element = settings.toElement();
         if (element.hasAttributeNS(KoXmlNS::table,  "case-sensitive")) {
@@ -146,7 +146,7 @@ void CalculationSettings::loadOdf(const KoXmlElement& body)
                     if (date.isValid())
                         d->refDate = date;
                 } else {
-                    kDebug() << "CalculationSettings: Error on loading null date."
+                    debugSheets << "CalculationSettings: Error on loading null date."
                     << "Value type """ << valueType << """ not handled"
                     << ", falling back to default." << endl;
                     // NOTE Stefan: I don't know why different types are possible here!

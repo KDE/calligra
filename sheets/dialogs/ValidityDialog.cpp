@@ -32,7 +32,7 @@
 #include <QFrame>
 
 #include <kcombobox.h>
-#include <kdebug.h>
+#include "SheetsDebug.h"
 #include <klineedit.h>
 #include <kmessagebox.h>
 #include <knumvalidator.h>

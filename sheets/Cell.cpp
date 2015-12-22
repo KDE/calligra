@@ -47,6 +47,7 @@
 #include <float.h>
 #include <math.h>
 
+#include "SheetsDebug.h"
 #include "CalculationSettings.h"
 #include "CellStorage.h"
 #include "Condition.h"
@@ -87,8 +88,6 @@
 #include <KoTextDocument.h>
 #include <KoTextWriter.h>
 #include <KoParagraphStyle.h>
-
-#include <kdebug.h>
 
 #include <QTimer>
 #include <QTextDocument>
@@ -561,7 +560,7 @@ bool Cell::needsPrinting() const
     }
 
     if (style.hasAttribute(Style::BackgroundColor)) {
-        kDebug(36004) << "needsPrinting: Has background color";
+        debugSheetsRender << "needsPrinting: Has background color";
         QColor backgroundColor = style.backgroundColor();
 
         // We don't need to print anything, if the background is white opaque or fully transparent.
@@ -651,7 +650,7 @@ QString Cell::encodeFormula(bool fixedReferences) const
         }
         }
     }
-    //kDebug() << result;
+    //debugSheets << result;
     return result;
 }
 
@@ -714,7 +713,7 @@ QString Cell::decodeFormula(const QString &_text) const
             // Skip '#' or '$'
             ++pos;
             if (row < 1 || col < 1 || row > KS_rowMax || col > KS_colMax) {
-                kDebug(36003) << "Cell::decodeFormula: row or column out of range (col:" << col << " | row:" << row << ')';
+                debugSheetsODF << "Cell::decodeFormula: row or column out of range (col:" << col << " | row:" << row << ')';
                 erg += Value::errorREF().errorMessage();
             } else {
                 if (abs1)
@@ -739,7 +738,7 @@ QString Cell::decodeFormula(const QString &_text) const
 
 bool Cell::makeFormula()
 {
-//   kDebug(36002) ;
+//   debugSheetsFormula ;
 
     // sanity check
     if (!isFormula())
@@ -792,7 +791,7 @@ double Cell::height() const
 // parses the text
 void Cell::parseUserInput(const QString& text)
 {
-//   kDebug() ;
+//   debugSheets ;
 
     // empty string?
     if (text.isEmpty()) {
@@ -853,7 +852,7 @@ void Cell::parseUserInput(const QString& text)
     if (!sheet()->isLoading()) {
         Validity validity = this->validity();
         if (!validity.testValidity(this)) {
-            kDebug(36003) << "Validation failed";
+            debugSheetsODF << "Validation failed";
             //reapply old value if action == stop
             setFormula(oldFormula);
             setUserInput(oldUserInput);
@@ -1182,7 +1181,7 @@ bool Cell::saveOdf(int row, int column, int &repeated,
             // get the next cell and set the index to the adjacent cell
             nextCell = sheet()->cellStorage()->nextInRow(j++, row);
         }
-        //kDebug(36003) << "Cell::saveOdf: empty cell in column" << column
+        //debugSheetsODF << "Cell::saveOdf: empty cell in column" << column
         //<< "repeated" << repeated << "time(s)" << endl;
 
         if (repeated > 1)
@@ -1195,7 +1194,7 @@ bool Cell::saveOdf(int row, int column, int &repeated,
         xmlwriter.addAttribute("table:validation-name", tableContext.valStyle.insert(styleVal));
     }
     if (isFormula()) {
-        //kDebug(36003) <<"Formula found";
+        //debugSheetsODF <<"Formula found";
         QString formula = Odf::encodeFormula(userInput(), locale());
         xmlwriter.addAttribute("table:formula", formula);
     }
@@ -1214,7 +1213,7 @@ bool Cell::saveOdf(int row, int column, int &repeated,
     saveOdfAnnotation(xmlwriter);
 
     if (!isFormula() && !link().isEmpty()) {
-        //kDebug(36003)<<"Link found";
+        //debugSheetsODF<<"Link found";
         xmlwriter.startElement("text:p");
         xmlwriter.startElement("text:a");
         const QString url = link();
@@ -1394,7 +1393,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
     if (element.hasAttributeNS(KoXmlNS::table, sFormula)) {
         isFormula = true;
         QString oasisFormula(element.attributeNS(KoXmlNS::table, sFormula, QString()));
-        // kDebug(36003) << "cell:" << name() << "formula :" << oasisFormula;
+        // debugSheetsODF << "cell:" << name() << "formula :" << oasisFormula;
         // each spreadsheet application likes to safe formulas with a different namespace
         // prefix, so remove all of them
         QString namespacePrefix;
@@ -1415,7 +1414,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
     //
     if (element.hasAttributeNS(KoXmlNS::table, sValidationName)) {
         const QString validationName = element.attributeNS(KoXmlNS::table, sValidationName, QString());
-        kDebug(36003) << "cell:" << name() << sValidationName << validationName;
+        debugSheetsODF << "cell:" << name() << sValidationName << validationName;
         Validity validity;
         validity.loadOdfValidation(this, validationName, tableContext);
         if (!validity.isEmpty())
@@ -1427,7 +1426,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
     //
     if (element.hasAttributeNS(KoXmlNS::office, sValueType)) {
         const QString valuetype = element.attributeNS(KoXmlNS::office, sValueType, QString());
-        // kDebug(36003) << "cell:" << name() << "value-type:" << valuetype;
+        // debugSheetsODF << "cell:" << name() << "value-type:" << valuetype;
         if (valuetype == sBoolean) {
             const QString val = element.attributeNS(KoXmlNS::office, sBooleanValue, QString()).toLower();
             if ((val == sTrue) || (val == sFalse))
@@ -1535,7 +1534,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
                 s.setFormatType(Format::ShortDate);
                 setStyle(s);
 #endif
-                // kDebug(36003) << "cell:" << name() << "Type: date, value:" << value << "Date:" << year << " -" << month << " -" << day;
+                // debugSheetsODF << "cell:" << name() << "Type: date, value:" << value << "Date:" << year << " -" << month << " -" << day;
             }
         } else if (valuetype == sTime) {
             QString value = element.attributeNS(KoXmlNS::office, sTimeValue, QString());
@@ -1557,7 +1556,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
                     seconds = num.toInt(&ok);
                 else
                     continue;
-                //kDebug(36003) << "Num:" << num;
+                //debugSheetsODF << "Num:" << num;
                 num.clear();
                 if (!ok)
                     break;
@@ -1573,7 +1572,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
                 style.setFormatType(Format::Time);
                 setStyle(style);
 #endif
-                // kDebug(36003) << "cell:" << name() << "Type: time:" << value << "Hours:" << hours << "," << minutes << "," << seconds;
+                // debugSheetsODF << "cell:" << name() << "Type: time:" << value << "Hours:" << hours << "," << minutes << "," << seconds;
             }
         } else if (valuetype == sString) {
             if (element.hasAttributeNS(KoXmlNS::office, sStringValue)) {
@@ -1590,12 +1589,12 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
             setStyle(style);
 #endif
         } else {
-            // kDebug(36003) << "cell:" << name() << "  Unknown type. Parsing user input.";
+            // debugSheetsODF << "cell:" << name() << "  Unknown type. Parsing user input.";
             // Set the value by parsing the user input.
             parseUserInput(userInput());
         }
     } else { // no value-type attribute
-        // kDebug(36003) << "cell:" << name() << "  No value type specified. Parsing user input.";
+        // debugSheetsODF << "cell:" << name() << "  No value type specified. Parsing user input.";
         // Set the value by parsing the user input.
         parseUserInput(userInput());
     }
@@ -1878,7 +1877,7 @@ ShapeLoadingData Cell::loadOdfObject(const KoXmlElement &element, KoShapeLoading
     data.shape = 0;
     KoShape* shape = KoShapeRegistry::instance()->createShapeFromOdf(element, shapeContext);
     if (!shape) {
-        kDebug(36003) << "Unable to load shape with localName=" << element.localName();
+        debugSheetsODF << "Unable to load shape with localName=" << element.localName();
         return data;
     }
 
@@ -1902,7 +1901,7 @@ ShapeLoadingData Cell::loadOdfObject(const KoXmlElement &element, KoShapeLoading
     if (!shape->hasAdditionalAttribute("table:end-cell-address") ||
             !shape->hasAdditionalAttribute("table:end-x") ||
             !shape->hasAdditionalAttribute("table:end-y")) {
-        kDebug(36003) << "Not all attributes found, that are necessary for cell anchoring.";
+        debugSheetsODF << "Not all attributes found, that are necessary for cell anchoring.";
         return data;
     }
 
@@ -1958,11 +1957,11 @@ bool Cell::load(const KoXmlElement & cell, int _xshift, int _yshift,
 
     // Validation
     if (d->row < 1 || d->row > KS_rowMax) {
-        kDebug(36001) << "Cell::load: Value out of range Cell:row=" << d->row;
+        debugSheets << "Cell::load: Value out of range Cell:row=" << d->row;
         return false;
     }
     if (d->column < 1 || d->column > KS_colMax) {
-        kDebug(36001) << "Cell::load: Value out of range Cell:column=" << d->column;
+        debugSheets << "Cell::load: Value out of range Cell:column=" << d->column;
         return false;
     }
 
@@ -1979,7 +1978,7 @@ bool Cell::load(const KoXmlElement & cell, int _xshift, int _yshift,
             if (!ok) return false;
             // Validation
             if (i < 0 || i > KS_spanMax) {
-                kDebug(36001) << "Value out of range Cell::colspan=" << i;
+                debugSheets << "Value out of range Cell::colspan=" << i;
                 return false;
             }
             if (i)
@@ -1991,7 +1990,7 @@ bool Cell::load(const KoXmlElement & cell, int _xshift, int _yshift,
             if (!ok) return false;
             // Validation
             if (i < 0 || i > KS_spanMax) {
-                kDebug(36001) << "Value out of range Cell::rowspan=" << i;
+                debugSheets << "Value out of range Cell::rowspan=" << i;
                 return false;
             }
             if (i)
@@ -2221,7 +2220,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op, const QS
                 else
                     setValue(Value(t.toLongLong(&ok)));
                 if (!ok) {
-                    kWarning(36001) << "Couldn't parse '" << t << "' as number.";
+                    warnSheets << "Couldn't parse '" << t << "' as number.";
                 }
                 /* We will need to localize the text version of the number */
                 KLocale* locale = sheet()->map()->calculationSettings()->locale();

@@ -31,8 +31,7 @@
 // Local
 #include "SheetAdaptor.h"
 
-#include <kdebug.h>
-
+#include "SheetsDebug.h"
 #include "Damages.h"
 #include "Map.h"
 #include "PrintSettings.h"
@@ -246,7 +245,7 @@ int SheetAdaptor::lastRow() const
 // bool SheetAdaptor::processDynamic( const DCOPCString& fun, const QByteArray&/*data*/,
 //                                         DCOPCString& replyType, QByteArray &replyData )
 // {
-//     kDebug(36001) <<"Calling '" << fun.data() << '\'';
+//     debugSheets <<"Calling '" << fun.data() << '\'';
 //     // Does the name follow the pattern "foobar()" ?
 //     uint len = fun.length();
 //     if ( len < 3 )
@@ -525,7 +524,7 @@ void SheetAdaptor::handleDamages(const QList<Damage*>& damages)
             if (sheetDamage->sheet() != m_sheet) {
                 continue;
             }
-            kDebug(36007) << *sheetDamage;
+            debugSheetsDamage << *sheetDamage;
             const SheetDamage::Changes changes = sheetDamage->changes();
             if (changes & SheetDamage::Name) {
                 emit nameChanged();

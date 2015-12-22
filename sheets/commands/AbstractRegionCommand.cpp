@@ -92,7 +92,7 @@ void AbstractRegionCommand::redo()
     //can reproduce the situation.
 #if 0
     if (!m_sheet) {
-        kWarning() << "AbstractRegionCommand::redo(): No explicit m_sheet is set. "
+        warnSheets << "AbstractRegionCommand::redo(): No explicit m_sheet is set. "
         << "Manipulating all sheets of the region." << endl;
     }
 #else
@@ -115,14 +115,14 @@ void AbstractRegionCommand::redo()
     successfully = mainProcessing();
     if (!successfully) {
         m_success = false;
-        kWarning() << "AbstractRegionCommand::redo(): processing was not successful!";
+        warnSheets << "AbstractRegionCommand::redo(): processing was not successful!";
     }
 
     successfully = true;
     successfully = postProcessing();
     if (!successfully) {
         m_success = false;
-        kWarning() << "AbstractRegionCommand::redo(): postprocessing was not successful!";
+        warnSheets << "AbstractRegionCommand::redo(): postprocessing was not successful!";
     }
 
     QApplication::restoreOverrideCursor();

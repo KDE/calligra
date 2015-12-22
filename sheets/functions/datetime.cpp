@@ -545,7 +545,7 @@ Value func_date(valVector args, ValueCalc *calc, FuncExtra *)
         tmpDate = tmpDate.addMonths(m - 1);
         tmpDate = tmpDate.addDays(d - 1);
 
-        //kDebug(36002) <<"func_date:: date =" << tmpDate;
+        //debugSheetsFormula <<"func_date:: date =" << tmpDate;
         return Value(tmpDate, calc->settings());
     }
 }
@@ -767,7 +767,7 @@ Value func_weekNum(valVector args, ValueCalc *calc, FuncExtra *)
     if (date1.dayOfWeek() == 7 && method == 1)
         res--;
 
-    //kDebug(36002) <<"weeknum = [startday(" << startday <<") + base(7) + New Year(" << date1.dayOfWeek() <<") + days(" << days <<")] / 7 =" << res;
+    //debugSheetsFormula <<"weeknum = [startday(" << startday <<") + base(7) + New Year(" << date1.dayOfWeek() <<") + days(" << days <<")] / 7 =" << res;
 
     return Value(res);
 }
