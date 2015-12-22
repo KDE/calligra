@@ -36,7 +36,6 @@
 #include <KoIcon.h>
 #include <KoXmlReader.h>
 
-#include <AnnotationElement.h>
 #include "FormulaDebug.h"
 #include "KoFormulaShape.h"
 #include "FormulaCommand.h"
@@ -62,16 +61,6 @@ void KoM2MMLFormulaTool::activate(KoToolBase::ToolActivation toolActivation, con
     {
         emit done();
         return;
-    }
-    FormulaElement* element = m_formulaShape->formulaData()->formulaElement();
-    foreach(BasicElement* elt, element->childElements())
-    {
-        if(elt->elementType() == Annotation)
-        {
-            AnnotationElement* annot = static_cast<AnnotationElement*>(elt);
-            m_text = annot->content();
-            m_mode = annot->attribute("mode");
-        }
     }
     
     if(m_lineEdit)
@@ -192,18 +181,8 @@ void KoM2MMLFormulaTool::setMathML(const QString& mathml, const QString& mode)
 {
     KoXmlDocument tmpDocument;
     tmpDocument.setContent( QString(mathml), false, 0, 0, 0 );
-    FormulaElement* formulaElement = new FormulaElement();     // create a new root element
-    formulaElement->readMathML( tmpDocument.documentElement() );     // and load the new formula
 
-    AnnotationElement* annot = new AnnotationElement;
-    annot->setContent(m_lineEdit->text());
-    annot->setAttribute("mode", mode);
-    formulaElement->insertChild(0, annot);
-    
     debugFormula << mathml;
-    
-    canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, new FormulaCommandLoad(m_formulaShape->formulaData(), formulaElement)));
-    m_errorLabel->setText("");
 }
 
 

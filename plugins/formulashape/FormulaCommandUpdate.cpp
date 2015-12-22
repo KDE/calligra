@@ -18,10 +18,10 @@
 */
 
 #include "FormulaCommand.h"
+#include "KoFormulaShape.h"
 #include "FormulaCommandUpdate.h"
-#include "FormulaCursor.h"
 #include <klocalizedstring.h> 
-#include "FormulaData.h"
+// #include "FormulaData.h"
 
 
 FormulaCommandUpdate::FormulaCommandUpdate (KoFormulaShape* shape, FormulaCommand* command )
@@ -36,17 +36,15 @@ void FormulaCommandUpdate::redo()
 {
     m_shape->update();
     m_command->redo();
-    m_shape->updateLayout();
     m_shape->update();
-    m_shape->formulaData()->notifyDataChange(m_command,false);
+//     m_shape->formulaData()->notifyDataChange(m_command,false);
 }
 
 void FormulaCommandUpdate::undo()
 {
     m_shape->update();
     m_command->undo();
-    m_shape->updateLayout();
     m_shape->update();
-    m_shape->formulaData()->notifyDataChange(m_command,true);
+//     m_shape->formulaData()->notifyDataChange(m_command,true);
 }
 

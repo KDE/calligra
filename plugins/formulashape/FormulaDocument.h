@@ -31,8 +31,12 @@ class KoView;
 class KoOdfReadStore;
 class QPainter;
 class QWidget;
+class QDomElement;
 
+class KoXmlWriter;
 class KoFormulaShape;
+class KoOdfLoadingContext;
+class KoShapeLoadingContext;
 
 #define FORMULA_MIME_TYPE "application/vnd.oasis.opendocument.formula"
 
@@ -41,7 +45,6 @@ class FormulaDocument : public KoDocument
 public:
     explicit FormulaDocument(KoFormulaShape *parent);
     ~FormulaDocument();
-    
 
     /// reimplemented from KoDocument
     virtual QByteArray nativeFormatMimeType() const { return FORMULA_MIME_TYPE; }
@@ -58,12 +61,18 @@ public:
 
     bool loadOdf( KoOdfReadStore &odfStore );
     bool loadXML( const KoXmlDocument &doc, KoStore *store );
-    
+    bool loadEmbeddedDocument(KoStore *store,const KoXmlElement &objectElement,
+                              const KoOdfLoadingContext &odfLoadingContext);
+    bool loadOdfEmbedded(const KoXmlElement &mathElement, KoShapeLoadingContext &context);
+
+    void processMathML(QDomElement &element, KoXmlWriter &writer);
+
     bool saveOdf( SavingContext &context );
+
     KoView *createViewInstance( QWidget *parent );
-    
-    void paintContent( QPainter &painter, const QRect &rect ); 
-    
+    const QByteArray & content();
+    void paintContent( QPainter &painter, const QRect &rect );
+
 private:
     class Private;
     Private * const d;

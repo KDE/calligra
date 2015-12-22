@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C)  2006 Martin Pfeiffer <hubipete@gmx.net>
                   2009 Jeremias Epperlein <jeeree@web.de>
+                  2015 Yue Liu <yue.liu@mail.com>
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -27,10 +28,11 @@
 class KoStore;
 class KoDocumentResourceManager;
 class KoOdfLoadingContext;
+class KoXmlWriter;
+class QDomElement;
+class QBuffer;
 
-class BasicElement;
-class FormulaRenderer;
-class FormulaData;
+class QMathView;
 class FormulaDocument;
 
 /**
@@ -59,20 +61,11 @@ public:
 
     void updateLayout();
 
-    /// @return The element at the point @p p
-    BasicElement* elementAt( const QPointF& p );
-
     /// Resize the shape.
     void resize( const QSizeF &size );
 
-    /// @return Get the bounding box of the shape.
-//     QRectF boundingRect() const;
-
-    /// @return the data shown by the shape
-    FormulaData* formulaData() const;
-
     /// @return the formularenderer used to paint this shape
-    FormulaRenderer* formulaRenderer() const;
+    QMathView* mathview() const;
 
     /**
      * Load a shape from odf - reimplemented from KoShape
@@ -83,7 +76,6 @@ public:
     bool loadOdf( const KoXmlElement& element, KoShapeLoadingContext& context );
 
     virtual bool loadOdfFrameElement(const KoXmlElement& element, KoShapeLoadingContext& context);
-    bool loadOdfEmbedded(const KoXmlElement &mathElement, KoShapeLoadingContext &context);
 
     /**
      * @brief store the shape data as ODF XML. - reimplemented from KoShape
@@ -96,14 +88,9 @@ public:
     KoDocumentResourceManager *resourceManager() const;
 
 private:
-    bool loadEmbeddedDocument(KoStore *store,const KoXmlElement &objectElement,
-                              const KoOdfLoadingContext &odfLoadingContext);
-
-    /// The data this shape displays
-    FormulaData* m_formulaData;
 
     /// The renderer that takes care of painting the shape's formula
-    FormulaRenderer* m_formulaRenderer;
+    QMathView* m_qmathview;
 
     /// True if this formula is inline, i.e. not embedded in a formula document.
     bool m_isInline;

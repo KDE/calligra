@@ -22,8 +22,6 @@
 
 #include "KoFormulaShape.h"
 #include "FormulaToolWidget.h"
-#include "BasicElement.h"
-#include "FormulaEditor.h"
 #include "FormulaDebug.h"
 
 #include <KoCanvasBase.h>
@@ -51,14 +49,13 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoEmbeddedDocumentSaver.h>
-#include "FormulaRenderer.h"
 #include <QClipboard>
 
 
 
-KoFormulaTool::KoFormulaTool( KoCanvasBase* canvas ) : KoToolBase( canvas ),
-                                                       m_formulaShape( 0 ),
-                                                       m_formulaEditor( 0 )
+KoFormulaTool::KoFormulaTool( KoCanvasBase* canvas )
+    : KoToolBase( canvas )
+    , m_formulaShape( 0 )
 {
     m_signalMapper = new QSignalMapper(this);
     setupActions();
@@ -67,13 +64,7 @@ KoFormulaTool::KoFormulaTool( KoCanvasBase* canvas ) : KoToolBase( canvas ),
 
 KoFormulaTool::~KoFormulaTool()
 {
-    if( m_formulaEditor ) {
-        m_cursorList.removeAll(m_formulaEditor);
-        delete m_formulaEditor;
-    }
-    foreach (FormulaEditor* tmp, m_cursorList) {
-        delete tmp;
-    }
+    delete m_signalMapper;
 }
 
 void KoFormulaTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -91,60 +82,22 @@ void KoFormulaTool::activate(ToolActivation toolActivation, const QSet<KoShape*>
         return;
     }
     useCursor(Qt::IBeamCursor);
-    m_formulaEditor=0;
-    for (int i = 0; i < m_cursorList.count(); i++) {
-        FormulaEditor* editor = m_cursorList[i];
-        FormulaData* formulaData=m_formulaShape->formulaData();
-        if (editor->formulaData() == formulaData) {
-            //we have to check if the cursors current element is actually a 
-            //child of the m_formulaShape->formulaData()
-            m_cursorList.removeAll(editor);
-            if (formulaData->formulaElement()->hasDescendant(editor->cursor().currentElement())) {
-                if (editor->cursor().isAccepted()) {
-                    debugFormula << "Found old cursor";
-                    m_formulaEditor=editor;
-                    break;
-                }
-            }
-            delete editor;
-        }
-    }
-    if (m_formulaEditor==0) {
-        //TODO: there should be a extra constructior for this
-        m_formulaEditor = new FormulaEditor( m_formulaShape->formulaData());
-    }
-    connect(m_formulaShape->formulaData(), SIGNAL(dataChanged(FormulaCommand*,bool)), this, SLOT(updateCursor(FormulaCommand*,bool)));
+//     connect(m_formulaShape->formulaData(), SIGNAL(dataChanged(FormulaCommand*,bool)), this, SLOT(updateCursor(FormulaCommand*,bool)));
     connect(m_signalMapper, SIGNAL(mapped(QString)), this, SLOT(insert(QString)));
     //Only for debugging:
-    connect(action("write_elementTree"),SIGNAL(triggered(bool)), m_formulaShape->formulaData(), SLOT(writeElementTree()));
+//     connect(action("write_elementTree"),SIGNAL(triggered(bool)), m_formulaShape->formulaData(), SLOT(writeElementTree()));
 }
 
 void KoFormulaTool::deactivate()
 {
-    disconnect(m_formulaShape->formulaData(),0,this,0);
+//     disconnect(m_formulaShape->formulaData(),0,this,0);
     disconnect(m_signalMapper,0,this,0);
-    if (canvas()) {
-        m_cursorList.append(m_formulaEditor);
-        debugFormula << "Appending cursor";
-    }
-    if (m_cursorList.count() > 20) { // don't let it grow indefinitely
-        //TODO: is this save?
-        delete m_cursorList[0];
-        m_cursorList.removeAt(0);
-    }
     m_formulaShape = 0;
 }
 
 
 void KoFormulaTool::updateCursor(FormulaCommand* command, bool undo)
 {
-    if (command!=0) {
-        debugFormula << "Going to change cursor";
-        command->changeCursor(m_formulaEditor->cursor(),undo);
-    } else {
-        debugFormula << "Going to reset cursor";
-        resetFormulaEditor();
-    }
     repaintCursor();
 }
 
@@ -157,8 +110,8 @@ void KoFormulaTool::paint( QPainter &painter, const KoViewConverter &converter )
     // has to come last
     painter.setTransform(m_formulaShape->absoluteTransformation(&converter) * painter.transform());
     KoShape::applyConversion(painter,converter);
-    m_formulaShape->formulaRenderer()->paintElement(painter,m_formulaShape->formulaData()->formulaElement(),true);
-    m_formulaEditor->paint( painter );
+//     m_formulaShape->formulaRenderer()->paintElement(painter,m_formulaShape->formulaData()->formulaElement(),true);
+//     m_formulaEditor->paint( painter );
     painter.restore();
 }
 
@@ -173,15 +126,6 @@ void KoFormulaTool::mousePressEvent( KoPointerEvent *event )
     if(!m_formulaShape->boundingRect().contains( event->point )) {
         return;
     }
-    // transform the global coordinates into shape coordinates
-    QPointF p = m_formulaShape->absoluteTransformation(0).inverted().map( event->point );
-    if (event->modifiers() & Qt::ShiftModifier) {
-        m_formulaEditor->cursor().setSelecting(true);
-    } else {
-        m_formulaEditor->cursor().setSelecting(false);
-    }
-    // set the cursor to the element the user clicked on
-    m_formulaEditor->cursor().setCursorTo( p );
 
     repaintCursor();
     event->accept();
@@ -192,14 +136,6 @@ void KoFormulaTool::mouseDoubleClickEvent( KoPointerEvent *event )
     if( !m_formulaShape->boundingRect().contains( event->point ) ) {
         return;
     }
-    // transform the global coordinates into shape coordinates
-    QPointF p = m_formulaShape->absoluteTransformation(0).inverted().map( event->point );
-    
-    //clear the current selection
-    m_formulaEditor->cursor().setSelecting(false);
-    //place the cursor
-    m_formulaEditor->cursor().setCursorTo(p);
-    m_formulaEditor->cursor().selectElement(m_formulaEditor->cursor().currentElement());
     repaintCursor();
     event->accept();
 }
@@ -210,15 +146,6 @@ void KoFormulaTool::mouseMoveEvent( KoPointerEvent *event )
     if (!(event->buttons() & Qt::LeftButton)) {
 	return;
     }
-    // Check if the event is valid means inside the shape
-    if( !m_formulaShape->boundingRect().contains( event->point ) )
-        debugFormula << "Getting most probably invalid mouseMoveEvent";
-    
-    // transform the global coordinates into shape coordinates
-    QPointF p = m_formulaShape->absoluteTransformation(0).inverted().map( event->point );
-    //TODO Implement drag and drop of elements
-    m_formulaEditor->cursor().setSelecting(true);
-    m_formulaEditor->cursor().setCursorTo( p );
     repaintCursor();
     event->accept();
 }
@@ -233,55 +160,6 @@ void KoFormulaTool::mouseReleaseEvent( KoPointerEvent *event )
 void KoFormulaTool::keyPressEvent( QKeyEvent *event )
 {
     FormulaCommand *command=0;
-    if( !m_formulaEditor )
-        return;
-
-    if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right || 
-        event->key() == Qt::Key_Up || event->key() == Qt::Key_Down ||
-        event->key() == Qt::Key_Home || event->key() == Qt::Key_End ) {
-        if (event->modifiers() & Qt::ShiftModifier) {
-            m_formulaEditor->cursor().setSelecting(true);
-        } else {
-            m_formulaEditor->cursor().setSelecting(false);
-        }
-    }
-    switch( event->key() )                           // map key to movement or action
-    {
-        case Qt::Key_Backspace:
-            m_formulaShape->update();
-            command=m_formulaEditor->remove( true );
-            m_formulaShape->updateLayout();
-            m_formulaShape->update();
-            break;
-        case Qt::Key_Delete:
-            m_formulaShape->update();
-            command=m_formulaEditor->remove( false );
-            m_formulaShape->updateLayout();
-            m_formulaShape->update();
-            break;
-        case Qt::Key_Left:
-            m_formulaEditor->cursor().move( MoveLeft );
-            break;
-        case Qt::Key_Up:
-            m_formulaEditor->cursor().move( MoveUp );
-            break;
-        case Qt::Key_Right:
-            m_formulaEditor->cursor().move( MoveRight );
-            break;
-        case Qt::Key_Down:
-            m_formulaEditor->cursor().move( MoveDown );
-            break;
-        case Qt::Key_End:
-            m_formulaEditor->cursor().moveEnd();
-            break;
-        case Qt::Key_Home:
-            m_formulaEditor->cursor().moveHome();
-            break;
-        default:
-            if( event->text().length() != 0 ) {
-                command=m_formulaEditor->insertText( event->text() );
-            }
-    }
     if (command!=0) {
         canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape,command));
     }
@@ -297,8 +175,7 @@ void KoFormulaTool::keyReleaseEvent( QKeyEvent *event )
 void KoFormulaTool::remove( bool backSpace )
 {
     m_formulaShape->update();
-    m_formulaEditor->remove( backSpace );
-    m_formulaShape->updateLayout();
+//     m_formulaEditor->remove( backSpace );
     m_formulaShape->update();
 }
 
@@ -306,32 +183,32 @@ void KoFormulaTool::insert( const QString& action )
 {
     FormulaCommand *command;
     m_formulaShape->update();
-    command=m_formulaEditor->insertMathML( action );
-    if (command!=0) {
-        canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
-    }
+//     command=m_formulaEditor->insertMathML( action );
+//     if (command!=0) {
+//         canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
+//     }
 }
 
 void KoFormulaTool::changeTable ( QAction* action )
 {
-    FormulaCommand *command;
+//     FormulaCommand *command;
     m_formulaShape->update();
-    bool row=action->data().toList()[0].toBool();
-    bool insert=action->data().toList()[1].toBool();
-    command=m_formulaEditor->changeTable(insert,row);
-    if (command!=0) {
-        canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
-    }
+//     bool row=action->data().toList()[0].toBool();
+//     bool insert=action->data().toList()[1].toBool();
+//     command=m_formulaEditor->changeTable(insert,row);
+//     if (command!=0) {
+//         canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
+//     }
 }
 
 void KoFormulaTool::insertSymbol ( const QString& symbol )
 {
-    FormulaCommand *command;
-    m_formulaShape->update();
-    command=m_formulaEditor->insertText( symbol );
-    if (command!=0) {
-        canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
-    }
+//     FormulaCommand *command;
+//     m_formulaShape->update();
+//     command=m_formulaEditor->insertText( symbol );
+//     if (command!=0) {
+//         canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
+//     }
 }
 
 
@@ -347,26 +224,8 @@ KoFormulaShape* KoFormulaTool::shape()
     return m_formulaShape;
 }
 
-
-FormulaEditor* KoFormulaTool::formulaEditor()
-{
-    return m_formulaEditor;
-}
-
-
-void KoFormulaTool::resetFormulaEditor() {
-    m_formulaEditor->setData(m_formulaShape->formulaData());
-    FormulaCursor cursor(FormulaCursor(m_formulaShape->formulaData()->formulaElement(),false,0,0));
-    m_formulaEditor->setCursor(cursor);
-    //if the cursor is not allowed at the beginning of the formula, move it right
-    //TODO: check, if this can ever happen
-    if ( !m_formulaEditor->cursor().isAccepted() ) {
-        m_formulaEditor->cursor().move(MoveRight);
-    }
-}
-
 void KoFormulaTool::loadFormula()
-{
+{/*
     // get an filepath
     const QString fileName = QFileDialog::getOpenFileName();
     if( fileName.isEmpty() || !shape() )
@@ -387,22 +246,22 @@ void KoFormulaTool::loadFormula()
     FormulaElement* formulaElement = new FormulaElement();     // create a new root element
     formulaElement->readMathML( tmpDocument.documentElement() );     // and load the new formula
     FormulaCommand* command=new FormulaCommandLoad(m_formulaShape->formulaData(),formulaElement);
-    canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
+    canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, command));*/
 }
 
 void KoFormulaTool::saveFormula()
 {
-    const QString filePath = QFileDialog::getSaveFileName();
-    if( filePath.isEmpty() || !shape() )
-        return;
-
-    QFile file( filePath );
-    KoXmlWriter writer( &file );
-    KoGenStyles styles;
-    KoEmbeddedDocumentSaver embeddedSaver;
-    KoShapeSavingContext shapeSavingContext( writer, styles, embeddedSaver );
-
-    m_formulaShape->formulaData()->saveMathML( shapeSavingContext );
+//     const QString filePath = QFileDialog::getSaveFileName();
+//     if( filePath.isEmpty() || !shape() )
+//         return;
+// 
+//     QFile file( filePath );
+//     KoXmlWriter writer( &file );
+//     KoGenStyles styles;
+//     KoEmbeddedDocumentSaver embeddedSaver;
+//     KoShapeSavingContext shapeSavingContext( writer, styles, embeddedSaver );
+// 
+//     m_formulaShape->formulaData()->saveMathML( shapeSavingContext );
 }
 
 void KoFormulaTool::setupActions()
@@ -501,7 +360,7 @@ void KoFormulaTool::deleteSelection()
 }
 
 bool KoFormulaTool::paste()
-{
+{/*
     const QMimeData* data=QApplication::clipboard()->mimeData();
     if (data->hasFormat("text/plain")) {
         debugFormula << data->text();
@@ -511,7 +370,7 @@ bool KoFormulaTool::paste()
         }
         repaintCursor();
         return true;
-    }
+    }*/
     return false;
 }
 

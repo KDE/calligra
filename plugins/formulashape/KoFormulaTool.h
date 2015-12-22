@@ -24,7 +24,6 @@
 #include <KoToolBase.h>
 
 class KoFormulaShape;
-class FormulaEditor;
 class FormulaCommand;
 class QSignalMapper;
 
@@ -64,12 +63,6 @@ public:
 
     /// @return The currently manipulated KoFormulaShape
     KoFormulaShape* shape();
-
-    /// @return The currently active cursor
-    FormulaEditor* formulaEditor();
-
-    /// Reset the cursor
-    void resetFormulaEditor();
 
 public Q_SLOTS:
     /// Called when this tool instance is activated and fills m_formulaShape
@@ -116,11 +109,6 @@ private:
 
     /// The FormulaShape the tool is manipulating
     KoFormulaShape* m_formulaShape;
-
-    /// The FormulaEditor the tool uses to move around in the formula
-    FormulaEditor* m_formulaEditor;
-
-    QList<FormulaEditor*> m_cursorList;
 
     QSignalMapper* m_signalMapper;
 };

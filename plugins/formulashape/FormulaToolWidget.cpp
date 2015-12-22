@@ -22,9 +22,6 @@
 
 #include "KoFormulaTool.h"
 #include "KoFormulaShape.h"
-#include "ElementFactory.h"
-#include "BasicElement.h"
-#include "FormulaCursor.h"
 #include "FormulaDebug.h"
 
 #include <QWidgetAction>
