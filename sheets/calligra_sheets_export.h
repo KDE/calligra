@@ -43,10 +43,6 @@
 # endif
 #endif
 
-# ifndef CALLIGRA_SHEETS_EXPORT_DEPRECATED
-#  define CALLIGRA_SHEETS_EXPORT_DEPRECATED KDE_DEPRECATED CALLIGRA_SHEETS_EXPORT
-# endif
-
 // now for tests
 #ifdef COMPILING_TESTS
 #if defined _WIN32 || defined _WIN64
