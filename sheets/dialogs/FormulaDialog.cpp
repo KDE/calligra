@@ -50,13 +50,13 @@
 #include <KoIcon.h>
 
 #include <kcombobox.h>
-#include <ktextbrowser.h>
+#include <klineedit.h>
 #include <knumvalidator.h>
 
 #include <QEvent>
+#include <QTextBrowser>
 #include <QLabel>
 #include <QPushButton>
-#include <klineedit.h>
 #include <QLayout>
 #include <QStringListModel>
 #include <QSortFilterProxyModel>
@@ -141,7 +141,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     m_tabwidget->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     grid1->addWidget(m_tabwidget, 0, 1, 4, 1);
 
-    m_browser = new KTextBrowser(m_tabwidget, true);
+    m_browser = new QTextBrowser(m_tabwidget);
     m_browser->document()->setDefaultStyleSheet("h1 { font-size:x-large; } h2 { font-size:large; } h3 { font-size:medium; }");
     m_browser->setMinimumWidth(300);
 
@@ -224,8 +224,8 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     connect(m_selection, SIGNAL(changed(Region)),
             this, SLOT(slotSelectionChanged()));
 
-    connect(m_browser, SIGNAL(urlClick(QString)),
-            this, SLOT(slotShowFunction(QString)));
+    connect(m_browser, SIGNAL(anchorClicked(QUrl)),
+            this, SLOT(slotShowFunction(QUrl)));
 
     // Save the name of the active sheet.
     m_sheetName = m_selection->activeSheet()->sheetName();
@@ -704,8 +704,10 @@ void FormulaDialog::slotSelected(const QString& afunction)
 }
 
 // from hyperlink in the "Related Function"
-void FormulaDialog::slotShowFunction(const QString& function)
+void FormulaDialog::slotShowFunction(const QUrl& functionUrl)
 {
+    const QString function = functionUrl.toString();
+
     FunctionDescription* desc =
         FunctionRepository::self()->functionInfo(function);
     if (!desc) return;

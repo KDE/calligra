@@ -35,10 +35,11 @@
 #include <kcompletion.h>
 #include <KoDialog.h>
 
+class QUrl;
 class QLabel;
 class QPushButton;
 class QTabWidget;
-class KTextBrowser;
+class QTextBrowser;
 class QStringListModel;
 class QSortFilterProxyModel;
 class KComboBox;
@@ -98,7 +99,7 @@ private Q_SLOTS:
      * This will switch the active function and show help page
      * of the function as well.
      */
-    void slotShowFunction(const QString& function);
+    void slotShowFunction(const QUrl& functionUrl);
     /**
      * Called if the user double clicked on some method name.
      * That will switch into editing mode, allowing the user
@@ -144,7 +145,7 @@ private:
     CellEditorBase* m_editor;
 
     QTabWidget* m_tabwidget;
-    KTextBrowser* m_browser;
+    QTextBrowser* m_browser;
     QWidget* m_input;
 
     QPushButton *selectFunction;
