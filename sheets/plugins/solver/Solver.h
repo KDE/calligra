@@ -24,11 +24,9 @@
 
 #include <kxmlguiclient.h>
 
-#include <calligra_sheets_export.h>
-
 #include <Cell.h>
 
-class QObject;
+#include <QObject>
 #include <QVariantList>
 
 namespace Calligra
@@ -42,7 +40,7 @@ namespace Plugins
  * \class Solver Function Optimizer
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */
-class CALLIGRA_SHEETS_SOLVER_EXPORT Solver : public QObject, public KXMLGUIClient
+class Solver : public QObject, public KXMLGUIClient
 {
     Q_OBJECT
 
