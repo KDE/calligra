@@ -1,7 +1,7 @@
 [calligra]
 ColorSpaceExtensionsPluginsDisabled=
 ColorSpacePluginsDisabled=kolcmsengine
-FlakePluginsDisabled=kexirelationdesignshape
+FlakePluginsDisabled=
 TextEditingPluginsDisabled=thesaurustool
 ShapePluginsDisabled=
 TextInlinePluginsDisabled=kprvariables

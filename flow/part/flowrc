@@ -10,5 +10,5 @@ PaintGridInBackground=true
 ViewMode=Detailed
 
 [calligra]
-FlakePluginsDisabled=kexirelationdesignshape,karbonimagefilter,karbonsvgfilter
+FlakePluginsDisabled=karbonimagefilter,karbonsvgfilter
 TextInlinePluginsDisabled=kprvariables
