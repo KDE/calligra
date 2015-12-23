@@ -42,10 +42,8 @@
 #include <QTime>
 #include <QVariant>
 
-// Calligra
-#include "calligra_sheets_export.h"
-
 // Sheets
+#include "sheets_odf_export.h"
 #include "Condition.h"
 
 #include "KoXmlReaderForward.h"

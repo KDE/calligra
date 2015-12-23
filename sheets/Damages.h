@@ -21,7 +21,9 @@
 #ifndef CALLIGRA_SHEETS_DAMAGES
 #define CALLIGRA_SHEETS_DAMAGES
 
-#include "calligra_sheets_export.h"
+#include "sheets_odf_export.h"
+
+#include <QDebug>
 
 namespace Calligra
 {

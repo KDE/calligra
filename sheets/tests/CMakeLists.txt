@@ -1,5 +1,10 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-include_directories( ${CMAKE_SOURCE_DIR}/sheets  ${EIGEN3_INCLUDE_DIR} ${KOMAIN_INCLUDES} )
+include_directories(
+    ${CMAKE_SOURCE_DIR}/sheets
+    ${CMAKE_BINARY_DIR}/sheets
+    ${EIGEN3_INCLUDE_DIR}
+    ${KOMAIN_INCLUDES}
+)
 
 # call: sheets_add_unit_test(<test-name> <sources> LINK_LIBRARIES <library> [<library> [...]] [GUI])
 macro(SHEETS_ADD_UNIT_TEST _TEST_NAME)

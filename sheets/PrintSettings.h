@@ -26,7 +26,7 @@
 
 #include <QPair>
 
-#include "calligra_sheets_export.h"
+#include "sheets_odf_export.h"
 
 class QSize;
 

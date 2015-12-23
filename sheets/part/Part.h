@@ -33,7 +33,7 @@
 #include <KoDocument.h>
 #include <KoPart.h>
 
-#include "../calligra_sheets_export.h"
+#include "sheets_common_export.h"
 
 class QWidget;
 class QGraphicsItem;

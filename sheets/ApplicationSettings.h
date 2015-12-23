@@ -26,7 +26,7 @@
 #include <QObject>
 
 #include "Global.h"
-#include "calligra_sheets_export.h"
+#include "sheets_odf_export.h"
 
 namespace Calligra
 {

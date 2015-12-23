@@ -31,7 +31,7 @@
 #include <QMutexLocker>
 #endif
 
-#include "calligra_sheets_export.h"
+#include "sheets_odf_export.h"
 
 #include "Map.h"
 #include "Region.h"

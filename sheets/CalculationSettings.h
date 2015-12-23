@@ -30,7 +30,7 @@
 #ifndef CALLIGRA_SHEETS_CALCULATION_SETTINGS
 #define CALLIGRA_SHEETS_CALCULATION_SETTINGS
 
-#include "calligra_sheets_export.h"
+#include "sheets_odf_export.h"
 
 #include <KoXmlReader.h>
 

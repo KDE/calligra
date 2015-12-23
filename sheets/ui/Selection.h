@@ -30,6 +30,8 @@
 
 #include <sheets/Region.h>
 
+#include "sheets_common_export.h"
+
 class KoCanvasBase;
 
 namespace Calligra

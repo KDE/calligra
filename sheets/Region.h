@@ -28,7 +28,7 @@
 #include <QString>
 
 #include "SheetsDebug.h"
-#include "calligra_sheets_export.h"
+#include "sheets_odf_export.h"
 
 inline uint qHash(const QPoint& point)
 {

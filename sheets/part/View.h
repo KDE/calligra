@@ -39,7 +39,7 @@
 #include <KoView.h>
 #include <KoZoomMode.h>
 #include <KoPart.h>
-#include <sheets/calligra_sheets_export.h>
+#include "sheets_common_export.h"
 
 class QKeyEvent;
 class QScrollBar;

@@ -21,7 +21,7 @@
 #define CALLIGRA_SHEETS_PASTE_STRATEGY
 
 #include "SelectionStrategy.h"
-#include "calligra_sheets_export.h"
+#include "sheets_common_export.h"
 
 namespace Calligra
 {

@@ -23,7 +23,7 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-#include <calligra_sheets_export.h>
+#include "sheets_odf_export.h"
 
 extern const CALLIGRA_SHEETS_ODF_EXPORT QLoggingCategory &SHEETS_LOG(); // 36001
 

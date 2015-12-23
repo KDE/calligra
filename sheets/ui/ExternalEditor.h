@@ -24,7 +24,7 @@
 
 #include <ktextedit.h>
 
-#include "calligra_sheets_export.h"
+#include "sheets_common_export.h"
 
 class QFocusEvent;
 class QKeyEvent;

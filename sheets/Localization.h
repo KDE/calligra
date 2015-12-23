@@ -24,7 +24,7 @@
 #include <klocale.h>
 #include <KoXmlReader.h>
 
-#include "calligra_sheets_export.h"
+#include "sheets_odf_export.h"
 
 class QDomElement;
 class QDomDocument;

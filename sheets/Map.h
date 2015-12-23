@@ -28,7 +28,7 @@
 
 #include "ProtectableObject.h"
 
-#include "calligra_sheets_export.h"
+#include "sheets_odf_export.h"
 
 #include <KoDataCenterBase.h>
 #include <KoXmlReader.h>

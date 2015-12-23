@@ -297,6 +297,10 @@ set (calligrasheetsodf_LIB_SRCS
 
 
 add_library(calligrasheetsodf SHARED ${calligrasheetsodf_LIB_SRCS})
+generate_export_header(calligrasheetsodf
+    EXPORT_FILE_NAME sheets_odf_generated_export.h
+    BASE_NAME CALLIGRA_SHEETS_ODF
+)
 
 target_link_libraries(calligrasheetsodf komain KF5::KDELibs4Support)
 target_link_libraries(calligrasheetsodf LINK_INTERFACE_LIBRARIES komain KF5::KDELibs4Support)
@@ -308,6 +312,10 @@ install(TARGETS calligrasheetsodf ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 add_library(calligrasheetscommon SHARED ${calligrasheetscommon_LIB_SRCS})
+generate_export_header(calligrasheetscommon
+    EXPORT_FILE_NAME sheets_common_generated_export.h
+    BASE_NAME CALLIGRA_SHEETS_COMMON
+)
 
 target_link_libraries(calligrasheetscommon
     komain
@@ -349,7 +357,11 @@ install( FILES  sheetsrc DESTINATION ${CONFIG_INSTALL_DIR})
 
 
 install( FILES
-    calligra_sheets_export.h
+    sheets_odf_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/sheets_odf_generated_export.h
+    sheets_common_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/sheets_common_generated_export.h
+
     calligra_sheets_limits.h
 
     Cell.h

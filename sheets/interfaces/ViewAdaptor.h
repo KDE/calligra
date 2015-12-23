@@ -31,7 +31,7 @@
 #include <QRect>
 #include <QString>
 #include <QDBusAbstractAdaptor>
-#include "calligra_sheets_export.h"
+#include "sheets_common_export.h"
 
 namespace Calligra
 {

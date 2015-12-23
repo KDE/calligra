@@ -41,7 +41,7 @@
 #include "../Global.h"
 #include "../DocBase.h"
 
-#include "../calligra_sheets_export.h"
+#include "sheets_common_export.h"
 
 class QDomDocument;
 class QPainter;

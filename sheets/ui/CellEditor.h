@@ -25,7 +25,7 @@
 #include <KCompletion>
 #include <ktextedit.h>
 
-#include "calligra_sheets_export.h"
+#include "sheets_common_export.h"
 #include "CellEditorBase.h"
 
 #include <QCompleter>

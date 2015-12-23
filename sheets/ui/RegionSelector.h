@@ -24,7 +24,7 @@
 
 #include <QWidget>
 
-#include "calligra_sheets_export.h"
+#include "sheets_common_export.h"
 
 class KTextEdit;
 

@@ -22,7 +22,7 @@
 #ifndef CALLIGRA_SHEETS_GENVALIDATIONSTYLE
 #define CALLIGRA_SHEETS_GENVALIDATIONSTYLE
 
-#include "calligra_sheets_export.h"
+#include "sheets_odf_export.h"
 
 #include <QMap>
 #include <QString>
