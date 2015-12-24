@@ -38,9 +38,9 @@
 #include <klineedit.h>
 #include <KLocalizedString>
 #include <kmessagebox.h>
-#include <knumvalidator.h>
 #include <ktextedit.h>
 
+#include <QIntValidator>
 #include <QCheckBox>
 #include <QFrame>
 #include <QGridLayout>
@@ -110,7 +110,7 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     databaseFrameLayout->addWidget(m_password, 5, 1);
 
     m_port = new KLineEdit(databaseFrame);
-    m_port->setValidator(new KIntValidator(m_port));
+    m_port->setValidator(new QIntValidator(m_port));
     databaseFrameLayout->addWidget(m_port, 3, 1);
 
     QLabel * dbName = new QLabel(databaseFrame);

@@ -51,8 +51,8 @@
 
 #include <kcombobox.h>
 #include <klineedit.h>
-#include <knumvalidator.h>
 
+#include <QDoubleValidator>
 #include <QEvent>
 #include <QTextBrowser>
 #include <QLabel>
@@ -536,7 +536,6 @@ static void showEntry(KLineEdit* edit, QLabel* label,
     label->setText(desc->param(param).helpText() + ':');
     label->show();
     ParameterType elementType = desc->param(param).type();
-    KDoubleValidator *validate = 0;
     switch (elementType) {
     case KSpread_String:
     case KSpread_Boolean:
@@ -545,9 +544,7 @@ static void showEntry(KLineEdit* edit, QLabel* label,
         edit->setValidator(0);
         break;
     case KSpread_Float:
-        validate = new KDoubleValidator(edit);
-        validate->setAcceptLocalizedNumbers(true);
-        edit->setValidator(validate);
+        edit->setValidator(new QDoubleValidator(edit));
         edit->setText("0");
         break;
     case KSpread_Int:

@@ -35,6 +35,7 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include <QIntValidator>
 #include <QCheckBox>
 #include <QFrame>
 #include <QLabel>
@@ -52,7 +53,6 @@
 #include <kcolorbutton.h>
 #include <kcombobox.h>
 #include <klineedit.h>
-#include <knumvalidator.h>
 
 #include <KoIcon.h>
 #include <KoCanvasBase.h>
@@ -2542,7 +2542,7 @@ void CellFormatPageBorder::InitializeGrids()
     size = new KComboBox(tmpQGroupBox);
     size->setEditable(true);
     grid2->addWidget(size, 7, 1);
-    size->setValidator(new KIntValidator(size));
+    size->setValidator(new QIntValidator(size));
     QString tmp;
     for (int i = 0; i < 10; i++) {
         tmp = tmp.setNum(i);
