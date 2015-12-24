@@ -85,11 +85,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>knuminput.h</header>
-  </customwidget>
-  <customwidget>
    <class>KoUnitDoubleSpinBox</class>
    <extends>QDoubleSpinBox</extends>
    <header location="global" >KoUnitDoubleSpinBox.h</header>

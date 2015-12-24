@@ -137,11 +137,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>knuminput.h</header>
-  </customwidget>
-  <customwidget>
    <class>KoFontComboBox</class>
    <extends>QComboBox</extends>
    <header>KoFontComboBox.h</header>
