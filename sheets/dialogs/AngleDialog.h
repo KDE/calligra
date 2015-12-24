@@ -26,7 +26,7 @@
 
 #include <KoDialog.h>
 
-class KIntNumInput;
+class QSpinBox;
 
 namespace Calligra
 {
@@ -49,7 +49,7 @@ public Q_SLOTS:
     void slotDefault();
 protected:
     Selection* m_selection;
-    KIntNumInput *m_pAngle;
+    QSpinBox *m_pAngle;
 };
 
 } // namespace Sheets

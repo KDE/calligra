@@ -48,8 +48,8 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QPixmap>
+#include <QSpinBox>
 
-#include <knuminput.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
 #include <klineedit.h>
@@ -961,10 +961,11 @@ CellFormatPageFloat::CellFormatPageFloat(QWidget* parent, CellFormatDialog *_dlg
     postfix = new KLineEdit(box);
     postfix->setWhatsThis(i18n("You can add here a Postfix such as a $HK symbol to the end of each cell content in the checked format."));
     grid->addWidget(postfix, 2, 1);
-    precision = new KIntNumInput(dlg->precision, box, 10);
+    precision = new QSpinBox(box);
+    precision->setValue(dlg->precision);
     precision->setSpecialValueText(i18n("variable"));
-    precision->setRange(-1, 10, 1);
-    precision->setSliderEnabled(false);
+    precision->setRange(-1, 10);
+    precision->setSingleStep(1);
     precision->setWhatsThis(i18n("You can control how many digits are displayed after the decimal point for numeric values. This can also be changed using the Increase precision or Decrease precision icons in the Format toolbar. "));
     grid->addWidget(precision, 1, 1);
 

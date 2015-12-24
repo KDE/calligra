@@ -49,7 +49,7 @@
 #include "ui_ProtectionWidget.h"
 
 class KoUnitDoubleSpinBox;
-class KIntNumInput;
+class QSpinBox;
 class QPixmap;
 class QRadioButton;
 class QPushButton;
@@ -248,7 +248,7 @@ public Q_SLOTS:
     void currencyChanged(const QString &);
 protected:
     KLineEdit* postfix;
-    KIntNumInput* precision;
+    QSpinBox* precision;
     KLineEdit* prefix;
     KComboBox *format;
     KComboBox *currency;
