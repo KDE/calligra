@@ -21,7 +21,7 @@
     </widget>
    </item>
    <item row="0" column="1" >
-    <widget class="KIntSpinBox" name="m_recentFilesEntries" >
+    <widget class="QSpinBox" name="m_recentFilesEntries" >
      <property name="whatsThis" >
       <string>Controls the maximum number of filenames that are shown when you select File-> Open Recent.</string>
      </property>
@@ -41,7 +41,7 @@
     </widget>
    </item>
    <item row="1" column="1" >
-    <widget class="KIntSpinBox" name="m_autoSaveDelay" >
+    <widget class="QSpinBox" name="m_autoSaveDelay" >
      <property name="whatsThis" >
       <string>Here you can select the time between autosaves, or disable this feature altogether by choosing "No autosave" (by selecting the minimum value).</string>
      </property>
@@ -88,13 +88,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KIntSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>knuminput.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
