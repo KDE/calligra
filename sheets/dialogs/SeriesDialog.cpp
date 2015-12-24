@@ -31,18 +31,16 @@
 
 #include "commands/DataManipulators.h"
 
+#include <kmessagebox.h>
+#include <KLocalizedString>
+
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QGridLayout>
-#include <KLocalizedString>
 #include <QLabel>
-
-#include <kmessagebox.h>
-
 #include <QRadioButton>
 #include <QCheckBox>
-
-#include <knuminput.h>
+#include <QDoubleSpinBox>
 
 using namespace Calligra::Sheets;
 
@@ -92,20 +90,29 @@ SeriesDialog::SeriesDialog(QWidget* parent, Selection* selection)
 
     QLabel* label = new QLabel(i18n("Start value:"), gb);
     gb_layout->addWidget(label, 0, 0);
-    start = new KDoubleNumInput(-999999.999, 999999.99, 0.0,
-                                gb, 1.0, 3);
+    start = new QDoubleSpinBox(gb);
+    start->setValue(0.0);
+    start->setRange(-999999.999, 999999.99);
+    start->setSingleStep(1.0);
+    start->setDecimals(3);
     gb_layout->addWidget(start, 0, 1);
 
     label = new QLabel(i18n("Stop value:"), gb);
     gb_layout->addWidget(label, 1, 0);
-    end = new KDoubleNumInput(-999999.999, 999999.99, 0.0,
-                              gb, 1.0, 3);
+    end = new QDoubleSpinBox(gb);
+    end->setValue(0.0);
+    end->setRange(-999999.999, 999999.99);
+    end->setSingleStep(1.0);
+    end->setDecimals(3);
     gb_layout->addWidget(end, 1, 1);
 
     label = new QLabel(i18n("Step value:"), gb);
     gb_layout->addWidget(label, 2, 0);
-    step = new KDoubleNumInput(-999999.999, 999999.99, 0.0,
-                               gb, 1.0, 3);
+    step = new QDoubleSpinBox(gb);
+    step->setValue(0.0);
+    step->setRange(-999999.999, 999999.99);
+    step->setSingleStep(1.0);
+    step->setDecimals(3);
     gb_layout->addWidget(step, 2, 1);
     gb_layout->setColumnStretch(1, 9);
 

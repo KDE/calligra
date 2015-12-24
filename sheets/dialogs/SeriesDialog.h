@@ -29,7 +29,7 @@
 #include <KoDialog.h>
 
 class QRadioButton;
-class KDoubleNumInput;
+class QDoubleSpinBox;
 
 namespace Calligra
 {
@@ -56,9 +56,9 @@ public Q_SLOTS:
 
 protected:
     Selection* m_selection;
-    KDoubleNumInput *start;
-    KDoubleNumInput *end;
-    KDoubleNumInput *step;
+    QDoubleSpinBox* start;
+    QDoubleSpinBox* end;
+    QDoubleSpinBox* step;
 
     QRadioButton* column;
     QRadioButton* row;
