@@ -29,7 +29,7 @@
 #include "StylesModel.h"
 #include "DockerStylesComboModel.h"
 #include "StylesDelegate.h"
-#include "ListLevelChooser.h"
+#include "ListLevelWidget.h"
 #include "commands/ChangeListLevelCommand.h"
 
 #include <KoTextEditor.h>
@@ -42,9 +42,22 @@
 #include <KoStyleManager.h>
 #include <KoListLevelProperties.h>
 #include <KoShapePaintingContext.h>
+#include <KoDialog.h>
+#include <KoOdfLoadingContext.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
+#include <KoXmlWriter.h>
+#include <KoGenStyles.h>
+#include <KoEmbeddedDocumentSaver.h>
+#include <KoStore.h>
+#include <KoOdfReadStore.h>
+#include <KoXmlReader.h>
+
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
 
 #include <QAction>
-
+#include <QBuffer>
 #include <QTextLayout>
 #include <QFlags>
 #include <QMenu>
@@ -60,7 +73,6 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
         , m_tool(tool)
         , m_directionButtonState(Auto)
         , m_thumbnailer(new KoStyleThumbnailer())
-        , m_mapper(new QSignalMapper(this))
         , m_stylesModel(new StylesModel(0, StylesModel::ParagraphStyle))
         , m_sortedStylesModel(new DockerStylesComboModel())
         , m_stylesDelegate(0)
@@ -94,8 +106,7 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
     connect(widget.decreaseIndent, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.increaseIndent, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
 
-    widget.bulletListButton->setDefaultAction(tool->action("format_bulletlist"));
-    widget.bulletListButton->setNumColumns(3);
+    widget.bulletListButton->setDefaultAction(tool->action("format_list"));
 
     fillListButtons();
     widget.bulletListButton->addSeparator();
@@ -109,18 +120,34 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
     connect(widget.paragraphStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));
     connect(widget.paragraphStyleCombo, SIGNAL(showStyleManager(int)), this, SLOT(slotShowStyleManager(int)));
 
-    connect(m_mapper, SIGNAL(mapped(int)), this, SLOT(changeListLevel(int)));
 
     m_sortedStylesModel->setStylesModel(m_stylesModel);
+
 }
 
 SimpleParagraphWidget::~SimpleParagraphWidget()
 {
+    QBuffer dev;
+    KoXmlWriter writer(&dev);
+    KoGenStyles genStyles;
+    KoEmbeddedDocumentSaver mainStyles;
+    KoShapeSavingContext savingContext(writer, genStyles, mainStyles);
+
+    writer.startElement("templates:templates");
+    foreach (const KoListLevelProperties &llp, m_levelLibrary) {
+        llp.saveOdf(&writer, savingContext);
+    }
+    writer.endElement(); // list-level-properties
+
+    KSharedConfig::openConfig()->reparseConfiguration();
+    KConfigGroup appAuthorGroup( KSharedConfig::openConfig("calligrarc"), "");
+    appAuthorGroup.writeEntry("listLevelFormats", QString(dev.data()));
+
     //the style model is set on the comboBox who takes over ownership
     delete m_thumbnailer;
 }
 
-void SimpleParagraphWidget::fillListButtons()
+QPixmap SimpleParagraphWidget::generateListLevelPixmap(const KoListLevelProperties &llp)
 {
     KoZoomHandler zoomHandler;
     zoomHandler.setZoom(1.2);
@@ -131,71 +158,214 @@ void SimpleParagraphWidget::fillListButtons()
     TextShape textShape(&itom, &tlm);
     textShape.setSize(QSizeF(300, 100));
     QTextCursor cursor (textShape.textShapeData()->document());
-    foreach(const Lists::ListStyleItem &item, Lists::genericListStyleItems()) {
-        QPixmap pm(48,48);
+    textShape.textShapeData()->document()->setUndoRedoEnabled(false); // let's noth bother
 
-        pm.fill(Qt::transparent);
-        QPainter p(&pm);
+    QPixmap pm(48,48);
 
-        p.translate(0, -1.5);
-        p.setRenderHint(QPainter::Antialiasing);
-        if(item.style != KoListStyle::None) {
-            KoListStyle listStyle;
-            KoListLevelProperties llp = listStyle.levelProperties(1);
-            llp.setStyle(item.style);
-            if (KoListStyle::isNumberingStyle(item.style)) {
-                llp.setStartValue(1);
-                llp.setListItemSuffix(".");
-            }
-            listStyle.setLevelProperties(llp);
-            cursor.select(QTextCursor::Document);
-            QTextCharFormat textCharFormat=cursor.blockCharFormat();
-            textCharFormat.setFontPointSize(11);
-            textCharFormat.setFontWeight(QFont::Normal);
-            cursor.setCharFormat(textCharFormat);
+    pm.fill(Qt::transparent);
+    QPainter p(&pm);
+    p.translate(0, -1.5);
+    p.setRenderHint(QPainter::Antialiasing);
+    if(llp.style() == KoListStyle::None) {
+    } else if (KoListStyle::isNumberingStyle(llp.style())) {
+        KoListStyle listStyle;
 
-            QTextBlock cursorBlock = cursor.block();
-            KoTextBlockData data(cursorBlock);
-            cursor.insertText("----");
-            listStyle.applyStyle(cursor.block(),1);
-            cursorBlock = cursor.block();
-            KoTextBlockData data1(cursorBlock);
-            cursor.insertText("\n----");
-            cursorBlock = cursor.block();
-            KoTextBlockData data2(cursorBlock);
-            cursor.insertText("\n----");
-            cursorBlock = cursor.block();
-            KoTextBlockData data3(cursorBlock);
+        listStyle.setLevelProperties(llp);
+        cursor.select(QTextCursor::Document);
+        QTextCharFormat textCharFormat=cursor.blockCharFormat();
+        textCharFormat.setFontPointSize(11);
+        textCharFormat.setFontWeight(QFont::Normal);
+        cursor.setCharFormat(textCharFormat);
 
-            KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(textShape.textShapeData()->document()->documentLayout());
-            if(lay)
-                lay->layout();
+        QTextBlock cursorBlock = cursor.block();
+        KoTextBlockData data(cursorBlock);
+        cursor.insertText("----");
+        listStyle.applyStyle(cursor.block(),1);
+        cursorBlock = cursor.block();
+        KoTextBlockData data1(cursorBlock);
+        cursor.insertText("\n----");
+        cursorBlock = cursor.block();
+        KoTextBlockData data2(cursorBlock);
+        cursor.insertText("\n----");
+        cursorBlock = cursor.block();
+        KoTextBlockData data3(cursorBlock);
+    } else {
+        KoListStyle listStyle;
+        listStyle.setLevelProperties(llp);
+        cursor.select(QTextCursor::Document);
+        QTextCharFormat textCharFormat=cursor.blockCharFormat();
+        textCharFormat.setFontPointSize(27);
+        textCharFormat.setFontWeight(QFont::Normal);
+        cursor.setBlockCharFormat(textCharFormat);
 
-            KoShapePaintingContext paintContext; //FIXME
-            textShape.paintComponent(p, zoomHandler, paintContext);
-            widget.bulletListButton->addItem(pm, static_cast<int> (item.style));
+        QTextBlock cursorBlock = cursor.block();
+        KoTextBlockData data(cursorBlock);
+        listStyle.applyStyle(cursor.block(),1);
+    }
+
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(textShape.textShapeData()->document()->documentLayout());
+    if(lay)
+        lay->layout();
+
+    KoShapePaintingContext paintContext; //FIXME
+    textShape.paintComponent(p, zoomHandler, paintContext);
+
+    return pm;
+}
+
+void SimpleParagraphWidget::fillListButtons()
+{
+    KSharedConfig::openConfig()->reparseConfiguration();
+    KConfigGroup appAuthorGroup( KSharedConfig::openConfig("calligrarc"), "");
+    QString formats = appAuthorGroup.readEntry("listLevelFormats", QString());
+    formats.replace("\n", "");
+
+    if (false/*!formats.isEmpty()*/) {
+
+        KoXmlDocument document;
+        document.setContent(formats);
+        KoXmlElement styleElem;
+        forEachElement(styleElem, document.documentElement()) {
+            KoListLevelProperties llp;
+    //        properties.loadOdf(scontext, styleElem);
+            m_levelLibrary.append(llp);
         }
+    //    KoOdfLoadingContext odfContext;
+    //    KoShapeLoadingContext loadingContext(odfContext);
+    } else {
+        KoListStyle listStyle;
+        KoListLevelProperties llp = listStyle.levelProperties(1);
+        llp.setMargin(36.0);
+        llp.setMarginIncrease(18.0);
+        llp.setTextIndent(-18.0);
+        llp.setTabStopPosition(36.0);
+        llp.setLabelFollowedBy(KoListStyle::ListTab);
+        llp.setDisplayLevel(4);
+
+        llp.setStyle(KoListStyle::CustomCharItem);
+        llp.setBulletCharacter(QChar(0x2022)); // Bullet
+        m_levelLibrary.append(llp);
+
+        llp.setStyle(KoListStyle::CustomCharItem);
+        llp.setBulletCharacter(QChar(0x25A0)); // Square
+        m_levelLibrary.append(llp);
+
+        llp.setStyle(KoListStyle::CustomCharItem);
+        llp.setBulletCharacter(QChar(0x25C6)); // Rhombus
+        m_levelLibrary.append(llp);
+
+        llp.setStyle(KoListStyle::CustomCharItem);
+        llp.setBulletCharacter(QChar(0x25CB)); // Circle
+        m_levelLibrary.append(llp);
+
+        llp.setStyle(KoListStyle::CustomCharItem);
+        llp.setBulletCharacter(QChar(0x2714)); // HeavyCheckMark
+        m_levelLibrary.append(llp);
+
+        llp.setStyle(KoListStyle::CustomCharItem);
+        llp.setBulletCharacter(QChar(0x2794)); // Right Arrow
+        m_levelLibrary.append(llp);
+
+        llp.setStyle(KoListStyle::DecimalItem);
+        llp.setListItemSuffix(".");
+        m_levelLibrary.append(llp);
+
+        llp.setStyle(KoListStyle::DecimalItem);
+        llp.setListItemSuffix(")");
+        m_levelLibrary.append(llp);
+
+        llp.setStyle(KoListStyle::AlphaLowerItem);
+        llp.setListItemSuffix(".");
+        m_levelLibrary.append(llp);
+
+        llp.setStyle(KoListStyle::AlphaLowerItem);
+        llp.setListItemSuffix(")");
+        m_levelLibrary.append(llp);
+
+        llp.setStyle(KoListStyle::UpperAlphaItem);
+        llp.setListItemSuffix("");
+        m_levelLibrary.append(llp);
+
+        llp.setStyle(KoListStyle::RomanLowerItem);
+        llp.setListItemSuffix("");
+        m_levelLibrary.append(llp);
+
+        llp.setStyle(KoListStyle::UpperRomanItem);
+        llp.setListItemSuffix("");
+        m_levelLibrary.append(llp);
+    }
+
+    m_recentChooserAction = widget.bulletListButton->addItemChooser(5, i18n("Recently Used Level Formats"));
+    int id=1;
+    m_recentListFormats.append(m_levelLibrary.at(0));
+    widget.bulletListButton->addItem(m_recentChooserAction, generateListLevelPixmap( m_recentListFormats.at(0)), id);
+
+    m_libraryChooserAction = widget.bulletListButton->addItemChooser(5, i18n("Library of Level Formats"));
+    id=1000;
+    foreach(const KoListLevelProperties &llp, m_levelLibrary) {
+        widget.bulletListButton->addItem(m_libraryChooserAction, generateListLevelPixmap(llp), id);
+        QAction *a = widget.bulletListButton->addItemMenuItem(m_libraryChooserAction, id, i18n("Delete"));
+        a->setData(id);
+        connect(a, SIGNAL(triggered(bool)), this, SLOT(deleteLevelFormat()));
+        a = widget.bulletListButton->addItemMenuItem(m_libraryChooserAction, id, i18n("Edit..."));
+        a->setData(id);
+        connect(a, SIGNAL(triggered(bool)), this, SLOT(editLevelFormat()));
+        id++;
     }
 
     widget.bulletListButton->addSeparator();
 
-    QAction *action = new QAction(i18n("Change List Level"),this);
-    action->setToolTip(i18n("Change the level the list is at"));
-
-    QMenu *listLevelMenu = new QMenu();
-    const int levelIndent = 13;
-    for (int level = 0; level < 10; ++level) {
-        QWidgetAction *wa = new QWidgetAction(listLevelMenu);
-        ListLevelChooser *chooserWidget = new ListLevelChooser((levelIndent * level) + 5);
-        wa->setDefaultWidget(chooserWidget);
-        listLevelMenu->addAction(wa);
-        m_mapper->setMapping(wa,level + 1);
-        connect(chooserWidget, SIGNAL(clicked()), wa, SLOT(trigger()));
-        connect(wa, SIGNAL(triggered()), m_mapper, SLOT(map()));
-    }
-
-    action->setMenu(listLevelMenu);
+    QAction *action = new QAction(i18n("Define New Level Format..."),this);
+    action->setToolTip(i18n("Define new bullet or numbering format"));
     widget.bulletListButton->addAction(action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(defineLevelFormat()));
+/*    action = new QAction(i18n("Continue Previous List"),this);
+    action->setToolTip(i18n("Continue the list from a previous list"));
+    widget.bulletListButton->addAction(action);
+    action = new QAction(i18n("Set Numbering Value..."),this);
+    action->setToolTip(i18n("Set the numbering value"));
+    widget.bulletListButton->addAction(action);
+    */
+}
+
+void SimpleParagraphWidget::defineLevelFormat()
+{
+    ListLevelWidget *llw = new ListLevelWidget();
+    KoDialog dia(this);
+
+    dia.setModal(true);
+    dia.setButtons(KoDialog::Ok | KoDialog::Cancel);
+    dia.setMainWidget(llw);
+    dia.setWindowTitle(i18n("Define New List Level Format"));
+
+    KoListLevelProperties llp;
+    llp.setMargin(36.0);
+    llp.setMarginIncrease(18.0);
+    llp.setTextIndent(-18.0);
+    llp.setTabStopPosition(36.0);
+    llp.setLabelFollowedBy(KoListStyle::ListTab);
+    llw->setDisplay(llp);
+
+    if (dia.exec()) {
+        for(int i = 0; i < m_levelLibrary.size(); ++i) {
+            KoListLevelProperties llp = m_levelLibrary.at(i);
+            llp.setLevel(1);
+            widget.bulletListButton->addItem(m_libraryChooserAction, generateListLevelPixmap(m_levelLibrary.at(i)), i+1000);
+        }
+
+        int id = m_levelLibrary.size() + 1000;
+        llw->save(llp);
+
+        m_levelLibrary.append(llp);
+        llp.setLevel(1);
+        widget.bulletListButton->addItem(m_libraryChooserAction, generateListLevelPixmap(m_levelLibrary.at(id-1000)), id);
+        QAction *a = widget.bulletListButton->addItemMenuItem(m_libraryChooserAction, id, i18n("Delete"));
+        a->setData(id);
+        connect(a, SIGNAL(triggered(bool)), this, SLOT(deleteLevelFormat()));
+        a = widget.bulletListButton->addItemMenuItem(m_libraryChooserAction, id, i18n("Edit..."));
+        a->setData(id);
+        connect(a, SIGNAL(triggered(bool)), this, SLOT(editLevelFormat()));
+    }
 }
 
 void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
@@ -310,11 +480,67 @@ void SimpleParagraphWidget::listStyleChanged(int id)
     emit doneWithFocus();
     if (m_blockSignals) return;
     KoListLevelProperties llp;
-    llp.setStyle(static_cast<KoListStyle::Style>(id));
+
+    if (id >= 1000) {
+        llp = m_levelLibrary.at(id-1000);
+    } else {
+        llp = m_recentListFormats.at(id-1);
+        m_recentListFormats.removeAt(id-1);
+    }
+
     llp.setLevel(1);
-    KoTextEditor::ChangeListFlags flags(KoTextEditor::AutoListStyle);
+    m_recentListFormats.prepend(llp);
+    if (m_recentListFormats.size() > 5) {
+        m_recentListFormats.removeLast();
+    }
+    for(int i = 0; i < m_recentListFormats.size(); ++i) {
+        widget.bulletListButton->addItem(m_recentChooserAction, generateListLevelPixmap(m_recentListFormats.at(i)), i+1); // +1 as items are 1 based
+    }
+    KoTextEditor::ChangeListFlags flags(KoTextEditor::AutoListStyle | KoTextEditor::DontUnsetIfSame);
     m_tool->textEditor()->setListProperties(llp, flags);
 }
+
+void SimpleParagraphWidget::deleteLevelFormat()
+{
+    int id = qobject_cast<QAction *>(sender())->data().toInt();
+    m_levelLibrary.takeAt(id-1000);
+    widget.bulletListButton->removeLastItem(m_libraryChooserAction);
+
+    for(int i = 0; i < m_levelLibrary.size(); ++i) {
+        KoListLevelProperties llp = m_levelLibrary.at(i);
+        llp.setLevel(1);
+        if(llp.style() != KoListStyle::None) {
+            widget.bulletListButton->addItem(m_libraryChooserAction, generateListLevelPixmap(m_levelLibrary.at(i)), i+1000);
+/*            QAction *a = widget.bulletListButton->addItemMenuItem(m_libraryChooserAction, id, i18n("Delete"));
+            a->setData(id);
+            connect(a, SIGNAL(triggered(bool)), this, SLOT(deleteLevelFormat()));
+            a = widget.bulletListButton->addItemMenuItem(m_libraryChooserAction, id, i18n("Edit..."));
+            a->setData(id);
+            connect(a, SIGNAL(triggered(bool)), this, SLOT(editLevelFormat()));
+*/        }
+    }
+}
+
+void SimpleParagraphWidget::editLevelFormat()
+{
+    int id = qobject_cast<QAction *>(sender())->data().toInt();
+
+    ListLevelWidget *llw = new ListLevelWidget();
+    KoDialog dia(this);
+
+    dia.setModal(true);
+    dia.setButtons(KoDialog::Ok | KoDialog::Cancel);
+    dia.setMainWidget(llw);
+    dia.setWindowTitle(i18n("Edit List Level Format"));
+
+    llw->setDisplay(m_levelLibrary.at(id-1000));
+
+    if (dia.exec()) {
+        llw->save(m_levelLibrary[id-1000]);
+        widget.bulletListButton->addItem(m_libraryChooserAction, generateListLevelPixmap(m_levelLibrary.at(id-1000)), id);
+    }
+}
+
 
 void SimpleParagraphWidget::styleSelected(int index)
 {
@@ -347,12 +573,4 @@ void SimpleParagraphWidget::slotShowStyleManager(int index)
 void SimpleParagraphWidget::slotParagraphStyleApplied(const KoParagraphStyle *style)
 {
     m_sortedStylesModel->styleApplied(style);
-}
-
-void SimpleParagraphWidget::changeListLevel(int level)
-{
-    emit doneWithFocus();
-    if (m_blockSignals) return;
-
-    m_tool->setListLevel(level);
 }

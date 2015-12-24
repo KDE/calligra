@@ -28,6 +28,18 @@
 
 #include <QDebug>
 
+class ContentWidget : public QFrame
+{
+    Q_OBJECT
+public:
+    ContentWidget() : QFrame(){}
+protected:
+    void resizeEvent(QResizeEvent *event) override { QFrame::resizeEvent(event); emit readyAfterResize();}
+
+Q_SIGNALS:
+    void readyAfterResize();
+};
+
 //This class is a helper to add a label
 class LabelAction : public QWidgetAction
 {
@@ -48,11 +60,12 @@ class ItemChooserAction : public QWidgetAction
 {
 public:
     ItemChooserAction(int columns);
-    QFrame *m_widget;
+    QWidget *m_widget;
     QGridLayout *m_containerLayout;
     int m_cnt;
     int m_columns;
     QToolButton *addItem(QPixmap pm);
+    QToolButton *removeLastItem();
     void addBlanks(int n);
 };
 
@@ -61,20 +74,23 @@ ItemChooserAction::ItemChooserAction(int columns)
  , m_cnt(0)
  , m_columns(columns)
 {
-    m_widget = new QFrame;
+    QFrame *ow = new ContentWidget;
     QGridLayout *l = new QGridLayout();
     l->setSpacing(0);
     l->setMargin(0);
-    m_widget->setLayout(l);
+    l->setSizeConstraint(QLayout::SetMinAndMaxSize);
+    ow->setLayout(l);
 
-    QWidget *w = new QWidget();
-    l->addWidget(w);
+    m_widget = new QWidget();
+    l->addWidget(m_widget);
 
     m_containerLayout = new QGridLayout();
     m_containerLayout->setSpacing(4);
-    w->setLayout(m_containerLayout);
+    m_containerLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
+    m_containerLayout->setColumnStretch(columns-1, 1); // make sure the items are left when less than full row
+    m_widget->setLayout(m_containerLayout);
 
-    setDefaultWidget(m_widget);
+    setDefaultWidget(ow);
 }
 
 QToolButton *ItemChooserAction::addItem(QPixmap pm)
@@ -83,8 +99,24 @@ QToolButton *ItemChooserAction::addItem(QPixmap pm)
     b->setIcon(QIcon(pm));
     b->setIconSize(pm.size());
     b->setAutoRaise(true);
+    b->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    b->setContextMenuPolicy(Qt::ActionsContextMenu);
+    b->setPopupMode(static_cast<QToolButton::ToolButtonPopupMode>(10));
     m_containerLayout->addWidget(b, m_cnt / m_columns, m_cnt % m_columns);
     ++m_cnt;
+    return b;
+}
+
+QToolButton *ItemChooserAction::removeLastItem()
+{
+    --m_cnt;
+    QLayoutItem *li = m_containerLayout->itemAtPosition(m_cnt / m_columns, m_cnt % m_columns);
+    QToolButton *b = 0;
+    if (li) {
+        m_containerLayout->removeItem(li);
+        b = qobject_cast<QToolButton *>(li->widget());
+        delete li;
+    }
     return b;
 }
 
@@ -93,12 +125,9 @@ void ItemChooserAction::addBlanks(int n)
     m_cnt += n;
 }
 
-
 FormattingButton::FormattingButton(QWidget *parent)
     : QToolButton(parent)
     , m_lastId(0)
-    , m_styleAction(0)
-    , m_columns(1)
     , m_menuShownFirstTime(true)
 {
     m_menu = new QMenu();
@@ -110,16 +139,10 @@ FormattingButton::FormattingButton(QWidget *parent)
     connect(m_menu, SIGNAL(aboutToHide()), this, SLOT(menuShown()));
 }
 
-void FormattingButton::setNumColumns(int columns)
+void FormattingButton::setItemsBackground(ItemChooserAction *chooser, const QColor &color)
 {
-    m_styleAction = 0;
-    m_columns = columns;
-}
-
-void FormattingButton::setItemsBackground(const QColor &color)
-{
-    if(m_styleAction) {
-        foreach (QObject *o, m_styleAction->defaultWidget()->children()) {
+    if(chooser) {
+        foreach (QObject *o, chooser->defaultWidget()->children()) {
             QWidget *w = qobject_cast<QWidget *>(o);
             if (w) {
                 QPalette p = w->palette();
@@ -129,11 +152,22 @@ void FormattingButton::setItemsBackground(const QColor &color)
                 break;
             }
         }
-        qobject_cast<QFrame *>(m_styleAction->defaultWidget())->setFrameStyle(QFrame::StyledPanel|QFrame::Sunken);
+        qobject_cast<QFrame *>(chooser->defaultWidget())->setFrameStyle(QFrame::StyledPanel|QFrame::Sunken);
     }
 }
 
-void FormattingButton::addItem(const QPixmap &pm, int id, const QString &toolTip)
+ItemChooserAction *FormattingButton::addItemChooser(int columns, const QString &title)
+{
+    m_menu->addSection(title);
+
+    ItemChooserAction *styleAction = new ItemChooserAction(columns);
+
+    m_menu->addAction(styleAction);
+    connect(styleAction->defaultWidget(), SIGNAL(readyAfterResize()), this, SLOT(recalcMenuSize()));
+    return styleAction;
+}
+
+void FormattingButton::addItem(ItemChooserAction *chooser, const QPixmap &pm, int id, const QString &toolTip)
 {
     //Note: Do not use 0 as the item id, because that will break the m_lastId functionality
     Q_ASSERT(id != 0);
@@ -145,12 +179,7 @@ void FormattingButton::addItem(const QPixmap &pm, int id, const QString &toolTip
             button->setIconSize(pm.size());
         }
     } else {
-        if(m_styleAction == 0) {
-            m_styleAction = new ItemChooserAction(m_columns);
-            m_menu->addAction(m_styleAction);
-        }
-
-        QToolButton *b = m_styleAction->addItem(pm);
+        QToolButton *b = chooser->addItem(pm);
         b->setToolTip(toolTip);
         m_styleMap.insert(id, b);
         connect(b, SIGNAL(released()), this, SLOT(itemSelected()));
@@ -160,22 +189,46 @@ void FormattingButton::addItem(const QPixmap &pm, int id, const QString &toolTip
     }
 }
 
-void FormattingButton::addBlanks(int n)
+QAction *FormattingButton::addItemMenuItem(ItemChooserAction *chooser, int id, const QString &text)
 {
-    if(m_styleAction) {
-        m_styleAction->addBlanks(n);
+    //Note: Do not use 0 as the item id, because that will break the m_lastId functionality
+    Q_ASSERT(id != 0);
+
+    if (m_styleMap.contains(id)) {
+        QToolButton *button = dynamic_cast<QToolButton *> (m_styleMap.value(id));
+        if (button) {
+            QAction *a = new QAction(text, nullptr);
+            button->addAction(a);
+            return a;
+        }
+    }
+    return nullptr;
+}
+
+void FormattingButton::addBlanks(ItemChooserAction *chooser, int n)
+{
+    chooser->addBlanks(n);
+}
+
+void FormattingButton::removeLastItem(ItemChooserAction *chooser)
+{
+    QToolButton *b = chooser->removeLastItem();
+
+    int id = m_styleMap.key(b);
+    m_styleMap.remove(id);
+    b->deleteLater();
+    if (m_lastId == id) {
+Q_ASSERT(false);//oops
     }
 }
 
 void FormattingButton::addAction(QAction *action)
 {
-    m_styleAction = 0;
     m_menu->addAction(action);
 }
 
 void FormattingButton::addSeparator()
 {
-    m_styleAction = 0;
     m_menu->addSeparator();
 }
 
@@ -208,7 +261,16 @@ void FormattingButton::menuShown()
     m_menuShownFirstTime = false;
 }
 
+void FormattingButton::recalcMenuSize()
+{
+    m_menu->setSeparatorsCollapsible(!m_menu->separatorsCollapsible()); // invalidates menu cache
+    m_menu->setSeparatorsCollapsible(!m_menu->separatorsCollapsible()); // of action rects
+    m_menu->setMaximumSize(m_menu->sizeHint());
+}
+
 bool FormattingButton::isFirstTimeMenuShown()
 {
     return m_menuShownFirstTime;
 }
+
+#include "FormattingButton.moc"

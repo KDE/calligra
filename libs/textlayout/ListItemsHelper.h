@@ -33,12 +33,14 @@ namespace Lists
 {
 enum Capitalisation { Lowercase, Uppercase };
 struct ListStyleItem {
-    ListStyleItem(const QString &name_, KoListStyle::Style style_) {
+    ListStyleItem(const QString &name_, KoListStyle::Style style_, const QString &suffix_ = QString()) {
         name = name_;
         style = style_;
+        suffix = suffix_;
     }
     KoListStyle::Style style;
     QString name;
+    QString suffix;
 };
 
 KOTEXTLAYOUT_EXPORT QString intToRoman(int n);

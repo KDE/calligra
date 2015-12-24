@@ -26,6 +26,9 @@
 
 #include <QWidget>
 #include <QTextBlock>
+#include <QPixmap>
+
+#include <KoListLevelProperties.h>
 
 class TextTool;
 class KoStyleManager;
@@ -37,6 +40,7 @@ class DockerStylesComboModel;
 class StylesDelegate;
 
 class QSignalMapper;
+namespace Lists {class ListStyleItem;};
 
 class SimpleParagraphWidget : public QWidget
 {
@@ -61,10 +65,12 @@ Q_SIGNALS:
     void showStyleManager(int styleId);
 
 private Q_SLOTS:
+    void defineLevelFormat();
     void listStyleChanged(int id);
+    void deleteLevelFormat();
+    void editLevelFormat();
     void styleSelected(int index);
     void styleSelected(const QModelIndex &index);
-    void changeListLevel(int level);
 
 private:
     enum DirectionButtonState {
@@ -76,9 +82,11 @@ private:
     void updateDirection(DirectionButtonState state);
 
 
+    QPixmap generateListLevelPixmap(const KoListLevelProperties &llp);
     void fillListButtons();
 
     Ui::SimpleParagraphWidget widget;
+    QList<KoListLevelProperties> m_levelLibrary;
     KoStyleManager *m_styleManager;
     bool m_blockSignals;
     QTextBlock m_currentBlock;
@@ -86,8 +94,9 @@ private:
     TextTool *m_tool;
     DirectionButtonState m_directionButtonState;
     KoStyleThumbnailer *m_thumbnailer;
-    QSignalMapper *m_mapper;
-
+    QList<KoListLevelProperties> m_recentListFormats;
+    ItemChooserAction *m_recentChooserAction;
+    ItemChooserAction *m_libraryChooserAction;
     StylesModel *m_stylesModel;
     DockerStylesComboModel *m_sortedStylesModel;
     StylesDelegate *m_stylesDelegate;

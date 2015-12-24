@@ -60,6 +60,7 @@ private:
     QList<KoTableOfContentsGeneratorInfo *> m_templateList;
     //each template in the template list will have have a previewGenerator that will be deleted after preview is generated
     QList<TableOfContentsPreview *> m_previewGenerator;
+    ItemChooserAction *m_chooser;
     ReferencesTool *m_referenceTool;
     QSignalMapper *m_signalMapper;
     TableOfContentsTemplate *m_templateGenerator;

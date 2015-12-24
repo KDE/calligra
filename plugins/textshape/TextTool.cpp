@@ -319,11 +319,9 @@ void TextTool::createActions()
     addAction("format_decreaseindent", m_actionFormatDecreaseIndent);
     connect(m_actionFormatDecreaseIndent, SIGNAL(triggered()), this, SLOT(decreaseIndent()));
 
-    QAction *action = new QAction(koIcon("format-list-unordered"),  i18n("Bullet list"), this);
-    addAction("format_bulletlist", action);
-
-    action = new QAction(koIcon("format-list-ordered"),  i18n("Numbered list"), this);
-    addAction("format_numberlist", action);
+    QAction *action = new QAction(koIcon("format-list-unordered"),  i18n("Toggle List or List Level Formatting"), this);
+    action->setToolTip(i18n("Toggle list on/off, or change format of current level"));
+    addAction("format_list", action);
 
     action = new QAction(i18n("Increase Font Size"), this);
     action->setShortcut(Qt::CTRL + Qt::Key_Greater);

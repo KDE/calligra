@@ -144,6 +144,10 @@ public:
     void setMargin(qreal vlaue);
     /// returns the margin of the list
     qreal margin() const;
+    /// sets how much the margin should increase with each level when autogenerating lists - default of 18
+    void setMarginIncrease(qreal vlaue);
+    /// returns how much the margin should increase with each level when autogenerating lists - default of 18
+    qreal marginIncrease() const;
 
     /// sets the text indent of the list item
     void setTextIndent(qreal value);
@@ -159,6 +163,10 @@ public:
     void setTabStopPosition(qreal value);
     /// returns the value of tab stop that follows the label, it is used only if ListLabelFollowedBy is ListTab
     qreal tabStopPosition() const;
+    /// returns if the value of tab stop that follows the label is set, it is used only if ListLabelFollowedBy is ListTab
+    bool hasTabStopPosition() const;
+    /// clears (unsets) the value of tab stop that follows the label, it is used only if ListLabelFollowedBy is ListTab
+    void clearTabStopPosition();
 
     /// sets the alignment mode of the list isLabelAlignmentMode=true if ist-level-position-and-space-mode=label-alignment
     void setAlignmentMode(bool isLabelAlignmentMode);

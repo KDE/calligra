@@ -46,7 +46,6 @@ SimpleTableOfContentsWidget::SimpleTableOfContentsWidget(ReferencesTool *tool, Q
     m_templateGenerator = new TableOfContentsTemplate(KoTextDocument(m_referenceTool->editor()->document()).styleManager());
 
     widget.addToC->setIcon(koIcon("insert-tableofcontents"));
-    widget.addToC->setNumColumns(1);
     connect(widget.addToC, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.addToC, SIGNAL(aboutToShowMenu()), this, SLOT(prepareTemplateMenu()));
     connect(widget.addToC, SIGNAL(itemTriggered(int)), this, SLOT(applyTemplate(int)));
@@ -78,6 +77,8 @@ void SimpleTableOfContentsWidget::prepareTemplateMenu()
 
     connect(m_signalMapper, SIGNAL(mapped(int)), this, SLOT(pixmapReady(int)));
 
+    m_chooser = widget.addToC->addItemChooser(1);
+
     int index = 0;
     foreach (KoTableOfContentsGeneratorInfo *info, m_templateList) {
         TableOfContentsPreview *preview = new TableOfContentsPreview();
@@ -93,7 +94,7 @@ void SimpleTableOfContentsWidget::prepareTemplateMenu()
         if (! widget.addToC->hasItemId(index)) {
             QPixmap pmm(QSize(200,120));
             pmm.fill(Qt::white);
-            widget.addToC->addItem(pmm, index);
+            widget.addToC->addItem(m_chooser, pmm, index);
         }
     }
     if (widget.addToC->isFirstTimeMenuShown()) {
@@ -107,7 +108,7 @@ void SimpleTableOfContentsWidget::prepareTemplateMenu()
 void SimpleTableOfContentsWidget::pixmapReady(int templateId)
 {
     // +1 to the templateId is because formattingButton does not allow id = 0
-    widget.addToC->addItem(m_previewGenerator.at(templateId)->previewPixmap(), templateId + 1);
+    widget.addToC->addItem(m_chooser, m_previewGenerator.at(templateId)->previewPixmap(), templateId + 1);
     disconnect(m_previewGenerator.at(templateId), SIGNAL(pixmapGenerated()), m_signalMapper, SLOT(map()));
     m_previewGenerator.at(templateId)->deleteLater();
 }

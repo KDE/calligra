@@ -67,7 +67,7 @@ KoListLevelProperties::KoListLevelProperties()
     setCharacterProperties(charStyle);
 
     setRelativeBulletSize(100);
-    setAlignmentMode(false);
+    setAlignmentMode(true);
     setDisplayLevel(1);
     connect(this,SIGNAL(styleChanged(int)),SLOT(onStyleChanged(int)));
 }
@@ -399,6 +399,19 @@ qreal KoListLevelProperties::margin() const
     return propertyDouble(KoListStyle::Margin);
 }
 
+void KoListLevelProperties::setMarginIncrease(qreal value)
+{
+    setProperty(KoListStyle::MarginIncrease, value);
+}
+
+qreal KoListLevelProperties::marginIncrease() const
+{
+    if(d->stylesPrivate.contains(KoListStyle::MarginIncrease))
+        return propertyDouble(KoListStyle::MarginIncrease);
+    else
+        return 18; // market default it seems
+}
+
 void KoListLevelProperties::setTextIndent(qreal value)
 {
     setProperty(KoListStyle::TextIndent, value);
@@ -422,6 +435,16 @@ bool KoListLevelProperties::alignmentMode() const
 void KoListLevelProperties::setTabStopPosition(qreal value)
 {
     setProperty(KoListStyle::TabStopPosition,value);
+}
+
+bool KoListLevelProperties::hasTabStopPosition() const
+{
+    return d->stylesPrivate.contains(KoListStyle::TabStopPosition);
+}
+
+void KoListLevelProperties::clearTabStopPosition()
+{
+    d->stylesPrivate.remove(KoListStyle::TabStopPosition);
 }
 
 qreal KoListLevelProperties::tabStopPosition() const
@@ -463,10 +486,6 @@ KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list)
 
 void KoListLevelProperties::onStyleChanged(int key)
 {
-    int bullet=KoListStyle::bulletCharacter(key);
-    if (bullet != 0)
-        setBulletCharacter(QChar(bullet));
-
     //for numbered list the relative bullet size is made 100
     if (KoListStyle::isNumberingStyle(key)) {
         setRelativeBulletSize(100);
@@ -515,67 +534,12 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
 
         //1.6: KoParagCounter::loadOasisListStyle
         QString bulletChar = style.attributeNS(KoXmlNS::text, "bullet-char", QString());
-//         debugText << "style.localName()=" << style.localName() << "level=" << level << "displayLevel=" << displayLevel << "bulletChar=" << bulletChar;
         if (bulletChar.isEmpty()) {  // list without any visible bullets
-            setStyle(KoListStyle::CustomCharItem);
             setBulletCharacter(QChar());
-        } else { // try to determinate the bullet we should use
-            switch (bulletChar[0].unicode()) {
-            case 0x2022: // bullet, a small disc -> circle
-                setStyle(KoListStyle::Bullet);
-                break;
-            case 0x25CF: // black circle, large disc -> disc
-                setStyle(KoListStyle::BlackCircle);
-                break;
-            case 0x25CB:           //white circle, no fill
-                setStyle(KoListStyle::CircleItem);
-                break;
-            case 0x25C6: // losange => rhombus
-                setStyle(KoListStyle::RhombusItem);
-                break;
-            case 0x25A0: // square. Not in OASIS (reserved Unicode area!), but used in both OOo and kotext.
-                setStyle(KoListStyle::SquareItem);
-                break;
-            case 0x27A2: // two-colors right-pointing triangle
-                setStyle(KoListStyle::RightArrowHeadItem);
-                break;
-            case 0x2794: // arrow to right
-                setStyle(KoListStyle::RightArrowItem);
-                break;
-            case 0x2714: // checkmark
-                setStyle(KoListStyle::HeavyCheckMarkItem);
-                break;
-            case 0x2d: // minus
-                setStyle(KoListStyle::CustomCharItem);
-                break;
-            case 0x2717: // cross
-                setStyle(KoListStyle::BallotXItem);
-                break;
-            default:
-                QChar customBulletChar = bulletChar[0];
-                debugText << "Unhandled bullet code 0x" << QString::number((uint)customBulletChar.unicode(), 16) << bulletChar;
-                debugText << "Should use the style =>" << style.attributeNS(KoXmlNS::text, "style-name", QString()) << "<=";
-                setStyle(KoListStyle::CustomCharItem);
-                /*
-                QString customBulletFont;
-                // often StarSymbol when it comes from OO; doesn't matter, Qt finds it in another font if needed.
-                if ( listStyleProperties.hasAttributeNS( KoXmlNS::style, "font-name" ) )
-                {
-                    customBulletFont = listStyleProperties.attributeNS( KoXmlNS::style, "font-name", QString() );
-                    debugText <<"customBulletFont style:font-name =" << listStyleProperties.attributeNS( KoXmlNS::style,"font-name", QString() );
-                }
-                else if ( listStyleTextProperties.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
-                {
-                    customBulletFont = listStyleTextProperties.attributeNS( KoXmlNS::fo, "font-family", QString() );
-                    debugText <<"customBulletFont fo:font-family =" << listStyleTextProperties.attributeNS( KoXmlNS::fo,"font-family", QString() );
-                }
-                // ## TODO in fact we're supposed to read it from the style pointed to by text:style-name
-                */
-//                     setStyle(KoListStyle::BoxItem); //fallback
-                break;
-            } // switch
+        } else {
             setBulletCharacter(bulletChar[0]);
         }
+        setStyle(KoListStyle::CustomCharItem);
         QString size = style.attributeNS(KoXmlNS::text, "bullet-relative-size", QString());
         if (!size.isEmpty()) {
             setRelativeBulletSize(size.remove('%').toInt());
@@ -697,7 +661,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
             continue;
         const QString localName = property.localName();
         if (localName == "list-level-properties") {
-            QString mode(property.attributeNS(KoXmlNS::text, "list-level-position-and-space-mode"));
+            QString mode(property.attributeNS(KoXmlNS::text, "list-level-position-and-space-mode", "label-width-and-position"));
             if (mode == "label-alignment") {
                 QString textAlign(property.attributeNS(KoXmlNS::fo, "text-align"));
                 setAlignment(textAlign.isEmpty() ? Qt::AlignLeft : KoText::alignmentFromString(textAlign));
@@ -747,9 +711,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                         //TODO support ODF 18.829 text:label-followed-by and 18.832 text:list-tab-stop-position
                      }
                 }
-            }
-
-            if(alignmentMode()!=true ){ // default is mode == "label-width-and-position"
+            } else { // default is mode == "label-width-and-position"
                 // The text:space-before, text:min-label-width, text:minimum-label-distance and fo:text-align attributes
                 // are used to define the position and spacing of the list label and the list item.
 
@@ -841,11 +803,9 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
     else {
         writer->startElement("text:list-level-style-bullet");
 
-        int bullet;
+        int bullet = 0;
         if (d->stylesPrivate.contains(KoListStyle::BulletCharacter)) {
             bullet = d->stylesPrivate.value(KoListStyle::BulletCharacter).toInt();
-        } else { // try to determine the bullet character from the style
-            bullet = KoListStyle::bulletCharacter(style());
         }
         writer->addAttribute("text:bullet-char", QChar(bullet));
     }

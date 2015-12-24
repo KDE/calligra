@@ -229,28 +229,14 @@ bool KoListStyle::isNumberingStyle() const
 
 bool KoListStyle::isNumberingStyle(int style)
 {
-    bool retval = true;
     switch (style) {
-    case KoListStyle::SquareItem:
-    case KoListStyle::DiscItem:
-    case KoListStyle::CircleItem:
     case KoListStyle::None:
-    case KoListStyle::Bullet:
-    case KoListStyle::BlackCircle:
-    case KoListStyle::BoxItem:
-    case KoListStyle::RhombusItem:
-    case KoListStyle::HeavyCheckMarkItem:
-    case KoListStyle::BallotXItem:
-    case KoListStyle::RightArrowItem:
-    case KoListStyle::RightArrowHeadItem:
     case KoListStyle::CustomCharItem:
     case KoListStyle::ImageItem:
-        retval = false;
-        break;
+        return false;
     default:
-        retval = true;
+        return true;
     }
-    return retval;
 }
 
 bool KoListStyle::isOulineStyle() const
@@ -267,23 +253,4 @@ bool KoListStyle::isOulineStyle() const
 QList<int> KoListStyle::listLevels() const
 {
     return d->levels.keys();
-}
-
-int KoListStyle::bulletCharacter(int style)
-{
-    int bullet;
-    switch (style) {
-    case KoListStyle::Bullet:               bullet = 0x2022; break;
-    case KoListStyle::CircleItem:           bullet = 0x25CB; break;
-    case KoListStyle::RhombusItem:          bullet = 0x25C6; break;
-    case KoListStyle::SquareItem:           bullet = 0x25A0; break;
-    case KoListStyle::RightArrowHeadItem:   bullet = 0x27A2; break;
-    case KoListStyle::RightArrowItem:       bullet = 0x2794; break;
-    case KoListStyle::HeavyCheckMarkItem:   bullet = 0x2714; break;
-    case KoListStyle::BallotXItem:          bullet = 0x2717; break;
-    case KoListStyle::BlackCircle:
-    case KoListStyle::DiscItem:             bullet = 0x25CF; break;
-    default:                                bullet = 0; break; //empty character
-    }
-    return bullet;
 }

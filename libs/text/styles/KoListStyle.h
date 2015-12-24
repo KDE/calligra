@@ -71,42 +71,23 @@ public:
     /// If you add a style to that list you also need to check if you need to update
     /// KoListStyle::isNumberingStyle(int)
     enum Style {
-        /// Draw a square
-        SquareItem = QTextListFormat::ListSquare,
-        /// Draw a disc (filled circle)  (aka bullet)
-        DiscItem = QTextListFormat::ListDisc,
-        /// Draw a disc (non-filled disk)
-        CircleItem = QTextListFormat::ListCircle,
-        /// use arabic numbering (1, 2, 3, ...)
-        DecimalItem = QTextListFormat::ListDecimal,
-        /// use alpha numbering (a, b, c, ... aa, ab, ...)
-        AlphaLowerItem = QTextListFormat::ListLowerAlpha,
-        /// use alpha numbering (A, B, C, ... AA, AB, ...)
-        UpperAlphaItem = QTextListFormat::ListUpperAlpha,
         /// List style with no numbering
         None = 1,
+        /// use an unicode char for the bullet
+        CustomCharItem,
+        /// an image for the bullet
+        ImageItem,
+
+        /// use arabic numbering (1, 2, 3, ...)
+        DecimalItem,
+        /// use alpha numbering (a, b, c, ... aa, ab, ...)
+        AlphaLowerItem,
+        /// use alpha numbering (A, B, C, ... AA, AB, ...)
+        UpperAlphaItem,
         /// use lower roman counting.  (i, ii, iii, iv, ...)
         RomanLowerItem,
         /// use upper roman counting.  (I, II, III, IV, ...)
         UpperRomanItem,
-        /// bullet, a small circle Unicode char U+2022
-        Bullet,
-        /// black circle, a large circle Unicode char U+25CF
-        BlackCircle,
-        /// draw a box
-        BoxItem,
-        /// rhombus, like a SquareItem but rotated by 45 degree
-        RhombusItem,
-        /// a check mark
-        HeavyCheckMarkItem,
-        /// a ballot x
-        BallotXItem,
-        /// heavy wide-headed rightwards arrow
-        RightArrowItem,
-        /// three-d top-lighted rightwards arrowhead
-        RightArrowHeadItem,
-        /// use an unicode char for the bullet
-        CustomCharItem,
         Bengali,    ///< Bengali characters for normal 10-base counting
         Gujarati,   ///< Gujarati characters for normal 10-base counting
         Gurumukhi,  ///< Gurumukhi characters for normal 10-base counting
@@ -119,38 +100,46 @@ public:
         Thai,       ///< Thai characters for normal 10-base counting
         Abjad,      ///< Abjad sequence.
         AbjadMinor, ///< A lesser known version of the Abjad sequence.
-        ArabicAlphabet, ///< Arabic alphabet.
-        /// an image for the bullet
-        ImageItem
+        ArabicAlphabet ///< Arabic alphabet.
 
         // TODO look at css 3 for things like hebrew counters
     };
 
     /// further properties
     enum Property {
-        ListItemPrefix = QTextFormat::UserProperty + 1000, ///< The text to be printed before the listItem
+        // Housekeeping
+        Level = QTextFormat::UserProperty + 1000,          ///< list nesting level, is 1 or higher, or zero when implied
+        ListId,         ///< A group of lists together are called 1 (user intended) list in ODF. Store the listId here
+        StyleId,        ///< The id stored in the listFormat to link the list to this style.
+        IsOutline,      ///< If true then this list is an outline list (for header paragraphs)
+
+        // Label
+        ListItemPrefix, ///< The text to be printed before the listItem
         ListItemSuffix, ///< The text to be printed after the listItem
         StartValue,     ///< First value to use
-        Level,          ///< list nesting level, is 1 or higher, or zero when implied
-        DisplayLevel,   ///< show this many levels. Is always lower than the (implied) level.
+        DisplayLevel,   ///< show this many parent levels. Is always lower than the (implied) level.
         CharacterStyleId,///< CharacterStyle used for markup of the counter
         CharacterProperties, ///< This stores the character properties of the list style
         BulletCharacter,///< an int with the unicode value of the character (for CustomCharItem)
         RelativeBulletSize,     ///< size in percent relative to the height of the text
-        Alignment,      ///< Alignment of the counter
-        MinimumWidth,   ///< The minimum width, in pt, of the listItem including the prefix/suffix.
-        ListId,         ///< A group of lists together are called 1 (user intended) list in ODF. Store the listId here
-        IsOutline,      ///< If true then this list is an outline list (for header paragraphs)
         LetterSynchronization, ///< If letters are used for numbering, when true increment all at the same time. (aa, bb)
-        StyleId,        ///< The id stored in the listFormat to link the list to this style.
-        Indent,         ///< The space (margin) to include for all paragraphs
-        MinimumDistance, ///< The minimum distance, in pt, between the counter and the text
         Width,          ///< The width, in pt, of  a picture bullet.
         Height,         ///< The height, in pt, of a picture bullet.
         BulletImage,    ///< Bullet image stored as a key for lookup in the imageCollection
-        Margin,         ///< Stores the margin of the list
-        TextIndent,     ///< Stores the text indent of list item
+
+        // Geometry mode
         AlignmentMode,   ///< Is true if list-level-position-and-space-mode=label-alignment
+
+        // Geometry properties for old mode
+        Indent,         ///< The space (margin) to include for all paragraphs
+        MinimumWidth,   ///< The minimum width, in pt, of the listItem including the prefix/suffix.
+        MinimumDistance, ///< The minimum distance, in pt, between the counter and the text
+
+        // Geometry properties for label-alignment mode
+        Alignment,      ///< Alignment of the counter
+        Margin,         ///< Stores the margin of the list - not ODF but convenience when auto generating new levels
+        MarginIncrease, ///< Stores the margin increase of the list
+        TextIndent,     ///< Stores the text indent of list item
         LabelFollowedBy,  ///< Label followed by one of the enums ListLabelFollowedBy
         TabStopPosition   ///< Specifies the additional tab stops
     };
@@ -261,7 +250,6 @@ public:
     /// returns true if style is a numbering style
     static bool isNumberingStyle(int style);
 
-    static int bulletCharacter(int style);
 Q_SIGNALS:
     void nameChanged(const QString &newName);
     void styleChanged(int level);

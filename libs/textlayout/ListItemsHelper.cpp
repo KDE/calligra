@@ -221,26 +221,19 @@ QList<ListStyleItem> Lists::genericListStyleItems()
 {
     QList<ListStyleItem> answer;
     answer.append(ListStyleItem(i18nc("Text list-style", "None"), KoListStyle::None));
-    answer.append(ListStyleItem(i18n("Small Bullet"), KoListStyle::Bullet));
-    answer.append(ListStyleItem(i18n("Circle Bullet"), KoListStyle::CircleItem));
-    answer.append(ListStyleItem(i18n("Square Bullet"), KoListStyle::SquareItem));
-    answer.append(ListStyleItem(i18n("Rhombus Bullet"), KoListStyle::RhombusItem));
-    answer.append(ListStyleItem(i18n("Check Mark Bullet"), KoListStyle::HeavyCheckMarkItem));
-    answer.append(ListStyleItem(i18n("Rightwards Arrow Bullet"), KoListStyle::RightArrowItem));
-    answer.append(ListStyleItem(i18n("Arabic"), KoListStyle::DecimalItem));
-    answer.append(ListStyleItem(i18n("Lower Alphabetical"), KoListStyle::AlphaLowerItem));
-    answer.append(ListStyleItem(i18n("Upper Alphabetical"), KoListStyle::UpperAlphaItem));
-    answer.append(ListStyleItem(i18n("Lower Roman"), KoListStyle::RomanLowerItem));
-    answer.append(ListStyleItem(i18n("Upper Roman"), KoListStyle::UpperRomanItem));
+    answer.append(ListStyleItem(i18n("Arabic"), KoListStyle::DecimalItem, "."));
+    answer.append(ListStyleItem(i18n("Arabic"), KoListStyle::DecimalItem, ")"));
+    answer.append(ListStyleItem(i18n("Lower Alphabetical"), KoListStyle::AlphaLowerItem, "."));
+    answer.append(ListStyleItem(i18n("Lower Alphabetical"), KoListStyle::AlphaLowerItem, ")"));
+    answer.append(ListStyleItem(i18n("Upper Alphabetical"), KoListStyle::UpperAlphaItem, ""));
+    answer.append(ListStyleItem(i18n("Lower Roman"), KoListStyle::RomanLowerItem, ""));
+    answer.append(ListStyleItem(i18n("Upper Roman"), KoListStyle::UpperRomanItem, ""));
     return answer;
 }
 
 QList<ListStyleItem> Lists::otherListStyleItems()
 {
     QList<ListStyleItem> answer;
-    answer.append(ListStyleItem(i18n("Large Bullet"), KoListStyle::BlackCircle));
-    answer.append(ListStyleItem(i18n("Ballot X Bullet"), KoListStyle::BallotXItem));
-    answer.append(ListStyleItem(i18n("Rightwards Arrow Head Bullet"), KoListStyle::RightArrowHeadItem));
     answer.append(ListStyleItem(i18n("Bengali"), KoListStyle::Bengali));
     answer.append(ListStyleItem(i18n("Gujarati"), KoListStyle::Gujarati));
     answer.append(ListStyleItem(i18n("Gurumukhi"), KoListStyle::Gurumukhi));
@@ -421,17 +414,7 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
                                 m_textList->format().boolProperty(KoListStyle::LetterSynchronization));
     } else {
         switch (listStyle) {
-        case KoListStyle::SquareItem:
-        case KoListStyle::Bullet:
-        case KoListStyle::BlackCircle:
-        case KoListStyle::DiscItem:
-        case KoListStyle::CircleItem:
-        case KoListStyle::HeavyCheckMarkItem:
-        case KoListStyle::BallotXItem:
-        case KoListStyle::RightArrowItem:
-        case KoListStyle::RightArrowHeadItem:
-        case KoListStyle::RhombusItem:
-        case KoListStyle::BoxItem: {
+        case KoListStyle::CustomCharItem: {
             calcWidth = false;
             if (format.intProperty(KoListStyle::BulletCharacter))
                 item = QString(QChar(format.intProperty(KoListStyle::BulletCharacter)));
@@ -441,12 +424,6 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
                 width = width * (percent / 100.0);
             break;
         }
-        case KoListStyle::CustomCharItem:
-            calcWidth = false;
-            if (format.intProperty(KoListStyle::BulletCharacter))
-                item = QString(QChar(format.intProperty(KoListStyle::BulletCharacter)));
-            width = m_fm.width(item);
-            break;
         case KoListStyle::None:
             calcWidth = false;
             width =  0.0;

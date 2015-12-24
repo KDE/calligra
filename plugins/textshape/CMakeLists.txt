@@ -107,6 +107,7 @@ set ( textshape_SRCS
     dialogs/TableOfContentsTemplate.cpp
     dialogs/BibliographyTemplate.cpp
     dialogs/BibliographyPreview.cpp
+    dialogs/ListLevelWidget.cpp
     dialogs/ListLevelChooser.cpp
     dialogs/SimpleAnnotationWidget.cpp
     dialogs/ManageBookmarkDialog.cpp
@@ -161,6 +162,7 @@ ki18n_wrap_ui(textshape_SRCS
     dialogs/SimpleAnnotationWidget.ui
 
 
+    dialogs/ListLevelWidget.ui
     dialogs/FontDecorations.ui
     dialogs/LanguageTab.ui
     dialogs/ChangeConfigureDialog.ui

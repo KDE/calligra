@@ -61,6 +61,7 @@ private:
     QList<KoBibliographyInfo *> m_templateList;
     //each template in the template list will have have a previewGenerator that will be deleted after preview is generated
     QList<BibliographyPreview *> m_previewGenerator;
+    ItemChooserAction *m_chooser;
     QSignalMapper *m_signalMapper;
     BibliographyTemplate *m_templateGenerator;
 };

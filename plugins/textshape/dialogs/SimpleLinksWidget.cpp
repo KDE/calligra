@@ -41,7 +41,6 @@ SimpleLinksWidget::SimpleLinksWidget(ReferencesTool *tool, QWidget *parent)
     Q_ASSERT(tool);
     widget.insertLink->setDefaultAction(tool->action("insert_link"));
     widget.invokeBookmarkHandler->setDefaultAction(tool->action("invoke_bookmark_handler"));
-    widget.invokeBookmarkHandler->setNumColumns(1);
     connect(widget.insertLink, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.invokeBookmarkHandler, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.invokeBookmarkHandler, SIGNAL(aboutToShowMenu()), this, SLOT(preparePopUpMenu()));

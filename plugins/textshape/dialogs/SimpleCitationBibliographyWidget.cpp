@@ -45,7 +45,6 @@ SimpleCitationBibliographyWidget::SimpleCitationBibliographyWidget(ReferencesToo
     connect(widget.addCitation,SIGNAL(clicked(bool)),this,SIGNAL(doneWithFocus()));
 
     widget.addBibliography->setDefaultAction(tool->action("insert_bibliography"));
-    widget.addBibliography->setNumColumns(1);
     connect(widget.addBibliography,SIGNAL(clicked(bool)),this,SIGNAL(doneWithFocus()));
     connect(widget.addBibliography, SIGNAL(aboutToShowMenu()), this, SLOT(prepareTemplateMenu()));
     connect(widget.addBibliography, SIGNAL(itemTriggered(int)), this, SLOT(applyTemplate(int)));
@@ -80,6 +79,8 @@ void SimpleCitationBibliographyWidget::prepareTemplateMenu()
 
     connect(m_signalMapper, SIGNAL(mapped(int)), this, SLOT(pixmapReady(int)));
 
+    m_chooser = widget.addBibliography->addItemChooser(1);
+
     int index = 0;
     foreach (KoBibliographyInfo *info, m_templateList) {
         BibliographyPreview *preview = new BibliographyPreview();
@@ -95,7 +96,7 @@ void SimpleCitationBibliographyWidget::prepareTemplateMenu()
         if (! widget.addBibliography->hasItemId(index)) {
             QPixmap pmm(QSize(200,120));
             pmm.fill(Qt::white);
-            widget.addBibliography->addItem(pmm, index);
+            widget.addBibliography->addItem(m_chooser, pmm, index);
         }
     }
     if (widget.addBibliography->isFirstTimeMenuShown()) {
@@ -116,7 +117,7 @@ void SimpleCitationBibliographyWidget::insertCustomBibliography()
 void SimpleCitationBibliographyWidget::pixmapReady(int templateId)
 {
     // +1 to the templateId is because formattingButton does not allow id = 0
-    widget.addBibliography->addItem(m_previewGenerator.at(templateId)->previewPixmap(), templateId + 1);
+    widget.addBibliography->addItem(m_chooser, m_previewGenerator.at(templateId)->previewPixmap(), templateId + 1);
     disconnect(m_previewGenerator.at(templateId), SIGNAL(pixmapGenerated()), m_signalMapper, SLOT(map()));
     m_previewGenerator.at(templateId)->deleteLater();
 }
