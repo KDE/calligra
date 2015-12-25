@@ -642,7 +642,15 @@ Value func_weeksInYear(valVector args, ValueCalc *calc, FuncExtra *)
 {
     int y = calc->conv()->asInteger(args[0]).asInteger();
     QDate date(y, 12, 31);   // last day of the year
-    return Value(date.weekNumber());
+    int yearNumber;
+    int weekNumber = date.weekNumber(&yearNumber);
+    // day assigned to first week of next year?
+    if (yearNumber != y) {
+        // take weekday the week before then
+        date = date.addDays(-7);
+        weekNumber = date.weekNumber();
+    }
+    return Value(weekNumber);
 }
 
 // Function: EASTERSUNDAY
