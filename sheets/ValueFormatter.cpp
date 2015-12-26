@@ -324,6 +324,7 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
             postfix += '%';
         break;
     case Format::Money:
+        // There is no substitute for this in QLocale (toCurrencyString cannot set precision) :(
         localizedNumber = m_converter->settings()->locale()->formatMoney(val, currencySymbol.isEmpty() ? m_converter->settings()->locale()->currencySymbol() : currencySymbol, p);
         break;
     case Format::Scientific: {

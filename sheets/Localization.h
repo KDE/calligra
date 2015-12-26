@@ -34,6 +34,7 @@ namespace Calligra
 namespace Sheets
 {
 
+// This should be ported to QLocale, however, there is no substitute for currency formatting with precision support.
 class CALLIGRA_SHEETS_ODF_EXPORT Localization : public KLocale
 {
 public:
