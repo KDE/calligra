@@ -346,7 +346,7 @@ Value func_hour(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() == 1) {
         Value v = calc->conv()->asTime(args[0]);
         if (v.isError()) return v;
-        time = v.asTime(calc->settings());
+        time = v.asTime();
     } else
         time = QTime::currentTime();
     return Value(time.hour());
@@ -359,7 +359,7 @@ Value func_minute(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() == 1) {
         Value v = calc->conv()->asTime(args[0]);
         if (v.isError()) return v;
-        time = v.asTime(calc->settings());
+        time = v.asTime();
     } else
         time = QTime::currentTime();
     return Value(time.minute());
@@ -372,7 +372,7 @@ Value func_second(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() == 1) {
         Value v = calc->conv()->asTime(args[0]);
         if (v.isError()) return v;
-        time = v.asTime(calc->settings());
+        time = v.asTime();
     } else
         time = QTime::currentTime();
     return Value(time.second() + qRound(time.msec() * 0.001));
@@ -585,7 +585,7 @@ Value func_time(valVector args, ValueCalc *calc, FuncExtra *)
     res = res.addSecs(60 * m);
     res = res.addSecs(s);
 
-    return Value(res, calc->settings());
+    return Value(res);
 }
 
 // Function: CURRENTDATE
@@ -597,7 +597,7 @@ Value func_currentDate(valVector, ValueCalc * calc, FuncExtra *)
 // Function: CURRENTTIME
 Value func_currentTime(valVector, ValueCalc * calc, FuncExtra *)
 {
-    return Value(QTime::currentTime(), calc->settings());
+    return Value(QTime::currentTime());
 }
 
 // Function: CURRENTDATETIME

@@ -429,9 +429,9 @@ void ValidityDialog::init()
             break;
         case Validity::Time:
             chooseType->setCurrentIndex(5);
-            val_min->setText(locale->formatTime(validity.minimumValue().asTime(settings), true));
+            val_min->setText(locale->formatTime(validity.minimumValue().asTime(), true));
             if (validity.condition() >= 5)
-                val_max->setText(locale->formatTime(validity.maximumValue().asTime(settings), true));
+                val_max->setText(locale->formatTime(validity.maximumValue().asTime(), true));
             break;
         case Validity::List: {
             chooseType->setCurrentIndex(7);

@@ -826,7 +826,7 @@ void AutoFillCommand::fillSequence(const QList<Cell>& _srcList,
         const Cell cell = _srcList.value(0);
         if (cell.isTime() || cell.value().format() == Value::fmt_DateTime) {
             // TODO Stefan: delta depending on minimum unit of format
-            deltaSequence.append(Value(QTime(1, 0), m_sheet->map()->calculationSettings()));
+            deltaSequence.append(Value(QTime(1, 0)));
         } else if (cell.isDate()) {
             // TODO Stefan: delta depending on minimum unit of format
             Value value(1);

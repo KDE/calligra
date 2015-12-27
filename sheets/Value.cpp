@@ -335,10 +335,9 @@ Value::Value(const QDateTime& dt, const CalculationSettings* settings)
 }
 
 // create a floating-point value from time
-Value::Value(const QTime& time, const CalculationSettings* settings)
+Value::Value(const QTime& time)
         : d(Private::null())
 {
-    Q_UNUSED(settings);
     const QTime refTime(0, 0);    // reference time is midnight
 
     d->type = Float;
@@ -533,9 +532,8 @@ QDate Value::asDate(const CalculationSettings* settings) const
 }
 
 // get the value as time
-QTime Value::asTime(const CalculationSettings* settings) const
+QTime Value::asTime() const
 {
-    Q_UNUSED(settings);
     QTime dt(0, 0, 0, 0);
 
     const int days = asInteger();

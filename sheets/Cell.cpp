@@ -1344,7 +1344,7 @@ void Cell::saveOdfValue(KoXmlWriter &xmlWriter)
     case Value::fmt_Time: {
         xmlWriter.addAttribute("office:value-type", "time");
         xmlWriter.addAttribute("office:time-value",
-                               value().asTime(sheet()->map()->calculationSettings()).toString("'PT'hh'H'mm'M'ss'S'"));
+                               value().asTime().toString("'PT'hh'H'mm'M'ss'S'"));
         break;
     }
     case Value::fmt_String: {
@@ -1565,7 +1565,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
             if (ok) {
                 // Value kval( timeToNum( hours, minutes, seconds ) );
                 // cell.setValue( kval );
-                setValue(Value(QTime(hours % 24, minutes, seconds), sheet()->map()->calculationSettings()));
+                setValue(Value(QTime(hours % 24, minutes, seconds)));
 // FIXME Stefan: Should be handled by Value::Format. Verify and remove!
 #if 0
                 Style style;
@@ -2124,7 +2124,7 @@ bool Cell::load(const KoXmlElement & cell, int _xshift, int _yshift,
                     second  = t.right(t.length() - pos1 - 1).toInt();
                     QTime time(hours, minutes, second);
                     if (time.isValid())
-                        setValue(Value(time, sheet()->map()->calculationSettings()));
+                        setValue(Value(time));
                 }
             } else {
                 setValue(Value(t));
@@ -2271,9 +2271,9 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op, const QS
                 pos1 = t.indexOf(':', pos + 1);
                 minutes = t.mid(pos + 1, ((pos1 - 1) - pos)).toInt();
                 second = t.right(t.length() - pos1 - 1).toInt();
-                setValue(Value(QTime(hours, minutes, second), sheet()->map()->calculationSettings()));
-                if (value().asTime(sheet()->map()->calculationSettings()).isValid())    // Should always be the case for new docs
-                    setUserInput(locale()->formatTime(value().asTime(sheet()->map()->calculationSettings()), true));
+                setValue(Value(QTime(hours, minutes, second)));
+                if (value().asTime().isValid())    // Should always be the case for new docs
+                    setUserInput(locale()->formatTime(value().asTime(), true));
                 else { // This happens with old docs, when format is set wrongly to time
                     parseUserInput(pasteOperation(t, userInput(), op));
                 }
@@ -2307,8 +2307,8 @@ QTime Cell::toTime(const KoXmlElement &element)
     pos1 = t.indexOf(':', pos + 1);
     minutes = t.mid(pos + 1, ((pos1 - 1) - pos)).toInt();
     second = t.right(t.length() - pos1 - 1).toInt();
-    setValue(Value(QTime(hours, minutes, second), sheet()->map()->calculationSettings()));
-    return value().asTime(sheet()->map()->calculationSettings());
+    setValue(Value(QTime(hours, minutes, second)));
+    return value().asTime();
 }
 
 QDate Cell::toDate(const KoXmlElement &element)

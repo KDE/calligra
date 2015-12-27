@@ -314,85 +314,85 @@ void TestValueParser::testTryParseTime_data(bool addCol)
     }
 
     QTest::newRow("24hr with seconds") << "C" << "13:14:15" << true
-        << Value(QTime(13, 14, 15), m_calcsettings);
+        << Value(QTime(13, 14, 15));
     QTest::newRow("24hr with seconds us") << "us" << "13:14:15" << false << Value();
     QTest::newRow("24hr with seconds nl") << "nl" << "13:14:15" << true
-        << Value(QTime(13, 14, 15), m_calcsettings);
+        << Value(QTime(13, 14, 15));
     QTest::newRow("24hr with bad seconds 1") << "C" << "13:14:-1" << false << Value();
     QTest::newRow("24hr with bad seconds 2") << "C" << "13:14:60" << false << Value();
     QTest::newRow("24hr with bad seconds 1 nl") << "nl" << "13:14:-1" << false << Value();
     QTest::newRow("24hr with bad seconds 2 nl") << "nl" << "13:14:60" << false << Value();
     QTest::newRow("24hr w/o seconds") << "C" << "13:14" << true
-        << Value(QTime(13, 14), m_calcsettings);
+        << Value(QTime(13, 14));
     QTest::newRow("24hr w/o seconds us") << "us" << "13:14" << false << Value();
     QTest::newRow("24hr w/o seconds nl") << "nl" << "13:14" << true
-        << Value(QTime(13, 14), m_calcsettings);
+        << Value(QTime(13, 14));
     QTest::newRow("24hr with bad minutes 1") << "C" << "13:-1:4" << false << Value();
     QTest::newRow("24hr with bad minutes 2") << "C" << "13:60:10" << false << Value();
     QTest::newRow("24hr with bad minutes 1 nl") << "nl" << "13:-1:4" << false << Value();
     QTest::newRow("24hr with bad minutes 2 nl") << "nl" << "13:60:10" << false << Value();
     QTest::newRow("25hr") << "C" << "25:1:4" << true
-        << Value(QTime(1, 1, 4), m_calcsettings);
+        << Value(QTime(1, 1, 4));
     QTest::newRow("25hr nl") << "nl" << "25:1:4" << true
-        << Value(QTime(1, 1, 4), m_calcsettings);
+        << Value(QTime(1, 1, 4));
     QTest::newRow("0hr") << "C" << "0:14:15" << true
-        << Value(QTime(0, 14, 15), m_calcsettings);
+        << Value(QTime(0, 14, 15));
     QTest::newRow("0hr us") << "us" << "0:14:15" << false << Value();
     QTest::newRow("0hr nl") << "nl" << "0:14:15" << true
-        << Value(QTime(0, 14, 15), m_calcsettings);
+        << Value(QTime(0, 14, 15));
     QTest::newRow("0hr am") << "C" << "0:14:15 AM" << true
-        << Value(QTime(0, 14, 15), m_calcsettings);
+        << Value(QTime(0, 14, 15));
     QTest::newRow("0hr am us") << "us" << "0:14:15 AM" << false << Value();
     QTest::newRow("0hr am nl") << "nl" << "0:14:15 xxAMxx" << true
-        << Value(QTime(0, 14, 15), m_calcsettings);
+        << Value(QTime(0, 14, 15));
     QTest::newRow("0hr pm") << "C" << "0:14:15 pM" << true
-        << Value(QTime(12, 14, 15), m_calcsettings);
+        << Value(QTime(12, 14, 15));
     QTest::newRow("0hr pm us") << "us" << "0:14:15 PM" << false << Value();
     QTest::newRow("0hr pm nl") << "nl" << "0:14:15 xxPmxx" << true
-        << Value(QTime(12, 14, 15), m_calcsettings);
+        << Value(QTime(12, 14, 15));
     QTest::newRow("12hr") << "C" << "10:14:15" << true
-        << Value(QTime(10, 14, 15), m_calcsettings);
+        << Value(QTime(10, 14, 15));
     QTest::newRow("12hr us") << "us" << "10:14:15" << false << Value();
     QTest::newRow("12hr nl") << "nl" << "10:14:15" << true
-        << Value(QTime(10, 14, 15), m_calcsettings);
+        << Value(QTime(10, 14, 15));
     QTest::newRow("am with seconds") << "C" << "10:11:12 am" << true
-        << Value(QTime(10, 11, 12), m_calcsettings);
+        << Value(QTime(10, 11, 12));
     QTest::newRow("am with seconds us") << "us" << "10:11:12 am" << true
-        << Value(QTime(10, 11, 12), m_calcsettings);
+        << Value(QTime(10, 11, 12));
     QTest::newRow("am with seconds nl") << "nl" << "10:11:12 xxamxx" << true
-        << Value(QTime(10, 11, 12), m_calcsettings);
+        << Value(QTime(10, 11, 12));
     QTest::newRow("am w/o seconds") << "C" << "10:11 am" << true
-        << Value(QTime(10, 11), m_calcsettings);
+        << Value(QTime(10, 11));
     QTest::newRow("am w/o seconds us") << "us" << "10:11 am" << true
-        << Value(QTime(10, 11), m_calcsettings);
+        << Value(QTime(10, 11));
     QTest::newRow("am w/o seconds nl") << "nl" << "10:11 xxamxx" << true
-        << Value(QTime(10, 11), m_calcsettings);
+        << Value(QTime(10, 11));
     QTest::newRow("pm with seconds") << "C" << "10:11:12 pm" << true
-        << Value(QTime(22, 11, 12), m_calcsettings);
+        << Value(QTime(22, 11, 12));
     QTest::newRow("pm with seconds us") << "us" << "10:11:12 pm" << true
-        << Value(QTime(22, 11, 12), m_calcsettings);
+        << Value(QTime(22, 11, 12));
     QTest::newRow("pm with seconds nl") << "nl" << "10:11:12 xxpmxx" << true
-        << Value(QTime(22, 11, 12), m_calcsettings);
+        << Value(QTime(22, 11, 12));
     QTest::newRow("pm w/o seconds") << "C" << "10:11 pm" << true
-        << Value(QTime(22, 11), m_calcsettings);
+        << Value(QTime(22, 11));
     QTest::newRow("pm w/o seconds us") << "us" << "10:11 pm" << true
-        << Value(QTime(22, 11), m_calcsettings);
+        << Value(QTime(22, 11));
     QTest::newRow("pm w/o seconds nl") << "nl" << "10:11 xxpmxx" << true
-        << Value(QTime(22, 11), m_calcsettings);
+        << Value(QTime(22, 11));
     QTest::newRow("negative time") << "C" << "-1:30:10" << true
-        << Value(QTime(22, 29, 50), m_calcsettings);
+        << Value(QTime(22, 29, 50));
     QTest::newRow("time with ms") << "C" << "2:3:4.5" << true
-        << Value(QTime(2, 3, 4, 5), m_calcsettings);
+        << Value(QTime(2, 3, 4, 5));
     QTest::newRow("time with ms 2") << "C" << "2:3:4.999" << true
-        << Value(QTime(2, 3, 4, 999), m_calcsettings);
+        << Value(QTime(2, 3, 4, 999));
     QTest::newRow("time with ms us") << "us" << "2:3:4.5 am" << true
-        << Value(QTime(2, 3, 4, 5), m_calcsettings);
+        << Value(QTime(2, 3, 4, 5));
     QTest::newRow("time with ms nl") << "nl" << "2:3:4,5" << true
-        << Value(QTime(2, 3, 4, 5), m_calcsettings);
+        << Value(QTime(2, 3, 4, 5));
     QTest::newRow("noon us") << "us" << "12:00pm" << true
-        << Value(QTime(12, 0), m_calcsettings);
+        << Value(QTime(12, 0));
     QTest::newRow("midnight us") << "us" << "12:00am" << true
-        << Value(QTime(0, 0), m_calcsettings);
+        << Value(QTime(0, 0));
     QTest::newRow("too low ms") << "C" << "2:3:4.-1" << false << Value();
     QTest::newRow("too high ms") << "C" << "2:3:4:1000" << false << Value();
 }
@@ -412,7 +412,7 @@ void TestValueParser::testTryParseTime()
     QCOMPARE(ok, expectedOk);
     // Negative times are a bit annoying. For now just compare the QTime representations.
     if (result.format() == Value::fmt_Time && expected.format() == Value::fmt_Time)
-        QCOMPARE(result.asTime(m_calcsettings), expected.asTime(m_calcsettings));
+        QCOMPARE(result.asTime(), expected.asTime());
     else
         QCOMPARE(result, expected);
 }
@@ -447,7 +447,7 @@ void TestValueParser::testParse() {
         expected = Value(str);
     // Negative times are a bit annoying. For now just compare the QTime representations.
     if (result.format() == Value::fmt_Time && expected.format() == Value::fmt_Time)
-        QCOMPARE(result.asTime(m_calcsettings), expected.asTime(m_calcsettings));
+        QCOMPARE(result.asTime(), expected.asTime());
     else
         QCOMPARE(result, expected);
 }

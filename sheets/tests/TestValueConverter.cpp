@@ -783,9 +783,9 @@ void TestValueConverter::testAsTime_data()
         << ValueWithFormat(10.3, Value::fmt_Time);
 
     QTest::newRow("string valid 1") << "C" << Value("13:45") << true
-        << Value(QTime(13, 45), m_calcsettings);
+        << Value(QTime(13, 45));
     QTest::newRow("string valid 2") << "C" << Value("13:45:33") << true
-        << Value(QTime(13, 45, 33), m_calcsettings);
+        << Value(QTime(13, 45, 33));
     QTest::newRow("string invalid") << "C" << Value("13:66:99") << false
         << Value::errorVALUE();
 
@@ -819,7 +819,7 @@ void TestValueConverter::testAsTime()
     QCOMPARE(ok, expectedOk);
     if (expected.isEmpty()) {
         QTime currentTime = QTime::currentTime();
-        expected = Value(currentTime, m_calcsettings);
+        expected = Value(currentTime);
         QVERIFY(result.isFloat());
         QVERIFY(result.asFloat() <= expected.asFloat());
         QVERIFY(result.asFloat() >= expected.asFloat() - 1.0/(24*60*60));

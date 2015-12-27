@@ -157,14 +157,14 @@ void TestValue::testTime()
 
     // time value
     v1 = new Value();
-    *v1 = Value(Value(QTime(0, 0, 0), &calculationSettings));
+    *v1 = Value(Value(QTime(0, 0, 0)));
     QCOMPARE(v1->type(), Value::Float);
     for (unsigned h = 0; h < 24; ++h)
         for (unsigned m = 0; m < 60; ++m)
             for (unsigned s = 0; s < 60; ++s) {
                 QTime t1 = QTime(h, m, s);
-                *v1 = Value(Value(t1, &calculationSettings));
-                QTime t2 = v1->asTime(&calculationSettings);
+                *v1 = Value(Value(t1));
+                QTime t2 = v1->asTime();
                 QCOMPARE(t1.hour(), t2.hour());
                 QCOMPARE(t1.minute(), t2.minute());
                 QCOMPARE(t1.second(), t2.second());
@@ -174,12 +174,12 @@ void TestValue::testTime()
 
     // time value (msec)
     v1 = new Value();
-    *v1 = Value(Value(QTime(0, 0, 0), &calculationSettings));
+    *v1 = Value(Value(QTime(0, 0, 0)));
     QCOMPARE(v1->type(), Value::Float);
     for (unsigned ms = 0; ms < 1000; ++ms) {
         QTime t1 = QTime(1, 14, 2, ms);
-        *v1 = Value(Value(t1, &calculationSettings));
-        QTime t2 = v1->asTime(&calculationSettings);
+        *v1 = Value(Value(t1));
+        QTime t2 = v1->asTime();
         QCOMPARE(t1.hour(), t2.hour());
         QCOMPARE(t1.minute(), t2.minute());
         QCOMPARE(t1.second(), t2.second());

@@ -170,7 +170,7 @@ public:
      * Creates a floating-point value from time.
      * See also note above.
      */
-    Value(const QTime& time, const CalculationSettings* settings);
+    Value(const QTime& time);
 
     /**
      * Creates a floating-point value from date.
@@ -332,7 +332,7 @@ public:
     /**
      * Returns the time representation of this value.
      */
-    QTime asTime(const CalculationSettings* settings) const;
+    QTime asTime() const;
 
     /**
      * Returns an element in the array value.
