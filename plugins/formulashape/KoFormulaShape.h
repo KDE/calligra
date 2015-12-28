@@ -25,6 +25,7 @@
 #define KoFormulaShapeId "FormulaShapeID"
 #include <KoFrameShape.h>
 
+
 class KoStore;
 class KoDocumentResourceManager;
 class KoOdfLoadingContext;
@@ -87,16 +88,27 @@ public:
 
     KoDocumentResourceManager *resourceManager() const;
 
+    QString content() const;
+    void setContent(QString mathML);
+
+    QFont font() const;
+    void setFont(QFont font);
+
+    QColor backgroundColor() const;
+    void setBackgroundColor(QColor color);
+
+    QColor foregroundColor() const;
+    void setForegroundColor(QColor color);
+
 private:
 
     /// The renderer that takes care of painting the shape's formula
     QMathView* m_qmathview;
+    FormulaDocument* m_document;
+    KoDocumentResourceManager *m_resourceManager;
 
     /// True if this formula is inline, i.e. not embedded in a formula document.
     bool m_isInline;
-
-    FormulaDocument *m_document;
-    KoDocumentResourceManager *m_resourceManager;
 };
 
 #endif // KOFORMULASHAPE_H

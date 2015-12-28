@@ -56,7 +56,10 @@ public:
     ~Private();
 
     KoFormulaShape *parent;
-    QByteArray content;
+    QString mathML;
+    QFont defaultFont;
+    QColor foregroundColor;
+    QColor backgroundColor;
 };
 
 FormulaDocument::Private::Private()
@@ -72,6 +75,7 @@ FormulaDocument::FormulaDocument( KoFormulaShape *parent )
     , d ( new Private )
 {
     d->parent = parent;
+    d->defaultFont = QFont("XITS Math", 12);
 }
 
 FormulaDocument::~FormulaDocument()
@@ -234,11 +238,10 @@ bool FormulaDocument::loadOdfEmbedded( const KoXmlElement &mathElement,
     processMathML(mathDomElement, writer);
     buffer->putChar('\0');
     buffer->seek(0);
-    d->content = buffer->readAll();
+    d->mathML = QString(buffer->readAll());
     buffer->close();
     delete buffer;
 
-    debugFormula << d->content.constData();
     return true;
 }
 
@@ -329,10 +332,6 @@ bool FormulaDocument::saveOdf( SavingContext &context )
     return true;
 }
 
-const QByteArray & FormulaDocument::content() {
-    return d->content;
-}
-
 void FormulaDocument::paintContent( QPainter &painter, const QRect &rect )
 {
     Q_UNUSED( painter );
@@ -340,3 +339,34 @@ void FormulaDocument::paintContent( QPainter &painter, const QRect &rect )
 }
 
 
+QString FormulaDocument::content() const {
+    return d->mathML;
+}
+
+void FormulaDocument::setContent(QString mathML) {
+    d->mathML = mathML;
+}
+
+const QFont& FormulaDocument::font() const {
+    return d->defaultFont;
+}
+
+void FormulaDocument::setFont(QFont font) {
+    d->defaultFont = font;
+}
+
+const QColor& FormulaDocument::backgroundColor() const {
+    return d->backgroundColor;
+}
+
+void FormulaDocument::setBackgroundColor(QColor color) {
+    d->backgroundColor = color;
+}
+
+const QColor& FormulaDocument::foregroundColor() const {
+    return d->foregroundColor;
+}
+
+void FormulaDocument::setForegroundColor(QColor color) {
+    d->foregroundColor = color;
+}

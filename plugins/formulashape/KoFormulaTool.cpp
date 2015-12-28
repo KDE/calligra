@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
-                 2009 Jeremias Epperlein <jeeree@web.de>
+   Copyright (C) 2011 Cyrille Berger <cberger@cberger.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,364 +19,177 @@
 
 #include "KoFormulaTool.h"
 
-#include "KoFormulaShape.h"
-#include "FormulaToolWidget.h"
-#include "FormulaDebug.h"
+#ifdef HAVE_M2MML
+#include <m2mml.h>
+#endif
+
+#include <string>
+
+#include <QComboBox>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QTextEdit>
+#include <QSyntaxHighlighter>
+#include <QSpacerItem>
+#include <QWidget>
+#include <QWidgetAction>
 
 #include <KoCanvasBase.h>
-#include <KoPointerEvent.h>
-#include <KoSelection.h>
-#include <KoShapeController.h>
 #include <KoIcon.h>
+#include <KoXmlReader.h>
 
-#include <klocalizedstring.h>
-
-#include <QKeyEvent>
-#include <QAction>
-#include <QPainter>
-#include <QFile>
-#include <QSignalMapper>
-#include <QFileDialog>
-
-#include <KoShapeSavingContext.h>
-#include <KoShapeLoadingContext.h>
-#include <KoOdfLoadingContext.h>
-#include <KoOdfStylesReader.h>
+#include "FormulaDebug.h"
+#include "FormulaFontFamilyAction.h"
+#include "../textshape/FontSizeAction.h"
+#include "KoFormulaShape.h"
 #include "FormulaCommand.h"
 #include "FormulaCommandUpdate.h"
-#include <KoXmlReader.h>
-#include <KoXmlWriter.h>
-#include <KoGenStyles.h>
-#include <KoEmbeddedDocumentSaver.h>
-#include <QClipboard>
+#include "3rdparty/itexToMML/itex2MML.h"
 
-
-
-KoFormulaTool::KoFormulaTool( KoCanvasBase* canvas )
-    : KoToolBase( canvas )
-    , m_formulaShape( 0 )
+KoFormulaTool::KoFormulaTool(KoCanvasBase* canvas): KoToolBase(canvas), m_textEdit(0), m_errorLabel(0), m_formulaShape(0), m_modeComboBox(0)
 {
-    m_signalMapper = new QSignalMapper(this);
-    setupActions();
-    setTextMode(true);
+    m_actionFontFamily = new FormulaFontFamilyAction(this);
+    m_actionFontSize = new FontSizeAction(this);
 }
 
-KoFormulaTool::~KoFormulaTool()
-{
-    delete m_signalMapper;
-}
-
-void KoFormulaTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KoFormulaTool::activate(KoToolBase::ToolActivation toolActivation, const QSet< KoShape* >& shapes)
 {
     Q_UNUSED(toolActivation);
+
     foreach (KoShape *shape, shapes) {
         m_formulaShape = dynamic_cast<KoFormulaShape*>( shape );
         if( m_formulaShape )
             break;
     }
-    
+
     if( m_formulaShape == 0 )  // none found
     {
         emit done();
         return;
     }
-    useCursor(Qt::IBeamCursor);
-//     connect(m_formulaShape->formulaData(), SIGNAL(dataChanged(FormulaCommand*,bool)), this, SLOT(updateCursor(FormulaCommand*,bool)));
-    connect(m_signalMapper, SIGNAL(mapped(QString)), this, SLOT(insert(QString)));
-    //Only for debugging:
-//     connect(action("write_elementTree"),SIGNAL(triggered(bool)), m_formulaShape->formulaData(), SLOT(writeElementTree()));
-}
-
-void KoFormulaTool::deactivate()
-{
-//     disconnect(m_formulaShape->formulaData(),0,this,0);
-    disconnect(m_signalMapper,0,this,0);
-    m_formulaShape = 0;
-}
-
-
-void KoFormulaTool::updateCursor(FormulaCommand* command, bool undo)
-{
-    repaintCursor();
-}
-
-
-void KoFormulaTool::paint( QPainter &painter, const KoViewConverter &converter )
-{
-    painter.save();
-    // transform painter from view coordinate system to document coordinate system
-    // remember that matrix multiplication is not commutative so painter.matrix
-    // has to come last
-    painter.setTransform(m_formulaShape->absoluteTransformation(&converter) * painter.transform());
-    KoShape::applyConversion(painter,converter);
-//     m_formulaShape->formulaRenderer()->paintElement(painter,m_formulaShape->formulaData()->formulaElement(),true);
-//     m_formulaEditor->paint( painter );
-    painter.restore();
-}
-
-void KoFormulaTool::repaintCursor()
-{
-    canvas()->updateCanvas( m_formulaShape->boundingRect() );
-}
-
-void KoFormulaTool::mousePressEvent( KoPointerEvent *event )
-{
-    // Check if the event is valid means inside the shape 
-    if(!m_formulaShape->boundingRect().contains( event->point )) {
-        return;
+    
+    if(m_textEdit)
+    {
+        m_textEdit->setText(m_formulaShape->content());
     }
-
-    repaintCursor();
-    event->accept();
 }
 
-void KoFormulaTool::mouseDoubleClickEvent( KoPointerEvent *event )
+void KoFormulaTool::mouseMoveEvent(KoPointerEvent* event)
 {
-    if( !m_formulaShape->boundingRect().contains( event->point ) ) {
-        return;
-    }
-    repaintCursor();
-    event->accept();
+    Q_UNUSED(event);
 }
 
-void KoFormulaTool::mouseMoveEvent( KoPointerEvent *event )
+void KoFormulaTool::mousePressEvent(KoPointerEvent* event)
 {
-//     Q_UNUSED( event )
-    if (!(event->buttons() & Qt::LeftButton)) {
-	return;
-    }
-    repaintCursor();
-    event->accept();
+    Q_UNUSED(event);
 }
 
-void KoFormulaTool::mouseReleaseEvent( KoPointerEvent *event )
+void KoFormulaTool::mouseReleaseEvent(KoPointerEvent* event)
 {
-    Q_UNUSED( event )
-
-    // TODO Implement drag and drop
+    Q_UNUSED(event);
 }
 
-void KoFormulaTool::keyPressEvent( QKeyEvent *event )
+void KoFormulaTool::paint(QPainter& painter, const KoViewConverter& converter)
 {
-    FormulaCommand *command=0;
-    if (command!=0) {
-        canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape,command));
-    }
-    repaintCursor();
-    event->accept();
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
 }
-
-void KoFormulaTool::keyReleaseEvent( QKeyEvent *event )
-{
-    event->accept();
-}
-
-void KoFormulaTool::remove( bool backSpace )
-{
-    m_formulaShape->update();
-//     m_formulaEditor->remove( backSpace );
-    m_formulaShape->update();
-}
-
-void KoFormulaTool::insert( const QString& action )
-{
-    FormulaCommand *command;
-    m_formulaShape->update();
-//     command=m_formulaEditor->insertMathML( action );
-//     if (command!=0) {
-//         canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
-//     }
-}
-
-void KoFormulaTool::changeTable ( QAction* action )
-{
-//     FormulaCommand *command;
-    m_formulaShape->update();
-//     bool row=action->data().toList()[0].toBool();
-//     bool insert=action->data().toList()[1].toBool();
-//     command=m_formulaEditor->changeTable(insert,row);
-//     if (command!=0) {
-//         canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
-//     }
-}
-
-void KoFormulaTool::insertSymbol ( const QString& symbol )
-{
-//     FormulaCommand *command;
-//     m_formulaShape->update();
-//     command=m_formulaEditor->insertText( symbol );
-//     if (command!=0) {
-//         canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
-//     }
-}
-
 
 QWidget* KoFormulaTool::createOptionWidget()
 {
-    FormulaToolWidget* options = new FormulaToolWidget( this );
-    options->setFormulaTool( this );
-    return options;
+    QWidget* widget = new QWidget;
+    QVBoxLayout* layout = new QVBoxLayout;
+    QHBoxLayout* hlayout = new QHBoxLayout();
+
+    hlayout->addWidget(m_actionFontFamily->requestWidget(widget));
+
+    QWidget* fontSizeComboBox = m_actionFontSize->requestWidget(widget);
+    fontSizeComboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    hlayout->addWidget(fontSizeComboBox);
+
+    // Combobox to select among latex, matlab and mathml
+    m_modeComboBox = new QComboBox;
+    m_modeComboBox->addItem(i18n("LaTeX"));
+    #ifdef HAVE_M2MML
+    m_modeComboBox->addItem(i18n("Matlab"));
+    if(m_mode == "Matlab")
+    {
+        m_modeComboBox->setCurrentIndex(1);
+    }
+    #endif
+    m_modeComboBox->addItem(i18n("MathML"));
+    m_modeComboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    hlayout->addWidget(m_modeComboBox);
+
+    layout->addLayout(hlayout);
+
+    // Edit line
+    widget->setLayout(layout);
+    m_textEdit = new QTextEdit(widget);
+    layout->addWidget(m_textEdit);
+    
+    // Error label
+    m_errorLabel = new QLabel(widget);
+    layout->addWidget(m_errorLabel);
+    m_errorLabel->setText("");
+    
+    layout->addSpacerItem(new QSpacerItem(0,0));
+    
+    //connect(m_textEdit, SIGNAL(editingFinished()), SLOT(textEdited()));
+    //connect(m_textEdit, SIGNAL(returnPressed()), SLOT(textEdited()));
+    m_textEdit->setText(m_text);
+    
+    return widget;
 }
 
-KoFormulaShape* KoFormulaTool::shape()
+// Not sure why but the toStdString/fromStdString in QString are not accessible
+inline std::string QStringtoStdString(const QString& str)
+{ const QByteArray latin1 = str.toLatin1(); return std::string(latin1.constData(), latin1.length()); }
+
+inline QString QStringfromStdString(const std::string &s)
+{ return QString::fromLatin1(s.data(), int(s.size())); }
+
+void KoFormulaTool::textEdited()
 {
-    return m_formulaShape;
-}
+    if(!m_formulaShape) return;
+    if(!m_textEdit) return;
 
-void KoFormulaTool::loadFormula()
-{/*
-    // get an filepath
-    const QString fileName = QFileDialog::getOpenFileName();
-    if( fileName.isEmpty() || !shape() )
-        return;
+#ifdef HAVE_M2MML
+    if(m_modeComboBox->currentIndex() == 1)
+    {
+        std::string source = QStringtoStdString(m_textEdit->toPlainText());
+        std::string mathml;
+        std::string errmsg;
 
-    // open the file the filepath points to
-    QFile file( fileName );
-    if( !file.open( QIODevice::ReadOnly | QIODevice::Text ) )
-        return;
-
-    KoOdfStylesReader stylesReader;
-    KoOdfLoadingContext odfContext( stylesReader, 0 );
-    KoShapeLoadingContext shapeContext(odfContext, canvas()->shapeController()->resourceManager());
-
-    // setup a DOM structure and start the actual loading process
-    KoXmlDocument tmpDocument;
-    tmpDocument.setContent( &file, false, 0, 0, 0 );
-    FormulaElement* formulaElement = new FormulaElement();     // create a new root element
-    formulaElement->readMathML( tmpDocument.documentElement() );     // and load the new formula
-    FormulaCommand* command=new FormulaCommandLoad(m_formulaShape->formulaData(),formulaElement);
-    canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape, command));*/
-}
-
-void KoFormulaTool::saveFormula()
-{
-//     const QString filePath = QFileDialog::getSaveFileName();
-//     if( filePath.isEmpty() || !shape() )
-//         return;
-// 
-//     QFile file( filePath );
-//     KoXmlWriter writer( &file );
-//     KoGenStyles styles;
-//     KoEmbeddedDocumentSaver embeddedSaver;
-//     KoShapeSavingContext shapeSavingContext( writer, styles, embeddedSaver );
-// 
-//     m_formulaShape->formulaData()->saveMathML( shapeSavingContext );
-}
-
-void KoFormulaTool::setupActions()
-{
-    //notice that only empty mrows hows parent is a inferred mrow are treated as placeholders
-    //this causes the <mrow><mrow/></mrow> constructs
-    addTemplateAction(i18n("Insert fenced element"), "insert_fence","<mfenced><mrow/></mfenced>", koIconNameCStr("brackets"));
-    addTemplateAction(i18n("Insert enclosed element"), "insert_enclosed",
-                      "<menclosed><mrow/></menclosed>", koIconNameCStr("enclosed"));
-
-    addTemplateAction(i18n("Insert root"), "insert_root","<mroot><mrow><mrow/></mrow></mroot>", koIconNameCStr("root"));
-    addTemplateAction(i18n("Insert square root"), "insert_sqrt","<msqrt><mrow/></msqrt>", koIconNameCStr("sqrt"));
-
-    addTemplateAction(i18n("Insert fraction"), "insert_fraction",
-                      "<mfrac><mrow><mrow/></mrow><mrow/></mfrac>", koIconNameCStr("frac"));
-    addTemplateAction(i18n("Insert bevelled fraction"), "insert_bevelled_fraction",
-                      "<mfrac bevelled=\"true\"><mrow><mrow/></mrow><mrow/></mfrac>", koIconNameCStr("bevelled"));
-
-    addTemplateAction(i18n("Insert 3x3 table"), "insert_33table",
-                      "<mtable><mtr><mtd><mrow /></mtd><mtd></mtd><mtd></mtd></mtr>" \
-                      "<mtr><mtd></mtd><mtd></mtd><mtd></mtd></mtr>" \
-                      "<mtr><mtd></mtd><mtd></mtd><mtd></mtd></mtr></mtable>", koIconNameCStr("matrix"));
-    addTemplateAction(i18n("Insert 2 dimensional vector"), "insert_21table",
-                      "<mtable><mtr><mtd><mrow/></mtd></mtr><mtr><mtd></mtd></mtr></mtable>", koIconNameCStr("vector"));
-
-    addTemplateAction(i18n("Insert subscript"), "insert_subscript",
-                      "<msub><mrow><mrow/></mrow><mrow/></msubsup>", koIconNameCStr("rsub"));
-    addTemplateAction(i18n("Insert superscript"), "insert_supscript",
-                      "<msup><mrow><mrow/></mrow><mrow/></msup>", koIconNameCStr("rsup"));
-    addTemplateAction(i18n("Insert sub- and superscript"), "insert_subsupscript",
-                      "<msubsup><mrow><mrow/></mrow><mrow/><mrow/></msubsup>", koIconNameCStr("rsubup"));
-    addTemplateAction(i18n("Insert overscript"), "insert_overscript",
-                      "<mover><mrow><mrow/></mrow><mrow/></mover>", koIconNameCStr("gsup"));
-    addTemplateAction(i18n("Insert underscript"), "insert_underscript",
-                      "<munder><mrow><mrow/></mrow><mrow/></munder>", koIconNameCStr("gsub"));
-    addTemplateAction(i18n("Insert under- and overscript"), "insert_underoverscript",
-                      "<munderover><mrow><mrow/></mrow><mrow/><mrow/></munderover>", koIconNameCStr("gsubup"));
-
-    //only for debugging
-    QAction * action;
-    action = new QAction( "Debug - writeElementTree" , this );
-    addAction( "write_elementTree", action );
-
-    QList<QVariant> list;
-    action = new QAction( i18n( "Insert row" ), this );
-    list<<true<<true;
-    action->setData( list);
-    list.clear();
-    addAction( "insert_row", action );
-    action->setIcon(koIcon("insrow"));
-
-    action = new QAction( i18n( "Insert column" ), this );
-    list<<false<<true;
-    action->setData( list);
-    list.clear();
-    addAction( "insert_column", action );
-    action->setIcon(koIcon("inscol"));
-
-    action = new QAction( i18n( "Remove row" ), this );
-    list<<true<<false;
-    action->setData( list);
-    list.clear();
-    addAction( "remove_row", action );
-    action->setIcon(koIcon("remrow"));
-
-    action = new QAction( i18n( "Remove column" ), this );
-    list<<false<<false;
-    action->setData( list);
-    list.clear();
-    addAction( "remove_column", action );
-    action->setIcon(koIcon("remcol"));
-
-}
-
-
-void KoFormulaTool::addTemplateAction(const QString &caption, const QString &name, const QString &data,
-                                      const char *iconName)
-{
-    QAction * action;
-    action = new QAction( caption, this );
-    m_signalMapper->setMapping(action, data);
-    addAction( name , action );
-    action->setIcon(QIcon::fromTheme(QLatin1String(iconName)));
-    connect( action, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
-}
-
-
-void KoFormulaTool::copy() const
-{
-    QApplication::clipboard()->setText("test");
-}
-
-void KoFormulaTool::deleteSelection()
-{
-    KoToolBase::deleteSelection();
-}
-
-bool KoFormulaTool::paste()
-{/*
-    const QMimeData* data=QApplication::clipboard()->mimeData();
-    if (data->hasFormat("text/plain")) {
-        debugFormula << data->text();
-        FormulaCommand* command=m_formulaEditor->insertText(data->text());
-        if (command!=0) {
-            canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape,command));
+        if(m2mml(source, mathml, &errmsg))
+        {
+            setMathML(QStringfromStdString(mathml), "Matlab");
+        } else {
+            m_errorLabel->setText(QStringfromStdString(errmsg));
         }
-        repaintCursor();
-        return true;
-    }*/
-    return false;
+    } else {
+#endif
+        std::string source = QStringtoStdString(m_textEdit->toPlainText());
+        source = '$' + source + '$';
+        char * mathml = itex2MML_parse (source.c_str(), source.size());
+        
+        if(mathml)
+        {
+            setMathML(mathml, "LaTeX");
+            itex2MML_free_string(mathml);
+            mathml = 0;
+        } else {
+            m_errorLabel->setText(i18n("Parse error."));
+        }
+#ifdef HAVE_M2MML
+    }
+#endif
 }
 
-QStringList KoFormulaTool::supportedPasteMimeTypes() const
+void KoFormulaTool::setMathML(const QString& mathml, const QString& mode)
 {
-    QStringList tmp;
-    tmp << "text/plain";
-    tmp << "application/xml";
-    return tmp;
+    KoXmlDocument tmpDocument;
+    tmpDocument.setContent( QString(mathml), false, 0, 0, 0 );
+
+    debugFormula << mathml;
 }

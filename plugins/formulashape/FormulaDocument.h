@@ -26,6 +26,7 @@
 #include <KoDocument.h>
 #include <KoXmlReaderForward.h>
 
+#include <QFont>
 
 class KoView;
 class KoOdfReadStore;
@@ -70,7 +71,19 @@ public:
     bool saveOdf( SavingContext &context );
 
     KoView *createViewInstance( QWidget *parent );
-    const QByteArray & content();
+
+    QString content() const;
+    void setContent(QString mathML);
+
+    const QFont& font() const;
+    void setFont(QFont font);
+
+    const QColor& backgroundColor() const;
+    void setBackgroundColor(QColor color);
+
+    const QColor& foregroundColor() const;
+    void setForegroundColor(QColor color);
+
     void paintContent( QPainter &painter, const QRect &rect );
 
 private:

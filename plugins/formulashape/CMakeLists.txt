@@ -43,31 +43,21 @@ if(M2MML_FOUND)
     add_definitions(-DHAVE_M2MML)
 endif()
 
-set( formulashape_PART_SRCS
-   KoFormulaShapePlugin.cpp
-   KoFormulaShape.cpp
-   FormulaCommandUpdate.cpp
-   KoFormulaShapeFactory.cpp
-   KoFormulaTool.cpp
-   FormulaCommand.cpp
-   KoFormulaToolFactory.cpp
-   FormulaToolWidget.cpp
-   FormulaDocument.cpp
-   FormulaPart.cpp
-)
-
-if (NOT MSVC AND NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
-set (formulashape_PART_SRCS
-   ${formulashape_PART_SRCS}
-   KoM2MMLForumulaTool.cpp
-   # itexToMML files
-   ${ITEXTOMML_SOURCE_DIR}/lex.yy.c
-   ${ITEXTOMML_SOURCE_DIR}/y.tab.c
-)
-endif ()
-
-ki18n_wrap_ui( formulashape_PART_SRCS
-    FormulaToolWidget.ui
+set(formulashape_PART_SRCS
+    KoFormulaShapePlugin.cpp
+    KoFormulaShape.cpp
+    FormulaCommandUpdate.cpp
+    KoFormulaShapeFactory.cpp
+    KoFormulaTool.cpp
+    FormulaFontFamilyAction.cpp
+    ../textshape/FontSizeAction.cpp
+    FormulaCommand.cpp
+    KoFormulaToolFactory.cpp
+    FormulaDocument.cpp
+    FormulaPart.cpp
+    # itexToMML files
+    ${ITEXTOMML_SOURCE_DIR}/lex.yy.c
+    ${ITEXTOMML_SOURCE_DIR}/y.tab.c
 )
 
 add_library(calligra_shape_formular MODULE ${formulashape_PART_SRCS})

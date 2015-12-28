@@ -39,22 +39,22 @@
 #include <KoDocumentResourceManager.h>
 
 #include <QMathView.hh>
-#include "FormulaDebug.h"
 #include "FormulaDocument.h"
+#include "FormulaDebug.h"
 
 KoFormulaShape::KoFormulaShape(KoDocumentResourceManager *documentResourceManager)
   : KoFrameShape( KoXmlNS::draw, "object" )
+  , m_isInline(false)
 {
-    m_qmathview = new QMathView();
-    m_isInline = false;
-
     m_document = new FormulaDocument( this );
+    m_qmathview = new QMathView(m_document->font(), FORMULA_LOG());
     m_resourceManager = documentResourceManager;
 }
 
 KoFormulaShape::~KoFormulaShape()
 {
     delete m_qmathview;
+    delete m_document;
 }
 
 void KoFormulaShape::paint( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
@@ -99,7 +99,7 @@ bool KoFormulaShape::loadOdfFrameElement(const KoXmlElement &element,
     }
 
     if (done) {
-        m_qmathview->loadBuffer(m_document->content().constData());
+        m_qmathview->loadBuffer(m_document->content().toUtf8().constData());
     }
 
     return done;
@@ -113,7 +113,7 @@ void KoFormulaShape::saveOdf( KoShapeSavingContext& context ) const
     writer.startElement("draw:frame");
     saveOdfAttributes(context, OdfAllAttributes);
     writer.startElement( "draw:object" );
-    writer.addCompleteElement(m_document->content().constData());
+    writer.addCompleteElement(m_document->content().toUtf8().constData());
     writer.endElement(); // draw:object
     writer.endElement(); // draw:frame
 }
@@ -121,4 +121,40 @@ void KoFormulaShape::saveOdf( KoShapeSavingContext& context ) const
 KoDocumentResourceManager *KoFormulaShape::resourceManager() const
 {
     return m_resourceManager;
+}
+
+QString KoFormulaShape::content() const {
+    return m_document->content();
+}
+
+void KoFormulaShape::setContent(QString mathML) {
+    m_document->setContent(mathML);
+    m_qmathview->loadBuffer(m_document->content().toUtf8().constData());
+}
+
+QFont KoFormulaShape::font() const {
+    return m_document->font();
+}
+
+void KoFormulaShape::setFont(QFont font) {
+    m_document->setFont(font);
+    m_qmathview->setFont(m_document->font());
+}
+
+QColor KoFormulaShape::backgroundColor() const {
+    return m_document->backgroundColor();
+}
+
+void KoFormulaShape::setBackgroundColor(QColor color) {
+    m_document->setBackgroundColor(color);
+    m_qmathview->setBackgroundColor(m_document->backgroundColor());
+}
+
+QColor KoFormulaShape::foregroundColor() const {
+    return m_document->foregroundColor();
+}
+
+void KoFormulaShape::setForegroundColor(QColor color) {
+    m_document->setForegroundColor(color);
+    m_qmathview->setForegroundColor(m_document->foregroundColor());
 }
