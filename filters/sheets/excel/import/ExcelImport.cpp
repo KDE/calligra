@@ -919,7 +919,7 @@ void ExcelImport::Private::processCell(Cell* ic, Calligra::Sheets::Cell oc)
             }
         } else if (Calligra::Sheets::Format::isTime(styleList[styleId].formatType())) {
             QTime time = convertTime(value.asFloat());
-            oc.setValue(Calligra::Sheets::Value(time, outputDoc->map()->calculationSettings()));
+            oc.setValue(Calligra::Sheets::Value(time));
             KLocale* locale = outputDoc->map()->calculationSettings()->locale();
             if (!isFormula)
                 oc.setRawUserInput(locale->formatTime(time, true));
