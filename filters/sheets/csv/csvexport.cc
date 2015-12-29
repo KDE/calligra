@@ -84,7 +84,7 @@ QString CSVExport::exportCSVCell(const Calligra::Sheets::Doc* doc, Sheet const *
         else if (!cell.link().isEmpty())
             text = cell.userInput(); // untested
         else if (cell.isTime())
-            text = cell.value().asTime(sheet->map()->calculationSettings()).toString("hh:mm:ss");
+            text = cell.value().asTime().toString("hh:mm:ss");
         else if (cell.isDate())
             text = cell.value().asDate(sheet->map()->calculationSettings()).toString("yyyy-MM-dd");
         else

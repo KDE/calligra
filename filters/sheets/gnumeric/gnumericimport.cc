@@ -733,7 +733,7 @@ bool GNUMERICFilter::setType(const Cell& kspread_cell,
 
                 time = GnumericDate::getTime(content);
             } else
-                time = kspread_cell.value().asTime(kspread_cell.sheet()->map()->calculationSettings());
+                time = kspread_cell.value().asTime();
 
             Format::Type type;
             switch (i) {
@@ -749,7 +749,7 @@ bool GNUMERICFilter::setType(const Cell& kspread_cell,
 
             kDebug(30521) << "i:" << i << ", Type:" << type;
             Cell cell(kspread_cell);
-            cell.setValue(Value(time, kspread_cell.sheet()->map()->calculationSettings()));
+            cell.setValue(Value(time));
             Style style;
             style.setFormatType(type);
             cell.setStyle(style);
