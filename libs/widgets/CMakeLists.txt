@@ -104,7 +104,7 @@ kde4_add_library(kowidgets SHARED ${kowidgets_LIB_SRCS})
 target_link_libraries(kowidgets kotext pigmentcms kowidgetutils ${KDE4_KIO_LIBS})
 
 if(GHNS)
-    target_link_libraries(kowidgets {KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kowidgets ${KDE4_KNEWSTUFF3_LIBS})
 endif ()
 
 target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms kowidgetutils ${KDE4_KDEUI_LIBS})
