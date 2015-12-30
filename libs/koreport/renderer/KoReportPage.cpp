@@ -59,7 +59,7 @@ KoReportPage::KoReportPage(QWidget *parent, ORODocument *document)
     m_renderer = m_factory.createInstance("screen");
     connect(m_reportDocument, SIGNAL(updated(int)), this, SLOT(pageUpdated(int)));
 
-    m_renderTimer = new QTimer();
+    m_renderTimer = new QTimer(this);
     m_renderTimer->setSingleShot(true);
     connect(m_renderTimer, SIGNAL(timeout()), this, SLOT(renderCurrentPage()));
     
@@ -70,7 +70,6 @@ KoReportPage::~KoReportPage()
 {
     delete m_renderer;
     delete m_pixmap;
-    delete m_renderTimer;
 }
 
 void KoReportPage::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)

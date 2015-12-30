@@ -387,13 +387,11 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 {
     Q_UNUSED(mode);
 
-    kDebug();
     if (tempData()->reportSchemaChangedInPreviousView) {
         kDebug() << "Schema changed";
         delete m_preRenderer;
 
-        kDebug() << tempData()->reportDefinition.tagName();
-
+        //kDebug() << tempData()->reportDefinition.tagName();
         m_preRenderer = new KoReportPreRenderer(tempData()->reportDefinition);
         if (m_preRenderer->isValid()) {
             KoReportData *reportData = 0;
@@ -416,20 +414,12 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 
             //If using a kexidb source, add a functions scripting object
             if (tempData()->connectionDefinition.attribute("type") == "internal") {
-                //Delete old functions
-                if (m_functions) {
-                    delete m_functions;
-                }
-                
+                delete m_functions; // prev functions
                 m_functions = new KRScriptFunctions(reportData, KexiMainWindowIface::global()->project()->dbConnection());
                 m_preRenderer->registerScriptObject(m_functions, "field");
             }
 
-            if (m_reportDocument) {
-                kDebug() << "=======================================Deleting old document";
-                delete m_reportDocument;
-            }
-            
+            delete m_reportDocument; // prev document
             m_reportDocument = m_preRenderer->generate();
             if (m_reportDocument) {
                 m_pageCount = m_reportDocument->pages();

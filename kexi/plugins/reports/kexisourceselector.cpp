@@ -124,7 +124,7 @@ KexiSourceSelector::~KexiSourceSelector()
     delete d;
 }
 
-void KexiSourceSelector::setConnectionData(QDomElement c)
+void KexiSourceSelector::setConnectionData(const QDomElement &c)
 {
     if (c.attribute("type") == "internal") {
         d->sourceType->setCurrentIndex(d->sourceType->findData("internal"));
@@ -136,7 +136,7 @@ void KexiSourceSelector::setConnectionData(QDomElement c)
         d->externalSource->setText(c.attribute("source"));
     }
 
-    emit(setData(sourceData()));
+    emit setData(sourceData());
 }
 
 QDomElement KexiSourceSelector::connectionData()

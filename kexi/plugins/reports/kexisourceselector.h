@@ -40,7 +40,7 @@ public:
     ~KexiSourceSelector();
 
     KoReportData* sourceData();
-    void setConnectionData(QDomElement);
+    void setConnectionData(const QDomElement &c);
     QDomElement connectionData();
 
 Q_SIGNALS:
