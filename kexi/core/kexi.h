@@ -110,7 +110,8 @@ public:
 
     bool error() const;
 
-    void setStatus(const QString& message, const QString& description);
+    void setStatus(const QString& message, const QString& description,
+                   const QString& errorSql = QString());
 
     //! Note: for safety, \a dbObject needs to be derived from QObject,
     //! otherwise it won't be assigned
@@ -137,7 +138,9 @@ public:
     //! by receiving a message
     operator KexiDB::MessageHandler*();
 
-    QString message, description;
+    QString message;
+    QString description;
+    QString errorSql; //!< Recently executed SQL, overrides information from dbObject()
 protected:
     QPointer<QObject> dbObj; //! This is in fact KexiDB::Object
     KexiDB::MessageHandler* msgHandler;

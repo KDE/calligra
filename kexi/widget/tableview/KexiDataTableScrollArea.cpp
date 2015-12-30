@@ -70,6 +70,7 @@ bool KexiDataTableScrollArea::setData(KexiDB::Cursor *cursor)
         kWarning() << "Cursor should have query schema defined!\n--aborting setData().\n";
         m_cursor->debug();
         clearColumns();
+        m_cursor = 0;
         return false;
     }
 
@@ -82,6 +83,7 @@ bool KexiDataTableScrollArea::setData(KexiDB::Cursor *cursor)
         kWarning() << "Cannot open cursor\n--aborting setData(). \n" << m_cursor->serverErrorMsg();
         m_cursor->debug();
         clearColumns();
+        m_cursor = 0;
         return false;
     }
 
@@ -98,8 +100,11 @@ bool KexiDataTableScrollArea::setData(KexiDB::Cursor *cursor)
     setWindowTitle(windowTitle);
 
     //PRIMITIVE!! data setting:
-    tv_data->preloadAllRows();
-
+    if (!tv_data->preloadAllRows()) {
+        delete tv_data;
+        clearColumns();
+        m_cursor = 0;
+    }
     KexiTableScrollArea::setData(tv_data);
     return true;
 }

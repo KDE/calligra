@@ -1,6 +1,7 @@
 /*
 * Kexi Report Plugin
 * Copyright (C) 2007-2009 by Adam Pigg (adam@piggz.co.uk)
+* Copyright (C) 2015 Jarosław Staniek <staniek@kde.org>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -17,17 +18,19 @@
 */
 
 #include "kexidbreportdata.h"
-#include <kdebug.h>
+#include "kexireportview.h"
 #include <db/queryschema.h>
 #include <core/kexipart.h>
-#include <QDomDocument>
 
+#include <kdebug.h>
+
+#include <QDomDocument>
 
 class KexiDBReportData::Private
 {
 public:
-    explicit Private(KexiDB::Connection *pDb)
-      : cursor(0), connection(pDb), originalSchema(0), copySchema(0)
+    explicit Private(KexiDB::Connection *pDb, KexiReportView *v)
+      : cursor(0), connection(pDb), view(v), originalSchema(0), copySchema(0)
     {
     }
     ~Private()
@@ -37,18 +40,17 @@ public:
         delete cursor;
     }
 
-
     QString objectName;
-
     KexiDB::Cursor *cursor;
-    KexiDB::Connection *connection;
+    KexiDB::Connection * const connection;
+    KexiReportView * const view;
     KexiDB::QuerySchema *originalSchema;
     KexiDB::QuerySchema *copySchema;
 };
 
 KexiDBReportData::KexiDBReportData (const QString &objectName,
-                                    KexiDB::Connection * pDb)
-        : d(new Private(pDb))
+                                    KexiDB::Connection * pDb, KexiReportView *view)
+        : d(new Private(pDb, view))
 {
     d->objectName = objectName;
     getSchema();
@@ -56,8 +58,8 @@ KexiDBReportData::KexiDBReportData (const QString &objectName,
 
 KexiDBReportData::KexiDBReportData(const QString& objectName,
                                    const QString& partClass,
-                                   KexiDB::Connection* pDb)
-        : d(new Private(pDb))
+                                   KexiDB::Connection* pDb, KexiReportView *view)
+        : d(new Private(pDb, view))
 {
     d->objectName = objectName;
     getSchema(partClass);
@@ -102,22 +104,24 @@ bool KexiDBReportData::open()
     {
         if ( d->objectName.isEmpty() )
         {
-            d->cursor = d->connection->executeQuery ( "SELECT '' AS expr1 FROM kexi__db WHERE kexi__db.db_property = 'kexidb_major_ver'" );
+            d->cursor = d->connection->prepareQuery("SELECT '' AS expr1 FROM kexi__db WHERE kexi__db.db_property = 'kexidb_major_ver'");
         }
         else if ( d->copySchema)
         {
             kDebug() << "Opening cursor.." << d->copySchema->debugString();
-            d->cursor = d->connection->executeQuery ( *d->copySchema, 1 );
+            d->cursor = d->connection->prepareQuery(*d->copySchema, KexiDB::Cursor::Buffered);
         }
 
-
-        if ( d->cursor )
-        {
-            kDebug() << "Moving to first record..";
-            return d->cursor->moveFirst();
+        if (d->cursor) {
+            bool ok = d->view->setData(d->cursor);
+            if (ok) {
+                kDebug() << "Moving to first record..";
+                if (!d->cursor->moveFirst()) {
+                    ok = !d->cursor->error();
+                }
+            }
+            return ok;
         }
-        else
-            return false;
     }
     return false;
 }
@@ -396,5 +400,5 @@ QStringList KexiDBReportData::dataSources() const
 
 KoReportData* KexiDBReportData::create(const QString& source)
 {
-    return new KexiDBReportData(source, d->connection);
+    return new KexiDBReportData(source, d->connection, d->view);
 }

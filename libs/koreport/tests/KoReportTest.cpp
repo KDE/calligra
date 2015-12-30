@@ -69,7 +69,7 @@ void KoReportTest::pageOptions()
     QCOMPARE(designer.propertySet()->property("margin-right").value().toDouble(), KoUnit::parseValue("4.0cm"));
 
     KoReportPreRenderer renderer( designer.document() );
-    renderer.generate();
+    QVERIFY(renderer.generateDocument());
     ReportPageOptions opt = renderer.reportData()->pageOptions();
 
     QCOMPARE(opt.getPageSize(), QString("A5"));
@@ -118,7 +118,7 @@ void KoReportTest::lineItem()
     QCOMPARE(end.toPoint(), QPointF(KoUnit::parseValue("4.5cm"), KoUnit::parseValue("2.5cm")));
 
     KoReportPreRenderer renderer( designer.document() );
-    renderer.generate();
+    QVERIFY(renderer.generateDocument());
     l = dynamic_cast<KoReportItemLine*>(renderer.reportData()->object("line1"));
 
     QVERIFY(l != 0);
@@ -171,7 +171,7 @@ void KoReportTest::rectItem()
     QCOMPARE(rect->pointRect(), expected);
 
     KoReportPreRenderer renderer( designer.document() );
-    renderer.generate();
+    QVERIFY(renderer.generateDocument());
     KoReportItemBase *item = dynamic_cast<KoReportItemBase*>(renderer.reportData()->object("label1"));
 
     QVERIFY(item != 0);

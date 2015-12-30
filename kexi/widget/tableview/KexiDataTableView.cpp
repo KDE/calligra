@@ -110,12 +110,13 @@ bool KexiDataTableView::loadTableViewSettings(KexiDB::TableViewData* data)
     return true;
 }
 
-void
-KexiDataTableView::setData(KexiDB::Cursor *c)
+bool KexiDataTableView::setWidgetData(KexiDB::Cursor *cursor)
 {
-    if (!dynamic_cast<KexiDataTableScrollArea*>(mainWidget()))
-        return;
-    dynamic_cast<KexiDataTableScrollArea*>(mainWidget())->setData(c);
+    bool ok = dynamic_cast<KexiDataTableScrollArea*>(mainWidget());
+    if (!ok) {
+        return false;
+    }
+    return dynamic_cast<KexiDataTableScrollArea*>(mainWidget())->setData(cursor);
 }
 
 void KexiDataTableView::filter()

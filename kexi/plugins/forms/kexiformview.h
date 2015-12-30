@@ -151,7 +151,7 @@ protected:
     //! Redirects to Container::eventFilter().
     virtual void contextMenuEvent(QContextMenuEvent *e);
 
-    void initDataSource();
+    bool initDataSource();
     virtual void setFocusInternal();
 
     /*! Called after loading the form contents (before showing it). */

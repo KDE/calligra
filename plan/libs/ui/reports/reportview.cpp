@@ -338,7 +338,7 @@ void ReportWidget::lastPage()
 
 KoPrintJob *ReportWidget::createPrintJob()
 {
-    return new ReportPrintingDialog( this, m_reportDocument );
+    return new ReportPrintingDialog(this, m_preRenderer->document());
 }
 
 void ReportWidget::slotExport()
@@ -362,7 +362,7 @@ void ReportWidget::slotExport()
 KoPageLayout ReportWidget::pageLayout() const
 {
     KoPageLayout p = ViewBase::pageLayout();
-    ReportPageOptions opt = m_reportDocument->pageOptions();
+    ReportPageOptions opt = m_preRenderer->document()->pageOptions();
     p.orientation = opt.isPortrait() ? KoPageFormat::Portrait : KoPageFormat::Landscape;
 
     if (opt.getPageSize().isEmpty()) {
@@ -420,7 +420,7 @@ void ReportWidget::exportToOdtTable( KoReportRendererContext &context )
         kError()<<"Cannot create odt (table) renderer";
         return;
     }
-    if (!renderer->render(context, m_reportDocument)) {
+    if (!renderer->render(context, m_preRenderer->document())) {
         KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.prettyUrl()) , i18n("Export to text document failed"));
     }
 }
@@ -433,7 +433,7 @@ void ReportWidget::exportToOdtFrames( KoReportRendererContext &context )
         kError()<<"Cannot create odt (frames) renderer";
         return;
     }
-    if (!renderer->render(context, m_reportDocument)) {
+    if (!renderer->render(context, m_preRenderer->document())) {
         KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.prettyUrl()) , i18n("Export to text document failed"));
     }
 }
@@ -447,7 +447,7 @@ void ReportWidget::exportToOds( KoReportRendererContext &context )
         kError()<<"Cannot create ods renderer";
         return;
     }
-    if (!renderer->render(context, m_reportDocument)) {
+    if (!renderer->render(context, m_preRenderer->document())) {
         KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.prettyUrl()) , i18n("Export to spreadsheet failed"));
     }
 }
@@ -461,7 +461,7 @@ void ReportWidget::exportToHtml( KoReportRendererContext &context )
         kError()<<"Cannot create html renderer";
         return;
     }
-    if (!renderer->render(context, m_reportDocument)) {
+    if (!renderer->render(context, m_preRenderer->document())) {
         KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.prettyUrl()) , i18n("Export to HTML failed"));
     }
 }
@@ -475,7 +475,7 @@ void ReportWidget::exportToXHtml( KoReportRendererContext &context )
         kError()<<"Cannot create xhtml css renderer";
         return;
     }
-    if (!renderer->render(context, m_reportDocument)) {
+    if (!renderer->render(context, m_preRenderer->document())) {
         KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.prettyUrl()) , i18n("Export to XHTML failed"));
     }
 }
@@ -524,11 +524,11 @@ void ReportWidget::slotRefreshView()
     m_preRenderer->setSourceData( rd );
     m_preRenderer->registerScriptObject(new ProjectAccess( rd ), "project");
 
-    m_reportDocument = m_preRenderer->generate();
-    m_pageSelector->setMaximum( m_reportDocument ? m_reportDocument->pages() : 1 );
+    const bool generated = m_preRenderer->generateDocument();
+    m_pageSelector->setMaximum(generated ? m_preRenderer->document()->pages() : 1);
     m_pageSelector->setCurrentPage( 1 );
 
-    m_reportPage = new KoReportPage(this, m_reportDocument);
+    m_reportPage = new KoReportPage(this, m_preRenderer->document());
     m_reportPage->setObjectName("ReportPage");
 
     m_reportScene->setSceneRect(0,0,m_reportPage->rect().width() + 40, m_reportPage->rect().height() + 40);

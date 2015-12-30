@@ -198,11 +198,12 @@ bool ObjectStatus::error() const
            || (dynamic_cast<KexiDB::Object*>((QObject*)dbObj) && dynamic_cast<KexiDB::Object*>((QObject*)dbObj)->error());
 }
 
-void ObjectStatus::setStatus(const QString& message, const QString& description)
+void ObjectStatus::setStatus(const QString& message, const QString& description, const QString& errorSql)
 {
     this->dbObj = 0;
     this->message = message;
     this->description = description;
+    this->errorSql = errorSql;
 }
 
 void ObjectStatus::setStatus(KexiDB::Object* dbObject, const QString& message, const QString& description)

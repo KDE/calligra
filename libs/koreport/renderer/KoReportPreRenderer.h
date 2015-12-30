@@ -46,8 +46,10 @@ public:
 
     void setSourceData(KoReportData*);
     void registerScriptObject(QObject*, const QString&);
-    
-    ORODocument * generate();
+
+    bool generateDocument();
+
+    ORODocument *document();
 
     /**
     @brief Set the name of the report so that it can be used internally by the script engine
@@ -63,7 +65,6 @@ protected:
 private:
     KoReportPreRendererPrivate *const d;
     bool setDom(const QDomElement &);
-    QMap<QString, QObject*> m_scriptObjects;
 };
 
 #endif // __KOREPORTPRERENDERER_H__

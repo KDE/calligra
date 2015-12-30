@@ -62,7 +62,6 @@ public:
 
 private:
     KoReportPreRenderer *m_preRenderer;
-    ORODocument *m_reportDocument;
     QGraphicsView *m_reportView;
     QGraphicsScene *m_reportScene;
     KoReportPage *m_reportPage;

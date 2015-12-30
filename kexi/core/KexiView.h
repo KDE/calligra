@@ -35,6 +35,7 @@ class Set;
 
 namespace KexiDB
 {
+class Cursor;
 class SchemaData;
 }
 
@@ -148,6 +149,9 @@ public:
     Q_DECLARE_FLAGS(StoreNewDataOptions, StoreNewDataOption)
 
 public Q_SLOTS:
+    /*! Sets data. Only works for db-aware view. */
+    bool setData(KexiDB::Cursor *cursor);
+
     virtual void setFocus();
 
     /*! Call this in your view's implementation whenever current property set
@@ -176,6 +180,11 @@ Q_SIGNALS:
     void focus(bool in);
 
 protected:
+    /*! Sets data to the widget. Default implementation just calls KexiDB::Cursor::open().
+     Used internally by setData(KexiDB::Cursor*).
+     @return true on success. */
+    virtual bool setWidgetData(KexiDB::Cursor *cursor);
+
     virtual bool eventFilter(QObject *o, QEvent *e);
 
     /*! called by KexiWindow::switchToViewMode() right before window is switched to new mode

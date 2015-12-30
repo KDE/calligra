@@ -540,7 +540,9 @@ tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
 
     if (viewMode() == Kexi::DataViewMode) {
 //TMP!!
-        initDataSource();
+        if (!initDataSource()) {
+            return false;
+        }
 
         //handle events for this form
         d->scrollView->setMainWidgetForEventHandling(d->dbform);
@@ -596,16 +598,20 @@ KexiFormPart* KexiFormView::formPart() const
     return dynamic_cast<KexiFormPart*>(part());
 }
 
-void KexiFormView::initDataSource()
+bool KexiFormView::initDataSource()
 {
     deleteQuery();
+    const QString dataSourceString(d->dbform->dataSource());
+    if (dataSourceString.isEmpty()) {
+        return true; // nothing to do
+    }
+
 //! @todo also handle anonymous (not stored) queries provided as statements here
     KexiDB::TableSchema *tableSchema = 0;
     KexiDB::Connection *conn = 0;
     QStringList sources;
     bool forceReadOnlyDataSource = false;
-    QString dataSourceString(d->dbform->dataSource());
-    bool ok = !dataSourceString.isEmpty();
+    bool ok = true;
     if (ok) {
         //collect all data-aware widgets and create query schema
         d->scrollView->setMainDataSourceWidget(d->dbform);
@@ -700,11 +706,15 @@ void KexiFormView::initDataSource()
                 KexiUtils::WaitCursorRemover remover;
                 params = KexiQueryParameters::getParameters(this, *conn->driver(), *d->query, ok);
             }
-            if (ok) //input cancelled
-                d->cursor = conn->executeQuery(*d->query, params);
+            if (ok) { //input cancelled
+                d->cursor = conn->prepareQuery(*d->query, params);
+            }
         }
         d->scrollView->invalidateDataSources(invalidSources, d->query);
         ok = d->cursor != 0;
+        if (ok) {
+            ok = setData(d->cursor);
+        }
     }
 
     if (!invalidSources.isEmpty())
@@ -716,7 +726,7 @@ void KexiFormView::initDataSource()
         KexiDB::TableViewData* data = new KexiDB::TableViewData(d->cursor);
         if (forceReadOnlyDataSource)
             data->setReadOnly(true);
-        data->preloadAllRows();
+        ok = data->preloadAllRows();
 
 ///*! @todo few backends return result count for free! - no need to reopen() */
 //   int resultCount = -1;
@@ -727,11 +737,16 @@ void KexiFormView::initDataSource()
 //   if (ok)
 //    ok = ! (!d->cursor->moveFirst() && d->cursor->error());
 
-        d->scrollView->setData(data, true /*owner*/);
+        if (ok) {
+            d->scrollView->setData(data, true /*owner*/);
+        } else {
+            delete data;
+        }
     }
     else {
         d->scrollView->setData(0, false);
     }
+    return ok;
 }
 
 void KexiFormView::setFormModified()

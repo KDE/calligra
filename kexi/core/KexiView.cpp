@@ -26,6 +26,7 @@
 #include <koproperty/Set.h>
 
 #include <db/connection.h>
+#include <db/cursor.h>
 #include <db/utils.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/SmallToolButton.h>
@@ -553,6 +554,32 @@ void KexiView::addChildView(KexiView* childView)
 void KexiView::removeView(Kexi::ViewMode mode)
 {
     window()->removeView(mode);
+}
+
+bool KexiView::setWidgetData(KexiDB::Cursor *cursor)
+{
+    return cursor->open();
+}
+
+bool KexiView::setData(KexiDB::Cursor *cursor)
+{
+    bool ok = setWidgetData(cursor);
+    if (!ok && cursor) {
+        // A simple workaround needed because the cursor will be destroyed before
+        // the error message is built. Kexi 3 would have cleaner solution.
+        // See https://bugs.kde.org/show_bug.cgi?id=356888
+        QString msg = cursor->errorMsg();
+        QString desc;
+        if (!cursor->serverErrorMsg().isEmpty()) {
+            if (msg.isEmpty()) {
+                msg = cursor->serverErrorMsg();
+            } else {
+                desc = cursor->serverErrorMsg();
+            }
+        }
+        window()->setStatus(msg, desc, cursor->recentSQLString());
+    }
+    return ok;
 }
 
 void KexiView::setFocus()

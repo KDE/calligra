@@ -88,7 +88,7 @@ tristate KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
     if (!ok) {//input cancelled
         return cancelled;
     }
-    d->cursor = conn->executeQuery(*query, d->currentParams);
+    d->cursor = conn->prepareQuery(*query, d->currentParams);
     if (!d->cursor) {
         window()->setStatus(
             conn,
@@ -96,13 +96,20 @@ tristate KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
 //! @todo also provide server result and sql statement
         return false;
     }
-    setData(d->cursor);
+    ok = setData(d->cursor);
 
 //! @todo remove close() when dynamic cursors arrive
-    d->cursor->close();
-
-    if (oldCursor)
-        oldCursor->connection()->deleteCursor(oldCursor);
+    if (!d->cursor->close()) {
+        ok = false;
+    }
+    if (oldCursor) {
+        conn->deleteCursor(oldCursor);
+    }
+    if (!ok) {
+        conn->deleteCursor(d->cursor);
+        d->cursor = 0;
+        return false;
+    }
 
 //! @todo maybe allow writing and inserting for single-table relations?
     tableView()->setReadOnly(true);

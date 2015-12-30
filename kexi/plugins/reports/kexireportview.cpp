@@ -55,7 +55,7 @@
 #include "../scripting/kexiscripting/kexiscriptadaptor.h"
 
 KexiReportView::KexiReportView(QWidget *parent)
-        : KexiView(parent), m_preRenderer(0), m_reportDocument(0), m_currentPage(0), m_pageCount(0), m_kexi(0), m_functions(0)
+        : KexiView(parent), m_preRenderer(0), m_currentPage(0), m_pageCount(0), m_kexi(0), m_functions(0)
 {
     setObjectName("KexiReportDesigner_DataView");
 
@@ -177,7 +177,6 @@ KexiReportView::~KexiReportView()
     delete m_preRenderer;
     delete m_kexi;
     delete m_functions;
-    delete m_reportDocument;
 }
 
 void KexiReportView::slotPrintReport()
@@ -193,7 +192,7 @@ void KexiReportView::slotPrintReport()
         cxt.printer = &printer;
         cxt.painter = &painter;
 
-        renderer->render(cxt, m_reportDocument);
+        renderer->render(cxt, m_preRenderer->document());
     }
     delete dialog;
     delete renderer;
@@ -223,7 +222,7 @@ void KexiReportView::slotExportAsPdf()
         painter.begin(&printer);
         cxt.printer = &printer;
         cxt.painter = &painter;
-        if (!renderer->render(cxt, m_reportDocument)) {
+        if (!renderer->render(cxt, m_preRenderer->document())) {
             KMessageBox::error(this,
                                i18n("Exporting the report as PDF to %1 failed.", cxt.destinationUrl.prettyUrl()),
                                i18n("Export Failed"));
@@ -299,7 +298,7 @@ void KexiReportView::slotExportAsSpreadsheet()
             return;
         }
 
-        if (!renderer->render(cxt, m_reportDocument)) {
+        if (!renderer->render(cxt, m_preRenderer->document())) {
             KMessageBox::error(this,
                                i18n("Failed to export the report as spreadsheet to %1.", cxt.destinationUrl.prettyUrl()),
                                i18n("Export Failed"));
@@ -325,7 +324,7 @@ void KexiReportView::slotExportAsTextDocument()
             return;
         }
 
-        if (!renderer->render(cxt, m_reportDocument)) {
+        if (!renderer->render(cxt, m_preRenderer->document())) {
             KMessageBox::error(this,
                                i18n("Exporting the report as text document to %1 failed.", cxt.destinationUrl.prettyUrl()),
                                i18n("Export Failed"));
@@ -366,7 +365,7 @@ void KexiReportView::slotExportAsWebPage()
         renderer = m_factory.createInstance("htmltable");
     }
 
-    if (!renderer->render(cxt, m_reportDocument)) {
+    if (!renderer->render(cxt, m_preRenderer->document())) {
         KMessageBox::error(this,
                            i18n("Exporting the report as web page to %1 failed.", cxt.destinationUrl.prettyUrl()),
                            i18n("Export Failed"));
@@ -388,6 +387,8 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
     Q_UNUSED(mode);
 
     if (tempData()->reportSchemaChangedInPreviousView) {
+        tempData()->reportSchemaChangedInPreviousView = false;
+
         kDebug() << "Schema changed";
         delete m_preRenderer;
 
@@ -399,7 +400,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
                 reportData = sourceData(tempData()->connectionDefinition);    
             }
             if (!reportData) {
-                reportData = new KexiDBReportData(QString(), KexiMainWindowIface::global()->project()->dbConnection());
+                reportData = new KexiDBReportData(QString(), KexiMainWindowIface::global()->project()->dbConnection(), this);
             }
             m_preRenderer->setSourceData(reportData);
             
@@ -419,30 +420,24 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
                 m_preRenderer->registerScriptObject(m_functions, "field");
             }
 
-            delete m_reportDocument; // prev document
-            m_reportDocument = m_preRenderer->generate();
-            if (m_reportDocument) {
-                m_pageCount = m_reportDocument->pages();
-#ifndef KEXI_MOBILE
-                m_pageSelector->setRecordCount(m_pageCount);
-                m_pageSelector->setCurrentRecordNumber(1);
-#endif
+            if (!m_preRenderer->generateDocument()) {
+                return false;
             }
-
-            m_reportPage = new KoReportPage(this, m_reportDocument);
+            m_pageCount = m_preRenderer->document()->pages();
+#ifndef KEXI_MOBILE
+            m_pageSelector->setRecordCount(m_pageCount);
+            m_pageSelector->setCurrentRecordNumber(1);
+#endif
+            m_reportPage = new KoReportPage(this, m_preRenderer->document());
             m_reportPage->setObjectName("KexiReportPage");
 
             m_reportScene->setSceneRect(0,0,m_reportPage->rect().width() + 40, m_reportPage->rect().height() + 40);
             m_reportScene->addItem(m_reportPage);
             m_reportPage->setPos(20,20);
             m_reportView->centerOn(0,0);
-
         } else {
             KMessageBox::error(this, i18n("Report schema appears to be invalid or corrupt"), i18n("Opening failed"));
         }
-
-
-        tempData()->reportSchemaChangedInPreviousView = false;
     }
     return true;
 }
@@ -452,7 +447,9 @@ KoReportData* KexiReportView::sourceData(QDomElement e)
     KoReportData *kodata = 0;
 
     if (e.attribute("type") == "internal") {
-        kodata = new KexiDBReportData(e.attribute("source"), KexiMainWindowIface::global()->project()->dbConnection());
+        kodata = new KexiDBReportData(e.attribute("source"),
+                                      KexiMainWindowIface::global()->project()->dbConnection(),
+                                      this);
     }
 #ifndef KEXI_MOBILE
     if (e.attribute("type") ==  "external") {

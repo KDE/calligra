@@ -31,30 +31,25 @@
 
 KoReportPage::KoReportPage(QWidget *parent, ORODocument *document)
         : QObject(parent), QGraphicsRectItem()
+        , m_reportDocument(document)
+        , m_page(0)
 {
-    //TODO setAttribute(Qt::WA_NoBackground);
-    //kDebug() << "CREATED PAGE";
-    m_reportDocument = document;
-    m_page = 0;
-    int pageWidth = 0;
-    int pageHeight = 0;
+    Q_ASSERT(m_reportDocument);
 
-    if (m_reportDocument) {
-        QString pageSize = m_reportDocument->pageOptions().getPageSize();
-
-
-        if (pageSize == "Custom") {
-            // if this is custom sized sheet of paper we will just use those values
-            pageWidth = (int)(m_reportDocument->pageOptions().getCustomWidth());
-            pageHeight = (int)(m_reportDocument->pageOptions().getCustomHeight());
-        } else {
-            // lookup the correct size information for the specified size paper
-            pageWidth = m_reportDocument->pageOptions().widthPx();
-            pageHeight = m_reportDocument->pageOptions().heightPx();
-        }
+    int pageWidth;
+    int pageHeight;
+    const QString pageSize = m_reportDocument->pageOptions().getPageSize();
+    if (pageSize == "Custom") {
+        // if this is custom sized sheet of paper we will just use those values
+        pageWidth = (int)(m_reportDocument->pageOptions().getCustomWidth());
+        pageHeight = (int)(m_reportDocument->pageOptions().getCustomHeight());
+    } else {
+        // lookup the correct size information for the specified size paper
+        pageWidth = m_reportDocument->pageOptions().widthPx();
+        pageHeight = m_reportDocument->pageOptions().heightPx();
     }
-    setRect(0,0,pageWidth, pageHeight);
-    //kDebug() << "PAGE IS " << pageWidth << "x" << pageHeight;
+    setRect(0, 0, pageWidth, pageHeight);
+
     m_pixmap = new QPixmap(pageWidth, pageHeight);
     m_renderer = m_factory.createInstance("screen");
     connect(m_reportDocument, SIGNAL(updated(int)), this, SLOT(pageUpdated(int)));
@@ -62,7 +57,7 @@ KoReportPage::KoReportPage(QWidget *parent, ORODocument *document)
     m_renderTimer = new QTimer(this);
     m_renderTimer->setSingleShot(true);
     connect(m_renderTimer, SIGNAL(timeout()), this, SLOT(renderCurrentPage()));
-    
+
     renderPage(1);
 }
 
@@ -106,6 +101,5 @@ void KoReportPage::renderCurrentPage()
 {
     renderPage(m_page + 1);
 }
-
 
 #include "KoReportPage.moc"

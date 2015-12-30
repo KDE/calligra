@@ -66,9 +66,6 @@ public:
     bool loadTableViewSettings(KexiDB::TableViewData* data);
 
 public Q_SLOTS:
-    /*! Sets data. Only works for db-aware table. */
-    void setData(KexiDB::Cursor *cursor);
-
     /*! Saves settings for the view. Implemented for KexiView. */
     virtual bool saveSettings();
 
@@ -78,6 +75,8 @@ protected Q_SLOTS:
 
 protected:
     void init();
+
+    virtual bool setWidgetData(KexiDB::Cursor *cursor);
 
     class Private;
     Private * const d;

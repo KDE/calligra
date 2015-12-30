@@ -17,16 +17,19 @@
 */
 
 #include "kexisourceselector.h"
+#include "kexireportview.h"
+#include <kexiproject.h>
+#include "KexiDataSourceComboBox.h"
+#include <core/KexiMainWindowIface.h>
+#include <core/KexiWindow.h>
 
 #include <kpushbutton.h>
 #include <klineedit.h>
-
-#include <QLabel>
 #include <klocale.h>
 #include <kdebug.h>
+
 #include <QDomElement>
-#include "KexiDataSourceComboBox.h"
-#include <kexiproject.h>
+#include <QLabel>
 
 //#define NO_EXTERNAL_SOURCES
 
@@ -178,8 +181,17 @@ KoReportData* KexiSourceSelector::sourceData()
 
 //!@TODO Fix when enable external data
 #ifndef NO_EXTERNAL_SOURCES
+    KexiReportView *view = 0;
+    if (KexiMainWindowIface::global()->currentWindow()) {
+        view = qobject_cast<KexiReportView*>(KexiMainWindowIface::global()->currentWindow()->selectedView());
+        if (!view) {
+            return 0;
+        }
+    }
     if (d->sourceType->itemData(d->sourceType->currentIndex()).toString() == "internal" && d->internalSource->isSelectionValid()) {
-        d->kexiDBData = new KexiDBReportData(d->internalSource->selectedName(), d->internalSource->selectedPartClass(), d->conn);
+        d->kexiDBData = new KexiDBReportData(d->internalSource->selectedName(),
+                                             d->internalSource->selectedPartClass(),
+                                             d->conn, view);
         return d->kexiDBData;
     }
 

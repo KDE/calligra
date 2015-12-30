@@ -861,10 +861,12 @@ KexiWindow* KexiProject::openObject(QWidget* parent, KexiPart::Item& item,
         return 0;
     KexiWindow *window  = part->openInstance(parent, item, viewMode, staticObjectArgs);
     if (!window) {
-        if (part->lastOperationStatus().error())
+        if (part->lastOperationStatus().error()) {
+            m_sql = part->lastOperationStatus().errorSql; // pass proper SQL error
             setError(i18n("Opening object \"%1\" failed.", item.name()) + "<br>"
                      + part->lastOperationStatus().message,
                      part->lastOperationStatus().description);
+        }
         return 0;
     }
     return window;
