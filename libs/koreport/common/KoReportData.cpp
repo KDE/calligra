@@ -73,7 +73,7 @@ QStringList KoReportData::dataSourceNames() const
     return dataSources();
 }
 
-KoReportData* KoReportData::data(const QString &source)
+KoReportData* KoReportData::create(const QString &source)
 {
     Q_UNUSED(source);
     return 0;

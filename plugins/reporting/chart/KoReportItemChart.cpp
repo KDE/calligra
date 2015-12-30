@@ -237,7 +237,7 @@ void KoReportItemChart::populateData()
         QString src = m_dataSource->value().toString();
 
         if (!src.isEmpty()) {
-            KoReportData *curs = m_reportData->data(src);
+            KoReportData *curs = m_reportData->create(src);
             if (curs) {
                 const QStringList keys = m_links.keys();
                 foreach(const QString& field, keys) {
