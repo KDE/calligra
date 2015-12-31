@@ -41,7 +41,6 @@
 #include <kcmdlineargs.h>
 
 #include <kiconloader.h>
-#include <klibloader.h>
 #include <KLocalizedString>
 #include <kmessagebox.h>
 
