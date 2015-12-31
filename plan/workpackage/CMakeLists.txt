@@ -106,12 +106,9 @@ endif ()
 target_link_libraries(
     kdeinit_calligraplanwork
     planworkapp
-    
-    
-    Qt5::Core
-    Qt5::Gui
-    KF5::Parts
-    )
+
+    KF5::DBusAddons
+)
 
 install(TARGETS kdeinit_calligraplanwork  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

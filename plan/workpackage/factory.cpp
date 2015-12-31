@@ -23,16 +23,16 @@
 #include "aboutdata.h"
 
 #include <KoResourcePaths.h>
+#include <KoComponentData.h>
 
-#include <kcomponentdata.h>
 #include <kiconloader.h>
 
 
 namespace KPlatoWork
 {
 
-KComponentData* Factory::s_global = 0L;
-K4AboutData* Factory::s_aboutData = 0L;
+KoComponentData* Factory::s_global = 0L;
+KAboutData* Factory::s_aboutData = 0L;
 
 Factory::Factory()
     : KPluginFactory()
@@ -58,18 +58,18 @@ QObject* Factory::create( const char* iface, QWidget* parentWidget, QObject *par
     return part;
 }
 
-K4AboutData* Factory::aboutData()
+KAboutData* Factory::aboutData()
 {
     if ( !s_aboutData )
         s_aboutData = newAboutData();
     return s_aboutData;
 }
 
-const KComponentData &Factory::global()
+const KoComponentData &Factory::global()
 {
     if ( !s_global )
     {
-        s_global = new KComponentData( aboutData() );
+        s_global = new KoComponentData( *aboutData() );
 
         // Add any application-specific resource directories here
         KoResourcePaths::addResourceType("planwork_template", "data", "planwork/templates/");

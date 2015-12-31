@@ -25,8 +25,8 @@
 
 #include <kpluginfactory.h>
 
-class K4AboutData;
-class KComponentData;
+class KAboutData;
+class KoComponentData;
 
 namespace KPlatoWork
 {
@@ -40,14 +40,13 @@ public:
 
     virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
 
-    static const KComponentData &global();
+    static const KoComponentData &global();
 
-    // _Creates_ a K4AboutData but doesn't keep ownership
-    static K4AboutData* aboutData();
+    static KAboutData* aboutData();
 
 private:
-    static KComponentData* s_global;
-    static K4AboutData* s_aboutData;
+    static KoComponentData* s_global;
+    static KAboutData* s_aboutData;
 };
 
 } // KPlatoWork namespace

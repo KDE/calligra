@@ -52,7 +52,6 @@
 #include <QUrl>
 #include <QMimeDatabase>
 
-#include <kcomponentdata.h>
 #include <KLocalizedString>
 #include <kmessagebox.h>
 #include <kparts/partmanager.h>
@@ -344,7 +343,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, const QVariantList & /*args*
     m_undostack( new KUndo2QStack( this ) )
 {
     debugPlanWork;
-    setComponentData( Factory::global() );
+    setComponentData( *Factory::aboutData() );
     if ( isReadWrite() ) {
         setXMLFile( "planwork.rc" );
     } else {

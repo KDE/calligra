@@ -19,28 +19,23 @@
 
 
 #include "kplatowork_export.h"
-#include "aboutdata.h"
 #include "application.h"
 
-#include <kcmdlineargs.h>
+#include <KDBusService>
 
-#include <QFile>
+#include <QDir>
 
 
-extern "C" KPLATOWORK_EXPORT int kdemain( int argc, char **argv ) {
-    KCmdLineArgs::init( argc, argv, KPlatoWork::newAboutData());
-    KCmdLineOptions options;
-    options.add("+[file]", ki18n("File to open"));
-    KCmdLineArgs::addCmdLineOptions( options );
+extern "C" KPLATOWORK_EXPORT int kdemain( int argc, char **argv )
+{
+    KPlatoWork_Application app(argc, argv);
 
-    if (!KUniqueApplication::start()) {
-       fprintf(stderr, "PlanWork is already running!\n");
-       return 0;
-    }
+    KDBusService service(KDBusService::Unique);
+    QObject::connect(&service, &KDBusService::activateRequested,
+                     &app, &KPlatoWork_Application::handleActivateRequest);
 
-    KPlatoWork_Application app;
-    fprintf(stderr, "app created\n");
-
+    app.handleCommandLine(QDir::current());
     app.exec();
+
     return 0;
 }

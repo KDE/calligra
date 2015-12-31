@@ -25,36 +25,29 @@
 
 #include "planworkapp_export.h"
 
-#include <KoMainWindow.h>
-
-#include <KoApplication.h>
-
-#include <kuniqueapplication.h>
-
-#include <QMap>
-#include <QToolButton>
-#include <QLabel>
+#include <QApplication>
+#include <QCommandLineParser>
 
 class KPlatoWork_MainWindow;
+class QDir;
 
-namespace KPlatoWork {
-}
-namespace KPlato {
-    class Document;
-}
-
-
-class PLANWORKAPP_EXPORT KPlatoWork_Application : public KUniqueApplication
+class PLANWORKAPP_EXPORT KPlatoWork_Application : public QApplication
 {
     Q_OBJECT
+
 public:
-    KPlatoWork_Application();
+    KPlatoWork_Application(int argc, char **argv);
     ~KPlatoWork_Application();
 
-    virtual int newInstance();
+public:
+    void handleCommandLine(const QDir &workingDirectory);
+
+public Q_SLOTS:
+    void handleActivateRequest(const QStringList &arguments, const QString &workingDirectory);
 
 private:
     KPlatoWork_MainWindow *m_mainwindow;
+    QCommandLineParser m_commandLineParser;
 };
 
 

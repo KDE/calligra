@@ -21,8 +21,9 @@
 #ifndef KPLATOWORK_ABOUTDATA
 #define KPLATOWORK_ABOUTDATA
 
-#include <k4aboutdata.h>
+#include <KAboutData>
 #include <KLocalizedString>
+
 #include <calligraversion.h>
 
 namespace KPlatoWork
@@ -31,16 +32,19 @@ namespace KPlatoWork
 static const char PLANWORK_DESCRIPTION[] = I18N_NOOP("PlanWork - Work Package handler for the Plan Project Planning Tool");
 static const char PLANWORK_VERSION[] = CALLIGRA_VERSION_STRING;
 
-K4AboutData * newAboutData()
+KAboutData * newAboutData()
 {
-    K4AboutData * aboutData=new K4AboutData( "planwork", 0, ki18nc("application name", "Plan WorkPackage Handler"),
-                                           PLANWORK_VERSION, ki18n(PLANWORK_DESCRIPTION),
-                                           K4AboutData::License_GPL,
-                                           ki18n("© 1998-%1, The Plan Team").subs(CALLIGRA_YEAR),
-                                           KLocalizedString(),
-                                           "https://www.calligra.org/plan/" );
+    KAboutData * aboutData = new KAboutData(
+        QStringLiteral("planwork"),
+        i18nc("application name", "Plan WorkPackage Handler"),
+        QStringLiteral(CALLIGRA_VERSION_STRING),
+        i18n("PlanWork - Work Package handler for the Plan Project Planning Tool"),
+        KAboutLicense::GPL,
+        i18n("Copyright 1998-%1, The Plan Team").arg(QStringLiteral(CALLIGRA_YEAR)),
+        QString(),
+        QStringLiteral("https://www.calligra.org/plan/"));
 
-    aboutData->addAuthor(ki18n("Dag Andersen"), KLocalizedString(), "danders@get2net.dk");
+    aboutData->addAuthor(i18n("Dag Andersen"), QString(), QStringLiteral("danders@get2net.dk"));
 
     aboutData->setProductName( "calligra-plan/work" );
     aboutData->setProgramIconName( "calligraplanwork" );
