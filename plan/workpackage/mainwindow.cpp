@@ -30,6 +30,8 @@
 #include <QSplitter>
 #include <QLabel>
 #include <QWidget>
+#include <QFileDialog>
+
 #include <kundo2qstack.h>
 
 #include <assert.h>
@@ -38,7 +40,6 @@
 #include <KoApplicationAdaptor.h>
 #include <KoDocument.h>
 
-#include <kfiledialog.h>
 #include <KLocalizedString>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
@@ -148,8 +149,8 @@ void KPlatoWork_MainWindow::slotFileSave()
 
 void KPlatoWork_MainWindow::slotFileOpen()
 {
-    QString file = KFileDialog::getOpenFileName( QUrl(), "*.planwork" );
+    const QUrl file = QFileDialog::getOpenFileUrl( 0, QString(), QUrl(), "*.planwork" );
     if ( ! file.isEmpty() ) {
-        openDocument( QUrl::fromUserInput(file) );
+        openDocument( file );
     }
 }
