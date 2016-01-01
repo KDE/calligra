@@ -45,7 +45,7 @@
 #include <kactioncollection.h>
 
 #include <ktoolinvocation.h>
-#include <kio/netaccess.h>
+#include <KIO/StatJob>
 #include <kxmlguiwindow.h>
 
 #include <KoDocumentInfo.h>
@@ -100,7 +100,13 @@ void KPlatoWork_MainWindow::setCaption( const QString &, bool modified )
 
 bool KPlatoWork_MainWindow::openDocument(const QUrl & url)
 {
-    if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0)) {
+    // TODO: m_part->openUrl will find out about this as well, no?
+    KIO::StatJob* statJob = KIO::stat( url );
+    statJob->setSide(  KIO::StatJob::SourceSide );
+
+    const bool isUrlReadable = statJob->exec();
+
+    if (! isUrlReadable) {
         KMessageBox::error(0L, i18n("The file %1 does not exist.", url.url()));
 //        d->recent->removeUrl(url); //remove the file from the recent-opened-file-list
 //        saveRecentFiles();

@@ -51,14 +51,11 @@
 #include <QPainter>
 #include <QDir>
 #include <QMutableMapIterator>
+#include <QTemporaryFile>
 
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <QTemporaryFile>
-#include <kio/global.h>
-#include <kio/jobclasses.h>
-#include <kio/netaccess.h>
-#include <kio/copyjob.h>
+#include <KIO/CopyJob>
 
 
 namespace KPlato
@@ -804,8 +801,8 @@ void MainDocument::mergeWorkPackage( Task *to, const Task *from, const Package *
         QMap<QString, QUrl>::const_iterator end = package->documents.constEnd();
         for ( ; it != end; ++it ) {
             const QUrl src = QUrl::fromLocalFile(it.key());
-            KIO::Job *job = KIO::move( src, it.value(), KIO::Overwrite );
-            if ( KIO::NetAccess::synchronousRun( job, 0 ) ) {
+            KIO::CopyJob *job = KIO::move( src, it.value(), KIO::Overwrite );
+            if ( job->exec() ) {
                 docsaved = true;
                 //TODO: async
                 debugPlan<<"Moved file:"<<src<<it.value();

@@ -22,7 +22,7 @@
 #include "kptproject.h"
 
 #include <KLocalizedString>
-#include <kio/netaccess.h>
+#include <KIO/StatJob>
 
 namespace KPlato
 {
@@ -90,7 +90,12 @@ void InsertFilePanel::slotOpenFileDialog( KUrlRequester * )
 
 void InsertFilePanel::changed( const QString &text )
 {
-    emit enableButtonOk( KIO::NetAccess::exists( QUrl::fromUserInput( text ), KIO::NetAccess::SourceSide, 0 ) );
+    KIO::StatJob* statJob = KIO::stat( QUrl::fromUserInput(text) );
+    statJob->setSide( KIO::StatJob::SourceSide );
+
+    const bool isUrlReadable = statJob->exec();
+
+    emit enableButtonOk( isUrlReadable );
 }
 
 QUrl InsertFilePanel::url() const

@@ -39,8 +39,8 @@
 #include <QStringList>
 #include <QLocale>
 
-#include <kio/netaccess.h>
-#include <kio/job.h>
+#include <KIO/TransferJob>
+#include <KIO/StatJob>
 
 #ifdef PLAN_KCONTACTS_FOUND
 #include <KContacts/Addressee>
@@ -1360,10 +1360,20 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         }
         bool result = false;
         foreach ( const QUrl &url, urls ) {
-            if ( url.scheme() != "akonadi" || ! KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, 0 ) ) {
-                debugPlan<<url<<"is not 'akonadi' or does not exist";
+            if ( url.scheme() != "akonadi" ) {
+                debugPlan<<url<<"is not 'akonadi'";
                 continue;
             }
+            // TODO: KIO::get will find out about this as well, no?
+            KIO::StatJob* statJob = KIO::stat( url );
+            statJob->setSide(  KIO::StatJob::SourceSide );
+
+            const bool isUrlReadable = statJob->exec();
+            if (! isUrlReadable ) {
+                debugPlan<<url<<"does not exist";
+                continue;
+            }
+
             KIO::TransferJob *job = KIO::get( url, KIO::NoReload, KIO::HideProgressInfo );
             bool res = connect(job, SIGNAL(data(KIO::Job*,QByteArray)), this, SLOT(slotDataArrived(KIO::Job*,QByteArray)));
             Q_ASSERT( res );
