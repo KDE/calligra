@@ -52,7 +52,7 @@ public slots:
     void slotCancelPlaybackSafe();
     void slotUpdatePlaybackSpeed(double value);
     void slotUpdatePlaybackTimer();
-
+    void slotUpdateDropFramesMode();
 signals:
     void sigFrameChanged();
     void sigPlaybackStopped();
@@ -60,7 +60,7 @@ signals:
 private:
     void connectCancelSignals();
     void disconnectCancelSignals();
-    void uploadFrame(int frame);
+    void uploadFrame(int time);
 
 private:
     struct Private;

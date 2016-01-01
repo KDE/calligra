@@ -20,9 +20,19 @@
 #include <kglobal.h>
 
 #include <kis_debug.h>
+#include "kis_signal_compressor.h"
+
+struct KisConfigNotifier::Private
+{
+    Private() : dropFramesModeCompressor(300, KisSignalCompressor::FIRST_ACTIVE) {}
+
+    KisSignalCompressor dropFramesModeCompressor;
+};
 
 KisConfigNotifier::KisConfigNotifier()
+    : m_d(new Private)
 {
+    connect(&m_d->dropFramesModeCompressor, SIGNAL(timeout()), SIGNAL(dropFramesModeChanged()));
 }
 
 KisConfigNotifier::~KisConfigNotifier()
@@ -41,5 +51,9 @@ void KisConfigNotifier::notifyConfigChanged(void)
     emit configChanged();
 }
 
-#include "kis_config_notifier.moc"
+void KisConfigNotifier::notifyDropFramesModeChanged()
+{
+    m_d->dropFramesModeCompressor.start();
+}
 
+#include "kis_config_notifier.moc"
