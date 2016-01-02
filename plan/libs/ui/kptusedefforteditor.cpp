@@ -25,6 +25,8 @@
 #include <QHeaderView>
 #include <QLocale>
 
+#include <KLocalizedString>
+
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptresource.h"

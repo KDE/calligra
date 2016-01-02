@@ -19,6 +19,7 @@
 
 #include "KPlatoXmlLoaderBase.h"
 
+#include "kptlocale.h"
 #include "kptxmlloaderobject.h"
 #include "kptnode.h"
 #include "kptproject.h"
@@ -31,6 +32,8 @@
 #include "kptappointment.h"
 
 #include <KoXmlReader.h>
+
+#include <KLocalizedString>
 
 #include <QTimeZone>
 
@@ -52,20 +55,20 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
         }
         KoXmlElement e = n.toElement();
         if ( e.tagName() == "locale" ) {
-            KLocale *l = project->locale();
+            Locale *l = project->locale();
             l->setCurrencySymbol( e.attribute( "currency-symbol", l->currencySymbol() ) );
 
 //            l->setMonetaryDecimalSymbol( e.attribute( "monetary-decimal-symbol", l->monetaryDecimalSymbol() ) );
 
 //            l->setMonetaryThousandsSeparator( e.attribute( "monetary-thousands-separator", l->monetaryThousandsSeparator() ) );
             if ( e.hasAttribute( "positive-monetary-sign-position" ) ) {
-                l->setPositiveMonetarySignPosition( (KLocale::SignPosition)( e.attribute( "positive-monetary-sign-position" ).toInt() ) );
+                l->setPositiveMonetarySignPosition( (Locale::SignPosition)( e.attribute( "positive-monetary-sign-position" ).toInt() ) );
             }
             if ( e.hasAttribute( "positive-prefix-currency-symbol" ) ) {
                 l->setPositivePrefixCurrencySymbol( e.attribute( "positive-prefix-currency-symbol" ).toInt() );
             }
             if ( e.hasAttribute( "negative-monetary-sign-position" ) ) {
-                l->setNegativeMonetarySignPosition( (KLocale::SignPosition)( e.attribute( "negative-monetary-sign-position" ).toInt() ) );
+                l->setNegativeMonetarySignPosition( (Locale::SignPosition)( e.attribute( "negative-monetary-sign-position" ).toInt() ) );
             }
             if ( e.hasAttribute( "negative-prefix-currency-symbol" ) ) {
                 l->setNegativePrefixCurrencySymbol( e.attribute( "negative-prefix-currency-symbol" ).toInt() );
@@ -692,7 +695,7 @@ bool KPlatoXmlLoaderBase::load( ResourceGroup *rg, const KoXmlElement &element, 
 bool KPlatoXmlLoaderBase::load( Resource *resource, const KoXmlElement &element, XMLLoaderObject &status )
 {
     debugPlanXml<<"resource";
-    const KLocale *locale = status.project().locale();
+    const Locale *locale = status.project().locale();
     QString s;
     resource->setId( element.attribute( "id" ) );
     resource->setName( element.attribute( "name" ) );

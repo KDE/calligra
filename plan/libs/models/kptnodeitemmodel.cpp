@@ -20,6 +20,7 @@
 #include "kptnodeitemmodel.h"
 
 #include "kptglobal.h"
+#include "kptlocale.h"
 #include "kptcommonstrings.h"
 #include "kptcommand.h"
 #include "kptduration.h"
@@ -39,7 +40,6 @@
 #include <QModelIndex>
 #include <QByteArray>
 
-#include <klocale.h>
 #include <krichtextwidget.h>
 
 #include <KGanttGlobal>
@@ -1584,7 +1584,7 @@ QVariant NodeModel::remainingEffort( const Node *node, int role ) const
 
 QVariant NodeModel::plannedCostTo( const Node *node, int role ) const
 {
-    KLocale *l = m_project->locale();
+    Locale *l = m_project->locale();
     switch ( role ) {
         case Qt::DisplayRole:
             return l->formatMoney( node->plannedCostTo( m_now, id() ) );
@@ -1601,7 +1601,7 @@ QVariant NodeModel::plannedCostTo( const Node *node, int role ) const
 
 QVariant NodeModel::actualCostTo( const Node *node, int role ) const
 {
-    KLocale *l = m_project->locale();
+    Locale *l = m_project->locale();
     switch ( role ) {
         case Qt::DisplayRole:
             return l->formatMoney( node->actualCostTo( id(), m_now ).cost() );
@@ -2879,9 +2879,10 @@ KUndo2Command *NodeModel::setStartupAccount( Node *node, const QVariant &value, 
 
 KUndo2Command *NodeModel::setStartupCost( Node *node, const QVariant &value, int role )
 {
+    Locale *l = m_project->locale();
     switch ( role ) {
         case Qt::EditRole: {
-            double v = KLocale::global()->readMoney( value.toString() );
+            double v = l->readMoney( value.toString() );
             if ( v != node->startupCost() ) {
                 return new NodeModifyStartupCostCmd( *node, v, kundo2_i18n( "Modify startup cost" ) );
             }
@@ -2916,9 +2917,10 @@ KUndo2Command *NodeModel::setShutdownAccount( Node *node, const QVariant &value,
 
 KUndo2Command *NodeModel::setShutdownCost( Node *node, const QVariant &value, int role )
 {
+    Locale *l = m_project->locale();
     switch ( role ) {
         case Qt::EditRole: {
-            double v = KLocale::global()->readMoney( value.toString() );
+            double v = l->readMoney( value.toString() );
             if ( v != node->shutdownCost() ) {
                 return new NodeModifyShutdownCostCmd( *node, v, kundo2_i18n( "Modify shutdown cost" ) );
             }

@@ -31,6 +31,8 @@
 #include "kptresourceallocationmodel.h"
 #include "kptresourceappointmentsmodel.h"
 
+#include <KLocalizedString>
+
 #include <QSortFilterProxyModel>
 #include <QString>
 #include <QStringList>

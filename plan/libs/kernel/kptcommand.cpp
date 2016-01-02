@@ -27,9 +27,8 @@
 #include "kptrelation.h"
 #include "kptresource.h"
 #include "kptdocuments.h"
+#include "kptlocale.h"
 #include "kptdebug.h"
-
-#include <klocale.h>
 
 #include <QApplication>
 
@@ -3523,7 +3522,7 @@ void ModifyProjectLocaleCmd::unexecute()
     m_project.emitLocaleChanged();
 }
 
-ModifyCurrencySymolCmd::ModifyCurrencySymolCmd(  KLocale *locale, const QString &value, const KUndo2MagicString& name )
+ModifyCurrencySymolCmd::ModifyCurrencySymolCmd( Locale *locale, const QString &value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_locale( locale ),
     m_newvalue( value ),
@@ -3539,7 +3538,7 @@ void ModifyCurrencySymolCmd::unexecute()
     m_locale->setCurrencySymbol( m_oldvalue );
 }
 
-ModifyCurrencyFractionalDigitsCmd::ModifyCurrencyFractionalDigitsCmd(  KLocale *locale, int value, const KUndo2MagicString& name )
+ModifyCurrencyFractionalDigitsCmd::ModifyCurrencyFractionalDigitsCmd( Locale *locale, int value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_locale( locale ),
     m_newvalue( value ),
@@ -3555,7 +3554,7 @@ void ModifyCurrencyFractionalDigitsCmd::unexecute()
     m_locale->setMonetaryDecimalPlaces(m_oldvalue);
 }
 
-ModifyPositivePrefixCurrencySymolCmd::ModifyPositivePrefixCurrencySymolCmd(  KLocale *locale, bool value, const KUndo2MagicString& name )
+ModifyPositivePrefixCurrencySymolCmd::ModifyPositivePrefixCurrencySymolCmd( Locale *locale, bool value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_locale( locale ),
     m_newvalue( value ),
@@ -3571,7 +3570,7 @@ void ModifyPositivePrefixCurrencySymolCmd::unexecute()
     m_locale->setPositivePrefixCurrencySymbol( m_oldvalue );
 }
 
-ModifyNegativePrefixCurrencySymolCmd::ModifyNegativePrefixCurrencySymolCmd(  KLocale *locale, bool value, const KUndo2MagicString& name )
+ModifyNegativePrefixCurrencySymolCmd::ModifyNegativePrefixCurrencySymolCmd( Locale *locale, bool value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_locale( locale ),
     m_newvalue( value ),
@@ -3587,7 +3586,7 @@ void ModifyNegativePrefixCurrencySymolCmd::unexecute()
     m_locale->setNegativePrefixCurrencySymbol( m_oldvalue );
 }
 
-ModifyPositiveMonetarySignPositionCmd ::ModifyPositiveMonetarySignPositionCmd (  KLocale *locale, int value, const KUndo2MagicString& name )
+ModifyPositiveMonetarySignPositionCmd::ModifyPositiveMonetarySignPositionCmd( Locale *locale, int value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_locale( locale ),
     m_newvalue( value ),
@@ -3596,14 +3595,14 @@ ModifyPositiveMonetarySignPositionCmd ::ModifyPositiveMonetarySignPositionCmd ( 
 };
 void ModifyPositiveMonetarySignPositionCmd ::execute()
 {
-    m_locale->setPositiveMonetarySignPosition( (KLocale::SignPosition)m_newvalue );
+    m_locale->setPositiveMonetarySignPosition( (Locale::SignPosition)m_newvalue );
 }
 void ModifyPositiveMonetarySignPositionCmd ::unexecute()
 {
-    m_locale->setPositiveMonetarySignPosition( (KLocale::SignPosition)m_oldvalue );
+    m_locale->setPositiveMonetarySignPosition( (Locale::SignPosition)m_oldvalue );
 }
 
-ModifyNegativeMonetarySignPositionCmd ::ModifyNegativeMonetarySignPositionCmd (  KLocale *locale, int value, const KUndo2MagicString& name )
+ModifyNegativeMonetarySignPositionCmd::ModifyNegativeMonetarySignPositionCmd( Locale *locale, int value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_locale( locale ),
     m_newvalue( value ),
@@ -3612,11 +3611,11 @@ ModifyNegativeMonetarySignPositionCmd ::ModifyNegativeMonetarySignPositionCmd ( 
 };
 void ModifyNegativeMonetarySignPositionCmd ::execute()
 {
-    m_locale->setNegativeMonetarySignPosition( (KLocale::SignPosition)m_newvalue );
+    m_locale->setNegativeMonetarySignPosition( (Locale::SignPosition)m_newvalue );
 }
 void ModifyNegativeMonetarySignPositionCmd ::unexecute()
 {
-    m_locale->setNegativeMonetarySignPosition( (KLocale::SignPosition)m_oldvalue );
+    m_locale->setNegativeMonetarySignPosition( (Locale::SignPosition)m_oldvalue );
 }
 
 AddExternalAppointmentCmd::AddExternalAppointmentCmd( Resource *resource, const QString &pid, const QString &pname, const QDateTime &start, const QDateTime &end, double load, const KUndo2MagicString& name )

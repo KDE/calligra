@@ -25,6 +25,8 @@
 
 #include <KoXmlReader.h>
 
+#include <KLocalizedString>
+
 #include <QStringList>
 
 

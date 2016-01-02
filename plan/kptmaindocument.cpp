@@ -53,7 +53,6 @@
 #include <QMutableMapIterator>
 #include <QTemporaryFile>
 
-#include <klocale.h>
 #include <kmessagebox.h>
 #include <KIO/CopyJob>
 

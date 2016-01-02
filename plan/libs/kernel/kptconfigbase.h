@@ -22,10 +22,10 @@
 
 #include "kpttask.h"
 
-class KLocale;
 
 namespace KPlato
 {
+class Locale;
 
 class KPLATOKERNEL_EXPORT ConfigBase : public QObject
 {
@@ -64,8 +64,8 @@ public:
     virtual QBrush milestoneCriticalColor() const;
     virtual QBrush milestoneFinishedColor() const;
 
-    const KLocale *locale() const;
-    KLocale *locale();
+    const Locale *locale() const;
+    Locale *locale();
 
     static QBrush gradientBrush( const QColor &c );
 
@@ -75,8 +75,7 @@ protected:
 private:
     Task *m_taskDefaults;
 
-    KLocale *m_locale;
-
+    Locale *m_locale;
 };
 
 }  //KPlato namespace

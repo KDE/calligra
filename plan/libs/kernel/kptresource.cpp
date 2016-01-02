@@ -18,6 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "kptlocale.h"
 #include "kptresource.h"
 #include "kptaccount.h"
 #include "kptappointment.h"
@@ -32,7 +33,8 @@
 
 #include <KoXmlReader.h>
 
-#include <klocale.h>
+#include <KLocalizedString>
+
 #include <QLocale>
 
 
@@ -515,7 +517,7 @@ DateTime Resource::getBestAvailableTime(const DateTime &/*after*/, const Duratio
 
 bool Resource::load(KoXmlElement &element, XMLLoaderObject &status) {
     //debugPlan;
-    const KLocale *locale = status.project().locale();
+    const Locale *locale = status.project().locale();
     QString s;
     setId(element.attribute("id"));
     m_name = element.attribute("name");

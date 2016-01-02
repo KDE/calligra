@@ -20,6 +20,7 @@
 #include "kptaccountsmodel.h"
 
 #include "kptglobal.h"
+#include "kptlocale.h"
 #include "kptcommonstrings.h"
 #include "kptcommand.h"
 #include "kptduration.h"

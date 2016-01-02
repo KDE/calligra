@@ -18,6 +18,8 @@
 */
 
 #include "kptresourcedialog.h"
+
+#include "kptlocale.h"
 #include "kptcommand.h"
 #include "kptproject.h"
 #include "kptresource.h"
@@ -35,8 +37,6 @@
 #include <akonadi/contact/emailaddressselectionwidget.h>
 #include <akonadi/contact/emailaddressselection.h>
 #endif
-
-#include <klocale.h>
 
 
 namespace KPlato

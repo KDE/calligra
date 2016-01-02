@@ -10,6 +10,7 @@ include_directories(${KOODF_INCLUDES}
 
 set(kplatokernel_LIB_SRCS
     kptglobal.cpp
+    kptlocale.cpp
     kpteffortcostmap.cpp
     kptdocuments.cpp
     kptaccount.cpp

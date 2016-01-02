@@ -34,6 +34,8 @@
 
 #include <KoXmlReader.h>
 
+#include <KLocalizedString>
+
 
 namespace KPlato
 {

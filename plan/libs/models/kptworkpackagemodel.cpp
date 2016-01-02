@@ -29,6 +29,8 @@
 #include "kptschedule.h"
 #include "kptdebug.h"
 
+#include <KLocalizedString>
+
 #include <QModelIndex>
 #include <QVariant>
 

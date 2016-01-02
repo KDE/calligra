@@ -24,11 +24,10 @@
 
 #include "ui_kpttaskcostpanelbase.h"
 
-class KLocale;
-
 namespace KPlato
 {
 
+class Locale;
 class TaskCostPanel;
 class Account;
 class Accounts;
@@ -69,7 +68,7 @@ private:
     Account *m_oldrunning;
     Account *m_oldstartup;
     Account *m_oldshutdown;
-    const KLocale *m_locale;
+    const Locale *m_locale;
     bool m_localeIsOwn;
 };
 

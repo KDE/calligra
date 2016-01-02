@@ -29,19 +29,18 @@
 
 #include "ui_localemon.h"
 
-class KLocale;
-
 namespace KPlato
 {
 
 class MacroCommand;
+class Locale;
 
 class KPLATOUI_EXPORT LocaleConfigMoney : public QWidget, Ui::LocaleConfigMoney
 {
   Q_OBJECT
 
 public:
-  LocaleConfigMoney(KLocale *locale, QWidget *parent);
+  LocaleConfigMoney(Locale *locale, QWidget *parent);
   virtual ~LocaleConfigMoney();
 
   void save();
@@ -74,7 +73,7 @@ private Q_SLOTS:
 //  void slotMonDigSetChanged(int i);
 
 private:
-  KLocale *m_locale;
+  Locale *m_locale;
 };
 
 } // namespace KPlato

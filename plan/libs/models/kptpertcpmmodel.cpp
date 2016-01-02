@@ -27,6 +27,8 @@
 #include "kptschedule.h"
 #include "kptdebug.h"
 
+#include <KLocalizedString>
+
 #include <QStringList>
 #include <QMimeData>
 #include <QLocale>

@@ -19,9 +19,8 @@
 
 #include "kptconfigbase.h"
 
-#include <klocale.h>
+#include "kptlocale.h"
 
-#include <QLocale>
 #include <QApplication>
 #include <QBrush>
 #include <QColor>
@@ -33,8 +32,7 @@ namespace KPlato
 ConfigBase::ConfigBase()
     : m_taskDefaults( new Task() )
 {
-    QLocale locale;
-    m_locale = new KLocale( QLocale::languageToString(locale.language()), QLocale::countryToString(locale.country()) );
+    m_locale = new Locale();
     m_readWrite = true;
     // set some reasonable defaults
     m_taskDefaults->estimate()->setType( Estimate::Type_Effort );
@@ -142,12 +140,12 @@ QBrush ConfigBase::milestoneFinishedColor() const
     return gradientBrush( Qt::gray );
 }
 
-const KLocale *ConfigBase::locale() const
+const Locale *ConfigBase::locale() const
 {
     return m_locale;
 }
 
-KLocale *ConfigBase::locale()
+Locale *ConfigBase::locale()
 {
     return m_locale;
 }

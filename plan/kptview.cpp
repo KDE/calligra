@@ -48,7 +48,6 @@
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kstandardaction.h>
-#include <klocale.h>
 #include <ktoolbar.h>
 #include <kconfigdialogmanager.h>
 #include <kxmlguifactory.h>
@@ -64,6 +63,7 @@
 #include <KoComponentData.h>
 #include <KoJsonTrader.h>
 
+#include "kptlocale.h"
 #include "kptviewbase.h"
 #include "kptaccountsview.h"
 #include "kptaccountseditor.h"

@@ -19,12 +19,12 @@
 */
 
 #include "kpttaskcostpanel.h"
+
 #include "kptaccount.h"
 #include "kpttask.h"
 #include "kptcommand.h"
 #include "kptproject.h"
-
-#include <klocale.h>
+#include "kptlocale.h"
 
 
 namespace KPlato
@@ -40,8 +40,7 @@ TaskCostPanel::TaskCostPanel(Task &task, Accounts &accounts, QWidget *p, const c
         m_locale = project->locale();
         m_localeIsOwn = false;
     } else {
-        QLocale locale;
-        m_locale = new KLocale( QLocale::languageToString(locale.language()), QLocale::countryToString(locale.country()) );
+        m_locale = new Locale();
         m_localeIsOwn = true;
     }
 

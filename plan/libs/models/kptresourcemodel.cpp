@@ -20,6 +20,7 @@
 
 #include "kptresourcemodel.h"
 
+#include "kptlocale.h"
 #include "kptcommonstrings.h"
 #include "kptcommand.h"
 #include "kptitemmodelbase.h"

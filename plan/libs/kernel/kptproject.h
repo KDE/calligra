@@ -42,13 +42,12 @@
 #include <QPointer>
 #include <QTimeZone>
 
-#include <klocale.h>
-
 
 /// The main namespace.
 namespace KPlato
 {
 
+class Locale;
 class Schedule;
 class StandardWorktime;
 class ScheduleManager;
@@ -479,9 +478,9 @@ public:
     const Task &taskDefaults() const { return config().taskDefaults(); }
 
     /// Return locale. (Used for currency, everything else is from KGlobal::locale)
-    KLocale *locale() { return const_cast<ConfigBase&>(config()).locale(); }
+    Locale *locale() { return const_cast<ConfigBase&>(config()).locale(); }
     /// Return locale. (Used for currency, everything else is from KGlobal::locale)
-    const KLocale *locale() const { return config().locale(); }
+    const Locale *locale() const { return config().locale(); }
     /// Signal that locale data has changed
     void emitLocaleChanged();
     

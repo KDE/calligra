@@ -26,6 +26,8 @@
 
 #include "KoXmlReader.h"
 
+#include <KLocalizedString>
+
 #include <kmessagebox.h>
 
 

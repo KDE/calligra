@@ -25,6 +25,7 @@
 //#include "toplevel.h"
 #include "localemon.h"
 
+#include "kptlocale.h"
 #include "kptcommand.h"
 #include "kptdebug.h"
 
@@ -34,12 +35,11 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <klocale.h>
-
+#include <KSharedConfig>
 
 namespace KPlato {
 
-LocaleConfigMoney::LocaleConfigMoney(KLocale *locale,
+LocaleConfigMoney::LocaleConfigMoney(Locale *locale,
                                        QWidget *parent)
   : QWidget(parent),
     m_locale(locale)
@@ -149,7 +149,7 @@ void LocaleConfigMoney::save()
                        m_locale->negativePrefixCurrencySymbol(), KConfig::Persistent|KConfig::Global);
 
   i = entGrp.readEntry("PositiveMonetarySignPosition",
-                       (int)KLocale::BeforeQuantityMoney);
+                       (int)Locale::BeforeQuantityMoney);
   group.deleteEntry("PositiveMonetarySignPosition", KConfig::Persistent | KConfig::Global);
   if (i != m_locale->positiveMonetarySignPosition())
     group.writeEntry("PositiveMonetarySignPosition",
@@ -157,14 +157,14 @@ void LocaleConfigMoney::save()
                        KConfig::Persistent|KConfig::Global);
 
   i = entGrp.readEntry("NegativeMonetarySignPosition",
-                       (int)KLocale::ParensAround);
+                       (int)Locale::ParensAround);
   group.deleteEntry("NegativeMonetarySignPosition", KConfig::Persistent | KConfig::Global);
   if (i != m_locale->negativeMonetarySignPosition())
     group.writeEntry("NegativeMonetarySignPosition",
                        (int)m_locale->negativeMonetarySignPosition(),
                        KConfig::Persistent|KConfig::Global);
 
-//   i = entGrp.readEntry("MonetaryDigitSet", (int)KLocale::ArabicDigits);
+//   i = entGrp.readEntry("MonetaryDigitSet", (int)Locale::ArabicDigits);
 //   group.deleteEntry("MonetaryDigitSet", KConfig::Persistent | KConfig::Global);
 //   if (i != m_locale->monetaryDigitSet())
 //     group.writeEntry("MonetaryDigitSet",
@@ -227,19 +227,19 @@ void LocaleConfigMoney::slotMonNegPreCurSymChanged()
 
 void LocaleConfigMoney::slotMonPosMonSignPosChanged(int /*i*/)
 {
-  //m_locale->setPositiveMonetarySignPosition((KLocale::SignPosition)i);
+  //m_locale->setPositiveMonetarySignPosition((Locale::SignPosition)i);
   emit localeChanged();
 }
 
 void LocaleConfigMoney::slotMonNegMonSignPosChanged(int /*i*/)
 {
-  //m_locale->setNegativeMonetarySignPosition((KLocale::SignPosition)i);
+  //m_locale->setNegativeMonetarySignPosition((Locale::SignPosition)i);
   emit localeChanged();
 }
 
 // void LocaleConfigMoney::slotMonDigSetChanged(int i)
 // {
-//   m_locale->setMonetaryDigitSet((KLocale::DigitSet)i);
+//   m_locale->setMonetaryDigitSet((Locale::DigitSet)i);
 //   emit localeChanged();
 // }
 
@@ -258,10 +258,10 @@ void LocaleConfigMoney::slotTranslate()
     wc->setItemText(4, i18n("After Money"));
   }
 
-//   QList<KLocale::DigitSet> digitSets = m_locale->allDigitSetsList();
+//   QList<Locale::DigitSet> digitSets = m_locale->allDigitSetsList();
 //   qSort(digitSets);
 //   m_cmbMonDigSet->clear();
-//   foreach (KLocale::DigitSet ds, digitSets)
+//   foreach (Locale::DigitSet ds, digitSets)
 //   {
 //     m_cmbMonDigSet->addItem(m_locale->digitSetToName(ds, true));
 //   }

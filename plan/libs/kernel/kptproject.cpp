@@ -21,6 +21,8 @@
 */
 
 #include "kptproject.h"
+
+#include "kptlocale.h"
 #include "kptappointment.h"
 #include "kpttask.h"
 #include "kptdatetime.h"
@@ -33,10 +35,11 @@
 
 #include <KoXmlReader.h>
 
-#include <QDateTime>
-
 #include <krandom.h>
 #include <KFormat>
+#include <KLocalizedString>
+
+#include <QDateTime>
 
 
 namespace KPlato
@@ -930,7 +933,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
         }
         KoXmlElement e = n.toElement();
         if ( e.tagName() == "locale" ) {
-            KLocale *l = locale();
+            Locale *l = locale();
             l->setCurrencySymbol( e.attribute( "currency-symbol", l->currencySymbol() ) );
 
 //            l->setMonetaryDecimalSymbol( e.attribute( "monetary-decimal-symbol", l->monetaryDecimalSymbol() ) );
@@ -940,13 +943,13 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
                 l->setMonetaryDecimalPlaces(e.attribute("currency-digits").toInt());
             }
             if ( e.hasAttribute( "positive-monetary-sign-position" ) ) {
-                l->setPositiveMonetarySignPosition( (KLocale::SignPosition)( e.attribute( "positive-monetary-sign-position" ).toInt() ) );
+                l->setPositiveMonetarySignPosition( (Locale::SignPosition)( e.attribute( "positive-monetary-sign-position" ).toInt() ) );
             }
             if ( e.hasAttribute( "positive-prefix-currency-symbol" ) ) {
                 l->setPositivePrefixCurrencySymbol( e.attribute( "positive-prefix-currency-symbol" ).toInt() );
             }
             if ( e.hasAttribute( "negative-monetary-sign-position" ) ) {
-                l->setNegativeMonetarySignPosition( (KLocale::SignPosition)( e.attribute( "negative-monetary-sign-position" ).toInt() ) );
+                l->setNegativeMonetarySignPosition( (Locale::SignPosition)( e.attribute( "negative-monetary-sign-position" ).toInt() ) );
             }
             if ( e.hasAttribute( "negative-prefix-currency-symbol" ) ) {
                 l->setNegativePrefixCurrencySymbol( e.attribute( "negative-prefix-currency-symbol" ).toInt() );
@@ -1248,7 +1251,7 @@ void Project::save( QDomElement &element ) const
     
     QDomElement loc = me.ownerDocument().createElement( "locale" );
     me.appendChild( loc );
-    const KLocale *l = locale();
+    const Locale *l = locale();
     loc.setAttribute( "currency-symbol", l->currencySymbol() );
 //    loc.setAttribute( "monetary-decimal-symbol", l->monetaryDecimalSymbol() );
 //    loc.setAttribute( "monetary-thousands-separator", l->monetaryThousandsSeparator() );

@@ -21,6 +21,7 @@
 #include "kpttaskstatusmodel.h"
 
 #include "kptglobal.h"
+#include "kptlocale.h"
 #include "kptcommonstrings.h"
 #include "kptcommand.h"
 #include "kptproject.h"
@@ -41,8 +42,6 @@
 #include <QResizeEvent>
 #include <QTimer>
 #include <QAction>
-
-#include <klocale.h>
 
 #include <KChartChart>
 #include <KChartAbstractCoordinatePlane>
@@ -937,8 +936,8 @@ void PerformanceStatusBase::setProject( Project *project )
 void PerformanceStatusBase::slotLocaleChanged()
 {
     debugPlan;
-    KLocale *locale = m_project->locale();
-    const QString currencySymbol = locale ? locale->currencySymbol() : QString();
+
+    const QString currencySymbol = m_project->locale()->currencySymbol();
 
     m_linechart.costaxis->setTitleText( i18nc( "Chart axis title 1=currency symbol", "Cost (%1)", currencySymbol ) );
     m_linechart.effortaxis->setTitleText( i18nc( "Chart axis title", "Effort (hours)" ) );

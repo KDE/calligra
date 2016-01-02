@@ -18,11 +18,15 @@
  */
 
 #include "kptnodechartmodel.h"
+
+#include "kptlocale.h"
 #include "kptnode.h"
 #include "kptproject.h"
 #include "kptschedule.h"
 #include "kptresource.h"
 #include "kptdebug.h"
+
+#include <KLocalizedString>
 
 #include <QVariant>
 #include <QPen>
@@ -154,18 +158,18 @@ QVariant ChartItemModel::data( const QModelIndex &index, int role ) const
         } else {
             QLocale locale;
             // TODO: temporary workaround while KLocale/money logic still used
-            KLocale *klocale;
-            KLocale *tmpklocale = 0;
+            Locale *planLocale;
+            Locale *tmpPlanLocale = 0;
             if (project()) {
-                klocale = project()->locale();
+                planLocale = project()->locale();
             } else {
-                tmpklocale = new KLocale( QLocale::languageToString(locale.language()), QLocale::countryToString(locale.country()) );
-                klocale = tmpklocale;
+                tmpPlanLocale = new Locale();
+                planLocale = tmpPlanLocale;
             }
             switch ( index.column() ) {
-            case BCWSCost: result = klocale->formatMoney( bcwsCost( index.row() ), 0 ); break;
-            case BCWPCost: result = klocale->formatMoney( bcwpCost( index.row() ), 0 ); break;
-            case ACWPCost: result = klocale->formatMoney( acwpCost( index.row() ), 0 ); break;
+            case BCWSCost: result = planLocale->formatMoney( bcwsCost( index.row() ), QString(), 0 ); break;
+            case BCWPCost: result = planLocale->formatMoney( bcwpCost( index.row() ), QString(), 0 ); break;
+            case ACWPCost: result = planLocale->formatMoney( acwpCost( index.row() ), QString(), 0 ); break;
             case BCWSEffort: result = locale.toString( bcwsEffort( index.row() ), 'f', 0 ); break;
             case BCWPEffort: result = locale.toString( bcwpEffort( index.row() ), 'f', 0 ); break;
             case ACWPEffort: result = locale.toString( acwpEffort( index.row() ), 'f', 0 ); break;
@@ -175,7 +179,7 @@ QVariant ChartItemModel::data( const QModelIndex &index, int role ) const
             case CPIEffort: result = locale.toString( cpiEffort( index.row() ), 'f', 2 ); break;
             default: break;
             }
-            delete tmpklocale;
+            delete tmpPlanLocale;
         }
         //debugPlan<<index<<role<<result;
         return result;
@@ -219,7 +223,6 @@ QVariant ChartItemModel::data( const QModelIndex &index, int role ) const
 
 QVariant ChartItemModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
-    KLocale *locale = project() ? project()->locale() : KLocale::global();
     QVariant result;
     if ( role == Qt::DisplayRole ) {
         if ( orientation == Qt::Horizontal ) {
@@ -255,7 +258,7 @@ QVariant ChartItemModel::headerData( int section, Qt::Orientation orientation, i
                 default: return QVariant();
             }
         } else {
-            return locale->formatDate( startDate().addDays( section ) );
+            return QLocale().toString( startDate().addDays( section ), QLocale::ShortFormat );
         }
     } else if ( role == Qt::EditRole ) {
         if ( orientation == Qt::Horizontal ) {
