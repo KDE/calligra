@@ -128,9 +128,22 @@ ki18n_wrap_ui(kplatoui_LIB_SRCS
 add_library(kplatoui SHARED ${kplatoui_LIB_SRCS})
 generate_export_header(kplatoui)
 
-target_link_libraries(kplatoui komain kplatokernel kplatomodels KPropertyWidgets KReport KChart KGantt KF5::KHtml )
+target_link_libraries(kplatoui
+PUBLIC
+    komain
+    kplatokernel
+    kplatomodels
+    KReport
+    KGantt
+    KF5::KHtml
+PRIVATE
+    KPropertyWidgets
+    KChart
+    KF5::ItemViews
+    KF5::IconThemes
+)
 if(KF5AkonadiContact_FOUND)
-    target_link_libraries(kplatoui KF5::AkonadiContact)
+    target_link_libraries(kplatoui  PRIVATE KF5::AkonadiContact)
 endif()
 
 set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

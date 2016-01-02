@@ -90,9 +90,18 @@ kconfig_add_kcfg_files(plansettings_SRCS plansettings.kcfgc)
 add_library(planprivate SHARED ${planprivate_LIB_SRCS} ${plansettings_SRCS} )
 generate_export_header(planprivate BASE_NAME kplato)
 
-target_link_libraries(planprivate kplatokernel kplatomodels kplatoui KF5::KHtml komain)
+target_link_libraries(planprivate
+PUBLIC
+    kplatokernel
+    kplatomodels
+    kplatoui
+    komain
+PRIVATE
+    KF5::IconThemes
+#     KF5::KHtml
+)
 if(KF5AkonadiContact_FOUND)
-    target_link_libraries(planprivate KF5::AkonadiContact)
+    target_link_libraries(planprivate  PRIVATE KF5::AkonadiContact)
 endif()
 set_target_properties(planprivate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
@@ -131,7 +140,7 @@ if (APPLE)
    install( FILES ${CMAKE_CURRENT_BINARY_DIR}/calligraplan_KDEINIT_SRCS.icns DESTINATION ${BUNDLE_INSTALL_DIR}/calligraplan.app/Contents/Resources)
 endif ()
 
-target_link_libraries(kdeinit_calligraplan komain KF5::KDELibs4Support)
+target_link_libraries(kdeinit_calligraplan komain)
 
 install(TARGETS kdeinit_calligraplan  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

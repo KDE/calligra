@@ -42,6 +42,7 @@ generate_export_header(planworkfactory BASE_NAME kplatowork)
 
 target_link_libraries(
     planworkfactory
+PUBLIC
     kplatokernel
     kplatomodels
     kplatoui
@@ -49,7 +50,9 @@ target_link_libraries(
     komain
     KGantt
     KF5::Parts
-    )
+PRIVATE
+    KF5::IconThemes
+)
 
 set_target_properties(planworkfactory PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
@@ -84,7 +87,9 @@ target_link_libraries(
     kplatokernel
     komain
     KF5::Parts
-    )
+    KF5::IconThemes
+    KF5::WindowSystem
+)
 
 set_target_properties(planworkapp PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 

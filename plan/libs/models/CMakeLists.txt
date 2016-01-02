@@ -46,10 +46,20 @@ set(kplatomodels_LIB_SRCS
 add_library(kplatomodels SHARED ${kplatomodels_LIB_SRCS})
 generate_export_header(kplatomodels)
 
-target_link_libraries(kplatomodels kplatokernel koodf KChart KGantt KF5::KIOWidgets Qt5::Core Qt5::Gui)
-target_link_libraries(kplatomodels kundo2)
+target_link_libraries(kplatomodels
+PUBLIC
+    kplatokernel
+    koodf
+    kundo2
+    KChart
+    KF5::KIOWidgets
+PRIVATE
+    KGantt
+    KF5::Notifications
+    KF5::TextWidgets
+)
 if(KF5Contacts_FOUND)
-    target_link_libraries(kplatomodels KF5::Contacts)
+    target_link_libraries(kplatomodels  PRIVATE KF5::Contacts)
 endif()
 
 set_target_properties(kplatomodels PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

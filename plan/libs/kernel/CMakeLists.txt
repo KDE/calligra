@@ -45,6 +45,7 @@ PUBLIC
     kowidgetutils
     kundo2
     KF5::KIOWidgets
+PRIVATE
     KF5::KDELibs4Support
 )
 
