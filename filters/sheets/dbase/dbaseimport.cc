@@ -26,13 +26,12 @@
 #include <QString>
 #include <QByteArray>
 
-#include <kdebug.h>
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <KoUnit.h>
 #include <kpluginfactory.h>
 #include <kmessagebox.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 
 K_PLUGIN_FACTORY_WITH_JSON(DBaseImportFactory, "calligra_filter_dbase2kspread.json",
