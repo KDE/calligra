@@ -21,7 +21,6 @@ target_link_libraries(calligrageminidropboxplugin
     Qt5::Widgets
     Qt5::Qml
     Qt5::Quick
-    ${QT_QTNETWORK_LIBRARIES}
 )
 
 install(TARGETS calligrageminidropboxplugin DESTINATION ${QML_INSTALL_DIR}/Calligra/Gemini/Dropbox)

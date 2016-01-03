@@ -44,7 +44,6 @@ generate_export_header(plantjscheduler BASE_NAME kplatotj)
 target_link_libraries(
     plantjscheduler
     kplatokernel
-    ${QT_QTXML_LIBRARY}
 )
 
 set_target_properties( plantjscheduler PROPERTIES DEFINE_SYMBOL MAKE_KPLATOTJ_LIB )

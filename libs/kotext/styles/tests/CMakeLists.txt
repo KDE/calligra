@@ -1,7 +1,7 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(
     ${KOTEXT_INCLUDES}
-    ${QT_INCLUDES})
+)
 
 add_definitions(-DSPECS_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/specs/")
 
@@ -35,4 +35,4 @@ kotext_styles_add_unit_test(TestStyleManager TestStyleManager.cpp  LINK_LIBRARIE
 
 ########### next target ###############
 
-#kotext_styles_add_unit_test(TestOpenDocumentStyle TestOpenDocumentStyle.cpp  LINK_LIBRARIES kotext ${QT_XML_LIBRARY} Qt5::Test)
+#kotext_styles_add_unit_test(TestOpenDocumentStyle TestOpenDocumentStyle.cpp  LINK_LIBRARIES kotext Qt5::Test)

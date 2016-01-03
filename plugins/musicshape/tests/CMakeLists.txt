@@ -1,6 +1,4 @@
 
-include_directories( ${QT_QTGUI_INCLUDE_DIR} ${QT_QTCORE_INCLUDE_DIR} ${QT_INCLUDE_DIR} )
-
 set( musicwidgettest_SRCS
     MusicWidget.cpp
     MusicWidgetTest.cpp
