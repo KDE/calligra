@@ -23,8 +23,7 @@
 #include <QDir>
 #include <QApplication>
 
-#include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kconfig.h>
 #include <KoFilterManager.h>
 
@@ -45,7 +44,7 @@
  *  true to construct a modal dialog.
  */
 LatexExportDialog::LatexExportDialog(KoStore* inputStore, QWidget* parent)
-  : KDialog(parent)
+  : KoDialog(parent)
   , m_inputStore(inputStore)
 {
     QWidget *mainWidget = new QWidget();

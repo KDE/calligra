@@ -35,13 +35,13 @@
 using namespace Calligra::Sheets;
 
 CSVExportDialog::CSVExportDialog(QWidget * parent)
-        : KDialog(parent),
+        : KoDialog(parent),
         m_dialog(new ExportDialogUI(this)),
         m_delimiter(","),
         m_textquote('"')
 {
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    setDefaultButton(KDialog::Ok);
+    setButtons(KoDialog::Ok | KoDialog::Cancel);
+    setDefaultButton(KoDialog::Ok);
     QApplication::restoreOverrideCursor();
 
     QStringList encodings;

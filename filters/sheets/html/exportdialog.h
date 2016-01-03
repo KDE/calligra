@@ -20,7 +20,7 @@
 #ifndef EXPORTDIALOG_H
 #define EXPORTDIALOG_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 class KUrl;
 
 #include <ui_exportwidget.h>
@@ -34,7 +34,7 @@ public:
 };
 
 
-class ExportDialog : public KDialog
+class ExportDialog : public KoDialog
 {
     Q_OBJECT
 public:

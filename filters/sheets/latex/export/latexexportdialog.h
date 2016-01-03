@@ -22,15 +22,14 @@
 
 #include <ui_latexexportwidget.h>
 
-// KDE
-#include <kdialog.h>
+#include <KoDialog.h>
 // Qt
 #include <QStringList>
 
 class KoStore;
 class KConfig;
 
-class LatexExportDialog : public KDialog
+class LatexExportDialog : public KoDialog
 {
     Q_OBJECT
 

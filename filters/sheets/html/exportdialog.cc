@@ -32,11 +32,11 @@
 #include <kurl.h>
 
 ExportDialog::ExportDialog(QWidget *parent)
-        : KDialog(parent), m_mainwidget(new ExportWidget(this))
+        : KoDialog(parent), m_mainwidget(new ExportWidget(this))
 {
     setCaption(i18n("Export Sheet to HTML"));
     setButtons(Ok | Cancel);
-    setDefaultButton(KDialog::Cancel);
+    setDefaultButton(Cancel);
     QApplication::restoreOverrideCursor();
 
     connect(m_mainwidget->mCustomButton, SIGNAL(toggled(bool)),

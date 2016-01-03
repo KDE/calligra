@@ -21,7 +21,7 @@
 #ifndef CSVEXPORTDIALOG_H
 #define CSVEXPORTDIALOG_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 #include <ui_exportdialogui.h>
 
 class ExportDialogUI;
@@ -44,7 +44,7 @@ public:
 };
 
 
-class CSVExportDialog : public KDialog
+class CSVExportDialog : public KoDialog
 {
     Q_OBJECT
 public:
