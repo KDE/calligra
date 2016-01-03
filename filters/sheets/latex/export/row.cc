@@ -21,8 +21,6 @@
 
 #include "row.h"
 
-#include <kdebug.h>  /* for kDebug stream */
-
 #include <QTextStream>
 
 /*******************************************/

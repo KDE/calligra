@@ -23,13 +23,13 @@
 
 #include "document.h"
 
-#include <kdebug.h>
+#include "LatexDebug.h"
 
 Document::Document(const KoStore* in, QString fileOut):
         XmlParser(in), _file(fileOut), _in(in)
 {
-    //kDebug(30522) << fileIn;
-    kDebug(30522) << fileOut;
+    //debugLatex << fileIn;
+    debugLatex << fileOut;
     _filename = fileOut;
     //setFileHeader(_fileHeader);
     //setRoot(&_document);
@@ -46,19 +46,19 @@ void Document::analyze()
 {
     QDomNode node;
     node = init();
-    kDebug(30522) << "ANALYZE A DOC";
+    debugLatex << "ANALYZE A DOC";
     _document.analyze(node);
-    kDebug(30522) << "END ANALYZE";
+    debugLatex << "END ANALYZE";
 }
 
 void Document::generate()
 {
     if (_file.open(QIODevice::WriteOnly)) {
-        kDebug(30522) << "GENERATION";
+        debugLatex << "GENERATION";
         _out.setDevice(&_file);
         _document.generate(_out, !isEmbeded());
         //_out << getDocument();
         _file.close();
     } else
-        kDebug(30522) << "Can't use the file ...";
+        debugLatex << "Can't use the file ...";
 }

@@ -3,6 +3,7 @@ include_directories(${KOMAIN_INCLUDES})
 ########### next target ###############
 
 set(kspread2tex_PART_SRCS
+   LatexDebug.cpp
    cell.cc 
    column.cc 
    config.cc 

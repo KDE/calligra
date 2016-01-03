@@ -23,11 +23,11 @@
 
 #include <stdlib.h>
 
-#include <kdebug.h>
-
+#include "LatexDebug.h"
 #include "column.h"
 #include "fileheader.h" /* for the use of _header (color and underlined) */
 #include "row.h"
+
 #include <QTextStream>
 
 Format::Format()
@@ -97,25 +97,25 @@ void Format::analyze(const QDomNode node)
     if (isChild(node, "pen"))
         analyzePen(getChild(node, "pen"));
     if (isChild(node, "bottom-border")) {
-        kDebug(30522) << "bottom-border";
+        debugLatex << "bottom-border";
         _isValidFormat = true;
         _bottomBorder = new Pen();
         _bottomBorder->analyze(getChild(getChild(node, "bottom-border"), "pen"));
     }
     if (isChild(node, "top-border")) {
-        kDebug(30522) << "top-border";
+        debugLatex << "top-border";
         _isValidFormat = true;
         _topBorder = new Pen();
         _topBorder->analyze(getChild(getChild(node, "top-border"), "pen"));
     }
     if (isChild(node, "left-border")) {
-        kDebug(30522) << "left-border";
+        debugLatex << "left-border";
         _isValidFormat = true;
         _leftBorder = new Pen();
         _leftBorder->analyze(getChild(getChild(node, "left-border"), "pen"));
     }
     if (isChild(node, "right-border")) {
-        kDebug(30522) << "right-border";
+        debugLatex << "right-border";
         _isValidFormat = true;
         _rightBorder = new Pen();
         _rightBorder->analyze(getChild(getChild(node, "right-border"), "pen"));

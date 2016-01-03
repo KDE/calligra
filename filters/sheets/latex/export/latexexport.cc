@@ -20,8 +20,8 @@
 #include "latexexport.h"
 
 #include "latexexportdialog.h"
-// KDE
-#include <kdebug.h>
+#include "LatexDebug.h"
+// KF5
 #include <KoFilterChain.h>
 #include <kpluginfactory.h>
 // Qt
@@ -45,11 +45,11 @@ KoFilter::ConversionStatus LATEXExport::convert(const QByteArray& from, const QB
 
     KoStore* in = KoStore::createStore(m_chain->inputFile(), KoStore::Read);
     if (!in || !in->open("root")) {
-        kError(30503) << "Unable to open input file!" << endl;
+        errorLatex << "Unable to open input file!" << endl;
         delete in;
         return KoFilter::FileNotFound;
     }
-    kDebug(30522) << "In the kspread latex export filter...";
+    debugLatex << "In the kspread latex export filter...";
     /* input file Reading */
     in->close();
 

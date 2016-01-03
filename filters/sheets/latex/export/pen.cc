@@ -23,8 +23,6 @@
 
 #include <stdlib.h>
 
-#include <kdebug.h>
-
 //#include "fileheader.h" /* for the use of _header (color and underlined) */
 #include <QTextStream>
 

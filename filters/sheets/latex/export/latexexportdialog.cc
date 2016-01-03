@@ -26,9 +26,9 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kconfig.h>
-#include <kdebug.h>
 #include <KoFilterManager.h>
 
+#include "LatexDebug.h"
 #include "latexexportAdaptor.h"
 
 #include "document.h"
@@ -61,7 +61,7 @@ LatexExportDialog::LatexExportDialog(KoStore* inputStore, QWidget* parent)
     QString value;
     while (i < 10) {
         /*value = m_config->readPathEntry( QString("Recent%1").arg(i), QString() );
-        kDebug(30522) <<"recent :" << value;
+        debugLatex <<"recent :" << value;
         if(!value.isEmpty())
         {
          _recentList.append( value );
@@ -166,7 +166,7 @@ LatexExportDialog::~LatexExportDialog()
  */
 void LatexExportDialog::reject()
 {
-    kDebug(30522) << "Export cancelled";
+    debugLatex << "Export cancelled";
     QDialog::reject();
 }
 
@@ -177,7 +177,7 @@ void LatexExportDialog::reject()
 void LatexExportDialog::accept()
 {
     hide();
-    kDebug(30522) << "KSPREAD LATEX EXPORT FILTER --> BEGIN";
+    debugLatex << "KSPREAD LATEX EXPORT FILTER --> BEGIN";
     Config* config = Config::instance();
 
     /* Document tab */
@@ -204,7 +204,7 @@ void LatexExportDialog::accept()
     config->setEncoding(m_ui.encodingComboBox->currentText());
     QListWidget* langUsedList = m_ui.langUsedList;
     for (int index = 0; index < langUsedList->count(); ++index) {
-        kDebug(30522) << "lang. :" << langUsedList->item(index)->text();
+        debugLatex << "lang. :" << langUsedList->item(index)->text();
         config->addLanguage(langUsedList->item(index)->text());
     }
 
@@ -213,16 +213,16 @@ void LatexExportDialog::accept()
         config->setDefaultLanguage(langUsedList->item(0)->text());
     if (langUsedList->currentItem() != NULL) {
         const QString currentLanguage = langUsedList->currentItem()->text();
-        kDebug(30522) << "default lang. :" << currentLanguage;
+        debugLatex << "default lang. :" << currentLanguage;
         config->setDefaultLanguage(currentLanguage);
     }
 
     Document doc(m_inputStore, m_fileOut);
-//     kDebug(30522) << "---------- analyze file -------------";
+//     debugLatex << "---------- analyze file -------------";
     doc.analyze();
-//     kDebug(30522) << "---------- generate file -------------";
+//     debugLatex << "---------- generate file -------------";
     doc.generate();
-//     kDebug(30522) << "KSPREAD LATEX EXPORT FILTER --> END";
+//     debugLatex << "KSPREAD LATEX EXPORT FILTER --> END";
 }
 
 void LatexExportDialog::addLanguage()
@@ -232,7 +232,7 @@ void LatexExportDialog::addLanguage()
         return;
     }
     const QString text = currentItem->text();
-    kDebug(30522) << "add a new supported language" << text;
+    debugLatex << "add a new supported language" << text;
     m_ui.langUsedList->addItem(text);
     delete currentItem;
 }
@@ -244,7 +244,7 @@ void LatexExportDialog::removeLanguage()
         return;
     }
     const QString text = currentItem->text();
-    kDebug(30522) << "remove a language" << text;
+    debugLatex << "remove a language" << text;
     m_ui.languagesList->addItem(text);
     delete currentItem;
 }
