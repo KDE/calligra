@@ -10,7 +10,7 @@ if(SHOULD_BUILD_FILTER_HTML_TO_ODS)
 set(html2ods_PART_SRCS htmlimport.cc HtmlImportDebug.cpp)
 add_library(calligra_filter_html2ods MODULE ${html2ods_PART_SRCS})
 kcoreaddons_desktop_to_json(calligra_filter_html2ods calligra_filter_html2ods.desktop)
-target_link_libraries(calligra_filter_html2ods komain KF5::KHtml KF5::KDELibs4Support)
+target_link_libraries(calligra_filter_html2ods komain KF5::KHtml)
 install(TARGETS calligra_filter_html2ods  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 endif()
