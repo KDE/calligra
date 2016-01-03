@@ -25,7 +25,7 @@
 
 #include <kcharsets.h>
 #include <kmessagebox.h>
-#include <kglobal.h>
+#include <KSharedConfig>
 #include <kdebug.h>
 
 #include <QApplication>
@@ -47,7 +47,7 @@ CSVExportDialog::CSVExportDialog(QWidget * parent)
     QStringList encodings;
     encodings << i18nc("Descriptive encoding name", "Recommended ( %1 )" , "UTF-8");
     encodings << i18nc("Descriptive encoding name", "Locale ( %1 )" , QString(QTextCodec::codecForLocale()->name()));
-    encodings += KGlobal::charsets()->descriptiveEncodingNames();
+    encodings += KCharsets::charsets()->descriptiveEncodingNames();
     // Add a few non-standard encodings, which might be useful for text files
     const QString description(i18nc("Descriptive encoding name", "Other ( %1 )"));
     encodings << description.arg("Apple Roman"); // Apple
@@ -90,7 +90,7 @@ CSVExportDialog::~CSVExportDialog()
 
 void CSVExportDialog::loadSettings()
 {
-    KConfigGroup configGroup = KGlobal::config()->group("CSVDialog Settings");
+    KConfigGroup configGroup = KSharedConfig::openConfig()->group("CSVDialog Settings");
     m_textquote = configGroup.readEntry("textQuote", "\"")[0];
     m_delimiter = configGroup.readEntry("delimiter", ",");
     const QString codecText = configGroup.readEntry("codec", "");
@@ -129,7 +129,7 @@ void CSVExportDialog::loadSettings()
 
 void CSVExportDialog::saveSettings()
 {
-    KConfigGroup configGroup = KGlobal::config()->group("CSVDialog Settings");
+    KConfigGroup configGroup = KSharedConfig::openConfig()->group("CSVDialog Settings");
     configGroup.writeEntry("textQuote", QString(m_textquote));
     configGroup.writeEntry("delimiter", m_delimiter);
     configGroup.writeEntry("codec", m_dialog->comboBoxEncoding->currentText());
@@ -265,7 +265,7 @@ bool CSVExportDialog::exportSelectionOnly() const
 
 QTextCodec* CSVExportDialog::getCodec(void) const
 {
-    const QString strCodec(KGlobal::charsets()->encodingForName(m_dialog->comboBoxEncoding->currentText()));
+    const QString strCodec(KCharsets::charsets()->encodingForName(m_dialog->comboBoxEncoding->currentText()));
     kDebug(30502) << "Encoding:" << strCodec;
 
     bool ok = false;
@@ -275,7 +275,7 @@ QTextCodec* CSVExportDialog::getCodec(void) const
     if (codec) {
         ok = true;
     } else {
-        codec = KGlobal::charsets()->codecForName(strCodec, ok);
+        codec = KCharsets::charsets()->codecForName(strCodec, ok);
     }
 
     // Still nothing?
