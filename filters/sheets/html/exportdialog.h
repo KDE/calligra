@@ -21,7 +21,7 @@
 #define EXPORTDIALOG_H
 
 #include <KoDialog.h>
-class KUrl;
+class QUrl;
 
 #include <ui_exportwidget.h>
 
@@ -51,9 +51,9 @@ public:
 
     /**
       Returns a valid URL if the custom button was selected.
-      Else, it will return KUrl().
+      Else, it will return QUrl().
     */
-    KUrl customStyleURL() const;
+    QUrl customStyleURL() const;
 
     /**
       Returns true if borders should be shown, false if borders

@@ -26,10 +26,10 @@
 #include <QSpinBox>
 #include <QTextCodec>
 #include <QApplication>
+#include <QUrl>
 
 #include <kglobal.h>
 #include <klocale.h>
-#include <kurl.h>
 
 ExportDialog::ExportDialog(QWidget *parent)
         : KoDialog(parent), m_mainwidget(new ExportWidget(this))
@@ -87,13 +87,13 @@ bool ExportDialog::separateFiles() const
     return m_mainwidget->mSeparateFiles->isChecked();
 }
 
-KUrl ExportDialog::customStyleURL() const
+QUrl ExportDialog::customStyleURL() const
 {
-    KUrl url = m_mainwidget->mCustomURL->url();
+    QUrl url = m_mainwidget->mCustomURL->url();
     if (m_mainwidget->mCustomButton->isChecked() && url.isValid())
         return url;
 
-    return KUrl();
+    return QUrl();
 }
 
 void ExportDialog::setSheets(const QStringList &list)

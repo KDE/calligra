@@ -26,8 +26,8 @@
 #include <QTextCodec>
 #include <QTextStream>
 #include <QByteArray>
+#include <QUrl>
 
-#include <kurl.h>
 #include <kdebug.h>
 #include <kpluginfactory.h>
 #include <KoFilterChain.h>
