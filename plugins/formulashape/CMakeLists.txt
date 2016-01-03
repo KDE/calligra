@@ -55,6 +55,7 @@ set(formulashape_PART_SRCS
     KoFormulaToolFactory.cpp
     FormulaDocument.cpp
     FormulaPart.cpp
+    BasicXMLSyntaxHighlighter.cpp
     # itexToMML files
     ${ITEXTOMML_SOURCE_DIR}/lex.yy.c
     ${ITEXTOMML_SOURCE_DIR}/y.tab.c

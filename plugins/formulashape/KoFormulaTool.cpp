@@ -28,8 +28,7 @@
 #include <QComboBox>
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QTextEdit>
-#include <QSyntaxHighlighter>
+#include <KTextEdit>
 #include <QSpacerItem>
 #include <QWidget>
 #include <QWidgetAction>
@@ -45,8 +44,9 @@
 #include "FormulaCommand.h"
 #include "FormulaCommandUpdate.h"
 #include "3rdparty/itexToMML/itex2MML.h"
+#include "BasicXMLSyntaxHighlighter.h"
 
-KoFormulaTool::KoFormulaTool(KoCanvasBase* canvas): KoToolBase(canvas), m_textEdit(0), m_errorLabel(0), m_formulaShape(0), m_modeComboBox(0)
+KoFormulaTool::KoFormulaTool(KoCanvasBase* canvas): KoToolBase(canvas), m_textEdit(0), m_syntaxHighlighter(0), m_errorLabel(0), m_formulaShape(0), m_modeComboBox(0)
 {
     m_actionFontFamily = new FormulaFontFamilyAction(this);
     m_actionFontSize = new FontSizeAction(this);
@@ -71,6 +71,7 @@ void KoFormulaTool::activate(KoToolBase::ToolActivation toolActivation, const QS
     if(m_textEdit)
     {
         m_textEdit->setText(m_formulaShape->content());
+        m_syntaxHighlighter = new BasicXMLSyntaxHighlighter(m_textEdit->document());
     }
 }
 
@@ -125,7 +126,10 @@ QWidget* KoFormulaTool::createOptionWidget()
 
     // Edit line
     widget->setLayout(layout);
-    m_textEdit = new QTextEdit(widget);
+    m_textEdit = new KTextEdit(widget);
+    m_textEdit->setAcceptRichText(false);
+    m_textEdit->setCheckSpellingEnabled(false);
+    m_textEdit->setPlaceholderText(i18n("Input formula here …"));
     layout->addWidget(m_textEdit);
     
     // Error label

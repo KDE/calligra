@@ -22,11 +22,13 @@
 
 #include <KoToolBase.h>
 #include <KoToolFactoryBase.h>
+#include <QtGui/qsyntaxhighlighter.h>
 
 class QComboBox;
 class QLabel;
 class KoFormulaShape;
-class QTextEdit;
+class KTextEdit;
+class QSyntaxHighlighter;
 class QWidgetAction;
 
 class KoFormulaTool : public KoToolBase
@@ -46,7 +48,8 @@ public Q_SLOTS:
 private:
     void setMathML(const QString& mathml, const QString& mode);
 private:
-    QTextEdit* m_textEdit;
+    KTextEdit* m_textEdit;
+    QSyntaxHighlighter* m_syntaxHighlighter;
     QLabel* m_errorLabel;
     KoFormulaShape* m_formulaShape;
     QString m_text;
