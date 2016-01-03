@@ -28,10 +28,10 @@
 #include <KoJsonTrader.h>
 #include <KoDocumentEntry.h>
 
-#include <kcmdlineargs.h>
 #include <kdebug.h>
 
 #include <QApplication>
+#include <QCommandLineParser>
 #include <QBuffer>
 #include <QDir>
 #include <QFileInfo>
@@ -222,35 +222,36 @@ bool checkThumbnails(const QList<QImage> &thumbnails, const QList<QImage> &other
 
 int main(int argc, char *argv[])
 {
-    KCmdLineArgs::init(argc, argv, "cstester", 0, KLocalizedString(), 0, KLocalizedString());
-
-    KCmdLineOptions options;
-    options.add("create", ki18n("create verification data for file"));
-    options.add("indir <dir>", ki18n("directory to read the data from"));
-    options.add("outdir <dir>", ki18n("directory to save the data to"));
-    options.add("roundtrip", ki18n("load/save/load and check the document is the same after load and save/load"));
-    options.add("verbose", ki18n("be verbose"));
-    options.add("!verify", ki18n("verify the file"));
-    options.add( "+file", ki18n("file to use"));
-    KCmdLineArgs::addCmdLineOptions(options);
-
     QApplication app(argc, argv);
+    QApplication::setApplicationName("cstester");
 
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    QCommandLineParser parser;
+    parser.addHelpOption();
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("create"), i18n("create verification data for file")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("indir"), i18n("directory to read the data from"), QStringLiteral("dir")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("outdir"), i18n("directory to save the data to"), QStringLiteral("dir")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("roundtrip"), i18n("load/save/load and check the document is the same after load and save/load")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("verbose"), i18n("be verbose")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("verify"), i18n("verify the file")));
+
+    parser.addPositionalArgument(QStringLiteral("file"), i18n("file to use"));
+
+    parser.process(app);
+
     bool create = false;
     bool roundtrip = false;
     bool verify = false;
     int optionCount = 0;
 
-    if (args->isSet("create")) {
+    if (parser.isSet("create")) {
         create = true;
         optionCount++;
     }
-    if (args->isSet("roundtrip")) {
+    if (parser.isSet("roundtrip")) {
         roundtrip = true;
         optionCount++;
     }
-    if (args->isSet("verify")) {
+    if (parser.isSet("verify")) {
         verify = true;
         optionCount++;
     }
@@ -265,38 +266,37 @@ int main(int argc, char *argv[])
     }
 
     QString outDir;
-    if (args->isSet("outdir")) {
+    if (parser.isSet("outdir")) {
         // check if it is a directory
-        QDir dir(args->getOption("outdir"));
+        QDir dir(parser.value("outdir"));
         if (!dir.exists()) {
-            kError() << "outdir" << args->getOption("outdir") << "does not exist";
+            kError() << "outdir" << parser.value("outdir") << "does not exist";
             exit(1);
         }
         outDir = dir.path();
     }
 
     QString inDir;
-    if (args->isSet("indir")) {
+    if (parser.isSet("indir")) {
         // check if it is a directory
-        QDir dir(args->getOption("indir"));
+        QDir dir(parser.value("indir"));
         if (!dir.exists()) {
-            kError() << "indir" << args->getOption("indir") << "does not exist";
+            kError() << "indir" << parser.value("indir") << "does not exist";
             exit(1);
         }
         inDir = dir.path();
     }
 
-    bool verbose = args->isSet("verbose");
+    bool verbose = parser.isSet("verbose");
 
     int exitValue = 0;
 
     int successful = 0;
     int failed = 0;
-    for (int i=0; i < args->count(); ++i) {
-        QString filename(args->arg(i));
+    foreach(const QString &filename, parser.positionalArguments()) {
         QFileInfo file(filename);
         QString checkDir;
-        if (!args->isSet("indir")) {
+        if (!parser.isSet("indir")) {
             checkDir = filename + ".check";
         }
         else {
@@ -304,7 +304,7 @@ int main(int argc, char *argv[])
         }
 
         // this is wrong for multiple files in different dirs
-        if (!args->isSet("outdir")) {
+        if (!parser.isSet("outdir")) {
             outDir = file.path();
         }
 
@@ -324,7 +324,7 @@ int main(int argc, char *argv[])
             saveThumbnails(file, thumbnails, outDir);
         }
         else if (verify) {
-            if (args->isSet("outdir")) {
+            if (parser.isSet("outdir")) {
                 saveThumbnails(file, thumbnails, outDir);
             }
             if (checkThumbnails(thumbnails, checkDir, verbose)) {
@@ -342,7 +342,7 @@ int main(int argc, char *argv[])
             qDebug() << roundtrip << "rFilename" << rFilename << rFile.absoluteFilePath();
             document = openFile(rFile.absoluteFilePath());
             QList<QImage> others(createThumbnails(document, QSize(800,800)));
-            if (args->isSet("outdir")) {
+            if (parser.isSet("outdir")) {
                 saveThumbnails(file, others, outDir);
                 saveThumbnails(file, thumbnails, outDir + "/before");
             }
