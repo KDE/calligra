@@ -38,10 +38,10 @@
 
 #include <MsooXmlReader_p.h>
 
-#include <kglobal.h>
 #include <kdebug.h>
 
 #include <QMap>
+#include <QGlobalStatic>
 
 #include <math.h>
 
@@ -180,9 +180,10 @@ public:
     }
 };
 
+Q_GLOBAL_STATIC(ST_HorizontalAlignment_fromStringMap, s_ST_HorizontalAlignmentValues)
+
 void XlsxCellFormat::setHorizontalAlignment(const QString& alignment)
 {
-    K_GLOBAL_STATIC(ST_HorizontalAlignment_fromStringMap, s_ST_HorizontalAlignmentValues)
     horizontalAlignment = s_ST_HorizontalAlignmentValues->value(alignment);
 }
 
@@ -199,9 +200,10 @@ public:
     }
 };
 
+Q_GLOBAL_STATIC(ST_VerticalAlignment_fromStringMap, s_ST_VerticalAlignmentValues)
+
 void XlsxCellFormat::setVerticalAlignment(const QString& alignment)
 {
-    K_GLOBAL_STATIC(ST_VerticalAlignment_fromStringMap, s_ST_VerticalAlignmentValues)
     verticalAlignment = s_ST_VerticalAlignmentValues->value(alignment);
 }
 
