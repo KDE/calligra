@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     QString resultDir(argv[2]);
     QString number(argv[3]);
     QString noPickup("pickup");
-    if (argc <= 5) {
+    if (argc >= 5) {
         noPickup = argv[4];
     }
     CSTProcessRunner runner(docDir, resultDir, number.toInt(), noPickup != "nopickup");
