@@ -28,8 +28,6 @@
 #include <KoJsonTrader.h>
 #include <KoDocumentEntry.h>
 
-#include <kdebug.h>
-
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QBuffer>
@@ -38,6 +36,7 @@
 #include <QImage>
 #include <QTimer>
 #include <QMimeDatabase>
+#include <QDebug>
 
 #include "CSThumbProviderStage.h"
 #include "CSThumbProviderTables.h"
@@ -83,7 +82,7 @@ KoDocument* openFile(const QString &filename)
             document->setReadWrite(false);
         }
         else {
-            kWarning(31000)<< "openUrl failed" << filename << mimetype << error;
+            qWarning()<< "openUrl failed" << filename << mimetype << error;
             delete document;
             document = 0;
         }
@@ -113,7 +112,7 @@ QString saveFile(KoDocument *document, const QString &filename, const QString &o
     QUrl url = QUrl::fromLocalFile(saveAs);
     document->setOutputMimeType(mimetype, 0);
     document->saveAs(url);
-    kDebug(31000) << "save done";
+    qDebug() << "save done";
     return saveAs;
 }
 
@@ -257,11 +256,11 @@ int main(int argc, char *argv[])
     }
 
     if (optionCount > 1) {
-        kError() << "create, roundtrip and verify cannot be used the same time";
+        qCritical() << "create, roundtrip and verify cannot be used the same time";
         exit(1);
     }
     else if (optionCount < 1) {
-        kError() << "one of the options create, roundtrip or verify needs to be specified";
+        qCritical() << "one of the options create, roundtrip or verify needs to be specified";
         exit(1);
     }
 
@@ -270,7 +269,7 @@ int main(int argc, char *argv[])
         // check if it is a directory
         QDir dir(parser.value("outdir"));
         if (!dir.exists()) {
-            kError() << "outdir" << parser.value("outdir") << "does not exist";
+            qCritical() << "outdir" << parser.value("outdir") << "does not exist";
             exit(1);
         }
         outDir = dir.path();
@@ -281,7 +280,7 @@ int main(int argc, char *argv[])
         // check if it is a directory
         QDir dir(parser.value("indir"));
         if (!dir.exists()) {
-            kError() << "indir" << parser.value("indir") << "does not exist";
+            qCritical() << "indir" << parser.value("indir") << "does not exist";
             exit(1);
         }
         inDir = dir.path();
