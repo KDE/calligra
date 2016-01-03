@@ -25,7 +25,7 @@ ki18n_wrap_ui(kspread2tex_PART_SRCS latexexportwidget.ui )
 add_library(calligra_filter_kspread2tex MODULE ${kspread2tex_PART_SRCS})
 kcoreaddons_desktop_to_json(calligra_filter_kspread2tex calligra_filter_kspread2tex.desktop)
 
-target_link_libraries(calligra_filter_kspread2tex komain KF5::KDELibs4Support)
+target_link_libraries(calligra_filter_kspread2tex komain)
 
 install(TARGETS calligra_filter_kspread2tex  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
