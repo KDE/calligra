@@ -538,6 +538,24 @@ macro_log_feature(LIBMATHVIEW_FOUND "LibMathView"
                   ""Required to edit and render math formulas"")
 
 ##
+## Test for LibXslt
+##
+macro_optional_find_package(LibXslt)
+macro_log_feature(LIBXSLT_FOUND "LibXslt"
+        "XML stylesheet transformation library"
+        "http://xmlsoft.org/XSLT/" FALSE ""
+        ""Required to edit math formulas in Latex"")
+
+##
+## Test for LibXml2
+##
+macro_optional_find_package(LibXml2)
+macro_log_feature(LIBXML2_FOUND "LibXml2"
+        "XML parsing library, version 2"
+        "http://www.xmlsoft.org/" FALSE ""
+        ""Required to edit math formulas in Latex"")
+
+##
 ## Test for Fontconfig
 ##
 ## Only test if on non-Windows system
@@ -884,6 +902,8 @@ calligra_drop_product_on_bad_condition( PLUGIN_CHARTSHAPE
 
 calligra_drop_product_on_bad_condition( PLUGIN_FORMULASHAPE
     LIBMATHVIEW_FOUND "LibMathView devel not found"
+    LIBXSLT_FOUND "LibXslt not found"
+    LIBXML2_FOUND "LibXml2 not found"
 )
 
 calligra_drop_product_on_bad_condition( PLUGIN_VIDEOSHAPE

@@ -12,6 +12,8 @@ set(ITEXTOMML_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/itexToMML")
 include_directories( ${CMAKE_SOURCE_DIR}/plugins/formulashape
                      ${LIBMATHVIEW_INCLUDE_DIRS}
                      ${KOMAIN_INCLUDES}
+                     ${LIBXSLT_INCLUDE_DIR}
+                     ${LIBXML2_INCLUDE_DIR}
 )
 
 ########### KoFormula Library ###############
@@ -64,7 +66,7 @@ set(formulashape_PART_SRCS
 add_library(calligra_shape_formular MODULE ${formulashape_PART_SRCS})
 kcoreaddons_desktop_to_json(calligra_shape_formular calligra_shape_formular.desktop)
 target_compile_options(calligra_shape_formular PRIVATE -Wno-error=implicit-function-declaration)
-target_link_libraries(calligra_shape_formular koformula ${M2MML_TOOL_LIBRARIES})
+target_link_libraries(calligra_shape_formular koformula ${M2MML_TOOL_LIBRARIES} ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES})
 
 
 #set_target_properties(koformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
