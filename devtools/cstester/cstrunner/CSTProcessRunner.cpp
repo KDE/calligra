@@ -142,7 +142,7 @@ void CSTProcessRunner::startCstester(QProcess *process)
         QString document = m_documents.takeFirst();
         //qDebug() << "start:" << process << document << m_resultDir;
         QStringList arguments;
-        arguments << "--graphicssystem" << "raster" << "--outdir" << m_resultDir << "--create" << document;
+        arguments << "--outdir" << m_resultDir << "--create" << document;
         m_processes[process] = document;
         process->start(PROGRAM, arguments, QIODevice::NotOpen);
     }

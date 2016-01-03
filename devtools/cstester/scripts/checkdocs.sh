@@ -29,6 +29,6 @@ ls -b | grep -v "check$" | while read file
 do
     if [ ! -e "${1}/${file}.check" ]
     then
-        cstester --graphicssystem raster --outdir $1 --create "$file" || echo $file >> $LOG
+        cstester --outdir $1 --create "$file" || echo $file >> $LOG
     fi
 done

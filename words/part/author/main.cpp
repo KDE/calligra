@@ -28,11 +28,6 @@ extern "C" WORDS_EXPORT int kdemain(int argc, char **argv)
 {
     QScopedPointer<KAboutData> aboutData(newAuthorAboutData());
 
-#ifdef HAVE_X11
-    // the "raster" graphicssystem is way faster then the "native" graphicssystem on x11 with Calligra Author
-    qApp->setGraphicsSystem( QLatin1String("raster") );
-#endif
-
     KoApplication app(WORDS_MIME_TYPE, *aboutData.data(), argc, argv);
 
     if (!app.start())

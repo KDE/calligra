@@ -22,7 +22,6 @@
 
 int
 main(int argc, char** argv) {
-    //QApplication::setGraphicsSystem("opengl");
     QApplication app(argc, argv);
 //    QPixmapCache::setCacheLimit(100000);
 
