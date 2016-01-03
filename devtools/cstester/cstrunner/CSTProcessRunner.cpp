@@ -33,7 +33,10 @@ CSTProcessRunner::CSTProcessRunner(const QString &documentDir, const QString &re
 {
     if (!QDir::current().exists(resultDir)) {
         qWarning() << "Creating result directory " << resultDir;
-        QDir::current().mkdir(resultDir);
+        if (!QDir::current().mkpath(resultDir)) {
+            qCritical() << "Could not create result directory " << resultDir;
+            ::exit(-1);
+        }
         // if the dir was not there we can't pickup
         pickup = false;
     }
