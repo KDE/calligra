@@ -71,6 +71,8 @@ target_link_libraries(calligra_shape_formular koformula ${M2MML_TOOL_LIBRARIES} 
 
 #set_target_properties(koformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS calligra_shape_formular  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/xsltml/mmltex.xsl
+        DESTINATION ${DATA_INSTALL_DIR}/calligra/formula)
 
 add_subdirectory( pics ) 
 add_subdirectory( fonts )
