@@ -91,7 +91,7 @@ KoFilter::ConversionStatus HTMLImport::convert(const QByteArray& from, const QBy
     m_store->contentWriter(); // we need to create the instance even if the contentWriter is not used
 
     bodyWriter->startElement("office:body");
-    KoFilter::ConversionStatus result = loadUrl(m_chain->inputFile());
+    KoFilter::ConversionStatus result = loadUrl(QUrl::fromLocalFile(m_chain->inputFile()));
     if(result != KoFilter::OK)
         kWarning() << "Failed to load url=" << m_chain->inputFile();
     bodyWriter->endElement(); // office:body
@@ -172,7 +172,7 @@ bool HTMLImport::createMeta()
     return m_store->store()->close();
 }
 
-KoFilter::ConversionStatus HTMLImport::loadUrl(const KUrl &url)
+KoFilter::ConversionStatus HTMLImport::loadUrl(const QUrl &url)
 {
     kDebug() << url;
 
@@ -191,7 +191,7 @@ KoFilter::ConversionStatus HTMLImport::loadUrl(const KUrl &url)
 
         QEventLoop loop;
         connect(&html, SIGNAL(completed()), &loop, SLOT(quit()));
-        QMetaObject::invokeMethod(&html,"openUrl", Qt::QueuedConnection, Q_ARG(KUrl,url));
+        QMetaObject::invokeMethod(&html,"openUrl", Qt::QueuedConnection, Q_ARG(QUrl,url));
         //if (!html.openUrl(url)) { kWarning(30503) << "Failed loadUrl" << url; return KoFilter::StupidError; }
         loop.exec(QEventLoop::ExcludeUserInputEvents);
 
@@ -225,7 +225,7 @@ KoFilter::ConversionStatus HTMLImport::loadUrl(const KUrl &url)
     if(!sheets.isEmpty()) {
         m_states.push(InFrameset);
         foreach(const QString &src, sheets) {
-            KUrl u(QFileInfo(m_inputDir, src).absoluteFilePath());
+            const QUrl u = QUrl::fromLocalFile(QFileInfo(m_inputDir, src).absoluteFilePath());
             loadUrl(u);
         }
         m_states.pop();
