@@ -28,7 +28,6 @@
 #include <KoJsonTrader.h>
 #include <KoDocumentEntry.h>
 
-#include <kmimetype.h>
 #include <kcmdlineargs.h>
 #include <kdebug.h>
 
@@ -38,6 +37,7 @@
 #include <QFileInfo>
 #include <QImage>
 #include <QTimer>
+#include <QMimeDatabase>
 
 #include "CSThumbProviderStage.h"
 #include "CSThumbProviderTables.h"
@@ -53,7 +53,7 @@
 
 KoDocument* openFile(const QString &filename)
 {
-    const QString mimetype = KMimeType::findByPath(filename)->name();
+    const QString mimetype = QMimeDatabase().mimeTypeForFile(filename).name();
 
     KoPart *part;
     QString error;
@@ -105,9 +105,9 @@ QString saveFile(KoDocument *document, const QString &filename, const QString &o
     }
 
     QByteArray mimetype = document->nativeFormatMimeType();
-    KMimeType::Ptr mime = KMimeType::mimeType(mimetype);
-    Q_ASSERT(mime);
-    QString extension = mime->mainExtension();
+    QMimeType mime = QMimeDatabase().mimeTypeForName(mimetype);
+    Q_ASSERT(mime.isValid());
+    QString extension = mime.preferredSuffix();
     saveAs += extension;
 
     QUrl url = QUrl::fromLocalFile(saveAs);
