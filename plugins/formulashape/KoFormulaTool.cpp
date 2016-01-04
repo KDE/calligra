@@ -32,19 +32,24 @@
 #include <QSpacerItem>
 #include <QWidget>
 #include <QWidgetAction>
+#include <QPushButton>
 
 #include <KoCanvasBase.h>
 #include <KoIcon.h>
 #include <KoXmlReader.h>
+
+#include <libxslt/transform.h>
+#include <libxslt/xsltutils.h>
 
 #include "FormulaDebug.h"
 #include "FormulaFontFamilyAction.h"
 #include "../textshape/FontSizeAction.h"
 #include "KoFormulaShape.h"
 #include "FormulaCommand.h"
-#include "FormulaCommandUpdate.h"
 #include "3rdparty/itexToMML/itex2MML.h"
 #include "BasicXMLSyntaxHighlighter.h"
+
+enum EditMode { MathML, Latex };
 
 KoFormulaTool::KoFormulaTool(KoCanvasBase* canvas): KoToolBase(canvas), m_textEdit(0), m_syntaxHighlighter(0), m_errorLabel(0), m_formulaShape(0), m_modeComboBox(0)
 {
@@ -110,16 +115,40 @@ QWidget* KoFormulaTool::createOptionWidget()
 
     // Combobox to select among latex, matlab and mathml
     m_modeComboBox = new QComboBox;
-    m_modeComboBox->addItem(i18n("LaTeX"));
-    #ifdef HAVE_M2MML
-    m_modeComboBox->addItem(i18n("Matlab"));
-    if(m_mode == "Matlab")
-    {
-        m_modeComboBox->setCurrentIndex(1);
-    }
-    #endif
-    m_modeComboBox->addItem(i18n("MathML"));
+    m_modeComboBox->insertItem(EditMode::MathML, i18n("MathML"));
+    m_modeComboBox->insertItem(EditMode::Latex, i18n("LaTeX"));
     m_modeComboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    connect(m_modeComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), [=](int index){
+        m_modeComboBox->setCurrentIndex(index);
+        if (index == EditMode::MathML) {
+            m_textEdit->setText(m_formulaShape->content());
+            m_syntaxHighlighter->setDocument(m_textEdit->document());
+        } else if (index == EditMode::Latex) {
+            QString mmltex = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                    "calligra/formula/mmltex.xsl");
+            xmlChar* texStr = 0;
+            int size = 0;
+            if (QFileInfo::exists(mmltex)) {
+                xsltStylesheetPtr stylesheet = xsltParseStylesheetFile(
+                        (const xmlChar *) mmltex.toUtf8().constData()
+                );
+                xmlDocPtr doc = xmlParseMemory(
+                        m_formulaShape->content().toUtf8().constData(),
+                        m_formulaShape->content().toUtf8().size()
+                );
+                xmlDocPtr res = xsltApplyStylesheet(stylesheet, doc, 0);
+                xsltSaveResultToString(&texStr, &size, res, stylesheet);
+                xsltFreeStylesheet(stylesheet);
+                xmlFreeDoc(doc);
+                xmlFreeDoc(res);
+            }
+            QString textEditStr = QString::fromUtf8((const char*)texStr, size);
+            textEditStr.chop(3); // remove "\n\]" from end
+            m_textEdit->setText(textEditStr.mid(5)); // exclude "\n\[\n\t" from begin
+            m_syntaxHighlighter->setDocument(0);
+            free(texStr);
+        }
+    });
     hlayout->addWidget(m_modeComboBox);
 
     layout->addLayout(hlayout);
@@ -131,6 +160,11 @@ QWidget* KoFormulaTool::createOptionWidget()
     m_textEdit->setCheckSpellingEnabled(false);
     m_textEdit->setPlaceholderText(i18n("Input formula here …"));
     layout->addWidget(m_textEdit);
+
+    // Update button
+    m_updateButton = new QPushButton(i18n("Update Formula"), widget);
+    connect(m_updateButton, &QAbstractButton::clicked, this, &KoFormulaTool::updateFormula);
+    layout->addWidget(m_updateButton);
     
     // Error label
     m_errorLabel = new QLabel(widget);
@@ -153,47 +187,30 @@ inline std::string QStringtoStdString(const QString& str)
 inline QString QStringfromStdString(const std::string &s)
 { return QString::fromLatin1(s.data(), int(s.size())); }
 
-void KoFormulaTool::textEdited()
-{
-    if(!m_formulaShape) return;
-    if(!m_textEdit) return;
-
-#ifdef HAVE_M2MML
-    if(m_modeComboBox->currentIndex() == 1)
-    {
-        std::string source = QStringtoStdString(m_textEdit->toPlainText());
-        std::string mathml;
-        std::string errmsg;
-
-        if(m2mml(source, mathml, &errmsg))
-        {
-            setMathML(QStringfromStdString(mathml), "Matlab");
-        } else {
-            m_errorLabel->setText(QStringfromStdString(errmsg));
-        }
-    } else {
-#endif
+void KoFormulaTool::updateFormula() {
+    // TODO support setting formula colors
+    QString mathML;
+    if (m_modeComboBox->currentIndex() == EditMode::Latex) {
         std::string source = QStringtoStdString(m_textEdit->toPlainText());
         source = '$' + source + '$';
-        char * mathml = itex2MML_parse (source.c_str(), source.size());
-        
-        if(mathml)
+        char * mmlStr = itex2MML_parse(source.c_str(), source.size());
+        if(mmlStr)
         {
-            setMathML(mathml, "LaTeX");
-            itex2MML_free_string(mathml);
-            mathml = 0;
+            mathML = QString::fromUtf8(mmlStr);
+            itex2MML_free_string(mmlStr);
         } else {
+            mathML = "";
             m_errorLabel->setText(i18n("Parse error."));
         }
-#ifdef HAVE_M2MML
+    } else {
+        mathML = m_textEdit->toPlainText();
     }
-#endif
-}
 
-void KoFormulaTool::setMathML(const QString& mathml, const QString& mode)
-{
-    KoXmlDocument tmpDocument;
-    tmpDocument.setContent( QString(mathml), false, 0, 0, 0 );
-
-    debugFormula << mathml;
+    canvas()->addCommand(new FormulaCommand(
+            m_formulaShape,
+            mathML,
+            QFont(m_actionFontFamily->fontFamily(), m_actionFontSize->fontSize()),
+            m_formulaShape->foregroundColor(),
+            m_formulaShape->backgroundColor()
+    ));
 }

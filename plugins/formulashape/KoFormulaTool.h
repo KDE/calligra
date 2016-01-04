@@ -30,6 +30,9 @@ class KoFormulaShape;
 class KTextEdit;
 class QSyntaxHighlighter;
 class QWidgetAction;
+class QPushButton;
+class FormulaFontFamilyAction;
+class FontSizeAction;
 
 class KoFormulaTool : public KoToolBase
 {
@@ -43,19 +46,18 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent* event);
     virtual void paint(QPainter& painter, const KoViewConverter& converter);
     virtual QWidget* createOptionWidget();
-public Q_SLOTS:
-    void textEdited();
+
 private:
-    void setMathML(const QString& mathml, const QString& mode);
-private:
+    void updateFormula();
     KTextEdit* m_textEdit;
     QSyntaxHighlighter* m_syntaxHighlighter;
     QLabel* m_errorLabel;
+    QPushButton* m_updateButton;
     KoFormulaShape* m_formulaShape;
     QString m_text;
     QComboBox* m_modeComboBox;
-    QWidgetAction* m_actionFontFamily;
-    QWidgetAction* m_actionFontSize;
+    FormulaFontFamilyAction* m_actionFontFamily;
+    FontSizeAction* m_actionFontSize;
     QString m_mode;
 };
 

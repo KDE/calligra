@@ -16,21 +16,8 @@ include_directories( ${CMAKE_SOURCE_DIR}/plugins/formulashape
                      ${LIBXML2_INCLUDE_DIR}
 )
 
-########### KoFormula Library ###############
+#generate_export_header(koformula EXPORT_MACRO_NAME KOFORMULA_EXPORT)
 
-set( koformula_LIB_SRCS
-   FormulaDebug.cpp
-   FormulaCommand.cpp
-)
-
-add_library(koformula SHARED ${koformula_LIB_SRCS})
-generate_export_header(koformula EXPORT_MACRO_NAME KOFORMULA_EXPORT)
-
-target_link_libraries(koformula PUBLIC komain ${LIBMATHVIEW_LIBRARIES})
-
-set_target_properties(koformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
-
-install(TARGETS koformula ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### FormulaShape Plugin ###############
 
@@ -46,9 +33,9 @@ if(M2MML_FOUND)
 endif()
 
 set(formulashape_PART_SRCS
+    FormulaDebug.cpp
     KoFormulaShapePlugin.cpp
     KoFormulaShape.cpp
-    FormulaCommandUpdate.cpp
     KoFormulaShapeFactory.cpp
     KoFormulaTool.cpp
     FormulaFontFamilyAction.cpp
@@ -66,7 +53,7 @@ set(formulashape_PART_SRCS
 add_library(calligra_shape_formular MODULE ${formulashape_PART_SRCS})
 kcoreaddons_desktop_to_json(calligra_shape_formular calligra_shape_formular.desktop)
 target_compile_options(calligra_shape_formular PRIVATE -Wno-error=implicit-function-declaration)
-target_link_libraries(calligra_shape_formular koformula ${M2MML_TOOL_LIBRARIES} ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES})
+target_link_libraries(calligra_shape_formular komain ${LIBMATHVIEW_LIBRARIES} ${M2MML_TOOL_LIBRARIES} ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES})
 
 
 #set_target_properties(koformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
