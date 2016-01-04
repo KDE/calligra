@@ -1702,7 +1702,7 @@ void PptToOdp::defineListStyleProperties(KoXmlWriter& out, bool imageBullet, con
         // style:vertical-pos
         list_level_properties.set_style_vertical_pos("middle");
         // style:vertical-rel
-        list_level_properties.set_style_vertical_pos("line");
+        list_level_properties.set_style_vertical_rel("line");
         // svg:x
         // svg:y
     }
