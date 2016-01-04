@@ -31,6 +31,16 @@ if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
 endif()
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_DOC)
-    install( FILES libokularGenerator_doc_calligra.desktop okularDoc_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+    kcoreaddons_add_plugin(okularGenerator_doc_calligra
+        JSON libokularGenerator_doc.json
+        INSTALL_NAMESPACE "okular/generators"
+        SOURCES OkularDocGeneratorPlugin.cpp
+    )
+
+    target_link_libraries( okularGenerator_doc_calligra
+        kookularGenerator_odt
+    )
+
+    install( FILES okularDoc_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
     install( PROGRAMS okularApplication_doc_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 endif()

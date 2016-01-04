@@ -35,26 +35,10 @@
 #include <KoDocumentInfo.h>
 #include <KoGlobal.h>
 
-#include <KAboutData>
-
 #include <okular/core/page.h>
 
-static KAboutData createAboutData()
-{
-    KAboutData aboutData(
-         QStringLiteral("okularGenerator_odp"),
-         i18n( "ODP Backend" ),
-         CalligraVersionWrapper::versionString(),
-         i18n( "ODP file renderer" ),
-         KAboutLicense::GPL,
-         i18n( "© 2010 Sven Langkamp" )
-    );
+#include <KLocalizedString>
 
-    // fill the about data
-    return aboutData;
-}
-
-OKULAR_EXPORT_PLUGIN(OkularOdpGenerator, createAboutData())
 
 OkularOdpGenerator::OkularOdpGenerator( QObject *parent, const QVariantList &args )
     : Okular::Generator( parent, args )

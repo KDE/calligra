@@ -27,6 +27,16 @@ if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
 endif()
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_WORDPERFECT)
-    install( FILES libokularGenerator_wpd_calligra.desktop okularWpd_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+    kcoreaddons_add_plugin(okularGenerator_wpd_calligra
+        JSON libokularGenerator_wpd.json
+        INSTALL_NAMESPACE "okular/generators"
+        SOURCES OkularWpdGeneratorPlugin.cpp
+    )
+
+    target_link_libraries( okularGenerator_wpd_calligra
+        kookularGenerator_odt
+    )
+
+    install( FILES okularWpd_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
     install( PROGRAMS okularApplication_wpd_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 endif()

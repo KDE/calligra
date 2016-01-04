@@ -60,7 +60,7 @@ static KAboutData createAboutData()
     return aboutData;
 }
 
-OKULAR_EXPORT_PLUGIN(OkularOdtGenerator, createAboutData())
+OKULAR_EXPORT_PLUGIN(OkularOdtGenerator, "libokularGenerator_odt.json")
 
 OkularOdtGenerator::OkularOdtGenerator( QObject *parent, const QVariantList &args )
     : Okular::Generator( parent, args )

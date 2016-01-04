@@ -1,0 +1,29 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "sven.langkamp@gmail.com",
+                "Name": "Sven Langkamp"
+            }, {
+                "Email": "kossebau@kde.org",
+                "Name": "Friedrich W. H. Kossebau"
+            }
+        ],
+        "Copyright": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
+        "Description": "OpenDocument Text file renderer",
+        "Id": "okularGenerator_odt_calligra",
+        "License": "GPL",
+        "MimeTypes": [
+            "application/vnd.oasis.opendocument.text",
+            "application/vnd.oasis.opendocument.text-template"
+        ],
+        "Name": "ODT Backend",
+        "ServiceTypes": [
+            "okular/Generator"
+        ],
+        "Version": "2.99.5"
+    },
+    "X-KDE-Priority": 1,
+    "X-KDE-okularAPIVersion": 1,
+    "X-KDE-okularHasInternalSettings": false
+}

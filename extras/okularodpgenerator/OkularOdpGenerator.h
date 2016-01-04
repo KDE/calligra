@@ -20,13 +20,15 @@
 #ifndef OKULARODPGENERATOR_H
 #define OKULARODPGENERATOR_H
 
+#include "kookulargenerator_odp_export.h"
+
 #include <okular/core/generator.h>
 #include <okular/core/document.h>
 #include <okular/core/version.h>
 
 class KoPADocument;
 
-class OkularOdpGenerator : public Okular::Generator
+class KOOKULARGENERATOR_ODP_EXPORT OkularOdpGenerator : public Okular::Generator
 {
     Q_OBJECT
     Q_INTERFACES( Okular::Generator )

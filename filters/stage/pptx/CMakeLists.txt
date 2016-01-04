@@ -40,7 +40,17 @@ if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES stage_pptx_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 endif()
 
-if(SHOULD_BUILD_OKULARGENERATOR_PPTX)
-    install( FILES libokularGenerator_pptx_calligra.desktop okularPptx_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+if(SHOULD_BUILD_OKULAR_GENERATOR_PPTX)
+    kcoreaddons_add_plugin(okularGenerator_pptx_calligra
+        JSON libokularGenerator_pptx.json
+        INSTALL_NAMESPACE "okular/generators"
+        SOURCES OkularPptxGeneratorPlugin.cpp
+    )
+
+    target_link_libraries( okularGenerator_pptx_calligra
+        kookularGenerator_odp
+    )
+
+    install( FILES okularPptx_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
     install( PROGRAMS okularApplication_pptx_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 endif()

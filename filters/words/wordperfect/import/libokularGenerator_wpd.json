@@ -1,0 +1,28 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "sven.langkamp@gmail.com",
+                "Name": "Sven Langkamp"
+            }, {
+                "Email": "kossebau@kde.org",
+                "Name": "Friedrich W. H. Kossebau"
+            }
+        ],
+        "Copyright": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
+        "Description": "WordPerfect Document file renderer",
+        "Id": "okularGenerator_wpd_calligra",
+        "License": "GPL",
+        "MimeTypes": [
+            "application/vnd.wordperfect"
+        ],
+        "Name": "WPD Backend",
+        "ServiceTypes": [
+            "okular/Generator"
+        ],
+        "Version": "2.99.5"
+    },
+    "X-KDE-Priority": 1,
+    "X-KDE-okularAPIVersion": 1,
+    "X-KDE-okularHasInternalSettings": false
+}
