@@ -20,6 +20,8 @@
 
 #include "KoJsonTrader.h"
 
+#include <KoConfig.h> // OLD_PLUGIN_MIMETYPE_DATA
+
 #include <QDebug>
 
 #include <QCoreApplication>
@@ -113,8 +115,12 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
                 }
 
                 if (!mimetype.isEmpty()) {
-                    QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
-                    mimeTypes += json.value("MimeType").toString().split(';');
+#ifdef OLD_PLUGIN_MIMETYPE_DATA
+                    QStringList mimeTypes = json.value("MimeType").toString().split(';');
+#else
+                    QStringList mimeTypes = pluginData.value("MimeTypes").toVariant().toStringList();
+#endif
+                    mimeTypes += json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
                     mimeTypes += json.value("X-KDE-NativeMimeType").toString();
                     if (! mimeTypes.contains(mimetype)) {
                         continue;

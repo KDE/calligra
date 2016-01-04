@@ -218,6 +218,9 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS
 if(KF5_Activities_FOUND)
     set(HAVE_KACTIVITIES TRUE)
 endif()
+if(${KF5_VERSION} VERSION_LESS "5.16.0")
+    set(OLD_PLUGIN_MIMETYPE_DATA TRUE)
+endif()
 
 find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport
                                            Script Svg Test)

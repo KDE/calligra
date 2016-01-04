@@ -53,3 +53,6 @@
 
 /* Defines if we use KActivities */
 #cmakedefine HAVE_KACTIVITIES 1
+
+/* Defines if the old plugin metadata for mimetypes is used */
+#cmakedefine OLD_PLUGIN_MIMETYPE_DATA 1

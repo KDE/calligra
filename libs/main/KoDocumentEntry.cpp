@@ -23,11 +23,13 @@
 #include "KoPart.h"
 #include "KoDocument.h"
 #include "KoFilter.h"
+#include <MainDebug.h>
+
+#include <KoJsonTrader.h>
+#include <KoConfig.h> // OLD_PLUGIN_MIMETYPE_DATA
 
 #include <kservicetype.h>
 #include <kpluginfactory.h>
-#include <MainDebug.h>
-#include <KoJsonTrader.h>
 
 #include <QPluginLoader>
 #include <QCoreApplication>
@@ -74,7 +76,12 @@ QString KoDocumentEntry::name() const {
  */
 QStringList KoDocumentEntry::mimeTypes() const {
     QJsonObject json = m_loader->metaData().value("MetaData").toObject();
+#ifdef OLD_PLUGIN_MIMETYPE_DATA
     return json.value("MimeType").toString().split(';', QString::SkipEmptyParts);
+#else
+    QJsonObject pluginData = json.value("KPlugin").toObject();
+    return pluginData.value("MimeTypes").toVariant().toStringList();
+#endif
 }
 
 /**
