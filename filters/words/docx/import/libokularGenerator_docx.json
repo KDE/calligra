@@ -2,28 +2,29 @@
     "KPlugin": {
         "Authors": [
             {
-                "Email": "sven.langkamp@gmail.com",
+                "Email": "sven.langkamp@gmail.com", 
                 "Name": "Sven Langkamp"
-            }, {
-                "Email": "kossebau@kde.org",
+            }, 
+            {
+                "Email": "kossebau@kde.org", 
                 "Name": "Friedrich W. H. Kossebau"
             }
-        ],
-        "Copyright": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
-        "Description": "DOCX file renderer",
-        "Id": "okularGenerator_docx_calligra",
-        "License": "GPL",
+        ], 
+        "Copyright": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
+        "Description": "DOCX file renderer", 
+        "Id": "okularGenerator_docx_calligra", 
+        "License": "GPL", 
         "MimeTypes": [
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document", 
             "application/vnd.openxmlformats-officedocument.wordprocessingml.template"
-        ],
-        "Name": "DOCX Backend",
+        ], 
+        "Name": "DOCX Backend", 
         "ServiceTypes": [
             "okular/Generator"
-        ],
+        ], 
         "Version": "2.99.5"
-    },
-    "X-KDE-Priority": 1,
-    "X-KDE-okularAPIVersion": 1,
+    }, 
+    "X-KDE-Priority": 1, 
+    "X-KDE-okularAPIVersion": 1, 
     "X-KDE-okularHasInternalSettings": false
 }
