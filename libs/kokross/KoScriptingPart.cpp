@@ -20,30 +20,28 @@
  ***************************************************************************/
 
 #include "KoScriptingPart.h"
+
 #include "KoScriptingModule.h"
 #include "KoScriptManager.h"
 #include "KoScriptingDocker.h"
-
+#include "KoKrossDebug.h"
 // calligra
 #include <KoView.h>
 #include <KoMainWindow.h>
-
-// qt
-#include <QApplication>
-
-// kde
+// KF5
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
 #include <kactionmenu.h>
-#include <kmenu.h>
 #include <kmessagebox.h>
-#include <kfiledialog.h>
-#include <kstandarddirs.h>
-#include <kdebug.h>
 #include <kross/core/manager.h>
 #include <kross/core/interpreter.h>
 #include <kross/core/actioncollection.h>
-
+// Qt
+#include <QApplication>
+#include <QStandardPaths>
+#include <QDirIterator>
+#include <QMenu>
+#include <QFileDialog>
 
 
 /// \internal d-pointer class.
@@ -71,7 +69,7 @@ public:
     QList<Kross::Action*> actions;
 };
 
-KoScriptingPart::KoScriptingPart(KoScriptingModule *const module, const QStringList&)
+KoScriptingPart::KoScriptingPart(KoScriptingModule *const module)
     : d(new Private())
 {
     d->module = module;
@@ -93,8 +91,16 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule *const module, const QStringL
     //connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(slotFinished(Kross::Action*)));
 
     if (Kross::Manager::self().property("configfile") == QVariant::Invalid) {
-        QString file = KStandardDirs::locateLocal("appdata", "scripts/scripts.rc");
-        QStringList files = KGlobal::dirs()->findAllResources("appdata", "scripts/*.rc");
+        QString file = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QStringLiteral("/scripts/scripts.rc");
+        QStringList files;
+        const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::DataLocation, "scripts", QStandardPaths::LocateDirectory);
+        foreach(const QString& dir, dirs) {
+            QDirIterator it(dir, QStringList() << QStringLiteral("*.rc"));
+            while (it.hasNext()) {
+                files.append(it.next());
+            }
+        }
+
         Kross::Manager::self().setProperty("configfile", file);
         Kross::Manager::self().setProperty("configfiles", files);
 
@@ -120,7 +126,7 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule *const module, const QStringL
                 a->addObject(d->module);
                 KoScriptingDockerFactory f(view, d->module, a);
                 if (mainwindow) mainwindow->createDockWidget(&f);
-                kDebug(41011) << "Adding scripting docker with id=" << f.id();
+                debugKoKross << "Adding scripting docker with id=" << f.id();
             }
         }
     }
@@ -146,22 +152,18 @@ bool KoScriptingPart::showExecuteScriptFile()
     foreach (const QString &interpretername, Kross::Manager::self().interpreters()) {
         Kross::InterpreterInfo *info = Kross::Manager::self().interpreterInfo(interpretername);
         Q_ASSERT(info);
-        mimetypes.append(info->mimeTypes().join(" ").trimmed());
+        mimetypes.append(info->mimeTypes());
     }
-    KFileDialog *filedialog = new KFileDialog(
-        QUrl("kfiledialog:///KrossExecuteScript"), // startdir
-        mimetypes.join(" "), // filter
-        0, // custom widget
-        0 // parent
-    );
-    filedialog->setCaption(i18n("Execute Script File"));
-    filedialog->setOperationMode(KFileDialog::Opening);
-    filedialog->setMode(KFile::File | KFile::ExistingOnly | KFile::LocalOnly);
-    if (filedialog->exec()) {
+    QFileDialog filedialog;
+    //QT5TODO: QUrl("kfiledialog:///KrossExecuteScript"), // startdir
+    filedialog.setMimeTypeFilters(mimetypes);
+    filedialog.setWindowTitle(i18n("Execute Script File"));
+    filedialog.setFileMode(QFileDialog::ExistingFile);
+    if (filedialog.exec()) {
         Kross::Action action(this, "Execute Script File");
         action.addObject(d->module);
 
-        action.setFile(filedialog->selectedUrl().path());
+        action.setFile(filedialog.selectedUrls().at(1).path());
         action.trigger();
 
         return true;
@@ -204,7 +206,7 @@ void KoScriptingPart::slotShowScriptManager()
 
 void KoScriptingPart::slotStarted(Kross::Action *action)
 {
-    kDebug(32010) << "action=" << action->objectName();
+    debugKoKross << "action=" << action->objectName();
     KoMainWindow *mainwin = dynamic_cast<KoMainWindow*>(qApp->activeWindow());
     KoView *view = d->module ? d->module->view() : 0;
     if (view && mainwin && view->mainWindow() == mainwin && view == mainwin->rootView()) {
@@ -218,7 +220,7 @@ void KoScriptingPart::slotStarted(Kross::Action *action)
 
 void KoScriptingPart::slotFinished(Kross::Action *action)
 {
-    kDebug(32010) <<"KoScriptingPart::slotFinished action=" << action->objectName();
+    debugKoKross <<"KoScriptingPart::slotFinished action=" << action->objectName();
     disconnect(action, SIGNAL(finished(Kross::Action*)), this, SLOT(slotFinished(Kross::Action*)));
     if (d->module && d->module == action->object(d->module->objectName())) {
         //d->view->document()->setModified(true);
@@ -238,12 +240,10 @@ void KoScriptingPart::slotFinished(Kross::Action *action)
 
 void KoScriptingPart::slotFinalized(Kross::Action *action)
 {
-    kDebug(32010) << "action=" << action->objectName();
+    debugKoKross << "action=" << action->objectName();
     disconnect(action, SIGNAL(finalized(Kross::Action*)), this, SLOT(slotFinalized(Kross::Action*)));
     d->actions.removeAll(action);
     if (d->module && d->module == action->object(d->module->objectName())) {
         myFinalized(action);
     }
 }
-
-#include <KoScriptingPart.moc>

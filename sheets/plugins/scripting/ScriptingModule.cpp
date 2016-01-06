@@ -21,15 +21,17 @@
  */
 
 #include "ScriptingModule.h"
+
 #include "ScriptingFunction.h"
 #include "ScriptingWidgets.h"
 #include "ScriptingReader.h"
 #include "ScriptingWriter.h"
 #include "ScriptingListener.h"
+#include "ScriptingDebug.h"
+#include "sheetsscripting_export.h"
 
 #include <QPointer>
 #include <QLayout>
-#include <kdebug.h>
 
 #include <part/Part.h>
 #include <part/Doc.h>
@@ -39,11 +41,12 @@
 #include <interfaces/SheetAdaptor.h>
 #include <Map.h>
 #include <interfaces/MapAdaptor.h>
+
 #include <KoPartAdaptor.h>
 #include <KoApplicationAdaptor.h>
 
 extern "C" {
-    KDE_EXPORT QObject* krossmodule() {
+    SHEETSSCRIPTING_EXPORT QObject* krossmodule() {
         return new ScriptingModule();
     }
 }
@@ -66,7 +69,7 @@ ScriptingModule::ScriptingModule(QObject* parent)
 
 ScriptingModule::~ScriptingModule()
 {
-    kDebug() << "ScriptingModule::~ScriptingModule()";
+    debugSheetsScripting << "ScriptingModule::~ScriptingModule()";
     delete d;
 }
 
@@ -173,22 +176,22 @@ QString ScriptingModule::toXML()
 
 bool ScriptingModule::openUrl(const QString& url)
 {
-    return kspreadDoc()->openUrl(url);
+    return kspreadDoc()->openUrl(QUrl(url)); // QT5TODO: check QUrl usage here
 }
 
 bool ScriptingModule::saveUrl(const QString& url)
 {
-    return kspreadDoc()->saveAs(url);
+    return kspreadDoc()->saveAs(QUrl(url)); // QT5TODO: check QUrl usage here
 }
 
 bool ScriptingModule::importUrl(const QString& url)
 {
-    return kspreadDoc()->importDocument(url);
+    return kspreadDoc()->importDocument(QUrl(url)); // QT5TODO: check QUrl usage here
 }
 
 bool ScriptingModule::exportUrl(const QString& url)
 {
-    return kspreadDoc()->exportDocument(url);
+    return kspreadDoc()->exportDocument(QUrl(url)); // QT5TODO: check QUrl usage here
 }
 
 QObject* ScriptingModule::reader()

@@ -21,22 +21,24 @@
 
 #include "KoScriptManagerAdd.h"
 
+#include "KoKrossDebug.h"
+
 #include <kross/core/manager.h>
 #include <kross/core/interpreter.h>
 #include <kross/core/actioncollection.h>
 #include <kross/ui/view.h>
 
-#include <QBoxLayout>
-#include <QLabel>
-#include <QRadioButton>
-
-#include <QLineEdit>
-#include <QComboBox>
-
+#include <KIO/Global>
 #include <klocalizedstring.h>
 #include <kfilewidget.h>
 #include <kurlrequester.h>
-#include <kdebug.h>
+
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QRadioButton>
+#include <QComboBox>
+
 
 /********************************************************************
  * KoScriptManagerAddTypeWidget
@@ -119,20 +121,20 @@ KoScriptManagerAddFileWidget::~KoScriptManagerAddFileWidget()
 
 QString KoScriptManagerAddFileWidget::selectedFile() const
 {
-    //kDebug(32010)<<m_filewidget->selectedFile();
+    //debugKoKross<<m_filewidget->selectedFile();
     return m_file;
 }
 
 void KoScriptManagerAddFileWidget::slotFileHighlighted(const QString &file)
 {
-    //kDebug(32010)<<file;
+    //debugKoKross<<file;
     m_file = file;
     m_wizard->setValid(m_wizard->m_fileItem, ! file.isEmpty());
 }
 
 void KoScriptManagerAddFileWidget::slotUpdate()
 {
-    //kDebug(32010)<<selectedFile();
+    //debugKoKross<<selectedFile();
     m_wizard->setValid(m_wizard->m_fileItem, ! m_file.isEmpty());
 }
 
@@ -183,7 +185,7 @@ void KoScriptManagerAddScriptWidget::showEvent(QShowEvent *event)
     action->setText(fi.baseName());
     //action->setDescription();
     if (fi.isFile()) {
-        action->setIconName(KMimeType::iconNameForUrl(QUrl(file)));
+        action->setIconName(KIO::iconNameForUrl(QUrl(file)));
         action->setEnabled(fi.exists());
     }
     action->setFile(file);
@@ -202,7 +204,7 @@ void KoScriptManagerAddScriptWidget::showEvent(QShowEvent *event)
 
 bool KoScriptManagerAddScriptWidget::accept()
 {
-    kDebug(32010);
+    debugKoKross;
     Q_ASSERT(m_editor);
     Q_ASSERT(m_editor->action());
     Q_ASSERT(m_wizard);
@@ -250,12 +252,10 @@ void KoScriptManagerAddCollectionWidget::slotUpdate()
 
 bool KoScriptManagerAddCollectionWidget::accept()
 {
-    kDebug(32010);
+    debugKoKross;
     Q_ASSERT(m_wizard);
-#ifndef DISABLE_ADD_REMOVE
     m_editor->commit(); // take over changes done in the editor into the action collection
     m_editor->collection()->setParentCollection(m_wizard->m_collection);
-#endif
     //TODO select new item
     return true;
 }
@@ -269,7 +269,7 @@ KoScriptManagerAddWizard::KoScriptManagerAddWizard(QWidget *parent, Kross::Actio
 {
     Q_ASSERT(m_collection);
     setObjectName("ScriptManagerAddWizard");
-    setCaption(i18n("Add"));
+    setWindowTitle(i18n("Add"));
 
     m_typewidget = new KoScriptManagerAddTypeWidget(this);
     m_typeItem = addPage(m_typewidget, i18n("Add"));
@@ -310,7 +310,7 @@ bool KoScriptManagerAddWizard::invokeWidgetMethod(const char *member)
     Q_ASSERT(item);
     bool ok = true;
     QMetaObject::invokeMethod(item->widget(), member, Q_RETURN_ARG(bool,ok));
-    kDebug(32010) << "object=" << item->widget()->objectName() << " member=" << member << " ok=" << ok;
+    debugKoKross << "object=" << item->widget()->objectName() << " member=" << member << " ok=" << ok;
     return ok;
 }
 
@@ -331,5 +331,3 @@ void KoScriptManagerAddWizard::accept()
     if (invokeWidgetMethod("accept"))
         KAssistantDialog::accept();
 }
-
-#include <KoScriptManagerAdd.moc>

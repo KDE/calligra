@@ -21,12 +21,13 @@
 
 #include "KoScriptingOdf.h"
 
+#include "KoKrossDebug.h"
+
 #include <KoStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoPartAdaptor.h>
 #include <KoEmbeddedDocumentSaver.h>
 
-#include <kdebug.h>
 #include <QBuffer>
 
 /************************************************************************************************
@@ -209,10 +210,10 @@ void dumpElem(KoXmlElement elem, int level=0)
     QString prefix;
     for (int i = 0; i < level; ++i)
         prefix+="  ";
-    kDebug(32010)  << QString("%1  %2").arg(prefix).arg(elem.tagName());
+    debugKoKross  << QString("%1  %2").arg(prefix).arg(elem.tagName());
 #ifndef KOXML_USE_QDOM
     foreach (const QString &s, elem.attributeNames())
-        kDebug(32010)  << QString("%1    %2 = %3").arg(prefix).arg(s).arg(elem.attribute(s));
+        debugKoKross  << QString("%1    %2 = %3").arg(prefix).arg(s).arg(elem.attribute(s));
 #endif
     level++;
     KoXmlElement e;
@@ -241,15 +242,15 @@ KoStore *KoScriptingOdfStore::getReadStore()
 {
     QByteArray ba = getByteArray();
     if (ba.isNull()) {
-        kWarning(32010)  << "KoScriptingOdfStore::getReadStore() Failed to fetch ByteArray";
+        warnKoKross  << "KoScriptingOdfStore::getReadStore() Failed to fetch ByteArray";
         return 0;
     }
     if (m_readStore ) {
-        //kDebug(32010) <<"KoScriptingOdfStore::getReadStore() Return cached store";
+        //debugKoKross <<"KoScriptingOdfStore::getReadStore() Return cached store";
         Q_ASSERT(m_readDevice);
         return m_readStore;
     }
-    //kDebug(32010) <<"KoScriptingOdfStore::getReadStore() Return new store";
+    //debugKoKross <<"KoScriptingOdfStore::getReadStore() Return new store";
     Q_ASSERT(!m_readDevice);
     m_readDevice = new QBuffer(&m_byteArray);
     m_readStore = KoStore::createStore(m_readDevice, KoStore::Read, "KrossScript", KoStore::Tar);
@@ -261,25 +262,25 @@ QByteArray KoScriptingOdfStore::getByteArray()
     if (! m_byteArray.isNull())
         return m_byteArray;
     if (m_readStore) {
-        //kDebug(32010)  << "KoScriptingOdfStore::getByteArray() Cleaning prev cached store up.";
+        //debugKoKross  << "KoScriptingOdfStore::getByteArray() Cleaning prev cached store up.";
         if (m_readStore->isOpen() ) {
-            //kDebug(32010)  << "KoScriptingOdfStore::getByteArray() Closing prev cached store.";
+            //debugKoKross  << "KoScriptingOdfStore::getByteArray() Closing prev cached store.";
             m_readStore->close();
         }
         delete m_readStore;
         m_readStore = 0;
     }
     if (m_readDevice) {
-        //kDebug(32010)  << "KoScriptingOdfStore::getByteArray() Cleaning prev cached device up.";
+        //debugKoKross  << "KoScriptingOdfStore::getByteArray() Cleaning prev cached device up.";
         delete m_readDevice;
         m_readDevice = 0;
     }
     if (! m_document) {
-        //kWarning(32010)  << "KoScriptingOdfStore::getByteArray() No document defined.";
+        //warnKoKross  << "KoScriptingOdfStore::getByteArray() No document defined.";
         return QByteArray();
     }
 
-    //kDebug(32010)  << "KoScriptingOdfStore::getByteArray() Reading ByteArray.";
+    //debugKoKross  << "KoScriptingOdfStore::getByteArray() Reading ByteArray.";
     QBuffer buffer(&m_byteArray);
     KoStore *store = KoStore::createStore(&buffer, KoStore::Write, "KrossScript", KoStore::Tar);
     KoOdfWriteStore odfStore(store);
@@ -288,7 +289,7 @@ QByteArray KoScriptingOdfStore::getByteArray()
     KoDocument::SavingContext documentContext(odfStore, embeddedSaver);
     QByteArray mime = getMimeType();
     if (! m_document->saveOdf(documentContext)) {
-        kWarning(32010)  << "KoScriptingOdfStore::open() Failed to save Oasis to ByteArray";
+        warnKoKross  << "KoScriptingOdfStore::open() Failed to save Oasis to ByteArray";
         m_byteArray = QByteArray();
     }
     //odfStore.closeContentWriter();
@@ -350,10 +351,10 @@ QObject *KoScriptingOdfStore::open(const QString &fileName)
     if (store->isOpen())
         store->close();
     if (! store->open(fileName)) {
-        kWarning(32010) <<"KoScriptingOdfStore::openFile() Failed to open file:"<<fileName;
+        warnKoKross <<"KoScriptingOdfStore::openFile() Failed to open file:"<<fileName;
         return 0;
     }
-    //kDebug(32010) <<"KoScriptingOdfStore::openFile() fileName="<<fileName<<" store->isOpen="<<store->isOpen()<<endl;
+    //debugKoKross <<"KoScriptingOdfStore::openFile() fileName="<<fileName<<" store->isOpen="<<store->isOpen()<<endl;
     Q_ASSERT(store->device());
 
     //KoOasisStore oasisStore(store);
@@ -362,13 +363,13 @@ QObject *KoScriptingOdfStore::open(const QString &fileName)
     QString errorMsg;
     int errorLine, errorColumn;
     if (! doc.setContent(store->device(), &errorMsg, &errorLine, &errorColumn)) {
-       kWarning(32010) << "Parse-Error message" << errorMsg << "line" << errorLine << "col" << errorColumn;
+       warnKoKross << "Parse-Error message" << errorMsg << "line" << errorLine << "col" << errorColumn;
        delete store;
        return 0;
     }
 
     const QString tagName = doc.documentElement().tagName();
-    kDebug(32010) <<"KoScriptingOdfStore::open documentElement.tagName="<<tagName;
+    debugKoKross <<"KoScriptingOdfStore::open documentElement.tagName="<<tagName;
     if (tagName == "office:document-content")
         m_reader = new KoScriptingOdfContentReader(this, doc);
     if (tagName == "office:document-styles")
@@ -440,5 +441,3 @@ bool KoScriptingOdfStore::setDocument(QObject *document)
     }
     return ok;
 }
-
-#include <KoScriptingOdf.moc>

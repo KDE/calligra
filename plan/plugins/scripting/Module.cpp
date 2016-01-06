@@ -20,6 +20,7 @@
  */
 
 #include "Module.h"
+
 #include "Project.h"
 #include "Account.h"
 #include "Calendar.h"
@@ -28,13 +29,12 @@
 #include "ResourceGroup.h"
 #include "Schedule.h"
 #include "ScriptingWidgets.h"
+#include "kplatoscripting_export.h"
 
 // qt
 #include <QPointer>
 #include <QWidget>
 #include <QMap>
-// kde
-#include <kdebug.h>
 // plan
 #include "kptmaindocument.h"
 #include "kptpart.h"
@@ -46,7 +46,7 @@
 
 extern "C"
 {
-    KDE_EXPORT QObject* krossmodule()
+    KPLATOSCRIPTING_EXPORT QObject* krossmodule()
     {
         return new Scripting::Module();
     }
@@ -103,7 +103,7 @@ KoDocument* Module::doc()
 
 void Module::openUrl( const QString &url )
 {
-    doc()->openUrl( url );
+    doc()->openUrl( QUrl(url) ); // QT5TODO: check QUrl usage here
 }
 
 QObject *Module::openDocument( const QString &tag, const QString &url )
@@ -113,7 +113,7 @@ QObject *Module::openDocument( const QString &tag, const QString &url )
         m = new Module();
         d->modules[ tag ] = m;
     }
-    m->part()->openUrl( url );
+    m->part()->openUrl( QUrl(url) ); // QT5TODO: check QUrl usage here
     return m;
 }
 

@@ -75,7 +75,7 @@ calligra_define_product(LIB_MSO "libmso"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(LIB_KOMSOOXML "libkomsooxml"  REQUIRES LIB_CALLIGRA LIB_KOODF2 LIB_KOMAIN)
 
 # features
-calligra_define_feature(FEATURE_SCRIPTING "Scripting feature" UNPORTED) # TODO
+calligra_define_feature(FEATURE_SCRIPTING "Scripting feature")
 calligra_define_feature(FEATURE_RDF "RDF feature")
 
 # plugins

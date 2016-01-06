@@ -22,8 +22,6 @@
 #ifndef TESTRESULT_H
 #define TESTRESULT_H
 
-#include "kplatoscripting_export.h"
-
 #include <QString>
 #include <QStringList>
 #include <QObject>

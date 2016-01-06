@@ -21,38 +21,37 @@
  */
 
 #include "ScriptingPart.h"
+
 #include "ScriptingModule.h"
+#include "ScriptingDebug.h"
 // Qt
 #include <QFileInfo>
-// KDE
+#include <QStandardPaths>
+// KF5
 #include <kpluginfactory.h>
 #include <kstandarddirs.h>
 #include <kcmdlineargs.h>
 #include <KLocalizedString>
 #include <kmessagebox.h>
+#include <kglobal.h>
 // KSpread
 #include <part/Doc.h>
 #include <part/View.h>
 // Kross
 #include <kross/core/manager.h>
 
-K_PLUGIN_FACTORY(KSpreadScriptingFactory, registerPlugin< ScriptingPart >();)
-K_EXPORT_PLUGIN(KSpreadScriptingFactory("krossmodulesheets"))
 
-/// \internal d-pointer class.
-class ScriptingPart::Private
-{
-public:
-};
+K_PLUGIN_FACTORY_WITH_JSON(KSpreadScriptingFactory, "sheetsscripting.json",
+                           registerPlugin<ScriptingPart>();)
+
 
 ScriptingPart::ScriptingPart(QObject* parent, const QVariantList& argList)
-        : KoScriptingPart(new ScriptingModule(parent))
-        , d(new Private())
+    : KoScriptingPart(new ScriptingModule(parent))
 {
     Q_UNUSED(argList);
     //setComponentData(ScriptingPart::componentData());
-    setXMLFile(KStandardDirs::locate("data", "sheets/viewplugins/scripting.rc"), true);
-    kDebug() << "Scripting plugin. Class:" << metaObject()->className() << ", Parent:" << parent->metaObject()->className();
+    setXMLFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "sheets/viewplugins/scripting.rc"), true);
+    debugSheetsScripting << "Scripting plugin. Class:" << metaObject()->className() << ", Parent:" << parent->metaObject()->className();
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     if (args) {
@@ -96,8 +95,7 @@ ScriptingPart::ScriptingPart(QObject* parent, const QVariantList& argList)
 
 ScriptingPart::~ScriptingPart()
 {
-    //kDebug() <<"ScriptingPart::~ScriptingPart()";
-    delete d;
+    //debugSheetsScripting <<"ScriptingPart::~ScriptingPart()";
 }
 
 #include "ScriptingPart.moc"

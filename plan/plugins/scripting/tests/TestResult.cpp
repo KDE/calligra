@@ -21,11 +21,13 @@
 
 #include "TestResult.h"
 
-#include <kdebug.h>
+#include "kplatoscripting_export.h"
+
+#include <QDebug>
 
 extern "C"
 {
-    KDE_EXPORT QObject* krossmodule()
+    KPLATOSCRIPTING_EXPORT QObject* krossmodule()
     {
         return new TestResult();
     }

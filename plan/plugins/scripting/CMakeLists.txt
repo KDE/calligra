@@ -3,7 +3,6 @@ add_definitions(-DTRANSLATION_DOMAIN=\"krossmoduleplan\")
 include_directories( 
     ${CMAKE_SOURCE_DIR}/plan
     ${KPLATO_INCLUDES}
-    
     ${KOKROSS_INCLUDES}
 )
 
@@ -21,31 +20,25 @@ set(krossmoduleplan_PART_SRCS
     Module.cpp
     ScriptingPart.cpp
     ScriptingWidgets.cpp
+    ScriptingDebug.cpp
 )
 
 ki18n_wrap_ui(krossmoduleplan_PART_SRCS
     ScriptingDataQueryView.ui
 )
 
-
-qt5_wrap_cpp(krossmoduleplan_PART_SRCS
-)
-
-add_library(krossmoduleplan MODULE SHARED ${krossmoduleplan_PART_SRCS})
+add_library(krossmoduleplan MODULE ${krossmoduleplan_PART_SRCS})
 generate_export_header(krossmoduleplan BASE_NAME kplatoscripting)
+kcoreaddons_desktop_to_json(krossmoduleplan planscripting.desktop)
 
-target_link_libraries(
-    krossmoduleplan
-    kokross
+target_link_libraries(krossmoduleplan
     planprivate
     kplatokernel
     kplatomodels
     komain
+    kokross
 )
-
-set_target_properties(krossmoduleplan PROPERTIES DEFINE_SYMBOL MAKE_KPLATOSCRIPTING_LIB)
 
 install(TARGETS krossmoduleplan DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 install(FILES krossmoduleplan.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-install(FILES planscripting.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install(FILES scripting.rc DESTINATION ${DATA_INSTALL_DIR}/plan/viewplugins)

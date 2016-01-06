@@ -82,5 +82,3 @@ QObject *KoScriptingModule::store()
 {
     return new KoScriptingOdfStore(this, doc());
 }
-
-#include <KoScriptingModule.moc>

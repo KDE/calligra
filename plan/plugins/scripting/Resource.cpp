@@ -20,6 +20,7 @@
 #include "Resource.h"
 
 #include "Project.h"
+#include "ScriptingDebug.h"
 
 #include "kptresource.h"
 #include "kptappointment.h"
@@ -91,7 +92,7 @@ QObject *Scripting::Resource::childAt( int index ) const
 
 void Scripting::Resource::setChildren( const QList<QObject*> &children )
 {
-    qDebug()<<"setTeamMembers:"<<children;
+    debugPlanScripting<<"setTeamMembers:"<<children;
     KPlato::Resource *team = kplatoResource();
     // atm. only teams have children
     if ( team->type() != KPlato::Resource::Type_Team ) {
@@ -110,5 +111,5 @@ void Scripting::Resource::setChildren( const QList<QObject*> &children )
     if ( ! cmd->isEmpty() ) {
         m_project->addCommand( cmd );
     }
-    qDebug()<<"setTeamMembers:"<<team->teamMembers();
+    debugPlanScripting<<"setTeamMembers:"<<team->teamMembers();
 }

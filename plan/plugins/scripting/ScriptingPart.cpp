@@ -20,10 +20,12 @@
  */
 
 #include "ScriptingPart.h"
+
 #include "Module.h"
+#include "ScriptingDebug.h"
 
 #include <QStandardPaths>
-#include <klocale.h>
+// KF5
 #include <kpluginfactory.h>
 // kross
 #include <kross/core/manager.h>
@@ -37,45 +39,23 @@
 
 #include <kptview.h>
 
-int planScriptingDebugArea() {
-    static int s_area = KDebug::registerArea( "plan (Scripting)" );
-    return s_area;
-}
 
-K_EXPORT_PLUGIN( KPlatoScriptingFactory )
+K_PLUGIN_FACTORY_WITH_JSON(KPlatoScriptingFactory, "planscripting.json",
+                           registerPlugin<KPlatoScriptingPart>();)
 
-KPlatoScriptingFactory::KPlatoScriptingFactory(const char *componentName, const char *catalogName, QObject *parent )
-    : KPluginFactory( componentName, catalogName, parent )
+
+KPlatoScriptingPart::KPlatoScriptingPart(QObject *parent, const QVariantList &args)
+    : KoScriptingPart(new Scripting::Module(parent))
 {
-    kDebug(planScriptingDebugArea())<<parent;
-}
-
-QObject *KPlatoScriptingFactory::create(const char *iface, QWidget *parentWidget, QObject *parent, const QVariantList &args, const QString &keyword)
-{
-    kDebug(planScriptingDebugArea())<<iface<<parentWidget<<parent<<args<<keyword;
-    return new KPlatoScriptingPart( parent );
-}
-
-//---------------------
-/// \internal d-pointer class.
-class KPlatoScriptingPart::Private
-{
-    public:
-};
-
-KPlatoScriptingPart::KPlatoScriptingPart(QObject* parent, const QStringList& args)
-    : KoScriptingPart(new Scripting::Module(parent), args)
-    , d(new Private())
-{
+    Q_UNUSED(args);
     //setComponentData(ScriptingPart::componentData());
     setXMLFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "plan/viewplugins/scripting.rc"), true);
-    kDebug(planScriptingDebugArea()) <<"PlanScripting plugin. Class:" << metaObject()->className() <<", Parent:" <<(parent?parent->metaObject()->className():"0");
+    debugPlanScripting <<"PlanScripting plugin. Class:" << metaObject()->className() <<", Parent:" <<(parent?parent->metaObject()->className():"0");
 
 }
 
 KPlatoScriptingPart::~KPlatoScriptingPart()
 {
-    delete d;
 }
 
 #include "ScriptingPart.moc"

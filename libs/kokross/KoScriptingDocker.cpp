@@ -20,8 +20,11 @@
  ***************************************************************************/
 
 #include "KoScriptingDocker.h"
+
 #include "KoScriptingModule.h"
 #include "KoScriptManager.h"
+#include "KoKrossDebug.h"
+
 #include <KoIcon.h>
 
 #include <QToolBar>
@@ -29,7 +32,6 @@
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
-#include <kdebug.h>
 
 #include <kross/core/action.h>
 #include <kross/ui/model.h>
@@ -139,7 +141,7 @@ void KoScriptingDocker::slotEnabledChanged(const QString &actionname)
 
 void KoScriptingDocker::slotDoubleClicked()
 {
-    //kDebug(32010)<<"KoScriptingDocker::slotDoubleClicked()";
+    //debugKoKross<<"KoScriptingDocker::slotDoubleClicked()";
     m_view->slotRun();
 }
 
@@ -152,20 +154,20 @@ KoScriptingActionDocker::KoScriptingActionDocker(KoScriptingModule *module, Kros
     m_module(module),
     m_action(action)
 {
-    kDebug(32010);
+    debugKoKross;
     m_action->addObject(this, "KoDocker", Kross::ChildrenInterface::AutoConnectSignals);
     //connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(slotVisibilityChanged(bool)));
 }
 
 KoScriptingActionDocker::~KoScriptingActionDocker()
 {
-    kDebug(32010);
+    debugKoKross;
     m_action->finalize();
 }
 
 void KoScriptingActionDocker::slotVisibilityChanged(bool visible)
 {
-    kDebug(32010)<<"visible="<<visible;
+    debugKoKross<<"visible="<<visible;
     if (visible) {
         if (m_module && m_action->isFinalized()) {
             //KoView *view = m_module->view();
@@ -186,5 +188,3 @@ void KoScriptingActionDocker::setWidget(QWidget *widget)
 {
     QDockWidget::setWidget(widget);
 }
-
-#include <KoScriptingDocker.moc>

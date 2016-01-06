@@ -20,6 +20,8 @@
 
 #include "ScriptingFunction.h"
 
+#include "ScriptingDebug.h"
+
 #include <QDomDocument>
 #include <QPointer>
 
@@ -33,7 +35,6 @@
 #include <FunctionDescription.h>
 #include <FunctionRepository.h>
 
-//#define KROSS_MAIN_EXPORT KDE_EXPORT
 #include <kross/core/manager.h>
 
 /***************************************************************************
@@ -50,19 +51,19 @@ public:
         Q_ASSERT(extra && extra->function);
         ScriptingFunctionImpl* funcimpl = static_cast< ScriptingFunctionImpl* >(extra->function);
 
-        kDebug() << "ScriptingFunctionImpl::callback";
+        debugSheetsScripting << "ScriptingFunctionImpl::callback";
 
         if (! funcimpl->m_function) {
-            kDebug() << QString("ScriptingFunctionImpl::callback ScriptingFunction instance is NULL.");
+            debugSheetsScripting << QString("ScriptingFunctionImpl::callback ScriptingFunction instance is NULL.");
             Calligra::Sheets::Value err = Calligra::Sheets::Value::errorNA();
             err.setError('#' + i18n("No such script."));
             return err;
         }
 
-        kDebug() << QString("ScriptingFunctionImpl::callback name=%1 argcount=%2").arg(funcimpl->m_function->name()).arg(args.count());
+        debugSheetsScripting << QString("ScriptingFunctionImpl::callback name=%1 argcount=%2").arg(funcimpl->m_function->name()).arg(args.count());
 
         Calligra::Sheets::FunctionDescription *description = Calligra::Sheets::FunctionRepository::self()->functionInfo(funcimpl->name());
-        kDebug(36005) << "name=" << description->name() << " type=" << description->type();
+        debugSheetsScripting << "name=" << description->name() << " type=" << description->type();
 
         QVariantList list;
         for (int i = 0; i < args.size(); ++i) {
@@ -85,12 +86,12 @@ public:
                 list << args[i].asVariant();
                 break;
             }
-            //kDebug()<<"1 ==================> helpText="<<description->param(i).helpText()<<" type="<<description->param(i).type();
+            //debugSheetsScripting<<"1 ==================> helpText="<<description->param(i).helpText()<<" type="<<description->param(i).type();
         }
 
         /*
                     for(int i = 0; i < size; ++i) {
-        kDebug()<<"2 ==================> "<<args[i].asString();
+        debugSheetsScripting<<"2 ==================> "<<args[i].asString();
                         //TODO needs to be more generic!
                         //list << args[i].asVariant();
                         list << args[i].asString();
@@ -141,7 +142,7 @@ public:
             break;
         }
 
-        //kDebug() <<"result=" << result.toString();
+        //debugSheetsScripting <<"result=" << result.toString();
         //return Calligra::Sheets::Value( result.toString() );
         return resultvalue;
     }
@@ -198,7 +199,7 @@ ScriptingFunction::ScriptingFunction(QObject* parent)
         : QObject(parent)
         , d(new Private())
 {
-    kDebug() << "ScriptingFunction::ScriptingFunction";
+    debugSheetsScripting << "ScriptingFunction::ScriptingFunction";
     d->typeName = "String";
     d->funcElement = d->document.createElement("Function");
     d->helpElement = d->document.createElement("Help");
@@ -206,7 +207,7 @@ ScriptingFunction::ScriptingFunction(QObject* parent)
 
 ScriptingFunction::~ScriptingFunction()
 {
-    kDebug() << "ScriptingFunction::~ScriptingFunction";
+    debugSheetsScripting << "ScriptingFunction::~ScriptingFunction";
     delete d;
 }
 
@@ -296,10 +297,10 @@ void ScriptingFunction::addParameter(const QString& typeName, const QString& com
 
 bool ScriptingFunction::registerFunction()
 {
-    kDebug() << "ScriptingFunction::registerFunction";
+    debugSheetsScripting << "ScriptingFunction::registerFunction";
 
     if (d->name.isEmpty()) {
-        kWarning() << "ScriptingFunction::registerFunction() name is empty!";
+        warnSheetsScripting << "ScriptingFunction::registerFunction() name is empty!";
         return false;
     }
 

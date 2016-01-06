@@ -20,12 +20,16 @@
  */
 
 #include "ScriptingWidgets.h"
+
 #include "Module.h"
 #include "Project.h"
+#include "ScriptingDebug.h"
 
 #include "kptproject.h"
 #include "kptschedule.h"
 #include "kptnodeitemmodel.h"
+
+#include <KLocalizedString>
 
 #include <QVBoxLayout>
 #include <QTreeView>
@@ -35,16 +39,11 @@
 #include <QListWidget>
 #include <QListWidgetItem>
 
-#include <klocale.h>
-#include <kdebug.h>
-
-extern int planScriptingDebugArea();
-
 
 ScriptingScheduleListView::ScriptingScheduleListView(Scripting::Module* module, QWidget* parent)
     : QWidget(parent), m_module(module)
 {
-    kDebug(planScriptingDebugArea())<<this<<parent;
+    debugPlanScripting<<this<<parent;
     if ( parent->layout() ) {
         parent->layout()->addWidget( this );
     }
@@ -61,13 +60,13 @@ ScriptingScheduleListView::ScriptingScheduleListView(Scripting::Module* module, 
     QStandardItemModel *model = new QStandardItemModel(m_view);
     model->setHorizontalHeaderLabels( QStringList() << i18n( "Schedule Name" ) );
     KPlato::Project *p = static_cast<Scripting::Project*>( m_module->project() )->kplatoProject();
-    kDebug(planScriptingDebugArea())<<p;
+    debugPlanScripting<<p;
     foreach ( KPlato::ScheduleManager *sm, p->allScheduleManagers() ) {
         if ( sm->isScheduled() ) {
             QStandardItem *i = new QStandardItem( sm->name() );
             i->setData( (qlonglong)sm->scheduleId() );
             model->appendRow( i );
-            kDebug(planScriptingDebugArea())<<i<<model->rowCount();
+            debugPlanScripting<<i<<model->rowCount();
         }
     }
     layout->addWidget(m_view);
@@ -76,24 +75,24 @@ ScriptingScheduleListView::ScriptingScheduleListView(Scripting::Module* module, 
 
 ScriptingScheduleListView::~ScriptingScheduleListView()
 {
-    kDebug(planScriptingDebugArea())<<"gone!";
+    debugPlanScripting<<"gone!";
 }
 
 QVariant ScriptingScheduleListView::currentSchedule() const
 {
     QModelIndex i = m_view->currentIndex();
-    kDebug(planScriptingDebugArea())<<i<<i.isValid();
+    debugPlanScripting<<i<<i.isValid();
     if ( ! i.isValid() ) {
-        kDebug(planScriptingDebugArea())<<"index not valid";
+        debugPlanScripting<<"index not valid";
         return -1;
     }
-    kDebug(planScriptingDebugArea())<<m_view->model();
+    debugPlanScripting<<m_view->model();
     QStandardItem *item = static_cast<QStandardItemModel*>(m_view->model())->itemFromIndex( i );
-    kDebug(planScriptingDebugArea())<<item;
+    debugPlanScripting<<item;
     if ( item == 0 ) {
         return -1;
     }
-    kDebug(planScriptingDebugArea())<<item->data();
+    debugPlanScripting<<item->data();
     return item->data();
 }
 
@@ -102,7 +101,7 @@ ScriptingNodePropertyListView::ScriptingNodePropertyListView(Scripting::Module* 
     : KActionSelector( parent ),
       m_module(module)
 {
-    kDebug(planScriptingDebugArea())<<this<<parent;
+    debugPlanScripting<<this<<parent;
 
     KPlato::NodeModel m;
     const QMetaEnum e = m.columnMap();
@@ -139,7 +138,7 @@ ScriptingDataQueryView::ScriptingDataQueryView(Scripting::Module* module, QWidge
     : QWidget( parent ),
       m_module(module)
 {
-    kDebug(planScriptingDebugArea())<<this<<parent;
+    debugPlanScripting<<this<<parent;
     setupUi( this );
     setup();
 

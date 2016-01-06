@@ -25,7 +25,6 @@
 #include <QTest>
 #include <Kross/Action>
 #include <Kross/Manager>
-#include <kdebug.h>
 
 namespace KPlato
 {

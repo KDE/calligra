@@ -21,7 +21,9 @@
  ***************************************************************************/
 
 #include "KoScriptManager.h"
+
 #include "KoScriptManagerAdd.h"
+#include "KoKrossDebug.h"
 
 #include <kross/core/manager.h>
 #include <kross/core/actioncollection.h>
@@ -31,8 +33,8 @@
 #include <KoIcon.h>
 
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
-#include <kdebug.h>
+
+#include <QStandardPaths>
 #include <QBoxLayout>
 
 /******************************************************************************
@@ -75,7 +77,6 @@ public:
             return static_cast<Kross::ActionCollectionModel*>(Kross::ActionCollectionView::model());
     }
 
-#ifndef DISABLE_ADD_REMOVE
     virtual void slotAdd()
     {
         Kross::ActionCollection *collection = model()->rootCollection();
@@ -108,19 +109,18 @@ public:
         foreach (Kross::Action *action, actions) {
             QModelIndex idx = model()->indexForAction(action);
             if (idx.isValid()) {
-                //kDebug(32010)<<"action:"<<action->name();
+                //debugKoKross<<"action:"<<action->name();
                 delete action;
             }
         }
         foreach (Kross::ActionCollection *collection, collections) {
             QModelIndex idx = model()->indexForCollection(collection);
             if (idx.isValid()) {
-                //kDebug(32010)<<"collection:"<<collection->name();
+                //debugKoKross<<"collection:"<<collection->name();
                 delete collection;
             }
         }
     }
-#endif
 };
 
 KoScriptManagerCollection::KoScriptManagerCollection(QWidget *parent)
@@ -312,15 +312,16 @@ KoScriptManagerDialog::~KoScriptManagerDialog()
 
 void KoScriptManagerDialog::slotAccepted()
 {
-    const QString dir = KGlobal::dirs()->saveLocation("appdata", "scripts/");
+    const QString dir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
     if (! dir.isEmpty()) {
-        const QString file = QFileInfo(dir, "scripts.rc").absoluteFilePath();
+        const QString scriptsDir = dir + QStringLiteral("/scripts/");
+        QDir().mkpath(scriptsDir);
+
+        const QString file = QFileInfo(scriptsDir, "scripts.rc").absoluteFilePath();
         QFile f(file);
         if (f.open(QIODevice::WriteOnly))
             if (Kross::Manager::self().actionCollection()->writeXml(&f))
-                kDebug(32010)<<"Successfully saved file:"<<file;
+                debugKoKross<<"Successfully saved file:"<<file;
         f.close();
     }
 }
-
-#include <KoScriptManager.moc>

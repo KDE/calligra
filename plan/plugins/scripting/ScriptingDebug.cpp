@@ -1,8 +1,7 @@
 /*
  * This file is part of KPlato
  *
- * Copyright (c) 2006 Sebastian Sauer <mail@dipe.org>
- * Copyright (c) 2008 Dag Andersen <danders@get2net>
+ * Copyright (c) 2016 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published by
@@ -19,23 +18,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPlatoSCRIPTINGPART_H
-#define KPlatoSCRIPTINGPART_H
+#include "ScriptingDebug.h"
 
-#include <KoScriptingPart.h>
-
-#include <QVariantList>
-
-/**
-* The KPlatoScriptingPart class implements a KPart component
-* to integrate scripting into KPlato.
-*/
-class KPlatoScriptingPart : public KoScriptingPart
+const QLoggingCategory &PLANSCRIPTING_LOG()
 {
-        Q_OBJECT
-    public:
-        KPlatoScriptingPart(QObject *parent, const QVariantList&);
-        virtual ~KPlatoScriptingPart();
-};
-
-#endif
+    static const QLoggingCategory category("calligra.plan.scripting");
+    return category;
+}

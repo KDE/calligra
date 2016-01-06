@@ -1,10 +1,4 @@
-macro_ensure_version( "4.1.81" ${KDE_VERSION} KDE_VERSION_OK)
-if(NOT KDE_VERSION_OK)
-    add_definitions( -DDISABLE_ADD_REMOVE )
-    message(STATUS "KDE_VERSION: ${KDE_VERSION} (4.1.81 needed) ScriptManager: add/remove will not be compiled")
-endif()
-
-include_directories(${KDE4_KDECORE_INCLUDES} ${KDE4_KDEUI_INCLUDES} ${KOMAIN_INCLUDES})
+include_directories(${KOMAIN_INCLUDES})
 
 set(kokross_LIB_SRCS
     KoScriptingModule.cpp
@@ -13,17 +7,18 @@ set(kokross_LIB_SRCS
     KoScriptManagerAdd.cpp
     KoScriptingPart.cpp
     KoScriptingOdf.cpp
+    KoKrossDebug.cpp
 )
 add_library(kokross SHARED ${kokross_LIB_SRCS})
+generate_export_header(kokross)
 
 target_link_libraries(kokross
+PUBLIC
     komain
-    ${KDE4_KFILE_LIBRARY}
-    ${KDE4_KROSSCORE_LIBRARY}
-    ${KDE4_KROSSUI_LIBS}
+    KF5::KrossUi
+PRIVATE
+    KF5::KDELibs4Support
 )
-
-target_link_libraries(kokross LINK_INTERFACE_LIBRARIES ${KDE4_KROSSCORE_LIBRARY} ${KDE4_KROSSUI_LIBS})
 
 set_target_properties(kokross PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

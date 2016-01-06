@@ -19,15 +19,17 @@
  */
 
 #include "ScriptingWidgets.h"
+
 #include "ScriptingModule.h"
+#include "ScriptingDebug.h"
 
 #include <QMetaEnum>
 #include <QVBoxLayout>
 #include <QTreeView>
 #include <QStandardItemModel>
 #include <QStandardItem>
+
 #include <KLocalizedString>
-#include <kdebug.h>
 
 #include <part/View.h>
 #include <part/Doc.h>
@@ -76,7 +78,7 @@ void ScriptingSheetsListView::initialize()
     if (m_initialized)
         finalize();
 
-    kDebug() << "ScriptingSheetsListView::initialize()";
+    debugSheetsScripting << "ScriptingSheetsListView::initialize()";
 
     QStringList headers;
     headers << i18n("Sheet");
@@ -155,7 +157,7 @@ void ScriptingSheetsListView::initialize()
 void ScriptingSheetsListView::finalize()
 {
     if (m_initialized) {
-        kDebug() << "ScriptingSheetsListView::finalize()";
+        debugSheetsScripting << "ScriptingSheetsListView::finalize()";
 
         m_prevlist = sheets();
         QStandardItemModel* model = static_cast< QStandardItemModel* >(m_view->model());

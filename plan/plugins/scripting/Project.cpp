@@ -19,11 +19,13 @@
  */
 
 #include "Project.h"
+
 #include "Account.h"
 #include "Calendar.h"
 #include "Resource.h"
 #include "ResourceGroup.h"
 #include "Schedule.h"
+#include "ScriptingDebug.h"
 
 #include "kptglobal.h"
 #include "kptaccount.h"
@@ -35,12 +37,11 @@
 
 #include <QMetaEnum>
 
-extern int planScriptingDebugArea();
 
 Scripting::Project::Project( Scripting::Module* module, KPlato::Project *project )
     : Node( this, project, module ), m_module( module )
 {
-    kDebug(planScriptingDebugArea())<<this<<"KPlato::"<<project;
+    debugPlanScripting<<this<<"KPlato::"<<project;
     m_nodeModel.setProject( project );
     m_nodeModel.setShowProject( true );
     m_nodeModel.setReadWrite( true );
@@ -85,7 +86,7 @@ Scripting::Project::Project( Scripting::Module* module, KPlato::Project *project
 
 Scripting::Project::~Project()
 {
-    kDebug(planScriptingDebugArea())<<this;
+    debugPlanScripting<<this;
     qDeleteAll( m_nodes );
     qDeleteAll( m_groups );
     qDeleteAll( m_resources );
@@ -304,7 +305,7 @@ QVariant Scripting::Project::nodeData( const KPlato::Node *node, const QString &
     QModelIndex idx = m_nodeModel.index( node );
     idx = m_nodeModel.index( idx.row(), col, idx.parent() );
     if ( ! idx.isValid() ) {
-        kDebug(planScriptingDebugArea())<<"Failed"<<node<<property<<idx;
+        debugPlanScripting<<"Failed"<<node<<property<<idx;
         return QVariant();
     }
     int r = stringToRole( role, m_nodeprogramroles.value( col ) );
@@ -412,7 +413,7 @@ QObject *Scripting::Project::findResourceGroup( const QString &id )
 
 QObject *Scripting::Project::createResourceGroup( QObject *group )
 {
-    //kDebug(planScriptingDebugArea())<<this<<group;
+    //debugPlanScripting<<this<<group;
     KPlato::ResourceGroup *g = 0;
     const ResourceGroup *gr = qobject_cast<ResourceGroup*>( group );
     if ( gr == 0 ) {
@@ -420,11 +421,11 @@ QObject *Scripting::Project::createResourceGroup( QObject *group )
     }
     KPlato::ResourceGroup *copyfrom = gr->kplatoResourceGroup();
     if ( copyfrom == 0 ) {
-        kDebug(planScriptingDebugArea())<<"Nothing to copy from";
+        debugPlanScripting<<"Nothing to copy from";
         return 0;
     }
     if ( kplatoProject()->findResourceGroup( copyfrom->id() ) ) {
-        kDebug(planScriptingDebugArea())<<"Group with id already exists";
+        debugPlanScripting<<"Group with id already exists";
         return 0;
     }
     g = new KPlato::ResourceGroup( copyfrom );
@@ -490,12 +491,12 @@ QObject *Scripting::Project::createResource( QObject *group, QObject *copy )
 {
     ResourceGroup *gr = qobject_cast<ResourceGroup*>( group );
     if ( gr == 0 ) {
-        kDebug(planScriptingDebugArea())<<"No group specified";
+        debugPlanScripting<<"No group specified";
         return 0;
     }
     KPlato::ResourceGroup *g = kplatoProject()->findResourceGroup( gr->kplatoResourceGroup()->id() );
     if ( g == 0 ) {
-        kDebug(planScriptingDebugArea())<<"Could not find group";
+        debugPlanScripting<<"Could not find group";
         return 0;
     }
     KPlato::Resource *r = 0;
@@ -505,7 +506,7 @@ QObject *Scripting::Project::createResource( QObject *group, QObject *copy )
     }
     r = kplatoProject()->findResource( rs->kplatoResource()->id() );
     if ( r ) {
-        kDebug(planScriptingDebugArea())<<"Resource already exists";
+        debugPlanScripting<<"Resource already exists";
         return 0;
     }
     r = new KPlato::Resource( rs->kplatoResource() );
@@ -523,12 +524,12 @@ QObject *Scripting::Project::createResource( QObject *group )
 {
     ResourceGroup *gr = qobject_cast<ResourceGroup*>( group );
     if ( gr == 0 ) {
-        kDebug(planScriptingDebugArea())<<"No group specified";
+        debugPlanScripting<<"No group specified";
         return 0;
     }
     KPlato::ResourceGroup *g = kplatoProject()->findResourceGroup( gr->kplatoResourceGroup()->id() );
     if ( g == 0 ) {
-        kDebug(planScriptingDebugArea())<<"Could not find group";
+        debugPlanScripting<<"Could not find group";
         return 0;
     }
     KPlato::Resource *r = new KPlato::Resource();
@@ -573,7 +574,7 @@ QVariant Scripting::Project::resourceData( const KPlato::Resource *resource, con
     QModelIndex idx = m_resourceModel.index( resource );
     idx = m_resourceModel.index( idx.row(), resourceColumnNumber( property ), idx.parent() );
     if ( ! idx.isValid() ) {
-        kDebug(planScriptingDebugArea())<<"Invalid index"<<resource;
+        debugPlanScripting<<"Invalid index"<<resource;
         return QVariant();
     }
     int r = stringToRole( role, m_resourceprogramroles.value( idx.column() ) );
@@ -628,7 +629,7 @@ void Scripting::Project::addExternalAppointment( QObject *resource, const QVaria
     if ( r == 0 ) {
         return;
     }
-    //kDebug(planScriptingDebugArea())<<id<<name<<lst;
+    //debugPlanScripting<<id<<name<<lst;
     KPlato::DateTime st = KPlato::DateTime::fromString( lst[0].toString() );
     KPlato::DateTime et = KPlato::DateTime::fromString( lst[1].toString() );
     double load = lst[2].toDouble();
@@ -676,13 +677,13 @@ QObject *Scripting::Project::calendarAt( int index )
 QObject *Scripting::Project::findCalendar( const QString &id )
 {
     KPlato::Calendar *c = kplatoProject()->calendar( id );
-    kDebug(planScriptingDebugArea())<<id<<c;
+    debugPlanScripting<<id<<c;
     return calendar( c );
 }
 
 QObject *Scripting::Project::createCalendar( QObject *copy, QObject *parent )
 {
-    kDebug(planScriptingDebugArea())<<this<<copy<<parent;
+    debugPlanScripting<<this<<copy<<parent;
     const KPlato::Calendar *copyfrom = 0;
     KPlato::Calendar *c = 0;
     if ( copy == 0 ) {
@@ -691,12 +692,12 @@ QObject *Scripting::Project::createCalendar( QObject *copy, QObject *parent )
     const Calendar *cal = qobject_cast<Calendar*>( copy );
     copyfrom = cal->kplatoCalendar();
     if ( copyfrom == 0 ) {
-        kDebug(planScriptingDebugArea())<<"Nothing to copy from";
+        debugPlanScripting<<"Nothing to copy from";
         return 0;
     }
     c = kplatoProject()->calendar( copyfrom->id() );
     if ( c ) {
-        kDebug(planScriptingDebugArea())<<"Calendar already exists";
+        debugPlanScripting<<"Calendar already exists";
         return 0;
     }
     Calendar *par = qobject_cast<Calendar*>( parent );
@@ -711,13 +712,13 @@ QObject *Scripting::Project::createCalendar( QObject *copy, QObject *parent )
     }
     m_calendarModel.insertCalendar( c, -1, p );
     Calendar *call = this->calendar( c );
-    kDebug(planScriptingDebugArea())<<call;
+    debugPlanScripting<<call;
     return call;
 }
 
 QObject *Scripting::Project::createCalendar( QObject *parent )
 {
-    kDebug(planScriptingDebugArea())<<this<<parent;
+    debugPlanScripting<<this<<parent;
     Calendar *par = qobject_cast<Calendar*>( parent );
     KPlato::Calendar *p = 0;
     if ( par ) {
@@ -750,7 +751,7 @@ QVariant Scripting::Project::calendarData(const KPlato::Calendar* calendar, cons
     if ( r < 0 ) {
         return QVariant(); // invalid role
     }
-    kDebug(planScriptingDebugArea())<<"data:"<<calendar<<property<<role<<":"<<idx<<m_calendarModel.data( idx, r );
+    debugPlanScripting<<"data:"<<calendar<<property<<role<<":"<<idx<<m_calendarModel.data( idx, r );
     return m_calendarModel.data( idx, r );
 }
 
@@ -776,7 +777,7 @@ QVariant Scripting::Project::setCalendarData( KPlato::Calendar *calendar, const 
 int Scripting::Project::calendarColumnNumber(const QString& property) const
 {
     int col = m_calendarModel.columnNumber( property );
-    kDebug(planScriptingDebugArea())<<"calendarColumnNumber:"<<property<<"="<<col;
+    debugPlanScripting<<"calendarColumnNumber:"<<property<<"="<<col;
     return col;
 }
 
@@ -809,7 +810,7 @@ QObject *Scripting::Project::accountAt( int index )
 QObject *Scripting::Project::findAccount( const QString &id )
 {
     KPlato::Account *a = kplatoProject()->accounts().findAccount( id );
-    kDebug(planScriptingDebugArea())<<id<<a;
+    debugPlanScripting<<id<<a;
     return a == 0 ? 0 : account( a );
 }
 
