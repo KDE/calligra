@@ -17,7 +17,7 @@ PUBLIC
     komain
     KF5::KrossUi
 PRIVATE
-    KF5::KDELibs4Support
+    KF5::KIOFileWidgets
 )
 
 set_target_properties(kokross PROPERTIES
