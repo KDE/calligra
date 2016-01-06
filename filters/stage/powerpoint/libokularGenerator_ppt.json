@@ -3,21 +3,37 @@
         "Authors": [
             {
                 "Email": "sven.langkamp@gmail.com", 
-                "Name": "Sven Langkamp"
+                "Name": "Sven Langkamp", 
+                "Name[x-test]": "xxSven Langkampxx"
             }, 
             {
                 "Email": "kossebau@kde.org", 
-                "Name": "Friedrich W. H. Kossebau"
+                "Name": "Friedrich W. H. Kossebau", 
+                "Name[x-test]": "xxFriedrich W. H. Kossebauxx"
             }
         ], 
         "Copyright": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
+        "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2010–2016", 
+        "Copyright[x-test]": "xxCopyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebauxx", 
         "Description": "PPT file renderer", 
+        "Description[nl]": "PPT-bestandsweergave", 
+        "Description[pt]": "Visualizador de ficheiros PPT", 
+        "Description[pt_BR]": "Renderização de arquivos PPT", 
+        "Description[sv]": "PPT-filåtergivning", 
+        "Description[uk]": "Засіб показу вмісту файлів PPT", 
+        "Description[x-test]": "xxPPT file rendererxx", 
         "Id": "okularGenerator_ppt_calligra", 
         "License": "GPL", 
         "MimeTypes": [
             "application/vnd.ms-powerpoint"
         ], 
         "Name": "PPT Backend", 
+        "Name[nl]": "PPT-backend", 
+        "Name[pt]": "Infra-Estrutura para PPT", 
+        "Name[pt_BR]": "Infraestrutura PPT", 
+        "Name[sv]": "PPT-gränssnitt", 
+        "Name[uk]": "Модуль обробки PPT", 
+        "Name[x-test]": "xxPPT Backendxx", 
         "ServiceTypes": [
             "okular/Generator"
         ], 

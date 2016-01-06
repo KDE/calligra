@@ -3,15 +3,25 @@
         "Authors": [
             {
                 "Email": "sven.langkamp@gmail.com", 
-                "Name": "Sven Langkamp"
+                "Name": "Sven Langkamp", 
+                "Name[x-test]": "xxSven Langkampxx"
             }, 
             {
                 "Email": "kossebau@kde.org", 
-                "Name": "Friedrich W. H. Kossebau"
+                "Name": "Friedrich W. H. Kossebau", 
+                "Name[x-test]": "xxFriedrich W. H. Kossebauxx"
             }
         ], 
         "Copyright": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
+        "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2012–2016", 
+        "Copyright[x-test]": "xxCopyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebauxx", 
         "Description": "OpenDocument Text file renderer", 
+        "Description[nl]": "OpenDocument tekstbestandsweergave", 
+        "Description[pt]": "Visualizador de ficheiros de Texto em OpenDocument", 
+        "Description[pt_BR]": "Renderização de arquivos de Texto OpenDocument", 
+        "Description[sv]": "OpenDocument textfilåtergivning", 
+        "Description[uk]": "Засіб показу вмісту файлів ODT", 
+        "Description[x-test]": "xxOpenDocument Text file rendererxx", 
         "Id": "okularGenerator_odt_calligra", 
         "License": "GPL", 
         "MimeTypes": [
@@ -19,6 +29,12 @@
             "application/vnd.oasis.opendocument.text-template"
         ], 
         "Name": "ODT Backend", 
+        "Name[nl]": "ODT-backend", 
+        "Name[pt]": "Infra-Estrutura para ODT", 
+        "Name[pt_BR]": "Infraestrutura ODT", 
+        "Name[sv]": "ODT-gränssnitt", 
+        "Name[uk]": "Модуль обробки ODT", 
+        "Name[x-test]": "xxODT Backendxx", 
         "ServiceTypes": [
             "okular/Generator"
         ], 

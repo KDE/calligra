@@ -3,15 +3,25 @@
         "Authors": [
             {
                 "Email": "sven.langkamp@gmail.com", 
-                "Name": "Sven Langkamp"
+                "Name": "Sven Langkamp", 
+                "Name[x-test]": "xxSven Langkampxx"
             }, 
             {
                 "Email": "kossebau@kde.org", 
-                "Name": "Friedrich W. H. Kossebau"
+                "Name": "Friedrich W. H. Kossebau", 
+                "Name[x-test]": "xxFriedrich W. H. Kossebauxx"
             }
         ], 
         "Copyright": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
+        "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2012–2016", 
+        "Copyright[x-test]": "xxCopyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebauxx", 
         "Description": "DOCX file renderer", 
+        "Description[nl]": "DOCX-bestandsweergave", 
+        "Description[pt]": "Visualizador de ficheiros DOCX", 
+        "Description[pt_BR]": "Renderização de arquivos DOCX", 
+        "Description[sv]": "DOCX-filåtergivning", 
+        "Description[uk]": "Засіб показу вмісту файлів DOCX", 
+        "Description[x-test]": "xxDOCX file rendererxx", 
         "Id": "okularGenerator_docx_calligra", 
         "License": "GPL", 
         "MimeTypes": [
@@ -19,6 +29,12 @@
             "application/vnd.openxmlformats-officedocument.wordprocessingml.template"
         ], 
         "Name": "DOCX Backend", 
+        "Name[nl]": "DOCX-backend", 
+        "Name[pt]": "Infra-Estrutura para DOCX", 
+        "Name[pt_BR]": "Infraestrutura DOCX", 
+        "Name[sv]": "DOCX-gränssnitt", 
+        "Name[uk]": "Модуль обробки DOCX", 
+        "Name[x-test]": "xxDOCX Backendxx", 
         "ServiceTypes": [
             "okular/Generator"
         ], 

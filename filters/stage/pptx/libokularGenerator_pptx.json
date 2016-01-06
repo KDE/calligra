@@ -3,15 +3,25 @@
         "Authors": [
             {
                 "Email": "sven.langkamp@gmail.com", 
-                "Name": "Sven Langkamp"
+                "Name": "Sven Langkamp", 
+                "Name[x-test]": "xxSven Langkampxx"
             }, 
             {
                 "Email": "kossebau@kde.org", 
-                "Name": "Friedrich W. H. Kossebau"
+                "Name": "Friedrich W. H. Kossebau", 
+                "Name[x-test]": "xxFriedrich W. H. Kossebauxx"
             }
         ], 
         "Copyright": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
+        "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2010–2016", 
+        "Copyright[x-test]": "xxCopyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebauxx", 
         "Description": "PPTX file renderer", 
+        "Description[nl]": "PPTX-bestandsweergave", 
+        "Description[pt]": "Visualizador de ficheiros PPTX", 
+        "Description[pt_BR]": "Renderização de arquivos PPTX", 
+        "Description[sv]": "PPTX-filåtergivning", 
+        "Description[uk]": "Засіб показу вмісту файлів PPTX", 
+        "Description[x-test]": "xxPPTX file rendererxx", 
         "Id": "okularGenerator_pptx_calligra", 
         "License": "GPL", 
         "MimeTypes": [
@@ -19,6 +29,12 @@
             "application/vnd.openxmlformats-officedocument.presentationml.template"
         ], 
         "Name": "PPTX Backend", 
+        "Name[nl]": "PPTX-backend", 
+        "Name[pt]": "Infra-Estrutura para PPTX", 
+        "Name[pt_BR]": "Infraestrutura PPTX", 
+        "Name[sv]": "PPTX-gränssnitt", 
+        "Name[uk]": "Модуль обробки PPTX", 
+        "Name[x-test]": "xxPPTX Backendxx", 
         "ServiceTypes": [
             "okular/Generator"
         ], 

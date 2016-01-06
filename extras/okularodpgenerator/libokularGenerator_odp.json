@@ -3,15 +3,25 @@
         "Authors": [
             {
                 "Email": "sven.langkamp@gmail.com", 
-                "Name": "Sven Langkamp"
+                "Name": "Sven Langkamp", 
+                "Name[x-test]": "xxSven Langkampxx"
             }, 
             {
                 "Email": "kossebau@kde.org", 
-                "Name": "Friedrich W. H. Kossebau"
+                "Name": "Friedrich W. H. Kossebau", 
+                "Name[x-test]": "xxFriedrich W. H. Kossebauxx"
             }
         ], 
         "Copyright": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
+        "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2010–2016", 
+        "Copyright[x-test]": "xxCopyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebauxx", 
         "Description": "OpenDocument Presentation file renderer", 
+        "Description[nl]": "OpenDocument presentatiebestandsweergave", 
+        "Description[pt]": "Visualizador de ficheiros de Apresentações em OpenDocument", 
+        "Description[pt_BR]": "Renderização de arquivos de Apresentação OpenDocument", 
+        "Description[sv]": "OpenDocument presentationsfilåtergivning", 
+        "Description[uk]": "Засіб показу вмісту файлів ODP", 
+        "Description[x-test]": "xxOpenDocument Presentation file rendererxx", 
         "Id": "okularGenerator_odp_calligra", 
         "License": "GPL", 
         "MimeTypes": [
@@ -19,6 +29,12 @@
             "application/vnd.oasis.opendocument.presentation-template"
         ], 
         "Name": "ODP Backend", 
+        "Name[nl]": "ODP-backend", 
+        "Name[pt]": "Infra-Estrutura para ODP", 
+        "Name[pt_BR]": "Infraestrutura ODP", 
+        "Name[sv]": "ODP-gränssnitt", 
+        "Name[uk]": "Модуль обробки ODP", 
+        "Name[x-test]": "xxODP Backendxx", 
         "ServiceTypes": [
             "okular/Generator"
         ], 
