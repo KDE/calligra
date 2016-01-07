@@ -15,6 +15,7 @@
   <name xml:lang="et">Karbon</name>
   <name xml:lang="fi">Karbon</name>
   <name xml:lang="fr">Karbon</name>
+  <name xml:lang="gl">Karbon</name>
   <name xml:lang="ia">Karbon</name>
   <name xml:lang="it">Karbon</name>
   <name xml:lang="ja">Karbon</name>
@@ -38,6 +39,7 @@
   <summary xml:lang="et">Vektorgraafika</summary>
   <summary xml:lang="fi">Skaalautuva grafiikka</summary>
   <summary xml:lang="fr">Graphisme vectoriel</summary>
+  <summary xml:lang="gl">Editor de imaxes vectoriais</summary>
   <summary xml:lang="ia">Graphicos scalabile</summary>
   <summary xml:lang="it">Grafica scalabile</summary>
   <summary xml:lang="ja">画像の寸法</summary>
@@ -85,6 +87,7 @@
     <p xml:lang="et">Omadused:</p>
     <p xml:lang="fi">Ominaisuuksia:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
+    <p xml:lang="gl">Funcionalidades:</p>
     <p xml:lang="ia">Characteristicas</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="ja">機能:</p>
@@ -110,6 +113,7 @@
       <li xml:lang="et">ODG, SVG, WPG, WMF, EPS/PS laadimise toetamine</li>
       <li xml:lang="fi">Lukutuki ODG-, SVG-, WPG-, WMF- ja EPS/PS-muodoista</li>
       <li xml:lang="fr">Lecture des formats ODG, SVG, WPG, WMF, EPS/PS</li>
+      <li xml:lang="gl">Capacidade para cargar ODG, SVG, WPG, WMF e EPS/PS.</li>
       <li xml:lang="ia">Cargante supporto pro ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="it">Supporto per il caricamento di ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="ja">読み込み可能な形式: ODG, SVG, WPG, WMF, EPS/PS</li>
@@ -134,6 +138,7 @@
       <li xml:lang="et">ODG, SVG, PNG, PDF, WMF kirjutamine toetamine</li>
       <li xml:lang="fi">Kirjoitustuki ODG-, SVG-, PNG-, PDF- ja WMF-muotoihin</li>
       <li xml:lang="fr">Écriture des formats ODG, SVG, PNG, PDF, WMF</li>
+      <li xml:lang="gl">Capacidade de xeración de ODG, SVG, PNG, PDF e WMF.</li>
       <li xml:lang="ia">Supporto de scriber pro ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="it">Supporto per la scrittura di ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="ja">書き込み可能な形式: ODG, SVG, PNG, PDF, WMF</li>
@@ -158,6 +163,7 @@
       <li xml:lang="et">Kohandatav kasutajaliides vabalt liigutatavate tööriistaribade ja dokkidega</li>
       <li xml:lang="fi">Mukautettava käyttöliittymä, jonka työkalurivit ja telakat ovat vapaasti sijoitettavissa</li>
       <li xml:lang="fr">Interface utilisateur personnalisable avec des barres d'outil librement déplaçables.</li>
+      <li xml:lang="gl">Interface de usuario personalizábel con barras de ferramentas e docas que poden recolocarse libremente.</li>
       <li xml:lang="ia">Interfacie de usator personalisabile con barra de instrumentos e stivatores (dockers) liberemente positionabile</li>
       <li xml:lang="it">Interfaccia utente personalizzabile con barre degli strumenti posizionabili liberamente e aree di aggancio</li>
       <li xml:lang="nl">Aan te passen gebruikersinterface met vrij te plaatsen werkbalken en verankeringen</li>
@@ -202,6 +208,7 @@
       <li xml:lang="et">Täiustatud kompleksjoone muutmise tööriist suurepäraste otse lõuendil redigeerimise võimalustega</li>
       <li xml:lang="fi">Edistynyt polunmuokkaustyökalu, jolla on erinomaiset muokkausominaisuudet</li>
       <li xml:lang="fr">Outil d'édition de chemin avancé avec des capacités d'édition dans les canevas performantes</li>
+      <li xml:lang="gl">Ferramenta avanzada de edición de camiños cunha gran funcionalidade de edición sobre o lenzo.</li>
       <li xml:lang="it">Strumento avanzato di modifica di tracciati con grandi capacità di modifica sul posto</li>
       <li xml:lang="nl">Geavanceerde padbewerkingsgereedschap met prima bewerkingsmiddelen op het werkblad</li>
       <li xml:lang="pl">Zaawansowane narzędzia edytowania ścieżki z szerokimi możliwościami edytowania na płótnie</li>
@@ -348,6 +355,7 @@
       <li xml:lang="et">Laiendamisvõimalus pluginate kirjutamise abil uute tööriistade, kujundite ja dokkide tarbeks</li>
       <li xml:lang="fi">Laajennettavissa kirjoittamalla liitännäisiä uusille työkaluille, muodoille ja telakoille</li>
       <li xml:lang="fr">Extensible par l'écriture de modules pour de nouveaux outils, formes et conteneurs</li>
+      <li xml:lang="gl">Permite ampliar as súas funcionalidades mediante complementos de ferramentas novas, de formas e de docas.</li>
       <li xml:lang="it">Espandibile tramite la scrittura di estensioni per nuovi strumenti, forme e aree di aggancio</li>
       <li xml:lang="nl">Uit te breiden dor het schrijven van plug-ins voor nieuwe hulpmiddelen, vormen en verankering</li>
       <li xml:lang="pl">Rozszerzalne wtyczki zapisu dla nowych narzędzi, kształtów i dokowań</li>

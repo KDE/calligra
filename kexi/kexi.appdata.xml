@@ -15,6 +15,7 @@
   <name xml:lang="et">Kexi</name>
   <name xml:lang="fi">Kexi</name>
   <name xml:lang="fr">Kexi</name>
+  <name xml:lang="gl">Kexi</name>
   <name xml:lang="ia">Kexi</name>
   <name xml:lang="it">Kexi</name>
   <name xml:lang="ja">Kexi</name>
@@ -39,6 +40,7 @@
   <summary xml:lang="et">Andmebaaside imelihtne loomine</summary>
   <summary xml:lang="fi">Tietokantojen luonti</summary>
   <summary xml:lang="fr">Créateur de base de données</summary>
+  <summary xml:lang="gl">Editor de bases da datos</summary>
   <summary xml:lang="ia">Creator de base de datos</summary>
   <summary xml:lang="it">Creazione di basi di dati</summary>
   <summary xml:lang="ja">データベース作成</summary>
@@ -89,6 +91,7 @@
     <p xml:lang="et">Omadused:</p>
     <p xml:lang="fi">Ominaisuuksia:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
+    <p xml:lang="gl">Funcionalidades:</p>
     <p xml:lang="ia">Characteristicas</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="ja">機能:</p>
@@ -112,6 +115,7 @@
       <li xml:lang="et">Tabelite, päringute, vormide ja aruannete täielikult visuaalne kujundamine</li>
       <li xml:lang="fi">Täysin visuaalinen taulukoiden, kyselyjen, lomakkeiden ja raporttien suunnittelu</li>
       <li xml:lang="fr">Conception complètement visuelle pour les tables, requêtes, formulaires et rapports</li>
+      <li xml:lang="gl">Deseñadores completamente visuais para táboas, consultas, formularios e informes.</li>
       <li xml:lang="it">Progettazione completamente visuale di tabelle, query e report</li>
       <li xml:lang="ja">テーブル、クエリー、フォームおよびレポートをすべて視覚的にでデザインできます</li>
       <li xml:lang="nb">Fullstendig visuell utforming for tabeller, spøøringer, skjemaer og rapporter</li>
@@ -134,6 +138,7 @@
       <li xml:lang="et">Päringute sooritamine, parameetritega päringute toetamine</li>
       <li xml:lang="fi">Kyselyjen suoritus ja parametroitavien kyselyjen tuki</li>
       <li xml:lang="fr">Exécution de requêtes, prise en charge des requêtes paramétrées</li>
+      <li xml:lang="gl">Execución de consultas, e funcionalidade de consultas parametrizadas.</li>
       <li xml:lang="it">Esecuzione di query, supporto per le query parametriche</li>
       <li xml:lang="ja">クエリーの実行、パラメータ化クエリーのサポート</li>
       <li xml:lang="nb">Kjøre spørriner, støtte for parametriserte spørringer</li>
@@ -219,6 +224,7 @@
       <li xml:lang="et">Relatsiooniliste andmete kujundamine ja kuvamine liitkastide abil (päringuveerud)</li>
       <li xml:lang="fi">Relaatiotiedon suunnittelu ja näyttö yhdistelmäkenttiä käyttäen (hakusarakkeet)</li>
       <li xml:lang="fr">Conception et affichage de données relationnelles à l'aide de listes déroulantes (colonnes de consultation)</li>
+      <li xml:lang="gl">Deseño e mostra de datos relacionais mediante caixas despregábeis (columnas de busca).</li>
       <li xml:lang="it">Progettazione e visualizzazione dei dati relazionali utilizzando caselle combinate (colonne di ricerca)</li>
       <li xml:lang="ja">コンボボックスを使用した関係データのデザインと表示(参照列)</li>
       <li xml:lang="nb">Utforming og visning av relasjonsdata vhja kombo-bokser (oppslagskolonner)</li>
@@ -241,6 +247,7 @@
       <li xml:lang="et">Otsene andmete sisestamine või importimine CSV-vormingus</li>
       <li xml:lang="fi">Suora tiedon syöttö tai tuonti CSV-muodossa</li>
       <li xml:lang="fr">Saisie directe de données ou import utilisant le format CSV</li>
+      <li xml:lang="gl">Introdución directa de datos ou importación en formato CSV.</li>
       <li xml:lang="it">Inserimento diretto dei dati o importazione utilizzando il formato CSV</li>
       <li xml:lang="ja">CSV を使用したダイレクトデータの入力もしくはインポート</li>
       <li xml:lang="nb">Direkte datainnskriving eller import med CSV-format</li>
@@ -262,6 +269,7 @@
       <li xml:lang="et">Piiratud õigustega kasutajarežiim, mis võimaldab lülitada välja kõik projekti kujunduse muutmisega seotud käsud</li>
       <li xml:lang="fi">Lukittu käyttäjätila, jossa voit poistaa käytöstä projektin suunnitteluun liittyvät komennot</li>
       <li xml:lang="fr">Mode utilisateur verrouillé, vous permettant de désactiver toutes les commandes liées à la modification de la conception de votre projet</li>
+      <li xml:lang="gl">Modo de usuario bloqueado, que permite desactivar todas as ordes de edición do deseño do proxecto.</li>
       <li xml:lang="it">Modalità utente bloccata, che ti consente di disattivare tutti i comandi in grado di modificare la struttura del tuo progetto.</li>
       <li xml:lang="ja">プロジェクトデザインの編集スイッチをオフにする事でユーザモードへのロックダウンが可能</li>
       <li xml:lang="nb">Låst brukermodus, slik at du kan slå av alle kommandoer som gjelder endring av prosjektets utforming</li>
@@ -284,6 +292,7 @@
       <li xml:lang="et">Skriptimisvõimalused JavaScripti, Pythoni või Ruby programmeerimiskeeles (eksperimentaalne)</li>
       <li xml:lang="fi">Skriptaus JavaScript-, Python- tai Ruby-ohjelmointikielillä (kokeellinen)</li>
       <li xml:lang="fr">Pilotage par scripts utilisant les les langages JavaScript, Python ou Ruby (expérimental)</li>
+      <li xml:lang="gl">Uso de scripts nas linguaxes de programación JavaScript, Python e Ruby (experimental).</li>
       <li xml:lang="it">Creazione script utilizzando i linguaggi di programmazione JavaScript, Python o Ruby (sperimentale)</li>
       <li xml:lang="ja">JavaScript, Python や Ruby を使用してのスクリプティング(実験的)</li>
       <li xml:lang="nb">Skripting ved bruk av JavaScript, Python eller Ruby programmeringsspråk (eksperimentelt)</li>
@@ -316,6 +325,7 @@
       <caption xml:lang="et">Tabelivaates piltide salvestamise võimalus</caption>
       <caption xml:lang="fi">Kuvien tallennus taulukkonäkymään</caption>
       <caption xml:lang="fr">Affichage de tables stockant des images</caption>
+      <caption xml:lang="gl">Vista de táboa que almacena imaxes.</caption>
       <caption xml:lang="it">Vista tabella per archiviare immagini</caption>
       <caption xml:lang="ja">イメージを格納するテーブルビュー</caption>
       <caption xml:lang="nb">Tabellvisning som lagrer bilder</caption>
@@ -341,6 +351,7 @@
       <caption xml:lang="et">Vormikujundaja</caption>
       <caption xml:lang="fi">Lomakkeiden suunnittelu</caption>
       <caption xml:lang="fr">Concepteur de formulaires</caption>
+      <caption xml:lang="gl">Deseñador de formularios</caption>
       <caption xml:lang="it">Progettazione moduli</caption>
       <caption xml:lang="ja">フォームデザイナー</caption>
       <caption xml:lang="nb">Skjemautformer</caption>
