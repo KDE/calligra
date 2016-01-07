@@ -13,9 +13,11 @@
             }
         ], 
         "Copyright": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
+        "Copyright[gl]": "© 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
         "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2012–2016", 
         "Copyright[x-test]": "xxCopyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebauxx", 
         "Description": "DOC file renderer", 
+        "Description[gl]": "Renderizador de ficheiros DOC", 
         "Description[nl]": "DOC-bestandsweergave", 
         "Description[pt]": "Visualizador de ficheiros DOC", 
         "Description[pt_BR]": "Renderização de arquivos DOC", 
@@ -28,6 +30,7 @@
             "application/msword"
         ], 
         "Name": "DOC Backend", 
+        "Name[gl]": "Infraestrutura de DOC", 
         "Name[nl]": "DOC-backend", 
         "Name[pt]": "Infra-Estrutura para DOC", 
         "Name[pt_BR]": "Infraestrutura DOC", 

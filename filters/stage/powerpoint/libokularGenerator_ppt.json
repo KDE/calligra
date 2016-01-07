@@ -13,9 +13,11 @@
             }
         ], 
         "Copyright": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
+        "Copyright[gl]": "© 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
         "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2010–2016", 
         "Copyright[x-test]": "xxCopyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebauxx", 
         "Description": "PPT file renderer", 
+        "Description[gl]": "Renderizador de ficheiros PPT", 
         "Description[nl]": "PPT-bestandsweergave", 
         "Description[pt]": "Visualizador de ficheiros PPT", 
         "Description[pt_BR]": "Renderização de arquivos PPT", 
@@ -28,6 +30,7 @@
             "application/vnd.ms-powerpoint"
         ], 
         "Name": "PPT Backend", 
+        "Name[gl]": "Infraestrutura de PPT", 
         "Name[nl]": "PPT-backend", 
         "Name[pt]": "Infra-Estrutura para PPT", 
         "Name[pt_BR]": "Infraestrutura PPT", 

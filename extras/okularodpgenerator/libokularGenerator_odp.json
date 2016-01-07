@@ -13,9 +13,11 @@
             }
         ], 
         "Copyright": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
+        "Copyright[gl]": "© 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
         "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2010–2016", 
         "Copyright[x-test]": "xxCopyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebauxx", 
         "Description": "OpenDocument Presentation file renderer", 
+        "Description[gl]": "Renderizador de ficheiros de presentación de OpenDocument", 
         "Description[nl]": "OpenDocument presentatiebestandsweergave", 
         "Description[pt]": "Visualizador de ficheiros de Apresentações em OpenDocument", 
         "Description[pt_BR]": "Renderização de arquivos de Apresentação OpenDocument", 
@@ -29,6 +31,7 @@
             "application/vnd.oasis.opendocument.presentation-template"
         ], 
         "Name": "ODP Backend", 
+        "Name[gl]": "Infraestrutura ODP", 
         "Name[nl]": "ODP-backend", 
         "Name[pt]": "Infra-Estrutura para ODP", 
         "Name[pt_BR]": "Infraestrutura ODP", 

@@ -13,9 +13,11 @@
             }
         ], 
         "Copyright": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
+        "Copyright[gl]": "© 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
         "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2012–2016", 
         "Copyright[x-test]": "xxCopyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebauxx", 
         "Description": "OpenDocument Text file renderer", 
+        "Description[gl]": "Renderizador de ficheiros de texto de OpenDocument", 
         "Description[nl]": "OpenDocument tekstbestandsweergave", 
         "Description[pt]": "Visualizador de ficheiros de Texto em OpenDocument", 
         "Description[pt_BR]": "Renderização de arquivos de Texto OpenDocument", 
@@ -29,6 +31,7 @@
             "application/vnd.oasis.opendocument.text-template"
         ], 
         "Name": "ODT Backend", 
+        "Name[gl]": "Infraestrutura de ODT", 
         "Name[nl]": "ODT-backend", 
         "Name[pt]": "Infra-Estrutura para ODT", 
         "Name[pt_BR]": "Infraestrutura ODT", 
