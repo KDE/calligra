@@ -45,6 +45,7 @@
 #include "MsooXmlContentTypes.h"
 #include "MsooXmlSchemas.h"
 #include "MsooXmlReader.h"
+#include "MsooXmlDebug.h"
 
 #include "ooxml_pole.h"
 
@@ -55,6 +56,7 @@
 #include <KoUnit.h>
 
 #include <klocalizedstring.h>
+#include <kzip.h>
 
 #include <QGlobalStatic>
 #include <QDomDocument>
@@ -64,10 +66,7 @@
 #include <QImageReader>
 #include <QPalette>
 #include <QRegExp>
-#include <QtXml>
 
-#include "MsooXmlDebug.h"
-#include <kzip.h>
 
 #include <memory>
 

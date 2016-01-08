@@ -18,12 +18,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QDebug>
-
-#include <QAction>
-
 #include "KoToolBase.h"
 #include "KoToolBase_p.h"
+
 #include "KoCanvasBase.h"
 #include "KoPointerEvent.h"
 #include "KoDocumentResourceManager.h"
@@ -35,6 +32,8 @@
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
+
+#include <QAction>
 #include <QWidget>
 #include <QFile>
 #include <QDomDocument>
