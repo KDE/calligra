@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef LINKLAYER_H
-#define LINKLAYER_H
+#ifndef LINKAREA_H
+#define LINKAREA_H
 
 #include <QtQuick/QQuickItem>
 
@@ -65,4 +65,4 @@ private:
 };
 } // Namespace Components
 } // Namespace Calligra
-#endif // LINKLAYER_H
+#endif // LINKAREA_H
