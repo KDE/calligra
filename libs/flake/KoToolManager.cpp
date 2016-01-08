@@ -187,7 +187,7 @@ public:
                 }
                 foreach(QAction *a, canvasActionCollection->actions()) {
                     QAction *canvasAction = dynamic_cast<QAction*>(a);
-                    if (canvasAction && canvasAction->shortcut().toString() != "" && canvasAction->shortcut() == toolAction->shortcut()) {
+                    if (canvasAction && !canvasAction->shortcut().toString().isEmpty() && canvasAction->shortcut() == toolAction->shortcut()) {
                         warnFlake << activeToolId << ": action" << toolActionID << "conflicts with canvas action" << canvasAction->objectName() << "shortcut:" << canvasAction->shortcut().toString();
                         disabledCanvasShortcuts[canvasAction] = canvasAction->shortcut().toString();
                         canvasAction->setShortcut(QKeySequence());
