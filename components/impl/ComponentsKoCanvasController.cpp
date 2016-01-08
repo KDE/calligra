@@ -53,10 +53,12 @@ ComponentsKoCanvasController::~ComponentsKoCanvasController()
 
 void ComponentsKoCanvasController::setVastScrolling(qreal factor)
 {
+    Q_UNUSED(factor)
 }
 
 void ComponentsKoCanvasController::setZoomWithWheel(bool zoom)
 {
+    Q_UNUSED(zoom)
 }
 
 void ComponentsKoCanvasController::updateDocumentSize(const QSize& sz, bool recalculateCenter)
@@ -92,6 +94,7 @@ QPointF ComponentsKoCanvasController::preferredCenter() const
 
 void ComponentsKoCanvasController::setPreferredCenter(const QPointF& viewPoint)
 {
+    Q_UNUSED(viewPoint)
 }
 
 void ComponentsKoCanvasController::recenterPreferred()
@@ -100,26 +103,34 @@ void ComponentsKoCanvasController::recenterPreferred()
 
 void ComponentsKoCanvasController::zoomTo(const QRect& rect)
 {
+    Q_UNUSED(rect)
 }
 
 void ComponentsKoCanvasController::zoomBy(const QPoint& center, qreal zoom)
 {
+    Q_UNUSED(center)
+    Q_UNUSED(zoom)
 }
 
 void ComponentsKoCanvasController::zoomOut(const QPoint& center)
 {
+    Q_UNUSED(center)
 }
 
 void ComponentsKoCanvasController::zoomIn(const QPoint& center)
 {
+    Q_UNUSED(center)
 }
 
 void ComponentsKoCanvasController::ensureVisible(KoShape* shape)
 {
+    Q_UNUSED(shape)
 }
 
 void ComponentsKoCanvasController::ensureVisible(const QRectF& rect, bool smooth)
 {
+    Q_UNUSED(rect)
+    Q_UNUSED(smooth)
 }
 
 int ComponentsKoCanvasController::canvasOffsetY() const
@@ -156,6 +167,7 @@ void ComponentsKoCanvasController::setCanvas(KoCanvasBase* canvas)
 
 void ComponentsKoCanvasController::setDrawShadow(bool drawShadow)
 {
+    Q_UNUSED(drawShadow)
 }
 
 QSize ComponentsKoCanvasController::viewportSize() const
@@ -166,6 +178,8 @@ QSize ComponentsKoCanvasController::viewportSize() const
 
 void ComponentsKoCanvasController::scrollContentsBy(int dx, int dy)
 {
+    Q_UNUSED(dx)
+    Q_UNUSED(dy)
 }
 
 QSize ComponentsKoCanvasController::documentSize()

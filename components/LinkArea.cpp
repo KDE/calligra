@@ -103,6 +103,7 @@ void LinkArea::mouseReleaseEvent(QMouseEvent* event)
 
 void LinkArea::mouseDoubleClickEvent(QMouseEvent* event)
 {
+    Q_UNUSED(event);
     emit doubleClicked();
 }
 
