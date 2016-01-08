@@ -23,7 +23,6 @@
 #include "kptnode.h"
 
 #include <QLineEdit>
-#include <QLocale>
 #include <QDoubleValidator>
 #include <QKeyEvent>
 #include <QLocale>

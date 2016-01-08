@@ -41,7 +41,6 @@
 #include <QStyle>
 #include <QToolButton>
 #include <QDoubleValidator>
-#include <QFontDatabase>
 #include <qdrawutil.h>
 
 
