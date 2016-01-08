@@ -40,6 +40,17 @@
 namespace KPlato
 {
 
+// convert horizontal alignment from KGantt::StyleOptionGanttItem to Qt
+// assuming only Left/Center/Right are used
+static Qt::Alignment qAlignment( KGantt::StyleOptionGanttItem::Position kganttPosition)
+{
+    return
+        (kganttPosition == KGantt::StyleOptionGanttItem::Left)  ? Qt::AlignLeft :
+        (kganttPosition == KGantt::StyleOptionGanttItem::Right) ? Qt::AlignRight :
+        /*                 KGantt::StyleOptionGanttItem::Center*/ Qt::AlignCenter;
+}
+
+
 GanttItemDelegate::GanttItemDelegate( QObject *parent )
     : KGantt::ItemDelegate( parent ),
     showResources( false ),
@@ -556,12 +567,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt::StyleOp
                 }
                 painter->restore();
             }
-            Qt::Alignment ta;
-            switch( opt.displayPosition ) {
-            case KGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
-            case KGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
-            case KGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
-            }
+            const Qt::Alignment ta = qAlignment( opt.displayPosition );
             painter->drawText( textRect, ta, txt );
         }
         break;
@@ -588,12 +594,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt::StyleOp
             painter->translate( 0.5, 0.5 );
             painter->drawPath( path );
             painter->restore();
-            Qt::Alignment ta;
-            switch( opt.displayPosition ) {
-            case KGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
-            case KGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
-            case KGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
-            }
+            const Qt::Alignment ta = qAlignment( opt.displayPosition );
             painter->drawText( textRect, ta | Qt::AlignVCenter, txt );
         }
         break;
@@ -703,12 +704,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt::StyleOp
                 painter->restore();
             }
 
-            Qt::Alignment ta;
-            switch( opt.displayPosition ) {
-            case KGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
-            case KGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
-            case KGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
-            }
+            const Qt::Alignment ta = qAlignment( opt.displayPosition );
             painter->drawText( textRect, ta | Qt::AlignVCenter, txt );
         }
         break;
@@ -885,12 +881,7 @@ void ResourceGanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt:
             painter->translate( 0.5, 0.5 );
             painter->drawRect( r );
             painter->restore();
-            Qt::Alignment ta;
-            switch( opt.displayPosition ) {
-            case KGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
-            case KGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
-            case KGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
-            }
+            const Qt::Alignment ta = qAlignment( opt.displayPosition );
             painter->drawText( boundingRect, ta, txt );
         }
         break;
@@ -917,12 +908,7 @@ void ResourceGanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt:
             painter->translate( 0.5, 0.5 );
             painter->drawPath( path );
             painter->restore();
-            Qt::Alignment ta;
-            switch( opt.displayPosition ) {
-            case KGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
-            case KGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
-            case KGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
-            }
+            const Qt::Alignment ta = qAlignment( opt.displayPosition );
             painter->drawText( boundingRect, ta | Qt::AlignVCenter, txt );
         }
         break;
@@ -942,12 +928,7 @@ void ResourceGanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt:
             painter->translate( 0.5, 0.5 );
             painter->drawPath( path );
             painter->restore();
-            Qt::Alignment ta;
-            switch( opt.displayPosition ) {
-            case KGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
-            case KGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
-            case KGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
-            }
+            const Qt::Alignment ta = qAlignment( opt.displayPosition );
             painter->drawText( boundingRect, ta | Qt::AlignVCenter, txt );
         }
         break;
@@ -1006,12 +987,7 @@ void ResourceGanttItemDelegate::paintResourceItem( QPainter* painter, const KGan
     }
 
     painter->restore();
-    Qt::Alignment ta;
-    switch( opt.displayPosition ) {
-    case KGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
-    case KGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
-    case KGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
-    }
+    const Qt::Alignment ta = qAlignment( opt.displayPosition );
     painter->drawText( boundingRect, ta, opt.text );
 }
 
