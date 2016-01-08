@@ -122,7 +122,7 @@ QVariant TextContentsModelImpl::data(int index, Calligra::Components::ContentsMo
 
     switch(role) {
         case ContentsModel::TitleRole:
-            return QString(i18n("Page %1")).arg(page.pageNumber());
+            return i18n("Page %1", page.pageNumber());
         case ContentsModel::LevelRole:
             return 0;
         case ContentsModel::ThumbnailRole: {

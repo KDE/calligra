@@ -1865,7 +1865,7 @@ void View::calcStatusBarOp()
             break;
         }
         if ((range.columns() > 1) || (range.rows() > 1)) {
-            QString size = i18n("%1x%2").arg(range.columns()).arg(range.rows());
+            QString size = i18n("%1x%2", range.columns(), range.rows());
             prefix = prefix.size() ? size + ", " + prefix : size;
         }
     }
