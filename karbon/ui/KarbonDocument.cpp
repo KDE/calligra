@@ -741,7 +741,7 @@ QMap<QString, KoDataCenterBase*> KarbonDocument::dataCenterMap() const
     return d->dataCenterMap;
 }
 
-void KarbonDocument::useExternalDataCenterMap(QMap<QString, KoDataCenterBase*> dataCenters)
+void KarbonDocument::useExternalDataCenterMap(const QMap<QString, KoDataCenterBase*> &dataCenters)
 {
     qDeleteAll(d->dataCenterMap);
     d->dataCenterMap = dataCenters;

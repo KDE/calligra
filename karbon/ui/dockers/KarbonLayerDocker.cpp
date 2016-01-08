@@ -397,7 +397,7 @@ void KarbonLayerDocker::lowerItem()
     }
 }
 
-void KarbonLayerDocker::selectLayers(QList<KoShapeLayer*> layers)
+void KarbonLayerDocker::selectLayers(const QList<KoShapeLayer*> &layers)
 {
     QItemSelectionModel * selModel = m_layerView->selectionModel();
     selModel->clearSelection();
