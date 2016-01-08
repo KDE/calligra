@@ -47,7 +47,7 @@ set(CALLIGRA_VERSION_RELEASE 89)     # 89 for Alpha, increase for next test rele
 set(CALLIGRA_ALPHA 1) # uncomment only for Alpha
 #set(CALLIGRA_BETA 1) # uncomment only for Beta
 #set(CALLIGRA_RC 1) # uncomment only for RC
-set(CALLIGRA_YEAR 2015) # update every year
+set(CALLIGRA_YEAR 2016) # update every year
 
 if(NOT DEFINED CALLIGRA_ALPHA AND NOT DEFINED CALLIGRA_BETA AND NOT DEFINED CALLIGRA_RC)
     set(CALLIGRA_STABLE 1) # do not edit
