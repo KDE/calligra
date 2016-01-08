@@ -40,7 +40,7 @@ KAboutData * newAboutData()
         QStringLiteral(CALLIGRA_VERSION_STRING),
         i18n("PlanWork - Work Package handler for the Plan Project Planning Tool"),
         KAboutLicense::GPL,
-        i18n("Copyright 1998-%1, The Plan Team").arg(QStringLiteral(CALLIGRA_YEAR)),
+        i18n("Copyright 1998-%1, The Plan Team", QStringLiteral(CALLIGRA_YEAR)),
         QString(),
         QStringLiteral("https://www.calligra.org/plan/"));
 

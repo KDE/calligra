@@ -178,7 +178,7 @@ int main( int argc, char **argv )
                          QStringLiteral(CALLIGRA_VERSION_STRING),
                          i18n("Calligra Document Opener"),
                          KAboutLicense::GPL,
-                         i18n("Copyright 2010-%1 Calligra developers").arg(CALLIGRA_YEAR));
+                         i18n("Copyright 2010-%1 Calligra developers", QStringLiteral(CALLIGRA_YEAR)));
     aboutData.addAuthor(i18n("Jarosław Staniek"), QString(), "staniek@kde.org");
 
     QApplication app(argc, argv);

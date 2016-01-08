@@ -34,7 +34,7 @@ KAboutData * newKPresenterAboutData()
         QStringLiteral(CALLIGRA_VERSION_STRING),
         i18n("Calligra Presentation Tool"),
         KAboutLicense::LGPL,
-        i18n("Copyright 1998-%1, The Stage Team").arg(QStringLiteral(CALLIGRA_YEAR)),
+        i18n("Copyright 1998-%1, The Stage Team", QStringLiteral(CALLIGRA_YEAR)),
         QString(),
         QStringLiteral("https://www.calligra.org/stage/"));
     aboutData->setProductName("calligrastage"); // for bugs.kde.org

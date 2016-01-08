@@ -34,7 +34,7 @@ KAboutData * newAuthorAboutData()
         QStringLiteral(CALLIGRA_VERSION_STRING),
         i18n("Author tool"),
         KAboutLicense::LGPL,
-        i18n("Copyright 2012-%1, The Author Team").arg(QStringLiteral(CALLIGRA_YEAR)),
+        i18n("Copyright 2012-%1, The Author Team", QStringLiteral(CALLIGRA_YEAR)),
         QString(),
         QStringLiteral("https://www.calligra.org/author/"));
     aboutData->setProductName("calligraauthor"); // for bugs.kde.org

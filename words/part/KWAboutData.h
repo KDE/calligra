@@ -33,7 +33,7 @@ KAboutData * newWordsAboutData()
         QStringLiteral(CALLIGRA_VERSION_STRING),
         i18n("Word processor"),
         KAboutLicense::LGPL,
-        i18n("Copyright 1998-%1, The Words Team").arg(QStringLiteral(CALLIGRA_YEAR)),
+        i18n("Copyright 1998-%1, The Words Team", QStringLiteral(CALLIGRA_YEAR)),
         QString(),
         QStringLiteral("https://www.calligra.org/words/"));
     aboutData->setProductName("calligrawords"); // for bugs.kde.org

@@ -49,7 +49,7 @@ int main( int argc, char** argv )
                          QStringLiteral(CALLIGRA_VERSION_STRING),
                          i18n("Calligra Gemini: Writing and Presenting at Home and on the Go"),
                          KAboutLicense::GPL,
-                         i18n("(c) 1999-%1 The Calligra team and KO GmbH.\n").arg(CALLIGRA_YEAR),
+                         i18n("(c) 1999-%1 The Calligra team and KO GmbH.\n", QStringLiteral(CALLIGRA_YEAR)),
                          QString(),
                          QStringLiteral("https://www.calligra.org"),
                          QStringLiteral("submit@bugs.kde.org"));
