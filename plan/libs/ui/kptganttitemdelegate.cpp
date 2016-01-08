@@ -884,7 +884,6 @@ void ResourceGanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt:
             }
             painter->translate( 0.5, 0.5 );
             painter->drawRect( r );
-            QModelIndex ix = idx.model()->index( idx.row(), ResourceAppointmentsRowModel::Load, idx.parent() );
             painter->restore();
             Qt::Alignment ta;
             switch( opt.displayPosition ) {
