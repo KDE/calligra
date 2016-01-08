@@ -32,7 +32,7 @@ namespace Components {
 class PresentationContentsModelImpl : public ContentsModelImpl
 {
 public:
-    PresentationContentsModelImpl(KoDocument* document);
+    explicit PresentationContentsModelImpl(KoDocument* document);
     ~PresentationContentsModelImpl();
 
     virtual int rowCount() const Q_DECL_OVERRIDE;

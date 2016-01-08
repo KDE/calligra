@@ -39,7 +39,7 @@ class Global : public QObject
 {
     Q_OBJECT
 public:
-    Global(QObject* parent = 0);
+    explicit Global(QObject* parent = 0);
 
     static Q_INVOKABLE void loadPlugins();
     static Q_INVOKABLE int documentType(const QUrl& document);

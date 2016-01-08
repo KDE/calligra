@@ -35,7 +35,7 @@ class QPainterPath;
 class FLAKE_EXPORT KoSnapStrategy
 {
 public:
-    KoSnapStrategy(KoSnapGuide::Strategy type);
+    explicit KoSnapStrategy(KoSnapGuide::Strategy type);
     virtual ~KoSnapStrategy() {};
 
     virtual bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance) = 0;

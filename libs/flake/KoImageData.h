@@ -117,7 +117,7 @@ private:
     friend class TestImageCollection;
 
 
-    KoImageData(KoImageDataPrivate *priv);
+    explicit KoImageData(KoImageDataPrivate *priv);
 
     /// returns true only if pixmap() would return immediately with a cached pixmap
     bool hasCachedPixmap() const;

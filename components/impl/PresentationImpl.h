@@ -32,7 +32,7 @@ class PresentationImpl : public DocumentImpl
 {
     Q_OBJECT
 public:
-    PresentationImpl(QObject* parent = 0);
+    explicit PresentationImpl(QObject* parent = 0);
     ~PresentationImpl();
     
     virtual bool load(const QUrl& url);

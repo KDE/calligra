@@ -31,7 +31,7 @@ class KOMAIN_EXPORT KoTemplateTree
 {
 
 public:
-    KoTemplateTree(const QString &templatesResourcePath, bool readTree = false);
+    explicit KoTemplateTree(const QString &templatesResourcePath, bool readTree = false);
     ~KoTemplateTree();
 
     QString templatesResourcePath() const {

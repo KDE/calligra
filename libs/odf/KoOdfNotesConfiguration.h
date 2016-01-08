@@ -65,7 +65,7 @@ public:
         Endnote
     };
 
-    KoOdfNotesConfiguration(NoteClass noteClass);
+    explicit KoOdfNotesConfiguration(NoteClass noteClass);
     ~KoOdfNotesConfiguration();
     KoOdfNotesConfiguration(const KoOdfNotesConfiguration &other);
     KoOdfNotesConfiguration &operator=(const KoOdfNotesConfiguration &other);

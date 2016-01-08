@@ -28,7 +28,7 @@
 class KoComponentDataPrivate : public QSharedData
 {
 public:
-    KoComponentDataPrivate(const KAboutData &_aboutData)
+    explicit KoComponentDataPrivate(const KAboutData &_aboutData)
         : aboutData(_aboutData)
         {}
 

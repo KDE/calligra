@@ -170,7 +170,7 @@ public:
      * Creates a floating-point value from time.
      * See also note above.
      */
-    Value(const QTime& time);
+    explicit Value(const QTime& time);
 
     /**
      * Creates a floating-point value from date.

@@ -32,7 +32,7 @@ namespace Components {
 class SpreadsheetContentsModelImpl : public ContentsModelImpl
 {
 public:
-    SpreadsheetContentsModelImpl(KoDocument* document);
+    explicit SpreadsheetContentsModelImpl(KoDocument* document);
     ~SpreadsheetContentsModelImpl();
 
     virtual int rowCount() const Q_DECL_OVERRIDE;

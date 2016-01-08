@@ -35,7 +35,7 @@ class QRectF;
 class FLAKE_EXPORT KoSnapProxy
 {
 public:
-    KoSnapProxy(KoSnapGuide *snapGuide);
+    explicit KoSnapProxy(KoSnapGuide *snapGuide);
 
     /// returns list of points in given rectangle in document coordinates
     QList<QPointF> pointsInRect(const QRectF &rect);

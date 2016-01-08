@@ -89,7 +89,7 @@ class Document : public QObject
     Q_PROPERTY(QObject* textEditor READ textEditor NOTIFY textEditorChanged)
 
 public:
-    Document(QObject* parent = 0);
+    explicit Document(QObject* parent = 0);
     ~Document();
 
     QUrl source() const;

@@ -32,7 +32,7 @@ class SpreadsheetImpl  : public DocumentImpl
 {
     Q_OBJECT
 public:
-    SpreadsheetImpl(QObject* parent = 0);
+    explicit SpreadsheetImpl(QObject* parent = 0);
     ~SpreadsheetImpl();
 
     virtual bool load(const QUrl& url);

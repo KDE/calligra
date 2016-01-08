@@ -37,7 +37,7 @@ class LinkArea : public QQuickItem
     Q_PROPERTY( float controllerZoom READ controllerZoom WRITE setControllerZoom NOTIFY controllerZoomChanged )
 
 public:
-    LinkArea(QQuickItem* parent = 0);
+    explicit LinkArea(QQuickItem* parent = 0);
     virtual ~LinkArea();
 
     Calligra::Components::Document* document() const;

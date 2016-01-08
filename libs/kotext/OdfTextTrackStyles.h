@@ -54,7 +54,7 @@ public:
 private:
     static QMap<QObject *, OdfTextTrackStyles *> instances;
 
-    OdfTextTrackStyles(KoStyleManager *manager);
+    explicit OdfTextTrackStyles(KoStyleManager *manager);
 
     /// Destructor, called when the parent is deleted.
     ~OdfTextTrackStyles();
