@@ -419,6 +419,8 @@ KGantt::Span GanttItemDelegate::itemBoundingSpan( const KGantt::StyleOptionGantt
                 itemRect = itemRect.united( optRect.adjusted( 0.0, 0.0, tw - optRect.width(), 0.0 ) );
             }
             break;
+        case KGantt::StyleOptionGanttItem::Hidden: // unused here
+            break;
     }
     return KGantt::Span( itemRect.left(), itemRect.width() );
 }
