@@ -511,7 +511,6 @@ void TestKoTextEditor::testInsertSectionHandling()
 }
 
 #include "TestDeleteSectionHandling_data.cpp"
-#include <kundo2stack.h>
 
 // This test tests delete handling only on Formatting Level
 // See KoSectionModel

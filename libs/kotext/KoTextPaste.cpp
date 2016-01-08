@@ -35,7 +35,6 @@
 #include "TextDebug.h"
 #ifdef SHOULD_BUILD_RDF
 #include "KoTextRdfCore.h"
-#include "KoSectionModel.h"
 #include <Soprano/Soprano>
 #endif
 

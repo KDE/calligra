@@ -34,22 +34,21 @@
 #include "KoShapeRegistry.h"
 #include "KoShapeController.h"
 #include "KoOdf.h"
+#include "FlakeDebug.h"
 
 #include <kundo2command.h>
 #include <KoProperties.h>
-
-#include <FlakeDebug.h>
-#include <klocalizedstring.h>
-#include <QUrl>
 #include <KoNetAccess.h>
+
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 
+#include <QUrl>
 #include <QTimer>
 #include <QApplication>
 #include <QTouchEvent>
 #include <QClipboard>
 
-#include "FlakeDebug.h"
 
 KoToolProxyPrivate::KoToolProxyPrivate(KoToolProxy *p)
     : activeTool(0),
