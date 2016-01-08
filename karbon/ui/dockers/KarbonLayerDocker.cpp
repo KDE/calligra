@@ -399,7 +399,6 @@ void KarbonLayerDocker::lowerItem()
 
 void KarbonLayerDocker::selectLayers(QList<KoShapeLayer*> layers)
 {
-    QModelIndex root = m_layerView->rootIndex();
     QItemSelectionModel * selModel = m_layerView->selectionModel();
     selModel->clearSelection();
     foreach(KoShapeLayer * layer, layers) {
