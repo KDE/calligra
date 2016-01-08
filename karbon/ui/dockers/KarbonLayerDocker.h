@@ -52,7 +52,8 @@ class KarbonLayerDocker : public QDockWidget, public KoCanvasObserverBase
 public:
     KarbonLayerDocker();
     virtual ~KarbonLayerDocker();
-    QString observerName() { return "KarbonLayerDocker"; }
+
+    virtual QString observerName() const { return QStringLiteral("KarbonLayerDocker"); }
 
 public Q_SLOTS:
     void updateView();

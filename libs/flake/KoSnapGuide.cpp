@@ -161,7 +161,7 @@ QPointF KoSnapGuide::snap(const QPointF &mousePosition, Qt::KeyboardModifiers mo
     return d->currentStrategy->snappedPosition();
 }
 
-QRectF KoSnapGuide::boundingRect()
+QRectF KoSnapGuide::boundingRect() const
 {
     QRectF rect;
 

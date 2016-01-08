@@ -19,6 +19,9 @@
 
 #include "KoCanvasObserverBase.h"
 
+#include <QString>
+
+
 class KoCanvasObserverBasePrivate
 {
 public:
@@ -40,6 +43,11 @@ KoCanvasObserverBase::KoCanvasObserverBase()
 KoCanvasObserverBase::~KoCanvasObserverBase()
 {
     delete d;
+}
+
+QString KoCanvasObserverBase::observerName() const
+{
+    return QString();
 }
 
 void KoCanvasObserverBase::setObservedCanvas(KoCanvasBase* canvas)

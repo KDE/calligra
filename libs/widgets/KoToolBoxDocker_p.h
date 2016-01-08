@@ -38,7 +38,7 @@ public:
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
-    virtual QString observerName() { return "KoToolBoxDocker"; }
+    virtual QString observerName() const { return QStringLiteral("KoToolBoxDocker"); }
 
 
 protected Q_SLOTS:

@@ -37,8 +37,8 @@ class TextDocumentInspectionDocker : public QDockWidget, public KoCanvasObserver
 public:
     explicit TextDocumentInspectionDocker(QWidget *parent = 0);
     virtual ~TextDocumentInspectionDocker();
-    QString observerName() { return "TextDocumentInspectionDocker"; }
     /// reimplemented from KoCanvasObserverBase
+    virtual QString observerName() const { return QStringLiteral("TextDocumentInspectionDocker"); }
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 

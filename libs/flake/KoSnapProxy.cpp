@@ -30,7 +30,7 @@ KoSnapProxy::KoSnapProxy(KoSnapGuide * snapGuide)
 {
 }
 
-QList<QPointF> KoSnapProxy::pointsInRect(const QRectF &rect)
+QList<QPointF> KoSnapProxy::pointsInRect(const QRectF &rect) const
 {
     QList<QPointF> points;
     QList<KoShape*> shapes = shapesInRect(rect);
@@ -44,7 +44,7 @@ QList<QPointF> KoSnapProxy::pointsInRect(const QRectF &rect)
     return points;
 }
 
-QList<KoShape*> KoSnapProxy::shapesInRect(const QRectF &rect, bool omitEditedShape)
+QList<KoShape*> KoSnapProxy::shapesInRect(const QRectF &rect, bool omitEditedShape) const
 {
     QList<KoShape*> shapes = m_snapGuide->canvas()->shapeManager()->shapesAt(rect);
     foreach(KoShape * shape, m_snapGuide->ignoredShapes()) {
@@ -60,7 +60,7 @@ QList<KoShape*> KoSnapProxy::shapesInRect(const QRectF &rect, bool omitEditedSha
     return shapes;
 }
 
-QList<QPointF> KoSnapProxy::pointsFromShape(KoShape * shape)
+QList<QPointF> KoSnapProxy::pointsFromShape(KoShape * shape) const
 {
     QList<QPointF> snapPoints;
     // no snapping to hidden shapes
@@ -101,7 +101,7 @@ QList<QPointF> KoSnapProxy::pointsFromShape(KoShape * shape)
     return snapPoints;
 }
 
-QList<KoPathSegment> KoSnapProxy::segmentsInRect(const QRectF &rect)
+QList<KoPathSegment> KoSnapProxy::segmentsInRect(const QRectF &rect) const
 {
     
     QList<KoShape*> shapes = shapesInRect(rect, true);
@@ -137,7 +137,7 @@ QList<KoPathSegment> KoSnapProxy::segmentsInRect(const QRectF &rect)
     return segments;
 }
 
-QList<KoShape*> KoSnapProxy::shapes(bool omitEditedShape)
+QList<KoShape*> KoSnapProxy::shapes(bool omitEditedShape) const
 {
     QList<KoShape*> allShapes = m_snapGuide->canvas()->shapeManager()->shapes();
     QList<KoShape*> filteredShapes;
@@ -159,7 +159,7 @@ QList<KoShape*> KoSnapProxy::shapes(bool omitEditedShape)
     return filteredShapes;
 }
 
-KoCanvasBase * KoSnapProxy::canvas()
+KoCanvasBase * KoSnapProxy::canvas() const
 {
     return m_snapGuide->canvas();
 }
