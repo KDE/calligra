@@ -22,12 +22,14 @@
 #include <QStyle>
 #include <QWindowsStyle>
 #include <QPainter>
+#include <QScrollBar>
 
 #include <kexi_global.h>
 #include "kexicomboboxbase.h"
 #include <widget/utils/kexicomboboxdropdownbutton.h>
 #include "kexicomboboxpopup.h"
 #include "KexiTableScrollArea.h"
+#include "KexiTableScrollAreaWidget.h"
 #include "kexi.h"
 
 KexiComboBoxBase::KexiComboBoxBase()
@@ -413,8 +415,14 @@ void KexiComboBoxBase::createPopup(bool show)
     QPoint posMappedToGlobal = mapFromParentToGlobal(thisWidget->pos());
     if (posMappedToGlobal != QPoint(-1, -1)) {
 //! todo alter the position to fit the popup within screen boundaries
+        QPoint pos = posMappedToGlobal + QPoint(0, thisWidget->height());
+        if (qobject_cast<KexiTableScrollAreaWidget*>(thisWidget->parentWidget())) {
+            KexiTableScrollArea* tableScroll = qobject_cast<KexiTableScrollAreaWidget*>(thisWidget->parentWidget())->scrollArea;
+            pos -= QPoint(tableScroll->horizontalScrollBar()->value(),
+                          tableScroll->verticalScrollBar()->value());
+        }
         popup()->hide();
-        popup()->move(posMappedToGlobal + QPoint(0, thisWidget->height()));
+        popup()->move(pos);
         //kDebug() << "pos:" << posMappedToGlobal + QPoint(0, thisWidget->height());
         //to avoid flickering: first resize to 0-height, then show and resize back to prev. height
         const int w = popupWidthHint();
