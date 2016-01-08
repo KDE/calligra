@@ -18,8 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kptlocale.h"
 #include "kptresource.h"
+
+#include "kptlocale.h"
 #include "kptaccount.h"
 #include "kptappointment.h"
 #include "kptproject.h"
