@@ -601,12 +601,12 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt::StyleOp
             }
             painter->restore();
 
-            Qt::Alignment ta;
-            switch( opt.displayPosition ) {
-            case KGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
-            case KGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
-            case KGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
-            }
+            // only Left/Center/Right used
+            const Qt::Alignment ta =
+                (opt.displayPosition == KGantt::StyleOptionGanttItem::Left)  ? Qt::AlignLeft :
+                (opt.displayPosition == KGantt::StyleOptionGanttItem::Right) ? Qt::AlignRight :
+                /*                      KGantt::StyleOptionGanttItem::Center*/ Qt::AlignCenter;
+
             painter->drawText( textRect, ta, txt );
         }
         break;
