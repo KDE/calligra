@@ -328,49 +328,49 @@ configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
 ##
 ## Test for Phonon4Qt5
 ##
-find_package(Phonon4Qt5)
+find_package(Phonon4Qt5 QUIET)
 macro_log_feature(Phonon4Qt5_FOUND "Phonon4Qt5" "Abstraction lib for multimedia applications" "http://www.kde.org/" FALSE "" "Required by Stage event actions and Videoshape plugin")
 
 ##
 ## Test for KF5CalendarCore
 ##
-find_package(KF5CalendarCore CONFIG)
+find_package(KF5CalendarCore CONFIG QUIET)
 macro_log_feature(KF5CalendarCore_FOUND "KF5CalendarCore" "KDE Calendar Library" "http://www.kde.org/" FALSE "" "Required by Plan Ical export and optionally used by semantic item Event")
 
 ##
 ## Test for KF5Contacts
 ##
-find_package(KF5Contacts CONFIG)
+find_package(KF5Contacts CONFIG QUIET)
 macro_log_feature(KF5Contacts_FOUND "KF5Contacts" "KDE Address book Library" "http://www.kde.org/" FALSE "" "Optionally used by semantic item Contact")
 
 ##
 ## Test for KF5AkonadiContact
 ##
-find_package(KF5AkonadiContact CONFIG)
+find_package(KF5AkonadiContact CONFIG QUIET)
 macro_log_feature(KF5AkonadiContact_FOUND "KF5AkonadiContact" "Library for Accessing Contacts stored in Akonadi" "http://www.kde.org/" FALSE "" "Optionally used by Plan")
 
 ##
 ## Test for KF5AkonadiCore
 ##
-find_package(KF5Akonadi CONFIG)
+find_package(KF5Akonadi CONFIG QUIET)
 macro_log_feature(KF5Akonadi_FOUND "KF5Akonadi" "Library for general Access to Akonadi" "http://www.kde.org/" FALSE "" "Optionally used by semantic items Event and Contact")
 
 ##
 ## Test for KGantt
 ##
-macro_optional_find_package(KGantt 2.6.0)
+macro_optional_find_package(KGantt 2.6.0 QUIET)
 macro_log_feature(KGantt_FOUND "KGantt" "Library for creating Gantt diagrams (part of KDiagram)" "http://www.kde.org/" FALSE "" "Required by Plan")
 
 ##
 ## Test for KChart
 ##
-macro_optional_find_package(KChart 2.6.0)
+macro_optional_find_package(KChart 2.6.0 QUIET)
 macro_log_feature(KChart_FOUND "KChart" "Library for creating business charts (part of KDiagram)" "http://www.kde.org/" FALSE "" "Required by Chart shape and Plan")
 
 ##
 ## Test for KReport
 ##
-macro_optional_find_package(KReport 2.96.1)
+macro_optional_find_package(KReport 2.96.1 QUIET)
 if (KReport_FOUND AND KREPORT_SCRIPTING)
     set(KReport_WITH_SCRIPTING_FOUND TRUE)
 endif()
@@ -393,7 +393,7 @@ macro_log_feature(EIGEN3_FOUND "Eigen" "C++ template library for linear algebra"
 ##
 ## Test for QCA2
 ##
-macro_optional_find_package(Qca-qt5 2.1.0)
+macro_optional_find_package(Qca-qt5 2.1.0 QUIET)
 macro_log_feature(Qca-qt5_FOUND "QCA" "Qt Cryptographic Architecture" "http:/download.kde.org/stable/qca-qt5" FALSE "2.0" "Required for encrypted OpenDocument files and encrypted xls files support (available as a module in kdesupport)")
 
 ##
