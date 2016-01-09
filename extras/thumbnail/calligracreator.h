@@ -24,7 +24,6 @@
 // KDE
 #include <KIO/ThumbCreator>
 // Qt
-#include <QApplication>
 #include <QEventLoop>
 
 class KoPart;
@@ -48,8 +47,6 @@ private:
     KoDocument *m_doc;
 
     bool m_loadingCompleted :1;
-    // needed for QWidgets created by some koparts even head-less
-    QApplication m_app;
     QEventLoop m_eventLoop;
 };
 
