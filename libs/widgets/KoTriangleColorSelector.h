@@ -43,10 +43,7 @@ class KOWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
         int hue() const;
         int value() const;
         int saturation() const;
-        KoColor realColor() const;
-
-        // please use realColor() instead!
-        Q_DECL_DEPRECATED QColor color() const;
+        KoColor color() const;
 
     public Q_SLOTS:
         void setHue(int h);
@@ -54,13 +51,11 @@ class KOWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
         void setSaturation(int s);
         void setHSV(int h, int s, int v);
 
-        // please use setRealColor() instead!
-        Q_DECL_DEPRECATED void setQColor(const QColor& );
+        void setColor(const KoColor& );
 
-        void setRealColor(const KoColor& );
     Q_SIGNALS:
-        void colorChanged(const QColor& );
-        void realColorChanged(const KoColor& );
+        void colorChanged(const KoColor& );
+
     private Q_SLOTS:
         void configurationChanged();
     private:

@@ -160,7 +160,7 @@ void KoTriangleColorSelector::paintEvent( QPaintEvent * event )
         p.save();
         p.setPen( QPen( Qt::white, 1.0) );
 
-        QColor currentColor = d->displayRenderer->toQColor(realColor());
+        QColor currentColor = d->displayRenderer->toQColor(color());
 
         p.setBrush(currentColor);
         p.rotate( hue() + 150 );
@@ -191,7 +191,7 @@ int KoTriangleColorSelector::hue() const
 
 void KoTriangleColorSelector::setHue(int h)
 {
-    // setRealColor() will give you -1 when saturation is 0
+    // setColor() will give you -1 when saturation is 0
     // ignore setting hue in this instance. otherwise it will mess up the hue ring
     if (h == -1)
         return;
@@ -240,14 +240,14 @@ void KoTriangleColorSelector::setHSV(int h, int s, int v)
     setSaturation(s);
 }
 
-KoColor KoTriangleColorSelector::realColor() const
+KoColor KoTriangleColorSelector::color() const
 {
     return d->displayRenderer->fromHsv(hue(), saturation(), value());
 }
 
-void KoTriangleColorSelector::setRealColor(const KoColor & color)
+void KoTriangleColorSelector::setColor(const KoColor & _color)
 {
-    if ( realColor() == color)
+    if ( color() == _color)
         return;
 
     //displayrenderer->getHsv is what sets the foreground color in the application
@@ -256,23 +256,12 @@ void KoTriangleColorSelector::setRealColor(const KoColor & color)
         int saturationRef = saturation();
         int valueRef = value();
 
-        d->displayRenderer->getHsv(color, &hueRef, &saturationRef, &valueRef);
+        d->displayRenderer->getHsv(_color, &hueRef, &saturationRef, &valueRef);
         setHSV(hueRef, saturationRef, valueRef);
 
         d->invalidTriangle = true;
         d->updateTimer.start();
     }
-}
-
-QColor KoTriangleColorSelector::color() const
-{
-    return realColor().toQColor();
-}
-
-void KoTriangleColorSelector::setQColor(const QColor& c)
-{
-    KoColor color(c, KoColorSpaceRegistry::instance()->rgb8());
-    setRealColor(color);
 }
 
 void KoTriangleColorSelector::resizeEvent( QResizeEvent * event )
@@ -291,8 +280,7 @@ inline qreal pow2(qreal v)
 void KoTriangleColorSelector::tellColorChanged()
 {
     d->updateAllowed = false;
-    emit(realColorChanged(realColor()));
-    emit(colorChanged(realColor().toQColor()));
+    emit(colorChanged(color()));
     d->updateAllowed = true;
 }
 

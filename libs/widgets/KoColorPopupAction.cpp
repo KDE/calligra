@@ -105,8 +105,8 @@ KoColorPopupAction::KoColorPopupAction(QObject *parent)
 
     connect(d->colorSetWidget, SIGNAL(colorChanged(const KoColor &, bool)), this, SLOT(colorWasSelected(const KoColor &, bool)));
 
-    connect( d->colorChooser, SIGNAL( colorChanged( const QColor &) ),
-             this, SLOT( colorWasEdited( const QColor &) ) );
+    connect( d->colorChooser, SIGNAL(colorChanged(KoColor)),
+             this, SLOT(colorWasEdited(KoColor)) );
     connect( d->opacitySlider, SIGNAL(valueChanged(int)),
              this, SLOT(opacityWasChanged(int)));
 }
@@ -118,7 +118,7 @@ KoColorPopupAction::~KoColorPopupAction()
 
 void KoColorPopupAction::setCurrentColor( const KoColor &color )
 {
-    d->colorChooser->setRealColor( color );
+    d->colorChooser->setColor( color );
 
     KoColor minColor( color );
     d->currentColor = minColor;
@@ -208,9 +208,9 @@ void KoColorPopupAction::colorWasSelected(const KoColor &color, bool final)
     updateIcon();
 }
 
-void KoColorPopupAction::colorWasEdited( const QColor &color )
+void KoColorPopupAction::colorWasEdited( const KoColor &color )
 {
-    d->currentColor = KoColor( color, KoColorSpaceRegistry::instance()->rgb8() );
+    d->currentColor = color;
     quint8 opacity = d->opacitySlider->value();
     d->currentColor.setOpacity( opacity );
 

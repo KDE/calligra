@@ -76,7 +76,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void emitColorChanged();
     void colorWasSelected(const KoColor &color, bool final);
-    void colorWasEdited( const QColor &color );
+    void colorWasEdited( const KoColor &color );
     void opacityWasChanged( int opacity );
     void slotTriggered(bool);
 
