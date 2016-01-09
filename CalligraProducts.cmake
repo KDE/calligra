@@ -99,7 +99,7 @@ calligra_define_product(APP_PLAN "Plan app (for Desktop)"  REQUIRES LIB_CALLIGRA
 calligra_define_product(APP_BRAINDUMP "Braindump app (for Desktop)" REQUIRES LIB_CALLIGRA LIB_KOMAIN)
 calligra_define_product(APP_GEMINI "The Calligra Gemini application"  REQUIRES PART_QTQUICK PART_COMPONENTS)
 # TODO: this needs to be split up by app products
-calligra_define_product(DOC "Calligra Documentations" UNPORTED)
+calligra_define_product(DOC "Calligra Documentations")
 
 # extras
 calligra_define_product(APP_CONVERTER "Format converter for commandline" REQUIRES LIB_CALLIGRA LIB_KOMAIN)

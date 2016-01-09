@@ -193,6 +193,7 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS
         ConfigWidgets 
         CoreAddons
         DBusAddons
+        DocTools
         GuiAddons 
         I18n 
         IconThemes 
