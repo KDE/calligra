@@ -41,26 +41,8 @@
 #include <KoParagraphStyle.h>
 #include <KoTextLayoutRootArea.h>
 
-#include <KAboutData>
-
 #include <okular/core/page.h>
 
-static KAboutData createAboutData()
-{
-    KAboutData aboutData(
-         QStringLiteral("okularGenerator_odt"),
-         i18n( "ODT/OTT Backend" ),
-         CalligraVersionWrapper::versionString(),
-         i18n( "ODT/OTT file renderer" ),
-         KAboutLicense::GPL,
-         i18n( "© 2012 Sven Langkamp" )
-    );
-
-    // fill the about data
-    return aboutData;
-}
-
-OKULAR_EXPORT_PLUGIN(OkularOdtGenerator, "libokularGenerator_odt.json")
 
 OkularOdtGenerator::OkularOdtGenerator( QObject *parent, const QVariantList &args )
     : Okular::Generator( parent, args )
@@ -265,5 +247,3 @@ const Okular::DocumentSynopsis* OkularOdtGenerator::generateDocumentSynopsis()
 {
     return m_documentSynopsis.hasChildNodes() ? &m_documentSynopsis : 0;
 }
-
-#include "OkularOdtGenerator.moc"
