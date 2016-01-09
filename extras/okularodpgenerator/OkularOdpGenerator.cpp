@@ -151,5 +151,3 @@ Okular::DocumentInfo OkularOdpGenerator::generateDocumentInfo( const QSet<Okular
 
     return m_documentInfo;
 }
-
-#include "OkularOdpGenerator.moc"
