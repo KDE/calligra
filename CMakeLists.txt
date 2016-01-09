@@ -593,7 +593,7 @@ macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "ht
 ##
 ## Test for Okular
 ##
-macro_optional_find_package(Okular5 1.0.0)
+macro_optional_find_package(Okular5 1.0.0 QUIET)
 macro_log_feature(Okular5_FOUND "Okular" "A unified document viewer" "http://okular.kde.org/" FALSE "" "Required to build the plugins for Okular")
 
 ##
