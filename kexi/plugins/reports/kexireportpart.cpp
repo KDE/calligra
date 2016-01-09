@@ -158,8 +158,6 @@ KexiWindowData* KexiReportPart::createWindowData(KexiWindow* window)
 
     td->reportDefinition = korep;
     td->connectionDefinition = conn;
-
-    td->name = window->partItem()->name();
     return td;
 }
 

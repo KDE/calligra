@@ -1,7 +1,7 @@
 /*
 * Kexi Report Plugin
 * Copyright (C) 2007-2009 by Adam Pigg (adam@piggz.co.uk)
-* Copyright (C) 2015 Jarosław Staniek <staniek@kde.org>
+* Copyright (C) 2015-2016 Jarosław Staniek <staniek@kde.org>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -41,6 +41,7 @@ public:
     }
 
     QString objectName;
+    QString objectClass;
     KexiDB::Cursor *cursor;
     KexiDB::Connection * const connection;
     KexiReportView * const view;
@@ -48,21 +49,14 @@ public:
     KexiDB::QuerySchema *copySchema;
 };
 
-KexiDBReportData::KexiDBReportData (const QString &objectName,
-                                    KexiDB::Connection * pDb, KexiReportView *view)
-        : d(new Private(pDb, view))
-{
-    d->objectName = objectName;
-    getSchema();
-}
-
 KexiDBReportData::KexiDBReportData(const QString& objectName,
-                                   const QString& partClass,
+                                   const QString& objectClass,
                                    KexiDB::Connection* pDb, KexiReportView *view)
         : d(new Private(pDb, view))
 {
     d->objectName = objectName;
-    getSchema(partClass);
+    d->objectClass = objectClass;
+    getSchema();
 }
 
 void KexiDBReportData::setSorting(const QList<SortedField>& sorting)
@@ -138,7 +132,7 @@ bool KexiDBReportData::close()
     return true;
 }
 
-bool KexiDBReportData::getSchema(const QString& partClass)
+bool KexiDBReportData::getSchema()
 {
     if (d->connection)
     {
@@ -147,13 +141,13 @@ bool KexiDBReportData::getSchema(const QString& partClass)
         delete d->copySchema;
         d->copySchema = 0;
 
-        if ((partClass.isEmpty() || partClass == "org.kexi-project.table")
+        if ((d->objectClass.isEmpty() || d->objectClass == "org.kexi-project.table")
                 && d->connection->tableSchema(d->objectName))
         {
             kDebug() << d->objectName <<  "is a table..";
             d->originalSchema = new KexiDB::QuerySchema(*(d->connection->tableSchema(d->objectName)));
         }
-        else if ((partClass.isEmpty() || partClass == "org.kexi-project.query")
+        else if ((d->objectClass.isEmpty() || d->objectClass == "org.kexi-project.query")
                  && d->connection->querySchema(d->objectName))
         {
             kDebug() << d->objectName <<  "is a query..";
@@ -178,6 +172,11 @@ bool KexiDBReportData::getSchema(const QString& partClass)
 QString KexiDBReportData::sourceName() const
 {
     return d->objectName;
+}
+
+QString KexiDBReportData::sourceClass() const
+{
+    return d->objectClass;
 }
 
 int KexiDBReportData::fieldNumber ( const QString &fld ) const
@@ -400,5 +399,5 @@ QStringList KexiDBReportData::dataSources() const
 
 KoReportData* KexiDBReportData::create(const QString& source) const
 {
-    return new KexiDBReportData(source, d->connection, d->view);
+    return new KexiDBReportData(source, QString(), d->connection, d->view);
 }

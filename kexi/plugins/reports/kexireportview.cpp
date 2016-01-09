@@ -1,7 +1,7 @@
 /*
  * Kexi Report Plugin
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
-   Copyright (C) 2014 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2014-2016 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -400,11 +400,11 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
                 reportData = sourceData(tempData()->connectionDefinition);    
             }
             if (!reportData) {
-                reportData = new KexiDBReportData(QString(), KexiMainWindowIface::global()->project()->dbConnection(), this);
+                reportData = new KexiDBReportData(QString(), QString(),
+                                                  KexiMainWindowIface::global()->project()->dbConnection(), this);
             }
             m_preRenderer->setSourceData(reportData);
-            
-            m_preRenderer->setName(tempData()->name);
+
             m_currentPage = 1;
 
             //Add a kexi object to provide kexidb and extra functionality
@@ -442,12 +442,13 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
     return true;
 }
 
-KoReportData* KexiReportView::sourceData(QDomElement e)
+KoReportData* KexiReportView::sourceData(const QDomElement &e)
 {
     KoReportData *kodata = 0;
 
     if (e.attribute("type") == "internal") {
         kodata = new KexiDBReportData(e.attribute("source"),
+                                      e.attribute("source-class"),
                                       KexiMainWindowIface::global()->project()->dbConnection(),
                                       this);
     }

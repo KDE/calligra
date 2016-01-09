@@ -131,7 +131,8 @@ void KexiSourceSelector::setConnectionData(const QDomElement &c)
 {
     if (c.attribute("type") == "internal") {
         d->sourceType->setCurrentIndex(d->sourceType->findData("internal"));
-        d->internalSource->setCurrentIndex(d->internalSource->findText(c.attribute("source")));
+        d->internalSource->setDataSource(
+                    c.attribute("source-class"), c.attribute("source"));
     }
 
     if (c.attribute("type") == "external") {
@@ -155,6 +156,10 @@ QDomElement KexiSourceSelector::connectionData()
 
     if (d->sourceType->itemData(d->sourceType->currentIndex()).toString() == "internal") {
         conndata.setAttribute("source", d->internalSource->currentText());
+        const QString sourceClass(d->internalSource->selectedPartClass());
+        if (!sourceClass.isEmpty()) {
+            conndata.setAttribute("source-class", sourceClass);
+        }
     } else {
         conndata.setAttribute("source", d->externalSource->text());
     }

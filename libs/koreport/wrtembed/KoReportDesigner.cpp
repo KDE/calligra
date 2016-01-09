@@ -375,13 +375,10 @@ void KoReportDesigner::slotSectionEditor()
 
 void KoReportDesigner::setReportData(KoReportData* kodata)
 {
-    //kDebug();
-    if (kodata) {
-        m_kordata = kodata;
-        slotPageButton_Pressed();
-        setModified(true);
-        emit reportDataChanged();
-    }
+    m_kordata = kodata;
+    slotPageButton_Pressed();
+    setModified(true);
+    emit reportDataChanged();
 }
 
 ReportSection * KoReportDesigner::section(KRSectionData::Section s) const

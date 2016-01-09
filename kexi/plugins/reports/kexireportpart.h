@@ -64,6 +64,7 @@ public:
         Check this flag to see if we should refresh data for DataViewMode. */
         bool reportSchemaChangedInPreviousView;
         QString name;
+        QString className; //!< org.kexi-project.table or org.kexi-project.query
     };
 
     virtual KLocalizedString i18nMessage(const QString& englishMessage,

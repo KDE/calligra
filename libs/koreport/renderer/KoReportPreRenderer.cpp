@@ -651,11 +651,6 @@ KoReportPreRenderer::~KoReportPreRenderer()
     delete d;
 }
 
-void KoReportPreRenderer::setName(const QString &n)
-{
-    d->m_reportData->setName(n);
-}
-
 ORODocument* KoReportPreRenderer::document()
 {
     return d->m_document;

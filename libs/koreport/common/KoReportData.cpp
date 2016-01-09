@@ -38,6 +38,11 @@ QString KoReportData::sourceName() const
     return QString();
 }
 
+QString KoReportData::sourceClass() const
+{
+    return QString();
+}
+
 void KoReportData::setSorting(const QList<SortedField> &sorting)
 {
     Q_UNUSED(sorting);

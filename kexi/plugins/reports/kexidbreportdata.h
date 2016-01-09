@@ -1,7 +1,7 @@
 /*
 * Kexi Report Plugin
 * Copyright (C) 2007-2009 by Adam Pigg (adam@piggz.co.uk)
-* Copyright (C) 2015 Jarosław Staniek <staniek@kde.org>
+* Copyright (C) 2015-2016 Jarosław Staniek <staniek@kde.org>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -36,16 +36,14 @@ class KexiReportView;
 class KexiDBReportData : public KoReportData
 {
 public:
-    KexiDBReportData(const QString &objectName, KexiDB::Connection *conn, KexiReportView *view);
-
     /*!
-     * @a partClass specifies @a objectName type: a table or query.
+     * @a objectClass specifies @a objectName type: a table or query.
      * Types accepted:
      * -"org.kexi-project.table"
      * -"org.kexi-project.query"
      * -empty QString() - attempt to resolve @a objectName
      */
-    KexiDBReportData(const QString &objectName, const QString& partClass, KexiDB::Connection *conn, KexiReportView *view);
+    KexiDBReportData(const QString &objectName, const QString& objectClass, KexiDB::Connection *conn, KexiReportView *view);
     virtual ~KexiDBReportData();
 
     virtual QStringList fieldNames() const;
@@ -53,6 +51,7 @@ public:
     virtual void addExpression(const QString &field, const QVariant &value, int relation = '=');
 
     virtual QString sourceName() const;
+    virtual QString sourceClass() const;
     virtual int fieldNumber(const QString &field) const;
     virtual QVariant value(unsigned int) const;
     virtual QVariant value(const QString &field) const;
@@ -77,7 +76,7 @@ private:
     class Private;
     Private * const d;
 
-    bool getSchema(const QString& partClass = QString());
+    bool getSchema();
 };
 
 #endif

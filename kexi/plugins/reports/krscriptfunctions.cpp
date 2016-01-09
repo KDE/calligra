@@ -1,7 +1,7 @@
 /*
  * Kexi Report Plugin
  * Copyright (C) 2007-2008 by Adam Pigg <adam@piggz.co.uk>
- * Copyright (C) 2012 Jarosław Staniek <staniek@kde.org>
+ * Copyright (C) 2012-2016 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,10 +26,15 @@ KRScriptFunctions::KRScriptFunctions(const KoReportData* kodata, KexiDB::Connect
     m_cursor = kodata;
     m_connection = conn;
 
-    if (m_connection->tableSchema(kodata->sourceName())) {
-        m_source = kodata->sourceName();
-    } else if (m_connection->querySchema(kodata->sourceName())) {
-        m_source = m_connection->selectStatement(*(m_connection->querySchema(kodata->sourceName())));
+    if (kodata->sourceClass().isEmpty() || kodata->sourceClass() == "org.kexi-project.table") {
+        if (m_connection->tableSchema(kodata->sourceName())) {
+            m_source = kodata->sourceName();
+        }
+    }
+    if (m_source.isEmpty() && (kodata->sourceClass().isEmpty() || kodata->sourceClass() == "org.kexi-project.query")) {
+        if (m_connection->querySchema(kodata->sourceName())) {
+            m_source = m_connection->selectStatement(*(m_connection->querySchema(kodata->sourceName())));
+        }
     }
 }
 

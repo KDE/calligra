@@ -81,6 +81,9 @@ public:
     //!Return the name of this source
     virtual QString sourceName() const;
 
+    //! @return the class name of this source
+    virtual QString sourceClass() const;
+
     //!Sets the sorting for the data
     //!Should be called before open() so that the data source can be edited accordingly
     //!Default impl does nothing

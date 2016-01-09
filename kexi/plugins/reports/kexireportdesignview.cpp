@@ -200,6 +200,7 @@ void KexiReportDesignView::slotSetData(KoReportData* kodata)
 {
     m_reportDesigner->setReportData(kodata);
     tempData()->connectionDefinition = m_sourceSelector->connectionData();
+    setDirty(true);
 }
 
 void KexiReportDesignView::triggerAction(const QString &action)
