@@ -102,7 +102,7 @@ public:
     @brief Override if the item uses a sub query and linked fields, such as a chart or sub-report
     @return True if uses a sub query
     */
-    virtual bool supportsSubQuery();
+    virtual bool supportsSubQuery() const;
 
     KoProperty::Set* propertySet() const;
 

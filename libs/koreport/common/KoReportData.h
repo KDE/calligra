@@ -110,7 +110,7 @@ public:
     //! Creates a new instance with data source. Default implementation returns @c nullptr.
     //! @a source is a driver-specific identifier.
     //! Owner of the returned pointer is the caller.
-    virtual KoReportData* create(const QString &source) Q_REQUIRED_RESULT;
+    virtual KoReportData* create(const QString &source) const Q_REQUIRED_RESULT;
 };
 
 #endif

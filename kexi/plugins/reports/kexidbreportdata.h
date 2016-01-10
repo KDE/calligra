@@ -71,7 +71,7 @@ public:
     virtual QStringList scriptList(const QString& language) const;
     virtual QString scriptCode(const QString& script, const QString& language) const;
     virtual QStringList dataSources() const;
-    virtual KoReportData* create(const QString &source);
+    virtual KoReportData* create(const QString &source) const;
 
 private:
     class Private;

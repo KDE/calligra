@@ -97,7 +97,7 @@ public:
     @brief Return a pointer to the reports data
     @return Pointer to report data
     */
-    KoReportData *reportData(){return m_kordata;}
+    const KoReportData *reportData() const { return m_kordata; }
 
     /**
     @brief Return a pointer to the section specified

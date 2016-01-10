@@ -216,7 +216,7 @@ void KoReportItemChart::setColorScheme(const QString &cs)
     }
 }
 
-void KoReportItemChart::setConnection(KoReportData *c)
+void KoReportItemChart::setConnection(const KoReportData *c)
 {
     m_reportData = c;
     populateData();
