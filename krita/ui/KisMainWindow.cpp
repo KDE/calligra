@@ -467,15 +467,6 @@ KisMainWindow::~KisMainWindow()
 
 //    }
 
-    KConfigGroup cfg(KGlobal::config(), "MainWindow");
-    cfg.writeEntry("ko_geometry", saveGeometry().toBase64());
-    cfg.writeEntry("ko_windowstate", saveState().toBase64());
-
-    {
-        KConfigGroup group(KGlobal::config(), "theme");
-        group.writeEntry("Theme", d->themeManager->currentThemeName());
-    }
-
     // The doc and view might still exist (this is the case when closing the window)
     KisPart::instance()->removeMainWindow(this);
 
@@ -1047,6 +1038,16 @@ void KisMainWindow::redo()
 void KisMainWindow::closeEvent(QCloseEvent *e)
 {
     d->mdiArea->closeAllSubWindows();
+
+    KConfigGroup cfg(KGlobal::config(), "MainWindow");
+    cfg.writeEntry("ko_geometry", saveGeometry().toBase64());
+    cfg.writeEntry("ko_windowstate", saveState().toBase64());
+
+    {
+        KConfigGroup group(KGlobal::config(), "theme");
+        group.writeEntry("Theme", d->themeManager->currentThemeName());
+    }
+
 
     if(d->activeView && d->activeView->document() && d->activeView->document()->isLoading()) {
         e->setAccepted(false);
