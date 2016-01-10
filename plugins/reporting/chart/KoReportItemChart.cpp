@@ -303,7 +303,7 @@ void KoReportItemChart::populateData()
     }
 }
 
-QStringList KoReportItemChart::masterFields()
+QStringList KoReportItemChart::masterFields() const
 {
     return m_linkMaster->value().toString().split(',');
 }

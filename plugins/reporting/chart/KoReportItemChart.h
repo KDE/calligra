@@ -68,13 +68,13 @@ public:
     The caller will use this to set the current value for each field
     at that stage in the report
     */
-    QStringList masterFields();
+    QStringList masterFields() const;
 
     /**
     @brief The chart object is a complex object that uses its own data source
     @return true
     */
-    virtual bool supportsSubQuery() { return true; }
+    virtual bool supportsSubQuery() const { return true; }
 
 protected:
 

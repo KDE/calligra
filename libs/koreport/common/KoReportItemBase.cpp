@@ -97,7 +97,7 @@ KoProperty::Set* KoReportItemBase::propertySet() const
  return m_set;
 }
 
-bool KoReportItemBase::supportsSubQuery()
+bool KoReportItemBase::supportsSubQuery() const
 {
     return false;
 }
