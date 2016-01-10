@@ -72,7 +72,7 @@ private:
     int m_currentPage;
     int m_pageCount;
     KexiReportPart::TempData* tempData() const;
-    KoReportData* sourceData(const QDomElement &e);
+    KoReportData* createSourceData(const QDomElement &e);
 
     KexiScriptAdaptor *m_kexi;
     KRScriptFunctions *m_functions;

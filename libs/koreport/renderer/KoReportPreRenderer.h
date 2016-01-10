@@ -44,7 +44,8 @@ public:
 
     virtual ~KoReportPreRenderer();
 
-    void setSourceData(KoReportData*);
+    //! Sets source data to @a data, takes ownership
+    void setSourceData(KoReportData *data);
     void registerScriptObject(QObject*, const QString&);
 
     bool generateDocument();

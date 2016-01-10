@@ -119,6 +119,7 @@ KoReportPreRendererPrivate::~KoReportPreRendererPrivate()
 
     m_postProcText.clear();
     delete m_document;
+    delete m_kodata;
 }
 
 void KoReportPreRendererPrivate::createNewPage()
@@ -634,7 +635,9 @@ bool KoReportPreRendererPrivate::generateDocument()
         return false;
     }
     delete m_scriptHandler;
+    m_scriptHandler = 0;
     delete m_kodata;
+    m_kodata = 0;
     m_postProcText.clear();
     return true;
 }
@@ -668,7 +671,8 @@ bool KoReportPreRenderer::generateDocument()
 
 void KoReportPreRenderer::setSourceData(KoReportData *data)
 {
-    if (d && data) {
+    if (d && d->m_kodata != data) {
+        delete d->m_kodata;
         d->m_kodata = data;
     }
 }

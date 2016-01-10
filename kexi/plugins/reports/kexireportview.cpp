@@ -397,7 +397,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
         if (m_preRenderer->isValid()) {
             KoReportData *reportData = 0;
             if (!tempData()->connectionDefinition.isNull())  {
-                reportData = sourceData(tempData()->connectionDefinition);    
+                reportData = createSourceData(tempData()->connectionDefinition);
             }
             if (!reportData) {
                 reportData = new KexiDBReportData(QString(), QString(),
@@ -442,7 +442,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
     return true;
 }
 
-KoReportData* KexiReportView::sourceData(const QDomElement &e)
+KoReportData* KexiReportView::createSourceData(const QDomElement &e)
 {
     KoReportData *kodata = 0;
 

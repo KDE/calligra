@@ -1,6 +1,7 @@
 /*
 * Kexi Report Plugin
 * Copyright (C) 2007-2009 by Adam Pigg (adam@piggz.co.uk)
+* Copyright (C) 2016 Jarosław Staniek <staniek@kde.org>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -45,16 +46,11 @@ class KexiSourceSelector::Private
 {
 public:
     Private()
-      : kexiDBData(0)
     {
     }
 
     ~Private()
     {
-        delete kexiDBData;
-#ifndef KEXI_MOBILE
-        delete kexiMigrateData;
-#endif
     }
 
     KexiDB::Connection *conn;
@@ -64,13 +60,6 @@ public:
     KexiDataSourceComboBox *internalSource;
     KLineEdit *externalSource;
     KPushButton *setData;
-
-    KexiDBReportData *kexiDBData;
-
-#ifndef KEXI_MOBILE
-    KexiMigrateReportData *kexiMigrateData;
-#endif
-
 };
 
 KexiSourceSelector::KexiSourceSelector(KexiProject* project, QWidget* parent)
@@ -78,12 +67,6 @@ KexiSourceSelector::KexiSourceSelector(KexiProject* project, QWidget* parent)
         , d(new Private)
 {
     d->conn = project->dbConnection();
-    d->kexiDBData = 0;
-
-#ifndef KEXI_MOBILE
-    d->kexiMigrateData = 0;
-#endif
-
     d->layout = new QVBoxLayout(this);
     d->sourceType = new QComboBox(this);
     d->internalSource = new KexiDataSourceComboBox(this);
@@ -91,7 +74,7 @@ KexiSourceSelector::KexiSourceSelector(KexiProject* project, QWidget* parent)
     d->externalSource = new KLineEdit(this);
     d->setData = new KPushButton(i18n("Set Data"));
 
-    connect(d->setData, SIGNAL(clicked()), this, SLOT(setDataClicked()));
+    connect(d->setData, SIGNAL(clicked()), this, SIGNAL(sourceDataChanged()));
 
     d->sourceType->addItem(i18n("Internal"), QVariant("internal"));
     d->sourceType->addItem(i18n("External"), QVariant("external"));
@@ -140,7 +123,7 @@ void KexiSourceSelector::setConnectionData(const QDomElement &c)
         d->externalSource->setText(c.attribute("source"));
     }
 
-    emit setData(sourceData());
+    emit sourceDataChanged();
 }
 
 QDomElement KexiSourceSelector::connectionData()
@@ -170,20 +153,8 @@ QDomElement KexiSourceSelector::connectionData()
     return conndata;
 }
 
-KoReportData* KexiSourceSelector::sourceData()
+KoReportData* KexiSourceSelector::createSourceData() const
 {
-    if (d->kexiDBData) {
-        delete d->kexiDBData;
-        d->kexiDBData = 0;
-    }
-
-#ifndef KEXI_MOBILE
-    if (d->kexiMigrateData) {
-        delete d->kexiMigrateData;
-        d->kexiMigrateData = 0;
-    }
-#endif
-
 //!@TODO Fix when enable external data
 #ifndef NO_EXTERNAL_SOURCES
     KexiReportView *view = 0;
@@ -194,29 +165,21 @@ KoReportData* KexiSourceSelector::sourceData()
         }
     }
     if (d->sourceType->itemData(d->sourceType->currentIndex()).toString() == "internal" && d->internalSource->isSelectionValid()) {
-        d->kexiDBData = new KexiDBReportData(d->internalSource->selectedName(),
+        return new KexiDBReportData(d->internalSource->selectedName(),
                                              d->internalSource->selectedPartClass(),
                                              d->conn, view);
-        return d->kexiDBData;
     }
 
 #ifndef KEXI_MOBILE
     if (d->sourceType->itemData(d->sourceType->currentIndex()).toString() == "external") {
-        d->kexiMigrateData = new KexiMigrateReportData(d->externalSource->text());
-        return d->kexiMigrateData;
+        return new KexiMigrateReportData(d->externalSource->text());
     }
 #endif
 
 #else
     if (d->internalSource->isSelectionValid()) {
-        d->kexiDBData = new KexiDBReportData(d->internalSource->selectedName(), d->conn);
-        return d->kexiDBData;
+        return new KexiDBReportData(d->internalSource->selectedName(), d->conn);
     }
 #endif
     return 0;
-}
-
-void KexiSourceSelector::setDataClicked()
-{
-    emit(setData(sourceData()));
 }

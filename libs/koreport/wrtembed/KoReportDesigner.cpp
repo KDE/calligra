@@ -196,6 +196,7 @@ KoReportDesigner::~KoReportDesigner()
     delete d;
     delete m_sectionData;
     delete m_set;
+    delete m_kordata;
 }
 
 ///The loading Code
@@ -375,6 +376,10 @@ void KoReportDesigner::slotSectionEditor()
 
 void KoReportDesigner::setReportData(KoReportData* kodata)
 {
+    if (m_kordata == kodata) {
+        return;
+    }
+    delete m_kordata;
     m_kordata = kodata;
     slotPageButton_Pressed();
     setModified(true);

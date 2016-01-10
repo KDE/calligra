@@ -1,6 +1,7 @@
 /*
 * Kexi Report Plugin
 * Copyright (C) 2007-2009 by Adam Pigg (adam@piggz.co.uk)
+* Copyright (C) 2016 Jarosław Staniek <staniek@kde.org>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -39,15 +40,12 @@ public:
     explicit KexiSourceSelector(KexiProject* project, QWidget* parent = 0);
     ~KexiSourceSelector();
 
-    KoReportData* sourceData();
+    KoReportData* createSourceData() const Q_REQUIRED_RESULT;
     void setConnectionData(const QDomElement &c);
     QDomElement connectionData();
 
 Q_SIGNALS:
-    void setData(KoReportData*);
-
-private Q_SLOTS:
-    void setDataClicked();
+    void sourceDataChanged();
 
 private:
     class Private;
