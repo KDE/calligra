@@ -145,6 +145,10 @@ set (interfaces_DIR_SRCS
     )
 endif()
 
+set (odf_DIR_SRCS
+    odf/SheetsOdfDoc.cpp
+    )
+
 set (part_DIR_SRCS
     part/CanvasBase.cpp
     part/Canvas.cpp
@@ -282,6 +286,8 @@ set (calligrasheetsodf_LIB_SRCS
     database/DatabaseManager.cpp
     database/DatabaseStorage.cpp
     database/Filter.cpp
+
+    ${odf_DIR_SRCS}
 
     # TODO: move the formula evaluation out of Formula.cpp so these files can move out of libcalligrasheetsodf
     Function.cpp

@@ -124,9 +124,7 @@ public:
     void loadConfigFromFile();
     bool configLoadFromFile() const;
 
-
-    virtual bool saveOdfHelper(SavingContext &documentContext, SaveFlag saveFlag,
-                       QString* plainText = 0);
+    virtual bool saveOdf(SavingContext &documentContext);
 
     /**
      * Requests an update of all attached user interfaces (views).
@@ -158,8 +156,6 @@ protected:
      */
     virtual bool completeLoading(KoStore*);
 
-    virtual void saveOdfViewSettings(KoXmlWriter& settingsWriter);
-    virtual void saveOdfViewSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter);
 private:
     Q_DISABLE_COPY(Doc)
 

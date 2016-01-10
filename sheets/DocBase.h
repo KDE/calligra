@@ -53,10 +53,6 @@ class CALLIGRA_SHEETS_ODF_EXPORT DocBase : public KoDocument
 {
     Q_OBJECT
 public:
-    /**
-     * \ingroup OpenDocument
-     */
-    enum SaveFlag { SaveAll, SaveSelected }; // Stage and Words have have SavePage too
 
     /**
      * Creates a new document.
@@ -106,6 +102,8 @@ public:
 
     virtual void initConfig();
 
+    QStringList spellListIgnoreAll() const;
+    void setSpellListIgnoreAll(const QStringList &list);
 
 
     /**
@@ -116,26 +114,10 @@ public:
 
     /**
      * \ingroup OpenDocument
-     * Save the whole document, or just the selection, into OASIS format
-     * When saving the selection, also return the data as plain text and/or plain picture,
-     * which are used to insert into the KMultipleDrag drag object.
-     *
-     * @param store the KoStore to save into
-     * @param manifestWriter pointer to a koxmlwriter to add entries to the manifest
-     * @param saveFlag either the whole document, or only the selected text/objects.
-     * @param plainText must be set when saveFlag==SaveSelected.
-     *        It returns the plain text format of the saved data, when available.
-     */
-    virtual bool saveOdfHelper(SavingContext &documentContext, SaveFlag saveFlag,
-                       QString* plainText = 0);
-
-    /**
-     * \ingroup OpenDocument
-     * Main loading method.
+     * Main loading method. Wrapper around Odf::loadDocument.
      * @see Map::loadOdf
      */
     virtual bool loadOdf(KoOdfReadStore & odfStore);
-
 protected:
     class Private;
     Private * const d;
@@ -143,32 +125,8 @@ protected:
     virtual void paintContent(QPainter & painter, const QRect & rect);
     virtual bool loadXML(const KoXmlDocument& doc, KoStore *store);
 
-    virtual void saveOdfViewSettings(KoXmlWriter& settingsWriter);
-    virtual void saveOdfViewSheetSettings(Sheet *sheet, KoXmlWriter& settingsWriter);
 private:
     Q_DISABLE_COPY(DocBase)
-
-    /**
-     * \ingroup OpenDocument
-     * Saves the Document related settings.
-     * The actual saving takes place in Map::saveOdfSettings.
-     * @see Map::saveOdfSettings
-     */
-    void saveOdfSettings(KoXmlWriter &settingsWriter);
-
-    /**
-     * \ingroup OpenDocument
-     * Loads the Document related settings.
-     * The actual loading takes place in Map::loadOdfSettings.
-     * @see Map::loadOdfSettings
-     */
-    void loadOdfSettings(const KoXmlDocument&settingsDoc);
-
-    /**
-     * \ingroup OpenDocument
-     * Load the spell checker ignore list.
-     */
-    void loadOdfIgnoreList(const KoOasisSettings& settings);
 };
 
 } // namespace Sheets

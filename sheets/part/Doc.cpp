@@ -566,38 +566,7 @@ void Doc::sheetAdded(Sheet* sheet)
 #endif
 }
 
-void Doc::saveOdfViewSettings(KoXmlWriter& settingsWriter)
-{
-    Q_UNUSED(settingsWriter);
-    /*FIXME
-    // Save visual info for the first view, such as active sheet and active cell
-    // It looks like a hack, but reopening a document creates only one view anyway (David)
-    View *const view = static_cast<View*>(views().first());
-    // save current sheet selection before to save marker, otherwise current pos is not saved
-    view->saveCurrentSheetSelection();
-    //<config:config-item config:name="ActiveTable" config:type="string">Feuille1</config:config-item>
-    if (Sheet *sheet = view->activeSheet()) {
-        settingsWriter.addConfigItem("ActiveTable", sheet->sheetName());
-    }
-    */
-}
-
-void Doc::saveOdfViewSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter)
-{
-    Q_UNUSED(sheet);
-    Q_UNUSED(settingsWriter);
-    /*FIXME
-    View *const view = static_cast<View*>(views().first());
-    QPoint marker = view->markerFromSheet(sheet);
-    QPointF offset = view->offsetFromSheet(sheet);
-    settingsWriter.addConfigItem("CursorPositionX", marker.x() - 1);
-    settingsWriter.addConfigItem("CursorPositionY", marker.y() - 1);
-    settingsWriter.addConfigItem("xOffset", offset.x());
-    settingsWriter.addConfigItem("yOffset", offset.y());
-    */
-}
-
-bool Doc::saveOdfHelper(SavingContext &documentContext, SaveFlag saveFlag, QString *plainText)
+bool Doc::saveOdf(SavingContext &documentContext)
 {
     /* don't pull focus away from the editor if this is just a background
        autosave */
@@ -609,5 +578,5 @@ bool Doc::saveOdfHelper(SavingContext &documentContext, SaveFlag saveFlag, QStri
         emit closeEditor(true);
     }
 
-    return DocBase::saveOdfHelper(documentContext, saveFlag, plainText);
+    return DocBase::saveOdf(documentContext);
 }
