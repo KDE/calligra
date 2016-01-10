@@ -215,6 +215,7 @@ void KoReportDesignerItemLabel::exitInlineEditingMode()
 
 void KoReportDesignerItemLabel::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
 {
+    Q_UNUSED(event)
     enterInlineEditingMode();
 }
 
