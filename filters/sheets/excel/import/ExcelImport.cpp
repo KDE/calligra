@@ -38,7 +38,6 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoGenStyle.h>
-#include <KoOdfNumberStyles.h>
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeRegistry.h>
