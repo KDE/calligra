@@ -28,6 +28,7 @@
 
 #include <KoScriptingModule.h>
 
+#include "kplatoscripting_export.h"
 #include <kptmaindocument.h>
 
 class QWidget;
@@ -53,7 +54,7 @@ namespace Scripting {
     * print Plan.project().name()
     * \endcode
     */
-    class Module : public KoScriptingModule
+    class KPLATOSCRIPTING_TEST_EXPORT Module : public KoScriptingModule
     {
             Q_OBJECT
         public:

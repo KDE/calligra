@@ -28,7 +28,10 @@ ki18n_wrap_ui(krossmoduleplan_PART_SRCS
 )
 
 add_library(krossmoduleplan MODULE ${krossmoduleplan_PART_SRCS})
-generate_export_header(krossmoduleplan BASE_NAME kplatoscripting)
+generate_export_header(krossmoduleplan
+    BASE_NAME kplatoscripting
+    EXPORT_FILE_NAME kplatoscripting_generated_export.h
+)
 kcoreaddons_desktop_to_json(krossmoduleplan planscripting.desktop)
 
 target_link_libraries(krossmoduleplan
