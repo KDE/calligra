@@ -24,7 +24,7 @@
 #define DEFAULT_MUT_SCHED   500
 #define DEFAULT_MUT_ALT	 500
 
-char *rcps_version() {
+const char *rcps_version() {
 	return VERSION;
 }
 
@@ -522,15 +522,15 @@ void rcps_solver_free(struct rcps_solver *s) {
 	free(s);
 }
 
-static char *check_ok = "Ok";
-static char *check_start_job_missing = "Start job missing";
-static char *check_multiple_end_jobs = "Multiple end jobs";
-static char *check_end_job_missing = "End job missing";
-static char *check_circular_dependency = "Circular dependency";
-static char *check_unknown_code = "Unknown error code";
+static const char check_ok[] = "Ok";
+static const char check_start_job_missing[] = "Start job missing";
+static const char check_multiple_end_jobs[] = "Multiple end jobs";
+static const char check_end_job_missing[] = "End job missing";
+static const char check_circular_dependency[] = "Circular dependency";
+static const char check_unknown_code[] = "Unknown error code";
 
-char *rcps_error(int code) {
-	char *r = check_unknown_code;
+const char *rcps_error(int code) {
+	const char *r = check_unknown_code;
 	if (code == RCPS_CHECK_OK) {
 		r = check_ok;
 	} else if (code & RCPS_CHECK_START_JOB_MISSING) {
