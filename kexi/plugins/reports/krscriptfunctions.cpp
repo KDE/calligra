@@ -25,7 +25,12 @@ KRScriptFunctions::KRScriptFunctions(const KoReportData* kodata, KexiDB::Connect
 {
     m_cursor = kodata;
     m_connection = conn;
-    m_source = kodata->sourceName();
+
+    if (m_connection->tableSchema(kodata->sourceName())) {
+        m_source = kodata->sourceName();
+    } else if (m_connection->querySchema(kodata->sourceName())) {
+        m_source = m_connection->selectStatement(*(m_connection->querySchema(kodata->sourceName())));
+    }
 }
 
 KRScriptFunctions::~KRScriptFunctions()
