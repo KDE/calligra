@@ -27,7 +27,8 @@ ki18n_wrap_ui(krossmoduleplan_PART_SRCS
     ScriptingDataQueryView.ui
 )
 
-add_library(krossmoduleplan MODULE ${krossmoduleplan_PART_SRCS})
+# TODO: plugin should not be SHARED, but MODULE. Needs to be SHARED because tests link to it -> fix with util lib/objects
+add_library(krossmoduleplan SHARED ${krossmoduleplan_PART_SRCS})
 generate_export_header(krossmoduleplan
     BASE_NAME kplatoscripting
     EXPORT_FILE_NAME kplatoscripting_generated_export.h
