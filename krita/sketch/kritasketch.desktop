@@ -64,6 +64,6 @@ GenericName[ug]=سىفىرلىق رەسىم سىزغۇ
 GenericName[uk]=Цифрове малювання
 GenericName[x-test]=xxDigital Paintingxx
 Exec=kritasketch
-Icon=calligrakrita
+Icon=calligrakrita2
 MimeType=application/x-krita;
 Categories=Qt;KDE;Graphics;

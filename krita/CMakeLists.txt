@@ -155,7 +155,7 @@ if(WIN32 AND USE_BREAKPAD)
     set(BREAKPAD_LIBS breakpad)
 endif()
 
-kde4_add_app_icon(krita_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
+kde4_add_app_icon(krita_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita2.png")
 
 kde4_add_executable(krita ${krita_SRCS})
 target_link_libraries(krita kritaui ${BREAKPAD_LIBS})

@@ -47,7 +47,7 @@ KAboutData *newKritaAboutData()
                                             "http://www.krita.org",
                                             "submit@bugs.kde.org");
 
-    aboutData->setProgramIconName(koIconName("calligrakrita"));
+    aboutData->setProgramIconName(koIconName("calligrakrita2"));
 
     aboutData->addAuthor(ki18n("Boudewijn Rempt"), ki18n("Project Maintainer"));
     aboutData->addAuthor(ki18n("Aaron J. Seigo"));

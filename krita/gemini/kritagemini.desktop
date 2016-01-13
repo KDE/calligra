@@ -64,6 +64,6 @@ Name[tr]=Krita Gemini
 Name[uk]=Krita Gemini
 Name[x-test]=xxKrita Geminixx
 Exec=kritagemini
-Icon=calligrakrita
+Icon=calligrakrita2
 MimeType=application/x-krita;
 Categories=Qt;KDE;Graphics;

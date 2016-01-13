@@ -267,7 +267,7 @@
     <Action name="help_contents" icon="help-contents" text="Krita &amp;Handbook" whatsThis="" toolTip="Krita Handbook" iconText="Krita Handbook" shortcut="F1" defaultShortcut="F1" isCheckable="false" statusTip=""/>
     <Action name="help_report_bug" icon="tools-report-bug" text="&amp;Report Bug..." whatsThis="" toolTip="Report Bug" iconText="Report Bug" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="switch_application_language" icon="preferences-desktop-locale" text="Switch Application &amp;Language..." whatsThis="" toolTip="Switch Application Language" iconText="Switch Application Language" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="help_about_app" icon="calligrakrita" text="&amp;About Krita" whatsThis="" toolTip="About Krita" iconText="About Krita" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
+    <Action name="help_about_app" icon="calligrakrita2" text="&amp;About Krita" whatsThis="" toolTip="About Krita" iconText="About Krita" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="help_about_kde" icon="kde" text="About &amp;KDE" whatsThis="" toolTip="About KDE" iconText="About KDE" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="mainToolBar" icon="" text="Show File Toolbar" whatsThis="" toolTip="Show File Toolbar" iconText="Show File Toolbar" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="BrushesAndStuff" icon="" text="Hide Brushes and Stuff Toolbar" whatsThis="" toolTip="Hide Brushes and Stuff Toolbar" iconText="Hide Brushes and Stuff Toolbar" shortcut="" defaultShortcut="" isCheckable="true" statusTip=""/>
