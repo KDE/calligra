@@ -4,7 +4,7 @@ add_definitions(
 
 if (SHOULD_BUILD_LIB_CALLIGRA)
     add_subdirectory( version )
-    add_subdirectory( koplugin )
+    add_subdirectory( plugin )
     add_subdirectory( widgetutils )
     add_subdirectory( widgets )
     add_subdirectory( store )

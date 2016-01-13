@@ -724,7 +724,7 @@ set(KOVERSION_INCLUDES ${CMAKE_SOURCE_DIR}/libs/version
 include_directories(${KOVERSION_INCLUDES})
 
 # koplugin is at the bottom of the stack
-set(KOPLUGIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin)
+set(KOPLUGIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/plugin)
 
 set(KUNDO2_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kundo2
                     ${CMAKE_BINARY_DIR}/libs/kundo2)
