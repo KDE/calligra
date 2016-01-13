@@ -809,7 +809,9 @@ set(KORDF_INCLUDES ${KOMAIN_INCLUDES}
 set(KORDF_LIBS kordf)
 
 if(SHOULD_BUILD_FEATURE_SCRIPTING)
-  set(KOKROSS_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kokross ${CMAKE_BINARY_DIR}/libs/kokross)
+  set(KOKROSS_INCLUDES
+                    ${CMAKE_SOURCE_DIR}/libs/kross
+                    ${CMAKE_BINARY_DIR}/libs/kross)
 endif()
 
 # kopageapp

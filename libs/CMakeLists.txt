@@ -22,7 +22,7 @@ if (SHOULD_BUILD_LIB_KOMAIN)
 endif ()
 
 if (SHOULD_BUILD_FEATURE_SCRIPTING)
-    add_subdirectory( kokross )
+    add_subdirectory( kross )
 endif ()
 
 if (SHOULD_BUILD_LIB_KOVECTORIMAGE)
