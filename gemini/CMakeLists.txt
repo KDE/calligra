@@ -14,7 +14,7 @@ include_directories(${KOMAIN_INCLUDES}
                     ${CMAKE_CURRENT_SOURCE_DIR}/../part
                     #${CMAKE_CURRENT_SOURCE_DIR}/models
                     ${CMAKE_CURRENT_BINARY_DIR}
-                    ${CMAKE_SOURCE_DIR}/libs/kopageapp
+                    ${CMAKE_SOURCE_DIR}/libs/pageapp
                     ${CMAKE_SOURCE_DIR}/stage
                     ${CMAKE_SOURCE_DIR}/stage/part
                     ${CMAKE_SOURCE_DIR}/words

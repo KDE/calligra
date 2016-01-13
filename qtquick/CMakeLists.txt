@@ -71,7 +71,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/words/part
     ${CMAKE_SOURCE_DIR}/words/gemini
 #    ${CMAKE_SOURCE_DIR}/sheets
-    ${CMAKE_SOURCE_DIR}/libs/kopageapp
+    ${CMAKE_SOURCE_DIR}/libs/pageapp
 )
 
 add_library(calligraqtquickcomponentsplugin SHARED ${calligraqtquickcomponents_SRCS})

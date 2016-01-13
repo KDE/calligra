@@ -30,7 +30,7 @@ if (SHOULD_BUILD_LIB_KOVECTORIMAGE)
 endif ()
 
 if (SHOULD_BUILD_LIB_KOPAGEAPP)
-    add_subdirectory( kopageapp )
+    add_subdirectory( pageapp )
 endif ()
 
 if (SHOULD_BUILD_FEATURE_RDF)
