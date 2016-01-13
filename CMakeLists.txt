@@ -767,11 +767,12 @@ set(VECTORIMAGE_INCLUDES
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage/libwmf)
 
 # KoText depends on koplugin, odf
-set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
-                   ${CMAKE_BINARY_DIR}/libs/kotext
-                   ${CMAKE_SOURCE_DIR}/libs/kotext/changetracker
-                   ${CMAKE_SOURCE_DIR}/libs/kotext/styles
-                   ${CMAKE_SOURCE_DIR}/libs/kotext/opendocument
+set(KOTEXT_INCLUDES
+                   ${CMAKE_SOURCE_DIR}/libs/text
+                   ${CMAKE_BINARY_DIR}/libs/text
+                   ${CMAKE_SOURCE_DIR}/libs/text/changetracker
+                   ${CMAKE_SOURCE_DIR}/libs/text/styles
+                   ${CMAKE_SOURCE_DIR}/libs/text/opendocument
                    ${SOPRANO_INCLUDE_DIR}
                    ${FLAKE_INCLUDES}
                    ${KOODF_INCLUDES})
