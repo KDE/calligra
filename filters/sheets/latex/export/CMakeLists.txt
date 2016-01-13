@@ -28,11 +28,3 @@ kcoreaddons_desktop_to_json(calligra_filter_kspread2tex calligra_filter_kspread2
 target_link_libraries(calligra_filter_kspread2tex komain)
 
 install(TARGETS calligra_filter_kspread2tex  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  calligra_filter_kspread2tex.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
-
-

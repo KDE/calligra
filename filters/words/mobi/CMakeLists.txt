@@ -21,8 +21,3 @@ target_link_libraries(calligra_filter_odt2mobi komain Qt5::Svg)
 
 install(TARGETS calligra_filter_odt2mobi  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 kcoreaddons_desktop_to_json(calligra_filter_odt2mobi calligra_filter_odt2mobi.desktop)
-
-
- ########### install files ###############
-
-install( FILES  calligra_filter_odt2mobi.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
