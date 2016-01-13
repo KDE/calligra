@@ -34,16 +34,24 @@
 namespace KPlato
 {
 
-QTimeZone createTimeZoneWithOffsetFromSystem(int hours, const QString & name)
+QTimeZone createTimeZoneWithOffsetFromSystem(int hours, const QString & name, int *shiftDays)
 {
     QTimeZone systemTimeZone = QTimeZone::systemTimeZone();
     int systemOffsetSeconds = systemTimeZone.standardTimeOffset(QDateTime(QDate(1980, 1, 1), QTime(), Qt::UTC));
     int offsetSeconds = systemOffsetSeconds + 3600 * hours;
-    if (offsetSeconds >= (14*3600) ) {
+    if (offsetSeconds >= (12*3600) ) {
+        qDebug() << "reducing offset by 24h";
         offsetSeconds -= (24*3600);
-    } else if (offsetSeconds <= -(14*3600) ) {
+        *shiftDays = -1;
+    } else if (offsetSeconds <= -(12*3600) ) {
+        qDebug() << "increasing offset by 24h";
         offsetSeconds += (24*3600);
+        *shiftDays = 1;
+    } else {
+        *shiftDays = 0;
     }
+    qDebug() << "creating timezone for offset" << hours << offsetSeconds << "systemoffset" << systemOffsetSeconds
+             << "shiftDays" << *shiftDays;
     return QTimeZone(name.toLatin1(), offsetSeconds, name, name);
 }
 
@@ -156,10 +164,11 @@ void CalendarTester::testTimezone()
     QVERIFY(t.findDay(wdate) == day);
 
     // local zone: Europe/Berlin ( 1 hours from London )
-    QTimeZone lo = createTimeZoneWithOffsetFromSystem(-1, "DummyLondon");
+    int loShiftDays;
+    QTimeZone lo = createTimeZoneWithOffsetFromSystem(-1, "DummyLondon", &loShiftDays);
     QVERIFY( lo.isValid() );
-    QDateTime dt1 = QDateTime( wdate, t1, lo ).addSecs( -2 * 3600 );
-    QDateTime dt2 = QDateTime( wdate, t2, lo ).addSecs( 0 * 3600 );
+    QDateTime dt1 = QDateTime( wdate, t1, lo ).addDays(loShiftDays).addSecs( -2 * 3600 );
+    QDateTime dt2 = QDateTime( wdate, t2, lo ).addDays(loShiftDays).addSecs( 0 * 3600 );
 
     qDebug()<<QDateTime( wdt1 )<<QDateTime( wdt2 );
     qDebug()<<dt1<<dt2<<"("<<dt1.toLocalTime()<<dt2.toLocalTime()<<")";
@@ -170,10 +179,11 @@ void CalendarTester::testTimezone()
     QCOMPARE( t.effort( DateTime( dt1 ), DateTime( dt2 ) ).toString(), e.toString() );
 
     // local zone: Europe/Berlin ( 9 hours from America/Los_Angeles )
-    QTimeZone la = createTimeZoneWithOffsetFromSystem(-9, "DummyLos_Angeles");
+    int laShiftDays;
+    QTimeZone la = createTimeZoneWithOffsetFromSystem(-9, "DummyLos_Angeles", &laShiftDays);
     QVERIFY( la.isValid() );
-    QDateTime dt3 = QDateTime( wdate, t1, la ).addSecs( -10 * 3600 );
-    QDateTime dt4 = QDateTime( wdate, t2, la ).addSecs( -8 * 3600 );
+    QDateTime dt3 = QDateTime( wdate, t1, la ).addDays(laShiftDays).addSecs( -10 * 3600 );
+    QDateTime dt4 = QDateTime( wdate, t2, la ).addDays(laShiftDays).addSecs( -8 * 3600 );
 
     qDebug()<<QDateTime( wdt1 )<<QDateTime( wdt2 );
     qDebug()<<dt3<<dt4<<"("<<dt3.toLocalTime()<<dt4.toLocalTime()<<")";
@@ -185,9 +195,10 @@ void CalendarTester::testTimezone()
     QString s = "Test Cairo:";
     qDebug()<<s;
     // local zone: Europe/Berlin ( 1 hour from cairo )
-    QTimeZone ca = createTimeZoneWithOffsetFromSystem(1, "DummyCairo");
-    QDateTime dt5 = QDateTime( wdate, t1, ca ).addSecs( 0 * 3600 );
-    QDateTime dt6 = QDateTime( wdate, t2, ca ).addSecs( 2 * 3600 );
+    int caShiftDays;
+    QTimeZone ca = createTimeZoneWithOffsetFromSystem(1, "DummyCairo", &caShiftDays);
+    QDateTime dt5 = QDateTime( wdate, t1, ca ).addDays(caShiftDays).addSecs( 0 * 3600 );
+    QDateTime dt6 = QDateTime( wdate, t2, ca ).addDays(caShiftDays).addSecs( 2 * 3600 );
 
     qDebug()<<QDateTime( wdt1 )<<QDateTime( wdt2 );
     qDebug()<<dt5<<dt6<<"("<<dt5.toLocalTime()<<dt6.toLocalTime()<<")";
