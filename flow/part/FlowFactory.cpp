@@ -42,8 +42,7 @@ FlowFactory::FlowFactory()
     if (factoryCount == 0) {
 
         // Load the KoPA-specific tools
-        KoPluginLoader::instance()->load(QLatin1String("CalligraPageApp/Tool"),
-                                         QLatin1String("[X-KoPageApp-Version] == 28"));
+        KoPluginLoader::instance()->load(QLatin1String("CalligraPageApp/Tool"));
 
         // Load Flow specific dockers
         KoPluginLoader::instance()->load(QLatin1String("Flow/Dock"));

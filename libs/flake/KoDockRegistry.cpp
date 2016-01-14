@@ -41,9 +41,7 @@ void KoDockRegistry::init()
     config.whiteList = "DockerPlugins";
     config.blacklist = "DockerPluginsDisabled";
     config.group = "calligra";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Dock"),
-                                     QString::fromLatin1("[X-Flake-PluginVersion] == 28"),
-                                     config);
+    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Dock"), config);
 }
 
 KoDockRegistry::~KoDockRegistry()

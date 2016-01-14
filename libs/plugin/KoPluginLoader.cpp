@@ -54,17 +54,13 @@ KoPluginLoader* KoPluginLoader::instance()
     return pluginLoaderInstance();
 }
 
-void KoPluginLoader::load(const QString & serviceType, const QString & versionString, const PluginsConfig &config, QObject* owner)
+void KoPluginLoader::load(const QString & serviceType, const PluginsConfig &config, QObject* owner)
 {
     // Don't load the same plugins again
     if (d->loadedServiceTypes.contains(serviceType)) {
         return;
     }
     d->loadedServiceTypes << serviceType;
-    QString query = QString::fromLatin1("(Type == 'Service')");
-    if (!versionString.isEmpty()) {
-        query += QString::fromLatin1(" and (%1)").arg(versionString);
-    }
 
     QList<QPluginLoader *> offers = KoJsonTrader::self()->query(serviceType, QString());
     QList<QPluginLoader *> plugins;

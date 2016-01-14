@@ -98,19 +98,16 @@ public:
     static KoPluginLoader * instance();
 
     /**
-     * Load all plugins that conform to the versiontype and versionstring,
+     * Load all plugins that conform to the plugin type,
      * for instance:
-     * KoPluginLoader::instance()->load("Calligra/Flake", "([X-Flake-PluginVersion] == 28)");
-     * This method allows you to optionally limit the plugins that are loaded by version, but also
-     * using a user configurable set of config options.
+     * KoPluginLoader::instance()->load("Calligra/Flake");
      * If you pass a PluginsConfig struct only those plugins are loaded that are specified in the
      * application config file.  New plugins found since last start will be automatically loaded.
      * @param serviceType The string used to identify the plugins.
-     * @param versionString A string match that allows you to check for a specific version
      * @param config when passing a valid config only the wanted plugins are actually loaded
      * @return a list of services (by library name) that were not know in the config
      */
-    void load(const QString & serviceType, const QString & versionString = QString(), const PluginsConfig &config = PluginsConfig(), QObject* owner = 0);
+    void load(const QString & serviceType, const PluginsConfig &config = PluginsConfig(), QObject* owner = 0);
 
 public:
     /// DO NOT USE! Use instance() instead
