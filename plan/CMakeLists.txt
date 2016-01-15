@@ -91,14 +91,15 @@ add_library(planprivate SHARED ${planprivate_LIB_SRCS} ${plansettings_SRCS} )
 generate_export_header(planprivate BASE_NAME kplato)
 
 target_link_libraries(planprivate
-PUBLIC
-    kplatokernel
-    kplatomodels
-    kplatoui
-    komain
-PRIVATE
-    KF5::IconThemes
-#     KF5::KHtml
+    PUBLIC
+        kplatokernel
+        kplatomodels
+        kplatoui
+        komain
+    PRIVATE
+        koplugin
+        KF5::IconThemes
+        #KF5::KHtml
 )
 if(KF5AkonadiContact_FOUND)
     target_link_libraries(planprivate  PRIVATE KF5::AkonadiContact)

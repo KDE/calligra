@@ -29,8 +29,12 @@ set(vectorimage_LIB_SRCS
 add_library(kovectorimage SHARED ${vectorimage_LIB_SRCS})
 generate_export_header(kovectorimage BASE_NAME kovectorimage)
 
-target_link_libraries(kovectorimage  KF5::I18n Qt5::Gui Qt5::PrintSupport)
-target_link_libraries(kovectorimage LINK_INTERFACE_LIBRARIES )
+target_link_libraries(kovectorimage
+    PUBLIC
+        Qt5::Gui
+    PRIVATE
+        Qt5::PrintSupport
+)
 
 set_target_properties(kovectorimage PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

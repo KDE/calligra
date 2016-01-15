@@ -226,6 +226,7 @@ target_link_libraries(flake
         koodf
         kundo2
     PRIVATE
+        koplugin
         KF5::IconThemes
         Qt5::Svg
 )

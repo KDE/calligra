@@ -302,8 +302,13 @@ generate_export_header(calligrasheetsodf
     BASE_NAME CALLIGRA_SHEETS_ODF
 )
 
-target_link_libraries(calligrasheetsodf komain KF5::KDELibs4Support)
-target_link_libraries(calligrasheetsodf LINK_INTERFACE_LIBRARIES komain KF5::KDELibs4Support)
+target_link_libraries(calligrasheetsodf
+    PUBLIC
+        komain
+        KF5::KDELibs4Support
+    PRIVATE
+        koplugin
+)
 
 set_target_properties(calligrasheetsodf PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -318,17 +323,19 @@ generate_export_header(calligrasheetscommon
 )
 
 target_link_libraries(calligrasheetscommon
-    komain
-    calligrasheetsodf
-    KF5::SonnetCore
-    KF5::SonnetUi
-    KF5::NotifyConfig
+    PUBLIC
+        komain
+        calligrasheetsodf
+    PRIVATE
+        koplugin
+        KF5::SonnetCore
+        KF5::SonnetUi
+        KF5::NotifyConfig
 )
 if(Qt5Sql_FOUND)
-    target_link_libraries(calligrasheetscommon Qt5::Sql)
+    target_link_libraries(calligrasheetscommon PRIVATE Qt5::Sql)
 endif()
 
-target_link_libraries(calligrasheetscommon LINK_INTERFACE_LIBRARIES komain calligrasheetsodf )
 
 set_target_properties(calligrasheetscommon PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

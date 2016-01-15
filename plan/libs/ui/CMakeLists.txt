@@ -129,18 +129,18 @@ add_library(kplatoui SHARED ${kplatoui_LIB_SRCS})
 generate_export_header(kplatoui)
 
 target_link_libraries(kplatoui
-PUBLIC
-    komain
-    kplatokernel
-    kplatomodels
-    KReport
-    KGantt
-    KF5::KHtml
-PRIVATE
-    KPropertyWidgets
-    KChart
-    KF5::ItemViews
-    KF5::IconThemes
+    PUBLIC
+        komain
+        kplatokernel
+        kplatomodels
+        KReport
+        KGantt
+        KF5::KHtml
+    PRIVATE
+        KPropertyWidgets
+        KChart
+        KF5::ItemViews
+        KF5::IconThemes
 )
 if(KF5AkonadiContact_FOUND)
     target_link_libraries(kplatoui  PRIVATE KF5::AkonadiContact)

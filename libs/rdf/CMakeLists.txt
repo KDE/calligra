@@ -36,11 +36,13 @@ ki18n_wrap_ui( kordf_LIB_SRCS
 
 add_library(kordf SHARED ${kordf_LIB_SRCS})
 
-target_link_libraries(kordf komain )
-target_link_libraries(kordf ${SOPRANO_LIBRARIES})
-target_link_libraries(kordf LINK_INTERFACE_LIBRARIES  ${SOPRANO_LIBRARIES})
-
-target_link_libraries(kordf LINK_INTERFACE_LIBRARIES komain )
+target_link_libraries(kordf
+    PUBLIC
+        komain
+        ${SOPRANO_LIBRARIES}
+    PRIVATE
+        koplugin
+)
 
 set_target_properties(kordf PROPERTIES
 VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

@@ -85,6 +85,7 @@ target_link_libraries(calligraqtquickcomponentsplugin
     wordsprivate
 #    calligrasheetscommon
     kopageapp
+    koplugin
     calligrastageprivate)
 
 install(TARGETS calligraqtquickcomponentsplugin

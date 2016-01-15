@@ -160,6 +160,7 @@ target_link_libraries(calligrastageprivate
     PRIVATE
         kowidgets
         kotextlayout
+        koplugin
         KF5::Archive
         KF5::IconThemes
         Qt5::Svg

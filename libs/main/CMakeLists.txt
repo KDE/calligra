@@ -92,16 +92,17 @@ generate_export_header(komain
     )
 
 target_link_libraries(komain
-PUBLIC
-    kowidgets
-    kotextlayout
-    koversion
-PRIVATE
-    KF5::Notifications
-    KF5::ItemViews
-    KF5::KIOFileWidgets
-    KF5::IconThemes
-    KF5::DBusAddons
+    PUBLIC
+        kowidgets
+        kotextlayout
+        koversion
+    PRIVATE
+        koplugin
+        KF5::Notifications
+        KF5::ItemViews
+        KF5::KIOFileWidgets
+        KF5::IconThemes
+        KF5::DBusAddons
 )
 
 if( KF5_Activities_FOUND )

@@ -40,18 +40,17 @@ kconfig_add_kcfg_files(planworksettings_SRCS planworksettings.kcfgc)
 add_library(planworkfactory SHARED ${planworkfactory_LIB_SRCS} ${planworksettings_SRCS})
 generate_export_header(planworkfactory BASE_NAME kplatowork)
 
-target_link_libraries(
-    planworkfactory
-PUBLIC
-    kplatokernel
-    kplatomodels
-    kplatoui
-    planprivate
-    komain
-    KGantt
-    KF5::Parts
-PRIVATE
-    KF5::IconThemes
+target_link_libraries(planworkfactory
+    PUBLIC
+        kplatokernel
+        kplatomodels
+        kplatoui
+        planprivate
+        komain
+        KGantt
+        KF5::Parts
+    PRIVATE
+        KF5::IconThemes
 )
 
 set_target_properties(planworkfactory PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

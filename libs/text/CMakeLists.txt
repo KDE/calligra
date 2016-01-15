@@ -142,6 +142,7 @@ target_link_libraries(kotext
         flake
         KF5::TextWidgets
     PRIVATE
+        koplugin
         KF5::WindowSystem # KoFind to activate the window with content found
 )
 if( SHOULD_BUILD_FEATURE_RDF )

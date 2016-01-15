@@ -13,11 +13,11 @@ add_library(kokross SHARED ${kokross_LIB_SRCS})
 generate_export_header(kokross)
 
 target_link_libraries(kokross
-PUBLIC
-    komain
-    KF5::KrossUi
-PRIVATE
-    KF5::KIOFileWidgets
+    PUBLIC
+        komain
+        KF5::KrossUi
+    PRIVATE
+        KF5::KIOFileWidgets
 )
 
 set_target_properties(kokross PROPERTIES

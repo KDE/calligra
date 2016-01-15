@@ -28,7 +28,6 @@ add_library(calligra_semanticitem_location MODULE ${calligra_semanticitem_locati
 if( MARBLE_FOUND )
 include_directories(${MARBLE_INCLUDE_DIR})
 target_link_libraries(calligra_semanticitem_location ${MARBLE_LIBRARIES})
-target_link_libraries(calligra_semanticitem_location LINK_INTERFACE_LIBRARIES  ${MARBLE_LIBRARIES})
 endif()
 
 target_link_libraries(calligra_semanticitem_location   ${KORDF_LIBS} KF5::I18n KF5::KDELibs4Support)
