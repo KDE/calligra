@@ -35,7 +35,7 @@ void KoInputDeviceHandlerRegistry::init()
     config.whiteList = "DevicePlugins";
     config.blacklist = "DevicePluginsDisabled";
     config.group = "calligra";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Device"), config);
+    KoPluginLoader::load(QStringLiteral("Calligra/Device"), config);
 
     foreach(const QString & id, keys()) {
         KoInputDeviceHandler * d = value(id);

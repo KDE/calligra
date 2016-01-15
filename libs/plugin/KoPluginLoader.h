@@ -20,10 +20,11 @@
 #ifndef KO_PLUGIN_LOADER_H
 #define KO_PLUGIN_LOADER_H
 
-#include <QObject>
 #include <QStringList>
 
 #include "koplugin_export.h"
+
+class QObject;
 
 /**
  * The pluginloader singleton is responsible for loading the plugins
@@ -59,18 +60,14 @@ MyPlugin::MyPlugin( QObject *parent, const QVariantList& ) : QObject(parent) {
 #include <MyPlugin.moc>
 @endcode
  */
-class KOPLUGIN_EXPORT KoPluginLoader : public QObject
+namespace KoPluginLoader
 {
-
-    Q_OBJECT
-
-public:
     /**
      * Config object for load()
      * It is possible to limit which plugins will be loaded in the KConfig configuration file by
      * stating explicitly which plugins are wanted.
      */
-    struct PluginsConfig {
+    struct KOPLUGIN_EXPORT PluginsConfig {
         PluginsConfig() : group(0), whiteList(0), blacklist(0) {}
         /**
          * The properties are retrieved from the config using the following construct;
@@ -89,37 +86,18 @@ public:
         QStringList defaults;
     };
 
-    ~KoPluginLoader();
-
-    /**
-     * Return an instance of the KoPluginLoader
-     * Creates an instance if that has never happened before and returns the singleton instance.
-     */
-    static KoPluginLoader * instance();
-
     /**
      * Load all plugins that conform to the plugin type,
      * for instance:
-     * KoPluginLoader::instance()->load("Calligra/Flake");
+     * KoPluginLoader::load(QStringLiteral("Calligra/Flake"));
      * If you pass a PluginsConfig struct only those plugins are loaded that are specified in the
      * application config file.  New plugins found since last start will be automatically loaded.
      * @param serviceType The string used to identify the plugins.
      * @param config when passing a valid config only the wanted plugins are actually loaded
      * @return a list of services (by library name) that were not know in the config
      */
-    void load(const QString & serviceType, const PluginsConfig &config = PluginsConfig(), QObject* owner = 0);
+    KOPLUGIN_EXPORT void load(const QString & serviceType, const PluginsConfig &config = PluginsConfig(), QObject* owner = 0);
 
-public:
-    /// DO NOT USE! Use instance() instead
-    // TODO: turn KoPluginLoader into namespace and do not expose object at all
-    KoPluginLoader();
-private:
-    KoPluginLoader(const KoPluginLoader&);
-    KoPluginLoader operator=(const KoPluginLoader&);
-
-private:
-    class Private;
-    Private * const d;
-};
+}
 
 #endif // KO_PLUGIN_LOADER_H

@@ -31,36 +31,24 @@
 #include <KConfigGroup>
 #include <KPluginFactory>
 
-class Q_DECL_HIDDEN KoPluginLoader::Private
+class KoPluginLoaderImpl : public QObject
 {
 public:
     QStringList loadedServiceTypes;
 };
 
-KoPluginLoader::KoPluginLoader()
-        : d(new Private())
-{
-}
 
-KoPluginLoader::~KoPluginLoader()
-{
-    delete d;
-}
 
-Q_GLOBAL_STATIC(KoPluginLoader, pluginLoaderInstance)
+Q_GLOBAL_STATIC(KoPluginLoaderImpl, pluginLoaderInstance)
 
-KoPluginLoader* KoPluginLoader::instance()
-{
-    return pluginLoaderInstance();
-}
 
 void KoPluginLoader::load(const QString & serviceType, const PluginsConfig &config, QObject* owner)
 {
     // Don't load the same plugins again
-    if (d->loadedServiceTypes.contains(serviceType)) {
+    if (pluginLoaderInstance->loadedServiceTypes.contains(serviceType)) {
         return;
     }
-    d->loadedServiceTypes << serviceType;
+    pluginLoaderInstance->loadedServiceTypes << serviceType;
 
     QList<QPluginLoader *> offers = KoJsonTrader::self()->query(serviceType, QString());
     QList<QPluginLoader *> plugins;
@@ -120,7 +108,7 @@ void KoPluginLoader::load(const QString & serviceType, const PluginsConfig &conf
     QList<QString> whiteList;
     foreach(QPluginLoader *loader, serviceNames) {
         KPluginFactory *factory = qobject_cast<KPluginFactory *>(loader->instance());
-        QObject *plugin = factory->create<QObject>(owner ? owner : this, QVariantList());
+        QObject *plugin = factory->create<QObject>(owner ? owner : pluginLoaderInstance, QVariantList());
         if (plugin) {
             QJsonObject json = loader->metaData().value("MetaData").toObject();
             json = json.value("KPlugin").toObject();

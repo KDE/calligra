@@ -49,7 +49,7 @@ void KoToolRegistry::init()
     config.group = "calligra";
     config.whiteList = "ToolPlugins";
     config.blacklist = "ToolPluginsDisabled";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Tool"), config);
+    KoPluginLoader::load(QStringLiteral("Calligra/Tool"), config);
 
     // register generic tools
     add(new KoCreateShapesToolFactory());

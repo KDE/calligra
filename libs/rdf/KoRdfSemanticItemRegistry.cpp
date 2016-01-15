@@ -43,7 +43,7 @@ void KoRdfSemanticItemRegistry::Private::init()
     config.whiteList = "SemanticItemPlugins";
     config.blacklist = "SemanticItemPluginsDisabled";
     config.group = "calligra";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/SemanticItem"), config);
+    KoPluginLoader::load(QStringLiteral("Calligra/SemanticItem"), config);
 }
 
 KoRdfSemanticItemRegistry* KoRdfSemanticItemRegistry::instance()

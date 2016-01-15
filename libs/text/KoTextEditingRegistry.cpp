@@ -30,7 +30,7 @@ void KoTextEditingRegistry::init()
     config.whiteList = "TextEditingPlugins";
     config.blacklist = "TextEditingPluginsDisabled";
     config.group = "calligra";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Text-EditingPlugin"), config);
+    KoPluginLoader::load(QStringLiteral("Calligra/Text-EditingPlugin"), config);
 }
 
 KoTextEditingRegistry* KoTextEditingRegistry::instance()
