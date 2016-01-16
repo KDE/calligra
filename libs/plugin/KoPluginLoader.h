@@ -25,6 +25,7 @@
 #include "koplugin_export.h"
 
 class QObject;
+class KPluginFactory;
 
 /**
  * The pluginloader singleton is responsible for loading the plugins
@@ -98,6 +99,12 @@ namespace KoPluginLoader
      */
     KOPLUGIN_EXPORT void load(const QString & serviceType, const PluginsConfig &config = PluginsConfig(), QObject* owner = 0);
 
+    /**
+     * Load all plugins that conform to the plugin type and return their KPluginFactory objects.
+     * @param serviceType The string used to identify the plugins.
+     * @return a list of plugin factories from the found plugins matching the servicetype
+     */
+    KOPLUGIN_EXPORT QList<KPluginFactory *> instantiatePluginFactories(const QString & serviceType);
 }
 
 #endif // KO_PLUGIN_LOADER_H

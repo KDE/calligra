@@ -53,7 +53,7 @@
 #include <KoZoomAction.h>
 #include <KoIcon.h>
 #include "KoToolBoxFactory.h"
-#include <KoJsonTrader.h>
+#include <KoPluginLoader.h>
 #include "KoOdf.h"
 #include "KoShapeGroup.h"
 #include "KoShapeDeleteCommand.h"
@@ -206,13 +206,17 @@ void View::initActions()
 
 void View::loadExtensions()
 {
-    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Braindump/Extensions", QString());
+    const QList<KPluginFactory *> pluginFactories =
+        KoPluginLoader::instantiatePluginFactories(QStringLiteral("Braindump/Extensions"));
 
-    foreach(QPluginLoader *pluginLoader, offers) {
-        KPluginFactory *factory = qobject_cast<KPluginFactory *>(pluginLoader->instance());
-        KXMLGUIClient *plugin = dynamic_cast<KXMLGUIClient*>(factory->create<QObject>(this, QVariantList()));
-        if (plugin) {
-            insertChildClient(plugin);
+    foreach (KPluginFactory* factory, pluginFactories) {
+        QObject *object = factory->create<QObject>(this, QVariantList());
+        KXMLGUIClient *clientPlugin = dynamic_cast<KXMLGUIClient*>(object);
+        if (clientPlugin) {
+            insertChildClient(clientPlugin);
+        } else {
+            // not our/valid plugin, so delete the created object
+            object->deleteLater();
         }
     }
 }

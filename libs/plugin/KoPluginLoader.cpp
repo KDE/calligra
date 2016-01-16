@@ -129,3 +129,28 @@ void KoPluginLoader::load(const QString & serviceType, const PluginsConfig &conf
         configGroup.writeEntry(config.blacklist, blacklist);
     }
 }
+
+QList<KPluginFactory *> KoPluginLoader::instantiatePluginFactories(const QString & serviceType)
+{
+    QList<KPluginFactory *> pluginFactories;
+
+    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query(serviceType, QString());
+
+    foreach(QPluginLoader *pluginLoader, offers) {
+        QObject* pluginInstance = pluginLoader->instance();
+        if (!pluginInstance) {
+            qWarning() << "Loading plugin" << pluginLoader->fileName() << "failed, " << pluginLoader->errorString();
+            continue;
+        }
+        KPluginFactory *factory = qobject_cast<KPluginFactory *>(pluginInstance);
+        if (factory == 0) {
+            qWarning() << "Expected a KPluginFactory, got a" << pluginInstance->metaObject()->className();
+            delete pluginInstance;
+            continue;
+        }
+
+        pluginFactories.append(factory);
+    }
+
+    return pluginFactories;
+}

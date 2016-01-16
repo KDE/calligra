@@ -71,7 +71,7 @@
 
 // Calligra includes
 #include <KoComponentData.h>
-#include <KoJsonTrader.h>
+#include <KoPluginLoader.h>
 #include <KoGlobal.h>
 #include <KoColor.h>
 #include <KoCanvasControllerWidget.h>
@@ -566,13 +566,17 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
 
     d->initActions();
 
-    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Sheets/ViewPlugin", QString());
+    const QList<KPluginFactory *> pluginFactories =
+        KoPluginLoader::instantiatePluginFactories(QStringLiteral("Sheets/ViewPlugin"));
 
-    foreach(QPluginLoader *pluginLoader, offers) {
-        KPluginFactory *factory = qobject_cast<KPluginFactory *>(pluginLoader->instance());
-        KXMLGUIClient *plugin = dynamic_cast<KXMLGUIClient*>(factory->create<QObject>(this, QVariantList()));
-        if (plugin) {
-            insertChildClient(plugin);
+    foreach (KPluginFactory* factory, pluginFactories) {
+        QObject *object = factory->create<QObject>(this, QVariantList());
+        KXMLGUIClient *clientPlugin = dynamic_cast<KXMLGUIClient*>(object);
+        if (clientPlugin) {
+            insertChildClient(clientPlugin);
+        } else {
+            // not our/valid plugin, so delete the created object
+            object->deleteLater();
         }
     }
 

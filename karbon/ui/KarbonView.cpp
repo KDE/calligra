@@ -121,7 +121,7 @@
 #include <KoIcon.h>
 #include <KoFileDialog.h>
 #include <KoUnit.h>
-#include <KoJsonTrader.h>
+#include <KoPluginLoader.h>
 #include <KoComponentData.h>
 
 // KF5 header
@@ -260,15 +260,18 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
     initActions();
 
     // Load all plugins
-    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Karbon/ViewPlugin", QString());
-    foreach(QPluginLoader *pluginLoader, offers) {
-        KPluginFactory *factory = qobject_cast<KPluginFactory *>(pluginLoader->instance());
-        KXMLGUIClient *plugin = dynamic_cast<KXMLGUIClient*>(factory->create<QObject>(this, QVariantList()));
-        if (plugin) {
-            insertChildClient(plugin);
+    const QList<KPluginFactory *> pluginFactories =
+        KoPluginLoader::instantiatePluginFactories(QStringLiteral("Karbon/ViewPlugin"));
+    foreach (KPluginFactory* factory, pluginFactories) {
+        QObject *object = factory->create<QObject>(this, QVariantList());
+        KXMLGUIClient *clientPlugin = dynamic_cast<KXMLGUIClient*>(object);
+        if (clientPlugin) {
+            insertChildClient(clientPlugin);
+        } else {
+            // not our/valid plugin, so delete the created object
+            object->deleteLater();
         }
     }
-
 
     unsigned int max = part()->maxRecentFiles();
     setNumberOfRecentFiles(max);
