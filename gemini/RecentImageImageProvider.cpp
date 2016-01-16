@@ -27,7 +27,6 @@
 
 #include <KoStore.h>
 #include <KoDocument.h>
-#include <KoDocumentEntry.h>
 #include <KoPart.h>
 
 RecentImageImageProvider::RecentImageImageProvider()

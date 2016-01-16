@@ -29,7 +29,6 @@
 #include <QPluginLoader>
 
 #include <KoPluginLoader.h>
-#include <KoDocumentEntry.h>
 
 using namespace Calligra::Components;
 

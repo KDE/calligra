@@ -57,7 +57,6 @@
 #include <krun.h>
 #include <khelpclient.h>
 
-#include <KoDocumentEntry.h>
 #include <KoTemplateCreateDia.h>
 #include <KoPart.h>
 #include <KoComponentData.h>

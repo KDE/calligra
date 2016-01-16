@@ -31,7 +31,6 @@
 #include <QToolButton>
 #include <QLabel>
 
-#include <KoDocumentEntry.h>
 #include <kparts/mainwindow.h>
 
 namespace KParts {
@@ -42,8 +41,6 @@ namespace KPlatoWork {
 namespace KPlato {
     class Document;
 }
-
-class KoDocumentEntry;
 
 
 /////// class KPlatoWork_MainWindow ////////
