@@ -76,7 +76,6 @@
 #include <KoShapeRegistry.h>
 #include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>
-#include <KoDocumentEntry.h>
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
@@ -869,18 +868,7 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store,
     }
 
     //debugChart << "tmpURL=" << tmpURL;
-    QString errorMsg;
 
-#if 0
-    // NOTE: This was added, probably by the MVC patch.
-    //       It seems to do nothing for the chartshape and it prevents the
-    //       chart from loading. So for now it's disabled but can be enabled
-    //       again if it does fulfill some purpose.
-    KoDocumentEntry e = KoDocumentEntry::queryByMimeType(mimeType);
-    if (e.isEmpty()) {
-        return false;
-    }
-#endif
     bool res = true;
     if (tmpURL.startsWith(STORE_PROTOCOL)
          || tmpURL.startsWith(INTERNAL_PROTOCOL)
