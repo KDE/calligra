@@ -111,13 +111,14 @@ void FunctionModuleRegistry::loadFunctionModules()
     debugSheetsFormula << offers.count() << "function modules found.";
     foreach (QPluginLoader *loader, offers) {
 
-        QJsonObject meta = loader->metaData().value("MetaData").toObject().value("KPlugin").toObject();
-        int version = meta.value("X-CalligraSheets-InterfaceVersion").toInt();
+        QJsonObject metaData = loader->metaData().value("MetaData").toObject();
+        int version = metaData.value("X-CalligraSheets-InterfaceVersion").toInt();
         if (version != 0) {
             debugSheetsFormula << "Skipping" << loader->fileName() << ", because interface version is" << version;
             continue;
         }
-        QString category = meta.value("Category").toString();
+        QJsonObject pluginData = metaData.value("KPlugin").toObject();
+        QString category = pluginData.value("Category").toString();
         if (category != "FunctionModule") {
             debugSheetsFormula << "Skipping" << loader->fileName() << ", because category is " << category;
             continue;
@@ -130,7 +131,7 @@ void FunctionModuleRegistry::loadFunctionModules()
             debugSheetsFormula << "Unable to create function module for" << loader->fileName();
             continue;
         }
-        QString name = meta.value("Name").toString();
+        QString name = pluginData.value("Name").toString();
         add(name, module);
         debugSheetsFormula << "Loaded" << name;
 
