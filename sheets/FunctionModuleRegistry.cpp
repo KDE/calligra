@@ -29,7 +29,7 @@
 #ifndef SHEETS_NO_PLUGINMODULES
 #include <kplugininfo.h>
 #include <KPluginFactory>
-#include "KoJsonTrader.h"
+#include <KoPluginLoader.h>
 #else
 #include "functions/BitOpsModule.h"
 #include "functions/ConversionModule.h"
@@ -107,7 +107,7 @@ FunctionModuleRegistry* FunctionModuleRegistry::instance()
 void FunctionModuleRegistry::loadFunctionModules()
 {
 #ifndef SHEETS_NO_PLUGINMODULES
-    QList<QPluginLoader *> offers = KoJsonTrader::self()->query("CalligraSheets/Plugin", QString());
+    QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("CalligraSheets/Plugin"));
     debugSheetsFormula << offers.count() << "function modules found.";
     foreach (QPluginLoader *loader, offers) {
 

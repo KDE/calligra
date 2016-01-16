@@ -37,7 +37,7 @@
 #include "KoAutoSaveRecoveryDialog.h"
 #include <KoDpi.h>
 #include "KoPart.h"
-#include <KoJsonTrader.h>
+#include <KoPluginLoader.h>
 #include <KoConfig.h>
 #include <KoResourcePaths.h>
 #include <KoComponentData.h>
@@ -255,7 +255,7 @@ bool KoApplication::start()
 
     // Find the part component file corresponding to the application instance name
     KoDocumentEntry entry;
-    Q_FOREACH (QPluginLoader *loader, KoJsonTrader::self()->query("Calligra/Part", d->nativeMimeType)) {
+    Q_FOREACH (QPluginLoader *loader, KoPluginLoader::pluginLoaders("Calligra/Part", d->nativeMimeType)) {
         if (loader->fileName().contains(applicationName()+QString("part"))) {
             entry = KoDocumentEntry(loader);
             break;

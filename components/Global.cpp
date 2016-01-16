@@ -28,7 +28,7 @@
 #include <QMimeDatabase>
 #include <QPluginLoader>
 
-#include <KoJsonTrader.h>
+#include <KoPluginLoader.h>
 #include <KoDocumentEntry.h>
 
 using namespace Calligra::Components;
@@ -49,7 +49,7 @@ int Global::documentType(const QUrl& document)
 {
     QMimeType mime = QMimeDatabase{}.mimeTypeForUrl(document);
 
-    QList<QPluginLoader*> plugins = KoJsonTrader::self()->query("Calligra/Part", mime.name());
+    QList<QPluginLoader*> plugins = KoPluginLoader::pluginLoaders(QStringLiteral("Calligra/Part"), mime.name());
 
     for (int i = 0; i < plugins.count(); i++) {
         QPluginLoader* loader = plugins.at(i);

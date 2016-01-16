@@ -25,7 +25,7 @@
 #include <KWDocument.h>
 #include <sheets/part/Doc.h>
 #include <KoPart.h>
-#include <KoJsonTrader.h>
+#include <KoPluginLoader.h>
 #include <KoDocumentEntry.h>
 
 #include <QApplication>
@@ -56,7 +56,7 @@ KoDocument* openFile(const QString &filename)
 
     KoPart *part;
     QString error;
-    QList<QPluginLoader *> pluginLoaders = KoJsonTrader::self()->query("Calligra/Part", mimetype);
+    QList<QPluginLoader *> pluginLoaders = KoPluginLoader::pluginLoaders(QStringLiteral("Calligra/Part"), mimetype);
     if (!pluginLoaders.isEmpty()) {
         // take first
         KoDocumentEntry entry(pluginLoaders[0]);

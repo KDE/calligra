@@ -25,6 +25,7 @@
 #include "koplugin_export.h"
 
 class QObject;
+class QPluginLoader;
 class KPluginFactory;
 
 /**
@@ -105,6 +106,14 @@ namespace KoPluginLoader
      * @return a list of plugin factories from the found plugins matching the servicetype
      */
     KOPLUGIN_EXPORT QList<KPluginFactory *> instantiatePluginFactories(const QString & serviceType);
+
+    /**
+     * Load all plugins that conform to the plugin type and return their KPluginFactory objects.
+     * @param serviceType The string used to identify the plugins.
+     * @param mimeType The string used to identify the plugins.
+     * @return a list of plugin factories from the found plugins matching the servicetype
+     */
+    KOPLUGIN_EXPORT QList<QPluginLoader *> pluginLoaders(const QString &serviceType, const QString &mimeType = QString());
 }
 
 #endif // KO_PLUGIN_LOADER_H

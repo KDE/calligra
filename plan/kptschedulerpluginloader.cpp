@@ -23,7 +23,7 @@
 #include "kptschedulerplugin.h"
 #include "kptdebug.h"
 
-#include <KoJsonTrader.h>
+#include <KoPluginLoader.h>
 
 #include <QPluginLoader>
 #include <QLocale>
@@ -73,7 +73,7 @@ QJsonValue readLocalValue(const QJsonObject &json, const QString &key)
 void SchedulerPluginLoader::loadAllPlugins()
 {
     debugPlan << "Load all plugins";
-    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Plan/SchedulerPlugin", QString());
+    const QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("Plan/SchedulerPlugin"));
 
     foreach(QPluginLoader *pluginLoader, offers) {
         KPluginFactory *factory = qobject_cast<KPluginFactory*>(pluginLoader->instance());

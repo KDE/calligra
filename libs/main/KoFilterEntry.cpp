@@ -24,7 +24,7 @@ Boston, MA 02110-1301, USA.
 #include "KoFilter.h"
 
 #include <MainDebug.h>
-#include <KoJsonTrader.h>
+#include <KoPluginLoader.h>
 #include <kpluginfactory.h>
 #include <QFile>
 
@@ -45,7 +45,7 @@ QList<KoFilterEntry::Ptr> KoFilterEntry::query()
 {
     QList<KoFilterEntry::Ptr> lst;
 
-    QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Calligra/Filter", QString());
+    QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("Calligra/Filter"));
 
     QList<QPluginLoader *>::ConstIterator it = offers.constBegin();
     unsigned int max = offers.count();

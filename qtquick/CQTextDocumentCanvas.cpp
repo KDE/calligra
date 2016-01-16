@@ -29,7 +29,7 @@
 
 #include "gemini/ViewModeSwitchEvent.h"
 
-#include <KoJsonTrader.h>
+#include <KoPluginLoader.h>
 #include <KoDocumentEntry.h>
 #include <KoUnit.h>
 #include <KoDocument.h>
@@ -236,7 +236,7 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
     emit loadingBegun();
 
     KoDocumentEntry entry;
-    Q_FOREACH (QPluginLoader *loader, KoJsonTrader::self()->query("Calligra/Part", QString())) {
+    Q_FOREACH (QPluginLoader *loader, KoPluginLoader::pluginLoaders("Calligra/Part")) {
         if (loader->fileName().contains(QLatin1String("wordspart"))) {
             entry = KoDocumentEntry(loader);
             break;

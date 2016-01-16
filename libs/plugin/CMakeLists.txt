@@ -1,7 +1,6 @@
 
 set(koplugin_LIB_SRCS
     KoPluginLoader.cpp
-    KoJsonTrader.cpp
 )
 
 # help plugin trader find installed plugins when run from uninstalled tests
