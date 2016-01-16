@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2016 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -393,7 +393,7 @@ protected:
     //</members related to buffering>
 
     //! Useful e.g. for value(int) method when we need access to schema def.
-    QueryColumnInfo::Vector* m_fieldsExpanded;
+    QueryColumnInfo::Vector* m_visibleFieldsExpanded;
 
     //! Used by setOrderByColumnList()
     QueryColumnInfo::Vector* m_orderByColumnList;

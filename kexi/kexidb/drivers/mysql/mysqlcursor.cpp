@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Joseph Wenninger<jowenn@kde.org>
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2016 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -112,8 +112,8 @@ QVariant MySqlCursor::value(uint pos)
     if (!d->mysqlrow || pos >= m_fieldCount || d->mysqlrow[pos] == 0)
         return QVariant();
 
-    KexiDB::Field *f = (m_fieldsExpanded && pos < (uint)m_fieldsExpanded->count())
-                       ? m_fieldsExpanded->at(pos)->field : 0;
+    const KexiDB::Field *f = (m_visibleFieldsExpanded && pos < uint(m_visibleFieldsExpanded->count()))
+                       ? m_visibleFieldsExpanded->at(pos)->field : 0;
 
 //! @todo js: use MYSQL_FIELD::type here!
 
@@ -130,15 +130,15 @@ bool MySqlCursor::drv_storeCurrentRow(RecordData& data) const
     if (d->numRows == 0)
         return false;
 
-//! @todo js: use MYSQL_FIELD::type here!
-//!           see SQLiteCursor::storeCurrentRow()
+    if (!m_visibleFieldsExpanded) {//simple version: without types
+        for (uint i = 0; i < m_fieldCount; i++) {
+            data[i] = QString::fromUtf8(d->mysqlrow[i], d->lengths[i]);
+        }
+        return true;
+    }
 
-    const uint fieldsExpandedCount = m_fieldsExpanded ? m_fieldsExpanded->count() : UINT_MAX;
-    const uint realCount = qMin(fieldsExpandedCount, m_fieldsToStoreInRow);
-    for (uint i = 0; i < realCount; i++) {
-        Field *f = m_fieldsExpanded ? m_fieldsExpanded->at(i)->field : 0;
-        if (m_fieldsExpanded && !f)
-            continue;
+    for (int i = 0; i < int(m_fieldCount); ++i) {
+        Field *f = m_visibleFieldsExpanded->at(i)->field;
         data[i] = KexiDB::cstringToVariant(d->mysqlrow[i], f, d->lengths[i]);
     }
     return true;

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2016 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -42,9 +42,12 @@ QuerySchemaPrivate::QuerySchemaPrivate(QuerySchema* q, QuerySchemaPrivate* copy)
         , maxIndexWithAlias(-1)
         , visibility(64)
         , fieldsExpanded(0)
+        , visibleFieldsExpanded(0)
         , internalFields(0)
         , fieldsExpandedWithInternalAndRowID(0)
+        , visibleFieldsExpandedWithInternalAndRowID(0)
         , fieldsExpandedWithInternal(0)
+        , visibleFieldsExpandedWithInternal(0)
         , orderByColumnList(0)
         , autoincFields(0)
         , columnsOrder(0)
@@ -63,6 +66,7 @@ QuerySchemaPrivate::QuerySchemaPrivate(QuerySchema* q, QuerySchemaPrivate* copy)
         *this = *copy;
         // <clear, so computeFieldsExpanded() will re-create it>
         fieldsExpanded = 0;
+        visibleFieldsExpanded = 0;
         internalFields = 0;
         columnsOrder = 0;
         columnsOrderWithoutAsterisks = 0;
@@ -74,7 +78,9 @@ QuerySchemaPrivate::QuerySchemaPrivate(QuerySchema* q, QuerySchemaPrivate* copy)
         columnInfosByName.clear();
         ownedVisibleColumns = 0;
         fieldsExpandedWithInternalAndRowID = 0;
+        visibleFieldsExpandedWithInternalAndRowID = 0;
         fieldsExpandedWithInternal = 0;
+        visibleFieldsExpandedWithInternal = 0;
         pkeyFieldsOrder = 0;
         fakeRowIDCol = 0;
         fakeRowIDField = 0;
@@ -114,7 +120,9 @@ QuerySchemaPrivate::~QuerySchemaPrivate()
         delete internalFields;
     }
     delete fieldsExpandedWithInternalAndRowID;
+    delete visibleFieldsExpandedWithInternalAndRowID;
     delete fieldsExpandedWithInternal;
+    delete visibleFieldsExpandedWithInternal;
 }
 
 //static
@@ -162,6 +170,8 @@ void QuerySchemaPrivate::clearCachedData()
         qDeleteAll(*fieldsExpanded);
         delete fieldsExpanded;
         fieldsExpanded = 0;
+        delete visibleFieldsExpanded; // NO qDeleteAll, items not owned
+        visibleFieldsExpanded = 0;
         if (internalFields) {
             qDeleteAll(*internalFields);
             delete internalFields;
@@ -169,8 +179,12 @@ void QuerySchemaPrivate::clearCachedData()
         }
         delete fieldsExpandedWithInternalAndRowID;
         fieldsExpandedWithInternalAndRowID = 0;
+        delete visibleFieldsExpandedWithInternalAndRowID;
+        visibleFieldsExpandedWithInternalAndRowID = 0;
         delete fieldsExpandedWithInternal;
         fieldsExpandedWithInternal = 0;
+        delete visibleFieldsExpandedWithInternal;
+        visibleFieldsExpandedWithInternal = 0;
     }
 }
 

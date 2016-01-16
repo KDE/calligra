@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2016 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -611,7 +611,7 @@ public:
      explicitly specify "t2.name" as the identifier to get the second column. */
     QueryColumnInfo* columnInfo(const QString& identifier, bool expanded = true);
 
-    /*! Options used in fieldsExpanded(). */
+    /*! Options used in fieldsExpanded() and visibleFieldsExpanded(). */
     enum FieldsExpandedOptions {
         Default,                   //!< All fields are returned even if duplicated
         Unique,                    //!< Unique list of fields is returned
@@ -661,7 +661,14 @@ public:
      This method's result is cached by QuerySchema object.
     @todo js: UPDATE CACHE!
     */
-    QueryColumnInfo::Vector fieldsExpanded(FieldsExpandedOptions options = Default);
+    inline QueryColumnInfo::Vector fieldsExpanded(FieldsExpandedOptions options = Default) {
+        return fieldsExpandedInternal(options, false);
+    }
+
+    /*! Like fieldsExpanded() but returns only visible fields. */
+    inline QueryColumnInfo::Vector visibleFieldsExpanded(FieldsExpandedOptions options = Default) {
+        return fieldsExpandedInternal(options, true);
+    }
 
     /*! \return list of internal fields used for lookup columns. */
     QueryColumnInfo::Vector internalFields();
@@ -824,6 +831,9 @@ protected:
     void init();
 
     void computeFieldsExpanded();
+
+    //! Used by fieldsExpanded(FieldsExpandedOptions) and visibleFieldsExpanded(FieldsExpandedOptions options).
+    QueryColumnInfo::Vector fieldsExpandedInternal(FieldsExpandedOptions options, bool onlyVisible);
 
     QuerySchemaPrivate * const d;
 

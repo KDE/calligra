@@ -174,11 +174,10 @@ QVariant pqxxSqlCursor::pValue(uint pos)const
         return QVariant();
     }
 
-    KexiDB::Field *f = (m_fieldsExpanded && pos < qMin((uint)m_fieldsExpanded->count(), m_fieldCount))
-                       ? m_fieldsExpanded->at(pos)->field : 0;
-
 // KexiDBDrvDbg << pos;
     //from most to least frequently used types:
+    const Field *f = (m_visibleFieldsExpanded && pos < uint(m_visibleFieldsExpanded->count()))
+                     ? m_visibleFieldsExpanded->at(pos)->field : 0;
     if (f) { //We probably have a schema type query so can use kexi to determin the row type
         const Field::Type type = f->type(); // cache: evaluating type of expressions can be expensive
         if (type == Field::Null || type == Field::InvalidType) {

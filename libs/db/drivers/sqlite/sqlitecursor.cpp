@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2016 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -383,27 +383,15 @@ bool SQLiteCursor::drv_storeCurrentRow(RecordData &data) const
 {
     //const uint realCount = m_fieldCount + (m_containsROWIDInfo ? 1 : 0);
 //not needed data.resize(m_fieldCount);
-    if (!m_fieldsExpanded) {//simple version: without types
+    if (!m_visibleFieldsExpanded) {//simple version: without types
         for (uint i = 0; i < m_fieldCount; i++) {
             data[i] = QString::fromUtf8((const char*)sqlite3_column_text(d->prepared_st_handle, i));
         }
         return true;
     }
 
-    //const uint fieldsExpandedCount = m_fieldsExpanded->count();
-    const uint maxCount = qMin(m_fieldCount, (uint)m_fieldsExpanded->count());
-    // i - visible field's index, j - physical index
-    for (uint i = 0, j = 0; i < m_fieldCount; ++i, ++j) {
-//  while (j < m_detailedVisibility.count() && !m_detailedVisibility[j]) //!m_query->isColumnVisible(j))
-//   j++;
-        while (j < maxCount && !m_fieldsExpanded->at(j)->visible)
-            j++;
-        if (j >= (maxCount /*+(m_containsROWIDInfo ? 1 : 0)*/)) {
-            //ERR!
-            break;
-        }
-        //(m_logicalFieldCount introduced) Field *f = (m_containsROWIDInfo && i>=m_fieldCount) ? 0 : m_fieldsExpanded->at(j)->field;
-        Field *f = (i >= m_fieldCount) ? 0 : m_fieldsExpanded->at(j)->field;
+    for (uint i = 0; i < m_fieldCount; ++i) {
+        Field *f = m_visibleFieldsExpanded->at(i)->field;
 //  KexiDBDrvDbg << "SQLiteCursor::storeCurrentRow(): col=" << (col ? *col : 0);
         data[i] = d->getValue(f, i); //, !f /*!f means ROWID*/);
     }
@@ -417,8 +405,8 @@ QVariant SQLiteCursor::value(uint i)
         return QVariant();
 //TODO: allow disable range checking! - performance reasons
 // const KexiDB::Field *f = m_query ? m_query->field(i) : 0;
-    KexiDB::Field *f = (m_fieldsExpanded && i < (uint)m_fieldsExpanded->count())
-                       ? m_fieldsExpanded->at(i)->field : 0;
+    KexiDB::Field *f = (m_visibleFieldsExpanded && i < (uint)m_visibleFieldsExpanded->count())
+                       ? m_visibleFieldsExpanded->at(i)->field : 0;
     return d->getValue(f, i); //, i==m_logicalFieldCount/*ROWID*/);
 }
 

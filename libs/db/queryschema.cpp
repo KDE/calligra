@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2016 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -881,27 +881,32 @@ QueryColumnInfo* QuerySchema::columnInfo(const QString& identifier, bool expande
     return expanded ? d->columnInfosByNameExpanded[identifier] : d->columnInfosByName[identifier];
 }
 
-QueryColumnInfo::Vector QuerySchema::fieldsExpanded(FieldsExpandedOptions options)
+QueryColumnInfo::Vector QuerySchema::fieldsExpandedInternal(FieldsExpandedOptions options, bool onlyVisible)
 {
     computeFieldsExpanded();
+    QueryColumnInfo::Vector *realFieldsExpanded = onlyVisible ? d->visibleFieldsExpanded : d->fieldsExpanded;
     if (options == WithInternalFields || options == WithInternalFieldsAndRowID) {
         //a ref to a proper pointer (as we cache the vector for two cases)
         QueryColumnInfo::Vector*& tmpFieldsExpandedWithInternal =
-            (options == WithInternalFields) ? d->fieldsExpandedWithInternal : d->fieldsExpandedWithInternalAndRowID;
+            (options == WithInternalFields) ?
+                (onlyVisible ? d->visibleFieldsExpandedWithInternal : d->fieldsExpandedWithInternal)
+              : (onlyVisible ? d->visibleFieldsExpandedWithInternalAndRowID : d->fieldsExpandedWithInternalAndRowID);
         //special case
         if (!tmpFieldsExpandedWithInternal) {
             //glue expanded and internal fields and cache it
-            const uint size = d->fieldsExpanded->count()
-                              + (d->internalFields ? d->internalFields->count() : 0)
+            const uint internalFieldsCount = d->internalFields ? d->internalFields->size() : 0;
+            const uint fieldsExpandedVectorSize = realFieldsExpanded->size();
+            const uint size = fieldsExpandedVectorSize + internalFieldsCount
                               + ((options == WithInternalFieldsAndRowID) ? 1 : 0) /*ROWID*/;
             tmpFieldsExpandedWithInternal = new QueryColumnInfo::Vector(size);
-            const uint fieldsExpandedVectorSize = d->fieldsExpanded->size();
-            for (uint i = 0; i < fieldsExpandedVectorSize; i++)
-                (*tmpFieldsExpandedWithInternal)[i] = d->fieldsExpanded->at(i);
-            const uint internalFieldsCount = d->internalFields ? d->internalFields->size() : 0;
+            for (uint i = 0; i < fieldsExpandedVectorSize; i++) {
+                (*tmpFieldsExpandedWithInternal)[i] = realFieldsExpanded->at(i);
+            }
             if (internalFieldsCount > 0) {
-                for (uint i = 0; i < internalFieldsCount; i++)
-                    (*tmpFieldsExpandedWithInternal)[fieldsExpandedVectorSize + i] = d->internalFields->at(i);
+                for (uint i = 0; i < internalFieldsCount; i++) {
+                    QueryColumnInfo *info = d->internalFields->at(i);
+                    (*tmpFieldsExpandedWithInternal)[fieldsExpandedVectorSize + i] = info;
+                }
             }
             if (options == WithInternalFieldsAndRowID) {
                 if (!d->fakeRowIDField) {
@@ -914,18 +919,19 @@ QueryColumnInfo::Vector QuerySchema::fieldsExpanded(FieldsExpandedOptions option
         return *tmpFieldsExpandedWithInternal;
     }
 
-    if (options == Default)
-        return *d->fieldsExpanded;
+    if (options == Default) {
+        return *realFieldsExpanded;
+    }
 
     //options == Unique:
     QSet<QByteArray> columnsAlreadyFound;
-    const uint fieldsExpandedCount(d->fieldsExpanded->count());
+    const uint fieldsExpandedCount(realFieldsExpanded->count());
     QueryColumnInfo::Vector result(fieldsExpandedCount);   //initial size is set
 // QMapConstIterator<QueryColumnInfo*, bool> columnsAlreadyFoundIt;
     //compute unique list
     uint uniqueListCount = 0;
     for (uint i = 0; i < fieldsExpandedCount; i++) {
-        QueryColumnInfo *ci = d->fieldsExpanded->at(i);
+        QueryColumnInfo *ci = realFieldsExpanded->at(i);
 //  columnsAlreadyFoundIt = columnsAlreadyFound.find(ci);
 //  uint foundColumnIndex = -1;
         if (!columnsAlreadyFound.contains(ci->aliasOrName())) {// columnsAlreadyFoundIt==columnsAlreadyFound.constEnd())
@@ -1134,13 +1140,15 @@ void QuerySchema::computeFieldsExpanded()
     }
     //prepare clean vector for expanded list, and a map for order information
     if (!d->fieldsExpanded) {
-        d->fieldsExpanded = new QueryColumnInfo::Vector(list.count());  // Field::Vector( list.count() );
-//Qt 4  d->fieldsExpanded->setAutoDelete(true);
+        d->fieldsExpanded = new QueryColumnInfo::Vector(list.count());
+        d->visibleFieldsExpanded = new QueryColumnInfo::Vector(list.count());
         d->columnsOrderExpanded = new QHash<QueryColumnInfo*, int>();
     } else {//for future:
         qDeleteAll(*d->fieldsExpanded);
         d->fieldsExpanded->clear();
         d->fieldsExpanded->resize(list.count());
+        d->visibleFieldsExpanded->clear();
+        d->visibleFieldsExpanded->resize(list.count());
         d->columnsOrderExpanded->clear();
     }
 
@@ -1152,9 +1160,14 @@ void QuerySchema::computeFieldsExpanded()
     d->columnInfosByName.clear();
     d->columnInfosByNameExpanded.clear();
     i = -1;
+    int visibleIndex = -1;
     foreach(QueryColumnInfo* ci, list) {
         i++;
         (*d->fieldsExpanded)[i] = ci;
+        if (ci->visible) {
+            ++visibleIndex;
+            (*d->visibleFieldsExpanded)[visibleIndex] = ci;
+        }
         d->columnsOrderExpanded->insert(ci, i);
         //remember field by name/alias/table.name if there's no such string yet in d->columnInfosByNameExpanded
         if (!ci->alias.isEmpty()) {
@@ -1191,6 +1204,7 @@ void QuerySchema::computeFieldsExpanded()
             }
         }
     }
+    d->visibleFieldsExpanded->resize(visibleIndex + 1);
 
     //remove duplicates for lookup fields
     QHash<QString, uint> lookup_dict; //used to fight duplicates and to update QueryColumnInfo::indexForVisibleLookupValue()

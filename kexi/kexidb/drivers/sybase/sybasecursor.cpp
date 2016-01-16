@@ -147,8 +147,8 @@ QVariant SybaseCursor::value(uint pos)
     if (!d->dbProcess || pos >= m_fieldCount)
         return QVariant();
 
-    KexiDB::Field *f = (m_fieldsExpanded && pos < uint(m_fieldsExpanded->count()))
-                       ? m_fieldsExpanded->at(pos)->field : 0;
+    KexiDB::Field *f = (m_visibleFieldsExpanded && pos < uint(m_visibleFieldsExpanded->count()))
+                       ? m_visibleFieldsExpanded->at(pos)->field : 0;
 
     // db-library indexes its columns from 1
     pos = pos + 1;
@@ -182,11 +182,11 @@ bool SybaseCursor::drv_storeCurrentRow(RecordData& data) const
 // if (d->numRows<=0)
 //  return false;
 
-    const uint fieldsExpandedCount = m_fieldsExpanded ? m_fieldsExpanded->count() : UINT_MAX;
+    const uint fieldsExpandedCount = m_visibleFieldsExpanded ? m_visibleFieldsExpanded->count() : UINT_MAX;
     const uint realCount = qMin(fieldsExpandedCount, m_fieldsToStoreInRow);
     for (uint i = 0; i < realCount; i++) {
-        Field *f = m_fieldsExpanded ? m_fieldsExpanded->at(i)->field : 0;
-        if (m_fieldsExpanded && !f)
+        Field *f = m_visibleFieldsExpanded ? m_visibleFieldsExpanded->at(i)->field : 0;
+        if (m_visibleFieldsExpanded && !f)
             continue;
 
         long int columnDataLength = dbdatlen(d->dbProcess, i + 1);

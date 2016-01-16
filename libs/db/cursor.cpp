@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2016 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -87,15 +87,15 @@ void Cursor::init()
 
     if (m_query) {
         //get list of all fields
-        m_fieldsExpanded = new QueryColumnInfo::Vector();
-        *m_fieldsExpanded = m_query->fieldsExpanded(
+        m_visibleFieldsExpanded = new QueryColumnInfo::Vector();
+        *m_visibleFieldsExpanded = m_query->visibleFieldsExpanded(
                                 m_containsROWIDInfo ? QuerySchema::WithInternalFieldsAndRowID : QuerySchema::WithInternalFields);
-        m_logicalFieldCount = m_fieldsExpanded->count()
+        m_logicalFieldCount = m_visibleFieldsExpanded->count()
                               - m_query->internalFields().count() - (m_containsROWIDInfo ? 1 : 0);
-        m_fieldCount = m_fieldsExpanded->count();
+        m_fieldCount = m_visibleFieldsExpanded->count();
         m_fieldsToStoreInRow = m_fieldCount;
     } else {
-        m_fieldsExpanded = 0;
+        m_visibleFieldsExpanded = 0;
         m_logicalFieldCount = 0;
         m_fieldCount = 0;
         m_fieldsToStoreInRow = 0;
@@ -128,7 +128,7 @@ Cursor::~Cursor()
             exit(1);
         }
     }
-    delete m_fieldsExpanded;
+    delete m_visibleFieldsExpanded;
     delete m_queryParameters;
 }
 
