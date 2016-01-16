@@ -19,5 +19,5 @@ set_target_properties(calligra_filter_odt2mobi PROPERTIES COMPILE_DEFINITIONS "D
 
 target_link_libraries(calligra_filter_odt2mobi komain Qt5::Svg)
 
-install(TARGETS calligra_filter_odt2mobi  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_odt2mobi  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 kcoreaddons_desktop_to_json(calligra_filter_odt2mobi calligra_filter_odt2mobi.desktop)

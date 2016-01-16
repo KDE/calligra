@@ -5,7 +5,12 @@ set(koplugin_LIB_SRCS
 
 # help plugin trader find installed plugins when run from uninstalled tests
 if (BUILD_TESTING)
-    add_definitions(-DCMAKE_INSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
+    if(IS_ABSOLUTE ${PLUGIN_INSTALL_DIR})
+        set(CALLIGRA_PLUGIN_INSTALL_BASE_DIR "${PLUGIN_INSTALL_DIR}")
+    else()
+        set(CALLIGRA_PLUGIN_INSTALL_BASE_DIR "${CMAKE_INSTALL_PREFIX}/${PLUGIN_INSTALL_DIR}")
+    endif()
+    add_definitions(-DCALLIGRA_PLUGIN_INSTALL_BASE_DIR="${CALLIGRA_PLUGIN_INSTALL_BASE_DIR}")
 endif()
 
 add_library(koplugin SHARED ${koplugin_LIB_SRCS})

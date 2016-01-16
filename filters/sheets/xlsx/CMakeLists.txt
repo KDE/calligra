@@ -37,7 +37,7 @@ target_link_libraries(
     calligrasheetscommon
 )
 
-install(TARGETS calligra_filter_xlsx2ods DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_xlsx2ods DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 ########### install files ###############
 

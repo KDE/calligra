@@ -73,7 +73,7 @@ QJsonValue readLocalValue(const QJsonObject &json, const QString &key)
 void SchedulerPluginLoader::loadAllPlugins()
 {
     debugPlan << "Load all plugins";
-    const QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("Plan/SchedulerPlugin"));
+    const QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("calligraplan/schedulers"));
 
     foreach(QPluginLoader *pluginLoader, offers) {
         KPluginFactory *factory = qobject_cast<KPluginFactory*>(pluginLoader->instance());

@@ -18,7 +18,7 @@ kcoreaddons_desktop_to_json(calligra_filter_wps2odt calligra_filter_wps2odt.desk
 
 target_link_libraries(calligra_filter_wps2odt komain ${LIBODFGEN_LIBRARIES} ${LIBREVENGE_LIBRARIES} ${LIBWPS_LIBRARIES})
 
-install(TARGETS calligra_filter_wps2odt DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_wps2odt DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install(FILES words_wps_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})

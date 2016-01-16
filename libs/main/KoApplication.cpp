@@ -255,7 +255,7 @@ bool KoApplication::start()
 
     // Find the part component file corresponding to the application instance name
     KoDocumentEntry entry;
-    Q_FOREACH (QPluginLoader *loader, KoPluginLoader::pluginLoaders("Calligra/Part", d->nativeMimeType)) {
+    Q_FOREACH (QPluginLoader *loader, KoPluginLoader::pluginLoaders("calligra/parts", d->nativeMimeType)) {
         if (loader->fileName().contains(applicationName()+QString("part"))) {
             entry = KoDocumentEntry(loader);
             break;

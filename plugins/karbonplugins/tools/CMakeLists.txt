@@ -49,7 +49,7 @@ kcoreaddons_desktop_to_json(karbon_tools karbon_tools.desktop)
 
 target_link_libraries(karbon_tools kowidgets)
 
-install(TARGETS karbon_tools DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS karbon_tools DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/tools)
 
 ecm_install_icons( ICONS
     22-actions-calligraphy.png

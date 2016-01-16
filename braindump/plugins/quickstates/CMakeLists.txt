@@ -8,7 +8,7 @@ add_library(braindumpquickstates MODULE ${braindumpquickstates_PART_SRCS})
 
 target_link_libraries(braindumpquickstates ${FLAKE_LIBRARY} ${KOTEXT_LIBRARY} ${KOBASE_LIBRARY}  braindumpcore)
 
-install(TARGETS braindumpquickstates  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS braindumpquickstates  DESTINATION ${PLUGIN_INSTALL_DIR}/braindump/extensions)
 
 kcoreaddons_desktop_to_json(braindumpquickstates braindumpquickstates.desktop)
 

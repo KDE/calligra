@@ -56,7 +56,7 @@ KoDocument* openFile(const QString &filename)
 
     KoPart *part;
     QString error;
-    QList<QPluginLoader *> pluginLoaders = KoPluginLoader::pluginLoaders(QStringLiteral("Calligra/Part"), mimetype);
+    QList<QPluginLoader *> pluginLoaders = KoPluginLoader::pluginLoaders(QStringLiteral("calligra/parts"), mimetype);
     if (!pluginLoaders.isEmpty()) {
         // take first
         KoDocumentEntry entry(pluginLoaders[0]);

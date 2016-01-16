@@ -39,10 +39,10 @@ KPrFactory::KPrFactory()
     if (factoryCount == 0) {
 
         // Load the KoPA-specific tools
-        KoPluginLoader::load(QStringLiteral("CalligraPageApp/Tool"));
+        KoPluginLoader::load(QStringLiteral("calligra/pageapptools"));
 
         // Load the Stage-specific tools
-        KoPluginLoader::load(QStringLiteral("CalligraStage/Tool"));
+        KoPluginLoader::load(QStringLiteral("calligrastage/tools"));
     }
     factoryCount++;
 }

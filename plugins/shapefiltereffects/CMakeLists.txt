@@ -46,4 +46,4 @@ kcoreaddons_desktop_to_json(calligra_filtereffects calligra_filtereffects.deskto
 
 target_link_libraries(calligra_filtereffects flake kowidgets)
 
-install(TARGETS calligra_filtereffects  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filtereffects  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapefiltereffects)

@@ -20,7 +20,7 @@ target_link_libraries(calligra_textediting_thesaurus
     kowidgets
 )
 
-install(TARGETS calligra_textediting_thesaurus  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_textediting_thesaurus  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/textediting)
 
 
 ########### install files ###############

@@ -107,7 +107,7 @@ FunctionModuleRegistry* FunctionModuleRegistry::instance()
 void FunctionModuleRegistry::loadFunctionModules()
 {
 #ifndef SHEETS_NO_PLUGINMODULES
-    QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("CalligraSheets/Plugin"));
+    QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("calligrasheets/functions"));
     debugSheetsFormula << offers.count() << "function modules found.";
     foreach (QPluginLoader *loader, offers) {
 

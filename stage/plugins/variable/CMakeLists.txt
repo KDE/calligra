@@ -18,4 +18,4 @@ target_link_libraries(
     Qt5::Core
     )
 
-install(TARGETS kprvariables  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kprvariables  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/textinlineobjects)

@@ -31,7 +31,7 @@ target_link_libraries(calligra_shape_vector
     Qt5::Svg
 )
 
-install(TARGETS calligra_shape_vector DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_vector DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
 
 ########### install files ###############
 

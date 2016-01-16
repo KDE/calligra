@@ -30,7 +30,7 @@ add_library(flowpart MODULE ${flowpart_PART_SRCS})
 
 target_link_libraries(flowpart flowprivate)
 
-install(TARGETS flowpart DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS flowpart DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)
 
 ### kdeinit flow ###
 set(flow_KDEINIT_SRCS main.cpp )

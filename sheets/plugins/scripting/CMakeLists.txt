@@ -37,6 +37,6 @@ target_link_libraries(krossmodulesheets
     kokross
 )
 
-install(TARGETS krossmodulesheets DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS krossmodulesheets DESTINATION ${PLUGIN_INSTALL_DIR}/calligrasheets/extensions)
 install( FILES krossmodulesheets.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES scripting.rc  DESTINATION ${DATA_INSTALL_DIR}/sheets/viewplugins)

@@ -38,7 +38,7 @@ target_link_libraries(
     komain
 )
 
-install(TARGETS calligra_filter_docx2odt DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_docx2odt DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 
 ########### next target ###############
@@ -58,7 +58,7 @@ target_link_libraries(
     koodf
 )
 
-install(TARGETS docxexport DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS docxexport DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 endif()
 

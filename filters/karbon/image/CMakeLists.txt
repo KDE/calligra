@@ -14,4 +14,4 @@ kcoreaddons_desktop_to_json(calligra_filter_karbon2image calligra_filter_karbon2
 
 target_link_libraries(calligra_filter_karbon2image karbonui komain)
 
-install(TARGETS calligra_filter_karbon2image  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_karbon2image  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)

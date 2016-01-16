@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
+ * Copyright (c) 2016 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -89,31 +90,37 @@ namespace KoPluginLoader
     };
 
     /**
-     * Load all plugins that conform to the plugin type,
+     * Load all plugins that are located in the specified directory,
      * for instance:
-     * KoPluginLoader::load(QStringLiteral("Calligra/Flake"));
+     * KoPluginLoader::load(QStringLiteral("calligra/flakes"));
      * If you pass a PluginsConfig struct only those plugins are loaded that are specified in the
      * application config file.  New plugins found since last start will be automatically loaded.
-     * @param serviceType The string used to identify the plugins.
+     * @param directory The directory to search for plugins, as relative path.
+     * All entries of QCoreApplication::libraryPaths() will be checked with @p directory appended as a
+     * subdirectory.
      * @param config when passing a valid config only the wanted plugins are actually loaded
      * @return a list of services (by library name) that were not know in the config
      */
-    KOPLUGIN_EXPORT void load(const QString & serviceType, const PluginsConfig &config = PluginsConfig(), QObject* owner = 0);
+    KOPLUGIN_EXPORT void load(const QString & directory, const PluginsConfig &config = PluginsConfig(), QObject* owner = 0);
 
     /**
-     * Load all plugins that conform to the plugin type and return their KPluginFactory objects.
-     * @param serviceType The string used to identify the plugins.
+     * Load all plugins that are located in the specified directory and return their KPluginFactory objects.
+     * @param directory The directory to search for plugins, as relative path.
+     * All entries of QCoreApplication::libraryPaths() will be checked with @p directory appended as a
+     * subdirectory.
      * @return a list of plugin factories from the found plugins matching the servicetype
      */
-    KOPLUGIN_EXPORT QList<KPluginFactory *> instantiatePluginFactories(const QString & serviceType);
+    KOPLUGIN_EXPORT QList<KPluginFactory *> instantiatePluginFactories(const QString & directory);
 
     /**
-     * Load all plugins that conform to the plugin type and return their KPluginFactory objects.
-     * @param serviceType The string used to identify the plugins.
+     * Load all plugins that are located in the specified directory and return their KPluginFactory objects.
+     * @param directory The directory to search for plugins, as relative path.
+     * All entries of QCoreApplication::libraryPaths() will be checked with @p directory appended as a
+     * subdirectory.
      * @param mimeType The string used to identify the plugins.
      * @return a list of plugin factories from the found plugins matching the servicetype
      */
-    KOPLUGIN_EXPORT QList<QPluginLoader *> pluginLoaders(const QString &serviceType, const QString &mimeType = QString());
+    KOPLUGIN_EXPORT QList<QPluginLoader *> pluginLoaders(const QString &directory, const QString &mimeType = QString());
 }
 
 #endif // KO_PLUGIN_LOADER_H

@@ -351,7 +351,7 @@ kcoreaddons_desktop_to_json(calligrasheetspart sheetspart.desktop)
 
 target_link_libraries(calligrasheetspart calligrasheetscommon )
 
-install(TARGETS calligrasheetspart  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligrasheetspart  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)
 
 ########### install files ###############
 

@@ -29,7 +29,7 @@ target_link_libraries( sheetssolver
         calligrasheetscommon
 )
 
-install(TARGETS sheetssolver  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS sheetssolver  DESTINATION ${PLUGIN_INSTALL_DIR}/calligrasheets/extensions)
 
 
 ########### install files ###############

@@ -380,7 +380,7 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
     QTimer::singleShot( 100, this, SLOT(initiateViews()) );
 
     const QList<KPluginFactory *> pluginFactories =
-        KoPluginLoader::instantiatePluginFactories(QStringLiteral("Plan/ViewPlugin"));
+        KoPluginLoader::instantiatePluginFactories(QStringLiteral("calligraplan/extensions"));
 
     foreach (KPluginFactory* factory, pluginFactories) {
         QObject *object = factory->create<QObject>(this, QVariantList());

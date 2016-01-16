@@ -41,7 +41,7 @@ public:
         
         // XXX: Use minversion here?
         // The plugins are responsible for adding a factory to the registry
-        KoPluginLoader::load(QStringLiteral("CalligraStage/ShapeAnimation"), config);
+        KoPluginLoader::load(QStringLiteral("calligrastage/shapeanimations"), config);
     }
 
     KPrShapeAnimationRegistry q;

@@ -236,7 +236,7 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
     emit loadingBegun();
 
     KoDocumentEntry entry;
-    Q_FOREACH (QPluginLoader *loader, KoPluginLoader::pluginLoaders("Calligra/Part")) {
+    Q_FOREACH (QPluginLoader *loader, KoPluginLoader::pluginLoaders("calligra/parts")) {
         if (loader->fileName().contains(QLatin1String("wordspart"))) {
             entry = KoDocumentEntry(loader);
             break;

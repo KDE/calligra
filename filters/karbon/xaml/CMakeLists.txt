@@ -14,7 +14,7 @@ add_library(karbonxamlexport MODULE ${karbonxamlexport_PART_SRCS})
 
 target_link_libraries(karbonxamlexport    karboncommon )
 
-install(TARGETS karbonxamlexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS karbonxamlexport  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 
 ########### next target ###############
@@ -27,7 +27,7 @@ add_library(karbonxamlimport MODULE ${karbonxamlimport_PART_SRCS})
 
 target_link_libraries(karbonxamlimport    karboncommon )
 
-install(TARGETS karbonxamlimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS karbonxamlimport  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 
 ########### install files ###############

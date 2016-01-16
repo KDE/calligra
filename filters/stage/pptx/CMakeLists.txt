@@ -32,7 +32,7 @@ target_link_libraries(
     komain
 )
 
-install(TARGETS calligra_filter_pptx2odp DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_pptx2odp DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 ########### install files ###############
 

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (c) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (c) 2016 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,12 +25,10 @@
 #include <KSharedConfig>
 #include <KConfigGroup>
 #include <KPluginFactory>
+#include <KPluginLoader>
 
 #include <QCoreApplication>
-#include <QDirIterator>
-#include <QDir>
 #include <QJsonObject>
-#include <QJsonArray>
 #include <QPluginLoader>
 #include <QDebug>
 
@@ -37,8 +36,7 @@
 class KoPluginLoaderImpl : public QObject
 {
 public:
-    QString pluginPath;
-    QStringList loadedServiceTypes;
+    QStringList loadedDirectories;
 };
 
 
@@ -46,20 +44,20 @@ public:
 Q_GLOBAL_STATIC(KoPluginLoaderImpl, pluginLoaderInstance)
 
 
-void KoPluginLoader::load(const QString & serviceType, const PluginsConfig &config, QObject* owner)
+void KoPluginLoader::load(const QString & directory, const PluginsConfig &config, QObject* owner)
 {
     // Don't load the same plugins again
-    if (pluginLoaderInstance->loadedServiceTypes.contains(serviceType)) {
+    if (pluginLoaderInstance->loadedDirectories.contains(directory)) {
         return;
     }
-    pluginLoaderInstance->loadedServiceTypes << serviceType;
+    pluginLoaderInstance->loadedDirectories << directory;
 
-    QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(serviceType);
+    QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(directory);
     QList<QPluginLoader *> plugins;
     bool configChanged = false;
     QList<QString> blacklist; // what we will save out afterwards
     if (config.whiteList && config.blacklist && config.group) {
-//        qDebug() << "Loading" << serviceType << "with checking the config";
+//        qDebug() << "Loading" << directory << "with checking the config";
         KConfigGroup configGroup(KSharedConfig::openConfig(), config.group);
         QList<QString> whiteList = configGroup.readEntry(config.whiteList, config.defaults);
         QList<QString> knownList;
@@ -134,11 +132,11 @@ void KoPluginLoader::load(const QString & serviceType, const PluginsConfig &conf
     }
 }
 
-QList<KPluginFactory *> KoPluginLoader::instantiatePluginFactories(const QString & serviceType)
+QList<KPluginFactory *> KoPluginLoader::instantiatePluginFactories(const QString & directory)
 {
     QList<KPluginFactory *> pluginFactories;
 
-    const QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(serviceType);
+    const QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(directory);
 
     foreach(QPluginLoader *pluginLoader, offers) {
         QObject* pluginInstance = pluginLoader->instance();
@@ -159,93 +157,43 @@ QList<KPluginFactory *> KoPluginLoader::instantiatePluginFactories(const QString
     return pluginFactories;
 }
 
-QList<QPluginLoader *> KoPluginLoader::pluginLoaders(const QString &serviceType, const QString &mimeType)
+QList<QPluginLoader *> KoPluginLoader::pluginLoaders(const QString &directory, const QString &mimeType)
 {
-    if (pluginLoaderInstance->pluginPath.isEmpty()) {
-
-        QList<QDir> searchDirs;
-
-        QDir appDir(qApp->applicationDirPath());
-        appDir.cdUp();
-
-        searchDirs << appDir;
-        // help plugin trader find installed plugins when run from uninstalled tests
-#ifdef CMAKE_INSTALL_PREFIX
-        searchDirs << QDir(CMAKE_INSTALL_PREFIX);
-#endif
-
-        foreach(const QDir& dir, searchDirs) {
-            foreach(const QString &entry, dir.entryList()) {
-                QFileInfo info(dir, entry);
-                if (info.isDir() && info.fileName().contains("lib")) {
-                    QDir libDir(info.absoluteFilePath());
-
-                    // on many systems this will be the actual lib dir (and calligra subdir contains plugins)
-                    if (libDir.entryList(QStringList() << "calligra").size() > 0) {
-                        pluginLoaderInstance->pluginPath = info.absoluteFilePath() + "/calligra";
-                        break;
-                    }
-
-                    // on debian at least the actual libdir is a subdir named like "lib/x86_64-linux-gnu"
-                    // so search there for the calligra subdir which will contain our plugins
-                    foreach(const QString &subEntry, libDir.entryList()) {
-                        QFileInfo subInfo(libDir, subEntry);
-                        if (subInfo.isDir()) {
-                            if (QDir(subInfo.absoluteFilePath()).entryList(QStringList() << "calligra").size() > 0) {
-                                pluginLoaderInstance->pluginPath = subInfo.absoluteFilePath() + "/calligra";
-                                break; // will only break inner loop so we need the extra check below
-                            }
-                        }
-                    }
-
-                    if (!pluginLoaderInstance->pluginPath.isEmpty()) {
-                        break;
-                    }
-                }
-            }
-
-            if(!pluginLoaderInstance->pluginPath.isEmpty()) {
-                break;
-            }
-        }
-        //qDebug() << "KoPluginLoader will load its plugins from" << pluginLoaderInstance->pluginPath;
-
+#ifdef CALLIGRA_PLUGIN_INSTALL_BASE_DIR
+    static bool pluginBaseDirAdded = false;
+    if (!pluginBaseDirAdded) {
+        QCoreApplication::addLibraryPath(CALLIGRA_PLUGIN_INSTALL_BASE_DIR);
+        pluginBaseDirAdded = true;
     }
+#endif
 
     QList<QPluginLoader *>list;
-    QDirIterator dirIter(pluginLoaderInstance->pluginPath, QDirIterator::Subdirectories);
-    while (dirIter.hasNext()) {
-        dirIter.next();
-        if (dirIter.fileInfo().isFile()) {
-            QPluginLoader *loader = new QPluginLoader(dirIter.filePath());
-            QJsonObject json = loader->metaData().value("MetaData").toObject();
+    KPluginLoader::forEachPlugin(directory, [&](const QString &pluginPath) {
+        qDebug() << "Trying to load" << pluginPath;
+        QPluginLoader *loader = new QPluginLoader(pluginPath);
+        QJsonObject metaData = loader->metaData().value("MetaData").toObject();
 
-            if (json.isEmpty()) {
-                //qDebug() << dirIter.filePath() << "has no json!";
-            }
-            if (!json.isEmpty()) {
-                QJsonObject pluginData = json.value("KPlugin").toObject();
-                if (!pluginData.value("ServiceTypes").toArray().contains(QJsonValue(serviceType))) {
-                    continue;
-                }
+        if (metaData.isEmpty()) {
+            //qDebug() << dirIter.filePath() << "has no json!";
+            return;
+        }
 
-                if (!mimeType.isEmpty()) {
+        if (!mimeType.isEmpty()) {
 #ifdef OLD_PLUGIN_MIMETYPE_DATA
-                    QStringList mimeTypes = json.value("MimeType").toString().split(';');
+            QStringList mimeTypes = metaData.value("MimeType").toString().split(';');
 #else
-                    QStringList mimeTypes = pluginData.value("MimeTypes").toVariant().toStringList();
+            QJsonObject pluginData = metaData.value("KPlugin").toObject();
+            QStringList mimeTypes = pluginData.value("MimeTypes").toVariant().toStringList();
 #endif
-                    mimeTypes += json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
-                    mimeTypes += json.value("X-KDE-NativeMimeType").toString();
-                    if (! mimeTypes.contains(mimeType)) {
-                        continue;
-                    }
-                }
-                list.append(loader);
+            mimeTypes += metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(QLatin1Char(','));
+            mimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
+            if (! mimeTypes.contains(mimeType)) {
+                return;
             }
         }
 
-    }
+        list.append(loader);
+    });
 
     return list;
 }

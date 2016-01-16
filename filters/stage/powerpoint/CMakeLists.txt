@@ -24,7 +24,7 @@ kcoreaddons_desktop_to_json(calligra_filter_ppt2odp calligra_filter_ppt2odp.desk
 
 target_link_libraries(calligra_filter_ppt2odp ppttoodplib komain)
 
-install(TARGETS calligra_filter_ppt2odp  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_ppt2odp  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES  stage_powerpoint_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

@@ -567,7 +567,7 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
     d->initActions();
 
     const QList<KPluginFactory *> pluginFactories =
-        KoPluginLoader::instantiatePluginFactories(QStringLiteral("Sheets/ViewPlugin"));
+        KoPluginLoader::instantiatePluginFactories(QStringLiteral("calligrasheets/extensions"));
 
     foreach (KPluginFactory* factory, pluginFactories) {
         QObject *object = factory->create<QObject>(this, QVariantList());

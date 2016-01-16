@@ -47,4 +47,4 @@ target_link_libraries(
     Qt5::Gui    
     )
 
-install(TARGETS kpr_pageeffect_edgewipe  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kpr_pageeffect_edgewipe  DESTINATION ${PLUGIN_INSTALL_DIR}/calligrastage/pageeffects)

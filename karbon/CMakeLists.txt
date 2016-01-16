@@ -38,7 +38,7 @@ kcoreaddons_desktop_to_json(karbonpart "${CMAKE_CURRENT_SOURCE_DIR}/data/karbonp
 
 target_link_libraries(karbonpart karbonui)
 
-install(TARGETS karbonpart  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS karbonpart  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)
 
 ########### next target ###############
 

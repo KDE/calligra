@@ -101,11 +101,11 @@ void KoEventActionRegistry::init()
     config.whiteList = "PresentationEventActionPlugins";
     config.blacklist = "PresentationEventActionPluginsDisabled";
     config.group = "calligra";
-    KoPluginLoader::load(QStringLiteral("Calligra/PresentationEventAction"), config);
+    KoPluginLoader::load(QStringLiteral("calligra/presentationeventactions"), config);
 
     config.whiteList = "ScriptEventActionPlugins";
     config.blacklist = "ScriptEventActionPluginsDisabled";
-    KoPluginLoader::load(QStringLiteral("Calligra/ScriptEventAction"), config);
+    KoPluginLoader::load(QStringLiteral("calligra/scripteventactions"), config);
 }
 
 QSet<KoEventAction*> KoEventActionRegistry::createEventActionsFromOdf(const KoXmlElement & e, KoShapeLoadingContext & context) const

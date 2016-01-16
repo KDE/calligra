@@ -38,7 +38,7 @@ target_link_libraries(calligra_shape_template flake)
 #Template: Possibly you need to link with komain too.
 #target_link_libraries(templateshape komain flake)
 
-install(TARGETS calligra_shape_template DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_template DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
 
 ########### install files ###############
 

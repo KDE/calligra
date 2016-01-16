@@ -20,6 +20,6 @@ if(GHNS)
     target_link_libraries(calligra_docker_stencils KF5::NewStuff)
 endif()
 
-install(TARGETS calligra_docker_stencils DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_docker_stencils DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/dockers)
 
 install(FILES calligra_stencils.knsrc DESTINATION ${CONFIG_INSTALL_DIR})

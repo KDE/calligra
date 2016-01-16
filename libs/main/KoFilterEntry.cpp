@@ -45,7 +45,7 @@ QList<KoFilterEntry::Ptr> KoFilterEntry::query()
 {
     QList<KoFilterEntry::Ptr> lst;
 
-    QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("Calligra/Filter"));
+    QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("calligra/formatfilters"));
 
     QList<QPluginLoader *>::ConstIterator it = offers.constBegin();
     unsigned int max = offers.count();

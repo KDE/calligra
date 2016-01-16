@@ -143,7 +143,7 @@ QList<KoDocumentEntry> KoDocumentEntry::query(const QString & mimetype)
     QList<KoDocumentEntry> lst;
 
     // Query the trader
-    const QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("Calligra/Part"), mimetype);
+    const QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("calligra/parts"), mimetype);
 
     foreach(QPluginLoader *pluginLoader, offers) {
         lst.append(KoDocumentEntry(pluginLoader));

@@ -12,7 +12,7 @@ kcoreaddons_desktop_to_json(karbon_flattenpath karbon_flattenpath.desktop)
 
 target_link_libraries(karbon_flattenpath karboncommon)
 
-install(TARGETS karbon_flattenpath  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS karbon_flattenpath  DESTINATION ${PLUGIN_INSTALL_DIR}/karbon/extensions)
 
 
 ########### install files ###############

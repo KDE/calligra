@@ -39,7 +39,7 @@ void KoFilterEffectRegistry::init()
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "FilterEffectPlugins";
     config.blacklist = "FilterEffectPluginsDisabled";
-    KoPluginLoader::load(QStringLiteral("Calligra/FilterEffect"), config);
+    KoPluginLoader::load(QStringLiteral("calligra/shapefiltereffects"), config);
 }
 
 

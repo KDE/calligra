@@ -82,7 +82,7 @@ const KoComponentData &KarbonFactory::global()
         KIconLoader::global()->addAppDir("calligra");
 
         // Load Karbon specific dockers.
-        KoPluginLoader::load(QStringLiteral("Karbon/Dock"));
+        KoPluginLoader::load(QStringLiteral("karbon/dockers"));
     }
     return *s_global;
 }

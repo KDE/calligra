@@ -207,7 +207,7 @@ void View::initActions()
 void View::loadExtensions()
 {
     const QList<KPluginFactory *> pluginFactories =
-        KoPluginLoader::instantiatePluginFactories(QStringLiteral("Braindump/Extensions"));
+        KoPluginLoader::instantiatePluginFactories(QStringLiteral("braindump/extensions"));
 
     foreach (KPluginFactory* factory, pluginFactories) {
         QObject *object = factory->create<QObject>(this, QVariantList());

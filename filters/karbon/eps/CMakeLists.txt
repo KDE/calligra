@@ -11,7 +11,7 @@ kcoreaddons_desktop_to_json(calligra_filter_eps2svgai calligra_filter_eps2svgai.
 
 target_link_libraries(calligra_filter_eps2svgai komain)
 
-install(TARGETS calligra_filter_eps2svgai  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_eps2svgai  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 #TODO: restore also importing from PostScript
 #karbon_ps_import.desktop

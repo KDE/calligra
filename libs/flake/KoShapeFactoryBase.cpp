@@ -248,7 +248,7 @@ void KoShapeFactoryBase::getDeferredPlugin()
     if (d->deferredFactory) return;
 
     const QList<KPluginFactory *> pluginFactories =
-        KoPluginLoader::instantiatePluginFactories(QStringLiteral("Calligra/Deferred"));
+        KoPluginLoader::instantiatePluginFactories(QStringLiteral("calligra/deferred"));
     Q_ASSERT(pluginFactories.size() > 0);
     foreach (KPluginFactory* factory, pluginFactories) {
         KoDeferredShapeFactoryBase *plugin = factory->create<KoDeferredShapeFactoryBase>(this, QVariantList());

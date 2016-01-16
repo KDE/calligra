@@ -261,7 +261,7 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
 
     // Load all plugins
     const QList<KPluginFactory *> pluginFactories =
-        KoPluginLoader::instantiatePluginFactories(QStringLiteral("Karbon/ViewPlugin"));
+        KoPluginLoader::instantiatePluginFactories(QStringLiteral("karbon/extensions"));
     foreach (KPluginFactory* factory, pluginFactories) {
         QObject *object = factory->create<QObject>(this, QVariantList());
         KXMLGUIClient *clientPlugin = dynamic_cast<KXMLGUIClient*>(object);

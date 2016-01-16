@@ -9,4 +9,4 @@ kcoreaddons_desktop_to_json(calligra_filter_applixword2odt calligra_filter_appli
 
 target_link_libraries(calligra_filter_applixword2odt komain)
 
-install(TARGETS calligra_filter_applixword2odt  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_applixword2odt  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)

@@ -43,6 +43,6 @@ target_link_libraries(krossmoduleplan
     kokross
 )
 
-install(TARGETS krossmoduleplan DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS krossmoduleplan DESTINATION ${PLUGIN_INSTALL_DIR}/calligraplan/extensions)
 install(FILES krossmoduleplan.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install(FILES scripting.rc DESTINATION ${DATA_INSTALL_DIR}/plan/viewplugins)
