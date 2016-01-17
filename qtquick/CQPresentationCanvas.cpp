@@ -47,8 +47,8 @@
 #include <stage/part/KPrDocument.h>
 
 #include <KActionCollection>
-#include <KService>
 
+#include <QPluginLoader>
 #include <QMimeDatabase>
 #include <QGraphicsWidget>
 #include <QTextDocument>

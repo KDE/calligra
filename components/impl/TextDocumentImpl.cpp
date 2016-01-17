@@ -24,7 +24,6 @@
 
 #include <QtWidgets/QGraphicsWidget>
 
-#include <kservice.h>
 #include <kactioncollection.h>
 
 #include <KWPart.h>

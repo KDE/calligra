@@ -57,8 +57,8 @@
 #include <commands/KWShapeCreateCommand.h>
 
 #include <KActionCollection>
-#include <KService>
 
+#include <QPluginLoader>
 #include <QMimeDatabase>
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsWidget>
