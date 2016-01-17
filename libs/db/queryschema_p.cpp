@@ -167,6 +167,10 @@ void QuerySchemaPrivate::clearCachedData()
             delete internalFields;
             internalFields = 0;
         }
+        delete fieldsExpandedWithInternalAndRowID;
+        fieldsExpandedWithInternalAndRowID = 0;
+        delete fieldsExpandedWithInternal;
+        fieldsExpandedWithInternal = 0;
     }
 }
 
