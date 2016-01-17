@@ -91,10 +91,6 @@ void ToolRegistry::loadTools()
             debugSheetsFormula << "Unable to create tool factory for" << loader->fileName();
             continue;
         }
-        // TODO: calendar tool does not fit into UI these days
-        if (toolFactory->id() == QLatin1String("KSpreadCalendarToolId")) {
-            continue;
-        }
         // Tool already registered?
         if (KoToolRegistry::instance()->contains(toolFactory->id())) {
             continue;
