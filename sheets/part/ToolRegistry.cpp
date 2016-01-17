@@ -64,7 +64,7 @@ void ToolRegistry::loadTools()
     QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("calligrasheets/tools"));
     debugSheetsFormula << offers.count() << "tools found.";
 
-    const KConfigGroup moduleGroup = KSharedConfig::openConfig()->group("Plugins");
+    const KConfigGroup pluginsConfigGroup = KSharedConfig::openConfig()->group("Plugins");
     foreach (QPluginLoader *loader, offers) {
         QJsonObject metaData = loader->metaData().value("MetaData").toObject();
         int version = metaData.value("X-CalligraSheets-InterfaceVersion").toInt();
@@ -91,13 +91,28 @@ void ToolRegistry::loadTools()
             debugSheetsFormula << "Unable to create tool factory for" << loader->fileName();
             continue;
         }
-        // Tool already registered?
-        if (KoToolRegistry::instance()->contains(toolFactory->id())) {
-            continue;
+        const QString pluginConfigEnableKey = pluginData.value("Id").toString() + QLatin1String("Enabled");
+        const bool isPluginEnabled = pluginsConfigGroup.hasKey(pluginConfigEnableKey) ?
+            pluginsConfigGroup.readEntry(pluginConfigEnableKey, true) :
+            pluginData.value("EnabledByDefault").toBool(true);
+
+        if (isPluginEnabled) {
+            // Tool already registered?
+            if (KoToolRegistry::instance()->contains(toolFactory->id())) {
+                continue;
+            }
+
+            toolFactory->setIconName(pluginData.value("Icon").toString());
+            toolFactory->setPriority(10);
+            toolFactory->setToolTip(pluginData.value("Description").toString());
+            KoToolRegistry::instance()->add(toolFactory);
+        } else {
+           // Tool not registered?
+           if (!KoToolRegistry::instance()->contains(toolFactory->id())) {
+               continue;
+           }
+           delete KoToolRegistry::instance()->value(toolFactory->id());
+           KoToolRegistry::instance()->remove(toolFactory->id());
         }
-        toolFactory->setIconName(pluginData.value("Icon").toString());
-        toolFactory->setPriority(10);
-        toolFactory->setToolTip(pluginData.value("Description").toString());
-        KoToolRegistry::instance()->add(toolFactory);
     }
 }

@@ -331,6 +331,7 @@ target_link_libraries(calligrasheetscommon
         KF5::SonnetCore
         KF5::SonnetUi
         KF5::NotifyConfig
+        KF5::KCMUtils
 )
 if(Qt5Sql_FOUND)
     target_link_libraries(calligrasheetscommon PRIVATE Qt5::Sql)

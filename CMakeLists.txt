@@ -212,6 +212,7 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS
         XmlGui 
         NotifyConfig
         Notifications
+        KCMUtils
     OPTIONAL_COMPONENTS
         Activities
         KHtml

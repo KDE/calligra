@@ -109,6 +109,8 @@ void FunctionModuleRegistry::loadFunctionModules()
 #ifndef SHEETS_NO_PLUGINMODULES
     QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("calligrasheets/functions"));
     debugSheetsFormula << offers.count() << "function modules found.";
+
+    const KConfigGroup pluginsConfigGroup = KSharedConfig::openConfig()->group("Plugins");
     foreach (QPluginLoader *loader, offers) {
 
         QJsonObject metaData = loader->metaData().value("MetaData").toObject();
@@ -124,20 +126,59 @@ void FunctionModuleRegistry::loadFunctionModules()
             continue;
         }
 
-        // TODO: the kde4 version supported enabling/disabling of plugins, do we want that?
-        KPluginFactory* factory = qobject_cast<KPluginFactory *>(loader->instance());
-        FunctionModule* module = qobject_cast<FunctionModule *>(factory->create());
-        if (!module) {
-            debugSheetsFormula << "Unable to create function module for" << loader->fileName();
-            continue;
-        }
-        QString name = pluginData.value("Name").toString();
-        add(name, module);
-        debugSheetsFormula << "Loaded" << name;
+        const QString pluginId = pluginData.value("Id").toString();
+        const QString pluginConfigEnableKey = pluginId + QLatin1String("Enabled");
+        const bool isPluginEnabled = pluginsConfigGroup.hasKey(pluginConfigEnableKey) ?
+            pluginsConfigGroup.readEntry(pluginConfigEnableKey, true) :
+            pluginData.value("EnabledByDefault").toBool(true);
 
-        // Delays the function registration until the user needs one.
-        if (d->repositoryInitialized) {
-            d->registerFunctionModule(module);
+        if (isPluginEnabled) {
+            if(contains(pluginId)) {
+                continue;
+            }
+            // Plugin enabled, but not registered. Add it.
+            KPluginFactory* const factory = qobject_cast<KPluginFactory *>(loader->instance());
+            if (!factory) {
+                debugSheetsFormula << "Unable to create plugin factory for" << loader->fileName();
+                continue;
+            }
+            FunctionModule* const module = qobject_cast<FunctionModule *>(factory->create());
+            if (!module) {
+                debugSheetsFormula << "Unable to create function module for" << loader->fileName();
+                continue;
+            }
+
+            add(pluginId, module);
+            debugSheetsFormula << "Loaded" << pluginId;
+
+            // Delays the function registration until the user needs one.
+            if (d->repositoryInitialized) {
+                d->registerFunctionModule(module);
+            }
+        } else {
+            if (!contains(pluginId)) {
+                continue;
+            }
+            // Plugin disabled, but registered. Remove it.
+            FunctionModule* const module = get(pluginId);
+            // Delay the function registration until the user needs one.
+            if (d->repositoryInitialized) {
+                d->removeFunctionModule(module);
+            }
+            remove(pluginId);
+            if (module->isRemovable()) {
+                delete module;
+                KPluginFactory* factory = qobject_cast<KPluginFactory *>(loader->instance());
+                delete factory;
+                loader->unload();
+            } else {
+                // Put it back in.
+                add(pluginId, module);
+                // Delay the function registration until the user needs one.
+                if (d->repositoryInitialized) {
+                    d->registerFunctionModule(module);
+                }
+            }
         }
     }
 #else
