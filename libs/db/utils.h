@@ -513,7 +513,7 @@ CALLIGRADB_EXPORT Field::Type maximumForIntegerTypes(Field::Type t1, Field::Type
 
 /*! \return QVariant value converted from null-terminated \a data string.
  In case of BLOB type, \a data is not nul lterminated, so passing length is needed. */
-inline QVariant cstringToVariant(const char* data, KexiDB::Field* f, int length = -1)
+inline QVariant cstringToVariant(const char* data, const KexiDB::Field* f, int length = -1)
 {
     if (!data)
         return QVariant();
