@@ -617,7 +617,7 @@ public:
         Unique,                    //!< Unique list of fields is returned
         WithInternalFields,        //!< Like Default but internal fields (for lookup) are appended
         WithInternalFieldsAndRowID //!< Like WithInternalFields but RowID (big int type) field
-        //!< is appended after internal fields
+                                   //!< is appended after internal fields
     };
 
     /*! \return fully expanded list of fields.
@@ -663,7 +663,7 @@ public:
     */
     QueryColumnInfo::Vector fieldsExpanded(FieldsExpandedOptions options = Default);
 
-    /*! \return list of fields internal fields used for lookup columns. */
+    /*! \return list of internal fields used for lookup columns. */
     QueryColumnInfo::Vector internalFields();
 
     /*! \return info for expanded of internal field at index \a index.
