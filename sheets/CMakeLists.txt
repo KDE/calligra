@@ -137,7 +137,7 @@ set (functions_DIR_SRCS
     functions/helper.cpp
     )
 
-if(QT_QTDBUS_FOUND)
+if(Qt5DBus_FOUND)
 set (interfaces_DIR_SRCS
     interfaces/MapAdaptor.cpp
     interfaces/SheetAdaptor.cpp
