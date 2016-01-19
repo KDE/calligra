@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2016 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 
    This program is free software; you can redistribute it and/or
@@ -199,6 +199,7 @@ public:
     }
 
     KexiSearchLineEditCompleter *completer;
+    QTreeView *popupTreeView;
     KexiSearchLineEditCompleterPopupModel *model;
     KexiSearchLineEditPopupItemDelegate *delegate;
     QPointer<QWidget> previouslyFocusedWidget;
@@ -235,6 +236,17 @@ public:
     KexiSearchLineEditPopupItemDelegate(QObject *parent, KexiCompleter *completer) 
      : QStyledItemDelegate(parent), highlightMatchingSubstrings(true), m_completer(completer)
     {
+    }
+
+    //! Implemented to improve width hint
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+    {
+        QSize size(QStyledItemDelegate::sizeHint(option, index));
+        QStyleOptionViewItemV4 v4 = option;
+        QStyledItemDelegate::initStyleOption(&v4, index);
+        const QSize s = v4.widget->style()->sizeFromContents(QStyle::CT_ItemViewItem, &v4, size, v4.widget);
+        size.setWidth(s.width());
+        return size;
     }
 
     virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
@@ -352,10 +364,10 @@ KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
  : KLineEdit(parent), d(new Private(this))
 {
     d->completer = new KexiSearchLineEditCompleter(this);
-    QTreeView *treeView = new QTreeView;
-    kexiTester() << KexiTestObject(treeView, "globalSearch.treeView");
+    d->popupTreeView = new QTreeView;
+    kexiTester() << KexiTestObject(d->popupTreeView, "globalSearch.treeView");
 
-    d->completer->setPopup(treeView);
+    d->completer->setPopup(d->popupTreeView);
     d->completer->setModel(d->model = new KexiSearchLineEditCompleterPopupModel(d->completer));
     d->completer->setCaseSensitivity(Qt::CaseInsensitive);
     d->completer->setSubstringCompletion(true);
@@ -365,10 +377,10 @@ KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
     // filtering so only table names are displayed.
     d->completer->setModelSorting(KexiCompleter::UnsortedModel);
     
-    treeView->setHeaderHidden(true);
-    treeView->setRootIsDecorated(false);
-    treeView->setItemDelegate(
-        d->delegate = new KexiSearchLineEditPopupItemDelegate(treeView, d->completer));
+    d->popupTreeView->setHeaderHidden(true);
+    d->popupTreeView->setRootIsDecorated(false);
+    d->popupTreeView->setItemDelegate(
+        d->delegate = new KexiSearchLineEditPopupItemDelegate(d->popupTreeView, d->completer));
     
     // forked initialization like in QLineEdit::setCompleter:
     d->completer->setWidget(this);
@@ -809,6 +821,7 @@ void KexiSearchLineEdit::complete(int key)
         d->completer->setCompletionPrefix(text);
     }
 
+    d->popupTreeView->resizeColumnToContents(0);
     d->completer->complete();
 }
 

@@ -148,7 +148,6 @@
 #include <QStringListModel>
 #include <QDirModel>
 #include <QFileSystemModel>
-#include <QHeaderView>
 #include <QListView>
 #include <QApplication>
 #include <QEvent>
@@ -929,25 +928,26 @@ void KexiCompleterPrivate::_q_autoResizePopup()
     showPopup(popupRect);
 }
 
-void KexiCompleterPrivate::showPopup(const QRect& rect)
+static void adjustPopupGeometry(QWidget *popupWidget, QWidget *widget, int widthHint,
+                                int heightHint, const QRect &currentRect)
 {
     const QRect screen = QApplication::desktop()->availableGeometry(widget);
-    Qt::LayoutDirection dir = widget->layoutDirection();
+    const Qt::LayoutDirection dir = widget->layoutDirection();
     QPoint pos;
     int rh, w;
-    int h = (popup->sizeHintForRow(0) * qMin(maxVisibleItems, popup->model()->rowCount()) + 3) + 3;
-    QScrollBar *hsb = popup->horizontalScrollBar();
-    if (hsb && hsb->isVisible())
-        h += popup->horizontalScrollBar()->sizeHint().height();
+    int h = heightHint;
 
-    if (rect.isValid()) {
-        rh = rect.height();
-        w = rect.width();
-        pos = widget->mapToGlobal(dir == Qt::RightToLeft ? rect.bottomRight() : rect.bottomLeft());
+    if (currentRect.isValid()) {
+        rh = currentRect.height();
+        w = currentRect.width();
+        pos = widget->mapToGlobal(dir == Qt::RightToLeft ? currentRect.bottomRight() : currentRect.bottomLeft());
     } else {
         rh = widget->height();
         pos = widget->mapToGlobal(QPoint(0, widget->height() - 2));
         w = widget->width();
+    }
+    if (widthHint > w) {
+        w = widthHint;
     }
 
     if (w > screen.width())
@@ -959,7 +959,7 @@ void KexiCompleterPrivate::showPopup(const QRect& rect)
 
     int top = pos.y() - rh - screen.top() + 2;
     int bottom = screen.bottom() - pos.y();
-    h = qMax(h, popup->minimumHeight());
+    h = qMax(h, popupWidget->minimumHeight());
     if (h > bottom) {
         h = qMin(qMax(top, bottom), h);
 
@@ -967,8 +967,22 @@ void KexiCompleterPrivate::showPopup(const QRect& rect)
             pos.setY(pos.y() - h - rh + 2);
     }
 
-    popup->setGeometry(pos.x(), pos.y(), w, h);
+    popupWidget->setGeometry(pos.x(), pos.y(), w, h);
+}
 
+void KexiCompleterPrivate::showPopup(const QRect& rect)
+{
+    int widthHint = popup->sizeHintForColumn(0);
+    QScrollBar *vsb = popup->verticalScrollBar();
+    if (vsb) {
+        widthHint += vsb->sizeHint().width() + 3 + 3;
+    }
+    int heightHint = (popup->sizeHintForRow(0) * qMin(maxVisibleItems, popup->model()->rowCount()) + 3) + 3;
+    QScrollBar *hsb = popup->horizontalScrollBar();
+    if (hsb && hsb->isVisible()) {
+        heightHint += hsb->sizeHint().height();
+    }
+    adjustPopupGeometry(popup, widget, widthHint, heightHint, rect);
     if (!popup->isVisible())
         popup->show();
 }
