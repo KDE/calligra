@@ -105,7 +105,7 @@ target_link_libraries(komain
         KF5::DBusAddons
 )
 
-if( KF5_Activities_FOUND )
+if( KF5Activities_FOUND )
     target_link_libraries(komain PRIVATE KF5::Activities)
 endif()
 

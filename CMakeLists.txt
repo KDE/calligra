@@ -184,7 +184,10 @@ include(MacroEnsureVersion)
 include(MacroJPEG)
 
 
-find_package(KF5 5.7.0 REQUIRED COMPONENTS 
+set(REQUIRED_KF5_VERSION "5.7.0")
+
+find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED
+    COMPONENTS
         Archive 
         Codecs 
         Completion
@@ -212,16 +215,27 @@ find_package(KF5 5.7.0 REQUIRED COMPONENTS
         NotifyConfig
         Notifications
         KCMUtils
-    OPTIONAL_COMPONENTS
+)
+find_package(KF5 ${REQUIRED_KF5_VERSION} QUIET
+    COMPONENTS
         Activities
         KHtml
 )
-if(KF5_Activities_FOUND)
+set_package_properties(KF5Activities PROPERTIES
+    TYPE OPTIONAL
+)
+set_package_properties(KF5KHtml PROPERTIES
+    PURPOSE "Required for HTML2ODS import filter"
+    TYPE OPTIONAL
+)
+
+if(KF5Activities_FOUND)
     set(HAVE_KACTIVITIES TRUE)
 endif()
 if(${KF5_VERSION} VERSION_LESS "5.16.0")
     set(OLD_PLUGIN_MIMETYPE_DATA TRUE)
 endif()
+
 
 set(REQUIRED_QT_VERSION "5.3.0")
 
@@ -1072,7 +1086,7 @@ calligra_drop_product_on_bad_condition( FILTER_PDF_TO_SVG
 calligra_drop_product_on_bad_condition( FILTER_HTML_TO_ODS
     NOT_WIN "not supported on Windows"
     NOT_COCOA "not supported with Qt Cocoa"
-    KF5_KHtml_FOUND "KF5KHtml devel not found"
+    KF5KHtml_FOUND "KF5KHtml devel not found"
 )
 
 calligra_drop_product_on_bad_condition( FILTER_SHEETS_TO_HTML
