@@ -223,11 +223,64 @@ if(${KF5_VERSION} VERSION_LESS "5.16.0")
     set(OLD_PLUGIN_MIMETYPE_DATA TRUE)
 endif()
 
-find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport
-                                           Script Svg Test)
-find_package(Qt5 5.3.0 COMPONENTS UiTools Sql WebKit WebKitWidgets DBus Declarative Qml Quick OpenGL)
+set(REQUIRED_QT_VERSION "5.3.0")
+
+find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED
+    COMPONENTS
+        Core
+        Gui
+        Network
+        PrintSupport
+        Svg
+        Test
+        Widgets
+        Xml
+)
+find_package(Qt5 ${REQUIRED_QT_VERSION} QUIET
+    COMPONENTS
+        DBus
+        Declarative
+        OpenGL
+        Quick
+        Sql
+        WebKit
+        WebKitWidgets
+)
+
+set_package_properties(Qt5DBus PROPERTIES
+    TYPE RECOMMENDED
+)
+set_package_properties(Qt5Declarative PROPERTIES
+    PURPOSE "Required for QtQuick1 components"
+    TYPE RECOMMENDED
+)
+set_package_properties(Qt5OpenGL PROPERTIES
+    PURPOSE "Required for QtQuick1 components"
+    TYPE RECOMMENDED
+)
+set_package_properties(Qt5Quick PROPERTIES
+    PURPOSE "Required for QtQuick2 components"
+    TYPE RECOMMENDED
+)
+set_package_properties(Qt5Sql PROPERTIES
+    PURPOSE "Optional for Sheets' database connection"
+    TYPE OPTIONAL
+)
+set_package_properties(Qt5WebKit PROPERTIES
+    PURPOSE "Required for Braindump's Web shape"
+    TYPE OPTIONAL
+)
+set_package_properties(Qt5WebKitWidget PROPERTIES
+    PURPOSE "Required for Stage"
+    TYPE RECOMMENDED
+)
+
+if(Qt5WebKit_FOUND)
+    add_definitions( -DCAN_USE_QTWEBKIT )
+endif()
 
 set(HAVE_OPENGL ${Qt5OpenGL_FOUND})
+
 
 if (GHNS)
     find_package(Attica 3.0)
@@ -247,8 +300,9 @@ endif ()
 
 find_package(X11)
 if(X11_FOUND)
-    find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
-                 X11Extras
+    find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED
+        COMPONENTS
+            X11Extras
     )
     set(HAVE_X11 TRUE)
     add_definitions(-DHAVE_X11)
@@ -645,32 +699,6 @@ else()
     add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
 endif()
 
-##
-## Test for Qt Sql
-##
-set_package_properties(Qt5Sql PROPERTIES
-    PURPOSE "Optional for Sheets database connection"
-    TYPE OPTIONAL
-)
-
-##
-## Test for Qt Webkit
-##
-set_package_properties(Qt5WebKit PROPERTIES
-    PURPOSE "Required for the web shape"
-    TYPE OPTIONAL
-)
-if(Qt5WebKit_FOUND)
-    add_definitions( -DCAN_USE_QTWEBKIT )
-endif()
-
-##
-## Test for Qt WebKitWidgets
-##
-set_package_properties(Qt5WebKitWidget PROPERTIES
-    PURPOSE "Required for Stage"
-    TYPE RECOMMENDED
-)
 
 ##
 ## Test endianess
