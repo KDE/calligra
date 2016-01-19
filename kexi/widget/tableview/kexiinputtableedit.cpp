@@ -337,7 +337,7 @@ void KexiInputTableEdit::updateLineEditStyleSheet()
       .arg(m_rightMarginWhenFocused) // right
       .arg(align_right ? 0 : 2) // left
     );
-    kDebug() << m_rightMarginWhenFocused << m_lineedit->styleSheet();
+    //kDebug() << m_rightMarginWhenFocused << m_lineedit->styleSheet();
 }
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiInputEditorFactoryItem, KexiInputTableEdit)

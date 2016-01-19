@@ -249,9 +249,9 @@ QAction* KexiDataAwareView::sharedActionRequested(QKeyEvent *ke, const char *act
 bool KexiDataAwareView::eventFilter(QObject *o, QEvent *e)
 {
     // kDebug() << "***" << o << e << window()->selectedView() << this;
-    if (e->type() == QEvent::FocusIn || e->type() == QEvent::FocusOut) {
+    /*if (e->type() == QEvent::FocusIn || e->type() == QEvent::FocusOut) {
         kDebug() << "F O C U S" << e << o;
-    }
+    }*/
     if (e->type() == QEvent::ShortcutOverride && o == this) {
         QKeyEvent *ke = static_cast<QKeyEvent*>(e);
         QAction *a = sharedActionRequested(ke, "data_cancel_row_changes");

@@ -653,7 +653,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
             // the same cell but may need a bit of scrolling to make it visible
             ensureCellVisible(m_curRow, m_curCol);
         }
-        kDebug() << "NO CHANGE";
+        //kDebug() << "NO CHANGE";
     }
 
     if (m_initDataContentsOnShow) {
@@ -684,13 +684,13 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
     if (!acceptEditor()) {
         return false;
     }
-    kDebug() << "EDIT RECORD ACCEPTING...";
+    //kDebug() << "EDIT RECORD ACCEPTING...";
 
     bool success = true;
     const bool inserting = m_newRowEditing;
 
     if (m_data->rowEditBuffer()->isEmpty() && !m_newRowEditing) {
-        kDebug() << "-- NOTHING TO ACCEPT!!!";
+        //kDebug() << "-- NOTHING TO ACCEPT!!!";
     } else {//not empty edit buffer or new row to insert:
         if (m_newRowEditing) {
             kDebug() << "-- INSERTING: ";
@@ -751,7 +751,7 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
     }
     //indicate on the vheader that we are not editing
     if (verticalHeader()) {
-        kDebug() << currentRow();
+        //kDebug() << currentRow();
         updateVerticalHeaderSection(currentRow());
     }
     return success;
@@ -787,7 +787,7 @@ bool KexiDataAwareObjectInterface::cancelRowEdit()
 
     //indicate on the vheader that we are not editing
     if (verticalHeader()) {
-        kDebug() << currentRow();
+        //kDebug() << currentRow();
         updateVerticalHeaderSection(currentRow());
     }
 
