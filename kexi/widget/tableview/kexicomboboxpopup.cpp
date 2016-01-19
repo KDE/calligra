@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2016 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,6 +32,8 @@
 
 #include <kdebug.h>
 
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QEvent>
 #include <QKeyEvent>
 #include <QScrollBar>
@@ -350,7 +352,9 @@ void KexiComboBoxPopup::updateSize(int minWidth)
     int width = qMax(d->tv->tableSize().width(),
                            (te ? te->totalSize().width() : (parentWidget() ? parentWidget()->width() : 0/*sanity*/)));
     //kDebug() << "size=" << size();
-    resize(qMax(minWidth, width)/*+(d->tv->columnCount()>1?2:0)*/ /*(d->updateSizeCalled?0:1)*/, d->tv->rowHeight() * rows + 2);
+    const QRect screen = QApplication::desktop()->availableGeometry(this);
+    resize(qMin(screen.width(), qMax(minWidth, width)), d->tv->rowHeight() * rows + 2);
+
     //kDebug() << "size after=" << size();
     if (d->visibleColumnsToShow.isEmpty()) {
         // row source type is not Query

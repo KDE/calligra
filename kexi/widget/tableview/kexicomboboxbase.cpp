@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Peter Simonsson <psn@linux.se>
-   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2016 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QLayout>
 #include <QStyle>
 #include <QWindowsStyle>
@@ -425,13 +427,43 @@ void KexiComboBoxBase::createPopup(bool show)
         popup()->move(pos);
         //kDebug() << "pos:" << posMappedToGlobal + QPoint(0, thisWidget->height());
         //to avoid flickering: first resize to 0-height, then show and resize back to prev. height
-        const int w = popupWidthHint();
+        int w = popupWidthHint();
         popup()->resize(w, 0);
         if (show) {
             popup()->show();
             //kDebug(44010) << "SHOW!!!";
         }
         popup()->updateSize(w);
+
+        // make sure the popup fits on the screen
+        const QRect screen = QApplication::desktop()->availableGeometry(posMappedToGlobal);
+        pos -= screen.topLeft(); // to simplify computation
+        w = popup()->width();
+        int h = popup()->height();
+        if (screen.width() < w) {
+            w = screen.width();
+            pos.setX(0);
+        } else if (screen.width() < (pos.x() + w - 1)) {
+            pos.setX(screen.width() - w + 1);
+        } else if (pos.x() < 0) {
+            pos.setX(0);
+        }
+        if (screen.height() < h) {
+            h = screen.height();
+            pos.setY(0);
+        } else if (screen.height() < (pos.y() + h - 1)) {
+            const int topY = pos.y() - thisWidget->height() - h;
+            if (topY >= 0 && (topY + h - 1 < screen.height())) {
+                pos.setY(pos.y() - thisWidget->height() - h);
+            } else {
+                pos.setY(screen.height() - h + 1);
+            }
+        } else if (pos.y() < 0) {
+            pos.setY(0);
+        }
+        popup()->move(pos + screen.topLeft());
+        popup()->resize(w, h);
+
         if (m_updatePopupSelectionOnShow) {
             int rowToHighlight = -1;
             KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
