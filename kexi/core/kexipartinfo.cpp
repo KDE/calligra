@@ -240,10 +240,11 @@ bool Info::isPropertyEditorAlwaysVisibleInDesignMode() const
 
 QAction* Info::newObjectAction()
 {
-    if (!KexiMainWindowIface::global() || !KexiMainWindowIface::global()->actionCollection()
-        || !isVisibleInNavigator())
-    {
-        kWarning();
+    if (!isVisibleInNavigator()) {
+        return 0;
+    }
+    if (!KexiMainWindowIface::global() || !KexiMainWindowIface::global()->actionCollection()) {
+        kWarning() << "Missing Kexi's global action collection";
         return 0;
     }
     QAction *act = KexiMainWindowIface::global()->actionCollection()->action(nameForCreateAction(*this));
