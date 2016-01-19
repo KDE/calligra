@@ -74,7 +74,12 @@ install(TARGETS koformula ${INSTALL_TARGETS_DEFAULT_ARGS})
 find_package(Cauchy)
 
 macro_optional_find_package(Cauchy)
-macro_log_feature(M2MML_FOUND "Cauchy's M2MML" "Matlab/Octave to MathML compiler" "https://bitbucket.org/cyrille/cauchy" FALSE "" "Required for the matlab/octave formula tool")
+set_package_properties(Cauchy PROPERTIES
+    DESCRIPTION "Cauchy's M2MML, a Matlab/Octave to MathML compiler"
+    URL "https://bitbucket.org/cyrille/cauchy"
+    PURPOSE "Required for the matlab/octave formula tool"
+    TYPE OPTIONAL
+)
 
 if(M2MML_FOUND)
     set(M2MML_TOOL_LIBRARIES ${M2MML_LIBRARY})

@@ -1,27 +1,24 @@
-# - Try to find Pstoedit
+# - Try to find Pstoedit with svg output plugin
 # Once done this will define
 #
-#  PSTOEDIT_FOUND - system has pstoedit
+#  PstoeditSvgOutput_FOUND - system has pstoedit with svg output plugin
 #  PSTOEDIT_EXECUTABLE - path of the pstoedit executable
 #  PSTOEDIT_VERSION - the version string, like "3.45"
-#  PSTOEDIT_SVG_PLUGIN_FOUND - svg output plugin found
 
 find_program(PSTOEDIT_EXECUTABLE NAMES pstoedit)
 
 include(MacroEnsureVersion)
 
 if(PSTOEDIT_EXECUTABLE)
-    set(PSTOEDIT_FOUND TRUE)
-
     execute_process(COMMAND ${PSTOEDIT_EXECUTABLE} -help
         ERROR_VARIABLE _PSTOEDIT_VERSION OUTPUT_VARIABLE _PSTOEDIT_PLUGINS
     )
     string (REGEX MATCH "[0-9]\\.[0-9]+" PSTOEDIT_VERSION "${_PSTOEDIT_VERSION}")
     string (REGEX MATCH "plot-svg" PSTOEDIT_SVG_PLUGIN "${_PSTOEDIT_PLUGINS}")
-    string (COMPARE EQUAL "plot-svg" "${PSTOEDIT_SVG_PLUGIN}" PSTOEDIT_SVG_PLUGIN_FOUND )
+    string (COMPARE EQUAL "plot-svg" "${PSTOEDIT_SVG_PLUGIN}" PstoeditSvgOutput_FOUND )
 endif()
 
-if(PSTOEDIT_FOUND AND PSTOEDIT_SVG_PLUGIN_FOUND )
+if(PstoeditSvgOutput_FOUND)
   if(NOT Pstoedit_FIND_QUIETLY)
     message(STATUS "Found pstoedit version ${PSTOEDIT_VERSION}: ${PSTOEDIT_EXECUTABLE}")
     message(STATUS "Found pstoedit svg-plugin: ${PSTOEDIT_SVG_PLUGIN}")

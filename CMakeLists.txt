@@ -179,7 +179,6 @@ include(KDECMakeSettings)
 include(KDECompilerSettings)
 # own macros
 include(MacroBoolTo01)
-include(MacroLogFeature)
 include(MacroOptionalFindPackage)
 include(MacroEnsureVersion)
 include(MacroJPEG)
@@ -231,9 +230,13 @@ find_package(Qt5 5.3.0 COMPONENTS UiTools Sql WebKit WebKitWidgets DBus Declarat
 set(HAVE_OPENGL ${Qt5OpenGL_FOUND})
 
 if (GHNS)
-    find_package(Attica)
+    find_package(Attica 3.0)
     find_package(NewStuff)
-    macro_log_feature(LIBATTICA_FOUND "LibAttica" "Attica is used for Get Hot New Stuff." "https://projects.kde.org/projects/kdesupport/attica" FALSE "" "You need at least version 3.0 for uploading of resources to work.")
+    set_package_properties(Attica PROPERTIES
+        DESCRIPTION "Attica is used for Get Hot New Stuff."
+        URL "https://projects.kde.org/projects/kdesupport/attica"
+        TYPE OPTIONAL
+    )
 
     if (NOT LIBATTICA_FOUND)
         set(GHNS FALSE)
@@ -320,9 +323,13 @@ macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 ##
 ## Test for GNU Scientific Library
 ##
-macro_optional_find_package(GSL)
-macro_log_feature(GSL_FOUND "GSL" "GNU Scientific Library" "http://www.gnu.org/software/gsl"
-                  FALSE "1.7" "Required by Sheets' solver plugin")
+macro_optional_find_package(GSL 1.7)
+set_package_properties(GSL_FOUND PROPERTIES
+    DESCRIPTION "GNU Scientific Library"
+    URL "https://www.gnu.org/software/gsl"
+    PURPOSE "Required by Sheets' solver plugin"
+    TYPE OPTIONAL
+)
 macro_bool_to_01(GSL_FOUND HAVE_GSL)
 configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
 
@@ -330,72 +337,122 @@ configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
 ## Test for Phonon4Qt5
 ##
 find_package(Phonon4Qt5 QUIET)
-macro_log_feature(Phonon4Qt5_FOUND "Phonon4Qt5" "Abstraction lib for multimedia applications" "http://www.kde.org/" FALSE "" "Required by Stage event actions and Videoshape plugin")
+set_package_properties(Phonon4Qt5 PROPERTIES
+    DESCRIPTION "Abstraction lib for multimedia applications"
+    URL "https://www.kde.org/"
+    PURPOSE "Required by Stage event actions and Videoshape plugin"
+    TYPE OPTIONAL
+)
 
 ##
 ## Test for KF5CalendarCore
 ##
 find_package(KF5CalendarCore CONFIG QUIET)
-macro_log_feature(KF5CalendarCore_FOUND "KF5CalendarCore" "KDE Calendar Library" "http://www.kde.org/" FALSE "" "Required by Plan Ical export and optionally used by semantic item Event")
+set_package_properties(KF5CalendarCore PROPERTIES
+    DESCRIPTION "KDE Calendar Library"
+    URL "https://www.kde.org/"
+    PURPOSE "Required by Plan Ical export and optionally used by semantic item Event"
+    TYPE OPTIONAL
+)
 
 ##
 ## Test for KF5Contacts
 ##
 find_package(KF5Contacts CONFIG QUIET)
-macro_log_feature(KF5Contacts_FOUND "KF5Contacts" "KDE Address book Library" "http://www.kde.org/" FALSE "" "Optionally used by semantic item Contact")
+set_package_properties(KF5Contacts PROPERTIES
+    DESCRIPTION "KDE Address book Library"
+    URL "https://www.kde.org/"
+    PURPOSE "Optionally used by semantic item Contact"
+    TYPE OPTIONAL
+)
 
 ##
 ## Test for KF5AkonadiContact
 ##
 find_package(KF5AkonadiContact CONFIG QUIET)
-macro_log_feature(KF5AkonadiContact_FOUND "KF5AkonadiContact" "Library for Accessing Contacts stored in Akonadi" "http://www.kde.org/" FALSE "" "Optionally used by Plan")
+set_package_properties(KF5AkonadiContact PROPERTIES
+    DESCRIPTION "Library for Accessing Contacts stored in Akonadi"
+    URL "https://www.kde.org/"
+    PURPOSE "Optionally used by Plan"
+    TYPE OPTIONAL
+)
 
 ##
 ## Test for KF5AkonadiCore
 ##
 find_package(KF5Akonadi CONFIG QUIET)
-macro_log_feature(KF5Akonadi_FOUND "KF5Akonadi" "Library for general Access to Akonadi" "http://www.kde.org/" FALSE "" "Optionally used by semantic items Event and Contact")
+set_package_properties(KF5Akonadi PROPERTIES
+    DESCRIPTION "Library for general Access to Akonadi"
+    URL "https://www.kde.org/"
+    PURPOSE "Optionally used by semantic items Event and Contact"
+    TYPE OPTIONAL
+)
 
 ##
 ## Test for KGantt
 ##
 macro_optional_find_package(KGantt 2.6.0 QUIET)
-macro_log_feature(KGantt_FOUND "KGantt" "Library for creating Gantt diagrams (part of KDiagram)" "http://www.kde.org/" FALSE "" "Required by Plan")
+set_package_properties(KGantt PROPERTIES
+    DESCRIPTION "Library for creating Gantt diagrams (part of KDiagram)"
+    URL "https://www.kde.org/"
+    PURPOSE "Required by Plan"
+    TYPE RECOMMENDED
+)
 
 ##
 ## Test for KChart
 ##
 macro_optional_find_package(KChart 2.6.0 QUIET)
-macro_log_feature(KChart_FOUND "KChart" "Library for creating business charts (part of KDiagram)" "http://www.kde.org/" FALSE "" "Required by Chart shape and Plan")
+set_package_properties(KChart PROPERTIES
+    DESCRIPTION "Library for creating business charts (part of KDiagram)"
+    URL "https://www.kde.org/"
+    PURPOSE "Required by Chart shape and Plan"
+    TYPE RECOMMENDED
+)
 
 ##
 ## Test for KReport
 ##
 macro_optional_find_package(KReport 2.96.1 QUIET)
-if (KReport_FOUND AND KREPORT_SCRIPTING)
-    set(KReport_WITH_SCRIPTING_FOUND TRUE)
-endif()
-macro_log_feature(KReport_WITH_SCRIPTING_FOUND "KReport" "A framework for the creation and generation of reports in multiple formats (scripting support required)"
-                                               "http://community.kde.org/KReport" FALSE "" "Required by Plan")
+set_package_properties(KReport PROPERTIES
+    DESCRIPTION "A framework for the creation and generation of reports in multiple formats"
+    URL "https://community.kde.org/KReport"
+    PURPOSE "Required by Plan"
+    TYPE RECOMMENDED
+)
 
 ##
 ## Test for KPropertyWidgets
 ##
-macro_optional_find_package(KPropertyWidgets 2.98.0)
-macro_log_feature(KPropertyWidgets_FOUND "KPropertyWidgets" "A property editing framework with editor widget"
-                                  "http://community.kde.org/KProperty" FALSE "" "Required by Plan")
+macro_optional_find_package(KPropertyWidgets 2.98.0 QUIET)
+set_package_properties(KPropertyWidgets PROPERTIES
+    DESCRIPTION "A property editing framework with editor widget"
+    URL "https://community.kde.org/KProperty"
+    PURPOSE "Required by Plan"
+    TYPE RECOMMENDED
+)
 
 ##
 ## Test for eigen3
 ##
 macro_optional_find_package(Eigen3)
-macro_log_feature(EIGEN3_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "3.0" "Required by Calligra Sheets")
+set_package_properties(Eigen3 PROPERTIES
+    DESCRIPTION "C++ template library for linear algebra"
+    URL "http://eigen.tuxfamily.org"
+    PURPOSE "Required by Calligra Sheets"
+    TYPE RECOMMENDED
+)
 
 ##
 ## Test for QCA2
 ##
 macro_optional_find_package(Qca-qt5 2.1.0 QUIET)
-macro_log_feature(Qca-qt5_FOUND "QCA" "Qt Cryptographic Architecture" "http:/download.kde.org/stable/qca-qt5" FALSE "2.0" "Required for encrypted OpenDocument files and encrypted xls files support (available as a module in kdesupport)")
+set_package_properties(Qca-qt5 PROPERTIES
+    DESCRIPTION "Qt Cryptographic Architecture"
+    URL "http:/download.kde.org/stable/qca-qt5"
+    PURPOSE "Required for encrypted OpenDocument files and encrypted xls files support (available as a module in kdesupport)"
+    TYPE OPTIONAL
+)
 
 ##
 ## Test for soprano
@@ -403,7 +460,12 @@ macro_log_feature(Qca-qt5_FOUND "QCA" "Qt Cryptographic Architecture" "http:/dow
 # QT5TODO: push for released (and maintained) Qt5 version of Soprano, T462, T461
 # macro_optional_find_package(Soprano)
 set(Soprano_FOUND FALSE)
-macro_log_feature(Soprano_FOUND "Soprano" "RDF handling library" "http://soprano.sourceforge.net/" FALSE "" "Required to handle RDF metadata in ODF")
+set_package_properties(Soprano PROPERTIES
+    DESCRIPTION "RDF handling library"
+    URL "http://soprano.sourceforge.net/"
+    PURPOSE "Required to handle RDF metadata in ODF"
+    TYPE OPTIONAL
+)
 if(NOT Soprano_FOUND)
     set(SOPRANO_INCLUDE_DIR "")
 endif()
@@ -434,13 +496,22 @@ else()
         message( WARNING "MarbleControlBox.h not found, could not properly set the SETMARBLEWIDGET define." )
     endif()
 endif()
-macro_log_feature(MARBLE_FOUND "Marble" "KDE World Globe Widget library" "https://marble.kde.org/" FALSE "${MARBLE_MIN_VERSION}" "Required by RDF to show locations on a map")
+set_package_properties(Marble PROPERTIES
+    DESCRIPTION "World Globe Widget library"
+    URL "https://marble.kde.org/"
+    PURPOSE "Required by RDF to show locations on a map"
+    TYPE OPTIONAL
+)
 
 ##
 ## Test for lcms
 ##
-macro_optional_find_package(LCMS2)
-macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.4" "Will be used for color management")
+set_package_properties(LCMS2 PROPERTIES
+    DESCRIPTION "LittleCMS, a color management engine"
+    URL "http://www.littlecms.com"
+    PURPOSE "Will be used for color management"
+    TYPE OPTIONAL
+)
 if(LCMS2_FOUND)
     if(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
         set(HAVE_LCMS24 TRUE)
@@ -456,7 +527,13 @@ endif()
 set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 macro_optional_find_package(Vc 0.6.70)
-macro_log_feature(Vc_FOUND "Vc" "Portable, zero-overhead SIMD library for C++" "http://code.compeng.uni-frankfurt.de/projects/vc" FALSE "" "Required by the pigment for vectorization")
+set_package_properties(Vc PROPERTIES
+    DESCRIPTION "Portable, zero-overhead SIMD library for C++"
+    URL "http://code.compeng.uni-frankfurt.de/projects/vc"
+    PURPOSE "Required by the pigment for vectorization"
+    TYPE OPTIONAL
+)
+
 macro_bool_to_01(Vc_FOUND HAVE_VC)
 macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
 
@@ -539,7 +616,12 @@ endif()
 ## Only test if on non-Windows system
 if(NOT WIN32 AND NOT APPLE)
     macro_optional_find_package(Fontconfig)
-    macro_log_feature(FONTCONFIG_FOUND "Fontconfig" "Library for configuring and customizing font access" "http://fontconfig.org" FALSE "" "Required to handle exact font size")
+    set_package_properties(Fontconfig PROPERTIES
+        DESCRIPTION "Library for configuring and customizing font access"
+        URL "http://fontconfig.org"
+        PURPOSE "Required to handle exact font size"
+        TYPE RECOMMENDED
+    )
 endif()
 
 ##
@@ -548,7 +630,12 @@ endif()
 ## Only test if on non-Windows system
 if(NOT WIN32 AND NOT APPLE)
     macro_optional_find_package(Freetype)
-    macro_log_feature(FREETYPE_FOUND "Freetype" "A Free, High-Quality, and Portable Font Engine" "http://www.freetype.org/" FALSE "" "Required to handle exact font size")
+    set_package_properties(Freetype PROPERTIES
+        DESCRIPTION "A Free, High-Quality, and Portable Font Engine"
+        URL "http://www.freetype.org/"
+        PURPOSE "Required to handle exact font size"
+        TYPE RECOMMENDED
+    )
 endif()
 
 if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
@@ -559,17 +646,20 @@ else()
 endif()
 
 ##
-## Test for Qt WebKitWidgets
+## Test for Qt Sql
 ##
-macro_log_feature(Qt5Sql_FOUND "Qt Sql"
-                  "Qt SQL module."
-                  "http://qt.io" FALSE ""
-                  "Optional for Sheets database connection")
+set_package_properties(Qt5Sql PROPERTIES
+    PURPOSE "Optional for Sheets database connection"
+    TYPE OPTIONAL
+)
 
 ##
 ## Test for Qt Webkit
 ##
-macro_log_feature(Qt5WebKit_FOUND "Qt Webkit" "Qt binding for Webkit, the HTML engine." "http://qt.io" FALSE "" "Required for the web shape")
+set_package_properties(Qt5WebKit PROPERTIES
+    PURPOSE "Required for the web shape"
+    TYPE OPTIONAL
+)
 if(Qt5WebKit_FOUND)
     add_definitions( -DCAN_USE_QTWEBKIT )
 endif()
@@ -577,7 +667,10 @@ endif()
 ##
 ## Test for Qt WebKitWidgets
 ##
-macro_log_feature(Qt5WebKitWidgets_FOUND "Qt WebkitWidgets" "QWidgets module for Webkit, the HTML engine." "http://qt.io" FALSE "" "Required for Stage")
+set_package_properties(Qt5WebKitWidget PROPERTIES
+    PURPOSE "Required for Stage"
+    TYPE RECOMMENDED
+)
 
 ##
 ## Test endianess
@@ -589,101 +682,124 @@ test_big_endian(CMAKE_WORDS_BIGENDIAN)
 ## Test SharedMimeInfo
 ##
 macro_optional_find_package(SharedMimeInfo)
-macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "http://freedesktop.org/wiki/Software/shared-mime-info" FALSE "" "Required to determine file types SVM or all of MSOOXML.")
+set_package_properties(SharedMimeInfo PROPERTIES
+    DESCRIPTION "Shared Mime Info"
+    URL "http://freedesktop.org/wiki/Software/shared-mime-info"
+    PURPOSE "Required to determine file types SVM or all of MSOOXML."
+    TYPE RECOMMENDED
+)
 
 ##
 ## Test for Okular
 ##
 macro_optional_find_package(Okular5 1.0.0 QUIET)
-macro_log_feature(Okular5_FOUND "Okular" "A unified document viewer" "http://okular.kde.org/" FALSE "" "Required to build the plugins for Okular")
+set_package_properties(Okular5 PROPERTIES
+    DESCRIPTION "A unified document viewer"
+    URL "https://okular.kde.org/"
+    PURPOSE "Required to build the plugins for Okular"
+    TYPE OPTIONAL
+)
 
 ##
 ## Test for librevenge
 ##
 macro_optional_find_package(LibRevenge)
-macro_log_feature(LIBREVENGE_FOUND "LibRevenge"
-                  "A base library for writing document import filters"
-                  "http://sf.net/p/libwpd/librevenge/" FALSE ""
-                  "Required by various import filters"
+set_package_properties(LibRevenge PROPERTIES
+    DESCRIPTION "A base library for writing document import filters"
+    URL "http://sf.net/p/libwpd/librevenge/"
+    PURPOSE "Required by various import filters"
+    TYPE OPTIONAL
 )
 
 ##
 ## Test for libodfgen
 ##
 macro_optional_find_package(LibOdfGen)
-macro_log_feature(LIBODFGEN_FOUND "LibOdfGen"
-                  "Open Document Format Generation Library"
-                  "http://sf.net/p/libwpd/libodfgen/" FALSE ""
-                  "Required by various import filters"
+set_package_properties(LibOdfGen PROPERTIES
+    DESCRIPTION "Open Document Format Generation Library"
+    URL "http://sf.net/p/libwpd/libodfgen/"
+    PURPOSE "Required by various import filters"
+    TYPE OPTIONAL
 )
 
 ##
 ## Test for WordPerfect Document Library
 ##
 macro_optional_find_package(LibWpd)
-macro_log_feature(LIBWPD_FOUND "LibWpd"
-                  "WordPerfect Document Library"
-                  "http://libwpd.sourceforge.net/" FALSE ""
-                  "Required by the Words WPD import filter"
+set_package_properties(LibWpd PROPERTIES
+    DESCRIPTION "WordPerfect Document Library"
+    URL "http://libwpd.sourceforge.net/"
+    PURPOSE "Required by the Words WPD import filter"
+    TYPE OPTIONAL
 )
 
 ##
 ## Test for WordPerfect Graphics Library
 ##
 macro_optional_find_package(LibWpg)
-macro_log_feature(LIBWPG_FOUND "LibWpg"
-                  "WordPerfect Graphics Library"
-                  "http://libwpg.sourceforge.net/" FALSE ""
-                  "Required by the Karbon WPG import filter"
+set_package_properties(LibWpg PROPERTIES
+    DESCRIPTION "WordPerfect Graphics Library"
+    URL "http://libwpg.sourceforge.net/"
+    PURPOSE "Required by the Karbon WPG import filter"
+    TYPE OPTIONAL
 )
 
 ##
 ## Test for Microsoft Works Document Library
 ##
 macro_optional_find_package(LibWps)
-macro_log_feature(LIBWPS_FOUND "LibWps"
-                  "Microsoft Works Document Library"
-                  "http://libwps.sourceforge.net/" FALSE ""
-                  "Required by the Words WPS import filter"
+set_package_properties(LibWps PROPERTIES
+    DESCRIPTION "Microsoft Works Document Library"
+    URL "http://libwps.sourceforge.net/"
+    PURPOSE "Required by the Words WPS import filter"
+    TYPE OPTIONAL
 )
 
 ##
 ## Test for Microsoft Visio Document Library
 ##
 macro_optional_find_package(LibVisio)
-macro_log_feature(LIBVISIO_FOUND "LibVisio"
-                  "Visio Import Filter Library"
-                  "https://wiki.documentfoundation.org/DLP/Libraries/libvisio" FALSE ""
-                  "Required by the Flow visio import filter"
+set_package_properties(LibVisio PROPERTIES
+    DESCRIPTION "Visio Import Filter Library"
+    URL "https://wiki.documentfoundation.org/DLP/Libraries/libvisio"
+    PURPOSE "Required by the Flow visio import filter"
+    TYPE OPTIONAL
 )
 
 ##
 ## Test for Apple Keynote Document Library
 ##
 macro_optional_find_package(LibEtonyek)
-macro_log_feature(LIBETONYEK_FOUND "LibEtonyek"
-                  "Apple Keynote Document Library"
-                  "https://wiki.documentfoundation.org/DLP/Libraries/libetonyek" FALSE ""
-                  "Required by the Stage keynote import filter"
+set_package_properties(LibEtonyek PROPERTIES
+    DESCRIPTION "Apple Keynote Document Library"
+    URL "https://wiki.documentfoundation.org/DLP/Libraries/libetonyek"
+    PURPOSE "Required by the Stage keynote import filter"
+    TYPE OPTIONAL
 )
 
 ##
 ## Test for qt-poppler
 ##
 macro_optional_find_package(Poppler)
-macro_log_feature( POPPLER_FOUND "Poppler-Qt5" "A PDF rendering library" "http://poppler.freedesktop.org" FALSE "" "Required by the Karbon PDF import filter and CSTester PDF feature")
+set_package_properties(Poppler PROPERTIES
+    DESCRIPTION "A PDF rendering library"
+    URL "http://poppler.freedesktop.org"
+    PURPOSE "Required by the Karbon PDF import filter and CSTester PDF feature"
+    TYPE OPTIONAL
+)
 
-## The Karbon pdf-importer needs the not-officially-supported XPDF Headers
+##
+## Test for qt-poppler not-officially-supported XPDF Headers
 ## Installing these is off by default in poppler sources, so lets make
 ## sure they're really there before trying to build the pdf import
-if(POPPLER_FOUND)
-    find_path(POPPLER_XPDF_HEADERS poppler-config.h
-    HINTS ${POPPLER_INCLUDE_DIR} )
-    if(POPPLER_XPDF_HEADERS)
-        set(POPPLER_XPDF_HEADERS_FOUND TRUE)
-    endif()
-    macro_log_feature( POPPLER_XPDF_HEADERS_FOUND "poppler-qt5-xpdf-headers" "XPDF headers in the Poppler Qt5 interface library" "http://poppler.freedesktop.org" FALSE "" "Required by the Karbon PDF import filter")
-endif()
+##
+macro_optional_find_package(PopplerXPDFHeaders)
+set_package_properties(PopplerXPDFHeaders PROPERTIES
+    DESCRIPTION "XPDF headers in the Poppler Qt5 interface library"
+    URL "http://poppler.freedesktop.org"
+    PURPOSE "Required by the Karbon PDF import filter"
+    TYPE OPTIONAL
+)
 
 
 ##
@@ -1064,7 +1180,7 @@ add_subdirectory(extras)
 add_subdirectory(filters)
 add_subdirectory(data)
 
-macro_display_feature_log()
+feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 calligra_product_deps_report("product_deps")
 calligra_log_should_build()
