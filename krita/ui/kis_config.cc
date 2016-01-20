@@ -403,9 +403,11 @@ void KisConfig::setMonitorProfile(int screen, const QString & monitorProfile, bo
 
 const KoColorProfile *KisConfig::getScreenProfile(int screen)
 {
+    if (screen < 0) return 0;
+
     KisConfig cfg;
     QString monitorId;
-    if (KisColorManager::instance()->devices().size() > screen) {
+    if (KisColorManager::instance()->devices().size() > screen && screen > 0) {
         monitorId = cfg.monitorForScreen(screen, KisColorManager::instance()->devices()[screen]);
     }
     //qDebug() << "getScreenProfile(). Screen" << screen << "monitor id" << monitorId;
@@ -431,6 +433,8 @@ const KoColorProfile *KisConfig::getScreenProfile(int screen)
 
 const KoColorProfile *KisConfig::displayProfile(int screen) const
 {
+    if (screen < 0) return 0;
+
     // if the user plays with the settings, they can override the display profile, in which case
     // we don't want the system setting.
     bool override = useSystemMonitorProfile();
