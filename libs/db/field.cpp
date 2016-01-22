@@ -675,7 +675,7 @@ void Field::debug() const
 
 void Field::setExpression(KexiDB::BaseExpr *expr)
 {
-    assert(!m_parent || dynamic_cast<QuerySchema*>(m_parent));
+    Q_ASSERT(!m_parent || dynamic_cast<QuerySchema*>(m_parent));
     if (m_expr == expr)
         return;
     if (m_expr) {

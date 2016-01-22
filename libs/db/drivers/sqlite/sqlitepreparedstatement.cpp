@@ -67,7 +67,7 @@ bool SQLitePreparedStatement::execute()
     else if (m_type == InsertStatement)
         fieldList = m_fields->fields();
     else
-        assert(0); //impl. error
+        Q_ASSERT(0); //impl. error
 
     int arg = 1; //arg index counted from 1
     Field::ListIterator itFields(fieldList->constBegin());

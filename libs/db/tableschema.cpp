@@ -113,7 +113,7 @@ TableSchema::TableSchema(Connection *conn, const QString & name)
         , d( new Private )
         , m_isKexiDBSystem(false)
 {
-    assert(conn);
+    Q_ASSERT(conn);
     m_name = name;
     init();
 }
@@ -189,7 +189,7 @@ void TableSchema::setPrimaryKey(IndexSchema *pkey)
 
 FieldList& TableSchema::insertField(uint index, Field *field)
 {
-    assert(field);
+    Q_ASSERT(field);
     FieldList::insertField(index, field);
     if (!field || index > (uint)m_fields.count())
         return *this;
@@ -243,7 +243,7 @@ bool TableSchema::removeField(KexiDB::Field *field)
 #if 0 //original  
 KexiDB::FieldList& TableSchema::addField(KexiDB::Field* field)
 {
-    assert(field);
+    Q_ASSERT(field);
     FieldList::addField(field);
     field->setTable(this);
     field->m_order = m_fields.count();

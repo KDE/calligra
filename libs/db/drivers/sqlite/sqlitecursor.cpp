@@ -352,7 +352,7 @@ void SQLiteCursor::drv_clearBuffer()
 void SQLiteCursor::drv_storeCurrentRecord()
 {
 #if 0
-  assert(!m_data->rec_stored);
+  Q_ASSERT(!m_data->rec_stored);
   m_data->rec_stored = true;
   m_data->next_cols = m_data->curr_cols;
   for (int i=0;i<m_data->curr_cols;i++) {

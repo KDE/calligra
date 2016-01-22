@@ -1576,7 +1576,7 @@ QueryAsterisk::QueryAsterisk(QuerySchema *query, TableSchema *table)
         : Field()
         , m_table(table)
 {
-    assert(query);
+    Q_ASSERT(query);
     m_parent = query;
     setType(Field::Asterisk);
 }

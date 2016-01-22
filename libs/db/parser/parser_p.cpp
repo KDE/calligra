@@ -275,16 +275,16 @@ QuerySchema* buildSelectQuery(
             QString aliasString;
             if (e->exprClass() == KexiDBExpr_SpecialBinary) {
                 BinaryExpr* t_with_alias = e->toBinary();
-                assert(t_with_alias);
-                assert(t_with_alias->left()->exprClass() == KexiDBExpr_Variable);
-                assert(t_with_alias->right()->exprClass() == KexiDBExpr_Variable
-                       && (t_with_alias->token() == AS || t_with_alias->token() == 0));
+                Q_ASSERT(t_with_alias);
+                Q_ASSERT(t_with_alias->left()->exprClass() == KexiDBExpr_Variable);
+                Q_ASSERT(t_with_alias->right()->exprClass() == KexiDBExpr_Variable
+                         && (t_with_alias->token() == AS || t_with_alias->token() == 0));
                 t_e = t_with_alias->left()->toVariable();
                 aliasString = t_with_alias->right()->toVariable()->name.toLatin1();
             } else {
                 t_e = e->toVariable();
             }
-            assert(t_e);
+            Q_ASSERT(t_e);
             QString tname = t_e->name;
             TableSchema *s = parser->db()->tableSchema(tname);
             if (!s) {

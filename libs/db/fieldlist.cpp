@@ -64,7 +64,7 @@ void FieldList::clear()
 
 FieldList& FieldList::insertField(uint index, KexiDB::Field *field)
 {
-    assert(field);
+    Q_ASSERT(field);
     if (!field)
         return *this;
     if (index > (uint)m_fields.count()) {
@@ -115,7 +115,7 @@ FieldList& FieldList::addField(KexiDB::Field *field)
 
 bool FieldList::removeField(KexiDB::Field *field)
 {
-    assert(field);
+    Q_ASSERT(field);
     if (!field)
         return false;
     if (m_fields_by_name.remove(field->name().toLower()) < 1)
@@ -129,7 +129,7 @@ bool FieldList::removeField(KexiDB::Field *field)
 
 bool FieldList::moveField(KexiDB::Field *field, uint newIndex)
 {
-    assert(field);
+    Q_ASSERT(field);
     if (!field || !m_fields.removeOne(field)) {
         return false;
     }

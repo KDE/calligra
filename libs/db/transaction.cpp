@@ -47,7 +47,7 @@ TransactionData::TransactionData(Connection *conn)
         , m_active(true)
         , refcount(1)
 {
-    assert(conn);
+    Q_ASSERT(conn);
     Transaction::globalcount++; //because refcount(1) init.
     TransactionData::globalcount++;
     KexiDBDbg << "-- TransactionData::globalcount == " << TransactionData::globalcount;

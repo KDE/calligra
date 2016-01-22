@@ -62,7 +62,7 @@ Cursor::Cursor(Connection* conn, QuerySchema& query, uint options)
 
 void Cursor::init()
 {
-    assert(m_conn);
+    Q_ASSERT(m_conn);
     m_conn->addCursor(*this);
     m_opened = false;
 // , m_atFirst(false)
