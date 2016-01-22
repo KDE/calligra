@@ -179,7 +179,8 @@ tristate KexiTablePart::askForClosingObjectsUsingTableSchema(
     }
     openedObjectsStr += "</list>";
     int r = KMessageBox::questionYesNo(parent,
-                                       "<para>" + msg + "</para><para>" + openedObjectsStr + "</para><para>"
+                                       i18nc("@info", "<para>%1</para><para>%2</para>", msg, openedObjectsStr)
+                                       + "<para>"
                                        + i18n("Do you want to close all windows for these objects?")
                                        + "</para>",
                                        QString(), KGuiItem(i18n("Close windows"), koIconName("window-close")), KStandardGuiItem::cancel());
