@@ -504,7 +504,8 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
                         kDebug() << "invisible field with sorting: do not add it to the fields list";
                         continue;
                     }
-                    temp->query()->addField(currentField, fieldVisible);
+                    const int tablePosition = temp->query()->tablePosition(t->name());
+                    temp->query()->addField(currentField, tablePosition, fieldVisible);
                     if (fieldVisible)
                         fieldsFound = true;
                     if (!alias.isEmpty())
