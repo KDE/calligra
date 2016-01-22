@@ -160,10 +160,6 @@ KexiRelationsTableFieldList::KexiRelationsTableFieldList(
 {
     setSchema(tableOrQuerySchema);
     setAcceptDrops(true);
-
-    connect(this, SIGNAL(contentsMoving(int,int)),
-            this, SLOT(slotContentsMoving(int,int)));
-
     horizontalScrollBar()->installEventFilter(this);
     verticalScrollBar()->installEventFilter(this);
 }
