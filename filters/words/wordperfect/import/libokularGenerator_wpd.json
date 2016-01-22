@@ -3,51 +3,21 @@
         "Authors": [
             {
                 "Email": "sven.langkamp@gmail.com", 
-                "Name": "Sven Langkamp", 
-                "Name[x-test]": "xxSven Langkampxx"
+                "Name": "Sven Langkamp"
             }, 
             {
                 "Email": "kossebau@kde.org", 
-                "Name": "Friedrich W. H. Kossebau", 
-                "Name[x-test]": "xxFriedrich W. H. Kossebauxx"
+                "Name": "Friedrich W. H. Kossebau"
             }
         ], 
         "Copyright": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
-        "Copyright[fi]": "Copyright 2012–2016 Sven Langkamp, Friedrich W. H. Kossebau", 
-        "Copyright[gl]": "© 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
-        "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2012–2016", 
-        "Copyright[x-test]": "xxCopyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebauxx", 
         "Description": "WordPerfect Document file renderer", 
-        "Description[ca@valencia]": "Representació de fitxers de documents de WordPerfect", 
-        "Description[ca]": "Representació de fitxers de documents de WordPerfect", 
-        "Description[fi]": "WordPerfect Document -tiedostohahmonnin", 
-        "Description[gl]": "Renderizador de ficheiros de documentos de WordPerfect", 
-        "Description[nl]": "WordPerfect documentbestandsweergave", 
-        "Description[pl]": "Wyświetlanie pliku WordPerfect", 
-        "Description[pt]": "Visualizador de documentos do WordPerfect", 
-        "Description[pt_BR]": "Renderização de arquivos de documento WordPerfect", 
-        "Description[sk]": "Zobrazovač súborov WordPerfect", 
-        "Description[sv]": "WordPerfect dokumentfilåtergivning", 
-        "Description[uk]": "Засіб показу вмісту документів WordPerfect", 
-        "Description[x-test]": "xxWordPerfect Document file rendererxx", 
         "Id": "okularGenerator_wpd_calligra", 
         "License": "GPL", 
         "MimeTypes": [
             "application/vnd.wordperfect"
         ], 
         "Name": "WPD Backend", 
-        "Name[ca@valencia]": "Dorsal pels WPD", 
-        "Name[ca]": "Dorsal pels WPD", 
-        "Name[es]": "Motor WPD", 
-        "Name[fi]": "WPD-taustaosa", 
-        "Name[gl]": "Infraestrutura de WPD", 
-        "Name[nl]": "WPD-backend", 
-        "Name[pl]": "Silnik WPD", 
-        "Name[pt]": "Infra-Estrutura para WPD", 
-        "Name[pt_BR]": "Infraestrutura WPD", 
-        "Name[sv]": "WPD-gränssnitt", 
-        "Name[uk]": "Модуль WPD", 
-        "Name[x-test]": "xxWPD Backendxx", 
         "ServiceTypes": [
             "okular/Generator"
         ], 

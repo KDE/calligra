@@ -3,51 +3,21 @@
         "Authors": [
             {
                 "Email": "sven.langkamp@gmail.com", 
-                "Name": "Sven Langkamp", 
-                "Name[x-test]": "xxSven Langkampxx"
+                "Name": "Sven Langkamp"
             }, 
             {
                 "Email": "kossebau@kde.org", 
-                "Name": "Friedrich W. H. Kossebau", 
-                "Name[x-test]": "xxFriedrich W. H. Kossebauxx"
+                "Name": "Friedrich W. H. Kossebau"
             }
         ], 
         "Copyright": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
-        "Copyright[fi]": "Copyright 2010–2016 Sven Langkamp, Friedrich W. H. Kossebau", 
-        "Copyright[gl]": "© 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
-        "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2010–2016", 
-        "Copyright[x-test]": "xxCopyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebauxx", 
         "Description": "PPT file renderer", 
-        "Description[ca@valencia]": "Representació de fitxers PPT", 
-        "Description[ca]": "Representació de fitxers PPT", 
-        "Description[fi]": "PPT-tiedostohahmonnin", 
-        "Description[gl]": "Renderizador de ficheiros PPT", 
-        "Description[nl]": "PPT-bestandsweergave", 
-        "Description[pl]": "Wyświetlanie pliku PPT", 
-        "Description[pt]": "Visualizador de ficheiros PPT", 
-        "Description[pt_BR]": "Renderização de arquivos PPT", 
-        "Description[sk]": "Zobrazovač súborov PPT", 
-        "Description[sv]": "PPT-filåtergivning", 
-        "Description[uk]": "Засіб показу вмісту файлів PPT", 
-        "Description[x-test]": "xxPPT file rendererxx", 
         "Id": "okularGenerator_ppt_calligra", 
         "License": "GPL", 
         "MimeTypes": [
             "application/vnd.ms-powerpoint"
         ], 
         "Name": "PPT Backend", 
-        "Name[ca@valencia]": "Dorsal pels PPT", 
-        "Name[ca]": "Dorsal pels PPT", 
-        "Name[es]": "Motor PPT", 
-        "Name[fi]": "PPT-taustaosa", 
-        "Name[gl]": "Infraestrutura de PPT", 
-        "Name[nl]": "PPT-backend", 
-        "Name[pl]": "Silnik PPT", 
-        "Name[pt]": "Infra-Estrutura para PPT", 
-        "Name[pt_BR]": "Infraestrutura PPT", 
-        "Name[sv]": "PPT-gränssnitt", 
-        "Name[uk]": "Модуль обробки PPT", 
-        "Name[x-test]": "xxPPT Backendxx", 
         "ServiceTypes": [
             "okular/Generator"
         ], 
