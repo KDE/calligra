@@ -2,30 +2,6 @@
 Type=ServiceType
 X-KDE-ServiceType=CalligraStage/Tool
 Comment=Tool for Calligra Stage
-Comment[bs]=Alat za Calligra Stage
-Comment[ca]=Eina pel Stage del Calligra
-Comment[ca@valencia]=Eina pel Stage del Calligra
-Comment[cs]=Nástroj pro Calligra Stage
-Comment[da]=Værktøj til Calligra Stage
-Comment[de]=Hilfsprogramm für Calligra Stage
-Comment[en_GB]=Tool for Calligra Stage
-Comment[es]=Herramienta para Calligra Stage
-Comment[et]=Calligra Stage'i tööriist
-Comment[fi]=Calligra Stage -työkalu
-Comment[gl]=Ferramenta para Calligra Stage
-Comment[ia]=Instrumento proCalligra Stage
-Comment[it]=Strumento per Calligra Stage
-Comment[ja]=Calligra Stage のためのツール
-Comment[nb]=Verktøy for Calligra Stage
-Comment[nl]=Hulpmiddele voor Calligra Stage
-Comment[pl]=Narzędzie dla Scena Calligra
-Comment[pt]=Ferramenta para o Calligra Stage
-Comment[pt_BR]=Ferramenta para o Calligra Stage
-Comment[sk]=Nástroj pre Calligra Stage
-Comment[sv]=Verktyg för Calligra Stage
-Comment[tr]=Calligra Stage Araç
-Comment[uk]=Інструмент для Calligra Stage
-Comment[x-test]=xxTool for Calligra Stagexx
 [PropertyDef::X-KPresenter-Version]
 Type=int
 [PropertyDef::X-KDE-PluginInfo-Name]
