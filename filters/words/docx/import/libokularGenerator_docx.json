@@ -3,15 +3,34 @@
         "Authors": [
             {
                 "Email": "sven.langkamp@gmail.com", 
-                "Name": "Sven Langkamp"
+                "Name": "Sven Langkamp", 
+                "Name[x-test]": "xxSven Langkampxx"
             }, 
             {
                 "Email": "kossebau@kde.org", 
-                "Name": "Friedrich W. H. Kossebau"
+                "Name": "Friedrich W. H. Kossebau", 
+                "Name[x-test]": "xxFriedrich W. H. Kossebauxx"
             }
         ], 
         "Copyright": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
+        "Copyright[fi]": "Copyright 2012–2016 Sven Langkamp, Friedrich W. H. Kossebau", 
+        "Copyright[gl]": "© 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
+        "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2012–2016", 
+        "Copyright[x-test]": "xxCopyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebauxx", 
         "Description": "DOCX file renderer", 
+        "Description[ca@valencia]": "Representació de fitxers DOCX", 
+        "Description[ca]": "Representació de fitxers DOCX", 
+        "Description[cs]": "Vykreslovač souborů DOCX", 
+        "Description[fi]": "DOCX-tiedostohahmonnin", 
+        "Description[gl]": "Renderizador de ficheiros DOCX", 
+        "Description[nl]": "DOCX-bestandsweergave", 
+        "Description[pl]": "Wyświetlanie pliku DOCX", 
+        "Description[pt]": "Visualizador de ficheiros DOCX", 
+        "Description[pt_BR]": "Renderização de arquivos DOCX", 
+        "Description[sk]": "Zobrazovač súborov DOCX", 
+        "Description[sv]": "DOCX-filåtergivning", 
+        "Description[uk]": "Засіб показу вмісту файлів DOCX", 
+        "Description[x-test]": "xxDOCX file rendererxx", 
         "Id": "okularGenerator_docx_calligra", 
         "License": "GPL", 
         "MimeTypes": [
@@ -19,6 +38,19 @@
             "application/vnd.openxmlformats-officedocument.wordprocessingml.template"
         ], 
         "Name": "DOCX Backend", 
+        "Name[ca@valencia]": "Dorsal pels DOCX", 
+        "Name[ca]": "Dorsal pels DOCX", 
+        "Name[cs]": "Podpůrná vrstva DOCX", 
+        "Name[es]": "Motor DOCX", 
+        "Name[fi]": "DOCX-taustaosa", 
+        "Name[gl]": "Infraestrutura de DOCX", 
+        "Name[nl]": "DOCX-backend", 
+        "Name[pl]": "Silnik DOCX", 
+        "Name[pt]": "Infra-Estrutura para DOCX", 
+        "Name[pt_BR]": "Infraestrutura DOCX", 
+        "Name[sv]": "DOCX-gränssnitt", 
+        "Name[uk]": "Модуль обробки DOCX", 
+        "Name[x-test]": "xxDOCX Backendxx", 
         "ServiceTypes": [
             "okular/Generator"
         ], 

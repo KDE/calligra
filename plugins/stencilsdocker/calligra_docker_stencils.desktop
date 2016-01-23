@@ -1,5 +1,19 @@
 [Desktop Entry]
 Name=Calligra Stencils Docker plugin
+Name[ca]=Connector d'acobladors de plantilles per al Calligra
+Name[ca@valencia]=Connector d'acobladors de plantilles per al Calligra
+Name[en_GB]=Calligra Stencils Docker plugin
+Name[es]=Complemento de panel de plantillas de Calligra
+Name[gl]=Complemento de doca de figuras para Calligra
+Name[it]=Estensione per le aree di aggancio delle forme di Calligra
+Name[nl]=Vastzetterplug-in voor Calligra Stencils
+Name[pl]=Wtyczka dokowań Szablonów Calligry
+Name[pt]='Plugin' de Áreas de Formas do Calligra
+Name[pt_BR]=Plugin de área de estênceis do Calligra
+Name[sk]=Plugin dockerov šablón Calligra
+Name[sv]=Calligra-dockningsinsticksprogram för schabloner
+Name[uk]=Додаток панелі шаблонів для Calligra
+Name[x-test]=xxCalligra Stencils Docker pluginxx
 X-KDE-ServiceTypes=Calligra/Dock
 Type=Service
 X-KDE-PluginInfo-Name=calligra_docker_stencils

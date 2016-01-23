@@ -3,21 +3,53 @@
         "Authors": [
             {
                 "Email": "sven.langkamp@gmail.com", 
-                "Name": "Sven Langkamp"
+                "Name": "Sven Langkamp", 
+                "Name[x-test]": "xxSven Langkampxx"
             }, 
             {
                 "Email": "kossebau@kde.org", 
-                "Name": "Friedrich W. H. Kossebau"
+                "Name": "Friedrich W. H. Kossebau", 
+                "Name[x-test]": "xxFriedrich W. H. Kossebauxx"
             }
         ], 
         "Copyright": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
+        "Copyright[fi]": "Copyright 2012–2016 Sven Langkamp, Friedrich W. H. Kossebau", 
+        "Copyright[gl]": "© 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
+        "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2012–2016", 
+        "Copyright[x-test]": "xxCopyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebauxx", 
         "Description": "DOC file renderer", 
+        "Description[ca@valencia]": "Representació de fitxers DOC", 
+        "Description[ca]": "Representació de fitxers DOC", 
+        "Description[cs]": "Vykreslovač souborů DOC", 
+        "Description[fi]": "DOC-tiedostohahmonnin", 
+        "Description[gl]": "Renderizador de ficheiros DOC", 
+        "Description[nl]": "DOC-bestandsweergave", 
+        "Description[pl]": "Wyświetlanie pliku DOC", 
+        "Description[pt]": "Visualizador de ficheiros DOC", 
+        "Description[pt_BR]": "Renderização de arquivos DOC", 
+        "Description[sk]": "Zobrazovač súborov DOC", 
+        "Description[sv]": "DOC-filåtergivning", 
+        "Description[uk]": "Засіб показу вмісту файлів DOC", 
+        "Description[x-test]": "xxDOC file rendererxx", 
         "Id": "okularGenerator_doc_calligra", 
         "License": "GPL", 
         "MimeTypes": [
             "application/msword"
         ], 
         "Name": "DOC Backend", 
+        "Name[ca@valencia]": "Dorsal pels DOC", 
+        "Name[ca]": "Dorsal pels DOC", 
+        "Name[cs]": "Podpůrná vrstva DOC", 
+        "Name[es]": "Motor DOC", 
+        "Name[fi]": "DOC-taustaosa", 
+        "Name[gl]": "Infraestrutura de DOC", 
+        "Name[nl]": "DOC-backend", 
+        "Name[pl]": "Silnik DOC", 
+        "Name[pt]": "Infra-Estrutura para DOC", 
+        "Name[pt_BR]": "Infraestrutura DOC", 
+        "Name[sv]": "DOC-gränssnitt", 
+        "Name[uk]": "Модуль обробки DOC", 
+        "Name[x-test]": "xxDOC Backendxx", 
         "ServiceTypes": [
             "okular/Generator"
         ], 
