@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2016 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -178,7 +178,7 @@ KexiQueryPart::TempData::TempData(KexiWindow* window, KexiDB::Connection *conn)
         : KexiWindowData(window)
         , KexiDB::Connection::TableSchemaChangeListenerInterface()
         , m_query(0)
-        , m_queryChangedInPreviousView(false)
+        , m_queryChangedInView(Kexi::NoViewMode)
 {
     this->conn = conn;
 }
@@ -236,14 +236,15 @@ void KexiQueryPart::TempData::setQuery(KexiDB::QuerySchema *query)
     m_query = query;
 }
 
-bool KexiQueryPart::TempData::queryChangedInPreviousView() const
+Kexi::ViewMode KexiQueryPart::TempData::queryChangedInView() const
 {
-    return m_queryChangedInPreviousView;
+    return m_queryChangedInView;
 }
 
-void KexiQueryPart::TempData::setQueryChangedInPreviousView(bool set)
+void KexiQueryPart::TempData::setQueryChangedInView(bool set)
 {
-    m_queryChangedInPreviousView = set;
+    m_queryChangedInView = set ? qobject_cast<KexiWindow*>(parent())->currentViewMode()
+                                       : Kexi::NoViewMode;
 }
 
 //----------------

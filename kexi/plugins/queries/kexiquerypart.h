@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2016 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -79,19 +79,22 @@ public:
         //! Connection used for retrieving definition of the query
         KexiDB::Connection *conn;
 
-        /*! @return true if \a query member has changed in previous view.
+        /*! @return view mode if which the query member has changed.
+         It's possibly one of previously visited views. Kexi::NoViewMode is the default,
+         what means that query was not changed.
          Used on view switching. We're checking this flag to see if we should
          rebuild internal structure for DesignViewMode of regenerated sql text
          in TextViewMode after switch from other view. */
-        bool queryChangedInPreviousView() const;
+        Kexi::ViewMode queryChangedInView() const;
 
-        /*! Sets the queryChangedInPreviousView flag.
-         @see queryChangedInPreviousView() */
-        void setQueryChangedInPreviousView(bool set);
+        /*! Sets the queryChangedInView flag. If @a set is true, then the flag is changed
+         to the current view mode. If @a set is false, the flag is changed to Kexi::NoViewMode.
+         @see queryChangedInView() */
+        void setQueryChangedInView(bool set);
 
     private:
         KexiDB::QuerySchema *m_query;
-        bool m_queryChangedInPreviousView;
+        Kexi::ViewMode m_queryChangedInView;
     };
 
     virtual KLocalizedString i18nMessage(const QString& englishMessage,
