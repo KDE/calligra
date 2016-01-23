@@ -67,6 +67,7 @@
 #include <ValueConverter.h>
 #include <ShapeApplicationData.h>
 #include <Util.h>
+#include <odf/SheetsOdf.h>
 
 #include <Charting.h>
 #include <KoOdfChartWriter.h>
@@ -486,7 +487,7 @@ void ExcelImport::Private::processEmbeddedObjects(const KoXmlElement& rootElemen
             if (cellElement.localName() == "shapes") {
                 KoXmlElement element;
                 forEachElement(element, cellElement) {
-                    sheet->loadOdfObject(element, shapeContext);
+                    Calligra::Sheets::Odf::loadSheetObject(sheet, element, shapeContext);
                 }
             } else {
                 Q_ASSERT(cellElement.localName() == "table-cell");

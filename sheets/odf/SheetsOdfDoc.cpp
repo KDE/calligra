@@ -42,17 +42,22 @@
 #include "calligra_sheets_limits.h"
 
 #include <KoGenStyles.h>
+#include <KoOasisSettings.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoProgressUpdater.h>
 #include <KoShapeSavingContext.h>
+#include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
 #include <KoUpdater.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
+
+#include <KCodecs>
+#include <QBuffer>
 
 // This file contains functionality to load/save a DocBase
 
@@ -63,6 +68,14 @@ namespace Odf {
     void loadDocSettings(DocBase *doc, const KoXmlDocument &settingsDoc);
     void loadDocIgnoreList(DocBase *doc, const KoOasisSettings& settings);
     void saveSettings(DocBase *doc, KoXmlWriter &settingsWriter);
+
+    // these are in SheetsOdfMap
+    bool loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfContext);
+    void loadMapSettings(Map *map, const KoOasisSettings &settingsDoc);
+    bool saveMap(Map *map, KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext);
+
+    // this one is in SheetsOdfSheet
+    void saveSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter);
 };
 
 
@@ -70,7 +83,7 @@ bool Odf::loadDocument(DocBase *doc, KoOdfReadStore &odfStore)
 {
     QPointer<KoUpdater> updater;
     if (doc->progressUpdater()) {
-        updater = doc->progressUpdater()->startSubtask(1, "Calligra::Sheets::DocBase::loadOdf");
+        updater = doc->progressUpdater()->startSubtask(1, "Calligra::Sheets::Odf::loadDocument");
         updater->setProgress(0);
     }
 
@@ -108,7 +121,7 @@ bool Odf::loadDocument(DocBase *doc, KoOdfReadStore &odfStore)
     // TODO check versions and mimetypes etc.
 
     // all <sheet:sheet> goes to workbook
-    if (!doc->map()->loadOdf(body, context)) {
+    if (!loadMap(doc->map(), body, context)) {
         doc->map()->deleteLoadingInfo();
         return false;
     }
@@ -144,7 +157,7 @@ void Odf::loadDocSettings(DocBase *doc, const KoXmlDocument &settingsDoc)
     if (!viewSettings.isNull()) {
         doc->setUnit(KoUnit::fromSymbol(viewSettings.parseConfigItemString("unit")));
     }
-    doc->map()->loadOdfSettings(settings);
+    loadMapSettings(doc->map(), settings);
     loadDocIgnoreList(doc, settings);
 }
 
@@ -180,11 +193,12 @@ bool Odf::saveDocument(DocBase *doc, KoDocument::SavingContext &documentContext)
     bodyWriter->startElement("office:spreadsheet");
 
     // Saving the map.
-    doc->map()->saveOdf(*bodyWriter, savingContext);
+    saveMap(doc->map(), *bodyWriter, savingContext);
 
     bodyWriter->endElement(); ////office:spreadsheet
     bodyWriter->endElement(); ////office:body
 
+#warning convert to new odf
     // Done with writing out the contents to the tempfile, we can now write out the automatic styles
     mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
 
@@ -244,7 +258,7 @@ void Odf::saveSettings(DocBase *doc, KoXmlWriter &settingsWriter)
     foreach (Sheet *sheet, doc->map()->sheetList()) {
         settingsWriter.startElement("config:config-item-map-entry");
         settingsWriter.addAttribute("config:name", sheet->sheetName());
-        sheet->saveOdfSettings(settingsWriter);
+        saveSheetSettings(sheet, settingsWriter);
         settingsWriter.endElement();
     }
     settingsWriter.endElement();
@@ -252,7 +266,65 @@ void Odf::saveSettings(DocBase *doc, KoXmlWriter &settingsWriter)
     settingsWriter.endElement();
 }
 
+void Odf::loadProtection(ProtectableObject *prot, const KoXmlElement& element)
+{
+    if (!element.hasAttributeNS(KoXmlNS::table, "protection-key")) return;
+    QString p = element.attributeNS(KoXmlNS::table, "protection-key", QString());
+    if (p.isNull()) return;
 
+    QByteArray str(p.toUtf8());
+    debugSheetsODF <<"Decoding password:" << str;
+    prot->setProtected(KCodecs::base64Decode(str));
+}
+
+bool Odf::paste(QBuffer &buffer, Map *map)
+{
+    KoStore * store = KoStore::createStore(&buffer, KoStore::Read);
+
+    KoOdfReadStore odfStore(store); // does not delete the store on destruction
+    KoXmlDocument doc;
+    QString errorMessage;
+    bool ok = odfStore.loadAndParse("content.xml", doc, errorMessage);
+    if (!ok) {
+        errorSheetsODF << "Error parsing content.xml: " << errorMessage << endl;
+    delete store;
+        return false;
+    }
+
+    KoOdfStylesReader stylesReader;
+    KoXmlDocument stylesDoc;
+    (void)odfStore.loadAndParse("styles.xml", stylesDoc, errorMessage);
+    // Load styles from style.xml
+    stylesReader.createStyleMap(stylesDoc, true);
+    // Also load styles from content.xml
+    stylesReader.createStyleMap(doc, false);
+
+    // from KSpreadDoc::loadOdf:
+    KoXmlElement content = doc.documentElement();
+    KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
+    if (realBody.isNull()) {
+        debugSheetsUI << "Invalid OASIS OpenDocument file. No office:body tag found.";
+        delete store;
+        return false;
+    }
+    KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "spreadsheet");
+
+    if (body.isNull()) {
+        errorSheetsODF << "No office:spreadsheet found!" << endl;
+        delete store;
+        return false;
+    }
+
+    KoOdfLoadingContext context(stylesReader, store);
+    Q_ASSERT(!stylesReader.officeStyle().isNull());
+
+    // all <sheet:sheet> goes to workbook
+    bool result = loadMap(map, body, context);
+
+    delete store;
+
+    return result;
+}
 
 
 }  // Sheets

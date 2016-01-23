@@ -29,10 +29,8 @@
 #include <QRect>
 
 #include <KoDocument.h>
-#include <KoOasisSettings.h> // for KoOasisSettings::NamedMap
 #include <KoShapeBasedDocumentBase.h>
 #include <KoShapeUserData.h>
-#include <KoXmlReader.h>
 
 #include "Cell.h"
 #include "Style.h"
@@ -43,13 +41,7 @@
 class QAbstractItemModel;
 class QDomElement;
 
-class KoStyleStack;
-class KoGenStyles;
-class KoOasisSettings;
-class KoOdfStylesReader;
-class KoOdfLoadingContext;
 class KoShape;
-class KoXmlWriter;
 
 namespace Calligra
 {
@@ -66,8 +58,6 @@ class FusionStorage;
 class LinkStorage;
 class HeaderFooter;
 class Map;
-class OdfLoadingContext;
-class OdfSavingContext;
 class PrintSettings;
 class Region;
 class RowFormat;
@@ -81,7 +71,6 @@ class ValidityStorage;
 class ValueStorage;
 class View;
 class SheetTest;
-template<typename T> class IntervalMap;
 
 /**
  * A sheet contains several cells.
@@ -354,48 +343,6 @@ public:
     //
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN Methods related to the OpenDocument file format
-    //
-
-    /**
-     * \ingroup OpenDocument
-     */
-    bool loadOdf(const KoXmlElement& sheet,
-                 OdfLoadingContext& odfContext,
-                 const Styles& autoStyles,
-                 const QHash<QString, Conditions>& conditionalStyles);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    bool saveOdf(OdfSavingContext& tableContext);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    void saveOdfHeaderFooter(KoXmlWriter &xmlWriter) const;
-
-    /**
-     * \ingroup OpenDocument
-     */
-    void saveOdfBackgroundImage(KoXmlWriter& xmlWriter) const;
-
-    /**
-     * \ingroup OpenDocument
-     */
-    void loadOdfSettings(const KoOasisSettings::NamedMap &settings);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    void saveOdfSettings(KoXmlWriter &settingsWriter) const;
-
-    void loadOdfObject(const KoXmlElement& element, KoShapeLoadingContext& shapeContext);
-    //
-    //END Methods related to the OpenDocument file format
-    //
-    //////////////////////////////////////////////////////////////////////////
-    //
     //BEGIN Methods related to row formats
     //
 
@@ -434,6 +381,7 @@ public:
      * \return the first non-default row format
      */
     ColumnFormat* firstCol() const;
+    ColumnFormat *nextColumn(int col) const;
 
     /**
      * \ingroup ColumnRowFormat
@@ -827,111 +775,6 @@ protected:
      */
     void changeCellTabName(QString const & old_name, QString const & new_name);
 
-    //
-    //////////////////////////////////////////////////////////////////////////
-    //
-    //BEGIN Methods related to the OpenDocument file format
-    //
-
-    void loadColumnNodes(const KoXmlElement& parent, int& indexCol,
-                            int& maxColumn, KoOdfLoadingContext& odfContext,
-                            QHash<QString, QRegion>& columnStyleRegions,
-                            IntervalMap<QString>& columnStyles);
-    void loadRowNodes(const KoXmlElement& parent, int& rowIndex,
-                            int& maxColumn, OdfLoadingContext& tableContext,
-                            QHash<QString, QRegion>& rowStyleRegions,
-                            QHash<QString, QRegion>& cellStyleRegions,
-                            const IntervalMap<QString>& columnStyles,
-                            const Styles& autoStyles,
-                            QList<ShapeLoadingData>& shapeData);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    int loadRowFormat(const KoXmlElement& row, int &rowIndex,
-                       OdfLoadingContext& odfContext,
-                       QHash<QString, QRegion>& rowStyleRegions,
-                       QHash<QString, QRegion>& cellStyleRegions,
-                       const IntervalMap<QString>& columnStyles,
-                       const Styles& autoStyles,
-                       QList<ShapeLoadingData>& shapeData);
-
-    /**
-     * \ingroup OpenDocument
-     * Loads the properties of a column from a table:table-column element in an OASIS XML file
-     * defaultColumnCellStyles is a map from column indicies to the default cell style for that column
-     */
-    bool loadColumnFormat(const KoXmlElement& row,
-                          const KoOdfStylesReader& stylesReader, int & indexCol,
-                          QHash<QString, QRegion>& columnStyleRegions,
-                          IntervalMap<QString>& columnStyles);
-
-    /**
-     * \ingroup OpenDocument
-     * Inserts the styles contained in \p styleRegions into the style storage.
-     * Looks automatic styles up in the map of preloaded automatic styles,
-     * \p autoStyles , and custom styles in the StyleManager.
-     * The region is restricted to \p usedArea .
-     */
-    void loadOdfInsertStyles(const Styles& autoStyles,
-                             const QHash<QString, QRegion>& styleRegions,
-                             const QHash<QString, Conditions>& conditionalStyles,
-                             const QRect& usedArea,
-                             QList<QPair<QRegion, Style> >& outStyleRegions,
-                             QList<QPair<QRegion, Conditions> >& outConditionalStyles);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    bool loadSheetStyleFormat(KoXmlElement *style);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    void loadOdfMasterLayoutPage(KoStyleStack &styleStack);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    QString saveOdfSheetStyleName(KoGenStyles &mainStyles);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    void saveOdfColRowCell(int maxCols, int maxRows, OdfSavingContext& tableContext);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    void saveOdfCells(int row, int maxCols, OdfSavingContext& tableContext);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    void convertPart(const QString & part, KoXmlWriter & writer) const;
-
-    /**
-     * \ingroup OpenDocument
-     */
-    void addText(const QString & text, KoXmlWriter & writer) const;
-
-    /**
-     * \ingroup OpenDocument
-     */
-    bool compareRows(int row1, int row2, int maxCols, OdfSavingContext& tableContext) const;
-
-    /**
-     * \ingroup OpenDocument
-     */
-    QString getPart(const KoXmlNode & part);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    void replaceMacro(QString & text, const QString & old, const QString & newS);
-
-    //
-    //END Methods related to the OpenDocument file format
     //
     //////////////////////////////////////////////////////////////////////////
     //

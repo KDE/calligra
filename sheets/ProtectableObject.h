@@ -79,11 +79,6 @@ public:
      */
     void loadXmlProtection(const KoXmlElement& element);
 
-    /**
-     * \ingroup OpenDocument
-     */
-    void loadOdfProtection(const KoXmlElement& element);
-
 private:
     // disable assignment operator
     void operator=(const ProtectableObject&);

@@ -31,44 +31,15 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef SHEETS_ODF
-#define SHEETS_ODF
+#include "SheetsOdf.h"
 
-#include <QHash>
-#include <KoDocument.h>
-#include "Style.h"
-#include "sheets_odf_export.h"
-
-class QBuffer;
-
-class KoOdfReadStore;
-class KoShapeLoadingContext;
-class KoXmlElement;
+// This file contains functionality to load/save a Cell
 
 namespace Calligra {
 namespace Sheets {
 
-class Conditions;
-class DocBase;
-class Map;
-class OdfLoadingContext;
-class OdfSavingContext;
-class ProtectableObject;
-class Sheet;
 
-namespace Odf {
-    bool loadDocument(DocBase *doc, KoOdfReadStore &odfStore);
-    bool saveDocument(DocBase *doc, KoDocument::SavingContext &documentContext);
 
-    void loadProtection(ProtectableObject *prot, const KoXmlElement& element);
-    CALLIGRA_SHEETS_ODF_EXPORT bool loadSheet(Sheet *sheet, const KoXmlElement& sheetElement, OdfLoadingContext& tableContext, const Styles& autoStyles, const QHash<QString, Conditions>& conditionalStyles);
-    CALLIGRA_SHEETS_ODF_EXPORT bool saveSheet(Sheet *sheet, OdfSavingContext& tableContext);
-    CALLIGRA_SHEETS_ODF_EXPORT void loadSheetObject(Sheet *sheet, const KoXmlElement& element, KoShapeLoadingContext& shapeContext);
+}  // Sheets
+}  // Calligra
 
-    CALLIGRA_SHEETS_ODF_EXPORT bool paste(QBuffer &buffer, Map *map);
-}
-
-}  // namespace Sheets
-}  // namespace Calligra
-
-#endif  // SHEETS_ODF

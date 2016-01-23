@@ -103,14 +103,3 @@ void ProtectableObject::loadXmlProtection(const KoXmlElement& element)
     }
 }
 
-void ProtectableObject::loadOdfProtection(const KoXmlElement& element)
-{
-    if (element.hasAttributeNS(KoXmlNS::table, "protection-key")) {
-        QString p = element.attributeNS(KoXmlNS::table, "protection-key", QString());
-        if (!p.isNull()) {
-            QByteArray str(p.toUtf8());
-            debugSheetsODF <<"Decoding password:" << str;
-            m_password = KCodecs::base64Decode(str);
-        }
-    }
-}

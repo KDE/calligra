@@ -174,6 +174,7 @@ void SheetTest::testDocumentToCellCoordinates()
     QCOMPARE(m_sheet->documentToCellCoordinates(area), result);
 }
 
+#if 0
 // test if embedded objects are propare taken into account (tests for bug 287997)
 void SheetTest::testCompareRows()
 {
@@ -201,5 +202,6 @@ void SheetTest::testCompareRows()
     QCOMPARE(m_sheet->compareRows(12,20,1024,tableContext), false);
     QCOMPARE(m_sheet->compareRows(12,21,1024,tableContext), true);
 }
+#endif
 
 QTEST_MAIN(SheetTest)

@@ -147,6 +147,9 @@ endif()
 
 set (odf_DIR_SRCS
     odf/SheetsOdfDoc.cpp
+    odf/SheetsOdfMap.cpp
+    odf/SheetsOdfSheet.cpp
+    odf/SheetsOdfCell.cpp
     )
 
 set (part_DIR_SRCS

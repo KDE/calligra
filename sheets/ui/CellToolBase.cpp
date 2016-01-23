@@ -57,6 +57,7 @@
 #include "CellStorage.h"
 #include "Value.h"
 #include "ValueConverter.h"
+#include "odf/SheetsOdf.h"
 
 // commands
 #include "commands/AutoFilterCommand.h"
@@ -111,16 +112,10 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoColorPopupAction.h>
-#include <KoOdfLoadingContext.h>
-#include <KoOdfReadStore.h>
-#include <KoOdfStylesReader.h>
 #include <KoPointerEvent.h>
 #include <KoSelection.h>
 #include <KoShape.h>
-#include <KoStore.h>
 #include <KoViewConverter.h>
-#include <KoXmlReader.h>
-#include <KoXmlNS.h>
 #include <KoColor.h>
 #include <KoIcon.h>
 
@@ -2961,57 +2956,61 @@ void CellToolBase::edit()
 
 void CellToolBase::cut()
 {
-    if (!editor()) {
-        QDomDocument doc = CopyCommand::saveAsXml(*selection(), true);
-        doc.documentElement().setAttribute("cut", selection()->Region::name());
-
-        // Save to buffer
-        QBuffer buffer;
-        buffer.open(QIODevice::WriteOnly);
-        QTextStream str(&buffer);
-        str.setCodec("UTF-8");
-        str << doc;
-        buffer.close();
-
-        QMimeData* mimeData = new QMimeData();
-        mimeData->setText(CopyCommand::saveAsPlainText(*selection()));
-        mimeData->setData("application/x-kspread-snippet", buffer.buffer());
-
-        QApplication::clipboard()->setMimeData(mimeData);
-
-        DeleteCommand* command = new DeleteCommand();
-        command->setText(kundo2_i18n("Cut"));
-        command->setSheet(selection()->activeSheet());
-        command->add(*selection());
-        command->execute();
-    } else {
+    if (editor()) {
         editor()->cut();
+        selection()->emitModified();
+        return;
     }
+
+    QDomDocument doc = CopyCommand::saveAsXml(*selection(), true);
+    doc.documentElement().setAttribute("cut", selection()->Region::name());
+
+    // Save to buffer
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    QTextStream str(&buffer);
+    str.setCodec("UTF-8");
+    str << doc;
+    buffer.close();
+
+    QMimeData* mimeData = new QMimeData();
+    mimeData->setText(CopyCommand::saveAsPlainText(*selection()));
+    mimeData->setData("application/x-kspread-snippet", buffer.buffer());
+
+    QApplication::clipboard()->setMimeData(mimeData);
+
+    DeleteCommand* command = new DeleteCommand();
+    command->setText(kundo2_i18n("Cut"));
+    command->setSheet(selection()->activeSheet());
+    command->add(*selection());
+    command->execute();
+
     selection()->emitModified();
 }
 
 void CellToolBase::copy() const
 {
     Selection* selection = const_cast<CellToolBase*>(this)->selection();
-    if (!editor()) {
-        QDomDocument doc = CopyCommand::saveAsXml(*selection);
-
-        // Save to buffer
-        QBuffer buffer;
-        buffer.open(QIODevice::WriteOnly);
-        QTextStream str(&buffer);
-        str.setCodec("UTF-8");
-        str << doc;
-        buffer.close();
-
-        QMimeData* mimeData = new QMimeData();
-        mimeData->setText(CopyCommand::saveAsPlainText(*selection));
-        mimeData->setData("application/x-kspread-snippet", buffer.buffer());
-
-        QApplication::clipboard()->setMimeData(mimeData);
-    } else {
+    if (editor()) {
         editor()->copy();
+        return;
     }
+
+    QDomDocument doc = CopyCommand::saveAsXml(*selection);
+
+    // Save to buffer
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    QTextStream str(&buffer);
+    str.setCodec("UTF-8");
+    str << doc;
+    buffer.close();
+
+    QMimeData* mimeData = new QMimeData();
+    mimeData->setText(CopyCommand::saveAsPlainText(*selection));
+    mimeData->setData("application/x-kspread-snippet", buffer.buffer());
+
+    QApplication::clipboard()->setMimeData(mimeData);
 }
 
 bool CellToolBase::paste()
@@ -3027,62 +3026,8 @@ bool CellToolBase::paste()
         if (arr.isEmpty())
             return false;
         QBuffer buffer(&arr);
-        KoStore * store = KoStore::createStore(&buffer, KoStore::Read);
-
-        KoOdfReadStore odfStore(store); // does not delete the store on destruction
-        KoXmlDocument doc;
-        QString errorMessage;
-        bool ok = odfStore.loadAndParse("content.xml", doc, errorMessage);
-        if (!ok) {
-            errorSheetsODF << "Error parsing content.xml: " << errorMessage << endl;
-	    delete store;
-            return false;
-        }
-
-        KoOdfStylesReader stylesReader;
-        KoXmlDocument stylesDoc;
-        (void)odfStore.loadAndParse("styles.xml", stylesDoc, errorMessage);
-        // Load styles from style.xml
-        stylesReader.createStyleMap(stylesDoc, true);
-        // Also load styles from content.xml
-        stylesReader.createStyleMap(doc, false);
-
-        // from KSpreadDoc::loadOdf:
-        KoXmlElement content = doc.documentElement();
-        KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
-        if (realBody.isNull()) {
-            debugSheetsUI << "Invalid OASIS OpenDocument file. No office:body tag found.";
-	    delete store;
-            return false;
-        }
-        KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "spreadsheet");
-
-        if (body.isNull()) {
-            errorSheetsODF << "No office:spreadsheet found!" << endl;
-            KoXmlElement childElem;
-            QString localName;
-            forEachElement(childElem, realBody) {
-                localName = childElem.localName();
-            }
-            delete store;
-            return false;
-        }
-
-        KoOdfLoadingContext context(stylesReader, store);
-        Q_ASSERT(!stylesReader.officeStyle().isNull());
-
-        //load in first
-        selection()->activeSheet()->map()->styleManager()->loadOdfStyleTemplate(stylesReader);
-
-        // all <sheet:sheet> goes to workbook
-        bool result = selection()->activeSheet()->map()->loadOdf(body, context);
-
-        if (!result) {
-	    delete store;
-            return false;
-	}
-        selection()->activeSheet()->map()->namedAreaManager()->loadOdf(body);
-	delete store;
+        Map *map = selection()->activeSheet()->map();
+        if (!Odf::paste(buffer, map)) return false;
     }
 
     if (!editor()) {
@@ -3092,7 +3037,7 @@ bool CellToolBase::paste()
             mimeData->text().split('\n').count() >= 2 )
         {
             insertFromClipboard();
-       } else {
+        } else {
             //debugSheetsUI <<"Pasting. Rect=" << selection()->lastRange() <<" bytes";
             PasteCommand *const command = new PasteCommand();
             command->setSheet(selection()->activeSheet());

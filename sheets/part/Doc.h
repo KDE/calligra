@@ -96,12 +96,6 @@ public:
      */
     virtual bool loadXML(const KoXmlDocument& doc, KoStore *store);
 
-    /**
-     * \ingroup OpenDocument
-     */
-    void loadOdfCalculationSettings(const KoXmlElement& body);
-
-
     virtual int supportedSpecialFormats() const;
 
     virtual bool loadChildren(KoStore* _store);

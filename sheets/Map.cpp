@@ -29,20 +29,11 @@
 #include <kcodecs.h>
 #include <kcompletion.h>
 
-#include <KoUnit.h>
-#include <KoGenStyles.h>
-#include <KoStyleStack.h>
 #include <KoGlobal.h>
 #include <KoOasisSettings.h>
-#include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoEmbeddedDocumentSaver.h>
-#include <KoShapeSavingContext.h>
-#include <KoXmlNS.h>
-#include <KoXmlWriter.h>
 #include <KoStyleManager.h>
-#include <KoShapeLoadingContext.h>
-#include <KoTextSharedLoadingData.h>
 #include <KoParagraphStyle.h>
 #include <KoUpdater.h>
 #include <KoProgressUpdater.h>
@@ -57,13 +48,10 @@
 #include "LoadingInfo.h"
 #include "Localization.h"
 #include "NamedAreaManager.h"
-#include "OdfLoadingContext.h"
-#include "OdfSavingContext.h"
 #include "RecalcManager.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 #include "StyleManager.h"
-#include "Validity.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 #include "ValueFormatter.h"
@@ -386,70 +374,6 @@ void Map::moveSheet(const QString & _from, const QString & _to, bool _before)
     }
 }
 
-void Map::loadOdfSettings(KoOasisSettings &settings)
-{
-    KoOasisSettings::Items viewSettings = settings.itemSet("view-settings");
-    KoOasisSettings::IndexedMap viewMap = viewSettings.indexedMap("Views");
-    KoOasisSettings::Items firstView = viewMap.entry(0);
-
-    KoOasisSettings::NamedMap sheetsMap = firstView.namedMap("Tables");
-    debugSheets << " loadOdfSettings( KoOasisSettings &settings ) exist :" << !sheetsMap.isNull();
-    if (!sheetsMap.isNull()) {
-        foreach(Sheet* sheet, d->lstSheets) {
-            sheet->loadOdfSettings(sheetsMap);
-        }
-    }
-
-    QString activeSheet = firstView.parseConfigItemString("ActiveTable");
-    debugSheets << " loadOdfSettings( KoOasisSettings &settings ) activeSheet :" << activeSheet;
-
-    if (!activeSheet.isEmpty()) {
-        // Used by View's constructor
-        loadingInfo()->setInitialActiveSheet(findSheet(activeSheet));
-    }
-}
-
-bool Map::saveOdf(KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext)
-{
-    // Saving the custom cell styles including the default cell style.
-    d->styleManager->saveOdf(savingContext.mainStyles());
-
-    // Saving the default column style
-    KoGenStyle defaultColumnStyle(KoGenStyle::TableColumnStyle, "table-column");
-    defaultColumnStyle.addPropertyPt("style:column-width", d->defaultColumnFormat->width());
-    defaultColumnStyle.setDefaultStyle(true);
-    savingContext.mainStyles().insert(defaultColumnStyle, "Default", KoGenStyles::DontAddNumberToName);
-
-    // Saving the default row style
-    KoGenStyle defaultRowStyle(KoGenStyle::TableRowStyle, "table-row");
-    defaultRowStyle.addPropertyPt("style:row-height", d->defaultRowFormat->height());
-    defaultRowStyle.setDefaultStyle(true);
-    savingContext.mainStyles().insert(defaultRowStyle, "Default", KoGenStyles::DontAddNumberToName);
-
-    d->calculationSettings->saveOdf(xmlWriter); // table::calculation-settings
-
-    QByteArray password;
-    this->password(password);
-    if (!password.isNull()) {
-        xmlWriter.addAttribute("table:structure-protected", "true");
-        QByteArray str = KCodecs::base64Encode(password);
-        // FIXME Stefan: see OpenDocument spec, ch. 17.3 Encryption
-        xmlWriter.addAttribute("table:protection-key", QString(str.data()));
-    }
-
-    OdfSavingContext tableContext(savingContext);
-
-    foreach(Sheet* sheet, d->lstSheets) {
-        sheet->saveOdf(tableContext);
-    }
-
-    tableContext.valStyle.writeStyle(xmlWriter);
-
-    d->namedAreaManager->saveOdf(savingContext.xmlWriter());
-    d->databaseManager->saveOdf(savingContext.xmlWriter());
-    return true;
-}
-
 QDomElement Map::save(QDomDocument& doc)
 {
     QDomElement spread = doc.documentElement();
@@ -489,182 +413,6 @@ QDomElement Map::save(QDomDocument& doc)
     }
     return mymap;
 }
-
-static void fixupStyle(KoCharacterStyle* style)
-{
-    style->removeHardCodedDefaults();
-
-    QTextCharFormat format;
-    style->applyStyle(format);
-    switch (style->underlineStyle()) {
-        case KoCharacterStyle::NoLineStyle:
-            format.setUnderlineStyle(QTextCharFormat::NoUnderline); break;
-        case KoCharacterStyle::SolidLine:
-            format.setUnderlineStyle(QTextCharFormat::SingleUnderline); break;
-        case KoCharacterStyle::DottedLine:
-            format.setUnderlineStyle(QTextCharFormat::DotLine); break;
-        case KoCharacterStyle::DashLine:
-            format.setUnderlineStyle(QTextCharFormat::DashUnderline); break;
-        case KoCharacterStyle::DotDashLine:
-            format.setUnderlineStyle(QTextCharFormat::DashDotLine); break;
-        case KoCharacterStyle::DotDotDashLine:
-            format.setUnderlineStyle(QTextCharFormat::DashDotDotLine); break;
-        case KoCharacterStyle::LongDashLine:
-            format.setUnderlineStyle(QTextCharFormat::DashUnderline); break;
-        case KoCharacterStyle::WaveLine:
-            format.setUnderlineStyle(QTextCharFormat::WaveUnderline); break;
-    }
-    style->copyProperties(format);
-}
-
-bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
-{
-    d->isLoading = true;
-    loadingInfo()->setFileFormat(LoadingInfo::OpenDocument);
-
-    //load in first
-    d->styleManager->loadOdfStyleTemplate(odfContext.stylesReader(), this);
-
-    OdfLoadingContext tableContext(odfContext);
-    tableContext.validities = Validity::preloadValidities(body); // table:content-validations
-
-    // load text styles for rich-text content and TOS
-    KoShapeLoadingContext shapeContext(tableContext.odfContext, resourceManager());
-    tableContext.shapeContext = &shapeContext;
-    KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
-    sharedData->loadOdfStyles(shapeContext, textStyleManager());
-
-    fixupStyle((KoCharacterStyle*)textStyleManager()->defaultParagraphStyle());
-    foreach (KoCharacterStyle* style, sharedData->characterStyles(true)) {
-        fixupStyle(style);
-    }
-    foreach (KoCharacterStyle* style, sharedData->characterStyles(false)) {
-        fixupStyle(style);
-    }
-    shapeContext.addSharedData(KOTEXT_SHARED_LOADING_ID, sharedData);
-
-    QVariant variant;
-    variant.setValue(textStyleManager());
-    resourceManager()->setResource(KoText::StyleManager, variant);
-
-
-    // load default column style
-    const KoXmlElement* defaultColumnStyle = odfContext.stylesReader().defaultStyle("table-column");
-    if (defaultColumnStyle) {
-//       debugSheets <<"style:default-style style:family=\"table-column\"";
-        KoStyleStack styleStack;
-        styleStack.push(*defaultColumnStyle);
-        styleStack.setTypeProperties("table-column");
-        if (styleStack.hasProperty(KoXmlNS::style, "column-width")) {
-            const double width = KoUnit::parseValue(styleStack.property(KoXmlNS::style, "column-width"), -1.0);
-            if (width != -1.0) {
-//           debugSheets <<"\tstyle:column-width:" << width;
-                d->defaultColumnFormat->setWidth(width);
-            }
-        }
-    }
-
-    // load default row style
-    const KoXmlElement* defaultRowStyle = odfContext.stylesReader().defaultStyle("table-row");
-    if (defaultRowStyle) {
-//       debugSheets <<"style:default-style style:family=\"table-row\"";
-        KoStyleStack styleStack;
-        styleStack.push(*defaultRowStyle);
-        styleStack.setTypeProperties("table-row");
-        if (styleStack.hasProperty(KoXmlNS::style, "row-height")) {
-            const double height = KoUnit::parseValue(styleStack.property(KoXmlNS::style, "row-height"), -1.0);
-            if (height != -1.0) {
-//           debugSheets <<"\tstyle:row-height:" << height;
-                d->defaultRowFormat->setHeight(height);
-            }
-        }
-    }
-
-    d->calculationSettings->loadOdf(body); // table::calculation-settings
-    if (body.hasAttributeNS(KoXmlNS::table, "structure-protected")) {
-        loadOdfProtection(body);
-    }
-
-    KoXmlNode sheetNode = KoXml::namedItemNS(body, KoXmlNS::table, "table");
-
-    if (sheetNode.isNull()) {
-        // We need at least one sheet !
-        doc()->setErrorMessage(i18n("This document has no sheets (tables)."));
-        d->isLoading = false;
-        return false;
-    }
-
-    d->overallRowCount = 0;
-    while (!sheetNode.isNull()) {
-        KoXmlElement sheetElement = sheetNode.toElement();
-        if (!sheetElement.isNull()) {
-            //debugSheets<<"  Map::loadOdf tableElement is not null";
-            //debugSheets<<"tableElement.nodeName() :"<<sheetElement.nodeName();
-
-            // make it slightly faster
-            KoXml::load(sheetElement);
-
-            if (sheetElement.nodeName() == "table:table") {
-                if (!sheetElement.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
-                    const QString sheetName = sheetElement.attributeNS(KoXmlNS::table, "name", QString());
-                    Sheet* sheet = addNewSheet(sheetName);
-                    sheet->setSheetName(sheetName, true);
-                    d->overallRowCount += KoXml::childNodesCount(sheetElement);
-                }
-            }
-        }
-
-        // reduce memory usage
-        KoXml::unload(sheetElement);
-        sheetNode = sheetNode.nextSibling();
-    }
-
-    //pre-load auto styles
-    QHash<QString, Conditions> conditionalStyles;
-    Styles autoStyles = d->styleManager->loadOdfAutoStyles(odfContext.stylesReader(),
-                        conditionalStyles, parser());
-
-    // load the sheet
-    sheetNode = body.firstChild();
-    while (!sheetNode.isNull()) {
-        KoXmlElement sheetElement = sheetNode.toElement();
-        if (!sheetElement.isNull()) {
-            // make it slightly faster
-            KoXml::load(sheetElement);
-
-            //debugSheets<<"tableElement.nodeName() bis :"<<sheetElement.nodeName();
-            if (sheetElement.nodeName() == "table:table") {
-                if (!sheetElement.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
-                    QString name = sheetElement.attributeNS(KoXmlNS::table, "name", QString());
-                    Sheet* sheet = findSheet(name);
-                    if (sheet) {
-                        sheet->loadOdf(sheetElement, tableContext, autoStyles, conditionalStyles);
-                    }
-                }
-            }
-        }
-
-        // reduce memory usage
-        KoXml::unload(sheetElement);
-        sheetNode = sheetNode.nextSibling();
-    }
-
-    // make sure always at least one sheet exists
-    if (count() == 0) {
-        addNewSheet();
-    }
-
-    //delete any styles which were not used
-    d->styleManager->releaseUnusedAutoStyles(autoStyles);
-
-    // Load databases. This needs the sheets to be loaded.
-    d->databaseManager->loadOdf(body); // table:database-ranges
-    d->namedAreaManager->loadOdf(body); // table:named-expressions
-
-    d->isLoading = false;
-    return true;
-}
-
 
 bool Map::loadXML(const KoXmlElement& mymap)
 {
@@ -807,6 +555,11 @@ int Map::count() const
     return d->lstSheets.count();
 }
 
+void Map::setOverallRowsCounter(int number)
+{
+    d->overallRowCount = number;
+}
+
 int Map::increaseLoadedRowsCounter(int number)
 {
     d->loadedRowsCounter += number;
@@ -820,6 +573,10 @@ bool Map::isLoading() const
 {
     // The KoDocument state is necessary to avoid damages while importing a file (through a filter).
     return d->isLoading || (d->doc && d->doc->isLoading());
+}
+
+void Map::setLoading(bool l) {
+    d->isLoading = l;
 }
 
 int Map::syntaxVersion() const

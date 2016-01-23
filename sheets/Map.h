@@ -194,21 +194,6 @@ public:
     void setDefaultRowHeight(double height);
 
     /**
-     * \ingroup OpenDocument
-     */
-    void loadOdfSettings(KoOasisSettings &settings);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    bool saveOdf(KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    bool loadOdf(const KoXmlElement& mymap, KoOdfLoadingContext& odfContext);
-
-    /**
      * \ingroup NativeFormat
      */
     bool loadXML(const KoXmlElement& mymap);
@@ -293,6 +278,7 @@ public:
     QStringList visibleSheets() const;
     QStringList hiddenSheets() const;
 
+    void setOverallRowsCounter(int number);
     int increaseLoadedRowsCounter(int i = 1);
 
     /**
@@ -301,6 +287,13 @@ public:
      * \return true if the document is currently loading.
      */
     bool isLoading() const;
+
+    /**
+     * \ingroup OpenDocument
+     * \ingroup NativeFormat
+     * \set whether the document is currently loading
+     */
+    void setLoading(bool l);
 
     /**
      * \return the document's syntax version
