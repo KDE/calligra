@@ -516,11 +516,11 @@ void KexiReportView::moveToPreviousRecordRequested()
 
 void KexiReportView::moveToRecordRequested(uint r)
 {
-	r++;
-	if (r != m_currentPage && r > 1 && r <= m_pageCount) {
-		m_currentPage = r;
-		m_reportPage->renderPage(m_currentPage);
-	}
+    r++;
+    if (int(r) != m_currentPage && r > 1 && int(r) <= m_pageCount) {
+        m_currentPage = r;
+        m_reportPage->renderPage(m_currentPage);
+    }
 }
 
 int KexiReportView::currentRecord() const
