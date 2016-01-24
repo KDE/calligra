@@ -85,15 +85,15 @@ static Okular::DocumentViewport calculateViewport( const QTextBlock &block,
     rect.translate(shape->absolutePosition(KoFlake::TopLeftCorner));
 
     KWPage* page = static_cast<KWPage *>(a->page());
-    rect.translate(qreal(0.0), -(page->offsetInDocument()));
+    rect.translate(static_cast<qreal>(0.0), -(page->offsetInDocument()));
 
     const qreal pageHeight = page->height();
     const qreal pageWidth = page->width();
     const int pageNumber = page->pageNumber();
 
     Okular::DocumentViewport viewport( pageNumber-1 );
-    viewport.rePos.normalizedX = (double)rect.x() / (double)pageWidth;
-    viewport.rePos.normalizedY = double(rect.y()) / double(pageHeight);
+    viewport.rePos.normalizedX = static_cast<double>(rect.x()) / static_cast<double>(pageWidth);
+    viewport.rePos.normalizedY = static_cast<double>(rect.y()) / static_cast<double>(pageHeight);
     viewport.rePos.enabled = true;
     viewport.rePos.pos = Okular::DocumentViewport::TopLeft;
 
