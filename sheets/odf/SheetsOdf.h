@@ -34,15 +34,14 @@
 #ifndef SHEETS_ODF
 #define SHEETS_ODF
 
-#include <QHash>
 #include <KoDocument.h>
-#include "Style.h"
 #include "sheets_odf_export.h"
 
 class QBuffer;
 
 class KoOdfReadStore;
 class KoShapeLoadingContext;
+class KoShapeSavingContext;
 class KoXmlElement;
 
 namespace Calligra {
@@ -51,8 +50,6 @@ namespace Sheets {
 class Conditions;
 class DocBase;
 class Map;
-class OdfLoadingContext;
-class OdfSavingContext;
 class ProtectableObject;
 class Sheet;
 
@@ -60,9 +57,10 @@ namespace Odf {
     bool loadDocument(DocBase *doc, KoOdfReadStore &odfStore);
     bool saveDocument(DocBase *doc, KoDocument::SavingContext &documentContext);
 
+    CALLIGRA_SHEETS_ODF_EXPORT bool loadTableShape(Sheet *sheet, const KoXmlElement &element, KoShapeLoadingContext &context);
+    CALLIGRA_SHEETS_ODF_EXPORT void saveTableShape(Sheet *sheet, KoShapeSavingContext &context);
+
     void loadProtection(ProtectableObject *prot, const KoXmlElement& element);
-    CALLIGRA_SHEETS_ODF_EXPORT bool loadSheet(Sheet *sheet, const KoXmlElement& sheetElement, OdfLoadingContext& tableContext, const Styles& autoStyles, const QHash<QString, Conditions>& conditionalStyles);
-    CALLIGRA_SHEETS_ODF_EXPORT bool saveSheet(Sheet *sheet, OdfSavingContext& tableContext);
     CALLIGRA_SHEETS_ODF_EXPORT void loadSheetObject(Sheet *sheet, const KoXmlElement& element, KoShapeLoadingContext& shapeContext);
 
     CALLIGRA_SHEETS_ODF_EXPORT bool paste(QBuffer &buffer, Map *map);

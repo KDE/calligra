@@ -327,5 +327,7 @@ bool Odf::paste(QBuffer &buffer, Map *map)
 }
 
 
+
+
 }  // Sheets
 }  // Calligra

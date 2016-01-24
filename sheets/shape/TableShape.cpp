@@ -24,28 +24,20 @@
 
 #include <QPainter>
 
-#include <KoGenStyles.h>
-#include <KoOdfLoadingContext.h>
 #include <KoShapeContainer.h>
-#include <KoShapeLoadingContext.h>
-#include <KoShapeSavingContext.h>
 #include <KoXmlNS.h>
 
 #include <SheetsDebug.h>
 #include <CellView.h>
 #include <Damages.h>
-#include <GenValidationStyle.h>
 #include <Condition.h>
 #include <Map.h>
-#include <OdfLoadingContext.h>
-#include <OdfSavingContext.h>
 #include <PrintSettings.h>
 #include <Region.h>
 #include <RowColumnFormat.h>
 #include <RowFormatStorage.h>
 #include <Sheet.h>
 #include <SheetView.h>
-#include <StyleManager.h>
 #include <Value.h>
 #include <odf/SheetsOdf.h>
 
@@ -170,27 +162,7 @@ bool TableShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
 {
     //debugSheets << "LOADING TABLE SHAPE";
     if (sheet() && element.namespaceURI() == KoXmlNS::table && element.localName() == "table") {
-        // pre-load auto styles
-        KoOdfLoadingContext& odfContext = context.odfLoadingContext();
-        OdfLoadingContext tableContext(odfContext);
-        QHash<QString, Conditions> conditionalStyles;
-        Map *const map = sheet()->map();
-        StyleManager *const styleManager = map->styleManager();
-        ValueParser *const parser = map->parser();
-#warning use new odf here
-        Styles autoStyles = styleManager->loadOdfAutoStyles(odfContext.stylesReader(), conditionalStyles, parser);
-
-        if (!element.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
-            sheet()->setSheetName(element.attributeNS(KoXmlNS::table, "name", QString()), true);
-        }
-        const bool result = Odf::loadSheet(sheet(), element, tableContext, autoStyles, conditionalStyles);
-
-        // delete any styles which were not used
-        sheet()->map()->styleManager()->releaseUnusedAutoStyles(autoStyles);
-
-        if (!result) {
-            return false;
-        }
+        if (!Odf::loadTableShape(sheet(), element, context)) return false;
 
         const QRect usedArea = sheet()->usedArea();
         d->columns = usedArea.width();
@@ -211,26 +183,7 @@ void TableShape::saveOdf(KoShapeSavingContext & context) const
 {
     if (!sheet())
         return;
-    const Map* map = sheet()->map();
-    // Saving the custom cell styles including the default cell style.
-#warning use new odf here
-    map->styleManager()->saveOdf(context.mainStyles());
-
-    // Saving the default column style
-    KoGenStyle defaultColumnStyle(KoGenStyle::TableColumnStyle, "table-column");
-    defaultColumnStyle.addPropertyPt("style:column-width", map->defaultColumnFormat()->width());
-    defaultColumnStyle.setDefaultStyle(true);
-    context.mainStyles().insert(defaultColumnStyle, "Default", KoGenStyles::DontAddNumberToName);
-
-    // Saving the default row style
-    KoGenStyle defaultRowStyle(KoGenStyle::TableRowStyle, "table-row");
-    defaultRowStyle.addPropertyPt("style:row-height", map->defaultRowFormat()->height());
-    defaultRowStyle.setDefaultStyle(true);
-    context.mainStyles().insert(defaultRowStyle, "Default", KoGenStyles::DontAddNumberToName);
-
-    OdfSavingContext tableContext(context);
-    Odf::saveSheet(sheet(), tableContext);
-    tableContext.valStyle.writeStyle(context.xmlWriter());
+    Odf::saveTableShape(sheet(), context);
 }
 
 void TableShape::setMap(Map *map)

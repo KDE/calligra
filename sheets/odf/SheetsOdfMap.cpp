@@ -77,7 +77,9 @@ namespace Odf {
     bool saveMap(Map *map, KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext);
 
     // these are in SheetsOdfSheet
+    bool loadSheet(Sheet *sheet, const KoXmlElement& sheetElement, OdfLoadingContext& tableContext, const Styles& autoStyles, const QHash<QString, Conditions>& conditionalStyles);
     void loadSheetSettings(Sheet *sheet, const KoOasisSettings::NamedMap &settings);
+    bool saveSheet(Sheet *sheet, OdfSavingContext& tableContext);
 }
 
 void Odf::fixupStyle(KoCharacterStyle* style)
@@ -330,6 +332,58 @@ bool Odf::saveMap(Map *map, KoXmlWriter & xmlWriter, KoShapeSavingContext & savi
     map->databaseManager()->saveOdf(savingContext.xmlWriter());
     return true;
 }
+
+
+// Table shape is here too, as the code is rather similar to Map load/save
+
+bool Odf::loadTableShape(Sheet *sheet, const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    // pre-load auto styles
+    KoOdfLoadingContext& odfContext = context.odfLoadingContext();
+    OdfLoadingContext tableContext(odfContext);
+    QHash<QString, Conditions> conditionalStyles;
+    Map *const map = sheet->map();
+    StyleManager *const styleManager = map->styleManager();
+    ValueParser *const parser = map->parser();
+#warning use new odf here
+    Styles autoStyles = styleManager->loadOdfAutoStyles(odfContext.stylesReader(), conditionalStyles, parser);
+
+    if (!element.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
+        sheet->setSheetName(element.attributeNS(KoXmlNS::table, "name", QString()), true);
+    }
+    bool result = loadSheet(sheet, element, tableContext, autoStyles, conditionalStyles);
+
+    // delete any styles which were not used
+    sheet->map()->styleManager()->releaseUnusedAutoStyles(autoStyles);
+
+    return result;
+}
+
+void Odf::saveTableShape(Sheet *sheet, KoShapeSavingContext &context)
+{
+    const Map* map = sheet->map();
+    // Saving the custom cell styles including the default cell style.
+#warning use new odf here
+    map->styleManager()->saveOdf(context.mainStyles());
+
+    // Saving the default column style
+    KoGenStyle defaultColumnStyle(KoGenStyle::TableColumnStyle, "table-column");
+    defaultColumnStyle.addPropertyPt("style:column-width", map->defaultColumnFormat()->width());
+    defaultColumnStyle.setDefaultStyle(true);
+    context.mainStyles().insert(defaultColumnStyle, "Default", KoGenStyles::DontAddNumberToName);
+
+    // Saving the default row style
+    KoGenStyle defaultRowStyle(KoGenStyle::TableRowStyle, "table-row");
+    defaultRowStyle.addPropertyPt("style:row-height", map->defaultRowFormat()->height());
+    defaultRowStyle.setDefaultStyle(true);
+    context.mainStyles().insert(defaultRowStyle, "Default", KoGenStyles::DontAddNumberToName);
+
+    OdfSavingContext tableContext(context);
+    saveSheet(sheet, tableContext);
+    tableContext.valStyle.writeStyle(context.xmlWriter());
+}
+
+
 
 
 }  // Sheets

@@ -96,6 +96,7 @@ private:
 
 
 namespace Odf {
+    bool loadSheet(Sheet *sheet, const KoXmlElement& sheetElement, OdfLoadingContext& tableContext, const Styles& autoStyles, const QHash<QString, Conditions>& conditionalStyles);
     /**
      * Inserts the styles contained in \p styleRegions into the style storage.
      * Looks automatic styles up in the map of preloaded automatic styles,
@@ -139,6 +140,7 @@ namespace Odf {
     QString getPart(const KoXmlNode & part);
     void replaceMacro(QString & text, const QString & old, const QString & newS);
 
+    bool saveSheet(Sheet *sheet, OdfSavingContext& tableContext);
     QString saveSheetStyleName(Sheet *sheet, KoGenStyles &mainStyles);
     void saveColRowCell(Sheet *sheet, int maxCols, int maxRows, OdfSavingContext& tableContext);
     void saveCells(Sheet *sheet, int row, int maxCols, OdfSavingContext& tableContext);
