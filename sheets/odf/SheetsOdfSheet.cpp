@@ -74,6 +74,8 @@
 namespace Calligra {
 namespace Sheets {
 
+class Cell;
+
 template<typename T> class IntervalMap
 {
 public:
@@ -96,7 +98,11 @@ private:
 
 
 namespace Odf {
+    // Sheet loading and saving
     bool loadSheet(Sheet *sheet, const KoXmlElement& sheetElement, OdfLoadingContext& tableContext, const Styles& autoStyles, const QHash<QString, Conditions>& conditionalStyles);
+    bool saveSheet(Sheet *sheet, OdfSavingContext& tableContext);
+
+    // Sheet loading - helper functions
     /**
      * Inserts the styles contained in \p styleRegions into the style storage.
      * Looks automatic styles up in the map of preloaded automatic styles,
@@ -140,7 +146,7 @@ namespace Odf {
     QString getPart(const KoXmlNode & part);
     void replaceMacro(QString & text, const QString & old, const QString & newS);
 
-    bool saveSheet(Sheet *sheet, OdfSavingContext& tableContext);
+    // Sheet saving - helper functions
     QString saveSheetStyleName(Sheet *sheet, KoGenStyles &mainStyles);
     void saveColRowCell(Sheet *sheet, int maxCols, int maxRows, OdfSavingContext& tableContext);
     void saveCells(Sheet *sheet, int row, int maxCols, OdfSavingContext& tableContext);
@@ -150,8 +156,15 @@ namespace Odf {
     void convertPart(Sheet *sheet, const QString & part, KoXmlWriter & xmlWriter);
     bool compareRows(Sheet *sheet, int row1, int row2, int maxCols, OdfSavingContext& tableContext);
 
+    // sheet settings
     void loadSheetSettings(Sheet *sheet, const KoOasisSettings::NamedMap &settings);
     void saveSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter);
+
+    // Cell loading - in SheetsOdfCell
+    bool loadCell(Cell *cell, const KoXmlElement& element, OdfLoadingContext& tableContext,
+            const Styles& autoStyles, const QString& cellStyleName,
+            QList<ShapeLoadingData>& shapeData);
+    bool saveCell(Cell *cell, int &repeated, OdfSavingContext& tableContext);
 }
 
 // *************** Loading *****************
@@ -980,8 +993,7 @@ int Odf::loadRowFormat(Sheet *sheet, const KoXmlElement& row, int &rowIndex,
             cellStyleName = columnStyles.get(columnIndex);
 
         Cell cell(sheet, columnIndex, rowIndex);
-#warning TODO new style odf
-        cell.loadOdf(cellElement, tableContext, autoStyles, cellStyleName, shapeData);
+        loadCell(&cell, cellElement, tableContext, autoStyles, cellStyleName, shapeData);
 
         if (!cell.comment().isEmpty())
             sheet->cellStorage()->setComment(Region(columnIndex, rowIndex, numberColumns, number, sheet), cell.comment());
@@ -1287,7 +1299,7 @@ void Odf::saveColRowCell(Sheet *sheet, int maxCols, int maxRows, OdfSavingContex
             if (repeated > 1)
                 xmlWriter.addAttribute("table:number-rows-repeated", repeated);
             if (!style.isDefault()) {
-                KoGenStyle currentDefaultCellStyle; // the type is determined in saveOdfCellStyle
+                KoGenStyle currentDefaultCellStyle; // the type is determined in saveCellStyle
 #warning TODO new style odf
                 const QString name = style.saveOdf(currentDefaultCellStyle, mainStyles,
                                                    sheet->map()->styleManager());
@@ -1318,7 +1330,7 @@ void Odf::saveColRowCell(Sheet *sheet, int maxCols, int maxRows, OdfSavingContex
             i = j - 1; /*it's already incremented in the for loop*/
         } else { // row is not empty
             if (!style.isDefault()) {
-                KoGenStyle currentDefaultCellStyle; // the type is determined in saveOdfCellStyle
+                KoGenStyle currentDefaultCellStyle; // the type is determined in saveCellStyle
 #warning TODO new style odf
                 const QString name = style.saveOdf(currentDefaultCellStyle, mainStyles,
                                                    sheet->map()->styleManager());
@@ -1389,8 +1401,7 @@ void Odf::saveCells(Sheet *sheet, int row, int maxCols, OdfSavingContext& tableC
 
         int repeated = 1;
         int column = i;
-#warning TODO new style odf
-        cell.saveOdf(row, column, repeated, tableContext);
+        saveCell(&cell, repeated, tableContext);
         i += repeated;
         // stop if we reached the end column
         if (i > maxCols || nextCell.isNull())

@@ -150,6 +150,7 @@ set (odf_DIR_SRCS
     odf/SheetsOdfMap.cpp
     odf/SheetsOdfSheet.cpp
     odf/SheetsOdfCell.cpp
+    odf/SheetsOdfStyle.cpp
     )
 
 set (part_DIR_SRCS

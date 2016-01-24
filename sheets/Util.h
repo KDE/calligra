@@ -132,20 +132,6 @@ namespace Odf
 {
 /**
  * \ingroup OpenDocument
- * Creates OpenDocument pen attributes of the QPen \p pen .
- * \return the OpenDocument pen attributes
- */
-QString encodePen(const QPen& pen);
-
-/**
- * \ingroup OpenDocument
- * Creates a QPen of OpenDocument pen attributes \p str .
- * \return the created QPen
- */
-QPen decodePen(const QString &str);
-
-/**
- * \ingroup OpenDocument
  * Converts an OpenDocument representation of a formula to a localized formula.
  * @param expr The expression to convert from OpenDocument format.
  * @param locale The locale to which the expression should be converted.

@@ -355,6 +355,81 @@ void Style::loadOdfDataStyle(KoOdfStylesReader &stylesReader, const QString &sty
     }
 }
 
+QString encodePen(const QPen & pen)
+{
+//     debugSheets<<"encodePen( const QPen & pen ) :"<<pen;
+    // NOTE Stefan: QPen api docs:
+    //              A line width of zero indicates a cosmetic pen. This means
+    //              that the pen width is always drawn one pixel wide,
+    //              independent of the transformation set on the painter.
+    QString s = QString("%1pt ").arg((pen.width() == 0) ? 1 : pen.width());
+    switch (pen.style()) {
+    case Qt::NoPen:
+        return "none";
+    case Qt::SolidLine:
+        s += "solid";
+        break;
+    case Qt::DashLine:
+        s += "dashed";
+        break;
+    case Qt::DotLine:
+        s += "dotted";
+        break;
+    case Qt::DashDotLine:
+        s += "dot-dash";
+        break;
+    case Qt::DashDotDotLine:
+        s += "dot-dot-dash";
+        break;
+    default: break;
+    }
+    //debugSheets << " encodePen :" << s;
+    if (pen.color().isValid()) {
+        s += ' ' + Style::colorName(pen.color());
+    }
+    return s;
+}
+
+QPen decodePen(const QString &border)
+{
+    QPen pen;
+    //string like "0.088cm solid #800000"
+    if (border.isEmpty() || border == "none" || border == "hidden") { // in fact no border
+        pen.setStyle(Qt::NoPen);
+        return pen;
+    }
+    //code from koborder, for the moment Calligra Sheets doesn't use koborder
+    // ## isn't it faster to use QStringList::split than parse it 3 times?
+    QString _width = border.section(' ', 0, 0);
+    QByteArray _style = border.section(' ', 1, 1).toLatin1();
+    QString _color = border.section(' ', 2, 2);
+
+    pen.setWidth((int)(KoUnit::parseValue(_width, 1.0)));
+
+    if (_style == "none")
+        pen.setStyle(Qt::NoPen);
+    else if (_style == "solid")
+        pen.setStyle(Qt::SolidLine);
+    else if (_style == "dashed")
+        pen.setStyle(Qt::DashLine);
+    else if (_style == "dotted")
+        pen.setStyle(Qt::DotLine);
+    else if (_style == "dot-dash")
+        pen.setStyle(Qt::DashDotLine);
+    else if (_style == "dot-dot-dash")
+        pen.setStyle(Qt::DashDotDotLine);
+    else
+        debugSheets << " style undefined :" << _style;
+
+    if (_color.isEmpty())
+        pen.setColor(QColor());
+    else
+        pen.setColor(QColor(_color));
+
+    return pen;
+}
+
+
 void Style::loadOdfParagraphProperties(KoOdfStylesReader& stylesReader, const KoStyleStack& styleStack)
 {
     Q_UNUSED(stylesReader);
@@ -455,7 +530,7 @@ void Style::loadOdfTableCellProperties(KoOdfStylesReader& stylesReader, const Ko
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "border")) {
         str = styleStack.property(KoXmlNS::fo, "border");
-        QPen pen = Odf::decodePen(str);
+        QPen pen = decodePen(str);
         setLeftBorderPen(pen);
         setTopBorderPen(pen);
         setBottomBorderPen(pen);
@@ -463,27 +538,27 @@ void Style::loadOdfTableCellProperties(KoOdfStylesReader& stylesReader, const Ko
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "border-left")) {
         str = styleStack.property(KoXmlNS::fo, "border-left");
-        setLeftBorderPen(Odf::decodePen(str));
+        setLeftBorderPen(decodePen(str));
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "border-right")) {
         str = styleStack.property(KoXmlNS::fo, "border-right");
-        setRightBorderPen(Odf::decodePen(str));
+        setRightBorderPen(decodePen(str));
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "border-top")) {
         str = styleStack.property(KoXmlNS::fo, "border-top");
-        setTopBorderPen(Odf::decodePen(str));
+        setTopBorderPen(decodePen(str));
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "border-bottom")) {
         str = styleStack.property(KoXmlNS::fo, "border-bottom");
-        setBottomBorderPen(Odf::decodePen(str));
+        setBottomBorderPen(decodePen(str));
     }
     if (styleStack.hasProperty(KoXmlNS::style, "diagonal-tl-br")) {
         str = styleStack.property(KoXmlNS::style, "diagonal-tl-br");
-        setFallDiagonalPen(Odf::decodePen(str));
+        setFallDiagonalPen(decodePen(str));
     }
     if (styleStack.hasProperty(KoXmlNS::style, "diagonal-bl-tr")) {
         str = styleStack.property(KoXmlNS::style, "diagonal-bl-tr");
-        setGoUpDiagonalPen(Odf::decodePen(str));
+        setGoUpDiagonalPen(decodePen(str));
     }
 
     if (styleStack.hasProperty(KoXmlNS::draw, "style-name") || styleStack.hasProperty(KoXmlNS::calligra, "fill-style-name")) {
@@ -1378,25 +1453,25 @@ void Style::saveOdfStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
             (leftBorderPen() == rightBorderPen()) &&
             (leftBorderPen() == bottomBorderPen())) {
         if (leftBorderPen().style() != Qt::NoPen)
-            style.addProperty("fo:border", Odf::encodePen(leftBorderPen()));
+            style.addProperty("fo:border", encodePen(leftBorderPen()));
     } else {
         if (keysToStore.contains(LeftPen) && (leftBorderPen().style() != Qt::NoPen))
-            style.addProperty("fo:border-left", Odf::encodePen(leftBorderPen()));
+            style.addProperty("fo:border-left", encodePen(leftBorderPen()));
 
         if (keysToStore.contains(RightPen) && (rightBorderPen().style() != Qt::NoPen))
-            style.addProperty("fo:border-right", Odf::encodePen(rightBorderPen()));
+            style.addProperty("fo:border-right", encodePen(rightBorderPen()));
 
         if (keysToStore.contains(TopPen) && (topBorderPen().style() != Qt::NoPen))
-            style.addProperty("fo:border-top", Odf::encodePen(topBorderPen()));
+            style.addProperty("fo:border-top", encodePen(topBorderPen()));
 
         if (keysToStore.contains(BottomPen) && (bottomBorderPen().style() != Qt::NoPen))
-            style.addProperty("fo:border-bottom", Odf::encodePen(bottomBorderPen()));
+            style.addProperty("fo:border-bottom", encodePen(bottomBorderPen()));
     }
     if (keysToStore.contains(FallDiagonalPen) && (fallDiagonalPen().style() != Qt::NoPen)) {
-        style.addProperty("style:diagonal-tl-br", Odf::encodePen(fallDiagonalPen()));
+        style.addProperty("style:diagonal-tl-br", encodePen(fallDiagonalPen()));
     }
     if (keysToStore.contains(GoUpDiagonalPen) && (goUpDiagonalPen().style() != Qt::NoPen)) {
-        style.addProperty("style:diagonal-bl-tr", Odf::encodePen(goUpDiagonalPen()));
+        style.addProperty("style:diagonal-bl-tr", encodePen(goUpDiagonalPen()));
     }
 
     // font

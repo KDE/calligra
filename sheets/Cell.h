@@ -49,10 +49,6 @@ class QPoint;
 class QDate;
 
 class KLocale;
-class KoXmlWriter;
-class KoGenStyles;
-class KoGenStyle;
-class KoShapeLoadingContext;
 
 namespace Calligra
 {
@@ -62,13 +58,10 @@ class Conditions;
 class Database;
 class Doc;
 class Formula;
-class OdfLoadingContext;
-class OdfSavingContext;
 class Sheet;
 class Validity;
 class Value;
 class CellTest;
-struct ShapeLoadingData;
 
 /**
  * An accessor to the actual cell data.
@@ -361,22 +354,6 @@ public:
     QDate toDate(const KoXmlElement &element);
 
     /**
-     * \ingroup OpenDocument
-     * Loads a cell from an OASIS XML element.
-     * @param element An OASIS XML element
-     * @param tableContext The loading context assoiated with the XML element
-     */
-    bool loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
-        const Styles& autoStyles, const QString& cellStyleName,
-        QList<ShapeLoadingData>& shapeData);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    bool saveOdf(int row, int column, int &repeated,
-                 OdfSavingContext& savingContext);
-
-    /**
      * Copies the format from \p cell .
      *
      * @see copyAll(Cell *cell)
@@ -596,26 +573,6 @@ public:
      */
     bool compareData(const Cell& other) const;
 
-protected:
-    /**
-     * \ingroup OpenDocument
-     * Load the text paragraphs from an OASIS XML cell description.
-     * @param parent The DOM element representing the cell.
-     */
-    void loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableContext, const Styles& autoStyles, const QString& cellStyleName);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    void loadOdfObjects(const KoXmlElement& e, OdfLoadingContext& tableContext, QList<ShapeLoadingData>& shapeData);
-
-
-    /**
-     * \ingroup OpenDocument
-     */
-    void saveOdfAnnotation(KoXmlWriter &xmlwriter);
-public:
-    ShapeLoadingData loadOdfObject(const KoXmlElement& element, KoShapeLoadingContext& shapeContext);
 private:
     friend class CellTest;
 
@@ -631,17 +588,6 @@ private:
      * \ingroup NativeFormat
      */
     bool saveCellResult(QDomDocument& doc, QDomElement& result, QString str);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    void saveOdfValue(KoXmlWriter &xmlWriter);
-
-    /**
-     * \ingroup OpenDocument
-     * @return the OASIS style's name
-     */
-    QString saveOdfCellStyle(KoGenStyle &currentCellStyle, KoGenStyles &mainStyles);
 };
 
 inline uint qHash(const Cell& cell)
