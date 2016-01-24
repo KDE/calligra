@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
    Copyright (C) 2012 Sven Langkamp <sven.langkamp@gmail.com>
+   Copyright (C) 2015-2016 Friedrich W. H. Kossebau <kossebau@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -59,16 +60,22 @@ static Okular::DocumentViewport calculateViewport( const QTextBlock &block,
 {
     KoTextLayoutRootArea *a = textDocumentLayout->rootAreaForPosition(block.position());
 
-    const QRectF rect = textDocumentLayout->blockBoundingRect( block );
+    QRectF rect = textDocumentLayout->blockBoundingRect( block );
+    rect.translate(-(a->referenceRect().topLeft()));
+
+    KoShape *shape = a->associatedShape();
+    rect.translate(shape->absolutePosition(KoFlake::TopLeftCorner));
+
     KWPage* page = static_cast<KWPage *>(a->page());
+    rect.translate(qreal(0.0), -(page->offsetInDocument()));
+
     const qreal pageHeight = page->height();
     const qreal pageWidth = page->width();
     const int pageNumber = page->pageNumber();
-    const int yOffset = qRound( rect.y() - a->referenceRect().y() );
 
     Okular::DocumentViewport viewport( pageNumber-1 );
     viewport.rePos.normalizedX = (double)rect.x() / (double)pageWidth;
-    viewport.rePos.normalizedY = (double)yOffset / (double)pageHeight;
+    viewport.rePos.normalizedY = double(rect.y()) / double(pageHeight);
     viewport.rePos.enabled = true;
     viewport.rePos.pos = Okular::DocumentViewport::TopLeft;
 
