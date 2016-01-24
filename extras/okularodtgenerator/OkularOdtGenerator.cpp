@@ -172,46 +172,41 @@ bool OkularOdtGenerator::loadDocument( const QString &fileName, QVector<Okular::
     QStack< QPair<int,QDomNode> > parentNodeStack;
     parentNodeStack.push( qMakePair( 0, parentNode ) );
 
-    KoTextDocumentLayout* textDocumentayout = static_cast<KoTextDocumentLayout *>(m_doc->mainFrameSet()->document()->documentLayout());
+    QTextDocument* textDocument = m_doc->mainFrameSet()->document();
+    KoTextDocumentLayout* textDocumentLayout = static_cast<KoTextDocumentLayout *>(textDocument->documentLayout());
 
-    foreach (KWFrameSet *fs, m_doc->frameSets()) {
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-        if (tfs == 0) continue;
-
-        QTextDocument *doc = tfs->document();
-        QTextBlock block = doc->begin();
-        while (block.isValid()) {
-            int blockLevel = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
-
-            // no blockLevel?
-            if (blockLevel == 0) {
-                block = block.next();
-                continue;
-            }
-
-            Okular::DocumentViewport viewport = calculateViewport( block, textDocumentayout );
-
-            QDomElement item = m_documentSynopsis.createElement( block.text() );
-            item.setAttribute( "Viewport", viewport.toString() );
-
-            // we need a parent, which has to be at a higher heading level than this heading level
-            // so we just work through the stack
-            while ( ! parentNodeStack.isEmpty() ) {
-                int parentLevel = parentNodeStack.top().first;
-                if ( parentLevel < blockLevel ) {
-                    // this is OK as a parent
-                    parentNode = parentNodeStack.top().second;
-                    break;
-                } else {
-                    // we'll need to be further into the stack
-                    parentNodeStack.pop();
-                }
-            }
-            parentNode.appendChild( item );
-            parentNodeStack.push( qMakePair( blockLevel, QDomNode(item) ) );
-
-            block = block.next();
+    QTextBlock block = textDocument->begin();
+    for (; block.isValid(); block = block.next()) {
+        int blockLevel = 0;
+        if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel)) {
+            blockLevel = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
         }
+
+        // no blockLevel yet?
+        if (blockLevel == 0) {
+            continue;
+        }
+
+        Okular::DocumentViewport viewport = calculateViewport( block, textDocumentLayout );
+
+        QDomElement item = m_documentSynopsis.createElement( block.text() );
+        item.setAttribute( "Viewport", viewport.toString() );
+
+        // we need a parent, which has to be at a higher heading level than this heading level
+        // so we just work through the stack
+        while ( ! parentNodeStack.isEmpty() ) {
+            int parentLevel = parentNodeStack.top().first;
+            if ( parentLevel < blockLevel ) {
+                // this is OK as a parent
+                parentNode = parentNodeStack.top().second;
+                break;
+            } else {
+                // we'll need to be further into the stack
+                parentNodeStack.pop();
+            }
+        }
+        parentNode.appendChild( item );
+        parentNodeStack.push( qMakePair( blockLevel, QDomNode(item) ) );
     }
 
     return true;
