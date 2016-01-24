@@ -58,15 +58,15 @@ OkularOdtGenerator::~OkularOdtGenerator()
 static Okular::DocumentViewport calculateViewport( const QTextBlock &block,
                                                    KoTextDocumentLayout* textDocumentLayout )
 {
-    KoTextLayoutRootArea *a = textDocumentLayout->rootAreaForPosition(block.position());
+    KoTextLayoutRootArea *rootArea = textDocumentLayout->rootAreaForPosition(block.position());
 
     QRectF rect = textDocumentLayout->blockBoundingRect( block );
-    rect.translate(-(a->referenceRect().topLeft()));
+    rect.translate(-(rootArea->referenceRect().topLeft()));
 
-    KoShape *shape = a->associatedShape();
+    KoShape *shape = rootArea->associatedShape();
     rect.translate(shape->absolutePosition(KoFlake::TopLeftCorner));
 
-    KWPage* page = static_cast<KWPage *>(a->page());
+    KWPage* page = static_cast<KWPage *>(rootArea->page());
     rect.translate(static_cast<qreal>(0.0), -(page->offsetInDocument()));
 
     const qreal pageHeight = page->height();
