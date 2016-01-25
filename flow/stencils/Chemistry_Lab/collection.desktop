@@ -1,3 +1,8 @@
 [Desktop Entry]
 Name=Chemistry Lab
+Name[en_GB]=Chemistry Lab
+Name[fi]=Kemian laboratorio
+Name[fr]=Laboratoire de chimie
+Name[nl]=Scheikundelab
+Name[x-test]=xxChemistry Labxx
 X-KDE-DirType=odg-collection

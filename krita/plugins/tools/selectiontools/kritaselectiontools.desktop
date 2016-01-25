@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Selection Tools
+Name[en_GB]=Selection Tools
+Name[fi]=Valintatyökalut
+Name[fr]=Outils de sélection
+Name[nl]=Selectiegereedschappen
+Name[x-test]=xxSelection Toolsxx
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritaselectiontools

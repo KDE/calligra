@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Shear Image Plugin
+Name[en_GB]=Shear Image Plugin
+Name[fi]=Kuvan viistoamisliitännäinen
+Name[fr]=Module de rognage d'images
+Name[nl]=Plug-in voor afbeelding schuintrekken
+Name[x-test]=xxShear Image Pluginxx
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritashearimage

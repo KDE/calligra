@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Artistic color selector
+Name[en_GB]=Artistic colour selector
+Name[fi]=Taiteellinen värivalitsin
+Name[fr]=Sélecteur Couleur artistique
+Name[nl]=Artistieke kleurenkiezer
+Name[x-test]=xxArtistic color selectorxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritaartisticcolorselector

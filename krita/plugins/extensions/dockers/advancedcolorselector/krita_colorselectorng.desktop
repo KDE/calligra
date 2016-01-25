@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=ColorSelectorNG
+Name[en_GB]=ColourSelectorNG
+Name[fr]=SélecteurcouleursNG
+Name[nl]=ColorSelectorNG
+Name[x-test]=xxColorSelectorNGxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritacolorselectorng

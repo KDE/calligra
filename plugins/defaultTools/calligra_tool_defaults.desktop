@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Default Flake Tools
+Name[en_GB]=Default Flake Tools
+Name[fi]=Flake-oletustyökalut
+Name[fr]=Outils de flocons par défaut
+Name[nl]=Standaard Flake-gereedschappen
+Name[x-test]=xxDefault Flake Toolsxx
 X-KDE-ServiceTypes=Calligra/Tool
 Type=Service
 X-KDE-PluginInfo-Name=defaulttools

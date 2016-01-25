@@ -1,7 +1,13 @@
 [Desktop Entry]
 Type=Service
 Name=OpenDocument Presentation Document
+Name[en_GB]=OpenDocument Presentation Document
+Name[nl]=OpenDocument presentatie-document
+Name[x-test]=xxOpenDocument Presentation Documentxx
 Comment=Odp for okular
+Comment[en_GB]=Odp for okular
+Comment[nl]=Odp voor okular
+Comment[x-test]=xxOdp for okularxx
 ServiceTypes=okular/Generator
 MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;
 X-KDE-Library=okularGenerator_odp

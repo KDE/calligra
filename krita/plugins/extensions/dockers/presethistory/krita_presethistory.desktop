@@ -1,6 +1,14 @@
 [Desktop Entry]
 Name=Preset History Docker
+Name[en_GB]=Preset History Docker
+Name[fi]=Esiasetushistoriatelakka
+Name[nl]=Verankering voor voorinstelling van geschiedenis
+Name[x-test]=xxPreset History Dockerxx
 Comment=Show the last used presets
+Comment[en_GB]=Show the last used presets
+Comment[fi]=Näytä viimeksi käytetyt esiasetukset
+Comment[nl]=De laatst gebruikte voorinstellingen tonen
+Comment[x-test]=xxShow the last used presetsxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritapresethistory

@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Karbon WMF Import Filter
+Name[en_GB]=Karbon WMF Import Filter
+Name[fi]=Karbonin WMF-tuontisuodatin
+Name[fr]=Filtre d'importation WMF de Karbon
+Name[nl]=WMF-importfilter voor Karbon
+Name[x-test]=xxKarbon WMF Import Filterxx
 X-KDE-Export=image/svg+xml
 X-KDE-Import=image/x-wmf
 X-KDE-Weight=1

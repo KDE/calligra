@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Spacenavigator Device
+Name[en_GB]=Spacenavigator Device
+Name[fr]=Dispositif de NavigateurEspace
+Name[nl]=Spacenavigator-apparaat
+Name[x-test]=xxSpacenavigator Devicexx
 X-KDE-ServiceTypes=Calligra/Device
 Type=Service
 X-KDE-PluginInfo-Name=spacenavigator

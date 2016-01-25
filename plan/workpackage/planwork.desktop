@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Plan WorkPackage Handler
+Name[en_GB]=Plan WorkPackage Handler
+Name[fi]=Plan-työpakettikäsittelijä
+Name[fr]=Paquet de travail de Plan
+Name[nl]=Plan werkpakketbeheerder
+Name[x-test]=xxPlan WorkPackage Handlerxx
 GenericName=Project Management
+GenericName[en_GB]=Project Management
+GenericName[fi]=Projektinhallinta
+GenericName[fr]=Gestion de projets
+GenericName[nl]=Projectbeheer
+GenericName[x-test]=xxProject Managementxx
 Exec=calligraplanwork %u
 MimeType=application/x-vnd.kde.plan.work;application/x-vnd.kde.kplato.work;
 Type=Application

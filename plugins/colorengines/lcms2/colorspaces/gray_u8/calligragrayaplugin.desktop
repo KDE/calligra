@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Grayscale Color Model with Alpha
+Name[en_GB]=Grayscale Colour Model with Alpha
+Name[fi]=Harmaasävyvärimalli alfalla
+Name[fr]=Modèle de couleurs en niveaux de gris avec Alpha
+Name[nl]=Grijswaarden kleurmodel met alphakanaal
+Name[x-test]=xxGrayscale Color Model with Alphaxx
 Comment=Color model for 8-bit grayscale images
+Comment[en_GB]=Colour model for 8-bit grayscale images
+Comment[fi]=Värimalli 8-bittisille harmaasävykuville
+Comment[fr]=Modèle de couleurs pour des images en niveaux de gris 8 bits
+Comment[nl]=Kleurmodel voor afbeeldingen in 8-bit grijswaarden
+Comment[x-test]=xxColor model for 8-bit grayscale imagesxx
 X-KDE-ServiceTypes=Calligra/ColorSpace
 Type=Service
 X-KDE-PluginInfo-Name=calligragrayau8plugin

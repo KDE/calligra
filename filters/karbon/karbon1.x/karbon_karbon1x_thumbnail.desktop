@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Karbon 14 Drawings
+Name[en_GB]=Karbon 14 Drawings
+Name[fi]=Karbon 14 -piirrokset
+Name[fr]=Graphiques Karbon 14
+Name[nl]=Tekeningen van Karbon 14
+Name[x-test]=xxKarbon 14 Drawingsxx
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/x-karbon;

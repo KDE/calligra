@@ -1,3 +1,7 @@
 [Desktop Entry]
 Name=Civil
+Name[en_GB]=Civil
+Name[fr]=Civil
+Name[nl]=Civiel
+Name[x-test]=xxCivilxx
 X-KDE-DirType=odg-collection

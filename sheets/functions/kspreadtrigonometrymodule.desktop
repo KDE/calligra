@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Trigonometry Functions
+Name[en_GB]=Trigonometry Functions
+Name[fi]=Trigonometriset funktiot
+Name[fr]=Fonctions trigonométriques
+Name[nl]=Trigonometrie-functies
+Name[x-test]=xxTrigonometry Functionsxx
 Comment=ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH
+Comment[en_GB]=ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH
+Comment[fi]=ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH
+Comment[fr]=ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH
+Comment[nl]=ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH
+Comment[x-test]=xxACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANHxx
 Icon=funct
 Type=Service
 X-KDE-Library=kspreadtrigonometrymodule

@@ -2,6 +2,9 @@
 Type=ServiceType
 X-KDE-ServiceType=Krita/FileFilter
 Comment=Krita FileFilter
+Comment[en_GB]=Krita FileFilter
+Comment[nl]=Bestandsfilter voor Krita
+Comment[x-test]=xxKrita FileFilterxx
 
 [PropertyDef::X-KDE-Import]
 Type=QStringList

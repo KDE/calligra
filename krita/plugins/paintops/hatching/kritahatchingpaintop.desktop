@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Hatching brush
+Name[en_GB]=Hatching brush
+Name[fi]=Viivoitussivellin
+Name[fr]=Brosses à hachures
+Name[nl]=Penseel voor arcering
+Name[x-test]=xxHatching brushxx
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritahatchingpaintop

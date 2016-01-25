@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=
 Name=Karbon SVG Export Filter
+Name[en_GB]=Karbon SVG Export Filter
+Name[fi]=Karbonin SVG-vientisuodatin
+Name[fr]=Filtre d'exportation SVG de Karbon
+Name[nl]=SVG-exportfilter voor Karbon
+Name[x-test]=xxKarbon SVG Export Filterxx
 X-KDE-ServiceTypes=Calligra/Filter
 Type=Service
 X-KDE-Export=image/svg+xml

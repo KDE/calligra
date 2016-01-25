@@ -1,8 +1,18 @@
 [Desktop Entry]
 Name=Inline Text Object Plugin
+Name[en_GB]=Inline Text Object Plugin
+Name[fi]=Liitännäinen rivinsisäisiä tekstiobjekteja varten
+Name[fr]=Module externe d'objet de texte interne
+Name[nl]=Inline tekstobjectplug-in
+Name[x-test]=xxInline Text Object Pluginxx
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Text-InlineObject
 Comment=Definition of a text object
+Comment[en_GB]=Definition of a text object
+Comment[fi]=Tekstiobjektin määrittely
+Comment[fr]=Définition d'un objet de texte
+Comment[nl]=Definitie van een tekstobject
+Comment[x-test]=xxDefinition of a text objectxx
 [PropertyDef::X-KoText-MinVersion]
 Type=int
 [PropertyDef::X-KoText-PluginVersion]

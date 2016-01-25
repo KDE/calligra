@@ -1,3 +1,8 @@
 [Desktop Entry]
 Name=Network
+Name[en_GB]=Network
+Name[fi]=Verkko
+Name[fr]=Réseau
+Name[nl]=Netwerk
+Name[x-test]=xxNetworkxx
 X-KDE-DirType=odg-collection

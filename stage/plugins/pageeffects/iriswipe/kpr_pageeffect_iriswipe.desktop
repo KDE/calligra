@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Iris Wipe
+Name[en_GB]=Iris Wipe
+Name[fi]=Mykiöpyyhkäisy
+Name[fr]=Effaceur par irisation
+Name[nl]=Irisvegen
+Name[x-test]=xxIris Wipexx
 Comment=Iris Wipe Page Effects
+Comment[en_GB]=Iris Wipe Page Effects
+Comment[fi]=Mykiöpyyhkäisy-sivutehoste
+Comment[fr]=Effets de page de l'effaceur par irisation
+Comment[nl]=Irisvegen pagina-effect
+Comment[x-test]=xxIris Wipe Page Effectsxx
 X-KDE-PluginInfo-Name=kpr_pageeffect_iriswipe
 X-KDE-ServiceTypes=CalligraStage/PageEffect
 Type=Service

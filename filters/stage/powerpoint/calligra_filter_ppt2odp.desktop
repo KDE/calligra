@@ -1,6 +1,10 @@
 [Desktop Entry]
 Type=Service
 Name=Microsoft PowerPoint Import Filter for KPresenter
+Name[en_GB]=Microsoft PowerPoint Import Filter for KPresenter
+Name[fi]=KPresenterin Microsoft PowerPoint -tuontisuodatin
+Name[nl]= Microsoft Powerpoint importfilter voor KPresenter
+Name[x-test]=xxMicrosoft PowerPoint Import Filter for KPresenterxx
 X-KDE-Export=application/vnd.oasis.opendocument.presentation
 X-KDE-Import=application/vnd.ms-powerpoint
 X-KDE-Weight=1

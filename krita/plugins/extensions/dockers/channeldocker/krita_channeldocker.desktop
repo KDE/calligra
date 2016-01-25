@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Channel Docker
+Name[en_GB]=Channel Docker
+Name[fi]=Kanavatelakka
+Name[fr]=Panneau par défaut
+Name[nl]=Kanaalvastzetter
+Name[x-test]=xxChannel Dockerxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritachanneldocker

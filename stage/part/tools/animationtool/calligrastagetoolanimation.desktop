@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Animation Tool
+Name[en_GB]=Animation Tool
+Name[fi]=Animointityökalu
+Name[fr]=Outils d'animation
+Name[nl]=Animatie-hulpmiddel
+Name[x-test]=xxAnimation Toolxx
 X-KDE-PluginInfo-Name=calligrastagetoolanimation
 X-KDE-ServiceTypes=CalligraStage/Tool
 Type=Service

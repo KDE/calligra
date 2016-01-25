@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Overview Docker
+Name[en_GB]=Overview Docker
+Name[fi]=Yleiskuvatelakka
+Name[fr]=Panneau de vue d'ensemble
+Name[nl]=Vastzetter voor overzicht
+Name[x-test]=xxOverview Dockerxx
 Comment=Docker for showing an image overview
+Comment[en_GB]=Docker for showing an image overview
+Comment[fi]=Telakka kuvan yleiskuvan näyttämiseen
+Comment[fr]=Panneau pour afficher une vue d'ensemble d'une image
+Comment[nl]=Vastzetter voor het tonen van een overzicht van afbeeldingen
+Comment[x-test]=xxDocker for showing an image overviewxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritaoverviewdocker

@@ -1,6 +1,10 @@
 [Desktop Entry]
 Type=Service
 Name=MS Project Import Filter
+Name[en_GB]=MS Project Import Filter
+Name[fi]=MS Project -tuontisuodatin
+Name[nl]=Importfilter voor MS Project
+Name[x-test]=xxMS Project Import Filterxx
 X-KDE-Export=application/x-vnd.kde.plan
 X-KDE-Import=application/vnd.ms-project
 X-KDE-Weight=1

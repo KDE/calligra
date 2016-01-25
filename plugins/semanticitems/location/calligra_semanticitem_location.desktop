@@ -1,6 +1,15 @@
 [Desktop Entry]
 Name=RDF Location Plugin
+Name[en_GB]=RDF Location Plugin
+Name[fi]=RDF-sijaintiliitännäinen
+Name[fr]=Module externe de localisation RDF
+Name[nl]=Plug-in voor RDF-locatie
+Name[x-test]=xxRDF Location Pluginxx
 Comment=A plugin to map location items between document and RDF database
+Comment[en_GB]=A plugin to map location items between document and RDF database
+Comment[fr]=Un module externe pour faire correspondre une localisation entre un document et une base de données RDF
+Comment[nl]=Een plug-in om verbinding te maken tussen locatie-items in een document en een RDF-database
+Comment[x-test]=xxA plugin to map location items between document and RDF databasexx
 
 Type=Service
 X-KDE-ServiceTypes=Calligra/SemanticItem

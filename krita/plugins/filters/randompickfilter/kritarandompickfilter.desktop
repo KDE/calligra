@@ -1,7 +1,17 @@
 [Desktop Entry]
 Comment=Random pick to an image
+Comment[en_GB]=Random pick to an image
+Comment[fi]=Kuvan pikseleiden satunnainen vaihdanta
+Comment[fr]=Choix aléatoire d'image
+Comment[nl]=Willekeurige keuze voor een afbeelding
+Comment[x-test]=xxRandom pick to an imagexx
 Icon=
 Name=Random pick Filter
+Name[en_GB]=Random pick Filter
+Name[fi]=Random pick -suodatin
+Name[fr]=Filtre de choix aléatoire
+Name[nl]=Willekeurige-keuze-filter
+Name[x-test]=xxRandom pick Filterxx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritarandompickfilter

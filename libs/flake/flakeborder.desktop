@@ -1,8 +1,18 @@
 [Desktop Entry]
 Name=Shape border definition
+Name[en_GB]=Shape border definition
+Name[fi]=Muodon rajan määrittely
+Name[fr]=Définition d'une bordure de forme
+Name[nl]=Vormranddefinitie
+Name[x-test]=xxShape border definitionxx
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Border
 Comment=Definition of a flake shape border
+Comment[en_GB]=Definition of a flake shape border
+Comment[fi]=Flake-muodon rajan määrittely
+Comment[fr]=Définition d'une bordure de forme de flocons
+Comment[nl]=Definitie van een flake-vormrand
+Comment[x-test]=xxDefinition of a flake shape borderxx
 [PropertyDef::X-Flake-PluginVersion]
 Type=int
 [PropertyDef::X-KDE-PluginInfo-Name]

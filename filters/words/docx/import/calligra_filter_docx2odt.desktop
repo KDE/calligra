@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=MS Word 2007 Import Filter for Words
+Name[en_GB]=MS Word 2007 Import Filter for Words
+Name[fi]=MS Word 2007 -tuontisuodatin Wordsiin
+Name[fr]=Filtre d'importation MS Word 2007 de Words
+Name[nl]=MS Word 2007-importfilter voor Words
+Name[x-test]=xxMS Word 2007 Import Filter for Wordsxx
 X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-word.document.macroEnabled.12,application/vnd.ms-word.template.macroEnabled.12
 X-KDE-Weight=1

@@ -1,7 +1,17 @@
 [Desktop Entry]
 Comment=This plugins allow to transfer color from an image to an other image
+Comment[en_GB]=This plugins allow to transfer colour from an image to an other image
+Comment[fi]=Tämä liitännäinen mahdollistaa värin siirtämisen kuvasta toiseen
+Comment[fr]=Ce module permet de transférer une couleur d'une image à une autre
+Comment[nl]=Met deze plug-in kunt u kleur van een afbeelding naar een andere overzetten
+Comment[x-test]=xxThis plugins allow to transfer color from an image to an other imagexx
 Icon=
 Name=Color Transfer Filter
+Name[en_GB]=Colour Transfer Filter
+Name[fi]=Värinsiirtosuodin
+Name[fr]=Filtres de transfert de couleur
+Name[nl]=Kleuroverzetfilter
+Name[x-test]=xxColor Transfer Filterxx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritafastcolortransferfilter

@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=KSpread dBASE Import Filter
+Name[en_GB]=KSpread dBASE Import Filter
+Name[fi]=KSpreadin dBASE-tuontisuodatin
+Name[fr]=Filtre d'importation dBASE de Kspread
+Name[nl]=dBASE-importfilter voor KSpread
+Name[x-test]=xxKSpread dBASE Import Filterxx
 X-KDE-Export=application/x-kspread
 X-KDE-Import=application/x-dbf
 X-KDE-Weight=1

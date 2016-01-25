@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Krita PDF Import Filter
+Name[en_GB]=Krita PDF Import Filter
+Name[fi]=Kritan PDF-tuontisuodatin
+Name[fr]=Filtre d'importation PDF de Krita
+Name[nl]=PDF-importfilter voor Krita
+Name[x-test]=xxKrita PDF Import Filterxx
 X-KDE-ServiceTypes=Krita/FileFilter
 Type=Service
 X-KDE-Export=application/x-krita

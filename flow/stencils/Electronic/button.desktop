@@ -1,2 +1,6 @@
 [Desktop Entry]
 Name=button
+Name[en_GB]=button
+Name[fr]=bouton
+Name[nl]=knop
+Name[x-test]=xxbuttonxx

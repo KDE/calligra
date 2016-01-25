@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=template_dslr
 Name=Nikon_D5000_4288x2848
+Name[en_GB]=Nikon_D5000_4288x2848
+Name[fi]=Nikon D5000 4288 × 2848
+Name[fr]=Nikon_D5000_4288x2848
+Name[nl]=Nikon_D5000_4288x2848
+Name[x-test]=xxNikon_D5000_4288x2848xx
 Type=Link
 URL[$e]=.source/Nikon_D5000_4288x2848.kra
 X-KDE-Hidden=false

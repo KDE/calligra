@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=
 Name=Presentation Variables
+Name[en_GB]=Presentation Variables
+Name[fi]=Esitysmuuttujat
+Name[fr]=Presentation des variables
+Name[nl]=Presentatievariabelen
+Name[x-test]=xxPresentation Variablesxx
 X-KDE-PluginInfo-Name=kprvariables
 X-KDE-ServiceTypes=Calligra/Text-InlineObject
 Type=Service

@@ -1,3 +1,8 @@
 [Desktop Entry]
 Name=Building Site
+Name[en_GB]=Building Site
+Name[fi]=Rakennustyömaa
+Name[fr]=Immeuble
+Name[nl]=Bouwsite
+Name[x-test]=xxBuilding Sitexx
 X-KDE-DirType=odg-collection

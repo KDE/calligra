@@ -2,7 +2,17 @@
 Type=Link
 URL=.source/ProfessionalA4.odt
 Name=Professional Letter
+Name[en_GB]=Professional Letter
+Name[fi]=Ammattimainen kirje
+Name[fr]=Lettre professionnelle
+Name[nl]=Professionele brief
+Name[x-test]=xxProfessional Letterxx
 Comment=Creates a blank document with wide margins for professional looking documents
+Comment[en_GB]=Creates a blank document with wide margins for professional looking documents
+Comment[fi]=Luo tyhjän tiedoston, jossa on leveät marginaalit
+Comment[fr]=Crée un document vide avec de grandes marges pour une apparence professionnelle
+Comment[nl]=Maakt een leeg document aan met brede margins voor een professioneel uiterlijk
+Comment[x-test]=xxCreates a blank document with wide margins for professional looking documentsxx
 Icon=template_a4
 X-KDE-MeasureSystem=metric
 X-KDE-VariantName=A4

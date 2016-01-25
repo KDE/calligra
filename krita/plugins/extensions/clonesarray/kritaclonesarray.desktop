@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Clones Array Plugin
+Name[en_GB]=Clones Array Plugin
+Name[fr]=Module externe de tableau de clones
+Name[nl]=Plug-in voor array klonen
+Name[x-test]=xxClones Array Pluginxx
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaclonesarray

@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Fade
+Name[en_GB]=Fade
+Name[fi]=Häivytys
+Name[fr]=Estomper
+Name[nl]=Vervagen
+Name[x-test]=xxFadexx
 Comment=Fade Effect
+Comment[en_GB]=Fade Effect
+Comment[fi]=Häivytystehoste
+Comment[fr]=Effet de fondu
+Comment[nl]=Vervagingseffect
+Comment[x-test]=xxFade Effectxx
 X-KDE-PluginInfo-Name=kpr_pageeffect_fade
 X-KDE-ServiceTypes=CalligraStage/PageEffect
 Type=Service

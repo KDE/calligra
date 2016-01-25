@@ -1,7 +1,17 @@
 [Desktop Entry]
 Icon=strange_far_hills
 Name=Strange Far Hills
+Name[en_GB]=Strange Far Hills
+Name[fi]=Kaukaiset oudot kukkulat
+Name[fr]=Étranges collines lointaines
+Name[nl]=Vreemde afgelegen heuvels
+Name[x-test]=xxStrange Far Hillsxx
 Comment=Strange Far Hills
+Comment[en_GB]=Strange Far Hills
+Comment[fi]=Kaukaiset oudot kukkulat
+Comment[fr]=Étranges collines lointaines
+Comment[nl]=Vreemde afgelegen heuvels
+Comment[x-test]=xxStrange Far Hillsxx
 Type=Link
 URL=.source/strange_far_hills.otp
 X-KDE-Hidden=false

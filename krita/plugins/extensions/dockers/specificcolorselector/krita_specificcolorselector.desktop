@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=SpecificColorSelector
+Name[en_GB]=SpecificColourSelector
+Name[fi]=Määrävärin valitsin
+Name[fr]=Sélecteur-Couleur-spécifique
+Name[nl]=SpecificColorSelector
+Name[x-test]=xxSpecificColorSelectorxx
 Comment=SpecificColorSelector
+Comment[en_GB]=SpecificColourSelector
+Comment[fi]=Määrävärin valitsin
+Comment[fr]=Sélecteur-Couleur-spécifique
+Comment[nl]=SpecificColorSelector
+Comment[x-test]=xxSpecificColorSelectorxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritaspecificcolorselector

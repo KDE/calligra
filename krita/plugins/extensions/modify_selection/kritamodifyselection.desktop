@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Modify Selection
+Name[en_GB]=Modify Selection
+Name[fi]=Muuta valintaa
+Name[fr]=Modifier la sélection
+Name[nl]=Selectie aanpassen
+Name[x-test]=xxModify Selectionxx
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritamodifyselection

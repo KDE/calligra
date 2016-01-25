@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Image Docker
+Name[en_GB]=Image Docker
+Name[fi]=Kuvatelakka
+Name[fr]=Panneau image
+Name[nl]=Vastzetter van afbeelding
+Name[x-test]=xxImage Dockerxx
 Comment=Docker for reference images
+Comment[en_GB]=Docker for reference images
+Comment[fi]=Mallikuvatelakka
+Comment[fr]=Panneau d'images de référence
+Comment[nl]=Vastzetten voor referentie-afbeeldingen
+Comment[x-test]=xxDocker for reference imagesxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritaimagedocker

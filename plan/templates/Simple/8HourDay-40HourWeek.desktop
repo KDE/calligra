@@ -2,4 +2,9 @@
 Type=Link
 URL=.source/8HourDay-40HourWeek.plant
 Name=8 hour day, 40 hour week
+Name[en_GB]=8 hour day, 40 hour week
+Name[fi]=8-tuntinen päivä, 40-tuntinen viikko
+Name[fr]=8 heures par jour, 40 heures par semaine
+Name[nl]=8-urige dag, 40-urige week
+Name[x-test]=xx8 hour day, 40 hour weekxx
 Icon=template_timechart

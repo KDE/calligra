@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Space Rotation
+Name[en_GB]=Space Rotation
+Name[fi]=Avaruuskierto
+Name[fr]=Rotation d'espace
+Name[nl]=Ruimte-rotatie
+Name[x-test]=xxSpace Rotationxx
 Comment=Space Rotation Page Effect
+Comment[en_GB]=Space Rotation Page Effect
+Comment[fi]=Avaruuskierto-sivutehoste
+Comment[fr]=Effets de page de la rotation d'espace
+Comment[nl]=Ruimte-rotatie-pagina-effect
+Comment[x-test]=xxSpace Rotation Page Effectxx
 X-KDE-PluginInfo-Name=kpr_pageeffect_spacerotation
 X-KDE-ServiceTypes=CalligraStage/PageEffect
 Type=Service

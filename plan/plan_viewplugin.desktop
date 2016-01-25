@@ -2,5 +2,10 @@
 Type=ServiceType
 X-KDE-ServiceType=Plan/ViewPlugin
 Comment=GUI functionality for Plan
+Comment[en_GB]=GUI functionality for Plan
+Comment[fi]=GUI-toimintoja Planiin
+Comment[fr]=Fonctionnalités d'interface pour Plan
+Comment[nl]=Interfacefunctionaliteit voor Plan
+Comment[x-test]=xxGUI functionality for Planxx
 [PropertyDef::X-Plan-Version]
 Type=int

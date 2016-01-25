@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Emboss Filter
+Name[en_GB]=Emboss Filter
+Name[fi]=Kohokuviosuodin
+Name[fr]=Filtre gravure
+Name[nl]=Reliëffilter
+Name[x-test]=xxEmboss Filterxx
 Comment=Emboss filter
+Comment[en_GB]=Emboss filter
+Comment[fi]=Kohokuviosuodin
+Comment[fr]=Filtre gravure
+Comment[nl]=Reliëffilter
+Comment[x-test]=xxEmboss filterxx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaembossfilter

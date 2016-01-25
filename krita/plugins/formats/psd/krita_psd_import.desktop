@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=
 Name=Krita PhotoShop Import Filter
+Name[en_GB]=Krita PhotoShop Import Filter
+Name[fi]=Kritan PhotoShop-tuontisuodatin
+Name[fr]=Filtre d'importation PhotoShop de Krita
+Name[nl]=Photoshop-importfilter voor Krita
+Name[x-test]=xxKrita PhotoShop Import Filterxx
 X-KDE-ServiceTypes=Krita/FileFilter
 Type=Service
 X-KDE-Export=application/x-krita

@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=ODT to Epub2 Export Filter
+Name[en_GB]=ODT to Epub2 Export Filter
+Name[fi]=Vientisuodatin ODT:sta Epub2:ksi
+Name[fr]=Filtre d'exportation ODT vers Epub2
+Name[nl]=ODT naar Epub2 exportfilter
+Name[x-test]=xxODT to Epub2 Export Filterxx
 
 X-KDE-Export=application/epub+zip
 X-KDE-Import=application/vnd.oasis.opendocument.text

@@ -2,4 +2,9 @@
 Type=Link
 URL=.source/PriceQuotation.kst
 Name=Price Quotation
+Name[en_GB]=Price Quotation
+Name[fi]=Tarjous
+Name[fr]=Chiffrage
+Name[nl]=Prijsopgave
+Name[x-test]=xxPrice Quotationxx
 Icon=template_pricequotation

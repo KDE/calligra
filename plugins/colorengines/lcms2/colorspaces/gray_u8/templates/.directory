@@ -1,3 +1,8 @@
 [Desktop Entry]
 Name=Grayscale
+Name[en_GB]=Grayscale
+Name[fi]=Harmaasävy
+Name[fr]=Niveaux de gris
+Name[nl]=Grijswaarden
+Name[x-test]=xxGrayscalexx
 X-KDE-DefaultTab=true

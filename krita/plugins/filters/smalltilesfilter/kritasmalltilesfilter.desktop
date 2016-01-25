@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Small Tiles Filter
+Name[en_GB]=Small Tiles Filter
+Name[fi]=Small tiles -suodatin
+Name[fr]=Filtre mosaïque
+Name[nl]=Kleine tegeltjes
+Name[x-test]=xxSmall Tiles Filterxx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritasmalltilesfilter

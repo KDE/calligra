@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Karbon PDF Import Filter
+Name[en_GB]=Karbon PDF Import Filter
+Name[fi]=Karbonin PDF-tuontisuodatin
+Name[fr]=Filtre d'importation PDF de Karbon
+Name[nl]=PDF-importfilter voor Karbon
+Name[x-test]=xxKarbon PDF Import Filterxx
 X-KDE-ServiceTypes=Calligra/Filter
 Type=Service
 X-KDE-Export=image/svg+xml

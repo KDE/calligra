@@ -1,2 +1,7 @@
 [Desktop Entry]
 Name=SIP Proxy server
+Name[en_GB]=SIP Proxy server
+Name[fi]=SIP-välityspalvelin
+Name[fr]=Serveur mandataire SIP
+Name[nl]=SIP proxyserver
+Name[x-test]=xxSIP Proxy serverxx

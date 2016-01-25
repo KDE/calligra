@@ -1,3 +1,8 @@
 [Desktop Entry]
 Name=SDL
+Name[en_GB]=SDL
+Name[fi]=SDL
+Name[fr]=SDL
+Name[nl]=SDL
+Name[x-test]=xxSDLxx
 X-KDE-DirType=odg-collection

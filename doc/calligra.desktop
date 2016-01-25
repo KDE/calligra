@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Application
 Name=Calligra
+Name[en_GB]=Calligra
+Name[fi]=Calligra
+Name[fr]=Calligra
+Name[nl]=Calligra
+Name[x-test]=xxCalligraxx
 Exec=khelpcenter help:/calligra
 NoDisplay=true
 X-DocPath=calligra/index.html

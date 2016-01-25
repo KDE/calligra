@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=
 Name=Krita HeightMap Import Filter
+Name[en_GB]=Krita HeightMap Import Filter
+Name[fi]=Kritan HeightMap-tuontisuodatin
+Name[fr]=Filtre d'importation HeightMap pour Krita
+Name[nl]=HeightMap-importfilter voor Krita
+Name[x-test]=xxKrita HeightMap Import Filterxx
 X-KDE-ServiceTypes=Krita/FileFilter
 Type=Service
 X-KDE-Export=application/x-krita

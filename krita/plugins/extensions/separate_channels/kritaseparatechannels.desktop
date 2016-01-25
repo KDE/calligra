@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Separate Channels Plugin
+Name[en_GB]=Separate Channels Plugin
+Name[fi]=Erilliset kanavat -liitännäinen
+Name[fr]=Module de séparation des canaux
+Name[nl]=Plug-in voor aparte kanalen
+Name[x-test]=xxSeparate Channels Pluginxx
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaseparatechannels

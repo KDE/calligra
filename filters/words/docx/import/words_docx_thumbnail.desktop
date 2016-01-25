@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Microsoft Word 2007 Documents
+Name[en_GB]=Microsoft Word 2007 Documents
+Name[fi]=Microsoft Word 2007 -tiedostot
+Name[fr]=Documents Microsoft Word 2007
+Name[nl]=Microsoft Word 2007-documenten
+Name[x-test]=xxMicrosoft Word 2007 Documentsxx
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.wordprocessingml.template;

@@ -1,3 +1,8 @@
 [Desktop Entry]
 Name=Lights
+Name[en_GB]=Lights
+Name[fi]=Valot
+Name[fr]=Lumières
+Name[nl]=Lichten
+Name[x-test]=xxLightsxx
 X-KDE-DirType=odg-collection

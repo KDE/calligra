@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=
 Name=Krita ora Export Filter
+Name[en_GB]=Krita ora Export Filter
+Name[fi]=Kritan ora-vientisuodatin
+Name[fr]=Filtre d'exportation ora de Krita
+Name[nl]=Ora-exportfilter voor Krita
+Name[x-test]=xxKrita ora Export Filterxx
 X-KDE-ServiceTypes=Krita/FileFilter
 Type=Service
 X-KDE-Export=image/openraster

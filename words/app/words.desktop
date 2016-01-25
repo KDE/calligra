@@ -1,9 +1,24 @@
 [Desktop Entry]
 Type=Application
 Name=Calligra Words
+Name[en_GB]=Calligra Words
+Name[fi]=Calligra Words
+Name[fr]=Calligra Words
+Name[nl]=Calligra Words
+Name[x-test]=xxCalligra Wordsxx
 Exec=calligrawords %u
 GenericName=Word Processor
+GenericName[en_GB]=Word Processor
+GenericName[fi]=Tekstinkäsittely
+GenericName[fr]=Traitement de texte
+GenericName[nl]=Tekstverwerker
+GenericName[x-test]=xxWord Processorxx
 Comment=Write documents
+Comment[en_GB]=Write documents
+Comment[fi]=Kirjoita tekstitiedostoja
+Comment[fr]=Documents texte
+Comment[nl]=Documenten wegschrijven
+Comment[x-test]=xxWrite documentsxx
 MimeType=application/vnd.oasis.opendocument.text-master;application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/msword;application/rtf;application/x-mswrite;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.wordprocessingml.template;application/vnd.ms-works;application/vnd.wordperfect;
 X-KDE-ServiceTypes=Calligra/Application
 Icon=calligrawords

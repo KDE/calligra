@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Karbon Refine Path plugin
+Name[en_GB]=Karbon Refine Path plugin
+Name[fi]=Karbonin tarkenna polkua -liitännäinen
+Name[fr]=Module externe pour Karbon de raffinage de tracé
+Name[nl]=Plug-in voor pad van Karbon Refine
+Name[x-test]=xxKarbon Refine Path pluginxx
 X-KDE-ServiceTypes=Karbon/ViewPlugin
 Type=Service
 X-KDE-Library=karbon_refinepathplugin

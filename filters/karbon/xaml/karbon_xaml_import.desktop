@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Karbon XAML Import Filter
+Name[en_GB]=Karbon XAML Import Filter
+Name[fi]=Karbonin XAML-tuontisuodatin
+Name[fr]=Filtre d'importation XAML de Karbon
+Name[nl]=XAML-importfilter voor Karbon
+Name[x-test]=xxKarbon XAML Import Filterxx
 X-KDE-Export=application/x-karbon
 X-KDE-Import=image/wvg+xml
 X-KDE-Weight=1

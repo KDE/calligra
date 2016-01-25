@@ -1,5 +1,8 @@
 [Desktop Entry]
 Name=Grid Brush
+Name[en_GB]=Grid Brush
+Name[nl]=Rasterpenseel
+Name[x-test]=xxGrid Brushxx
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritagridpaintop

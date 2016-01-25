@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Polygon Tool
+Name[en_GB]=Polygon Tool
+Name[fi]=Monikulmiotyökalu
+Name[fr]=Polygone
+Name[nl]=Veelhoeksgereedschap
+Name[x-test]=xxPolygon Toolxx
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolpolygon

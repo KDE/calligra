@@ -1,6 +1,15 @@
 [Desktop Entry]
 Name=Sybase
+Name[en_GB]=Sybase
+Name[fi]=Sybase
+Name[fr]=Sybase
+Name[nl]=Sybase
+Name[x-test]=xxSybasexx
 Comment=Kexi database driver for accessing Sybase servers
+Comment[en_GB]=Kexi database driver for accessing Sybase servers
+Comment[fi]=Kexi-tietokanta-ajuri Sybase-palvelinten käyttämiseksi
+Comment[nl]=Kexi databasestuurprogramma voor toegang tot Sybase-servers
+Comment[x-test]=xxKexi database driver for accessing Sybase serversxx
 X-KDE-Library=kexidb_sybasedriver
 X-KDE-ServiceTypes=Kexi/DBDriver
 Type=Service

@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Noise Filter
+Name[en_GB]=Noise Filter
+Name[fi]=Kohinasuodin
+Name[fr]=Filtre de bruit
+Name[nl]=Ruisfilter
+Name[x-test]=xxNoise Filterxx
 Comment=Add noise to an image
+Comment[en_GB]=Add noise to an image
+Comment[fi]=Lisää kuvaan kohinaa
+Comment[fr]=Ajouter du bruit à une image
+Comment[nl]=Voeg ruis toe aan een afbeelding
+Comment[x-test]=xxAdd noise to an imagexx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritanoisefilter

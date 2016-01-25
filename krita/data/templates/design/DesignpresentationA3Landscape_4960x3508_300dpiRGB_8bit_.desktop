@@ -1,6 +1,10 @@
 [Desktop Entry]
 Icon=template_DIN_A3_landscape
 Name=Design presentation A3 Landscape [ 4960x3508 , 300dpi RGB , 8bit ]
+Name[en_GB]=Design presentation A3 Landscape [ 4960x3508 , 300dpi RGB , 8bit ]
+Name[fr]=Style présentation A3 paysage [ 4960x3508, 300dpi RGB, 8bit ]
+Name[nl]=Design presentatie A3 Landschap [ 4960x3508 , 300dpi RGB , 8bit ]
+Name[x-test]=xxDesign presentation A3 Landscape [ 4960x3508 , 300dpi RGB , 8bit ]xx
 Type=Link
 URL[$e]=.source/DesignpresentationA3Landscape_4960x3508_300dpiRGB_8bit_.kra
 X-KDE-Hidden=false

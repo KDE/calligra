@@ -1,6 +1,10 @@
 [Desktop Entry]
 Icon=template_ratio_43
 Name=Design screen 4:3 [ 2250x1680 , 96dpi RGB , 8bit ]
+Name[en_GB]=Design screen 4:3 [ 2250x1680 , 96dpi RGB , 8bit ]
+Name[fr]=Style écran 4:3 [ 2250x1680, 96dpi RGB, 8bit ]
+Name[nl]=Design screen 4:3 [ 2250x1680 , 96dpi RGB , 8bit ]
+Name[x-test]=xxDesign screen 4:3 [ 2250x1680 , 96dpi RGB , 8bit ]xx
 Type=Link
 URL[$e]=.source/Designscreen4_3_2250x1680_96dpiRGB_8bit_.kra
 X-KDE-Hidden=false

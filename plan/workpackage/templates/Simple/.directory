@@ -1,3 +1,8 @@
 [Desktop Entry]
 Name=Simple
+Name[en_GB]=Simple
+Name[fi]=Yksinkertainen
+Name[fr]=Simple
+Name[nl]=Eenvoudig
+Name[x-test]=xxSimplexx
 X-KDE-DefaultTab=true

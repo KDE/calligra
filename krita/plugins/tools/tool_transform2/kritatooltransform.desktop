@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Transform Tool
+Name[en_GB]=Transform Tool
+Name[fi]=Muunnostyökalu
+Name[fr]=Transformer
+Name[nl]=Vervormgereedschap
+Name[x-test]=xxTransform Toolxx
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatooltransform

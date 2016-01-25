@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=
 Name=Krita TIFF Import Filter
+Name[en_GB]=Krita TIFF Import Filter
+Name[fi]=Kritan TIFF-tuontisuodatin
+Name[fr]=Filtre d'importation TIFF de Krita
+Name[nl]=TIFF-importfilter voor Krita
+Name[x-test]=xxKrita TIFF Import Filterxx
 X-KDE-ServiceTypes=Krita/FileFilter
 Type=Service
 X-KDE-Export=application/x-krita

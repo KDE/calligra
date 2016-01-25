@@ -1,3 +1,8 @@
 [Desktop Entry]
 Name=DSLR Templates
+Name[en_GB]=DSLR Templates
+Name[fi]=DSLR-pohjat
+Name[fr]=Modèles DSLR
+Name[nl]=DSLR-sjablonen
+Name[x-test]=xxDSLR Templatesxx
 X-KDE-DefaultTab=true

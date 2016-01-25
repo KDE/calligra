@@ -1,2 +1,6 @@
 [Desktop Entry]
 Name=Location server
+Name[en_GB]=Location server
+Name[fr]=emplacement du serveur
+Name[nl]=Locatieserver
+Name[x-test]=xxLocation serverxx

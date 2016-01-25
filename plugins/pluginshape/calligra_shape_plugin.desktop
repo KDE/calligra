@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Plugin Shape
+Name[en_GB]=Plugin Shape
+Name[fi]=Liitännäismuoto
+Name[fr]=Forme module
+Name[nl]=Plug-in voor vorm
+Name[x-test]=xxPlugin Shapexx
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-PluginInfo-Name=pluginshape

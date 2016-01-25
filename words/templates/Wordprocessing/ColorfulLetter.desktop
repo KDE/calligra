@@ -2,7 +2,17 @@
 Type=Link
 URL=.source/ColorfulLetter.odt
 Name=Colorful Document
+Name[en_GB]=Colourful Document
+Name[fi]=Värikäs tiedosto
+Name[fr]=Document coloré
+Name[nl]=Kleurrijk document
+Name[x-test]=xxColorful Documentxx
 Comment=A two-column template with stylishly colored headers and footers
+Comment[en_GB]=A two-column template with stylishly coloured headers and footers
+Comment[fi]=Kaksipalstainen pohja värillisin ylä- ja alatunnistein
+Comment[fr]=Un modèle à deux colonnes avec des en-têtes colorées et des pieds de page
+Comment[nl]=Een tweekoloms sjabloon met stijlvolle gekleurde kop- en voetteksten
+Comment[x-test]=xxA two-column template with stylishly colored headers and footersxx
 Icon=template_colorful
 X-KDE-MeasureSystem=imperial
 X-KDE-VariantName=Letter

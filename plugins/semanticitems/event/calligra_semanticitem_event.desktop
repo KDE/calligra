@@ -1,6 +1,15 @@
 [Desktop Entry]
 Name=RDF Calendar Event Plugin
+Name[en_GB]=RDF Calendar Event Plugin
+Name[fi]=RDF-kalenteritapahtumaliitännäinen
+Name[fr]=Module externe d'évènement de calendrier RDF
+Name[nl]=Plug-in voor gebeurtenis in RDF-agenda
+Name[x-test]=xxRDF Calendar Event Pluginxx
 Comment=A plugin to map calendar event items between document and RDF database
+Comment[en_GB]=A plugin to map calendar event items between document and RDF database
+Comment[fr]=Un module externe pour faire correspondre un évènement de calendrier entre un document et une base de données RDF
+Comment[nl]=Een plug-in om verbinding te maken tussen gebeurtenis-items in een document en een RDF-database
+Comment[x-test]=xxA plugin to map calendar event items between document and RDF databasexx
 
 Type=Service
 X-KDE-ServiceTypes=Calligra/SemanticItem

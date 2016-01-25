@@ -1,8 +1,18 @@
 [Desktop Entry]
 Name=Shape definition
+Name[en_GB]=Shape definition
+Name[fi]=Muodon määrittely
+Name[fr]=Définition de formes
+Name[nl]=Vormdefinitie
+Name[x-test]=xxShape definitionxx
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Shape
 Comment=Definition of a flake shape object
+Comment[en_GB]=Definition of a flake shape object
+Comment[fi]=Muoto-olion määrittely
+Comment[fr]=Définition Engineering d'un objet en forme de flocon
+Comment[nl]=Definitie van een flake-vormobject
+Comment[x-test]=xxDefinition of a flake shape objectxx
 [PropertyDef::X-Flake-MinVersion]
 Type=int
 [PropertyDef::X-Flake-PluginVersion]

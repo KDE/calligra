@@ -1,9 +1,24 @@
 [Desktop Entry]
 Type=Application
 Name=Calligra Author
+Name[en_GB]=Calligra Author
+Name[fi]=Calligra Author
+Name[fr]=Calligra Auteur
+Name[nl]=Calligra Author
+Name[x-test]=xxCalligra Authorxx
 Exec=calligraauthor %u
 GenericName=Author tool
+GenericName[en_GB]=Author tool
+GenericName[fi]=Author-työkalu
+GenericName[fr]=Outil Auteur
+GenericName[nl]=Author hulpmiddel
+GenericName[x-test]=xxAuthor toolxx
 Comment=Write ebooks and textbooks
+Comment[en_GB]=Write ebooks and textbooks
+Comment[fi]=Kirjoita sähkö- ja oppikirjoja
+Comment[fr]=Écrire des ebooks et textbooks
+Comment[nl]=Schrijf ebooks en tekstboeken
+Comment[x-test]=xxWrite ebooks and textbooksxx
 MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/msword;application/rtf;text/plain;application/x-mswrite;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.wordprocessingml.template;application/vnd.ms-works;application/vnd.wordperfect;
 X-KDE-ServiceTypes=Calligra/Application
 Icon=calligraauthor

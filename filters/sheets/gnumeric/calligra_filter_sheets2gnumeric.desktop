@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=GNUmeric Export Filter for KSpread
+Name[en_GB]=GNUmeric Export Filter for KSpread
+Name[fi]=KSpreadin Gnumeric-vientisuodatin
+Name[fr]=Filtre d'exportation GNUmeric de KSpread
+Name[nl]=GNUmeric-exportfilter voor KSpread
+Name[x-test]=xxGNUmeric Export Filter for KSpreadxx
 X-KDE-Export=application/x-gnumeric
 X-KDE-Import=application/x-kspread
 X-KDE-Weight=1

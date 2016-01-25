@@ -1,8 +1,18 @@
 [Desktop Entry]
 Type=Application
 Name=Calligra Flow
+Name[en_GB]=Calligra Flow
+Name[fi]=Calligra Flow
+Name[fr]=Calligra Flow
+Name[nl]=Calligra Flow
+Name[x-test]=xxCalligra Flowxx
 Exec=calligraflow %u
 GenericName=Flowchart & Diagram Editing
+GenericName[en_GB]=Flowchart & Diagram Editing
+GenericName[fi]=Kaavioiden piirtäminen
+GenericName[fr]=Conception de diagrammes et de tableaux
+GenericName[nl]=Bewerken van (stroom)diagrammen
+GenericName[x-test]=xxFlowchart & Diagram Editingxx
 MimeType=application/vnd.oasis.opendocument.graphics;application/vnd.visio;
 X-KDE-ServiceTypes=Calligra/Application
 Icon=calligraflow

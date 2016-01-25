@@ -1,2 +1,6 @@
 [Desktop Entry]
 Name=Temperature and Humidity Sensor
+Name[en_GB]=Temperature and Humidity Sensor
+Name[fr]=Capteur de température et humidité
+Name[nl]=Temperatuur- en vochtigheidssensor
+Name[x-test]=xxTemperature and Humidity Sensorxx

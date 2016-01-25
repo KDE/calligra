@@ -1,7 +1,17 @@
 [Desktop Entry]
 Icon=burning_desire
 Name=Burning Desire
+Name[en_GB]=Burning Desire
+Name[fi]=Polttava toive
+Name[fr]=Désir de feu
+Name[nl]=Brandend verlangen
+Name[x-test]=xxBurning Desirexx
 Comment=Burning Desire
+Comment[en_GB]=Burning Desire
+Comment[fi]=Polttava toive
+Comment[fr]=Désir de feu
+Comment[nl]=Brandend verlangen
+Comment[x-test]=xxBurning Desirexx
 Type=Link
 URL=.source/burning_desire.otp
 X-KDE-Hidden=false

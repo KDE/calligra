@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Deform brush
+Name[en_GB]=Deform brush
+Name[fi]=Vääntösivellin
+Name[fr]=Brosse déformante
+Name[nl]=Vervorm penseel
+Name[x-test]=xxDeform brushxx
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritadeformpaintop

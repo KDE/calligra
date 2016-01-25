@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Quattro Pro Import Filter for KSpread
+Name[en_GB]=Quattro Pro Import Filter for KSpread
+Name[fi]=KSpreadin Quattro Pro -tuontisuodatin
+Name[fr]=Filtre d'importation Quattro Pro pour KSpread
+Name[nl]=Quattro Pro-importfilter voor KSpread
+Name[x-test]=xxQuattro Pro Import Filter for KSpreadxx
 X-KDE-Export=application/x-kspread
 X-KDE-Import=application/x-quattropro
 X-KDE-Weight=1

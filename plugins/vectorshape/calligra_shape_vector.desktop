@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Static Vector Shape
+Name[en_GB]=Static Vector Shape
+Name[fi]=Staattinen vektorimuoto
+Name[fr]=Forme pour vecteur statique
+Name[nl]=Statische vectorvorm
+Name[x-test]=xxStatic Vector Shapexx
 X-KDE-PluginInfo-Name=vectorshape
 X-KDE-ServiceTypes=Calligra/Flake
 Type=Service

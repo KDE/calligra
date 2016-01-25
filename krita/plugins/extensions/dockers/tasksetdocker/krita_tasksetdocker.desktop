@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Taskset Docker
+Name[en_GB]=Taskset Docker
+Name[fi]=Tehtäväjoukkotelakka
+Name[fr]=Panneau de définition de tâches
+Name[nl]=Vastzetter voor takenset
+Name[x-test]=xxTaskset Dockerxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritatasksetdocker

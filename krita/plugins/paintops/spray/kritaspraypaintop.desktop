@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Spray
+Name[en_GB]=Spray
+Name[fi]=Spray
+Name[fr]=Aérographe
+Name[nl]=Spuitbus
+Name[x-test]=xxSprayxx
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritaspraypaintop

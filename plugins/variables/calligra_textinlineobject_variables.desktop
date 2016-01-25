@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=
 Name=Text Variables
+Name[en_GB]=Text Variables
+Name[fi]=Tekstimuuttujat
+Name[fr]=Variables texte
+Name[nl]=Tekstvariabelen
+Name[x-test]=xxText Variablesxx
 X-KDE-PluginInfo-Name=textvariables
 X-KDE-ServiceTypes=Calligra/Text-InlineObject
 Type=Service

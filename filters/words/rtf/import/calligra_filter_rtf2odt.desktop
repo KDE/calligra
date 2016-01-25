@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Words RTF Import Filter
+Name[en_GB]=Words RTF Import Filter
+Name[fi]=Wordsin RTF-tuontisuodatin
+Name[fr]=Filtre d'importation RTF de Words
+Name[nl]=RTF-importfilter voor Words
+Name[x-test]=xxWords RTF Import Filterxx
 X-KDE-Import=application/rtf
 X-KDE-Weight=1
 ImportDescription=RTF

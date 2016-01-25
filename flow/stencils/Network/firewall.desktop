@@ -1,2 +1,7 @@
 [Desktop Entry]
 Name=Firewall
+Name[en_GB]=Firewall
+Name[fi]=Palomuuri
+Name[fr]=Pare-feu
+Name[nl]=Firewall
+Name[x-test]=xxFirewallxx

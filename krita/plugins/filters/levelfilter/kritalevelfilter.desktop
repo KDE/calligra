@@ -1,6 +1,14 @@
 [Desktop Entry]
 Name=Levels
+Name[en_GB]=Levels
+Name[fr]=Niveaux
+Name[nl]=Niveaus
+Name[x-test]=xxLevelsxx
 Comment=Levels
+Comment[en_GB]=Levels
+Comment[fr]=Niveaux
+Comment[nl]=Niveaus
+Comment[x-test]=xxLevelsxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritalevelfilter

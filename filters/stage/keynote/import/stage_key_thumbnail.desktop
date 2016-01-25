@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Apple Keynote Documents
+Name[en_GB]=Apple Keynote Documents
+Name[fi]=Apple Keynote -tiedostot
+Name[fr]=Documents Apple Keynote
+Name[nl]=Documenten van Apple-keynote
+Name[x-test]=xxApple Keynote Documentsxx
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/x-iwork-keynote-sffkey;

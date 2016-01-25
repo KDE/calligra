@@ -1,3 +1,8 @@
 [Desktop Entry]
 Name=Comic Templates
+Name[en_GB]=Comic Templates
+Name[fi]=Sarjakuvapohjat
+Name[fr]=Modèles de bandes dessinées
+Name[nl]=Stripverhaalsjabloon
+Name[x-test]=xxComic Templatesxx
 X-KDE-DefaultTab=true

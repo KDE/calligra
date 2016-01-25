@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Dyna Tool
+Name[en_GB]=Dyna Tool
+Name[fi]=Dynatyökalu
+Name[fr]=Outil Dyna
+Name[nl]=Dyna-gereedschap
+Name[x-test]=xxDyna Toolxx
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatooldyna

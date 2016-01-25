@@ -2,6 +2,11 @@
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Part
 Comment=Calligra Component
+Comment[en_GB]=Calligra Component
+Comment[fi]=Calligra-osa
+Comment[fr]=Composant gestion de projets de Calligra
+Comment[nl]=Calligra-component
+Comment[x-test]=xxCalligra Componentxx
 
 # Name of the native mimetype (mandatory)
 [PropertyDef::X-KDE-NativeMimeType]

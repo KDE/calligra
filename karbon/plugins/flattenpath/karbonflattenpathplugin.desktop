@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Karbon Flatten Path plugin
+Name[en_GB]=Karbon Flatten Path plugin
+Name[fi]=Karbonin tasoita polku -liitännäinen
+Name[fr]=Module externe pour Karbon de mise à plat de tracé
+Name[nl]=Plug-in voor pad van Karbon Flatten
+Name[x-test]=xxKarbon Flatten Path pluginxx
 X-KDE-ServiceTypes=Karbon/ViewPlugin
 Type=Service
 X-KDE-Library=karbon_flattenpathplugin

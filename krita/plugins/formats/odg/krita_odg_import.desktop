@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Krita ODG Import Filter
+Name[en_GB]=Krita ODG Import Filter
+Name[fi]=Kritan ODG-tuontisuodatin
+Name[fr]=Filtre d'importation ODG de Krita
+Name[nl]=ODG-importfilter voor Krita
+Name[x-test]=xxKrita ODG Import Filterxx
 X-KDE-Export=application/x-krita
 X-KDE-Import=application/vnd.oasis.opendocument.graphics
 X-KDE-Weight=1

@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Filter Op
+Name[en_GB]=Filter Op
+Name[fi]=Suodintoiminto
+Name[fr]=Option Filtre
+Name[nl]=Filter
+Name[x-test]=xxFilter Opxx
 Comment=Filter Op
+Comment[en_GB]=Filter Op
+Comment[fi]=Suodintoiminto
+Comment[fr]=Option Filtre
+Comment[nl]=Filter
+Comment[x-test]=xxFilter Opxx
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritafilterop

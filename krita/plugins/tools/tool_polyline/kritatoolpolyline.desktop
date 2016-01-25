@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Polyline Tool
+Name[en_GB]=Polyline Tool
+Name[fi]=Murtoviivatyökalu
+Name[fr]=Lignes multiples
+Name[nl]=Gebroken-lijngereedschap
+Name[x-test]=xxPolyline Toolxx
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolpolyline

@@ -1,2 +1,7 @@
 [Desktop Entry]
 Name=Car
+Name[en_GB]=Car
+Name[fi]=Auto
+Name[fr]=voiture
+Name[nl]=Auto
+Name[x-test]=xxCarxx

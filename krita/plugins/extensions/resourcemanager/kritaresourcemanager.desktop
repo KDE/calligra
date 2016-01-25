@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Resource Manager
+Name[en_GB]=Resource Manager
+Name[fr]=Manager de ressources
+Name[nl]=Beheerder van hulpbronnen
+Name[x-test]=xxResource Managerxx
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaresourcemanager

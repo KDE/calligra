@@ -1,7 +1,13 @@
 [Desktop Entry]
 Icon=cohere-blue
 Name=Cohere
+Name[en_GB]=Cohere
+Name[nl]=Cohere
+Name[x-test]=xxCoherexx
 Comment=Cohere designed presentation template
+Comment[en_GB]=Cohere designed presentation template
+Comment[nl]=Met Cohere ontworpen presentatiesjabloon
+Comment[x-test]=xxCohere designed presentation templatexx
 X-KDE-Color=blue
 X-KDE-Swatch=ColorPalettes-Blue-1
 X-KDE-TemplateIsWideFormat=true

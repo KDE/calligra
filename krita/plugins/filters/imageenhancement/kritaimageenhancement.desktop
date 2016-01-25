@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Enhancement Filters
+Name[en_GB]=Enhancement Filters
+Name[fi]=Parannussuotimet
+Name[fr]=Filtres d'amélioration
+Name[nl]=Correctiefilters
+Name[x-test]=xxEnhancement Filtersxx
 Comment=Enhance the quality of an image
+Comment[en_GB]=Enhance the quality of an image
+Comment[fi]=Paranna kuvan laatua
+Comment[fr]=Améliore la qualité d'une image
+Comment[nl]=De kwaliteit van een afbeelding verbeteren
+Comment[x-test]=xxEnhance the quality of an imagexx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaimageenhancement

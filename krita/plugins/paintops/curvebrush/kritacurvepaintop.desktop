@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Curve brush
+Name[en_GB]=Curve brush
+Name[fi]=Kaarisivellin
+Name[fr]=Brosse courbe
+Name[nl]=Kromme-penseel
+Name[x-test]=xxCurve brushxx
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritacurvepaintop

@@ -1,6 +1,15 @@
 [Desktop Entry]
 Name=MySQL
+Name[en_GB]=MySQL
+Name[fi]=MySQL
+Name[fr]=MySQL
+Name[nl]=MySQL
+Name[x-test]=xxMySQLxx
 Comment=Kexi database driver for accessing MySQL servers
+Comment[en_GB]=Kexi database driver for accessing MySQL servers
+Comment[fi]=Kexi-tietokanta-ajuri MySQL-palvelinten käyttämiseksi
+Comment[nl]=Kexi databasestuurprogramma voor toegang tot MySQL-servers
+Comment[x-test]=xxKexi database driver for accessing MySQL serversxx
 X-KDE-Library=kexidb_mysqldriver
 X-KDE-ServiceTypes=Kexi/DBDriver
 Type=Service

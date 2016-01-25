@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Text Tool
+Name[en_GB]=Text Tool
+Name[fi]=Tekstityökalu
+Name[fr]=Texte
+Name[nl]=Tekstgereedschap
+Name[x-test]=xxText Toolxx
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatooltext

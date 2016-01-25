@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Spreadsheet
+Name[en_GB]=Spreadsheet
+Name[fi]=Laskentataulukko
+Name[fr]=Tableur
+Name[nl]=Rekenblad
+Name[x-test]=xxSpreadsheetxx
 Comment=Spreadsheet Import Plugin for Kexi
+Comment[en_GB]=Spreadsheet Import Plugin for Kexi
+Comment[fi]=Laskentataulukon tuontiliitännäinen Kexiin
+Comment[fr]=Module d'importation de Tables pour Kexi
+Comment[nl]=Import-plug-in van rekenblad voor Kexi
+Comment[x-test]=xxSpreadsheet Import Plugin for Kexixx
 X-KDE-Library=keximigrate_spreadsheet
 X-KDE-ServiceTypes=Kexi/MigrationDriver
 Type=Service

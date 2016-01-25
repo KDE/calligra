@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Microsoft Powerpoint 2007 Presentations
+Name[en_GB]=Microsoft Powerpoint 2007 Presentations
+Name[fi]=Microsoft Powerpoint 2007 -esitykset
+Name[fr]=Présentations Microsoft PowerPoint
+Name[nl]=Microsoft Powerpoint 2007-presentaties
+Name[x-test]=xxMicrosoft Powerpoint 2007 Presentationsxx
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/vnd.openxmlformats-officedocument.presentationml.presentation;application/vnd.openxmlformats-officedocument.presentationml.template;

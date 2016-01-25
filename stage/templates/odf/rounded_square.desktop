@@ -1,7 +1,17 @@
 [Desktop Entry]
 Icon=rounded_square
 Name=Rounded Square
+Name[en_GB]=Rounded Square
+Name[fi]=Pyöristetyt neliöt
+Name[fr]=Carré arrondi
+Name[nl]=Afgeronde vierkant
+Name[x-test]=xxRounded Squarexx
 Comment=Rounded Square
+Comment[en_GB]=Rounded Square
+Comment[fi]=Pyöristetyt neliöt
+Comment[fr]=Carré arrondi
+Comment[nl]=Afgeronde vierkant
+Comment[x-test]=xxRounded Squarexx
 Type=Link
 URL=.source/rounded_square.otp
 X-KDE-Hidden=false

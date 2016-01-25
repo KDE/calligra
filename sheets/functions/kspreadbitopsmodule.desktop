@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Bit Operation Functions
+Name[en_GB]=Bit Operation Functions
+Name[fi]=Bittioperaatiofunktiot
+Name[fr]=Fonctions d'opérations de bit
+Name[nl]=Bit-operatie functies
+Name[x-test]=xxBit Operation Functionsxx
 Comment=BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT
+Comment[en_GB]=BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT
+Comment[fi]=BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT
+Comment[fr]=BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT
+Comment[nl]=BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT
+Comment[x-test]=xxBITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFTxx
 Icon=funct
 Type=Service
 X-KDE-Library=kspreadbitopsmodule

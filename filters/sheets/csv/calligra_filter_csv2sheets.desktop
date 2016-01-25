@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=CSV Import Filter for KSpread
+Name[en_GB]=CSV Import Filter for KSpread
+Name[fi]=KSpreadin CSV-tuontisuodatin
+Name[fr]=Filtre d'importation CSV de KSpread
+Name[nl]=CSV-importfilter voor KSpread
+Name[x-test]=xxCSV Import Filter for KSpreadxx
 X-KDE-Export=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-Import=text/csv,text/plain
 X-KDE-Weight=50

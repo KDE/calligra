@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=
 Name=Krita ora Import Filter
+Name[en_GB]=Krita ora Import Filter
+Name[fi]=Kritan ora-tuontisuodatin
+Name[fr]=Filtre d'importation ora de Krita
+Name[nl]=Ora-importfilter voor Krita
+Name[x-test]=xxKrita ora Import Filterxx
 X-KDE-ServiceTypes=Krita/FileFilter
 Type=Service
 X-KDE-Export=application/x-krita

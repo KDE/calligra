@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=
 Name=Image enhancement Filters (Extension)
+Name[en_GB]=Image enhancement Filters (Extension)
+Name[fi]=Kuvanparannussuotimet (laajennus)
+Name[fr]=Filtres d'amélioration d'images (extension)
+Name[nl]=Afbeeldingsfilters (extensie)
+Name[x-test]=xxImage enhancement Filters (Extension)xx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaunsharpfilter

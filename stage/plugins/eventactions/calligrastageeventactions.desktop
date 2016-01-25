@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=
 Name=Presentation Event Actions
+Name[en_GB]=Presentation Event Actions
+Name[fi]=Esitystapahtumien toiminnot
+Name[fr]=Actions de présentation d'évéznements
+Name[nl]=Acties na presentatie-events
+Name[x-test]=xxPresentation Event Actionsxx
 X-KDE-PluginInfo-Name=calligrastageeventactions
 X-KDE-ServiceTypes=Calligra/PresentationEventAction
 Type=Service

@@ -1,8 +1,18 @@
 [Desktop Entry]
 Name=Calligra Docker Plugin
+Name[en_GB]=Calligra Docker Plugin
+Name[fi]=Calligran telakkaliitännäinen
+Name[fr]=Module externe de panneaux pour Calligra
+Name[nl]=Calligra-plug-in voor vastzetter
+Name[x-test]=xxCalligra Docker Pluginxx
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Dock
 Comment=A plugin that contains a so called 'dockwidget'
+Comment[en_GB]=A plugin that contains a so called 'dockwidget'
+Comment[fi]=Liitännäinen, joka sisältää ns. dock-elementin
+Comment[fr]=Module externe contenant un plasmoïde « panneau »
+Comment[nl]=Een plug-in, die een zogenaamde 'dockwidget' bevat
+Comment[x-test]=xxA plugin that contains a so called 'dockwidget'xx
 [PropertyDef::X-Flake-MinVersion]
 Type=int
 [PropertyDef::X-Flake-PluginVersion]

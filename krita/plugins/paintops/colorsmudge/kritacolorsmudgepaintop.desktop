@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Color Smudge Brush
+Name[en_GB]=Colour Smudge Brush
+Name[fr]=Brosse pour tâches de couleur
+Name[nl]=Uitsmeerpenseel met kleur
+Name[x-test]=xxColor Smudge Brushxx
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritacolorsmudgepaintop

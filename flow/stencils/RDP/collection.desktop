@@ -1,3 +1,7 @@
 [Desktop Entry]
 Name=RDP
+Name[en_GB]=RDP
+Name[fr]=RDP
+Name[nl]=RDP
+Name[x-test]=xxRDPxx
 X-KDE-DirType=odg-collection

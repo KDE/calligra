@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=PostgreSQL
+Name[en_GB]=PostgreSQL
+Name[fi]=PostgreSQL
+Name[fr]=PostgreSQL
+Name[nl]=PostgreSQL
+Name[x-test]=xxPostgreSQLxx
 Comment=PostgreSQL Import Plugin for Kexi
+Comment[en_GB]=PostgreSQL Import Plugin for Kexi
+Comment[fi]=PostgreSQL-tuontiliitännäinen Kexille
+Comment[fr]=Module d'importation PostgreSQL pour Kexi
+Comment[nl]=PostgreSQL-importplugin voor Kexi
+Comment[x-test]=xxPostgreSQL Import Plugin for Kexixx
 X-KDE-Library=keximigrate_pqxx
 X-KDE-ServiceTypes=Kexi/MigrationDriver
 Type=Service

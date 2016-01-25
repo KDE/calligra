@@ -1,3 +1,7 @@
 [Desktop Entry]
 Name=Digital
+Name[en_GB]=Digital
+Name[fr]=Numérique
+Name[nl]=Digitaal
+Name[x-test]=xxDigitalxx
 X-KDE-DirType=odg-collection

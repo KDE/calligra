@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Exploding Page
+Name[en_GB]=Exploding Page
+Name[fi]=Räjähtävä sivu
+Name[fr]=Page de dégroupage
+Name[nl]=Exploderende pagina
+Name[x-test]=xxExploding Pagexx
 Comment=Exploding Page Page Effect
+Comment[en_GB]=Exploding Page Page Effect
+Comment[fi]=Räjähtävä sivu -sivutehoste
+Comment[fr]=Effet de page avec une page d'explosion
+Comment[nl]=Exploderende pagina pagina-effect
+Comment[x-test]=xxExploding Page Page Effectxx
 X-KDE-PluginInfo-Name=kpr_pageeffect_example
 X-KDE-ServiceTypes=CalligraStage/PageEffect
 Type=Service

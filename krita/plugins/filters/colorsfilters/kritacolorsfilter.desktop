@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Color Filters
+Name[en_GB]=Colour Filters
+Name[fi]=Värisuotimet
+Name[fr]=Filtres de couleurs
+Name[nl]=Kleurfilters
+Name[x-test]=xxColor Filtersxx
 Comment=Color filters
+Comment[en_GB]=Colour filters
+Comment[fi]=Värisuotimet
+Comment[fr]=Filtres de couleurs
+Comment[nl]=Kleurfilters
+Comment[x-test]=xxColor filtersxx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritacolorsfilters

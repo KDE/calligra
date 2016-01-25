@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Grid
+Name[en_GB]=Grid
+Name[fi]=Ruudukko
+Name[fr]=Grille
+Name[nl]=Rooster
+Name[x-test]=xxGridxx
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolgrid

@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=MySQL
+Name[en_GB]=MySQL
+Name[fi]=MySQL
+Name[fr]=MySQL
+Name[nl]=MySQL
+Name[x-test]=xxMySQLxx
 Comment=MySQL Import Plugin for Kexi
+Comment[en_GB]=MySQL Import Plugin for Kexi
+Comment[fi]=MySQL-tuontiliitännäinen Kexille
+Comment[fr]=Module d'importation MySQL pour Kexi
+Comment[nl]=MySQL-importplugin voor Kexi
+Comment[x-test]=xxMySQL Import Plugin for Kexixx
 X-KDE-Library=keximigrate_mysql
 X-KDE-ServiceTypes=Kexi/MigrationDriver
 Type=Service

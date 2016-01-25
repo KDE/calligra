@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Quickstates Plugin
+Name[en_GB]=Quickstates Plugin
+Name[fi]=Pikatilaliitännäinen
+Name[fr]=Module externe Quickstates
+Name[nl]=Plug-in voor snelstatussen
+Name[x-test]=xxQuickstates Pluginxx
 
 X-KDE-ServiceTypes=Braindump/Extensions
 Type=Service

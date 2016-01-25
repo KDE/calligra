@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Calligra Spreadsheet Component
+Name[en_GB]=Calligra Spreadsheet Component
+Name[fi]=Calligran taulukkolaskentaosa
+Name[fr]=Composant gestion de projets de Calligra
+Name[nl]=Component van Calligra Rekenblad
+Name[x-test]=xxCalligra Spreadsheet Componentxx
 X-KDE-Library=calligrasheetspart
 MimeType=application/vnd.oasis.opendocument.spreadsheet;application/vnd.oasis.opendocument.spreadsheet-template;application/x-kspread;application/vnd.ms-excel;text/csv;application/x-quattropro;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;application/vnd.openxmlformats-officedocument.spreadsheetml.template;
 Type=Service
@@ -8,4 +13,9 @@ X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.spreadsheet-template,application/x-kspread
 GenericName=Spreadsheet
+GenericName[en_GB]=Spreadsheet
+GenericName[fi]=Taulukkolaskenta
+GenericName[fr]=Tableur
+GenericName[nl]=Spreadsheet
+GenericName[x-test]=xxSpreadsheetxx
 Icon=calligrasheets

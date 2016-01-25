@@ -1,6 +1,14 @@
 [Desktop Entry]
 Name=SQLite3
+Name[en_GB]=SQLite3
+Name[fi]=SQLite3
+Name[nl]=SQLite3
+Name[x-test]=xxSQLite3xx
 Comment=SQLite is default Kexi embedded SQL engine
+Comment[en_GB]=SQLite is default Kexi embedded SQL engine
+Comment[fi]=SQLite on Kexin käyttämä sisäänrakennettu SQL-moottori.
+Comment[nl]=SQLite is de standaard SQL-database voor Kexi
+Comment[x-test]=xxSQLite is default Kexi embedded SQL enginexx
 X-KDE-Library=kexidb_sqlite3driver
 X-KDE-ServiceTypes=Kexi/DBDriver
 Type=Service

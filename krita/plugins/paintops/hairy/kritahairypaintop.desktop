@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Hairy brushes
+Name[en_GB]=Hairy brushes
+Name[fr]=Brosses à cheveux
+Name[nl]=Harige penselen
+Name[x-test]=xxHairy brushesxx
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritahairypaintop

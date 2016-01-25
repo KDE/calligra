@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Pattern Docker
+Name[en_GB]=Pattern Docker
+Name[fi]=Kuviotelakka
+Name[fr]=Panneaux de motifs
+Name[nl]=Vastzetter van patroon
+Name[x-test]=xxPattern Dockerxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritapatterndocker

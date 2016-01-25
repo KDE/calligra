@@ -2,5 +2,10 @@
 Type=Link
 URL=.source/Worksheet.kst
 Name=Blank Worksheet
+Name[en_GB]=Blank Worksheet
+Name[fi]=Tyhjä arkki
+Name[fr]=Feuille de travail blanche
+Name[nl]=Leeg werkblad
+Name[x-test]=xxBlank Worksheetxx
 Icon=template_worksheet
 X-KDE-DefaultTemplate=true

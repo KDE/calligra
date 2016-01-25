@@ -1,7 +1,17 @@
 [Desktop Entry]
 Icon=simple_waves
 Name=Simple Waves
+Name[en_GB]=Simple Waves
+Name[fi]=Yksinkertaiset aallot
+Name[fr]=Vagues simples
+Name[nl]=Eenvoudige golven
+Name[x-test]=xxSimple Wavesxx
 Comment=Simple Waves
+Comment[en_GB]=Simple Waves
+Comment[fi]=Yksinkertaiset aallot
+Comment[fr]=Vagues simples
+Comment[nl]=Eenvoudige golven
+Comment[x-test]=xxSimple Wavesxx
 Type=Link
 URL=.source/simple_waves.otp
 X-KDE-Hidden=false

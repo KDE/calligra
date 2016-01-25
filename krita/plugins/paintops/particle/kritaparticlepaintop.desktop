@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Particle brush
+Name[en_GB]=Particle brush
+Name[fi]=Osassivellin
+Name[fr]=Brosse à particules
+Name[nl]=Deeltjes-penseel
+Name[x-test]=xxParticle brushxx
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritaparticlepaintop

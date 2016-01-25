@@ -2,4 +2,9 @@
 Type=Link
 URL=.source/Invoice.kst
 Name=Invoice
+Name[en_GB]=Invoice
+Name[fi]=Lasku
+Name[fr]=Rentrées
+Name[nl]=Rekening
+Name[x-test]=xxInvoicexx
 Icon=template_invoice

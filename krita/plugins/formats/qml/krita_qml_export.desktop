@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=
 Name=Krita QML Export Filter
+Name[en_GB]=Krita QML Export Filter
+Name[fi]=Kritan QML-vientisuodatin
+Name[fr]=Filtre d'exportation QML de Krita
+Name[nl]=QML-exportfilter voor Krita
+Name[x-test]=xxKrita QML Export Filterxx
 X-KDE-ServiceTypes=Krita/FileFilter
 Type=Service
 X-KDE-Export=text/x-qml

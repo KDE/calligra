@@ -1,3 +1,8 @@
 [Desktop Entry]
 Name=Circuit
+Name[en_GB]=Circuit
+Name[fi]=Virtapiiri
+Name[fr]=Circuit
+Name[nl]=Elektrisch schema
+Name[x-test]=xxCircuitxx
 X-KDE-DirType=odg-collection

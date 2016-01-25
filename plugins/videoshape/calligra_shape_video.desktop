@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Video Shape
+Name[en_GB]=Video Shape
+Name[fi]=Videomuoto
+Name[fr]=Forme vidéo
+Name[nl]=Video-vorm
+Name[x-test]=xxVideo Shapexx
 X-KDE-PluginInfo-Name=videoshape
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service

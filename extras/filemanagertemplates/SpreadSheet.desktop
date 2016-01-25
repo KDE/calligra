@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Spread Sheet Document...
+Name[en_GB]=Spread Sheet Document...
+Name[fi]=Taulukkolaskentatiedosto…
+Name[fr]=Document Feuille de calcul...
+Name[nl]=Spreadsheetdocument...
+Name[x-test]=xxSpread Sheet Document...xx
 Comment=New Sheets document:
+Comment[en_GB]=New Sheets document:
+Comment[fi]=Uusi Sheets-tiedosto:
+Comment[fr]=Nouveau document Tables : 
+Comment[nl]=Nieuw Sheets-document:
+Comment[x-test]=xxNew Sheets document:xx
 Type=Link
 URL=.source/SpreadSheet.ods
 Icon=application-vnd.oasis.opendocument.spreadsheet

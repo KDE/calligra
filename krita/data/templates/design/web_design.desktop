@@ -1,6 +1,10 @@
 [Desktop Entry]
 Icon=template_web_design
 Name=Web Design [ 2160x1440 , 72ppi RGB , 8bit ]
+Name[en_GB]=Web Design [ 2160x1440 , 72ppi RGB , 8bit ]
+Name[fr]=Style écran [ 2160x1440, 72ppi RGB , 8bit ]
+Name[nl]=Webontwerp [ 2160x1440 , 72ppi RGB , 8bit ]
+Name[x-test]=xxWeb Design [ 2160x1440 , 72ppi RGB , 8bit ]xx
 Type=Link
 URL[$e]=.source/web_design.kra
 X-KDE-Hidden=false

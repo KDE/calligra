@@ -6,6 +6,9 @@ Actions=Print;
 
 [Desktop Action Print]
 Name=Print...
+Name[en_GB]=Print...
+Name[nl]=Afdrukken...
+Name[x-test]=xxPrint...xx
 
 Exec=krita --print %U
 Icon=document-print

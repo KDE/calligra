@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Words MS Word-ODF Import Filter
+Name[en_GB]=Words MS Word-ODF Import Filter
+Name[fi]=Wordsin MS Word-ODF -tuontisuodatin
+Name[fr]=Filtre d'importation MS Word-ODF de Words
+Name[nl]=MS Word-ODF-importfilter voor Word
+Name[x-test]=xxWords MS Word-ODF Import Filterxx
 X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=application/msword
 X-KDE-Weight=1

@@ -2,7 +2,17 @@
 Type=Link
 URL=.source/A4.odt
 Name=Blank Document
+Name[en_GB]=Blank Document
+Name[fi]=Tyhjä tiedosto
+Name[fr]=Document vide
+Name[nl]=Leeg document
+Name[x-test]=xxBlank Documentxx
 Comment=Creates a blank A4 document, with a small page margin.
+Comment[en_GB]=Creates a blank A4 document, with a small page margin.
+Comment[fi]=Luo tyhjän A4-tiedoston kapein reunuksin.
+Comment[fr]=Crée un document A4 vide avec une petite marge
+Comment[nl]=Maakt een leeg A4-document aan met een kleine paginamarge.
+Comment[x-test]=xxCreates a blank A4 document, with a small page margin.xx
 Icon=template_a4
 X-KDE-MeasureSystem=metric
 X-KDE-Thumbnail=.thumbnail/a4.png

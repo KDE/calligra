@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=
 Name=Path Shapes
+Name[en_GB]=Path Shapes
+Name[fi]=Polkumuodot
+Name[fr]=Formes emplacement
+Name[nl]=Padvormen
+Name[x-test]=xxPath Shapesxx
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-PluginInfo-Name=pathshapes

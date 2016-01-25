@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Palette Docker
+Name[en_GB]=Palette Docker
+Name[fi]=Palettitelakka
+Name[fr]=Panneau de palette
+Name[nl]=Vastzetter van palet
+Name[x-test]=xxPalette Dockerxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritapalettedocker

@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=WordPerfect/DrawPerfect Images
+Name[en_GB]=WordPerfect/DrawPerfect Images
+Name[fi]=WordPerfect/DrawPerfect-kuvat
+Name[fr]=Images WordPerfect/DrawPerfect
+Name[nl]=Afbeeldingen van WordPerfect/DrawPerfect
+Name[x-test]=xxWordPerfect/DrawPerfect Imagesxx
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/x-wpg;

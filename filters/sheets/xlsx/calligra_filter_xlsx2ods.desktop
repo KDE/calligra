@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=MS Excel 2007 Import Filter for KSpread
+Name[en_GB]=MS Excel 2007 Import Filter for KSpread
+Name[fi]=KSpreadin MS Excel 2007 -tuontisuodatin
+Name[fr]=Filtre d'importation MS Excel 2007 de KSpread
+Name[nl]=MS Excel 2007 importfilter voor KSpread
+Name[x-test]=xxMS Excel 2007 Import Filter for KSpreadxx
 X-KDE-Export=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-Import=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.template,application/vnd.ms-excel.sheet.macroEnabled,application/vnd.ms-excel.sheet.macroEnabled.12,application/vnd.ms-excel.template.macroEnabled.12
 X-KDE-Weight=1

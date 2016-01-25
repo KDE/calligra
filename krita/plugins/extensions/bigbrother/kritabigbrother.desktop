@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=bigbrother
+Name[en_GB]=bigbrother
+Name[fi]=bigbrother
+Name[fr]=grandfrère
+Name[nl]=bigbrother
+Name[x-test]=xxbigbrotherxx
 Comment=bigbrother
+Comment[en_GB]=bigbrother
+Comment[fi]=bigbrother
+Comment[fr]=grand-frère
+Comment[nl]=bigbrother
+Comment[x-test]=xxbigbrotherxx
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritabigbrother

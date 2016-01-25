@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Calligra Dockers plugin
+Name[en_GB]=Calligra Dockers plugin
+Name[fi]=Calligran telakkaliitännäinen
+Name[fr]=Module externe de panneaux pour Calligra
+Name[nl]=Vastzetterplug-in voor Calligra
+Name[x-test]=xxCalligra Dockers pluginxx
 X-KDE-ServiceTypes=Calligra/Dock
 Type=Service
 X-KDE-PluginInfo-Name=calligradockers

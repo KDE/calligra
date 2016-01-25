@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Default Tools
+Name[en_GB]=Default Tools
+Name[fi]=Oletustyökalut
+Name[fr]=Outils par défaut
+Name[nl]=Standaardgereedschappen
+Name[x-test]=xxDefault Toolsxx
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritadefaulttools

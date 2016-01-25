@@ -1,6 +1,14 @@
 [Desktop Entry]
 Name=Swap Effect
+Name[en_GB]=Swap Effect
+Name[fr]=Effet d'échange
+Name[nl]=Omwissel-effect
+Name[x-test]=xxSwap Effectxx
 Comment=Swap Page Effect
+Comment[en_GB]=Swap Page Effect
+Comment[fr]=Effets de page par effet d'échange
+Comment[nl]=Pagina-omwisselen-effect
+Comment[x-test]=xxSwap Page Effectxx
 X-KDE-PluginInfo-Name=kpr_pageeffect_swapeffect
 X-KDE-ServiceTypes=CalligraStage/PageEffect
 Type=Service

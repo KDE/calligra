@@ -2,4 +2,9 @@
 Type=Link
 URL=.source/VacationChecklist.kst
 Name=Vacation Checklist
+Name[en_GB]=Vacation Checklist
+Name[fi]=Loman tarkistuslista
+Name[fr]=Checklist des vacances
+Name[nl]=Vakantie-controlelijst
+Name[x-test]=xxVacation Checklistxx
 Icon=template_vacationchecklist

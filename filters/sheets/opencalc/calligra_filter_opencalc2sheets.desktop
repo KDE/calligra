@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=OpenOffice.org Calc Import Filter for KSpread
+Name[en_GB]=OpenOffice.org Calc Import Filter for KSpread
+Name[fi]=KSpreadin OpenOffice.org Calc -tuontisuodatin
+Name[fr]=Filtre d'importation OpenOffice.org Calc pour KSpread
+Name[nl]=OpenOffice.org Calc-importfilter voor KSpread
+Name[x-test]=xxOpenOffice.org Calc Import Filter for KSpreadxx
 X-KDE-Export=application/x-kspread
 X-KDE-Import=application/vnd.sun.xml.calc,application/vnd.sun.xml.calc.template
 X-KDE-Weight=1

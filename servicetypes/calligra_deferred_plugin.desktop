@@ -1,4 +1,8 @@
 [Desktop Entry]
 Name=Calligra Deferred Loading Plugin
+Name[en_GB]=Calligra Deferred Loading Plugin
+Name[fr]=Extension de chargement différé de Calligra
+Name[nl]=Plugin voor Calligra uitgesteld laden
+Name[x-test]=xxCalligra Deferred Loading Pluginxx
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Deferred

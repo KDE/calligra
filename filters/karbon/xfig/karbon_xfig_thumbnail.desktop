@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=XFig Images
+Name[en_GB]=XFig Images
+Name[fi]=XFig-kuvat
+Name[fr]=Images XFig
+Name[nl]=XFig-afbeeldingen
+Name[x-test]=xxXFig Imagesxx
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=image/x-xfig;

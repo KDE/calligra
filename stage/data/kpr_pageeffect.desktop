@@ -2,6 +2,11 @@
 Type=ServiceType
 X-KDE-ServiceType=CalligraStage/PageEffect
 Comment=Page effect plugin for Calligra Stage
+Comment[en_GB]=Page effect plugin for Calligra Stage
+Comment[fi]=Calligra Stagen sivutehosteliitännäinen
+Comment[fr]=Module extérieur d'effet de page pour Calligra Stage
+Comment[nl]=Plug-in voor pagina-effect in Calligra Stage
+Comment[x-test]=xxPage effect plugin for Calligra Stagexx
 [PropertyDef::X-KPresenter-Version]
 Type=int
 [PropertyDef::X-KDE-PluginInfo-Name]

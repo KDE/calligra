@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Crop Tool
+Name[en_GB]=Crop Tool
+Name[fi]=Rajaustyökalu
+Name[fr]=Recadrer
+Name[nl]=Snijgereedschap
+Name[x-test]=xxCrop Toolxx
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolcrop

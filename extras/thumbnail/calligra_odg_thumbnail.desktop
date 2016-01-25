@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=OpenDocument Drawings
+Name[en_GB]=OpenDocument Drawings
+Name[fi]=OpenDocument-piirrokset
+Name[fr]=Graphiques OpenDocument
+Name[nl]=OpenDocument tekeningen
+Name[x-test]=xxOpenDocument Drawingsxx
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-template;

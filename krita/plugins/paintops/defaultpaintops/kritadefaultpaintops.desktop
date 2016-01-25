@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Default Paint Operations
+Name[en_GB]=Default Paint Operations
+Name[fi]=Oletusväritystoimenpiteet
+Name[fr]=Opérations de dessin par défaut
+Name[nl]=Standaardschilderoperaties
+Name[x-test]=xxDefault Paint Operationsxx
 Comment=Default paint operations
+Comment[en_GB]=Default paint operations
+Comment[fi]=Oletusväritystoimenpiteet
+Comment[fr]=Opérations de dessin par défaut
+Comment[nl]=Standaardschilderoperaties
+Comment[x-test]=xxDefault paint operationsxx
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritadefaultpaintops

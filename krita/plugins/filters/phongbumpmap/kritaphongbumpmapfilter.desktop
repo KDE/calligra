@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Phong Bumpmap Filter
+Name[en_GB]=Phong Bumpmap Filter
+Name[fi]=Phong Bumpmap -suodin
+Name[fr]=Filtre Phong bumpmap
+Name[nl]=Phong Bumpmapfilter
+Name[x-test]=xxPhong Bumpmap Filterxx
 Comment=Phong Bumpmap filter
+Comment[en_GB]=Phong Bumpmap filter
+Comment[fi]=Phong Bumpmap -suodin
+Comment[fr]=Filtre Phong Bumpmap
+Comment[nl]=Phong Bumpmapfilter
+Comment[x-test]=xxPhong Bumpmap filterxx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaphongbumpmap

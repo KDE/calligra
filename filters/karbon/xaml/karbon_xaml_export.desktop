@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=
 Name=Karbon WVG Export Filter
+Name[en_GB]=Karbon WVG Export Filter
+Name[fi]=Karbonin WVG-vientisuodatin
+Name[fr]=Filtre d'exportation WVG de Karbon
+Name[nl]= WVG-exportfilter voor Karbon
+Name[x-test]=xxKarbon WVG Export Filterxx
 X-KDE-ServiceTypes=Calligra/Filter
 Type=Service
 X-KDE-Export=image/wvg+xml

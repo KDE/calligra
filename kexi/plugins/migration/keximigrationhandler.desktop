@@ -3,7 +3,17 @@ Type=Service
 X-KDE-ServiceTypes=Kexi/Handler
 
 GenericName=Migration Plugin
+GenericName[en_GB]=Migration Plugin
+GenericName[fi]=Siirtoliitännäinen
+GenericName[fr]=Module externe de migration
+GenericName[nl]=Migratieplug-in
+GenericName[x-test]=xxMigration Pluginxx
 Name=Migration Plugin
+Name[en_GB]=Migration Plugin
+Name[fi]=Siirtoliitännäinen
+Name[fr]=Module externe de migration
+Name[nl]=Migratieplug-in
+Name[x-test]=xxMigration Pluginxx
 X-KDE-Library=kexihandler_migration
 X-KDE-ParentApp=kexi
 X-Kexi-PartVersion=2

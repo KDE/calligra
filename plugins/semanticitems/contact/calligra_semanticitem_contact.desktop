@@ -1,6 +1,15 @@
 [Desktop Entry]
 Name=RDF Contact Plugin
+Name[en_GB]=RDF Contact Plugin
+Name[fi]=RDF-yhteystietoliitännäinen
+Name[fr]=Module externe de contact RDF
+Name[nl]=Plug-in voor RDF-contactpersoon
+Name[x-test]=xxRDF Contact Pluginxx
 Comment=A plugin to map contact items between document and RDF database
+Comment[en_GB]=A plugin to map contact items between document and RDF database
+Comment[fr]=Un module externe pour faire correspondre des contacts entre un document et une base de données RDF
+Comment[nl]=Een plug-in om verbinding te maken tussen contact-items in een document en een RDF-database
+Comment[x-test]=xxA plugin to map contact items between document and RDF databasexx
 
 Type=Service
 X-KDE-ServiceTypes=Calligra/SemanticItem

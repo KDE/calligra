@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Karbon Whirl Pinch plugin
+Name[en_GB]=Karbon Whirl Pinch plugin
+Name[fi]=Karbonin pyörrenipistämisliitännäinen
+Name[fr]=Module externe pour Karbon de tourbillon et pincement
+Name[nl]=Plug-in voor Whirl Pinch van Karbon
+Name[x-test]=xxKarbon Whirl Pinch pluginxx
 X-KDE-ServiceTypes=Karbon/ViewPlugin
 Type=Service
 X-KDE-Library=karbon_whirlpinchplugin

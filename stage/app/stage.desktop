@@ -1,9 +1,24 @@
 [Desktop Entry]
 Type=Application
 Name=Calligra Stage
+Name[en_GB]=Calligra Stage
+Name[fi]=Calligra Stage
+Name[fr]=Calligra Stage
+Name[nl]=Calligra Stage
+Name[x-test]=xxCalligra Stagexx
 Exec=calligrastage %u
 GenericName=Presentation
+GenericName[en_GB]=Presentation
+GenericName[fi]=Esitysgrafiikka
+GenericName[fr]=Présentation
+GenericName[nl]=Presentatie
+GenericName[x-test]=xxPresentationxx
 Comment=Write presentation documents
+Comment[en_GB]=Write presentation documents
+Comment[fi]=Kirjoita esitystiedostoja
+Comment[fr]=Écrire des documents de présentation
+Comment[nl]=Presentatiedocumenten schrijven
+Comment[x-test]=xxWrite presentation documentsxx
 MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/x-kpresenter;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/vnd.openxmlformats-officedocument.presentationml.template;
 X-KDE-ServiceTypes=Calligra/Application
 Icon=calligrastage

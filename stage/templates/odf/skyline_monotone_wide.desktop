@@ -1,7 +1,16 @@
 [Desktop Entry]
 Icon=skyline_monotone_wide
 Name=Skyline Wide
+Name[en_GB]=Skyline Wide
+Name[fi]=Taivaanranta, leveä
+Name[nl]=Brede horizon
+Name[x-test]=xxSkyline Widexx
 Comment=Skyline Monotone Wide
+Comment[en_GB]=Skyline Monotone Wide
+Comment[fi]=Monotoninen taivaanranta, leveä
+Comment[fr]=Horizon monotone large
+Comment[nl]=Brede monotone horizon
+Comment[x-test]=xxSkyline Monotone Widexx
 Type=Link
 URL=.source/skyline_monotone_wide.otp
 X-KDE-Hidden=false

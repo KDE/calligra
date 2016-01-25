@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Calligra Author Component
+Name[en_GB]=Calligra Author Component
+Name[fi]=Calligra Author -osa
+Name[fr]=Composant Auteur de Calligra
+Name[nl]=Calligra Author component
+Name[x-test]=xxCalligra Author Componentxx
 X-KDE-Library=authorpart
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.text
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.text
@@ -8,5 +13,10 @@ X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.text-template
 MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/msword;application/rtf;text/plain;application/x-mswrite;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.wordprocessingml.template;application/vnd.ms-works;application/vnd.wordperfect;
 X-KDE-ServiceTypes=Calligra/Part
 GenericName=Author tool
+GenericName[en_GB]=Author tool
+GenericName[fi]=Author-työkalu
+GenericName[fr]=Outil Auteur
+GenericName[nl]=Author hulpmiddel
+GenericName[x-test]=xxAuthor toolxx
 Icon=calligraauthor
 InitialPreference=3

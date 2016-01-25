@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Words ASCII Export Filter
+Name[en_GB]=Words ASCII Export Filter
+Name[fi]=Wordsin ASCII-vientisuodatin
+Name[fr]=Filtre d'exportation ASCII de Words
+Name[nl]=ASCII-exportfilter voor Words
+Name[x-test]=xxWords ASCII Export Filterxx
 X-KDE-Import=application/vnd.oasis.opendocument.text
 X-KDE-Export=text/plain
 X-KDE-Weight=1

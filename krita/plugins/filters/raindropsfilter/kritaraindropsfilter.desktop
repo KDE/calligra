@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Raindrops Filter
+Name[en_GB]=Raindrops Filter
+Name[fi]=Vesipisarasuodin
+Name[fr]=Filtre gouttes de pluie
+Name[nl]=Regendruppelfilter
+Name[x-test]=xxRaindrops Filterxx
 Comment=Raindrops filter
+Comment[en_GB]=Raindrops filter
+Comment[fi]=Vesipisarasuodin
+Comment[fr]=Filtre gouttes de pluie
+Comment[nl]=Regendruppelfilter
+Comment[x-test]=xxRaindrops filterxx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaraindropsfilter

@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Presentation Document...
+Name[en_GB]=Presentation Document...
+Name[fi]=Esitystiedosto…
+Name[fr]=Document de présentation...
+Name[nl]=Presentatie-document...
+Name[x-test]=xxPresentation Document...xx
 Comment=New Stage presentation document:
+Comment[en_GB]=New Stage presentation document:
+Comment[fi]=Uusi Stage-esitystiedosto:
+Comment[fr]=Nouveau document de présentation Stage : 
+Comment[nl]=Nieuw Stage-presentatiedocument:
+Comment[x-test]=xxNew Stage presentation document:xx
 Type=Link
 URL=.source/Presentation.odp
 Icon=application-vnd.oasis.opendocument.presentation

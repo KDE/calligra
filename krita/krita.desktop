@@ -1,9 +1,24 @@
 [Desktop Entry]
 Name=Krita
+Name[en_GB]=Krita
+Name[fi]=Krita
+Name[fr]=Krita
+Name[nl]=Krita
+Name[x-test]=xxKritaxx
 Exec=krita %U
 GenericName=Digital Painting
+GenericName[en_GB]=Digital Painting
+GenericName[fi]=Digitaalimaalaus
+GenericName[fr]=Peinture numérique
+GenericName[nl]=Digitaal schilderen
+GenericName[x-test]=xxDigital Paintingxx
 MimeType=application/x-krita;image/openraster;application/x-krita-paintoppreset;
 Comment=Digital Painting
+Comment[en_GB]=Digital Painting
+Comment[fi]=Digitaalimaalaus
+Comment[fr]=Peinture numérique
+Comment[nl]=Digitaal schilderen
+Comment[x-test]=xxDigital Paintingxx
 Type=Application
 Icon=calligrakrita2
 Categories=Qt;KDE;Graphics;

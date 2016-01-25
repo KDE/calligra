@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=KSpread Applix Spreadsheet Import Filter
+Name[en_GB]=KSpread Applix Spreadsheet Import Filter
+Name[fi]=KSpreadin Applix-laskentataulukkotuontisuodatin
+Name[fr]=Filtre d'importation Applix Spreadsheet de KSpread
+Name[nl]=Applix Spreadsheet-importfilter voor KSpread
+Name[x-test]=xxKSpread Applix Spreadsheet Import Filterxx
 X-KDE-Export=application/x-kspread
 X-KDE-Import=application/x-applix-spreadsheet
 X-KDE-Weight=1

@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Sheets Solver Plugin
+Name[en_GB]=Sheets Solver Plugin
+Name[fr]=Module externe pour Sheets de solveur
+Name[nl]=Plug-in voor Sheet oplosser
+Name[x-test]=xxSheets Solver Pluginxx
 X-KDE-ServiceTypes=Sheets/ViewPlugin
 Type=Service
 X-KDE-Library=sheetssolver

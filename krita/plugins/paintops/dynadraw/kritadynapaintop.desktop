@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Dyna
+Name[en_GB]=Dyna
+Name[fi]=Dyna
+Name[fr]=Dyna
+Name[nl]=Dyna
+Name[x-test]=xxDynaxx
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritadynapaintop

@@ -1,8 +1,18 @@
 [Desktop Entry]
 Name=Flake tool definition
+Name[en_GB]=Flake tool definition
+Name[fi]=Flake-työkalun määrittely
+Name[fr]=Définition d'outil de flocon
+Name[nl]=Flake-gereedschapdefinitie
+Name[x-test]=xxFlake tool definitionxx
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Tool
 Comment=Definition of flake tools
+Comment[en_GB]=Definition of flake tools
+Comment[fi]=Flake-työkalujen määrittely
+Comment[fr]=Définition d'outil de flocon
+Comment[nl]=Definitie van flake-gereedschappen
+Comment[x-test]=xxDefinition of flake toolsxx
 [PropertyDef::X-Flake-MinVersion]
 Type=int
 [PropertyDef::X-Flake-PluginVersion]

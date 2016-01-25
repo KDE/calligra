@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Logic Functions
+Name[en_GB]=Logic Functions
+Name[fi]=Loogiset funktiot
+Name[fr]=Fonctions logiques
+Name[nl]=Logische functies
+Name[x-test]=xxLogic Functionsxx
 Comment=AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR
+Comment[en_GB]=AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR
+Comment[fi]=AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR
+Comment[fr]=AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR
+Comment[nl]=AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR
+Comment[x-test]=xxAND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XORxx
 Icon=funct
 Type=Service
 X-KDE-Library=kspreadlogicmodule

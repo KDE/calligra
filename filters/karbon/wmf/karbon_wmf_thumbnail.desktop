@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=WMF Images
+Name[en_GB]=WMF Images
+Name[fi]=WMF-kuvat
+Name[fr]=Images WMF
+Name[nl]=WMF-afbeeldingen
+Name[x-test]=xxWMF Imagesxx
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=image/x-wmf;

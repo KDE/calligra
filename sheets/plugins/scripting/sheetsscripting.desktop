@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Sheets Scripting Plugin
+Name[en_GB]=Sheets Scripting Plugin
+Name[fi]=Sheetsin komentojonoliitännäinen
+Name[fr]=Module externe pour Sheets de scriptage
+Name[nl]=Scriptplug-in van Sheets
+Name[x-test]=xxSheets Scripting Pluginxx
 X-KDE-ServiceTypes=Sheets/ViewPlugin
 Type=Service
 X-KDE-Library=krossmodulesheets

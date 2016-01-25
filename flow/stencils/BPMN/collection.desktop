@@ -1,3 +1,8 @@
 [Desktop Entry]
 Name=BPMN
+Name[en_GB]=BPMN
+Name[fi]=BPMN
+Name[fr]=BPMN
+Name[nl]=BPMN
+Name[x-test]=xxBPMNxx
 X-KDE-DirType=odg-collection

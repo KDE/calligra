@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=State Shape
+Name[en_GB]=State Shape
+Name[fi]=Tilamuoto
+Name[fr]=Forme statique
+Name[nl]=Statusvorm
+Name[x-test]=xxState Shapexx
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-PluginInfo-Name=stateshape

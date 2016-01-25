@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Jiggle and Wiggle
+Name[en_GB]=Jiggle and Wiggle
+Name[fi]=Keinuta ja keikuta
+Name[fr]=Secouer et frétiller
+Name[nl]=Bibberen en bewegen
+Name[x-test]=xxJiggle and Wigglexx
 Comment=Jiggle and Wiggle that Shape!
+Comment[en_GB]=Jiggle and Wiggle that Shape!
+Comment[fi]=Keinuta ja keikuta sitä hahmoa!
+Comment[fr]=Secouer et &rétiller cette forme ! 
+Comment[nl]=Bibber en beweeg die vorm!
+Comment[x-test]=xxJiggle and Wiggle that Shape!xx
 X-KDE-PluginInfo-Name=kpr_shapeanimation_example
 X-KDE-ServiceTypes=CalligraStage/ShapeAnimation
 Type=Service

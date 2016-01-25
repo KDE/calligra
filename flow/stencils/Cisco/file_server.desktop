@@ -1,2 +1,7 @@
 [Desktop Entry]
 Name=File Server
+Name[en_GB]=File Server
+Name[fi]=Tiedostopalvelin
+Name[fr]=Serveur de fichiers
+Name[nl]=Bestandsserver
+Name[x-test]=xxFile Serverxx

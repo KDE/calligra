@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=template_dslr
 Name=Canon_5Dmk3_5760x3840
+Name[en_GB]=Canon_5Dmk3_5760x3840
+Name[fi]=Canon 5Dmk3 5760 × 3840
+Name[fr]=Canon_5Dmk3_5760x3840
+Name[nl]=Canon_5Dmk3_5760x3840
+Name[x-test]=xxCanon_5Dmk3_5760x3840xx
 Type=Link
 URL[$e]=.source/Canon_5Dmk3_5760x3840.kra
 X-KDE-Hidden=false

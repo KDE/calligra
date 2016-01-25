@@ -1,7 +1,17 @@
 [Desktop Entry]
 Icon=curious_penguin
 Name=Curious Penguin
+Name[en_GB]=Curious Penguin
+Name[fi]=Utelias pingviini
+Name[fr]=Pingouin curieux
+Name[nl]=Nieuwsgierige penguin
+Name[x-test]=xxCurious Penguinxx
 Comment=Curious Penguin
+Comment[en_GB]=Curious Penguin
+Comment[fi]=Utelias pingviini
+Comment[fr]=Pingouin curieux
+Comment[nl]=Nieuwsgierige penguin
+Comment[x-test]=xxCurious Penguinxx
 Type=Link
 URL=.source/curious_penguin.otp
 X-KDE-Hidden=false

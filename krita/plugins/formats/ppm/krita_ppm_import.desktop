@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=
 Name=Krita PPM Import Filter
+Name[en_GB]=Krita PPM Import Filter
+Name[fi]=Kritan PDF-tuontisuodatin
+Name[fr]=Filtre d'importation PPM de Krita
+Name[nl]=PPM-importfilter voor Krita
+Name[x-test]=xxKrita PPM Import Filterxx
 X-KDE-ServiceTypes=Krita/FileFilter
 Type=Service
 X-KDE-Export=application/x-krita

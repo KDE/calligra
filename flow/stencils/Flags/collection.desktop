@@ -1,3 +1,8 @@
 [Desktop Entry]
 Name=Flags
+Name[en_GB]=Flags
+Name[fi]=Liput
+Name[fr]=Drapeaux
+Name[nl]=Vlaggen
+Name[x-test]=xxFlagsxx
 X-KDE-DirType=odg-collection

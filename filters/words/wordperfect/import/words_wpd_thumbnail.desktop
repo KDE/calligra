@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=WordPerfect Documents
+Name[en_GB]=WordPerfect Documents
+Name[fi]=WordPerfect-tiedostot
+Name[fr]=Documents WordPerfect
+Name[nl]=WordPerfect-documenten
+Name[x-test]=xxWordPerfect Documentsxx
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/vnd.wordperfect;

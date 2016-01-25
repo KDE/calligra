@@ -1,2 +1,7 @@
 [Desktop Entry]
 Name=File
+Name[en_GB]=File
+Name[fi]=Tiedosto
+Name[fr]=Fichier
+Name[nl]=Bestand
+Name[x-test]=xxFilexx

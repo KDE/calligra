@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=
 Name=Krita PPM Export Filter
+Name[en_GB]=Krita PPM Export Filter
+Name[fi]=Kritan BMP-vientisuodatin
+Name[fr]=Filtre d'exportation PPM de Krita
+Name[nl]=PPM-exportfilter voor Krita
+Name[x-test]=xxKrita PPM Export Filterxx
 X-KDE-ServiceTypes=Krita/FileFilter
 Type=Service
 X-KDE-Export=image/x-portable-pixmap,image/x-portable-graymap,image/x-portable-bitmap

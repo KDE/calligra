@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Calligra Stage Component
+Name[en_GB]=Calligra Stage Component
+Name[fi]=Calligra Stage -osa
+Name[fr]=Composant gestion de projets de Calligra
+Name[nl]=Component van Calligra Stage
+Name[x-test]=xxCalligra Stage Componentxx
 X-KDE-Library=calligrastagepart
 MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/x-kpresenter;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/vnd.openxmlformats-officedocument.presentationml.template;application/vnd.openxmlformats-officedocument.presentationml.slideshow;
 Type=Service

@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=OpenDocument Spreadsheets
+Name[en_GB]=OpenDocument Spreadsheets
+Name[fi]=OpenDocument-laskentataulukot
+Name[fr]=Tableurs OpenDocument
+Name[nl]=OpenDocument spreadsheets
+Name[x-test]=xxOpenDocument Spreadsheetsxx
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/vnd.oasis.opendocument.spreadsheet;application/vnd.oasis.opendocument.spreadsheet-template;

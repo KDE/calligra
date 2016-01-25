@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Music Shape
+Name[en_GB]=Music Shape
+Name[fi]=Musiikkimuoto
+Name[fr]=Forme musique
+Name[nl]=Muziekvorm
+Name[x-test]=xxMusic Shapexx
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-PluginInfo-Name=musicshape

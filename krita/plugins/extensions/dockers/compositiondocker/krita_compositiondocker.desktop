@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Composition Docker
+Name[en_GB]=Composition Docker
+Name[fr]=Panneau de composition
+Name[nl]=Vaszetter van compositie
+Name[x-test]=xxComposition Dockerxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritacompositiondocker

@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=LCMS Color Management Engine for Pigment
+Name[en_GB]=LCMS Colour Management Engine for Pigment
+Name[fr]=Application de gestion de couleurs LCMS pour pigment
+Name[nl]=LCMS Kleurbeheer-engine voor Pigment
+Name[x-test]=xxLCMS Color Management Engine for Pigmentxx
 X-KDE-ServiceTypes=Calligra/ColorSpace
 Type=Service
 X-KDE-PluginInfo-Name=kolcmsengine

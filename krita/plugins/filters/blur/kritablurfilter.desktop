@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=
 Name=Convolution Filters (Extension)
+Name[en_GB]=Convolution Filters (Extension)
+Name[fi]=Konvoluutiosuotimet (laajennus)
+Name[fr]=Filtres de convolution (extension)
+Name[nl]=Verdraaiïngsfilters (uitbreiding)
+Name[x-test]=xxConvolution Filters (Extension)xx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritablurfilter

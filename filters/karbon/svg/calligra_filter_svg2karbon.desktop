@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Karbon SVG Import Filter
+Name[en_GB]=Karbon SVG Import Filter
+Name[fi]=Karbonin SVG-tuontisuodatin
+Name[fr]=Filtre d'importation SVG de Karbon 14
+Name[nl]=SVG-importfilter voor Karbon
+Name[x-test]=xxKarbon SVG Import Filterxx
 X-KDE-Export=application/vnd.oasis.opendocument.graphics
 X-KDE-Import=image/svg+xml,image/svg+xml-compressed
 X-KDE-PluginInfo-Name=karbonsvgfilter

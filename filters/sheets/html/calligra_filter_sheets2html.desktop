@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=HTML Export Filter for KSpread
+Name[en_GB]=HTML Export Filter for KSpread
+Name[fi]=KSpreadin HTML-vientisuodatin
+Name[fr]=Filtre d'exportation HTML de KSpread
+Name[nl]=HTML-exportfilter voor KSpread
+Name[x-test]=xxHTML Export Filter for KSpreadxx
 X-KDE-Export=text/html
 X-KDE-Import=application/x-kspread
 X-KDE-Weight=50

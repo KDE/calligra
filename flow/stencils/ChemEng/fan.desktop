@@ -1,2 +1,7 @@
 [Desktop Entry]
 Name=fan
+Name[en_GB]=fan
+Name[fi]=tuuletin
+Name[fr]=flux
+Name[nl]=ventilator
+Name[x-test]=xxfanxx

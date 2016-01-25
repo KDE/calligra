@@ -1,7 +1,16 @@
 [Desktop Entry]
 Icon=skyline_morning
 Name=Skyline
+Name[en_GB]=Skyline
+Name[fi]=Taivaanranta
+Name[nl]=Horizon
+Name[x-test]=xxSkylinexx
 Comment=Skyline Morning
+Comment[en_GB]=Skyline Morning
+Comment[fi]=Aamuinen taivaanranta
+Comment[fr]=Horizon à l'aube
+Comment[nl]=Morgenhorizon
+Comment[x-test]=xxSkyline Morningxx
 Type=Link
 URL=.source/skyline_morning.otp
 X-KDE-Hidden=false

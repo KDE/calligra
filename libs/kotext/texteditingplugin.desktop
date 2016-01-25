@@ -1,8 +1,18 @@
 [Desktop Entry]
 Name=Text Editing plugin for the Calligra text tool
+Name[en_GB]=Text Editing plugin for the Calligra text tool
+Name[fi]=Tekstinmuokkausliitännäinen Calligran tekstityökalua varten
+Name[fr]=Module externe d'édition de texte pour l'outil texte de Calligra
+Name[nl]=Tekstbewerkingsplug-in voor het tekstgereedschap van Calligra
+Name[x-test]=xxText Editing plugin for the Calligra text toolxx
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Text-EditingPlugin
 Comment=Definition of a text-editing plugin
+Comment[en_GB]=Definition of a text-editing plugin
+Comment[fi]=Tekstinmuokkausliitännäisen määrittely
+Comment[fr]=Définition d'un module externe d'édition de texte
+Comment[nl]=Definitie van een tekstinvoerplug-in
+Comment[x-test]=xxDefinition of a text-editing pluginxx
 [PropertyDef::X-KoText-MinVersion]
 Type=int
 [PropertyDef::X-KoText-PluginVersion]

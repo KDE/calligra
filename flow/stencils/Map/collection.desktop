@@ -1,3 +1,8 @@
 [Desktop Entry]
 Name=Map
+Name[en_GB]=Map
+Name[fi]=Kartta
+Name[fr]=Carte
+Name[nl]=Kaart
+Name[x-test]=xxMapxx
 X-KDE-DirType=odg-collection

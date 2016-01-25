@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Plan KPlato Import Filter
+Name[en_GB]=Plan KPlato Import Filter
+Name[fi]=Planin KPlato-tuontisuodatin
+Name[fr]=Filtre d'importation KPlato de Plan
+Name[nl]=Plan importfilter voor KPlato
+Name[x-test]=xxPlan KPlato Import Filterxx
 X-KDE-Export=application/x-vnd.kde.plan
 X-KDE-Import=application/x-vnd.kde.kplato
 X-KDE-Weight=1

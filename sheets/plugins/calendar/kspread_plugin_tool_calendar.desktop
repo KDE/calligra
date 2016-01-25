@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Calendar Tool
+Name[en_GB]=Calendar Tool
+Name[fi]=Kalenterityökalu
+Name[fr]=Outil Calendrier
+Name[nl]=Kalenderhulpmiddel
+Name[x-test]=xxCalendar Toolxx
 Comment=Inserts a calendar into a cell range.
+Comment[en_GB]=Inserts a calendar into a cell range.
+Comment[fi]=Lisää kalenteri solualueelle.
+Comment[fr]=Insère un calendrier dans un intervalle de cellules
+Comment[nl]=Voeg een kalender in in een celreeks.
+Comment[x-test]=xxInserts a calendar into a cell range.xx
 Icon=office-calendar
 Type=Service
 X-KDE-Library=kspread_plugin_tool_calendar

@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Flow Visio Import Filter
+Name[en_GB]=Flow Visio Import Filter
+Name[fi]=Flow Visio -tuontisuodatin
+Name[fr]=Filtre d'importation de Visio pour Flow
+Name[nl]=Visio-importfilter voor Flow
+Name[x-test]=xxFlow Visio Import Filterxx
 X-KDE-Export=application/vnd.oasis.opendocument.graphics
 X-KDE-Import=application/vnd.visio
 X-KDE-Weight=1

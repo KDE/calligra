@@ -1,6 +1,10 @@
 [Desktop Entry]
 Type=Service
 Name=Words Wiki Export Filter
+Name[en_GB]=Words Wiki Export Filter
+Name[fi]=Wordsin Wiki-vientisuodatin
+Name[nl]=Wiki-exportfilter voor Words
+Name[x-test]=xxWords Wiki Export Filterxx
 X-KDE-Import=application/vnd.oasis.opendocument.text
 X-KDE-Export=text/wiki
 X-KDE-Weight=1

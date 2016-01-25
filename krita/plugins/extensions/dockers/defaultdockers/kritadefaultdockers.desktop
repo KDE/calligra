@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Default Dockers
+Name[en_GB]=Default Dockers
+Name[fi]=Oletustelakat
+Name[fr]=Panneaux par défaut
+Name[nl]=Standaard vastzetter
+Name[x-test]=xxDefault Dockersxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritadefaultdockers

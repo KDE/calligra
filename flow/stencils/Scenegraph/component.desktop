@@ -1,2 +1,6 @@
 [Desktop Entry]
 Name=component
+Name[en_GB]=component
+Name[fr]=Composant
+Name[nl]=component
+Name[x-test]=xxcomponentxx

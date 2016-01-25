@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Invert Filter
+Name[en_GB]=Invert Filter
+Name[fi]=Käänteissuodin
+Name[fr]=Filtre d'inversion
+Name[nl]=Inversefilter
+Name[x-test]=xxInvert Filterxx
 Comment=Invert the colors of an image
+Comment[en_GB]=Invert the colours of an image
+Comment[fi]=Kääntää kuvan värit vastakkaisiksi
+Comment[fr]=Inverse les couleurs de l'image
+Comment[nl]=Keert de kleuren van een afbeelding om
+Comment[x-test]=xxInvert the colors of an imagexx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaexample

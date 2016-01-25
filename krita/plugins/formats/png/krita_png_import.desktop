@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Krita PNG Import Filter
+Name[en_GB]=Krita PNG Import Filter
+Name[fi]=Kritan PNG-tuontisuodatin
+Name[fr]=Filtre d'importation PNG de Krita
+Name[nl]=PNG-importfilter voor Krita
+Name[x-test]=xxKrita PNG Import Filterxx
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/png
 X-KDE-Weight=1

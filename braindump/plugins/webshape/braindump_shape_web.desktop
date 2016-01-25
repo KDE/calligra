@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Web Shape
+Name[en_GB]=Web Shape
+Name[fi]=Webmuoto
+Name[fr]=Forme pour internet
+Name[nl]=Webvorm
+Name[x-test]=xxWeb Shapexx
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-PluginInfo-Name=webshape

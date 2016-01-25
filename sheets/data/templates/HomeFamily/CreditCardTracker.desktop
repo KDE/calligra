@@ -2,4 +2,9 @@
 Type=Link
 URL=.source/CreditCardTracker.kst
 Name=Credit Card Tracker
+Name[en_GB]=Credit Card Tracker
+Name[fi]=Luottokorttitapahtumien seuranta
+Name[fr]=Traqueur de carte de crédit
+Name[nl]=Creditkaart-programma
+Name[x-test]=xxCredit Card Trackerxx
 Icon=template_creditcardtracker

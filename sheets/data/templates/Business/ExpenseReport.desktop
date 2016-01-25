@@ -2,4 +2,9 @@
 Type=Link
 URL=.source/ExpenseReport.kst
 Name=Expense Report
+Name[en_GB]=Expense Report
+Name[fi]=Kuluraportti
+Name[fr]=Rapport des dépenses
+Name[nl]=Uitgavenrapport
+Name[x-test]=xxExpense Reportxx
 Icon=template_expensereport

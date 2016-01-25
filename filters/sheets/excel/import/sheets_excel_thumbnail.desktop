@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Microsoft Excel Spreadsheets
+Name[en_GB]=Microsoft Excel Spreadsheets
+Name[fi]=MIcrosoft Excel laskentataulukot
+Name[fr]=Tableurs Microsoft Excel
+Name[nl]=Microsoft Excel-spreadsheets
+Name[x-test]=xxMicrosoft Excel Spreadsheetsxx
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/vnd.ms-excel;

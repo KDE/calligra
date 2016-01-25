@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Krita PNG Export Filter
+Name[en_GB]=Krita PNG Export Filter
+Name[fi]=Kritan PNG-vientisuodatin
+Name[fr]=Filtre d'exportation PNG de Krita
+Name[nl]=PNG-exportfilter voor Krita
+Name[x-test]=xxKrita PNG Export Filterxx
 X-KDE-Export=image/png
 X-KDE-ServiceTypes=Krita/FileFilter
 Type=Service

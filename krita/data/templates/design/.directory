@@ -1,3 +1,8 @@
 [Desktop Entry]
 Name=Design Templates
+Name[en_GB]=Design Templates
+Name[fi]=Suunnittelupohjat
+Name[fr]=Modèles design
+Name[nl]=Design-sjablonen
+Name[x-test]=xxDesign Templatesxx
 X-KDE-DefaultTab=true

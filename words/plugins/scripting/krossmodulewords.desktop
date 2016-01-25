@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Scripting plugin
+Name[en_GB]=Scripting plugin
+Name[fi]=Komentojonoliitännäinen
+Name[fr]=Module de scriptage
+Name[nl]=Scriptplug-in
+Name[x-test]=xxScripting pluginxx
 Comment=Allow execution of scripts
+Comment[en_GB]=Allow execution of scripts
+Comment[fi]=Mahdollista komentojonojen suorittaminen
+Comment[fr]=Permet d'exécuter des scripts
+Comment[nl]=Hiermee kunnen scripts uitgevoerd worden
+Comment[x-test]=xxAllow execution of scriptsxx
 Type=Service
 X-KDE-Library=krossmodulewords
 X-KDE-Version=28

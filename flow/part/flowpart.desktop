@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Calligra Flowchart & Diagram Editing Component
+Name[en_GB]=Calligra Flowchart & Diagram Editing Component
+Name[fi]=Calligran kaavionpiirtämisosa
+Name[fr]=Composant conception de diagrammes et de tableaux de Calligra
+Name[nl]=Calligra-stroomdiagram & Bewerkingscomponent voor diagrammen
+Name[x-test]=xxCalligra Flowchart & Diagram Editing Componentxx
 X-KDE-Library=flowpart
 MimeType=application/vnd.oasis.opendocument.graphics;application/vnd.visio;
 Type=Service
@@ -9,4 +14,9 @@ X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.graphics
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.graphics-template
 Categories=Qt;KDE;Office;
 GenericName=Flowchart & Diagram
+GenericName[en_GB]=Flowchart & Diagram
+GenericName[fi]=Kaaviot
+GenericName[fr]=Diagramme et tableau
+GenericName[nl]=Stroomdiagrammen
+GenericName[x-test]=xxFlowchart & Diagramxx
 Icon=calligraflow

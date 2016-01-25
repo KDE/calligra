@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=SmallColorSelector
+Name[en_GB]=SmallColourSelector
+Name[fi]=Pieni värivalitsin
+Name[fr]=SélecteurPetiteCouleur
+Name[nl]=SmallColorSelector
+Name[x-test]=xxSmallColorSelectorxx
 Comment=SmallColorSelector
+Comment[en_GB]=SmallColourSelector
+Comment[fi]=Pieni värivalitsin
+Comment[fr]=Sélecteur-Petite-Couleur
+Comment[nl]=SmallColorSelector
+Comment[x-test]=xxSmallColorSelectorxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritasmallcolorselector

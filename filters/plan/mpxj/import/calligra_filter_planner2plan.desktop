@@ -1,6 +1,10 @@
 [Desktop Entry]
 Type=Service
 Name=Planner Import Filter
+Name[en_GB]=Planner Import Filter
+Name[fi]=Planner-tuontisuodatin
+Name[nl]=Importfilter voor Planner
+Name[x-test]=xxPlanner Import Filterxx
 X-KDE-Export=application/x-vnd.kde.plan
 X-KDE-Import=application/x-planner
 X-KDE-Weight=1

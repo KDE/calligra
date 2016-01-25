@@ -2,4 +2,9 @@
 Type=Link
 URL=.source/StudentIDCard.kst
 Name=Student ID Card
+Name[en_GB]=Student ID Card
+Name[fi]=Opiskelijakortti
+Name[fr]=Carte d'étudiant
+Name[nl]=Studentenkaart
+Name[x-test]=xxStudent ID Cardxx
 Icon=template_studentidcard

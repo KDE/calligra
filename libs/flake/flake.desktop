@@ -1,8 +1,18 @@
 [Desktop Entry]
 Name=Flake Plugin
+Name[en_GB]=Flake Plugin
+Name[fi]=Flake-liitännäinen
+Name[fr]=Module externe de flocons
+Name[nl]=Flake-plug-in
+Name[x-test]=xxFlake Pluginxx
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Flake
 Comment=A plugin that contains a set of a shape and a tool
+Comment[en_GB]=A plugin that contains a set of a shape and a tool
+Comment[fi]=Liitännäinen, joka sisältää muodon ja vastaavan työkalun
+Comment[fr]=Un module externe qui contient un ensemble de formes et un outil
+Comment[nl]=Een plug-in, die een aantal vormen en gereedschappen bevat
+Comment[x-test]=xxA plugin that contains a set of a shape and a toolxx
 [PropertyDef::X-Flake-MinVersion]
 Type=int
 [PropertyDef::X-Flake-PluginVersion]

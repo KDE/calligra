@@ -1,7 +1,17 @@
 [Desktop Entry]
 Icon=business
 Name=Business
+Name[en_GB]=Business
+Name[fi]=Bisnes
+Name[fr]=Affaires
+Name[nl]=Zakelijk
+Name[x-test]=xxBusinessxx
 Comment=Business
+Comment[en_GB]=Business
+Comment[fi]=Bisnes
+Comment[fr]=Affaires
+Comment[nl]=Zakelijk
+Comment[x-test]=xxBusinessxx
 Type=Link
 URL=.source/business.otp
 X-KDE-Hidden=false

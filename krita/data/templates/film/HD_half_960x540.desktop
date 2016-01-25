@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=template_film
 Name=HD_half_960x540
+Name[en_GB]=HD_half_960x540
+Name[fi]=HD half 960 × 540
+Name[fr]=HD_half_960x540
+Name[nl]=HD_half_960x540
+Name[x-test]=xxHD_half_960x540xx
 Type=Link
 URL[$e]=.source/HD_half_960x540.kra
 X-KDE-Hidden=false

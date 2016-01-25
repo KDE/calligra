@@ -1,2 +1,7 @@
 [Desktop Entry]
 Name=Service
+Name[en_GB]=Service
+Name[fi]=Palvelu
+Name[fr]=Service
+Name[nl]=Service
+Name[x-test]=xxServicexx

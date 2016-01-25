@@ -1,12 +1,25 @@
 [Desktop Entry]
 Name=Kexi
+Name[en_GB]=Kexi
+Name[fi]=Kexi
+Name[fr]=Kexi
+Name[nl]=Kexi
+Name[x-test]=xxKexixx
 Type=Application
 Exec=kexi
 Icon=calligrakexi
 MimeType=application/x-kexiproject-sqlite;application/x-kexiproject-shortcut;application/x-kexiproject-sqlite3;application/x-sqlite3;application/x-kexi-connectiondata;application/x-msaccess;
 Terminal=false
 GenericName=Database Creator
+GenericName[en_GB]=Database Creator
+GenericName[fi]=Tietokantojen luonti
+GenericName[nl]=Database aanmaken
+GenericName[x-test]=xxDatabase Creatorxx
 Comment=Develop desktop database applications
+Comment[en_GB]=Develop desktop database applications
+Comment[fi]=Kehitä tietokantasovelluksia
+Comment[nl]=Ontwikkel databasetoepassingen
+Comment[x-test]=xxDevelop desktop database applicationsxx
 X-KDE-ServiceTypes=Calligra/Application
 X-Calligra-DefaultMimeTypes=application/x-kexiproject-sqlite,application/x-kexiproject-shortcut,application/x-kexiproject-sqlite3,application/x-sqlite3,application/x-kexi-connectiondata,application/x-msaccess
 X-DocPath=kexi/index.html

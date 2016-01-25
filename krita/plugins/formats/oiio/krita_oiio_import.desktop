@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Krita OpenColorIO-based Import Filter
+Name[en_GB]=Krita OpenColorIO-based Import Filter
+Name[fi]=Kritan OpenColorIO-pohjainen tuontisuodatin
+Name[fr]=Filtre d'importation OpenColorIO de Krita
+Name[nl]=Op Krita OpenColorIO gebaseerd importfilter
+Name[x-test]=xxKrita OpenColorIO-based Import Filterxx
 X-KDE-Export=application/x-krita
 X-KDE-ServiceTypes=Krita/FileFilter
 Type=Service

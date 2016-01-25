@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Karbon EPS Import Filter
+Name[en_GB]=Karbon EPS Import Filter
+Name[fi]=Karbonin EPS-tuontisuodatin
+Name[fr]=Filtre d'importation EPS de Karbon
+Name[nl]=EPS-importfilter voor Karbon
+Name[x-test]=xxKarbon EPS Import Filterxx
 X-KDE-Export=image/svg+xml,application/illustrator
 X-KDE-Import=image/x-eps,image/eps,application/eps,application/x-eps,application/postscript
 X-KDE-Weight=1

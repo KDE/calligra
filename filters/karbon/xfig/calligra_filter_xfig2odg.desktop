@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Karbon XFig Import Filter
+Name[en_GB]=Karbon XFig Import Filter
+Name[fi]=Karbonin XFig-tuontisuodatin
+Name[fr]=Filtre d'importation XFig de Karbon
+Name[nl]=Xfig-importfilter voor Karbon
+Name[x-test]=xxKarbon XFig Import Filterxx
 X-KDE-Export=application/vnd.oasis.opendocument.graphics
 X-KDE-Import=image/x-xfig
 X-KDE-Weight=1

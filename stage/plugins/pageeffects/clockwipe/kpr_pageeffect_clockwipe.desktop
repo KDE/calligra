@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Clock wipe
+Name[en_GB]=Clock wipe
+Name[fi]=Kellopyyhkäisy
+Name[fr]=Effaceur d'horloge
+Name[nl]=Klokvegen
+Name[x-test]=xxClock wipexx
 Comment=Clock wipe Page Effects
+Comment[en_GB]=Clock wipe Page Effects
+Comment[fi]=Kellopyyhkäisy-sivutehoste
+Comment[fr]=Effet de page de l'effaceur d'horloge
+Comment[nl]=Klokvegen pagina-effecten
+Comment[x-test]=xxClock wipe Page Effectsxx
 X-KDE-PluginInfo-Name=kpr_pageeffect_clockwipe
 X-KDE-ServiceTypes=CalligraStage/PageEffect
 Type=Service

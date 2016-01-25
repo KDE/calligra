@@ -1,5 +1,8 @@
 [Desktop Entry]
 Name=Tangent Normal Brush
+Name[en_GB]=Tangent Normal Brush
+Name[nl]=Rakend normaal penseel
+Name[x-test]=xxTangent Normal Brushxx
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritatangentnormalpaintop

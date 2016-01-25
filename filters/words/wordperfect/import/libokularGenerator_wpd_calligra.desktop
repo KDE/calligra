@@ -1,7 +1,15 @@
 [Desktop Entry]
 Type=Service
 Name=WordPerfect Documents
+Name[en_GB]=WordPerfect Documents
+Name[fi]=WordPerfect-tiedostot
+Name[fr]=Documents WordPerfect
+Name[nl]=WordPerfect-documenten
+Name[x-test]=xxWordPerfect Documentsxx
 Comment=WPD for Okular
+Comment[en_GB]=WPD for Okular
+Comment[nl]=WPD voor Okular
+Comment[x-test]=xxWPD for Okularxx
 ServiceTypes=okular/Generator
 MimeType=application/vnd.wordperfect;
 X-KDE-Library=okularGenerator_odt

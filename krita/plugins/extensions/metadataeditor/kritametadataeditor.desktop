@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=metadataeditor
+Name[en_GB]=metadataeditor
+Name[fi]=metadatan muokkain
+Name[fr]=éditeur-données
+Name[nl]=Metagegevenseditor
+Name[x-test]=xxmetadataeditorxx
 Comment=metadataeditor
+Comment[en_GB]=metadataeditor
+Comment[fi]=metadatan muokkain
+Comment[fr]=éditeur-données
+Comment[nl]=Metagegevenseditor
+Comment[x-test]=xxmetadataeditorxx
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritametadataeditor

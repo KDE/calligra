@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=SpellCheck plugin
+Name[en_GB]=SpellCheck plugin
+Name[fi]=Oikolukuliitännäinen
+Name[fr]=Module externe de vérification d'orthographe
+Name[nl]=Spellingcontroleplug-in
+Name[x-test]=xxSpellCheck pluginxx
 X-KDE-ServiceTypes=Calligra/Text-EditingPlugin
 Type=Service
 X-KDE-PluginInfo-Name=spellcheck

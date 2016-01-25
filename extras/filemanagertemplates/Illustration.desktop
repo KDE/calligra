@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Illustration Document...
+Name[en_GB]=Illustration Document...
+Name[fi]=Illustrator-tiedosto
+Name[fr]=Document d'illustration...
+Name[nl]=Illustratiedocument...
+Name[x-test]=xxIllustration Document...xx
 Comment=New Karbon document:
+Comment[en_GB]=New Karbon document:
+Comment[fi]=Uusi Karbon-tiedosto:
+Comment[fr]=Nouveau document Karbon :
+Comment[nl]=Nieuw Karbon-document:
+Comment[x-test]=xxNew Karbon document:xx
 Type=Link
 URL=.source/Illustration.odg
 Icon=application-vnd.oasis.opendocument.graphics

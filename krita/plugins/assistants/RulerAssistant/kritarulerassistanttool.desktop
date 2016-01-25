@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=RulerAssistantTool
+Name[en_GB]=RulerAssistantTool
+Name[fr]=OutilAssistantRègle
+Name[nl]=Assistent voor liniaal
+Name[x-test]=xxRulerAssistantToolxx
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritarulerassistanttool

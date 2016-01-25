@@ -2,5 +2,10 @@
 Type=ServiceType
 X-KDE-ServiceType=Flow/Dock
 Comment=Docker for Flow
+Comment[en_GB]=Docker for Flow
+Comment[fi]=Flow-telakka
+Comment[fr]=Panneau pour Flow
+Comment[nl]=Vastzetten van Flow
+Comment[x-test]=xxDocker for Flowxx
 [PropertyDef::X-KDE-PluginInfo-Name]
 Type=QString

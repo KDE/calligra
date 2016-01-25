@@ -2,4 +2,9 @@
 Type=Link
 URL=.source/PackingSlip.kst
 Name=Packing Slip
+Name[en_GB]=Packing Slip
+Name[fi]=Pakkauslista
+Name[fr]=Bon de livraison
+Name[nl]=Pakbon
+Name[x-test]=xxPacking Slipxx
 Icon=template_packingslip

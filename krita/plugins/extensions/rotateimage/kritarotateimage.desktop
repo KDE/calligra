@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Rotate Image Plugin
+Name[en_GB]=Rotate Image Plugin
+Name[fi]=Kuvan kierrätysliitännäinen
+Name[fr]=Module de rotation d'images
+Name[nl]=Plug-in voor afbeeldingrotatie
+Name[x-test]=xxRotate Image Pluginxx
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritarotateimage

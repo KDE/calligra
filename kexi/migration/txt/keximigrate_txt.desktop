@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=TSV
+Name[en_GB]=TSV
+Name[fi]=TSV
+Name[fr]=TSV
+Name[nl]=TSV
+Name[x-test]=xxTSVxx
 Comment="Tab Separated Values" Document Import Plugin for Kexi
+Comment[en_GB]="Tab Separated Values" Document Import Plugin for Kexi
+Comment[fi]=”Sarkaimin eroteltujen arvojen” (TSV) tiedostojen tuontiliitännäinen Kexille
+Comment[fr]=Module d'importation de document «séparations par tabulation» pour Kexi
+Comment[nl]="Tab Separated Values" Import-plug-in van document voor Kexi
+Comment[x-test]=xx"Tab Separated Values" Document Import Plugin for Kexixx
 X-KDE-Library=keximigrate_txt
 X-KDE-ServiceTypes=Kexi/MigrationDriver
 Type=Service

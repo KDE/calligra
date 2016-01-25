@@ -2,7 +2,16 @@
 Type=Service
 ServiceTypes=Kexi/Handler
 GenericName=Reports
+GenericName[en_GB]=Reports
+GenericName[fi]=Raportit
+GenericName[nl]=Rapporten
+GenericName[x-test]=xxReportsxx
 Name=Report
+Name[en_GB]=Report
+Name[fi]=Raportti
+Name[fr]=Rapport
+Name[nl]=Rapport
+Name[x-test]=xxReportxx
 X-KDE-Library=kexihandler_report
 X-KDE-ParentApp=kexi
 X-Kexi-PartVersion=2

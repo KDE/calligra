@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Words Applixword Import Filter
+Name[en_GB]=Words Applixword Import Filter
+Name[fi]=Wordsin Applixword-tuontisuodatin
+Name[fr]=Filtre d'importation Applix Word de Words
+Name[nl]=Applixword-importfilter voor Words
+Name[x-test]=xxWords Applixword Import Filterxx
 X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=application/x-applix-word
 X-KDE-Weight=1

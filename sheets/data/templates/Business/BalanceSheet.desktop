@@ -2,4 +2,9 @@
 Type=Link
 URL=.source/BalanceSheet.kst
 Name=Balance Sheet
+Name[en_GB]=Balance Sheet
+Name[fi]=Taselaskelma
+Name[fr]=Feuille balance comptable
+Name[nl]=Balans-werkblad
+Name[x-test]=xxBalance Sheetxx
 Icon=template_balancesheet

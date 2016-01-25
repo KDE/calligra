@@ -3,7 +3,16 @@ Type=Service
 X-KDE-ServiceTypes=Kexi/Handler
 
 GenericName=Forms
+GenericName[en_GB]=Forms
+GenericName[fi]=Lomakkeet
+GenericName[nl]=Formulieren
+GenericName[x-test]=xxFormsxx
 Name=Form
+Name[en_GB]=Form
+Name[fi]=Lomake
+Name[fr]=Formulaire
+Name[nl]=Formulier
+Name[x-test]=xxFormxx
 X-KDE-Library=kexihandler_form
 X-KDE-ParentApp=kexi
 X-Kexi-PartVersion=2

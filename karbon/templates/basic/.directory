@@ -1,3 +1,8 @@
 [Desktop Entry]
 Name=Basic
+Name[en_GB]=Basic
+Name[fi]=Yksinkertainen
+Name[fr]=Basique
+Name[nl]=Basis
+Name[x-test]=xxBasicxx
 X-KDE-DefaultTab=true

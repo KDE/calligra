@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=RTF Documents
+Name[en_GB]=RTF Documents
+Name[fi]=RTF-tiedostot
+Name[fr]=Documents RTF
+Name[nl]=RTF-documenten
+Name[x-test]=xxRTF Documentsxx
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/rtf;

@@ -1,7 +1,13 @@
 [Desktop Entry]
 Type=Service
 Name=OpenDocument Text Document
+Name[en_GB]=OpenDocument Text Document
+Name[nl]=OpenDocument tekstdocument
+Name[x-test]=xxOpenDocument Text Documentxx
 Comment=Odt for okular
+Comment[en_GB]=Odt for okular
+Comment[nl]=Odt voor okular
+Comment[x-test]=xxOdt for okularxx
 ServiceTypes=okular/Generator
 MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;
 X-KDE-Library=okularGenerator_odt

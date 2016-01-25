@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=
 Name=Filter Effects
+Name[en_GB]=Filter Effects
+Name[fi]=Suodintehosteet
+Name[fr]=Effets de filtrage
+Name[nl]=Filtereffecten
+Name[x-test]=xxFilter Effectsxx
 X-KDE-ServiceTypes=Calligra/FilterEffect
 Type=Service
 X-KDE-PluginInfo-Name=karbonfiltereffects

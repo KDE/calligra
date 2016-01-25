@@ -1,4 +1,9 @@
 [Desktop Entry]
 Name=Blank Documents
+Name[en_GB]=Blank Documents
+Name[fi]=Tyhjät tiedostot
+Name[fr]=Documents vides
+Name[nl]=Leeg document
+Name[x-test]=xxBlank Documentsxx
 X-KDE-DefaultTab=true
 X-KDE-SortingWeight=10

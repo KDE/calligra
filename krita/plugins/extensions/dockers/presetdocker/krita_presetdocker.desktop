@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Preset Docker
+Name[en_GB]=Preset Docker
+Name[fi]=Esiasetustelakka
+Name[fr]=Panneau prédéfini
+Name[nl]=Vastzetter voor voorinstelling
+Name[x-test]=xxPreset Dockerxx
 Comment=Docker for selecting presets
+Comment[en_GB]=Docker for selecting presets
+Comment[fi]=Telakka esiasetusten valitsemiseen
+Comment[fr]=Panneau de choix prédéfinis
+Comment[nl]=Vastzetter voor geselecteerde voorinstellingen
+Comment[x-test]=xxDocker for selecting presetsxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritapresetdocker

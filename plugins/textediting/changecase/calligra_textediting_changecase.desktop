@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Change case plugin
+Name[en_GB]=Change case plugin
+Name[fi]=Aakkossarjan vaihtamisen liitännäinen
+Name[fr]=Module externe de changement de casse
+Name[nl]=Hoofd-/kleine lettersplug-in
+Name[x-test]=xxChange case pluginxx
 X-KDE-ServiceTypes=Calligra/Text-EditingPlugin
 Type=Service
 X-KDE-PluginInfo-Name=changecase

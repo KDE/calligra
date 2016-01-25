@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=KPresenter Presentations
+Name[en_GB]=KPresenter Presentations
+Name[fi]=KPresenter-esitykset
+Name[fr]=Présentation KPresenter
+Name[nl]=KPresenter-presentatie
+Name[x-test]=xxKPresenter Presentationsxx
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/x-kpresenter;

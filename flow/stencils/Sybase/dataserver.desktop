@@ -1,2 +1,6 @@
 [Desktop Entry]
 Name=Dataserver
+Name[en_GB]=Dataserver
+Name[fr]=serveur de base de données
+Name[nl]=Dataserver
+Name[x-test]=xxDataserverxx

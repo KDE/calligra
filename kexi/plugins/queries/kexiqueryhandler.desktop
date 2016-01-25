@@ -3,7 +3,16 @@ Type=Service
 X-KDE-ServiceTypes=Kexi/Handler
 
 GenericName=Queries
+GenericName[en_GB]=Queries
+GenericName[fi]=Kyselyt
+GenericName[nl]=Queries
+GenericName[x-test]=xxQueriesxx
 Name=Query
+Name[en_GB]=Query
+Name[fi]=Kysely
+Name[fr]=Requête
+Name[nl]=Query
+Name[x-test]=xxQueryxx
 X-KDE-Library=kexihandler_query
 X-KDE-ParentApp=kexi
 X-Kexi-PartVersion=2

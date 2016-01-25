@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Convolution Filters
+Name[en_GB]=Convolution Filters
+Name[fi]=Konvoluutiosuotimet
+Name[fr]=Filtres de convolution
+Name[nl]=Verdraaïngs
+Name[x-test]=xxConvolution Filtersxx
 Comment=Convolution filters
+Comment[en_GB]=Convolution filters
+Comment[fi]=Konvoluutiosuotimet
+Comment[fr]=Filtres de déformations
+Comment[nl]=Verdraaiingsfilters
+Comment[x-test]=xxConvolution filtersxx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaconvolutionfilters

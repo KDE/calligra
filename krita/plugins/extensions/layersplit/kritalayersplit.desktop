@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Layer Splitter
+Name[en_GB]=Layer Splitter
+Name[fi]=Tason jakaja
+Name[nl]=Splitser van lagen
+Name[x-test]=xxLayer Splitterxx
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritalayersplit

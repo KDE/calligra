@@ -1,8 +1,16 @@
 [Desktop Entry]
 Name=Presentation Event Action Plugin
+Name[en_GB]=Presentation Event Action Plugin
+Name[fr]=Module externe d'action de présentation d'évènement
+Name[nl]=Plug-in voor actie na presentatie-event
+Name[x-test]=xxPresentation Event Action Pluginxx
 Type=ServiceType
 X-KDE-ServiceType=Calligra/PresentationEventAction
 Comment=A plugin that contains a presentation event action
+Comment[en_GB]=A plugin that contains a presentation event action
+Comment[fr]=Module externe contenant une action de présentation d'évènement
+Comment[nl]=Een plug-in met een actie voor een presentatie-event
+Comment[x-test]=xxA plugin that contains a presentation event actionxx
 [PropertyDef::X-PresentationEventAction-MinVersion]
 Type=int
 [PropertyDef::X-PresentationEventAction-PluginVersion]

@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=DigitalMixer
+Name[en_GB]=DigitalMixer
+Name[fi]=Digitaalinen värisekoitin
+Name[fr]=Mélangeur-Digital
+Name[nl]=DigitalMixer
+Name[x-test]=xxDigitalMixerxx
 Comment=DigitalMixer
+Comment[en_GB]=DigitalMixer
+Comment[fi]=Digitaalinen värisekoitin
+Comment[fr]=Mélangeur-Digital
+Comment[nl]=DigitalMixer
+Comment[x-test]=xxDigitalMixerxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritadigitalmixer

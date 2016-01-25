@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Calligra Scalable Graphics Component
+Name[en_GB]=Calligra Scalable Graphics Component
+Name[fi]=Calligran vektorigrafiikkakomponentti
+Name[fr]=Composant graphiques vectoriels de Calligra
+Name[nl]=Vectorafbeeldingencomponent voor Calligra
+Name[x-test]=xxCalligra Scalable Graphics Componentxx
 X-KDE-Library=karbonpart
 MimeType=application/x-karbon;image/x-eps;application/postscript;application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-template;image/x-xfig;
 # kghostview has 6 for application/postscript, we need to be under that...
@@ -10,4 +15,9 @@ X-KDE-NativeMimeType=application/vnd.oasis.opendocument.graphics
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.graphics
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.graphics,application/vnd.oasis.opendocument.graphics-template
 GenericName=Scalable Graphics
+GenericName[en_GB]=Scalable Graphics
+GenericName[fi]=Skaalautuva grafiikka
+GenericName[fr]=Graphiques vectoriels
+GenericName[nl]=Vectorafbeeldingen
+GenericName[x-test]=xxScalable Graphicsxx
 Icon=calligrakarbon

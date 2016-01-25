@@ -4,4 +4,12 @@ Type=Service
 X-KDE-Library=kplatorcpsscheduler
 
 Name=RCPS Scheduler
+Name[en_GB]=RCPS Scheduler
+Name[fr]=Programe RCPS
+Name[nl]=RCPS-planner
+Name[x-test]=xxRCPS Schedulerxx
 Comment=Genetics based Resource Constrained Project Scheduler
+Comment[en_GB]=Genetics based Resource Constrained Project Scheduler
+Comment[fr]=La génétique fondée sur les conflits de ressource de la programmation du projet
+Comment[nl]=Op genetica gebaseerde projectplanner voor hulpbronvoorwaarden
+Comment[x-test]=xxGenetics based Resource Constrained Project Schedulerxx

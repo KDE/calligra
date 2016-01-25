@@ -1,3 +1,8 @@
 [Desktop Entry]
 Name=Electronic
+Name[en_GB]=Electronic
+Name[fi]=Elektroniikka
+Name[fr]=Électronique
+Name[nl]=Elektronisch
+Name[x-test]=xxElectronicxx
 X-KDE-DirType=odg-collection

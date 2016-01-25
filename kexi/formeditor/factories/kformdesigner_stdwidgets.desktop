@@ -3,6 +3,10 @@ Type=Service
 X-KDE-ServiceTypes=Kexi/WidgetFactory
 
 Name=Basic Widgets
+Name[en_GB]=Basic Widgets
+Name[fi]=Yleiset elementit
+Name[nl]=Basiswidgets
+Name[x-test]=xxBasic Widgetsxx
 
 X-KDE-Library=kformdesigner_stdwidgets
 X-KFormDesigner-FactoryGroup=

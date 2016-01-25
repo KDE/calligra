@@ -1,8 +1,16 @@
 [Desktop Entry]
 Type=Application
 Name=Calligra Gemini
+Name[en_GB]=Calligra Gemini
+Name[fi]=Calligra Gemini
+Name[nl]=Calligra Gemini
+Name[x-test]=xxCalligra Geminixx
 Version=1.0
 GenericName=Word Processing and Presentation
+GenericName[en_GB]=Word Processing and Presentation
+GenericName[fi]=Tekstinkäsittely ja esitykset
+GenericName[nl]=Tekstverwerking en presentatie
+GenericName[x-test]=xxWord Processing and Presentationxx
 Exec=calligragemini %u
 Icon=calligragemini
 MimeType=application/vnd.oasis.opendocument.text-master;application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/msword;application/rtf;application/x-mswrite;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.wordprocessingml.template;application/vnd.ms-works;application/vnd.wordperfect;application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/x-kpresenter;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/vnd.openxmlformats-officedocument.presentationml.template;

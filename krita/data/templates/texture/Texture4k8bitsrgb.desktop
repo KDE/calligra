@@ -1,6 +1,10 @@
 [Desktop Entry]
 Icon=template_texture
 Name=Texture 4k 8bit srgb
+Name[en_GB]=Texture 4k 8bit srgb
+Name[fr]=Texture 4k 8bit srgb
+Name[nl]=Textuur 4k 8bit srgb
+Name[x-test]=xxTexture 4k 8bit srgbxx
 Type=Link
 URL[$e]=.source/Texture4k8bitsrgb.kra
 X-KDE-Hidden=false

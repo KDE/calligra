@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Words WordPerfect Import Filter
+Name[en_GB]=Words WordPerfect Import Filter
+Name[fi]=Wordsin WordPerfect-tuontisuodatin
+Name[fr]=Filtre d'importation WordPerfect de Words
+Name[nl]=WordPerfect-importfilter voor Words
+Name[x-test]=xxWords WordPerfect Import Filterxx
 X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=application/vnd.wordperfect
 X-KDE-Weight=1

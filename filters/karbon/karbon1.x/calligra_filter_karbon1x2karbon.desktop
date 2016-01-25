@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Karbon 1.x Import Filter
+Name[en_GB]=Karbon 1.x Import Filter
+Name[fi]=Karbon 1.x -tuontisuodatin
+Name[fr]=Filtre d'importation de Karbon 1.x
+Name[nl]=1.x-importfilter voor Karbon
+Name[x-test]=xxKarbon 1.x Import Filterxx
 X-KDE-Export=image/svg+xml
 X-KDE-Import=application/x-karbon
 X-KDE-Weight=1

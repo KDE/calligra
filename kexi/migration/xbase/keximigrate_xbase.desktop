@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=xBase
+Name[en_GB]=xBase
+Name[fi]=xBase
+Name[fr]=xBase
+Name[nl]=xBase
+Name[x-test]=xxxBasexx
 Comment=xBase Import Plugin for Kexi
+Comment[en_GB]=xBase Import Plugin for Kexi
+Comment[fi]=xBase-tuontiliitännäinen Kexille
+Comment[fr]=Module d'importation xBase pour Kexi
+Comment[nl]=xBase-importplugin voor Kexi
+Comment[x-test]=xxxBase Import Plugin for Kexixx
 X-KDE-Library=keximigrate_xbase
 X-KDE-ServiceTypes=Kexi/MigrationDriver
 Type=Service

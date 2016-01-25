@@ -1,10 +1,20 @@
 [Desktop Entry]
 Icon=
 Name=Thesaurus Tool
+Name[en_GB]=Thesaurus Tool
+Name[fi]=Synonyymisanakirjatyökalu
+Name[fr]=Outil de thésaurus
+Name[nl]=Thesaurus hulpprogramma
+Name[x-test]=xxThesaurus Toolxx
 X-KDE-Library=calligra_textediting_thesaurus
 Type=Service
 Commands=thesaurus
 Comment=Show Related Words
+Comment[en_GB]=Show Related Words
+Comment[fi]=Näytä samankaltaiset sanat
+Comment[fr]=Afficher les mots liés
+Comment[nl]=Toon gerelateerde woorden
+Comment[x-test]=xxShow Related Wordsxx
 X-KDE-PluginInfo-Name=thesaurustool
 X-KoText-MinVersion=28
 X-KoText-PluginVersion=28

@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Krita BMP Export Filter
+Name[en_GB]=Krita BMP Export Filter
+Name[fi]=Kritan BMP-vientisuodatin
+Name[fr]=Filtre d'exportation BMP de Krita
+Name[nl]=BMP-exportfilter voor Krita
+Name[x-test]=xxKrita BMP Export Filterxx
 X-KDE-Export=image/bmp,image/x-xpixmap,image/x-xbitmap,image/vnd.microsoft.icon,image/webp
 X-KDE-ServiceTypes=Krita/FileFilter
 Type=Service

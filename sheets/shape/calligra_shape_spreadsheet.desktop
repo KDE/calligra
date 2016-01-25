@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Spreadsheet Shape
+Name[en_GB]=Spreadsheet Shape
+Name[fi]=Laskentataulukkomuoto
+Name[fr]=Forme pour tableur
+Name[nl]=Rekenblad-vorm
+Name[x-test]=xxSpreadsheet Shapexx
 X-KDE-PluginInfo-Name=spreadsheetshape
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service

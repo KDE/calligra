@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=template_film
 Name=HD_full_1920x1080
+Name[en_GB]=HD_full_1920x1080
+Name[fi]=HD full 1920 × 1080
+Name[fr]=HD_full_1920x1080
+Name[nl]=HD_full_1920x1080
+Name[x-test]=xxHD_full_1920x1080xx
 Type=Link
 URL[$e]=.source/HD_full_1920x1080.kra
 X-KDE-Hidden=false

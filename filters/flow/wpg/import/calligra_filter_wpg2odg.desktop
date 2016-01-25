@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Flow WPG Import Filter
+Name[en_GB]=Flow WPG Import Filter
+Name[fi]=Flow’n WPG-tuontisuodatin
+Name[fr]=Filtre d'importation WPG
+Name[nl]=WPG-importfilter voor Flow
+Name[x-test]=xxFlow WPG Import Filterxx
 X-KDE-Export=application/vnd.oasis.opendocument.graphics
 X-KDE-Import=application/x-wpg
 X-KDE-Weight=1

@@ -1,7 +1,17 @@
 [Desktop Entry]
 Icon=blue_orange_vector
 Name=Blue Orange Vector
+Name[en_GB]=Blue Orange Vector
+Name[fi]=Sinioranssi vektoritausta
+Name[fr]=Vecteur bleu-orange
+Name[nl]=Bauw-oranje vector
+Name[x-test]=xxBlue Orange Vectorxx
 Comment=Blue Orange Vector
+Comment[en_GB]=Blue Orange Vector
+Comment[fi]=Sinioranssi vektoritausta
+Comment[fr]=Vecteur bleu-orange
+Comment[nl]=Bauw-oranje vector
+Comment[x-test]=xxBlue Orange Vectorxx
 Type=Link
 URL=.source/blue_orange_vector.otp
 X-KDE-Hidden=false

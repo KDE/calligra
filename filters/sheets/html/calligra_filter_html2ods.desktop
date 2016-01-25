@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=HTML Import Filter for KSpread
+Name[en_GB]=HTML Import Filter for KSpread
+Name[fi]=KSpreadin HTML-tuontisuodatin
+Name[fr]=Filtre d'importation HTML pour KSpread
+Name[nl]=HTML-importfilter voor KSpread
+Name[x-test]=xxHTML Import Filter for KSpreadxx
 X-KDE-Export=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-Import=text/html
 X-KDE-Weight=50

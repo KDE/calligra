@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Page Application Background Tool
+Name[en_GB]=Page Application Background Tool
+Name[fr]=Outil de page d'application en arrière-plan
+Name[nl]=Hulpmiddel voor de achtergrond van een pagina-applicatie
+Name[x-test]=xxPage Application Background Toolxx
 X-KDE-ServiceTypes=CalligraPageApp/Tool
 Type=Service
 X-KDE-PluginInfo-Name=kopabackgroundtool

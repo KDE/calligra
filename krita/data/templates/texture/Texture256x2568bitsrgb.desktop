@@ -1,6 +1,10 @@
 [Desktop Entry]
 Icon=template_texture
 Name=Texture 256x256 8bit srgb
+Name[en_GB]=Texture 256x256 8bit srgb
+Name[fr]=Texture 256x256 8bit srgb
+Name[nl]=Textuur 256x256 8bit srgb
+Name[x-test]=xxTexture 256x256 8bit srgbxx
 Type=Link
 URL[$e]=.source/Texture256x2568bitsrgb.kra
 X-KDE-Hidden=false

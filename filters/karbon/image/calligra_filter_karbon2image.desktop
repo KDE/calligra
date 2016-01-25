@@ -1,6 +1,10 @@
 [Desktop Entry]
 Type=Service
 Name=Karbon JPEG/PNG Export Filter
+Name[en_GB]=Karbon JPEG/PNG Export Filter
+Name[fi]=Karbonin JPEG/PNG-vientisuodatin
+Name[nl]=JPEG/PNG-exportfilter voor Karbon
+Name[x-test]=xxKarbon JPEG/PNG Export Filterxx
 X-KDE-ServiceTypes=Calligra/Filter
 X-KDE-Export=image/jpeg,image/png
 X-KDE-Import=application/vnd.oasis.opendocument.graphics

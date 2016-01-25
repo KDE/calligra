@@ -2,5 +2,10 @@
 Type=ServiceType
 X-KDE-ServiceType=CalligraSheets/Plugin
 Comment=Plugin for Calligra Sheets
+Comment[en_GB]=Plugin for Calligra Sheets
+Comment[fi]=Calligra Sheetsin liitännäinen
+Comment[fr]=Module pour Calligra Tables
+Comment[nl]=Plug-in voor Calligra Sheets
+Comment[x-test]=xxPlugin for Calligra Sheetsxx
 [PropertyDef::X-CalligraSheets-InterfaceVersion]
 Type=int

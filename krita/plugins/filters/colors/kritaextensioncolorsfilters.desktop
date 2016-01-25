@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=
 Name=Color Filters (Extension)
+Name[en_GB]=Colour Filters (Extension)
+Name[fi]=Värisuotimet (laajennus)
+Name[fr]=Filtres de couleurs (extension)
+Name[nl]=Kleurfilters (extensie)
+Name[x-test]=xxColor Filters (Extension)xx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaextensioncolorsfilters

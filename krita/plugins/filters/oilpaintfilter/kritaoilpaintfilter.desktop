@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Oilpaint Filter
+Name[en_GB]=Oilpaint Filter
+Name[fi]=Öljyvärisuodin
+Name[fr]=Filtre de peinture à l'huile
+Name[nl]=Olieverffilter
+Name[x-test]=xxOilpaint Filterxx
 Comment=Oilpaint filter
+Comment[en_GB]=Oilpaint filter
+Comment[fi]=Öljyvärisuodin
+Comment[fr]=Filtre peinture à l'huile
+Comment[nl]=Olieverffilter
+Comment[x-test]=xxOilpaint filterxx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaoilpaintfilter

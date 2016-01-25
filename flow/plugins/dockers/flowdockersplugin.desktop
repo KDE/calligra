@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Flow Dockers plugin
+Name[en_GB]=Flow Dockers plugin
+Name[fi]=Flow’n telakkaliitännäinen
+Name[nl]=Vastzetterplug-in voor Flow
+Name[x-test]=xxFlow Dockers pluginxx
 X-KDE-ServiceTypes=Flow/Dock
 Type=Service
 X-KDE-PluginInfo-Name=flowdockersplugin

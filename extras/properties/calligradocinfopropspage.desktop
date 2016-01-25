@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Calligra Document Info Properties Page
+Name[en_GB]=Calligra Document Info Properties Page
+Name[fi]=Calligra-tiedoston tietosivu
+Name[fr]=Page des propriétés d'un document Calligra
+Name[nl]=Document-info-eigenschappen-pagina van Calligra
+Name[x-test]=xxCalligra Document Info Properties Pagexx
 X-KDE-Library=calligradocinfopropspage
 X-KDE-ServiceTypes=KPropertiesDialog/Plugin
 X-KDE-Protocol=file

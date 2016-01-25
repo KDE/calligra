@@ -1,6 +1,12 @@
 [Desktop Entry]
 Name=Normalize Filter
+Name[en_GB]=Normalise Filter
+Name[nl]=Normalisatiefilter
+Name[x-test]=xxNormalize Filterxx
 Comment=Normalize the color channels.
+Comment[en_GB]=Normalise the colour channels.
+Comment[nl]=De kleurkanalen normaliseren.
+Comment[x-test]=xxNormalize the color channels.xx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritanormalize

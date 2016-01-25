@@ -1,6 +1,15 @@
 [Desktop Entry]
 Name=Lut Docker
+Name[en_GB]=Lut Docker
+Name[fi]=Lut-telakka
+Name[fr]=Panneau lut
+Name[nl]=Lut-vastzetter
+Name[x-test]=xxLut Dockerxx
 Comment=Docker for selecting luts
+Comment[en_GB]=Docker for selecting luts
+Comment[fr]=Panneau de sélection des luts
+Comment[nl]=Vastzetter voor selecteren luts
+Comment[x-test]=xxDocker for selecting lutsxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritalutdocker

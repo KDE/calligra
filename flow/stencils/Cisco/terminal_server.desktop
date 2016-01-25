@@ -1,2 +1,7 @@
 [Desktop Entry]
 Name=Terminal Server
+Name[en_GB]=Terminal Server
+Name[fi]=Päätepalvelin
+Name[fr]=Terminal Server
+Name[nl]=Terminal-server
+Name[x-test]=xxTerminal Serverxx

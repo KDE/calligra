@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Sobel Filter
+Name[en_GB]=Sobel Filter
+Name[fi]=Sobel-suodatin
+Name[fr]=Filtre de Sobel
+Name[nl]=Sobelfilter
+Name[x-test]=xxSobel Filterxx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritasobelfilter

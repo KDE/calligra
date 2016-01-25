@@ -1,7 +1,16 @@
 [Desktop Entry]
 Icon=skyline_night_wide
 Name=Skyline Wide
+Name[en_GB]=Skyline Wide
+Name[fi]=Taivaanranta, leveä
+Name[nl]=Brede horizon
+Name[x-test]=xxSkyline Widexx
 Comment=Skyline Night Wide
+Comment[en_GB]=Skyline Night Wide
+Comment[fi]=Öinen taivaanranta, leveä
+Comment[fr]=Horizon nocturne élargi
+Comment[nl]=Brede nachthorizon
+Comment[x-test]=xxSkyline Night Widexx
 Type=Link
 URL=.source/skyline_night_wide.otp
 X-KDE-Hidden=false

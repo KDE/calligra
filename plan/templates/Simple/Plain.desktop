@@ -2,4 +2,9 @@
 Type=Link
 URL=.source/Plain.plant
 Name=Plain
+Name[en_GB]=Plain
+Name[fi]=Pelkistetty
+Name[fr]=Brut
+Name[nl]=Normaal
+Name[x-test]=xxPlainxx
 Icon=template_timechart

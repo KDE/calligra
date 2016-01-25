@@ -1,8 +1,18 @@
 [Desktop Entry]
 Name=Flake device definition
+Name[en_GB]=Flake device definition
+Name[fi]=Flake-laitteiden määrittely
+Name[fr]=Définition d'outil de flocon
+Name[nl]=Flake-apparaatdefinitie
+Name[x-test]=xxFlake device definitionxx
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Device
 Comment=Definition of flake devices
+Comment[en_GB]=Definition of flake devices
+Comment[fi]=Flake-laitteiden määrittely
+Comment[fr]=Définition de dispositifs de flocons
+Comment[nl]=Definitie van flake-apparaat
+Comment[x-test]=xxDefinition of flake devicesxx
 [PropertyDef::X-Flake-MinVersion]
 Type=int
 [PropertyDef::X-Flake-PluginVersion]

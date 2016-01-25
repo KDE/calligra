@@ -5,6 +5,9 @@ Type=Service
 X-KDE-ServiceTypes=Kexi/WidgetFactory
 
 Name=Web Browser Plugin for Kexi Forms
+Name[en_GB]=Web Browser Plugin for Kexi Forms
+Name[nl]=Webbrowserplugin voor Kexi-formulieren
+Name[x-test]=xxWeb Browser Plugin for Kexi Formsxx
 
 
 X-KDE-Library=kformdesigner_webbrowser

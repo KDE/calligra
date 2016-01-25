@@ -1,2 +1,6 @@
 [Desktop Entry]
 Name=field
+Name[en_GB]=field
+Name[fr]=champ
+Name[nl]=veld
+Name[x-test]=xxfieldxx

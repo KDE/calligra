@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Colorrange
+Name[en_GB]=Colourrange
+Name[fi]=Värialue
+Name[fr]=Plage de couleurs
+Name[nl]=Kleurbereik
+Name[x-test]=xxColorrangexx
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritacolorrange

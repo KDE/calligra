@@ -2,7 +2,17 @@
 Version=1.0
 Type=Application
 GenericName=Digital Painting
+GenericName[en_GB]=Digital Painting
+GenericName[fi]=Digitaalimaalaus
+GenericName[fr]=Peinture numérique
+GenericName[nl]=Digitaal schilderen
+GenericName[x-test]=xxDigital Paintingxx
 Name=Krita Gemini
+Name[en_GB]=Krita Gemini
+Name[fi]=Krita Gemini
+Name[fr]=Krita Gemini
+Name[nl]=Krita Gemini
+Name[x-test]=xxKrita Geminixx
 Exec=kritagemini
 Icon=calligrakrita2
 MimeType=application/x-krita;

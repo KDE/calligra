@@ -1,3 +1,8 @@
 [Desktop Entry]
 Name=CMOS
+Name[en_GB]=CMOS
+Name[fi]=CMOS
+Name[fr]=CMOS
+Name[nl]=CMOS
+Name[x-test]=xxCMOSxx
 X-KDE-DirType=odg-collection

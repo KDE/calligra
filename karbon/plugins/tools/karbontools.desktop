@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Karbon Tools
+Name[en_GB]=Karbon Tools
+Name[fi]=Karbon-työkalut
+Name[fr]=Outils de Karbon
+Name[nl]=Hulpmiddelen voor Karbon
+Name[x-test]=xxKarbon Toolsxx
 X-KDE-ServiceTypes=Calligra/Tool
 Type=Service
 X-KDE-PluginInfo-Name=karbontools

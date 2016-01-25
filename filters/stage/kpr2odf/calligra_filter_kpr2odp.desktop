@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Filter to export KPR files to ODP
+Name[en_GB]=Filter to export KPR files to ODP
+Name[fi]=Vientisuodatin KPR-tiedostoista ODP:ksi
+Name[fr]=Filtre pour exporter des fichiers KPR vers ODP
+Name[nl]=Filter om KPR-bestanden naar ODP te exporteren
+Name[x-test]=xxFilter to export KPR files to ODPxx
 
 X-KDE-Weight=1
 X-KDE-Export=application/vnd.oasis.opendocument.presentation

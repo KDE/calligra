@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=
 Name=Krita exr Export Filter
+Name[en_GB]=Krita exr Export Filter
+Name[fi]=Kritan exr-vientisuodatin
+Name[fr]=Filtre d'exportation exr de Krita
+Name[nl]=exr-exportfilter voor Krita
+Name[x-test]=xxKrita exr Export Filterxx
 X-KDE-ServiceTypes=Krita/FileFilter
 Type=Service
 X-KDE-Export=image/x-exr,application/x-extension-exr

@@ -1,7 +1,17 @@
 [Desktop Entry]
 Comment=Transform an image in a wave
+Comment[en_GB]=Transform an image in a wave
+Comment[fi]=Muunna kuva aalloksi
+Comment[fr]=Transformer une image en une vague
+Comment[nl]=Transformeer een afbeelding in een golf
+Comment[x-test]=xxTransform an image in a wavexx
 Icon=
 Name=Wave Filter
+Name[en_GB]=Wave Filter
+Name[fi]=Wave-suodatin
+Name[fr]=Filtre vague
+Name[nl]=Golffilter
+Name[x-test]=xxWave Filterxx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritawavefilter

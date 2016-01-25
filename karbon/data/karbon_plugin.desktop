@@ -2,5 +2,10 @@
 Type=ServiceType
 X-KDE-ServiceType=Karbon/ViewPlugin
 Comment=GUI functionality for Karbon
+Comment[en_GB]=GUI functionality for Karbon
+Comment[fi]=GUI-toimintoja Karboniin
+Comment[fr]=Fonctionnalités d'interface pour Karbon
+Comment[nl]=Interfacefunctionaliteit voor Karbon
+Comment[x-test]=xxGUI functionality for Karbonxx
 [PropertyDef::X-Karbon-Version]
 Type=int

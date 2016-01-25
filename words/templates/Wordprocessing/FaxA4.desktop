@@ -2,7 +2,17 @@
 Type=Link
 URL=.source/FaxA4.odt
 Name=Fax Template
+Name[en_GB]=Fax Template
+Name[fi]=Faksipohja
+Name[fr]=Modèle de fax
+Name[nl]=Faxsjabloon
+Name[x-test]=xxFax Templatexx
 Comment=A template to quickly create a facsimile communication
+Comment[en_GB]=A template to quickly create a facsimile communication
+Comment[fi]=Pohja telefaksin nopeaa laatimista varten
+Comment[fr]=Un modèle pour communiquer par fax
+Comment[nl]=Een sjabloon om snel een fax op te stellen
+Comment[x-test]=xxA template to quickly create a facsimile communicationxx
 Icon=template_fax
 X-KDE-MeasureSystem=metric
 X-KDE-VariantName=A4

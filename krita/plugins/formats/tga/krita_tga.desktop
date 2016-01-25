@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Krita
+Name[en_GB]=Krita
+Name[fi]=Krita
+Name[fr]=Krita
+Name[nl]=Krita
+Name[x-test]=xxKritaxx
 Exec=krita %u
 MimeType=image/x-tga;
 Type=Application

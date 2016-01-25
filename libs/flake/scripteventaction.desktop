@@ -1,8 +1,16 @@
 [Desktop Entry]
 Name=Script Event Action Plugin
+Name[en_GB]=Script Event Action Plugin
+Name[fr]=Module externe d'action de script d'évènement
+Name[nl]=Plug-in voor actie na scriptevent
+Name[x-test]=xxScript Event Action Pluginxx
 Type=ServiceType
 X-KDE-ServiceType=Calligra/ScriptEventAction
 Comment=A plugin that contains a script event action
+Comment[en_GB]=A plugin that contains a script event action
+Comment[fr]=Module externe contenant une action de script d'évènement
+Comment[nl]=Een plug-in met een actie bij een event in een script
+Comment[x-test]=xxA plugin that contains a script event actionxx
 [PropertyDef::X-ScriptEventAction-MinVersion]
 Type=int
 [PropertyDef::X-ScriptEventAction-PluginVersion]

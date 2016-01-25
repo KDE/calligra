@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Sybase
+Name[en_GB]=Sybase
+Name[fi]=Sybase
+Name[fr]=Sybase
+Name[nl]=Sybase
+Name[x-test]=xxSybasexx
 Comment=Sybase Import Plugin for Kexi
+Comment[en_GB]=Sybase Import Plugin for Kexi
+Comment[fi]=Sybase-tuontiliitännäinen Kexille
+Comment[fr]=Module d'importation Sybase pour Kexi
+Comment[nl]=Sybase-importplugin voor Kexi
+Comment[x-test]=xxSybase Import Plugin for Kexixx
 X-KDE-Library=keximigrate_sybase
 X-KDE-ServiceTypes=Kexi/MigrationDriver
 Type=Service

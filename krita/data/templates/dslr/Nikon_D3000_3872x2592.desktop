@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=template_dslr
 Name=Nikon_D3000_3872x2592
+Name[en_GB]=Nikon_D3000_3872x2592
+Name[fi]=Nikon D3000 3872 × 2592
+Name[fr]=Nikon_D3000_3872x2592
+Name[nl]=Nikon_D3000_3872x2592
+Name[x-test]=xxNikon_D3000_3872x2592xx
 Type=Link
 URL[$e]=.source/Nikon_D3000_3872x2592.kra
 X-KDE-Hidden=false

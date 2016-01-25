@@ -2,4 +2,9 @@
 Type=Link
 URL=.source/MenuPlan.kst
 Name=Menu Plan
+Name[en_GB]=Menu Plan
+Name[fi]=Ruokalistan suunnitelma
+Name[fr]=Plan du menu
+Name[nl]=Menuplan
+Name[x-test]=xxMenu Planxx
 Icon=template_menuplan

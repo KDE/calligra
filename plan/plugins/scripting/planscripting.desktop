@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Plan Scripting Plugin
+Name[en_GB]=Plan Scripting Plugin
+Name[fi]=Planin komentojonoliitännäinen
+Name[fr]=Module externe de scriptage de Plan
+Name[nl]=Scriptplug-in van Plan
+Name[x-test]=xxPlan Scripting Pluginxx
 X-KDE-ServiceTypes=Plan/ViewPlugin
 Type=Service
 X-KDE-Library=krossmoduleplan

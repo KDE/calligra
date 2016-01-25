@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Pixelize Filter
+Name[en_GB]=Pixelise Filter
+Name[fi]=Pikselöintisuodin
+Name[fr]=Filtre pixélisation
+Name[nl]=Filter voor pixels maken
+Name[x-test]=xxPixelize Filterxx
 Comment=Pixelize filter
+Comment[en_GB]=Pixelise filter
+Comment[fi]=Pikselöintisuodin
+Comment[fr]=Filtre pixellisation
+Comment[nl]=Filter voor pixels maken
+Comment[x-test]=xxPixelize filterxx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritapixelizefilter

@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Autocorrection plugin
+Name[en_GB]=Autocorrection plugin
+Name[fi]=Automaattikorjausliitännäinen
+Name[fr]=Module externe d'autocorrection
+Name[nl]=Autocorrectieplug-in
+Name[x-test]=xxAutocorrection pluginxx
 X-KDE-ServiceTypes=Calligra/Text-EditingPlugin
 Type=Service
 X-KDE-PluginInfo-Name=autocorrect

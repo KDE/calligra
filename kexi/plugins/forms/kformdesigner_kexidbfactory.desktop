@@ -3,6 +3,9 @@ Type=Service
 X-KDE-ServiceTypes=Kexi/WidgetFactory
 
 Name=Widgets Plugin for Kexi Forms
+Name[en_GB]=Widgets Plugin for Kexi Forms
+Name[nl]=Widgetsplugin voor Kexi Forms
+Name[x-test]=xxWidgets Plugin for Kexi Formsxx
 
 X-KDE-Library=kformdesigner_kexidbwidgets
 X-KFormDesigner-FactoryGroup=kexi

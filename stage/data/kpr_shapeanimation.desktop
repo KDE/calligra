@@ -2,6 +2,11 @@
 Type=ServiceType
 X-KDE-ServiceType=CalligraStage/ShapeAnimation
 Comment=Shape animation plugin for Calligra Stage
+Comment[en_GB]=Shape animation plugin for Calligra Stage
+Comment[fi]=Calligra Stagen muotojen animointiliitännäinen
+Comment[fr]=Module extérieur d'animation de forme pour Calligra Stage
+Comment[nl]=Plug-in voor vormanimatie in Calligra Stage
+Comment[x-test]=xxShape animation plugin for Calligra Stagexx
 [PropertyDef::X-KPresenter-Version]
 Type=int
 [PropertyDef::X-KDE-PluginInfo-Name]

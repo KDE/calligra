@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Text Document...
+Name[en_GB]=Text Document...
+Name[fi]=Tekstitiedosto…
+Name[fr]=Document texte...
+Name[nl]=Tekstdocument...
+Name[x-test]=xxText Document...xx
 Comment=New Words document:
+Comment[en_GB]=New Words document:
+Comment[fi]=Uusi Words-tiedosto:
+Comment[fr]=Nouveau document Words : 
+Comment[nl]=Nieuw Words-document:
+Comment[x-test]=xxNew Words document:xx
 Type=Link
 URL=.source/TextDocument.odt
 Icon=application-vnd.oasis.opendocument.text

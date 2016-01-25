@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Colorspace Conversion
+Name[en_GB]=Colourspace Conversion
+Name[fi]=Väriavaruuden muunnos
+Name[fr]=Conversion d'espaces de couleurs
+Name[nl]=Conversie van kleurspectrum
+Name[x-test]=xxColorspace Conversionxx
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritacolorspaceconversion

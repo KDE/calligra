@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=MS Word DOCX Export Filter
+Name[en_GB]=MS Word DOCX Export Filter
+Name[fi]=MS Word DOCX -vientisuodatin
+Name[fr]=Filtre d'exportation de MS Word DOCX 
+Name[nl]=DOCX-exportfilter voor MS Word
+Name[x-test]=xxMS Word DOCX Export Filterxx
 X-KDE-Import=application/vnd.oasis.opendocument.text
 X-KDE-Export=application/vnd.openxmlformats-officedocument.wordprocessingml.document
 X-KDE-Weight=1

@@ -2,6 +2,11 @@
 Type=ServiceType
 X-KDE-ServiceType=Kexi/WidgetFactory
 Comment=Widget Factory Base
+Comment[en_GB]=Widget Factory Base
+Comment[fi]=Käyttöliittymäelementtien pohja
+Comment[fr]=Base de création de composants graphiques
+Comment[nl]=Widget Factory Base
+Comment[x-test]=xxWidget Factory Basexx
 
 [PropertyDef::X-KFormDesigner-FactoryGroup]
 Type=QString

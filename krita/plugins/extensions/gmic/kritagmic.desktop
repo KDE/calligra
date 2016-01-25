@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Gmic
+Name[en_GB]=Gmic
+Name[fi]=Gmic
+Name[fr]=Gmic
+Name[nl]=Gmic
+Name[x-test]=xxGmicxx
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritagmic

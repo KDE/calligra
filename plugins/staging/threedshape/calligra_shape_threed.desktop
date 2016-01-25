@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=3D Scene Shape
+Name[en_GB]=3D Scene Shape
+Name[fr]=Forme scène 3D
+Name[nl]=Vorm van 3D-scène
+Name[x-test]=xx3D Scene Shapexx
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-PluginInfo-Name=threedshape

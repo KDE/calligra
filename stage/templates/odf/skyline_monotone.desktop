@@ -1,7 +1,16 @@
 [Desktop Entry]
 Icon=skyline_monotone
 Name=Skyline
+Name[en_GB]=Skyline
+Name[fi]=Taivaanranta
+Name[nl]=Horizon
+Name[x-test]=xxSkylinexx
 Comment=Skyline Monotone
+Comment[en_GB]=Skyline Monotone
+Comment[fi]=Monotoninen taivaanranta
+Comment[fr]=Horizon monotone
+Comment[nl]=Monotone horizon
+Comment[x-test]=xxSkyline Monotonexx
 Type=Link
 URL=.source/skyline_monotone.otp
 X-KDE-Hidden=false

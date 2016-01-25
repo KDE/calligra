@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Perspective Grid Tool
+Name[en_GB]=Perspective Grid Tool
+Name[fi]=Perspektiiviruudukko
+Name[fr]=Grille de perspective
+Name[nl]=Perspectiefraster-gereedschap
+Name[x-test]=xxPerspective Grid Toolxx
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolperspectivegrid

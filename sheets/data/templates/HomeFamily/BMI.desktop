@@ -2,5 +2,15 @@
 Type=Link
 URL=.source/BMI.kst
 Name=BMI Calculator
+Name[en_GB]=BMI Calculator
+Name[fi]=BMI-laskin
+Name[fr]=Calculatrice BMI
+Name[nl]=BMI-calculator
+Name[x-test]=xxBMI Calculatorxx
 Comment=Simple Body Mass Index Calculator
+Comment[en_GB]=Simple Body Mass Index Calculator
+Comment[fi]=Yksinkertainen painoindeksilaskin.
+Comment[fr]=Simple calculatrice d'index de masse corporelle.
+Comment[nl]=Eenvoudige berekening van lichaamsgewichtindex (BMI)
+Comment[x-test]=xxSimple Body Mass Index Calculatorxx
 Icon=template_bmi

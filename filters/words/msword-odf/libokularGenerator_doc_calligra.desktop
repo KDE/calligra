@@ -1,7 +1,15 @@
 [Desktop Entry]
 Type=Service
 Name=Microsoft Word Documents
+Name[en_GB]=Microsoft Word Documents
+Name[fi]=Microsoft Word -tiedostot
+Name[fr]=Documents Microsoft Word
+Name[nl]=Microsoft Word-documenten
+Name[x-test]=xxMicrosoft Word Documentsxx
 Comment=DOC for Okular
+Comment[en_GB]=DOC for Okular
+Comment[nl]=DOC voor Okular
+Comment[x-test]=xxDOC for Okularxx
 ServiceTypes=okular/Generator
 MimeType=application/msword;
 X-KDE-Library=okularGenerator_odt

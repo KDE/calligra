@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Krita BMP Import Filter
+Name[en_GB]=Krita BMP Import Filter
+Name[fi]=Kritan BMP-tuontisuodatin
+Name[fr]=Filtre d'exportation BMP de Krita
+Name[nl]=BMP-importfilter voor Krita
+Name[x-test]=xxKrita BMP Import Filterxx
 X-KDE-Export=application/x-krita
 X-KDE-ServiceTypes=Krita/FileFilter
 Type=Service

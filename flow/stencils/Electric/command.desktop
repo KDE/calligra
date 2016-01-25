@@ -1,2 +1,6 @@
 [Desktop Entry]
 Name=command
+Name[en_GB]=command
+Name[fr]=commande
+Name[nl]=commando
+Name[x-test]=xxcommandxx

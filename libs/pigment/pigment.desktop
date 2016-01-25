@@ -2,6 +2,11 @@
 Type=ServiceType
 X-KDE-ServiceType=Calligra/ColorSpace
 Comment=A module implementing a complete colorspace for use with Pigment Color Manipulation System
+Comment[en_GB]=A module implementing a complete colourspace for use with Pigment Colour Manipulation System
+Comment[fi]=Moduuli, joka toteuttaa täydellisen väriavaruuden käytettäväksi Pigment Color Manipulation System -järjestelmän kanssa
+Comment[fr]=Un module implantant un espace de couleurs complet à utiliser avec le système de manipulation des pigment de couleurs
+Comment[nl]=Een module die een volledig kleurgebied implementeert dat gebruikt wordt met Pigment Color Manipulation System
+Comment[x-test]=xxA module implementing a complete colorspace for use with Pigment Color Manipulation Systemxx
 [PropertyDef::X-Pigment-MinVersion]
 Type=int
 [PropertyDef::X-Pigment-PluginVersion]

@@ -2,6 +2,11 @@
 Type=ServiceType
 X-KDE-ServiceType=Kexi/MigrationDriver
 Comment=Kexi Data Migration Driver
+Comment[en_GB]=Kexi Data Migration Driver
+Comment[fi]=Kexi tietojen siirtoajuri
+Comment[fr]=Pilote de migration de données de Kexi
+Comment[nl]=Kexi Datamigratie Stuurprogramma
+Comment[x-test]=xxKexi Data Migration Driverxx
 
 [PropertyDef::X-Kexi-FileMigrationDriverMime]
 Type=QString

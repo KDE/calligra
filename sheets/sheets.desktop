@@ -1,8 +1,23 @@
 [Desktop Entry]
 Name=Calligra Sheets
+Name[en_GB]=Calligra Sheets
+Name[fi]=Calligra Sheets
+Name[fr]=Calligra Sheets
+Name[nl]=Calligra Sheets
+Name[x-test]=xxCalligra Sheetsxx
 Exec=calligrasheets %u
 GenericName=Spreadsheet
+GenericName[en_GB]=Spreadsheet
+GenericName[fi]=Taulukkolaskenta
+GenericName[fr]=Tableur
+GenericName[nl]=Spreadsheet
+GenericName[x-test]=xxSpreadsheetxx
 Comment=Write spreadsheet documents
+Comment[en_GB]=Write spreadsheet documents
+Comment[fi]=Kirjoita taulukkolaskentatiedostoja
+Comment[fr]=Documents tableurs vides
+Comment[nl]=Rekenbladdocumenten schrijven
+Comment[x-test]=xxWrite spreadsheet documentsxx
 MimeType=application/vnd.oasis.opendocument.spreadsheet;application/x-kspread;application/vnd.ms-excel;text/csv;application/x-quattropro;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;application/vnd.openxmlformats-officedocument.spreadsheetml.template;
 Type=Application
 Icon=calligrasheets

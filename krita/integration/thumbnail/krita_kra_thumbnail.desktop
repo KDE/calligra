@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Krita Documents
+Name[en_GB]=Krita Documents
+Name[fi]=Krita-tiedostot
+Name[fr]=Documents Krita
+Name[nl]=Krita-documenten
+Name[x-test]=xxKrita Documentsxx
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/x-krita;image/openraster;

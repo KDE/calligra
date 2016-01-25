@@ -1,2 +1,6 @@
 [Desktop Entry]
 Name=product
+Name[en_GB]=product
+Name[fr]=produit
+Name[nl]=product
+Name[x-test]=xxproductxx

@@ -2,5 +2,9 @@
 Type=ServiceType
 X-KDE-ServiceType=Krita/Brush
 Comment=Brush plugin for Krita
+Comment[en_GB]=Brush plugin for Krita
+Comment[fi]=Sivellinliitännäinen Kritaan
+Comment[nl]=Penseelplug-in voor Krita
+Comment[x-test]=xxBrush plugin for Kritaxx
 [PropertyDef::X-Krita-Version]
 Type=int

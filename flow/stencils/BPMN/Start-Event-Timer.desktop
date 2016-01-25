@@ -1,2 +1,6 @@
 [Desktop Entry]
 Name=Start-Event-Timer
+Name[en_GB]=Start-Event-Timer
+Name[fr]=Temporisation de démarrage d'évènement
+Name[nl]=Begin-gebeurtenis-timer
+Name[x-test]=xxStart-Event-Timerxx

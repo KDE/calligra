@@ -2,7 +2,17 @@
 MimeType=application/vnd.ms-powerpoint;
 Terminal=false
 Name=okular
+Name[en_GB]=okular
+Name[fi]=okular
+Name[fr]=Okular
+Name[nl]=okular
+Name[x-test]=xxokularxx
 GenericName=Document Viewer
+GenericName[en_GB]=Document Viewer
+GenericName[fi]=Asiakirjakatselin
+GenericName[fr]=Afficheur de documents
+GenericName[nl]=Documentenviewer
+GenericName[x-test]=xxDocument Viewerxx
 Exec=okular %U %i -caption %c
 Icon=okular
 Type=Application

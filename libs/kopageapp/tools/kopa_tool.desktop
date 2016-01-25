@@ -2,6 +2,10 @@
 Type=ServiceType
 X-KDE-ServiceType=CalligraPageApp/Tool
 Comment=Tool for Calligra Page Applications
+Comment[en_GB]=Tool for Calligra Page Applications
+Comment[fi]=Calligran sivupohjaisten sovellusten työkalu
+Comment[nl]=Hulpmiddel voor Calligra pagina-applicatie
+Comment[x-test]=xxTool for Calligra Page Applicationsxx
 [PropertyDef::X-KoPageApp-Version]
 Type=int
 [PropertyDef::X-KDE-PluginInfo-Name]

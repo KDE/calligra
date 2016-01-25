@@ -1,8 +1,18 @@
 [Desktop Entry]
 Type=Application
 Name=Karbon
+Name[en_GB]=Karbon
+Name[fi]=Karbon
+Name[fr]=Karbon
+Name[nl]=Karbon
+Name[x-test]=xxKarbonxx
 Exec=karbon %u
 GenericName=Scalable Graphics
+GenericName[en_GB]=Scalable Graphics
+GenericName[fi]=Skaalautuva grafiikka
+GenericName[fr]=Graphiques vectoriels
+GenericName[nl]=Vectorafbeeldingen
+GenericName[x-test]=xxScalable Graphicsxx
 MimeType=application/vnd.oasis.opendocument.graphics;application/x-karbon;image/x-eps;application/postscript;image/svg+xml;image/svg+xml-compressed;image/x-wmf;application/pdf;image/x-xfig;
 # kghostview has 6 for application/postscript, we need to be under that...
 InitialPreference=5
@@ -12,4 +22,9 @@ X-KDE-NativeMimeType=application/vnd.oasis.opendocument.graphics
 X-Calligra-DefaultMimeTypes=application/vnd.oasis.opendocument.graphics,application/x-karbon,image/x-eps,application/postscript,image/svg+xml,image/svg+xml-compressed,image/x-wmf,application/pdf,
 Categories=Qt;KDE;Graphics;Office;
 Comment=Create scalable vector drawings
+Comment[en_GB]=Create scalable vector drawings
+Comment[fi]=Luo vektorigrafiikkapiirroksia
+Comment[fr]=Créer des tracés vectoriels
+Comment[nl]=Schaalbare vectorafbeeldingen aanmaken
+Comment[x-test]=xxCreate scalable vector drawingsxx
 X-DocPath=http://userbase.kde.org/Special:MyLanguage/Karbon

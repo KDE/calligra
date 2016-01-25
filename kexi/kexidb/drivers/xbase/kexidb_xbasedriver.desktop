@@ -1,6 +1,15 @@
 [Desktop Entry]
 Name=xBase
+Name[en_GB]=xBase
+Name[fi]=xBase
+Name[fr]=xBase
+Name[nl]=xBase
+Name[x-test]=xxxBasexx
 Comment=Kexi database driver for accessing xBase database files
+Comment[en_GB]=Kexi database driver for accessing xBase database files
+Comment[fi]=Kexi-tietokanta-ajuri xBase-palvelinten käyttämiseksi
+Comment[nl]=Kexi databasestuurprogramma voor toegang tot xBase database-bestanden
+Comment[x-test]=xxKexi database driver for accessing xBase database filesxx
 X-KDE-Library=kexidb_xbasedriver
 X-KDE-ServiceTypes=Kexi/DBDriver
 Type=Service

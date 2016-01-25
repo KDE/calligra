@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=
 Name=Krita JPEG Import Filter
+Name[en_GB]=Krita JPEG Import Filter
+Name[fi]=Kritan JPEG-tuontisuodatin
+Name[fr]=Filtre d'importation JPEG de Krita
+Name[nl]=JPEG-importfilter voor Krita
+Name[x-test]=xxKrita JPEG Import Filterxx
 X-KDE-ServiceTypes=Krita/FileFilter
 Type=Service
 X-KDE-Export=application/x-krita

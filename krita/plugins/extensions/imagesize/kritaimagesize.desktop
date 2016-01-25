@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Image Resize and Scale Plugin
+Name[en_GB]=Image Resize and Scale Plugin
+Name[fi]=Liitännäinen kuvan koon muuttamista ja skaalaamista varten
+Name[fr]=Module de redimensionnement d'images
+Name[nl]=Grootte wijzigen en schalen van afbeelding
+Name[x-test]=xxImage Resize and Scale Pluginxx
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaimagesize

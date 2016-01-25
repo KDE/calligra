@@ -3,6 +3,9 @@ Type=Service
 X-KDE-ServiceTypes=Kexi/WidgetFactory
 
 Name=Map Browser Plugin for Kexi Forms
+Name[en_GB]=Map Browser Plugin for Kexi Forms
+Name[nl]=Plugin voor Map Browser in Kexi Forms
+Name[x-test]=xxMap Browser Plugin for Kexi Formsxx
 
 X-KDE-Library=kformdesigner_mapbrowser
 X-KFormDesigner-FactoryGroup=kexi

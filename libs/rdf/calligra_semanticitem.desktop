@@ -1,6 +1,14 @@
 [Desktop Entry]
 Name=Semantic item definition
+Name[en_GB]=Semantic item definition
+Name[fr]=Définition d'élément sémantique
+Name[nl]=Definitie van semantisch item
+Name[x-test]=xxSemantic item definitionxx
 Comment=Definition of a semantic item object
+Comment[en_GB]=Definition of a semantic item object
+Comment[fr]=Définition d'un objet sémantique
+Comment[nl]=Definitie van een semantisch itemobject
+Comment[x-test]=xxDefinition of a semantic item objectxx
 
 Type=ServiceType
 X-KDE-ServiceType=Calligra/SemanticItem

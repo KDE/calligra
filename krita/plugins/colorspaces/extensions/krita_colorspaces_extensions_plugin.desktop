@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Some extensions to color spaces
+Name[en_GB]=Some extensions to colour spaces
+Name[fi]=Laajennuksia väriavaruuksiin
+Name[fr]=Quelques extensions pour les espaces de couleur
+Name[nl]=Enkele uitbereidingen voor de kleurruimtes
+Name[x-test]=xxSome extensions to color spacesxx
 Comment=Some extensions to color spaces
+Comment[en_GB]=Some extensions to colour spaces
+Comment[fi]=Laajennuksia väriavaruuksiin
+Comment[fr]=Quelques extensions pour les espaces de couleur
+Comment[nl]=Enkele uitbereidingen voor de kleurruimtes
+Comment[x-test]=xxSome extensions to color spacesxx
 X-KDE-ServiceTypes=Calligra/ColorSpaceExtension
 Type=Service
 X-KDE-PluginInfo-Name=krita_colorspaces_extensions

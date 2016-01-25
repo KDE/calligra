@@ -1,2 +1,7 @@
 [Desktop Entry]
 Name=Database
+Name[en_GB]=Database
+Name[fi]=Tietokanta
+Name[fr]=Base de données
+Name[nl]=Database
+Name[x-test]=xxDatabasexx

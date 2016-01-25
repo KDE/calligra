@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Formula Shape
+Name[en_GB]=Formula Shape
+Name[fi]=Kaavamuoto
+Name[fr]=Forme de formule
+Name[nl]=Formula-vorm
+Name[x-test]=xxFormula Shapexx
 X-KDE-ServiceTypes=Calligra/Flake
 Type=Service
 X-KDE-PluginInfo-Name=formulashape

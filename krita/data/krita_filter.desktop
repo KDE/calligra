@@ -2,5 +2,9 @@
 Type=ServiceType
 X-KDE-ServiceType=Krita/Filter
 Comment=Filter plugin for Krita
+Comment[en_GB]=Filter plugin for Krita
+Comment[fi]=Suodinliitännäinen Kritaan
+Comment[nl]=Filterplug-in voor Krita
+Comment[x-test]=xxFilter plugin for Kritaxx
 [PropertyDef::X-Krita-Version]
 Type=int

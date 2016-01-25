@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Krita TGA Import Filter
+Name[en_GB]=Krita TGA Import Filter
+Name[fi]=Kritan TGA-tuontisuodatin
+Name[fr]=Filtre d'importation TGA de Krita
+Name[nl]=TGA-importfilter voor Krita
+Name[x-test]=xxKrita TGA Import Filterxx
 X-KDE-Export=application/x-krita
 X-KDE-ServiceTypes=Krita/FileFilter
 Type=Service

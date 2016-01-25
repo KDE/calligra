@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Chart Shape
+Name[en_GB]=Chart Shape
+Name[fi]=Kaaviomuoto
+Name[fr]=Forme de diagramme
+Name[nl]=Grafiekvorm
+Name[x-test]=xxChart Shapexx
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-PluginInfo-Name=chartshape

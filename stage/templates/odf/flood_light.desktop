@@ -1,7 +1,17 @@
 [Desktop Entry]
 Icon=flood_light
 Name=Flood Light
+Name[en_GB]=Flood Light
+Name[fi]=Valonheitin
+Name[fr]=Lumière englobante
+Name[nl]=Floodlight
+Name[x-test]=xxFlood Lightxx
 Comment=Flood Light
+Comment[en_GB]=Flood Light
+Comment[fi]=Valonheitin
+Comment[fr]=Lumière englobante
+Comment[nl]=Floodlight
+Comment[x-test]=xxFlood Lightxx
 Type=Link
 URL=.source/flood_light.otp
 X-KDE-Hidden=false

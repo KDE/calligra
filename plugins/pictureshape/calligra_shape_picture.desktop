@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Picture Shape
+Name[en_GB]=Picture Shape
+Name[fi]=Kuvamuoto
+Name[fr]=Forme image
+Name[nl]=Afbeeldingvorm
+Name[x-test]=xxPicture Shapexx
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-PluginInfo-Name=pictureshape

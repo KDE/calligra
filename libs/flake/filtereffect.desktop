@@ -1,8 +1,18 @@
 [Desktop Entry]
 Name=Filter effect definition
+Name[en_GB]=Filter effect definition
+Name[fi]=Suodintehostetyökalun määrittely
+Name[fr]=Définition d'un effet de filtrage
+Name[nl]=Definitie van filtereffect
+Name[x-test]=xxFilter effect definitionxx
 Type=ServiceType
 X-KDE-ServiceType=Calligra/FilterEffect
 Comment=Definition of a flake filter effect
+Comment[en_GB]=Definition of a flake filter effect
+Comment[fi]=Flake-suodintehosteen määrittely
+Comment[fr]=Définition d'un effet de filtre de flocons
+Comment[nl]=Definitie van een flake-filtereffect
+Comment[x-test]=xxDefinition of a flake filter effectxx
 [PropertyDef::X-Flake-PluginVersion]
 Type=int
 [PropertyDef::X-KDE-PluginInfo-Name]

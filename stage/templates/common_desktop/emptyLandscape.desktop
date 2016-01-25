@@ -1,7 +1,17 @@
 [Desktop Entry]
 Icon=template_emptylandscape
 Name=Empty
+Name[en_GB]=Empty
+Name[fi]=Tyhjä
+Name[fr]=Vide
+Name[nl]=Leeg
+Name[x-test]=xxEmptyxx
 Comment=Empty presentation
+Comment[en_GB]=Empty presentation
+Comment[fi]=Tyhjä esitys
+Comment[fr]=Présentation vide
+Comment[nl]=Lege presentatie
+Comment[x-test]=xxEmpty presentationxx
 Type=Link
 URL=.source/emptyLandscape.otp
 X-KDE-Hidden=false

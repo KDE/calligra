@@ -1,6 +1,15 @@
 [Desktop Entry]
 Name=PostgreSQL
+Name[en_GB]=PostgreSQL
+Name[fi]=PostgreSQL
+Name[fr]=PostgreSQL
+Name[nl]=PostgreSQL
+Name[x-test]=xxPostgreSQLxx
 Comment=Kexi database driver for accessing PostgreSQL servers
+Comment[en_GB]=Kexi database driver for accessing PostgreSQL servers
+Comment[fi]=Kexi-tietokanta-ajuri PostgreSQL-palvelinten käyttämiseksi
+Comment[nl]=Kexi databasestuurprogramma voor toegang tot PostgreSQL-servers
+Comment[x-test]=xxKexi database driver for accessing PostgreSQL serversxx
 X-KDE-Library=kexidb_pqxxsqldriver
 X-KDE-ServiceTypes=Kexi/DBDriver
 Type=Service

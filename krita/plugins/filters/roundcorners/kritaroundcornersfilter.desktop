@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Round Corners Filter
+Name[en_GB]=Round Corners Filter
+Name[fi]=Kulmienpyöristyssuodin
+Name[fr]=Filtre avec coins arrondis
+Name[nl]=Ronde-hoeken-filter
+Name[x-test]=xxRound Corners Filterxx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaroundcornersfilter
