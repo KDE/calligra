@@ -3,11 +3,9 @@ macro_optional_find_package(PstoeditSvgOutput)
 set_package_properties(PstoeditSvgOutput PROPERTIES
     DESCRIPTION "pstoedit with svg plugin"
     URL "http://www.pstoedit.net/"
-    PURPOSE "Required at runtime by the Karbon EPS import filter"
+    PURPOSE "Required at runtime by the calligra_filter_eps2svgai format filter"
     TYPE RUNTIME
 )
-
-if (PstoeditSvgOutput_FOUND)
 
 set(eps2svgai_PART_SRCS EpsImport.cpp PsCommentLexer.cpp )
 
@@ -20,5 +18,3 @@ install(TARGETS calligra_filter_eps2svgai  DESTINATION ${PLUGIN_INSTALL_DIR}/cal
 
 #TODO: restore also importing from PostScript
 #karbon_ps_import.desktop
-
-endif ()
