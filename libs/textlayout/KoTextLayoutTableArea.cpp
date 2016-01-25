@@ -580,8 +580,6 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
     Q_ASSERT(row >= 0);
     Q_ASSERT(row < d->table->rows());
 
-    QTextTableFormat tableFormat = d->table->format();
-
     /*
      * Implementation Note:
      *
