@@ -217,7 +217,7 @@ find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED
         KCMUtils
 )
 find_package(KF5 ${REQUIRED_KF5_VERSION} QUIET
-    COMPONENTS
+    OPTIONAL_COMPONENTS
         Activities
         KHtml
 )
