@@ -1,6 +1,27 @@
 [Desktop Entry]
 Name=conn
+Name[bs]=conn
+Name[ca]=conn
+Name[ca@valencia]=conn
+Name[da]=conn
+Name[de]=Verbindung
+Name[el]=conn
 Name[en_GB]=conn
+Name[es]=conexión
+Name[et]=Ühendus
+Name[eu]=konexioa
 Name[fr]=conn
+Name[gl]=Conexión
+Name[it]=conn
+Name[kk]=түйіс
 Name[nl]=conn
+Name[pl]=połączenie
+Name[pt]=ligação
+Name[pt_BR]=conexão
+Name[ru]=conn
+Name[sk]=conn
+Name[sv]=anslutning
+Name[tr]=bağ
+Name[uk]=З’єднання
 Name[x-test]=xxconnxx
+Name[zh_TW]=conn

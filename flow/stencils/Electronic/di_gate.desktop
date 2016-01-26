@@ -1,6 +1,27 @@
 [Desktop Entry]
 Name=di gate
+Name[bs]=di vrata
+Name[ca]=porta di
+Name[ca@valencia]=porta di
+Name[da]=di gate
+Name[de]=Diodengatter
+Name[el]=di gate
 Name[en_GB]=di gate
+Name[es]=puerta di
+Name[et]=Kahe paisuga väljatransistor
+Name[eu]=di atea
 Name[fr]=di gate
+Name[gl]=Porta DI
+Name[it]=di gate
+Name[kk]=диод-қақпа
 Name[nl]=di gate
+Name[pl]=bramka di
+Name[pt]=porta-DI
+Name[pt_BR]=porta DI
+Name[ru]=Диодный клапан
+Name[sk]=di brána
+Name[sv]=dubbelgrind
+Name[tr]=diyot kapısı
+Name[uk]=DI-шлюз
 Name[x-test]=xxdi gatexx
+Name[zh_TW]=di gate
