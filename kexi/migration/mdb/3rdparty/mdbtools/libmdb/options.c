@@ -34,7 +34,7 @@ static int optset;
 static void load_options();
 
 void
-mdb_debug(int klass, char *fmt, ...)
+mdb_debug(int klass, const char *fmt, ...)
 {
 #ifdef DEBUG
 	va_list ap;

@@ -59,7 +59,7 @@ void mdb_bind_column(MdbTableDef *table, int col_num, void *bind_ptr, int *len_p
 		col->len_ptr = len_ptr;
 }
 int
-mdb_bind_column_by_name(MdbTableDef *table, gchar *col_name, void *bind_ptr, int *len_ptr)
+mdb_bind_column_by_name(MdbTableDef *table, const gchar *col_name, void *bind_ptr, int *len_ptr)
 {
 	unsigned int i;
 	int col_num = -1;

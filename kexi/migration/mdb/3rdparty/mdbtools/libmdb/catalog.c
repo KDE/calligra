@@ -22,10 +22,10 @@
 #include "dmalloc.h"
 #endif
 
-char *
+const char *
 mdb_get_objtype_string(int obj_type)
 {
-static char *type_name[] = {"Form",
+static const char *type_name[] = {"Form",
 			"Table",
 			"Macro",
 			"System Table",

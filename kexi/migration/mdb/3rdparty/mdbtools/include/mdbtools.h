@@ -475,7 +475,7 @@ extern void mdb_free_catalog(MdbHandle *mdb);
 extern GPtrArray *mdb_read_catalog(MdbHandle *mdb, int obj_type);
 MdbCatalogEntry *mdb_get_catalogentry_by_name(MdbHandle *mdb, const gchar* name);
 extern void mdb_dump_catalog(MdbHandle *mdb, int obj_type);
-extern char *mdb_get_objtype_string(int obj_type);
+extern const char *mdb_get_objtype_string(int obj_type);
 
 /* table.c */
 extern MdbTableDef *mdb_alloc_tabledef(MdbCatalogEntry *entry);
@@ -496,7 +496,7 @@ extern const char *mdb_table_get_prop(const MdbTableDef *table, const gchar *key
 extern const char *mdb_col_get_prop(const MdbColumn *col, const gchar *key);
 
 /* data.c */
-extern int mdb_bind_column_by_name(MdbTableDef *table, gchar *col_name, void *bind_ptr, int *len_ptr);
+extern int mdb_bind_column_by_name(MdbTableDef *table, const gchar *col_name, void *bind_ptr, int *len_ptr);
 extern void mdb_data_dump(MdbTableDef *table);
 extern void mdb_date_to_tm(double td, struct tm *t);
 extern void mdb_bind_column(MdbTableDef *table, int col_num, void *bind_ptr, int *len_ptr);
@@ -601,7 +601,7 @@ extern void mdb_temp_columns_end(MdbTableDef *table);
 
 /* options.c */
 extern int mdb_get_option(unsigned long optnum);
-extern void mdb_debug(int klass, char *fmt, ...);
+extern void mdb_debug(int klass, const char *fmt, ...);
 
 /* iconv.c */
 extern int mdb_unicode2ascii(MdbHandle *mdb, char *src, size_t slen, char *dest, size_t dlen);

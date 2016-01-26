@@ -5,6 +5,7 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-unused-parameter)
     add_definitions(-Wno-pointer-arith)
     add_definitions(-std=c99)
+    add_definitions(-Wno-cast-qual)
 endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
 
 set(MDBTOOLS_SOURCE_DIR "${CMAKE_SOURCE_DIR}/kexi/migration/mdb/3rdparty/mdbtools")

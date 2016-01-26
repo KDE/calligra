@@ -194,7 +194,7 @@ mdb_crack_row(MdbTableDef *table, int row_start, int row_end, MdbField *fields)
 	}
 
 	bitmask_sz = (row_cols + 7) / 8;
-	nullmask = (char*)pg_buf + row_end - bitmask_sz + 1;
+	nullmask = (unsigned char *)pg_buf + row_end - bitmask_sz + 1;
 
 	/* read table of variable column locations */
 	if (table->num_var_cols > 0) {
