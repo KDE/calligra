@@ -185,16 +185,10 @@ if( SHOULD_BUILD_FEATURE_RDF )
     target_link_libraries(calligra_shape_text ${SOPRANO_LIBRARIES})
 endif()
 
-
 install(TARGETS calligra_shape_text DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
 
-########### install files ###############
-
-#ecm_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
-
+# QT5TODO: needs rework, no longer possible to have multiple plugin metadata per plugin binary
 if(BUILD_TEXTDOCUMENT_INSPECTOR)
     # workaround: to avoid translations the real desktop file is only generated
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/calligra_docker_textdocumentinspection.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/calligra_docker_textdocumentinspection.desktop)
-
-    install( FILES ${CMAKE_CURRENT_BINARY_DIR}/calligra_docker_textdocumentinspection.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 endif()
