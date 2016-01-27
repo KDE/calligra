@@ -53,4 +53,5 @@ set_target_properties(kplatokernel PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VER
 
 install(TARGETS kplatokernel ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install(FILES plan_schedulerplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
+# TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
+# plan_schedulerplugin.desktop

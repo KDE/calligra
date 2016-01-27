@@ -165,7 +165,8 @@ install(TARGETS kotext  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES texteditingplugin.desktop inlinetextobject.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+# TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
+# texteditingplugin.desktop inlinetextobject.desktop
 
 install(
     FILES

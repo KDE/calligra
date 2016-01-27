@@ -1,8 +1,4 @@
 add_subdirectory(backgroundTool)
 
-install(
-    FILES
-        kopa_tool.desktop
-    DESTINATION
-        ${SERVICETYPES_INSTALL_DIR}
-)
+# TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
+# kopa_tool.desktop

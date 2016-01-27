@@ -49,7 +49,8 @@ VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSI
 )
 install(TARGETS kordf ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
-install( FILES calligra_semanticitem.desktop  DESTINATION ${SERVICETYPES_INSTALL_DIR})
+# TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
+# calligra_semanticitem.desktop
 
 install( FILES
     kordf_export.h

@@ -359,10 +359,10 @@ install(TARGETS calligrasheetspart  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/p
 install( FILES  sheets.rc sheets_readonly.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/sheets)
 install( FILES  ui/CellToolOptionWidgets.xml DESTINATION ${DATA_INSTALL_DIR}/sheets)
 install( FILES  sheets.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
-install( FILES  sheets_plugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
-install( FILES  sheets_viewplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 install( FILES  sheetsrc DESTINATION ${CONFIG_INSTALL_DIR})
 
+# TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended
+# propertiessheets_plugin.desktop, sheets_viewplugin.desktop
 
 install( FILES
     sheets_odf_export.h

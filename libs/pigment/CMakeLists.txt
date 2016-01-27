@@ -150,7 +150,8 @@ set_target_properties(pigmentcms PROPERTIES
 
 install(TARGETS pigmentcms  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install( FILES pigment.desktop pigmentextension.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+# TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
+# pigment.desktop pigmentextension.desktop
 
 install( FILES ${PIGMENT_INSTALL_FILES}
          DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
