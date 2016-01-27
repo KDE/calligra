@@ -24,6 +24,7 @@
  */
 
 #include "KWDocument.h"
+
 #include "KWFactory.h"
 #include "KWView.h"
 #include "KWCanvas.h"
@@ -39,6 +40,7 @@
 #include "frames/KWFrameLayout.h"
 #include "dialogs/KWFrameDialog.h"
 #include "KWRootAreaProvider.h"
+#include "WordsDebug.h"
 
 // calligra libs includes
 #include <changetracker/KoChangeTracker.h>
@@ -81,12 +83,12 @@
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
-// KDE + Qt includes
+// KF5
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
 #include <KSharedConfig>
-#include <WordsDebug.h>
 
+// Qt
 #include <QIODevice>
 #include <QTimer>
 #include <QThread>

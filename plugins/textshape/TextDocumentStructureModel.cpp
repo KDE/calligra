@@ -20,9 +20,8 @@
 
 #include <TextDocumentStructureModel.h>
 
-// KDE
-#include <QDebug>
 // Qt
+#include <QDebug>
 #include <QTextDocument>
 #include <QTextFrame>
 #include <QTextBlock>

@@ -25,7 +25,7 @@
 #include "KoTextRange.h"
 #include "kotext_export.h"
 
-// Qt + kde
+// Qt
 #include <QMetaType>
 #include <QHash>
 #include <QSet>

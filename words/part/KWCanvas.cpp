@@ -36,7 +36,7 @@
 #include <KoToolProxy.h>
 #include <KoGridData.h>
 
-// KDE + Qt includes
+// Qt includes
 #include <QBrush>
 #include <QPainter>
 #include <QPainterPath>

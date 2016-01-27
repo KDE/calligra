@@ -23,7 +23,7 @@
 #include "KoVariableManager.h"
 #include "kotext_export.h"
 
-// Qt + kde
+// Qt
 #include <QHash>
 #include <QTextBlock>
 

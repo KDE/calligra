@@ -21,7 +21,7 @@
 
 #include "KoDocumentRdf.h"
 #include "RdfSemanticTreeWidgetSelectAction.h"
-// KDE
+// KF5
 #include <kdebug.h>
 #include <klocalizedstring.h>
 

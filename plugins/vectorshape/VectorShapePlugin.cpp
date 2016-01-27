@@ -22,7 +22,7 @@
 // Own
 #include "VectorShapePlugin.h"
 
-// KDE
+// KF5
 #include <kpluginfactory.h>
 
 // Calligra libs

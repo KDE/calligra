@@ -21,9 +21,7 @@
 // Own
 #include "KoOdfLoadingContext.h"
 
-// KDE
-#include <OdfDebug.h>
-
+#include "OdfDebug.h"
 
 // Calligra
 #include <KoOdfReadStore.h>

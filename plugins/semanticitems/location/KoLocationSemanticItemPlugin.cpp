@@ -25,7 +25,7 @@
 #include "KoLocationSemanticItemFactory.h"
 // rdf
 #include <KoRdfSemanticItemRegistry.h>
-// KDE
+// KF5
 #include <kpluginfactory.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_semanticitem_location.json",

@@ -23,7 +23,7 @@
 #include "kordf_export.h"
 
 #include "RdfForward.h"
-// KDE
+// KF5
 #include <KDateTime>
 // Soprano
 #include <Soprano/Soprano>

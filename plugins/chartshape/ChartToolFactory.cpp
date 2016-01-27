@@ -28,7 +28,7 @@
 // Calligra
 #include <KoIcon.h>
 
-// KDE
+// KF5
 #include <klocalizedstring.h>
 
 

@@ -25,7 +25,7 @@
 #include "KoContextBarButton.h"
 #include <KoIcon.h>
 
-//KDE headers
+// KF5
 #include <klocalizedstring.h>
 
 //Qt Headers

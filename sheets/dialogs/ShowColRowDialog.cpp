@@ -28,7 +28,7 @@
 #include <QVBoxLayout>
 #include <QListWidget>
 
-// KDE
+// KF5
 #include <KLocalizedString>
 
 // Sheets

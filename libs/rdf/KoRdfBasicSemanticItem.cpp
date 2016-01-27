@@ -22,7 +22,7 @@
 //Calligra
 #include <KoDocumentRdf.h>
 
-//KDE
+// KF5
 #include <KDebug>
 
 //QT

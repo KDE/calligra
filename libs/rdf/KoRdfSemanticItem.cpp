@@ -31,7 +31,7 @@
 #include <KoTextMeta.h>
 #include <KoTextRdfCore.h>
 
-//KDE
+// KF5
 #include <KDebug>
 
 //QT

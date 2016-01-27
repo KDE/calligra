@@ -24,12 +24,12 @@
 #include <QFile>
 #include <QBuffer>
 
-// KDE
-#include <VectorImageDebug.h>
-
 // LibEmf
 #include "EmfRecords.h"
 #include "EmfObjects.h"
+
+// lib
+#include "VectorImageDebug.h"
 
 
 // 0 - No debug

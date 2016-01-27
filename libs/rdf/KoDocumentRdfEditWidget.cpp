@@ -30,7 +30,7 @@
 // main
 #include <KoDocument.h>
 #include <KoIcon.h>
-// KDE
+// KF5
 #include <kdebug.h>
 #include <kmenu.h>
 #include <kmessagebox.h>

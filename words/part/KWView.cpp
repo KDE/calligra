@@ -22,6 +22,7 @@
 // words includes
 #define  SHOW_ANNOTATIONS 1
 #include "KWView.h"
+
 #include "KWGui.h"
 #include "KWDocument.h"
 #include "KWCanvas.h"
@@ -40,6 +41,7 @@
 #include "commands/KWShapeCreateCommand.h"
 #include "ui_KWInsertImage.h"
 #include "gemini/ViewModeSwitchEvent.h"
+#include "WordsDebug.h"
 
 // calligra libs includes
 #include <KoShapeCreateCommand.h>
@@ -95,21 +97,21 @@
 #include <KoTextLayoutRootArea.h>
 #include <KoIcon.h>
 
-// KDE + Qt includes
+// KF5
+#include <klocalizedstring.h>
+#include <ktoggleaction.h>
+#include <kactioncollection.h>
+#include <kactionmenu.h>
+#include <kxmlguifactory.h>
+#include <ktoolbar.h>
+
+// Qt
 #include <QTimer>
 #include <QScrollBar>
 #include <QStatusBar>
 #include <QPushButton>
 #include <QClipboard>
 #include <QMenuBar>
-
-#include <klocalizedstring.h>
-#include <WordsDebug.h>
-#include <ktoggleaction.h>
-#include <kactioncollection.h>
-#include <kactionmenu.h>
-#include <kxmlguifactory.h>
-#include <ktoolbar.h>
 
 #include <limits>
 

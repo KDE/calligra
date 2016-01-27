@@ -22,11 +22,13 @@
  */
 
 #include "KWOdfLoader.h"
+
 #include "KWOdfSharedLoadingData.h"
 #include "KWDocument.h"
 #include "KWPage.h"
 #include "KWPageManager.h"
 #include "frames/KWTextFrameSet.h"
+#include "WordsDebug.h"
 
 // calligra
 #include <KoOdfStylesReader.h>
@@ -53,9 +55,8 @@
 #include <KoDocumentRdf.h>
 #endif
 
-// KDE + Qt includes
+// Qt includes
 #include <QTextCursor>
-#include <WordsDebug.h>
 
 #include <KoDocumentRdfBase.h>
 

@@ -27,7 +27,7 @@
 #include <QTableWidget>
 #include <QTableWidgetSelectionRange>
 
-// KDE
+// KF5
 #include <kcharsets.h>
 #include <kconfig.h>
 #include <WidgetsDebug.h>

@@ -24,7 +24,7 @@
 #include <QStringList>
 #include <QStandardItemModel>
 
-// KDE
+// KF5
 #include <kiconloader.h>
 #include <kpluginfactory.h>
 #include <klocalizedstring.h>

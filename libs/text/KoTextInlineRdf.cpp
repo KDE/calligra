@@ -32,7 +32,8 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoElementReference.h>
-// KDE
+// TODO: the "errorText" define in TextDebug.h results in a build error, if used as second include here
+// find out why and perhaps change the rather generic "errorText" & Co defines to something less conflict-prone
 #include "TextDebug.h"
 // Qt
 #include <QTextCursor>

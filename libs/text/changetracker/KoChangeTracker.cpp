@@ -33,9 +33,9 @@
 #include <KoGenChanges.h>
 #include <KoFormatChangeInformation.h>
 #include <kundo2magicstring.h>
-
-//KDE includes
 #include "TextDebug.h"
+
+// KF5
 #include <klocalizedstring.h>
 
 //Qt includes

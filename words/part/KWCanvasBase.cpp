@@ -29,6 +29,7 @@
 #include "KWPage.h"
 #include "KWPageCacheManager.h"
 #include "frames/KWFrameLayout.h"
+#include "WordsDebug.h"
 
 // calligra libs includes
 #include <KoShapeManager.h>
@@ -43,8 +44,7 @@
 
 #include <KoAnnotationLayoutManager.h>
 
-// KDE + Qt includes
-#include <WordsDebug.h>
+// Qt
 #include <QBrush>
 #include <QPainter>
 #include <QPainterPath>

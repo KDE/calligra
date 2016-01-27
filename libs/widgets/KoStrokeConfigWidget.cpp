@@ -40,7 +40,7 @@
 #include <QHBoxLayout>
 #include <QSizePolicy>
 
-// KDE
+// KF5
 #include <klocalizedstring.h>
 
 // Calligra

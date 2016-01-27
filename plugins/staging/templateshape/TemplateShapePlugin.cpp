@@ -22,7 +22,7 @@
 // Own
 #include "TemplateShapePlugin.h"
 
-// KDE
+// KF5
 #include <kpluginfactory.h>
 
 // Calligra libs

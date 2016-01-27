@@ -23,7 +23,7 @@
 //Qt includes
 #include <QList>
 
-//KDE includes
+// KF5
 #include <klocalizedstring.h>
 
 //Calligra includes

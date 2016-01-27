@@ -20,9 +20,11 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 // flake
 #include "KoToolManager.h"
 #include "KoToolManager_p.h"
+
 #include "KoToolRegistry.h"
 #include "KoToolProxy.h"
 #include "KoToolProxy_p.h"
@@ -40,8 +42,13 @@
 #include "tools/KoCreateShapesTool.h"
 #include "tools/KoZoomTool.h"
 #include "tools/KoPanTool.h"
+#include "FlakeDebug.h"
 
-// Qt + kde
+// KF5
+#include <KActionCollection>
+#include <KLocalizedString>
+
+// Qt
 #include <QWidget>
 #include <QEvent>
 #include <QWheelEvent>
@@ -52,11 +59,7 @@
 #include <QVBoxLayout>
 #include <QStringList>
 #include <QApplication>
-#include <kactioncollection.h>
-#include <FlakeDebug.h>
-
 #include <QAction>
-#include <klocalizedstring.h>
 #include <QKeySequence>
 #include <QStack>
 #include <QLabel>
