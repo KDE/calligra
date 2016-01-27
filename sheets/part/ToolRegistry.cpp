@@ -79,7 +79,6 @@ void ToolRegistry::loadTools()
             continue;
         }
 
-        // TODO: the kde4 version supported enabling/disabling of plugins, do we want that?
         KPluginFactory* factory = qobject_cast<KPluginFactory *>(loader->instance());
         if (!factory) {
             debugSheetsFormula << "Unable to create plugin factory for" << loader->fileName();
