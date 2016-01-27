@@ -33,9 +33,6 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
 
-
-
-
 #include <kis_debug.h>
 
 #include <KoIcon.h>
@@ -60,9 +57,14 @@
 
 
 KisImageFromClipboard::KisImageFromClipboard(QWidget* parent, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
-: KisCustomImageWidget(parent, defWidth, defHeight, resolution, defColorModel, defColorDepth, defColorProfile, imageName)
+    : KisCustomImageWidget(parent, defWidth, defHeight, resolution, defColorModel, defColorDepth, defColorProfile, imageName)
+    , m_scene(new QGraphicsScene())
+    , m_previewItem(new QGraphicsPixmapItem())
+
 {
     setObjectName("KisImageFromClipboard");
+    clipPreview->setScene(m_scene);
+    m_scene->addItem(m_previewItem);
     
     // create clipboard preview and show it   
     createClipboardPreview();
@@ -80,6 +82,8 @@ KisImageFromClipboard::KisImageFromClipboard(QWidget* parent, qint32 defWidth, q
 
 KisImageFromClipboard::~KisImageFromClipboard()
 {
+    delete m_scene;
+    delete m_previewItem;
 }
 
 void KisImageFromClipboard::createImage()
@@ -114,28 +118,26 @@ void KisImageFromClipboard::clipboardDataChanged()
 void KisImageFromClipboard::createClipboardPreview()
 {
     QClipboard *cb = QApplication::clipboard();
-    QImage qimage = cb->image();
     const QMimeData *cbData = cb->mimeData();
-    QByteArray mimeType("application/x-krita-selection");
-    
-    if ((cbData && cbData->hasFormat(mimeType)) || !qimage.isNull()) {
-        QImage* clipboardImage = new QImage(qimage); // qimage needs to be on the heap
-        QGraphicsPixmapItem *item = new QGraphicsPixmapItem( QPixmap::fromImage(*clipboardImage));
-        
-        QGraphicsScene *clipboardScene = new QGraphicsScene();      
-        clipboardScene->addItem(item);
-        
-        clipPreview->setScene(clipboardScene);
-        clipPreview->show();             
-        createButton->setEnabled(true);
-        
-        doubleWidth->setValue(clipboardImage->width());
-        doubleHeight->setValue(clipboardImage->height());
-    } else {
-        createButton->setEnabled(false);
-        clipPreview->setScene(new QGraphicsScene(this));
+    if (cbData->hasImage()) {
+        QImage qimage = cb->image();
+
+        QByteArray mimeType("application/x-krita-selection");
+
+        if ((cbData && cbData->hasFormat(mimeType)) || !qimage.isNull()) {
+            m_previewItem->setPixmap(QPixmap::fromImage(qimage));
+
+            clipPreview->show();
+            createButton->setEnabled(true);
+
+            doubleWidth->setValue(qimage.width());
+            doubleHeight->setValue(qimage.height());
+        }
     }
-    
+    else {
+        createButton->setEnabled(false);
+        clipPreview->hide();
+    }
     
 }
 
