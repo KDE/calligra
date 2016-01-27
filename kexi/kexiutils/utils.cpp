@@ -563,23 +563,6 @@ const WidgetMargins KexiUtils::operator+ (
 
 //---------
 
-K_GLOBAL_STATIC(QFont, _smallFont)
-
-QFont KexiUtils::smallFont(QWidget *init)
-{
-    if (init) {
-        *_smallFont = init->font();
-        const int wdth = KGlobalSettings::desktopGeometry(init).width();
-        int size = 10 + qMax(0, wdth - 1100) / 100;
-        size = qMin(init->fontInfo().pixelSize(), size);
-        size = qMax(KGlobalSettings::smallestReadableFont().pixelSize(), size);
-        _smallFont->setPixelSize(size);
-    }
-    return *_smallFont;
-}
-
-//---------------------
-
 KTextEditorFrame::KTextEditorFrame(QWidget * parent, Qt::WindowFlags f)
         : QFrame(parent, f)
 {

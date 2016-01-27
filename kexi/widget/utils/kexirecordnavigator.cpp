@@ -123,7 +123,7 @@ KexiRecordNavigator::KexiRecordNavigator(QAbstractScrollArea &parentView, QWidge
     d->lyr->addWidget(d->textLabel);
     setLabelText(i18n("Record:"));
 
-    setFont( KexiUtils::smallFont() );
+    setFont(KGlobalSettings::smallestReadableFont());
     QFontMetrics fm(font());
     d->nav1DigitWidth = fm.width("8");
 

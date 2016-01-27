@@ -26,6 +26,7 @@
 #include <QScrollBar>
 
 #include <kdebug.h>
+#include <kglobalsettings.h>
 
 #include <math.h>
 
@@ -91,7 +92,7 @@ KexiRelationsConnection::drawConnection(QPainter *p)
     int rx = d->detailsTable->x() + d->scrollArea->horizontalScrollBar()->value();
     int ry = d->detailsTable->globalY(d->detailsField);
 
-    QFont f(KexiUtils::smallFont(d->scrollArea));
+    QFont f(KGlobalSettings::smallestReadableFont());
     f.setBold(true);
     p->setFont(f);
     QFontMetrics fm(f);

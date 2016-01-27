@@ -832,7 +832,6 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     const bool userMode = KexiMainWindowIface::global()->userMode();
     KToolBar *tbar;
 
-    KexiUtils::smallFont(this/*init*/);
     slotSettingsChanged(KGlobalSettings::FontChanged);
     connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)), this, SLOT(slotSettingsChanged(int)));
 
