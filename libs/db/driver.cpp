@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2016 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -418,6 +418,11 @@ QString Driver::unicodeFunctionToString(KexiDB::NArgExpr *args,
                                         QuerySchemaParameterValueListIterator* params) const
 {
     return KexiDB::FunctionExpr::toString(QLatin1String("UNICODE"), this, args, params);
+}
+
+QString Driver::concatenateFunctionToString(KexiDB::BinaryExpr *args, QuerySchemaParameterValueListIterator* params) const
+{
+    return args->left()->toString(this, params) + QLatin1String("||") + args->right()->toString(this, params);
 }
 
 //---------------

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2016 Jarosław Staniek <staniek@kde.org>
 
    Based on nexp.cpp : Parser module of Python-like language
    (C) 2001 Jarosław Staniek, MIMUW (www.mimuw.edu.pl)
@@ -537,8 +537,17 @@ Field::Type BinaryExpr::type()
     switch (m_token) {
     case BITWISE_SHIFT_RIGHT:
     case BITWISE_SHIFT_LEFT:
-    case CONCATENATION:
         return lt;
+    case '+':
+    case CONCATENATION: {
+        const bool ltText = Field::isTextType(lt);
+        const bool rtText = Field::isTextType(rt);
+        if (ltText || rtText) {
+            return (lt == Field::LongText || rt == Field::LongText) ? Field::LongText
+                                                                    : Field::Text;
+        }
+        return lt;
+    }
     }
 
     const bool ltInt = Field::isIntegerType(lt);
@@ -597,6 +606,15 @@ QString BinaryExpr::tokenToString(const Driver *driver)
 
 QString BinaryExpr::toString(const Driver *driver, QuerySchemaParameterValueListIterator* params)
 {
+    switch (m_token) {
+    case '+':
+    case CONCATENATION: {
+        const Field::Type t = type();
+        if (driver && (t == Field::Text || t == Field::LongText)) {
+            return driver->concatenateFunctionToString(this, params);
+        }
+    }
+    }
 #define INFIX(a) \
     (m_larg ? m_larg->toString(driver, params) : "<NULL>") + ' ' + a + ' ' + (m_rarg ? m_rarg->toString(driver, params) : "<NULL>")
     return INFIX(tokenToString(driver));

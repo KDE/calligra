@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2016 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,6 +41,7 @@ class ConnectionInternal;
 class DriverManager;
 class DriverBehaviour;
 class DriverPrivate;
+class BinaryExpr;
 class NArgExpr;
 class QuerySchemaParameterValueListIterator;
 
@@ -340,6 +341,14 @@ public:
     //! Special case is for MYSQL and PostgreSQL.
     virtual QString unicodeFunctionToString(KexiDB::NArgExpr *args,
                                             QuerySchemaParameterValueListIterator* params) const;
+
+    //! Generates native (driver-specific) function call for concatenation of two strings.
+    //! Default implementation USES infix "||" operator.
+    //! Special case is for MYSQL (CONCAT()).
+    //! @todo API supporting NArgExpr would be useful so instead of a||b||c can be expressed as
+    //!       CONCAT(a,b,c), not by CONCAT(CONCAT(a,b),c). This requires changes to the SQL parser.
+    virtual QString concatenateFunctionToString(KexiDB::BinaryExpr *args,
+                                                QuerySchemaParameterValueListIterator* params) const;
 
 protected:
     /*! Used by DriverManager.
