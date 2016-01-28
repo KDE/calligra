@@ -123,9 +123,6 @@ void KoTableColumnAndRowStyleManager::removeColumns(int column, int numberColumn
         return;
     }
 
-    while (column > d->tableColumnStyles.size())
-        d->tableColumnStyles.append(KoTableColumnStyle());
-
     d->tableColumnStyles.remove(column, numberColumns);
 }
 
