@@ -107,8 +107,8 @@ public:
     void setColumnGapWidth(qreal columnGapWidth);
     qreal columnGapWidth() const;
 
-    void setColumnData(const QList<KoColumns::ColumnDatum> &columnData);
-    QList<KoColumns::ColumnDatum> columnData() const;
+    void setColumnData(const QVector<KoColumns::ColumnDatum> &columnData);
+    QVector<KoColumns::ColumnDatum> columnData() const;
 
     void setSeparatorStyle(KoColumns::SeparatorStyle separatorStyle);
     KoColumns::SeparatorStyle separatorStyle() const;

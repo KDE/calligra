@@ -40,7 +40,7 @@
 #include "TextDebug.h"
 
 
-Q_DECLARE_METATYPE(QList<KoColumns::ColumnDatum>)
+Q_DECLARE_METATYPE(QVector<KoColumns::ColumnDatum>)
 
 class Q_DECL_HIDDEN KoSectionStyle::Private
 {
@@ -77,11 +77,11 @@ public:
             return QColor();
         return variant.value<QColor>();
     }
-    QList<KoColumns::ColumnDatum> propertyColumnData() const{
+    QVector<KoColumns::ColumnDatum> propertyColumnData() const{
         QVariant variant = stylesPrivate.value(ColumnData);
         if (variant.isNull())
-            return QList<KoColumns::ColumnDatum>();
-        return variant.value<QList<KoColumns::ColumnDatum> >();
+            return QVector<KoColumns::ColumnDatum>();
+        return variant.value<QVector<KoColumns::ColumnDatum> >();
     }
 
     QString name;
@@ -216,12 +216,12 @@ qreal KoSectionStyle::columnGapWidth() const
     return d->propertyDouble(ColumnGapWidth);
 }
 
-void KoSectionStyle::setColumnData(const QList<KoColumns::ColumnDatum> &columnData)
+void KoSectionStyle::setColumnData(const QVector<KoColumns::ColumnDatum> &columnData)
 {
-    setProperty(ColumnData, QVariant::fromValue<QList<KoColumns::ColumnDatum> >(columnData));
+    setProperty(ColumnData, QVariant::fromValue<QVector<KoColumns::ColumnDatum> >(columnData));
 }
 
-QList<KoColumns::ColumnDatum> KoSectionStyle::columnData() const
+QVector<KoColumns::ColumnDatum> KoSectionStyle::columnData() const
 {
     return d->propertyColumnData();
 }
@@ -394,7 +394,7 @@ void KoSectionStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &c
         if (styleStack.hasProperty(KoXmlNS::fo, "column-gap")) {
             setColumnGapWidth(KoUnit::parseValue(columns.attributeNS(KoXmlNS::fo, "column-gap")));
         } else {
-            QList <KoColumns::ColumnDatum> columnData;
+            QVector<KoColumns::ColumnDatum> columnData;
 
             KoXmlElement columnElement;
             forEachElement(columnElement, columns) {
