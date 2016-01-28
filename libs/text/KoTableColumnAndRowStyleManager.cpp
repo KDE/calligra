@@ -93,6 +93,8 @@ void KoTableColumnAndRowStyleManager::setColumnStyle(int column, const KoTableCo
         return;
     }
 
+    // TODO: just resize() if needed should work as well
+    d->tableColumnStyles.reserve(column+1);
     while (column >= d->tableColumnStyles.size())
         d->tableColumnStyles.append(KoTableColumnStyle());
 
@@ -108,6 +110,8 @@ void KoTableColumnAndRowStyleManager::insertColumns(int column, int numberColumn
         return;
     }
 
+    // TODO: just resize() if needed should work as well
+    d->tableColumnStyles.reserve(column + numberColumns);
     while (column > d->tableColumnStyles.size())
         d->tableColumnStyles.append(KoTableColumnStyle());
 

@@ -68,6 +68,7 @@ void DeleteTableColumnCommand::redo()
 
         m_table->removeColumns(m_selectionColumn, m_selectionColumnSpan);
 
+        m_deletedStyles.reserve(m_selectionColumnSpan);
         for (int i = m_selectionColumn; i < m_selectionColumn + m_selectionColumnSpan; ++i) {
             m_deletedStyles.append(carsManager.columnStyle(i));
         }
