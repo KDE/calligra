@@ -523,11 +523,15 @@ struct FragmentData
     , position(position)
     , length(length)
     {}
+    FragmentData() {}
 
     QTextCharFormat format;
     int position;
     int length;
 };
+
+Q_DECLARE_TYPEINFO(FragmentData, Q_MOVABLE_TYPE);
+
 
 void KoCharacterStyle::applyStyle(QTextBlock &block) const
 {
@@ -544,7 +548,7 @@ void KoCharacterStyle::applyStyle(QTextBlock &block) const
 
     // be sure that we keep the InlineInstanceId, anchor information and ChangeTrackerId when applying a style
 
-    QList<FragmentData> fragments;
+    QVector<FragmentData> fragments;
     for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
         QTextFragment currentFragment = it.fragment();
         if (currentFragment.isValid()) {
