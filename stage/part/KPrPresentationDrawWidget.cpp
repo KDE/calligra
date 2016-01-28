@@ -59,7 +59,7 @@ void KPrPresentationDrawWidget::paintEvent(QPaintEvent * event)
     QPainter painter( this );
     QBrush brush( Qt::SolidPattern );
     QPen pen( brush, m_penSize, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin );
-    foreach ( const Path &path, m_pointVectors ) {
+    foreach ( const KPrPresentationDrawPath &path, m_pointVectors ) {
         pen.setColor( path.color );
         pen.setWidth( path.size );
         painter.setPen( pen );
@@ -69,7 +69,7 @@ void KPrPresentationDrawWidget::paintEvent(QPaintEvent * event)
 
 void KPrPresentationDrawWidget::mousePressEvent( QMouseEvent* e )
 {
-    struct Path path;
+    KPrPresentationDrawPath path;
     path.color = m_penColor;
     path.size = m_penSize;
     path.points = QVector<QPointF>() << e->pos();
