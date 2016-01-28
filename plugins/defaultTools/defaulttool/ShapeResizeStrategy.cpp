@@ -269,7 +269,7 @@ KUndo2Command* ShapeResizeStrategy::createCommand()
 {
     tool()->canvas()->snapGuide()->reset();
     QVector<QSizeF> newSizes;
-    QList<QTransform> transformations;
+    QVector<QTransform> transformations;
     const int shapeCount = m_selectedShapes.count();
 
     newSizes.reserve(shapeCount);

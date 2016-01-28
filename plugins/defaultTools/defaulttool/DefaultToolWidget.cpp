@@ -196,8 +196,8 @@ void DefaultToolWidget::sizeHasChanged()
 
         QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::StrippedSelection );
         QVector<QSizeF> oldSizes, newSizes;
-        QList<QTransform> oldState;
-        QList<QTransform> newState;
+        QVector<QTransform> oldState;
+        QVector<QTransform> newState;
         const int selectedShapesCount = selectedShapes.count();
 
         oldSizes.reserve(selectedShapesCount);

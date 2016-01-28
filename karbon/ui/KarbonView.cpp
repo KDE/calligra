@@ -760,7 +760,8 @@ void KarbonView::selectionFlip(bool horizontally, bool vertically)
         return;
 
     QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::StrippedSelection );
-    if( ! selectedShapes.count() )
+    const int selectedShapesCount = selectedShapes.count();
+    if( selectedShapesCount < 1 )
         return;
 
     // mirror about center point
@@ -771,8 +772,11 @@ void KarbonView::selectionFlip(bool horizontally, bool vertically)
     mirrorMatrix.scale( horizontally ? -1.0 : 1.0, vertically ? -1.0 : 1.0);
     mirrorMatrix.translate(-mirrorCenter.x(), -mirrorCenter.y());
 
-    QList<QTransform> oldState;
-    QList<QTransform> newState;
+    QVector<QTransform> oldState;
+    QVector<QTransform> newState;
+    oldState.reserve(selectedShapesCount);
+    newState.reserve(selectedShapesCount);
+
     foreach( KoShape* shape, selectedShapes ) {
         shape->update();
         oldState << shape->transformation();

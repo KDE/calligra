@@ -60,8 +60,8 @@ private:
     QSizeF m_initialSize;
     QPointF m_initialPosition;
     QTransform m_scaleMatrix;
-    QList<QTransform> m_oldTransforms;
-    QList<QTransform> m_transformations;
+    QVector<QTransform> m_oldTransforms;
+    QVector<QTransform> m_transformations;
     QPointF m_lastScale;
     QList<KoShape*> m_selectedShapes;
 };

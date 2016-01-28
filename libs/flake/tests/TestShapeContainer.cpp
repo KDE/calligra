@@ -130,8 +130,8 @@ void TestShapeContainer::testScaling()
     QTransform matrix;
     matrix.scale(0.5, 0.5);
 
-    QList<QTransform> oldTransformations;
-    QList<QTransform> newTransformations;
+    QVector<QTransform> oldTransformations;
+    QVector<QTransform> newTransformations;
     foreach(const KoShape* shape, transformShapes) {
         QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
@@ -190,8 +190,8 @@ void TestShapeContainer::testScaling2()
     QTransform matrix;
     matrix.scale(0.5, 0.5);
 
-    QList<QTransform> oldTransformations;
-    QList<QTransform> newTransformations;
+    QVector<QTransform> oldTransformations;
+    QVector<QTransform> newTransformations;
     foreach(const KoShape* shape, transformShapes) {
         QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
