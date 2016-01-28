@@ -78,7 +78,7 @@ public:
 
     //  KoPAViewBase/KoView overrides
 
-    void addImages(const QList<QImage> &imageList, const QPoint &insertAt);
+    void addImages(const QVector<QImage> &imageList, const QPoint &insertAt);
 
     KoZoomController* zoomController() const;
 

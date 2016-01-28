@@ -32,7 +32,7 @@ public:
     explicit CSThumbProviderKarbon(KarbonDocument *doc);
     virtual ~CSThumbProviderKarbon();
 
-    virtual QList<QImage> createThumbnails(const QSize &thumbSize);
+    virtual QVector<QImage> createThumbnails(const QSize &thumbSize);
 
 private:
     KarbonDocument *m_doc;

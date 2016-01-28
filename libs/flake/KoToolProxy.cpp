@@ -564,7 +564,7 @@ bool KoToolProxy::paste()
     if (!success) {
         const QMimeData *data = QApplication::clipboard()->mimeData();
 
-        QList<QImage> imageList;
+        QVector<QImage> imageList;
 
         QImage image = QApplication::clipboard()->image();
 

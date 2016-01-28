@@ -130,7 +130,7 @@ public:
     * @param images the images the filter should be applied to
     * @param context the render context providing additional data
     */
-    virtual QImage processImages(const QList<QImage> &images, const KoFilterEffectRenderContext &context) const;
+    virtual QImage processImages(const QVector<QImage> &images, const KoFilterEffectRenderContext &context) const;
 
     /**
      * Loads data from given xml element.

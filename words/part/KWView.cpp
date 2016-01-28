@@ -492,7 +492,7 @@ void KWView::pasteRequested()
     QImage img = QApplication::clipboard()->image();
 
     if (!img.isNull()) {
-        QList<QImage> images;
+        QVector<QImage> images;
         images.append(img);
         addImages(images, canvas()->mapFromGlobal(QCursor::pos()));
     }
@@ -1064,7 +1064,7 @@ void KWView::refreshFindTexts()
     m_find->setDocuments(texts);
 }
 
-void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
+void KWView::addImages(const QVector<QImage> &imageList, const QPoint &insertAt)
 {
     if (!m_canvas) {
         // no canvas because we're not on the desktop?

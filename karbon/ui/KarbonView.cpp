@@ -434,7 +434,7 @@ void KarbonView::dropEvent(QDropEvent *e)
     KoView::dropEvent(e);
 }
 
-void KarbonView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
+void KarbonView::addImages(const QVector<QImage> &imageList, const QPoint &insertAt)
 {
     // get position from event and convert to document coordinates
     QPointF pos = canvasWidget()->viewConverter()->viewToDocument(insertAt)

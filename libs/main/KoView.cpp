@@ -226,7 +226,7 @@ void KoView::dragEnterEvent(QDragEnterEvent *event)
 void KoView::dropEvent(QDropEvent *event)
 {
     // we can drop a list of urls from, for instance dolphin
-    QList<QImage> images;
+    QVector<QImage> images;
 
     if (event->mimeData()->hasImage()) {
         QImage image = event->mimeData()->imageData().value<QImage>();
@@ -266,7 +266,7 @@ void KoView::dropEvent(QDropEvent *event)
 }
 
 
-void KoView::addImages(const QList<QImage> &, const QPoint &)
+void KoView::addImages(const QVector<QImage> &, const QPoint &)
 {
     // override in your application
 }

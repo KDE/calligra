@@ -187,7 +187,7 @@ KoPAView::~KoPAView()
     delete d;
 }
 
-void KoPAView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
+void KoPAView::addImages(const QVector<QImage> &imageList, const QPoint &insertAt)
 {
     // get position from event and convert to document coordinates
     QPointF pos = zoomHandler()->viewToDocument(insertAt)

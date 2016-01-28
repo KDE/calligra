@@ -147,7 +147,7 @@ protected:
     virtual void updateReadWrite(bool readwrite);
     virtual void resizeEvent(QResizeEvent* event);
     virtual void dragEnterEvent(QDragEnterEvent * event);
-    virtual void addImages(const QList<QImage> &imageList, const QPoint &insertAt);
+    virtual void addImages(const QVector<QImage> &imageList, const QPoint &insertAt);
 
     void createLayersTabDock();
     void createStrokeDock();

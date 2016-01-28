@@ -62,7 +62,7 @@ QImage CompositeEffect::processImage(const QImage &image, const KoFilterEffectRe
     return image;
 }
 
-QImage CompositeEffect::processImages(const QList<QImage> &images, const KoFilterEffectRenderContext &context) const
+QImage CompositeEffect::processImages(const QVector<QImage> &images, const KoFilterEffectRenderContext &context) const
 {
     int imageCount = images.count();
     if (!imageCount)
