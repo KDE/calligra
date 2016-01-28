@@ -165,7 +165,7 @@ KoCanvasBase* KoToolProxy::canvas() const
 void KoToolProxy::touchEvent(QTouchEvent *event)
 {
     QPointF point;
-    QList<KoTouchPoint> touchPoints;
+    QVector<KoTouchPoint> touchPoints;
 
     bool isPrimary = true;
     foreach(QTouchEvent::TouchPoint p, event->touchPoints()) {
