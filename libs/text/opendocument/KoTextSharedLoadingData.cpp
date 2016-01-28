@@ -275,7 +275,7 @@ QList<QPair<QString, KoParagraphStyle *> > KoTextSharedLoadingData::loadParagrap
 void KoTextSharedLoadingData::addCharacterStyles(KoShapeLoadingContext &context, const QList<KoXmlElement*> &styleElements,
         int styleTypes, KoStyleManager *styleManager)
 {
-    QList<OdfCharStyle> characterStyles(loadCharacterStyles(context, styleElements));
+    QVector<OdfCharStyle> characterStyles(loadCharacterStyles(context, styleElements));
 
     foreach (const OdfCharStyle &odfStyle, characterStyles) {
         if (styleTypes & ContentDotXml) {
@@ -315,9 +315,10 @@ void KoTextSharedLoadingData::addCharacterStyles(KoShapeLoadingContext &context,
     }
 }
 
-QList<KoTextSharedLoadingData::OdfCharStyle> KoTextSharedLoadingData::loadCharacterStyles(KoShapeLoadingContext &shapeContext, const QList<KoXmlElement*> &styleElements)
+QVector<KoTextSharedLoadingData::OdfCharStyle> KoTextSharedLoadingData::loadCharacterStyles(KoShapeLoadingContext &shapeContext, const QList<KoXmlElement*> &styleElements)
 {
-    QList<OdfCharStyle> characterStyles;
+    QVector<OdfCharStyle> characterStyles;
+    characterStyles.reserve(styleElements.size());
 
     foreach(KoXmlElement *styleElem, styleElements) {
         Q_ASSERT(styleElem);

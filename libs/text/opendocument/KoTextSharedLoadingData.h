@@ -206,7 +206,9 @@ private:
         QString parentStyle;
         KoCharacterStyle *style;
     };
-    QList<OdfCharStyle> loadCharacterStyles(KoShapeLoadingContext &context, const QList<KoXmlElement*> &styleElements);
+    // declaring OdfCharStyle as movable type seems not possible, due to being a private nested struct
+
+    QVector<OdfCharStyle> loadCharacterStyles(KoShapeLoadingContext &context, const QList<KoXmlElement*> &styleElements);
 
     void addDefaultCharacterStyle(KoShapeLoadingContext &context, const KoXmlElement *styleElem, const KoXmlElement *appDefault, KoStyleManager *styleManager);
 
