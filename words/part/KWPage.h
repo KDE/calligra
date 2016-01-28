@@ -195,6 +195,8 @@ private:
     int n;
 };
 
+Q_DECLARE_TYPEINFO(KWPage, Q_MOVABLE_TYPE);
+
 inline uint qHash(const KWPage &page)
 {
     return page.hash();
