@@ -64,6 +64,7 @@ void DeleteTableRowCommand::redo()
             m_selectionRowSpan = 1;
         }
 
+        m_deletedStyles.reserve(m_selectionRowSpan);
         for (int i = m_selectionRow; i < m_selectionRow + m_selectionRowSpan; ++i) {
             m_deletedStyles.append(carsManager.rowStyle(i));
         }

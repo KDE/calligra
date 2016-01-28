@@ -152,6 +152,8 @@ void KoTableColumnAndRowStyleManager::setRowStyle(int row, const KoTableRowStyle
         return;
     }
 
+    // TODO: just resize() if needed should work as well
+    d->tableRowStyles.reserve(row+1);
     while (row >= d->tableRowStyles.size())
         d->tableRowStyles.append(KoTableRowStyle());
 
@@ -167,6 +169,8 @@ void KoTableColumnAndRowStyleManager::insertRows(int row, int numberRows, const 
         return;
     }
 
+    // TODO: just resize() if needed should work as well
+    d->tableRowStyles.reserve(row + numberRows);
     while (row > d->tableRowStyles.size())
         d->tableRowStyles.append(KoTableRowStyle());
 
