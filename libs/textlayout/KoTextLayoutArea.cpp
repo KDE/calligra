@@ -651,7 +651,7 @@ QTextLine KoTextLayoutArea::Private::restartLayout(QTextBlock &block, int lineTe
     QTextLayout *layout = block.layout();
     KoTextBlockData blockData(block);
     QPointF stashedCounterPosition = blockData.counterPosition();
-    QList<LineKeeper> stashedLines;
+    QVector<LineKeeper> stashedLines;
     QTextLine line;
     for(int i = 0; i < layout->lineCount(); i++) {
         QTextLine l = layout->lineAt(i);
@@ -671,7 +671,7 @@ QTextLine KoTextLayoutArea::Private::restartLayout(QTextBlock &block, int lineTe
     return recreatePartialLayout(block, stashedLines, stashedCounterPosition, line);
 }
 
-void KoTextLayoutArea::Private::stashRemainingLayout(QTextBlock &block, int lineTextStartOfFirstKeep, QList<LineKeeper> &stashedLines, QPointF &stashedCounterPosition)
+void KoTextLayoutArea::Private::stashRemainingLayout(QTextBlock &block, int lineTextStartOfFirstKeep, QVector<LineKeeper> &stashedLines, QPointF &stashedCounterPosition)
 {
     QTextLayout *layout = block.layout();
     KoTextBlockData blockData(block);
@@ -690,7 +690,7 @@ void KoTextLayoutArea::Private::stashRemainingLayout(QTextBlock &block, int line
     }
 }
 
-QTextLine KoTextLayoutArea::Private::recreatePartialLayout(QTextBlock &block, QList<LineKeeper> stashedLines, QPointF &stashedCounterPosition, QTextLine &line)
+QTextLine KoTextLayoutArea::Private::recreatePartialLayout(QTextBlock &block, const QVector<LineKeeper> &stashedLines, QPointF &stashedCounterPosition, QTextLine &line)
 {
     QTextLayout *layout = block.layout();
     KoTextBlockData blockData(block);
@@ -1142,7 +1142,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     // ==============
     // Possibly store the old layout of lines in case we end up splitting the paragraph at the same position
     // ==============
-    QList<LineKeeper> stashedLines;
+    QVector<LineKeeper> stashedLines;
     QPointF stashedCounterPosition;
     if (lastOfPreviousRun) {
         // we have been layouted before, and the block ended on the following page so better

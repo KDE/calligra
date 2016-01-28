@@ -44,6 +44,7 @@ struct LineKeeper
     qreal lineWidth;
     QPointF position;
 };
+Q_DECLARE_TYPEINFO(LineKeeper, Q_MOVABLE_TYPE);
 
 
 class Q_DECL_HIDDEN KoTextLayoutArea::Private
@@ -139,9 +140,9 @@ public:
     /// utility method to restart layout of a block
     QTextLine restartLayout(QTextBlock &block, int lineTextStartOfLastKeep);
     /// utility method to store remaining layout of a split block
-    void stashRemainingLayout(QTextBlock &block, int lineTextStartOfFirstKeep, QList<LineKeeper> &stashedLines, QPointF &stashedCounterPosition);
+    void stashRemainingLayout(QTextBlock &block, int lineTextStartOfFirstKeep, QVector<LineKeeper> &stashedLines, QPointF &stashedCounterPosition);
     /// utility method to recreate partial layout of a split block
-    QTextLine recreatePartialLayout(QTextBlock &block, QList<LineKeeper> stashedLines, QPointF &stashedCounterPosition, QTextLine &line);
+    QTextLine recreatePartialLayout(QTextBlock &block, const QVector<LineKeeper> &stashedLines, QPointF &stashedCounterPosition, QTextLine &line);
 
 
 };
