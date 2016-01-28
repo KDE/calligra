@@ -99,7 +99,7 @@ private:
     KoPAPixmapCache operator=( const KoPAPixmapCache & );
 
     QString generateKey( const QString &key, const QSize & size );
-    QMap<QString, QList<QSize> > m_keySize;
+    QMap<QString, QVector<QSize> > m_keySize;
 };
 
 #endif /* KOPAPIXMAPCACHE_H */
