@@ -932,7 +932,7 @@ void KarbonView::pathSnapToGrid()
 
     QList<KoShape*> selectedShapes = selection->selectedShapes();
     QList<KoPathPointData> points;
-    QList<QPointF> offsets;
+    QVector<QPointF> offsets;
 
     // store current grid snap state
     bool oldSnapToGrid = part()->gridData().snapToGrid();

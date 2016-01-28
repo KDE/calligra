@@ -140,7 +140,7 @@ void TestShapeContainer::testScaling()
         newTransformations.append(localTransform*oldTransform);
     }
 
-    QList<QPointF> oldPositions;
+    QVector<QPointF> oldPositions;
     for(int i=0; i< transformShapes.size(); i++) {
         oldPositions.append(transformShapes.at(i)->absolutePosition(KoFlake::TopLeftCorner));
     }
@@ -198,7 +198,7 @@ void TestShapeContainer::testScaling2()
         newTransformations.append(oldTransform*matrix);
     }
 
-    QList<QPointF> oldPositions;
+    QVector<QPointF> oldPositions;
     for(int i=0; i< transformShapes.size(); i++) {
         oldPositions.append(transformShapes.at(i)->absolutePosition(KoFlake::TopLeftCorner));
     }

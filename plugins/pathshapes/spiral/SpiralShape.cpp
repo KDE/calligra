@@ -114,7 +114,7 @@ void SpiralShape::moveHandleAction(int handleId, const QPointF &point, Qt::Keybo
             break;
         case 2:
         {
-            QList<QPointF> kindHandlePositions;
+            QVector<QPointF> kindHandlePositions;
             kindHandlePositions.push_back(QPointF(m_center + QPointF(cos(m_kindAngle) * m_radii.x(), -sin(m_kindAngle) * m_radii.y())));
             kindHandlePositions.push_back(m_center);
             kindHandlePositions.push_back((m_handles[0] + m_handles[1]) / 2.0);

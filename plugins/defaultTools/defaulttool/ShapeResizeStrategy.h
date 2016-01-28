@@ -53,7 +53,7 @@ private:
     void resizeBy( const QPointF &center, qreal zoomX, qreal zoomY );
 
     QPointF m_start;
-    QList<QPointF> m_startPositions;
+    QVector<QPointF> m_startPositions;
     QVector<QSizeF> m_startSizes;
     bool m_top, m_left, m_bottom, m_right;
     QTransform m_unwindMatrix, m_windMatrix;

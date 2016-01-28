@@ -128,8 +128,11 @@ void DefaultToolWidget::positionHasChanged()
 
     QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
     QPointF moveBy = newPos - oldPos;
-    QList<QPointF> oldPositions;
-    QList<QPointF> newPositions;
+    QVector<QPointF> oldPositions;
+    QVector<QPointF> newPositions;
+    const int selectedShapesCount = selectedShapes.count();
+    oldPositions.reserve(selectedShapesCount);
+    newPositions.reserve(selectedShapesCount);
     foreach( KoShape* shape, selectedShapes )
     {
         oldPositions.append( shape->position() );

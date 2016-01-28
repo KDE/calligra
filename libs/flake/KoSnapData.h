@@ -22,6 +22,7 @@
 
 #include <KoPathSegment.h>
 #include <flake_export.h>
+#include <QVector>
 
 /**
  * This class is used to provide additional data to the snap guide.
@@ -41,10 +42,10 @@ public:
     ~KoSnapData();
 
     /// Returns list of points to snap to
-    QList<QPointF> snapPoints() const;
+    QVector<QPointF> snapPoints() const;
 
     /// Sets list of points to snap to
-    void setSnapPoints(const QList<QPointF> &snapPoints);
+    void setSnapPoints(const QVector<QPointF> &snapPoints);
 
     /// Returns list of segments to snap to
     QList<KoPathSegment> snapSegments() const;
@@ -53,7 +54,7 @@ public:
     void setSnapSegments(const QList<KoPathSegment> &snapSegments);
 
 private:
-    QList<QPointF> m_points;
+    QVector<QPointF> m_points;
     QList<KoPathSegment> m_segments;
 };
 

@@ -78,10 +78,10 @@ public:
     int degree() const;
 
     /// Returns list of intersections with the given path segment
-    QList<QPointF> intersections(const KoPathSegment &segment) const;
+    QVector<QPointF> intersections(const KoPathSegment &segment) const;
 
     /// Returns the convex hull polygon of the segment
-    QList<QPointF> convexHull() const;
+    QVector<QPointF> convexHull() const;
 
     /// Splits segment at given position returning the two resulting segments
     QPair<KoPathSegment, KoPathSegment> splitAt(qreal t) const;
@@ -144,7 +144,7 @@ public:
     qreal nearestPoint(const QPointF &point) const;
 
     /// Returns ordered list of control points
-    QList<QPointF> controlPoints() const;
+    QVector<QPointF> controlPoints() const;
 
     /**
      * Interpolates quadric bezier curve.

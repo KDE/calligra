@@ -220,8 +220,8 @@ void KoPencilTool::finish(bool closePath)
         return;
 
     KoPathShape * path = 0;
-    QList<QPointF> complete;
-    QList<QPointF> *points = &m_points;
+    QVector<QPointF> complete;
+    QVector<QPointF> *points = &m_points;
 
     if (m_mode == ModeStraight || m_optimizeRaw || m_optimizeCurve) {
         float combineAngle;

@@ -40,11 +40,14 @@ KoShapeAlignCommand::KoShapeAlignCommand(const QList<KoShape*> &shapes, Align al
         : KUndo2Command(parent),
         d(new Private())
 {
-    QList<QPointF> previousPositions;
-    QList<QPointF> newPositions;
+    QVector<QPointF> previousPositions;
+    QVector<QPointF> newPositions;
     QPointF position;
     QPointF delta;
     QRectF bRect;
+    const int shapesCount = shapes.count();
+    previousPositions.reserve(shapesCount);
+    newPositions.reserve(shapesCount);
     foreach(KoShape *shape, shapes) {
 //   if (dynamic_cast<KoShapeGroup*> (shape))
 //       debugFlake <<"Found Group";

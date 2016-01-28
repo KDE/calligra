@@ -87,7 +87,7 @@ protected:
 private:
     QPointF m_outputPosition;
     QString m_outputName;
-    QList<QPointF> m_inputPositions;
+    QVector<QPointF> m_inputPositions;
     KoFilterEffect * m_effect;
 };
 

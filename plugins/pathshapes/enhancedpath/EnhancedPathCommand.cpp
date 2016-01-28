@@ -49,7 +49,7 @@ bool EnhancedPathCommand::execute()
      * to the normal mathematically coordinate system to be used for the arcTo
      * drawing routine. This is done by computing (2*M_PI - angle).
      */
-    QList<QPointF> points = pointsFromParameters();
+    const QVector<QPointF> points = pointsFromParameters();
     const int pointsCount = points.size();
 
     switch (m_command.unicode()) {
@@ -207,12 +207,13 @@ bool EnhancedPathCommand::execute()
     return true;
 }
 
-QList<QPointF> EnhancedPathCommand::pointsFromParameters()
+QVector<QPointF> EnhancedPathCommand::pointsFromParameters() const
 {
-    QList<QPointF> points;
+    QVector<QPointF> points;
     QPointF p;
 
     int paramCount = m_parameters.count();
+    points.reserve(paramCount);
     for (int i = 0; i < paramCount - 1; i += 2) {
         p.setX(m_parameters[i]->evaluate());
         p.setY(m_parameters[i+1]->evaluate());
@@ -231,7 +232,7 @@ QList<QPointF> EnhancedPathCommand::pointsFromParameters()
     }
     if ((points.count() % mod) != 0) { // invalid command
         qWarning() << "Invalid point count for command" << m_command << "ignoring" << "count:" << points.count() << "mod:" << mod;
-        return QList<QPointF>();
+        return QVector<QPointF>();
     }
 
     return points;
