@@ -22,7 +22,7 @@
 #define DELETETABLEROWCOMMAND_H
 
 #include <kundo2command.h>
-#include <QList>
+#include <QVector>
 #include <KoTableRowStyle.h>
 
 class KoTextEditor;
@@ -43,7 +43,7 @@ private:
     QTextTable *m_table;
     int m_selectionRow;
     int m_selectionRowSpan;
-    QList<KoTableRowStyle> m_deletedStyles;
+    QVector<KoTableRowStyle> m_deletedStyles;
 };
 
 #endif // DELETETABLEROWCOMMAND_H
