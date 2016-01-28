@@ -268,14 +268,18 @@ void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zo
 KUndo2Command* ShapeResizeStrategy::createCommand()
 {
     tool()->canvas()->snapGuide()->reset();
-    QList<QSizeF> newSizes;
+    QVector<QSizeF> newSizes;
     QList<QTransform> transformations;
     const int shapeCount = m_selectedShapes.count();
+
+    newSizes.reserve(shapeCount);
+    transformations.reserve(shapeCount);
     for ( int i = 0; i < shapeCount; ++i )
     {
         newSizes << m_selectedShapes[i]->size();
         transformations << m_selectedShapes[i]->transformation();
     }
+
     KUndo2Command * cmd = new KUndo2Command(kundo2_i18n("Resize"));
     new KoShapeSizeCommand(m_selectedShapes, m_startSizes, newSizes, cmd );
     new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, transformations, cmd );

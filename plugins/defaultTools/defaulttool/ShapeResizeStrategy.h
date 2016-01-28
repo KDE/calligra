@@ -54,7 +54,7 @@ private:
 
     QPointF m_start;
     QList<QPointF> m_startPositions;
-    QList<QSizeF> m_startSizes;
+    QVector<QSizeF> m_startSizes;
     bool m_top, m_left, m_bottom, m_right;
     QTransform m_unwindMatrix, m_windMatrix;
     QSizeF m_initialSize;

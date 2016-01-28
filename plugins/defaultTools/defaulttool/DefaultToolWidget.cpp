@@ -192,9 +192,15 @@ void DefaultToolWidget::sizeHasChanged()
         resizeMatrix.translate( -scaleCenter.x(), -scaleCenter.y() );
 
         QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::StrippedSelection );
-        QList<QSizeF> oldSizes, newSizes;
+        QVector<QSizeF> oldSizes, newSizes;
         QList<QTransform> oldState;
         QList<QTransform> newState;
+        const int selectedShapesCount = selectedShapes.count();
+
+        oldSizes.reserve(selectedShapesCount);
+        newSizes.reserve(selectedShapesCount);
+        oldState.reserve(selectedShapesCount);
+        newState.reserve(selectedShapesCount);
 
         foreach( KoShape* shape, selectedShapes )
         {

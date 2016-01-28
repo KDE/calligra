@@ -84,8 +84,8 @@ void KPrPlaceholders::setLayout( KPrPageLayout * layout, KoPADocument * document
             }
             // replace the shape as given by the layout
             QList<KoShape *> modifiedShape;
-            QList<QSizeF> oldSize;
-            QList<QSizeF> newSize;
+            QVector<QSizeF> oldSize;
+            QVector<QSizeF> newSize;
             QList<QPointF> oldPosition;
             QList<QPointF> newPosition;
             modifiedShape.append( it->shape );
