@@ -193,6 +193,7 @@ private:
     QSharedDataPointer<Private> d;
 };
 
+Q_DECLARE_TYPEINFO(KoTableColumnStyle, Q_MOVABLE_TYPE);
 Q_DECLARE_METATYPE(KoTableColumnStyle *)
 
 #endif

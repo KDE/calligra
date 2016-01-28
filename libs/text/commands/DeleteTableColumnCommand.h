@@ -22,7 +22,7 @@
 #define DELETETABLECOLUMNCOMMAND_H
 
 #include <kundo2command.h>
-#include <QList>
+#include <QVector>
 #include <KoTableColumnStyle.h>
 
 class KoTextEditor;
@@ -44,7 +44,7 @@ private:
     int m_selectionColumn;
     int m_selectionColumnSpan;
     int m_changeId;
-    QList<KoTableColumnStyle> m_deletedStyles;
+    QVector<KoTableColumnStyle> m_deletedStyles;
 };
 
 #endif // DELETETABLEROWCOMMAND_H
