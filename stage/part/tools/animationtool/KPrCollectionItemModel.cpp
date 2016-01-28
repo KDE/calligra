@@ -61,7 +61,7 @@ int KPrCollectionItemModel::rowCount(const QModelIndex &parent) const
     return m_animationClassList.count();
 }
 
-void KPrCollectionItemModel::setAnimationClassList(const QList<KPrCollectionItem> &newlist)
+void KPrCollectionItemModel::setAnimationClassList(const QVector<KPrCollectionItem> &newlist)
 {
     m_animationClassList = newlist;
     reset();
