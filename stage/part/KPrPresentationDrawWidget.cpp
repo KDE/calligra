@@ -26,7 +26,6 @@
 #include <QVBoxLayout>
 #include <QPainter>
 #include <QPaintEvent>
-#include <QList>
 #include <QMenu>
 #include <QIcon>
 
