@@ -29,7 +29,7 @@
 
 #include <QTextFrame>
 
-static QList<SortKeyPair> sortKeys;
+static QVector<SortKeyPair> sortKeys;
 
 BibliographyGenerator::BibliographyGenerator(QTextDocument *bibDocument, const QTextBlock &block, KoBibliographyInfo *bibInfo)
     : QObject(bibDocument)
@@ -70,7 +70,7 @@ static bool lessThan(KoInlineCite *c1, KoInlineCite *c2)
     return compare_on(0, c1, c2);
 }
 
-static QList<KoInlineCite *> sort(QList<KoInlineCite *> cites, QList<SortKeyPair> keys)
+static QList<KoInlineCite *> sort(QList<KoInlineCite *> cites, const QVector<SortKeyPair> &keys)
 {
     sortKeys = keys;
     sortKeys << QPair<QString, Qt::SortOrder>("identifier", Qt::AscendingOrder);
