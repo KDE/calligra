@@ -26,7 +26,6 @@
 #include <QObject>
 #include <QString>
 #include <QTextDocument>
-#include <QList>
 #include <QTextCursor>
 #include <QTextCharFormat>
 
