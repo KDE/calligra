@@ -39,7 +39,7 @@ public:
     QString iconName;
     QString odfNameSpace;
     QStringList odfElementNames;
-    QList<KoInlineObjectTemplate> templates;
+    QVector<KoInlineObjectTemplate> templates;
     KoInlineObjectFactoryBase::ObjectType type;
 };
 
@@ -59,7 +59,7 @@ QString KoInlineObjectFactoryBase::id() const
     return d->id;
 }
 
-QList<KoInlineObjectTemplate> KoInlineObjectFactoryBase::templates() const
+QVector<KoInlineObjectTemplate> KoInlineObjectFactoryBase::templates() const
 {
     return d->templates;
 }

@@ -21,6 +21,7 @@
 #define KOINLINEOBJECTFACTORY_H
 
 #include <QString>
+#include <QVector>
 
 #include "kotext_export.h"
 
@@ -38,6 +39,8 @@ struct KOTEXT_EXPORT KoInlineObjectTemplate {
      */
     const KoProperties *properties;
 };
+
+Q_DECLARE_TYPEINFO(KoInlineObjectTemplate, Q_MOVABLE_TYPE);
 
 /**
  * A factory for inline text objects. There should be one for each plugin type to
@@ -84,7 +87,7 @@ public:
      * Return all the templates this factory knows about.
      * Each template shows a different way to create an object this factory is specialized in.
      */
-    QList<KoInlineObjectTemplate> templates() const;
+    QVector<KoInlineObjectTemplate> templates() const;
 
     QStringList odfElementNames() const;
 
