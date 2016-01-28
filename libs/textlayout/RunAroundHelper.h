@@ -41,7 +41,7 @@ private:
     KoTextLayoutArea *m_area;
     QList<KoTextLayoutObstruction*> m_obstructions;
     QList<KoTextLayoutObstruction*> m_validObstructions;
-    QList<QRectF> m_lineParts;
+    QVector<QRectF> m_lineParts;
     QRectF m_lineRect;
     qreal m_horizontalPosition;
     bool m_updateValidObstructions;

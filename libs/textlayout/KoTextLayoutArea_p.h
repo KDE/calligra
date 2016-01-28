@@ -122,7 +122,7 @@ public:
     bool acceptsColumnBreak;
     bool virginPage;
     qreal verticalAlignOffset;
-    QList<QRectF> blockRects;
+    QVector<QRectF> blockRects;
     qreal anchoringParagraphTop;
     qreal anchoringParagraphContentTop;
 
