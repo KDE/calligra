@@ -126,7 +126,6 @@ if(BUILD_TEXTDOCUMENT_INSPECTOR)
         TextDocumentStructureModel.cpp
         TextDocumentInspectionDocker.cpp
         TextDocumentInspectionDockerFactory.cpp
-        TextDocumentInspectionPlugin.cpp
     )
 endif()
 
@@ -186,9 +185,3 @@ if( SHOULD_BUILD_FEATURE_RDF )
 endif()
 
 install(TARGETS calligra_shape_text DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
-
-# QT5TODO: needs rework, no longer possible to have multiple plugin metadata per plugin binary
-if(BUILD_TEXTDOCUMENT_INSPECTOR)
-    # workaround: to avoid translations the real desktop file is only generated
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/calligra_docker_textdocumentinspection.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/calligra_docker_textdocumentinspection.desktop)
-endif()
