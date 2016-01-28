@@ -218,7 +218,7 @@ void KoStyleManager::saveReferredStylesToOdf(KoShapeSavingContext &context)
     }
 
     QSet<KoParagraphStyle *> savedParaStyles;
-    QList<KoGenStyles::NamedStyle>  namedStyles = context.mainStyles().styles(KoGenStyle::ParagraphAutoStyle);
+    QVector<KoGenStyles::NamedStyle>  namedStyles = context.mainStyles().styles(KoGenStyle::ParagraphAutoStyle);
     namedStyles += context.mainStyles().styles(KoGenStyle::ParagraphStyle);
     foreach(const KoGenStyles::NamedStyle &namedStyle, namedStyles) {
         KoParagraphStyle *paraStyle = 0;
