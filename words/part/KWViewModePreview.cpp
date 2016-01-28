@@ -60,11 +60,11 @@ void KWViewModePreview::updatePageCache()
     // TODO
 }
 
-QList<KWViewMode::ViewMap> KWViewModePreview::mapExposedRects(const QRectF &viewRect, KoViewConverter *viewConverter) const
+QVector<KWViewMode::ViewMap> KWViewModePreview::mapExposedRects(const QRectF &viewRect, KoViewConverter *viewConverter) const
 {
     Q_UNUSED(viewRect);
     Q_UNUSED(viewConverter);
-    return QList<KWViewMode::ViewMap>();
+    return QVector<KWViewMode::ViewMap>();
 }
 
 void KWViewModePreview::setGap(int gap)

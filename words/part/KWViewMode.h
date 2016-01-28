@@ -131,7 +131,7 @@ public:
      * @param viewConverter An optional viewconverter to override the viewconverter set on the viewmode.
      * @return a list of clipping-rects as it maps to the internal document.
      */
-    virtual QList<ViewMap> mapExposedRects(const QRectF &clipRect, KoViewConverter *viewConverter) const = 0;
+    virtual QVector<ViewMap> mapExposedRects(const QRectF &clipRect, KoViewConverter *viewConverter) const = 0;
 
 public Q_SLOTS:
     /**
@@ -152,5 +152,7 @@ protected:
 private:
     bool m_drawFrameBorders;
 };
+
+Q_DECLARE_TYPEINFO(KWViewMode::ViewMap, Q_MOVABLE_TYPE);
 
 #endif

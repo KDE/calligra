@@ -65,7 +65,7 @@ public:
     const QString type() const {
         return KWViewModePreview::viewMode();
     }
-    QList<ViewMap> mapExposedRects(const QRectF &viewRect, KoViewConverter *viewConverter) const;
+    QVector<ViewMap> mapExposedRects(const QRectF &viewRect, KoViewConverter *viewConverter) const;
 
     /// set the gap between the pages
     void setGap(int gap);
