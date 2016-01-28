@@ -998,7 +998,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     //========
     // Tabs
     //========
-    QList<KoText::Tab> tabs = pStyle.tabPositions();
+    const QVector<KoText::Tab> tabs = pStyle.tabPositions();
 
     // Handle tabs relative to startMargin
     qreal tabOffset = -d->indent;

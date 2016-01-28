@@ -563,9 +563,9 @@ public:
     /// return the tab stop distance for this paragraph style
     qreal tabStopDistance() const;
     /// Set the tab data for this paragraph style.
-    void setTabPositions(const QList<KoText::Tab> &tabs);
+    void setTabPositions(const QVector<KoText::Tab> &tabs);
     /// return the tabs data for this paragraph style
-    QList<KoText::Tab> tabPositions() const;
+    QVector<KoText::Tab> tabPositions() const;
 
     /// If this style is a list, then this sets the nested-ness (aka level) of this paragraph.  A H2 has level 2.
     void setListLevel(int value);

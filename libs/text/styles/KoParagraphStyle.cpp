@@ -1476,7 +1476,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     }
     KoXmlElement tabStops(styleStack.childNode(KoXmlNS::style, "tab-stops"));
     if (!tabStops.isNull()) {     // 3.11.10
-        QList<KoText::Tab> tabList;
+        QVector<KoText::Tab> tabList;
         KoXmlElement tabStop;
         forEachElement(tabStop, tabStops) {
             if(tabStop.localName() != "tab-stop")
@@ -1890,9 +1890,9 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 
 }
 
-void KoParagraphStyle::setTabPositions(const QList<KoText::Tab> &tabs)
+void KoParagraphStyle::setTabPositions(const QVector<KoText::Tab> &tabs)
 {
-    QList<KoText::Tab> newTabs = tabs;
+    QVector<KoText::Tab> newTabs = tabs;
     qSort(newTabs.begin(), newTabs.end(), compareTabs);
     QList<QVariant> list;
     foreach(const KoText::Tab &tab, tabs) {
@@ -1903,13 +1903,19 @@ void KoParagraphStyle::setTabPositions(const QList<KoText::Tab> &tabs)
     setProperty(TabPositions, list);
 }
 
-QList<KoText::Tab> KoParagraphStyle::tabPositions() const
+QVector<KoText::Tab> KoParagraphStyle::tabPositions() const
 {
+    QVector<KoText::Tab> answer;
+
     QVariant variant = value(TabPositions);
-    if (variant.isNull())
-        return QList<KoText::Tab>();
-    QList<KoText::Tab> answer;
-    foreach(const QVariant &tab, qvariant_cast<QList<QVariant> >(variant)) {
+    if (variant.isNull()) {
+        return answer;
+    }
+
+    // TODO: why is this stored as QList<QVariant> and not as QVector<KoText::Tab> variant?
+    const QList<QVariant> tabPositions = qvariant_cast<QList<QVariant> >(variant);
+    answer.reserve(tabPositions.size());
+    foreach(const QVariant &tab, tabPositions) {
         answer.append(tab.value<KoText::Tab>());
     }
     return answer;

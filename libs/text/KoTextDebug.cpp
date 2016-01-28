@@ -51,7 +51,7 @@ const QTextDocument *KoTextDebug::document = 0;
 #define dumpIndent(T) { for (int i=0; i<T; ++i) out << ' '; }
 #define dumpList(T) { foreach (const QString &x, T) out << x << ' '; }
 
-Q_DECLARE_METATYPE(QList<KoText::Tab>)
+Q_DECLARE_METATYPE(QVector<KoText::Tab>)
 
 static QString fontProperties(const QTextCharFormat &textFormat)
 {

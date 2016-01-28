@@ -126,6 +126,7 @@ KOTEXT_EXPORT QString textBreakToString (KoTextBreakProperty textBreak);
 KOTEXT_EXPORT QTextLength parseLength (const QString &length);
 }
 
+Q_DECLARE_TYPEINFO(KoText::Tab, Q_MOVABLE_TYPE);
 Q_DECLARE_METATYPE(KoText::Tab)
 
 #endif

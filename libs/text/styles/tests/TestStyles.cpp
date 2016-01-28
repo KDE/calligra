@@ -97,7 +97,7 @@ void TestStyles::testTabsStorage()
 {
     KoParagraphStyle paragStyle;
 
-    QList<KoText::Tab> tabs;
+    QVector<KoText::Tab> tabs;
     paragStyle.setTabPositions(tabs);
     QCOMPARE(paragStyle.tabPositions().count(), 0);
 
