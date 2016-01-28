@@ -56,7 +56,7 @@ public:
     QTextCharFormat labelFormat;
     KoTextBlockBorderData *border;
     KoTextBlockPaintStrategyBase *paintStrategy;
-    QMap<KoTextBlockData::MarkupType, QList<MarkupRange> > markupRangesMap;
+    QMap<KoTextBlockData::MarkupType, QVector<MarkupRange> > markupRangesMap;
     QMap<KoTextBlockData::MarkupType, bool> layoutedMarkupRanges;
 };
 
@@ -114,8 +114,8 @@ KoTextBlockData::MarkupRange KoTextBlockData::findMarkup(MarkupType type, int po
 
 void KoTextBlockData::rebaseMarkups(MarkupType type, int fromPosition, int delta)
 {
-    QList<MarkupRange>::Iterator markIt = markupsBegin(type);
-    QList<MarkupRange>::Iterator markEnd = markupsEnd(type);
+    QVector<MarkupRange>::Iterator markIt = markupsBegin(type);
+    QVector<MarkupRange>::Iterator markEnd = markupsEnd(type);
     while (markIt != markEnd) {
         if (fromPosition <= markIt->lastChar) {
             // we need to modify the end of this
@@ -139,12 +139,12 @@ bool KoTextBlockData::isMarkupsLayoutValid(MarkupType type) const
     return d->layoutedMarkupRanges[type];
 }
 
-QList<KoTextBlockData::MarkupRange>::Iterator KoTextBlockData::markupsBegin(MarkupType type)
+QVector<KoTextBlockData::MarkupRange>::Iterator KoTextBlockData::markupsBegin(MarkupType type)
 {
     return d->markupRangesMap[type].begin();
 }
 
-QList<KoTextBlockData::MarkupRange>::Iterator KoTextBlockData::markupsEnd(MarkupType type)
+QVector<KoTextBlockData::MarkupRange>::Iterator KoTextBlockData::markupsEnd(MarkupType type)
 {
     return d->markupRangesMap[type].end();
 }

@@ -102,8 +102,8 @@ public:
     void setMarkupsLayoutValidity(MarkupType type, bool valid);
     bool isMarkupsLayoutValid(MarkupType type) const;
 
-    QList<MarkupRange>::Iterator markupsBegin(MarkupType type);
-    QList<MarkupRange>::Iterator markupsEnd(MarkupType type);
+    QVector<MarkupRange>::Iterator markupsBegin(MarkupType type);
+    QVector<MarkupRange>::Iterator markupsEnd(MarkupType type);
 
     /**
      * Clear the counter and set everything to default values.
@@ -219,6 +219,7 @@ private:
     Private * const d;
 };
 
+Q_DECLARE_TYPEINFO(KoTextBlockData::MarkupRange, Q_MOVABLE_TYPE);
 Q_DECLARE_METATYPE(QTextBlockUserData*)
 
 #endif
