@@ -1265,7 +1265,7 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
     KoTableColumnAndRowStyleManager tcarManager = KoTableColumnAndRowStyleManager::getManager(tbl);
     int rows = 0;
     int columns = 0;
-    QList<QRect> spanStore; //temporary list to store spans until the entire table have been created
+    QVector<QRect> spanStore; //temporary list to store spans until the entire table have been created
     KoXmlElement tblTag;
     int headingRowCounter = 0;
     QList<KoXmlElement> rowTags;
@@ -1353,7 +1353,7 @@ void KoTextLoader::loadTableColumn(const KoXmlElement &tblTag, QTextTable *tbl, 
         tbl->resize(1, columns);
 }
 
-void KoTextLoader::loadTableRow(const KoXmlElement &tblTag, QTextTable *tbl, QList<QRect> &spanStore, QTextCursor &cursor, int &rows)
+void KoTextLoader::loadTableRow(const KoXmlElement &tblTag, QTextTable *tbl, QVector<QRect> &spanStore, QTextCursor &cursor, int &rows)
 {
     KoTableColumnAndRowStyleManager tcarManager = KoTableColumnAndRowStyleManager::getManager(tbl);
 
@@ -1396,7 +1396,7 @@ void KoTextLoader::loadTableRow(const KoXmlElement &tblTag, QTextTable *tbl, QLi
     }
 }
 
-void KoTextLoader::loadTableCell(const KoXmlElement &rowTag, QTextTable *tbl, QList<QRect> &spanStore, QTextCursor &cursor, int &currentCell)
+void KoTextLoader::loadTableCell(const KoXmlElement &rowTag, QTextTable *tbl, QVector<QRect> &spanStore, QTextCursor &cursor, int &currentCell)
 {
     KoTableColumnAndRowStyleManager tcarManager = KoTableColumnAndRowStyleManager::getManager(tbl);
     const int currentRow = tbl->rows() - 1;

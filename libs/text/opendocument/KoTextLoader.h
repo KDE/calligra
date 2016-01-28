@@ -162,12 +162,12 @@ private:
     /**
      * Loads a table-row into the cursor
      */
-    void loadTableRow(const KoXmlElement &element, QTextTable *table, QList<QRect> &spanStore, QTextCursor &cursor, int &rows);
+    void loadTableRow(const KoXmlElement &element, QTextTable *table, QVector<QRect> &spanStore, QTextCursor &cursor, int &rows);
 
     /**
      * Loads a table-cell into the cursor
      */
-    void loadTableCell(const KoXmlElement &element, QTextTable *table, QList<QRect> &spanStore, QTextCursor &cursor, int &currentCell);
+    void loadTableCell(const KoXmlElement &element, QTextTable *table, QVector<QRect> &spanStore, QTextCursor &cursor, int &currentCell);
 
     /**
      * Load a note \p element into the \p cursor.
