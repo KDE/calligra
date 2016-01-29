@@ -79,11 +79,6 @@ public:
     /** Size of the contents area, in pixels */
     virtual QSizeF contentsSize() const = 0;
 
-    /** Should selected text be drawn as such? */
-    virtual bool drawSelections() {
-        return true;
-    }
-
     /** Should we see frame borders? This setting doesn't always come from KWView... */
     bool drawFrameBorders() const {
         return m_drawFrameBorders;
