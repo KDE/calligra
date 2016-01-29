@@ -93,15 +93,14 @@ QImage RecentImageImageProvider::requestImage(const QString &id, QSize *size, co
             QProcess thumbnailer;
             QString thumbnailerProgram = QString("%1%2calligrageminithumbnailhelper").arg(qApp->applicationDirPath()).arg(QDir::separator());
             QStringList arguments;
-            arguments << "-in" << id;
+            arguments << "--in" << id;
             QString thumbFile = id;
             thumbFile.replace("/", "-").replace("\\", "-");
             thumbFile.prepend(QDir::separator()).prepend(QDir::tempPath());
             thumbFile.append(".png");
-            arguments << "-out" << thumbFile;
-            arguments << "-width" << QString::number(sz.width());
-            arguments << "-height" << QString::number(sz.height());
-            arguments << "--nocrashhandler";
+            arguments << "--out" << thumbFile;
+            arguments << "--width" << QString::number(sz.width());
+            arguments << "--height" << QString::number(sz.height());
             bool fileExists = QFile::exists(thumbFile);
             if(!fileExists)
                 thumbnailer.start(thumbnailerProgram, arguments);
