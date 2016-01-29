@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2016 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -251,13 +251,16 @@ protected:
     //! Implementation for KexiDataAwareObjectInterface
     virtual int currentLocalSortColumn() const;
 
-    //! Implementation for KexiDataAwareObjectInterface
+    //! Implementation for KexiDataAwareObjectInterface. Visually does nothing
+    //! but remembers index of the currently sorted column and order.
     virtual void setLocalSortOrder(int column, Qt::SortOrder order);
 
-    //! Implementation for KexiDataAwareObjectInterface
+    //! Implementation for KexiDataAwareObjectInterface.
+    //! Just calls KexiDataAwareObjectInterface's implementation.
     void sortColumnInternal(int col, int order = 0);
 
-    //! Implementation for KexiDataAwareObjectInterface
+    //! Implementation for KexiDataAwareObjectInterface.
+    //! Nothing to do here. Record navigator is already updated.
     virtual void updateGUIAfterSorting(int previousRow);
 
     //! Implementation for KexiDataAwareObjectInterface

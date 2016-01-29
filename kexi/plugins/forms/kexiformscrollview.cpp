@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2015 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2016 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -131,8 +131,6 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
     }
     m_contextMenu = new KMenu(this);
     m_contextMenu->setObjectName("m_contextMenu");
-//! @todo sorting temporarily disabled because not it's not implemented in forms (bug 150372)
-    setSortingEnabled(false);
 }
 
 KexiFormScrollView::~KexiFormScrollView()
@@ -229,7 +227,6 @@ void KexiFormScrollView::clearColumnsInternal(bool repaint)
 
 Qt::SortOrder KexiFormScrollView::currentLocalSortOrder() const
 {
-    //! @todo
     return d->localSortOrder;
 }
 
@@ -240,22 +237,18 @@ int KexiFormScrollView::currentLocalSortColumn() const
 
 void KexiFormScrollView::setLocalSortOrder(int column, Qt::SortOrder order)
 {
-    //! @todo
     d->currentLocalSortColumn = column;
     d->localSortOrder = order;
 }
 
 void KexiFormScrollView::sortColumnInternal(int col, int order)
 {
-    Q_UNUSED(col);
-    Q_UNUSED(order);
-    //! @todo
+    KexiDataAwareObjectInterface::sortColumnInternal(col, order);
 }
 
 void KexiFormScrollView::updateGUIAfterSorting(int previousRow)
 {
     Q_UNUSED(previousRow);
-    //! @todo
 }
 
 void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
