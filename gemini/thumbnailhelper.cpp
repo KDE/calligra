@@ -29,6 +29,7 @@
 
 #include <KAboutData>
 #include <KLocalizedString>
+#include <KCrash>
 
 #include <calligraversion.h>
 
@@ -57,6 +58,10 @@ int main( int argc, char** argv )
 #if defined HAVE_X11
     QApplication::setAttribute(Qt::AA_X11InitThreads);
 #endif
+
+    // needed as kdelibs4support linking plugins seem to inject activated drkonqi
+    // TODO: fix it, that seems very wrong
+    KCrash::setDrKonqiEnabled(false);
 
     QApplication app(argc, argv);
     KAboutData::setApplicationData(aboutData);

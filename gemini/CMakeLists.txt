@@ -63,9 +63,8 @@ endif ()
 
 add_executable(calligrageminithumbnailhelper ${thumbnailhelper_SRCS})
 target_link_libraries(calligrageminithumbnailhelper
-    Qt5::Gui
-    Qt5::Core
     komain
+    KF5::Crash # needed to explicitely disable drkonqi if any plugin links to kdelibs4support
 )
 
 # Calligra Gemini application
