@@ -571,6 +571,7 @@ set_package_properties(Marble PROPERTIES
 ##
 ## Test for lcms
 ##
+macro_optional_find_package(LCMS2)
 set_package_properties(LCMS2 PROPERTIES
     DESCRIPTION "LittleCMS, a color management engine"
     URL "http://www.littlecms.com"
