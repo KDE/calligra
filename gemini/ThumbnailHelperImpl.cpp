@@ -75,8 +75,7 @@ bool ThumbnailHelperImpl::convert(const QString& in, const QString& out, int wid
     connect(m_doc, SIGNAL(completed()), SLOT(onLoadingCompleted()));
 
     // load the document content
-    QUrl url;
-    url.setPath(in);
+    QUrl url = QUrl::fromLocalFile(in);
     if (!m_doc->openUrl(url)) {
         delete m_doc;
         qDebug() << "Load failure! Document did not open" << url;
