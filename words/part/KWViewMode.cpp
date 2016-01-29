@@ -29,7 +29,6 @@
 
 KWViewMode::KWViewMode()
     : m_pageManager(0)
-    , m_drawFrameBorders(false)
 {
 }
 
