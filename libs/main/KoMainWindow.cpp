@@ -1695,8 +1695,7 @@ void KoMainWindow::slotEmailFile()
         tmpfile->close();
         delete tmpfile;
 
-        QUrl u;
-        u.setPath(fileName);
+        QUrl u = QUrl::fromLocalFile(fileName);
         rootDocument()->setUrl(u);
         rootDocument()->setModified(true);
         rootDocument()->setOutputMimeType(rootDocument()->nativeFormatMimeType());
