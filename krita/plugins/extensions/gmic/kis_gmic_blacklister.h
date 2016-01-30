@@ -21,6 +21,7 @@
 #include <QSet>
 #include <QQueue>
 #include <QVector>
+#include <QObject>
 
 class QDomDocument;
 class Command;
@@ -38,8 +39,9 @@ private:
     QQueue<const Component *> m_queue;
 };
 
-class KisGmicBlacklister
+class KisGmicBlacklister : public QObject
 {
+    Q_OBJECT
 public:
     KisGmicBlacklister(const QString& filePath);
     ~KisGmicBlacklister();

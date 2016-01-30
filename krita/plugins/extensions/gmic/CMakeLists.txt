@@ -134,6 +134,7 @@ set(kritagmic_shared_PART_SRCS
     kis_gmic_blacklister.cpp
     kis_gmic_filter_model.cpp
     kis_gmic_filter_settings.cpp
+    Component.cpp
     Category.cpp
     Command.cpp
     Parameter.cpp
@@ -181,7 +182,8 @@ install( FILES  gmic.rc DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
 install( FILES  kritagmic.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES
   #${GMIC_SOURCE_DIR}/gmic_def.gmic
-  ${GMIC_SOURCE_DIR}/update1610.gmic
+  #${GMIC_SOURCE_DIR}/update1610.gmic
+  ${GMIC_SOURCE_DIR}/gimp_update169.gmic
   gmic_def.gmic.blacklist
 DESTINATION ${GMIC_INSTALL_DIR} )
 
