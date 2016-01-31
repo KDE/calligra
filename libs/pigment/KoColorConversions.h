@@ -68,6 +68,17 @@ PIGMENTCMS_EXPORT void RGBToHCI(const qreal r, const qreal g, const qreal b, qre
 PIGMENTCMS_EXPORT void HCYToRGB(const qreal h, const qreal s, const qreal y, qreal *red, qreal *green, qreal *blue,  qreal R=0.299, qreal G=0.587, qreal B=0.114);
 PIGMENTCMS_EXPORT void RGBToHCY(const qreal r, const qreal g, const qreal b, qreal *h, qreal *c, qreal *y,  qreal R=0.299, qreal G=0.587, qreal B=0.114);
 
+PIGMENTCMS_EXPORT void RGBToYUV( qreal r, qreal g, qreal b, qreal *y, qreal *cb, qreal *cr, qreal R=0.299, qreal G=0.587, qreal B=0.114);
+PIGMENTCMS_EXPORT void YUVToRGB(const qreal y, const qreal cb, const qreal cr, qreal *r, qreal *g, qreal *b, qreal R=0.299, qreal G=0.587, qreal B=0.114);
+
+PIGMENTCMS_EXPORT void LabToLCH(const qreal l, const qreal a, const qreal b, qreal *L, qreal *C, qreal *H);
+PIGMENTCMS_EXPORT void LCHToLab(const qreal L, const qreal C, const qreal H, qreal *l, qreal *a, qreal *b);
+
+PIGMENTCMS_EXPORT void XYZToxyY(const qreal X, const qreal Y, const qreal Z, qreal *x, qreal *y, qreal *yY);
+PIGMENTCMS_EXPORT void xyYToXYZ(const qreal x, const qreal y, const qreal yY, qreal *X, qreal *Y, qreal *Z);
+
+PIGMENTCMS_EXPORT void CMYToCMYK(qreal *c, qreal *m, qreal *y, qreal *k);
+PIGMENTCMS_EXPORT void CMYKToCMY(qreal *c, qreal *m, qreal *y, qreal *k);
 
 #endif // _KO_COLORCONVERSIONS_H_
 
