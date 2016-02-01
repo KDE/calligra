@@ -6,6 +6,7 @@ macro_add_unittest_definitions()
 set(kritagmic_parser_PART_SRCS
 ../kis_gmic_parser.cpp
 ../kis_gmic_blacklister.cpp
+../Component.cpp
 ../Category.cpp
 ../Command.cpp
 ../Parameter.cpp
