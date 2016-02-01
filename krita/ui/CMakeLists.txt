@@ -65,6 +65,7 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_blacklist_cleanup.cpp
     dialogs/kis_dlg_layer_style.cpp
     dialogs/kis_dlg_png_import.cpp
+    dialogs/kis_delayed_save_dialog.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -417,6 +418,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgrectangleconstraints.ui
     forms/KisDetailsPaneBase.ui
     forms/KisOpenPaneBase.ui
+    dialogs/kis_delayed_save_dialog.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui
     input/config/kis_input_configuration_page_item.ui

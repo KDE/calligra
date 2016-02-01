@@ -130,6 +130,7 @@
 #include "kis_resource_server_provider.h"
 #include "kis_icon_utils.h"
 
+#include "dialogs/kis_delayed_save_dialog.h"
 
 #include "calligraversion.h"
 
@@ -770,6 +771,9 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
     if (!document) {
         return true;
     }
+
+    KisDelayedSaveDialog dlg(document->image(), this);
+    dlg.blockIfImageIsBusy();
 
     bool reset_url;
 
