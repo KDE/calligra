@@ -102,6 +102,12 @@ public:
     bool tryBarrierLock();
 
     /**
+     * Tells if there are no strokes or updates are running at the
+     * moment. Internally calls to tryBarrierLock(), so it is not O(1).
+     */
+    bool isIdle();
+
+    /**
      * Blocks all the updates from execution. It doesn't affect
      * strokes execution in any way. This type of lock is supposed
      * to be held by the strokes themselves when they need a short

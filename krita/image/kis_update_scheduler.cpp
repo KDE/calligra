@@ -241,6 +241,19 @@ void KisUpdateScheduler::unlock()
     processQueues();
 }
 
+bool KisUpdateScheduler::isIdle()
+{
+    bool result = false;
+
+    if (tryBarrierLock()) {
+        result = true;
+        m_d->processingBlocked = false;
+        processQueues();
+    }
+
+    return result;
+}
+
 void KisUpdateScheduler::waitForDone()
 {
     do {

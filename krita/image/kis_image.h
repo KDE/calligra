@@ -668,6 +668,8 @@ Q_SIGNALS:
 public Q_SLOTS:
     KisCompositeProgressProxy* compositeProgressProxy();
 
+    bool isIdle();
+
     void barrierLock();
     bool tryBarrierLock();
     void waitForDone();

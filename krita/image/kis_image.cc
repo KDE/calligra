@@ -366,6 +366,11 @@ bool KisImage::locked() const
     return m_d->lockCount != 0;
 }
 
+bool KisImage::isIdle()
+{
+    return !locked() && m_d->scheduler->isIdle();
+}
+
 void KisImage::barrierLock()
 {
     if (!locked()) {
