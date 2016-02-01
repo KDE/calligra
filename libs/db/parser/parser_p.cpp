@@ -362,7 +362,8 @@ QuerySchema* buildSelectQuery(
                 || c == KexiDBExpr_Logical
                 || c == KexiDBExpr_Relational
                 || c == KexiDBExpr_Function
-                || c == KexiDBExpr_Aggregation;
+                || c == KexiDBExpr_Aggregation
+                || c == KexiDBExpr_QueryParameter;
 
             if (c == KexiDBExpr_Variable) {
                 //just a variable, do nothing, addColumn() will handle this

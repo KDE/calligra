@@ -1508,10 +1508,18 @@ OrderByColumnList& QuerySchema::orderByColumnList() const
 
 QuerySchemaParameterList QuerySchema::parameters()
 {
-    if (!whereExpression())
-        return QuerySchemaParameterList();
     QuerySchemaParameterList params;
-    whereExpression()->getQueryParameters(params);
+    const QueryColumnInfo::Vector fieldsExpanded(this->fieldsExpanded());
+    for (int i=0; i < fieldsExpanded.count(); ++i) {
+        const QueryColumnInfo *ci = fieldsExpanded[i];
+        if (ci->field->expression()) {
+            ci->field->expression()->getQueryParameters(params);
+        }
+    }
+    BaseExpr *where = whereExpression();
+    if (where) {
+        where->getQueryParameters(params);
+    }
     return params;
 }
 

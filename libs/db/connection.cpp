@@ -1248,6 +1248,8 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
     number = 0;
     QList<QuerySchema*> subqueries_for_lookup_data; // subqueries will be added to FROM section
     QString kexidb_subquery_prefix("__kexidb_subquery_");
+    QuerySchemaParameterValueListIterator paramValuesIt(driver, params);
+    QuerySchemaParameterValueListIterator *paramValuesItPtr = params.isEmpty() ? 0 : &paramValuesIt;
     foreach(Field *f, *querySchema.fields()) {
         if (querySchema.isColumnVisible(number)) {
             if (!sql.isEmpty())
@@ -1261,7 +1263,7 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
                     sql += QLatin1Char('*');
             } else {
                 if (f->isExpression()) {
-                    sql += f->expression()->toString(driver);
+                    sql += f->expression()->toString(driver, paramValuesItPtr);
                 } else {
                     if (!f->table()) //sanity check
                         return QString();
@@ -1492,8 +1494,6 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
     }
     //EXPLICITLY SPECIFIED WHERE EXPRESSION
     if (querySchema.whereExpression()) {
-        QuerySchemaParameterValueListIterator paramValuesIt(driver, params);
-        QuerySchemaParameterValueListIterator *paramValuesItPtr = params.isEmpty() ? 0 : &paramValuesIt;
         if (wasWhere) {
 //TODO: () are not always needed
             s_where = '(' + s_where + ") AND (" + querySchema.whereExpression()->toString(driver, paramValuesItPtr) + ')';
