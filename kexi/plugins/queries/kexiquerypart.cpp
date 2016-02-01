@@ -125,8 +125,10 @@ KexiDB::SchemaData* KexiQueryPart::loadSchemaData(
         return 0;
     }
     KexiDB::Parser *parser = KexiMainWindowIface::global()->project()->sqlParser();
-    parser->parse(sqlText);
-    KexiDB::QuerySchema *query = parser->query();
+    KexiDB::QuerySchema *query = 0;
+    if (parser->parse(sqlText)) {
+        query = parser->query();
+    }
     //error?
     if (!query) {
         if (viewMode == Kexi::TextViewMode) {
