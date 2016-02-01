@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>682</width>
-    <height>530</height>
+    <width>685</width>
+    <height>628</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -335,21 +335,18 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QGraphicsView" name="clipPreview">
-          <property name="minimumSize">
-           <size>
-            <width>100</width>
-            <height>100</height>
-           </size>
-          </property>
+         <widget class="QLabel" name="lblPreview">
           <property name="maximumSize">
            <size>
-            <width>300</width>
-            <height>300</height>
+            <width>250</width>
+            <height>250</height>
            </size>
           </property>
-          <property name="interactive">
-           <bool>false</bool>
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="text">
+           <string>TextLabel</string>
           </property>
          </widget>
         </item>
@@ -621,7 +618,6 @@
   <tabstop>bnScreenSize</tabstop>
   <tabstop>txtPredefinedName</tabstop>
   <tabstop>bnSaveAsPredefined</tabstop>
-  <tabstop>clipPreview</tabstop>
   <tabstop>cmbColor</tabstop>
   <tabstop>sliderOpacity</tabstop>
   <tabstop>radioBackgroundAsLayer</tabstop>
