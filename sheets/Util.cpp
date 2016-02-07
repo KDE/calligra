@@ -38,6 +38,7 @@
 #include "Region.h"
 #include "Sheet.h"
 #include "Style.h"
+#include "odf/SheetsOdf.h"
 
 using namespace Calligra::Sheets;
 
@@ -487,7 +488,7 @@ QString Calligra::Sheets::Odf::decodeFormula(const QString& expression_, const K
         case InReference:
             switch (data->unicode()) {
             case ']':
-                Region::loadOdf(pos, data, out);
+                Odf::loadRegion(pos, data, out);
                 pos = data;
                 state = Start;
                 break;
@@ -543,9 +544,9 @@ QString Calligra::Sheets::Odf::encodeFormula(const QString& expr, const KLocale*
             // FIXME Stefan: Hack to get the apostrophes right. Fix and remove!
             const int pos = tokenText.lastIndexOf('!');
             if (pos != -1 && tokenText.left(pos).contains(' '))
-                result.append(Region::saveOdf('\'' + tokenText.left(pos) + '\'' + tokenText.mid(pos)));
+                result.append(Odf::saveRegion('\'' + tokenText.left(pos) + '\'' + tokenText.mid(pos)));
             else
-                result.append(Region::saveOdf(tokenText));
+                result.append(Odf::saveRegion(tokenText));
             result.append(']');
             break;
         }

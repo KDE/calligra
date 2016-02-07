@@ -424,8 +424,7 @@ bool Odf::loadSheet(Sheet *sheet, const KoXmlElement& sheetElement, OdfLoadingCo
     if (sheetElement.hasAttributeNS(KoXmlNS::table, "print-ranges")) {
         // e.g.: Sheet4.A1:Sheet4.E28
         QString range = sheetElement.attributeNS(KoXmlNS::table, "print-ranges", QString());
-#warning TODO new style odf
-        Region region(Region::loadOdf(range));
+        Region region(loadRegion(range));
         if (!region.firstSheet() || sheet->sheetName() == region.firstSheet()->sheetName())
             sheet->printSettings()->setPrintRegion(region);
     }
@@ -1051,7 +1050,7 @@ bool Odf::saveSheet(Sheet *sheet, OdfSavingContext& tableContext)
         if (region.isValid()) {
             debugSheetsODF << region;
 #warning TODO new style odf
-            xmlWriter.addAttribute("table:print-ranges", region.saveOdf());
+            xmlWriter.addAttribute("table:print-ranges", saveRegion(region.name()));
         }
     }
 

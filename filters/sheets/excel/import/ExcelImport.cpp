@@ -284,7 +284,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
         if(range.startsWith(QLatin1Char('[')) && range.endsWith(QLatin1Char(']'))) {
             range.remove(0, 1).chop(1);
         }
-        Calligra::Sheets::Region region(Calligra::Sheets::Region::loadOdf(range), d->outputDoc->map());
+        Calligra::Sheets::Region region(Calligra::Sheets::Odf::loadRegion(range), d->outputDoc->map());
         if (!region.isValid() || !region.lastSheet()) {
             kDebug() << "invalid area" << range;
             continue;
@@ -497,7 +497,7 @@ void ExcelImport::Private::processEmbeddedObjects(const KoXmlElement& rootElemen
 
                 KoXmlElement element;
                 forEachElement(element, cellElement) {
-                    cell.loadOdfObject(element, shapeContext);
+                    Calligra::Sheets::Odf::loadObject(&cell, element, shapeContext);
                 }
             }
             ++currentCell;

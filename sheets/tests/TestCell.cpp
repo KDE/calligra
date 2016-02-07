@@ -33,6 +33,7 @@
 #include <sheets/Style.h>
 #include <sheets/OdfLoadingContext.h>
 #include <sheets/Value.h>
+#include <sheets/odf/SheetsOdf.h>
 
 #include <QTest>
 
@@ -76,7 +77,7 @@ void CellTest::testRichText()
         KoXmlDocument doc = xmlDocument("<text:p>Some text</text:p>");
         KoXmlElement e = doc.documentElement();
         QVERIFY(!e.isNull());
-        cell.loadOdfCellText(e, context, autoStyles, cellStyleName);
+        Odf::loadCellText(&cell, e, context, autoStyles, cellStyleName);
         QVERIFY(!cell.isNull());
         QVERIFY(!cell.richText());
         QVERIFY(cell.userInput().split('\n').count() == 1);
@@ -86,7 +87,7 @@ void CellTest::testRichText()
         KoXmlDocument doc = xmlDocument("<text:p>First<text:span>Second<text:span>Theird</text:span></text:span></text:p>");
         KoXmlElement e = doc.documentElement();
         QVERIFY(!e.isNull());
-        cell.loadOdfCellText(e, context, autoStyles, cellStyleName);
+        Odf::loadCellText(&cell, e, context, autoStyles, cellStyleName);
         QVERIFY(!cell.isNull());
         QVERIFY(cell.richText());
         QVERIFY(cell.userInput().split('\n').count() == 1);
@@ -96,7 +97,7 @@ void CellTest::testRichText()
         KoXmlDocument doc = xmlDocument("<text:p>First<text:line-break/>Second</text:p>");
         KoXmlElement e = doc.documentElement();
         QVERIFY(!e.isNull());
-        cell.loadOdfCellText(e, context, autoStyles, cellStyleName);
+        Odf::loadCellText(&cell, e, context, autoStyles, cellStyleName);
         QVERIFY(!cell.isNull());
         QVERIFY(!cell.richText());
         QVERIFY(cell.userInput().split('\n').count() == 2);
@@ -106,7 +107,7 @@ void CellTest::testRichText()
         KoXmlDocument doc = xmlDocument("<text:p>First<text:s/>Second<text:tab/>Theird</text:p>");
         KoXmlElement e = doc.documentElement();
         QVERIFY(!e.isNull());
-        cell.loadOdfCellText(e, context, autoStyles, cellStyleName);
+        Odf::loadCellText(&cell, e, context, autoStyles, cellStyleName);
         QVERIFY(!cell.isNull());
         QVERIFY(!cell.richText());
         QVERIFY(cell.userInput().split('\n').count() == 1);

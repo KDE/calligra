@@ -65,14 +65,11 @@
 #include "Util.h"
 #include "Value.h"
 #include "Validity.h"
-#include "ValueConverter.h"
 #include "ValueFormatter.h"
 #include "ValueParser.h"
 #include "StyleStorage.h"
 
 #include <KoXmlReader.h>
-
-#include <KoParagraphStyle.h>
 
 #include <QTimer>
 #include <QTextDocument>

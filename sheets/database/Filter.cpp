@@ -32,6 +32,7 @@
 #include "Sheet.h"
 #include "Value.h"
 #include "ValueConverter.h"
+#include "odf/SheetsOdf.h"
 
 using namespace Calligra::Sheets;
 
@@ -667,7 +668,7 @@ bool Filter::loadOdf(const KoXmlElement& element, const Map* map)
     if (element.hasAttributeNS(KoXmlNS::table, "target-range-address")) {
         const QString address = element.attributeNS(KoXmlNS::table, "target-range-address", QString());
         // only absolute addresses allowed; no fallback sheet needed
-        d->targetRangeAddress = Region(Region::loadOdf(address), map);
+        d->targetRangeAddress = Region(Odf::loadRegion(address), map);
         if (!d->targetRangeAddress.isValid())
             return false;
     }
@@ -680,7 +681,7 @@ bool Filter::loadOdf(const KoXmlElement& element, const Map* map)
     if (element.hasAttributeNS(KoXmlNS::table, "condition-source-range-address")) {
         const QString address = element.attributeNS(KoXmlNS::table, "condition-source-range-address", QString());
         // only absolute addresses allowed; no fallback sheet needed
-        d->conditionSourceRangeAddress = Region(Region::loadOdf(address), map);
+        d->conditionSourceRangeAddress = Region(Odf::loadRegion(address), map);
     }
     if (element.hasAttributeNS(KoXmlNS::table, "display-duplicates")) {
         if (element.attributeNS(KoXmlNS::table, "display-duplicates", "true") == "false")
@@ -717,11 +718,11 @@ void Filter::saveOdf(KoXmlWriter& xmlWriter) const
         return;
     xmlWriter.startElement("table:filter");
     if (!d->targetRangeAddress.isEmpty())
-        xmlWriter.addAttribute("table:target-range-address", d->targetRangeAddress.saveOdf());
+        xmlWriter.addAttribute("table:target-range-address", Odf::saveRegion(d->targetRangeAddress.name()));
     if (d->conditionSource != Private::Self)
         xmlWriter.addAttribute("table:condition-source", "cell-range");
     if (!d->conditionSourceRangeAddress.isEmpty())
-        xmlWriter.addAttribute("table:condition-source-range-address", d->conditionSourceRangeAddress.saveOdf());
+        xmlWriter.addAttribute("table:condition-source-range-address", Odf::saveRegion(d->conditionSourceRangeAddress.name()));
     if (!d->displayDuplicates)
         xmlWriter.addAttribute("table:display-duplicates", "false");
     d->condition->saveOdf(xmlWriter);

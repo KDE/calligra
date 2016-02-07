@@ -45,6 +45,7 @@
 #include "Region.h"
 #include "Sheet.h"
 #include "Util.h"
+#include "odf/SheetsOdf.h"
 
 using namespace Calligra::Sheets;
 
@@ -196,7 +197,7 @@ void NamedAreaManager::loadOdf(const KoXmlElement& body)
                 // while it's missing in the table:cell-range-address. See bug #194386 for an example.
                 Sheet* fallbackSheet = 0;
                 if (!base.isEmpty()) {
-                    Region region(Region::loadOdf(base), d->map);
+                    Region region(Odf::loadRegion(base), d->map);
                     fallbackSheet = region.lastSheet();
                 }
                 
@@ -204,7 +205,7 @@ void NamedAreaManager::loadOdf(const KoXmlElement& body)
                 const QString range = element.attributeNS(KoXmlNS::table, "cell-range-address", QString());
                 debugSheetsODF << "Named area found, name:" << name << ", area:" << range;
 
-                Region region(Region::loadOdf(range), d->map, fallbackSheet);
+                Region region(Odf::loadRegion(range), d->map, fallbackSheet);
                 if (!region.isValid() || !region.lastSheet()) {
                     debugSheetsODF << "invalid area";
                     continue;
@@ -230,8 +231,8 @@ void NamedAreaManager::saveOdf(KoXmlWriter& xmlWriter) const
         region = Region(namedAreas[i].range, namedAreas[i].sheet);
         xmlWriter.startElement("table:named-range");
         xmlWriter.addAttribute("table:name", namedAreas[i].name);
-        xmlWriter.addAttribute("table:base-cell-address", Region(1, 1, namedAreas[i].sheet).saveOdf());
-        xmlWriter.addAttribute("table:cell-range-address", region.saveOdf());
+        xmlWriter.addAttribute("table:base-cell-address", Odf::saveRegion(Region(1, 1, namedAreas[i].sheet).name()));
+        xmlWriter.addAttribute("table:cell-range-address", Odf::saveRegion(&region));
         xmlWriter.endElement();
     }
     xmlWriter.endElement();

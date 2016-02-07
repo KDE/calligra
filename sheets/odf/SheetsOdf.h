@@ -37,6 +37,8 @@
 #include <KoDocument.h>
 #include "sheets_odf_export.h"
 
+#include "Style.h"
+
 class QBuffer;
 
 class KoOdfReadStore;
@@ -47,23 +49,37 @@ class KoXmlElement;
 namespace Calligra {
 namespace Sheets {
 
+class Cell;
 class Conditions;
 class DocBase;
 class Map;
+class OdfLoadingContext;
 class ProtectableObject;
+class Region;
 class Sheet;
+struct ShapeLoadingData;
 
 namespace Odf {
-    bool loadDocument(DocBase *doc, KoOdfReadStore &odfStore);
-    bool saveDocument(DocBase *doc, KoDocument::SavingContext &documentContext);
+    CALLIGRA_SHEETS_ODF_EXPORT bool loadDocument(DocBase *doc, KoOdfReadStore &odfStore);
+    CALLIGRA_SHEETS_ODF_EXPORT bool saveDocument(DocBase *doc, KoDocument::SavingContext &documentContext);
 
     CALLIGRA_SHEETS_ODF_EXPORT bool loadTableShape(Sheet *sheet, const KoXmlElement &element, KoShapeLoadingContext &context);
     CALLIGRA_SHEETS_ODF_EXPORT void saveTableShape(Sheet *sheet, KoShapeSavingContext &context);
 
-    void loadProtection(ProtectableObject *prot, const KoXmlElement& element);
+    CALLIGRA_SHEETS_ODF_EXPORT ShapeLoadingData loadObject(Cell *cell, const KoXmlElement &element, KoShapeLoadingContext &shapeContext);
+    CALLIGRA_SHEETS_ODF_EXPORT void loadCellText(Cell *cell, const KoXmlElement& parent, OdfLoadingContext& tableContext, const Styles& autoStyles, const QString& cellStyleName);
+
+    CALLIGRA_SHEETS_ODF_EXPORT void loadProtection(ProtectableObject *prot, const KoXmlElement& element);
     CALLIGRA_SHEETS_ODF_EXPORT void loadSheetObject(Sheet *sheet, const KoXmlElement& element, KoShapeLoadingContext& shapeContext);
 
     CALLIGRA_SHEETS_ODF_EXPORT bool paste(QBuffer &buffer, Map *map);
+
+
+    // regions
+    CALLIGRA_SHEETS_ODF_EXPORT QString loadRegion(const QString& expression);
+    CALLIGRA_SHEETS_ODF_EXPORT void loadRegion(const QChar *&data, const QChar *&end, QChar *&out);
+    CALLIGRA_SHEETS_ODF_EXPORT QString saveRegion(const QString& expression);
+    CALLIGRA_SHEETS_ODF_EXPORT QString saveRegion(Region *region);
 }
 
 }  // namespace Sheets
