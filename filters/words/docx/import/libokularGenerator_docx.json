@@ -32,6 +32,7 @@
         "Description[sv]": "DOCX-filåtergivning", 
         "Description[uk]": "Засіб показу вмісту файлів DOCX", 
         "Description[x-test]": "xxDOCX file rendererxx", 
+        "Description[zh_CN]": "DOCX 文件渲染器", 
         "Id": "okularGenerator_docx_calligra", 
         "License": "GPL", 
         "MimeTypes": [
@@ -53,6 +54,7 @@
         "Name[sv]": "DOCX-gränssnitt", 
         "Name[uk]": "Модуль обробки DOCX", 
         "Name[x-test]": "xxDOCX Backendxx", 
+        "Name[zh_CN]": "DOCX 后端", 
         "ServiceTypes": [
             "okular/Generator"
         ], 

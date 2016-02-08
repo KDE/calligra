@@ -32,6 +32,7 @@
         "Description[sv]": "PPTX-filåtergivning", 
         "Description[uk]": "Засіб показу вмісту файлів PPTX", 
         "Description[x-test]": "xxPPTX file rendererxx", 
+        "Description[zh_CN]": "PPTX 文件渲染器", 
         "Id": "okularGenerator_pptx_calligra", 
         "License": "GPL", 
         "MimeTypes": [
@@ -53,6 +54,7 @@
         "Name[sv]": "PPTX-gränssnitt", 
         "Name[uk]": "Модуль обробки PPTX", 
         "Name[x-test]": "xxPPTX Backendxx", 
+        "Name[zh_CN]": "PPTX 后端", 
         "ServiceTypes": [
             "okular/Generator"
         ], 

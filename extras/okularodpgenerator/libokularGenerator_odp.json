@@ -31,6 +31,7 @@
         "Description[sv]": "OpenDocument presentationsfilåtergivning", 
         "Description[uk]": "Засіб показу вмісту файлів ODP", 
         "Description[x-test]": "xxOpenDocument Presentation file rendererxx", 
+        "Description[zh_CN]": "OpenDocument 演示文件渲染器", 
         "Id": "okularGenerator_odp_calligra", 
         "License": "GPL", 
         "MimeTypes": [
@@ -53,6 +54,7 @@
         "Name[sv]": "ODP-gränssnitt", 
         "Name[uk]": "Модуль обробки ODP", 
         "Name[x-test]": "xxODP Backendxx", 
+        "Name[zh_CN]": "ODP 后端", 
         "ServiceTypes": [
             "okular/Generator"
         ], 

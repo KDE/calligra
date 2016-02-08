@@ -32,6 +32,7 @@
         "Description[sv]": "WordPerfect dokumentfilåtergivning", 
         "Description[uk]": "Засіб показу вмісту документів WordPerfect", 
         "Description[x-test]": "xxWordPerfect Document file rendererxx", 
+        "Description[zh_CN]": "WordPerfect 文档文件渲染器", 
         "Id": "okularGenerator_wpd_calligra", 
         "License": "GPL", 
         "MimeTypes": [
@@ -52,6 +53,7 @@
         "Name[sv]": "WPD-gränssnitt", 
         "Name[uk]": "Модуль WPD", 
         "Name[x-test]": "xxWPD Backendxx", 
+        "Name[zh_CN]": "WPD 后端", 
         "ServiceTypes": [
             "okular/Generator"
         ], 

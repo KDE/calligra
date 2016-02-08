@@ -32,6 +32,7 @@
         "Description[sv]": "PPT-filåtergivning", 
         "Description[uk]": "Засіб показу вмісту файлів PPT", 
         "Description[x-test]": "xxPPT file rendererxx", 
+        "Description[zh_CN]": "PPT 文件渲染器", 
         "Id": "okularGenerator_ppt_calligra", 
         "License": "GPL", 
         "MimeTypes": [
@@ -52,6 +53,7 @@
         "Name[sv]": "PPT-gränssnitt", 
         "Name[uk]": "Модуль обробки PPT", 
         "Name[x-test]": "xxPPT Backendxx", 
+        "Name[zh_CN]": "PPT 后端", 
         "ServiceTypes": [
             "okular/Generator"
         ], 

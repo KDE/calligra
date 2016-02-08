@@ -31,6 +31,7 @@
         "Description[sv]": "OpenDocument textfilåtergivning", 
         "Description[uk]": "Засіб показу вмісту файлів ODT", 
         "Description[x-test]": "xxOpenDocument Text file rendererxx", 
+        "Description[zh_CN]": "OpenDocument 文本文件渲染器", 
         "Id": "okularGenerator_odt_calligra", 
         "License": "GPL", 
         "MimeTypes": [
@@ -52,6 +53,7 @@
         "Name[sv]": "ODT-gränssnitt", 
         "Name[uk]": "Модуль обробки ODT", 
         "Name[x-test]": "xxODT Backendxx", 
+        "Name[zh_CN]": "ODT 后端", 
         "ServiceTypes": [
             "okular/Generator"
         ], 
