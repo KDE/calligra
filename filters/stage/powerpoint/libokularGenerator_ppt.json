@@ -18,6 +18,7 @@
         "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2010–2016", 
         "Copyright[x-test]": "xxCopyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebauxx", 
         "Description": "PPT file renderer", 
+        "Description[ast]": "Renderizador de ficheros PPT", 
         "Description[ca@valencia]": "Representació de fitxers PPT", 
         "Description[ca]": "Representació de fitxers PPT", 
         "Description[cs]": "Vykreslovač souborů PPT", 
@@ -39,6 +40,7 @@
             "application/vnd.ms-powerpoint"
         ], 
         "Name": "PPT Backend", 
+        "Name[ast]": "Backend de PPT", 
         "Name[ca@valencia]": "Dorsal pels PPT", 
         "Name[ca]": "Dorsal pels PPT", 
         "Name[cs]": "Podpůrná vrstva PPT", 

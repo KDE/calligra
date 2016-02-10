@@ -18,6 +18,7 @@
         "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2012–2016", 
         "Copyright[x-test]": "xxCopyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebauxx", 
         "Description": "WordPerfect Document file renderer", 
+        "Description[ast]": "Renderizador de ficheros de documentu WordPerfect", 
         "Description[ca@valencia]": "Representació de fitxers de documents de WordPerfect", 
         "Description[ca]": "Representació de fitxers de documents de WordPerfect", 
         "Description[cs]": "Vykreslovač souborů WordPerfect Document", 
@@ -39,6 +40,7 @@
             "application/vnd.wordperfect"
         ], 
         "Name": "WPD Backend", 
+        "Name[ast]": "Backend de WPD", 
         "Name[ca@valencia]": "Dorsal pels WPD", 
         "Name[ca]": "Dorsal pels WPD", 
         "Name[cs]": "Podpůrná vrstva WPD", 

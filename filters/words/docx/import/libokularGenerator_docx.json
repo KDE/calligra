@@ -18,6 +18,7 @@
         "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2012–2016", 
         "Copyright[x-test]": "xxCopyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebauxx", 
         "Description": "DOCX file renderer", 
+        "Description[ast]": "Renderizador de ficheros DOCX", 
         "Description[ca@valencia]": "Representació de fitxers DOCX", 
         "Description[ca]": "Representació de fitxers DOCX", 
         "Description[cs]": "Vykreslovač souborů DOCX", 
@@ -40,6 +41,7 @@
             "application/vnd.openxmlformats-officedocument.wordprocessingml.template"
         ], 
         "Name": "DOCX Backend", 
+        "Name[ast]": "Backend de DOCX", 
         "Name[ca@valencia]": "Dorsal pels DOCX", 
         "Name[ca]": "Dorsal pels DOCX", 
         "Name[cs]": "Podpůrná vrstva DOCX", 

@@ -18,6 +18,7 @@
         "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2012–2016", 
         "Copyright[x-test]": "xxCopyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebauxx", 
         "Description": "OpenDocument Text file renderer", 
+        "Description[ast]": "Renderizador de ficheros de testu OpenDocument", 
         "Description[ca@valencia]": "Representació de fitxers de text d'OpenDocument", 
         "Description[ca]": "Representació de fitxers de text d'OpenDocument", 
         "Description[fi]": "OpenDocument Text -tiedostohahmonnin", 
@@ -39,6 +40,7 @@
             "application/vnd.oasis.opendocument.text-template"
         ], 
         "Name": "ODT Backend", 
+        "Name[ast]": "Backend de ODT", 
         "Name[ca@valencia]": "Dorsal pels ODT", 
         "Name[ca]": "Dorsal pels ODT", 
         "Name[cs]": "Podpůrná vrstva ODT", 

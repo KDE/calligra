@@ -18,6 +18,7 @@
         "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2010–2016", 
         "Copyright[x-test]": "xxCopyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebauxx", 
         "Description": "PPTX file renderer", 
+        "Description[ast]": "Renderizador de ficheros PPTX", 
         "Description[ca@valencia]": "Representació de fitxers PPTX", 
         "Description[ca]": "Representació de fitxers PPTX", 
         "Description[cs]": "Vykreslovač souborů PPTX", 
@@ -40,6 +41,7 @@
             "application/vnd.openxmlformats-officedocument.presentationml.template"
         ], 
         "Name": "PPTX Backend", 
+        "Name[ast]": "Backend de PPTX", 
         "Name[ca@valencia]": "Dorsal pels PPTX", 
         "Name[ca]": "Dorsal pels PPTX", 
         "Name[cs]": "Podpůrná vrstva PPTX", 
