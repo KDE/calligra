@@ -260,6 +260,7 @@ QuerySchema* buildSelectQuery(
     SelectOptionsInternal* options)
 {
     ParseInfo parseInfo(querySchema);
+    QScopedPointer<QuerySchema> querySchemaPtr(querySchema); // destroy query on any error
 
     //-------tables list
 // assert( tablesList ); //&& tablesList->exprClass() == KexiDBExpr_TableList );
@@ -465,7 +466,7 @@ QuerySchema* buildSelectQuery(
 //  << " Tables=" << (tablesList ? tablesList->debugString() : QString()s);
 
     CLEANUP;
-    return querySchema;
+    return querySchemaPtr.take();
 }
 
 #undef CLEANUP
