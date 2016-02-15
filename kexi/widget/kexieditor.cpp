@@ -201,9 +201,9 @@ void KexiEditor::setHighlightMode(const QString& highlightmodename)
     if (!d->doc->setHighlightingMode(n))
         d->doc->setHighlightingMode(QString()); //hl->setHlMode(0); // 0=None, don't highlight anything.
 
-    QMetaObject::invokeMethod(d->view, "modeChanged", Q_ARG(KTextEditor::Document*, d->doc));
-    QMetaObject::invokeMethod(d->view, "highlightingModeChanged", Q_ARG(KTextEditor::Document*, d->doc));
-
+    //! @todo Code from 3540345ea16477d05e84, these signals no longer exist
+    // QMetaObject::invokeMethod(d->view, "modeChanged", Q_ARG(KTextEditor::Document*, d->doc));
+    // QMetaObject::invokeMethod(d->view, "highlightingModeChanged", Q_ARG(KTextEditor::Document*, d->doc));
 #endif
 }
 
