@@ -307,12 +307,12 @@ hex_0x             (0x{hex_digit}+)
 {identifier} {
     KexiDBDbg << "yytext: '" << yytext << "' (" << yyleng << ")";
     ECOUNT;
-    yylval.stringValue = new QString(QString::fromUtf8(yytext, yyleng));
     if (yytext[0]>='0' && yytext[0]<='9') {
         setError(i18n("Invalid identifier"),
           i18n("Identifiers should start with a letter or '_' character"));
         return SCAN_ERROR;
     }
+    yylval.stringValue = new QString(QString::fromUtf8(yytext, yyleng));
     return IDENTIFIER;
 }
 
