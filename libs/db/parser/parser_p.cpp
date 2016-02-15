@@ -42,12 +42,9 @@ extern int yylex_destroy(void);
 //-------------------------------------
 
 Parser::Private::Private()
-        : initialized(false)
+        : table(0), select(0), db(0), initialized(false)
 {
     clear();
-    table = 0;
-    select = 0;
-    db = 0;
 }
 
 Parser::Private::~Private()
@@ -60,6 +57,11 @@ void Parser::Private::clear()
 {
     operation = Parser::OP_None;
     error = ParserError();
+    statement.clear();
+    delete table;
+    table = 0;
+    delete select;
+    select = 0;
 }
 
 //-------------------------------------

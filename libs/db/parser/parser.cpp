@@ -103,11 +103,6 @@ void Parser::setOperation(OPCode op)
     d->operation = op;
 }
 
-QuerySchema *Parser::select() const
-{
-    return d->select;
-}
-
 void Parser::setError(const ParserError &err)
 {
     d->error = err;

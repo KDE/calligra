@@ -211,12 +211,6 @@ public:
 
     /**
      * \internal
-     * \return query schema
-     */
-    QuerySchema *select() const;
-
-    /**
-     * \internal
      * INTERNAL use only: sets a error
      */
     void setError(const ParserError &err);
