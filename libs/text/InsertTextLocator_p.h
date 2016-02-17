@@ -18,7 +18,7 @@
  */
 
 #ifndef INSERTTEXTLOCATOR_H
-#define INSERTNAMEDVARIABLEACTION_H
+#define INSERTTEXTLOCATOR_H
 
 #include "InsertInlineObjectActionBase_p.h"
 
