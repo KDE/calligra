@@ -263,9 +263,9 @@ bool KoScriptManagerModule::installPackage(const QString& scriptpackagefile)
         const QString name = element.attribute("name");
         Action* action = new Action(Manager::self().actionCollection(), name, packagepath);
         action->fromDomElement(element);
-        //connect(action, SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
-        //connect(action, SIGNAL( success() ), this, SLOT( executionSuccessful() ));
-        //connect(action, SIGNAL( activated(Kross::Action*) ), SIGNAL( executionStarted(Kross::Action*)));
+        //connect(action, SIGNAL(failed(QString,QString)), this, SLOT(executionFailed(QString,QString)));
+        //connect(action, SIGNAL(success()), this, SLOT(executionSuccessful()));
+        //connect(action, SIGNAL(activated(Kross::Action*)), SIGNAL(executionStarted(Kross::Action*)));
     }
 
     //d->modified = true;

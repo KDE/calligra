@@ -645,20 +645,20 @@ void KoPADocumentModel::setDocument( KoPADocument* document )
         return;
     }
     if (m_document) {
-        disconnect( m_document, SIGNAL(pageAdded( KoPAPageBase* ) ), this, SLOT( update() ) );
-        disconnect( m_document, SIGNAL(pageRemoved( KoPAPageBase* ) ), this, SLOT( update() ) );
-        disconnect( m_document, SIGNAL(update(KoPAPageBase*)), this, SLOT( update() ) );
-        disconnect( m_document, SIGNAL(shapeAdded( KoShape* ) ), this, SLOT( update() ) );
-        disconnect( m_document, SIGNAL(shapeRemoved( KoShape* ) ), this, SLOT( update() ) );
+        disconnect( m_document, SIGNAL(pageAdded(KoPAPageBase*)), this, SLOT(update()) );
+        disconnect( m_document, SIGNAL(pageRemoved(KoPAPageBase*)), this, SLOT(update()) );
+        disconnect( m_document, SIGNAL(update(KoPAPageBase*)), this, SLOT(update()) );
+        disconnect( m_document, SIGNAL(shapeAdded(KoShape*)), this, SLOT(update()) );
+        disconnect( m_document, SIGNAL(shapeRemoved(KoShape*)), this, SLOT(update()) );
     }
     m_document = document;
 
     if ( m_document ) {
-        connect( m_document, SIGNAL(pageAdded( KoPAPageBase* ) ), this, SLOT( update() ) );
-        connect( m_document, SIGNAL(pageRemoved( KoPAPageBase* ) ), this, SLOT( update() ) );
-        connect( m_document, SIGNAL(update(KoPAPageBase*)), this, SLOT( update() ) );
-        connect( m_document, SIGNAL(shapeAdded( KoShape* ) ), this, SLOT( update() ) );
-        connect( m_document, SIGNAL(shapeRemoved( KoShape* ) ), this, SLOT( update() ) );
+        connect( m_document, SIGNAL(pageAdded(KoPAPageBase*)), this, SLOT(update()) );
+        connect( m_document, SIGNAL(pageRemoved(KoPAPageBase*)), this, SLOT(update()) );
+        connect( m_document, SIGNAL(update(KoPAPageBase*)), this, SLOT(update()) );
+        connect( m_document, SIGNAL(shapeAdded(KoShape*)), this, SLOT(update()) );
+        connect( m_document, SIGNAL(shapeRemoved(KoShape*)), this, SLOT(update()) );
     }
 
     reset();

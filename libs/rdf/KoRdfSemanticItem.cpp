@@ -287,8 +287,8 @@ hKoSemanticStylesheet KoRdfSemanticItem::createUserStylesheet(const QString &nam
     QList<hKoSemanticStylesheet> userSheets = userStylesheets();
     userSheets << ss;
     const_cast<KoDocumentRdf*>(documentRdf())->setUserStyleSheetList(className(),userSheets);
-    connect(ss.data(), SIGNAL(nameChanging(hKoSemanticStylesheet, QString, QString)),
-            this, SLOT(onUserStylesheetRenamed(hKoSemanticStylesheet, QString, QString)));
+    connect(ss.data(), SIGNAL(nameChanging(hKoSemanticStylesheet,QString,QString)),
+            this, SLOT(onUserStylesheetRenamed(hKoSemanticStylesheet,QString,QString)));
     return ss;
 }
 
@@ -350,8 +350,8 @@ void KoRdfSemanticItem::loadUserStylesheets(QSharedPointer<Soprano::Model> model
         QList<hKoSemanticStylesheet> userSheets = userStylesheets();
         userSheets << ss;
         const_cast<KoDocumentRdf*>(documentRdf())->setUserStyleSheetList(className(),userSheets);
-        connect(ss.data(), SIGNAL(nameChanging(hKoSemanticStylesheet, QString, QString)),
-                this, SLOT(onUserStylesheetRenamed(KoSemanticStylesheetPtr, QString, QString)));
+        connect(ss.data(), SIGNAL(nameChanging(hKoSemanticStylesheet,QString,QString)),
+                this, SLOT(onUserStylesheetRenamed(KoSemanticStylesheetPtr,QString,QString)));
     }
 }
 

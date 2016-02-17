@@ -111,8 +111,8 @@ KoScriptManagerAddFileWidget::KoScriptManagerAddFileWidget(KoScriptManagerAddWiz
     m_filewidget->setMimeFilter(mimetypes /*, defaultmime*/);
 
     layout->addWidget(m_filewidget);
-    connect(m_filewidget, SIGNAL(fileHighlighted(const QString&)), this, SLOT(slotFileHighlighted(const QString&)));
-    connect(m_filewidget, SIGNAL(fileSelected(const QString&)), this, SLOT(slotUpdate()));
+    connect(m_filewidget, SIGNAL(fileHighlighted(QString)), this, SLOT(slotFileHighlighted(QString)));
+    connect(m_filewidget, SIGNAL(fileSelected(QString)), this, SLOT(slotUpdate()));
 }
 
 KoScriptManagerAddFileWidget::~KoScriptManagerAddFileWidget()
@@ -194,9 +194,9 @@ void KoScriptManagerAddScriptWidget::showEvent(QShowEvent *event)
     layout()->addWidget(m_editor);
     m_editor->interpreterEdit()->setEnabled(false);
     m_editor->fileEdit()->setEnabled(false);
-    connect(m_editor->textEdit(), SIGNAL(textChanged(const QString&)), this, SLOT(slotUpdate()));
-    connect(m_editor->interpreterEdit(), SIGNAL(editTextChanged(const QString&)), this, SLOT(slotUpdate()));
-    connect(m_editor->fileEdit(), SIGNAL(textChanged(const QString&)), this, SLOT(slotUpdate()));
+    connect(m_editor->textEdit(), SIGNAL(textChanged(QString)), this, SLOT(slotUpdate()));
+    connect(m_editor->interpreterEdit(), SIGNAL(editTextChanged(QString)), this, SLOT(slotUpdate()));
+    connect(m_editor->fileEdit(), SIGNAL(textChanged(QString)), this, SLOT(slotUpdate()));
 
     QWidget::showEvent(event);
     slotUpdate();

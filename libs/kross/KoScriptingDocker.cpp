@@ -116,13 +116,13 @@ KoScriptingDocker::KoScriptingDocker(QWidget *parent)
     d->tb->addSeparator();
     QLineEdit *filter = new QLineEdit(tb);
     d->tb->addWidget(filter);
-    connect(filter, SIGNAL(textChanged(const QString&)), model, SLOT(setFilterRegExp(const QString&)));
+    connect(filter, SIGNAL(textChanged(QString)), model, SLOT(setFilterRegExp(QString)));
     */
 
     setWidget(widget);
 
-    connect(m_view, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(slotDoubleClicked()));
-    connect(m_view, SIGNAL(enabledChanged(const QString&)), this, SLOT(slotEnabledChanged(const QString&)));
+    connect(m_view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotDoubleClicked()));
+    connect(m_view, SIGNAL(enabledChanged(QString)), this, SLOT(slotEnabledChanged(QString)));
 }
 
 void KoScriptingDocker::slotShowScriptManager()

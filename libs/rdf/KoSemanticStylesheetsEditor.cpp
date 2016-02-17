@@ -109,8 +109,8 @@ KoSemanticStylesheetsEditor::KoSemanticStylesheetsEditor(QWidget *parent, KoDocu
             this, SLOT(newStylesheet()));
     connect(d->m_ui->deleteStylesheet, SIGNAL(clicked()),
             this, SLOT(deleteStylesheet()));
-    connect(d->m_ui->stylesheets, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
-            this, SLOT(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
+    connect(d->m_ui->stylesheets, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
+            this, SLOT(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)));
     d->m_ui->stylesheets->setSelectionBehavior(QAbstractItemView::SelectRows);
     d->m_ui->stylesheets->sortItems(ColName, Qt::DescendingOrder);
     connect(d->m_ui->definition, SIGNAL(textChanged()),

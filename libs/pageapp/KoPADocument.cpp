@@ -80,8 +80,8 @@ KoPADocument::KoPADocument(KoPart *part)
     d->inlineTextObjectManager = resourceManager()->resource(KoText::InlineTextObjectManager).value<KoInlineTextObjectManager*>();
     Q_ASSERT(d->inlineTextObjectManager);
     d->rulersVisible = false;
-    connect(documentInfo(), SIGNAL(infoUpdated(const QString &, const QString &)),
-            d->inlineTextObjectManager, SLOT(documentInformationUpdated(const QString &, const QString &)));
+    connect(documentInfo(), SIGNAL(infoUpdated(QString,QString)),
+            d->inlineTextObjectManager, SLOT(documentInformationUpdated(QString,QString)));
 
     resourceManager()->setUndoStack(undoStack());
     resourceManager()->setOdfDocument(this);

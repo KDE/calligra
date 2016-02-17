@@ -225,7 +225,7 @@ KoTextEditor::KoTextEditor(QTextDocument *document)
     : QObject(document),
       d (new Private(this, document))
 {
-    connect (d->document, SIGNAL (undoCommandAdded()), this, SLOT (documentCommandAdded()));
+    connect (d->document, SIGNAL(undoCommandAdded()), this, SLOT(documentCommandAdded()));
 }
 
 KoTextEditor::~KoTextEditor()

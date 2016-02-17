@@ -126,7 +126,7 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
         for (int i = 0; i < m_activeColorSet->nColors(); i++) {
             KoColorPatch *patch = new KoColorPatch(widget.patchesFrame);
             patch->setColor(m_activeColorSet->getColor(i).color);
-            connect(patch, SIGNAL(triggered(KoColorPatch *)), this, SLOT(setTextLabel(KoColorPatch *)));
+            connect(patch, SIGNAL(triggered(KoColorPatch*)), this, SLOT(setTextLabel(KoColorPatch*)));
             m_gridLayout->addWidget(patch, i/16, i%16);
         }
     }
@@ -159,7 +159,7 @@ void KoEditColorSetWidget::addColor()
         newEntry.name = QInputDialog::getText(this, i18n("Add Color To Palette"), i18n("Color name:"));
         KoColorPatch *patch = new KoColorPatch(widget.patchesFrame);
         patch->setColor(newEntry.color);
-        connect(patch, SIGNAL(triggered(KoColorPatch *)), this, SLOT(setTextLabel(KoColorPatch *)));
+        connect(patch, SIGNAL(triggered(KoColorPatch*)), this, SLOT(setTextLabel(KoColorPatch*)));
         Q_ASSERT(m_gridLayout);
         Q_ASSERT(m_activeColorSet);
         m_gridLayout->addWidget(patch, m_activeColorSet->nColors()/16, m_activeColorSet->nColors()%16);

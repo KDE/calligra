@@ -413,7 +413,7 @@ Q_SIGNALS:
      *                   in widget during the zooming. It is measured in
      *                   view coordinate system *before* zoom.
      */
-    void zoomRelative(const qreal factor, const QPointF &stillPoint);
+    void zoomRelative(qreal factor, const QPointF &stillPoint);
 
 public Q_SLOTS:
     /**
