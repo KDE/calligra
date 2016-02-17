@@ -59,24 +59,24 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
     updatePosition();
     updateSize();
 
-    connect( positionSelector, SIGNAL( positionSelected(KoFlake::Position) ),
-        this, SLOT( positionSelected(KoFlake::Position) ) );
+    connect( positionSelector, SIGNAL(positionSelected(KoFlake::Position)),
+        this, SLOT(positionSelected(KoFlake::Position)) );
 
-    connect( positionXSpinBox, SIGNAL( editingFinished() ), this, SLOT( positionHasChanged() ) );
-    connect( positionYSpinBox, SIGNAL( editingFinished() ), this, SLOT( positionHasChanged() ) );
+    connect( positionXSpinBox, SIGNAL(editingFinished()), this, SLOT(positionHasChanged()) );
+    connect( positionYSpinBox, SIGNAL(editingFinished()), this, SLOT(positionHasChanged()) );
 
-    connect( widthSpinBox, SIGNAL( editingFinished() ), this, SLOT( sizeHasChanged() ) );
-    connect( heightSpinBox, SIGNAL( editingFinished() ), this, SLOT( sizeHasChanged() ) );
+    connect( widthSpinBox, SIGNAL(editingFinished()), this, SLOT(sizeHasChanged()) );
+    connect( heightSpinBox, SIGNAL(editingFinished()), this, SLOT(sizeHasChanged()) );
 
     KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
-    connect( selection, SIGNAL( selectionChanged() ), this, SLOT( updatePosition() ) );
-    connect( selection, SIGNAL( selectionChanged() ), this, SLOT( updateSize() ) );
+    connect( selection, SIGNAL(selectionChanged()), this, SLOT(updatePosition()) );
+    connect( selection, SIGNAL(selectionChanged()), this, SLOT(updateSize()) );
     KoShapeManager * manager = m_tool->canvas()->shapeManager();
-    connect( manager, SIGNAL( selectionContentChanged() ), this, SLOT( updatePosition() ) );
-    connect( manager, SIGNAL( selectionContentChanged() ), this, SLOT( updateSize() ) );
+    connect( manager, SIGNAL(selectionContentChanged()), this, SLOT(updatePosition()) );
+    connect( manager, SIGNAL(selectionContentChanged()), this, SLOT(updateSize()) );
 
-    connect( m_tool->canvas()->resourceManager(), SIGNAL( canvasResourceChanged( int, const QVariant& ) ),
-        this, SLOT( resourceChanged( int, const QVariant& ) ) );
+    connect( m_tool->canvas()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+        this, SLOT(resourceChanged(int,QVariant)) );
 
     connect (aspectButton, SIGNAL(keepAspectRatioChanged(bool)),
         this, SLOT(aspectButtonToggled(bool)));

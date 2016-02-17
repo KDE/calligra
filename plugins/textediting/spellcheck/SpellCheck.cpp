@@ -71,8 +71,8 @@ SpellCheck::SpellCheck()
     QPair<QString, QAction*> pair = m_spellCheckMenu->menuAction();
     addAction(pair.first, pair.second);
 
-    connect(m_bgSpellCheck, SIGNAL(misspelledWord(const QString &,int,bool)),
-            this, SLOT(highlightMisspelled(const QString &,int,bool)));
+    connect(m_bgSpellCheck, SIGNAL(misspelledWord(QString,int,bool)),
+            this, SLOT(highlightMisspelled(QString,int,bool)));
     connect(m_bgSpellCheck, SIGNAL(done()), this, SLOT(finishedRun()));
     connect(spellCheck, SIGNAL(toggled(bool)), this, SLOT(setBackgroundSpellChecking(bool)));
 }
@@ -297,7 +297,7 @@ void SpellCheck::runQueue()
 void SpellCheck::configureSpellCheck()
 {
     Sonnet::ConfigDialog *dialog = new Sonnet::ConfigDialog(0);
-    connect (dialog, SIGNAL(languageChanged(const QString&)), this, SLOT(setDefaultLanguage(const QString&)));
+    connect (dialog, SIGNAL(languageChanged(QString)), this, SLOT(setDefaultLanguage(QString)));
     dialog->exec();
     delete dialog;
 }

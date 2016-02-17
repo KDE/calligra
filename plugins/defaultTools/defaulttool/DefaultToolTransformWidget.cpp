@@ -51,17 +51,17 @@ DefaultToolTransformWidget::DefaultToolTransformWidget( KoInteractionTool* tool,
 
     setUnit( m_tool->canvas()->unit() );
 
-    connect( m_tool->canvas()->resourceManager(), SIGNAL( canvasResourceChanged( int, const QVariant& ) ),
-        this, SLOT( resourceChanged( int, const QVariant& ) ) );
+    connect( m_tool->canvas()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+        this, SLOT(resourceChanged(int,QVariant)) );
 
-    connect( rotateButton, SIGNAL( clicked() ), this, SLOT( rotationChanged() ) );
-    connect( shearXButton, SIGNAL( clicked() ), this, SLOT( shearXChanged() ) );
-    connect( shearYButton, SIGNAL( clicked() ), this, SLOT( shearYChanged() ) );
-    connect( scaleXButton, SIGNAL( clicked() ), this, SLOT( scaleXChanged() ) );
-    connect( scaleYButton, SIGNAL( clicked() ), this, SLOT( scaleYChanged() ) );
-    connect( scaleAspectCheckBox, SIGNAL( toggled( bool ) ), scaleYSpinBox, SLOT( setDisabled( bool ) ) );
-    connect( scaleAspectCheckBox, SIGNAL( toggled( bool ) ), scaleYButton, SLOT( setDisabled( bool ) ) );
-    connect( resetButton, SIGNAL( clicked() ), this, SLOT( resetTransformations() ) );
+    connect( rotateButton, SIGNAL(clicked()), this, SLOT(rotationChanged()) );
+    connect( shearXButton, SIGNAL(clicked()), this, SLOT(shearXChanged()) );
+    connect( shearYButton, SIGNAL(clicked()), this, SLOT(shearYChanged()) );
+    connect( scaleXButton, SIGNAL(clicked()), this, SLOT(scaleXChanged()) );
+    connect( scaleYButton, SIGNAL(clicked()), this, SLOT(scaleYChanged()) );
+    connect( scaleAspectCheckBox, SIGNAL(toggled(bool)), scaleYSpinBox, SLOT(setDisabled(bool)) );
+    connect( scaleAspectCheckBox, SIGNAL(toggled(bool)), scaleYButton, SLOT(setDisabled(bool)) );
+    connect( resetButton, SIGNAL(clicked()), this, SLOT(resetTransformations()) );
 }
 
 

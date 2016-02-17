@@ -55,8 +55,8 @@ SpellCheckMenu::SpellCheckMenu(const Sonnet::Speller &speller, SpellCheck *spell
     // m_ignoreWordAction = new QAction(i18n("Ignore Word"), this);
     // connect(m_ignoreWordAction, SIGNAL(triggered()), this, SLOT(ignoreWord()));
 
-    connect(m_suggestionsSignalMapper, SIGNAL(mapped(const QString&)), 
-            this, SLOT(replaceWord(const QString&)));
+    connect(m_suggestionsSignalMapper, SIGNAL(mapped(QString)),
+            this, SLOT(replaceWord(QString)));
 
     setEnabled(false);
     setVisible(false);

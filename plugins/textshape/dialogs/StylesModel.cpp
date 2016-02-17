@@ -321,7 +321,7 @@ void StylesModel::addParagraphStyle(KoParagraphStyle *style)
     beginInsertRows(QModelIndex(), index, index);
     m_styleList.insert(begin, style->styleId());
     m_styleMapper->setMapping(style, style->styleId());
-    connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+    connect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
     endInsertRows();
 }
 
@@ -346,7 +346,7 @@ void StylesModel::updateParagraphStyles()
         if (style != m_styleManager->defaultParagraphStyle()) { //The default character style is not user selectable. It only provides individual property defaults and is not a style per say.
             m_styleList.append(style->styleId());
             m_styleMapper->setMapping(style, style->styleId());
-            connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+            connect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
         }
     }
 
@@ -381,7 +381,7 @@ void StylesModel::addCharacterStyle(KoCharacterStyle *style)
     m_styleList.insert(index, style->styleId());
     endInsertRows();
     m_styleMapper->setMapping(style, style->styleId());
-    connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+    connect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
 }
 
 bool sortCharacterStyleByName(KoCharacterStyle *style1, KoCharacterStyle *style2)
@@ -409,7 +409,7 @@ void StylesModel::updateCharacterStyles()
         if (style != m_styleManager->defaultCharacterStyle()) { //The default character style is not user selectable. It only provides individual property defaults and is not a style per say.
             m_styleList.append(style->styleId());
             m_styleMapper->setMapping(style, style->styleId());
-            connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+            connect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
         }
     }
 
@@ -422,7 +422,7 @@ void StylesModel::removeParagraphStyle(KoParagraphStyle *style)
     int row = m_styleList.indexOf(style->styleId());
     beginRemoveRows(QModelIndex(), row, row);
     m_styleMapper->removeMappings(style);
-    disconnect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+    disconnect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
     m_styleList.removeAt(row);
     endRemoveRows();
 }
@@ -433,7 +433,7 @@ void StylesModel::removeCharacterStyle(KoCharacterStyle *style)
     int row = m_styleList.indexOf(style->styleId());
     beginRemoveRows(QModelIndex(), row, row);
     m_styleMapper->removeMappings(style);
-    disconnect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+    disconnect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
     m_styleList.removeAt(row);
     endRemoveRows();
 }

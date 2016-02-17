@@ -36,10 +36,10 @@ void ChangeTracker::setDocument(QTextDocument * document)
 {
     m_reverseUndo = false;
     if (m_document)
-        disconnect(m_document, SIGNAL(contentsChange(int, int, int)), this, SLOT(contentsChange(int, int, int)));
+        disconnect(m_document, SIGNAL(contentsChange(int,int,int)), this, SLOT(contentsChange(int,int,int)));
     m_document = document;
     if (m_document)
-        connect(m_document, SIGNAL(contentsChange(int, int, int)), this, SLOT(contentsChange(int, int, int)));
+        connect(m_document, SIGNAL(contentsChange(int,int,int)), this, SLOT(contentsChange(int,int,int)));
 }
 
 int ChangeTracker::getChangeId(QString title, int existingChangeId)

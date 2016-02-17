@@ -171,8 +171,8 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_unit = canvas->resourceManager()->unitResource(KoCanvasResourceManager::Unit);
 
     foreach (KoTextEditingPlugin* plugin, textEditingPluginContainer()->values()) {
-        connect(plugin, SIGNAL(startMacro(const QString &)),
-                this, SLOT(startMacro(const QString &)));
+        connect(plugin, SIGNAL(startMacro(QString)),
+                this, SLOT(startMacro(QString)));
         connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
         QHash<QString, QAction*> actions = plugin->actions();
         QHash<QString, QAction*>::iterator i = actions.begin();
@@ -338,8 +338,8 @@ void TextTool::createActions()
     m_actionFormatFontFamily = new KoFontFamilyAction(this);
     m_actionFormatFontFamily->setText(i18n("Font Family"));
     addAction("format_fontfamily", m_actionFormatFontFamily);
-    connect(m_actionFormatFontFamily, SIGNAL(triggered(const QString &)),
-            this, SLOT(setFontFamily(const QString &)));
+    connect(m_actionFormatFontFamily, SIGNAL(triggered(QString)),
+            this, SLOT(setFontFamily(QString)));
 
     m_variableMenu = new KActionMenu(i18n("Variable"), this);
     addAction("insert_variable", m_variableMenu);
@@ -395,14 +395,14 @@ void TextTool::createActions()
     m_actionFormatTextColor->setToolTip(i18n("Text Color..."));
     m_actionFormatTextColor->setText(i18n("Text Color"));
     addAction("format_textcolor", m_actionFormatTextColor);
-    connect(m_actionFormatTextColor, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setTextColor(const KoColor &)));
+    connect(m_actionFormatTextColor, SIGNAL(colorChanged(KoColor)), this, SLOT(setTextColor(KoColor)));
 
     m_actionFormatBackgroundColor = new KoColorPopupAction(this);
     m_actionFormatBackgroundColor->setIcon(koIcon("format-fill-color"));
     m_actionFormatBackgroundColor->setToolTip(i18n("Background Color..."));
     m_actionFormatBackgroundColor->setText(i18n("Background"));
     addAction("format_backgroundcolor", m_actionFormatBackgroundColor);
-    connect(m_actionFormatBackgroundColor, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setBackgroundColor(const KoColor &)));
+    connect(m_actionFormatBackgroundColor, SIGNAL(colorChanged(KoColor)), this, SLOT(setBackgroundColor(KoColor)));
 
     m_growWidthAction = new QAction(koIcon("zoom-fit-best"), i18n("Grow To Fit Width"), this);
     addAction("grow_to_fit_width", m_growWidthAction);
@@ -1015,12 +1015,12 @@ void TextTool::setShapeData(KoTextShapeData *data)
 {
     bool docChanged = !data || !m_textShapeData || m_textShapeData->document() != data->document();
     if (m_textShapeData) {
-        disconnect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
+        disconnect(m_textShapeData, SIGNAL(destroyed(QObject*)), this, SLOT(shapeDataRemoved()));
     }
     m_textShapeData = data;
     if (!m_textShapeData)
         return;
-    connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
+    connect(m_textShapeData, SIGNAL(destroyed(QObject*)), this, SLOT(shapeDataRemoved()));
     if (docChanged) {
         if (!m_textEditor.isNull()) {
             disconnect(m_textEditor.data(), SIGNAL(textFormatChanged()), this, SLOT(updateActions()));
@@ -1115,8 +1115,8 @@ TextEditingPluginContainer *TextTool::textEditingPluginContainer()
         canvas()->resourceManager()->setResource(TextEditingPluginContainer::ResourceId, variant);
 
         foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values()) {
-            connect(plugin, SIGNAL(startMacro(const QString &)),
-                    this, SLOT(startMacro(const QString &)));
+            connect(plugin, SIGNAL(startMacro(QString)),
+                    this, SLOT(startMacro(QString)));
             connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
             QHash<QString, QAction*> actions = plugin->actions();
             QHash<QString, QAction*>::iterator i = actions.begin();
@@ -1859,10 +1859,10 @@ void TextTool::ensureCursorVisible(bool moveView)
         // If we have changed root area we need to update m_textShape and m_textShapeData
         m_textShape = static_cast<TextShape*>(rootArea->associatedShape());
         Q_ASSERT(m_textShape);
-        disconnect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
+        disconnect(m_textShapeData, SIGNAL(destroyed(QObject*)), this, SLOT(shapeDataRemoved()));
         m_textShapeData = static_cast<KoTextShapeData*>(m_textShape->userData());
         Q_ASSERT(m_textShapeData);
-        connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
+        connect(m_textShapeData, SIGNAL(destroyed(QObject*)), this, SLOT(shapeDataRemoved()));
     }
 
     if (!moveView) {
@@ -2206,32 +2206,32 @@ QList<QPointer<QWidget> > TextTool::createOptionWidgets()
     }
 */
     // Connect to/with simple character widget (docker)
-    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), scw, SLOT(setStyleManager(KoStyleManager *)));
-    connect(this, SIGNAL(charFormatChanged(QTextCharFormat, QTextCharFormat)), scw, SLOT(setCurrentFormat(QTextCharFormat, QTextCharFormat)));
+    connect(this, SIGNAL(styleManagerChanged(KoStyleManager*)), scw, SLOT(setStyleManager(KoStyleManager*)));
+    connect(this, SIGNAL(charFormatChanged(QTextCharFormat,QTextCharFormat)), scw, SLOT(setCurrentFormat(QTextCharFormat,QTextCharFormat)));
     connect(this, SIGNAL(blockFormatChanged(QTextBlockFormat)), scw, SLOT(setCurrentBlockFormat(QTextBlockFormat)));
     connect(scw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
-    connect(scw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
+    connect(scw, SIGNAL(characterStyleSelected(KoCharacterStyle*)), this, SLOT(setStyle(KoCharacterStyle*)));
     connect(scw, SIGNAL(newStyleRequested(QString)), this, SLOT(createStyleFromCurrentCharFormat(QString)));
     connect(scw, SIGNAL(showStyleManager(int)), this, SLOT(showStyleManager(int)));
 
 
     // Connect to/with simple paragraph widget (docker)
-    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), spw, SLOT(setStyleManager(KoStyleManager *)));
-    connect(this, SIGNAL(blockChanged(const QTextBlock&)), spw, SLOT(setCurrentBlock(const QTextBlock&)));
+    connect(this, SIGNAL(styleManagerChanged(KoStyleManager*)), spw, SLOT(setStyleManager(KoStyleManager*)));
+    connect(this, SIGNAL(blockChanged(QTextBlock)), spw, SLOT(setCurrentBlock(QTextBlock)));
     connect(this, SIGNAL(blockFormatChanged(QTextBlockFormat)), spw, SLOT(setCurrentFormat(QTextBlockFormat)));
     connect(spw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
-    connect(spw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
+    connect(spw, SIGNAL(paragraphStyleSelected(KoParagraphStyle*)), this, SLOT(setStyle(KoParagraphStyle*)));
     connect(spw, SIGNAL(newStyleRequested(QString)), this, SLOT(createStyleFromCurrentBlockFormat(QString)));
     connect(spw, SIGNAL(showStyleManager(int)), this, SLOT(showStyleManager(int)));
 
     // Connect to/with simple table widget (docker)
-    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), stw, SLOT(setStyleManager(KoStyleManager *)));
+    connect(this, SIGNAL(styleManagerChanged(KoStyleManager*)), stw, SLOT(setStyleManager(KoStyleManager*)));
     connect(stw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
-    connect(stw, SIGNAL(tableBorderDataUpdated(const KoBorder::BorderData &)), this, SLOT(setTableBorderData(const KoBorder::BorderData &)));
+    connect(stw, SIGNAL(tableBorderDataUpdated(KoBorder::BorderData)), this, SLOT(setTableBorderData(KoBorder::BorderData)));
 
     // Connect to/with simple insert widget (docker)
     connect(siw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
-    connect(siw, SIGNAL(insertTableQuick(int, int)), this, SLOT(insertTableQuick(int, int)));
+    connect(siw, SIGNAL(insertTableQuick(int,int)), this, SLOT(insertTableQuick(int,int)));
 
     updateStyleManager();
     if (m_textShape) {
@@ -2715,8 +2715,8 @@ void TextTool::insertSpecialCharacter()
 {
     if (m_specialCharacterDocker == 0) {
         m_specialCharacterDocker = new InsertCharacter(canvas()->canvasWidget());
-        connect(m_specialCharacterDocker, SIGNAL(insertCharacter(const QString&)),
-                this, SLOT(insertString(const QString&)));
+        connect(m_specialCharacterDocker, SIGNAL(insertCharacter(QString)),
+                this, SLOT(insertString(QString)));
     }
 
     m_specialCharacterDocker->show();
@@ -2766,7 +2766,7 @@ void TextTool::shapeDataRemoved()
         }
         m_textShape = static_cast<TextShape*>(lay->shapes().first());
         m_textShapeData = static_cast<KoTextShapeData*>(m_textShape->userData());
-        connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
+        connect(m_textShapeData, SIGNAL(destroyed(QObject*)), this, SLOT(shapeDataRemoved()));
     }
 }
 

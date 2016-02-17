@@ -158,21 +158,21 @@ Thesaurus::Thesaurus()
 
     // single click -- keep display unambiguous by removing other selections:
 
-    connect(m_synListWidget, SIGNAL(itemClicked(QListWidgetItem *)),
-            this, SLOT(slotSetReplaceTermSyn(QListWidgetItem *)));
-    connect(m_hyperListWidget, SIGNAL(itemClicked(QListWidgetItem *)),
-            this, SLOT(slotSetReplaceTermHyper(QListWidgetItem *)));
-    connect(m_hypoListWidget, SIGNAL(itemClicked(QListWidgetItem *)),
-            this, SLOT(slotSetReplaceTermHypo(QListWidgetItem *)));
+    connect(m_synListWidget, SIGNAL(itemClicked(QListWidgetItem*)),
+            this, SLOT(slotSetReplaceTermSyn(QListWidgetItem*)));
+    connect(m_hyperListWidget, SIGNAL(itemClicked(QListWidgetItem*)),
+            this, SLOT(slotSetReplaceTermHyper(QListWidgetItem*)));
+    connect(m_hypoListWidget, SIGNAL(itemClicked(QListWidgetItem*)),
+            this, SLOT(slotSetReplaceTermHypo(QListWidgetItem*)));
 
     // double click -- set the double clicked item as the new search term
 
-    connect(m_synListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
-            this, SLOT(slotFindTermFromList(QListWidgetItem *)));
-    connect(m_hyperListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
-            this, SLOT(slotFindTermFromList(QListWidgetItem *)));
-    connect(m_hypoListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
-            this, SLOT(slotFindTermFromList(QListWidgetItem *)));
+    connect(m_synListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
+            this, SLOT(slotFindTermFromList(QListWidgetItem*)));
+    connect(m_hyperListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
+            this, SLOT(slotFindTermFromList(QListWidgetItem*)));
+    connect(m_hypoListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
+            this, SLOT(slotFindTermFromList(QListWidgetItem*)));
 
     //
     // WordNet Tab
@@ -190,7 +190,7 @@ Thesaurus::Thesaurus()
 
     m_resultTextBrowser = new QTextBrowser(wnWidget);
     m_resultTextBrowser->setReadOnly(true);
-    connect(m_resultTextBrowser, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(slotFindTermFromUrl(const QUrl &)));
+    connect(m_resultTextBrowser, SIGNAL(anchorClicked(QUrl)), this, SLOT(slotFindTermFromUrl(QUrl)));
     wnLayout->addWidget(m_resultTextBrowser);
 
     // Connect for the history box

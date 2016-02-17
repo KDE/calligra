@@ -148,10 +148,10 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget* parent)
     m_layout->setRowStretch(1, 1);
     m_layout->setColumnStretch(2, 1);
 
-    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea )), this, SLOT(locationChanged(Qt::DockWidgetArea)));
+    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(locationChanged(Qt::DockWidgetArea)));
 
-    connect(m_quickView, SIGNAL(clicked(const QModelIndex&)),
-            this, SLOT(activateShapeCreationToolFromQuick(const QModelIndex&)));
+    connect(m_quickView, SIGNAL(clicked(QModelIndex)),
+            this, SLOT(activateShapeCreationToolFromQuick(QModelIndex)));
 
     m_moreShapes = new QToolButton(mainWidget);
     m_moreShapes->setText(i18n("More"));
@@ -176,8 +176,8 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget* parent)
     m_collectionChooser->setMovement(QListView::Static);
     m_collectionChooser->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_collectionChooser->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    connect(m_collectionChooser, SIGNAL(itemClicked(QListWidgetItem *)),
-            this, SLOT(activateShapeCollection(QListWidgetItem *)));
+    connect(m_collectionChooser, SIGNAL(itemClicked(QListWidgetItem*)),
+            this, SLOT(activateShapeCollection(QListWidgetItem*)));
 
 
     m_addCollectionButton = new QToolButton (m_moreShapesContainer);
@@ -219,8 +219,8 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget* parent)
     m_collectionView->setFixedSize(QSize(165,345));
     m_collectionView->setWordWrap(true);
 
-    connect(m_collectionView, SIGNAL(clicked(const QModelIndex&)),
-            this, SLOT(activateShapeCreationTool(const QModelIndex&)));
+    connect(m_collectionView, SIGNAL(clicked(QModelIndex)),
+            this, SLOT(activateShapeCreationTool(QModelIndex)));
 
     // Load the default shapes and add them to the combobox
     loadDefaultShapes();
@@ -479,8 +479,8 @@ void ShapeCollectionDocker::loadCollection()
     if(type == "odg-collection")
     {
         OdfCollectionLoader* loader = new OdfCollectionLoader(path, this);
-        connect(loader, SIGNAL(loadingFailed(const QString&)),
-                this, SLOT(onLoadingFailed(const QString&)));
+        connect(loader, SIGNAL(loadingFailed(QString)),
+                this, SLOT(onLoadingFailed(QString)));
         connect(loader, SIGNAL(loadingFinished()),
                 this, SLOT(onLoadingFinished()));
 

@@ -73,13 +73,13 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
 
     m_languageTab->setVisible(false);
 
-    connect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
+    connect(widget.name, SIGNAL(textChanged(QString)), this, SIGNAL(nameChanged(QString)));
 }
 
 void CharacterGeneral::hideStyleName(bool hide)
 {
     if (hide) {
-        disconnect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
+        disconnect(widget.name, SIGNAL(textChanged(QString)), this, SIGNAL(nameChanged(QString)));
         widget.tabs->removeTab(0);
         m_nameHidden = true;
     }
