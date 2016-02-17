@@ -35,6 +35,7 @@
 #include <QList>
 #include <QShortcut>
 #include <QPointer>
+#include <QDesktopWidget>
 
 #include <kexi_global.h>
 
@@ -124,9 +125,17 @@ KexiFindDialog::KexiFindDialog(QWidget* parent)
 
     setLookInColumnList(QStringList(), QStringList());
 
-    QRect savedGeometry = d->confGroup.readEntry("Geometry", geometry());
-    if (!savedGeometry.isEmpty()) {
-        setGeometry(savedGeometry);
+    QRect g = d->confGroup.readEntry("Geometry", QRect());
+    updateGeometry();
+#ifndef Q_OS_WIN // not needed for Windows: this kind of dialog is centered by default
+    if (g.isNull()) {
+        g = geometry();
+        g.moveCenter((parentWidget() ? parentWidget()->geometry()
+                                     : QApplication::desktop()->availableGeometry(this)).center());
+    }
+#endif
+    if (!g.isNull()) {
+        setGeometry(g);
     }
 }
 
