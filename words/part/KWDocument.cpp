@@ -140,8 +140,8 @@ KWDocument::KWDocument(KoPart *part)
     m_shapeController = new KoShapeController(0, this);
 
     if (inlineTextObjectManager()) {
-        connect(documentInfo(), SIGNAL(infoUpdated(const QString &, const QString &)),
-                inlineTextObjectManager(), SLOT(documentInformationUpdated(const QString &, const QString &)));
+        connect(documentInfo(), SIGNAL(infoUpdated(QString,QString)),
+                inlineTextObjectManager(), SLOT(documentInformationUpdated(QString,QString)));
     }
 
     m_annotationManager = new KoAnnotationLayoutManager();
@@ -330,8 +330,8 @@ void KWDocument::removeFrameSet(KWFrameSet *fs)
     foreach (KoShape *shape, fs->shapes())
         removeSequencedShape(shape);
 
-    disconnect(fs, SIGNAL(shapeAdded(KoShape *)), this, SLOT(addSequencedShape(KoShape *)));
-    disconnect(fs, SIGNAL(shapeRemoved(KoShape *)), this, SLOT(removeSequencedShape(KoShape *)));
+    disconnect(fs, SIGNAL(shapeAdded(KoShape*)), this, SLOT(addSequencedShape(KoShape*)));
+    disconnect(fs, SIGNAL(shapeRemoved(KoShape*)), this, SLOT(removeSequencedShape(KoShape*)));
 }
 
 void KWDocument::relayout(QList<KWFrameSet*> framesets)
@@ -423,8 +423,8 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
         }
     }
 
-    connect(fs, SIGNAL(shapeAdded(KoShape *)), this, SLOT(addSequencedShape(KoShape *)));
-    connect(fs, SIGNAL(shapeRemoved(KoShape *)), this, SLOT(removeSequencedShape(KoShape *)));
+    connect(fs, SIGNAL(shapeAdded(KoShape*)), this, SLOT(addSequencedShape(KoShape*)));
+    connect(fs, SIGNAL(shapeRemoved(KoShape*)), this, SLOT(removeSequencedShape(KoShape*)));
 }
 
 void KWDocument::addSequencedShape(KoShape *shape)

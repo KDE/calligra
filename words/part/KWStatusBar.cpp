@@ -228,7 +228,7 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
 
     updateCurrentTool(0);
     setCurrentView(view);
-    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*, int)),
+    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
             this, SLOT(updateCurrentTool(KoCanvasController*)));
 }
 
@@ -412,8 +412,8 @@ void KWStatusBar::setCurrentView(KWView *view)
         Q_ASSERT(canvas);
         KoCanvasResourceManager *resourceManager = canvas->resourceManager();
         Q_ASSERT(resourceManager);
-        disconnect(resourceManager, SIGNAL(canvasResourceChanged(int, QVariant)),
-            this, SLOT(canvasResourceChanged(int, QVariant)));
+        disconnect(resourceManager, SIGNAL(canvasResourceChanged(int,QVariant)),
+            this, SLOT(canvasResourceChanged(int,QVariant)));
         QWidget *zoomWidget = m_zoomWidgets.value(m_currentView);
         if (zoomWidget) {
             m_statusbar->removeWidget(zoomWidget);
@@ -452,7 +452,7 @@ void KWStatusBar::setCurrentView(KWView *view)
 
     KoCanvasResourceManager *resourceManager = view->canvasBase()->resourceManager();
     Q_ASSERT(resourceManager);
-    connect(resourceManager, SIGNAL(canvasResourceChanged(int, QVariant)), this, SLOT(canvasResourceChanged(int, QVariant)), Qt::QueuedConnection);
+    connect(resourceManager, SIGNAL(canvasResourceChanged(int,QVariant)), this, SLOT(canvasResourceChanged(int,QVariant)), Qt::QueuedConnection);
 
     KWTextFrameSet *fs = m_currentView->kwdocument()->mainFrameSet();
     if (fs) {
