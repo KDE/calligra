@@ -1744,24 +1744,24 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
         if (m_complexCharStatus == InstrAllowed) {
             QString instruction = text().toString().trimmed();
 
-            if (instruction.startsWith("HYPERLINK")) {
+            if (instruction.startsWith(QLatin1String("HYPERLINK"))) {
                 // Removes hyperlink, spaces and extra " chars
                 instruction.remove(0, 11);
                 instruction.truncate(instruction.size() - 1);
                 m_complexCharType = HyperlinkComplexFieldCharType;
                 m_complexCharValue = instruction;
             }
-            else if (instruction.startsWith("PAGEREF")) {
+            else if (instruction.startsWith(QLatin1String("PAGEREF"))) {
                 instruction.remove(0, 8); // removes PAGEREF
                 m_complexCharType = ReferenceComplexFieldCharType;
                 m_complexCharValue = instruction.left(instruction.indexOf(' '));
             }
-            else if (instruction.startsWith("GOTOBUTTON")) {
+            else if (instruction.startsWith(QLatin1String("GOTOBUTTON"))) {
                 instruction.remove(0, 12); // removes GOTOBUTTON
                 m_complexCharType = InternalHyperlinkComplexFieldCharType;
                 m_complexCharValue = instruction;
             }
-            else if (instruction.startsWith("MACROBUTTON")) {
+            else if (instruction.startsWith(QLatin1String("MACROBUTTON"))) {
                 m_complexCharType = MacroButtonFieldCharType;
                 m_complexCharValue = '[';
             }
@@ -4120,10 +4120,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rFonts()
         TRY_READ_ATTR(asciiTheme)
         if (!asciiTheme.isEmpty()) {
             QString font = asciiTheme;
-            if (font.startsWith("major")) {
+            if (font.startsWith(QLatin1String("major"))) {
                 font = m_context->themes->fontScheme.majorFonts.latinTypeface;
             }
-            else if (font.startsWith("minor")) {
+            else if (font.startsWith(QLatin1String("minor"))) {
                font = m_context->themes->fontScheme.minorFonts.latinTypeface;
             }
             m_currentTextStyle.addProperty("style:font-name", font);

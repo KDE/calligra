@@ -156,7 +156,7 @@ KoFilter::ConversionStatus MsooXmlRelationshipsReader::read_Relationship()
     READ_ATTR_WITHOUT_NS(Type)
     READ_ATTR_WITHOUT_NS(Target)
     QString fixedPath(m_context->path);
-    while (Target.startsWith("../")) {
+    while (Target.startsWith(QLatin1String("../"))) {
         //debugMsooXml << "- Target:" << Target << "fixedPath:" << fixedPath;
         Target.remove(0, 3);
         fixedPath.truncate(fixedPath.lastIndexOf('/'));

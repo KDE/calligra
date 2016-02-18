@@ -814,7 +814,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_defaultTextStyle()
         if (isStartElement()) {
             // Initializing the default style for the level.  At the end, there
             // should be 9 levels
-            if (qualifiedName().toString().startsWith("a:lvl")) {
+            if (qualifiedName().toString().startsWith(QLatin1String("a:lvl"))) {
                 defaultTextColors.push_back(QString());
                 defaultLatinFonts.push_back(QString());
                 defaultBulletColors.push_back(QString());
@@ -833,7 +833,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_defaultTextStyle()
 //! @todo add ELSE_WRONG_FORMAT
         }
         if (isEndElement()) {
-            if (qualifiedName().toString().startsWith("a:lvl")) {
+            if (qualifiedName().toString().startsWith(QLatin1String("a:lvl"))) {
                 defaultParagraphStyles.push_back(m_currentParagraphStyle);
                 defaultTextStyles.push_back(m_currentTextStyle);
                 defaultListStyles.push_back(m_currentBulletProperties);
