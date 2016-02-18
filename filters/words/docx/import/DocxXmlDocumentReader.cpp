@@ -513,7 +513,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_textDirection()
     if (!val.isEmpty() && val.size() == 4) {
         const QString left = val.left(2).toLower();
         const QString right = val.right(2).toLower();
-        m_currentPageStyle.addProperty("style:writing-mode", left + "-" + right);
+        m_currentPageStyle.addProperty("style:writing-mode", left + '-' + right);
     }
 
     readNext();
@@ -1395,9 +1395,9 @@ void DocxXmlDocumentReader::createBorderStyle(const QString& size, const QString
 
     QString border;
     if (!size.isEmpty())
-        border += MSOOXML::Utils::ST_EighthPointMeasure_to_ODF(size) + " ";
+        border += MSOOXML::Utils::ST_EighthPointMeasure_to_ODF(size) + ' ';
 
-    border.append(odfLineStyle + " ");
+    border.append(odfLineStyle + ' ');
 
     if (!color.isEmpty()) {
         if (color == "auto") {
@@ -1763,7 +1763,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
             }
             else if (instruction.startsWith("MACROBUTTON")) {
                 m_complexCharType = MacroButtonFieldCharType;
-                m_complexCharValue = "[";
+                m_complexCharValue = '[';
             }
             else {
                 m_complexCharValue = instruction;
@@ -2823,7 +2823,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
             }
             else {
                 int spacePosition = m_complexCharValue.indexOf(' ');
-                QString textValue = "#";
+                QString textValue(QLatin1Char('#'));
                 textValue.append(m_complexCharValue.left(spacePosition));
                 m_complexCharValue.remove(0, textValue.length());
                 body->addAttribute("xlink:href", QUrl(textValue).toEncoded());
