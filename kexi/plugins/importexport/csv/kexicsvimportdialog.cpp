@@ -1422,7 +1422,7 @@ void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QStrin
     }
 
     type = d->detectedType(col);
-    kDebug() << type;
+    //kDebug() << type;
 
     if (type == KexiDB::Field::Integer) {
         // check uniqueness for this value
