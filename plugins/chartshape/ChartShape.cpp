@@ -835,7 +835,7 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store,
         url.remove(0, 1);
 
     if (QUrl::fromUserInput(url).isRelative()) {
-        if (url.startsWith("./"))
+        if (url.startsWith(QLatin1String("./")))
             tmpURL = QString(INTERNAL_PROTOCOL) + ":/" + url.mid(2);
         else
             tmpURL = QString(INTERNAL_PROTOCOL) + ":/" + url;
@@ -861,7 +861,7 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store,
         return false;
     }
 
-    const bool isOdf = mimeType.startsWith("application/vnd.oasis.opendocument");
+    const bool isOdf = mimeType.startsWith(QLatin1String("application/vnd.oasis.opendocument"));
     if (!isOdf) {
         tmpURL += "/maindoc.xml";
         //debugChart << "tmpURL adjusted to" << tmpURL;

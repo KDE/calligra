@@ -1687,9 +1687,9 @@ void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 
     const QString textPosition(styleStack.property(KoXmlNS::style, "text-position"));
     if (!textPosition.isEmpty()) {  // OO 3.10.7
-        if (textPosition.startsWith("super"))
+        if (textPosition.startsWith(QLatin1String("super")))
             setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-        else if (textPosition.startsWith("sub"))
+        else if (textPosition.startsWith(QLatin1String("sub")))
             setVerticalAlignment(QTextCharFormat::AlignSubScript);
         else {
             QRegExp re("(-?[\\d.]+)%.*");

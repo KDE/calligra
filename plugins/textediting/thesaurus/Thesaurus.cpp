@@ -398,7 +398,7 @@ void Thesaurus::slotFindTermFromUrl(const QUrl &url)
 void Thesaurus::slotFindTerm(const QString &term, bool addToHistory)
 {
     // slotSetReplaceTerm(term);
-    if (term.startsWith("http://")) {
+    if (term.startsWith(QLatin1String("http://"))) {
         (void) new KRun(QUrl::fromUserInput(term),0L);
     }
     else {
@@ -451,7 +451,7 @@ void Thesaurus::findTermThesaurus(const QString &searchTerm)
 
     for (QStringList::Iterator it = lines.begin(); it != lines.end(); ++it) {
         QString line = (*it);
-        if (line.startsWith("  ")) {  // ignore license (two spaces)
+        if (line.startsWith(QLatin1String("  "))) {  // ignore license (two spaces)
             continue;
         }
 

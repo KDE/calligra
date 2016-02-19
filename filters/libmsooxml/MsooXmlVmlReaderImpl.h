@@ -132,7 +132,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     const QString z_index(m_currentVMLProperties.vmlStyle.value("z-index"));
     qreal rotationAngle = 0;
     if (!rotation.isEmpty()) {
-        if (rotation.endsWith("fd")) {
+        if (rotation.endsWith(QLatin1String("fd"))) {
             rotationAngle = rotation.left(rotation.length()-2).toDouble() / 65536.0;
         }
         else {
