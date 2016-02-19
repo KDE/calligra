@@ -23,8 +23,8 @@
 #ifndef CALLIGRA_COMPONENTS_IMAGEDATAITEM_H
 #define CALLIGRA_COMPONENTS_IMAGEDATAITEM_H
 
-#include <QtGui/QPixmap>
-#include <QtQuick/QQuickItem>
+#include <QPixmap>
+#include <QQuickItem>
 
 namespace Calligra {
 namespace Components {

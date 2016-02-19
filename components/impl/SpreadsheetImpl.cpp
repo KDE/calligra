@@ -22,10 +22,10 @@
 
 #include "SpreadsheetImpl.h"
 
-#include <QtWidgets/QGraphicsWidget>
-#include <QtGui/QTextDocument>
-#include <QtGui/QTextFrame>
-#include <QtGui/QTextLayout>
+#include <QGraphicsWidget>
+#include <QTextDocument>
+#include <QTextFrame>
+#include <QTextLayout>
 
 #include <KoToolManager.h>
 

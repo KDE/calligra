@@ -19,7 +19,7 @@
 #ifndef TOUCHDECLARATIVEVIEW_H
 #define TOUCHDECLARATIVEVIEW_H
 
-#include <QtQuick/QQuickView>
+#include <QQuickView>
 #include <QPointer>
 
 /**

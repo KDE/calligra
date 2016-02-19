@@ -22,8 +22,8 @@
 
 #include "ImageDataItem.h"
 
-#include <QtGui/QPixmap>
-#include <QtQuick/QSGSimpleTextureNode>
+#include <QPixmap>
+#include <QSGSimpleTextureNode>
 #include <QQuickWindow>
 
 using namespace Calligra::Components;

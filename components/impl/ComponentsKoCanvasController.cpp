@@ -24,8 +24,8 @@
 
 #include "ComponentsKoCanvasController.h"
 
-#include <QtCore/QPoint>
-#include <QtCore/QSize>
+#include <QPoint>
+#include <QSize>
 #include <QGraphicsWidget>
 
 #include <QDebug>
