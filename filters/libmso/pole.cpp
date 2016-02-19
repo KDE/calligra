@@ -39,7 +39,7 @@
 
 #include <QList>
 #include <QString>
-#include <QtDebug>
+#include <QDebug>
 
 //Enable to activate debugging output.
 //#define POLE_DEBUG

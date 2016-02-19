@@ -29,7 +29,6 @@
 #include <QRegExp>
 #include <kdebug.h>
 #include <kzip.h>
-#include <QtXml>
 
 const char ooNS::office[] = "http://openoffice.org/2000/office";
 const char ooNS::style[] = "http://openoffice.org/2000/style";

@@ -26,7 +26,6 @@
 #include <kiconloader.h>
 #include <ksharedconfig.h>
 
-#include <QtDebug>
 #include <QContextMenuEvent>
 #include <QHeaderView>
 #include <QHelpEvent>
