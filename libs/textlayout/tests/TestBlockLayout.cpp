@@ -935,9 +935,9 @@ void TestBlockLayout::testParagraphBorders()
     QVERIFY(qAbs(blockLayout->lineAt(0).y() - (9.0 + 14.4 + 10 + (5.0 + 2.0 + 3.0) * 2 + 100.0)) < ROUNDING);
 }
 
-void TestBlockLayout::testBorderData()
+void TestBlockLayout::testParagraphMargins()
 {
-    setupTest("Emtpy\nParagraph with Borders\nAnother parag\n");
+    setupTest("Emtpy\nParagraph\nAnother parag\n");
 
     KoParagraphStyle style;
     style.setFontPointSize(12.0);

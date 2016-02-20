@@ -82,7 +82,7 @@ private Q_SLOTS:
     //etc
     //void testParagOffset();
     void testParagraphBorders();
-    void testBorderData();
+    void testParagraphMargins();
     void testDropCaps();
 
 private:

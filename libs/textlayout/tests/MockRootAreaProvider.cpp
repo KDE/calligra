@@ -28,7 +28,7 @@ MockRootAreaProvider::MockRootAreaProvider()
 {
 }
 
-KoTextLayoutRootArea *MockRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &, int, bool *isNewRootArea)
+KoTextLayoutRootArea *MockRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &, int requestedPosition, bool *isNewRootArea)
 {
     if(m_area == 0) {
         m_area = new KoTextLayoutRootArea(documentLayout);
@@ -36,8 +36,8 @@ KoTextLayoutRootArea *MockRootAreaProvider::provide(KoTextDocumentLayout *docume
         return m_area;
     }
     *isNewRootArea = false;
-    m_askedForMoreThenOneArea = true;
-    return 0;
+    m_askedForMoreThenOneArea |= requestedPosition > 0;
+    return requestedPosition == 0 ? m_area : 0;
 }
 
 void MockRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea)
