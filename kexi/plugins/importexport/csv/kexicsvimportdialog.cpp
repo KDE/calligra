@@ -399,7 +399,11 @@ void KexiCSVImportDialog::next()
     KPageWidgetItem *curPage = currentPage();
 
     if (curPage == m_openFilePage) {
-        m_fname = m_openFileWidget->highlightedFile();
+        if (m_openFileWidget->checkSelectedFile()) {
+            m_fname = m_openFileWidget->highlightedFile();
+        } else {
+            return;
+        }
         if (m_fname.isEmpty()) {
             KMessageBox::sorry(this, i18nc("@info", "Select source filename."));
             return;
