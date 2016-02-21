@@ -151,7 +151,7 @@ void StyleManager::setParagraphStyle(KoParagraphStyle *style)
 
         widget.paragraphStylesListView->setCurrentIndex(m_paragraphProxyModel->mapFromSource(m_paragraphStylesModel->styleIndex(localStyle)));
     }
-    widget.paragraphStylePage->setStyle(localStyle);
+    widget.paragraphStylePage->setStyle(localStyle, 0, false);
     widget.stackedWidget->setCurrentWidget(widget.paragraphStylePage);
     widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.paragraphStylesListView));
     widget.paragraphStylesListView->setEnabled(style != 0);
@@ -176,7 +176,7 @@ void StyleManager::setCharacterStyle(KoCharacterStyle *style, bool canDelete)
         }
         widget.characterStylesListView->setCurrentIndex(m_characterProxyModel->mapFromSource(m_characterStylesModel->styleIndex(localStyle)));
     }
-    widget.characterStylePage->setStyle(localStyle);
+    widget.characterStylePage->setStyle(localStyle, false);
     widget.stackedWidget->setCurrentWidget(widget.characterStylePage);
     widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.characterStylesListView));
     widget.characterStylePage->setEnabled(style != 0);
@@ -195,8 +195,8 @@ void StyleManager::save()
     }
     widget.paragraphStylePage->save();
     widget.characterStylePage->save();
-    widget.paragraphStylePage->setStyle(0);
-    widget.characterStylePage->setStyle(0);
+    widget.paragraphStylePage->setStyle(0, 0, false);
+    widget.characterStylePage->setStyle(0, false);
 
     m_styleManager->beginEdit();
 

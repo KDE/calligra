@@ -39,15 +39,14 @@ enum Position {
     Custom
 };
 
-CharacterHighlighting::CharacterHighlighting(bool uniqueFormat,QWidget* parent)
-    : QWidget(parent),
-      m_uniqueFormat(uniqueFormat)
+CharacterHighlighting::CharacterHighlighting(QWidget* parent)
+    : QWidget(parent)
 {
     widget.setupUi(this);
 
     QStringList list;
     KFontChooser::getFontList(list, KFontChooser::SmoothScalableFonts);
-    m_fontChooser = new KFontChooser(this, (m_uniqueFormat) ? KFontChooser::NoDisplayFlags : KFontChooser::ShowDifferences, list, false);
+    m_fontChooser = new KFontChooser(this, KFontChooser::ShowDifferences, list, false);
     m_fontChooser->setSampleBoxVisible(false);
     widget.fontLayout->addWidget(m_fontChooser);
 
@@ -144,30 +143,24 @@ int CharacterHighlighting::lineStyleToIndex(KoCharacterStyle::LineStyle type)
 
 void CharacterHighlighting::capitalisationChanged(int item)
 {
-    if (m_uniqueFormat || widget.capitalizationList->currentIndex() >= 0) {
-        switch (item) {
-        case 0:
-            emit capitalizationChanged(QFont::MixedCase);
-            m_mixedCaseInherited = false;
-            break;
-        case 1:
-            emit capitalizationChanged(QFont::SmallCaps);
-            m_smallCapsInherited = false;
-            break;
-        case 2:
-            emit capitalizationChanged(QFont::AllUppercase);
-            m_allUpperCaseInherited = false;
-            break;
-        case 3:
-            emit capitalizationChanged(QFont::AllLowercase);
-            m_allLowerCaseInherited = false;
-            break;
-        case 4:
-            emit capitalizationChanged(QFont::Capitalize);
-            m_capitalizInherited = false;
-            break;
-        }
+    switch (item) {
+    case 0:
+        emit capitalizationChanged(QFont::MixedCase);
+        break;
+    case 1:
+        emit capitalizationChanged(QFont::SmallCaps);
+        break;
+    case 2:
+        emit capitalizationChanged(QFont::AllUppercase);
+        break;
+    case 3:
+        emit capitalizationChanged(QFont::AllLowercase);
+        break;
+    case 4:
+        emit capitalizationChanged(QFont::Capitalize);
+        break;
     }
+    m_capitalizationInherited = false;
     emit charStyleChanged();
 }
 
@@ -293,7 +286,7 @@ QStringList CharacterHighlighting::fontLayoutPositionList()
     lst <<i18n("Subscript");
     return lst;
 }
-void CharacterHighlighting::setDisplay(KoCharacterStyle *style)
+void CharacterHighlighting::setDisplay(KoCharacterStyle *style, bool directFormattingMode)
 {
     if (style == 0)
         return;
@@ -317,84 +310,64 @@ void CharacterHighlighting::setDisplay(KoCharacterStyle *style)
         // TODO check if its custom instead.
         widget.positionList->setCurrentIndex(0);
     }
-    if (!m_uniqueFormat){
-        widget.positionList->setEnabled(false);
-        widget.positionList->setCurrentIndex(-1);
-    }
 
-    m_underlineInherited = !style->hasProperty(KoCharacterStyle::UnderlineStyle)
+    m_underlineInherited = directFormattingMode || (!style->hasProperty(KoCharacterStyle::UnderlineStyle)
                             && !style->hasProperty(KoCharacterStyle::UnderlineType)
-                            && !style->hasProperty(QTextFormat::TextUnderlineColor);
-    m_strikeoutInherited = !style->hasProperty(KoCharacterStyle::StrikeOutStyle)
+                            && !style->hasProperty(QTextFormat::TextUnderlineColor));
+    m_strikeoutInherited = directFormattingMode || (!style->hasProperty(KoCharacterStyle::StrikeOutStyle)
                             && !style->hasProperty(KoCharacterStyle::StrikeOutType)
-                            && !style->hasProperty(KoCharacterStyle::StrikeOutColor);
-    m_mixedCaseInherited = !style->hasProperty(QFont::MixedCase);
-    m_smallCapsInherited = !style->hasProperty(QFont::SmallCaps);
-    m_allUpperCaseInherited = !style->hasProperty(QFont::AllUppercase);
-    m_allLowerCaseInherited = !style->hasProperty(QFont::AllLowercase);
-    m_capitalizInherited = !style->hasProperty(QFont::Capitalize);
+                            && !style->hasProperty(KoCharacterStyle::StrikeOutColor));
+    m_capitalizationInherited = directFormattingMode || !style->hasProperty(QTextFormat::FontCapitalization);
 
     //set the underline up
     widget.underlineStyle->setCurrentIndex(1);
     widget.underlineLineStyle->setCurrentIndex(lineStyleToIndex(style->underlineStyle()));
-    if (m_uniqueFormat)
-        widget.underlineStyle->setCurrentIndex(lineTypeToIndex(style->underlineType()));
-    else
-        widget.underlineStyle->setCurrentIndex(-1);
-
-    underlineTypeChanged(widget.underlineStyle->currentIndex());
+    widget.underlineStyle->setCurrentIndex(lineTypeToIndex(style->underlineType()));
     widget.underlineColor->setColor(style->underlineColor());
 
     //set the strikethrough up
     widget.strikethroughType->setCurrentIndex(1);
     widget.strikethroughLineStyle->setCurrentIndex(lineStyleToIndex(style->strikeOutStyle()));
-    if (m_uniqueFormat)
-        widget.strikethroughType->setCurrentIndex(lineTypeToIndex(style->strikeOutType()));
-    else
-        widget.strikethroughType->setCurrentIndex(-1);
-    strikethroughTypeChanged(widget.strikethroughType->currentIndex());
+    widget.strikethroughType->setCurrentIndex(lineTypeToIndex(style->strikeOutType()));
     widget.strikethroughColor->setColor(style->strikeOutColor());
 
     //Now set the capitalisation
-    int index;
     switch (style->fontCapitalization()) {
-    case QFont::MixedCase: widget.capitalizationList->setCurrentIndex(0);index=0; break;
-    case QFont::SmallCaps: widget.capitalizationList->setCurrentIndex(1);index=1; break;
-    case QFont::AllUppercase: widget.capitalizationList->setCurrentIndex(2);index=2; break;
-    case QFont::AllLowercase: widget.capitalizationList->setCurrentIndex(3);index=3; break;
-    case QFont::Capitalize: widget.capitalizationList->setCurrentIndex(4);index=4; break;
+    case QFont::MixedCase:
+        widget.capitalizationList->setCurrentIndex(0);
+        break;
+    case QFont::SmallCaps:
+        widget.capitalizationList->setCurrentIndex(1);
+        break;
+    case QFont::AllUppercase:
+        widget.capitalizationList->setCurrentIndex(2);
+        break;
+    case QFont::AllLowercase:
+        widget.capitalizationList->setCurrentIndex(3);
+        break;
+    case QFont::Capitalize:
+        widget.capitalizationList->setCurrentIndex(4);
+        break;
     default:
         widget.capitalizationList->setCurrentIndex(0);
-        index =0;
         break;
     }
 
-    if(m_uniqueFormat)
-        capitalisationChanged(index);
-    else{
-        widget.capitalizationList->setCurrentIndex(-1);
-        widget.capitalizationList->setEnabled(false);
-    }
-
     //Set font decoration display
-    widget.enableText->setVisible(!m_uniqueFormat);
-    widget.enableText->setChecked(m_uniqueFormat);
-    textToggled(m_uniqueFormat);
-    widget.enableBackground->setVisible(!m_uniqueFormat);
-    widget.enableBackground->setChecked(m_uniqueFormat);
-    backgroundToggled(m_uniqueFormat);
-
     m_textColorChanged = false;
-    m_backgroundColorChanged = false;
     m_textColorReset = ! style->hasProperty(QTextFormat::ForegroundBrush);
-    if (m_textColorReset || (style->foreground().style() == Qt::NoBrush)) {
-        clearTextColor();
+    widget.enableText->setChecked(m_textColorReset);
+    if (style->foreground().style() == Qt::NoBrush) {
+        widget.textColor->setColor(widget.textColor->defaultColor());
     } else {
         widget.textColor->setColor(style->foreground().color());
     }
+
+    m_backgroundColorChanged = false;
     m_backgroundColorReset = ! style->hasProperty(QTextFormat::BackgroundBrush);
-    if (m_backgroundColorReset || (style->background().style() == Qt::NoBrush)) {
-        clearBackgroundColor();
+    widget.enableBackground->setChecked(m_backgroundColorReset);
+    if (style->background().style() == Qt::NoBrush) {
+        widget.backgroundColor->setColor(widget.backgroundColor->defaultColor());
     } else {
         widget.backgroundColor->setColor(style->background().color());
     }
@@ -407,13 +380,13 @@ void CharacterHighlighting::save(KoCharacterStyle *style)
 
 
     KFontChooser::FontDiffFlags fontDiff = m_fontChooser->fontDiffFlags();
-    if (m_uniqueFormat || (fontDiff & KFontChooser::FontDiffFamily)){
+    if (fontDiff & KFontChooser::FontDiffFamily){
         style->setFontFamily(m_fontChooser->font().family());
     }
-    if (m_uniqueFormat || (fontDiff & KFontChooser::FontDiffSize)){
+    if (fontDiff & KFontChooser::FontDiffSize){
         style->setFontPointSize(m_fontChooser->font().pointSize());
     }
-    if (m_uniqueFormat || (fontDiff & KFontChooser::FontDiffStyle)) {
+    if (fontDiff & KFontChooser::FontDiffStyle) {
         style->setFontWeight(m_fontChooser->font().weight());
         style->setFontItalic(m_fontChooser->font().italic()); //TODO should set style instead of italic
     }
@@ -427,7 +400,6 @@ void CharacterHighlighting::save(KoCharacterStyle *style)
         }
     }
 
-
     if (!m_strikeoutInherited) {
         style->setStrikeOutStyle(indexToLineStyle(widget.strikethroughLineStyle->currentIndex()));
         style->setStrikeOutColor(widget.strikethroughColor->color());
@@ -437,34 +409,30 @@ void CharacterHighlighting::save(KoCharacterStyle *style)
         }
     }
 
-
-    if (m_uniqueFormat || widget.capitalizationList->currentIndex() >= 0) {
-        if (widget.capitalizationList->currentIndex() == 0 && !m_mixedCaseInherited)
+    if (!m_capitalizationInherited) {
+        if (widget.capitalizationList->currentIndex() == 0)
             style->setFontCapitalization(QFont::MixedCase);
-        else if (widget.capitalizationList->currentIndex() == 1 && !m_smallCapsInherited)
+        else if (widget.capitalizationList->currentIndex() == 1)
             style->setFontCapitalization(QFont::SmallCaps);
-        else if (widget.capitalizationList->currentIndex() == 2 && !m_allUpperCaseInherited)
+        else if (widget.capitalizationList->currentIndex() == 2)
             style->setFontCapitalization(QFont::AllUppercase);
-        else if (widget.capitalizationList->currentIndex() == 3 && !m_allLowerCaseInherited)
+        else if (widget.capitalizationList->currentIndex() == 3)
             style->setFontCapitalization(QFont::AllLowercase);
-        else if (widget.capitalizationList->currentIndex() == 4 && !m_capitalizInherited)
+        else if (widget.capitalizationList->currentIndex() == 4)
             style->setFontCapitalization(QFont::Capitalize);
     }
 
-
-    QTextCharFormat::VerticalAlignment va;
-    if (m_uniqueFormat || widget.positionList->currentIndex() >= 0){
-        if (!m_positionInherited ) {
-            if (widget.positionList->currentIndex() == 0)
-                va = QTextCharFormat::AlignNormal;
-            else if (widget.positionList->currentIndex() == 2)
-                va = QTextCharFormat::AlignSubScript;
-            else if (widget.positionList->currentIndex() == 1)
-                va = QTextCharFormat::AlignSuperScript;
-            else
-                va = QTextCharFormat::AlignNormal;
-            style->setVerticalAlignment(va);
-        }
+    if (!m_positionInherited ) {
+        QTextCharFormat::VerticalAlignment va;
+        if (widget.positionList->currentIndex() == 0)
+            va = QTextCharFormat::AlignNormal;
+        else if (widget.positionList->currentIndex() == 2)
+            va = QTextCharFormat::AlignSubScript;
+        else if (widget.positionList->currentIndex() == 1)
+            va = QTextCharFormat::AlignSuperScript;
+        else
+            va = QTextCharFormat::AlignNormal;
+        style->setVerticalAlignment(va);
     }
 
     if (widget.enableBackground->isChecked() && m_backgroundColorReset)

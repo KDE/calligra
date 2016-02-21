@@ -37,6 +37,9 @@ public:
 
     virtual void visitBlock(QTextBlock &block, const QTextCursor &caret)
     {
+        m_formats.clear();
+        m_cursors.clear();
+
         for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
             QTextCursor fragmentSelection(caret);
             fragmentSelection.setPosition(it.fragment().position());
@@ -49,16 +52,15 @@ public:
             visitFragmentSelection(fragmentSelection);
         }
 
-        QList<QTextCharFormat>::Iterator it = m_formats.begin();
-        foreach(QTextCursor cursor, m_cursors) {
-            QTextFormat prevFormat(cursor.charFormat());
-            cursor.setCharFormat(*it);
-            editor()->registerTrackedChange(cursor, KoGenChange::FormatChange, kundo2_i18n("Formatting"), *it, prevFormat, false);
-            ++it;
-        }
         QTextCursor cursor(caret);
         cursor.mergeBlockFormat(m_deltaBlockFormat);
         cursor.mergeBlockCharFormat(m_deltaCharFormat);
+
+        QList<QTextCharFormat>::Iterator it = m_formats.begin();
+        foreach(QTextCursor cursor, m_cursors) {
+            cursor.setCharFormat(*it);
+            ++it;
+        }
     }
 
     virtual void visitFragmentSelection(QTextCursor &fragmentSelection)

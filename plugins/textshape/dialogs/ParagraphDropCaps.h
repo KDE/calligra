@@ -39,7 +39,7 @@ class ParagraphDropCaps : public QWidget
 public:
   explicit ParagraphDropCaps(QWidget *parent = 0);
 
-  void setDisplay(KoParagraphStyle *style);
+  void setDisplay(KoParagraphStyle *style, bool directFormattingMode);
   void save(KoParagraphStyle *style);
 
   void setUnit(const KoUnit &unit);

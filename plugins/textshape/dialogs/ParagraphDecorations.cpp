@@ -37,7 +37,7 @@ void ParagraphDecorations::slotBackgroundColorChanged()
     emit parStyleChanged();
 }
 
-void ParagraphDecorations::setDisplay(KoParagraphStyle *style)
+void ParagraphDecorations::setDisplay(KoParagraphStyle *style, bool directFormattingMode)
 {
     m_backgroundColorChanged = false;
     m_backgroundColorReset = style->background().style() == Qt::NoBrush;

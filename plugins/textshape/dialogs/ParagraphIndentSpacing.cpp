@@ -92,7 +92,7 @@ void ParagraphIndentSpacing::bottomMarginValueChanged()
     emit parStyleChanged();
 }
 
-void ParagraphIndentSpacing::setDisplay(KoParagraphStyle *style)
+void ParagraphIndentSpacing::setDisplay(KoParagraphStyle *style, bool directFormattingMode)
 {
     m_style = style;
     // TODO : handle relatives
@@ -102,12 +102,12 @@ void ParagraphIndentSpacing::setDisplay(KoParagraphStyle *style)
     widget.before->changeValue(style->topMargin());
     widget.after->changeValue(style->bottomMargin());
 
-    m_rightMarginIngerited = !style->hasProperty(QTextFormat::BlockRightMargin);
-    m_leftMarginInherited = !style->hasProperty(QTextFormat::BlockLeftMargin);
-    m_topMarginInherited = !style->hasProperty(QTextFormat::BlockTopMargin);
-    m_bottomMarginInherited = !style->hasProperty(QTextFormat::BlockBottomMargin);
-    m_autoTextIndentInherited = !style->hasProperty(KoParagraphStyle::AutoTextIndent);
-    m_textIndentInherited = !style->hasProperty(QTextFormat::TextIndent);
+    m_rightMarginIngerited = directFormattingMode || !style->hasProperty(QTextFormat::BlockRightMargin);
+    m_leftMarginInherited = directFormattingMode || !style->hasProperty(QTextFormat::BlockLeftMargin);
+    m_topMarginInherited = directFormattingMode || !style->hasProperty(QTextFormat::BlockTopMargin);
+    m_bottomMarginInherited = directFormattingMode || !style->hasProperty(QTextFormat::BlockBottomMargin);
+    m_autoTextIndentInherited = directFormattingMode  || !style->hasProperty(KoParagraphStyle::AutoTextIndent);
+    m_textIndentInherited = directFormattingMode || !style->hasProperty(QTextFormat::TextIndent);
 
     widget.autoTextIndent->setChecked(style->autoTextIndent());
 

@@ -98,13 +98,13 @@ void ParagraphGeneral::selectName()
     widget.name->setFocus(Qt::OtherFocusReason);
 }
 
-void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level)
+void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level, bool directFormattingMode)
 {
     m_style = style;
     if (m_style == 0)
         return;
 
-    CharacterGeneral::setStyle(style);
+    CharacterGeneral::setStyle(style, directFormattingMode);
 
     blockSignals(true);
 
@@ -137,11 +137,11 @@ void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level)
         }
     }
 
-    m_paragraphIndentSpacing->setDisplay(style);
-    m_paragraphLayout->setDisplay(style);
-    m_paragraphBulletsNumbers->setDisplay(style, level);
-    m_paragraphDecorations->setDisplay(style);
-    m_paragraphDropCaps->setDisplay(style);
+    m_paragraphIndentSpacing->setDisplay(style, directFormattingMode);
+    m_paragraphLayout->setDisplay(style, directFormattingMode);
+    m_paragraphBulletsNumbers->setDisplay(style, level, directFormattingMode);
+    m_paragraphDecorations->setDisplay(style, directFormattingMode);
+    m_paragraphDropCaps->setDisplay(style, directFormattingMode);
 
     widget.preview->setParagraphStyle(style);
 

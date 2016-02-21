@@ -78,7 +78,7 @@ void ParagraphLayout::thresholdValueChanged()
     emit parStyleChanged();
 }
 
-void ParagraphLayout::setDisplay(KoParagraphStyle *style)
+void ParagraphLayout::setDisplay(KoParagraphStyle *style, bool directFormattingMode)
 {
     switch (style->alignment()) {
     case Qt::AlignRight: widget.right->setChecked(true); break;
@@ -89,11 +89,11 @@ void ParagraphLayout::setDisplay(KoParagraphStyle *style)
         widget.left->setChecked(true); break;
     }
 
-    m_alignmentInherited = !style->hasProperty(QTextFormat::BlockAlignment);
-    m_keepTogetherInherited = !style->hasProperty(QTextFormat::BlockNonBreakableLines);
-    m_breakAfterInherited = !style->hasProperty(KoParagraphStyle::BreakAfter);
-    m_breakBeforeInherited = !style->hasProperty(KoParagraphStyle::BreakBefore);
-    m_orphanThresholdInherited = !style->hasProperty(KoParagraphStyle::OrphanThreshold);
+    m_alignmentInherited = directFormattingMode|| !style->hasProperty(QTextFormat::BlockAlignment);
+    m_keepTogetherInherited = directFormattingMode|| !style->hasProperty(QTextFormat::BlockNonBreakableLines);
+    m_breakAfterInherited = directFormattingMode|| !style->hasProperty(KoParagraphStyle::BreakAfter);
+    m_breakBeforeInherited = directFormattingMode|| !style->hasProperty(KoParagraphStyle::BreakBefore);
+    m_orphanThresholdInherited = directFormattingMode|| !style->hasProperty(KoParagraphStyle::OrphanThreshold);
 
     widget.keepTogether->setChecked(style->nonBreakableLines());
     widget.breakBefore->setChecked(style->breakBefore());

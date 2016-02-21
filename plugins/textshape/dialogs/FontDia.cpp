@@ -65,7 +65,7 @@ FontDia::FontDia(KoTextEditor *editor, QWidget* parent)
 void FontDia::initTabs()
 {
     KoCharacterStyle style(m_initialFormat);
-    m_characterGeneral->setStyle(&style);
+    m_characterGeneral->setStyle(&style, true);
 }
 
 void FontDia::styleChanged(bool state)

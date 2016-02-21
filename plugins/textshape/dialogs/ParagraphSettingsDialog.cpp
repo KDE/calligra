@@ -63,7 +63,7 @@ ParagraphSettingsDialog::~ParagraphSettingsDialog()
 void ParagraphSettingsDialog::initTabs()
 {
     KoParagraphStyle *style = KoParagraphStyle::fromBlock(m_editor->block());
-    m_paragraphGeneral->setStyle(style, KoList::level(m_editor->block()));
+    m_paragraphGeneral->setStyle(style, KoList::level(m_editor->block()), true);
 }
 
 void ParagraphSettingsDialog::styleChanged(bool state)

@@ -63,7 +63,7 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
     widget.inheritStyle->setStylesModel(m_characterInheritedStyleModel);
     widget.inheritStyle->setEnabled(false);
 
-    m_characterHighlighting = new CharacterHighlighting(true, this);
+    m_characterHighlighting = new CharacterHighlighting(this);
     connect(m_characterHighlighting, SIGNAL(charStyleChanged()), this, SIGNAL(styleChanged()));
     connect(m_characterHighlighting, SIGNAL(charStyleChanged()), this, SLOT(setPreviewCharacterStyle()));
 
@@ -85,7 +85,7 @@ void CharacterGeneral::hideStyleName(bool hide)
     }
 }
 
-void CharacterGeneral::setStyle(KoCharacterStyle *style)
+void CharacterGeneral::setStyle(KoCharacterStyle *style, bool directFormattingMode)
 {
     m_style = style;
     if (m_style == 0)
@@ -95,7 +95,7 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style)
     if (!m_nameHidden)
         widget.name->setText(style->name());
 
-    m_characterHighlighting->setDisplay(style);
+    m_characterHighlighting->setDisplay(style, directFormattingMode);
     //m_languageTab->setDisplay(style);
 
     widget.preview->setCharacterStyle(style);

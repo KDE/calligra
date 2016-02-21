@@ -86,7 +86,7 @@ int ParagraphBulletsNumbers::addStyle(const Lists::ListStyleItem &lsi)
     return widget.listTypes->count() - 1;
 }
 
-void ParagraphBulletsNumbers::setDisplay(KoParagraphStyle *style, int level)
+void ParagraphBulletsNumbers::setDisplay(KoParagraphStyle *style, int level, bool directFormattingMode)
 {
     KoListStyle *listStyle = style->listStyle();
     widget.listPropertiesPane->setEnabled(listStyle != 0);

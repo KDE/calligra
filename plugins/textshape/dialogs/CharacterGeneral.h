@@ -39,7 +39,7 @@ class CharacterGeneral : public QWidget
 public:
     explicit CharacterGeneral(QWidget *parent = 0);
 
-    void setStyle(KoCharacterStyle *style);
+    void setStyle(KoCharacterStyle *style, bool directFormattingMode);
     void hideStyleName(bool hide);
     bool isStyleChanged();
     QString styleName() const;

@@ -39,7 +39,7 @@ class ParagraphBulletsNumbers : public QWidget
 public:
     explicit ParagraphBulletsNumbers(QWidget *parent);
 
-    void setDisplay(KoParagraphStyle *style, int level = 0);
+    void setDisplay(KoParagraphStyle *style, int level, bool directFormattingMode);
 
     void save(KoParagraphStyle *style);
 

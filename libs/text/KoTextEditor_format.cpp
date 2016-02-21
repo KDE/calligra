@@ -507,7 +507,6 @@ public:
         foreach(QTextCursor cursor, m_cursors) {
             QTextFormat prevFormat(cursor.charFormat());
             cursor.setCharFormat(*it);
-            editor()->registerTrackedChange(cursor, KoGenChange::FormatChange, kundo2_i18n("Formatting"), *it, prevFormat, false);
             ++it;
         }
     }
