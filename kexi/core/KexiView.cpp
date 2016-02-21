@@ -128,7 +128,7 @@ public:
         menuButton->setPopupMode(QToolButton::InstantPopup);
         topBarLyr->insertWidget(0, menuButton);
 
-        m_mainMenu = new KMenu;
+        m_mainMenu = new KMenu(menuButton);
         menuButton->setMenu(m_mainMenu);
         return m_mainMenu;
     }
