@@ -43,12 +43,13 @@ public:
     KexiMenuWidgetAction(const QString &text, QObject *parent);
     KexiMenuWidgetAction(const KIcon &icon, const QString &text, QObject *parent);
     KexiMenuWidgetAction(KStandardAction::StandardAction id, QObject *parent);
+    ~KexiMenuWidgetAction();
 
     void setPersistentlySelected(bool set);
     bool persistentlySelected() const;
 
 protected:
-    KexiMenuWidgetActionPrivate * const d;
+    const QScopedPointer<KexiMenuWidgetActionPrivate> d;
 };
 
 class KexiMenuWidget : public QWidget
