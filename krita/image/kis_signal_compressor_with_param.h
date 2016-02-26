@@ -93,8 +93,8 @@ public:
     typedef boost::function<void (T)> CallbackFunction;
 
 public:
-    KisSignalCompressorWithParam(int delay, CallbackFunction function)
-        : m_compressor(delay, KisSignalCompressor::FIRST_ACTIVE),
+    KisSignalCompressorWithParam(int delay, CallbackFunction function, KisSignalCompressor::Mode mode = KisSignalCompressor::FIRST_ACTIVE)
+        : m_compressor(delay, mode),
           m_function(function)
     {
         boost::function<void ()> callback(

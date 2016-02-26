@@ -1654,3 +1654,13 @@ bool KisConfig::animationDropFrames(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("animationDropFrames", true));
 }
+
+int KisConfig::scribbingUpdatesDelay(bool defaultValue) const
+{
+    return (defaultValue ? 30 : m_cfg.readEntry("scribbingUpdatesDelay", 30));
+}
+
+void KisConfig::setScribbingUpdatesDelay(int value)
+{
+    m_cfg.writeEntry("scribbingUpdatesDelay", value);
+}

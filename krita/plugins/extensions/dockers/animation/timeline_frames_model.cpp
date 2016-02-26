@@ -17,12 +17,14 @@
  */
 
 #include "timeline_frames_model.h"
+#include <boost/function.hpp>
 #include <QFont>
 #include <QSize>
 #include <QColor>
 #include <QMimeData>
 
 #include "kis_layer.h"
+#include "kis_config.h"
 
 #include "kis_debug.h"
 #include "kis_image.h"
@@ -30,6 +32,7 @@
 #include "kis_node_dummies_graph.h"
 #include "kis_dummies_facade_base.h"
 #include "kis_signal_compressor.h"
+#include "kis_signal_compressor_with_param.h"
 #include "kis_keyframe_channel.h"
 #include "kundo2command.h"
 #include "kis_post_execution_undo_adapter.h"
@@ -86,6 +89,7 @@ struct TimelineFramesModel::Private
     QScopedPointer<NodeManipulationInterface> nodeInterface;
 
     QPersistentModelIndex lastClickedIndex;
+    QScopedPointer<KisSignalCompressorWithParam<int> > scrubbingCompressor;
 
     QVariant layerName(int row) const {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
@@ -178,6 +182,16 @@ TimelineFramesModel::TimelineFramesModel(QObject *parent)
       m_d(new Private)
 {
     connect(&m_d->updateTimer, SIGNAL(timeout()), SLOT(processUpdateQueue()));
+
+    {
+        KisConfig cfg;
+
+        boost::function<void (int)> callback(
+            boost::bind(&TimelineFramesModel::slotInternalScrubPreviewRequested, this, _1));
+
+        m_d->scrubbingCompressor.reset(
+            new KisSignalCompressorWithParam<int>(cfg.scribbingUpdatesDelay(), callback, KisSignalCompressor::FIRST_ACTIVE));
+    }
 }
 
 TimelineFramesModel::~TimelineFramesModel()
@@ -852,6 +866,13 @@ void TimelineFramesModel::setScrubState(bool active)
     }
 }
 
+void TimelineFramesModel::slotInternalScrubPreviewRequested(int time)
+{
+    if (m_d->animationPlayer && !m_d->animationPlayer->isPlaying()) {
+        m_d->animationPlayer->displayFrame(time);
+    }
+}
+
 void TimelineFramesModel::scrubTo(int time, bool preview)
 {
     if (m_d->animationPlayer && m_d->animationPlayer->isPlaying()) return;
@@ -860,7 +881,7 @@ void TimelineFramesModel::scrubTo(int time, bool preview)
 
     if (preview) {
         if (m_d->animationPlayer) {
-            m_d->animationPlayer->displayFrame(time);
+            m_d->scrubbingCompressor->start(time);
         }
     } else {
         m_d->image->animationInterface()->requestTimeSwitchWithUndo(time);
