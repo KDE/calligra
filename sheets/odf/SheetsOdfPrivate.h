@@ -48,6 +48,7 @@ namespace Calligra {
 namespace Sheets {
 
 class CalculationSettings;
+class NamedAreaManager;
 
 namespace Odf {
 
@@ -59,6 +60,8 @@ namespace Odf {
     bool loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfContext);
     void loadMapSettings(Map *map, const KoOasisSettings &settingsDoc);
     bool saveMap(Map *map, KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext);
+    void loadNamedAreas(NamedAreaManager *manager, const KoXmlElement& body);
+    void saveNamedAreas(const NamedAreaManager *manager, KoXmlWriter& xmlWriter);
 
     // SheetsOdfSheet
     bool loadSheet(Sheet *sheet, const KoXmlElement& sheetElement, OdfLoadingContext& tableContext, const Styles& autoStyles, const QHash<QString, Conditions>& conditionalStyles);

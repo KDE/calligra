@@ -188,7 +188,6 @@ bool Odf::saveDocument(DocBase *doc, KoDocument::SavingContext &documentContext)
     bodyWriter->endElement(); ////office:spreadsheet
     bodyWriter->endElement(); ////office:body
 
-#warning convert to new odf
     // Done with writing out the contents to the tempfile, we can now write out the automatic styles
     mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
 

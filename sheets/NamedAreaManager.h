@@ -23,16 +23,14 @@
 #include <QList>
 #include <QObject>
 
-#include <KoXmlReader.h>
-
 #include "Region.h"
 
 #include "sheets_odf_export.h"
 
 class QDomDocument;
+class QDomElement;
 class QString;
-
-class KoXmlWriter;
+class KoXmlElement;
 
 namespace Calligra
 {
@@ -59,6 +57,8 @@ public:
      */
     virtual ~NamedAreaManager();
 
+    const Map *map() const;
+
     void remove(Sheet* sheet);
 
     Region namedArea(const QString& name) const;
@@ -73,11 +73,6 @@ public:
 
     void regionChanged(const Region& region);
     void updateAllNamedAreas();
-
-    /// \ingroup OpenDocument
-    void loadOdf(const KoXmlElement& body);
-    /// \ingroup OpenDocument
-    void saveOdf(KoXmlWriter& xmlWriter) const;
 
     /// \ingroup NativeFormat
     void loadXML(const KoXmlElement& element);

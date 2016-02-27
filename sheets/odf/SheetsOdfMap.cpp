@@ -239,7 +239,7 @@ bool Odf::loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfCo
 #warning TODO new style odf
     map->databaseManager()->loadOdf(body); // table:database-ranges
 #warning TODO new style odf
-    map->namedAreaManager()->loadOdf(body); // table:named-expressions
+    loadNamedAreas(map->namedAreaManager(), body); // table:named-expressions
 
     map->setLoading(false);
     return true;
@@ -305,7 +305,7 @@ bool Odf::saveMap(Map *map, KoXmlWriter & xmlWriter, KoShapeSavingContext & savi
     tableContext.valStyle.writeStyle(xmlWriter);
 
 #warning TODO new style odf
-    map->namedAreaManager()->saveOdf(savingContext.xmlWriter());
+    saveNamedAreas(map->namedAreaManager(), savingContext.xmlWriter());
 #warning TODO new style odf
     map->databaseManager()->saveOdf(savingContext.xmlWriter());
     return true;
@@ -358,6 +358,71 @@ void Odf::saveTableShape(Sheet *sheet, KoShapeSavingContext &context)
     saveSheet(sheet, tableContext);
     tableContext.valStyle.writeStyle(context.xmlWriter());
 }
+
+void Odf::loadNamedAreas(NamedAreaManager *manager, const KoXmlElement& body)
+{
+    KoXmlNode namedAreas = KoXml::namedItemNS(body, KoXmlNS::table, "named-expressions");
+    if (namedAreas.isNull()) return;
+
+    debugSheetsODF << "Loading named areas...";
+    KoXmlElement element;
+    forEachElement(element, namedAreas) {
+        if (element.namespaceURI() != KoXmlNS::table)
+            continue;
+        if (element.localName() == "named-range") {
+            if (!element.hasAttributeNS(KoXmlNS::table, "name"))
+                continue;
+            if (!element.hasAttributeNS(KoXmlNS::table, "cell-range-address"))
+                continue;
+
+            // TODO: what is: table:base-cell-address
+            const QString base = element.attributeNS(KoXmlNS::table, "base-cell-address", QString());
+
+            // Handle the case where the table:base-cell-address does contain the referenced sheetname
+            // while it's missing in the table:cell-range-address. See bug #194386 for an example.
+            Sheet* fallbackSheet = 0;
+            if (!base.isEmpty()) {
+                Region region(loadRegion(base), manager->map());
+                fallbackSheet = region.lastSheet();
+            }
+            
+            const QString name = element.attributeNS(KoXmlNS::table, "name", QString());
+            const QString range = element.attributeNS(KoXmlNS::table, "cell-range-address", QString());
+            debugSheetsODF << "Named area found, name:" << name << ", area:" << range;
+
+            Region region(Odf::loadRegion(range), manager->map(), fallbackSheet);
+            if (!region.isValid() || !region.lastSheet()) {
+                debugSheetsODF << "invalid area";
+                continue;
+            }
+
+            manager->insert(region, name);
+        } else if (element.localName() == "named-expression") {
+            debugSheetsODF << "Named expression found.";
+            // TODO
+        }
+    }
+}
+
+void Odf::saveNamedAreas(const NamedAreaManager *manager, KoXmlWriter& xmlWriter)
+{
+   QList<QString> areas = manager->areaNames();
+   if (areas.isEmpty()) return;
+
+    Region region;
+    xmlWriter.startElement("table:named-expressions");
+    for (int i = 0; i < areas.count(); ++i) {
+        QString name = areas[i];
+        region = manager->namedArea(name);
+        xmlWriter.startElement("table:named-range");
+        xmlWriter.addAttribute("table:name", name);
+        xmlWriter.addAttribute("table:base-cell-address", Odf::saveRegion(Region(1, 1, manager->sheet(name)).name()));
+        xmlWriter.addAttribute("table:cell-range-address", Odf::saveRegion(&region));
+        xmlWriter.endElement();
+    }
+    xmlWriter.endElement();
+}
+
 
 
 
