@@ -821,7 +821,6 @@ ShapeLoadingData Odf::loadObject(Cell *cell, const KoXmlElement &element, KoShap
         return data;
     }
 
-#warning use new odf
     Region endCell(loadRegion(shape->additionalAttribute("table:end-cell-address")),
                    cell->sheet()->map(), cell->sheet());
     if (!endCell.isValid() || !endCell.isSingular())

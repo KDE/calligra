@@ -412,7 +412,6 @@ bool Odf::loadSheet(Sheet *sheet, const KoXmlElement& sheetElement, OdfLoadingCo
     }
 
     if (sheetElement.attributeNS(KoXmlNS::table, "protected", QString()) == "true") {
-#warning TODO new style odf
         loadProtection(sheet, sheetElement);
     }
     return true;
@@ -1031,7 +1030,6 @@ bool Odf::saveSheet(Sheet *sheet, OdfSavingContext& tableContext)
         const Region region(_printRange, sheet);
         if (region.isValid()) {
             debugSheetsODF << region;
-#warning TODO new style odf
             xmlWriter.addAttribute("table:print-ranges", saveRegion(region.name()));
         }
     }

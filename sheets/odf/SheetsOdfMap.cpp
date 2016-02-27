@@ -109,7 +109,6 @@ bool Odf::loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfCo
     KoShapeLoadingContext shapeContext(tableContext.odfContext, map->resourceManager());
     tableContext.shapeContext = &shapeContext;
     KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
-#warning TODO new style odf
     sharedData->loadOdfStyles(shapeContext, map->textStyleManager());
 
     fixupStyle((KoCharacterStyle*)map->textStyleManager()->defaultParagraphStyle());
@@ -238,7 +237,6 @@ bool Odf::loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfCo
     // Load databases. This needs the sheets to be loaded.
 #warning TODO new style odf
     map->databaseManager()->loadOdf(body); // table:database-ranges
-#warning TODO new style odf
     loadNamedAreas(map->namedAreaManager(), body); // table:named-expressions
 
     map->setLoading(false);
@@ -304,7 +302,6 @@ bool Odf::saveMap(Map *map, KoXmlWriter & xmlWriter, KoShapeSavingContext & savi
 
     tableContext.valStyle.writeStyle(xmlWriter);
 
-#warning TODO new style odf
     saveNamedAreas(map->namedAreaManager(), savingContext.xmlWriter());
 #warning TODO new style odf
     map->databaseManager()->saveOdf(savingContext.xmlWriter());
