@@ -316,6 +316,101 @@ bool Odf::paste(QBuffer &buffer, Map *map)
     return result;
 }
 
+void Odf::loadCalculationSettings(CalculationSettings *settings, const KoXmlElement& body)
+{
+    KoXmlNode xmlsettings = KoXml::namedItemNS(body, KoXmlNS::table, "calculation-settings");
+    debugSheets << "Calculation settings found?" << !xmlsettings.isNull();
+    if (!xmlsettings.isNull()) {
+        KoXmlElement element = xmlsettings.toElement();
+        if (element.hasAttributeNS(KoXmlNS::table,  "case-sensitive")) {
+            settings->setCaseSensitiveComparisons(Qt::CaseSensitive);
+            QString value = element.attributeNS(KoXmlNS::table, "case-sensitive", "true");
+            if (value == "false")
+                settings->setCaseSensitiveComparisons(Qt::CaseInsensitive);
+        } else if (element.hasAttributeNS(KoXmlNS::table, "precision-as-shown")) {
+            settings->setPrecisionAsShown(false);
+            QString value = element.attributeNS(KoXmlNS::table, "precision-as-shown", "false");
+            if (value == "true")
+                settings->setPrecisionAsShown(true);
+        } else if (element.hasAttributeNS(KoXmlNS::table, "search-criteria-must-apply-to-whole-cell")) {
+            settings->setWholeCellSearchCriteria(true);
+            QString value = element.attributeNS(KoXmlNS::table, "search-criteria-must-apply-to-whole-cell", "true");
+            if (value == "false")
+                settings->setWholeCellSearchCriteria(false);
+        } else if (element.hasAttributeNS(KoXmlNS::table, "automatic-find-labels")) {
+            settings->setAutomaticFindLabels(true);
+            QString value = element.attributeNS(KoXmlNS::table, "automatic-find-labels", "true");
+            if (value == "false")
+                settings->setAutomaticFindLabels(false);
+        } else if (element.hasAttributeNS(KoXmlNS::table, "use-regular-expressions")) {
+            settings->setUseRegularExpressions(true);
+            QString value = element.attributeNS(KoXmlNS::table, "use-regular-expressions", "true");
+            if (value == "false")
+                settings->setUseRegularExpressions(false);
+        } else if (element.hasAttributeNS(KoXmlNS::table, "use-wildcards")) {
+            settings->setUseWildcards(false);
+            QString value = element.attributeNS(KoXmlNS::table, "use-wildcards", "false");
+            if (value == "true")
+                settings->setUseWildcards(true);
+        } else if (element.hasAttributeNS(KoXmlNS::table, "null-year")) {
+            settings->setReferenceYear(1930);
+            QString value = element.attributeNS(KoXmlNS::table, "null-year", "1930");
+            if (!value.isEmpty() && value != "1930") {
+                bool ok;
+                int refYear = value.toInt(&ok);
+                if (ok)
+                    settings->setReferenceYear(refYear);
+            }
+        }
+
+        forEachElement(element, xmlsettings) {
+            if (element.namespaceURI() != KoXmlNS::table)
+                continue;
+            else if (element.tagName() ==  "null-date") {
+                settings->setReferenceDate(QDate(1899, 12, 30));
+                QString valueType = element.attributeNS(KoXmlNS::table, "value-type", "date");
+                if (valueType == "date") {
+                    QString value = element.attributeNS(KoXmlNS::table, "date-value", "1899-12-30");
+                    QDate date = QDate::fromString(value, Qt::ISODate);
+                    if (date.isValid())
+                        settings->setReferenceDate(date);
+                } else {
+                    debugSheets << "CalculationSettings: Error on loading null date."
+                    << "Value type """ << valueType << """ not handled"
+                    << ", falling back to default." << endl;
+                    // NOTE Stefan: I don't know why different types are possible here!
+                    // sebsauer: because according to ODF-specs a zero null date can
+                    // mean QDate::currentDate(). Still unclear what a numeric value !=0
+                    // means through :-/
+                }
+            } else if (element.tagName() ==  "iteration") {
+                // TODO
+            }
+        }
+    }
+}
+
+bool Odf::saveCalculationSettings(const CalculationSettings *settings, KoXmlWriter &xmlWriter)
+{
+    xmlWriter.startElement("table:calculation-settings");
+    if (!settings->caseSensitiveComparisons())
+        xmlWriter.addAttribute("table:case-sensitive", "false");
+    if (settings->precisionAsShown())
+        xmlWriter.addAttribute("table:precision-as-shown", "true");
+    if (!settings->wholeCellSearchCriteria())
+        xmlWriter.addAttribute("table:search-criteria-must-apply-to-whole-cell", "false");
+    if (!settings->automaticFindLabels())
+        xmlWriter.addAttribute("table:automatic-find-labels", "false");
+    if (!settings->useRegularExpressions())
+        xmlWriter.addAttribute("table:use-regular-expressions", "false");
+    if (settings->useWildcards())
+        xmlWriter.addAttribute("table:use-wildcards", "true");
+    if (settings->referenceYear() != 1930)
+        xmlWriter.addAttribute("table:null-year", QString::number(settings->referenceYear()));
+    xmlWriter.endElement();
+    return true;
+}
+
 
 
 

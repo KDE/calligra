@@ -158,8 +158,7 @@ bool Odf::loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfCo
         }
     }
 
-#warning use new odf
-    map->calculationSettings()->loadOdf(body); // table::calculation-settings
+    loadCalculationSettings(map->calculationSettings(), body); // table::calculation-settings
     if (body.hasAttributeNS(KoXmlNS::table, "structure-protected")) {
         loadProtection(map, body);
     }
@@ -217,10 +216,8 @@ bool Odf::loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfCo
                 if (!sheetElement.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
                     QString name = sheetElement.attributeNS(KoXmlNS::table, "name", QString());
                     Sheet* sheet = map->findSheet(name);
-                    if (sheet) {
-#warning use new odf
+                    if (sheet)
                         loadSheet(sheet, sheetElement, tableContext, autoStyles, conditionalStyles);
-                    }
                 }
             }
         }
@@ -288,8 +285,7 @@ bool Odf::saveMap(Map *map, KoXmlWriter & xmlWriter, KoShapeSavingContext & savi
     defaultRowStyle.setDefaultStyle(true);
     savingContext.mainStyles().insert(defaultRowStyle, "Default", KoGenStyles::DontAddNumberToName);
 
-#warning TODO new style odf
-    map->calculationSettings()->saveOdf(xmlWriter); // table::calculation-settings
+    saveCalculationSettings(map->calculationSettings(), xmlWriter); // table::calculation-settings
 
     QByteArray password;
     map->password(password);

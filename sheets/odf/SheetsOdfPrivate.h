@@ -47,7 +47,13 @@
 namespace Calligra {
 namespace Sheets {
 
+class CalculationSettings;
+
 namespace Odf {
+
+    // SheetsOdfDoc
+    void loadCalculationSettings(CalculationSettings *settings, const KoXmlElement& body);
+    bool saveCalculationSettings(const CalculationSettings *settings, KoXmlWriter &settingsWriter);
 
     // SheetsOdfMap
     bool loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfContext);
