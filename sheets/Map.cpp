@@ -30,8 +30,6 @@
 #include <kcompletion.h>
 
 #include <KoGlobal.h>
-#include <KoOasisSettings.h>
-#include <KoOdfStylesReader.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>

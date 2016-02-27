@@ -34,7 +34,6 @@
 #include <KoXmlReader.h>
 
 class KoStore;
-class KoOdfLoadingContext;
 class KoStyleManager;
 class KoDocumentResourceManager;
 
@@ -45,7 +44,6 @@ class QDomDocument;
 class KUndo2Command;
 
 class KoXmlWriter;
-class KoOasisSettings;
 
 namespace Calligra
 {

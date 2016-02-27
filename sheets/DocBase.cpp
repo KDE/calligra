@@ -32,7 +32,6 @@
 #include "DocBase.h"
 #include "DocBase_p.h"
 
-#include <KoOasisSettings.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShapeRegistry.h>
 #include <KoPart.h>

@@ -35,7 +35,6 @@
 
 #include "sheets_odf_export.h"
 
-class KoOasisSettings;
 class KoDocumentResourceManager;
 class KoPart;
 
