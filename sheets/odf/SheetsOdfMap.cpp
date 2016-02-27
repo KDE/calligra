@@ -32,14 +32,13 @@
 */
 
 #include "SheetsOdf.h"
+#include "SheetsOdfPrivate.h"
 
 #include "CalculationSettings.h"
 #include "DocBase.h"
 #include "LoadingInfo.h"
 #include "Map.h"
 #include "NamedAreaManager.h"
-#include "OdfLoadingContext.h"
-#include "OdfSavingContext.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 #include "StyleManager.h"
@@ -49,10 +48,6 @@
 #include <KoCharacterStyle.h>
 #include <KoDocumentResourceManager.h>
 #include <KoGenStyles.h>
-#include <KoOasisSettings.h>
-#include <KoOdfLoadingContext.h>
-#include <KoShapeLoadingContext.h>
-#include <KoShapeSavingContext.h>
 #include <KoStyleManager.h>
 #include <KoStyleStack.h>
 #include <KoText.h>
@@ -69,17 +64,7 @@ namespace Calligra {
 namespace Sheets {
 
 namespace Odf {
-    bool loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfContext);
-    void loadMapSettings(Map *map, const KoOasisSettings &settingsDoc);
-
     void fixupStyle(KoCharacterStyle* style);
-
-    bool saveMap(Map *map, KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext);
-
-    // these are in SheetsOdfSheet
-    bool loadSheet(Sheet *sheet, const KoXmlElement& sheetElement, OdfLoadingContext& tableContext, const Styles& autoStyles, const QHash<QString, Conditions>& conditionalStyles);
-    void loadSheetSettings(Sheet *sheet, const KoOasisSettings::NamedMap &settings);
-    bool saveSheet(Sheet *sheet, OdfSavingContext& tableContext);
 }
 
 void Odf::fixupStyle(KoCharacterStyle* style)
@@ -115,8 +100,7 @@ bool Odf::loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfCo
     map->loadingInfo()->setFileFormat(LoadingInfo::OpenDocument);
 
     //load in first
-#warning TODO new style odf
-    map->styleManager()->loadOdfStyleTemplate(odfContext.stylesReader(), map);
+    loadStyleTemplate(map->styleManager(), odfContext.stylesReader(), map);
 
     OdfLoadingContext tableContext(odfContext);
     tableContext.validities = Validity::preloadValidities(body); // table:content-validations
@@ -217,8 +201,7 @@ bool Odf::loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfCo
 
     //pre-load auto styles
     QHash<QString, Conditions> conditionalStyles;
-#warning TODO new style odf
-    Styles autoStyles = map->styleManager()->loadOdfAutoStyles(odfContext.stylesReader(),
+    Styles autoStyles = loadAutoStyles(map->styleManager(), odfContext.stylesReader(),
                         conditionalStyles, map->parser());
 
     // load the sheet
@@ -253,7 +236,7 @@ bool Odf::loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfCo
     }
 
     //delete any styles which were not used
-    map->styleManager()->releaseUnusedAutoStyles(autoStyles);
+    map->styleManager()->clearOasisStyles();
 
     // Load databases. This needs the sheets to be loaded.
 #warning TODO new style odf
@@ -290,9 +273,8 @@ void Odf::loadMapSettings(Map *map, const KoOasisSettings &settings)
 
 bool Odf::saveMap(Map *map, KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext)
 {
-#warning TODO new style odf
     // Saving the custom cell styles including the default cell style.
-    map->styleManager()->saveOdf(savingContext.mainStyles());
+    saveStyles(map->styleManager(), savingContext.mainStyles());
 
     // Saving the default column style
     KoGenStyle defaultColumnStyle(KoGenStyle::TableColumnStyle, "table-column");
@@ -345,8 +327,7 @@ bool Odf::loadTableShape(Sheet *sheet, const KoXmlElement &element, KoShapeLoadi
     Map *const map = sheet->map();
     StyleManager *const styleManager = map->styleManager();
     ValueParser *const parser = map->parser();
-#warning use new odf here
-    Styles autoStyles = styleManager->loadOdfAutoStyles(odfContext.stylesReader(), conditionalStyles, parser);
+    Styles autoStyles = loadAutoStyles(styleManager, odfContext.stylesReader(), conditionalStyles, parser);
 
     if (!element.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
         sheet->setSheetName(element.attributeNS(KoXmlNS::table, "name", QString()), true);
@@ -354,7 +335,7 @@ bool Odf::loadTableShape(Sheet *sheet, const KoXmlElement &element, KoShapeLoadi
     bool result = loadSheet(sheet, element, tableContext, autoStyles, conditionalStyles);
 
     // delete any styles which were not used
-    sheet->map()->styleManager()->releaseUnusedAutoStyles(autoStyles);
+    sheet->map()->styleManager()->clearOasisStyles();
 
     return result;
 }
@@ -363,8 +344,7 @@ void Odf::saveTableShape(Sheet *sheet, KoShapeSavingContext &context)
 {
     const Map* map = sheet->map();
     // Saving the custom cell styles including the default cell style.
-#warning use new odf here
-    map->styleManager()->saveOdf(context.mainStyles());
+    saveStyles(map->styleManager(), context.mainStyles());
 
     // Saving the default column style
     KoGenStyle defaultColumnStyle(KoGenStyle::TableColumnStyle, "table-column");

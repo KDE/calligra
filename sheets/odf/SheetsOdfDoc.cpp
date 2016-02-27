@@ -32,6 +32,7 @@
 */
 
 #include "SheetsOdf.h"
+#include "SheetsOdfPrivate.h"
 
 #include "DocBase.h"
 #include "BindingModel.h"
@@ -42,12 +43,9 @@
 #include "calligra_sheets_limits.h"
 
 #include <KoGenStyles.h>
-#include <KoOasisSettings.h>
-#include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoProgressUpdater.h>
-#include <KoShapeSavingContext.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
@@ -68,14 +66,6 @@ namespace Odf {
     void loadDocSettings(DocBase *doc, const KoXmlDocument &settingsDoc);
     void loadDocIgnoreList(DocBase *doc, const KoOasisSettings& settings);
     void saveSettings(DocBase *doc, KoXmlWriter &settingsWriter);
-
-    // these are in SheetsOdfMap
-    bool loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfContext);
-    void loadMapSettings(Map *map, const KoOasisSettings &settingsDoc);
-    bool saveMap(Map *map, KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext);
-
-    // this one is in SheetsOdfSheet
-    void saveSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter);
 };
 
 

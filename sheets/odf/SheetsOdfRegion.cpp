@@ -32,6 +32,7 @@
 */
 
 #include "SheetsOdf.h"
+#include "SheetsOdfPrivate.h"
 #include "Region.h"
 
 // This file contains functionality to load/save regions

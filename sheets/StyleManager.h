@@ -29,9 +29,6 @@ class QDomElement;
 class QDomDocument;
 class QStringList;
 
-class KoGenStyles;
-class KoOdfStylesReader;
-
 namespace Calligra
 {
 namespace Sheets
@@ -58,9 +55,6 @@ public:
     QDomElement save(QDomDocument & doc);
     bool loadXML(KoXmlElement const & styles);
 
-    void saveOdf(KoGenStyles &mainStyles);
-    void loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* map = 0);
-
     CustomStyle * defaultStyle() const {
         return m_defaultStyle;
     }
@@ -84,36 +78,17 @@ public:
     void takeStyle(CustomStyle * style);
     void createBuiltinStyles();
 
-    QStringList styleNames() const;
+    QStringList styleNames(bool includeDefault = true) const;
     int count() const {
         return m_styles.count();
     }
 
-    /**
-     * Loads OpenDocument auto styles.
-     * The auto styles are preloaded, because an auto style could be shared
-     * among cells. So, preloading prevents a multiple loading of the same
-     * auto style.
-     * This method is called before the cell loading process.
-     * @param stylesReader repository of styles
-     * @return a hash of styles with the OpenDocument internal name as key
-     */
-    Styles loadOdfAutoStyles(KoOdfStylesReader& stylesReader,
-                             QHash<QString, Conditions>& conditionalStyles,
-                             const ValueParser *parser);
+    // Defines a temporary Oasis style alias.
+    void defineOasisStyle(const QString &oasisName, const QString &styleName);
 
-    /**
-     * Releases unused auto styles.
-     * If there are auto styles, which are not used by any cell (uncommon case)
-     * this method makes sure, that these get deleted.
-     * This method is called after the cell loading porcess.
-     * @param autoStyles a hash of styles with the OpenDocument internal name as
-     *                   key
-     * @see loadOdfAutoStyles
-     */
-    void releaseUnusedAutoStyles(Styles autoStyles);
+    void clearOasisStyles();
 
-    /// OpenDocument name to internal name (on loading) or vice versa (on saving)
+   /// OpenDocument name to internal name (on loading) or vice versa (on saving)
     QString openDocumentName(const QString&) const;
 
 private:

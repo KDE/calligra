@@ -32,11 +32,11 @@
 */
 
 #include "SheetsOdf.h"
+#include "SheetsOdfPrivate.h"
 
 #include <KoGenStyles.h>
 #include <KoParagraphStyle.h>
 #include <KoShape.h>
-#include <KoShapeLoadingContext.h>
 #include <KoShapeRegistry.h>
 #include <KoStyleManager.h>
 #include <KoTextDocument.h>
@@ -62,8 +62,6 @@
 #include "ValueConverter.h"
 #include "ValueFormatter.h"
 #include "GenValidationStyle.h"
-#include "OdfLoadingContext.h"
-#include "OdfSavingContext.h"
 #include "ShapeApplicationData.h"
 
 #include <float.h>
@@ -75,10 +73,6 @@ namespace Sheets {
 
 
 namespace Odf {
-    bool loadCell(Cell *cell, const KoXmlElement& element, OdfLoadingContext& tableContext,
-            const Styles& autoStyles, const QString& cellStyleName,
-            QList<ShapeLoadingData>& shapeData);
-    bool saveCell(Cell *cell, int &repeated, OdfSavingContext& tableContext);
 
     // cell loading - helper functions
     void loadCellText(Cell *cell, const KoXmlElement& parent, OdfLoadingContext& tableContext, const Styles& autoStyles, const QString& cellStyleName);
@@ -893,8 +887,8 @@ QString Odf::saveCellStyle(Cell *cell, KoGenStyle &currentCellStyle, KoGenStyles
 #warning use new odf
         conditions.saveOdfConditions(currentCellStyle, cell->sheet()->map()->converter());
     }
-#warning TODO new style odf
-    return cell->style().saveOdf(currentCellStyle, mainStyles, cell->sheet()->map()->styleManager());
+    Style style = cell->style();
+    return saveStyle(&style, currentCellStyle, mainStyles, cell->sheet()->map()->styleManager());
 }
 
 void Odf::saveCellValue(Cell *cell, KoXmlWriter &xmlWriter)

@@ -42,6 +42,7 @@
 class QBuffer;
 
 class KoOdfReadStore;
+class KoOdfStylesReader;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoXmlElement;
@@ -74,6 +75,8 @@ namespace Odf {
 
     CALLIGRA_SHEETS_ODF_EXPORT bool paste(QBuffer &buffer, Map *map);
 
+    // styles
+    CALLIGRA_SHEETS_ODF_EXPORT void loadDataStyle(Style *style, KoOdfStylesReader &stylesReader, const QString &styleName, Conditions &conditions, const StyleManager *styleManager, const ValueParser *parser);
 
     // regions
     CALLIGRA_SHEETS_ODF_EXPORT QString loadRegion(const QString& expression);

@@ -1426,7 +1426,7 @@ void ExcelImport::Private::processNumberFormats()
             Calligra::Sheets::Style& style = dataStyleCache[f->valueFormat()];
             if (style.isEmpty()) {
                 Calligra::Sheets::Conditions conditions;
-                style.loadOdfDataStyle(odfStyles, styleName, conditions, outputDoc->map()->styleManager(), outputDoc->map()->parser());
+                Calligra::Sheets::Odf::loadDataStyle(&style, odfStyles, styleName, conditions, outputDoc->map()->styleManager(), outputDoc->map()->parser());
 
                 if (!conditions.isEmpty())
                     dataStyleConditions[f->valueFormat()] = conditions;

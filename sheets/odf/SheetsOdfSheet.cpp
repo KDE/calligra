@@ -32,16 +32,14 @@
 */
 
 #include "SheetsOdf.h"
+#include "SheetsOdfPrivate.h"
 
 #include <kcodecs.h>
 
 #include <KoDocumentInfo.h>
 #include <KoGenStyles.h>
-#include <KoOasisSettings.h>
 #include <KoProgressUpdater.h>
 #include <KoShape.h>
-#include <KoShapeLoadingContext.h>
-#include <KoShapeSavingContext.h>
 #include <KoShapeRegistry.h>
 #include "KoStore.h"
 #include <KoStyleStack.h>
@@ -57,8 +55,6 @@
 #include "HeaderFooter.h"
 #include "LoadingInfo.h"
 #include "Map.h"
-#include "OdfLoadingContext.h"
-#include "OdfSavingContext.h"
 #include "PrintSettings.h"
 #include "RowColumnFormat.h"
 #include "RowFormatStorage.h"
@@ -98,10 +94,6 @@ private:
 
 
 namespace Odf {
-    // Sheet loading and saving
-    bool loadSheet(Sheet *sheet, const KoXmlElement& sheetElement, OdfLoadingContext& tableContext, const Styles& autoStyles, const QHash<QString, Conditions>& conditionalStyles);
-    bool saveSheet(Sheet *sheet, OdfSavingContext& tableContext);
-
     // Sheet loading - helper functions
     /**
      * Inserts the styles contained in \p styleRegions into the style storage.
@@ -155,16 +147,6 @@ namespace Odf {
     void addText(const QString & text, KoXmlWriter & writer);
     void convertPart(Sheet *sheet, const QString & part, KoXmlWriter & xmlWriter);
     bool compareRows(Sheet *sheet, int row1, int row2, int maxCols, OdfSavingContext& tableContext);
-
-    // sheet settings
-    void loadSheetSettings(Sheet *sheet, const KoOasisSettings::NamedMap &settings);
-    void saveSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter);
-
-    // Cell loading - in SheetsOdfCell
-    bool loadCell(Cell *cell, const KoXmlElement& element, OdfLoadingContext& tableContext,
-            const Styles& autoStyles, const QString& cellStyleName,
-            QList<ShapeLoadingData>& shapeData);
-    bool saveCell(Cell *cell, int &repeated, OdfSavingContext& tableContext);
 }
 
 // *************** Loading *****************
@@ -1216,8 +1198,7 @@ void Odf::saveColRowCell(Sheet *sheet, int maxCols, int maxRows, OdfSavingContex
         if (!column->isDefault() || !style.isDefault()) {
             if (!style.isDefault()) {
                 KoGenStyle currentDefaultCellStyle; // the type is determined in saveOdfStyle
-#warning TODO new style odf
-                const QString name = style.saveOdf(currentDefaultCellStyle, mainStyles,
+                const QString name = saveStyle(&style, currentDefaultCellStyle, mainStyles,
                                                    sheet->map()->styleManager());
                 xmlWriter.addAttribute("table:default-cell-style-name", name);
             }
@@ -1299,8 +1280,7 @@ void Odf::saveColRowCell(Sheet *sheet, int maxCols, int maxRows, OdfSavingContex
                 xmlWriter.addAttribute("table:number-rows-repeated", repeated);
             if (!style.isDefault()) {
                 KoGenStyle currentDefaultCellStyle; // the type is determined in saveCellStyle
-#warning TODO new style odf
-                const QString name = style.saveOdf(currentDefaultCellStyle, mainStyles,
+                const QString name = saveStyle(&style, currentDefaultCellStyle, mainStyles,
                                                    sheet->map()->styleManager());
                 xmlWriter.addAttribute("table:default-cell-style-name", name);
             }
@@ -1330,8 +1310,7 @@ void Odf::saveColRowCell(Sheet *sheet, int maxCols, int maxRows, OdfSavingContex
         } else { // row is not empty
             if (!style.isDefault()) {
                 KoGenStyle currentDefaultCellStyle; // the type is determined in saveCellStyle
-#warning TODO new style odf
-                const QString name = style.saveOdf(currentDefaultCellStyle, mainStyles,
+                const QString name = saveStyle(&style, currentDefaultCellStyle, mainStyles,
                                                    sheet->map()->styleManager());
                 xmlWriter.addAttribute("table:default-cell-style-name", name);
             }
