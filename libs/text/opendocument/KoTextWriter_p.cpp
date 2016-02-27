@@ -137,10 +137,20 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             }
         }
 
+        if (cursor.currentTable() && cursor.currentTable() != currentTable) {
+            // Call the code to save the table....
+            saveTable(cursor.currentTable(), listStyles, from, to);
+            // We skip to the end of the table.
+            block = cursor.currentTable()->lastCursorPosition().block();
+            block = block.next();
+            continue;
+        }
+
         if (format.hasProperty(KoParagraphStyle::HiddenByTable)) {
             block = block.next();
             continue;
         }
+
         if (format.hasProperty(KoParagraphStyle::TableOfContentsData)) {
             saveTableOfContents(document, listStyles, block);
             block = block.next();
@@ -148,15 +158,6 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
         }
         if (format.hasProperty(KoParagraphStyle::BibliographyData)) {
             saveBibliography(document, listStyles, block);
-            block = block.next();
-            continue;
-        }
-
-        if (cursor.currentTable() && cursor.currentTable() != currentTable) {
-            // Call the code to save the table....
-            saveTable(cursor.currentTable(), listStyles, from, to);
-            // We skip to the end of the table.
-            block = cursor.currentTable()->lastCursorPosition().block();
             block = block.next();
             continue;
         }
