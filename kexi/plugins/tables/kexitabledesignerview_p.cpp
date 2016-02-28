@@ -97,8 +97,8 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
     KoProperty::Property& property = set[propertyName];
 
     //remember because we'll change list data soon
-    KoProperty::Property::ListData *oldListData = property.listData() ?
-            new KoProperty::Property::ListData(*property.listData()) : 0;
+    const QScopedPointer<KoProperty::Property::ListData>oldListData(property.listData() ?
+            new KoProperty::Property::ListData(*property.listData()) : 0);
     if (slist && nlist) {
         if (slist->isEmpty() || nlist->isEmpty()) {
             property.setListData(0);
@@ -119,9 +119,8 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
         property.setValue(newValue, rememberOldValue);
     if (commandGroup) {
             new ChangeFieldPropertyCommand(commandGroup, designerView, set, propertyName, oldValue, newValue,
-                                           oldListData, property.listData());
+                                           oldListData.data(), property.listData());
     }
-    delete oldListData;
     addHistoryCommand_in_slotPropertyChanged_enabled
         = prev_addHistoryCommand_in_slotPropertyChanged_enabled; //restore
 }
