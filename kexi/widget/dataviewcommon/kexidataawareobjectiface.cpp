@@ -1583,7 +1583,7 @@ void KexiDataAwareObjectInterface::verticalScrollBarValueChanged(int v)
     if (m_scrollbarToolTipsEnabled && verticalScrollBar()->isSliderDown()) {
         QWidget* thisWidget = dynamic_cast<QWidget*>(this);
         const int row = lastVisibleRow() + 1;
-        if (row > 0) {
+        if (thisWidget && row > 0) {
             const QString toolTipText( i18n("Record: %1", row) );
             QToolTip::showText(
                 QPoint(

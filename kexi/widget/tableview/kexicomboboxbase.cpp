@@ -26,7 +26,7 @@
 #include <QPainter>
 #include <QScrollBar>
 
-#include <kexi_global.h>
+#include <kexiutils/utils.h>
 #include "kexicomboboxbase.h"
 #include <widget/utils/kexicomboboxdropdownbutton.h>
 #include "kexicomboboxpopup.h"
@@ -381,8 +381,12 @@ void KexiComboBoxBase::createPopup(bool show)
     //kDebug() << show << field() << popup() << m_updatePopupSelectionOnShow;
     if (!field())
         return;
-    m_insideCreatePopup = true;
     QWidget* thisWidget = dynamic_cast<QWidget*>(this);
+    if (!thisWidget) {
+        return;
+    }
+    m_insideCreatePopup = true;
+    KexiUtils::Setter<bool> insideCreatePopupSetter(&m_insideCreatePopup, false);
     QWidget *widgetToFocus = internalEditor() ? internalEditor() : thisWidget;
     //kDebug() << "widgetToFocus:" << widgetToFocus;
 
@@ -505,7 +509,6 @@ void KexiComboBoxBase::createPopup(bool show)
             widgetToFocus->setFocus();
         }
     }
-    m_insideCreatePopup = false;
 }
 
 void KexiComboBoxBase::hide()
@@ -564,7 +567,9 @@ void KexiComboBoxBase::slotItemSelected(KexiDB::RecordData*)
         if (valueToSet.toString().isEmpty() && !m_insideCreatePopup) {
             clear();
             QWidget* thisWidget = dynamic_cast<QWidget*>(this);
-            thisWidget->parentWidget()->setFocus();
+            if (thisWidget) {
+                thisWidget->parentWidget()->setFocus();
+            }
             return;
         }
     }

@@ -265,7 +265,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
             QObject *o = watched; //focusWidget();
             QWidget* realWidget = dynamic_cast<QWidget*>(o); //will beused below (for tab/backtab handling)
 
-            if (!tab && !backtab) {
+            if (realWidget && !tab && !backtab) {
                 //for buttons, left/up and right/down keys act like tab/backtab (see qbutton.cpp)
                 if (realWidget->inherits("QButton")) {
                     if (ke->modifiers() == Qt::NoModifier && (key == Qt::Key_Right || key == Qt::Key_Down))
