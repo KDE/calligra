@@ -129,6 +129,7 @@ QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
         case KexiDB::Field::BLOB: {
 //! @todo BLOB input unsupported
             values.append(QByteArray());
+            break;
         }
         default:
             kWarning() << "unsupported type " << KexiDB::Field::typeName((*it).type)
