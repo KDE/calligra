@@ -450,6 +450,7 @@ void KexiConnectionSelectorWidget::slotRemoteRemoveBtnClicked()
     if (nextItem)
         nextItem->setSelected(true);
 
+    delete item->data();
     delete item;
 
     slotConnectionSelectionChanged();

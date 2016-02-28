@@ -51,7 +51,7 @@ public:
      \return true on success (data is then copied from \a newData to \a oldData) */
     bool saveConnectionData(KexiDB::ConnectionData *oldData, const KexiDB::ConnectionData &newData);
 
-    /*! Removed \a data from this set.
+    /*! Removes \a data from this set without deleting the object.
      \return true on successful removing of corresponding .kexic file */
     bool removeConnectionData(KexiDB::ConnectionData *data);
 

@@ -123,7 +123,6 @@ void KexiDBConnectionSet::removeConnectionDataInternal(KexiDB::ConnectionData *d
     d->filenamesForData.remove(key(*data));
     d->dataForFilenames.remove(filename);
     d->list.removeAt(d->list.indexOf(data));
-    delete data;
 }
 
 bool KexiDBConnectionSet::removeConnectionData(KexiDB::ConnectionData *data)
