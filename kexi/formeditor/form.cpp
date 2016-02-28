@@ -478,6 +478,7 @@ void Form::selectWidgets(const QList<QWidget*>& widgets, WidgetSelectionFlags fl
             flags = LastSelection;
         }
         selectWidget(widget, flags);
+        ++i;
     }
 }
 
