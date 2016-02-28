@@ -26,7 +26,8 @@
 KexiDBDatePicker::KexiDBDatePicker(QWidget *parent)
         : KDatePicker(parent)
         , KexiFormDataItemInterface()
-        , m_dateEditFocused(false)
+        , m_invalidState(false)
+        , m_readOnly(false)
 {
     connect(this, SIGNAL(dateChanged(QDate)), this, SLOT(slotValueChanged()));
     connect(this, SIGNAL(dateEntered(QDate)), this, SLOT(slotValueChanged()));

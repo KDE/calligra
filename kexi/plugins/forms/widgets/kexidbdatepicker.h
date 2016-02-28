@@ -86,10 +86,7 @@ protected:
 
 private:
     bool m_invalidState;
-    bool m_cursorAtEnd;
-    bool m_cursorAtStart;
     bool m_readOnly;
-    bool m_dateEditFocused;
 };
 
 #endif
