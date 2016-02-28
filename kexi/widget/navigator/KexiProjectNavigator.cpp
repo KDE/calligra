@@ -300,7 +300,9 @@ void KexiProjectNavigator::contextMenuEvent(QContextMenuEvent* event)
     if (bit->partItem()) {
         pm = d->itemMenu;
         KexiProjectModelItem *par_it = static_cast<KexiProjectModelItem*>(bit->parent());
-        d->itemMenu->update(par_it->partInfo(), bit->partItem());
+        if (par_it->partInfo() && bit->partItem()) {
+            d->itemMenu->update(par_it->partInfo(), bit->partItem());
+        }
     }
     if (pm) {
         pm->exec(event->globalPos());
