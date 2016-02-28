@@ -81,12 +81,12 @@ void ReportDesignView::slotDesignerPropertySetChanged() {
 
 DB::SchemaData* ReportDesignView::storeNewData ( const DB::SchemaData& sdata, bool &cancel ) {
     DB::SchemaData *s = View::storeNewData ( sdata, cancel );
-    kexipluginsdbg << "new id:" << s->id();
 
     if ( !s || cancel ) {
         delete s;
         return 0;
     }
+    kexipluginsdbg << "new id:" << s->id();
     if ( !storeData() ) {
         //failure: remove object's schema data to avoid garbage
         DB::Connection *conn = MainWindowIface::global()->project()->dbConnection();

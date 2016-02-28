@@ -445,12 +445,12 @@ KexiDB::SchemaData* KexiScriptDesignView::storeNewData(const KexiDB::SchemaData&
                                                        bool &cancel)
 {
     KexiDB::SchemaData *s = KexiView::storeNewData(sdata, options, cancel);
-    kDebug() << "new id:" << s->id();
 
     if (!s || cancel) {
         delete s;
         return 0;
     }
+    kDebug() << "new id:" << s->id();
 
     if (! storeData()) {
         kWarning() << "Failed to store the data.";

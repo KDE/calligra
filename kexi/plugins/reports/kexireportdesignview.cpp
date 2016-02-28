@@ -85,12 +85,12 @@ KexiDB::SchemaData* KexiReportDesignView::storeNewData(const KexiDB::SchemaData&
                                                        bool &cancel)
 {
     KexiDB::SchemaData *s = KexiView::storeNewData(sdata, options, cancel);
-    kDebug() << "new id:" << s->id();
 
     if (!s || cancel) {
         delete s;
         return 0;
     }
+    kDebug() << "new id:" << s->id();
     if (!storeData()) {
         //failure: remove object's schema data to avoid garbage
         KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
