@@ -183,9 +183,10 @@ void KexiReportView::slotPrintReport()
 {
     QPrinter printer(QPrinter::HighResolution);
     QPainter painter;
-    KoReportRendererBase *renderer;
-
-    renderer = m_factory.createInstance("print");
+    QScopedPointer<KoReportRendererBase> renderer(m_factory.createInstance("print"));
+    if (!renderer) {
+        return;
+    }
     QPointer<QPrintDialog> dialog = new QPrintDialog(&printer, this);
     if (dialog->exec() == QDialog::Accepted) {
         KoReportRendererContext cxt;
@@ -195,7 +196,6 @@ void KexiReportView::slotPrintReport()
         renderer->render(cxt, m_preRenderer->document());
     }
     delete dialog;
-    delete renderer;
 }
 
 void KexiReportView::slotExportAsPdf()
@@ -284,10 +284,9 @@ void KexiReportView::openExportedDocument(const KUrl& destination)
 
 void KexiReportView::slotExportAsSpreadsheet()
 {
-    KoReportRendererBase *renderer;
     KoReportRendererContext cxt;
 
-    renderer = m_factory.createInstance("ods");
+    QScopedPointer<KoReportRendererBase> renderer(m_factory.createInstance("ods"));
 
     if (renderer) {
         cxt.destinationUrl = getExportUrl(QLatin1String("application/vnd.oasis.opendocument.spreadsheet"),
@@ -310,10 +309,9 @@ void KexiReportView::slotExportAsSpreadsheet()
 
 void KexiReportView::slotExportAsTextDocument()
 {
-    KoReportRendererBase *renderer;
     KoReportRendererContext cxt;
 
-    renderer = m_factory.createInstance("odt");
+    QScopedPointer<KoReportRendererBase> renderer(m_factory.createInstance("odt"));
 
     if (renderer) {
         cxt.destinationUrl = getExportUrl(QLatin1String("application/vnd.oasis.opendocument.text"),
@@ -337,7 +335,6 @@ void KexiReportView::slotExportAsTextDocument()
 void KexiReportView::slotExportAsWebPage()
 {
     KoReportRendererContext cxt;
-    KoReportRendererBase *renderer;
 
     const QString dialogTitle = i18n("Export Report as Web Page");
     cxt.destinationUrl = getExportUrl(QLatin1String("text/html"),
@@ -358,11 +355,12 @@ void KexiReportView::slotExportAsWebPage()
             KGuiItem(i18n("Use CSS")),
             KGuiItem(i18n("Use Table")));
 
-    if (answer == KMessageBox::Yes) {
-        renderer = m_factory.createInstance("htmlcss");
-    }
-    else {
-        renderer = m_factory.createInstance("htmltable");
+    QScopedPointer<KoReportRendererBase> renderer(
+        m_factory.createInstance(
+            answer == KMessageBox::Yes ? "htmlcss"
+                                       : "htmltable"));
+    if (!renderer) {
+        return;
     }
 
     if (!renderer->render(cxt, m_preRenderer->document())) {
