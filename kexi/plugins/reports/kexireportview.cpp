@@ -159,15 +159,8 @@ KexiReportView::KexiReportView(QWidget *parent)
 #ifndef KEXI_MOBILE
     // setup main menu actions
     QList<QAction*> mainMenuActions;
-
     mainMenuActions << exportMenu;
-
     setMainMenuActions(mainMenuActions);
-
-    connect(m_pageSelector, SIGNAL(nextButtonClicked()), this, SLOT(nextPage()));
-    connect(m_pageSelector, SIGNAL(prevButtonClicked()), this, SLOT(prevPage()));
-    connect(m_pageSelector, SIGNAL(firstButtonClicked()), this, SLOT(firstPage()));
-    connect(m_pageSelector, SIGNAL(lastButtonClicked()), this, SLOT(lastPage()));
 #endif
 }
 
