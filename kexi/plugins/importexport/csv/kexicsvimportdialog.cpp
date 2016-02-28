@@ -440,10 +440,10 @@ void KexiCSVImportDialog::next()
 
             KexiPart::Part *part = Kexi::partManager().partForClass("org.kexi-project.table");
             KexiDB::SchemaData tmp;
-            tristate res = m_conn->loadObjectSchemaData(
+            tristate res = part ? m_conn->loadObjectSchemaData(
                     project->idForClass(part->info()->partClass()),
                     m_newTableWidget->nameText(),
-                    tmp);
+                    tmp) : false;
             if (res == true) {
                 KMessageBox::information(this,
                         "<p>"
@@ -451,6 +451,9 @@ void KexiCSVImportDialog::next()
                         .subs(m_newTableWidget->nameText()).toString()
                         + "</p><p>" + i18n("Please choose other name.") + "</p>"
                         );
+                return;
+            } else if (res == false) {
+                qFatal("Plugin org.kexi-project.table not found");
                 return;
             }
         } else {

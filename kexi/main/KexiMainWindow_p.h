@@ -1684,6 +1684,9 @@ public:
                           KexiDockWidget *dockWidget, bool visible) 
     {
         KMultiTabBar *mtbar = multiTabBars.value(position);
+        if (!mtbar) {
+            return;
+        }
         if (!visible) {
             mtbar->removeTab(id);
         }

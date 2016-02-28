@@ -261,21 +261,28 @@ void KexiMainWindowTabWidget::paintEvent(QPaintEvent * event)
 
 void KexiMainWindowTabWidget::closeTab()
 {
-    dynamic_cast<KexiMainWindow*>(KexiMainWindowIface::global())->closeWindowForTab(m_tabIndex);
+    KexiMainWindow *main = dynamic_cast<KexiMainWindow*>(KexiMainWindowIface::global());
+    if (main) {
+        main->closeWindowForTab(m_tabIndex);
+    }
 }
 
 tristate KexiMainWindowTabWidget::closeAllTabs()
 {
     tristate alternateResult = true;
     QList<KexiWindow*> windowList;
+    KexiMainWindow *main = dynamic_cast<KexiMainWindow*>(KexiMainWindowIface::global());
+    if (!main) {
+        return alternateResult;
+    }
     for (int i = 0; i < count(); i++) {
-        KexiWindow *window = dynamic_cast<KexiMainWindow*>(KexiMainWindowIface::global())->windowForTab(i);
+        KexiWindow *window = main->windowForTab(i);
         if (window) {
             windowList.append(window);
         }
     }
     foreach (KexiWindow *window, windowList) {
-        tristate result = dynamic_cast<KexiMainWindow*>(KexiMainWindowIface::global())->closeWindow(window);
+        tristate result = main->closeWindow(window);
         if (result != true && result != false) {
             return result;
         }

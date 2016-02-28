@@ -361,6 +361,9 @@ KexiFormView* KexiFormManager::activeFormViewWidget() const
         return 0;
     }
     KexiDBForm *dbform = dynamic_cast<KexiDBForm*>(form->formWidget());
+    if (!dbform) {
+        return 0;
+    }
     KexiFormScrollView *scrollViewWidget = dynamic_cast<KexiFormScrollView*>(dbform->dataAwareObject());
     if (!scrollViewWidget)
         return 0;

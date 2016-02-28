@@ -71,7 +71,7 @@ public:
     QRect subElementRect(SubElement element, const QStyleOption *option, const QWidget *widget = 0) const
     {
         const KFormDesigner::FormWidgetInterface *formWidget = dynamic_cast<const KFormDesigner::FormWidgetInterface*>(widget);
-        if (formWidget->designMode()) {
+        if (formWidget && formWidget->designMode()) {
             const KexiFormDataItemInterface *dataItemIface = dynamic_cast<const KexiFormDataItemInterface*>(widget);
             if (dataItemIface && !dataItemIface->dataSource().isEmpty() && !formWidget->editingMode()) {
                 if (element == SE_LineEditContents) {
@@ -313,7 +313,7 @@ void KexiDBLineEdit::paintEvent(QPaintEvent *pe)
 {
     KLineEdit::paintEvent(pe);
     KFormDesigner::FormWidgetInterface *formWidget = dynamic_cast<KFormDesigner::FormWidgetInterface*>(this);
-    if (formWidget->designMode()) {
+    if (formWidget && formWidget->designMode()) {
         KexiFormDataItemInterface *dataItemIface = dynamic_cast<KexiFormDataItemInterface*>(this);
         if (dataItemIface && !dataItemIface->dataSource().isEmpty() && !formWidget->editingMode()) {
             // draw "data source tag" icon

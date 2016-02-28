@@ -50,7 +50,6 @@ Q_SIGNALS:
 
 private:
     KoReportDesigner *m_reportDesigner;
-    KoProperty::Set *m_propertySet;
     KexiReportPart::TempData* tempData() const;
     QScrollArea * m_scrollArea;
 
@@ -60,7 +59,6 @@ private:
     KAction *m_editPasteAction;
     KAction *m_editDeleteAction;
     KAction *m_sectionEdit;
-    KAction *m_parameterEdit;
     KAction *m_itemRaiseAction;
     KAction *m_itemLowerAction;
 

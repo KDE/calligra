@@ -71,7 +71,11 @@ void KexiFormDataItemInterface::cancelEditor()
 
 void KexiFormDataItemInterface::cancelEditor()
 {
-    QWidget *parentWidget = dynamic_cast<QWidget*>(this)->parentWidget();
+    QWidget *thisWidget = dynamic_cast<QWidget*>(this);
+    if (!thisWidget) {
+        return;
+    }
+    QWidget *parentWidget = thisWidget->parentWidget();
     KexiDataAwareObjectInterface *dataAwareObject = KexiUtils::findParentByType<KexiDataAwareObjectInterface*>(parentWidget);
     if (dataAwareObject)
         dataAwareObject->cancelEditor();
