@@ -394,6 +394,12 @@
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="KIntNumInput" name="customPortEdit" native="true">
+          <property name="minimum">
+           <number>0</number>
+          </property>
+          <property name="maximum">
+           <number>65535</number>
+          </property>
           <property name="minValue" stdset="0">
            <number>0</number>
           </property>
