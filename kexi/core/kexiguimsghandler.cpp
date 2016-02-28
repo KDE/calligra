@@ -101,7 +101,9 @@ KexiGUIMessageHandler::showErrorMessage(const QString &message, Kexi::ObjectStat
     } else {
         showErrorMessage(message);
     }
-    status->clearStatus();
+    if (status) {
+        status->clearStatus();
+    }
 }
 
 void
