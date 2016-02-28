@@ -674,7 +674,7 @@ KexiProject::isConnected()
 KexiPart::ItemDict*
 KexiProject::items(KexiPart::Info *i)
 {
-    //kDebug();
+    clearError();
     if (!i || !isConnected())
         return 0;
 
