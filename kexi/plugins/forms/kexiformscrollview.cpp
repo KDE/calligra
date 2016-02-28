@@ -488,13 +488,14 @@ bool KexiFormScrollView::shouldDisplayDefaultValueForItem(KexiFormDataItemInterf
 
 bool KexiFormScrollView::cancelEditor()
 {
-    if (!dynamic_cast<KexiFormDataItemInterface*>(m_editor))
+    KexiFormDataItemInterface *itemIface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
+    if (!itemIface) {
         return false;
+    }
 
     if (m_errorMessagePopup)
         m_errorMessagePopup->close();
 
-    KexiFormDataItemInterface *itemIface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
     itemIface->undoChanges();
 
     const bool displayDefaultValue = shouldDisplayDefaultValueForItem(itemIface);

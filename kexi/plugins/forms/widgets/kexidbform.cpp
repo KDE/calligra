@@ -355,7 +355,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
 
             if (tab || backtab) {
                 //the watched widget can be a subwidget of a real widget, e.g. a drop down button of image box: find it
-                while (!KexiFormManager::self()->library()->widgetInfoForClassName(
+                while (realWidget && !KexiFormManager::self()->library()->widgetInfoForClassName(
                             realWidget->metaObject()->className())) {
                     realWidget = realWidget->parentWidget();
                 }
@@ -367,7 +367,9 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                     realWidget = dynamic_cast<QWidget*>(dynamic_cast<KexiDataItemInterface*>(realWidget)->parentDataItemInterface());
 
                 d->setOrderedFocusWidgetsIteratorTo(realWidget);
-                dynamic_cast<KexiDataItemInterface*>(realWidget)->moveCursorToEnd();
+                if (dynamic_cast<KexiDataItemInterface*>(realWidget)) {
+                    dynamic_cast<KexiDataItemInterface*>(realWidget)->moveCursorToEnd();
+                }
 
                 //kDebug() << realWidget->objectName();
 
