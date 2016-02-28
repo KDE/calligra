@@ -197,11 +197,6 @@ KexiFormView::KexiFormView(QWidget *parent, bool dbAware)
 
 KexiFormView::~KexiFormView()
 {
-    if (d->cursor) {
-        KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-        conn->deleteCursor(d->cursor);
-        d->cursor = 0;
-    }
     deleteQuery();
     propertySetSwitched();
     delete d;
