@@ -21,6 +21,7 @@
         "Description[ast]": "Renderizador de ficheros de testu OpenDocument", 
         "Description[ca@valencia]": "Representació de fitxers de text d'OpenDocument", 
         "Description[ca]": "Representació de fitxers de text d'OpenDocument", 
+        "Description[es]": "Motor de visualización para archivos de texto de OpenDocument", 
         "Description[fi]": "OpenDocument Text -tiedostohahmonnin", 
         "Description[gl]": "Renderizador de ficheiros de texto de OpenDocument", 
         "Description[it]": "Presentatore file OpenDocument Text", 
