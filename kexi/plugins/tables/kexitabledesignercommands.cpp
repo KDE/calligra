@@ -37,14 +37,14 @@ using namespace KexiTableDesignerCommands;
 Command::Command(const KUndo2MagicString &text, Command *parent, KexiTableDesignerView* view)
         : KUndo2Command(text, parent)
         , m_view(view)
-        , m_redoEnabled(true)
+        , m_blockRedoOnce(false)
 {
 }
 
 Command::Command(Command* parent, KexiTableDesignerView* view)
         : KUndo2Command(KUndo2MagicString(), parent)
         , m_view(view)
-        , m_redoEnabled(true)
+        , m_blockRedoOnce(false)
 {
 }
 
@@ -52,16 +52,14 @@ Command::~Command()
 {
 }
 
-void Command::setRedoEnabled(bool enabled)
-{
-    m_redoEnabled = enabled;
-}
 
 void Command::redo()
 {
-    if (m_redoEnabled) {
-        redoInternal();
+    if (m_blockRedoOnce) {
+        m_blockRedoOnce = false;
+        return;
     }
+    redoInternal();
 }
 
 void Command::undo()
@@ -75,6 +73,11 @@ void Command::redoInternal()
 
 void Command::undoInternal()
 {
+}
+
+void Command::blockRedoOnce()
+{
+    m_blockRedoOnce = true;
 }
 
 //--------------------------------------------------------

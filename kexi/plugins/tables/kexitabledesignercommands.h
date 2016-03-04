@@ -55,14 +55,15 @@ public:
     virtual void redo();
     virtual void undo();
 
-    //! Enables or disabled redo(). Needed for pushing action on stack without executing it.
-    //! True by default.
-    void setRedoEnabled(bool enabled);
+    //! Used to block execution of redo() once, on ading the command to the stack.
+    void blockRedoOnce();
 protected:
     virtual void redoInternal();
     virtual void undoInternal();
+
     QPointer<KexiTableDesignerView> m_view;
-    bool m_redoEnabled;
+    bool m_blockRedoOnce; //!< Used to block redo() once
+    friend class KexiTableDesignerView;
 };
 
 //! @short Undo/redo command used for when changing a property for a table field

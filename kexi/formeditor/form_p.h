@@ -150,8 +150,6 @@ public:
     PropertyCommandGroup  *lastCommandGroup;
     uint idOfPropertyCommand;
 
-    //! Command that being executed through Form::addCommand()
-    const Command *executingCommand;
     bool slotPropertyChangedEnabled;
     bool slotPropertyChanged_addCommandEnabled;
     bool insideAddPropertyCommand;

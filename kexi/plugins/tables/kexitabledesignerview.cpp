@@ -1556,12 +1556,9 @@ void KexiTableDesignerView::addHistoryCommand(KexiTableDesignerCommands::Command
     debugCommand(command, 0);
 # endif
     if (!execute) {
-        command->setRedoEnabled(false);
+        command->blockRedoOnce();
     }
     d->history->push(command);
-    if (!execute) {
-        command->setRedoEnabled(true);
-    }
     updateUndoRedoActions();
 #endif
 }
