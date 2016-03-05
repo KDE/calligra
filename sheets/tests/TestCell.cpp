@@ -31,7 +31,7 @@
 #include <sheets/Map.h>
 #include <sheets/Sheet.h>
 #include <sheets/Style.h>
-#include <sheets/OdfLoadingContext.h>
+#include <sheets/odf/OdfLoadingContext.h>
 #include <sheets/Value.h>
 #include <sheets/odf/SheetsOdf.h>
 
@@ -56,7 +56,7 @@ void CellTest::testRichText()
     KoStore *store = KoStore::createStore(&buffer, KoStore::Read);
 
     KoOdfLoadingContext odfContext(stylesReader, store);
-    OdfLoadingContext context(odfContext);
+    Odf::OdfLoadingContext context(odfContext);
 
     KoDocumentResourceManager documentResources;
     KoShapeLoadingContext shapeContext(odfContext, &documentResources);

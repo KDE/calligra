@@ -786,7 +786,7 @@ void Odf::loadObjects(Cell *cell, const KoXmlElement &parent, OdfLoadingContext&
     }
 }
 
-ShapeLoadingData Odf::loadObject(Cell *cell, const KoXmlElement &element, KoShapeLoadingContext &shapeContext)
+Odf::ShapeLoadingData Odf::loadObject(Cell *cell, const KoXmlElement &element, KoShapeLoadingContext &shapeContext)
 {
     ShapeLoadingData data;
     data.shape = 0;

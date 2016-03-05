@@ -33,6 +33,8 @@ namespace Calligra
 {
 namespace Sheets
 {
+namespace Odf
+{
 
 /**
  * \ingroup OpenDocument
@@ -58,6 +60,7 @@ struct ShapeLoadingData {
     QPointF endPoint;
 };
 
+} // namespace Odf
 } // namespace Sheets
 } // namespace Calligra
 

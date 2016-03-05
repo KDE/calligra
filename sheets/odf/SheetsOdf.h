@@ -54,13 +54,14 @@ class Cell;
 class Conditions;
 class DocBase;
 class Map;
-class OdfLoadingContext;
 class ProtectableObject;
 class Region;
 class Sheet;
-struct ShapeLoadingData;
 
 namespace Odf {
+    class OdfLoadingContext;
+    struct ShapeLoadingData;
+
     CALLIGRA_SHEETS_ODF_EXPORT bool loadDocument(DocBase *doc, KoOdfReadStore &odfStore);
     CALLIGRA_SHEETS_ODF_EXPORT bool saveDocument(DocBase *doc, KoDocument::SavingContext &documentContext);
 

@@ -36,6 +36,8 @@ namespace Calligra
 {
 namespace Sheets
 {
+namespace Odf
+{
 
 /**
  * \ingroup OpenDocument
@@ -107,6 +109,7 @@ private:
     AnchoredShapes m_cellAnchoredShapes;
 };
 
+} // namespace Odf
 } // namespace Sheets
 } // namespace Calligra
 

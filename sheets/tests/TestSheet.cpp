@@ -31,7 +31,6 @@
 #include <Map.h>
 #include <Sheet.h>
 #include <CellStorage.h>
-#include <OdfSavingContext.h>
 
 #include <QPainter>
 #include <QTest>
