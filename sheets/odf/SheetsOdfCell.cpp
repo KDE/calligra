@@ -148,8 +148,7 @@ bool Odf::loadCell(Cell *cell, const KoXmlElement& element, OdfLoadingContext& t
         const QString validationName = element.attributeNS(KoXmlNS::table, sValidationName, QString());
         debugSheetsODF << "cell:" << cell->name() << sValidationName << validationName;
         Validity validity;
-#warning use new odf
-        validity.loadOdfValidation(cell, validationName, tableContext);
+        loadValidation(&validity, cell, validationName, tableContext);
         if (!validity.isEmpty())
             cell->setValidity(validity);
     }

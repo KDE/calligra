@@ -153,6 +153,7 @@ set (odf_DIR_SRCS
     odf/SheetsOdfStyle.cpp
     odf/SheetsOdfRegion.cpp
     odf/SheetsOdfCondition.cpp
+    odf/SheetsOdfValidity.cpp
     )
 
 set (part_DIR_SRCS

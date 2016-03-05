@@ -106,6 +106,8 @@ namespace Odf {
     void loadConditions(Conditions *conditions, const KoXmlElement &element, const ValueParser *parser, const StyleManager* styleManager);
     void saveConditions(const Conditions *conditions, KoGenStyle &currentCellStyle, ValueConverter *converter);
 
+    // SheetsOdfValidity
+    void loadValidation(Validity *validity, Cell* const cell, const QString& validationName, OdfLoadingContext& tableContext);
 
 }
 
