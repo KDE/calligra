@@ -283,8 +283,7 @@ void Odf::loadStyle(Style *style, KoOdfStylesReader& stylesReader, const KoXmlEl
     KoXmlElement e;
     forEachElement(e, element) {
         if (e.namespaceURI() == KoXmlNS::style && e.localName() == "map")
-#warning TODO new odf
-            conditions.loadOdfConditions(e, parser, styleManager);
+            loadConditions(&conditions, e, parser, styleManager);
     }
 
     loadDataStyle(style, stylesReader, element, conditions, styleManager, parser);
@@ -328,8 +327,7 @@ void Odf::loadDataStyle(Style *style, KoOdfStylesReader &stylesReader, const QSt
     if(styleMaps.count() > 0) {
         style = new Style();
         for (QList<QPair<QString,QString> >::const_iterator it = styleMaps.begin(); it != styleMaps.end(); ++it) {
-#warning TODO new odf
-            const Conditional c = conditions.loadOdfCondition(it->first, it->second, QString(), parser);
+            const Conditional c = loadCondition(&conditions, it->first, it->second, QString(), parser);
             if (styleManager->style(c.styleName) == 0) {
                 CustomStyle* s = new CustomStyle(c.styleName);
                 loadDataStyle(s, stylesReader, c.styleName, conditions, styleManager, parser);

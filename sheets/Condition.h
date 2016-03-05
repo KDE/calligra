@@ -119,6 +119,11 @@ public:
     void setConditionList(const QLinkedList<Conditional> & list);
 
     /**
+      * Add a new condition.
+      */
+    void addCondition(Conditional cond);
+
+    /**
      * Returns an optional default style, which is returned by testConditons if none of
      * the conditions matches.
      */
@@ -144,25 +149,6 @@ public:
      */
     QDomElement saveConditions(QDomDocument &doc, ValueConverter *converter) const;
 
-    /**
-     * \ingroup OpenDocument
-     * Loads the condtional formatting.
-     */
-    Conditional loadOdfCondition(const QString &conditionValue, const QString &applyStyleName,
-                                 const QString &baseCellAddress, const ValueParser *parser);
-
-    /**
-     * \ingroup OpenDocument
-     * Loads the condtional formattings.
-     */
-    void loadOdfConditions(const KoXmlElement &element, const ValueParser *parser, const StyleManager* styleManager);
-
-    /**
-     * \ingroup OpenDocument
-     * Saves the condtional formattings.
-     */
-    void saveOdfConditions(KoGenStyle &currentCellStyle, ValueConverter *converter) const;
-
     /// \note implementation to make QMap happy (which is needed by RectStorage)
     bool operator<(const Conditions& conditions) const {
         return qHash(*this) < qHash(conditions);
@@ -187,26 +173,6 @@ private:
     bool currentCondition(const Cell& cell, Conditional & condition) const;
 
     bool isTrueFormula(const Cell& cell, const QString& formula, const QString& baseCellAddress) const;
-
-    /**
-     * \ingroup OpenDocument
-     */
-    void loadOdfCondition(QString &valExpression, Conditional &newCondition, const ValueParser *parser);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    void loadOdfConditionValue(const QString &styleCondition, Conditional &newCondition, const ValueParser *parser);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    void loadOdfValidationValue(const QStringList &listVal, Conditional &newCondition, const ValueParser *parser);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    QString saveOdfConditionValue(const Conditional &conditionalStyle, ValueConverter *converter) const;
 
     class Private;
     QSharedDataPointer<Private> d;

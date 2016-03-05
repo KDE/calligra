@@ -49,6 +49,8 @@ namespace Sheets {
 
 class CalculationSettings;
 class NamedAreaManager;
+class Conditions;
+class Conditional;
 
 namespace Odf {
 
@@ -97,6 +99,14 @@ namespace Odf {
     void loadDataStyle(Style *style, KoOdfStylesReader& stylesReader, const KoXmlElement& element,
                              Conditions& conditions, const StyleManager* styleManager,
                              const ValueParser *parser);
+
+    // SheetsOdfCondition
+    Conditional loadCondition(Conditions *conditions, const QString &conditionValue, const QString &applyStyleName,
+                                 const QString &baseCellAddress, const ValueParser *parser);
+    void loadConditions(Conditions *conditions, const KoXmlElement &element, const ValueParser *parser, const StyleManager* styleManager);
+    void saveConditions(const Conditions *conditions, KoGenStyle &currentCellStyle, ValueConverter *converter);
+
+
 }
 
 }

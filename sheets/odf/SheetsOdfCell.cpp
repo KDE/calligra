@@ -883,8 +883,7 @@ QString Odf::saveCellStyle(Cell *cell, KoGenStyle &currentCellStyle, KoGenStyles
     if (!conditions.isEmpty()) {
         // this has to be an automatic style
         currentCellStyle = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
-#warning use new odf
-        conditions.saveOdfConditions(currentCellStyle, cell->sheet()->map()->converter());
+        saveConditions(&conditions, currentCellStyle, cell->sheet()->map()->converter());
     }
     Style style = cell->style();
     return saveStyle(&style, currentCellStyle, mainStyles, cell->sheet()->map()->styleManager());
