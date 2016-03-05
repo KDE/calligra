@@ -32,7 +32,6 @@
 
 #include "Global.h"
 #include "Map.h"
-#include "OdfSavingContext.h"
 #include "RTree.h"
 #include "Style.h"
 #include "StyleManager.h"
@@ -296,7 +295,8 @@ QRect StyleStorage::usedArea() const
     return QRect(QPoint(1, 1), d->usedArea.boundingRect().bottomRight());
 }
 
-void StyleStorage::saveOdfCreateDefaultStyles(int& maxCols, int& maxRows, OdfSavingContext& tableContext) const
+// craete default styles in the style tables - used in Odf saving
+void StyleStorage::saveCreateDefaultStyles(int& maxCols, int& maxRows, QMap<int, Style> &columnDefaultStyles, QMap<int, Style> &rowDefaultStyles) const
 {
     d->ensureLoaded();
 #if 0 // TODO
@@ -304,11 +304,11 @@ void StyleStorage::saveOdfCreateDefaultStyles(int& maxCols, int& maxRows, OdfSav
     if (!d->usedColumns.isEmpty() && !d->usedRows.isEmpty()) {
         for (int i = 0; i < d->usedColumns.count(); ++i) {
             const int col = d->usedColumns[i];
-            tableContext.columnDefaultStyles[col].insertSubStyle(contains(QRect(col, 1, 1, KS_rowMax)));
+            columnDefaultStyles[col].insertSubStyle(contains(QRect(col, 1, 1, KS_rowMax)));
         }
         for (int i = 0; i < d->usedRow.count(); ++i) {
             const int row = d->usedRow[i];
-            tableContext.rowDefaultStyles[row].insertSubStyle(contains(QRect(1, row, KS_colMax, 1)));
+            rowDefaultStyles[row].insertSubStyle(contains(QRect(1, row, KS_colMax, 1)));
         }
         return;
     }
@@ -330,18 +330,18 @@ void StyleStorage::saveOdfCreateDefaultStyles(int& maxCols, int& maxRows, OdfSav
         if (rect.top() == 1 && rect.bottom() == maxRows) {
             for (int col = rect.left(); col <= rect.right(); ++col) {
                 if (pairs[i].second.data()->type() == Style::DefaultStyleKey)
-                    tableContext.columnDefaultStyles.remove(col);
+                    columnDefaultStyles.remove(col);
                 else
-                    tableContext.columnDefaultStyles[col].insertSubStyle(pairs[i].second);
+                    columnDefaultStyles[col].insertSubStyle(pairs[i].second);
             }
         }
         // row default cell styles
         else if (rect.left() == 1 && rect.right() == maxCols) {
             for (int row = rect.top(); row <= rect.bottom(); ++row) {
                 if (pairs[i].second.data()->type() == Style::DefaultStyleKey)
-                    tableContext.rowDefaultStyles.remove(row);
+                    rowDefaultStyles.remove(row);
                 else
-                    tableContext.rowDefaultStyles[row].insertSubStyle(pairs[i].second);
+                    rowDefaultStyles[row].insertSubStyle(pairs[i].second);
             }
         }
     }

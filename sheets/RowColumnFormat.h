@@ -54,7 +54,6 @@ public:
 
     QDomElement save(QDomDocument&, int yshift = 0) const;
     bool load(const KoXmlElement& row, int yshift = 0, Paste::Mode mode = Paste::Normal);
-    bool loadOdf(const KoXmlElement& row, KoXmlElement * rowStyle);
 
     /**
      * \return the row's height

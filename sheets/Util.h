@@ -135,7 +135,7 @@ namespace Odf
  * Converts an OpenDocument representation of a formula to a localized formula.
  * @param expr The expression to convert from OpenDocument format.
  * @param locale The locale to which the expression should be converted.
- * \note Use Region::loadOdf() for plain cell references.
+ * \note Use Odf::loadRegion() for plain cell references.
  */
 // TODO check visibility
 CALLIGRA_SHEETS_ODF_EXPORT QString decodeFormula(const QString& expression_, const KLocale *locale = 0, const QString &namespacePrefix = QString());

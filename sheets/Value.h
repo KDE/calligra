@@ -309,7 +309,7 @@ public:
      * Returns the double quoted string value of this value.
      *
      * Same as \a asString but with double quotes around. This
-     * is needed for example in Conditions::saveOdfConditionValue
+     * is needed for example in Odf::saveConditionValue
      * to save Value strings with double quotes.
      */
     QString asStringWithDoubleQuotes() const;

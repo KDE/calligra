@@ -205,7 +205,7 @@ Sheet::Sheet(const Sheet &other)
     // flake
 #if 0 // CALLIGRA_SHEETS_WIP_COPY_SHEET_(SHAPES)
     //FIXME This does not work as copySettings does not work. Also createDefaultShapeAndInit without the correct settings can not work
-    //I think this should use saveOdf and loadOdf for copying
+    //I think this should use ODF load/save for copying
     KoShape* shape;
     const QList<KoShape*> shapes = other.d->shapes;
     for (int i = 0; i < shapes.count(); ++i) {

@@ -147,6 +147,7 @@ namespace Odf {
     void addText(const QString & text, KoXmlWriter & writer);
     void convertPart(Sheet *sheet, const QString & part, KoXmlWriter & xmlWriter);
     bool compareRows(Sheet *sheet, int row1, int row2, int maxCols, OdfSavingContext& tableContext);
+    QString savePageLayout(PrintSettings *settings, KoGenStyles &mainStyles, bool formulas, bool zeros);
 }
 
 // *************** Loading *****************
@@ -1073,8 +1074,7 @@ QString Odf::saveSheetStyleName(Sheet *sheet, KoGenStyles &mainStyles)
     KoGenStyle pageStyle(KoGenStyle::TableAutoStyle, "table"/*FIXME I don't know if name is sheet*/);
 
     KoGenStyle pageMaster(KoGenStyle::MasterPageStyle);
-#warning TODO new style odf
-    const QString pageLayoutName = sheet->printSettings()->saveOdfPageLayout(mainStyles,
+    const QString pageLayoutName = savePageLayout(sheet->printSettings(), mainStyles,
                                    sheet->getShowFormula(),
                                    !sheet->getHideZero());
     pageMaster.addAttribute("style:page-layout-name", pageLayoutName);
@@ -1113,8 +1113,7 @@ void Odf::saveColRowCell(Sheet *sheet, int maxCols, int maxRows, OdfSavingContex
     // calculate the column/row default cell styles
     int maxMaxRows = maxRows; // includes the max row a column default style occupies
     // also extends the maximum column/row to include column/row styles
-#warning TODO new style odf
-    sheet->styleStorage()->saveOdfCreateDefaultStyles(maxCols, maxMaxRows, tableContext);
+    sheet->styleStorage()->saveCreateDefaultStyles(maxCols, maxMaxRows, tableContext.columnDefaultStyles, tableContext.rowDefaultStyles);
     if (tableContext.rowDefaultStyles.count() != 0)
         maxRows = qMax(maxRows, (--tableContext.rowDefaultStyles.constEnd()).key());
     // Take the actual used area into account so we also catch shapes that are
@@ -1768,6 +1767,79 @@ void Odf::saveSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter)
     settingsWriter.addConfigItem("autoCalc", sheet->isAutoCalculationEnabled());
     settingsWriter.addConfigItem("ShowColumnNumber", sheet->getShowColumnNumber());
 }
+
+QString Odf::savePageLayout(PrintSettings *settings, KoGenStyles &mainStyles, bool formulas, bool zeros)
+{
+    // Create a page layout style.
+    // 15.2.1 Page Size
+    // 15.2.4 Print Orientation
+    // 15.2.5 Margins
+    KoGenStyle pageLayout = settings->pageLayout().saveOdf();
+
+    // 15.2.13 Print
+    QString printParameter;
+    if (settings->printHeaders()) {
+        printParameter = "headers ";
+    }
+    if (settings->printGrid()) {
+        printParameter += "grid ";
+    }
+    /*    if (settings->printComments()) {
+            printParameter += "annotations ";
+        }*/
+    if (settings->printObjects()) {
+        printParameter += "objects ";
+    }
+    if (settings->printCharts()) {
+        printParameter += "charts ";
+    }
+    /*    if (settings->printDrawings()) {
+            printParameter += "drawings ";
+        }*/
+    if (formulas) {
+        printParameter += "formulas ";
+    }
+    if (zeros) {
+        printParameter += "zero-values ";
+    }
+    if (!printParameter.isEmpty()) {
+        printParameter += "drawings"; //default print style attributes in OO
+        pageLayout.addProperty("style:print", printParameter);
+    }
+
+    // 15.2.14 Print Page Order
+    const QString pageOrder = (settings->pageOrder() == PrintSettings::LeftToRight) ? "ltr" : "ttb";
+    pageLayout.addProperty("style:print-page-order", pageOrder);
+
+    // 15.2.16 Scale
+    // FIXME handle cases where only one direction is limited
+    if (settings->pageLimits().width() > 0 && settings->pageLimits().height() > 0) {
+        const int pages = settings->pageLimits().width() * settings->pageLimits().height();
+        pageLayout.addProperty("style:scale-to-pages", pages);
+    } else if (settings->zoom() != 1.0) {
+        pageLayout.addProperty("style:scale-to", qRound(settings->zoom() * 100)); // in %
+    }
+
+    // 15.2.17 Table Centering
+    if (settings->centerHorizontally() && settings->centerVertically()) {
+        pageLayout.addProperty("style:table-centering", "both");
+    } else if (settings->centerHorizontally()) {
+        pageLayout.addProperty("style:table-centering", "horizontal");
+    } else if (settings->centerVertically()) {
+        pageLayout.addProperty("style:table-centering", "vertical");
+    } else {
+        pageLayout.addProperty("style:table-centering", "none");
+    }
+
+    // this is called from Sheet::saveOdfSheetStyleName for writing the SytleMaster so
+    // the style has to be in the styles.xml file and only there
+    pageLayout.setAutoStyleInStylesDotXml(true);
+
+    return mainStyles.insert(pageLayout, "pm");
+}
+
+
+
 
 
 }  // Sheets
