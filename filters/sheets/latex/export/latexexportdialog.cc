@@ -22,6 +22,7 @@
 
 #include <QDir>
 #include <QApplication>
+#include <QDBusConnection>
 
 #include <KLocalizedString>
 #include <kconfig.h>

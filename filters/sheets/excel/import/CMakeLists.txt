@@ -49,7 +49,7 @@ add_library(excelimport MODULE ${excelimport_PART_SRCS})
 
 target_link_libraries(excelimport calligrasheetsodf komsooxml komain mso koodf ${ZLIB_LIBRARIES})
 
-#install(TARGETS excelimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+#install(TARGETS excelimport  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 set(xls2ods_SRCS ExcelImport.cpp ImportUtils.cpp ODrawClient.cpp ${sidewinder_SRCS})
 add_library(calligra_filter_xls2ods MODULE ${xls2ods_SRCS})
@@ -60,7 +60,7 @@ target_link_libraries(calligra_filter_xls2ods
                       komain koodf
                       ${ZLIB_LIBRARIES})
 
-install(TARGETS calligra_filter_xls2ods DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_xls2ods DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 ########### install files ###############
 

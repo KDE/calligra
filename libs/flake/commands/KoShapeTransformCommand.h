@@ -43,7 +43,7 @@ public:
      * @see KoShape::transformation()
      * @see KoShape::setTransformation()
      */
-    KoShapeTransformCommand(const QList<KoShape*> &shapes, const QList<QTransform> &oldState, const QList<QTransform> &newState, KUndo2Command * parent = 0);
+    KoShapeTransformCommand(const QList<KoShape*> &shapes, const QVector<QTransform> &oldState, const QVector<QTransform> &newState, KUndo2Command * parent = 0);
     ~KoShapeTransformCommand();
     /// redo the command
     void redo();

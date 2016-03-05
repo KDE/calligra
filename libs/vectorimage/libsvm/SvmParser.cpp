@@ -28,12 +28,12 @@
 #include <QString>
 #include <QPolygon>
 
-// KDE
-#include <VectorImageDebug.h>
-
 // Libsvm
 #include "SvmEnums.h"
 #include "SvmStructs.h"
+
+// lib
+#include "VectorImageDebug.h"
 
 // 0 - No debug
 // 1 - Print a lot of debug info

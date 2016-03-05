@@ -11,7 +11,7 @@ kcoreaddons_desktop_to_json(karbon_whirlpinch karbon_whirlpinch.desktop)
 
 target_link_libraries(karbon_whirlpinch karboncommon)
 
-install(TARGETS karbon_whirlpinch  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS karbon_whirlpinch  DESTINATION ${PLUGIN_INSTALL_DIR}/karbon/extensions)
 
 ########### install files ###############
 

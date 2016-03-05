@@ -27,7 +27,7 @@ ParagraphDecorations::ParagraphDecorations(QWidget* parent)
 {
     widget.setupUi(this);
 
-    connect(widget.backgroundColor, SIGNAL(changed(const QColor&)), this, SLOT(slotBackgroundColorChanged()));
+    connect(widget.backgroundColor, SIGNAL(changed(QColor)), this, SLOT(slotBackgroundColorChanged()));
     connect(widget.resetBackgroundColor, SIGNAL(clicked()), this, SLOT(clearBackgroundColor()));
 }
 

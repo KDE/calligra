@@ -1,8 +1,11 @@
 
-macro_optional_find_package(Pstoedit)
-macro_log_feature(PSTOEDIT_SVG_PLUGIN_FOUND "pstoedit with svg plugin" "Translates PostScript and PDF graphics to SVG" "http://www.pstoedit.net/" FALSE "" "Required at runtime by the Karbon EPS import filter")
-
-if (PSTOEDIT_SVG_PLUGIN_FOUND)
+macro_optional_find_package(PstoeditSvgOutput)
+set_package_properties(PstoeditSvgOutput PROPERTIES
+    DESCRIPTION "pstoedit with svg plugin"
+    URL "http://www.pstoedit.net/"
+    PURPOSE "Required at runtime by the calligra_filter_eps2svgai format filter"
+    TYPE RUNTIME
+)
 
 set(eps2svgai_PART_SRCS EpsImport.cpp PsCommentLexer.cpp )
 
@@ -11,9 +14,7 @@ kcoreaddons_desktop_to_json(calligra_filter_eps2svgai calligra_filter_eps2svgai.
 
 target_link_libraries(calligra_filter_eps2svgai komain)
 
-install(TARGETS calligra_filter_eps2svgai  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_eps2svgai  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 #TODO: restore also importing from PostScript
 #karbon_ps_import.desktop
-
-endif ()

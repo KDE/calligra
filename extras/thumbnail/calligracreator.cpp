@@ -19,7 +19,7 @@
 */
 #include "calligracreator.h"
 
-// KDE
+// Calligra
 #include <KoPart.h>
 #include <KoStore.h>
 #include <KoDocument.h>

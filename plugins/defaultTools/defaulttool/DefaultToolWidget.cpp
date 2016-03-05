@@ -59,24 +59,24 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
     updatePosition();
     updateSize();
 
-    connect( positionSelector, SIGNAL( positionSelected(KoFlake::Position) ),
-        this, SLOT( positionSelected(KoFlake::Position) ) );
+    connect( positionSelector, SIGNAL(positionSelected(KoFlake::Position)),
+        this, SLOT(positionSelected(KoFlake::Position)) );
 
-    connect( positionXSpinBox, SIGNAL( editingFinished() ), this, SLOT( positionHasChanged() ) );
-    connect( positionYSpinBox, SIGNAL( editingFinished() ), this, SLOT( positionHasChanged() ) );
+    connect( positionXSpinBox, SIGNAL(editingFinished()), this, SLOT(positionHasChanged()) );
+    connect( positionYSpinBox, SIGNAL(editingFinished()), this, SLOT(positionHasChanged()) );
 
-    connect( widthSpinBox, SIGNAL( editingFinished() ), this, SLOT( sizeHasChanged() ) );
-    connect( heightSpinBox, SIGNAL( editingFinished() ), this, SLOT( sizeHasChanged() ) );
+    connect( widthSpinBox, SIGNAL(editingFinished()), this, SLOT(sizeHasChanged()) );
+    connect( heightSpinBox, SIGNAL(editingFinished()), this, SLOT(sizeHasChanged()) );
 
     KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
-    connect( selection, SIGNAL( selectionChanged() ), this, SLOT( updatePosition() ) );
-    connect( selection, SIGNAL( selectionChanged() ), this, SLOT( updateSize() ) );
+    connect( selection, SIGNAL(selectionChanged()), this, SLOT(updatePosition()) );
+    connect( selection, SIGNAL(selectionChanged()), this, SLOT(updateSize()) );
     KoShapeManager * manager = m_tool->canvas()->shapeManager();
-    connect( manager, SIGNAL( selectionContentChanged() ), this, SLOT( updatePosition() ) );
-    connect( manager, SIGNAL( selectionContentChanged() ), this, SLOT( updateSize() ) );
+    connect( manager, SIGNAL(selectionContentChanged()), this, SLOT(updatePosition()) );
+    connect( manager, SIGNAL(selectionContentChanged()), this, SLOT(updateSize()) );
 
-    connect( m_tool->canvas()->resourceManager(), SIGNAL( canvasResourceChanged( int, const QVariant& ) ),
-        this, SLOT( resourceChanged( int, const QVariant& ) ) );
+    connect( m_tool->canvas()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+        this, SLOT(resourceChanged(int,QVariant)) );
 
     connect (aspectButton, SIGNAL(keepAspectRatioChanged(bool)),
         this, SLOT(aspectButtonToggled(bool)));
@@ -128,8 +128,11 @@ void DefaultToolWidget::positionHasChanged()
 
     QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
     QPointF moveBy = newPos - oldPos;
-    QList<QPointF> oldPositions;
-    QList<QPointF> newPositions;
+    QVector<QPointF> oldPositions;
+    QVector<QPointF> newPositions;
+    const int selectedShapesCount = selectedShapes.count();
+    oldPositions.reserve(selectedShapesCount);
+    newPositions.reserve(selectedShapesCount);
     foreach( KoShape* shape, selectedShapes )
     {
         oldPositions.append( shape->position() );
@@ -192,9 +195,15 @@ void DefaultToolWidget::sizeHasChanged()
         resizeMatrix.translate( -scaleCenter.x(), -scaleCenter.y() );
 
         QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::StrippedSelection );
-        QList<QSizeF> oldSizes, newSizes;
-        QList<QTransform> oldState;
-        QList<QTransform> newState;
+        QVector<QSizeF> oldSizes, newSizes;
+        QVector<QTransform> oldState;
+        QVector<QTransform> newState;
+        const int selectedShapesCount = selectedShapes.count();
+
+        oldSizes.reserve(selectedShapesCount);
+        newSizes.reserve(selectedShapesCount);
+        oldState.reserve(selectedShapesCount);
+        newState.reserve(selectedShapesCount);
 
         foreach( KoShape* shape, selectedShapes )
         {

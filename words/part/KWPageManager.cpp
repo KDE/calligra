@@ -353,9 +353,9 @@ void KWPageManager::removePage(const KWPage &page)
 #endif
 }
 
-QList<KWPage> KWPageManager::pages(const QString &pageStyle) const
+QVector<KWPage> KWPageManager::pages(const QString &pageStyle) const
 {
-    QList<KWPage> answer;
+    QVector<KWPage> answer;
     const bool checkForStyle = !pageStyle.isEmpty();
     QHash<int, KWPageManagerPrivate::Page>::ConstIterator it = d->pages.constBegin();
     QHash<int, KWPageManagerPrivate::Page>::ConstIterator end = d->pages.constEnd();

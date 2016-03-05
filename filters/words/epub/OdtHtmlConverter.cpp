@@ -547,7 +547,7 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
             // We already have an object reference.
 
             // Normalize the object reference
-            if (href.startsWith("./"))
+            if (href.startsWith(QLatin1String("./")))
                 href.remove(0, 2);
             QString type = m_manifest->value(href);
 

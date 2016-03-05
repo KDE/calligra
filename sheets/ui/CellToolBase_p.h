@@ -36,8 +36,6 @@
 #include "dialogs/FindDialog.h"
 #include "dialogs/FormulaDialog.h"
 
-// KDE
-
 // Qt
 #include <QAction>
 #include <QHash>

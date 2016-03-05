@@ -30,9 +30,9 @@ KoSnapProxy::KoSnapProxy(KoSnapGuide * snapGuide)
 {
 }
 
-QList<QPointF> KoSnapProxy::pointsInRect(const QRectF &rect) const
+QVector<QPointF> KoSnapProxy::pointsInRect(const QRectF &rect) const
 {
-    QList<QPointF> points;
+    QVector<QPointF> points;
     QList<KoShape*> shapes = shapesInRect(rect);
     foreach(KoShape * shape, shapes) {
         foreach(const QPointF & point, pointsFromShape(shape)) {
@@ -60,9 +60,9 @@ QList<KoShape*> KoSnapProxy::shapesInRect(const QRectF &rect, bool omitEditedSha
     return shapes;
 }
 
-QList<QPointF> KoSnapProxy::pointsFromShape(KoShape * shape) const
+QVector<QPointF> KoSnapProxy::pointsFromShape(KoShape * shape) const
 {
-    QList<QPointF> snapPoints;
+    QVector<QPointF> snapPoints;
     // no snapping to hidden shapes
     if (! shape->isVisible(true))
         return snapPoints;

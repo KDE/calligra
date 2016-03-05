@@ -23,7 +23,7 @@
 
 // lib
 #include "KoRdfLocation.h"
-// KDE
+// KF5
 #include <kdebug.h>
 #include <klocalizedstring.h>
 

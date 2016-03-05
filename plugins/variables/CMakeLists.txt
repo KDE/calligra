@@ -39,4 +39,4 @@ target_link_libraries(calligra_textinlineobject_variables
     kotextlayout
 )
 
-install(TARGETS calligra_textinlineobject_variables DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_textinlineobject_variables DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/textinlineobjects)

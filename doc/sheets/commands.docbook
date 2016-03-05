@@ -1058,17 +1058,6 @@ information.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Configure Toolbars...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Configure the toolbars.</action> The section on
-<link linkend="configtoolbars">configuring toolbars</link> has more
-information.
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Settings</guimenu>
 <guimenuitem>Themes</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Choose the color theme for &sheets; window.</action> You can choose

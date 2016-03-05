@@ -121,7 +121,7 @@
 #include <KoIcon.h>
 #include <KoFileDialog.h>
 #include <KoUnit.h>
-#include <KoJsonTrader.h>
+#include <KoPluginLoader.h>
 #include <KoComponentData.h>
 
 // KF5 header
@@ -260,15 +260,18 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
     initActions();
 
     // Load all plugins
-    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Karbon/ViewPlugin", QString());
-    foreach(QPluginLoader *pluginLoader, offers) {
-        KPluginFactory *factory = qobject_cast<KPluginFactory *>(pluginLoader->instance());
-        KXMLGUIClient *plugin = dynamic_cast<KXMLGUIClient*>(factory->create<QObject>(this, QVariantList()));
-        if (plugin) {
-            insertChildClient(plugin);
+    const QList<KPluginFactory *> pluginFactories =
+        KoPluginLoader::instantiatePluginFactories(QStringLiteral("karbon/extensions"));
+    foreach (KPluginFactory* factory, pluginFactories) {
+        QObject *object = factory->create<QObject>(this, QVariantList());
+        KXMLGUIClient *clientPlugin = dynamic_cast<KXMLGUIClient*>(object);
+        if (clientPlugin) {
+            insertChildClient(clientPlugin);
+        } else {
+            // not our/valid plugin, so delete the created object
+            object->deleteLater();
         }
     }
-
 
     unsigned int max = part()->maxRecentFiles();
     setNumberOfRecentFiles(max);
@@ -431,7 +434,7 @@ void KarbonView::dropEvent(QDropEvent *e)
     KoView::dropEvent(e);
 }
 
-void KarbonView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
+void KarbonView::addImages(const QVector<QImage> &imageList, const QPoint &insertAt)
 {
     // get position from event and convert to document coordinates
     QPointF pos = canvasWidget()->viewConverter()->viewToDocument(insertAt)
@@ -757,7 +760,8 @@ void KarbonView::selectionFlip(bool horizontally, bool vertically)
         return;
 
     QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::StrippedSelection );
-    if( ! selectedShapes.count() )
+    const int selectedShapesCount = selectedShapes.count();
+    if( selectedShapesCount < 1 )
         return;
 
     // mirror about center point
@@ -768,8 +772,11 @@ void KarbonView::selectionFlip(bool horizontally, bool vertically)
     mirrorMatrix.scale( horizontally ? -1.0 : 1.0, vertically ? -1.0 : 1.0);
     mirrorMatrix.translate(-mirrorCenter.x(), -mirrorCenter.y());
 
-    QList<QTransform> oldState;
-    QList<QTransform> newState;
+    QVector<QTransform> oldState;
+    QVector<QTransform> newState;
+    oldState.reserve(selectedShapesCount);
+    newState.reserve(selectedShapesCount);
+
     foreach( KoShape* shape, selectedShapes ) {
         shape->update();
         oldState << shape->transformation();
@@ -929,7 +936,7 @@ void KarbonView::pathSnapToGrid()
 
     QList<KoShape*> selectedShapes = selection->selectedShapes();
     QList<KoPathPointData> points;
-    QList<QPointF> offsets;
+    QVector<QPointF> offsets;
 
     // store current grid snap state
     bool oldSnapToGrid = part()->gridData().snapToGrid();

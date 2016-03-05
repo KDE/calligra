@@ -40,17 +40,18 @@ add_library(kplatokernel SHARED ${kplatokernel_LIB_SRCS})
 generate_export_header(kplatokernel)
 
 target_link_libraries(kplatokernel
-PUBLIC
-    koodf
-    kowidgetutils
-    kundo2
-    KF5::KIOWidgets
-PRIVATE
-    KF5::KDELibs4Support
+    PUBLIC
+        koodf
+        kowidgetutils
+        kundo2
+        KF5::KIOWidgets
+    PRIVATE
+        KF5::KDELibs4Support
 )
 
 set_target_properties(kplatokernel PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
 install(TARGETS kplatokernel ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install(FILES plan_schedulerplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
+# TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
+# plan_schedulerplugin.desktop

@@ -57,7 +57,7 @@ void KarbonCalligraphicShape::appendPoint(const QPointF &point,
     KarbonCalligraphicPoint *calligraphicPoint =
         new KarbonCalligraphicPoint(p, angle, width);
 
-    QList<QPointF> handles = this->handles();
+    QVector<QPointF> handles = this->handles();
     handles.append(p);
     setHandles(handles);
     m_points.append(calligraphicPoint);
@@ -310,9 +310,11 @@ void KarbonCalligraphicShape::updatePath(const QSizeF &size)
 
     simplifyPath();
 
-    QList<QPointF> handles;
-    foreach(KarbonCalligraphicPoint *p, m_points)
-    handles.append(p->point());
+    QVector<QPointF> handles;
+    handles.reserve(m_points.count());
+    foreach(KarbonCalligraphicPoint *p, m_points) {
+        handles.append(p->point());
+    }
     setHandles(handles);
 
     setPosition(pos);
@@ -372,10 +374,6 @@ void KarbonCalligraphicShape::simplifyGuidePath()
     // do not attempt to simplify if there are too few points
     if (m_points.count() < 3)
         return;
-
-    QList<QPointF> points;
-    foreach(KarbonCalligraphicPoint *p, m_points)
-    points.append(p->point());
 
     // cumulative data used to determine if the point can be removed
     qreal widthChange = 0;

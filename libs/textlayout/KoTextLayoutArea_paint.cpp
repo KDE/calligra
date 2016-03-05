@@ -886,8 +886,8 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, b
         pen.setDashPattern(pattern);
         painter->setPen(pen);
 
-        QList<KoTextBlockData::MarkupRange>::Iterator markIt = blockData.markupsBegin(KoTextBlockData::Misspell);
-        QList<KoTextBlockData::MarkupRange>::Iterator markEnd = blockData.markupsEnd(KoTextBlockData::Misspell);
+        QVector<KoTextBlockData::MarkupRange>::Iterator markIt = blockData.markupsBegin(KoTextBlockData::Misspell);
+        QVector<KoTextBlockData::MarkupRange>::Iterator markEnd = blockData.markupsEnd(KoTextBlockData::Misspell);
         for (int i = 0 ; i < layout->lineCount(); ++i) {
             if (markIt == markEnd) {
                 break;

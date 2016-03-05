@@ -23,7 +23,6 @@
 #include "KoDocumentSectionToolTip.h"
 #include "KoDocumentSectionView.h"
 
-#include <QtDebug>
 #include <QApplication>
 #include <QKeyEvent>
 #include <QLineEdit>

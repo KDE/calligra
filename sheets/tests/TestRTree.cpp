@@ -1,10 +1,10 @@
-#include <QSharedData>
+#include "TestRTree.h"
 
 #include "RTree.h"
 
-#include "TestRTree.h"
-
 #include <QTest>
+#include <QSharedData>
+
 
 using namespace Calligra::Sheets;
 

@@ -513,7 +513,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_textDirection()
     if (!val.isEmpty() && val.size() == 4) {
         const QString left = val.left(2).toLower();
         const QString right = val.right(2).toLower();
-        m_currentPageStyle.addProperty("style:writing-mode", left + "-" + right);
+        m_currentPageStyle.addProperty("style:writing-mode", left + '-' + right);
     }
 
     readNext();
@@ -1395,9 +1395,9 @@ void DocxXmlDocumentReader::createBorderStyle(const QString& size, const QString
 
     QString border;
     if (!size.isEmpty())
-        border += MSOOXML::Utils::ST_EighthPointMeasure_to_ODF(size) + " ";
+        border += MSOOXML::Utils::ST_EighthPointMeasure_to_ODF(size) + ' ';
 
-    border.append(odfLineStyle + " ");
+    border.append(odfLineStyle + ' ');
 
     if (!color.isEmpty()) {
         if (color == "auto") {
@@ -1744,26 +1744,26 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
         if (m_complexCharStatus == InstrAllowed) {
             QString instruction = text().toString().trimmed();
 
-            if (instruction.startsWith("HYPERLINK")) {
+            if (instruction.startsWith(QLatin1String("HYPERLINK"))) {
                 // Removes hyperlink, spaces and extra " chars
                 instruction.remove(0, 11);
                 instruction.truncate(instruction.size() - 1);
                 m_complexCharType = HyperlinkComplexFieldCharType;
                 m_complexCharValue = instruction;
             }
-            else if (instruction.startsWith("PAGEREF")) {
+            else if (instruction.startsWith(QLatin1String("PAGEREF"))) {
                 instruction.remove(0, 8); // removes PAGEREF
                 m_complexCharType = ReferenceComplexFieldCharType;
                 m_complexCharValue = instruction.left(instruction.indexOf(' '));
             }
-            else if (instruction.startsWith("GOTOBUTTON")) {
+            else if (instruction.startsWith(QLatin1String("GOTOBUTTON"))) {
                 instruction.remove(0, 12); // removes GOTOBUTTON
                 m_complexCharType = InternalHyperlinkComplexFieldCharType;
                 m_complexCharValue = instruction;
             }
-            else if (instruction.startsWith("MACROBUTTON")) {
+            else if (instruction.startsWith(QLatin1String("MACROBUTTON"))) {
                 m_complexCharType = MacroButtonFieldCharType;
-                m_complexCharValue = "[";
+                m_complexCharValue = '[';
             }
             else {
                 m_complexCharValue = instruction;
@@ -2823,7 +2823,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
             }
             else {
                 int spacePosition = m_complexCharValue.indexOf(' ');
-                QString textValue = "#";
+                QString textValue(QLatin1Char('#'));
                 textValue.append(m_complexCharValue.left(spacePosition));
                 m_complexCharValue.remove(0, textValue.length());
                 body->addAttribute("xlink:href", QUrl(textValue).toEncoded());
@@ -4120,10 +4120,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rFonts()
         TRY_READ_ATTR(asciiTheme)
         if (!asciiTheme.isEmpty()) {
             QString font = asciiTheme;
-            if (font.startsWith("major")) {
+            if (font.startsWith(QLatin1String("major"))) {
                 font = m_context->themes->fontScheme.majorFonts.latinTypeface;
             }
-            else if (font.startsWith("minor")) {
+            else if (font.startsWith(QLatin1String("minor"))) {
                font = m_context->themes->fontScheme.minorFonts.latinTypeface;
             }
             m_currentTextStyle.addProperty("style:font-name", font);

@@ -336,11 +336,11 @@ bool Autocorrect::autoFractions()
         return false;
     }
 
-    if (trimmed.startsWith("1/2"))
+    if (trimmed.startsWith(QLatin1String("1/2")))
         m_word.replace(0, 3, QString::fromUtf8("½"));
-    else if (trimmed.startsWith("1/4"))
+    else if (trimmed.startsWith(QLatin1String("1/4")))
         m_word.replace(0, 3, QString::fromUtf8("¼"));
-    else if (trimmed.startsWith("3/4"))
+    else if (trimmed.startsWith(QLatin1String("3/4")))
         m_word.replace(0, 3, QString::fromUtf8("¾"));
     else
         return false;

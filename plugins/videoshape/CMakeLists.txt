@@ -42,4 +42,4 @@ kcoreaddons_desktop_to_json(calligra_shape_video calligra_shape_video.desktop)
 
 target_link_libraries(calligra_shape_video flake kowidgets KF5::KIOFileWidgets ${PHONON_LIBS})
 
-install(TARGETS calligra_shape_video DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_video DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)

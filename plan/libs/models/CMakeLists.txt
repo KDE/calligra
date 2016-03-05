@@ -47,16 +47,16 @@ add_library(kplatomodels SHARED ${kplatomodels_LIB_SRCS})
 generate_export_header(kplatomodels)
 
 target_link_libraries(kplatomodels
-PUBLIC
-    kplatokernel
-    koodf
-    kundo2
-    KChart
-    KF5::KIOWidgets
-PRIVATE
-    KGantt
-    KF5::Notifications
-    KF5::TextWidgets
+    PUBLIC
+        kplatokernel
+        koodf
+        kundo2
+        KChart
+        KF5::KIOWidgets
+    PRIVATE
+        KGantt
+        KF5::Notifications
+        KF5::TextWidgets
 )
 if(KF5Contacts_FOUND)
     target_link_libraries(kplatomodels  PRIVATE KF5::Contacts)

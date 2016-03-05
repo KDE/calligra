@@ -12,7 +12,7 @@ kcoreaddons_desktop_to_json(calligra_filter_csv2sheets calligra_filter_csv2sheet
 
 target_link_libraries(calligra_filter_csv2sheets calligrasheetscommon kowidgets)
 
-install(TARGETS calligra_filter_csv2sheets DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_csv2sheets DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 endif()
 
@@ -28,6 +28,6 @@ kcoreaddons_desktop_to_json(calligra_filter_sheets2csv calligra_filter_sheets2cs
 
 target_link_libraries(calligra_filter_sheets2csv calligrasheetscommon)
 
-install(TARGETS calligra_filter_sheets2csv  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_sheets2csv  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 endif()

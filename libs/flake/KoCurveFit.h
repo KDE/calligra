@@ -43,7 +43,7 @@ class KoPathShape;
  * @return a path shape representing the fitted curve
  */
 
-FLAKE_EXPORT KoPathShape * bezierFit(const QList<QPointF> &points, float error);
+FLAKE_EXPORT KoPathShape * bezierFit(const QVector<QPointF> &points, float error);
 
 #endif
 

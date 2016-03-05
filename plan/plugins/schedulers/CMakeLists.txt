@@ -8,7 +8,12 @@ set(LIBRCPS_MIN_VERSION "0.3")
 
 set(HAVE_LIBRCPS 1)
 
-macro_log_feature(HAVE_LIBRCPS "LibRCPS" "Resource Constrained Project Scheduling Library" "http://www.librcps.org" FALSE ${LIBRCPS_MIN_VERSION} "Required by Plan RCPS Plugin")
+set_package_properties(LibRCPS PROPERTIES
+    DESCRIPTION "Resource Constrained Project Scheduling Library"
+    URL "http://www.librcps.org"
+    PURPOSE "Required by Plan RCPS Plugin"
+    TYPE OPTIONAL
+)
 
 if(HAVE_LIBRCPS)
     add_subdirectory( rcps )

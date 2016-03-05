@@ -135,7 +135,7 @@ int KoFilterEffect::maximalInputCount() const
     return qMax(d->maximalInputCount, d->requiredInputCount);
 }
 
-QImage KoFilterEffect::processImages(const QList<QImage> &images, const KoFilterEffectRenderContext &/*context*/) const
+QImage KoFilterEffect::processImages(const QVector<QImage> &images, const KoFilterEffectRenderContext &/*context*/) const
 {
     Q_ASSERT(images.count());
     return images.first();

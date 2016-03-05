@@ -145,7 +145,7 @@ void RunAroundHelper::createLineParts()
         // Add whole line rect
         m_lineParts.append(m_lineRect);
     } else {
-        QList<QRectF> lineParts;
+        QVector<QRectF> lineParts;
         QRectF rightLineRect = m_lineRect;
         bool lastRightRectValid = false;
         qSort(m_validObstructions.begin(), m_validObstructions.end(), KoTextLayoutObstruction::compareRectLeft);

@@ -42,7 +42,7 @@ public:
     ~KWPageCache();
 
     KWPageCacheManager* m_manager;
-    QList<QImage> cache;
+    QVector<QImage> cache;
     int m_tilesx, m_tilesy;
     QSize m_size;
     // List of logical exposed rects in view coordinates

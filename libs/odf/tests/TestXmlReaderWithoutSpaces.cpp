@@ -9,8 +9,6 @@
 
 #include <KoXmlReader.h>
 
-#include <QtXml>
-
 
 class TestXmlReaderWithoutSpaces : public QObject
 {

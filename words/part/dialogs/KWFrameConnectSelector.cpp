@@ -28,10 +28,10 @@ KWFrameConnectSelector::KWFrameConnectSelector(FrameConfigSharedState *state)
 {
     widget.setupUi(this);
 
-    connect(widget.framesList, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
+    connect(widget.framesList, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
             this, SLOT(frameSetSelected()));
-    connect(widget.frameSetName, SIGNAL(textChanged(const QString &)),
-            this, SLOT(nameChanged(const QString &)));
+    connect(widget.frameSetName, SIGNAL(textChanged(QString)),
+            this, SLOT(nameChanged(QString)));
 }
 
 bool KWFrameConnectSelector::canOpen(KoShape *shape)

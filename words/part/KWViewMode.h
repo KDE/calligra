@@ -79,20 +79,6 @@ public:
     /** Size of the contents area, in pixels */
     virtual QSizeF contentsSize() const = 0;
 
-    /** Should selected text be drawn as such? */
-    virtual bool drawSelections() {
-        return true;
-    }
-
-    /** Should we see frame borders? This setting doesn't always come from KWView... */
-    bool drawFrameBorders() const {
-        return m_drawFrameBorders;
-    }
-    /** Should we see frame borders? This setting doesn't always come from KWView... */
-    void setDrawFrameBorders(bool b)  {
-        m_drawFrameBorders = b;
-    }
-
     /** Does this viewmode know anything about pages? */
     virtual bool hasPages() {
         return true;
@@ -131,7 +117,7 @@ public:
      * @param viewConverter An optional viewconverter to override the viewconverter set on the viewmode.
      * @return a list of clipping-rects as it maps to the internal document.
      */
-    virtual QList<ViewMap> mapExposedRects(const QRectF &clipRect, KoViewConverter *viewConverter) const = 0;
+    virtual QVector<ViewMap> mapExposedRects(const QRectF &clipRect, KoViewConverter *viewConverter) const = 0;
 
 public Q_SLOTS:
     /**
@@ -148,9 +134,8 @@ protected:
     virtual void updatePageCache() = 0;
 
     KWPageManager *m_pageManager;
-
-private:
-    bool m_drawFrameBorders;
 };
+
+Q_DECLARE_TYPEINFO(KWViewMode::ViewMap, Q_MOVABLE_TYPE);
 
 #endif

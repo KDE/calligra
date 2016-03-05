@@ -82,7 +82,7 @@ FixedDateFormat::FixedDateFormat(DateVariable *variable)
     connect(widget.formatList, SIGNAL(itemPressed(QListWidgetItem*)), this, SLOT(listClicked(QListWidgetItem*)));
     connect(widget.correction, SIGNAL(valueChanged(int)), this, SLOT(offsetChanged(int)));
     connect(widget.formatButton, SIGNAL(clicked()), this, SLOT(insertCustomButtonPressed()));
-    connect(widget.customString, SIGNAL(textChanged(const QString&)), this, SLOT(customTextChanged(const QString&)));
+    connect(widget.customString, SIGNAL(textChanged(QString)), this, SLOT(customTextChanged(QString)));
 }
 
 void FixedDateFormat::customClicked(int state)

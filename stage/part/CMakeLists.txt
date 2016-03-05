@@ -160,6 +160,7 @@ target_link_libraries(calligrastageprivate
     PRIVATE
         kowidgets
         kotextlayout
+        koplugin
         KF5::Archive
         KF5::IconThemes
         Qt5::Svg
@@ -181,7 +182,7 @@ kcoreaddons_desktop_to_json(calligrastagepart stagepart.desktop)
 
 target_link_libraries(calligrastagepart calligrastageprivate )
 
-install(TARGETS calligrastagepart DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligrastagepart DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)
 
 ### GUI files ###
 install( FILES stage.rc stage_readonly.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/stage)

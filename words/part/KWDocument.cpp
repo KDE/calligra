@@ -24,6 +24,7 @@
  */
 
 #include "KWDocument.h"
+
 #include "KWFactory.h"
 #include "KWView.h"
 #include "KWCanvas.h"
@@ -39,6 +40,7 @@
 #include "frames/KWFrameLayout.h"
 #include "dialogs/KWFrameDialog.h"
 #include "KWRootAreaProvider.h"
+#include "WordsDebug.h"
 
 // calligra libs includes
 #include <changetracker/KoChangeTracker.h>
@@ -81,12 +83,12 @@
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
-// KDE + Qt includes
+// KF5
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
 #include <KSharedConfig>
-#include <WordsDebug.h>
 
+// Qt
 #include <QIODevice>
 #include <QTimer>
 #include <QThread>
@@ -138,8 +140,8 @@ KWDocument::KWDocument(KoPart *part)
     m_shapeController = new KoShapeController(0, this);
 
     if (inlineTextObjectManager()) {
-        connect(documentInfo(), SIGNAL(infoUpdated(const QString &, const QString &)),
-                inlineTextObjectManager(), SLOT(documentInformationUpdated(const QString &, const QString &)));
+        connect(documentInfo(), SIGNAL(infoUpdated(QString,QString)),
+                inlineTextObjectManager(), SLOT(documentInformationUpdated(QString,QString)));
     }
 
     m_annotationManager = new KoAnnotationLayoutManager();
@@ -328,8 +330,8 @@ void KWDocument::removeFrameSet(KWFrameSet *fs)
     foreach (KoShape *shape, fs->shapes())
         removeSequencedShape(shape);
 
-    disconnect(fs, SIGNAL(shapeAdded(KoShape *)), this, SLOT(addSequencedShape(KoShape *)));
-    disconnect(fs, SIGNAL(shapeRemoved(KoShape *)), this, SLOT(removeSequencedShape(KoShape *)));
+    disconnect(fs, SIGNAL(shapeAdded(KoShape*)), this, SLOT(addSequencedShape(KoShape*)));
+    disconnect(fs, SIGNAL(shapeRemoved(KoShape*)), this, SLOT(removeSequencedShape(KoShape*)));
 }
 
 void KWDocument::relayout(QList<KWFrameSet*> framesets)
@@ -421,8 +423,8 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
         }
     }
 
-    connect(fs, SIGNAL(shapeAdded(KoShape *)), this, SLOT(addSequencedShape(KoShape *)));
-    connect(fs, SIGNAL(shapeRemoved(KoShape *)), this, SLOT(removeSequencedShape(KoShape *)));
+    connect(fs, SIGNAL(shapeAdded(KoShape*)), this, SLOT(addSequencedShape(KoShape*)));
+    connect(fs, SIGNAL(shapeRemoved(KoShape*)), this, SLOT(removeSequencedShape(KoShape*)));
 }
 
 void KWDocument::addSequencedShape(KoShape *shape)

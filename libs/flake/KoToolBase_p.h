@@ -66,14 +66,14 @@ public:
             KoCanvasResourceManager * crp = canvas->resourceManager();
             Q_ASSERT_X(crp, "KoToolBase::KoToolBase", "No Canvas KoResourceManager");
             if (crp)
-                q->connect(crp, SIGNAL(canvasResourceChanged(int, const QVariant &)),
-                        SLOT(canvasResourceChanged(int, const QVariant &)));
+                q->connect(crp, SIGNAL(canvasResourceChanged(int,QVariant)),
+                        SLOT(canvasResourceChanged(int,QVariant)));
 
             // can be 0 in the case of Calligra Sheets
             KoDocumentResourceManager *scrm = canvas->shapeController()->resourceManager();
             if (scrm) {
-                q->connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
-                        SLOT(documentResourceChanged(int, const QVariant &)));
+                q->connect(scrm, SIGNAL(resourceChanged(int,QVariant)),
+                        SLOT(documentResourceChanged(int,QVariant)));
             }
         }
     }

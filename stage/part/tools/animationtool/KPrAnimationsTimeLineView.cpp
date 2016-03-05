@@ -26,9 +26,6 @@
 #include "animations/KPrShapeAnimation.h"
 #include "tools/animationtool/KPrAnimationGroupProxyModel.h"
 
-//KDE HEADERS
-
-
 //QT HEADERS
 #include <QVBoxLayout>
 #include <QHBoxLayout>

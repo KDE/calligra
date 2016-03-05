@@ -263,7 +263,7 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     d->colorAction->setCurrentColor(Qt::white);
     d->colorButton->setDefaultAction(d->colorAction);
     d->colorButton->setPopupMode(QToolButton::InstantPopup);
-    connect(d->colorAction, SIGNAL(colorChanged(const KoColor &)), this, SLOT(colorChanged()));
+    connect(d->colorAction, SIGNAL(colorChanged(KoColor)), this, SLOT(colorChanged()));
     connect(d->colorButton, SIGNAL(iconSizeChanged()), d->colorAction, SLOT(updateIcon()));
 
     // Gradient selector
@@ -271,14 +271,14 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     QSharedPointer<KoAbstractResourceServerAdapter> gradientResourceAdapter(new KoResourceServerAdapter<KoAbstractGradient>(serverProvider->gradientServer()));
     d->gradientAction = new KoResourcePopupAction(gradientResourceAdapter, d->colorButton);
     d->gradientAction->setToolTip(i18n("Change the filling gradient"));
-    connect(d->gradientAction, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground> )), this, SLOT(gradientChanged(QSharedPointer<KoShapeBackground> )));
+    connect(d->gradientAction, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground>)), this, SLOT(gradientChanged(QSharedPointer<KoShapeBackground>)));
     connect(d->colorButton, SIGNAL(iconSizeChanged()), d->gradientAction, SLOT(updateIcon()));
 
     // Pattern selector
     QSharedPointer<KoAbstractResourceServerAdapter>patternResourceAdapter(new KoResourceServerAdapter<KoPattern>(serverProvider->patternServer()));
     d->patternAction = new KoResourcePopupAction(patternResourceAdapter, d->colorButton);
     d->patternAction->setToolTip(i18n("Change the filling pattern"));
-    connect(d->patternAction, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground> )), this, SLOT(patternChanged(QSharedPointer<KoShapeBackground> )));
+    connect(d->patternAction, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground>)), this, SLOT(patternChanged(QSharedPointer<KoShapeBackground>)));
     connect(d->colorButton, SIGNAL(iconSizeChanged()), d->patternAction, SLOT(updateIcon()));
 
     // Spacer

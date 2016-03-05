@@ -23,7 +23,7 @@
 #define KPRCOLLECTIONITEMMODEL_H
 
 #include <QAbstractItemModel>
-#include <QList>
+#include <QVector>
 #include <QString>
 #include <QIcon>
 #include <KoXmlReader.h>
@@ -39,6 +39,8 @@ struct KPrCollectionItem
     QIcon icon;                     // icon of the animation type
     KoXmlElement animationContext;  //xml data used to instantiate animations of this type
 };
+
+Q_DECLARE_TYPEINFO(KPrCollectionItem, Q_MOVABLE_TYPE);
 
 /** Model used to store predefined animations data */
 class KPrCollectionItemModel : public QAbstractListModel
@@ -56,9 +58,9 @@ public:
      *
      * @param List of KPrCollectionItem
      */
-    void setAnimationClassList(const QList<KPrCollectionItem> &newlist);
+    void setAnimationClassList(const QVector<KPrCollectionItem> &newlist);
 
-    QList<KPrCollectionItem> animationClassList() const {return m_animationClassList;}
+    QVector<KPrCollectionItem> animationClassList() const {return m_animationClassList;}
 
     /**
      * @brief Return the xml context for the animation on index
@@ -68,7 +70,7 @@ public:
     KoXmlElement animationContext(const QModelIndex &index) const;
 
 private:
-    QList<KPrCollectionItem> m_animationClassList;
+    QVector<KPrCollectionItem> m_animationClassList;
     QString m_family;
 };
 #endif // KPRCOLLECTIONITEMMODEL_H

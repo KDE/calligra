@@ -112,7 +112,7 @@ protected:
     bool mouseInsideHandle(const QPointF &mousePos, const QPointF &handlePos, const KoViewConverter &converter) const;
 
 
-    QList<QPointF> m_handles;  ///< the list of handles
+    QVector<QPointF> m_handles;  ///< the list of handles
     int m_selectedHandle;      ///< index of currently deleted handle or -1 if none selected
     QSharedPointer<KoPatternBackground> m_oldFill;
     QSharedPointer<KoPatternBackground> m_newFill;

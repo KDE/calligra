@@ -49,7 +49,7 @@ public:
     * @param offsets the offsets by which the points are moved in document coordinates
     * @param parent the parent command used for macro commands
     */
-    KoPathPointMoveCommand(const QList<KoPathPointData> &pointData, const QList<QPointF> &offsets, KUndo2Command *parent = 0);
+    KoPathPointMoveCommand(const QList<KoPathPointData> &pointData, const QVector<QPointF> &offsets, KUndo2Command *parent = 0);
 
     ~KoPathPointMoveCommand();
 

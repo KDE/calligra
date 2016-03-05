@@ -72,14 +72,14 @@ CharacterHighlighting::CharacterHighlighting(bool uniqueFormat,QWidget* parent)
 
     connect(widget.positionList, SIGNAL(activated(int)), this, SLOT(positionChanged(int)));
 
-    connect(m_fontChooser, SIGNAL(fontSelected(const QFont &)), this, SIGNAL(fontChanged(const QFont &)));
-    connect(m_fontChooser, SIGNAL(fontSelected(const QFont &)), this, SIGNAL(charStyleChanged()));
+    connect(m_fontChooser, SIGNAL(fontSelected(QFont)), this, SIGNAL(fontChanged(QFont)));
+    connect(m_fontChooser, SIGNAL(fontSelected(QFont)), this, SIGNAL(charStyleChanged()));
 
     const QIcon clearIcon = koIcon("edit-clear");
     widget.resetTextColor->setIcon(clearIcon);
     widget.resetBackground->setIcon(clearIcon);
-    connect(widget.textColor, SIGNAL(changed(const QColor&)), this, SLOT(textColorChanged()));
-    connect(widget.backgroundColor, SIGNAL(changed(const QColor&)), this, SLOT(backgroundColorChanged()));
+    connect(widget.textColor, SIGNAL(changed(QColor)), this, SLOT(textColorChanged()));
+    connect(widget.backgroundColor, SIGNAL(changed(QColor)), this, SLOT(backgroundColorChanged()));
     connect(widget.resetTextColor, SIGNAL(clicked()), this, SLOT(clearTextColor()));
     connect(widget.resetBackground, SIGNAL(clicked()), this, SLOT(clearBackgroundColor()));
     connect(widget.enableText, SIGNAL(toggled(bool)), this, SLOT(textToggled(bool)));

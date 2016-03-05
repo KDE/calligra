@@ -15,7 +15,12 @@ endif ()
 
 if (SHOULD_BUILD_PLUGIN_SPACENAVIGATOR)
     macro_optional_find_package(Spnav)
-    macro_log_feature(SPNAV_FOUND "Spnav" "3Dconnexion device driver and SDK" "http://spacenav.sourceforge.net/" FALSE "" "Required by SpaceNavigator 3D mouse plugin") 
+    set_package_properties(Spnav PROPERTIES
+        DESCRIPTION "3Dconnexion device driver and SDK"
+        URL "http://spacenav.sourceforge.net/"
+        PURPOSE "Required by SpaceNavigator 3D mouse plugin"
+        TYPE OPTIONAL
+    )
     if (SPNAV_FOUND)
         add_subdirectory( spacenavigator )
     endif ()

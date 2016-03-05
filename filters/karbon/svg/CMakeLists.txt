@@ -15,7 +15,7 @@ kcoreaddons_desktop_to_json(calligra_filter_karbon2svg calligra_filter_karbon2sv
 
 target_link_libraries(calligra_filter_karbon2svg karbonui)
 
-install(TARGETS calligra_filter_karbon2svg DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_karbon2svg DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 endif()
 
@@ -32,6 +32,6 @@ kcoreaddons_desktop_to_json(calligra_filter_svg2karbon calligra_filter_svg2karbo
 
 target_link_libraries(calligra_filter_svg2karbon karbonui KF5::Archive)
 
-install(TARGETS calligra_filter_svg2karbon  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_svg2karbon  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 endif()

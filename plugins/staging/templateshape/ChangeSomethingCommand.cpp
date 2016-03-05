@@ -22,7 +22,7 @@
 // Own
 #include "ChangeSomethingCommand.h"
 
-// KDE
+// KF5
 #include <klocalizedstring.h>
 #include <kdebug.h>
 

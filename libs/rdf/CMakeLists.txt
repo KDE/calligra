@@ -36,18 +36,21 @@ ki18n_wrap_ui( kordf_LIB_SRCS
 
 add_library(kordf SHARED ${kordf_LIB_SRCS})
 
-target_link_libraries(kordf komain )
-target_link_libraries(kordf ${SOPRANO_LIBRARIES})
-target_link_libraries(kordf LINK_INTERFACE_LIBRARIES  ${SOPRANO_LIBRARIES})
-
-target_link_libraries(kordf LINK_INTERFACE_LIBRARIES komain )
+target_link_libraries(kordf
+    PUBLIC
+        komain
+        ${SOPRANO_LIBRARIES}
+    PRIVATE
+        koplugin
+)
 
 set_target_properties(kordf PROPERTIES
 VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS kordf ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
-install( FILES calligra_semanticitem.desktop  DESTINATION ${SERVICETYPES_INSTALL_DIR})
+# TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
+# calligra_semanticitem.desktop
 
 install( FILES
     kordf_export.h

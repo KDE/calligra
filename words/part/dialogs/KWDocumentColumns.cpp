@@ -40,7 +40,7 @@ KWDocumentColumns::KWDocumentColumns(QWidget *parent, const KoColumns &columns)
 
     connect(widget.columns, SIGNAL(valueChanged(int)), this, SLOT(optionsChanged()));
     connect(widget.spacing, SIGNAL(valueChangedPt(qreal)), this, SLOT(optionsChanged()));
-    connect(this, SIGNAL(columnsChanged(const KoColumns&)), m_preview, SLOT(setColumns(const KoColumns&)));
+    connect(this, SIGNAL(columnsChanged(KoColumns)), m_preview, SLOT(setColumns(KoColumns)));
 }
 
 void KWDocumentColumns::setColumns(const KoColumns &columns)

@@ -73,7 +73,7 @@ KoTagChooserWidget::KoTagChooserWidget(QWidget* parent): QWidget(parent)
             this, SIGNAL(tagChosen(QString)));
 
     connect(d->tagToolButton, SIGNAL(popupMenuAboutToShow()),
-            this, SLOT (tagOptionsContextMenuAboutToShow()));
+            this, SLOT(tagOptionsContextMenuAboutToShow()));
     connect(d->tagToolButton, SIGNAL(newTagRequested(QString)),
             this, SIGNAL(newTagRequested(QString)));
     connect(d->tagToolButton, SIGNAL(deletionOfCurrentTagRequested()),

@@ -632,7 +632,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_name()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_INTO(val, m_name)
-    m_name.replace(" ", "_");
+    m_name.replace(QLatin1Char(' '), QLatin1Char('_'));
     readNext();
     READ_EPILOGUE
 }

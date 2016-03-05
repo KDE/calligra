@@ -144,9 +144,9 @@ KoOpenPane::KoOpenPane(QWidget *parent, const QStringList& mimeFilter, const QSt
 
     connect(d->m_sectionList, SIGNAL(itemSelectionChanged()),
             this, SLOT(updateSelectedWidget()));
-    connect(d->m_sectionList, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
+    connect(d->m_sectionList, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
             this, SLOT(itemClicked(QTreeWidgetItem*)));
-    connect(d->m_sectionList, SIGNAL(itemActivated(QTreeWidgetItem*, int)),
+    connect(d->m_sectionList, SIGNAL(itemActivated(QTreeWidgetItem*,int)),
             this, SLOT(itemClicked(QTreeWidgetItem*)));
 
     initRecentDocs();
@@ -172,8 +172,8 @@ KoOpenPane::KoOpenPane(QWidget *parent, const QStringList& mimeFilter, const QSt
     if (!sizes.isEmpty())
         emit splitterResized(0, sizes);
 
-    connect(this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)),
-            this, SLOT(saveSplitterSizes(KoDetailsPane*, const QList<int>&)));
+    connect(this, SIGNAL(splitterResized(KoDetailsPane*,QList<int>)),
+            this, SLOT(saveSplitterSizes(KoDetailsPane*,QList<int>)));
 
     setAcceptDrops(true);
 }
@@ -212,12 +212,12 @@ void KoOpenPane::initRecentDocs()
 {
     QString header = i18n("Recent Documents");
     KoRecentDocumentsPane* recentDocPane = new KoRecentDocumentsPane(this, header);
-    connect(recentDocPane, SIGNAL(openUrl(const QUrl&)), this, SIGNAL(openExistingFile(const QUrl&)));
+    connect(recentDocPane, SIGNAL(openUrl(QUrl)), this, SIGNAL(openExistingFile(QUrl)));
     QTreeWidgetItem* item = addPane(header, koIconName("document-open"), recentDocPane, 0);
-    connect(recentDocPane, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)),
-            this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)));
-    connect(this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)),
-            recentDocPane, SLOT(resizeSplitter(KoDetailsPane*, const QList<int>&)));
+    connect(recentDocPane, SIGNAL(splitterResized(KoDetailsPane*,QList<int>)),
+            this, SIGNAL(splitterResized(KoDetailsPane*,QList<int>)));
+    connect(this, SIGNAL(splitterResized(KoDetailsPane*,QList<int>)),
+            recentDocPane, SLOT(resizeSplitter(KoDetailsPane*,QList<int>)));
 
     if (KSharedConfig::openConfig()->hasGroup("RecentFiles")) {
         d->m_sectionList->setCurrentItem(item, 0, QItemSelectionModel::ClearAndSelect);
@@ -244,15 +244,15 @@ void KoOpenPane::initTemplates(const QString& templatesResourcePath)
 
             KoTemplatesPane* pane = new KoTemplatesPane(this, group->name(),
                     group, templateTree.defaultTemplate());
-            connect(pane, SIGNAL(openUrl(const QUrl&)), this, SIGNAL(openTemplate(const QUrl&)));
-            connect(pane, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)),
-                    this, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)));
-            connect(this, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)),
-                    pane, SLOT(changeAlwaysUseTemplate(KoTemplatesPane*, const QString&)));
-            connect(pane, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)),
-                    this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)));
-            connect(this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)),
-                    pane, SLOT(resizeSplitter(KoDetailsPane*, const QList<int>&)));
+            connect(pane, SIGNAL(openUrl(QUrl)), this, SIGNAL(openTemplate(QUrl)));
+            connect(pane, SIGNAL(alwaysUseChanged(KoTemplatesPane*,QString)),
+                    this, SIGNAL(alwaysUseChanged(KoTemplatesPane*,QString)));
+            connect(this, SIGNAL(alwaysUseChanged(KoTemplatesPane*,QString)),
+                    pane, SLOT(changeAlwaysUseTemplate(KoTemplatesPane*,QString)));
+            connect(pane, SIGNAL(splitterResized(KoDetailsPane*,QList<int>)),
+                    this, SIGNAL(splitterResized(KoDetailsPane*,QList<int>)));
+            connect(this, SIGNAL(splitterResized(KoDetailsPane*,QList<int>)),
+                    pane, SLOT(resizeSplitter(KoDetailsPane*,QList<int>)));
             QTreeWidgetItem* item = addPane(group->name(), group->templates().first()->loadPicture(),
                                            pane, group->sortingWeight() + templateOffset);
 

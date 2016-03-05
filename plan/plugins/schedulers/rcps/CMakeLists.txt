@@ -21,4 +21,4 @@ target_link_libraries(
 #    ${LIBRCPS_LIBRARIES}
 )
 
-install( TARGETS kplatorcpsscheduler DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR} )
+install( TARGETS kplatorcpsscheduler DESTINATION ${PLUGIN_INSTALL_DIR}/calligraplan/schedulers )

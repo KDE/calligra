@@ -47,7 +47,7 @@ CSThumbProviderKarbon::~CSThumbProviderKarbon()
 {
 }
 
-QList<QImage> CSThumbProviderKarbon::createThumbnails(const QSize &thumbSize)
+QVector<QImage> CSThumbProviderKarbon::createThumbnails(const QSize &thumbSize)
 {
     // make sure everything is rendered before painting
     processEvents();
@@ -60,5 +60,5 @@ QList<QImage> CSThumbProviderKarbon::createThumbnails(const QSize &thumbSize)
     // make sure there are no events; this fixes a crash on shutdown
     processEvents();
 
-    return QList<QImage>() << thumbnail;
+    return QVector<QImage>() << thumbnail;
 }

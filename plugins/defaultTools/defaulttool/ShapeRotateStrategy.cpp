@@ -138,7 +138,8 @@ void ShapeRotateStrategy::paint( QPainter &painter, const KoViewConverter &conve
 }
 
 KUndo2Command* ShapeRotateStrategy::createCommand() {
-    QList<QTransform> newTransforms;
+    QVector<QTransform> newTransforms;
+    newTransforms.reserve(m_selectedShapes.count());
     foreach( KoShape* shape, m_selectedShapes )
         newTransforms << shape->transformation();
 

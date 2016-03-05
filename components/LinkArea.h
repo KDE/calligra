@@ -24,7 +24,7 @@
 #ifndef LINKAREA_H
 #define LINKAREA_H
 
-#include <QtQuick/QQuickItem>
+#include <QQuickItem>
 
 #include "Document.h"
 

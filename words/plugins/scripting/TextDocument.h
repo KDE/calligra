@@ -46,9 +46,9 @@ class TextDocument : public QObject
 public:
     TextDocument(QObject* parentFrameSet, QTextDocument* doc)
             : QObject(parentFrameSet), m_doc(doc) {
-        connect(doc, SIGNAL(contentsChange(int, int, int)), this, SIGNAL(contentsChanged(int, int, int)));
-        connect(doc, SIGNAL(cursorPositionChanged(const QTextCursor&)), this, SIGNAL(cursorPositionChanged()));
-        connect(doc->documentLayout(), SIGNAL(documentSizeChanged(const QSizeF&)), this, SIGNAL(documentSizeChanged()));
+        connect(doc, SIGNAL(contentsChange(int,int,int)), this, SIGNAL(contentsChanged(int,int,int)));
+        connect(doc, SIGNAL(cursorPositionChanged(QTextCursor)), this, SIGNAL(cursorPositionChanged()));
+        connect(doc->documentLayout(), SIGNAL(documentSizeChanged(QSizeF)), this, SIGNAL(documentSizeChanged()));
     }
     virtual ~TextDocument() {}
 

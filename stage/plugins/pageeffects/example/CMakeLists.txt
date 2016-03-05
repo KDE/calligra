@@ -8,4 +8,4 @@ kcoreaddons_desktop_to_json(kpr_pageeffect_example kpr_pageeffect_example.deskto
 
 target_link_libraries(kpr_pageeffect_example calligrastageprivate flake )
 
-install(TARGETS kpr_pageeffect_example  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kpr_pageeffect_example  DESTINATION ${PLUGIN_INSTALL_DIR}/calligrastage/pageeffects)

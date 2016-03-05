@@ -37,6 +37,7 @@ target_link_libraries( CalligraComponentsPlugin
     calligrasheetscommon
     calligrastageprivate
     kotextlayout
+    koplugin
 )
 
 install(TARGETS CalligraComponentsPlugin DESTINATION ${QML_INSTALL_DIR}/org/kde/calligra)

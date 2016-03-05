@@ -34,7 +34,7 @@
 #include <KoShape.h>
 #include <KoZoomHandler.h>
 
-// KDE + Qt includes
+// Qt includes
 #include <QBrush>
 #include <QPainter>
 #include <QPainterPath>

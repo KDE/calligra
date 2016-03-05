@@ -46,10 +46,10 @@ struct rcps_solver;
 
 
 /* return the library version as a string (static, don't free it) */
-char *rcps_version();
+const char *rcps_version();
 
 /* return an error string corresponding to code */
-char *rcps_error(int code);
+const char *rcps_error(int code);
 
 /* create and return a new problem structure */
 struct rcps_problem* rcps_problem_new();

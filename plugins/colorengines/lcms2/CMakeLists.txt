@@ -95,5 +95,5 @@ add_library(kolcmsengine MODULE ${lcmsengine_SRCS})
 kcoreaddons_desktop_to_json(kolcmsengine kolcmsengine.desktop)
 
 target_link_libraries(kolcmsengine pigmentcms kowidgets KF5::I18n  ${LCMS2_LIBRARIES}  ${LINK_OPENEXR_LIB})
-install(TARGETS kolcmsengine DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kolcmsengine DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/colorspaces)
 

@@ -68,8 +68,8 @@ ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
     connect(widget.listTypes, SIGNAL(currentRowChanged(int)), this, SLOT(styleChanged(int)));
     connect(widget.customCharacter, SIGNAL(clicked(bool)), this, SLOT(customCharButtonPressed()));
     connect(widget.letterSynchronization, SIGNAL(toggled(bool)), widget.startValue, SLOT(setLetterSynchronization(bool)));
-    connect(widget.prefix, SIGNAL(textChanged(const QString&)), this, SLOT(recalcPreview()));
-    connect(widget.suffix, SIGNAL(textChanged(const QString&)), this, SLOT(recalcPreview()));
+    connect(widget.prefix, SIGNAL(textChanged(QString)), this, SLOT(recalcPreview()));
+    connect(widget.suffix, SIGNAL(textChanged(QString)), this, SLOT(recalcPreview()));
     connect(widget.depth, SIGNAL(valueChanged(int)), this, SLOT(recalcPreview()));
     connect(widget.levels, SIGNAL(valueChanged(int)), this, SLOT(recalcPreview()));
     connect(widget.startValue, SIGNAL(valueChanged(int)), this, SLOT(recalcPreview()));

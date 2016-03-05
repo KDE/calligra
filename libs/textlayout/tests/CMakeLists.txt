@@ -37,8 +37,3 @@ set(TestTableLayout_test_SRCS
  MockRootAreaProvider.cpp
 )
 kotextlayout_add_unit_test(TestTableLayout ${TestTableLayout_test_SRCS}  LINK_LIBRARIES kotext kotextlayout Qt5::Test)
-
-########### next target ###############
-
-set(TestKoTableColumnAndRowStyleManager_test_SRCS TestKoTableColumnAndRowStyleManager.cpp)
-kotextlayout_add_unit_test(TestKoTableColumnAndRowStyleManager ${TestKoTableColumnAndRowStyleManager_test_SRCS}  LINK_LIBRARIES kotext Qt5::Test)

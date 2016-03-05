@@ -25,7 +25,7 @@
 #include <KoToolProxy.h>
 #include <KoDocumentResourceManager.h>
 #include <KoTextEditor.h>
-// KDE
+// KF5
 #include <kactionmenu.h>
 #include <kpagedialog.h>
 #include <kdebug.h>

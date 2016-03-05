@@ -26,7 +26,6 @@
 #include <kguiitem.h>
 
 #include <KoStore.h>
-#include <KoDocumentEntry.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
@@ -191,11 +190,6 @@ bool KoFormulaShape::loadEmbeddedDocument( KoStore *store,
     }
 
     //debugFormula << "tmpURL=" << tmpURL;
-    QString errorMsg;
-    KoDocumentEntry e = KoDocumentEntry::queryByMimeType( mimeType );
-    if ( e.isEmpty() ) {
-        return false;
-    }
 
     bool res = true;
     if ( tmpURL.startsWith( STORE_PROTOCOL )

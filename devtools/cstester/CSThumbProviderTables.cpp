@@ -43,9 +43,9 @@ CSThumbProviderTables::~CSThumbProviderTables()
 {
 }
 
-QList<QImage> CSThumbProviderTables::createThumbnails(const QSize &thumbSize)
+QVector<QImage> CSThumbProviderTables::createThumbnails(const QSize &thumbSize)
 {
-    QList<QImage> thumbnails;
+    QVector<QImage> thumbnails;
     if (0 != m_doc->map()) {
         foreach(Calligra::Sheets::Sheet* sheet, m_doc->map()->sheetList()) {
             QImage thumbnail(thumbSize, QImage::Format_RGB32);

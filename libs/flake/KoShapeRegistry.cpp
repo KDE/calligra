@@ -79,14 +79,10 @@ void KoShapeRegistry::Private::init(KoShapeRegistry *q)
     config.whiteList = "FlakePlugins";
     config.blacklist = "FlakePluginsDisabled";
     config.group = "calligra";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Flake"),
-                                     QString::fromLatin1("[X-Flake-PluginVersion] == 28"),
-                                     config);
+    KoPluginLoader::load(QStringLiteral("calligra/flakes"), config);
     config.whiteList = "ShapePlugins";
     config.blacklist = "ShapePluginsDisabled";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Shape"),
-                                     QString::fromLatin1("[X-Flake-PluginVersion] == 28"),
-                                     config);
+    KoPluginLoader::load(QStringLiteral("calligra/shapes"), config);
 
     // Also add our hard-coded basic shapes
     q->add(new KoPathShapeFactory(QStringList()));

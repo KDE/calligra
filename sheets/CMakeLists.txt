@@ -137,7 +137,7 @@ set (functions_DIR_SRCS
     functions/helper.cpp
     )
 
-if(QT_QTDBUS_FOUND)
+if(Qt5DBus_FOUND)
 set (interfaces_DIR_SRCS
     interfaces/MapAdaptor.cpp
     interfaces/SheetAdaptor.cpp
@@ -315,8 +315,13 @@ generate_export_header(calligrasheetsodf
     BASE_NAME CALLIGRA_SHEETS_ODF
 )
 
-target_link_libraries(calligrasheetsodf komain KF5::KDELibs4Support)
-target_link_libraries(calligrasheetsodf LINK_INTERFACE_LIBRARIES komain KF5::KDELibs4Support)
+target_link_libraries(calligrasheetsodf
+    PUBLIC
+        komain
+        KF5::KDELibs4Support
+    PRIVATE
+        koplugin
+)
 
 set_target_properties(calligrasheetsodf PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -331,17 +336,20 @@ generate_export_header(calligrasheetscommon
 )
 
 target_link_libraries(calligrasheetscommon
-    komain
-    calligrasheetsodf
-    KF5::SonnetCore
-    KF5::SonnetUi
-    KF5::NotifyConfig
+    PUBLIC
+        komain
+        calligrasheetsodf
+    PRIVATE
+        koplugin
+        KF5::SonnetCore
+        KF5::SonnetUi
+        KF5::NotifyConfig
+        KF5::KCMUtils
 )
 if(Qt5Sql_FOUND)
-    target_link_libraries(calligrasheetscommon Qt5::Sql)
+    target_link_libraries(calligrasheetscommon PRIVATE Qt5::Sql)
 endif()
 
-target_link_libraries(calligrasheetscommon LINK_INTERFACE_LIBRARIES komain calligrasheetsodf )
 
 set_target_properties(calligrasheetscommon PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -357,17 +365,17 @@ kcoreaddons_desktop_to_json(calligrasheetspart sheetspart.desktop)
 
 target_link_libraries(calligrasheetspart calligrasheetscommon )
 
-install(TARGETS calligrasheetspart  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligrasheetspart  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)
 
 ########### install files ###############
 
 install( FILES  sheets.rc sheets_readonly.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/sheets)
 install( FILES  ui/CellToolOptionWidgets.xml DESTINATION ${DATA_INSTALL_DIR}/sheets)
 install( FILES  sheets.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
-install( FILES  sheets_plugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
-install( FILES  sheets_viewplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 install( FILES  sheetsrc DESTINATION ${CONFIG_INSTALL_DIR})
 
+# TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended
+# propertiessheets_plugin.desktop, sheets_viewplugin.desktop
 
 install( FILES
     sheets_odf_export.h

@@ -76,8 +76,8 @@ StyleManager::StyleManager(QWidget *parent)
     widget.paragraphStylesListView->setModel(m_paragraphProxyModel);
     widget.characterStylesListView->setModel(m_characterProxyModel);
 
-    connect(widget.paragraphStylesListView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotParagraphStyleSelected(QModelIndex)));
-    connect(widget.characterStylesListView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotCharacterStyleSelected(QModelIndex)));
+    connect(widget.paragraphStylesListView, SIGNAL(clicked(QModelIndex)), this, SLOT(slotParagraphStyleSelected(QModelIndex)));
+    connect(widget.characterStylesListView, SIGNAL(clicked(QModelIndex)), this, SLOT(slotCharacterStyleSelected(QModelIndex)));
 
     connect(widget.bNew, SIGNAL(pressed()), this, SLOT(buttonNewPressed()));
     //connect(widget.bDelete, SIGNAL(pressed()), this, SLOT(buttonDeletePressed()));

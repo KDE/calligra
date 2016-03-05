@@ -2401,7 +2401,7 @@ qreal AbstractAlgorithm::defaultValue(const QString& type, const QMap<QString, q
 //         } else if (type == "bMarg") {
 //             Q_ASSERT(values.contains("primFontSz"));
 //             value = values.value("primFontSz") * 0.60;
-        } else if (type.startsWith("user")) { // userA, userB, userC, etc.
+        } else if (type.startsWith(QLatin1String("user"))) { // userA, userB, userC, etc.
             bool ok;
             const qreal v = layout()->variable(type, true /* checkParents */).toDouble(&ok);
             value = ok ? v : 0.0;

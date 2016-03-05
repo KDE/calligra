@@ -173,7 +173,8 @@ void ShapeShearStrategy::paint( QPainter &painter, const KoViewConverter &conver
 }
 
 KUndo2Command* ShapeShearStrategy::createCommand() {
-    QList<QTransform> newTransforms;
+    QVector<QTransform> newTransforms;
+    newTransforms.reserve(m_selectedShapes.count());
     foreach( KoShape* shape, m_selectedShapes )
         newTransforms << shape->transformation();
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, newTransforms );

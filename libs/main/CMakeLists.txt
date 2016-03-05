@@ -92,19 +92,20 @@ generate_export_header(komain
     )
 
 target_link_libraries(komain
-PUBLIC
-    kowidgets
-    kotextlayout
-    koversion
-PRIVATE
-    KF5::Notifications
-    KF5::ItemViews
-    KF5::KIOFileWidgets
-    KF5::IconThemes
-    KF5::DBusAddons
+    PUBLIC
+        kowidgets
+        kotextlayout
+        koversion
+    PRIVATE
+        koplugin
+        KF5::Notifications
+        KF5::ItemViews
+        KF5::KIOFileWidgets
+        KF5::IconThemes
+        KF5::DBusAddons
 )
 
-if( KF5_Activities_FOUND )
+if( KF5Activities_FOUND )
     target_link_libraries(komain PRIVATE KF5::Activities)
 endif()
 
@@ -119,7 +120,9 @@ install(TARGETS komain ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 ########### install files ###############
 
-install(FILES calligradocker.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
+# TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
+# calligradocker.desktop
+
 install(FILES calligra_shell.rc DESTINATION ${DATA_INSTALL_DIR}/calligra )
 
 if (APPLE)

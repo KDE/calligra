@@ -10,4 +10,4 @@ target_link_libraries(calligradocinfopropspage  KF5::KIOWidgets kowidgets)
 
 install(TARGETS calligradocinfopropspage DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install(FILES calligradocinfopropspage.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install(FILES calligradocinfopropspage.desktop DESTINATION ${SERVICES_INSTALL_DIR})

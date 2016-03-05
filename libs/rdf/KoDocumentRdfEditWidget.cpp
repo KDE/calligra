@@ -30,7 +30,7 @@
 // main
 #include <KoDocument.h>
 #include <KoIcon.h>
-// KDE
+// KF5
 #include <kdebug.h>
 #include <kmenu.h>
 #include <kmessagebox.h>
@@ -281,8 +281,8 @@ KoDocumentRdfEditWidget::KoDocumentRdfEditWidget( KoDocumentRdf *docRdf)
     connect(d->m_ui->newNamespaceButton, SIGNAL(clicked()), this, SLOT(addNamespace()));
     connect(d->m_ui->deleteNamespaceButton, SIGNAL(clicked()), this, SLOT(deleteNamespace()));
     d->m_ui->m_semanticView->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(d->m_ui->m_semanticView, SIGNAL(customContextMenuRequested(const QPoint &)),
-            this, SLOT(showSemanticViewContextMenu(const QPoint &)));
+    connect(d->m_ui->m_semanticView, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(showSemanticViewContextMenu(QPoint)));
     connect(d->m_ui->m_sparqlExecute, SIGNAL(clicked()), this, SLOT(sparqlExecute()));
 
     connect(docRdf, SIGNAL(semanticObjectUpdated(hKoRdfBasicSemanticItem)),

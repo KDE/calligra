@@ -177,8 +177,8 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
 
     QStatusBar * sb = statusBar();
     if (sb) { // No statusbar in e.g. konqueror
-        connect(d->document, SIGNAL(statusBarMessage(const QString&)),
-                this, SLOT(slotActionStatusText(const QString&)));
+        connect(d->document, SIGNAL(statusBarMessage(QString)),
+                this, SLOT(slotActionStatusText(QString)));
         connect(d->document, SIGNAL(clearStatusBarMessage()),
                 this, SLOT(slotClearStatusText()));
     }
@@ -226,7 +226,7 @@ void KoView::dragEnterEvent(QDragEnterEvent *event)
 void KoView::dropEvent(QDropEvent *event)
 {
     // we can drop a list of urls from, for instance dolphin
-    QList<QImage> images;
+    QVector<QImage> images;
 
     if (event->mimeData()->hasImage()) {
         QImage image = event->mimeData()->imageData().value<QImage>();
@@ -266,7 +266,7 @@ void KoView::dropEvent(QDropEvent *event)
 }
 
 
-void KoView::addImages(const QList<QImage> &, const QPoint &)
+void KoView::addImages(const QVector<QImage> &, const QPoint &)
 {
     // override in your application
 }
@@ -339,7 +339,7 @@ void KoView::setupGlobalActions()
     actionCollection()->addAction("edit_redo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::RED0));
 
     d->actionAuthor  = new KSelectAction(koIcon("user-identity"), i18n("Active Author Profile"), this);
-    connect(d->actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));
+    connect(d->actionAuthor, SIGNAL(triggered(QString)), this, SLOT(changeAuthorProfile(QString)));
     actionCollection()->addAction("settings_active_author", d->actionAuthor);
 
     slotUpdateAuthorProfileActions();

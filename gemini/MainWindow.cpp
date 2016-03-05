@@ -65,7 +65,6 @@
 #include <KoAbstractGradient.h>
 #include <KoZoomController.h>
 #include <KoFileDialog.h>
-#include <KoJsonTrader.h>
 #include <KoDialog.h>
 #include <KoIcon.h>
 

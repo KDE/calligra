@@ -85,7 +85,7 @@ KoPointerEvent::KoPointerEvent(QTabletEvent *ev, const QPointF &pnt)
     d->tabletEvent = ev;
 }
 
-KoPointerEvent::KoPointerEvent(QTouchEvent *ev, const QPointF &pnt, QList<KoTouchPoint> _touchPoints)
+KoPointerEvent::KoPointerEvent(QTouchEvent *ev, const QPointF &pnt, const QVector<KoTouchPoint> &_touchPoints)
     : point (pnt)
     , touchPoints(_touchPoints)
     , m_event(ev)

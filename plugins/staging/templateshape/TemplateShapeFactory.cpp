@@ -24,7 +24,7 @@
 // Qt
 #include <QList>
 
-// KDE
+// KF5
 #include <klocalizedstring.h>
 #include <kdebug.h>
 

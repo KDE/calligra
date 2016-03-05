@@ -404,7 +404,7 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
                     result = filterEffect->processImage(imageBuffers.value(input), renderContext);
                 }
             } else {
-                QList<QImage> inputImages;
+                QVector<QImage> inputImages;
                 foreach(const QString &input, filterEffect->inputs()) {
                     QImage image = imageBuffers.value(input);
                     if (!image.isNull())

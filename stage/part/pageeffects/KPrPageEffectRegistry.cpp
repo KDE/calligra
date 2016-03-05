@@ -104,9 +104,7 @@ void KPrPageEffectRegistry::init()
     config.group = "stage";
 
     // The plugins are responsible for adding a factory to the registry
-    KoPluginLoader::instance()->load( QString::fromLatin1("CalligraStage/PageEffect"),
-            QString::fromLatin1("[X-KPresenter-Version] == 28"),
-            config);
+    KoPluginLoader::load(QStringLiteral("calligrastage/pageeffects"), config);
 
     QList<KPrPageEffectFactory*> factories = values();
 

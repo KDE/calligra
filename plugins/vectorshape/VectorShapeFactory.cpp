@@ -80,7 +80,7 @@ bool VectorShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext 
                 mimetype.isEmpty() ||
                 // next for compatibility with OO/LO and our filters
                 // see drwho.virtadpt.net%2Ffiles%2FNOVALUG-Tor.odp
-                mimetype.startsWith("application/x-openoffice");
+                mimetype.startsWith(QLatin1String("application/x-openoffice"));
         }
         return true;
     }

@@ -28,7 +28,7 @@
 #include <KoOdf.h>
 #include <KoStore.h>
 #include <KoFilterChain.h>
-// KDE
+// KF5
 #include <kpluginfactory.h>
 // Qt
 #include <QFile>

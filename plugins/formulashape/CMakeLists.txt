@@ -74,7 +74,12 @@ install(TARGETS koformula ${INSTALL_TARGETS_DEFAULT_ARGS})
 find_package(Cauchy)
 
 macro_optional_find_package(Cauchy)
-macro_log_feature(M2MML_FOUND "Cauchy's M2MML" "Matlab/Octave to MathML compiler" "https://bitbucket.org/cyrille/cauchy" FALSE "" "Required for the matlab/octave formula tool")
+set_package_properties(Cauchy PROPERTIES
+    DESCRIPTION "Cauchy's M2MML, a Matlab/Octave to MathML compiler"
+    URL "https://bitbucket.org/cyrille/cauchy"
+    PURPOSE "Required for the matlab/octave formula tool"
+    TYPE OPTIONAL
+)
 
 if(M2MML_FOUND)
     set(M2MML_TOOL_LIBRARIES ${M2MML_LIBRARY})
@@ -116,7 +121,7 @@ target_link_libraries(calligra_shape_formular koformula ${M2MML_TOOL_LIBRARIES})
 
 
 #set_target_properties(koformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
-install(TARGETS calligra_shape_formular  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_formular  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
 
 add_subdirectory( pics ) 
 add_subdirectory( fonts ) 

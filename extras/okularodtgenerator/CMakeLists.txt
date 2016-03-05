@@ -10,12 +10,12 @@ add_library( kookularGenerator_odt SHARED ${kookularGenerator_odt_SRCS})
 generate_export_header(kookularGenerator_odt)
 
 target_link_libraries(kookularGenerator_odt
-PUBLIC
-    Okular::Core
-PRIVATE
-    komain
-    kotextlayout
-    wordsprivate
+    PUBLIC
+        Okular::Core
+    PRIVATE
+        komain
+        kotextlayout
+        wordsprivate
 )
 
 set_target_properties(kookularGenerator_odt PROPERTIES

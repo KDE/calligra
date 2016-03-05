@@ -27,8 +27,8 @@
 
 #include <KoCanvasController.h>
 
-#include <QtCore/QSize>
-#include <QtCore/QPoint>
+#include <QSize>
+#include <QPoint>
 
 class KoCanvasBase;
 namespace Calligra {

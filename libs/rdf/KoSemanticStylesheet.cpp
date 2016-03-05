@@ -24,7 +24,7 @@
 #include <KoDocument.h>
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
-// KDE
+// KF5
 #include <kdebug.h>
 // Qt
 #include <QCoreApplication>

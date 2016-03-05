@@ -20,9 +20,11 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 // flake
 #include "KoToolManager.h"
 #include "KoToolManager_p.h"
+
 #include "KoToolRegistry.h"
 #include "KoToolProxy.h"
 #include "KoToolProxy_p.h"
@@ -40,8 +42,13 @@
 #include "tools/KoCreateShapesTool.h"
 #include "tools/KoZoomTool.h"
 #include "tools/KoPanTool.h"
+#include "FlakeDebug.h"
 
-// Qt + kde
+// KF5
+#include <KActionCollection>
+#include <KLocalizedString>
+
+// Qt
 #include <QWidget>
 #include <QEvent>
 #include <QWheelEvent>
@@ -52,11 +59,7 @@
 #include <QVBoxLayout>
 #include <QStringList>
 #include <QApplication>
-#include <kactioncollection.h>
-#include <FlakeDebug.h>
-
 #include <QAction>
-#include <klocalizedstring.h>
 #include <QKeySequence>
 #include <QStack>
 #include <QLabel>
@@ -310,15 +313,15 @@ void KoToolManager::Private::setup()
 void KoToolManager::Private::connectActiveTool()
 {
     if (canvasData->activeTool) {
-        connect(canvasData->activeTool, SIGNAL(cursorChanged(const QCursor &)),
-                q, SLOT(updateCursor(const QCursor &)));
-        connect(canvasData->activeTool, SIGNAL(activateTool(const QString &)),
-                q, SLOT(switchToolRequested(const QString &)));
-        connect(canvasData->activeTool, SIGNAL(activateTemporary(const QString &)),
-                q, SLOT(switchToolTemporaryRequested(const QString &)));
+        connect(canvasData->activeTool, SIGNAL(cursorChanged(QCursor)),
+                q, SLOT(updateCursor(QCursor)));
+        connect(canvasData->activeTool, SIGNAL(activateTool(QString)),
+                q, SLOT(switchToolRequested(QString)));
+        connect(canvasData->activeTool, SIGNAL(activateTemporary(QString)),
+                q, SLOT(switchToolTemporaryRequested(QString)));
         connect(canvasData->activeTool, SIGNAL(done()), q, SLOT(switchBackRequested()));
-        connect(canvasData->activeTool, SIGNAL(statusTextChanged(const QString &)),
-                q, SIGNAL(changedStatusText(const QString &)));
+        connect(canvasData->activeTool, SIGNAL(statusTextChanged(QString)),
+                q, SIGNAL(changedStatusText(QString)));
     }
 
     // we expect the tool to emit a cursor on activation.
@@ -332,15 +335,15 @@ void KoToolManager::Private::disconnectActiveTool()
         // repaint the decorations before we deactivate the tool as it might deleted
         // data needed for the repaint
         canvasData->activeTool->deactivate();
-        disconnect(canvasData->activeTool, SIGNAL(cursorChanged(const QCursor&)),
-                   q, SLOT(updateCursor(const QCursor&)));
-        disconnect(canvasData->activeTool, SIGNAL(activateTool(const QString &)),
-                   q, SLOT(switchToolRequested(const QString &)));
-        disconnect(canvasData->activeTool, SIGNAL(activateTemporary(const QString &)),
-                   q, SLOT(switchToolTemporaryRequested(const QString &)));
+        disconnect(canvasData->activeTool, SIGNAL(cursorChanged(QCursor)),
+                   q, SLOT(updateCursor(QCursor)));
+        disconnect(canvasData->activeTool, SIGNAL(activateTool(QString)),
+                   q, SLOT(switchToolRequested(QString)));
+        disconnect(canvasData->activeTool, SIGNAL(activateTemporary(QString)),
+                   q, SLOT(switchToolTemporaryRequested(QString)));
         disconnect(canvasData->activeTool, SIGNAL(done()), q, SLOT(switchBackRequested()));
-        disconnect(canvasData->activeTool, SIGNAL(statusTextChanged(const QString &)),
-                   q, SIGNAL(changedStatusText(const QString &)));
+        disconnect(canvasData->activeTool, SIGNAL(statusTextChanged(QString)),
+                   q, SIGNAL(changedStatusText(QString)));
     }
 
     // emit a empty status text to clear status text from last active tool
@@ -811,8 +814,8 @@ KoToolManager::KoToolManager()
     : QObject(),
     d(new Private(this))
 {
-    connect(QApplication::instance(), SIGNAL(focusChanged(QWidget*, QWidget*)),
-            this, SLOT(movedFocus(QWidget*, QWidget*)));
+    connect(QApplication::instance(), SIGNAL(focusChanged(QWidget*,QWidget*)),
+            this, SLOT(movedFocus(QWidget*,QWidget*)));
 }
 
 KoToolManager::~KoToolManager()

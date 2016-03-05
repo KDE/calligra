@@ -104,15 +104,15 @@ void KPrPredefinedAnimationsLoader::loadDefaultAnimations()
     m_isInitialized = true;
 
     // Initialize animation class lists
-    QList<KPrCollectionItem> entranceList;
-    QList<KPrCollectionItem> emphasisList;
-    QList<KPrCollectionItem> exitList;
-    QList<KPrCollectionItem> customList;
-    QList<KPrCollectionItem> motion_PathList;
-    QList<KPrCollectionItem> ole_ActionList;
-    QList<KPrCollectionItem> media_CallList;
+    QVector<KPrCollectionItem> entranceList;
+    QVector<KPrCollectionItem> emphasisList;
+    QVector<KPrCollectionItem> exitList;
+    QVector<KPrCollectionItem> customList;
+    QVector<KPrCollectionItem> motion_PathList;
+    QVector<KPrCollectionItem> ole_ActionList;
+    QVector<KPrCollectionItem> media_CallList;
 
-    QMap<QString, QList<KPrCollectionItem> > subModelList;
+    QMap<QString, QVector<KPrCollectionItem> > subModelList;
     int row = -1;
     foreach(KPrShapeAnimation *animation, m_animations) {
         row++;
@@ -121,8 +121,7 @@ void KPrPredefinedAnimationsLoader::loadDefaultAnimations()
         // Check if this animation has sub types (and add them to the sub model list)
         if (!animation->presetSubType().isEmpty()) {
             if (!subModelList.contains(animId)) {
-                QList<KPrCollectionItem> tempList = QList<KPrCollectionItem>();
-                subModelList.insert(animId, tempList);
+                subModelList.insert(animId, QVector<KPrCollectionItem>());
                 isSubItem = false;
             }
             KPrCollectionItem subItem;
@@ -212,7 +211,7 @@ void KPrPredefinedAnimationsLoader::loadDefaultAnimations()
 
     // Create models for subtypes and populate them using sub model list
     if (!subModelList.isEmpty()) {
-        QMap<QString, QList<KPrCollectionItem> >::const_iterator i;
+        QMap<QString, QVector<KPrCollectionItem> >::const_iterator i;
         for (i = subModelList.constBegin(); i != subModelList.constEnd(); ++i) {
             model = new KPrCollectionItemModel(this);
             model->setAnimationClassList(i.value());

@@ -226,6 +226,7 @@ target_link_libraries(flake
         koodf
         kundo2
     PRIVATE
+        koplugin
         KF5::IconThemes
         Qt5::Svg
 )
@@ -237,15 +238,14 @@ set_target_properties(flake PROPERTIES
 ########### install files ###############
 
 install(TARGETS flake  ${INSTALL_TARGETS_DEFAULT_ARGS})
-install( FILES
-    flake.desktop
-    flaketool.desktop
-    flakeshape.desktop
-    flakedevice.desktop
-    presentationeventaction.desktop
-    scripteventaction.desktop
-    filtereffect.desktop
-    DESTINATION ${SERVICETYPES_INSTALL_DIR})
+# TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
+#     flake.desktop
+#     flaketool.desktop
+#     flakeshape.desktop
+#     flakedevice.desktop
+#     presentationeventaction.desktop
+#     scripteventaction.desktop
+#     filtereffect.desktop
 
 install(
     FILES

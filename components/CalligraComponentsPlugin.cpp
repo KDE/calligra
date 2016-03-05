@@ -22,8 +22,6 @@
 
 #include "CalligraComponentsPlugin.h"
 
-#include <QtQml/QtQml>
-
 #include "Document.h"
 #include "View.h"
 #include "Global.h"

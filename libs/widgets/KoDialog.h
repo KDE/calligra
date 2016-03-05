@@ -103,9 +103,9 @@ class KoDialogPrivate;
  *
  *   FooWidget *widget = new FooWidget( dialog );
  *   dialog->setMainWidget( widget );
- *   connect( dialog, SIGNAL( applyClicked() ), widget, SLOT( save() ) );
- *   connect( dialog, SIGNAL( okClicked() ), widget, SLOT( save() ) );
- *   connect( widget, SIGNAL( changed( bool ) ), dialog, SLOT( enableButtonApply( bool ) ) );
+ *   connect( dialog, SIGNAL(applyClicked()), widget, SLOT(save()) );
+ *   connect( dialog, SIGNAL(okClicked()), widget, SLOT(save()) );
+ *   connect( widget, SIGNAL(changed(bool)), dialog, SLOT(enableButtonApply(bool)) );
  *
  *   dialog->enableButtonApply( false );
  *   dialog->show();

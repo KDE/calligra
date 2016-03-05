@@ -37,7 +37,7 @@
 #include "KoAutoSaveRecoveryDialog.h"
 #include <KoDpi.h>
 #include "KoPart.h"
-#include <KoJsonTrader.h>
+#include <KoPluginLoader.h>
 #include <KoConfig.h>
 #include <KoResourcePaths.h>
 #include <KoComponentData.h>
@@ -255,7 +255,7 @@ bool KoApplication::start()
 
     // Find the part component file corresponding to the application instance name
     KoDocumentEntry entry;
-    Q_FOREACH (QPluginLoader *loader, KoJsonTrader::self()->query("Calligra/Part", d->nativeMimeType)) {
+    Q_FOREACH (QPluginLoader *loader, KoPluginLoader::pluginLoaders("calligra/parts", d->nativeMimeType)) {
         if (loader->fileName().contains(applicationName()+QString("part"))) {
             entry = KoDocumentEntry(loader);
             break;
@@ -332,12 +332,12 @@ bool KoApplication::start()
         filters << QString(".%1-%2-%3-autosave%4").arg(part->componentData().componentName()).arg("*").arg("*").arg(extension);
 
 #ifdef Q_OS_WIN
-        QDir dir = QDir::tempPath();
+        QDir autosaveDir = QDir::tempPath();
 #else
-        QDir dir = QDir::home();
+        QDir autosaveDir = QDir::home();
 #endif
         // all autosave files for our application
-        autoSaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
+        autoSaveFiles = autosaveDir.entryList(filters, QDir::Files | QDir::Hidden);
 
         QStringList pids;
         QString ourPid;
@@ -360,7 +360,7 @@ bool KoApplication::start()
 
         // remove the autosave files that are saved for other, open instances of ourselves
         foreach(const QString &autoSaveFileName, autoSaveFiles) {
-            if (!QFile::exists(QDir::homePath() + "/" + autoSaveFileName)) {
+            if (!QFile::exists(autosaveDir.absolutePath() + QDir::separator() + autoSaveFileName)) {
                 autoSaveFiles.removeAll(autoSaveFileName);
                 continue;
             }
@@ -378,10 +378,10 @@ bool KoApplication::start()
             KoAutoSaveRecoveryDialog dlg(autoSaveFiles);
             if (dlg.exec() == QDialog::Accepted) {
                 QStringList filesToRecover = dlg.recoverableFiles();
-                foreach (const QString &autosaveFile, autoSaveFiles) {
-                    if (!filesToRecover.contains(autosaveFile)) {
+                foreach (const QString &autoSaveFileName, autoSaveFiles) {
+                    if (!filesToRecover.contains(autoSaveFileName)) {
                         // remove the files the user didn't want to recover
-                        QFile::remove(QDir::homePath() + "/" + autosaveFile);
+                        QFile::remove(autosaveDir.absolutePath() + QDir::separator() + autoSaveFileName);
                     }
                 }
                 autoSaveFiles = filesToRecover;
@@ -394,12 +394,12 @@ bool KoApplication::start()
 
         if (autoSaveFiles.size() > 0) {
             short int numberOfOpenDocuments = 0; // number of documents open
-            QUrl url;
             // bah, we need to re-use the document that was already created
-            url.setPath(QDir::homePath() + "/" + autoSaveFiles.takeFirst());
+            QUrl url = QUrl::fromLocalFile(autosaveDir.absolutePath() + QDir::separator() + autoSaveFiles.takeFirst());
             if (mainWindow->openDocument(part, url)) {
                 doc->resetURL();
                 doc->setModified(true);
+                // TODO: what if the app crashes immediately, before another autosave was made? better keep & rename
                 QFile::remove(url.toLocalFile());
                 numberOfOpenDocuments++;
             }
@@ -412,13 +412,14 @@ bool KoApplication::start()
                 KoPart *part = entry.createKoPart(&errorMsg);
                 d->partList << part;
                 if (part) {
-                    url.setPath(QDir::homePath() + "/" + autoSaveFile);
+                    url = QUrl::fromLocalFile(autosaveDir.absolutePath() + QDir::separator() + autoSaveFile);
 
                     KoMainWindow *mainWindow = part->createMainWindow();
                     mainWindow->show();
                     if (mainWindow->openDocument(part, url)) {
                         doc->resetURL();
                         doc->setModified(true);
+                        // TODO: what if the app crashes immediately, before another autosave was made? better keep & rename
                         QFile::remove(url.toLocalFile());
                         numberOfOpenDocuments++;
                     }

@@ -24,7 +24,7 @@
 // Qt
 #include <QPainter>
 
-// KDE
+// KF5
 #include <kdebug.h>
 
 // Calligra

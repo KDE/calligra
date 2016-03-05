@@ -63,7 +63,7 @@ void KPrPlaceholders::setLayout( KPrPageLayout * layout, KoPADocument * document
     Q_ASSERT( !shapes.isEmpty() );
     KoShapeLayer * layer = dynamic_cast<KoShapeLayer*>( shapes[0] );
 
-    QMap<QString, QList<QRectF> > placeholders;
+    QMap<QString, QVector<QRectF> > placeholders;
     if ( layout ) {
         foreach ( KPrPlaceholder * placeholder, layout->placeholders() ) {
             placeholders[placeholder->presentationObject()].append( placeholder->rect( pageSize ) );
@@ -75,7 +75,7 @@ void KPrPlaceholders::setLayout( KPrPageLayout * layout, KoPADocument * document
     while ( it != m_placeholders.end() ) {
         Placeholders::iterator next( it );
         ++next;
-        QMap<QString, QList<QRectF> >::iterator itPlaceholder( placeholders.find( it->presentationClass ) );
+        QMap<QString, QVector<QRectF> >::iterator itPlaceholder( placeholders.find( it->presentationClass ) );
         // modify existing placeholders to get the position and size defined in the new layout
         if ( itPlaceholder != placeholders.end() && !itPlaceholder.value().isEmpty() ) {
             QRectF rect = itPlaceholder.value().takeFirst();
@@ -84,10 +84,10 @@ void KPrPlaceholders::setLayout( KPrPageLayout * layout, KoPADocument * document
             }
             // replace the shape as given by the layout
             QList<KoShape *> modifiedShape;
-            QList<QSizeF> oldSize;
-            QList<QSizeF> newSize;
-            QList<QPointF> oldPosition;
-            QList<QPointF> newPosition;
+            QVector<QSizeF> oldSize;
+            QVector<QSizeF> newSize;
+            QVector<QPointF> oldPosition;
+            QVector<QPointF> newPosition;
             modifiedShape.append( it->shape );
             oldSize.append( it->shape->size() );
             newSize.append( rect.size() );
@@ -110,10 +110,10 @@ void KPrPlaceholders::setLayout( KPrPageLayout * layout, KoPADocument * document
     }
 
     // add placeholder shapes for all available positions
-    QMap<QString, QList<QRectF> >::const_iterator itPlaceholder( placeholders.constBegin() );
+    QMap<QString, QVector<QRectF> >::const_iterator itPlaceholder( placeholders.constBegin() );
     for ( ; itPlaceholder != placeholders.constEnd(); ++itPlaceholder ) {
-        const QList<QRectF> & list( itPlaceholder.value() );
-        QList<QRectF>::const_iterator listIt( list.begin() );
+        const QVector<QRectF> & list( itPlaceholder.value() );
+        QVector<QRectF>::const_iterator listIt( list.begin() );
         for ( ; listIt != list.end(); ++listIt ) {
              KPrPlaceholderShape * shape = new KPrPlaceholderShape( itPlaceholder.key() );
              shape->initStrategy(document->resourceManager());

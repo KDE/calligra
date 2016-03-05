@@ -16,4 +16,4 @@ kcoreaddons_desktop_to_json(plankplatoimport plan_kplato_import.desktop)
 
 target_link_libraries(plankplatoimport planprivate kplatokernel komain)
 
-install(TARGETS plankplatoimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS plankplatoimport  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)

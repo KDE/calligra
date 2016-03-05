@@ -25,7 +25,7 @@ Boston, MA 02110-1301, USA
 
 #include <KoIcon.h>
 
-//KDE includes:
+// KF5
 #include <kmessagebox.h>
 
 //QT includes

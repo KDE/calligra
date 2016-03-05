@@ -5,7 +5,7 @@
 #ifndef DROPBOXPLUGIN_H
 #define DROPBOXPLUGIN_H
 
-#include <QtQml/QQmlExtensionPlugin>
+#include <QQmlExtensionPlugin>
 
 class DropboxPlugin : public QQmlExtensionPlugin
 {

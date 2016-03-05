@@ -32,9 +32,9 @@ KWViewModeNormal::KWViewModeNormal()
 {
 }
 
-QList<KWViewMode::ViewMap> KWViewModeNormal::mapExposedRects(const QRectF &viewRect, KoViewConverter *viewConverter) const
+QVector<KWViewMode::ViewMap> KWViewModeNormal::mapExposedRects(const QRectF &viewRect, KoViewConverter *viewConverter) const
 {
-    QList<ViewMap> answer;
+    QVector<ViewMap> answer;
     if (!viewConverter) return answer;
 
 #if 1

@@ -19,4 +19,4 @@ target_link_libraries(calligra_textediting_changecase
     kowidgets
 )
 
-install(TARGETS calligra_textediting_changecase DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_textediting_changecase DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/textediting)

@@ -20,4 +20,4 @@ kcoreaddons_desktop_to_json(calligra_filter_qpro2sheets calligra_filter_qpro2she
 
 target_link_libraries(calligra_filter_qpro2sheets calligrasheetscommon)
 
-install(TARGETS calligra_filter_qpro2sheets  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_qpro2sheets  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)

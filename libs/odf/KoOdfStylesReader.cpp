@@ -209,7 +209,7 @@ void KoOdfStylesReader::insertOfficeStyles(const KoXmlElement& styles)
                     localName == "conicalGradient"))
             ) {
             QString drawType = localName;
-            if (drawType.endsWith("Gradient")) {
+            if (drawType.endsWith(QLatin1String("Gradient"))) {
                 drawType = "gradient";
             }
             const QString name = e.attributeNS(KoXmlNS::draw, "name", QString());

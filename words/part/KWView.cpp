@@ -22,6 +22,7 @@
 // words includes
 #define  SHOW_ANNOTATIONS 1
 #include "KWView.h"
+
 #include "KWGui.h"
 #include "KWDocument.h"
 #include "KWCanvas.h"
@@ -40,6 +41,7 @@
 #include "commands/KWShapeCreateCommand.h"
 #include "ui_KWInsertImage.h"
 #include "gemini/ViewModeSwitchEvent.h"
+#include "WordsDebug.h"
 
 // calligra libs includes
 #include <KoShapeCreateCommand.h>
@@ -95,21 +97,21 @@
 #include <KoTextLayoutRootArea.h>
 #include <KoIcon.h>
 
-// KDE + Qt includes
+// KF5
+#include <klocalizedstring.h>
+#include <ktoggleaction.h>
+#include <kactioncollection.h>
+#include <kactionmenu.h>
+#include <kxmlguifactory.h>
+#include <ktoolbar.h>
+
+// Qt
 #include <QTimer>
 #include <QScrollBar>
 #include <QStatusBar>
 #include <QPushButton>
 #include <QClipboard>
 #include <QMenuBar>
-
-#include <klocalizedstring.h>
-#include <WordsDebug.h>
-#include <ktoggleaction.h>
-#include <kactioncollection.h>
-#include <kactionmenu.h>
-#include <kxmlguifactory.h>
-#include <ktoolbar.h>
 
 #include <limits>
 
@@ -158,8 +160,8 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     connect(m_find, SIGNAL(matchFound(KoFindMatch)), this, SLOT(findMatchFound(KoFindMatch)));
     connect(m_find, SIGNAL(updateCanvas()), m_canvas, SLOT(update()));
     // The text documents to search in will potentially change when we add/remove shapes and after load
-    connect(m_document, SIGNAL(shapeAdded(KoShape *, KoShapeManager::Repaint)), this, SLOT(refreshFindTexts()));
-    connect(m_document, SIGNAL(shapeRemoved(KoShape *)), this, SLOT(refreshFindTexts()));
+    connect(m_document, SIGNAL(shapeAdded(KoShape*,KoShapeManager::Repaint)), this, SLOT(refreshFindTexts()));
+    connect(m_document, SIGNAL(shapeRemoved(KoShape*)), this, SLOT(refreshFindTexts()));
 
 
     refreshFindTexts();
@@ -182,10 +184,10 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     if (m_canvas->viewMode()->hasPages())
         modes |= KoZoomMode::ZOOM_PAGE;
     m_zoomController->zoomAction()->setZoomModes(modes);
-    connect(m_canvas, SIGNAL(documentSize(const QSizeF &)), m_zoomController, SLOT(setDocumentSize(const QSizeF&)));
+    connect(m_canvas, SIGNAL(documentSize(QSizeF)), m_zoomController, SLOT(setDocumentSize(QSizeF)));
     m_canvas->updateSize(); // to emit the doc size at least once
     m_zoomController->setZoom(m_document->config().zoomMode(), m_document->config().zoom() / 100.);
-    connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), this, SLOT(zoomChanged(KoZoomMode::Mode, qreal)));
+    connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), this, SLOT(zoomChanged(KoZoomMode::Mode,qreal)));
 
     //Timer start in Distraction-Free mode view.
     m_hideCursorTimer = new QTimer(this);
@@ -490,7 +492,7 @@ void KWView::pasteRequested()
     QImage img = QApplication::clipboard()->image();
 
     if (!img.isNull()) {
-        QList<QImage> images;
+        QVector<QImage> images;
         images.append(img);
         addImages(images, canvas()->mapFromGlobal(QCursor::pos()));
     }
@@ -1062,7 +1064,7 @@ void KWView::refreshFindTexts()
     m_find->setDocuments(texts);
 }
 
-void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
+void KWView::addImages(const QVector<QImage> &imageList, const QPoint &insertAt)
 {
     if (!m_canvas) {
         // no canvas because we're not on the desktop?
