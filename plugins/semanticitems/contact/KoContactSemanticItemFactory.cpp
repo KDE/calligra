@@ -23,7 +23,7 @@
 
 // plugin
 #include "KoRdfFoaF.h"
-// KDE
+// KF5
 #include <kdebug.h>
 #include <klocalizedstring.h>
 // Qt

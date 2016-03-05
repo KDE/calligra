@@ -29,10 +29,6 @@ target_link_libraries(
     KF5::ItemViews
     KF5::CoreAddons
     )
-install(TARGETS braindump_shape_state DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS braindump_shape_state DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
 
 kcoreaddons_desktop_to_json(braindump_shape_state braindump_shape_state.desktop)
-
-########### install files ###############
-
-install( FILES braindump_shape_state.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

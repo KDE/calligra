@@ -22,11 +22,11 @@
 
 #include "View.h"
 
-#include <QtCore/QTimer>
-#include <QtGui/QPainter>
-#include <QtQuick/QQuickWindow>
-#include <QtWidgets/QGraphicsWidget>
-#include <QtWidgets/QStyleOptionGraphicsItem>
+#include <QTimer>
+#include <QPainter>
+#include <QQuickWindow>
+#include <QGraphicsWidget>
+#include <QStyleOptionGraphicsItem>
 
 #include "Document.h"
 #include <KoCanvasController.h>

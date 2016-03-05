@@ -149,7 +149,7 @@ private:
     int m_textCursor;
     QTimer m_blinkingCursor;
     bool m_showCursor;
-    QList<QPointF> m_linefeedPositions; ///< offset positions for temporary line feeds
+    QVector<QPointF> m_linefeedPositions; ///< offset positions for temporary line feeds
     KoInteractionStrategy *m_currentStrategy;
 };
 

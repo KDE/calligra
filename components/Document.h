@@ -24,7 +24,7 @@
 #ifndef CALLIGRA_COMPONENTS_DOCUMENT_H
 #define CALLIGRA_COMPONENTS_DOCUMENT_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 #include "Global.h"
 

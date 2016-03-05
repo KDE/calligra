@@ -44,7 +44,7 @@ public:
     /// Returns if given handle is connected to a shape
     bool handleConnected(int handleId) const;
 
-    QList<QPointF> path;
+    QVector<QPointF> path;
 
     KoShape *shape1;
     KoShape *shape2;

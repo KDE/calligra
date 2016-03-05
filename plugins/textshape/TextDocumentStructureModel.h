@@ -1,6 +1,6 @@
 /* This file is part of the Calligra project, made within the KDE community.
  *
- * Copyright (C) 2013 Friedrich W. H. Kossebau <friedrich@kogmbh.com>
+ * Copyright (C) 2013,2016 Friedrich W. H. Kossebau <friedrich@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,19 +29,33 @@
 class QTextDocument;
 class QTextFrame;
 class QTextBlock;
+class QTextLine;
 
 struct NodeData
 {
-    enum Type {Frame, Block};
+    enum Type {Frame, Block, Line};
 
     Type type;
     union {
         QTextFrame *frame;
         int blockNumber;
     };
+    int lineNumber;
+
     static NodeData fromFrame(QTextFrame *frame);
     static NodeData fromBlock(int blockNumber);
+    static NodeData fromLine(int blockNumber, int lineNumber);
 };
+Q_DECLARE_TYPEINFO(NodeData, Q_MOVABLE_TYPE);
+
+struct BlockData
+{
+    explicit BlockData(int _nodeIndex) : nodeIndex(_nodeIndex) {}
+
+    int nodeIndex;
+    QHash<int, int> lineNumberTable;
+};
+Q_DECLARE_TYPEINFO(BlockData, Q_MOVABLE_TYPE);
 
 
 class TextDocumentStructureModel : public QAbstractItemModel
@@ -73,6 +87,7 @@ private Q_SLOTS:
     void onModelReset();
 
 private:
+    int lineIndex(const QTextBlock &block, const QTextLine &line) const;
     int blockIndex(const QTextBlock &block) const;
     int frameIndex(QTextFrame *frame) const;
 
@@ -80,7 +95,8 @@ private:
     QPointer<QTextDocument> m_textDocument;
 
     mutable QVector<NodeData> m_nodeDataTable;
-    mutable QHash<int, int> m_blockNumberTable;
+
+    mutable QHash<int, BlockData> m_blockNumberTable;
     mutable QHash<QTextFrame*, int> m_frameTable;
 };
 

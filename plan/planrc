@@ -1,6 +1,6 @@
 [calligra]
 DockerPlugins=Scripting
-DockerPluginsDisabled=calligradockers,textdocumentinspection
+DockerPluginsDisabled=calligradockers
 FlakePlugins=
 FlakePluginsDisabled=
 ShapePlugins=

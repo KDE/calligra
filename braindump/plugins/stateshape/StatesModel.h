@@ -39,7 +39,7 @@ public:
     QModelIndex indexFor(const QString& catId, const QString& stateId) const;
 private:
     QList<const State*> m_states;
-    QList<QImage> m_icons;
+    QVector<QImage> m_icons;
 };
 
 #endif

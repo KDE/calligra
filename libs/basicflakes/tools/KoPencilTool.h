@@ -21,6 +21,7 @@
 #define _KOPENCILTOOL_H_
 
 #include <KoToolBase.h>
+#include <QVector>
 
 class KoPathShape;
 class KoShapeStroke;
@@ -86,7 +87,7 @@ private:
     qreal m_fittingError;
     bool m_close;
 
-    QList<QPointF> m_points; // the raw points
+    QVector<QPointF> m_points; // the raw points
 
     KoPathShape * m_shape;
     KoPathPoint *m_existingStartPoint; ///< an existing path point we started a new path at

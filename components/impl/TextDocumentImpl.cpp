@@ -22,9 +22,8 @@
 
 #include "TextDocumentImpl.h"
 
-#include <QtWidgets/QGraphicsWidget>
+#include <QGraphicsWidget>
 
-#include <kservice.h>
 #include <kactioncollection.h>
 
 #include <KWPart.h>
@@ -37,9 +36,9 @@
 #include <KoZoomController.h>
 #include <KoZoomHandler.h>
 
-#include <QtGui/QTextDocument>
-#include <QtGui/QTextFrame>
-#include <QtGui/QTextLayout>
+#include <QTextDocument>
+#include <QTextFrame>
+#include <QTextLayout>
 
 #include "ComponentsKoCanvasController.h"
 #include <libs/textlayout/KoTextShapeData.h>

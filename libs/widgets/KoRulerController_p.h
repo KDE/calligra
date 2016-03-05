@@ -163,7 +163,7 @@ public:
         }
 
         QTextBlockFormat bf;
-        QList<KoText::Tab> sortedList = tabList;
+        QVector<KoText::Tab> sortedList = tabList;
         qSort(sortedList.begin(), sortedList.end(), compareTabs);
         QList<QVariant> list;
         foreach(const KoText::Tab & tab, sortedList) {
@@ -204,7 +204,7 @@ private:
     KoRuler *ruler;
     KoCanvasResourceManager *resourceManager;
     int lastPosition; // the last position in the text document.
-    QList<KoText::Tab> tabList;
+    QVector<KoText::Tab> tabList;
     KoText::Tab currentTab;
     int originalTabIndex, currentTabIndex;
 };

@@ -24,7 +24,7 @@
 
 #include "kplatomodels_export.h"
 
-#include <QDateTime>
+#include <QDate>
 #include <QFrame>
 
 namespace KPlato

@@ -29,7 +29,7 @@
 #ifndef SHEETS_NO_PLUGINMODULES
 #include <kplugininfo.h>
 #include <KPluginFactory>
-#include "KoJsonTrader.h"
+#include <KoPluginLoader.h>
 #else
 #include "functions/BitOpsModule.h"
 #include "functions/ConversionModule.h"
@@ -107,36 +107,78 @@ FunctionModuleRegistry* FunctionModuleRegistry::instance()
 void FunctionModuleRegistry::loadFunctionModules()
 {
 #ifndef SHEETS_NO_PLUGINMODULES
-    QList<QPluginLoader *> offers = KoJsonTrader::self()->query("CalligraSheets/Plugin", QString());
+    QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("calligrasheets/functions"));
     debugSheetsFormula << offers.count() << "function modules found.";
+
+    const KConfigGroup pluginsConfigGroup = KSharedConfig::openConfig()->group("Plugins");
     foreach (QPluginLoader *loader, offers) {
 
-        QJsonObject meta = loader->metaData().value("MetaData").toObject().value("KPlugin").toObject();
-        int version = meta.value("X-CalligraSheets-InterfaceVersion").toInt();
+        QJsonObject metaData = loader->metaData().value("MetaData").toObject();
+        int version = metaData.value("X-CalligraSheets-InterfaceVersion").toInt();
         if (version != 0) {
             debugSheetsFormula << "Skipping" << loader->fileName() << ", because interface version is" << version;
             continue;
         }
-        QString category = meta.value("Category").toString();
+        QJsonObject pluginData = metaData.value("KPlugin").toObject();
+        QString category = pluginData.value("Category").toString();
         if (category != "FunctionModule") {
             debugSheetsFormula << "Skipping" << loader->fileName() << ", because category is " << category;
             continue;
         }
 
-        // TODO: the kde4 version supported enabling/disabling of plugins, do we want that?
-        KPluginFactory* factory = qobject_cast<KPluginFactory *>(loader->instance());
-        FunctionModule* module = qobject_cast<FunctionModule *>(factory->create());
-        if (!module) {
-            debugSheetsFormula << "Unable to create function module for" << loader->fileName();
-            continue;
-        }
-        QString name = meta.value("Name").toString();
-        add(name, module);
-        debugSheetsFormula << "Loaded" << name;
+        const QString pluginId = pluginData.value("Id").toString();
+        const QString pluginConfigEnableKey = pluginId + QLatin1String("Enabled");
+        const bool isPluginEnabled = pluginsConfigGroup.hasKey(pluginConfigEnableKey) ?
+            pluginsConfigGroup.readEntry(pluginConfigEnableKey, true) :
+            pluginData.value("EnabledByDefault").toBool(true);
 
-        // Delays the function registration until the user needs one.
-        if (d->repositoryInitialized) {
-            d->registerFunctionModule(module);
+        if (isPluginEnabled) {
+            if(contains(pluginId)) {
+                continue;
+            }
+            // Plugin enabled, but not registered. Add it.
+            KPluginFactory* const factory = qobject_cast<KPluginFactory *>(loader->instance());
+            if (!factory) {
+                debugSheetsFormula << "Unable to create plugin factory for" << loader->fileName();
+                continue;
+            }
+            FunctionModule* const module = qobject_cast<FunctionModule *>(factory->create());
+            if (!module) {
+                debugSheetsFormula << "Unable to create function module for" << loader->fileName();
+                continue;
+            }
+
+            add(pluginId, module);
+            debugSheetsFormula << "Loaded" << pluginId;
+
+            // Delays the function registration until the user needs one.
+            if (d->repositoryInitialized) {
+                d->registerFunctionModule(module);
+            }
+        } else {
+            if (!contains(pluginId)) {
+                continue;
+            }
+            // Plugin disabled, but registered. Remove it.
+            FunctionModule* const module = get(pluginId);
+            // Delay the function registration until the user needs one.
+            if (d->repositoryInitialized) {
+                d->removeFunctionModule(module);
+            }
+            remove(pluginId);
+            if (module->isRemovable()) {
+                delete module;
+                KPluginFactory* factory = qobject_cast<KPluginFactory *>(loader->instance());
+                delete factory;
+                loader->unload();
+            } else {
+                // Put it back in.
+                add(pluginId, module);
+                // Delay the function registration until the user needs one.
+                if (d->repositoryInitialized) {
+                    d->registerFunctionModule(module);
+                }
+            }
         }
     }
 #else

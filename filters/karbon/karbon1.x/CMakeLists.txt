@@ -14,7 +14,7 @@ kcoreaddons_desktop_to_json(calligra_filter_karbon1x2karbon calligra_filter_karb
 
 target_link_libraries(calligra_filter_karbon1x2karbon karboncommon)
 
-install(TARGETS calligra_filter_karbon1x2karbon DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_karbon1x2karbon DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 ########### install files ###############
 

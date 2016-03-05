@@ -234,7 +234,8 @@ void KarbonSimplifyPath::simplifySubpaths(QList<KoSubpath *> *subpaths,
 
 void KarbonSimplifyPath::simplifySubpath(KoSubpath *subpath, qreal error)
 {
-    QList<QPointF> points;
+    QVector<QPointF> points;
+    points.reserve(subpath->size());
 
     for (int i = 0; i < subpath->size(); ++i) {
         points.append((*subpath)[i]->point());

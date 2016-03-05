@@ -56,6 +56,6 @@ target_link_libraries(calligra_filter_sheets2xls
 set(INSTALL_XLS_EXPORT_FILTER OFF CACHE BOOL "Install the very experimental xls export filter, which might eat your data and provides no guarentees")
 
 if(INSTALL_XLS_EXPORT_FILTER)
-  install(TARGETS calligra_filter_sheets2xls  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+  install(TARGETS calligra_filter_sheets2xls  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 endif()
 

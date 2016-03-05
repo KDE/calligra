@@ -88,7 +88,7 @@ protected:
      * @param insertPosition: the position in screen pixels where the images
      * can be inserted.
      */
-    virtual void addImages(const QList<QImage> &imageList, const QPoint &insertAt);
+    virtual void addImages(const QVector<QImage> &imageList, const QPoint &insertAt);
 
 public:
 

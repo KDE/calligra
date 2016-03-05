@@ -31,7 +31,7 @@ target_link_libraries(
     KF5::IconThemes
 )
 
-install(TARGETS calligrastagetoolanimation  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligrastagetoolanimation  DESTINATION ${PLUGIN_INSTALL_DIR}/calligrastage/tools)
 
 
 ########### install files ###############

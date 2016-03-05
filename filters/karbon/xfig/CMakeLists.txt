@@ -13,7 +13,7 @@ target_link_libraries( calligra_filter_xfig2odg
     komain
 )
 
-install(TARGETS calligra_filter_xfig2odg  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR} )
+install(TARGETS calligra_filter_xfig2odg  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters )
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES  karbon_xfig_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})

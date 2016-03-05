@@ -56,19 +56,19 @@ void TestSnapStrategy::testOrthogonalSnap()
     //will make this call shape->snapData().snapPoints(); so the shapes have to have snapPoints
     //In order to have snapPoints we have to use the call
     //shape->snapData().setSnapPoints() for each fakeShape, where we send in a const
-    //QList<QPointF> &snapPoints in order to have snapPoints to iterate - which is the only
+    //QVector<QPointF> &snapPoints in order to have snapPoints to iterate - which is the only
     //way to change the value of minHorzDist and minVertDist in KoSnapStrategy.cpp so it
     //differs from HUGE_VAL - i.e. gives us the true value for the snap function.
 
     //creating the lists of points
-    //example QList<QPointF> pts; pts.push_back(QPointF(0.2, 0.3)); pts.push_back(QPointF(0.5, 0.7));
+    //example QVector<QPointF> pts; pts.push_back(QPointF(0.2, 0.3)); pts.push_back(QPointF(0.5, 0.7));
 
 
     MockCanvas fakeKoCanvasBaseTwo(&fakeShapeControllerBaseTwo); //the shapeManager() function of this will be called
 
     KoShapeManager *fakeShapeManager = fakeKoCanvasBaseTwo.shapeManager();
     MockShape fakeShapeOne;
-    QList<QPointF> firstSnapPointList;
+    QVector<QPointF> firstSnapPointList;
     firstSnapPointList.push_back(QPointF(1,2));
     firstSnapPointList.push_back(QPointF(2,2));
     firstSnapPointList.push_back(QPointF(3,2));
@@ -110,7 +110,7 @@ void TestSnapStrategy::testNodeSnap()
     MockCanvas fakeKoCanvasBaseTwo(&fakeShapeControllerBaseTwo);
     KoShapeManager *fakeShapeManager = fakeKoCanvasBaseTwo.shapeManager();
     MockShape fakeShapeOne;
-    QList<QPointF> firstSnapPointList;
+    QVector<QPointF> firstSnapPointList;
     firstSnapPointList.push_back(QPointF(1,2));
     firstSnapPointList.push_back(QPointF(2,2));
     firstSnapPointList.push_back(QPointF(3,2));
@@ -150,7 +150,7 @@ void TestSnapStrategy::testExtensionSnap()
     MockCanvas fakeKoCanvasBaseTwo(&fakeShapeControllerBaseTwo);
     KoShapeManager *fakeShapeManager = fakeKoCanvasBaseTwo.shapeManager();
     KoPathShape fakeShapeOne;
-    QList<QPointF> firstSnapPointList;
+    QVector<QPointF> firstSnapPointList;
     firstSnapPointList.push_back(QPointF(1,2));
     firstSnapPointList.push_back(QPointF(2,2));
     firstSnapPointList.push_back(QPointF(3,2));
@@ -202,7 +202,7 @@ void TestSnapStrategy::testIntersectionSnap()
 
     qreal paramSnapDistanceTwo = 8;
     KoPathShape pathShapeOne;
-    QList<QPointF> firstSnapPointList;
+    QVector<QPointF> firstSnapPointList;
 
     pathShapeOne.moveTo(QPointF(1,2));
     pathShapeOne.lineTo(QPointF(2,2));
@@ -215,7 +215,7 @@ void TestSnapStrategy::testIntersectionSnap()
     ShapeManager->addShape(&pathShapeOne);
 
     KoPathShape pathShapeTwo;
-    QList<QPointF> secondSnapPointList;
+    QVector<QPointF> secondSnapPointList;
 
     pathShapeTwo.moveTo(QPointF(1,1));
     pathShapeTwo.lineTo(QPointF(2,2));
@@ -228,7 +228,7 @@ void TestSnapStrategy::testIntersectionSnap()
     ShapeManager->addShape(&pathShapeTwo);
 
     KoPathShape pathShapeThree;
-    QList<QPointF> thirdSnapPointList;
+    QVector<QPointF> thirdSnapPointList;
     pathShapeThree.moveTo(QPointF(5,5));
     pathShapeThree.lineTo(QPointF(6,6));
     pathShapeThree.lineTo(QPointF(7,7));
@@ -291,7 +291,7 @@ void TestSnapStrategy::testBoundingBoxSnap()
 
     qreal paramSnapDistanceTwo = 8;
     KoPathShape pathShapeOne;
-    QList<QPointF> firstSnapPointList;
+    QVector<QPointF> firstSnapPointList;
 
     pathShapeOne.moveTo(QPointF(1,2));
     pathShapeOne.lineTo(QPointF(2,2));
@@ -302,7 +302,7 @@ void TestSnapStrategy::testBoundingBoxSnap()
     ShapeManager->addShape(&pathShapeOne);
 
     KoPathShape pathShapeTwo;
-    QList<QPointF> secondSnapPointList;
+    QVector<QPointF> secondSnapPointList;
 
     pathShapeTwo.moveTo(QPointF(1,1));
     pathShapeTwo.lineTo(QPointF(2,2));
@@ -313,7 +313,7 @@ void TestSnapStrategy::testBoundingBoxSnap()
     ShapeManager->addShape(&pathShapeTwo);
 
     KoPathShape pathShapeThree;
-    QList<QPointF> thirdSnapPointList;
+    QVector<QPointF> thirdSnapPointList;
     pathShapeThree.moveTo(QPointF(5,5));
     pathShapeThree.lineTo(QPointF(6,6));
     pathShapeThree.lineTo(QPointF(7,7));
@@ -380,7 +380,7 @@ void TestSnapStrategy::testOrhogonalDecoration()
 
     KoShapeManager *fakeShapeManager = fakeKoCanvasBaseTwo.shapeManager();
     MockShape fakeShapeOne;
-    QList<QPointF> firstSnapPointList;
+    QVector<QPointF> firstSnapPointList;
     firstSnapPointList.push_back(QPointF(1,2));
     firstSnapPointList.push_back(QPointF(2,2));
     firstSnapPointList.push_back(QPointF(3,2));
@@ -428,7 +428,7 @@ void TestSnapStrategy::testExtensionDecoration()
     MockCanvas fakeKoCanvasBaseTwo(&fakeShapeControllerBaseTwo);
     KoShapeManager *fakeShapeManager = fakeKoCanvasBaseTwo.shapeManager();
     KoPathShape fakeShapeOne;
-    QList<QPointF> firstSnapPointList;
+    QVector<QPointF> firstSnapPointList;
     firstSnapPointList.push_back(QPointF(1,2));
     firstSnapPointList.push_back(QPointF(2,2));
     firstSnapPointList.push_back(QPointF(3,2));

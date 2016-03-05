@@ -721,7 +721,7 @@ bool KoOdfChartWriter::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         store->close();
     }
 
-    manifestWriter->addManifestEntry(m_href + "/", "application/vnd.oasis.opendocument.chart");
+    manifestWriter->addManifestEntry(m_href + QLatin1Char('/'), "application/vnd.oasis.opendocument.chart");
     manifestWriter->addManifestEntry(QString("%1/styles.xml").arg(m_href), "text/xml");
     manifestWriter->addManifestEntry(QString("%1/content.xml").arg(m_href), "text/xml");
 

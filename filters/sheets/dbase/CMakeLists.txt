@@ -7,6 +7,6 @@ kcoreaddons_desktop_to_json(calligra_filter_dbase2kspread calligra_filter_dbase2
 
 target_link_libraries(calligra_filter_dbase2kspread komain)
 
-install(TARGETS calligra_filter_dbase2kspread  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_dbase2kspread  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 

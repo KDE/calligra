@@ -18,6 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "TestInformationFunctions.h"
+
 #include <CellStorage.h>
 #include <Formula.h>
 #include <Map.h>
@@ -25,8 +27,6 @@
 #include <CalculationSettings.h>
 
 #include "TestKspreadCommon.h"
-
-#include "TestInformationFunctions.h"
 
 // because we may need to promote expected value from integer to float
 #define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }

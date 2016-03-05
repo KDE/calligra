@@ -31,7 +31,6 @@
 
 //Qt Headers
 #include <QToolButton>
-#include <QListWidget>
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QTreeView>

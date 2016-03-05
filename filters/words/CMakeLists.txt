@@ -1,7 +1,12 @@
 # check whether we can compile wv2
 
 macro_optional_find_package(Iconv)
-macro_log_feature(ICONV_FOUND "Iconv" "Iconv" "http://www.gnu.org/software/libiconv/" FALSE "" "Required by the msword .doc filter")
+set_package_properties(Iconv PROPERTIES
+    URL "http://www.gnu.org/software/libiconv/"
+    PURPOSE "Required by the msword .doc filter"
+    TYPE OPTIONAL
+)
+
 if( ICONV_FOUND )
     set( HAVE_ICONV_H 1 )
     set( ICONV_REQUIRES_CONST ${ICONV_SECOND_ARGUMENT_IS_CONST} )

@@ -20,7 +20,6 @@
 
 #include "KoSubpathRemoveCommand.h"
 
-#include "KoPathPointData.h"
 #include "KoPathPoint.h"
 #include <klocalizedstring.h>
 

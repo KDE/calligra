@@ -28,8 +28,8 @@ kcoreaddons_desktop_to_json(calligra_shape_spreadsheet calligra_shape_spreadshee
 target_link_libraries(calligra_shape_spreadsheet-deferred calligrasheetscommon)
 target_link_libraries(calligra_shape_spreadsheet flake KF5::KDELibs4Support)
 
-install(TARGETS calligra_shape_spreadsheet-deferred DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-install(TARGETS calligra_shape_spreadsheet DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_spreadsheet-deferred DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/deferred)
+install(TARGETS calligra_shape_spreadsheet DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
 
 ########### install files ###############
 

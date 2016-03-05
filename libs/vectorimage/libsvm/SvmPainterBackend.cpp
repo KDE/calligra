@@ -26,13 +26,13 @@
 #include <QString>
 #include <QPainter>
 
-// KDE
-#include <VectorImageDebug.h>
-
 // Libsvm
 #include "SvmEnums.h"
 #include "SvmStructs.h"
 #include "SvmGraphicsContext.h"
+
+// lib
+#include "VectorImageDebug.h"
 
 
 #define DEBUG_SVMPAINT 0

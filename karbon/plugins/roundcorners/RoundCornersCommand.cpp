@@ -367,7 +367,7 @@ void RoundCornersCommand::copyPath(KoPathShape * dst, KoPathShape * src)
 
 QPointF RoundCornersCommand::tangentAtStart(const KoPathSegment &s)
 {
-    QList<QPointF> cp = s.controlPoints();
+    QVector<QPointF> cp = s.controlPoints();
     QPointF tn = cp[1] - cp.first();
     qreal length = sqrt(tn.x() * tn.x() + tn.y() * tn.y());
     return tn / length;
@@ -375,7 +375,7 @@ QPointF RoundCornersCommand::tangentAtStart(const KoPathSegment &s)
 
 QPointF RoundCornersCommand::tangentAtEnd(const KoPathSegment &s)
 {
-    QList<QPointF> cp = s.controlPoints();
+    QVector<QPointF> cp = s.controlPoints();
     QPointF tn = cp[cp.count()-2] - cp.last();
     qreal length = sqrt(tn.x() * tn.x() + tn.y() * tn.y());
     return tn / length;

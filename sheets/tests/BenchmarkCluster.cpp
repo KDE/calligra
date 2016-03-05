@@ -17,11 +17,11 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "BenchmarkCluster.h"
+
 #include "BenchmarkHelper.h"
 #include "Cluster.h"
 #include "Global.h"
-
-#include "BenchmarkCluster.h"
 
 #include <QTest>
 

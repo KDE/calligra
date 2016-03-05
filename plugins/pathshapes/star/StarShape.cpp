@@ -203,7 +203,7 @@ void StarShape::updatePath(const QSizeF &size)
 
     normalize();
 
-    QList<QPointF> handles;
+    QVector<QPointF> handles;
     handles.push_back(points.at(tip)->point());
     if (! m_convex)
         handles.push_back(points.at(base)->point());

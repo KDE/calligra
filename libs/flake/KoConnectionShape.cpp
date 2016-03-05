@@ -196,8 +196,8 @@ void KoConnectionShapePrivate::normalPath(const qreal MinimumEscapeLength)
     path.clear();
     path.append(handles[KoConnectionShape::StartHandle]);
 
-    QList<QPointF> edges1;
-    QList<QPointF> edges2;
+    QVector<QPointF> edges1;
+    QVector<QPointF> edges2;
 
     QPointF direction1 = escapeDirection(KoConnectionShape::StartHandle);
     QPointF direction2 = escapeDirection(KoConnectionShape::EndHandle);

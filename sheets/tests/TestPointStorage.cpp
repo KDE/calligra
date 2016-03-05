@@ -20,9 +20,9 @@
 #define KS_colMax 10
 #define KS_rowMax 10
 
-#include "PointStorage.h"
-
 #include "TestPointStorage.h"
+
+#include "PointStorage.h"
 
 #include <QTest>
 

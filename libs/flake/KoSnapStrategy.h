@@ -23,6 +23,7 @@
 #include "KoSnapGuide.h"
 
 #include <QLineF>
+#include <QVector>
 
 class TestSnapStrategy;
 class KoPathPoint;
@@ -94,7 +95,7 @@ private:
     qreal project(const QPointF &lineStart , const QPointF &lineEnd, const QPointF &point);
     QPointF extensionDirection(KoPathPoint * point, const QTransform &matrix);
     bool snapToExtension(QPointF &position, KoPathPoint * point, const QTransform &matrix);
-    QList<QLineF> m_lines;
+    QVector<QLineF> m_lines;
 };
 
 /// snaps to intersections of shapes

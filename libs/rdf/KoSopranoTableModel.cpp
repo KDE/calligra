@@ -21,7 +21,7 @@
 
 #include "KoDocumentRdf.h"
 #include "KoRdfPrefixMapping.h"
-// KDE
+// KF5
 #include <kdebug.h>
 #include <klocalizedstring.h>
 

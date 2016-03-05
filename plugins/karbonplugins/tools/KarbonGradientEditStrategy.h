@@ -158,7 +158,7 @@ protected:
     KoShape *m_shape;          ///< the shape we are working on
     QBrush m_oldBrush;         ///< the old background brush
     QBrush m_newBrush;         ///< the new background brush
-    QList<QPointF> m_handles;  ///< the list of handles
+    QVector<QPointF> m_handles;  ///< the list of handles
     QGradientStops m_stops;    ///< the gradient stops
     QTransform m_matrix;          ///< matrix to map handle into document coordinate system
     KoShapeStroke m_oldStroke;  ///< the old stroke

@@ -25,7 +25,7 @@
 #include "KoFilter.h"
 #include <MainDebug.h>
 
-#include <KoJsonTrader.h>
+#include <KoPluginLoader.h>
 #include <KoConfig.h> // OLD_PLUGIN_MIMETYPE_DATA
 
 #include <kservicetype.h>
@@ -143,7 +143,7 @@ QList<KoDocumentEntry> KoDocumentEntry::query(const QString & mimetype)
     QList<KoDocumentEntry> lst;
 
     // Query the trader
-    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Calligra/Part", mimetype);
+    const QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("calligra/parts"), mimetype);
 
     foreach(QPluginLoader *pluginLoader, offers) {
         lst.append(KoDocumentEntry(pluginLoader));

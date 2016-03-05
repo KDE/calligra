@@ -30,4 +30,4 @@ target_link_libraries(
     Qt5::Gui    
     )
 
-install(TARGETS kpr_pageeffect_iriswipe  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kpr_pageeffect_iriswipe  DESTINATION ${PLUGIN_INSTALL_DIR}/calligrastage/pageeffects)

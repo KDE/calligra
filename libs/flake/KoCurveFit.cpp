@@ -99,7 +99,7 @@ qreal distance(const QPointF &p1, const QPointF &p2)
 }
 
 
-FitVector ComputeLeftTangent(const QList<QPointF> &points, int end)
+FitVector ComputeLeftTangent(const QVector<QPointF> &points, int end)
 {
     FitVector tHat1(points.at(end + 1), points.at(end));
 
@@ -108,7 +108,7 @@ FitVector ComputeLeftTangent(const QList<QPointF> &points, int end)
     return tHat1;
 }
 
-FitVector ComputeRightTangent(const QList<QPointF> &points, int end)
+FitVector ComputeRightTangent(const QVector<QPointF> &points, int end)
 {
     FitVector tHat1(points.at(end - 1), points.at(end));
 
@@ -122,7 +122,7 @@ FitVector ComputeRightTangent(const QList<QPointF> &points, int end)
  *  Assign parameter values to digitized points
  *  using relative distances between points.
  */
-static qreal *ChordLengthParameterize(const QList<QPointF> &points, int first, int last)
+static qreal *ChordLengthParameterize(const QVector<QPointF> &points, int first, int last)
 {
     int     i;
     qreal   *u;         /*  Parameterization        */
@@ -167,7 +167,7 @@ static FitVector VectorSub(FitVector a, FitVector b)
     return (c);
 }
 
-static FitVector ComputeCenterTangent(const QList<QPointF> &points, int center)
+static FitVector ComputeCenterTangent(const QVector<QPointF> &points, int center)
 {
     FitVector V1, V2, tHatCenter;
 
@@ -216,7 +216,7 @@ static qreal B3(qreal u)
  *  Use least-squares method to find Bezier control points for region.
  *
  */
-QPointF* GenerateBezier(const QList<QPointF> &points, int first, int last, qreal *uPrime, FitVector tHat1, FitVector tHat2)
+QPointF* GenerateBezier(const QVector<QPointF> &points, int first, int last, qreal *uPrime, FitVector tHat1, FitVector tHat2)
 {
     int     i;
     int     nPts;           /* Number of pts in sub-curve */
@@ -365,7 +365,7 @@ static QPointF BezierII(int degree, QPointF *V, qreal t)
  *  Find the maximum squared distance of digitized points
  *  to fitted curve.
 */
-static qreal ComputeMaxError(const QList<QPointF> &points, int first, int last, QPointF *curve, qreal *u, int *splitPoint)
+static qreal ComputeMaxError(const QVector<QPointF> &points, int first, int last, QPointF *curve, qreal *u, int *splitPoint)
 {
     int     i;
     qreal   maxDist;        /*  Maximum error       */
@@ -439,7 +439,7 @@ static qreal NewtonRaphsonRootFind(QPointF *Q, QPointF P, qreal u)
  *   a better parameterization.
  *
  */
-static qreal *Reparameterize(const QList<QPointF> &points, int first, int last, qreal *u, QPointF *curve)
+static qreal *Reparameterize(const QVector<QPointF> &points, int first, int last, qreal *u, QPointF *curve)
 {
     int     nPts = last - first + 1;
     int     i;
@@ -452,7 +452,7 @@ static qreal *Reparameterize(const QList<QPointF> &points, int first, int last, 
     return (uPrime);
 }
 
-QPointF *FitCubic(const QList<QPointF> &points, int first, int last, FitVector tHat1, FitVector tHat2, float error, int &width)
+QPointF *FitCubic(const QVector<QPointF> &points, int first, int last, FitVector tHat1, FitVector tHat2, float error, int &width)
 {
     qreal *u;
     qreal *uPrime;
@@ -550,7 +550,7 @@ QPointF *FitCubic(const QList<QPointF> &points, int first, int last, FitVector t
 }
 
 
-KoPathShape * bezierFit(const QList<QPointF> &points, float error)
+KoPathShape * bezierFit(const QVector<QPointF> &points, float error)
 {
     FitVector tHat1, tHat2;
 

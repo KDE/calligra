@@ -31,11 +31,11 @@ class Q_DECL_HIDDEN KoShapeTransformCommand::Private
 public:
     Private(const QList<KoShape*> &list) : shapes(list) { }
     QList<KoShape*> shapes;
-    QList<QTransform> oldState;
-    QList<QTransform> newState;
+    QVector<QTransform> oldState;
+    QVector<QTransform> newState;
 };
 
-KoShapeTransformCommand::KoShapeTransformCommand(const QList<KoShape*> &shapes, const QList<QTransform> &oldState, const QList<QTransform> &newState, KUndo2Command * parent)
+KoShapeTransformCommand::KoShapeTransformCommand(const QList<KoShape*> &shapes, const QVector<QTransform> &oldState, const QVector<QTransform> &newState, KUndo2Command * parent)
         : KUndo2Command(parent),
         d(new Private(shapes))
 {

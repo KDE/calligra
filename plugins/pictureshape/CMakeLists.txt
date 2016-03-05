@@ -32,4 +32,4 @@ target_link_libraries(calligra_shape_picture
     KF5::KIOFileWidgets
     KF5::GuiAddons
 )
-install(TARGETS calligra_shape_picture DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_picture DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)

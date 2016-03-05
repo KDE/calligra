@@ -44,6 +44,7 @@ target_link_libraries(karbonui
     PRIVATE
         kowidgets
         koodf
+        koplugin
         KF5::IconThemes
         KF5::GuiAddons
 )

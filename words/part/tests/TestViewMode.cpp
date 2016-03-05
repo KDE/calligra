@@ -94,7 +94,7 @@ void TestViewMode::testBasicConversion()
     QCOMPARE(viewMode.viewToDocument(QPointF(1000, 1000 + PAGEGAP)).toPoint(), QPoint(1000, 1000)); // no clipping vertically
 
     // rectangles are more tricky ;)
-    QList<KWViewMode::ViewMap> answer;
+    QVector<KWViewMode::ViewMap> answer;
     answer = viewMode.mapExposedRects(QRect(10, 10, 10, 10));
     QCOMPARE(answer.count(), 1);
     QCOMPARE(answer[0].clipRect, QRect(10, 10, 10, 10));
@@ -135,7 +135,7 @@ void TestViewMode::testClipRectForPageSpread()
     QCOMPARE(pageManager.pageCount(), 3);
     viewMode.pageSetupChanged();
 
-    QList<KWViewMode::ViewMap> answer;
+    QVector<KWViewMode::ViewMap> answer;
     answer = viewMode.mapExposedRects(QRect(50, 180, 300, 100));
     QCOMPARE(answer.count(), 2);
     QCOMPARE(answer[0].clipRect, QRect(50, 180, 250, 20)); // page 1

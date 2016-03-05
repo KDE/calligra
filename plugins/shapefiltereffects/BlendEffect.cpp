@@ -51,7 +51,7 @@ QImage BlendEffect::processImage(const QImage &image, const KoFilterEffectRender
     return image;
 }
 
-QImage BlendEffect::processImages(const QList<QImage> &images, const KoFilterEffectRenderContext &context) const
+QImage BlendEffect::processImages(const QVector<QImage> &images, const KoFilterEffectRenderContext &context) const
 {
     int imageCount = images.count();
     if (!imageCount)

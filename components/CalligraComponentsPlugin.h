@@ -23,7 +23,7 @@
 #ifndef CALLIGRACOMPONENTSPLUGIN_H
 #define CALLIGRACOMPONENTSPLUGIN_H
 
-#include <QtQml/QQmlExtensionPlugin>
+#include <QQmlExtensionPlugin>
 
 class QQmlEngine;
 class QJSEngine;

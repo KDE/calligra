@@ -98,13 +98,13 @@ void KoColorSpaceRegistry::init()
     config.whiteList = "ColorSpacePlugins";
     config.blacklist = "ColorSpacePluginsDisabled";
     config.group = "calligra";
-    KoPluginLoader::instance()->load("Calligra/ColorSpace", "[X-Pigment-PluginVersion] == 28", config);
+    KoPluginLoader::load(QStringLiteral("calligra/colorspaces"), config);
 
     KoPluginLoader::PluginsConfig configExtensions;
     configExtensions.whiteList = "ColorSpaceExtensionsPlugins";
     configExtensions.blacklist = "ColorSpaceExtensionsPluginsDisabled";
     configExtensions.group = "calligra";
-    KoPluginLoader::instance()->load("Calligra/ColorSpaceExtension", "[X-Pigment-PluginVersion] == 28", configExtensions);
+    KoPluginLoader::load(QStringLiteral("calligra/colorspaceextensions"), configExtensions);
 
 
     dbgPigment << "Loaded the following colorspaces:";

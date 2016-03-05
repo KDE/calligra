@@ -64,7 +64,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::fillColors()
             patch->setFrameStyle(QFrame::Plain | QFrame::Box);
             patch->setLineWidth(1);
             patch->setColor(colorSet->getColor(i).color);
-            connect(patch, SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
+            connect(patch, SIGNAL(triggered(KoColorPatch*)), thePublic, SLOT(colorTriggered(KoColorPatch*)));
             colorSetLayout->addWidget(patch, p/16, p%16);
             ++p;
         }
@@ -116,7 +116,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRecent(const KoColor &color)
         recentPatches[numRecents] = new KoColorPatch(thePublic);
         recentPatches[numRecents]->setFrameShape(QFrame::Box);
         recentsLayout->insertWidget(numRecents+1, recentPatches[numRecents]);
-        connect(recentPatches[numRecents], SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
+        connect(recentPatches[numRecents], SIGNAL(triggered(KoColorPatch*)), thePublic, SLOT(colorTriggered(KoColorPatch*)));
         numRecents++;
     }
     // shift colors to the right

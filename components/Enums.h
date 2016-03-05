@@ -23,7 +23,7 @@
 #ifndef CALLIGRA_COMPONENTS_ENUMS_H
 #define CALLIGRA_COMPONENTS_ENUMS_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 namespace Calligra {
 namespace Components {

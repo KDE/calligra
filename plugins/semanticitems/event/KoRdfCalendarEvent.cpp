@@ -403,7 +403,7 @@ void KoRdfCalendarEvent::saveToKCal()
     item.setMimeType(event->mimeType());
 
     Akonadi::ItemCreateJob *itemCreateJob = new Akonadi::ItemCreateJob(item, collection);
-    connect(itemCreateJob, SIGNAL(result(KJob*) ), SLOT(onCreateJobFinished(KJob*)));
+    connect(itemCreateJob, SIGNAL(result(KJob*)), SLOT(onCreateJobFinished(KJob*)));
 #endif
 }
 

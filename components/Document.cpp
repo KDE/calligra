@@ -22,10 +22,10 @@
 
 #include "Document.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QUrl>
-#include <QtCore/QSizeF>
-#include <QtCore/QPoint>
+#include <QDebug>
+#include <QUrl>
+#include <QSizeF>
+#include <QPoint>
 
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>

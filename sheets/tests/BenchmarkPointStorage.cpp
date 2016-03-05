@@ -17,15 +17,15 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QUuid>
+#include "BenchmarkPointStorage.h"
 
 #include "calligra_sheets_limits.h"
 
 #include "PointStorage.h"
 
-#include "BenchmarkPointStorage.h"
-
 #include <QTest>
+#include <QUuid>
+
 
 using namespace Calligra::Sheets;
 

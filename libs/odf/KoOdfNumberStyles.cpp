@@ -251,25 +251,25 @@ QString formatFraction(qreal value, const QString &format)
 
     int index = 0;
     int limit = 0;
-    if (format.endsWith("/2")) {
+    if (format.endsWith(QLatin1String("/2"))) {
         index = 2;
-    } else if (format.endsWith("/4")) {
+    } else if (format.endsWith(QLatin1String("/4"))) {
         index = 4;
-    } else if (format.endsWith("/8")) {
+    } else if (format.endsWith(QLatin1String("/8"))) {
         index = 8;
-    } else if (format.endsWith("/16")) {
+    } else if (format.endsWith(QLatin1String("/16"))) {
         index = 16;
-    } else if (format.endsWith("/10")) {
+    } else if (format.endsWith(QLatin1String("/10"))) {
         index = 10;
-    } else if (format.endsWith("/100")) {
+    } else if (format.endsWith(QLatin1String("/100"))) {
         index = 100;
-    } else if (format.endsWith("/?")) {
+    } else if (format.endsWith(QLatin1String("/?"))) {
         index = 3;
         limit = 9;
-    } else if (format.endsWith("/??")) {
+    } else if (format.endsWith(QLatin1String("/??"))) {
         index = 4;
         limit = 99;
-    } else if (format.endsWith("/???")) {
+    } else if (format.endsWith(QLatin1String("/???"))) {
         index = 5;
         limit = 999;
     } else { // fallback
@@ -277,7 +277,9 @@ QString formatFraction(qreal value, const QString &format)
     }
 
     // handle halves, quarters, tenths, ...
-    if (!format.endsWith("/?") && !format.endsWith("/??") && !format.endsWith("/???")) {
+    if (!format.endsWith(QLatin1String("/?")) &&
+        !format.endsWith(QLatin1String("/??")) &&
+        !format.endsWith(QLatin1String("/???"))) {
         qreal calc = 0;
         int index1 = 0;
         qreal diff = result;

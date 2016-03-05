@@ -52,7 +52,7 @@ public:
     bool numberedEntries;
     bool sortByPosition;
     QString sortAlgorithm;
-    QList<SortKeyPair> sortKeys;
+    QVector<SortKeyPair> sortKeys;
 };
 
 KoOdfBibliographyConfiguration::KoOdfBibliographyConfiguration()
@@ -161,7 +161,7 @@ bool KoOdfBibliographyConfiguration::sortByPosition() const
     return d->sortByPosition;
 }
 
-QList<SortKeyPair> KoOdfBibliographyConfiguration::sortKeys() const
+QVector<SortKeyPair> KoOdfBibliographyConfiguration::sortKeys() const
 {
     return d->sortKeys;
 }
@@ -196,7 +196,7 @@ void KoOdfBibliographyConfiguration::setSortByPosition(bool enable)
     d->sortByPosition = enable;
 }
 
-void KoOdfBibliographyConfiguration::setSortKeys(const QList<SortKeyPair> &sortKeys)
+void KoOdfBibliographyConfiguration::setSortKeys(const QVector<SortKeyPair> &sortKeys)
 {
     d->sortKeys = sortKeys;
 }

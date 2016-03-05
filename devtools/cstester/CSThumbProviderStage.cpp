@@ -38,7 +38,7 @@ CSThumbProviderStage::~CSThumbProviderStage()
 {
 }
 
-QList<QImage> CSThumbProviderStage::createThumbnails(const QSize &thumbSize)
+QVector<QImage> CSThumbProviderStage::createThumbnails(const QSize &thumbSize)
 {
     // make sure all is rendered before painting
     int i = 100;
@@ -47,7 +47,7 @@ QList<QImage> CSThumbProviderStage::createThumbnails(const QSize &thumbSize)
         QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     }
 
-    QList<QImage> thumbnails;
+    QVector<QImage> thumbnails;
     foreach(KoPAPageBase *page, m_doc->pages(false)) {
         thumbnails.append(m_doc->pageThumbImage(page, thumbSize));
     }

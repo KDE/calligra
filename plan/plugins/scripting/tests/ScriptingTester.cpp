@@ -23,8 +23,8 @@
 #include "Module.h"
 
 #include <QTest>
-#include <Kross/Action>
-#include <Kross/Manager>
+#include <Kross/Core/Action>
+#include <Kross/Core/Manager>
 
 namespace KPlato
 {

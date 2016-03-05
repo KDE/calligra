@@ -22,7 +22,7 @@
 
 #include "kordf_export.h"
 #include "RdfForward.h"
-// KDE
+// Calligra
 #include <KoDialog.h>
 // Qt
 #include <QSharedPointer>

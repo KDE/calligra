@@ -23,7 +23,7 @@
 #ifndef CALLIGRA_COMPONENTS_DOCUMENTIMPL_H
 #define CALLIGRA_COMPONENTS_DOCUMENTIMPL_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include "Global.h"
 
 class KoDocument;

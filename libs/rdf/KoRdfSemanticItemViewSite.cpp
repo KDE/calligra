@@ -25,7 +25,7 @@
 #include <KoToolProxy.h>
 #include <KoText.h>
 #include <KoTextEditor.h>
-// KDE
+// KF5
 #include <kdebug.h>
 
 using namespace Soprano;

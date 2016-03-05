@@ -71,20 +71,20 @@ void TestPathSegment::segmentDegree()
 void TestPathSegment::segmentConvexHull()
 {
     KoPathSegment s1(QPointF(0, 0), QPointF(100, 100));
-    QList<QPointF> hull1 = s1.convexHull();
+    QVector<QPointF> hull1 = s1.convexHull();
     QCOMPARE(hull1.count(), 2);
     QCOMPARE(hull1[0], QPointF(0, 0));
     QCOMPARE(hull1[1], QPointF(100, 100));
 
     KoPathSegment s2(QPointF(0, 0), QPointF(100, 100), QPointF(200, 0));
-    QList<QPointF> hull2 = s2.convexHull();
+    QVector<QPointF> hull2 = s2.convexHull();
     QCOMPARE(hull2.count(), 3);
     QCOMPARE(hull2[0], QPointF(0, 0));
     QCOMPARE(hull2[1], QPointF(100, 100));
     QCOMPARE(hull2[2], QPointF(200, 0));
 
     KoPathSegment s3(QPointF(0, 0), QPointF(100, 100), QPointF(200, 100), QPointF(300, 0));
-    QList<QPointF> hull3 = s3.convexHull();
+    QVector<QPointF> hull3 = s3.convexHull();
     QCOMPARE(hull3.count(), 4);
     QCOMPARE(hull3[0], QPointF(0, 0));
     QCOMPARE(hull3[1], QPointF(100, 100));
@@ -92,7 +92,7 @@ void TestPathSegment::segmentConvexHull()
     QCOMPARE(hull3[3], QPointF(300, 0));
 
     KoPathSegment s4(QPointF(0, 0), QPointF(150, 100), QPointF(150, 50), QPointF(300, 0));
-    QList<QPointF> hull4 = s4.convexHull();
+    QVector<QPointF> hull4 = s4.convexHull();
     QCOMPARE(hull4.count(), 3);
     QCOMPARE(hull4[0], QPointF(0, 0));
     QCOMPARE(hull4[1], QPointF(150, 100));
@@ -169,32 +169,32 @@ void TestPathSegment::segmentIntersections()
     {
         KoPathSegment s1(QPointF(0, 0), QPointF(100, 0));
         KoPathSegment s2(QPointF(50, -50), QPointF(50, 50));
-        QList<QPointF> isects = s1.intersections(s2);
+        QVector<QPointF> isects = s1.intersections(s2);
         QCOMPARE(isects.count(), 1);
     }
     {
         KoPathSegment s1(QPointF(0, 0), QPointF(100, 100));
         KoPathSegment s2(QPointF(25, 100), QPointF(75, 50));
-        QList<QPointF> isects = s1.intersections(s2);
+        QVector<QPointF> isects = s1.intersections(s2);
         QCOMPARE(isects.count(), 1);
     }
     // curve intersections
     {
         KoPathSegment s1(QPointF(0, 0), QPointF(50, 50), QPointF(100, -50), QPointF(150, 0));
         KoPathSegment s2(QPointF(75, 75), QPointF(125, 25), QPointF(25, -25), QPointF(75, -75));
-        QList<QPointF> isects = s1.intersections(s2);
+        QVector<QPointF> isects = s1.intersections(s2);
         QCOMPARE(isects.count(), 1);
     }
     {
         KoPathSegment s1(QPointF(0, 0), QPointF(50, 50), QPointF(100, -50), QPointF(150, 0));
         KoPathSegment s2(QPointF(100, 75), QPointF(150, 25), QPointF(50, -25), QPointF(100, -75));
-        QList<QPointF> isects = s1.intersections(s2);
+        QVector<QPointF> isects = s1.intersections(s2);
         QCOMPARE(isects.count(), 1);
     }
     {
         KoPathSegment s1(QPointF(0, 0), QPointF(25, 50), QPointF(75, 50), QPointF(100, 0));
         KoPathSegment s2(QPointF(0, 30), QPointF(25, -20), QPointF(75, -20), QPointF(100, 30));
-        QList<QPointF> isects = s1.intersections(s2);
+        QVector<QPointF> isects = s1.intersections(s2);
         QCOMPARE(isects.count(), 2);
     }
 }

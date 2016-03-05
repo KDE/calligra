@@ -23,11 +23,11 @@
 #include "PresentationImpl.h"
 #include "PresentationKoPAView.h"
 
-#include <QtWidgets/QGraphicsWidget>
-#include <QtGui/QTextDocument>
-#include <QtGui/QTextFrame>
-#include <QtGui/QTextLayout>
-#include <QtCore/QDebug>
+#include <QGraphicsWidget>
+#include <QTextDocument>
+#include <QTextFrame>
+#include <QTextLayout>
+#include <QDebug>
 
 #include <stage/part/KPrPart.h>
 #include <stage/part/KPrDocument.h>

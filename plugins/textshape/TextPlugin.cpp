@@ -21,7 +21,7 @@
 #include "ReferencesToolFactory.h"
 #include "ReviewToolFactory.h"
 #ifdef CREATE_TEXTDOCUMENT_INSPECTOR
-#include "TextDocumentInspectionPlugin.h"
+#include "TextDocumentInspectionDockerFactory.h"
 #endif
 #include "TextShapeFactory.h"
 #include "AnnotationTextShapeFactory.h"
@@ -30,18 +30,15 @@
 #include <KoDockRegistry.h>
 #include <KoToolRegistry.h>
 
+#ifdef CREATE_TEXTDOCUMENT_INSPECTOR
+#include <KSharedConfig>
+#include <KConfigGroup>
+#endif
 #include <kpluginfactory.h>
 
-#ifdef CREATE_TEXTDOCUMENT_INSPECTOR
-K_PLUGIN_FACTORY_WITH_JSON(TextPluginFactory, "calligra_shape_text.json",
-                 registerPlugin<TextPlugin>();
-                 registerPlugin<TextDocumentInspectionPlugin>(QLatin1String("TextDocumentInspection"));
-)
-#else
 K_PLUGIN_FACTORY_WITH_JSON(TextPluginFactory, "calligra_shape_text.json",
                  registerPlugin<TextPlugin>();
 )
-#endif
 
 TextPlugin::TextPlugin(QObject * parent, const QVariantList &)
         : QObject(parent)
@@ -51,6 +48,15 @@ TextPlugin::TextPlugin(QObject * parent, const QVariantList &)
     KoToolRegistry::instance()->add(new ReferencesToolFactory());
     KoShapeRegistry::instance()->add(new TextShapeFactory());
     KoShapeRegistry::instance()->add(new AnnotationTextShapeFactory());
+
+#ifdef CREATE_TEXTDOCUMENT_INSPECTOR
+    KConfigGroup debugConfigGroup( KSharedConfig::openConfig(), "Debug");
+    const bool isInspectorEnabled  = (debugConfigGroup.readEntry("EnableTextDocumentInspector", QString()) == "true");
+
+    if (isInspectorEnabled) {
+        KoDockRegistry::instance()->add(new TextDocumentInspectionDockerFactory());
+    }
+#endif
 }
 
 #include <TextPlugin.moc>

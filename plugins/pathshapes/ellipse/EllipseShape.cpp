@@ -41,7 +41,8 @@ EllipseShape::EllipseShape()
     m_kindAngle(M_PI),
     m_type(Arc)
 {
-    QList<QPointF> handles;
+    QVector<QPointF> handles;
+    handles.reserve(3);
     handles.push_back(QPointF(100, 50));
     handles.push_back(QPointF(100, 50));
     handles.push_back(QPointF(0, 50));
@@ -184,7 +185,7 @@ void EllipseShape::moveHandleAction(int handleId, const QPointF &point, Qt::Keyb
             angle += M_PI;
     }
 
-    QList<QPointF> handles = this->handles();
+    QVector<QPointF> handles = this->handles();
     switch ( handleId ) {
     case 0:
         p = QPointF(m_center + QPointF(cos(angle) * m_radii.x(), -sin(angle) * m_radii.y()));
@@ -199,7 +200,8 @@ void EllipseShape::moveHandleAction(int handleId, const QPointF &point, Qt::Keyb
         updateKindHandle();
         break;
     case 2: {
-        QList<QPointF> kindHandlePositions;
+        QVector<QPointF> kindHandlePositions;
+        kindHandlePositions.reserve(3);
         kindHandlePositions.push_back(QPointF(m_center + QPointF(cos(m_kindAngle) * m_radii.x(), -sin(m_kindAngle) * m_radii.y())));
         kindHandlePositions.push_back(m_center);
         kindHandlePositions.push_back((handles[0] + handles[1]) / 2.0);
@@ -304,7 +306,7 @@ void EllipseShape::updateKindHandle()
     m_kindAngle = (m_startAngle + m_endAngle) * M_PI / 360.0;
     if (m_startAngle > m_endAngle)
         m_kindAngle += M_PI;
-    QList<QPointF> handles = this->handles();
+    QVector<QPointF> handles = this->handles();
     switch (m_type) {
     case Arc:
         handles[2] = m_center + QPointF(cos(m_kindAngle) * m_radii.x(), -sin(m_kindAngle) * m_radii.y());
@@ -323,7 +325,7 @@ void EllipseShape::updateAngleHandles()
 {
     qreal startRadian = m_startAngle * M_PI / 180.0;
     qreal endRadian = m_endAngle * M_PI / 180.0;
-    QList<QPointF> handles = this->handles();
+    QVector<QPointF> handles = this->handles();
     handles[0] = m_center + QPointF(cos(startRadian) * m_radii.x(), -sin(startRadian) * m_radii.y());
     handles[1] = m_center + QPointF(cos(endRadian) * m_radii.x(), -sin(endRadian) * m_radii.y());
     setHandles(handles);

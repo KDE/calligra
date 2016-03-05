@@ -57,11 +57,10 @@
 #include <krun.h>
 #include <khelpclient.h>
 
-#include <KoDocumentEntry.h>
 #include <KoTemplateCreateDia.h>
 #include <KoPart.h>
 #include <KoComponentData.h>
-#include <KoJsonTrader.h>
+#include <KoPluginLoader.h>
 
 #include "kptlocale.h"
 #include "kptviewbase.h"
@@ -380,12 +379,17 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
     // create views after dockers hidden, views take time for large projects
     QTimer::singleShot( 100, this, SLOT(initiateViews()) );
 
-    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Plan/ViewPlugin", QString());
-    foreach(QPluginLoader *pluginLoader, offers) {
-        KPluginFactory *factory = qobject_cast<KPluginFactory *>(pluginLoader->instance());
-        KXMLGUIClient *plugin = dynamic_cast<KXMLGUIClient*>(factory->create<QObject>(this, QVariantList()));
-        if (plugin) {
-            insertChildClient(plugin);
+    const QList<KPluginFactory *> pluginFactories =
+        KoPluginLoader::instantiatePluginFactories(QStringLiteral("calligraplan/extensions"));
+
+    foreach (KPluginFactory* factory, pluginFactories) {
+        QObject *object = factory->create<QObject>(this, QVariantList());
+        KXMLGUIClient *clientPlugin = dynamic_cast<KXMLGUIClient*>(object);
+        if (clientPlugin) {
+            insertChildClient(clientPlugin);
+        } else {
+            // not our/valid plugin, so delete the created object
+            object->deleteLater();
         }
     }
 

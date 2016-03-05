@@ -21,8 +21,7 @@
 // Own
 #include "Ko3dScene.h"
 
-// KDE
-#include <OdfDebug.h>
+#include "OdfDebug.h"
 
 // Calligra
 #include <KoXmlReader.h>

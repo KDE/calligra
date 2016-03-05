@@ -10,11 +10,11 @@ add_library( kookularGenerator_odp SHARED ${kookularGenerator_odp_SRCS})
 generate_export_header(kookularGenerator_odp)
 
 target_link_libraries(kookularGenerator_odp
-PUBLIC
-    Okular::Core
-PRIVATE
-    komain
-    kopageapp
+    PUBLIC
+        Okular::Core
+    PRIVATE
+        komain
+        kopageapp
 )
 
 set_target_properties(kookularGenerator_odp PROPERTIES

@@ -83,7 +83,7 @@ public:
     }
 
     /// reimplemented from superclass
-    void addImages(const QList<QImage> &imageList, const QPoint &insertAt);
+    void addImages(const QVector<QImage> &imageList, const QPoint &insertAt);
 
     // interface KoView
     /// reimplemented method from superclass

@@ -24,7 +24,6 @@
 #include <QProcess>
 #include <QString>
 #include <QTextStream>
-#include <QtXml>
 
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>

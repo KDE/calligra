@@ -82,7 +82,7 @@ bool OrthogonalSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * pr
 
     QList<KoShape*> shapes = proxy->shapes();
     foreach(KoShape * shape, shapes) {
-        QList<QPointF> points = proxy->pointsFromShape(shape);
+        QVector<QPointF> points = proxy->pointsFromShape(shape);
         foreach (const QPointF &point, points) {
             qreal dx = fabs(point.x() - mousePosition.x());
             if (dx < minHorzDist && dx < maxSnapDistance) {
@@ -146,7 +146,7 @@ bool NodeSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * proxy, q
 
     QRectF rect(-maxSnapDistance, -maxSnapDistance, maxSnapDistance, maxSnapDistance);
     rect.moveCenter(mousePosition);
-    QList<QPointF> points = proxy->pointsInRect(rect);
+    QVector<QPointF> points = proxy->pointsInRect(rect);
     QPointF snappedPoint = mousePosition;
 
     foreach (const QPointF &point, points) {
@@ -257,7 +257,7 @@ bool ExtensionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * pro
         // check if intersection of extension lines is near mouse position
         KoPathSegment s1(startPoints[0], snappedPoints[0] + snappedPoints[0]-startPoints[0]);
         KoPathSegment s2(startPoints[1], snappedPoints[1] + snappedPoints[1]-startPoints[1]);
-        QList<QPointF> isects = s1.intersections(s2);
+        QVector<QPointF> isects = s1.intersections(s2);
         if (isects.count() == 1 && squareDistance(isects[0], mousePosition) < maxDistance) {
             // add both extension lines
             m_lines.append(QLineF(startPoints[0], isects[0]));
@@ -393,7 +393,7 @@ bool IntersectionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy *p
     for (int i = 0; i < segmentCount; ++i) {
         const KoPathSegment &s1 = segments[i];
         for (int j = i + 1; j < segmentCount; ++j) {
-            QList<QPointF> isects = s1.intersections(segments[j]);
+            QVector<QPointF> isects = s1.intersections(segments[j]);
             foreach(const QPointF &point, isects) {
                 if (! rect.contains(point))
                     continue;

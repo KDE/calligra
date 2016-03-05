@@ -151,8 +151,7 @@ KoTextLayoutTableArea::KoTextLayoutTableArea(QTextTable *table, KoTextLayoutArea
     for (int row = 0; row < table->rows(); ++row) {
         d->cellAreas[row].resize(table->columns());
     }
-    KoTableStyle tableStyle(d->table->format());
-    d->collapsing = tableStyle.collapsingBorderModel();
+    d->collapsing = d->table->format().boolProperty(KoTableStyle::CollapsingBorders);
 }
 
 KoTextLayoutTableArea::~KoTextLayoutTableArea()
@@ -580,8 +579,6 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
 
     Q_ASSERT(row >= 0);
     Q_ASSERT(row < d->table->rows());
-
-    QTextTableFormat tableFormat = d->table->format();
 
     /*
      * Implementation Note:

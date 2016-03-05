@@ -71,9 +71,9 @@ public:
             connect(it.value(), SIGNAL(triggered()), m_signalMapper, SLOT(map()));
             m_signalMapper->setMapping(it.value() , it.key());
         }
-        connect(m_signalMapper, SIGNAL(mapped(const QString&)), this, SIGNAL(actionTriggered(const QString&)));
+        connect(m_signalMapper, SIGNAL(mapped(QString)), this, SIGNAL(actionTriggered(QString)));
 
-        connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*, int)), this, SIGNAL(changedTool()));
+        connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)), this, SIGNAL(changedTool()));
     }
     virtual ~Tool() {}
 

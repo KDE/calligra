@@ -29,7 +29,7 @@
 
 #include <QStyleOptionGraphicsItem>
 
-#include <KoJsonTrader.h>
+#include <KoPluginLoader.h>
 #include <KoDocumentEntry.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShapeManager.h>
@@ -47,8 +47,8 @@
 #include <stage/part/KPrDocument.h>
 
 #include <KActionCollection>
-#include <KService>
 
+#include <QPluginLoader>
 #include <QMimeDatabase>
 #include <QGraphicsWidget>
 #include <QTextDocument>
@@ -250,7 +250,7 @@ void CQPresentationCanvas::openFile(const QString& uri)
     emit loadingBegun();
 
     KoDocumentEntry entry;
-    Q_FOREACH (QPluginLoader *loader, KoJsonTrader::self()->query("Calligra/Part", QString())) {
+    Q_FOREACH (QPluginLoader *loader, KoPluginLoader::pluginLoaders("calligra/parts")) {
         if (loader->fileName().contains(QLatin1String("stagepart"))) {
             entry = KoDocumentEntry(loader);
             break;

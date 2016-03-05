@@ -24,11 +24,6 @@ target_link_libraries(
     Qt5::WebKitWidgets
     Qt5::Svg
     )
-install(TARGETS braindump_shape_web DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS braindump_shape_web DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
 
 kcoreaddons_desktop_to_json(braindump_shape_web braindump_shape_web.desktop)
-
-########### install files ###############
-
-install( FILES braindump_shape_web.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-

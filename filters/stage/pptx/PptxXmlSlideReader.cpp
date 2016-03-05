@@ -187,10 +187,10 @@ void PptxXmlSlideReaderContext::initializeContext(
         }
         if (!defaultLatinFonts.at(defaultIndex).isEmpty()) {
             QString face = defaultLatinFonts.at(defaultIndex);
-            if (face.startsWith("+mj")) {
+            if (face.startsWith(QLatin1String("+mj"))) {
                 face = theme.fontScheme.majorFonts.latinTypeface;
             }
-            else if (face.startsWith("+mn")) {
+            else if (face.startsWith(QLatin1String("+mn"))) {
                 face = theme.fontScheme.minorFonts.latinTypeface;
             }
             defaultTextStyles[defaultIndex].addProperty("fo:font-family", face);

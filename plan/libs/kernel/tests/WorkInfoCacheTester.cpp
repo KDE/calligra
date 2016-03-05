@@ -33,16 +33,24 @@
 namespace KPlato
 {
 
-QTimeZone createTimeZoneWithOffsetFromSystem(int hours, const QString & name)
+QTimeZone createTimeZoneWithOffsetFromSystem(int hours, const QString & name, int *shiftDays)
 {
     QTimeZone systemTimeZone = QTimeZone::systemTimeZone();
     int systemOffsetSeconds = systemTimeZone.standardTimeOffset(QDateTime(QDate(1980, 1, 1), QTime(), Qt::UTC));
     int offsetSeconds = systemOffsetSeconds + 3600 * hours;
-    if (offsetSeconds >= (14*3600) ) {
+    if (offsetSeconds >= (12*3600) ) {
+        qDebug() << "reducing offset by 24h";
         offsetSeconds -= (24*3600);
-    } else if (offsetSeconds <= -(14*3600) ) {
+        *shiftDays = -1;
+    } else if (offsetSeconds <= -(12*3600) ) {
+        qDebug() << "increasing offset by 24h";
         offsetSeconds += (24*3600);
+        *shiftDays = 1;
+    } else {
+        *shiftDays = 0;
     }
+    qDebug() << "creating timezone for offset" << hours << offsetSeconds << "systemoffset" << systemOffsetSeconds
+             << "shiftDays" << *shiftDays;
     return QTimeZone(name.toLatin1(), offsetSeconds, name, name);
 }
 
@@ -265,7 +273,8 @@ void WorkInfoCacheTester::timeZone()
 {
     Calendar cal("Test");
     // local zone: Europe/Berlin ( 9 hours from America/Los_Angeles )
-    QTimeZone la = createTimeZoneWithOffsetFromSystem(-9, "DummyLos_Angeles");
+    int laShiftDays;
+    QTimeZone la = createTimeZoneWithOffsetFromSystem(-9, "DummyLos_Angeles", &laShiftDays);
     QVERIFY( la.isValid() );
     cal.setTimeZone( la );
 
@@ -293,6 +302,8 @@ void WorkInfoCacheTester::timeZone()
     r.calendarIntervals( before, after );
     qDebug()<<wic.intervals.map();
     QCOMPARE( wic.intervals.map().count(), 2 );
+
+    wdate = wdate.addDays( -laShiftDays );
 qDebug() << wdate;
 qDebug() << wic.intervals.map().value( wdate );
 qDebug() << wic.intervals.map().value( wdate ).startTime();

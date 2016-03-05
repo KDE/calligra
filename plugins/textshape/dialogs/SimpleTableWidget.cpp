@@ -59,7 +59,7 @@ SimpleTableWidget::SimpleTableWidget(TextTool *tool, QWidget *parent)
     actionBorderColor->setIcon(koIcon("format-fill-color"));
     actionBorderColor->setText(i18n("Set Border Color..."));
     widget.border->addAction(actionBorderColor);
-    connect(actionBorderColor, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setBorderColor(const KoColor &)));
+    connect(actionBorderColor, SIGNAL(colorChanged(KoColor)), this, SLOT(setBorderColor(KoColor)));
 
     connect(widget.addRowAbove, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.addRowBelow, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));

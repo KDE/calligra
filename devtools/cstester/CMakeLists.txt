@@ -24,10 +24,9 @@ endif()
 
 add_executable(cstester ${cstester_SRCS})
 
+target_link_libraries(cstester komain kopageapp koplugin calligrasheetscommon wordsprivate)
 if(SHOULD_BUILD_KARBON)
-    target_link_libraries(cstester komain kopageapp calligrasheetscommon wordsprivate karbonui)
-else()
-    target_link_libraries(cstester komain kopageapp calligrasheetscommon wordsprivate)
+    target_link_libraries(cstester karbonui)
 endif()
 
 install(TARGETS cstester  ${INSTALL_TARGETS_DEFAULT_ARGS})

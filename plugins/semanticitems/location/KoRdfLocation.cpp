@@ -29,7 +29,7 @@
 #include <marble/MarbleWidget.h>
 #include <marble/MarbleWidgetInputHandler.h>
 #endif
-// KDE
+// KF5
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <kurl.h>

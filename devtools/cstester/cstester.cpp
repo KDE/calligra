@@ -25,7 +25,7 @@
 #include <KWDocument.h>
 #include <sheets/part/Doc.h>
 #include <KoPart.h>
-#include <KoJsonTrader.h>
+#include <KoPluginLoader.h>
 #include <KoDocumentEntry.h>
 
 #include <QApplication>
@@ -56,7 +56,7 @@ KoDocument* openFile(const QString &filename)
 
     KoPart *part;
     QString error;
-    QList<QPluginLoader *> pluginLoaders = KoJsonTrader::self()->query("Calligra/Part", mimetype);
+    QList<QPluginLoader *> pluginLoaders = KoPluginLoader::pluginLoaders(QStringLiteral("calligra/parts"), mimetype);
     if (!pluginLoaders.isEmpty()) {
         // take first
         KoDocumentEntry entry(pluginLoaders[0]);
@@ -116,7 +116,7 @@ QString saveFile(KoDocument *document, const QString &filename, const QString &o
     return saveAs;
 }
 
-QList<QImage> createThumbnails(KoDocument *document, const QSize &thumbSize)
+QVector<QImage> createThumbnails(KoDocument *document, const QSize &thumbSize)
 {
     CSThumbProvider *tp = 0;
 
@@ -135,13 +135,13 @@ QList<QImage> createThumbnails(KoDocument *document, const QSize &thumbSize)
     }
 #endif
 
-    return tp ? tp->createThumbnails(thumbSize) : QList<QImage>();
+    return tp ? tp->createThumbnails(thumbSize) : QVector<QImage>();
 }
 
-void saveThumbnails(const QList<QImage> &thumbnails, const QString &dir)
+void saveThumbnails(const QVector<QImage> &thumbnails, const QString &dir)
 {
     int i = 0;
-    for (QList<QImage>::const_iterator it(thumbnails.constBegin()); it != thumbnails.constEnd(); ++it) {
+    for (QVector<QImage>::const_iterator it(thumbnails.constBegin()); it != thumbnails.constEnd(); ++it) {
         // it is not possible to use QString("%1/thumb_%2.png").arg(dir).arg(++i);
         // as dir can contain % values which then might or might not be overwritten by the second arg
         QString thumbFilename = dir + QString("/thumb_%2.png").arg(++i);
@@ -149,7 +149,7 @@ void saveThumbnails(const QList<QImage> &thumbnails, const QString &dir)
     }
 }
 
-void saveThumbnails(const QFileInfo &file, const QList<QImage> &thumbnails, const QString &outdir)
+void saveThumbnails(const QFileInfo &file, const QVector<QImage> &thumbnails, const QString &outdir)
 {
     QDir dir(outdir);
     QString checkSubDir(file.fileName() + ".check");
@@ -157,11 +157,11 @@ void saveThumbnails(const QFileInfo &file, const QList<QImage> &thumbnails, cons
     saveThumbnails(thumbnails, outdir + '/' + checkSubDir);
 }
 
-bool checkThumbnails(const QList<QImage> &thumbnails, const QString &dir, bool verbose)
+bool checkThumbnails(const QVector<QImage> &thumbnails, const QString &dir, bool verbose)
 {
     bool success = true;
     int i = 0;
-    for (QList<QImage>::const_iterator it(thumbnails.constBegin()); it != thumbnails.constEnd(); ++it) {
+    for (QVector<QImage>::const_iterator it(thumbnails.constBegin()); it != thumbnails.constEnd(); ++it) {
         QString thumbFilename = dir + QString("/thumb_%2.png").arg(++i);
 
         QByteArray ba;
@@ -186,7 +186,7 @@ bool checkThumbnails(const QList<QImage> &thumbnails, const QString &dir, bool v
     return success;
 }
 
-bool checkThumbnails(const QList<QImage> &thumbnails, const QList<QImage> &others, bool verbose)
+bool checkThumbnails(const QVector<QImage> &thumbnails, const QVector<QImage> &others, bool verbose)
 {
     bool success = true;
     if (thumbnails.size() != others.size()) {
@@ -194,8 +194,8 @@ bool checkThumbnails(const QList<QImage> &thumbnails, const QList<QImage> &other
         return false;
     }
     int i = 1;
-    QList<QImage>::const_iterator it(thumbnails.constBegin());
-    QList<QImage>::const_iterator oIt(others.constBegin());
+    QVector<QImage>::const_iterator it(thumbnails.constBegin());
+    QVector<QImage>::const_iterator oIt(others.constBegin());
 
     for (; it != thumbnails.constEnd(); ++it, ++oIt, ++i) {
         QByteArray ba;
@@ -316,7 +316,7 @@ int main(int argc, char *argv[])
             exit(2);
         }
 
-        QList<QImage> thumbnails(createThumbnails(document, QSize(800,800)));
+        QVector<QImage> thumbnails(createThumbnails(document, QSize(800,800)));
 
         qDebug() << "created" << thumbnails.size() << "thumbnails";
         if (create) {
@@ -340,7 +340,7 @@ int main(int argc, char *argv[])
             QFileInfo rFile(rFilename);
             qDebug() << roundtrip << "rFilename" << rFilename << rFile.absoluteFilePath();
             document = openFile(rFile.absoluteFilePath());
-            QList<QImage> others(createThumbnails(document, QSize(800,800)));
+            QVector<QImage> others(createThumbnails(document, QSize(800,800)));
             if (parser.isSet("outdir")) {
                 saveThumbnails(file, others, outDir);
                 saveThumbnails(file, thumbnails, outDir + "/before");

@@ -23,7 +23,7 @@
 #ifndef CALLIGRA_COMPONENTS_VIEW_H
 #define CALLIGRA_COMPONENTS_VIEW_H
 
-#include <QtQuick/QQuickPaintedItem>
+#include <QQuickPaintedItem>
 
 namespace Calligra {
 namespace Components {

@@ -21,12 +21,12 @@
 // Own
 #include "WmfStack.h"
 
-// KDE
-#include <VectorImageDebug.h>
-
 // Local
 #include "WmfAbstractBackend.h"
 #include "WmfDeviceContext.h"
+
+// lib
+#include "VectorImageDebug.h"
 
 
 /**

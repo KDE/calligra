@@ -18,7 +18,7 @@ kcoreaddons_desktop_to_json(calligra_filter_wpg2odg calligra_filter_wpg2odg.desk
 
 target_link_libraries(calligra_filter_wpg2odg komain ${LIBODFGEN_LIBRARIES} ${LIBREVENGE_LIBRARIES} ${LIBWPG_LIBRARIES})
 
-install(TARGETS calligra_filter_wpg2odg DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_wpg2odg DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install(FILES flow_wpg_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})

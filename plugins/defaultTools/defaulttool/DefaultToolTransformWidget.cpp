@@ -51,17 +51,17 @@ DefaultToolTransformWidget::DefaultToolTransformWidget( KoInteractionTool* tool,
 
     setUnit( m_tool->canvas()->unit() );
 
-    connect( m_tool->canvas()->resourceManager(), SIGNAL( canvasResourceChanged( int, const QVariant& ) ),
-        this, SLOT( resourceChanged( int, const QVariant& ) ) );
+    connect( m_tool->canvas()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+        this, SLOT(resourceChanged(int,QVariant)) );
 
-    connect( rotateButton, SIGNAL( clicked() ), this, SLOT( rotationChanged() ) );
-    connect( shearXButton, SIGNAL( clicked() ), this, SLOT( shearXChanged() ) );
-    connect( shearYButton, SIGNAL( clicked() ), this, SLOT( shearYChanged() ) );
-    connect( scaleXButton, SIGNAL( clicked() ), this, SLOT( scaleXChanged() ) );
-    connect( scaleYButton, SIGNAL( clicked() ), this, SLOT( scaleYChanged() ) );
-    connect( scaleAspectCheckBox, SIGNAL( toggled( bool ) ), scaleYSpinBox, SLOT( setDisabled( bool ) ) );
-    connect( scaleAspectCheckBox, SIGNAL( toggled( bool ) ), scaleYButton, SLOT( setDisabled( bool ) ) );
-    connect( resetButton, SIGNAL( clicked() ), this, SLOT( resetTransformations() ) );
+    connect( rotateButton, SIGNAL(clicked()), this, SLOT(rotationChanged()) );
+    connect( shearXButton, SIGNAL(clicked()), this, SLOT(shearXChanged()) );
+    connect( shearYButton, SIGNAL(clicked()), this, SLOT(shearYChanged()) );
+    connect( scaleXButton, SIGNAL(clicked()), this, SLOT(scaleXChanged()) );
+    connect( scaleYButton, SIGNAL(clicked()), this, SLOT(scaleYChanged()) );
+    connect( scaleAspectCheckBox, SIGNAL(toggled(bool)), scaleYSpinBox, SLOT(setDisabled(bool)) );
+    connect( scaleAspectCheckBox, SIGNAL(toggled(bool)), scaleYButton, SLOT(setDisabled(bool)) );
+    connect( resetButton, SIGNAL(clicked()), this, SLOT(resetTransformations()) );
 }
 
 
@@ -80,7 +80,10 @@ void DefaultToolTransformWidget::resourceChanged( int key, const QVariant & res 
 void DefaultToolTransformWidget::rotationChanged()
 {
     QList<KoShape*> selectedShapes = m_tool->canvas()->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
-    QList<QTransform> oldTransforms;
+    const int selectedShapesCount = selectedShapes.count();
+
+    QVector<QTransform> oldTransforms;
+    oldTransforms.reserve(selectedShapesCount);
 
     foreach( KoShape* shape, selectedShapes )
         oldTransforms << shape->transformation();
@@ -99,7 +102,9 @@ void DefaultToolTransformWidget::rotationChanged()
     }
 
     m_tool->canvas()->shapeManager()->selection()->applyAbsoluteTransformation( matrix );
-    QList<QTransform> newTransforms;
+
+    QVector<QTransform> newTransforms;
+    newTransforms.reserve(selectedShapesCount);
 
     foreach( KoShape* shape, selectedShapes )
         newTransforms << shape->transformation();
@@ -113,7 +118,10 @@ void DefaultToolTransformWidget::shearXChanged()
 {
     KoSelection* selection = m_tool->canvas()->shapeManager()->selection();
     QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
-    QList<QTransform> oldTransforms;
+    const int selectedShapesCount = selectedShapes.count();
+
+    QVector<QTransform> oldTransforms;
+    oldTransforms.reserve(selectedShapesCount);
 
     foreach( KoShape* shape, selectedShapes )
         oldTransforms << shape->transformation();
@@ -132,7 +140,9 @@ void DefaultToolTransformWidget::shearXChanged()
     }
 
     selection->applyAbsoluteTransformation( matrix );
-    QList<QTransform> newTransforms;
+
+    QVector<QTransform> newTransforms;
+    newTransforms.reserve(selectedShapesCount);
 
     foreach( KoShape* shape, selectedShapes )
         newTransforms << shape->transformation();
@@ -146,7 +156,10 @@ void DefaultToolTransformWidget::shearYChanged()
 {
     KoSelection* selection = m_tool->canvas()->shapeManager()->selection();
     QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
-    QList<QTransform> oldTransforms;
+    const int selectedShapesCount = selectedShapes.count();
+
+    QVector<QTransform> oldTransforms;
+    oldTransforms.reserve(selectedShapesCount);
 
     foreach( KoShape* shape, selectedShapes )
         oldTransforms << shape->transformation();
@@ -165,7 +178,9 @@ void DefaultToolTransformWidget::shearYChanged()
     }
 
     selection->applyAbsoluteTransformation( matrix );
-    QList<QTransform> newTransforms;
+
+    QVector<QTransform> newTransforms;
+    newTransforms.reserve(selectedShapesCount);
 
     foreach( KoShape* shape, selectedShapes )
         newTransforms << shape->transformation();
@@ -178,7 +193,10 @@ void DefaultToolTransformWidget::shearYChanged()
 void DefaultToolTransformWidget::scaleXChanged()
 {
     QList<KoShape*> selectedShapes = m_tool->canvas()->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
-    QList<QTransform> oldTransforms;
+    const int selectedShapesCount = selectedShapes.count();
+
+    QVector<QTransform> oldTransforms;
+    oldTransforms.reserve(selectedShapesCount);
 
     foreach( KoShape* shape, selectedShapes )
         oldTransforms << shape->transformation();
@@ -202,7 +220,9 @@ void DefaultToolTransformWidget::scaleXChanged()
     }
 
     m_tool->canvas()->shapeManager()->selection()->applyAbsoluteTransformation( matrix );
-    QList<QTransform> newTransforms;
+
+    QVector<QTransform> newTransforms;
+    newTransforms.reserve(selectedShapesCount);
 
     foreach( KoShape* shape, selectedShapes )
         newTransforms << shape->transformation();
@@ -215,7 +235,10 @@ void DefaultToolTransformWidget::scaleXChanged()
 void DefaultToolTransformWidget::scaleYChanged()
 {
     QList<KoShape*> selectedShapes = m_tool->canvas()->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
-    QList<QTransform> oldTransforms;
+    const int selectedShapesCount = selectedShapes.count();
+
+    QVector<QTransform> oldTransforms;
+    oldTransforms.reserve(selectedShapesCount);
 
     foreach( KoShape* shape, selectedShapes )
         oldTransforms << shape->transformation();
@@ -234,7 +257,9 @@ void DefaultToolTransformWidget::scaleYChanged()
     }
 
     m_tool->canvas()->shapeManager()->selection()->applyAbsoluteTransformation( matrix );
-    QList<QTransform> newTransforms;
+
+    QVector<QTransform> newTransforms;
+    newTransforms.reserve(selectedShapesCount);
 
     foreach( KoShape* shape, selectedShapes )
         newTransforms << shape->transformation();
@@ -247,7 +272,10 @@ void DefaultToolTransformWidget::scaleYChanged()
 void DefaultToolTransformWidget::resetTransformations()
 {
     QList<KoShape*> selectedShapes = m_tool->canvas()->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
-    QList<QTransform> oldTransforms;
+    const int selectedShapesCount = selectedShapes.count();
+
+    QVector<QTransform> oldTransforms;
+    oldTransforms.reserve(selectedShapesCount);
 
     foreach( KoShape* shape, selectedShapes )
         oldTransforms << shape->transformation();
@@ -261,7 +289,9 @@ void DefaultToolTransformWidget::resetTransformations()
     }
 
     m_tool->canvas()->shapeManager()->selection()->applyAbsoluteTransformation( matrix );
-    QList<QTransform> newTransforms;
+
+    QVector<QTransform> newTransforms;
+    newTransforms.reserve(selectedShapesCount);
 
     foreach( KoShape* shape, selectedShapes )
         newTransforms << shape->transformation();

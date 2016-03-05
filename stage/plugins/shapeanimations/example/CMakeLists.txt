@@ -13,4 +13,4 @@ target_link_libraries(
     Qt5::Core
     )
 
-install(TARGETS kpr_shapeanimation_example  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kpr_shapeanimation_example  DESTINATION ${PLUGIN_INSTALL_DIR}/calligrastage/shapeanimations)

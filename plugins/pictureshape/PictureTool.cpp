@@ -122,7 +122,7 @@ QWidget *PictureTool::createOptionWidget()
     connect(m_pictureToolUI->cbAspect, SIGNAL(toggled(bool)), this, SLOT(aspectCheckBoxChanged(bool)));
     connect(m_pictureToolUI->bnFill, SIGNAL(pressed()), this, SLOT(fillButtonPressed()));
     connect(m_pictureToolUI->cbContour, SIGNAL(toggled(bool)), this, SLOT(contourCheckBoxChanged(bool)));
-    connect(m_pictureToolUI->cropWidget, SIGNAL(sigCropRegionChanged(QRectF, bool)), this, SLOT(cropRegionChanged(QRectF, bool)));
+    connect(m_pictureToolUI->cropWidget, SIGNAL(sigCropRegionChanged(QRectF,bool)), this, SLOT(cropRegionChanged(QRectF,bool)));
 
     return m_pictureToolUI;
 }

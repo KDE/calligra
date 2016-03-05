@@ -23,7 +23,7 @@
 #ifndef CALLIGRA_COMPONENTS_VIEWCONTROLLER_H
 #define CALLIGRA_COMPONENTS_VIEWCONTROLLER_H
 
-#include <QtQuick/QQuickItem>
+#include <QQuickItem>
 
 namespace Calligra {
 namespace Components {

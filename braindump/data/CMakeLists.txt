@@ -2,9 +2,8 @@ add_subdirectory(states)
 add_subdirectory(icons)
 
 ### Services ###
-install( FILES
-    braindump_extensions.desktop
-    DESTINATION ${SERVICETYPES_INSTALL_DIR})
+# TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
+# braindump_extensions.desktop
 
 ### GUI files ###
 install( FILES braindumpui.rc braindumpview.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/braindump)

@@ -27,7 +27,7 @@
 #include <QTableWidget>
 #include <QTableWidgetSelectionRange>
 
-// KDE
+// KF5
 #include <kcharsets.h>
 #include <kconfig.h>
 #include <WidgetsDebug.h>
@@ -126,24 +126,24 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
     buttonGroup->addButton(d->dialog->m_radioTab, 3);
     buttonGroup->addButton(d->dialog->m_radioOther, 4);
 
-    connect(d->dialog->m_formatComboBox, SIGNAL(activated( const QString& )),
-            this, SLOT(formatChanged( const QString& )));
+    connect(d->dialog->m_formatComboBox, SIGNAL(activated(QString)),
+            this, SLOT(formatChanged(QString)));
     connect(buttonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(delimiterClicked(int)));
     connect(d->dialog->m_delimiterEdit, SIGNAL(returnPressed()),
             this, SLOT(returnPressed()));
-    connect(d->dialog->m_delimiterEdit, SIGNAL(textChanged ( const QString & )),
-            this, SLOT(genericDelimiterChanged( const QString & ) ));
-    connect(d->dialog->m_comboQuote, SIGNAL(activated(const QString &)),
-            this, SLOT(textquoteSelected(const QString &)));
-    connect(d->dialog->m_sheet, SIGNAL(currentCellChanged(int, int, int, int)),
-            this, SLOT(currentCellChanged(int, int)));
+    connect(d->dialog->m_delimiterEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(genericDelimiterChanged(QString)));
+    connect(d->dialog->m_comboQuote, SIGNAL(activated(QString)),
+            this, SLOT(textquoteSelected(QString)));
+    connect(d->dialog->m_sheet, SIGNAL(currentCellChanged(int,int,int,int)),
+            this, SLOT(currentCellChanged(int,int)));
     connect(d->dialog->m_ignoreDuplicates, SIGNAL(stateChanged(int)),
             this, SLOT(ignoreDuplicatesChanged(int)));
     connect(d->dialog->m_updateButton, SIGNAL(clicked()),
             this, SLOT(updateClicked()));
-    connect(d->dialog->comboBoxEncoding, SIGNAL(textChanged ( const QString & )),
-            this, SLOT(encodingChanged ( const QString & ) ));
+    connect(d->dialog->comboBoxEncoding, SIGNAL(textChanged(QString)),
+            this, SLOT(encodingChanged(QString)));
 }
 
 

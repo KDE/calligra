@@ -33,7 +33,7 @@
 #include <QColor>
 #include <QPainter>
 
-// KDE
+// KF5
 #include <klocalizedstring.h>
 
 // KChart

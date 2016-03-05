@@ -27,7 +27,6 @@
 #include <QFile>
 #include <QFont>
 #include <QPen>
-#include <QtXml>
 #include <QList>
 #include <QByteArray>
 

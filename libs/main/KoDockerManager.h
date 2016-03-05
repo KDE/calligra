@@ -17,14 +17,15 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef DOCKER_MANAGER_H
-#define DOCKER_MANAGER_H
+
+#ifndef KODOCKERMANAGER_H
+#define KODOCKERMANAGER_H
 
 #include "komain_export.h"
 
 #include <QObject>
 #include <QPointer>
-\
+
 class KoMainWindow;
 
 /**

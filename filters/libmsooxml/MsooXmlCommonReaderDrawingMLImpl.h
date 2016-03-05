@@ -3612,7 +3612,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
         debugMsooXml << "sourceName:" << sourceName;
 
         //A test file is attached to Bug 286700.
-        if (sourceName.endsWith("NULL")) {
+        if (sourceName.endsWith(QLatin1String("NULL"))) {
             skipCurrentElement();
             READ_EPILOGUE
         }
@@ -3946,7 +3946,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srcRect()
     TRY_READ_ATTR_WITHOUT_NS(r)
     TRY_READ_ATTR_WITHOUT_NS(t)
 
-    if (!m_recentDestName.endsWith("wmf") && !m_recentDestName.endsWith("emf")) {
+    if (!m_recentDestName.endsWith(QLatin1String("wmf")) && !m_recentDestName.endsWith(QLatin1String("emf"))) {
         if (!b.isEmpty() || !l.isEmpty() || !r.isEmpty() || !t.isEmpty()) {
             qreal bReal = b.toDouble() / 100000;
             qreal tReal = t.toDouble() / 100000;

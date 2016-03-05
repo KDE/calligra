@@ -50,7 +50,6 @@
 #include <QKeyEvent>
 #include <QCompleter>
 #include <QAbstractItemView>
-#include <QtDebug>
 #include <QStringListModel>
 #include <QScrollBar>
 #include <QList>

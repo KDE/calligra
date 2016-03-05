@@ -20,7 +20,7 @@
 // Local
 #include "Validity.h"
 
-// KDE
+// KF5
 #include <kmessagebox.h>
 
 // Calligra

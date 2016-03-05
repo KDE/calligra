@@ -14,7 +14,7 @@ include_directories(${KOMAIN_INCLUDES}
                     ${CMAKE_CURRENT_SOURCE_DIR}/../part
                     #${CMAKE_CURRENT_SOURCE_DIR}/models
                     ${CMAKE_CURRENT_BINARY_DIR}
-                    ${CMAKE_SOURCE_DIR}/libs/kopageapp
+                    ${CMAKE_SOURCE_DIR}/libs/pageapp
                     ${CMAKE_SOURCE_DIR}/stage
                     ${CMAKE_SOURCE_DIR}/stage/part
                     ${CMAKE_SOURCE_DIR}/words
@@ -63,9 +63,8 @@ endif ()
 
 add_executable(calligrageminithumbnailhelper ${thumbnailhelper_SRCS})
 target_link_libraries(calligrageminithumbnailhelper
-    Qt5::Gui
-    Qt5::Core
     komain
+    KF5::Crash # needed to explicitely disable drkonqi if any plugin links to kdelibs4support
 )
 
 # Calligra Gemini application

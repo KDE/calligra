@@ -36,4 +36,4 @@ target_link_libraries(
     Qt5::Gui
     )
 
-install(TARGETS kpr_pageeffect_clockwipe  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kpr_pageeffect_clockwipe  DESTINATION ${PLUGIN_INSTALL_DIR}/calligrastage/pageeffects)

@@ -23,7 +23,7 @@
 #include "ViewController.h"
 #include <KoToolManager.h>
 
-#include <QtCore/QDebug>
+#include <QDebug>
 #include <QTimer>
 #include <QQuickWindow>
 #include <QPainter>

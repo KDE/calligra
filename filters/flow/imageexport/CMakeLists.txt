@@ -16,7 +16,7 @@ add_library(flowimageexport MODULE ${flowimageexport_PART_SRCS})
 
 target_link_libraries(flowimageexport  flowcommon )
 
-install(TARGETS flowimageexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS flowimageexport  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 
 ########### install files ###############

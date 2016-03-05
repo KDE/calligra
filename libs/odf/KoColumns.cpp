@@ -24,8 +24,7 @@
 #include "KoXmlReader.h"
 #include "KoXmlNS.h"
 #include "KoUnit.h"
-// KDE
-#include <OdfDebug.h>
+#include "OdfDebug.h"
 
 static const int defaultColumnCount = 1;
 static const KoColumns::SeparatorStyle defaultSeparatorStyle = KoColumns::None;

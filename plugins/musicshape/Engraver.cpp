@@ -35,6 +35,7 @@
 #include <math.h>
 
 #include <QList>
+#include <QVector>
 #include <QVarLengthArray>
 #include <QMultiMap>
 
@@ -511,7 +512,7 @@ void Engraver::engraveBar(Bar* bar, qreal sizeFactor)
             if (c->beamType(0) == BeamStart) {
                 // fetch all chords in the beam
                 QList<Chord*> chords;
-                QList<QPointF> stemEnds;
+                QVector<QPointF> stemEnds;
                 for (int j = i; j < vb->elementCount(); j++) {
                     Chord* chord = dynamic_cast<Chord*>(vb->element(j));
                     if (!chord) continue;

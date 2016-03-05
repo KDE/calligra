@@ -23,7 +23,7 @@
 #ifndef KOGENSTYLES_H
 #define KOGENSTYLES_H
 
-#include <QList>
+#include <QVector>
 #include <QMultiMap>
 #include <QString>
 
@@ -123,7 +123,7 @@ public:
      * @param type the style type, see the KoGenStyle constructor
      * @see insert()
      */
-    QList<KoGenStyles::NamedStyle> styles(KoGenStyle::Type type) const;
+    QVector<KoGenStyles::NamedStyle> styles(KoGenStyle::Type type) const;
 
     /**
      * @return an existing style by name. If no such style exists, 0 is returned.
@@ -251,6 +251,7 @@ private:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoGenStyles::InsertionFlags)
+Q_DECLARE_TYPEINFO(KoGenStyles::NamedStyle, Q_MOVABLE_TYPE);
 
 //! Debug stream operator.
 KOODF_EXPORT QDebug operator<<(QDebug dbg, const KoGenStyles& styles);

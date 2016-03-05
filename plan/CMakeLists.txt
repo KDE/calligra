@@ -91,14 +91,15 @@ add_library(planprivate SHARED ${planprivate_LIB_SRCS} ${plansettings_SRCS} )
 generate_export_header(planprivate BASE_NAME kplato)
 
 target_link_libraries(planprivate
-PUBLIC
-    kplatokernel
-    kplatomodels
-    kplatoui
-    komain
-PRIVATE
-    KF5::IconThemes
-#     KF5::KHtml
+    PUBLIC
+        kplatokernel
+        kplatomodels
+        kplatoui
+        komain
+    PRIVATE
+        koplugin
+        KF5::IconThemes
+        #KF5::KHtml
 )
 if(KF5AkonadiContact_FOUND)
     target_link_libraries(planprivate  PRIVATE KF5::AkonadiContact)
@@ -117,7 +118,7 @@ kcoreaddons_desktop_to_json(planpart planpart.desktop)
 
 target_link_libraries(planpart KF5::Parts planprivate)
 
-install(TARGETS planpart DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS planpart DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)
 
 
 ########### KPlato executable ###############
@@ -153,8 +154,10 @@ install( FILES  plan.rc plan_readonly.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/plan
 install( PROGRAMS  plan.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  planrc DESTINATION ${CONFIG_INSTALL_DIR})
 install(FILES plansettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
-install( FILES  plan_viewplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 install(FILES plan.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
+
+# TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
+# plan_viewplugin.desktop
 
 install(FILES
     about/top-left-plan.png

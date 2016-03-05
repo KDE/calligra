@@ -42,15 +42,15 @@
 #include <kconfig.h>
 #include <KCompletion>
 
+#include <KPluginMetaData>
+#include <KPluginInfo>
+#include <KPluginSelector>
+#include <ksharedconfig.h>
+#include <sonnet/configwidget.h>
+
 #include <KoConfigAuthorPage.h>
 #include <KoUnit.h>
 #include <KoComponentData.h>
-
-// #include <kplugininfo.h>
-// #include <kpluginselector.h>
-// #include <kservicetypetrader.h>
-#include <ksharedconfig.h>
-#include <sonnet/configwidget.h>
 
 #include "ApplicationSettings.h"
 #include "CalculationSettings.h"
@@ -92,8 +92,7 @@ public:
     bool oldCreateBackupFile;
 
     // Plugin Options
-    // QT5TODO: not compatible with Calligra-style plugins, T448
-//     KPluginSelector* pluginSelector;
+    KPluginSelector* pluginSelector;
 
     // Spellchecker Options
     Sonnet::ConfigWidget* spellCheckPage;
@@ -284,6 +283,16 @@ void PreferenceDialog::Private::resetOpenSaveOptions()
     fileOptions.m_autoSaveDelay->setValue(oldAutoSaveDelay);
 }
 
+QList<KPluginInfo> pluginInfos(const QString &directory)
+{
+    QList<KPluginInfo> result;
+    QVector<KPluginMetaData> pluginMetaDataList = KPluginLoader::findPlugins(directory);
+    result.reserve(pluginMetaDataList.size());
+    foreach(const KPluginMetaData &metaData, pluginMetaDataList) {
+        result.append(KPluginInfo::fromMetaData(metaData));
+    }
+    return result;
+}
 
 
 PreferenceDialog::PreferenceDialog(View* view)
@@ -349,21 +358,15 @@ PreferenceDialog::PreferenceDialog(View* view)
     d->resetOpenSaveOptions(); // initialize values
 
     // Plugin Options Widget
-    // QT5TODO: not compatible with Calligra-style plugins, T448
-    /*
     d->pluginSelector = new KPluginSelector(this);
-    const QString serviceType = QLatin1String("CalligraSheets/Plugin");
-    const QString query = QLatin1String("([X-CalligraSheets-InterfaceVersion] == 0)");
-    const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
-    const QList<KPluginInfo> pluginInfoList = KPluginInfo::fromServices(offers);
-    d->pluginSelector->addPlugins(pluginInfoList, KPluginSelector::ReadConfigFile,
+    const QList<KPluginInfo> functionPluginInfos = pluginInfos(QStringLiteral("calligrasheets/functions"));
+    const QList<KPluginInfo> toolPluginInfos = pluginInfos(QStringLiteral("calligrasheets/tools"));
+    d->pluginSelector->addPlugins(functionPluginInfos, KPluginSelector::ReadConfigFile,
                                   i18n("Function Modules"), "FunctionModule");
-    d->pluginSelector->addPlugins(pluginInfoList, KPluginSelector::ReadConfigFile,
+    d->pluginSelector->addPlugins(toolPluginInfos, KPluginSelector::ReadConfigFile,
                                   i18n("Tools"), "Tool");
     d->pluginSelector->load();
-    */
-    QWidget *pluginSelectorDummy = new QWidget(this);
-    page = new KPageWidgetItem(pluginSelectorDummy/*d->pluginSelector*/, i18n("Plugins"));
+    page = new KPageWidgetItem(d->pluginSelector, i18n("Plugins"));
     page->setIcon(koIcon("preferences-plugin"));
     addPage(page);
     d->pluginPage = page;
@@ -407,7 +410,7 @@ void PreferenceDialog::slotApply()
     d->applyOpenSaveOptions();
 
     // Plugin Options
-//     d->pluginSelector->save();
+    d->pluginSelector->save();
     FunctionModuleRegistry::instance()->loadFunctionModules();
 
     d->spellCheckPage->save();
@@ -428,7 +431,7 @@ void PreferenceDialog::slotDefault()
     } else if (currentPage() == d->page4) {
         d->spellCheckPage->slotDefault();
     } else if (currentPage() == d->pluginPage) {
-//         d->pluginSelector->load();
+        d->pluginSelector->load();
     }
 }
 
@@ -441,7 +444,7 @@ void PreferenceDialog::slotReset()
     } else if (currentPage() == d->page4) {
         // TODO
     } else if (currentPage() == d->pluginPage) {
-//         d->pluginSelector->load(); // FIXME
+        d->pluginSelector->load();
     }
 }
 

@@ -54,9 +54,9 @@ StylesWidget::StylesWidget(QWidget *parent, bool paragraphMode, Qt::WindowFlags 
 //    widget.stylesView->setItemDelegate(m_stylesDelegate);
 
     if (paragraphMode) {
-        connect(widget.stylesView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(applyParagraphStyle()));
+        connect(widget.stylesView, SIGNAL(clicked(QModelIndex)), this, SLOT(applyParagraphStyle()));
     } else {
-        connect(widget.stylesView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(applyCharacterStyle()));
+        connect(widget.stylesView, SIGNAL(clicked(QModelIndex)), this, SLOT(applyCharacterStyle()));
     }
 }
 

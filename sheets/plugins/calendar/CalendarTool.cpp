@@ -188,16 +188,18 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
     debugSheets << "inserting calendar completed";
 }
 
-QWidget* CalendarTool::createOptionWidget()
+QList<QPointer<QWidget> > CalendarTool::createOptionWidgets()
 {
     // Create the main cell tool widget. It is not visible, but the CellTool makes heavy use
     // of it, and it refuses to work correctly if it does not exist
-    CellTool::createOptionWidget();
+    CellTool::createOptionWidgets();
 
     CalendarToolWidget* widget =  new CalendarToolWidget(canvas()->canvasWidget());
     connect(widget, SIGNAL(insertCalendar(QDate,QDate)),
             this, SLOT(insertCalendar(QDate,QDate)));
-    return widget;
+    QList<QPointer<QWidget> > ow;
+    ow.append(widget);
+    return ow;
 }
 
 void CalendarTool::setText(Sheet* sheet, int _row, int _column, const QString& _text, bool asString)

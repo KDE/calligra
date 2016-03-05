@@ -22,7 +22,7 @@
 // Own
 #include "TemplateToolFactory.h"
 
-// KDE
+// KF5
 #include <klocalizedstring.h>
 
 // Calligra

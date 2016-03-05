@@ -37,7 +37,7 @@ endmacro()
 
 colorengine_lcms_add_unit_test(TestKoLcmsColorProfile
     TestKoLcmsColorProfile.cpp
-    LINK_LIBRARIES kolcmsengine kowidgets pigmentcms KF5::I18n ${LCMS2_LIBRARIES} Qt5::Test
+    LINK_LIBRARIES kowidgets pigmentcms KF5::I18n ${LCMS2_LIBRARIES} Qt5::Test
 )
 
 ########### next target ###############

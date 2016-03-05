@@ -133,23 +133,15 @@ generate_export_header(pigmentcms
     EXPORT_MACRO_NAME PIGMENTCMS_EXPORT
 )
 
-if (HAVE_VC)
-    target_link_libraries(pigmentcms KF5::I18n )
-    target_link_libraries(pigmentcms LINK_INTERFACE_LIBRARIES KF5::I18n )
-endif()
-
-target_link_libraries(
-    pigmentcms
-    koplugin
-    ${EXTRA_LIBRARIES}
-    KF5::I18n 
-    Qt5::Gui
-    Qt5::Xml
-    ${WIN32_PLATFORM_NET_LIBS}
-    )
-
-target_link_libraries(
-    pigmentcms LINK_INTERFACE_LIBRARIES koplugin Qt5::Xml Qt5::Gui ${EXTRA_LIBRARIES}
+target_link_libraries(pigmentcms
+    PUBLIC
+        KF5::I18n
+        Qt5::Xml
+        Qt5::Gui
+        ${EXTRA_LIBRARIES}
+    PRIVATE
+        koplugin
+        ${WIN32_PLATFORM_NET_LIBS}
 )
 
 set_target_properties(pigmentcms PROPERTIES
@@ -158,7 +150,8 @@ set_target_properties(pigmentcms PROPERTIES
 
 install(TARGETS pigmentcms  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install( FILES pigment.desktop pigmentextension.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+# TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
+# pigment.desktop pigmentextension.desktop
 
 install( FILES ${PIGMENT_INSTALL_FILES}
          DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)

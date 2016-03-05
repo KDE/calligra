@@ -127,7 +127,7 @@ public:
      * Return an ordered list of all pages.
      * @param pageStyle if non empty return only the pages that follow the page style.
      */
-    QList<KWPage> pages(const QString &pageStyle = QString()) const;
+    QVector<KWPage> pages(const QString &pageStyle = QString()) const;
 
     /**
      * Return the padding used for this document. This is used to have some space around each
