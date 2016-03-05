@@ -154,6 +154,7 @@ set (odf_DIR_SRCS
     odf/SheetsOdfRegion.cpp
     odf/SheetsOdfCondition.cpp
     odf/SheetsOdfValidity.cpp
+    odf/GenValidationStyle.cpp
     )
 
 set (part_DIR_SRCS
@@ -259,7 +260,6 @@ set (calligrasheetsodf_LIB_SRCS
     DocBase.cpp
     Format.cpp
     Formula.cpp
-    GenValidationStyle.cpp
     HeaderFooter.cpp
     Localization.cpp
     Map.cpp
