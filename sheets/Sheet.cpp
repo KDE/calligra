@@ -50,6 +50,7 @@
 #include "SheetModel.h"
 #include "StyleStorage.h"
 #include "Validity.h"
+#include "ValueConverter.h"
 #include "ValueStorage.h"
 #include "database/Filter.h"
 
