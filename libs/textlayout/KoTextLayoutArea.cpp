@@ -165,7 +165,6 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
             if (block == d->startOfArea->it.currentBlock() && line.textStart() < d->startOfArea->lineTextStart) {
                 continue; // this line is part of a previous layoutArea
             }
-            QRectF lineRect = line.naturalTextRect();
             if (point.y() > line.y() + line.height()) {
                 pointedAt.position = block.position() + line.textStart() + line.textLength();
                 if (block == d->endOfArea->it.currentBlock() && line.textStart() + line.textLength() >= d->endOfArea->lineTextStart) {
@@ -177,8 +176,9 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
             if (accuracy == Qt::ExactHit && point.y() < line.y()) { // between lines
                 return KoPointedAt();
             }
+            const QRectF lineRect = line.naturalTextRect();
             if (accuracy == Qt::ExactHit && // left or right of line
-                    (point.x() < line.naturalTextRect().left() || point.x() > line.naturalTextRect().right())) {
+                    (point.x() < lineRect.left() || point.x() > lineRect.right())) {
                 return KoPointedAt();
             }
             if (point.x() > lineRect.x() + lineRect.width() && layout->textOption().textDirection() == Qt::RightToLeft) {
