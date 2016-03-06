@@ -113,7 +113,6 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
         QTextFrame *subFrame = it.currentFrame();
-        QTextBlockFormat format = block.blockFormat();
 
         if (!block.isValid()) {
             if (lastBorder) { // draw previous block's border

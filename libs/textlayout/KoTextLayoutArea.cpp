@@ -114,7 +114,6 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
         QTextFrame *subFrame = it.currentFrame();
-        QTextBlockFormat format = block.blockFormat();
 
         if (table) {
             if (tableAreaIndex >= d->tableAreas.size()) {
@@ -260,7 +259,6 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
         QTextFrame *subFrame = it.currentFrame();
-        QTextBlockFormat format = block.blockFormat();
 
         if (table) {
             if (tableAreaIndex >= d->tableAreas.size()) {
