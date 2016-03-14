@@ -25,7 +25,6 @@
 #include <QProcess>
 #include <QDir>
 #include <QApplication>
-#include <QDesktopServices>
 #include <QUrl>
 
 #include <klocalizedstring.h>
@@ -124,7 +123,7 @@ void DesktopViewProxy::fileOpen()
 
     KoFileDialog dialog(d->desktopView, KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Open Document"));
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     dialog.setMimeTypeFilters(mimeFilter);
     QString filename = dialog.filename();
     if (filename.isEmpty()) return;

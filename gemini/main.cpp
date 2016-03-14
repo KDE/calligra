@@ -23,7 +23,6 @@
 #include <QFile>
 #include <QStringList>
 #include <QString>
-#include <QDesktopServices>
 #include <QProcessEnvironment>
 #include <QDir>
 #include <QMessageBox>

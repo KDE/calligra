@@ -23,7 +23,6 @@
 
 #include <QApplication>
 #include <QDebug>
-#include <QDesktopServices>
 #include <QDirIterator>
 #include <QRunnable>
 #include <QThreadPool>

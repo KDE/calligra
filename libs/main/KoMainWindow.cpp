@@ -77,7 +77,6 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QDesktopWidget>
-#include <QDesktopServices>
 #include <QPrintPreviewDialog>
 #include <QCloseEvent>
 #include <QPointer>
@@ -1293,8 +1292,8 @@ void KoMainWindow::slotFileOpen()
         KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
         dialog.setCaption(i18n("Open Document"));
         dialog.setDefaultDir(qApp->applicationName().contains("karbon")
-                               ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
-                               : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+                               ? QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)
+                               : QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
         dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
         dialog.setHideNameFilterDetailsOption();
         url = QUrl::fromUserInput(dialog.filename());
@@ -1302,8 +1301,8 @@ void KoMainWindow::slotFileOpen()
         KoFileDialog dialog(this, KoFileDialog::ImportFile, "OpenDocument");
         dialog.setCaption(i18n("Import Document"));
         dialog.setDefaultDir(qApp->applicationName().contains("karbon")
-                                ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
-                                : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+                                ? QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)
+                                : QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
         dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
         dialog.setHideNameFilterDetailsOption();
         url = QUrl::fromUserInput(dialog.filename());
@@ -1446,8 +1445,8 @@ KoPrintJob* KoMainWindow::exportToPdf(const KoPageLayout &_pageLayout, const QSt
         KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
         QString defaultDir = group.readEntry("SavePdfDialog");
         if (defaultDir.isEmpty())
-            defaultDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
-        QUrl startUrl = QUrl(defaultDir);
+            defaultDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+        QUrl startUrl = QUrl::fromLocalFile(defaultDir);
         KoDocument* pDoc = rootDocument();
         /** if document has a file name, take file name and replace extension with .pdf */
         if (pDoc && pDoc->url().isValid()) {

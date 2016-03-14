@@ -21,7 +21,6 @@
 #include <QFile>
 #include <QDir>
 #include <QProcessEnvironment>
-#include <QDesktopServices>
 #include <QDebug>
 #include <QTimer>
 #include <QCommandLineParser>

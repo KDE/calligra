@@ -58,7 +58,6 @@
 #include <QWidget>
 #include <QSysInfo>
 #include <QStringList>
-#include <QDesktopServices>
 #include <QProcessEnvironment>
 #include <QDir>
 #include <QPluginLoader>

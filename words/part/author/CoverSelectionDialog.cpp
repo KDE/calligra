@@ -31,7 +31,6 @@ Boston, MA 02110-1301, USA
 //QT includes
 #include <QPushButton>
 #include <QDebug>
-#include <QDesktopServices>
 
 // Calligra includes
 #include <KoFileDialog.h>
@@ -73,7 +72,7 @@ void CoverSelectionDialog::open()
     //Here filter could be change if new extension(s) have to be added
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Open Cover"));
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     dialog.setImageFilters();
 
     QString fileName = dialog.filename();

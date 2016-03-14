@@ -21,7 +21,7 @@
 #include "ui_KoFileDialogTester.h"
 
 #include <QApplication>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QListWidget>
 #include <QCheckBox>
 #include <QRadioButton>
@@ -74,7 +74,7 @@ void KoFileDialogTester::testOpenFile()
     ui->listResults->clear();
     KoFileDialog dlg(this, KoFileDialog::OpenFile, ui->txtUniqueKey->text());
     dlg.setCaption("Testing: OpenFile");
-    dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     if (ui->radioName->isChecked()) {
 
         if (ui->chkSetDefaultFilter->isChecked()) {
@@ -110,7 +110,7 @@ void KoFileDialogTester::testOpenFiles()
     ui->listResults->clear();
     KoFileDialog dlg(this, KoFileDialog::OpenFiles, ui->txtUniqueKey->text());
     dlg.setCaption("Testing: OpenFile");
-    dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     if (ui->radioName->isChecked()) {
 
           if (ui->chkSetDefaultFilter->isChecked()) {
@@ -148,7 +148,7 @@ void KoFileDialogTester::testOpenDirectory()
     ui->listResults->clear();
     KoFileDialog dlg(this, KoFileDialog::OpenDirectory, ui->txtUniqueKey->text());
     dlg.setCaption("Testing: OpenDirectory");
-    dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     if (ui->radioName->isChecked()) {
 
          if (ui->chkSetDefaultFilter->isChecked()) {
@@ -186,7 +186,7 @@ void KoFileDialogTester::testImportFile()
 
     KoFileDialog dlg(this, KoFileDialog::ImportFile, ui->txtUniqueKey->text());
     dlg.setCaption("Testing: ImportFile");
-    dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     if (ui->radioName->isChecked()) {
 
          if (ui->chkSetDefaultFilter->isChecked()) {
@@ -223,7 +223,7 @@ void KoFileDialogTester::testImportFiles()
     ui->listResults->clear();
     KoFileDialog dlg(this, KoFileDialog::ImportFiles, ui->txtUniqueKey->text());
     dlg.setCaption("Testing: ImportFiles");
-    dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     if (ui->radioName->isChecked()) {
 
          if (ui->chkSetDefaultFilter->isChecked()) {
@@ -261,7 +261,7 @@ void KoFileDialogTester::testImportDirectory()
     ui->listResults->clear();
     KoFileDialog dlg(this, KoFileDialog::ImportDirectory, ui->txtUniqueKey->text());
     dlg.setCaption("Testing: Import Directory");
-    dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     if (ui->radioName->isChecked()) {
 
         if (ui->chkSetDefaultFilter->isChecked()) {
@@ -298,7 +298,7 @@ void KoFileDialogTester::testSaveFile()
 
     KoFileDialog dlg(this, KoFileDialog::SaveFile, ui->txtUniqueKey->text());
     dlg.setCaption("Testing: SaveFile");
-    dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     if (ui->radioName->isChecked()) {
         if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setNameFilters(m_nameFilters, m_nameFilters.last());

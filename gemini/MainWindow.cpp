@@ -35,7 +35,6 @@
 #include <QToolButton>
 #include <QMenuBar>
 #include <QAction>
-#include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QFileInfo>
 #include <QUrl>
@@ -618,7 +617,7 @@ void MainWindow::openFile()
 
     KoFileDialog dialog(d->desktopView, KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Open Document"));
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     dialog.setMimeTypeFilters(mimeFilter);
     QString filename = dialog.filename();
     if(!filename.isEmpty()) {

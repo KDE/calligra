@@ -31,7 +31,6 @@
 #include <QTreeWidgetItem>
 #include <QStyledItemDelegate>
 #include <QLinearGradient>
-#include <QDesktopServices>
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QMimeData>
@@ -200,8 +199,8 @@ void KoOpenPane::openFileDialog()
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Open Existing Document"));
     dialog.setDefaultDir(qApp->applicationName().contains("karbon")
-                          ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
-                          : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+                          ? QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)
+                          : QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     dialog.setMimeTypeFilters(m_mimeFilter);
     dialog.setHideNameFilterDetailsOption();
     QUrl url = QUrl::fromUserInput(dialog.filename());

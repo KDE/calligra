@@ -20,7 +20,6 @@
 #include "DocumentListModel.h"
 
 #include <QDebug>
-#include <QDesktopServices>
 #include <QDirIterator>
 #include <QRunnable>
 #include <QThreadPool>
@@ -59,7 +58,7 @@ void SearchThread::run()
 // Keeping this code around, in case Tracker later blows up horribly and we
 // have to rapidly reenable the filesystem only support
     // Get documents from the device storage's document directory...
-    QString documentsDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
+    QString documentsDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     QStringList nameFilters;
     for (QHash<QString, DocumentListModel::DocumentType>::const_iterator it = m_docTypes.constBegin(); it != m_docTypes.constEnd(); ++it)
         nameFilters.append("*." + it.key());
@@ -257,7 +256,7 @@ DocumentListModel::DocumentType DocumentListModel::filter()
 
 QString DocumentListModel::documentsFolder() const
 {
-    return QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
+    return QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
 }
 
 void DocumentListModel::setFilter(DocumentListModel::DocumentType newFilter)
