@@ -100,7 +100,7 @@ QSize ContentsModel::thumbnailSize() const
     return d->thumbnailSize;
 }
 
-void ContentsModel::setThumbnailSize(QSize newValue)
+void ContentsModel::setThumbnailSize(const QSize& newValue)
 {
     if(newValue != d->thumbnailSize) {
         d->thumbnailSize = newValue;

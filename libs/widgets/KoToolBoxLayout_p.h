@@ -156,7 +156,7 @@ public:
         return m_name;
     }
 
-    void setButtonSize(QSize size)
+    void setButtonSize(const QSize& size)
     {
         m_layout->setButtonSize(size);
     }

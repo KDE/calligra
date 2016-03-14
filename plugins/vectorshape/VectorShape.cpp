@@ -259,7 +259,7 @@ void VectorShape::paint(QPainter &painter, const KoViewConverter &converter, KoS
     }
 }
 
-void VectorShape::renderFinished(QSize boundingSize, QImage *image)
+void VectorShape::renderFinished(const QSize &boundingSize, QImage *image)
 {
     if (image) {
         m_cache.insert(boundingSize.height(), image);

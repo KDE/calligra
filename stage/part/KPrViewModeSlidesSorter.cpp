@@ -503,7 +503,7 @@ void KPrViewModeSlidesSorter::updateZoom(KoZoomMode::Mode mode, qreal zoom)
     setZoom(qRound(zoom * 100.));
 }
 
-void KPrViewModeSlidesSorter::setIconSize(QSize size)
+void KPrViewModeSlidesSorter::setIconSize(const QSize &size)
 {
     if (size != m_iconSize) {
         m_iconSize = size;

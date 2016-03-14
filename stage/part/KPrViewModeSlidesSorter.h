@@ -104,7 +104,7 @@ protected:
      *
      * @param size which is a QSize
      */
-    void setIconSize(QSize size);
+    void setIconSize(const QSize &size);
 
     /**
      * load the last zoom value used

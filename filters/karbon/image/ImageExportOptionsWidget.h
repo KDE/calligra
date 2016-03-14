@@ -29,7 +29,7 @@ class ImageExportOptionsWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit ImageExportOptionsWidget(QSizeF pointSize, QWidget *parent = 0);
+    explicit ImageExportOptionsWidget(const QSizeF &pointSize, QWidget *parent = 0);
 
     /// Sets the initial unit to use
     void setUnit(const KoUnit &unit);

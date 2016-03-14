@@ -70,7 +70,7 @@ public:
     /**
      * Setter for property #thumbnailSize.
      */
-    void setThumbnailSize(QSize newValue);
+    void setThumbnailSize(const QSize& newValue);
 
     void setUseToC(bool newValue);
     bool useToC() const;
