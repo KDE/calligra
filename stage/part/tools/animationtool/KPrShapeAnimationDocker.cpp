@@ -89,7 +89,6 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     m_editAnimation = new QToolButton();
     m_editAnimation->setText(i18n("Edit animation"));
     m_editAnimation->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    m_editAnimation->setIconSize(QSize(KIconLoader::SizeSmallMedium, KIconLoader::SizeSmallMedium));
     m_editAnimation->setIcon(koIcon("edit_animation"));
     m_editAnimation->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_editAnimation->setToolTip(i18n("Edit animation"));

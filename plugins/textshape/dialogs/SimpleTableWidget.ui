@@ -30,12 +30,6 @@
      </property>
      <item row="0" column="0">
       <widget class="QToolButton" name="addRowAbove">
-       <property name="iconSize">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
-       </property>
        <property name="autoRaise">
         <bool>true</bool>
        </property>
@@ -43,12 +37,6 @@
      </item>
      <item row="0" column="1">
       <widget class="QToolButton" name="addColumnLeft">
-       <property name="iconSize">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
-       </property>
        <property name="autoRaise">
         <bool>true</bool>
        </property>
@@ -56,12 +44,6 @@
      </item>
      <item row="0" column="2">
       <widget class="QToolButton" name="addColumnRight">
-       <property name="iconSize">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
-       </property>
        <property name="autoRaise">
         <bool>true</bool>
        </property>
@@ -69,12 +51,6 @@
      </item>
      <item row="2" column="0">
       <widget class="QToolButton" name="addRowBelow">
-       <property name="iconSize">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
-       </property>
        <property name="autoRaise">
         <bool>true</bool>
        </property>
@@ -82,12 +58,6 @@
      </item>
      <item row="2" column="1">
       <widget class="QToolButton" name="deleteRow">
-       <property name="iconSize">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
-       </property>
        <property name="autoRaise">
         <bool>true</bool>
        </property>
@@ -95,12 +65,6 @@
      </item>
      <item row="2" column="2">
       <widget class="QToolButton" name="deleteColumn">
-       <property name="iconSize">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
-       </property>
        <property name="autoRaise">
         <bool>true</bool>
        </property>
@@ -127,12 +91,6 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="iconSize">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
-       </property>
        <property name="autoRaise">
         <bool>true</bool>
        </property>
@@ -142,12 +100,6 @@
       <widget class="QToolButton" name="mergeCells">
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
        </property>
        <property name="autoRaise">
         <bool>true</bool>
@@ -174,12 +126,6 @@
       <widget class="FormattingButton" name="border">
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
        </property>
        <property name="popupMode">
         <enum>QToolButton::MenuButtonPopup</enum>
