@@ -97,6 +97,7 @@ KoToolBase::~KoToolBase()
 //    else {
 //        qDebug() << "Tool" << toolId() << "has no actions";
 //    }
+    qDeleteAll(d_ptr->optionWidgets);
     delete d_ptr;
 }
 
