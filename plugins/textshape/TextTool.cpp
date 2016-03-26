@@ -1097,7 +1097,6 @@ QMimeData *TextTool::generateMimeData() const
 #endif
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
     QTextDocumentFragment fragment = m_textEditor.data()->selection();
-    drag.setData("text/html", fragment.toHtml("utf-8").toUtf8());
     drag.setData("text/plain", fragment.toPlainText().toUtf8());
 
     return drag.takeMimeData();
@@ -1178,7 +1177,7 @@ void TextTool::cut()
 QStringList TextTool::supportedPasteMimeTypes() const
 {
     QStringList list;
-    list << "text/plain" << "text/html" << "application/vnd.oasis.opendocument.text";
+    list << "text/plain" << "application/vnd.oasis.opendocument.text";
     return list;
 }
 

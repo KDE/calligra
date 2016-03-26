@@ -455,8 +455,6 @@ public Q_SLOTS:
      */
     void insertText(const QString &text, const QString &hRef = QString());
 
-    void insertHtml(const QString &html);
-
     void mergeBlockFormat( const QTextBlockFormat &modifier);
 
     bool movePosition(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor, int n = 1);

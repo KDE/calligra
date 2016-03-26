@@ -123,8 +123,6 @@ void TextPasteCommand::redo()
                 }
 #endif
             }
-        } else if (!m_pasteAsText && m_mimeData->hasHtml()) {
-            editor->insertHtml(m_mimeData->html());
         } else if (m_pasteAsText || m_mimeData->hasText()) {
             editor->insertText(m_mimeData->text());
         }
