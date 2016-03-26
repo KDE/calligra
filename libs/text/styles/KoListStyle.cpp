@@ -192,7 +192,7 @@ void KoListStyle::loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& s
         KoListLevelProperties llp;
         llp.setLevel(1);
         llp.setStartValue(1);
-        llp.setStyle(KoListStyle::DecimalItem);
+        llp.setLabelType(KoListStyle::DecimalItem);
         llp.setListItemSuffix(".");
         setLevelProperties(llp);
     }
@@ -220,7 +220,7 @@ bool KoListStyle::isNumberingStyle() const
 {
     QMap<int, KoListLevelProperties>::const_iterator it(d->levels.constBegin());
     for (; it != d->levels.constEnd(); ++it) {
-        if (isNumberingStyle(it.value().style())) {
+        if (isNumberingStyle(it.value().labelType())) {
             return true;
         }
     }

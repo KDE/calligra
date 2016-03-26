@@ -94,7 +94,7 @@ void ParagraphSettingsDialog::slotApply()
     if (chosenStyle.listStyle()) {
         llp = chosenStyle.listStyle()->levelProperties(chosenStyle.listStyle()->listLevels().first());
     } else {
-        llp.setStyle(KoListStyle::None);
+        llp.setLabelType(KoListStyle::None);
     }
 
     m_editor->applyDirectFormatting(cformat, format, llp);

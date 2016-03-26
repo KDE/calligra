@@ -945,7 +945,7 @@ void TestBlockLayout::testParagraphMargins()
     style.setTopMargin(QTextLength(QTextLength::FixedLength, 10));
     KoListStyle listStyle;
     KoListLevelProperties llp = listStyle.levelProperties(1);
-    llp.setStyle(KoListStyle::DecimalItem);
+    llp.setLabelType(KoListStyle::DecimalItem);
     listStyle.setLevelProperties(llp);
     style.setListStyle(&listStyle);
     style.setLeftBorderWidth(3);

@@ -166,8 +166,8 @@ QPixmap SimpleParagraphWidget::generateListLevelPixmap(const KoListLevelProperti
     QPainter p(&pm);
     p.translate(0, -1.5);
     p.setRenderHint(QPainter::Antialiasing);
-    if(llp.style() == KoListStyle::None) {
-    } else if (KoListStyle::isNumberingStyle(llp.style())) {
+    if(llp.labelType() == KoListStyle::None) {
+    } else if (KoListStyle::isNumberingStyle(llp.labelType())) {
         KoListStyle listStyle;
 
         listStyle.setLevelProperties(llp);
@@ -242,55 +242,55 @@ void SimpleParagraphWidget::fillListButtons()
         llp.setLabelFollowedBy(KoListStyle::ListTab);
         llp.setDisplayLevel(4);
 
-        llp.setStyle(KoListStyle::CustomCharItem);
+        llp.setLabelType(KoListStyle::CustomCharItem);
         llp.setBulletCharacter(QChar(0x2022)); // Bullet
         m_levelLibrary.append(llp);
 
-        llp.setStyle(KoListStyle::CustomCharItem);
+        llp.setLabelType(KoListStyle::CustomCharItem);
         llp.setBulletCharacter(QChar(0x25A0)); // Square
         m_levelLibrary.append(llp);
 
-        llp.setStyle(KoListStyle::CustomCharItem);
+        llp.setLabelType(KoListStyle::CustomCharItem);
         llp.setBulletCharacter(QChar(0x25C6)); // Rhombus
         m_levelLibrary.append(llp);
 
-        llp.setStyle(KoListStyle::CustomCharItem);
+        llp.setLabelType(KoListStyle::CustomCharItem);
         llp.setBulletCharacter(QChar(0x25CB)); // Circle
         m_levelLibrary.append(llp);
 
-        llp.setStyle(KoListStyle::CustomCharItem);
+        llp.setLabelType(KoListStyle::CustomCharItem);
         llp.setBulletCharacter(QChar(0x2714)); // HeavyCheckMark
         m_levelLibrary.append(llp);
 
-        llp.setStyle(KoListStyle::CustomCharItem);
+        llp.setLabelType(KoListStyle::CustomCharItem);
         llp.setBulletCharacter(QChar(0x2794)); // Right Arrow
         m_levelLibrary.append(llp);
 
-        llp.setStyle(KoListStyle::DecimalItem);
+        llp.setLabelType(KoListStyle::DecimalItem);
         llp.setListItemSuffix(".");
         m_levelLibrary.append(llp);
 
-        llp.setStyle(KoListStyle::DecimalItem);
+        llp.setLabelType(KoListStyle::DecimalItem);
         llp.setListItemSuffix(")");
         m_levelLibrary.append(llp);
 
-        llp.setStyle(KoListStyle::AlphaLowerItem);
+        llp.setLabelType(KoListStyle::AlphaLowerItem);
         llp.setListItemSuffix(".");
         m_levelLibrary.append(llp);
 
-        llp.setStyle(KoListStyle::AlphaLowerItem);
+        llp.setLabelType(KoListStyle::AlphaLowerItem);
         llp.setListItemSuffix(")");
         m_levelLibrary.append(llp);
 
-        llp.setStyle(KoListStyle::UpperAlphaItem);
+        llp.setLabelType(KoListStyle::UpperAlphaItem);
         llp.setListItemSuffix("");
         m_levelLibrary.append(llp);
 
-        llp.setStyle(KoListStyle::RomanLowerItem);
+        llp.setLabelType(KoListStyle::RomanLowerItem);
         llp.setListItemSuffix("");
         m_levelLibrary.append(llp);
 
-        llp.setStyle(KoListStyle::UpperRomanItem);
+        llp.setLabelType(KoListStyle::UpperRomanItem);
         llp.setListItemSuffix("");
         m_levelLibrary.append(llp);
     }
@@ -509,7 +509,7 @@ void SimpleParagraphWidget::deleteLevelFormat()
     for(int i = 0; i < m_levelLibrary.size(); ++i) {
         KoListLevelProperties llp = m_levelLibrary.at(i);
         llp.setLevel(1);
-        if(llp.style() != KoListStyle::None) {
+        if(llp.labelType() != KoListStyle::None) {
             widget.bulletListButton->addItem(m_libraryChooserAction, generateListLevelPixmap(m_levelLibrary.at(i)), i+1000);
 /*            QAction *a = widget.bulletListButton->addItemMenuItem(m_libraryChooserAction, id, i18n("Delete"));
             a->setData(id);

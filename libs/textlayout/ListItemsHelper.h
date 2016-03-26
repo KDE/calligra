@@ -33,21 +33,21 @@ namespace Lists
 {
 enum Capitalisation { Lowercase, Uppercase };
 struct ListStyleItem {
-    ListStyleItem(const QString &name_, KoListStyle::Style style_, const QString &suffix_ = QString()) {
+    ListStyleItem(const QString &name_, KoListStyle::LabelType labelType_, const QString &suffix_ = QString()) {
         name = name_;
-        style = style_;
+        labelType = labelType_;
         suffix = suffix_;
     }
-    KoListStyle::Style style;
+    KoListStyle::LabelType labelType;
     QString name;
     QString suffix;
 };
 
 KOTEXTLAYOUT_EXPORT QString intToRoman(int n);
 KOTEXTLAYOUT_EXPORT QString intToAlpha(int n, Capitalisation caps, bool letterSynchronization);
-KOTEXTLAYOUT_EXPORT QString intToScript(int n, KoListStyle::Style type);
-KOTEXTLAYOUT_EXPORT QString intToScriptList(int n, KoListStyle::Style type);
-KOTEXTLAYOUT_EXPORT QString intToNumberingStyle(int index, KoListStyle::Style listStyle, bool letterSynchronizations);
+KOTEXTLAYOUT_EXPORT QString intToScript(int n, KoListStyle::LabelType labelType);
+KOTEXTLAYOUT_EXPORT QString intToScriptList(int n, KoListStyle::LabelType labelType);
+KOTEXTLAYOUT_EXPORT QString intToNumberingStyle(int index, KoListStyle::LabelType labelType, bool letterSynchronizations);
 
 /// return international list items (bullets/arabic/roman)
 KOTEXTLAYOUT_EXPORT QList<ListStyleItem> genericListStyleItems();

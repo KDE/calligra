@@ -67,13 +67,11 @@ public:
     // ListIdType will be 32-bit in 32 bit machines and 64 bit in 64 bit machines
     typedef quintptr ListIdType;
 
-    /// This list is used to specify what kind of list-style to use
-    /// If you add a style to that list you also need to check if you need to update
-    /// KoListStyle::isNumberingStyle(int)
-    enum Style {
+    /// This is used to specify what type of list label to use
+    enum LabelType {
         /// List style with no numbering
         None = 1,
-        /// use an unicode char for the bullet
+        /// an unicode char for the bullet
         CustomCharItem,
         /// an image for the bullet
         ImageItem,

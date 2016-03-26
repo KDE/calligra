@@ -163,7 +163,7 @@ void ListLevelWidget::setDisplay(const KoListLevelProperties &props)
         m_charSelect->setCurrentChar(QChar(0x2022)); // default to bullet
     }
 
-    switch(props.style()) {
+    switch(props.labelType()) {
     case KoListStyle::CustomCharItem:
         widget.tabWidget->setCurrentIndex(1);
         break;
@@ -189,16 +189,16 @@ void ListLevelWidget::save(KoListLevelProperties &props) const
 
     switch(widget.tabWidget->currentIndex()) {
     case 0:
-        props.setStyle(KoListStyle::DecimalItem);
-        props.setListItemPrefix();
-        props.setListItemSuffix();
+        props.setLabelType(KoListStyle::DecimalItem);
+        //props.setListItemPrefix();
+        //props.setListItemSuffix();
         break;
     case 1:
-        props.setStyle(KoListStyle::CustomCharItem);
+        props.setLabelType(KoListStyle::CustomCharItem);
         props.setBulletCharacter(m_charSelect->currentChar());
         break;
     case 2:
-        props.setStyle(KoListStyle::ImageItem);
+        props.setLabelType(KoListStyle::ImageItem);
         break;
     }
 }

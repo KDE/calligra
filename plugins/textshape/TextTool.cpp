@@ -1622,7 +1622,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
                 textEditor->toggleListNumbering(false);
             } else {
                 KoListLevelProperties llp;
-                llp.setStyle(KoListStyle::None);
+                llp.setLabelType(KoListStyle::None);
                 llp.setLevel(0);
                 // backspace on numbered, empty parag, removes numbering.
                 textEditor->setListProperties(llp);
@@ -3027,7 +3027,7 @@ void TextTool::debugTextStyles()
                 << (ls == styleManager->defaultListStyle() ? "[Default]":"");
             foreach (int level, ls->listLevels()) {
                 KoListLevelProperties llp = ls->levelProperties(level);
-                qDebug() << "  |  level" << llp.level() << " style (enum):" << llp.style();
+                qDebug() << "  |  level" << llp.level() << " style (enum):" << llp.labelType();
                 if (llp.bulletCharacter().unicode() != 0) {
                     qDebug() << "  |  bullet" << llp.bulletCharacter();
                 }

@@ -53,9 +53,9 @@ public:
     void setStyleId(int id);
 
     /// set the style to be used for this list-level.
-    void setStyle(KoListStyle::Style style);
+    void setLabelType(KoListStyle::LabelType labelType);
     /// return the used style
-    KoListStyle::Style style() const;
+    KoListStyle::LabelType labelType() const;
     /// set the string that will be shown before the counter in the list label
     void setListItemPrefix(const QString &prefix);
     /// return the string that will be shown before the counter in the list label

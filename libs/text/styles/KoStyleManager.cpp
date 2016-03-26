@@ -120,7 +120,7 @@ KoStyleManager::KoStyleManager(QObject *parent)
         KoListLevelProperties llp;
         llp.setLevel(level);
         llp.setStartValue(1);
-        llp.setStyle(KoListStyle::DecimalItem);
+        llp.setLabelType(KoListStyle::DecimalItem);
         llp.setListItemSuffix(".");
         llp.setAlignmentMode(true);
         llp.setLabelFollowedBy(KoListStyle::ListTab);

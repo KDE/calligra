@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2016 Camilla Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,15 +23,13 @@
 #include "ListItemsHelper.h"
 
 ListsSpinBox::ListsSpinBox(QWidget *parent)
-        : QSpinBox(parent),
-        m_type(KoListStyle::DecimalItem),
-        m_letterSynchronization(false)
+        : QSpinBox(parent)
 {
 }
 
-void ListsSpinBox::setCounterType(KoListStyle::Style type)
+void ListsSpinBox::setNumberFormat(const KoOdfNumberDefinition &format)
 {
-    m_type = type;
+    m_format = format;
     update();
 }
 
@@ -42,33 +41,5 @@ int ListsSpinBox::valueFromText(const QString &text) const
 
 QString ListsSpinBox::textFromValue(int value) const
 {
-    switch (m_type) {
-    case KoListStyle::DecimalItem:
-        return QString::number(value);
-    case KoListStyle::AlphaLowerItem:
-        return Lists::intToAlpha(value, Lists::Lowercase, m_letterSynchronization);
-    case KoListStyle::UpperAlphaItem:
-        return Lists::intToAlpha(value, Lists::Uppercase, m_letterSynchronization);
-    case KoListStyle::RomanLowerItem:
-        return Lists::intToRoman(value);
-    case KoListStyle::UpperRomanItem:
-        return Lists::intToRoman(value).toUpper();
-    case KoListStyle::Bengali:
-    case KoListStyle::Gujarati:
-    case KoListStyle::Gurumukhi:
-    case KoListStyle::Kannada:
-    case KoListStyle::Malayalam:
-    case KoListStyle::Oriya:
-    case KoListStyle::Tamil:
-    case KoListStyle::Telugu:
-    case KoListStyle::Tibetan:
-    case KoListStyle::Thai:
-        return Lists::intToScript(value, m_type);
-    case KoListStyle::Abjad:
-    case KoListStyle::ArabicAlphabet:
-    case KoListStyle::AbjadMinor:
-        return Lists::intToScriptList(value, m_type);
-    default:  // others we ignore.
-        return "X";
-    }
+    return m_format.formattedNumber(value);
 }

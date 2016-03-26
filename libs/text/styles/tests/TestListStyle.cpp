@@ -38,17 +38,17 @@ void TestListStyle::testListStyle()
     KoListLevelProperties llp = ls.levelProperties(2);
     QCOMPARE(llp.level(), 2);
 
-    llp.setStyle(KoListStyle::AlphaLowerItem);
+    llp.setLabelType(KoListStyle::AlphaLowerItem);
     KoListLevelProperties llp2 = ls.levelProperties(2);
-    QVERIFY(llp2.style() != llp.style());
+    QVERIFY(llp2.labelType() != llp.labelType());
 
     ls.setLevelProperties(llp);
     QCOMPARE(llp.level(), 2);
-    QCOMPARE(llp.style(), KoListStyle::AlphaLowerItem);
+    QCOMPARE(llp.labelType(), KoListStyle::AlphaLowerItem);
 
     llp = ls.levelProperties(2);
     QCOMPARE(llp.level(), 2);
-    QCOMPARE(llp.style(), KoListStyle::AlphaLowerItem);
+    QCOMPARE(llp.labelType(), KoListStyle::AlphaLowerItem);
 
     QTextDocument doc;
     KoTextDocument kodoc(&doc);
@@ -91,7 +91,7 @@ void TestListStyle::testListStyle()
     // new levels are a copy of the existing level.
     KoListLevelProperties l5 = ls.levelProperties(5);
     QCOMPARE(l5.displayLevel(), 1);
-    QCOMPARE(l5.style(), KoListStyle::AlphaLowerItem);
+    QCOMPARE(l5.labelType(), KoListStyle::AlphaLowerItem);
     QCOMPARE(l5.indent(), 0.);
 }
 

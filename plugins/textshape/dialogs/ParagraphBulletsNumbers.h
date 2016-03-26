@@ -64,7 +64,7 @@ private Q_SLOTS:
 private:
     Ui::ParagraphBulletsNumbers widget;
 
-    QHash<int, KoListStyle::Style> m_mapping;
+    QHash<int, KoListStyle::LabelType> m_mapping;
     int m_previousLevel;
     int m_blankCharIndex;
     bool m_alignmentMode;

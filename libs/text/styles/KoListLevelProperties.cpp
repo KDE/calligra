@@ -195,15 +195,15 @@ QString KoListLevelProperties::listItemPrefix() const
     return propertyString(KoListStyle::ListItemPrefix);
 }
 
-void KoListLevelProperties::setStyle(KoListStyle::Style style)
+void KoListLevelProperties::setLabelType(KoListStyle::LabelType labelType)
 {
-    setProperty(QTextListFormat::ListStyle, (int) style);
-    emit styleChanged(style);
+    setProperty(QTextListFormat::ListStyle, (int) labelType);
+    emit styleChanged(labelType);
 }
 
-KoListStyle::Style KoListLevelProperties::style() const
+KoListStyle::LabelType KoListLevelProperties::labelType() const
 {
-    return static_cast<KoListStyle::Style>(propertyInt(QTextListFormat::ListStyle));
+    return static_cast<KoListStyle::LabelType>(propertyInt(QTextListFormat::ListStyle));
 }
 
 void KoListLevelProperties::setListItemSuffix(const QString &suffix)
@@ -477,7 +477,7 @@ KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list)
 {
     KoListLevelProperties llp;
     if (!list) {
-        llp.setStyle(KoListStyle::None);
+        llp.setLabelType(KoListStyle::None);
         return llp;
     }
     llp.d->stylesPrivate = list->format().properties();
@@ -539,7 +539,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
         } else {
             setBulletCharacter(bulletChar[0]);
         }
-        setStyle(KoListStyle::CustomCharItem);
+        setLabelType(KoListStyle::CustomCharItem);
         QString size = style.attributeNS(KoXmlNS::text, "bullet-relative-size", QString());
         if (!size.isEmpty()) {
             setRelativeBulletSize(size.remove('%').toInt());
@@ -557,62 +557,62 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
 
         switch(numberDefinition.formatSpecification()) {
         case KoOdfNumberDefinition::Empty:
-            setStyle(KoListStyle::None);
+            setLabelType(KoListStyle::None);
             break;
         case KoOdfNumberDefinition::AlphabeticLowerCase:
-            setStyle(KoListStyle::AlphaLowerItem);
+            setLabelType(KoListStyle::AlphaLowerItem);
             break;
         case KoOdfNumberDefinition::AlphabeticUpperCase:
-            setStyle(KoListStyle::UpperAlphaItem);
+            setLabelType(KoListStyle::UpperAlphaItem);
             break;
         case KoOdfNumberDefinition::RomanLowerCase:
-            setStyle(KoListStyle::RomanLowerItem);
+            setLabelType(KoListStyle::RomanLowerItem);
             break;
         case KoOdfNumberDefinition::RomanUpperCase:
-            setStyle(KoListStyle::UpperRomanItem);
+            setLabelType(KoListStyle::UpperRomanItem);
             break;
         case KoOdfNumberDefinition::ArabicAlphabet:
-                    setStyle(KoListStyle::ArabicAlphabet);
+                    setLabelType(KoListStyle::ArabicAlphabet);
                     break;
         case KoOdfNumberDefinition::Thai:
-            setStyle(KoListStyle::Thai);
+            setLabelType(KoListStyle::Thai);
             break;
         case KoOdfNumberDefinition::Abjad:
-            setStyle(KoListStyle::Abjad);
+            setLabelType(KoListStyle::Abjad);
             break;
         case KoOdfNumberDefinition::AbjadMinor:
-            setStyle(KoListStyle::AbjadMinor);
+            setLabelType(KoListStyle::AbjadMinor);
             break;
         case KoOdfNumberDefinition::Tibetan:
-            setStyle(KoListStyle::Tibetan);
+            setLabelType(KoListStyle::Tibetan);
             break;
         case KoOdfNumberDefinition::Telugu:
-            setStyle(KoListStyle::Telugu);
+            setLabelType(KoListStyle::Telugu);
             break;
         case KoOdfNumberDefinition::Tamil:
-            setStyle(KoListStyle::Tamil);
+            setLabelType(KoListStyle::Tamil);
             break;
         case KoOdfNumberDefinition::Oriya:
-            setStyle(KoListStyle::Oriya);
+            setLabelType(KoListStyle::Oriya);
             break;
         case KoOdfNumberDefinition::Malayalam:
-            setStyle(KoListStyle::Malayalam);
+            setLabelType(KoListStyle::Malayalam);
             break;
         case KoOdfNumberDefinition::Kannada:
-            setStyle(KoListStyle::Kannada);
+            setLabelType(KoListStyle::Kannada);
             break;
         case KoOdfNumberDefinition::Gurumukhi:
-            setStyle(KoListStyle::Gurumukhi);
+            setLabelType(KoListStyle::Gurumukhi);
             break;
         case KoOdfNumberDefinition::Gujarati:
-            setStyle(KoListStyle::Gujarati);
+            setLabelType(KoListStyle::Gujarati);
             break;
         case KoOdfNumberDefinition::Bengali:
-            setStyle(KoListStyle::Bengali);
+            setLabelType(KoListStyle::Bengali);
             break;
         case KoOdfNumberDefinition::Numeric:
         default:
-            setStyle(KoListStyle::DecimalItem);
+            setLabelType(KoListStyle::DecimalItem);
         }
 
         if (!numberDefinition.prefix().isNull()) {
@@ -626,7 +626,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
         setStartValue(startValue.toInt());
     }
     else if (style.localName() == "list-level-style-image") {   // list with image
-        setStyle(KoListStyle::ImageItem);
+        setLabelType(KoListStyle::ImageItem);
         KoImageCollection *imageCollection = scontext.imageCollection();
         const QString href = style.attribute("href");
         if(imageCollection) {
@@ -647,7 +647,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
     }
     else { // if not defined, we have do nothing
 //         debugText << "stylename else:" << style.localName() << "level=" << level << "displayLevel=" << displayLevel;
-        setStyle(KoListStyle::DecimalItem);
+        setLabelType(KoListStyle::DecimalItem);
         setListItemSuffix(".");
     }
 
@@ -766,7 +766,7 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
             writer->addAttribute("text:display-levels", d->stylesPrivate.value(KoListStyle::DisplayLevel).toInt());
 
         QByteArray format;
-        switch (style()) {
+        switch (labelType()) {
         case KoListStyle::DecimalItem:      format = "1"; break;
         case KoListStyle::AlphaLowerItem:   format = "a"; break;
         case KoListStyle::UpperAlphaItem:   format = "A"; break;
@@ -788,7 +788,7 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
         }
         writer->addAttribute("style:num-format", format);
     }
-    else if (style() == KoListStyle::ImageItem) {
+    else if (labelType() == KoListStyle::ImageItem) {
         KoImageData *imageData = d->stylesPrivate.value(KoListStyle::BulletImage).value<KoImageData *>();
         Q_ASSERT(imageData->priv()->collection);
         if (imageData && imageData->priv()->collection) {
