@@ -199,6 +199,101 @@ void KoOdfNumberDefinition::saveOdf(KoXmlWriter *writer) const
     }
 }
 
+static QString intToRoman(int n)
+{
+    static const QString RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
+    static const QString RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
+    static const QString RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
+    static const QString RNThousands[] = {"", "m", "mm", "mmm", "mmmm", "mmmmm", "mmmmmm", "mmmmmmm", "mmmmmmmm", "mmmmmmmmm"};
+
+    if (n <= 0) {
+        return QString::number(n);
+    }
+
+    return RNThousands[(n / 1000)] +
+           RNHundreds[(n / 100) % 10 ] +
+           RNTens[(n / 10) % 10 ] +
+           RNUnits[(n) % 10 ];
+}
+
+static QString intToAlpha(int n, bool letterSynchronization)
+{
+    QString answer;
+    if (letterSynchronization) {
+        int digits = 1;
+        for (; n > 26; n -= 26)
+            digits += 1;
+        for (int i = 0; i < digits; i++)
+            answer.prepend(QChar('a' + n - 1));
+        return answer;
+    } else {
+        char bottomDigit;
+        while (n > 26) {
+            bottomDigit = (n - 1) % 26;
+            n = (n - 1) / 26;
+            answer.prepend(QChar('a' + bottomDigit));
+        }
+    }
+    answer.prepend(QChar('a' + n - 1));
+    return answer;
+}
+
+static QString intToScript(int n, int offset)
+{
+    // 10-base
+    QString answer;
+    while (n > 0) {
+        answer.prepend(QChar(offset + n % 10));
+        n = n / 10;
+    }
+    return answer;
+}
+
+static QString intToScriptList(int n, KoOdfNumberDefinition::FormatSpecification formatSpecification)
+{
+    // 1 time Sequences
+    // note; the leading X is to make these 1 based.
+    static const char* const Abjad[] = { "أ", "ب", "ج", "د", "ﻫ", "و", "ز", "ح", "ط", "ي", "ك", "ل", "م",
+                                   "ن", "س", "ع", "ف", "ص", "ق", "ر", "ش", "ت", "ث", "خ", "ذ", "ض", "ظ", "غ"
+                                 };
+    static const char* const Abjad2[] = { "ﺃ", "ﺏ", "ﺝ", "ﺩ", "ﻫ", "ﻭ", "ﺯ", "ﺡ", "ﻁ", "ﻱ", "ﻙ", "ﻝ", "ﻡ",
+                                    "ﻥ", "ﺹ", "ﻉ", "ﻑ", "ﺽ", "ﻕ", "ﺭ", "ﺱ", "ﺕ", "ﺙ", "ﺥ", "ﺫ", "ﻅ", "ﻍ", "ﺵ"
+                                  };
+    static const char* const ArabicAlphabet[] = {"ا", "ب", "ت", "ث", "ج", "ح", "خ", "د", "ذ", "ر", "ز",
+                                           "س", "ش", "ص", "ض", "ط", "ظ", "ع", "غ", "ف", "ق", "ك", "ل", "م", "ن", "ه", "و", "ي"
+                                          };
+
+    /*
+    // see this page for the 10, 100, 1000 etc http://en.wikipedia.org/wiki/Chinese_numerals
+    static const char* const chinese1[] = { '零','壹','貳','叄','肆','伍','陸','柒','捌','玖' };
+    static const char* const chinese2[] = { '〇','一','二','三','四','五','六','七','八','九' };
+
+    TODO: http://en.wikipedia.org/wiki/Korean_numerals
+    http://en.wikipedia.org/wiki/Japanese_numerals
+    'http://en.wikipedia.org/wiki/Hebrew_numerals'
+    'http://en.wikipedia.org/wiki/Armenian_numerals'
+    'http://en.wikipedia.org/wiki/Greek_numerals'
+    'http://en.wikipedia.org/wiki/Cyrillic_numerals'
+    'http://en.wikipedia.org/wiki/Sanskrit_numerals'
+    'http://en.wikipedia.org/wiki/Ge%27ez_alphabet#Numerals'
+    'http://en.wikipedia.org/wiki/Abjad_numerals'
+    */
+
+    switch (formatSpecification) {
+    case KoOdfNumberDefinition::Abjad:
+        if (n > 22) return "*";
+        return QString::fromUtf8(Abjad[n-1]);
+    case KoOdfNumberDefinition::AbjadMinor:
+        if (n > 22) return "*";
+        return QString::fromUtf8(Abjad2[n-1]);
+    case KoOdfNumberDefinition::ArabicAlphabet:
+        if (n > 28) return "*";
+        return QString::fromUtf8(ArabicAlphabet[n-1]);
+    default:
+        return QString::number(n);
+    }
+}
+
 QString KoOdfNumberDefinition::formattedNumber(int number, KoOdfNumberDefinition *defaultDefinition) const
 {
    switch(d->formatSpecification) {
@@ -207,150 +302,41 @@ QString KoOdfNumberDefinition::formattedNumber(int number, KoOdfNumberDefinition
         break;
 
     case AlphabeticLowerCase:
-    {
-        if (d->letterSynchronization) {
-            int loop = (number-1)/26;
-            int rem = (number-1)%26;
-            QChar letter = (char)(rem+97);
-            QString alpha;
-            for (int i=0; i<=loop; i++) {
-                alpha.append(letter);
-            }
-            return alpha;
-        } else {
-            int loop = (number-1)/26;
-            QChar letter;
-            QString alpha;
-            if (loop>0) {
-                letter = (char)(loop+96);
-                alpha.append(letter);
-            }
-            int rem = (number -1)%26;
-            letter = (char)(rem+97);
-            alpha.append(letter);
-            return alpha;
-        }
-        break;
-    }
+        return intToAlpha(number, d->letterSynchronization);
     case AlphabeticUpperCase:
-    {
-        if (d->letterSynchronization) {
-            int loop = (number-1)/26;
-            int rem = (number-1)%26;
-            QChar letter = (char)(rem+65);
-            QString alpha;
-            for (int i=0; i<=loop; i++) {
-                alpha.append(letter);
-            }
-            return alpha;
-        } else {
-            int loop = (number-1)/26;
-            QChar letter;
-            QString alpha;
-            if (loop>0) {
-                letter = (char)(loop+64);
-                alpha.append(letter);
-            }
-            int rem = (number -1)%26;
-            letter = (char)(rem+65);
-            alpha.append(letter);
-            return alpha;
-        }
-        break;
-    }
+        return intToAlpha(number, d->letterSynchronization).toUpper();
+
     case RomanLowerCase:
-    {
-        QString roman;
-        int loop = number/1000;
-        for (int i=1; i<=loop && number/1000!=0; i++) {
-             roman.append("m");
-        }
-        number = number%1000;
-        loop = number/500;
-        for (int i=1; i<=loop && number/500!=0; i++) {
-            roman.append("d");
-        }
-        number = number%500;
-        loop = number/100;
-        for (int i=1; i<=loop && number/100!=0; i++) {
-            roman.append("c");
-        }
-        number = number%100;
-        loop = number/50;
-        for (int i=1; i<=loop && number/50!=0; i++) {
-             roman.append("l");
-        }
-        number = number%50;
-        loop = number/10;
-        for (int i=1; i<=loop && number/10!=0; i++) {
-             roman.append("x");
-        }
-        number = number%10;
-        if (number>=5 && number<=8) {
-             loop = number%5;
-             roman.append("v");
-             for (int i=1;i<=loop;i++)
-                roman.append("i");
-        }
-        else if (number==9) {
-             roman.append("ix");
-        }
-        else if (number>=1 && number<=3) {
-             for (int i=1; i<=number; i++)
-                roman.append("i");
-        }
-        else if (number==4)
-            roman.append("iv");
-
-        return roman;
-        break;
-    }
+        return intToRoman(number);
     case RomanUpperCase:
-    {
-        QString roman;
-        int loop = number/1000;
-        for (int i=1; i<=loop && number/1000!=0; i++) {
-             roman.append("M");
-        }
-        number = number%1000;
-        loop = number/500;
-        for (int i=1; i<=loop && number/500!=0; i++) {
-            roman.append("D");
-        }
-        number = number%500;
-        loop = number/100;
-        for (int i=1; i<=loop && number/100!=0; i++) {
-            roman.append("C");
-        }
-        number = number%100;
-        loop = number/50;
-        for (int i=1; i<=loop && number/50!=0; i++) {
-             roman.append("L");
-        }
-        number = number%50;
-        loop = number/10;
-        for (int i=1; i<=loop && number/10!=0; i++) {
-             roman.append("X");
-        }
-        number = number%10;
-        if (number>=5 && number<=8) {
-             loop = number%5;
-             roman.append("V");
-             for (int i=1; i<=loop; i++)
-                roman.append("I");
-        }
-        else if (number==9) {
-             roman.append("IX");
-        }
-        else if (number>=1 && number<=3) {
-             for (int i=1; i<=number; i++)
-                roman.append("I");
-        }
-        else if (number==4)
-            roman.append("IV");
+        return intToRoman(number).toUpper();
 
-        return roman;
-    }
+    case Thai:
+        return intToScript(number, 0xe50);
+    case Tibetan:
+        return intToScript(number, 0xf20);
+    case Telugu:
+        return intToScript(number, 0xc66);
+    case Tamil:
+        return intToScript(number, 0x0be6);
+    case Oriya:
+        return intToScript(number, 0xb66);
+    case Malayalam:
+        return intToScript(number, 0xd66);
+    case Kannada:
+        return intToScript(number, 0xce6);
+    case Gurumukhi:
+        return intToScript(number, 0xa66);
+    case Gujarati:
+        return intToScript(number, 0xae6);
+    case Bengali:
+        return intToScript(number, 0x9e6);
+
+    case Abjad:
+    case AbjadMinor:
+    case ArabicAlphabet:
+        return intToScriptList(number, d->formatSpecification);
+
     case Empty:
         if (defaultDefinition) {
             return defaultDefinition->formattedNumber(number);
