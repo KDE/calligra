@@ -72,35 +72,10 @@ public:
         /// List style with no numbering
         None = 1,
         /// an unicode char for the bullet
-        CustomCharItem,
+        BulletCharLabelType,
         /// an image for the bullet
-        ImageItem,
-
-        /// use arabic numbering (1, 2, 3, ...)
-        DecimalItem,
-        /// use alpha numbering (a, b, c, ... aa, ab, ...)
-        AlphaLowerItem,
-        /// use alpha numbering (A, B, C, ... AA, AB, ...)
-        UpperAlphaItem,
-        /// use lower roman counting.  (i, ii, iii, iv, ...)
-        RomanLowerItem,
-        /// use upper roman counting.  (I, II, III, IV, ...)
-        UpperRomanItem,
-        Bengali,    ///< Bengali characters for normal 10-base counting
-        Gujarati,   ///< Gujarati characters for normal 10-base counting
-        Gurumukhi,  ///< Gurumukhi characters for normal 10-base counting
-        Kannada,    ///< Kannada characters for normal 10-base counting
-        Malayalam,  ///< Malayalam characters for normal 10-base counting
-        Oriya,      ///< Oriya characters for normal 10-base counting
-        Tamil,      ///< Tamil characters for normal 10-base counting
-        Telugu,     ///< Telugu characters for normal 10-base counting
-        Tibetan,    ///< Tibetan characters for normal 10-base counting
-        Thai,       ///< Thai characters for normal 10-base counting
-        Abjad,      ///< Abjad sequence.
-        AbjadMinor, ///< A lesser known version of the Abjad sequence.
-        ArabicAlphabet ///< Arabic alphabet.
-
-        // TODO look at css 3 for things like hebrew counters
+        ImageLabelType,
+        NumberLabelType
     };
 
     /// further properties
@@ -112,6 +87,7 @@ public:
         IsOutline,      ///< If true then this list is an outline list (for header paragraphs)
 
         // Label
+        NumberFormat, ///< The KoOdfNumberFormat::FormattingSpecification
         ListItemPrefix, ///< The text to be printed before the listItem
         ListItemSuffix, ///< The text to be printed after the listItem
         StartValue,     ///< First value to use

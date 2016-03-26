@@ -24,6 +24,7 @@
 #include "KoListStyle.h"
 
 #include <KoXmlReader.h>
+#include <KoOdfNumberDefinition.h>
 
 class KoCharacterStyle;
 class KoShapeLoadingContext;
@@ -52,10 +53,14 @@ public:
     /// each style has a unique ID (non persistent) given out by the styleManager
     void setStyleId(int id);
 
-    /// set the style to be used for this list-level.
+    /// set the label type to be used.
     void setLabelType(KoListStyle::LabelType labelType);
-    /// return the used style
+    /// return the used label type
     KoListStyle::LabelType labelType() const;
+    /// set the number format to be used.
+    void setNumberFormat(KoOdfNumberDefinition::FormatSpecification numberFormat);
+    /// return the used style
+    KoOdfNumberDefinition::FormatSpecification numberFormat() const;
     /// set the string that will be shown before the counter in the list label
     void setListItemPrefix(const QString &prefix);
     /// return the string that will be shown before the counter in the list label

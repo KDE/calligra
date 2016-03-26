@@ -465,7 +465,7 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, QTextBlock &block)
         }
 
         KoListStyle::LabelType labelType = static_cast<KoListStyle::LabelType>(listFormat.style());
-        if (labelType == KoListStyle::ImageItem) {
+        if (labelType == KoListStyle::ImageLabelType) {
             QFontMetricsF fm(blockData.labelFormat().font(), d->documentLayout->paintDevice());
             qreal x = qMax(qreal(1), blockData.counterPosition().x());
             qreal width = qMax(listFormat.doubleProperty(KoListStyle::Width), (qreal)1.0);

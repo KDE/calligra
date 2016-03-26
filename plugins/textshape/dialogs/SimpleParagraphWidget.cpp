@@ -242,55 +242,62 @@ void SimpleParagraphWidget::fillListButtons()
         llp.setLabelFollowedBy(KoListStyle::ListTab);
         llp.setDisplayLevel(4);
 
-        llp.setLabelType(KoListStyle::CustomCharItem);
+        llp.setLabelType(KoListStyle::BulletCharLabelType);
         llp.setBulletCharacter(QChar(0x2022)); // Bullet
         m_levelLibrary.append(llp);
 
-        llp.setLabelType(KoListStyle::CustomCharItem);
+        llp.setLabelType(KoListStyle::BulletCharLabelType);
         llp.setBulletCharacter(QChar(0x25A0)); // Square
         m_levelLibrary.append(llp);
 
-        llp.setLabelType(KoListStyle::CustomCharItem);
+        llp.setLabelType(KoListStyle::BulletCharLabelType);
         llp.setBulletCharacter(QChar(0x25C6)); // Rhombus
         m_levelLibrary.append(llp);
 
-        llp.setLabelType(KoListStyle::CustomCharItem);
+        llp.setLabelType(KoListStyle::BulletCharLabelType);
         llp.setBulletCharacter(QChar(0x25CB)); // Circle
         m_levelLibrary.append(llp);
 
-        llp.setLabelType(KoListStyle::CustomCharItem);
+        llp.setLabelType(KoListStyle::BulletCharLabelType);
         llp.setBulletCharacter(QChar(0x2714)); // HeavyCheckMark
         m_levelLibrary.append(llp);
 
-        llp.setLabelType(KoListStyle::CustomCharItem);
+        llp.setLabelType(KoListStyle::BulletCharLabelType);
         llp.setBulletCharacter(QChar(0x2794)); // Right Arrow
         m_levelLibrary.append(llp);
 
-        llp.setLabelType(KoListStyle::DecimalItem);
+        llp.setLabelType(KoListStyle::NumberLabelType);
+        llp.setNumberFormat(KoOdfNumberDefinition::Numeric);
         llp.setListItemSuffix(".");
         m_levelLibrary.append(llp);
 
-        llp.setLabelType(KoListStyle::DecimalItem);
+        llp.setLabelType(KoListStyle::NumberLabelType);
+        llp.setNumberFormat(KoOdfNumberDefinition::Numeric);
         llp.setListItemSuffix(")");
         m_levelLibrary.append(llp);
 
-        llp.setLabelType(KoListStyle::AlphaLowerItem);
+        llp.setLabelType(KoListStyle::NumberLabelType);
+        llp.setNumberFormat(KoOdfNumberDefinition::AlphabeticLowerCase);
         llp.setListItemSuffix(".");
         m_levelLibrary.append(llp);
 
-        llp.setLabelType(KoListStyle::AlphaLowerItem);
+        llp.setLabelType(KoListStyle::NumberLabelType);
+        llp.setNumberFormat(KoOdfNumberDefinition::AlphabeticLowerCase);
         llp.setListItemSuffix(")");
         m_levelLibrary.append(llp);
 
-        llp.setLabelType(KoListStyle::UpperAlphaItem);
+        llp.setLabelType(KoListStyle::NumberLabelType);
+        llp.setNumberFormat(KoOdfNumberDefinition::AlphabeticUpperCase);
         llp.setListItemSuffix("");
         m_levelLibrary.append(llp);
 
-        llp.setLabelType(KoListStyle::RomanLowerItem);
+        llp.setLabelType(KoListStyle::NumberLabelType);
+        llp.setNumberFormat(KoOdfNumberDefinition::RomanLowerCase);
         llp.setListItemSuffix("");
         m_levelLibrary.append(llp);
 
-        llp.setLabelType(KoListStyle::UpperRomanItem);
+        llp.setLabelType(KoListStyle::NumberLabelType);
+        llp.setNumberFormat(KoOdfNumberDefinition::RomanUpperCase);
         llp.setListItemSuffix("");
         m_levelLibrary.append(llp);
     }

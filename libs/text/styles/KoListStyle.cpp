@@ -192,7 +192,8 @@ void KoListStyle::loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& s
         KoListLevelProperties llp;
         llp.setLevel(1);
         llp.setStartValue(1);
-        llp.setLabelType(KoListStyle::DecimalItem);
+        llp.setLabelType(KoListStyle::NumberLabelType);
+        llp.setNumberFormat(KoOdfNumberDefinition::Numeric);
         llp.setListItemSuffix(".");
         setLevelProperties(llp);
     }
@@ -231,8 +232,8 @@ bool KoListStyle::isNumberingStyle(int style)
 {
     switch (style) {
     case KoListStyle::None:
-    case KoListStyle::CustomCharItem:
-    case KoListStyle::ImageItem:
+    case KoListStyle::BulletCharLabelType:
+    case KoListStyle::ImageLabelType:
         return false;
     default:
         return true;

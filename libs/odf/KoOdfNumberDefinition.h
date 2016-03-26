@@ -106,6 +106,7 @@ public:
 
     FormatSpecification formatSpecification() const;
     void setFormatSpecification(FormatSpecification formatSpecification);
+    static QStringList userFormatDescriptions();
 
     /**
      * Letter synchronization

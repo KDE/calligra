@@ -43,16 +43,6 @@ struct ListStyleItem {
     QString suffix;
 };
 
-KOTEXTLAYOUT_EXPORT QString intToRoman(int n);
-KOTEXTLAYOUT_EXPORT QString intToAlpha(int n, Capitalisation caps, bool letterSynchronization);
-KOTEXTLAYOUT_EXPORT QString intToScript(int n, KoListStyle::LabelType labelType);
-KOTEXTLAYOUT_EXPORT QString intToScriptList(int n, KoListStyle::LabelType labelType);
-KOTEXTLAYOUT_EXPORT QString intToNumberingStyle(int index, KoListStyle::LabelType labelType, bool letterSynchronizations);
-
-/// return international list items (bullets/arabic/roman)
-KOTEXTLAYOUT_EXPORT QList<ListStyleItem> genericListStyleItems();
-/// return non-latin list items (bullets/arabic/roman)
-KOTEXTLAYOUT_EXPORT QList<ListStyleItem> otherListStyleItems(); // we may want to split this method up into different world regions.
 }
 
 /// \internal helper class for calculating text-lists prefixes and indents

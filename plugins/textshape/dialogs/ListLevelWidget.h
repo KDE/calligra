@@ -44,6 +44,7 @@ protected:
 private Q_SLOTS:
     void labelFollowedByChanged(int);
     void alignmentChanged(int);
+    void numberFormatChanged(int);
 
 private:
     Ui::ListLevelWidget widget;

@@ -334,6 +334,23 @@
        <string>Number</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
+       <item row="1" column="2">
+        <widget class="QComboBox" name="format">
+         <property name="minimumContentsLength">
+          <number>9</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QLineEdit" name="suffix">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="0" colspan="2">
         <widget class="QLineEdit" name="prefix"/>
        </item>
@@ -380,23 +397,6 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="3">
-        <widget class="QLineEdit" name="suffix">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QComboBox" name="format">
-         <property name="minimumContentsLength">
-          <number>9</number>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="4">
         <spacer name="horizontalSpacer_11">
          <property name="orientation">
@@ -410,14 +410,7 @@
          </property>
         </spacer>
        </item>
-       <item row="2" column="0">
-        <widget class="QCheckBox" name="legal">
-         <property name="text">
-          <string>Show parent numbers</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
+       <item row="4" column="0">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -430,16 +423,31 @@
          </property>
         </spacer>
        </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Display levels above:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QCheckBox" name="synchro">
+         <property name="text">
+          <string>Letter synchronization</string>
+         </property>
+        </widget>
+       </item>
       </layout>
       <zorder>displayLevels</zorder>
       <zorder>label_3</zorder>
       <zorder>format</zorder>
       <zorder>suffix</zorder>
-      <zorder>legal</zorder>
       <zorder>prefix</zorder>
       <zorder>label_4</zorder>
       <zorder>label_5</zorder>
       <zorder>verticalSpacer_4</zorder>
+      <zorder>label</zorder>
+      <zorder>synchro</zorder>
      </widget>
      <widget class="QWidget" name="bulletTab">
       <attribute name="title">

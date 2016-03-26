@@ -38,17 +38,17 @@ void TestListStyle::testListStyle()
     KoListLevelProperties llp = ls.levelProperties(2);
     QCOMPARE(llp.level(), 2);
 
-    llp.setLabelType(KoListStyle::AlphaLowerItem);
+    llp.setNumberFormat(KoOdfNumberDefinition::AlphabeticLowerCase);
     KoListLevelProperties llp2 = ls.levelProperties(2);
-    QVERIFY(llp2.labelType() != llp.labelType());
+    QVERIFY(llp2.numberFormat() != llp.numberFormat());
 
     ls.setLevelProperties(llp);
     QCOMPARE(llp.level(), 2);
-    QCOMPARE(llp.labelType(), KoListStyle::AlphaLowerItem);
+    QCOMPARE(llp.numberFormat(), KoOdfNumberDefinition::AlphabeticLowerCase);
 
     llp = ls.levelProperties(2);
     QCOMPARE(llp.level(), 2);
-    QCOMPARE(llp.labelType(), KoListStyle::AlphaLowerItem);
+    QCOMPARE(llp.numberFormat(), KoOdfNumberDefinition::AlphabeticLowerCase);
 
     QTextDocument doc;
     KoTextDocument kodoc(&doc);
@@ -60,7 +60,7 @@ void TestListStyle::testListStyle()
     QVERIFY(block.textList());
     QTextList *textList = block.textList();
     QTextListFormat format = textList->format();
-    QCOMPARE(format.intProperty(QTextListFormat::ListStyle), (int)(KoListStyle::AlphaLowerItem));
+    QCOMPARE(format.intProperty(KoListStyle::NumberFormat), (int)(KoOdfNumberDefinition::AlphabeticLowerCase));
 
     block = block.next();
     QVERIFY(block.isValid());
@@ -72,7 +72,7 @@ void TestListStyle::testListStyle()
     QVERIFY(block.textList());
     textList = block.textList();
     format = textList->format();
-    QCOMPARE(format.intProperty(QTextListFormat::ListStyle), (int)(KoListStyle::AlphaLowerItem));
+    QCOMPARE(format.intProperty(KoListStyle::NumberFormat), (int)(KoOdfNumberDefinition::AlphabeticLowerCase));
 
     // getting a properties without setting it doesn't change the list.
     KoListLevelProperties l4 = ls.levelProperties(4);
@@ -91,7 +91,7 @@ void TestListStyle::testListStyle()
     // new levels are a copy of the existing level.
     KoListLevelProperties l5 = ls.levelProperties(5);
     QCOMPARE(l5.displayLevel(), 1);
-    QCOMPARE(l5.labelType(), KoListStyle::AlphaLowerItem);
+    QCOMPARE(l5.numberFormat(), KoOdfNumberDefinition::AlphabeticLowerCase);
     QCOMPARE(l5.indent(), 0.);
 }
 

@@ -24,232 +24,12 @@
 #include <KoParagraphStyle.h>
 #include <KoTextDocument.h>
 #include <KoList.h>
+#include <KoOdfNumberDefinition.h>
 
 #include <TextLayoutDebug.h>
 #include <klocalizedstring.h>
 #include <QTextList>
 
-using namespace Lists;
-
-QString Lists::intToRoman(int n)
-{
-    static const QString RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
-    static const QString RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
-    static const QString RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
-    static const QString RNThousands[] = {"", "m", "mm", "mmm", "mmmm", "mmmmm", "mmmmmm", "mmmmmmm", "mmmmmmmm", "mmmmmmmmm"};
-
-    if (n <= 0) {
-        warnTextLayout << "intToRoman called with negative number: n=" << n;
-        return QString::number(n);
-    }
-
-    return RNThousands[(n / 1000)] +
-           RNHundreds[(n / 100) % 10 ] +
-           RNTens[(n / 10) % 10 ] +
-           RNUnits[(n) % 10 ];
-}
-
-QString Lists::intToAlpha(int n, Capitalisation caps, bool letterSynchronization)
-{
-    const char offset = caps == Uppercase ? 'A' : 'a';
-    QString answer;
-    if (letterSynchronization) {
-        int digits = 1;
-        for (; n > 26; n -= 26)
-            digits += 1;
-        for (int i = 0; i < digits; i++)
-            answer.prepend(QChar(offset + n - 1));
-        return answer;
-    } else {
-        char bottomDigit;
-        while (n > 26) {
-            bottomDigit = (n - 1) % 26;
-            n = (n - 1) / 26;
-            answer.prepend(QChar(offset + bottomDigit));
-        }
-    }
-    answer.prepend(QChar(offset + n - 1));
-    return answer;
-}
-
-QString Lists::intToScript(int n, KoListStyle::LabelType labelType)
-{
-    // 10-base
-    static const int bengali = 0x9e6;
-    static const int gujarati = 0xae6;
-    static const int gurumukhi = 0xa66;
-    static const int kannada = 0xce6;
-    static const int malayalam = 0xd66;
-    static const int oriya = 0xb66;
-    static const int tamil = 0x0be6;
-    static const int telugu = 0xc66;
-    static const int tibetan = 0xf20;
-    static const int thai = 0xe50;
-
-    int offset;
-    switch (labelType) {
-    case KoListStyle::Bengali:
-        offset = bengali;
-        break;
-    case KoListStyle::Gujarati:
-        offset = gujarati;
-        break;
-    case KoListStyle::Gurumukhi:
-        offset = gurumukhi;
-        break;
-    case KoListStyle::Kannada:
-        offset = kannada;
-        break;
-    case KoListStyle::Malayalam:
-        offset = malayalam;
-        break;
-    case KoListStyle::Oriya:
-        offset = oriya;
-        break;
-    case KoListStyle::Tamil:
-        offset = tamil;
-        break;
-    case KoListStyle::Telugu:
-        offset = telugu;
-        break;
-    case KoListStyle::Tibetan:
-        offset = tibetan;
-        break;
-    case KoListStyle::Thai:
-        offset = thai;
-        break;
-    default:
-        return QString::number(n);
-    }
-    QString answer;
-    while (n > 0) {
-        answer.prepend(QChar(offset + n % 10));
-        n = n / 10;
-    }
-    return answer;
-}
-
-QString Lists::intToScriptList(int n, KoListStyle::LabelType labelType)
-{
-    // 1 time Sequences
-    // note; the leading X is to make these 1 based.
-    static const char* const Abjad[] = { "أ", "ب", "ج", "د", "ﻫ", "و", "ز", "ح", "ط", "ي", "ك", "ل", "م",
-                                   "ن", "س", "ع", "ف", "ص", "ق", "ر", "ش", "ت", "ث", "خ", "ذ", "ض", "ظ", "غ"
-                                 };
-    static const char* const Abjad2[] = { "ﺃ", "ﺏ", "ﺝ", "ﺩ", "ﻫ", "ﻭ", "ﺯ", "ﺡ", "ﻁ", "ﻱ", "ﻙ", "ﻝ", "ﻡ",
-                                    "ﻥ", "ﺹ", "ﻉ", "ﻑ", "ﺽ", "ﻕ", "ﺭ", "ﺱ", "ﺕ", "ﺙ", "ﺥ", "ﺫ", "ﻅ", "ﻍ", "ﺵ"
-                                  };
-    static const char* const ArabicAlphabet[] = {"ا", "ب", "ت", "ث", "ج", "ح", "خ", "د", "ذ", "ر", "ز",
-                                           "س", "ش", "ص", "ض", "ط", "ظ", "ع", "غ", "ف", "ق", "ك", "ل", "م", "ن", "ه", "و", "ي"
-                                          };
-
-    /*
-    // see this page for the 10, 100, 1000 etc http://en.wikipedia.org/wiki/Chinese_numerals
-    static const char* const chinese1[] = { '零','壹','貳','叄','肆','伍','陸','柒','捌','玖' };
-    static const char* const chinese2[] = { '〇','一','二','三','四','五','六','七','八','九' };
-
-    TODO: http://en.wikipedia.org/wiki/Korean_numerals
-    http://en.wikipedia.org/wiki/Japanese_numerals
-    'http://en.wikipedia.org/wiki/Hebrew_numerals'
-    'http://en.wikipedia.org/wiki/Armenian_numerals'
-    'http://en.wikipedia.org/wiki/Greek_numerals'
-    'http://en.wikipedia.org/wiki/Cyrillic_numerals'
-    'http://en.wikipedia.org/wiki/Sanskrit_numerals'
-    'http://en.wikipedia.org/wiki/Ge%27ez_alphabet#Numerals'
-    'http://en.wikipedia.org/wiki/Abjad_numerals'
-    */
-
-    switch (labelType) {
-    case KoListStyle::Abjad:
-        if (n > 22) return "*";
-        return QString::fromUtf8(Abjad[n-1]);
-    case KoListStyle::AbjadMinor:
-        if (n > 22) return "*";
-        return QString::fromUtf8(Abjad2[n-1]);
-    case KoListStyle::ArabicAlphabet:
-        if (n > 28) return "*";
-        return QString::fromUtf8(ArabicAlphabet[n-1]);
-    default:
-        return QString::number(n);
-    }
-}
-
-QString Lists::intToNumberingStyle(int index, KoListStyle::LabelType labelType, bool letterSynchronization)
-{
-    QString counterText;
-    switch(labelType) {
-    case KoListStyle::DecimalItem:
-        counterText = QString::number(index);
-        break;
-    case KoListStyle::AlphaLowerItem:
-        counterText = intToAlpha(index, Lowercase, letterSynchronization);
-        break;
-    case KoListStyle::UpperAlphaItem:
-        counterText = intToAlpha(index, Uppercase, letterSynchronization);
-        break;
-    case KoListStyle::RomanLowerItem:
-        counterText = intToRoman(index);
-        break;
-    case KoListStyle::UpperRomanItem:
-        counterText = intToRoman(index).toUpper();
-        break;
-    case KoListStyle::Bengali:
-    case KoListStyle::Gujarati:
-    case KoListStyle::Gurumukhi:
-    case KoListStyle::Kannada:
-    case KoListStyle::Malayalam:
-    case KoListStyle::Oriya:
-    case KoListStyle::Tamil:
-    case KoListStyle::Telugu:
-    case KoListStyle::Tibetan:
-    case KoListStyle::Thai:
-        counterText = intToScript(index, labelType);
-        break;
-    case KoListStyle::Abjad:
-    case KoListStyle::ArabicAlphabet:
-    case KoListStyle::AbjadMinor:
-        counterText = intToScriptList(index, labelType);
-        break;
-    default:
-        counterText = QString::number(index);
-    }
-
-    return counterText;
-}
-
-QList<ListStyleItem> Lists::genericListStyleItems()
-{
-    QList<ListStyleItem> answer;
-    answer.append(ListStyleItem(i18nc("Text list-style", "None"), KoListStyle::None));
-    answer.append(ListStyleItem(i18n("Arabic"), KoListStyle::DecimalItem, "."));
-    answer.append(ListStyleItem(i18n("Arabic"), KoListStyle::DecimalItem, ")"));
-    answer.append(ListStyleItem(i18n("Lower Alphabetical"), KoListStyle::AlphaLowerItem, "."));
-    answer.append(ListStyleItem(i18n("Lower Alphabetical"), KoListStyle::AlphaLowerItem, ")"));
-    answer.append(ListStyleItem(i18n("Upper Alphabetical"), KoListStyle::UpperAlphaItem, ""));
-    answer.append(ListStyleItem(i18n("Lower Roman"), KoListStyle::RomanLowerItem, ""));
-    answer.append(ListStyleItem(i18n("Upper Roman"), KoListStyle::UpperRomanItem, ""));
-    return answer;
-}
-
-QList<ListStyleItem> Lists::otherListStyleItems()
-{
-    QList<ListStyleItem> answer;
-    answer.append(ListStyleItem(i18n("Bengali"), KoListStyle::Bengali));
-    answer.append(ListStyleItem(i18n("Gujarati"), KoListStyle::Gujarati));
-    answer.append(ListStyleItem(i18n("Gurumukhi"), KoListStyle::Gurumukhi));
-    answer.append(ListStyleItem(i18n("Kannada"), KoListStyle::Kannada));
-    answer.append(ListStyleItem(i18n("Malayalam"), KoListStyle::Malayalam));
-    answer.append(ListStyleItem(i18n("Oriya"), KoListStyle::Oriya));
-    answer.append(ListStyleItem(i18n("Tamil"), KoListStyle::Tamil));
-    answer.append(ListStyleItem(i18n("Telugu"), KoListStyle::Telugu));
-    answer.append(ListStyleItem(i18n("Tibetan"), KoListStyle::Tibetan));
-    answer.append(ListStyleItem(i18n("Thai"), KoListStyle::Thai));
-    answer.append(ListStyleItem(i18n("Abjad"), KoListStyle::Abjad));
-    answer.append(ListStyleItem(i18n("AbjadMinor"), KoListStyle::AbjadMinor));
-    answer.append(ListStyleItem(i18n("ArabicAlphabet"), KoListStyle::ArabicAlphabet));
-    answer.append(ListStyleItem(i18n("Image"), KoListStyle::ImageItem));
-    return answer;
-}
 
 // ------------------- ListItemsHelper ------------
 /// \internal helper class for calculating text-lists prefixes and indents
@@ -375,8 +155,10 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
                 checkLevel--;
                 for (int i = otherLevel + 1; i < level; i++) {
                     tmpDisplayLevel--;
-                    item += "." + intToNumberingStyle(index, labelType,
-                                                      m_textList->format().boolProperty(KoListStyle::LetterSynchronization)); // add missing counters.
+                    KoOdfNumberDefinition numberFormat;
+                    numberFormat.setFormatSpecification(static_cast<KoOdfNumberDefinition::FormatSpecification>(format.intProperty(KoListStyle::NumberFormat)));
+                    numberFormat.setLetterSynchronization(format.boolProperty(KoListStyle::LetterSynchronization));
+                    item += "." + numberFormat.formattedNumber(index); // add missing counters.
                 }
             } else { // just copy previous counter as prefix
                 QString otherPrefix = lf.stringProperty(KoListStyle::ListItemPrefix);
@@ -384,9 +166,12 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
                 QString pureCounter = otherData.counterText().mid(otherPrefix.size());
                 pureCounter = pureCounter.left(pureCounter.size() - otherSuffix.size());
                 item += pureCounter;
-                for (int i = otherLevel + 1; i < level; i++)
-                    item += "." + intToNumberingStyle(index, labelType,
-                                                      m_textList->format().boolProperty(KoListStyle::LetterSynchronization)); // add missing counters.
+                for (int i = otherLevel + 1; i < level; i++) {
+                    KoOdfNumberDefinition numberFormat;
+                    numberFormat.setFormatSpecification(static_cast<KoOdfNumberDefinition::FormatSpecification>(format.intProperty(KoListStyle::NumberFormat)));
+                    numberFormat.setLetterSynchronization(format.boolProperty(KoListStyle::LetterSynchronization));
+                    item += "." + numberFormat.formattedNumber(index); // add missing counters.
+                }
                 tmpDisplayLevel = 0;
                 if (isOutline && counterResetRequired) {
                     index = 1;
@@ -394,50 +179,56 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
                 break;
             }
         }
-        for (int i = 1; i < tmpDisplayLevel; i++)
-            item = intToNumberingStyle(index, labelType,
-                                       m_textList->format().boolProperty(KoListStyle::LetterSynchronization))
-                    + "." + item; // add missing counters.
-    }
-
-    if ((labelType == KoListStyle::DecimalItem || labelType == KoListStyle::AlphaLowerItem ||
-            labelType == KoListStyle::UpperAlphaItem ||
-            labelType == KoListStyle::RomanLowerItem ||
-            labelType == KoListStyle::UpperRomanItem) &&
-            !(item.isEmpty() || item.endsWith('.') || item.endsWith(' '))) {
-        item += '.';
+        for (int i = 1; i < tmpDisplayLevel; i++) {
+            KoOdfNumberDefinition numberFormat;
+            numberFormat.setFormatSpecification(static_cast<KoOdfNumberDefinition::FormatSpecification>(format.intProperty(KoListStyle::NumberFormat)));
+            numberFormat.setLetterSynchronization(format.boolProperty(KoListStyle::LetterSynchronization));
+            item = numberFormat.formattedNumber(index) + "." + item; // add missing counters.
+        }
     }
     bool calcWidth = true;
     QString partialCounterText;
-    if (KoListStyle::isNumberingStyle(labelType)) {
-        partialCounterText = intToNumberingStyle(index, labelType,
-                                m_textList->format().boolProperty(KoListStyle::LetterSynchronization));
-    } else {
-        switch (labelType) {
-        case KoListStyle::CustomCharItem: {
-            calcWidth = false;
-            if (format.intProperty(KoListStyle::BulletCharacter))
-                item = QString(QChar(format.intProperty(KoListStyle::BulletCharacter)));
-            width = m_fm.width(item);
-            int percent = format.intProperty(KoListStyle::RelativeBulletSize);
-            if (percent > 0)
-                width = width * (percent / 100.0);
-            break;
+    switch (labelType) {
+    case KoListStyle::NumberLabelType: {
+        KoOdfNumberDefinition::FormatSpecification spec = static_cast<KoOdfNumberDefinition::FormatSpecification>(format.intProperty(KoListStyle::NumberFormat));
+
+        if (!(item.isEmpty() || item.endsWith('.') || item.endsWith(' '))) {
+            if (spec == KoOdfNumberDefinition::Numeric || spec == KoOdfNumberDefinition::AlphabeticLowerCase ||
+            spec == KoOdfNumberDefinition::AlphabeticUpperCase ||
+            spec == KoOdfNumberDefinition::RomanLowerCase ||
+            spec == KoOdfNumberDefinition::RomanUpperCase) {
+                item += '.';
+            }
         }
-        case KoListStyle::None:
-            calcWidth = false;
-            width =  0.0;
-            break;
-        case KoListStyle::ImageItem:
-            calcWidth = false;
-            width = qMax(format.doubleProperty(KoListStyle::Width), (qreal)1.0);
-            break;
-        default:  // others we ignore.
-            calcWidth = false;
-        }
+
+        KoOdfNumberDefinition numberFormat;
+        numberFormat.setFormatSpecification(spec);
+        partialCounterText = numberFormat.formattedNumber(index);
+        break;
+    }
+    case KoListStyle::BulletCharLabelType: {
+        calcWidth = false;
+        if (format.intProperty(KoListStyle::BulletCharacter))
+            item = QString(QChar(format.intProperty(KoListStyle::BulletCharacter)));
+        width = m_fm.width(item);
+        int percent = format.intProperty(KoListStyle::RelativeBulletSize);
+        if (percent > 0)
+            width = width * (percent / 100.0);
+        break;
+    }
+    case KoListStyle::None:
+        calcWidth = false;
+        width =  0.0;
+        break;
+    case KoListStyle::ImageLabelType:
+        calcWidth = false;
+        width = qMax(format.doubleProperty(KoListStyle::Width), (qreal)1.0);
+        break;
+    default:  // others we ignore.
+        calcWidth = false;
     }
 
-    blockData.setCounterIsImage(labelType == KoListStyle::ImageItem);
+    blockData.setCounterIsImage(labelType == KoListStyle::ImageLabelType);
     blockData.setPartialCounterText(partialCounterText);
     blockData.setCounterIndex(index);
     item += partialCounterText;
@@ -467,7 +258,6 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     }
     blockData.setCounterWidth(width);
     blockData.setCounterSpacing(counterSpacing);
-    //warnTextLayout;
 }
 
 // static

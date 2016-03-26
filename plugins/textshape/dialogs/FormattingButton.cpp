@@ -25,6 +25,7 @@
 #include <QLabel>
 #include <QGridLayout>
 #include <QWidgetAction>
+#include <QResizeEvent>
 
 #include <QDebug>
 
@@ -34,7 +35,7 @@ class ContentWidget : public QFrame
 public:
     ContentWidget() : QFrame(){}
 protected:
-    void resizeEvent(QResizeEvent *event) override { QFrame::resizeEvent(event); emit readyAfterResize();}
+    void resizeEvent(QResizeEvent *event) override { QFrame::resizeEvent(event); if (event->oldSize().isValid()) emit readyAfterResize();}
 
 Q_SIGNALS:
     void readyAfterResize();
@@ -58,6 +59,7 @@ LabelAction::LabelAction(const QString &label)
 //This class is the main place where the expanding grid is done
 class ItemChooserAction : public QWidgetAction
 {
+    Q_OBJECT
 public:
     ItemChooserAction(int columns);
     QWidget *m_widget;
@@ -163,6 +165,7 @@ ItemChooserAction *FormattingButton::addItemChooser(int columns, const QString &
     ItemChooserAction *styleAction = new ItemChooserAction(columns);
 
     m_menu->addAction(styleAction);
+    connect(m_menu, SIGNAL(aboutToShow()), this, SLOT(recalcMenuSize()));
     connect(styleAction->defaultWidget(), SIGNAL(readyAfterResize()), this, SLOT(recalcMenuSize()));
     return styleAction;
 }
@@ -265,6 +268,7 @@ void FormattingButton::recalcMenuSize()
 {
     m_menu->setSeparatorsCollapsible(!m_menu->separatorsCollapsible()); // invalidates menu cache
     m_menu->setSeparatorsCollapsible(!m_menu->separatorsCollapsible()); // of action rects
+    m_menu->grab();// helps recalc size
     m_menu->setMaximumSize(m_menu->sizeHint());
 }
 

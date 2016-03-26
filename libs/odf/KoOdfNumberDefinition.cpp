@@ -62,6 +62,27 @@ KoOdfNumberDefinition::~KoOdfNumberDefinition()
     delete d;
 }
 
+QStringList KoOdfNumberDefinition::userFormatDescriptions()
+{
+    QStringList list;
+    list << "1, 2, 3, ..."
+    << "a, b, c, ..."
+    << "A, B, C, ..."
+    << "i, ii, iii, ..."
+    << "I, II, III, ..." << "أ, ب, ت, ..."
+    << "ก, ข, ค, ..."
+    << "౧, ౨, ౩, ..."
+    << "௧, ௨, ௪, ..."
+    << "୧, ୨, ୩, ..."
+    << "൧, ൨, ൩, ..."
+    << "೧, ೨, ೩, ..."
+    << "੧, ੨, ੩, ..."
+    << "૧, ૨, ૩, ..."
+    << "১, ২, ৩, ...";
+
+    return list;
+}
+
 void KoOdfNumberDefinition::loadOdf(const KoXmlElement &element)
 {
     const QString format = element.attributeNS(KoXmlNS::style, "num-format", QString());

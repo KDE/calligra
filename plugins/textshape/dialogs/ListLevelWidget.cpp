@@ -84,6 +84,8 @@ ListLevelWidget::ListLevelWidget(QWidget* parent)
 {
     widget.setupUi(this);
 
+    widget.format->addItems(KoOdfNumberDefinition::userFormatDescriptions());
+
     QGridLayout *bulletLayout = new QGridLayout();
     m_charSelect = new KCharSelect(0, 0, KCharSelect::FontCombo | KCharSelect::BlockCombos | KCharSelect::CharacterTable | KCharSelect::DetailBrowser);
     bulletLayout->addWidget(m_charSelect, 0,0);
@@ -91,6 +93,7 @@ ListLevelWidget::ListLevelWidget(QWidget* parent)
 
     widget.geometryGrid->addWidget(m_label = new LabelDrawingWidget, 4, 0);
 
+    connect(widget.format, SIGNAL(currentIndexChanged(int)), this, SLOT(numberFormatChanged(int)));
     connect(widget.addTabStop, SIGNAL(toggled(bool)), widget.relativeTabStop, SLOT(setEnabled(bool)));
     connect(widget.labelFollowedBy, SIGNAL(currentIndexChanged(int)), this, SLOT(labelFollowedByChanged(int)));
     connect(widget.alignment, SIGNAL(currentIndexChanged(int)), this, SLOT(alignmentChanged(int)));
@@ -146,6 +149,12 @@ void ListLevelWidget::alignmentChanged(int a)
     m_alignmentModified = true;
 }
 
+void ListLevelWidget::numberFormatChanged(int index)
+{
+    widget.synchro->setEnabled(index == KoOdfNumberDefinition::AlphabeticLowerCase 
+                            || index ==KoOdfNumberDefinition::AlphabeticUpperCase);
+}
+
 void ListLevelWidget::setDisplay(const KoListLevelProperties &props)
 {
     widget.blockIndent->setValue(props.margin());
@@ -163,11 +172,18 @@ void ListLevelWidget::setDisplay(const KoListLevelProperties &props)
         m_charSelect->setCurrentChar(QChar(0x2022)); // default to bullet
     }
 
+    widget.format->setCurrentIndex(props.numberFormat());
+    numberFormatChanged(props.numberFormat()); // enable/diable letterSynch checkbox
+    widget.synchro->setChecked(props.letterSynchronization());
+    widget.prefix->setText(props.listItemPrefix());
+    widget.suffix->setText(props.listItemSuffix());
+    widget.displayLevels->setValue(props.displayLevel());
+
     switch(props.labelType()) {
-    case KoListStyle::CustomCharItem:
+    case KoListStyle::BulletCharLabelType:
         widget.tabWidget->setCurrentIndex(1);
         break;
-    case KoListStyle::ImageItem:
+    case KoListStyle::ImageLabelType:
         widget.tabWidget->setCurrentIndex(2);
         break;
     default:
@@ -189,16 +205,19 @@ void ListLevelWidget::save(KoListLevelProperties &props) const
 
     switch(widget.tabWidget->currentIndex()) {
     case 0:
-        props.setLabelType(KoListStyle::DecimalItem);
-        //props.setListItemPrefix();
-        //props.setListItemSuffix();
+        props.setLabelType(KoListStyle::NumberLabelType);
+        props.setNumberFormat(KoOdfNumberDefinition::FormatSpecification(widget.format->currentIndex()));
+        props.setListItemPrefix(widget.prefix->text());
+        props.setListItemSuffix(widget.suffix->text());
+        props.setLetterSynchronization(widget.synchro->isChecked());
+        props.setDisplayLevel(widget.displayLevels->value());
         break;
     case 1:
-        props.setLabelType(KoListStyle::CustomCharItem);
+        props.setLabelType(KoListStyle::BulletCharLabelType);
         props.setBulletCharacter(m_charSelect->currentChar());
         break;
     case 2:
-        props.setLabelType(KoListStyle::ImageItem);
+        props.setLabelType(KoListStyle::ImageLabelType);
         break;
     }
 }

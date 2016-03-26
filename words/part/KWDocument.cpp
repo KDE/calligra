@@ -576,7 +576,7 @@ void KWDocument::initEmpty()
     parag->setName(i18n("Bullet List"));
     KoListStyle *list = new KoListStyle(parag);
     KoListLevelProperties llp = list->levelProperties(0);
-    llp.setLabelType(KoListStyle::CustomCharItem);
+    llp.setLabelType(KoListStyle::BulletCharLabelType);
     llp.setBulletCharacter(QChar(0x2022)); // Bullet
     list->setLevelProperties(llp);
     parag->setListStyle(list);

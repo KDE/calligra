@@ -53,6 +53,7 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, const KoListLeve
         KoListLevelProperties llp;
         llp.setLevel(lev);
         llp.setLabelType(labelType);
+        llp.setNumberFormat(levelProperties.numberFormat());
         llp.setListItemPrefix(levelProperties.listItemPrefix());
         llp.setListItemSuffix(levelProperties.listItemSuffix());
 
@@ -63,10 +64,10 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, const KoListLeve
                 llp.setListItemSuffix(".");
             }
         }
-        else if (labelType == KoListStyle::CustomCharItem) {
+        else if (labelType == KoListStyle::BulletCharLabelType) {
             llp.setRelativeBulletSize(100); //we take the default value for numbering bullets as 100
             llp.setBulletCharacter(levelProperties.bulletCharacter());
-        } else if (labelType == KoListStyle::ImageItem) {
+        } else if (labelType == KoListStyle::ImageLabelType) {
             llp.setBulletImage(levelProperties.bulletImage());
             llp.setWidth(levelProperties.width());
             llp.setHeight(levelProperties.height());
