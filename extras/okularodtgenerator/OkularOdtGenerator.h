@@ -45,8 +45,11 @@ public:
     Okular::DocumentInfo generateDocumentInfo( const QSet<Okular::DocumentInfo::Key> &keys ) const;
     const Okular::DocumentSynopsis* generateDocumentSynopsis();
 
+    bool canGenerateTextPage() const;
+
 protected:
     bool doCloseDocument();
+    Okular::TextPage* textPage( Okular::Page *page );
 
 private:
     KWDocument* m_doc;

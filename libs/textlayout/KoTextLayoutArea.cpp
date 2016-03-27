@@ -37,6 +37,7 @@
 #include "KoTextDocumentLayout.h"
 #include "FrameIterator.h"
 #include "KoPointedAt.h"
+#include "KoCharAreaInfo.h"
 
 #include <KoTextDocument.h>
 #include <KoParagraphStyle.h>
@@ -219,6 +220,94 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
     }
     return pointedAt;
 }
+
+
+QVector<KoCharAreaInfo> KoTextLayoutArea::generateCharAreaInfos() const
+{
+    QVector<KoCharAreaInfo> result;
+    if (d->startOfArea == 0 || d->endOfArea == 0) { // We have not been completely layouted yet
+        debugTextLayout << "called when not completely layouted yet";
+        return result;
+    }
+
+    QTextFrame::iterator it = d->startOfArea->it;
+    QTextFrame::iterator stop = d->endOfArea->it;
+
+    int tableAreaIndex = 0;
+    int tocIndex = 0;
+    for (; it != stop && !it.atEnd(); ++it) {
+       QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
+       if (table) {
+            if (tableAreaIndex >= d->tableAreas.size()) {
+                continue;
+            }
+            result.append(d->tableAreas[tableAreaIndex]->generateCharAreaInfos());
+            ++tableAreaIndex;
+            continue;
+        }
+
+        QTextFrame *subFrame = it.currentFrame();
+        if (subFrame) {
+            if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
+                result.append(d->endNotesArea->generateCharAreaInfos());
+            }
+            continue;
+        }
+
+        QTextBlock block = it.currentBlock();
+        if (!block.isValid()) {
+            continue;
+        }
+
+        if (block.blockFormat().hasProperty(KoParagraphStyle::GeneratedDocument)) {
+            result.append(d->generatedDocAreas[tocIndex]->generateCharAreaInfos());
+            ++tocIndex;
+            continue;
+        }
+
+        // TODO: also include header/paragraph numbering/bullet points
+        QTextLayout *layout = block.layout();
+
+        for (int i = 0; i < layout->lineCount(); ++i) {
+            QTextLine line = layout->lineAt(i);
+            if (block == d->startOfArea->it.currentBlock() && line.textStart() < d->startOfArea->lineTextStart) {
+                continue; // this line is part of a previous layoutArea
+            }
+            if (block == d->endOfArea->it.currentBlock() && line.textStart() + line.textLength() >= d->endOfArea->lineTextStart) {
+                break; // this and following lines are part of a next layoutArea
+            }
+            qreal xLeading;
+            qreal xTrailing;
+            for (int j = line.textStart(); j < line.textStart() + line.textLength(); ++j) {
+                // TODO: support RTL
+                xLeading = line.cursorToX(j, QTextLine::Leading);
+                xTrailing = line.cursorToX(j, QTextLine::Trailing);
+                QRectF rect(xLeading, line.y(), xTrailing-xLeading, line.height()); // TODO: at least height needs more work
+                result.append(KoCharAreaInfo(rect, block.text()[j]));
+            }
+
+            // TODO: perhaps only at end of paragraph (last qtextline) add linebreak, for in-paragraph linebreak
+            // use real whitespace(s) found in original text (or see if forced linebreak)
+            QRectF rect(xTrailing, line.y(), 1, line.height()); // TODO: better dummy width needed, with reasoning
+            result.append(KoCharAreaInfo(rect, QLatin1Char('\n')));
+        }
+    }
+
+    qreal footNoteYOffset = bottom() - d->footNotesHeight;
+    foreach(KoTextLayoutNoteArea *footerArea, d->footNoteAreas) {
+        QVector<KoCharAreaInfo> footNoteCharAreaInfos = footerArea->generateCharAreaInfos();
+        QMutableVectorIterator<KoCharAreaInfo> it(footNoteCharAreaInfos);
+        while (it.hasNext()) {
+            KoCharAreaInfo &info = it.next();
+            info.rect.translate(0, footNoteYOffset);
+        }
+        result.append(footNoteCharAreaInfos);
+        footNoteYOffset += footerArea->bottom() - footerArea->top();
+    }
+
+    return result;
+}
+
 
 QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
 {

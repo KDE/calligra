@@ -24,6 +24,7 @@
 #include "KoInlineNote.h"
 #include "KoPointedAt.h"
 #include "FrameIterator.h"
+#include "KoCharAreaInfo.h"
 
 #include <KoTextDocument.h>
 
@@ -119,6 +120,22 @@ KoPointedAt KoTextLayoutEndNotesArea::hitTest(const QPointF &p, Qt::HitTestAccur
     }
     return KoPointedAt();
 }
+
+QVector<KoCharAreaInfo> KoTextLayoutEndNotesArea::generateCharAreaInfos() const
+{
+    QVector<KoCharAreaInfo> result;
+
+    if (d->startOfArea == 0) {// We have not been layouted yet
+        return result;
+    }
+
+    foreach(KoTextLayoutNoteArea *area, d->endNoteAreas) {
+        result.append(area->generateCharAreaInfos());
+    }
+
+    return result;
+}
+
 
 QRectF KoTextLayoutEndNotesArea::selectionBoundingBox(QTextCursor &cursor) const
 {

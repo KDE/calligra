@@ -41,6 +41,7 @@
 #include <KoGlobal.h>
 #include <KoParagraphStyle.h>
 #include <KoTextLayoutRootArea.h>
+#include <KoCharAreaInfo.h>
 
 #include <okular/core/page.h>
 
@@ -49,6 +50,7 @@ OkularOdtGenerator::OkularOdtGenerator( QObject *parent, const QVariantList &arg
     : Okular::Generator( parent, args )
 {
     m_doc = 0;
+    setFeature( TextExtraction );
 }
 
 OkularOdtGenerator::~OkularOdtGenerator()
@@ -237,6 +239,59 @@ void OkularOdtGenerator::generatePixmap( Okular::PixmapRequest *request )
 
     signalPixmapRequestDone( request );
 }
+
+bool OkularOdtGenerator::canGenerateTextPage() const
+{
+    return true;
+}
+
+Okular::TextPage* OkularOdtGenerator::textPage( Okular::Page *page )
+{
+    QTextDocument* textDocument = m_doc->mainFrameSet()->document();
+    KoTextDocumentLayout* textDocumentLayout = static_cast<KoTextDocumentLayout *>(textDocument->documentLayout());
+
+    KoTextLayoutRootArea *rootArea = 0;
+    foreach(KoTextLayoutRootArea *area, textDocumentLayout->rootAreas()) {
+        if (area->page()->pageNumber() == page->number()+1) {
+            rootArea = area;
+            break;
+        }
+    }
+
+    if (!rootArea) {
+        return 0;
+    }
+
+    const QVector<KoCharAreaInfo> charAreaInfos = rootArea->generateCharAreaInfos();
+
+    // TODO: text from master pages (headers/footers), text in floating shapes
+    if (charAreaInfos.isEmpty()) {
+        return 0;
+    }
+
+    KWPage* wpage = static_cast<KWPage *>(rootArea->page());
+    KoShape *shape = rootArea->associatedShape();
+
+    const QPointF offset = shape->absolutePosition(KoFlake::TopLeftCorner)
+                           + QPointF(static_cast<qreal>(0.0), -(wpage->offsetInDocument()))
+                           - rootArea->referenceRect().topLeft();
+
+    const double pageHeight = wpage->height();
+    const double pageWidth = wpage->width();
+
+    Okular::TextPage *textPage = new Okular::TextPage;
+    foreach(const KoCharAreaInfo &charAreaInfo, charAreaInfos) {
+        const QRectF rect = charAreaInfo.rect.translated(offset);
+        const double left = static_cast<double>(rect.left()) / pageWidth;
+        const double top = static_cast<double>(rect.top()) / pageHeight;
+        const double right = static_cast<double>(rect.right()) / pageWidth;
+        const double bottom = static_cast<double>(rect.bottom()) / pageHeight;
+        textPage->append( charAreaInfo.character,
+                          new Okular::NormalizedRect( left, top, right, bottom ) );
+    }
+    return textPage;
+}
+
 
 Okular::DocumentInfo OkularOdtGenerator::generateDocumentInfo( const QSet<Okular::DocumentInfo::Key> &keys ) const
 {

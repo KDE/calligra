@@ -45,6 +45,8 @@ public:
 
     QRectF selectionBoundingBox(QTextCursor &cursor) const;
 
+    QVector<KoCharAreaInfo> generateCharAreaInfos() const;
+
     void paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context);
 
 private:
