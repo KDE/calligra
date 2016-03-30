@@ -1,5 +1,5 @@
 ecm_install_icons( ICONS
-    16-actions-snap-boundingbox.png
+    16-actions-snap-bounding-box.png
     16-actions-snap-extension.png
     22-actions-convert-to-path.png
     22-actions-createpath.png
@@ -19,7 +19,7 @@ ecm_install_icons( ICONS
     22-actions-pathsegment-curve.png
     22-actions-pathsegment-line.png
     22-actions-pathshape.png
-    sc-actions-snap-boundingbox.svg
+    sc-actions-snap-bounding-box.svg
     sc-actions-snap-extension.svg
     DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
     THEME hicolor

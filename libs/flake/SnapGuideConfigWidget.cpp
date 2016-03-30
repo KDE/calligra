@@ -31,7 +31,7 @@ SnapGuideConfigWidget::SnapGuideConfigWidget(KoSnapGuide * snapGuide, QWidget * 
     widget.nodeSnapGuide->setIcon(koIcon("snap-node"));
     widget.extensionSnapGuide->setIcon(koIcon("snap-extension"));
     widget.intersectionSnapGuide->setIcon(koIcon("snap-intersection"));
-    widget.boundingBoxSnapGuide->setIcon(koIcon("snap-boundingbox"));
+    widget.boundingBoxSnapGuide->setIcon(koIcon("snap-bounding-box"));
     widget.lineGuideSnapGuide->setIcon(koIcon("snap-guideline"));
 
     updateControls();
