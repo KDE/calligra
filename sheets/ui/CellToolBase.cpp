@@ -305,43 +305,43 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- border actions --
 
-    action = new QAction(koIcon("border_left"), i18n("Border Left"), this);
+    action = new QAction(koIcon("format-border-set-left"), i18n("Border Left"), this);
     action->setIconText(i18n("Left"));
     addAction("borderLeft", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(borderLeft()));
     action->setToolTip(i18n("Set a left border to the selected area"));
 
-    action = new QAction(koIcon("border_right"), i18n("Border Right"), this);
+    action = new QAction(koIcon("format-border-set-right"), i18n("Border Right"), this);
     action->setIconText(i18n("Right"));
     addAction("borderRight", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(borderRight()));
     action->setToolTip(i18n("Set a right border to the selected area"));
 
-    action = new QAction(koIcon("border_top"), i18n("Border Top"), this);
+    action = new QAction(koIcon("format-border-set-top"), i18n("Border Top"), this);
     action->setIconText(i18n("Top"));
     addAction("borderTop", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(borderTop()));
     action->setToolTip(i18n("Set a top border to the selected area"));
 
-    action = new QAction(koIcon("border_bottom"), i18n("Border Bottom"), this);
+    action = new QAction(koIcon("format-border-set-bottom"), i18n("Border Bottom"), this);
     action->setIconText(i18n("Bottom"));
     addAction("borderBottom", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(borderBottom()));
     action->setToolTip(i18n("Set a bottom border to the selected area"));
 
-    action = new QAction(koIcon("border_all"), i18n("All Borders"), this);
+    action = new QAction(koIcon("format-border-set-all"), i18n("All Borders"), this);
     action->setIconText(i18n("All"));
     addAction("borderAll", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(borderAll()));
     action->setToolTip(i18n("Set a border around all cells in the selected area"));
 
-    action = new QAction(koIcon("border_remove"), i18n("No Borders"), this);
+    action = new QAction(koIcon("format-border-set-none"), i18n("No Borders"), this);
     action->setIconText(i18n("None"));
     addAction("borderRemove", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(borderRemove()));
     action->setToolTip(i18n("Remove all borders in the selected area"));
 
-    action = new QAction(koIcon("border_outline"), i18n("Border Outline"), this);
+    action = new QAction(koIcon("format-border-set-external"), i18n("Border Outline"), this);
     action->setIconText(i18n("Outline"));
     addAction("borderOutline", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(borderOutline()));

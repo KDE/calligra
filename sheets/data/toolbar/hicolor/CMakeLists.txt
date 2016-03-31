@@ -2,18 +2,18 @@ ecm_install_icons( ICONS
     16-actions-adjustcol.png
     16-actions-adjustrow.png
     16-actions-black_sum.png
-    16-actions-border_all.png
-    16-actions-border_bottom.png
-    16-actions-border_fall.png
-    16-actions-border_horizontal.png
-    16-actions-border_inside.png
-    16-actions-border_left.png
-    16-actions-border_outline.png
-    16-actions-border_remove.png
-    16-actions-border_right.png
-    16-actions-border_top.png
-    16-actions-border_up.png
-    16-actions-border_vertical.png
+    16-actions-format-border-set-all.png
+    16-actions-format-border-set-bottom.png
+    16-actions-format-border-set-diagonal-tl-br.png
+    16-actions-format-border-set-internal-horizontal.png
+    16-actions-format-border-set-internal.png
+    16-actions-format-border-set-left.png
+    16-actions-format-border-set-external.png
+    16-actions-format-border-set-none.png
+    16-actions-format-border-set-right.png
+    16-actions-format-border-set-top.png
+    16-actions-format-border-set-diagonal-bl-tr.png
+    16-actions-format-border-set-internal-vertical.png
     16-actions-cell_edit.png
     16-actions-cell_layout.png
     16-actions-comment.png
@@ -48,18 +48,18 @@ ecm_install_icons( ICONS
     16-actions-text_top.png
     16-actions-vertical_text.png
     22-actions-black_sum.png
-    22-actions-border_all.png
-    22-actions-border_bottom.png
-    22-actions-border_fall.png
-    22-actions-border_horizontal.png
-    22-actions-border_inside.png
-    22-actions-border_left.png
-    22-actions-border_outline.png
-    22-actions-border_remove.png
-    22-actions-border_right.png
-    22-actions-border_top.png
-    22-actions-border_up.png
-    22-actions-border_vertical.png
+    22-actions-format-border-set-all.png
+    22-actions-format-border-set-bottom.png
+    22-actions-format-border-set-diagonal-tl-br.png
+    22-actions-format-border-set-internal-horizontal.png
+    22-actions-format-border-set-internal.png
+    22-actions-format-border-set-left.png
+    22-actions-format-border-set-external.png
+    22-actions-format-border-set-none.png
+    22-actions-format-border-set-right.png
+    22-actions-format-border-set-top.png
+    22-actions-format-border-set-diagonal-bl-tr.png
+    22-actions-format-border-set-internal-vertical.png
     22-actions-funct.png
     22-actions-mergecell-horizontal.png
     22-actions-mergecell.png
@@ -72,18 +72,18 @@ ecm_install_icons( ICONS
     22-actions-prec_plus.png
     22-actions-text_bottom.png
     22-actions-text_top.png
-    32-actions-border_all.png
-    32-actions-border_bottom.png
-    32-actions-border_fall.png
-    32-actions-border_horizontal.png
-    32-actions-border_inside.png
-    32-actions-border_left.png
-    32-actions-border_outline.png
-    32-actions-border_remove.png
-    32-actions-border_right.png
-    32-actions-border_top.png
-    32-actions-border_up.png
-    32-actions-border_vertical.png
+    32-actions-format-border-set-all.png
+    32-actions-format-border-set-bottom.png
+    32-actions-format-border-set-diagonal-tl-br.png
+    32-actions-format-border-set-internal-horizontal.png
+    32-actions-format-border-set-internal.png
+    32-actions-format-border-set-left.png
+    32-actions-format-border-set-external.png
+    32-actions-format-border-set-none.png
+    32-actions-format-border-set-right.png
+    32-actions-format-border-set-top.png
+    32-actions-format-border-set-diagonal-bl-tr.png
+    32-actions-format-border-set-internal-vertical.png
     32-actions-funct.png
     32-actions-percent.png
     32-actions-prec_minus.png

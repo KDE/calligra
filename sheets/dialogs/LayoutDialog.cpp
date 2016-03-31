@@ -2428,14 +2428,14 @@ void CellFormatPageBorder::InitializeGrids()
     const char shortcutButtonNames[BorderShortcutType_END][20] = {"remove", "all", "outline"};
 
     QString borderButtonIconNames[BorderType_END] = {
-        koIconName("border_top"), koIconName("border_bottom"),
-        koIconName("border_left"), koIconName("border_right"),
-        koIconName("border_vertical"), koIconName("border_horizontal"),
-        koIconName("border_fall"), koIconName("border_up")
+        koIconName("format-border-set-top"), koIconName("format-border-set-bottom"),
+        koIconName("format-border-set-left"), koIconName("format-border-set-right"),
+        koIconName("format-border-set-internal-vertical"), koIconName("format-border-set-internal-horizontal"),
+        koIconName("format-border-set-diagonal-tl-br"), koIconName("format-border-set-diagonal-bl-tr")
     };
 
     QString shortcutButtonIconNames[BorderShortcutType_END] = {
-        koIconName("border_remove"), QString(), koIconName("border_outline")
+        koIconName("format-border-set-none"), QString(), koIconName("format-border-set-external")
     };
 
     int borderButtonPositions[BorderType_END][2] = {{0, 2}, {4, 2}, {2, 0}, {2, 4}, {4, 4}, {4, 0}, {0, 0}, {0, 4}};
@@ -2480,11 +2480,11 @@ void CellFormatPageBorder::InitializeGrids()
     /* the "all" button is different depending on what kind of region is currently
        selected */
     if ((dlg->oneRow == true) && (dlg->oneCol == false)) {
-        shortcutButtonIconNames[BorderShortcutType_All] = koIconName("border_vertical");
+        shortcutButtonIconNames[BorderShortcutType_All] = koIconName("format-border-set-internal-vertical");
     } else if ((dlg->oneRow == false) && (dlg->oneCol == true)) {
-        shortcutButtonIconNames[BorderShortcutType_All] = koIconName("border_horizontal");
+        shortcutButtonIconNames[BorderShortcutType_All] = koIconName("format-border-set-internal-horizontal");
     } else {
-        shortcutButtonIconNames[BorderShortcutType_All] = koIconName("border_inside");
+        shortcutButtonIconNames[BorderShortcutType_All] = koIconName("format-border-set-internal");
     }
 
     for (int i = BorderShortcutType_Remove; i < BorderShortcutType_END; i++) {
