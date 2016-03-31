@@ -103,7 +103,7 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style, bool directFormattingMo
     if (m_styleManager) {
         KoCharacterStyle *parentStyle = style->parentStyle();
         if (parentStyle) {
-            widget.inheritStyle->setCurrentIndex(m_characterInheritedStyleModel->indexOf(*parentStyle).row());
+            widget.inheritStyle->setCurrentIndex(m_characterInheritedStyleModel->indexOf(parentStyle).row());
         }
     }
 
@@ -173,7 +173,7 @@ void CharacterGeneral::updateNextStyleCombo(KoParagraphStyle *style)
     if (!style)
         return;
 
-    widget.nextStyle->setCurrentIndex(m_paragraphStyleModel->indexOf(*style).row());
+    widget.nextStyle->setCurrentIndex(m_paragraphStyleModel->indexOf(style).row());
     m_paragraphStyleModel->setCurrentParagraphStyle(style->styleId());
 }
 

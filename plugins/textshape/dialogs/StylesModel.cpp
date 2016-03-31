@@ -177,10 +177,10 @@ void StylesModel::setProvideStyleNone(bool provide)
     }
 }
 
-QModelIndex StylesModel::indexOf(const KoCharacterStyle &style) const
+QModelIndex StylesModel::indexOf(const KoCharacterStyle *style) const
 {
-    if (&style) {
-        return createIndex(m_styleList.indexOf(style.styleId()), 0, style.styleId());
+    if (style) {
+        return createIndex(m_styleList.indexOf(style->styleId()), 0, style->styleId());
     }
     else {
         return QModelIndex();
