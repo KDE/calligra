@@ -16,12 +16,12 @@ ecm_install_icons( ICONS
     16-actions-format-border-set-internal-vertical.png
     16-actions-cell_edit.png
     16-actions-cell_layout.png
-    16-actions-comment.png
+    16-actions-edit-comment.png
     16-actions-deletecell.png
     16-actions-delete_table.png
     16-actions-dissociatecell.png
-    16-actions-first_letter_upper.png
-    16-actions-funct.png
+    16-actions-format-text-capitalize.png
+    16-actions-insert-math-expression.png
     16-actions-hide_table_column.png
     16-actions-hide_table_row.png
     16-actions-insertcellcopy.png
@@ -29,14 +29,13 @@ ecm_install_icons( ICONS
     16-actions-mergecell-horizontal.png
     16-actions-mergecell.png
     16-actions-mergecell-vertical.png
-    16-actions-middle.png
-    16-actions-money.png
+    16-actions-format-currency.png
     16-actions-multirow.png
-    16-actions-percent.png
-    16-actions-prec_minus.png
-    16-actions-prec_plus.png
+    16-actions-format-number-percent.png
+    16-actions-format-precision-less.png
+    16-actions-format-precision-more.png
     16-actions-removecell.png
-    16-actions-removecomment.png
+    16-actions-delete-comment.png
     16-actions-resizecol.png
     16-actions-resizerow.png
     16-actions-selection.png
@@ -44,9 +43,10 @@ ecm_install_icons( ICONS
     16-actions-show_table_column.png
     16-actions-show_table_row.png
     16-actions-special_paste.png
-    16-actions-text_bottom.png
-    16-actions-text_top.png
-    16-actions-vertical_text.png
+    16-actions-format-align-vertical-bottom.png
+    16-actions-format-align-vertical-center.png
+    16-actions-format-align-vertical-top.png
+    16-actions-format-text-direction-vertical.png
     22-actions-black_sum.png
     22-actions-format-border-set-all.png
     22-actions-format-border-set-bottom.png
@@ -60,18 +60,18 @@ ecm_install_icons( ICONS
     22-actions-format-border-set-top.png
     22-actions-format-border-set-diagonal-bl-tr.png
     22-actions-format-border-set-internal-vertical.png
-    22-actions-funct.png
+    22-actions-insert-math-expression.png
     22-actions-mergecell-horizontal.png
     22-actions-mergecell.png
     22-actions-mergecell-vertical.png
-    22-actions-middle.png
-    22-actions-money.png
+    22-actions-format-currency.png
     22-actions-multirow.png
-    22-actions-percent.png
-    22-actions-prec_minus.png
-    22-actions-prec_plus.png
-    22-actions-text_bottom.png
-    22-actions-text_top.png
+    22-actions-format-number-percent.png
+    22-actions-format-precision-less.png
+    22-actions-format-precision-more.png
+    22-actions-format-align-vertical-bottom.png
+    22-actions-format-align-vertical-center.png
+    22-actions-format-align-vertical-top.png
     32-actions-format-border-set-all.png
     32-actions-format-border-set-bottom.png
     32-actions-format-border-set-diagonal-tl-br.png
@@ -84,10 +84,10 @@ ecm_install_icons( ICONS
     32-actions-format-border-set-top.png
     32-actions-format-border-set-diagonal-bl-tr.png
     32-actions-format-border-set-internal-vertical.png
-    32-actions-funct.png
-    32-actions-percent.png
-    32-actions-prec_minus.png
-    32-actions-prec_plus.png
+    32-actions-insert-math-expression.png
+    32-actions-format-number-percent.png
+    32-actions-format-precision-less.png
+    32-actions-format-precision-more.png
 
     DESTINATION ${DATA_INSTALL_DIR}/sheets/icons
     THEME hicolor

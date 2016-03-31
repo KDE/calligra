@@ -282,21 +282,21 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     // -- vertical alignment actions --
 
     QActionGroup* groupPos = new QActionGroup(this);
-    action = new KToggleAction(koIcon("text_top"), i18n("Align Top"), this);
+    action = new KToggleAction(koIcon("format-align-vertical-top"), i18n("Align Top"), this);
     action->setIconText(i18n("Top"));
     addAction("alignTop", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(alignTop(bool)));
     action->setToolTip(i18n("Align cell contents along the top of the cell"));
     action->setActionGroup(groupPos);
 
-    action = new KToggleAction(koIcon("middle"), i18n("Align Middle"), this);
+    action = new KToggleAction(koIcon("format-align-vertical-center"), i18n("Align Middle"), this);
     action->setIconText(i18n("Middle"));
     addAction("alignMiddle", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(alignMiddle(bool)));
     action->setToolTip(i18n("Align cell contents centered in the cell"));
     action->setActionGroup(groupPos);
 
-    action = new KToggleAction(koIcon("text_bottom"), i18n("Align Bottom"), this);
+    action = new KToggleAction(koIcon("format-align-vertical-bottom"), i18n("Align Bottom"), this);
     action->setIconText(i18n("Bottom"));
     addAction("alignBottom", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(alignBottom(bool)));
@@ -363,7 +363,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, SIGNAL(triggered(bool)), this, SLOT(wrapText(bool)));
     action->setToolTip(i18n("Make the cell text wrap onto multiple lines"));
 
-    action = new KToggleAction(koIcon("vertical_text"), i18n("Vertical Text"), this);
+    action = new KToggleAction(koIcon("format-text-direction-vertical"), i18n("Vertical Text"), this);
     action->setIconText(i18n("Vertical"));
     addAction("verticalText", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(verticalText(bool)));
@@ -387,24 +387,24 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- value format actions --
 
-    action = new KToggleAction(koIcon("percent"), i18n("Percent Format"), this);
+    action = new KToggleAction(koIcon("format-number-percent"), i18n("Percent Format"), this);
     action->setIconText(i18n("Percent"));
     addAction("percent", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(percent(bool)));
     action->setToolTip(i18n("Set the cell formatting to look like a percentage"));
 
-    action = new KToggleAction(koIcon("money"), i18n("Money Format"), this);
+    action = new KToggleAction(koIcon("format-currency"), i18n("Money Format"), this);
     action->setIconText(i18n("Money"));
     addAction("currency", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(currency(bool)));
     action->setToolTip(i18n("Set the cell formatting to look like your local currency"));
 
-    action = new QAction(koIcon("prec_plus"), i18n("Increase Precision"), this);
+    action = new QAction(koIcon("format-precision-more"), i18n("Increase Precision"), this);
     addAction("increasePrecision", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(increasePrecision()));
     action->setToolTip(i18n("Increase the decimal precision shown onscreen"));
 
-    action = new QAction(koIcon("prec_minus"), i18n("Decrease Precision"), this);
+    action = new QAction(koIcon("format-precision-less"), i18n("Decrease Precision"), this);
     addAction("decreasePrecision", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(decreasePrecision()));
     action->setToolTip(i18n("Decrease the decimal precision shown onscreen"));
@@ -423,7 +423,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toLowerCase()));
     action->setToolTip(i18n("Convert all letters to lower case"));
 
-    action = new QAction(koIcon("first_letter_upper"), i18n("Convert First Letter to Upper Case"), this);
+    action = new QAction(koIcon("format-text-capitalize"), i18n("Convert First Letter to Upper Case"), this);
     action->setIconText(i18n("First Letter Upper"));
     addAction("firstLetterToUpperCase", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(firstLetterToUpperCase()));
@@ -569,12 +569,12 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     addAction("clearContents", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(clearContents()));
 
-    action = new QAction(koIcon("comment"), i18n("Comment..."), this);
+    action = new QAction(koIcon("edit-comment"), i18n("Comment..."), this);
     action->setToolTip(i18n("Edit a comment for this cell"));
     addAction("comment", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(comment()));
 
-    action = new QAction(koIcon("removecomment"), i18n("Comment"), this);
+    action = new QAction(koIcon("delete-comment"), i18n("Comment"), this);
     action->setIconText(i18n("Remove Comment"));
     action->setToolTip(i18n("Remove this cell's comment"));
     addAction("clearComment", action);
@@ -665,7 +665,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertSeries()));
     action ->setToolTip(i18n("Insert a series"));
 
-    action = new QAction(koIcon("funct"), i18n("&Function..."), this);
+    action = new QAction(koIcon("insert-math-expression"), i18n("&Function..."), this);
     addAction("insertFormula", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertFormula()));
     action->setToolTip(i18n("Insert math expression"));

@@ -1295,11 +1295,11 @@ void CellToolBase::Private::createPopupMenuActions()
     connect(action, SIGNAL(triggered(bool)), q, SLOT(listChoosePopupMenu()));
     popupMenuActions.insert("listChoose", action);
 
-    action = new QAction(koIcon("comment"), i18n("Comment"), q);
+    action = new QAction(koIcon("edit-comment"), i18n("Comment"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(comment()));
     popupMenuActions.insert("comment", action);
 
-    action = new QAction(koIcon("removecomment"),i18n("Clear Comment"), q);
+    action = new QAction(koIcon("delete-comment"),i18n("Clear Comment"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(clearComment()));
     popupMenuActions.insert("clearComment", action);
 
