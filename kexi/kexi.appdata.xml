@@ -177,6 +177,7 @@
       <li xml:lang="bs">Jedini Multiplatform grafički alat koji uvozi podatke  iz MS Access baze podataka</li>
       <li xml:lang="ca">L'única eina gràfica multiplataforma d'importació de dades des de les bases de dades MS Access</li>
       <li xml:lang="ca-valencia">L'única eina gràfica multiplataforma d'importació de dades des de les bases de dades MS Access</li>
+      <li xml:lang="de">Das einzige Programm mit grafischer Oberfläche für mehrere Plattformen, das Daten aus MS-Access-Datenbanken importieren kann.</li>
       <li xml:lang="en-GB">The only multiplatform graphical tool importing data from MS Access databases</li>
       <li xml:lang="es">La única herramienta gráfica multiplataforma que importa datos de bases de datos MS Access</li>
       <li xml:lang="et">Ainuke mitmel platvormil töötav graafiline rakendus MS Accessi andmebaaside andmete importimiseks</li>
@@ -198,6 +199,7 @@
       <li xml:lang="bs">Podržava dizajn upita u posvećenom SQL view-u</li>
       <li xml:lang="ca">Permet el disseny de consultes en vistes SQL dedicades</li>
       <li xml:lang="ca-valencia">Permet el disseny de consultes en vistes SQL dedicades</li>
+      <li xml:lang="de">Unterstützt Abfrageentwürfe in einer eigenen SQL-Ansicht</li>
       <li xml:lang="en-GB">Supports query design in dedicated SQL view</li>
       <li xml:lang="es">Soporta el diseño de consultas en una vista SQL dedicada</li>
       <li xml:lang="et">Päringute kujundamise toetamine SQL-vaates</li>
