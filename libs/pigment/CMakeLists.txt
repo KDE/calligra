@@ -144,6 +144,10 @@ target_link_libraries(pigmentcms
         ${WIN32_PLATFORM_NET_LIBS}
 )
 
+if (HAVE_VC AND NOT PACKAGERS_BUILD)
+    set_property(TARGET pigmentcms APPEND PROPERTY COMPILE_OPTIONS "${Vc_ARCHITECTURE_FLAGS}")
+endif()
+
 set_target_properties(pigmentcms PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
