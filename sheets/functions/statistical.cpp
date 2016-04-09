@@ -2747,7 +2747,7 @@ Value func_trend(valVector args, ValueCalc *calc, FuncExtra *)
         withOffset = calc->conv()->asInteger(args[3]).asInteger();
 
     List knownY, knownX, newX;
-    int  knownXcount, newXcount;
+    int  knownXcount = 0, newXcount = 0;
 
     //
     // knownX
