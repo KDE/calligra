@@ -1526,8 +1526,7 @@ bool Sheet::loadXML(const KoXmlElement& sheet)
                 rl->setSheet(this);
                 if (rl->load(e))
                     insertRowFormat(rl);
-                else
-                    delete rl;
+                delete rl;
             } else if (tagName == "column") {
                 ColumnFormat *cl = new ColumnFormat();
                 cl->setSheet(this);
