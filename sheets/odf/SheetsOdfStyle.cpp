@@ -324,7 +324,8 @@ void Odf::loadDataStyle(Style *style, KoOdfStylesReader &stylesReader, const QSt
 
     const KoOdfNumberStyles::NumericStyleFormat& dataStyle = dataStylePair.first;
     const QList<QPair<QString,QString> > styleMaps = dataStyle.styleMaps;
-    if(styleMaps.count() > 0) {
+    bool useNewStyle = (styleMaps.count() > 0);
+    if (useNewStyle) {
         style = new Style();
         for (QList<QPair<QString,QString> >::const_iterator it = styleMaps.begin(); it != styleMaps.end(); ++it) {
             const Conditional c = loadCondition(&conditions, it->first, it->second, QString(), parser);
@@ -418,7 +419,7 @@ void Odf::loadDataStyle(Style *style, KoOdfStylesReader &stylesReader, const QSt
 
     style->setCustomFormat(dataStyle.formatStr);
 
-    if(styleMaps.count() > 0) {
+    if (useNewStyle) {
         conditions.setDefaultStyle(*style);
         delete style;
     }
