@@ -130,7 +130,7 @@ bool DeleteCommand::mainProcessing()
             m_sheet->insertColumnFormat(new ColumnFormat(*columnFormat));
         }
         foreach(RowFormat* rowFormat, m_rowFormats) {
-            m_sheet->insertRowFormat(*rowFormat);
+            m_sheet->insertRowFormat(rowFormat);
         }
     }
     return AbstractDataManipulator::mainProcessing();
