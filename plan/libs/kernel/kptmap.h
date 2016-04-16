@@ -54,12 +54,12 @@ public:
         DateMapType::remove(date.toString(Qt::ISODate));
     }
 
-    int state(const QString &date) {
-        DateMapType::iterator it = find(date);
+    int state(const QString &date) const {
+        DateMapType::ConstIterator it = find(date);
         if (it == end()) return 0;
         else return it.value();
     }
-    int state(QDate date) { return state(date.toString(Qt::ISODate)); }
+    int state(const QDate &date) const { return state(date.toString(Qt::ISODate)); }
 
     bool operator==(const DateMap &m) const {
         return keys() == m.keys() && values() == m.values();
@@ -101,8 +101,8 @@ public:
         else
             IntMapType::insert(key, state); }
 
-    virtual int state(int key) {
-        IntMapType::iterator it = IntMapType::find(key);
+    virtual int state(int key) const {
+        IntMapType::ConstIterator it = IntMapType::find(key);
         if (it == IntMapType::end()) return 0;
         else return it.value();
     }
@@ -147,8 +147,8 @@ public:
     static QPair<int, int> week(int key) { return QPair<int, int>(key/10000, key%10000); }
 
     using IntMap::state;
-    int state(const QPair<int, int> &week) { return IntMap::state(week.first*10000 + week.second); }
-    int state(int week, int year) { return state(QPair<int, int>(week, year)); }
+    int state(const QPair<int, int> &week) const { return IntMap::state(week.first*10000 + week.second); }
+    int state(int week, int year) const { return state(QPair<int, int>(week, year)); }
 
     void toggle(const QPair<int,int> &week, int state=CalendarDay::NonWorking) {
         if (week.first < 1 || week.first > 53) { errorPlan<<"Illegal week number: "<<week.first<<endl; return; }
