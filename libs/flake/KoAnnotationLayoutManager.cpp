@@ -57,9 +57,9 @@ public:
 };
 
 KoAnnotationLayoutManager::KoAnnotationLayoutManager(QObject *parent)
-    :d(new Private())
+    : QObject(parent)
+    , d(new Private())
 {
-    Q_UNUSED(parent);
 }
 
 KoAnnotationLayoutManager::~KoAnnotationLayoutManager()

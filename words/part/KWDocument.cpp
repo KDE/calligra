@@ -144,7 +144,7 @@ KWDocument::KWDocument(KoPart *part)
                 inlineTextObjectManager(), SLOT(documentInformationUpdated(QString,QString)));
     }
 
-    m_annotationManager = new KoAnnotationLayoutManager();
+    m_annotationManager = new KoAnnotationLayoutManager(this);
 
     clear();
 }
