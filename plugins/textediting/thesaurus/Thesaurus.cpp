@@ -447,10 +447,9 @@ void Thesaurus::findTermThesaurus(const QString &searchTerm)
     }
     QByteArray byteArray = m_thesProc->readAllStandardOutput();
     QString stdoutString(byteArray);
-    QStringList lines = stdoutString.split(QChar('\n'));
+    const QStringList lines = stdoutString.split(QChar('\n'));
 
-    for (QStringList::Iterator it = lines.begin(); it != lines.end(); ++it) {
-        QString line = (*it);
+    foreach(const QString& line, lines) {
         if (line.startsWith(QLatin1String("  "))) {  // ignore license (two spaces)
             continue;
         }
@@ -458,20 +457,18 @@ void Thesaurus::findTermThesaurus(const QString &searchTerm)
         int sep_pos = line.indexOf('#');
         QString synPart = line.left(sep_pos);
         QString hyperPart = line.right(line.length() - sep_pos - 1);
-        QStringList synTmp = synPart.split(QChar(';'));
-        QStringList hyperTmp = hyperPart.split(QChar(';'));
+        const QStringList synTmp = synPart.split(QChar(';'));
+        const QStringList hyperTmp = hyperPart.split(QChar(';'));
 
         if (synTmp.filter(searchTerm, Qt::CaseInsensitive).size() > 0) {
             // match on the left side of the '#' -- synonyms
-            for (QStringList::Iterator it2 = synTmp.begin(); it2 != synTmp.end(); ++it2) {
+            foreach(const QString& term, synTmp) {
                 // add if it's not the searchTerm itself and if it's not yet in the list
-                QString term = (*it2);
                 if (term.toLower() != searchTerm.toLower() && syn.contains(term) == 0 && !term.isEmpty()) {
                     syn.append(term);
                 }
             }
-            for (QStringList::Iterator it2 = hyperTmp.begin(); it2 != hyperTmp.end(); ++it2) {
-                QString term = (*it2);
+            foreach(const QString& term, hyperTmp) {
                 if (term.toLower() != searchTerm.toLower() && hyper.contains(term) == 0 && !term.isEmpty()) {
                     hyper.append(term);
                 }
@@ -479,8 +476,7 @@ void Thesaurus::findTermThesaurus(const QString &searchTerm)
         }
         if (hyperTmp.filter(searchTerm, Qt::CaseInsensitive).size() > 0) {
             // match on the right side of the '#' -- hypernyms
-            for (QStringList::Iterator it2 = synTmp.begin(); it2 != synTmp.end(); ++it2) {
-                QString term = (*it2);
+            foreach(const QString& term, synTmp) {
                 if (term.toLower() != searchTerm && hypo.contains(term) == 0 && !term.isEmpty()) {
                     hypo.append(term);
                 }
@@ -653,13 +649,13 @@ void Thesaurus::findTermWordnet(const QString &term)
     }
     else {
         // render in a table, each line one row:
-        QStringList lines = stdoutString.split(QChar('\n'), QString::SkipEmptyParts);
+        const QStringList lines = stdoutString.split(QChar('\n'), QString::SkipEmptyParts);
         QString result = "<qt><table>\n";
         // TODO in Qt > 3.01: try without the following line (it's necessary to ensure the
         // first column is really always quite small):
         result += "<tr><td width=\"10%\"></td><td width=\"90%\"></td></tr>\n";
         uint ct = 0;
-        for (QStringList::Iterator it = lines.begin(); it != lines.end(); ++it) {
+        for (QStringList::ConstIterator it = lines.begin(); it != lines.end(); ++it) {
             QString l = (*it);
             // Remove some lines:
             QRegExp re("^\\d+( of \\d+)? senses? of \\w+");
@@ -734,8 +730,8 @@ QString Thesaurus::formatLine(const QString &line) const
     if (re.indexIn(l) != -1) {
         l = re.cap(1);
         l += re.cap(2);
-        QStringList links = re.cap(3).split(QChar(';'), QString::SkipEmptyParts);
-        for (QStringList::Iterator it = links.begin(); it != links.end(); ++it) {
+        const QStringList links = re.cap(3).split(QChar(';'), QString::SkipEmptyParts);
+        for (QStringList::ConstIterator it = links.begin(); it != links.end(); ++it) {
             QString link = (*it);
             if (it != links.begin()) {
                 l += ", ";
@@ -754,8 +750,8 @@ QString Thesaurus::formatLine(const QString &line) const
         QString line_end = l.mid(dash_pos+2, l.length()-dash_pos);
         l = re.cap(1);
         l += re.cap(2) + ' ';
-        QStringList links = re.cap(3).split(QChar(','), QString::SkipEmptyParts);
-        for (QStringList::Iterator it = links.begin(); it != links.end(); ++it) {
+        const QStringList links = re.cap(3).split(QChar(','), QString::SkipEmptyParts);
+        for (QStringList::ConstIterator it = links.begin(); it != links.end(); ++it) {
             QString link = (*it);
             if (it != links.begin()) {
                 l += ", ";

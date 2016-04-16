@@ -95,8 +95,8 @@ bool KoProperties::load(const QString & s)
 void KoProperties::save(QDomElement &root) const
 {
     QDomDocument doc = root.ownerDocument();
-    QMap<QString, QVariant>::Iterator it;
-    for (it = d->properties.begin(); it != d->properties.end(); ++it) {
+    QMap<QString, QVariant>::ConstIterator it;
+    for (it = d->properties.constBegin(); it != d->properties.constEnd(); ++it) {
         QDomElement e = doc.createElement("property");
         e.setAttribute("name", QString(it.key().toLatin1()));
         QVariant v = it.value();

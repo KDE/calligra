@@ -96,7 +96,7 @@ public:
     QString insert(const GenValidationStyle& style);
 
     typedef QMap<GenValidationStyle, QString> StyleMap;
-    void writeStyle(KoXmlWriter& writer);
+    void writeStyle(KoXmlWriter& writer) const;
 
 private:
     QString makeUniqueName(const QString& base) const;

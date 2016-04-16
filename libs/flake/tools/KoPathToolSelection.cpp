@@ -44,8 +44,8 @@ void KoPathToolSelection::paint(QPainter &painter, const KoViewConverter &conver
 {
     int handleRadius = m_tool->canvas()->shapeController()->resourceManager()->handleRadius();
 
-    PathShapePointMap::iterator it(m_shapePointMap.begin());
-    for (; it != m_shapePointMap.end(); ++it) {
+    PathShapePointMap::ConstIterator it(m_shapePointMap.constBegin());
+    for (; it != m_shapePointMap.constEnd(); ++it) {
         painter.save();
 
         painter.setTransform(it.key()->absoluteTransformation(&converter) * painter.transform());
@@ -216,8 +216,8 @@ void KoPathToolSelection::update()
         KoParameterShape *parameterShape = dynamic_cast<KoParameterShape*>(it.key());
         bool isParametricShape = parameterShape && parameterShape->isParametricShape();
         if (! m_selectedShapes.contains(it.key()) || isParametricShape) {
-            QSet<KoPathPoint *>::iterator pointIt(it.value().begin());
-            for (; pointIt != it.value().end(); ++pointIt) {
+            QSet<KoPathPoint *>::ConstIterator pointIt(it.value().constBegin());
+            for (; pointIt != it.value().constEnd(); ++pointIt) {
                 m_selectedPoints.remove(*pointIt);
             }
             it = m_shapePointMap.erase(it);

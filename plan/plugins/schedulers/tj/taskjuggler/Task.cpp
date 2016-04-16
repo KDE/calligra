@@ -125,8 +125,8 @@ Task::inheritValues()
     if (p)
     {
         // Inherit flags from parent task.
-        for (QStringList::Iterator it = p->flags.begin();
-             it != p->flags.end(); ++it)
+        for (QStringList::ConstIterator it = p->flags.constBegin();
+             it != p->flags.constEnd(); ++it)
             addFlag(*it);
 
         // Set attributes that are inherited from parent task.

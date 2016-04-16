@@ -49,16 +49,16 @@ namespace KPlato
 
 void NamedCommand::setSchScheduled()
 {
-    QMap<Schedule*, bool>::Iterator it;
-    for ( it = m_schedules.begin(); it != m_schedules.end(); ++it ) {
+    QMap<Schedule*, bool>::ConstIterator it;
+    for ( it = m_schedules.constBegin(); it != m_schedules.constEnd(); ++it ) {
         //debugPlan << it.key() ->name() <<":" << it.value();
         it.key() ->setScheduled( it.value() );
     }
 }
 void NamedCommand::setSchScheduled( bool state )
 {
-    QMap<Schedule*, bool>::Iterator it;
-    for ( it = m_schedules.begin(); it != m_schedules.end(); ++it ) {
+    QMap<Schedule*, bool>::ConstIterator it;
+    for ( it = m_schedules.constBegin(); it != m_schedules.constEnd(); ++it ) {
         //debugPlan << it.key() ->name() <<":" << state;
         it.key() ->setScheduled( state );
     }

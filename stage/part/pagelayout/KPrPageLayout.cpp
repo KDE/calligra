@@ -172,11 +172,11 @@ bool KPrPageLayout::operator<( const KPrPageLayout & other ) const
         qSort( placeholders.begin(), placeholders.end(), comparePlaceholder );
         qSort( otherPlaceholders.begin(), otherPlaceholders.end(), comparePlaceholder );
 
-        QList<KPrPlaceholder *>::iterator it( placeholders.begin() );
-        QList<KPrPlaceholder *>::iterator otherIt( otherPlaceholders.begin() );
+        QList<KPrPlaceholder *>::ConstIterator it( placeholders.constBegin() );
+        QList<KPrPlaceholder *>::ConstIterator otherIt( otherPlaceholders.constBegin() );
         debugStage << "KPrPageLayout::operator< start" << ( *it )->rect( QSizeF( 1, 1 ) ) << ( *otherIt )->rect( QSizeF( 1, 1 ) );
 
-        for ( ; it != placeholders.end(); ++it, ++otherIt ) {
+        for ( ; it != placeholders.constEnd(); ++it, ++otherIt ) {
             debugStage << "KPrPageLayout::operator<" << ( *it )->rect( QSizeF( 1, 1 ) ) << ( *otherIt )->rect( QSizeF( 1, 1 ) );
             if ( *( *it ) == *( *otherIt ) ) {
                 debugStage << "KPrPageLayout::operator< 0" << ( *( *it ) < *( *otherIt ) );

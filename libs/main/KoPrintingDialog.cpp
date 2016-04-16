@@ -158,9 +158,9 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy)
             }
         }
         if (d->printer->pageOrder() == QPrinter::LastPageFirst) {
-            QList<int> pages = d->pages;
+            const QList<int> pages = d->pages;
             d->pages.clear();
-            QList<int>::Iterator iter = pages.end();
+            QList<int>::ConstIterator iter = pages.end();
             do {
                 --iter;
                 d->pages << *iter;

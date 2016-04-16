@@ -54,7 +54,7 @@ void KoPathShapeMarkerCommand::redo()
 void KoPathShapeMarkerCommand::undo()
 {
     KUndo2Command::undo();
-    QList<KoMarker*>::iterator markerIt = m_oldMarkers.begin();
+    QList<KoMarker*>::ConstIterator markerIt = m_oldMarkers.constBegin();
     foreach(KoPathShape *shape, m_shapes) {
         shape->setMarker(*markerIt, m_position);
         shape->update();

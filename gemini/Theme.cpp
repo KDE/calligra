@@ -421,7 +421,7 @@ void Theme::Private::rebuildFontCache()
 {
     fontMap.clear();
     QFontDatabase db;
-    for(QVariantMap::iterator itr = fonts.begin(); itr != fonts.end(); ++itr)
+    for(QVariantMap::ConstIterator itr = fonts.constBegin(); itr != fonts.constEnd(); ++itr)
     {
         QVariantMap map = itr->toMap();
         if(map.isEmpty())

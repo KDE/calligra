@@ -186,7 +186,7 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray& from, const QB
     formats.insert(42, QString::fromUtf8("_-* #,##0\\ \"€\"_-;\\-* #,##0\\ \"€\"_-;_-* \"-\"\\ \"€\"_-;_-@_-"));
     formats.insert(43, QString::fromUtf8("_-* #,##0.00\\ _€_-;\\-* #,##0.00\\ _€_-;_-* \"-\"??\\ _€_-;_-@_-"));
     formats.insert(44, QString::fromUtf8("_-* #,##0.00\\ \"€\"_-;\\-* #,##0.00\\ \"€\"_-;_-* \"-\"??\\ \"€\"_-;_-@_-"));
-    for (QMap<int, QString>::iterator i = formats.begin(); i != formats.end(); ++i) {
+    for (QMap<int, QString>::ConstIterator i = formats.constBegin(); i != formats.constEnd(); ++i) {
         FormatRecord fr(0);
         fr.setIndex(i.key());
         fr.setFormatString(i.value());

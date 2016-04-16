@@ -114,12 +114,12 @@ void Changecase::sentenceCase()
     // TODO
     // * Exception?
     while (true) {
-        QString text = block.text();
+        const QString text = block.text();
         int prevLetterIndex = -1;
         QChar currentWord;
         pos = block.position() + block.length() - 1;
 
-        QString::Iterator iter = text.end();
+        QString::ConstIterator iter = text.end();
 
         if (text.isEmpty()) { // empty block, go to next block
             if (!(block.isValid() && block.position() + block.length() < m_endPosition))

@@ -70,8 +70,8 @@ bool SortManipulator::preProcessing()
 
     m_cellStorage = new CellStorage(m_sheet->cellStorage()->subStorage(*this));
 
-    Region::Iterator endOfList(cells().end());
-    for (Region::Iterator it = cells().begin(); it != endOfList; ++it) {
+    Region::ConstIterator endOfList(cells().constEnd());
+    for (Region::ConstIterator it = cells().constBegin(); it != endOfList; ++it) {
         QRect range = (*it)->rect();
         for (int col = range.left(); col <= range.right(); ++col)
             for (int row = range.top(); row <= range.bottom(); ++row) {
@@ -216,12 +216,11 @@ bool SortManipulator::shouldReorder(Element *element, int first, int second)
         if (m_usecustomlist) {
             QString s1 = conv->asString(val1).asString().toLower();
             QString s2 = conv->asString(val2).asString().toLower();
-            QStringList::iterator it;
             int pos1 = -1, pos2 = -1;
             int pos = 0;
             // Try to locate our two strings in the list. If both are there, assume
             // ordering as specified by the list.
-            for (it = m_customlist.begin(); it != m_customlist.end(); ++it) {
+            for (QStringList::ConstIterator  it = m_customlist.constBegin(); it != m_customlist.constEnd(); ++it) {
                 if ((pos1 == -1) && ((*it).toLower() == s1))
                     pos1 = pos;
                 if ((pos2 == -1) && ((*it).toLower() == s2))

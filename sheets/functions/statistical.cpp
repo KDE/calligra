@@ -2068,14 +2068,12 @@ Value func_mode(valVector args, ValueCalc *calc, FuncExtra *)
     int maxcount = 0;
     double max = 0.0;
 
-    ContentSheet::iterator it;
-
     // check if there is a difference in frequency
-    it = sh.begin();
+    ContentSheet::ConstIterator it = sh.constBegin();
     double last = it.value(); // init last with 1st value
     bool   nodiff = true;     // reset flag
 
-    for (it = sh.begin(); it != sh.end(); ++it) {
+    for ( ; it != sh.constEnd(); ++it) {
         if (it.value() > maxcount) {
             max = it.key();
             maxcount = it.value();

@@ -83,8 +83,8 @@ void KoInlineTextObjectManager::insertObject(KoInlineObject *object)
     m_objects.insert(object->id(), object);
     if (object->propertyChangeListener()) {
         m_listeners.append(object);
-        QHash<int, QVariant>::iterator i;
-        for (i = m_properties.begin(); i != m_properties.end(); ++i)
+        QHash<int, QVariant>::ConstIterator i;
+        for (i = m_properties.constBegin(); i != m_properties.constEnd(); ++i)
             object->propertyChanged((KoInlineObject::Property)(i.key()), i.value());
     }
 

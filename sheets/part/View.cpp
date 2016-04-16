@@ -1223,8 +1223,8 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     }
 
     // Restore the old scrolling offset.
-    QMap<Sheet*, QPointF>::Iterator it3 = d->savedOffsets.find(d->activeSheet);
-    if (it3 != d->savedOffsets.end()) {
+    QMap<Sheet*, QPointF>::ConstIterator it3 = d->savedOffsets.constFind(d->activeSheet);
+    if (it3 != d->savedOffsets.constEnd()) {
         const QPoint offset = zoomHandler()->documentToView(*it3).toPoint();
         d->canvas->setDocumentOffset(offset);
         d->horzScrollBar->setValue(offset.x());
@@ -1251,12 +1251,12 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     }
 
     /* see if there was a previous selection on this other sheet */
-    QMap<Sheet*, QPoint>::Iterator it = d->savedAnchors.find(d->activeSheet);
-    QMap<Sheet*, QPoint>::Iterator it2 = d->savedMarkers.find(d->activeSheet);
+    QMap<Sheet*, QPoint>::ConstIterator it = d->savedAnchors.constFind(d->activeSheet);
+    QMap<Sheet*, QPoint>::ConstIterator it2 = d->savedMarkers.constFind(d->activeSheet);
 
     // restore the old anchor and marker
-    const QPoint newAnchor = (it == d->savedAnchors.end()) ? QPoint(1, 1) : *it;
-    const QPoint newMarker = (it2 == d->savedMarkers.end()) ? QPoint(1, 1) : *it2;
+    const QPoint newAnchor = (it == d->savedAnchors.constEnd()) ? QPoint(1, 1) : *it;
+    const QPoint newMarker = (it2 == d->savedMarkers.constEnd()) ? QPoint(1, 1) : *it2;
 
     d->selection->clear();
     d->selection->setActiveSheet(d->activeSheet);
@@ -2011,15 +2011,15 @@ void View::updateShowSheetMenu()
 
 QPoint View::markerFromSheet(Sheet* sheet) const
 {
-    QMap<Sheet*, QPoint>::Iterator it = d->savedMarkers.find(sheet);
-    QPoint newMarker = (it == d->savedMarkers.end()) ? QPoint(1, 1) : *it;
+    QMap<Sheet*, QPoint>::ConstIterator it = d->savedMarkers.constFind(sheet);
+    QPoint newMarker = (it == d->savedMarkers.constEnd()) ? QPoint(1, 1) : *it;
     return newMarker;
 }
 
 QPointF View::offsetFromSheet(Sheet* sheet) const
 {
-    QMap<Sheet*, QPointF>::Iterator it = d->savedOffsets.find(sheet);
-    QPointF offset = (it == d->savedOffsets.end()) ? QPointF() : *it;
+    QMap<Sheet*, QPointF>::ConstIterator it = d->savedOffsets.constFind(sheet);
+    QPointF offset = (it == d->savedOffsets.constEnd()) ? QPointF() : *it;
     return offset;
 }
 

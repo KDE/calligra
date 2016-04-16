@@ -370,8 +370,8 @@ void WordsTableHandler::tableCellStart()
 //         debugMsDoc <<"fVertRestart is set!";
         // This cell is the first one of a series of vertically merged cells ->
         // we want to find out its size.
-        QList<Words::Row>::Iterator it = m_currentTable->rows.begin() +  m_row + 1;
-        for (; it != m_currentTable->rows.end(); ++it)  {
+        QList<Words::Row>::ConstIterator it = m_currentTable->rows.constBegin() +  m_row + 1;
+        for (; it != m_currentTable->rows.constEnd(); ++it)  {
             // Find cell right below us in row (*it), if any
             Words::TAPptr tapBelow = (*it).tap;
             const wvWare::Word97::TC* tcBelow = 0L;

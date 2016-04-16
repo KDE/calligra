@@ -48,7 +48,7 @@ void Odf::saveConditions(const Conditions *conditions, KoGenStyle &currentCellSt
     //todo fix me with kspread old format!!!
     if (conditions->isEmpty())
         return;
-    QLinkedList<Conditional> list = conditions->conditionList();
+    const QLinkedList<Conditional> list = conditions->conditionList();
     QLinkedList<Conditional>::const_iterator it;
     int i = 0;
     for (it = list.begin(); it != list.end(); ++it, ++i) {

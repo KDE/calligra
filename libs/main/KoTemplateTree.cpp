@@ -65,8 +65,8 @@ void KoTemplateTree::writeTemplateTree()
         //kDebug( 30003 ) <<"group:" << group->name();
 
         bool touched = false;
-        QList<KoTemplate*> templates = group->templates();
-        QList<KoTemplate*>::iterator it = templates.begin();
+        const QList<KoTemplate*> templates = group->templates();
+        QList<KoTemplate*>::ConstIterator it = templates.begin();
         for (; it != templates.end() && !touched && !group->touched(); ++it)
             touched = (*it)->touched();
 

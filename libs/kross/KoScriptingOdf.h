@@ -256,7 +256,7 @@ public Q_SLOTS:
     * print reader.paths("text/xml")
     * \endcode
     */
-    QStringList paths(const QString &type = QString());
+    QStringList paths(const QString &type = QString()) const;
 private:
     QList<QPair<QString,QString> > m_entries;
 };

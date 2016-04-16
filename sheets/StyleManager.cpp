@@ -53,8 +53,8 @@ QDomElement StyleManager::save(QDomDocument & doc)
 
     m_defaultStyle->save(doc, styles, this);
 
-    CustomStyles::iterator iter = m_styles.begin();
-    CustomStyles::iterator end  = m_styles.end();
+    CustomStyles::ConstIterator iter = m_styles.constBegin();
+    CustomStyles::ConstIterator end  = m_styles.constEnd();
 
     while (iter != end) {
         CustomStyle * styleData = iter.value();
@@ -105,8 +105,8 @@ bool StyleManager::loadXML(KoXmlElement const & styles)
     }
 
     // reparent all styles
-    QStringList names = styleNames();
-    QStringList::iterator it;
+    const QStringList names = styleNames();
+    QStringList::ConstIterator it;
     for (it = names.begin(); it != names.end(); ++it) {
         if (*it != "Default") {
             CustomStyle * styleData = style(*it);
@@ -173,8 +173,8 @@ void StyleManager::takeStyle(CustomStyle * style)
 {
     const QString parentName = style->parentName();
 
-    CustomStyles::iterator iter = m_styles.begin();
-    CustomStyles::iterator end  = m_styles.end();
+    CustomStyles::ConstIterator iter = m_styles.constBegin();
+    CustomStyles::ConstIterator end  = m_styles.constEnd();
 
     while (iter != end) {
         if (iter.value()->parentName() == style->name())

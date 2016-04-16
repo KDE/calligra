@@ -52,13 +52,13 @@ KoSectionEnd *KoSectionModel::createSectionEnd(KoSection *section)
     return new KoSectionEnd(section);
 }
 
-KoSection *KoSectionModel::sectionAtPosition(int pos)
+KoSection *KoSectionModel::sectionAtPosition(int pos) const
 {
     // TODO: Rewrite it by traversing Model as tree
     KoSection *result = 0;
     int level = -1; // Seeking the section with maximum level
-    QHash<QString, KoSection *>::iterator it = m_sectionNames.begin();
-    for (; it != m_sectionNames.end(); it++) {
+    QHash<QString, KoSection *>::ConstIterator it = m_sectionNames.begin();
+    for (; it != m_sectionNames.end(); ++it) {
         QPair<int, int> bounds = it.value()->bounds();
         if (bounds.first > pos || bounds.second < pos) {
             continue;
@@ -103,8 +103,8 @@ bool KoSectionModel::setName(KoSection *section, const QString &name)
 
 void KoSectionModel::allowMovingEndBound()
 {
-    QSet<KoSection *>::iterator it = m_registeredSections.begin();
-    for (; it != m_registeredSections.end(); it++) {
+    QSet<KoSection *>::ConstIterator it = m_registeredSections.constBegin();
+    for (; it != m_registeredSections.constEnd(); ++it) {
         (*it)->setKeepEndBound(false);
     }
 }

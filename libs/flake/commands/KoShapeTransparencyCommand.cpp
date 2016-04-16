@@ -80,7 +80,7 @@ KoShapeTransparencyCommand::~KoShapeTransparencyCommand()
 void KoShapeTransparencyCommand::redo()
 {
     KUndo2Command::redo();
-    QList<qreal>::iterator transparencyIt = d->newTransparencies.begin();
+    QList<qreal>::ConstIterator transparencyIt = d->newTransparencies.constBegin();
     foreach(KoShape *shape, d->shapes) {
         shape->setTransparency(*transparencyIt);
         shape->update();
@@ -91,7 +91,7 @@ void KoShapeTransparencyCommand::redo()
 void KoShapeTransparencyCommand::undo()
 {
     KUndo2Command::undo();
-    QList<qreal>::iterator transparencyIt = d->oldTransparencies.begin();
+    QList<qreal>::ConstIterator transparencyIt = d->oldTransparencies.constBegin();
     foreach(KoShape *shape, d->shapes) {
         shape->setTransparency(*transparencyIt);
         shape->update();

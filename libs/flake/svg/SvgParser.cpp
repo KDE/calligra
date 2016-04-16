@@ -294,8 +294,8 @@ bool SvgParser::parseGradient(const KoXmlElement &e, const KoXmlElement &referen
     } else {
         // try style attr
         QString style = b.attribute("style").simplified();
-        QStringList substyles = style.split(';', QString::SkipEmptyParts);
-        for (QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it) {
+        const QStringList substyles = style.split(';', QString::SkipEmptyParts);
+        for (QStringList::ConstIterator it = substyles.begin(); it != substyles.end(); ++it) {
             QStringList substyle = it->split(':');
             QString command = substyle[0].trimmed();
             QString params  = substyle[1].trimmed();
@@ -1171,8 +1171,8 @@ KoShape * SvgParser::createPath(const KoXmlElement &element)
             points.replace(',', ' ');
             points.remove('\r');
             points.remove('\n');
-            QStringList pointList = points.split(' ', QString::SkipEmptyParts);
-            for (QStringList::Iterator it = pointList.begin(); it != pointList.end(); ++it) {
+            const QStringList pointList = points.split(' ', QString::SkipEmptyParts);
+            for (QStringList::ConstIterator it = pointList.begin(); it != pointList.end(); ++it) {
                 QPointF point;
                 point.setX(SvgUtil::fromUserSpace((*it).toDouble()));
                 ++it;

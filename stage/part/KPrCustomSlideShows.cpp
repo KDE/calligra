@@ -201,9 +201,9 @@ void KPrCustomSlideShows::loadOdf( const KoXmlElement & presentationSettings, Ko
     }
 }
 
-QStringList KPrCustomSlideShows::namesByPage(KoPAPageBase *page)
+QStringList KPrCustomSlideShows::namesByPage(KoPAPageBase *page) const
 {
-    QMap< QString, QList<KoPAPageBase*> >::iterator it = m_customSlideShows.begin();
+    QMap< QString, QList<KoPAPageBase*> >::ConstIterator it = m_customSlideShows.begin();
     QStringList names;
     while(it != m_customSlideShows.end()) {
         if (it.value().contains(page)) {

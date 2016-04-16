@@ -467,9 +467,9 @@ void KoStrokeConfigWidget::applyMarkerChanges(KoMarkerData::MarkerPosition posit
         return;
     }
 
-    QList<KoShape*> shapeList = selection->selectedShapes();
+    const QList<KoShape*> shapeList = selection->selectedShapes();
     QList<KoPathShape*> pathShapeList;
-    for (QList<KoShape*>::iterator itShape = shapeList.begin(); itShape != shapeList.end(); ++itShape) {
+    for (QList<KoShape*>::ConstIterator itShape = shapeList.begin(); itShape != shapeList.end(); ++itShape) {
         KoPathShape* pathShape = dynamic_cast<KoPathShape*>(*itShape);
         if (pathShape) {
             pathShapeList << pathShape;

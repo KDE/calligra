@@ -160,8 +160,8 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
         QVector<qreal> array;
         if (params != "none") {
             QString dashString = params;
-            QStringList dashes = dashString.replace(',', ' ').simplified().split(' ');
-            for (QStringList::Iterator it = dashes.begin(); it != dashes.end(); ++it)
+            const QStringList dashes = dashString.replace(',', ' ').simplified().split(' ');
+            for (QStringList::ConstIterator it = dashes.begin(); it != dashes.end(); ++it)
                 array.append((*it).toFloat());
         }
         gc->stroke.setLineStyle(Qt::CustomDashLine, array);
@@ -363,8 +363,8 @@ void SvgStyleParser::parseColorStops(QGradient *gradient, const KoXmlElement &e)
             else {
                 // try style attr
                 QString style = stop.attribute("style").simplified();
-                QStringList substyles = style.split(';', QString::SkipEmptyParts);
-                for (QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it) {
+                const QStringList substyles = style.split(';', QString::SkipEmptyParts);
+                for (QStringList::ConstIterator it = substyles.begin(); it != substyles.end(); ++it) {
                     QStringList substyle = it->split(':');
                     QString command = substyle[0].trimmed();
                     QString params  = substyle[1].trimmed();
@@ -410,10 +410,10 @@ SvgStyles SvgStyleParser::collectStyles(const KoXmlElement &e)
 
     // collect all css style attributes
     foreach(const QString &style, cssStyles) {
-        QStringList substyles = style.split(';', QString::SkipEmptyParts);
+        const QStringList substyles = style.split(';', QString::SkipEmptyParts);
         if (!substyles.count())
             continue;
-        for (QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it) {
+        for (QStringList::ConstIterator it = substyles.begin(); it != substyles.end(); ++it) {
             QStringList substyle = it->split(':');
             if (substyle.count() != 2)
                 continue;

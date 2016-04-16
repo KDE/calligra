@@ -389,9 +389,9 @@ void DeleteCommand::deleteSectionsFromModel()
 void DeleteCommand::insertSectionsToModel()
 {
     KoSectionModel *model = KoTextDocument(m_document).sectionModel();
-    QList<SectionDeleteInfo>::iterator it = m_sectionsToRemove.end();
-    while (it != m_sectionsToRemove.begin()) {
-        it--;
+    QList<SectionDeleteInfo>::ConstIterator it = m_sectionsToRemove.constEnd();
+    while (it != m_sectionsToRemove.constBegin()) {
+        --it;
         model->insertToModel(it->section, it->childIdx);
     }
 }

@@ -56,7 +56,7 @@ public:
         cursor.mergeBlockFormat(m_deltaBlockFormat);
         cursor.mergeBlockCharFormat(m_deltaCharFormat);
 
-        QList<QTextCharFormat>::Iterator it = m_formats.begin();
+        QList<QTextCharFormat>::ConstIterator it = m_formats.constBegin();
         foreach(QTextCursor cursor, m_cursors) {
             cursor.setCharFormat(*it);
             ++it;

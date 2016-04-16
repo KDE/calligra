@@ -212,8 +212,8 @@ Resource::inheritValues()
     if (pr)
     {
         // Inherit flags from parent resource.
-        for (QStringList::Iterator it = pr->flags.begin();
-             it != pr->flags.end(); ++it)
+        for (QStringList::ConstIterator it = pr->flags.constBegin();
+             it != pr->flags.constEnd(); ++it)
             addFlag(*it);
 
         // Inherit default working hours from parent resource.
@@ -1111,8 +1111,8 @@ Resource::getProjectIDs(int sc, const Interval& period, const Task* task) const
     QStringList pids;
     getPIDs(sc, period, task, pids);
     QString pidStr;
-    for (QStringList::Iterator it = pids.begin(); it != pids.end(); ++it)
-        pidStr += QString(it != pids.begin() ? ", " : "") + *it;
+    for (QStringList::ConstIterator it = pids.constBegin(); it != pids.constEnd(); ++it)
+        pidStr += QString(it != pids.constBegin() ? ", " : "") + *it;
 
     return pidStr;
 }

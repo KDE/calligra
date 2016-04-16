@@ -221,9 +221,9 @@ void ResourceDialogImpl::slotChooseResource()
             const Akonadi::EmailAddressSelection s = selections.first();
             nameEdit->setText( s.name() );
             emailEdit->setText( s.email() );
-            QStringList l = s.name().split(' ');
+            const QStringList l = s.name().split(' ');
             QString in;
-            QStringList::Iterator it = l.begin();
+            QStringList::ConstIterator it = l.begin();
             for (/*int i = 0*/; it != l.end(); ++it) {
                 in += (*it)[0];
             }

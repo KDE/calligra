@@ -139,8 +139,8 @@ void StyleManager::setParagraphStyle(KoParagraphStyle *style)
     KoParagraphStyle *localStyle = 0;
 
     if (style) {
-        QMap<KoParagraphStyle*, KoParagraphStyle*>::iterator it = m_modifiedParagraphStyles.find(style);
-        if (it == m_modifiedParagraphStyles.end()) {
+        QMap<KoParagraphStyle*, KoParagraphStyle*>::ConstIterator it = m_modifiedParagraphStyles.constFind(style);
+        if (it == m_modifiedParagraphStyles.constEnd()) {
             localStyle = style->clone();
             m_modifiedParagraphStyles.insert(localStyle, style);
             m_paragraphStylesModel->replaceStyle(style, localStyle);
@@ -165,8 +165,9 @@ void StyleManager::setCharacterStyle(KoCharacterStyle *style, bool canDelete)
     KoCharacterStyle *localStyle = 0;
 
     if (style) {
-        QMap<KoCharacterStyle*, KoCharacterStyle*>::iterator it = m_modifiedCharacterStyles.find(style);
-        if (it == m_modifiedCharacterStyles.end()) {
+        QMap<KoCharacterStyle*, KoCharacterStyle*>::ConstIterator it =
+        m_modifiedCharacterStyles.constFind(style);
+        if (it == m_modifiedCharacterStyles.constEnd()) {
             localStyle = style->clone();
             m_modifiedCharacterStyles.insert(localStyle, style);
             m_characterStylesModel->replaceStyle(style, localStyle);
@@ -200,7 +201,7 @@ void StyleManager::save()
 
     m_styleManager->beginEdit();
 
-    for (QMap<KoParagraphStyle*, KoParagraphStyle*>::iterator it(m_modifiedParagraphStyles.begin()); it != m_modifiedParagraphStyles.end(); ++it) {
+    for (QMap<KoParagraphStyle*, KoParagraphStyle*>::ConstIterator it(m_modifiedParagraphStyles.constBegin()); it != m_modifiedParagraphStyles.constEnd(); ++it) {
         if (it.value() == 0) {
             m_styleManager->add(it.key());
         }
@@ -213,7 +214,7 @@ void StyleManager::save()
     }
     m_modifiedParagraphStyles.clear();
 
-    for (QMap<KoCharacterStyle*, KoCharacterStyle*>::iterator it(m_modifiedCharacterStyles.begin()); it != m_modifiedCharacterStyles.end(); ++it) {
+    for (QMap<KoCharacterStyle*, KoCharacterStyle*>::ConstIterator it(m_modifiedCharacterStyles.constBegin()); it != m_modifiedCharacterStyles.constEnd(); ++it) {
         if (it.value() == 0) {
             m_styleManager->add(it.key());
         }

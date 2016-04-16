@@ -261,13 +261,13 @@ bool KoOdfLoadingContext::useStylesAutoStyles() const
 
 QString KoOdfLoadingContext::mimeTypeForPath(const QString& path, bool guess) const
 {
-    QHash<QString, KoOdfManifestEntry *>::iterator it(d->manifestEntries.find(path));
-    if (it == d->manifestEntries.end()) {
+    QHash<QString, KoOdfManifestEntry *>::ConstIterator it(d->manifestEntries.constFind(path));
+    if (it == d->manifestEntries.constEnd()) {
         // try to find it with an added / at the end
         QString dirPath = path + '/';
-        it = d->manifestEntries.find(dirPath);
+        it = d->manifestEntries.constFind(dirPath);
     }
-    if (it != d->manifestEntries.end()) {
+    if (it != d->manifestEntries.constEnd()) {
         QString mimeType = it.value()->mediaType();
 
         // figure out mimetype by content if it is not provided

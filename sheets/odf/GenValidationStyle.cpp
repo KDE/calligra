@@ -64,11 +64,11 @@ QString GenValidationStyles::makeUniqueName(const QString& base) const
     return name;
 }
 
-void GenValidationStyles::writeStyle(KoXmlWriter& writer)
+void GenValidationStyles::writeStyle(KoXmlWriter& writer) const
 {
     if (m_styles.count() > 0) {
         writer.startElement("table:content-validations");
-        StyleMap::Iterator it;
+        StyleMap::ConstIterator it;
         for (it = m_styles.begin(); it != m_styles.end(); ++it) {
             writer.startElement("table:content-validation");
             writer.addAttribute("table:name", it.value());
@@ -79,10 +79,10 @@ void GenValidationStyles::writeStyle(KoXmlWriter& writer)
             writer.addAttribute("table:title", it.key().title);
             writer.addAttribute("table:display", it.key().displayValidationInformation);
 
-            QStringList text = it.key().messageInfo.split('\n', QString::SkipEmptyParts);
-            for (QStringList::Iterator it2 = text.begin(); it2 != text.end(); ++it2) {
+            const QStringList helpLines = it.key().messageInfo.split('\n', QString::SkipEmptyParts);
+            foreach(const QString& helpLine, helpLines) {
                 writer.startElement("text:p");
-                writer.addTextNode(*it2);
+                writer.addTextNode(helpLine);
                 writer.endElement();
             }
             writer.endElement();
@@ -92,10 +92,11 @@ void GenValidationStyles::writeStyle(KoXmlWriter& writer)
 
             writer.addAttribute("table:title", it.key().titleInfo);
             writer.addAttribute("table:display", it.key().displayMessage);
-            text = it.key().message.split('\n', QString::SkipEmptyParts);
-            for (QStringList::Iterator it3 = text.begin(); it3 != text.end(); ++it3) {
+
+            const QStringList errorLines = it.key().message.split('\n', QString::SkipEmptyParts);
+            foreach(const QString& errorLine, errorLines) {
                 writer.startElement("text:p");
-                writer.addTextNode(*it3);
+                writer.addTextNode(errorLine);
                 writer.endElement();
             }
             writer.endElement();

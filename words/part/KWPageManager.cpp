@@ -132,8 +132,8 @@ void KWPageManagerPrivate::insertPage(const Page &newPage)
 
     // increase the pagenumbers of pages following the pageNumber
     if (!pageNumbers.isEmpty()) {
-        QMap<int, int> numbers = pageNumbers;
-        QMap<int, int>::iterator iter = numbers.end();
+        const QMap<int, int> numbers = pageNumbers;
+        QMap<int, int>::ConstIterator iter = numbers.end();
         do {
             --iter;
 
@@ -264,7 +264,7 @@ KWPage KWPageManager::appendPage(const KWPageStyle &pageStyle)
     KWPageManagerPrivate::Page page;
 
     if (! d->pages.isEmpty()) {
-        QMap<int, int>::iterator end = d->pageNumbers.end();
+        QMap<int, int>::ConstIterator end = d->pageNumbers.constEnd();
         --end; // last one is one before the imaginary 'end'
         KWPageManagerPrivate::Page lastPage = d->pages[end.value()];
         page = lastPage;
@@ -331,8 +331,8 @@ void KWPageManager::removePage(const KWPage &page)
     d->visiblePageNumbers.remove(removedPageNumber);
 
     // decrease the pagenumbers of pages following the pageNumber
-    QMap<int, int> pageNumbers = d->pageNumbers;
-    QMap<int, int>::iterator iter = pageNumbers.begin();
+    const QMap<int, int> pageNumbers = d->pageNumbers;
+    QMap<int, int>::ConstIterator iter = pageNumbers.begin();
     while (iter != pageNumbers.end()) {
         if (iter.key() < removedPageNumber) {
             //  don't touch those
@@ -417,14 +417,14 @@ const KWPage KWPageManager::begin() const
 {
     if (d->pages.isEmpty())
         return KWPage();
-    return KWPage(d, d->pageNumbers.begin().value());
+    return KWPage(d, d->pageNumbers.constBegin().value());
 }
 
 const KWPage KWPageManager::last() const
 {
     if (d->pages.isEmpty())
         return KWPage();
-    QMap<int, int>::iterator end = d->pageNumbers.end();
+    QMap<int, int>::ConstIterator end = d->pageNumbers.constEnd();
     --end; // last one is one before the imaginary 'end'
     return KWPage(d, end.value());
 }
@@ -440,7 +440,7 @@ KWPage KWPageManager::last()
 {
     if (d->pages.isEmpty())
         return KWPage();
-    QMap<int, int>::iterator end = d->pageNumbers.end();
+    QMap<int, int>::ConstIterator end = d->pageNumbers.constEnd();
     --end; // last one is one before the imaginary 'end'
     return KWPage(d, end.value());
 }

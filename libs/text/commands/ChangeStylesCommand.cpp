@@ -163,8 +163,8 @@ void ChangeStylesCommand::redo()
                 cursor.setBlockCharFormat(memento->blockParentCharFormat);
             }
 
-            QList<QTextCharFormat>::Iterator fmtIt = memento->fragmentDirectFormats.begin();
-            QList<int>::Iterator idIt = memento->fragmentStyleId.begin();
+            QList<QTextCharFormat>::ConstIterator fmtIt = memento->fragmentDirectFormats.constBegin();
+            QList<int>::ConstIterator idIt = memento->fragmentStyleId.constBegin();
             foreach(QTextCursor fragCursor, memento->fragmentCursors) {
                 QTextCharFormat cf(block.charFormat()); // start with block formatting
 

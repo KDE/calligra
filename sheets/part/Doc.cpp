@@ -233,7 +233,7 @@ QDomDocument Doc::saveXML()
     if (!d->spellListIgnoreAll.isEmpty()) {
         QDomElement spellCheckIgnore = doc.createElement("SPELLCHECKIGNORELIST");
         spread.appendChild(spellCheckIgnore);
-        for (QStringList::Iterator it = d->spellListIgnoreAll.begin(); it != d->spellListIgnoreAll.end(); ++it) {
+        for (QStringList::ConstIterator it = d->spellListIgnoreAll.constBegin(); it != d->spellListIgnoreAll.constEnd(); ++it) {
             QDomElement spellElem = doc.createElement("SPELLCHECKIGNOREWORD");
             spellCheckIgnore.appendChild(spellElem);
             spellElem.setAttribute("word", *it);

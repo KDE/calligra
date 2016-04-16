@@ -92,7 +92,7 @@ KoShapeBackgroundCommand::KoShapeBackgroundCommand(const QList<KoShape*> &shapes
 void KoShapeBackgroundCommand::redo()
 {
     KUndo2Command::redo();
-    QList<QSharedPointer<KoShapeBackground> >::iterator brushIt = d->newFills.begin();
+    QList<QSharedPointer<KoShapeBackground> >::ConstIterator brushIt = d->newFills.constBegin();
     foreach(KoShape *shape, d->shapes) {
         shape->setBackground(*brushIt);
         shape->update();
@@ -103,7 +103,7 @@ void KoShapeBackgroundCommand::redo()
 void KoShapeBackgroundCommand::undo()
 {
     KUndo2Command::undo();
-    QList<QSharedPointer<KoShapeBackground> >::iterator brushIt = d->oldFills.begin();
+    QList<QSharedPointer<KoShapeBackground> >::ConstIterator brushIt = d->oldFills.constBegin();
     foreach(KoShape *shape, d->shapes) {
         shape->setBackground(*brushIt);
         shape->update();

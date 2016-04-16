@@ -242,8 +242,8 @@ void KoFindText::findTextInShapes(const QList<KoShape*> &shapes, QList<QTextDocu
 
 void KoFindText::Private::updateSelections()
 {
-    QHash< QTextDocument*, QVector<QAbstractTextDocumentLayout::Selection> >::iterator itr;
-    for(itr = selections.begin(); itr != selections.end(); ++itr) {
+    QHash< QTextDocument*, QVector<QAbstractTextDocumentLayout::Selection> >::ConstIterator itr;
+    for(itr = selections.constBegin(); itr != selections.constEnd(); ++itr) {
         KoTextDocument doc(itr.key());
         doc.setSelections(itr.value());
     }

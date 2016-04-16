@@ -162,7 +162,7 @@ public:
      * @return a List of the Slide Show names that contains the page
      *         a blank list if the page was not found
      */
-    QStringList namesByPage(KoPAPageBase *page);
+    QStringList namesByPage(KoPAPageBase *page) const;
 
 Q_SIGNALS:
     void updated();

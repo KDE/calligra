@@ -66,13 +66,13 @@ bool KoImageCollection::completeLoading(KoStore *store)
 
 bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context)
 {
-    QMap<qint64, QString> imagesToSave(context->imagesToSave());
-    QMap<qint64, QString>::iterator imagesToSaveIter(imagesToSave.begin());
+    const QMap<qint64, QString> imagesToSave(context->imagesToSave());
+    QMap<qint64, QString>::ConstIterator imagesToSaveIter(imagesToSave.begin());
 
-    QMap<qint64, KoImageDataPrivate *>::iterator knownImagesIter(d->images.begin());
+    QMap<qint64, KoImageDataPrivate *>::ConstIterator knownImagesIter(d->images.constBegin());
 
-    while (imagesToSaveIter != imagesToSave.end()) {
-        if (knownImagesIter == d->images.end()) {
+    while (imagesToSaveIter != imagesToSave.constEnd()) {
+        if (knownImagesIter == d->images.constEnd()) {
             // this should not happen
             warnFlake << "image not found";
             Q_ASSERT(0);

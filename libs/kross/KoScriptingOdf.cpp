@@ -195,10 +195,10 @@ KoScriptingOdfManifestReader::KoScriptingOdfManifestReader(KoScriptingOdfStore *
             m_entries << QPair<QString,QString>(e.attribute("manifest:media-type"), e.attribute("manifest:full-path"));
 }
 
-QStringList KoScriptingOdfManifestReader::paths(const QString &type)
+QStringList KoScriptingOdfManifestReader::paths(const QString &type) const
 {
     QStringList list;
-    for (QList<QPair<QString,QString> >::Iterator it = m_entries.begin(); it != m_entries.end(); ++it)
+    for (QList<QPair<QString,QString> >::ConstIterator it = m_entries.begin(); it != m_entries.end(); ++it)
         if (type.isEmpty() || type == (*it).first )
             list << (*it).second;
     return list;

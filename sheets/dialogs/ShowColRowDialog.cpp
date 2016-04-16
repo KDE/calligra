@@ -82,8 +82,7 @@ ShowColRow::ShowColRow(QWidget* parent, Selection* selection, Type _type)
                 listInt.append(col->column());
         }
         qSort(listInt);
-        QList<int>::Iterator it;
-        for (it = listInt.begin(); it != listInt.end(); ++it) {
+        for (QList<int>::ConstIterator it = listInt.constBegin(); it != listInt.constEnd(); ++it) {
             if (!showColNumber)
                 listCol += i18n("Column: %1", Cell::columnName(*it));
             else
@@ -101,8 +100,7 @@ ShowColRow::ShowColRow(QWidget* parent, Selection* selection, Type _type)
             }
             row = lastRow+1;
         }
-        QList<int>::Iterator it;
-        for (it = listInt.begin(); it != listInt.end(); ++it)
+        for (QList<int>::ConstIterator it = listInt.constBegin(); it != listInt.constEnd(); ++it)
             listRow += i18n("Row: %1", text.setNum(*it));
 
         list->addItems(listRow);

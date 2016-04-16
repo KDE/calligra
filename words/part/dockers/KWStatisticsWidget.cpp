@@ -277,16 +277,38 @@ void KWStatisticsWidget::updateData()
     // parts of words for better counting of syllables:
     // (only use reg exp if necessary -> speed up)
 
-    QStringList subs_syl;
-    subs_syl << "cial" << "tia" << "cius" << "cious" << "giu" << "ion" << "iou";
-    QStringList subs_syl_regexp;
-    subs_syl_regexp << "sia$" << "ely$";
+    const QStringList subs_syl {
+        QStringLiteral("cial"),
+        QStringLiteral("tia"),
+        QStringLiteral("cius"),
+        QStringLiteral("cious"),
+        QStringLiteral("giu"),
+        QStringLiteral("ion"),
+        QStringLiteral("iou")
+    };
+    const QStringList subs_syl_regexp {
+        QStringLiteral("sia$"),
+        QStringLiteral("ely$")
+    };
 
-    QStringList add_syl;
-    add_syl << "ia" << "riet" << "dien" << "iu" << "io" << "ii";
-    QStringList add_syl_regexp;
-    add_syl_regexp << "[aeiouym]bl$" << "[aeiou]{3}" << "^mc" << "ism$"
-    << "[^l]lien" << "^coa[dglx]." << "[^gq]ua[^auieo]" << "dnt$";
+    const QStringList add_syl {
+        QStringLiteral("ia"),
+        QStringLiteral("riet"),
+        QStringLiteral("dien"),
+        QStringLiteral("iu"),
+        QStringLiteral("io"),
+        QStringLiteral("ii")
+    };
+    const QStringList add_syl_regexp {
+        QStringLiteral("[aeiouym]bl$"),
+        QStringLiteral("[aeiou]{3}"),
+        QStringLiteral("^mc"),
+        QStringLiteral("ism$"),
+        QStringLiteral("[^l]lien"),
+        QStringLiteral("^coa[dglx]."),
+        QStringLiteral("[^gq]ua[^auieo]"),
+        QStringLiteral("dnt$")
+    };
 
     foreach (KWFrameSet *fs, m_document->frameSets()) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
@@ -329,25 +351,25 @@ void KWStatisticsWidget::updateData()
                 re.setPattern("e$");
                 word.remove(re);
                 re.setPattern("[^aeiouy]+");
-                QStringList syls = word.split(re, QString::SkipEmptyParts);
+                const QStringList syls = word.split(re, QString::SkipEmptyParts);
                 int word_syllables = 0;
-                for (QStringList::Iterator it = subs_syl.begin(); it != subs_syl.end(); ++it) {
+                for (QStringList::ConstIterator it = subs_syl.begin(); it != subs_syl.end(); ++it) {
                     if (word.indexOf(*it, 0, Qt::CaseInsensitive) != -1) {
                         word_syllables--;
                     }
                 }
-                for (QStringList::Iterator it = subs_syl_regexp.begin(); it != subs_syl_regexp.end(); ++it) {
+                for (QStringList::ConstIterator it = subs_syl_regexp.begin(); it != subs_syl_regexp.end(); ++it) {
                     re.setPattern(*it);
                     if (word.indexOf(re) != -1) {
                         word_syllables--;
                     }
                 }
-                for (QStringList::Iterator it = add_syl.begin(); it != add_syl.end(); ++it) {
+                for (QStringList::ConstIterator it = add_syl.begin(); it != add_syl.end(); ++it) {
                     if (word.indexOf(*it, 0, Qt::CaseInsensitive) != -1) {
                         word_syllables++;
                     }
                 }
-                for (QStringList::Iterator it = add_syl_regexp.begin(); it != add_syl_regexp.end(); ++it) {
+                for (QStringList::ConstIterator it = add_syl_regexp.begin(); it != add_syl_regexp.end(); ++it) {
                     re.setPattern(*it);
                     if (word.indexOf(re) != -1) {
                         word_syllables++;

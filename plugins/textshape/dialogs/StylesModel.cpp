@@ -359,14 +359,14 @@ void StylesModel::addCharacterStyle(KoCharacterStyle *style)
     Q_ASSERT(style);
     // find the place where we need to insert the style
     QCollator collator;
-    QList<int>::iterator begin = m_styleList.begin();
+    QList<int>::ConstIterator begin = m_styleList.constBegin();
     int index = 0;
     // the None style should also be the first one so only start after it
-    if (begin != m_styleList.end() && *begin == NoneStyleId) {
+    if (begin != m_styleList.constEnd() && *begin == NoneStyleId) {
         ++begin;
         ++index;
     }
-    for ( ; begin != m_styleList.end(); ++begin) {
+    for ( ; begin != m_styleList.constEnd(); ++begin) {
         KoCharacterStyle *s = m_styleManager->characterStyle(*begin);
         if (!s && m_draftCharStyleList.contains(*begin))
             s = m_draftCharStyleList[*begin];
@@ -452,8 +452,8 @@ void StylesModel::updateName(int styleId)
             if (paragStyle) {
                 m_styleThumbnailer->removeFromCache(paragStyle);
 
-                QList<int>::iterator begin = m_styleList.begin();
-                for ( ; begin != m_styleList.end(); ++begin) {
+                QList<int>::ConstIterator begin = m_styleList.constBegin();
+                for ( ; begin != m_styleList.constEnd(); ++begin) {
                     // don't test again the same style
                     if (*begin == styleId) {
                         continue;
@@ -485,12 +485,12 @@ void StylesModel::updateName(int styleId)
             if (characterStyle) {
                 m_styleThumbnailer->removeFromCache(characterStyle);
 
-                QList<int>::iterator begin = m_styleList.begin();
-                if (begin != m_styleList.end() && *begin == NoneStyleId) {
+                QList<int>::ConstIterator begin = m_styleList.constBegin();
+                if (begin != m_styleList.constEnd() && *begin == NoneStyleId) {
                     ++begin;
                     ++newIndex;
                 }
-                for ( ; begin != m_styleList.end(); ++begin) {
+                for ( ; begin != m_styleList.constEnd(); ++begin) {
                     // don't test again the same style
                     if (*begin == styleId) {
                         continue;

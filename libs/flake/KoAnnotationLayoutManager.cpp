@@ -121,10 +121,10 @@ void KoAnnotationLayoutManager::paintConnections(QPainter &painter)
     painter.restore();
 }
 
-bool KoAnnotationLayoutManager::isAnnotationShape(KoShape *shape)
+bool KoAnnotationLayoutManager::isAnnotationShape(KoShape *shape) const
 {
-    QList< QPair < QPointF, KoShape * > >::iterator it = d->annotationShapePositions.begin();
-    while (it != d->annotationShapePositions.end()) {
+    QList< QPair < QPointF, KoShape * > >::ConstIterator it = d->annotationShapePositions.constBegin();
+    while (it != d->annotationShapePositions.constEnd()) {
         if (shape == it->second) {
             return true;
         }

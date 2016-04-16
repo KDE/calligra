@@ -95,7 +95,7 @@ public:
      * Returns pointer to the deepest KoSection that covers @p pos
      * or NULL if there is no such section
      */
-    KoSection *sectionAtPosition(int pos);
+    KoSection *sectionAtPosition(int pos) const;
 
     /// Returns name for the new section.
     QString possibleNewName();

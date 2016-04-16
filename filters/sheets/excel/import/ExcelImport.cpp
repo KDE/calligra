@@ -984,8 +984,8 @@ void ExcelImport::Private::processCell(Cell* ic, Calligra::Sheets::Cell oc)
         oc.setComment(note);
 
     cellStyles[styleId] += QRect(oc.column(), oc.row(), 1, 1);
-    QHash<QString, Calligra::Sheets::Conditions>::iterator conds = dataStyleConditions.find(ic->format().valueFormat());
-    if (conds != dataStyleConditions.end()) {
+    QHash<QString, Calligra::Sheets::Conditions>::ConstIterator conds = dataStyleConditions.constFind(ic->format().valueFormat());
+    if (conds != dataStyleConditions.constEnd()) {
         cellConditions.append(qMakePair(QRegion(oc.column(), oc.row(), 1, 1), conds.value()));
     }
 

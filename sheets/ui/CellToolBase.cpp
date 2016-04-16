@@ -3477,7 +3477,7 @@ void CellToolBase::listChoosePopupMenu()
         }
     }
 
-    for (QStringList::Iterator it = itemList.begin(); it != itemList.end(); ++it) {
+    for (QStringList::ConstIterator it = itemList.constBegin(); it != itemList.constEnd(); ++it) {
         d->popupListChoose->addAction((*it));
     }
 

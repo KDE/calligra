@@ -47,10 +47,10 @@ void KoTextEditingPlugin::selectWord(QTextCursor &cursor, int cursorPosition) co
     QTextBlock block = cursor.block();
     cursor.setPosition(block.position());
     cursorPosition -= block.position();
-    QString string = block.text();
+    const QString string = block.text();
     int pos = 0;
     bool space = false;
-    QString::Iterator iter = string.begin();
+    QString::ConstIterator iter = string.begin();
     while (iter != string.end()) {
         if (iter->isSpace()) {
             if (space) ;// double spaces belong to the previous word
@@ -61,7 +61,7 @@ void KoTextEditingPlugin::selectWord(QTextCursor &cursor, int cursorPosition) co
         } else if (space)
             break;
         pos++;
-        iter++;
+        ++iter;
     }
     cursor.setPosition(pos + block.position(), QTextCursor::KeepAnchor);
 }
@@ -85,9 +85,9 @@ void KoTextEditingPlugin::checkSection(QTextDocument *document, int startPositio
         if (!block.contains(startPosition - 1) && !block.contains(endPosition + 1)) // only parags that are completely in
             finishedParagraph(document, block.position());
 
-        QString text = block.text();
+        const QString text = block.text();
         bool space = true;
-        QString::Iterator iter = text.begin();
+        QString::ConstIterator iter = text.begin();
         while (pos < endPosition && iter != text.end()) {
             bool isSpace = iter->isSpace();
             if (pos >= startPosition && space && !isSpace) // for each word, call finishedWord

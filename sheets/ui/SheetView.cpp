@@ -395,7 +395,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
     }
 
     // 2. Paint the cell content including markers (formula, comment, ...)
-    for (QList<CellPaintData>::iterator it(cached_cells.begin()); it != cached_cells.end(); ++it) {
+    for (QList<CellPaintData>::ConstIterator it(cached_cells.constBegin()); it != cached_cells.constEnd(); ++it) {
         it->cellView.paintCellContents(paintRect, painter, clipRect, it->coordinate, it->cell, this);
     }
 
@@ -488,8 +488,8 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
     if (hasHighlightedCells()) {
         QPointF active = activeHighlight();
         QPainterPath p;
-        CellPaintData* activeData = 0;
-        for (QList<CellPaintData>::iterator it(cached_cells.begin()); it != cached_cells.end(); ++it) {
+        const CellPaintData* activeData = 0;
+        for (QList<CellPaintData>::ConstIterator it(cached_cells.constBegin()); it != cached_cells.constEnd(); ++it) {
             if (isHighlighted(it->cell.cellPosition())) {
                 p.addRect(it->coordinate.x(), it->coordinate.y(), it->cellView.cellWidth(), it->cellView.cellHeight());
                 if (it->cell.cellPosition() == active) {

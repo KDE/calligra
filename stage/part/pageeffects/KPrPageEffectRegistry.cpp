@@ -70,10 +70,10 @@ KPrPageEffect * KPrPageEffectRegistry::createPageEffect( const KoXmlElement & el
             reverse = true;
         }
 
-        QHash<QPair<QString, bool>, KPrPageEffectFactory *>::iterator it( d->tagToFactory.find( QPair<QString, bool>( smilType, reverse ) ) );
+        QHash<QPair<QString, bool>, KPrPageEffectFactory *>::ConstIterator it( d->tagToFactory.constFind( QPair<QString, bool>( smilType, reverse ) ) );
 
         // call the factory to create the page effect 
-        if ( it != d->tagToFactory.end() ) {
+        if ( it != d->tagToFactory.constEnd() ) {
             pageEffect = it.value()->createPageEffect( element );
         }
         else {
@@ -109,8 +109,8 @@ void KPrPageEffectRegistry::init()
     QList<KPrPageEffectFactory*> factories = values();
 
     foreach ( KPrPageEffectFactory * factory, factories ) {
-        QList<QPair<QString, bool> > tags( factory->tags() );
-        QList<QPair<QString, bool> >::iterator it( tags.begin() );
+        const QList<QPair<QString, bool> > tags( factory->tags() );
+        QList<QPair<QString, bool> >::ConstIterator it( tags.begin() );
         for ( ; it != tags.end(); ++it ) {
             d->tagToFactory.insert( *it, factory );
         }

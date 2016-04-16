@@ -58,8 +58,8 @@ void KoPathPointTypeCommand::redo()
     repaint(false);
     m_additionalPointData.clear();
 
-    QList<PointData>::iterator it(m_oldPointData.begin());
-    for (; it != m_oldPointData.end(); ++it) {
+    QList<PointData>::ConstIterator it(m_oldPointData.constBegin());
+    for (; it != m_oldPointData.constEnd(); ++it) {
         KoPathPoint *point = it->m_pointData.pathShape->pointByIndex(it->m_pointData.pointIndex);
         KoPathPoint::PointProperties properties = point->properties();
 

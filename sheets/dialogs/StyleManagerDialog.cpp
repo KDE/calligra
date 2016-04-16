@@ -155,8 +155,8 @@ void StyleManagerDialog::slotDisplayMode(int mode)
     if (mode != 1) // NOT "Custom Styles"
         new QTreeWidgetItem(m_styleList, QStringList(i18n("Default")));
 
-    CustomStyles::iterator iter = m_styleManager->m_styles.begin();
-    CustomStyles::iterator end  = m_styleManager->m_styles.end();
+    CustomStyles::ConstIterator iter = m_styleManager->m_styles.constBegin();
+    CustomStyles::ConstIterator end  = m_styleManager->m_styles.constEnd();
 
     while (iter != end) {
         CustomStyle* styleData = iter.value();

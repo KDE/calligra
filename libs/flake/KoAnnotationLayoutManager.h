@@ -51,7 +51,7 @@ public:
 
     void paintConnections(QPainter &painter);
     // Return true if shape is in annotaion shapes list.
-    bool isAnnotationShape(KoShape *shape);
+    bool isAnnotationShape(KoShape *shape) const;
 
 public Q_SLOTS:
     /// register the position of an annotation shape.

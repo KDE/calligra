@@ -141,8 +141,8 @@ KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*
         }
     }
 
-    QMap<KoShape*, QList<KoShape*> >::iterator newIt(newOrder.begin());
-    for (; newIt!= newOrder.end(); ++newIt) {
+    QMap<KoShape*, QList<KoShape*> >::ConstIterator newIt(newOrder.constBegin());
+    for (; newIt!= newOrder.constEnd(); ++newIt) {
         QList<KoShape*> order(newIt.value());
         order.removeAll(0);
         int index = -KoShapePrivate::MaxZIndex - 1; // set minimum zIndex

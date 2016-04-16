@@ -1255,7 +1255,7 @@ void KPlatoRCPSScheduler::addRequest( rcps_job *job, Task *task )
 
 void KPlatoRCPSScheduler::setConstraints()
 {
-    for ( QMap<struct rcps_job*, Task*>::iterator it = m_taskmap.begin(); it != m_taskmap.end(); ++it ) {
+    for ( QMap<struct rcps_job*, Task*>::ConstIterator it = m_taskmap.constBegin(); it != m_taskmap.constEnd(); ++it ) {
         Task *task = it.value();
         struct rcps_job *job = it.key();
         struct weight_info *wi = m_weight_info_list.value( job );
@@ -1308,7 +1308,7 @@ void KPlatoRCPSScheduler::setConstraints()
 
 void KPlatoRCPSScheduler::setWeights()
 {
-    for ( QMap<struct rcps_job*, Task*>::iterator it = m_taskmap.begin(); it != m_taskmap.end(); ++it ) {
+    for ( QMap<struct rcps_job*, Task*>::ConstIterator it = m_taskmap.constBegin(); it != m_taskmap.constEnd(); ++it ) {
         Task *task = it.value();
         struct rcps_job *job = it.key();
         if ( m_backward ) {

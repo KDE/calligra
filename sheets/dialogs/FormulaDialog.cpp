@@ -737,18 +737,15 @@ void FormulaDialog::slotSelectionChanged()
 
 void FormulaDialog::slotActivated(const QString& category)
 {
-    QStringList lst;
-    if (category == i18n("All"))
-        lst = FunctionRepository::self()->functionNames();
-    else
-        lst = FunctionRepository::self()->functionNames(category);
+    const QStringList lst = (category == i18n("All")) ?
+        FunctionRepository::self()->functionNames() : FunctionRepository::self()->functionNames(category);
 
     debugSheets << "category:" << category << " (" << lst.count() << "functions)";
 
     functionsModel->setStringList(lst);
 
     QStringList upperList;
-    for (QStringList::Iterator it = lst.begin(); it != lst.end(); ++it)
+    for (QStringList::ConstIterator it = lst.begin(); it != lst.end(); ++it)
         upperList.append((*it).toUpper());
     listFunct.setItems(upperList);
 
