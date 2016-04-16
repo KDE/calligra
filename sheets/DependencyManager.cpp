@@ -381,8 +381,8 @@ void DependencyManager::Private::removeDependencies(const Cell& cell)
     }
 
     // remove information about named area dependencies
-    QHash<QString, QList<Cell> >::Iterator nit(namedAreaConsumers.begin()), nend(namedAreaConsumers.end());
-    while (nit != nend) {
+    QHash<QString, QList<Cell> >::Iterator nit(namedAreaConsumers.begin());
+    while (nit != namedAreaConsumers.end()) {
         nit.value().removeAll(cell);
         if (nit.value().isEmpty())
             nit = namedAreaConsumers.erase(nit);
