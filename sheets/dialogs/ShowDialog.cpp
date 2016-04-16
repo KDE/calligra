@@ -62,8 +62,6 @@ ShowDialog::ShowDialog(QWidget* parent, Selection* selection)
     lay1->addWidget(m_listWidget);
 
     m_listWidget->setSelectionMode(QListWidget::MultiSelection);
-    QString text;
-    QStringList::Iterator it;
     QStringList tabsList = m_selection->activeSheet()->map()->hiddenSheets();
     m_listWidget->addItems(tabsList);
     if (!m_listWidget->count())
