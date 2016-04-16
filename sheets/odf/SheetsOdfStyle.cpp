@@ -643,7 +643,7 @@ void Odf::loadTextProperties(Style *style, KoOdfStylesReader& stylesReader, cons
         const KoXmlElement * xmlstyle = stylesReader.findStyle(fontName);
         // TODO: sanity check that it is a font-face style?
         debugSheetsODF << "\t\t\t style:" << xmlstyle;
-        if (style) {
+        if (xmlstyle) {
             style->setFontFamily(xmlstyle->attributeNS(KoXmlNS::svg, "font-family"));
             debugSheetsODF << "\t\t\t svg:font-family:" << style->fontFamily();
         }
