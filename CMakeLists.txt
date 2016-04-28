@@ -595,10 +595,21 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 macro_optional_find_package(Vc 0.6.70)
 set_package_properties(Vc PROPERTIES
     DESCRIPTION "Portable, zero-overhead SIMD library for C++"
-    URL "http://code.compeng.uni-frankfurt.de/projects/vc"
+    URL "https://github.com/VcDevel/Vc"
     PURPOSE "Required by the pigment for vectorization"
     TYPE OPTIONAL
 )
+# check if not too new version, Vc > 0.7.* not yet supported
+# no proper way yet found how to set a max version with find_package,
+# as workaround simply search the package again with an exact lower number
+# TODO: improve or file feature request with cmake
+if(Vc_FOUND)
+    if(Vc_VERSION_MAJOR GREATER 0 OR Vc_VERSION_MINOR GREATER 7)
+        message(STATUS "Vc ${Vc_VERSION} is too new, currently only Vc versions <= 0.7.5 can be used.")
+        find_package(Vc 0.7.5 EXACT QUIET)
+        set(Vc_INCLUDE_DIR)
+    endif()
+endif()
 
 macro_bool_to_01(Vc_FOUND HAVE_VC)
 macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
