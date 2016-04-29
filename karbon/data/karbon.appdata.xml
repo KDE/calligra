@@ -66,6 +66,7 @@
     <p xml:lang="et">Karbon on vektorgraafikarakendus hõlpsasti kasutatava, äärmiselt kohandatava ja laiendatava kasutajaliidesega. See muudab Karboni imeheaks abivahendiks algajale, kes alles uudistab vektorgraafika maailma, aga ka kunstnikele, kes soovivad luua hingematvalt kaunist vektorgraafikat.</p>
     <p xml:lang="fi">Karbon on vektorigrafiikkasovellus, jonka käyttöliittymä on helppo ja laajasti mukautettavissa ja laajennettavissa. Karbon on näin loistava sovellus vektorigrafiikan maailmaan vasta tutustuville käyttäjille samoin kuin henkeäsalpaavaa vektoritaidetta luoville taiteilijoille.</p>
     <p xml:lang="fr">Karbon est une application de dessin vectoriel avec une interface facile à utiliser, personnalisable et extensible. Cela fait de Karbon une application majeure pour les utilisateurs s'initiant au dessin vectoriel et pour les artistes voulant créer des œuvres à couper le souffle.</p>
+    <p xml:lang="gl">Karbon é un programa de debuxo vectorial con unha interface de usuario fácil de usar, personalizar e ampliar. Iso fai de Karbon un gran programa para usuarios que comezan a explorar o mundo das imaxes vectoriais, pero tamén para artistas que queren crear impresionantes obras de arte vectoriais.</p>
     <p xml:lang="it">Karbon è un'applicazione di disegno vettoriale con un'interfaccia utente facile da utilizzare, altamente personalizzabile ed estendibile. Ciò rende Karbon un'ottima applicazione per gli utenti che iniziano a esplorare il mondo della grafica vettoriale così come per gli artisti che vogliono creare straordinarie opere vettoriali. </p>
     <p xml:lang="nl">Karbon is een toepassing voor tekenen met vectoren met een gebruikersinterface dat gemakkelijk is te gebruiken, zeer goed aan te passen en uit te breiden. Dit maakt Karbon een geweldige toepassing voor gebruikers die de wereld van grafiek met vectoren aan het verkennen zijn evenals voor kunstenaars die adembenemende vectorkunst willen maken.</p>
     <p xml:lang="pl">Karbon jest programem do rysowania wektorowego z układem sterowania, który jest łatwy w użyciu, wysoce dostosowywalny i rozszerzalny. To czyni Karbon wspaniałym programem dla użytkowników zaczynających poznawanie świata grafiki wektorowej, a artystów zachęca do tworzenie sztuki wektorowej zapierającej dech w piersiach.</p>
@@ -187,6 +188,7 @@
       <li xml:lang="et">Kihtide dokk keerukamate dokumentide hõlpsaks töötlemiseks, kaasa arvatud pisipiltide eelvaatlus, kujundite rühmitamise toetamine ainult lohistamisega, kujundite nähtavuse ja lukustamise määramine</li>
       <li xml:lang="fi">Monimutkaisten tiedostojen helppoon hallintaan tasotelakka, joka sisältää esikatselukuvat, muotojen ryhmittelyn tuen vetämällä ja pudottamalla sekä muotojen näkyvyyden ja lukitsemisen hallinnan</li>
       <li xml:lang="fr">Conteneurs de calques pour la manipulation facile de documents complexes incluant les vignettes d'aperçu, la prise en charge du groupement de formes par glisser-déposer, contrôle de la visibilité des formes et verrouillage</li>
+      <li xml:lang="gl">Doca de capas para xestionar facilmente documentos complexos. Inclúe miniaturas de vista previa, permite agrupar formas arrastrando e soltando, controlar a visibilidade das formas ou bloquealas.</li>
       <li xml:lang="it">Area di aggancio di livelli per una facile gestione di documenti complessi incluse miniature di anteprima, supporto di forme raggruppate tramite il trascinamento e rilascio, controllo della visibilità delle forme e blocco</li>
       <li xml:lang="nl">Laagverankering voor gemakkelijke behandeling van complexe documenten inclusief voorbeeldminiaturen, ondersteuning voor groeperen van vormen via slepen en laten vallen, besturing van zichtbaarheid van vormen of vastzetten</li>
       <li xml:lang="pl">Dokowanie warstw dla łatwiejszej obsługi złożonych dokumentów zawierający: podgląd miniatur, obsługę grupowania kształtów poprzez przeciągnij i upuść, sterowanie widocznością kształtów czy blokowanie.</li>
@@ -230,6 +232,7 @@
       <li xml:lang="et">Mitmesugused kompleksjoontest kujundite loomise vahendid, sealhulgas kompleksjoone joonistamise tööriist, pliiatsitööriist ning kalligraafia loomise tööriist</li>
       <li xml:lang="fi">Eri piirrostyökalut polkumuotojen luontiin: polunpiirto-, kynä- ja kalligrafinen piirrostyökalu</li>
       <li xml:lang="fr">Outils de dessin variés incluant un outil de création de chemin, un crayon ainsi qu'un outil pour la calligraphie</li>
+      <li xml:lang="gl">Varias ferramentas de debuxo para crear formas de camiños, incluíndo unha ferramenta de debuxo de camiños, unha ferramenta de lapis, e unha ferramenta de debuxo caligráfico.</li>
       <li xml:lang="it">Vari strumenti di disegno per creare percorsi e forme che include uno strumento di tracciati, un matita e uno strumento calligrafico</li>
       <li xml:lang="nl">Verschillende tekengereedschappen voor het maken van padvormen inclusief een tekenhulpmiddel voor paden, een potloodhulpmiddel evenals een tekengereedschap voor kalligrafie</li>
       <li xml:lang="pl">Różne narzędzia rysownicze do tworzenia kształtów ścieżek uwzględniając w tym: narzędzie rysowania ścieżki, narzędzie ołówka, a także kaligraficzne narzędzia rysownicze </li>
@@ -251,6 +254,7 @@
       <li xml:lang="et">Ülemineku- ja mustritööriistad üleminekute ja mustrite stiilide hõlpsaks redigeerimiseks otse lõuendil</li>
       <li xml:lang="fi">Työkalut liukuvärien ja täyttökuvioiden helppoon muokkaukseen</li>
       <li xml:lang="fr">Outils de gradient et de tramage pour l'édition facile de styles de gradients et de trames</li>
+      <li xml:lang="gl">Ferramentas de degradados e padróns para editar degradados e estilos de padróns facilmente sobre o lenzo.</li>
       <li xml:lang="it">Strumenti di gradienti e motivi per una facile modifica sul posto di stili di gradienti e motivi</li>
       <li xml:lang="nl">Hulpmiddelen voor gradiënten en patronen voor gemakkelijk werken op het werkblad van gradiënten en patroonstijlen</li>
       <li xml:lang="pl">Narzędzia gradientu i wzorca dla łatwiejszego ich edytowania na płótnie</li>
@@ -272,6 +276,7 @@
       <li xml:lang="et">Äärmiselt tulusad haardetööriistad juhtjoonte järgi joonistamiseks ja redigeerimiseks (nt tõmme alusvõrgule, juhtjooned, kompleksjoone sõlmed, piirdekastid, kompleksjoontest kujundite lõikekohad jms)</li>
       <li xml:lang="fi">Huippulaatuinen kiinnitysominaisuus ohjattuun piirtämiseen ja muokkaukseen (esim. kiinnitys ruudukkoon, apuviivoihin, rajauslaatikkoon, kohtisuoraan asemaan, leikkaukseen, polkumuotoon tai viivojen ja polkujen jatkeisiin)</li>
       <li xml:lang="fr">Fonctionnalités d'alignement top-niveau pour guider le dessin et l'édition (p.ex. alignement sur la grille, chemin nodal, boîtes, positions orthogonales, intersections de formes ou extensions de lignes ou de formes)</li>
+      <li xml:lang="gl">Funcionalidades de axuste de última xeración para editar e debuxar de maneira guiada (por exemplo, axustar á grade, liñas de guía, nodos de camiños, caixas de límites, posicións ortogonais, cruce de formas de camiños ou extensións de liñas e camiños).</li>
       <li xml:lang="it">Capacità di alto livello di regolazione per disegno e modifica guidata (ad es. aggancio alla griglia, linee guida, nodi di tracciato, riquadri collegati, posizioni ortgonali, intersezioni di forme di tracciato o estensioni di linee e tracciati)</li>
       <li xml:lang="nl">Excellente vastklik faciliteiten voor geleid tekenen en bewerken (bijv. vastklikken aan raster, gidslijnen, padpunten, begrenzingsvakken, orthogonale posities, kruispunten van padvormen of extensies van lijnen en paden)</li>
       <li xml:lang="pl">Możliwości przyciągania z najwyższej półki rysowania i edytowania ze wspomaganiem (np. przyciąganie do siatki, -prowadnic, węzłów ścieżki, pól ograniczających, prostopadłych położeń, przecięć kształtów ścieżek lub wydłużeń linii i ścieżek)</li>
@@ -293,6 +298,7 @@
       <li xml:lang="et">Hulk valmiskujundeid, sealhulgas tähed, ringid ja ellipsid, ristkülikud, pildid</li>
       <li xml:lang="fi">Lukuisia esimääritettyjä muotoja (perusmuodot kuten tähdet, ympyrä ja soikio, nelikulmio, kuva)</li>
       <li xml:lang="fr">Inclut de nombreuses formes prédéfinies, telles que les étoiles, cercles/ellipses, rectangles, images</li>
+      <li xml:lang="gl">Inclúe moitas formas predefinidas, entre elas formas básicas como estrelas, círculos, elipses, rectángulos e imaxes.</li>
       <li xml:lang="it">Include molte forme predefinite tra cui forme base come stelle, cerchi/ellissi, rettangoli e immagini</li>
       <li xml:lang="nl">Omvat vele voorgedefinieerde vormen inclusief basisvormen als ster, cirkel/ellips, rechthoek, afbeelding</li>
       <li xml:lang="pl">Zawiera wiele uprzednio stworzonych kształtów, do których można zaliczyć gwiazdy, okręgi, elipsy, prostokąty, obrazy</li>
@@ -314,6 +320,7 @@
       <li xml:lang="et">Kunstiline tekstikujund, mis toetab kompleksjooni, st võimaldab asetada teksti kompleksjoonele</li>
       <li xml:lang="fi">Taiteelliset tekstimuodot polunseurantatuella</li>
       <li xml:lang="fr">Formes de texte artistiques prenant par exemple en charge la création de texte le long d'une courbe</li>
+      <li xml:lang="gl">Forma de texto artístico que permite seguir o contorno de camiños (é dicir, texto sobre camiños).</li>
       <li xml:lang="it">Forme di testo artistico con supporto per le bordature che seguono il tracciato (ad es. testo su tracciato)</li>
       <li xml:lang="nl">Artistieke tekstvormen met ondersteuning voor het volden van paden (dwz. tekst op een pad)</li>
       <li xml:lang="pl">Kształty artystycznego tekstu z obsługą dla następujących zarysów ścieżek (tj. tekst na ścieżce)</li>
@@ -334,6 +341,7 @@
       <li xml:lang="et">Ka keerukamad kompleksjoone operatsioonid ja efektid, näiteks tõeväärtustega operatsioonid, kompleksjoonte lamendamine, ümardamine ja täpsustamine, keerise efekt jms</li>
       <li xml:lang="fi">Monimutkaiset polku-operaatiot ja -tehosteet kuten totuusarvo-operaatiot, polun tasoitus, pyöristys ja hienosäätö sekä pyörre- ja nipistystehosteet</li>
       <li xml:lang="fr">Opérations de chemins complexes et effets tels que les opérateurs booléens, mise à plat et ajustements, de même que les effets de spirale et de pincement</li>
+      <li xml:lang="gl">Operacións de camiños complexas e efectos como operacións de grupos de valores booleanos; aplanamento, arredondamento e refinamento de camiños; así como efectos de xiro e picada.</li>
       <li xml:lang="it">Operazioni complesse su tracciati ed effetti del tipo operazioni su insiemi booleani, appiattimento di tracciati, arrotondamento e affinamento così come effetti di vortice/pizzico</li>
       <li xml:lang="nl">Complexe bewerkingen van paden en effecten zoals booleaanse set bewerkingen, afvlakken van paden, afronding en verfijning evenals wervel/put-effecten</li>
       <li xml:lang="pl">Złożone działania i efekty na ścieżce takie jak działania boolean, spłaszczanie ścieżki, zaokrąglanie, a także efekty polepszające wraz z efektami wiru/rozdmuchania</li>

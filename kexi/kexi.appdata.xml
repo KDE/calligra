@@ -69,6 +69,7 @@
     <p xml:lang="et">Kexi on Calligra visuaalne andmebaaside loomise rakendus. Selle abil saab kujundada andmebaasirakendusi, sisestada ja muuta andmeid, sooritada päringuid ning töödelda andmeid. Saab luua vorme, mis kindlustada andmetele kohandatava liidese. Kõik andmebaasiobjektid - tabelid, päringud, vormid, aruanded - salvestatakse andmebaasi, mis muudab andmete ja kujunduse jagamise õige lihtsaks.</p>
     <p xml:lang="fi">Kexillä luodaan tietokantoja visuaalisesti. Se on osa Calligra-ohjelmistoa. Sen avulla voi suunnitella tietokantasovelluksia, lisätä ja muokata tietoja, suorittaa kyselyjä ja käsitellä tietoja. Voit luoda lomakkeita mukauttaaksesi tietojesi käyttöliittymää. Kaikki tietokantaoliot – taulukot, kyselyt, lomakkeet ja raportit – tallennetaan tietokantaan, joten tiedon jako ja suunnittelu on helppoa.</p>
     <p xml:lang="fr">Kexi est un créateur de base de données visuel, faisant partie de la suite Calligra. Il peut être utilisé pour concevoir des applications de base de données, insérer et éditer des données, effectuer des requêtes, et traiter des données. Des formulaires peuvent être créés pour fournir une interface personnalisée pour vos données. Tous les objets de bases de données (tables, requêtes, formulaires, rapports) sont stockés dans la base de données, rendant facile le partage de données et de design.</p>
+    <p xml:lang="gl">Kexi é un construtor visual de bases de datos que forma parte da colección de software Calligra. Pode usarse para deseñar programas de base de datos, inserindo e editando datos, realizando consultas, e procesando datos Poden crearse formularios para fornecer unha interface adaptada aos datos. Todos os obxectos de base de datos (táboas, consultas, formularios, informes, etc.) añmacénanse na base de datos, facendo fácil compartir os datos e o deseño.</p>
     <p xml:lang="it">Kexi è uno strumento visuale per la creaazione di basi di dati, parte di Calligra Suite. Può essere utilizzato per progettare applicazioni che usano basi di dati, inserire e modificare dati, eseguire query ed elaborare dati. Puoi creare moduli per fornire un'interfaccia personalizzata ai tuoi dati. Tutti gli oggetti di una base di dati - tabelle, query, moduli, report - sono memorizzati nella base di dati stessa, semplificando la condivisione dei dati e la progettazione.</p>
     <p xml:lang="nb">Kexi er en visuell database-oppretter, en del av Calligra-suiten. Det kan brukes til å utforme databaseprogrammer, sette inn og redigere data, utføre spørringer og behandle data. Et egendefinert grensesnitt mot dine data kan lages ved hjelp av skjemaer. Alle database-objekter lagres i databasen – tabeller, spørringer, skjemaer, rapporter – det  gjør det enkelt å dele data og utforming.</p>
     <p xml:lang="nl">Kexi is een maakprogramma van een database op een visuele manier, onderdeel van de Calligra Suite. Het kan gebruikt worden voor het ontwerpen van toepassingen met een database, gegevens invoeren en bewerken, zoekopdrachten uitvoeren en gegevens verwerken. Formulieren kunnen gemaakt worden om een aangepast interface naar uw gegevens te bieden. Alle database-objecten - tabellen, zoekopdrachten, formulieren, rapporten - worden opgeslagen in de database, waarmee het gemakkelijk wordt gegevens en ontwerp te delen.</p>
@@ -161,6 +162,7 @@
       <li xml:lang="et">SQLite'i, MySQL'i, PostgreSQL-i ja MS SQL Serveri andmebaaside toetamine</li>
       <li xml:lang="fi">SQLite-, MySQL-, PostgreSQL- ja MS SQL Server -tietokantojen tuki</li>
       <li xml:lang="fr">Prend en charge les bases de données SQLite, MySQL, PostgreSQL et MS SQL Server</li>
+      <li xml:lang="gl">Compatíbel con bases de datos SQLite, MySQL, PostgreSQL e MS SQL Server.</li>
       <li xml:lang="it">Supporta le basi di dati SQLite, MySQL, PostgreSQL e MS SQL Server</li>
       <li xml:lang="ja">SQLite, MySQL, PostgreSQL そして MS SQL Server データベースをサポートします</li>
       <li xml:lang="nb">Støtter databasene SQLite, MySQL, PostgreSQL og MS SQL Server</li>
@@ -183,6 +185,7 @@
       <li xml:lang="et">Ainuke mitmel platvormil töötav graafiline rakendus MS Accessi andmebaaside andmete importimiseks</li>
       <li xml:lang="fi">Ainoa useampialustainen graafinen työkalu tietojen tuontiin MS Access -tietokannoista</li>
       <li xml:lang="fr">Le seul outil graphique multi plate-formes pouvant importer les bases de données de MS Access</li>
+      <li xml:lang="gl">A única ferramenta gráfica multiplataforma para importar datos de bases de datos de MS Access.</li>
       <li xml:lang="it">Il solo strumento grafico multipiattaforma in grado di importare basi di dati MS Access</li>
       <li xml:lang="ja">インポートするだけで MS Access データベースにマルチプラットホームのグラフィカルツールを提供</li>
       <li xml:lang="nb">Det eneste grafiske multiplattform-verktøy for å importere data fra MS Access-databaser</li>
@@ -205,6 +208,7 @@
       <li xml:lang="et">Päringute kujundamise toetamine SQL-vaates</li>
       <li xml:lang="fi">Kyselyn suunnittelun tuki SQL-näkymässä</li>
       <li xml:lang="fr">Prend en charge la conception de requêtes dans une vue SQL dédiée</li>
+      <li xml:lang="gl">Funcionalidade de deseño de consultas nunha vista de SQL dedicada.</li>
       <li xml:lang="it">Supporta la progettazione di query in una vista SQL dedicata</li>
       <li xml:lang="ja">専用の SQL ビューでクエリのデザインをサポート</li>
       <li xml:lang="nb">Støtter utforming av spørringer i en egen SQL-visning</li>
