@@ -46,6 +46,12 @@ extern "C" KPLATO_EXPORT int kdemain( int argc, char **argv ) {
 
     KoApplication app(PLAN_MIME_TYPE, *aboutData, argc, argv);
 
+    delete aboutData;
+
+    if (!app.start()) {
+	return 1;
+    }
+
 #ifdef MAINTANER_WANTED_SPLASH
     // After creating the KApplication then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
@@ -58,13 +64,7 @@ extern "C" KPLATO_EXPORT int kdemain( int argc, char **argv ) {
     "See community.kde.org/Calligra</p>");
 #endif
 
-    // This is disabled for now so the crude test below will run
-    if (!app.start())
-	return 1;
-
     app.exec();
-
-    delete (aboutData);
 
     return 0;
 }

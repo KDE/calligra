@@ -54,10 +54,13 @@ extern "C" KARBONUI_EXPORT int kdemain( int argc, char* argv[] )
 {
     KAboutData *aboutData = newKarbonAboutData();
 
-
     KoApplication app(KARBON_MIME_TYPE, *aboutData, argc, argv);
 
     delete aboutData;
+
+    if (!app.start()) {  // parses command line args, create initial docs and mainwindows
+        return 1;
+    }
 
 #ifdef MAINTANER_WANTED_SPLASH
     // After creating the KoApplication then create the pixmap from an xpm: we cannot get the
@@ -70,9 +73,6 @@ extern "C" KARBONUI_EXPORT int kdemain( int argc, char* argv[] )
     "The Calligra community welcomes someone to take over.<br><br>"
     "See community.kde.org/Calligra</p>");
 #endif
-
-    if( !app.start() )  // parses command line args, create initial docs and mainwindows
-        return 1;
 
     return app.exec();
 }
