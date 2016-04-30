@@ -83,14 +83,12 @@ const QTime appStartTime(QTime::currentTime());
 class KoApplicationPrivate
 {
 public:
-    KoApplicationPrivate(const KAboutData &aboutData_)
+    KoApplicationPrivate()
         : splashScreen(0)
-        , aboutData(aboutData_)
     {}
     QByteArray nativeMimeType;
     QWidget *splashScreen;
     QList<KoPart *> partList;
-    KAboutData aboutData;
 };
 
 class KoApplication::ResetStarting
@@ -132,12 +130,12 @@ public:
 
 KoApplication::KoApplication(const QByteArray &nativeMimeType, const KAboutData &aboutData, int &argc, char **argv)
     : QApplication(argc, argv)
-    , d(new KoApplicationPrivate(aboutData))
+    , d(new KoApplicationPrivate())
 {
     KAboutData::setApplicationData( aboutData );
 
     setWindowIcon(QIcon::fromTheme(aboutData.programIconName()));
-    
+
     KoApplication::KoApp = this;
 
     d->nativeMimeType = nativeMimeType;
@@ -195,10 +193,11 @@ BOOL isWow64()
 
 bool KoApplication::start()
 {
+    KAboutData aboutData = KAboutData::applicationData();
 
     // process commandline parameters
     QCommandLineParser parser;
-    d->aboutData.setupCommandLine(&parser);
+    aboutData.setupCommandLine(&parser);
     parser.addHelpOption();
     parser.addVersionOption();
 
@@ -215,7 +214,7 @@ bool KoApplication::start()
 
     parser.process(*this);
 
-    d->aboutData.processCommandLine(&parser);
+    aboutData.processCommandLine(&parser);
 
 #if defined(Q_OS_WIN) || defined (Q_OS_MACX)
 #ifdef ENV32BIT
