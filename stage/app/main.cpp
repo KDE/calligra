@@ -18,26 +18,21 @@
 */
 
 #include <KPrAboutData.h>
+#include <KPrDocument.h>
 
 #include <KoApplication.h>
-#include "KPrDocument.h"
-
-#include <klocalizedstring.h>
-
 
 extern "C" STAGE_EXPORT int kdemain( int argc, char **argv )
 {
-    int state;
-    KAboutData *aboutData = newKPresenterAboutData();
+    KAboutData* aboutData = newKPresenterAboutData();
 
     KoApplication app(STAGE_MIME_TYPE, *aboutData, argc, argv);
 
-    if (!app.start())
+    delete aboutData;
+
+    if (!app.start()) {
         return 1;
+    }
 
-    state=app.exec();
-
-    delete (aboutData);
-
-    return state;
+    return app.exec();
 }

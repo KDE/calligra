@@ -17,21 +17,22 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <KoApplication.h>
 #include <KWAboutData.h>
 #include <KWDocument.h>
 
+#include <KoApplication.h>
+
 extern "C" WORDS_EXPORT int kdemain(int argc, char **argv)
 {
-    KAboutData * aboutData = newWordsAboutData();
+    KAboutData* aboutData = newWordsAboutData();
 
     KoApplication app(WORDS_MIME_TYPE, *aboutData, argc, argv);
 
-    if (!app.start())
+    delete aboutData;
+
+    if (!app.start()) {
         return 1;
-    app.exec();
+    }
 
-    delete(aboutData);
-
-    return 0;
+    return app.exec();
 }

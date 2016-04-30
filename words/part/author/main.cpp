@@ -19,19 +19,22 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <KoApplication.h>
 #include "CAuAboutData.h"
-#include "KWDocument.h"
+#include <KWDocument.h>
 
+#include <KoApplication.h>
 
 extern "C" WORDS_EXPORT int kdemain(int argc, char **argv)
 {
-    QScopedPointer<KAboutData> aboutData(newAuthorAboutData());
+    KAboutData* aboutData = newAuthorAboutData();
 
-    KoApplication app(WORDS_MIME_TYPE, *aboutData.data(), argc, argv);
+    KoApplication app(WORDS_MIME_TYPE, *aboutData, argc, argv);
 
-    if (!app.start())
+    delete aboutData;
+
+    if (!app.start()) {
         return 1;
+    }
 
     return app.exec();
 }

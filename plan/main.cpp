@@ -18,14 +18,13 @@
 */
 
 #include "kptaboutdata.h"
+#include "kptmaindocument.h"
+
+#include <KoApplication.h>
 
 #include "about/hi256-app-calligraplan.xpm"
 #include <QSplashScreen>
 #include <QHideEvent>
-
-#include <KoApplication.h>
-
-#include "kptmaindocument.h"
 
 #ifdef MAINTANER_WANTED_SPLASH
 class KoSplashScreen : public QSplashScreen
@@ -41,8 +40,9 @@ public:
 };
 #endif
 
-extern "C" KPLATO_EXPORT int kdemain( int argc, char **argv ) {
-    KAboutData *aboutData = KPlato::newAboutData();
+extern "C" KPLATO_EXPORT int kdemain( int argc, char **argv )
+{
+    KAboutData* aboutData = KPlato::newAboutData();
 
     KoApplication app(PLAN_MIME_TYPE, *aboutData, argc, argv);
 
@@ -64,7 +64,5 @@ extern "C" KPLATO_EXPORT int kdemain( int argc, char **argv ) {
     "See community.kde.org/Calligra</p>");
 #endif
 
-    app.exec();
-
-    return 0;
+    return app.exec();
 }

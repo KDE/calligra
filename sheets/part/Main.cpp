@@ -28,18 +28,18 @@ using namespace Calligra::Sheets;
 
 extern "C" CALLIGRA_SHEETS_COMMON_EXPORT int kdemain(int argc, char **argv)
 {
-    KAboutData *aboutData = newAboutData();
+    KAboutData* aboutData = newAboutData();
 
     // QT5TODO: support custom options
 //     options.add("scriptfile <scriptfile>", ki18n("Execute the scriptfile after startup."));
 
     KoApplication app(SHEETS_MIME_TYPE, *aboutData, argc, argv);
 
-    if (!app.start())
+    delete aboutData;
+
+    if (!app.start()) {
         return 1;
-    app.exec();
+    }
 
-    delete(aboutData);
-
-    return 0;
+    return app.exec();
 }
