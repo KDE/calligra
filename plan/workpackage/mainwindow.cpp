@@ -31,13 +31,13 @@
 #include <QLabel>
 #include <QWidget>
 #include <QFileDialog>
+#include <QApplication>
 
 #include <kundo2qstack.h>
 
 #include <assert.h>
 //#include "koshellsettings.h"
 
-#include <KoApplicationAdaptor.h>
 #include <KoDocument.h>
 
 #include <KLocalizedString>

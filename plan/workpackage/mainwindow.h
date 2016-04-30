@@ -25,8 +25,6 @@
 
 #include "kplatowork_export.h"
 
-#include <KoApplication.h>
-
 #include <QMap>
 #include <QToolButton>
 #include <QLabel>

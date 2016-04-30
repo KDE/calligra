@@ -51,7 +51,6 @@
 #include <kmessagebox.h>
 
 #include <KoComponentData.h>
-#include <KoApplication.h>
 #include <KoDocumentInfo.h>
 #include <KoMainWindow.h>
 #include <KoOasisSettings.h>

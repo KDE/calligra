@@ -51,6 +51,7 @@
 #include <QPointer>
 #include <QUrl>
 #include <QMimeDatabase>
+#include <QApplication>
 
 #include <KLocalizedString>
 #include <kmessagebox.h>

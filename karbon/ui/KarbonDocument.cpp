@@ -48,7 +48,6 @@
 #include <KarbonCanvas.h>
 #include "KarbonUiDebug.h"
 
-#include <KoApplication.h>
 #include <KoImageCollection.h>
 #include <KoDataCenterBase.h>
 #include <KoText.h>

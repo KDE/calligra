@@ -39,7 +39,6 @@
 #include "KoOdfWriteStore.h"
 #include "KoXmlNS.h"
 
-#include "KoApplication.h"
 #include <KoProgressProxy.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>

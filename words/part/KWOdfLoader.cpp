@@ -47,7 +47,6 @@
 #include <KoProgressUpdater.h>
 #include <KoVariableManager.h>
 #include <KoInlineTextObjectManager.h>
-#include <KoApplication.h>
 #include <KoUnit.h>
 #include <KoSectionModel.h>
 
