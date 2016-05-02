@@ -22,6 +22,8 @@
 
 #include <KoApplication.h>
 
+#include <QLoggingCategory>
+
 #include "about/hi256-app-calligraplan.xpm"
 #include <QSplashScreen>
 #include <QHideEvent>
@@ -42,6 +44,18 @@ public:
 
 extern "C" KPLATO_EXPORT int kdemain( int argc, char **argv )
 {
+    /**
+     * Disable debug output by default, only log warnings.
+     * Debug logs can be controlled by the environment variable QT_LOGGING_RULES.
+     *
+     * For example, to get full debug output, run the following:
+     * QT_LOGGING_RULES="calligra.*=true" calligraplan
+     *
+     * See: http://doc.qt.io/qt-5/qloggingcategory.html
+     */
+    QLoggingCategory::setFilterRules("calligra.*.debug=false\n"
+                                     "calligra.*.warning=true");
+
     KAboutData* aboutData = KPlato::newAboutData();
 
     KoApplication app(PLAN_MIME_TYPE, *aboutData, argc, argv);

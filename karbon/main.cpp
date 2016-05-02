@@ -29,6 +29,7 @@
 #include "ui/splash/hi256-app-calligrakarbon.xpm"
 #include <QSplashScreen>
 #include <QHideEvent>
+#include <QLoggingCategory>
 
 #include <KoApplication.h>
 
@@ -52,6 +53,18 @@ public:
 
 extern "C" KARBONUI_EXPORT int kdemain( int argc, char* argv[] )
 {
+    /**
+     * Disable debug output by default, only log warnings.
+     * Debug logs can be controlled by the environment variable QT_LOGGING_RULES.
+     *
+     * For example, to get full debug output, run the following:
+     * QT_LOGGING_RULES="calligra.*=true" karbon
+     *
+     * See: http://doc.qt.io/qt-5/qloggingcategory.html
+     */
+    QLoggingCategory::setFilterRules("calligra.*.debug=false\n"
+                                     "calligra.*.warning=true");
+
     KAboutData *aboutData = newKarbonAboutData();
 
     KoApplication app(KARBON_MIME_TYPE, *aboutData, argc, argv);

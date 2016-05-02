@@ -24,8 +24,22 @@
 
 #include <KoApplication.h>
 
+#include <QLoggingCategory>
+
 extern "C" WORDS_EXPORT int kdemain(int argc, char **argv)
 {
+    /**
+     * Disable debug output by default, only log warnings.
+     * Debug logs can be controlled by the environment variable QT_LOGGING_RULES.
+     *
+     * For example, to get full debug output, run the following:
+     * QT_LOGGING_RULES="calligra.*=true" calligraauthor
+     *
+     * See: http://doc.qt.io/qt-5/qloggingcategory.html
+     */
+    QLoggingCategory::setFilterRules("calligra.*.debug=false\n"
+                                     "calligra.*.warning=true");
+
     KAboutData* aboutData = newAuthorAboutData();
 
     KoApplication app(WORDS_MIME_TYPE, *aboutData, argc, argv);

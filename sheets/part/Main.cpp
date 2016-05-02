@@ -17,17 +17,31 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <KoApplication.h>
-
 #include "AboutData.h"
 #include "DocBase.h"
 
 #include "sheets_common_export.h"
 
+#include <KoApplication.h>
+
+#include <QLoggingCategory>
+
 using namespace Calligra::Sheets;
 
 extern "C" CALLIGRA_SHEETS_COMMON_EXPORT int kdemain(int argc, char **argv)
 {
+    /**
+     * Disable debug output by default, only log warnings.
+     * Debug logs can be controlled by the environment variable QT_LOGGING_RULES.
+     *
+     * For example, to get full debug output, run the following:
+     * QT_LOGGING_RULES="calligra.*=true" calligrasheets
+     *
+     * See: http://doc.qt.io/qt-5/qloggingcategory.html
+     */
+    QLoggingCategory::setFilterRules("calligra.*.debug=false\n"
+                                     "calligra.*.warning=true");
+
     KAboutData* aboutData = newAboutData();
 
     // QT5TODO: support custom options
