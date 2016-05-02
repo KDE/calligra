@@ -27,14 +27,9 @@ inline QString toString(T value)
     return QString::number(value);
 }
 
-namespace Private
-{
-
-inline double stringToDouble(const QString &string)
+inline double toDouble(const QString &string)
 {
     return string.toDouble();
-}
-
 }
 
 }
