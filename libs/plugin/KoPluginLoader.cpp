@@ -30,7 +30,18 @@
 #include <QCoreApplication>
 #include <QJsonObject>
 #include <QPluginLoader>
+#include <QLoggingCategory>
 #include <QDebug>
+
+
+const QLoggingCategory &PLUGIN_LOG()
+{
+    static const QLoggingCategory category("calligra.lib.plugin");
+    return category;
+}
+
+#define debugPlugin qCDebug(PLUGIN_LOG)
+#define warnPlugin qCWarning(PLUGIN_LOG)
 
 
 class KoPluginLoaderImpl : public QObject
@@ -57,7 +68,7 @@ void KoPluginLoader::load(const QString & directory, const PluginsConfig &config
     bool configChanged = false;
     QList<QString> blacklist; // what we will save out afterwards
     if (config.whiteList && config.blacklist && config.group) {
-//        qDebug() << "Loading" << directory << "with checking the config";
+        debugPlugin << "Loading" << directory << "with checking the config";
         KConfigGroup configGroup(KSharedConfig::openConfig(), config.group);
         QList<QString> whiteList = configGroup.readEntry(config.whiteList, config.defaults);
         QList<QString> knownList;
@@ -73,7 +84,7 @@ void KoPluginLoader::load(const QString & directory, const PluginsConfig &config
             json = json.value("KPlugin").toObject();
             const QString pluginName = json.value("Id").toString();
             if (pluginName.isEmpty()) {
-                qWarning() << "Loading plugin" << loader->fileName() << "failed, has no X-KDE-PluginInfo-Name.";
+                warnPlugin << "Loading plugin" << loader->fileName() << "failed, has no X-KDE-PluginInfo-Name.";
                 continue;
             }
             if (whiteList.contains(pluginName)) {
@@ -116,12 +127,12 @@ void KoPluginLoader::load(const QString & directory, const PluginsConfig &config
             json = json.value("KPlugin").toObject();
             const QString pluginName = json.value("Id").toString();
             whiteList << pluginName;
-//             qDebug() << "Loaded plugin" << loader->fileName() << owner;
+            debugPlugin << "Loaded plugin" << loader->fileName() << owner;
             if (!owner) {
                 delete plugin;
             }
         } else {
-            qWarning() << "Loading plugin" << loader->fileName() << "failed, " << loader->errorString();
+            warnPlugin << "Loading plugin" << loader->fileName() << "failed, " << loader->errorString();
         }
     }
 
@@ -141,12 +152,12 @@ QList<KPluginFactory *> KoPluginLoader::instantiatePluginFactories(const QString
     foreach(QPluginLoader *pluginLoader, offers) {
         QObject* pluginInstance = pluginLoader->instance();
         if (!pluginInstance) {
-            qWarning() << "Loading plugin" << pluginLoader->fileName() << "failed, " << pluginLoader->errorString();
+            warnPlugin << "Loading plugin" << pluginLoader->fileName() << "failed, " << pluginLoader->errorString();
             continue;
         }
         KPluginFactory *factory = qobject_cast<KPluginFactory *>(pluginInstance);
         if (factory == 0) {
-            qWarning() << "Expected a KPluginFactory, got a" << pluginInstance->metaObject()->className();
+            warnPlugin << "Expected a KPluginFactory, got a" << pluginInstance->metaObject()->className();
             delete pluginInstance;
             continue;
         }
@@ -169,12 +180,12 @@ QList<QPluginLoader *> KoPluginLoader::pluginLoaders(const QString &directory, c
 
     QList<QPluginLoader *>list;
     KPluginLoader::forEachPlugin(directory, [&](const QString &pluginPath) {
-        qDebug() << "Trying to load" << pluginPath;
+        debugPlugin << "Trying to load" << pluginPath;
         QPluginLoader *loader = new QPluginLoader(pluginPath);
         QJsonObject metaData = loader->metaData().value("MetaData").toObject();
 
         if (metaData.isEmpty()) {
-            //qDebug() << dirIter.filePath() << "has no json!";
+            debugPlugin << pluginPath << "has no MetaData!";
             return;
         }
 
