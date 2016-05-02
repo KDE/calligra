@@ -41,10 +41,10 @@ int main(int argc, char **argv)
 
     parser.addVersionOption();
     parser.addHelpOption();
+    about.setupCommandLine(&parser);
 
     parser.process(app);
 
-    about.setupCommandLine(&parser);
     about.processCommandLine(&parser);
 
     KIconLoader::global()->addAppDir("calligra");
