@@ -33,6 +33,12 @@ set(wordsprivate_LIB_SRCS
     KWRootAreaProviderTextBox.cpp
     KWRootAreaProvider.cpp
 
+    mct/MctWidget.cpp
+    mct/MctMain.cpp
+    mct/MctManagerBase.cpp
+    mct/MctRevisionManager.cpp
+    mct/mctmergemanagerdialog.cpp
+    
     pagetool/KWPageTool.cpp
     pagetool/KWPageToolFactory.cpp
     pagetool/SimpleSetupWidget.cpp
@@ -101,6 +107,9 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWCreateBookmark.ui
     dialogs/KWSelectBookmark.ui
     dialogs/KWInsertImage.ui
+    mct/MctWidget.ui
+    mct/MctRevisionManager.ui
+    mct/mctmergemanagerdialog.ui
     dockers/StatisticsPreferencesPopup.ui
     pagetool/SimpleSetupWidget.ui
     pagetool/SimpleHeaderFooterWidget.ui

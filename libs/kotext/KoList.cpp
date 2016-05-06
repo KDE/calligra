@@ -30,6 +30,9 @@
 
 #include <QTextCursor>
 
+#include "MctChangeTypes.h"
+#include <KoTextEditor.h>
+
 KoList::KoList(const QTextDocument *document, KoListStyle *style, KoList::Type type)
     : QObject(const_cast<QTextDocument *>(document)), d(new KoListPrivate(this, document))
 {
@@ -115,12 +118,16 @@ void KoList::add(const QTextBlock &block, int level)
     QTextList *textList = d->textLists.value(level-1).data();
     if (!textList) {
         QTextCursor cursor(block);
+        QTextFormat tmpformat1 = QTextListFormat();
         QTextListFormat format = d->style->listFormat(level);
         textList = cursor.createList(format);
         format.setProperty(KoListStyle::ListId, (KoListStyle::ListIdType)(textList));
         textList->setFormat(format);
         d->textLists[level-1] = textList;
         d->textListIds[level-1] = (KoListStyle::ListIdType)textList;
+        if(KoTextDocument(d->document).textEditor()){
+            emit KoTextDocument(d->document).textEditor()->emitCreateMctChange(cursor, MctChangeTypes::StyleChange, kundo2_i18n("list2"), format, tmpformat1);
+        }
     } else {
         textList->add(block);
     }

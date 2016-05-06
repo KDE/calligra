@@ -2,7 +2,7 @@ add_subdirectory( tests )
 add_subdirectory( pics )
 
 include_directories(${KOTEXT_INCLUDES} ${KOODF_INCLUDES} ${PIGMENT_INCLUDES})
-include_directories(${CMAKE_SOURCE_DIR}/libs/widgetutils)
+include_directories(${CMAKE_SOURCE_DIR}/libs/widgetutils ${CMAKE_SOURCE_DIR}/libs/main ${CMAKE_BINARY_DIR}/libs/kotext/mct)
 if (LIBATTICA_FOUND)
     include_directories(${LIBATTICA_INCLUDE_DIR})
 endif ()

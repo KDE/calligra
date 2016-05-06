@@ -49,6 +49,9 @@
 #include <QTouchEvent>
 #include <QClipboard>
 
+#include <KoDocument.h>
+#include "MctStaticData.h"
+
 
 KoToolProxyPrivate::KoToolProxyPrivate(KoToolProxy *p)
     : activeTool(0),
@@ -378,9 +381,39 @@ void KoToolProxy::mouseReleaseEvent(QMouseEvent *event, const QPointF &point)
     KoToolManager::instance()->priv()->switchInputDevice(id);
     d->scrollTimer.stop();
 
+    bool noPositionChange = false;
     KoPointerEvent ev(event, point);
     if (d->activeTool) {
         d->activeTool->mouseReleaseEvent(&ev);
+        Q_ASSERT(d->activeTool->canvas());
+        KoShapeManager *manager = d->activeTool->canvas()->shapeManager();
+        Q_ASSERT(manager);
+        /*if (MctStaticData::instance()->getMctState()){
+            int shapeCenterPos = 50;
+            KoShape *shape = manager->shapeAt(QPointF(point.x() + shapeCenterPos, point.y() + shapeCenterPos));
+            if (!selectedShape){
+                if (shape){
+                    if (shape->shapeId() == "KoPathShape" || shape->shapeId() == "PictureShape"){
+                        selectedShape = shape;
+                        noPositionChange = true;
+                        qDebug() << "Selected shape changed.";
+                        if (shape->getFileUrl() == "") shape->setFileUrl(MctStaticData::instance()->getAddedShapeType());
+                    }
+                }
+            } else {
+                if (shape && shape->shapeId() == "TextShapeID") shape = manager->shapeAt(point);
+                if (shape){
+                    if (shape->shapeId() == "KoPathShape" || shape->shapeId() == "PictureShape"){
+                        if (shape->position() != selectedShape->position()  || shape->size() != selectedShape->size()){
+                            selectedShape = shape;
+                            noPositionChange = true;
+                            qDebug() << "Selected shape changed.";
+                            if (shape->getFileUrl() == "") shape->setFileUrl(MctStaticData::instance()->getAddedShapeType());
+                        }
+                    }
+                }
+            }
+        }*/
 
         if (! event->isAccepted() && event->button() == Qt::LeftButton && event->modifiers() == 0
                 && qAbs(d->mouseDownPoint.x() - event->x()) < 5
@@ -393,18 +426,50 @@ void KoToolProxy::mouseReleaseEvent(QMouseEvent *event, const QPointF &point)
             if (manager->selection()->count() <= 1) {
                 KoShape *shape = manager->shapeAt(point);
                 if (shape && !manager->selection()->isSelected(shape)) { // make the clicked shape the active one
+                    //shape selected
+                    selectedShape = shape;
+                    prevSize = shape->size();
+                    rotation = shape->rotation();
+                    noPositionChange = true;
+                    qDebug() << "shape Selected";
                     manager->selection()->deselectAll();
                     manager->selection()->select(shape);
                     QList<KoShape*> shapes;
                     shapes << shape;
                     QString tool = KoToolManager::instance()->preferredToolForSelection(shapes);
                     KoToolManager::instance()->switchToolRequested(tool);
+                } else {
+                    //shape deSelected
+                    selectedShape = NULL;
+                    prevPos = NULL;
+                    //qDebug() << "shape Deselected";
                 }
             }
         }
     } else {
         event->ignore();
+        noPositionChange = true;
     }
+
+    if (selectedShape && !noPositionChange){
+        /*if (MctStaticData::instance()->getMctState()){
+            KoDocument *doc = MctStaticData::instance()->getKoDocument();
+            doc->emitShapePositionChanged(selectedShape, point, prevPos);
+
+            QSizeF badSize = QSizeF(-1,-1);
+            if (selectedShape->size() != prevSize && prevSize != badSize){
+                doc->emitCreateShapeStyleChanged(selectedShape->getFileUrl(), selectedShape->position(), *selectedShape, NULL, NULL, prevPos, prevSize, 370);
+                prevSize = selectedShape->size();
+            }
+
+            if (selectedShape->rotation() != rotation && !isnan(selectedShape->rotation())){
+                doc->emitCreateShapeStyleChanged(selectedShape->getFileUrl(), selectedShape->position(), *selectedShape, NULL, NULL, prevPos, QSizeF(0,0), rotation);
+                rotation = selectedShape->rotation();
+            }
+        }*/
+    }
+
+    if (selectedShape) prevPos = new QPointF(selectedShape->position());
 }
 
 void KoToolProxy::mouseReleaseEvent(KoPointerEvent* event)

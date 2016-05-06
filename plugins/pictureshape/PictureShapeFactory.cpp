@@ -73,6 +73,9 @@ KoShape *PictureShapeFactory::createShape(const KoProperties *params, KoDocument
         if (shape->imageCollection()) {
             KoImageData *data = shape->imageCollection()->createImageData(image);
             shape->setUserData(data);
+            if (params->contains("fileurl")) {
+                shape->setFileUrl(params->property("fileurl").toString());
+            }
             shape->setSize(data->imageSize());
             shape->update();
         }

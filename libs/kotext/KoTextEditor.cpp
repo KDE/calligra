@@ -5,6 +5,7 @@
  * Copyright (C) 2011-2015 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
  * Copyright (C) 2015 Soma Schliszka <soma.schliszka@gmail.com>
+ * Copyright (C) 2015-2016 MultiRacio Ltd. <multiracio@multiracio.com> (S.Schliszka, F.Novak, P.Rakyta)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -189,6 +190,7 @@ void KoTextEditor::Private::newLine(KUndo2Command *parent)
     changeCursor.setPosition(endPosition, QTextCursor::KeepAnchor);
     changeCursor.endEditBlock();
 
+    emit q->createMctChange(changeCursor, MctChangeTypes::ParagraphBreak, kundo2_i18nc("(qtundo-format)", "New Paragraph"), format, format);
     q->registerTrackedChange(changeCursor, KoGenChange::InsertChange, kundo2_i18n("New Paragraph"), format, format, false);
 
     // possibly change the style if requested
@@ -568,6 +570,7 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner, KUndo2Command *cm
 
     InsertInlineObjectCommand *insertInlineObjectCommand = new InsertInlineObjectCommand(inliner, d->document, topCommand);
 
+    emit createMctChange(d->caret, MctChangeTypes::AddedTextGraphicObject, kundo2_i18n("Key Press"), format, format);
     d->caret.endEditBlock();
  
     if (!cmd) {
@@ -666,6 +669,13 @@ void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)
 //        trackChanges = true;
 //    }
 
+    QTextCursor mctTmpCursor = d->caret;
+    //setting cursor position to selectionEnd to avoid false DelParagraphBreak changes
+    mctTmpCursor.setPosition(d->caret.selectionStart());
+    mctTmpCursor.setPosition(d->caret.selectionEnd(), QTextCursor::KeepAnchor);
+    KUndo2MagicString title = kundo2_i18n("Delete");
+    QTextFormat format = mctTmpCursor.charFormat();
+
     if (previous) {
         if (!d->caret.hasSelection() && d->caret.block().blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
             movePosition(QTextCursor::PreviousCharacter);
@@ -685,11 +695,49 @@ void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)
         }
     }
 
+    bool caretAtBeginOfBlock = (mctTmpCursor.position() == mctTmpCursor.block().position());
+    int selectionSize = mctTmpCursor.selectionEnd() - mctTmpCursor.selectionStart();
+    MctChangeTypes changeType = (caretAtBeginOfBlock && selectionSize < 1) ? MctChangeTypes::DelParagraphBreak : MctChangeTypes::RemovedString;
+
     if (previous) {
+        QTextCursor tmpCursor = mctTmpCursor;
+
+        if(! hasSelection() ) {
+            tmpCursor.setPosition(tmpCursor.position() - 1);
+            QTextTable* table = tmpCursor.currentTable();
+            if(table != mctTmpCursor.currentTable()) {
+                d->caret.setPosition(table->firstPosition());
+                deleteTable();
+                return;
+            }
+            mctTmpCursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+        } else {
+            int i = tmpCursor.selectionStart();
+            int start = i;
+            int end = tmpCursor.selectionEnd();
+            QTextTable* table;
+            while(i <= end) {
+                tmpCursor.setPosition(i);
+                table = tmpCursor.currentTable();
+                if(table && start <= table->firstPosition() - 1) {
+                    d->caret.setPosition(table->firstPosition());
+                    deleteTable();
+                    return;
+                }
+                ++i;
+            }
+        }
+        emit createMctChange(mctTmpCursor, changeType, title, format, format);
+
         addCommand(new DeleteCommand(DeleteCommand::PreviousChar,
                                         d->document,
                                         shapeController, parent));
     } else {
+        if(! hasSelection() ) {
+            mctTmpCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+        }
+        emit createMctChange(mctTmpCursor, changeType, title, format, format);
+
         addCommand(new DeleteCommand(DeleteCommand::NextChar,
                                         d->document,
                                         shapeController, parent));
@@ -971,11 +1019,25 @@ void KoTextEditor::insertTable(int rows, int columns)
 
     QTextBlock currentBlock = d->caret.block();
     if (d->caret.position() != currentBlock.position()) {
+        QTextCursor parBreak = d->caret;
+        int pos = d->caret.position();
         d->caret.insertBlock();
         currentBlock = d->caret.block();
+        parBreak.setPosition(pos);
+        parBreak.setPosition(d->caret.position(), QTextCursor::KeepAnchor);
+        emit createMctChange(parBreak, MctChangeTypes::ParagraphBreak, kundo2_i18n("Paragraph added"), parBreak.charFormat(), parBreak.charFormat());
     }
 
+    QTextTable *isCursorAtTable = d->caret.currentTable();
+
     QTextTable *table = d->caret.insertTable(rows, columns, tableFormat);
+
+    // emit AddedTextTable
+    if (!isCursorAtTable){
+        emit createMctChange(d->caret, MctChangeTypes::AddedTextTable, kundo2_i18n("Table added"), tableFormat, tableFormat);
+    } else {
+        emit createMctChange(d->caret, MctChangeTypes::AddedTextTableInTable, kundo2_i18n("Table added"), tableFormat, tableFormat);
+    }
 
     // Get (and thus create) columnandrowstyle manager so it becomes part of undo
     // and not something that happens uncontrollably during layout
@@ -1084,6 +1146,75 @@ void KoTextEditor::deleteTableRow()
     QTextTable *table = d->caret.currentTable();
     if (table) {
         addCommand(new DeleteTableRowCommand(this, table));
+    }
+}
+
+void KoTextEditor::deleteTable()
+{
+    QTextTable *table = d->caret.currentTable();
+
+    if (table) {
+        qWarning() << "TABLE UNDER THE CURSOR!";
+        QTextCursor cursor = d->caret;
+        for (int row = table->rows()-1; row >= 0; --row) {
+            for (int col = table->columns()-1; col >= 0; --col) {
+                QTextTableCell cell = table->cellAt(row, col);
+                cursor.setPosition(cell.lastPosition());
+                QTextCursor cellCursor = cursor;
+                cellCursor.setPosition(cell.firstPosition(), QTextCursor::KeepAnchor);
+                cursor.movePosition(QTextCursor::StartOfBlock);
+                cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+                while(cellCursor.hasSelection()) {
+                    QTextTable *tableInTable = cursor.currentTable();
+                    if(tableInTable != table) {
+                        qDebug() << "Table in table first pos: " << tableInTable->firstPosition() - 1;
+                        qDebug() << "Last pos: " << tableInTable->lastPosition();
+                        d->caret.setPosition(tableInTable->firstPosition());
+                        deleteTable();
+                    } else if(cursor.hasSelection()) {
+                        qDebug() << "Selected text in table: " << cursor.selectedText();
+                        emit createMctChange(cursor, MctChangeTypes::RemovedString, kundo2_i18n("Delete"), cursor.charFormat(), cursor.charFormat());
+                    }
+                    if(cursor.anchor() == cell.firstPosition()) {
+                        break;
+                    }
+                    cursor.movePosition(QTextCursor::PreviousBlock);
+                    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+                    tableInTable = cursor.currentTable();
+                    if(tableInTable == table) {
+                        QTextCursor newLine = cursor;
+                        newLine.setPosition(cursor.position());
+                        newLine.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+                        emit createMctChange(newLine, MctChangeTypes::DelParagraphBreak, kundo2_i18n("Delete"), newLine.charFormat(), newLine.charFormat());
+                    }
+                }
+            }
+        }
+
+        d->caret.setPosition(table->firstPosition());
+        int blockpos = table->firstPosition();
+        int newBlockpos = blockpos == 0 ? blockpos : blockpos - 1;
+        d->caret.setPosition(newBlockpos);
+        QTextTable *isTableInTable = d->caret.currentTable();
+        d->caret.setPosition(blockpos);
+        if (!isTableInTable || newBlockpos == blockpos){
+            emit createMctChange(d->caret, MctChangeTypes::RemovedTextTable, kundo2_i18n("Delete Table"), table->format(), table->format());
+        } else {
+            emit createMctChange(d->caret, MctChangeTypes::RemovedTextTableInTable, kundo2_i18n("Delete Table"), table->format(), table->format());
+        }
+
+        /// !!! KoTextEditor's table: {hidden block}[table]
+        qDebug() << "First position (hidden block): " << table->firstPosition() - 1;
+        d->caret.setPosition(table->firstPosition() - 1);
+
+        qDebug() << "Last position (last cell of the table): " << table->lastPosition();
+        d->caret.setPosition(table->lastPosition(), QTextCursor::KeepAnchor);
+
+        //this->deleteChar();
+        d->caret.deleteChar();
+
+    } else {
+        qCritical() << "NO TABLE UNDER THE CURSOR!";
     }
 }
 
@@ -1406,6 +1537,8 @@ void KoTextEditor::insertText(const QString &text, const QString &hRef)
     d->caret.setPosition(startPosition);
     d->caret.setPosition(endPosition, QTextCursor::KeepAnchor);
 
+    emit createMctChange(d->caret, MctChangeTypes::AddedString, kundo2_i18n("Typing"), format, format);
+
     registerTrackedChange(d->caret, KoGenChange::InsertChange, kundo2_i18n("Typing"), format, format, false);
 
     d->caret.clearSelection();
@@ -1678,6 +1811,11 @@ const QTextList *KoTextEditor::currentList () const
 const QTextTable *KoTextEditor::currentTable () const
 {
     return d->caret.currentTable();
+}
+
+void KoTextEditor::shapeOperation(KoShape *shape, ChangeAction action)
+{
+    emit shapeOperationSignal(shape, action);
 }
 
 #include <KoTextEditor.moc>

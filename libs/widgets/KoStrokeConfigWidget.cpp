@@ -65,6 +65,10 @@
 #include <KoShapeManager.h>
 #include <KoShapeStrokeCommand.h>
 #include <KoShapeStrokeModel.h>
+#include <KoDocument.h>
+
+#include <MctStaticData.h>
+#include <MctChangeEntities.h>
 
 class CapNJoinMenu : public QMenu
 {
@@ -443,6 +447,14 @@ void KoStrokeConfigWidget::applyChanges()
     newStroke->setJoinStyle(static_cast<Qt::PenJoinStyle>(d->capNJoinMenu->joinGroup->checkedId()));
     newStroke->setMiterLimit(miterLimit());
     newStroke->setLineStyle(lineStyle(), lineDashes());
+//FIXME
+    /*if (MctStaticData::instance()->getMctState()){
+        KoDocument* kodoc = MctStaticData::instance()->getKoDocument();
+        KoShape *newShape = selection->selectedShapes().at(0);
+        QPointF prevpos = selection->firstSelectedShape()->position();
+        double noRotation = 370;
+        kodoc->emitCreateShapeStyleChanged(newShape->getFileUrl(), newShape->position(), *newShape, newStroke, nullptr, &prevpos, QSizeF(0,0), noRotation);
+    }*/
 
     if (d->active) {
         KoShapeStrokeCommand *cmd = new KoShapeStrokeCommand(selection->selectedShapes(), newStroke);

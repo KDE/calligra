@@ -31,6 +31,11 @@
 #include <KoDocumentBase.h>
 #include <kundo2stack.h>
 
+#include <KoShape.h>
+#include <MctChangeEntities.h>
+#include <KoShapeStroke.h>
+
+
 class KUndo2Command;
 class KoPart;
 class KoStore;
@@ -46,6 +51,7 @@ class KoGuidesData;
 class KoXmlWriter;
 
 class QDomDocument;
+class QDomElement;
 
 // MSVC seems to need to know the declaration of the classes
 // we pass references of in, when used by external modules
@@ -601,6 +607,9 @@ public:
      */
     void setProfileReferenceTime(const QTime& referenceTime);
 
+    KoShape *emitPosition(QPointF pos);
+    KoShape *emitCreateShapeFromXML(QDomElement change);
+
 public Q_SLOTS:
 
     /**
@@ -749,6 +758,22 @@ public:
 
     virtual bool saveAs( const KUrl &url );
 
+    void emitSendPosition(QPointF pos, KoShape **shape) {
+        emit sendPosition(pos, shape);
+    }
+
+    void emitCreateShapeMctChange(QString type, QPointF pos, KoShape &shape, ChangeAction action, QPointF *prevPos) {
+        emit createShapeMctChange(type, pos, shape, action, prevPos);
+    }
+
+    void emitCreateShapeStyleChanged(QString type, QPointF pos, KoShape &shape, KoShapeStroke *oldStroke, KoShapeShadow *newShadow, QPointF *prevPos, QSizeF prevSize, double rotation) {
+        emit createShapeStyleChanged(type, pos, shape, oldStroke, newShadow, prevPos, prevSize, rotation);
+    }
+
+    void emitShapePositionChanged(KoShape *selectedShape, QPointF point, QPointF *prevPos) {
+        emit shapePositionChanged(selectedShape, point, prevPos);
+    }
+
 public Q_SLOTS:
 
     virtual bool save();
@@ -758,6 +783,11 @@ Q_SIGNALS:
 
     void completed();
     void canceled(const QString &);
+    void sendPosition(QPointF pos, KoShape **shape);
+    void createShapeFromXML(QDomElement change, KoShape **shape);
+    void createShapeMctChange(QString type, QPointF pos, KoShape &shape, ChangeAction action, QPointF *prevPos);
+    void createShapeStyleChanged(QString type, QPointF pos, KoShape &shape, KoShapeStroke *oldStroke, KoShapeShadow *newShadow, QPointF *prevPos, QSizeF prevSize, double rotation);
+    void shapePositionChanged(KoShape *selectedShape, QPointF point, QPointF *prevPos);
 
 private Q_SLOTS:
 

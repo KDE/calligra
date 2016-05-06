@@ -44,6 +44,9 @@ class QDropEvent;
 class QTouchEvent;
 class QPainter;
 class QPointF;
+class KoShape;
+
+#include <QSizeF>
 
 /**
  * Tool proxy object which allows an application to address the current tool.
@@ -188,6 +191,10 @@ private:
 
     friend class KoToolProxyPrivate;
     KoToolProxyPrivate * const d;
+    KoShape *selectedShape;
+    QPointF *prevPos;
+    QSizeF prevSize;
+    double rotation;
 };
 
 #endif // _KO_TOOL_PROXY_H_

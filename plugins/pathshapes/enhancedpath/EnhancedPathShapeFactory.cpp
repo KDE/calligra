@@ -195,7 +195,7 @@ void EnhancedPathShapeFactory::addArrow()
         t.family = "arrow";
         t.toolTip = i18n("An arrow");
         t.iconName = koIconName("draw-arrow-forward");
-        t.properties = dataToProperties(modifiers, commands, handles, formulae);
+        t.properties = dataToProperties(modifiers, commands, handles, formulae);        
 
         addTemplate(t);
     }

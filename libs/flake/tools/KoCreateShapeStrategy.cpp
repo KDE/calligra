@@ -29,6 +29,9 @@
 #include "KoShapeFactoryBase.h"
 #include "KoShapeController.h"
 #include "KoViewConverter.h"
+#include "MctStaticData.h"
+#include "KoDocument.h"
+#include "KoProperties.h"
 
 #include <QPainter>
 
@@ -39,6 +42,7 @@ KoCreateShapeStrategy::KoCreateShapeStrategy(KoCreateShapesTool *tool, const QPo
 {
     KoCreateShapesTool *parent = static_cast<KoCreateShapesTool*>(d_ptr->tool);
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(parent->shapeId());
+    //KoDocument *kodoc = MctStaticData::instance()->getKoDocument();
     if (factory) {
         const KoProperties *props = parent->shapeProperties();
         KoShape *shape;
@@ -47,7 +51,15 @@ KoCreateShapeStrategy::KoCreateShapeStrategy(KoCreateShapesTool *tool, const QPo
         } else {
             shape = factory->createDefaultShape();
         }
+        shape->setFileUrl(parent->shapeId());
 
+        /*if (MctStaticData::instance()->getMctState()){
+            QString type = parent->shapeId();
+            if (props){
+                if (props->contains("type") && props->property("type").toString() != "") type += "_", type += props->property("type").toString();
+            }
+            emit kodoc->emitCreateShapeMctChange(type, clicked, *shape, ADDED, nullptr);
+        }*/
         m_outline = shape->outline();
         m_outlineBoundingRect = m_outline.boundingRect();
         delete shape;

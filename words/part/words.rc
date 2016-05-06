@@ -76,6 +76,7 @@
  </Menu>
 
  <Menu name="settings"><text>&amp;Settings</text>
+  <Action name="mctDialog"/>
   <Menu name="SpellCheck"><text>Spellcheck</text>
       <Action name="tool_auto_spellcheck"/>
       <Action name="tool_configure_spellcheck"/>

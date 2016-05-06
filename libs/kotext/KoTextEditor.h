@@ -34,6 +34,9 @@
 #include <QTextCursor>
 #include <QTextFrame>
 
+#include "mct/MctChangeTypes.h"
+#include "mct/MctChangeEntities.h"
+
 class KoListLevelProperties;
 class KoCharacterStyle;
 class KoInlineObject;
@@ -154,6 +157,7 @@ private:
      * will be added to the textEditor with addCommand. For examples of proper implementation of
      * such undoCommands, see the TextShape commands.
      */
+public:
     QTextCursor* cursor();
 
 public Q_SLOTS:
@@ -378,6 +382,11 @@ public Q_SLOTS:
     void deleteTableRow();
 
     /**
+     * Delete a table block at the current cursor position.
+     */
+    void deleteTable();
+
+    /**
      * Merge table cells (selected by the cursor).
      */
     void mergeTableCells();
@@ -494,11 +503,30 @@ public Q_SLOTS:
     const QTextList *currentList () const;
     const QTextTable *currentTable () const;
 
+    void shapeOperation(KoShape *shape, ChangeAction action);
+
 Q_SIGNALS:
     void cursorPositionChanged();
     void textFormatChanged();
     void characterStyleApplied(KoCharacterStyle *style);
     void paragraphStyleApplied(KoParagraphStyle *style);
+
+    void createMctChange(QTextCursor &selection, MctChangeTypes changeType, const KUndo2MagicString title, QTextFormat format, QTextFormat prevFormat);
+    void shapeOperationSignal(KoShape *shape, ChangeAction action);
+    void createShapeMctChange(QString type, QPointF pos);
+
+public:
+    void emitCreateMctChange(QTextCursor &selection, MctChangeTypes changeType, const KUndo2MagicString title, QTextFormat format, QTextFormat prevFormat) {
+        emit createMctChange(selection, changeType, title, format, prevFormat);
+    }
+
+    void emitCreateShapeMctChange(QString type, QPointF pos){
+        emit createShapeMctChange(type, pos);
+    }
+
+    void emitShapeOperationSignal(KoShape *shape, ChangeAction action){
+        emit shapeOperationSignal(shape, action);
+    }
 
 protected:
     void recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisitor &visitor) const;

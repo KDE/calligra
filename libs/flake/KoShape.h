@@ -1108,6 +1108,10 @@ public:
      */
     KoShapePrivate *priv();
 
+    void setFileUrl(QString url);
+
+    QString getFileUrl() const;
+
 protected:
     /// constructor
     KoShape(KoShapePrivate &);
@@ -1197,6 +1201,8 @@ protected:
     QTransform transform() const;
 
     KoShapePrivate *d_ptr;
+
+    QString fileUrl;
 
 private:
     Q_DECLARE_PRIVATE(KoShape)

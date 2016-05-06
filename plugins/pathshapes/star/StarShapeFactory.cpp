@@ -55,6 +55,7 @@ StarShapeFactory::StarShapeFactory()
     QVariant v;
     v.setValue(QColor(Qt::yellow));
     props->setProperty("background", v);
+    props->setProperty("type", "star");
     t.properties = props;
     addTemplate(t);
 
@@ -72,6 +73,7 @@ StarShapeFactory::StarShapeFactory()
     props->setProperty("tipRoundness", 40.0);
     v.setValue(QColor(Qt::magenta));
     props->setProperty("background", v);
+    props->setProperty("type", "flower");
     t.properties = props;
     addTemplate(t);
 
@@ -88,6 +90,7 @@ StarShapeFactory::StarShapeFactory()
     props->setProperty("tipRoundness", 0.0);
     v.setValue(QColor(Qt::blue));
     props->setProperty("background", v);
+    props->setProperty("type", "pentagon");
     t.properties = props;
     addTemplate(t);
 
@@ -104,6 +107,7 @@ StarShapeFactory::StarShapeFactory()
     props->setProperty("tipRoundness", 0.0);
     v.setValue(QColor(Qt::blue));
     props->setProperty("background", v);
+    props->setProperty("type", "hexagon");
     t.properties = props;
     addTemplate(t);
 }

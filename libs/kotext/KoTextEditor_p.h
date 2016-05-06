@@ -177,8 +177,11 @@ public:
             visitor.visit(block);
             QTextCursor cursor(block);
             QTextBlockFormat format = cursor.blockFormat();
-            if (registerChange)
+            if (registerChange) {
+                emit editor->emitCreateMctChange(cursor, MctChangeTypes::StyleChange, title, format, prevFormat);
+
                 editor->registerTrackedChange(cursor, KoGenChange::FormatChange, title, format, prevFormat, true);
+            }
             block = block.next();
         }
     }
@@ -247,8 +250,10 @@ public:
                 formats.append(format);
 
                 QTextCharFormat prevFormat(cursor.charFormat());
-                if (registerChange)
+                if (registerChange) {
+                    emit editor->createMctChange(cursor, MctChangeTypes::StyleChange, title, format, prevFormat);
                     editor->registerTrackedChange(cursor,KoGenChange::FormatChange,title, format, prevFormat, false); //this will lead to every fragment having a different change untill the change merging in registerTrackedChange checks also for formatChange or not?
+                }
 
                 ++iter;
             }

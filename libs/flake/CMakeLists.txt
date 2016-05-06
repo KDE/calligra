@@ -1,6 +1,6 @@
 project(flake)
 
-include_directories(${FLAKE_INCLUDES} ${QT_INCLUDES})
+include_directories(${FLAKE_INCLUDES} ${CMAKE_SOURCE_DIR}/libs/main ${CMAKE_SOURCE_DIR}/libs/kotext/mct ${QT_INCLUDES})
 
 if(KDE4_BUILD_TESTS)
     # only with this definition will the FLAKE_TEST_EXPORT macro do something

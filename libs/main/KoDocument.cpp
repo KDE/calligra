@@ -2381,6 +2381,20 @@ void KoDocument::setProfileReferenceTime(const QTime& referenceTime)
     d->profileReferenceTime = referenceTime;
 }
 
+KoShape* KoDocument::emitPosition(QPointF pos)
+{
+    KoShape *shape = nullptr;
+    emit sendPosition(pos, &shape);
+    return shape;
+}
+
+KoShape *KoDocument::emitCreateShapeFromXML(QDomElement change)
+{
+    KoShape *shape = nullptr;
+    emit createShapeFromXML(change, &shape);
+    return shape;
+}
+
 void KoDocument::clearUndoHistory()
 {
     d->undoStack->clear();

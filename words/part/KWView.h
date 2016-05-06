@@ -30,8 +30,13 @@
 #include <KoViewConverter.h>
 #include <KoZoomHandler.h>
 #include <KoFindMatch.h>
+#include <KoShape.h>
+#include <KoShapeAnchor.h>
 
 #include <QWidget>
+
+#include <mct/MctChangeTypes.h>
+#include <mct/MctChangeEntities.h>
 
 class KWDocument;
 class KWCanvas;
@@ -42,6 +47,7 @@ class KoPart;
 class KoCanvasBase;
 class KoZoomController;
 class KoFindText;
+class MctWidget;
 
 class QPushButton;
 #ifdef SHOULD_BUILD_RDF
@@ -86,7 +92,8 @@ public:
     /// reimplemented from superclass
     void addImages(const QList<QImage> &imageList, const QPoint &insertAt);
 
-    // interface KoView
+    void addImage(const QImage &imageList, const QPoint &insertAt, KoShapeAnchor::AnchorType anchorType, KoShapeAnchor::HorizontalPos hpos, KoShapeAnchor::VerticalPos vpos, KoShape::TextRunAroundSide wrap, QString fileUrl);
+	// interface KoView
     /// reimplemented method from superclass
     virtual void updateReadWrite(bool readWrite);
     /// reimplemented method from superclass
@@ -126,6 +133,7 @@ public:
 
 Q_SIGNALS:
     void shownPagesChanged();
+	void createMctChange(KoShape &selection, MctChangeTypes changeType, const KUndo2MagicString title, QString fileUrl, ChangeAction action);
 
 public Q_SLOTS:
     void offsetInDocumentMoved(int yOffset);
@@ -150,10 +158,16 @@ public Q_SLOTS:
     /// Call when "Exit Distraction-Free Mode" in staus bar clicked.
     void exitDistractioFreeMode();
 
+	void getPosition(QPointF pos, KoShape **shape);
+    void createShapeFromXML(QDomElement change, KoShape **shape);
+
 protected:
     /// reimplemented method from superclass
     virtual void showEvent(QShowEvent *event);
     virtual bool event(QEvent* event);
+
+public:
+    KoShape *getSelectedShape() {return selectedShape();}
 
 private:
     void setupActions();
@@ -218,6 +232,8 @@ private Q_SLOTS:
     /// Hide status bar and scroll bars after seconds in Distraction-Free mode.
     void hideUI();
 
+    void createMctDialog();
+
 private:
     KWGui *m_gui;
     KWCanvas *m_canvas;
@@ -243,6 +259,8 @@ private:
     KAction *m_actionViewHeader;
     KAction *m_actionViewFooter;
     KToggleAction *m_actionViewSnapToGrid;
+
+    MctWidget *mctWidget;
 
     bool m_snapToGrid;
     QString m_lastPageSettingsTab;

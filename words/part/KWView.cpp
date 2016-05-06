@@ -109,6 +109,7 @@
 #include <kmenubar.h>
 
 #include <limits>
+#include <mct/MctWidget.h>
 
 KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
         : KoView(part, document, parent)
@@ -192,6 +193,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     addStatusBarItem(m_dfmExitButton, 0);
     m_dfmExitButton->setVisible(false);
     connect(m_dfmExitButton, SIGNAL(clicked()), this, SLOT(exitDistractioFreeMode()));
+    mctWidget = nullptr;
 
 #ifdef SHOULD_BUILD_RDF
     if (KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
@@ -394,6 +396,12 @@ void KWView::setupActions()
 #endif
 
     // -------------- Settings menu
+    action = new KAction(i18n("MCT"), this);
+    action->setToolTip(i18n("Show MCT dialog"));
+    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
+    actionCollection()->addAction("mctDialog", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(createMctDialog()));
+
     action = new KAction(koIcon("configure"), i18n("Configure..."), this);
     actionCollection()->addAction("configure", action);
     connect(action, SIGNAL(triggered()), this, SLOT(configure()));
@@ -694,6 +702,22 @@ void KWView::hideUI()
         static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     }
+}
+
+void KWView::createMctDialog()
+{
+    qDebug() << "Creating Mct Dialog!";
+    KoMainWindow *mainwin = dynamic_cast<KoMainWindow*>(this->parent());
+    QString documentName = m_document->localFilePath();
+    if (!mctWidget){
+        mctWidget = new MctWidget(nullptr, m_document, documentName);
+        if (mainwin){
+            connect(mctWidget, SIGNAL(save()), mainwin, SLOT(saveDocument()));
+            connect(mctWidget, SIGNAL(saveAs(bool)), mainwin, SLOT(saveDocument(bool)));
+            connect(mainwin, SIGNAL(documentSaved()), mctWidget, SLOT(createRevisionOnSave()));
+        }
+    }
+    mctWidget->show();
 }
 
 void KWView::hideCursor(){
@@ -1120,6 +1144,106 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         selection->select(shape);
         m_canvas->addCommand(cmd);
     }
+}
+
+void KWView::addImage(const QImage &image, const QPoint &insertAt, KoShapeAnchor::AnchorType anchorType, KoShapeAnchor::HorizontalPos hpos, KoShapeAnchor::VerticalPos vpos, KoShape::TextRunAroundSide wrap, QString fileUrl)
+{
+    if (!m_canvas) {
+        // no canvas because we're not on the desktop?
+        return;
+    }
+    qDebug() << "addImages insertAt pos: " << insertAt;
+    QPointF pos = viewConverter()->viewToDocument(m_canvas->documentOffset() + insertAt + KWView::pos());
+    qDebug() << "addImages pos0: " << pos;
+    pos.setX(qMax(qreal(0), pos.x()));
+    pos.setY(qMax(qreal(0), pos.y()));
+    qDebug() << "addImages pos: " << pos;    
+
+    // create a factory
+    KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("PictureShape");
+
+    if (!factory) {
+        kWarning(30003) << "No picture shape found, cannot drop images.";
+        return;
+    }
+
+        KoProperties params;
+        params.setProperty("qimage", image);
+        params.setProperty("fileurl", fileUrl);
+
+        KoShape *shape = factory->createShape(&params, kwdocument()->resourceManager());
+
+        // resize the shape so it will fit in the document, with some nice
+        // hard-coded constants.
+        qreal pageWidth = currentPage().width();
+        qreal pageHeight = currentPage().height();
+
+        if (shape->size().width() > (pageWidth * 0.8) || shape->size().height() > pageHeight) {
+            QSizeF sz = shape->size();
+            sz.scale(QSizeF(pageWidth * 0.6, pageHeight *.6), Qt::KeepAspectRatio);
+            shape->setSize(sz);
+        }
+
+        if (!shape) {
+            kWarning(30003) << "Could not create a shape from the image";
+            return;
+        }
+        qDebug() << "shape size: " << shape->size();
+
+        shape->setTextRunAroundSide(wrap);
+
+        KoShapeAnchor *anchor = new KoShapeAnchor(shape);
+        anchor->setAnchorType(anchorType);
+        anchor->setHorizontalPos(hpos);
+        anchor->setVerticalPos(vpos);
+//        anchor->setHorizontalRel(KoShapeAnchor::HPage);
+//        anchor->setVerticalRel(KoShapeAnchor::VPage);
+        shape->setAnchor(anchor);
+        shape->setPosition(pos);
+
+        pos += QPointF(25,25); // increase the position for each shape we insert so the
+                               // user can see them all.
+
+        // create the undo step.
+        KWShapeCreateCommand *cmd = new KWShapeCreateCommand(kwdocument(), shape);
+        KoSelection *selection = m_canvas->shapeManager()->selection();
+        selection->deselectAll();
+        selection->select(shape);
+
+        emit createMctChange(*shape, MctChangeTypes::AddedTextGraphicObject, kundo2_i18n("Added Image"), fileUrl, ADDED);
+        m_canvas->addCommand(cmd);
+
+}
+
+void KWView::getPosition(QPointF pos, KoShape **shape){
+    KoShape *shape1 = m_canvas->shapeManager()->shapeAt(pos);
+    *shape = shape1;
+}
+
+void KWView::createShapeFromXML(QDomElement change, KoShape **shape){
+
+    QPointF pos(change.attribute("PositionX").toDouble(), change.attribute("PositionY").toDouble());
+    // create a factory
+    KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("PictureShape");
+
+    QString fileUrl = change.attribute("URL");
+    QImage img(fileUrl);
+    KoProperties params;
+    params.setProperty("qimage", img);
+    params.setProperty("fileurl", fileUrl);
+
+    KoShape *shape1 = factory->createShape(&params, kwdocument()->resourceManager());
+    QSizeF size(change.attribute("Width").toDouble(), change.attribute("Height").toDouble());
+    shape1->setSize(size);
+
+    KoShapeAnchor *anchor = new KoShapeAnchor(shape1);
+    anchor->setAnchorType(KoShapeAnchor::AnchorType(change.attribute("AnchorType").toInt()));
+    anchor->setHorizontalPos(KoShapeAnchor::HorizontalPos(change.attribute("VertOrientPosition").toInt()));
+    anchor->setVerticalPos(KoShapeAnchor::VerticalPos(change.attribute("HoriOrientPosition").toInt()));
+    shape1->setAnchor(anchor);
+    shape1->setPosition(pos);
+
+    *shape = shape1;
 }
 
 const qreal KWView::AnnotationAreaWidth = 200.0; // only static const integral data members can be initialized within a class

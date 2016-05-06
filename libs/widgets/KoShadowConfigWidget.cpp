@@ -31,11 +31,15 @@
 #include <KoShapeShadowCommand.h>
 #include <KoShapeManager.h>
 
+#include <MctStaticData.h>
+#include <MctChangeEntities.h>
+
 #include <klocale.h>
 
 #include <QCheckBox>
 
 #include <math.h>
+#include <KoDocument.h>
 
 class KoShadowConfigWidget::Private
 {
@@ -169,6 +173,14 @@ void KoShadowConfigWidget::applyChanges()
         newShadow->setColor(shadowColor());
         newShadow->setOffset(shadowOffset());
         newShadow->setBlur(shadowBlur());
+//FIXME
+        /*if (MctStaticData::instance()->getMctState()){
+            KoDocument* kodoc = MctStaticData::instance()->getKoDocument();
+            QPointF prevpos = selection->firstSelectedShape()->position();
+            double noRotation = 370;
+            kodoc->emitCreateShapeStyleChanged(shape->getFileUrl(), shape->position(), *shape, nullptr, newShadow, &prevpos, QSizeF(0,0), noRotation);
+        }*/
+
         d->canvas->addCommand(new KoShapeShadowCommand(selection->selectedShapes(KoFlake::TopLevelSelection), newShadow));
     }
 }

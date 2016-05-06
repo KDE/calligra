@@ -17,6 +17,17 @@ if(${CMAKE_VERSION} VERSION_GREATER 3.0.0)
     cmake_policy(SET CMP0046 OLD)
 endif()
 
+include(CheckCXXCompilerFlag)
+CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+if(COMPILER_SUPPORTS_CXX11)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+elseif(COMPILER_SUPPORTS_CXX0X)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+else()
+        message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+endif()
+
 
 
  ######################
@@ -27,10 +38,10 @@ endif()
 
 # define common versions of Calligra applications, used to generate calligraversion.h
 # update these version for every release:
-set(CALLIGRA_VERSION_STRING "2.9.11")
+set(CALLIGRA_VERSION_STRING "2.9.10")
 set(CALLIGRA_VERSION_MAJOR 2)
 set(CALLIGRA_STABLE_VERSION_MINOR 9)
-set(CALLIGRA_VERSION_RELEASE 11)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+set(CALLIGRA_VERSION_RELEASE 10)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
 #set(CALLIGRA_ALPHA 1) # uncomment only for Alpha
 #set(CALLIGRA_BETA 1) # uncomment only for Beta
 #set(CALLIGRA_RC 1) # uncomment only for RC
@@ -706,6 +717,17 @@ set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
                    ${CMAKE_SOURCE_DIR}/libs/flake/svg
                    ${CMAKE_BINARY_DIR}/libs/flake)
 
+# KoText depends on koplugin, odf
+set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
+                   ${CMAKE_BINARY_DIR}/libs/kotext
+                   ${CMAKE_SOURCE_DIR}/libs/kotext/mct
+                   ${CMAKE_SOURCE_DIR}/libs/kotext/changetracker
+                   ${CMAKE_SOURCE_DIR}/libs/kotext/styles
+                   ${CMAKE_SOURCE_DIR}/libs/kotext/opendocument
+                   ${SOPRANO_INCLUDE_DIR}
+                   ${FLAKE_INCLUDES}
+                   ${KOODF_INCLUDES})
+
 # vectorimage
 set(VECTORIMAGE_INCLUDES
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage
@@ -713,15 +735,6 @@ set(VECTORIMAGE_INCLUDES
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage/libsvm
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage/libwmf)
 
-# KoText depends on koplugin, odf
-set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
-                   ${CMAKE_BINARY_DIR}/libs/kotext
-                   ${CMAKE_SOURCE_DIR}/libs/kotext/changetracker
-                   ${CMAKE_SOURCE_DIR}/libs/kotext/styles
-                   ${CMAKE_SOURCE_DIR}/libs/kotext/opendocument
-                   ${SOPRANO_INCLUDE_DIR}
-                   ${FLAKE_INCLUDES}
-                   ${KOODF_INCLUDES})
 
 # TextLayout depends on kotext
 set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}

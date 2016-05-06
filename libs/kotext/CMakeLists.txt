@@ -121,6 +121,29 @@ set(kotext_LIB_SRCS
     commands/RenameSectionCommand.cpp
     commands/NewSectionCommand.cpp
 
+    mct/MctAbstractGraph.cpp
+    mct/MctAuthor.cpp
+    mct/MctCell.cpp
+    mct/MctChange.cpp
+    mct/MctChangeEntities.cpp
+    mct/MctChangeset.cpp
+    mct/MctDoBase.cpp
+    mct/MctEmbObjProperties.cpp
+    mct/MctNode.cpp
+    mct/MctPosition.cpp
+    mct/MctPropertyBase.cpp
+    mct/MctRedoClass.cpp
+    mct/MctRedoGraph.cpp
+    mct/MctRedoGraphXMLfilter.cpp
+    mct/MctRedoTags.cpp
+    mct/MctStaticData.cpp
+    mct/MctTableProperties.cpp
+    mct/MctUndoClass.cpp
+    mct/MctUndoGraph.cpp
+    mct/MctUndoGraphXMLfilter.cpp
+    mct/MctUndoTags.cpp
+    mct/ExtractFile.cpp
+
     KoTextDrag.cpp
     KoTextCommandBase.cpp
 )
@@ -131,7 +154,7 @@ if( SHOULD_BUILD_FEATURE_RDF )
     )
 endif()
 
-kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
+kde4_add_library(kotext STATIC ${kotext_LIB_SRCS})
 
 target_link_libraries(kotext flake)
 if( SHOULD_BUILD_FEATURE_RDF )
@@ -150,6 +173,7 @@ endif()
 
 set_target_properties(kotext PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+   COMPILE_FLAGS  "-fPIC"
 )
 install(TARGETS kotext  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
@@ -227,4 +251,33 @@ install(
     changetracker/KoDeletedCellData.cpp
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra/changetracker COMPONENT Devel
+)
+
+install(
+    FILES
+    mct/MctAbstractGraph.h
+    mct/MctAuthor.h
+    mct/MctCell.h
+    mct/MctChange.h
+    mct/MctChangeEntities.h
+    mct/MctChangeset.h
+    mct/MctChangeTypes.h
+    mct/MctDoBase.h
+    mct/MctEmbObjProperties.h
+    mct/MctNode.h
+    mct/MctPosition.h
+    mct/MctPropertyBase.h
+    mct/MctRedoClass.h
+    mct/MctRedoGraph.h
+    mct/MctRedoGraphXMLfilter.h
+    mct/MctRedoTags.h
+    mct/MctStaticData.h
+    mct/MctTableProperties.h
+    mct/MctUndoClass.h
+    mct/MctUndoGraph.h
+    mct/MctUndoGraphXMLfilter.h
+    mct/MctUndoTags.h
+    mct/ExtractFile.h
+    DESTINATION
+    ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
 )

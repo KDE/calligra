@@ -2321,3 +2321,13 @@ KoShapePrivate *KoShape::priv()
     Q_D(KoShape);
     return d;
 }
+
+void KoShape::setFileUrl(QString url)
+{
+    fileUrl = url;
+}
+
+QString KoShape::getFileUrl() const
+{
+    return fileUrl;
+}
