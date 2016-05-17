@@ -490,7 +490,12 @@ void ReportWidget::slotRefreshView()
     //QT5TODO: see how to make this depend on scripting availability
 //     m_preRenderer->registerScriptObject(new ProjectAccess( rd ), "project");
 
-    m_reportDocument = m_preRenderer->generate();
+    if (! m_preRenderer->generateDocument()) {
+        debugPlan << "Could not generate report document";
+        return;
+    }
+
+    m_reportDocument = m_preRenderer->document();
     m_pageSelector->setMaximum( m_reportDocument ? m_reportDocument->pages() : 1 );
     m_pageSelector->setCurrentPage( 1 );
 
