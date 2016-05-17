@@ -156,6 +156,10 @@ calligra_set_productset(${PRODUCTSET})
 find_package(ECM 1.7.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
+# ECM KDE macros (include first, to have their policies and settings effect all other macros)
+include(KDEInstallDirs)
+include(KDECMakeSettings NO_POLICY_SCOPE)
+include(KDECompilerSettings NO_POLICY_SCOPE)
 # CMake macros
 include(CMakePackageConfigHelpers)
 include(WriteBasicConfigVersionFile)
@@ -173,10 +177,6 @@ include(ECMAddTests)
 include(ECMMarkAsTest)
 include(ECMMarkNonGuiExecutable)
 include(ECMGenerateHeaders)
-# ECM KDE macros
-include(KDEInstallDirs)
-include(KDECMakeSettings)
-include(KDECompilerSettings)
 # own macros
 include(MacroBoolTo01)
 include(MacroOptionalFindPackage)
