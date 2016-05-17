@@ -23,7 +23,7 @@ if (POLICY CMP0059)
     cmake_policy(SET CMP0059 OLD)
 endif()
 if (POLICY CMP0063)
-    cmake_policy(SET CMP0063 OLD)
+    cmake_policy(SET CMP0063 NEW)
 endif()
 
 # ensure out-of-source build
