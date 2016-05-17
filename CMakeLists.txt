@@ -1,8 +1,8 @@
+cmake_minimum_required(VERSION 2.8.12)
+
 project(calligra)
 
 message(STATUS "Using CMake version: ${CMAKE_VERSION}")
-
-cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
 if (POLICY CMP0002)
     cmake_policy(SET CMP0002 OLD)
