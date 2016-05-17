@@ -4,7 +4,10 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-unused-variable)
 endif ()
 
-include_directories(${KOODF_INCLUDES})
+include_directories(
+    ${KOODF_INCLUDES}
+    ${ZLIB_INCLUDE_DIR}
+)
 
 kde_enable_exceptions()
 
@@ -33,4 +36,5 @@ target_link_libraries(mso
         koodf
     PRIVATE
         Qt5::Gui
+        ${ZLIB_LIBRARIES}
 )

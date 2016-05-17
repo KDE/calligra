@@ -1,7 +1,6 @@
 add_subdirectory( tests )
 
 include_directories(
-    ${ZLIB_INCLUDE_DIR}
     ../../libmso
     ${KOMAIN_INCLUDES}
     ${KOTEXT_INCLUDES}
@@ -14,7 +13,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS} -fPIC")
 endif()
 
 add_library(ppttoodplib STATIC PptDebug.cpp PptToOdp.cpp ParsedPresentation.cpp DateTimeFormat.cpp pptstyle.cpp)
-target_link_libraries(ppttoodplib koodf mso ${ZLIB_LIBRARIES})
+target_link_libraries(ppttoodplib PUBLIC koodf mso)
 
 add_executable(ppttoodp ppttoodpmain.cpp)
 target_link_libraries(ppttoodp ppttoodplib)

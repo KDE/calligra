@@ -1,5 +1,4 @@
 include_directories(
-    ${ZLIB_INCLUDE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder
     ${CMAKE_BINARY_DIR}/filters/
     ${KOMAIN_INCLUDES}
@@ -51,7 +50,7 @@ target_link_libraries(calligra_filter_sheets2xls
                       calligrasheetscommon
                       komsooxml mso
                       komain koodf
-                      ${ZLIB_LIBRARIES})
+)
 
 set(INSTALL_XLS_EXPORT_FILTER OFF CACHE BOOL "Install the very experimental xls export filter, which might eat your data and provides no guarentees")
 

@@ -1,5 +1,4 @@
 include_directories(
-    ${ZLIB_INCLUDE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder
     ${CMAKE_BINARY_DIR}/filters/
     ${KOMAIN_INCLUDES}
@@ -47,7 +46,7 @@ set(excelimport_PART_SRCS excelimporttoods.cc ImportUtils.cpp ODrawClient.cpp ${
 add_library(excelimport MODULE ${excelimport_PART_SRCS})
 
 
-target_link_libraries(excelimport calligrasheetsodf komsooxml komain mso koodf ${ZLIB_LIBRARIES})
+target_link_libraries(excelimport calligrasheetsodf komsooxml komain mso koodf)
 
 #install(TARGETS excelimport  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
@@ -58,7 +57,7 @@ target_link_libraries(calligra_filter_xls2ods
                       calligrasheetsodf
                       komsooxml mso
                       komain koodf
-                      ${ZLIB_LIBRARIES})
+)
 
 install(TARGETS calligra_filter_xls2ods DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 

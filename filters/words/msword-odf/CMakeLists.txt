@@ -1,7 +1,7 @@
 add_subdirectory(wv2)
 
 include_directories(
-    ${ICONV_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR}
+    ${ICONV_INCLUDE_DIR}
     ../../libmso
 )
 
@@ -22,7 +22,7 @@ kde_enable_exceptions()
 add_library(calligra_filter_doc2odt MODULE ${doc2odt_PART_SRCS})
 kcoreaddons_desktop_to_json(calligra_filter_doc2odt calligra_filter_doc2odt.desktop)
 
-target_link_libraries(calligra_filter_doc2odt kowv2 komain mso ${ZLIB_LIBRARIES})
+target_link_libraries(calligra_filter_doc2odt kowv2 komain mso)
 
 install(TARGETS calligra_filter_doc2odt  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
