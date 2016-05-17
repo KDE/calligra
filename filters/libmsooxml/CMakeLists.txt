@@ -41,9 +41,16 @@ set(msooxml_LIB_SRCS
 add_library(komsooxml SHARED ${msooxml_LIB_SRCS})
 generate_export_header(komsooxml BASE_NAME komsooxml)
 
-target_link_libraries(komsooxml mso koodf2 koodf komain KF5::Archive)
+target_link_libraries(komsooxml
+    PUBLIC
+        mso
+        koodf2
+        komain
+    PRIVATE
+        KF5::Archive
+    )
 if(Qca-qt5_FOUND)
-   target_link_libraries(komsooxml qca-qt5)
+   target_link_libraries(komsooxml PRIVATE qca-qt5)
 endif()
 
 set_target_properties(komsooxml PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
