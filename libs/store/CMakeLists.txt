@@ -1,4 +1,3 @@
-include_directories({KOVERSION_INCLUDES})
 add_subdirectory(tests)
 
 ########### libkostore ###############
