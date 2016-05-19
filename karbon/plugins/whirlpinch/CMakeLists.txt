@@ -1,5 +1,5 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core   )
+include_directories( ${CMAKE_SOURCE_DIR}/karbon )
 
 ########### next target ###############
 

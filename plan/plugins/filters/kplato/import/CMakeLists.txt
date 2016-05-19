@@ -1,6 +1,5 @@
 
 include_directories(
-    ${CMAKE_BINARY_DIR}/plan/plugins/filters/plan/import
     ${CMAKE_SOURCE_DIR}/plan
     ${CMAKE_SOURCE_DIR}/plan/libs/kernel
     ${KOMAIN_INCLUDES}
