@@ -31,7 +31,7 @@ MctTable::MctTable(QString cellName, QString tableName, MctCell *cellInfo)
     : MctNode()
 {
     if (cellInfo)
-        MctCell(cellInfo->getCellName(), cellInfo->getTableName());
+        MctCell(cellInfo->cellName(), cellInfo->tableName());
     else
         MctCell(cellName, tableName);
 }

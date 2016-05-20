@@ -25,8 +25,8 @@
 class MctCell : public MctPropertyBase
 {
 public:
-    MctCell(QString cellName, QString tableName, int row = -1, int col = -1);
-    MctCell(int row, int col, QString tableName = "noname");
+    MctCell(QString m_cellName, QString m_tableName, int m_row = -1, int m_col = -1);
+    MctCell(int m_row, int m_col, QString m_tableName = "noname");
     MctCell(const MctCell &cell);
     MctCell();
     ~MctCell();
@@ -35,27 +35,27 @@ public:
     void convertCellPos2CellName();
     void convertCellName2CellPos();
 
-    QString getCellName() const;
+    QString cellName() const;
     void setCellName(QString cell);
 
-    QString getTableName() const;
+    QString tableName() const;
     void setTableName(QString name);
 
-    int getRow() const;
+    int row() const;
     void setRow(int r);
 
-    int getCol() const;
+    int col() const;
     void setCol(int c);
 
     const static QString COLS;
     
 protected:
-    QString cellName;       // The name of the cell
-    QString tableName;      // The name of the anchor table
+    QString m_cellName;       // The name of the cell
+    QString m_tableName;      // The name of the anchor table
 
 private:
-    int col;                // The column number of the cell
-    int row;                // The row number of the cell
+    int m_col;                // The column number of the cell
+    int m_row;                // The row number of the cell
 };
 
 #endif // MCTCELL_H

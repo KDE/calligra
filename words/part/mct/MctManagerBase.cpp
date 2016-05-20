@@ -51,8 +51,8 @@ void MctManagerBase::loadRevisionTrees(QTreeWidget *undoTreeWidget, QTreeWidget 
     redoTreeWidget->clear();
 
     if (!undoMap && !redoMap) {
-        undoMap = MctStaticData::instance()->getUndoGraph()->getChangesetNodes();
-        redoMap = MctStaticData::instance()->getRedoGraph()->getChangesetNodes();
+        undoMap = MctStaticData::instance()->getUndoGraph()->changesetNodes();
+        redoMap = MctStaticData::instance()->getRedoGraph()->changesetNodes();
     }
 
     undoTreeWidget->setColumnCount(2);
@@ -276,7 +276,7 @@ void MctManagerBase::checkParents(MctChangeset *changesetNode, QList<ulong> *par
 
     qDebug() << "processing other parents";
 
-    if (graphToMerge->getRedoOrUndo() == "undo"){
+    if (graphToMerge->redoOrUndo() == "undo"){
         this->filterChangesetNodes(parents, MctStaticData::instance()->getUndoGraph(), graphToMerge);
     } else {
         this->filterChangesetNodes(parents, MctStaticData::instance()->getRedoGraph(), graphToMerge);
@@ -319,7 +319,7 @@ QString MctManagerBase::createNodeString(MctChangeset *changesetNode)
 
 QList<QDomNode> MctManagerBase::getTreeNodes(QList<QString> displayValues, MctUndoGraphXMLfilter *treeModel)
 {
-    QDomElement rootNode = treeModel->getRoot();
+    QDomElement rootNode = treeModel->root();
     QList<QDomNode> treeNodes;
 
     int revisionsNum = rootNode.childNodes().count();

@@ -21,9 +21,9 @@
 
 MctAuthor::MctAuthor(QString userName, QString forename , QString surname )
 {
-    this->userName = userName;
-    this->forename = forename;
-    this->surname = surname;
+    this->m_userName = userName;
+    this->m_forename = forename;
+    this->m_surname = surname;
 }
 
 MctAuthor::~MctAuthor()
@@ -33,30 +33,30 @@ MctAuthor::~MctAuthor()
 
 void MctAuthor::setName(QString name)
 {
-    this->userName = name;
+    this->m_userName = name;
 }
 
 void MctAuthor::setForename(QString name)
 {
-    this->forename = name;
+    this->m_forename = name;
 }
 
 void MctAuthor::setSurname(QString name)
 {
-    this->surname = name;
+    this->m_surname = name;
 }
 
-QString MctAuthor::getName() const
+QString MctAuthor::name() const
 {
-    return userName;
+    return m_userName;
 }
 
-QString MctAuthor::getForename() const
+QString MctAuthor::forename() const
 {
-    return forename;
+    return m_forename;
 }
 
-QString MctAuthor::getSurname() const
+QString MctAuthor::surname() const
 {
-    return surname;
+    return m_surname;
 }

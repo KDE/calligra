@@ -258,7 +258,7 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
              tmpcursor.movePosition(QTextCursor::NextCharacter);
              table = tmpcursor.currentTable();
          }
-         QTextTableCell cell = table->cellAt(tmp->getCellInfo()->getRow(), tmp->getCellInfo()->getCol());
+         QTextTableCell cell = table->cellAt(tmp->getCellInfo()->row(), tmp->getCellInfo()->col());
          tmpcursor = cell.firstCursorPosition();
          tmp = tmp->getAnchoredPos();
          // if a nested table comes, jump +1 extra block ahead

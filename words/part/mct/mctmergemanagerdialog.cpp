@@ -119,18 +119,18 @@ void MctMergeManagerDialog::loadGraph()
     ui->treeRedoOpened->clear();
 
     undoGraphOpened = new MctUndoGraph(ui->filePathText->text(), doc2merge);
-    if(undoGraphOpened->getChangesetNodes()->size() > 0)
-        addRevision2Tree(ui->treeUndoOpened, undoGraphOpened->getChangesetNodes()->begin(), 0);
+    if(undoGraphOpened->changesetNodes()->size() > 0)
+        addRevision2Tree(ui->treeUndoOpened, undoGraphOpened->changesetNodes()->begin(), 0);
 
     redoGraphOpened = new MctRedoGraph(ui->filePathText->text(), doc2merge);
-    if(redoGraphOpened->getChangesetNodes()->size() > 0)
-        addRevision2Tree(ui->treeRedoOpened, redoGraphOpened->getChangesetNodes()->begin(), 0);
+    if(redoGraphOpened->changesetNodes()->size() > 0)
+        addRevision2Tree(ui->treeRedoOpened, redoGraphOpened->changesetNodes()->begin(), 0);
 
-    QString undoOpenedCheckNum = undoGraphOpened->getRoot().attributeNode(MctStaticData::STARTINGSTRING).value();
-    QString redoOpenedCheckNum = redoGraphOpened->getRoot().attributeNode(MctStaticData::STARTINGSTRING).value();
+    QString undoOpenedCheckNum = undoGraphOpened->root().attributeNode(MctStaticData::STARTINGSTRING).value();
+    QString redoOpenedCheckNum = redoGraphOpened->root().attributeNode(MctStaticData::STARTINGSTRING).value();
 
-    QString undoCurrentCheckNum = MctStaticData::instance()->getUndoGraph()->getRoot().attributeNode(MctStaticData::STARTINGSTRING).value();
-    QString redoCurrentCheckNum = MctStaticData::instance()->getRedoGraph()->getRoot().attributeNode(MctStaticData::STARTINGSTRING).value();
+    QString undoCurrentCheckNum = MctStaticData::instance()->getUndoGraph()->root().attributeNode(MctStaticData::STARTINGSTRING).value();
+    QString redoCurrentCheckNum = MctStaticData::instance()->getRedoGraph()->root().attributeNode(MctStaticData::STARTINGSTRING).value();
 
     if ((undoCurrentCheckNum != undoOpenedCheckNum) || (redoOpenedCheckNum != redoCurrentCheckNum)){
         QMessageBox::StandardButton reply;
@@ -142,7 +142,7 @@ void MctMergeManagerDialog::loadGraph()
             return;
         }
     }
-    loadRevisionTrees(ui->treeUndoOpened, ui->treeRedoOpened, undoGraphOpened->getChangesetNodes(), redoGraphOpened->getChangesetNodes());
+    loadRevisionTrees(ui->treeUndoOpened, ui->treeRedoOpened, undoGraphOpened->changesetNodes(), redoGraphOpened->changesetNodes());
     //ui->mergeRevButton->setEnabled(true);
 }
 
@@ -194,8 +194,8 @@ void MctMergeManagerDialog::mergingGraphs(ChangeType type, QTreeWidget *undoTree
         if (graph2merge == nullptr){
             qDebug() << "graph2merge is None when attempting to merge!";
         } else {
-            QVector<QDateTime>* excludeDates = graph2merge->getDates();
-            QVector<QDateTime>* dates2CorrectWith = MctStaticData::instance()->getUndoGraph()->getDates(excludeDates);
+            QVector<QDateTime>* excludeDates = graph2merge->dates();
+            QVector<QDateTime>* dates2CorrectWith = MctStaticData::instance()->getUndoGraph()->dates(excludeDates);
             QList<QDateTime> dates2CorrectWithList = dates2CorrectWith->toList();
             QList<MctChangeset*>* changesetNodes2CorrectWith = MctStaticData::instance()->getUndoGraph()->getChangesetListByDates(&dates2CorrectWithList);
             qDebug() << "Changesets to use to correct redo changesets:";
@@ -243,8 +243,8 @@ void MctMergeManagerDialog::mergingGraphs(ChangeType type, QTreeWidget *undoTree
 
             graph->correctChangesetNodeListWithDate(changesetNode, MctAbstractGraph::DATE_LATER, true);
         } else {
-            QVector<QDateTime>* excludeDates = graph2merge->getDates();
-            QVector<QDateTime>* dates2CorrectWith = MctStaticData::instance()->getUndoGraph()->getDates(excludeDates);
+            QVector<QDateTime>* excludeDates = graph2merge->dates();
+            QVector<QDateTime>* dates2CorrectWith = MctStaticData::instance()->getUndoGraph()->dates(excludeDates);
             QList<QDateTime> dates2CorrectWithList = dates2CorrectWith->toList();
             QList<MctChangeset*>* changesetNodes2CorrectWith = MctStaticData::instance()->getUndoGraph()->getChangesetListByDates(&dates2CorrectWithList);
             //TODO changesetNodes2correctWith value?

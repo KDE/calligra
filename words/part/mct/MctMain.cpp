@@ -319,7 +319,7 @@ void MctMain::createMctChange(QTextCursor &selection, MctChangeTypes changeType,
             outerTableCursor.setPosition(blockpos - 1);
             pos = createPositionInTable(outerTableCursor);
             pos->getCellInfo()->convertCellPos2CellName();
-            changeEntity = new MctRemovedTextTableInTable("removed-table-in-table", new MctTableProperties("", table->rows(), table->columns()), pos->getCellInfo()->getCellName(), "", pos->getCellInfo());
+            changeEntity = new MctRemovedTextTableInTable("removed-table-in-table", new MctTableProperties("", table->rows(), table->columns()), pos->getCellInfo()->cellName(), "", pos->getCellInfo());
             p1--; /// !!! KoTextEditor's table: {hidden block}[table] but Mct's table is a logical table, thus contains the hidden (technical) block right before the table.
         } else {
             qFatal("No table at cursor!");
@@ -336,7 +336,7 @@ void MctMain::createMctChange(QTextCursor &selection, MctChangeTypes changeType,
             outerTableCursor.setPosition(blockpos-1);
             pos = createPositionInTable(outerTableCursor);
             pos->getCellInfo()->convertCellPos2CellName();
-            changeEntity = new MctAddedTextTableInTable("added-table-in-table", new MctTableProperties("", table->rows(), table->columns()), pos->getCellInfo()->getCellName(), "", pos->getCellInfo());
+            changeEntity = new MctAddedTextTableInTable("added-table-in-table", new MctTableProperties("", table->rows(), table->columns()), pos->getCellInfo()->cellName(), "", pos->getCellInfo());
             p1--; /// !!! KoTextEditor's table: {hidden block}[table] but Mct's table is a logical table, thus contains the hidden (technical) block right before the table.
         } else {
             qFatal("No table at cursor!");
@@ -917,8 +917,8 @@ void MctMain::setAnchorPosition(MctPosition *anchor, MctPosition *InnerAnchor, M
 bool MctMain::posCheckInTable(MctPosition *lastpos, MctPosition *pos, MctChangeTypes changeType)
 {
     if (changeType == MctChangeTypes::AddedStringInTable) {
-        if (lastpos->getCellInfo()->getCol() == pos->getCellInfo()->getCol()
-           && lastpos->getCellInfo()->getRow() == pos->getCellInfo()->getRow()
+        if (lastpos->getCellInfo()->col() == pos->getCellInfo()->col()
+           && lastpos->getCellInfo()->row() == pos->getCellInfo()->row()
            && lastpos->getAnchoredPos()->getEndChar() == pos->getAnchoredPos()->getStartChar()
            && lastpos->getAnchoredPos()->getEndPar() == pos->getAnchoredPos()->getStartPar()) {
             bool isPosRight = true;
@@ -932,8 +932,8 @@ bool MctMain::posCheckInTable(MctPosition *lastpos, MctPosition *pos, MctChangeT
             return isPosRight;
         }
     } else if (changeType == MctChangeTypes::RemovedStringInTable) {
-        if (lastpos->getCellInfo()->getCol() == pos->getCellInfo()->getCol()
-           && lastpos->getCellInfo()->getRow() == pos->getCellInfo()->getRow()
+        if (lastpos->getCellInfo()->col() == pos->getCellInfo()->col()
+           && lastpos->getCellInfo()->row() == pos->getCellInfo()->row()
            && lastpos->getAnchoredPos()->getStartChar() == pos->getAnchoredPos()->getEndChar()
            && lastpos->getAnchoredPos()->getStartPar() == pos->getAnchoredPos()->getEndPar()) {
             bool isPosRight = true;

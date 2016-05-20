@@ -42,41 +42,40 @@ class KoTextDocument;
 class MctAbstractGraph
 {
 public:
-    MctAbstractGraph(QString redoOrUndo, QString odt, KoTextDocument *koTextDoc);
+    MctAbstractGraph(QString m_redoOrUndo, QString odt, KoTextDocument *m_koTextDoc);
     virtual ~MctAbstractGraph();
 
-    // Getter-Setterek
-    QList<MctChange*> * getChangeNodes() const;
+    QList<MctChange*> *changeNodes() const;
     void setChangeNodes(QList<MctChange*> *changeNodes);
 
-    QMap<QDateTime, MctChangeset*> * getChangesetNodes() const;
-    void setChangesetNodes(QMap<QDateTime, MctChangeset*> *changesetNodes);
+    QMap<QDateTime, MctChangeset*> *changesetNodes() const;
+    void setChangesetNodes(QMap<QDateTime, MctChangeset*> *setChangesetNodes);
 
-    QVector<QDateTime> * getDates(QVector<QDateTime> *excludeDates = NULL) const;
-    void setDates(QVector<QDateTime> *dates);
+    QVector<QDateTime> * dates(QVector<QDateTime> *excludeDates = NULL) const;
+    void setDates(QVector<QDateTime> *m_dates);
 
-    QMap<ulong, QDateTime> * getIdDates() const;
-    void setIdDates(QMap<ulong, QDateTime> *idDates);
+    QMap<ulong, QDateTime> * idDates() const;
+    void setIdDates(QMap<ulong, QDateTime> *m_idDates);
 
-    QString getRedoOrUndo() const;
+    QString redoOrUndo() const;
     void setRedoOrUndo(QString string);
 
-    QString getOdtFile() const;
+    QString odtFile() const;
     void setOdtFile(QString name);
 
-    QString getFilename() const;
+    QString filename() const;
     void setFilename(QString name);
 
-    QString getNodeTag() const;
+    QString nodeTag() const;
     void setNodeTag(QString name);
 
-    QDomElement getRoot() const;
-    void setRoot(QDomElement root);
+    QDomElement root() const;
+    void setRoot(QDomElement m_root);
 
-    QDomDocument * getDoc() const;
-    void setDoc(QDomDocument *doc);
+    QDomDocument * doc() const;
+    void setDoc(QDomDocument *m_doc);
 
-    KoTextDocument * getKoTextDoc();
+    KoTextDocument * koTextDoc();
 
 
     MctChangeset * getChangeset(QDateTime date);
@@ -155,18 +154,18 @@ public:
 protected:
     ulong _id;  //static id number which is given to the next node
 
-    QList<MctChange*> *changeNodes;
-    QMap<QDateTime, MctChangeset*> *changesetNodes;
-    QVector<QDateTime> *dates;
-    QMap<ulong, QDateTime> *idDates;
-    QString redoOrUndo;
-    QString odtFile;        //odt file name
-    QString fileName;       //filename containing the XML graph
-    QString nodeTag;        //Node tag (undo or redo graph)
+    QList<MctChange*> *m_changeNodes;
+    QMap<QDateTime, MctChangeset*> *m_changesetNodes;
+    QVector<QDateTime> *m_dates;
+    QMap<ulong, QDateTime> *m_idDates;
+    QString m_redoOrUndo;
+    QString m_odtFile;        //odt file name
+    QString m_fileName;       //filename containing the XML graph
+    QString m_nodeTag;        //Node tag (undo or redo graph)
 
-    QDomElement root;
-    QDomDocument *doc;    
-    KoTextDocument *koTextDoc;
+    QDomElement m_root;
+    QDomDocument *m_doc;
+    KoTextDocument *m_koTextDoc;
 };
 
 #endif // MCTABSTRACTGRAPH_H

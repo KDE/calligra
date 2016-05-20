@@ -45,7 +45,7 @@ using PropertyMap = QMap<int, QPair<QString, ChangeAction>>;
 class MctTable : public virtual MctNode , public MctCell
 {
 public:
-    MctTable(QString cellName = "", QString tableName = "", MctCell *cellInfo = NULL);
+    MctTable(QString m_cellName = "", QString m_tableName = "", MctCell *cellInfo = NULL);
     ~MctTable();
 };
 
@@ -59,7 +59,7 @@ public:
 class MctParagraphBreakInTable : public MctParagraphBreak , public MctTable
 {
 public:
-    MctParagraphBreakInTable(QString cellName = "", QString tableName = "", MctCell *cellInfo = NULL);
+    MctParagraphBreakInTable(QString m_cellName = "", QString m_tableName = "", MctCell *cellInfo = NULL);
     ~MctParagraphBreakInTable();
 };
 
@@ -73,7 +73,7 @@ public:
 class MctDelParagraphBreakInTable : public MctDelParagraphBreak , public MctTable
 {
 public:
-    MctDelParagraphBreakInTable(QString cellName = "", QString tableName = "", MctCell *cellInfo = NULL);
+    MctDelParagraphBreakInTable(QString m_cellName = "", QString m_tableName = "", MctCell *cellInfo = NULL);
     ~MctDelParagraphBreakInTable();
 };
 
@@ -91,7 +91,7 @@ private:
 class MctStringChangeInTable : public MctStringChange , public MctTable
 {
 public:
-    MctStringChangeInTable(QString string = "", QString cellName = "", QString tableName = "", MctCell *cellInfo = NULL);
+    MctStringChangeInTable(QString string = "", QString m_cellName = "", QString m_tableName = "", MctCell *cellInfo = NULL);
     ~MctStringChangeInTable();
 };
 
@@ -198,14 +198,14 @@ public:
 class MctAddedTextGraphicObjectInTable : public MctAddedTextGraphicObject , public MctTable
 {
 public:
-    MctAddedTextGraphicObjectInTable(QString name, MctEmbObjProperties* embObjProps = NULL, QString cellName = "", QString tableName = "", MctCell *cellInfo = NULL);
+    MctAddedTextGraphicObjectInTable(QString name, MctEmbObjProperties* embObjProps = NULL, QString m_cellName = "", QString m_tableName = "", MctCell *cellInfo = NULL);
     ~MctAddedTextGraphicObjectInTable();
 };
 
 class MctRemovedTextGraphicObjectInTable : public MctRemovedTextGraphicObject , public MctTable
 {
 public:
-    MctRemovedTextGraphicObjectInTable(QString name, MctEmbObjProperties* embObjProps = NULL, QString cellName = "", QString tableName = "", MctCell *cellInfo = NULL);
+    MctRemovedTextGraphicObjectInTable(QString name, MctEmbObjProperties* embObjProps = NULL, QString m_cellName = "", QString m_tableName = "", MctCell *cellInfo = NULL);
     ~MctRemovedTextGraphicObjectInTable();
 };
 
@@ -254,7 +254,7 @@ public:
 class MctAddedTextTableInTable : public MctAddedTextTable , public MctTable
 {
 public:
-    MctAddedTextTableInTable(QString name, MctTableProperties* tableProps = NULL, QString cellName = "", QString tableName = "", MctCell *cellInfo = NULL);
+    MctAddedTextTableInTable(QString name, MctTableProperties* tableProps = NULL, QString m_cellName = "", QString m_tableName = "", MctCell *cellInfo = NULL);
     //MctAddedTextTableInTable(int row, int col, QTextTableFormat format, MctCell *cellInfo = NULL);
     ~MctAddedTextTableInTable();
 };
@@ -262,14 +262,14 @@ public:
 class MctRemovedTextTableInTable : public MctRemovedTextTable , public MctTable
 {
 public:
-    MctRemovedTextTableInTable(QString name, MctTableProperties* tableProps = NULL, QString cellName = "", QString tableName = "", MctCell *cellInfo = NULL);
+    MctRemovedTextTableInTable(QString name, MctTableProperties* tableProps = NULL, QString m_cellName = "", QString m_tableName = "", MctCell *cellInfo = NULL);
     ~MctRemovedTextTableInTable();
 };
 
 class MctStylePropertyChangeInTable : public MctStylePropertyChange , public MctTable
 {
 public:
-    MctStylePropertyChangeInTable(ChangeEventList *propChanges, QString cellName = "", QString tableName = "", MctCell *cellInfo = NULL);
+    MctStylePropertyChangeInTable(ChangeEventList *propChanges, QString m_cellName = "", QString m_tableName = "", MctCell *cellInfo = NULL);
     ~MctStylePropertyChangeInTable();
 };
 

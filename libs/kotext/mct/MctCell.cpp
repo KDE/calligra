@@ -31,29 +31,29 @@ const QString MctCell::COLS = "ABCDEFGHIJKLMNOPQRTSUVWXYZabcdefghijklmnopqrstuvw
  */
 MctCell::MctCell(QString cellName, QString tableName, int row, int col)
     : MctPropertyBase(cellName)
-    , cellName(cellName)
-    , tableName(tableName)
-    , row(row)
-    , col(col)
+    , m_cellName(cellName)
+    , m_tableName(tableName)
+    , m_row(row)
+    , m_col(col)
 {
 
 }
 
 MctCell::MctCell(int row, int col, QString tableName)
-    : row(row)
-    , col(col)
-    , tableName(tableName)
+    : m_row(row)
+    , m_col(col)
+    , m_tableName(tableName)
 {
 
 }
 
 MctCell::MctCell(const MctCell &cell)
-    : MctPropertyBase(cell.cellName)
+    : MctPropertyBase(cell.cellName())
 {
-    cellName = cell.cellName;
-    tableName = cell.tableName;
-    row = cell.row;
-    col = cell.col;
+    m_cellName = cell.cellName();
+    m_tableName = cell.tableName();
+    m_row = cell.row();
+    m_col = cell.col();
 
     // az os elvileg inicializalja es nem null
     if (props == nullptr)
@@ -83,22 +83,22 @@ MctCell::~MctCell()
  */
 MctCell *MctCell::addCelPos(MctCell *cell)
 {
-    if (this->tableName != cell->tableName)
+    if (m_tableName != cell->tableName())
         //qDebug << "The cells arent in the same table!";
 
-    if (cell->row < 0 || cell->col < 0)
+    if (cell->row() < 0 || cell->col() < 0)
         cell->convertCellName2CellPos();
 
-    if (this->row < 0 || this->col < 0)
+    if (m_row < 0 || m_col < 0)
         this->convertCellName2CellPos();
 
-    if (cell->row < 0 || cell->col < 0 || this->row < 0 || this->col < 0)
+    if (cell->row() < 0 || cell->col() < 0 || m_row < 0 || m_col < 0)
         return NULL; // Failed converting
 
-    int newCol = cell->col + this->col - 1;
-    int newRow = cell->row + this->row - 1;
+    int newCol = cell->col() + m_col - 1;
+    int newRow = cell->row() + m_row - 1;
 
-    return new MctCell(newRow, newCol, this->tableName);
+    return new MctCell(newRow, newCol, m_tableName);
 }
 
 /**
@@ -150,53 +150,53 @@ void MctCell::convertCellName2CellPos()
 void MctCell::convertCellPos2CellName()
 {
 /// FIXME: this could be also legacy function
-    if (this->row < 0 || this->col < 0)
+    if (m_row < 0 || m_col < 0)
         return;
 
     int colNumMod = COLS.length();
 
-    int mod = this->col % colNumMod;
+    int mod = m_col % colNumMod;
 
-    this->cellName = COLS[mod] + QString::number(this->row + 1);
+    m_cellName = COLS[mod] + QString::number(m_row + 1);
 }
 
-QString MctCell::getTableName() const
+QString MctCell::tableName() const
 {
-    return this->tableName;
+    return m_tableName;
 }
 
 void MctCell::setTableName(QString name)
 {
-    tableName = name;
+    m_tableName = name;
 }
 
 void MctCell::setCellName(QString cell)
 {
-    cellName = cell;
+    m_cellName = cell;
 }
 
-QString MctCell::getCellName() const
+QString MctCell::cellName() const
 {
-    return cellName;
+    return m_cellName;
 }
 
 void MctCell::setRow(int r)
 {
-    row = r;
+    m_row = r;
 }
 
-int MctCell::getRow() const
+int MctCell::row() const
 {
-    return row;
+    return m_row;
 }
 
-int MctCell::getCol() const
+int MctCell::col() const
 {
-    return col;
+    return m_col;
 }
 
 void MctCell::setCol(int c)
 {
-    col = c;
+    m_col = c;
 }
 

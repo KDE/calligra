@@ -480,15 +480,15 @@ void MctStaticData::deleteEmbeddedFiles(QMap<QString, MctEmbObjProperties *> del
 
 void MctStaticData::exportGraphs()
 {
-    KoTextDocument* koTextDoc = undograph->getKoTextDoc();
+    KoTextDocument* koTextDoc = undograph->koTextDoc();
     QMap<ulong, ulong> *indexes = getFrameIndexes(koTextDoc);
 
-    QDomDocument copyUndoDoc = undograph->getDoc()->cloneNode(true).toDocument();
+    QDomDocument copyUndoDoc = undograph->doc()->cloneNode(true).toDocument();
 
     //undograph->correctBlockPositionForExport(&copyUndoDoc, indexes);
 
 
-    QDomDocument copyRedoDoc = redograph->getDoc()->cloneNode(true).toDocument();
+    QDomDocument copyRedoDoc = redograph->doc()->cloneNode(true).toDocument();
 
     //redograph->correctBlockPositionForExport(&copyRedoDoc, indexes);
 
@@ -778,7 +778,7 @@ void MctStaticData::addPos2change(QDomElement *change, MctPosition *pos, bool mo
         posStringStart += POSSEPARATOR +QString::number(pos->getStartPar() + 1) + POSSEPARATOR + QString::number(pos->getStartChar() + 1);
     if (pos->getCellInfo() != NULL) {
         pos->getCellInfo()->convertCellName2CellPos();
-        posStringStart += POSSEPARATOR + QString::number(pos->getCellInfo()->getRow() + 1) + POSSEPARATOR + QString::number(pos->getCellInfo()->getCol() + 1);
+        posStringStart += POSSEPARATOR + QString::number(pos->getCellInfo()->row() + 1) + POSSEPARATOR + QString::number(pos->getCellInfo()->col() + 1);
     }
     change->setAttribute(startTag, posStringStart);
 
@@ -787,7 +787,7 @@ void MctStaticData::addPos2change(QDomElement *change, MctPosition *pos, bool mo
         posStringEnd += POSSEPARATOR + QString::number(pos->getEndPar() + 1) + POSSEPARATOR + QString::number(pos->getEndChar() + 1);
     if (pos->getCellInfo() != NULL) {
         pos->getCellInfoEnd()->convertCellName2CellPos();
-        posStringEnd += POSSEPARATOR + QString::number(pos->getCellInfoEnd()->getRow() + 1) + POSSEPARATOR + QString::number(pos->getCellInfoEnd()->getCol() + 1);
+        posStringEnd += POSSEPARATOR + QString::number(pos->getCellInfoEnd()->row() + 1) + POSSEPARATOR + QString::number(pos->getCellInfoEnd()->col() + 1);
     }
     change->setAttribute(endTag, posStringEnd);
 
@@ -901,7 +901,7 @@ MctChange* MctStaticData::createRedoChangeNode(KoTextDocument *doc, MctChange *c
     } else if (changeType == MctChangeTypes::AddedStringInTable) {
         QString text = cursor->block().text();  //todo
         MctTable *tableEntity = dynamic_cast<MctTable*>(changeEntity);
-        redochangeEntity = new MctStringChangeInTable(text, tableEntity->getCellName(), tableEntity->getTableName());
+        redochangeEntity = new MctStringChangeInTable(text, tableEntity->cellName(), tableEntity->tableName());
         redoChangeNode = new MctChange(pos, changeType, redochangeEntity);
     } else if (changeType == MctChangeTypes::RemovedString) {
         //TODO: megnézni hogy ez a pozíció jó-e
@@ -914,14 +914,14 @@ MctChange* MctStaticData::createRedoChangeNode(KoTextDocument *doc, MctChange *c
         int p = cursor->block().position(); //todo
         cursor->setPosition(p);
         MctTable *tableEntity = dynamic_cast<MctTable*>(changeEntity);
-        redochangeEntity = new MctStringChangeInTable("", tableEntity->getCellName(), tableEntity->getTableName());
+        redochangeEntity = new MctStringChangeInTable("", tableEntity->cellName(), tableEntity->tableName());
         redoChangeNode = new MctChange(pos, changeType, redochangeEntity);
     } else if (changeType == MctChangeTypes::MovedString) {
         redochangeEntity = new MctStringChange("");
         redoChangeNode = new MctChange(pos, changeType, redochangeEntity, changeNode->getMovedPosition());
     } else if (changeType == MctChangeTypes::MovedStringInTable) {
         MctTable *tableEntity = dynamic_cast<MctTable*>(changeEntity);
-        redochangeEntity = new MctStringChangeInTable("", tableEntity->getCellName(), tableEntity->getTableName());
+        redochangeEntity = new MctStringChangeInTable("", tableEntity->cellName(), tableEntity->tableName());
         redoChangeNode = new MctChange(pos, changeType, redochangeEntity, changeNode->getMovedPosition());
     } else if (changeType == MctChangeTypes::ParagraphBreak) {
         redochangeEntity = new MctParagraphBreak();

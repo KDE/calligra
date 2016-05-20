@@ -25,21 +25,21 @@
 class MctAuthor : public MctNode
 {
 public:
-    MctAuthor(QString userName = "", QString forename = "", QString surname = "");
+    MctAuthor(QString m_userName = "", QString m_forename = "", QString m_surname = "");
     ~MctAuthor();
 
-    QString getName() const;
+    QString name() const;
     void setName(QString name);
-    QString getForename() const;
+    QString forename() const;
     void setForename(QString name);
-    QString getSurname() const;
+    QString surname() const;
     void setSurname(QString name);
 
 private:    
 
-    QString userName;
-    QString forename;
-    QString surname;
+    QString m_userName;
+    QString m_forename;
+    QString m_surname;
 
 };
 

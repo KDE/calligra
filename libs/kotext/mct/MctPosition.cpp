@@ -136,7 +136,7 @@ int MctPosition::getTableCellPosition(QTextCursor *cursor) const
             tmpcursor.movePosition(QTextCursor::NextCharacter);
             table = tmpcursor.currentTable();
         }
-        QTextTableCell cell = table->cellAt(tmp->getCellInfo()->getRow(), tmp->getCellInfo()->getCol());
+        QTextTableCell cell = table->cellAt(tmp->getCellInfo()->row(), tmp->getCellInfo()->col());
         tmpcursor = cell.firstCursorPosition();
         tmp = tmp->getAnchoredPos();
         // if a nested table comes there will be +1 block to jump through

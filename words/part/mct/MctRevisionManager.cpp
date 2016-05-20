@@ -62,8 +62,8 @@ QMap<QString, MctChangeset*>* MctRevisionManager::fillRevTree(MctAbstractGraph *
 {
     QMap<QString, MctChangeset*>* changesetNodesMap = new QMap<QString, MctChangeset*>();
 
-    QMap<QDateTime, MctChangeset*>*  changesetNodes = graph->getChangesetNodes();
-    QVector<QDateTime> *dates = graph->getDates();
+    QMap<QDateTime, MctChangeset*>*  changesetNodes = graph->changesetNodes();
+    QVector<QDateTime> *dates = graph->dates();
 
     QStandardItemModel *model = new QStandardItemModel(this);
     model->setColumnCount(1);
@@ -506,9 +506,9 @@ void MctRevisionManager::printChanges(QString type)
 {
     QMap<QDateTime, MctChangeset*>* changes = nullptr;
     if (type == MctStaticData::UNDOCHANGES)
-        changes = MctStaticData::instance()->getUndoGraph()->getChangesetNodes();
+        changes = MctStaticData::instance()->getUndoGraph()->changesetNodes();
     else
-        changes = MctStaticData::instance()->getRedoGraph()->getChangesetNodes();
+        changes = MctStaticData::instance()->getRedoGraph()->changesetNodes();
 
     for (auto it = changes->begin(); it != changes->end(); ++it){
         QList<MctChange*>* cs = it.value()->getChanges();

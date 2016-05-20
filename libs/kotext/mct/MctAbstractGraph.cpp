@@ -58,23 +58,23 @@ const QString MctAbstractGraph::DATE_ALL = "all";
 MctAbstractGraph::MctAbstractGraph(QString redoOrUndo, QString odt, KoTextDocument *koTextDoc)
 {
     _id = 1;
-    changeNodes = new QList<MctChange*>();
-    changesetNodes = new QMap<QDateTime, MctChangeset*>();
-    dates = new QVector<QDateTime>();
-    idDates = new QMap<ulong, QDateTime>();
-    doc = 0;
+    m_changeNodes = new QList<MctChange*>();
+    m_changesetNodes = new QMap<QDateTime, MctChangeset*>();
+    m_dates = new QVector<QDateTime>();
+    m_idDates = new QMap<ulong, QDateTime>();
+    m_doc = 0;
 
-    this->koTextDoc = koTextDoc;
+    this->m_koTextDoc = koTextDoc;
 
-    this->redoOrUndo = redoOrUndo;
+    this->m_redoOrUndo = redoOrUndo;
     if(redoOrUndo == MctStaticData::UNDOCHANGES) {
-        nodeTag = MctStaticData::UNDOTAG;
+        m_nodeTag = MctStaticData::UNDOTAG;
     } else {
-        nodeTag = MctStaticData::REDOTAG;
+        m_nodeTag = MctStaticData::REDOTAG;
     }
 
-    odtFile = odt;
-    setFilename(odtFile);
+    m_odtFile = odt;
+    setFilename(m_odtFile);
 
     KZip *zip = new KZip(odt);
     zip->open(QIODevice::ReadOnly);
@@ -86,7 +86,7 @@ MctAbstractGraph::MctAbstractGraph(QString redoOrUndo, QString odt, KoTextDocume
             found = true;            
             const KArchiveEntry * kentry = zip->directory()->entry(entry);
             const KZipFileEntry * zipEntry = static_cast<const KZipFileEntry *>(kentry);
-            QFileInfo fi(fileName);
+            QFileInfo fi(m_fileName);
             copyTo(fi.absolutePath(), fi.fileName(), zipEntry);
             /*QFile tmp(path + entry);
             tmp.rename(fileName);*/
@@ -95,85 +95,85 @@ MctAbstractGraph::MctAbstractGraph(QString redoOrUndo, QString odt, KoTextDocume
     zip->close();
     delete zip;
 
-    QFile file(fileName);
+    QFile file(m_fileName);
     if (!found) {
         qDebug() << "Starting new " << redoOrUndo << " graph";
-        doc = new QDomDocument(redoOrUndo);
+        m_doc = new QDomDocument(redoOrUndo);
 
         file.open(QIODevice::WriteOnly);
 
-        root = doc->createElement(redoOrUndo);
+        m_root = m_doc->createElement(redoOrUndo);
         QString datestring = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
         datestring.replace(" ", "T");
-        root.setAttribute("started",datestring);
-        doc->appendChild(root);
+        m_root.setAttribute("started",datestring);
+        m_doc->appendChild(m_root);
 
         QTextStream out(&file);
-        out << doc->toString();
+        out << m_doc->toString();
 
-        qDebug() << fileName << " graph created";
+        qDebug() << m_fileName << " graph created";
 
     } else {
         qDebug() << "Loading " << redoOrUndo << " graph";
 
-        doc = new QDomDocument(redoOrUndo);
+        m_doc = new QDomDocument(redoOrUndo);
         file.open(QIODevice::ReadOnly);
         QByteArray xml = file.readAll();
-        doc->setContent(xml);
+        m_doc->setContent(xml);
     }
     file.close();
 }
 
 MctAbstractGraph::~MctAbstractGraph()
 {
-    delete changeNodes;
-    delete changesetNodes;
-    delete dates;
-    delete idDates;
-    delete doc;
+    delete m_changeNodes;
+    delete m_changesetNodes;
+    delete m_dates;
+    delete m_idDates;
+    delete m_doc;
 }
 
-QList<MctChange*> * MctAbstractGraph::getChangeNodes() const
+QList<MctChange*> * MctAbstractGraph::changeNodes() const
 {
-    return this->changeNodes;
+    return this->m_changeNodes;
 }
 
 void MctAbstractGraph::setChangeNodes(QList<MctChange*> *changeNodes)
 {
-    this->changeNodes = changeNodes;
+    this->m_changeNodes = changeNodes;
 }
 
 /**
  * @brief This gets list of changesetNodes
  * @return Returns with the whole < date, changeset> map.
  */
-QMap<QDateTime, MctChangeset*>* MctAbstractGraph::getChangesetNodes() const
+QMap<QDateTime, MctChangeset*>* MctAbstractGraph::changesetNodes() const
 {
-    return changesetNodes;
+    return m_changesetNodes;
 }
 
-void MctAbstractGraph::setChangesetNodes(QMap<QDateTime, MctChangeset*> *changesetNodes)
+void MctAbstractGraph::setChangesetNodes(QMap<QDateTime, MctChangeset*> *setChangesetNodes)
 {
-    this->changesetNodes = changesetNodes;
+    this->m_changesetNodes = setChangesetNodes;
 }
 
 /**
  * @brief This gets list of changeset dates
  * @return Returns with the list of dates
  */
-QVector<QDateTime> * MctAbstractGraph::getDates(QVector<QDateTime> *excludeDates) const
+QVector<QDateTime> * MctAbstractGraph::dates(QVector<QDateTime> *excludeDates) const
 {
     if (excludeDates == NULL)
-        return dates;
+        return m_dates;
 
-    QVector<QDateTime> *newDates = new QVector<QDateTime>(*dates);
-    foreach (QDateTime date, *dates){
+    QVector<QDateTime> *newDates = new QVector<QDateTime>(*m_dates);
+    foreach (QDateTime date, *m_dates){
         qDebug() << date.toString();
         foreach (QDateTime excludeDate, *excludeDates){
             qDebug() << excludeDate.toString();
             if (date == excludeDate){
-                int idx = dates->indexOf(date);
-                dates->remove(idx);
+                int idx = m_dates->indexOf(date);
+                m_dates->remove(idx);
                 //dates->removeOne(date);
             }
         }
@@ -184,40 +184,40 @@ QVector<QDateTime> * MctAbstractGraph::getDates(QVector<QDateTime> *excludeDates
 
 void MctAbstractGraph::setDates(QVector<QDateTime> *dates)
 {
-    this->dates = dates;
+    this->m_dates = dates;
 }
 
-QMap<ulong, QDateTime> *MctAbstractGraph::getIdDates() const
+QMap<ulong, QDateTime> *MctAbstractGraph::idDates() const
 {
-    return this->idDates;
+    return this->m_idDates;
 }
 
 /**
  * @brief This gets the redoOrUndo attribute
  */
-QString MctAbstractGraph::getRedoOrUndo() const
+QString MctAbstractGraph::redoOrUndo() const
 {
-    return redoOrUndo;
+    return m_redoOrUndo;
 }
 
 void MctAbstractGraph::setRedoOrUndo(QString string)
 {
-    this->redoOrUndo = string;
+    this->m_redoOrUndo = string;
 }
 
-QString MctAbstractGraph::getOdtFile() const
+QString MctAbstractGraph::odtFile() const
 {
-    return this->odtFile;
+    return this->m_odtFile;
 }
 
 void MctAbstractGraph::setOdtFile(QString name)
 {
-    this->odtFile = name;
+    this->m_odtFile = name;
 }
 
-QString MctAbstractGraph::getFilename() const
+QString MctAbstractGraph::filename() const
 {
-    return this->fileName;
+    return this->m_fileName;
 }
 
 /**
@@ -226,46 +226,46 @@ QString MctAbstractGraph::getFilename() const
  */
 void MctAbstractGraph::setFilename(QString name)
 {
-    fileName = name + "_" + redoOrUndo + ".xml";
+    m_fileName = name + "_" + m_redoOrUndo + ".xml";
 }
 
-QString MctAbstractGraph::getNodeTag() const
+QString MctAbstractGraph::nodeTag() const
 {
-    return this->nodeTag;
+    return this->m_nodeTag;
 }
 
 void MctAbstractGraph::setNodeTag(QString name)
 {
-    this->nodeTag = name;
+    this->m_nodeTag = name;
 }
 
 /**
  * @brief This gets the root of the graph
  * @return Returns with the root node.
  */
-QDomElement MctAbstractGraph::getRoot() const
+QDomElement MctAbstractGraph::root() const
 {
-    return root;
+    return m_root;
 }
 
 void MctAbstractGraph::setRoot(QDomElement  root)
 {    
-    this->root = root;
+    this->m_root = root;
 }
 
-QDomDocument * MctAbstractGraph::getDoc() const
+QDomDocument * MctAbstractGraph::doc() const
 {
-    return this->doc;
+    return this->m_doc;
 }
 
 void MctAbstractGraph::setDoc(QDomDocument *doc)
 {
-    this->doc = doc;
+    this->m_doc = doc;
 }
 
-KoTextDocument * MctAbstractGraph::getKoTextDoc()
+KoTextDocument * MctAbstractGraph::koTextDoc()
 {
-    return koTextDoc;
+    return m_koTextDoc;
 }
 
 /**
@@ -277,10 +277,10 @@ MctChangeset* MctAbstractGraph::getChangeset(QDateTime date)
 {
     qDebug () << "date1: " << date;
     MctChangeset* changset = NULL;
-    foreach(QDateTime d, changesetNodes->keys())  {
+    foreach(QDateTime d, m_changesetNodes->keys())  {
         qDebug() << "date: " << d;
         if (d == date) {
-            changset = changesetNodes->value(d);
+            changset = m_changesetNodes->value(d);
         }
     }
     return changset;
@@ -298,7 +298,7 @@ QList<MctChangeset*>* MctAbstractGraph::getChangesetList(QDateTime date)
     if (date.isValid()) {
         datesList = findEarlierDates(date);
     } else {
-        datesList = dates;
+        datesList = m_dates;
     }
     foreach (QDateTime d, *datesList) {
         MctChangeset * changesetnode = getChangeset(d);
@@ -563,23 +563,23 @@ MctTableProperties * MctAbstractGraph::createTableProps(QDomElement change)
 void MctAbstractGraph::fillUpGraph()
 {
     _id = 0;
-    if(!doc) {
-        doc = new QDomDocument(redoOrUndo);
+    if(!m_doc) {
+        m_doc = new QDomDocument(m_redoOrUndo);
         _id = 1;
         return;
     }
     qDebug() << "fill up the graph";
 
     QMap<ulong, ulong> *indexes = nullptr;
-    if (koTextDoc) indexes = MctStaticData::instance()->getFrameIndexes(koTextDoc);
+    if (m_koTextDoc) indexes = MctStaticData::instance()->getFrameIndexes(m_koTextDoc);
 
-    root = doc->firstChildElement();
-    QDomNodeList childs = root.childNodes();
+    m_root = m_doc->firstChildElement();
+    QDomNodeList childs = m_root.childNodes();
     for(uint i=0; i < childs.length(); i++) {
         QDomNode node = childs.at(i);
         if(node.isElement()) {
             QDomElement elem = node.toElement();
-            if (elem.tagName() == nodeTag) {
+            if (elem.tagName() == m_nodeTag) {
                 MctChangeset * changeset = new MctChangeset(elem);
                 int parentidx = 1;
                 while (true) {
@@ -591,9 +591,9 @@ void MctAbstractGraph::fillUpGraph()
                     ++parentidx;
                 }
                 QDateTime date = changeset->getDate();
-                dates->append(date);
-                changesetNodes->insert(date, changeset);
-                idDates->insert(changeset->getId(), date);
+                m_dates->append(date);
+                m_changesetNodes->insert(date, changeset);
+                m_idDates->insert(changeset->getId(), date);
 
                 QDomNodeList changeList = elem.childNodes();
                 for(uint j = 0; j < changeList.length(); j++) {
@@ -612,14 +612,14 @@ void MctAbstractGraph::fillUpGraph()
     }
 
     //fill up changesetNodes with children Id's
-    foreach (MctChangeset * changeset, changesetNodes->values()) {
+    foreach (MctChangeset * changeset, m_changesetNodes->values()) {
         QList<ulong>* parents = changeset->getParents();
         foreach (ulong idnum, *parents) {
-            QDateTime date = idDates->value(idnum);
+            QDateTime date = m_idDates->value(idnum);
             if(date.isNull()) {
                 continue;
             }
-            MctChangeset* changesetNode_tmp = changesetNodes->value(date);
+            MctChangeset* changesetNode_tmp = m_changesetNodes->value(date);
             if(changesetNode_tmp != NULL) {
                 changesetNode_tmp->addChild(changeset->getId());
             }
@@ -712,7 +712,7 @@ void MctAbstractGraph::correctBlockPositionForExport(QDomDocument *document, QMa
         QDomNode node = childs.at(i);
         if(node.isElement()) {
             QDomElement elem = node.toElement();
-            if (elem.tagName() == nodeTag) {
+            if (elem.tagName() == m_nodeTag) {
                 QDomNodeList changeList = elem.childNodes();
                 for(uint j = 0; j < changeList.length(); j++) {
                     QDomNode node = changeList.at(j);
@@ -730,7 +730,7 @@ void MctAbstractGraph::correctBlockPositionForExport(QDomDocument *document, QMa
  */
 QDateTime MctAbstractGraph::getDateFromId(ulong id)
 {
-    return idDates->value(id);
+    return m_idDates->value(id);
 }
 
 /**
@@ -741,13 +741,13 @@ QDateTime MctAbstractGraph::getDateFromId(ulong id)
 MctChangeset* MctAbstractGraph::findChangeset(ulong revNum)
 {
     MctChangeset* changesetNode = NULL;
-    if(revNum > dates->size()) {
+    if(revNum > m_dates->size()) {
         qDebug() << "Revisions " << revNum << " not found in the list of changeset nodes!";
         return NULL;
     }
-    QDateTime date = dates->at(revNum - 1);
-    if(changesetNodes->contains(date)) {
-        changesetNode = changesetNodes->value(date);
+    QDateTime date = m_dates->at(revNum - 1);
+    if(m_changesetNodes->contains(date)) {
+        changesetNode = m_changesetNodes->value(date);
     } else {
         qDebug() << "Revisions " << revNum << " not found";
     }
@@ -759,7 +759,7 @@ MctChangeset* MctAbstractGraph::findChangeset(ulong revNum)
  */
 void MctAbstractGraph::sortDates()
 {
-    qSort(dates->begin(), dates->end());
+    qSort(m_dates->begin(), m_dates->end());
 }
 
 /**
@@ -777,12 +777,12 @@ MctChangeset* MctAbstractGraph::addChangeset(QList<MctChange *> *changes, MctAut
     qDebug() << "adding changeset to graph";
     merge = true; //FIXME!
 
-    QDomElement changeset = doc->createElement(nodeTag);
-    root.appendChild(changeset);
+    QDomElement changeset = m_doc->createElement(m_nodeTag);
+    m_root.appendChild(changeset);
 
-    if((parentId == 0) && (dates->size() > 0)) {
-        QDateTime lastDate = dates->last();
-        MctChangeset* parentNode = changesetNodes->value(lastDate);
+    if((parentId == 0) && (m_dates->size() > 0)) {
+        QDateTime lastDate = m_dates->last();
+        MctChangeset* parentNode = m_changesetNodes->value(lastDate);
         parentId = parentNode->getId();
     }
 
@@ -790,7 +790,7 @@ MctChangeset* MctAbstractGraph::addChangeset(QList<MctChange *> *changes, MctAut
 
     QList<MctChange *> * tmpchanges = new QList<MctChange*> (*changes);
 
-    if(redoOrUndo == MctStaticData::UNDOCHANGES) {
+    if(m_redoOrUndo == MctStaticData::UNDOCHANGES) {
         tmpchanges = findMovedChanges(tmpchanges);       // TODO: that was different in the python code
     }
 
@@ -801,10 +801,10 @@ MctChangeset* MctAbstractGraph::addChangeset(QList<MctChange *> *changes, MctAut
 
     findParents(changesetNode, merge);
     qDebug() << date;
-    changesetNodes->insert(date, changesetNode);
-    dates->append(date);
+    m_changesetNodes->insert(date, changesetNode);
+    m_dates->append(date);
     qDebug() << date;
-    idDates->insert(changesetNode->getId(), date);
+    m_idDates->insert(changesetNode->getId(), date);
     sortDates();
     qDebug() << date;
 //FIXME:
@@ -841,7 +841,7 @@ void MctAbstractGraph::findParents(MctChangeset *changesetNode, bool merge)
     QList<MctPosition*> orig_movedpos;
     QDateTime date = changesetNode->getDate();
 
-    int sgn = redoOrUndo == MctStaticData::UNDOCHANGES ? -1 : 1;
+    int sgn = m_redoOrUndo == MctStaticData::UNDOCHANGES ? -1 : 1;
 
     //store original positions
     for (int i = 0; i< changes->length(); i++) {
@@ -850,12 +850,12 @@ void MctAbstractGraph::findParents(MctChangeset *changesetNode, bool merge)
         orig_movedpos.append(change->getMovedPosition());
     }
 
-    for(int i = dates->size() - 1; i >= 0; i--) {
+    for(int i = m_dates->size() - 1; i >= 0; i--) {
         MctChangeset* changesetNode_temp;
-        if(redoOrUndo == MctStaticData::UNDOCHANGES){
-            changesetNode_temp = changesetNodes->value(dates->at(i));
+        if(m_redoOrUndo == MctStaticData::UNDOCHANGES){
+            changesetNode_temp = m_changesetNodes->value(m_dates->at(i));
         } else {
-            changesetNode_temp = changesetNodes->value(dates->at(dates->size()- i - 1));
+            changesetNode_temp = m_changesetNodes->value(m_dates->at(m_dates->size()- i - 1));
         }
         QList<MctChange *> *changes_temp = changesetNode_temp->getChanges();
         QDateTime date_temp = changesetNode_temp->getDate();
@@ -1036,7 +1036,7 @@ bool MctAbstractGraph::arePositionsOverlapping(MctPosition *pos1, MctPosition *p
         if(cellinf1 != NULL && cellinf2 != NULL) {
             cellinf1->convertCellPos2CellName();
             cellinf2->convertCellPos2CellName();
-            if( cellinf1->getCellName() != cellinf2->getCellName()) {
+            if( cellinf1->cellName() != cellinf2->cellName()) {
                 change_overlapping = false;
                 return change_overlapping;
             }
@@ -1108,7 +1108,7 @@ int MctAbstractGraph::comparePositions(MctPosition *pos1, MctPosition *pos2)
         if(cellinf1 != NULL && cellinf2 != NULL) {
             cellinf1->convertCellPos2CellName();
             cellinf2->convertCellPos2CellName();
-            if(cellinf1->getCellName() != cellinf2->getCellName()) {
+            if(cellinf1->cellName() != cellinf2->cellName()) {
                 return 0;
             }
         }
@@ -1207,7 +1207,7 @@ void MctAbstractGraph::addChangesetNodeWithCorr(MctChangeset *changesetNode)
     list_temp.append(changesetNode);
 
     foreach (QDateTime date_temp, *laterDates) {
-        MctChangeset* changesetNode_temp = changesetNodes->value(date_temp);
+        MctChangeset* changesetNode_temp = m_changesetNodes->value(date_temp);
         correctChangesetNode2(changesetNode_temp, &list_temp);
     }
 
@@ -1233,7 +1233,7 @@ QVector<QDateTime> * MctAbstractGraph::findLaterDates(QDateTime date)
 {
     QVector<QDateTime> * retDates = new QVector<QDateTime>();
     sortDates();
-    foreach (QDateTime date_temp, *dates) {
+    foreach (QDateTime date_temp, *m_dates) {
         if(dateComapre(date_temp, date) == 1) { //date_temp > date
             retDates->append(date_temp);
         }
@@ -1251,7 +1251,7 @@ QVector<QDateTime> * MctAbstractGraph::findEarlierDates(QDateTime date)
     QVector<QDateTime> * retDates = new QVector<QDateTime>();
     sortDates();
 
-    foreach (QDateTime date_temp, *dates) {
+    foreach (QDateTime date_temp, *m_dates) {
         int result = dateComapre(date_temp, date);
         if(result <= 0 ) { // date_temp < date , date_temp == date
             retDates->append(date_temp);
@@ -1269,7 +1269,7 @@ void MctAbstractGraph::correctChangesetNodeList(MctChangeset *changesetNode)
     QList<MctChangeset*> *changesetList = new QList<MctChangeset*>();
     changesetList->append(changesetNode);
 
-    foreach (QDateTime date, *dates) {
+    foreach (QDateTime date, *m_dates) {
         MctChangeset * changesetNode_temp = getChangeset(date);
         correctChangesetNode2(changesetNode_temp, changesetList);
     }
@@ -1290,7 +1290,7 @@ void MctAbstractGraph::correctChangesetNodeListWithDate(MctChangeset *changesetN
     } else if (withdates == DATE_LATER) {
         datesList = findLaterDates(date);
     } else {
-        datesList = dates;
+        datesList = m_dates;
     }
 
     QList<MctChangeset*> *changesetNodesList = new QList<MctChangeset*>();
@@ -1318,15 +1318,15 @@ int MctAbstractGraph::correctChangesetNode(MctChangeset *changesetNode, QString 
     } else if (withdates == DATE_LATER) {
         datesList = findLaterDates(date);
     } else {
-        datesList = dates;
+        datesList = m_dates;
     }
 
     QList<MctChangeset*> *changesetNodesList = new QList<MctChangeset*>();
     MctChangeset *changesetNode_temp = NULL;
 
     foreach (QDateTime date, *datesList) {
-        if(changesetNodes->contains(date)) {
-            changesetNode_temp = changesetNodes->value(date);
+        if(m_changesetNodes->contains(date)) {
+            changesetNode_temp = m_changesetNodes->value(date);
         }
         changesetNodesList->append(changesetNode_temp);
     }
@@ -1584,11 +1584,11 @@ void MctAbstractGraph::removeChangeset(MctChangeset *changesetnode, bool clearch
 {
     qDebug() << "removing changeset";
     QDateTime date = changesetnode->getDate();
-    QDateTime givendate = dates->last();
+    QDateTime givendate = m_dates->last();
 
-    int idx = dates->size() - 1;
-    for (int i=0; i < dates->size(); i++) {
-        QDateTime idate = dates->at(i);
+    int idx = m_dates->size() - 1;
+    for (int i=0; i < m_dates->size(); i++) {
+        QDateTime idate = m_dates->at(i);
         if(dateComapre(date, idate) == 0) {
             givendate = idate;
             idx = i;
@@ -1610,9 +1610,9 @@ void MctAbstractGraph::removeChangeset(MctChangeset *changesetnode, bool clearch
     }
 
     // Removing changesetNode
-    dates->remove(idx);
-    root.removeChild(changesetnode->getChangeSetNode());
-    changesetNodes->remove(givendate);
+    m_dates->remove(idx);
+    m_root.removeChild(changesetnode->getChangeSetNode());
+    m_changesetNodes->remove(givendate);
 }
 
 /**
@@ -1624,21 +1624,21 @@ MctChangeset * MctAbstractGraph::popChangeset(QDateTime date)
 {
     int idx = -1;
     QDateTime givendate;
-    for(int i=0; i<dates->size(); i++){
-        if(dateComapre(date, dates->at(i)) == 0) {
+    for(int i=0; i<m_dates->size(); i++){
+        if(dateComapre(date, m_dates->at(i)) == 0) {
             idx = i;
-            givendate = dates->at(i);
+            givendate = m_dates->at(i);
             break;
         }
     }
 
-    dates->remove(idx);
+    m_dates->remove(idx);
 
     //removing changeset Node
 /// FIXME: in the python code there was a delete, but the changesetNode wasn't defined
 qCritical() << "This function is suspicious";
 ///    root.removeChild(changesetNode.getChangeSet());
-    MctChangeset* tmp = changesetNodes->value(givendate);
+    MctChangeset* tmp = m_changesetNodes->value(givendate);
 
     return tmp;
 }
@@ -1671,17 +1671,17 @@ bool MctAbstractGraph::removeDir(const QString & dirName)
  */
 void MctAbstractGraph::exportGraph(QDomDocument *document)
 {
-    qDebug() << "temporary exporting graph to: " << fileName;
-    QFile file(fileName);
+    qDebug() << "temporary exporting graph to: " << m_fileName;
+    QFile file(m_fileName);
     file.open(QIODevice::WriteOnly);
     QTextStream out(&file);
     out << document->toString();
     qDebug() << document->toString();
     file.close();
 
-    qDebug() << "exporting graph to backuped file: " << odtFile;
+    qDebug() << "exporting graph to backuped file: " << m_odtFile;
 
-    QString outfilename = MctStaticData::instance()->tempMctFile(odtFile);
+    QString outfilename = MctStaticData::instance()->tempMctFile(m_odtFile);
     qDebug() << "exporting graph to: " << outfilename;
 
     KZip *zfile;
@@ -1690,7 +1690,7 @@ void MctAbstractGraph::exportGraph(QDomDocument *document)
     if(fi.exists()) {
         zfile = new KZip(outfilename);
     } else {
-        zfile = new KZip(odtFile);
+        zfile = new KZip(m_odtFile);
     }
 
     zfile->open(QIODevice::ReadOnly);
@@ -1702,8 +1702,8 @@ void MctAbstractGraph::exportGraph(QDomDocument *document)
     bool found = false;
     QStringList entries = zfile->directory()->entries();
     foreach (QString item, entries) {
-        if (item == redoOrUndo + ".xml") {
-            zfileout->addLocalFile(fileName, redoOrUndo + ".xml");
+        if (item == m_redoOrUndo + ".xml") {
+            zfileout->addLocalFile(m_fileName, m_redoOrUndo + ".xml");
             found = true;
         } else {
             const KArchiveEntry * kentry = zfile->directory()->entry(item);
@@ -1726,18 +1726,18 @@ void MctAbstractGraph::exportGraph(QDomDocument *document)
     }
 
     if(!found) {
-         zfileout->addLocalFile(fileName, redoOrUndo + ".xml");
+         zfileout->addLocalFile(m_fileName, m_redoOrUndo + ".xml");
     }
 
     zfile->close();
     zfileout->close();
 
-    QFile f(odtFile);
+    QFile f(m_odtFile);
     f.remove();
 
-    QFile::rename(outfilename_temp, odtFile);
+    QFile::rename(outfilename_temp, m_odtFile);
 
-    qDebug() << redoOrUndo << " graph exported";
+    qDebug() << m_redoOrUndo << " graph exported";
 }
 
 /**
@@ -1767,7 +1767,7 @@ void MctAbstractGraph::regManifest(QString filename)
         if(node.isElement()) {
             QDomElement elem = node.toElement();
             QString full_path = elem.attribute(manifest+"full-path");
-            if(full_path == redoOrUndo+".xml") {
+            if(full_path == m_redoOrUndo+".xml") {
                 found = true;
                 break;
             }
@@ -1778,7 +1778,7 @@ void MctAbstractGraph::regManifest(QString filename)
         QString tag = manifest + "file-entry";
         QDomElement elem = manifest_tree->createElement(tag);
         elem.setAttribute(manifest+"media-type", "text/xml");
-        elem.setAttribute(manifest+"full-path", redoOrUndo+".xml");
+        elem.setAttribute(manifest+"full-path", m_redoOrUndo+".xml");
         rootNode.appendChild(elem);
 
         file.open(QIODevice::WriteOnly);
@@ -1794,7 +1794,7 @@ void MctAbstractGraph::regManifest(QString filename)
  */
 ulong MctAbstractGraph::getCurrentRevision()
 {
-    return dates->size();
+    return m_dates->size();
 }
 
 /**
@@ -1817,10 +1817,10 @@ void MctAbstractGraph::addTableDataToPos(QDomElement change, MctChange *changeNo
         return;
     }
     tableChangeEntity->convertCellName2CellPos();
-    if(tableChangeEntity->getTableName().isNull()) {
+    if(tableChangeEntity->tableName().isNull()) {
         tableChangeEntity->setTableName("");
     }
-    if(tableChangeEntity->getCellName().isNull()) {
+    if(tableChangeEntity->cellName().isNull()) {
         tableChangeEntity->setCellName("");
     }
 
@@ -1836,14 +1836,14 @@ void MctAbstractGraph::addTableDataToPos(QDomElement change, MctChange *changeNo
     }
 
     QString posstringstart = change.attribute(starttag);
-    posstringstart = MctStaticData::POSSEPARATOR + tableChangeEntity->getTableName() + MctStaticData::POSSEPARATOR
-            + QString::number(tableChangeEntity->getRow()) + MctStaticData::POSSEPARATOR + QString::number(tableChangeEntity->getCol()) + posstringstart;
+    posstringstart = MctStaticData::POSSEPARATOR + tableChangeEntity->tableName() + MctStaticData::POSSEPARATOR
+            + QString::number(tableChangeEntity->row()) + MctStaticData::POSSEPARATOR + QString::number(tableChangeEntity->col()) + posstringstart;
 
     change.setAttribute(starttag, posstringstart);
 
     QString posstringend = change.attribute(endtag);
-    posstringend = MctStaticData::POSSEPARATOR + tableChangeEntity->getTableName() + MctStaticData::POSSEPARATOR
-            + QString::number(tableChangeEntity->getRow()) + MctStaticData::POSSEPARATOR + QString::number(tableChangeEntity->getCol()) + posstringend;
+    posstringend = MctStaticData::POSSEPARATOR + tableChangeEntity->tableName() + MctStaticData::POSSEPARATOR
+            + QString::number(tableChangeEntity->row()) + MctStaticData::POSSEPARATOR + QString::number(tableChangeEntity->col()) + posstringend;
     change.setAttribute(endtag, posstringend);
 }
 

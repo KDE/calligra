@@ -25,7 +25,7 @@
 class MctUndoGraphXMLfilter : public MctAbstractGraph
 {
 public:
-    MctUndoGraphXMLfilter(QString redoOrUndo, QString odt, KoTextDocument *koTextDoc);
+    MctUndoGraphXMLfilter(QString m_redoOrUndo, QString odt, KoTextDocument *m_koTextDoc);
     virtual ~MctUndoGraphXMLfilter();
 
     virtual void addChangeFromXML(QDomNode node, MctChangeset* changeset);
