@@ -37,7 +37,7 @@
 #include <KoXmlReader.h>
 
 #include <kpluginfactory.h>
-#include <kfilterdev.h>
+#include <KCompressionDevice>
 
 #include <QFileInfo>
 #include <QDebug>
@@ -81,19 +81,17 @@ KoFilter::ConversionStatus SvgImport::convert(const QByteArray& from, const QByt
     if (result >= 0)
         strExt = fileIn.mid(result).toLower();
 
-    QString strMime; // Mime type of the compressor
-    if ((strExt == ".gz")    //in case of .svg.gz (logical extension)
-            || (strExt == ".svgz")) //in case of .svgz (extension used prioritary)
-        strMime = "application/x-gzip"; // Compressed with gzip
-    else if (strExt == ".bz2") //in case of .svg.bz2 (logical extension)
-        strMime = "application/x-bzip2"; // Compressed with bzip2
-    else
-        strMime = "text/plain";
+    const KCompressionDevice::CompressionType compressionType =
+        (strExt == QLatin1String(".gz"))         //in case of .svg.gz (logical extension)
+         || (strExt == QLatin1String(".svgz")) ? //in case of .svgz (extension used prioritary)
+            KCompressionDevice::GZip :
+        (strExt == QLatin1String(".bz2")) ?      //in case of .svg.bz2 (logical extension)
+            KCompressionDevice::BZip2 :
+            KCompressionDevice::None;
 
     /*debugSvg <<"File extension: -" << strExt <<"- Compression:" << strMime;*/
 
-    QIODevice* in = KFilterDev::deviceForFile(fileIn, strMime);
-
+    QIODevice* in = new KCompressionDevice(fileIn, compressionType);
     if (!in->open(QIODevice::ReadOnly)) {
         errorSvg << "Cannot open file! Aborting!" << endl;
         delete in;

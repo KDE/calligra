@@ -23,7 +23,7 @@
 
 #include <gnumericexport.h>
 #include <kdebug.h>
-#include <kfilterdev.h>
+#include <KCompressionDevice>
 #include <kpluginfactory.h>
 #include <klocale.h>
 #include <KoFilterChain.h>
@@ -1457,7 +1457,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
 
     // Ok, now write to export file
 
-    QIODevice* out = KFilterDev::deviceForFile(m_chain->outputFile(), "application/x-gzip");
+    QIODevice* out = new KCompressionDevice(m_chain->outputFile(), KCompressionDevice::GZip);
 
     if (!out) {
         kError(30521) << "No output file! Aborting!" << endl;

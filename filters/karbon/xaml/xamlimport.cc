@@ -19,9 +19,13 @@
 
 #include "xamlimport.h"
 #include "color.h"
+
 #include <KoFilterChain.h>
+
+#include <KCompressionDevice>
 #include <kpluginfactory.h>
 #include <kdebug.h>
+
 #include <shapes/vellipse.h>
 #include <shapes/vrectangle.h>
 #include <shapes/vpolygon.h>
@@ -35,7 +39,6 @@
 #include <QColor>
 #include <QFile>
 #include <QList>
-#include <kfilterdev.h>
 
 K_PLUGIN_FACTORY(XAMLImportFactory, registerPlugin<XAMLImport>();)
 K_EXPORT_PLUGIN(XAMLImportFactory("calligrafilters"))
@@ -65,18 +68,17 @@ KoFilter::ConversionStatus XAMLImport::convert(const QByteArray& from, const QBy
         strExt = fileIn.mid(result).lower();
     }
 
-    QString strMime; // Mime type of the compressor
-    if ((strExt == ".gz")    //in case of .svg.gz (logical extension)
-            || (strExt == ".wvgz")) //in case of .svgz (extension used prioritary)
-        strMime = "application/x-gzip"; // Compressed with gzip
-    else if (strExt == ".bz2") //in case of .svg.bz2 (logical extension)
-        strMime = "application/x-bzip2"; // Compressed with bzip2
-    else
-        strMime = "text/plain";
+    const KCompressionDevice::CompressionType compressionType =
+        (strExt == QLatin1String(".gz"))         //in case of .svg.gz (logical extension)
+         || (strExt == QLatin1String(".wvgz")) ? //in case of .wvgz (extension used prioritary)
+            KCompressionDevice::GZip :
+        (strExt == QLatin1String(".bz2")) ?      //in case of .svg.bz2 (logical extension)
+            KCompressionDevice::BZip2 :
+            KCompressionDevice::None;
 
     kDebug(30514) << "File extension: -" << strExt << "- Compression:" << strMime;
 
-    QIODevice* in = KFilterDev::deviceForFile(fileIn, strMime);
+    QIODevice* in = new KCompressionDevice(fileIn, compressionType);
 
     if (!in->open(QIODevice::ReadOnly)) {
         kError(30514) << "Cannot open file! Aborting!" << endl;

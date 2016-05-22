@@ -30,7 +30,7 @@
 #include <QPen>
 #include <QDomDocument>
 
-#include <kfilterdev.h>
+#include <KCompressionDevice>
 #include <kdebug.h>
 #include <kpluginfactory.h>
 
@@ -1703,7 +1703,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
     }
 
 
-    QIODevice* in = KFilterDev::deviceForFile(m_chain->inputFile(), "application/x-gzip");
+    QIODevice* in = new KCompressionDevice(m_chain->inputFile(), KCompressionDevice::GZip);
 
     if (!in) {
         kError(30521) << "Cannot create device for uncompressing! Aborting!" << endl;
