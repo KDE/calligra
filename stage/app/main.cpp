@@ -40,7 +40,7 @@ extern "C" STAGE_EXPORT int kdemain( int argc, char **argv )
 
     KAboutData* aboutData = newKPresenterAboutData();
 
-    KoApplication app(STAGE_MIME_TYPE, *aboutData, argc, argv);
+    KoApplication app(STAGE_MIME_TYPE, QStringLiteral("calligrastage"), *aboutData, argc, argv);
 
     delete aboutData;
 

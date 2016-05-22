@@ -47,7 +47,6 @@ KAboutData * newAboutData()
     aboutData->addAuthor(i18n("Dag Andersen"), QString(), QStringLiteral("danders@get2net.dk"));
 
     aboutData->setProductName( "calligraplan/work" );
-    aboutData->setProgramIconName( "calligraplanwork" );
 
     return aboutData;
 }

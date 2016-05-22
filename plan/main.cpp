@@ -58,7 +58,7 @@ extern "C" KPLATO_EXPORT int kdemain( int argc, char **argv )
 
     KAboutData* aboutData = KPlato::newAboutData();
 
-    KoApplication app(PLAN_MIME_TYPE, *aboutData, argc, argv);
+    KoApplication app(PLAN_MIME_TYPE, QStringLiteral("calligraplan"), *aboutData, argc, argv);
 
     delete aboutData;
 

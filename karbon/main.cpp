@@ -67,7 +67,7 @@ extern "C" KARBONUI_EXPORT int kdemain( int argc, char* argv[] )
 
     KAboutData *aboutData = newKarbonAboutData();
 
-    KoApplication app(KARBON_MIME_TYPE, *aboutData, argc, argv);
+    KoApplication app(KARBON_MIME_TYPE, QStringLiteral("calligrakarbon"), *aboutData, argc, argv);
 
     delete aboutData;
 

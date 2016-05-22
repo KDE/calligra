@@ -40,7 +40,7 @@ extern "C" WORDS_EXPORT int kdemain(int argc, char **argv)
 
     KAboutData* aboutData = newWordsAboutData();
 
-    KoApplication app(WORDS_MIME_TYPE, *aboutData, argc, argv);
+    KoApplication app(WORDS_MIME_TYPE, QStringLiteral("calligrawords"), *aboutData, argc, argv);
 
     delete aboutData;
 

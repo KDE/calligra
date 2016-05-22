@@ -128,13 +128,16 @@ public:
 };
 
 
-KoApplication::KoApplication(const QByteArray &nativeMimeType, const KAboutData &aboutData, int &argc, char **argv)
+KoApplication::KoApplication(const QByteArray &nativeMimeType,
+                             const QString &windowIconName,
+                             const KAboutData &aboutData,
+                             int &argc, char **argv)
     : QApplication(argc, argv)
     , d(new KoApplicationPrivate())
 {
     KAboutData::setApplicationData( aboutData );
 
-    setWindowIcon(QIcon::fromTheme(aboutData.programIconName()));
+    setWindowIcon(QIcon::fromTheme(windowIconName));
 
     KoApplication::KoApp = this;
 

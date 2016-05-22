@@ -43,6 +43,7 @@ KPlatoWork_Application::KPlatoWork_Application(int argc, char **argv)
 {
     KAboutData *aboutData = KPlatoWork::newAboutData();
     KAboutData::setApplicationData( *aboutData );
+    setWindowIcon(QIcon::fromTheme(QStringLiteral("calligraplanwork")));
 
     aboutData->setupCommandLine(&m_commandLineParser);
     m_commandLineParser.addHelpOption();

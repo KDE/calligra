@@ -47,7 +47,7 @@ extern "C" CALLIGRA_SHEETS_COMMON_EXPORT int kdemain(int argc, char **argv)
     // QT5TODO: support custom options
 //     options.add("scriptfile <scriptfile>", ki18n("Execute the scriptfile after startup."));
 
-    KoApplication app(SHEETS_MIME_TYPE, *aboutData, argc, argv);
+    KoApplication app(SHEETS_MIME_TYPE, QStringLiteral("calligrasheets"), *aboutData, argc, argv);
 
     delete aboutData;
 

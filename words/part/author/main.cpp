@@ -42,7 +42,7 @@ extern "C" WORDS_EXPORT int kdemain(int argc, char **argv)
 
     KAboutData* aboutData = newAuthorAboutData();
 
-    KoApplication app(WORDS_MIME_TYPE, *aboutData, argc, argv);
+    KoApplication app(WORDS_MIME_TYPE, QStringLiteral("calligraauthor"), *aboutData, argc, argv);
 
     delete aboutData;
 

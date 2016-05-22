@@ -58,10 +58,13 @@ public:
      * initializes kimgio.
      *
      * @param nativeMimeType: the nativeMimeType of the Calligra application
+     * @param windowIconName xdg-spec name of the icon to be set for windows
      * @param argc number of commandline argument strings in @c argv
      * @param argv array of commandline argument strings
      */
-    explicit KoApplication(const QByteArray &nativeMimeType, const KAboutData &aboutData, int &argc, char **argv);
+    explicit KoApplication(const QByteArray &nativeMimeType,
+                           const QString &windowIconName, const KAboutData &aboutData,
+                           int &argc, char **argv);
 
     /**
      *  Destructor.
