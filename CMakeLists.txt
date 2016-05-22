@@ -550,10 +550,10 @@ else()
     ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
     ## with commit ea177ca. This is for compatibility with older versions.
     ##
-    find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR} PATH_SUFFIXES marble)
+    find_file(MARBLECONTROLBOX_H MarbleControlBox.h PATHS ${MARBLE_INCLUDE_DIR} PATH_SUFFIXES marble)
     if( MARBLECONTROLBOX_H )
-    file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
-    string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
+        file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
+        string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET "${MARBLECONTROLBOX_H_CONTENT}")
         if( SETMARBLEWIDGET )
             add_definitions(-DHAVE_SETMARBLEWIDGET)
         endif()
