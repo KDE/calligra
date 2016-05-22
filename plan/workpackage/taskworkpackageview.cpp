@@ -556,9 +556,6 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt::StyleOp
                     if ( state & Node::State_Late ) {
                         painter->setBrush( m_brushes[ Brush_Late ] );
                         normal = false;
-                    } else if ( state & Node::State_Started && Node::State_Late ) {
-                        painter->setBrush(  m_brushes[ Brush_Late ] );
-                        normal = false;
                     }
                 } else  {
                     // scheduled, not started, not finished
