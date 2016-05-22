@@ -59,6 +59,7 @@
 #include <kopenwithdialog.h>
 #include <kmimetypetrader.h>
 //#include <kserviceoffer.h>
+#include <KIO/DesktopExecParser>
 #include <krun.h>
 #include <kprocess.h>
 #include <kactioncollection.h>
@@ -252,7 +253,9 @@ bool DocumentChild::startProcess( KService::Ptr service, const QUrl &url )
         files << url;
     }
     if ( service ) {
-        args = KRun::processDesktopExec( *service, files );
+        KIO::DesktopExecParser parser(*service, files);
+        parser.setUrlsAreTempFiles(false);
+        args = parser.resultingArguments();
     } else {
         QList<QUrl> list;
         QPointer<KOpenWithDialog> dlg = new KOpenWithDialog( list, i18n("Edit with:"), QString(), 0 );
