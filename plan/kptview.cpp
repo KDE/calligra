@@ -161,7 +161,7 @@ void ConfigDialog::updateSettings()
         }
     }
     if ( changed ) {
-        m_config->writeConfig();
+        m_config->save();
     }
 }
 

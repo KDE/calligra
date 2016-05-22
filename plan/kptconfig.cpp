@@ -48,7 +48,7 @@ void Config::saveSettings()
     if ( ! m_readWrite ) {
         return;
     }
-    KPlatoSettings::self()->writeConfig();
+    KPlatoSettings::self()->save();
 }
 
 void Config::setDefaultValues( Task &task )

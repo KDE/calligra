@@ -314,7 +314,7 @@ void View::saveContext() const
 {
     debugPlanWork;
     PlanWorkSettings::self()->setCurrentView( currentIndex() );
-    PlanWorkSettings::self()->writeConfig();
+    PlanWorkSettings::self()->save();
 }
 
 void View::slotEditDocument()

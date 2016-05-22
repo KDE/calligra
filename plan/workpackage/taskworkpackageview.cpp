@@ -448,7 +448,7 @@ void TaskWorkPackageView::saveContext()
     doc.appendChild( context );
     m_view->saveContext( itemModel()->columnMap(), context );
     PlanWorkSettings::self()->setTaskWorkPackageView( doc.toString() );
-    PlanWorkSettings::self()->writeConfig();
+    PlanWorkSettings::self()->save();
     debugPlanWork<<endl<<doc.toString();
 }
 
@@ -926,7 +926,7 @@ void TaskWPGanttView::saveContext()
     doc.appendChild( context );
     m_view->saveContext( context );
     PlanWorkSettings::self()->setTaskWPGanttView( doc.toString() );
-    PlanWorkSettings::self()->writeConfig();
+    PlanWorkSettings::self()->save();
     debugPlanWork<<endl<<doc.toString();
 }
 
