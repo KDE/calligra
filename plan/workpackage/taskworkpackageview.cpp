@@ -566,7 +566,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt::StyleOp
                         painter->setBrush( m_brushes[ Brush_NotReadyToStart ] );
                         normal = false;
                     } else if ( state & Node::State_ReadyToStart ) {
-                        painter->setBrush(  m_brushes[ Brush_Late ] );
+                        painter->setBrush(  m_brushes[ Brush_ReadyToStart ] );
                         normal = false;
                     }
                 }
