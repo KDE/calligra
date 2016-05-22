@@ -1,5 +1,10 @@
 project(calligragemini)
 
+# TEMPORARY: for  Qt5/KF5 build porting phase deprecation warnings are only annoying noise
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    add_definitions(-Wno-deprecated -Wno-deprecated-declarations)
+endif ()
+
 if (WIN32)
     option(ENABLE_GEMINI_STARTUP_MAGIC "Enable Gemini's windows startup magic" ON)
 

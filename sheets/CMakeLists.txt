@@ -1,5 +1,10 @@
 project(calligra-sheets)
 
+# TEMPORARY: for  Qt5/KF5 build porting phase deprecation warnings are only annoying noise
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    add_definitions(-Wno-deprecated -Wno-deprecated-declarations)
+endif ()
+
 include_directories( ${CMAKE_SOURCE_DIR}/interfaces
                     ${KOMAIN_INCLUDES}
                     ${KOTEXT_INCLUDES}

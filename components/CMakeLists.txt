@@ -1,5 +1,10 @@
 project(calligracomponentsplugin)
 
+# TEMPORARY: for  Qt5/KF5 build porting phase deprecation warnings are only annoying noise
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    add_definitions(-Wno-deprecated -Wno-deprecated-declarations)
+endif ()
+
 set(components_SRCS
     CalligraComponentsPlugin.cpp
     Document.cpp

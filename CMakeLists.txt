@@ -351,12 +351,6 @@ if(WIN32)
     set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
 endif()
 
-# TEMPORARY: for initial Qt5/KF5 build porting phase deprecation warnings are only annoying noise
-# remove once code porting phase starts, perhaps first locally in product subdirs
-if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
-    add_definitions(-Wno-deprecated -Wno-deprecated-declarations)
-endif ()
-
  ###########################
 ############################
 ## Required dependencies  ##
