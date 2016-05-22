@@ -62,6 +62,7 @@
 #include <ktoolbar.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
+#include <KWindowConfig>
 
 #ifdef HAVE_KACTIVITIES
 #include <KActivities/ResourceInstance>
@@ -1160,9 +1161,10 @@ void KoMainWindow::saveWindowSettings()
     if (d->windowSizeDirty ) {
 
         // Save window size into the config file of our componentData
+        // TODO: check if this is ever read again, seems lost over the years
         debugMain << "KoMainWindow::saveWindowSettings";
         KConfigGroup mainWindowConfigGroup = config->group("MainWindow");
-        saveWindowSize(mainWindowConfigGroup);
+        KWindowConfig::saveWindowSize(windowHandle(), mainWindowConfigGroup);
         config->sync();
         d->windowSizeDirty = false;
     }
