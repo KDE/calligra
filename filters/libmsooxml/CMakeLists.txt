@@ -2,6 +2,11 @@ if(Qca-qt5_FOUND)
     add_definitions( -DHAVE_QCA2 )
 endif()
 
+# TEMPORARY: for std::auto_ptr deprecation warnings are only annoying noise
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    add_definitions(-Wno-deprecated-declarations)
+endif ()
+
 include_directories(
     ${KOMAIN_INCLUDES}
     ${KOODF2_INCLUDES} # For charts
