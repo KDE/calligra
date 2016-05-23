@@ -34,7 +34,7 @@ class KOTEXT_EXPORT MctChangeset : public MctNode
 {
 public:
 
-    MctChangeset(QDomElement changeset, ulong parentId, MctAuthor* author, QDateTime date, QString comment, ulong id);
+    MctChangeset(QDomElement changeset, ulong parentId, MctAuthor* author, QDateTime date, QString comment, ulong m_id);
     MctChangeset(QDomElement changeset);
     MctChangeset();
 
@@ -43,34 +43,34 @@ public:
     ~MctChangeset();    
 
     void setId(unsigned long id);
-    unsigned long getId() const;
+    unsigned long id() const;
 
-    QList<ulong>* getParents() const;
+    QList<ulong>* parents() const;
     void addParentId(ulong pid);
     void clearParents();
-    int getParentId();
+    int parentId();
 
-    QList<ulong>* getChilds() const;
+    QList<ulong>* childs() const;
     void removeChild(ulong id);
     void addChild(ulong id);
     void clearChilds();
     void removeChildId(ulong id);
 
-    MctAuthor* getAuthor() const;
+    MctAuthor* author() const;
     void setAuthor(MctAuthor *author);
-    QString getComment() const;
+    QString comment() const;
     void setComment(QString comment);
-    QDateTime getDate() const;
+    QDateTime date() const;
     void setDate(QDateTime date);
 
     void addChange(MctChange * change);
-    QList<MctChange*>* getChanges() const;
+    QList<MctChange*>* changes() const;
     void clearChangeset();
 
-    QString getDateInString();
+    QString dateInString();
 
-    QDomElement getChangeSetNode() const;
-    void setChangeSet(QDomElement changeset);
+    QDomElement changeset() const;
+    void setChangeset(QDomElement changeset);
 
     void setCorrected(bool value);
     bool isCorrected() const;
@@ -79,15 +79,15 @@ public:
 
 private:
 
-    QDomElement changeset;
-    QDateTime date;
-    QString comment;    
-    MctAuthor *author;
-    QList<ulong> *parents;
-    QList<ulong> *childs;
-    QList<MctChange*> *changelist;
+    QDomElement m_changeset;
+    QDateTime m_date;
+    QString m_comment;
+    MctAuthor *m_author;
+    QList<ulong> *m_parents;
+    QList<ulong> *m_childs;
+    QList<MctChange*> *m_changelist;
 
-    bool corrected;
+    bool m_corrected;
 
 };
 

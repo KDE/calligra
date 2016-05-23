@@ -47,21 +47,21 @@ MctChangeset*  MctRedoGraph::addchangesetFromUndo(MctChangeset *undochangeset)
     undochangeset->clearParents();
     undochangeset->clearChilds();
 
-    MctAuthor * author = undochangeset->getAuthor();
-    QDateTime date = undochangeset->getDate();
-    QString comment = undochangeset->getComment();
-    QList<MctChange*> * changelist = undochangeset->getChanges();
+    MctAuthor * author = undochangeset->author();
+    QDateTime date = undochangeset->date();
+    QString comment = undochangeset->comment();
+    QList<MctChange*> * changelist = undochangeset->changes();
     QList<MctChange*> * redochangelist = new QList<MctChange*>();
 
     foreach (MctChange *changeNode, *changelist) {
-        MctPosition * pos = changeNode->getPosition();
-        MctChangeTypes changeType = changeNode->getChangeType();
-        MctNode* changeEntity = changeNode->getChangeEntity();
+        MctPosition * pos = changeNode->position();
+        MctChangeTypes changeType = changeNode->changeType();
+        MctNode* changeEntity = changeNode->changeEntity();
         MctChange * redoChangeNode = NULL;
         MctPosition * movedpos = NULL;
 
         if(changeType == MctChangeTypes::MovedString) {
-            movedpos = changeNode->getMovedPosition();
+            movedpos = changeNode->movedPosition();
             redoChangeNode = new MctChange(pos, changeType, changeEntity, movedpos);
         } else {
             redoChangeNode = new MctChange(pos, changeType, changeEntity);
@@ -84,114 +84,114 @@ void MctRedoGraph::addChange(MctChange* changeNode, MctChangeset* changeset)
         return;
     }
     QDomElement change;
-    QDomElement parent = changeset->getChangeSetNode();
-    if(changeNode->getChangeType() == MctChangeTypes::AddedString) {
+    QDomElement parent = changeset->changeset();
+    if(changeNode->changeType() == MctChangeTypes::AddedString) {
         change = m_doc->createElement(MctRedoTags::ADDED);
         parent.appendChild(change);
         addString(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::AddedStringInTable) {
+    } else if (changeNode->changeType() == MctChangeTypes::AddedStringInTable) {
         change = m_doc->createElement(MctRedoTags::ADDED);
         parent.appendChild(change);
         addStringInTable(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::RemovedString) {
+    } else if (changeNode->changeType() == MctChangeTypes::RemovedString) {
         change = m_doc->createElement(MctRedoTags::REMOVED);
         parent.appendChild(change);
         removeString(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::RemovedStringInTable) {
+    } else if (changeNode->changeType() == MctChangeTypes::RemovedStringInTable) {
         change = m_doc->createElement(MctRedoTags::REMOVED);
         parent.appendChild(change);
         removeStringInTable(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::MovedString) {
+    } else if (changeNode->changeType() == MctChangeTypes::MovedString) {
         change = m_doc->createElement(MctRedoTags::MOVED);
         parent.appendChild(change);
         moveString(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::MovedStringInTable) {
+    } else if (changeNode->changeType() == MctChangeTypes::MovedStringInTable) {
         change = m_doc->createElement(MctRedoTags::MOVED);
         parent.appendChild(change);
         moveStringInTable(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::ParagraphBreak) {
+    } else if (changeNode->changeType() == MctChangeTypes::ParagraphBreak) {
         change = m_doc->createElement(MctRedoTags::ADDED);
         parent.appendChild(change);
         addParBreak(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::ParagraphBreakInTable) {
+    } else if (changeNode->changeType() == MctChangeTypes::ParagraphBreakInTable) {
         change = m_doc->createElement(MctRedoTags::ADDED);
         parent.appendChild(change);
         addParBreakInTable(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::DelParagraphBreak) {
+    } else if (changeNode->changeType() == MctChangeTypes::DelParagraphBreak) {
         change = m_doc->createElement(MctRedoTags::REMOVED);
         parent.appendChild(change);
         delParBreak(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::DelParagraphBreakInTable) {
+    } else if (changeNode->changeType() == MctChangeTypes::DelParagraphBreakInTable) {
         change = m_doc->createElement(MctRedoTags::REMOVED);
         parent.appendChild(change);
         delParBreakInTable(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::StyleChange) {
+    } else if (changeNode->changeType() == MctChangeTypes::StyleChange) {
         change = m_doc->createElement(MctRedoTags::FORMATTAG);
         parent.appendChild(change);
         styleChange(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::StyleChangeInTable) {
+    } else if (changeNode->changeType() == MctChangeTypes::StyleChangeInTable) {
         change = m_doc->createElement(MctRedoTags::FORMATTAG);
         parent.appendChild(change);
         styleChangeInTable(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::AddedTextFrame) {
+    } else if (changeNode->changeType() == MctChangeTypes::AddedTextFrame) {
         change = m_doc->createElement(MctRedoTags::ADDED);
         parent.appendChild(change);
         textFrame(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::AddedTextFrameInTable) {
-    } else if (changeNode->getChangeType() == MctChangeTypes::RemovedTextFrame) {
-    } else if (changeNode->getChangeType() == MctChangeTypes::RemovedTextFrameInTable) {
-    } else if (changeNode->getChangeType() == MctChangeTypes::AddedTextGraphicObject) {
+    } else if (changeNode->changeType() == MctChangeTypes::AddedTextFrameInTable) {
+    } else if (changeNode->changeType() == MctChangeTypes::RemovedTextFrame) {
+    } else if (changeNode->changeType() == MctChangeTypes::RemovedTextFrameInTable) {
+    } else if (changeNode->changeType() == MctChangeTypes::AddedTextGraphicObject) {
         change = m_doc->createElement(MctRedoTags::ADDED);
         parent.appendChild(change);
         textGraphicObject(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::AddedTextGraphicObjectInTable) {
+    } else if (changeNode->changeType() == MctChangeTypes::AddedTextGraphicObjectInTable) {
         change = m_doc->createElement(MctRedoTags::ADDED);
         parent.appendChild(change);
         textGraphicObjectInTable(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::RemovedTextGraphicObject) {
+    } else if (changeNode->changeType() == MctChangeTypes::RemovedTextGraphicObject) {
         change = m_doc->createElement(MctRedoTags::REMOVED);
         parent.appendChild(change);
         textGraphicObject(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::RemovedTextGraphicObjectInTable) {
+    } else if (changeNode->changeType() == MctChangeTypes::RemovedTextGraphicObjectInTable) {
         change = m_doc->createElement(MctRedoTags::REMOVED);
         parent.appendChild(change);
         textGraphicObjectInTable(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::AddedEmbeddedObject) {
+    } else if (changeNode->changeType() == MctChangeTypes::AddedEmbeddedObject) {
         change = m_doc->createElement(MctRedoTags::ADDED);
         parent.appendChild(change);
         embeddedObject(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::AddedEmbeddedObjectInTable) {
-    } else if (changeNode->getChangeType() == MctChangeTypes::RemovedEmbeddedObject) {
-    } else if (changeNode->getChangeType() == MctChangeTypes::RemovedEmbeddedObjectInTable) {
-    } else if (changeNode->getChangeType() == MctChangeTypes::AddedTextTable) {
+    } else if (changeNode->changeType() == MctChangeTypes::AddedEmbeddedObjectInTable) {
+    } else if (changeNode->changeType() == MctChangeTypes::RemovedEmbeddedObject) {
+    } else if (changeNode->changeType() == MctChangeTypes::RemovedEmbeddedObjectInTable) {
+    } else if (changeNode->changeType() == MctChangeTypes::AddedTextTable) {
         change = m_doc->createElement(MctRedoTags::ADDED);
         parent.appendChild(change);
         textTable(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::AddedTextTableInTable) {
+    } else if (changeNode->changeType() == MctChangeTypes::AddedTextTableInTable) {
         change = m_doc->createElement(MctRedoTags::ADDED);
         parent.appendChild(change);
         textTableInTable(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::RemovedTextTable) {
+    } else if (changeNode->changeType() == MctChangeTypes::RemovedTextTable) {
         change = m_doc->createElement(MctRedoTags::REMOVED);
         parent.appendChild(change);
         textTable(&change, changeNode, false);
-    } else if (changeNode->getChangeType() == MctChangeTypes::RemovedTextTableInTable) {
+    } else if (changeNode->changeType() == MctChangeTypes::RemovedTextTableInTable) {
         change = m_doc->createElement(MctRedoTags::REMOVED);
         parent.appendChild(change);
         textTableInTable(&change, changeNode, false);
-    } else if (changeNode->getChangeType() == MctChangeTypes::AddedRowInTable) {
+    } else if (changeNode->changeType() == MctChangeTypes::AddedRowInTable) {
         change = m_doc->createElement(MctRedoTags::ADDED);
         parent.appendChild(change);
         rowChangeInTable(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::RemovedRowInTable) {
+    } else if (changeNode->changeType() == MctChangeTypes::RemovedRowInTable) {
         change = m_doc->createElement(MctRedoTags::REMOVED);
         parent.appendChild(change);
         rowChangeInTable(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::AddedColInTable) {
+    } else if (changeNode->changeType() == MctChangeTypes::AddedColInTable) {
         change = m_doc->createElement(MctRedoTags::ADDED);
         parent.appendChild(change);
         colChangeInTable(&change, changeNode);
-    } else if (changeNode->getChangeType() == MctChangeTypes::RemovedColInTable) {
+    } else if (changeNode->changeType() == MctChangeTypes::RemovedColInTable) {
         change = m_doc->createElement(MctRedoTags::REMOVED);
         parent.appendChild(change);
         colChangeInTable(&change, changeNode);
@@ -221,9 +221,9 @@ void MctRedoGraph::addChange(MctChange* changeNode, MctChangeset* changeset)
 void MctRedoGraph::addString(QDomElement *xmlchange, MctChange *change)
 {
     xmlchange->setAttribute("type", MctRedoTags::STRING);
-    MctPosition *pos = change->getPosition();
+    MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
-    MctStringChange * sc = dynamic_cast<MctStringChange*>(change->getChangeEntity());
+    MctStringChange * sc = dynamic_cast<MctStringChange*>(change->changeEntity());
     QDomText nodeText = m_doc->createTextNode(sc->getString());
     xmlchange->appendChild(nodeText);
 }
@@ -236,9 +236,9 @@ void MctRedoGraph::addString(QDomElement *xmlchange, MctChange *change)
 void MctRedoGraph::removeString(QDomElement *xmlchange, MctChange *change)
 {
     xmlchange->setAttribute("type", MctRedoTags::STRING);
-    MctPosition *pos = change->getPosition();
+    MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
-    MctStringChange * sc = dynamic_cast<MctStringChange*>(change->getChangeEntity());
+    MctStringChange * sc = dynamic_cast<MctStringChange*>(change->changeEntity());
     QDomText nodeText = m_doc->createTextNode(sc->getString());
     xmlchange->appendChild(nodeText);
 }
@@ -251,13 +251,13 @@ void MctRedoGraph::removeString(QDomElement *xmlchange, MctChange *change)
 void MctRedoGraph::moveString(QDomElement *xmlchange, MctChange *change)
 {
     xmlchange->setAttribute("type", MctRedoTags::STRING);
-    MctPosition *pos = change->getPosition();
+    MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 
-    MctPosition *movedpos = change->getMovedPosition();
+    MctPosition *movedpos = change->movedPosition();
     addPos2change(xmlchange, movedpos, true);
 
-    MctStringChange * sc = dynamic_cast<MctStringChange*>(change->getChangeEntity());
+    MctStringChange * sc = dynamic_cast<MctStringChange*>(change->changeEntity());
     QDomText nodeText = m_doc->createTextNode(sc->getString());
     xmlchange->appendChild(nodeText);
 }
@@ -270,7 +270,7 @@ void MctRedoGraph::moveString(QDomElement *xmlchange, MctChange *change)
 void MctRedoGraph::addParBreak(QDomElement *xmlchange, MctChange *change)
 {
     xmlchange->setAttribute("type", MctRedoTags::PARAGRAPH);
-    MctPosition *pos = change->getPosition();
+    MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 }
 
@@ -282,7 +282,7 @@ void MctRedoGraph::addParBreak(QDomElement *xmlchange, MctChange *change)
 void MctRedoGraph::delParBreak(QDomElement *xmlchange, MctChange *change)
 {
     xmlchange->setAttribute("type", MctRedoTags::PARAGRAPH);
-    MctPosition *pos = change->getPosition();
+    MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 }
 
@@ -293,40 +293,40 @@ void MctRedoGraph::delParBreak(QDomElement *xmlchange, MctChange *change)
  */
 void MctRedoGraph::styleChange(QDomElement *xmlchange, MctChange *change)
 {
-    MctPosition *pos = change->getPosition();
+    MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 
-    MctStylePropertyChange * sc = dynamic_cast<MctStylePropertyChange*>(change->getChangeEntity());
+    MctStylePropertyChange * sc = dynamic_cast<MctStylePropertyChange*>(change->changeEntity());
     //filling up text properties
-    if(sc->getTextPropChanges()->length() > 0) {
+    if(sc->textPropChanges()->length() > 0) {
         QDomElement subchange = m_doc->createElement(MctRedoTags::PROPERTIESTAG);
         subchange.setAttribute("type", MctRedoTags::TEXTTAG);
         xmlchange->appendChild(subchange);
-        fillPropertySubNode(&subchange, sc->getTextPropChanges(), MctStaticData::CharacterProperty);
+        fillPropertySubNode(&subchange, sc->textPropChanges(), MctStaticData::CharacterProperty);
     }
 
     //filling up parapraph properties
-    if(sc->getParagraphPropChanges()->length() > 0) {
+    if(sc->paragraphPropChanges()->length() > 0) {
         QDomElement subchange = m_doc->createElement(MctRedoTags::PROPERTIESTAG);
         subchange.setAttribute("type", MctRedoTags::PARAGRAPHTAG);
         xmlchange->appendChild(subchange);
-        fillPropertySubNode(&subchange, sc->getParagraphPropChanges(), MctStaticData::ParagraphProperty);
+        fillPropertySubNode(&subchange, sc->paragraphPropChanges(), MctStaticData::ParagraphProperty);
     }
 
     //filling up list properties
-    if(sc->getListPropChanges()->length() > 0) {
+    if(sc->listPropChanges()->length() > 0) {
         QDomElement subchange = m_doc->createElement(MctRedoTags::PROPERTIESTAG);
         subchange.setAttribute("type", MctRedoTags::LIST);
         xmlchange->appendChild(subchange);
-        fillPropertySubNode(&subchange, sc->getListPropChanges(), MctStaticData::ListProperty);
+        fillPropertySubNode(&subchange, sc->listPropChanges(), MctStaticData::ListProperty);
     }
 
     //filling up properties for other components
-    if(sc->getOtherPropChanges()->length() > 0) {
+    if(sc->otherPropChanges()->length() > 0) {
         QDomElement subchange = m_doc->createElement(MctRedoTags::PROPERTIESTAG);
         subchange.setAttribute("type", MctRedoTags::UNDEFINEDTAG);
         xmlchange->appendChild(subchange);
-        fillPropertySubNode(&subchange, sc->getOtherPropChanges(), MctStaticData::UnknownProperty);
+        fillPropertySubNode(&subchange, sc->otherPropChanges(), MctStaticData::UnknownProperty);
     }
 }
 
@@ -334,8 +334,8 @@ void MctRedoGraph::fillPropertySubNode(QDomElement *subnode, ChangeEventList *pr
 {
     foreach (ChangeEvent* change, *propchanges) {
         change->calcDiff(type);
-        foreach (int key, change->getChanges()->keys()) {
-            QPair<QString, ChangeAction> value = change->getChanges()->value(key);
+        foreach (int key, change->changes()->keys()) {
+            QPair<QString, ChangeAction> value = change->changes()->value(key);
 
             QString propName = MctStaticData::getTextPropetyString(key, type);
             qDebug() << propName << "(" << key << ") : "  << value.first;
@@ -357,10 +357,10 @@ void MctRedoGraph::fillPropertySubNode(QDomElement *subnode, ChangeEventList *pr
 void MctRedoGraph::textFrame(QDomElement *xmlchange, MctChange *change)
 {
     xmlchange->setAttribute("type", MctRedoTags::TEXTFRAME);
-    MctPosition *pos = change->getPosition();
+    MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 
-    xmlchange->setAttribute("name", change->getChangeEntity()->getName());
+    xmlchange->setAttribute("name", change->changeEntity()->name());
 }
 
 /**
@@ -372,33 +372,33 @@ void MctRedoGraph::textFrame(QDomElement *xmlchange, MctChange *change)
 void MctRedoGraph::textTable(QDomElement *xmlchange, MctChange *change, bool added)
 {
     xmlchange->setAttribute("type", MctRedoTags::TABLE);
-    MctPosition *pos = change->getPosition();
+    MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 
-    MctChangedTexObjectBase * changeEntity = dynamic_cast<MctChangedTexObjectBase*>(change->getChangeEntity());
-    xmlchange->setAttribute("name",changeEntity->getName());
+    MctChangedTexObjectBase * changeEntity = dynamic_cast<MctChangedTexObjectBase*>(change->changeEntity());
+    xmlchange->setAttribute("name",changeEntity->name());
 
-    MctTableProperties * tableprops = dynamic_cast<MctTableProperties*>(changeEntity->getObjectProperties());
-    xmlchange->setAttribute("col", tableprops->getCols());
-    xmlchange->setAttribute("row", tableprops->getRows());
+    MctTableProperties * tableprops = dynamic_cast<MctTableProperties*>(changeEntity->objectProperties());
+    xmlchange->setAttribute("col", tableprops->cols());
+    xmlchange->setAttribute("row", tableprops->rows());
     if( ! added){
         return;
     }
     else if (tableprops) {
-        if(tableprops->getProps2Export()->size() == 0) {
-            tableprops->setProps2Export(tableprops->getProps());
+        if(tableprops->props2Export()->size() == 0) {
+            tableprops->setProps2Export(tableprops->props());
         }
     }
 
     if (tableprops) {
-        QList<QString> keys = tableprops->getProps2Export()->keys();
+        QList<QString> keys = tableprops->props2Export()->keys();
         if (!keys.isEmpty()) {
             foreach (QString key, keys) {
                 if( MctStaticData::TEXTTABLE_STRUCTPROPS.contains(key) ||
                     MctStaticData::TEXTTABLE_ENUMPROPS.contains(key)) {
                     continue;
                 }
-                xmlchange->setAttribute(key, tableprops->getProps2Export()->value(key).toString());
+                xmlchange->setAttribute(key, tableprops->props2Export()->value(key).toString());
             }
         }
     }
@@ -413,45 +413,45 @@ void MctRedoGraph::textTable(QDomElement *xmlchange, MctChange *change, bool add
 void MctRedoGraph::textGraphicObject(QDomElement *xmlchange, MctChange *change, bool added)
 {
     xmlchange->setAttribute("type", MctRedoTags::TEXTGRAPHICOBJECT);
-    MctPosition *pos = change->getPosition();
+    MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 
-    MctChangedTexObjectBase * changeEntity = dynamic_cast<MctChangedTexObjectBase*>(change->getChangeEntity());
-    xmlchange->setAttribute("name", changeEntity->getName());
+    MctChangedTexObjectBase * changeEntity = dynamic_cast<MctChangedTexObjectBase*>(change->changeEntity());
+    xmlchange->setAttribute("name", changeEntity->name());
 
-    MctEmbObjProperties *embObjProps = dynamic_cast<MctEmbObjProperties*>(changeEntity->getObjectProperties());
-    if (embObjProps->getURL() != ""){
-        if (embObjProps->getPos().x() != 0 && embObjProps->getPos().y() != 0)
+    MctEmbObjProperties *embObjProps = dynamic_cast<MctEmbObjProperties*>(changeEntity->objectProperties());
+    if (embObjProps->url() != ""){
+        if (embObjProps->pos().x() != 0 && embObjProps->pos().y() != 0)
             embObjProps->setPositionInExport();
-        xmlchange->setAttribute("URL", embObjProps->getURL());
+        xmlchange->setAttribute("URL", embObjProps->url());
     } else {
-        xmlchange->setAttribute("URL", embObjProps->getShape()->getFileUrl());
+        xmlchange->setAttribute("URL", embObjProps->shape()->getFileUrl());
     }
 
     if( ! added) {
-        xmlchange->setAttribute("PositionX", embObjProps->getProps2Export()->value("PositionX").toString());
-        xmlchange->setAttribute("PositionY", embObjProps->getProps2Export()->value("PositionY").toString());
-        xmlchange->setAttribute("Rotation", embObjProps->getProps2Export()->value("Rotation").toString());
-        if (embObjProps->getProps2Export()->value("PrevPositionX").toString() != "")
-            xmlchange->setAttribute("PrevPositionX", embObjProps->getProps2Export()->value("PrevPositionX").toString()),
-            xmlchange->setAttribute("PrevPositionY", embObjProps->getProps2Export()->value("PrevPositionY").toString());
+        xmlchange->setAttribute("PositionX", embObjProps->props2Export()->value("PositionX").toString());
+        xmlchange->setAttribute("PositionY", embObjProps->props2Export()->value("PositionY").toString());
+        xmlchange->setAttribute("Rotation", embObjProps->props2Export()->value("Rotation").toString());
+        if (embObjProps->props2Export()->value("PrevPositionX").toString() != "")
+            xmlchange->setAttribute("PrevPositionX", embObjProps->props2Export()->value("PrevPositionX").toString()),
+            xmlchange->setAttribute("PrevPositionY", embObjProps->props2Export()->value("PrevPositionY").toString());
 
-        QList<QString> keys = embObjProps->getProps2Export()->keys();
+        QList<QString> keys = embObjProps->props2Export()->keys();
         foreach (QString key, keys) {
             if (key.startsWith("Stroke") || key.startsWith("Shadow") || key.startsWith("PrevSize") || key.startsWith("PrevRotation")){
-                xmlchange->setAttribute(key, embObjProps->getProps2Export()->value(key).toString());
+                xmlchange->setAttribute(key, embObjProps->props2Export()->value(key).toString());
             }
         }
         return;
     }
 
-    QList<QString> keys = embObjProps->getProps2Export()->keys();
+    QList<QString> keys = embObjProps->props2Export()->keys();
     foreach (QString key, keys) {
         if(MctStaticData::TEXTGRAPHICOBJECTS_STRUCTPROPS.contains(key)
            || key == "LinkDisplayName") {
             continue;
         }
-        xmlchange->setAttribute(key, embObjProps->getProps2Export()->value(key).toString());
+        xmlchange->setAttribute(key, embObjProps->props2Export()->value(key).toString());
     }
 }
 
@@ -463,10 +463,10 @@ void MctRedoGraph::textGraphicObject(QDomElement *xmlchange, MctChange *change, 
 void MctRedoGraph::embeddedObject(QDomElement *xmlchange, MctChange *change)
 {
     xmlchange->setAttribute("type", MctRedoTags::EMBEDDEDOBJECT);
-    MctPosition *pos = change->getPosition();
+    MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 
-    xmlchange->setAttribute("name", change->getChangeEntity()->getName());
+    xmlchange->setAttribute("name", change->changeEntity()->name());
 }
 
 /**
@@ -559,7 +559,7 @@ void MctRedoGraph::textTableInTable(QDomElement *xmlchange, MctChange *change, b
 void MctRedoGraph::rowChangeInTable(QDomElement *xmlchange, MctChange *change)
 {
     xmlchange->setAttribute("type", MctRedoTags::ROWCHANGE);
-    MctPosition *pos = change->getPosition();
+    MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 }
 
@@ -571,6 +571,6 @@ void MctRedoGraph::rowChangeInTable(QDomElement *xmlchange, MctChange *change)
 void MctRedoGraph::colChangeInTable(QDomElement *xmlchange, MctChange *change)
 {
     xmlchange->setAttribute("type", MctRedoTags::COLCHANGE);
-    MctPosition *pos = change->getPosition();
+    MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 }

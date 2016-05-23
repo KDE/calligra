@@ -34,7 +34,7 @@ MctDoBase::~MctDoBase()
 
 QTextTable* MctDoBase::getTable(MctChange *changeNode)
 {
-    MctPosition *pos = changeNode->getPosition();
+    MctPosition *pos = changeNode->position();
     QTextCursor *cursor = createcursor(changeNode, pos);
     return cursor->currentTable();
 }
@@ -42,6 +42,6 @@ QTextTable* MctDoBase::getTable(MctChange *changeNode)
 QTextCursor* MctDoBase::createcursor(MctChange *change, MctPosition *pos)
 {
     QTextCursor * cursor = NULL;
-    cursor = MctStaticData::instance()->CreateCursorFromRecursivePos(doc, pos);
+    cursor = MctStaticData::instance()->CreateCursorFromRecursivePos(m_doc, pos);
     return cursor;
 }

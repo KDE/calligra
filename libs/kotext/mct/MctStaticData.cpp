@@ -444,7 +444,7 @@ void MctStaticData::includeEmbeddedFiles(QMap<QString, MctEmbObjProperties *> de
 {
     foreach (MctEmbObjProperties* value, delemet.values()) {
         if(value->isBackedup()) {
-            if( ! value->getWasInserted()) {
+            if( ! value->wasInserted()) {
                 value->restoreBackupFile();
             }
         }
@@ -459,7 +459,7 @@ void MctStaticData::backupEmbeddedFiles(QMap<QString, MctEmbObjProperties *> del
 {
     foreach (MctEmbObjProperties* value, delemet.values()) {
         if( ! value->isBackedup()) {
-            value->backupFileFromOdt(value->getInnerUrl(), value->getOdtURL());
+            value->backupFileFromOdt(value->innerUrl(), value->odtURL());
         }
     }
 }
@@ -774,25 +774,25 @@ void MctStaticData::addPos2change(QDomElement *change, MctPosition *pos, bool mo
         posStringStart = POSSEPARATOR + QString::number(pos->getCellInfo()->getRow() + 1) + POSSEPARATOR + QString::number(pos->getCellInfo()->getCol() + 1) + posStringStart;
     }
     */
-    if (pos->getStartPar() != UNDEFINED)
-        posStringStart += POSSEPARATOR +QString::number(pos->getStartPar() + 1) + POSSEPARATOR + QString::number(pos->getStartChar() + 1);
-    if (pos->getCellInfo() != NULL) {
-        pos->getCellInfo()->convertCellName2CellPos();
-        posStringStart += POSSEPARATOR + QString::number(pos->getCellInfo()->row() + 1) + POSSEPARATOR + QString::number(pos->getCellInfo()->col() + 1);
+    if (pos->startPar() != UNDEFINED)
+        posStringStart += POSSEPARATOR +QString::number(pos->startPar() + 1) + POSSEPARATOR + QString::number(pos->startChar() + 1);
+    if (pos->startCellInfo() != NULL) {
+        pos->startCellInfo()->convertCellName2CellPos();
+        posStringStart += POSSEPARATOR + QString::number(pos->startCellInfo()->row() + 1) + POSSEPARATOR + QString::number(pos->startCellInfo()->col() + 1);
     }
     change->setAttribute(startTag, posStringStart);
 
     QString posStringEnd = change->attribute(endTag, "");
-    if (pos->getEndPar() != UNDEFINED)
-        posStringEnd += POSSEPARATOR + QString::number(pos->getEndPar() + 1) + POSSEPARATOR + QString::number(pos->getEndChar() + 1);
-    if (pos->getCellInfo() != NULL) {
-        pos->getCellInfoEnd()->convertCellName2CellPos();
-        posStringEnd += POSSEPARATOR + QString::number(pos->getCellInfoEnd()->row() + 1) + POSSEPARATOR + QString::number(pos->getCellInfoEnd()->col() + 1);
+    if (pos->endPar() != UNDEFINED)
+        posStringEnd += POSSEPARATOR + QString::number(pos->endPar() + 1) + POSSEPARATOR + QString::number(pos->endChar() + 1);
+    if (pos->startCellInfo() != NULL) {
+        pos->endCellInfoEnd()->convertCellName2CellPos();
+        posStringEnd += POSSEPARATOR + QString::number(pos->endCellInfoEnd()->row() + 1) + POSSEPARATOR + QString::number(pos->endCellInfoEnd()->col() + 1);
     }
     change->setAttribute(endTag, posStringEnd);
 
-    if (pos->getAnchoredPos() != NULL)
-        addPos2change(change, pos->getAnchoredPos(), moved, false);
+    if (pos->anchoredPos() != NULL)
+        addPos2change(change, pos->anchoredPos(), moved, false);
 }
 
 /**
@@ -802,7 +802,7 @@ void MctStaticData::addPos2change(QDomElement *change, MctPosition *pos, bool mo
  */
 bool MctStaticData::isTableChange(const MctChange *changeNode)
 {
-    MctChangeTypes changeType = changeNode->getChangeType();
+    MctChangeTypes changeType = changeNode->changeType();
 
     switch (changeType) {
     case MctChangeTypes::AddedStringInTable:
@@ -826,9 +826,10 @@ bool MctStaticData::isTableChange(const MctChange *changeNode)
 
 QTextCursor * MctStaticData::CreateCursorFromRecursivePos(KoTextDocument *doc, MctPosition *position)
 {
+    if (!doc) qCritical("nullptr");
     QTextCursor tmpcursor = *(doc->textEditor()->cursor());
     tmpcursor.movePosition(QTextCursor::Start);
-    int blocknumber = position->getStartPar();
+    int blocknumber = position->startPar();
     /*MctPosition *tmpPos = position->getAnchoredPos();
     while(tmpPos) {
         blocknumber = tmpPos->getStartPar();
@@ -877,9 +878,9 @@ QList<int> * MctStaticData::findNewLines(QString string)
  */
 MctChange* MctStaticData::createRedoChangeNode(KoTextDocument *doc, MctChange *changeNode)
 {
-    MctPosition * pos = changeNode->getPosition();
-    MctChangeTypes changeType = changeNode->getChangeType();
-    MctNode *changeEntity = changeNode->getChangeEntity();
+    MctPosition * pos = changeNode->position();
+    MctChangeTypes changeType = changeNode->changeType();
+    MctNode *changeEntity = changeNode->changeEntity();
 
     MctNode *redochangeEntity = NULL;
     MctChange *redoChangeNode = NULL;
@@ -918,11 +919,11 @@ MctChange* MctStaticData::createRedoChangeNode(KoTextDocument *doc, MctChange *c
         redoChangeNode = new MctChange(pos, changeType, redochangeEntity);
     } else if (changeType == MctChangeTypes::MovedString) {
         redochangeEntity = new MctStringChange("");
-        redoChangeNode = new MctChange(pos, changeType, redochangeEntity, changeNode->getMovedPosition());
+        redoChangeNode = new MctChange(pos, changeType, redochangeEntity, changeNode->movedPosition());
     } else if (changeType == MctChangeTypes::MovedStringInTable) {
         MctTable *tableEntity = dynamic_cast<MctTable*>(changeEntity);
         redochangeEntity = new MctStringChangeInTable("", tableEntity->cellName(), tableEntity->tableName());
-        redoChangeNode = new MctChange(pos, changeType, redochangeEntity, changeNode->getMovedPosition());
+        redoChangeNode = new MctChange(pos, changeType, redochangeEntity, changeNode->movedPosition());
     } else if (changeType == MctChangeTypes::ParagraphBreak) {
         redochangeEntity = new MctParagraphBreak();
         redoChangeNode = new MctChange(pos, changeType, redochangeEntity);

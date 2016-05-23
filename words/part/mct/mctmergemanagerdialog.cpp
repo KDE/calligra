@@ -209,11 +209,11 @@ void MctMergeManagerDialog::mergingGraphs(ChangeType type, QTreeWidget *undoTree
 
     for (auto it = changesetNodes->begin(); it != changesetNodes->end(); it++){
         MctChangeset* changesetNode = *it;
-        qCritical() << "ChangesetNode date: " << changesetNode->getDateInString();
+        qCritical() << "ChangesetNode date: " << changesetNode->dateInString();
         if (type == UNDOCHANGE){
             QMap<ulong, MctChange*> redoChangeNodes;
             QMap<ulong, MctPosition*> origPositions;
-            QList<MctChange*>* changeNodes = changesetNode->getChanges();
+            QList<MctChange*>* changeNodes = changesetNode->changes();
             //loaded changeNode ids have no value
             ulong changeNodeCount = 0;
             auto changeIt = changeNodes->end();
@@ -222,22 +222,22 @@ void MctMergeManagerDialog::mergingGraphs(ChangeType type, QTreeWidget *undoTree
                 MctChange* changeNode = *changeIt;
                 changeNode->setId(changeNodeCount++);
                 MctChange* redoChangeNode = MctStaticData::instance()->createRedoChangeNode(doc2merge, changeNode);
-                redoChangeNodes[changeNode->getId()] = redoChangeNode;
-                origPositions[changeNode->getId()] = changeNode->getPosition();
-                redoop->createcursor(changeNode, changeNode->getPosition());
+                redoChangeNodes[changeNode->id()] = redoChangeNode;
+                origPositions[changeNode->id()] = changeNode->position();
+                redoop->createcursor(changeNode, changeNode->position());
                 graph->correctChangesetNode(changesetNode, MctAbstractGraph::DATE_LATER, true);
-                redoop->createcursor(changeNode, changeNode->getPosition());
+                redoop->createcursor(changeNode, changeNode->position());
             } while (changeIt != changeNodes->begin());
 
             changeIt = changeNodes->end();
             do {
                 changeIt--;
                 MctChange* changeNode = *changeIt;
-                MctChange* redoChangeNode = redoChangeNodes[changeNode->getId()];
+                MctChange* redoChangeNode = redoChangeNodes[changeNode->id()];
                 if (redoChangeNode != nullptr){
-                    redoChangeNode->setPosition(changeNode->getPosition());
+                    redoChangeNode->setPosition(changeNode->position());
                     redoop->redoChange(redoChangeNode);
-                    changeNode->setPosition(origPositions[changeNode->getId()]);
+                    changeNode->setPosition(origPositions[changeNode->id()]);
                 }
             } while (changeIt != changeNodes->begin());
 
@@ -253,7 +253,7 @@ void MctMergeManagerDialog::mergingGraphs(ChangeType type, QTreeWidget *undoTree
 
         qDebug() << "Changeset to be merge:";
         changesetNode->printChangeset();
-        graph->addChangeset(changesetNode->getChanges(), changesetNode->getAuthor(), changesetNode->getDate(), changesetNode->getComment(), 0, true);
+        graph->addChangeset(changesetNode->changes(), changesetNode->author(), changesetNode->date(), changesetNode->comment(), 0, true);
     }
 
     if (type == UNDOCHANGE){
@@ -287,7 +287,7 @@ void MctMergeManagerDialog::checkChangesetNodesInGraph(QList<MctChangeset *> *ch
     QList<MctChangeset*> changesetNodes2done;
 
     for (auto it = changesetNodes->begin(); it != changesetNodes->end(); ++it) {
-        QDateTime date = (*it)->getDate();
+        QDateTime date = (*it)->date();
 
         MctChangeset *changesetNodeInGraph = nullptr;
         if (type == UNDOCHANGE){

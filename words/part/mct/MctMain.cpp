@@ -318,8 +318,8 @@ void MctMain::createMctChange(QTextCursor &selection, MctChangeTypes changeType,
             QTextCursor outerTableCursor = QTextCursor(selection);
             outerTableCursor.setPosition(blockpos - 1);
             pos = createPositionInTable(outerTableCursor);
-            pos->getCellInfo()->convertCellPos2CellName();
-            changeEntity = new MctRemovedTextTableInTable("removed-table-in-table", new MctTableProperties("", table->rows(), table->columns()), pos->getCellInfo()->cellName(), "", pos->getCellInfo());
+            pos->startCellInfo()->convertCellPos2CellName();
+            changeEntity = new MctRemovedTextTableInTable("removed-table-in-table", new MctTableProperties("", table->rows(), table->columns()), pos->startCellInfo()->cellName(), "", pos->startCellInfo());
             p1--; /// !!! KoTextEditor's table: {hidden block}[table] but Mct's table is a logical table, thus contains the hidden (technical) block right before the table.
         } else {
             qFatal("No table at cursor!");
@@ -335,8 +335,8 @@ void MctMain::createMctChange(QTextCursor &selection, MctChangeTypes changeType,
             QTextCursor outerTableCursor = QTextCursor(selection);
             outerTableCursor.setPosition(blockpos-1);
             pos = createPositionInTable(outerTableCursor);
-            pos->getCellInfo()->convertCellPos2CellName();
-            changeEntity = new MctAddedTextTableInTable("added-table-in-table", new MctTableProperties("", table->rows(), table->columns()), pos->getCellInfo()->cellName(), "", pos->getCellInfo());
+            pos->startCellInfo()->convertCellPos2CellName();
+            changeEntity = new MctAddedTextTableInTable("added-table-in-table", new MctTableProperties("", table->rows(), table->columns()), pos->startCellInfo()->cellName(), "", pos->startCellInfo());
             p1--; /// !!! KoTextEditor's table: {hidden block}[table] but Mct's table is a logical table, thus contains the hidden (technical) block right before the table.
         } else {
             qFatal("No table at cursor!");
@@ -365,9 +365,9 @@ void MctMain::createMctChange(QTextCursor &selection, MctChangeTypes changeType,
         MctChange *lastchange = changebuffer.last();
         // Is this change about following characters? Merge them to a word into only one MctChange
         if(changeType == MctChangeTypes::AddedString) {
-            if(lastchange->getPosition()->getEndPar() == change->getPosition()->getStartPar()
-               && lastchange->getPosition()->getEndChar() == change->getPosition()->getStartChar()
-               && changeType == lastchange->getChangeType()) {
+            if(lastchange->position()->endPar() == change->position()->startPar()
+               && lastchange->position()->endChar() == change->position()->startChar()
+               && changeType == lastchange->changeType()) {
                 changebuffer.append(change);
             } else {
                 normailizeChangebuffer();
@@ -376,9 +376,9 @@ void MctMain::createMctChange(QTextCursor &selection, MctChangeTypes changeType,
                 changebuffer.append(change);
             }
         } else if (changeType == MctChangeTypes::RemovedString) {
-            if(lastchange->getPosition()->getStartPar() == change->getPosition()->getEndPar()
-               && lastchange->getPosition()->getStartChar() == change->getPosition()->getEndChar()
-               && changeType == lastchange->getChangeType()) {
+            if(lastchange->position()->startPar() == change->position()->endPar()
+               && lastchange->position()->startChar() == change->position()->endChar()
+               && changeType == lastchange->changeType()) {
                 changebuffer.append(change);
             } else {
                 normailizeChangebuffer();
@@ -388,10 +388,10 @@ void MctMain::createMctChange(QTextCursor &selection, MctChangeTypes changeType,
             }
 
         } else if (changeType == MctChangeTypes::AddedStringInTable) {
-            if(changeType == lastchange->getChangeType()
-               && lastchange->getPosition()->getEndPar() == change->getPosition()->getStartPar()
-               && lastchange->getPosition()->getEndChar() == change->getPosition()->getStartChar()
-               && posCheckInTable(lastchange->getPosition(), change->getPosition(), changeType)) {
+            if(changeType == lastchange->changeType()
+               && lastchange->position()->endPar() == change->position()->startPar()
+               && lastchange->position()->endChar() == change->position()->startChar()
+               && posCheckInTable(lastchange->position(), change->position(), changeType)) {
                 changebuffer.append(change);
             } else {
                 normailizeChangebuffer();
@@ -400,10 +400,10 @@ void MctMain::createMctChange(QTextCursor &selection, MctChangeTypes changeType,
                 changebuffer.append(change);
             }
         } else if (changeType == MctChangeTypes::RemovedStringInTable) {
-            if(changeType == lastchange->getChangeType()
-               && lastchange->getPosition()->getStartPar() == change->getPosition()->getEndPar()
-               && lastchange->getPosition()->getStartChar() == change->getPosition()->getEndChar()
-               && posCheckInTable(lastchange->getPosition(), change->getPosition(), changeType)) {
+            if(changeType == lastchange->changeType()
+               && lastchange->position()->startPar() == change->position()->endPar()
+               && lastchange->position()->startChar() == change->position()->endChar()
+               && posCheckInTable(lastchange->position(), change->position(), changeType)) {
                 changebuffer.append(change);
             } else {
                 normailizeChangebuffer();
@@ -473,7 +473,7 @@ void MctMain::createShapeMctChange(QString type, QPointF pos, KoShape &shape, Ch
     MctStaticData::instance()->setAddedShapeType(type);
 
     if (action == REMOVED){
-        KoShape *shape1 = MctStaticData::instance()->getKoDocument()->emitPosition(props->getCenterPos());
+        KoShape *shape1 = MctStaticData::instance()->getKoDocument()->emitPosition(props->centerPos());
         props->setURL(shape1->getFileUrl());
 
         changeType = MctChangeTypes::RemovedTextGraphicObject;
@@ -746,7 +746,7 @@ void MctMain::removeRevision(QString target)
  */
 void MctMain::collectChildren(MctChangeset* change, QList<ulong>* childrenIDs, MctAbstractGraph* graph)
 {
-    QList<ulong> *children = change->getChilds();
+    QList<ulong> *children = change->childs();
 
     if (children->length() == 0) return;
 
@@ -796,24 +796,24 @@ void MctMain::normailizeChangebuffer()
     //TODO: AddedString/RemovedString, AddedStringInTable/RemovedStringInTable works only
     int i = 0;
     MctChange *tmpchange = changebuffer.at(i);
-    int p1 = tmpchange->getPosition()->getStartPar();
-    int s = tmpchange->getPosition()->getStartChar();
-    int p2 = tmpchange->getPosition()->getEndPar();
-    int e = tmpchange->getPosition()->getEndChar();
+    int p1 = tmpchange->position()->startPar();
+    int s = tmpchange->position()->startChar();
+    int p2 = tmpchange->position()->endPar();
+    int e = tmpchange->position()->endChar();
     MctCell *startCell;
     MctCell *endCell;
     MctPosition *anchor;
 
-    if(tmpchange->getChangeType() == MctChangeTypes::AddedStringInTable || tmpchange->getChangeType() == MctChangeTypes::RemovedStringInTable){
-        startCell = tmpchange->getPosition()->getCellInfo();
-        endCell = tmpchange->getPosition()->getCellInfoEnd();
-        anchor = tmpchange->getPosition()->getAnchoredPos();
+    if(tmpchange->changeType() == MctChangeTypes::AddedStringInTable || tmpchange->changeType() == MctChangeTypes::RemovedStringInTable){
+        startCell = tmpchange->position()->startCellInfo();
+        endCell = tmpchange->position()->endCellInfoEnd();
+        anchor = tmpchange->position()->anchoredPos();
     }
     QString str;
-    if(tmpchange->getChangeType() == MctChangeTypes::AddedString || tmpchange->getChangeType() == MctChangeTypes::RemovedString
-       || tmpchange->getChangeType() == MctChangeTypes::AddedStringInTable
-       || tmpchange->getChangeType() == MctChangeTypes::RemovedStringInTable) {
-        str = dynamic_cast<MctStringChange*>(tmpchange->getChangeEntity())->getString();
+    if(tmpchange->changeType() == MctChangeTypes::AddedString || tmpchange->changeType() == MctChangeTypes::RemovedString
+       || tmpchange->changeType() == MctChangeTypes::AddedStringInTable
+       || tmpchange->changeType() == MctChangeTypes::RemovedStringInTable) {
+        str = dynamic_cast<MctStringChange*>(tmpchange->changeEntity())->getString();
     } else {
         MctStaticData::instance()->getChanges()->append(tmpchange);
         changebuffer.clear();
@@ -821,40 +821,40 @@ void MctMain::normailizeChangebuffer()
     }
     while(++i < changebuffer.length()) {
         tmpchange = changebuffer.at(i);
-        if(tmpchange->getChangeType() == MctChangeTypes::AddedString) {
-            p2 = tmpchange->getPosition()->getEndPar();
-            e = tmpchange->getPosition()->getEndChar();
-            str.append(dynamic_cast<MctStringChange*>(tmpchange->getChangeEntity())->getString());
-        } else if(tmpchange->getChangeType() == MctChangeTypes::RemovedString) {
-            p1 = tmpchange->getPosition()->getStartPar();
-            s =  tmpchange->getPosition()->getStartChar();
-            str.prepend(dynamic_cast<MctStringChange*>(tmpchange->getChangeEntity())->getString());
-        } else if(tmpchange->getChangeType() == MctChangeTypes::AddedStringInTable) {
-            p2 = tmpchange->getPosition()->getEndPar();
-            e = tmpchange->getPosition()->getEndChar();
-            endCell = tmpchange->getPosition()->getCellInfoEnd();
-            setAnchorPosition(anchor, tmpchange->getPosition()->getAnchoredPos(), tmpchange->getChangeType());
-            str.append(dynamic_cast<MctStringChangeInTable*>(tmpchange->getChangeEntity())->getString());
-        } else if(tmpchange->getChangeType() == MctChangeTypes::RemovedStringInTable) {
-            p1 = tmpchange->getPosition()->getStartPar();
-            s =  tmpchange->getPosition()->getStartChar();
-            startCell = tmpchange->getPosition()->getCellInfo();
-            setAnchorPosition(anchor, tmpchange->getPosition()->getAnchoredPos(), tmpchange->getChangeType());
-            str.prepend(dynamic_cast<MctStringChangeInTable*>(tmpchange->getChangeEntity())->getString());
+        if(tmpchange->changeType() == MctChangeTypes::AddedString) {
+            p2 = tmpchange->position()->endPar();
+            e = tmpchange->position()->endChar();
+            str.append(dynamic_cast<MctStringChange*>(tmpchange->changeEntity())->getString());
+        } else if(tmpchange->changeType() == MctChangeTypes::RemovedString) {
+            p1 = tmpchange->position()->startPar();
+            s =  tmpchange->position()->startChar();
+            str.prepend(dynamic_cast<MctStringChange*>(tmpchange->changeEntity())->getString());
+        } else if(tmpchange->changeType() == MctChangeTypes::AddedStringInTable) {
+            p2 = tmpchange->position()->endPar();
+            e = tmpchange->position()->endChar();
+            endCell = tmpchange->position()->endCellInfoEnd();
+            setAnchorPosition(anchor, tmpchange->position()->anchoredPos(), tmpchange->changeType());
+            str.append(dynamic_cast<MctStringChangeInTable*>(tmpchange->changeEntity())->getString());
+        } else if(tmpchange->changeType() == MctChangeTypes::RemovedStringInTable) {
+            p1 = tmpchange->position()->startPar();
+            s =  tmpchange->position()->startChar();
+            startCell = tmpchange->position()->startCellInfo();
+            setAnchorPosition(anchor, tmpchange->position()->anchoredPos(), tmpchange->changeType());
+            str.prepend(dynamic_cast<MctStringChangeInTable*>(tmpchange->changeEntity())->getString());
         }
     }
 
     MctPosition *pos = new MctPosition(p1, s, p2, e);
     MctNode *changeEntity;
-    if(tmpchange->getChangeType() == MctChangeTypes::AddedStringInTable || tmpchange->getChangeType() == MctChangeTypes::RemovedStringInTable){
-        pos->setCellInfo(startCell);
-        pos->setCellInfoEnd(endCell);
+    if(tmpchange->changeType() == MctChangeTypes::AddedStringInTable || tmpchange->changeType() == MctChangeTypes::RemovedStringInTable){
+        pos->setStartCellInfo(startCell);
+        pos->setEndCellInfo(endCell);
         pos->setAnchored(anchor);
         changeEntity = new MctStringChangeInTable(str);
     } else {
         changeEntity = new MctStringChange(str);
     }
-    MctChange *change = new MctChange(pos, tmpchange->getChangeType(), changeEntity);
+    MctChange *change = new MctChange(pos, tmpchange->changeType(), changeEntity);
 
     MctStaticData::instance()->getChanges()->append(change);
     changebuffer.clear();
@@ -901,46 +901,46 @@ void MctMain::disconnectSignals()
 void MctMain::setAnchorPosition(MctPosition *anchor, MctPosition *InnerAnchor, MctChangeTypes changeType)
 {
     if (changeType == MctChangeTypes::AddedStringInTable) {
-        anchor->setCellInfoEnd(InnerAnchor->getCellInfoEnd());
-        anchor->setEndChar(InnerAnchor->getEndChar());
-        anchor->setEndPar(InnerAnchor->getEndPar());
+        anchor->setEndCellInfo(InnerAnchor->endCellInfoEnd());
+        anchor->setEndChar(InnerAnchor->endChar());
+        anchor->setEndPar(InnerAnchor->endPar());
     } else if (changeType == MctChangeTypes::RemovedStringInTable) {
-        anchor->setCellInfo(InnerAnchor->getCellInfo());
-        anchor->setStartChar(InnerAnchor->getStartChar());
-        anchor->setStartPar(InnerAnchor->getStartPar());
+        anchor->setStartCellInfo(InnerAnchor->startCellInfo());
+        anchor->setStartChar(InnerAnchor->startChar());
+        anchor->setStartPar(InnerAnchor->startPar());
     }
-    if (InnerAnchor->getAnchoredPos()) {
-        setAnchorPosition(anchor->getAnchoredPos(), InnerAnchor->getAnchoredPos(), changeType);
+    if (InnerAnchor->anchoredPos()) {
+        setAnchorPosition(anchor->anchoredPos(), InnerAnchor->anchoredPos(), changeType);
     }
 }
 
 bool MctMain::posCheckInTable(MctPosition *lastpos, MctPosition *pos, MctChangeTypes changeType)
 {
     if (changeType == MctChangeTypes::AddedStringInTable) {
-        if (lastpos->getCellInfo()->col() == pos->getCellInfo()->col()
-           && lastpos->getCellInfo()->row() == pos->getCellInfo()->row()
-           && lastpos->getAnchoredPos()->getEndChar() == pos->getAnchoredPos()->getStartChar()
-           && lastpos->getAnchoredPos()->getEndPar() == pos->getAnchoredPos()->getStartPar()) {
+        if (lastpos->startCellInfo()->col() == pos->startCellInfo()->col()
+           && lastpos->startCellInfo()->row() == pos->startCellInfo()->row()
+           && lastpos->anchoredPos()->endChar() == pos->anchoredPos()->startChar()
+           && lastpos->anchoredPos()->endPar() == pos->anchoredPos()->startPar()) {
             bool isPosRight = true;
 
-            if (lastpos->getAnchoredPos()->getCellInfo() && pos->getAnchoredPos()->getCellInfo()) {
-                isPosRight = posCheckInTable(lastpos->getAnchoredPos(), pos->getAnchoredPos(), changeType);
-            } else if (lastpos->getAnchoredPos()->getCellInfo()  || pos->getAnchoredPos()->getCellInfo() ) {
+            if (lastpos->anchoredPos()->startCellInfo() && pos->anchoredPos()->startCellInfo()) {
+                isPosRight = posCheckInTable(lastpos->anchoredPos(), pos->anchoredPos(), changeType);
+            } else if (lastpos->anchoredPos()->startCellInfo()  || pos->anchoredPos()->startCellInfo() ) {
                 isPosRight = false;
             }
 
             return isPosRight;
         }
     } else if (changeType == MctChangeTypes::RemovedStringInTable) {
-        if (lastpos->getCellInfo()->col() == pos->getCellInfo()->col()
-           && lastpos->getCellInfo()->row() == pos->getCellInfo()->row()
-           && lastpos->getAnchoredPos()->getStartChar() == pos->getAnchoredPos()->getEndChar()
-           && lastpos->getAnchoredPos()->getStartPar() == pos->getAnchoredPos()->getEndPar()) {
+        if (lastpos->startCellInfo()->col() == pos->startCellInfo()->col()
+           && lastpos->startCellInfo()->row() == pos->startCellInfo()->row()
+           && lastpos->anchoredPos()->startChar() == pos->anchoredPos()->endChar()
+           && lastpos->anchoredPos()->startPar() == pos->anchoredPos()->endPar()) {
             bool isPosRight = true;
 
-            if (lastpos->getAnchoredPos()->getCellInfo() && pos->getAnchoredPos()->getCellInfo()) {
-                isPosRight = posCheckInTable(lastpos->getAnchoredPos(), pos->getAnchoredPos(), changeType);
-            } else if (lastpos->getAnchoredPos()->getCellInfo()  || pos->getAnchoredPos()->getCellInfo() ) {
+            if (lastpos->anchoredPos()->startCellInfo() && pos->anchoredPos()->startCellInfo()) {
+                isPosRight = posCheckInTable(lastpos->anchoredPos(), pos->anchoredPos(), changeType);
+            } else if (lastpos->anchoredPos()->startCellInfo()  || pos->anchoredPos()->startCellInfo() ) {
                 isPosRight = false;
             }
 

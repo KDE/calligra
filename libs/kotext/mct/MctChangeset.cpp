@@ -47,18 +47,18 @@
 
 MctChangeset::MctChangeset(QDomElement changeset, ulong parentId, MctAuthor* author, QDateTime date, QString comment, ulong id)
 {
-    parents = new QList<ulong>();
-    childs = new QList<ulong>();
-    changelist = new QList<MctChange*>();
+    m_parents = new QList<ulong>();
+    m_childs = new QList<ulong>();
+    m_changelist = new QList<MctChange*>();
 
-    this->changeset = changeset;
-    this->id = id;
+    m_changeset = changeset;
+    m_id = id;
     if(parentId != 0) {
         addParentId(parentId);
     }
-    this->author = author;
-    this->date = date;
-    this->comment = comment;
+    m_author = author;
+    m_date = date;
+    m_comment = comment;
 
     //adatok beállítása az xml-ben
     setDate(date);
@@ -66,63 +66,63 @@ MctChangeset::MctChangeset(QDomElement changeset, ulong parentId, MctAuthor* aut
     setComment(comment);
     setId(id); // Overrides the id if it was set in the changeset before
 
-    corrected = false;
+    m_corrected = false;
 }
 
 MctChangeset::MctChangeset(QDomElement changeset)
 {
-    this->changeset = changeset;
-    parents = new QList<ulong>();
-    childs = new QList<ulong>();
-    changelist = new QList<MctChange*>();
+    m_changeset = changeset;
+    m_parents = new QList<ulong>();
+    m_childs = new QList<ulong>();
+    m_changelist = new QList<MctChange*>();
     setAuthor(new MctAuthor("Undefined"));
-    id = 0;
+    m_id = 0;
 
     QString datestring = changeset.attribute("date");
     datestring.replace("T", " ");
-    date = QDateTime::fromString(datestring, "yyyy-MM-dd hh:mm:ss");
+    m_date = QDateTime::fromString(datestring, "yyyy-MM-dd hh:mm:ss");
 
-    corrected = false;
+    m_corrected = false;
 }
 
 MctChangeset::MctChangeset()
 {
-    parents = new QList<ulong>();
-    childs = new QList<ulong>();
-    changelist = new QList<MctChange*>();    
-    changeset.parentNode().removeChild(changeset);
-    corrected = false;
+    m_parents = new QList<ulong>();
+    m_childs = new QList<ulong>();
+    m_changelist = new QList<MctChange*>();
+    m_changeset.parentNode().removeChild(m_changeset);
+    m_corrected = false;
     setAuthor(new MctAuthor("Undefined"));
-    id = 0;
+    m_id = 0;
 }
 
 MctChangeset::MctChangeset(const MctChangeset& other)
 {
-    setId(other.getId());
-    changeset = other.getChangeSetNode();
-    parents = new QList<ulong>(*other.getParents());
-    childs = new QList<ulong>(*other.getChilds());
-    setAuthor(other.getAuthor());
-    setDate(other.getDate());
-    setComment(other.getComment());
-    changelist = new QList<MctChange*>(*other.getChanges());
-    corrected = other.isCorrected();
+    setId(other.id());
+    m_changeset = other.changeset();
+    m_parents = new QList<ulong>(*other.parents());
+    m_childs = new QList<ulong>(*other.childs());
+    setAuthor(other.author());
+    setDate(other.date());
+    setComment(other.comment());
+    m_changelist = new QList<MctChange*>(*other.changes());
+    m_corrected = other.isCorrected();
 }
 
 MctChangeset::~MctChangeset()
 {
-    delete parents;
-    delete childs;
-    delete changelist;
+    delete m_parents;
+    delete m_childs;
+    delete m_changelist;
 }
 
 /**
  * @brief This gets the list of parent Id's
  * @return Returns with the list of parent Id's
  */
-QList<ulong>* MctChangeset::getParents() const
+QList<ulong>* MctChangeset::parents() const
 {
-    return parents;
+    return m_parents;
 }
 
 /**
@@ -131,9 +131,9 @@ QList<ulong>* MctChangeset::getParents() const
  */
 void MctChangeset::addParentId(ulong pid)
 {
-    if(!parents->contains(pid)) {
-        parents->append(pid);
-        changeset.setAttribute("parent" + QString::number(parents->size()), QString::number(pid));
+    if(!m_parents->contains(pid)) {
+        m_parents->append(pid);
+        m_changeset.setAttribute("parent" + QString::number(m_parents->size()), QString::number(pid));
     }
 }
 
@@ -146,20 +146,20 @@ void MctChangeset::clearParents()
         QString name = "parent" + QString::number(parent);
         changeset.removeAttribute(name);
     }*/
-    for(int i=0; i < parents->length(); i++) {
+    for(int i=0; i < m_parents->length(); i++) {
         QString name = "parent" + QString::number(i+1);
-        changeset.removeAttribute(name);
+        m_changeset.removeAttribute(name);
     }
-    parents->clear();
+    m_parents->clear();
 }
 
 /**
  * @brief This gets the first parentID of the changeset --- OBSOLETE
  * @return Returns with the author name
  */
-int MctChangeset::getParentId()
+int MctChangeset::parentId()
 {
-    QString parent = changeset.attribute("parent1", "0");
+    QString parent = m_changeset.attribute("parent1", "0");
     return parent.toInt();
 }
 
@@ -167,9 +167,9 @@ int MctChangeset::getParentId()
  * @brief This gets the list is child Id's
  * @return Returns with the list of child Id's
  */
-QList<ulong>* MctChangeset::getChilds() const
+QList<ulong>* MctChangeset::childs() const
 {
-    return childs;
+    return m_childs;
 }
 
 /**
@@ -178,7 +178,7 @@ QList<ulong>* MctChangeset::getChilds() const
  */
 void MctChangeset::removeChild(ulong id)
 {
-    QMutableListIterator<ulong> it(*childs);
+    QMutableListIterator<ulong> it(*m_childs);
     while(it.hasNext()) {
         if(it.next() == id) {
             it.remove();
@@ -193,8 +193,8 @@ void MctChangeset::removeChild(ulong id)
  */
 void MctChangeset::addChild(ulong id)
 {
-    if(!childs->contains(id)) {
-        childs->append(id);
+    if(!m_childs->contains(id)) {
+        m_childs->append(id);
     }
 }
 
@@ -203,7 +203,7 @@ void MctChangeset::addChild(ulong id)
  */
 void MctChangeset::clearChilds()
 {
-    childs->clear();
+    m_childs->clear();
 }
 
 /**
@@ -212,9 +212,9 @@ void MctChangeset::clearChilds()
  */
 void MctChangeset::removeChildId(ulong id)
 {
-    for(int i = 0; i < childs->length(); i++) {
-        if(childs->at(i) == id) {
-            childs->removeAt(i);
+    for(int i = 0; i < m_childs->length(); i++) {
+        if(m_childs->at(i) == id) {
+            m_childs->removeAt(i);
             break;
         }
     }
@@ -224,13 +224,13 @@ void MctChangeset::removeChildId(ulong id)
  * @brief This gets the author of the changeset.
  * @return Returns with the author name.
  */
-MctAuthor* MctChangeset::getAuthor() const
+MctAuthor* MctChangeset::author() const
 {
-    if(author == NULL) {
-        QString name = changeset.attribute("author");
+    if(m_author == NULL) {
+        QString name = m_changeset.attribute("author");
         return new MctAuthor(name);
     }
-    return author;
+    return m_author;
 }
 
 /**
@@ -239,20 +239,20 @@ MctAuthor* MctChangeset::getAuthor() const
  */
 void MctChangeset::setAuthor(MctAuthor *author)
 {
-    changeset.setAttribute("author", author->getName());
-    this->author = author;
+    m_changeset.setAttribute("author", author->name());
+    this->m_author = author;
 }
 
 /**
  * @brief This gets the comment of the changeset
  * @return Returns with the comment.
  */
-QString MctChangeset::getComment() const
+QString MctChangeset::comment() const
 {
-    if(comment.isEmpty()) {
-        return changeset.attribute("comment","");
+    if(m_comment.isEmpty()) {
+        return m_changeset.attribute("comment","");
     }
-    return comment;
+    return m_comment;
 }
 
 /**
@@ -261,24 +261,24 @@ QString MctChangeset::getComment() const
  */
 void MctChangeset::setComment(QString comment)
 {
-    this->comment = comment;
-    changeset.setAttribute("comment", comment);
+    this->m_comment = comment;
+    m_changeset.setAttribute("comment", comment);
 }
 
 /**
  * @brief This gets the date of the changeset
  * @return Returns with the date.
  */
-QDateTime MctChangeset::getDate() const
+QDateTime MctChangeset::date() const
 {
-    if(!date.isValid()) {
-        QString datestring = changeset.attribute("date");
-        return QDateTime::fromString(changeset.attribute("date").replace("T", " "), "yyyy-MM-dd hh:mm:ss");
+    if(!m_date.isValid()) {
+        QString datestring = m_changeset.attribute("date");
+        return QDateTime::fromString(m_changeset.attribute("date").replace("T", " "), "yyyy-MM-dd hh:mm:ss");
         /*QString datestring = changeset.attribute("date");
         datestring.replace("T", " ");
         date = QDateTime::fromString(datestring, "yyyy-MM-dd hh:mm:ss");*/
     }
-    return date;
+    return m_date;
 }
 
 /**
@@ -289,20 +289,20 @@ void MctChangeset::setDate(QDateTime date)
 {
     QString datestring = date.toString("yyyy-MM-dd hh:mm:ss");
     datestring.replace(" ", "T");
-    changeset.setAttribute("date", datestring);
-    this->date = date;
+    m_changeset.setAttribute("date", datestring);
+    this->m_date = date;
 }
 
 /**
  * @brief This gets the Id number of the changeset
  * @return Returns with the Id number.
  */
-ulong MctChangeset::getId() const
+ulong MctChangeset::id() const
 {
-    if(id == 0) {
-        return changeset.attribute("id", "0").toULong();
+    if(m_id == 0) {
+        return m_changeset.attribute("id", "0").toULong();
     }
-    return id;
+    return m_id;
 }
 
 /**
@@ -311,8 +311,8 @@ ulong MctChangeset::getId() const
  */
 void MctChangeset::setId(unsigned long id)
 {
-    this->id = id;
-    changeset.setAttribute("id", QString::number(id));
+    m_id = id;
+    m_changeset.setAttribute("id", QString::number(id));
 }
 
 /**
@@ -321,16 +321,16 @@ void MctChangeset::setId(unsigned long id)
  */
 void MctChangeset::addChange(MctChange *change)
 {
-    changelist->append(change);
+    m_changelist->append(change);
 }
 
 /**
  * @brief This gets the changes related to the changeset node.
  * @return Returns with the list of change nodes.
  */
-QList<MctChange*>* MctChangeset::getChanges() const
+QList<MctChange*>* MctChangeset::changes() const
 {
-    return changelist;
+    return m_changelist;
 }
 
 /**
@@ -338,20 +338,20 @@ QList<MctChange*>* MctChangeset::getChanges() const
  */
 void MctChangeset::clearChangeset()
 {
-    foreach (MctChange* changeNode, *changelist) {
-        changeset.removeChild(changeNode->getChangeNode());
+    foreach (MctChange* changeNode, *m_changelist) {
+        m_changeset.removeChild(changeNode->changeNode());
     }
-    changelist->clear();
+    m_changelist->clear();
 }
 
 /**
  * @brief This gets the date and author of the changeset in one string.
  * @return
  */
-QString MctChangeset::getDateInString()
+QString MctChangeset::dateInString()
 {
-    QString author = this->author->getName();
-    QString nodestring = getDate().toString("yyyy-MM-dd hh:mm:ss") + " by: " + author;
+    QString author = this->m_author->name();
+    QString nodestring = date().toString("yyyy-MM-dd hh:mm:ss") + " by: " + author;
     return nodestring;
 }
 
@@ -359,46 +359,46 @@ QString MctChangeset::getDateInString()
  * @brief This gets the xml changeset node.
  * @return Returns with the changeset node.
  */
-QDomElement MctChangeset::getChangeSetNode() const
+QDomElement MctChangeset::changeset() const
 {
-    return changeset;
+    return m_changeset;
 }
 
 /**
  * @brief This sets the xml changeset node.
  * @param changeset the xml changeset node
  */
-void MctChangeset::setChangeSet(QDomElement changeset)
+void MctChangeset::setChangeset(QDomElement changeset)
 {
-    this->changeset = changeset;
+    this->m_changeset = changeset;
 }
 
 void MctChangeset::setCorrected(bool value)
 {
-    corrected = value;
+    m_corrected = value;
 }
 
 bool MctChangeset::isCorrected() const
 {
-    return corrected;
+    return m_corrected;
 }
 
 void MctChangeset::printChangeset()
 {
     qDebug() << "Printing changeset:";
-    QString dateString = date.toString("yyyy.M.d.");
-    QString timeString = date.toString("(H:m:s)");
-    qDebug() << dateString << " " << timeString << " by: " << author->getName();
-    for (int i = 0; i < changelist->size(); i++){
-        MctChange *change = changelist->at(i);
-        qDebug() << change->getPosition()->toString();
-        if (change->getPosition() == NULL)
+    QString dateString = m_date.toString("yyyy.M.d.");
+    QString timeString = m_date.toString("(H:m:s)");
+    qDebug() << dateString << " " << timeString << " by: " << m_author->name();
+    for (int i = 0; i < m_changelist->size(); i++){
+        MctChange *change = m_changelist->at(i);
+        qDebug() << change->position()->toString();
+        if (change->position() == NULL)
             continue;
-        if (change->getChangeType() == MovedString){
-            qDebug() << change->getChangeType() << " " << change->getPosition()->getStartChar() << " " << change->getPosition()->getEndChar() <<
-                        change->getMovedPosition()->getStartChar() << change->getMovedPosition()->getEndChar();
+        if (change->changeType() == MovedString){
+            qDebug() << change->changeType() << " " << change->position()->startChar() << " " << change->position()->endChar() <<
+                        change->movedPosition()->startChar() << change->movedPosition()->endChar();
         } else {
-            qDebug() << change->getChangeType() << " " << change->getPosition()->getStartChar() << " " << change->getPosition()->getEndChar();
+            qDebug() << change->changeType() << " " << change->position()->startChar() << " " << change->position()->endChar();
         }
     }
     qDebug() << "-------------------";

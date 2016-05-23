@@ -30,34 +30,34 @@ class MctPosition;
 class MctChange : public MctNode
 {
 public:
-    MctChange(MctPosition *position, MctChangeTypes changeType, MctNode *changeEntity,  QDomElement change, MctPosition *movedpos = NULL);
-    MctChange(MctPosition *position, MctChangeTypes changeType, MctNode *changeEntity, MctPosition *movedpos = NULL);
+    MctChange(MctPosition *m_position, MctChangeTypes m_changeType, MctNode *m_changeEntity,  QDomElement m_change, MctPosition *movedpos = NULL);
+    MctChange(MctPosition *m_position, MctChangeTypes m_changeType, MctNode *m_changeEntity, MctPosition *movedpos = NULL);
     ~MctChange();
 
-    void addElementTreeNode(QDomElement change);
-    int getNodeId();
+    void addElementTreeNode(QDomElement m_change);
+    //int nodeId(); //unused function
 
-    MctChangeTypes getChangeType() const;
-    void setChangeType(MctChangeTypes changeType);
+    MctChangeTypes changeType() const;
+    void setChangeType(MctChangeTypes m_changeType);
 
-    MctPosition * getPosition() const;
-    void setPosition(MctPosition *position);
+    MctPosition * position() const;
+    void setPosition(MctPosition *m_position);
 
-    MctPosition * getMovedPosition() const;
-    void setMovedPosition(MctPosition *position);
+    MctPosition * movedPosition() const;
+    void setMovedPosition(MctPosition *m_position);
 
-    MctNode * getChangeEntity();
+    MctNode * changeEntity();
 
-    QDomElement getChangeNode();
+    QDomElement changeNode();
     void setChangeNode(QDomElement);
 
 private:    
 
-    MctPosition *position;         // Position of the change
-    MctChangeTypes changeType;     // ChangeType
-    MctNode *changeEntity;         // Change entity
-    QDomElement change;            // The change node in the ElementTree
-    MctPosition *movedPosition;    // Position of the change
+    MctPosition *m_position;         // Position of the change
+    MctChangeTypes m_changeType;     // ChangeType
+    MctNode *m_changeEntity;         // Change entity
+    QDomElement m_change;            // The change node in the ElementTree
+    MctPosition *m_movedPosition;    // Position of the change
 
 };
 

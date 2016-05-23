@@ -245,9 +245,9 @@ MctChange* MctRedoGraphXMLfilter::rowChangeFromXML(QDomElement change)
     MctChangeTypes changeType;
     MctNode* changeEntity;
 
-    QString tableName = pos->getCellInfo()->tableName();
-    int startrow = pos->getCellInfo()->row();
-    int endrow = pos->getCellInfoEnd()->row();
+    QString tableName = pos->startCellInfo()->tableName();
+    int startrow = pos->startCellInfo()->row();
+    int endrow = pos->endCellInfoEnd()->row();
     int rownum = endrow - startrow + 1;
 
     if(change.tagName() == MctRedoTags::ADDED) {
@@ -274,9 +274,9 @@ MctChange* MctRedoGraphXMLfilter::colChangeFromXML(QDomElement change)
     MctChangeTypes changeType;
     MctNode* changeEntity;
 
-    QString tableName = pos->getCellInfo()->tableName();
-    int startcol = pos->getCellInfo()->col();
-    int endcol = pos->getCellInfoEnd()->col();
+    QString tableName = pos->startCellInfo()->tableName();
+    int startcol = pos->startCellInfo()->col();
+    int endcol = pos->endCellInfoEnd()->col();
     int colnum = endcol - startcol + 1;
 
     if(change.tagName() == MctRedoTags::ADDED) {

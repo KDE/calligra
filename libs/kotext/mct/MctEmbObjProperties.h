@@ -32,40 +32,40 @@ class MctEmbObjProperties : public MctPropertyBase
 {
 public:
     MctEmbObjProperties(QString name);
-    MctEmbObjProperties(QString name, KoShape *shape);
-    MctEmbObjProperties(QString name, KoShape *shape, QPointF pos, QSizeF size);
+    MctEmbObjProperties(QString name, KoShape *m_shape);
+    MctEmbObjProperties(QString name, KoShape *m_shape, QPointF m_pos, QSizeF m_size);
     ~MctEmbObjProperties();
 
-    QString backupFileFromOdt(QString innerURL, QString absOdtURL);    // Makes a copy of a metadata stored in the Odt.
+    QString backupFileFromOdt(QString m_innerURL, QString absOdtURL);    // Makes a copy of a metadata stored in the Odt.
     void restoreBackupFile();    // Makes a copy of a metadata stored in the Odt. The Manifest file is also modified in order to get valid odt.
     void deleteBackupFile();
-    void getMediaType(QString fileName);    // Gets media type of the embedded object in the manifest.xml
+    void mediaType(QString fileName);    // Gets media type of the embedded object in the manifest.xml
     void regManifest(QString fileName);     // Registers the embedded filenames in the manifest.xml
     PropertyDictionary * compareProperties(const MctEmbObjProperties& otherEmbObjProperties); // Compares properties with properties of another embObjProps class
     QString createInnerURL(QString graphicURL); // Creates inner URL in the Odt for embedded object.
-    QString createGraphicURL(QString innerURL); // Creates graphic URL in the Odt for embedded object.
+    QString createGraphicURL(QString m_innerURL); // Creates graphic URL in the Odt for embedded object.
 
     void setOdtUrl(QString odt);
 
     bool isBackedup();
 
-    QString getURL() const;
+    QString url() const;
     void setURL(const QString &value);
 
-    QString getOdtURL() const;
+    QString odtURL() const;
     void setOdtURL(const QString &value);
 
-    bool getIsBackedUp() const;
+    bool isBackedUp() const;
     void setIsBackedUp(bool value);
 
-    bool getWasInserted() const;
+    bool wasInserted() const;
     void setWasInserted(bool value);
 
-    bool getDoRestoreWhenDeleted() const;
+    bool doRestoreWhenDeleted() const;
     void setDoRestoreWhenDeleted(bool value);
 
-    QPointF getPos() const;
-    QPointF getCenterPos() const;
+    QPointF pos() const;
+    QPointF centerPos() const;
 
     void setPositionInExport();
 
@@ -74,22 +74,22 @@ public:
     void addShadowStyleChanges(KoShapeShadow *newShadow);
     void addSizeChanged(QSizeF prevPos);
     void addRotationChanged(double rotation);
-    KoShape* getShape();
+    KoShape* shape();
 
     void setPrevPos(QPointF prevPos);
-    void textGraphicStyleChanges(MctEmbObjProperties* props2, KoShape* shape);
+    void textGraphicStyleChanges(MctEmbObjProperties* props2, KoShape* m_shape);
     bool removeDir(const QString & dirName);
 
 private:
-    QString URL;                // URL of the backup file
-    QString odtURL;             // URL of the Odt file
-    QString mediaType;          // media type of the embedded object in the manifest file
-    bool isBackedUp;            // True if the embedded object is backed up
-    bool wasInserted;           // True if the object was inserted
-    bool doRestoreWhenDeleted;  // backed up file is restored into the Odt when True
-    KoShape *shape;
-    QPointF pos;
-    QSizeF size;
+    QString m_url;      // unused    // URL of the backup file
+    QString m_odtURL;   // unused    // URL of the Odt file
+    QString m_mediaType;// unused          // media type of the embedded object in the manifest file
+    bool m_isBackedUp;  // unused           // True if the embedded object is backed up
+    bool m_wasInserted; // u      // True if the object was inserted
+    bool m_doRestoreWhenDeleted;  // backed up file is restored into the Odt when True
+    KoShape *m_shape;   // u
+    QPointF m_pos;      // u
+    QSizeF m_size;      // u
 
     QString convertURL(QString oldPrefix, QString newPrefix, QString name);
 };

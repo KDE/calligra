@@ -78,14 +78,14 @@ QMap<QString, MctChangeset*>* MctRevisionManager::fillRevTree(MctAbstractGraph *
         MctChangeset* changesetNode = changesetNodes->value(date);
         QString nodestring = createNodeString(changesetNode);
         QStandardItem *item = new QStandardItem(nodestring);
-        QStandardItem *comment = new QStandardItem("By: " + changesetNode->getAuthor()->getName() + " : " +changesetNode->getComment());
+        QStandardItem *comment = new QStandardItem("By: " + changesetNode->author()->name() + " : " +changesetNode->comment());
         item->setChild(0,comment);
         // tooltip to make debugging easier
-        QList<MctChange*>* changes = changesetNode->getChanges();
+        QList<MctChange*>* changes = changesetNode->changes();
         QListIterator<MctChange*> it(*changes);
         QString listOfChanges = "Changes:";
         while (it.hasNext()) {
-            listOfChanges += "\n" + MctStaticData::CHANGE_AS_STRING.value(it.next()->getChangeType());
+            listOfChanges += "\n" + MctStaticData::CHANGE_AS_STRING.value(it.next()->changeType());
         }
         item->setToolTip(listOfChanges);
         // view setup (ascending order for redo revs)
@@ -100,7 +100,7 @@ QMap<QString, MctChangeset*>* MctRevisionManager::fillRevTree(MctAbstractGraph *
 
 QString MctRevisionManager::createNodeString(MctChangeset *changesetNode)
 {
-    QDateTime date = changesetNode->getDate();
+    QDateTime date = changesetNode->date();
     QString datestr = date.toString("yyyy.M.d. (H:m:s)");
     return datestr;
     //return datestr + " by: " + changesetNode->getAuthor()->getName();
@@ -202,7 +202,7 @@ QString MctRevisionManager::getUndoChildren(QList<MctChangeset*> selection, QLis
             continue;
 
         changesetNodes->append(changesetNode);
-        childListAll->append(changesetNode->getId());
+        childListAll->append(changesetNode->id());
     }
 
     if (changesetNodes->size() == 0)
@@ -233,7 +233,7 @@ QString MctRevisionManager::getUndoChildren(QList<MctChangeset*> selection, QLis
 
 void MctRevisionManager::checkChildren(MctChangeset *changesetNode, QList<ulong> *childlist, MctAbstractGraph* graph)
 {
-    QList<ulong> *childs = changesetNode->getChilds();
+    QList<ulong> *childs = changesetNode->childs();
 
     if (childs->size() == 0)
         return;
@@ -313,7 +313,7 @@ void MctRevisionManager::redoRevs(QList<MctChangeset *> selection)
 
         MctStaticData::instance()->getUndoGraph()->addchangesetFromRedo(changesetNode);
 
-        qDebug() << "Changeset " << changesetNode->getDateInString() << " redid";
+        qDebug() << "Changeset " << changesetNode->dateInString() << " redid";
 
         qCritical() << "Changes after redo";
         this->printChanges(MctStaticData::UNDOCHANGES);
@@ -355,7 +355,7 @@ QString MctRevisionManager::getRedoChildren(QList<MctChangeset *> selection, QLi
             continue;
 
         changesetNodes->append(changesetNode);
-        childListAll->append(changesetNode->getId());
+        childListAll->append(changesetNode->id());
     }
 
     if (changesetNodes->size() == 0)
@@ -511,13 +511,13 @@ void MctRevisionManager::printChanges(QString type)
         changes = MctStaticData::instance()->getRedoGraph()->changesetNodes();
 
     for (auto it = changes->begin(); it != changes->end(); ++it){
-        QList<MctChange*>* cs = it.value()->getChanges();
+        QList<MctChange*>* cs = it.value()->changes();
         qCritical() << "nextChange ---------------";
-        qCritical() << "date: " << it.value()->getDateInString();
+        qCritical() << "date: " << it.value()->dateInString();
         foreach (MctChange *change, *cs){
-            qCritical() << "start: "<< change->getPosition()->getStartPar() << "/" << change->getPosition()->getStartChar() <<
-                           "end: " << change->getPosition()->getEndPar() << "/" << change->getPosition()->getEndChar() <<
-                           ", type: " << change->getChangeType();
+            qCritical() << "start: "<< change->position()->startPar() << "/" << change->position()->startChar() <<
+                           "end: " << change->position()->endPar() << "/" << change->position()->endChar() <<
+                           ", type: " << change->changeType();
         }
 
     }

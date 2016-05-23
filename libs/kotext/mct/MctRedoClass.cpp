@@ -36,7 +36,7 @@
 
 MctRedoClass::MctRedoClass(KoTextDocument *kotextdoc)
 {
-    doc = kotextdoc;
+    m_doc = kotextdoc;
 }
 
 MctRedoClass::~MctRedoClass()
@@ -55,9 +55,9 @@ MctChangeset * MctRedoClass::addChangesetToUndo(MctChangeset *changesetNode, QLi
     changesetNode->clearParents();
     changesetNode->clearChilds();
 
-    MctAuthor *author = changesetNode->getAuthor();
-    QDateTime date = changesetNode->getDate();
-    QString comment = changesetNode->getComment();
+    MctAuthor *author = changesetNode->author();
+    QDateTime date = changesetNode->date();
+    QString comment = changesetNode->comment();
 
     return MctStaticData::instance()->getUndoGraph()->addChangeset(undoChangeList, author, date, comment);
 }
@@ -70,7 +70,7 @@ MctChangeset * MctRedoClass::addChangesetToUndo(MctChangeset *changesetNode, QLi
 void MctRedoClass::redoChangeset(MctChangeset *changesetNode, bool add2Graph)
 {
     QList<MctChange *> *undoChangeList = new QList<MctChange *> ();
-    QList<MctChange *> *changelist = changesetNode->getChanges();
+    QList<MctChange *> *changelist = changesetNode->changes();
 
     foreach (MctChange * change, *changelist) {
         MctChange* undochangeNode = redoChange(change);
@@ -96,7 +96,7 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
 
     //Redoing the change
 
-    MctChangeTypes changeType = changeNode->getChangeType();
+    MctChangeTypes changeType = changeNode->changeType();
     if(changeType == MctChangeTypes::AddedString) {
         undoChangeNode = redoAddedString(changeNode);
     } else if (changeType == MctChangeTypes::RemovedString) {
@@ -163,14 +163,14 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
   */
  MctChange * MctRedoClass::redoAddedString(MctChange * changeNode)
  {
-     MctPosition *pos = changeNode->getPosition();
-     MctStringChange *changeEntity = dynamic_cast<MctStringChange*>(changeNode->getChangeEntity());
+     MctPosition *pos = changeNode->position();
+     MctStringChange *changeEntity = dynamic_cast<MctStringChange*>(changeNode->changeEntity());
      QTextCursor *cursor = createcursor(changeNode, pos);
      int blockpos  = cursor->block().position();
-     cursor->setPosition(blockpos + pos->getStartChar());
+     cursor->setPosition(blockpos + pos->startChar());
 
-     doc->textEditor()->setPosition(cursor->position());
-     doc->textEditor()->insertText(changeEntity->getString());
+     m_doc->textEditor()->setPosition(cursor->position());
+     m_doc->textEditor()->insertText(changeEntity->getString());
      //cursor->insertText(changeEntity->getString());
 
      MctChange * undoChangeNode = new MctChange(pos, MctChangeTypes::AddedString, changeEntity);
@@ -179,19 +179,19 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
 
  MctChange * MctRedoClass::redoRemovedString(MctChange * changeNode)
  {
-     MctPosition *pos = changeNode->getPosition();
-     MctStringChange *changeEntity = dynamic_cast<MctStringChange*>(changeNode->getChangeEntity());
+     MctPosition *pos = changeNode->position();
+     MctStringChange *changeEntity = dynamic_cast<MctStringChange*>(changeNode->changeEntity());
      QTextCursor *cursor = createcursor(changeNode, pos);
 
      int blockpos  = cursor->block().position();
-     cursor->setPosition(blockpos + pos->getStartChar());
-     doc->textEditor()->setPosition(cursor->position());
-     cursor->setPosition(blockpos + pos->getEndChar(), QTextCursor::KeepAnchor);
-     doc->textEditor()->setPosition(cursor->position(), QTextCursor::KeepAnchor);
+     cursor->setPosition(blockpos + pos->startChar());
+     m_doc->textEditor()->setPosition(cursor->position());
+     cursor->setPosition(blockpos + pos->endChar(), QTextCursor::KeepAnchor);
+     m_doc->textEditor()->setPosition(cursor->position(), QTextCursor::KeepAnchor);
      QString string = cursor->selectedText();
      changeEntity->setString(string);
      //cursor->removeSelectedText();
-     doc->textEditor()->deleteChar();
+     m_doc->textEditor()->deleteChar();
 
      MctChange * undoChangeNode = new MctChange(pos, MctChangeTypes::RemovedString, changeEntity);
      return undoChangeNode;
@@ -199,25 +199,25 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
 
  MctChange * MctRedoClass::redoMovedString(MctChange * changeNode)
  {
-     MctPosition *pos = changeNode->getPosition();
-     MctPosition *movedpos = changeNode->getMovedPosition();
-     MctStringChange *changeEntity = dynamic_cast<MctStringChange*>(changeNode->getChangeEntity());
+     MctPosition *pos = changeNode->position();
+     MctPosition *movedpos = changeNode->movedPosition();
+     MctStringChange *changeEntity = dynamic_cast<MctStringChange*>(changeNode->changeEntity());
 
      QTextCursor *cursor = createcursor(changeNode, pos);
      int blockpos  = cursor->block().position();
-     cursor->setPosition(blockpos + pos->getStartChar());
-     doc->textEditor()->setPosition(cursor->position());
-     cursor->setPosition(blockpos + pos->getEndChar(), QTextCursor::KeepAnchor);
-     doc->textEditor()->setPosition(cursor->position(), QTextCursor::KeepAnchor);
+     cursor->setPosition(blockpos + pos->startChar());
+     m_doc->textEditor()->setPosition(cursor->position());
+     cursor->setPosition(blockpos + pos->endChar(), QTextCursor::KeepAnchor);
+     m_doc->textEditor()->setPosition(cursor->position(), QTextCursor::KeepAnchor);
      //cursor->removeSelectedText();
-     doc->textEditor()->deleteChar();
+     m_doc->textEditor()->deleteChar();
 
      cursor = createcursor(changeNode, movedpos);
      blockpos = cursor->block().position();
-     cursor->setPosition(blockpos + movedpos->getStartChar());
-     doc->textEditor()->setPosition(cursor->position());
+     cursor->setPosition(blockpos + movedpos->startChar());
+     m_doc->textEditor()->setPosition(cursor->position());
      //cursor->insertText(changeEntity->getString());
-     doc->textEditor()->insertText(changeEntity->getString());
+     m_doc->textEditor()->insertText(changeEntity->getString());
 
      MctChange * undoChangeNode = new MctChange(pos, MctChangeTypes::MovedString, changeEntity, movedpos);
      return undoChangeNode;
@@ -225,14 +225,14 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
 
  MctChange * MctRedoClass::redoAddedStringInTable(MctChange * changeNode)
  {
-     MctPosition *pos = changeNode->getPosition();
-     MctStringChangeInTable *changeEntity = dynamic_cast<MctStringChangeInTable*>(changeNode->getChangeEntity());
+     MctPosition *pos = changeNode->position();
+     MctStringChangeInTable *changeEntity = dynamic_cast<MctStringChangeInTable*>(changeNode->changeEntity());
 
      QTextCursor *cursor = createcursor(changeNode, pos);
 
-     doc->textEditor()->setPosition(pos->getTableCellPosition(cursor));
+     m_doc->textEditor()->setPosition(pos->tableCellPosition(cursor));
 
-     doc->textEditor()->insertText(changeEntity->getString());
+     m_doc->textEditor()->insertText(changeEntity->getString());
 
      MctChange * undoChangeNode = new MctChange(pos, MctChangeTypes::AddedStringInTable, changeEntity);
      return undoChangeNode;
@@ -241,8 +241,8 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
 
  MctChange * MctRedoClass::redoRemovedStringInTable(MctChange * changeNode)
  {
-     MctPosition *pos = changeNode->getPosition();
-     MctStringChangeInTable *changeEntity = dynamic_cast<MctStringChangeInTable*>(changeNode->getChangeEntity());
+     MctPosition *pos = changeNode->position();
+     MctStringChangeInTable *changeEntity = dynamic_cast<MctStringChangeInTable*>(changeNode->changeEntity());
 
      QTextCursor *cursor = createcursor(changeNode, pos);
      //táblázat kezdő blokja
@@ -250,7 +250,7 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
      MctPosition *tmp = pos;
      QTextCursor tmpcursor(*cursor);
      QTextTable * table;
-     while(tmp->getAnchoredPos()) {
+     while(tmp->anchoredPos()) {
          blockpos  = tmpcursor.block().position();
          bool hiddenTableHandling = tmpcursor.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable);
          table = tmpcursor.currentTable();
@@ -258,25 +258,25 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
              tmpcursor.movePosition(QTextCursor::NextCharacter);
              table = tmpcursor.currentTable();
          }
-         QTextTableCell cell = table->cellAt(tmp->getCellInfo()->row(), tmp->getCellInfo()->col());
+         QTextTableCell cell = table->cellAt(tmp->startCellInfo()->row(), tmp->startCellInfo()->col());
          tmpcursor = cell.firstCursorPosition();
-         tmp = tmp->getAnchoredPos();
+         tmp = tmp->anchoredPos();
          // if a nested table comes, jump +1 extra block ahead
-         int k = tmp->getAnchoredPos() ? 1 : 0;
-         tmpcursor.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, k + tmp->getStartPar());
-         tmpcursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, tmp->getStartChar());
+         int k = tmp->anchoredPos() ? 1 : 0;
+         tmpcursor.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, k + tmp->startPar());
+         tmpcursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, tmp->startChar());
      }
 
-     doc->textEditor()->setPosition(tmpcursor.position());
+     m_doc->textEditor()->setPosition(tmpcursor.position());
      blockpos  = tmpcursor.block().position();
 
-     tmpcursor.setPosition(blockpos + tmp->getEndChar(), QTextCursor::KeepAnchor);
-     doc->textEditor()->setPosition(tmpcursor.position(), QTextCursor::KeepAnchor);
+     tmpcursor.setPosition(blockpos + tmp->endChar(), QTextCursor::KeepAnchor);
+     m_doc->textEditor()->setPosition(tmpcursor.position(), QTextCursor::KeepAnchor);
 
      QString string = tmpcursor.selectedText();
      changeEntity->setString(string);
 
-     doc->textEditor()->deleteChar();
+     m_doc->textEditor()->deleteChar();
 
      MctChange * undoChangeNode = new MctChange(pos, MctChangeTypes::RemovedStringInTable, changeEntity);
      return undoChangeNode;
@@ -291,14 +291,14 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
 
  MctChange * MctRedoClass::redoParagraphBreak(MctChange * changeNode)
  {
-     MctPosition *pos = changeNode->getPosition();
-     MctParagraphBreak *changeEntity = dynamic_cast<MctParagraphBreak*>(changeNode->getChangeEntity());
+     MctPosition *pos = changeNode->position();
+     MctParagraphBreak *changeEntity = dynamic_cast<MctParagraphBreak*>(changeNode->changeEntity());
 
      QTextCursor *cursor = createcursor(changeNode, pos);
      int blockpos  = cursor->block().position();
-     cursor->setPosition(blockpos + pos->getStartChar());
-     doc->textEditor()->setPosition(cursor->position());
-     doc->textEditor()->newLine();
+     cursor->setPosition(blockpos + pos->startChar());
+     m_doc->textEditor()->setPosition(cursor->position());
+     m_doc->textEditor()->newLine();
 
      MctChange * undoChangeNode = new MctChange(pos, MctChangeTypes::ParagraphBreak, changeEntity);
      return undoChangeNode;
@@ -306,13 +306,13 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
 
  MctChange * MctRedoClass::redoParagraphBreakInTable(MctChange * changeNode)
  {
-     MctPosition *pos = changeNode->getPosition();
-     MctParagraphBreakInTable *changeEntity = dynamic_cast<MctParagraphBreakInTable*>(changeNode->getChangeEntity());
+     MctPosition *pos = changeNode->position();
+     MctParagraphBreakInTable *changeEntity = dynamic_cast<MctParagraphBreakInTable*>(changeNode->changeEntity());
      QTextCursor *cursor = createcursor(changeNode, pos);
 
-     doc->textEditor()->setPosition(pos->getTableCellPosition(cursor));
+     m_doc->textEditor()->setPosition(pos->tableCellPosition(cursor));
 
-     doc->textEditor()->newLine();
+     m_doc->textEditor()->newLine();
 
      MctChange * undoChangeNode = new MctChange(pos, MctChangeTypes::ParagraphBreakInTable, changeEntity);
      return undoChangeNode;
@@ -320,21 +320,21 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
 
  MctChange * MctRedoClass::redoDelParagraphBreak(MctChange * changeNode)
  {
-     MctPosition *pos = changeNode->getPosition();
-     MctDelParagraphBreak *changeEntity = dynamic_cast<MctDelParagraphBreak*>(changeNode->getChangeEntity());
+     MctPosition *pos = changeNode->position();
+     MctDelParagraphBreak *changeEntity = dynamic_cast<MctDelParagraphBreak*>(changeNode->changeEntity());
 
      QTextCursor *cursor = createcursor(changeNode, pos);
      int blockpos  = cursor->block().position();
-     cursor->setPosition(blockpos + pos->getStartChar());
-     doc->textEditor()->setPosition(cursor->position());
-     doc->textEditor()->deletePreviousChar();
+     cursor->setPosition(blockpos + pos->startChar());
+     m_doc->textEditor()->setPosition(cursor->position());
+     m_doc->textEditor()->deletePreviousChar();
 
-     if(pos->getStartPar() > pos->getEndPar()) {
-         ulong tmp = pos->getStartPar();
-         pos->setStartPar(pos->getEndPar());
+     if(pos->startPar() > pos->endPar()) {
+         ulong tmp = pos->startPar();
+         pos->setStartPar(pos->endPar());
          pos->setEndPar(tmp);
-         tmp = pos->getStartChar();
-         pos->setStartChar(pos->getEndChar());
+         tmp = pos->startChar();
+         pos->setStartChar(pos->endChar());
          pos->setEndChar(tmp);
      }
 
@@ -344,13 +344,13 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
 
  MctChange * MctRedoClass::redoDelParagraphBreakInTable(MctChange * changeNode)
  {
-     MctPosition *pos = changeNode->getPosition();
-     MctDelParagraphBreakInTable *changeEntity = dynamic_cast<MctDelParagraphBreakInTable*>(changeNode->getChangeEntity());
+     MctPosition *pos = changeNode->position();
+     MctDelParagraphBreakInTable *changeEntity = dynamic_cast<MctDelParagraphBreakInTable*>(changeNode->changeEntity());
 
      QTextCursor *cursor = createcursor(changeNode, pos);
 
-     doc->textEditor()->setPosition(pos->getTableCellPosition(cursor));
-     doc->textEditor()->deleteChar();
+     m_doc->textEditor()->setPosition(pos->tableCellPosition(cursor));
+     m_doc->textEditor()->deleteChar();
 
      MctChange * undoChangeNode = new MctChange(pos, MctChangeTypes::DelParagraphBreakInTable, changeEntity);
      return undoChangeNode;
@@ -358,20 +358,20 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
 
  MctChange * MctRedoClass::redoStyleChange(MctChange * changeNode)
  {
-     MctPosition *pos = changeNode->getPosition();
-     MctStylePropertyChange *changeEntity = dynamic_cast<MctStylePropertyChange*>(changeNode->getChangeEntity());
+     MctPosition *pos = changeNode->position();
+     MctStylePropertyChange *changeEntity = dynamic_cast<MctStylePropertyChange*>(changeNode->changeEntity());
 
      QTextCursor *cursor = createcursor(changeNode, pos);
      int blockpos  = cursor->block().position();
-     cursor->setPosition(blockpos + pos->getStartChar());
-     doc->textEditor()->setPosition(cursor->position());
-     cursor->setPosition(blockpos + pos->getEndChar(), QTextCursor::KeepAnchor);
-     doc->textEditor()->setPosition(cursor->position(), QTextCursor::KeepAnchor);
+     cursor->setPosition(blockpos + pos->startChar());
+     m_doc->textEditor()->setPosition(cursor->position());
+     cursor->setPosition(blockpos + pos->endChar(), QTextCursor::KeepAnchor);
+     m_doc->textEditor()->setPosition(cursor->position(), QTextCursor::KeepAnchor);
 
-     redoPropsChange(doc->textEditor()->cursor(), changeEntity->getTextPropChanges());
-     redoPropsChange(doc->textEditor()->cursor(), changeEntity->getParagraphPropChanges());
-     redoPropsChange(doc->textEditor()->cursor(), changeEntity->getListPropChanges());
-     redoPropsChange(doc->textEditor()->cursor(), changeEntity->getOtherPropChanges());
+     redoPropsChange(m_doc->textEditor()->cursor(), changeEntity->textPropChanges());
+     redoPropsChange(m_doc->textEditor()->cursor(), changeEntity->paragraphPropChanges());
+     redoPropsChange(m_doc->textEditor()->cursor(), changeEntity->listPropChanges());
+     redoPropsChange(m_doc->textEditor()->cursor(), changeEntity->otherPropChanges());
 
      MctChange * undoChangeNode = new MctChange(pos, MctChangeTypes::StyleChange, changeEntity);
      return undoChangeNode;
@@ -380,7 +380,7 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
  void MctRedoClass::redoPropsChange(QTextCursor *cursor, ChangeEventList * propchanges)
  {
      foreach (ChangeEvent *change, *propchanges) {
-         QTextFormat format = change->getOldFormat();
+         QTextFormat format = change->oldFormat();
          if(format.isCharFormat()) {
              QTextFormat currentformat = cursor->charFormat();
              ChangeEvent::printProperties(format);
@@ -393,7 +393,7 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
 
              change->setNewFormat(format);
              change->setOldFormat(prevformat);
-             doc->textEditor()->registerTrackedChange(*cursor, KoGenChange::FormatChange, kundo2_i18n("Formatting"), format, currentformat, false);
+             m_doc->textEditor()->registerTrackedChange(*cursor, KoGenChange::FormatChange, kundo2_i18n("Formatting"), format, currentformat, false);
 
          } else if (format.isBlockFormat()) {
              QTextBlockFormat currentformat = cursor->blockFormat();
@@ -405,7 +405,7 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
              cursor->mergeBlockFormat(format.toBlockFormat());
              ChangeEvent::printProperties(cursor->blockFormat());
 
-             change->setNewFormat(change->getOldFormat());
+             change->setNewFormat(change->oldFormat());
              change->setOldFormat(prevformat);
 
          } else if(format.isListFormat()) {
@@ -427,7 +427,7 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
              } else { // TODO: in depth compre with ChangeListCommand constructor (should be similar)
 
                  QTextListFormat currentTextListFormat = format.toListFormat();
-                 KoListStyle *listStyle = doc->styleManager()->defaultListStyle()->clone();
+                 KoListStyle *listStyle = m_doc->styleManager()->defaultListStyle()->clone();
                  KoListLevelProperties llp = listStyle->levelProperties(1);
                  llp.setStyle(static_cast<KoListStyle::Style>(currentTextListFormat.style()));
                  KoListStyle::Style currentStyle = static_cast<KoListStyle::Style>(currentTextListFormat.style());
@@ -440,7 +440,7 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
                  }
                  llp.setLevel(currentTextListFormat.indent());
                  listStyle->setLevelProperties(llp);
-                 KoList *newList = new KoList(doc->document(), listStyle);                 
+                 KoList *newList = new KoList(m_doc->document(), listStyle);
                  newList->add(cursor->block(), 1);
 
                 if(prevformat.propertyCount() == 0) {
@@ -448,7 +448,7 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
                 }
              }
 
-             change->setNewFormat(change->getOldFormat());
+             change->setNewFormat(change->oldFormat());
              change->setOldFormat(prevformat);
          }
 
@@ -463,36 +463,36 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
 
  MctChange * MctRedoClass::redoAddedTextGraphicObjects(MctChange * changeNode, bool withprops)
  {
-     MctAddedTextGraphicObject *changeEntity = dynamic_cast<MctAddedTextGraphicObject*>(changeNode->getChangeEntity());
-     MctEmbObjProperties* props = dynamic_cast<MctEmbObjProperties*>(changeEntity->getObjectProperties());
+     MctAddedTextGraphicObject *changeEntity = dynamic_cast<MctAddedTextGraphicObject*>(changeNode->changeEntity());
+     MctEmbObjProperties* props = dynamic_cast<MctEmbObjProperties*>(changeEntity->objectProperties());
 
-     MctPosition *pos = changeNode->getPosition();
+     MctPosition *pos = changeNode->position();
 
-     KoShape *shape = props->getShape();
+     KoShape *shape = props->shape();
 
-     if (changeEntity->getName() == "changed-text-graphic-object"){
+     if (changeEntity->name() == "changed-text-graphic-object"){
          QSizeF shapeSize = shape->size();
-         if (props->getProps2Export()->contains("PrevSizeHeight")){
-             shape->setSize(QSizeF(props->getProps2Export()->value("PrevSizeWidth").toDouble(), props->getProps2Export()->value("PrevSizeHeight").toDouble()));
+         if (props->props2Export()->contains("PrevSizeHeight")){
+             shape->setSize(QSizeF(props->props2Export()->value("PrevSizeWidth").toDouble(), props->props2Export()->value("PrevSizeHeight").toDouble()));
          }
 
          double rotation = shape->rotation();
-         if (props->getProps2Export()->contains("PrevRotation")){
-             shape->rotate(360 - props->getProps2Export()->value("Rotation").toDouble() + props->getProps2Export()->value("PrevRotation").toDouble());
+         if (props->props2Export()->contains("PrevRotation")){
+             shape->rotate(360 - props->props2Export()->value("Rotation").toDouble() + props->props2Export()->value("PrevRotation").toDouble());
          }
 
-         QPointF position(props->getProps2Export()->value("PositionX").toFloat(), props->getProps2Export()->value("PositionY").toFloat());
-         QPointF prevPosition(props->getProps2Export()->value("PrevPositionX").toFloat(), props->getProps2Export()->value("PrevPositionY").toFloat());
+         QPointF position(props->props2Export()->value("PositionX").toFloat(), props->props2Export()->value("PositionY").toFloat());
+         QPointF prevPosition(props->props2Export()->value("PrevPositionX").toFloat(), props->props2Export()->value("PrevPositionY").toFloat());
          QPointF actPos = shape->position();
          if (prevPosition != actPos) position = prevPosition;
          shape->setPosition(position);
-         MctEmbObjProperties *props2 = new MctEmbObjProperties(props->getURL(), shape, position, shape->size());
+         MctEmbObjProperties *props2 = new MctEmbObjProperties(props->url(), shape, position, shape->size());
 
-         if (props->getProps2Export()->contains("PrevSizeHeight")) {
+         if (props->props2Export()->contains("PrevSizeHeight")) {
              props2->addSizeChanged(shapeSize);
          }
 
-         if (props->getProps2Export()->contains("PrevRotation")){
+         if (props->props2Export()->contains("PrevRotation")){
              props2->addRotationChanged(rotation);
          }
 
@@ -501,7 +501,7 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
          props2->setPrevPos(actPos);
          changeEntity->setObjectProperties(props2);
      } else {
-         doc->textEditor()->shapeOperation(shape, ADDED);
+         m_doc->textEditor()->shapeOperation(shape, ADDED);
      }
 
      MctChange * undoChangeNode = new MctChange(pos, MctChangeTypes::AddedTextGraphicObject, changeEntity);
@@ -510,19 +510,19 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
 
  MctChange * MctRedoClass::redoRemovedTextGraphicObjects(MctChange * changeNode, bool withprops)
  {
-     MctRemovedTextGraphicObject *changeEntity = dynamic_cast<MctRemovedTextGraphicObject*>(changeNode->getChangeEntity());
-     MctEmbObjProperties* props = dynamic_cast<MctEmbObjProperties*>(changeEntity->getObjectProperties());
+     MctRemovedTextGraphicObject *changeEntity = dynamic_cast<MctRemovedTextGraphicObject*>(changeNode->changeEntity());
+     MctEmbObjProperties* props = dynamic_cast<MctEmbObjProperties*>(changeEntity->objectProperties());
 
-     MctPosition *pos = changeNode->getPosition();
+     MctPosition *pos = changeNode->position();
 
      //inserted shape, else image
-     if (!props->getURL().contains("/")){
+     if (!props->url().contains("/")){
 //FIXME
         //KoShape *shape = MctStaticData::instance()->getKoDocument()->emitPosition(props->getCenterPos());
         //doc->textEditor()->shapeOperation(shape, REMOVED);
      } else {
-        KoShape *shapeImg = props->getShape();
-        doc->textEditor()->shapeOperation(shapeImg, REMOVED);
+        KoShape *shapeImg = props->shape();
+        m_doc->textEditor()->shapeOperation(shapeImg, REMOVED);
      }
 
      MctChange * undoChangeNode = new MctChange(pos, MctChangeTypes::RemovedTextGraphicObject, changeEntity);
@@ -543,19 +543,19 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
 
  MctChange * MctRedoClass::redoAddedTextTable(MctChange * changeNode, bool withprops)
  {
-     MctPosition *pos = changeNode->getPosition();
-     MctAddedTextTable *changeEntity = dynamic_cast<MctAddedTextTable*>(changeNode->getChangeEntity());
+     MctPosition *pos = changeNode->position();
+     MctAddedTextTable *changeEntity = dynamic_cast<MctAddedTextTable*>(changeNode->changeEntity());
 
      QTextCursor *cursor = createcursor(changeNode, pos);
      int blockpos  = cursor->block().position();
-     cursor->setPosition(blockpos + pos->getStartChar());
-     doc->textEditor()->setPosition(cursor->position());
+     cursor->setPosition(blockpos + pos->startChar());
+     m_doc->textEditor()->setPosition(cursor->position());
 
-     MctTableProperties* props = dynamic_cast<MctTableProperties*>(changeEntity->getObjectProperties());
-     int rows = props->getRows();
-     int cols = props->getCols();
+     MctTableProperties* props = dynamic_cast<MctTableProperties*>(changeEntity->objectProperties());
+     int rows = props->rows();
+     int cols = props->cols();
 
-     doc->textEditor()->insertTable(rows, cols);
+     m_doc->textEditor()->insertTable(rows, cols);
 
      MctChange * redoChangeNode = new MctChange(pos, MctChangeTypes::AddedTextTable, changeEntity);
      return redoChangeNode;
@@ -563,22 +563,22 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
 
  MctChange * MctRedoClass::redoRemovedTextTable(MctChange * changeNode)
  {
-     MctPosition *pos = changeNode->getPosition();
+     MctPosition *pos = changeNode->position();
 
      qDebug() << pos->toString();
 
-     MctRemovedTextTable *changeEntity = dynamic_cast<MctRemovedTextTable*>(changeNode->getChangeEntity());
+     MctRemovedTextTable *changeEntity = dynamic_cast<MctRemovedTextTable*>(changeNode->changeEntity());
 
      QTextCursor *cursor = createcursor(changeNode, pos);
      int blockpos  = cursor->block().position();
-     cursor->setPosition(blockpos + pos->getStartChar());
+     cursor->setPosition(blockpos + pos->startChar());
 
      qDebug() << "Cursor position: " << cursor->position() << " ->(1)[table]";
 
-     doc->textEditor()->setPosition(cursor->position());
-     doc->textEditor()->deleteChar();   // jump over the hidden block before the table
+     m_doc->textEditor()->setPosition(cursor->position());
+     m_doc->textEditor()->deleteChar();   // jump over the hidden block before the table
      qDebug() << "Cursor position: " << cursor->position() << " ->[table]";
-     doc->textEditor()->deleteTable();
+     m_doc->textEditor()->deleteTable();
 
      MctChange * redoChangeNode = new MctChange(pos, MctChangeTypes::RemovedTextTable, changeEntity);
      return redoChangeNode;
@@ -586,18 +586,18 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
 
  MctChange * MctRedoClass::redoAddedTextTableInTable(MctChange * changeNode, bool withprops)
  {
-     MctPosition *pos = changeNode->getPosition();
-     MctAddedTextTableInTable *changeEntity = dynamic_cast<MctAddedTextTableInTable*>(changeNode->getChangeEntity());
+     MctPosition *pos = changeNode->position();
+     MctAddedTextTableInTable *changeEntity = dynamic_cast<MctAddedTextTableInTable*>(changeNode->changeEntity());
 
      QTextCursor *cursor = createcursor(changeNode, pos);
 
-     doc->textEditor()->setPosition(pos->getTableCellPosition(cursor));
+     m_doc->textEditor()->setPosition(pos->tableCellPosition(cursor));
 
-     MctTableProperties* props = dynamic_cast<MctTableProperties*>(changeEntity->getObjectProperties());
-     int rows = props->getRows();
-     int cols = props->getCols();
+     MctTableProperties* props = dynamic_cast<MctTableProperties*>(changeEntity->objectProperties());
+     int rows = props->rows();
+     int cols = props->cols();
 
-     doc->textEditor()->insertTable(rows, cols);
+     m_doc->textEditor()->insertTable(rows, cols);
 
      MctChange * undoChangeNode = new MctChange(pos, MctChangeTypes::AddedTextTableInTable, changeEntity);
      return undoChangeNode;
@@ -605,18 +605,18 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
 
  MctChange * MctRedoClass::redoRemovedTextTableInTable(MctChange * changeNode)
  {
-     MctPosition *pos = changeNode->getPosition();
+     MctPosition *pos = changeNode->position();
 
      qDebug() << pos->toString();
 
-     MctRemovedTextTableInTable *changeEntity = dynamic_cast<MctRemovedTextTableInTable*>(changeNode->getChangeEntity());
+     MctRemovedTextTableInTable *changeEntity = dynamic_cast<MctRemovedTextTableInTable*>(changeNode->changeEntity());
 
      QTextCursor *cursor = createcursor(changeNode, pos);
 
-     doc->textEditor()->setPosition(pos->getTableCellPosition(cursor) + 1);
+     m_doc->textEditor()->setPosition(pos->tableCellPosition(cursor) + 1);
      //doc->textEditor()->deleteChar();   // jump over the hidden block before the table
      qDebug() << "Cursor position: " << cursor->position() << " ->[table]";
-     doc->textEditor()->deleteTable();
+     m_doc->textEditor()->deleteTable();
 
      MctChange * undoChangeNode = new MctChange(pos, MctChangeTypes::RemovedTextTableInTable, changeEntity);
      return undoChangeNode;

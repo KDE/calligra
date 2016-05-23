@@ -590,10 +590,10 @@ void MctAbstractGraph::fillUpGraph()
                     changeset->addParentId(parentID.toInt());
                     ++parentidx;
                 }
-                QDateTime date = changeset->getDate();
+                QDateTime date = changeset->date();
                 m_dates->append(date);
                 m_changesetNodes->insert(date, changeset);
-                m_idDates->insert(changeset->getId(), date);
+                m_idDates->insert(changeset->id(), date);
 
                 QDomNodeList changeList = elem.childNodes();
                 for(uint j = 0; j < changeList.length(); j++) {
@@ -613,7 +613,7 @@ void MctAbstractGraph::fillUpGraph()
 
     //fill up changesetNodes with children Id's
     foreach (MctChangeset * changeset, m_changesetNodes->values()) {
-        QList<ulong>* parents = changeset->getParents();
+        QList<ulong>* parents = changeset->parents();
         foreach (ulong idnum, *parents) {
             QDateTime date = m_idDates->value(idnum);
             if(date.isNull()) {
@@ -621,7 +621,7 @@ void MctAbstractGraph::fillUpGraph()
             }
             MctChangeset* changesetNode_tmp = m_changesetNodes->value(date);
             if(changesetNode_tmp != NULL) {
-                changesetNode_tmp->addChild(changeset->getId());
+                changesetNode_tmp->addChild(changeset->id());
             }
         }
     }
@@ -783,7 +783,7 @@ MctChangeset* MctAbstractGraph::addChangeset(QList<MctChange *> *changes, MctAut
     if((parentId == 0) && (m_dates->size() > 0)) {
         QDateTime lastDate = m_dates->last();
         MctChangeset* parentNode = m_changesetNodes->value(lastDate);
-        parentId = parentNode->getId();
+        parentId = parentNode->id();
     }
 
     MctChangeset*changesetNode = new MctChangeset(changeset, parentId, author, date, comment, this->_id++);
@@ -804,7 +804,7 @@ MctChangeset* MctAbstractGraph::addChangeset(QList<MctChange *> *changes, MctAut
     m_changesetNodes->insert(date, changesetNode);
     m_dates->append(date);
     qDebug() << date;
-    m_idDates->insert(changesetNode->getId(), date);
+    m_idDates->insert(changesetNode->id(), date);
     sortDates();
     qDebug() << date;
 //FIXME:
@@ -836,18 +836,18 @@ int MctAbstractGraph::dateComapre(QDateTime d1, QDateTime d2) {
 void MctAbstractGraph::findParents(MctChangeset *changesetNode, bool merge)
 {
     qDebug() << "searching for parents";
-    QList<MctChange*> *changes = changesetNode->getChanges();
+    QList<MctChange*> *changes = changesetNode->changes();
     QList<MctPosition*> orig_pos;
     QList<MctPosition*> orig_movedpos;
-    QDateTime date = changesetNode->getDate();
+    QDateTime date = changesetNode->date();
 
     int sgn = m_redoOrUndo == MctStaticData::UNDOCHANGES ? -1 : 1;
 
     //store original positions
     for (int i = 0; i< changes->length(); i++) {
         MctChange * change = changes->at(i);
-        orig_pos.append(change->getPosition());
-        orig_movedpos.append(change->getMovedPosition());
+        orig_pos.append(change->position());
+        orig_movedpos.append(change->movedPosition());
     }
 
     for(int i = m_dates->size() - 1; i >= 0; i--) {
@@ -857,8 +857,8 @@ void MctAbstractGraph::findParents(MctChangeset *changesetNode, bool merge)
         } else {
             changesetNode_temp = m_changesetNodes->value(m_dates->at(m_dates->size()- i - 1));
         }
-        QList<MctChange *> *changes_temp = changesetNode_temp->getChanges();
-        QDateTime date_temp = changesetNode_temp->getDate();
+        QList<MctChange *> *changes_temp = changesetNode_temp->changes();
+        QDateTime date_temp = changesetNode_temp->date();
 
         foreach (MctChange* change_temp, *changes_temp) {
             for(int j =0; j < changes->length(); j++) {
@@ -868,12 +868,12 @@ void MctAbstractGraph::findParents(MctChangeset *changesetNode, bool merge)
 
                 if( (areChangesOverlapping(change_temp, pos_orig, movedpos_orig)) &&
                   (dateComapre(date_temp, date) == sgn || !merge) ) {
-                    changesetNode->addParentId(changesetNode_temp->getId());
-                    changesetNode_temp->addChild(changesetNode->getId());
+                    changesetNode->addParentId(changesetNode_temp->id());
+                    changesetNode_temp->addChild(changesetNode->id());
                 } else if ( (areChangesOverlapping2(change, change_temp)) &&
                             (dateComapre(date_temp, date) == sgn || !merge) ) {
-                    changesetNode->addParentId(changesetNode_temp->getId());
-                    changesetNode_temp->addChild(changesetNode->getId());
+                    changesetNode->addParentId(changesetNode_temp->id());
+                    changesetNode_temp->addChild(changesetNode->id());
                 }
             }
         }
@@ -889,14 +889,14 @@ void MctAbstractGraph::findParents(MctChangeset *changesetNode, bool merge)
  */
 void MctAbstractGraph::correctParentsAndChildren(MctChangeset *changsetNode, bool merge)
 {
-    QList<ulong> *parentIds = changsetNode->getParents();
+    QList<ulong> *parentIds = changsetNode->parents();
 
     foreach (ulong id, *parentIds) {
         QDateTime date = getDateFromId(id);
         MctChangeset * changesetNodeParent = getChangeset(date);
-        QList<ulong> *childrenIds = changesetNodeParent->getChilds();
+        QList<ulong> *childrenIds = changesetNodeParent->childs();
         foreach (ulong idChild, *childrenIds) {
-            if(idChild == changsetNode->getId()) {
+            if(idChild == changsetNode->id()) {
                 continue;
             }
             changesetNodeParent->removeChild(idChild);
@@ -918,21 +918,21 @@ void MctAbstractGraph::correctParentsAndChildren(MctChangeset *changsetNode, boo
  */
 bool MctAbstractGraph::areChangesOverlapping2(MctChange *change1, MctChange *change2)
 {
-    if(! (change1->getChangeType() == MctChangeTypes::AddedTextFrame || change1->getChangeType() == MctChangeTypes::RemovedTextFrame ||
-          change1->getChangeType() == MctChangeTypes::AddedTextGraphicObject || change1->getChangeType() == MctChangeTypes::RemovedTextGraphicObject ||
-          change1->getChangeType() == MctChangeTypes::AddedEmbeddedObject || change1->getChangeType() == MctChangeTypes::RemovedEmbeddedObject )) {
+    if(! (change1->changeType() == MctChangeTypes::AddedTextFrame || change1->changeType() == MctChangeTypes::RemovedTextFrame ||
+          change1->changeType() == MctChangeTypes::AddedTextGraphicObject || change1->changeType() == MctChangeTypes::RemovedTextGraphicObject ||
+          change1->changeType() == MctChangeTypes::AddedEmbeddedObject || change1->changeType() == MctChangeTypes::RemovedEmbeddedObject )) {
         return false;
     }
-    if(! (change2->getChangeType() == MctChangeTypes::AddedTextFrame || change2->getChangeType() == MctChangeTypes::RemovedTextFrame ||
-          change2->getChangeType() == MctChangeTypes::AddedTextGraphicObject || change2->getChangeType() == MctChangeTypes::RemovedTextGraphicObject ||
-          change2->getChangeType() == MctChangeTypes::AddedEmbeddedObject || change2->getChangeType() == MctChangeTypes::RemovedEmbeddedObject )) {
+    if(! (change2->changeType() == MctChangeTypes::AddedTextFrame || change2->changeType() == MctChangeTypes::RemovedTextFrame ||
+          change2->changeType() == MctChangeTypes::AddedTextGraphicObject || change2->changeType() == MctChangeTypes::RemovedTextGraphicObject ||
+          change2->changeType() == MctChangeTypes::AddedEmbeddedObject || change2->changeType() == MctChangeTypes::RemovedEmbeddedObject )) {
         return false;
     }
 
-    MctNode* changeEntity1 = change1->getChangeEntity();
-    MctNode* changeEntity2 = change2->getChangeEntity();
+    MctNode* changeEntity1 = change1->changeEntity();
+    MctNode* changeEntity2 = change2->changeEntity();
 
-    if(changeEntity1->getName() == changeEntity2->getName()) {
+    if(changeEntity1->name() == changeEntity2->name()) {
         return true;
     } else {
         return false;
@@ -960,7 +960,7 @@ bool MctAbstractGraph::arePositionsOverlapping(MctPosition *pos1, MctPosition *p
     MctPosition * pos_tmp = pos1;
     while(true) {
         poslist1->append(pos_tmp);
-        MctPosition* parentPos = pos_tmp->getAnchoredPos();
+        MctPosition* parentPos = pos_tmp->anchoredPos();
         if (parentPos == NULL) {
             break;
         } else {
@@ -971,7 +971,7 @@ bool MctAbstractGraph::arePositionsOverlapping(MctPosition *pos1, MctPosition *p
     pos_tmp = pos2;
     while (true) {
         poslist2->append(pos_tmp);
-        MctPosition* parentPos = pos_tmp->getAnchoredPos();
+        MctPosition* parentPos = pos_tmp->anchoredPos();
         if(parentPos == NULL) {
             break;
         } else {
@@ -992,7 +992,7 @@ bool MctAbstractGraph::arePositionsOverlapping(MctPosition *pos1, MctPosition *p
         MctPosition* pos2_tmp = poslist2->at(i);
 
         //determine wheter overlapping paragraphs of changes
-        if((pos1_tmp->getEndPar() >= pos2_tmp->getStartPar()) && (pos1_tmp->getStartPar() <= pos2_tmp->getEndPar())){
+        if((pos1_tmp->endPar() >= pos2_tmp->startPar()) && (pos1_tmp->startPar() <= pos2_tmp->endPar())){
             paragraph_overlapping = true;
         } else {
             paragraph_overlapping = false;
@@ -1000,7 +1000,7 @@ bool MctAbstractGraph::arePositionsOverlapping(MctPosition *pos1, MctPosition *p
         }
 
         //determine wheter overlapping characters of changes
-        if((pos1_tmp->getEndChar() >= pos2_tmp->getStartChar()) && (pos1_tmp->getStartChar() <= pos2_tmp->getEndChar())) {
+        if((pos1_tmp->endChar() >= pos2_tmp->startChar()) && (pos1_tmp->startChar() <= pos2_tmp->endChar())) {
             character_overlapping = true;
         } else {
             character_overlapping = false;
@@ -1013,18 +1013,18 @@ bool MctAbstractGraph::arePositionsOverlapping(MctPosition *pos1, MctPosition *p
             change_overlapping = false;
         }
 
-        if (pos1_tmp->getStartPar() == pos2_tmp->getEndPar() && pos1_tmp->getStartChar() == pos2_tmp->getEndChar()){
+        if (pos1_tmp->startPar() == pos2_tmp->endPar() && pos1_tmp->startChar() == pos2_tmp->endChar()){
             change_overlapping = false;
         }
 
         //check AddedTable
-        if (pos2_tmp->getStartPar() == pos2_tmp->getEndPar() && pos2_tmp->getStartChar() == pos2_tmp->getEndChar()){
-            if (pos1_tmp->getStartPar() == pos2_tmp->getStartPar() && pos1_tmp->getStartChar() == pos2_tmp->getStartChar())
+        if (pos2_tmp->startPar() == pos2_tmp->endPar() && pos2_tmp->startChar() == pos2_tmp->endChar()){
+            if (pos1_tmp->startPar() == pos2_tmp->startPar() && pos1_tmp->startChar() == pos2_tmp->startChar())
                 change_overlapping = true;
         }
 
-        MctCell* cellinf1 = pos1_tmp->getCellInfo();
-        MctCell* cellinf2 = pos2_tmp->getCellInfo();
+        MctCell* cellinf1 = pos1_tmp->startCellInfo();
+        MctCell* cellinf2 = pos2_tmp->startCellInfo();
         if(cellinf1 == NULL && cellinf2 == NULL) {
             //change_overlapping = false;
             return change_overlapping;
@@ -1069,7 +1069,7 @@ int MctAbstractGraph::comparePositions(MctPosition *pos1, MctPosition *pos2)
     MctPosition * pos_tmp = pos1;
     while (true) {
         poslist1.append(pos_tmp);
-        MctPosition* parent_pos = pos_tmp->getAnchoredPos();
+        MctPosition* parent_pos = pos_tmp->anchoredPos();
         if(parent_pos == NULL) {
             break;
         } else {
@@ -1080,7 +1080,7 @@ int MctAbstractGraph::comparePositions(MctPosition *pos1, MctPosition *pos2)
     pos_tmp = pos2;
     while (true) {
         poslist2.append(pos_tmp);
-        MctPosition* parent_pos = pos_tmp->getAnchoredPos();
+        MctPosition* parent_pos = pos_tmp->anchoredPos();
         if(parent_pos == NULL) {
             break;
         } else {
@@ -1096,8 +1096,8 @@ int MctAbstractGraph::comparePositions(MctPosition *pos1, MctPosition *pos2)
         MctPosition* pos1_tmp = poslist1.at(i);
         MctPosition* pos2_tmp = poslist2.at(i);
 
-        MctCell* cellinf1 = pos1_tmp->getCellInfo();
-        MctCell* cellinf2 = pos2_tmp->getCellInfo();
+        MctCell* cellinf1 = pos1_tmp->startCellInfo();
+        MctCell* cellinf2 = pos2_tmp->startCellInfo();
 
         /*if(cellinf1 == NULL && cellinf2 == NULL) {
             return 0;
@@ -1114,7 +1114,7 @@ int MctAbstractGraph::comparePositions(MctPosition *pos1, MctPosition *pos2)
         }
 
         //determine wheter overlapping paragraphs of changes
-        if(pos1_tmp->getEndPar() < pos2_tmp->getStartPar() || (pos1_tmp->getEndPar() == pos2_tmp->getStartPar() && pos2_tmp->getStartChar() >= pos1_tmp->getEndChar())) {
+        if(pos1_tmp->endPar() < pos2_tmp->startPar() || (pos1_tmp->endPar() == pos2_tmp->startPar() && pos2_tmp->startChar() >= pos1_tmp->endChar())) {
             paragraph_preceeding = true;
         } else {
             return -1;
@@ -1148,10 +1148,10 @@ int MctAbstractGraph::comparePositions(MctPosition *pos1, MctPosition *pos2)
 bool MctAbstractGraph::areChangesOverlapping(MctChange *change, MctPosition *pos_orig, MctPosition *movedpos_orig)
 {
     MctPosition * pos1 = pos_orig;
-    MctPosition * pos2 = change->getPosition();
+    MctPosition * pos2 = change->position();
 
     MctPosition * movedpos1 = movedpos_orig;
-    MctPosition * movedpos2 = change->getMovedPosition();
+    MctPosition * movedpos2 = change->movedPosition();
 
     bool change_overlapping = false;
 
@@ -1164,28 +1164,28 @@ bool MctAbstractGraph::areChangesOverlapping(MctChange *change, MctPosition *pos
     if(change_overlapping) {
         return change_overlapping;
     } else {
-        correctPosition(pos1, pos2, change->getChangeType());
+        correctPosition(pos1, pos2, change->changeType());
     }
 
     change_overlapping = arePositionsOverlapping(movedpos1, pos2);
     if(change_overlapping) {
         return change_overlapping;
     } else {
-        correctPosition(movedpos1, pos2, change->getChangeType());
+        correctPosition(movedpos1, pos2, change->changeType());
     }
 
     change_overlapping = arePositionsOverlapping(pos1, movedpos2);
     if(change_overlapping) {
         return change_overlapping;
     } else {
-        correctPosition(pos1, movedpos2, change->getChangeType());
+        correctPosition(pos1, movedpos2, change->changeType());
     }
 
     change_overlapping = arePositionsOverlapping(movedpos1, movedpos2);
     if(change_overlapping) {
         return change_overlapping;
     } else {
-        correctPosition(movedpos1, movedpos2, change->getChangeType());
+        correctPosition(movedpos1, movedpos2, change->changeType());
     }
 
     return change_overlapping;
@@ -1202,7 +1202,7 @@ void MctAbstractGraph::addChangesetNodeWithCorr(MctChangeset *changesetNode)
     correctChangesetNode(changesetNode, DATE_EARLIER);
 
     //correct later changesetNodes in the graph
-    QVector<QDateTime> * laterDates = findLaterDates(changesetNode->getDate());
+    QVector<QDateTime> * laterDates = findLaterDates(changesetNode->date());
     QList<MctChangeset*> list_temp;
     list_temp.append(changesetNode);
 
@@ -1214,10 +1214,10 @@ void MctAbstractGraph::addChangesetNodeWithCorr(MctChangeset *changesetNode)
     //add changeset to the graph
     changesetNode->setId(_id);
 
-    QList<MctChange*> *changes = changesetNode->getChanges();
-    MctAuthor *author = changesetNode->getAuthor();
-    QDateTime date = changesetNode->getDate();
-    QString comment = changesetNode->getComment();
+    QList<MctChange*> *changes = changesetNode->changes();
+    MctAuthor *author = changesetNode->author();
+    QDateTime date = changesetNode->date();
+    QString comment = changesetNode->comment();
 
     reverseList<MctChange*>(&changes);
     addChangeset(changes, author, date, comment);
@@ -1283,7 +1283,7 @@ void MctAbstractGraph::correctChangesetNodeList(MctChangeset *changesetNode)
  */
 void MctAbstractGraph::correctChangesetNodeListWithDate(MctChangeset *changesetNode, QString withdates, bool foradd)
 {
-    QDateTime date = changesetNode->getDate();
+    QDateTime date = changesetNode->date();
     QVector<QDateTime> *datesList;
     if(withdates == DATE_EARLIER) {
         datesList =findEarlierDates(date);
@@ -1311,7 +1311,7 @@ void MctAbstractGraph::correctChangesetNodeListWithDate(MctChangeset *changesetN
  */
 int MctAbstractGraph::correctChangesetNode(MctChangeset *changesetNode, QString withdates, bool foradd)
 {
-    QDateTime date = changesetNode->getDate();
+    QDateTime date = changesetNode->date();
     QVector<QDateTime> *datesList;
     if(withdates == DATE_EARLIER) {
         datesList =findEarlierDates(date);
@@ -1343,15 +1343,15 @@ int MctAbstractGraph::correctChangesetNode(MctChangeset *changesetNode, QString 
  */
 int MctAbstractGraph::correctChangesetNode2(MctChangeset *changesetNode, QList<MctChangeset *> *changesetnodes, bool foradd)
 {
-    QList<MctChange*> *changes = changesetNode->getChanges();
+    QList<MctChange*> *changes = changesetNode->changes();
     int parentId = 0;
     foreach (MctChangeset* node, *changesetnodes) {
         if(node == NULL) {
             continue;
         }
 
-        QList<MctChange*> *changestemp = node->getChanges();
-        parentId = node->getParentId();
+        QList<MctChange*> *changestemp = node->changes();
+        parentId = node->parentId();
 
         foreach (MctChange *changeNode, *changes) {
             foreach (MctChange *changetemp, *changestemp) {
@@ -1372,7 +1372,7 @@ int MctAbstractGraph::correctChangesetNode2(MctChangeset *changesetNode, QList<M
  */
 MctChange* MctAbstractGraph::correctChangeNode(MctChange *changeNode, MctChange *prevChangeNode, bool foradd)
 {
-    MctPosition * pos = changeNode->getPosition();
+    MctPosition * pos = changeNode->position();
     MctPosition * apos = pos;
 // TODO: what? check python code...
 //    while (true) {
@@ -1382,23 +1382,23 @@ MctChange* MctAbstractGraph::correctChangeNode(MctChange *changeNode, MctChange 
 //        }
 //    }
 
-    MctPosition * prevpos = prevChangeNode->getPosition();
+    MctPosition * prevpos = prevChangeNode->position();
     MctPosition * movedpos = NULL;
     MctPosition * prevmovedpos = NULL;
 
     MctPosition * pos_orig = new MctPosition(*pos);
     MctPosition * movedpos_orig = NULL;
 
-    if(changeNode->getChangeType() == MctChangeTypes::MovedString || changeNode->getChangeType() == MctChangeTypes::MovedStringInTable) {
-        movedpos = changeNode->getMovedPosition();
+    if(changeNode->changeType() == MctChangeTypes::MovedString || changeNode->changeType() == MctChangeTypes::MovedStringInTable) {
+        movedpos = changeNode->movedPosition();
         movedpos_orig = new MctPosition(*movedpos);
     }
 
-    if(prevChangeNode->getChangeType() == MctChangeTypes::MovedString || prevChangeNode->getChangeType() == MctChangeTypes::MovedStringInTable) {
-        prevmovedpos = prevChangeNode->getMovedPosition();
+    if(prevChangeNode->changeType() == MctChangeTypes::MovedString || prevChangeNode->changeType() == MctChangeTypes::MovedStringInTable) {
+        prevmovedpos = prevChangeNode->movedPosition();
     }
 
-    pos = correctPosition(pos, prevpos, prevChangeNode->getChangeType(), pos_orig, foradd);
+    pos = correctPosition(pos, prevpos, prevChangeNode->changeType(), pos_orig, foradd);
 
     if( prevmovedpos != NULL) {
         if(pos != NULL) {
@@ -1409,7 +1409,7 @@ MctChange* MctAbstractGraph::correctChangeNode(MctChange *changeNode, MctChange 
     }
 
     if( movedpos != NULL) {
-        movedpos = correctPosition(movedpos, prevpos, prevChangeNode->getChangeType(), movedpos_orig, foradd);
+        movedpos = correctPosition(movedpos, prevpos, prevChangeNode->changeType(), movedpos_orig, foradd);
     }
     if(prevmovedpos != NULL && movedpos != NULL) {
         movedpos = correctPosition(movedpos, prevmovedpos, MctChangeTypes::AddedString, movedpos_orig, foradd); //first remove than add string in case MovedString
@@ -1446,28 +1446,28 @@ void MctAbstractGraph::correctParInPosition(MctPosition *pos, MctPosition *prevp
     bool preceeding_paragraph = false;
 
     //determine whether prev pos is connected to precceding paragraph than pos_orig
-    if(pos->getStartPar() >= prevpos->getEndPar()) {
+    if(pos->startPar() >= prevpos->endPar()) {
         preceeding_paragraph = true;
     }
 
     //adjusting paragraph numbers
     if(preceeding_paragraph) {
-        ulong diff = prevpos->getEndPar() - prevpos->getStartPar();
+        ulong diff = prevpos->endPar() - prevpos->startPar();
         if(prevchangetype == MctChangeTypes::AddedString) {
-            pos->setStartPar(pos->getStartPar() + diff);
-            pos->setEndPar(pos->getEndPar() + diff);
+            pos->setStartPar(pos->startPar() + diff);
+            pos->setEndPar(pos->endPar() + diff);
         } else if (prevchangetype == MctChangeTypes::RemovedString) {
-            pos->setStartPar(pos->getStartPar() - diff);
-            pos->setEndPar(pos->getEndPar() - diff);
+            pos->setStartPar(pos->startPar() - diff);
+            pos->setEndPar(pos->endPar() - diff);
         } else if (prevchangetype == MctChangeTypes::MovedString) {
-            pos->setStartPar(pos->getStartPar() - diff);
-            pos->setEndPar(pos->getEndPar() - diff);
+            pos->setStartPar(pos->startPar() - diff);
+            pos->setEndPar(pos->endPar() - diff);
         } else if (prevchangetype == MctChangeTypes::ParagraphBreak) {
-            pos->setStartPar(pos->getStartPar() + 1);
-            pos->setEndPar(pos->getEndPar() + 1);
+            pos->setStartPar(pos->startPar() + 1);
+            pos->setEndPar(pos->endPar() + 1);
         } else if (prevchangetype == MctChangeTypes::DelParagraphBreak) {
-            pos->setStartPar(pos->getStartPar() - 1);
-            pos->setEndPar(pos->getEndPar() - 1);
+            pos->setStartPar(pos->startPar() - 1);
+            pos->setEndPar(pos->endPar() - 1);
         }
     }
 }
@@ -1512,62 +1512,62 @@ MctPosition * MctAbstractGraph::correctPosition(MctPosition *pos, MctPosition *p
     }
 
     //adjusting paragraph and character numbers    
-    long diff = sgn*(prevpos->getEndPar() - prevpos->getStartPar());
-    bool samePosition = prevpos->getStartChar() == pos_orig->getStartChar() && prevpos->getStartPar() == pos_orig->getStartPar();
+    long diff = sgn*(prevpos->endPar() - prevpos->startPar());
+    bool samePosition = prevpos->startChar() == pos_orig->startChar() && prevpos->startPar() == pos_orig->startPar();
     bool foraddChar = (foradd && samePosition);
     if(prevchangetype == MctChangeTypes::AddedString || prevchangetype == MctChangeTypes::AddedStringInTable) {
-        pos->setStartPar(pos->getStartPar() + diff);
-        pos->setEndPar(pos->getEndPar() + diff);
-        bool sameParPrevOrEqChar = prevpos->getEndPar() == pos_orig->getStartPar() && prevpos->getEndChar() <= pos_orig->getStartChar();
-        bool notEmptyPar = pos_orig->getEndChar() != 0;
+        pos->setStartPar(pos->startPar() + diff);
+        pos->setEndPar(pos->endPar() + diff);
+        bool sameParPrevOrEqChar = prevpos->endPar() == pos_orig->startPar() && prevpos->endChar() <= pos_orig->startChar();
+        bool notEmptyPar = pos_orig->endChar() != 0;
         if(sameParPrevOrEqChar && notEmptyPar || foraddChar) {
-            long chardiff = sgn*(prevpos->getEndChar() - prevpos->getStartChar());
+            long chardiff = sgn*(prevpos->endChar() - prevpos->startChar());
             if (!foradd){
-                pos->setStartChar(pos->getStartChar() + chardiff);
-                bool onePar = pos_orig->getStartPar() == pos_orig->getEndPar();
+                pos->setStartChar(pos->startChar() + chardiff);
+                bool onePar = pos_orig->startPar() == pos_orig->endPar();
                 if(onePar) {
-                    pos->setEndChar(pos->getEndChar() + chardiff);
+                    pos->setEndChar(pos->endChar() + chardiff);
                 }
             }
         }
     } else if(prevchangetype == MctChangeTypes::RemovedString || prevchangetype == MctChangeTypes::RemovedStringInTable ||
               prevchangetype == MctChangeTypes::MovedString || prevchangetype == MctChangeTypes::MovedStringInTable) {
-        pos->setStartPar(pos->getStartPar() - diff);
-        pos->setEndPar(pos->getEndPar() - diff);
-        if(prevpos->getEndPar() == pos_orig->getStartPar() && prevpos->getEndChar() < pos_orig->getStartChar()) {
-            long chardiff = sgn*(prevpos->getEndChar() - prevpos->getStartChar());
-            pos->setStartChar(pos->getStartChar() - chardiff);
-            if(pos_orig->getStartPar() == pos_orig->getEndPar()) {
-                pos->setEndChar(pos->getEndChar() - chardiff);
+        pos->setStartPar(pos->startPar() - diff);
+        pos->setEndPar(pos->endPar() - diff);
+        if(prevpos->endPar() == pos_orig->startPar() && prevpos->endChar() < pos_orig->startChar()) {
+            long chardiff = sgn*(prevpos->endChar() - prevpos->startChar());
+            pos->setStartChar(pos->startChar() - chardiff);
+            if(pos_orig->startPar() == pos_orig->endPar()) {
+                pos->setEndChar(pos->endChar() - chardiff);
             }
         }
         //TODO: a pythonban itt AddedTable volt AddedTextTable helyett
     } else if(prevchangetype == MctChangeTypes::AddedTextTable || prevchangetype == MctChangeTypes::AddedTextTableInTable ||
               prevchangetype == MctChangeTypes::ParagraphBreak || prevchangetype == MctChangeTypes::ParagraphBreakInTable) {
-        pos->setStartPar(pos->getStartPar() + sgn);
-        pos->setEndPar(pos->getEndPar() + sgn);
-        bool sameParPrevOrEqChar = prevpos->getEndPar() == pos_orig->getStartPar() && prevpos->getEndChar() <= pos_orig->getStartChar();
-        bool notEmptyPar = (prevpos->getEndChar() != 0) || (foradd && pos->getEndChar() != 0);
+        pos->setStartPar(pos->startPar() + sgn);
+        pos->setEndPar(pos->endPar() + sgn);
+        bool sameParPrevOrEqChar = prevpos->endPar() == pos_orig->startPar() && prevpos->endChar() <= pos_orig->startChar();
+        bool notEmptyPar = (prevpos->endChar() != 0) || (foradd && pos->endChar() != 0);
         if((sameParPrevOrEqChar && notEmptyPar) || foraddChar) {
-            long chardiff = sgn*(prevpos->getStartChar());
-            bool diffIsPositive = pos->getStartChar() - chardiff <= pos->getStartChar() + chardiff;
+            long chardiff = sgn*(prevpos->startChar());
+            bool diffIsPositive = pos->startChar() - chardiff <= pos->startChar() + chardiff;
                 if (diffIsPositive && !foradd){
-		            pos->setStartChar(pos->getStartChar() - chardiff);
-		            if(pos_orig->getStartPar() == pos_orig->getEndPar()) {
-		                pos->setEndChar(pos->getEndChar() - chardiff);
+                    pos->setStartChar(pos->startChar() - chardiff);
+                    if(pos_orig->startPar() == pos_orig->endPar()) {
+                        pos->setEndChar(pos->endChar() - chardiff);
                 }
             }
         }
         //TODO: in the python code there was RemovedTable instead of RemovedTextTable
     } else if(prevchangetype == MctChangeTypes::RemovedTextTable || prevchangetype == MctChangeTypes::RemovedTextTableInTable ||
               prevchangetype == MctChangeTypes::DelParagraphBreak || prevchangetype == MctChangeTypes::DelParagraphBreakInTable) {
-        pos->setStartPar(pos->getStartPar() - sgn);
-        pos->setEndPar(pos->getEndPar() - sgn);
-        if(prevpos->getEndPar() == pos_orig->getStartPar() && prevpos->getEndChar() < pos_orig->getStartChar()) {
-            long chardiff = sgn*(prevpos->getStartChar());
-            pos->setStartChar(pos->getStartChar() + chardiff);
-            if(pos_orig->getStartPar() == pos_orig->getEndPar()) {
-                pos->setEndChar(pos->getEndChar() + chardiff);
+        pos->setStartPar(pos->startPar() - sgn);
+        pos->setEndPar(pos->endPar() - sgn);
+        if(prevpos->endPar() == pos_orig->startPar() && prevpos->endChar() < pos_orig->startChar()) {
+            long chardiff = sgn*(prevpos->startChar());
+            pos->setStartChar(pos->startChar() + chardiff);
+            if(pos_orig->startPar() == pos_orig->endPar()) {
+                pos->setEndChar(pos->endChar() + chardiff);
             }
         }
     }
@@ -1583,7 +1583,7 @@ MctPosition * MctAbstractGraph::correctPosition(MctPosition *pos, MctPosition *p
 void MctAbstractGraph::removeChangeset(MctChangeset *changesetnode, bool clearchanges)
 {
     qDebug() << "removing changeset";
-    QDateTime date = changesetnode->getDate();
+    QDateTime date = changesetnode->date();
     QDateTime givendate = m_dates->last();
 
     int idx = m_dates->size() - 1;
@@ -1601,17 +1601,17 @@ void MctAbstractGraph::removeChangeset(MctChangeset *changesetnode, bool clearch
     }
 
     // Updating parents of changesetNode
-    QList<ulong> *parents = changesetnode->getParents();
+    QList<ulong> *parents = changesetnode->parents();
     foreach (ulong parent, *parents) {
         QDateTime date_tmp = getDateFromId(parent);
         MctChangeset *changesetnode_parent = getChangeset(date_tmp);
         if (changesetnode_parent != NULL)
-            changesetnode_parent->removeChildId(changesetnode->getId());
+            changesetnode_parent->removeChildId(changesetnode->id());
     }
 
     // Removing changesetNode
     m_dates->remove(idx);
-    m_root.removeChild(changesetnode->getChangeSetNode());
+    m_root.removeChild(changesetnode->changeset());
     m_changesetNodes->remove(givendate);
 }
 
@@ -1810,7 +1810,7 @@ MctPosition* MctAbstractGraph::getPosFromXML(QDomElement change, bool moved)
 
 void MctAbstractGraph::addTableDataToPos(QDomElement change, MctChange *changeNode, bool moved)
 {
-    MctNode * changeEntity = changeNode->getChangeEntity();
+    MctNode * changeEntity = changeNode->changeEntity();
     MctTable * tableChangeEntity = dynamic_cast<MctTable*> (changeEntity);
     if(tableChangeEntity == NULL) {
         qCritical() << "changeEntity in not a derived class of MctTable";
@@ -1890,12 +1890,12 @@ QList<MctChange *>* MctAbstractGraph::findMovedChanges(QList<MctChange *> *chang
             }
             i += 2;
         } else */
-        if (change->getChangeType() == MctChangeTypes::RemovedString && nextChange->getChangeType() == MctChangeTypes::AddedString) {
-            MctStringChange *changeEntity = dynamic_cast<MctStringChange*>(change->getChangeEntity());
-            MctStringChange *nextChangeEntity = dynamic_cast<MctStringChange*>(nextChange->getChangeEntity());
+        if (change->changeType() == MctChangeTypes::RemovedString && nextChange->changeType() == MctChangeTypes::AddedString) {
+            MctStringChange *changeEntity = dynamic_cast<MctStringChange*>(change->changeEntity());
+            MctStringChange *nextChangeEntity = dynamic_cast<MctStringChange*>(nextChange->changeEntity());
             //ugyanaz a szöveg lett beszúrva ami előtt törölve lett -> át lett mozgatva a szöveg
             if(changeEntity->getString() == nextChangeEntity->getString()) {
-                movedChange = new MctChange(change->getPosition(), MctChangeTypes::MovedString, changeEntity, nextChange->getPosition());
+                movedChange = new MctChange(change->position(), MctChangeTypes::MovedString, changeEntity, nextChange->position());
                 tmpchanges->append(movedChange);
                 moved = true;
                 i += 2;

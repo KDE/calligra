@@ -34,13 +34,13 @@ public:
     MctPropertyBase(QString name = "undefined");
     virtual ~MctPropertyBase();
 
-    QString getPropertyName() const;
+    QString propertyName() const;
     void setPropertyName(QString name);
-    PropertyDictionary * getProps() const;
+    PropertyDictionary * props() const;
     void setProps(PropertyDictionary* props);
-    PropertyDictionary * getProps2Export() const;
+    PropertyDictionary * props2Export() const;
     void setProps2Export(PropertyDictionary* props);
-    QString getInnerUrl()const ;
+    QString innerUrl()const ;
     void setInnerUrl(QString url);
 
 protected:
@@ -49,10 +49,10 @@ protected:
 #endif
     virtual void fillUpProperties();
 
-    QString propName;                      // The name of the frame object
-    PropertyDictionary *props;         // Properties of the texttable object
-    PropertyDictionary *props2export;  // Properties to be exported into the graph
-    QString innerURL;           // inside URL of the backed up file
+    QString m_propName;                      // The name of the frame object
+    PropertyDictionary *m_props;         // Properties of the texttable object
+    PropertyDictionary *m_props2export;  // Properties to be exported into the graph
+    QString m_innerURL;           // inside URL of the backed up file
 };
 
 #endif // MCTPROPERTYBASE_H

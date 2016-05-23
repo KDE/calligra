@@ -89,7 +89,7 @@ MctDelParagraphBreakInTable::~MctDelParagraphBreakInTable()
 
 MctStringChange::MctStringChange(QString string)
     : MctNode()
-    , string(string)
+    , m_string(string)
 {
 
 }
@@ -101,12 +101,12 @@ MctStringChange::~MctStringChange()
 
 QString MctStringChange::getString() const
 {
-    return this->string;
+    return this->m_string;
 }
 
 void MctStringChange::setString(QString string)
 {
-    this->string = string;
+    this->m_string = string;
 }
 
 MctStringChangeInTable::MctStringChangeInTable(QString string, QString cellName, QString tableName, MctCell *cellInfo)
@@ -123,10 +123,10 @@ MctStringChangeInTable::~MctStringChangeInTable()
 
 MctStylePropertyChange::MctStylePropertyChange(ChangeEventList *changeList)
 {
-    this->textPropChanges = new ChangeEventList();
-    this->paragraphPropChanges = new ChangeEventList();
-    this->listPropChanges = new ChangeEventList();
-    this->otherPropChanges = new ChangeEventList();
+    this->m_textPropChanges = new ChangeEventList();
+    this->m_paragraphPropChanges = new ChangeEventList();
+    this->m_listPropChanges = new ChangeEventList();
+    this->m_otherPropChanges = new ChangeEventList();
     if(changeList != NULL) {
         this->sortPropertyChanges(changeList);
     }
@@ -134,30 +134,30 @@ MctStylePropertyChange::MctStylePropertyChange(ChangeEventList *changeList)
 
 MctStylePropertyChange::~MctStylePropertyChange()
 {
-    delete paragraphPropChanges;
-    delete textPropChanges;
-    delete listPropChanges;
-    delete otherPropChanges;
+    delete m_paragraphPropChanges;
+    delete m_textPropChanges;
+    delete m_listPropChanges;
+    delete m_otherPropChanges;
 }
 
-ChangeEventList *MctStylePropertyChange::getTextPropChanges()
+ChangeEventList *MctStylePropertyChange::textPropChanges()
 {
-    return textPropChanges;
+    return m_textPropChanges;
 }
 
-ChangeEventList *MctStylePropertyChange::getParagraphPropChanges()
+ChangeEventList *MctStylePropertyChange::paragraphPropChanges()
 {
-    return paragraphPropChanges;
+    return m_paragraphPropChanges;
 }
 
-ChangeEventList *MctStylePropertyChange::getListPropChanges()
+ChangeEventList *MctStylePropertyChange::listPropChanges()
 {
-    return listPropChanges;
+    return m_listPropChanges;
 }
 
-ChangeEventList *MctStylePropertyChange::getOtherPropChanges()
+ChangeEventList *MctStylePropertyChange::otherPropChanges()
 {
-    return otherPropChanges;
+    return m_otherPropChanges;
 }
 
 /**
@@ -168,16 +168,16 @@ void MctStylePropertyChange::sortPropertyChanges(ChangeEventList *propChanges)
 {
     for (auto it = propChanges->begin(); it != propChanges->end(); ++it) {
 
-        int type = (*it)->getType();
+        int type = (*it)->type();
 
         if ( type == QTextFormat::CharFormat ) {
-            this->textPropChanges->append(*it);
+            this->m_textPropChanges->append(*it);
         } else if ( type == QTextFormat::BlockFormat ) {
-            this->paragraphPropChanges->append(*it);
+            this->m_paragraphPropChanges->append(*it);
         } else if ( type == QTextFormat::ListFormat ) {
-            this->listPropChanges->append(*it);
+            this->m_listPropChanges->append(*it);
         } else {
-            this->otherPropChanges->append(*it);
+            this->m_otherPropChanges->append(*it);
         }
     }
 }
@@ -206,7 +206,7 @@ MctRemovedTextFrame::~MctRemovedTextFrame()
 
 MctChangedTexObjectBase::MctChangedTexObjectBase(QString name, MctPropertyBase *objectProperties)
     : MctNode()    
-    , objectProperties(objectProperties)
+    , m_objectProperties(objectProperties)
 {
     setName(name);
     this->setObjectName(name);
@@ -214,25 +214,25 @@ MctChangedTexObjectBase::MctChangedTexObjectBase(QString name, MctPropertyBase *
 
 MctChangedTexObjectBase::~MctChangedTexObjectBase()
 {
-    delete objectProperties;
+    delete m_objectProperties;
 }
 
 void MctChangedTexObjectBase::setObjectName(QString name)
 {
-    if (this->objectProperties == NULL)
+    if (this->m_objectProperties == NULL)
         return;
     else
-        this->objectProperties->setPropertyName(name);
+        this->m_objectProperties->setPropertyName(name);
 }
 
-MctPropertyBase * MctChangedTexObjectBase::getObjectProperties() const
+MctPropertyBase * MctChangedTexObjectBase::objectProperties() const
 {
-    return this->objectProperties;
+    return this->m_objectProperties;
 }
 
 void MctChangedTexObjectBase::setObjectProperties(MctPropertyBase* objectProperties)
 {
-    this->objectProperties  = objectProperties;
+    this->m_objectProperties  = objectProperties;
 }
 
 MctAddedTextGraphicObject::MctAddedTextGraphicObject(QString name, MctEmbObjProperties* embObjProps)
@@ -284,7 +284,7 @@ MctRemovedTextGraphicObjectInTable::~MctRemovedTextGraphicObjectInTable()
 MctAddedEmbeddedObject::MctAddedEmbeddedObject(QString name)
     : MctNode()
 {
-    this->name = name;
+    m_name = name;
 }
 
 MctAddedEmbeddedObject::~MctAddedEmbeddedObject()
@@ -311,38 +311,38 @@ MctAddedTextTable::MctAddedTextTable(QString name, MctTableProperties *tableProp
 
 MctAddedTextTable::MctAddedTextTable(int row, int col, QTextTableFormat format)
     : MctChangedTexObjectBase("")
-    , row(row), col(col), tableFormat(format)
+    , m_row(row), m_col(col), m_tableFormat(format)
 {
 }
 
-int MctAddedTextTable::getRowCount()
+int MctAddedTextTable::rowCount()
 {
-    return row;
+    return m_row;
 }
 
-int MctAddedTextTable::getColCount()
+int MctAddedTextTable::colCount()
 {
-    return col;
+    return m_col;
 }
 
 QTextTableFormat MctAddedTextTable::getTableFormat()
 {
-    return tableFormat;
+    return m_tableFormat;
 }
 
 void MctAddedTextTable::setRowCount(int row)
 {
-    this->row = row;
+    this->m_row = row;
 }
 
 void MctAddedTextTable::setColCount(int col)
 {
-    this->col = col;
+    this->m_col = col;
 }
 
 void MctAddedTextTable::setTableFormat(QTextTableFormat format)
 {
-    this->tableFormat = format;
+    this->m_tableFormat = format;
 }
 
 MctAddedTextTable::~MctAddedTextTable()
@@ -405,9 +405,9 @@ MctStylePropertyChangeInTable::~MctStylePropertyChangeInTable()
 
 MctRowChangeInTable::MctRowChangeInTable(int startRow, int rowCount, QString tableName)
     : MctNode()
-    , startRow(startRow)
-    , rowCount(rowCount)
-    , tableName(tableName)
+    , m_startRow(startRow)
+    , m_rowCount(rowCount)
+    , m_tableName(tableName)
 {
 
 }
@@ -417,41 +417,41 @@ MctRowChangeInTable::~MctRowChangeInTable()
 
 }
 
-int MctRowChangeInTable::getStartRow() const
+int MctRowChangeInTable::startRow() const
 {
-    return this->startRow;
+    return this->m_startRow;
 }
 
 void MctRowChangeInTable::setStartRow(int n)
 {
-    this->startRow = n;
+    this->m_startRow = n;
 }
 
-int MctRowChangeInTable::getRowCount() const
+int MctRowChangeInTable::rowCount() const
 {
-    return this->rowCount;
+    return this->m_rowCount;
 }
 
 void MctRowChangeInTable::setRowCount(int n)
 {
-    this->rowCount = n;
+    this->m_rowCount = n;
 }
 
-QString MctRowChangeInTable::getTableName() const
+QString MctRowChangeInTable::tableName() const
 {
-    return this->tableName;
+    return this->m_tableName;
 }
 
 void MctRowChangeInTable::setTableName(QString n)
 {
-    this->tableName = n;
+    this->m_tableName = n;
 }
 
 MctColChangeInTable::MctColChangeInTable(int startCol, int colCount, QString tableName)
     : MctNode()
-    , startCol(startCol)
-    , colCount(colCount)
-    , tableName(tableName)
+    , m_startCol(startCol)
+    , m_colCount(colCount)
+    , m_tableName(tableName)
 {
 
 }
@@ -461,34 +461,34 @@ MctColChangeInTable::~MctColChangeInTable()
 
 }
 
-int MctColChangeInTable::getStartCol() const
+int MctColChangeInTable::startCol() const
 {
-    return this->startCol;
+    return this->m_startCol;
 }
 
 void MctColChangeInTable::setStartCol(int n)
 {
-    this->startCol = n;
+    this->m_startCol = n;
 }
 
-int MctColChangeInTable::getColCount() const
+int MctColChangeInTable::colCount() const
 {
-    return this->colCount;
+    return this->m_colCount;
 }
 
 void MctColChangeInTable::setColCount(int n)
 {
-    this->colCount = n;
+    this->m_colCount = n;
 }
 
-QString MctColChangeInTable::getTableName() const
+QString MctColChangeInTable::tableName() const
 {
-    return this->tableName;
+    return this->m_tableName;
 }
 
 void MctColChangeInTable::setTableName(QString n)
 {
-    this->tableName = n;
+    this->m_tableName = n;
 }
 
 MctAddedRowInTable::MctAddedRowInTable(int startRow, int rowCount, QString tableName)
@@ -563,41 +563,41 @@ ChangeEvent::ChangeEvent(QTextFormat o, QTextFormat n)
             qCritical() << "Unknow format type";
         }
 #endif
-        oldFormat = o;
-        newFormat = n;
-        changedProperties = new PropertyMap();  // Need to call calcDiff() before using it!
+        m_oldFormat = o;
+        m_newFormat = n;
+        m_changedProperties = new PropertyMap();  // Need to call calcDiff() before using it!
     }
 
 }
 
-PropertyMap *ChangeEvent::getChanges()
+PropertyMap *ChangeEvent::changes()
 {
-    return changedProperties;
+    return m_changedProperties;
 }
 
-int ChangeEvent::getType()
+int ChangeEvent::type()
 {
-    return oldFormat.type();
+    return m_oldFormat.type();
 }
 
-QTextFormat ChangeEvent::getOldFormat()
+QTextFormat ChangeEvent::oldFormat()
 {
-    return oldFormat;
+    return m_oldFormat;
 }
 
-QTextFormat ChangeEvent::getNewFormat()
+QTextFormat ChangeEvent::newFormat()
 {
-    return newFormat;
+    return m_newFormat;
 }
 
 void ChangeEvent::setOldFormat(QTextFormat format)
 {
-    oldFormat = format;
+    m_oldFormat = format;
 }
 
 void ChangeEvent::setNewFormat(QTextFormat format)
 {
-    newFormat = format;
+    m_newFormat = format;
 }
 
 void ChangeEvent::ensureProperties(QTextFormat &format1, QTextFormat format2)
@@ -748,29 +748,29 @@ void ChangeEvent::printProperties(QTextFormat format)
 
 void ChangeEvent::calcDiff(int type)
 {
-    foreach (int key, oldFormat.properties().keys()) {
+    foreach (int key, m_oldFormat.properties().keys()) {
         if(key == KoCharacterStyle::ChangeTrackerId) {
             continue;
         }
-        if(newFormat.property(key) != oldFormat.property(key)) {
+        if(m_newFormat.property(key) != m_oldFormat.property(key)) {
             QString propName = MctStaticData::getTextPropetyString(key, type);
             MctStaticData::textPropMapTester(key);
-            QString oldProp = oldFormat.property(key).toString();
-            QString newProp = newFormat.property(key).toString();
+            QString oldProp = m_oldFormat.property(key).toString();
+            QString newProp = m_newFormat.property(key).toString();
             if(key == QTextFormat::ForegroundBrush || key == QTextFormat::BackgroundBrush) {
-                oldProp = key == QTextFormat::BackgroundBrush && !oldFormat.background().isOpaque() ? "transparent" : oldFormat.brushProperty(key).color().name();
-                newProp = newFormat.brushProperty(key).color().name();
+                oldProp = key == QTextFormat::BackgroundBrush && !m_oldFormat.background().isOpaque() ? "transparent" : m_oldFormat.brushProperty(key).color().name();
+                newProp = m_newFormat.brushProperty(key).color().name();
             }
 
             if(oldProp == "" || oldProp == "false" || oldProp == "0" || oldProp == "0.0") {
                 qDebug() << "Property ADDED: " << propName << QString::number(key, 16) << " = " << oldProp << " new value: " << newProp;
-                changedProperties->insert(key, QPair<QString, ChangeAction>(oldProp, ChangeAction::ADDED));
+                m_changedProperties->insert(key, QPair<QString, ChangeAction>(oldProp, ChangeAction::ADDED));
             } else if(newProp == "" || newProp == "false" || newProp == "0" || newProp == "0.0") {
                 qDebug() << "Property REMOVED: " << propName << QString::number(key, 16) << " = " << oldProp << " new value: " << newProp;
-                changedProperties->insert(key, QPair<QString, ChangeAction>(oldProp, ChangeAction::REMOVED));
+                m_changedProperties->insert(key, QPair<QString, ChangeAction>(oldProp, ChangeAction::REMOVED));
             } else {
                 qDebug() << "Property CHANGED: " << propName << QString::number(key, 16) << " = " << oldProp << " new value: " << newProp;
-                changedProperties->insert(key, QPair<QString, ChangeAction>(oldProp, ChangeAction::CHANGED));
+                m_changedProperties->insert(key, QPair<QString, ChangeAction>(oldProp, ChangeAction::CHANGED));
             }
         }
     }

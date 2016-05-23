@@ -104,7 +104,7 @@ void MctManagerBase::addRevision2Tree(QTreeWidget* parent, RevisionIterator chan
     }
 
     // + author
-    QString author = changeset.value()->getAuthor()->getName();
+    QString author = changeset.value()->author()->name();
     if (!author.isEmpty()) {
         QTreeWidgetItem *authorTreeItem = new QTreeWidgetItem(revTreeItem);
         authorTreeItem->setText(1, "by " + author);
@@ -112,7 +112,7 @@ void MctManagerBase::addRevision2Tree(QTreeWidget* parent, RevisionIterator chan
     }
 
     // + comment
-    QString comment = changeset.value()->getComment();
+    QString comment = changeset.value()->comment();
     if (!comment.isEmpty()) {
         QTreeWidgetItem *commTreeItem = new QTreeWidgetItem(revTreeItem);
         commTreeItem->setText(1, comment);
@@ -120,7 +120,7 @@ void MctManagerBase::addRevision2Tree(QTreeWidget* parent, RevisionIterator chan
     }
 
     // + changes
-    QList<MctChange*> *changeList = changeset.value()->getChanges();
+    QList<MctChange*> *changeList = changeset.value()->changes();
     for (ChangeIterator changeIt = changeList->begin(); changeIt != changeList->end(); ++changeIt) {
         addChange2Tree(revTreeItem, changeIt);
     }
@@ -131,7 +131,7 @@ void MctManagerBase::addChange2Tree(QTreeWidgetItem *parent, ChangeIterator chan
     QTreeWidgetItem *changeTreeItem = new QTreeWidgetItem();
 
     // This can be anything
-    changeTreeItem->setText(1, MctStaticData::CHANGE_AS_STRING.value((*change)->getChangeType()));
+    changeTreeItem->setText(1, MctStaticData::CHANGE_AS_STRING.value((*change)->changeType()));
     changeTreeItem->setDisabled(true);
     parent->addChild(changeTreeItem);
 }
@@ -150,7 +150,7 @@ QString MctManagerBase::getParents(QList<QTreeWidgetItem *> selection, QList<Mct
             continue;
 
         changesetNodes->append(changesetNode);
-        childListAll->append(changesetNode->getId());
+        childListAll->append(changesetNode->id());
 
     }
 
@@ -159,7 +159,7 @@ QString MctManagerBase::getParents(QList<QTreeWidgetItem *> selection, QList<Mct
 
     for (auto it = changesetNodes->begin(); it != changesetNodes->end(); ++it){
         MctChangeset *cs = *it;
-        QDateTime date = cs->getDate();
+        QDateTime date = cs->date();
         QList<ulong> *parentlist = new QList<ulong>();
 
         MctChangeset *changesetNodeInGraph = nullptr;
@@ -203,14 +203,14 @@ QString MctManagerBase::getChildren(QList<QTreeWidgetItem *> selection, QList<Mc
             continue;
 
         changesetNodes->append(changesetNode);
-        childListAll->append(changesetNode->getId());
+        childListAll->append(changesetNode->id());
     }
 
     if (changesetNodes->size() == 0)
         return additionalChangesets;
 
     for (auto it = changesetNodes->begin(); it != changesetNodes->end(); ++it){
-        QDateTime date = (*it)->getDate();
+        QDateTime date = (*it)->date();
         QList<ulong> *childlist = new QList<ulong>();
 
         MctChangeset *changesetNodeInGraph = nullptr;
@@ -245,7 +245,7 @@ QString MctManagerBase::getChildren(QList<QTreeWidgetItem *> selection, QList<Mc
 
 void MctManagerBase::checkChildren(MctChangeset *changesetNode, QList<ulong> *childlist, MctUndoGraphXMLfilter *graphToMerge)
 {
-    QList<ulong> *children = changesetNode->getChilds();
+    QList<ulong> *children = changesetNode->childs();
 
     if (children->size() == 0)
         return;
@@ -269,7 +269,7 @@ void MctManagerBase::checkChildren(MctChangeset *changesetNode, QList<ulong> *ch
 
 void MctManagerBase::checkParents(MctChangeset *changesetNode, QList<ulong> *parentlist, MctUndoGraphXMLfilter *graphToMerge)
 {
-    QList<ulong> *parents = changesetNode->getParents();
+    QList<ulong> *parents = changesetNode->parents();
 
     if (parents->size() == 0)
         return;
@@ -310,10 +310,10 @@ void MctManagerBase::filterChangesetNodes(QList<ulong> *changesetIdList, MctUndo
 
 QString MctManagerBase::createNodeString(MctChangeset *changesetNode)
 {
-    QDateTime date = changesetNode->getDate();
+    QDateTime date = changesetNode->date();
     QString dateString = date.toString("yyyy.MM.dd");
     QString timeString = date.toString("(hh:mm:ss)");
-    QString nodeString = dateString +  " " + timeString + " by: " + changesetNode->getAuthor()->getName();
+    QString nodeString = dateString +  " " + timeString + " by: " + changesetNode->author()->name();
     return nodeString;
 }
 

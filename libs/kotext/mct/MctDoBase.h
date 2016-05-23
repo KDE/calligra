@@ -33,12 +33,11 @@ public:
     virtual ~MctDoBase();
 
     QTextTable* getTable(MctChange *changeNode);
-
     QTextCursor *createcursor(MctChange *change, MctPosition *pos);
 
 protected:
 
-    KoTextDocument *doc;    //TODO
+    KoTextDocument *m_doc;    //TODO
 
 private:
 

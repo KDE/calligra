@@ -21,8 +21,8 @@
 
 MctTableProperties::MctTableProperties(QString name, int rows, int cols)
     : MctPropertyBase(name)
-    , rows(rows)
-    , cols(cols)
+    , m_rows(rows)
+    , m_cols(cols)
 {
 
 }
@@ -32,24 +32,24 @@ MctTableProperties::~MctTableProperties()
 
 }
 
-int MctTableProperties::getRows() const
+int MctTableProperties::rows() const
 {
-    return rows;
+    return m_rows;
 }
 
 void MctTableProperties::setRows(int value)
 {
-    rows = value;
+    m_rows = value;
 }
 
-int MctTableProperties::getCols() const
+int MctTableProperties::cols() const
 {
-    return cols;
+    return m_cols;
 }
 
 void MctTableProperties::setCols(int value)
 {
-    cols = value;
+    m_cols = value;
 }
 
 

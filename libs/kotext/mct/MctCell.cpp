@@ -56,13 +56,13 @@ MctCell::MctCell(const MctCell &cell)
     m_col = cell.col();
 
     // az os elvileg inicializalja es nem null
-    if (props == nullptr)
-        props = new PropertyDictionary;
-    *props = *cell.props;
+    if (m_props == nullptr)
+        m_props = new PropertyDictionary;
+    *m_props = *cell.m_props;
 
-    if (props2export == nullptr)
-        props2export = new PropertyDictionary;
-    *props2export = *cell.props2export;
+    if (m_props2export == nullptr)
+        m_props2export = new PropertyDictionary;
+    *m_props2export = *cell.m_props2export;
 
 }
 

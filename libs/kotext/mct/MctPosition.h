@@ -34,41 +34,41 @@ public:
     MctPosition(const MctPosition &position);
     ~MctPosition();
 
-    ulong getStartPar() const;
+    ulong startPar() const;
     void setStartPar(ulong value);
 
-    ulong getEndPar() const;
+    ulong endPar() const;
     void setEndPar(ulong value);
 
-    ulong getStartChar() const;
+    ulong startChar() const;
     void setStartChar(ulong value);
 
-    ulong getEndChar() const;
+    ulong endChar() const;
     void setEndChar(ulong value);
 
-    MctCell* getCellInfo() const;
-    void setCellInfo(MctCell* info);
+    MctCell* startCellInfo() const;
+    void setStartCellInfo(MctCell* info);
 
-    MctCell* getCellInfoEnd() const;
-    void setCellInfoEnd(MctCell* info);
+    MctCell* endCellInfoEnd() const;
+    void setEndCellInfo(MctCell* info);
 
-    MctPosition * getAnchoredPos() const;
+    MctPosition * anchoredPos() const;
     void setAnchored(MctPosition *parentPos);
 
-    int getTableCellPosition(QTextCursor *cursor) const;
+    int tableCellPosition(QTextCursor *cursor) const;
 
     QString toString() const;
 
 private:
-    ulong startPar;     // The start number of the paragraph where the change starts.
-    ulong startChar;    // The start number of the character in the paragraph where the change starts.
-    ulong endPar;       // The end number of the paragraph where the change starts.
-    ulong endChar;      // The end number of the character in the paragraph where the change starts.
+    ulong m_startPar;     // The start number of the paragraph where the change starts.
+    ulong m_startChar;    // The start number of the character in the paragraph where the change starts.
+    ulong m_endPar;       // The end number of the paragraph where the change starts.
+    ulong m_endChar;      // The end number of the character in the paragraph where the change starts.
 
-    MctCell *startCellInf;   // Cell class conatining starting cell name and table name
-    MctCell *endCellInf;     // Cell class conatining ending cell name and table name
+    MctCell *m_startCellInf;   // Cell class conatining starting cell name and table name
+    MctCell *m_endCellInf;     // Cell class conatining ending cell name and table name
 
-    MctPosition *anchoredPos;// Position class of the object where this position is anchored
+    MctPosition *m_anchoredPos;// Position class of the object where this position is anchored
 
 };
 

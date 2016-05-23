@@ -30,14 +30,14 @@ public:
     virtual ~MctNode();
 
     virtual void setId(unsigned long id);
-    virtual unsigned long getId() const;
+    virtual unsigned long id() const;
 
     void setName(QString name);
-    QString getName();
+    QString name();
 
 protected:
-    unsigned long id;
-    QString name;
+    unsigned long m_id;
+    QString m_name;
 };
 
 #endif // MCTNODE_H

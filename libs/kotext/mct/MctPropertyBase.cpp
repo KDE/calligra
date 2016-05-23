@@ -21,9 +21,9 @@
 #include <QDebug>
 
 MctPropertyBase::MctPropertyBase(QString name)
-    : propName(name)
-    , props(new PropertyDictionary())
-    , props2export(new PropertyDictionary())
+    : m_propName(name)
+    , m_props(new PropertyDictionary())
+    , m_props2export(new PropertyDictionary())
 {
     // FIXME: if its implemented... ?
     //fillUpProperties();
@@ -34,45 +34,45 @@ MctPropertyBase::~MctPropertyBase()
 
 }
 
-QString MctPropertyBase::getPropertyName() const
+QString MctPropertyBase::propertyName() const
 {
-    return this->propName;
+    return this->m_propName;
 }
 
 void MctPropertyBase::setPropertyName(QString name)
 {
-    this->propName = name;
+    this->m_propName = name;
 }
 
-PropertyDictionary * MctPropertyBase::getProps() const
+PropertyDictionary * MctPropertyBase::props() const
 {
-    return this->props;
+    return this->m_props;
 }
 
 void MctPropertyBase::setProps(PropertyDictionary *props)
 {
-    this->props = props;
+    this->m_props = props;
 }
 
-PropertyDictionary * MctPropertyBase::getProps2Export() const
+PropertyDictionary * MctPropertyBase::props2Export() const
 {
 
-    return this->props2export;
+    return this->m_props2export;
 }
 
 void MctPropertyBase::setProps2Export(PropertyDictionary *props)
 {
-    props2export = props;
+    m_props2export = props;
 }
 
-QString MctPropertyBase::getInnerUrl() const
+QString MctPropertyBase::innerUrl() const
 {
-    return innerURL;
+    return m_innerURL;
 }
 
 void MctPropertyBase::setInnerUrl(QString url)
 {
-    innerURL = url;
+    m_innerURL = url;
 }
 
 void MctPropertyBase::fillUpProperties()

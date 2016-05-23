@@ -21,114 +21,114 @@
 #include "MctCell.h"
 
 MctPosition::MctPosition(ulong startPar , ulong starChar , ulong endPar , ulong endChar , MctCell *startCellInf , MctCell *endCellInf )
-    : startPar(startPar)
-    , startChar(starChar)
-    , endPar(endPar)
-    , endChar(endChar)
-    , startCellInf(startCellInf)
-    , endCellInf(endCellInf)
-    , anchoredPos(NULL)
+    : m_startPar(startPar)
+    , m_startChar(starChar)
+    , m_endPar(endPar)
+    , m_endChar(endChar)
+    , m_startCellInf(startCellInf)
+    , m_endCellInf(endCellInf)
+    , m_anchoredPos(NULL)
 {
 
 }
 
 MctPosition::MctPosition(const MctPosition &position)
-    : startPar(position.startPar)
-    , startChar(position.startChar)
-    , endPar(position.endPar)
-    , endChar(position.endChar)
-    , startCellInf(position.startCellInf)
-    , endCellInf(position.endCellInf)
-    , anchoredPos(NULL)
+    : m_startPar(position.m_startPar)
+    , m_startChar(position.m_startChar)
+    , m_endPar(position.m_endPar)
+    , m_endChar(position.m_endChar)
+    , m_startCellInf(position.m_startCellInf)
+    , m_endCellInf(position.m_endCellInf)
+    , m_anchoredPos(NULL)
 {
-    if (position.anchoredPos)
-        this->anchoredPos = new MctPosition(*(position.anchoredPos)); // duplicate
+    if (position.m_anchoredPos)
+        this->m_anchoredPos = new MctPosition(*(position.m_anchoredPos)); // duplicate
 }
 
 MctPosition::~MctPosition()
 {
-    delete startCellInf;
-    delete endCellInf;
-    delete anchoredPos;
+    delete m_startCellInf;
+    delete m_endCellInf;
+    delete m_anchoredPos;
 }
 
-ulong MctPosition::getStartPar() const
+ulong MctPosition::startPar() const
 {
-    return startPar;
+    return m_startPar;
 }
 
 void MctPosition::setStartPar(ulong value)
 {
-    startPar = value;
+    m_startPar = value;
 }
 
-ulong MctPosition::getEndPar() const
+ulong MctPosition::endPar() const
 {
-    return this->endPar;
+    return this->m_endPar;
 }
 
 void MctPosition::setEndPar(ulong value)
 {
-    endPar = value;
+    m_endPar = value;
 }
 
-ulong MctPosition::getStartChar() const
+ulong MctPosition::startChar() const
 {
-    return startChar;
+    return m_startChar;
 }
 
 void MctPosition::setStartChar(ulong value)
 {
-    startChar = value;
+    m_startChar = value;
 }
 
-ulong MctPosition::getEndChar() const
+ulong MctPosition::endChar() const
 {
-    return endChar;
+    return m_endChar;
 }
 
 void MctPosition::setEndChar(ulong value)
 {
-    endChar = value;
+    m_endChar = value;
 }
 
-MctCell* MctPosition::getCellInfo() const
+MctCell* MctPosition::startCellInfo() const
 {
-    return startCellInf;
+    return m_startCellInf;
 }
 
-void MctPosition::setCellInfo(MctCell* info)
+void MctPosition::setStartCellInfo(MctCell* info)
 {
-    this->startCellInf = info;
+    this->m_startCellInf = info;
 }
 
-void MctPosition::setCellInfoEnd(MctCell *info)
+void MctPosition::setEndCellInfo(MctCell *info)
 {
-    this->endCellInf = info;
+    this->m_endCellInf = info;
 }
 
-MctCell * MctPosition::getCellInfoEnd() const
+MctCell * MctPosition::endCellInfoEnd() const
 {
-    return endCellInf;
+    return m_endCellInf;
 }
 
-MctPosition* MctPosition::getAnchoredPos() const
+MctPosition* MctPosition::anchoredPos() const
 {
-    return anchoredPos;
+    return m_anchoredPos;
 }
 
 void MctPosition::setAnchored(MctPosition *parentPos)
 {
-    this->anchoredPos = parentPos;
+    this->m_anchoredPos = parentPos;
 }
 
-int MctPosition::getTableCellPosition(QTextCursor *cursor) const
+int MctPosition::tableCellPosition(QTextCursor *cursor) const
 {
     int blockpos  = cursor->block().position();
     MctPosition *tmp = new MctPosition(*this);
     QTextCursor tmpcursor(*cursor);
     QTextTable * table;
-    while(tmp->getAnchoredPos()) {
+    while(tmp->anchoredPos()) {
         blockpos  = tmpcursor.block().position();
         bool hiddenTableHandling = tmpcursor.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable);
         table = tmpcursor.currentTable();
@@ -136,20 +136,20 @@ int MctPosition::getTableCellPosition(QTextCursor *cursor) const
             tmpcursor.movePosition(QTextCursor::NextCharacter);
             table = tmpcursor.currentTable();
         }
-        QTextTableCell cell = table->cellAt(tmp->getCellInfo()->row(), tmp->getCellInfo()->col());
+        QTextTableCell cell = table->cellAt(tmp->startCellInfo()->row(), tmp->startCellInfo()->col());
         tmpcursor = cell.firstCursorPosition();
-        tmp = tmp->getAnchoredPos();
+        tmp = tmp->anchoredPos();
         // if a nested table comes there will be +1 block to jump through
-        int k = tmp->getAnchoredPos() ? 1 : 0;
-        tmpcursor.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, k + tmp->getStartPar());
-        tmpcursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, tmp->getStartChar());
+        int k = tmp->anchoredPos() ? 1 : 0;
+        tmpcursor.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, k + tmp->startPar());
+        tmpcursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, tmp->startChar());
     }
     return tmpcursor.position();
 }
 
 QString MctPosition::toString() const
 {
-    QString answer = "POSITION INFO:\nstart p: " + QString::number(this->startPar) + "\tchar: " + QString::number(this->startChar) + "\nend p: " + QString::number(this->endPar) + "\tchar:" + QString::number(this->endChar) + "\n";
+    QString answer = "POSITION INFO:\nstart p: " + QString::number(this->m_startPar) + "\tchar: " + QString::number(this->m_startChar) + "\nend p: " + QString::number(this->m_endPar) + "\tchar:" + QString::number(this->m_endChar) + "\n";
     return answer;
 }
 

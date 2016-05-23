@@ -29,15 +29,15 @@ public:
     MctTableProperties(QString name, int rows = -1, int cols = -1);
     ~MctTableProperties();
     
-    int getRows() const;
+    int rows() const;
     void setRows(int value);
     
-    int getCols() const;
+    int cols() const;
     void setCols(int value);
     
 private:
-    int rows;
-    int cols;
+    int m_rows;
+    int m_cols;
     
 };
 

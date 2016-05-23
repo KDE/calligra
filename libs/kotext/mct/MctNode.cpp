@@ -22,12 +22,12 @@
 
 MctNode::MctNode()
 {
-    id = MctStaticData::UNDEFINED; //ulong max
+    m_id = MctStaticData::UNDEFINED; //ulong max
 }
 
 MctNode::MctNode(unsigned long id)
 {
-    this->id = id;
+    m_id = id;
 }
 
 MctNode::~MctNode()
@@ -37,20 +37,20 @@ MctNode::~MctNode()
 
 void MctNode::setId(unsigned long id)
 {
-    this->id = id;
+    m_id = id;
 }
 
-unsigned long MctNode::getId() const
+unsigned long MctNode::id() const
 {
-    return id;
+    return m_id;
 }
 
 void MctNode::setName(QString name)
 {
-    this->name = name;
+    m_name = name;
 }
 
-QString MctNode::getName()
+QString MctNode::name()
 {
-    return name;
+    return m_name;
 }

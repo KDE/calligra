@@ -100,7 +100,7 @@ MctChange* MctUndoGraphXMLfilter::addStringFromXML(QDomElement change)
     MctChangeTypes changeType;
     MctNode* changeEntity;
 
-    MctCell *cellinfo = pos->getCellInfo();
+    MctCell *cellinfo = pos->startCellInfo();
     if(cellinfo != NULL) {
         cellinfo->convertCellPos2CellName();
         tableName = cellinfo->tableName();
@@ -133,7 +133,7 @@ MctChange* MctUndoGraphXMLfilter::removeStringFromXML(QDomElement change)
     MctChangeTypes changeType;
     MctNode* changeEntity;
 
-    MctCell *cellinfo = pos->getCellInfo();
+    MctCell *cellinfo = pos->startCellInfo();
     if(cellinfo != NULL) {
         cellinfo->convertCellPos2CellName();
         tableName = cellinfo->tableName();
@@ -166,7 +166,7 @@ MctChange* MctUndoGraphXMLfilter::moveStringFromXML(QDomElement change)
     MctChangeTypes changeType;
     MctNode* changeEntity;
 
-    MctCell *cellinfo = pos->getCellInfo();
+    MctCell *cellinfo = pos->startCellInfo();
     if(cellinfo != NULL) {
         cellinfo->convertCellPos2CellName();
         tableName = cellinfo->tableName();
@@ -200,7 +200,7 @@ MctChange* MctUndoGraphXMLfilter::addParBreakFromXML(QDomElement change)
     MctChangeTypes changeType;
     MctNode* changeEntity;
 
-    MctCell *cellinfo = pos->getCellInfo();
+    MctCell *cellinfo = pos->startCellInfo();
     if(cellinfo != NULL) {
         cellinfo->convertCellPos2CellName();
         tableName = cellinfo->tableName();
@@ -233,7 +233,7 @@ MctChange* MctUndoGraphXMLfilter::delParBreakFromXML(QDomElement change)
     MctChangeTypes changeType;
     MctNode* changeEntity;
 
-    MctCell *cellinfo = pos->getCellInfo();
+    MctCell *cellinfo = pos->startCellInfo();
     if(cellinfo != NULL) {
         cellinfo->convertCellPos2CellName();
         tableName = cellinfo->tableName();
@@ -266,7 +266,7 @@ MctChange* MctUndoGraphXMLfilter::styleChangeFromXML(QDomElement change)
     MctChangeTypes changeType;
     MctNode* changeEntity;
 
-    MctCell *cellinfo = pos->getCellInfo();
+    MctCell *cellinfo = pos->startCellInfo();
     if(cellinfo != NULL) {
         cellinfo->convertCellPos2CellName();
         tableName = cellinfo->tableName();
@@ -393,7 +393,7 @@ MctChange* MctUndoGraphXMLfilter::addTextGraphicObjectFromXML(QDomElement change
     MctEmbObjProperties* cembObjProps = createEmbObjProps(change);
     //ensure that the embedded file is backed up
     if(!cembObjProps->isBackedup()) {
-        cembObjProps->backupFileFromOdt(cembObjProps->getInnerUrl(), m_odtFile);
+        cembObjProps->backupFileFromOdt(cembObjProps->innerUrl(), m_odtFile);
     }
 
     MctChangeTypes changeType = MctChangeTypes::AddedTextGraphicObject;
@@ -426,7 +426,7 @@ MctChange* MctUndoGraphXMLfilter::removeTextGraphicObjectFromXML(QDomElement cha
     }
     //ensure that the embedded file is backed up
     if(!cembObjProps->isBackedup()) {
-        cembObjProps->backupFileFromOdt(cembObjProps->getInnerUrl(), m_odtFile);
+        cembObjProps->backupFileFromOdt(cembObjProps->innerUrl(), m_odtFile);
     }
 
     MctChangeTypes changeType = MctChangeTypes::RemovedTextGraphicObject;
@@ -469,7 +469,7 @@ MctChange* MctUndoGraphXMLfilter::addTextTableFromXML(QDomElement change)
     MctChangeTypes changeType;
     MctNode* changeEntity;
 
-    MctCell *cellinfo = pos->getCellInfo();
+    MctCell *cellinfo = pos->startCellInfo();
     if(cellinfo != NULL) {
         cellinfo->convertCellPos2CellName();
         tableName = cellinfo->tableName();
@@ -505,7 +505,7 @@ MctChange* MctUndoGraphXMLfilter::removeTextTableFromXML(QDomElement change)
     MctChangeTypes changeType;
     MctNode* changeEntity;
 
-    MctCell *cellinfo = pos->getCellInfo();
+    MctCell *cellinfo = pos->startCellInfo();
     if(cellinfo != NULL) {
         cellinfo->convertCellPos2CellName();
         tableName = cellinfo->tableName();
@@ -536,9 +536,9 @@ MctChange* MctUndoGraphXMLfilter::rowChangeFromXML(QDomElement change)
     MctChangeTypes changeType;
     MctNode* changeEntity;
 
-    QString tableName = pos->getCellInfo()->tableName();
-    int startrow = pos->getCellInfo()->row();
-    int endrow = pos->getCellInfoEnd()->row();
+    QString tableName = pos->startCellInfo()->tableName();
+    int startrow = pos->startCellInfo()->row();
+    int endrow = pos->endCellInfoEnd()->row();
     int rownum = endrow - startrow + 1;
 
     if(change.tagName() == MctUndoTags::ADDED) {
@@ -565,9 +565,9 @@ MctChange* MctUndoGraphXMLfilter::colChangeFromXML(QDomElement change)
     MctChangeTypes changeType;
     MctNode* changeEntity;
 
-    QString tableName = pos->getCellInfo()->tableName();
-    int startcol = pos->getCellInfo()->col();
-    int endcol = pos->getCellInfoEnd()->col();
+    QString tableName = pos->startCellInfo()->tableName();
+    int startcol = pos->startCellInfo()->col();
+    int endcol = pos->endCellInfoEnd()->col();
     int colnum = endcol - startcol + 1;
 
     if(change.tagName() == MctUndoTags::ADDED) {
