@@ -1084,7 +1084,7 @@ calligra_drop_product_on_bad_condition( FILTER_WPG_TO_ODG
 
 calligra_drop_product_on_bad_condition( FILTER_PDF_TO_SVG
     NOT_WIN "not supported on Windows"
-    POPPLER_XPDF_HEADERS_FOUND "poppler xpdf headers not found"
+    PopplerXPDFHeaders_FOUND "poppler xpdf headers not found"
 )
 
 calligra_drop_product_on_bad_condition( FILTER_HTML_TO_ODS
