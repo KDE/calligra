@@ -529,7 +529,7 @@ QPointF *FitCubic(const QVector<QPointF> &points, int first, int last, FitVector
     tHatCenter = ComputeCenterTangent(points, splitPoint);
 
     int w1, w2;
-    QPointF *cu1 = NULL, *cu2 = NULL;
+    QPointF *cu1 = 0, *cu2 = 0;
     cu1 = FitCubic(points, first, splitPoint, tHat1, tHatCenter, error, w1);
 
     tHatCenter.negate();
