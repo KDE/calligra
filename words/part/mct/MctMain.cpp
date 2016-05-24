@@ -38,32 +38,32 @@
 #include <QTextTable>
 
 MctMain::MctMain(KWDocument *document, QString fileUrl)
-    : doc(document),
-      fileURL(fileUrl)
+    : m_doc(document),
+      m_fileURL(fileUrl)
 {
-    koTextDoc = new KoTextDocument(document->mainFrameSet()->document());
-    editor = koTextDoc->textEditor();
+    m_koTextDoc = new KoTextDocument(document->mainFrameSet()->document());
+    m_editor = m_koTextDoc->textEditor();
 
-    MctStaticData::instance()->setKoDocument(doc);
-    MctStaticData::instance()->setFileURL(fileURL);
+    MctStaticData::instance()->setKoDocument(m_doc);
+    MctStaticData::instance()->setFileURL(m_fileURL);
     MctStaticData::instance()->setMctState(true);
 
     //class managing undo operations
-    undoop = new MctUndoClass(koTextDoc);
+    m_undoop = new MctUndoClass(m_koTextDoc);
     //class managing redo operations
-    redoop = new MctRedoClass(koTextDoc);
+    m_redoop = new MctRedoClass(m_koTextDoc);
 
-    changebuffer.clear();
+    m_changebuffer.clear();
 
     //loading undo graph
     if(MctStaticData::instance()->getUndoGraph() == NULL) {
         qDebug() << "loading undo graph";
-        MctStaticData::instance()->setUndoGraph(new MctUndoGraph(fileURL,koTextDoc));
+        MctStaticData::instance()->setUndoGraph(new MctUndoGraph(m_fileURL,m_koTextDoc));
     }
     //loading redo graph
     if(MctStaticData::instance()->getRedoGraph() == NULL) {
         qDebug() << "loading redo graph";
-        MctStaticData::instance()->setRedoGraph(new MctRedoGraph(fileURL,koTextDoc));
+        MctStaticData::instance()->setRedoGraph(new MctRedoGraph(m_fileURL,m_koTextDoc));
     }
 }
 
@@ -151,14 +151,14 @@ MctPosition* MctMain::createPositionInTable(QTextCursor cursor)
     return pos;
 }
 
-MctUndoClass *MctMain::getUndoop()
+MctUndoClass *MctMain::undoop()
 {
-    return undoop;
+    return m_undoop;
 }
 
-MctRedoClass *MctMain::getRedoop()
+MctRedoClass *MctMain::redoop()
 {
-    return redoop;
+    return m_redoop;
 }
 
 void MctMain::createMctChange(QTextCursor &selection, MctChangeTypes changeType, const KUndo2MagicString title, QTextFormat format, QTextFormat prevFormat)
@@ -359,32 +359,32 @@ void MctMain::createMctChange(QTextCursor &selection, MctChangeTypes changeType,
 
     MctChange *change = new MctChange(pos, changeType, changeEntity);
 
-    if(changebuffer.isEmpty()) {
-        changebuffer.append(change);
+    if(m_changebuffer.isEmpty()) {
+        m_changebuffer.append(change);
     } else {
-        MctChange *lastchange = changebuffer.last();
+        MctChange *lastchange = m_changebuffer.last();
         // Is this change about following characters? Merge them to a word into only one MctChange
         if(changeType == MctChangeTypes::AddedString) {
             if(lastchange->position()->endPar() == change->position()->startPar()
                && lastchange->position()->endChar() == change->position()->startChar()
                && changeType == lastchange->changeType()) {
-                changebuffer.append(change);
+                m_changebuffer.append(change);
             } else {
                 normailizeChangebuffer();
 
-                changebuffer.clear();
-                changebuffer.append(change);
+                m_changebuffer.clear();
+                m_changebuffer.append(change);
             }
         } else if (changeType == MctChangeTypes::RemovedString) {
             if(lastchange->position()->startPar() == change->position()->endPar()
                && lastchange->position()->startChar() == change->position()->endChar()
                && changeType == lastchange->changeType()) {
-                changebuffer.append(change);
+                m_changebuffer.append(change);
             } else {
                 normailizeChangebuffer();
 
-                changebuffer.clear();
-                changebuffer.append(change);
+                m_changebuffer.clear();
+                m_changebuffer.append(change);
             }
 
         } else if (changeType == MctChangeTypes::AddedStringInTable) {
@@ -392,24 +392,24 @@ void MctMain::createMctChange(QTextCursor &selection, MctChangeTypes changeType,
                && lastchange->position()->endPar() == change->position()->startPar()
                && lastchange->position()->endChar() == change->position()->startChar()
                && posCheckInTable(lastchange->position(), change->position(), changeType)) {
-                changebuffer.append(change);
+                m_changebuffer.append(change);
             } else {
                 normailizeChangebuffer();
 
-                changebuffer.clear();
-                changebuffer.append(change);
+                m_changebuffer.clear();
+                m_changebuffer.append(change);
             }
         } else if (changeType == MctChangeTypes::RemovedStringInTable) {
             if(changeType == lastchange->changeType()
                && lastchange->position()->startPar() == change->position()->endPar()
                && lastchange->position()->startChar() == change->position()->endChar()
                && posCheckInTable(lastchange->position(), change->position(), changeType)) {
-                changebuffer.append(change);
+                m_changebuffer.append(change);
             } else {
                 normailizeChangebuffer();
 
-                changebuffer.clear();
-                changebuffer.append(change);
+                m_changebuffer.clear();
+                m_changebuffer.append(change);
             }
 
         } else {
@@ -449,9 +449,9 @@ void MctMain::addGraphicMctChange(KoShape &selection, MctChangeTypes changeType,
 void MctMain::shapeOperationSlot(KoShape *shape, ChangeAction action)
 {
     if (action == REMOVED){
-        doc->removeShape(shape);
+        m_doc->removeShape(shape);
     } else if (action == ADDED){
-        doc->addShape(shape);
+        m_doc->addShape(shape);
     }
 }
 
@@ -550,14 +550,14 @@ void MctMain::createShapeStyleChanged(QString type, QPointF pos, KoShape &shape,
 void MctMain::createRevision(QString author, QString comment)
 {
 #if QT_VERSION < 0x050000
-    bool oldState = editor->blockSignals(true);
+    bool oldState = m_editor->blockSignals(true);
 #else
     QObject::disconnect(editorConnection);
 #endif
     normailizeChangebuffer();
     // already saved, no need to do it again
     if(! (author == "System" && comment == "revision on save")) {
-        doc->save();
+        m_doc->save();
     }
     MctStaticData::instance()->getUndoGraph()->addChangeset(MctStaticData::instance()->getChanges(), new MctAuthor(author), QDateTime::currentDateTime(), comment);    
     MctStaticData::instance()->exportGraphs();
@@ -565,7 +565,7 @@ void MctMain::createRevision(QString author, QString comment)
     MctStaticData::instance()->clearChanges();
     qDebug() << "revision created";    
 #if QT_VERSION < 0x050000
-    editor->blockSignals(oldState);
+    m_editor->blockSignals(oldState);
 #else
     editorConnection = connect(editor, &KoTextEditor::createMctChange, this, &MctMain::createMctChange);
 #endif
@@ -578,7 +578,7 @@ void MctMain::createRevision(QString author, QString comment)
 void MctMain::restoreRevision(QString target)
 {
 #if QT_VERSION < 0x050000
-    bool oldState = editor->blockSignals(true);
+    bool oldState = m_editor->blockSignals(true);
 #else
     QObject::disconnect(editorConnection);
 #endif
@@ -591,12 +591,12 @@ void MctMain::restoreRevision(QString target)
         rev = target.toInt();
         restoreUndoRevision(rev);
     }
-    doc->save();
+    m_doc->save();
     emit adjustListOfRevisions();    
     MctStaticData::instance()->exportGraphs();
     MctStaticData::instance()->clearChanges();
 #if QT_VERSION < 0x050000
-    editor->blockSignals(oldState);
+    m_editor->blockSignals(oldState);
 #else
     editorConnection = connect(editor, &KoTextEditor::createMctChange, this, &MctMain::createMctChange);
 #endif
@@ -614,7 +614,7 @@ void MctMain::updateRedoRevision(int targetRevision)
         MctChangeset *changesetNode = MctStaticData::instance()->getRedoGraph()->findChangeset(currentRev);
         MctStaticData::instance()->getRedoGraph()->removeChangeset(changesetNode, false);
         MctStaticData::instance()->getUndoGraph()->correctChangesetNodeListWithDate(changesetNode, MctAbstractGraph::DATE_LATER, true);
-        redoop->redoChangeset(changesetNode);
+        m_redoop->redoChangeset(changesetNode);
         --targetRevision;
     }
 }
@@ -631,7 +631,7 @@ void MctMain::restoreUndoRevision(int targetRevision)
     while(currentRev > targetRevision) {
         MctChangeset *changesetNode = MctStaticData::instance()->getUndoGraph()->findChangeset(currentRev);
         MctStaticData::instance()->getUndoGraph()->removeChangeset(changesetNode, false);
-        undoop->undoChangeset(changesetNode);
+        m_undoop->undoChangeset(changesetNode);
         --currentRev;
     }
 }
@@ -640,7 +640,7 @@ void MctMain::restoreUndoRevision(int targetRevision)
  * @brief MctMain::getUndoRevCount
  * @return the index of the last (= newest) UNDO revision.
  */
-int MctMain::getUndoRevCount()
+int MctMain::undoRevCount()
 {
     return MctStaticData::instance()->getUndoGraph()->getCurrentRevision();
 }
@@ -649,7 +649,7 @@ int MctMain::getUndoRevCount()
  * @brief MctMain::getRedoRevCount
  * @return the index of the last (= newest) REDO revision.
  */
-int MctMain::getRedoRevCount()
+int MctMain::redoRevCount()
 {
     return MctStaticData::instance()->getRedoGraph()->getCurrentRevision();
 }
@@ -790,12 +790,12 @@ void MctMain::clearRevisionHistory()
  */
 void MctMain::normailizeChangebuffer()
 {
-    if(changebuffer.isEmpty()) {
+    if(m_changebuffer.isEmpty()) {
         return;
     }
     //TODO: AddedString/RemovedString, AddedStringInTable/RemovedStringInTable works only
     int i = 0;
-    MctChange *tmpchange = changebuffer.at(i);
+    MctChange *tmpchange = m_changebuffer.at(i);
     int p1 = tmpchange->position()->startPar();
     int s = tmpchange->position()->startChar();
     int p2 = tmpchange->position()->endPar();
@@ -816,11 +816,11 @@ void MctMain::normailizeChangebuffer()
         str = dynamic_cast<MctStringChange*>(tmpchange->changeEntity())->getString();
     } else {
         MctStaticData::instance()->getChanges()->append(tmpchange);
-        changebuffer.clear();
+        m_changebuffer.clear();
         return;
     }
-    while(++i < changebuffer.length()) {
-        tmpchange = changebuffer.at(i);
+    while(++i < m_changebuffer.length()) {
+        tmpchange = m_changebuffer.at(i);
         if(tmpchange->changeType() == MctChangeTypes::AddedString) {
             p2 = tmpchange->position()->endPar();
             e = tmpchange->position()->endChar();
@@ -857,12 +857,12 @@ void MctMain::normailizeChangebuffer()
     MctChange *change = new MctChange(pos, tmpchange->changeType(), changeEntity);
 
     MctStaticData::instance()->getChanges()->append(change);
-    changebuffer.clear();
+    m_changebuffer.clear();
 }
 
-QString MctMain::getFileUrl() const
+QString MctMain::fileUrl() const
 {
-    return fileURL;
+    return m_fileURL;
 }
 
 void MctMain::documentSavedAs(QString fileUrl)
@@ -877,11 +877,11 @@ void MctMain::documentSavedAs(QString fileUrl)
 void MctMain::connectSignals()
 {
     #if QT_VERSION < 0x050000
-        connect(editor, SIGNAL(shapeOperationSignal(KoShape*,ChangeAction)), this, SLOT(shapeOperationSlot(KoShape*,ChangeAction)));
-        connect(doc, SIGNAL(createShapeMctChange(QString,QPointF,KoShape&,ChangeAction,QPointF*)), this, SLOT(createShapeMctChange(QString,QPointF,KoShape&,ChangeAction,QPointF*)));
-        connect(doc, SIGNAL(createShapeStyleChanged(QString,QPointF,KoShape&,KoShapeStroke*,KoShapeShadow*,QPointF*,QSizeF,double)), this, SLOT(createShapeStyleChanged(QString,QPointF,KoShape&,KoShapeStroke*,KoShapeShadow*,QPointF*,QSizeF,double)));
-        connect(doc, SIGNAL(shapePositionChanged(KoShape*,QPointF,QPointF*)), this, SLOT(createShapePositionChanged(KoShape*,QPointF,QPointF*)));
-        connect(editor, SIGNAL(createMctChange(QTextCursor&,MctChangeTypes,KUndo2MagicString,QTextFormat,QTextFormat)), this, SLOT(createMctChange(QTextCursor&,MctChangeTypes,KUndo2MagicString,QTextFormat,QTextFormat)));
+        connect(m_editor, SIGNAL(shapeOperationSignal(KoShape*,ChangeAction)), this, SLOT(shapeOperationSlot(KoShape*,ChangeAction)));
+        connect(m_doc, SIGNAL(createShapeMctChange(QString,QPointF,KoShape&,ChangeAction,QPointF*)), this, SLOT(createShapeMctChange(QString,QPointF,KoShape&,ChangeAction,QPointF*)));
+        connect(m_doc, SIGNAL(createShapeStyleChanged(QString,QPointF,KoShape&,KoShapeStroke*,KoShapeShadow*,QPointF*,QSizeF,double)), this, SLOT(createShapeStyleChanged(QString,QPointF,KoShape&,KoShapeStroke*,KoShapeShadow*,QPointF*,QSizeF,double)));
+        connect(m_doc, SIGNAL(shapePositionChanged(KoShape*,QPointF,QPointF*)), this, SLOT(createShapePositionChanged(KoShape*,QPointF,QPointF*)));
+        connect(m_editor, SIGNAL(createMctChange(QTextCursor&,MctChangeTypes,KUndo2MagicString,QTextFormat,QTextFormat)), this, SLOT(createMctChange(QTextCursor&,MctChangeTypes,KUndo2MagicString,QTextFormat,QTextFormat)));
     #else
         connect(editor, &KoTextEditor::shapeOperationSignal, this, &MctMain::shapeOperationSlot);
         connect(doc, &KoDocument::createShapeMctChange, this, &MctMain::createShapeMctChange);
@@ -894,8 +894,8 @@ void MctMain::connectSignals()
 void MctMain::disconnectSignals()
 {
     this->disconnect();
-    this->editor->disconnect();
-    this->doc->disconnect();
+    this->m_editor->disconnect();
+    this->m_doc->disconnect();
 }
 
 void MctMain::setAnchorPosition(MctPosition *anchor, MctPosition *InnerAnchor, MctChangeTypes changeType)

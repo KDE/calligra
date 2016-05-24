@@ -163,9 +163,9 @@ void MctMergeManagerDialog::mergingGraphs(ChangeType type, QTreeWidget *undoTree
 
     QString additionalChangesets = "";
     if (type == UNDOCHANGE){
-        additionalChangesets = getParents(selection, changesetNodes, childListAll, type, undoGraph);
+        additionalChangesets = this->lookForDependingParents(selection, changesetNodes, childListAll, type, undoGraph);
     } else {
-        additionalChangesets = getChildren(selection, changesetNodes, childListAll, type, redoGraph);
+        additionalChangesets = MctMergeManagerDialog::lookForDependingChildren(selection, changesetNodes, childListAll, type, redoGraph);
     }
 
     qDebug() << "selectionCount: " << selectionCount;

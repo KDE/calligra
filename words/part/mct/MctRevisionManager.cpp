@@ -36,26 +36,26 @@
 
 MctRevisionManager::MctRevisionManager(QWidget *parent, MctUndoClass *undoop, MctRedoClass *redoop) :
     QDialog(parent),
-    ui(new Ui::MctRevisionManager)
+    m_ui(new Ui::MctRevisionManager)
 {
-    ui->setupUi(this);
+    m_ui->setupUi(this);
 
     //setWindowModality(Qt::WindowModal);
 
-    this->undoop = undoop;
-    this->redoop = redoop;
+    this->m_undoop = undoop;
+    this->m_redoop = redoop;
 
-    undochangesetNodes = fillRevTree(MctStaticData::instance()->getUndoGraph(), ui->revTree, false);
-    redochangesetNodes = fillRevTree(MctStaticData::instance()->getRedoGraph(), ui->undidRevTree, true);
+    m_undochangesetNodes = fillRevTree(MctStaticData::instance()->getUndoGraph(), m_ui->revTree, false);
+    m_redochangesetNodes = fillRevTree(MctStaticData::instance()->getRedoGraph(), m_ui->undidRevTree, true);
 
     adjustButtonAccess();
 }
 
 MctRevisionManager::~MctRevisionManager()
 {
-    delete ui;
-    delete undochangesetNodes;
-    delete redochangesetNodes;
+    delete m_ui;
+    delete m_undochangesetNodes;
+    delete m_redochangesetNodes;
 }
 
 QMap<QString, MctChangeset*>* MctRevisionManager::fillRevTree(MctAbstractGraph *graph, QTreeView *view, bool isRedo)
@@ -109,7 +109,7 @@ QString MctRevisionManager::createNodeString(MctChangeset *changesetNode)
 void MctRevisionManager::on_undoButton_clicked()
 {
     QList<MctChangeset*> selection;
-    QModelIndexList list = ui->revTree->selectionModel()->selectedIndexes();
+    QModelIndexList list = m_ui->revTree->selectionModel()->selectedIndexes();
     int row = -1;
     foreach (QModelIndex index, list)
     {
@@ -117,7 +117,7 @@ void MctRevisionManager::on_undoButton_clicked()
         {
             qDebug() << index.data().toString();
             row = index.row();
-            selection.append(undochangesetNodes->value(index.data().toString()));
+            selection.append(m_undochangesetNodes->value(index.data().toString()));
         }
     }
     this->undoRevs(selection);
@@ -157,7 +157,7 @@ void MctRevisionManager::undoRevs(QList<MctChangeset*> selection)
         MctStaticData::instance()->getUndoGraph()->correctChangesetNodeListWithDate(changesetNode, MctAbstractGraph::DATE_LATER, false);
         changesetNode->printChangeset();
 
-        undoop->undoChangeset(changesetNode, false);
+        m_undoop->undoChangeset(changesetNode, false);
 
         MctStaticData::instance()->getRedoGraph()->correctChangesetNode(changesetNode, MctAbstractGraph::DATE_EARLIER, true);
         MctStaticData::instance()->getRedoGraph()->addchangesetFromUndo(changesetNode);
@@ -180,8 +180,8 @@ void MctRevisionManager::undoRevs(QList<MctChangeset*> selection)
     MctStaticData::instance()->getKoDocument()->save();
     MctStaticData::instance()->exportGraphs();
 
-    undochangesetNodes = fillRevTree(MctStaticData::instance()->getUndoGraph(), ui->revTree, false);
-    redochangesetNodes = fillRevTree(MctStaticData::instance()->getRedoGraph(), ui->undidRevTree, true);
+    m_undochangesetNodes = fillRevTree(MctStaticData::instance()->getUndoGraph(), m_ui->revTree, false);
+    m_redochangesetNodes = fillRevTree(MctStaticData::instance()->getRedoGraph(), m_ui->undidRevTree, true);
 
     emit adjustListOfRevisions();
     adjustButtonAccess();
@@ -197,7 +197,7 @@ QString MctRevisionManager::getUndoChildren(QList<MctChangeset*> selection, QLis
         MctChangeset* treeNode = selection.at(idx);
         idx--;
         QString nodeString = createNodeString(treeNode);
-        MctChangeset* changesetNode = undochangesetNodes->value(nodeString);
+        MctChangeset* changesetNode = m_undochangesetNodes->value(nodeString);
         if (changesetNode == nullptr)
             continue;
 
@@ -261,7 +261,7 @@ void MctRevisionManager::checkChildren(MctChangeset *changesetNode, QList<ulong>
 void MctRevisionManager::on_redoButton_clicked()
 {
     QList<MctChangeset*> selection;
-    QModelIndexList list = ui->undidRevTree->selectionModel()->selectedIndexes();
+    QModelIndexList list = m_ui->undidRevTree->selectionModel()->selectedIndexes();
     int row = -1;
     foreach (QModelIndex index, list)
     {
@@ -269,7 +269,7 @@ void MctRevisionManager::on_redoButton_clicked()
         {
             qDebug() << index.data().toString();
             row = index.row();
-            selection.append(redochangesetNodes->value(index.data().toString()));
+            selection.append(m_redochangesetNodes->value(index.data().toString()));
         }
     }
     this->redoRevs(selection);
@@ -309,7 +309,7 @@ void MctRevisionManager::redoRevs(QList<MctChangeset *> selection)
 
         MctStaticData::instance()->getUndoGraph()->correctChangesetNodeListWithDate(changesetNode, MctAbstractGraph::DATE_LATER, true);
         changesetNode->printChangeset();
-        redoop->redoChangeset(changesetNode, false);
+        m_redoop->redoChangeset(changesetNode, false);
 
         MctStaticData::instance()->getUndoGraph()->addchangesetFromRedo(changesetNode);
 
@@ -333,8 +333,8 @@ void MctRevisionManager::redoRevs(QList<MctChangeset *> selection)
     MctStaticData::instance()->getKoDocument()->save();
     MctStaticData::instance()->exportGraphs();
 
-    undochangesetNodes = fillRevTree(MctStaticData::instance()->getUndoGraph(), ui->revTree, false);
-    redochangesetNodes = fillRevTree(MctStaticData::instance()->getRedoGraph(), ui->undidRevTree, true);
+    m_undochangesetNodes = fillRevTree(MctStaticData::instance()->getUndoGraph(), m_ui->revTree, false);
+    m_redochangesetNodes = fillRevTree(MctStaticData::instance()->getRedoGraph(), m_ui->undidRevTree, true);
 
     emit adjustListOfRevisions();
     adjustButtonAccess();
@@ -350,7 +350,7 @@ QString MctRevisionManager::getRedoChildren(QList<MctChangeset *> selection, QLi
         MctChangeset* treeNode = selection.at(idx);
         idx--;
         QString nodeString = createNodeString(treeNode);
-        MctChangeset* changesetNode = redochangesetNodes->value(nodeString);
+        MctChangeset* changesetNode = m_redochangesetNodes->value(nodeString);
         if (changesetNode == nullptr)
             continue;
 
@@ -387,7 +387,7 @@ QString MctRevisionManager::getRedoChildren(QList<MctChangeset *> selection, QLi
 void MctRevisionManager::on_deleteButton_clicked()
 {
     QList<MctChangeset*> selectionUndo;
-    QModelIndexList list = ui->revTree->selectionModel()->selectedIndexes();
+    QModelIndexList list = m_ui->revTree->selectionModel()->selectedIndexes();
 
     int row = -1;
     foreach (QModelIndex index, list)
@@ -396,12 +396,12 @@ void MctRevisionManager::on_deleteButton_clicked()
         {
             qDebug() << index.data().toString();
             row = index.row();
-            selectionUndo.append(undochangesetNodes->value(index.data().toString()));
+            selectionUndo.append(m_undochangesetNodes->value(index.data().toString()));
         }
     }
 
     QList<MctChangeset*> selectionRedo;
-    list = ui->undidRevTree->selectionModel()->selectedIndexes();
+    list = m_ui->undidRevTree->selectionModel()->selectedIndexes();
     row = -1;
     foreach (QModelIndex index, list)
     {
@@ -409,7 +409,7 @@ void MctRevisionManager::on_deleteButton_clicked()
         {
             qDebug() << index.data().toString();
             row = index.row();
-            selectionRedo.append(redochangesetNodes->value(index.data().toString()));
+            selectionRedo.append(m_redochangesetNodes->value(index.data().toString()));
         }
     }
 
@@ -425,8 +425,8 @@ void MctRevisionManager::on_deleteButton_clicked()
     MctStaticData::instance()->getKoDocument()->save();
     MctStaticData::instance()->exportGraphs();
 
-    undochangesetNodes = fillRevTree(MctStaticData::instance()->getUndoGraph(), ui->revTree, false);
-    redochangesetNodes = fillRevTree(MctStaticData::instance()->getRedoGraph(), ui->undidRevTree, true);
+    m_undochangesetNodes = fillRevTree(MctStaticData::instance()->getUndoGraph(), m_ui->revTree, false);
+    m_redochangesetNodes = fillRevTree(MctStaticData::instance()->getRedoGraph(), m_ui->undidRevTree, true);
 
     emit adjustListOfRevisions();
     MctStaticData::instance()->clearChanges();
@@ -525,11 +525,11 @@ void MctRevisionManager::printChanges(QString type)
 
 void MctRevisionManager::adjustButtonAccess()
 {
-    if (redochangesetNodes)
-        ui->redoButton->setEnabled(redochangesetNodes->count());
+    if (m_redochangesetNodes)
+        m_ui->redoButton->setEnabled(m_redochangesetNodes->count());
 
-    if (undochangesetNodes)
-        ui->undoButton->setEnabled(undochangesetNodes->count());
+    if (m_undochangesetNodes)
+        m_ui->undoButton->setEnabled(m_undochangesetNodes->count());
 }
 
 void MctRevisionManager::on_clearButton_clicked()
@@ -548,30 +548,30 @@ void MctRevisionManager::on_clearButton_clicked()
         return;
     }
 
-    delete undochangesetNodes;
-    undochangesetNodes = NULL;
-    delete redochangesetNodes;
-    redochangesetNodes = NULL;
-    QStandardItemModel *model = dynamic_cast<QStandardItemModel*>(ui->revTree->model());
+    delete m_undochangesetNodes;
+    m_undochangesetNodes = NULL;
+    delete m_redochangesetNodes;
+    m_redochangesetNodes = NULL;
+    QStandardItemModel *model = dynamic_cast<QStandardItemModel*>(m_ui->revTree->model());
     model->clear();
     model->setColumnCount(1);
     model->setRowCount(0);
     model->setHeaderData(0, Qt::Horizontal, "Applied Revisions");
-    ui->revTree->setModel(model);
+    m_ui->revTree->setModel(model);
 
-    model = dynamic_cast<QStandardItemModel*>(ui->undidRevTree->model());
+    model = dynamic_cast<QStandardItemModel*>(m_ui->undidRevTree->model());
     model->clear();
     model->setColumnCount(1);
     model->setRowCount(0);
     model->setHeaderData(0, Qt::Horizontal, "Disabled Revisions");
-    ui->undidRevTree->setModel(model);
+    m_ui->undidRevTree->setModel(model);
 
 
 }
 
 void MctRevisionManager::on_revTree_expanded(const QModelIndex &index)
 {
-    QStandardItemModel *model = qobject_cast<QStandardItemModel *>(ui->revTree->model());
+    QStandardItemModel *model = qobject_cast<QStandardItemModel *>(m_ui->revTree->model());
     QStandardItem *item = model->itemFromIndex(index);
     QPoint p = QCursor::pos();
     p.setX(p.x()+20);
@@ -581,7 +581,7 @@ void MctRevisionManager::on_revTree_expanded(const QModelIndex &index)
 
 void MctRevisionManager::on_undidRevTree_expanded(const QModelIndex &index)
 {
-    QStandardItemModel *model = qobject_cast<QStandardItemModel *>(ui->undidRevTree->model());
+    QStandardItemModel *model = qobject_cast<QStandardItemModel *>(m_ui->undidRevTree->model());
     QStandardItem *item = model->itemFromIndex(index);
     QPoint p = QCursor::pos();
     p.setX(p.x()+20);

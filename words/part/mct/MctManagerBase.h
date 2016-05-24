@@ -48,13 +48,13 @@ protected:
                            ChangeSetMap *undoMap = nullptr, ChangeSetMap *redoMap = nullptr);
     void addRevision2Tree(QTreeWidget *parent, RevisionIterator changeset, QString index, bool isCurrent = false);
     void addChange2Tree(QTreeWidgetItem *parent, ChangeIterator change);
-    QString getParents(QList<QTreeWidgetItem*> selection, QList<MctChangeset*> *changesetNodes, QList<ulong> *childListAll, ChangeType type, MctUndoGraphXMLfilter *graphToMerge);
-    QString getChildren(QList<QTreeWidgetItem*> selection, QList<MctChangeset*> *changesetNodes, QList<ulong> *childListAll, ChangeType type, MctUndoGraphXMLfilter *graphToMerge);
+    QString lookForDependingParents(QList<QTreeWidgetItem*> selection, QList<MctChangeset*> *changesetNodes, QList<ulong> *childListAll, ChangeType type, MctUndoGraphXMLfilter *graphToMerge);
+    QString lookForDependingChildren(QList<QTreeWidgetItem*> selection, QList<MctChangeset*> *changesetNodes, QList<ulong> *childListAll, ChangeType type, MctUndoGraphXMLfilter *graphToMerge);
     void checkParents(MctChangeset *changesetNode, QList<ulong> *parentlist, MctUndoGraphXMLfilter *graphToMerge);
     void checkChildren(MctChangeset *changesetNode, QList<ulong> *childlist, MctUndoGraphXMLfilter *graphToMerge);
     void filterChangesetNodes(QList<ulong> *changesetIdList, MctUndoGraphXMLfilter *graph, MctUndoGraphXMLfilter *graphToMerge);
     QString createNodeString(MctChangeset *changesetNode);
-    QList<QDomNode> getTreeNodes(QList<QString> displayValues, MctUndoGraphXMLfilter *treeModel);
+    QList<QDomNode> treeNodes(QList<QString> displayValues, MctUndoGraphXMLfilter *treeModel);
 
 };
 

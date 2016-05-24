@@ -41,7 +41,7 @@ class MctRevisionManager : public QDialog
     Q_OBJECT
 
 public:
-    explicit MctRevisionManager(QWidget *parent = 0,  MctUndoClass *undoop = nullptr, MctRedoClass *redoop = nullptr);
+    explicit MctRevisionManager(QWidget *parent = 0,  MctUndoClass *m_undoop = nullptr, MctRedoClass *m_redoop = nullptr);
     ~MctRevisionManager();          
 
 private slots:
@@ -59,13 +59,13 @@ signals:
     void normalizeBuffer();
 
 private:
-    Ui::MctRevisionManager *ui;
+    Ui::MctRevisionManager *m_ui;
     QScreen* sc;
 
-    QMap<QString, MctChangeset*> *undochangesetNodes;
-    QMap<QString, MctChangeset*> *redochangesetNodes;
-    MctUndoClass *undoop;
-    MctRedoClass *redoop;
+    QMap<QString, MctChangeset*> *m_undochangesetNodes;
+    QMap<QString, MctChangeset*> *m_redochangesetNodes;
+    MctUndoClass *m_undoop;
+    MctRedoClass *m_redoop;
 
     QMap<QString, MctChangeset*>* fillRevTree(MctAbstractGraph *graph, QTreeView *view, bool isRedo = false);
     QString createNodeString(MctChangeset* changesetNode);

@@ -30,15 +30,15 @@
 #include "MctMain.h"
 #include "MctStaticData.h"
 
-MctWidget::MctWidget(QWidget *parent, KWDocument *document, QString fileUrl) :
-    QWidget(parent),
-    ui(new Ui::MctWidget),
-    document(document),
-    fileUrl(fileUrl)
+MctWidget::MctWidget(QWidget *parent, KWDocument *document, QString fileUrl)
+    : QWidget(parent)
+    , m_ui(new Ui::MctWidget)
+    , m_document(document)
+    , m_fileUrl(fileUrl)
 {
-    ui->setupUi(this);
+    m_ui->setupUi(this);
 
-    ui->labelRevision->setText("0");
+    m_ui->labelRevision->setText("0");
 
     setWindowModality(Qt::WindowModal);
 
@@ -49,58 +49,58 @@ MctWidget::MctWidget(QWidget *parent, KWDocument *document, QString fileUrl) :
     connect(this, SIGNAL(openMergeManager()), this, SLOT(mergeManager()));
     connect(this, SIGNAL(openRevisionManager()), this, SLOT(revisionManager()));
 
-    connect(this, SIGNAL(clearComboBox()), ui->comboRevision, SLOT(clear()));
+    connect(this, SIGNAL(clearComboBox()), m_ui->comboRevision, SLOT(clear()));
     connect(this, SIGNAL(sendMctStatus(bool)), this, SLOT(updateMctStatus(bool)));
 
-    mct = NULL;
+    m_mct = NULL;
 
-    if (this->fileUrl != "" && MctStaticData::hasMctSupport(this->fileUrl)){
-        isFileSaved = true;
+    if (m_fileUrl != "" && MctStaticData::hasMctSupport(m_fileUrl)){
+        m_isFileSaved = true;
         startChangeTracking();
     }
 }
 
 MctWidget::~MctWidget()
 {
-    delete ui;
-    if(mct) {
-        delete mct;
+    delete m_ui;
+    if(m_mct) {
+        delete m_mct;
     }
 }
 
 void MctWidget::on_buttonClose_clicked()
 {
-    this->hide();
+    hide();
 }
 
 void MctWidget::enableUi(bool enable)
 {
-    isEnabled = enable;
+    m_isEnabled = enable;
 
-    ui->buttonStart->setEnabled(!enable);
-    ui->buttonStop->setEnabled(enable);
+    m_ui->buttonStart->setEnabled(!enable);
+    m_ui->buttonStop->setEnabled(enable);
 
-    ui->buttonCreate->setEnabled(enable);
-    ui->buttonRedo->setEnabled(enable);
-    ui->comboRevision->setEnabled(enable);
-    ui->buttonRevisionManager->setEnabled(enable);
-    ui->buttonMergeManager->setEnabled(enable);
+    m_ui->buttonCreate->setEnabled(enable);
+    m_ui->buttonRedo->setEnabled(enable);
+    m_ui->comboRevision->setEnabled(enable);
+    m_ui->buttonRevisionManager->setEnabled(enable);
+    m_ui->buttonMergeManager->setEnabled(enable);
 
-    ui->lineAuthor->setEnabled(enable);
-    ui->lineComment->setEnabled(enable);
+    m_ui->lineAuthor->setEnabled(enable);
+    m_ui->lineComment->setEnabled(enable);
 }
 
 bool MctWidget::status()
 {
-    return isEnabled;
+    return m_isEnabled;
 }
 
 void MctWidget::on_buttonStart_clicked()
 {
-    fileUrl = document->localFilePath();
-    isFileSaved = (fileUrl != "");
+    m_fileUrl = m_document->localFilePath();
+    m_isFileSaved = (m_fileUrl != "");
 
-    if (!isFileSaved) {
+    if (!m_isFileSaved) {
         QMessageBox::StandardButton reply;
         reply = QMessageBox::information(this, tr("Warning"), tr("Document need to be saved first"));
         if (reply == QMessageBox::Ok) {
@@ -121,18 +121,18 @@ void MctWidget::on_buttonStart_clicked()
 
 void MctWidget::startChangeTracking()
 {
-    KoChangeTracker *ct = document->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
+    KoChangeTracker *ct = m_document->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
     //ct->setRecordChanges(true);
     //ct->setDisplayChanges(true);
 
     enableUi(true);
 
-    if(!mct) {
-        mct = new MctMain(document, fileUrl);
+    if(!m_mct) {
+        m_mct = new MctMain(m_document, m_fileUrl);
     }
 
     emit sendMctStatus(status());
-    connect(mct, SIGNAL(adjustListOfRevisions()), this, SLOT(adjustListOfRevisions()));
+    connect(m_mct, SIGNAL(adjustListOfRevisions()), this, SLOT(adjustListOfRevisions()));
     adjustListOfRevisions();
 
     //ui->labelRevision->setStyleSheet("QLabel { color : green; }");
@@ -149,7 +149,7 @@ void MctWidget::on_buttonStop_clicked()
 
 void MctWidget::stopChangTracking()
 {
-    KoChangeTracker *ct = document->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
+    KoChangeTracker *ct = m_document->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
     //ct->setRecordChanges(false);
     //ct->setDisplayChanges(false);
 
@@ -163,55 +163,55 @@ void MctWidget::stopChangTracking()
 
 void MctWidget::updateFileStatus(bool enabled)
 {
-    this->isFileSaved = enabled;
+    m_isFileSaved = enabled;
 }
 
 void MctWidget::setFileUrl(QString url)
 {
-    fileUrl = url;
+    m_fileUrl = url;
 }
 
 KWDocument *MctWidget::getKoDoc()
 {
-    return document;
+    return m_document;
 }
 
 bool MctWidget::checkExtension()
 {
-    QString ext = fileUrl;
-    ext.remove(0, fileUrl.lastIndexOf('.') + 1);
+    QString ext = m_fileUrl;
+    ext.remove(0, m_fileUrl.lastIndexOf('.') + 1);
     return (ext == "odt" ? false : true);
 }
 
 bool MctWidget::hasMct()
 {
-    return (mct) ? (true) : (false);
+    return (m_mct) ? (true) : (false);
 }
 
 QString MctWidget::getFileUrl() const
 {
-    return fileUrl;
+    return m_fileUrl;
 }
 
 void MctWidget::on_buttonCreate_clicked()
 {
-    if(!mct) {
+    if(!m_mct) {
         return;
     }
-    mct->createRevision(ui->lineAuthor->text(), ui->lineComment->text());
+    m_mct->createRevision(m_ui->lineAuthor->text(), m_ui->lineComment->text());
 }
 
 void MctWidget::on_buttonRedo_clicked()
 {
-    if(!mct) {
+    if(!m_mct) {
         return;
     }
-    redoRevision(ui->comboRevision->currentText());
+    redoRevision(m_ui->comboRevision->currentText());
 }
 
 void MctWidget::on_buttonMergeManager_clicked()
 {
-    if (!isFileSaved) {
+    if (!m_isFileSaved) {
         QMessageBox::StandardButton reply;
         reply = QMessageBox::information(this, tr("Warning"), tr("Document need to be saved first"));
         if (reply == QMessageBox::Ok)
@@ -229,7 +229,7 @@ void MctWidget::on_buttonMergeManager_clicked()
 
 void MctWidget::on_buttonRevisionManager_clicked()
 {
-    if (!isFileSaved) {
+    if (!m_isFileSaved) {
         QMessageBox::StandardButton reply;
         reply = QMessageBox::information(this, tr("Warning"), tr("Document need to be saved first"));
         if (reply == QMessageBox::Ok)
@@ -247,7 +247,7 @@ void MctWidget::on_buttonRevisionManager_clicked()
 
 void MctWidget::mergeManager()
 {
-    MctMergeManagerDialog* mergeMan = new MctMergeManagerDialog(nullptr, mct->getUndoop(), mct->getRedoop());
+    MctMergeManagerDialog* mergeMan = new MctMergeManagerDialog(nullptr, m_mct->undoop(), m_mct->redoop());
     connect(mergeMan, SIGNAL(adjustListOfRevisions()), this, SLOT(adjustListOfRevisions()));
     connect(mergeMan, SIGNAL(normalizeBuffer()), this, SLOT(normalizeBuffer()));
     mergeMan->show();
@@ -255,7 +255,7 @@ void MctWidget::mergeManager()
 
 void MctWidget::revisionManager()
 {
-    MctRevisionManager *revman = new MctRevisionManager(nullptr, mct->getUndoop(), mct->getRedoop());
+    MctRevisionManager *revman = new MctRevisionManager(nullptr, m_mct->undoop(), m_mct->redoop());
     connect(revman, SIGNAL(adjustListOfRevisions()), this, SLOT(adjustListOfRevisions()));
     connect(revman, SIGNAL(normalizeBuffer()), this, SLOT(normalizeBuffer()));
     connect(revman, SIGNAL(clearingProcess()), this, SLOT(clearRevisionHistory()));
@@ -265,84 +265,84 @@ void MctWidget::revisionManager()
 
 void MctWidget::adjustListOfRevisions()
 {
-    int undoRevCount = mct->getUndoRevCount();
-    int redoRevCount = mct->getRedoRevCount();
+    int undoRevCount = m_mct->undoRevCount();
+    int redoRevCount = m_mct->redoRevCount();
 
-    ui->labelRevision->setText(QString::number(undoRevCount));
+    m_ui->labelRevision->setText(QString::number(undoRevCount));
 
      // reset the combobox
      emit clearComboBox();
 
-    ui->comboRevision->setInsertPolicy(QComboBox::InsertAtBottom);
-    ui->comboRevision->addItem(QString::number(0), 0);       // thats the baseline revision
+    m_ui->comboRevision->setInsertPolicy(QComboBox::InsertAtBottom);
+    m_ui->comboRevision->addItem(QString::number(0), 0);       // thats the baseline revision
     for (int i = 1; i <= undoRevCount; ++i) {
-        ui->comboRevision->addItem(QString::number(i), i);
+        m_ui->comboRevision->addItem(QString::number(i), i);
     }
 
     for (int i = 1; i <= redoRevCount; ++i) {
-        ui->comboRevision->addItem(MctStaticData::REDOCHAR + QString::number(i), i);
+        m_ui->comboRevision->addItem(MctStaticData::REDOCHAR + QString::number(i), i);
     }
-    ui->comboRevision->setCurrentIndex(ui->comboRevision->count() - 1);
+    m_ui->comboRevision->setCurrentIndex(m_ui->comboRevision->count() - 1);
 
     emit refreshRevisionManager();
 }
 
 void MctWidget::redoRevision(QString revisionIndex)
 {
-    mct->restoreRevision(revisionIndex);
+    m_mct->restoreRevision(revisionIndex);
 }
 
 void MctWidget::removeSelectedRevision(QString target)
 {
-    mct->removeRevision(target);
+    m_mct->removeRevision(target);
 }
 
 void MctWidget::clearRevisionHistory()
 {
     qDebug() << "CLEAR ALL THE HISTORY!";
-    mct->clearRevisionHistory();
+    m_mct->clearRevisionHistory();
 }
 
 void MctWidget::normalizeBuffer()
 {
-    mct->normailizeChangebuffer();
+    m_mct->normailizeChangebuffer();
 }
 
 void MctWidget::updateMctStatus(bool enable)
 {
     if (enable){;
         MctStaticData::instance()->setMctState(true);
-        mct->connectSignals();
+        m_mct->connectSignals();
     }
     else {
         MctStaticData::instance()->setMctState(false);;
-        mct->disconnectSignals();
+        m_mct->disconnectSignals();
     }
 }
 
 void MctWidget::createMctChange(KoShape &selection, MctChangeTypes changeType, const KUndo2MagicString title, QString fileUrl, ChangeAction action)
 {
     if (!fileUrl.contains("/")){
-        mct->createShapeMctChange(selection.shapeId(), selection.position(), selection, action);
+        m_mct->createShapeMctChange(selection.shapeId(), selection.position(), selection, action);
     } else {
-        mct->addGraphicMctChange(selection, changeType, title, fileUrl, action);
+        m_mct->addGraphicMctChange(selection, changeType, title, fileUrl, action);
     }
 }
 
 void MctWidget::createRevisionOnSave()
 {
-    if(!mct || !isEnabled) {
+    if(!m_mct || !m_isEnabled) {
         return;
     }
 
-    QString fileUrlTmp = document->localFilePath();
+    QString fileUrlTmp = m_document->localFilePath();
 
-    if (fileUrlTmp != fileUrl){
-        fileUrl = fileUrlTmp;
-        mct->documentSavedAs(fileUrl);
+    if (fileUrlTmp != m_fileUrl){
+        m_fileUrl = fileUrlTmp;
+        m_mct->documentSavedAs(m_fileUrl);
     }
 
-    mct->createRevision("System", "revision on save");
+    m_mct->createRevision("System", "revision on save");
 }
 
 /*void MctWidget::setBackgroundColor()

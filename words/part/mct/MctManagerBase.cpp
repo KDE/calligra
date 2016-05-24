@@ -136,7 +136,7 @@ void MctManagerBase::addChange2Tree(QTreeWidgetItem *parent, ChangeIterator chan
     parent->addChild(changeTreeItem);
 }
 
-QString MctManagerBase::getParents(QList<QTreeWidgetItem *> selection, QList<MctChangeset*> *changesetNodes, QList<ulong> *childListAll, ChangeType type, MctUndoGraphXMLfilter *graphToMerge)
+QString MctManagerBase::lookForDependingParents(QList<QTreeWidgetItem *> selection, QList<MctChangeset*> *changesetNodes, QList<ulong> *childListAll, ChangeType type, MctUndoGraphXMLfilter *graphToMerge)
 {
     QString additionalChangesets = "";
     int idx = selection.size() - 1;
@@ -192,7 +192,7 @@ QString MctManagerBase::getParents(QList<QTreeWidgetItem *> selection, QList<Mct
     return additionalChangesets;
 }
 
-QString MctManagerBase::getChildren(QList<QTreeWidgetItem *> selection, QList<MctChangeset *> *changesetNodes, QList<ulong> *childListAll, ChangeType type, MctUndoGraphXMLfilter *graphToMerge)
+QString MctManagerBase::lookForDependingChildren(QList<QTreeWidgetItem *> selection, QList<MctChangeset *> *changesetNodes, QList<ulong> *childListAll, ChangeType type, MctUndoGraphXMLfilter *graphToMerge)
 {
     QString additionalChangesets = "";
 
@@ -317,7 +317,7 @@ QString MctManagerBase::createNodeString(MctChangeset *changesetNode)
     return nodeString;
 }
 
-QList<QDomNode> MctManagerBase::getTreeNodes(QList<QString> displayValues, MctUndoGraphXMLfilter *treeModel)
+QList<QDomNode> MctManagerBase::treeNodes(QList<QString> displayValues, MctUndoGraphXMLfilter *treeModel)
 {
     QDomElement rootNode = treeModel->root();
     QList<QDomNode> treeNodes;

@@ -33,7 +33,7 @@ class MctWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit MctWidget(QWidget *parent, KWDocument *document, QString fileUrl);
+    explicit MctWidget(QWidget *parent, KWDocument *m_document, QString m_fileUrl);
     ~MctWidget();
 
     bool status();
@@ -50,7 +50,7 @@ private:
 public slots:
     void updateFileStatus(bool enabled);
     void startChangeTracking();
-    void createMctChange(KoShape &selection, MctChangeTypes changeType, const KUndo2MagicString title, QString fileUrl, ChangeAction action);
+    void createMctChange(KoShape &selection, MctChangeTypes changeType, const KUndo2MagicString title, QString m_fileUrl, ChangeAction action);
     void createRevisionOnSave();
 
 private slots:
@@ -89,14 +89,14 @@ signals:
     void refreshRevisionManager();
 
 private:
-    Ui::MctWidget *ui;
+    Ui::MctWidget *m_ui;
 
-    KWDocument *document;
-    QString fileUrl;
-    MctMain *mct;
+    KWDocument *m_document;
+    QString m_fileUrl;
+    MctMain *m_mct;
 
-    bool isFileSaved;
-    bool isEnabled;
+    bool m_isFileSaved;
+    bool m_isEnabled;
 };
 
 #endif // MCTWIDGET_H

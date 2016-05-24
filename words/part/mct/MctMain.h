@@ -54,15 +54,15 @@ public:
     void restoreRevision(QString target);
     void updateRedoRevision(int revision);
     void restoreUndoRevision(int revision);
-    int getUndoRevCount();
-    int getRedoRevCount();
+    int undoRevCount();
+    int redoRevCount();
     void removeRevision(QString target);
     void clearRevisionHistory();
-    MctUndoClass* getUndoop();
-    MctRedoClass* getRedoop();
+    MctUndoClass* undoop();
+    MctRedoClass* redoop();
 
     void normailizeChangebuffer();
-    QString getFileUrl() const;
+    QString fileUrl() const;
     void documentSavedAs(QString fileUrl);
 
     void connectSignals();
@@ -79,18 +79,18 @@ public slots:
     void createShapeStyleChanged(QString type, QPointF pos, KoShape &shape, KoShapeStroke *newStroke, KoShapeShadow *newShadow, QPointF *prevPos, QSizeF prevSize, double rotation);
 
 private:    
-    KWDocument *doc;
-    KoTextDocument *koTextDoc;
-    KoTextEditor *editor;
+    KWDocument *m_doc;
+    KoTextDocument *m_koTextDoc;
+    KoTextEditor *m_editor;
 
     //QMetaObject::Connection editorConnection;
 
-    MctUndoClass *undoop;
-    MctRedoClass *redoop;
+    MctUndoClass *m_undoop;
+    MctRedoClass *m_redoop;
 
-    QString fileURL;
+    QString m_fileURL;
 
-    QList<MctChange*> changebuffer;
+    QList<MctChange*> m_changebuffer;
 
     void setAnchorPosition(MctPosition *anchor, MctPosition *InnerAnchor, MctChangeTypes changeType);
     bool posCheckInTable(MctPosition *lastpos, MctPosition *pos, MctChangeTypes changeType);
