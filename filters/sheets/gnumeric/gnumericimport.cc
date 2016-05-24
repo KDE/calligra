@@ -100,7 +100,7 @@ static char const * const cell_date_format [] = {
     "yyyy-mmm-dd",  /* 29 Cell::Format::Date15*/
     "yy",   /* 30 Cell::Format::Date24*/
     "yyyy",   /* 31 Cell::Format::Date23*/
-    NULL
+    nullptr
 };
 
 // copied from gnumeric: src/formats.c:
@@ -116,7 +116,7 @@ static char const * const cell_time_format [] = {
     "[h]:mm",
     "[mm]:ss",
     "[ss]",
-    NULL
+    nullptr
 };
 
 namespace gnumeric_import_LNS

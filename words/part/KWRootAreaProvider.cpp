@@ -372,7 +372,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout* document
     return area;
 }
 
-// afterThis==NULL means delete everything
+// afterThis==nullptr means delete everything
 void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 {
     int afterIndex = -1;

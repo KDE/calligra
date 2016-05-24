@@ -35,10 +35,10 @@ Format::Format()
     _multirow = -1;
     _brushStyle = -1;
     _isValidFormat = false;
-    _bottomBorder = NULL;
-    _topBorder = NULL;
-    _rightBorder = NULL;
-    _leftBorder = NULL;
+    _bottomBorder = nullptr;
+    _topBorder = nullptr;
+    _rightBorder = nullptr;
+    _leftBorder = nullptr;
 }
 
 Format::~Format()
@@ -51,7 +51,7 @@ Format::~Format()
 
 bool Format::hasTopBorder() const
 {
-    if (_topBorder == NULL)
+    if (_topBorder == nullptr)
         return false;
     else
         return (_topBorder->getStyle() > 0);
@@ -59,7 +59,7 @@ bool Format::hasTopBorder() const
 
 bool Format::hasBottomBorder() const
 {
-    if (_bottomBorder == NULL)
+    if (_bottomBorder == nullptr)
         return false;
     else
         return (_bottomBorder->getStyle() > 0);
@@ -67,7 +67,7 @@ bool Format::hasBottomBorder() const
 
 bool Format::hasLeftBorder() const
 {
-    if (_leftBorder == NULL)
+    if (_leftBorder == nullptr)
         return false;
     else
         return (_leftBorder->getStyle() > 0);
@@ -75,7 +75,7 @@ bool Format::hasLeftBorder() const
 
 bool Format::hasRightBorder() const
 {
-    if (_rightBorder == NULL)
+    if (_rightBorder == nullptr)
         return false;
     else
         return (_rightBorder->getStyle() > 0);
@@ -147,20 +147,20 @@ void Format::generate(QTextStream& out, Column* col, Row* row)
         out << ">{\\columncolor";
         generateColor(out);
         out << "}";
-    } else if (col != NULL) {
+    } else if (col != nullptr) {
         if (col->getBrushStyle() >= 1) {
             out << ">{\\columncolor";
             col->generateColor(out);
             out << "}";
         }
-    } else if (row != NULL) {
+    } else if (row != nullptr) {
         if (row->getBrushStyle() >= 1) {
             out << ">{\\columncolor";
             row->generateColor(out);
             out << "}";
         }
     }
-    if (col != NULL)
+    if (col != nullptr)
         out << "m{" << col->getWidth() << "pt}";
     if (hasRightBorder())
         out << "|";

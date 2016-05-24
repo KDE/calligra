@@ -649,8 +649,8 @@ QColor PptToOdp::DrawClient::toQColor(const MSO::OfficeArtCOLORREF& c)
     //required.  Testing required to implement the correct logic.
 
     const MSO::MasterOrSlideContainer* mc = dc_data->masterSlide;
-    const MSO::MainMasterContainer* mm = NULL;
-    const MSO::SlideContainer* tm = NULL;
+    const MSO::MainMasterContainer* mm = nullptr;
+    const MSO::SlideContainer* tm = nullptr;
     QColor ret;
 
     if (mc) {
@@ -1949,7 +1949,7 @@ void PptToOdp::defineMasterStyles(KoGenStyles& styles)
             masterPresentationStyles[m][5] = styles.insert(style);
         }
     }
-    m_currentMaster = NULL;
+    m_currentMaster = nullptr;
 }
 
 void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
@@ -3041,8 +3041,8 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
         odrawtoodf.processGroupShape(spgr, out);
     }
 
-    m_currentMaster = NULL;
-    m_currentSlide = NULL;
+    m_currentMaster = nullptr;
+    m_currentSlide = nullptr;
 
     if (slide->drawing.OfficeArtDg.shape) {
         // leave it out until it is understood
@@ -3171,15 +3171,15 @@ QColor PptToOdp::toQColor(const ColorIndexStruct &color)
         return ret;
     }
 
-    const QList<ColorStruct>* colorScheme = NULL;
+    const QList<ColorStruct>* colorScheme = nullptr;
     const MSO::MasterOrSlideContainer* m = m_currentMaster;
-    const MSO::MainMasterContainer* mmc = NULL;
-    const MSO::SlideContainer* tmc = NULL;
+    const MSO::MainMasterContainer* mmc = nullptr;
+    const MSO::SlideContainer* tmc = nullptr;
     const MSO::SlideContainer* sc = m_currentSlide;
 
     //TODO: hande the case of a notes master slide/notes slide pair
-//     const MSO::NotesContainer* nmc = NULL;
-//     const MSO::NotesContainer* nc = NULL;
+//     const MSO::NotesContainer* nmc = nullptr;
+//     const MSO::NotesContainer* nc = nullptr;
 
 //     if (m) {
 //         if (m->anon.is<MainMasterContainer>()) {
@@ -3201,7 +3201,7 @@ QColor PptToOdp::toQColor(const ColorIndexStruct &color)
         } else {
             mmc = m->anon.get<MainMasterContainer>();
             colorScheme = &mmc->slideSchemeColorSchemeAtom.rgSchemeColor;
-            m = NULL;
+            m = nullptr;
         }
     }
 
@@ -3244,12 +3244,12 @@ QColor PptToOdp::toQColor(const MSO::OfficeArtCOLORREF& c,
     //defined color scheme will be used to determine the color (MS-ODRAW)
     if (c.fSchemeIndex) {
 
-        const QList<ColorStruct>* colorScheme = NULL;
-        const MSO::MainMasterContainer* mmc = NULL;
-        const MSO::SlideContainer* tmc = NULL;
-        const MSO::SlideContainer* sc = NULL;
-        const MSO::NotesContainer* nmc = NULL;
-        const MSO::NotesContainer* nc = NULL;
+        const QList<ColorStruct>* colorScheme = nullptr;
+        const MSO::MainMasterContainer* mmc = nullptr;
+        const MSO::SlideContainer* tmc = nullptr;
+        const MSO::SlideContainer* sc = nullptr;
+        const MSO::NotesContainer* nmc = nullptr;
+        const MSO::NotesContainer* nc = nullptr;
 
         // Get the color scheme of the current main master/title master or
         // notes master slide.
@@ -3607,7 +3607,7 @@ void PptToOdp::insertNotesDeclaration(DeclarationType type, const QString &name,
 // @return pointer to the OfficeArtSpContainer
 const OfficeArtSpContainer* checkGroupShape(const OfficeArtSpgrContainer& o, quint32 spid)
 {
-    if (o.rgfb.size() < 2) return NULL;
+    if (o.rgfb.size() < 2) return nullptr;
 
     const OfficeArtSpContainer* sp = 0;
     foreach(const OfficeArtSpgrContainerFileBlock& co, o.rgfb) {
@@ -3619,7 +3619,7 @@ const OfficeArtSpContainer* checkGroupShape(const OfficeArtSpgrContainer& o, qui
 	}
         //TODO: the shape could be located deeper in the hierarchy
     }
-    return NULL;
+    return nullptr;
 }
 
 const OfficeArtSpContainer* PptToOdp::retrieveMasterShape(quint32 spid) const
@@ -3680,5 +3680,5 @@ const OfficeArtSpContainer* PptToOdp::retrieveMasterShape(quint32 spid) const
         }
     }
 #endif
-    return NULL;
+    return nullptr;
 }

@@ -234,7 +234,7 @@ public:
      * @param col The column of this cell.
      * @param row The row of this cell.
      */
-    void generate(QTextStream& out, Column* col = NULL, Row* row = NULL);
+    void generate(QTextStream& out, Column* col = nullptr, Row* row = nullptr);
 
     /**
      * Generate the text cell format (color and font).

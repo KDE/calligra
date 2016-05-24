@@ -36,7 +36,7 @@ class XlsxChartOdfWriter : public KoOdfChartWriter
 {
 public:
     explicit XlsxChartOdfWriter(KoChart::Chart* chart,
-				const MSOOXML::DrawingMLTheme* const contextWithThemeInfo = NULL);
+				const MSOOXML::DrawingMLTheme* const contextWithThemeInfo = nullptr);
     ~XlsxChartOdfWriter();
 
 

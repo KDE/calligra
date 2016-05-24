@@ -55,11 +55,11 @@ void MultiscriptElement::ensureEvenNumberElements()
 {
     if (m_postScripts.size() % 2 == 1) {
         // Odd number - add a None element to the end
-        m_postScripts.append(NULL);
+        m_postScripts.append(nullptr);
     }
     if (m_preScripts.size() % 2 == 1) {
         // Odd number - add a None element to the end
-        m_preScripts.append(NULL);
+        m_preScripts.append(nullptr);
     }
 }
 
@@ -184,7 +184,7 @@ void MultiscriptElement::layout( const AttributeManager* am )
                 lastSubScriptWidth = m_postScripts[i]->width();
                 // For a given vertical line, this is processed after the superscript
                 qreal offset = 0.0;
-                if(m_postScripts.size() > i+1 && m_postScripts[i+1] != NULL) //the subscript directly below us.
+                if(m_postScripts.size() > i+1 && m_postScripts[i+1] != nullptr) //the subscript directly below us.
                     offset = qMax(qreal(0.0), (m_postScripts[i+1]->width() - lastSubScriptWidth)/qreal(2.0));
                 m_postScripts[i]->setOrigin( QPointF(
                             offset + xOffset,
@@ -270,11 +270,11 @@ bool MultiscriptElement::readMathMLContent( const KoXmlElement& parent )
         if (tmp.tagName() == "none") {
             //In mathml, we read subscript, then superscript, etc.  To skip one,
             //you use "none"
-            //To represent "none" we use a NULL pointer
+            //To represent "none" we use a nullptr
             if(prescript)
-                m_preScripts.append(NULL);
+                m_preScripts.append(nullptr);
             else
-                m_postScripts.append(NULL);
+                m_postScripts.append(nullptr);
             continue;
         } else if (tmp.tagName() == "mprescripts") {
             prescript = true;
@@ -372,7 +372,7 @@ bool MultiscriptElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& o
         }
         if (newcursor.direction()==MoveLeft) {
             if (!m_preScripts.isEmpty()) {
-                // we search for the first non NULL element to the left
+                // we search for the first non nullptr element to the left
                 int i;
                 for (i=0; i<m_preScripts.count(); i++) {
                     if (m_preScripts[i]) {
@@ -388,7 +388,7 @@ bool MultiscriptElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& o
             return moveSingleSituation(newcursor,oldcursor,0);
         } else if (newcursor.direction()==MoveRight) {
             if (!m_postScripts.isEmpty()) {
-                // we search for the first non NULL element to the left
+                // we search for the first non nullptr element to the left
                 int i;
                 for (i=0; i<m_postScripts.count(); i++) {
                     if (m_postScripts[i]) {

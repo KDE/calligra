@@ -35,7 +35,7 @@ public:
 StaffElement::StaffElement(Staff* staff, int startTime) : d(new Private)
 {
     d->staff = staff;
-    d->bar = NULL;
+    d->bar = nullptr;
     d->startTime = startTime;
     d->x = 0;
     d->y = 0;

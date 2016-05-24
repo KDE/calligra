@@ -137,7 +137,7 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
     KoXmlWriter writer(&opfDevice);
 
     //FIXME: Write   <?xml version="1.0"?> -> FIXED
-    writer.startDocument(NULL,NULL,NULL);
+    writer.startDocument(nullptr, nullptr, nullptr);
 
     // FIXME: Get the unique identifier
     writer.startElement("package");

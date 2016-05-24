@@ -405,7 +405,7 @@ void SvgOutputDev::drawString(GfxState * state, GooString * s)
     char * p = s->getCString();
     int len = s->getLength();
     CharCode code;
-    Unicode *u = NULL;
+    Unicode *u = nullptr;
     int uLen;
     double dx, dy, originX, originY;
     while (len > 0) {
@@ -514,7 +514,7 @@ void SvgOutputDev::drawImage(GfxState *state, Object */*ref*/, Stream *str,
         image = new QImage(buffer, width, height, QImage::Format_RGB32);
     }
 
-    if (image == NULL || image->isNull()) {
+    if (image == nullptr || image->isNull()) {
         debugPdf << "Null image";
         delete imgStr;
         delete[] buffer;

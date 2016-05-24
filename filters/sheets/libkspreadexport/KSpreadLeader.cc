@@ -24,7 +24,7 @@ using namespace KSpread;
 
 Leader::Leader(KoFilterChain *filterChain)
 {
-    m_worker = NULL;
+    m_worker = nullptr;
     m_filterChain = filterChain;
 }
 

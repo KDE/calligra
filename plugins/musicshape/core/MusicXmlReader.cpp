@@ -169,12 +169,12 @@ void MusicXmlReader::loadPart(const KoXmlElement& partElement, Part* part)
 
     int curBar = 0;
     int curDivisions = 26880;
-    Chord* lastNote = NULL;
+    Chord* lastNote = nullptr;
 
     forEachElement(barElem, partElement) {
         if (!checkNamespace(barElem) || barElem.localName() != "measure") continue;
 
-        Bar* bar = NULL;
+        Bar* bar = nullptr;
         if (curBar >= sheet->barCount()) {
             bar = sheet->addBar();
         } else {

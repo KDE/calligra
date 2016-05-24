@@ -2685,8 +2685,8 @@ void LinearAlgorithm::virtualDoLayout() {
     QList<LayoutNodeAtom*> childs = childLayouts();
     if ( childs.isEmpty() )
         return;
-    LayoutNodeAtom *firstNSpaceNode = NULL;
-    LayoutNodeAtom *lastNSpaceNode = NULL;
+    LayoutNodeAtom *firstNSpaceNode = nullptr;
+    LayoutNodeAtom *lastNSpaceNode = nullptr;
     debugMsooXml << values;
     for ( int i = 0; i < childs.count(); ++ i )
     {

@@ -227,7 +227,7 @@ void PSCommentLexer::nextStep(char c, State *newState, Action *newAction)
 
 uchar PSCommentLexer::decode()
 {
-    uchar value = m_temp.toString().toShort(NULL, 8);
+    uchar value = m_temp.toString().toShort(nullptr, 8);
 //  qDebug ("got encoded char %c",value);
     return value;
 }
@@ -325,7 +325,7 @@ void BoundingBoxExtractor::gotComment(const char *value)
 
 bool BoundingBoxExtractor::getRectangle(const char* input, int &llx, int &lly, int &urx, int &ury)
 {
-    if (input == NULL) return false;
+    if (input == nullptr) return false;
 
     QString s(input);
     if (s.contains("(atend)")) return false;

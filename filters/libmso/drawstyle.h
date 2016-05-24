@@ -355,7 +355,7 @@ template <typename A, typename B>
 IMsoArray
 getComplexData(const B& b)
 {
-    MSO::OfficeArtFOPTE* p = NULL;
+    MSO::OfficeArtFOPTE* p = nullptr;
     IMsoArray a;
     const char* pData = b.complexData.data();
     uint offset = 0;
@@ -432,7 +432,7 @@ template <typename A, typename B>
 QString
 getComplexName(const B& b)
 {
-    MSO::OfficeArtFOPTE* p = NULL;
+    MSO::OfficeArtFOPTE* p = nullptr;
     uint offset = 0;
     QString a;
 

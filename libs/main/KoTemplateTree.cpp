@@ -106,19 +106,19 @@ void KoTemplateTree::add(KoTemplateGroup *g)
 {
 
     KoTemplateGroup *group = find(g->name());
-    if (group == NULL)
+    if (group == nullptr)
         m_groups.append(g);
     else {
         group->addDir(g->dirs().first()); // "...there can be only one..." (Queen)
         delete g;
-        g = NULL;
+        g = nullptr;
     }
 }
 
 KoTemplateGroup *KoTemplateTree::find(const QString &name) const
 {
     QList<KoTemplateGroup*>::const_iterator it = m_groups.begin();
-    KoTemplateGroup* ret = NULL;
+    KoTemplateGroup* ret = nullptr;
 
     while (it != m_groups.end()) {
         if ((*it)->name() == name) {

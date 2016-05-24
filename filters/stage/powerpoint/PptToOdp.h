@@ -294,7 +294,7 @@ private:
     void defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles,
                                 ODrawToOdf& odrawtoodf,
                                 const MSO::HeadersFootersAtom* hf,
-                                const MSO::SlideFlags* sf = NULL);
+                                const MSO::SlideFlags* sf = nullptr);
 
     /* Extract data into the style of type ListAutoStyle/ListStyle */
     void defineListStyle(KoGenStyle& style,
@@ -544,8 +544,8 @@ private:
      * @return QColor value, may be undefined
      */
     QColor toQColor(const MSO::OfficeArtCOLORREF& color,
-                    const MSO::StreamOffset* master = NULL,
-                    const MSO::StreamOffset* common = NULL);
+                    const MSO::StreamOffset* master = nullptr,
+                    const MSO::StreamOffset* common = nullptr);
 
     /**
     * @brief processTextAutoNumberScheme : process the Textautoscheme to display the Bullet and numbering.
@@ -591,7 +591,7 @@ private:
     /**
      * There is at most one SlideHeadersFootersContainer, but for some slides
      * it is in a strange positions. This convenience function returns a pointer
-     * to the SlideHeadersFootersContainer or NULL if there is none.
+     * to the SlideHeadersFootersContainer or nullptr if there is none.
      **/
     const MSO::SlideHeadersFootersContainer* getSlideHF() const
     {

@@ -209,9 +209,9 @@ void LatexExportDialog::accept()
     }
 
     /* The default language is the first language in the list */
-    if (langUsedList->item(0) != NULL)
+    if (langUsedList->item(0) != nullptr)
         config->setDefaultLanguage(langUsedList->item(0)->text());
-    if (langUsedList->currentItem() != NULL) {
+    if (langUsedList->currentItem() != nullptr) {
         const QString currentLanguage = langUsedList->currentItem()->text();
         debugLatex << "default lang. :" << currentLanguage;
         config->setDefaultLanguage(currentLanguage);

@@ -77,7 +77,7 @@ void KeySignatureAction::mousePress(Staff* staff, int barIdx, const QPointF& pos
         dlg.setAccidentals(ks ? ks->accidentals() : 0);
         if (dlg.exec() == QDialog::Accepted) {
             if (dlg.updateAllStaves()) {
-                staff = NULL;
+                staff = nullptr;
             }
             if (dlg.updateToNextChange() || dlg.updateTillEndOfPiece()) {
                 SetKeySignatureCommand::RegionType t = dlg.updateToNextChange() ? SetKeySignatureCommand::NextChange : SetKeySignatureCommand::EndOfPiece;
@@ -87,6 +87,6 @@ void KeySignatureAction::mousePress(Staff* staff, int barIdx, const QPointF& pos
             }
         }
     } else {
-        m_tool->addCommand(new SetKeySignatureCommand(m_tool->shape(), barIdx, SetKeySignatureCommand::NextChange, NULL, m_accidentals));
+        m_tool->addCommand(new SetKeySignatureCommand(m_tool->shape(), barIdx, SetKeySignatureCommand::NextChange, nullptr, m_accidentals));
     }
 }

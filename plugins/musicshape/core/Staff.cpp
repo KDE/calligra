@@ -130,7 +130,7 @@ int Staff::line(qreal y) const
 
 Clef* Staff::lastClefChange(int bar, int time, Clef* oldClef)
 {
-    if (!part()) return NULL;
+    if (!part()) return nullptr;
     
     if (time < 0) time = INT_MAX;
     for (int b = bar; b >= 0; b--) {
@@ -156,7 +156,7 @@ Clef* Staff::lastClefChange(Bar* bar, int time, Clef* oldClef)
 
 KeySignature* Staff::lastKeySignatureChange(int bar)
 {
-    if (!part()) return NULL;
+    if (!part()) return nullptr;
     
     for (int b = bar; b >= 0; b--) {
         Bar* curBar = part()->sheet()->bar(b);
@@ -176,7 +176,7 @@ KeySignature* Staff::lastKeySignatureChange(Bar* bar)
 
 TimeSignature* Staff::lastTimeSignatureChange(int bar)
 {
-    if (!part()) return NULL;
+    if (!part()) return nullptr;
     
     for (int b = bar; b >= 0; b--) {
         Bar* curBar = part()->sheet()->bar(b);

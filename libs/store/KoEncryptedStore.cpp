@@ -533,13 +533,13 @@ bool KoEncryptedStore::openRead(const QString& name)
             // Read error detected
             d->stream->close();
             delete d->stream;
-            d->stream = NULL;
+            d->stream = nullptr;
             warnStore << "read error";
             return false;
         }
         d->stream->close();
         delete d->stream;
-        d->stream = NULL;
+        d->stream = nullptr;
         KoEncryptedStore_EncryptionData encData = m_encryptionData.value(name);
         QCA::SecureArray decrypted;
 
@@ -608,7 +608,7 @@ bool KoEncryptedStore::openRead(const QString& name)
 
         QByteArray *resultArray = new QByteArray(decrypted.toByteArray());
         KCompressionDevice::CompressionType type = KFilterDev::compressionTypeForMimeType("application/x-gzip");
-        QIODevice *resultDevice = new KCompressionDevice(new QBuffer(resultArray, NULL), false, type);
+        QIODevice *resultDevice = new KCompressionDevice(new QBuffer(resultArray, nullptr), false, type);
 
         if (!resultDevice) {
             delete resultArray;
@@ -628,7 +628,7 @@ bool KoEncryptedStore::closeRead()
 {
     Q_D(KoStore);
     delete d->stream;
-    d->stream = NULL;
+    d->stream = nullptr;
     return true;
 }
 

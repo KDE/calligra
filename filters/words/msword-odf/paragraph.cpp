@@ -180,7 +180,7 @@ void Paragraph::addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word9
     }
 
     // if it's inner paragraph, push back true this is an
-    // m_textStyles.push_back(NULL) complement if we still need the style
+    // m_textStyles.push_back(nullptr) complement if we still need the style
     // applied
     m_addCompleteElement.push_back(addCompleteElement);
 

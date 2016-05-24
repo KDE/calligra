@@ -109,7 +109,7 @@ Clef* StaffSystem::clef(Staff* staff) const
             return c;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 void StaffSystem::setClefs(QList<Clef*> clefs)

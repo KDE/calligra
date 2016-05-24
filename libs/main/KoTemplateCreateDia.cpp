@@ -204,7 +204,7 @@ void KoTemplateCreateDia::slotSelectionChanged()
     if ( ! item )
         return;
 
-    if ( item->parent() != NULL )
+    if ( item->parent() != nullptr )
     {
         d->m_name->setText( item->text( 0 ) );
     }
@@ -259,7 +259,7 @@ void KoTemplateCreateDia::slotOk() {
         return;
     }
     // is it a group or a template? anyway - get the group :)
-    if(item->parent() != NULL)
+    if(item->parent() != nullptr)
         item=item->parent();
     if(!item) {    // *very* safe :P
         d->m_tree->writeTemplateTree();
@@ -460,7 +460,7 @@ void KoTemplateCreateDia::slotRemove() {
 
     QString what;
         QString removed;
-        if (item->parent() == NULL) {
+        if (item->parent() == nullptr) {
                 what =  i18n("Do you really want to remove that group?");
                 removed = i18n("Remove Group");
         } else {
@@ -474,7 +474,7 @@ void KoTemplateCreateDia::slotRemove() {
         return;
     }
 
-    if(item->parent() == NULL) {
+    if(item->parent() == nullptr) {
         KoTemplateGroup *group=d->m_tree->find(item->text(0));
         if(group)
             group->setHidden(true);

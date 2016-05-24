@@ -1277,7 +1277,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
     int level = 0;
     bool readingGradient = false;
     bool readingGradientStop = false;
-    KoChart::Gradient* gradient = NULL;
+    KoChart::Gradient* gradient = nullptr;
     KoChart::Gradient::GradientStop currentStop;
     while (!atEnd()) {
         readNext();
@@ -1358,7 +1358,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
                       m_context->m_chart->m_fillGradient = gradient;
                       break;
                 }
-                gradient = NULL;
+                gradient = nullptr;
             }
         } else if ( qualifiedName() == "a:gs" && readingGradient ) {
             if ( isStartElement() ) {

@@ -30,7 +30,7 @@
 /* Init static data */
 FileHeader* XmlParser::_fileHeader = 0;
 Document* XmlParser::_root = 0;
-KoStore* XmlParser::_in = NULL;
+KoStore* XmlParser::_in = nullptr;
 
 XmlParser::XmlParser(const QString &filename): _filename(filename)
 {
@@ -68,7 +68,7 @@ XmlParser::XmlParser()
 
 XmlParser::~XmlParser()
 {
-    if (_in != NULL)
+    if (_in != nullptr)
         _in->close();
 }
 

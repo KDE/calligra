@@ -82,7 +82,7 @@ void AbstractNoteMusicAction::mousePress(Staff* staff, int barIdx, const QPointF
                 qreal dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
                 if (dist < closestDist) {
                     closestDist = dist;
-                    closestNote = NULL;
+                    closestNote = nullptr;
                     chord = c;
                 }
             }
@@ -160,7 +160,7 @@ void AbstractNoteMusicAction::mouseMove(Staff* staff, int barIdx, const QPointF&
                 qreal dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
                 if (dist < closestDist) {
                     closestDist = dist;
-                    closestNote = NULL;
+                    closestNote = nullptr;
                     chord = c;
                 }
             }

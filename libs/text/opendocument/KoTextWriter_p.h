@@ -72,7 +72,7 @@ class TagInformation
 
         void clear()
         {
-            tagName = NULL;
+            tagName = nullptr;
             attributeList.clear();
         }
 

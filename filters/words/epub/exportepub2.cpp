@@ -472,7 +472,7 @@ void ExportEpub2::writeCoverImage(EpubFile *epubFile, const QString coverPath)
     QBuffer buff(&coverHtmlContent);
     KoXmlWriter writer(&buff);
 
-    writer.startDocument(NULL,NULL,NULL); //xml version, etc...
+    writer.startDocument(nullptr, nullptr, nullptr); //xml version, etc...
     writer.startElement("html");
     writer.addAttribute("xmlns", "http://www.w3.org/1999/xhtml");
     writer.addAttribute("xml:lang", "en");

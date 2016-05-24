@@ -1764,7 +1764,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_VML_background()
         if (m_pDocBkgImageWriter) {
             delete m_pDocBkgImageWriter->device();
             delete m_pDocBkgImageWriter;
-            m_pDocBkgImageWriter = NULL;
+            m_pDocBkgImageWriter = nullptr;
         }
         QBuffer* buffer = new QBuffer();
         m_pDocBkgImageWriter = new KoXmlWriter(buffer);

@@ -27,7 +27,7 @@
 using namespace MusicCore;
 
 SetClefCommand::SetClefCommand(MusicShape* shape, Bar* bar, Staff* staff, Clef::ClefShape clefShape, int line, int octaveChange)
-    : m_shape(shape), m_bar(bar), m_clef(new Clef(staff, 0, clefShape, line, octaveChange)), m_oldClef(NULL)
+    : m_shape(shape), m_bar(bar), m_clef(new Clef(staff, 0, clefShape, line, octaveChange)), m_oldClef(nullptr)
 {
     setText(kundo2_i18n("Change clef"));
     

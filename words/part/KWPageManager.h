@@ -177,7 +177,7 @@ public:
     QHash<QString, KWPageStyle> pageStyles() const;
 
     /**
-     * Returns the \a KWPageStyle known under the name \p name or NULL if the
+     * Returns the \a KWPageStyle known under the name \p name or nullptr if the
      * document has no such page style.
      */
     KWPageStyle pageStyle(const QString &name) const;

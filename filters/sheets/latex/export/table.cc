@@ -132,7 +132,7 @@ Cell* Table::searchCell(int col, int row)
         if (cell->getCol() == col && cell->getRow() == row)
             return cell;
     }
-    return NULL;
+    return nullptr;
 }
 
 Column* Table::searchColumn(int col)
@@ -141,7 +141,7 @@ Column* Table::searchColumn(int col)
         if (column->getCol() == col)
             return column;
     }
-    return NULL;
+    return nullptr;
 }
 
 Row* Table::searchRow(int rowNumber)
@@ -151,7 +151,7 @@ Row* Table::searchRow(int rowNumber)
         if (row->getRow() == rowNumber)
             return row;
     }
-    return NULL;
+    return nullptr;
 }
 
 /*******************************************/
@@ -176,7 +176,7 @@ void Table::generate(QTextStream& out)
     while (rowNumber <= getMaxRow()) {
         generateTopLineBorder(out, rowNumber);
         Row* row = searchRow(rowNumber);
-        if (row != NULL)
+        if (row != nullptr)
             row->generate(out);
 
         for (int col = 1; col <= getMaxColumn(); col++) {
@@ -255,7 +255,7 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
         debugLatex << "search" << row << "," << index;
         cell = searchCell(index, row);
 
-        if (cell == NULL) {
+        if (cell == nullptr) {
             cell = new Cell(row, index);
             _cells.append(cell);
         }
@@ -289,7 +289,7 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
 
     /*Row * row;
     row = searchRow(row);
-    if(row != NULL)
+    if(row != nullptr)
      row->generate(out);*/
 }
 
@@ -306,7 +306,7 @@ void Table::generateBottomLineBorder(QTextStream& out, int row)
         /* Search the cell in the list */
         cell = searchCell(index, row);
 
-        if (cell == NULL) {
+        if (cell == nullptr) {
             cell = new Cell(row, index);
             _cells.append(cell);
         }
@@ -348,7 +348,7 @@ void Table::generateCell(QTextStream& out, int row, int col)
 
     /* Search the cell in the list */
     Cell *cell = searchCell(col, row);
-    if (cell != NULL) {
+    if (cell != nullptr) {
         debugLatex << "generate cell with text:" << cell->getText();
         cell->generate(out, this);
     }
@@ -367,7 +367,7 @@ void Table::generateTableHeader(QTextStream& out)
 
     for (int col = 1; col <= getMaxColumn(); col++) {
         column = searchColumn(col);
-        if (column != NULL)
+        if (column != nullptr)
             column->generate(out);
         else {
             out << "m{20pt}";

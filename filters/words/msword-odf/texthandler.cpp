@@ -132,7 +132,7 @@ bool WordsTextHandler::stateOk() const
 
 KoXmlWriter* WordsTextHandler::currentWriter() const
 {
-    KoXmlWriter* writer = NULL;
+    KoXmlWriter* writer = nullptr;
 
     if (m_insideDrawing) {
         writer = m_drawingWriter;

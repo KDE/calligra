@@ -132,7 +132,7 @@ void NoteEntryAction::mousePress(Staff* staff, int bar, const QPointF& pos)
         }
     }
     
-    Chord* join = NULL;
+    Chord* join = nullptr;
     if (before > 0) join = dynamic_cast<Chord*>(vb->element(before-1));
     if (join && join->x() + join->width() >= pos.x()) {
         if (clef && !m_isRest) {
