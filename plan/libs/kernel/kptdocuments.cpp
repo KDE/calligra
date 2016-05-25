@@ -162,9 +162,9 @@ void Document::save(QDomElement &element) const
 {
     element.setAttribute("url", m_url.url() );
     element.setAttribute("name", m_name );
-    element.setAttribute("type", m_type );
+    element.setAttribute("type", QString::number(m_type) );
     element.setAttribute("status", m_status );
-    element.setAttribute("sendas", m_sendAs );
+    element.setAttribute("sendas", QString::number(m_sendAs) );
 }
 
 //----------------

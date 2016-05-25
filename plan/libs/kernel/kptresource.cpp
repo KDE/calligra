@@ -620,7 +620,7 @@ void Resource::save(QDomElement &element) const {
     me.setAttribute("email", m_email);
     me.setAttribute("auto-allocate", m_autoAllocate );
     me.setAttribute("type", typeToString());
-    me.setAttribute("units", m_units);
+    me.setAttribute("units", QString::number(m_units));
     if ( m_availableFrom.isValid() ) {
         me.setAttribute("available-from", m_availableFrom.toString( Qt::ISODate ));
     }
@@ -1102,7 +1102,7 @@ bool Resource::WorkInfoCache::load( const KoXmlElement &element, XMLLoaderObject
 
 void Resource::WorkInfoCache::save( QDomElement &element ) const
 {
-    element.setAttribute( "version", version );
+    element.setAttribute( "version", QString::number(version) );
     element.setAttribute( "effort", effort.toString() );
     element.setAttribute( "start", start.toString( Qt::ISODate ) );
     element.setAttribute( "end", end.toString( Qt::ISODate ) );
@@ -1612,7 +1612,7 @@ void ResourceRequest::save(QDomElement &element) const {
     QDomElement me = element.ownerDocument().createElement("resource-request");
     element.appendChild(me);
     me.setAttribute("resource-id", m_resource->id());
-    me.setAttribute("units", m_units);
+    me.setAttribute("units", QString::number(m_units));
     if ( ! m_required.isEmpty() ) {
         QDomElement e = me.ownerDocument().createElement("required-resources");
         me.appendChild(e);
@@ -1953,7 +1953,7 @@ void ResourceGroupRequest::save(QDomElement &element) const {
     QDomElement me = element.ownerDocument().createElement("resourcegroup-request");
     element.appendChild(me);
     me.setAttribute("group-id", m_group->id());
-    me.setAttribute("units", m_units);
+    me.setAttribute("units", QString::number(m_units));
     foreach (ResourceRequest *r, m_resourceRequests)
         r->save(me);
 }

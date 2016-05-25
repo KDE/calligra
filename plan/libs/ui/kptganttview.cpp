@@ -173,8 +173,8 @@ void GanttPrintingOptions::saveContext( QDomElement &settings ) const
 {
     QDomElement e = settings.ownerDocument().createElement( "print-options" );
     settings.appendChild( e );
-    e.setAttribute( "print-rowlabels", printRowLabels );
-    e.setAttribute( "print-singlepage", singlePage );
+    e.setAttribute( "print-rowlabels", QString::number(printRowLabels) );
+    e.setAttribute( "print-singlepage", QString::number(singlePage) );
 }
 
 GanttPrintingOptionsWidget::GanttPrintingOptionsWidget( QWidget *parent )
@@ -354,8 +354,8 @@ bool GanttViewBase::loadContext( const KoXmlElement &settings )
 void GanttViewBase::saveContext( QDomElement &settings ) const
 {
     KGantt::DateTimeGrid *g = static_cast<KGantt::DateTimeGrid*>( grid() );
-    settings.setAttribute( "chart-scale", g->scale() );
-    settings.setAttribute( "chart-daywidth", g->dayWidth() );
+    settings.setAttribute( "chart-scale", QString::number(g->scale()) );
+    settings.setAttribute( "chart-daywidth", QString::number(g->dayWidth()) );
 }
 
 //-------------------------------------------
@@ -436,16 +436,16 @@ void NodeGanttViewBase::saveContext( QDomElement &settings ) const
 
     QDomElement e = settings.ownerDocument().createElement( "ganttchart" );
     settings.appendChild( e );
-    e.setAttribute( "show-dependencies", m_ganttdelegate->showTaskLinks );
-    e.setAttribute( "show-taskname", m_ganttdelegate->showTaskName );
-    e.setAttribute( "show-resourcenames", m_ganttdelegate->showResources );
-    e.setAttribute( "show-completion", m_ganttdelegate->showProgress );
-    e.setAttribute( "show-criticalpath", m_ganttdelegate->showCriticalPath  );
-    e.setAttribute( "show-criticaltasks", m_ganttdelegate->showCriticalTasks );
-    e.setAttribute( "show-positivefloat", m_ganttdelegate->showPositiveFloat );
-    e.setAttribute( "show-schedulingerror", m_ganttdelegate->showSchedulingError );
-    e.setAttribute( "show-timeconstraint", m_ganttdelegate->showTimeConstraint );
-    e.setAttribute( "show-negativefloat", m_ganttdelegate->showNegativeFloat );
+    e.setAttribute( "show-dependencies", QString::number(m_ganttdelegate->showTaskLinks) );
+    e.setAttribute( "show-taskname", QString::number(m_ganttdelegate->showTaskName) );
+    e.setAttribute( "show-resourcenames", QString::number(m_ganttdelegate->showResources) );
+    e.setAttribute( "show-completion", QString::number(m_ganttdelegate->showProgress) );
+    e.setAttribute( "show-criticalpath", QString::number(m_ganttdelegate->showCriticalPath)  );
+    e.setAttribute( "show-criticaltasks",QString::number(m_ganttdelegate->showCriticalTasks) );
+    e.setAttribute( "show-positivefloat", QString::number(m_ganttdelegate->showPositiveFloat) );
+    e.setAttribute( "show-schedulingerror", QString::number(m_ganttdelegate->showSchedulingError) );
+    e.setAttribute( "show-timeconstraint", QString::number(m_ganttdelegate->showTimeConstraint) );
+    e.setAttribute( "show-negativefloat", QString::number(m_ganttdelegate->showNegativeFloat) );
 
     GanttViewBase::saveContext( e );
 
@@ -790,7 +790,7 @@ void GanttView::saveContext( QDomElement &settings ) const
 {
     debugPlan;
     ViewBase::saveContext( settings );
-    settings.setAttribute( "show-project", actionShowProject->isChecked() );
+    settings.setAttribute( "show-project", QString::number(actionShowProject->isChecked()) );
 
     m_gantt->saveContext( settings );
 

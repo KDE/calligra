@@ -245,7 +245,7 @@ void ReportView::saveContext( QDomElement &context ) const
 {
     QDomElement e = context.ownerDocument().createElement( "view" );
     context.appendChild( e );
-    e.setAttribute( "current-view", m_stack->currentIndex() );
+    e.setAttribute( "current-view", QString::number(m_stack->currentIndex()) );
 
     reportDesigner()->saveContext( context );
     reportWidget()->saveContext( context );

@@ -1573,9 +1573,9 @@ bool Estimate::load(KoXmlElement &element, XMLLoaderObject &status) {
 void Estimate::save(QDomElement &element) const {
     QDomElement me = element.ownerDocument().createElement("estimate");
     element.appendChild(me);
-    me.setAttribute("expected", m_expectedEstimate);
-    me.setAttribute("optimistic", m_optimisticEstimate);
-    me.setAttribute("pessimistic", m_pessimisticEstimate);
+    me.setAttribute("expected", QString::number(m_expectedEstimate));
+    me.setAttribute("optimistic", QString::number(m_optimisticEstimate));
+    me.setAttribute("pessimistic", QString::number(m_pessimisticEstimate));
     me.setAttribute("type", typeToString());
     if ( m_calendar ) {
         me.setAttribute("calendar-id", m_calendar->id() );

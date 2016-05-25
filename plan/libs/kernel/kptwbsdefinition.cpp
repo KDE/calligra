@@ -237,7 +237,7 @@ void WBSDefinition::saveXML(QDomElement &element)  const {
 
     me.setAttribute( "project-code", m_projectCode );
     me.setAttribute( "project-separator", m_projectSeparator );
-    me.setAttribute( "levels-enabled", m_levelsEnabled );
+    me.setAttribute( "levels-enabled", QString::number(m_levelsEnabled) );
     if ( ! m_levelsDef.isEmpty() ) {
         QDomElement ld = element.ownerDocument().createElement("levels");
         me.appendChild(ld);
@@ -245,7 +245,7 @@ void WBSDefinition::saveXML(QDomElement &element)  const {
         for (it = m_levelsDef.constBegin(); it != m_levelsDef.constEnd(); ++it) {
             QDomElement l = element.ownerDocument().createElement("level");
             ld.appendChild(l);
-            l.setAttribute( "level", it.key() );
+            l.setAttribute( "level", QString::number(it.key()) );
             l.setAttribute( "code", it.value().code );
             l.setAttribute( "separator", it.value().separator );
         }

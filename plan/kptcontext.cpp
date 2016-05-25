@@ -119,7 +119,7 @@ QDomDocument Context::save( const View *view ) const {
     QDomElement doc = document.createElement( "context" );
     doc.setAttribute( "editor", "Plan" );
     doc.setAttribute( "mime", "application/x-vnd.kde.plan" );
-    doc.setAttribute( "version", 0.0 );
+    doc.setAttribute( "version", QString::number(0.0) );
     document.appendChild( doc );
 
     QDomElement e = doc.ownerDocument().createElement("context");

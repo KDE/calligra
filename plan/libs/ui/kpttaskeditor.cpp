@@ -966,7 +966,7 @@ bool TaskEditor::loadContext( const KoXmlElement &context )
 void TaskEditor::saveContext( QDomElement &context ) const
 {
     ViewBase::saveContext( context );
-    context.setAttribute( "show-project", baseModel()->projectShown() );
+    context.setAttribute( "show-project", QString::number(baseModel()->projectShown()) );
     m_view->saveContext( baseModel()->columnMap(), context );
 }
 
@@ -1217,7 +1217,7 @@ bool TaskView::loadContext( const KoXmlElement &context )
 void TaskView::saveContext( QDomElement &context ) const
 {
     ViewBase::saveContext( context );
-    context.setAttribute( "show-project", baseModel()->projectShown() );
+    context.setAttribute( "show-project", QString::number(baseModel()->projectShown()) );
     m_view->saveContext( m_view->baseModel()->columnMap(), context );
 }
 

@@ -177,7 +177,7 @@ QString ViewListItem::viewType() const
 
 void ViewListItem::save( QDomElement &element ) const
 {
-    element.setAttribute( "itemtype", type() );
+    element.setAttribute( "itemtype", QString::number(type()) );
     element.setAttribute( "tag", tag() );
 
     if ( type() == ItemType_SubView ) {

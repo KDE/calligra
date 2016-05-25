@@ -167,14 +167,14 @@ void CalendarDay::save(QDomElement &element) const {
     if (m_date.isValid()) {
         element.setAttribute("date", m_date.toString(Qt::ISODate));
     }
-    element.setAttribute("state", m_state);
+    element.setAttribute("state", QString::number(m_state));
     if (m_timeIntervals.count() == 0)
         return;
     
     foreach (TimeInterval *i, m_timeIntervals) {
         QDomElement me = element.ownerDocument().createElement("interval");
         element.appendChild(me);
-        me.setAttribute("length", i->second);
+        me.setAttribute("length", QString::number(i->second));
         me.setAttribute("start", i->first.toString());
     }
 }
@@ -496,7 +496,7 @@ void CalendarWeekdays::save(QDomElement &element) const {
         i.next();
         QDomElement me = element.ownerDocument().createElement("weekday");
         element.appendChild(me);
-        me.setAttribute( "day", i.key() - 1 ); // 0 (monday) .. 6 (sunday)
+        me.setAttribute( "day", QString::number(i.key() - 1) ); // 0 (monday) .. 6 (sunday)
         i.value()->save(me);
     }
 }
@@ -829,7 +829,7 @@ void Calendar::saveCacheVersion( QDomElement &element ) const
 {
     QDomElement me = element.ownerDocument().createElement("cache");
     element.appendChild(me);
-    me.setAttribute("version", m_cacheversion);
+    me.setAttribute("version", QString::number(m_cacheversion));
 }
 
 bool Calendar::load( KoXmlElement &element, XMLLoaderObject &status ) {
@@ -898,7 +898,7 @@ void Calendar::save(QDomElement &element) const {
     me.setAttribute("name", m_name);
     me.setAttribute("id", m_id);
     if ( m_default ) {
-        me.setAttribute("default", m_default);
+        me.setAttribute("default", QString::number(m_default));
     }
     me.setAttribute("timezone", m_timeZone.isValid() ? QString::fromLatin1(m_timeZone.id()) : QString());
     m_weekdays->save(me);

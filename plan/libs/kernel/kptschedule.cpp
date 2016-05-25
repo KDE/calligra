@@ -324,7 +324,7 @@ void Schedule::saveCommonXML( QDomElement &element ) const
     //debugPlan<<m_name<<" save schedule";
     element.setAttribute( "name", m_name );
     element.setAttribute( "type", typeToString() );
-    element.setAttribute( "id", qlonglong( m_id ) );
+    element.setAttribute( "id", QString::number(qlonglong( m_id )) );
 }
 
 void Schedule::saveAppointments( QDomElement &element ) const
@@ -859,13 +859,13 @@ void NodeSchedule::saveXML( QDomElement &element ) const
 
     sch.setAttribute( "duration", duration.toString() );
 
-    sch.setAttribute( "in-critical-path", inCriticalPath );
-    sch.setAttribute( "resource-error", resourceError );
-    sch.setAttribute( "resource-overbooked", resourceOverbooked );
-    sch.setAttribute( "resource-not-available", resourceNotAvailable );
-    sch.setAttribute( "scheduling-conflict", constraintError );
-    sch.setAttribute( "scheduling-error", schedulingError );
-    sch.setAttribute( "not-scheduled", notScheduled );
+    sch.setAttribute( "in-critical-path", QString::number(inCriticalPath) );
+    sch.setAttribute( "resource-error", QString::number(resourceError) );
+    sch.setAttribute( "resource-overbooked", QString::number(resourceOverbooked) );
+    sch.setAttribute( "resource-not-available", QString::number(resourceNotAvailable) );
+    sch.setAttribute( "scheduling-conflict", QString::number(constraintError) );
+    sch.setAttribute( "scheduling-error", QString::number(schedulingError) );
+    sch.setAttribute( "not-scheduled", QString::number(notScheduled) );
 
     sch.setAttribute( "positive-float", positiveFloat.toString() );
     sch.setAttribute( "negative-float", negativeFloat.toString() );
@@ -1344,9 +1344,9 @@ void MainSchedule::saveXML( QDomElement &element ) const
     element.setAttribute( "start", startTime.toString( Qt::ISODate ) );
     element.setAttribute( "end", endTime.toString( Qt::ISODate ) );
     element.setAttribute( "duration", duration.toString() );
-    element.setAttribute( "scheduling-conflict", constraintError );
-    element.setAttribute( "scheduling-error", schedulingError );
-    element.setAttribute( "not-scheduled", notScheduled );
+    element.setAttribute( "scheduling-conflict", QString::number(constraintError) );
+    element.setAttribute( "scheduling-error", QString::number(schedulingError) );
+    element.setAttribute( "not-scheduled", QString::number(notScheduled) );
 
     if ( ! m_pathlists.isEmpty() ) {
         QDomElement lists = element.ownerDocument().createElement( "criticalpath-list" );
@@ -1991,17 +1991,17 @@ void ScheduleManager::saveXML( QDomElement &element ) const
     element.appendChild( el );
     el.setAttribute( "name", m_name );
     el.setAttribute( "id", m_id );
-    el.setAttribute( "distribution", m_usePert ? 1 : 0 );
-    el.setAttribute( "overbooking", m_allowOverbooking );
-    el.setAttribute( "check-external-appointments", m_checkExternalAppointments );
-    el.setAttribute( "scheduling-direction", m_schedulingDirection );
-    el.setAttribute( "baselined", m_baselined );
+    el.setAttribute( "distribution", QString::number(m_usePert ? 1 : 0) );
+    el.setAttribute( "overbooking", QString::number(m_allowOverbooking) );
+    el.setAttribute( "check-external-appointments", QString::number(m_checkExternalAppointments) );
+    el.setAttribute( "scheduling-direction", QString::number(m_schedulingDirection) );
+    el.setAttribute( "baselined", QString::number(m_baselined) );
     el.setAttribute( "scheduler-plugin-id", m_schedulerPluginId );
     if ( schedulerPlugin() ) {
         // atm we only save for current plugin
-        el.setAttribute( "granularity", schedulerPlugin()->granularity() );
+        el.setAttribute( "granularity", QString::number(schedulerPlugin()->granularity()) );
     }
-    el.setAttribute( "recalculate", m_recalculate );
+    el.setAttribute( "recalculate", QString::number(m_recalculate) );
     el.setAttribute( "recalculate-from", m_recalculateFrom.toString( Qt::ISODate ) );
     if ( m_expected && ! m_expected->isDeleted() ) {
         QDomElement schs = el.ownerDocument().createElement( "schedule" );
@@ -2021,11 +2021,11 @@ void ScheduleManager::saveWorkPackageXML( QDomElement &element, const Node &node
     element.appendChild( el );
     el.setAttribute( "name", m_name );
     el.setAttribute( "id", m_id );
-    el.setAttribute( "distribution", m_usePert ? 1 : 0 );
-    el.setAttribute( "overbooking", m_allowOverbooking );
-    el.setAttribute( "check-external-appointments", m_checkExternalAppointments );
-    el.setAttribute( "scheduling-direction", m_schedulingDirection );
-    el.setAttribute( "baselined", m_baselined );
+    el.setAttribute( "distribution", QString::number(m_usePert ? 1 : 0) );
+    el.setAttribute( "overbooking", QString::number(m_allowOverbooking) );
+    el.setAttribute( "check-external-appointments", QString::number(m_checkExternalAppointments) );
+    el.setAttribute( "scheduling-direction", QString::number(m_schedulingDirection) );
+    el.setAttribute( "baselined", QString::number(m_baselined) );
     if ( m_expected && ! m_expected->isDeleted() ) { // TODO: should we check isScheduled() ?
         QDomElement schs = el.ownerDocument().createElement( "schedule" );
         el.appendChild( schs );

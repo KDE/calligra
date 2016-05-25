@@ -402,8 +402,8 @@ void Task::save(QDomElement &element)  const {
     me.setAttribute("constraint-starttime",m_constraintStartTime.toString( Qt::ISODate ));
     me.setAttribute("constraint-endtime",m_constraintEndTime.toString( Qt::ISODate ));
 
-    me.setAttribute("startup-cost", m_startupCost);
-    me.setAttribute("shutdown-cost", m_shutdownCost);
+    me.setAttribute("startup-cost", QString::number(m_startupCost));
+    me.setAttribute("shutdown-cost", QString::number(m_shutdownCost));
 
     me.setAttribute("wbs", wbsCode()); //NOTE: included for information
 
@@ -465,8 +465,8 @@ void Task::saveWorkPackageXML(QDomElement &element, long id )  const
     me.setAttribute("constraint-starttime",m_constraintStartTime.toString( Qt::ISODate ));
     me.setAttribute("constraint-endtime",m_constraintEndTime.toString( Qt::ISODate ));
 
-    me.setAttribute("startup-cost", m_startupCost);
-    me.setAttribute("shutdown-cost", m_shutdownCost);
+    me.setAttribute("startup-cost", QString::number(m_startupCost));
+    me.setAttribute("shutdown-cost", QString::number(m_shutdownCost));
 
     me.setAttribute("wbs", wbsCode()); // NOTE: included for information
 
@@ -3531,8 +3531,8 @@ void Completion::saveXML(QDomElement &element )  const
 {
     QDomElement el = element.ownerDocument().createElement("progress");
     element.appendChild(el);
-    el.setAttribute("started", m_started);
-    el.setAttribute("finished", m_finished);
+    el.setAttribute("started", QString::number(m_started));
+    el.setAttribute("finished", QString::number(m_finished));
     el.setAttribute("startTime", m_startTime.toString( Qt::ISODate ));
     el.setAttribute("finishTime", m_finishTime.toString( Qt::ISODate ));
     el.setAttribute("entrymode", entryModeToString());
@@ -3799,9 +3799,9 @@ void WorkPackageSettings::saveXML( QDomElement &element ) const
 {
     QDomElement el = element.ownerDocument().createElement("settings");
     element.appendChild( el );
-    el.setAttribute( "used-effort", usedEffort );
-    el.setAttribute( "progress", progress );
-    el.setAttribute( "documents", documents );
+    el.setAttribute( "used-effort", QString::number(usedEffort) );
+    el.setAttribute( "progress", QString::number(progress) );
+    el.setAttribute( "documents", QString::number(documents) );
 }
 
 bool WorkPackageSettings::loadXML( const KoXmlElement &element )

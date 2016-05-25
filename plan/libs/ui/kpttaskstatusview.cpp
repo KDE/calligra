@@ -331,9 +331,9 @@ bool TaskStatusView::loadContext( const KoXmlElement &context )
 void TaskStatusView::saveContext( QDomElement &context ) const
 {
     ViewBase::saveContext( context );
-    context.setAttribute( "period", m_view->period() );
-    context.setAttribute( "periodtype", m_view->periodType() );
-    context.setAttribute( "weekday", m_view->weekday() );
+    context.setAttribute( "period", QString::number(m_view->period()) );
+    context.setAttribute( "periodtype", QString::number(m_view->periodType()) );
+    context.setAttribute( "weekday", QString::number(m_view->weekday()) );
     m_view->saveContext( model()->columnMap(), context );
 }
 
@@ -980,27 +980,27 @@ bool PerformanceStatusBase::loadContext( const KoXmlElement &context )
 
 void PerformanceStatusBase::saveContext( QDomElement &context ) const
 {
-    context.setAttribute( "show-bar-chart", m_chartinfo.showBarChart );
-    context.setAttribute( "show-line-chart", m_chartinfo.showLineChart );
-    context.setAttribute( "show-table-view", m_chartinfo.showTableView );
+    context.setAttribute( "show-bar-chart", QString::number(m_chartinfo.showBarChart) );
+    context.setAttribute( "show-line-chart", QString::number(m_chartinfo.showLineChart) );
+    context.setAttribute( "show-table-view", QString::number(m_chartinfo.showTableView ));
 
-    context.setAttribute( "show-base-values", m_chartinfo.showBaseValues );
-    context.setAttribute( "show-indeces", m_chartinfo.showIndices );
+    context.setAttribute( "show-base-values", QString::number(m_chartinfo.showBaseValues) );
+    context.setAttribute( "show-indeces", QString::number(m_chartinfo.showIndices) );
 
-    context.setAttribute( "show-cost", m_chartinfo.showCost );
-    context.setAttribute( "show-bcws-cost", m_chartinfo.showBCWSCost );
-    context.setAttribute( "show-bcwp-cost", m_chartinfo.showBCWPCost );
-    context.setAttribute( "show-acwp-cost", m_chartinfo.showACWPCost );
+    context.setAttribute( "show-cost", QString::number(m_chartinfo.showCost) );
+    context.setAttribute( "show-bcws-cost", QString::number(m_chartinfo.showBCWSCost) );
+    context.setAttribute( "show-bcwp-cost", QString::number(m_chartinfo.showBCWPCost) );
+    context.setAttribute( "show-acwp-cost", QString::number(m_chartinfo.showACWPCost) );
 
-    context.setAttribute( "show-effort",  m_chartinfo.showEffort );
-    context.setAttribute( "show-bcws-effort", m_chartinfo.showBCWSEffort );
-    context.setAttribute( "show-bcwp-effort", m_chartinfo.showBCWPEffort );
-    context.setAttribute( "show-acwp-effort", m_chartinfo.showACWPEffort );
+    context.setAttribute( "show-effort",  QString::number(m_chartinfo.showEffort) );
+    context.setAttribute( "show-bcws-effort", QString::number(m_chartinfo.showBCWSEffort) );
+    context.setAttribute( "show-bcwp-effort", QString::number(m_chartinfo.showBCWPEffort) );
+    context.setAttribute( "show-acwp-effort", QString::number(m_chartinfo.showACWPEffort) );
 
-    context.setAttribute( "show-spi-cost", m_chartinfo.showSpiCost );
-    context.setAttribute( "show-cpi-cost", m_chartinfo.showCpiCost );
-    context.setAttribute( "show-spi-effort", m_chartinfo.showSpiEffort );
-    context.setAttribute( "show-cpi-effort", m_chartinfo.showCpiEffort );
+    context.setAttribute( "show-spi-cost", QString::number(m_chartinfo.showSpiCost) );
+    context.setAttribute( "show-cpi-cost", QString::number(m_chartinfo.showCpiCost) );
+    context.setAttribute( "show-spi-effort", QString::number(m_chartinfo.showSpiEffort) );
+    context.setAttribute( "show-cpi-effort", QString::number(m_chartinfo.showCpiEffort) );
 }
 
 KoPrintJob *PerformanceStatusBase::createPrintJob( ViewBase *parent )

@@ -2898,7 +2898,7 @@ void View::saveContext( QDomElement &me ) const
     //debugPlan;
     long id = activeScheduleId();
     if ( id != -1 ) {
-        me.setAttribute( "current-schedule", (qlonglong)id );
+        me.setAttribute( "current-schedule", QString::number((qlonglong)id) );
     }
     ViewListItem *item = m_viewlist->findItem( qobject_cast<ViewBase*>( m_tab->currentWidget() ) );
     if ( item ) {

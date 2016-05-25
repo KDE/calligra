@@ -151,8 +151,8 @@ void ResourceAppointmentsTreeView::saveContext( QDomElement &settings ) const
     debugPlan;
     QDomElement e = settings.ownerDocument().createElement( "common" );
     settings.appendChild( e );
-    e.setAttribute( "show-internal-appointments", model()->showInternalAppointments() );
-    e.setAttribute( "show-external-appointments", model()->showExternalAppointments() );
+    e.setAttribute( "show-internal-appointments", QString::number(model()->showInternalAppointments()) );
+    e.setAttribute( "show-external-appointments", QString::number(model()->showExternalAppointments()) );
 }
 
 void ResourceAppointmentsTreeView::slotRefreshed()

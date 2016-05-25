@@ -155,7 +155,7 @@ void AppointmentInterval::saveXML(QDomElement &element) const
 
     me.setAttribute("start", d->start.toString( Qt::ISODate ));
     me.setAttribute("end", d->end.toString( Qt::ISODate ));
-    me.setAttribute("load", d->load);
+    me.setAttribute("load", QString::number(d->load));
 }
 
 bool AppointmentInterval::isValid() const {

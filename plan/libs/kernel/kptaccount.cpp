@@ -644,9 +644,9 @@ void Account::CostPlace::save(QDomElement &element) const {
     QDomElement me = element.ownerDocument().createElement("costplace");
     element.appendChild(me);
     me.setAttribute("object-id", m_objectId);
-    me.setAttribute("running-cost", m_running);
-    me.setAttribute("startup-cost", m_startup);
-    me.setAttribute("shutdown-cost", m_shutdown);
+    me.setAttribute("running-cost", QString::number(m_running));
+    me.setAttribute("startup-cost", QString::number(m_startup));
+    me.setAttribute("shutdown-cost", QString::number(m_shutdown));
     
 }
 

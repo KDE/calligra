@@ -124,9 +124,9 @@ bool DockWidget::saveXml( QDomElement &context ) const
     QDomElement e = context.ownerDocument().createElement( "docker" );
     context.appendChild( e );
     e.setAttribute( "id", id );
-    e.setAttribute( "location", location );
-    e.setAttribute( "floating", isFloating() );
-    e.setAttribute( "visible", m_shown );
+    e.setAttribute( "location", QString::number(location) );
+    e.setAttribute( "floating", QString::number(isFloating()) );
+    e.setAttribute( "visible", QString::number(m_shown) );
     return true;
 }
 
@@ -166,19 +166,19 @@ void PrintingOptions::saveXml( QDomElement &element ) const
 
     QDomElement h = me.ownerDocument().createElement( "header" );
     me.appendChild( h );
-    h.setAttribute( "group", headerOptions.group );
-    h.setAttribute( "project", headerOptions.project );
-    h.setAttribute( "date", headerOptions.date );
-    h.setAttribute( "manager", headerOptions.manager );
-    h.setAttribute( "page", headerOptions.page );
+    h.setAttribute( "group", QString::number(headerOptions.group) );
+    h.setAttribute( "project", QString::number(headerOptions.project) );
+    h.setAttribute( "date", QString::number(headerOptions.date) );
+    h.setAttribute( "manager", QString::number(headerOptions.manager) );
+    h.setAttribute( "page", QString::number(headerOptions.page) );
 
     QDomElement f = me.ownerDocument().createElement( "footer" );
     me.appendChild( f );
-    f.setAttribute( "group", footerOptions.group );
-    f.setAttribute( "project", footerOptions.project );
-    f.setAttribute( "date", footerOptions.date );
-    f.setAttribute( "manager", footerOptions.manager );
-    f.setAttribute( "page", footerOptions.page );
+    f.setAttribute( "group", QString::number(footerOptions.group) );
+    f.setAttribute( "project", QString::number(footerOptions.project) );
+    f.setAttribute( "date", QString::number(footerOptions.date) );
+    f.setAttribute( "manager", QString::number(footerOptions.manager) );
+    f.setAttribute( "page", QString::number(footerOptions.page) );
 }
 
 //----------------------
@@ -655,12 +655,12 @@ void ViewBase::saveContext( QDomElement &context ) const
     context.appendChild( me );
     me.setAttribute( "format", KoPageFormat::formatString( m_pagelayout.format ) );
     me.setAttribute( "orientation", m_pagelayout.orientation == KoPageFormat::Portrait ? "portrait" : "landscape" );
-    me.setAttribute( "width", m_pagelayout.width );
-    me.setAttribute( "height",m_pagelayout. height );
-    me.setAttribute( "left-margin", m_pagelayout.leftMargin );
-    me.setAttribute( "right-margin", m_pagelayout.rightMargin );
-    me.setAttribute( "top-margin", m_pagelayout.topMargin );
-    me.setAttribute( "bottom-margin", m_pagelayout.bottomMargin );
+    me.setAttribute( "width", QString::number(m_pagelayout.width) );
+    me.setAttribute( "height",QString::number(m_pagelayout. height) );
+    me.setAttribute( "left-margin", QString::number(m_pagelayout.leftMargin) );
+    me.setAttribute( "right-margin", QString::number(m_pagelayout.rightMargin) );
+    me.setAttribute( "top-margin", QString::number(m_pagelayout.topMargin) );
+    me.setAttribute( "bottom-margin",QString::number( m_pagelayout.bottomMargin) );
 
     m_printingOptions.saveXml( context );
 
@@ -1501,7 +1501,7 @@ bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &elemen
 void TreeViewBase::saveContext( const QMetaEnum &map, QDomElement &element ) const
 {
     //debugPlan<<objectName();
-    element.setAttribute( "stretch-last-column", header()->stretchLastSection() );
+    element.setAttribute( "stretch-last-column", QString::number(header()->stretchLastSection()) );
     QDomElement e = element.ownerDocument().createElement( "columns" );
     element.appendChild( e );
     for ( int i = 0; i < model()->columnCount(); ++i ) {

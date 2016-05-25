@@ -1256,9 +1256,9 @@ void Project::save( QDomElement &element ) const
 //    loc.setAttribute( "monetary-decimal-symbol", l->monetaryDecimalSymbol() );
 //    loc.setAttribute( "monetary-thousands-separator", l->monetaryThousandsSeparator() );
     loc.setAttribute("currency-digits", l->monetaryDecimalPlaces());
-    loc.setAttribute( "positive-monetary-sign-position", l->positiveMonetarySignPosition() );
+    loc.setAttribute( "positive-monetary-sign-position", QString::number(l->positiveMonetarySignPosition()) );
     loc.setAttribute( "positive-prefix-currency-symbol", l->positivePrefixCurrencySymbol() );
-    loc.setAttribute( "negative-monetary-sign-position", l->negativeMonetarySignPosition() );
+    loc.setAttribute( "negative-monetary-sign-position", QString::number(l->negativeMonetarySignPosition()) );
     loc.setAttribute( "negative-prefix-currency-symbol", l->negativePrefixCurrencySymbol() );
     
     m_accounts.save( me );

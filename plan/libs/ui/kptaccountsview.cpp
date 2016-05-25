@@ -272,12 +272,12 @@ void AccountsView::saveContext( QDomElement &context ) const
     //debugPlan;
     ViewBase::saveContext( context );
 
-    context.setAttribute( "show-mode", m_view->showMode() );
-    context.setAttribute( "cumulative", m_view->cumulative() );
-    context.setAttribute( "period-type", m_view->periodType() );
-    context.setAttribute( "start-mode", m_view->startMode() );
+    context.setAttribute( "show-mode", QString::number(m_view->showMode()) );
+    context.setAttribute( "cumulative", QString::number(m_view->cumulative()) );
+    context.setAttribute( "period-type", QString::number(m_view->periodType()) );
+    context.setAttribute( "start-mode", QString::number(m_view->startMode()) );
     context.setAttribute( "start-date", m_view->startDate().toString( Qt::ISODate ) );
-    context.setAttribute( "end-mode", m_view->endMode() );
+    context.setAttribute( "end-mode", QString::number(m_view->endMode()) );
     context.setAttribute( "end-date", m_view->endDate().toString( Qt::ISODate ) );
 }
 
