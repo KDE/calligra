@@ -1059,21 +1059,21 @@ QDomElement Sheet::saveXML(QDomDocument& dd)
 
     //Laurent: for oasis format I think that we must use style:direction...
     sheet.setAttribute("layoutDirection", (layoutDirection() == Qt::RightToLeft) ? "rtl" : "ltr");
-    sheet.setAttribute("columnnumber", (int)getShowColumnNumber());
-    sheet.setAttribute("borders", (int)isShowPageOutline());
-    sheet.setAttribute("hide", (int)isHidden());
-    sheet.setAttribute("hidezero", (int)getHideZero());
-    sheet.setAttribute("firstletterupper", (int)getFirstLetterUpper());
-    sheet.setAttribute("grid", (int)getShowGrid());
-    sheet.setAttribute("printGrid", (int)print()->settings()->printGrid());
-    sheet.setAttribute("printCommentIndicator", (int)print()->settings()->printCommentIndicator());
-    sheet.setAttribute("printFormulaIndicator", (int)print()->settings()->printFormulaIndicator());
-    sheet.setAttribute("showFormula", (int)getShowFormula());
-    sheet.setAttribute("showFormulaIndicator", (int)getShowFormulaIndicator());
-    sheet.setAttribute("showCommentIndicator", (int)getShowCommentIndicator());
-    sheet.setAttribute("lcmode", (int)getLcMode());
-    sheet.setAttribute("autoCalc", (int)isAutoCalculationEnabled());
-    sheet.setAttribute("borders1.2", 1);
+    sheet.setAttribute("columnnumber", QString::number((int)getShowColumnNumber()));
+    sheet.setAttribute("borders", QString::number((int)isShowPageOutline()));
+    sheet.setAttribute("hide", QString::number((int)isHidden()));
+    sheet.setAttribute("hidezero", QString::number((int)getHideZero()));
+    sheet.setAttribute("firstletterupper", QString::number((int)getFirstLetterUpper()));
+    sheet.setAttribute("grid", QString::number((int)getShowGrid()));
+    sheet.setAttribute("printGrid", QString::number((int)print()->settings()->printGrid()));
+    sheet.setAttribute("printCommentIndicator", QString::number((int)print()->settings()->printCommentIndicator()));
+    sheet.setAttribute("printFormulaIndicator", QString::number((int)print()->settings()->printFormulaIndicator()));
+    sheet.setAttribute("showFormula", QString::number((int)getShowFormula()));
+    sheet.setAttribute("showFormulaIndicator", QString::number((int)getShowFormulaIndicator()));
+    sheet.setAttribute("showCommentIndicator", QString::number((int)getShowCommentIndicator()));
+    sheet.setAttribute("lcmode", QString::number((int)getLcMode()));
+    sheet.setAttribute("autoCalc", QString::number((int)isAutoCalculationEnabled()));
+    sheet.setAttribute("borders1.2", "1");
     QByteArray pwd;
     password(pwd);
     if (!pwd.isNull()) {
@@ -1092,10 +1092,10 @@ QDomElement Sheet::saveXML(QDomDocument& dd)
 
     QDomElement borders = dd.createElement("borders");
     KoPageLayout pageLayout = print()->settings()->pageLayout();
-    borders.setAttribute("left", pageLayout.leftMargin);
-    borders.setAttribute("top", pageLayout.topMargin);
-    borders.setAttribute("right", pageLayout.rightMargin);
-    borders.setAttribute("bottom", pageLayout.bottomMargin);
+    borders.setAttribute("left", QString::number(pageLayout.leftMargin));
+    borders.setAttribute("top", QString::number(pageLayout.topMargin));
+    borders.setAttribute("right", QString::number(pageLayout.rightMargin));
+    borders.setAttribute("bottom", QString::number(pageLayout.bottomMargin));
     paper.appendChild(borders);
 
     QDomElement head = dd.createElement("head");
@@ -1150,31 +1150,31 @@ QDomElement Sheet::saveXML(QDomDocument& dd)
         top = 0;
         bottom = 0;
     }
-    printrange.setAttribute("left-rect", left);
-    printrange.setAttribute("right-rect", right);
-    printrange.setAttribute("bottom-rect", bottom);
-    printrange.setAttribute("top-rect", top);
+    printrange.setAttribute("left-rect", QString::number(left));
+    printrange.setAttribute("right-rect", QString::number(right));
+    printrange.setAttribute("bottom-rect", QString::number(bottom));
+    printrange.setAttribute("top-rect", QString::number(top));
     sheet.appendChild(printrange);
 
     // Print repeat columns
     QDomElement printRepeatColumns = dd.createElement("printrepeatcolumns");
-    printRepeatColumns.setAttribute("left", printSettings()->repeatedColumns().first);
-    printRepeatColumns.setAttribute("right", printSettings()->repeatedColumns().second);
+    printRepeatColumns.setAttribute("left", QString::number(printSettings()->repeatedColumns().first));
+    printRepeatColumns.setAttribute("right", QString::number(printSettings()->repeatedColumns().second));
     sheet.appendChild(printRepeatColumns);
 
     // Print repeat rows
     QDomElement printRepeatRows = dd.createElement("printrepeatrows");
-    printRepeatRows.setAttribute("top", printSettings()->repeatedRows().first);
-    printRepeatRows.setAttribute("bottom", printSettings()->repeatedRows().second);
+    printRepeatRows.setAttribute("top", QString::number(printSettings()->repeatedRows().first));
+    printRepeatRows.setAttribute("bottom", QString::number(printSettings()->repeatedRows().second));
     sheet.appendChild(printRepeatRows);
 
     //Save print zoom
-    sheet.setAttribute("printZoom", printSettings()->zoom());
+    sheet.setAttribute("printZoom", QString::number(printSettings()->zoom()));
 
     //Save page limits
     const QSize pageLimits = printSettings()->pageLimits();
-    sheet.setAttribute("printPageLimitX", pageLimits.width());
-    sheet.setAttribute("printPageLimitY", pageLimits.height());
+    sheet.setAttribute("printPageLimitX", QString::number(pageLimits.width()));
+    sheet.setAttribute("printPageLimitY", QString::number(pageLimits.height()));
 
     // Save all cells.
     const QRect usedArea = this->usedArea();

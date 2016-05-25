@@ -383,8 +383,8 @@ QDomElement Map::save(QDomDocument& doc)
     spread.appendChild(areaname);
 
     QDomElement defaults = doc.createElement("defaults");
-    defaults.setAttribute("row-height", d->defaultRowFormat->height());
-    defaults.setAttribute("col-width", d->defaultColumnFormat->width());
+    defaults.setAttribute("row-height", QString::number(d->defaultRowFormat->height()));
+    defaults.setAttribute("col-width", QString::number(d->defaultColumnFormat->width()));
     spread.appendChild(defaults);
 
     QDomElement s = d->styleManager->save(doc);

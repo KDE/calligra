@@ -217,7 +217,7 @@ void Style::saveXML(QDomDocument& doc, QDomElement& format, const StyleManager* 
         format.setAttribute(type() == AUTO ? "align" : "alignX", (int) halign());
 
     if (keysToStore.contains(VerticalAlignment) && valign() != VAlignUndefined)
-        format.setAttribute("alignY", (int) valign());
+        format.setAttribute("alignY", QString::number((int) valign()));
 
     if (keysToStore.contains(BackgroundColor) && backgroundColor().isValid())
         format.setAttribute("bgcolor", backgroundColor().name());
@@ -232,7 +232,7 @@ void Style::saveXML(QDomDocument& doc, QDomElement& format, const StyleManager* 
         format.setAttribute("shrinktofit", "yes");
 
     if (keysToStore.contains(Precision))
-        format.setAttribute("precision", precision());
+        format.setAttribute("precision", QString::number(precision()));
 
     if (keysToStore.contains(Prefix) && !prefix().isEmpty())
         format.setAttribute("prefix", prefix());
@@ -241,13 +241,13 @@ void Style::saveXML(QDomDocument& doc, QDomElement& format, const StyleManager* 
         format.setAttribute("postfix", postfix());
 
     if (keysToStore.contains(FloatFormatKey))
-        format.setAttribute("float", (int) floatFormat());
+        format.setAttribute("float", QString::number((int) floatFormat()));
 
     if (keysToStore.contains(FloatColorKey))
-        format.setAttribute("floatcolor", (int)floatColor());
+        format.setAttribute("floatcolor", QString::number((int)floatColor()));
 
     if (keysToStore.contains(FormatTypeKey))
-        format.setAttribute("format", (int) formatType());
+        format.setAttribute("format", QString::number((int) formatType()));
 
     if (keysToStore.contains(CustomFormat) && !customFormat().isEmpty())
         format.setAttribute("custom", customFormat());
@@ -258,10 +258,10 @@ void Style::saveXML(QDomDocument& doc, QDomElement& format, const StyleManager* 
     }
 
     if (keysToStore.contains(Angle))
-        format.setAttribute("angle", angle());
+        format.setAttribute("angle", QString::number(angle()));
 
     if (keysToStore.contains(Indentation))
-        format.setAttribute("indent", indentation());
+        format.setAttribute("indent", QString::number(indentation()));
 
     if (keysToStore.contains(DontPrintText))
         format.setAttribute("dontprinttext", printText() ? "no" : "yes");
@@ -288,7 +288,7 @@ void Style::saveXML(QDomDocument& doc, QDomElement& format, const StyleManager* 
         if (keysToStore.contains(FontFamily))
             format.setAttribute("font-family", fontFamily());
         if (keysToStore.contains(FontSize))
-            format.setAttribute("font-size", fontSize());
+            format.setAttribute("font-size", QString::number(fontSize()));
         if (keysToStore.contains(FontBold) || keysToStore.contains(FontItalic) ||
                 keysToStore.contains(FontUnderline) || keysToStore.contains(FontStrike)) {
             enum FontFlags {
@@ -302,7 +302,7 @@ void Style::saveXML(QDomDocument& doc, QDomElement& format, const StyleManager* 
             fontFlags |= italic()    ? FItalic    : 0;
             fontFlags |= underline() ? FUnderline : 0;
             fontFlags |= strikeOut() ? FStrike    : 0;
-            format.setAttribute("font-flags", fontFlags);
+            format.setAttribute("font-flags", QString::number(fontFlags));
         }
     }
 
@@ -311,7 +311,7 @@ void Style::saveXML(QDomDocument& doc, QDomElement& format, const StyleManager* 
 
     if (keysToStore.contains(BackgroundBrush)) {
         format.setAttribute("brushcolor", backgroundBrush().color().name());
-        format.setAttribute("brushstyle", (int) backgroundBrush().style());
+        format.setAttribute("brushstyle", QString::number((int) backgroundBrush().style()));
     }
 
     if (keysToStore.contains(LeftPen)) {
@@ -1515,7 +1515,7 @@ void CustomStyle::save(QDomDocument& doc, QDomElement& styles, const StyleManage
         return;
 
     QDomElement style(doc.createElement("style"));
-    style.setAttribute("type", (int) type());
+    style.setAttribute("type", QString::number((int) type()));
     if (!parentName().isNull())
         style.setAttribute("parent", parentName());
     style.setAttribute("name", name());

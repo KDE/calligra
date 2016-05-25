@@ -142,8 +142,8 @@ QDomElement Calligra::Sheets::NativeFormat::createElement(const QString & tagNam
     QDomElement e(doc.createElement(tagName));
 
     e.setAttribute("family", font.family());
-    e.setAttribute("size", font.pointSize());
-    e.setAttribute("weight", font.weight());
+    e.setAttribute("size", QString::number(font.pointSize()));
+    e.setAttribute("weight", QString::number(font.weight()));
     if (font.bold())
         e.setAttribute("bold", "yes");
     if (font.italic())
@@ -161,8 +161,8 @@ QDomElement Calligra::Sheets::NativeFormat::createElement(const QString & tagnam
 {
     QDomElement e(doc.createElement(tagname));
     e.setAttribute("color", pen.color().name());
-    e.setAttribute("style", (int)pen.style());
-    e.setAttribute("width", (int)pen.width());
+    e.setAttribute("style", QString::number((int)pen.style()));
+    e.setAttribute("width", QString::number((int)pen.width())); // not qreal, would need spec change
     return e;
 }
 

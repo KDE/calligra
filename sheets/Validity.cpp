@@ -166,14 +166,14 @@ QDomElement Validity::saveXML(QDomDocument& doc, const ValueConverter *converter
     QDomElement validityElement = doc.createElement("validity");
 
     QDomElement param = doc.createElement("param");
-    param.setAttribute("cond", (int)d->cond);
-    param.setAttribute("action", (int)d->action);
-    param.setAttribute("allow", (int)d->restriction);
+    param.setAttribute("cond", QString::number((int)d->cond));
+    param.setAttribute("action", QString::number((int)d->action));
+    param.setAttribute("allow", QString::number((int)d->restriction));
     param.setAttribute("valmin", converter->asString(d->minValue).asString());
     param.setAttribute("valmax", converter->asString(d->maxValue).asString());
-    param.setAttribute("displaymessage", d->displayMessage);
-    param.setAttribute("displayvalidationinformation", d->displayValidationInformation);
-    param.setAttribute("allowemptycell", d->allowEmptyCell);
+    param.setAttribute("displaymessage", QString::number(d->displayMessage));
+    param.setAttribute("displayvalidationinformation", QString::number(d->displayValidationInformation));
+    param.setAttribute("allowemptycell", QString::number(d->allowEmptyCell));
     if (!d->listValidity.isEmpty())
         param.setAttribute("listvalidity", d->listValidity.join(";"));
     validityElement.appendChild(param);

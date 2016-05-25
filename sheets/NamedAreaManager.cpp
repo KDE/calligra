@@ -230,10 +230,10 @@ QDomElement NamedAreaManager::saveXML(QDomDocument& doc) const
         e.appendChild(refname);
 
         QDomElement rect = doc.createElement("rect");
-        rect.setAttribute("left-rect", (namedAreas[i].range).left());
-        rect.setAttribute("right-rect", (namedAreas[i].range).right());
-        rect.setAttribute("top-rect", (namedAreas[i].range).top());
-        rect.setAttribute("bottom-rect", (namedAreas[i].range).bottom());
+        rect.setAttribute("left-rect", QString::number((namedAreas[i].range).left()));
+        rect.setAttribute("right-rect", QString::number((namedAreas[i].range).right()));
+        rect.setAttribute("top-rect", QString::number((namedAreas[i].range).top()));
+        rect.setAttribute("bottom-rect", QString::number((namedAreas[i].range).bottom()));
         e.appendChild(rect);
         element.appendChild(e);
     }

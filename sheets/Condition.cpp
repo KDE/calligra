@@ -309,7 +309,7 @@ QDomElement Conditions::saveConditions(QDomDocument &doc, ValueConverter *conver
         name.prepend("condition");
 
         child = doc.createElement(name);
-        child.setAttribute("cond", (int) condition.cond);
+        child.setAttribute("cond", QString::number((int) condition.cond));
 
         // TODO: saving in KSpread 1.1 | KSpread 1.2 format
         if (condition.value1.isString()) {

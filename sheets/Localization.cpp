@@ -85,11 +85,11 @@ QDomElement Localization::save(QDomDocument& doc) const
     element.setAttribute("monetaryThousandsSeparator", monetaryThousandsSeparator());
     element.setAttribute("positiveSign", positiveSign());
     element.setAttribute("negativeSign", negativeSign());
-    element.setAttribute("fracDigits", monetaryDecimalPlaces());
+    element.setAttribute("fracDigits", QString::number(monetaryDecimalPlaces()));
     element.setAttribute("positivePrefixCurrencySymbol", positivePrefixCurrencySymbol() ? "True" : "False");
     element.setAttribute("negativePrefixCurrencySymbol", negativePrefixCurrencySymbol() ? "True" : "False");
-    element.setAttribute("positiveMonetarySignPosition", (int)positiveMonetarySignPosition());
-    element.setAttribute("negativeMonetarySignPosition", (int)negativeMonetarySignPosition());
+    element.setAttribute("positiveMonetarySignPosition", QString::number((int)positiveMonetarySignPosition()));
+    element.setAttribute("negativeMonetarySignPosition", QString::number((int)negativeMonetarySignPosition()));
     element.setAttribute("timeFormat", timeFormat());
     element.setAttribute("dateFormat", dateFormat());
     element.setAttribute("dateFormatShort", dateFormatShort());

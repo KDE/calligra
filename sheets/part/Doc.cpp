@@ -227,7 +227,7 @@ QDomDocument Doc::saveXML()
     QDomElement spread = doc.documentElement();
     spread.setAttribute("editor", "Calligra Sheets");
     spread.setAttribute("mime", "application/x-kspread");
-    spread.setAttribute("syntaxVersion", CURRENT_SYNTAX_VERSION);
+    spread.setAttribute("syntaxVersion", QString::number(CURRENT_SYNTAX_VERSION));
 
     if (!d->spellListIgnoreAll.isEmpty()) {
         QDomElement spellCheckIgnore = doc.createElement("SPELLCHECKIGNORELIST");
@@ -254,10 +254,10 @@ QDomDocument Doc::saveXML()
         View *const view = static_cast<View*>(views().first());
         Canvas *const canvas = view->canvasWidget();
         e.setAttribute("activeTable",  canvas->activeSheet()->sheetName());
-        e.setAttribute("markerColumn", view->selection()->marker().x());
-        e.setAttribute("markerRow",    view->selection()->marker().y());
-        e.setAttribute("xOffset",      canvas->xOffset());
-        e.setAttribute("yOffset",      canvas->yOffset());
+        e.setAttribute("markerColumn", QString::number(view->selection()->marker().x()));
+        e.setAttribute("markerRow",    QString::number(view->selection()->marker().y()));
+        e.setAttribute("xOffset",      QString::number(canvas->xOffset()));
+        e.setAttribute("yOffset",      QString::number(canvas->yOffset()));
 */
     spread.appendChild(e);
 

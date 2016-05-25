@@ -738,16 +738,16 @@ void Odf::saveStyle(const Style *style, const QSet<Style::Key>& keysToStore, KoG
 
 #if 0
     if (keysToStore.contains(Style::FloatFormat))
-        format.setAttribute("float", (int) style->floatFormat());
+        format.setAttribute("float", QString::number((int) style->floatFormat()));
 
     if (keysToStore.contains(Style::FloatColor))
-        format.setAttribute("floatcolor", (int)style->floatColor());
+        format.setAttribute("floatcolor", QString::number((int)style->floatColor()));
 
     if (keysToStore.contains(Style::CustomFormat) && !style->customFormat().isEmpty())
         format.setAttribute("custom", customFormat());
 
     if (keysToStore.contains(Style::Format::Type) && style->formatType() == Money) {
-        format.setAttribute("type", (int) currency().type);
+        format.setAttribute("type", QString::number((int) currency().type));
         format.setAttribute("symbol", currency().symbol);
     }
 #endif

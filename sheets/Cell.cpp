@@ -928,8 +928,8 @@ QDomElement Cell::save(QDomDocument& doc, int xOffset, int yOffset, bool era)
 {
     // Save the position of this cell
     QDomElement cell = doc.createElement("cell");
-    cell.setAttribute("row", row() - yOffset);
-    cell.setAttribute("column", column() - xOffset);
+    cell.setAttribute("row", QString::number(row() - yOffset));
+    cell.setAttribute("column", QString::number(column() - xOffset));
 
     //
     // Save the formatting information
@@ -941,9 +941,9 @@ QDomElement Cell::save(QDomDocument& doc, int xOffset, int yOffset, bool era)
 
     if (doesMergeCells()) {
         if (mergedXCells())
-            formatElement.setAttribute("colspan", mergedXCells());
+            formatElement.setAttribute("colspan", QString::number(mergedXCells()));
         if (mergedYCells())
-            formatElement.setAttribute("rowspan", mergedYCells());
+            formatElement.setAttribute("rowspan", QString::number(mergedYCells()));
     }
 
     Conditions conditions = this->conditions();

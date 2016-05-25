@@ -44,8 +44,8 @@ QDomDocument CopyCommand::saveAsXml(const Region& region, bool era)
     int top = boundingRect.top();
 
     // for tiling the clipboard content in the selection
-    root.setAttribute("rows", boundingRect.height());
-    root.setAttribute("columns", boundingRect.width());
+    root.setAttribute("rows", QString::number(boundingRect.height()));
+    root.setAttribute("columns", QString::number(boundingRect.width()));
 
     const Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
@@ -58,8 +58,8 @@ QDomDocument CopyCommand::saveAsXml(const Region& region, bool era)
         //
         if ((*it)->isRow()) {
             QDomElement rows = xmlDoc.createElement("rows");
-            rows.setAttribute("count", range.height());
-            rows.setAttribute("row", range.top() - top + 1);
+            rows.setAttribute("count", QString::number(range.height()));
+            rows.setAttribute("row", QString::number(range.top() - top + 1));
             root.appendChild(rows);
 
             // Save all cells.
@@ -91,8 +91,8 @@ QDomDocument CopyCommand::saveAsXml(const Region& region, bool era)
         //
         if ((*it)->isColumn()) {
             QDomElement columns = xmlDoc.createElement("columns");
-            columns.setAttribute("count", range.width());
-            columns.setAttribute("column", range.left() - left + 1);
+            columns.setAttribute("count", QString::number(range.width()));
+            columns.setAttribute("column", QString::number(range.left() - left + 1));
             root.appendChild(columns);
 
             // Save all cells.
