@@ -46,26 +46,35 @@ void Global::loadPlugins()
 
 int Global::documentType(const QUrl& document)
 {
+    int result = DocumentType::Unknown;
+
     QMimeType mime = QMimeDatabase{}.mimeTypeForUrl(document);
 
+    // TODO: see if KoPluginLoader could provide this info via some metadata query instead
     QList<QPluginLoader*> plugins = KoPluginLoader::pluginLoaders(QStringLiteral("calligra/parts"), mime.name());
 
     for (int i = 0; i < plugins.count(); i++) {
         QPluginLoader* loader = plugins.at(i);
 
         if(loader->fileName().contains("words")) {
-            return DocumentType::TextDocument;
+            result = DocumentType::TextDocument;
+            break;
         } else if(loader->fileName().contains("sheets")) {
-            return DocumentType::Spreadsheet;
+            result = DocumentType::Spreadsheet;
+            break;
         } else if(loader->fileName().contains("stage")) {
-            return DocumentType::Presentation;
+            result = DocumentType::Presentation;
+            break;
         }
     }
 
+    // cleanup
+    qDeleteAll(plugins);
+
     // Since we don't actually have a Calligra plugin that handles these...
-    if(staticTextTypes.contains(mime.name())) {
-        return DocumentType::StaticTextDocument;
+    if ((result == DocumentType::Unknown) && staticTextTypes.contains(mime.name())) {
+        result = DocumentType::StaticTextDocument;
     }
 
-    return DocumentType::Unknown;
+    return result;
 }

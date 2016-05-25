@@ -61,7 +61,7 @@ ToolRegistry* ToolRegistry::instance()
 
 void ToolRegistry::loadTools()
 {
-    QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("calligrasheets/tools"));
+    const QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("calligrasheets/tools"));
     debugSheetsFormula << offers.count() << "tools found.";
 
     const KConfigGroup pluginsConfigGroup = KSharedConfig::openConfig()->group("Plugins");
@@ -114,4 +114,5 @@ void ToolRegistry::loadTools()
            KoToolRegistry::instance()->remove(toolFactory->id());
         }
     }
+    qDeleteAll(offers);
 }

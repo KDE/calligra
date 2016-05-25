@@ -59,7 +59,8 @@ KoDocument* openFile(const QString &filename)
     QList<QPluginLoader *> pluginLoaders = KoPluginLoader::pluginLoaders(QStringLiteral("calligra/parts"), mimetype);
     if (!pluginLoaders.isEmpty()) {
         // take first
-        KoDocumentEntry entry(pluginLoaders[0]);
+        KoDocumentEntry entry(pluginLoaders.takeFirst());
+        qDeleteAll(pluginLoaders);
         part = entry.createKoPart(&error);
     } else {
         error = "Could not find component";

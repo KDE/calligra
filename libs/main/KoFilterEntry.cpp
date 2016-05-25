@@ -41,6 +41,11 @@ KoFilterEntry::KoFilterEntry(QPluginLoader *loader)
     available = loader->metaData().value("MetaData").toObject().value("X-KDE-Available").toString();
 }
 
+KoFilterEntry::~KoFilterEntry()
+{
+    delete m_loader;
+}
+
 QList<KoFilterEntry::Ptr> KoFilterEntry::query()
 {
     QList<KoFilterEntry::Ptr> lst;

@@ -23,12 +23,14 @@
 
 #include <QList>
 #include <QString>
+#include <QSharedPointer>
+#include <QPluginLoader>
+
 #include "komain_export.h"
 
 class QStringList;
 class KoDocument;
 class KoPart;
-class QPluginLoader;
 
 /**
  *  Represents an available Calligra component
@@ -44,6 +46,7 @@ public:
     explicit KoDocumentEntry();
     /**
      * Represents a valid entry
+     * @param loader pluginloader for the service, KoDocumentEntry takes ownership
      */
     explicit KoDocumentEntry(QPluginLoader *loader);
     ~KoDocumentEntry();
@@ -95,7 +98,7 @@ public:
     static KoDocumentEntry queryByMimeType(const QString & mimetype);
 
 private:
-    QPluginLoader *m_loader;
+    QSharedPointer<QPluginLoader> m_loader;
 };
 
 #endif

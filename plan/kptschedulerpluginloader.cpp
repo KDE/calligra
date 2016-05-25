@@ -100,6 +100,7 @@ void SchedulerPluginLoader::loadAllPlugins()
            debugPlan << "KPluginFactory could not create SchedulerPlugin:" << pluginLoader->fileName();
         }
     }
+    qDeleteAll(offers);
 }
 
 } //namespace KPlato

@@ -107,7 +107,7 @@ FunctionModuleRegistry* FunctionModuleRegistry::instance()
 void FunctionModuleRegistry::loadFunctionModules()
 {
 #ifndef SHEETS_NO_PLUGINMODULES
-    QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("calligrasheets/functions"));
+    const QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("calligrasheets/functions"));
     debugSheetsFormula << offers.count() << "function modules found.";
 
     const KConfigGroup pluginsConfigGroup = KSharedConfig::openConfig()->group("Plugins");
@@ -181,6 +181,7 @@ void FunctionModuleRegistry::loadFunctionModules()
             }
         }
     }
+    qDeleteAll(offers);
 #else
     QList<FunctionModule*> modules;
     QObject *parent = 0;

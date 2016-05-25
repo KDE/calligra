@@ -141,6 +141,8 @@ void KoPluginLoader::load(const QString & directory, const PluginsConfig &config
         configGroup.writeEntry(config.whiteList, whiteList);
         configGroup.writeEntry(config.blacklist, blacklist);
     }
+
+    qDeleteAll(offers);
 }
 
 QList<KPluginFactory *> KoPluginLoader::instantiatePluginFactories(const QString & directory)
@@ -164,6 +166,7 @@ QList<KPluginFactory *> KoPluginLoader::instantiatePluginFactories(const QString
 
         pluginFactories.append(factory);
     }
+    qDeleteAll(offers);
 
     return pluginFactories;
 }

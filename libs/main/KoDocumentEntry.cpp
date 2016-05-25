@@ -31,7 +31,6 @@
 #include <kservicetype.h>
 #include <kpluginfactory.h>
 
-#include <QPluginLoader>
 #include <QCoreApplication>
 
 #include <limits.h> // UINT_MAX
@@ -52,7 +51,7 @@ KoDocumentEntry::~KoDocumentEntry()
 
 
 QPluginLoader * KoDocumentEntry::loader() const {
-    return m_loader;
+    return m_loader.data();
 }
 
 /**

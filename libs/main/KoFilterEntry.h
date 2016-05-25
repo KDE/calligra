@@ -40,8 +40,11 @@ public:
     typedef QExplicitlySharedDataPointer<KoFilterEntry> Ptr;
 
     //KoFilterEntry() : weight( 0 ) { m_service = 0; } // for QList
+    /**
+     * @param loader pluginloader for the filter, KoFilterEntry takes ownership
+     */
     explicit KoFilterEntry(QPluginLoader *loader);
-    ~KoFilterEntry() { }
+    ~KoFilterEntry();
 
     KoFilter* createFilter(KoFilterChain* chain, QObject* parent = 0);
 
@@ -89,7 +92,7 @@ public:
     }
 
 private:
-    QPluginLoader *m_loader;
+    QPluginLoader * const m_loader;
 };
 
 #endif

@@ -113,12 +113,12 @@ namespace KoPluginLoader
     KOPLUGIN_EXPORT QList<KPluginFactory *> instantiatePluginFactories(const QString & directory);
 
     /**
-     * Load all plugins that are located in the specified directory and return their KPluginFactory objects.
+     * Creates and returns pluginLoaders for all plugins that are located in the specified directory.
      * @param directory The directory to search for plugins, as relative path.
      * All entries of QCoreApplication::libraryPaths() will be checked with @p directory appended as a
      * subdirectory.
      * @param mimeType The string used to identify the plugins.
-     * @return a list of plugin factories from the found plugins matching the servicetype
+     * @return a list of plugin loaders from the found plugins matching the mimetype, ownership is transferred to the caller
      */
     KOPLUGIN_EXPORT QList<QPluginLoader *> pluginLoaders(const QString &directory, const QString &mimeType = QString());
 }
