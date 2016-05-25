@@ -110,11 +110,11 @@ void OoUtils::importIndents(QDomElement& parentElement, const KoStyleStack& styl
         if (marginLeft != 0 || marginRight != 0 || first != 0) {
             QDomElement indent = parentElement.ownerDocument().createElement("INDENTS");
             if (marginLeft != 0)
-                indent.setAttribute("left", marginLeft);
+                indent.setAttribute("left", QString::number(marginLeft));
             if (marginRight != 0)
-                indent.setAttribute("right", marginRight);
+                indent.setAttribute("right", QString::number(marginRight));
             if (first != 0)
-                indent.setAttribute("first", first);
+                indent.setAttribute("first", QString::number(first));
             parentElement.appendChild(indent);
         }
     }
@@ -136,7 +136,7 @@ void OoUtils::importLineSpacing(QDomElement& parentElement, const KoStyleStack& 
             else if (value.contains('%')) {
                 double percent = value.toDouble();
                 lineSpacing.setAttribute("type", "multiple");
-                lineSpacing.setAttribute("spacingvalue", percent / 100);
+                lineSpacing.setAttribute("spacingvalue", QString::number(percent / 100));
             } else { // fixed value (use KoUnit::parseValue to get it in pt)
                 kWarning(30519) << "Unhandled value for fo:line-height: " << value;
             }
@@ -153,7 +153,7 @@ void OoUtils::importLineSpacing(QDomElement& parentElement, const KoStyleStack& 
         // Well let's see if this makes a big difference.
         QDomElement lineSpacing = parentElement.ownerDocument().createElement("LINESPACING");
         lineSpacing.setAttribute("type", "atleast");
-        lineSpacing.setAttribute("spacingvalue", KoUnit::parseValue(value));
+        lineSpacing.setAttribute("spacingvalue", QString::number(KoUnit::parseValue(value)));
         parentElement.appendChild(lineSpacing);
     }
     // Line-spacing is mutually exclusive with line-height and line-height-at-least
@@ -162,7 +162,7 @@ void OoUtils::importLineSpacing(QDomElement& parentElement, const KoStyleStack& 
         if (value != 0.0) {
             QDomElement lineSpacing = parentElement.ownerDocument().createElement("LINESPACING");
             lineSpacing.setAttribute("type", "custom");
-            lineSpacing.setAttribute("spacingvalue", value);
+            lineSpacing.setAttribute("spacingvalue", QString::number(value));
             parentElement.appendChild(lineSpacing);
         }
     }
@@ -178,9 +178,9 @@ void OoUtils::importTopBottomMargin(QDomElement& parentElement, const KoStyleSta
         if (mtop != 0 || mbottom != 0) {
             QDomElement offset = parentElement.ownerDocument().createElement("OFFSETS");
             if (mtop != 0)
-                offset.setAttribute("before", mtop);
+                offset.setAttribute("before", QString::number(mtop));
             if (mbottom != 0)
-                offset.setAttribute("after", mbottom);
+                offset.setAttribute("after", QString::number(mbottom));
             parentElement.appendChild(offset);
         }
     }
@@ -215,7 +215,7 @@ void OoUtils::importTabulators(QDomElement& parentElement, const KoStyleStack& s
         elem.setAttribute("type", calligraType);
 
         double pos = KoUnit::parseValue(tabStop.attributeNS(ooNS::style, "position", QString()));
-        elem.setAttribute("ptpos", pos);
+        elem.setAttribute("ptpos", QString::number(pos));
 
         // TODO Convert leaderChar's unicode value to the Calligra enum
         // (blank/dots/line/dash/dash-dot/dash-dot-dot, 0 to 5)
@@ -249,8 +249,8 @@ void OoUtils::importBorders(QDomElement& parentElement, const KoStyleStack& styl
         QColor color;
         if (OoUtils::parseBorder(styleStack.property(ooNS::fo, "border", "left"), &width, &style, &color)) {
             QDomElement lbElem = parentElement.ownerDocument().createElement("LEFTBORDER");
-            lbElem.setAttribute("width", width);
-            lbElem.setAttribute("style", style);
+            lbElem.setAttribute("width", QString::number(width));
+            lbElem.setAttribute("style", QString::number(style));
             if (color.isValid()) {
                 lbElem.setAttribute("red", color.red());
                 lbElem.setAttribute("green", color.green());
@@ -266,8 +266,8 @@ void OoUtils::importBorders(QDomElement& parentElement, const KoStyleStack& styl
         QColor color;
         if (OoUtils::parseBorder(styleStack.property(ooNS::fo, "border", "right"), &width, &style, &color)) {
             QDomElement lbElem = parentElement.ownerDocument().createElement("RIGHTBORDER");
-            lbElem.setAttribute("width", width);
-            lbElem.setAttribute("style", style);
+            lbElem.setAttribute("width", QString::number(width));
+            lbElem.setAttribute("style", QString::number(style));
             if (color.isValid()) {
                 lbElem.setAttribute("red", color.red());
                 lbElem.setAttribute("green", color.green());
@@ -283,8 +283,8 @@ void OoUtils::importBorders(QDomElement& parentElement, const KoStyleStack& styl
         QColor color;
         if (OoUtils::parseBorder(styleStack.property(ooNS::fo, "border", "top"), &width, &style, &color)) {
             QDomElement lbElem = parentElement.ownerDocument().createElement("TOPBORDER");
-            lbElem.setAttribute("width", width);
-            lbElem.setAttribute("style", style);
+            lbElem.setAttribute("width", QString::number(width));
+            lbElem.setAttribute("style", QString::number(style));
             if (color.isValid()) {
                 lbElem.setAttribute("red", color.red());
                 lbElem.setAttribute("green", color.green());
@@ -300,8 +300,8 @@ void OoUtils::importBorders(QDomElement& parentElement, const KoStyleStack& styl
         QColor color;
         if (OoUtils::parseBorder(styleStack.property(ooNS::fo, "border", "bottom"), &width, &style, &color)) {
             QDomElement lbElem = parentElement.ownerDocument().createElement("BOTTOMBORDER");
-            lbElem.setAttribute("width", width);
-            lbElem.setAttribute("style", style);
+            lbElem.setAttribute("width", QString::number(width));
+            lbElem.setAttribute("style", QString::number(style));
             if (color.isValid()) {
                 lbElem.setAttribute("red", color.red());
                 lbElem.setAttribute("green", color.green());

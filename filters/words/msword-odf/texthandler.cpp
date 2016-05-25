@@ -2368,7 +2368,7 @@ QDomElement WordsTextHandler::insertVariable(int type, wvWare::SharedPtr<const w
 
     QDomElement varElem = m_formats.ownerDocument().createElement("VARIABLE");
     QDomElement typeElem = m_formats.ownerDocument().createElement("TYPE");
-    typeElem.setAttribute("type", type);
+    typeElem.setAttribute("type", QString::number(type));
     typeElem.setAttribute("key", format);
     varElem.appendChild(typeElem);
     formatElem.appendChild(varElem);

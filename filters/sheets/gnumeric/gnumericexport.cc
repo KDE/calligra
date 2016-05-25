@@ -653,12 +653,12 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc, const Cell& 
     // TODO verify if it's correct, in import we "* 10.0"
     cell_style.setAttribute("Indent", QString::number(style.indentation()));
 
-    cell_style.setAttribute("Locked", !style.notProtected());
+    cell_style.setAttribute("Locked", QString::number(!style.notProtected()));
 
     // A Calligra Sheets cell can have two options to hide: only formula hidden, or everything hidden.
     // I only consider a cell with everything hidden as hidden.
     // Gnumeric hides everything or nothing.
-    cell_style.setAttribute("Hidden", style.hideAll());
+    cell_style.setAttribute("Hidden", QString::number(style.hideAll()));
 
     QColor patColor =  style.backgroundBrush().color();
     red = patColor.red() << 8;
@@ -1066,8 +1066,8 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
     foreach(Sheet* table, ksdoc->map()->sheetList()) {
         if (table->printSettings()->pageLayout().format == KoPageFormat::CustomSize) {
             customSize = gnumeric_doc.createElement("gmr:Geometry");
-            customSize.setAttribute("Width", POINT_TO_MM(table->printSettings()->pageLayout().width));
-            customSize.setAttribute("Height", POINT_TO_MM(table->printSettings()->pageLayout().width));
+            customSize.setAttribute("Width", QString::number(POINT_TO_MM(table->printSettings()->pageLayout().width)));
+            customSize.setAttribute("Height", QString::number(POINT_TO_MM(table->printSettings()->pageLayout().width)));
             sheets.appendChild(customSize);
             //<gmr:Geometry Width="768" Height="365"/>
         }
@@ -1119,22 +1119,22 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
         margins = gnumeric_doc.createElement("gmr:Margins");
 
         topMargin = gnumeric_doc.createElement("gmr:top");
-        topMargin.setAttribute("Points", table->printSettings()->pageLayout().topMargin);
+        topMargin.setAttribute("Points", QString::number(table->printSettings()->pageLayout().topMargin));
         topMargin.setAttribute("PrefUnit", "mm");
         margins.appendChild(topMargin);
 
         bottomMargin = gnumeric_doc.createElement("gmr:bottom");
-        bottomMargin.setAttribute("Points", table->printSettings()->pageLayout().bottomMargin);
+        bottomMargin.setAttribute("Points", QString::number(table->printSettings()->pageLayout().bottomMargin));
         bottomMargin.setAttribute("PrefUnit", "mm");
         margins.appendChild(bottomMargin);
 
         leftMargin = gnumeric_doc.createElement("gmr:left");
-        leftMargin.setAttribute("Points", table->printSettings()->pageLayout().leftMargin);
+        leftMargin.setAttribute("Points", QString::number(table->printSettings()->pageLayout().leftMargin));
         leftMargin.setAttribute("PrefUnit", "mm");
         margins.appendChild(leftMargin);
 
         rightMargin = gnumeric_doc.createElement("gmr:right");
-        rightMargin.setAttribute("Points", table->printSettings()->pageLayout().rightMargin);
+        rightMargin.setAttribute("Points", QString::number(table->printSettings()->pageLayout().rightMargin));
         rightMargin.setAttribute("PrefUnit", "mm");
         margins.appendChild(rightMargin);
 
@@ -1448,7 +1448,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
             sheet.appendChild(merged);
     }
     QDomElement uidata = gnumeric_doc.createElement("gmr:UIData");
-    uidata.setAttribute("SelectedTab", indexActiveTable);
+    uidata.setAttribute("SelectedTab", QString::number(indexActiveTable));
     workbook.appendChild(uidata);
 
     str = gnumeric_doc.toString();
