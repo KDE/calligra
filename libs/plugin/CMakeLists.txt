@@ -4,7 +4,9 @@ set(koplugin_LIB_SRCS
 )
 
 # help plugin trader find installed plugins when run from uninstalled tests
-if (BUILD_TESTING)
+# Disabled until the usecase for this is found again
+# (at least KDE CI does not need this, now that kpluginloader-compatible plugin install paths are used)
+if (FALSE) # (BUILD_TESTING)
     if(IS_ABSOLUTE ${PLUGIN_INSTALL_DIR})
         set(CALLIGRA_PLUGIN_INSTALL_BASE_DIR "${PLUGIN_INSTALL_DIR}")
     else()
