@@ -119,8 +119,9 @@ void Graph::buildGraph()
 
     foreach(const KoDocumentEntry& part, parts) {
 
-        QStringList nativeMimeTypes = part.loader()->metaData().value("MetaData").toObject().value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
-        nativeMimeTypes += part.loader()->metaData().value("MetaData").toObject().value("X-KDE-NativeMimeType").toString();
+        QJsonObject metaData = part.metaData();
+        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+        nativeMimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
 
         foreach(const QString& nativeMimeType, nativeMimeTypes) {
             const QByteArray key = nativeMimeType.toLatin1();
@@ -160,7 +161,7 @@ void Graph::buildGraph()
                 }
             }
         } else
-            debugFilter << "Filter:" << filter->loader()->fileName() << " doesn't apply.";
+            debugFilter << "Filter:" << filter->fileName() << " doesn't apply.";
     }
 }
 
@@ -206,8 +207,9 @@ QByteArray Graph::findCalligraPart() const
 
     // Be sure that v gets initialized correctly
     while (!v && partIt != partEnd) {
-        QStringList nativeMimeTypes = (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
-        nativeMimeTypes += (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-NativeMimeType").toString();
+        QJsonObject metaData = (*partIt).metaData();
+        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+        nativeMimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; !v && it != end; ++it)
@@ -220,8 +222,9 @@ QByteArray Graph::findCalligraPart() const
 
     // Now we try to find the "cheapest" Calligra vertex
     while (partIt != partEnd) {
-        QStringList nativeMimeTypes = (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
-        nativeMimeTypes += (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-NativeMimeType").toString();
+        QJsonObject metaData = (*partIt).metaData();
+        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+        nativeMimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; !v && it != end; ++it) {

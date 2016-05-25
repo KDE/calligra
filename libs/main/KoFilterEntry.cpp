@@ -46,6 +46,11 @@ KoFilterEntry::~KoFilterEntry()
     delete m_loader;
 }
 
+QString KoFilterEntry::fileName() const
+{
+    return m_loader->fileName();
+}
+
 QList<KoFilterEntry::Ptr> KoFilterEntry::query()
 {
     QList<KoFilterEntry::Ptr> lst;

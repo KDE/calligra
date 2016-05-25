@@ -45,8 +45,9 @@ int main(int /*argc*/, char ** /*argv*/)
 
     while (partIt != partEnd) {
         //kDebug() << ( *partIt ).service()->desktopEntryName();
-        QStringList nativeMimeTypes = (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
-        nativeMimeTypes += (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-NativeMimeType").toString();
+        QJsonObject metaData = (*partIt).metaData();
+        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+        nativeMimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; it != end; ++it) {

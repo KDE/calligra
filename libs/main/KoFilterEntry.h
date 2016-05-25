@@ -82,14 +82,13 @@ public:
         return (export_.contains(_m));
     }
 
+    QString fileName() const;
+
     /**
      *  This function will query KDED to find all available filters.
      */
     static QList<KoFilterEntry::Ptr> query();
 
-    QPluginLoader *loader() const {
-        return m_loader;
-    }
 
 private:
     QPluginLoader * const m_loader;

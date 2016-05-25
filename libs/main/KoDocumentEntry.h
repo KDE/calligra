@@ -51,7 +51,9 @@ public:
     explicit KoDocumentEntry(QPluginLoader *loader);
     ~KoDocumentEntry();
 
-    QPluginLoader *loader() const;
+    QJsonObject metaData() const;
+
+    QString fileName() const;
 
     /**
      * @return TRUE if the service pointer is null

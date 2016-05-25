@@ -598,8 +598,8 @@ void MainWindow::openFile()
     QStringList mimeFilter;
 
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(WORDS_MIME_TYPE);
-    if (entry.loader()) {
-        QJsonObject json = entry.loader()->metaData().value("MetaData").toObject();
+    if (!entry.isEmpty()) {
+        QJsonObject json = entry.metaData();
         QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
 
         mimeFilter << KoFilterManager::mimeFilter(WORDS_MIME_TYPE,
@@ -607,8 +607,8 @@ void MainWindow::openFile()
                                                   mimeTypes);
     }
     entry = KoDocumentEntry::queryByMimeType(STAGE_MIME_TYPE);
-    if (entry.loader()) {
-        QJsonObject json = entry.loader()->metaData().value("MetaData").toObject();
+    if (!entry.isEmpty()) {
+        QJsonObject json = entry.metaData();
         QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
         mimeFilter << KoFilterManager::mimeFilter(STAGE_MIME_TYPE,
                                                   KoFilterManager::Import,

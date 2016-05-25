@@ -97,7 +97,7 @@ namespace CalligraFilter {
 
     void ChainLink::dump() const
     {
-        debugFilter << "   Link:" << m_filterEntry->loader()->fileName();
+        debugFilter << "   Link:" << m_filterEntry->fileName();
     }
 
     void ChainLink::setupCommunication(const KoFilter *const parentFilter) const

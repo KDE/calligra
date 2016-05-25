@@ -291,8 +291,9 @@ void buildGraph(QHash<QByteArray, Vertex*>& vertices, KoFilterManager::Direction
     QList<KoDocumentEntry>::ConstIterator partEnd(parts.constEnd());
 
     while (partIt != partEnd) {
-        QStringList nativeMimeTypes = (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
-        nativeMimeTypes += (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-NativeMimeType").toString();
+        QJsonObject metaData = (*partIt).metaData();
+        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+        nativeMimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         const QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; it != end; ++it)
@@ -331,7 +332,7 @@ void buildGraph(QHash<QByteArray, Vertex*>& vertices, KoFilterManager::Direction
 
         if (impList.empty() || expList.empty()) {
             // This filter cannot be used under these conditions
-            debugFilter << "Filter:" << (*it)->loader()->fileName() << " ruled out";
+            debugFilter << "Filter:" << (*it)->fileName() << " ruled out";
             continue;
         }
 
@@ -371,7 +372,7 @@ void buildGraph(QHash<QByteArray, Vertex*>& vertices, KoFilterManager::Direction
                 }
             }
         } else {
-            debugFilter << "Filter:" << (*it)->loader()->fileName() << " does not apply.";
+            debugFilter << "Filter:" << (*it)->fileName() << " does not apply.";
         }
     }
 }
@@ -462,8 +463,9 @@ QStringList KoFilterManager::mimeFilter()
     Vertex *v = new Vertex("supercalifragilistic/x-pialadocious");
     vertices.insert("supercalifragilistic/x-pialadocious", v);
     while (partIt != partEnd) {
-        QStringList nativeMimeTypes = (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
-        nativeMimeTypes += (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-NativeMimeType").toString();
+        QJsonObject metaData = (*partIt).metaData();
+        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+        nativeMimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         const QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; it != end; ++it)

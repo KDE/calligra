@@ -50,8 +50,14 @@ KoDocumentEntry::~KoDocumentEntry()
 }
 
 
-QPluginLoader * KoDocumentEntry::loader() const {
-    return m_loader.data();
+QJsonObject KoDocumentEntry::metaData() const
+{
+    return m_loader ? m_loader->metaData().value("MetaData").toObject() : QJsonObject();
+}
+
+QString KoDocumentEntry::fileName() const
+{
+    return m_loader ? m_loader->fileName() : QString();
 }
 
 /**
@@ -65,7 +71,7 @@ bool KoDocumentEntry::isEmpty() const {
  * @return name of the associated service
  */
 QString KoDocumentEntry::name() const {
-    QJsonObject json = m_loader->metaData().value("MetaData").toObject();
+    QJsonObject json = metaData();
     json = json.value("KPlugin").toObject();
     return json.value("Name").toString();
 }
@@ -74,7 +80,7 @@ QString KoDocumentEntry::name() const {
  *  Mimetypes (and other service types) which this document can handle.
  */
 QStringList KoDocumentEntry::mimeTypes() const {
-    QJsonObject json = m_loader->metaData().value("MetaData").toObject();
+    QJsonObject json = metaData();
 #ifdef OLD_PLUGIN_MIMETYPE_DATA
     return json.value("MimeType").toString().split(';', QString::SkipEmptyParts);
 #else
@@ -92,6 +98,10 @@ bool KoDocumentEntry::supportsMimeType(const QString & _mimetype) const {
 
 KoPart *KoDocumentEntry::createKoPart(QString* errorMsg) const
 {
+    if (!m_loader) {
+        return 0;
+    }
+
     QObject *obj = m_loader->instance();
     KPluginFactory *factory = qobject_cast<KPluginFactory *>(obj);
     KoPart *part = factory->create<KoPart>(0, QVariantList());
