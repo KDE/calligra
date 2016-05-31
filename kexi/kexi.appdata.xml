@@ -132,7 +132,7 @@
       <li>Running queries, support for parametrized queries</li>
       <li xml:lang="bs">Potrebno upite , podršku za parametrizovan upite</li>
       <li xml:lang="ca">Execució de consultes, admet consultes paramètriques</li>
-      <li xml:lang="ca-valencia">Execució de consultes, implementació de consultes paramètriques</li>
+      <li xml:lang="ca-valencia">Execució de consultes, admet consultes paramètriques</li>
       <li xml:lang="de">Ausführung von Abfragen, Unterstützung für parametrisierte Abfragen</li>
       <li xml:lang="en-GB">Running queries, support for parametrised queries</li>
       <li xml:lang="es">Ejecución de consultas, soporte de consultas parametrizadas</li>
