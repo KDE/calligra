@@ -4,6 +4,7 @@
  * Copyright (c) 2011 Boudewijn Rempt <boud@kogmbh.com>
  * Copyright (C) 2011-2012 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
+ * Copyright (C) 2015-2016 MultiRáció Ltd. <multiracio@multiracio.com> (S.Schliszka, F.Novák, P.Rakyta)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -357,9 +358,11 @@ public:
 
         QList<QTextCharFormat>::Iterator it = m_formats.begin();
         foreach(QTextCursor cursor, m_cursors) {
-            QTextFormat prevFormat(cursor.charFormat());
+            QTextCharFormat prevFormat(cursor.charFormat());
             cursor.setCharFormat(*it);
-            editor()->registerTrackedChange(cursor, KoGenChange::FormatChange, kundo2_i18n("Set Character Style"), *it, prevFormat, false);
+            QTextFormat format = ChangeEvent::getNewValuesForFormat(*it, prevFormat);
+            ChangeEvent::ensureProperties(format, *it);
+            emit editor()->emitCreateMctChange(cursor, MctChangeTypes::StyleChange, kundo2_i18n("Formatting"), format, prevFormat);
             ++it;
         }
     }
@@ -437,13 +440,27 @@ public:
         , m_styleManager(styleManager)
         , m_style(style)
     {
+        dynamic_cast<KoCharacterStyle*>(m_style)->applyStyle(m_deltaCharFormat);
+        m_style->ensureMinimalProperties(m_deltaCharFormat);
     }
 
-    virtual void visitBlock(QTextBlock &block, const QTextCursor &)
+    virtual void visitBlock(QTextBlock &block, const QTextCursor &caret)
     {
+        for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
+            QTextCursor fragmentSelection(caret);
+            fragmentSelection.setPosition(it.fragment().position());
+            fragmentSelection.setPosition(it.fragment().position() + it.fragment().length(), QTextCursor::KeepAnchor);
+
+            if (fragmentSelection.anchor() >= fragmentSelection.position()) {
+                continue;
+            }
+
+            visitFragmentSelection(fragmentSelection);
+        }
+
+        QTextBlockFormat prevFormat = block.blockFormat();
         if (m_styleManager) {
-            QTextBlockFormat bf = block.blockFormat();
-            KoParagraphStyle *old = m_styleManager->paragraphStyle(bf.intProperty(KoParagraphStyle::StyleId));
+            KoParagraphStyle *old = m_styleManager->paragraphStyle(prevFormat.intProperty(KoParagraphStyle::StyleId));
             if (old)
                 old->unapplyStyle(block);
         }
@@ -456,11 +473,26 @@ public:
         fmt.setProperty(KoParagraphStyle::SectionStartings, sectionStartings);
         fmt.setProperty(KoParagraphStyle::SectionEndings, sectionEndings);
         cursor.setBlockFormat(fmt);
+
         m_style->applyStyle(block);
+        QTextBlockFormat currentFormat = block.blockFormat();
+        QTextFormat format = ChangeEvent::getNewValuesForFormat(currentFormat, prevFormat);
+        ChangeEvent::ensureProperties(format, currentFormat);
+        emit editor()->emitCreateMctChange(cursor, MctChangeTypes::StyleChange, kundo2_i18n("Formatting"), format, prevFormat);
+    }
+
+    virtual void visitFragmentSelection(QTextCursor &fragmentSelection)
+    {
+        QTextCharFormat prevFormat = fragmentSelection.charFormat();
+        QTextFormat format = ChangeEvent::getNewValuesForFormat(m_deltaCharFormat, prevFormat);
+        ChangeEvent::ensureProperties(format, m_deltaCharFormat);
+
+        emit  editor()->emitCreateMctChange(fragmentSelection, MctChangeTypes::StyleChange, kundo2_i18n("Formatting"), format, prevFormat);
     }
 
     KoStyleManager *m_styleManager;
     KoParagraphStyle *m_style;
+    QTextCharFormat m_deltaCharFormat;
 };
 
 void KoTextEditor::setStyle(KoParagraphStyle *style)
@@ -507,8 +539,17 @@ public:
         foreach(QTextCursor cursor, m_cursors) {
             QTextFormat prevFormat(cursor.charFormat());
             cursor.setCharFormat(*it);
+
+            emit editor()->emitCreateMctChange(cursor, MctChangeTypes::StyleChange, kundo2_i18n("Formatting"), *it, prevFormat);
+
             editor()->registerTrackedChange(cursor, KoGenChange::FormatChange, kundo2_i18n("Formatting"), *it, prevFormat, false);
             ++it;
+        }
+
+        if(m_formats.isEmpty()) {
+            QTextCursor cursor = caret;
+            QTextFormat prevFormat(cursor.charFormat());
+            emit editor()->emitCreateMctChange(cursor, MctChangeTypes::StyleChange, kundo2_i18n("Formatting"), m_deltaCharFormat, prevFormat);
         }
     }
 
@@ -554,6 +595,7 @@ void KoTextEditor::applyDirectFormatting(const QTextCharFormat &deltaCharFormat,
                                   const KoListLevelProperties &llp)
 {
     addCommand(new ParagraphFormattingCommand(this, deltaCharFormat, deltaBlockFormat, llp));
+
     emit textFormatChanged();
 }
 
