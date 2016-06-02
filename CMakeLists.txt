@@ -589,7 +589,7 @@ set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 set(HAVE_VC FALSE)
 if( NOT MSVC)
-    macro_optional_find_package(Vc 1.0.0)
+    macro_optional_find_package(Vc 1.1.0)
     set_package_properties(Vc PROPERTIES
         DESCRIPTION "Portable, zero-overhead SIMD library for C++"
         URL "https://github.com/VcDevel/Vc"
