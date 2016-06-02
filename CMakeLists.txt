@@ -587,17 +587,18 @@ endif()
 
 set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
-macro_optional_find_package(Vc 1.0.0)
-set_package_properties(Vc PROPERTIES
-    DESCRIPTION "Portable, zero-overhead SIMD library for C++"
-    URL "https://github.com/VcDevel/Vc"
-    PURPOSE "Required by the pigment for vectorization"
-    TYPE OPTIONAL
-)
-
-macro_bool_to_01(Vc_FOUND HAVE_VC)
-macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
-
+set(HAVE_VC FALSE)
+if( NOT MSVC)
+    macro_optional_find_package(Vc 1.0.0)
+    set_package_properties(Vc PROPERTIES
+        DESCRIPTION "Portable, zero-overhead SIMD library for C++"
+        URL "https://github.com/VcDevel/Vc"
+        PURPOSE "Required by the pigment for vectorization"
+        TYPE OPTIONAL
+    )
+    macro_bool_to_01(Vc_FOUND HAVE_VC)
+    macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
+endif()
 configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
 
 if(HAVE_VC)
