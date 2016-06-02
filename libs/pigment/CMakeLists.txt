@@ -28,6 +28,10 @@ if(HAVE_VC)
 
     message("Following objects are generated from the per-arch lib")
     message(${__per_arch_factory_objs})
+    # silence warnings for using older Vc API for now, where "the tuple" should be built "with Vc::tie"
+    if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+        add_definitions(-Wno-deprecated-declarations)
+    endif ()
 endif()
 
 add_subdirectory(tests)
