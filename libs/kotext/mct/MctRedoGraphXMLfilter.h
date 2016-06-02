@@ -24,19 +24,19 @@
 class MctRedoGraphXMLfilter : public MctUndoGraphXMLfilter
 {
 public:
-    MctRedoGraphXMLfilter(QString m_redoOrUndo, QString odt, KoTextDocument *m_koTextDoc);
+    MctRedoGraphXMLfilter(const QString &m_redoOrUndo, const QString &odt, KoTextDocument *m_koTextDoc);
     virtual ~MctRedoGraphXMLfilter();
 
-    void addChangeFromXML(QDomNode change, MctChangeset* changeset);
+    void addChangeFromXML(const QDomNode &change, MctChangeset* changeset);
 
-    void particularStyleChangeFromXML(QDomNode node, ChangeEventList * propchanges);    //!!!
-    MctChange* addTextFrameFromXML(QDomElement change) ;
-    MctChange* addTextGraphicObjectFromXML(QDomElement change);
-    MctChange* removeTextGraphicObjectFromXML(QDomElement change);
-    MctChange* addEmbeddedObjectFromXML(QDomElement change);
+    void particularStyleChangeFromXML(const QDomNode &node, ChangeEventList * propchanges);    //!!!
+    MctChange* addTextFrameFromXML(const QDomElement &change) ;
+    MctChange* addTextGraphicObjectFromXML(const QDomElement &change);
+    MctChange* removeTextGraphicObjectFromXML(const QDomElement &change);
+    MctChange* addEmbeddedObjectFromXML(const QDomElement &change);
 
-    MctChange* rowChangeFromXML(QDomElement change);
-    MctChange* colChangeFromXML(QDomElement change);
+    MctChange* rowChangeFromXML(const QDomElement &change);
+    MctChange* colChangeFromXML(const QDomElement &change);
 };
 
 #endif // MCTREDOGRAPHXMLFILTER_H

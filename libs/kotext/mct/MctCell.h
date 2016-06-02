@@ -25,8 +25,8 @@
 class MctCell : public MctPropertyBase
 {
 public:
-    MctCell(QString m_cellName, QString m_tableName, int m_row = -1, int m_col = -1);
-    MctCell(int m_row, int m_col, QString m_tableName = "noname");
+    MctCell(const QString &m_cellName, const QString &m_tableName, int m_row = -1, int m_col = -1);
+    MctCell(int m_row, int m_col, const QString &m_tableName = "noname");
     MctCell(const MctCell &cell);
     MctCell();
     ~MctCell();
@@ -39,7 +39,7 @@ public:
     void setCellName(QString cell);
 
     QString tableName() const;
-    void setTableName(QString name);
+    void setTableName(const QString &name);
 
     int row() const;
     void setRow(int r);

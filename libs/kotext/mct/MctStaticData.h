@@ -167,10 +167,10 @@ public:
     void stopSupport(QString url);
 
     // function2.py
-    QList<QString> getDataFromPosTag(QString postag);
-    MctPosition * getPosFromElementreeNode(QDomElement change, bool moved=false);
-    MctPosition * getPosFromElementreeNodeNew(QDomElement change, bool moved=false);
-    MctPosition * getPosFromElementreeNodeOld(QDomElement change, bool moved=false);
+    QList<QString> getDataFromPosTag(const QString &postag);
+    MctPosition * getPosFromElementreeNode(const QDomElement &change, bool moved=false);
+    MctPosition * getPosFromElementreeNodeNew(const QDomElement &change, bool moved=false);
+    MctPosition * getPosFromElementreeNodeOld(const QDomElement &change, bool moved=false);
     void addPos2change(QDomElement *change, MctPosition *pos, bool moved=false, bool clearfirst=true);
     bool isTableChange(const MctChange *changeNode);
 
@@ -196,7 +196,7 @@ public:
     void setRedoGraph(MctRedoGraph* graph);
 
     QString getFileURL();
-    void setFileURL(QString url);
+    void setFileURL(const QString &url);
 
     QList<MctChange*>* getChanges();
     void setChanges(QList<MctChange*> *change);
@@ -211,7 +211,7 @@ public:
     void setMctState(bool state);
 
     QString getAddedShapeType();
-    void setAddedShapeType(QString shapeType);
+    void setAddedShapeType(const QString &shapeType);
 private:
     MctStaticData();
 

@@ -20,7 +20,7 @@
 #include "MctPropertyBase.h"
 #include <QDebug>
 
-MctPropertyBase::MctPropertyBase(QString name)
+MctPropertyBase::MctPropertyBase(const QString &name)
     : m_propName(name)
     , m_props(new PropertyDictionary())
     , m_props2export(new PropertyDictionary())
@@ -39,7 +39,7 @@ QString MctPropertyBase::propertyName() const
     return this->m_propName;
 }
 
-void MctPropertyBase::setPropertyName(QString name)
+void MctPropertyBase::setPropertyName(const QString &name)
 {
     this->m_propName = name;
 }
@@ -70,7 +70,7 @@ QString MctPropertyBase::innerUrl() const
     return m_innerURL;
 }
 
-void MctPropertyBase::setInnerUrl(QString url)
+void MctPropertyBase::setInnerUrl(const QString &url)
 {
     m_innerURL = url;
 }

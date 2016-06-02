@@ -45,7 +45,7 @@
 #include <QMutableListIterator>
 
 
-MctChangeset::MctChangeset(QDomElement changeset, ulong parentId, MctAuthor* author, QDateTime date, QString comment, ulong id)
+MctChangeset::MctChangeset(const QDomElement &changeset, ulong parentId, MctAuthor* author, const QDateTime &date, const QString &comment, ulong id)
 {
     m_parents = new QList<ulong>();
     m_childs = new QList<ulong>();
@@ -69,7 +69,7 @@ MctChangeset::MctChangeset(QDomElement changeset, ulong parentId, MctAuthor* aut
     m_corrected = false;
 }
 
-MctChangeset::MctChangeset(QDomElement changeset)
+MctChangeset::MctChangeset(const QDomElement &changeset)
 {
     m_changeset = changeset;
     m_parents = new QList<ulong>();
@@ -259,7 +259,7 @@ QString MctChangeset::comment() const
  * @brief This sets the comment of the changeset
  * @param comment The comment to set
  */
-void MctChangeset::setComment(QString comment)
+void MctChangeset::setComment(const QString &comment)
 {
     this->m_comment = comment;
     m_changeset.setAttribute("comment", comment);
@@ -285,7 +285,7 @@ QDateTime MctChangeset::date() const
  * @brief This sets the date of the changeset
  * @param date The date to set
  */
-void MctChangeset::setDate(QDateTime date)
+void MctChangeset::setDate(const QDateTime &date)
 {
     QString datestring = date.toString("yyyy-MM-dd hh:mm:ss");
     datestring.replace(" ", "T");
@@ -368,7 +368,7 @@ QDomElement MctChangeset::changeset() const
  * @brief This sets the xml changeset node.
  * @param changeset the xml changeset node
  */
-void MctChangeset::setChangeset(QDomElement changeset)
+void MctChangeset::setChangeset(const QDomElement &changeset)
 {
     this->m_changeset = changeset;
 }

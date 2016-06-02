@@ -552,7 +552,7 @@ void MctStaticData::stopSupport(QString URL)
  * @param postag The position tag
  * @return Returns with the list of data extracted from position tag
  */
-QList<QString> MctStaticData::getDataFromPosTag(QString postag)
+QList<QString> MctStaticData::getDataFromPosTag(const QString &postag)
 {
     QList<QString> data;
     int idx = 0;
@@ -575,7 +575,7 @@ QList<QString> MctStaticData::getDataFromPosTag(QString postag)
  * @param moved True if moved position is wanted, False otherwise
  * @return Returns with the created position class.
  */
-MctPosition* MctStaticData::getPosFromElementreeNode(QDomElement change, bool moved)
+MctPosition* MctStaticData::getPosFromElementreeNode(const QDomElement &change, bool moved)
 {
     MctPosition *pos = getPosFromElementreeNodeNew(change, moved);
 
@@ -593,7 +593,7 @@ MctPosition* MctStaticData::getPosFromElementreeNode(QDomElement change, bool mo
  * @param moved True if moved position is wanted, False otherwise
  * @return Returns with the created position class.
  */
-MctPosition* MctStaticData::getPosFromElementreeNodeNew(QDomElement change, bool moved)
+MctPosition* MctStaticData::getPosFromElementreeNodeNew(const QDomElement &change, bool moved)
 {
     MctPosition * pos = nullptr;
     MctPosition * pos_parent = nullptr;
@@ -733,7 +733,7 @@ MctPosition* MctStaticData::getPosFromElementreeNodeNew(QDomElement change, bool
  * @param moved True if moved position is wanted, False otherwise
  * @return Returns with the created position class.
  */
-MctPosition* MctStaticData::getPosFromElementreeNodeOld(QDomElement change, bool moved)
+MctPosition* MctStaticData::getPosFromElementreeNodeOld(const QDomElement &change, bool moved)
 {
     //TODO
     qCritical() << "Obsolete getPosFromElementreeNode called!";
@@ -1037,7 +1037,7 @@ bool MctStaticData::hasMctSupport(QString odt)
     return found;
 }
 
-void MctStaticData::setFileURL(QString url)
+void MctStaticData::setFileURL(const QString &url)
 {
     fileURL = url;
 }
@@ -1123,7 +1123,7 @@ QString MctStaticData::getAddedShapeType()
     return addedShapeType;
 }
 
-void MctStaticData::setAddedShapeType(QString shapeType)
+void MctStaticData::setAddedShapeType(const QString &shapeType)
 {
     this->addedShapeType = shapeType;
 }

@@ -27,7 +27,8 @@
 #include "MctEmbObjProperties.h"
 #include "KoDocument.h"
 
-MctUndoGraph::MctUndoGraph(QString odt, KoTextDocument *koTextDoc) : MctUndoGraphXMLfilter(MctStaticData::UNDOCHANGES, odt, koTextDoc)
+MctUndoGraph::MctUndoGraph(const QString &odt, KoTextDocument *koTextDoc)
+    : MctUndoGraphXMLfilter(MctStaticData::UNDOCHANGES, odt, koTextDoc)
 {
     fillUpGraph();
 }

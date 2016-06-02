@@ -55,7 +55,7 @@ const QString MctAbstractGraph::DATE_ALL = "all";
  * @param redoOrUndo "UndoChanges" for undo.xml, "RedoChanges" for redo.xml
  * @param odt file handle or name.
  */
-MctAbstractGraph::MctAbstractGraph(QString redoOrUndo, QString odt, KoTextDocument *koTextDoc)
+MctAbstractGraph::MctAbstractGraph(const QString &redoOrUndo, const QString &odt, KoTextDocument *koTextDoc)
 {
     _id = 1;
     m_changeNodes = new QList<MctChange*>();
@@ -200,7 +200,7 @@ QString MctAbstractGraph::redoOrUndo() const
     return m_redoOrUndo;
 }
 
-void MctAbstractGraph::setRedoOrUndo(QString string)
+void MctAbstractGraph::setRedoOrUndo(const QString &string)
 {
     this->m_redoOrUndo = string;
 }
@@ -210,7 +210,7 @@ QString MctAbstractGraph::odtFile() const
     return this->m_odtFile;
 }
 
-void MctAbstractGraph::setOdtFile(QString name)
+void MctAbstractGraph::setOdtFile(const QString &name)
 {
     this->m_odtFile = name;
 }
@@ -224,7 +224,7 @@ QString MctAbstractGraph::filename() const
  * @brief This sets the filename of the graph output
  * @param name the path of the file
  */
-void MctAbstractGraph::setFilename(QString name)
+void MctAbstractGraph::setFilename(const QString &name)
 {
     m_fileName = name + "_" + m_redoOrUndo + ".xml";
 }
@@ -234,7 +234,7 @@ QString MctAbstractGraph::nodeTag() const
     return this->m_nodeTag;
 }
 
-void MctAbstractGraph::setNodeTag(QString name)
+void MctAbstractGraph::setNodeTag(const QString &name)
 {
     this->m_nodeTag = name;
 }
@@ -248,7 +248,7 @@ QDomElement MctAbstractGraph::root() const
     return m_root;
 }
 
-void MctAbstractGraph::setRoot(QDomElement  root)
+void MctAbstractGraph::setRoot(const QDomElement &root)
 {    
     this->m_root = root;
 }
@@ -273,7 +273,7 @@ KoTextDocument * MctAbstractGraph::koTextDoc()
  * @param date The date corresponding to the wanted changeset
  * @return Returns with the changesetNode corresponding to the given date.
  */
-MctChangeset* MctAbstractGraph::getChangeset(QDateTime date)
+MctChangeset* MctAbstractGraph::getChangeset(const QDateTime &date)
 {
     qDebug () << "date1: " << date;
     MctChangeset* changset = NULL;
@@ -291,7 +291,7 @@ MctChangeset* MctAbstractGraph::getChangeset(QDateTime date)
  * @param date The date.
  * @return Returns with the list of changesets ordered by the dates.
  */
-QList<MctChangeset*>* MctAbstractGraph::getChangesetList(QDateTime date)
+QList<MctChangeset*>* MctAbstractGraph::getChangesetList(const QDateTime &date)
 {
     QList<MctChangeset*>* changeset = new QList<MctChangeset*>();
     const QVector<QDateTime> * datesList;
@@ -328,7 +328,7 @@ QList<MctChangeset*>* MctAbstractGraph::getChangesetListByDates(QList<QDateTime>
  * @brief This creates embObjProps object from properties in the graph xml
  * @param change The node representing the changeevent
  */
-MctEmbObjProperties* MctAbstractGraph::createEmbObjProps(QDomElement change)
+MctEmbObjProperties* MctAbstractGraph::createEmbObjProps(const QDomElement &change)
 {
     QString name = change.attribute("name");
     if(name.isEmpty()) {
@@ -408,7 +408,7 @@ MctEmbObjProperties* MctAbstractGraph::createEmbObjProps(QDomElement change)
     return cembObjProps;
 }
 
-MctEmbObjProperties *MctAbstractGraph::createEmbObjShapeProps(QDomElement change)
+MctEmbObjProperties *MctAbstractGraph::createEmbObjShapeProps(const QDomElement &change)
 {
     KoShape *shape = createShapeFromProps(change);
 
@@ -420,7 +420,7 @@ MctEmbObjProperties *MctAbstractGraph::createEmbObjShapeProps(QDomElement change
     return cembObjProps;
 }
 
-KoShape *MctAbstractGraph::createShapeFromProps(QDomElement change)
+KoShape *MctAbstractGraph::createShapeFromProps(const QDomElement &change)
 {
     const KoProperties *properties = getShapeProperties(change.attribute("URL"));
 
@@ -439,7 +439,7 @@ KoShape *MctAbstractGraph::createShapeFromProps(QDomElement change)
     return shape;
 }
 
-void MctAbstractGraph::setShapeStyles(KoShape *shape, QDomElement change)
+void MctAbstractGraph::setShapeStyles(KoShape *shape, const QDomElement &change)
 {
     QSizeF size(change.attribute("Width").toDouble(), change.attribute("Height").toDouble());
     shape->setSize(size);
@@ -492,7 +492,7 @@ void MctAbstractGraph::setShapeStyles(KoShape *shape, QDomElement change)
     }
 }
 
-const KoProperties *MctAbstractGraph::getShapeProperties(QString type)
+const KoProperties *MctAbstractGraph::getShapeProperties(const QString &type)
 {
     foreach(const QString & id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(id);
@@ -518,7 +518,7 @@ const KoProperties *MctAbstractGraph::getShapeProperties(QString type)
  * @param change The node representing the changeevent
  * @return
  */
-MctTableProperties * MctAbstractGraph::createTableProps(QDomElement change)
+MctTableProperties * MctAbstractGraph::createTableProps(const QDomElement &change)
 {
     QString name = change.attribute("name");
     if(name.isEmpty()) {
@@ -772,7 +772,7 @@ void MctAbstractGraph::sortDates()
  * @param merge True if the adding changeset is being merged from another graph, False otherwise.
  * @return Returns with the created changesetNode
  */
-MctChangeset* MctAbstractGraph::addChangeset(QList<MctChange *> *changes, MctAuthor *author, QDateTime date, QString comment, uint parentId, bool merge)
+MctChangeset* MctAbstractGraph::addChangeset(QList<MctChange *> *changes, MctAuthor *author, const QDateTime &date, const QString &comment, uint parentId, bool merge)
 {
     qDebug() << "adding changeset to graph";
     merge = true; //FIXME!
@@ -822,7 +822,7 @@ MctChangeset* MctAbstractGraph::addChangeset(QList<MctChange *> *changes, MctAut
  * @param d2 The date class.
  * @return Returns with -1 if d1 earlier, return 0 if equal, return 1 if d1 later than d2
  */
-int MctAbstractGraph::dateComapre(QDateTime d1, QDateTime d2) {
+int MctAbstractGraph::dateComapre(const QDateTime &d1, const QDateTime &d2) {
     if(d1 < d2) return -1;
     else if(d1 == d2) return 0;
     else return 1;
@@ -1229,7 +1229,7 @@ void MctAbstractGraph::addChangesetNodeWithCorr(MctChangeset *changesetNode)
  * @param date The date class.
  * @return Returns with the list of later dates
  */
-QVector<QDateTime> * MctAbstractGraph::findLaterDates(QDateTime date)
+QVector<QDateTime> * MctAbstractGraph::findLaterDates(const QDateTime &date)
 {
     QVector<QDateTime> * retDates = new QVector<QDateTime>();
     sortDates();
@@ -1246,7 +1246,7 @@ QVector<QDateTime> * MctAbstractGraph::findLaterDates(QDateTime date)
  * @param date The date
  * @return Returns with the list of earlier or equal dates
  */
-QVector<QDateTime> * MctAbstractGraph::findEarlierDates(QDateTime date)
+QVector<QDateTime> * MctAbstractGraph::findEarlierDates(const QDateTime &date)
 {
     QVector<QDateTime> * retDates = new QVector<QDateTime>();
     sortDates();
@@ -1281,7 +1281,7 @@ void MctAbstractGraph::correctChangesetNodeList(MctChangeset *changesetNode)
  * @param withdates string: 'earlier', 'later', 'all'. Used to select dates to correct.
  * @param foradd True if the changesetNode is intended to be added.
  */
-void MctAbstractGraph::correctChangesetNodeListWithDate(MctChangeset *changesetNode, QString withdates, bool foradd)
+void MctAbstractGraph::correctChangesetNodeListWithDate(MctChangeset *changesetNode, const QString &withdates, bool foradd)
 {
     QDateTime date = changesetNode->date();
     QVector<QDateTime> *datesList;
@@ -1309,7 +1309,7 @@ void MctAbstractGraph::correctChangesetNodeListWithDate(MctChangeset *changesetN
  * @param foradd True if the changesetNode is intended to be added.
  * @return Returns with the parent ID
  */
-int MctAbstractGraph::correctChangesetNode(MctChangeset *changesetNode, QString withdates, bool foradd)
+int MctAbstractGraph::correctChangesetNode(MctChangeset *changesetNode, const QString &withdates, bool foradd)
 {
     QDateTime date = changesetNode->date();
     QVector<QDateTime> *datesList;
@@ -1620,7 +1620,7 @@ void MctAbstractGraph::removeChangeset(MctChangeset *changesetnode, bool clearch
  * @param date The date of the wanted changesetNode.
  * @return Returns with the removed changesetNode.
  */
-MctChangeset * MctAbstractGraph::popChangeset(QDateTime date)
+MctChangeset * MctAbstractGraph::popChangeset(const QDateTime &date)
 {
     int idx = -1;
     QDateTime givendate;
@@ -1643,7 +1643,7 @@ qCritical() << "This function is suspicious";
     return tmp;
 }
 
-bool MctAbstractGraph::removeDir(const QString & dirName)
+bool MctAbstractGraph::removeDir(const QString &dirName)
 {
     bool result = true;
     QDir dir(dirName);
@@ -1744,7 +1744,7 @@ void MctAbstractGraph::exportGraph(QDomDocument *document)
  * @brief This register undo.xml/redo.xml files in the manifest.xml
  * @param filename The name of the copied manifest file
  */
-void MctAbstractGraph::regManifest(QString filename)
+void MctAbstractGraph::regManifest(const QString &filename)
 {
     qDebug() << "registering manifest";
     QDomDocument *manifest_tree = new QDomDocument(filename);
@@ -1803,12 +1803,12 @@ ulong MctAbstractGraph::getCurrentRevision()
  * @param moved True if moved position is wanted, False otherwise
  * @return Returns with the created position class.
  */
-MctPosition* MctAbstractGraph::getPosFromXML(QDomElement change, bool moved)
+MctPosition* MctAbstractGraph::getPosFromXML(const QDomElement &change, bool moved)
 {
     return MctStaticData::instance()->getPosFromElementreeNode(change, moved);
 }
 
-void MctAbstractGraph::addTableDataToPos(QDomElement change, MctChange *changeNode, bool moved)
+void MctAbstractGraph::addTableDataToPos(QDomElement &change, MctChange *changeNode, bool moved)
 {
     MctNode * changeEntity = changeNode->changeEntity();
     MctTable * tableChangeEntity = dynamic_cast<MctTable*> (changeEntity);

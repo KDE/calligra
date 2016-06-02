@@ -27,7 +27,8 @@
 #include "MctEmbObjProperties.h"
 #include "KoDocument.h"
 
-MctRedoGraph::MctRedoGraph(QString odt, KoTextDocument *koTextDoc) : MctRedoGraphXMLfilter(MctStaticData::REDOCHANGES, odt, koTextDoc)
+MctRedoGraph::MctRedoGraph(const QString &odt, KoTextDocument *koTextDoc)
+    : MctRedoGraphXMLfilter(MctStaticData::REDOCHANGES, odt, koTextDoc)
 {
     fillUpGraph();
 }

@@ -29,7 +29,7 @@ const QString MctCell::COLS = "ABCDEFGHIJKLMNOPQRTSUVWXYZabcdefghijklmnopqrstuvw
  * @brief MctCell::MctCell copy-costructor
  * @param cell
  */
-MctCell::MctCell(QString cellName, QString tableName, int row, int col)
+MctCell::MctCell(const QString &cellName, const QString &tableName, int row, int col)
     : MctPropertyBase(cellName)
     , m_cellName(cellName)
     , m_tableName(tableName)
@@ -39,7 +39,7 @@ MctCell::MctCell(QString cellName, QString tableName, int row, int col)
 
 }
 
-MctCell::MctCell(int row, int col, QString tableName)
+MctCell::MctCell(int row, int col, const QString &tableName)
     : m_row(row)
     , m_col(col)
     , m_tableName(tableName)
@@ -165,7 +165,7 @@ QString MctCell::tableName() const
     return m_tableName;
 }
 
-void MctCell::setTableName(QString name)
+void MctCell::setTableName(const QString &name)
 {
     m_tableName = name;
 }

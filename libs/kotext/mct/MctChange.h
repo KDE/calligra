@@ -34,7 +34,7 @@ public:
     MctChange(MctPosition *m_position, MctChangeTypes m_changeType, MctNode *m_changeEntity, MctPosition *movedpos = NULL);
     ~MctChange();
 
-    void addElementTreeNode(QDomElement m_change);
+    void addElementTreeNode(const QDomElement &m_change);
     //int nodeId(); //unused function
 
     MctChangeTypes changeType() const;
@@ -49,7 +49,7 @@ public:
     MctNode * changeEntity();
 
     QDomElement changeNode();
-    void setChangeNode(QDomElement);
+    void setChangeNode(const QDomElement &element);
 
 private:    
 

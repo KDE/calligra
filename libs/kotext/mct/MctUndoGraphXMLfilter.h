@@ -25,28 +25,28 @@
 class MctUndoGraphXMLfilter : public MctAbstractGraph
 {
 public:
-    MctUndoGraphXMLfilter(QString m_redoOrUndo, QString odt, KoTextDocument *m_koTextDoc);
+    MctUndoGraphXMLfilter(const QString &m_redoOrUndo, const QString &odt, KoTextDocument *m_koTextDoc);
     virtual ~MctUndoGraphXMLfilter();
 
-    virtual void addChangeFromXML(QDomNode node, MctChangeset* changeset);
-    MctChange* addStringFromXML(QDomElement change);
-    MctChange* removeStringFromXML(QDomElement change);
-    MctChange* moveStringFromXML(QDomElement change);
-    MctChange* addParBreakFromXML(QDomElement change);
-    MctChange* delParBreakFromXML(QDomElement change);
-    MctChange* styleChangeFromXML(QDomElement change);
+    virtual void addChangeFromXML(const QDomNode &node, MctChangeset* changeset);
+    MctChange* addStringFromXML(const QDomElement &change);
+    MctChange* removeStringFromXML(const QDomElement &change);
+    MctChange* moveStringFromXML(const QDomElement &change);
+    MctChange* addParBreakFromXML(const QDomElement &change);
+    MctChange* delParBreakFromXML(const QDomElement &change);
+    MctChange* styleChangeFromXML(const QDomElement &change);
 
-    virtual void particularStyleChangeFromXML(QDomNode node, ChangeEventList * propchanges);    //!!!
-    void listChangesFromXML(QDomNamedNodeMap attribs, ChangeEventList * propchanges);
+    virtual void particularStyleChangeFromXML(const QDomNode &node, ChangeEventList * propchanges);    //!!!
+    void listChangesFromXML(const QDomNamedNodeMap &attribs, ChangeEventList * propchanges);
 
-    virtual MctChange* addTextFrameFromXML(QDomElement change);
-    virtual MctChange* addTextGraphicObjectFromXML(QDomElement change);
-    virtual MctChange* removeTextGraphicObjectFromXML(QDomElement change);
-    virtual MctChange* addEmbeddedObjectFromXML(QDomElement change);
-    MctChange* addTextTableFromXML(QDomElement change);
-    MctChange* removeTextTableFromXML(QDomElement change);
-    virtual MctChange* rowChangeFromXML(QDomElement change);
-    virtual MctChange* colChangeFromXML(QDomElement change);
+    virtual MctChange* addTextFrameFromXML(const QDomElement &change);
+    virtual MctChange* addTextGraphicObjectFromXML(const QDomElement &change);
+    virtual MctChange* removeTextGraphicObjectFromXML(const QDomElement &change);
+    virtual MctChange* addEmbeddedObjectFromXML(const QDomElement &change);
+    MctChange* addTextTableFromXML(const QDomElement &change);
+    MctChange* removeTextTableFromXML(const QDomElement &change);
+    virtual MctChange* rowChangeFromXML(const QDomElement &change);
+    virtual MctChange* colChangeFromXML(const QDomElement &change);
 };
 
 #endif // MCTUNDOGRAPHXMLFILTER_H

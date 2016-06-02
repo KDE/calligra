@@ -32,20 +32,20 @@
 
 #include "kzip.h"
 
-MctEmbObjProperties::MctEmbObjProperties(QString name)
+MctEmbObjProperties::MctEmbObjProperties(const QString &name)
     : MctPropertyBase(name)
 {
 
 }
 
-MctEmbObjProperties::MctEmbObjProperties(QString name, KoShape *shape)
+MctEmbObjProperties::MctEmbObjProperties(const QString &name, KoShape *shape)
     : MctPropertyBase(name)
     , m_shape(shape)
 {
     fillUpProperties();
 }
 
-MctEmbObjProperties::MctEmbObjProperties(QString name, KoShape *shape, QPointF pos, QSizeF size)
+MctEmbObjProperties::MctEmbObjProperties(const QString &name, KoShape *shape, const QPointF &pos, const QSizeF &size)
     : MctPropertyBase(name)
     , m_shape(shape)
     , m_pos(pos)
@@ -81,7 +81,7 @@ QString MctEmbObjProperties::odtURL() const
     return m_odtURL;
 }
 
-void MctEmbObjProperties::setOdtUrl(QString odt)
+void MctEmbObjProperties::setOdtUrl(const QString &odt)
 {
     m_odtURL = odt;
 }
@@ -236,7 +236,7 @@ void MctEmbObjProperties::addShadowStyleChanges(KoShapeShadow *newShadow)
     }
 }
 
-void MctEmbObjProperties::addSizeChanged(QSizeF prevPos)
+void MctEmbObjProperties::addSizeChanged(const QSizeF &prevPos)
 {
     m_props2export->insert("PrevSizeWidth", prevPos.width());
     m_props2export->insert("PrevSizeHeight", prevPos.height());
@@ -252,7 +252,7 @@ KoShape *MctEmbObjProperties::shape()
     return m_shape;
 }
 
-void MctEmbObjProperties::setPrevPos(QPointF prevPos)
+void MctEmbObjProperties::setPrevPos(const QPointF &prevPos)
 {
     m_props2export->insert("PrevPositionX", prevPos.x());
     m_props2export->insert("PrevPositionY", prevPos.y());
@@ -363,7 +363,7 @@ void MctEmbObjProperties::textGraphicStyleChanges(MctEmbObjProperties *props2, K
  * @param name The original identifier that should contain oldPrefix.
  * @return The identifier starting with the newPrefix substring.
  */
-QString MctEmbObjProperties::convertURL(QString oldPrefix, QString newPrefix, QString name)
+QString MctEmbObjProperties::convertURL(const QString &oldPrefix, const QString &newPrefix, const QString &name)
 {
     QString returnURL;
 
@@ -404,7 +404,7 @@ bool MctEmbObjProperties::removeDir(const QString & dirName)
  * @param OdtURL The absolute URL of the Odt.
  * @return returns with the URL of the backed up file
  */
-QString MctEmbObjProperties::backupFileFromOdt(QString innerURL, QString OdtURL)
+QString MctEmbObjProperties::backupFileFromOdt(const QString &innerURL, const QString &OdtURL)
 {
     if(m_isBackedUp) {
         return m_url;
@@ -568,7 +568,7 @@ void MctEmbObjProperties::deleteBackupFile()
  * @brief MctEmbObjProperties::getMediaType Update the value of this->mediaType member from the given manifest file
  * @param fileName Name of manifest file. (Usually .../odtURL/manifest.xml)
  */
-void MctEmbObjProperties::mediaType(QString fileName)
+void MctEmbObjProperties::mediaType(const QString &fileName)
 {
     QDomDocument *manifest_tree = new QDomDocument(fileName);
 
@@ -602,7 +602,7 @@ void MctEmbObjProperties::mediaType(QString fileName)
  * @brief MctEmbObjProperties::regManifest
  * @param fileName
  */
-void MctEmbObjProperties::regManifest(QString fileName)
+void MctEmbObjProperties::regManifest(const QString &fileName)
 {
     qDebug() << "registering manifest";
     QDomDocument *manifest_tree = new QDomDocument(fileName);
@@ -661,7 +661,7 @@ PropertyDictionary *MctEmbObjProperties::compareProperties(const MctEmbObjProper
  * @param graphicURL Should starts with someting like this: "nd.sun.star.GraphicObject:"identifier
  * @return The innerURL that looks like this: "Picture/"identifier
  */
-QString MctEmbObjProperties::createInnerURL(QString graphicURL)
+QString MctEmbObjProperties::createInnerURL(const QString &graphicURL)
 {
     return convertURL(MctStaticData::GRAPHICOBJ, MctStaticData::GRAPHICOBJ_PATH, graphicURL);
 }
@@ -671,7 +671,7 @@ QString MctEmbObjProperties::createInnerURL(QString graphicURL)
  * @param innerURL The innerURL should looks like this: "Picture/"identifier
  * @return The grapicURL that looks like this: "nd.sun.star.GraphicObject:"identifier
  */
-QString MctEmbObjProperties::createGraphicURL(QString innerURL)
+QString MctEmbObjProperties::createGraphicURL(const QString &innerURL)
 {
     return convertURL(MctStaticData::GRAPHICOBJ_PATH, MctStaticData::GRAPHICOBJ, innerURL);
 }

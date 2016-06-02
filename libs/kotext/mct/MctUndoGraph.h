@@ -28,7 +28,7 @@ using ChangeEventList = QList<ChangeEvent*>;
 class MctUndoGraph : public MctUndoGraphXMLfilter
 {
 public:
-    MctUndoGraph(QString odt, KoTextDocument *m_koTextDoc);
+    MctUndoGraph(const QString &odt, KoTextDocument *m_koTextDoc);
     virtual ~MctUndoGraph();
 
     MctChangeset* addchangesetFromRedo(MctChangeset* redochangeset);

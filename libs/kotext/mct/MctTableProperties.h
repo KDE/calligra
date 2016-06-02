@@ -26,7 +26,7 @@
 class MctTableProperties : public MctPropertyBase
 {
 public:
-    MctTableProperties(QString name, int rows = -1, int cols = -1);
+    MctTableProperties(const QString &name, int rows = -1, int cols = -1);
     ~MctTableProperties();
     
     int rows() const;

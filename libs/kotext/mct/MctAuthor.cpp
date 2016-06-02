@@ -31,17 +31,17 @@ MctAuthor::~MctAuthor()
 
 }
 
-void MctAuthor::setName(QString name)
+void MctAuthor::setName(const QString &name)
 {
     this->m_userName = name;
 }
 
-void MctAuthor::setForename(QString name)
+void MctAuthor::setForename(const QString &name)
 {
     this->m_forename = name;
 }
 
-void MctAuthor::setSurname(QString name)
+void MctAuthor::setSurname(const QString &name)
 {
     this->m_surname = name;
 }

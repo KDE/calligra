@@ -34,8 +34,8 @@ class KOTEXT_EXPORT MctChangeset : public MctNode
 {
 public:
 
-    MctChangeset(QDomElement changeset, ulong parentId, MctAuthor* author, QDateTime date, QString comment, ulong m_id);
-    MctChangeset(QDomElement changeset);
+    MctChangeset(const QDomElement &changeset, ulong parentId, MctAuthor* author, const QDateTime &date, const QString &comment, ulong m_id);
+    MctChangeset(const QDomElement &changeset);
     MctChangeset();
 
     MctChangeset(const MctChangeset &other);
@@ -59,9 +59,9 @@ public:
     MctAuthor* author() const;
     void setAuthor(MctAuthor *author);
     QString comment() const;
-    void setComment(QString comment);
+    void setComment(const QString &comment);
     QDateTime date() const;
-    void setDate(QDateTime date);
+    void setDate(const QDateTime &date);
 
     void addChange(MctChange * change);
     QList<MctChange*>* changes() const;
@@ -70,7 +70,7 @@ public:
     QString dateInString();
 
     QDomElement changeset() const;
-    void setChangeset(QDomElement changeset);
+    void setChangeset(const QDomElement &changeset);
 
     void setCorrected(bool value);
     bool isCorrected() const;

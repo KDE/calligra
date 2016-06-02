@@ -45,7 +45,7 @@ unsigned long MctNode::id() const
     return m_id;
 }
 
-void MctNode::setName(QString name)
+void MctNode::setName(const QString &name)
 {
     m_name = name;
 }

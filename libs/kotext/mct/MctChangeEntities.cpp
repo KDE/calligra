@@ -27,7 +27,7 @@
 
 #include <KoCharacterStyle.h>
 
-MctTable::MctTable(QString cellName, QString tableName, MctCell *cellInfo)
+MctTable::MctTable(const QString &cellName, const QString &tableName, MctCell *cellInfo)
     : MctNode()
 {
     if (cellInfo)
@@ -52,7 +52,7 @@ MctParagraphBreak::~MctParagraphBreak()
 
 }
 
-MctParagraphBreakInTable::MctParagraphBreakInTable(QString cellName, QString tableName, MctCell *cellInfo)
+MctParagraphBreakInTable::MctParagraphBreakInTable(const QString &cellName, const QString &tableName, MctCell *cellInfo)
     : MctParagraphBreak()
     , MctTable(cellName, tableName, cellInfo)
 {
@@ -75,7 +75,7 @@ MctDelParagraphBreak::~MctDelParagraphBreak()
 
 }
 
-MctDelParagraphBreakInTable::MctDelParagraphBreakInTable(QString cellName, QString tableName, MctCell *cellInfo)
+MctDelParagraphBreakInTable::MctDelParagraphBreakInTable(const QString &cellName, const QString &tableName, MctCell *cellInfo)
     : MctDelParagraphBreak()
     , MctTable(cellName, tableName, cellInfo)
 {
@@ -87,7 +87,7 @@ MctDelParagraphBreakInTable::~MctDelParagraphBreakInTable()
 
 }
 
-MctStringChange::MctStringChange(QString string)
+MctStringChange::MctStringChange(const QString &string)
     : MctNode()
     , m_string(string)
 {
@@ -104,12 +104,12 @@ QString MctStringChange::getString() const
     return this->m_string;
 }
 
-void MctStringChange::setString(QString string)
+void MctStringChange::setString(const QString &string)
 {
     this->m_string = string;
 }
 
-MctStringChangeInTable::MctStringChangeInTable(QString string, QString cellName, QString tableName, MctCell *cellInfo)
+MctStringChangeInTable::MctStringChangeInTable(const QString &string, const QString &cellName, const QString &tableName, MctCell *cellInfo)
     : MctStringChange(string)
     , MctTable(cellName, tableName, cellInfo)
 {
@@ -204,7 +204,7 @@ MctRemovedTextFrame::~MctRemovedTextFrame()
 
 }
 
-MctChangedTexObjectBase::MctChangedTexObjectBase(QString name, MctPropertyBase *objectProperties)
+MctChangedTexObjectBase::MctChangedTexObjectBase(const QString &name, MctPropertyBase *objectProperties)
     : MctNode()    
     , m_objectProperties(objectProperties)
 {
@@ -217,7 +217,7 @@ MctChangedTexObjectBase::~MctChangedTexObjectBase()
     delete m_objectProperties;
 }
 
-void MctChangedTexObjectBase::setObjectName(QString name)
+void MctChangedTexObjectBase::setObjectName(const QString &name)
 {
     if (this->m_objectProperties == NULL)
         return;
@@ -235,7 +235,7 @@ void MctChangedTexObjectBase::setObjectProperties(MctPropertyBase* objectPropert
     this->m_objectProperties  = objectProperties;
 }
 
-MctAddedTextGraphicObject::MctAddedTextGraphicObject(QString name, MctEmbObjProperties* embObjProps)
+MctAddedTextGraphicObject::MctAddedTextGraphicObject(const QString &name, MctEmbObjProperties* embObjProps)
     : MctChangedTexObjectBase(name, embObjProps)
 {
 
@@ -246,7 +246,7 @@ MctAddedTextGraphicObject::~MctAddedTextGraphicObject()
 
 }
 
-MctRemovedTextGraphicObject::MctRemovedTextGraphicObject(QString name, MctEmbObjProperties* embObjProps)
+MctRemovedTextGraphicObject::MctRemovedTextGraphicObject(const QString &name, MctEmbObjProperties* embObjProps)
     : MctChangedTexObjectBase(name, embObjProps)
 {
 
@@ -257,7 +257,7 @@ MctRemovedTextGraphicObject::~MctRemovedTextGraphicObject()
 
 }
 
-MctAddedTextGraphicObjectInTable::MctAddedTextGraphicObjectInTable(QString name, MctEmbObjProperties* embObjProps, QString cellName, QString tableName, MctCell *cellInfo)
+MctAddedTextGraphicObjectInTable::MctAddedTextGraphicObjectInTable(const QString &name, MctEmbObjProperties* embObjProps, const QString &cellName, const QString &tableName, MctCell *cellInfo)
     : MctAddedTextGraphicObject(name, embObjProps)
     , MctTable(cellName, tableName, cellInfo)
 {
@@ -269,7 +269,7 @@ MctAddedTextGraphicObjectInTable::~MctAddedTextGraphicObjectInTable()
 
 }
 
-MctRemovedTextGraphicObjectInTable::MctRemovedTextGraphicObjectInTable(QString name, MctEmbObjProperties* embObjProps, QString cellName, QString tableName, MctCell *cellInfo)
+MctRemovedTextGraphicObjectInTable::MctRemovedTextGraphicObjectInTable(const QString &name, MctEmbObjProperties* embObjProps, const QString &cellName, const QString &tableName, MctCell *cellInfo)
     : MctRemovedTextGraphicObject(name, embObjProps)
     , MctTable(cellName, tableName, cellInfo)
 {
@@ -281,7 +281,7 @@ MctRemovedTextGraphicObjectInTable::~MctRemovedTextGraphicObjectInTable()
 
 }
 
-MctAddedEmbeddedObject::MctAddedEmbeddedObject(QString name)
+MctAddedEmbeddedObject::MctAddedEmbeddedObject(const QString &name)
     : MctNode()
 {
     m_name = name;
@@ -303,13 +303,13 @@ MctRemovedEmbeddedObject::~MctRemovedEmbeddedObject()
 
 }
 
-MctAddedTextTable::MctAddedTextTable(QString name, MctTableProperties *tableProps)
+MctAddedTextTable::MctAddedTextTable(const QString &name, MctTableProperties *tableProps)
     : MctChangedTexObjectBase(name, tableProps)
 {
 
 }
 
-MctAddedTextTable::MctAddedTextTable(int row, int col, QTextTableFormat format)
+MctAddedTextTable::MctAddedTextTable(int row, int col, const QTextTableFormat &format)
     : MctChangedTexObjectBase("")
     , m_row(row), m_col(col), m_tableFormat(format)
 {
@@ -340,7 +340,7 @@ void MctAddedTextTable::setColCount(int col)
     this->m_col = col;
 }
 
-void MctAddedTextTable::setTableFormat(QTextTableFormat format)
+void MctAddedTextTable::setTableFormat(const QTextTableFormat &format)
 {
     this->m_tableFormat = format;
 }
@@ -350,7 +350,7 @@ MctAddedTextTable::~MctAddedTextTable()
 
 }
 
-MctRemovedTextTable::MctRemovedTextTable(QString name, MctTableProperties* tableProps)
+MctRemovedTextTable::MctRemovedTextTable(const QString &name, MctTableProperties* tableProps)
     :  MctChangedTexObjectBase(name, tableProps)
 {
 
@@ -367,7 +367,7 @@ MctRemovedTextTable::~MctRemovedTextTable()
 
 }
 
-MctAddedTextTableInTable::MctAddedTextTableInTable(QString name, MctTableProperties *tableProps, QString cellName, QString tableName, MctCell *cellInfo)
+MctAddedTextTableInTable::MctAddedTextTableInTable(const QString &name, MctTableProperties *tableProps, const QString &cellName, const QString &tableName, MctCell *cellInfo)
     : MctAddedTextTable(name, tableProps)
     , MctTable(cellName, tableName, cellInfo)
 {
@@ -379,7 +379,7 @@ MctAddedTextTableInTable::~MctAddedTextTableInTable()
 
 }
 
-MctRemovedTextTableInTable::MctRemovedTextTableInTable(QString name, MctTableProperties *tableProps, QString cellName, QString tableName, MctCell *cellInfo)
+MctRemovedTextTableInTable::MctRemovedTextTableInTable(const QString &name, MctTableProperties *tableProps, const QString &cellName, const QString &tableName, MctCell *cellInfo)
     : MctRemovedTextTable(name, tableProps)
     , MctTable(cellName, tableName, cellInfo)
 {
@@ -391,7 +391,7 @@ MctRemovedTextTableInTable::~MctRemovedTextTableInTable()
 
 }
 
-MctStylePropertyChangeInTable::MctStylePropertyChangeInTable(ChangeEventList *propChanges, QString cellName, QString tableName, MctCell *cellInfo)
+MctStylePropertyChangeInTable::MctStylePropertyChangeInTable(ChangeEventList *propChanges, const QString &cellName, const QString &tableName, MctCell *cellInfo)
     : MctStylePropertyChange(propChanges)
     , MctTable(cellName, tableName, cellInfo)
 {
@@ -403,7 +403,7 @@ MctStylePropertyChangeInTable::~MctStylePropertyChangeInTable()
 
 }
 
-MctRowChangeInTable::MctRowChangeInTable(int startRow, int rowCount, QString tableName)
+MctRowChangeInTable::MctRowChangeInTable(int startRow, int rowCount, const QString &tableName)
     : MctNode()
     , m_startRow(startRow)
     , m_rowCount(rowCount)
@@ -442,12 +442,12 @@ QString MctRowChangeInTable::tableName() const
     return this->m_tableName;
 }
 
-void MctRowChangeInTable::setTableName(QString n)
+void MctRowChangeInTable::setTableName(const QString &n)
 {
     this->m_tableName = n;
 }
 
-MctColChangeInTable::MctColChangeInTable(int startCol, int colCount, QString tableName)
+MctColChangeInTable::MctColChangeInTable(int startCol, int colCount, const QString &tableName)
     : MctNode()
     , m_startCol(startCol)
     , m_colCount(colCount)
@@ -486,12 +486,12 @@ QString MctColChangeInTable::tableName() const
     return this->m_tableName;
 }
 
-void MctColChangeInTable::setTableName(QString n)
+void MctColChangeInTable::setTableName(const QString &n)
 {
     this->m_tableName = n;
 }
 
-MctAddedRowInTable::MctAddedRowInTable(int startRow, int rowCount, QString tableName)
+MctAddedRowInTable::MctAddedRowInTable(int startRow, int rowCount, const QString &tableName)
     : MctRowChangeInTable(startRow, rowCount, tableName)
 {
 
@@ -502,7 +502,7 @@ MctAddedRowInTable::~MctAddedRowInTable()
 
 }
 
-MctRemovedRowInTable::MctRemovedRowInTable(int startRow, int rowCount, QString tableName)
+MctRemovedRowInTable::MctRemovedRowInTable(int startRow, int rowCount, const QString &tableName)
     : MctRowChangeInTable(startRow, rowCount, tableName)
 {
 
@@ -513,7 +513,7 @@ MctRemovedRowInTable::~MctRemovedRowInTable()
 
 }
 
-MctAddedColInTable::MctAddedColInTable(int startCol, int colCount, QString tableName)
+MctAddedColInTable::MctAddedColInTable(int startCol, int colCount, const QString &tableName)
     : MctColChangeInTable(startCol, colCount, tableName)
 {
 
@@ -524,7 +524,7 @@ MctAddedColInTable::~MctAddedColInTable()
 
 }
 
-MctRemovedColInTable::MctRemovedColInTable(int startCol, int colCount, QString tableName)
+MctRemovedColInTable::MctRemovedColInTable(int startCol, int colCount, const QString &tableName)
     : MctColChangeInTable(startCol, colCount, tableName)
 {
 
@@ -536,7 +536,7 @@ MctRemovedColInTable::~MctRemovedColInTable()
 }
 
 
-ChangeEvent::ChangeEvent(QTextFormat o, QTextFormat n)
+ChangeEvent::ChangeEvent(const QTextFormat &o, const QTextFormat &n)
 {
     if ( o.type() != n.type() ) {
         qCritical() << "Different format type in a change event!";
@@ -590,17 +590,17 @@ QTextFormat ChangeEvent::newFormat()
     return m_newFormat;
 }
 
-void ChangeEvent::setOldFormat(QTextFormat format)
+void ChangeEvent::setOldFormat(const QTextFormat &format)
 {
     m_oldFormat = format;
 }
 
-void ChangeEvent::setNewFormat(QTextFormat format)
+void ChangeEvent::setNewFormat(const QTextFormat &format)
 {
     m_newFormat = format;
 }
 
-void ChangeEvent::ensureProperties(QTextFormat &format1, QTextFormat format2)
+void ChangeEvent::ensureProperties(QTextFormat &format1, const QTextFormat &format2)
 {
     const QMap<int, QVariant> props = format2.properties();
     QMap<int, QVariant>::const_iterator it = props.begin();
@@ -612,7 +612,7 @@ void ChangeEvent::ensureProperties(QTextFormat &format1, QTextFormat format2)
     }
 }
 
-QTextFormat ChangeEvent::getNewValuesForFormat(QTextFormat current, QTextFormat base)
+QTextFormat ChangeEvent::getNewValuesForFormat(const QTextFormat &current, const QTextFormat &base)
 {
     int type = MctStaticData::UnknownProperty;
     if(base.isCharFormat()) { type = MctStaticData::CharacterProperty;}
@@ -665,7 +665,7 @@ QTextFormat ChangeEvent::getNewValuesForFormat(QTextFormat current, QTextFormat 
     return format;
 }
 
-QTextFormat ChangeEvent::getOldValuesForFormat(QTextFormat current, QTextFormat base)
+QTextFormat ChangeEvent::getOldValuesForFormat(const QTextFormat &current, const QTextFormat &base)
 {
     int type = MctStaticData::UnknownProperty;
     if(base.isCharFormat()) { type = MctStaticData::CharacterProperty;}
@@ -729,7 +729,7 @@ QTextFormat ChangeEvent::getOldValuesForFormat(QTextFormat current, QTextFormat 
     return format;
 }
 
-void ChangeEvent::printProperties(QTextFormat format)
+void ChangeEvent::printProperties(const QTextFormat &format)
 {
     qDebug() << "Format contains properties: ";
     int type = MctStaticData::UnknownProperty;

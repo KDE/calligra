@@ -19,7 +19,7 @@
 
 #include "MctTableProperties.h"
 
-MctTableProperties::MctTableProperties(QString name, int rows, int cols)
+MctTableProperties::MctTableProperties(const QString &name, int rows, int cols)
     : MctPropertyBase(name)
     , m_rows(rows)
     , m_cols(cols)

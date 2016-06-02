@@ -28,7 +28,8 @@
 #include "MctEmbObjProperties.h"
 #include "KoDocument.h"
 
-MctUndoGraphXMLfilter::MctUndoGraphXMLfilter(QString redoOrUndo, QString odt, KoTextDocument *koTextDoc): MctAbstractGraph(redoOrUndo, odt, koTextDoc)
+MctUndoGraphXMLfilter::MctUndoGraphXMLfilter(const QString &redoOrUndo, const QString &odt, KoTextDocument *koTextDoc)
+    : MctAbstractGraph(redoOrUndo, odt, koTextDoc)
 {
 
 }
@@ -43,7 +44,7 @@ MctUndoGraphXMLfilter::~MctUndoGraphXMLfilter()
  * @param change The change node in the XML
  * @param changeset The parent changeset node
  */
-void MctUndoGraphXMLfilter::addChangeFromXML(QDomNode node, MctChangeset* changeset) {
+void MctUndoGraphXMLfilter::addChangeFromXML(const QDomNode &node, MctChangeset* changeset) {
     QDomElement change = node.toElement();
     MctChange *changeNode = NULL;
     if(change.tagName() == MctUndoTags::ADDED && change.attribute("type") == MctUndoTags::STRING){
@@ -91,7 +92,7 @@ void MctUndoGraphXMLfilter::addChangeFromXML(QDomNode node, MctChangeset* change
  * @param change The change node in the XML
  * @return Returns with the created change node.
  */
-MctChange* MctUndoGraphXMLfilter::addStringFromXML(QDomElement change)
+MctChange* MctUndoGraphXMLfilter::addStringFromXML(const QDomElement &change)
 {
     //determine whether the string change was in table
     MctPosition* pos = getPosFromXML(change);
@@ -124,7 +125,7 @@ MctChange* MctUndoGraphXMLfilter::addStringFromXML(QDomElement change)
  * @param change The change node in the XML
  * @return Returns with the created change node.
  */
-MctChange* MctUndoGraphXMLfilter::removeStringFromXML(QDomElement change)
+MctChange* MctUndoGraphXMLfilter::removeStringFromXML(const QDomElement &change)
 {
     //determine whether the string change was in table
     MctPosition* pos = getPosFromXML(change);
@@ -157,7 +158,7 @@ MctChange* MctUndoGraphXMLfilter::removeStringFromXML(QDomElement change)
  * @param change The change node in the XML
  * @return Returns with the created change node.
  */
-MctChange* MctUndoGraphXMLfilter::moveStringFromXML(QDomElement change)
+MctChange* MctUndoGraphXMLfilter::moveStringFromXML(const QDomElement &change)
 {
     //determine whether the string change was in table
     MctPosition* pos = getPosFromXML(change);
@@ -191,7 +192,7 @@ MctChange* MctUndoGraphXMLfilter::moveStringFromXML(QDomElement change)
  * @param change The change node in the XML
  * @return Returns with the created change node.
  */
-MctChange* MctUndoGraphXMLfilter::addParBreakFromXML(QDomElement change)
+MctChange* MctUndoGraphXMLfilter::addParBreakFromXML(const QDomElement &change)
 {
     //determine whether the string change was in table
     MctPosition* pos = getPosFromXML(change);
@@ -224,7 +225,7 @@ MctChange* MctUndoGraphXMLfilter::addParBreakFromXML(QDomElement change)
  * @param change The change node in the XML
  * @return Returns with the created change node.
  */
-MctChange* MctUndoGraphXMLfilter::delParBreakFromXML(QDomElement change)
+MctChange* MctUndoGraphXMLfilter::delParBreakFromXML(const QDomElement &change)
 {
     //determine whether the string change was in table
     MctPosition* pos = getPosFromXML(change);
@@ -257,7 +258,7 @@ MctChange* MctUndoGraphXMLfilter::delParBreakFromXML(QDomElement change)
  * @param change The change node in the XML
  * @return Returns with the created change node.
  */
-MctChange* MctUndoGraphXMLfilter::styleChangeFromXML(QDomElement change)
+MctChange* MctUndoGraphXMLfilter::styleChangeFromXML(const QDomElement &change)
 {
     //determine whether the string change was in table
     MctPosition* pos = getPosFromXML(change);
@@ -294,7 +295,7 @@ MctChange* MctUndoGraphXMLfilter::styleChangeFromXML(QDomElement change)
     return changeNode;
 }
 
-void MctUndoGraphXMLfilter::particularStyleChangeFromXML(QDomNode node, ChangeEventList * propchanges){
+void MctUndoGraphXMLfilter::particularStyleChangeFromXML(const QDomNode &node, ChangeEventList * propchanges){
     QDomNamedNodeMap attribs = node.attributes();
     QString strtype = attribs.namedItem("type").toAttr().value();
     int type = QTextFormat::InvalidFormat;
@@ -346,7 +347,7 @@ void MctUndoGraphXMLfilter::particularStyleChangeFromXML(QDomNode node, ChangeEv
     propchanges->append(changeEvent);
 }
 
-void MctUndoGraphXMLfilter::listChangesFromXML(QDomNamedNodeMap attribs, ChangeEventList * propchanges)
+void MctUndoGraphXMLfilter::listChangesFromXML(const QDomNamedNodeMap &attribs, ChangeEventList * propchanges)
 {
     int type = QTextFormat::ListFormat;
     QTextFormat oldformat(type);
@@ -372,7 +373,7 @@ void MctUndoGraphXMLfilter::listChangesFromXML(QDomNamedNodeMap attribs, ChangeE
  * @param change The change node in the XML
  * @return Returns with the created change node.
  */
-MctChange* MctUndoGraphXMLfilter::addTextFrameFromXML(QDomElement change)
+MctChange* MctUndoGraphXMLfilter::addTextFrameFromXML(const QDomElement &change)
 {
     QString name = change.attribute("name");
     MctChangeTypes changeType = MctChangeTypes::AddedTextFrame;
@@ -387,7 +388,7 @@ MctChange* MctUndoGraphXMLfilter::addTextFrameFromXML(QDomElement change)
  * @param change The change node in the XML
  * @return Returns with the created change node.
  */
-MctChange* MctUndoGraphXMLfilter::addTextGraphicObjectFromXML(QDomElement change)
+MctChange* MctUndoGraphXMLfilter::addTextGraphicObjectFromXML(const QDomElement &change)
 {
     QString name = change.attribute("name");
     MctEmbObjProperties* cembObjProps = createEmbObjProps(change);
@@ -410,7 +411,7 @@ MctChange* MctUndoGraphXMLfilter::addTextGraphicObjectFromXML(QDomElement change
  * @param change The change node in the XML
  * @return Returns with the created change node.
  */
-MctChange* MctUndoGraphXMLfilter::removeTextGraphicObjectFromXML(QDomElement change)
+MctChange* MctUndoGraphXMLfilter::removeTextGraphicObjectFromXML(const QDomElement &change)
 {
     QString name = change.attribute("name");
     MctEmbObjProperties* cembObjProps = NULL;
@@ -442,7 +443,7 @@ MctChange* MctUndoGraphXMLfilter::removeTextGraphicObjectFromXML(QDomElement cha
  * @param change The change node in the XML
  * @return Returns with the created change node.
  */
-MctChange* MctUndoGraphXMLfilter::addEmbeddedObjectFromXML(QDomElement change)
+MctChange* MctUndoGraphXMLfilter::addEmbeddedObjectFromXML(const QDomElement &change)
 {
     QString name = change.attribute("name");
     MctChangeTypes changeType = MctChangeTypes::AddedEmbeddedObject;
@@ -457,7 +458,7 @@ MctChange* MctUndoGraphXMLfilter::addEmbeddedObjectFromXML(QDomElement change)
  * @param change The change node in the XML
  * @return Returns with the created change node.
  */
-MctChange* MctUndoGraphXMLfilter::addTextTableFromXML(QDomElement change)
+MctChange* MctUndoGraphXMLfilter::addTextTableFromXML(const QDomElement &change)
 {
     QString name = change.attribute("name");
     MctTableProperties* ctableProps = createTableProps(change);
@@ -493,7 +494,7 @@ MctChange* MctUndoGraphXMLfilter::addTextTableFromXML(QDomElement change)
  * @param change The change node in the XML
  * @return Returns with the created change node.
  */
-MctChange* MctUndoGraphXMLfilter::removeTextTableFromXML(QDomElement change)
+MctChange* MctUndoGraphXMLfilter::removeTextTableFromXML(const QDomElement &change)
 {
     QString name = change.attribute("name");
     MctTableProperties* ctableProps = createTableProps(change);
@@ -529,7 +530,7 @@ MctChange* MctUndoGraphXMLfilter::removeTextTableFromXML(QDomElement change)
  * @param change The change node in the XML
  * @return Returns with the created change node.
  */
-MctChange* MctUndoGraphXMLfilter::rowChangeFromXML(QDomElement change)
+MctChange* MctUndoGraphXMLfilter::rowChangeFromXML(const QDomElement &change)
 {
     //determine whether the string change was in table
     MctPosition* pos = getPosFromXML(change);
@@ -558,7 +559,7 @@ MctChange* MctUndoGraphXMLfilter::rowChangeFromXML(QDomElement change)
  * @param change The change node in the XML
  * @return Returns with the created change node.
  */
-MctChange* MctUndoGraphXMLfilter::colChangeFromXML(QDomElement change)
+MctChange* MctUndoGraphXMLfilter::colChangeFromXML(const QDomElement &change)
 {
     //determine whether the string change was in table
     MctPosition* pos = getPosFromXML(change);

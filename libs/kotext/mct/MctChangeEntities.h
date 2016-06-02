@@ -45,7 +45,7 @@ using PropertyMap = QMap<int, QPair<QString, ChangeAction>>;
 class MctTable : public virtual MctNode , public MctCell
 {
 public:
-    MctTable(QString m_cellName = "", QString m_tableName = "", MctCell *cellInfo = NULL);
+    MctTable(const QString &m_cellName = "", const QString &m_tableName = "", MctCell *cellInfo = NULL);
     ~MctTable();
 };
 
@@ -59,7 +59,7 @@ public:
 class MctParagraphBreakInTable : public MctParagraphBreak , public MctTable
 {
 public:
-    MctParagraphBreakInTable(QString m_cellName = "", QString m_tableName = "", MctCell *cellInfo = NULL);
+    MctParagraphBreakInTable(const QString &m_cellName = "", const QString &m_tableName = "", MctCell *cellInfo = NULL);
     ~MctParagraphBreakInTable();
 };
 
@@ -73,17 +73,17 @@ public:
 class MctDelParagraphBreakInTable : public MctDelParagraphBreak , public MctTable
 {
 public:
-    MctDelParagraphBreakInTable(QString m_cellName = "", QString m_tableName = "", MctCell *cellInfo = NULL);
+    MctDelParagraphBreakInTable(const QString &m_cellName = "", const QString &m_tableName = "", MctCell *cellInfo = NULL);
     ~MctDelParagraphBreakInTable();
 };
 
 class MctStringChange : public virtual MctNode
 {
 public:
-    MctStringChange(QString string = "");
+    MctStringChange(const QString &string = "");
     ~MctStringChange();
     QString getString() const;
-    void setString(QString string);
+    void setString(const QString &string);
 private:
     QString m_string;
 };
@@ -91,7 +91,7 @@ private:
 class MctStringChangeInTable : public MctStringChange , public MctTable
 {
 public:
-    MctStringChangeInTable(QString string = "", QString cellName = "", QString tableName = "", MctCell *cellInfo = NULL);
+    MctStringChangeInTable(const QString &string = "", const QString &cellName = "", const QString &tableName = "", MctCell *cellInfo = NULL);
     ~MctStringChangeInTable();
 };
 
@@ -99,7 +99,7 @@ public:
 class ChangeEvent
 {
 public:
-    ChangeEvent(QTextFormat o, QTextFormat n);
+    ChangeEvent(const QTextFormat &o, const QTextFormat &n);
     PropertyMap * changes();    // getter
     int type();
     void calcDiff(int type);
@@ -107,14 +107,14 @@ public:
     QTextFormat oldFormat();
     QTextFormat newFormat();
 
-    void setOldFormat(QTextFormat format);
-    void setNewFormat(QTextFormat format);
+    void setOldFormat(const QTextFormat &format);
+    void setNewFormat(const QTextFormat &format);
 
     // static functions!
-    static void ensureProperties(QTextFormat &format1, QTextFormat format2);
-    static QTextFormat getNewValuesForFormat(QTextFormat current, QTextFormat base);
-    static QTextFormat getOldValuesForFormat(QTextFormat current, QTextFormat base);
-    static void printProperties(QTextFormat format);
+    static void ensureProperties(QTextFormat &format1, const QTextFormat &format2);
+    static QTextFormat getNewValuesForFormat(const QTextFormat& current, const QTextFormat &base);
+    static QTextFormat getOldValuesForFormat(const QTextFormat &current, const QTextFormat &base);
+    static void printProperties(const QTextFormat &format);
 
 private:
     QTextFormat m_oldFormat;
@@ -171,10 +171,10 @@ public:
 class MctChangedTexObjectBase : public virtual MctNode
 {
 public:
-    MctChangedTexObjectBase(QString name, MctPropertyBase *objectProperties = NULL);
+    MctChangedTexObjectBase(const QString &name, MctPropertyBase *objectProperties = NULL);
     virtual ~MctChangedTexObjectBase();
 
-    void setObjectName(QString name);
+    void setObjectName(const QString &name);
     MctPropertyBase* objectProperties() const;
     void setObjectProperties(MctPropertyBase* objectProperties);
 protected:
@@ -184,35 +184,35 @@ protected:
 class MctAddedTextGraphicObject : public MctChangedTexObjectBase
 {
 public:
-    MctAddedTextGraphicObject(QString name, MctEmbObjProperties* embObjProps = NULL);
+    MctAddedTextGraphicObject(const QString &name, MctEmbObjProperties* embObjProps = NULL);
     ~MctAddedTextGraphicObject();
 };
 
 class MctRemovedTextGraphicObject : public MctChangedTexObjectBase
 {
 public:
-    MctRemovedTextGraphicObject(QString name, MctEmbObjProperties* embObjProps = NULL);
+    MctRemovedTextGraphicObject(const QString &name, MctEmbObjProperties* embObjProps = NULL);
     ~MctRemovedTextGraphicObject();
 };
 
 class MctAddedTextGraphicObjectInTable : public MctAddedTextGraphicObject , public MctTable
 {
 public:
-    MctAddedTextGraphicObjectInTable(QString name, MctEmbObjProperties* embObjProps = NULL, QString m_cellName = "", QString m_tableName = "", MctCell *cellInfo = NULL);
+    MctAddedTextGraphicObjectInTable(const QString &name, MctEmbObjProperties* embObjProps = NULL, const QString &m_cellName = "", const QString &m_tableName = "", MctCell *cellInfo = NULL);
     ~MctAddedTextGraphicObjectInTable();
 };
 
 class MctRemovedTextGraphicObjectInTable : public MctRemovedTextGraphicObject , public MctTable
 {
 public:
-    MctRemovedTextGraphicObjectInTable(QString name, MctEmbObjProperties* embObjProps = NULL, QString m_cellName = "", QString m_tableName = "", MctCell *cellInfo = NULL);
+    MctRemovedTextGraphicObjectInTable(const QString &name, MctEmbObjProperties* embObjProps = NULL, const QString &m_cellName = "", const QString &m_tableName = "", MctCell *cellInfo = NULL);
     ~MctRemovedTextGraphicObjectInTable();
 };
 
 class MctAddedEmbeddedObject : public virtual MctNode
 {
 public:
-    MctAddedEmbeddedObject(QString name);
+    MctAddedEmbeddedObject(const QString &name);
     ~MctAddedEmbeddedObject();
 };
 
@@ -226,8 +226,8 @@ public:
 class MctAddedTextTable : public MctChangedTexObjectBase
 {
 public:    
-    MctAddedTextTable(QString name, MctTableProperties* tableProps = NULL);
-    MctAddedTextTable(int row, int col, QTextTableFormat format);
+    MctAddedTextTable(const QString &name, MctTableProperties* tableProps = NULL);
+    MctAddedTextTable(int row, int col, const QTextTableFormat &format);
     ~MctAddedTextTable();
 
     int rowCount(); // unused
@@ -235,7 +235,7 @@ public:
     QTextTableFormat getTableFormat();
     void setRowCount(int row);
     void setColCount(int col);
-    void setTableFormat(QTextTableFormat format);
+    void setTableFormat(const QTextTableFormat &format);
 
 protected:
     int m_row;
@@ -246,7 +246,7 @@ protected:
 class MctRemovedTextTable : public MctChangedTexObjectBase
 {
 public:
-    MctRemovedTextTable(QString name, MctTableProperties* tableProps = NULL);
+    MctRemovedTextTable(const QString &name, MctTableProperties* tableProps = NULL);
     //MctRemovedTextTable(int row, int col, QTextTableFormat format);
     ~MctRemovedTextTable();
 };
@@ -254,7 +254,7 @@ public:
 class MctAddedTextTableInTable : public MctAddedTextTable , public MctTable
 {
 public:
-    MctAddedTextTableInTable(QString name, MctTableProperties* tableProps = NULL, QString cellName = "", QString tableName = "", MctCell *cellInfo = NULL);
+    MctAddedTextTableInTable(const QString &name, MctTableProperties* tableProps = NULL, const QString &cellName = "", const QString &tableName = "", MctCell *cellInfo = NULL);
     //MctAddedTextTableInTable(int row, int col, QTextTableFormat format, MctCell *cellInfo = NULL);
     ~MctAddedTextTableInTable();
 };
@@ -262,28 +262,28 @@ public:
 class MctRemovedTextTableInTable : public MctRemovedTextTable , public MctTable
 {
 public:
-    MctRemovedTextTableInTable(QString name, MctTableProperties* tableProps = NULL, QString cellName = "", QString tableName = "", MctCell *cellInfo = NULL);
+    MctRemovedTextTableInTable(const QString &name, MctTableProperties* tableProps = NULL, const QString &cellName = "", const QString &tableName = "", MctCell *cellInfo = NULL);
     ~MctRemovedTextTableInTable();
 };
 
 class MctStylePropertyChangeInTable : public MctStylePropertyChange , public MctTable
 {
 public:
-    MctStylePropertyChangeInTable(ChangeEventList *propChanges, QString cellName = "", QString tableName = "", MctCell *cellInfo = NULL);
+    MctStylePropertyChangeInTable(ChangeEventList *propChanges, const QString &cellName = "", const QString &tableName = "", MctCell *cellInfo = NULL);
     ~MctStylePropertyChangeInTable();
 };
 
 class MctRowChangeInTable : public virtual MctNode
 {
 public:
-    MctRowChangeInTable(int startRow, int rowCount, QString tableName);
+    MctRowChangeInTable(int startRow, int rowCount, const QString &tableName);
     ~MctRowChangeInTable();
     int startRow() const;
     void setStartRow(int n);
     int rowCount() const;
     void setRowCount(int n);
     QString tableName() const;
-    void setTableName(QString n);
+    void setTableName(const QString &n);
 private:
     int m_startRow;
     int m_rowCount;
@@ -293,14 +293,14 @@ private:
 class MctColChangeInTable : public virtual MctNode
 {
 public:
-    MctColChangeInTable(int startCol, int colCount, QString tableName);
+    MctColChangeInTable(int startCol, int colCount, const QString &tableName);
     ~MctColChangeInTable();   
     int startCol() const;
     void setStartCol(int n);
     int colCount() const;
     void setColCount(int n);
     QString tableName() const;
-    void setTableName(QString n);
+    void setTableName(const QString &n);
 private:
     int m_startCol;
     int m_colCount;
@@ -310,28 +310,28 @@ private:
 class MctAddedRowInTable : public MctRowChangeInTable
 {
 public:
-    MctAddedRowInTable(int m_startRow, int rowCount, QString m_tableName);
+    MctAddedRowInTable(int m_startRow, int rowCount, const QString &m_tableName);
     ~MctAddedRowInTable();
 };
 
 class MctRemovedRowInTable : public MctRowChangeInTable
 {
 public:
-    MctRemovedRowInTable(int m_startRow, int rowCount, QString m_tableName);
+    MctRemovedRowInTable(int m_startRow, int rowCount, const QString &m_tableName);
     ~MctRemovedRowInTable();
 };
 
 class MctAddedColInTable : public MctColChangeInTable
 {
 public:
-    MctAddedColInTable(int m_startCol, int colCount, QString tableName);
+    MctAddedColInTable(int m_startCol, int colCount, const QString &tableName);
     ~MctAddedColInTable();
 };
 
 class MctRemovedColInTable : public MctColChangeInTable
 {
 public:
-    MctRemovedColInTable(int m_startCol, int colCount, QString tableName);
+    MctRemovedColInTable(int m_startCol, int colCount, const QString &tableName);
     ~MctRemovedColInTable();
 };
 

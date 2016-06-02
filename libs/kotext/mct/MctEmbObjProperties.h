@@ -31,21 +31,21 @@
 class MctEmbObjProperties : public MctPropertyBase
 {
 public:
-    MctEmbObjProperties(QString name);
-    MctEmbObjProperties(QString name, KoShape *m_shape);
-    MctEmbObjProperties(QString name, KoShape *m_shape, QPointF m_pos, QSizeF m_size);
+    MctEmbObjProperties(const QString &name);
+    MctEmbObjProperties(const QString &name, KoShape *m_shape);
+    MctEmbObjProperties(const QString &name, KoShape *m_shape, const QPointF &m_pos, const QSizeF &m_size);
     ~MctEmbObjProperties();
 
-    QString backupFileFromOdt(QString m_innerURL, QString absOdtURL);    // Makes a copy of a metadata stored in the Odt.
+    QString backupFileFromOdt(const QString &m_innerURL, const QString &absOdtURL);    // Makes a copy of a metadata stored in the Odt.
     void restoreBackupFile();    // Makes a copy of a metadata stored in the Odt. The Manifest file is also modified in order to get valid odt.
     void deleteBackupFile();
-    void mediaType(QString fileName);    // Gets media type of the embedded object in the manifest.xml
-    void regManifest(QString fileName);     // Registers the embedded filenames in the manifest.xml
+    void mediaType(const QString &fileName);    // Gets media type of the embedded object in the manifest.xml
+    void regManifest(const QString &fileName);     // Registers the embedded filenames in the manifest.xml
     PropertyDictionary * compareProperties(const MctEmbObjProperties& otherEmbObjProperties); // Compares properties with properties of another embObjProps class
-    QString createInnerURL(QString graphicURL); // Creates inner URL in the Odt for embedded object.
-    QString createGraphicURL(QString m_innerURL); // Creates graphic URL in the Odt for embedded object.
+    QString createInnerURL(const QString &graphicURL); // Creates inner URL in the Odt for embedded object.
+    QString createGraphicURL(const QString &m_innerURL); // Creates graphic URL in the Odt for embedded object.
 
-    void setOdtUrl(QString odt);
+    void setOdtUrl(const QString &odt);
 
     bool isBackedup();
 
@@ -72,11 +72,11 @@ public:
     virtual void fillUpProperties();
     void addStrokeStyleChanges(KoShapeStroke *newStroke);
     void addShadowStyleChanges(KoShapeShadow *newShadow);
-    void addSizeChanged(QSizeF prevPos);
+    void addSizeChanged(const QSizeF &prevPos);
     void addRotationChanged(double rotation);
     KoShape* shape();
 
-    void setPrevPos(QPointF prevPos);
+    void setPrevPos(const QPointF &prevPos);
     void textGraphicStyleChanges(MctEmbObjProperties* props2, KoShape* m_shape);
     bool removeDir(const QString & dirName);
 
@@ -91,7 +91,7 @@ private:
     QPointF m_pos;      // u
     QSizeF m_size;      // u
 
-    QString convertURL(QString oldPrefix, QString newPrefix, QString name);
+    QString convertURL(const QString &oldPrefix, const QString &newPrefix, const QString &name);
 };
 
 #endif // MCTEMBOBJPROPERTIES_H

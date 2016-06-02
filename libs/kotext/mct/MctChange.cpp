@@ -57,7 +57,7 @@ MctChange::~MctChange()
  * @brief This stores XML node corresponding to the change node in change attribute.
  * @param change The XML node representing the change event.
  */
-void MctChange::addElementTreeNode(QDomElement change)
+void MctChange::addElementTreeNode(const QDomElement &change)
 {
     this->m_change = change;
     this->m_position = NULL;
@@ -172,7 +172,7 @@ QDomElement MctChange::changeNode()
  * @brief This sets the xml change node.
  * @param change The xml node to set
  */
-void MctChange::setChangeNode(QDomElement change)
+void MctChange::setChangeNode(const QDomElement &element)
 {
-    this->m_change = change;
+    this->m_change = element;
 }

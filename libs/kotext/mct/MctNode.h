@@ -32,7 +32,7 @@ public:
     virtual void setId(unsigned long id);
     virtual unsigned long id() const;
 
-    void setName(QString name);
+    void setName(const QString &name);
     QString name();
 
 protected:

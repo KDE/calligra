@@ -42,7 +42,7 @@ class KoTextDocument;
 class MctAbstractGraph
 {
 public:
-    MctAbstractGraph(QString m_redoOrUndo, QString odt, KoTextDocument *m_koTextDoc);
+    MctAbstractGraph(const QString &redoOrUndo, const QString &odt, KoTextDocument *koTextDoc);
     virtual ~MctAbstractGraph();
 
     QList<MctChange*> *changeNodes() const;
@@ -58,19 +58,20 @@ public:
     void setIdDates(QMap<ulong, QDateTime> *m_idDates);
 
     QString redoOrUndo() const;
-    void setRedoOrUndo(QString string);
+
+    void setRedoOrUndo(const QString &string);
 
     QString odtFile() const;
-    void setOdtFile(QString name);
+    void setOdtFile(const QString &name);
 
     QString filename() const;
-    void setFilename(QString name);
+    void setFilename(const QString &name);
 
     QString nodeTag() const;
-    void setNodeTag(QString name);
+    void setNodeTag(const QString &name);
 
     QDomElement root() const;
-    void setRoot(QDomElement m_root);
+    void setRoot(const QDomElement &m_root);
 
     QDomDocument * doc() const;
     void setDoc(QDomDocument *m_doc);
@@ -78,8 +79,8 @@ public:
     KoTextDocument * koTextDoc();
 
 
-    MctChangeset * getChangeset(QDateTime date);
-    QList<MctChangeset*> * getChangesetList(QDateTime date = QDateTime());
+    MctChangeset * getChangeset(const QDateTime &date);
+    QList<MctChangeset*> * getChangesetList(const QDateTime &date = QDateTime());
     QList<MctChangeset*> * getChangesetListByDates(QList<QDateTime> *dates);
 
     void fillUpGraph();
@@ -87,21 +88,21 @@ public:
     void correctBlockPosition(QDomNode *node, QMap<ulong, ulong> *indexes, bool import = true);
     void correctBlockPositionForExport(QDomDocument *document, QMap<ulong, ulong> *indexes);
 
-    MctEmbObjProperties * createEmbObjProps(QDomElement change);
-    MctEmbObjProperties * createEmbObjShapeProps(QDomElement change);
-    void setShapeStyles(KoShape* shape, QDomElement change);
-    KoShape * createShapeFromProps(QDomElement change);
-    const KoProperties * getShapeProperties(QString type);
-    MctTableProperties * createTableProps(QDomElement change);
+    MctEmbObjProperties * createEmbObjProps(const QDomElement &change);
+    MctEmbObjProperties * createEmbObjShapeProps(const QDomElement &change);
+    void setShapeStyles(KoShape* shape, const QDomElement &change);
+    KoShape * createShapeFromProps(const QDomElement &change);
+    const KoProperties * getShapeProperties(const QString &type);
+    MctTableProperties * createTableProps(const QDomElement &change);
 
     QDateTime getDateFromId(ulong id);
     MctChangeset * findChangeset(ulong revNum);
 
     void sortDates();
 
-    MctChangeset * addChangeset(QList<MctChange*> *changes, MctAuthor* author, QDateTime date, QString comment, uint parentId = 0, bool merge = false);
+    MctChangeset * addChangeset(QList<MctChange*> *changes, MctAuthor* author, const QDateTime &date, const QString &comment, uint parentId = 0, bool merge = false);
 
-    int dateComapre(QDateTime d1, QDateTime d2) ;
+    int dateComapre(const QDateTime &d1, const QDateTime &d2) ;
 
     void findParents(MctChangeset *changsetNode, bool merge = false);
     void correctParentsAndChildren(MctChangeset *changsetNode, bool merge=false);
@@ -114,12 +115,12 @@ public:
 
     void addChangesetNodeWithCorr(MctChangeset *changesetNode);
 
-    QVector<QDateTime> * findLaterDates(QDateTime date);
-    QVector<QDateTime> * findEarlierDates(QDateTime date);
+    QVector<QDateTime> * findLaterDates(const QDateTime &date);
+    QVector<QDateTime> * findEarlierDates(const QDateTime &date);
 
     void correctChangesetNodeList(MctChangeset *changesetNode);
-    void correctChangesetNodeListWithDate(MctChangeset*changesetNode, QString withdates = DATE_LATER, bool foradd = true);
-    int correctChangesetNode(MctChangeset*changesetNode, QString withdates = DATE_LATER, bool foradd = true);
+    void correctChangesetNodeListWithDate(MctChangeset*changesetNode, const QString &withdates = DATE_LATER, bool foradd = true);
+    int correctChangesetNode(MctChangeset*changesetNode, const QString &withdates = DATE_LATER, bool foradd = true);
     int correctChangesetNode2(MctChangeset *changesetNode, QList<MctChangeset*> *changesetnodes, bool foradd = true);
 
     MctChange* correctChangeNode(MctChange* changeNode, MctChange* prevChangeNode, bool foradd=true);
@@ -127,24 +128,24 @@ public:
     MctPosition * correctPosition(MctPosition *pos, MctPosition *prevpos, MctChangeTypes prevchangetype, MctPosition *pos_orig = NULL, bool foradd=true);
 
     void removeChangeset(MctChangeset *changesetnode, bool clearchanges=true);
-    MctChangeset * popChangeset(QDateTime date);
+    MctChangeset * popChangeset(const QDateTime &date);
 
     virtual void addChange(MctChange* change, MctChangeset* changeset) = 0 ;
-    virtual void addChangeFromXML(QDomNode change, MctChangeset* changeset) = 0;
+    virtual void addChangeFromXML(const QDomNode &change, MctChangeset* changeset) = 0;
 
     void exportGraph(QDomDocument *document);
-    void regManifest(QString filename);
+    void regManifest(const QString &filename);
 
     ulong getCurrentRevision();
-    MctPosition * getPosFromXML(QDomElement change, bool moved=false);
+    MctPosition * getPosFromXML(const QDomElement &change, bool moved=false);
 
-    void addTableDataToPos(QDomElement change, MctChange *changeNode, bool moved=false);
+    void addTableDataToPos(QDomElement &change, MctChange *changeNode, bool moved=false);
     void addPos2change(QDomElement *change, MctPosition *pos, bool moved=false);
 
     template <typename T> void reverseList(QList<T> **list);
 
     QList<MctChange *> *  findMovedChanges(QList<MctChange *> * changes);
-    bool removeDir(const QString & dirName);
+    bool removeDir(const QString &dirName);
 
 
     static const QString DATE_EARLIER;

@@ -29,11 +29,11 @@ public:
     ~MctAuthor();
 
     QString name() const;
-    void setName(QString name);
+    void setName(const QString &name);
     QString forename() const;
-    void setForename(QString name);
+    void setForename(const QString &name);
     QString surname() const;
-    void setSurname(QString name);
+    void setSurname(const QString &name);
 
 private:    
 

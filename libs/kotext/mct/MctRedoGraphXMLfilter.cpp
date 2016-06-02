@@ -27,7 +27,8 @@
 #include "KoDocument.h"
 #include "MctEmbObjProperties.h"
 
-MctRedoGraphXMLfilter::MctRedoGraphXMLfilter(QString redoOrUndo, QString odt, KoTextDocument *koTextDoc) : MctUndoGraphXMLfilter(redoOrUndo, odt, koTextDoc)
+MctRedoGraphXMLfilter::MctRedoGraphXMLfilter(const QString &redoOrUndo, const QString &odt, KoTextDocument *koTextDoc)
+    : MctUndoGraphXMLfilter(redoOrUndo, odt, koTextDoc)
 {
 
 }
@@ -42,7 +43,7 @@ MctRedoGraphXMLfilter::~MctRedoGraphXMLfilter()
  * @param change The change node in the XML
  * @param changeset The parent changeset node
  */
-void MctRedoGraphXMLfilter::addChangeFromXML(QDomNode node, MctChangeset* changeset)
+void MctRedoGraphXMLfilter::addChangeFromXML(const QDomNode &node, MctChangeset* changeset)
 {
     QDomElement change = node.toElement();
     MctChange *changeNode = NULL;
@@ -86,7 +87,7 @@ void MctRedoGraphXMLfilter::addChangeFromXML(QDomNode node, MctChangeset* change
     changeset->addChange(changeNode);
 }
 
-void MctRedoGraphXMLfilter::particularStyleChangeFromXML(QDomNode node, ChangeEventList * propchanges)
+void MctRedoGraphXMLfilter::particularStyleChangeFromXML(const QDomNode &node, ChangeEventList * propchanges)
 {
     QDomNamedNodeMap attribs = node.attributes();
     QString strtype = attribs.namedItem("type").toAttr().value();
@@ -144,7 +145,7 @@ void MctRedoGraphXMLfilter::particularStyleChangeFromXML(QDomNode node, ChangeEv
  * @param change The change node in the XML
  * @return Returns with the created change node.
  */
-MctChange* MctRedoGraphXMLfilter::addTextFrameFromXML(QDomElement change)
+MctChange* MctRedoGraphXMLfilter::addTextFrameFromXML(const QDomElement &change)
 {
     QString name = change.attribute("name");
     MctChangeTypes changeType = MctChangeTypes::AddedTextFrame;
@@ -160,7 +161,7 @@ MctChange* MctRedoGraphXMLfilter::addTextFrameFromXML(QDomElement change)
  * @param change The change node in the XML
  * @return Returns with the created change node.
  */
-MctChange* MctRedoGraphXMLfilter::addTextGraphicObjectFromXML(QDomElement change)
+MctChange* MctRedoGraphXMLfilter::addTextGraphicObjectFromXML(const QDomElement &change)
 {
     QString name = change.attribute("name");
     MctEmbObjProperties* cembObjProps = NULL;
@@ -204,7 +205,7 @@ MctChange* MctRedoGraphXMLfilter::addTextGraphicObjectFromXML(QDomElement change
  * @param change The change node in the XML
  * @return Returns with the created change node.
  */
-MctChange* MctRedoGraphXMLfilter::removeTextGraphicObjectFromXML(QDomElement change)
+MctChange* MctRedoGraphXMLfilter::removeTextGraphicObjectFromXML(const QDomElement &change)
 {
     QString name = change.attribute("name");
     MctEmbObjProperties* cembObjProps = createEmbObjProps(change);
@@ -222,7 +223,7 @@ MctChange* MctRedoGraphXMLfilter::removeTextGraphicObjectFromXML(QDomElement cha
  * @param change The change node in the XML
  * @return Returns with the created change node.
  */
-MctChange* MctRedoGraphXMLfilter::addEmbeddedObjectFromXML(QDomElement change)
+MctChange* MctRedoGraphXMLfilter::addEmbeddedObjectFromXML(const QDomElement &change)
 {
     QString name = change.attribute("name");
     MctChangeTypes changeType = MctChangeTypes::AddedEmbeddedObject;
@@ -238,7 +239,7 @@ MctChange* MctRedoGraphXMLfilter::addEmbeddedObjectFromXML(QDomElement change)
  * @param change The change node in the XML
  * @return Returns with the created change node.
  */
-MctChange* MctRedoGraphXMLfilter::rowChangeFromXML(QDomElement change)
+MctChange* MctRedoGraphXMLfilter::rowChangeFromXML(const QDomElement &change)
 {
     //determine whether the string change was in table
     MctPosition* pos = getPosFromXML(change);
@@ -267,7 +268,7 @@ MctChange* MctRedoGraphXMLfilter::rowChangeFromXML(QDomElement change)
  * @param change The change node in the XML
  * @return Returns with the created change node.
  */
-MctChange* MctRedoGraphXMLfilter::colChangeFromXML(QDomElement change)
+MctChange* MctRedoGraphXMLfilter::colChangeFromXML(const QDomElement &change)
 {
     //determine whether the string change was in table
     MctPosition* pos = getPosFromXML(change);

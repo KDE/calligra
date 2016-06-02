@@ -31,17 +31,17 @@ using PropertyDictionary = QVariantMap;
 class MctPropertyBase
 {
 public:
-    MctPropertyBase(QString name = "undefined");
+    MctPropertyBase(const QString &name = "undefined");
     virtual ~MctPropertyBase();
 
     QString propertyName() const;
-    void setPropertyName(QString name);
+    void setPropertyName(const QString &name);
     PropertyDictionary * props() const;
     void setProps(PropertyDictionary* props);
     PropertyDictionary * props2Export() const;
     void setProps2Export(PropertyDictionary* props);
     QString innerUrl()const ;
-    void setInnerUrl(QString url);
+    void setInnerUrl(const QString &url);
 
 protected:
 #if 0
