@@ -198,9 +198,6 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
     plugSharedAction("edit_redo", this, SLOT(slotRedo()));
     setAvailable("edit_undo", false);
     setAvailable("edit_redo", false);
-   //!todo qundo
-    connect(d->history, SIGNAL(commandExecuted(K3Command*)),
-            this, SLOT(slotCommandExecuted(K3Command*)));
 #endif
 
 #ifdef KEXI_DEBUG_GUI
