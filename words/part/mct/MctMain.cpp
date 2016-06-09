@@ -75,7 +75,7 @@ MctMain::~MctMain()
     MctStaticData::instance()->setMctState(false);
 }
 
-MctPosition* MctMain::createPositionInTable(QTextCursor cursor)
+MctPosition* MctMain::createPositionInTable(const QTextCursor &cursor)
 {
     QTextBlock startBlock = cursor.document()->findBlock(cursor.anchor());
     QTextBlock endBlock = cursor.document()->findBlock(cursor.position());
@@ -421,7 +421,7 @@ void MctMain::createMctChange(QTextCursor &selection, MctChangeTypes changeType,
     //MctStaticData::instance()->getChanges()->append(change);
 }
 
-void MctMain::addGraphicMctChange(KoShape &selection, MctChangeTypes changeType, const KUndo2MagicString title, QString fileUrl, ChangeAction action)
+void MctMain::addGraphicMctChange(KoShape &selection, MctChangeTypes changeType, const KUndo2MagicString title, const QString &fileUrl, ChangeAction action)
 {
     qDebug() << "selection: " << selection.position();
     MctNode *changeEntity;
@@ -455,7 +455,7 @@ void MctMain::shapeOperationSlot(KoShape *shape, ChangeAction action)
     }
 }
 
-void MctMain::createShapeMctChange(QString type, QPointF pos, KoShape &shape, ChangeAction action, QPointF *prevPos)
+void MctMain::createShapeMctChange(const QString &type, const QPointF &pos, KoShape &shape, ChangeAction action, QPointF *prevPos)
 {
     MctNode *changeEntity;
     MctPosition *position = NULL;
@@ -495,7 +495,7 @@ void MctMain::createShapeMctChange(QString type, QPointF pos, KoShape &shape, Ch
     MctStaticData::instance()->getChanges()->append(change);
 }
 
-void MctMain::createShapePositionChanged(KoShape *selectedShape, QPointF point, QPointF *prevPos)
+void MctMain::createShapePositionChanged(KoShape *selectedShape, const QPointF &point, QPointF *prevPos)
 {
     qDebug() << "Shape type: " << selectedShape->getFileUrl() << ", position: " << point;
     KoShape *shape1 = MctStaticData::instance()->getKoDocument()->emitPosition(point);
@@ -507,7 +507,7 @@ void MctMain::createShapePositionChanged(KoShape *selectedShape, QPointF point, 
     }
 }
 
-void MctMain::createShapeStyleChanged(QString type, QPointF pos, KoShape &shape, KoShapeStroke *newStroke, KoShapeShadow *newShadow, QPointF *prevPos, QSizeF prevSize, double rotation)
+void MctMain::createShapeStyleChanged(const QString &type, const QPointF &pos, KoShape &shape, KoShapeStroke *newStroke, KoShapeShadow *newShadow, QPointF *prevPos, const QSizeF &prevSize, double rotation)
 {
     MctNode *changeEntity;
     MctPosition *position = NULL;
@@ -547,7 +547,7 @@ void MctMain::createShapeStyleChanged(QString type, QPointF pos, KoShape &shape,
     MctStaticData::instance()->getChanges()->append(change);
 }
 
-void MctMain::createRevision(QString author, QString comment)
+void MctMain::createRevision(const QString &author, const QString &comment)
 {
 #if QT_VERSION < 0x050000
     bool oldState = m_editor->blockSignals(true);
@@ -575,7 +575,7 @@ void MctMain::createRevision(QString author, QString comment)
  * @brief MctMain::restoreRevision is restoring the selected revision
  * @param target is the id of the revision
  */
-void MctMain::restoreRevision(QString target)
+void MctMain::restoreRevision(QString &target)
 {
 #if QT_VERSION < 0x050000
     bool oldState = m_editor->blockSignals(true);
@@ -661,7 +661,7 @@ int MctMain::redoRevCount()
  *
  * @warning It should remove child (or depending) revision, but this part is not working yet!
  */
-void MctMain::removeRevision(QString target)
+void MctMain::removeRevision(QString &target)
 {
 // FIXME: works differently than the legacy python code
 
@@ -865,7 +865,7 @@ QString MctMain::fileUrl() const
     return m_fileURL;
 }
 
-void MctMain::documentSavedAs(QString fileUrl)
+void MctMain::documentSavedAs(const QString &fileUrl)
 {
     MctStaticData::instance()->setFileURL(fileUrl);
     MctStaticData::instance()->getUndoGraph()->setFilename(fileUrl);

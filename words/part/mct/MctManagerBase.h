@@ -46,7 +46,7 @@ public:
 protected:
     void loadRevisionTrees(QTreeWidget *undoTreeWidget, QTreeWidget *redoTreeWidget,
                            ChangeSetMap *undoMap = nullptr, ChangeSetMap *redoMap = nullptr);
-    void addRevision2Tree(QTreeWidget *parent, RevisionIterator changeset, QString index, bool isCurrent = false);
+    void addRevision2Tree(QTreeWidget *parent, RevisionIterator changeset, const QString &index, bool isCurrent = false);
     void addChange2Tree(QTreeWidgetItem *parent, ChangeIterator change);
     QString lookForDependingParents(QList<QTreeWidgetItem*> selection, QList<MctChangeset*> *changesetNodes, QList<ulong> *childListAll, ChangeType type, MctUndoGraphXMLfilter *graphToMerge);
     QString lookForDependingChildren(QList<QTreeWidgetItem*> selection, QList<MctChangeset*> *changesetNodes, QList<ulong> *childListAll, ChangeType type, MctUndoGraphXMLfilter *graphToMerge);

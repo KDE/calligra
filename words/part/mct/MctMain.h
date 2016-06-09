@@ -50,20 +50,20 @@ public:
     MctMain(KWDocument *document, QString fileUrl);
     ~MctMain();
 
-    void createRevision(QString author, QString comment);
-    void restoreRevision(QString target);
+    void createRevision(const QString &author, const QString &comment);
+    void restoreRevision(QString &target);
     void updateRedoRevision(int revision);
     void restoreUndoRevision(int revision);
     int undoRevCount();
     int redoRevCount();
-    void removeRevision(QString target);
+    void removeRevision(QString &target);
     void clearRevisionHistory();
     MctUndoClass* undoop();
     MctRedoClass* redoop();
 
     void normailizeChangebuffer();
     QString fileUrl() const;
-    void documentSavedAs(QString fileUrl);
+    void documentSavedAs(const QString &fileUrl);
 
     void connectSignals();
     void disconnectSignals();
@@ -72,11 +72,11 @@ signals:
 
 public slots:
     void createMctChange(QTextCursor &selection, MctChangeTypes changeType, const KUndo2MagicString title, QTextFormat format, QTextFormat prevFormat);
-    void addGraphicMctChange(KoShape &selection, MctChangeTypes changeType, const KUndo2MagicString title, QString fileUrl, ChangeAction action);
+    void addGraphicMctChange(KoShape &selection, MctChangeTypes changeType, const KUndo2MagicString title, const QString &fileUrl, ChangeAction action);
     void shapeOperationSlot(KoShape *shape, ChangeAction action);
-    void createShapeMctChange(QString type, QPointF pos, KoShape &shape, ChangeAction action, QPointF *prevPos = nullptr);
-    void createShapePositionChanged(KoShape *selectedShape, QPointF point, QPointF *prevPos);
-    void createShapeStyleChanged(QString type, QPointF pos, KoShape &shape, KoShapeStroke *newStroke, KoShapeShadow *newShadow, QPointF *prevPos, QSizeF prevSize, double rotation);
+    void createShapeMctChange(const QString &type, const QPointF &pos, KoShape &shape, ChangeAction action, QPointF *prevPos = nullptr);
+    void createShapePositionChanged(KoShape *selectedShape, const QPointF &point, QPointF *prevPos);
+    void createShapeStyleChanged(const QString &type, const QPointF &pos, KoShape &shape, KoShapeStroke *newStroke, KoShapeShadow *newShadow, QPointF *prevPos, const QSizeF &prevSize, double rotation);
 
 private:    
     KWDocument *m_doc;
@@ -95,7 +95,7 @@ private:
     void setAnchorPosition(MctPosition *anchor, MctPosition *InnerAnchor, MctChangeTypes changeType);
     bool posCheckInTable(MctPosition *lastpos, MctPosition *pos, MctChangeTypes changeType);
     void collectChildren(MctChangeset *change, QList<ulong> *childrenIDs, MctAbstractGraph *graph);
-    MctPosition* createPositionInTable(QTextCursor cursor);
+    MctPosition* createPositionInTable(const QTextCursor &cursor);
     //void correctBlockPositions();
 };
 

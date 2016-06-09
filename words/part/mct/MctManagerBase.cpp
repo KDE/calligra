@@ -91,7 +91,7 @@ void MctManagerBase::loadRevisionTrees(QTreeWidget *undoTreeWidget, QTreeWidget 
     redoTreeWidget->resizeColumnToContents(0);
 }
 
-void MctManagerBase::addRevision2Tree(QTreeWidget* parent, RevisionIterator changeset, QString index, bool isCurrent)
+void MctManagerBase::addRevision2Tree(QTreeWidget* parent, RevisionIterator changeset, const QString &index, bool isCurrent)
 {
     // date of revision
     QTreeWidgetItem *revTreeItem = new QTreeWidgetItem(parent);
