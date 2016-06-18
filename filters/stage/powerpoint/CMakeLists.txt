@@ -6,11 +6,7 @@ include_directories(
     ${KOTEXT_INCLUDES}
 )
 
-if("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS} -KPIC")
-else()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS} -fPIC")
-endif()
 
 add_library(ppttoodplib STATIC PptDebug.cpp PptToOdp.cpp ParsedPresentation.cpp DateTimeFormat.cpp pptstyle.cpp)
 target_link_libraries(ppttoodplib PUBLIC koodf mso)

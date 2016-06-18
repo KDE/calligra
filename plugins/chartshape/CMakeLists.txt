@@ -71,11 +71,7 @@ ki18n_wrap_ui(chartshape_LIB_SRCS
 add_library(chartshapecore STATIC ${chartshape_LIB_SRCS})
 target_link_libraries(chartshapecore  komain kotextlayout KChart)
 if(NOT MSVC AND NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
-    if("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
-        set_target_properties(chartshapecore PROPERTIES COMPILE_FLAGS "-KPIC")
-    else()
-        set_target_properties(chartshapecore PROPERTIES COMPILE_FLAGS "-fPIC")
-    endif()
+    set_target_properties(chartshapecore PROPERTIES COMPILE_FLAGS "-fPIC")
 endif()
 
 

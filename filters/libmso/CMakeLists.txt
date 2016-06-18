@@ -12,11 +12,7 @@ include_directories(
 kde_enable_exceptions()
 
 if(NOT MSVC AND NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
-    if("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -KPIC")
-    else()
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-    endif()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 endif()
 
 add_library(mso STATIC
