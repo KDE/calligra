@@ -785,8 +785,8 @@ public:
     */
     static QString sqlColumnsList(QueryColumnInfo::List* infolist, const Driver *driver);
 
-    /*! \return cached sql list created using sqlColumnsList() on a list returned
-     by autoIncrementFields(). */
+    /*! \return cached list of autoincrement fields created using sqlColumnsList() on a list returned
+     by autoIncrementFields(). The field names are escaped using driver escaping. */
     QString autoIncrementSQLFieldsList(const Driver *driver);
 
     /*! Sets a WHERE expression \a exp. It will be owned by this query,
