@@ -263,9 +263,6 @@ QString FieldList::sqlFieldsList(Field::List* list, const Driver *driver,
     result.reserve(256);
     bool start = true;
     const QString tableAliasAndDot(tableAlias.isEmpty() ? QString() : (tableAlias + "."));
-    int kexiEscaping = drvEscaping | Driver::EscapeDriver;
-    kexiEscaping ^= Driver::EscapeDriver;
-    kexiEscaping |= Driver::EscapeKexi;
     foreach(Field *f, *list) {
         if (!start)
             result += separator;
