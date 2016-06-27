@@ -262,7 +262,8 @@ QString FieldList::sqlFieldsList(Field::List* list, const Driver *driver,
     QString result;
     result.reserve(256);
     bool start = true;
-    const QString tableOrAliasAndDot(tableOrAlias.isEmpty() ? QString() : (tableOrAlias + '.'));
+    const QString tableOrAliasAndDot(tableOrAlias.isEmpty() ? QString()
+                           : (escapeIdentifier(driver, tableOrAlias, drvEscaping) + '.'));
     foreach(Field *f, *list) {
         if (!start)
             result += separator;
