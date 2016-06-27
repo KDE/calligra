@@ -1562,7 +1562,8 @@ quint64 Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const Q
     }
     RecordData rdata;
     if (row_id <= 0 || true != querySingleRecord(
-                QLatin1String("SELECT ") + tableName + QLatin1Char('.') + aiFieldName + QLatin1String(" FROM ") + tableName
+                QLatin1String("SELECT ") + escapeIdentifier(tableName) + QLatin1Char('.')
+                + escapeIdentifier(aiFieldName) + QLatin1String(" FROM ") + escapeIdentifier(tableName)
                 + QLatin1String(" WHERE ") + m_driver->beh->ROW_ID_FIELD_NAME + QLatin1Char('=') + QString::number(row_id), rdata)) {
 //  KexiDBDbg << "Connection::lastInsertedAutoIncValue(): row_id<=0 || true!=querySingleRecord()";
         return (quint64) - 1; //ULL;
