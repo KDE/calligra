@@ -255,31 +255,31 @@ QStringList FieldList::names() const
 
 //static
 QString FieldList::sqlFieldsList(Field::List* list, const Driver *driver,
-                                 const QString& separator, const QString& tableAlias, int drvEscaping)
+                                 const QString& separator, const QString& tableOrAlias, int drvEscaping)
 {
     if (!list)
         return QString();
     QString result;
     result.reserve(256);
     bool start = true;
-    const QString tableAliasAndDot(tableAlias.isEmpty() ? QString() : (tableAlias + "."));
+    const QString tableOrAliasAndDot(tableOrAlias.isEmpty() ? QString() : (tableOrAlias + '.'));
     foreach(Field *f, *list) {
         if (!start)
             result += separator;
         else
             start = false;
-        result += (tableAliasAndDot + escapeIdentifier(driver, f->name(), drvEscaping));
+        result += (tableOrAliasAndDot + escapeIdentifier(driver, f->name(), drvEscaping));
     }
     return result;
 }
 
 QString FieldList::sqlFieldsList(const Driver *driver,
-                                 const QString& separator, const QString& tableAlias, int drvEscaping)
+                                 const QString& separator, const QString& tableOrAlias, int drvEscaping)
 {
     if (!m_sqlFields.isEmpty())
         return m_sqlFields;
 
-    m_sqlFields = FieldList::sqlFieldsList(&m_fields, driver, separator, tableAlias, drvEscaping);
+    m_sqlFields = FieldList::sqlFieldsList(&m_fields, driver, separator, tableOrAlias, drvEscaping);
     return m_sqlFields;
 }
 

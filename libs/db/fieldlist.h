@@ -166,20 +166,20 @@ public:
      for "INSERT INTO (xxx) ..". The result of this method is effectively cached,
      and it is invalidated when set of fields changes (e.g. using clear()
      or addField()).
-     \a tableAlias, if provided is prepended to each field, so the resulting
-     names will be in form tableAlias.fieldName. This option is used for building
-     queries with joins, where fields have to be spicified without ambiguity.
+     \a tableOrAlias, if provided is prepended to each field, so the resulting
+     names will be in form tableOrAlias.fieldName. This option is used for building
+     queries with joins, where fields have to be specified without ambiguity.
      See @ref Connection::selectStatement() for example use.
      \a drvEscaping can be used to alter default escaping type.
      \a driver is used for escaping identifiers, if 0, Kexi escaping is used.
     */
     QString sqlFieldsList(const Driver *driver, const QString& separator = QString::fromLatin1(","),
-                          const QString& tableAlias = QString(),
+                          const QString& tableOrAlias = QString(),
                           int drvEscaping = Driver::EscapeDriver | Driver::EscapeAsNecessary);
 
     /*! Like above, but this is convenient static function, so you can pass any \a list here. */
     static QString sqlFieldsList(Field::List* list, const Driver *driver,
-                                 const QString& separator = QString::fromLatin1(","), const QString& tableAlias = QString(),
+                                 const QString& separator = QString::fromLatin1(","), const QString& tableOrAlias = QString(),
                                  int drvEscaping = Driver::EscapeDriver | Driver::EscapeAsNecessary);
 
     /*! @internal Renames field \a oldName to \a newName.
