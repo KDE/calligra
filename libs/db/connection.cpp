@@ -1164,12 +1164,12 @@ bool Connection::insertRecord(FieldList& fields, const QList<QVariant>& values)
     m_sql.clear();
     QList<QVariant>::ConstIterator it = values.constBegin();
 // int i=0;
-    QString tableName = escapeIdentifier(flist->first()->table()->name());
+    const QString tableName(flist->first()->table()->name());
     while (fieldsIt != flist->constEnd() && it != values.constEnd()) {
         Field *f = *fieldsIt;
         if (m_sql.isEmpty())
             m_sql = QLatin1String("INSERT INTO ") +
-                    tableName + QLatin1Char('(') +
+                    escapeIdentifier(tableName) + QLatin1Char('(') +
                     fields.sqlFieldsList(m_driver) + ") VALUES (";
         else
             m_sql += ",";
