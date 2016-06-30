@@ -1211,10 +1211,11 @@ void ReportDesigner::createDockers()
 
 void ReportDesigner::setReportData( const QString &tag )
 {
-
+    emit optionsModified();
     ReportData *rd = Report::findReportData( m_reportdatamodels, tag );
-    if ( rd != m_designer->reportData() ) {
-        emit optionsModified();
+    if ( rd ) {
+        rd = rd->clone(); // KReportDesigner takes ownership, so give it a clone it can delete
+        connect(this, SIGNAL(projectC
     }
     m_designer->setReportData( rd );
 
