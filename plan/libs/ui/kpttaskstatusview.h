@@ -300,13 +300,13 @@ protected Q_SLOTS:
 private:
     struct ChartContents {
         ~ChartContents() {
+            delete dateaxis;
+            delete effortaxis;
+            delete costaxis;
             delete effortplane;
             delete costplane;
             delete effortdiagram;
             delete costdiagram;
-            delete dateaxis;
-            delete effortaxis;
-            delete costaxis;
         }
         ChartProxyModel costproxy;
         ChartProxyModel effortproxy;

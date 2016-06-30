@@ -1215,7 +1215,6 @@ void ReportDesigner::setReportData( const QString &tag )
     ReportData *rd = Report::findReportData( m_reportdatamodels, tag );
     if ( rd ) {
         rd = rd->clone(); // KReportDesigner takes ownership, so give it a clone it can delete
-        connect(this, SIGNAL(projectC
     }
     m_designer->setReportData( rd );
 
