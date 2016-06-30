@@ -67,15 +67,18 @@ extern "C" KPLATO_EXPORT int kdemain( int argc, char **argv )
     }
 
 #ifdef MAINTANER_WANTED_SPLASH
+// NOTE: This has the result that the event loop never exits: the app never terminates.
+//       We need to find a different way to do this!
+
     // After creating the KApplication then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.
-    QSplashScreen *splashScreen = new KoSplashScreen(QPixmap(splash_screen_xpm));
-    splashScreen->show();
-    splashScreen->showMessage("<p style=\"color:black\">"
-    "<b>Calligra Plan is unmaintained!</b><br><br>"
-    "The Calligra community welcomes someone to take over.<br><br>"
-    "See community.kde.org/Calligra</p>");
+//     QSplashScreen *splashScreen = new KoSplashScreen(QPixmap(splash_screen_xpm));
+//     splashScreen->show();
+//     splashScreen->showMessage("<p style=\"color:black\">"
+//     "<b>Calligra Plan is unmaintained!</b><br><br>"
+//     "The Calligra community welcomes someone to take over.<br><br>"
+//     "See community.kde.org/Calligra</p>");
 #endif
 
     return app.exec();
