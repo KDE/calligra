@@ -1254,7 +1254,7 @@ void TestXmlReader::testRootError()
     KoXmlDocument doc;
     QCOMPARE(doc.setContent(&xmldevice, &errorMsg, &errorLine, &errorColumn), false);
     QCOMPARE(errorMsg.isEmpty(), false);
-    QCOMPARE(errorMsg, QString("Extra content at end of document."));
+    QCOMPARE(errorMsg, QCoreApplication::translate("QXmlStream", "Extra content at end of document."));
     QCOMPARE(errorLine, 1);
     QCOMPARE(errorColumn, 21);
 }
@@ -1274,7 +1274,7 @@ void TestXmlReader::testMismatchedTag()
     KoXmlDocument doc;
     QCOMPARE(doc.setContent(&xmldevice, &errorMsg, &errorLine, &errorColumn), false);
     QCOMPARE(errorMsg.isEmpty(), false);
-    QCOMPARE(errorMsg, QString("Opening and ending tag mismatch."));
+    QCOMPARE(errorMsg, QCoreApplication::translate("QXmlStream", "Opening and ending tag mismatch."));
     QCOMPARE(errorLine, 1);
     QCOMPARE(errorColumn, 11);
 }
