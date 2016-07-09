@@ -30,6 +30,29 @@
 #include <QStringList>
 #include <QString>
 
+
+namespace QTest
+{
+    template<>
+    char *toString(const KPlato::DateTime &dt)
+    {
+        QString s;
+        switch ( dt.timeSpec() ) {
+            case Qt::LocalTime: s = " LocalTime"; break;
+            case Qt::UTC: s = " UTC"; break;
+            case Qt::OffsetFromUTC: s = " OffsetFromUTC"; break;
+            case Qt::TimeZone: s = " TimeZone (" + dt.timeZone().id() + ')'; break;
+        }
+        return toString( QString( "%1T%2 %3" ).arg( dt.date().toString(Qt::ISODate) ).arg( dt.time().toString( "hh:mm:ss.zzz" ) ).arg( s ) );
+    }
+
+    template<>
+    char *toString(const KPlato::Duration &d)
+    {
+        return toString( d.toString() );
+    }
+}
+
 namespace KPlato
 {
 
@@ -340,7 +363,7 @@ void print( const AppointmentInterval &i, const QString &indent = QString() )
     if ( ! i.isValid() ) {
         qDebug()<<s<<"Not valid";
     } else {
-        qDebug()<<s<<i.startTime().toString()<<i.endTime().toString()<<i.load()<<'%';
+        qDebug()<<s<<i.startTime()<<i.endTime()<<i.load()<<'%';
     }
 }
 

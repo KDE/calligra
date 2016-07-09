@@ -51,10 +51,35 @@ AppointmentInterval::AppointmentInterval( const AppointmentInterval &interval )
 AppointmentInterval::AppointmentInterval( const DateTime &start, const DateTime &end, double load )
     : d( new AppointmentIntervalData() )
 {
-    //debugPlan<<this;
     setStartTime( start );
     setEndTime( end );
     setLoad( load );
+#ifndef NDEBUG
+    if (start.isValid() && end.isValid()) {
+        debugPlan<<*this;
+        Q_ASSERT(start.timeZone() == end.timeZone());
+    }
+#endif
+}
+
+AppointmentInterval::AppointmentInterval( const QDate& date, const TimeInterval& timeInterval, double load )
+    : d( new AppointmentIntervalData() )
+{
+    Q_ASSERT( date.isValid() && timeInterval.isValid() );
+    DateTime s( date, timeInterval.startTime() );
+    DateTime e( date, timeInterval.endTime() );
+    if ( timeInterval.endsMidnight() ) {
+        e = e.addDays( 1 );
+    }
+    setStartTime( s );
+    setEndTime( e );
+    setLoad( load );
+#ifndef NDEBUG
+    if (s.isValid() && e.isValid()) {
+        debugPlan<<*this;
+        Q_ASSERT(s.timeZone() == e.timeZone());
+    }
+#endif
 }
 
 AppointmentInterval::~AppointmentInterval() {
@@ -143,6 +168,8 @@ bool AppointmentInterval::loadXML(KoXmlElement &element, XMLLoaderObject &status
     if (!ok) d->load = 100;
     if ( ! isValid() ) {
         errorPlan<<"AppointmentInterval::loadXML: Invalid interval:"<<*this<<element.attribute("start")<<element.attribute("end");
+    } else {
+        Q_ASSERT(d->start.timeZone() == d->end.timeZone());
     }
     return isValid();
 }
@@ -250,7 +277,7 @@ QString AppointmentInterval::toString() const
 
 QDebug operator<<( QDebug dbg, const KPlato::AppointmentInterval &i )
 {
-    dbg<<"AppointmentInterval["<<i.startTime().toString()<<i.endTime().toString()<<i.load()<<"%"<<']';
+    dbg<<"AppointmentInterval["<<i.startTime()<<i.endTime()<<i.load()<<"%"<<']';
     return dbg;
 }
 
@@ -396,6 +423,9 @@ void AppointmentIntervalList::add( const DateTime &st, const DateTime &et, doubl
 
 void AppointmentIntervalList::add( const AppointmentInterval &ai )
 {
+    if ( ! ai.isValid() ) {
+        debugPlan<<ai;
+    }
     Q_ASSERT( ai.isValid() );
     if ( ! ai.isValid() ) {
         return;

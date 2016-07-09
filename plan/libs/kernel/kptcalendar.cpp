@@ -349,12 +349,19 @@ TimeInterval CalendarDay::interval(const QDate &date, const QTime &start, int le
         //debugPlan<<"Day give:"<<date<<","<<t1<<"->"<<l;
         if ( sch ) {
             // check if booked
-            //debugPlan<<"Booked?"<<date<<","<<t1<<"+"<<l<<"="<<t1.addMSecs( l );
-            DateTime dt1 = !timeZone.isValid() ? DateTime( date, t1 ) : DateTime( date, t1, timeZone );
-            DateTimeInterval dti( dt1, dt1.addMSecs( l ) );
+            DateTime dt1 = timeZone.isValid() ? DateTime( date, t1, timeZone ) : DateTime( date, t1 );
+            QDate d2 = date;
+            QTime t2 = t1.addMSecs( l );
+            if ( t2 == QTime( 0, 0, 0 ) ) {
+                d2 = d2.addDays( 1 );
+            }
+            DateTime dt2 = timeZone.isValid() ? DateTime( d2, t2, timeZone ) : DateTime( d2, t2 );
+            DateTimeInterval dti( dt1, dt2 );
+            //debugPlan<<": Booked?"<<date<<","<<t1<<"+"<<l<<"="<<t1.addMSecs( l )<<endl<<dti;
             dti = sch->available( dti );
             //debugPlan<<"Checked sch:"<<ti.first<<","<<ti.second<<"="<<dti;
             ti = TimeInterval( dti.first.time(), ( dti.second - dti.first ).milliseconds() );
+            //debugPlan<<"CalendarDay::interval:"<<ti;
         }
         if ( ti.isValid() ) {
             //debugPlan<<"Return:"<<ti.first<<"+"<<ti.second<<"="<<ti.first.addMSecs( ti.second );
@@ -700,6 +707,7 @@ const Calendar &Calendar::copy( const Calendar &calendar ) {
 
 void Calendar::init() {
     m_weekdays = new CalendarWeekdays();
+    m_timeZone = QTimeZone::systemTimeZone();
     m_cacheversion = 0;
     m_blockversion = false;
 }
@@ -781,6 +789,11 @@ void Calendar::setTimeZone( const QTimeZone &tz )
         m_project->changed( this );
     }
     incCacheVersion();
+}
+
+QTimeZone Calendar::projectTimeZone() const
+{
+    return m_project ? m_project->timeZone() : QTimeZone::systemTimeZone();
 }
 
 void Calendar::setDefault( bool on )
@@ -1027,7 +1040,7 @@ bool Calendar::hasParent(Calendar *cal) {
 
 AppointmentIntervalList Calendar::workIntervals( const QDateTime &start, const QDateTime &end, double load ) const
 {
-//    debugPlan<<start<<end<<load;
+    //debugPlan<<start<<end<<load;
     AppointmentIntervalList lst;
     TimeInterval res;
     QTime startTime = start.time();
@@ -1043,7 +1056,7 @@ AppointmentIntervalList Calendar::workIntervals( const QDateTime &start, const Q
         res = firstInterval(start.date(), startTime, length, 0);
         while ( res.isValid() ) {
             DateTime dt( start.date(), res.startTime(), m_timeZone );
-            lst.add( AppointmentInterval( dt, dt.addMSecs( res.second ), load ) );
+            lst.add( AppointmentInterval( dt.toTimeZone(projectTimeZone()), dt.addMSecs( res.second ).toTimeZone(projectTimeZone()), load ) );
             length -= res.second;
             if ( length <= 0 || res.endsMidnight() ) {
                 break;
@@ -1069,9 +1082,15 @@ AppointmentIntervalList Calendar::workIntervals( const QDateTime &start, const Q
         }
         res = firstInterval( date, startTime, length );
         while ( res.isValid() ) {
-            DateTime dt( date, res.startTime(), m_timeZone );
-            AppointmentInterval i( dt, dt.addMSecs( res.second ), load );
+            //debugPlan<<"interval:"<<date<<startTime<<'='<<res.first<<res.second;
+            DateTime dt1( date, res.startTime(), m_timeZone );
+            DateTime dt2( date, res.endTime(), m_timeZone );
+            if ( res.endsMidnight() ) {
+                dt2 = dt2.addDays( 1 );
+            }
+            AppointmentInterval i( dt1.toTimeZone(projectTimeZone()), dt2.toTimeZone(projectTimeZone()), load );
             lst.add( i );
+            debugPlan<<dt1<<dt2<<lst;
             length -= startTime.msecsTo( res.endTime() );
             if ( length <= 0 || res.endsMidnight() ) {
                 break;
@@ -1100,78 +1119,11 @@ AppointmentIntervalList Calendar::workIntervals( const DateTime &start, const Da
         warnPlan<<"Invalid interval";
         return lst;
     }
-    if ( m_timeZone.isValid() ) {
-        QDateTime zonedStart(start.date(), start.time(), m_timeZone);
-        QDateTime zonedEnd(end.date(), end.time(), m_timeZone);
-        return workIntervals( zonedStart, zonedEnd, load );
-    }
-    TimeInterval res;
-    QTime startTime = start.time();
-    int length = 0;
-    if ( start.date() == end.date() ) {
-        // Handle single day
-        length = startTime.msecsTo( end.time() );
-        if ( length <= 0 ) {
-            warnPlan<<"Invalid length"<<length;
-            return lst;
-        }
-        //debugPlan<<"Check single day:"<<s.date()<<s.time()<<length;
-        res = firstInterval( start.date(), startTime, length, 0 );
-        while ( res.isValid() ) {
-            DateTime s( start.date(), res.startTime() );
-            DateTime e( start.date(), s.time().addMSecs( res.second ) );
-            if ( e.time() == QTime( 0, 0, 0 ) ) {
-                // ends at midnight...
-                e = e.addDays( 1 );
-                if ( e > end ) {
-                    e = end;
-                }
-            }
-            lst.add( AppointmentInterval( s, e, load ) );
-            length -= res.second;
-            if ( length <= 0 || e.date() > s.date() ) {
-                break;
-            }
-            res = firstInterval( start.date(), res.endTime(), length, 0 );
-        }
-        return lst;
-    }
-    // Multiple days
-    for ( QDate date = start.date(); date <= end.date(); date = date.addDays(1) ) {
-        if (date > start.date()) {
-            startTime = QTime(0, 0, 0);
-        }
-        if (date < end.date()) {
-            length = startTime.msecsTo( QTime(23, 59, 59, 999) ) + 1;
-        } else {
-            length = startTime.msecsTo( end.time() );
-        }
-        if ( length <= 0 ) {
-            break;
-        }
-        res = firstInterval( date, startTime, length );
-        while ( res.isValid() ) {
-            DateTime s( date, res.startTime() );
-            DateTime e( date, s.time().addMSecs( res.second ) );
-            if ( e.time() == QTime( 0, 0, 0 ) ) {
-                // ends at midnight...
-                e = e.addDays( 1 );
-                if ( e > end ) {
-                    e = end;
-                }
-            }
-            AppointmentInterval i( s, e, load );
-            lst.add( i );
-            length -= startTime.msecsTo( res.endTime() );
-            if ( length <= 0 || e.date() > date ) {
-                break;
-            }
-            startTime = res.endTime();
-            res = firstInterval( date, startTime, length, 0 );
-        }
-    }
-//     debugPlan<<"workintervals:"<<start<<end<<endl<<lst;
-    return lst;
+    Q_ASSERT(m_timeZone.isValid());
+    QDateTime zonedStart = start.toTimeZone( m_timeZone );
+    QDateTime zonedEnd = end.toTimeZone( m_timeZone );
+    Q_ASSERT( zonedStart.isValid() && zonedEnd.isValid() );
+    return workIntervals( zonedStart, zonedEnd, load );
 }
 
 Duration Calendar::effort(const QDate &date, const QTime &start, int length, Schedule *sch) const {
@@ -1247,35 +1199,11 @@ Duration Calendar::effort(const DateTime &start, const DateTime &end, Schedule *
         //debugPlan<<"start == end";
         return eff;
     }
-    if ( m_timeZone.isValid() ) {
-        QDateTime zonedStart(start.date(), start.time(), m_timeZone);
-        QDateTime zonedEnd(end.date(), end.time(), m_timeZone);
-        return effort( zonedStart, zonedEnd, sch );
-    }
-    QDate date = start.date();
-    QTime startTime = start.time();
-    QTime endTime = end.time();
-    int length = 0;
-    if ( date == end.date() ) {
-        // single day
-        length = startTime.msecsTo( endTime );
-        return effort( date, startTime, length, sch );
-    }
-    length = startTime.msecsTo( QTime( 23, 59, 59, 999 ) ) + 1;
-    QTime t0(0, 0, 0);
-    int aday = t0.msecsTo( QTime( 23, 59, 59, 999 ) ) + 1;
-    eff = effort(date, startTime, length, sch); // first day
-    // Now get all the rest of the days
-    for (date = date.addDays(1); date <= end.date(); date = date.addDays(1)) {
-        if (date < end.date()) {
-            eff += effort(date, t0, aday, sch); // whole days
-        } else if ( endTime > t0 ) {
-            eff += effort(date, t0, t0.msecsTo( endTime ), sch); // last day
-        }
-        //debugPlan<<": eff now="<<eff.toString(Duration::Format_Day);
-    }
-    //debugPlan<<start<<"-"<<end<<": total="<<eff.toString();
-    return eff;
+    Q_ASSERT(m_timeZone.isValid());
+    QDateTime zonedStart = start.toTimeZone( m_timeZone );
+    QDateTime zonedEnd = end.toTimeZone( m_timeZone );
+    Q_ASSERT( zonedStart.isValid() && zonedEnd.isValid() );
+    return effort( zonedStart, zonedEnd, sch );
 }
 
 
@@ -1321,7 +1249,7 @@ DateTimeInterval Calendar::firstInterval( const QDateTime &start, const QDateTim
             return DateTimeInterval();
         }
         DateTime dt1( start.date(), res.first, m_timeZone );
-        DateTimeInterval dti( dt1, DateTime( dt1.addMSecs( res.second ) ) );
+        DateTimeInterval dti( dt1, DateTime( dt1.addMSecs( res.second ) ).toTimeZone( m_timeZone ) );
         return dti;
     }
     //debugPlan<<"tospec:"<<s.toString()<<" -"<<e.toString();
@@ -1345,7 +1273,7 @@ DateTimeInterval Calendar::firstInterval( const QDateTime &start, const QDateTim
             //debugPlan<<"Found an interval ("<<date<<","<<res.first<<","<<res.second<<")";
             // return result in callers timezone
             DateTime dt1( date, res.first, m_timeZone );
-            DateTimeInterval dti( DateTime( dt1 ), dt1.addMSecs( res.second ) );
+            DateTimeInterval dti( DateTime( dt1 ), dt1.addMSecs( res.second ).toTimeZone( m_timeZone ) );
             //debugPlan<<"Result firstInterval:"<<dti.first.toString()<<","<<dti.second.toString();
             return dti;
         }
@@ -1369,59 +1297,11 @@ DateTimeInterval Calendar::firstInterval(const DateTime &start, const DateTime &
         warnPlan<<"Invalid interval"<<start<<end<<":"<<start<<end;
         return DateTimeInterval();
     }
-    if ( m_timeZone.isValid() ) {
-        QDateTime zonedStart(start.date(), start.time(), m_timeZone);
-        QDateTime zonedEnd(end.date(), end.time(), m_timeZone);
-        return firstInterval( zonedStart, zonedEnd, sch );
-    }
-    TimeInterval res;
-    QTime startTime = start.time();
-    int length = 0;
-    if ( start.date() == end.date() ) {
-        // Handle single day
-        length = startTime.msecsTo( end.time() );
-        if ( length <= 0 ) {
-            warnPlan<<"Invalid length"<<length;
-            return DateTimeInterval();
-        }
-        //debugPlan<<"Check single day:"<<s.date()<<s.time()<<length;
-        res = firstInterval(start.date(), startTime, length, sch);
-        if ( ! res.isValid() ) {
-            return DateTimeInterval();
-        }
-        DateTime dt1 = DateTime( start.date(), res.first );
-        DateTimeInterval dti( dt1, dt1.addMSecs( res.second ) );
-        //debugPlan<<"Got:"<<dti;
-        return dti;
-    }
-    //debugPlan<<"tospec:"<<s.toString()<<" -"<<e.toString();
-    // Multiple days
-    for ( QDate date = start.date(); date <= end.date(); date = date.addDays(1) ) {
-        if (date > start.date()) {
-            startTime = QTime(0, 0, 0);
-        }
-        if (date < end.date()) {
-            length = startTime.msecsTo( QTime(23, 59, 59, 999) ) + 1;
-        } else {
-            length = startTime.msecsTo( end.time() );
-        }
-        if ( length <= 0 ) {
-            break;
-        }
-        //debugPlan<<"Check:"<<date<<startTime<<"+"<<length<<"="<<startTime.addMSecs( length );
-        res = firstInterval(date, startTime, length, sch);
-        if ( res.isValid() ) {
-            //debugPlan<<"inp:"<<start<<"-"<<end;
-            //debugPlan<<"Found an interval ("<<date<<","<<res.first<<","<<res.second<<")";
-            // return result in callers timezone
-            DateTime dt1 = DateTime( date, res.first );
-            DateTimeInterval dti( dt1, dt1.addMSecs( res.second ) );
-            //debugPlan<<"Result:"<<dti.first.toString()<<","<<dti.second.toString();
-            return dti;
-        }
-    }
-    //warnPlan<<"Didn't find an interval ("<<start<<", "<<end<<")";
-    return DateTimeInterval();
+    Q_ASSERT( m_timeZone.isValid() );
+    QDateTime zonedStart = start.toTimeZone( m_timeZone );
+    QDateTime zonedEnd = end.toTimeZone( m_timeZone );
+    Q_ASSERT( zonedStart.isValid() && zonedEnd.isValid() );
+    return firstInterval( zonedStart, zonedEnd, sch );
 }
 
 
@@ -1445,18 +1325,20 @@ DateTime Calendar::firstAvailableAfter(const DateTime &time, const DateTime &lim
     if ( time == limit ) {
         return DateTime();
     }
-    if ( m_timeZone.isValid() ) {
-        QDateTime zonedTime(time.date(), time.time(), m_timeZone);
-        QDateTime zonedLimit(limit.date(), limit.time(), m_timeZone);
-        return firstInterval( zonedTime, zonedLimit ).first;
-    }
-    DateTime t = firstInterval(time, limit, sch).first;
-    //debugPlan<<m_name<<":"<<t;
-    return t;
+    Q_ASSERT( m_timeZone.isValid() );
+    QDateTime zonedTime = time.toTimeZone( m_timeZone );
+    QDateTime zonedLimit = limit.toTimeZone( m_timeZone );
+    Q_ASSERT( zonedTime.isValid() && zonedLimit.isValid() );
+    return firstInterval( zonedTime, zonedLimit, sch ).first;
 }
 
 DateTime Calendar::firstAvailableBefore(const QDateTime &time, const QDateTime &limit, Schedule *sch) {
-    //debugPlan<<m_name<<"check from"<<time<<"limit="<<limit;
+    debugPlan<<m_name<<"check from"<<time<<"limit="<<limit;
+    if ( !time.isValid() || !limit.isValid() ) {
+        warnPlan<<"Calendar::firstAvailableBefore:"<<"Invalid datetimes";
+        return DateTime();
+    }
+    Q_ASSERT(time.timeZone() == m_timeZone);
     QDateTime lmt = time;
     QDateTime t = QDateTime( time.date(), QTime( 0, 0, 0 ), m_timeZone ); // start of first day
     if ( t == lmt ) {
@@ -1493,7 +1375,7 @@ DateTime Calendar::firstAvailableBefore(const QDateTime &time, const QDateTime &
                 break;
         }
     }
-    DateTime result( res.toLocalTime() );
+    DateTime result( res.toTimeZone(projectTimeZone()) );
     //debugPlan<<m_name<<res<<res.dateTime().timeSpec()<<result<<result.timeSpec();
     return result; // return in local timezone
 }
@@ -1507,47 +1389,8 @@ DateTime Calendar::firstAvailableBefore(const DateTime &time, const DateTime &li
     if ( time == limit ) {
         return DateTime();
     }
-    if ( m_timeZone.isValid() ) {
-        return firstAvailableBefore( time.toTimeZone(m_timeZone), limit.toTimeZone(m_timeZone), sch );
-    }
-    DateTime lmt = time;
-    DateTime t = DateTime( time.date() ); // start of first day
-    if ( t == lmt ) {
-        t = t.addDays(-1); // in case time == start of day
-    }
-    if ( t < limit ) {
-        t = limit;  // always stop at limit (lower boundary)
-    }
-    //debugPlan<<m_name<<":"<<time<<limit<<t<<lmt;
-    DateTime res;
-    //debugPlan<<m_name<<": t="<<t<<","<<lmt<<" limit="<<limit;
-    while (!res.isValid() && t >= limit) {
-        // check intervals for 1 day
-        DateTime r = firstInterval( t, lmt, sch ).second;
-        res = r;
-        // Find the last interval
-        while(r.isValid() && r < lmt) {
-            r = firstInterval(r, lmt, sch).second;
-            if (r.isValid() ) {
-                res = r;
-            }
-            //debugPlan<<m_name<<": r="<<r<<","<<lmt<<" res="<<res;
-        }
-        if (!res.isValid()) {
-            if (t == limit) {
-                break;
-            }
-            lmt = t;
-            t = t.addDays(-1);
-            if (t < limit) {
-                t = limit;
-            }
-            if (t == lmt)
-                break;
-        }
-    }
-    //debugPlan<<m_name<<":"<<res;
-    return res; // return in callers timezone
+    Q_ASSERT(m_timeZone.isValid());
+    return firstAvailableBefore( time.toTimeZone(m_timeZone), limit.toTimeZone(m_timeZone), sch );
 }
 
 Calendar *Calendar::findCalendar(const QString &id) const { 

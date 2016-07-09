@@ -35,6 +35,7 @@ private Q_SLOTS:
     void addMiddle();
     void fullDay();
     void timeZone();
+    void doubleTimeZones();
 };
 
 } //namespace KPlato

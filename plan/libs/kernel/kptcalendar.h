@@ -489,6 +489,8 @@ public:
 
     QTimeZone timeZone() const { return m_timeZone; }
     void setTimeZone( const QTimeZone &tz );
+    /// Return the project timezone, or local timezone if no project
+    QTimeZone projectTimeZone() const;
 
     void setDefault( bool on );
     bool isDefault() const { return m_default; }

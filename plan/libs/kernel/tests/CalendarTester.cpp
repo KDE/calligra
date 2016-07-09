@@ -27,9 +27,8 @@
 #include <QTimeZone>
 #include <QDateTime>
 
-#include <QTest>
-
 #include "debug.cpp"
+
 
 namespace KPlato
 {
@@ -83,7 +82,7 @@ void CalendarTester::testSingleDay() {
     QCOMPARE(t.firstAvailableBefore(after, before), wdt2);
 
     Duration e(0, 2, 0);
-    QCOMPARE((t.effort(before, after)).toString(), e.toString());
+    QCOMPARE((t.effort(before, after)), e);
 }
 
 void CalendarTester::testWeekdays() {
@@ -143,7 +142,7 @@ void CalendarTester::testCalendarWithParent() {
     QCOMPARE(t.firstAvailableBefore(after, before), wdt2);
 
     Duration e(0, 2, 0);
-    QCOMPARE((t.effort(before, after)).toString(), e.toString());
+    QCOMPARE((t.effort(before, after)), e);
 }
 
 void CalendarTester::testTimezone()
@@ -176,7 +175,7 @@ void CalendarTester::testTimezone()
     QCOMPARE(t.firstAvailableBefore( DateTime( dt2 ), before ), wdt2 );
 
     Duration e(0, 2, 0);
-    QCOMPARE( t.effort( DateTime( dt1 ), DateTime( dt2 ) ).toString(), e.toString() );
+    QCOMPARE( t.effort( DateTime( dt1 ), DateTime( dt2 ) ), e );
 
     // local zone: Europe/Berlin ( 9 hours from America/Los_Angeles )
     int laShiftDays;
@@ -190,7 +189,7 @@ void CalendarTester::testTimezone()
     QCOMPARE(t.firstAvailableAfter( DateTime( dt3 ), after ), wdt1 );
     QCOMPARE(t.firstAvailableBefore( DateTime( dt4 ), before ), wdt2 );
 
-    QCOMPARE( t.effort( DateTime( dt3 ), DateTime( dt4 ) ).toString(), e.toString() );
+    QCOMPARE( t.effort( DateTime( dt3 ), DateTime( dt4 ) ), e );
 
     QString s = "Test Cairo:";
     qDebug()<<s;
@@ -205,7 +204,7 @@ void CalendarTester::testTimezone()
     QCOMPARE(t.firstAvailableAfter( DateTime( dt5 ), after ), wdt1 );
     QCOMPARE(t.firstAvailableBefore( DateTime( dt6 ), before ), wdt2 );
 
-    QCOMPARE( t.effort( DateTime( dt5 ), DateTime( dt6 ) ).toString(), e.toString() );
+    QCOMPARE( t.effort( DateTime( dt5 ), DateTime( dt6 ) ), e );
 }
 
 void CalendarTester::workIntervals()
@@ -314,6 +313,48 @@ void CalendarTester::workIntervalsFullDays()
     QCOMPARE( t.workIntervals( start, end, 100. ).map().count(), 3 );
     QCOMPARE( t.workIntervals( before, after, 100. ).map().count(), 3 );
 
+}
+
+void CalendarTester::dstSpring()
+{
+    Calendar t("DST");
+    QDate wdate(2016,3,27);
+
+    DateTime before = DateTime(wdate.addDays(-1), QTime());
+    DateTime after = DateTime(wdate.addDays(1), QTime());
+    QTime t1(0,0,0);
+    int length = 24*60*60*1000;
+    
+    CalendarDay *wd1 = t.weekday(Qt::Sunday);
+    QVERIFY(wd1 != 0);
+    
+    wd1->setState(CalendarDay::Working);
+    wd1->addInterval(TimeInterval(t1, length));
+    AppointmentIntervalList lst = t.workIntervals( before, after, 100. );
+    qDebug()<<lst;
+    QCOMPARE( lst.map().count(), 1 );
+    QCOMPARE( lst.map().first().effort().toHours(), 23. );
+    
+    wd1->clearIntervals();
+    qDebug()<<"clear list";
+    wd1->addInterval(TimeInterval(QTime(0,0,0), Duration(2., Duration::Unit_h).milliseconds() ));
+    wd1->addInterval(TimeInterval(QTime(2,0,0), Duration(2., Duration::Unit_h).milliseconds() ));
+    
+    lst = t.workIntervals( before, after, 100. );
+    qDebug()<<"DST?"<<DateTime(wdate, QTime(2,0,0))<<endl<<lst;
+    QCOMPARE( lst.map().count(), 2 );
+
+    AppointmentInterval ai = lst.map().values().value(0);
+    QCOMPARE( ai.startTime(),  DateTime(wdate, QTime()));
+    QCOMPARE( ai.endTime(),  DateTime(wdate, QTime(2,0,0)));
+    QCOMPARE( ai.effort().toHours(),  2.);
+
+    Debug::print(lst);
+    ai = lst.map().values().value(1);
+    QCOMPARE( ai.startTime(),  DateTime(wdate, QTime(2,0,0)));
+    QCOMPARE( ai.endTime(),  DateTime(wdate, QTime(4,0,0)));
+    QCOMPARE( ai.effort().toHours(),  1.); // Missing DST hour is skipped
+    
 }
 
 } //namespace KPlato

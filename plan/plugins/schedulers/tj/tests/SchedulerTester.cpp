@@ -78,6 +78,8 @@ void SchedulerTester::testProject( const QString &fname, const KoXmlDocument &do
         QVERIFY2( pel.isNull(), s.toLatin1() );        
     }
     Project project;
+    project.setTimeZone( QTimeZone( "UTC" ) );
+
     XMLLoaderObject status;
     status.setProject( &project );
     status.setVersion( doc.documentElement().attribute( "version", PLAN_FILE_SYNTAX_VERSION ) );
@@ -110,6 +112,7 @@ qDebug() << "+++++++++++++++++++++++++++calculate-end";
 
     long id1 = manager->scheduleId();
     long id2 = sm->scheduleId();
+    qDebug()<<project.startTime( id1 )<<project.startTime( id2 )<<project.timeZone();
     s = QString( "%1: Compare project schedules:\n Expected: %2\n   Result: %3" )
             .arg( fname )
             .arg( project.startTime( id1 ).toString( Qt::ISODate ) )

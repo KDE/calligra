@@ -19,6 +19,7 @@
 */
 
 #include "kptdatetime.h"
+#include "kptdebug.h"
 
 namespace KPlato
 {
@@ -36,15 +37,28 @@ DateTime::DateTime( const QDate &date )
 DateTime::DateTime( const QDate &date, const QTime &time)
     : QDateTime( date, time, Qt::LocalTime)
 {
+    if (!isValid() && this->date().isValid() && this->time().isValid()) {
+        QTime t = this->time();
+        warnPlan<<"Invalid DateTime, try to compencate for DST"<<this->date()<<t;
+        setTime( QTime( t.hour() + 1, 0, 0));
+        Q_ASSERT(isValid());
+    }
 }
 
 DateTime::DateTime(const QDate &date, const QTime &time, const QTimeZone &timeZone)
-    : QDateTime( timeZone.isValid() ? QDateTime(date, time, timeZone).toLocalTime() : QDateTime(date, time, Qt::LocalTime) )
+    : QDateTime( timeZone.isValid() ? QDateTime(date, time, timeZone) : QDateTime(date, time, Qt::LocalTime) )
 {
+    // If we ended inside DST, DateTime is not valid, but date(), time() and timeSpec() should be valid
+    if (!isValid() && this->date().isValid() && this->time().isValid()) {
+        QTime t = this->time();
+        warnPlan<<"Invalid DateTime, try to compencate for DST"<<this->date()<<t<<timeSpec();
+        setTime( QTime( t.hour() + 1, 0, 0 ) );
+        Q_ASSERT(isValid());
+    }
 }
 
 DateTime::DateTime( const QDateTime& other )
-    : QDateTime( other.toLocalTime() )
+    : QDateTime( other )
 {
 }
 
@@ -67,21 +81,44 @@ static QDateTime fromTimeZone(const QDateTime &dt, const QTimeZone &timeZone)
 DateTime::DateTime( const QDateTime &dt, const QTimeZone &timeZone )
     : QDateTime( fromTimeZone(dt, timeZone) )
 {
+    // may come from a TZ wo DST, into one with
+    if (!isValid() && dt.isValid()) {
+        warnPlan<<"Invalid DateTime, try to compencate for DST"<<dt;
+        setTime( QTime( dt.time().hour() + 1, 0, 0 ) );
+        Q_ASSERT(isValid());
+    }
 }
 
 
 void DateTime::add(const Duration &duration) {
-    if (isValid()) {
-        DateTime x = addMSecs(duration.milliseconds());
-        setDate( x.date() );
-        setTime( x.time() );
+    if (isValid() && duration.m_ms) {
+        if (timeSpec() == Qt::TimeZone ) {
+            QTimeZone tz = timeZone();
+            toUTC();
+            QDateTime x = addMSecs(duration.m_ms);
+            x.toUTC();
+            setDate( x.date() );
+            setTime( x.time() );
+            toTimeZone(tz);
+        } else {
+            *this = addMSecs(duration.m_ms);
+        }
         //debugPlan<<toString();
     }
 }
 
 void DateTime::subtract(const Duration &duration) {
     if (isValid() && duration.m_ms) {
-        *this = addMSecs(-duration.m_ms);
+        if (timeSpec() == Qt::TimeZone ) {
+            QTimeZone tz = timeZone();
+            QDateTime x = addMSecs(-duration.m_ms);
+            x.toUTC();
+            setDate( x.date() );
+            setTime( x.time() );
+            toTimeZone(tz);
+        } else {
+            *this = addMSecs(-duration.m_ms);
+        }
         //debugPlan<<toString();
     }
 }
@@ -124,16 +161,21 @@ DateTime DateTime::fromString( const QString &dts, const QTimeZone &timeZone )
         return DateTime();
     }
     QDateTime dt = QDateTime::fromString(dts, Qt::ISODate);
-    if ( ! dt.isValid() ) {
-        // try to parse in qt default format (used in early version)
-        dt = QDateTime::fromString(dts, Qt::TextDate);
-        if (timeZone.isValid()) {
-            dt.setTimeZone(timeZone);
-        }
-        return DateTime(dt);
-    }
-
-    return DateTime(dt);
+    return DateTime(dt.date(), dt.time(), timeZone);
 }
 
+
 }  //KPlato namespace
+
+QDebug operator<<( QDebug dbg, const KPlato::DateTime &dt )
+{
+    dbg.nospace()<<" DateTime[" << dt.toString( Qt::ISODate );
+    switch ( dt.timeSpec() ) {
+        case Qt::LocalTime: dbg << "LocalTime"; break;
+        case Qt::UTC: dbg << "UTC"; break;
+        case Qt::OffsetFromUTC: dbg << "OffsetFromUTC"; break;
+        case Qt::TimeZone: dbg << dt.timeZone(); break;
+    }
+    dbg.nospace() << "] ";
+    return dbg;
+}

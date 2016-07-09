@@ -1101,18 +1101,22 @@ DateTimeInterval ResourceSchedule::available( const DateTimeInterval &interval )
     if ( allowOverbooking() ) {
         return DateTimeInterval( interval.first, interval.second );
     }
+    QTimeZone projectTimeZone = QTimeZone::systemTimeZone();
+    if (m_resource) {
+        projectTimeZone = m_resource->project()->timeZone();
+    }
+    DateTimeInterval ci(interval.first.toTimeZone(projectTimeZone), interval.second.toTimeZone(projectTimeZone));
     Appointment a;
     if ( checkExternalAppointments() ) {
-        a.setIntervals( m_resource->externalAppointments( interval ) );
+        a.setIntervals( m_resource->externalAppointments( ci ) );
     }
-    a.merge( appointmentIntervals( m_calculationMode, interval ) );
-    if ( a.isEmpty() || a.startTime() >= interval.second || a.endTime() <= interval.first ) {
+    a.merge( appointmentIntervals( m_calculationMode, ci ) );
+    if ( a.isEmpty() || a.startTime() >= ci.second || a.endTime() <= ci.first ) {
         //debugPlan<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<interval.second<<" FREE";
-        return DateTimeInterval( interval.first, interval.second );
+        return DateTimeInterval( interval.first, interval.second ); // just return the interval
     }
     //debugPlan<<"available:"<<interval<<endl<<a.intervals();
     DateTimeInterval res;
-    DateTimeInterval ci = interval;
     int units = m_resource ? m_resource->units() : 100;
     foreach ( const AppointmentInterval &i, a.intervals().map() ) {
         //const_cast<ResourceSchedule*>(this)->logDebug( QString( "Schedule available check interval=%1 - %2" ).arg(i.startTime().toString()).arg(i.endTime().toString()) );
@@ -1176,7 +1180,7 @@ DateTimeInterval ResourceSchedule::available( const DateTimeInterval &interval )
         }
     }
     //debugPlan<<"available: result="<<interval<<":"<<res;
-    return res;
+    return DateTimeInterval(res.first.toTimeZone(interval.first.timeZone()), res.second.toTimeZone(interval.second.timeZone()));
 }
 
 void ResourceSchedule::logError( const QString &msg, int phase )
@@ -1713,7 +1717,7 @@ void ScheduleManager::setSchedulerPluginId( const QString &id )
 
 SchedulerPlugin *ScheduleManager::schedulerPlugin() const
 {
-    if ( m_schedulerPluginId.isEmpty() ) {
+    if ( m_schedulerPluginId.isEmpty() || !m_project.schedulerPlugins().contains( m_schedulerPluginId ) ) {
         // try to avoid crash
         return m_project.schedulerPlugins().value( m_project.schedulerPlugins().keys().value( 0 ) );
     }

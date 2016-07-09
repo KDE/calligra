@@ -59,8 +59,12 @@ public:
 
     bool isVacationDay(time_t day) const;
 
+    /// Add non-overlapping work intervals 
+    /// This will override usage of workingHours[]
+    void addWorkingInterval(const Interval &interval);
 private:
     QList<Interval*>* workingHours[7];
+    QList<Interval> workingIntervals;
 };
 
 } // namespace TJ

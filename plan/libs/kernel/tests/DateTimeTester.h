@@ -43,6 +43,7 @@ private Q_SLOTS:
     void addSecond();
     void addMillisecond();
 
+    void timeZones();
 };
 
 } //namespace KPlato

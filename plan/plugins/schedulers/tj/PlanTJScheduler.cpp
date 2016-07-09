@@ -309,20 +309,20 @@ int PlanTJScheduler::toTJDayOfWeek( int day )
 }
 
 // static
-DateTime PlanTJScheduler::fromTime_t( time_t t ) {
-    return DateTime ( QDateTime::fromTime_t( t ) );
+DateTime PlanTJScheduler::fromTime_t( time_t t, const QTimeZone &tz ) {
+    return DateTime ( QDateTime::fromTime_t( t ).toTimeZone( tz ) );
 }
 
 time_t PlanTJScheduler::toTJTime_t( const QDateTime &dt, ulong granularity )
 {
     int secs = QTime( 0, 0, 0 ).secsTo( dt.time() );
     secs -= secs % granularity;
-    return QDateTime( dt.date(), QTime( 0, 0, 0 ).addSecs( secs ) ).toTime_t();
+    return QDateTime( dt.date(), QTime( 0, 0, 0 ).addSecs( secs ), dt.timeZone() ).toTime_t();
 }
 
 // static
-AppointmentInterval PlanTJScheduler::fromTJInterval( const TJ::Interval &tji ) {
-    AppointmentInterval a( fromTime_t( tji.getStart() ), fromTime_t( tji.getEnd() ).addSecs( 1 ) );
+AppointmentInterval PlanTJScheduler::fromTJInterval( const TJ::Interval &tji, const QTimeZone &tz ) {
+    AppointmentInterval a( fromTime_t( tji.getStart(), tz ), fromTime_t( tji.getEnd(), tz ).addSecs( 1 ) );
     return a;
 }
 
@@ -330,10 +330,10 @@ AppointmentInterval PlanTJScheduler::fromTJInterval( const TJ::Interval &tji ) {
 TJ::Interval PlanTJScheduler::toTJInterval( const QDateTime &start, const QDateTime &end, ulong granularity ) {
     int secs = QTime( 0, 0, 0 ).secsTo( start.time() );
     secs -= secs % granularity;
-    QDateTime s( start.date(), QTime( 0, 0, 0 ).addSecs( secs ) );
+    QDateTime s( start.date(), QTime( 0, 0, 0 ).addSecs( secs ), start.timeZone() );
     secs = QTime( 0, 0, 0 ).secsTo( end.time() );
     secs -= secs % granularity;
-    QDateTime e( end.date(), QTime( 0, 0, 0 ).addSecs( secs ) );
+    QDateTime e( end.date(), QTime( 0, 0, 0 ).addSecs( secs ), end.timeZone() );
     TJ::Interval ti( s.toTime_t(), e.addSecs( -1 ).toTime_t() );
     return ti;
 }
@@ -405,7 +405,8 @@ bool PlanTJScheduler::taskFromTJ( TJ::Task *job, Task *task )
     }
     Schedule *cs = task->currentSchedule();
     Q_ASSERT( cs );
-    debugPlan<<"taskFromTJ:"<<task<<task->name()<<cs->id();
+    QTimeZone tz = m_project->timeZone();
+    debugPlan<<"taskFromTJ:"<<task<<task->name()<<cs->id()<<tz;
     time_t s = job->getStart( 0 );
     if ( s < m_tjProject->getStart() || s > m_tjProject->getEnd() ) {
         m_project->currentSchedule()->setSchedulingError( true );
@@ -421,10 +422,11 @@ bool PlanTJScheduler::taskFromTJ( TJ::Task *job, Task *task )
         cs->setSchedulingError( true );
         e = s + (8*60*60);
     }
-    task->setStartTime( DateTime( QDateTime::fromTime_t( s ) ) );
-    task->setEndTime( DateTime( QDateTime::fromTime_t( e + 1 ) ) );
+    task->setStartTime( fromTime_t( s, tz ) );
+    task->setEndTime( fromTime_t( e + 1, tz ) );
     task->setDuration( task->endTime() - task->startTime() );
 
+    debugPlan<<TJ::time2ISO(s)<<task->startTime()<<"-- "<<TJ::time2ISO(e+1)<<task->endTime();
     if ( ! task->startTime().isValid() ) {
         logError( task, 0, i18nc( "@info/plain", "Invalid start time" ) );
         return false;
@@ -444,7 +446,7 @@ bool PlanTJScheduler::taskFromTJ( TJ::Task *job, Task *task )
         Resource *res = m_resourcemap[ r ];
         const QVector<TJ::Interval> lst = r->getBookedIntervals( 0, job );
         foreach ( const TJ::Interval &tji, lst ) {
-            AppointmentInterval ai = fromTJInterval( tji );
+            AppointmentInterval ai = fromTJInterval( tji, tz );
             double load = res->type() == Resource::Type_Material ? res->units() : ai.load() * r->getEfficiency();
             res->addAppointment( cs, ai.startTime(), ai.endTime(), load );
             logDebug( task, 0, '\'' + res->name() + "' added appointment: " +  ai.startTime().toString( Qt::ISODate ) + " - " + ai.endTime().toString( Qt::ISODate ) );
@@ -602,54 +604,11 @@ TJ::Resource *PlanTJScheduler::addResource( KPlato::Resource *r)
 //    qDebug()<<r->name()<<lst;
     QMultiMap<QDate, AppointmentInterval>::const_iterator mapend = lst.map().constEnd();
     QMultiMap<QDate, AppointmentInterval>::const_iterator it = lst.map().constBegin();
-    QDate date;
-    QDateTime ivstart;
-    QDateTime ivend;
-    TJ::Shift *shift = 0;
-    QList<TJ::Interval*> ivs;
+    TJ::Shift *shift = new TJ::Shift( m_tjProject, r->id(), r->name(), 0, QString(), 0 );
     for ( ; it != mapend; ++it ) {
-        if ( date < it.key() ) {
-            if ( date.isValid() ) {
-                if ( ivs.isEmpty() ) {
-                    delete shift;
-                    shift = 0;
-                }
-                if ( shift ) {
-                    shift->setWorkingHours( toTJDayOfWeek( date.dayOfWeek() ), ivs );
-                    TJ::Interval interval = toTJInterval( ivstart, ivend, tjGranularity() );
-                    if (!res->addShift( interval, shift )) {
-                        warnPlan<<"Failed to add shift:"<<r->name()<<interval<<ivs;
-                    } else {
-//                        qDebug()<<r->name()<<"add shift:"<<date<<interval<<ivs;
-                    }
-                    qDeleteAll( ivs );
-                    ivs.clear();
-                }
-            }
-            date = it.key();
-            shift = new TJ::Shift( m_tjProject, r->id() + date.toString( Qt::ISODate ), r->name(), 0, QString(), 0 );
-            ivstart = ivend = QDateTime();
-        }
-        ivs << new TJ::Interval( toTJInterval( it.value().startTime().time(), it.value().endTime().time(), tjGranularity() ) );
-        if ( ! ivstart.isValid() ) {
-            ivstart = it.value().startTime();
-        }
-        if ( ivend < it.value().endTime() ) {
-            ivend = it.value().endTime();
-        }
+        shift->addWorkingInterval( toTJInterval( it.value().startTime(), it.value().endTime(), m_granularity/1000 ) );
     }
-    if ( date.isValid() && shift && ! ivs.isEmpty() ) {
-        // add the last day
-        shift->setWorkingHours( toTJDayOfWeek( date.dayOfWeek() ), ivs );
-        TJ::Interval interval = toTJInterval( ivstart, ivend, tjGranularity() );
-        if (!res->addShift( interval, shift )) {
-            warnPlan<<"Failed to add shift:"<<r->name()<<interval<<ivs;
-        } else {
-//            qDebug()<<r->name()<<"add shift:"<<date<<interval<<ivs;
-        }
-        qDeleteAll( ivs );
-        ivs.clear();
-    }
+    res->addShift( toTJInterval( start, end, m_granularity/1000 ), shift );
     m_resourcemap[res] = r;
     logDebug( m_project, 0, "Added resource: " + r->name() );
 /*    QListIterator<TJ::Interval*> it = res->getVacationListIterator();
@@ -686,55 +645,12 @@ void PlanTJScheduler::addWorkingTime( KPlato::Task *task, TJ::Task *job )
     AppointmentIntervalList lst = cal->workIntervals( start, end, 1.0 );
     QMultiMap<QDate, AppointmentInterval>::const_iterator mapend = lst.map().constEnd();
     QMultiMap<QDate, AppointmentInterval>::const_iterator it = lst.map().constBegin();
-    QDate date;
-    QDateTime ivstart;
-    QDateTime ivend;
-    TJ::Shift *shift = 0;
-    QList<TJ::Interval*> ivs;
-    for ( ; it != mapend; ++it ) {
-        if ( date < it.key() ) {
-            if ( date.isValid() ) {
-                if ( ivs.isEmpty() ) {
-                    delete shift;
-                    shift = 0;
-                }
-                if ( shift ) {
-                    shift->setWorkingHours( toTJDayOfWeek( date.dayOfWeek() ), ivs );
-                    TJ::Interval interval = toTJInterval( ivstart, ivend, tjGranularity() );
-                    if ( ! job->addShift( interval, shift ) ) {
-                        warnPlan<<"Failed to add shift:"<<task->name()<<interval<<ivs;
-                    } else {
-//                        qDebug()<<task->name()<<"add shift:"<<date<<interval<<ivs;
-                    }
-                    qDeleteAll( ivs );
-                    ivs.clear();
-                }
-            }
-            date = it.key();
-            shift = new TJ::Shift( m_tjProject, task->id() + QString( "-%1" ).arg( ++id ), task->name(), 0, QString(), 0 );
-            ivstart = ivend = QDateTime();
-        }
-        ivs << new TJ::Interval( toTJInterval( it.value().startTime().time(), it.value().endTime().time(), tjGranularity() ) );
-        if ( ! ivstart.isValid() ) {
-            ivstart = it.value().startTime();
-        }
-        if ( ivend < it.value().endTime() ) {
-            ivend = it.value().endTime();
-        }
-    }
-    if ( date.isValid() && shift && ! ivs.isEmpty() ) {
-        // add the last day
-        shift->setWorkingHours( toTJDayOfWeek( date.dayOfWeek() ), ivs );
-        TJ::Interval interval = toTJInterval( ivstart, ivend, tjGranularity() );
-        if ( ! job->addShift( interval, shift ) ) {
-            warnPlan<<"Failed to add shift:"<<task->name()<<interval<<ivs;
-        } else {
-//            qDebug()<<task->name()<<"add shift:"<<date<<interval<<ivs;
-        }
-        qDeleteAll( ivs );
-        ivs.clear();
-    }
 
+    TJ::Shift *shift = new TJ::Shift( m_tjProject, task->id() + QString( "-%1" ).arg( ++id ), task->name(), 0, QString(), 0 );
+    for ( ; it != mapend; ++it ) {
+        shift->addWorkingInterval(toTJInterval(it.value().startTime(), it.value().endTime(), m_granularity/1000));
+    }
+    job->addShift(toTJInterval(start, end, m_granularity/1000), shift);
 }
 
 void PlanTJScheduler::addTasks()
@@ -909,6 +825,7 @@ TJ::Task *PlanTJScheduler::addStartNotEarlier( Node *task )
     TJ::Task *p = new TJ::Task( m_tjProject, QString("%1-sne").arg( m_tjProject->taskCount() + 1 ), task->name() + "-sne", 0, QString(), 0 );
     p->setSpecifiedStart( 0, toTJTime_t( time, tjGranularity() ) );
     p->setSpecifiedEnd( 0, m_tjProject->getEnd() - 1 );
+    qDebug()<<"PlanTJScheduler::addStartNotEarlier:"<<time<<TJ::time2ISO(toTJTime_t( time, tjGranularity() ));
     return p;
 }
 

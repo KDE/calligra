@@ -72,6 +72,7 @@ void Project::init()
     m_refCount = 1; // always used by crateor
     m_constraint = Node::MustStartOn;
     m_standardWorktime = new StandardWorktime();
+    m_timeZone = QTimeZone::systemTimeZone(); // local timezone as default
     //debugPlan<<m_timeZone;
     if ( m_parent == 0 ) {
         // set sensible defaults for a project wo parent

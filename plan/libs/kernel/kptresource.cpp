@@ -971,23 +971,23 @@ void Resource::calendarIntervals( const DateTime &from, const DateTime &until ) 
     }
     if ( ! m_workinfocache.isValid() ) {
         // First time
-        debugPlan<<"First time:"<<from<<until;
+//         debugPlan<<"First time:"<<from<<until;
         m_workinfocache.start = from;
         m_workinfocache.end = until;
         m_workinfocache.intervals = cal->workIntervals( from, until, m_units );
-        debugPlan<<"calendarIntervals (first):"<<m_workinfocache.intervals;
+//         debugPlan<<"calendarIntervals (first):"<<m_workinfocache.intervals;
     } else {
         if ( from < m_workinfocache.start ) {
 //             debugPlan<<"Add to start:"<<from<<m_workinfocache.start;
             m_workinfocache.intervals += cal->workIntervals( from, m_workinfocache.start, m_units );
             m_workinfocache.start = from;
-//             debugPlan<<"calendarIntervals (start):"<<m_workinfocache.intervals;
+             debugPlan<<"calendarIntervals (start):"<<m_workinfocache.intervals;
         }
         if ( until > m_workinfocache.end ) {
 //             debugPlan<<"Add to end:"<<m_workinfocache.end<<until;
             m_workinfocache.intervals += cal->workIntervals( m_workinfocache.end, until, m_units );
             m_workinfocache.end = until;
-//             debugPlan<<"calendarIntervals: (end)"<<m_workinfocache.intervals;
+             debugPlan<<"calendarIntervals: (end)"<<m_workinfocache.intervals;
         }
     }
 }
@@ -1192,8 +1192,10 @@ DateTime Resource::availableBefore(const DateTime &time, const DateTime &limit) 
 }
 
 DateTime Resource::availableAfter(const DateTime &time, const DateTime &limit, Schedule *sch) const {
+    debugPlan<<time<<limit;
     DateTime t;
     if (m_units == 0) {
+        debugPlan<<this<<"zero units";
         return t;
     }
     DateTime lmt = m_availableUntil.isValid() ? m_availableUntil : ( m_project ? m_project->constraintEndTime() : DateTime() );
@@ -1201,19 +1203,24 @@ DateTime Resource::availableAfter(const DateTime &time, const DateTime &limit, S
         lmt = limit;
     }
     if (time >= lmt) {
+        debugPlan<<this<<"time >= limit"<<time<<lmt<<m_project;
         return t;
     }
     Calendar *cal = calendar();
     if (cal == 0) {
         if ( sch ) sch->logWarning( i18n( "Resource %1 has no calendar defined", m_name ) );
+        debugPlan<<this<<"No calendar";
         return t;
     }
     DateTime availableFrom = m_availableFrom.isValid() ? m_availableFrom : ( m_project ? m_project->constraintStartTime() : DateTime() );
     t = availableFrom > time ? availableFrom : time;
     if ( t >= lmt ) {
-        //debugPlan<<t<<lmt;
+        debugPlan<<this<<t<<lmt;
         return DateTime();
     }
+    QTimeZone tz = cal->timeZone();
+    t = t.toTimeZone( tz );
+    lmt = lmt.toTimeZone( tz );
     t = m_workinfocache.firstAvailableAfter( t, lmt, cal, sch );
 //    t = cal->firstAvailableAfter(t, lmt, sch);
     //debugPlan<<m_currentSchedule<<""<<m_name<<" id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<" returns:"<<time.toString()<<"="<<t.toString()<<""<<lmt.toString();
@@ -1248,6 +1255,9 @@ DateTime Resource::availableBefore(const DateTime &time, const DateTime &limit, 
 #ifndef PLAN_NLOGDEBUG
     if ( sch && t < lmt ) sch->logDebug( "t < lmt: " + t.toString() + " < " + lmt.toString() );
 #endif
+    QTimeZone tz = cal->timeZone();
+    t = t.toTimeZone( tz );
+    lmt = lmt.toTimeZone( tz );
     t = m_workinfocache.firstAvailableBefore( t, lmt, cal, sch );
 //    t = cal->firstAvailableBefore(t, lmt, sch );
 #ifndef PLAN_NLOGDEBUG

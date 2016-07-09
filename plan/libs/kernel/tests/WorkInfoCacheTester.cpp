@@ -27,6 +27,7 @@
 #include <QTest>
 #include <QDir>
 
+#include <cstdlib>
 
 #include "debug.cpp"
 
@@ -271,6 +272,10 @@ void WorkInfoCacheTester::fullDay()
 
 void WorkInfoCacheTester::timeZone()
 {
+    QByteArray tz( "TZ=Europe/Berlin" );
+    putenv( tz.data() );
+    qDebug()<<"Local timezone: "<<QTimeZone::systemTimeZone();
+    
     Calendar cal("Test");
     // local zone: Europe/Berlin ( 9 hours from America/Los_Angeles )
     int laShiftDays;
@@ -280,8 +285,8 @@ void WorkInfoCacheTester::timeZone()
 
     QDate wdate(2012,1,2);
     DateTime before = DateTime(wdate.addDays(-1), QTime());
-    DateTime after = DateTime(wdate.addDays(1), QTime());
-    qDebug() << "before, after" << before << after;
+    DateTime after = DateTime(wdate.addDays(2), QTime());
+//    qDebug() << "before, after" << before << after;
     QTime t1(14,0,0); // 23 LA
     QTime t2(16,0,0); // 01 LA next day
     DateTime wdt1(wdate, t1);
@@ -314,6 +319,67 @@ qDebug() << DateTime( wdate, QTime( 23, 0, 0 ) );
     wdate = wdate.addDays( 1 );
     QCOMPARE( wic.intervals.map().value( wdate ).startTime(), DateTime( wdate, QTime( 0, 0, 0 ) ) );
     QCOMPARE( wic.intervals.map().value( wdate ).endTime(), DateTime( wdate, QTime( 1, 0, 0 ) ) );
+}
+
+void WorkInfoCacheTester::doubleTimeZones()
+{
+    QByteArray tz( "TZ=Europe/Copenhagen" );
+    putenv( tz.data() );
+    qDebug()<<"Local timezone: "<<QTimeZone::systemTimeZone();
+    
+    Calendar cal("LocalTime/Copenhagen");
+    QCOMPARE( cal.timeZone(),  QTimeZone::systemTimeZone() );
+    
+    Calendar cal2("Helsinki");
+    cal2.setTimeZone( QTimeZone( "Europe/Helsinki" ) );
+    QVERIFY( cal2.timeZone().isValid() );
+    
+    QDate wdate(2012,1,2);
+    DateTime before = DateTime(wdate, QTime());
+    DateTime after = DateTime(wdate.addDays(1), QTime());
+    //    qDebug() << "before, after" << before << after;
+    QTime t1(14,0,0); // 23 LA
+    QTime t2(16,0,0); // 01 LA next day
+    DateTime wdt1(wdate, t1);
+    DateTime wdt2(wdate, t2);
+    int length = t1.msecsTo( t2 );
+
+    CalendarDay *day = new CalendarDay(wdate, CalendarDay::Working);
+    day->addInterval(TimeInterval(t1, length));
+    cal.addDay(day);
+    QVERIFY(cal.findDay(wdate) == day);
+    
+    Debug::print( &cal, "" );
+    Resource r1;
+    r1.setCalendar( &cal );
+    const Resource::WorkInfoCache &wic = r1.workInfoCache();
+    QVERIFY( ! wic.isValid() );
+    
+    r1.calendarIntervals( before, after );
+    Debug::print(wic.intervals);
+    QCOMPARE( wic.intervals.map().count(), 1 );
+    
+    QCOMPARE( wic.intervals.map().value( wdate ).startTime(), DateTime( wdate, QTime( 14, 0, 0 ) ) );
+    QCOMPARE( wic.intervals.map().value( wdate ).endTime(), DateTime( wdate, QTime( 16, 0, 0 ) ) );
+
+    day = new CalendarDay(wdate, CalendarDay::Working);
+    day->addInterval(TimeInterval(t1, length));
+    cal2.addDay(day);
+    QVERIFY(cal2.findDay(wdate) == day);
+    
+    Debug::print( &cal2, "" );
+    Resource r2;
+    r2.setCalendar( &cal2 );
+    const Resource::WorkInfoCache &wic2 = r2.workInfoCache();
+    QVERIFY( ! wic2.isValid() );
+    
+    r2.calendarIntervals( before, after );
+    Debug::print(wic2.intervals);
+    QCOMPARE( wic2.intervals.map().count(), 1 );
+    
+    QCOMPARE( wic2.intervals.map().value( wdate ).startTime(), DateTime( wdate, QTime( 13, 0, 0 ) ) );
+    QCOMPARE( wic2.intervals.map().value( wdate ).endTime(), DateTime( wdate, QTime( 15, 0, 0 ) ) );
+    
 }
 
 } //namespace KPlato

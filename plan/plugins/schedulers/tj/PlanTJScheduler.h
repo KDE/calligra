@@ -111,9 +111,9 @@ protected:
 
     static bool exists( QList<CalendarDay*> &lst, CalendarDay *day );
     static int toTJDayOfWeek( int day );
-    static DateTime fromTime_t( time_t );
+    static DateTime fromTime_t( time_t, const QTimeZone &tz );
     static time_t toTJTime_t( const QDateTime &dt, ulong granularity );
-    AppointmentInterval fromTJInterval( const TJ::Interval &tji );
+    AppointmentInterval fromTJInterval( const TJ::Interval &tji, const QTimeZone &tz );
     static TJ::Interval toTJInterval( const QDateTime &start, const QDateTime &end, ulong tjGranularity );
     static TJ::Interval toTJInterval( const QTime &start, const QTime &end, ulong tjGranularity );
 

@@ -21,23 +21,7 @@
 #include <kptdatetime.h>
 #include <kptduration.h>
 
-#include <QTest>
-
-namespace QTest
-{
-    template<>
-    char *toString(const KPlato::DateTime &dt)
-    {
-        QString s;
-        switch ( dt.timeSpec() ) {
-            case Qt::LocalTime: s = " LocalTime"; break;
-            case Qt::UTC: s = " UTC"; break;
-            case Qt::OffsetFromUTC: s = " OffsetFromUTC"; break;
-            case Qt::TimeZone: s = " TimeZone (" + dt.timeZone().id() + ')'; break;
-        }
-        return toString( QString( "%1T%2 %3" ).arg( dt.date().toString(Qt::ISODate) ).arg( dt.time().toString( "hh:mm:ss.zzz" ) ).arg( s ) );
-    }
-}
+#include "debug.cpp"
 
 namespace KPlato
 {
@@ -151,6 +135,48 @@ void DateTimeTester::addMillisecond()
     Duration d(0, 0, 0, 0, 1);
 
     QVERIFY((dt1+d) == dt2);
+    
+}
+
+void DateTimeTester::timeZones()
+{
+    QByteArray tz("TZ=Europe/Copenhagen");
+    putenv(tz.data());
+    
+    QTimeZone testZone("Europe/London");
+    
+    DateTime dt1(QDate(2006, 1, 1), QTime(8, 0, 0, 0 ), testZone);
+    
+    DateTime dt2 = dt1;
+    qDebug()<<dt1<<dt2;
+    QCOMPARE(dt1.timeZone(), dt2.timeZone());
+    
+    dt2 += Duration(1, 0, 0, 0, 0);
+    qDebug()<<dt2;
+    QCOMPARE(dt1.timeZone(), dt2.timeZone());
+    
+    dt2 -= Duration(1, 0, 0, 0, 0);
+    qDebug()<<dt1<<dt2;
+    QCOMPARE(dt1.timeZone(), dt2.timeZone());
+    QCOMPARE(dt2, dt1);
+    
+    dt2 = dt1 + Duration(1, 0, 0, 0, 0);
+    qDebug()<<dt1<<dt2;
+    QCOMPARE(dt1.timeZone(), dt2.timeZone());
+
+    dt2 = dt2 - Duration(1, 0, 0, 0, 0);
+    qDebug()<<dt1<<dt2;
+    QCOMPARE(dt1.timeZone(), dt2.timeZone());
+    QCOMPARE(dt2, dt1);
+    
+    DateTime dt3 = QDateTime(QDate(2006, 1, 1), QTime(8, 0, 0, 0 ), testZone);
+    qDebug()<<dt3;
+    QCOMPARE(dt3.timeZone(), testZone);
+    
+    DateTime dt4(QDateTime(QDate(2006, 1, 1), QTime(8, 0, 0, 0 ), Qt::UTC));
+    dt4 += Duration(1, 0, 0, 0, 0);
+    qDebug()<<dt4;
+    QCOMPARE(dt4.timeSpec(), Qt::UTC);
     
 }
 

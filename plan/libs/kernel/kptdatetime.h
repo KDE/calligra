@@ -24,6 +24,7 @@
 
 #include <QDateTime>
 #include <QTimeZone>
+#include <QDebug>
 
 /// The main namespace.
 namespace KPlato
@@ -33,7 +34,7 @@ class Duration;
 
 /**
  * DateTime is a QDateTime which knows about Duration
- * Note that in Plan all datetimes are often in the time zone specified
+ * Note that in Plan all datetimes shall be in the time zone specified
  * in the project.
  * Exception to this is the calendar related dates and times which has
  * their own time zone specification.
@@ -48,12 +49,13 @@ public:
     ///Constructs a datetime with the given date and time, and sets the timeSpec() to Qt::LocalTime.
     /// If date is valid and time is not, the time will be set to midnight.
     DateTime( const QDate &, const QTime &);
-    ///Constructs a datetime with the given date and time in the given timezone, and sets the timeSpec() to Qt::LocalTime.
-    /// If date is valid and time is not, the time will be set to midnight.
+    ///Constructs a datetime with the given date and time in the given timezone.
+    /// If @p timeZone is not valid, local time is used.
+    /// If @p date is valid and @p time is not, the time will be set to midnight.
     DateTime( const QDate &, const QTime &, const QTimeZone &timeZone);
-    /// Constructs a copy of the @p other datetime, converting the timeSpec() to Qt::LocalTime.
+    /// Constructs a copy of the @p other QDateTime
     DateTime( const QDateTime &other );
-    /// Constructs a copy of the @p other datetime.
+    /// Constructs a copy of the @p other DateTime.
     DateTime( const DateTime &other );
     /// Constructs a datetime from @p dt, reinterpreting it to be from timezone @p timeZone.
     /// dt must be of timespec LocalTime.
@@ -81,9 +83,11 @@ public:
     DateTime &operator-=(const Duration &duration);
 
     /**
-     * Parse a datetime string and return a DateTime.
+     * Parse a datetime string @p dts and return the DateTime in the given @p timeZone.
+     * The string @p dts should be in Qt::ISODate format and contain no time zone information.
      */
     static DateTime fromString(const QString &dts, const QTimeZone &timeZone = QTimeZone::systemTimeZone());
+
 private:
 
     Duration duration(const DateTime &dt) const;
@@ -92,6 +96,9 @@ private:
 
 };
 
+
 }  //KPlato namespace
+
+KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::DateTime &dt );
 
 #endif
