@@ -36,16 +36,16 @@ static const char version[] = CALLIGRA_VERSION_STRING;
 static KAboutData * newAboutData()
 {
     KAboutData * aboutData = new KAboutData(
-        QStringLiteral("sheets"),
+        QStringLiteral("calligrasheets"),
         i18nc("application name", "Calligra Sheets"),
         QStringLiteral(CALLIGRA_VERSION_STRING),
-        i18n("Calligra Spreadsheet Application"),
+        i18n("Spreadsheet Application"),
         KAboutLicense::LGPL,
         i18n("Copyright 1998-%1, The Calligra Sheets Team", QStringLiteral(CALLIGRA_YEAR)),
         QString(),
         QStringLiteral("https://www.calligra.org/sheets/"));
     aboutData->setProductName("calligrasheets"); // for bugs.kde.org
-    aboutData->setOrganizationDomain("calligra.org");
+    aboutData->setOrganizationDomain("kde.org");
     aboutData->addAuthor(i18n("Torben Weis"), i18n("Original Author"), "weis@kde.org");
     aboutData->addAuthor(i18n("Marijn Kruisselbrink"), i18n("Maintainer"), "mkruisselbrink@kde.org");
     aboutData->addAuthor(i18n("Sebastian Sauer"), i18n("ODS and Excel, functions, scripting"), "mail@dipe.org");

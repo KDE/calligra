@@ -1,6 +1,6 @@
 
-install( FILES  BMI.kst MenuPlan.kst VacationChecklist.kst CreditCardTracker.kst  DESTINATION ${DATA_INSTALL_DIR}/sheets/templates/HomeFamily/.source)
-install( FILES  .directory BMI.desktop MenuPlan.desktop VacationChecklist.desktop CreditCardTracker.desktop  DESTINATION ${DATA_INSTALL_DIR}/sheets/templates/HomeFamily)
+install( FILES  BMI.kst MenuPlan.kst VacationChecklist.kst CreditCardTracker.kst  DESTINATION ${DATA_INSTALL_DIR}/calligrasheets/templates/HomeFamily/.source)
+install( FILES  .directory BMI.desktop MenuPlan.desktop VacationChecklist.desktop CreditCardTracker.desktop  DESTINATION ${DATA_INSTALL_DIR}/calligrasheets/templates/HomeFamily)
 
 ecm_install_icons( ICONS
     48-actions-template_bmi.png
@@ -12,7 +12,7 @@ ecm_install_icons( ICONS
     sc-actions-template_menuplan.svgz
     sc-actions-template_vacationchecklist.svgz
 
-    DESTINATION ${DATA_INSTALL_DIR}/sheets/icons
+    DESTINATION ${DATA_INSTALL_DIR}/calligrasheets/icons
     THEME hicolor
 )
 

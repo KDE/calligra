@@ -18,7 +18,7 @@ if (SHOULD_BUILD_PART_SHEETS)
 add_subdirectory( shape )
 add_subdirectory( plugins )
 
-add_definitions(-DTRANSLATION_DOMAIN=\"sheets\")
+add_definitions(-DTRANSLATION_DOMAIN=\"calligrasheets\")
 
 add_subdirectory( data )
 add_subdirectory( tests )
@@ -374,10 +374,10 @@ install(TARGETS calligrasheetspart  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/p
 
 ########### install files ###############
 
-install( FILES  sheets.rc sheets_readonly.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/sheets)
-install( FILES  ui/CellToolOptionWidgets.xml DESTINATION ${DATA_INSTALL_DIR}/sheets)
-install( FILES  sheets.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
-install( FILES  sheetsrc DESTINATION ${CONFIG_INSTALL_DIR})
+install( FILES  calligrasheets.rc calligrasheets_readonly.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/calligrasheets)
+install( FILES  ui/CellToolOptionWidgets.xml DESTINATION ${DATA_INSTALL_DIR}/calligrasheets)
+install( FILES  calligrasheets.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
+install( FILES  calligrasheetsrc DESTINATION ${CONFIG_INSTALL_DIR})
 
 # TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended
 # propertiessheets_plugin.desktop, sheets_viewplugin.desktop
@@ -426,17 +426,17 @@ install( FILES
     part/Headers.h
     part/ToolRegistry.h
     part/View.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/sheets/part COMPONENT Devel)
+DESTINATION ${INCLUDE_INSTALL_DIR}/calligrasheets/part COMPONENT Devel)
 install( FILES
     ui/CellToolBase.h
     ui/CellEditorBase.h
     ui/Selection.h
     ui/SheetView.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/sheets/ui COMPONENT Devel)
+DESTINATION ${INCLUDE_INSTALL_DIR}/calligrasheets/ui COMPONENT Devel)
 install( FILES
     database/Database.h
     database/Filter.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/sheets/database COMPONENT Devel)
+DESTINATION ${INCLUDE_INSTALL_DIR}/calligrasheets/database COMPONENT Devel)
 install( FILES
     commands/AbstractRegionCommand.h
     commands/DataManipulators.h
@@ -446,7 +446,7 @@ install( FILES
     dialogs/pivotoptions.h
     dialogs/pivotmain.h
 
-DESTINATION ${INCLUDE_INSTALL_DIR}/sheets/commands COMPONENT Devel)
+DESTINATION ${INCLUDE_INSTALL_DIR}/calligrasheets/commands COMPONENT Devel)
 
 endif ()
 
@@ -475,7 +475,7 @@ install(TARGETS kdeinit_calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 target_link_libraries( calligrasheets kdeinit_calligrasheets )
 install(TARGETS calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install( PROGRAMS  sheets.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
-install( FILES sheets.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
+install( PROGRAMS  org.kde.calligrasheets.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( FILES org.kde.calligrasheets.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
 
 endif ()

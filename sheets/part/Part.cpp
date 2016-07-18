@@ -39,7 +39,7 @@ using namespace Calligra::Sheets;
 Part::Part(QObject *parent)
     : KoPart(Factory::global(), parent)
 {
-    setTemplatesResourcePath(QLatin1String("sheets/templates/"));
+    setTemplatesResourcePath(QLatin1String("calligrasheets/templates/"));
 }
 
 Part::~Part()

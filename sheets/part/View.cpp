@@ -559,7 +559,7 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
     d->loading = true;
 
     setComponentName(Factory::global().componentName(), Factory::global().componentDisplayName());
-    setXMLFile("sheets.rc");
+    setXMLFile("calligrasheets.rc");
 
     // GUI Initializations
     initView();

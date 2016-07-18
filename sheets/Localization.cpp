@@ -99,7 +99,7 @@ QDomElement Localization::save(QDomDocument& doc) const
 
 void Localization::defaultSystemConfig()
 {
-    KLocale locale("sheets");
+    KLocale locale("calligrasheets");
     setWeekStartDay(locale.weekStartDay());
     setDecimalSymbol(locale.decimalSymbol());
     setThousandsSeparator(locale.thousandsSeparator());

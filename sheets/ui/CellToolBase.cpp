@@ -1149,7 +1149,7 @@ QList<QPointer<QWidget> >  CellToolBase::createOptionWidgets()
 {
     QList<QPointer<QWidget> > widgets;
 
-    QString xmlName = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "sheets/CellToolOptionWidgets.xml");
+    QString xmlName = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligrasheets/CellToolOptionWidgets.xml");
     debugSheets << xmlName;
     if (xmlName.isEmpty()) {
         warnSheets << "couldn't find CellToolOptionWidgets.xml file";

@@ -66,7 +66,7 @@ void FunctionModuleRegistry::Private::registerFunctionModule(FunctionModule* mod
     }
     Q_ASSERT(!module->descriptionFileName().isEmpty());
     const QString fileName = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                                    QStringLiteral("sheets/functions/")+module->descriptionFileName());
+                                                    QStringLiteral("calligrasheets/functions/")+module->descriptionFileName());
     if (fileName.isEmpty()) {
         debugSheetsFormula << module->descriptionFileName() << "not found.";
         return;

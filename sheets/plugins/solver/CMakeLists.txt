@@ -34,6 +34,6 @@ install(TARGETS sheetssolver  DESTINATION ${PLUGIN_INSTALL_DIR}/calligrasheets/e
 
 ########### install files ###############
 
-install( FILES solver.rc  DESTINATION ${DATA_INSTALL_DIR}/sheets/viewplugins)
+install( FILES solver.rc  DESTINATION ${DATA_INSTALL_DIR}/calligrasheets/viewplugins)
 
 endif()

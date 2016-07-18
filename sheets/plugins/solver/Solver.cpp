@@ -59,7 +59,7 @@ Solver::Solver(QObject* parent, const QVariantList& args)
 {
     Q_UNUSED(args)
 
-    setXMLFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "sheets/viewplugins/solver.rc"), true);
+    setXMLFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligrasheets/viewplugins/solver.rc"), true);
 
     d->dialog = 0;
     d->view = qobject_cast<View*>(parent);

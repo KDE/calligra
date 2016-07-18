@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component type="desktop">
-  <id>sheets.desktop</id>
+  <id>org.kde.calligrasheets.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
-  <name>Sheets</name>
+  <name>Calligra Sheets</name>
   <name xml:lang="ast">Fueyes</name>
   <name xml:lang="bs">Listovi</name>
   <name xml:lang="ca">Sheets</name>

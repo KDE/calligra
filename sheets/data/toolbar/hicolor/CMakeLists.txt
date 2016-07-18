@@ -89,6 +89,6 @@ ecm_install_icons( ICONS
     32-actions-format-precision-less.png
     32-actions-format-precision-more.png
 
-    DESTINATION ${DATA_INSTALL_DIR}/sheets/icons
+    DESTINATION ${DATA_INSTALL_DIR}/calligrasheets/icons
     THEME hicolor
 )

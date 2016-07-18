@@ -76,7 +76,7 @@ const KoComponentData &Factory::global()
     if (!s_global) {
         s_global = new KoComponentData(*aboutData());
 
-        KoResourcePaths::addResourceType("sheet-styles", "data", "sheets/sheetstyles/");
+        KoResourcePaths::addResourceType("sheet-styles", "data", "calligrasheets/sheetstyles/");
 
         KoDockRegistry *dockRegistry = KoDockRegistry::instance();
         dockRegistry->add(new CellEditorDockerFactory);
