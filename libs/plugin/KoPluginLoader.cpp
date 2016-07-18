@@ -173,14 +173,6 @@ QList<KPluginFactory *> KoPluginLoader::instantiatePluginFactories(const QString
 
 QList<QPluginLoader *> KoPluginLoader::pluginLoaders(const QString &directory, const QString &mimeType)
 {
-#ifdef CALLIGRA_PLUGIN_INSTALL_BASE_DIR
-    static bool pluginBaseDirAdded = false;
-    if (!pluginBaseDirAdded) {
-        QCoreApplication::addLibraryPath(CALLIGRA_PLUGIN_INSTALL_BASE_DIR);
-        pluginBaseDirAdded = true;
-    }
-#endif
-
     QList<QPluginLoader *>list;
     KPluginLoader::forEachPlugin(directory, [&](const QString &pluginPath) {
         debugPlugin << "Trying to load" << pluginPath;
