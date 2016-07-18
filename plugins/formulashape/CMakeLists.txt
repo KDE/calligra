@@ -124,6 +124,7 @@ target_link_libraries(calligra_shape_formula koformula ${M2MML_TOOL_LIBRARIES})
 install(TARGETS calligra_shape_formula  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
 
 add_subdirectory( pics ) 
-add_subdirectory( fonts ) 
+# TODO: those font files seem unused currently, investigate if still needed
+# add_subdirectory( fonts )
 add_subdirectory( tests )
 add_subdirectory( templates )
