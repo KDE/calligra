@@ -21,7 +21,7 @@
 
 #include "kptduration.h"
 #include "kptmycombobox_p.h"
-#include "plansettings.h"
+#include "calligraplansettings.h"
 
 namespace KPlato
 {

@@ -20,7 +20,7 @@
 
 #include "kptconfig.h"
 
-#include "plansettings.h"
+#include "calligraplansettings.h"
 #include "kptconfigskeleton.h"
 #include "kptfactory.h"
 #include "kptdebug.h"

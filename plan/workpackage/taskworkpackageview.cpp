@@ -28,7 +28,7 @@
 #include "kptschedule.h"
 #include "kpteffortcostmap.h"
 #include "kptitemviewsettup.h"
-#include "planworksettings.h"
+#include "calligraplanworksettings.h"
 
 #include <KGanttGraphicsView>
 #include <KGanttTreeViewRowController>

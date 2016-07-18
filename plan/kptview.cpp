@@ -115,7 +115,7 @@
 #include "kptschedulesdocker.h"
 #include "kptdebug.h"
 
-#include "plansettings.h"
+#include "calligraplansettings.h"
 #include "kptprintingcontrolprivate.h"
 
 // #include "KPtViewAdaptor.h"

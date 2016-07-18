@@ -31,7 +31,7 @@
 #include "kptschedulerplugin.h"
 #include "kptbuiltinschedulerplugin.h"
 #include "kptcommand.h"
-#include "plansettings.h"
+#include "calligraplansettings.h"
 #include "kpttask.h"
 #include "KPlatoXmlLoader.h"
 #include "kptpackage.h"

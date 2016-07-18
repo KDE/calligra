@@ -18,7 +18,7 @@
 */
 
 #include "kptcolorsconfigpanel.h"
-#include "plansettings.h"
+#include "calligraplansettings.h"
 
 namespace KPlato
 {

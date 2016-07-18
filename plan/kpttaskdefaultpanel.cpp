@@ -21,7 +21,7 @@
 
 #include "kptduration.h"
 #include "kptmycombobox_p.h"
-#include "plansettings.h"
+#include "calligraplansettings.h"
 
 #ifdef PLAN_KDEPIMLIBS_FOUND
 #include <akonadi/contact/emailaddressselectiondialog.h>

@@ -24,7 +24,7 @@
 #include "workpackage.h"
 #include "packagesettings.h"
 #include "taskcompletiondialog.h"
-#include "planworksettings.h"
+#include "calligraplanworksettings.h"
 #include "kpttaskeditor.h"
 #include "kpttaskdescriptiondialog.h"
 #include "kptcommonstrings.h"
