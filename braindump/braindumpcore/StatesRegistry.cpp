@@ -126,7 +126,7 @@ StatesRegistry::StatesRegistry() : d(new Private)
 {
     QStringList statesFilenames;
     const QStringList stateFileDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
-                                                                "stateshape/states/",
+                                                                "calligra_shape_state/states/",
                                                                 QStandardPaths::LocateDirectory);
     Q_FOREACH(const QString &dir, stateFileDirs) {
         QDirIterator iter(dir, QStringList() << QStringLiteral("*.xml"));

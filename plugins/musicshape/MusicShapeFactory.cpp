@@ -58,7 +58,7 @@ KoShape *MusicShapeFactory::createDefaultShape(KoDocumentResourceManager *) cons
 {
     static bool loadedFont = false;
     if (!loadedFont) {
-        QString fontFile = KoResourcePaths::locate("data", "musicshape/fonts/Emmentaler-14.ttf");
+        QString fontFile = KoResourcePaths::locate("data", "calligra_shape_music/fonts/Emmentaler-14.ttf");
         if (QFontDatabase::addApplicationFont(fontFile) == -1) {
             warnMusic << "Could not load emmentaler font";
         }
