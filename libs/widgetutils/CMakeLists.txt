@@ -31,6 +31,8 @@ set_target_properties(kowidgetutils
 
 install(TARGETS kowidgetutils ${INSTALL_TARGETS_DEFAULT_ARGS})
 
+if (SHOULD_BUILD_DEVEL_HEADERS)
+
 install(FILES
     KoGroupButton.h
     KoProgressBar.h
@@ -43,3 +45,5 @@ install(FILES
     DESTINATION ${INCLUDE_INSTALL_DIR}/calligra
     COMPONENT Devel
 )
+
+endif()

@@ -69,6 +69,8 @@ set_target_properties(kopageapp PROPERTIES
 )
 install(TARGETS kopageapp  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
+if (SHOULD_BUILD_DEVEL_HEADERS)
+
 install(FILES
     kopageapp_export.h
     KoPACanvas.h
@@ -91,3 +93,5 @@ install(FILES
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
 )
+
+endif()

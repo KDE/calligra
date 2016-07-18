@@ -43,6 +43,8 @@ set_target_properties(koodfreader PROPERTIES
 install(TARGETS koodfreader ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
+if (SHOULD_BUILD_DEVEL_HEADERS)
+
 #install( FILES
      # ${CMAKE_CURRENT_BINARY_DIR}/koodfreader_export.h
      # OdfReaderContext.h
@@ -55,3 +57,4 @@ install(TARGETS koodfreader ${INSTALL_TARGETS_DEFAULT_ARGS} )
      # KoTableTemplate.h
 #DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 
+endif()

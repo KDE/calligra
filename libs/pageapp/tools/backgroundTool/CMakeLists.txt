@@ -20,11 +20,13 @@ install(TARGETS kopabackgroundtool  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/p
 
 ########### install files ###############
 
+if (SHOULD_BUILD_DEVEL_HEADERS)
 install(FILES
     KoPABackgroundTool.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
 )
+endif()
 
 ecm_install_icons( ICONS
     22-actions-backgroundtool.png

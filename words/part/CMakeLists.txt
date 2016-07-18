@@ -184,6 +184,8 @@ install(TARGETS calligrawordspart  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/pa
 install( FILES calligrawords.rc calligrawords_readonly.rc  DESTINATION ${KXMLGUI_INSTALL_DIR}/calligrawords)
 install( FILES calligrawordsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 
+if (SHOULD_BUILD_DEVEL_HEADERS)
+
 install( FILES
 words_export.h
 KWPage.h
@@ -207,6 +209,7 @@ frames/KWFrameSet.h
 frames/KWTextFrameSet.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligrawords/part/frames COMPONENT Devel)
 
+endif()
 
 ###What follows is calligraauthor section###
 

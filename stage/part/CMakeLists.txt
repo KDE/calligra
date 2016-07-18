@@ -195,6 +195,8 @@ install(FILES
         DESTINATION ${DATA_INSTALL_DIR}/calligrastage/animations)
 
 ### Include files ###
+if (SHOULD_BUILD_DEVEL_HEADERS)
+
 install( FILES
         stage_export.h
         KPrAnimationDirector.h
@@ -208,14 +210,18 @@ install( FILES
         KPrShapeAnimations.h
         KPrView.h
         KPrViewModePresentation.h
-        DESTINATION ${INCLUDE_INSTALL_DIR}/calligrastage/part)
+        DESTINATION ${INCLUDE_INSTALL_DIR}/calligrastage/part
+        COMPONENT Devel)
 
 install( FILES 
          animations/KPrAnimationData.h
          animations/KPrAnimationStep.h
          animations/KPrShapeAnimation.h
-         DESTINATION ${INCLUDE_INSTALL_DIR}/calligrastage/part/animations)
+         DESTINATION ${INCLUDE_INSTALL_DIR}/calligrastage/part/animations
+         COMPONENT Devel)
 
 install( FILES
          pagelayout/KPrPlaceholders.h
-         DESTINATION ${INCLUDE_INSTALL_DIR}/calligrastage/part/pagelayout)
+         DESTINATION ${INCLUDE_INSTALL_DIR}/calligrastage/part/pagelayout
+         COMPONENT Devel)
+endif()

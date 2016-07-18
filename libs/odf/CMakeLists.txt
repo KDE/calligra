@@ -62,6 +62,8 @@ set_target_properties(koodf PROPERTIES
 install(TARGETS koodf ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
+if (SHOULD_BUILD_DEVEL_HEADERS)
+
 install( FILES
     ${CMAKE_CURRENT_BINARY_DIR}/koodf_export.h
     KoOdf.h
@@ -96,3 +98,5 @@ install( FILES
     KoElementReference.h
     KoTableTemplate.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
+
+endif()

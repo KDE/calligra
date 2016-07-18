@@ -129,6 +129,8 @@ if (APPLE)
     install(FILES osx.stylesheet DESTINATION ${DATA_INSTALL_DIR}/calligra )
 endif ()
 
+if (SHOULD_BUILD_DEVEL_HEADERS)
+
 # For now, don't install the header files because of the conflict with the komvc
 # library.
 if (FALSE)
@@ -170,3 +172,4 @@ if( Qt5DBus_FOUND )
 endif()
 endif()
 
+endif()

@@ -161,5 +161,7 @@ install(TARGETS pigmentcms  ${INSTALL_TARGETS_DEFAULT_ARGS})
 # TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
 # pigment.desktop pigmentextension.desktop
 
+if (SHOULD_BUILD_DEVEL_HEADERS)
 install( FILES ${PIGMENT_INSTALL_FILES}
          DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
+endif()

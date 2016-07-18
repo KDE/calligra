@@ -26,6 +26,8 @@ set_target_properties(basicflakes PROPERTIES
 
 install(TARGETS basicflakes  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
+if (SHOULD_BUILD_DEVEL_HEADERS)
+
 install( FILES
     tools/KoCreatePathTool.h
     tools/KoPencilTool.h
@@ -34,3 +36,5 @@ install( FILES
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra
 COMPONENT Devel)
+
+endif()

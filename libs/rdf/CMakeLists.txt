@@ -52,6 +52,8 @@ install(TARGETS kordf ${INSTALL_TARGETS_DEFAULT_ARGS} )
 # TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
 # calligra_semanticitem.desktop
 
+if (SHOULD_BUILD_DEVEL_HEADERS)
+
 install( FILES
     kordf_export.h
     RdfForward.h
@@ -70,3 +72,5 @@ install( FILES
     RdfSemanticTreeWidgetAction.h
     RdfSemanticTreeWidgetSelectAction.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
+
+endif()

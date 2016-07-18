@@ -68,6 +68,8 @@ set_target_properties(koodf2 PROPERTIES
 install(TARGETS koodf2 ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
+if (SHOULD_BUILD_DEVEL_HEADERS)
+
 install( FILES
     ${CMAKE_CURRENT_BINARY_DIR}/koodf2_export.h
 
@@ -97,3 +99,4 @@ install( FILES
 
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 
+endif()

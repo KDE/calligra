@@ -168,6 +168,8 @@ install(TARGETS kotext  ${INSTALL_TARGETS_DEFAULT_ARGS})
 # TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
 # texteditingplugin.desktop inlinetextobject.desktop
 
+if (SHOULD_BUILD_DEVEL_HEADERS)
+
 install(
     FILES
     KoDocumentRdfBase.h
@@ -238,3 +240,5 @@ install(
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra/changetracker COMPONENT Devel
 )
+
+endif()

@@ -138,6 +138,8 @@ set_target_properties(kowidgets PROPERTIES
 
 install(TARGETS kowidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
+if (SHOULD_BUILD_DEVEL_HEADERS)
+
 install( FILES
     KoGlobal.h
     KoResourceItemChooserContextMenu.h
@@ -182,3 +184,5 @@ install( FILES
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra
 COMPONENT Devel)
+
+endif()

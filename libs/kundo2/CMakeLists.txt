@@ -27,6 +27,8 @@ set_target_properties(kundo2 PROPERTIES
 )
 install(TARGETS kundo2 ${INSTALL_TARGETS_DEFAULT_ARGS})
 
+if (SHOULD_BUILD_DEVEL_HEADERS)
+
 install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/kundo2_export.h
     kundo2stack.h
@@ -38,3 +40,5 @@ install(FILES
     kundo2magicstring.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
 )
+
+endif()

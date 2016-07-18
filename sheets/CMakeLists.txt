@@ -382,6 +382,8 @@ install( FILES  calligrasheetsrc DESTINATION ${CONFIG_INSTALL_DIR})
 # TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended
 # propertiessheets_plugin.desktop, sheets_viewplugin.desktop
 
+if (SHOULD_BUILD_DEVEL_HEADERS)
+
 install( FILES
     sheets_odf_export.h
     ${CMAKE_CURRENT_BINARY_DIR}/sheets_odf_generated_export.h
@@ -445,8 +447,9 @@ install( FILES
     dialogs/pivotfilters.h
     dialogs/pivotoptions.h
     dialogs/pivotmain.h
-
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligrasheets/commands COMPONENT Devel)
+
+endif()
 
 endif ()
 
