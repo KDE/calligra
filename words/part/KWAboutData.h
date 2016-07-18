@@ -28,7 +28,7 @@
 KAboutData * newWordsAboutData()
 {
     KAboutData * aboutData = new KAboutData(
-        QStringLiteral("words"),
+        QStringLiteral("calligrawords"),
         i18nc("application name", "Calligra Words"),
         QStringLiteral(CALLIGRA_VERSION_STRING),
         i18n("Word processor"),
@@ -37,7 +37,7 @@ KAboutData * newWordsAboutData()
         QString(),
         QStringLiteral("https://www.calligra.org/words/"));
     aboutData->setProductName("calligrawords"); // for bugs.kde.org
-    aboutData->setOrganizationDomain("calligra.org");
+    aboutData->setOrganizationDomain("kde.org");
     aboutData->addAuthor(i18n("Pierre Ducroquet"), i18n("Co maintainer"), "");
     aboutData->addAuthor(i18n("C. Boemann"), i18n("Co maintainer"), "cbo@boemann.dk");
     aboutData->addAuthor(i18n("Sebastian Sauer"), i18n("Everything"), "mail@dipe.org");

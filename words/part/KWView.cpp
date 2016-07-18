@@ -137,7 +137,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     layout->addWidget(m_gui);
 
     setComponentName(KWFactory::componentData().componentName(), KWFactory::componentData().componentDisplayName());
-    setXMLFile("words.rc");
+    setXMLFile("calligrawords.rc");
 
     m_currentPage = m_document->pageManager()->begin();
 

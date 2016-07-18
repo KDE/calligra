@@ -41,14 +41,14 @@ KWPart::KWPart(QObject *parent)
     : KoPart(KWFactory::componentData(), parent)
     , m_document(0)
 {
-    setTemplatesResourcePath(QLatin1String("words/templates/"));
+    setTemplatesResourcePath(QLatin1String("calligrawords/templates/"));
 }
 
 KWPart::KWPart(const KoComponentData &componentData, QObject *parent)
     : KoPart(componentData, parent)
     , m_document(0)
 {
-    setTemplatesResourcePath(QLatin1String("words/templates/"));
+    setTemplatesResourcePath(QLatin1String("calligrawords/templates/"));
 }
 
 KWPart::~KWPart()

@@ -57,7 +57,7 @@ public:
 
         KoTemplateTree* tree(0);
         if(templateType == WORDS_MIME_TYPE)
-            tree = new KoTemplateTree("words/templates/", true);
+            tree = new KoTemplateTree("calligrawords/templates/", true);
         else if(templateType == STAGE_MIME_TYPE)
             tree = new KoTemplateTree("stage/templates/", true);
         if(!tree)

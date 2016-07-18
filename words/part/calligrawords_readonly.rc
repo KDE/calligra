@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Words" version="4" translationDomain="words">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Calligra Words" version="4" translationDomain="calligrawords">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="file_statistics"/>

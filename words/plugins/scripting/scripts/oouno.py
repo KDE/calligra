@@ -6,9 +6,9 @@ This python script connects with OpenOffice.org using PyUNO and provides
 us the functionality to control OpenOffice.org.
 
     # Execute the python-script with the ODT-file as argument
-    python `kde4-config --install data`/words/scripts/extensions/oouno.py /path/mydoc.odt
+    python `kde4-config --install data`/calligrawords/scripts/extensions/oouno.py /path/mydoc.odt
     # Define the hostaddress and port the OpenOffice.org server is running on
-    python `kde4-config --install data`/words/scripts/extensions/oouno.py --host=192.168.0.1 --port=2002 /path/mydoc.odt
+    python `kde4-config --install data`/calligrawords/scripts/extensions/oouno.py --host=192.168.0.1 --port=2002 /path/mydoc.odt
 
 We are using the PyUNO module to access OpenOffice.org. For this an optional hidden
 OpenOffice.org instance need to be started. Then the script connects as client to

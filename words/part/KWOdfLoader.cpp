@@ -121,7 +121,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
 
     if (updater) updater->setProgress(20);
 
-    KoOdfLoadingContext odfContext(odfStore.styles(), odfStore.store(), QLatin1String("words/styles/"));
+    KoOdfLoadingContext odfContext(odfStore.styles(), odfStore.store(), QLatin1String("calligrawords/styles/"));
     KoShapeLoadingContext sc(odfContext, m_document->resourceManager());
     sc.setDocumentRdf(m_document->documentRdf());
 

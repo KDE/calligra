@@ -28,6 +28,6 @@ ecm_install_icons( ICONS
 ecm_install_icons( ICONS
     22-actions-tool_pagelayout.png
 
-    DESTINATION ${DATA_INSTALL_DIR}/words/icons
+    DESTINATION ${DATA_INSTALL_DIR}/calligrawords/icons
     THEME hicolor
 )

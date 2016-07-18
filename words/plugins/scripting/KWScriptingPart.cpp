@@ -33,7 +33,7 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QVariantList& args)
 {
     Q_UNUSED(args);
     setComponentData(KWScriptingPart::componentData());
-    setXMLFile(KStandardDirs::locate("data", "words/kpartplugins/scripting.rc"), true);
+    setXMLFile(KStandardDirs::locate("data", "calligrawords/kpartplugins/scripting.rc"), true);
     kDebug(32010) << "Parent:" << parent->metaObject()->className();
 
     /*

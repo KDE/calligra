@@ -1,6 +1,6 @@
 project(words)
 
-add_definitions(-DTRANSLATION_DOMAIN=\"words\")
+add_definitions(-DTRANSLATION_DOMAIN=\"calligrawords\")
 
 include_directories(
     ${KOMAIN_INCLUDES}

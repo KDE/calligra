@@ -170,19 +170,19 @@ install(TARGETS wordsprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 set(wordspart_PART_SRCS KWFactoryInit.cpp )
 
 
-add_library(wordspart MODULE ${wordspart_PART_SRCS})
+add_library(calligrawordspart MODULE ${wordspart_PART_SRCS})
 
-kcoreaddons_desktop_to_json(wordspart wordspart.desktop)
+kcoreaddons_desktop_to_json(calligrawordspart wordspart.desktop)
 
-target_link_libraries(wordspart   wordsprivate )
+target_link_libraries(calligrawordspart   wordsprivate )
 
-install(TARGETS wordspart  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)
+install(TARGETS calligrawordspart  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)
 
 
 ########### install files ###############
 
-install( FILES words.rc words_readonly.rc  DESTINATION ${KXMLGUI_INSTALL_DIR}/words)
-install( FILES wordsrc DESTINATION ${CONFIG_INSTALL_DIR} )
+install( FILES calligrawords.rc calligrawords_readonly.rc  DESTINATION ${KXMLGUI_INSTALL_DIR}/calligrawords)
+install( FILES calligrawordsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 
 install( FILES
 words_export.h
@@ -198,14 +198,14 @@ KWApplicationConfig.h
 KWViewMode.h
 KWView.h
 KWViewModeNormal.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/words/part COMPONENT Devel)
+DESTINATION ${INCLUDE_INSTALL_DIR}/calligrawords/part COMPONENT Devel)
 
 install( FILES
 frames/KWFrame.h
 frames/KWFrameLayout.h
 frames/KWFrameSet.h
 frames/KWTextFrameSet.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/words/part/frames COMPONENT Devel)
+DESTINATION ${INCLUDE_INSTALL_DIR}/calligrawords/part/frames COMPONENT Devel)
 
 
 ###What follows is calligraauthor section###

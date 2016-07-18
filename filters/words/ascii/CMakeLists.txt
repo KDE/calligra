@@ -38,6 +38,6 @@ install(TARGETS calligra_filter_odt2ascii DESTINATION ${PLUGIN_INSTALL_DIR}/call
 
 kcoreaddons_desktop_to_json(calligra_filter_odt2ascii calligra_filter_odt2ascii.desktop)
 
-install( PROGRAMS  calligrawords_ascii.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( PROGRAMS  org.kde.calligrawords_ascii.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 endif()
