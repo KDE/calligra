@@ -1,4 +1,4 @@
-add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_formular\")
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_formula\")
 
 # To hide all the warnings from the generated itex2MML code
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
@@ -114,14 +114,14 @@ ki18n_wrap_ui( formulashape_PART_SRCS
     FormulaToolWidget.ui
 )
 
-add_library(calligra_shape_formular MODULE ${formulashape_PART_SRCS})
-kcoreaddons_desktop_to_json(calligra_shape_formular calligra_shape_formular.desktop)
+add_library(calligra_shape_formula MODULE ${formulashape_PART_SRCS})
+kcoreaddons_desktop_to_json(calligra_shape_formula calligra_shape_formula.desktop)
 
-target_link_libraries(calligra_shape_formular koformula ${M2MML_TOOL_LIBRARIES})
+target_link_libraries(calligra_shape_formula koformula ${M2MML_TOOL_LIBRARIES})
 
 
 #set_target_properties(koformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
-install(TARGETS calligra_shape_formular  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
+install(TARGETS calligra_shape_formula  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
 
 add_subdirectory( pics ) 
 add_subdirectory( fonts ) 
