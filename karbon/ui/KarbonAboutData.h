@@ -39,7 +39,7 @@ KAboutData * newKarbonAboutData()
         i18n("You are invited to participate in any way."),
         QStringLiteral("https://www.calligra.org/karbon/"));
     aboutData->setProductName("karbon"); // for bugs.kde.org
-    aboutData->setOrganizationDomain("calligra.org");
+    aboutData->setOrganizationDomain("kde.org");
     aboutData->addAuthor(
         i18n("Rob Buis"),
         QString(),

@@ -153,4 +153,4 @@ Comment[zh_CN]=创建可缩放矢量绘图
 Comment[zh_TW]=建立可調整向量圖
 X-DocPath=http://userbase.kde.org/Special:MyLanguage/Karbon
 X-DBUS-StartupType=Multi
-X-DBUS-ServiceName=org.calligra.karbon
+X-DBUS-ServiceName=org.kde.karbon
