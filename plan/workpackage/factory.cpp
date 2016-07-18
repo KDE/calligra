@@ -72,8 +72,8 @@ const KoComponentData &Factory::global()
         s_global = new KoComponentData( *aboutData() );
 
         // Add any application-specific resource directories here
-        KoResourcePaths::addResourceType("planwork_template", "data", "planwork/templates/");
-        KoResourcePaths::addResourceType("projects", "data", "planwork/projects/");
+        KoResourcePaths::addResourceType("planwork_template", "data", "calligraplanwork/templates/");
+        KoResourcePaths::addResourceType("projects", "data", "calligraplanwork/projects/");
 
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");

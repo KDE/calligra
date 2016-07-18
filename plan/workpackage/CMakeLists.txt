@@ -1,6 +1,6 @@
 #project(planwork)
 
-add_definitions(-DTRANSLATION_DOMAIN=\"planwork\")
+add_definitions(-DTRANSLATION_DOMAIN=\"calligraplanwork\")
 
 add_subdirectory( templates )
 add_subdirectory( pics )
@@ -35,7 +35,7 @@ ki18n_wrap_ui(planworkfactory_LIB_SRCS
     taskcompletionpanel.ui
 )
 
-kconfig_add_kcfg_files(planworksettings_SRCS planworksettings.kcfgc)
+kconfig_add_kcfg_files(planworksettings_SRCS calligraplanworksettings.kcfgc)
 
 add_library(planworkfactory SHARED ${planworkfactory_LIB_SRCS} ${planworksettings_SRCS})
 generate_export_header(planworkfactory BASE_NAME kplatowork)
@@ -56,7 +56,7 @@ target_link_libraries(planworkfactory
 set_target_properties(planworkfactory PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
 install(TARGETS planworkfactory ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(FILES planworksettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
+install(FILES calligraplanworksettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
 
 
 ########### KPlatoWork part ###############
@@ -64,12 +64,12 @@ install(FILES planworksettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
 set(planworkpart_PART_SRCS factoryinit.cpp )
 
 
-add_library(planworkpart MODULE ${planworkpart_PART_SRCS})
-kcoreaddons_desktop_to_json(planworkpart planworkpart.desktop)
+add_library(calligraplanworkpart MODULE ${planworkpart_PART_SRCS})
+kcoreaddons_desktop_to_json(calligraplanworkpart planworkpart.desktop)
 
-target_link_libraries(planworkpart Qt5::Core KF5::Parts planworkfactory)
+target_link_libraries(calligraplanworkpart Qt5::Core KF5::Parts planworkfactory)
 
-install(TARGETS planworkpart DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligraplanworkpart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### KPlatoWork application ###############
@@ -122,7 +122,7 @@ install(TARGETS calligraplanwork  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES  planwork.rc planwork_readonly.rc planwork_mainwindow.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/planwork)
-install( FILES  planworkrc DESTINATION ${CONFIG_INSTALL_DIR})
-install( PROGRAMS  planwork.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( FILES  calligraplanwork.rc calligraplanwork_readonly.rc calligraplanwork_mainwindow.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/calligraplanwork)
+install( FILES  calligraplanworkrc DESTINATION ${CONFIG_INSTALL_DIR})
+install( PROGRAMS  org.kde.calligraplanwork.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 

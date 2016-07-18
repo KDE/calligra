@@ -349,9 +349,9 @@ Part::Part( QWidget *parentWidget, QObject *parent, const QVariantList & /*args*
     debugPlanWork;
     setComponentData( *Factory::aboutData() );
     if ( isReadWrite() ) {
-        setXMLFile( "planwork.rc" );
+        setXMLFile( "calligraplanwork.rc" );
     } else {
-        setXMLFile( "planwork_readonly.rc" );
+        setXMLFile( "calligraplanwork_readonly.rc" );
     }
 
     View *v = new View( this, parentWidget, actionCollection() );

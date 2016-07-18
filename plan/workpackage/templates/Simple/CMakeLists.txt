@@ -1,5 +1,5 @@
-install( FILES  Empty.planworkt  DESTINATION ${DATA_INSTALL_DIR}/planwork/templates/Simple/.source)
-install( FILES  .directory Empty.desktop DESTINATION ${DATA_INSTALL_DIR}/planwork/templates/Simple)
+install( FILES  Empty.planworkt  DESTINATION ${DATA_INSTALL_DIR}/calligraplanwork/templates/Simple/.source)
+install( FILES  .directory Empty.desktop DESTINATION ${DATA_INSTALL_DIR}/calligraplanwork/templates/Simple)
 
 ecm_install_icons( ICONS
     16-actions-template_empty.png
@@ -9,6 +9,6 @@ ecm_install_icons( ICONS
     64-actions-template_empty.png
     128-actions-template_empty.png
 
-    DESTINATION ${DATA_INSTALL_DIR}/planwork/icons
+    DESTINATION ${DATA_INSTALL_DIR}/calligraplanwork/icons
     THEME hicolor
 )

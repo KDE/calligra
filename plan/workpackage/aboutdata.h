@@ -35,7 +35,7 @@ static const char PLANWORK_VERSION[] = CALLIGRA_VERSION_STRING;
 KAboutData * newAboutData()
 {
     KAboutData * aboutData = new KAboutData(
-        QStringLiteral("planwork"),
+        QStringLiteral("calligraplanwork"),
         i18nc("application name", "Plan WorkPackage Handler"),
         QStringLiteral(CALLIGRA_VERSION_STRING),
         i18n("PlanWork - Work Package handler for the Plan Project Planning Tool"),
