@@ -59,7 +59,7 @@ public:
         if(templateType == WORDS_MIME_TYPE)
             tree = new KoTemplateTree("calligrawords/templates/", true);
         else if(templateType == STAGE_MIME_TYPE)
-            tree = new KoTemplateTree("stage/templates/", true);
+            tree = new KoTemplateTree("calligrastage/templates/", true);
         if(!tree)
             return;
 

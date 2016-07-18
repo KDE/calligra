@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="7" translationDomain="stage">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="7" translationDomain="calligrastage">
     <ToolBar name="mainToolBar">
         <Action name="view_zoom"/>
         <Action name="view_zoom_out"/>

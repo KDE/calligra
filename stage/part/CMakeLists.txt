@@ -185,14 +185,14 @@ target_link_libraries(calligrastagepart calligrastageprivate )
 install(TARGETS calligrastagepart DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)
 
 ### GUI files ###
-install( FILES stage.rc stage_readonly.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/stage)
+install( FILES calligrastage.rc calligrastage_readonly.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/calligrastage)
 
-install( FILES stagerc DESTINATION ${CONFIG_INSTALL_DIR} )
+install( FILES calligrastagerc DESTINATION ${CONFIG_INSTALL_DIR} )
 
 ### Predefined Animations ###
 install(FILES
         animations/animations.xml
-        DESTINATION ${DATA_INSTALL_DIR}/stage/animations)
+        DESTINATION ${DATA_INSTALL_DIR}/calligrastage/animations)
 
 ### Include files ###
 install( FILES
@@ -208,14 +208,14 @@ install( FILES
         KPrShapeAnimations.h
         KPrView.h
         KPrViewModePresentation.h
-        DESTINATION ${INCLUDE_INSTALL_DIR}/stage/part)
+        DESTINATION ${INCLUDE_INSTALL_DIR}/calligrastage/part)
 
 install( FILES 
          animations/KPrAnimationData.h
          animations/KPrAnimationStep.h
          animations/KPrShapeAnimation.h
-         DESTINATION ${INCLUDE_INSTALL_DIR}/stage/part/animations)
+         DESTINATION ${INCLUDE_INSTALL_DIR}/calligrastage/part/animations)
 
 install( FILES
          pagelayout/KPrPlaceholders.h
-         DESTINATION ${INCLUDE_INSTALL_DIR}/stage/part/pagelayout)
+         DESTINATION ${INCLUDE_INSTALL_DIR}/calligrastage/part/pagelayout)

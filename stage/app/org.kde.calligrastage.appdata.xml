@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component type="desktop">
-  <id>stage.desktop</id>
+  <id>org.kde.calligrastage.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
-  <name>Stage</name>
+  <name>Calligra Stage</name>
   <name xml:lang="bs">Stage</name>
   <name xml:lang="ca">Stage</name>
   <name xml:lang="ca-valencia">Stage</name>

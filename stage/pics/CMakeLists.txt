@@ -2,18 +2,18 @@ add_subdirectory( animations )
 
 install( FILES
          layout-elements.svg
-         DESTINATION ${DATA_INSTALL_DIR}/stage/pics)
+         DESTINATION ${DATA_INSTALL_DIR}/calligrastage/pics)
 
 install( FILES
     pen.png
-    DESTINATION ${DATA_INSTALL_DIR}/stage/cursors
+    DESTINATION ${DATA_INSTALL_DIR}/calligrastage/cursors
 )
 
 ecm_install_icons( ICONS
     16-actions-black.png
     16-actions-highlight.png
 
-    DESTINATION ${DATA_INSTALL_DIR}/stage/icons
+    DESTINATION ${DATA_INSTALL_DIR}/calligrastage/icons
     THEME hicolor
 )
 

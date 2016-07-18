@@ -33,7 +33,7 @@ KPrPresentationDrawStrategy::KPrPresentationDrawStrategy( KPrPresentationTool * 
 : KPrPresentationStrategyBase( tool )
 {
     m_widget = new KPrPresentationDrawWidget(canvas());
-    QPixmap pix(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "stage/cursors/pen.png"));
+    QPixmap pix(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligrastage/cursors/pen.png"));
     const qreal factor = 1.2;
     const int oldWidth = pix.width();
     const int oldHeight = pix.height();

@@ -228,7 +228,7 @@ void KPrPredefinedAnimationsLoader::readDefaultAnimations()
     KoShapeLoadingContext shapeContext(context, 0);
     KoXmlDocument doc;
 
-    const QString filePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "stage/animations/animations.xml");
+    const QString filePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligrastage/animations/animations.xml");
     if (!filePath.isEmpty()) {
         QFile file(filePath);
         QString errorMessage;

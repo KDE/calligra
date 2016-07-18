@@ -69,10 +69,10 @@ set(thumbnail_FILES
 #file(GLOB desktop_FILES *.desktop)
 #file(GLOB otp_FILES *.otp)
 
-install( FILES ${desktop_FILES} DESTINATION ${DATA_INSTALL_DIR}/stage/templates/odf/ )
-install( FILES ${otp_FILES} DESTINATION ${DATA_INSTALL_DIR}/stage/templates/odf/.source)
-install( FILES ${thumbnail_FILES} DESTINATION ${DATA_INSTALL_DIR}/stage/templates/odf/.thumbnail)
-install( FILES .directory DESTINATION ${DATA_INSTALL_DIR}/stage/templates/odf/)
+install( FILES ${desktop_FILES} DESTINATION ${DATA_INSTALL_DIR}/calligrastage/templates/odf/ )
+install( FILES ${otp_FILES} DESTINATION ${DATA_INSTALL_DIR}/calligrastage/templates/odf/.source)
+install( FILES ${thumbnail_FILES} DESTINATION ${DATA_INSTALL_DIR}/calligrastage/templates/odf/.thumbnail)
+install( FILES .directory DESTINATION ${DATA_INSTALL_DIR}/calligrastage/templates/odf/)
 
 ecm_install_icons( ICONS
     64-actions-blue_orange_vector.png
@@ -95,6 +95,6 @@ ecm_install_icons( ICONS
     sc-actions-cohere-magenta.svgz
     sc-actions-cohere-red.svgz
 
-    DESTINATION ${DATA_INSTALL_DIR}/stage/icons
+    DESTINATION ${DATA_INSTALL_DIR}/calligrastage/icons
     THEME hicolor
 )

@@ -230,9 +230,9 @@ void KPrView::initActions()
 {
     setComponentName(KPrFactory::componentData().componentName(), KPrFactory::componentData().componentDisplayName());
     if (!koDocument()->isReadWrite() )
-       setXMLFile( "stage_readonly.rc" );
+       setXMLFile( "calligrastage_readonly.rc" );
     else
-       setXMLFile( "stage.rc" );
+       setXMLFile( "calligrastage.rc" );
 
     // do special stage stuff here
     m_actionExportHtml = new QAction(i18n("Export as HTML..."), this);

@@ -36,7 +36,7 @@
 KPrPart::KPrPart(QObject *parent)
     : KoPart(KPrFactory::componentData(), parent)
 {
-    setTemplatesResourcePath(QLatin1String("stage/templates/"));
+    setTemplatesResourcePath(QLatin1String("calligrastage/templates/"));
 }
 
 KPrPart::~KPrPart()

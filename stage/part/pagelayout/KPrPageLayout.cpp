@@ -139,7 +139,7 @@ QPixmap KPrPageLayout::thumbnail() const
     QPainter p( &pic );
 
     // TODO: use QStandardPaths for that instead
-    QString file = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("stage/pics/layout-elements.svg"));
+    QString file = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("calligrastage/pics/layout-elements.svg"));
     if ( renderer.load( file ) ) {
         QList<KPrPlaceholder *>::const_iterator it( m_placeholders.begin() );
         for ( ; it != m_placeholders.end(); ++it ) {

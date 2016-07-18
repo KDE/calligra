@@ -62,7 +62,7 @@ QObject* KPrFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, Q
     Q_UNUSED( keyword );
     KPrPart *part = new KPrPart(parent);
     KPrDocument *doc = new KPrDocument(part);
-    doc->setDefaultStylesResourcePath(QLatin1String("stage/styles/"));
+    doc->setDefaultStylesResourcePath(QLatin1String("calligrastage/styles/"));
     part->setDocument(doc);
     return part;
 }

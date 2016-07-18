@@ -134,7 +134,7 @@ void KPrHtmlExportDialog::generateSlidesNames(const QList<KoPAPageBase*> &slides
 void KPrHtmlExportDialog::loadTemplatesList()
 {
     const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
-                                                       QStringLiteral("stage/templates/exportHTML/templates"),
+                                                       QStringLiteral("calligrastage/templates/exportHTML/templates"),
                                                        QStandardPaths::LocateDirectory);
     for (QStringList::ConstIterator path=dirs.constBegin(); path!=dirs.constEnd(); ++path) {
         QDir dir(*path);
@@ -293,7 +293,7 @@ bool KPrHtmlExportDialog::selectedTemplateIsSystemFavorite()
 
     const QString writablePath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
     const QStringList paths = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
-                                                        QStringLiteral("stage/templates/exportHTML"),
+                                                        QStringLiteral("calligrastage/templates/exportHTML"),
                                                         QStandardPaths::LocateDirectory);
     foreach (const QString &path, paths) {
         if (!path.startsWith(writablePath)) {
