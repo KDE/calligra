@@ -1,4 +1,4 @@
-add_definitions(-DTRANSLATION_DOMAIN=\"planlibs\")
+add_definitions(-DTRANSLATION_DOMAIN=\"calligraplanlibs\")
 
 add_subdirectory( kernel )
 add_subdirectory( models )

@@ -1,8 +1,8 @@
-File=plansettings.kcfg 
+File=calligraplansettings.kcfg
 ClassName=KPlatoSettings
-Singleton=true 
+Singleton=true
 Mutators=true
 Inherits=KPlatoConfigSkeleton
 IncludeFiles="kptconfigskeleton.h"
 TranslationSystem=kde
-TranslationDomain=plan
+TranslationDomain=calligraplan

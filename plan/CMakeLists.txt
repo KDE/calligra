@@ -37,7 +37,7 @@ add_subdirectory( workpackage )
 
 include_directories(${KPLATO_INCLUDES})
 
-add_definitions(-DTRANSLATION_DOMAIN=\"plan\")
+add_definitions(-DTRANSLATION_DOMAIN=\"calligraplan\")
 
 ########### KPlato private library ###############
 
@@ -85,7 +85,7 @@ ki18n_wrap_ui(planprivate_LIB_SRCS
     kptinsertfilepanel.ui
 )
 
-kconfig_add_kcfg_files(plansettings_SRCS plansettings.kcfgc)
+kconfig_add_kcfg_files(plansettings_SRCS calligraplansettings.kcfgc)
 
 add_library(planprivate SHARED ${planprivate_LIB_SRCS} ${plansettings_SRCS} )
 generate_export_header(planprivate BASE_NAME kplato)
@@ -112,13 +112,13 @@ install(TARGETS planprivate ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 set(planpart_PART_SRCS kptfactoryinit.cpp )
 
-add_library(planpart MODULE ${planpart_PART_SRCS})
+add_library(calligraplanpart MODULE ${planpart_PART_SRCS})
 
-kcoreaddons_desktop_to_json(planpart planpart.desktop)
+kcoreaddons_desktop_to_json(calligraplanpart planpart.desktop)
 
-target_link_libraries(planpart KF5::Parts planprivate)
+target_link_libraries(calligraplanpart KF5::Parts planprivate)
 
-install(TARGETS planpart DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)
+install(TARGETS calligraplanpart DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)
 
 
 ########### KPlato executable ###############
@@ -150,11 +150,11 @@ install(TARGETS calligraplan  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES  plan.rc plan_readonly.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/plan)
-install( PROGRAMS  plan.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
-install( FILES  planrc DESTINATION ${CONFIG_INSTALL_DIR})
-install(FILES plansettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
-install(FILES plan.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
+install( FILES  calligraplan.rc calligraplan_readonly.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/calligraplan)
+install( PROGRAMS  org.kde.calligraplan.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( FILES  calligraplanrc DESTINATION ${CONFIG_INSTALL_DIR})
+install(FILES calligraplansettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
+install(FILES org.kde.calligraplan.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
 
 # TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
 # plan_viewplugin.desktop
@@ -166,5 +166,5 @@ install(FILES
     about/tips.html
     about/tutorial.html
     about/plan.css
-    DESTINATION ${DATA_INSTALL_DIR}/plan/about
+    DESTINATION ${DATA_INSTALL_DIR}/calligraplan/about
 )

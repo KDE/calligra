@@ -211,9 +211,9 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
 
     setComponentName(Factory::global().componentName(), Factory::global().componentDisplayName());
     if ( !doc->isReadWrite() )
-        setXMLFile( "plan_readonly.rc" );
+        setXMLFile( "calligraplan_readonly.rc" );
     else
-        setXMLFile( "plan.rc" );
+        setXMLFile( "calligraplan.rc" );
 
 //     new ViewAdaptor( this );
 
@@ -885,7 +885,7 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString &tag, const Q
     taskeditor->updateReadWrite( m_readWrite );
 
     // last:
-    taskeditor->setTaskModules( KoResourcePaths::findAllResources( "plan_taskmodules", QString(), KoResourcePaths::NoDuplicates ) );
+    taskeditor->setTaskModules( KoResourcePaths::findAllResources( "calligraplan_taskmodules", QString(), KoResourcePaths::NoDuplicates ) );
     return taskeditor;
 }
 
@@ -3020,7 +3020,7 @@ void View::slotCurrencyConfigFinished( int result )
 void View::saveTaskModule( const QUrl &url, Project *project )
 {
     debugPlan<<url<<project;
-    const QString dir = KoResourcePaths::saveLocation( "plan_taskmodules" );
+    const QString dir = KoResourcePaths::saveLocation( "calligraplan_taskmodules" );
     debugPlan<<"dir="<<dir;
     if ( ! dir.isEmpty() ) {
         MainDocument part(getKoPart());

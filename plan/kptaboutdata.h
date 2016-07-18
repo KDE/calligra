@@ -32,7 +32,7 @@ namespace KPlato
 KAboutData * newAboutData()
 {
     KAboutData *aboutData = new KAboutData(
-        QStringLiteral("plan"),
+        QStringLiteral("calligraplan"),
         i18nc("application name", "Plan"),
         QStringLiteral(CALLIGRA_VERSION_STRING),
         i18n("Project Planning and Management Tool"),
@@ -46,7 +46,7 @@ KAboutData * newAboutData()
     aboutData->addAuthor(i18n("Raphael Langerhorst"),QString(),"raphael.langerhorst@kdemail.net");
 
     aboutData->setProductName( "calligraplan" ); // for bugs.kde.org
-    aboutData->setOrganizationDomain("calligra.org");
+    aboutData->setOrganizationDomain("kde.org");
 
     return aboutData;
 }

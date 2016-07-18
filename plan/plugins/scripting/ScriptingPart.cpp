@@ -49,7 +49,7 @@ KPlatoScriptingPart::KPlatoScriptingPart(QObject *parent, const QVariantList &ar
 {
     Q_UNUSED(args);
     //setComponentData(ScriptingPart::componentData());
-    setXMLFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "plan/viewplugins/scripting.rc"), true);
+    setXMLFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligraplan/viewplugins/scripting.rc"), true);
     debugPlanScripting <<"PlanScripting plugin. Class:" << metaObject()->className() <<", Parent:" <<(parent?parent->metaObject()->className():"0");
 
 }

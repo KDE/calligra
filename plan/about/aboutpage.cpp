@@ -46,7 +46,7 @@ KPlatoAboutPage::~KPlatoAboutPage()
 QString KPlatoAboutPage::main()
 {
     KIconLoader *iconloader = KIconLoader::global();
-    QString res = loadFile( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "plan/about/main.html" ));
+    QString res = loadFile( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligraplan/about/main.html" ));
     if ( res.isEmpty() ) {
         return res;
     }
@@ -81,7 +81,7 @@ QString KPlatoAboutPage::main()
 QString KPlatoAboutPage::intro()
 {
     KIconLoader *iconloader = KIconLoader::global();
-    QString res = loadFile( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "plan/about/intro.html" ));
+    QString res = loadFile( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligraplan/about/intro.html" ));
     if ( res.isEmpty() ) {
         return res;
     }
@@ -111,7 +111,7 @@ QString KPlatoAboutPage::intro()
 QString KPlatoAboutPage::tips()
 {
     
-    QString res = loadFile( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "plan/about/tips.html" ));
+    QString res = loadFile( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligraplan/about/tips.html" ));
     if ( res.isEmpty() ) {
         return res;
     }
@@ -157,7 +157,7 @@ QString KPlatoAboutPage::tips()
 
 QString KPlatoAboutPage::tutorial( const QString &header, const QString &text, const QString &nextpage, const QString &nexttext )
 {
-    QString res = loadFile( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "plan/about/tutorial.html" ));
+    QString res = loadFile( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligraplan/about/tutorial.html" ));
     if ( res.isEmpty() ) {
         return res;
     }

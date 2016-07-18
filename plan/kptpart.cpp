@@ -28,7 +28,7 @@
 Part::Part(QObject *parent)
     : KoPart(Factory::global(), parent)
 {
-    setTemplatesResourcePath(QLatin1String("plan/templates/"));
+    setTemplatesResourcePath(QLatin1String("calligraplan/templates/"));
 }
 
 Part::~Part()
