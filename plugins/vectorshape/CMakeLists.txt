@@ -35,7 +35,7 @@ install(TARGETS calligra_shape_vector DESTINATION ${PLUGIN_INSTALL_DIR}/calligra
 
 ########### install files ###############
 
-if (SHARED_MIME_INFO_FOUND)
+if (SharedMimeInfo_FOUND)
     install(FILES calligra_svm.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
     update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})
 endif ()

@@ -24,7 +24,7 @@ if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install(FILES stage_key_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 endif()
 
-if (SHARED_MIME_INFO_FOUND)
+if (SharedMimeInfo_FOUND)
     install(FILES x-iwork-keynote-sffkey.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
     update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})
 endif ()

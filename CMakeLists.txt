@@ -987,7 +987,7 @@ if (KReport_FOUND AND KREPORT_SCRIPTING)
 endif()
 
 calligra_drop_product_on_bad_condition( LIB_KOMSOOXML
-    SHARED_MIME_INFO_FOUND "SharedMimeInfo not found (needed to install mimetypes)"
+    SharedMimeInfo_FOUND "SharedMimeInfo not found (needed to install mimetypes)"
 )
 
 calligra_drop_product_on_bad_condition( FEATURE_RDF
