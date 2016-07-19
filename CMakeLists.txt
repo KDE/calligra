@@ -1189,7 +1189,6 @@ endif()
 # non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
 add_subdirectory(libs)
 add_subdirectory(interfaces)
-add_subdirectory(cmake)
 add_subdirectory(pics)
 add_subdirectory(plugins)
 add_subdirectory(servicetypes)
