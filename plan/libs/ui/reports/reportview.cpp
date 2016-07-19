@@ -487,9 +487,7 @@ void ReportWidget::slotRefreshView()
     }
     ReportData *rd = createReportData( e );
     m_preRenderer->setSourceData( rd );
-    //QT5TODO: see how to make this depend on scripting availability
-//     m_preRenderer->registerScriptObject(new ProjectAccess( rd ), "project");
-
+    m_preRenderer->registerScriptObject(new ProjectAccess( rd ), "project");
     if (! m_preRenderer->generateDocument()) {
         debugPlan << "Could not generate report document";
         return;

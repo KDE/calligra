@@ -983,6 +983,9 @@ endif()
 if (NOT QT_MAC_USE_COCOA)
     set(NOT_COCOA TRUE)
 endif()
+if (KReport_FOUND AND KREPORT_SCRIPTING)
+    set(KReport_WithScripting_FOUND TRUE)
+endif()
 
 calligra_drop_product_on_bad_condition( LIB_KOMSOOXML
     SHARED_MIME_INFO_FOUND "SharedMimeInfo not found (needed to install mimetypes)"
@@ -1080,7 +1083,7 @@ calligra_drop_product_on_bad_condition( APP_BRAINDUMP
 calligra_drop_product_on_bad_condition( APP_PLAN
     KGantt_FOUND "KGantt devel not found"
     KChart_FOUND "KChart devel not found"
-    KReport_FOUND "KReport not found"
+    KReport_WithScripting_FOUND "KReport with scripting support not found"
     KPropertyWidgets_FOUND "KPropertyWidgets not found"
 )
 
