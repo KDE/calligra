@@ -835,7 +835,6 @@ macro_optional_find_package(Libqgit2)
 ###############################
 
 include(MacroCalligraAddBenchmark)
-include(MacroCalligraAddTest)
 
  ####################
 #####################
