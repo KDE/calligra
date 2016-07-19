@@ -1,4 +1,4 @@
-add_definitions(-DTRANSLATION_DOMAIN=\"sheetscalendartool\")
+add_definitions(-DTRANSLATION_DOMAIN=\"calligrasheets_calendar\")
 
 include_directories(${CMAKE_SOURCE_DIR}/sheets ${KOMAIN_INCLUDES})
 

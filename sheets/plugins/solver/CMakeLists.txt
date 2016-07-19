@@ -1,6 +1,6 @@
 if(GSL_FOUND)
 
-add_definitions(-DTRANSLATION_DOMAIN=\"sheetssolver\")
+add_definitions(-DTRANSLATION_DOMAIN=\"calligrasheets_solver\")
 
 include_directories( ${CMAKE_SOURCE_DIR}/sheets
                      ${CMAKE_BINARY_DIR}/sheets

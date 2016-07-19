@@ -1,4 +1,4 @@
-add_definitions(-DTRANSLATION_DOMAIN=\"planrcpsplugin\")
+add_definitions(-DTRANSLATION_DOMAIN=\"calligraplan_scheduler_rcps\")
 
 set(LIBRCPS_INCLUDE_DIR 3rdparty/LibRCPS/src)
 include_directories( ${LIBRCPS_INCLUDE_DIR} ${KOODF_INCLUDES} ${CMAKE_SOURCE_DIR}/plan/libs/kernel  )
