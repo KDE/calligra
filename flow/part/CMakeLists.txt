@@ -49,8 +49,8 @@ install(TARGETS calligraflow ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ### desktop files ###
 install( FILES flowpart.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-install( PROGRAMS flow.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
-install( FILES flow.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
+install( PROGRAMS org.kde.calligraflow.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( FILES org.kde.calligraflow.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 
 ### GUI files ###
 install( FILES flow.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/flow)
