@@ -4,31 +4,6 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>Calligra Sheets</name>
-  <name xml:lang="ast">Fueyes</name>
-  <name xml:lang="bs">Listovi</name>
-  <name xml:lang="ca">Sheets</name>
-  <name xml:lang="ca-valencia">Sheets</name>
-  <name xml:lang="cs">Sheets</name>
-  <name xml:lang="da">Sheets</name>
-  <name xml:lang="de">Sheets</name>
-  <name xml:lang="en-GB">Sheets</name>
-  <name xml:lang="es">Sheets</name>
-  <name xml:lang="et">Sheets</name>
-  <name xml:lang="fi">Sheets</name>
-  <name xml:lang="fr">Sheets</name>
-  <name xml:lang="gl">Sheets</name>
-  <name xml:lang="ia">Sheets</name>
-  <name xml:lang="it">Sheets</name>
-  <name xml:lang="ja">Sheets</name>
-  <name xml:lang="nl">Werkbladen</name>
-  <name xml:lang="pl">Arkusze</name>
-  <name xml:lang="pt">Sheets</name>
-  <name xml:lang="pt-BR">Sheets</name>
-  <name xml:lang="sk">Sheets</name>
-  <name xml:lang="sv">Sheets</name>
-  <name xml:lang="uk">Sheets</name>
-  <name xml:lang="x-test">xxSheetsxx</name>
-  <name xml:lang="zh-CN">Sheets</name>
   <summary>Spreadsheet</summary>
   <summary xml:lang="ast">Fueyes de cálculu</summary>
   <summary xml:lang="bs">Tablica</summary>

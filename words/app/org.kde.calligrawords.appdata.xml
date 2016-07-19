@@ -4,32 +4,6 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>Calligra Words</name>
-  <name xml:lang="ast">Words</name>
-  <name xml:lang="bs">Words</name>
-  <name xml:lang="ca">Words</name>
-  <name xml:lang="ca-valencia">Words</name>
-  <name xml:lang="cs">Words</name>
-  <name xml:lang="da">Words</name>
-  <name xml:lang="de">Words</name>
-  <name xml:lang="en-GB">Words</name>
-  <name xml:lang="es">Words</name>
-  <name xml:lang="et">Words</name>
-  <name xml:lang="fi">Words</name>
-  <name xml:lang="fr">Words</name>
-  <name xml:lang="gl">Palabras</name>
-  <name xml:lang="ia">Words</name>
-  <name xml:lang="it">Words</name>
-  <name xml:lang="ja">Words</name>
-  <name xml:lang="nb">Words</name>
-  <name xml:lang="nl">Words</name>
-  <name xml:lang="pl">Słowa</name>
-  <name xml:lang="pt">Words</name>
-  <name xml:lang="pt-BR">Words</name>
-  <name xml:lang="sk">Words</name>
-  <name xml:lang="sv">Words</name>
-  <name xml:lang="uk">Words</name>
-  <name xml:lang="x-test">xxWordsxx</name>
-  <name xml:lang="zh-CN">Words</name>
   <summary>Word Processor</summary>
   <summary xml:lang="bs">Program za obradu teksta</summary>
   <summary xml:lang="ca">Processador de textos</summary>
