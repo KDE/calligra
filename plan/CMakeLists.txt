@@ -154,7 +154,7 @@ install( FILES  calligraplan.rc calligraplan_readonly.rc DESTINATION ${KXMLGUI_I
 install( PROGRAMS  org.kde.calligraplan.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  calligraplanrc DESTINATION ${CONFIG_INSTALL_DIR})
 install(FILES calligraplansettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
-install(FILES org.kde.calligraplan.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
+install(FILES org.kde.calligraplan.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 
 # TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
 # plan_viewplugin.desktop

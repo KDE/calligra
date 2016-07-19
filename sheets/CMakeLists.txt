@@ -479,6 +479,6 @@ target_link_libraries( calligrasheets kdeinit_calligrasheets )
 install(TARGETS calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( PROGRAMS  org.kde.calligrasheets.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
-install( FILES org.kde.calligrasheets.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
+install( FILES org.kde.calligrasheets.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 
 endif ()
