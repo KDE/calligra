@@ -986,10 +986,6 @@ if (KReport_FOUND AND KREPORT_SCRIPTING)
     set(KReport_WithScripting_FOUND TRUE)
 endif()
 
-calligra_drop_product_on_bad_condition( LIB_KOMSOOXML
-    SharedMimeInfo_FOUND "SharedMimeInfo not found (needed to install mimetypes)"
-)
-
 calligra_drop_product_on_bad_condition( FEATURE_RDF
     Soprano_FOUND "Soprano not found"
 )
