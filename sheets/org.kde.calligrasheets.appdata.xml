@@ -4,6 +4,11 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>Calligra Sheets</name>
+  <name xml:lang="ca">Sheets del Calligra</name>
+  <name xml:lang="es">Calligra Sheets</name>
+  <name xml:lang="nl">Calligra Sheets</name>
+  <name xml:lang="pt">Calligra Sheets</name>
+  <name xml:lang="sv">Calligra Sheets</name>
   <name xml:lang="x-test">xxCalligra Sheetsxx</name>
   <summary>Spreadsheet</summary>
   <summary xml:lang="ast">Fueyes de cálculu</summary>

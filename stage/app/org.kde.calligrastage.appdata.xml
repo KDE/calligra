@@ -4,6 +4,11 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>Calligra Stage</name>
+  <name xml:lang="ca">Stage del Calligra</name>
+  <name xml:lang="es">Calligra Stage</name>
+  <name xml:lang="nl">Calligra Stage</name>
+  <name xml:lang="pt">Calligra Stage</name>
+  <name xml:lang="sv">Calligra Stage</name>
   <name xml:lang="x-test">xxCalligra Stagexx</name>
   <summary>Presentation</summary>
   <summary xml:lang="bs">Prezentacija</summary>
