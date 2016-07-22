@@ -83,6 +83,11 @@ const QString MctStaticData::GRAPHICOBJ_PATH = "Pictures/";
 
 const QChar MctStaticData::REDOCHAR = 'r';
 
+// static variables for xml namespaces
+const QString MctStaticData::NS_DC = "dc";
+const QString MctStaticData::NS_C = "c";
+const QString MctStaticData::NS_OFFICE = "office";
+
 //properties stored as integers
 const QSet<QString> MctStaticData::TEXTGRAPHICOBJECTS_INTPROPS = QSet<QString>() << "BackColorTransparency"
  <<  "BackGraphicTransparency" << "VertOrientPosition" << "AdjustRed" << "HoriOrient" << "LeftBorderDistance"

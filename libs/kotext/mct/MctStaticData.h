@@ -84,6 +84,10 @@ public:
 
     static const QChar REDOCHAR;
 
+    static const QString NS_DC;
+    static const QString NS_C;
+    static const QString NS_OFFICE;
+
     static int currentRevision;    
 
     static const QSet<QString> TEXTGRAPHICOBJECTS_INTPROPS;
@@ -232,3 +236,4 @@ private:
 };
 
 #endif // MCTSTATICDATA_H
+
