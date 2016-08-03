@@ -75,7 +75,6 @@ const QString MctStaticData::MOVEDCELL = "dcell";
 const QString MctStaticData::DATESEP = "-";
 const QString MctStaticData::TIMESEP = ":";
 const QString MctStaticData::DATETIMESEP = "T";
-const QString MctStaticData::STARTINGSTRING = "started";
 
 // static variables to store URL paths
 const QString MctStaticData::GRAPHICOBJ = "vnd.sun.star.GraphicObject:";
@@ -83,10 +82,14 @@ const QString MctStaticData::GRAPHICOBJ_PATH = "Pictures/";
 
 const QChar MctStaticData::REDOCHAR = 'r';
 
-// static variables for xml namespaces
+// static variables for xml namespaces (nsURI)
 const QString MctStaticData::NS_DC = "dc";
 const QString MctStaticData::NS_C = "c";
 const QString MctStaticData::NS_OFFICE = "office";
+
+// custom static attributes from XML
+const QString MctStaticData::VERSION = "version";
+const QString MctStaticData::STARTINGSTRING = "started"; // mct enabled date
 
 //properties stored as integers
 const QSet<QString> MctStaticData::TEXTGRAPHICOBJECTS_INTPROPS = QSet<QString>() << "BackColorTransparency"

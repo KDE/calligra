@@ -103,9 +103,20 @@ MctAbstractGraph::MctAbstractGraph(const QString &redoOrUndo, const QString &odt
         file.open(QIODevice::WriteOnly);
 
         m_root = m_doc->createElement(redoOrUndo);
+
+        m_root.setAttribute("xmlns", "https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=office-collab");
+        m_root.setAttribute("xmlns:" + MctStaticData::NS_OFFICE, "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
+        m_root.setAttribute("xmlns:" + MctStaticData::NS_DC, "http://purl.org/dc/elements/1.1/");
+        m_root.setAttribute("xmlns:" + MctStaticData::NS_C, "https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=office-collab");
+
+        // version attribute
+        m_root.setAttribute(MctStaticData::NS_OFFICE + ":" + MctStaticData::VERSION,  1.3); // TODO: value should not be fixed like this!
+
+        // started attribute
         QString datestring = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
         datestring.replace(" ", "T");
-        m_root.setAttribute("started",datestring);
+        m_root.setAttribute(MctStaticData::STARTINGSTRING, datestring);
+
         m_doc->appendChild(m_root);
 
         QTextStream out(&file);

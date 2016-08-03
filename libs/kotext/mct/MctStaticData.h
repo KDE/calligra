@@ -77,7 +77,6 @@ public:
     static const QString DATESEP;
     static const QString TIMESEP;
     static const QString DATETIMESEP;
-    static const QString STARTINGSTRING;
 
     static const QString GRAPHICOBJ;
     static const QString GRAPHICOBJ_PATH;
@@ -87,6 +86,9 @@ public:
     static const QString NS_DC;
     static const QString NS_C;
     static const QString NS_OFFICE;
+
+    static const QString VERSION;
+    static const QString STARTINGSTRING;
 
     static int currentRevision;    
 
