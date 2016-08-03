@@ -251,9 +251,16 @@ Qt::ItemFlags ScheduleItemModel::flags( const QModelIndex &index ) const
     if ( !m_readWrite  ) {
         return flags &= ~Qt::ItemIsEditable;
     }
-    flags &= ~Qt::ItemIsEditable;
     ScheduleManager *sm = manager( index );
-    int capabilities = sm->schedulerPlugin()->capabilities();
+    if ( sm == 0 ) {
+        return flags;
+    }
+    SchedulerPlugin *pl = sm->schedulerPlugin();
+    if ( pl == 0 ) {
+        return flags;
+    }
+    int capabilities = pl->capabilities();
+    flags &= ~Qt::ItemIsEditable;
     if ( sm && ! sm->isBaselined() ) {
         switch ( index.column() ) {
             case ScheduleModel::ScheduleState: break;
@@ -451,7 +458,11 @@ QVariant ScheduleItemModel::allowOverbooking( const QModelIndex &index, int role
     if ( sm == 0 ) {
         return QVariant();
     }
-    int capabilities = sm->schedulerPlugin()->capabilities();
+    SchedulerPlugin *pl = sm->schedulerPlugin();
+    if ( pl == 0 ) {
+        return QVariant();
+    }
+    int capabilities = pl->capabilities();
     switch ( role ) {
         case Qt::EditRole:
             return sm->allowOverbooking();
@@ -479,11 +490,11 @@ QVariant ScheduleItemModel::allowOverbooking( const QModelIndex &index, int role
             if ( capabilities & SchedulerPlugin::AllowOverbooking ) {
                 return sm->allowOverbooking()
                             ? i18nc( "@info:tooltip", "Allow overbooking of resources" )
-                            : i18nc( "@info:tooltip 1=scheduler name", "%1 always allows overbooking of resources", sm->schedulerPlugin()->name() );
+                            : i18nc( "@info:tooltip 1=scheduler name", "%1 always allows overbooking of resources", pl->name() );
             }
             if ( capabilities & SchedulerPlugin::AvoidOverbooking ) {
                 return sm->allowOverbooking()
-                            ? i18nc( "@info:tooltip 1=scheduler name", "%1 always avoids overbooking of resources", sm->schedulerPlugin()->name() )
+                            ? i18nc( "@info:tooltip 1=scheduler name", "%1 always avoids overbooking of resources", pl->name() )
                             : i18nc( "@info:tooltip", "Avoid overbooking resources" );
             }
             break;
@@ -636,7 +647,11 @@ QVariant ScheduleItemModel::schedulingDirection( const QModelIndex &index, int r
     if ( sm == 0 ) {
         return QVariant();
     }
-    int capabilities = sm->schedulerPlugin()->capabilities();
+    SchedulerPlugin *pl = sm->schedulerPlugin();
+    if ( pl == 0 ) {
+        return QVariant();
+    }
+    int capabilities = pl->capabilities();
     switch ( role ) {
         case Qt::EditRole:
             return sm->schedulingDirection();
@@ -663,13 +678,13 @@ QVariant ScheduleItemModel::schedulingDirection( const QModelIndex &index, int r
             }
             if ( capabilities & SchedulerPlugin::ScheduleForward ) {
                 return sm->schedulingDirection()
-                            ? i18nc( "@info:tooltip 1=scheduler name", "%1 always schedules from target start time", sm->schedulerPlugin()->name() )
+                            ? i18nc( "@info:tooltip 1=scheduler name", "%1 always schedules from target start time", pl->name() )
                             : i18nc( "@info:tooltip", "Schedule project from target start time" );
             }
             if ( capabilities & SchedulerPlugin::ScheduleBackward ) {
                 return sm->schedulingDirection()
                             ? i18nc( "@info:tooltip", "Schedule project from target end time" )
-                            : i18nc( "@info:tooltip 1=scheduler name", "%1 always schedules from target end time", sm->schedulerPlugin()->name() );
+                            : i18nc( "@info:tooltip 1=scheduler name", "%1 always schedules from target end time", pl->name() );
             }
             break;
         case Role::EnumList:
@@ -707,24 +722,26 @@ QVariant ScheduleItemModel::scheduler( const QModelIndex &index, int role ) cons
         return QVariant();
     }
     SchedulerPlugin *pl = sm->schedulerPlugin();
-    switch ( role ) {
-        case Qt::EditRole:
-            return sm->schedulerPluginId();
-        case Qt::DisplayRole:
-            return pl ? pl->name() : i18n( "Unknown" );
-        case Qt::ToolTipRole:
-            return pl ? pl->comment() : QString();
-        case Role::EnumList:
-            return sm->schedulerPluginNames();
-        case Role::EnumListValue:
-            return sm->schedulerPluginIndex();
-        case Qt::TextAlignmentRole:
-            return Qt::AlignCenter;
-        case Qt::StatusTipRole:
-            return QVariant();
-        case Qt::WhatsThisRole: {
-            QString s = pl->description();
-            return s.isEmpty() ? QVariant() : QVariant( s );
+    if ( pl ) {
+        switch ( role ) {
+            case Qt::EditRole:
+                return sm->schedulerPluginId();
+            case Qt::DisplayRole:
+                return pl ? pl->name() : i18n( "Unknown" );
+            case Qt::ToolTipRole:
+                return pl ? pl->comment() : QString();
+            case Role::EnumList:
+                return sm->schedulerPluginNames();
+            case Role::EnumListValue:
+                return sm->schedulerPluginIndex();
+            case Qt::TextAlignmentRole:
+                return Qt::AlignCenter;
+            case Qt::StatusTipRole:
+                return QVariant();
+            case Qt::WhatsThisRole: {
+                QString s = pl->description();
+                return s.isEmpty() ? QVariant() : QVariant( s );
+            }
         }
     }
     return QVariant();
