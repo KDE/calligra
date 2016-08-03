@@ -89,13 +89,14 @@ void SchedulerPluginLoader::loadAllPlugins()
         if (plugin) {
             QJsonObject json = pluginLoader->metaData().value("MetaData").toObject();
             json = json.value("KPlugin").toObject();
+            const QString key = json.value(QLatin1String("Name")).toString(); // use unlocalized name as plugin identifier
             const QString name = readLocalValue(json, QLatin1String("Name")).toString();
             const QString comment = readLocalValue(json, QLatin1String("Description")).toString();
 
-            debugPlan << "Load plugin:" << name << ", " << comment;
+            debugPlan << "Load plugin:" << key << name << ", " << comment;
             plugin->setName( name );
             plugin->setComment( comment );
-            emit pluginLoaded( pluginLoader->fileName(), plugin);
+            emit pluginLoaded( key, plugin);
         } else {
            debugPlan << "KPluginFactory could not create SchedulerPlugin:" << pluginLoader->fileName();
         }
