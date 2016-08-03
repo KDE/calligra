@@ -534,9 +534,21 @@ bool Resource::load(KoXmlElement &element, XMLLoaderObject &status) {
     s = element.attribute("available-until");
     if (!s.isEmpty())
         m_availableUntil = DateTime::fromString(s, status.projectTimeZone());
-        
-    cost.normalRate = locale->readMoney(element.attribute("normal-rate"));
-    cost.overtimeRate = locale->readMoney(element.attribute("overtime-rate"));
+
+    // NOTE: money was earlier (2.x) saved with symbol so we need to handle that
+    QString money = element.attribute("normal-rate");
+    bool ok = false;
+    cost.normalRate = money.toDouble(&ok);
+    if (!ok) {
+        cost.normalRate = locale->readMoney(money);
+        debugPlan<<"normal-rate failed, tried readMoney()"<<money<<"->"<<cost.normalRate;;
+    }
+    money = element.attribute("overtime-rate");
+    cost.overtimeRate = money.toDouble(&ok);
+    if (!ok) {
+        cost.overtimeRate = locale->readMoney(money);
+        debugPlan<<"overtime-rate failed, tried readMoney()"<<money<<"->"<<cost.overtimeRate;;
+    }
     cost.account = status.project().accounts().findAccount(element.attribute("account"));
     
     KoXmlElement e;
@@ -627,8 +639,9 @@ void Resource::save(QDomElement &element) const {
     if ( m_availableUntil.isValid() ) {
         me.setAttribute("available-until", m_availableUntil.toString( Qt::ISODate ));
     }
-    me.setAttribute("normal-rate", m_project->locale()->formatMoney(cost.normalRate));
-    me.setAttribute("overtime-rate", m_project->locale()->formatMoney(cost.overtimeRate));
+    QString money;
+    me.setAttribute("normal-rate", money.setNum(cost.normalRate));
+    me.setAttribute("overtime-rate", money.setNum(cost.overtimeRate));
     if ( cost.account ) {
         me.setAttribute("account", cost.account->name());
     }
