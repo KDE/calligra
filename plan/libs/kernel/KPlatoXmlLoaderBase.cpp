@@ -57,22 +57,7 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
         if ( e.tagName() == "locale" ) {
             Locale *l = project->locale();
             l->setCurrencySymbol( e.attribute( "currency-symbol", l->currencySymbol() ) );
-
-//            l->setMonetaryDecimalSymbol( e.attribute( "monetary-decimal-symbol", l->monetaryDecimalSymbol() ) );
-
-//            l->setMonetaryThousandsSeparator( e.attribute( "monetary-thousands-separator", l->monetaryThousandsSeparator() ) );
-            if ( e.hasAttribute( "positive-monetary-sign-position" ) ) {
-                l->setPositiveMonetarySignPosition( (Locale::SignPosition)( e.attribute( "positive-monetary-sign-position" ).toInt() ) );
-            }
-            if ( e.hasAttribute( "positive-prefix-currency-symbol" ) ) {
-                l->setPositivePrefixCurrencySymbol( e.attribute( "positive-prefix-currency-symbol" ).toInt() );
-            }
-            if ( e.hasAttribute( "negative-monetary-sign-position" ) ) {
-                l->setNegativeMonetarySignPosition( (Locale::SignPosition)( e.attribute( "negative-monetary-sign-position" ).toInt() ) );
-            }
-            if ( e.hasAttribute( "negative-prefix-currency-symbol" ) ) {
-                l->setNegativePrefixCurrencySymbol( e.attribute( "negative-prefix-currency-symbol" ).toInt() );
-            }
+            //NOTE: decimalplaces missing
         }
     }
     QList<Calendar*> cals;

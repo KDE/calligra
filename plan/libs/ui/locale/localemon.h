@@ -43,8 +43,7 @@ public:
   LocaleConfigMoney(Locale *locale, QWidget *parent);
   virtual ~LocaleConfigMoney();
 
-  void save();
-
+  /// Save all changes
   MacroCommand *buildCommand();
 
 public Q_SLOTS:

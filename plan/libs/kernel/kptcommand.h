@@ -1872,58 +1872,6 @@ private:
     int m_oldvalue;
 };
 
-class  KPLATOKERNEL_EXPORT ModifyPositivePrefixCurrencySymolCmd : public NamedCommand
-{
-public:
-    ModifyPositivePrefixCurrencySymolCmd( Locale *locale, bool value, const KUndo2MagicString& name = KUndo2MagicString() );
-    void execute();
-    void unexecute();
-
-private:
-    Locale *m_locale;
-    bool m_newvalue;
-    bool m_oldvalue;
-};
-
-class  KPLATOKERNEL_EXPORT ModifyNegativePrefixCurrencySymolCmd : public NamedCommand
-{
-public:
-    ModifyNegativePrefixCurrencySymolCmd( Locale *locale, bool value, const KUndo2MagicString& name = KUndo2MagicString() );
-    void execute();
-    void unexecute();
-
-private:
-    Locale *m_locale;
-    bool m_newvalue;
-    bool m_oldvalue;
-};
-
-class  KPLATOKERNEL_EXPORT ModifyPositiveMonetarySignPositionCmd : public NamedCommand
-{
-public:
-    ModifyPositiveMonetarySignPositionCmd( Locale *locale, int value, const KUndo2MagicString& name = KUndo2MagicString() );
-    void execute();
-    void unexecute();
-
-private:
-    Locale *m_locale;
-    int m_newvalue;
-    int m_oldvalue;
-};
-
-class  KPLATOKERNEL_EXPORT ModifyNegativeMonetarySignPositionCmd : public NamedCommand
-{
-public:
-    ModifyNegativeMonetarySignPositionCmd( Locale *locale, int value, const KUndo2MagicString& name = KUndo2MagicString() );
-    void execute();
-    void unexecute();
-
-private:
-    Locale *m_locale;
-    int m_newvalue;
-    int m_oldvalue;
-};
-
 class  KPLATOKERNEL_EXPORT AddExternalAppointmentCmd : public NamedCommand
 {
 public:

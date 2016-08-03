@@ -38,100 +38,6 @@ public:
     Locale();
     ~Locale();
 
-public:
-    /**
-     * Various positions for where to place the positive or negative
-     * sign when they are related to a monetary value.
-     */
-    enum SignPosition {
-        /**
-         * Put parantheses around the quantity, e.g. "$ (217)"
-         */
-        ParensAround = 0,
-        /**
-         * Prefix the quantity with the sign, e.g. "$ -217"
-         */
-        BeforeQuantityMoney = 1,
-        /**
-         * Suffix the quanitity with the sign, e.g. "$ 217-"
-         */
-        AfterQuantityMoney = 2,
-        /**
-         * Prefix the currency symbol with the sign, e.g. "-$ 217"
-         */
-        BeforeMoney = 3,
-        /**
-         * Suffix the currency symbol with the sign, e.g. "$- 217"
-         */
-        AfterMoney = 4
-    };
-
-    /**
-     * Changes the sign position used for positive monetary values.
-     *
-     * @param signpos The new sign position
-     */
-    void setPositiveMonetarySignPosition(SignPosition signpos);
-
-    /**
-     * Changes the sign position used for negative monetary values.
-     *
-     * @param signpos The new sign position
-     */
-    void setNegativeMonetarySignPosition(SignPosition signpos);
-
-    /**
-     * Returns the position of a positive sign in relation to a
-     * monetary value.
-     *
-     * @return Where/how to print the positive sign.
-     * @see SignPosition
-     */
-    SignPosition positiveMonetarySignPosition() const;
-
-    /**
-     * Denotes where to place a negative sign in relation to a
-     * monetary value.
-     *
-     * @return Where/how to print the negative sign.
-     * @see SignPosition
-     */
-    SignPosition negativeMonetarySignPosition() const;
-
-    /**
-     * Changes the position where the currency symbol should be printed for
-     * positive monetary values.
-     *
-     * @param prefix True if the currency symbol should be prefixed instead of
-     * postfixed
-     */
-    void setPositivePrefixCurrencySymbol(bool prefix);
-
-    /**
-     * Changes the position where the currency symbol should be printed for
-     * negative monetary values.
-     *
-     * @param prefix True if the currency symbol should be prefixed instead of
-     * postfixed
-     */
-    void setNegativePrefixCurrencySymbol(bool prefix);
-
-    /**
-     * If and only if the currency symbol precedes a positive value,
-     * this will be true.
-     *
-     * @return Where to print the currency symbol for positive numbers.
-     */
-    bool positivePrefixCurrencySymbol() const;
-
-    /**
-     * If and only if the currency symbol precedes a negative value,
-     * this will be true.
-     *
-     * @return True if the currency symbol precedes negative numbers.
-     */
-    bool negativePrefixCurrencySymbol() const;
-
     /**
      * Changes the current currency symbol.
      *
@@ -169,24 +75,6 @@ public:
     int monetaryDecimalPlaces() const;
 
     /**
-     * Returns what a thousands separator for monetary values should
-     * look like ("," or " " etc.) according to the current locale or
-     * user settings.
-     *
-     * @return The monetary thousands separator used by locale.
-     */
-    QString monetaryThousandsSeparator() const;
-
-    /**
-     * Returns what a decimal point should look like ("." or "," etc.)
-     * for monetary values, according to the current locale or user
-     * settings.
-     *
-     * @return The monetary decimal symbol used by locale.
-     */
-    QString monetaryDecimalSymbol() const;
-
-    /**
      * Given a double, converts that to a numeric string containing
      * the localized monetary equivalent.
      *
@@ -214,28 +102,9 @@ public:
      */
     double readMoney(const QString &numStr, bool *ok = 0) const;
 
-    /**
-     * Returns the country code of the country where the user lives.
-     *
-     * The returned code complies with the ISO 3166-1 alpha-2 standard,
-     * except by KDE convention it is returned in lowercase whereas the
-     * official standard is uppercase.
-     * See http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 for details.
-     *
-     * defaultCountry() is returned by default, if no other available,
-     * this will always be uppercase 'C'.
-     *
-     * Use countryCodeToName(country) to get human readable, localized
-     * country names.
-     *
-     * @return the country code for the user
-     *
-     * @see countryCodeToName
-     */
-    QString country() const;
-
 private:
-    KLocale * klocale;
+    QString m_currencySymbol;
+    int m_decimalPlaces;
 };
 
 }  //KPlato namespace

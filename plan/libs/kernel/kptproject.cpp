@@ -937,23 +937,8 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
             Locale *l = locale();
             l->setCurrencySymbol( e.attribute( "currency-symbol", l->currencySymbol() ) );
 
-//            l->setMonetaryDecimalSymbol( e.attribute( "monetary-decimal-symbol", l->monetaryDecimalSymbol() ) );
-
-//            l->setMonetaryThousandsSeparator( e.attribute( "monetary-thousands-separator", l->monetaryThousandsSeparator() ) );
             if ( e.hasAttribute( "currency-digits" ) ) {
                 l->setMonetaryDecimalPlaces(e.attribute("currency-digits").toInt());
-            }
-            if ( e.hasAttribute( "positive-monetary-sign-position" ) ) {
-                l->setPositiveMonetarySignPosition( (Locale::SignPosition)( e.attribute( "positive-monetary-sign-position" ).toInt() ) );
-            }
-            if ( e.hasAttribute( "positive-prefix-currency-symbol" ) ) {
-                l->setPositivePrefixCurrencySymbol( e.attribute( "positive-prefix-currency-symbol" ).toInt() );
-            }
-            if ( e.hasAttribute( "negative-monetary-sign-position" ) ) {
-                l->setNegativeMonetarySignPosition( (Locale::SignPosition)( e.attribute( "negative-monetary-sign-position" ).toInt() ) );
-            }
-            if ( e.hasAttribute( "negative-prefix-currency-symbol" ) ) {
-                l->setNegativePrefixCurrencySymbol( e.attribute( "negative-prefix-currency-symbol" ).toInt() );
             }
         }
     }
@@ -1254,13 +1239,7 @@ void Project::save( QDomElement &element ) const
     me.appendChild( loc );
     const Locale *l = locale();
     loc.setAttribute( "currency-symbol", l->currencySymbol() );
-//    loc.setAttribute( "monetary-decimal-symbol", l->monetaryDecimalSymbol() );
-//    loc.setAttribute( "monetary-thousands-separator", l->monetaryThousandsSeparator() );
     loc.setAttribute("currency-digits", l->monetaryDecimalPlaces());
-    loc.setAttribute( "positive-monetary-sign-position", QString::number(l->positiveMonetarySignPosition()) );
-    loc.setAttribute( "positive-prefix-currency-symbol", l->positivePrefixCurrencySymbol() );
-    loc.setAttribute( "negative-monetary-sign-position", QString::number(l->negativeMonetarySignPosition()) );
-    loc.setAttribute( "negative-prefix-currency-symbol", l->negativePrefixCurrencySymbol() );
     
     m_accounts.save( me );
 

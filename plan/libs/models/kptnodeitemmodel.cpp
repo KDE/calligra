@@ -2882,7 +2882,7 @@ KUndo2Command *NodeModel::setStartupCost( Node *node, const QVariant &value, int
     Locale *l = m_project->locale();
     switch ( role ) {
         case Qt::EditRole: {
-            double v = l->readMoney( value.toString() );
+            double v = value.toDouble();
             if ( v != node->startupCost() ) {
                 return new NodeModifyStartupCostCmd( *node, v, kundo2_i18n( "Modify startup cost" ) );
             }
@@ -2920,7 +2920,7 @@ KUndo2Command *NodeModel::setShutdownCost( Node *node, const QVariant &value, in
     Locale *l = m_project->locale();
     switch ( role ) {
         case Qt::EditRole: {
-            double v = l->readMoney( value.toString() );
+            double v = value.toDouble();
             if ( v != node->shutdownCost() ) {
                 return new NodeModifyShutdownCostCmd( *node, v, kundo2_i18n( "Modify shutdown cost" ) );
             }
@@ -3634,9 +3634,9 @@ QAbstractItemDelegate *NodeItemModel::createDelegate( int column, QWidget *paren
         case NodeModel::NodeConstraintEnd: return new DateTimeCalendarDelegate( parent );
         case NodeModel::NodeRunningAccount: return new EnumDelegate( parent );
         case NodeModel::NodeStartupAccount: return new EnumDelegate( parent );
-        case NodeModel::NodeStartupCost: return new MoneyDelegate( parent );
+//         case NodeModel::NodeStartupCost: return new MoneyDelegate( parent );
         case NodeModel::NodeShutdownAccount: return new EnumDelegate( parent );
-        case NodeModel::NodeShutdownCost: return new MoneyDelegate( parent );
+//         case NodeModel::NodeShutdownCost: return new MoneyDelegate( parent );
 
         case NodeModel::NodeCompleted: return new TaskCompleteDelegate( parent );
         case NodeModel::NodeRemainingEffort: return new DurationSpinBoxDelegate( parent );

@@ -19,6 +19,8 @@
 
 #include "kptlocale.h"
 
+#include "kptdebug.h"
+
 #include <klocale.h>
 
 #include <QLocale>
@@ -30,97 +32,63 @@ namespace KPlato
 Locale::Locale()
 {
     QLocale locale;
-    klocale = new KLocale( QLocale::languageToString(locale.language()), QLocale::countryToString(locale.country()) );
+    m_currencySymbol = locale.currencySymbol(QLocale::CurrencySymbol);
+    m_decimalPlaces = 2;
 }
 
 Locale::~Locale()
 {
-    delete klocale;
-}
-
-void Locale::setPositiveMonetarySignPosition(SignPosition signpos)
-{
-    klocale->setPositiveMonetarySignPosition((KLocale::SignPosition)signpos);
-}
-
-void Locale::setNegativeMonetarySignPosition(SignPosition signpos)
-{
-    klocale->setNegativeMonetarySignPosition((KLocale::SignPosition)signpos);
-}
-
-Locale::SignPosition Locale::positiveMonetarySignPosition() const
-{
-    return (SignPosition)klocale->positiveMonetarySignPosition();
-}
-
-Locale::SignPosition Locale::negativeMonetarySignPosition() const
-{
-    return (SignPosition)klocale->negativeMonetarySignPosition();
-}
-
-void Locale::setPositivePrefixCurrencySymbol(bool prefix)
-{
-    klocale->setPositivePrefixCurrencySymbol(prefix);
-}
-
-void Locale::setNegativePrefixCurrencySymbol(bool prefix)
-{
-    klocale->setNegativePrefixCurrencySymbol(prefix);
-}
-
-bool Locale::positivePrefixCurrencySymbol() const
-{
-    return klocale->positivePrefixCurrencySymbol();
-}
-
-bool Locale::negativePrefixCurrencySymbol() const
-{
-    return klocale->negativePrefixCurrencySymbol();
 }
 
 void Locale::setCurrencySymbol(const QString &symbol)
 {
-    klocale->setCurrencySymbol(symbol);
+    m_currencySymbol = symbol;
 }
 
 QString Locale::currencySymbol() const
 {
-    return klocale->currencySymbol();
+    return m_currencySymbol;
 }
 
 void Locale::setMonetaryDecimalPlaces(int digits)
 {
-    klocale->setMonetaryDecimalPlaces(digits);
+    m_decimalPlaces = digits;
 }
 
 int Locale::monetaryDecimalPlaces() const
 {
-    return klocale->monetaryDecimalPlaces();
-}
-
-QString Locale::monetaryThousandsSeparator() const
-{
-    return klocale->monetaryThousandsSeparator();
-}
-
-QString Locale::monetaryDecimalSymbol() const
-{
-    return klocale->monetaryDecimalSymbol();
+    return m_decimalPlaces;
 }
 
 QString Locale::formatMoney(double num, const QString &currency, int precision) const
 {
-    return klocale->formatMoney(num, currency, precision);
+    QString c = currency;
+    if (c.isEmpty()) {
+        c = m_currencySymbol;
+    }
+    int p = precision;
+    if (p < 0) {
+        p = m_decimalPlaces;
+    }
+    QLocale l;
+    QString s = l.toCurrencyString(num, c, p);
+    return s;
 }
 
 double Locale::readMoney(const QString &numStr, bool *ok) const
 {
-    return klocale->readMoney(numStr, ok);
-}
-
-QString Locale::country() const
-{
-    return klocale->country();
+    QLocale l;
+    QString s = numStr;
+    bool okk = false;
+    s.remove(m_currencySymbol);
+    double v = l.toDouble(s, &okk);
+    if (ok) {
+        *ok = okk;
+    }
+    if (!okk) {
+        errorPlan<<"Failed to read money:"<<numStr;
+    }
+    return v;
 }
 
 }  //KPlato namespace
