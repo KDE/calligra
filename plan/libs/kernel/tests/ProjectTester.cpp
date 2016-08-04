@@ -37,7 +37,7 @@ namespace KPlato
 
 void ProjectTester::initTestCase()
 {
-    QByteArray tz("TZ=Europe/Copenhagen");
+    tz = "TZ=Europe/Copenhagen";
     putenv(tz.data());
     
     m_project = new Project();
@@ -3185,9 +3185,6 @@ void ProjectTester::scheduleTimeZone()
     project.addCalendar( cal2 );
     
     QDate today = project.constraintStartTime().date();
-    QDate tomorrow = today.addDays( 1 );
-    QDate yesterday = today.addDays( -1 );
-    QDate nextweek = today.addDays( 7 );
     
     Task *t = project.createTask();
     t->setName( "T1" );
