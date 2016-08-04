@@ -3,6 +3,7 @@
  *
  * Copyright (c) 1999-2003 Hans Petter Bieker <bieker@kde.org>
  * Copyright (c) 2007 Dag Andersen <danders@get2net.dk>
+ * Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
  *
  * Requires the Qt widget libraries, available at no cost at
  * http://www.troll.no/
