@@ -318,6 +318,9 @@ void CalendarTester::workIntervalsFullDays()
 
 void CalendarTester::dstSpring()
 {
+    QByteArray tz("TZ=Europe/Copenhagen");
+    putenv(tz.data());
+
     Calendar t("DST");
     QDate wdate(2016,3,27);
 
