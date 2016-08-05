@@ -49,6 +49,8 @@ class FIXME_PropertyDictionary;
 
 enum MctChangeTypes : unsigned int;
 
+using XMLns = QString;
+
 class MctStaticData
 {
 public:    
@@ -83,12 +85,31 @@ public:
 
     static const QChar REDOCHAR;
 
-    static const QString NS_DC;
-    static const QString NS_C;
-    static const QString NS_OFFICE;
+    static const XMLns XMLNS;
+    static const XMLns NS_DC;
+    static const XMLns NS_C;
+    static const XMLns NS_OFFICE;
 
     static const QString VERSION;
     static const QString STARTINGSTRING;
+    static const QString AUTHOR;
+    static const QString COMMENT;
+    static const QString DATE;
+    static const QString TYPE;
+    static const QString ID;
+    static const QString NAME;
+    static const QString ROW;
+    static const QString COL;
+    static const QString URL;
+    static const QString POSX;
+    static const QString POSY;
+    static const QString PREVPOSX;
+    static const QString PREVPOSY;
+    static const QString HEIGHT;
+    static const QString WIDTH;
+    static const QString ROTATION;
+    static const QString PARENT;
+
 
     static int currentRevision;    
 
@@ -218,6 +239,10 @@ public:
 
     QString getAddedShapeType();
     void setAddedShapeType(const QString &shapeType);
+
+    // xml
+    static QString attributeNS(const QString &attribute, const XMLns &ns);
+
 private:
     MctStaticData();
 

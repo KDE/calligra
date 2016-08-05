@@ -41,9 +41,9 @@
 #include "MctChange.h"
 #include "MctAuthor.h"
 #include "MctPosition.h"
+#include "MctStaticData.h"
 
 #include <QMutableListIterator>
-
 
 MctChangeset::MctChangeset(const QDomElement &changeset, ulong parentId, MctAuthor* author, const QDateTime &date, const QString &comment, ulong id)
 {
@@ -133,7 +133,7 @@ void MctChangeset::addParentId(ulong pid)
 {
     if(!m_parents->contains(pid)) {
         m_parents->append(pid);
-        m_changeset.setAttribute("parent" + QString::number(m_parents->size()), QString::number(pid));
+        m_changeset.setAttribute(MctStaticData::attributeNS(MctStaticData::PARENT + QString::number(m_parents->size()), MctStaticData::NS_C) , QString::number(pid));
     }
 }
 
@@ -227,7 +227,7 @@ void MctChangeset::removeChildId(ulong id)
 MctAuthor* MctChangeset::author() const
 {
     if(m_author == NULL) {
-        QString name = m_changeset.attribute("author");
+        QString name = m_changeset.attribute(MctStaticData::attributeNS(MctStaticData::AUTHOR, MctStaticData::NS_DC), "undefined");
         return new MctAuthor(name);
     }
     return m_author;
@@ -239,7 +239,7 @@ MctAuthor* MctChangeset::author() const
  */
 void MctChangeset::setAuthor(MctAuthor *author)
 {
-    m_changeset.setAttribute("author", author->name());
+    m_changeset.setAttribute(MctStaticData::attributeNS(MctStaticData::AUTHOR, MctStaticData::NS_DC), author->name());
     this->m_author = author;
 }
 
@@ -250,7 +250,7 @@ void MctChangeset::setAuthor(MctAuthor *author)
 QString MctChangeset::comment() const
 {
     if(m_comment.isEmpty()) {
-        return m_changeset.attribute("comment","");
+        return m_changeset.attribute(MctStaticData::attributeNS(MctStaticData::COMMENT, MctStaticData::NS_DC),"");
     }
     return m_comment;
 }
@@ -262,7 +262,7 @@ QString MctChangeset::comment() const
 void MctChangeset::setComment(const QString &comment)
 {
     this->m_comment = comment;
-    m_changeset.setAttribute("comment", comment);
+    m_changeset.setAttribute(MctStaticData::attributeNS(MctStaticData::COMMENT, MctStaticData::NS_DC), comment);
 }
 
 /**
@@ -289,7 +289,7 @@ void MctChangeset::setDate(const QDateTime &date)
 {
     QString datestring = date.toString("yyyy-MM-dd hh:mm:ss");
     datestring.replace(" ", "T");
-    m_changeset.setAttribute("date", datestring);
+    m_changeset.setAttribute(MctStaticData::attributeNS(MctStaticData::DATE, MctStaticData::NS_DC), datestring);
     this->m_date = date;
 }
 
@@ -312,7 +312,7 @@ ulong MctChangeset::id() const
 void MctChangeset::setId(unsigned long id)
 {
     m_id = id;
-    m_changeset.setAttribute("id", QString::number(id));
+    m_changeset.setAttribute(MctStaticData::attributeNS(MctStaticData::ID, MctStaticData::NS_C), QString::number(id));
 }
 
 /**

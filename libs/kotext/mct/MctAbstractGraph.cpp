@@ -104,18 +104,18 @@ MctAbstractGraph::MctAbstractGraph(const QString &redoOrUndo, const QString &odt
 
         m_root = m_doc->createElement(redoOrUndo);
 
-        m_root.setAttribute("xmlns", "https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=office-collab");
-        m_root.setAttribute("xmlns:" + MctStaticData::NS_OFFICE, "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
-        m_root.setAttribute("xmlns:" + MctStaticData::NS_DC, "http://purl.org/dc/elements/1.1/");
-        m_root.setAttribute("xmlns:" + MctStaticData::NS_C, "https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=office-collab");
+        m_root.setAttribute(MctStaticData::XMLNS, "https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=office-collab");
+        m_root.setAttribute(MctStaticData::attributeNS(MctStaticData::NS_OFFICE, MctStaticData::XMLNS), "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
+        m_root.setAttribute(MctStaticData::attributeNS(MctStaticData::NS_DC, MctStaticData::XMLNS), "http://purl.org/dc/elements/1.1/");
+        m_root.setAttribute(MctStaticData::attributeNS(MctStaticData::NS_C, MctStaticData::XMLNS), "https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=office-collab");
 
         // version attribute
-        m_root.setAttribute(MctStaticData::NS_OFFICE + ":" + MctStaticData::VERSION,  1.3); // TODO: value should not be fixed like this!
+        m_root.setAttribute(MctStaticData::attributeNS(MctStaticData::VERSION, MctStaticData::NS_OFFICE),  1.3); // TODO: value should not be fixed like this!
 
         // started attribute
         QString datestring = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
         datestring.replace(" ", "T");
-        m_root.setAttribute(MctStaticData::STARTINGSTRING, datestring);
+        m_root.setAttribute(MctStaticData::attributeNS(MctStaticData::NS_DC, MctStaticData::STARTINGSTRING), datestring);
 
         m_doc->appendChild(m_root);
 
@@ -677,8 +677,8 @@ void MctAbstractGraph::correctBlockPosition(QDomNode *node, QMap<ulong, ulong> *
             end.replace(1, idx2 - 1, QString::number(endpar - it.value()));
         }
     }
-    change.setAttribute(MctStaticData::POSSTART, start);
-    change.setAttribute(MctStaticData::POSEND, end);
+    change.setAttribute(MctStaticData::attributeNS(MctStaticData::POSSTART, MctStaticData::NS_C), start);
+    change.setAttribute(MctStaticData::attributeNS(MctStaticData::POSEND, MctStaticData::NS_C), end);
 
     //Moved position
     QString mstart = change.attribute(MctStaticData::MPOSSTART);
@@ -703,8 +703,8 @@ void MctAbstractGraph::correctBlockPosition(QDomNode *node, QMap<ulong, ulong> *
                 mend.replace(1, idx2 - 1, QString::number(endpar - it.value()));
             }
         }
-        change.setAttribute(MctStaticData::MPOSSTART, mstart);
-        change.setAttribute(MctStaticData::MPOSEND, mend);
+        change.setAttribute(MctStaticData::attributeNS(MctStaticData::MPOSSTART, MctStaticData::NS_C), mstart);
+        change.setAttribute(MctStaticData::attributeNS(MctStaticData::MPOSEND, MctStaticData::NS_C), mend);
     }
 //todo
 }
@@ -1788,8 +1788,8 @@ void MctAbstractGraph::regManifest(const QString &filename)
     if(!found) {
         QString tag = manifest + "file-entry";
         QDomElement elem = manifest_tree->createElement(tag);
-        elem.setAttribute(manifest+"media-type", "text/xml");
-        elem.setAttribute(manifest+"full-path", m_redoOrUndo+".xml");
+        elem.setAttribute(manifest+"media-type", "text/xml");   // FIXME: xmlns?
+        elem.setAttribute(manifest+"full-path", m_redoOrUndo+".xml"); // FIXME: xmlns?
         rootNode.appendChild(elem);
 
         file.open(QIODevice::WriteOnly);
@@ -1850,12 +1850,12 @@ void MctAbstractGraph::addTableDataToPos(QDomElement &change, MctChange *changeN
     posstringstart = MctStaticData::POSSEPARATOR + tableChangeEntity->tableName() + MctStaticData::POSSEPARATOR
             + QString::number(tableChangeEntity->row()) + MctStaticData::POSSEPARATOR + QString::number(tableChangeEntity->col()) + posstringstart;
 
-    change.setAttribute(starttag, posstringstart);
+    change.setAttribute(MctStaticData::attributeNS(starttag, MctStaticData::NS_C), posstringstart);
 
     QString posstringend = change.attribute(endtag);
     posstringend = MctStaticData::POSSEPARATOR + tableChangeEntity->tableName() + MctStaticData::POSSEPARATOR
             + QString::number(tableChangeEntity->row()) + MctStaticData::POSSEPARATOR + QString::number(tableChangeEntity->col()) + posstringend;
-    change.setAttribute(endtag, posstringend);
+    change.setAttribute(MctStaticData::attributeNS(endtag, MctStaticData::NS_C), posstringend);
 }
 
 /**

@@ -201,7 +201,7 @@ void MctUndoGraph::addChange(MctChange* changeNode, MctChangeset* changeset)
         changeNode->addElementTreeNode(change);
         changeset->addChange(changeNode);
 
-        change.setAttribute("id", QString::number(this->_id));
+        change.setAttribute(MctStaticData::attributeNS(MctStaticData::ID, MctStaticData::NS_C), QString::number(this->_id));
 
         ++_id;
 
@@ -217,7 +217,7 @@ void MctUndoGraph::addChange(MctChange* changeNode, MctChangeset* changeset)
  */
 void MctUndoGraph::addString(QDomElement *xmlchange, MctChange *change)
 {
-    xmlchange->setAttribute("type", MctUndoTags::STRING);
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::STRING);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
     MctStringChange * sc = dynamic_cast<MctStringChange*>(change->changeEntity());
@@ -232,7 +232,7 @@ void MctUndoGraph::addString(QDomElement *xmlchange, MctChange *change)
  */
 void MctUndoGraph::removeString(QDomElement *xmlchange, MctChange *change)
 {
-    xmlchange->setAttribute("type", MctUndoTags::STRING);
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::STRING);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
     MctStringChange * sc = dynamic_cast<MctStringChange*>(change->changeEntity());
@@ -247,7 +247,7 @@ void MctUndoGraph::removeString(QDomElement *xmlchange, MctChange *change)
  */
 void MctUndoGraph::moveString(QDomElement *xmlchange, MctChange *change)
 {
-    xmlchange->setAttribute("type", MctUndoTags::STRING);
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::STRING);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 
@@ -266,7 +266,7 @@ void MctUndoGraph::moveString(QDomElement *xmlchange, MctChange *change)
  */
 void MctUndoGraph::addParBreak(QDomElement *xmlchange, MctChange *change)
 {
-    xmlchange->setAttribute("type", MctUndoTags::PARAGRAPH);
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::PARAGRAPH);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 }
@@ -278,7 +278,7 @@ void MctUndoGraph::addParBreak(QDomElement *xmlchange, MctChange *change)
  */
 void MctUndoGraph::delParBreak(QDomElement *xmlchange, MctChange *change)
 {
-    xmlchange->setAttribute("type", MctUndoTags::PARAGRAPH);
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::PARAGRAPH);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 }
@@ -297,7 +297,7 @@ void MctUndoGraph::styleChange(QDomElement *xmlchange, MctChange *change)
     //filling up text properties
     if(sc->textPropChanges()->length() > 0) {
         QDomElement subchange = m_doc->createElement(MctUndoTags::PROPERTIESTAG);
-        subchange.setAttribute("type", MctUndoTags::TEXTTAG);
+        subchange.setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::TEXTTAG);
         xmlchange->appendChild(subchange);
         fillPropertySubNode(&subchange, sc->textPropChanges(), MctStaticData::CharacterProperty);
     }
@@ -305,7 +305,7 @@ void MctUndoGraph::styleChange(QDomElement *xmlchange, MctChange *change)
     //filling up parapraph properties
     if(sc->paragraphPropChanges()->length() > 0) {
         QDomElement subchange = m_doc->createElement(MctUndoTags::PROPERTIESTAG);
-        subchange.setAttribute("type", MctUndoTags::PARAGRAPHTAG);
+        subchange.setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::PARAGRAPHTAG);
         xmlchange->appendChild(subchange);
         fillPropertySubNode(&subchange, sc->paragraphPropChanges(), MctStaticData::ParagraphProperty);
     }
@@ -313,7 +313,7 @@ void MctUndoGraph::styleChange(QDomElement *xmlchange, MctChange *change)
     //filling up list properties
     if(sc->listPropChanges()->length() > 0) {
         QDomElement subchange = m_doc->createElement(MctUndoTags::PROPERTIESTAG);
-        subchange.setAttribute("type", MctUndoTags::LIST);
+        subchange.setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::LIST);
         xmlchange->appendChild(subchange);
         fillPropertySubNode(&subchange, sc->listPropChanges(), MctStaticData::ListProperty);
     }
@@ -321,7 +321,7 @@ void MctUndoGraph::styleChange(QDomElement *xmlchange, MctChange *change)
     //filling up properties for other components
     if(sc->otherPropChanges()->length() > 0) {
         QDomElement subchange = m_doc->createElement(MctUndoTags::PROPERTIESTAG);
-        subchange.setAttribute("type", MctUndoTags::UNDEFINEDTAG);
+        subchange.setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::UNDEFINEDTAG);
         xmlchange->appendChild(subchange);
         fillPropertySubNode(&subchange, sc->otherPropChanges(), MctStaticData::UnknownProperty);
     }
@@ -338,7 +338,7 @@ void MctUndoGraph::fillPropertySubNode(QDomElement *subnode, ChangeEventList* pr
 
             qDebug() << propName << "(" << key << ") : "  << value.first;
             if(propName != "") {
-                subnode->setAttribute(propName, value.first);
+                subnode->setAttribute(MctStaticData::attributeNS(propName, MctStaticData::NS_C), value.first);
             } else {
                 qDebug() << "Not mapped property: " << QString::number(key);
             }
@@ -353,11 +353,11 @@ void MctUndoGraph::fillPropertySubNode(QDomElement *subnode, ChangeEventList* pr
  */
 void MctUndoGraph::textFrame(QDomElement *xmlchange, MctChange *change)
 {
-    xmlchange->setAttribute("type", MctUndoTags::TEXTFRAME);
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::TEXTFRAME);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 
-    xmlchange->setAttribute("name", change->changeEntity()->name());
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::NAME, MctStaticData::NS_DC), change->changeEntity()->name());
 }
 
 /**
@@ -368,16 +368,16 @@ void MctUndoGraph::textFrame(QDomElement *xmlchange, MctChange *change)
  */
 void MctUndoGraph::textTable(QDomElement *xmlchange, MctChange *change, bool added)
 {
-    xmlchange->setAttribute("type", MctUndoTags::TABLE);
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::TABLE);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 
     MctChangedTexObjectBase * changeEntity = dynamic_cast<MctChangedTexObjectBase*>(change->changeEntity());
-    xmlchange->setAttribute("name",changeEntity->name());
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::NAME, MctStaticData::NS_C),changeEntity->name());
 
     MctTableProperties * tableprops = dynamic_cast<MctTableProperties*>(changeEntity->objectProperties());
-    xmlchange->setAttribute("col", tableprops->cols());
-    xmlchange->setAttribute("row", tableprops->rows());
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::COL, MctStaticData::NS_C), tableprops->cols());
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::ROW, MctStaticData::NS_C), tableprops->rows());
 
     if(added){
         return;
@@ -394,7 +394,7 @@ void MctUndoGraph::textTable(QDomElement *xmlchange, MctChange *change, bool add
             MctStaticData::TEXTTABLE_ENUMPROPS.contains(key)) {
             continue;
         }
-        xmlchange->setAttribute(key, tableprops->props2Export()->value(key).toString());
+        xmlchange->setAttribute(MctStaticData::attributeNS(key, MctStaticData::NS_C), tableprops->props2Export()->value(key).toString()); // FIXME: check xmlns
     }
 }
 
@@ -406,36 +406,36 @@ void MctUndoGraph::textTable(QDomElement *xmlchange, MctChange *change, bool add
  */
 void MctUndoGraph::textGraphicObject(QDomElement *xmlchange, MctChange *change, bool added)
 {
-    xmlchange->setAttribute("type", MctUndoTags::TEXTGRAPHICOBJECT);
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::TEXTGRAPHICOBJECT);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 
     MctChangedTexObjectBase * changeEntity = dynamic_cast<MctChangedTexObjectBase*>(change->changeEntity());
-    xmlchange->setAttribute("name", changeEntity->name());
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::NAME, MctStaticData::NS_C), changeEntity->name());
 
     MctEmbObjProperties *embObjProps = dynamic_cast<MctEmbObjProperties*>(changeEntity->objectProperties());
     if (embObjProps->url() != ""){
         if (embObjProps->pos().x() != 0 && embObjProps->pos().y() != 0)
             embObjProps->setPositionInExport();
-        xmlchange->setAttribute("URL", embObjProps->url());
+        xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::URL, MctStaticData::NS_C), embObjProps->url());
     } else {
-        xmlchange->setAttribute("URL", embObjProps->shape()->getFileUrl());
+        xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::URL, MctStaticData::NS_C), embObjProps->shape()->getFileUrl());
     }
 
     if(added) {
-        xmlchange->setAttribute("PositionX", embObjProps->props2Export()->value("PositionX").toString());
-        xmlchange->setAttribute("PositionY", embObjProps->props2Export()->value("PositionY").toString());
-        xmlchange->setAttribute("Height", embObjProps->props2Export()->value("Height").toString());
-        xmlchange->setAttribute("Width", embObjProps->props2Export()->value("Width").toString());
-        xmlchange->setAttribute("Rotation", embObjProps->props2Export()->value("Rotation").toString());
+        xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::POSX, MctStaticData::NS_C), embObjProps->props2Export()->value("PositionX").toString());
+        xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::POSY, MctStaticData::NS_C), embObjProps->props2Export()->value("PositionY").toString());
+        xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::HEIGHT, MctStaticData::NS_C), embObjProps->props2Export()->value("Height").toString());
+        xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::WIDTH, MctStaticData::NS_C), embObjProps->props2Export()->value("Width").toString());
+        xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::ROTATION, MctStaticData::NS_C), embObjProps->props2Export()->value("Rotation").toString());
         if (embObjProps->props2Export()->value("PrevPositionX").toString() != "")
-            xmlchange->setAttribute("PrevPositionX", embObjProps->props2Export()->value("PrevPositionX").toString()),
-            xmlchange->setAttribute("PrevPositionY", embObjProps->props2Export()->value("PrevPositionY").toString());
+            xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::PREVPOSX, MctStaticData::NS_C), embObjProps->props2Export()->value("PrevPositionX").toString()),
+            xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::PREVPOSY, MctStaticData::NS_C), embObjProps->props2Export()->value("PrevPositionY").toString());
 
         QList<QString> keys = embObjProps->props2Export()->keys();
         foreach (QString key, keys) {
             if (key.startsWith("Stroke") || key.startsWith("Shadow") || key.startsWith("PrevSize") || key.startsWith("PrevRotation")){
-                xmlchange->setAttribute(key, embObjProps->props2Export()->value(key).toString());
+                xmlchange->setAttribute(MctStaticData::attributeNS(key, MctStaticData::NS_C), embObjProps->props2Export()->value(key).toString());
             }
         }
 
@@ -452,7 +452,7 @@ void MctUndoGraph::textGraphicObject(QDomElement *xmlchange, MctChange *change, 
            || key == "LinkDisplayName" || key == "GraphicURL" || key == "FrameStyleName") {
             continue;
         }
-        xmlchange->setAttribute(key, embObjProps->props2Export()->value(key).toString());
+        xmlchange->setAttribute(MctStaticData::attributeNS(key, MctStaticData::NS_C), embObjProps->props2Export()->value(key).toString());
     }
 }
 
@@ -463,11 +463,11 @@ void MctUndoGraph::textGraphicObject(QDomElement *xmlchange, MctChange *change, 
  */
 void MctUndoGraph::embeddedObject(QDomElement *xmlchange, MctChange *change)
 {
-    xmlchange->setAttribute("type", MctUndoTags::EMBEDDEDOBJECT);
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::EMBEDDEDOBJECT);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 
-    xmlchange->setAttribute("name", change->changeEntity()->name());
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::NAME, MctStaticData::NS_C), change->changeEntity()->name());
 }
 
 /**
@@ -559,7 +559,7 @@ void MctUndoGraph::textTableInTable(QDomElement *xmlchange, MctChange *change, b
  */
 void MctUndoGraph::rowChangeInTable(QDomElement *xmlchange, MctChange *change)
 {
-    xmlchange->setAttribute("type", MctUndoTags::ROWCHANGE);
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::ROWCHANGE);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 }
@@ -571,7 +571,7 @@ void MctUndoGraph::rowChangeInTable(QDomElement *xmlchange, MctChange *change)
  */
 void MctUndoGraph::colChangeInTable(QDomElement *xmlchange, MctChange *change)
 {
-    xmlchange->setAttribute("type", MctUndoTags::COLCHANGE);
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::COLCHANGE);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 }

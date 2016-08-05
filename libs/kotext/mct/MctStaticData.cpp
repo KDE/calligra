@@ -83,13 +83,35 @@ const QString MctStaticData::GRAPHICOBJ_PATH = "Pictures/";
 const QChar MctStaticData::REDOCHAR = 'r';
 
 // static variables for xml namespaces (nsURI)
-const QString MctStaticData::NS_DC = "dc";
-const QString MctStaticData::NS_C = "c";
-const QString MctStaticData::NS_OFFICE = "office";
+const XMLns MctStaticData::XMLNS = "xmlns";
+const XMLns MctStaticData::NS_DC = "dc";
+const XMLns MctStaticData::NS_C = "c";
+const XMLns MctStaticData::NS_OFFICE = "office";
 
-// custom static attributes from XML
+// custom static attribute strings for undo/redo XML
+// xmlns:office
 const QString MctStaticData::VERSION = "version";
+// xmlns:dc
 const QString MctStaticData::STARTINGSTRING = "started"; // mct enabled date
+const QString MctStaticData::AUTHOR = "author";
+const QString MctStaticData::COMMENT = "comment";
+const QString MctStaticData::DATE = "date";
+const QString MctStaticData::TYPE = "type";
+// xmlns:c - custom attributes
+const QString MctStaticData::ID = "id";
+const QString MctStaticData::NAME = "name";
+const QString MctStaticData::ROW = "row";
+const QString MctStaticData::COL = "col";
+const QString MctStaticData::URL = "URL";
+const QString MctStaticData::POSX = "PositionX";
+const QString MctStaticData::POSY = "PositionY";
+const QString MctStaticData::PREVPOSX = "PrevPositionX";
+const QString MctStaticData::PREVPOSY = "PrevPositionY";
+const QString MctStaticData::HEIGHT = "Height";
+const QString MctStaticData::WIDTH = "Width";
+const QString MctStaticData::ROTATION = "Rotation";
+const QString MctStaticData::PARENT = "parent";
+
 
 //properties stored as integers
 const QSet<QString> MctStaticData::TEXTGRAPHICOBJECTS_INTPROPS = QSet<QString>() << "BackColorTransparency"
@@ -769,8 +791,8 @@ void MctStaticData::addPos2change(QDomElement *change, MctPosition *pos, bool mo
     }
 
     if (clearfirst) {
-        change->setAttribute(startTag, "");
-        change->setAttribute(endTag, "");
+        change->setAttribute(MctStaticData::attributeNS(startTag, MctStaticData::NS_C), ""); // FIXME: attribute name should be in MctStaticData
+        change->setAttribute(MctStaticData::attributeNS(endTag, MctStaticData::NS_C), "");
     }
 
     QString posStringStart = change->attribute(startTag, "");
@@ -788,7 +810,7 @@ void MctStaticData::addPos2change(QDomElement *change, MctPosition *pos, bool mo
         pos->startCellInfo()->convertCellName2CellPos();
         posStringStart += POSSEPARATOR + QString::number(pos->startCellInfo()->row() + 1) + POSSEPARATOR + QString::number(pos->startCellInfo()->col() + 1);
     }
-    change->setAttribute(startTag, posStringStart);
+    change->setAttribute(MctStaticData::attributeNS(startTag, MctStaticData::NS_C), posStringStart);
 
     QString posStringEnd = change->attribute(endTag, "");
     if (pos->endPar() != UNDEFINED)
@@ -797,7 +819,7 @@ void MctStaticData::addPos2change(QDomElement *change, MctPosition *pos, bool mo
         pos->endCellInfoEnd()->convertCellName2CellPos();
         posStringEnd += POSSEPARATOR + QString::number(pos->endCellInfoEnd()->row() + 1) + POSSEPARATOR + QString::number(pos->endCellInfoEnd()->col() + 1);
     }
-    change->setAttribute(endTag, posStringEnd);
+    change->setAttribute(MctStaticData::attributeNS(endTag, MctStaticData::NS_C), posStringEnd);
 
     if (pos->anchoredPos() != NULL)
         addPos2change(change, pos->anchoredPos(), moved, false);
@@ -1134,4 +1156,9 @@ QString MctStaticData::getAddedShapeType()
 void MctStaticData::setAddedShapeType(const QString &shapeType)
 {
     this->addedShapeType = shapeType;
+}
+
+QString MctStaticData::attributeNS(const QString &attribute, const XMLns &ns)
+{
+    return ns + ":" + attribute;
 }

@@ -621,8 +621,8 @@ void MctEmbObjProperties::regManifest(const QString &fileName)
 
     QString tag = manifest + "file-entry";
     QDomElement elem = manifest_tree->createElement(tag);
-    elem.setAttribute(manifest+"media-type", m_mediaType);
-    elem.setAttribute(manifest+"full-path", m_innerURL);
+    elem.setAttribute(manifest+"media-type", m_mediaType);  // FIXME: xmlns?
+    elem.setAttribute(manifest+"full-path", m_innerURL);    // FIXME: xmlns?
     rootNode.appendChild(elem);
 
     file.open(QIODevice::WriteOnly);
