@@ -482,6 +482,7 @@ MyKGanttView::MyKGanttView( QWidget *parent )
     m->setRole( KGantt::StartTimeRole, Qt::EditRole ); // To provide correct format
     m->setRole( KGantt::EndTimeRole, Qt::EditRole ); // To provide correct format
 
+    m->removeColumn( Qt::DisplayRole );
     m->setColumn( KGantt::ItemTypeRole, NodeModel::NodeType );
     m->setColumn( KGantt::StartTimeRole, NodeModel::NodeStartTime );
     m->setColumn( KGantt::EndTimeRole, NodeModel::NodeEndTime );
@@ -860,6 +861,7 @@ MilestoneKGanttView::MilestoneKGanttView( QWidget *parent )
     m->setRole( KGantt::StartTimeRole, Qt::EditRole ); // To provide correct format
     m->setRole( KGantt::EndTimeRole, Qt::EditRole ); // To provide correct format
 
+    m->removeColumn( Qt::DisplayRole );
     m->setColumn( KGantt::ItemTypeRole, NodeModel::NodeType );
     m->setColumn( KGantt::StartTimeRole, NodeModel::NodeStartTime );
     m->setColumn( KGantt::EndTimeRole, NodeModel::NodeEndTime );
