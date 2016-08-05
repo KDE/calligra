@@ -2880,7 +2880,6 @@ KUndo2Command *NodeModel::setStartupAccount( Node *node, const QVariant &value, 
 
 KUndo2Command *NodeModel::setStartupCost( Node *node, const QVariant &value, int role )
 {
-    Locale *l = m_project->locale();
     switch ( role ) {
         case Qt::EditRole: {
             double v = value.toDouble();
@@ -2918,7 +2917,6 @@ KUndo2Command *NodeModel::setShutdownAccount( Node *node, const QVariant &value,
 
 KUndo2Command *NodeModel::setShutdownCost( Node *node, const QVariant &value, int role )
 {
-    Locale *l = m_project->locale();
     switch ( role ) {
         case Qt::EditRole: {
             double v = value.toDouble();
