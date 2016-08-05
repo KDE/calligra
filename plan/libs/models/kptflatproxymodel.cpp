@@ -73,30 +73,10 @@ void FlatProxyModel::sourceLayoutChanged()
 
 void FlatProxyModel::sourceRowsAboutToBeInserted(const QModelIndex &source_parent, int start, int end)
 {
-    int rc = sourceModel()->rowCount( source_parent );
-    if ( rc == 0 ) {
-        Q_ASSERT( start == 0 );
-        QModelIndex idx = mapFromSource( source_parent );
-        //debugPlan<<"start<rc"<<source_parent<<start<<end<<":"<<idx;
-        if ( idx.isValid() ) {
-            beginInsertRows( QModelIndex(), idx.row() + start, idx.row() + end );
-        } else {
-            beginInsertRows( QModelIndex(), start, end );
-        }
-    } else if ( start < rc ) {
-        QModelIndex source_idx = sourceModel()->index( start, 0, source_parent );
-        QModelIndex idx = mapFromSource( source_idx );
-        //debugPlan<<"start<rc"<<source_parent<<start<<end<<":"<<idx;
-        beginInsertRows( QModelIndex(), idx.row(), idx.row() + end - start );
-    } else if ( start == rc ) {
-        QModelIndex source_idx = sourceModel()->index( start - 1, 0, source_parent );
-        QModelIndex idx = mapFromSource( source_idx );
-        //debugPlan<<"start==rc"<<source_parent<<start<<end<<":"<<idx;
-        beginInsertRows( QModelIndex(), idx.row() + 1, idx.row() + 1 + end - start );
-    } else {
-        // QT5TODO: port to qFatal
-        errorPlan<<"Strange data from source model"<<source_parent<<start<<end;
-    }
+    Q_UNUSED(source_parent);
+    Q_UNUSED(start);
+    Q_UNUSED(end);
+    beginResetModel();
 }
 
 void FlatProxyModel::sourceRowsInserted(const QModelIndex &source_parent, int start, int end)
@@ -104,8 +84,9 @@ void FlatProxyModel::sourceRowsInserted(const QModelIndex &source_parent, int st
     Q_UNUSED(source_parent);
     Q_UNUSED(start);
     Q_UNUSED(end);
+
     initiateMaps();
-    endInsertRows();
+    endResetModel();
 }
 
 void FlatProxyModel::sourceRowsAboutToBeRemoved( const QModelIndex &source_parent, int start, int end )
@@ -128,7 +109,12 @@ void FlatProxyModel::sourceRowsRemoved( const QModelIndex &source_parent, int st
 
 void FlatProxyModel::sourceRowsAboutToBeMoved(const QModelIndex &source_parent, int start, int end, const QModelIndex &destParent, int destStart)
 {
-    beginMoveRows(source_parent, start, end, destParent, destStart );
+    Q_UNUSED(source_parent);
+    Q_UNUSED(start);
+    Q_UNUSED(end);
+    Q_UNUSED(destParent);
+    Q_UNUSED(destStart);
+    beginResetModel();
 }
 
 void FlatProxyModel::sourceRowsMoved(const QModelIndex &source_parent, int start, int end, const QModelIndex &destParent, int destStart)
@@ -138,9 +124,9 @@ void FlatProxyModel::sourceRowsMoved(const QModelIndex &source_parent, int start
     Q_UNUSED(end);
     Q_UNUSED(destParent);
     Q_UNUSED(destStart);
-    debugPlan;
+
     initiateMaps();
-    endMoveRows();
+    endResetModel();
 }
 
 void FlatProxyModel::setSourceModel(QAbstractItemModel *model)
@@ -428,6 +414,7 @@ QModelIndex FlatProxyModel::mapFromSource(const QModelIndex &sourceIndex) const
     }
     QModelIndex proxy_index = index( m_sourceIndexList.indexOf( idx ), sourceIndex.column() );
     //debugPlan<<sourceIndex<<"->"<<proxy_index;
+    Q_ASSERT(proxy_index.model() == this);
     return proxy_index;
 }
 
