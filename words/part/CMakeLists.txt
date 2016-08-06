@@ -72,19 +72,6 @@ set(wordsprivate_LIB_SRCS
     commands/KWShapeCreateCommand.cpp
 )
 
-if (SHOULD_BUILD_APP_AUTHOR)
-set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
-##calligra author specific additions
-    author/AuthorDebug.cpp
-    author/CAuFactory.cpp
-    author/CAuView.cpp
-    author/CAuPart.cpp
-    author/CoverImage.cpp
-    author/CoverSelectionDialog.cpp
-    author/CAuDocument.cpp
-)
-endif()
-
 set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
     dockers/KWDebugDocker.cpp
     dockers/KWDebugDockerFactory.cpp
@@ -98,23 +85,6 @@ if( SHOULD_BUILD_FEATURE_RDF )
         dockers/KWRdfDockerTree.cpp
     )
 
-    if (SHOULD_BUILD_APP_AUTHOR)
-    set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
-        author/dockers/CAuOutlinerDocker.cpp
-        author/dockers/CAuOutlinerDockerFactory.cpp
-        author/dockers/CAuOutlinerWidget.cpp
-
-        author/metadata/CAuMetaDataManager.cpp
-
-        author/metadata/CAuSectionRdf.cpp
-        author/metadata/CAuSectionSemanticItemFactory.cpp
-
-        author/metadata/CAuActorRdf.cpp
-        author/metadata/CAuActorSemanticItemFactory.cpp
-
-        author/metadata/CAuSemanticItemBase.cpp
-    )
-    endif()
 endif()
 
 ki18n_wrap_ui(wordsprivate_LIB_SRCS
@@ -129,13 +99,10 @@ ki18n_wrap_ui(wordsprivate_LIB_SRCS
     dockers/StatisticsPreferencesPopup.ui
     pagetool/SimpleSetupWidget.ui
     pagetool/SimpleHeaderFooterWidget.ui
-    author/CoverSelectionDialog.ui
 )
 if( SHOULD_BUILD_FEATURE_RDF )
     ki18n_wrap_ui(wordsprivate_LIB_SRCS
         dockers/KWRdfDocker.ui
-        author/metadata/CAuSectionRdfEditWidget.ui
-        author/metadata/CAuActorRdfEditWidget.ui
     )
 endif()
 
@@ -211,50 +178,3 @@ DESTINATION ${INCLUDE_INSTALL_DIR}/calligrawords/part/frames COMPONENT Devel)
 
 endif()
 
-###What follows is calligraauthor section###
-
-if (SHOULD_BUILD_APP_AUTHOR)
-
-########### AuthorPart Library ###############
-
-set(authorpart_PART_SRCS author/CAuFactoryInit.cpp )
-
-add_library(authorpart MODULE ${authorpart_PART_SRCS})
-
-kcoreaddons_desktop_to_json(authorpart author/authorpart.desktop)
-
-target_link_libraries(authorpart   wordsprivate )
-
-install(TARGETS authorpart DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)
-
-########### Author exe ###############
-
-set(author_KDEINIT_SRCS author/main.cpp )
-
-file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/*-apps-calligraauthor.png")
-ecm_add_app_icon(author_KDEINIT_SRCS ICONS ${ICONS_SRCS})
-
-kf5_add_kdeinit_executable( calligraauthor ${author_KDEINIT_SRCS})
-
-if (APPLE)
-   set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/../app/Info.plist.template)
-   set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.author")
-   set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Author")
-   install( FILES ${CMAKE_CURRENT_BINARY_DIR}/author_KDEINIT_SRCS.icns DESTINATION ${BUNDLE_INSTALL_DIR}/calligraauthor.app/Contents/Resources)
-endif ()
-
-target_link_libraries(kdeinit_calligraauthor  komain)
-
-install(TARGETS kdeinit_calligraauthor  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-target_link_libraries( calligraauthor kdeinit_calligraauthor )
-install(TARGETS calligraauthor  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-
-########### install files ###############
-
-install( FILES author/author.rc author/author_readonly.rc  DESTINATION ${KXMLGUI_INSTALL_DIR}/author)
-install( PROGRAMS author/author.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
-install( FILES author/authorrc DESTINATION ${CONFIG_INSTALL_DIR} )
-
-endif ()
