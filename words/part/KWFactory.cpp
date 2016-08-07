@@ -94,7 +94,7 @@ const KoComponentData &KWFactory::componentData()
 // TODO reenable after release
         dockRegistry->add(new KWRdfDockerFactory());
 #endif
-
+        dockRegistry->remove("StencilBox"); //don't want this in Words
     }
     return *s_componentData;
 }
