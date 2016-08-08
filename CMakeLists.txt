@@ -985,6 +985,9 @@ endif()
 if (KReport_FOUND AND KREPORT_SCRIPTING)
     set(KReport_WithScripting_FOUND TRUE)
 endif()
+if (NOT Qt5_VERSION VERSION_LESS "5.7.0")
+    set(Qt5_5_7_OR_NEWER TRUE)
+endif()
 
 calligra_drop_product_on_bad_condition( FEATURE_RDF
     Soprano_FOUND "Soprano not found"
@@ -1080,6 +1083,7 @@ calligra_drop_product_on_bad_condition( APP_PLAN
     KChart_FOUND "KChart devel not found"
     KReport_WithScripting_FOUND "KReport with scripting support not found"
     KPropertyWidgets_FOUND "KPropertyWidgets not found"
+    Qt5_5_7_OR_NEWER "Needs Qt 5.7 or newer"
 )
 
 calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
