@@ -54,6 +54,9 @@
 #include <QTabWidget>
 #include <QPushButton>
 #include <QLocale>
+#include <QAction>
+#include <QMenu>
+#include <QHoverEvent>
 
 #include <ktoggleaction.h>
 
@@ -205,9 +208,8 @@ GanttPrintingDialog::GanttPrintingDialog( ViewBase *view, GanttViewBase *gantt )
     m_gantt( gantt ),
     m_options( 0 )
 {
-    // QT5TODO
-    m_headerHeight = 0;//gantt->graphicsView()->headerHeight();
-    m_sceneRect = QRectF();//m_gantt->printRect();
+    m_headerHeight = gantt->treeView()->header()->height(); // same header hight
+    m_sceneRect = gantt->graphicsView()->sceneRect();
     m_horPages = 1;
     qreal c = m_sceneRect.width() - printer().pageRect().width();
     while ( c > 0 ) {
@@ -224,22 +226,22 @@ GanttPrintingDialog::GanttPrintingDialog( ViewBase *view, GanttViewBase *gantt )
     printer().setFromTo( documentFirstPage(), documentLastPage() );
 }
 
-// void GanttPrintingDialog::startPrinting(RemovePolicy removePolicy )
-// {
-//     QList<int> pages;
-//     if ( printer().fromPage() > 0 ) {
-//         pages << printer().fromPage();
-//         if ( ! m_gantt->m_printOptions.singlePage ) {
-//             int last = printer().toPage();
-//             for ( int i = pages.first() + 1; i <= last; ++i ) {
-//                 pages << i;
-//             }
-//         }
-//     }
-//     setPageRange( pages );
-//
-//     PrintingDialog::startPrinting( removePolicy );
-// }
+void GanttPrintingDialog::startPrinting(RemovePolicy removePolicy )
+{
+    QList<int> pages;
+    if ( printer().fromPage() > 0 ) {
+        pages << printer().fromPage();
+        if ( ! m_gantt->m_printOptions.singlePage ) {
+            int last = printer().toPage();
+            for ( int i = pages.first() + 1; i <= last; ++i ) {
+                pages << i;
+            }
+        }
+    }
+    setPageRange( pages );
+
+    PrintingDialog::startPrinting( removePolicy );
+}
 
 QList<QWidget*> GanttPrintingDialog::createOptionWidgets() const
 {
@@ -290,8 +292,8 @@ void GanttPrintingDialog::printPage( int page, QPainter &painter )
         debugPlan<<p<<hor<<vert<<sourceRect;
     }
     painter.setClipRect( pageRect.adjusted( -1.0, -1.0, 1.0, 1.0 ) );
-    // QT5TODO
-//     m_gantt->print( &painter, pageRect, sourceRect, hor == 0 && m_gantt->m_printOptions.printRowLabels, vert == 0 );
+    // QT5TODO Make KGantt able to print multiple pages vertically
+    m_gantt->print( &painter, sourceRect.left(), sourceRect.right(), pageRect, hor == 0 && m_gantt->m_printOptions.printRowLabels, vert == 0 );
 }
 
 //---------------------
@@ -316,13 +318,62 @@ GanttTreeView::GanttTreeView( QWidget* parent )
     connect( header(), SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotHeaderContextMenuRequested(QPoint)) );
 }
 
+//-------------------------------------------
+GanttZoomWidget::GanttZoomWidget( QWidget *parent )
+    : QSlider( parent ), m_hide( true ), m_grid( 0 )
+{
+    setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+    setGeometry( 0, 0, 200, minimumSizeHint().height()  );
+    setContextMenuPolicy( Qt::PreventContextMenu );
+    setOrientation( Qt::Horizontal );
+    setPageStep( 5 );
+    setMaximum( 125 );
+    connect(this, SIGNAL(valueChanged(int)), SLOT(sliderValueChanged(int)));
+}
+
+void GanttZoomWidget::setEnableHideOnLeave( bool hide )
+{
+    m_hide = hide;
+}
+
+void GanttZoomWidget::setGrid( KGantt::DateTimeGrid *grid )
+{
+    m_grid = grid;
+    if ( grid ) {
+        int pos = -1; // daywidth always >= 0.1
+        for ( qreal dw = grid->dayWidth(); dw >= 0.1 && pos < maximum(); ++pos ) {
+            dw *= 1.0 / 1.1;
+        }
+        blockSignals( true );
+        setValue( pos );
+        blockSignals( false );
+    }
+}
+
+void GanttZoomWidget::leaveEvent( QEvent *e )
+{
+    if ( m_hide ) {
+        setVisible( false );
+    }
+    QSlider::leaveEvent( e );
+}
+
+void GanttZoomWidget::sliderValueChanged( int value )
+{
+    qDebug()<<m_grid<<value;
+    if ( m_grid ) {
+        int v = qMax(1.0, qPow( 1.1, value ) * 0.1);
+        m_grid->setDayWidth( v );
+    }
+}
 
 //-------------------------------------------
 GanttViewBase::GanttViewBase( QWidget *parent )
     : KGantt::View( parent )
 {
     KGantt::DateTimeGrid *g = static_cast<KGantt::DateTimeGrid*>( grid() );
-
+    g->setUserDefinedUpperScale( new KGantt::DateTimeScaleFormatter(KGantt::DateTimeScaleFormatter::Month, QString::fromLatin1("yyyy-MMMM")));
+    g->setUserDefinedLowerScale( new KGantt::DateTimeScaleFormatter(KGantt::DateTimeScaleFormatter::Day, QString::fromLatin1("ddd")));
     QLocale locale;
 
     g->setWeekStart( locale.firstDayOfWeek() );
@@ -335,12 +386,40 @@ GanttViewBase::GanttViewBase( QWidget *parent )
         }
     }
     g->setFreeDays( fd );
+
+
+    m_zoomwidget = new GanttZoomWidget( graphicsView() );
+    m_zoomwidget->setGrid( g );
+    m_zoomwidget->setEnableHideOnLeave( true );
+    m_zoomwidget->hide();
+    m_zoomwidget->move( 6, 6 );
+
+    graphicsView()->installEventFilter(this);
+    graphicsView()->setMouseTracking(true);
 }
 
 GanttTreeView *GanttViewBase::treeView() const
 {
     QAbstractItemView *v = const_cast<QAbstractItemView*>( leftView() );
     return static_cast<GanttTreeView*>( v );
+}
+
+bool GanttViewBase::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj != graphicsView()) {
+        return false;
+    }
+    if (event->type() == QEvent::HoverMove) {
+        QHoverEvent *e = static_cast<QHoverEvent*>( event );
+        if (e->pos().y() > 7 && e->pos().y() < m_zoomwidget->height() + 5 && e->pos().x() > 7 && e->pos().x() < m_zoomwidget->width() + 5 ) {
+            if ( !m_zoomwidget->isVisible()) {
+                m_zoomwidget->show();
+                m_zoomwidget->setFocus();
+            }
+            return true;
+        }
+    }
+    return false;
 }
 
 bool GanttViewBase::loadContext( const KoXmlElement &settings )
@@ -1218,3 +1297,5 @@ KoPrintJob *ResourceAppointmentsGanttView::createPrintJob()
 }
 
 }  //KPlato namespace
+
+#include "moc_kptganttview.cpp"

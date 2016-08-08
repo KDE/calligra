@@ -33,6 +33,7 @@
 
 #include <KGanttGlobal>
 #include <KGanttView>
+#include <KGanttDateTimeGrid>
 
 class KoDocument;
 
@@ -134,7 +135,7 @@ class GanttPrintingDialog : public PrintingDialog
 public:
     GanttPrintingDialog( ViewBase *view, GanttViewBase *gantt );
 
-//     void startPrinting( RemovePolicy removePolicy );
+    void startPrinting( RemovePolicy removePolicy );
     QList<QWidget*> createOptionWidgets() const;
     void printPage( int page, QPainter &painter );
 
@@ -161,6 +162,26 @@ public:
 
 };
 
+class GanttZoomWidget : public QSlider {
+    Q_OBJECT
+public:
+    explicit GanttZoomWidget( QWidget *parent );
+
+    void setGrid( KGantt::DateTimeGrid *grid );
+
+    void setEnableHideOnLeave( bool hide );
+
+protected:
+    void leaveEvent( QEvent *event );
+
+private Q_SLOTS:
+    void sliderValueChanged( int value );
+
+private:
+    bool m_hide;
+    KGantt::DateTimeGrid *m_grid;
+};
+
 class KPLATOUI_EXPORT GanttViewBase : public KGantt::View
 {
     Q_OBJECT
@@ -177,8 +198,13 @@ public Q_SLOTS:
     void setPrintingOptions( const GanttPrintingOptions &opt ) { m_printOptions = opt; }
 
 protected:
+    bool eventFilter(QObject *obj, QEvent *event);
+
     friend class GanttPrintingDialog;
     GanttPrintingOptions m_printOptions;
+
+private:
+    GanttZoomWidget *m_zoomwidget;
 };
 
 class NodeGanttViewBase : public GanttViewBase 
