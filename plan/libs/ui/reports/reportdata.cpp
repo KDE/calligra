@@ -443,7 +443,7 @@ ResourceReportData::ResourceReportData( QObject *parent )
     m_maindatasource = true;
     m_subdatasource = false;
     setObjectName( "resources" );
-    m_name = i18n( "Resource assignments" );
+    m_name = i18n( "Resources" );
 
     createModels();
 }
@@ -494,7 +494,7 @@ ResourceAssignmentReportData::ResourceAssignmentReportData( QObject *parent )
     m_maindatasource = true;
     m_subdatasource = false;
     setObjectName( "resourceassignments" );
-    m_name = i18n( "Resources" );
+    m_name = i18n( "Resource assignments" );
 
     createModels();
 }
