@@ -24,7 +24,7 @@ set (pictureshape_LIB_SRCS
 
 ki18n_wrap_ui(pictureshape_LIB_SRCS forms/wdgPictureTool.ui)
 add_library(calligra_shape_picture MODULE ${pictureshape_LIB_SRCS})
-kcoreaddons_desktop_to_json(calligra_shape_picture calligra_shape_picture.desktop)
+calligra_shape_desktop_to_json(calligra_shape_picture calligra_shape_picture.desktop)
 
 target_link_libraries(calligra_shape_picture
     flake

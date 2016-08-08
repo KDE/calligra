@@ -177,7 +177,7 @@ ki18n_wrap_ui(textshape_SRCS
 
 add_library(calligra_shape_text MODULE ${textshape_SRCS})
 
-kcoreaddons_desktop_to_json(calligra_shape_text calligra_shape_text.desktop)
+calligra_shape_desktop_to_json(calligra_shape_text calligra_shape_text.desktop)
 
 target_link_libraries(calligra_shape_text kotext kotextlayout kowidgets KF5::KIOCore KF5::KIOFileWidgets KF5::KIOWidgets KF5::ItemViews KF5::WidgetsAddons
 )

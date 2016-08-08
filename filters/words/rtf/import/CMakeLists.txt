@@ -6,7 +6,7 @@ include_directories(
 
 set(rtf2odt_PART_SRCS rtfimport.cpp )
 add_library(calligra_filter_rtf2odt MODULE ${rtf2odt_PART_SRCS})
-kcoreaddons_desktop_to_json(calligra_filter_rtf2odt calligra_filter_rtf2odt.desktop)
+calligra_filter_desktop_to_json(calligra_filter_rtf2odt calligra_filter_rtf2odt.desktop)
 target_link_libraries(calligra_filter_rtf2odt RtfReader komain)
 
 install(TARGETS calligra_filter_rtf2odt  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)

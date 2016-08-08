@@ -31,4 +31,4 @@ target_link_libraries(
     )
 install(TARGETS braindump_shape_state DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
 
-kcoreaddons_desktop_to_json(braindump_shape_state braindump_shape_state.desktop)
+calligra_shape_desktop_to_json(braindump_shape_state braindump_shape_state.desktop)

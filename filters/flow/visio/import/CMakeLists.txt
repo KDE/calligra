@@ -14,7 +14,7 @@ set(vsdx2odg_PART_SRCS
 )
 
 add_library(calligra_filter_vsdx2odg MODULE ${vsdx2odg_PART_SRCS})
-kcoreaddons_desktop_to_json(calligra_filter_vsdx2odg calligra_filter_vsdx2odg.desktop)
+calligra_filter_desktop_to_json(calligra_filter_vsdx2odg calligra_filter_vsdx2odg.desktop)
 
 target_link_libraries(calligra_filter_vsdx2odg komain ${LIBODFGEN_LIBRARIES} ${LIBREVENGE_LIBRARIES} ${LIBVISIO_LIBRARIES})
 

@@ -10,7 +10,7 @@ set(kpr_pageeffect_spacerotation_PART_SRCS Plugin.cpp
 
 add_library(kpr_pageeffect_spacerotation MODULE ${kpr_pageeffect_spacerotation_PART_SRCS})
 
-kcoreaddons_desktop_to_json(kpr_pageeffect_spacerotation kpr_pageeffect_spacerotation.desktop)
+calligrastage_pageeffect_desktop_to_json(kpr_pageeffect_spacerotation kpr_pageeffect_spacerotation.desktop)
 
 target_link_libraries(
     kpr_pageeffect_spacerotation

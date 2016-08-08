@@ -366,7 +366,7 @@ set (calligrasheetspart_PART_SRCS part/Factory_init.cpp )
 
 add_library(calligrasheetspart MODULE ${calligrasheetspart_PART_SRCS})
 
-kcoreaddons_desktop_to_json(calligrasheetspart sheetspart.desktop)
+calligra_part_desktop_to_json(calligrasheetspart sheetspart.desktop)
 
 target_link_libraries(calligrasheetspart calligrasheetscommon )
 

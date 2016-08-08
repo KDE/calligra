@@ -23,7 +23,7 @@ set_target_properties(calligra_filter_odt2epub2 PROPERTIES COMPILE_DEFINITIONS "
 target_link_libraries(calligra_filter_odt2epub2 kovectorimage komain Qt5::Svg)
 
 install(TARGETS calligra_filter_odt2epub2  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
-kcoreaddons_desktop_to_json(calligra_filter_odt2epub2 calligra_filter_odt2epub2.desktop)
+calligra_filter_desktop_to_json(calligra_filter_odt2epub2 calligra_filter_odt2epub2.desktop)
 
 endif()
 
@@ -46,7 +46,7 @@ set_target_properties(calligra_filter_odt2html PROPERTIES COMPILE_DEFINITIONS "D
 target_link_libraries(calligra_filter_odt2html kovectorimage komain Qt5::Svg)
 
 install(TARGETS calligra_filter_odt2html  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
-kcoreaddons_desktop_to_json(calligra_filter_odt2html calligra_filter_odt2html.desktop)
+calligra_filter_desktop_to_json(calligra_filter_odt2html calligra_filter_odt2html.desktop)
 
 endif()
 

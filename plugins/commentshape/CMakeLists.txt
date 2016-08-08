@@ -16,7 +16,7 @@ set( commentshape_LIB_SRCS
    )
 
 add_library(calligra_shape_comment MODULE ${commentshape_LIB_SRCS})
-kcoreaddons_desktop_to_json(calligra_shape_comment calligra_shape_comment.desktop)
+calligra_shape_desktop_to_json(calligra_shape_comment calligra_shape_comment.desktop)
 
 target_link_libraries(calligra_shape_comment kotextlayout)
 

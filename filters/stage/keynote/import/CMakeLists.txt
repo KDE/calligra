@@ -14,7 +14,7 @@ set(key2odp_PART_SRCS
 )
 
 add_library(calligra_filter_key2odp MODULE ${key2odp_PART_SRCS})
-kcoreaddons_desktop_to_json(calligra_filter_key2odp calligra_filter_key2odp.desktop)
+calligra_filter_desktop_to_json(calligra_filter_key2odp calligra_filter_key2odp.desktop)
 
 target_link_libraries(calligra_filter_key2odp komain ${LIBREVENGE_LIBRARIES} ${LIBODFGEN_LIBRARIES} ${LIBETONYEK_LIBRARIES})
 

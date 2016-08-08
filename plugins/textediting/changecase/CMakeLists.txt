@@ -12,7 +12,7 @@ set(changecase_SRCS
 )
 
 add_library(calligra_textediting_changecase MODULE ${changecase_SRCS})
-kcoreaddons_desktop_to_json(calligra_textediting_changecase calligra_textediting_changecase.desktop)
+calligra_texteditingplugin_desktop_to_json(calligra_textediting_changecase calligra_textediting_changecase.desktop)
 
 target_link_libraries(calligra_textediting_changecase
     kotext

@@ -21,9 +21,9 @@ set (tableshape_LIB_SRCS
    )
 
 add_library(calligra_shape_spreadsheet-deferred MODULE ${tableshape_LIB_SRCS})
-kcoreaddons_desktop_to_json(calligra_shape_spreadsheet-deferred calligra_shape_spreadsheet-deferred.desktop)
+calligra_deferredplugin_desktop_to_json(calligra_shape_spreadsheet-deferred calligra_shape_spreadsheet-deferred.desktop)
 add_library(calligra_shape_spreadsheet MODULE TableShapeFactory.cpp)
-kcoreaddons_desktop_to_json(calligra_shape_spreadsheet calligra_shape_spreadsheet.desktop)
+calligra_shape_desktop_to_json(calligra_shape_spreadsheet calligra_shape_spreadsheet.desktop)
 
 target_link_libraries(calligra_shape_spreadsheet-deferred calligrasheetscommon)
 target_link_libraries(calligra_shape_spreadsheet flake KF5::KDELibs4Support)

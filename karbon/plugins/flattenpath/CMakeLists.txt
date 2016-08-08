@@ -8,7 +8,7 @@ set(karbon_flattenpath_PART_SRCS FlattenPathPlugin.cpp KarbonPathFlattenCommand.
 
 add_library(karbon_flattenpath MODULE ${karbon_flattenpath_PART_SRCS})
 
-kcoreaddons_desktop_to_json(karbon_flattenpath karbon_flattenpath.desktop)
+karbon_viewplugin_desktop_to_json(karbon_flattenpath karbon_flattenpath.desktop)
 
 target_link_libraries(karbon_flattenpath karboncommon)
 

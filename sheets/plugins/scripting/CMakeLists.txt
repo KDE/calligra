@@ -30,7 +30,7 @@ qt5_wrap_cpp(krossmodulesheets_PART_SRCS
 
 add_library(krossmodulesheets MODULE ${krossmodulesheets_PART_SRCS})
 generate_export_header(krossmodulesheets BASE_NAME sheetsscripting)
-kcoreaddons_desktop_to_json(krossmodulesheets sheetsscripting.desktop)
+calligrasheets_viewplugin_desktop_to_json(krossmodulesheets sheetsscripting.desktop)
 
 target_link_libraries(krossmodulesheets
     calligrasheetscommon

@@ -35,7 +35,7 @@ set(kpr_pageeffect_edgewipe_SRCS
 
 add_library(kpr_pageeffect_edgewipe MODULE ${kpr_pageeffect_edgewipe_SRCS})
 
-kcoreaddons_desktop_to_json(kpr_pageeffect_edgewipe kpr_pageeffect_edgewipe.desktop)
+calligrastage_pageeffect_desktop_to_json(kpr_pageeffect_edgewipe kpr_pageeffect_edgewipe.desktop)
 
 target_link_libraries(
     kpr_pageeffect_edgewipe

@@ -43,7 +43,7 @@ kde_enable_exceptions()
 set(sheets2xls_SRCS ExcelExport.cpp CFBWriter.cpp ${sidewinder_SRCS})
 
 add_library(calligra_filter_sheets2xls MODULE ${sheets2xls_SRCS})
-kcoreaddons_desktop_to_json(calligra_filter_sheets2xls calligra_filter_sheets2xls.desktop)
+calligra_filter_desktop_to_json(calligra_filter_sheets2xls calligra_filter_sheets2xls.desktop)
 
 
 target_link_libraries(calligra_filter_sheets2xls

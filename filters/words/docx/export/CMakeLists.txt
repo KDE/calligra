@@ -25,7 +25,7 @@ target_link_libraries(calligra_filter_odt2docx koodfreader komain koodf koodf2)
 install(TARGETS calligra_filter_odt2docx DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 #install(FILES calligra_filter_odt2docx.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-kcoreaddons_desktop_to_json(calligra_filter_odt2docx calligra_filter_odt2docx.desktop)
+calligra_filter_desktop_to_json(calligra_filter_odt2docx calligra_filter_odt2docx.desktop)
 
 install( PROGRAMS  calligra_filter_odt2docx.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 

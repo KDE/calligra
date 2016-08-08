@@ -8,7 +8,7 @@ set(kprvariables_PART_SRCS
 
 add_library(kprvariables MODULE ${kprvariables_PART_SRCS})
 
-kcoreaddons_desktop_to_json(kprvariables kprvariables.desktop)
+calligra_textinlineobject_desktop_to_json(kprvariables kprvariables.desktop)
 
 target_link_libraries(
     kprvariables

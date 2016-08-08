@@ -7,7 +7,7 @@ set(kpr_pageeffect_swapeffect_PART_SRCS Plugin.cpp
 
 add_library(kpr_pageeffect_swapeffect MODULE ${kpr_pageeffect_swapeffect_PART_SRCS})
 
-kcoreaddons_desktop_to_json(kpr_pageeffect_swapeffect kpr_pageeffect_swapeffect.desktop)
+calligrastage_pageeffect_desktop_to_json(kpr_pageeffect_swapeffect kpr_pageeffect_swapeffect.desktop)
 
 target_link_libraries(
     kpr_pageeffect_swapeffect

@@ -20,7 +20,7 @@ set(doc2odt_PART_SRCS
 kde_enable_exceptions()
 
 add_library(calligra_filter_doc2odt MODULE ${doc2odt_PART_SRCS})
-kcoreaddons_desktop_to_json(calligra_filter_doc2odt calligra_filter_doc2odt.desktop)
+calligra_filter_desktop_to_json(calligra_filter_doc2odt calligra_filter_doc2odt.desktop)
 
 target_link_libraries(calligra_filter_doc2odt kowv2 komain mso)
 

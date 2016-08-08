@@ -139,7 +139,7 @@ set(wordspart_PART_SRCS KWFactoryInit.cpp )
 
 add_library(calligrawordspart MODULE ${wordspart_PART_SRCS})
 
-kcoreaddons_desktop_to_json(calligrawordspart wordspart.desktop)
+calligra_part_desktop_to_json(calligrawordspart wordspart.desktop)
 
 target_link_libraries(calligrawordspart   wordsprivate )
 

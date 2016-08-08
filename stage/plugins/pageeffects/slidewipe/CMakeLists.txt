@@ -15,7 +15,7 @@ KPrSlideWipeToTopStrategy.cpp
 
 add_library(kpr_pageeffect_slidewipe MODULE ${kpr_pageeffect_slidewipe_PART_SRCS})
 
-kcoreaddons_desktop_to_json(kpr_pageeffect_slidewipe kpr_pageeffect_slidewipe.desktop)
+calligrastage_pageeffect_desktop_to_json(kpr_pageeffect_slidewipe kpr_pageeffect_slidewipe.desktop)
 
 target_link_libraries(
     kpr_pageeffect_slidewipe

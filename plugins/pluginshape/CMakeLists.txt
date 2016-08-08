@@ -11,7 +11,7 @@ set (pluginshape_LIB_SRCS
 )
 
 add_library(calligra_shape_plugin MODULE ${pluginshape_LIB_SRCS})
-kcoreaddons_desktop_to_json(calligra_shape_plugin calligra_shape_plugin.desktop)
+calligra_shape_desktop_to_json(calligra_shape_plugin calligra_shape_plugin.desktop)
 
 target_link_libraries(calligra_shape_plugin
     komain

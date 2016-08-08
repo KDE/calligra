@@ -182,6 +182,7 @@ include(MacroBoolTo01)
 include(MacroOptionalFindPackage)
 include(MacroEnsureVersion)
 include(MacroJPEG)
+include(MacroDesktopToJson)
 
 
 set(REQUIRED_KF5_VERSION "5.7.0")

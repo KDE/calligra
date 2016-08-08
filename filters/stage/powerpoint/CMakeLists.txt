@@ -15,7 +15,7 @@ add_executable(ppttoodp ppttoodpmain.cpp)
 target_link_libraries(ppttoodp ppttoodplib)
 
 add_library(calligra_filter_ppt2odp MODULE PowerPointImport.cpp)
-kcoreaddons_desktop_to_json(calligra_filter_ppt2odp calligra_filter_ppt2odp.desktop)
+calligra_filter_desktop_to_json(calligra_filter_ppt2odp calligra_filter_ppt2odp.desktop)
 
 target_link_libraries(calligra_filter_ppt2odp ppttoodplib komain)
 

@@ -8,7 +8,7 @@ set(kpr_pageeffect_fade_PART_SRCS Plugin.cpp
 
 add_library(kpr_pageeffect_fade MODULE ${kpr_pageeffect_fade_PART_SRCS})
 
-kcoreaddons_desktop_to_json(kpr_pageeffect_fade kpr_pageeffect_fade.desktop)
+calligrastage_pageeffect_desktop_to_json(kpr_pageeffect_fade kpr_pageeffect_fade.desktop)
 
 target_link_libraries(
     kpr_pageeffect_fade

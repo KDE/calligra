@@ -32,7 +32,7 @@ ki18n_wrap_ui( textvariables_SRCS
 )
 
 add_library(calligra_textinlineobject_variables MODULE ${textvariables_SRCS})
-kcoreaddons_desktop_to_json(calligra_textinlineobject_variables calligra_textinlineobject_variables.desktop)
+calligra_textinlineobject_desktop_to_json(calligra_textinlineobject_variables calligra_textinlineobject_variables.desktop)
 
 target_link_libraries(calligra_textinlineobject_variables
     kotext

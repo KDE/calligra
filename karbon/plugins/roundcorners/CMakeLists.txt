@@ -10,7 +10,7 @@ set(karbon_roundcorners_PART_SRCS RoundCornersPlugin.cpp RoundCornersCommand.cpp
 
 add_library(karbon_roundcorners MODULE ${karbon_roundcorners_PART_SRCS})
 
-kcoreaddons_desktop_to_json(karbon_roundcorners karbon_roundcorners.desktop)
+karbon_viewplugin_desktop_to_json(karbon_roundcorners karbon_roundcorners.desktop)
 
 target_link_libraries(karbon_roundcorners karboncommon)
 

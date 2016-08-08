@@ -10,7 +10,7 @@ set_package_properties(PstoeditSvgOutput PROPERTIES
 set(eps2svgai_PART_SRCS EpsImport.cpp PsCommentLexer.cpp )
 
 add_library(calligra_filter_eps2svgai MODULE ${eps2svgai_PART_SRCS})
-kcoreaddons_desktop_to_json(calligra_filter_eps2svgai calligra_filter_eps2svgai.desktop)
+calligra_filter_desktop_to_json(calligra_filter_eps2svgai calligra_filter_eps2svgai.desktop)
 
 target_link_libraries(calligra_filter_eps2svgai komain)
 

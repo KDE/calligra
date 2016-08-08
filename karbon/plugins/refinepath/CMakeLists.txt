@@ -4,7 +4,7 @@ set(karbon_refinepath_PART_SRCS RefinePathPlugin.cpp KarbonPathRefineCommand.cpp
 
 add_library(karbon_refinepath MODULE ${karbon_refinepath_PART_SRCS})
 
-kcoreaddons_desktop_to_json(karbon_refinepath karbon_refinepath.desktop)
+karbon_viewplugin_desktop_to_json(karbon_refinepath karbon_refinepath.desktop)
 
 target_link_libraries(karbon_refinepath karboncommon)
 

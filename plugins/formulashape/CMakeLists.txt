@@ -115,7 +115,7 @@ ki18n_wrap_ui( formulashape_PART_SRCS
 )
 
 add_library(calligra_shape_formula MODULE ${formulashape_PART_SRCS})
-kcoreaddons_desktop_to_json(calligra_shape_formula calligra_shape_formula.desktop)
+calligra_shape_desktop_to_json(calligra_shape_formula calligra_shape_formula.desktop)
 
 target_link_libraries(calligra_shape_formula koformula ${M2MML_TOOL_LIBRARIES})
 

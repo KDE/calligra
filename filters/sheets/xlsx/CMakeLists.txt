@@ -25,7 +25,7 @@ set(xlsx2ods_PART_SRCS
 )
 
 add_library(calligra_filter_xlsx2ods MODULE ${xlsx2ods_PART_SRCS})
-kcoreaddons_desktop_to_json(calligra_filter_xlsx2ods calligra_filter_xlsx2ods.desktop)
+calligra_filter_desktop_to_json(calligra_filter_xlsx2ods calligra_filter_xlsx2ods.desktop)
 
 target_link_libraries(
     calligra_filter_xlsx2ods

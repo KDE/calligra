@@ -114,7 +114,7 @@ set(planpart_PART_SRCS kptfactoryinit.cpp )
 
 add_library(calligraplanpart MODULE ${planpart_PART_SRCS})
 
-kcoreaddons_desktop_to_json(calligraplanpart planpart.desktop)
+calligra_part_desktop_to_json(calligraplanpart planpart.desktop)
 
 target_link_libraries(calligraplanpart KF5::Parts planprivate)
 

@@ -24,7 +24,7 @@ set(kpr_pageeffect_clockwipe_SRCS
 
 add_library(kpr_pageeffect_clockwipe MODULE ${kpr_pageeffect_clockwipe_SRCS})
 
-kcoreaddons_desktop_to_json(kpr_pageeffect_clockwipe kpr_pageeffect_clockwipe.desktop)
+calligrastage_pageeffect_desktop_to_json(kpr_pageeffect_clockwipe kpr_pageeffect_clockwipe.desktop)
 
 target_link_libraries(
     kpr_pageeffect_clockwipe 

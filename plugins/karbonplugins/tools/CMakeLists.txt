@@ -45,7 +45,7 @@ ki18n_wrap_ui(karbon_tools_PART_SRCS
 
 add_library(karbon_tools MODULE ${karbon_tools_PART_SRCS})
 
-kcoreaddons_desktop_to_json(karbon_tools karbon_tools.desktop)
+calligra_tool_desktop_to_json(karbon_tools karbon_tools.desktop)
 
 target_link_libraries(karbon_tools kowidgets)
 

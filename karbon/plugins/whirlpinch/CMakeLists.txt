@@ -7,7 +7,7 @@ set(karbon_whirlpinch_PART_SRCS WhirlPinchPlugin.cpp KarbonWhirlPinchCommand.cpp
 
 add_library(karbon_whirlpinch MODULE ${karbon_whirlpinch_PART_SRCS})
 
-kcoreaddons_desktop_to_json(karbon_whirlpinch karbon_whirlpinch.desktop)
+karbon_viewplugin_desktop_to_json(karbon_whirlpinch karbon_whirlpinch.desktop)
 
 target_link_libraries(karbon_whirlpinch karboncommon)
 

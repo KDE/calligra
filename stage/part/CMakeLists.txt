@@ -178,7 +178,7 @@ set(calligrastagepart_PART_SRCS KPrFactoryInit.cpp )
 
 add_library(calligrastagepart MODULE ${calligrastagepart_PART_SRCS})
 
-kcoreaddons_desktop_to_json(calligrastagepart stagepart.desktop)
+calligra_part_desktop_to_json(calligrastagepart stagepart.desktop)
 
 target_link_libraries(calligrastagepart calligrastageprivate )
 

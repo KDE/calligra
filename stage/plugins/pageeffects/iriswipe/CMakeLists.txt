@@ -18,7 +18,7 @@ set(kpr_pageeffect_iriswipe_SRCS
 
 add_library(kpr_pageeffect_iriswipe MODULE ${kpr_pageeffect_iriswipe_SRCS})
 
-kcoreaddons_desktop_to_json(kpr_pageeffect_iriswipe kpr_pageeffect_iriswipe.desktop)
+calligrastage_pageeffect_desktop_to_json(kpr_pageeffect_iriswipe kpr_pageeffect_iriswipe.desktop)
 
 target_link_libraries(
     kpr_pageeffect_iriswipe

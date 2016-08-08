@@ -23,7 +23,7 @@ set(calligrastagetoolanimation_PART_SRCS
 
 add_library(calligrastagetoolanimation MODULE ${calligrastagetoolanimation_PART_SRCS})
 
-kcoreaddons_desktop_to_json(calligrastagetoolanimation calligrastagetoolanimation.desktop)
+calligrastage_tool_desktop_to_json(calligrastagetoolanimation calligrastagetoolanimation.desktop)
 
 target_link_libraries(
     calligrastagetoolanimation

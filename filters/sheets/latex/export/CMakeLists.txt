@@ -23,7 +23,7 @@ set(kspread2tex_PART_SRCS
 ki18n_wrap_ui(kspread2tex_PART_SRCS latexexportwidget.ui )
 
 add_library(calligra_filter_kspread2tex MODULE ${kspread2tex_PART_SRCS})
-kcoreaddons_desktop_to_json(calligra_filter_kspread2tex calligra_filter_kspread2tex.desktop)
+calligra_filter_desktop_to_json(calligra_filter_kspread2tex calligra_filter_kspread2tex.desktop)
 
 target_link_libraries(calligra_filter_kspread2tex komain)
 

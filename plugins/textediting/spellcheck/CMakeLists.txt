@@ -16,7 +16,7 @@ set(spellcheck_SRCS
 )
 
 add_library(calligra_textediting_spellcheck MODULE ${spellcheck_SRCS})
-kcoreaddons_desktop_to_json(calligra_textediting_spellcheck calligra_textediting_spellcheck.desktop)
+calligra_texteditingplugin_desktop_to_json(calligra_textediting_spellcheck calligra_textediting_spellcheck.desktop)
 
 target_link_libraries(calligra_textediting_spellcheck
     kotext

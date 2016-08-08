@@ -14,6 +14,6 @@ set ( spacenavigator_SRCS
 )
 
 add_library(calligra_device_spacenavigator MODULE ${spacenavigator_SRCS})
-kcoreaddons_desktop_to_json(calligra_device_spacenavigator calligra_device_spacenavigator.desktop)
+calligra_device_desktop_to_json(calligra_device_spacenavigator calligra_device_spacenavigator.desktop)
 target_link_libraries(calligra_device_spacenavigator flake ${SPNAV_LIBRARY} ${X11_LIBRARIES})
 install(TARGETS calligra_device_spacenavigator DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/devices)

@@ -12,7 +12,7 @@ set(stencilsdocker_PART_SRCS
 
 add_library(calligra_docker_stencils MODULE ${stencilsdocker_PART_SRCS})
 
-kcoreaddons_desktop_to_json(calligra_docker_stencils calligra_docker_stencils.desktop)
+calligra_docker_desktop_to_json(calligra_docker_stencils calligra_docker_stencils.desktop)
 
 target_link_libraries(calligra_docker_stencils komain kowidgets flake KF5::Archive)
 

@@ -14,7 +14,7 @@ set(wps2odt_PART_SRCS
 )
 
 add_library(calligra_filter_wps2odt MODULE ${wps2odt_PART_SRCS})
-kcoreaddons_desktop_to_json(calligra_filter_wps2odt calligra_filter_wps2odt.desktop)
+calligra_filter_desktop_to_json(calligra_filter_wps2odt calligra_filter_wps2odt.desktop)
 
 target_link_libraries(calligra_filter_wps2odt komain ${LIBODFGEN_LIBRARIES} ${LIBREVENGE_LIBRARIES} ${LIBWPS_LIBRARIES})
 

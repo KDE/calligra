@@ -21,7 +21,7 @@ ki18n_wrap_ui( solver_PART_SRCS
 )
 
 add_library(sheetssolver MODULE ${solver_PART_SRCS} )
-kcoreaddons_desktop_to_json(sheetssolver sheetssolver.desktop)
+calligrasheets_viewplugin_desktop_to_json(sheetssolver sheetssolver.desktop)
 
 
 target_link_libraries( sheetssolver
