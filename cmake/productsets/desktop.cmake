@@ -3,7 +3,6 @@
 calligra_define_productset(DESKTOP "Calligra for Desktop"
     OPTIONAL
         # apps
-        AUTHOR
         BRAINDUMP
         FLOW
         KARBON
