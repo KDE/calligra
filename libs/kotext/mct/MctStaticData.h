@@ -110,6 +110,25 @@ public:
     static const QString ROTATION;
     static const QString PARENT;
 
+    // xml string constants (tags, attribute values, etc)
+    static const QString ADDED;
+    static const QString REMOVED;
+    static const QString MOVED;
+    static const QString STRING;
+    static const QString PARAGRAPH;
+    static const QString STYLE;
+    static const QString TEXTFRAME;
+    static const QString TEXTGRAPHICOBJECT;
+    static const QString EMBEDDEDOBJECT;
+    static const QString ROWCHANGE;
+    static const QString COLCHANGE;
+    //static const QString TABLE;
+    static const QString FORMATTAG;
+    static const QString PROPERTIESTAG;
+    static const QString TEXTTAG;
+    static const QString PARAGRAPHTAG;
+    static const QString LIST;
+    static const QString UNDEFINEDTAG;
 
     static int currentRevision;    
 

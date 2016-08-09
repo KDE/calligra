@@ -112,6 +112,26 @@ const QString MctStaticData::WIDTH = "Width";
 const QString MctStaticData::ROTATION = "Rotation";
 const QString MctStaticData::PARENT = "parent";
 
+// xml string constants (tags, attribute values, etc)
+const QString MctStaticData::ADDED = "del";
+const QString MctStaticData::REMOVED = "add";
+const QString MctStaticData::MOVED = "move";
+const QString MctStaticData::STRING = "text";
+const QString MctStaticData::PARAGRAPH = "par";
+const QString MctStaticData::STYLE = "style";
+const QString MctStaticData::TEXTFRAME = "textframe";
+const QString MctStaticData::TEXTGRAPHICOBJECT = "graphobj";
+const QString MctStaticData::EMBEDDEDOBJECT = "embobj";
+const QString MctStaticData::ROWCHANGE = "row";
+const QString MctStaticData::COLCHANGE = "col";
+//const QString MctStaticData::TABLE = "table";
+const QString MctStaticData::FORMATTAG = "format";
+const QString MctStaticData::PROPERTIESTAG = "properties";
+const QString MctStaticData::TEXTTAG = "text";
+const QString MctStaticData::PARAGRAPHTAG = "paragraph";
+const QString MctStaticData::LIST = "list";
+const QString MctStaticData::UNDEFINEDTAG = "undef";
+
 
 //properties stored as integers
 const QSet<QString> MctStaticData::TEXTGRAPHICOBJECTS_INTPROPS = QSet<QString>() << "BackColorTransparency"

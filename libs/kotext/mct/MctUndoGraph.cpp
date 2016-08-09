@@ -21,7 +21,7 @@
 #include "MctStaticData.h"
 #include "MctChangeset.h"
 #include "MctChange.h"
-#include "MctUndoTags.h"
+//#include "MctStaticData.h"
 #include "MctChangeEntities.h"
 #include "MctTableProperties.h"
 #include "MctEmbObjProperties.h"
@@ -83,113 +83,113 @@ void MctUndoGraph::addChange(MctChange* changeNode, MctChangeset* changeset)
     QDomElement change;
     QDomElement parent = changeset->changeset();
     if(changeNode->changeType() == MctChangeTypes::AddedString) {
-        change = m_doc->createElement(MctUndoTags::ADDED);
+        change = m_doc->createElement(MctStaticData::ADDED);
         parent.appendChild(change);
         addString(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::AddedStringInTable) {
-        change = m_doc->createElement(MctUndoTags::ADDED);
+        change = m_doc->createElement(MctStaticData::ADDED);
         parent.appendChild(change);
         addStringInTable(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::RemovedString) {
-        change = m_doc->createElement(MctUndoTags::REMOVED);
+        change = m_doc->createElement(MctStaticData::REMOVED);
         parent.appendChild(change);
         removeString(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::RemovedStringInTable) {
-        change = m_doc->createElement(MctUndoTags::REMOVED);
+        change = m_doc->createElement(MctStaticData::REMOVED);
         parent.appendChild(change);
         removeStringInTable(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::MovedString) {
-        change = m_doc->createElement(MctUndoTags::MOVED);
+        change = m_doc->createElement(MctStaticData::MOVED);
         parent.appendChild(change);
         moveString(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::MovedStringInTable) {
-        change = m_doc->createElement(MctUndoTags::MOVED);
+        change = m_doc->createElement(MctStaticData::MOVED);
         parent.appendChild(change);
         moveStringInTable(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::ParagraphBreak) {
-        change = m_doc->createElement(MctUndoTags::ADDED);
+        change = m_doc->createElement(MctStaticData::ADDED);
         parent.appendChild(change);
         addParBreak(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::ParagraphBreakInTable) {
-        change = m_doc->createElement(MctUndoTags::ADDED);
+        change = m_doc->createElement(MctStaticData::ADDED);
         parent.appendChild(change);
         addParBreakInTable(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::DelParagraphBreak) {
-        change = m_doc->createElement(MctUndoTags::REMOVED);
+        change = m_doc->createElement(MctStaticData::REMOVED);
         parent.appendChild(change);
         delParBreak(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::DelParagraphBreakInTable) {
-        change = m_doc->createElement(MctUndoTags::REMOVED);
+        change = m_doc->createElement(MctStaticData::REMOVED);
         parent.appendChild(change);
         delParBreakInTable(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::StyleChange) {
-        change = m_doc->createElement(MctUndoTags::FORMATTAG);
+        change = m_doc->createElement(MctStaticData::FORMATTAG);
         parent.appendChild(change);
         styleChange(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::StyleChangeInTable) {
-        change = m_doc->createElement(MctUndoTags::FORMATTAG);
+        change = m_doc->createElement(MctStaticData::FORMATTAG);
         parent.appendChild(change);
         styleChangeInTable(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::AddedTextFrame) {
-        change = m_doc->createElement(MctUndoTags::ADDED);
+        change = m_doc->createElement(MctStaticData::ADDED);
         parent.appendChild(change);
         textFrame(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::AddedTextFrameInTable) {
     } else if (changeNode->changeType() == MctChangeTypes::RemovedTextFrame) {
     } else if (changeNode->changeType() == MctChangeTypes::RemovedTextFrameInTable) {
     } else if (changeNode->changeType() == MctChangeTypes::AddedTextGraphicObject) {
-        change = m_doc->createElement(MctUndoTags::ADDED);
+        change = m_doc->createElement(MctStaticData::ADDED);
         parent.appendChild(change);
         textGraphicObject(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::AddedTextGraphicObjectInTable) {
-        change = m_doc->createElement(MctUndoTags::ADDED);
+        change = m_doc->createElement(MctStaticData::ADDED);
         parent.appendChild(change);
         textGraphicObjectInTable(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::RemovedTextGraphicObject) {
-        change = m_doc->createElement(MctUndoTags::REMOVED);
+        change = m_doc->createElement(MctStaticData::REMOVED);
         parent.appendChild(change);
         textGraphicObject(&change, changeNode, false);
     } else if (changeNode->changeType() == MctChangeTypes::RemovedTextGraphicObjectInTable) {
-        change = m_doc->createElement(MctUndoTags::REMOVED);
+        change = m_doc->createElement(MctStaticData::REMOVED);
         parent.appendChild(change);
         textGraphicObjectInTable(&change, changeNode, false);
     } else if (changeNode->changeType() == MctChangeTypes::AddedEmbeddedObject) {
-        change = m_doc->createElement(MctUndoTags::ADDED);
+        change = m_doc->createElement(MctStaticData::ADDED);
         parent.appendChild(change);
         embeddedObject(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::AddedEmbeddedObjectInTable) {
     } else if (changeNode->changeType() == MctChangeTypes::RemovedEmbeddedObject) {
     } else if (changeNode->changeType() == MctChangeTypes::RemovedEmbeddedObjectInTable) {
     } else if (changeNode->changeType() == MctChangeTypes::AddedTextTable) {
-        change = m_doc->createElement(MctUndoTags::ADDED);
+        change = m_doc->createElement(MctStaticData::ADDED);
         parent.appendChild(change);
         textTable(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::AddedTextTableInTable) {
-        change = m_doc->createElement(MctUndoTags::ADDED);
+        change = m_doc->createElement(MctStaticData::ADDED);
         parent.appendChild(change);
         textTableInTable(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::RemovedTextTable) {
-        change = m_doc->createElement(MctUndoTags::REMOVED);
+        change = m_doc->createElement(MctStaticData::REMOVED);
         parent.appendChild(change);
         textTable(&change, changeNode, false);
     } else if (changeNode->changeType() == MctChangeTypes::RemovedTextTableInTable) {
-        change = m_doc->createElement(MctUndoTags::REMOVED);
+        change = m_doc->createElement(MctStaticData::REMOVED);
         parent.appendChild(change);
         textTableInTable(&change, changeNode, false);
     } else if (changeNode->changeType() == MctChangeTypes::AddedRowInTable) {
-        change = m_doc->createElement(MctUndoTags::ADDED);
+        change = m_doc->createElement(MctStaticData::ADDED);
         parent.appendChild(change);
         rowChangeInTable(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::RemovedRowInTable) {
-        change = m_doc->createElement(MctUndoTags::REMOVED);
+        change = m_doc->createElement(MctStaticData::REMOVED);
         parent.appendChild(change);
         rowChangeInTable(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::AddedColInTable) {
-        change = m_doc->createElement(MctUndoTags::ADDED);
+        change = m_doc->createElement(MctStaticData::ADDED);
         parent.appendChild(change);
         colChangeInTable(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::RemovedColInTable) {
-        change = m_doc->createElement(MctUndoTags::REMOVED);
+        change = m_doc->createElement(MctStaticData::REMOVED);
         parent.appendChild(change);
         colChangeInTable(&change, changeNode);
     } else {
@@ -217,7 +217,7 @@ void MctUndoGraph::addChange(MctChange* changeNode, MctChangeset* changeset)
  */
 void MctUndoGraph::addString(QDomElement *xmlchange, MctChange *change)
 {
-    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::STRING);
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::STRING);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
     MctStringChange * sc = dynamic_cast<MctStringChange*>(change->changeEntity());
@@ -232,7 +232,7 @@ void MctUndoGraph::addString(QDomElement *xmlchange, MctChange *change)
  */
 void MctUndoGraph::removeString(QDomElement *xmlchange, MctChange *change)
 {
-    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::STRING);
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::STRING);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
     MctStringChange * sc = dynamic_cast<MctStringChange*>(change->changeEntity());
@@ -247,7 +247,7 @@ void MctUndoGraph::removeString(QDomElement *xmlchange, MctChange *change)
  */
 void MctUndoGraph::moveString(QDomElement *xmlchange, MctChange *change)
 {
-    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::STRING);
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::STRING);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 
@@ -266,7 +266,7 @@ void MctUndoGraph::moveString(QDomElement *xmlchange, MctChange *change)
  */
 void MctUndoGraph::addParBreak(QDomElement *xmlchange, MctChange *change)
 {
-    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::PARAGRAPH);
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::PARAGRAPH);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 }
@@ -278,7 +278,7 @@ void MctUndoGraph::addParBreak(QDomElement *xmlchange, MctChange *change)
  */
 void MctUndoGraph::delParBreak(QDomElement *xmlchange, MctChange *change)
 {
-    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::PARAGRAPH);
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::PARAGRAPH);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 }
@@ -296,32 +296,32 @@ void MctUndoGraph::styleChange(QDomElement *xmlchange, MctChange *change)
     MctStylePropertyChange * sc = dynamic_cast<MctStylePropertyChange*>(change->changeEntity());
     //filling up text properties
     if(sc->textPropChanges()->length() > 0) {
-        QDomElement subchange = m_doc->createElement(MctUndoTags::PROPERTIESTAG);
-        subchange.setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::TEXTTAG);
+        QDomElement subchange = m_doc->createElement(MctStaticData::PROPERTIESTAG);
+        subchange.setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::TEXTTAG);
         xmlchange->appendChild(subchange);
         fillPropertySubNode(&subchange, sc->textPropChanges(), MctStaticData::CharacterProperty);
     }
 
     //filling up parapraph properties
     if(sc->paragraphPropChanges()->length() > 0) {
-        QDomElement subchange = m_doc->createElement(MctUndoTags::PROPERTIESTAG);
-        subchange.setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::PARAGRAPHTAG);
+        QDomElement subchange = m_doc->createElement(MctStaticData::PROPERTIESTAG);
+        subchange.setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::PARAGRAPHTAG);
         xmlchange->appendChild(subchange);
         fillPropertySubNode(&subchange, sc->paragraphPropChanges(), MctStaticData::ParagraphProperty);
     }
 
     //filling up list properties
     if(sc->listPropChanges()->length() > 0) {
-        QDomElement subchange = m_doc->createElement(MctUndoTags::PROPERTIESTAG);
-        subchange.setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::LIST);
+        QDomElement subchange = m_doc->createElement(MctStaticData::PROPERTIESTAG);
+        subchange.setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::LIST);
         xmlchange->appendChild(subchange);
         fillPropertySubNode(&subchange, sc->listPropChanges(), MctStaticData::ListProperty);
     }
 
     //filling up properties for other components
     if(sc->otherPropChanges()->length() > 0) {
-        QDomElement subchange = m_doc->createElement(MctUndoTags::PROPERTIESTAG);
-        subchange.setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::UNDEFINEDTAG);
+        QDomElement subchange = m_doc->createElement(MctStaticData::PROPERTIESTAG);
+        subchange.setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::UNDEFINEDTAG);
         xmlchange->appendChild(subchange);
         fillPropertySubNode(&subchange, sc->otherPropChanges(), MctStaticData::UnknownProperty);
     }
@@ -353,7 +353,7 @@ void MctUndoGraph::fillPropertySubNode(QDomElement *subnode, ChangeEventList* pr
  */
 void MctUndoGraph::textFrame(QDomElement *xmlchange, MctChange *change)
 {
-    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::TEXTFRAME);
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::TEXTFRAME);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 
@@ -368,7 +368,7 @@ void MctUndoGraph::textFrame(QDomElement *xmlchange, MctChange *change)
  */
 void MctUndoGraph::textTable(QDomElement *xmlchange, MctChange *change, bool added)
 {
-    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::TABLE);
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::TABLE);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 
@@ -406,7 +406,7 @@ void MctUndoGraph::textTable(QDomElement *xmlchange, MctChange *change, bool add
  */
 void MctUndoGraph::textGraphicObject(QDomElement *xmlchange, MctChange *change, bool added)
 {
-    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::TEXTGRAPHICOBJECT);
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::TEXTGRAPHICOBJECT);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 
@@ -463,7 +463,7 @@ void MctUndoGraph::textGraphicObject(QDomElement *xmlchange, MctChange *change, 
  */
 void MctUndoGraph::embeddedObject(QDomElement *xmlchange, MctChange *change)
 {
-    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::EMBEDDEDOBJECT);
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::EMBEDDEDOBJECT);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 
@@ -559,7 +559,7 @@ void MctUndoGraph::textTableInTable(QDomElement *xmlchange, MctChange *change, b
  */
 void MctUndoGraph::rowChangeInTable(QDomElement *xmlchange, MctChange *change)
 {
-    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::ROWCHANGE);
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::ROWCHANGE);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 }
@@ -571,7 +571,7 @@ void MctUndoGraph::rowChangeInTable(QDomElement *xmlchange, MctChange *change)
  */
 void MctUndoGraph::colChangeInTable(QDomElement *xmlchange, MctChange *change)
 {
-    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctUndoTags::COLCHANGE);
+    xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::COLCHANGE);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
 }

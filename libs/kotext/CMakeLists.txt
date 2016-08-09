@@ -135,13 +135,11 @@ set(kotext_LIB_SRCS
     mct/MctRedoClass.cpp
     mct/MctRedoGraph.cpp
     mct/MctRedoGraphXMLfilter.cpp
-    mct/MctRedoTags.cpp
     mct/MctStaticData.cpp
     mct/MctTableProperties.cpp
     mct/MctUndoClass.cpp
     mct/MctUndoGraph.cpp
     mct/MctUndoGraphXMLfilter.cpp
-    mct/MctUndoTags.cpp
     mct/ExtractFile.cpp
 
     KoTextDrag.cpp
@@ -270,13 +268,11 @@ install(
     mct/MctRedoClass.h
     mct/MctRedoGraph.h
     mct/MctRedoGraphXMLfilter.h
-    mct/MctRedoTags.h
     mct/MctStaticData.h
     mct/MctTableProperties.h
     mct/MctUndoClass.h
     mct/MctUndoGraph.h
     mct/MctUndoGraphXMLfilter.h
-    mct/MctUndoTags.h
     mct/ExtractFile.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel

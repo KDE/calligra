@@ -18,7 +18,7 @@
  */
 
 #include "MctRedoGraphXMLfilter.h"
-#include "MctRedoTags.h"
+//#include "MctStaticData.h"
 #include "MctChangeEntities.h"
 #include "MctChange.h"
 #include "MctChangeset.h"
@@ -47,37 +47,37 @@ void MctRedoGraphXMLfilter::addChangeFromXML(const QDomNode &node, MctChangeset*
 {
     QDomElement change = node.toElement();
     MctChange *changeNode = NULL;
-    if(change.tagName() == MctRedoTags::ADDED && change.attribute("type") == MctRedoTags::STRING){
+    if(change.tagName() == MctStaticData::ADDED && change.attribute("type") == MctStaticData::STRING){
         changeNode = addStringFromXML(change);
-    } else if (change.tagName() == MctRedoTags::REMOVED && change.attribute("type") == MctRedoTags::STRING) {
+    } else if (change.tagName() == MctStaticData::REMOVED && change.attribute("type") == MctStaticData::STRING) {
         changeNode = removeStringFromXML(change);
-    } else if (change.tagName() == MctRedoTags::MOVED && change.attribute("type") == MctRedoTags::STRING) {
+    } else if (change.tagName() == MctStaticData::MOVED && change.attribute("type") == MctStaticData::STRING) {
         changeNode = moveStringFromXML(change);
-    } else if (change.tagName() == MctRedoTags::ADDED && change.attribute("type") == MctRedoTags::PARAGRAPH) {
+    } else if (change.tagName() == MctStaticData::ADDED && change.attribute("type") == MctStaticData::PARAGRAPH) {
         changeNode = addParBreakFromXML(change);
-    } else if (change.tagName() == MctRedoTags::REMOVED && change.attribute("type") == MctRedoTags::PARAGRAPH) {
+    } else if (change.tagName() == MctStaticData::REMOVED && change.attribute("type") == MctStaticData::PARAGRAPH) {
         changeNode = delParBreakFromXML(change);    //TODO: pythonban itt removedParBreakFromXML szerepelt
-    } else if (change.tagName() == MctRedoTags::FORMATTAG) {
+    } else if (change.tagName() == MctStaticData::FORMATTAG) {
         changeNode = styleChangeFromXML(change);
-    } else if (change.tagName() == MctRedoTags::ADDED && change.attribute("type") == MctRedoTags::TEXTFRAME) {
+    } else if (change.tagName() == MctStaticData::ADDED && change.attribute("type") == MctStaticData::TEXTFRAME) {
         changeNode = addTextFrameFromXML(change);
-    } else if (change.tagName() == MctRedoTags::REMOVED && change.attribute("type") == MctRedoTags::TEXTFRAME) {
+    } else if (change.tagName() == MctStaticData::REMOVED && change.attribute("type") == MctStaticData::TEXTFRAME) {
         return;
-    } else if (change.tagName() == MctRedoTags::ADDED && change.attribute("type") == MctRedoTags::TEXTGRAPHICOBJECT) {
+    } else if (change.tagName() == MctStaticData::ADDED && change.attribute("type") == MctStaticData::TEXTGRAPHICOBJECT) {
         changeNode = addTextGraphicObjectFromXML(change);
-    } else if (change.tagName() == MctRedoTags::REMOVED && change.attribute("type") == MctRedoTags::TEXTGRAPHICOBJECT) {
+    } else if (change.tagName() == MctStaticData::REMOVED && change.attribute("type") == MctStaticData::TEXTGRAPHICOBJECT) {
         changeNode = removeTextGraphicObjectFromXML(change);
-    } else if (change.tagName() == MctRedoTags::ADDED && change.attribute("type") == MctRedoTags::EMBEDDEDOBJECT) {
+    } else if (change.tagName() == MctStaticData::ADDED && change.attribute("type") == MctStaticData::EMBEDDEDOBJECT) {
         changeNode = addEmbeddedObjectFromXML(change);
-    } else if (change.tagName() == MctRedoTags::REMOVED && change.attribute("type") == MctRedoTags::EMBEDDEDOBJECT) {
+    } else if (change.tagName() == MctStaticData::REMOVED && change.attribute("type") == MctStaticData::EMBEDDEDOBJECT) {
         return;
-    } else if (change.tagName() == MctRedoTags::ADDED && change.attribute("type") == MctRedoTags::TABLE) {
+    } else if (change.tagName() == MctStaticData::ADDED && change.attribute("type") == MctStaticData::TABLE) {
         changeNode = addTextTableFromXML(change);
-    } else if (change.tagName() == MctRedoTags::REMOVED && change.attribute("type") == MctRedoTags::TABLE) {
+    } else if (change.tagName() == MctStaticData::REMOVED && change.attribute("type") == MctStaticData::TABLE) {
         changeNode = removeTextTableFromXML(change);
-    } else if (change.attribute("type") == MctRedoTags::ROWCHANGE) {
+    } else if (change.attribute("type") == MctStaticData::ROWCHANGE) {
         changeNode = rowChangeFromXML(change);
-    } else if (change.attribute("type") == MctRedoTags::COLCHANGE) {
+    } else if (change.attribute("type") == MctStaticData::COLCHANGE) {
         changeNode = colChangeFromXML(change);
     } else {
         return;
@@ -92,14 +92,14 @@ void MctRedoGraphXMLfilter::particularStyleChangeFromXML(const QDomNode &node, C
     QDomNamedNodeMap attribs = node.attributes();
     QString strtype = attribs.namedItem("type").toAttr().value();
     int type = QTextFormat::InvalidFormat;
-    if(strtype == MctRedoTags::TEXTTAG) {
+    if(strtype == MctStaticData::TEXTTAG) {
         type = QTextFormat::CharFormat;
-    } else if(strtype == MctRedoTags::PARAGRAPHTAG) {
+    } else if(strtype == MctStaticData::PARAGRAPHTAG) {
         type = QTextFormat::BlockFormat;
-    } else if(strtype == MctRedoTags::LIST) {
+    } else if(strtype == MctStaticData::LIST) {
         type = QTextFormat::ListFormat;
     }
-    if(strtype == MctRedoTags::LIST) {
+    if(strtype == MctStaticData::LIST) {
         listChangesFromXML(attribs, propchanges);
         return;
     }
@@ -251,7 +251,7 @@ MctChange* MctRedoGraphXMLfilter::rowChangeFromXML(const QDomElement &change)
     int endrow = pos->endCellInfoEnd()->row();
     int rownum = endrow - startrow + 1;
 
-    if(change.tagName() == MctRedoTags::ADDED) {
+    if(change.tagName() == MctStaticData::ADDED) {
         changeType = MctChangeTypes::AddedRowInTable;
         changeEntity = new MctAddedRowInTable(startrow, rownum, tableName);
     } else {
@@ -280,7 +280,7 @@ MctChange* MctRedoGraphXMLfilter::colChangeFromXML(const QDomElement &change)
     int endcol = pos->endCellInfoEnd()->col();
     int colnum = endcol - startcol + 1;
 
-    if(change.tagName() == MctRedoTags::ADDED) {
+    if(change.tagName() == MctStaticData::ADDED) {
         changeType = MctChangeTypes::AddedColInTable;
         changeEntity = new MctAddedColInTable(startcol, colnum, tableName);
     } else {
