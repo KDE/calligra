@@ -80,22 +80,26 @@ MctChangeset* MctUndoGraph::addchangesetFromRedo(MctChangeset *redochangeset)
  */
 void MctUndoGraph::addChange(MctChange* changeNode, MctChangeset* changeset)
 {
+    // undo inverts the change direction (for example: to undo an add operation you need to remove)
+    QString ADDED = MctStaticData::REMOVED;
+    QString REMOVED = MctStaticData::ADDED;
+
     QDomElement change;
     QDomElement parent = changeset->changeset();
     if(changeNode->changeType() == MctChangeTypes::AddedString) {
-        change = m_doc->createElement(MctStaticData::ADDED);
+        change = m_doc->createElement(ADDED);
         parent.appendChild(change);
         addString(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::AddedStringInTable) {
-        change = m_doc->createElement(MctStaticData::ADDED);
+        change = m_doc->createElement(ADDED);
         parent.appendChild(change);
         addStringInTable(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::RemovedString) {
-        change = m_doc->createElement(MctStaticData::REMOVED);
+        change = m_doc->createElement(REMOVED);
         parent.appendChild(change);
         removeString(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::RemovedStringInTable) {
-        change = m_doc->createElement(MctStaticData::REMOVED);
+        change = m_doc->createElement(REMOVED);
         parent.appendChild(change);
         removeStringInTable(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::MovedString) {
@@ -107,19 +111,19 @@ void MctUndoGraph::addChange(MctChange* changeNode, MctChangeset* changeset)
         parent.appendChild(change);
         moveStringInTable(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::ParagraphBreak) {
-        change = m_doc->createElement(MctStaticData::ADDED);
+        change = m_doc->createElement(ADDED);
         parent.appendChild(change);
         addParBreak(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::ParagraphBreakInTable) {
-        change = m_doc->createElement(MctStaticData::ADDED);
+        change = m_doc->createElement(ADDED);
         parent.appendChild(change);
         addParBreakInTable(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::DelParagraphBreak) {
-        change = m_doc->createElement(MctStaticData::REMOVED);
+        change = m_doc->createElement(REMOVED);
         parent.appendChild(change);
         delParBreak(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::DelParagraphBreakInTable) {
-        change = m_doc->createElement(MctStaticData::REMOVED);
+        change = m_doc->createElement(REMOVED);
         parent.appendChild(change);
         delParBreakInTable(&change, changeNode);
     } else if (changeNode->changeType() == MctChangeTypes::StyleChange) {

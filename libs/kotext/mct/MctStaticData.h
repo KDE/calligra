@@ -111,8 +111,8 @@ public:
     static const QString PARENT;
 
     // xml string constants (tags, attribute values, etc)
-    static const QString ADDED;
-    static const QString REMOVED;
+    static const QString ADDED;     // undo uses "del" here (!)
+    static const QString REMOVED;   // undo uses "add" here (!)
     static const QString MOVED;
     static const QString STRING;
     static const QString PARAGRAPH;

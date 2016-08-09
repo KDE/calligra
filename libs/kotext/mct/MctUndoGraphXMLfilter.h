@@ -47,6 +47,10 @@ public:
     MctChange* removeTextTableFromXML(const QDomElement &change);
     virtual MctChange* rowChangeFromXML(const QDomElement &change);
     virtual MctChange* colChangeFromXML(const QDomElement &change);
+
+private:
+    QString ADDED;      // to store undo logic locally
+    QString REMOVED;    // to store undo logic locally
 };
 
 #endif // MCTUNDOGRAPHXMLFILTER_H
