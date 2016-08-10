@@ -117,7 +117,7 @@ public:
     Package *loadWorkPackageXML( Project& project, QIODevice*, const KoXmlDocument& document, const QUrl& url );
     QMap<QDateTime, Package*> workPackages() const { return m_workpackages; }
 
-    void insertFile( const QString &filename, Node *parent, Node *after = 0 );
+    void insertFile( const QUrl &url, Node *parent, Node *after = 0 );
     bool insertProject( Project &project, Node *parent, Node *after );
 
     KPlatoAboutPage &aboutPage() { return m_aboutPage; }
@@ -165,7 +165,7 @@ protected:
 
     // used by insert file
     struct InsertFileInfo {
-        QString url;
+        QUrl url;
         Node *parent;
         Node *after;
     } m_insertFileInfo;

@@ -1445,7 +1445,7 @@ void View::slotInsertFileFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted ) {
-        getPart()->insertFile( dlg->url().url(), dlg->parentNode(), dlg->afterNode() );
+        getPart()->insertFile( dlg->url(), dlg->parentNode(), dlg->afterNode() );
     }
     dlg->deleteLater();
 }
