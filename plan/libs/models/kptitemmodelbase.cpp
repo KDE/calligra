@@ -120,7 +120,7 @@ bool CheckStateItemDelegate::editorEvent( QEvent *event, QAbstractItemModel *mod
 
     // make sure that we have the right event type
     if ( ( event->type() == QEvent::MouseButtonRelease ) || ( event->type() == QEvent::MouseButtonDblClick ) || ( event->type() == QEvent::MouseButtonPress ) ) {
-        QStyleOptionViewItemV4 viewOpt( option );
+        QStyleOptionViewItem viewOpt( option );
         initStyleOption( &viewOpt, index );
         QRect checkRect = style->subElementRect( QStyle::SE_ItemViewItemDecoration, &viewOpt, 0 );
         QMouseEvent *me = static_cast<QMouseEvent*>( event );
@@ -195,7 +195,7 @@ void ProgressBarDelegate::paint( QPainter *painter, const QStyleOptionViewItem &
 {
     QStyle *style;
 
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem opt = option;
     initStyleOption( &opt, index );
 
     style = opt.widget ? opt.widget->style() : QApplication::style();
@@ -235,7 +235,7 @@ void ProgressBarDelegate::paint( QPainter *painter, const QStyleOptionViewItem &
 
 QSize ProgressBarDelegate::sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem opt = option;
     //  initStyleOption( &opt, index );
 
     QStyle *style = opt.widget ? opt.widget->style() : QApplication::style();

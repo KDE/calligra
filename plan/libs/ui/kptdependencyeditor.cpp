@@ -1121,7 +1121,7 @@ void DependencyScene::connectorEntered( DependencyConnectorItem *item, bool ente
 void DependencyScene::drawBackground ( QPainter *painter, const QRectF &rect )
 {
     QGraphicsScene::drawBackground( painter, rect );
-    QStyleOptionViewItemV3 opt;
+    QStyleOptionViewItem opt;
     QBrush br( opt.palette.brush( QPalette::AlternateBase ) );
     int first = row( rect.y() );
     int last = row( rect.bottom() );

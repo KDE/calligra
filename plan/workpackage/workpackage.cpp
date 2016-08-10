@@ -373,6 +373,7 @@ bool WorkPackage::completeSaving( KoStore *store )
 
 QString WorkPackage::fileName( const Part *part ) const
 {
+    Q_UNUSED(part);
     if ( m_project == 0 ) {
         warnPlanWork<<"No project in this package";
         return QString();
