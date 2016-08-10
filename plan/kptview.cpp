@@ -113,6 +113,7 @@
 #include "kptviewlistdocker.h"
 #include "kptviewlist.h"
 #include "kptschedulesdocker.h"
+#include "kptpart.h"
 #include "kptdebug.h"
 
 #include "calligraplansettings.h"
@@ -3019,16 +3020,19 @@ void View::slotCurrencyConfigFinished( int result )
 
 void View::saveTaskModule( const QUrl &url, Project *project )
 {
-    debugPlan<<url<<project;
     const QString dir = KoResourcePaths::saveLocation( "calligraplan_taskmodules" );
     debugPlan<<"dir="<<dir;
     if ( ! dir.isEmpty() ) {
-        MainDocument part(getKoPart());
-        part.insertProject( *project, 0, 0 );
-        part.getProject().setName( project->name() );
-        part.getProject().setLeader( project->leader() );
-        part.getProject().setDescription( project->description() );
-        part.saveNativeFormat( dir + url.fileName() );
+        Part *part = new Part( this );
+        MainDocument *doc = new MainDocument( part );
+        part->setDocument( doc );
+        doc->disconnect(); // doc shall not handle feedback from openUrl()
+        doc->setAutoSave( 0 ); //disable
+        doc->insertProject( *project, 0, 0 );
+        doc->getProject().setName( project->name() );
+        doc->getProject().setLeader( project->leader() );
+        doc->getProject().setDescription( project->description() );
+        doc->saveNativeFormat( dir + url.fileName() );
         debugPlan<<dir + url.fileName();
     } else {
         debugPlan<<"Could not find a location";
