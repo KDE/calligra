@@ -3033,6 +3033,7 @@ void View::saveTaskModule( const QUrl &url, Project *project )
         doc->getProject().setLeader( project->leader() );
         doc->getProject().setDescription( project->description() );
         doc->saveNativeFormat( dir + url.fileName() );
+        part->deleteLater(); // also deletes document
         debugPlan<<dir + url.fileName();
     } else {
         debugPlan<<"Could not find a location";
