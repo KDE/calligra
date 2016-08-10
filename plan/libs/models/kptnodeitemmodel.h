@@ -344,7 +344,7 @@ protected Q_SLOTS:
     virtual void slotNodeMoved( Node *node );
 
     virtual void slotLayoutChanged();
-    virtual void slotProjectCalulated( ScheduleManager *sm );
+    virtual void slotProjectCalculated( ScheduleManager *sm );
 
 protected:
     virtual bool setType( Node *node, const QVariant &value, int role );

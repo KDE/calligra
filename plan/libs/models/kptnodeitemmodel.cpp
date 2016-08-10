@@ -3095,7 +3095,7 @@ void NodeItemModel::slotLayoutChanged()
     emit layoutChanged();
 }
 
-void NodeItemModel::slotProjectCalulated(ScheduleManager *sm)
+void NodeItemModel::slotProjectCalculated(ScheduleManager *sm)
 {
     debugPlan<<m_manager<<sm;
     if ( sm && sm == m_manager ) {
@@ -3135,7 +3135,7 @@ void NodeItemModel::setProject( Project *project )
 
         disconnect( m_project, SIGNAL(nodeAdded(Node*)), this, SLOT(slotNodeInserted(Node*)) );
         disconnect( m_project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotNodeRemoved(Node*)) );
-        disconnect( m_project, SIGNAL(projectCalculated(ScheduleManager*)), this, SLOT(slotProjectCalulated(ScheduleManager*)));
+        disconnect( m_project, SIGNAL(projectCalculated(ScheduleManager*)), this, SLOT(slotProjectCalculated(ScheduleManager*)));
     }
     m_project = project;
     debugPlan<<this<<m_project<<"->"<<project;
@@ -3152,7 +3152,7 @@ void NodeItemModel::setProject( Project *project )
 
         connect( m_project, SIGNAL(nodeAdded(Node*)), this, SLOT(slotNodeInserted(Node*)) );
         connect( m_project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotNodeRemoved(Node*)) );
-        connect( m_project, SIGNAL(projectCalculated(ScheduleManager*)), this, SLOT(slotProjectCalulated(ScheduleManager*)));
+        connect( m_project, SIGNAL(projectCalculated(ScheduleManager*)), this, SLOT(slotProjectCalculated(ScheduleManager*)));
     }
     reset();
 }
