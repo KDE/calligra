@@ -4992,10 +4992,10 @@ bool TaskModuleModel::importProject( const QUrl &url, bool emitsignal )
         addTaskModule( project );
         if ( emitsignal ) {
             // FIXME: save destroys the project, so give it a copy (see kptview.cpp)
-            Project *p = new Project();
-            status.setProject( p );
-            p->load( element, status );
-            emit saveTaskModule( url, p );
+            Project p;
+            status.setProject( &p );
+            p.load( element, status );
+            emit saveTaskModule( url, &p );
         }
     } else {
         debugPlan<<"Failed to load project from:"<<url;
