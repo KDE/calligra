@@ -886,7 +886,9 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString &tag, const Q
     taskeditor->updateReadWrite( m_readWrite );
 
     // last:
-    taskeditor->setTaskModules( KoResourcePaths::findAllResources( "calligraplan_taskmodules", QString(), KoResourcePaths::NoDuplicates ) );
+    QStringList modules = KoResourcePaths::findAllResources( "calligraplan_taskmodules", "*.plan", KoResourcePaths::NoDuplicates|KoResourcePaths::Recursive );
+    debugPlan<<modules;
+    taskeditor->setTaskModules( modules );
     return taskeditor;
 }
 
@@ -3020,7 +3022,8 @@ void View::slotCurrencyConfigFinished( int result )
 
 void View::saveTaskModule( const QUrl &url, Project *project )
 {
-    const QString dir = KoResourcePaths::saveLocation( "calligraplan_taskmodules" );
+    // NOTE: workaround: KoResourcePaths::saveLocation( "calligraplan_taskmodules" ); does not work
+    const QString dir = KoResourcePaths::saveLocation( "appdata", "taskmodules/" );
     debugPlan<<"dir="<<dir;
     if ( ! dir.isEmpty() ) {
         Part *part = new Part( this );
@@ -3028,7 +3031,7 @@ void View::saveTaskModule( const QUrl &url, Project *project )
         part->setDocument( doc );
         doc->disconnect(); // doc shall not handle feedback from openUrl()
         doc->setAutoSave( 0 ); //disable
-        doc->insertProject( *project, 0, 0 );
+        doc->insertProject( *project, 0, 0 ); // FIXME: destroys project, find better way
         doc->getProject().setName( project->name() );
         doc->getProject().setLeader( project->leader() );
         doc->getProject().setDescription( project->description() );

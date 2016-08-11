@@ -3875,11 +3875,10 @@ bool NodeItemModel::dropResourceMimeData( const QMimeData *data, Qt::DropAction 
 bool NodeItemModel::dropProjectMimeData( const QMimeData *data, Qt::DropAction action, int row, int /*column*/, const QModelIndex &parent )
 {
     Node *n = node( parent );
-    debugPlan<<n<<parent;
     if ( n == 0 ) {
         n = m_project;
     }
-    debugPlan<<n->name()<<action<<row<<parent;
+    debugPlan<<n<<action<<row<<parent;
 
     KoXmlDocument doc;
     doc.setContent( data->data( "application/x-vnd.kde.plan.project" ) );
@@ -4992,7 +4991,11 @@ bool TaskModuleModel::importProject( const QUrl &url, bool emitsignal )
         stripProject( project );
         addTaskModule( project );
         if ( emitsignal ) {
-            emit saveTaskModule( url, project );
+            // FIXME: save destroys the project, so give it a copy (see kptview.cpp)
+            Project *p = new Project();
+            status.setProject( p );
+            p->load( element, status );
+            emit saveTaskModule( url, p );
         }
     } else {
         debugPlan<<"Failed to load project from:"<<url;
