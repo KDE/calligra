@@ -3124,6 +3124,7 @@ void NodeItemModel::slotWbsDefinitionChanged()
 void NodeItemModel::setProject( Project *project )
 {
     if ( m_project ) {
+        disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         disconnect( m_project, SIGNAL(localeChanged()), this, SLOT(slotLayoutChanged()) );
         disconnect( m_project, SIGNAL(wbsDefinitionChanged()), this, SLOT(slotWbsDefinitionChanged()) );
         disconnect( m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );
@@ -3141,6 +3142,7 @@ void NodeItemModel::setProject( Project *project )
     debugPlan<<this<<m_project<<"->"<<project;
     m_nodemodel.setProject( project );
     if ( project ) {
+        connect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         connect( m_project, SIGNAL(localeChanged()), this, SLOT(slotLayoutChanged()) );
         connect( m_project, SIGNAL(wbsDefinitionChanged()), this, SLOT(slotWbsDefinitionChanged()) );
         connect( m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );
@@ -4382,6 +4384,7 @@ void MilestoneItemModel::slotNodeMoved( Node *node )
 void MilestoneItemModel::setProject( Project *project )
 {
     if ( m_project ) {
+        disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         disconnect( m_project, SIGNAL(localeChanged()), this, SLOT(slotLayoutChanged()) );
         disconnect( m_project, SIGNAL(wbsDefinitionChanged()), this, SLOT(slotWbsDefinitionChanged()) );
         disconnect( m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );
@@ -4398,6 +4401,7 @@ void MilestoneItemModel::setProject( Project *project )
     //debugPlan<<m_project<<"->"<<project;
     m_nodemodel.setProject( project );
     if ( project ) {
+        connect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         connect( m_project, SIGNAL(localeChanged()), this, SLOT(slotLayoutChanged()) );
         connect( m_project, SIGNAL(wbsDefinitionChanged()), this, SLOT(slotWbsDefinitionChanged()) );
         connect( m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );

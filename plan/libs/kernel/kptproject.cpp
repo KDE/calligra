@@ -86,12 +86,14 @@ void Project::deref()
     --m_refCount;
     Q_ASSERT( m_refCount >= 0 );
     if ( m_refCount <= 0 ) {
+        emit aboutToBeDeleted();
         deleteLater();
     }
 }
 
 Project::~Project()
 {
+    debugPlan;
     disconnect(); // NOTE: may be a problem if somebody uses the destroyd() signal
     delete m_standardWorktime;
     while ( !m_resourceGroups.isEmpty() )

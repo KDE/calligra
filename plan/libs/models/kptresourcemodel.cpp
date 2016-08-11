@@ -600,6 +600,7 @@ void ResourceItemModel::slotLayoutChanged()
 void ResourceItemModel::setProject( Project *project )
 {
     if ( m_project ) {
+        disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         disconnect( m_project, SIGNAL(localeChanged()), this, SLOT(slotLayoutChanged()) );
         disconnect( m_project, SIGNAL(resourceChanged(Resource*)), this, SLOT(slotResourceChanged(Resource*)) );
         disconnect( m_project, SIGNAL(resourceGroupChanged(ResourceGroup*)), this, SLOT(slotResourceGroupChanged(ResourceGroup*)) );
@@ -624,6 +625,7 @@ void ResourceItemModel::setProject( Project *project )
     }
     m_project = project;
     if ( m_project ) {
+        connect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         connect( m_project, SIGNAL(localeChanged()), this, SLOT(slotLayoutChanged()) );
         connect( m_project, SIGNAL(resourceChanged(Resource*)), this, SLOT(slotResourceChanged(Resource*)) );
         connect( m_project, SIGNAL(resourceGroupChanged(ResourceGroup*)), this, SLOT(slotResourceGroupChanged(ResourceGroup*)) );
@@ -712,7 +714,7 @@ QModelIndex ResourceItemModel::parent( const QModelIndex &index ) const
     }
     //debugPlan<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
 
-    Resource *r = qobject_cast<Resource*>( object( index ) );
+    Resource *r = resource( index );
     if ( r && r->parentGroup() ) {
         // only resources have parent
         int row = m_project->indexOf(  r->parentGroup() );
@@ -733,8 +735,7 @@ QModelIndex ResourceItemModel::index( int row, int column, const QModelIndex &pa
         }
         return QModelIndex();
     }
-    QObject *p = object( parent );
-    ResourceGroup *g = qobject_cast<ResourceGroup*>( p );
+    ResourceGroup *g = group( parent );
     if ( g ) {
         if ( row < g->numResources() ) {
             return createIndex( row, column, g->resourceAt( row ) );
@@ -783,8 +784,7 @@ int ResourceItemModel::rowCount( const QModelIndex &parent ) const
     if ( ! parent.isValid() ) {
         return m_project->numResourceGroups();
     }
-    QObject *p = object( parent );
-    ResourceGroup *g = qobject_cast<ResourceGroup*>( p );
+    ResourceGroup *g = group( parent );
     if ( g ) {
         return g->numResources();
     }
@@ -1149,6 +1149,9 @@ QObject *ResourceItemModel::object( const QModelIndex &index ) const
 {
     QObject *o = 0;
     if ( index.isValid() ) {
+        Q_ASSERT( m_project );
+        debugPlan<<(void*)index.internalPointer()<<m_project->resourceGroups()<<m_project->resourceList();
+        Q_ASSERT(m_project->resourceGroups().contains(static_cast<ResourceGroup*>(index.internalPointer())) || m_project->resourceList().contains(static_cast<Resource*>(index.internalPointer())));
         o = static_cast<QObject*>( index.internalPointer() );
         Q_ASSERT( o );
     }

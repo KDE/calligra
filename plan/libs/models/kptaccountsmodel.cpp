@@ -531,6 +531,7 @@ void CostBreakdownItemModel::setProject( Project *project )
         disconnect( acc, SIGNAL(accountRemoved(const Account*)), this, SLOT(slotAccountRemoved(const Account*)) );
         disconnect( acc, SIGNAL(accountToBeRemoved(const Account*)), this, SLOT(slotAccountToBeRemoved(const Account*)) );
 
+        disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         disconnect( m_project , SIGNAL(nodeChanged(Node*)), this, SLOT(slotDataChanged()) );
         disconnect( m_project , SIGNAL(nodeAdded(Node*)), this, SLOT(slotDataChanged()) );
         disconnect( m_project , SIGNAL(nodeRemoved(Node*)), this, SLOT(slotDataChanged()) );
@@ -551,6 +552,7 @@ void CostBreakdownItemModel::setProject( Project *project )
         connect( acc, SIGNAL(accountRemoved(const Account*)), this, SLOT(slotAccountRemoved(const Account*)) );
         connect( acc, SIGNAL(accountToBeRemoved(const Account*)), this, SLOT(slotAccountToBeRemoved(const Account*)) );
 
+        connect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         connect( m_project , SIGNAL(nodeChanged(Node*)), this, SLOT(slotDataChanged()) );
         connect( m_project , SIGNAL(nodeAdded(Node*)), this, SLOT(slotDataChanged()) );
         connect( m_project , SIGNAL(nodeRemoved(Node*)), this, SLOT(slotDataChanged()) );

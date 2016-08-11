@@ -732,4 +732,9 @@ bool ItemModelBase::setData( const QModelIndex &index, const QVariant &value, in
     return false;
 }
 
+void ItemModelBase::projectDeleted()
+{
+    setProject(0);
+}
+
 } //namespace KPlato

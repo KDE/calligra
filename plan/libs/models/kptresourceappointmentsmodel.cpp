@@ -220,7 +220,10 @@ void ResourceAppointmentsItemModel::setProject( Project *project )
 {
     debugPlan;
     if ( m_project ) {
+        disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
+
         disconnect( m_project, SIGNAL(resourceChanged(Resource*)), this, SLOT(slotResourceChanged(Resource*)) );
+
         disconnect( m_project, SIGNAL(resourceGroupChanged(ResourceGroup*)), this, SLOT(slotResourceGroupChanged(ResourceGroup*)) );
 
         disconnect( m_project, SIGNAL(resourceGroupToBeAdded(const ResourceGroup*,int)), this, SLOT(slotResourceGroupToBeInserted(const ResourceGroup*,int)) );
@@ -255,6 +258,7 @@ void ResourceAppointmentsItemModel::setProject( Project *project )
     }
     m_project = project;
     if ( m_project ) {
+        connect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         connect( m_project, SIGNAL(resourceChanged(Resource*)), this, SLOT(slotResourceChanged(Resource*)) );
         connect( m_project, SIGNAL(resourceGroupChanged(ResourceGroup*)), this, SLOT(slotResourceGroupChanged(ResourceGroup*)) );
 
@@ -1351,6 +1355,8 @@ void ResourceAppointmentsRowModel::setProject( Project *project )
 {
     //debugPlan<<project;
     if ( m_project ) {
+        disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
+
         disconnect( m_project, SIGNAL(resourceGroupToBeAdded(const ResourceGroup*,int)), this, SLOT(slotResourceGroupToBeInserted(const ResourceGroup*,int)) );
 
         disconnect( m_project, SIGNAL(resourceGroupToBeRemoved(const ResourceGroup*)), this, SLOT(slotResourceGroupToBeRemoved(const ResourceGroup*)) );
@@ -1379,6 +1385,8 @@ void ResourceAppointmentsRowModel::setProject( Project *project )
     }
     m_project = project;
     if ( m_project ) {
+        connect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
+
         connect( m_project, SIGNAL(resourceGroupToBeAdded(const ResourceGroup*,int)), this, SLOT(slotResourceGroupToBeInserted(const ResourceGroup*,int)) );
 
         connect( m_project, SIGNAL(resourceGroupToBeRemoved(const ResourceGroup*)), this, SLOT(slotResourceGroupToBeRemoved(const ResourceGroup*)) );

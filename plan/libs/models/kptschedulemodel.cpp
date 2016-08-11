@@ -171,6 +171,8 @@ void ScheduleItemModel::slotScheduleRemoved( const MainSchedule * )
 void ScheduleItemModel::setProject( Project *project )
 {
     if ( m_project ) {
+        disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
+
         disconnect( m_project, SIGNAL(scheduleManagerChanged(ScheduleManager*)), this, SLOT(slotManagerChanged(ScheduleManager*)) );
 
         disconnect( m_project, SIGNAL(scheduleManagerToBeAdded(const ScheduleManager*,int)), this, SLOT(slotScheduleManagerToBeInserted(const ScheduleManager*,int)) );
@@ -197,6 +199,8 @@ void ScheduleItemModel::setProject( Project *project )
     }
     m_project = project;
     if ( m_project ) {
+        connect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
+
         connect( m_project, SIGNAL(scheduleManagerChanged(ScheduleManager*)), this, SLOT(slotManagerChanged(ScheduleManager*)) );
 
         connect( m_project, SIGNAL(scheduleManagerToBeAdded(const ScheduleManager*,int)), this, SLOT(slotScheduleManagerToBeInserted(const ScheduleManager*,int)) );
@@ -1079,6 +1083,8 @@ void ScheduleLogItemModel::setProject( Project *project )
 {
     debugPlan<<m_project<<"->"<<project;
     if ( m_project ) {
+        disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
+
         disconnect( m_project, SIGNAL(scheduleManagerChanged(ScheduleManager*)), this, SLOT(slotManagerChanged(ScheduleManager*)) );
 
         disconnect( m_project, SIGNAL(scheduleManagerToBeRemoved(const ScheduleManager*)), this, SLOT(slotScheduleManagerToBeRemoved(const ScheduleManager*)) );
@@ -1097,6 +1103,8 @@ void ScheduleLogItemModel::setProject( Project *project )
     }
     m_project = project;
     if ( m_project ) {
+        connect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
+
         connect( m_project, SIGNAL(scheduleManagerChanged(ScheduleManager*)), this, SLOT(slotManagerChanged(ScheduleManager*)) );
 
         connect( m_project, SIGNAL(scheduleManagerToBeRemoved(const ScheduleManager*)), this, SLOT(slotScheduleManagerToBeRemoved(const ScheduleManager*)) );

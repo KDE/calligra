@@ -516,6 +516,8 @@ public Q_SLOTS:
     void setMaxProgress( int max, ScheduleManager *sm = 0 );
 
 Q_SIGNALS:
+    /// Emitted when the project is about to be deleted (The destroyed signal is disabled)
+    void aboutToBeDeleted();
     /// Emitted when anything in the project is changed (use with care)
     void projectChanged();
     /// Emitted when the WBS code definition has changed. This may change all nodes.
