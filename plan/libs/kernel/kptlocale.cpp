@@ -72,7 +72,11 @@ QString Locale::formatMoney(double num, const QString &currency, int precision) 
         p = m_decimalPlaces;
     }
     QLocale l;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 7, 0))
     QString s = l.toCurrencyString(num, c, p);
+#else
+    QString s = l.toCurrencyString(num, c);
+#endif
     return s;
 }
 
