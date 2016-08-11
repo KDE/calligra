@@ -23,7 +23,7 @@
 #include "kptaboutdata.h"
 
 #include <KoResourcePaths.h>
-
+#include <KoDockRegistry.h>
 #include <KoComponentData.h>
 
 #include <kiconloader.h>
@@ -81,6 +81,9 @@ const KoComponentData &Factory::global()
 
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");
+
+        KoDockRegistry *dockRegistry = KoDockRegistry::instance();
+        dockRegistry->remove("StencilBox"); //don't want this in plan
     }
     return *s_global;
 }
