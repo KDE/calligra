@@ -45,7 +45,7 @@ CharacterHighlighting::CharacterHighlighting(QWidget* parent)
     widget.setupUi(this);
 
     QStringList list;
-    KFontChooser::getFontList(list, KFontChooser::SmoothScalableFonts);
+    KFontChooser::getFontList(list, KFontChooser::ScalableFonts);
     m_fontChooser = new KFontChooser(this, KFontChooser::ShowDifferences, list, false);
     m_fontChooser->setSampleBoxVisible(false);
     widget.fontLayout->addWidget(m_fontChooser);

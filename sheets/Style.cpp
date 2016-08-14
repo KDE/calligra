@@ -25,6 +25,7 @@
 #include <QBrush>
 #include <QHash>
 #include <QPen>
+#include <QFontDatabase>
 
 #include <KoGlobal.h>
 
@@ -908,7 +909,14 @@ void Style::setFont(QFont const & font)
 
 void Style::setFontFamily(QString const & family)
 {
-    insertSubStyle(FontFamily, family);
+    QString font = family;
+    // use the KDE default for sans serif, not Qt's default - this is because Qt doesn't return the default system font here
+    if (font.toLower() == "sans serif") {
+        QFont f = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
+        font = f.family();
+    }
+
+    insertSubStyle(FontFamily, font);
 }
 
 void Style::setFontBold(bool enabled)
