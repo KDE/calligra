@@ -50,8 +50,8 @@ const ulong MctStaticData::UNDEFINED = ULONG_MAX;
 
 const QString MctStaticData::EXPORTED_BY_SYSTEM = "exported by system on document save";
 
-const QString MctStaticData::UNDOTAG = "ChangeGroup";
-const QString MctStaticData::REDOTAG = "ChangeGroup";
+const QString MctStaticData::UNDOTAG = "change";
+const QString MctStaticData::REDOTAG = "change";
 
 const QString MctStaticData::UNDOCHANGES = "undo";
 const QString MctStaticData::REDOCHANGES = "redo";
@@ -113,8 +113,8 @@ const QString MctStaticData::ROTATION = "Rotation";
 const QString MctStaticData::PARENT = "parent";
 
 // xml string constants (tags, attribute values, etc)
-const QString MctStaticData::ADDED = "del";
-const QString MctStaticData::REMOVED = "add";
+const QString MctStaticData::ADDED = "add";
+const QString MctStaticData::REMOVED = "del";
 const QString MctStaticData::MOVED = "move";
 const QString MctStaticData::STRING = "text";
 const QString MctStaticData::PARAGRAPH = "par";
@@ -661,21 +661,15 @@ MctPosition* MctStaticData::getPosFromElementreeNodeNew(const QDomElement &chang
     MctCell * cellinfend;
 
     if(moved) {
-        start = change.attribute(MPOSSTART);
-        end = change.attribute(MPOSEND);
+        start = change.attribute(attributeNS(MPOSSTART, NS_C));
+        end = change.attribute(attributeNS(MPOSEND, NS_C));
     } else {
-        start = change.attribute(POSSTART);
-        end = change.attribute(POSEND);
+        start = change.attribute(attributeNS(POSSTART, NS_C));
+        end = change.attribute(attributeNS(POSEND, NS_C));
     }
 
-    if(start.isNull() || end.isNull()){
-        return NULL;
-    }
-
-    if(!start.startsWith(POSSEPARATOR) || !end.startsWith(POSSEPARATOR)) {
-        qDebug() << "Wrong position attribute in XML";
-        return NULL;
-    }
+    Q_ASSERT(!start.isEmpty() || !end.isEmpty());
+    Q_ASSERT(start.startsWith(POSSEPARATOR) || end.startsWith(POSSEPARATOR));
 
     between_separators_start = getDataFromPosTag(start);
     between_separators_end = getDataFromPosTag(end);
@@ -685,7 +679,7 @@ MctPosition* MctStaticData::getPosFromElementreeNodeNew(const QDomElement &chang
 
     if(between_separators_start.length() != between_separators_end.length()) {
         qDebug() << "Wrong position attribute in XML";
-        return NULL;
+        Q_ASSERT(between_separators_start.length() == between_separators_end.length());
     }
 
     if(between_separators_start.length() == 2) {
@@ -722,6 +716,7 @@ MctPosition* MctStaticData::getPosFromElementreeNodeNew(const QDomElement &chang
     } else if (between_separators_start.length() % 4 == 2) {
         pos = NULL;
     } else {
+        qCritical() << "Returning nullptr position!";
         return NULL;
     }
 

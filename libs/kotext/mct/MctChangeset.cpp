@@ -75,10 +75,10 @@ MctChangeset::MctChangeset(const QDomElement &changeset)
     m_parents = new QList<ulong>();
     m_childs = new QList<ulong>();
     m_changelist = new QList<MctChange*>();
-    setAuthor(new MctAuthor("Undefined"));
+    m_author = new MctAuthor(changeset.attribute(MctStaticData::attributeNS(MctStaticData::AUTHOR, MctStaticData::NS_DC), "Undefined"));
     m_id = 0;
 
-    QString datestring = changeset.attribute("date");
+    QString datestring = changeset.attribute(MctStaticData::attributeNS(MctStaticData::DATE, MctStaticData::NS_DC));
     datestring.replace("T", " ");
     m_date = QDateTime::fromString(datestring, "yyyy-MM-dd hh:mm:ss");
 
@@ -92,7 +92,7 @@ MctChangeset::MctChangeset()
     m_changelist = new QList<MctChange*>();
     m_changeset.parentNode().removeChild(m_changeset);
     m_corrected = false;
-    setAuthor(new MctAuthor("Undefined"));
+    setAuthor(new MctAuthor("Undefined_0"));
     m_id = 0;
 }
 
@@ -227,7 +227,7 @@ void MctChangeset::removeChildId(ulong id)
 MctAuthor* MctChangeset::author() const
 {
     if(m_author == NULL) {
-        QString name = m_changeset.attribute(MctStaticData::attributeNS(MctStaticData::AUTHOR, MctStaticData::NS_DC), "undefined");
+        QString name = m_changeset.attribute(MctStaticData::attributeNS(MctStaticData::AUTHOR, MctStaticData::NS_DC), "Undefined");
         return new MctAuthor(name);
     }
     return m_author;
@@ -272,8 +272,8 @@ void MctChangeset::setComment(const QString &comment)
 QDateTime MctChangeset::date() const
 {
     if(!m_date.isValid()) {
-        QString datestring = m_changeset.attribute("date");
-        return QDateTime::fromString(m_changeset.attribute("date").replace("T", " "), "yyyy-MM-dd hh:mm:ss");
+        QString datestring = m_changeset.attribute(MctStaticData::attributeNS(MctStaticData::DATE, MctStaticData::NS_DC));
+        return QDateTime::fromString(m_changeset.attribute(MctStaticData::attributeNS(MctStaticData::DATE, MctStaticData::NS_DC)).replace("T", " "), "yyyy-MM-dd hh:mm:ss");
         /*QString datestring = changeset.attribute("date");
         datestring.replace("T", " ");
         date = QDateTime::fromString(datestring, "yyyy-MM-dd hh:mm:ss");*/
@@ -300,7 +300,7 @@ void MctChangeset::setDate(const QDateTime &date)
 ulong MctChangeset::id() const
 {
     if(m_id == 0) {
-        return m_changeset.attribute("id", "0").toULong();
+        return m_changeset.attribute(MctStaticData::attributeNS(MctStaticData::ID, MctStaticData::NS_C), "0").toULong();
     }
     return m_id;
 }

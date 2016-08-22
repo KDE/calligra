@@ -585,8 +585,8 @@ void MctAbstractGraph::fillUpGraph()
     if (m_koTextDoc) indexes = MctStaticData::instance()->getFrameIndexes(m_koTextDoc);
 
     m_root = m_doc->firstChildElement();
-    QDomNodeList childs = m_root.childNodes();
-    for(uint i=0; i < childs.length(); i++) {
+    QDomNodeList childs = m_root.childNodes();  // <undo>...</undo> || <redo>...</redo>
+    for(uint i=0; i < childs.length(); i++) {   // <change>...</change>
         QDomNode node = childs.at(i);
         if(node.isElement()) {
             QDomElement elem = node.toElement();
@@ -594,7 +594,7 @@ void MctAbstractGraph::fillUpGraph()
                 MctChangeset * changeset = new MctChangeset(elem);
                 int parentidx = 1;
                 while (true) {
-                    QString parentID = elem.attribute("parent"+ QString::number(parentidx));
+                    QString parentID = elem.attribute(MctStaticData::attributeNS(MctStaticData::PARENT, MctStaticData::NS_C) + QString::number(parentidx));
                     if(parentID.isEmpty()) {
                         break;
                     }
@@ -607,7 +607,7 @@ void MctAbstractGraph::fillUpGraph()
                 m_idDates->insert(changeset->id(), date);
 
                 QDomNodeList changeList = elem.childNodes();
-                for(uint j = 0; j < changeList.length(); j++) {
+                for(uint j = 0; j < changeList.length(); j++) { // <del> || <add> || <move> ...
                     QDomNode node = changeList.at(j);
 
                     //if (koTextDoc) correctBlockPosition(&node, indexes);
@@ -681,9 +681,9 @@ void MctAbstractGraph::correctBlockPosition(QDomNode *node, QMap<ulong, ulong> *
     change.setAttribute(MctStaticData::attributeNS(MctStaticData::POSEND, MctStaticData::NS_C), end);
 
     //Moved position
-    QString mstart = change.attribute(MctStaticData::MPOSSTART);
+    QString mstart = change.attribute(MctStaticData::attributeNS(MctStaticData::MPOSSTART, MctStaticData::NS_C));
     if(!mstart.isEmpty()) {
-        QString mend = change.attribute(MctStaticData::MPOSEND);
+        QString mend = change.attribute(MctStaticData::attributeNS(MctStaticData::MPOSEND, MctStaticData::NS_C));
 
         idx1 = mstart.indexOf(MctStaticData::POSSEPARATOR, 1);
         startpar = mstart.mid(1, idx1 - 1).toULong();
@@ -1839,11 +1839,11 @@ void MctAbstractGraph::addTableDataToPos(QDomElement &change, MctChange *changeN
     QString endtag;
 
     if(moved) {
-        starttag = MctStaticData::MPOSSTART;
-        endtag = MctStaticData::MPOSEND;
+        starttag = MctStaticData::attributeNS(MctStaticData::MPOSSTART, MctStaticData::NS_C);
+        endtag = MctStaticData::attributeNS(MctStaticData::MPOSSTART, MctStaticData::NS_C);MctStaticData::MPOSEND;
     } else {
-        starttag = MctStaticData::POSSTART;
-        endtag = MctStaticData::POSEND;
+        starttag = MctStaticData::attributeNS(MctStaticData::POSSTART, MctStaticData::NS_C);
+        endtag = MctStaticData::attributeNS(MctStaticData::POSEND, MctStaticData::NS_C);
     }
 
     QString posstringstart = change.attribute(starttag);

@@ -47,37 +47,37 @@ void MctRedoGraphXMLfilter::addChangeFromXML(const QDomNode &node, MctChangeset*
 {
     QDomElement change = node.toElement();
     MctChange *changeNode = NULL;
-    if(change.tagName() == MctStaticData::ADDED && change.attribute("type") == MctStaticData::STRING){
+    if(change.tagName() == MctStaticData::ADDED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::STRING){
         changeNode = addStringFromXML(change);
-    } else if (change.tagName() == MctStaticData::REMOVED && change.attribute("type") == MctStaticData::STRING) {
+    } else if (change.tagName() == MctStaticData::REMOVED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::STRING) {
         changeNode = removeStringFromXML(change);
-    } else if (change.tagName() == MctStaticData::MOVED && change.attribute("type") == MctStaticData::STRING) {
+    } else if (change.tagName() == MctStaticData::MOVED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::STRING) {
         changeNode = moveStringFromXML(change);
-    } else if (change.tagName() == MctStaticData::ADDED && change.attribute("type") == MctStaticData::PARAGRAPH) {
+    } else if (change.tagName() == MctStaticData::ADDED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::PARAGRAPH) {
         changeNode = addParBreakFromXML(change);
-    } else if (change.tagName() == MctStaticData::REMOVED && change.attribute("type") == MctStaticData::PARAGRAPH) {
+    } else if (change.tagName() == MctStaticData::REMOVED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::PARAGRAPH) {
         changeNode = delParBreakFromXML(change);    //TODO: pythonban itt removedParBreakFromXML szerepelt
     } else if (change.tagName() == MctStaticData::FORMATTAG) {
         changeNode = styleChangeFromXML(change);
-    } else if (change.tagName() == MctStaticData::ADDED && change.attribute("type") == MctStaticData::TEXTFRAME) {
+    } else if (change.tagName() == MctStaticData::ADDED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::TEXTFRAME) {
         changeNode = addTextFrameFromXML(change);
-    } else if (change.tagName() == MctStaticData::REMOVED && change.attribute("type") == MctStaticData::TEXTFRAME) {
+    } else if (change.tagName() == MctStaticData::REMOVED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::TEXTFRAME) {
         return;
-    } else if (change.tagName() == MctStaticData::ADDED && change.attribute("type") == MctStaticData::TEXTGRAPHICOBJECT) {
+    } else if (change.tagName() == MctStaticData::ADDED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::TEXTGRAPHICOBJECT) {
         changeNode = addTextGraphicObjectFromXML(change);
-    } else if (change.tagName() == MctStaticData::REMOVED && change.attribute("type") == MctStaticData::TEXTGRAPHICOBJECT) {
+    } else if (change.tagName() == MctStaticData::REMOVED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::TEXTGRAPHICOBJECT) {
         changeNode = removeTextGraphicObjectFromXML(change);
-    } else if (change.tagName() == MctStaticData::ADDED && change.attribute("type") == MctStaticData::EMBEDDEDOBJECT) {
+    } else if (change.tagName() == MctStaticData::ADDED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::EMBEDDEDOBJECT) {
         changeNode = addEmbeddedObjectFromXML(change);
-    } else if (change.tagName() == MctStaticData::REMOVED && change.attribute("type") == MctStaticData::EMBEDDEDOBJECT) {
+    } else if (change.tagName() == MctStaticData::REMOVED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::EMBEDDEDOBJECT) {
         return;
-    } else if (change.tagName() == MctStaticData::ADDED && change.attribute("type") == MctStaticData::TABLE) {
+    } else if (change.tagName() == MctStaticData::ADDED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::TABLE) {
         changeNode = addTextTableFromXML(change);
-    } else if (change.tagName() == MctStaticData::REMOVED && change.attribute("type") == MctStaticData::TABLE) {
+    } else if (change.tagName() == MctStaticData::REMOVED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::TABLE) {
         changeNode = removeTextTableFromXML(change);
-    } else if (change.attribute("type") == MctStaticData::ROWCHANGE) {
+    } else if (change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::ROWCHANGE) {
         changeNode = rowChangeFromXML(change);
-    } else if (change.attribute("type") == MctStaticData::COLCHANGE) {
+    } else if (change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::COLCHANGE) {
         changeNode = colChangeFromXML(change);
     } else {
         return;
@@ -90,7 +90,7 @@ void MctRedoGraphXMLfilter::addChangeFromXML(const QDomNode &node, MctChangeset*
 void MctRedoGraphXMLfilter::particularStyleChangeFromXML(const QDomNode &node, ChangeEventList * propchanges)
 {
     QDomNamedNodeMap attribs = node.attributes();
-    QString strtype = attribs.namedItem("type").toAttr().value();
+    QString strtype = attribs.namedItem(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)).toAttr().value();
     int type = QTextFormat::InvalidFormat;
     if(strtype == MctStaticData::TEXTTAG) {
         type = QTextFormat::CharFormat;
@@ -109,12 +109,14 @@ void MctRedoGraphXMLfilter::particularStyleChangeFromXML(const QDomNode &node, C
     for(uint i = 0 ; i < attribs.length(); i++) {
         QDomAttr attr = attribs.item(i).toAttr();
         if(!attr.isNull()) {
-            if(attr.name() == "id" || attr.name() == "type" ||
-                    attr.name() == "e" || attr.name() == "s") {
+            if(attr.name() == MctStaticData::attributeNS(MctStaticData::ID, MctStaticData::NS_C)
+                    || attr.name() == MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)
+                    || attr.name() == MctStaticData::attributeNS(MctStaticData::POSEND, MctStaticData::NS_C)
+                    || attr.name() == MctStaticData::attributeNS(MctStaticData::POSSTART, MctStaticData::NS_DC)) {
                 continue;
             }
             QVariant v;
-            QString attrName = attr.name();
+            QString attrName = attr.name(); // FIXME: probaly XMLNS extension is required later
             int propkey = MctStaticData::getTextPropAsInt(attr.name());
             if (MctStaticData::TEXT_PROPS_INT.contains(attrName)) {
                 v = attr.value().toInt();

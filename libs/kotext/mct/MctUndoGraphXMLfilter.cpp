@@ -50,37 +50,37 @@ void MctUndoGraphXMLfilter::addChangeFromXML(const QDomNode &node, MctChangeset*
 
     QDomElement change = node.toElement();
     MctChange *changeNode = NULL;
-    if(change.tagName() == ADDED && change.attribute("type") == MctStaticData::STRING){
+    if(change.tagName() == ADDED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::STRING){
         changeNode = addStringFromXML(change);
-    } else if (change.tagName() == REMOVED && change.attribute("type") == MctStaticData::STRING) {
+    } else if (change.tagName() == REMOVED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::STRING) {
         changeNode = removeStringFromXML(change);
-    } else if (change.tagName() == MctStaticData::MOVED && change.attribute("type") == MctStaticData::STRING) {
+    } else if (change.tagName() == MctStaticData::MOVED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::STRING) {
         changeNode = moveStringFromXML(change);
-    } else if (change.tagName() == ADDED && change.attribute("type") == MctStaticData::PARAGRAPH) {
+    } else if (change.tagName() == ADDED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::PARAGRAPH) {
         changeNode = addParBreakFromXML(change);
-    } else if (change.tagName() == REMOVED && change.attribute("type") == MctStaticData::PARAGRAPH) {
+    } else if (change.tagName() == REMOVED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::PARAGRAPH) {
         changeNode = delParBreakFromXML(change);    //TODO: pythonban itt removedParBreakFromXML szerepelt
     } else if (change.tagName() == MctStaticData::FORMATTAG) {
         changeNode = styleChangeFromXML(change);
-    } else if (change.tagName() == ADDED && change.attribute("type") == MctStaticData::TEXTFRAME) {
+    } else if (change.tagName() == ADDED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::TEXTFRAME) {
         changeNode = addTextFrameFromXML(change);
-    } else if (change.tagName() == REMOVED && change.attribute("type") == MctStaticData::TEXTFRAME) {
+    } else if (change.tagName() == REMOVED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::TEXTFRAME) {
         return;
-    } else if (change.tagName() == ADDED && change.attribute("type") == MctStaticData::TEXTGRAPHICOBJECT) {
+    } else if (change.tagName() == ADDED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::TEXTGRAPHICOBJECT) {
         changeNode = addTextGraphicObjectFromXML(change);
-    } else if (change.tagName() == REMOVED && change.attribute("type") == MctStaticData::TEXTGRAPHICOBJECT) {
+    } else if (change.tagName() == REMOVED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::TEXTGRAPHICOBJECT) {
         changeNode = removeTextGraphicObjectFromXML(change);
-    } else if (change.tagName() == ADDED && change.attribute("type") == MctStaticData::EMBEDDEDOBJECT) {
+    } else if (change.tagName() == ADDED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::EMBEDDEDOBJECT) {
         changeNode = addEmbeddedObjectFromXML(change);
-    } else if (change.tagName() == REMOVED && change.attribute("type") == MctStaticData::EMBEDDEDOBJECT) {
+    } else if (change.tagName() == REMOVED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::EMBEDDEDOBJECT) {
         return;
-    } else if (change.tagName() == ADDED && change.attribute("type") == MctStaticData::TABLE) {
+    } else if (change.tagName() == ADDED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::TABLE) {
         changeNode = addTextTableFromXML(change);
-    } else if (change.tagName() == REMOVED && change.attribute("type") == MctStaticData::TABLE) {
+    } else if (change.tagName() == REMOVED && change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::TABLE) {
         changeNode = removeTextTableFromXML(change);
-    } else if (change.attribute("type") == MctStaticData::ROWCHANGE) {
+    } else if (change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::ROWCHANGE) {
         changeNode = rowChangeFromXML(change);
-    } else if (change.attribute("type") == MctStaticData::COLCHANGE) {
+    } else if (change.attribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC)) == MctStaticData::COLCHANGE) {
         changeNode = colChangeFromXML(change);
     } else {
         return;
