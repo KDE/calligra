@@ -114,6 +114,7 @@
 #include "kptviewlistdocker.h"
 #include "kptviewlist.h"
 #include "kptschedulesdocker.h"
+#include "kptpart.h"
 #include "kptdebug.h"
 
 #include "plansettings.h"
@@ -3033,13 +3034,17 @@ void View::saveTaskModule( const KUrl &url, Project *project )
     QString dir = Factory::global().dirs()->saveLocation( "plan_taskmodules" );
     kDebug(planDbg())<<"dir="<<dir;
     if ( ! dir.isEmpty() ) {
-        MainDocument part(getKoPart());
-        part.insertProject( *project, 0, 0 );
-        part.getProject().setName( project->name() );
-        part.getProject().setLeader( project->leader() );
-        part.getProject().setDescription( project->description() );
-        part.saveNativeFormat( dir + url.fileName() );
-        kDebug(planDbg())<<dir + url.fileName();
+        Part *part = new Part( this );
+        MainDocument *doc = new MainDocument( part );
+        part->setDocument( doc );
+        doc->disconnect(); // doc shall not handle feedback from openUrl()
+        doc->setAutoSave( 0 ); //disable
+        doc->insertProject( *project, 0, 0 );
+        doc->getProject().setName( project->name() );
+        doc->getProject().setLeader( project->leader() );
+        doc->getProject().setDescription( project->description() );
+        doc->saveNativeFormat( dir + url.fileName() );
+        part->deleteLater(); // also deletes document
     } else {
         kDebug(planDbg())<<"Could not find a location";
     }
