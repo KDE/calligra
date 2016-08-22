@@ -947,35 +947,32 @@ bool MainDocument::loadAndParse(KoStore *store, const QString &filename, KoXmlDo
     return true;
 }
 
-void MainDocument::insertFile( const QString &filename, Node *parent, Node *after )
+void MainDocument::insertFile( const KUrl &url, Node *parent, Node *after )
 {
     Part *part = new Part( this );
     MainDocument *doc = new MainDocument( part );
     part->setDocument( doc );
     doc->disconnect(); // doc shall not handle feedback from openUrl()
     doc->setAutoSave( 0 ); //disable
-    doc->m_insertFileInfo.url = filename;
+    doc->m_insertFileInfo.url = url;
     doc->m_insertFileInfo.parent = parent;
     doc->m_insertFileInfo.after = after;
     connect(doc, SIGNAL(completed()), SLOT(insertFileCompleted()));
     connect(doc, SIGNAL(canceled(QString)), SLOT(insertFileCancelled(QString)));
 
-    doc->openUrl( KUrl( filename ) );
+    doc->openUrl( url );
 }
 
 void MainDocument::insertFileCompleted()
 {
     kDebug(planDbg())<<sender();
-    Part *part = qobject_cast<Part*>( sender() );
-    if ( part ) {
-        MainDocument *doc = qobject_cast<MainDocument*>( part->document() );
-        if ( doc ) {
-            Project &p = doc->getProject();
-            insertProject( p, doc->m_insertFileInfo.parent, doc->m_insertFileInfo.after );
-        } else {
-            KMessageBox::error( 0, i18n("Internal error, failed to insert file.") );
-        }
-        part->deleteLater(); // also deletes document
+    MainDocument *doc = qobject_cast<MainDocument*>( sender() );
+    if ( doc ) {
+        Project &p = doc->getProject();
+        insertProject( p, doc->m_insertFileInfo.parent, doc->m_insertFileInfo.after );
+        doc->documentPart()->deleteLater(); // also deletes document
+    } else {
+        KMessageBox::error( 0, i18n("Internal error, failed to insert file.") );
     }
 }
 
