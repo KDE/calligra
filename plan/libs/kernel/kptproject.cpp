@@ -89,6 +89,7 @@ void Project::deref()
     --m_refCount;
     Q_ASSERT( m_refCount >= 0 );
     if ( m_refCount <= 0 ) {
+        emit aboutToBeDeleted();
         deleteLater();
     }
 }

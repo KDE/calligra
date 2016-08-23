@@ -74,10 +74,12 @@ void CalendarDayItemModelBase::setProject( Project *project )
 {
     setCalendar( 0 );
     if ( m_project ) {
+        disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         disconnect( m_project, SIGNAL(calendarToBeRemoved(const Calendar*)), this, SLOT(slotCalendarToBeRemoved(const Calendar*)) );
     }
     m_project = project;
     if ( project ) {
+        connect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         connect( m_project, SIGNAL(calendarToBeRemoved(const Calendar*)), this, SLOT(slotCalendarToBeRemoved(const Calendar*)) );
     }
     reset();
@@ -136,6 +138,7 @@ void CalendarItemModel::slotCalendarRemoved( const Calendar * )
 void CalendarItemModel::setProject( Project *project )
 {
     if ( m_project ) {
+        disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         disconnect( m_project , SIGNAL(calendarChanged(Calendar*)), this, SLOT(slotCalendarChanged(Calendar*)) );
 
         disconnect( m_project, SIGNAL(calendarAdded(const Calendar*)), this, SLOT(slotCalendarInserted(const Calendar*)) );
@@ -146,6 +149,7 @@ void CalendarItemModel::setProject( Project *project )
     }
     m_project = project;
     if ( project ) {
+        connect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         connect( m_project, SIGNAL(calendarChanged(Calendar*)), this, SLOT(slotCalendarChanged(Calendar*)) );
 
         connect( m_project, SIGNAL(calendarAdded(const Calendar*)), this, SLOT(slotCalendarInserted(const Calendar*)) );

@@ -203,6 +203,8 @@ protected Q_SLOTS:
 
     void slotLogInserted( MainSchedule*, int firstrow, int lastrow );
 
+    void projectDeleted();
+
 protected:
     void addLogEntry( const Schedule::Log &log, int row );
 
