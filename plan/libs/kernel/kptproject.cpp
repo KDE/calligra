@@ -1542,6 +1542,10 @@ bool Project::moveTask( Node* node, Node *newParent, int newPos )
     Node *oldParent = node->parentNode();
     int oldPos = oldParent->indexOf( node );
     int i = newPos < 0 ? newParent->numChildren() : newPos;
+    if ( oldParent == newParent && i == oldPos ) {
+        // no need to move to where it already is
+        return false;
+    }
     int newRow = i;
     if ( oldParent == newParent && newPos > oldPos ) {
         ++newRow; // itemmodels wants new row *before* node is removed from old position

@@ -4037,6 +4037,15 @@ bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, 
                 if ( pos >= 0 && n->parentNode() == par && par->indexOf( n ) < pos ) {
                     --pos;
                 }
+                if ( n->parentNode() == par ) {
+                    // avoid drop into the same position, QAbstractItemModel does not like it
+                    int crow = par->indexOf( n );
+                    if ( ( ( pos == -1 ) && ( crow == par->numChildren() - 1 ) ) || ( pos == crow ) ) {
+                        delete cmd;
+                        cmd = 0;
+                        continue;
+                    }
+                }
                 cmd->addCommand( new NodeMoveCmd( m_project, n, par, pos ) );
                 offset++;
             }
