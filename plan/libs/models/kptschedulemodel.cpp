@@ -1079,6 +1079,11 @@ void ScheduleLogItemModel::slotScheduleRemoved( const MainSchedule *sch )
     debugPlan<<m_schedule<<sch;
 }
 
+void ScheduleLogItemModel::projectDeleted()
+{
+    setProject(0);
+}
+
 void ScheduleLogItemModel::setProject( Project *project )
 {
     debugPlan<<m_project<<"->"<<project;
