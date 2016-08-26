@@ -399,7 +399,12 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
 
 View::~View()
 {
-/*    removeStatusBarItem( m_estlabel );
+    ViewBase *view = currentView();
+    if (view) {
+        // deactivate view to remove dockers etc
+        slotGuiActivated(view, false);
+    }
+    /*    removeStatusBarItem( m_estlabel );
     delete m_estlabel;*/
 }
 
