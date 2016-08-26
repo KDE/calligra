@@ -1830,11 +1830,20 @@ QList<ResourceRequest*> ResourceRequest::teamMembers() const
 
 QDebug &operator<<( QDebug &dbg, const KPlato::ResourceRequest *rr )
 {
-    return operator<<( dbg, *rr );
+    if (rr) {
+        dbg<<*rr;
+    } else {
+        dbg<<(void*)rr;
+    }
+    return dbg;
 }
 QDebug &operator<<( QDebug &dbg, const KPlato::ResourceRequest &rr )
 {
-    dbg<<"ResourceRequest["<<rr.resource()->name()<<']';
+    if (rr.resource()) {
+        dbg<<"ResourceRequest["<<rr.resource()->name()<<']';
+    } else {
+        dbg<<"ResourceRequest[No resource]";
+    }
     return dbg;
 }
 
