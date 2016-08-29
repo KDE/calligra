@@ -674,22 +674,30 @@ MctPosition* MctStaticData::getPosFromElementreeNodeNew(const QDomElement &chang
     between_separators_start = getDataFromPosTag(start);
     between_separators_end = getDataFromPosTag(end);
 
+    if (between_separators_end[0].isEmpty()) {
+        qDebug() << "Missing end attribute from change. Probably paraghraph change.";
+        startchar = between_separators_start.at(1).toULong() - 1;
+        startpar = between_separators_start.at(0).toULong() - 1;
+        pos = new MctPosition(startpar, startchar);
+        return pos;
+    }
+
     reverseList2<QString>(&between_separators_start);
     reverseList2<QString>(&between_separators_end);
 
-    if(between_separators_start.length() != between_separators_end.length()) {
+    if (between_separators_start.length() != between_separators_end.length()) {
         qDebug() << "Wrong position attribute in XML";
         Q_ASSERT(between_separators_start.length() == between_separators_end.length());
     }
 
-    if(between_separators_start.length() == 2) {
+    if (between_separators_start.length() == 2) {
         startchar = between_separators_start.at(0).toULong() - 1;
         startpar = between_separators_start.at(1).toULong() - 1;
         endchar = between_separators_end.at(0).toULong() - 1;
         endpar = between_separators_end.at(1).toULong() - 1;
         pos = new MctPosition(startpar, startchar, endpar, endchar);
         return pos;
-    } else if(between_separators_start.length() == 4) {
+    } else if (between_separators_start.length() == 4) {
         cellinf = new MctCell(between_separators_start.at(1), between_separators_start.at(0));
         cellinfend = new MctCell(between_separators_end.at(1), between_separators_end.at(0));
         pos = new MctPosition(0,0,0,0, cellinf, cellinfend);
@@ -703,7 +711,7 @@ MctPosition* MctStaticData::getPosFromElementreeNodeNew(const QDomElement &chang
         return pos;
     }
 
-    if(between_separators_start.length() % 4 == 0) {
+    if (between_separators_start.length() % 4 == 0) {
         cellinf = new MctCell(between_separators_start.at(1).toInt() - 1, between_separators_start.at(0).toInt() - 1);
         cellinfend = new MctCell(between_separators_end.at(1).toInt() - 1, between_separators_end.at(0).toInt() - 1);
         pos = new MctPosition(0,0,0,0, cellinf, cellinfend);
@@ -737,7 +745,7 @@ MctPosition* MctStaticData::getPosFromElementreeNodeNew(const QDomElement &chang
 
             pos_tmp = new MctPosition(startpar, startchar, endpar, endchar, cellinf, cellinfend);
 
-            if(pos_parent == NULL) {
+            if (pos_parent == NULL) {
                 pos = pos_tmp;
                 pos_parent = pos_tmp;
             } else {

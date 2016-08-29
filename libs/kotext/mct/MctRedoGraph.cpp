@@ -273,6 +273,7 @@ void MctRedoGraph::addParBreak(QDomElement *xmlchange, MctChange *change)
     xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::PARAGRAPH);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
+    xmlchange->removeAttribute(MctStaticData::attributeNS(MctStaticData::POSEND, MctStaticData::NS_C)); // remove redundant ending position from xml
 }
 
 /**
@@ -285,6 +286,7 @@ void MctRedoGraph::delParBreak(QDomElement *xmlchange, MctChange *change)
     xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::PARAGRAPH);
     MctPosition *pos = change->position();
     addPos2change(xmlchange, pos);
+    xmlchange->removeAttribute(MctStaticData::attributeNS(MctStaticData::POSEND, MctStaticData::NS_C)); // remove redundant ending position from xml
 }
 
 /**

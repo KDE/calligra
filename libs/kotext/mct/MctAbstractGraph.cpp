@@ -104,6 +104,7 @@ MctAbstractGraph::MctAbstractGraph(const QString &redoOrUndo, const QString &odt
 
         m_root = m_doc->createElement(redoOrUndo);
 
+        // TODO: values should be static const variables in MctStaticData!
         m_root.setAttribute(MctStaticData::XMLNS, "https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=office-collab");
         m_root.setAttribute(MctStaticData::attributeNS(MctStaticData::NS_OFFICE, MctStaticData::XMLNS), "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
         m_root.setAttribute(MctStaticData::attributeNS(MctStaticData::NS_DC, MctStaticData::XMLNS), "http://purl.org/dc/elements/1.1/");
