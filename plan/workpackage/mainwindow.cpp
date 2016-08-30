@@ -75,9 +75,8 @@ KPlatoWork_MainWindow::KPlatoWork_MainWindow()
     a->setEnabled( false );
     connect( m_part->undoStack(), SIGNAL(canRedoChanged(bool)), a, SLOT(setEnabled(bool)) );
     
-    setupGUI( KXmlGuiWindow::Default, "calligraplanwork_mainwindow.rc" );
-
     setCentralWidget( m_part->widget() );
+    setupGUI( KXmlGuiWindow::ToolBar | KXmlGuiWindow::Keys | KXmlGuiWindow::StatusBar | KXmlGuiWindow::Save, "calligraplanwork_mainwindow.rc" );
     createGUI( m_part );
     connect( m_part, SIGNAL(captionChanged(QString,bool)), SLOT(setCaption(QString,bool)) );
 }
