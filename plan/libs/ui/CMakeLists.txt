@@ -149,5 +149,5 @@ set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION
 install(TARGETS kplatoui ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
-
+add_subdirectory(reports/items)
 

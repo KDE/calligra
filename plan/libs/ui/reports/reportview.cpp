@@ -861,14 +861,14 @@ void ReportDesignPanel::populateToolbar( KToolBar *tb )
     m_actionGroup = new QActionGroup(tb);
     // allow only the following item types, there is not appropriate data for others
     const QStringList itemtypes = QStringList()
-        << QLatin1String("org.kde.kreport.line")
-        << QLatin1String("org.kde.kreport.label")
-        << QLatin1String("org.kde.kreport.field")
-        << QLatin1String("org.kde.kreport.text")
-        << QLatin1String("org.kde.kreport.check")
-        << QLatin1String("org.kde.kreport.chart")
-        << QLatin1String("org.kde.kreport.web")
-        << QLatin1String(""); //separator
+    << QLatin1String("org.kde.kreport.label")
+    << QLatin1String("org.kde.kreport.richtext") // replaces text
+    << QLatin1String("org.kde.kreport.field")
+    << QLatin1String("org.kde.kreport.line")
+    << QLatin1String("org.kde.kreport.checkbox")
+    << QLatin1String("org.kde.kreport.chart")
+    << QLatin1String("org.kde.kreport.web"); // can be used for fixed sized rich text
+
     foreach( QAction *a, m_designer->itemActions(m_actionGroup) ) {
         if ( ! itemtypes.contains( a->objectName() ) ) {
             m_actionGroup->removeAction( a );
@@ -1140,31 +1140,41 @@ void ReportDesigner::createDockers()
 
     // allow only the following item types, there is not appropriate data for others
     const QStringList itemtypes = QStringList()
-        << QLatin1String("org.kde.kreport.line")
-        << QLatin1String("org.kde.kreport.label")
-        << QLatin1String("org.kde.kreport.field")
-        << QLatin1String("org.kde.kreport.text")
-        << QLatin1String("org.kde.kreport.check")
-        << QLatin1String("org.kde.kreport.chart")
-        << QLatin1String("org.kde.kreport.web");
+    << QLatin1String("org.kde.kreport.label")
+    << QLatin1String("org.kde.kreport.richtext") // replaces text
+    << QLatin1String("org.kde.kreport.field")
+    << QLatin1String("org.kde.kreport.line")
+    << QLatin1String("org.kde.kreport.checkbox")
+    << QLatin1String("org.kde.kreport.chart")
+    << QLatin1String("org.kde.kreport.web"); // can be used for fixed sized rich text
+    const QStringList itemTooltips = QStringList()
+    << i18nc( "@into:tooltip", "Label" )
+    << i18nc( "@into:tooltip", "Rich- and plain text element with variable height" )
+    << i18nc( "@into:tooltip", "Plain text element with fixed size" )
+    << i18nc( "@into:tooltip", "Line" )
+    << i18nc( "@into:tooltip", "Checkbox" )
+    << i18nc( "@into:tooltip", "Chart" )
+    << i18nc( "@into:tooltip", "Rich Text element with fixed size" );
+
     QActionGroup *ag = new QActionGroup( this );
-    int i = 0;
-    foreach( QAction *a, m_designer->itemActions( ag ) ) {
-        if ( itemtypes.contains( a->objectName() ) ) {
+    QMap<int, QToolButton*> tblst;
+    for( const QAction *a : m_designer->itemActions( ag ) ) {
+        int pos = itemtypes.indexOf( a->objectName() );
+        if ( pos >= 0 ) {
             QToolButton *tb = new QToolButton( w );
             tb->setObjectName( a->objectName() );
             tb->setIcon( a->icon() );
             tb->setText( a->text() );
-            if ( tb->objectName() == QLatin1String("org.kde.kreport.web") ) {
-                tb->setToolTip( i18nc( "@into:tooltip", "Rich text" ) );
-            } else {
-                tb->setToolTip( a->toolTip() );
-            }
+            tb->setToolTip( itemTooltips.value( pos ) );
             tb->setCheckable( true );
-            tw.horizontalLayout->insertWidget( i++, tb );
+            tblst[pos] = tb;
             connect(tb, SIGNAL(clicked(bool)), SLOT(slotInsertAction()));
             connect(this, SIGNAL(resetButtonState(bool)), tb, SLOT(setChecked(bool)));
         }
+    }
+    int i = 0;
+    for(QToolButton *tb : tblst) {
+        tw.horizontalLayout->insertWidget( i++, tb );
     }
 
     m_sourceeditor = tw.sourceEditor;

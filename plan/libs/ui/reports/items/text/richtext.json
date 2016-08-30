@@ -1,0 +1,28 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "calligra_devel@kde.org", 
+                "Name": "Calligra Team",
+                "Name[x-test]": "xxCalligra Teamxx"
+            }
+        ], 
+        "Category": "", 
+        "Dependencies": [], 
+        "Description": "Rich Text element with expanding height", 
+        "Description[x-test]": "xxRich Text element with expanding heightxx", 
+        "EnabledByDefault": true, 
+        "Icon": "text-enriched", 
+        "Id": "org.kde.kreport.richtext", 
+        "License": "LGPL", 
+        "Name": "Rich Text", 
+        "Name[x-test]": "xxRich Textxx", 
+        "ServiceTypes": [
+            "KReport/Element"
+        ], 
+        "Version": "1.0", 
+        "Website": "https://calligra.org"
+    }, 
+    "X-KDE-PluginInfo-LegacyName": "richtext", 
+    "X-KReport-Priority": "10"
+}
