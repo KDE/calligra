@@ -19,23 +19,21 @@
 
 
 #include "kplatowork_export.h"
-#include "application.h"
+
+#include "commandlineparser.h"
 
 #include <KDBusService>
 
+#include <QApplication>
 #include <QDir>
-
 
 extern "C" KPLATOWORK_EXPORT int kdemain( int argc, char **argv )
 {
-    KPlatoWork_Application app(argc, argv);
-
+    QApplication app(argc, argv);
     KDBusService service(KDBusService::Unique);
-    QObject::connect(&service, &KDBusService::activateRequested,
-                     &app, &KPlatoWork_Application::handleActivateRequest);
-
-    app.handleCommandLine(QDir::current());
-    app.exec();
-
-    return 0;
+    // we come here only once...
+    CommandLineParser cmd;
+    QObject::connect(&service, &KDBusService::activateRequested, &cmd, &CommandLineParser::handleActivateRequest);
+    cmd.handleCommandLine(QDir::current());
+    return app.exec();
 }

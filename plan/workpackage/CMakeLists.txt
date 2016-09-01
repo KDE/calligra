@@ -72,32 +72,9 @@ target_link_libraries(calligraplanworkpart Qt5::Core KF5::Parts planworkfactory)
 install(TARGETS calligraplanworkpart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
-########### KPlatoWork application ###############
-
-set(planworkapp_LIB_SRCS application.cpp )
-
-
-add_library(planworkapp  SHARED ${planworkapp_LIB_SRCS})
-generate_export_header(planworkapp)
-
-target_link_libraries(
-    planworkapp
-    planworkfactory
-    kplatokernel
-    komain
-    KF5::Parts
-    KF5::IconThemes
-    KF5::WindowSystem
-)
-
-set_target_properties(planworkapp PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
-
-install(TARGETS planworkapp ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-
 ########### Calligra PlanWork executable ###############
 
-set(calligraplanwork_KDEINIT_SRCS main.cpp)
+set(calligraplanwork_KDEINIT_SRCS main.cpp commandlineparser.cpp)
 
 kf5_add_kdeinit_executable(calligraplanwork ${calligraplanwork_KDEINIT_SRCS})
 
@@ -109,8 +86,13 @@ endif ()
 
 target_link_libraries(
     kdeinit_calligraplanwork
-    planworkapp
 
+    planworkfactory
+    kplatokernel
+    komain
+    KF5::Parts
+    KF5::IconThemes
+    KF5::WindowSystem
     KF5::DBusAddons
 )
 
