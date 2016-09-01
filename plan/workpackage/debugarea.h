@@ -27,7 +27,7 @@
 
 extern const KPLATOWORK_EXPORT QLoggingCategory &PLANWORK_LOG();
 
-#define debugPlanWork qCDebug(PLANWORK_LOG)
+#define debugPlanWork qCDebug(PLANWORK_LOG)<<QString("%1:").arg(__func__)
 #define warnPlanWork qCWarning(PLANWORK_LOG)
 #define errorPlanWork qCCritical(PLANWORK_LOG)
 
