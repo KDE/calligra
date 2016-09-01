@@ -21,21 +21,84 @@
 #define MCTREDOGRAPHXMLFILTER_H
 #include "MctUndoGraphXMLfilter.h"
 
+/**
+ * Filter class for redo graph
+ *
+ * This filter is responsible for the connection between abstract graph and xml file.
+ * XML read/write operations are implemented here.
+ *
+ * @todo refactoring and merge with MctUndoGraphXMLfilter is recommended
+ */
 class MctRedoGraphXMLfilter : public MctUndoGraphXMLfilter
 {
 public:
+    /// constructor
     MctRedoGraphXMLfilter(const QString &m_redoOrUndo, const QString &odt, KoTextDocument *m_koTextDoc);
     virtual ~MctRedoGraphXMLfilter();
 
+    /**
+     * import single change from XML to abstract changeset representation (wrapper function)
+     *
+     * @param change node in the XML
+     * @param changeset parent changeset node
+     */
     void addChangeFromXML(const QDomNode &change, MctChangeset* changeset);
 
+    /**
+     * import stlye change from XML to style change list
+     *
+     * @param node node in XML
+     * @param propchanges list of style changes
+     */
     void particularStyleChangeFromXML(const QDomNode &node, ChangeEventList * propchanges);    //!!!
+
+    /**
+     * import addedTextFrame/addedTextFrameInTable change from XML
+     *
+     * @param change node in the XML
+     * @return created abstract change node
+     */
     MctChange* addTextFrameFromXML(const QDomElement &change) ;
+
+    /**
+     * import addedTextGraphicObject/addedTextGraphicObjectInTable change from XML
+     *
+     * @param node in the XML
+     * @return created abstract change node.
+     */
     MctChange* addTextGraphicObjectFromXML(const QDomElement &change);
+
+    /**
+     * import removedTextGraphicObject/removedTextGraphicObjectInTable change from XML
+     *
+     * @param node in the XML
+     * @return created abstract change node.
+     */
     MctChange* removeTextGraphicObjectFromXML(const QDomElement &change);
+
+    /**
+     * import adds addedEmbeddedObject/addedEmbeddedObjectInTable change from XML
+     *
+     * @param node in the XML
+     * @return created abstract change node.
+     */
     MctChange* addEmbeddedObjectFromXML(const QDomElement &change);
 
+    /**
+     * import addedRowInTable/removedRowInTable change from XML
+     *
+     * @param node in the XML
+     * @return created abstract change node.
+     */
     MctChange* rowChangeFromXML(const QDomElement &change);
+
+
+    /**
+     * import addedRowInTable/removedRowInTable change from XML
+     *
+     * @param node in the XML
+     * @return created abstract change node.
+     */
     MctChange* colChangeFromXML(const QDomElement &change);
 };
 

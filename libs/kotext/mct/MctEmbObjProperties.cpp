@@ -61,11 +61,6 @@ MctEmbObjProperties::~MctEmbObjProperties()
 
 }
 
-bool MctEmbObjProperties::isBackedup()
-{
-    return m_isBackedUp;
-}
-
 QString MctEmbObjProperties::url() const
 {
     return m_url;
@@ -356,13 +351,6 @@ void MctEmbObjProperties::textGraphicStyleChanges(MctEmbObjProperties *props2, K
     }
 }
 
-/**
- * @brief MctEmbObjProperties::convertURL common method to swap the prefix of a URL.
- * @param oldPrefix The URL should start with this.
- * @param newPrefix The URL should start with this.
- * @param name The original identifier that should contain oldPrefix.
- * @return The identifier starting with the newPrefix substring.
- */
 QString MctEmbObjProperties::convertURL(const QString &oldPrefix, const QString &newPrefix, const QString &name)
 {
     QString returnURL;
@@ -398,12 +386,6 @@ bool MctEmbObjProperties::removeDir(const QString & dirName)
     return result;
 }
 
-/**
- * @brief This makes a copy of a metadata stored in the Odt.
- * @param innerURL The relative URL in the Odt.
- * @param OdtURL The absolute URL of the Odt.
- * @return returns with the URL of the backed up file
- */
 QString MctEmbObjProperties::backupFileFromOdt(const QString &innerURL, const QString &OdtURL)
 {
     if(m_isBackedUp) {
@@ -472,12 +454,9 @@ QString MctEmbObjProperties::backupFileFromOdt(const QString &innerURL, const QS
     return m_url;
 }
 
-/**
- * @brief MctEmbObjProperties::restoreBackupFile Restore embedded file from backup (if it exists)
- */
 void MctEmbObjProperties::restoreBackupFile()
 {
-    if (isBackedup()) {
+    if (isBackedUp()) {
         qCritical() << "Trying to restore without backup.";
     }
 
@@ -548,12 +527,9 @@ void MctEmbObjProperties::restoreBackupFile()
     qDebug() << "Embedded file restored";
 }
 
-/**
- * @brief MctEmbObjProperties::deleteBackupFile cleans up backup files.
- */
 void MctEmbObjProperties::deleteBackupFile()
 {
-    if (!isBackedup())
+    if (!isBackedUp())
         return;
 
     QFile f(m_url);
@@ -564,10 +540,6 @@ void MctEmbObjProperties::deleteBackupFile()
     qDebug() << m_url << " backup file deleted";
 }
 
-/**
- * @brief MctEmbObjProperties::getMediaType Update the value of this->mediaType member from the given manifest file
- * @param fileName Name of manifest file. (Usually .../odtURL/manifest.xml)
- */
 void MctEmbObjProperties::mediaType(const QString &fileName)
 {
     QDomDocument *manifest_tree = new QDomDocument(fileName);
@@ -598,10 +570,6 @@ void MctEmbObjProperties::mediaType(const QString &fileName)
     }
 }
 
-/**
- * @brief MctEmbObjProperties::regManifest
- * @param fileName
- */
 void MctEmbObjProperties::regManifest(const QString &fileName)
 {
     qDebug() << "registering manifest";
@@ -631,11 +599,6 @@ void MctEmbObjProperties::regManifest(const QString &fileName)
     file.close();
 }
 
-/**
- * @brief MctEmbObjProperties::compareProperties gives a a dictionary about the not identical elements
- * @param otherEmbObjProperties The dictionary that should contains all element of this object's props dictionary.
- * @return The new dictionary about the differences.
- */
 PropertyDictionary *MctEmbObjProperties::compareProperties(const MctEmbObjProperties &otherEmbObjProperties)
 {
     QList<QString> keys = otherEmbObjProperties.m_props->keys();
@@ -656,21 +619,11 @@ PropertyDictionary *MctEmbObjProperties::compareProperties(const MctEmbObjProper
     return differentProps;
 }
 
-/**
- * @brief MctEmbObjProperties::createInnerURL transforms grapicURL into innerURL
- * @param graphicURL Should starts with someting like this: "nd.sun.star.GraphicObject:"identifier
- * @return The innerURL that looks like this: "Picture/"identifier
- */
 QString MctEmbObjProperties::createInnerURL(const QString &graphicURL)
 {
     return convertURL(MctStaticData::GRAPHICOBJ, MctStaticData::GRAPHICOBJ_PATH, graphicURL);
 }
 
-/**
- * @brief MctEmbObjProperties::createGraphicURL transforms innerURL into grapicURL
- * @param innerURL The innerURL should looks like this: "Picture/"identifier
- * @return The grapicURL that looks like this: "nd.sun.star.GraphicObject:"identifier
- */
 QString MctEmbObjProperties::createGraphicURL(const QString &innerURL)
 {
     return convertURL(MctStaticData::GRAPHICOBJ_PATH, MctStaticData::GRAPHICOBJ, innerURL);

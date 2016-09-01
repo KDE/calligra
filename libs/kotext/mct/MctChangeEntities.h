@@ -34,6 +34,11 @@ class MctTableProperties;
 class ChangeEvent;
 using ChangeEventList = QList<ChangeEvent*>;
 
+/**
+ * Change entities are used for specify all possible change type.
+ * They are added to MctChange as an MctNode pointer.
+ */
+
 enum ChangeAction {
     NOCHANGE,       /// there is no change
     CHANGED,        /// something changed
@@ -42,6 +47,9 @@ enum ChangeAction {
 };
 using PropertyMap = QMap<int, QPair<QString, ChangeAction>>;
 
+
+
+/// Base class for Table related changes
 class MctTable : public virtual MctNode , public MctCell
 {
 public:
@@ -49,6 +57,7 @@ public:
     ~MctTable();
 };
 
+/// Base class for Paragraph related changes
 class MctParagraphBreak : public virtual MctNode
 {
 public:
@@ -77,6 +86,7 @@ public:
     ~MctDelParagraphBreakInTable();
 };
 
+/// Base class for String related changes
 class MctStringChange : public virtual MctNode
 {
 public:
@@ -100,28 +110,77 @@ class ChangeEvent
 {
 public:
     ChangeEvent(const QTextFormat &o, const QTextFormat &n);
-    PropertyMap * changes();    // getter
+
+    /**
+     * getter of old type id
+     *
+     * @return type of old text format
+     */
     int type();
+
+    /**
+     * compare old and new text format
+     *
+     * The different proprties will be inserted into m_changedProperties map.
+     * @param type format type selector @todo refactor to use enum class instead of int
+     */
     void calcDiff(int type);
 
+    /// getter
+    PropertyMap * changes();
+    /// getter
     QTextFormat oldFormat();
-    QTextFormat newFormat();
-
+    /// setter
     void setOldFormat(const QTextFormat &format);
+    /// getter
+    QTextFormat newFormat();
+    /// setter
     void setNewFormat(const QTextFormat &format);
 
     // static functions!
+    /**
+     * copy properties
+     *
+     * @param format1 output formatting props
+     * @param format2 input formatting props
+     */
     static void ensureProperties(QTextFormat &format1, const QTextFormat &format2);
+
+    /**
+     *
+     * @param current
+     * @param base
+     * @return
+     * @todo understand this function
+     */
     static QTextFormat getNewValuesForFormat(const QTextFormat& current, const QTextFormat &base);
+
+    /**
+     *
+     * @param current
+     * @param base
+     * @return
+     * @todo understand this function
+     */
     static QTextFormat getOldValuesForFormat(const QTextFormat &current, const QTextFormat &base);
+
+    /**
+     * toString method for debugging
+     * @param format text format
+     */
     static void printProperties(const QTextFormat &format);
 
 private:
-    QTextFormat m_oldFormat;
-    QTextFormat m_newFormat;
-    PropertyMap * m_changedProperties;
+    QTextFormat m_oldFormat;            ///< old text format
+    QTextFormat m_newFormat;            ///< new text format
+    PropertyMap * m_changedProperties;  ///< map of changed properties
 };
 
+/**
+ * similar to \ref ChangeEvent
+ *
+ * @todo refactor this, merge with ChangeEvent for example
+ */
 class MctStylePropertyChange : public virtual MctNode
 {
 public:
@@ -130,24 +189,28 @@ public:
 
     QTextFormat *getOldFormat() const;
     void setOldFormat(QTextFormat *value);
-
+    /// getter of paragraph related style changes
     ChangeEventList * paragraphPropChanges();
+    /// getter of text related style changes
     ChangeEventList * textPropChanges();
+    /// getter of list related style changes
     ChangeEventList * listPropChanges();
-    ChangeEventList * otherPropChanges();
-    // TODO: setters?
+    /// getter of other style changes
+    ChangeEventList * otherPropChanges();    
 
 private:
     // bool hasNonUnoChangeEvent();
 
+    /**
+     * sort the different change types into theire own container
+     * @param propChanges style changes list
+     */
     void sortPropertyChanges(ChangeEventList *propChanges);
 
-    ChangeEventList *m_textPropChanges;       // QTextCharFormat : QTextFormat !
-    ChangeEventList *m_paragraphPropChanges;  // QTextBlockFormat : QTextFormat !
-    ChangeEventList *m_listPropChanges;       // QTextListFormat : QTextFormat !
-    ChangeEventList *m_otherPropChanges;      // QTextFormat
-
-
+    ChangeEventList *m_textPropChanges;       ///< QTextCharFormat : QTextFormat !
+    ChangeEventList *m_paragraphPropChanges;  ///< QTextBlockFormat : QTextFormat !
+    ChangeEventList *m_listPropChanges;       ///< QTextListFormat : QTextFormat !
+    ChangeEventList *m_otherPropChanges;      ///< QTextFormat
 
     // list of complex uno services cant be constructed when graph is loaded from xml. (every item in the list contains dictionary with keys identical to ::com::sun::star::beans::PropertyChangeEvent)
     // QList< QMap<unsigned long int, PropertyChangeEvent*> > nonUnoPropertyChanges;
@@ -167,18 +230,22 @@ public:
     ~MctRemovedTextFrame();
 };
 
-// Általános szövegmódosítások ősosztálya
+/// Base of text object changes
 class MctChangedTexObjectBase : public virtual MctNode
 {
 public:
     MctChangedTexObjectBase(const QString &name, MctPropertyBase *objectProperties = NULL);
     virtual ~MctChangedTexObjectBase();
 
-    void setObjectName(const QString &name);
+    /// getter
     MctPropertyBase* objectProperties() const;
+    /// setter
+    void setObjectName(const QString &name);
+    /// setter
     void setObjectProperties(MctPropertyBase* objectProperties);
+
 protected:
-    MctPropertyBase *m_objectProperties;
+    MctPropertyBase *m_objectProperties; ///< property container
 };
 
 class MctAddedTextGraphicObject : public MctChangedTexObjectBase
@@ -223,6 +290,7 @@ public:
     ~MctRemovedEmbeddedObject();
 };
 
+/// Table related changes
 class MctAddedTextTable : public MctChangedTexObjectBase
 {
 public:    
@@ -247,7 +315,6 @@ class MctRemovedTextTable : public MctChangedTexObjectBase
 {
 public:
     MctRemovedTextTable(const QString &name, MctTableProperties* tableProps = NULL);
-    //MctRemovedTextTable(int row, int col, QTextTableFormat format);
     ~MctRemovedTextTable();
 };
 
@@ -255,7 +322,6 @@ class MctAddedTextTableInTable : public MctAddedTextTable , public MctTable
 {
 public:
     MctAddedTextTableInTable(const QString &name, MctTableProperties* tableProps = NULL, const QString &cellName = "", const QString &tableName = "", MctCell *cellInfo = NULL);
-    //MctAddedTextTableInTable(int row, int col, QTextTableFormat format, MctCell *cellInfo = NULL);
     ~MctAddedTextTableInTable();
 };
 

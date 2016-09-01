@@ -22,6 +22,9 @@
 
 #include "MctPropertyBase.h"
 
+/**
+ * Representation of a table cell
+ */
 class MctCell : public MctPropertyBase
 {
 public:
@@ -31,31 +34,61 @@ public:
     MctCell();
     ~MctCell();
 
-    MctCell * addCelPos(MctCell *cell); // Copy the given cells position into a new one, and return with it
+    /**
+     * merge cell with another
+     *
+     * Merge two cell positions and create new cell object at the position
+     * @param cell to merge
+     * @return new cell with extended position
+     */
+    MctCell * addCelPos(MctCell *cell);
+
+    /**
+     * convert the cell name string into interger positions
+     *
+     * @note example: "D2" -> col = 3*60^0 = 4, row = 2
+     * @todo remove this function
+     */
     void convertCellPos2CellName();
+
+
+    /**
+     * generate string position identifier as cellname from current position
+     *
+     * @note Pl: col = 4, row = 2 -> "D"+"2" = "D2"
+     * @todo remove this function if not used
+     */
     void convertCellName2CellPos();
 
+    /// getter
     QString cellName() const;
+    /// setter
     void setCellName(QString cell);
 
+    /// getter
     QString tableName() const;
+    /// setter
     void setTableName(const QString &name);
 
+    /// getter
     int row() const;
+    /// setter
     void setRow(int r);
 
+    /// getter
     int col() const;
+    /// setter
     void setCol(int c);
 
-    const static QString COLS;
+    const static QString COLS;  ///< cell indentifier string eg: A22 @note probably legacy code
     
 protected:
-    QString m_cellName;       // The name of the cell
-    QString m_tableName;      // The name of the anchor table
+    QString m_cellName; ///< name of the cell
+    QString m_tableName;///< name of the anchor table
 
 private:
-    int m_col;                // The column number of the cell
-    int m_row;                // The row number of the cell
+    int m_col;  ///< column number of the cell
+    int m_row;  ///< row number of the cell
 };
 
 #endif // MCTCELL_H

@@ -160,10 +160,6 @@ ChangeEventList *MctStylePropertyChange::otherPropChanges()
     return m_otherPropChanges;
 }
 
-/**
- * @brief MctStylePropertyChange::sortPropertyChanges Sort the different change types into theire own container
- * @param propChanges
- */
 void MctStylePropertyChange::sortPropertyChanges(ChangeEventList *propChanges)
 {
     for (auto it = propChanges->begin(); it != propChanges->end(); ++it) {

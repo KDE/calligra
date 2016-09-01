@@ -25,37 +25,32 @@
 
 class KoTextDocument;
 
-
+/**
+ * Base class of Undo and Redo classes
+ *
+ * This class is responsible for the connection with Calligra via containing the KoDocument pointer.
+ */
 class MctDoBase
 {
 public:
+    /// constructor
     MctDoBase();
     virtual ~MctDoBase();
 
-    QTextTable* getTable(MctChange *changeNode);
+    /**
+     * create textcursor from a change node and a position
+     *
+     * Wrapper function which calls static method to get cursor
+     * at the given position, in the current document (m_doc).
+     * @param change @todo remove this param
+     * @param pos where to set the new cursor
+     * @return new cursor
+     */
     QTextCursor *createcursor(MctChange *change, MctPosition *pos);
 
 protected:
 
-    KoTextDocument *m_doc;    //TODO
-
-private:
-
-#if 0
-    MctDoBase(XComponent *document, XController *controller, MctStaticData *staticvars);
-    ~MctDoBase();
-
-    XText * getTextInterface(MctChange * change);
-    XTextTable * getTableInterface(MctChange * change);
-    Cursor * getCursor(MctChange * change, MctPosition * position);
-
-private:
-    XComponent *document;
-    XController *controller;
-    XText *text;
-    MctStaticData *staticvars;
-#endif
-
+    KoTextDocument *m_doc;    ///< pointer access to the current document which is handled by Calligra
 };
 
 #endif // MCTDOBASE_H

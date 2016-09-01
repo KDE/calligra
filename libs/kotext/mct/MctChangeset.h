@@ -30,64 +30,96 @@
 class MctChange;
 class MctAuthor;
 
+/**
+ * Represent an entire revision
+ *
+ * A Changeset could consist of many individual changes,
+ * it has an author, parent revision(s) and a timestamp.
+ * This class often access Dom tree.
+ *
+ * @todo this class could be rename (eg. Revision would be proper)
+ */
 class KOTEXT_EXPORT MctChangeset : public MctNode
 {
 public:
-
+    /// constructor
     MctChangeset(const QDomElement &changeset, ulong parentId, MctAuthor* author, const QDateTime &date, const QString &comment, ulong m_id);
     MctChangeset(const QDomElement &changeset);
     MctChangeset();
 
+    /// copy constructor
     MctChangeset(const MctChangeset &other);
 
     ~MctChangeset();    
 
+    /// setter
     void setId(unsigned long id);
+    /// getter
     unsigned long id() const;
-
+    /// getter of parent revisions list
     QList<ulong>* parents() const;
+    /// append new parent revision id
     void addParentId(ulong pid);
+    /// clear parent revision list
     void clearParents();
+    /// getter @todo remove this obsolote function
     int parentId();
-
+    /// getter of child revisions list
     QList<ulong>* childs() const;
+    /// remove child revision
     void removeChild(ulong id);
+    /// add child revision
     void addChild(ulong id);
+    /// clear all child revision from list
     void clearChilds();
-    void removeChildId(ulong id);
-
+    /// getter
     MctAuthor* author() const;
+    /// setter
     void setAuthor(MctAuthor *author);
+    /// getter
     QString comment() const;
+    /// setter
     void setComment(const QString &comment);
+    /// getter
     QDateTime date() const;
+    /// setter
     void setDate(const QDateTime &date);
 
+    /**
+     * add new change node to the revision
+     * @param change change node representing the change entity.
+     */
     void addChange(MctChange * change);
+    /// getter of change list
     QList<MctChange*>* changes() const;
+    /// clear change list
     void clearChangeset();
 
+    /// print author and date as a string
     QString dateInString();
 
+    /// getter
     QDomElement changeset() const;
+    /// setter
     void setChangeset(const QDomElement &changeset);
-
-    void setCorrected(bool value);
+    /// getter
     bool isCorrected() const;
-
+    /// setter
+    void setCorrected(bool value);
+    /// debug toString method
     void printChangeset();
 
 private:
 
-    QDomElement m_changeset;
-    QDateTime m_date;
-    QString m_comment;
-    MctAuthor *m_author;
-    QList<ulong> *m_parents;
-    QList<ulong> *m_childs;
-    QList<MctChange*> *m_changelist;
+    QDomElement m_changeset;    ///< node of changeset in
+    QDateTime m_date;           ///< timestamp
+    QString m_comment;          ///< optional comment
+    MctAuthor *m_author;        ///< author of the changeset
+    QList<ulong> *m_parents;    ///< list of parent ids
+    QList<ulong> *m_childs;     ///< list of child ids
+    QList<MctChange*> *m_changelist;    ///< list of changes in the set
 
-    bool m_corrected;
+    bool m_corrected;   ///< are the positions corrected?
 
 };
 

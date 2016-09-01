@@ -27,48 +27,73 @@
 
 class MctCell;
 
+/**
+ * Position of a change
+ *
+ * A change position in MCT usually consists of four component.
+ * The starting and ending paragraphs are counted and so the character positions.
+ * Sometimes ending information is not give for example when Paragraph change is in action.
+ */
 class MctPosition
 {
 public:
+    /// constructor
     MctPosition(ulong startPar = 0, ulong starChar = 0, ulong endPar = 0, ulong endChar = 0, MctCell *startCellInf = NULL, MctCell *endCellInf = NULL);
     MctPosition(const MctPosition &position);
     ~MctPosition();
 
+    /// getter
     ulong startPar() const;
+    /// setter
     void setStartPar(ulong value);
-
+    /// getter
     ulong endPar() const;
+    /// setter
     void setEndPar(ulong value);
-
+    /// getter
     ulong startChar() const;
+    /// setter
     void setStartChar(ulong value);
-
+    /// getter
     ulong endChar() const;
+    /// setter
     void setEndChar(ulong value);
-
+    /// getter
     MctCell* startCellInfo() const;
+    /// setter
     void setStartCellInfo(MctCell* info);
-
+    /// getter
     MctCell* endCellInfoEnd() const;
+    /// setter
     void setEndCellInfo(MctCell* info);
-
+    /// getter
     MctPosition * anchoredPos() const;
+    /// setter
     void setAnchored(MctPosition *parentPos);
 
+    /**
+     * correct table cell position calculation
+     *
+     * Calligra adds a hidden cursor position before tables,
+     * this function correct the position regarding to the hidden point.
+     * @param cursor which is point inside the table
+     * @return absolute cursor position
+     */
     int tableCellPosition(QTextCursor *cursor) const;
 
+    /// simple debug function
     QString toString() const;
 
 private:
-    ulong m_startPar;     // The start number of the paragraph where the change starts.
-    ulong m_startChar;    // The start number of the character in the paragraph where the change starts.
-    ulong m_endPar;       // The end number of the paragraph where the change starts.
-    ulong m_endChar;      // The end number of the character in the paragraph where the change starts.
+    ulong m_startPar;   ///< start number of the paragraph where the change starts.
+    ulong m_startChar;  ///< start number of the character in the paragraph where the change starts.
+    ulong m_endPar;     ///< end number of the paragraph where the change starts.
+    ulong m_endChar;    ///< end number of the character in the paragraph where the change starts.
 
-    MctCell *m_startCellInf;   // Cell class conatining starting cell name and table name
-    MctCell *m_endCellInf;     // Cell class conatining ending cell name and table name
+    MctCell *m_startCellInf;    ///< cell which contains starting cell name and table name
+    MctCell *m_endCellInf;      ///< cell which contains ending cell name and table name
 
-    MctPosition *m_anchoredPos;// Position class of the object where this position is anchored
+    MctPosition *m_anchoredPos; ///< position of the object where this position is anchored
 
 };
 

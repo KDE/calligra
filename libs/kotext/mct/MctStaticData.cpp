@@ -473,27 +473,16 @@ template <typename T> void MctStaticData::reverseList2(QList<T> *list)
     *list = result;
 }
 
-/// functions.py
-//-------------------------------------------------------------------
-/**
- * @brief This creates the temporary file path of the MCT tracket document
- * @param url The original URL of the document
- * @return Returns with the temporary file path.
- */
 QString MctStaticData::tempMctFile(QString url)
 {
     QString outFile = url + "_tmp.odt";
     return outFile;
 }
 
-/**
- * @brief This zips embedded files into the Odt when graph is exported.
- * @param delemet Dictionary of embedded objects stored in staticvars
- */
 void MctStaticData::includeEmbeddedFiles(QMap<QString, MctEmbObjProperties *> delemet)
 {
     foreach (MctEmbObjProperties* value, delemet.values()) {
-        if(value->isBackedup()) {
+        if(value->isBackedUp()) {
             if( ! value->wasInserted()) {
                 value->restoreBackupFile();
             }
@@ -501,32 +490,23 @@ void MctStaticData::includeEmbeddedFiles(QMap<QString, MctEmbObjProperties *> de
     }
 }
 
-/**
- * @brief This backs up embedded files from the Odt when graph is exported.
- * @param delemet Dictionary of embedded objects stored in staticvars
- */
 void MctStaticData::backupEmbeddedFiles(QMap<QString, MctEmbObjProperties *> delemet)
 {
     foreach (MctEmbObjProperties* value, delemet.values()) {
-        if( ! value->isBackedup()) {
+        if( ! value->isBackedUp()) {
             value->backupFileFromOdt(value->innerUrl(), value->odtURL());
         }
     }
 }
 
-/**
- * @brief his deletes embedded files corresponding to container delement.
- * @param delemet Dictionary of embedded objects stored in staticvars
- */
 void MctStaticData::deleteEmbeddedFiles(QMap<QString, MctEmbObjProperties *> delemet)
 {
     foreach (MctEmbObjProperties* value, delemet.values()) {
-        if( value->isBackedup()) {
+        if( value->isBackedUp()) {
             value->deleteBackupFile();
         }
     }
 }
-
 
 void MctStaticData::exportGraphs()
 {
@@ -559,49 +539,6 @@ void MctStaticData::exportGraphs()
     //backupEmbeddedFiles(dTextEmbeddedObjects);
 }
 
-void MctStaticData::attachListeners()
-{
-    // TODO
-}
-
-void MctStaticData::fillUpWithSuppliers()
-{
-    // TODO
-}
-
-void MctStaticData::fillUpWithSupplier()
-{
-    // TODO
-}
-
-void MctStaticData::fillUpWithSupplier2()
-{
-    // TODO
-}
-
-/**
- * @brief MctStaticData::stopSupport turns off MCT support
- * @param URL
- */
-void MctStaticData::stopSupport(QString URL)
-{
-    if (URL.isEmpty()) {
-        qDebug() << "The given URL is empty!";
-    } else {
-        // TODO
-    }
-}
-
-//---------------------------------------------------------------------
-
-/// functions2.py
-//---------------------------------------------------------------------
-
-/**
- * @brief This function gets data from position tag and arrange it into a list
- * @param postag The position tag
- * @return Returns with the list of data extracted from position tag
- */
 QList<QString> MctStaticData::getDataFromPosTag(const QString &postag)
 {
     QList<QString> data;
@@ -619,12 +556,6 @@ QList<QString> MctStaticData::getDataFromPosTag(const QString &postag)
     return data;
 }
 
-/**
- * @brief This function make position class from string extracted from the XML node.
- * @param change The XML node.
- * @param moved True if moved position is wanted, False otherwise
- * @return Returns with the created position class.
- */
 MctPosition* MctStaticData::getPosFromElementreeNode(const QDomElement &change, bool moved)
 {
     MctPosition *pos = getPosFromElementreeNodeNew(change, moved);
@@ -636,13 +567,6 @@ MctPosition* MctStaticData::getPosFromElementreeNode(const QDomElement &change, 
     return pos;
 }
 
-/**
- * @brief This function make position class from string extracted from the XML node. --- new
- * The index start from 1 in the xml, we need to compensate that.
- * @param change The XML node.
- * @param moved True if moved position is wanted, False otherwise
- * @return Returns with the created position class.
- */
 MctPosition* MctStaticData::getPosFromElementreeNodeNew(const QDomElement &change, bool moved)
 {
     MctPosition * pos = nullptr;
@@ -780,12 +704,7 @@ MctPosition* MctStaticData::getPosFromElementreeNodeNew(const QDomElement &chang
 
 }
 
-/**
- * @brief This function make position class from string extracted from the XML node. --- Obsolete
- * @param change The XML node.
- * @param moved True if moved position is wanted, False otherwise
- * @return Returns with the created position class.
- */
+
 MctPosition* MctStaticData::getPosFromElementreeNodeOld(const QDomElement &change, bool moved)
 {
     //TODO
@@ -793,14 +712,6 @@ MctPosition* MctStaticData::getPosFromElementreeNodeOld(const QDomElement &chang
     return NULL;
 }
 
-/**
- * @brief This recursively adds position attribute to the node of the graph.
- * The index start from 0 in Calligra, and start from 1 in the xml.
- * @param change The change node in the XML
- * @param pos The position
- * @param moved If Ture, moved position is affected.
- * @param clearfirst if True, position attributes in the XML node are cleared
- */
 void MctStaticData::addPos2change(QDomElement *change, MctPosition *pos, bool moved, bool clearfirst)
 {
     QString startTag, endTag;
@@ -848,11 +759,6 @@ void MctStaticData::addPos2change(QDomElement *change, MctPosition *pos, bool mo
         addPos2change(change, pos->anchoredPos(), moved, false);
 }
 
-/**
- * @brief MctStaticData::isTableChange Decide, whether the chage node represents table change or not
- * @param changeNode
- * @return Returns with True if the changenode is related to table change, False otherwise
- */
 bool MctStaticData::isTableChange(const MctChange *changeNode)
 {
     MctChangeTypes changeType = changeNode->changeType();
@@ -893,16 +799,6 @@ QTextCursor * MctStaticData::CreateCursorFromRecursivePos(KoTextDocument *doc, M
     return cursor;
 }
 
-//---------------------------------------------------------------------
-
-/// functions3.py
-//---------------------------------------------------------------------
-
-/**
- * @brief MctStaticData::findNewLines Gather indexes of newline characters in the parameter string
- * @param string
- * @return list of indexes
- */
 QList<int> * MctStaticData::findNewLines(QString string)
 {
     QList<int> *newlineIndexList = new QList<int>();
@@ -923,12 +819,6 @@ QList<int> * MctStaticData::findNewLines(QString string)
     return newlineIndexList;
 }
 
-/**
- * @brief This creates changeNode for redo operation
- * @param changeNode The undo changeNode.
- * @param doc
- * @return
- */
 MctChange* MctStaticData::createRedoChangeNode(KoTextDocument *doc, MctChange *changeNode)
 {
     MctPosition * pos = changeNode->position();
@@ -1031,14 +921,7 @@ FIXME_PropertyDictionary *MctStaticData::getNoneDefaultProps(MctEmbObjProperties
     return NULL;
 }
 
-//---------------------------------------------------------------------
 
-/**
- * @brief MctStaticData::recursiveDirectoryCopy Copies the archive directory recursievly into another Zip file.
- * @param dir KArchiveDirectory that will be copied
- * @param path Path of the input dir. Should not end neither with the name of dir nor path separator (eg. "/").
- * @param destinationZip KZip object that must be writeable!
- */
 void MctStaticData::recursiveDirectoryCopy(const KArchiveDirectory *dir, const QString &path, KZip *destinationZip)
 {
     foreach (const QString &it, dir->entries()) {
@@ -1067,11 +950,6 @@ void MctStaticData::textPropMapTester(int key)
     }
 }
 
-/**
- * @brief MctStaticData::hasMctSupport check wether the given odt file has undo/redo.xml in the package
- * @param odt The odt file to check
- * @return Returns true if the odt has mct support, false otherwise
- */
 bool MctStaticData::hasMctSupport(QString odt)
 {
     KZip *zip = new KZip(odt);
@@ -1125,12 +1003,6 @@ KoDocument* MctStaticData::getKoDocument()
     return kodoc;
 }
 
-/**
- * @brief MctStaticData::getFrameIndexes creates a map to the frames of the document
- * which contains from which block how much position correction is needed
- * @param koTextDoc
- * @return
- */
 QMap<ulong, ulong> * MctStaticData::getFrameIndexes(const KoTextDocument *koTextDoc)
 {
     QMap<ulong, ulong> *indexes = new QMap<ulong,ulong>();

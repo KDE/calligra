@@ -22,24 +22,34 @@
 
 #include "MctNode.h"
 
+/**
+ * Author class represents the author of a change
+ */
 class MctAuthor : public MctNode
 {
 public:
+    /// constructor
     MctAuthor(QString m_userName = "", QString m_forename = "", QString m_surname = "");
     ~MctAuthor();
 
+    /// getter
     QString name() const;
+    /// setter
     void setName(const QString &name);
+    /// getter
     QString forename() const;
+    /// setter
     void setForename(const QString &name);
+    /// getter
     QString surname() const;
+    /// setter
     void setSurname(const QString &name);
 
 private:    
 
-    QString m_userName;
-    QString m_forename;
-    QString m_surname;
+    QString m_userName; ///< username from input field or system
+    QString m_forename; ///< forename
+    QString m_surname;  ///< surname
 
 };
 

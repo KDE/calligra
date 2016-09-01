@@ -76,11 +76,6 @@ MctCell::~MctCell()
 
 }
 
-/**
- * @brief MctCell::addCelPos Add two cell positions and create new cell object at the position
- * @param cell The second cell
- * @return The new cell
- */
 MctCell *MctCell::addCelPos(MctCell *cell)
 {
     if (m_tableName != cell->tableName())
@@ -101,10 +96,7 @@ MctCell *MctCell::addCelPos(MctCell *cell)
     return new MctCell(newRow, newCol, m_tableName);
 }
 
-/**
- * @brief MctCell::convertCellName2CellPos Convert the cell name string into interger positions
- * @note Pl: "D2" -> col = 3*60^0 = 4, row = 2
- */
+
 void MctCell::convertCellName2CellPos()
 {
 /// FIXME: do we use this function in calligra?
@@ -143,10 +135,6 @@ void MctCell::convertCellName2CellPos()
 //    this->col = col;
 }
 
-/**
- * @brief MctCell::convertCellPos2CellName Generate string position identifier as cellname from current position
- * @note Pl: col = 4, row = 2 -> "D"+"2" = "D2"
- */
 void MctCell::convertCellPos2CellName()
 {
 /// FIXME: this could be also legacy function

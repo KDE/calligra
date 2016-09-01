@@ -38,11 +38,6 @@ MctRedoGraphXMLfilter::~MctRedoGraphXMLfilter()
 
 }
 
-/**
- * @brief This adds new change to the changeset change node from the loaded XML tree to the changeset
- * @param change The change node in the XML
- * @param changeset The parent changeset node
- */
 void MctRedoGraphXMLfilter::addChangeFromXML(const QDomNode &node, MctChangeset* changeset)
 {
     QDomElement change = node.toElement();
@@ -142,11 +137,6 @@ void MctRedoGraphXMLfilter::particularStyleChangeFromXML(const QDomNode &node, C
     propchanges->append(changeEvent);
 }
 
-/**
- * @brief This adds addedTextFrame/addedTextFrameInTable change to the changeset node from the loaded XML tree.
- * @param change The change node in the XML
- * @return Returns with the created change node.
- */
 MctChange* MctRedoGraphXMLfilter::addTextFrameFromXML(const QDomElement &change)
 {
     QString name = change.attribute("name");
@@ -158,11 +148,6 @@ MctChange* MctRedoGraphXMLfilter::addTextFrameFromXML(const QDomElement &change)
     return changeNode;
 }
 
-/**
- * @brief This adds addedTextGraphicObject/addedTextGraphicObjectInTable change to the changeset node from the loaded XML tree.
- * @param change The change node in the XML
- * @return Returns with the created change node.
- */
 MctChange* MctRedoGraphXMLfilter::addTextGraphicObjectFromXML(const QDomElement &change)
 {
     QString name = change.attribute("name");
@@ -202,11 +187,6 @@ MctChange* MctRedoGraphXMLfilter::addTextGraphicObjectFromXML(const QDomElement 
     return changeNode;
 }
 
-/**
- * @brief This adds removedTextGraphicObject/removedTextGraphicObjectInTable change to the changeset node from the loaded XML tree.
- * @param change The change node in the XML
- * @return Returns with the created change node.
- */
 MctChange* MctRedoGraphXMLfilter::removeTextGraphicObjectFromXML(const QDomElement &change)
 {
     QString name = change.attribute("name");
@@ -220,11 +200,6 @@ MctChange* MctRedoGraphXMLfilter::removeTextGraphicObjectFromXML(const QDomEleme
     return changeNode;
 }
 
-/**
- * @brief This adds addedEmbeddedObject/addedEmbeddedObjectInTable change to the changeset node from the loaded XML tree.
- * @param change The change node in the XML
- * @return Returns with the created change node.
- */
 MctChange* MctRedoGraphXMLfilter::addEmbeddedObjectFromXML(const QDomElement &change)
 {
     QString name = change.attribute("name");
@@ -236,11 +211,6 @@ MctChange* MctRedoGraphXMLfilter::addEmbeddedObjectFromXML(const QDomElement &ch
     return changeNode;
 }
 
-/**
- * @brief This adds addedRowInTable/removedRowInTable change to the changeset node from the loaded XML tree.
- * @param change The change node in the XML
- * @return Returns with the created change node.
- */
 MctChange* MctRedoGraphXMLfilter::rowChangeFromXML(const QDomElement &change)
 {
     //determine whether the string change was in table
@@ -265,11 +235,6 @@ MctChange* MctRedoGraphXMLfilter::rowChangeFromXML(const QDomElement &change)
     return changeNode;
 }
 
-/**
- * @brief This adds addedRowInTable/removedRowInTable change to the changeset node from the loaded XML tree.
- * @param change The change node in the XML
- * @return Returns with the created change node.
- */
 MctChange* MctRedoGraphXMLfilter::colChangeFromXML(const QDomElement &change)
 {
     //determine whether the string change was in table

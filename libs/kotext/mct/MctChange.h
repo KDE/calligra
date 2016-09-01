@@ -26,38 +26,62 @@
 #include "KoXmlReader.h"
 
 class MctPosition;
-
+/**
+ * Practial node in the abstract change-tracking graph
+ *
+ * The MctChange represents an actual change in the document history.
+ * The class connect the position, the change type, the id and the related Dom element.
+ */
 class MctChange : public MctNode
 {
 public:
-    MctChange(MctPosition *m_position, MctChangeTypes m_changeType, MctNode *m_changeEntity,  QDomElement m_change, MctPosition *movedpos = NULL);
+    /// constructor
+    MctChange(MctPosition *m_position, MctChangeTypes m_changeType, MctNode *m_changeEntity, QDomElement m_change, MctPosition *movedpos = NULL);
     MctChange(MctPosition *m_position, MctChangeTypes m_changeType, MctNode *m_changeEntity, MctPosition *movedpos = NULL);
     ~MctChange();
 
+    /**
+     * setter of the corresponding XML node
+     *
+     * @param change XML node representing the change event.
+     * @note position and movedPosition will be set to nullptr
+     */
     void addElementTreeNode(const QDomElement &m_change);
-    //int nodeId(); //unused function
 
+    /// getter
     MctChangeTypes changeType() const;
+    /// setter
     void setChangeType(MctChangeTypes m_changeType);
 
+    /**
+     * getter for change position
+     *
+     * A copy of the stored position pointer is returned, if member was set.
+     * The function will return nullptr if the related DOM object is undefined,
+     * otherwise the XML will be read and retunr with a new position object.
+     */
     MctPosition * position() const;
+    /// setter for change position
     void setPosition(MctPosition *m_position);
 
-    MctPosition * movedPosition() const;
+    /// setter
     void setMovedPosition(MctPosition *m_position);
-
+    /// getter
+    MctPosition * movedPosition() const;
+    /// getter
     MctNode * changeEntity();
-
-    QDomElement changeNode();
+    /// setter
     void setChangeNode(const QDomElement &element);
+    /// getter
+    QDomElement changeNode();
 
 private:    
 
-    MctPosition *m_position;         // Position of the change
-    MctChangeTypes m_changeType;     // ChangeType
-    MctNode *m_changeEntity;         // Change entity
-    QDomElement m_change;            // The change node in the ElementTree
-    MctPosition *m_movedPosition;    // Position of the change
+    MctPosition *m_position;        ///< position of the change
+    MctChangeTypes m_changeType;    ///< type of the change
+    MctNode *m_changeEntity;        ///< change entity, change id
+    QDomElement m_change;           ///< change node in the XML
+    MctPosition *m_movedPosition;   ///< position of the change
 
 };
 

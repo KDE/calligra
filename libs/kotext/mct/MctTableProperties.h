@@ -22,22 +22,28 @@
 
 #include "MctPropertyBase.h"
 
-// Text table properties class
+/**
+ * Text table properties
+ */
 class MctTableProperties : public MctPropertyBase
 {
 public:
+    /// constructor
     MctTableProperties(const QString &name, int rows = -1, int cols = -1);
     ~MctTableProperties();
     
+    /// getter
     int rows() const;
+    /// setter
     void setRows(int value);
-    
+    /// getter
     int cols() const;
+    /// setter
     void setCols(int value);
     
 private:
-    int m_rows;
-    int m_cols;
+    int m_rows; ///< row count
+    int m_cols; ///< col count
     
 };
 

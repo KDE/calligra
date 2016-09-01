@@ -20,39 +20,57 @@
 #ifndef MCTPROPERTYBASE_H
 #define MCTPROPERTYBASE_H
 
-//#include <QString>;
-//#include <QMap>;
 #include <QVariant>
 
 // The properties are stored in a different way in calligra (not in string)
 using PropertyDictionary = QVariantMap;
 
-// TODO: we can not use UNO's Xinterface, the props need to loaded directly from Calligra
+/**
+ * Legacy base class for all kind of properties
+ *
+ * The legacy version of the MCT plugin was developed for UNO's Xinterface which handles
+ * properties differently than Calligra does.
+ *
+ * @todo we can not use UNO's Xinterface, the props need to loaded directly from Calligra
+ * @todo refactoring is highly suggested here
+ */
 class MctPropertyBase
 {
 public:
+    /// constructor
     MctPropertyBase(const QString &name = "undefined");
     virtual ~MctPropertyBase();
 
+    /// getter
     QString propertyName() const;
+    /// setter
     void setPropertyName(const QString &name);
+    /// getter
     PropertyDictionary * props() const;
+    /// setter
     void setProps(PropertyDictionary* props);
+    /// getter
     PropertyDictionary * props2Export() const;
+    /// setter
     void setProps2Export(PropertyDictionary* props);
+    /// getter
     QString innerUrl()const ;
+    /// setter
     void setInnerUrl(const QString &url);
 
 protected:
 #if 0
     void fillUpProperties(Xinterface *interface);   // This fills up properties through the Xinterface
 #endif
+    /**
+     * load properties into formatting properties dictionary
+     */
     virtual void fillUpProperties();
 
-    QString m_propName;                      // The name of the frame object
-    PropertyDictionary *m_props;         // Properties of the texttable object
-    PropertyDictionary *m_props2export;  // Properties to be exported into the graph
-    QString m_innerURL;           // inside URL of the backed up file
+    QString m_propName;                 ///<  name of the frame object
+    PropertyDictionary *m_props;        ///< properties of the texttable object
+    PropertyDictionary *m_props2export; ///< properties to be exported into the graph
+    QString m_innerURL;                 ///< inside URL of the backed up file
 };
 
 #endif // MCTPROPERTYBASE_H

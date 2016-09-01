@@ -51,10 +51,14 @@ enum MctChangeTypes : unsigned int;
 
 using XMLns = QString;
 
+/**
+ * Contains all static const global variable and function
+ */
 class MctStaticData
 {
 public:    
 
+    /// String constants
     static const QString EXPORTED_BY_SYSTEM;
     static const ulong UNDEFINED;
 
@@ -85,11 +89,13 @@ public:
 
     static const QChar REDOCHAR;
 
+    /// XML namespaces
     static const XMLns XMLNS;
     static const XMLns NS_DC;
     static const XMLns NS_C;
     static const XMLns NS_OFFICE;
 
+    /// XML string constants (tags, attribute values, etc)
     static const QString VERSION;
     static const QString STARTINGSTRING;
     static const QString AUTHOR;
@@ -110,7 +116,6 @@ public:
     static const QString ROTATION;
     static const QString PARENT;
 
-    // xml string constants (tags, attribute values, etc)
     static const QString ADDED;     // undo uses "del" here (!)
     static const QString REMOVED;   // undo uses "add" here (!)
     static const QString MOVED;
@@ -132,6 +137,7 @@ public:
 
     static int currentRevision;    
 
+    /// property string and values
     static const QSet<QString> TEXTGRAPHICOBJECTS_INTPROPS;
     static const QSet<QString> TEXTGRAPHICOBJECTS_STRUCTPROPS;
     static const QSet<QString> TEXTGRAPHICOBJECTS_FLOATPROPS;
@@ -155,12 +161,31 @@ public:
     static const QMap<int, QString> TEXT_KO_LIST_PROPS_AS_STRING;
     static const QMap<int, QString> initTEXT_KO_LIST_PROPS_AS_STRING();
 
+    /**
+     * convert text property to integer
+     *
+     * @param propertyname name of the property (eg. from XML)
+     * @return corresponding interger identifier
+     */
     static int getTextPropAsInt(QString propertyname);
+
+    /**
+     * convert property type and id key into property name
+     *
+     * @param key property identifier
+     * @param type property type id (text, list, etc) @todo enum class
+     * @return property name as string
+     */
     static QString getTextPropetyString(int key, int type);
 
-    static const QMap<MctChangeTypes, QString> CHANGE_AS_STRING;
+    static const QMap<MctChangeTypes, QString> CHANGE_AS_STRING;    ///< \ref ChangeEntities classes as string
     static const QMap<MctChangeTypes, QString> initCHANGE_AS_STRING();
 
+    /**
+     * Text formatting property types
+     *
+     * @todo should make to enum class and use it correctly @ref MctChangeEntities
+     */
     enum PropertyType{
         CharacterProperty,
         ParagraphProperty,
@@ -199,25 +224,90 @@ public:
     template <typename T> void reverseList2(QList<T> *list);
 
     // functions.py
+    /**
+     * create the temporary file path of the MCT tracket document
+     *
+     * @param url original URL of the document
+     * @return the temporary file path
+     */
     QString tempMctFile(QString url);
+
+    /**
+     * zips embedded files into the Odt when graph is exported
+     *
+     * @param delemet dictionary of embedded objects stored in staticvars
+     */
     void includeEmbeddedFiles(QMap<QString, MctEmbObjProperties*> delemet);
+
+    /**
+     * backsup embedded files from the Odt when graph is exported
+     * @param delemet dictionary of embedded objects stored in staticvars
+     */
     void backupEmbeddedFiles(QMap<QString, MctEmbObjProperties*> delemet);
+
+    /**
+     * deletes embedded files corresponding to container delement
+     * @param delemet dictionary of embedded objects stored in staticvars
+     */
     void deleteEmbeddedFiles(QMap<QString, MctEmbObjProperties*> delemet);
+
+    /// export undo and redo graphs
     void exportGraphs();
-    //determineType(URL, Context)
-    //getTreeNodes(QList<DisplayValue*> display_values, TreeModel treeModel);
-    void attachListeners(/*dialogStatvarsInstance*/);
-    void fillUpWithSuppliers(/*doc, staticvars*/);
-    void fillUpWithSupplier(/*container, delement, OdtURL*/);
-    void fillUpWithSupplier2(/*container, delement*/);
-    void stopSupport(QString url);
 
     // function2.py
+    /**
+     * get data from position tag and arrange it into a list
+     * @param postag position tag
+     * @return the list of data extracted from position tag
+     */
     QList<QString> getDataFromPosTag(const QString &postag);
+
+    /**
+     * create position class from string extracted from the XML node
+     * @param change XML node.
+     * @param moved true if moved position is wanted, False otherwise
+     * @return created position class
+     */
     MctPosition * getPosFromElementreeNode(const QDomElement &change, bool moved=false);
+
+    /**
+     * create position class from string extracted from the XML node. --- new
+     *
+     * The index start from 1 in the xml, we need to fix that.
+     * @param change the XML node.
+     * @param moved true if moved position is wanted, False otherwise
+     * @return created position class.
+     */
     MctPosition * getPosFromElementreeNodeNew(const QDomElement &change, bool moved=false);
+
+    /**
+     * create position class from string extracted from the XML node. --- Obsolete
+     *
+     * @param change The XML node.
+     * @param moved True if moved position is wanted, False otherwise
+     * @return Returns with the created position class.
+     *
+     * @todo if obsolete why not removed?
+     */
     MctPosition * getPosFromElementreeNodeOld(const QDomElement &change, bool moved=false);
+
+    /**
+     * recursively add position attribute to the node of the graph.
+     *
+     * The index start from 0 in Calligra, and start from 1 in the xml.
+     * @param change change node in the XML
+     * @param pos position
+     * @param moved if true, moved position is affected.
+     * @param clearfirst if true, position attributes in the XML node are cleared
+     */
     void addPos2change(QDomElement *change, MctPosition *pos, bool moved=false, bool clearfirst=true);
+
+    /**
+     * decide, whether the chage node represents table change or not
+     *
+     * @param changeNode
+     * @return Returns with True if the changenode is related to table change, False otherwise
+     */
     bool isTableChange(const MctChange *changeNode);
 
     FIXME_TextInterface * getTextInterface(FIXME_TextInterface *parent, MctPosition *position);
@@ -225,44 +315,107 @@ public:
     QTextCursor * CreateCursorFromPos( FIXME_TextInterface *xtext_interface, MctPosition *position);
 
     // function3.py
+    /**
+     * gather indexes of newline characters in the parameter string
+     *
+     * @param string
+     * @return list of indexes
+     * @todo unused method
+     */
     QList<int> *findNewLines(QString string);
+
+    /**
+     * creates change node for redo operation
+     *
+     * @param changeNode The undo changeNode.
+     * @param doc
+     * @return
+     */
     MctChange * createRedoChangeNode(KoTextDocument *doc, MctChange *changeNode);
+
+    /// @todo unused
     void insertTextGraphicObjects(MctChange *changeNode, FIXME_Doc * doc/*,staticvars */,bool withprops=true, FIXME_TextInterface *xtext_interface=NULL);
+    /// @todo unused
     void instertTextTable(MctChange *changeNode/*,staticvars */, bool withprops=true, FIXME_TextInterface *xtext_interface=NULL);
+    /// @todo unused
     FIXME_PropertyDictionary * getNoneDefaultProps(MctEmbObjProperties *props);
 
     // own functions
+    /**
+     * recursive copy of the given directory
+     *
+     * @param dir directory to copy
+     * @param path destination
+     * @param destinationZip output which contains the copied content
+     */
     static void recursiveDirectoryCopy(const KArchiveDirectory *dir, const QString &path, KZip *destinationZip);
+
+    /**
+     * check whether the property type is supported or not
+     *
+     * @param key property type id @todo use enum class instead
+     */
     static void textPropMapTester(int key);
+
+    /**
+     * check wether the given odt file has undo/redo.xml in the package
+     * @param odt file to check
+     * @return true if the odt has mct support, false otherwise
+     * @todo unused function
+     */
     static bool hasMctSupport(QString odt);
 
+    /// getter
     MctUndoGraph* getUndoGraph();
+    /// setter
     void setUndoGraph(MctUndoGraph* graph);
+    /// getter
     MctRedoGraph* getRedoGraph();
+    /// setter
     void setRedoGraph(MctRedoGraph* graph);
-
+    /// getter
     QString getFileURL();
+    /// setter
     void setFileURL(const QString &url);
-
+    /// getter
     QList<MctChange*>* getChanges();
+    /// setter
     void setChanges(QList<MctChange*> *change);
+    /// clear the list of changes
     void clearChanges();
-
-    void setKoDocument(KoDocument* doc);
+    /// getter
     KoDocument* getKoDocument();
+    /// setter
+    void setKoDocument(KoDocument* doc);
 
+    /**
+     * create a map to the frames of the document
+     *
+     * The created map contains from which block how much position correction is needed
+     * @param koTextDoc document in action
+     * @return map of frame indexes
+     */
     QMap<ulong, ulong> * getFrameIndexes(const KoTextDocument *koTextDoc);    
 
+    /// getter
     bool getMctState() const;
+    /// setter
     void setMctState(bool state);
-
+    /// getter @todo unused
     QString getAddedShapeType();
     void setAddedShapeType(const QString &shapeType);
 
-    // xml
+    /**
+     * extends XML attribute with namespace prefix
+     *
+     * @param attribute xml attribute
+     * @param ns namespace prefix
+     * @return "ns:attribute"
+     */
     static QString attributeNS(const QString &attribute, const XMLns &ns);
 
 private:
+    /// constructor
     MctStaticData();
 
     MctStaticData(const MctStaticData&);
@@ -270,15 +423,15 @@ private:
 
     static MctStaticData* m_Instance;
 
-    KoDocument *kodoc;
+    KoDocument *kodoc;              ///< kde document handler class
 
-    QList<MctChange*> * changes;
+    QList<MctChange*> * changes;    ///< list of changes
 
-    MctUndoGraph * undograph;
-    MctRedoGraph * redograph;
-    QString fileURL;
-    bool mctState;
-    QString addedShapeType;
+    MctUndoGraph * undograph;       ///< undo graph
+    MctRedoGraph * redograph;       ///< redo graph
+    QString fileURL;                ///< path to document in action
+    bool mctState;                  ///< MCT status indicator
+    QString addedShapeType;         ///< ?
 };
 
 #endif // MCTSTATICDATA_H

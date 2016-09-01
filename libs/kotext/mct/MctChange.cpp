@@ -53,48 +53,27 @@ MctChange::~MctChange()
     }
 }
 
-/**
- * @brief This stores XML node corresponding to the change node in change attribute.
- * @param change The XML node representing the change event.
- */
 void MctChange::addElementTreeNode(const QDomElement &change)
 {
     this->m_change = change;
-    this->m_position = NULL;
-    this->m_movedPosition = NULL;
+    this->m_position = nullptr;
+    this->m_movedPosition = nullptr;
 }
 
-/**
- * @brief This gets the Id number of the change node.
- * @return Returns with the Id number.
- */
-//int MctChange::nodeId()
-//{
-//    return m_change.attribute("id").toInt();
-//}
-
-/**
- * @brief This gets the position of the change node.
- * @return Returns with position of the change.
- */
 MctPosition * MctChange::position() const
 {
     if (this->m_position) {
         return new MctPosition(*this->m_position); // duplicate
     } else if (this->m_change.isNull()) {
-        return NULL;
+        return nullptr;
     } else {
         return MctStaticData::instance()->getPosFromElementreeNode(this->m_change);
     }
 }
 
-/**
- * @brief This sets the position of the change node.
- * @param position The position to set
- */
 void MctChange::setPosition(MctPosition *position)
 {
-    if (position == NULL) {
+    if (position == nullptr) {
         return;
     } else if (this->m_change.isNull()) {
         this->m_position = new MctPosition(*position); // duplicate
@@ -103,10 +82,6 @@ void MctChange::setPosition(MctPosition *position)
     }
 }
 
-/**
- * @brief This gets the moved position of the change node.
- * @return Returns with moved position of the change.
- */
 MctPosition * MctChange::movedPosition() const
 {
     if (this->m_changeType != MctChangeTypes::MovedString)
@@ -118,10 +93,6 @@ MctPosition * MctChange::movedPosition() const
 
 }
 
-/**
- * @brief This sets the moved position of the change node.
- * @param position The position to set
- */
 void MctChange::setMovedPosition(MctPosition *position)
 {
     if (position == NULL)
@@ -132,47 +103,27 @@ void MctChange::setMovedPosition(MctPosition *position)
         MctStaticData::instance()->addPos2change( &m_change, position, true );
 }
 
-/**
- * @brief This sets the change type of the change node.
- * @param changeType
- */
 void MctChange::setChangeType(MctChangeTypes changeType)
 {
     this->m_changeType = changeType;
 }
 
-/**
- * @brief This gets the change type of the change node.
- * @return Returns with the change type.
- */
 MctChangeTypes MctChange::changeType() const
 {
     return this->m_changeType;
 }
 
-/**
- * @brief This gets the change entity of the change node.
- * @return Returns with the change entity.
- */
 MctNode * MctChange::changeEntity()
 {
     return this->m_changeEntity;
 }
 
-/**
- * @brief This gets the xml change node.
- * @return Returns with the change node.
- */
 QDomElement MctChange::changeNode()
 {
     return m_change;
 }
 
-/**
- * @brief This sets the xml change node.
- * @param change The xml node to set
- */
 void MctChange::setChangeNode(const QDomElement &element)
 {
-    this->m_change = element;
+    addElementTreeNode(element);
 }

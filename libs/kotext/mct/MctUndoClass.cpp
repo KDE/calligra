@@ -138,12 +138,6 @@ MctChange* MctUndoClass::undoChange(MctChange *changeNode)
     return redoChangeNode;
 }
 
-
-/**
-  * @brief This undoes an AddedString change node
-  * @param changeNode The change node to undone
-  * @return Returns with the cretaed redochangeNode
-  */
  MctChange * MctUndoClass::undoAddedString(MctChange * changeNode)
  {
      MctPosition *pos = changeNode->position();
@@ -603,24 +597,24 @@ MctChange* MctUndoClass::undoChange(MctChange *changeNode)
 
  MctChange * MctUndoClass::undoAddedRowInTable(MctChange * changeNode)
  {
-     //todo
+     // TODO
      return NULL;
  }
 
  MctChange * MctUndoClass::undoRemovedRowInTable(MctChange * changeNode)
  {
-     //todo
+     // TODO
      return NULL;
  }
 
  MctChange * MctUndoClass::undoAddedColInTable(MctChange * changeNode)
  {
-     //todo
+     // TODO
      return NULL;
  }
 
  MctChange * MctUndoClass::undoRemovedColInTable(MctChange * changeNode)
  {
-     //todo
+     // TODO
      return NULL;
  }

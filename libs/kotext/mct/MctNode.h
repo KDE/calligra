@@ -21,23 +21,29 @@
 #define MCTNODE_H
 
 #include <QString>
-
+/**
+ * A basic node for the abstract graph
+ */
 class MctNode
 {
 public:
+    /// constructor
     MctNode(unsigned long id);
     MctNode();
     virtual ~MctNode();
 
+    /// setter
     virtual void setId(unsigned long id);
+    /// getter
     virtual unsigned long id() const;
-
+    /// setter
     void setName(const QString &name);
+    /// getter
     QString name();
 
 protected:
-    unsigned long m_id;
-    QString m_name;
+    unsigned long m_id; ///< indetifier number
+    QString m_name;     ///< optional name or comment
 };
 
 #endif // MCTNODE_H

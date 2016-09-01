@@ -44,12 +44,6 @@ MctRedoClass::~MctRedoClass()
 
 }
 
-/**
- * @brief This converts and adds changeset from redo graph into undo graph
- * @param changesetNode ChangesetNode in the undo graph
- * @param undoChangeList The list of corresponding undo change nodes.
- * @return Returns with the created changesetNode.
- */
 MctChangeset * MctRedoClass::addChangesetToUndo(MctChangeset *changesetNode, QList<MctChange *> *undoChangeList)
 {
     changesetNode->clearParents();
@@ -62,11 +56,6 @@ MctChangeset * MctRedoClass::addChangesetToUndo(MctChangeset *changesetNode, QLi
     return MctStaticData::instance()->getUndoGraph()->addChangeset(undoChangeList, author, date, comment);
 }
 
-/**
- * @brief This redos one changeset in the document
- * @param changesetNode The changeset node in the redograph.
- * @param add2Graph
- */
 void MctRedoClass::redoChangeset(MctChangeset *changesetNode, bool add2Graph)
 {
     QList<MctChange *> *undoChangeList = new QList<MctChange *> ();
@@ -82,11 +71,6 @@ void MctRedoClass::redoChangeset(MctChangeset *changesetNode, bool add2Graph)
     }
 }
 
-/**
- * @brief This redo one change in the document
- * @param changeNode The change node in the redograph.
- * @return
- */
 MctChange* MctRedoClass::redoChange(MctChange *changeNode)
 {
     MctChange* undoChangeNode = NULL;
@@ -156,11 +140,6 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
     return undoChangeNode;
 }
 
-/**
-  * @brief This Redoes an AddedString change node
-  * @param changeNode The change node to Redone
-  * @return Returns with the cretaed redochangeNode
-  */
  MctChange * MctRedoClass::redoAddedString(MctChange * changeNode)
  {
      MctPosition *pos = changeNode->position();
@@ -624,24 +603,24 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
 
  MctChange * MctRedoClass::redoAddedRowInTable(MctChange * changeNode)
  {
-     //todo
+     // TODO
      return NULL;
  }
 
  MctChange * MctRedoClass::redoRemovedRowInTable(MctChange * changeNode)
  {
-     //todo
+     // TODO
      return NULL;
  }
 
  MctChange * MctRedoClass::redoAddedColInTable(MctChange * changeNode)
  {
-     //todo
+     // TODO
      return NULL;
  }
 
  MctChange * MctRedoClass::redoRemovedColInTable(MctChange * changeNode)
  {
-     //todo
+     // TODO
      return NULL;
  }

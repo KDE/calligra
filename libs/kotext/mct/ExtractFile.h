@@ -24,6 +24,13 @@
 
 #include "kzip.h"
 
+/**
+ * extract the given zip archive
+ *
+ * @param dest destination of copy (path)
+ * @param name folder to extract the archive
+ * @param zipEntry arhive to copy
+ */
 bool copyTo(const QString &dest, const QString &name, const KZipFileEntry * zipEntry);
 
 #endif // EXTRACTFILE_H

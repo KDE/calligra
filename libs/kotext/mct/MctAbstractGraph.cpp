@@ -50,11 +50,6 @@ const QString MctAbstractGraph::DATE_EARLIER = "earlier";
 const QString MctAbstractGraph::DATE_LATER = "later";
 const QString MctAbstractGraph::DATE_ALL = "all";
 
-/**
- * @brief This initializes class abstract of Graph.
- * @param redoOrUndo "UndoChanges" for undo.xml, "RedoChanges" for redo.xml
- * @param odt file handle or name.
- */
 MctAbstractGraph::MctAbstractGraph(const QString &redoOrUndo, const QString &odt, KoTextDocument *koTextDoc)
 {
     _id = 1;
@@ -155,10 +150,6 @@ void MctAbstractGraph::setChangeNodes(QList<MctChange*> *changeNodes)
     this->m_changeNodes = changeNodes;
 }
 
-/**
- * @brief This gets list of changesetNodes
- * @return Returns with the whole < date, changeset> map.
- */
 QMap<QDateTime, MctChangeset*>* MctAbstractGraph::changesetNodes() const
 {
     return m_changesetNodes;
@@ -169,10 +160,6 @@ void MctAbstractGraph::setChangesetNodes(QMap<QDateTime, MctChangeset*> *setChan
     this->m_changesetNodes = setChangesetNodes;
 }
 
-/**
- * @brief This gets list of changeset dates
- * @return Returns with the list of dates
- */
 QVector<QDateTime> * MctAbstractGraph::dates(QVector<QDateTime> *excludeDates) const
 {
     if (excludeDates == NULL)
@@ -204,9 +191,6 @@ QMap<ulong, QDateTime> *MctAbstractGraph::idDates() const
     return this->m_idDates;
 }
 
-/**
- * @brief This gets the redoOrUndo attribute
- */
 QString MctAbstractGraph::redoOrUndo() const
 {
     return m_redoOrUndo;
@@ -232,10 +216,6 @@ QString MctAbstractGraph::filename() const
     return this->m_fileName;
 }
 
-/**
- * @brief This sets the filename of the graph output
- * @param name the path of the file
- */
 void MctAbstractGraph::setFilename(const QString &name)
 {
     m_fileName = name + "_" + m_redoOrUndo + ".xml";
@@ -251,10 +231,6 @@ void MctAbstractGraph::setNodeTag(const QString &name)
     this->m_nodeTag = name;
 }
 
-/**
- * @brief This gets the root of the graph
- * @return Returns with the root node.
- */
 QDomElement MctAbstractGraph::root() const
 {
     return m_root;
@@ -280,11 +256,7 @@ KoTextDocument * MctAbstractGraph::koTextDoc()
     return m_koTextDoc;
 }
 
-/**
- * @brief This gets changeset node wth given date.
- * @param date The date corresponding to the wanted changeset
- * @return Returns with the changesetNode corresponding to the given date.
- */
+
 MctChangeset* MctAbstractGraph::getChangeset(const QDateTime &date)
 {
     qDebug () << "date1: " << date;
@@ -298,11 +270,6 @@ MctChangeset* MctAbstractGraph::getChangeset(const QDateTime &date)
     return changset;
 }
 
-/**
- * @brief This gets list of changesetNodes. If date is set, return with changesetnodes earlier than the given date.
- * @param date The date.
- * @return Returns with the list of changesets ordered by the dates.
- */
 QList<MctChangeset*>* MctAbstractGraph::getChangesetList(const QDateTime &date)
 {
     QList<MctChangeset*>* changeset = new QList<MctChangeset*>();
@@ -321,11 +288,6 @@ QList<MctChangeset*>* MctAbstractGraph::getChangesetList(const QDateTime &date)
     return changeset;
 }
 
-/**
- * @brief This gets list of changesetNodes corresponding o the list of dates.
- * @param dates The list of dates.
- * @return Returns with the list of changesets ordered by the dates.
- */
 QList<MctChangeset*>* MctAbstractGraph::getChangesetListByDates(QList<QDateTime> *dates)
 {
     QList<MctChangeset*>* changesets = new QList<MctChangeset*>();
@@ -336,10 +298,6 @@ QList<MctChangeset*>* MctAbstractGraph::getChangesetListByDates(QList<QDateTime>
     return changesets;
 }
 
-/**
- * @brief This creates embObjProps object from properties in the graph xml
- * @param change The node representing the changeevent
- */
 MctEmbObjProperties* MctAbstractGraph::createEmbObjProps(const QDomElement &change)
 {
     QString name = change.attribute("name");
@@ -525,11 +483,6 @@ const KoProperties *MctAbstractGraph::getShapeProperties(const QString &type)
     return NULL;
 }
 
-/**
- * @brief This creates tableProps object from properties in the graph xml
- * @param change The node representing the changeevent
- * @return
- */
 MctTableProperties * MctAbstractGraph::createTableProps(const QDomElement &change)
 {
     QString name = change.attribute("name");
@@ -569,9 +522,6 @@ MctTableProperties * MctAbstractGraph::createTableProps(const QDomElement &chang
     return ctableProps;
 }
 
-/**
- * @brief This fills the graph with the content of the file "undo.xml"/"redo.xml"
- */
 void MctAbstractGraph::fillUpGraph()
 {
     _id = 0;
@@ -642,10 +592,6 @@ void MctAbstractGraph::fillUpGraph()
     sortDates();
 }
 
-/**
- * @brief MctAbstractGraph::correctBlockPosition
- * @param node xml node
- */
 void MctAbstractGraph::correctBlockPosition(QDomNode *node, QMap<ulong, ulong> *indexes, bool import)
 {
     QDomElement change = node->toElement();
@@ -710,13 +656,6 @@ void MctAbstractGraph::correctBlockPosition(QDomNode *node, QMap<ulong, ulong> *
 //todo
 }
 
-/**
- * @brief During export the paragraph numbers should be written in the xml,
- * but the blocknumber gives a false value if the document contains tables.
- * The correction is applied right before exporting to xml.
- * @param document The document within the positions need to be corrected
- * @param indexes The frame index, it is the base of the correction
- */
 void MctAbstractGraph::correctBlockPositionForExport(QDomDocument *document, QMap<ulong, ulong> *indexes)
 {
     QDomNodeList childs = document->firstChildElement().childNodes();
@@ -735,21 +674,11 @@ void MctAbstractGraph::correctBlockPositionForExport(QDomDocument *document, QMa
     }
 }
 
-/**
- * @brief This gets the date of changeset by its Id
- * @param id The Id number
- * @return Returns with the date
- */
 QDateTime MctAbstractGraph::getDateFromId(ulong id)
 {
     return m_idDates->value(id);
 }
 
-/**
- * @brief This finds a changesetnode corresponding to given revision. The revision number is actually the index of the revision in the data structure.
- * @param revNum The number of the revision
- * @return Returns with the changeset node, or NULL if revision does not exist.
- */
 MctChangeset* MctAbstractGraph::findChangeset(ulong revNum)
 {
     MctChangeset* changesetNode = NULL;
@@ -766,24 +695,11 @@ MctChangeset* MctAbstractGraph::findChangeset(ulong revNum)
     return changesetNode;
 }
 
-/**
- * @brief This sorts the list of dates from the most older (first index) to the youngest one (last index).
- */
 void MctAbstractGraph::sortDates()
 {
     qSort(m_dates->begin(), m_dates->end());
 }
 
-/**
- * @brief This adds new changeset to the end of the graph without correction of position attribute
- * @param changes The list of changes
- * @param author The author of the revision
- * @param date The date of the revision
- * @param comment comment of the revision
- * @param parentId The parent changeset id
- * @param merge True if the adding changeset is being merged from another graph, False otherwise.
- * @return Returns with the created changesetNode
- */
 MctChangeset* MctAbstractGraph::addChangeset(QList<MctChange *> *changes, MctAuthor *author, const QDateTime &date, const QString &comment, uint parentId, bool merge)
 {
     qDebug() << "adding changeset to graph";
@@ -828,23 +744,12 @@ MctChangeset* MctAbstractGraph::addChangeset(QList<MctChange *> *changes, MctAut
     return changesetNode;
 }
 
-/**
- * @brief Compare two date
- * @param d1 The date class.
- * @param d2 The date class.
- * @return Returns with -1 if d1 earlier, return 0 if equal, return 1 if d1 later than d2
- */
 int MctAbstractGraph::dateComapre(const QDateTime &d1, const QDateTime &d2) {
     if(d1 < d2) return -1;
     else if(d1 == d2) return 0;
     else return 1;
 }
 
-/**
- * @brief This find the parents of the changesetNode.
- * @param changsetnode The changeset Node.
- * @param merge True if the adding changeset is being merged from another graph, False otherwise.
- */
 void MctAbstractGraph::findParents(MctChangeset *changesetNode, bool merge)
 {
     qDebug() << "searching for parents";
@@ -894,11 +799,6 @@ void MctAbstractGraph::findParents(MctChangeset *changesetNode, bool merge)
     qDebug() << "searching for parents finished";
 }
 
-/**
- * @brief This corrects parent-child correspondance, when new changeset is merged into the graph
- * @param changsetnode The changeset node that was merged
- * @param merge True if the adding changeset is being merged from another graph, False otherwise.
- */
 void MctAbstractGraph::correctParentsAndChildren(MctChangeset *changsetNode, bool merge)
 {
     QList<ulong> *parentIds = changsetNode->parents();
@@ -922,12 +822,6 @@ void MctAbstractGraph::correctParentsAndChildren(MctChangeset *changsetNode, boo
     }
 }
 
-/**
- * @brief This decides, whether change1 and change2 related to embedded objects are overlaping or not.
- * @param change1 ChangeNode
- * @param change2 ChangeNode
- * @return Returns with true if changes are related to the same embedded object, false otherwise.
- */
 bool MctAbstractGraph::areChangesOverlapping2(MctChange *change1, MctChange *change2)
 {
     if(! (change1->changeType() == MctChangeTypes::AddedTextFrame || change1->changeType() == MctChangeTypes::RemovedTextFrame ||
@@ -951,12 +845,6 @@ bool MctAbstractGraph::areChangesOverlapping2(MctChange *change1, MctChange *cha
     }
 }
 
-/**
- * @brief Recursively decides, whether pos1 and pos2 are overlappong or not.
- * @param pos1 Instance of Position class.
- * @param pos2 Instance of Position class.
- * @return Returns with true if positions are overlapping in paragraph, false otherwise.
- */
 bool MctAbstractGraph::arePositionsOverlapping(MctPosition *pos1, MctPosition *pos2)
 {
     if (pos1 == NULL || pos2 == NULL) {
@@ -1060,12 +948,6 @@ bool MctAbstractGraph::arePositionsOverlapping(MctPosition *pos1, MctPosition *p
     return change_overlapping;
 }
 
-/**
- * @brief Recursively decides, whether pos1 is before pos2 or not.
- * @param pos1 Instance of Position class.
- * @param pos2 Instance of Position class.
- * @return Returns 0 if pos1 and pos2 are not in the same textcontent, returns 1 if pos1 is before pos2, -1 otherwise.
- */
 int MctAbstractGraph::comparePositions(MctPosition *pos1, MctPosition *pos2)
 {
     if(pos1 == NULL || pos2 == NULL) {
@@ -1150,13 +1032,6 @@ int MctAbstractGraph::comparePositions(MctPosition *pos1, MctPosition *pos2)
     return 0;
 }
 
-/**
- * @brief This decides, whether change1 and change2 are overlaping or not.
- * @param change ChangeNode
- * @param pos_orig Position of change
- * @param movedpos_orig Moved position of change
- * @return Returns with true if they are overlapping in paragraph, false otherwise.
- */
 bool MctAbstractGraph::areChangesOverlapping(MctChange *change, MctPosition *pos_orig, MctPosition *movedpos_orig)
 {
     MctPosition * pos1 = pos_orig;
@@ -1203,11 +1078,6 @@ bool MctAbstractGraph::areChangesOverlapping(MctChange *change, MctPosition *pos
     return change_overlapping;
 }
 
-/**
- * @brief This adds changesetNode into the graph.
- * @detailed The changesetNode is corrected due to the earlier changesetNodes and the later ChangesetNodes in the graph are corrected as well.
- * @param changesetnode The new changesetNode
- */
 void MctAbstractGraph::addChangesetNodeWithCorr(MctChangeset *changesetNode)
 {
     //correct changesetNode according to earlier ones
@@ -1236,11 +1106,6 @@ void MctAbstractGraph::addChangesetNodeWithCorr(MctChangeset *changesetNode)
     sortDates();
 }
 
-/**
- * @brief Finds date keys of changesets with later date, than the given one
- * @param date The date class.
- * @return Returns with the list of later dates
- */
 QVector<QDateTime> * MctAbstractGraph::findLaterDates(const QDateTime &date)
 {
     QVector<QDateTime> * retDates = new QVector<QDateTime>();
@@ -1253,11 +1118,6 @@ QVector<QDateTime> * MctAbstractGraph::findLaterDates(const QDateTime &date)
     return retDates;
 }
 
-/**
- * @brief Finds date keys of changesets with earlier or equal date, than the given one
- * @param date The date
- * @return Returns with the list of earlier or equal dates
- */
 QVector<QDateTime> * MctAbstractGraph::findEarlierDates(const QDateTime &date)
 {
     QVector<QDateTime> * retDates = new QVector<QDateTime>();
@@ -1272,10 +1132,6 @@ QVector<QDateTime> * MctAbstractGraph::findEarlierDates(const QDateTime &date)
     return retDates;
 }
 
-/**
- * @brief This corrects the position attributes of changes in all changesets of the graph, according to the given changeset.
- * @param changesetNode The changesetNode
- */
 void MctAbstractGraph::correctChangesetNodeList(MctChangeset *changesetNode)
 {
     QList<MctChangeset*> *changesetList = new QList<MctChangeset*>();
@@ -1287,12 +1143,6 @@ void MctAbstractGraph::correctChangesetNodeList(MctChangeset *changesetNode)
     }
 }
 
-/**
- * @brief This corrects the position attributes of changes in all changesets of the graph with later/earlier/all date than the given changeset according to the given changeset.
- * @param changesetNode The changesetNode
- * @param withdates string: 'earlier', 'later', 'all'. Used to select dates to correct.
- * @param foradd True if the changesetNode is intended to be added.
- */
 void MctAbstractGraph::correctChangesetNodeListWithDate(MctChangeset *changesetNode, const QString &withdates, bool foradd)
 {
     QDateTime date = changesetNode->date();
@@ -1314,13 +1164,6 @@ void MctAbstractGraph::correctChangesetNodeListWithDate(MctChangeset *changesetN
     }
 }
 
-/**
- * @brief This corrects the position attributes of changes in changeset according to previous/later/all changes in the graph.
- * @param changesetnode The new changesetNode
- * @param withdates string: 'earlier', 'later', 'all'. Used to select dates to correct.
- * @param foradd True if the changesetNode is intended to be added.
- * @return Returns with the parent ID
- */
 int MctAbstractGraph::correctChangesetNode(MctChangeset *changesetNode, const QString &withdates, bool foradd)
 {
     QDateTime date = changesetNode->date();
@@ -1346,13 +1189,6 @@ int MctAbstractGraph::correctChangesetNode(MctChangeset *changesetNode, const QS
     return correctChangesetNode2(changesetNode, changesetNodesList, foradd);
 }
 
-/**
- * @brief This corrects the position attributes of changes in changeset according to other changes
- * @param changesetNode The changeset node to correct.
- * @param changesetnodes The list of changeset nodes using to correct the position attributes.
- * @param foradd True if the changesetNode is intended to be added.
- * @return Returns with the parent ID
- */
 int MctAbstractGraph::correctChangesetNode2(MctChangeset *changesetNode, QList<MctChangeset *> *changesetnodes, bool foradd)
 {
     QList<MctChange*> *changes = changesetNode->changes();
@@ -1375,13 +1211,6 @@ int MctAbstractGraph::correctChangesetNode2(MctChangeset *changesetNode, QList<M
     return parentId;
 }
 
-/**
- * @brief This corrects the position attributes of change node according to previous changes.
- * @param changeNode The change node to correct.
- * @param prevChangeNode The changeNode in order to correct the change node.
- * @param foradd True if the changesetNode is intended to be added.
- * @return Returns with the corrected change node.
- */
 MctChange* MctAbstractGraph::correctChangeNode(MctChange *changeNode, MctChange *prevChangeNode, bool foradd)
 {
     MctPosition * pos = changeNode->position();
@@ -1443,12 +1272,6 @@ MctChange* MctAbstractGraph::correctChangeNode(MctChange *changeNode, MctChange 
     return changeNode;
 }
 
-/**
- * @brief This corrects the paragraph attributes of position structure, when the order of two changes are exchanged.
- * @param pos The position class to be corrected.
- * @param prevpos The reference position class used in the exchange with the other position class pos.
- * @param prevchangetype The change type of the reference position class.
- */
 void MctAbstractGraph::correctParInPosition(MctPosition *pos, MctPosition *prevpos, MctChangeTypes prevchangetype)
 {
     if(pos == NULL or prevpos == NULL) {
@@ -1484,15 +1307,6 @@ void MctAbstractGraph::correctParInPosition(MctPosition *pos, MctPosition *prevp
     }
 }
 
-/**
- * @brief This corrects the position structure.
- * @param pos The position class to correct.
- * @param prevpos The position class used to correct the pos position class.
- * @param prevchangetype The change type of the previous change.
- * @param pos_orig The original position to correct.
- * @param foradd True if the changesetNode related to pos is intended to be added.
- * @return Returns the corrected position
- */
 MctPosition * MctAbstractGraph::correctPosition(MctPosition *pos, MctPosition *prevpos, MctChangeTypes prevchangetype, MctPosition *pos_orig, bool foradd)
 {
     if (pos == NULL) {
@@ -1587,11 +1401,6 @@ MctPosition * MctAbstractGraph::correctPosition(MctPosition *pos, MctPosition *p
     return pos;
 }
 
-/**
- * @brief This removes changeset from the graph without position correction of the other changesets
- * @param changesetnode The changeset node to remove.
- * @param clearchanges  Whether clear the list of changes or not.
- */
 void MctAbstractGraph::removeChangeset(MctChangeset *changesetnode, bool clearchanges)
 {
     qDebug() << "removing changeset";
@@ -1618,7 +1427,7 @@ void MctAbstractGraph::removeChangeset(MctChangeset *changesetnode, bool clearch
         QDateTime date_tmp = getDateFromId(parent);
         MctChangeset *changesetnode_parent = getChangeset(date_tmp);
         if (changesetnode_parent != NULL)
-            changesetnode_parent->removeChildId(changesetnode->id());
+            changesetnode_parent->removeChild(changesetnode->id());
     }
 
     // Removing changesetNode
@@ -1627,11 +1436,6 @@ void MctAbstractGraph::removeChangeset(MctChangeset *changesetnode, bool clearch
     m_changesetNodes->remove(givendate);
 }
 
-/**
- * @brief This removes changeset from the graph without position correction of the other changesets
- * @param date The date of the wanted changesetNode.
- * @return Returns with the removed changesetNode.
- */
 MctChangeset * MctAbstractGraph::popChangeset(const QDateTime &date)
 {
     int idx = -1;
@@ -1678,9 +1482,6 @@ bool MctAbstractGraph::removeDir(const QString &dirName)
     return result;
 }
 
-/**
- * @brief This exports the graph to undo.xml/redo.xml
- */
 void MctAbstractGraph::exportGraph(QDomDocument *document)
 {
     qDebug() << "temporary exporting graph to: " << m_fileName;
@@ -1752,10 +1553,6 @@ void MctAbstractGraph::exportGraph(QDomDocument *document)
     qDebug() << m_redoOrUndo << " graph exported";
 }
 
-/**
- * @brief This register undo.xml/redo.xml files in the manifest.xml
- * @param filename The name of the copied manifest file
- */
 void MctAbstractGraph::regManifest(const QString &filename)
 {
     qDebug() << "registering manifest";
@@ -1800,21 +1597,11 @@ void MctAbstractGraph::regManifest(const QString &filename)
     }
 }
 
-/**
- * @brief This gives the current number of revisions
- * @return The current number of revisions
- */
 ulong MctAbstractGraph::getCurrentRevision()
 {
     return m_dates->size();
 }
 
-/**
- * @brief This function makes position class from string extracted from the XML node.
- * @param change The XML node.
- * @param moved True if moved position is wanted, False otherwise
- * @return Returns with the created position class.
- */
 MctPosition* MctAbstractGraph::getPosFromXML(const QDomElement &change, bool moved)
 {
     return MctStaticData::instance()->getPosFromElementreeNode(change, moved);
@@ -1859,12 +1646,6 @@ void MctAbstractGraph::addTableDataToPos(QDomElement &change, MctChange *changeN
     change.setAttribute(MctStaticData::attributeNS(endtag, MctStaticData::NS_C), posstringend);
 }
 
-/**
- * @brief This recursively adds position attribute to the node of the graph
- * @param change The change node in the ElementTree
- * @param pos
- * @param moved If Ture, moved position is affected.
- */
 void MctAbstractGraph::addPos2change(QDomElement *change, MctPosition *pos, bool moved)
 {
     MctStaticData::instance()->addPos2change(change, pos, moved);
@@ -1918,7 +1699,7 @@ QList<MctChange *>* MctAbstractGraph::findMovedChanges(QList<MctChange *> *chang
             ++i;
         }
         if(!moved) {
-            tmpchanges->append(change);            
+            tmpchanges->append(change);
         }
     }
 

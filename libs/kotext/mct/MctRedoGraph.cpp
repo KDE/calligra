@@ -38,11 +38,6 @@ MctRedoGraph::~MctRedoGraph()
 
 }
 
-/**
- * @brief This converts and adds changeset from undo graph into redo graph
- * @param undochangeset ChangesetNode in the undo graph
- * @return Returns with the created changesetNode.
- */
 MctChangeset*  MctRedoGraph::addchangesetFromUndo(MctChangeset *undochangeset)
 {
     undochangeset->clearParents();
@@ -73,11 +68,6 @@ MctChangeset*  MctRedoGraph::addchangesetFromUndo(MctChangeset *undochangeset)
     return addChangeset(redochangelist, author, date, comment);
 }
 
-/**
- * @brief This adds new change to the changeset
- * @param change The change node
- * @param changeset The parent changeset node
- */
 void MctRedoGraph::addChange(MctChange* changeNode, MctChangeset* changeset)
 {
     if(changeNode == NULL) {
@@ -214,11 +204,6 @@ void MctRedoGraph::addChange(MctChange* changeNode, MctChangeset* changeset)
     }
 }
 
-/**
- * @brief This fills up added string changes to the changeNode
- * @param xmlchange The change node in the XML
- * @param change The change node in the Graph
- */
 void MctRedoGraph::addString(QDomElement *xmlchange, MctChange *change)
 {
     xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::STRING);
@@ -229,11 +214,6 @@ void MctRedoGraph::addString(QDomElement *xmlchange, MctChange *change)
     xmlchange->appendChild(nodeText);
 }
 
-/**
- * @brief This fills up removed string changes to the changeNode
- * @param xmlchange The change node in the XML
- * @param change The change node in the Graph
- */
 void MctRedoGraph::removeString(QDomElement *xmlchange, MctChange *change)
 {
     xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::STRING);
@@ -244,11 +224,6 @@ void MctRedoGraph::removeString(QDomElement *xmlchange, MctChange *change)
     xmlchange->appendChild(nodeText);
 }
 
-/**
- * @brief This fills up moved string changes to the changeNode
- * @param xmlchange The change node in the XML
- * @param change The change node in the Graph
- */
 void MctRedoGraph::moveString(QDomElement *xmlchange, MctChange *change)
 {
     xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::STRING);
@@ -263,11 +238,6 @@ void MctRedoGraph::moveString(QDomElement *xmlchange, MctChange *change)
     xmlchange->appendChild(nodeText);
 }
 
-/**
- * @brief This fills up added paragraph break changes to the changeNode
- * @param xmlchange The change node in the XML
- * @param change The change node in the Graph
- */
 void MctRedoGraph::addParBreak(QDomElement *xmlchange, MctChange *change)
 {
     xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::PARAGRAPH);
@@ -276,11 +246,6 @@ void MctRedoGraph::addParBreak(QDomElement *xmlchange, MctChange *change)
     xmlchange->removeAttribute(MctStaticData::attributeNS(MctStaticData::POSEND, MctStaticData::NS_C)); // remove redundant ending position from xml
 }
 
-/**
- * @brief This fills up deleted paragraph break changes to the changeNode
- * @param xmlchange The change node in the XML
- * @param change The change node in the Graph
- */
 void MctRedoGraph::delParBreak(QDomElement *xmlchange, MctChange *change)
 {
     xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::PARAGRAPH);
@@ -289,11 +254,6 @@ void MctRedoGraph::delParBreak(QDomElement *xmlchange, MctChange *change)
     xmlchange->removeAttribute(MctStaticData::attributeNS(MctStaticData::POSEND, MctStaticData::NS_C)); // remove redundant ending position from xml
 }
 
-/**
- * @brief This fills up style changes to the changeNode
- * @param xmlchange The change node in the XML
- * @param change The change node in the Graph
- */
 void MctRedoGraph::styleChange(QDomElement *xmlchange, MctChange *change)
 {
     MctPosition *pos = change->position();
@@ -352,11 +312,6 @@ void MctRedoGraph::fillPropertySubNode(QDomElement *subnode, ChangeEventList *pr
     }    
 }
 
-/**
- * @brief This fills up added/removed TextFrame change to the changeNode
- * @param xmlchange The change node in the XML
- * @param change The change node in the Graph
- */
 void MctRedoGraph::textFrame(QDomElement *xmlchange, MctChange *change)
 {
     xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::TEXTFRAME);
@@ -366,12 +321,6 @@ void MctRedoGraph::textFrame(QDomElement *xmlchange, MctChange *change)
     xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::NAME, MctStaticData::NS_DC), change->changeEntity()->name());
 }
 
-/**
- * @brief This fills up added/removed TextTable change to the changeNode
- * @param xmlchange The change node in the XML
- * @param change The change node in the Graph
- * @param added If False other style data are also exported.
- */
 void MctRedoGraph::textTable(QDomElement *xmlchange, MctChange *change, bool added)
 {
     xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::TABLE);
@@ -407,12 +356,6 @@ void MctRedoGraph::textTable(QDomElement *xmlchange, MctChange *change, bool add
     }
 }
 
-/**
- * @brief This fills up added/removed TextGraphicObject change to the changeNode
- * @param xmlchange The change node in the XML
- * @param change The change node in the Graph
- * @param added If False other style data are also exported.
- */
 void MctRedoGraph::textGraphicObject(QDomElement *xmlchange, MctChange *change, bool added)
 {
     xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::TEXTGRAPHICOBJECT);
@@ -458,11 +401,6 @@ void MctRedoGraph::textGraphicObject(QDomElement *xmlchange, MctChange *change, 
     }
 }
 
-/**
- * @brief This fills up added/removed EmbeddedObject change to the changeNode
- * @param xmlchange The change node in the XML
- * @param change The change node in the Graph
- */
 void MctRedoGraph::embeddedObject(QDomElement *xmlchange, MctChange *change)
 {
     xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::EMBEDDEDOBJECT);
@@ -472,93 +410,46 @@ void MctRedoGraph::embeddedObject(QDomElement *xmlchange, MctChange *change)
     xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::NAME, MctStaticData::NS_DC), change->changeEntity()->name());
 }
 
-/**
- * @brief This fills up added string in table to the changeNode
- * @param xmlchange The change node in the XML
- * @param change The change node in the Graph
- */
 void MctRedoGraph::addStringInTable(QDomElement *xmlchange, MctChange *change)
 {
     addString(xmlchange, change);
 }
 
-/**
- * @brief This fills up removed string in table to the changeNode
- * @param xmlchange The change node in the XML
- * @param change The change node in the Graph
- */
 void MctRedoGraph::removeStringInTable(QDomElement *xmlchange, MctChange *change)
 {
     removeString(xmlchange, change);
 }
 
-/**
- * @brief This fills up moved string in table to the changeNode
- * @param xmlchange The change node in the XML
- * @param change The change node in the Graph
- */
 void MctRedoGraph::moveStringInTable(QDomElement *xmlchange, MctChange *change)
 {
     moveString(xmlchange, change);
 }
 
-/**
- * @brief This fills up added paragraph break in table to the changeNode
- * @param xmlchange The change node in the XML
- * @param change The change node in the Graph
- */
 void MctRedoGraph::addParBreakInTable(QDomElement *xmlchange, MctChange *change)
 {
     addParBreak(xmlchange, change);
 }
 
-/**
- * @brief This fills up deleted paragraph break in table to the changeNode
- * @param xmlchange The change node in the XML
- * @param change The change node in the Graph
- */
 void MctRedoGraph::delParBreakInTable(QDomElement *xmlchange, MctChange *change)
 {
     delParBreak(xmlchange, change);
 }
 
-/**
- * @brief This fills up style changes in table to the changeNode
- * @param xmlchange The change node in the XML
- * @param change The change node in the Graph
- */
 void MctRedoGraph::styleChangeInTable(QDomElement *xmlchange, MctChange *change)
 {
     styleChange(xmlchange, change);
 }
 
-/**
- * @brief This fills up added/removed TextGraphicObject change in table to the changeNode
- * @param xmlchange The change node in the XML
- * @param change The change node in the Graph
- * @param added If False other style data are also exported.
- */
 void MctRedoGraph::textGraphicObjectInTable(QDomElement *xmlchange, MctChange *change, bool added)
 {
     textGraphicObject(xmlchange, change, added);
 }
 
-/**
- * @brief This fills up added/removed TextTable change in table to the changeNode
- * @param xmlchange The change node in the XML
- * @param change The change node in the Graph
- * @param added If False other style data are also exported.
- */
 void MctRedoGraph::textTableInTable(QDomElement *xmlchange, MctChange *change, bool added)
 {
     textTable(xmlchange, change);
 }
 
-/**
- * @brief This fills up added/removed row change in table into the changeNode
- * @param xmlchange The change node in the XML
- * @param change The change node in the Graph
- */
 void MctRedoGraph::rowChangeInTable(QDomElement *xmlchange, MctChange *change)
 {
     xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::ROWCHANGE);
@@ -566,11 +457,6 @@ void MctRedoGraph::rowChangeInTable(QDomElement *xmlchange, MctChange *change)
     addPos2change(xmlchange, pos);
 }
 
-/**
- * @brief This fills up added/removed col change in table into the changeNode
- * @param xmlchange The change node in the XML
- * @param change The change node in the Graph
- */
 void MctRedoGraph::colChangeInTable(QDomElement *xmlchange, MctChange *change)
 {
     xmlchange->setAttribute(MctStaticData::attributeNS(MctStaticData::TYPE, MctStaticData::NS_DC), MctStaticData::COLCHANGE);
