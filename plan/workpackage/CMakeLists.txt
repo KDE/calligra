@@ -104,7 +104,7 @@ install(TARGETS calligraplanwork  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES  calligraplanwork.rc calligraplanwork_readonly.rc calligraplanwork_mainwindow.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/calligraplanwork)
+install( FILES  calligraplanwork.rc calligraplanwork_readonly.rc calligraplanworkui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/calligraplanwork)
 install( FILES  calligraplanworkrc DESTINATION ${CONFIG_INSTALL_DIR})
 install( PROGRAMS  org.kde.calligraplanwork.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 
