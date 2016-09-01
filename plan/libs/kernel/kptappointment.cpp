@@ -56,9 +56,8 @@ AppointmentInterval::AppointmentInterval( const DateTime &start, const DateTime 
     setEndTime( end );
     setLoad( load );
 #ifndef NDEBUG
-    if (start.isValid() && end.isValid()) {
-        debugPlan<<*this;
-        Q_ASSERT(start.timeZone() == end.timeZone());
+    if ( start.isValid() && end.isValid() && start.timeZone() != end.timeZone() ) {
+        warnPlan<<"Timezones not equal:"<<start.timeZone()<<end.timeZone();
     }
 #endif
 }
@@ -265,10 +264,13 @@ bool AppointmentInterval::intersects( const AppointmentInterval &other ) const
 
 AppointmentInterval AppointmentInterval::interval( const DateTime &start, const DateTime &end ) const
 {
-    if ( start <= d->start && end >= d->end ) {
+    // TODO: Find and fix those that call with "wrong" timezone (should be local zone atm)
+    const DateTime s = start.toTimeZone( d->start.timeZone() );
+    const DateTime e = end.toTimeZone( d->end.timeZone() );
+    if ( s <= d->start && e >= d->end ) {
         return *this;
     }
-    return AppointmentInterval( qMax( start, d->start ), qMin( end, d->end ), d->load );
+    return AppointmentInterval( qMax( s, d->start ), qMin( e, d->end ), d->load );
 }
 
 QString AppointmentInterval::toString() const
@@ -560,8 +562,13 @@ Duration AppointmentIntervalList::effort(const DateTime &start, const DateTime &
 void AppointmentIntervalList::saveXML( QDomElement &element ) const
 {
     foreach ( const AppointmentInterval &i, m_map ) {
-        Q_ASSERT( i.isValid() );
-        i.saveXML(element);
+        i.saveXML( element );
+#ifndef NDEBUG
+        if ( !i.isValid() ) {
+            // NOTE: This should not happen, so hunt down cause if it does
+            warnPlan<<"Invalid interval:"<<i;
+        }
+#endif
     }
 }
 
