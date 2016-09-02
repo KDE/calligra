@@ -18,54 +18,54 @@
  *   Boston, MA 02110-1301, USA.
  */
 
-#include "PlanReportRichTextPlugin.h"
+#include "PlanReportTextPlugin.h"
 
-#include "PlanReportItemRichText.h"
-#include "PlanReportDesignerItemRichText.h"
+#include "PlanReportItemText.h"
+#include "PlanReportDesignerItemText.h"
 #ifdef KREPORT_SCRIPTING
-#include "PlanReportScriptRichText.h"
+#include "PlanReportScriptText.h"
 #endif
 
 #include "KReportPluginMetaData.h"
 
 #include <QDebug>
 
-KREPORT_PLUGIN_FACTORY(PlanReportRichTextPlugin, "richtext.json")
+KREPORT_PLUGIN_FACTORY(PlanReportTextPlugin, "text.json")
 
-PlanReportRichTextPlugin::PlanReportRichTextPlugin(QObject *parent, const QVariantList &args)
+PlanReportTextPlugin::PlanReportTextPlugin(QObject *parent, const QVariantList &args)
     : KReportPluginInterface(parent, args)
 {
 }
 
-PlanReportRichTextPlugin::~PlanReportRichTextPlugin()
+PlanReportTextPlugin::~PlanReportTextPlugin()
 {
 
 }
 
-QObject* PlanReportRichTextPlugin::createRendererInstance(const QDomNode& element)
+QObject* PlanReportTextPlugin::createRendererInstance(const QDomNode& element)
 {
-    return new PlanReportItemRichText(element);
+    return new PlanReportItemText(element);
 }
 
-QObject* PlanReportRichTextPlugin::createDesignerInstance(const QDomNode& element, KReportDesigner* designer, QGraphicsScene* scene)
+QObject* PlanReportTextPlugin::createDesignerInstance(const QDomNode& element, KReportDesigner* designer, QGraphicsScene* scene)
 {
-    return new PlanReportDesignerItemRichText(element, designer, scene);
+    return new PlanReportDesignerItemText(element, designer, scene);
 }
 
-QObject* PlanReportRichTextPlugin::createDesignerInstance(KReportDesigner* designer, QGraphicsScene* scene, const QPointF& pos)
+QObject* PlanReportTextPlugin::createDesignerInstance(KReportDesigner* designer, QGraphicsScene* scene, const QPointF& pos)
 {
-    return new PlanReportDesignerItemRichText(designer, scene, pos);
+    return new PlanReportDesignerItemText(designer, scene, pos);
 }
 
 #ifdef KREPORT_SCRIPTING
-QObject* PlanReportRichTextPlugin::createScriptInstance(KReportItemBase* item)
+QObject* PlanReportTextPlugin::createScriptInstance(KReportItemBase* item)
 {
-    PlanReportItemRichText *text = dynamic_cast<PlanReportItemRichText*>(item);
+    PlanReportItemText *text = dynamic_cast<PlanReportItemText*>(item);
     if (text) {
-        return new Scripting::RichText(text);
+        return new Scripting::Text(text);
     }
     return 0;
 }
 #endif
 
-#include "PlanReportRichTextPlugin.moc"
+#include "PlanReportTextPlugin.moc"

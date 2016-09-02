@@ -18,16 +18,16 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef PlanReportRichTextPlugin_H
-#define PlanReportRichTextPlugin_H
+#ifndef PlanReportTextPlugin_H
+#define PlanReportTextPlugin_H
 
 #include <KReportPluginInterface.h>
 
-class PlanReportRichTextPlugin : public KReportPluginInterface
+class PlanReportTextPlugin : public KReportPluginInterface
 {
     public:
-    explicit PlanReportRichTextPlugin(QObject *parent, const QVariantList &args = QVariantList());
-    virtual ~PlanReportRichTextPlugin();
+    explicit PlanReportTextPlugin(QObject *parent, const QVariantList &args = QVariantList());
+    virtual ~PlanReportTextPlugin();
 
     virtual QObject* createRendererInstance(const QDomNode& element);
     virtual QObject* createDesignerInstance(const QDomNode& element, KReportDesigner* , QGraphicsScene* scene);
@@ -37,4 +37,4 @@ class PlanReportRichTextPlugin : public KReportPluginInterface
 #endif
 };
 
-#endif // PlanReportRichTextPlugin_H
+#endif // PlanReportTextPlugin_H

@@ -17,7 +17,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "PlanReportDesignerItemRichText.h"
+#include "PlanReportDesignerItemText.h"
 
 #include "KReportDesignerItemBase.h"
 #include "KReportDesigner.h"
@@ -29,12 +29,8 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 
-//
-// class ReportEntityText
-//
-// methods (constructors)
 
-void PlanReportDesignerItemRichText::init(QGraphicsScene *scene, KReportDesigner *d)
+void PlanReportDesignerItemText::init(QGraphicsScene *scene, KReportDesigner *d)
 {
     //setFlags(ItemIsSelectable | ItemIsMovable);
     if (scene)
@@ -52,7 +48,7 @@ void PlanReportDesignerItemRichText::init(QGraphicsScene *scene, KReportDesigner
                      QLatin1String("textarea"));
 }
 
-PlanReportDesignerItemRichText::PlanReportDesignerItemRichText(KReportDesigner * rw, QGraphicsScene * scene, const QPointF &pos)
+PlanReportDesignerItemText::PlanReportDesignerItemText(KReportDesigner * rw, QGraphicsScene * scene, const QPointF &pos)
         : KReportDesignerItemRectBase(rw)
 {
     Q_UNUSED(pos);
@@ -61,32 +57,32 @@ PlanReportDesignerItemRichText::PlanReportDesignerItemRichText(KReportDesigner *
     m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
-PlanReportDesignerItemRichText::PlanReportDesignerItemRichText(const QDomNode & element, KReportDesigner * d, QGraphicsScene * s)
-        : PlanReportItemRichText(element), KReportDesignerItemRectBase(d)
+PlanReportDesignerItemText::PlanReportDesignerItemText(const QDomNode & element, KReportDesigner * d, QGraphicsScene * s)
+        : PlanReportItemText(element), KReportDesignerItemRectBase(d)
 {
     init(s, d);
     setSceneRect(m_pos.toScene(), m_size.toScene());
 }
 
-PlanReportDesignerItemRichText* PlanReportDesignerItemRichText::clone()
+PlanReportDesignerItemText* PlanReportDesignerItemText::clone()
 {
     QDomDocument d;
     QDomElement e = d.createElement(QLatin1String("clone"));
     QDomNode n;
     buildXML(&d, &e);
     n = e.firstChild();
-    return new PlanReportDesignerItemRichText(n, designer(), 0);
+    return new PlanReportDesignerItemText(n, designer(), 0);
 }
 
-PlanReportDesignerItemRichText::~PlanReportDesignerItemRichText()
+PlanReportDesignerItemText::~PlanReportDesignerItemText()
 {}
 
-QRect PlanReportDesignerItemRichText::getTextRect() const
+QRect PlanReportDesignerItemText::getTextRect() const
 {
     return QFontMetrics(font()).boundingRect(int (x()), int (y()), 0, 0, textFlags(), m_renderText);
 }
 
-void PlanReportDesignerItemRichText::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+void PlanReportDesignerItemText::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     Q_UNUSED(option);
     Q_UNUSED(widget)
@@ -122,7 +118,7 @@ void PlanReportDesignerItemRichText::paint(QPainter* painter, const QStyleOption
     painter->setPen(p);
 }
 
-void PlanReportDesignerItemRichText::buildXML(QDomDocument *doc, QDomElement *parent)
+void PlanReportDesignerItemText::buildXML(QDomDocument *doc, QDomElement *parent)
 {
     //kreportpluginDebug();
     QDomElement entity = doc->createElement(QLatin1String("report:") + typeName());
@@ -148,14 +144,14 @@ void PlanReportDesignerItemRichText::buildXML(QDomDocument *doc, QDomElement *pa
     parent->appendChild(entity);
 }
 
-void PlanReportDesignerItemRichText::mousePressEvent(QGraphicsSceneMouseEvent * event)
+void PlanReportDesignerItemText::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
     m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     KReportDesignerItemRectBase::mousePressEvent(event);
 }
 
 
-void PlanReportDesignerItemRichText::slotPropertyChanged(KPropertySet &s, KProperty &p)
+void PlanReportDesignerItemText::slotPropertyChanged(KPropertySet &s, KProperty &p)
 {
     Q_UNUSED(s);
 

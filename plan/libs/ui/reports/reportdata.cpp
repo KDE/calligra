@@ -2,6 +2,7 @@
 * KPlato Report Plugin
 * Copyright (C) 2007-2009 by Adam Pigg (adam@piggz.co.uk)
 * Copyright (C) 2010 by Dag Andersen <danders@get2net.dk>
+* Copyright (C) 2016 by Dag Andersen <danders@get2net.dk>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -65,6 +66,9 @@ KPLATOUI_EXPORT QList<ReportData*> Report::createBaseReportDataModels( QObject *
     lst << data;
 
     data = new CostBreakdownReportData( parent );
+    lst << data;
+
+    data = new ProjectReportData( parent );
     lst << data;
 
     foreach ( ReportData *r, lst ) {
@@ -202,6 +206,7 @@ QStringList ReportData::fieldKeys() const
 }
 
 QVariant ReportData::value ( unsigned int i ) const {
+    debugPlan<<i<<m_model.rowCount();
     if ( m_model.rowCount() == 0 ) {
         return QVariant();
     }
@@ -212,6 +217,20 @@ QVariant ReportData::value ( unsigned int i ) const {
 
 QVariant ReportData::value ( const QString &fld ) const
 {
+    debugPlan<<fld;
+    if (fld.startsWith('#') && fld.indexOf(objectName()) != 1) {
+        // Not this data source
+        if (!fld.contains('.')) {
+            return QVariant();
+        }
+        QString source = fld.mid(1).toLower();
+        ReportData *rd = getReportData(source.left(source.indexOf('.')));
+        if (!rd) {
+            return QVariant();
+        }
+        return rd->value(fld);
+    }
+
     if ( m_model.rowCount() == 0 ) {
         return QVariant();
     }
@@ -335,6 +354,22 @@ void ReportData::setProject( Project *project )
 void ReportData::setScheduleManager( ScheduleManager *sm )
 {
     m_schedulemanager = sm;
+}
+
+ReportData *ReportData::getReportData(const QString &tag) const
+{
+    if (tag == "project") {
+        if (!m_datasources.contains(tag)) {
+            ReportData *r = new ProjectReportData();
+            r->setParent( const_cast<ReportData*>(this) );
+            r->setProject( m_project );
+            r->setScheduleManager( m_schedulemanager );
+            m_datasources[tag] = r;
+        }
+        debugPlan<<tag<<m_datasources[tag];
+        return m_datasources[tag];
+    }
+    return 0;
 }
 
 //---------------------------
@@ -893,6 +928,127 @@ void CostBreakdownReportData::createModels()
     ItemModelBase *m = new CostBreakdownItemModel( fm );
     fm->setSourceModel( m );
     m_model.setSourceModel( fm );
+}
+
+//-----------------
+ProjectReportData::ProjectReportData( QObject *parent )
+    : ReportData( parent )
+{
+    m_maindatasource = true;
+    m_subdatasource = false;
+    setObjectName( "project" );
+    m_name = i18nc("@info:list Report data source", "Project" );
+
+    createModels();
+
+    m_keys[NodeModel::NodeName] = "#project.name";
+    m_keys[NodeModel::NodeResponsible] = "#project.manager";
+    m_keys[NodeModel::NodeDescription] = "#project.description";
+    m_keys[NodeModel::NodeBCWS] = "#project.bcws";
+    m_keys[NodeModel::NodeBCWP] = "#project.bcwp";
+    m_keys[NodeModel::NodeACWP] = "#project.acwp";
+    m_keys[NodeModel::NodePerformanceIndex] = "#project.spi";
+
+    m_names[NodeModel::NodeName] = m_data.headerData(NodeModel::NodeName).toString();
+    m_names[NodeModel::NodeResponsible] = m_data.headerData(NodeModel::NodeResponsible).toString();
+    m_names[NodeModel::NodeBCWS] = m_data.headerData(NodeModel::NodeBCWS).toString();
+    m_names[NodeModel::NodeBCWP] = m_data.headerData(NodeModel::NodeBCWP).toString();
+    m_names[NodeModel::NodeACWP] = m_data.headerData(NodeModel::NodeACWP).toString();
+    m_names[NodeModel::NodePerformanceIndex] = m_data.headerData(NodeModel::NodePerformanceIndex).toString();
+
+    setColumnRole(NodeModel::NodeDescription, Qt::EditRole);
+}
+
+ProjectReportData::ProjectReportData( const ProjectReportData &other )
+    : ReportData( other )
+{
+    m_keys = other.m_keys;
+    m_names = other.m_names;
+    m_project = other.m_project;
+    m_schedulemanager = other.m_schedulemanager;
+    createModels();
+}
+
+bool ProjectReportData::moveFirst()
+{
+    m_row = 0;
+    return true;
+}
+
+bool ProjectReportData::moveNext()
+{
+    m_row = 0;
+    return false; // only one row
+}
+
+bool ProjectReportData::moveLast()
+{
+    m_row = 0;
+    return true; // always at last
+}
+
+QStringList ProjectReportData::fieldNames() const
+{
+    return m_names.values();
+}
+
+QStringList ProjectReportData::fieldKeys() const
+{
+    return m_keys.values();
+}
+
+QVariant ProjectReportData::value(int column) const
+{
+    QVariant v;
+    if (!m_project) {
+        return v;
+    }
+    if (!m_project->locale()) {
+        debugPlan<<"No locale:"<<m_project;
+        return v;
+    }
+    int role = m_columnroles.value( column, Qt::DisplayRole );
+    v = m_data.data(m_project, column, role);
+    return v;
+}
+
+QVariant ProjectReportData::value(const QString &fld) const
+{
+    QVariant v;
+    int column = m_keys.key(fld.toLower());
+    if (column >= 0) {
+        v = value(column);
+    }
+    debugPlan<<fld<<column<<v;
+    return v;
+}
+
+ReportData *ProjectReportData::clone() const
+{
+    ReportData *r = new ProjectReportData( *this );
+    return r;
+}
+
+qint64 ProjectReportData::recordCount() const {
+    return m_keys.count();
+}
+
+void ProjectReportData::createModels()
+{
+    m_data.setProject(m_project);
+    m_data.setManager(m_schedulemanager);
+}
+
+void ProjectReportData::setProject( Project *project )
+{
+    m_data.setProject(project);
+    ReportData::setProject(project);
+}
+
+void ProjectReportData::setScheduleManager( ScheduleManager *sm )
+{
+    m_data.setManager(sm);
+    ReportData::setScheduleManager(sm);
 }
 
 } //namespace KPlato

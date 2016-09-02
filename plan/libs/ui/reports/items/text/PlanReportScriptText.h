@@ -15,28 +15,28 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SCRIPTINGKRSCRIPTRICHTEXT_H
-#define SCRIPTINGKRSCRIPTRICHTEXT_H
+#ifndef PLANSCRIPTINGKRSCRIPTTEXT_H
+#define PLANSCRIPTINGKRSCRIPTTEXT_H
 
 #include <QObject>
 
-#include "PlanReportItemRichText.h"
+#include "PlanReportItemText.h"
 
 namespace Scripting
 {
 
 /**
-@brief RichText item script interface
+@brief Text item script interface
 
 The user facing interface for scripting report rich text items
 */
-class RichText : public QObject
+class Text : public QObject
 {
     Q_OBJECT
 public:
-    explicit RichText(PlanReportItemRichText*);
+    explicit Text(PlanReportItemText*);
 
-    ~RichText();
+    ~Text();
 public Q_SLOTS:
 
     //!Returns the source (column) that the text item gets its data from
@@ -97,7 +97,7 @@ public Q_SLOTS:
     //!Load the contets for the text item from the given file
     void loadFromFile(const QString& fileName);
 private:
-    PlanReportItemRichText *m_text;
+    PlanReportItemText *m_text;
 };
 
 }

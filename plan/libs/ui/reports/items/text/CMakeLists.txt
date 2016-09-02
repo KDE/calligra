@@ -3,26 +3,26 @@ include_directories(
     ${KPROPERTY_INCLUDES}
 )
 
-ecm_create_qm_loader(planreport_richtextplugin_QM_LOADER planreport_richtextplugin_qt)
+ecm_create_qm_loader(planreport_textplugin_QM_LOADER planreport_textplugin_qt)
 
 #build a shared library
-set(planreport_richtextplugin_LIB_SRCS
-    PlanReportDesignerItemRichText.cpp
-    PlanReportItemRichText.cpp
-    PlanReportRichTextPlugin.cpp
-    PlanReportScriptRichText.cpp
-    ${planreport_richtextplugin_QM_LOADER}
+set(planreport_textplugin_LIB_SRCS
+    PlanReportDesignerItemText.cpp
+    PlanReportItemText.cpp
+    PlanReportTextPlugin.cpp
+    PlanReportScriptText.cpp
+    ${planreport_textplugin_QM_LOADER}
 )
 
-add_library(planreport_richtextplugin MODULE ${planreport_richtextplugin_LIB_SRCS})
+add_library(planreport_textplugin MODULE ${planreport_textplugin_LIB_SRCS})
 
-target_link_libraries(planreport_richtextplugin
+target_link_libraries(planreport_textplugin
     PUBLIC
         KReport
 )
 
 ########### install files ###############
 
-install(TARGETS planreport_richtextplugin DESTINATION ${KREPORT_PLUGIN_INSTALL_DIR})
+install(TARGETS planreport_textplugin DESTINATION ${KREPORT_PLUGIN_INSTALL_DIR})
 
 #add_subdirectory(pics)

@@ -9,20 +9,20 @@
         ], 
         "Category": "", 
         "Dependencies": [], 
-        "Description": "Rich Text element with expanding height", 
-        "Description[x-test]": "xxRich Text element with expanding heightxx", 
+        "Description": "Text element for Reports", 
+        "Description[x-test]": "xxText element for Reportsxx", 
         "EnabledByDefault": true, 
         "Icon": "text-enriched", 
-        "Id": "org.kde.kreport.richtext", 
+        "Id": "org.kde.kreport.plan.text", 
         "License": "LGPL", 
-        "Name": "Rich Text", 
-        "Name[x-test]": "xxRich Textxx", 
+        "Name": "Text", 
+        "Name[x-test]": "xxTextxx", 
         "ServiceTypes": [
             "KReport/Element"
         ], 
         "Version": "1.0", 
         "Website": "https://calligra.org"
     }, 
-    "X-KDE-PluginInfo-LegacyName": "richtext", 
+    "X-KDE-PluginInfo-LegacyName": "plan.text", 
     "X-KReport-Priority": "10"
 }

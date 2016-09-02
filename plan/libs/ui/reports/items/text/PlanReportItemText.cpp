@@ -16,7 +16,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "PlanReportItemRichText.h"
+#include "PlanReportItemText.h"
 #include "KReportRenderObjects.h"
 
 #include <KPropertySet>
@@ -30,19 +30,19 @@
 #include <QDebug>
 #include <QLoggingCategory>
 
-const QLoggingCategory &RICHTEXT_LOG()
+const QLoggingCategory &REPORTTEXT_LOG()
 {
-    static const QLoggingCategory category("calligra.plan.report.richtext");
+    static const QLoggingCategory category("calligra.plan.report.text");
     return category;
 }
-#define debugRichText qCDebug(RICHTEXT_LOG)<<QString("%1:").arg(__func__)
+#define debugText qCDebug(REPORTTEXT_LOG)<<QString("%1:").arg(__func__)
 
-PlanReportItemRichText::PlanReportItemRichText()
+PlanReportItemText::PlanReportItemText()
 {
     createProperties();
 }
 
-PlanReportItemRichText::PlanReportItemRichText(const QDomNode & element) : m_bottomPadding(0.0)
+PlanReportItemText::PlanReportItemText(const QDomNode & element) : m_bottomPadding(0.0)
 {
     QDomNodeList nl = element.childNodes();
     QString n;
@@ -51,6 +51,7 @@ PlanReportItemRichText::PlanReportItemRichText(const QDomNode & element) : m_bot
     createProperties();
     m_name->setValue(element.toElement().attribute(QLatin1String("report:name")));
     m_controlSource->setValue(element.toElement().attribute(QLatin1String("report:item-data-source")));
+    m_controlSource->setOption("extraValueAllowed", QLatin1String("true"));
     m_itemValue->setValue(element.toElement().attribute(QLatin1String("report:value")));
     Z = element.toElement().attribute(QLatin1String("report:z-index")).toDouble();
     m_horizontalAlignment->setValue(element.toElement().attribute(QLatin1String("report:horizontal-align")));
@@ -86,12 +87,12 @@ PlanReportItemRichText::PlanReportItemRichText(const QDomNode & element) : m_bot
 
 }
 
-PlanReportItemRichText::~PlanReportItemRichText()
+PlanReportItemText::~PlanReportItemText()
 {
     delete m_set;
 }
 
-Qt::Alignment PlanReportItemRichText::textFlags() const
+Qt::Alignment PlanReportItemText::textFlags() const
 {
     Qt::Alignment align;
     QString t;
@@ -114,7 +115,7 @@ Qt::Alignment PlanReportItemRichText::textFlags() const
     return align;
 }
 
-void PlanReportItemRichText::createProperties()
+void PlanReportItemText::createProperties()
 {
     m_set = new KPropertySet;
 
@@ -165,24 +166,24 @@ void PlanReportItemRichText::createProperties()
 
 }
 
-QString PlanReportItemRichText::itemDataSource() const
+QString PlanReportItemText::itemDataSource() const
 {
     return m_controlSource->value().toString();
 }
 
-qreal PlanReportItemRichText::bottomPadding() const
+qreal PlanReportItemText::bottomPadding() const
 {
     return m_bottomPadding;
 }
 
-void PlanReportItemRichText::setBottomPadding(qreal bp)
+void PlanReportItemText::setBottomPadding(qreal bp)
 {
     if (m_bottomPadding != bp) {
         m_bottomPadding = bp;
     }
 }
 
-KRTextStyleData PlanReportItemRichText::textStyle() const
+KRTextStyleData PlanReportItemText::textStyle() const
 {
     KRTextStyleData d;
     d.backgroundColor = m_backgroundColor->value().value<QColor>();
@@ -192,7 +193,7 @@ KRTextStyleData PlanReportItemRichText::textStyle() const
     return d;
 }
 
-KReportLineStyle PlanReportItemRichText::lineStyle() const
+KReportLineStyle PlanReportItemText::lineStyle() const
 {
     KReportLineStyle ls;
     ls.setWidth(m_lineWeight->value().toInt());
@@ -202,12 +203,12 @@ KReportLineStyle PlanReportItemRichText::lineStyle() const
 }
 
 // RTTI
-QString PlanReportItemRichText::typeName() const
+QString PlanReportItemText::typeName() const
 {
-    return QLatin1String("richtext");
+    return QLatin1String("plan.text");
 }
 
-int PlanReportItemRichText::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
+int PlanReportItemText::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
                                        const QVariant &data, KReportScriptHandler *script)
 
 {
@@ -222,10 +223,10 @@ int PlanReportItemRichText::renderSimpleData(OROPage *page, OROSection *section,
         QTextEdit te;
         te.setText(data.toString());
         qstrValue = te.toPlainText();
-        debugRichText<<qstrValue;
+        debugText<<qstrValue;
     } else {
         qstrValue = m_itemValue->value().toString();
-        debugRichText<<"No data source:"<<qstrValue;
+        debugText<<"No data source:"<<qstrValue;
     }
     
     QPointF pos = m_pos.toScene();

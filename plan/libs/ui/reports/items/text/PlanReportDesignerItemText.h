@@ -18,26 +18,26 @@
  */
 
 
-#ifndef PlanReportDesignerItemRichText_H
-#define PlanReportDesignerItemRichText_H
+#ifndef PlanReportDesignerItemText_H
+#define PlanReportDesignerItemText_H
 
-#include "PlanReportItemRichText.h"
+#include "PlanReportItemText.h"
 
 #include "KReportDesignerItemRectBase.h"
 
 class KProperty;
 
-class PlanReportDesignerItemRichText : public PlanReportItemRichText, public KReportDesignerItemRectBase
+class PlanReportDesignerItemText : public PlanReportItemText, public KReportDesignerItemRectBase
 {
   Q_OBJECT
 public:
-    PlanReportDesignerItemRichText(KReportDesigner *, QGraphicsScene * scene, const QPointF &pos);
-    PlanReportDesignerItemRichText(const QDomNode & element, KReportDesigner *, QGraphicsScene * scene);
-    virtual ~PlanReportDesignerItemRichText();
+    PlanReportDesignerItemText(KReportDesigner *, QGraphicsScene * scene, const QPointF &pos);
+    PlanReportDesignerItemText(const QDomNode & element, KReportDesigner *, QGraphicsScene * scene);
+    virtual ~PlanReportDesignerItemText();
 
     virtual void buildXML(QDomDocument *doc, QDomElement *parent);
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
-    virtual PlanReportDesignerItemRichText* clone();
+    virtual PlanReportDesignerItemText* clone();
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);

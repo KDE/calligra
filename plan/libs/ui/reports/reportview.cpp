@@ -862,7 +862,7 @@ void ReportDesignPanel::populateToolbar( KToolBar *tb )
     // allow only the following item types, there is not appropriate data for others
     const QStringList itemtypes = QStringList()
     << QLatin1String("org.kde.kreport.label")
-    << QLatin1String("org.kde.kreport.richtext") // replaces text
+    << QLatin1String("org.kde.kreport.plan.text") // replaces text
     << QLatin1String("org.kde.kreport.field")
     << QLatin1String("org.kde.kreport.line")
     << QLatin1String("org.kde.kreport.checkbox")
@@ -1132,7 +1132,7 @@ void ReportDesigner::createDockers()
     DockWidget *dw;
     QWidget *w;
 
-    dw = new DockWidget( this, "Tools", i18nc( "@title:window report group edit tools", "Tools" ) );
+    dw = new DockWidget( this, "DataElements", i18nc( "@title:window report data elements", "Data Elements" ) );
     dw->setLocation( Qt::LeftDockWidgetArea );
     w = new QWidget( dw );
     Ui::ReportToolsWidget tw;
@@ -1141,20 +1141,21 @@ void ReportDesigner::createDockers()
     // allow only the following item types, there is not appropriate data for others
     const QStringList itemtypes = QStringList()
     << QLatin1String("org.kde.kreport.label")
-    << QLatin1String("org.kde.kreport.richtext") // replaces text
+    << QLatin1String("org.kde.kreport.plan.text") // replaces text
     << QLatin1String("org.kde.kreport.field")
     << QLatin1String("org.kde.kreport.line")
     << QLatin1String("org.kde.kreport.checkbox")
     << QLatin1String("org.kde.kreport.chart")
     << QLatin1String("org.kde.kreport.web"); // can be used for fixed sized rich text
-    const QStringList itemTooltips = QStringList()
-    << i18nc( "@into:tooltip", "Label" )
-    << i18nc( "@into:tooltip", "Rich- and plain text element with variable height" )
-    << i18nc( "@into:tooltip", "Plain text element with fixed size" )
-    << i18nc( "@into:tooltip", "Line" )
-    << i18nc( "@into:tooltip", "Checkbox" )
-    << i18nc( "@into:tooltip", "Chart" )
-    << i18nc( "@into:tooltip", "Rich Text element with fixed size" );
+// TODO: proper tooltips
+//     const QStringList itemTooltips = QStringList()
+//     << i18nc( "@into:tooltip", "Label" )
+//     << i18nc( "@into:tooltip", "Text element with variable height" )
+//     << i18nc( "@into:tooltip", "Text element" )
+//     << i18nc( "@into:tooltip", "Line" )
+//     << i18nc( "@into:tooltip", "Checkbox" )
+//     << i18nc( "@into:tooltip", "Chart" )
+//     << i18nc( "@into:tooltip", "Text element with fixed size" );
 
     QActionGroup *ag = new QActionGroup( this );
     QMap<int, QToolButton*> tblst;
@@ -1165,7 +1166,7 @@ void ReportDesigner::createDockers()
             tb->setObjectName( a->objectName() );
             tb->setIcon( a->icon() );
             tb->setText( a->text() );
-            tb->setToolTip( itemTooltips.value( pos ) );
+//             tb.setToolTip( itemTooltips.value( pos ));
             tb->setCheckable( true );
             tblst[pos] = tb;
             connect(tb, SIGNAL(clicked(bool)), SLOT(slotInsertAction()));

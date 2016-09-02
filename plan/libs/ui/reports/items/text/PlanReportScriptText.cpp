@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "PlanReportScriptRichText.h"
+#include "PlanReportScriptText.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -23,27 +23,27 @@
 namespace Scripting
 {
 
-RichText::RichText(PlanReportItemRichText* t)
+Text::Text(PlanReportItemText* t)
 {
     m_text = t;
 }
 
 
-RichText::~RichText()
+Text::~Text()
 {
 }
 
-QString RichText::source() const
+QString Text::source() const
 {
     return m_text->itemDataSource();
 }
 
-void RichText::setSource(const QString& s)
+void Text::setSource(const QString& s)
 {
     m_text->m_controlSource->setValue(s);
 }
 
-int RichText::horizontalAlignment() const
+int Text::horizontalAlignment() const
 {
     const QString a = m_text->m_horizontalAlignment->value().toString().toLower();
 
@@ -58,7 +58,7 @@ int RichText::horizontalAlignment() const
     }
     return -1;
 }
-void RichText::setHorizonalAlignment(int a)
+void Text::setHorizonalAlignment(int a)
 {
     switch (a) {
     case -1:
@@ -76,7 +76,7 @@ void RichText::setHorizonalAlignment(int a)
     }
 }
 
-int RichText::verticalAlignment() const
+int Text::verticalAlignment() const
 {
     const QString a = m_text->m_horizontalAlignment->value().toString().toLower();
 
@@ -91,7 +91,7 @@ int RichText::verticalAlignment() const
     }
     return -1;
 }
-void RichText::setVerticalAlignment(int a)
+void Text::setVerticalAlignment(int a)
 {
     switch (a) {
     case -1:
@@ -109,56 +109,56 @@ void RichText::setVerticalAlignment(int a)
     }
 }
 
-QColor RichText::backgroundColor() const
+QColor Text::backgroundColor() const
 {
     return m_text->m_backgroundColor->value().value<QColor>();
 }
-void RichText::setBackgroundColor(const QColor& c)
+void Text::setBackgroundColor(const QColor& c)
 {
     m_text->m_backgroundColor->setValue(QColor(c));
 }
 
-QColor RichText::foregroundColor() const
+QColor Text::foregroundColor() const
 {
     return m_text->m_foregroundColor->value().value<QColor>();
 }
-void RichText::setForegroundColor(const QColor& c)
+void Text::setForegroundColor(const QColor& c)
 {
     m_text->m_foregroundColor->setValue(QColor(c));
 }
 
-int RichText::backgroundOpacity() const
+int Text::backgroundOpacity() const
 {
     return m_text->m_backgroundOpacity->value().toInt();
 }
-void RichText::setBackgroundOpacity(int o)
+void Text::setBackgroundOpacity(int o)
 {
     m_text->m_backgroundOpacity->setValue(o);
 }
 
-QColor RichText::lineColor() const
+QColor Text::lineColor() const
 {
     return m_text->m_lineColor->value().value<QColor>();
 }
-void RichText::setLineColor(const QColor& c)
+void Text::setLineColor(const QColor& c)
 {
     m_text->m_lineColor->setValue(QColor(c));
 }
 
-int RichText::lineWeight() const
+int Text::lineWeight() const
 {
     return m_text->m_lineWeight->value().toInt();
 }
-void RichText::setLineWeight(int w)
+void Text::setLineWeight(int w)
 {
     m_text->m_lineWeight->setValue(w);
 }
 
-int RichText::lineStyle() const
+int Text::lineStyle() const
 {
     return m_text->m_lineStyle->value().toInt();
 }
-void RichText::setLineStyle(int s)
+void Text::setLineStyle(int s)
 {
     if (s < 0 || s > 5) {
         s = 1;
@@ -166,25 +166,25 @@ void RichText::setLineStyle(int s)
     m_text->m_lineStyle->setValue(s);
 }
 
-QPointF RichText::position() const
+QPointF Text::position() const
 {
     return m_text->m_pos.toPoint();
 }
-void RichText::setPosition(const QPointF& p)
+void Text::setPosition(const QPointF& p)
 {
     m_text->m_pos.setPointPos(p);
 }
 
-QSizeF RichText::size() const
+QSizeF Text::size() const
 {
     return m_text->m_size.toPoint();
 }
-void RichText::setSize(const QSizeF& s)
+void Text::setSize(const QSizeF& s)
 {
     m_text->m_size.setPointSize(s);
 }
 
-void RichText::loadFromFile(const QString &fn)
+void Text::loadFromFile(const QString &fn)
 {
     QFile file(fn);
     //kreportpluginDebug() << "Loading from" << fn;

@@ -16,8 +16,8 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PlanReportItemRichText_H
-#define PlanReportItemRichText_H
+#ifndef PlanReportItemText_H
+#define PlanReportItemText_H
 
 #include "KReportItemBase.h"
 #include "KReportPosition.h"
@@ -29,18 +29,18 @@ class QDomNode;
 
 namespace Scripting
 {
-class RichText;
+class Text;
 
 }
 /**
 */
-class PlanReportItemRichText : public KReportItemBase
+class PlanReportItemText : public KReportItemBase
 {
 Q_OBJECT
 public:
-    PlanReportItemRichText();
-    explicit PlanReportItemRichText(const QDomNode & element);
-    virtual ~PlanReportItemRichText();
+    PlanReportItemText();
+    explicit PlanReportItemText(const QDomNode & element);
+    virtual ~PlanReportItemText();
 
     virtual QString typeName() const;
     virtual int renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset, const QVariant &data, KReportScriptHandler *script);
@@ -79,7 +79,7 @@ protected:
 private:
     virtual void createProperties();
 
-    friend class Scripting::RichText;
+    friend class Scripting::Text;
 };
 
 #endif
