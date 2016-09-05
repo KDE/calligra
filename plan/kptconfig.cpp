@@ -32,6 +32,7 @@ namespace KPlato
 {
 
 Config::Config()
+    : ConfigBase()
 {
     debugPlan<<"Leader:"<<KPlatoSettings::leader();
 }

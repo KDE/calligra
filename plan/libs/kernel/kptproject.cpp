@@ -49,7 +49,7 @@ Project::Project( Node *parent )
         : Node( parent ),
         m_accounts( *this ),
         m_defaultCalendar( 0 ),
-        m_config( 0 ),
+        m_config( &emptyConfig ),
         m_schedulerPlugins()
 {
     //debugPlan<<"("<<this<<")";
