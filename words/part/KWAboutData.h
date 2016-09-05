@@ -22,6 +22,7 @@
 
 #include <KAboutData>
 #include <klocalizedstring.h>
+#include <kcoreaddons_version.h>
 
 #include <calligraversion.h>
 
@@ -38,6 +39,9 @@ KAboutData * newWordsAboutData()
         QStringLiteral("https://www.calligra.org/words/"));
     aboutData->setProductName("calligrawords"); // for bugs.kde.org
     aboutData->setOrganizationDomain("kde.org");
+#if KCOREADDONS_VERSION >= 0x051600
+    aboutData->setDesktopFileName(QStringLiteral("org.kde.calligrawords"));
+#endif
     aboutData->addAuthor(i18n("Pierre Ducroquet"), i18n("Co maintainer"), "");
     aboutData->addAuthor(i18n("C. Boemann"), i18n("Co maintainer"), "cbo@boemann.dk");
     aboutData->addAuthor(i18n("Sebastian Sauer"), i18n("Everything"), "mail@dipe.org");

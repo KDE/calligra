@@ -22,6 +22,7 @@
 
 #include <KAboutData>
 #include <klocalizedstring.h>
+#include <kcoreaddons_version.h>
 
 #include <calligraversion.h>
 
@@ -39,6 +40,9 @@ KAboutData * newKPresenterAboutData()
         QStringLiteral("https://www.calligra.org/stage/"));
     aboutData->setProductName("calligrastage"); // for bugs.kde.org
     aboutData->setOrganizationDomain("kde.org");
+#if KCOREADDONS_VERSION >= 0x051600
+    aboutData->setDesktopFileName(QStringLiteral("org.kde.calligrastage"));
+#endif
     aboutData->addAuthor(i18n("Thorsten Zachmann"), i18n("Maintainer"), "zachmann@kde.org");
     aboutData->addAuthor(i18n("Laurent Montel"), i18n("Former maintainer"), "montel@kde.org");
     aboutData->addAuthor(i18n("Reginald Stadlbauer"),i18n("Original author"), "reggie@kde.org");

@@ -23,6 +23,7 @@
 
 #include <KAboutData>
 #include <KLocalizedString>
+#include <kcoreaddons_version.h>
 
 #include <calligraversion.h>
 
@@ -47,6 +48,9 @@ KAboutData * newAboutData()
 
     aboutData->setProductName( "calligraplan" ); // for bugs.kde.org
     aboutData->setOrganizationDomain("kde.org");
+#if KCOREADDONS_VERSION >= 0x051600
+    aboutData->setDesktopFileName(QStringLiteral("org.kde.calligraplan"));
+#endif
 
     return aboutData;
 }

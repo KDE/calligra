@@ -21,6 +21,7 @@
 
 #include <KAboutData>
 #include <klocalizedstring.h>
+#include <kcoreaddons_version.h>
 
 #include <calligraversion.h>
 
@@ -40,6 +41,9 @@ KAboutData * newKarbonAboutData()
         QStringLiteral("https://www.calligra.org/karbon/"));
     aboutData->setProductName("karbon"); // for bugs.kde.org
     aboutData->setOrganizationDomain("kde.org");
+#if KCOREADDONS_VERSION >= 0x051600
+    aboutData->setDesktopFileName(QStringLiteral("org.kde.karbon"));
+#endif
     aboutData->addAuthor(
         i18n("Rob Buis"),
         QString(),

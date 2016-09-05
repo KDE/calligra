@@ -22,6 +22,7 @@
 
 #include <KAboutData>
 #include <KLocalizedString>
+#include <kcoreaddons_version.h>
 
 #define BRAINDUMP_VERSION "0.10.9"
 
@@ -30,6 +31,9 @@ inline KAboutData newBrainDumpAboutData()
     KAboutData aboutData(QStringLiteral("braindump"), i18n("Braindump"), QStringLiteral(BRAINDUMP_VERSION),
                          i18n("Braindump: directly from your brain to the computer."),
                          KAboutLicense::LGPL, i18n("(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"));
+#if KCOREADDONS_VERSION >= 0x051600
+    aboutData.setDesktopFileName(QStringLiteral("org.kde.braindump"));
+#endif
     aboutData.addAuthor(i18n("Somsubhra Bairi"), i18n("Maintainer"), QStringLiteral("somsubhra.bairi@gmail.com"), QStringLiteral("https://www.somsubhra.com"));
     aboutData.addAuthor(i18n("Cyrille Berger"), i18n("Former Maintainer"), QStringLiteral("cberger@cberger.net"));
     return aboutData;

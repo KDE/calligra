@@ -23,6 +23,7 @@
 
 #include <KAboutData>
 #include <KLocalizedString>
+#include <kcoreaddons_version.h>
 
 #include <calligraversion.h>
 
@@ -47,6 +48,9 @@ KAboutData * newAboutData()
     aboutData->addAuthor(i18n("Dag Andersen"), QString(), QStringLiteral("danders@get2net.dk"));
 
     aboutData->setProductName( "calligraplan/work" );
+#if KCOREADDONS_VERSION >= 0x051600
+    aboutData->setDesktopFileName(QStringLiteral("org.kde.calligraplanworks"));
+#endif
 
     return aboutData;
 }
