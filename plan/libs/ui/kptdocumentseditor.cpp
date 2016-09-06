@@ -216,7 +216,7 @@ void DocumentsEditor::setupGui()
     connect( actionEditDocument, SIGNAL(triggered(bool)), SLOT(slotEditDocument()) );
     addAction( name, actionEditDocument );
 
-    actionViewDocument  = new QAction(koIcon("document-preview"), i18nc("@action View a document", "View..."), this);
+    actionViewDocument  = new QAction(koIcon("document-preview"), xi18nc("@action View a document", "View..."), this);
     actionCollection()->addAction("view_documents", actionViewDocument );
 //    actionCollection()->setDefaultShortcut(actionViewDocument, Qt::CTRL + Qt::SHIFT + Qt::Key_I);
     connect( actionViewDocument, SIGNAL(triggered(bool)), SLOT(slotViewDocument()) );

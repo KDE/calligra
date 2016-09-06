@@ -364,7 +364,7 @@ QUrl ReportWidget::getExportFileName(const QString &mimetype)
 {
     const QString filterString = QMimeDatabase().mimeTypeForName(mimetype).filterString();
 
-    const QString result = QFileDialog::getSaveFileName(this, i18nc("@title:window", "Export Report"), QString(), filterString);
+    const QString result = QFileDialog::getSaveFileName(this, xi18nc("@title:window", "Export Report"), QString(), filterString);
     return result.isEmpty() ? QUrl() : QUrl::fromLocalFile(result);
 }
 
@@ -383,7 +383,7 @@ void ReportWidget::exportAsTextDocument()
         return;
     }
     if (!renderer->render(context, m_reportDocument)) {
-        KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.toDisplayString()) , i18n("Export to text document failed"));
+        KMessageBox::error(this, xi18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.toDisplayString()) , i18n("Export to text document failed"));
     }
 }
 
@@ -403,7 +403,7 @@ void ReportWidget::exportAsSpreadsheet()
         return;
     }
     if (!renderer->render(context, m_reportDocument)) {
-        KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.toDisplayString()) , i18n("Export to spreadsheet failed"));
+        KMessageBox::error(this, xi18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.toDisplayString()) , i18n("Export to spreadsheet failed"));
     }
 }
 
@@ -425,7 +425,7 @@ void ReportWidget::exportAsWebPage()
         return;
     }
     if (!renderer->render(context, m_reportDocument)) {
-        KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.toDisplayString()) , i18n("Export to HTML failed"));
+        KMessageBox::error(this, xi18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.toDisplayString()) , i18n("Export to HTML failed"));
     }
 }
 
@@ -436,13 +436,13 @@ void ReportWidget::setupGui()
     QString name = "reportview_list";
 
     a = new QAction(koIcon("go-next-view"), i18n("Edit Report"), this);
-    a->setToolTip( i18nc( "@info:tooltip", "Edit the report definition" ) );
-    a->setWhatsThis( i18nc( "@info:whatsthis", "Opens the report design in the report design dialog." ) );
+    a->setToolTip( xi18nc( "@info:tooltip", "Edit the report definition" ) );
+    a->setWhatsThis( xi18nc( "@info:whatsthis", "Opens the report design in the report design dialog." ) );
     connect(a, SIGNAL(triggered()), this, SIGNAL(editReportDesign()));
     addAction( name, a );
 
-    KActionMenu *exportMenu = new KActionMenu(koIcon("document-export"), i18nc("@title:menu","E&xport As"), this);
-    exportMenu->setToolTip( i18nc( "@info:tooltip", "Export to file" ) );
+    KActionMenu *exportMenu = new KActionMenu(koIcon("document-export"), xi18nc("@title:menu","E&xport As"), this);
+    exportMenu->setToolTip( xi18nc( "@info:tooltip", "Export to file" ) );
     exportMenu->setDelayed(false);
 
     a = new QAction(koIcon("application-vnd.oasis.opendocument.text"), i18n("Text Document..."), this);
@@ -607,7 +607,7 @@ ReportDesignDialog::ReportDesignDialog( QWidget *parent )
     : KoDialog( parent ),
     m_view( 0 )
 {
-    setCaption( i18nc( "@title:window", "Report Designer" ) );
+    setCaption( xi18nc( "@title:window", "Report Designer" ) );
     m_panel = new ReportDesignPanel( this );
 
     setMainWidget( m_panel );
@@ -617,7 +617,7 @@ ReportDesignDialog::ReportDesignDialog( const QDomElement &element, const QList<
     : KoDialog( parent ),
     m_view( 0 )
 {
-    setCaption( i18nc( "@title:window", "Report Designer" ) );
+    setCaption( xi18nc( "@title:window", "Report Designer" ) );
     setButtons( KoDialog::Close | KoDialog::User1 | KoDialog::User2 );
     setButtonText( KoDialog::User1, i18n( "Save To View" ) );
     setButtonIcon(KoDialog::User1, koIcon("window-new"));
@@ -651,7 +651,7 @@ void ReportDesignDialog::slotButtonClicked( int button )
     if ( button == KoDialog::Close ) {
         if ( m_panel->m_modified ) {
             int res = KMessageBox::warningContinueCancel( this,
-                    i18nc( "@info", "The report definition has been modified.<br/>"
+                    xi18nc( "@info", "The report definition has been modified.<br/>"
                     "<emphasis>If you continue, the modifications will be lost.</emphasis>" ) );
 
             if ( res == KMessageBox::Cancel ) {
@@ -674,7 +674,7 @@ void ReportDesignDialog::slotSaveToFile()
 
     QFile file( fileName );
     if ( ! file.open( QIODevice::WriteOnly ) ) {
-        KMessageBox::sorry( this, i18nc( "@info", "Cannot open file:<br/><filename>%1</filename>", file.fileName() ) );
+        KMessageBox::sorry( this, xi18nc( "@info", "Cannot open file:<br/><filename>%1</filename>", file.fileName() ) );
         return;
     }
     QTextStream out( &file );
@@ -1132,7 +1132,7 @@ void ReportDesigner::createDockers()
     DockWidget *dw;
     QWidget *w;
 
-    dw = new DockWidget( this, "DataElements", i18nc( "@title:window report data elements", "Data Elements" ) );
+    dw = new DockWidget( this, "DataElements", xi18nc( "@title:window report data elements", "Data Elements" ) );
     dw->setLocation( Qt::LeftDockWidgetArea );
     w = new QWidget( dw );
     Ui::ReportToolsWidget tw;
@@ -1149,13 +1149,13 @@ void ReportDesigner::createDockers()
     << QLatin1String("org.kde.kreport.web"); // can be used for fixed sized rich text
 // TODO: proper tooltips
 //     const QStringList itemTooltips = QStringList()
-//     << i18nc( "@into:tooltip", "Label" )
-//     << i18nc( "@into:tooltip", "Text element with variable height" )
-//     << i18nc( "@into:tooltip", "Text element" )
-//     << i18nc( "@into:tooltip", "Line" )
-//     << i18nc( "@into:tooltip", "Checkbox" )
-//     << i18nc( "@into:tooltip", "Chart" )
-//     << i18nc( "@into:tooltip", "Text element with fixed size" );
+//     << xi18nc( "@into:tooltip", "Label" )
+//     << xi18nc( "@into:tooltip", "Text element with variable height" )
+//     << xi18nc( "@into:tooltip", "Text element" )
+//     << xi18nc( "@into:tooltip", "Line" )
+//     << xi18nc( "@into:tooltip", "Checkbox" )
+//     << xi18nc( "@into:tooltip", "Chart" )
+//     << xi18nc( "@into:tooltip", "Text element with fixed size" );
 
     QActionGroup *ag = new QActionGroup( this );
     QMap<int, QToolButton*> tblst;
@@ -1187,7 +1187,7 @@ void ReportDesigner::createDockers()
     dw->setWidget( w );
     addDocker( dw );
 
-    dw = new DockWidget( this, "Sections", i18nc( "@title:window report section docker", "Headers && Footers" ) );
+    dw = new DockWidget( this, "Sections", xi18nc( "@title:window report section docker", "Headers && Footers" ) );
     dw->setLocation( Qt::RightDockWidgetArea );
     w = new QScrollArea( dw );
     Ui::ReportSectionsWidget sw;
@@ -1208,7 +1208,7 @@ void ReportDesigner::createDockers()
 
     addDocker( dw );
 
-    dw = new DockWidget( this, "Groups", i18nc( "@title:window report group section docker", "Groups" ) );
+    dw = new DockWidget( this, "Groups", xi18nc( "@title:window report group section docker", "Groups" ) );
     dw->setLocation( Qt::RightDockWidgetArea );
     w = new QWidget( dw );
     m_groupsectioneditor->setupUi( w );
@@ -1374,18 +1374,18 @@ void GroupSectionEditor::clear()
 {
     model.clear();
     QStringList n;
-    n << i18nc( "@title:column", "Column" )
-        << i18nc( "@title:column", "Sort" )
-        << i18nc( "@title:column", "Header" )
-        << i18nc( "@title:column", "Footer" )
-        << i18nc( "@title:column", "Page Break" );
+    n << xi18nc( "@title:column", "Column" )
+        << xi18nc( "@title:column", "Sort" )
+        << xi18nc( "@title:column", "Header" )
+        << xi18nc( "@title:column", "Footer" )
+        << xi18nc( "@title:column", "Page Break" );
     model.setHorizontalHeaderLabels( n );
 
-    model.setHeaderData( 0, Qt::Horizontal, i18nc( "@info:tooltip", "Groups data by the selected column" ), Qt::ToolTipRole );
-    model.setHeaderData( 1, Qt::Horizontal, i18nc( "@info:tooltip", "Sorts data" ), Qt::ToolTipRole );
-    model.setHeaderData( 2, Qt::Horizontal, i18nc( "@info:tooltip", "Show header section" ), Qt::ToolTipRole );
-    model.setHeaderData( 3, Qt::Horizontal, i18nc( "@info:tooltip", "Show footer section" ), Qt::ToolTipRole );
-    model.setHeaderData( 4, Qt::Horizontal, i18nc( "@info:tooltip", "Insert page break" ), Qt::ToolTipRole );
+    model.setHeaderData( 0, Qt::Horizontal, xi18nc( "@info:tooltip", "Groups data by the selected column" ), Qt::ToolTipRole );
+    model.setHeaderData( 1, Qt::Horizontal, xi18nc( "@info:tooltip", "Sorts data" ), Qt::ToolTipRole );
+    model.setHeaderData( 2, Qt::Horizontal, xi18nc( "@info:tooltip", "Show header section" ), Qt::ToolTipRole );
+    model.setHeaderData( 3, Qt::Horizontal, xi18nc( "@info:tooltip", "Show footer section" ), Qt::ToolTipRole );
+    model.setHeaderData( 4, Qt::Horizontal, xi18nc( "@info:tooltip", "Insert page break" ), Qt::ToolTipRole );
 }
 
 void GroupSectionEditor::setData( KReportDesigner *d, ReportData *rd )

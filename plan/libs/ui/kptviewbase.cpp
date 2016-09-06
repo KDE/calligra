@@ -568,7 +568,7 @@ KoPrintJob *ViewBase::createPrintJob()
 QWidget *ViewBase::createPageLayoutWidget( ViewBase *view )
 {
     QWidget *widget = new QWidget();
-    widget->setWindowTitle( i18nc( "@title:tab", "Page Layout" ) );
+    widget->setWindowTitle( xi18nc( "@title:tab", "Page Layout" ) );
 
     QHBoxLayout *lay = new QHBoxLayout(widget);
 
@@ -589,7 +589,7 @@ QWidget *ViewBase::createPageLayoutWidget( ViewBase *view )
 PrintingHeaderFooter *ViewBase::createHeaderFooterWidget( ViewBase *view )
 {
     PrintingHeaderFooter *widget = new PrintingHeaderFooter( view->printingOptions() );
-    widget->setWindowTitle( i18nc( "@title:tab", "Header and Footer" ) );
+    widget->setWindowTitle( xi18nc( "@title:tab", "Header and Footer" ) );
     widget->setOptions( view->printingOptions() );
 
     return widget;

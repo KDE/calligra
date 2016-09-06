@@ -77,9 +77,9 @@ QVariant TaskEditorItemModel::headerData( int section, Qt::Orientation orientati
 {
     if ( orientation == Qt::Horizontal && section == NodeModel::NodeType ) {
         if ( role == Qt::ToolTipRole ) {
-            return i18nc( "@info:tooltip", "The type of task or the estimate type of the task" );
+            return xi18nc( "@info:tooltip", "The type of task or the estimate type of the task" );
         } else if ( role == Qt::WhatsThisRole ) {
-            return i18nc( "@info:whatsthis",
+            return xi18nc( "@info:whatsthis",
                           "<p>Indicates the type of task or the estimate type of the task.</p>"
                           "The type can be set to <emphasis>Milestone</emphasis>, <emphasis>Effort</emphasis> or <emphasis>Duration</emphasis>.<nl/>"
                           "<note>If the type is <emphasis>Summary</emphasis> or <emphasis>Project</emphasis> the type is not editable.</note>");
@@ -124,9 +124,9 @@ QVariant TaskEditorItemModel::type( const Node *node, int role ) const
             return Qt::AlignCenter;
         case Qt::ToolTipRole: {
             if ( node->type() == Node::Type_Task ) {
-                return i18nc( "@info:tooltip", "Task with estimate type: %1", node->estimate()->typeToString( true ) );
+                return xi18nc( "@info:tooltip", "Task with estimate type: %1", node->estimate()->typeToString( true ) );
             }
-            return i18nc( "@info:tooltip", "Task type: %1", node->typeToString( true ) );
+            return xi18nc( "@info:tooltip", "Task type: %1", node->typeToString( true ) );
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -374,7 +374,7 @@ void TaskEditor::setProject( Project *project )
 void TaskEditor::createDockers()
 {
     // Add dockers
-    DockWidget *ds = new DockWidget( this, "Allocations", i18nc( "@title resource allocations", "Allocations" ) );
+    DockWidget *ds = new DockWidget( this, "Allocations", xi18nc( "@title resource allocations", "Allocations" ) );
     QTreeView *x = new QTreeView( ds );
     AllocatedResourceItemModel *m1 = new AllocatedResourceItemModel( x );
     x->setModel( m1 );
@@ -393,8 +393,8 @@ void TaskEditor::createDockers()
     connect(m1, SIGNAL(resizeColumnToContents(int)), x, SLOT(resizeColumnToContents(int)));
     addDocker( ds );
 
-    ds = new DockWidget( this, "Resources", i18nc( "@title", "Resources" ) );
-    ds->setToolTip( i18nc( "@info:tooltip",
+    ds = new DockWidget( this, "Resources", xi18nc( "@title", "Resources" ) );
+    ds->setToolTip( xi18nc( "@info:tooltip",
                           "Drag resources into the Task Editor"
                           " and drop into the allocations- or responsible column" ) );
     QTreeView *e = new QTreeView( ds );
@@ -420,8 +420,8 @@ void TaskEditor::createDockers()
     addDocker( ds );
 
     {
-        ds = new DockWidget( this, "Taskmodules", i18nc( "@title", "Task Modules" ) );
-        ds->setToolTip( i18nc( "@info:tooltip", "Drag a task module into the <emphasis>Task Editor</emphasis> to add it to the project" ) );
+        ds = new DockWidget( this, "Taskmodules", xi18nc( "@title", "Task Modules" ) );
+        ds->setToolTip( xi18nc( "@info:tooltip", "Drag a task module into the <emphasis>Task Editor</emphasis> to add it to the project" ) );
         ds->setLocation( Qt::LeftDockWidgetArea );
         e = new QTreeView( ds );
         TaskModuleModel *m = new TaskModuleModel( e );
@@ -719,7 +719,7 @@ void TaskEditor::setupGui()
     connect( actionAddSubMilestone, SIGNAL(triggered(bool)), SLOT(slotAddSubMilestone()) );
     menuAddSubTask->addAction( actionAddSubMilestone );
 
-    actionDeleteTask  = new QAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
+    actionDeleteTask  = new QAction(koIcon("edit-delete"), xi18nc("@action", "Delete"), this);
     actionDeleteTask->setShortcut( Qt::Key_Delete );
     actionCollection()->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL(triggered(bool)), SLOT(slotDeleteTask()) );

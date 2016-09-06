@@ -61,7 +61,7 @@ ResourceDialogImpl::ResourceDialogImpl( const Project &project, Resource &resour
     QStandardItemModel *m = new QStandardItemModel( ui_teamView );
     pr->setSourceModel( new QStandardItemModel( ui_teamView ) );
     ui_teamView->setModel( m );
-    m->setHorizontalHeaderLabels( QStringList() << i18nc( "title:column", "Select team members" ) << i18nc( "title:column", "Group" ) );
+    m->setHorizontalHeaderLabels( QStringList() << xi18nc( "title:column", "Select team members" ) << xi18nc( "title:column", "Group" ) );
     foreach ( Resource *r, m_project.resourceList() ) {
         if ( r->type() != Resource::Type_Work || r->id() == m_resource.id() ) {
             continue;

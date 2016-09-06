@@ -278,7 +278,7 @@ QVariant CalendarItemModel::name( const Calendar *a, int role ) const
             return a->name();
         case Qt::ToolTipRole:
             if ( a->isDefault() ) {
-                return i18nc( "1=calendar name", "%1 (Default calendar)", a->name() );
+                return xi18nc( "1=calendar name", "%1 (Default calendar)", a->name() );
             }
             return a->name();
         case Qt::StatusTipRole:
@@ -416,8 +416,8 @@ QVariant CalendarItemModel::headerData( int section, Qt::Orientation orientation
     if ( orientation == Qt::Horizontal ) {
         if ( role == Qt::DisplayRole ) {
             switch ( section ) {
-                case Name: return i18nc( "@title:column", "Name" );
-                case TimeZone: return i18nc( "@title:column", "Timezone" );
+                case Name: return xi18nc( "@title:column", "Name" );
+                case TimeZone: return xi18nc( "@title:column", "Timezone" );
                 default: return QVariant();
             }
         } else if ( role == Qt::TextAlignmentRole ) {
@@ -862,18 +862,18 @@ QVariant CalendarDayItemModel::data( const QModelIndex &index, int role ) const
         }
         case Qt::ToolTipRole: {
             if ( d->state() == CalendarDay::Undefined ) {
-                return i18nc( "@info:tooltip", "Undefined" );
+                return xi18nc( "@info:tooltip", "Undefined" );
             }
             if ( d->state() == CalendarDay::NonWorking ) {
-                return i18nc( "@info:tooltip", "Non-working" );
+                return xi18nc( "@info:tooltip", "Non-working" );
             }
             QLocale locale;
             KFormat format(locale);
             QStringList tip;
             foreach ( TimeInterval *i, d->timeIntervals() ) {
-                tip <<  i18nc( "@info:tooltip 1=time 2=The work duration (non integer)", "%1, %2", locale.toString( i->startTime(), QLocale::ShortFormat ), format.formatDuration( i->second ) );
+                tip <<  xi18nc( "@info:tooltip 1=time 2=The work duration (non integer)", "%1, %2", locale.toString( i->startTime(), QLocale::ShortFormat ), format.formatDuration( i->second ) );
             }
-            return tip.join( "\n" );
+            return tip.join( "<nl/>" );
         }
         case Qt::FontRole: {
             if ( d->state() != CalendarDay::Undefined ) {
@@ -1018,16 +1018,16 @@ QVariant DateTableDataModel::data( const QDate &date, int role, int dataType ) c
         }
         CalendarDay *day = m_calendar->findDay( date );
         if ( day == 0 || day->state() == CalendarDay::Undefined ) {
-            return i18nc( "@info:tooltip", "Undefined" );
+            return xi18nc( "@info:tooltip", "Undefined" );
         }
         if ( day->state() == CalendarDay::NonWorking ) {
-            return i18nc( "@info:tooltip", "Non-working" );
+            return xi18nc( "@info:tooltip", "Non-working" );
         }
         QLocale locale;
         KFormat format(locale);
         QStringList tip;
         foreach ( TimeInterval *i, day->timeIntervals() ) {
-            tip <<  i18nc( "@info:tooltip 1=time 2=The work duration (non integer)", "%1, %2", locale.toString( i->startTime(), QLocale::ShortFormat ), format.formatDuration( i->second ) );
+            tip <<  xi18nc( "@info:tooltip 1=time 2=The work duration (non integer)", "%1, %2", locale.toString( i->startTime(), QLocale::ShortFormat ), format.formatDuration( i->second ) );
         }
         return tip.join( "\n" );
     }
@@ -1304,8 +1304,8 @@ QVariant CalendarExtendedItemModel::headerData( int section, Qt::Orientation ori
     if ( orientation == Qt::Horizontal ) {
         if ( role == Qt::DisplayRole ) {
             switch ( col ) {
-                case 0: return i18nc( "@title:column", "Weekday" );
-                case 1: return i18nc( "@title:column", "Date" );
+                case 0: return xi18nc( "@title:column", "Weekday" );
+                case 1: return xi18nc( "@title:column", "Date" );
                 default: return QVariant();
             }
         } else if ( role == Qt::TextAlignmentRole ) {

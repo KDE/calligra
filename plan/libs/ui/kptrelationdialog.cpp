@@ -33,8 +33,8 @@ RelationPanel::RelationPanel(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
-    lagLabel->setText( i18nc( "@label:spinbox Time lag", "Lag:" ) );
-    QString tt = i18nc( "@info:tooltip", "<emphasis>Lag</emphasis> is the time the dependent task is delayed" );
+    lagLabel->setText( xi18nc( "@label:spinbox Time lag", "Lag:" ) );
+    QString tt = xi18nc( "@info:tooltip", "<emphasis>Lag</emphasis> is the time the dependent task is delayed" );
     lagLabel->setToolTip( tt );
     lag->setToolTip( tt );
 }
@@ -50,7 +50,7 @@ AddRelationDialog::AddRelationDialog(Project &project, Relation *rel, QWidget *p
     setDefaultButton( Ok );
     showButtonSeparator( true );
     if ( caption.isEmpty() ) {
-        setCaption( i18nc( "@title:window", "Add Dependency" ) );
+        setCaption( xi18nc( "@title:window", "Add Dependency" ) );
     }
     m_relation = rel;
     m_panel = new RelationPanel(this);
@@ -142,11 +142,11 @@ int AddRelationDialog::selectedRelationType() const {
 //////////////////
 
 ModifyRelationDialog::ModifyRelationDialog(Project &project, Relation *rel, QWidget *p)
-    : AddRelationDialog(project, rel, p, i18nc( "@title:window", "Edit Dependency"), Ok|Cancel|User1)
+    : AddRelationDialog(project, rel, p, xi18nc( "@title:window", "Edit Dependency"), Ok|Cancel|User1)
 {
     m_deleterelation = false;
 
-    setButtonText( KoDialog::User1, i18nc( "@action:button", "Delete") );
+    setButtonText( KoDialog::User1, xi18nc( "@action:button", "Delete") );
     m_deleted = false;
     enableButtonOk(false);
     

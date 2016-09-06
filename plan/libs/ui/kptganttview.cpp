@@ -184,7 +184,7 @@ GanttPrintingOptionsWidget::GanttPrintingOptionsWidget( QWidget *parent )
     : QWidget( parent )
 {
     setupUi( this );
-    setWindowTitle( i18nc( "@title:tab", "Chart" ) );
+    setWindowTitle( xi18nc( "@title:tab", "Chart" ) );
 }
 
 GanttPrintingOptions GanttPrintingOptionsWidget::options() const

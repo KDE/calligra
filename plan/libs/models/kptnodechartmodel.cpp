@@ -245,16 +245,16 @@ QVariant ChartItemModel::headerData( int section, Qt::Orientation orientation, i
     } else if ( role == Qt::ToolTipRole ) {
         if ( orientation == Qt::Horizontal ) {
             switch ( section ) {
-                case BCWSCost: return i18nc( "@info:tooltip", "Cost based Budgeted Cost of Work Scheduled" );
-                case BCWPCost: return i18nc( "@info:tooltip", "Cost based Budgeted Cost of Work Performed" );
-                case ACWPCost: return i18nc( "@info:tooltip", "Cost based Actual Cost of Work Performed" );
-                case BCWSEffort: return i18nc( "@info:tooltip", "Effort based Budgeted Cost of Work Scheduled" );
-                case BCWPEffort: return i18nc( "@info:tooltip", "Effort based Budgeted Cost of Work Performed" );
-                case ACWPEffort: return i18nc( "@info:tooltip", "Effort based Actual Cost of Work Performed" );
-                case SPICost: return i18nc( "@info:tooltip", "Cost based Schedule Performance Index (BCWP/BCWS)" );
-                case CPICost: return i18nc( "@info:tooltip", "Cost based Cost Performance Index (BCWP/ACWS)" );
-                case SPIEffort: return i18nc( "@info:tooltip", "Effort based Schedule Performance Index (BCWP/BCWS)" );
-                case CPIEffort: return i18nc( "@info:tooltip", "Effort based Cost Performance Index (BCWP/ACWS)" );
+                case BCWSCost: return xi18nc( "@info:tooltip", "Cost based Budgeted Cost of Work Scheduled" );
+                case BCWPCost: return xi18nc( "@info:tooltip", "Cost based Budgeted Cost of Work Performed" );
+                case ACWPCost: return xi18nc( "@info:tooltip", "Cost based Actual Cost of Work Performed" );
+                case BCWSEffort: return xi18nc( "@info:tooltip", "Effort based Budgeted Cost of Work Scheduled" );
+                case BCWPEffort: return xi18nc( "@info:tooltip", "Effort based Budgeted Cost of Work Performed" );
+                case ACWPEffort: return xi18nc( "@info:tooltip", "Effort based Actual Cost of Work Performed" );
+                case SPICost: return xi18nc( "@info:tooltip", "Cost based Schedule Performance Index (BCWP/BCWS)" );
+                case CPICost: return xi18nc( "@info:tooltip", "Cost based Cost Performance Index (BCWP/ACWS)" );
+                case SPIEffort: return xi18nc( "@info:tooltip", "Effort based Schedule Performance Index (BCWP/BCWS)" );
+                case CPIEffort: return xi18nc( "@info:tooltip", "Effort based Cost Performance Index (BCWP/ACWS)" );
                 default: return QVariant();
             }
         } else {
@@ -478,34 +478,34 @@ QVariant PerformanceDataCurrentDateModel::headerData( int section, Qt::Orientati
     if ( role == Qt::DisplayRole ) {
         if ( o == Qt::Horizontal ) {
             switch ( section ) {
-            case 0: return i18nc( "@title:column Budgeted Cost of Work Scheduled", "BCWS" );
-            case 1: return i18nc( "@title:column Budgeted Cost of Work Performed", "BCWP" );
-            case 2: return i18nc( "@title:column Actual Cost of Work Performed", "ACWP" );
-            case 3: return i18nc( "@title:column Schedule Performance Index", "SPI" );
-            case 4: return i18nc( "@title:column Cost Performance Index", "CPI" );
+            case 0: return xi18nc( "@title:column Budgeted Cost of Work Scheduled", "BCWS" );
+            case 1: return xi18nc( "@title:column Budgeted Cost of Work Performed", "BCWP" );
+            case 2: return xi18nc( "@title:column Actual Cost of Work Performed", "ACWP" );
+            case 3: return xi18nc( "@title:column Schedule Performance Index", "SPI" );
+            case 4: return xi18nc( "@title:column Cost Performance Index", "CPI" );
             default: break;
             }
         } else {
             switch ( section ) {
-            case 0: return i18nc( "@title:column", "Cost:" );
-            case 1: return i18nc( "@title:column", "Effort:" );
+            case 0: return xi18nc( "@title:column", "Cost:" );
+            case 1: return xi18nc( "@title:column", "Effort:" );
             default: break;
             }
         }
     } else if ( role == Qt::ToolTipRole ) {
         if ( o == Qt::Horizontal ) {
             switch ( section ) {
-            case 0: return i18nc( "@info:tooltip", "Budgeted Cost of Work Scheduled" );
-            case 1: return i18nc( "@info:tooltip", "Budgeted Cost of Work Performed" );
-            case 2: return i18nc( "@info:tooltip", "Actual Cost of Work Performed" );
-            case 3: return i18nc( "@info:tooltip", "Schedule Performance Index" );
-            case 4: return i18nc( "@info:tooltip", "Cost Performance Index" );
+            case 0: return xi18nc( "@info:tooltip", "Budgeted Cost of Work Scheduled" );
+            case 1: return xi18nc( "@info:tooltip", "Budgeted Cost of Work Performed" );
+            case 2: return xi18nc( "@info:tooltip", "Actual Cost of Work Performed" );
+            case 3: return xi18nc( "@info:tooltip", "Schedule Performance Index" );
+            case 4: return xi18nc( "@info:tooltip", "Cost Performance Index" );
             default: break;
             }
         } else {
             switch ( section ) {
-            case 0: return i18nc( "@info:tooltip", "Performance indicators based on cost" );
-            case 1: return i18nc( "@info:tooltip", "Performance indicators based on effort" );
+            case 0: return xi18nc( "@info:tooltip", "Performance indicators based on cost" );
+            case 1: return xi18nc( "@info:tooltip", "Performance indicators based on effort" );
             default: break;
             }
         }

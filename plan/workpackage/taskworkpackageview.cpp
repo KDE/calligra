@@ -621,7 +621,7 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
     const QAbstractItemModel* model = idx.model();
     if ( data( idx, TaskWorkPackageModel::NodeFinished, Qt::EditRole ).toBool() ) {
         // finished
-        return i18nc( "@info:tooltip",
+        return xi18nc( "@info:tooltip",
                       "Task: %1<nl/>"
                       "Actual finish: %2<nl/>"
                       "Planned finish: %3<nl/>"
@@ -636,7 +636,7 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
     }
     if ( data( idx, TaskWorkPackageModel::NodeStarted, Qt::EditRole ).toBool() ) {
         // started
-        return i18nc( "@info:tooltip",
+        return xi18nc( "@info:tooltip",
                       "Task: %1<nl/>"
                       "Completion: %2 %<nl/>"
                       "Actual start: %3<nl/>"
@@ -657,7 +657,7 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
     int typ = data( idx, NodeModel::NodeType, Qt::EditRole ).toInt();
     switch ( typ ) {
         case Node::Type_Task:
-            return i18nc( "@info:tooltip",
+            return xi18nc( "@info:tooltip",
                           "Task: %1<nl/>"
                           "Planned: %2 - %3<nl/>"
                           "Status: %4<nl/>"

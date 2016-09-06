@@ -937,7 +937,7 @@ ProjectReportData::ProjectReportData( QObject *parent )
     m_maindatasource = true;
     m_subdatasource = false;
     setObjectName( "project" );
-    m_name = i18nc("@info:list Report data source", "Project" );
+    m_name = i18n( "Project" );
 
     createModels();
 
@@ -951,6 +951,7 @@ ProjectReportData::ProjectReportData( QObject *parent )
 
     m_names[NodeModel::NodeName] = m_data.headerData(NodeModel::NodeName).toString();
     m_names[NodeModel::NodeResponsible] = m_data.headerData(NodeModel::NodeResponsible).toString();
+    m_names[NodeModel::NodeDescription] = m_data.headerData(NodeModel::NodeDescription).toString();
     m_names[NodeModel::NodeBCWS] = m_data.headerData(NodeModel::NodeBCWS).toString();
     m_names[NodeModel::NodeBCWP] = m_data.headerData(NodeModel::NodeBCWP).toString();
     m_names[NodeModel::NodeACWP] = m_data.headerData(NodeModel::NodeACWP).toString();

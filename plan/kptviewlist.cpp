@@ -194,7 +194,7 @@ void ViewListItem::save( QDomElement &element ) const
 ViewListTreeWidget::ViewListTreeWidget( QWidget *parent )
     : QTreeWidget( parent )
 {
-    setWhatsThis( i18nc( "@info:whatsthis",
+    setWhatsThis( xi18nc( "@info:whatsthis",
         "<para>This is the list of available views and editors.</para>"
         "<para>You can configure the list by using the context menu:"
         "<list>"
@@ -726,15 +726,15 @@ void ViewListWidget::setupContextMenus()
     // NOTE: can't use xml file as there may not be a factory()
     QAction *action;
     // view actions
-    action = new QAction(koIcon("edit-rename"), i18nc("@action:inmenu rename view", "Rename"), this);
+    action = new QAction(koIcon("edit-rename"), xi18nc("@action:inmenu rename view", "Rename"), this);
     connect( action, SIGNAL(triggered(bool)), this, SLOT(slotEditViewTitle()) );
     m_viewactions.append( action );
 
-    action = new QAction(koIcon("configure"), i18nc("@action:inmenu configure view", "Configure..."), this );
+    action = new QAction(koIcon("configure"), xi18nc("@action:inmenu configure view", "Configure..."), this );
     connect( action, SIGNAL(triggered(bool)), this, SLOT(slotConfigureItem()) );
     m_viewactions.append( action );
 
-    action = new QAction(koIcon("list-remove"), i18nc("@action:inmenu remove view", "Remove"), this);
+    action = new QAction(koIcon("list-remove"), xi18nc("@action:inmenu remove view", "Remove"), this);
     connect( action, SIGNAL(triggered(bool)), this, SLOT(slotRemoveView()) );
     m_viewactions.append( action );
 
@@ -743,15 +743,15 @@ void ViewListWidget::setupContextMenus()
     m_viewactions.append( action );
 
     // Category actions
-    action = new QAction(koIcon("edit-rename"), i18nc("@action:inmenu rename view category", "Rename"), this);
+    action = new QAction(koIcon("edit-rename"), xi18nc("@action:inmenu rename view category", "Rename"), this);
     connect( action, SIGNAL(triggered(bool)), SLOT(renameCategory()) );
     m_categoryactions.append( action );
 
-    action = new QAction(koIcon("configure"), i18nc("@action:inmenu configure view category", "Configure..."), this);
+    action = new QAction(koIcon("configure"), xi18nc("@action:inmenu configure view category", "Configure..."), this);
     connect( action, SIGNAL(triggered(bool)), this, SLOT(slotConfigureItem()) );
     m_categoryactions.append( action );
 
-    action = new QAction(koIcon("list-remove"), i18nc("@action:inmenu Remove view category", "Remove"),this);
+    action = new QAction(koIcon("list-remove"), xi18nc("@action:inmenu Remove view category", "Remove"),this);
     connect( action, SIGNAL(triggered(bool)), this, SLOT(slotRemoveCategory()) );
     m_categoryactions.append( action );
 
@@ -760,7 +760,7 @@ void ViewListWidget::setupContextMenus()
     m_categoryactions.append( action );
 
     // list actions
-    action = new QAction(koIcon("list-add"), i18nc("@action:inmenu Insert View", "Insert..."), this);
+    action = new QAction(koIcon("list-add"), xi18nc("@action:inmenu Insert View", "Insert..."), this);
     connect( action, SIGNAL(triggered(bool)), this, SLOT(slotAddView()) );
     m_listactions.append( action );
 }

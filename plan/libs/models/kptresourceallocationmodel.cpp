@@ -165,10 +165,10 @@ QVariant ResourceAllocationModel::allocation( const ResourceGroup *group, const 
         case Qt::ToolTipRole: {
             int units = rr ? rr->units() : 0;
             if ( units == 0 ) {
-                return i18nc( "@info:tooltip", "Not allocated" );
+                return xi18nc( "@info:tooltip", "Not allocated" );
             }
             // xgettext: no-c-format
-            return i18nc( "@info:tooltip", "Allocated units: %1%", units );
+            return xi18nc( "@info:tooltip", "Allocated units: %1%", units );
         }
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
@@ -250,7 +250,7 @@ QVariant ResourceAllocationModel::required( const Resource *res, int role ) cons
         case Qt::StatusTipRole:
             return QVariant();
         case Qt::WhatsThisRole:
-            return i18nc( "@info:whatsthis", "<title>Required Resources</title>"
+            return xi18nc( "@info:whatsthis", "<title>Required Resources</title>"
             "<para>A working resource can be assigned to one or more required resources."
             " A required resource is a material resource that the working resource depends on"
             " in order to do the work.</para>"
@@ -329,8 +329,8 @@ QVariant ResourceAllocationModel::headerData( int section, int role )
             case RequestName: return i18n( "Name" );
             case RequestType: return i18n( "Type" );
             case RequestAllocation: return i18n( "Allocation" );
-            case RequestMaximum: return i18nc( "@title:column", "Available" );
-            case RequestRequired: return i18nc( "@title:column", "Required Resources" );
+            case RequestMaximum: return xi18nc( "@title:column", "Available" );
+            case RequestRequired: return xi18nc( "@title:column", "Required Resources" );
             default: return QVariant();
         }
     } else if ( role == Qt::TextAlignmentRole ) {
@@ -343,14 +343,14 @@ QVariant ResourceAllocationModel::headerData( int section, int role )
             case RequestName: return ToolTip::resourceName();
             case RequestType: return ToolTip::resourceType();
             case RequestAllocation: return i18n( "Resource allocation" );
-            case RequestMaximum: return i18nc( "@info:tootip", "Available resources or resource units" );
-            case RequestRequired: return i18nc( "@info:tootip", "Required material resources" );
+            case RequestMaximum: return xi18nc( "@info:tootip", "Available resources or resource units" );
+            case RequestRequired: return xi18nc( "@info:tootip", "Required material resources" );
             default: return QVariant();
         }
     } else if ( role == Qt::WhatsThisRole ) {
         switch ( section ) {
             case RequestRequired:
-                return i18nc( "@info:whatsthis", "<title>Required Resources</title>"
+                return xi18nc( "@info:whatsthis", "<title>Required Resources</title>"
                 "<para>A working resource can be assigned to one or more required resources."
                 " A required resource is a material resource that the working resource depends on"
                 " in order to do the work.</para>"
@@ -681,9 +681,9 @@ QVariant ResourceAllocationItemModel::allocation( const ResourceGroup *group, co
             return m_resourceCache[ res ]->units();
         case Qt::ToolTipRole: {
             if ( res->units() == 0 ) {
-                return i18nc( "@info:tooltip", "Not allocated" );
+                return xi18nc( "@info:tooltip", "Not allocated" );
             }
-            return i18nc( "@info:tooltip", "%1 allocated out of %2 available", allocation( group, res, Qt::DisplayRole ).toString(), m_model.maximum( res, Qt::DisplayRole ).toString() );
+            return xi18nc( "@info:tooltip", "%1 allocated out of %2 available", allocation( group, res, Qt::DisplayRole ).toString(), m_model.maximum( res, Qt::DisplayRole ).toString() );
         }
         case Qt::CheckStateRole:
             return m_resourceCache[ res ]->units() == 0 ? Qt::Unchecked : Qt::Checked;
@@ -720,19 +720,19 @@ QVariant ResourceAllocationItemModel::allocation( const ResourceGroup *res, int 
         case Qt::EditRole:
             return qMax( m_groupCache[ res ]->units(), allocation( res, Role::Minimum ).toInt() );
         case Qt::ToolTipRole: {
-            QString s1 = i18ncp( "@info:tooltip",
+            QString s1 = xi18ncp( "@info:tooltip",
                                  "%1 resource requested for dynamic allocation",
                                  "%1 resources requested for dynamic allocation",
                                  allocation( res, Qt::EditRole ).toInt() );
-            QString s2 = i18ncp( "@info:tooltip",
+            QString s2 = xi18ncp( "@info:tooltip",
                                  "%1 resource allocated",
                                  "%1 resources allocated",
                                  requestedResources( res ) );
 
-            return i18nc( "@info:tooltip", "%1<nl/>%2", s1, s2 );
+            return xi18nc( "@info:tooltip", "%1<nl/>%2", s1, s2 );
         }
         case Qt::WhatsThisRole: {
-            return i18nc( "@info:whatsthis",
+            return xi18nc( "@info:whatsthis",
                           "<title>Group allocations</title>"
                           "<para>You can allocate a number of resources from a group and let"
                           " the scheduler select from the available resources at the time of scheduling.</para>"
@@ -808,7 +808,7 @@ QVariant ResourceAllocationItemModel::maximum( const ResourceGroup *res, int rol
             return i18nc( "1: free resources, 2: number of resources", "%1 of %2", c, res->numResources() );
         }
         case Qt::ToolTipRole:
-            return i18ncp( "@info:tooltip", "There is %1 resource available in this group", "There are %1 resources available in this group", res->numResources() );
+            return xi18ncp( "@info:tooltip", "There is %1 resource available in this group", "There are %1 resources available in this group", res->numResources() );
         default:
             return m_model.maximum( res, role );
     }
@@ -842,7 +842,7 @@ QVariant ResourceAllocationItemModel::required( const QModelIndex &idx, int role
             switch ( res->type() ) {
                 case Resource::Type_Work: {
                     if ( ! hasMaterialResources() ) {
-                        return i18nc( "@info:tooltip", "No material resources available" );
+                        return xi18nc( "@info:tooltip", "No material resources available" );
                     }
                     QStringList lst;
                     if ( m_requiredChecked[ res ] ) {
@@ -850,12 +850,12 @@ QVariant ResourceAllocationItemModel::required( const QModelIndex &idx, int role
                             lst << r->name();
                         }
                     }
-                    return lst.isEmpty() ? i18nc( "@info:tooltip", "No required resources" ) : lst.join( "\n" );
+                    return lst.isEmpty() ? xi18nc( "@info:tooltip", "No required resources" ) : lst.join( "\n" );
                 }
                 case Resource::Type_Material:
-                    return i18nc( "@info:tooltip", "Material resources cannot have required resources" );
+                    return xi18nc( "@info:tooltip", "Material resources cannot have required resources" );
                 case Resource::Type_Team:
-                    return i18nc( "@info:tooltip", "Team resources cannot have required resources" );
+                    return xi18nc( "@info:tooltip", "Team resources cannot have required resources" );
             }
             break;
         case Qt::CheckStateRole:

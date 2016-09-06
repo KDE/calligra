@@ -485,7 +485,7 @@ Project::pass2(bool noDepCheck)
 
     if (taskList.isEmpty())
     {
-        TJMH.errorMessage(i18nc("@info/plain", "The project does not contain any tasks."));
+        TJMH.errorMessage(xi18nc("@info/plain", "The project does not contain any tasks."));
         return false;
     }
     qDebug()<<"pass2 task info:";
@@ -1077,16 +1077,16 @@ Project::schedule(int sc)
     {
         setProgressInfo("");
         setProgressBar(0, 0);
-        TJMH.infoMessage(i18nc("@info/plain", "Scheduling aborted on user request"));
+        TJMH.infoMessage(xi18nc("@info/plain", "Scheduling aborted on user request"));
         return false;
     }
 //    if (runAwayFound) {
 //        foreach (CoreAttributes *t, taskList) {
 //            if (static_cast<Task*>(t)->isRunaway()) {
 //                if (static_cast<Task*>(t)->getScheduling() == Task::ASAP) {
-//                    TJMH.errorMessage(i18nc("@info/plain", "Cannot meet the projects target finish time. Try using a later project end date.", t->getName()), t);
+//                    TJMH.errorMessage(xi18nc("@info/plain", "Cannot meet the projects target finish time. Try using a later project end date.", t->getName()), t);
 //                } else {
-//                    TJMH.errorMessage(i18nc("@info/plain", "Cannot meet the projetcs target start time. Try using an earlier project start date.", t->getName()), t);
+//                    TJMH.errorMessage(xi18nc("@info/plain", "Cannot meet the projetcs target start time. Try using an earlier project start date.", t->getName()), t);
 //                }
 //            }
 //        }
@@ -1120,7 +1120,7 @@ Project::checkSchedule(int sc) const
             static_cast<Task*>(t)->scheduleOk(sc);
         if (maxErrors > 0 && TJMH.getErrors() >= maxErrors)
         {
-            TJMH.errorMessage(i18nc("@info/plain", "Too many errors. Giving up."));
+            TJMH.errorMessage(xi18nc("@info/plain", "Too many errors. Giving up."));
             return false;
         }
     }

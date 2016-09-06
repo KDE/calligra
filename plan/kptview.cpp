@@ -472,7 +472,7 @@ void View::slotCreateNewProject()
 {
     debugPlan;
     if ( KMessageBox::Continue == KMessageBox::warningContinueCancel( this,
-                      i18nc( "@info",
+                      xi18nc( "@info",
                              "<note>This action cannot be undone.</note><nl/><nl/>"
                              "Create a new Project from the current project "
                              "with new project- and task identities.<nl/>"
@@ -661,61 +661,61 @@ ViewInfo View::defaultViewInfo( const QString &type ) const
     ViewInfo vi;
     if ( type == "CalendarEditor" ) {
         vi.name = i18n( "Work & Vacation" );
-        vi.tip = i18nc( "@info:tooltip", "Edit working- and vacation days for resources" );
+        vi.tip = xi18nc( "@info:tooltip", "Edit working- and vacation days for resources" );
     } else if ( type == "AccountsEditor" ) {
         vi.name = i18n( "Cost Breakdown Structure" );
-        vi.tip = i18nc( "@info:tooltip", "Edit cost breakdown structure." );
+        vi.tip = xi18nc( "@info:tooltip", "Edit cost breakdown structure." );
     } else if ( type == "ResourceEditor" ) {
         vi.name = i18n( "Resources" );
-        vi.tip = i18nc( "@info:tooltip", "Edit resource breakdown structure" );
+        vi.tip = xi18nc( "@info:tooltip", "Edit resource breakdown structure" );
     } else if ( type == "TaskEditor" ) {
         vi.name = i18n( "Tasks" );
-        vi.tip = i18nc( "@info:tooltip", "Edit work breakdown structure" );
+        vi.tip = xi18nc( "@info:tooltip", "Edit work breakdown structure" );
     } else if ( type == "DependencyEditor" ) {
         vi.name = i18n( "Dependencies (Graphic)" );
-        vi.tip = i18nc( "@info:tooltip", "Edit task dependencies" );
+        vi.tip = xi18nc( "@info:tooltip", "Edit task dependencies" );
     } else if ( type == "PertEditor" ) {
         vi.name = i18n( "Dependencies (List)" );
-        vi.tip = i18nc( "@info:tooltip", "Edit task dependencies" );
+        vi.tip = xi18nc( "@info:tooltip", "Edit task dependencies" );
     } else if ( type == "ScheduleEditor" ) {
         // This view is not used stand-alone atm
         vi.name = i18n( "Schedules" );
     } else if ( type == "ScheduleHandlerView" ) {
         vi.name = i18n( "Schedules" );
-        vi.tip = i18nc( "@info:tooltip", "Calculate and analyze project schedules" );
+        vi.tip = xi18nc( "@info:tooltip", "Calculate and analyze project schedules" );
     } else if ( type == "ProjectStatusView" ) {
         vi.name = i18n( "Project Performance Chart" );
-        vi.tip = i18nc( "@info:tooltip", "View project status information" );
+        vi.tip = xi18nc( "@info:tooltip", "View project status information" );
     } else if ( type == "TaskStatusView" ) {
         vi.name = i18n( "Task Status" );
-        vi.tip = i18nc( "@info:tooltip", "View task progress information" );
+        vi.tip = xi18nc( "@info:tooltip", "View task progress information" );
     } else if ( type == "TaskView" ) {
         vi.name = i18n( "Task Execution" );
-        vi.tip = i18nc( "@info:tooltip", "View task execution information" );
+        vi.tip = xi18nc( "@info:tooltip", "View task execution information" );
     } else if ( type == "TaskWorkPackageView" ) {
         vi.name = i18n( "Work Package View" );
-        vi.tip = i18nc( "@info:tooltip", "View task work package information" );
+        vi.tip = xi18nc( "@info:tooltip", "View task work package information" );
     } else if ( type == "GanttView" ) {
         vi.name = i18n( "Gantt" );
-        vi.tip = i18nc( "@info:tooltip", "View Gantt chart" );
+        vi.tip = xi18nc( "@info:tooltip", "View Gantt chart" );
     } else if ( type == "MilestoneGanttView" ) {
         vi.name = i18n( "Milestone Gantt" );
-        vi.tip = i18nc( "@info:tooltip", "View milestone Gantt chart" );
+        vi.tip = xi18nc( "@info:tooltip", "View milestone Gantt chart" );
     } else if ( type == "ResourceAppointmentsView" ) {
         vi.name = i18n( "Resource Assignments" );
-        vi.tip = i18nc( "@info:tooltip", "View resource assignments in a table" );
+        vi.tip = xi18nc( "@info:tooltip", "View resource assignments in a table" );
     } else if ( type == "ResourceAppointmentsGanttView" ) {
         vi.name = i18n( "Resource Assignments (Gantt)" );
-        vi.tip = i18nc( "@info:tooltip", "View resource assignments in Gantt chart" );
+        vi.tip = xi18nc( "@info:tooltip", "View resource assignments in Gantt chart" );
     } else if ( type == "AccountsView" ) {
         vi.name = i18n( "Cost Breakdown" );
-        vi.tip = i18nc( "@info:tooltip", "View planned and actual cost" );
+        vi.tip = xi18nc( "@info:tooltip", "View planned and actual cost" );
     } else if ( type == "PerformanceStatusView" ) {
         vi.name = i18n( "Tasks Performance Chart" );
-        vi.tip = i18nc( "@info:tooltip", "View tasks performance status information" );
+        vi.tip = xi18nc( "@info:tooltip", "View tasks performance status information" );
     } else if ( type == "ReportView" ) {
         vi.name = i18n( "Report" );
-        vi.tip = i18nc( "@info:tooltip", "View report" );
+        vi.tip = xi18nc( "@info:tooltip", "View report" );
     } else  {
         warnPlan<<"Unknown viewtype: "<<type;
     }
@@ -2712,7 +2712,7 @@ void View::slotOpenReportFileFinished( int result )
     }
     QFile file( fn );
     if ( ! file.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
-        KMessageBox::sorry( this, i18nc( "@info", "Cannot open file:<br/><filename>%1</filename>", fn ) );
+        KMessageBox::sorry( this, xi18nc( "@info", "Cannot open file:<br/><filename>%1</filename>", fn ) );
         return;
     }
     QDomDocument doc;
@@ -2928,7 +2928,7 @@ void View::setLabel( ScheduleManager *sm )
         m_estlabel->setText( sm->name() );
         return;
     }
-    m_estlabel->setText( i18nc( "@info:status", "Not scheduled" ) );
+    m_estlabel->setText( xi18nc( "@info:status", "Not scheduled" ) );
 }
 
 void View::slotWorkPackageLoaded()
@@ -2949,7 +2949,7 @@ void View::slotMailWorkpackage( Node *node, Resource *resource )
     QUrl url = QUrl::fromLocalFile( tmpfile.fileName() );
     if ( ! getPart()->saveWorkPackageUrl( url, node, activeScheduleId(), resource ) ) {
         debugPlan<<"Failed to save to file";
-        KMessageBox::error(0, i18nc( "@info", "Failed to save to temporary file:<br/> <filename>%1</filename>", url.url() ) );
+        KMessageBox::error(0, xi18nc( "@info", "Failed to save to temporary file:<br/> <filename>%1</filename>", url.url() ) );
         return;
     }
     QStringList attachURLs;
@@ -2987,7 +2987,7 @@ void View::slotMailWorkpackages( const QList<Node*> &nodes, Resource *resource )
         QUrl url = QUrl::fromLocalFile( tmpfile.fileName() );
         if ( ! getPart()->saveWorkPackageUrl( url, n, activeScheduleId(), resource ) ) {
             debugPlan<<"Failed to save to file";
-            KMessageBox::error(0, i18nc( "@info", "Failed to save to temporary file:<br><filename>%1</filename>", url.url() ) );
+            KMessageBox::error(0, xi18nc( "@info", "Failed to save to temporary file:<br><filename>%1</filename>", url.url() ) );
             return;
         }
         attachURLs << url.url();

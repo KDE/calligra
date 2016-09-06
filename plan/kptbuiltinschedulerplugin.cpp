@@ -32,7 +32,7 @@ BuiltinSchedulerPlugin::BuiltinSchedulerPlugin(QObject *parent)
     : SchedulerPlugin(parent)
 {
     setName( i18nc( "Network = task dependency network", "Network Scheduler" ) );
-    setComment( i18nc( "@info:tooltip", "Built-in network (PERT) based scheduler" ) );
+    setComment( xi18nc( "@info:tooltip", "Built-in network (PERT) based scheduler" ) );
 }
  
 BuiltinSchedulerPlugin::~BuiltinSchedulerPlugin()
@@ -41,7 +41,7 @@ BuiltinSchedulerPlugin::~BuiltinSchedulerPlugin()
 
 QString BuiltinSchedulerPlugin::description() const
 {
-    return i18nc( "@info:whatsthis", "<title>Network (PERT) Scheduler</title>"
+    return xi18nc( "@info:whatsthis", "<title>Network (PERT) Scheduler</title>"
                     "<para>The network scheduler generally schedules tasks according to their dependencies."
                     " When a task is scheduled it is scheduled in full, booking the allocated resources if available."
                     " If overbooking is not allowed, subsequent tasks that requests the same resource"

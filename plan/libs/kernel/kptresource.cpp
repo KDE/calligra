@@ -441,9 +441,9 @@ QString Resource::typeToString( bool trans ) const {
 QStringList Resource::typeToStringList( bool trans ) {
     // keep theese in the same order as the enum!
     return QStringList() 
-            << (trans ? i18nc( "@item:inlistbox resource type", "Work" ) : QString( "Work") )
-            << (trans ? i18nc( "@item:inlistbox resource type", "Material" ) : QString( "Material" ) )
-            << (trans ? i18nc( "@item:inlistbox resource type", "Team" ) : QString( "Team" ) );
+            << (trans ? xi18nc( "@item:inlistbox resource type", "Work" ) : QString( "Work") )
+            << (trans ? xi18nc( "@item:inlistbox resource type", "Material" ) : QString( "Material" ) )
+            << (trans ? xi18nc( "@item:inlistbox resource type", "Team" ) : QString( "Team" ) );
 }
 
 void Resource::setName( const QString &n )

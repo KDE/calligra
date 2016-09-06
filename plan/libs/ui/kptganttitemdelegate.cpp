@@ -84,7 +84,7 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
     const QAbstractItemModel* model = idx.model();
     if ( data( idx, NodeModel::NodeFinished, Qt::EditRole ).toBool() ) {
         // finished
-        return i18nc( "@info:tooltip",
+        return xi18nc( "@info:tooltip",
                 "Name: %1<nl/>"
                 "Actual finish: %2<nl/>"
                 "Planned finish: %3<nl/>"
@@ -96,7 +96,7 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
     }
     if ( data( idx, NodeModel::NodeStarted, Qt::EditRole ).toBool() ) {
         // started
-        return i18nc( "@info:tooltip",
+        return xi18nc( "@info:tooltip",
                 "Name: %1<nl/>"
                 "Completion: %2 %<nl/>"
                 "Actual start: %3<nl/>"
@@ -119,7 +119,7 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
                 case Node::MustStartOn:
                 case Node::StartNotEarlier:
                 case Node::FixedInterval:
-                        return i18nc( "@info:tooltip",
+                        return xi18nc( "@info:tooltip",
                             "Name: %1<nl/>"
                             "Planned: %2 - %3<nl/>"
                             "Status: %4<nl/>"
@@ -137,7 +137,7 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
 
                 case Node::MustFinishOn:
                 case Node::FinishNotLater:
-                        return i18nc( "@info:tooltip",
+                        return xi18nc( "@info:tooltip",
                             "Name: %1<nl/>"
                             "Planned: %2 - %3<nl/>"
                             "Status: %4<nl/>"
@@ -154,7 +154,7 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
                                 );
 
                 default:
-                    return i18nc( "@info:tooltip",
+                    return xi18nc( "@info:tooltip",
                             "Name: %1<nl/>"
                             "Planned: %2 - %3<nl/>"
                             "Status: %4<nl/>"
@@ -173,7 +173,7 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
                 case Node::MustStartOn:
                 case Node::StartNotEarlier:
                 case Node::FixedInterval:
-                        return i18nc( "@info:tooltip",
+                        return xi18nc( "@info:tooltip",
                             "Name: %1<nl/>"
                             "Planned: %2<nl/>"
                             "Status: %3<nl/>"
@@ -190,7 +190,7 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
 
                 case Node::MustFinishOn:
                 case Node::FinishNotLater:
-                        return i18nc( "@info:tooltip",
+                        return xi18nc( "@info:tooltip",
                             "Name: %1<nl/>"
                             "Planned: %2<nl/>"
                             "Status: %3<nl/>"
@@ -206,7 +206,7 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
                                 );
 
                 default:
-                    return i18nc( "@info:tooltip",
+                    return xi18nc( "@info:tooltip",
                             "Name: %1<nl/>"
                             "Planned: %2<nl/>"
                             "Status: %3<nl/>"
@@ -219,7 +219,7 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
             }
         }
         case Node::Type_Summarytask:
-            return i18nc( "@info:tooltip",
+            return xi18nc( "@info:tooltip",
                     "Name: %1<nl/>"
                     "Planned: %2 - %3",
                         model->data( idx, Qt::DisplayRole ).toString(),

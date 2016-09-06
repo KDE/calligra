@@ -114,7 +114,7 @@ QList<Resource*> ResourceTreeView::selectedResources() const
 ResourceEditor::ResourceEditor(KoPart *part, KoDocument *doc, QWidget *parent)
     : ViewBase(part, doc, parent)
 {
-    setWhatsThis( i18nc( "@info:whatsthis", 
+    setWhatsThis( xi18nc( "@info:whatsthis", 
         "<title>Resource Editor</title>"
         "<para>"
         "Resources are organized in a Resource Breakdown Structure. "
@@ -283,7 +283,7 @@ void ResourceEditor::setupGui()
     connect( actionAddResource, SIGNAL(triggered(bool)), SLOT(slotAddResource()) );
     addAction( name, actionAddResource );
     
-    actionDeleteSelection  = new QAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
+    actionDeleteSelection  = new QAction(koIcon("edit-delete"), xi18nc("@action", "Delete"), this);
     actionCollection()->addAction("delete_selection", actionDeleteSelection );
     actionCollection()->setDefaultShortcut(actionDeleteSelection, Qt::Key_Delete);
     connect( actionDeleteSelection, SIGNAL(triggered(bool)), SLOT(slotDeleteSelection()) );

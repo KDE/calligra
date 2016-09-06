@@ -108,11 +108,11 @@ Document *DocumentsPanel::selectedDocument() const
 void DocumentsPanel::slotAddUrl()
 {
     QPointer<KUrlRequesterDialog> dlg = new KUrlRequesterDialog( QUrl(), QString(), this );
-    dlg->setWindowTitle( i18nc( "@title:window", "Attach Document" ) );
+    dlg->setWindowTitle( xi18nc( "@title:window", "Attach Document" ) );
     if ( dlg->exec() == QDialog::Accepted && dlg ) {
         if ( m_docs.findDocument( dlg->selectedUrl() ) ) {
             warnPlan<<"Document (url) already exists: "<<dlg->selectedUrl();
-            KMessageBox::sorry( this, i18nc( "@info", "Document is already attached:<br/><filename>%1</filename>", dlg->selectedUrl().toDisplayString() ), i18nc( "@title:window", "Cannot Attach Document" ) );
+            KMessageBox::sorry( this, xi18nc( "@info", "Document is already attached:<br/><filename>%1</filename>", dlg->selectedUrl().toDisplayString() ), xi18nc( "@title:window", "Cannot Attach Document" ) );
         } else {
             Document *doc = new Document( dlg->selectedUrl() );
             //DocumentAddCmd *cmd = new DocumentAddCmd( m_docs, doc, kundo2_i18n( "Add document" ) );
@@ -133,7 +133,7 @@ void DocumentsPanel::slotChangeUrl()
         return slotAddUrl();
     }
     KUrlRequesterDialog *dlg = new KUrlRequesterDialog( doc->url(), QString(), this );
-    dlg->setWindowTitle( i18nc( "@title:window", "Modify Url" ) );
+    dlg->setWindowTitle( xi18nc( "@title:window", "Modify Url" ) );
     if ( dlg->exec() == QDialog::Accepted ) {
         if ( doc->url() != dlg->selectedUrl() ) {
             if ( m_docs.findDocument( dlg->selectedUrl() ) ) {

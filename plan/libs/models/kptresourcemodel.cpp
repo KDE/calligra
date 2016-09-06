@@ -89,7 +89,7 @@ QVariant ResourceModel::name( const Resource *res, int role ) const
             return res->name();
         case Qt::ToolTipRole:
             if ( res->autoAllocate() ) {
-                return i18nc( "@info:tooltip", "%1:<nl/>This resource will be automatically allocated to new tasks", res->name() );
+                return xi18nc( "@info:tooltip", "%1:<nl/>This resource will be automatically allocated to new tasks", res->name() );
             }
             return res->name();
         case Qt::StatusTipRole:
@@ -221,9 +221,9 @@ QVariant ResourceModel::calendar( const Resource *res, int role ) const
         }
         case Qt::ToolTipRole: {
             if ( res->type() == Resource::Type_Team ) {
-                return i18nc( "@info:tooltip", "A team resource does not have a calendar" );
+                return xi18nc( "@info:tooltip", "A team resource does not have a calendar" );
             }
-            QString s = i18nc( "@info:tooltip", "No calendar" );
+            QString s = xi18nc( "@info:tooltip", "No calendar" );
             Calendar *cal = res->calendar( true ); // don't check for default calendar
             if ( cal ) {
                 s = cal->name();
@@ -231,7 +231,7 @@ QVariant ResourceModel::calendar( const Resource *res, int role ) const
                 // Do we get a default calendar
                 cal = res->calendar();
                 if ( cal ) {
-                    s = i18nc( "@info:tooltip 1=calendar name", "Using default calendar: %1", cal->name() );
+                    s = xi18nc( "@info:tooltip 1=calendar name", "Using default calendar: %1", cal->name() );
                 }
             }
             return s;
@@ -285,9 +285,9 @@ QVariant ResourceModel::availableFrom( const Resource *res, int role ) const
             return Qt::AlignCenter;
         case Qt::ToolTipRole: {
             if ( res->availableFrom().isValid() ) {
-                return i18nc( "infor:tooltip", "Available from: %1", QLocale().toString( res->availableFrom(), QLocale::LongFormat ) );
+                return xi18nc( "infor:tooltip", "Available from: %1", QLocale().toString( res->availableFrom(), QLocale::LongFormat ) );
             }
-            return i18nc( "infor:tooltip", "Available from project target start time: %1", QLocale().toString( m_project->constraintStartTime(), QLocale::LongFormat ) );
+            return xi18nc( "infor:tooltip", "Available from project target start time: %1", QLocale().toString( m_project->constraintStartTime(), QLocale::LongFormat ) );
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -307,9 +307,9 @@ QVariant ResourceModel::availableUntil( const Resource *res, int role ) const
             return Qt::AlignCenter;
         case Qt::ToolTipRole: {
             if ( res->availableUntil().isValid() ) {
-                return i18nc( "infor:tooltip", "Available until: %1", QLocale().toString( res->availableUntil(), QLocale::LongFormat ) );
+                return xi18nc( "infor:tooltip", "Available until: %1", QLocale().toString( res->availableUntil(), QLocale::LongFormat ) );
             }
-            return i18nc( "infor:tooltip", "Available from project target finish time: %1", QLocale().toString( m_project->constraintEndTime(), QLocale::LongFormat ) );
+            return xi18nc( "infor:tooltip", "Available from project target finish time: %1", QLocale().toString( m_project->constraintEndTime(), QLocale::LongFormat ) );
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -1150,7 +1150,7 @@ QObject *ResourceItemModel::object( const QModelIndex &index ) const
     QObject *o = 0;
     if ( index.isValid() ) {
         Q_ASSERT( m_project );
-        debugPlan<<(void*)index.internalPointer()<<m_project->resourceGroups()<<m_project->resourceList();
+        //debugPlan<<(void*)index.internalPointer()<<m_project->resourceGroups()<<m_project->resourceList();
         Q_ASSERT(m_project->resourceGroups().contains(static_cast<ResourceGroup*>(index.internalPointer())) || m_project->resourceList().contains(static_cast<Resource*>(index.internalPointer())));
         o = static_cast<QObject*>( index.internalPointer() );
         Q_ASSERT( o );
@@ -1616,7 +1616,7 @@ QVariant AllocatedResourceItemModel::headerData(int section, Qt::Orientation ori
 {
     if ( section == 1 ) {
         if ( orientation == Qt::Horizontal && role == Qt::DisplayRole ) {
-            return i18nc( "@title:column", "Allocation" );
+            return xi18nc( "@title:column", "Allocation" );
         }
         return QVariant();
     }
@@ -1638,9 +1638,9 @@ QVariant AllocatedResourceItemModel::allocation( const Resource *res, int role )
         }
         case Qt::ToolTipRole: {
             if ( rr->units() == 0 ) {
-                return i18nc( "@info:tooltip", "Not allocated" );
+                return xi18nc( "@info:tooltip", "Not allocated" );
             }
-            return i18nc( "@info:tooltip", "%1 allocated out of %2 available", gr->count(), res->parentGroup()->numResources() );
+            return xi18nc( "@info:tooltip", "%1 allocated out of %2 available", gr->count(), res->parentGroup()->numResources() );
         }
         default:
             break;
@@ -1659,19 +1659,19 @@ QVariant AllocatedResourceItemModel::allocation( const ResourceGroup *res, int r
         case Qt::EditRole:
             return QString( "%1 (%2)" ).arg( gr->units() ).arg( gr->count() );
         case Qt::ToolTipRole: {
-            QString s1 = i18ncp( "@info:tooltip",
+            QString s1 = xi18ncp( "@info:tooltip",
                                  "%1 resource requested for dynamic allocation",
                                  "%1 resources requested for dynamic allocation",
                                  gr->units() );
-            QString s2 = i18ncp( "@info:tooltip",
+            QString s2 = xi18ncp( "@info:tooltip",
                                  "%1 resource allocated",
                                  "%1 resources allocated",
                                  gr->count() );
 
-            return i18nc( "@info:tooltip", "%1<nl/>%2", s1, s2 );
+            return xi18nc( "@info:tooltip", "%1<nl/>%2", s1, s2 );
         }
         case Qt::WhatsThisRole: {
-            return i18nc( "@info:whatsthis",
+            return xi18nc( "@info:whatsthis",
                           "<title>Group allocations</title>"
                           "<para>You can allocate a number of resources from a group and let"
                           " the scheduler select from the available resources at the time of scheduling.</para>"

@@ -283,7 +283,7 @@ void ScheduleEditor::setupGui()
     connect( actionAddSubSchedule, SIGNAL(triggered(bool)), SLOT(slotAddSubSchedule()) );
     addAction( name, actionAddSubSchedule );
 
-    actionDeleteSelection  = new QAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this );
+    actionDeleteSelection  = new QAction(koIcon("edit-delete"), xi18nc("@action", "Delete"), this );
     actionCollection()->setDefaultShortcut(actionDeleteSelection, Qt::Key_Delete);
     actionCollection()->addAction("schedule_delete_selection", actionDeleteSelection );
     connect( actionDeleteSelection, SIGNAL(triggered(bool)), SLOT(slotDeleteSelection()) );
@@ -301,7 +301,7 @@ void ScheduleEditor::setupGui()
     connect( actionBaselineSchedule, SIGNAL(triggered(bool)), SLOT(slotBaselineSchedule()) );
     addAction( name, actionBaselineSchedule );
 
-    actionMoveLeft  = new QAction(koIcon("go-first"), i18nc("@action", "Detach"), this);
+    actionMoveLeft  = new QAction(koIcon("go-first"), xi18nc("@action", "Detach"), this);
     actionCollection()->addAction("schedule_move_left", actionMoveLeft );
     connect( actionMoveLeft, SIGNAL(triggered(bool)), SLOT(slotMoveLeft()) );
     addAction( name, actionMoveLeft );
@@ -477,7 +477,7 @@ ScheduleLogTreeView::ScheduleLogTreeView( QWidget *parent )
 
     connect( header(), SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(headerContextMenuRequested(QPoint)) );
 
-    actionShowDebug = new KToggleAction( i18nc( "@action", "Show Debug Information" ), this );
+    actionShowDebug = new KToggleAction( xi18nc( "@action", "Show Debug Information" ), this );
     connect( actionShowDebug, SIGNAL(toggled(bool)), SLOT(slotShowDebug(bool)));
 }
 

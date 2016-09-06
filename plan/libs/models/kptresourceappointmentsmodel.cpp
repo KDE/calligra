@@ -1200,7 +1200,7 @@ QVariant ResourceAppointmentsRowModel::Private::appointmentData( int column, int
         }
     } else if ( role == Qt::ToolTipRole ) {
         Node *n = a->node()->node();
-        return i18nc( "@info:tooltip", "%1: %2<nl/>%3: %4",
+        return xi18nc( "@info:tooltip", "%1: %2<nl/>%3: %4",
                                 n->wbsCode(),
                                 n->name(),
                                 QLocale().toString( a->startTime(), QLocale::ShortFormat ),
@@ -1261,7 +1261,7 @@ QVariant ResourceAppointmentsRowModel::Private::intervalData( int column, int ro
     } else if ( role == Qt::ToolTipRole ) {
         Appointment *a = static_cast<Appointment*>( parent->ptr );
         Node *n = a->node()->node();
-        return i18nc( "@info:tooltip", "%1: %2<nl/>%3: %4<nl/>Assigned: %5<nl/>Available: %6",
+        return xi18nc( "@info:tooltip", "%1: %2<nl/>%3: %4<nl/>Assigned: %5<nl/>Available: %6",
                                 n->wbsCode(),
                                 n->name(),
                                 QLocale().toString( a->startTime(), QLocale::ShortFormat ),
@@ -1489,7 +1489,7 @@ QVariant ResourceAppointmentsRowModel::headerData( int section, Qt::Orientation 
             case Type: return i18n( "Type" );
             case StartTime: return i18n( "Start Time" );
             case EndTime: return i18n( "End Time" );
-            case Load: return i18nc( "@title:column noun", "Load" );
+            case Load: return xi18nc( "@title:column noun", "Load" );
         }
     }
     if ( role == Qt::TextAlignmentRole ) {

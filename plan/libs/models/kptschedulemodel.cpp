@@ -489,22 +489,22 @@ QVariant ScheduleItemModel::allowOverbooking( const QModelIndex &index, int role
                  capabilities & SchedulerPlugin::AvoidOverbooking )
             {
                 return sm->allowOverbooking()
-                            ? i18nc( "@info:tooltip", "Allow overbooking resources" )
-                            : i18nc( "@info:tooltip", "Avoid overbooking resources" );
+                            ? xi18nc( "@info:tooltip", "Allow overbooking resources" )
+                            : xi18nc( "@info:tooltip", "Avoid overbooking resources" );
             }
             if ( capabilities & SchedulerPlugin::AllowOverbooking ) {
                 return sm->allowOverbooking()
-                            ? i18nc( "@info:tooltip", "Allow overbooking of resources" )
-                            : i18nc( "@info:tooltip 1=scheduler name", "%1 always allows overbooking of resources", pl->name() );
+                            ? xi18nc( "@info:tooltip", "Allow overbooking of resources" )
+                            : xi18nc( "@info:tooltip 1=scheduler name", "%1 always allows overbooking of resources", pl->name() );
             }
             if ( capabilities & SchedulerPlugin::AvoidOverbooking ) {
                 return sm->allowOverbooking()
-                            ? i18nc( "@info:tooltip 1=scheduler name", "%1 always avoids overbooking of resources", pl->name() )
-                            : i18nc( "@info:tooltip", "Avoid overbooking resources" );
+                            ? xi18nc( "@info:tooltip 1=scheduler name", "%1 always avoids overbooking of resources", pl->name() )
+                            : xi18nc( "@info:tooltip", "Avoid overbooking resources" );
             }
             break;
         case Role::EnumList:
-            return QStringList() << i18nc( "@label:listbox", "Avoid" ) << i18nc( "@label:listbox", "Allow" );
+            return QStringList() << xi18nc( "@label:listbox", "Avoid" ) << xi18nc( "@label:listbox", "Allow" );
         case Role::EnumListValue:
             return sm->allowOverbooking() ? 1 : 0;
         case Qt::TextAlignmentRole:
@@ -544,10 +544,10 @@ QVariant ScheduleItemModel::usePert( const QModelIndex &index, int role ) const
             return sm->usePert() ? i18n( "PERT" ) : i18n( "None" );
         case Qt::ToolTipRole:
             return sm->usePert()
-                        ? i18nc( "@info:tooltip", "Use PERT distribution to calculate expected estimate for the tasks" )
-                        : i18nc( "@info:tooltip", "Use the tasks expected estimate directly" );
+                        ? xi18nc( "@info:tooltip", "Use PERT distribution to calculate expected estimate for the tasks" )
+                        : xi18nc( "@info:tooltip", "Use the tasks expected estimate directly" );
         case Role::EnumList:
-            return QStringList() << i18nc( "@label:listbox", "None" ) << i18nc( "@label:listbox", "PERT" );
+            return QStringList() << xi18nc( "@label:listbox", "None" ) << xi18nc( "@label:listbox", "PERT" );
         case Role::EnumListValue:
             return sm->usePert() ? 1 : 0;
         case Qt::TextAlignmentRole:
@@ -596,9 +596,9 @@ QVariant ScheduleItemModel::projectStart( const QModelIndex &index, int role ) c
             break;
         case Qt::ToolTipRole:
             if ( sm->isScheduled() ) {
-                return i18nc( "@info:tooltip", "Planned start: %1<nl/>Target start: %2", QLocale().toString( sm->expected()->start(), QLocale::ShortFormat ), QLocale().toString( m_project->constraintStartTime(), QLocale::ShortFormat ) );
+                return xi18nc( "@info:tooltip", "Planned start: %1<nl/>Target start: %2", QLocale().toString( sm->expected()->start(), QLocale::ShortFormat ), QLocale().toString( m_project->constraintStartTime(), QLocale::ShortFormat ) );
             } else {
-                return i18nc( "@info:tooltip", "Target start: %1", QLocale().toString( m_project->constraintStartTime(), QLocale::ShortFormat ) );
+                return xi18nc( "@info:tooltip", "Target start: %1", QLocale().toString( m_project->constraintStartTime(), QLocale::ShortFormat ) );
             }
             break;
         case Qt::TextAlignmentRole:
@@ -632,9 +632,9 @@ QVariant ScheduleItemModel::projectEnd( const QModelIndex &index, int role ) con
             break;
         case Qt::ToolTipRole:
             if ( sm->isScheduled() ) {
-                return i18nc( "@info:tooltip", "Planned finish: %1<nl/>Target finish: %2", QLocale().toString( sm->expected()->end(), QLocale::ShortFormat ), QLocale().toString( m_project->constraintEndTime(), QLocale::ShortFormat ) );
+                return xi18nc( "@info:tooltip", "Planned finish: %1<nl/>Target finish: %2", QLocale().toString( sm->expected()->end(), QLocale::ShortFormat ), QLocale().toString( m_project->constraintEndTime(), QLocale::ShortFormat ) );
             } else {
-                return i18nc( "@info:tooltip", "Target finish: %1", QLocale().toString( m_project->constraintEndTime(), QLocale::ShortFormat ) );
+                return xi18nc( "@info:tooltip", "Target finish: %1", QLocale().toString( m_project->constraintEndTime(), QLocale::ShortFormat ) );
             }
             break;
         case Qt::TextAlignmentRole:
@@ -678,22 +678,22 @@ QVariant ScheduleItemModel::schedulingDirection( const QModelIndex &index, int r
                  capabilities & SchedulerPlugin::ScheduleBackward )
             {
                 return sm->schedulingDirection()
-                            ? i18nc( "@info:tooltip", "Schedule project from target end time" )
-                            : i18nc( "@info:tooltip", "Schedule project from target start time" );
+                            ? xi18nc( "@info:tooltip", "Schedule project from target end time" )
+                            : xi18nc( "@info:tooltip", "Schedule project from target start time" );
             }
             if ( capabilities & SchedulerPlugin::ScheduleForward ) {
                 return sm->schedulingDirection()
-                            ? i18nc( "@info:tooltip 1=scheduler name", "%1 always schedules from target start time", pl->name() )
-                            : i18nc( "@info:tooltip", "Schedule project from target start time" );
+                            ? xi18nc( "@info:tooltip 1=scheduler name", "%1 always schedules from target start time", pl->name() )
+                            : xi18nc( "@info:tooltip", "Schedule project from target start time" );
             }
             if ( capabilities & SchedulerPlugin::ScheduleBackward ) {
                 return sm->schedulingDirection()
-                            ? i18nc( "@info:tooltip", "Schedule project from target end time" )
-                            : i18nc( "@info:tooltip 1=scheduler name", "%1 always schedules from target end time", pl->name() );
+                            ? xi18nc( "@info:tooltip", "Schedule project from target end time" )
+                            : xi18nc( "@info:tooltip 1=scheduler name", "%1 always schedules from target end time", pl->name() );
             }
             break;
         case Role::EnumList:
-            return QStringList() << i18nc( "@label:listbox", "Forward" ) << i18nc( "@label:listbox", "Backwards" );
+            return QStringList() << xi18nc( "@label:listbox", "Forward" ) << xi18nc( "@label:listbox", "Backwards" );
         case Role::EnumListValue:
             return sm->schedulingDirection() ? 1 : 0;
         case Qt::TextAlignmentRole:
@@ -810,11 +810,11 @@ QVariant ScheduleItemModel::granularity(const QModelIndex &index, int role) cons
         case Qt::ToolTipRole: {
             QList<long unsigned int> lst = sm->supportedGranularities();
             if ( lst.isEmpty() ) {
-                return i18nc( "@info:tooltip", "Scheduling granularity not supported" );
+                return xi18nc( "@info:tooltip", "Scheduling granularity not supported" );
             }
             int idx = sm->granularity();
             qulonglong g = idx < lst.count() ? lst[ idx ] : lst.last();
-            return i18nc( "@info:tooltip", "Selected scheduling granularity: %1", KFormat().formatDuration( g ) );
+            return xi18nc( "@info:tooltip", "Selected scheduling granularity: %1", KFormat().formatDuration( g ) );
         }
         case Qt::TextAlignmentRole:
             return Qt::AlignRight;
@@ -920,7 +920,7 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
                 case ScheduleModel::SchedulePlannedStart: return i18n( "Planned Start" );
                 case ScheduleModel::SchedulePlannedFinish: return i18n( "Planned Finish" );
                 case ScheduleModel::ScheduleScheduler: return i18n( "Scheduler" );
-                case ScheduleModel::ScheduleGranularity: return i18nc( "title:column", "Granularity" );
+                case ScheduleModel::ScheduleGranularity: return xi18nc( "title:column", "Granularity" );
                 case ScheduleModel::ScheduleScheduled: return i18n( "Scheduled" );
                 default: return QVariant();
             }

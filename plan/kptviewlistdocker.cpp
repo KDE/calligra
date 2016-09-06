@@ -62,15 +62,15 @@ void ViewListDocker::setView(View *view)
 
 void ViewListDocker::slotModified()
 {
-    setWindowTitle( i18nc( "@title:window", "View Selector [modified]" ) );
+    setWindowTitle( xi18nc( "@title:window", "View Selector [modified]" ) );
 }
 
 void ViewListDocker::updateWindowTitle( bool modified )
 {
     if ( modified ) {
-        setWindowTitle( i18nc( "@title:window", "View Selector [modified]" ) );
+        setWindowTitle( xi18nc( "@title:window", "View Selector [modified]" ) );
     } else {
-        setWindowTitle(i18nc( "@title:window", "View Selector"));
+        setWindowTitle(xi18nc( "@title:window", "View Selector"));
     }
 }
 

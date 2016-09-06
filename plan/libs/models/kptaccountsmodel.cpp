@@ -81,7 +81,7 @@ QVariant AccountModel::name( const Account *a, int role ) const
             return a->name();
         case Qt::ToolTipRole:
             if ( a->isDefaultAccount() ) {
-                return i18nc( "1=account name", "%1 (Default account)", a->name() );
+                return xi18nc( "1=account name", "%1 (Default account)", a->name() );
             }
             return a->name();
         case Qt::StatusTipRole:

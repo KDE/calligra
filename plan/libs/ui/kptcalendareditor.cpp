@@ -384,7 +384,7 @@ CalendarEditor::CalendarEditor(KoPart *part, KoDocument *doc, QWidget *parent )
     : ViewBase(part, doc, parent ),
     m_model( new DateTableDataModel( this ) )
 {
-    setWhatsThis( i18nc( "@info:whatsthis",
+    setWhatsThis( xi18nc( "@info:whatsthis",
         "<title>Work & Vacation Editor</title>"
         "<para>"
         "A calendar defines availability for resources or tasks of type <emphasis>Duration</emphasis>. "
@@ -621,7 +621,7 @@ void CalendarEditor::setupGui()
     coll->setDefaultShortcut(actionAddSubCalendar, Qt::SHIFT + Qt::CTRL + Qt::Key_I);
     connect( actionAddSubCalendar , SIGNAL(triggered(bool)), SLOT(slotAddSubCalendar()) );
 
-    actionDeleteSelection  = new QAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
+    actionDeleteSelection  = new QAction(koIcon("edit-delete"), xi18nc("@action", "Delete"), this);
     coll->addAction("delete_calendar_selection", actionDeleteSelection );
     coll->setDefaultShortcut(actionDeleteSelection, Qt::Key_Delete);
     connect( actionDeleteSelection, SIGNAL(triggered(bool)), SLOT(slotDeleteCalendar()) );

@@ -285,9 +285,9 @@ Task::schedule(int sc, time_t& date, time_t slotDuration)
         if (start == 0 ||
             (effort == 0.0 && length == 0.0 && duration == 0.0 && end == 0)) {
             if ( start == 0 ) {
-                warningMessage(i18nc("@info/plain", "Cannot schedule: Valid start time is not set"));
+                warningMessage(xi18nc("@info/plain", "Cannot schedule: Valid start time is not set"));
             } else {
-                warningMessage(i18nc("@info/plain", "Cannot schedule: Estimate is 0"));
+                warningMessage(xi18nc("@info/plain", "Cannot schedule: Estimate is 0"));
             }
             return false;
         }
@@ -306,7 +306,7 @@ Task::schedule(int sc, time_t& date, time_t slotDuration)
             if (DEBUGTS(20)) {
                 qDebug()<<"Scheduling of ASAP task"<<name<<"not continuous slots:"<<time2tjp(date)<<"last:"<<time2tjp(lastSlot);
             }
-            //warningMessage(i18nc("info/plain", "ASAP: Not continuous slots: %1 last: %2", time2ISO(date), time2ISO(lastSlot)));
+            //warningMessage(xi18nc("info/plain", "ASAP: Not continuous slots: %1 last: %2", time2ISO(date), time2ISO(lastSlot)));
             return false;
         }
 
@@ -317,9 +317,9 @@ Task::schedule(int sc, time_t& date, time_t slotDuration)
         if (end == 0 ||
             (effort == 0.0 && length == 0.0 && duration == 0.0 && start == 0)) {
             if ( end == 0 ) {
-                warningMessage(i18nc("@info/plain", "Cannot schedule: Valid end time is not set"));
+                warningMessage(xi18nc("@info/plain", "Cannot schedule: Valid end time is not set"));
             } else {
-                warningMessage(i18nc("@info/plain", "Cannot schedule: Estimate is 0"));
+                warningMessage(xi18nc("@info/plain", "Cannot schedule: Estimate is 0"));
             }
             return false;
         }
@@ -946,7 +946,7 @@ Task::bookResource(Allocation *allocation, Resource* r, time_t date, time_t slot
         if (availability == 0)
         {
             if (!(*rti)->book(new Booking(Interval(date, date + slotDuration - 1), this))) {
-                warningMessage(i18nc("@info/plain 1=resource name 2=datetime", "Failed to book resource: '%1' at %2", (*rti)->getName(), formatTime(date)));
+                warningMessage(xi18nc("@info/plain 1=resource name 2=datetime", "Failed to book resource: '%1' at %2", (*rti)->getName(), formatTime(date)));
                 if (DEBUGTS(2)) {
                     qWarning()<<" Failed to book resource"<<(*rti)->getName()<<"at"<<time2ISO(date);
                 }
@@ -966,7 +966,7 @@ Task::bookResource(Allocation *allocation, Resource* r, time_t date, time_t slot
                             qDebug()<<" Booked required resource"<<r->getName()<<"at"<<time2ISO(date);
                         }
                     } else {
-                        warningMessage(i18nc("@info/plain 1=resource name 2=datetime", "Failed to book required resource: '%1' at %2", r->getName(), formatTime(date)));
+                        warningMessage(xi18nc("@info/plain 1=resource name 2=datetime", "Failed to book required resource: '%1' at %2", r->getName(), formatTime(date)));
                         if (DEBUGTS(2)) {
                             qWarning()<<" Failed to book required resource"<<r->getName()<<"at"<<time2ISO(date);
                         }
@@ -2584,12 +2584,12 @@ Task::scheduleOk(int sc) const
     }
     if (start == 0)
     {
-        warningMessage(i18nc("@info/plain", "Start time is not calculated"));
+        warningMessage(xi18nc("@info/plain", "Start time is not calculated"));
         return false;
     }
     if (start < project->getStart() || start > project->getEnd())
     {
-        warningMessage(i18nc("@info/plain", "Start time %1 is outside of the project target times (%2 - %3)",
+        warningMessage(xi18nc("@info/plain", "Start time %1 is outside of the project target times (%2 - %3)",
                      formatTime(start),
                      formatTime(project->getStart()),
                      formatTime(project->getEnd())));
@@ -2619,12 +2619,12 @@ NOT USED ATM
 #endif
     if (end == 0)
     {
-        warningMessage(i18nc("info/plain", "End time is not calculated"));
+        warningMessage(xi18nc("info/plain", "End time is not calculated"));
         return false;
     }
     if ((end + 1) < project->getStart() || (end > project->getEnd()))
     {
-        warningMessage(i18nc("info/plain", "End time %1 is outside of the project target times (%2 - %3)",
+        warningMessage(xi18nc("info/plain", "End time %1 is outside of the project target times (%2 - %3)",
                      formatTime(end + 1),
                      formatTime(project->getStart()),
                      formatTime(project->getEnd() + 1)));
@@ -2692,10 +2692,10 @@ NOT USED ATM
         Task *t = static_cast<Task*>(tli.next());
         if (t->end > start && !t->runAway) {
             if (t->end == 0) {
-                warningMessage(i18nc("@info/plain", "Impossible dependency:<nl/>"
+                warningMessage(xi18nc("@info/plain", "Impossible dependency:<nl/>"
                                    "Predeccessor task '%1': End time not calculated", t->getName()));
             } else {
-                warningMessage(i18nc("@info/plain", "Impossible dependency:<nl/>"
+                warningMessage(xi18nc("@info/plain", "Impossible dependency:<nl/>"
                                    "Task '%1' ends at %2 but must precede<nl/>"
                                    "task '%3' which starts at %4",
                                    t->getName(), formatTime(t->end + 1),
@@ -2709,10 +2709,10 @@ NOT USED ATM
         Task *t = static_cast<Task*>(tli.next());
         if (end > t->start && !t->runAway) {
             if (t->start == 0) {
-                warningMessage(i18nc("@info/plain", "Impossible dependency:<nl/>"
+                warningMessage(xi18nc("@info/plain", "Impossible dependency:<nl/>"
                                    "Successor task '%1': Start time not calculated", t->getName()));
             } else {
-                warningMessage(i18nc("@info/plain", "Impossible dependency:<nl/>"
+                warningMessage(xi18nc("@info/plain", "Impossible dependency:<nl/>"
                                    "Task '%1' starts at %2 but must follow<nl/>"
                                    "task %3 which ends at %4",
                                    t->getName(), formatTime(t->start),
@@ -2723,7 +2723,7 @@ NOT USED ATM
     }
     if (!schedulingDone)
     {
-        warningMessage(i18nc("info/plain", "Task has not been marked completed.\n"
+        warningMessage(xi18nc("info/plain", "Task has not been marked completed.\n"
                           "It is scheduled to last from %1 to %2.\n"
                           "This might be a bug in the scheduler.",
                      formatTime(start), formatTime(end + 1)));
@@ -2940,7 +2940,7 @@ Task::prepareScenario(int sc)
                     {
                         /* In case the bookings exceed the specified effort
                          * in strict mode, show a warning. */
-                        warningMessage(i18nc("info/plain", "Planned effort %1 exceeds estimated effort %2",
+                        warningMessage(xi18nc("info/plain", "Planned effort %1 exceeds estimated effort %2",
                                        doneEffort,
                                        effort));
                     }

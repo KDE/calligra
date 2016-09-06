@@ -546,7 +546,7 @@ Resource::bookSlot(uint idx, SbBooking* nb)
 //                    i = j;
 //                    continue;
 //                }
-//                TJMH.errorMessage(i18nc("@info/plain 1=datetime 2=task name", "Resource is unavailable at %1. It cannot be assigned to task %2.", formatTime(index2start(i)), nb->getTask()->getName()), this);
+//                TJMH.errorMessage(xi18nc("@info/plain 1=datetime 2=task name", "Resource is unavailable at %1. It cannot be assigned to task %2.", formatTime(index2start(i)), nb->getTask()->getName()), this);
 //            }
 //            else if (scoreboard[i] == (SbBooking*) 2)
 //            {
@@ -555,7 +555,7 @@ Resource::bookSlot(uint idx, SbBooking* nb)
 //                    i = j;
 //                    continue;
 //                }
-//                TJMH.errorMessage(i18nc("@info/plain 1=datetime 2=task name", "Resource is on vacation at %1. It cannot be assigned to task %2.", formatTime(index2start(i)), nb->getTask()->getName()), this);
+//                TJMH.errorMessage(xi18nc("@info/plain 1=datetime 2=task name", "Resource is on vacation at %1. It cannot be assigned to task %2.", formatTime(index2start(i)), nb->getTask()->getName()), this);
 //            }
 //            else
 //            {
@@ -564,7 +564,7 @@ Resource::bookSlot(uint idx, SbBooking* nb)
 //                    i = j;
 //                    continue;
 //                }
-//                TJMH.errorMessage(i18nc("@info/plain 1=datetime 2=task name 3=task name", "Allocation conflict at %1. Conflicting tasks are %2 and %3.", formatTime(index2start(i)), scoreboard[i]->getTask()->getName(), nb->getTask()->getName()), this);
+//                TJMH.errorMessage(xi18nc("@info/plain 1=datetime 2=task name 3=task name", "Allocation conflict at %1. Conflicting tasks are %2 and %3.", formatTime(index2start(i)), scoreboard[i]->getTask()->getName(), nb->getTask()->getName()), this);
 //            }
 
 //            conflict = true;
@@ -1341,7 +1341,7 @@ Resource::bookingsOk(int sc)
             if (start < tStart || start > tEnd ||
                 end < tStart || end > tEnd)
             {
-                TJMH.errorMessage(i18nc("@info/plain 1=task name, 2, 3, 4=datetime", "Booking on task '%1' at %2 is outside of task interval (%3 - %4)", scoreboards[sc][i]->getTask()->getName(),formatTime(start), formatTime(tStart), formatTime(tEnd)), this);
+                TJMH.errorMessage(xi18nc("@info/plain 1=task name, 2, 3, 4=datetime", "Booking on task '%1' at %2 is outside of task interval (%3 - %4)", scoreboards[sc][i]->getTask()->getName(),formatTime(start), formatTime(tStart), formatTime(tEnd)), this);
                 return false;
             }
         }

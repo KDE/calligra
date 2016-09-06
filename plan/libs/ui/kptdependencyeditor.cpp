@@ -2323,7 +2323,7 @@ void DependencyEditor::setupGui()
     connect( actionAddSubMilestone, SIGNAL(triggered(bool)), SLOT(slotAddSubMilestone()) );
     menuAddSubTask->addAction( actionAddSubMilestone );
 
-    actionDeleteTask  = new QAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
+    actionDeleteTask  = new QAction(koIcon("edit-delete"), xi18nc("@action", "Delete"), this);
     coll->addAction("delete_task", actionDeleteTask );
     coll->setDefaultShortcut(actionDeleteTask, Qt::Key_Delete);
     connect( actionDeleteTask, SIGNAL(triggered(bool)), SLOT(slotDeleteTask()) );
