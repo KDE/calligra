@@ -1427,6 +1427,7 @@ void View::slotRefreshView()
 {
     ViewBase *v = currentView();
     if ( v ) {
+        debugPlan<<v;
         v->slotRefreshView();
     }
 }

@@ -213,6 +213,11 @@ void ReportView::setScheduleManager( ScheduleManager *sm )
     reportDesigner()->setScheduleManager( sm );
 }
 
+void ReportView::slotRefreshView()
+{
+    reportWidget()->slotRefreshView();
+}
+
 KoPrintJob *ReportView::createPrintJob()
 {
     return static_cast<ViewBase*>( m_stack->currentWidget() )->createPrintJob();

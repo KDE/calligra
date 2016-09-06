@@ -125,6 +125,8 @@ public Q_SLOTS:
     void setGuiActive( bool active );
     void setScheduleManager( ScheduleManager *sm );
 
+    virtual void slotRefreshView(); // refresh display
+
 private Q_SLOTS:
     void slotEditReport();
     void slotViewReport();
@@ -169,7 +171,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     /// refresh display
-    void slotRefreshView();
+    virtual void slotRefreshView();
 
 protected:
     void setupGui();
