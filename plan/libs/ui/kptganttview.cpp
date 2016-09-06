@@ -360,7 +360,7 @@ void GanttZoomWidget::leaveEvent( QEvent *e )
 
 void GanttZoomWidget::sliderValueChanged( int value )
 {
-    qDebug()<<m_grid<<value;
+    //debugPlan<<m_grid<<value;
     if ( m_grid ) {
         int v = qMax(1.0, qPow( 1.1, value ) * 0.1);
         m_grid->setDayWidth( v );
