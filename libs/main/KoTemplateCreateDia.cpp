@@ -342,7 +342,7 @@ void KoTemplateCreateDia::slotOk() {
     // don't overwrite the hidden template file with a new non-hidden one
     if ( !ignore )
     {
-        QFile::copy(d->m_filePath, dest.toLocalFile());
+        QFile::copy(d->m_filePath, dest.path());
         // save the picture as icon
         // (needs to be square, otherwise KIconLoader dpes nasty changes)
         if(d->m_default->isChecked() && !d->m_thumbnail.isNull()) {
