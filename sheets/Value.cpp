@@ -914,7 +914,8 @@ QTextStream& operator<<(QTextStream& ts, Value value)
     case Value::Boolean:
         ts << ": ";
         if (value.asBoolean()) ts << "TRUE";
-        else ts << "FALSE"; break;
+        else ts << "FALSE";
+        break;
 
     case Value::Integer:
         ts << ": " << value.asInteger(); break;
