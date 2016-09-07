@@ -339,9 +339,10 @@ bool PivotMain::checkCondition(const QString &field , const QString &condition, 
   
   QVector<QString> vect;
   
-  for(int i=range2.left();i<=r;i++)
+  for(int i=range2.left();i<=r;i++) {
     vect.append(Cell(sheet1,i,row).displayText());  
-  
+  }
+
     if(condition==">"){
       if(Cell(sheet1,vect.indexOf(field)+1,line).displayText() > value){
 		 
