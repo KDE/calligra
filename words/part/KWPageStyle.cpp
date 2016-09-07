@@ -333,22 +333,24 @@ void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &mast
     KoXmlElement header = KoXml::namedItemNS(style, KoXmlNS::style, "header-style");
     if (! header.isNull()) {
         KoXmlElement hfprops = KoXml::namedItemNS(header, KoXmlNS::style, "header-footer-properties");
-        if (! hfprops.isNull())
+        if (! hfprops.isNull()) {
             d->headerDistance = KoUnit::parseValue(hfprops.attributeNS(KoXmlNS::fo, "margin-bottom"));
             d->headerMinimumHeight = KoUnit::parseValue(hfprops.attributeNS(KoXmlNS::fo, "min-height"));
             const QString dynamicSpacing(hfprops.attributeNS(KoXmlNS::style, "dynamic-spacing"));
             d->headerDynamicSpacing = dynamicSpacing == "true";
+        }
         // TODO there are quite some more properties we want to at least preserve between load and save
     }
 
     KoXmlElement footer = KoXml::namedItemNS(style, KoXmlNS::style, "footer-style");
     if (! footer.isNull()) {
         KoXmlElement hfprops = KoXml::namedItemNS(footer, KoXmlNS::style, "header-footer-properties");
-        if (! hfprops.isNull())
+        if (! hfprops.isNull()) {
             d->footerDistance = KoUnit::parseValue(hfprops.attributeNS(KoXmlNS::fo, "margin-top"));
             d->footerMinimumHeight = KoUnit::parseValue(hfprops.attributeNS(KoXmlNS::fo, "min-height"));
             const QString dynamicSpacing(hfprops.attributeNS(KoXmlNS::style, "dynamic-spacing"));
             d->footerDynamicSpacing = dynamicSpacing == "true";
+        }
         // TODO there are quite some more properties we want to at least preserve between load and save
     }
 
