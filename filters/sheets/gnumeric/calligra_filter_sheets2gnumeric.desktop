@@ -64,7 +64,4 @@ X-KDE-Export=application/x-gnumeric
 X-KDE-Import=application/x-kspread
 X-KDE-Weight=1
 X-KDE-Library=calligra_filter_sheets2gnumeric
-X-KDE-LibraryMajor=1
-X-KDE-LibraryMinor=0
-X-KDE-LibraryDependencies=
 X-KDE-ServiceTypes=Calligra/Filter

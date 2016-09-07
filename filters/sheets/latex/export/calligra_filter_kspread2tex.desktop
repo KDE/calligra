@@ -1,10 +1,8 @@
 [Desktop Entry]
 X-KDE-Export=text/x-tex
-ExportDescription=LATEX
 Icon=
 X-KDE-Import=application/x-kspread
 X-KDE-Weight=1
-ImportDescription=KSpread
 Name=KSpread LATEX Export Filter
 Name[bg]=Филтър за изнасяне от KSpread в LATEX
 Name[br]=Sil ezporzh LATEX evit KSpread 

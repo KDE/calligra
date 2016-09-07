@@ -1,10 +1,8 @@
 [Desktop Entry]
 X-KDE-Export=text/calendar
-ExportDescription=iCalendar
 Icon=
 X-KDE-Import=application/x-vnd.kde.plan
 X-KDE-Weight=1
-ImportDescription=Plan
 Name=Plan iCalendar Export Filter
 Name[bg]=Филтър за изнасяне от Plan в iCalendar
 Name[bs]=Plan iKalendar izvozni Filter
