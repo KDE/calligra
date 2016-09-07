@@ -473,6 +473,6 @@ void KPrTimeLineView::paintItemBackground(QPainter *painter, const QRect &rect, 
     gradient.setColorAt(1, color);
     painter->fillRect(rect, selected ? gradient : palette().base());
     m_mainView->paintItemBorder(painter, palette(), rect);
-    painter->setPen(selected ? palette().highlightedText().color()
-                             : palette().windowText().color());
+    painter->setPen(QPen(selected ? palette().highlightedText().color()
+                                 : palette().windowText().color(), 0));
 }

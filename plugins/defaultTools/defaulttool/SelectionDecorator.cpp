@@ -93,7 +93,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
 
     if (m_selection->count() > 1) {
         // more than one shape selected, so we need to draw the selection bounding rect
-        painter.setPen( Qt::blue );
+        painter.setPen(QPen(Qt::blue, 0));
         // apply the selection transformation on top of the old painter transformation
         painter.setWorldTransform(m_selection->absoluteTransformation(&converter) * painterMatrix);
         // apply the zoom factor

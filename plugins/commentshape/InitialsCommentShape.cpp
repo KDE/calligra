@@ -59,7 +59,7 @@ void InitialsCommentShape::paint(QPainter& painter, const KoViewConverter& conve
     const QBrush brush(gradient);
     painter.setBrush(brush);
 
-    painter.setPen(Qt::black);
+    painter.setPen(QPen(Qt::black, 0));
 
     painter.drawRect(QRectF(initialsBoxPoint, initialsBoxSize));
 

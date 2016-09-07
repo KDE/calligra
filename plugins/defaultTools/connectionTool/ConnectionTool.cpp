@@ -186,7 +186,7 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
             if (shape->shapeId() == TextShape_SHAPEID && dynamic_cast<KoTosContainer*>(shape->parent())) continue;
 
             painter.save();
-            painter.setPen(Qt::black);
+            painter.setPen(QPen(Qt::black, 0));
             QTransform transform = shape->absoluteTransformation(0);
             KoShape::applyConversion(painter, converter);
             // Draw all the connection points of the shape
@@ -213,7 +213,7 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
             int handleCount = connectionShape->handleCount();
             for(int i = 0; i < handleCount; ++i) {
                 painter.save();
-                painter.setPen(Qt::blue);
+                painter.setPen(QPen(Qt::blue, 0));
                 painter.setBrush(i == m_activeHandle ? Qt::red : Qt::white);
                 painter.setTransform(connectionShape->absoluteTransformation(&converter) * painter.transform());
                 connectionShape->paintHandle(painter, converter, i, radius);

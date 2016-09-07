@@ -546,7 +546,7 @@ void CQTextDocumentCanvas::addNote(const QString& text, const QString& color, co
     font.setFamily("Permanent Marker");
     font.setStyle(QFont::StyleNormal);
     font.setPixelSize(40);
-    painter.setPen(QColor(color));
+    painter.setPen(QPen(QColor(color), 0));
     painter.setFont(font);
     painter.drawText(image.rect().adjusted(10, 10, -20, -20), Qt::AlignCenter | Qt::TextWordWrap, text);
     painter.end();

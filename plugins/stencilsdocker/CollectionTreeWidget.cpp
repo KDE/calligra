@@ -84,10 +84,10 @@ void SheetDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option,
         painter->setPen(Qt::NoPen);
         painter->setBrush(gradient);
         painter->drawRect(option.rect);
-        painter->setPen(highlightColor);
+        painter->setPen(QPen(highlightColor, 0));
         painter->drawLine(option.rect.topLeft() + QPoint(0, highlightOffset),
                           option.rect.topRight() + QPoint(0, highlightOffset));
-        painter->setPen(outlineColor);
+        painter->setPen(QPen(outlineColor, 0));
         if (drawTopline)
             painter->drawLine(option.rect.topLeft(), option.rect.topRight());
         painter->drawLine(option.rect.bottomLeft(), option.rect.bottomRight());

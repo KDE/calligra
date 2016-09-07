@@ -89,6 +89,6 @@ void FilterRegionEditStrategy::paint(QPainter &painter, const KoViewConverter &c
     Q_UNUSED(converter);
     // paint the filter subregion rect
     painter.setBrush(Qt::NoBrush);
-    painter.setPen(Qt::red);
+    painter.setPen(QPen(Qt::red, 0));
     painter.drawRect(m_filterRect);
 }

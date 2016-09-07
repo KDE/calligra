@@ -116,7 +116,7 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
         //BEGIN: top left corner
         {
             painter->save();
-            painter->setPen(outlineColor);
+            painter->setPen(QPen(outlineColor, 0));
             const QPointF topLeft(optRect.topLeft());
             QRectF arc(topLeft, QSizeF(4, 4));
             arc.translate(0.5, 0.5);
@@ -148,7 +148,7 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
         //BEGIN: top right corner
         {
             painter->save();
-            painter->setPen(outlineColor);
+            painter->setPen(QPen(outlineColor, 0));
             QPointF topRight(optRect.topRight());
             topRight.rx() -= 4;
             QRectF arc(topRight, QSizeF(4, 4));

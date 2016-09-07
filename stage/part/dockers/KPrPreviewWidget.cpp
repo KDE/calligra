@@ -57,6 +57,7 @@ void KPrPreviewWidget::paintEvent( QPaintEvent *event )
     }
 
     QPen pen(Qt::SolidLine);
+    pen.setWidth(0);
     pen.setColor(palette().color(QPalette::Mid));
     p.setPen(pen);
     QRect framerect = rect();

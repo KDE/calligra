@@ -55,7 +55,7 @@ void RowElement::paintEditingHints ( QPainter& painter, AttributeManager* am )
         QBrush brush (Qt::NoBrush);
         brush.setColor( Qt::transparent);
         painter.setBrush(brush);
-        painter.setPen( Qt::blue);
+        painter.setPen(QPen(Qt::blue, 0));
         painter.drawRect( childrenBoundingRect() );
         painter.restore();
     }

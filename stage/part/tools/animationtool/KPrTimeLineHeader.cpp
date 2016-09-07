@@ -101,7 +101,7 @@ void KPrTimeLineHeader::paintTimeScale(QPainter *painter, const QRect &rect)
 {
     // set a marging
     const int Padding = 3;
-    painter->setPen(palette().windowText().color());
+    painter->setPen(QPen(palette().windowText().color(), 0));
     painter->setFont(QFont("", 8));
     // calculate size of scale steps
     int totalWidth = m_mainView->widthOfColumn(KPrShapeAnimations::StartTime);

@@ -71,7 +71,7 @@ void GuidesTool::paint(QPainter &painter, const KoViewConverter &converter)
         start = QPointF(converter.documentToViewX(m_position), top);
         end = QPointF(converter.documentToViewX(m_position), bottom);
     }
-    painter.setPen(Qt::red);
+    painter.setPen(QPen(Qt::red, 0));
     painter.drawLine(start, end);
 }
 

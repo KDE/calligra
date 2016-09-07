@@ -45,7 +45,7 @@ void PluginShape::paint(QPainter &painter, const KoViewConverter &converter, KoS
 {
     QRectF pixelsF = converter.documentToView(QRectF(QPointF(0,0), size()));
     painter.fillRect(pixelsF, QColor(Qt::yellow));
-    painter.setPen(Qt::blue);
+    painter.setPen(QPen(Qt::blue, 0));
     QString mimetype = i18n("Unknown");
     if (!m_mimetype.isEmpty()) {
         mimetype = m_mimetype;

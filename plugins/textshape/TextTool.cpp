@@ -692,7 +692,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
             QString label = m_unit.toUserStringValue(w);
             int labelWidth = QFontMetrics(QToolTip::font()).boundingRect(label).width();
             painter.fillRect(drawRect, QColor(64, 255, 64, 196));
-            painter.setPen(QColor(0, 0, 0, 196));
+            painter.setPen(QPen(QColor(0, 0, 0, 196), 0));
             if (labelWidth + 10 < drawRect.width()) {
                 QPointF centerLeft(drawRect.left(), drawRect.center().y());
                 QPointF centerRight(drawRect.right(), drawRect.center().y());
@@ -729,7 +729,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                 drawRect.setHeight(boxHeight);
                 painter.fillRect(drawRect, QColor(64, 255, 64, 196));
             }
-            painter.setPen(QColor(0, 0, 0, 196));
+            painter.setPen(QPen(QColor(0, 0, 0, 196), 0));
             if (labelWidth + 10 < drawRect.width()) {
                 QPointF centerLeft(drawRect.left(), drawRect.center().y());
                 QPointF centerRight(drawRect.right(), drawRect.center().y());
@@ -775,7 +775,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
             labelRect.moveTopLeft(drawRect.center() - QPointF(labelRect.width(), labelRect.height())/2);
             painter.fillRect(drawRect, QColor(64, 255, 64, 196));
             painter.fillRect(labelRect, QColor(64, 255, 64, 196));
-            painter.setPen(QColor(0, 0, 0, 196));
+            painter.setPen(QPen(QColor(0, 0, 0, 196), 0));
             if (labelRect.height() + 10 < drawRect.height()) {
                 QPointF centerTop(drawRect.center().x(), drawRect.top());
                 QPointF centerBottom(drawRect.center().x(), drawRect.bottom());

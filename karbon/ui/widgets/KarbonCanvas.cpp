@@ -158,7 +158,7 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
     painter.setClipRect(clipRect);
 
     painter.translate(d->origin.x(), d->origin.y());
-    painter.setPen(Qt::black);
+    painter.setPen(QPen(Qt::black, 0));
 
     // paint the page rect
     painter.drawRect(d->zoomHandler.documentToView(QRectF(QPointF(0.0, 0.0), d->part->pageSize())));
@@ -204,7 +204,7 @@ void KarbonCanvas::paintMargins(QPainter &painter, const KoViewConverter &conver
                       pageSize.width() - pl.leftMargin - pl.rightMargin,
                       pageSize.height() - pl.topMargin - pl.bottomMargin);
 
-    QPen pen(Qt::blue);
+    QPen pen(Qt::blue, 0);
     QVector<qreal> pattern;
     pattern << 5 << 5;
     pen.setDashPattern(pattern);

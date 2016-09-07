@@ -137,7 +137,7 @@ void KoGridData::paintGrid(QPainter &painter, const KoViewConverter &converter, 
     if (! showGrid())
         return;
 
-    painter.setPen(gridColor());
+    painter.setPen(QPen(gridColor(), 0));
 
     qreal x = 0.0;
     do {

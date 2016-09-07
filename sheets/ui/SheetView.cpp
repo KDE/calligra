@@ -512,7 +512,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
 
         if (activeData && d->activeHighlightColor.isValid()) {
             painter.setBrush(QBrush(d->activeHighlightColor));
-            painter.setPen(QPen(Qt::black));
+            painter.setPen(QPen(Qt::black, 0));
             painter.drawRect(QRectF(activeData->coordinate.x(), activeData->coordinate.y(), activeData->cellView.cellWidth(), activeData->cellView.cellHeight()));
         }
     }

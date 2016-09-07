@@ -76,7 +76,7 @@ void SceneObject::paint(QPainter &painter, const KoViewConverter &converter,
     Q_UNUSED(context);
 
     //painter.setPen(QPen(QColor(172, 196, 206)));
-    painter.setPen(QPen(QColor(0, 0, 0)));
+    painter.setPen(QPen(QColor(0, 0, 0), 0));
 
 #if 1
     painter.drawRect(converter.documentToView(QRectF(QPoint(0, 0), size())));
@@ -93,7 +93,7 @@ void SceneObject::paint(QPainter &painter, const KoViewConverter &converter,
     painter.save();
 
     // Draw a simple cross in a rectangle just to indicate that there is something here.
-    painter.setPen(QPen(QColor(172, 196, 206)));
+    painter.setPen(QPen(QColor(172, 196, 206), 0));
     painter.drawRect(rect);
     painter.drawLine(rect.topLeft(), rect.bottomRight());
     painter.drawLine(rect.bottomLeft(), rect.topRight());

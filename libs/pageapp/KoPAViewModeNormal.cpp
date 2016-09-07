@@ -240,7 +240,7 @@ void KoPAViewModeNormal::paintMargins( QPainter &painter, const KoViewConverter 
                        pageSize.width() - pl.leftMargin - pl.rightMargin,
                        pageSize.height() - pl.topMargin - pl.bottomMargin );
 
-    QPen pen( Qt::gray );
+    QPen pen(Qt::gray, 0);
     painter.setPen( pen );
     painter.drawRect( converter.documentToView( marginRect ) );
 }

@@ -106,7 +106,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
         if (qAbs(rotation()) > 1)
             painter.setRenderHint(QPainter::Antialiasing);
 
-        QPen pen(QColor(210, 210, 210)); // use cosmetic pen
+        QPen pen(QColor(210, 210, 210), 0); // use cosmetic pen
         QPointF onePixel = converter.viewToDocument(QPointF(1.0, 1.0));
         QRectF rect(QPointF(0.0, 0.0), size() - QSizeF(onePixel.x(), onePixel.y()));
         painter.setPen(pen);

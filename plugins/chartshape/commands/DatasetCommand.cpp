@@ -78,7 +78,7 @@ void DatasetCommand::redo()
     m_dataSet->setValueLabelType(valueLabelType);
 
     m_dataSet->setBrush(QBrush(m_newBrushColor));
-    m_dataSet->setPen(QPen(m_newPenColor));
+    m_dataSet->setPen(QPen(m_newPenColor, 0));
     m_dataSet->setMarkerStyle(m_newMarkerStyle);
     m_dataSet->setAttachedAxis(m_newAxis);
     m_chart->update();
@@ -99,7 +99,7 @@ void DatasetCommand::undo()
     m_dataSet->setValueLabelType(valueLabelType);
 
     m_dataSet->setBrush(QBrush(m_oldBrushColor));
-    m_dataSet->setPen(QPen(m_oldPenColor));
+    m_dataSet->setPen(QPen(m_oldPenColor, 0));
     m_dataSet->setMarkerStyle(m_oldMarkerStyle);
     m_dataSet->setAttachedAxis(m_oldAxis);
     m_chart->update();

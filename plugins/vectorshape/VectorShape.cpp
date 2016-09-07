@@ -172,7 +172,7 @@ void RenderThread::drawNull(QPainter &painter) const
     painter.save();
 
     // Draw a simple cross in a rectangle just to indicate that there is something here.
-    painter.setPen(QPen(QColor(172, 196, 206)));
+    painter.setPen(QPen(QColor(172, 196, 206), 0));
     painter.drawRect(rect);
     painter.drawLine(rect.topLeft(), rect.bottomRight());
     painter.drawLine(rect.bottomLeft(), rect.topRight());

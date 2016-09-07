@@ -191,7 +191,7 @@ void ArtisticTextTool::paint( QPainter &painter, const KoViewConverter &converte
             painter.setBrush(Qt::NoBrush);
             painter.drawPath(m_currentShape->baseline());
         }
-        painter.setPen(Qt::blue);
+        painter.setPen(QPen(Qt::blue, 0));
         painter.setBrush(m_hoverHandle ? Qt::red : Qt::white);
         painter.drawPath(offsetHandleShape());
         painter.restore();

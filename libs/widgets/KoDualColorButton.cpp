@@ -58,7 +58,7 @@ class Q_DECL_HIDDEN KoDualColorButton::Private
         arrowBitmap.fill(Qt::transparent);
 
         QPainter p(&arrowBitmap);
-        p.setPen(dialogParent->palette().foreground().color());
+        p.setPen(QPen(dialogParent->palette().foreground().color(), 0));
 
         // arrow pointing left
         p.drawLine(0, 3, 7, 3);

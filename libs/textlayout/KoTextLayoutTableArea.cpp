@@ -1008,7 +1008,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
 
     if (context.showTableBorders) {
         QPen pen(painter->pen());
-        painter->setPen(QPen(QColor(0,0,0,96)));
+        painter->setPen(QPen(QColor(0,0,0,96), 0));
         painter->drawLines(accuBlankBorders);
         painter->setPen(pen);
     }

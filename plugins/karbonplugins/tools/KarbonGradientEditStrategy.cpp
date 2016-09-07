@@ -170,7 +170,7 @@ void GradientStrategy::paintStops(QPainter &painter, const KoViewConverter &conv
         painter.setPen(defPen);
         painter.drawLine(handles[i].first, handles[i].second);
         painter.setBrush(m_stops[i].second);
-        painter.setPen(invertedColor(m_stops[i].second));
+        painter.setPen(QPen(invertedColor(m_stops[i].second), 0));
         if (m_selection == Stop && m_selectionIndex == i) {
             QTransform m;
             m.translate(hr.center().x(), hr.center().y());

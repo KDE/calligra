@@ -129,7 +129,7 @@ void ShapeRotateStrategy::paint( QPainter &painter, const KoViewConverter &conve
     decorator.paint(painter, converter);
 
     // paint the rotation center
-    painter.setPen( QPen(Qt::red));
+    painter.setPen(QPen(Qt::red, 0));
     painter.setBrush( QBrush(Qt::red));
     painter.setRenderHint( QPainter::Antialiasing, true );
     QRectF circle( 0, 0, 5, 5 );

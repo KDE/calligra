@@ -1089,12 +1089,12 @@ void CellToolBase::Private::paintReferenceSelection(QPainter &painter, const QRe
         }
 
         painter.setBrush(QBrush());
-        painter.setPen(color);
+        painter.setPen(QPen(color, 0));
         painter.drawRect(area);
 
         // Now draw the size grip (the little rectangle on the bottom right-hand corner of
         // the range which the user can click and drag to resize the region)
-        painter.setPen(Qt::white);
+        painter.setPen(QPen(Qt::white, 0));
         painter.setBrush(color);
         const bool rtl = sheet->layoutDirection() == Qt::RightToLeft;
         const QPointF corner(rtl ? area.bottomLeft() : area.bottomRight());

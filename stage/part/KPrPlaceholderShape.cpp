@@ -52,7 +52,7 @@ void KPrPlaceholderShape::paint( QPainter &painter, const KoViewConverter &conve
     }
     else {
         applyConversion( painter, converter );
-        QPen pen( Qt::gray );
+        QPen pen(Qt::gray, 0);
         pen.setStyle( Qt::DashLine );
         painter.setPen( pen );
         painter.drawRect( rect );

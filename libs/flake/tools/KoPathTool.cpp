@@ -423,7 +423,7 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
     painter.setRenderHint(QPainter::Antialiasing, true);
     // use different colors so that it is also visible on a background of the same color
     painter.setBrush(Qt::white);   //TODO make configurable
-    painter.setPen(Qt::blue);
+    painter.setPen(QPen(Qt::blue, 0));
 
     foreach(KoPathShape *shape, m_pointSelection.selectedShapes()) {
         painter.save();
@@ -446,12 +446,12 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
     }
 
     painter.setBrush(Qt::green);   // TODO make color configurable
-    painter.setPen(Qt::blue);
+    painter.setPen(QPen(Qt::blue, 0));
 
     m_pointSelection.paint(painter, converter);
 
     painter.setBrush(Qt::red);   // TODO make color configurable
-    painter.setPen(Qt::blue);
+    painter.setPen(QPen(Qt::blue, 0));
 
     if (m_activeHandle) {
         if (m_activeHandle->check(m_pointSelection.selectedShapes())) {

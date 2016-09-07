@@ -55,7 +55,7 @@ KarbonPatternTool::~KarbonPatternTool()
 void KarbonPatternTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     painter.setBrush(Qt::green);   //TODO make configurable
-    painter.setPen(Qt::blue);   //TODO make configurable
+    painter.setPen(QPen(Qt::blue, 0));   //TODO make configurable
 
     // paint all the strategies
     foreach(KarbonPatternEditStrategyBase *strategy, m_strategies) {

@@ -1094,7 +1094,7 @@ void CellView::paintText(QPainter& painter,
         }
     }
 
-    QPen tmpPen(textColorPrint);
+    QPen tmpPen(textColorPrint, 0);
     QFont font = d->calculateFont();
 
     // Check for red font color for negative values.
@@ -1275,7 +1275,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
             && cell.row() <= printRange.bottom() + 1) {
         if (print->isColumnOnNewPage(cell.column())
                 && cell.row() <= printRange.bottom()) {
-            painter.setPen(cell.sheet()->map()->settings()->pageOutlineColor());
+            painter.setPen(QPen(cell.sheet()->map()->settings()->pageOutlineColor(), 0));
 
             if (cell.sheet()->layoutDirection() == Qt::RightToLeft)
                 line = QLineF(coordinate.x() + d->width, coordinate.y(),
@@ -1288,7 +1288,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
 
         if (print->isRowOnNewPage(cell.row()) &&
                 (cell.column() <= printRange.right())) {
-            painter.setPen(cell.sheet()->map()->settings()->pageOutlineColor());
+            painter.setPen(QPen(cell.sheet()->map()->settings()->pageOutlineColor(), 0));
             line = QLineF(coordinate.x(),  coordinate.y(),
                           coordinate.x() + d->width, coordinate.y());
             painter.drawLine(line);
@@ -1297,7 +1297,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
         if (paintBorder & RightBorder) {
             if (print->isColumnOnNewPage(cell.column() + 1)
                     && cell.row() <= printRange.bottom()) {
-                painter.setPen(cell.sheet()->map()->settings()->pageOutlineColor());
+                painter.setPen(QPen(cell.sheet()->map()->settings()->pageOutlineColor(), 0));
 
                 if (cell.sheet()->layoutDirection() == Qt::RightToLeft)
                     line = QLineF(coordinate.x(), coordinate.y(),
@@ -1312,7 +1312,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
         if (paintBorder & BottomBorder) {
             if (print->isRowOnNewPage(cell.row() + 1)
                     && cell.column() <= printRange.right()) {
-                painter.setPen(cell.sheet()->map()->settings()->pageOutlineColor());
+                painter.setPen(QPen(cell.sheet()->map()->settings()->pageOutlineColor(), 0));
                 line = QLineF(coordinate.x(),  coordinate.y() + d->height,
                               coordinate.x() + d->width, coordinate.y() + d->height);
                 painter.drawLine(line);

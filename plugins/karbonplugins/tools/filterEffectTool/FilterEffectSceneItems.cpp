@@ -273,7 +273,7 @@ EffectItem::EffectItem(KoFilterEffect *effect)
 ConnectionItem::ConnectionItem(EffectItemBase *source, EffectItemBase * target, int targetInput)
         : QGraphicsPathItem(0), m_source(source), m_target(target), m_targetInput(targetInput)
 {
-    setPen(QPen(Qt::black));
+    setPen(QPen(Qt::black, 0));
 }
 
 EffectItemBase * ConnectionItem::sourceItem() const

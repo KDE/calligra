@@ -74,7 +74,7 @@ void KPrAnimationTool::paint( QPainter &painter, const KoViewConverter &converte
         painter.save();
         // save the original painter transformation
         QTransform painterMatrix = painter.worldTransform();
-        painter.setPen(Qt::green);
+        painter.setPen(QPen(Qt::green, 0));
         // apply the shape transformation on top of the old painter transformation
         painter.setWorldTransform(shape->absoluteTransformation(&converter) *painterMatrix);
         // apply the zoom factor

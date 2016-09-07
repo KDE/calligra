@@ -78,7 +78,7 @@ void VideoShape::paint(QPainter &painter, const KoViewConverter &converter, KoSh
     QImage thumnailImage = m_thumbnailer->thumbnail();
     if (thumnailImage.isNull()) {
             painter.fillRect(pixelsF, QColor(Qt::gray));
-            painter.setPen(QPen());
+            painter.setPen(QPen(Qt::black, 0));
             painter.drawRect(pixelsF);
 
             m_icon.paint(&painter, pixelsF.toRect());
@@ -87,7 +87,7 @@ void VideoShape::paint(QPainter &painter, const KoViewConverter &converter, KoSh
     }
 #else
     painter.fillRect(pixelsF, QColor(Qt::gray));
-    painter.setPen(QPen());
+    painter.setPen(QPen(Qt::black, 0));
     painter.drawRect(pixelsF);
 
     m_icon.paint(&painter, pixelsF.toRect());

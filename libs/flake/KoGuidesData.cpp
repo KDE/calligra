@@ -128,7 +128,7 @@ void KoGuidesData::paintGuides(QPainter &painter, const KoViewConverter &convert
     if (! showGuideLines())
         return;
 
-    painter.setPen(d->guidesColor);
+    painter.setPen(QPen(d->guidesColor, 0));
     foreach(qreal guide, d->horzGuideLines) {
         if (guide < area.top() || guide > area.bottom())
             continue;

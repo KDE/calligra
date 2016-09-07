@@ -95,7 +95,7 @@ void MusicStyle::setTextAsPath(bool drawTextAsPath)
 
 void MusicStyle::renderNoteHead(QPainter& painter, qreal x, qreal y, Duration duration, const QColor& color)
 {
-    painter.setPen(QPen(color));
+    painter.setPen(QPen(color, 0));
     painter.setFont(m_font);
     switch (duration) {
         case HundredTwentyEighthNote:
@@ -120,7 +120,7 @@ void MusicStyle::renderNoteHead(QPainter& painter, qreal x, qreal y, Duration du
 
 void MusicStyle::renderRest(QPainter& painter, qreal x, qreal y, Duration duration, const QColor& color)
 {
-    painter.setPen(QPen(color));
+    painter.setPen(QPen(color, 0));
     painter.setFont(m_font);
     QPointF p(x, y);
     switch (duration) {
@@ -156,7 +156,7 @@ void MusicStyle::renderRest(QPainter& painter, qreal x, qreal y, Duration durati
 
 void MusicStyle::renderClef(QPainter& painter, qreal x, qreal y, Clef::ClefShape shape, const QColor& color)
 {
-    painter.setPen(QPen(color));
+    painter.setPen(QPen(color, 0));
     painter.setFont(m_font);
     QPointF p(x, y);
     switch (shape) {
@@ -174,7 +174,7 @@ void MusicStyle::renderClef(QPainter& painter, qreal x, qreal y, Clef::ClefShape
 
 void MusicStyle::renderAccidental(QPainter& painter, qreal x, qreal y, int accidental, const QColor& color)
 {
-    painter.setPen(QPen(color));
+    painter.setPen(QPen(color, 0));
     painter.setFont(m_font);
     QPointF p(x, y);
     switch (accidental) {
@@ -198,7 +198,7 @@ void MusicStyle::renderAccidental(QPainter& painter, qreal x, qreal y, int accid
 
 void MusicStyle::renderTimeSignatureNumber(QPainter& painter, qreal x, qreal y, qreal w, int number, const QColor& color)
 {
-    painter.setPen(QPen(color));
+    painter.setPen(QPen(color, 0));
     painter.setFont(m_font);
     QFontMetricsF m(m_font);
     QString txt = QString::number(number);
@@ -208,7 +208,7 @@ void MusicStyle::renderTimeSignatureNumber(QPainter& painter, qreal x, qreal y, 
 
 void MusicStyle::renderNoteFlags(QPainter& painter, qreal x, qreal y, Duration duration, bool stemsUp, const QColor& color)
 {
-    painter.setPen(QPen(color));
+    painter.setPen(QPen(color, 0));
     painter.setFont(m_font);
     QPointF p(x + 0.4, y);
     switch (duration) {

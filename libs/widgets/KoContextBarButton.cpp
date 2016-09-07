@@ -109,7 +109,7 @@ void KoContextBarButton::paintEvent(QPaintEvent*)
     }
 
     // Border
-    painter.setPen(borderColor);
+    painter.setPen(QPen(borderColor, 0));
     painter.drawPath(path);
 
     // Content

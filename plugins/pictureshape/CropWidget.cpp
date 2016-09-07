@@ -106,7 +106,7 @@ void CropWidget::paintEvent(QPaintEvent *event)
     if (clipPath) {
         painter.scale(0.01, 0.01); // the path is defined in 100x100 equaling shapesize
         painter.setBrush(Qt::NoBrush);
-        painter.setPen(Qt::red);
+        painter.setPen(QPen(Qt::red, 0));
         painter.drawPath(clipPath->path());
     }
 

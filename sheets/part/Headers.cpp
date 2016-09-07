@@ -437,10 +437,10 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
         const QRectF rect(0, converter->documentToViewY(yPos), width, height);
 
         if (selected || highlighted) {
-            painter->setPen(selectionColor.dark(150));
+            painter->setPen(QPen(selectionColor.dark(150), 0));
             painter->setBrush(selectionBrush);
         } else {
-            painter->setPen(backgroundColor.dark(150));
+            painter->setPen(QPen(backgroundColor.dark(150), 0));
             painter->setBrush(backgroundBrush);
         }
         painter->drawRect(rect);
@@ -1006,10 +1006,10 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
         const QRectF rect(converter->documentToViewX(xPos), 0, width, height);
 
         if (selected || highlighted) {
-            painter->setPen(selectionColor.dark(150));
+            painter->setPen(QPen(selectionColor.dark(150), 0));
             painter->setBrush(selectionBrush);
         } else {
-            painter->setPen(backgroundColor.dark(150));
+            painter->setPen(QPen(backgroundColor.dark(150), 0));
             painter->setBrush(backgroundBrush);
         }
         painter->drawRect(rect);
@@ -1122,14 +1122,14 @@ void SelectAllButton::paint(QPainter* painter, const QRectF& painterRect)
         selectionColor.setAlpha(127);
         const QBrush selectionBrush(selectionColor);
 
-        painter->setPen(selectionColor.dark(150));
+        painter->setPen(QPen(selectionColor.dark(150), 0));
         painter->setBrush(selectionBrush);
     } else {
         // background brush/color
         const QBrush backgroundBrush(palette().window());
         const QColor backgroundColor(backgroundBrush.color());
 
-        painter->setPen(backgroundColor.dark(150));
+        painter->setPen(QPen(backgroundColor.dark(150), 0));
         painter->setBrush(backgroundBrush);
     }
     painter->drawRect(painterRect.adjusted(0, 0, -1, -1));

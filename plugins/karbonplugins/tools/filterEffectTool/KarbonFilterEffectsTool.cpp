@@ -232,7 +232,7 @@ void KarbonFilterEffectsTool::paint(QPainter &painter, const KoViewConverter &co
         QRectF clipRect = filterStack->clipRectForBoundingRect(sizeRect);
         // finally paint the clipping rect
         painter.setBrush(Qt::NoBrush);
-        painter.setPen(Qt::blue);
+        painter.setPen(QPen(Qt::blue, 0));
         painter.drawRect(clipRect);
 
         if (currentStrategy()) {
@@ -241,7 +241,7 @@ void KarbonFilterEffectsTool::paint(QPainter &painter, const KoViewConverter &co
             QRectF filterRect = d->currentEffect->filterRectForBoundingRect(sizeRect);
             // paint the filter subregion rect
             painter.setBrush(Qt::NoBrush);
-            painter.setPen(Qt::red);
+            painter.setPen(QPen(Qt::red, 0));
             painter.drawRect(filterRect);
         }
 

@@ -82,7 +82,7 @@ KarbonGradientTool::~KarbonGradientTool()
 void KarbonGradientTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     painter.setBrush(Qt::green);   //TODO make configurable
-    painter.setPen(Qt::blue);   //TODO make configurable
+    painter.setPen(QPen(Qt::blue, 0));   //TODO make configurable
 
     foreach(GradientStrategy *strategy, m_strategies) {
         bool current = (strategy == m_currentStrategy);

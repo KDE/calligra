@@ -279,7 +279,7 @@ void TabBarPrivate::drawTab(QPainter& painter, QRect& rect, const QString& text,
     painter.drawPolygon(polygon);
 
     // draw the lines
-    painter.setPen(tabbar->palette().color(QPalette::Dark));
+    painter.setPen(QPen(tabbar->palette().color(QPalette::Dark), 0));
     painter.setRenderHint(QPainter::Antialiasing);
     if (!active) {
         const bool reverseLayout = tabbar->isRightToLeft();
