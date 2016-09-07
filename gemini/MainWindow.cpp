@@ -66,6 +66,7 @@
 #include <KoFileDialog.h>
 #include <KoDialog.h>
 #include <KoIcon.h>
+#include <KoConfig.h> // CALLIGRA_OLD_PLUGIN_METADATA
 
 #include "PropertyContainer.h"
 #include "RecentFileManager.h"
@@ -600,7 +601,11 @@ void MainWindow::openFile()
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(WORDS_MIME_TYPE);
     if (!entry.isEmpty()) {
         QJsonObject json = entry.metaData();
+#ifdef CALLIGRA_OLD_PLUGIN_METADATA
         QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+#else
+        QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
+#endif
 
         mimeFilter << KoFilterManager::mimeFilter(WORDS_MIME_TYPE,
                                                   KoFilterManager::Import,
@@ -609,7 +614,11 @@ void MainWindow::openFile()
     entry = KoDocumentEntry::queryByMimeType(STAGE_MIME_TYPE);
     if (!entry.isEmpty()) {
         QJsonObject json = entry.metaData();
+#ifdef CALLIGRA_OLD_PLUGIN_METADATA
         QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+#else
+        QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
+#endif
         mimeFilter << KoFilterManager::mimeFilter(STAGE_MIME_TYPE,
                                                   KoFilterManager::Import,
                                                   mimeTypes);

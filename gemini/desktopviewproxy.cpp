@@ -37,6 +37,7 @@
 #include <KoFilterManager.h>
 #include <KoFileDialog.h>
 #include <KoDocumentEntry.h>
+#include <KoConfig.h> // CALLIGRA_OLD_PLUGIN_METADATA
 
 #include "MainWindow.h"
 #include <DocumentManager.h>
@@ -114,7 +115,11 @@ void DesktopViewProxy::fileOpen()
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(DocumentManager::instance()->settingsManager()->currentFileClass().toLatin1());
     if (!entry.isEmpty()) {
         QJsonObject json = entry.metaData();
+#ifdef CALLIGRA_OLD_PLUGIN_METADATA
         QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+#else
+        QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
+#endif
 
         mimeFilter << KoFilterManager::mimeFilter(DocumentManager::instance()->settingsManager()->currentFileClass().toLatin1(),
                                                                KoFilterManager::Import,

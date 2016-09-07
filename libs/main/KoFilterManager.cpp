@@ -25,6 +25,7 @@ Boston, MA 02110-1301, USA.
 #include "KoDocument.h"
 #include "KoDocumentEntry.h"
 #include "KoProgressUpdater.h"
+#include <KoConfig.h> // CALLIGRA_OLD_PLUGIN_METADATA
 
 #include <QFile>
 #include <QLabel>
@@ -292,7 +293,11 @@ void buildGraph(QHash<QByteArray, Vertex*>& vertices, KoFilterManager::Direction
 
     while (partIt != partEnd) {
         QJsonObject metaData = (*partIt).metaData();
+#ifdef CALLIGRA_OLD_PLUGIN_METADATA
         QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+#else
+        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
+#endif
         nativeMimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         const QStringList::ConstIterator end = nativeMimeTypes.constEnd();
@@ -464,7 +469,11 @@ QStringList KoFilterManager::mimeFilter()
     vertices.insert("supercalifragilistic/x-pialadocious", v);
     while (partIt != partEnd) {
         QJsonObject metaData = (*partIt).metaData();
+#ifdef CALLIGRA_OLD_PLUGIN_METADATA
         QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+#else
+        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
+#endif
         nativeMimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         const QStringList::ConstIterator end = nativeMimeTypes.constEnd();

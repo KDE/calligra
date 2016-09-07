@@ -26,7 +26,7 @@
 #include <MainDebug.h>
 
 #include <KoPluginLoader.h>
-#include <KoConfig.h> // OLD_PLUGIN_MIMETYPE_DATA
+#include <KoConfig.h> // CALLIGRA_OLD_PLUGIN_METADATA
 
 #include <kservicetype.h>
 #include <kpluginfactory.h>
@@ -81,7 +81,7 @@ QString KoDocumentEntry::name() const {
  */
 QStringList KoDocumentEntry::mimeTypes() const {
     QJsonObject json = metaData();
-#ifdef OLD_PLUGIN_MIMETYPE_DATA
+#ifdef CALLIGRA_OLD_PLUGIN_METADATA
     return json.value("MimeType").toString().split(';', QString::SkipEmptyParts);
 #else
     QJsonObject pluginData = json.value("KPlugin").toObject();

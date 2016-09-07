@@ -25,6 +25,8 @@ Boston, MA 02110-1301, USA.
 
 #include <MainDebug.h>
 #include <KoPluginLoader.h>
+#include <KoConfig.h> // CALLIGRA_OLD_PLUGIN_METADATA
+
 #include <kpluginfactory.h>
 #include <QFile>
 
@@ -34,11 +36,18 @@ Boston, MA 02110-1301, USA.
 KoFilterEntry::KoFilterEntry(QPluginLoader *loader)
         : m_loader(loader)
 {
-    import = loader->metaData().value("MetaData").toObject().value("X-KDE-Import").toString().split(',');
-    export_ = loader->metaData().value("MetaData").toObject().value("X-KDE-Export").toString().split(',');
-    int w = loader->metaData().value("MetaData").toObject().value("X-KDE-Weight").toString().toInt();
+    QJsonObject metadata = loader->metaData().value("MetaData").toObject();
+#ifdef CALLIGRA_OLD_PLUGIN_METADATA
+    import = metadata.value("X-KDE-Import").toString().split(',');
+    export_ = metadata.value("X-KDE-Export").toString().split(',');
+    int w = metadata.value("X-KDE-Weight").toString().toInt();
+#else
+    import = metadata.value("X-KDE-Import").toVariant().toStringList();
+    export_ = metadata.value("X-KDE-Export").toVariant().toStringList();
+    int w = metadata.value("X-KDE-Weight").toInt();
+#endif
     weight = w < 0 ? UINT_MAX : static_cast<unsigned int>(w);
-    available = loader->metaData().value("MetaData").toObject().value("X-KDE-Available").toString();
+    available = metadata.value("X-KDE-Available").toString();
 }
 
 KoFilterEntry::~KoFilterEntry()
