@@ -6,8 +6,6 @@ include_directories(
     ${CMAKE_BINARY_DIR}/plan/libs/models
     ${CMAKE_BINARY_DIR}/plan/libs/ui
 
-    ${KOPROPERTIES_INCLUDES}
-
     ${KOMAIN_INCLUDES}
     ${KDEPIMLIBS_INCLUDE_DIR}
 )

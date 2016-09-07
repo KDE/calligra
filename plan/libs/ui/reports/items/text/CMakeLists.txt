@@ -1,7 +1,3 @@
-include_directories(
-    ${KREPORT_INCLUDES}
-    ${KPROPERTY_INCLUDES}
-)
 
 ecm_create_qm_loader(planreport_textplugin_QM_LOADER planreport_textplugin_qt)
 

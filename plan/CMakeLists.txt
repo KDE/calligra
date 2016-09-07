@@ -5,7 +5,10 @@ project(kplato)
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=42000 )
 
 if (KF5AkonadiContact_FOUND)
-    add_definitions(-DPLAN_KDEPIMLIBS_FOUND)
+    # disable for now: there is a bug
+    # it only works if you use kde contacts (of course) but many use other stuff, so gets dissapointed
+    # add_definitions(-DPLAN_KDEPIMLIBS_FOUND)
+    message(WARNING "AkonadiContacs available, but funtion is disabled due to Bug 311940")
 endif ()
 
 if (PLANCHARTDEBUG)
@@ -22,7 +25,6 @@ set( KPLATO_INCLUDES
     ${CMAKE_BINARY_DIR}/plan
 
     ${KOMAIN_INCLUDES}
-    ${KDEPIMLIBS_INCLUDE_DIR}
 )
 
 add_subdirectory( libs )
