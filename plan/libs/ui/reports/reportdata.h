@@ -24,7 +24,7 @@
 
 #include "kplatoui_export.h"
 
-#include <KReport/KReportData>
+#include <KReportData>
 
 #include "kptitemmodelbase.h"
 #include "kptnodeitemmodel.h"
