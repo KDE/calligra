@@ -33,7 +33,7 @@ generate_export_header(krossmoduleplan
     BASE_NAME kplatoscripting
     EXPORT_FILE_NAME kplatoscripting_generated_export.h
 )
-kcoreaddons_desktop_to_json(krossmoduleplan planscripting.desktop)
+calligraplan_viewplugin_desktop_to_json(krossmoduleplan planscripting.desktop)
 
 target_link_libraries(krossmoduleplan
     planprivate

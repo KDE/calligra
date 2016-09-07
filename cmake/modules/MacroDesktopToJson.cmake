@@ -187,6 +187,32 @@ endif()
 endfunction()
 
 
+function(calligraplan_scheduler_desktop_to_json target desktop)
+
+if(${KF5_VERSION} VERSION_LESS "5.16.0")
+    kcoreaddons_desktop_to_json(${target} ${desktop})
+else()
+    kcoreaddons_desktop_to_json(${target} ${desktop}
+        SERVICE_TYPES ${CMAKE_SOURCE_DIR}/plan/libs/kernel/plan_schedulerplugin.desktop
+    )
+endif()
+
+endfunction()
+
+
+function(calligraplan_viewplugin_desktop_to_json target desktop)
+
+if(${KF5_VERSION} VERSION_LESS "5.16.0")
+    kcoreaddons_desktop_to_json(${target} ${desktop})
+else()
+    kcoreaddons_desktop_to_json(${target} ${desktop}
+        SERVICE_TYPES ${CMAKE_SOURCE_DIR}/plan/plan_viewplugin.desktop
+    )
+endif()
+
+endfunction()
+
+
 function(calligrasheets_plugin_desktop_to_json target desktop)
 
 if(${KF5_VERSION} VERSION_LESS "5.16.0")

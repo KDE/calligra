@@ -12,7 +12,7 @@ set(icalendarexport_PART_SRCS
 
 
 add_library(planicalexport MODULE ${icalendarexport_PART_SRCS})
-kcoreaddons_desktop_to_json(planicalexport plan_icalendar_export.desktop)
+calligra_filter_desktop_to_json(planicalexport plan_icalendar_export.desktop)
 
 target_link_libraries(planicalexport planprivate kplatokernel komain KF5::CalendarCore)
 

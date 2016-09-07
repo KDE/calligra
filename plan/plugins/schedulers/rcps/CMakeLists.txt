@@ -12,7 +12,7 @@ set ( RCPSScheduler_SRCS
 )
 
 add_library(kplatorcpsscheduler MODULE ${RCPSScheduler_SRCS} )
-kcoreaddons_desktop_to_json(kplatorcpsscheduler planrcpsscheduler.desktop)
+calligraplan_scheduler_desktop_to_json(kplatorcpsscheduler planrcpsscheduler.desktop)
 
 target_link_libraries(
     kplatorcpsscheduler

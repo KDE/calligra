@@ -11,7 +11,7 @@ set(kplatoimport_PART_SRCS
 
 
 add_library(plankplatoimport MODULE ${kplatoimport_PART_SRCS})
-kcoreaddons_desktop_to_json(plankplatoimport plan_kplato_import.desktop)
+calligra_filter_desktop_to_json(plankplatoimport plan_kplato_import.desktop)
 
 target_link_libraries(plankplatoimport planprivate kplatokernel komain)
 

@@ -37,7 +37,7 @@ set ( TJScheduler_SRCS
 
 # TODO: plugin should not be SHARED, but MODULE. Needs to be SHARED because tests link to it -> fix with util lib/objects
 add_library(plantjscheduler SHARED ${TJScheduler_SRCS} )
-kcoreaddons_desktop_to_json(plantjscheduler plantjscheduler.desktop)
+calligraplan_scheduler_desktop_to_json(plantjscheduler plantjscheduler.desktop)
 # TODO: only export symbols for tests, not release
 generate_export_header(plantjscheduler BASE_NAME kplatotj)
 

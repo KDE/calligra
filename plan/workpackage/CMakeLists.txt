@@ -65,7 +65,12 @@ set(planworkpart_PART_SRCS factoryinit.cpp )
 
 
 add_library(calligraplanworkpart MODULE ${planworkpart_PART_SRCS})
-kcoreaddons_desktop_to_json(calligraplanworkpart planworkpart.desktop)
+if(NOT ${KF5_VERSION} VERSION_LESS "5.16.0")
+    set(calligraplanworkpart_SERVICE_TYPES_ARGS SERVICE_TYPES kpart.desktop)
+endif()
+kcoreaddons_desktop_to_json(calligraplanworkpart planworkpart.desktop
+    ${calligraplanworkpart_SERVICE_TYPES_ARGS}
+)
 
 target_link_libraries(calligraplanworkpart Qt5::Core KF5::Parts planworkfactory)
 
