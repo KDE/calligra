@@ -56,7 +56,7 @@ be packaged separately.
                                calligra_semanticitem_location.mo
                            Dependencies:
                                libkdepimlibs (kabc, kcalcore, akonadi)
-                               libmarble4-kde4 or marble
+                               libmarblewidget-qt5 or marble
                                                       (provides libmarblewidget)
 
 If Calligra is build with support for RDF enabled, it is STRONGLY RECOMMENDED to

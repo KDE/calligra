@@ -534,29 +534,7 @@ endif()
 ##
 ## Test for marble
 ##
-set(MARBLE_MIN_VERSION "0.19.2")
-macro_optional_find_package(CalligraMarble)
-if(NOT MARBLE_FOUND)
-    set(CAN_USE_MARBLE FALSE)
-    set(MARBLE_INCLUDE_DIR "")
-else()
-    set(CAN_USE_MARBLE TRUE)
-    add_definitions( -DCAN_USE_MARBLE )
-    ##
-    ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
-    ## with commit ea177ca. This is for compatibility with older versions.
-    ##
-    find_file(MARBLECONTROLBOX_H MarbleControlBox.h PATHS ${MARBLE_INCLUDE_DIR} PATH_SUFFIXES marble)
-    if( MARBLECONTROLBOX_H )
-        file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
-        string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET "${MARBLECONTROLBOX_H_CONTENT}")
-        if( SETMARBLEWIDGET )
-            add_definitions(-DHAVE_SETMARBLEWIDGET)
-        endif()
-    else()
-        message( WARNING "MarbleControlBox.h not found, could not properly set the SETMARBLEWIDGET define." )
-    endif()
-endif()
+macro_optional_find_package(Marble CONFIG)
 set_package_properties(Marble PROPERTIES
     DESCRIPTION "World Globe Widget library"
     URL "https://marble.kde.org/"

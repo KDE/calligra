@@ -1,5 +1,9 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"calligra_semanticitem_location\")
 
+if(Marble_FOUND)
+    add_definitions( -DCAN_USE_MARBLE )
+endif()
+
 include_directories(
     ${KORDF_INCLUDES}
 )
@@ -11,7 +15,7 @@ set(calligra_semanticitem_location_LIB_SRCS
     KoRdfLocationTreeWidgetItem.cpp
 )
 
-if(MARBLE_FOUND)
+if(Marble_FOUND)
     ki18n_wrap_ui( calligra_semanticitem_location_LIB_SRCS
         KoRdfLocationEditWidgetMarble.ui
         KoRdfLocationViewWidgetMarble.ui
@@ -25,9 +29,8 @@ endif()
 
 add_library(calligra_semanticitem_location MODULE ${calligra_semanticitem_location_LIB_SRCS})
 
-if( MARBLE_FOUND )
-include_directories(${MARBLE_INCLUDE_DIR})
-target_link_libraries(calligra_semanticitem_location ${MARBLE_LIBRARIES})
+if( Marble_FOUND )
+    target_link_libraries(calligra_semanticitem_location Marble)
 endif()
 
 target_link_libraries(calligra_semanticitem_location   ${KORDF_LIBS} KF5::I18n KF5::KDELibs4Support)
