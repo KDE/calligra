@@ -488,7 +488,7 @@ void ProjectTester::schedule()
     sm->createSchedules();
     m_project->calculate( *sm );
 
-    QCOMPARE( t->earlyStart(), m_project->startTime() );
+    QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
     QVERIFY( t->startTime() >= t->earlyStart() );
     QVERIFY( t->startTime() <= t->lateStart() );
     QVERIFY( t->startTime() >= m_project->startTime() );
