@@ -616,7 +616,7 @@ void MyKGanttView::setScheduleManager( ScheduleManager *sm )
     m_manager = sm;
     KGantt::DateTimeGrid *g = static_cast<KGantt::DateTimeGrid*>( grid() );
     if ( sm && project() ) {
-        QDateTime start = project()->startTime( sm->scheduleId() ).addDays( -1 );
+        QDateTime start = project()->startTime( sm->scheduleId() );
         if ( g->startDateTime() !=  start ) {
             g->setStartDateTime( start );
         }
@@ -997,7 +997,6 @@ void MilestoneKGanttView::setScheduleManager( ScheduleManager *sm )
         if ( ! start.isValid() ) {
             start = project()->startTime( sm->scheduleId() );
         }
-        start = start.addDays( -1 );
         if ( g->startDateTime() !=  start ) {
             g->setStartDateTime( start );
         }

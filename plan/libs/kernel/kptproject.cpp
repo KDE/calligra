@@ -342,12 +342,10 @@ void Project::calculate()
             calcCriticalPath( true );
         }
         cs->logInfo( i18n( "Calculation took: %1", KFormat().formatDuration( timer.elapsed() ) ) );
-        //makeAppointments();
-        calcResourceOverbooked();
-        cs->notScheduled = false;
-        calcFreeFloat();
-        emit scheduleChanged( cs );
-        emit projectChanged();
+        // TODO: fix this uncertainty, manager should *always* be available
+        if (cs->manager()) {
+            finishCalculation(*(cs->manager()));
+        }
     } else if ( type() == Type_Subproject ) {
         warnPlan << "Subprojects not implemented";
     } else {
@@ -358,12 +356,24 @@ void Project::calculate()
 void Project::finishCalculation( ScheduleManager &sm )
 {
     MainSchedule *cs = sm.expected();
+    if (nodeIdDict.count() > 1) {
+        // calculate project duration
+        cs->startTime = m_constraintEndTime;
+        cs->endTime = m_constraintStartTime;
+        for (const Node *n : nodeIdDict) {
+            cs->startTime = qMin(cs->startTime, n->startTime(cs->id()));
+            cs->endTime = qMax(cs->endTime, n->endTime(cs->id()));
+        }
+        cs->duration = cs->endTime - cs->startTime;
+    }
+
     calcCriticalPath( false );
     calcResourceOverbooked();
     cs->notScheduled = false;
     calcFreeFloat();
     emit scheduleChanged( cs );
     emit projectChanged();
+    debugPlan<<cs->startTime<<cs->endTime<<"-------------------------";
 }
 
 void Project::setProgress( int progress, ScheduleManager *sm )
