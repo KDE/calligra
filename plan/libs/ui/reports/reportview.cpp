@@ -1105,6 +1105,19 @@ void ReportDesigner::setData()
     connect(this, SIGNAL(pasteActivated()), m_designer, SLOT(slotEditPaste()));
     connect(this, SIGNAL(deleteActivated()), m_designer, SLOT(slotEditDelete()));
 
+    emit reportheaderShown(m_designer->section(KReportSectionData::ReportHeader));
+    emit reportfooterShown(m_designer->section(KReportSectionData::ReportFooter));
+    emit headerFirstpageShown(m_designer->section(KReportSectionData::PageHeaderFirst));
+    emit headerLastpageShown(m_designer->section(KReportSectionData::PageHeaderLast));
+    emit headerOddpagesShown(m_designer->section(KReportSectionData::PageHeaderOdd));
+    emit headerEvenpagesShown(m_designer->section(KReportSectionData::PageHeaderEven));
+    emit headerAllpagesShown(m_designer->section(KReportSectionData::PageHeaderAny));
+    emit footerFirstpageShown(m_designer->section(KReportSectionData::PageFooterFirst));
+    emit footerLastpageShown(m_designer->section(KReportSectionData::PageFooterLast));
+    emit footerOddpagesShown(m_designer->section(KReportSectionData::PageFooterOdd));
+    emit footerEvenpagesShown(m_designer->section(KReportSectionData::PageFooterEven));
+    emit footerAllpagesShown(m_designer->section(KReportSectionData::PageFooterAny));
+
     m_designer->setModified( false );
     slotModified();
 }
@@ -1210,6 +1223,19 @@ void ReportDesigner::createDockers()
     connect(sw.footerOddpages, SIGNAL(toggled(bool)), this, SLOT(slotSectionToggled(bool)));
     connect(sw.footerEvenpages, SIGNAL(toggled(bool)), this, SLOT(slotSectionToggled(bool)));
     connect(sw.footerAllpages, SIGNAL(toggled(bool)), this, SLOT(slotSectionToggled(bool)));
+
+    connect(this, SIGNAL(reportheaderShown(bool)), sw.reportheader, SLOT(setChecked(bool)));
+    connect(this, SIGNAL(reportfooterShown(bool)), sw.reportfooter, SLOT(setChecked(bool)));
+    connect(this, SIGNAL(headerFirstpageShown(bool)), sw.headerFirstpage, SLOT(setChecked(bool)));
+    connect(this, SIGNAL(headerLastpageShown(bool)), sw.headerLastpage, SLOT(setChecked(bool)));
+    connect(this, SIGNAL(headerOddpagesShown(bool)), sw.headerOddpages, SLOT(setChecked(bool)));
+    connect(this, SIGNAL(headerEvenpagesShown(bool)), sw.headerEvenpages, SLOT(setChecked(bool)));
+    connect(this, SIGNAL(headerAllpagesShown(bool)), sw.headerAllpages, SLOT(setChecked(bool)));
+    connect(this, SIGNAL(footerFirstpageShown(bool)), sw.footerFirstpage, SLOT(setChecked(bool)));
+    connect(this, SIGNAL(footerLastpageShown(bool)), sw.footerLastpage, SLOT(setChecked(bool)));
+    connect(this, SIGNAL(footerOddpagesShown(bool)), sw.footerOddpages, SLOT(setChecked(bool)));
+    connect(this, SIGNAL(footerEvenpagesShown(bool)), sw.footerEvenpages, SLOT(setChecked(bool)));
+    connect(this, SIGNAL(footerAllpagesShown(bool)), sw.footerAllpages, SLOT(setChecked(bool)));
 
     addDocker( dw );
 

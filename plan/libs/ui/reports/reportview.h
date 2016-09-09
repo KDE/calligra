@@ -296,6 +296,19 @@ Q_SIGNALS:
     void pasteActivated();
     void deleteActivated();
 
+    void reportheaderShown(bool);
+    void reportfooterShown(bool);
+    void headerFirstpageShown(bool);
+    void headerLastpageShown(bool);
+    void headerOddpagesShown(bool);
+    void headerEvenpagesShown(bool);
+    void headerAllpagesShown(bool);
+    void footerFirstpageShown(bool);
+    void footerLastpageShown(bool);
+    void footerOddpagesShown(bool);
+    void footerEvenpagesShown(bool);
+    void footerAllpagesShown(bool);
+
 protected:
     void setupGui();
     void createDockers();
