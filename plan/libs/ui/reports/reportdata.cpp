@@ -944,10 +944,16 @@ ProjectReportData::ProjectReportData( QObject *parent )
     m_keys[NodeModel::NodeName] = "#project.name";
     m_keys[NodeModel::NodeResponsible] = "#project.manager";
     m_keys[NodeModel::NodeDescription] = "#project.description";
-    m_keys[NodeModel::NodeBCWS] = "#project.bcws";
-    m_keys[NodeModel::NodeBCWP] = "#project.bcwp";
-    m_keys[NodeModel::NodeACWP] = "#project.acwp";
-    m_keys[NodeModel::NodePerformanceIndex] = "#project.spi";
+    m_keys[NodeModel::NodeBCWS] = "#project.bcws-cost";
+    m_keys[NodeModel::NodeBCWP] = "#project.bcwp-cost";
+    m_keys[NodeModel::NodeACWP] = "#project.acwp-cost";
+    m_keys[NodeModel::NodePerformanceIndex] = "#project.spi-cost";
+    //TODO: not in nodemodel atm
+//     m_keys[NodeModel::NodePerformanceIndex] = "#project.cpi-cost";
+//     m_keys[NodeModel::NodeBCWS] = "#project.bcws-effort";
+//     m_keys[NodeModel::NodeBCWP] = "#project.bcwp-effort";
+//     m_keys[NodeModel::NodeACWP] = "#project.acwp-effort";
+//     m_keys[NodeModel::NodePerformanceIndex] = "#project.spi-effort";
 
     m_names[NodeModel::NodeName] = m_data.headerData(NodeModel::NodeName).toString();
     m_names[NodeModel::NodeResponsible] = m_data.headerData(NodeModel::NodeResponsible).toString();
