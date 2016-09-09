@@ -1171,7 +1171,7 @@ void ReportDesigner::createDockers()
             tb->setObjectName( a->objectName() );
             tb->setIcon( a->icon() );
             tb->setText( a->text() );
-//             tb.setToolTip( itemTooltips.value( pos ));
+            tb->setToolTip( a->text() );
             tb->setCheckable( true );
             tblst[pos] = tb;
             connect(tb, SIGNAL(clicked(bool)), SLOT(slotInsertAction()));
