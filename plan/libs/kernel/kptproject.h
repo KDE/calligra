@@ -374,7 +374,7 @@ public:
     /// Set WBS Definition to @p def
     void setWbsDefinition( const WBSDefinition &def );
     /// Generate WBS Code
-    virtual QString generateWBSCode( QList<int> &indexes ) const;
+    virtual QString generateWBSCode( QList<int> &indexes, bool sortable = false ) const;
     
     Accounts &accounts() { return m_accounts; }
     const Accounts &accounts() const { return m_accounts; }

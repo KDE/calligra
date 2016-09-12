@@ -46,6 +46,10 @@ public:
     NodeModel();
     ~NodeModel() {}
     
+    enum SpecialRoles {
+        SortableRole = Qt::UserRole + 5024 // unlikely high number
+    };
+
     enum Properties {
         NodeName = 0,
         NodeType,
@@ -434,7 +438,9 @@ public:
     virtual bool dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data );
 
     QList<Node*> mileStones() const;
-    
+
+    int sortRole(int column) const;
+
 public Q_SLOTS:
     virtual void setProject( Project *project );
     virtual void setScheduleManager( ScheduleManager *sm );
@@ -469,6 +475,8 @@ public:
     ItemModelBase *itemModel() const;
     void setFilterUnscheduled( bool on );
     bool filterUnscheduled() const { return m_filterUnscheduled; }
+
+    void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
 
 protected:
     bool filterAcceptsRow ( int source_row, const QModelIndex & source_parent ) const;

@@ -2418,20 +2418,30 @@ void Project::setWbsDefinition( const WBSDefinition &def )
     emit projectChanged();
 }
 
-QString Project::generateWBSCode( QList<int> &indexes ) const
+QString Project::generateWBSCode( QList<int> &indexes, bool sortable ) const
 {
     QString code = m_wbsDefinition.projectCode();
-    if ( ! code.isEmpty() && ! indexes.isEmpty() ) {
-        code += m_wbsDefinition.projectSeparator();
-    }
-    int level = 1;
-    foreach ( int index, indexes ) {
-        code += m_wbsDefinition.code( index + 1, level  );
-        if ( level < indexes.count() ) {
-            // not last level, add separator also
-            code += m_wbsDefinition.separator( level );
+    if (sortable) {
+        int fw = (nodeIdDict.count() / 10) + 1;
+        QLatin1Char fc('0');
+        foreach ( int index, indexes ) {
+            code += ".%1";
+            code = code.arg(QString::number(index), fw, fc);
         }
-        ++level;
+        debugPlan<<code<<"------------------";
+    } else {
+        if ( ! code.isEmpty() && ! indexes.isEmpty() ) {
+            code += m_wbsDefinition.projectSeparator();
+        }
+        int level = 1;
+        foreach ( int index, indexes ) {
+            code += m_wbsDefinition.code( index + 1, level  );
+            if ( level < indexes.count() ) {
+                // not last level, add separator also
+                code += m_wbsDefinition.separator( level );
+            }
+            ++level;
+        }
     }
     //debugPlan<<code;
     return code;

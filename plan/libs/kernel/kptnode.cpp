@@ -1154,7 +1154,7 @@ int Node::level() const {
     return n ? n->level() + 1 : 0;
 }
 
-QString Node::generateWBSCode( QList<int> &indexes ) const {
+QString Node::generateWBSCode( QList<int> &indexes, bool sortable ) const {
     //debugPlan<<m_name<<indexes;
     if ( m_parent == 0 ) {
         return QString();
@@ -1163,10 +1163,10 @@ QString Node::generateWBSCode( QList<int> &indexes ) const {
     return m_parent->generateWBSCode( indexes );
 }
 
-QString Node::wbsCode() const {
+QString Node::wbsCode(bool sortable) const {
     //debugPlan<<m_name;
     QList<int> indexes;
-    return generateWBSCode( indexes );
+    return generateWBSCode( indexes, sortable );
 }
 
 bool Node::isScheduled( long id ) const

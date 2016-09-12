@@ -923,7 +923,8 @@ MilestoneKGanttView::MilestoneKGanttView( QWidget *parent )
     sfModel()->setFilterKeyColumn( NodeModel::NodeType );
 
     QList<int> show;
-    show << NodeModel::NodeName
+    show << NodeModel::NodeWBSCode
+            << NodeModel::NodeName
             << NodeModel::NodeStartTime;
 
     treeView()->setDefaultColumns( show );
@@ -932,6 +933,7 @@ MilestoneKGanttView::MilestoneKGanttView( QWidget *parent )
             treeView()->hideColumn( i );
         }
     }
+    treeView()->header()->moveSection(NodeModel::NodeWBSCode, show.indexOf(NodeModel::NodeWBSCode));
     treeView()->setRootIsDecorated ( false );
 
     KGantt::ProxyModel *m = static_cast<KGantt::ProxyModel*>( ganttProxyModel() );
@@ -951,6 +953,10 @@ MilestoneKGanttView::MilestoneKGanttView( QWidget *parent )
     // TODO: extend QLocale/KGantt to support formats for hourly time display
     // see bug #349030
     // removed custom code here
+
+    // TODO: add to context
+    treeView()->sortByColumn(NodeModel::NodeWBSCode, Qt::AscendingOrder);
+    treeView()->setSortingEnabled(true);
 }
 
 MilestoneItemModel *MilestoneKGanttView::model() const

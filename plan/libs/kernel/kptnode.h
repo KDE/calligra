@@ -459,9 +459,9 @@ public:
     /// Returns the level this node is in the hierarchy. Top node is level 0.
     virtual int level() const;
     /// Generate WBS Code
-    virtual QString generateWBSCode( QList<int> &indexes ) const;
+    virtual QString generateWBSCode( QList<int> &indexes, bool sortable = false ) const;
     /// Returns the Work Breakdown Structure Code
-    QString wbsCode() const;
+    QString wbsCode(bool sortable = false) const;
     
     double startupCost() const { return m_startupCost; }
     void setStartupCost(double cost);

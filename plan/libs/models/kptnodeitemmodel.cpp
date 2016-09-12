@@ -1893,6 +1893,8 @@ QVariant NodeModel::wbsCode( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case SortableRole:
+            return node->wbsCode(true);
     }
     return QVariant();
 }
@@ -4138,6 +4140,7 @@ QModelIndex NodeItemModel::insertSubtask( Node *node, Node *parent )
 
 int NodeItemModel::sortRole( int column ) const
 {
+    int v = Qt::DisplayRole;
     switch ( column ) {
         case NodeModel::NodeStartTime:
         case NodeModel::NodeEndTime:
@@ -4149,11 +4152,14 @@ int NodeItemModel::sortRole( int column ) const
         case NodeModel::NodeLateFinish:
         case NodeModel::NodeConstraintStart:
         case NodeModel::NodeConstraintEnd:
-            return Qt::EditRole;
+            v = Qt::EditRole;
+        case NodeModel::NodeWBSCode:
+            v = NodeModel::SortableRole;
         default:
             break;
     }
-    return Qt::DisplayRole;
+    debugPlan<<column<<v;
+    return v;
 }
 
 //------------------------------------------------
@@ -4444,7 +4450,7 @@ bool MilestoneItemModel::resetData()
     m_nodemap.clear();
     if ( m_project != 0 ) {
         foreach ( Node *n, m_project->allNodes() ) {
-            m_nodemap.insert( n->wbsCode(), n );
+            m_nodemap.insert( n->wbsCode(true), n );
         }
     }
     return cnt != m_nodemap.count();
@@ -4847,6 +4853,31 @@ void MilestoneItemModel::slotWbsDefinitionChanged()
     }
 }
 
+int MilestoneItemModel::sortRole( int column ) const
+{
+    int v = Qt::DisplayRole;
+    switch ( column ) {
+        case NodeModel::NodeStartTime:
+        case NodeModel::NodeEndTime:
+        case NodeModel::NodeActualStart:
+        case NodeModel::NodeActualFinish:
+        case NodeModel::NodeEarlyStart:
+        case NodeModel::NodeEarlyFinish:
+        case NodeModel::NodeLateStart:
+        case NodeModel::NodeLateFinish:
+        case NodeModel::NodeConstraintStart:
+        case NodeModel::NodeConstraintEnd:
+            v = Qt::EditRole;
+            break;
+        case NodeModel::NodeWBSCode:
+            v = NodeModel::SortableRole;
+            break;
+        default:
+            break;
+    }
+    return v;
+}
+
 //--------------
 NodeSortFilterProxyModel::NodeSortFilterProxyModel( ItemModelBase* model, QObject *parent, bool filterUnscheduled )
     : QSortFilterProxyModel( parent ),
@@ -4883,6 +4914,12 @@ bool NodeSortFilterProxyModel::filterAcceptsRow ( int row, const QModelIndex & p
     bool accepted = QSortFilterProxyModel::filterAcceptsRow( row, parent );
     //debugPlan<<this<<sourceModel()->index( row, 0, parent )<<"accepted ="<<accepted<<filterRegExp()<<filterRegExp().isEmpty()<<filterRegExp().capturedTexts();
     return accepted;
+}
+
+void NodeSortFilterProxyModel::sort(int column, Qt::SortOrder order)
+{
+    setSortRole(itemModel()->sortRole(column));
+    QSortFilterProxyModel::sort(column, order);
 }
 
 //------------------
