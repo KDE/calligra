@@ -18,6 +18,9 @@
 */
 #include "FlatProxyModelTester.h"
 
+#include "kptnodeitemmodel.h"
+#include "kptproject.h"
+#include "kpttask.h"
 
 #include <QModelIndex>
 #include <QStandardItemModel>
@@ -90,6 +93,8 @@ void FlatProxyModelTester::test()
     QList<QStandardItem*> items;
     items << new QStandardItem( "Child last column 1" ) << new QStandardItem( "Child last column 2" );
     item->appendRow( items );
+    QModelIndex parent = m_standardmodel.index( 1, 0 );
+    QCOMPARE( m_standardmodel.rowCount(parent), 1);
     QCOMPARE( m_flatmodel.rowCount(), 3 );
     idx = m_flatmodel.index( 2, 0 );
     QCOMPARE( idx.data(), QVariant( "Child last column 1" ) );
@@ -134,7 +139,7 @@ void FlatProxyModelTester::test()
 
     qDebug()<<"Add child on middle index's child, adds row 4 to flat model";
     
-    QModelIndex parent = m_standardmodel.index( 1, 0 );
+    parent = m_standardmodel.index( 1, 0 );
     QCOMPARE( parent.data().toString(), QString( "New index 1,0" ) );
     idx = m_standardmodel.index( 0, 0, parent );
     QCOMPARE( idx.data().toString(), QString( "Child middle column 1" ) );
@@ -510,6 +515,105 @@ void FlatProxyModelTester::testInsertRemoveGrandChildren()
     QCOMPARE( sm.rowCount(), 0 );
     QCOMPARE( fm.rowCount(), 0 );
     QCOMPARE( sf.rowCount(), 0 );
+}
+
+void FlatProxyModelTester::testWithNodeItemModel()
+{
+    Project project;
+    Task *t = project.createTask();
+    t->setName("S1");
+    project.addSubTask(t, &project);
+    Task *t1 = project.createTask();
+    t1->setName("S1.1");
+    project.addSubTask(t1, t);
+    t = project.createTask();
+    t->setName("T1.1.1");
+    project.addSubTask(t, t1);
+    
+    NodeItemModel model;
+    model.setProject(&project);
+    
+    FlatProxyModel flatmodel;
+    flatmodel.setSourceModel(&model);
+    
+    QCOMPARE(flatmodel.rowCount(), 3);
+    QModelIndex idx = flatmodel.index(0, 0);
+    QCOMPARE(flatmodel.data(idx), QVariant("S1"));
+    idx = flatmodel.index(1, 0);
+    QCOMPARE(flatmodel.data(idx), QVariant("S1.1"));
+    idx = flatmodel.index(2, 0);
+    QCOMPARE(flatmodel.data(idx), QVariant("T1.1.1"));
+
+    // test non 0 column
+    int column = NodeModel::NodeType;
+    idx = flatmodel.index(0, column);
+    QCOMPARE(flatmodel.data(idx), QVariant("Summary"));
+    idx = flatmodel.index(1, column);
+    QCOMPARE(flatmodel.data(idx), QVariant("Summary"));
+    idx = flatmodel.index(2, column);
+    QCOMPARE(flatmodel.data(idx), QVariant("Task"));
+    
+    // test parent
+    column = flatmodel.columnCount() - 1;
+    idx = flatmodel.index(0, column);
+    QCOMPARE(flatmodel.data(idx), QVariant());
+    idx = flatmodel.index(1, column);
+    QCOMPARE(flatmodel.data(idx), QVariant("S1"));
+    idx = flatmodel.index(2, column);
+    QCOMPARE(flatmodel.data(idx), QVariant("S1.1"));
+
+    t = project.createTask();
+    t->setName("S2");
+    project.addSubTask(t, &project);
+    t1 = project.createTask();
+    t1->setName("S2.1");
+    project.addSubTask(t1, t);
+    t = project.createTask();
+    t->setName("T2.1.1");
+    project.addSubTask(t, t1);
+    
+    QCOMPARE(flatmodel.rowCount(), 6);
+    idx = flatmodel.index(0, 0);
+    QCOMPARE(flatmodel.data(idx), QVariant("S1"));
+    idx = flatmodel.index(1, 0);
+    QCOMPARE(flatmodel.data(idx), QVariant("S1.1"));
+    idx = flatmodel.index(2, 0);
+    QCOMPARE(flatmodel.data(idx), QVariant("T1.1.1"));
+    idx = flatmodel.index(3, 0);
+    QCOMPARE(flatmodel.data(idx), QVariant("S2"));
+    idx = flatmodel.index(4, 0);
+    QCOMPARE(flatmodel.data(idx), QVariant("S2.1"));
+    idx = flatmodel.index(5, 0);
+    QCOMPARE(flatmodel.data(idx), QVariant("T2.1.1"));
+
+    t = project.createTask();
+    t->setName("T3");
+    project.addSubTask(t, &project);
+    QCOMPARE(flatmodel.rowCount(), 7);
+    idx = flatmodel.index(6, 0);
+    QCOMPARE(flatmodel.data(idx), QVariant("T3"));
+    
+    project.takeTask(t);
+    QCOMPARE(flatmodel.rowCount(), 6);
+
+    project.addSubTask(t, &project);
+    QCOMPARE(flatmodel.rowCount(), 7);
+    idx = flatmodel.index(6, 0);
+    QCOMPARE(flatmodel.data(idx), QVariant("T3"));
+    
+    project.moveTaskUp(t);
+    idx = flatmodel.index(3, 0);
+    QCOMPARE(flatmodel.data(idx), QVariant("T3"));
+    idx = flatmodel.index(4, 0);
+    QCOMPARE(flatmodel.data(idx), QVariant("S2"));
+    idx = flatmodel.index(5, 0);
+    QCOMPARE(flatmodel.data(idx), QVariant("S2.1"));
+    idx = flatmodel.index(6, 0);
+    QCOMPARE(flatmodel.data(idx), QVariant("T2.1.1"));
+    
+    project.moveTask(t, &project, 0);
+    idx = flatmodel.index(0, 0);
+    QCOMPARE(flatmodel.data(idx), QVariant("T3"));
 }
 
 } //namespace KPlato

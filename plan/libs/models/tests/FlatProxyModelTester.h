@@ -39,6 +39,7 @@ private Q_SLOTS:
     void testInsertRemoveTop();
     void testInsertRemoveChildren();
     void testInsertRemoveGrandChildren();
+    void testWithNodeItemModel();
 
 private:
     FlatProxyModel m_flatmodel;
