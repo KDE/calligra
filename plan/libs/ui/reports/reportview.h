@@ -285,6 +285,7 @@ public:
 
 public Q_SLOTS:
     void setReportData( const QString &tag );
+    void slotSaveReportDefinition();
 
 Q_SIGNALS:
     void viewReport();

@@ -656,7 +656,7 @@ void ReportDesignDialog::slotButtonClicked( int button )
     if ( button == KoDialog::Close ) {
         if ( m_panel->m_modified ) {
             int res = KMessageBox::warningContinueCancel( this,
-                    xi18nc( "@info", "The report definition has been modified.<br/>"
+                    xi18nc( "@info", "The report definition has been modified.<nl/>"
                     "<emphasis>If you continue, the modifications will be lost.</emphasis>" ) );
 
             if ( res == KMessageBox::Cancel ) {
@@ -679,7 +679,7 @@ void ReportDesignDialog::slotSaveToFile()
 
     QFile file( fileName );
     if ( ! file.open( QIODevice::WriteOnly ) ) {
-        KMessageBox::sorry( this, xi18nc( "@info", "Cannot open file:<br/><filename>%1</filename>", file.fileName() ) );
+        KMessageBox::sorry( this, xi18nc( "@info", "Cannot open file:<nl/><filename>%1</filename>", file.fileName() ) );
         return;
     }
     QTextStream out( &file );
@@ -859,6 +859,7 @@ void ReportDesignPanel::populateToolbar( KToolBar *tb )
 
     a = new QAction(koIcon("document-properties"), i18n("Section Editor"), this);
     a->setObjectName("sectionedit");
+    connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotSectionEditor()));
     tb->addAction( a );
 
     tb->addSeparator();
@@ -874,11 +875,13 @@ void ReportDesignPanel::populateToolbar( KToolBar *tb )
     << QLatin1String("org.kde.kreport.chart")
     << QLatin1String("org.kde.kreport.web"); // can be used for fixed sized rich text
 
-    foreach( QAction *a, m_designer->itemActions(m_actionGroup) ) {
-        if ( ! itemtypes.contains( a->objectName() ) ) {
-            m_actionGroup->removeAction( a );
-            continue;
+    QMap<int, QAction*> lst;
+    for( QAction *a : m_designer->itemActions(m_actionGroup) ) {
+        if ( itemtypes.contains( a->objectName() ) ) {
+            lst.insert(itemtypes.indexOf(a->objectName()), a);
         }
+    }
+    for(QAction *a : lst) {
         tb->addAction( a );
         connect( a, SIGNAL(triggered(bool)), SLOT(slotInsertAction()) );
     }
@@ -959,6 +962,11 @@ QStandardItemModel *ReportDesignPanel::createSourceModel( QObject *parent ) cons
 
     item = new QStandardItem( i18n( "Resources" ) );
     item->setData( "resources", Reports::TagRole );
+    item->setEditable( false );
+    m->appendRow( item );
+
+    item = new QStandardItem( i18n( "Project" ) );
+    item->setData( "project", Reports::TagRole );
     item->setEditable( false );
     m->appendRow( item );
 
@@ -1046,7 +1054,30 @@ void ReportDesigner::setupGui()
     m_undoaction->setEnabled( false );
     connect(m_undoaction, SIGNAL(triggered(bool)), SLOT(undoAllChanges()));
     addAction( name, m_undoaction );
+
+    a = new QAction(koIcon("document-export"), i18n("Export report definition"), this);
+    a->setObjectName( "save_report_definition" );
+    connect(a, SIGNAL(triggered(bool)), SLOT(slotSaveReportDefinition()));
+    addAction( name, a );
+
     createDockers();
+}
+
+void ReportDesigner::slotSaveReportDefinition()
+{
+    const QString fileName = QFileDialog::getSaveFileName(this);
+    if (fileName.isEmpty()) {
+        debugPlan<<"No file name given";
+        return;
+    }
+    QFile file( fileName );
+    if ( ! file.open( QIODevice::WriteOnly ) ) {
+        KMessageBox::sorry( this, xi18nc( "@info", "Cannot open file:<nl/><filename>%1</filename>", file.fileName() ) );
+        return;
+    }
+    QTextStream out( &file );
+    out << document().toString();
+    file.close();
 }
 
 void ReportDesigner::undoAllChanges()
