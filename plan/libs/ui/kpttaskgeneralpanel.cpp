@@ -85,7 +85,9 @@ void TaskGeneralPanel::setStartValues( Task &task ) {
     estimate->setMaximumUnit( (Duration::Unit)(m_project.config().maximumDurationUnit()) );
     estimate->setUnit( task.estimate()->unit() );
     setEstimateType(task.estimate()->type());
-
+    if (task.estimate()->type() == Estimate::Type_Effort && task.estimate()->expectedEstimate() == 0.0) {
+        setEstimateType(2 /*Milestone*/);
+    }
     setSchedulingType(task.constraint());
     if (task.constraintStartTime().isValid()) {
         setStartDateTime(task.constraintStartTime());
@@ -135,6 +137,9 @@ MacroCommand *TaskGeneralPanel::buildCommand() {
         modified = true;
     }
     int et = estimationType();
+    if (et == 2 /*Milestome*/) {
+        et = 0; /*Effort*/
+    }
     if (et != m_task.estimate()->type()) {
         cmd->addCommand(new ModifyEstimateTypeCmd(m_task,  m_task.estimate()->type(), et));
         modified = true;
@@ -182,16 +187,18 @@ void TaskGeneralPanel::estimationTypeChanged(int type) {
     if (type == 0 /*Effort*/) {
         estimate->setEnabled(true);
         calendarCombo->setEnabled(false);
-    } else {
-        if ( type == 1 /*Duration*/ ) {
-            calendarCombo->setEnabled(false);
-            if (schedulingType() == 6) { /*Fixed interval*/
-                estimate->setEnabled(false);
-            } else {
-                estimate->setEnabled(true);
-                calendarCombo->setEnabled(true);
-            }
+    } else if ( type == 1 /*Duration*/ ) {
+        calendarCombo->setEnabled(false);
+        if (schedulingType() == 6) { /*Fixed interval*/
+            estimate->setEnabled(false);
+        } else {
+            estimate->setEnabled(true);
+            calendarCombo->setEnabled(true);
         }
+    } else if ( type == 2 /* Milestone */ ) {
+        estimate->setValue( 0 );
+        estimate->setEnabled(false);
+        calendarCombo->setEnabled(false);
     }
     TaskGeneralPanelImpl::estimationTypeChanged(type);
 }
@@ -382,7 +389,7 @@ void TaskGeneralPanelImpl::setEstimateType( int type)
 void TaskGeneralPanelImpl::checkAllFieldsFilled()
 {
     emit changed();
-    emit obligatedFieldsFilled(!namefield->text().isEmpty());
+    emit obligatedFieldsFilled(true); // do not block save even if name is not filled
 }
 
 

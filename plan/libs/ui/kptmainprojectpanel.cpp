@@ -124,7 +124,7 @@ MacroCommand *MainProjectPanel::buildCommand() {
 void MainProjectPanel::slotCheckAllFieldsFilled()
 {
     emit changed();
-    emit obligatedFieldsFilled(!namefield->text().isEmpty() && !leaderfield->text().isEmpty());
+    emit obligatedFieldsFilled(true); // never block save
 }
 
 

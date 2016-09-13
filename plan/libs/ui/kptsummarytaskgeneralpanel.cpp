@@ -80,7 +80,7 @@ void SummaryTaskGeneralPanel::setStartValues(Task &task) {
 }
 
 void SummaryTaskGeneralPanel::slotObligatedFieldsFilled() {
-    emit obligatedFieldsFilled(!namefield->text().isEmpty());
+    emit obligatedFieldsFilled(true); // never block save
 }
 
 MacroCommand *SummaryTaskGeneralPanel::buildCommand() {
