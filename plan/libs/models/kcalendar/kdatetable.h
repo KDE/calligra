@@ -319,14 +319,14 @@ public:
     QRectF rectF;
 };
 
-class StyleOptionViewItem : public QStyleOptionViewItemV3
+class StyleOptionViewItem : public QStyleOptionViewItem
 {
 public:
     StyleOptionViewItem() 
-    : QStyleOptionViewItemV3()
+    : QStyleOptionViewItem()
     {}
     StyleOptionViewItem( const StyleOptionViewItem &style ) 
-    : QStyleOptionViewItemV3( style )
+    : QStyleOptionViewItem( style )
     {
         rectF = style.rectF;
     }

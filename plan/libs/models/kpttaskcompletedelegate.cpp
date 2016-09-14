@@ -53,7 +53,7 @@ void TaskCompleteDelegate::paint( QPainter *painter, const QStyleOptionViewItem 
         ProgressBarDelegate::paint( painter, option, index );
     } else {
         QStyle *style;
-        QStyleOptionViewItemV4 opt = option;
+        QStyleOptionViewItem opt = option;
         //initStyleOption( &opt, index );
         style = opt.widget ? opt.widget->style() : QApplication::style();
         style->drawPrimitive( QStyle::PE_PanelItemViewItem, &opt, painter );
