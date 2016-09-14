@@ -26,6 +26,7 @@
 
 #include <KLocalizedString>
 
+#include <QTextEdit>
 
 namespace KPlato
 {
@@ -131,6 +132,13 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
     connect( widget.insertAfter, SIGNAL(currentIndexChanged(int)), SLOT(changed()) );
     connect( widget.viewtype, SIGNAL(currentIndexChanged(int)), SLOT(viewtypeChanged(int)) );
     connect( widget.category, SIGNAL(editTextChanged(QString)), SLOT(categoryChanged()) );
+
+    QString categoryWhatsThis = xi18nc("@info:whatsthis",
+                                       "<title>The category of the view</title><nl/>"
+                                       "The view is placed under this category in the view selector.<nl/>"
+                                       "You can edit the category name to create a new category.");
+    widget.categoryLabel->setWhatsThis(categoryWhatsThis);
+    widget.category->setWhatsThis(categoryWhatsThis);
 }
 
 void AddViewPanel::viewnameChanged( const QString &text )
@@ -157,7 +165,9 @@ void AddViewPanel::viewtypeChanged( int idx )
         m_viewtipChanged = false;
     }
     if ( ! m_viewtipChanged ) {
-        widget.tooltip->setText( vi.tip );
+        QTextEdit e;
+        e.setText(vi.tip);
+        widget.tooltip->setText(e.toPlainText());
         m_viewtipChanged = false;
     }
 }
@@ -310,7 +320,9 @@ EditViewPanel::EditViewPanel( ViewListWidget &viewlist, ViewListItem *item, QWid
     widget.setupUi( this );
 
     widget.viewname->setText( item->text( 0 ) );
-    widget.tooltip->setText( item->toolTip( 0 ) );
+    QTextEdit e;
+    e.setText(item->toolTip(0));
+    widget.tooltip->setText(e.toPlainText());
 
     foreach ( ViewListItem *item, m_viewlist.categories() ) {
         m_categories.insert( item->text( 0 ), item );
@@ -326,6 +338,14 @@ EditViewPanel::EditViewPanel( ViewListWidget &viewlist, ViewListItem *item, QWid
     connect( widget.tooltip, SIGNAL(textChanged(QString)), SLOT(changed()) );
     connect( widget.insertAfter, SIGNAL(currentIndexChanged(int)), SLOT(changed()) );
     connect( widget.category, SIGNAL(editTextChanged(QString)), SLOT(categoryChanged()) );
+
+    QString categoryWhatsThis = xi18nc("@info:whatsthis",
+                                       "<title>The category of the view</title><nl/>"
+                                       "The view is placed under this category in the view selector.<nl/>"
+                                       "Selecting a different category will move the view to the new category.<nl/>"
+                                       "You can edit the category name to create a new category.");
+    widget.categoryLabel->setWhatsThis(categoryWhatsThis);
+    widget.category->setWhatsThis(categoryWhatsThis);
 }
 
 bool EditViewPanel::ok()
@@ -424,7 +444,9 @@ EditCategoryPanel::EditCategoryPanel( ViewListWidget &viewlist, ViewListItem *it
     widget.setupUi( this );
 
     widget.viewname->setText( item->text( 0 ) );
-    widget.tooltip->setText( item->toolTip( 0 ) );
+    QTextEdit e;
+    e.setText(item->toolTip(0));
+    widget.tooltip->setText(e.toPlainText());
 
     fillAfter();
 
@@ -566,7 +588,9 @@ void AddReportsViewPanel::viewtypeChanged( int idx )
         m_viewtipChanged = false;
     }
     if ( ! m_viewtipChanged ) {
-        widget.tooltip->setText( vi.tip );
+        QTextEdit e;
+        e.setText(vi.tip);
+        widget.tooltip->setText(e.toPlainText());
         m_viewtipChanged = false;
     }
 }
