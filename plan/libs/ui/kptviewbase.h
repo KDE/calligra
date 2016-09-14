@@ -173,7 +173,7 @@ public Q_SLOTS:
 protected:
     virtual void paint( QPainter &p, const PrintingOptions::Data &options, const QRect &rect,  int pageNumber, const Project &project );
     int headerFooterHeight( const PrintingOptions::Data &options ) const;
-    void drawBottomRect( QPainter &p, const QRect &r );
+    void drawRect( QPainter &p, const QRect &r, Qt::Edges edges = Qt::LeftEdge | Qt::RightEdge | Qt::BottomEdge );
 
 
 protected:

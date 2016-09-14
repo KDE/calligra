@@ -333,11 +333,25 @@ QList<KoShape*> PrintingDialog::shapesOnPage(int)
     return QList<KoShape*>();
 }
 
-void PrintingDialog::drawBottomRect( QPainter &p, const QRect &r )
+void PrintingDialog::drawRect( QPainter &p, const QRect &r, Qt::Edges edges )
 {
-    p.drawLine( r.topLeft(), r.bottomLeft() );
-    p.drawLine( r.bottomLeft(), r.bottomRight() );
-    p.drawLine( r.topRight(), r.bottomRight() );
+    p.save();
+    QPen pen = p.pen();
+    pen.setColor(Qt::gray);
+    p.setPen(pen);
+    if (edges & Qt::LeftEdge) {
+        p.drawLine( r.topLeft(), r.bottomLeft() );
+    }
+    if (edges & Qt::BottomEdge) {
+        p.drawLine( r.bottomLeft(), r.bottomRight() );
+    }
+    if (edges & Qt::TopEdge) {
+        p.drawLine( r.topRight(), r.bottomRight() );
+    }
+    if (edges & Qt::RightEdge) {
+        p.drawLine( r.topRight(), r.bottomRight() );
+    }
+    p.restore();
 }
 
 QRect PrintingDialog::headerRect() const
@@ -414,25 +428,49 @@ void PrintingDialog::paint( QPainter &p, const PrintingOptions::Data &options, c
         pageRect = p.boundingRect( rect_1, Qt::AlignRight|Qt::AlignTop, page );
         pageRect.setHeight( rect_1.height() );
         rect_1.setRight( pageRect.left() - 2 );
+        p.save();
+        QFont f = p.font();
+        f.setPointSize( f.pointSize() * 0.5 );
+        p.setFont( f );
+        QRect r = p.boundingRect( rect_1, Qt::AlignRight|Qt::AlignTop, i18n("Page:") );
+        if (r.left() > pageRect.left()) {
+            pageRect.setLeft(r.left());
+        }
+        p.restore();
         if ( options.project == Qt::Checked || options.manager == Qt::Checked || options.date == Qt::Checked ) {
             p.drawLine( rect_1.topRight(), rect_1.bottomRight() );
         }
     }
     if ( options.date == Qt::Checked ) {
+            p.save();
+            QFont f = p.font();
+            f.setPointSize( f.pointSize() * 0.5 );
+            p.setFont( f );
+            QRect rct = p.boundingRect( rect_1, Qt::AlignRight|Qt::AlignTop, i18n("Date:") );
+            p.restore();
         if ( ( options.project == Qt::Checked && options.manager != Qt::Checked ) ||
              ( options.project != Qt::Checked && options.manager == Qt::Checked ) )
         {
             dateRect = p.boundingRect( rect_1, Qt::AlignRight|Qt::AlignTop, date );
             dateRect.setHeight( rect_1.height() );
             rect_1.setRight( dateRect.left() - 2 );
+            if (rct.right() > dateRect.right()) {
+                dateRect.setRight(rct.right());
+            }
             p.drawLine( rect_1.topRight(), rect_1.bottomRight() );
         } else if ( options.project == Qt::Checked && options.manager == Qt::Checked ) {
             dateRect = p.boundingRect( rect_2, Qt::AlignRight|Qt::AlignTop, date );
             dateRect.setHeight( rect_2.height() );
             rect_2.setRight( dateRect.left() - 2 );
+            if (rct.right() > dateRect.right()) {
+                dateRect.setRight(rct.right());
+            }
             p.drawLine( rect_2.topRight(), rect_2.bottomRight() );
         } else {
             dateRect = p.boundingRect( rect_2, Qt::AlignLeft|Qt::AlignTop, date );
+            if (rct.right() > dateRect.right()) {
+                dateRect.setRight(rct.right());
+            }
             dateRect.setHeight( rect_2.height() );
             rect_2.setRight( dateRect.left() - 2 );
             if ( rect_2.left() != rect.left() ) {
@@ -441,35 +479,59 @@ void PrintingDialog::paint( QPainter &p, const PrintingOptions::Data &options, c
         }
     }
     if ( options.manager == Qt::Checked ) {
+        p.save();
+        QFont f = p.font();
+        f.setPointSize( f.pointSize() * 0.5 );
+        p.setFont( f );
+        QRect rct = p.boundingRect( rect_1, Qt::AlignRight|Qt::AlignTop, i18n("Manager:") );
+        p.restore();
         if ( options.project != Qt::Checked ) {
             managerRect = p.boundingRect( rect_1, Qt::AlignLeft|Qt::AlignTop, manager );
             managerRect.setHeight( rect_1.height() );
+            if (rct.right() > managerRect.right()) {
+                managerRect.setRight(rct.right());
+            }
         } else if ( options.date != Qt::Checked && options.page != Qt::Checked ) {
             managerRect = p.boundingRect( rect_1, Qt::AlignRight|Qt::AlignTop, manager );
             managerRect.setHeight( rect_1.height() );
+            if (rct.right() > managerRect.right()) {
+                managerRect.setRight(rct.right());
+            }
             rect_1.setRight( managerRect.left() - 2 );
             p.drawLine( rect_1.topRight(), rect_1.bottomRight() );
         } else {
             managerRect = p.boundingRect( rect_2, Qt::AlignLeft|Qt::AlignTop, manager );
             managerRect.setHeight( rect_2.height() );
+            if (rct.right() > managerRect.right()) {
+                managerRect.setRight(rct.right());
+            }
         }
     }
     if ( options.project == Qt::Checked ) {
         projectRect = p.boundingRect( rect_1, Qt::AlignLeft|Qt::AlignTop, projectName );
         projectRect.setHeight( rect_1.height() );
+        p.save();
+        QFont f = p.font();
+        f.setPointSize( f.pointSize() * 0.5 );
+        p.setFont( f );
+        QRect rct = p.boundingRect( rect_1, Qt::AlignRight|Qt::AlignTop, i18n("Project:") );
+        if (rct.right() > projectRect.right()) {
+            projectRect.setRight(rct.right());
+        }
+        p.restore();
     }
 
     if ( options.page == Qt::Checked ) {
         p.drawText( pageRect, Qt::AlignHCenter|Qt::AlignBottom, page );
     }
     if ( options.project == Qt::Checked ) {
-        p.drawText( projectRect, Qt::AlignLeft|Qt::AlignBottom, projectName );
+        p.drawText( projectRect.adjusted(3, 0, 3, 0), Qt::AlignLeft|Qt::AlignBottom, projectName );
     }
     if ( options.date == Qt::Checked ) {
         p.drawText( dateRect, Qt::AlignHCenter|Qt::AlignBottom, date );
     }
     if ( options.manager == Qt::Checked ) {
-        p.drawText( managerRect, Qt::AlignLeft|Qt::AlignBottom, manager );
+        p.drawText( managerRect.adjusted(3, 0, 3, 0), Qt::AlignLeft|Qt::AlignBottom, manager );
     }
     QFont f = p.font();
     f.setPointSize( f.pointSize() * 0.5 );
@@ -817,15 +879,25 @@ void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
 
     painter.setPen(Qt::black);
     painter.setBrush( Qt::lightGray );
+    int higestIndex = 0;
+    int rightpos = 0;
     for ( int i = 0; i < mh->count(); ++i ) {
         QString text = model->headerData( i, Qt::Horizontal ).toString();
         QVariant a = model->headerData( i, Qt::Horizontal, Qt::TextAlignmentRole );
         int align = a.isValid() ? a.toInt() : (int)(Qt::AlignLeft|Qt::AlignVCenter);
         if ( ! mh->isSectionHidden( i ) ) {
-            QRect r( mh->sectionPosition( i ), 0, mh->sectionSize( i ), height );
+            QRect r = QRect( mh->sectionPosition( i ), 0, mh->sectionSize( i ), height ).adjusted(0, 0, 0, -painter.pen().width());
+            if (rightpos < r.right()) {
+                higestIndex = i;
+                rightpos = r.right();
+            }
             painter.drawRect( r );
-            painter.drawText( r, align, text );
-            //debugPlan<<text<<r<<r.left() * sx<<align;
+            // FIXME There is a bug somewhere, the text somehow overwites the rect outline for the first column!
+            painter.save();
+            painter.setBrush(QBrush());
+            painter.drawText( r.adjusted(3, 1, -3, -1), align, text );
+            painter.drawRect( r );
+            painter.restore();
         }
         //debugPlan<<text<<"hidden="<<h->isSectionHidden( i )<<h->sectionPosition( i );
     }
@@ -844,13 +916,18 @@ void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
             if ( mh->isSectionHidden( i ) ) {
                 continue;
             }
+            Qt::Edges edges = Qt::BottomEdge | Qt::LeftEdge;
             QModelIndex index = model->index( idx.row(), i, idx.parent() );
             QString text = model->data( index ).toString();
             QVariant a = model->data( index, Qt::TextAlignmentRole );
             int align = a.isValid() ? a.toInt() : (int)(Qt::AlignLeft|Qt::AlignVCenter);
             QRect r( mh->sectionPosition( i ),  0, mh->sectionSize( i ), height );
-            drawBottomRect( painter, r );
-            painter.drawText( r, align, text );
+            if (higestIndex == i) {
+                edges |= Qt::RightEdge;
+                r.adjust(0, 0, 1, 0);
+            }
+            drawRect( painter, r, edges );
+            painter.drawText( r.adjusted(3, 1, -3, -1) , align, text );
         }
         ++numRows;
         idx = m_tree->indexBelow( idx );
@@ -1679,19 +1756,34 @@ void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
 
     painter.setPen(Qt::black);
     painter.setBrush( Qt::lightGray );
+    int higestIndex = 0;
+    int rightpos = 0;
     for ( int i = 0; i < mh->count(); ++i ) {
         QString text = model->headerData( i, Qt::Horizontal ).toString();
         QVariant a = model->headerData( i, Qt::Horizontal, Qt::TextAlignmentRole );
         int align = a.isValid() ? a.toInt() : (int)(Qt::AlignLeft|Qt::AlignVCenter);
         if ( ! mh->isSectionHidden( i ) ) {
-            QRect r( mh->sectionPosition( i ), 0, mh->sectionSize( i ), height );
+            QRect r = QRect( mh->sectionPosition( i ), 0, mh->sectionSize( i ), height ).adjusted(0, 0, 0, -painter.pen().width());
+            if (rightpos < r.right()) {
+                higestIndex = i;
+                rightpos = r.right();
+            }
             painter.drawRect( r );
-            painter.drawText( r, align, text );
+            // FIXME There is a bug somewhere, the text somehow overwites the rect outline for the first column!
+            painter.save();
+            painter.setBrush(QBrush());
+            painter.drawText( r.adjusted(3, 1, -3, -1), align, text );
+            painter.drawRect( r );
+            painter.restore();
         }
         if ( ! sh->isSectionHidden( i ) ) {
-            QRect r( sh->sectionPosition( i ) + mh->length(), 0, sh->sectionSize( i ), height );
+            QRect r = QRect( sh->sectionPosition( i ) + mh->length(), 0, sh->sectionSize( i ), height ).adjusted(0, 0, 0, -painter.pen().width());
+            if (rightpos < r.right()) {
+                higestIndex = i;
+                rightpos = r.right();
+            }
             painter.drawRect( r );
-            painter.drawText( r, align, text );
+            painter.drawText( r.adjusted(3, 1, -3, -1), align, text );
         }
         //debugPlan<<text<<"hidden="<<h->isSectionHidden( i )<<h->sectionPosition( i );
     }
@@ -1716,19 +1808,28 @@ void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
             if ( mh->isSectionHidden( i ) &&  sh->isSectionHidden( i ) ) {
                 continue;
             }
+            Qt::Edges edges = Qt::BottomEdge | Qt::LeftEdge;
             QModelIndex index = model->index( idx.row(), i, idx.parent() );
             QString text = model->data( index ).toString();
             QVariant a = model->data( index, Qt::TextAlignmentRole );
             int align = a.isValid() ? a.toInt() : (int)(Qt::AlignLeft|Qt::AlignVCenter);
             if ( ! mh->isSectionHidden( i ) ) {
                 QRect r( mh->sectionPosition( i ),  0, mh->sectionSize( i ), height );
-                drawBottomRect( painter, r );
-                painter.drawText( r, align, text );
+                if (higestIndex == i) {
+                    edges |= Qt::RightEdge;
+                    r.adjust(0, 0, 1, 0);
+                }
+                drawRect( painter, r, edges );
+                painter.drawText( r.adjusted(3, 1, -3, -1) , align, text );
             }
             if ( ! sh->isSectionHidden( i ) ) {
                 QRect r( sh->sectionPosition( i ) + mh->length(), 0, sh->sectionSize( i ), height );
-                drawBottomRect( painter, r );
-                painter.drawText( r, align, text );
+                if (higestIndex == i) {
+                    edges |= Qt::RightEdge;
+                    r.adjust(0, 0, 1, 0);
+                }
+                drawRect( painter, r, edges );
+                painter.drawText( r.adjusted(3, 1, -3, -1), align, text );
             }
         }
         ++numRows;
