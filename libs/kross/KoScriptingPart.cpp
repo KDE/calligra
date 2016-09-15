@@ -163,7 +163,7 @@ bool KoScriptingPart::showExecuteScriptFile()
         Kross::Action action(this, "Execute Script File");
         action.addObject(d->module);
 
-        action.setFile(filedialog.selectedUrls().at(1).path());
+        action.setFile(filedialog.selectedUrls().at(0).path());
         action.trigger();
 
         return true;
