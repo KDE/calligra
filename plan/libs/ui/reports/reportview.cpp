@@ -82,6 +82,7 @@
 #include <qpushbutton.h>
 #include <QMimeDatabase>
 #include <QFileDialog>
+#include <QMessageBox>
 
 namespace KPlato
 {
@@ -375,18 +376,18 @@ QUrl ReportWidget::getExportFileName(const QString &mimetype)
 
 void ReportWidget::exportAsTextDocument()
 {
+    KReportRendererBase *renderer = m_factory.createInstance("odtframes");
+    if ( renderer == 0 ) {
+        QMessageBox::warning(this, i18n("Export"), i18n("Export to text document is not supported"));
+        return;
+    }
     KReportRendererContext context;
     context.destinationUrl = getExportFileName(QStringLiteral("application/vnd.oasis.opendocument.text"));
+    debugPlan<<"Export to odt:"<<context.destinationUrl;
     if (!context.destinationUrl.isValid()) {
         return;
     }
 
-    debugPlan<<"Export to odt:"<<context.destinationUrl;
-    KReportRendererBase *renderer = m_factory.createInstance("odtframes");
-    if ( renderer == 0 ) {
-        errorPlan<<"Cannot create odt (frames) renderer";
-        return;
-    }
     if (!renderer->render(context, m_reportDocument)) {
         KMessageBox::error(this, xi18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.toDisplayString()) , i18n("Export to text document failed"));
     }
@@ -394,6 +395,12 @@ void ReportWidget::exportAsTextDocument()
 
 void ReportWidget::exportAsSpreadsheet()
 {
+    KReportRendererBase *renderer;
+    renderer = m_factory.createInstance("ods");
+    if ( renderer == 0 ) {
+        QMessageBox::warning(this, i18n("Export"), i18n("Export to spreadsheet document is not supported"));
+        return;
+    }
     KReportRendererContext context;
     context.destinationUrl = getExportFileName(QStringLiteral("application/vnd.oasis.opendocument.spreadsheet"));
     if (!context.destinationUrl.isValid()) {
@@ -401,12 +408,6 @@ void ReportWidget::exportAsSpreadsheet()
     }
 
     debugPlan<<"Export to ods:"<<context.destinationUrl;
-    KReportRendererBase *renderer;
-    renderer = m_factory.createInstance("ods");
-    if ( renderer == 0 ) {
-        errorPlan<<"Cannot create ods renderer";
-        return;
-    }
     if (!renderer->render(context, m_reportDocument)) {
         KMessageBox::error(this, xi18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.toDisplayString()) , i18n("Export to spreadsheet failed"));
     }
@@ -414,21 +415,20 @@ void ReportWidget::exportAsSpreadsheet()
 
 void ReportWidget::exportAsWebPage()
 {
+    //QT5TODO: perhaps also support "htmltable", with similar question switch like kexi
+    //Though plugins should rather not be hardcoded at all in the future.
+    KReportRendererBase *renderer;
+    renderer = m_factory.createInstance("htmlcss");
+    if ( renderer == 0 ) {
+        QMessageBox::warning(this, i18n("Export"), i18n("Export to HTML document is not supported"));
+        return;
+    }
     KReportRendererContext context;
     context.destinationUrl = getExportFileName(QStringLiteral("text/html"));
     if (!context.destinationUrl.isValid()) {
         return;
     }
-
     debugPlan<<"Export to html:"<<context.destinationUrl;
-    KReportRendererBase *renderer;
-    //QT5TODO: perhaps also support "htmltable", with similar question switch like kexi
-    //Though plugins should rather not be hardcoded at all in the future.
-    renderer = m_factory.createInstance("htmlcss");
-    if ( renderer == 0 ) {
-        errorPlan<<"Cannot create html renderer";
-        return;
-    }
     if (!renderer->render(context, m_reportDocument)) {
         KMessageBox::error(this, xi18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.toDisplayString()) , i18n("Export to HTML failed"));
     }
