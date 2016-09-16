@@ -63,6 +63,7 @@ ScheduleTreeView::ScheduleTreeView( QWidget *parent )
     //setSelectionBehavior( QAbstractItemView::SelectItems );
     setSelectionMode( QAbstractItemView::SingleSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
+    setTreePosition(-1); // always visual index 0
 
     createItemDelegates( m );
 }

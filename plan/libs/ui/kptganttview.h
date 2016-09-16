@@ -416,7 +416,15 @@ class ResourceAppointmentsGanttViewSettingsDialog : public ItemViewSettupDialog
 {
     Q_OBJECT
 public:
-    ResourceAppointmentsGanttViewSettingsDialog( ViewBase *view, GanttTreeView *treeview );
+    ResourceAppointmentsGanttViewSettingsDialog(GanttViewBase *gantt, ViewBase *view);
+
+public Q_SLOTS:
+    void slotOk();
+
+private:
+    GanttViewBase *m_gantt;
+    GanttPrintingOptionsWidget *m_printingoptions;
+
 };
 
 class KPLATOUI_EXPORT ResourceAppointmentsGanttView : public ViewBase

@@ -314,6 +314,7 @@ GanttTreeView::GanttTreeView( QWidget* parent )
     setHeader( new HeaderView );
 
     setSelectionMode( QAbstractItemView::ExtendedSelection );
+    setTreePosition(-1); // always visual index 0
 
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
     connect( header(), SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotHeaderContextMenuRequested(QPoint)) );
@@ -1157,15 +1158,28 @@ KoPrintJob *MilestoneGanttView::createPrintJob()
 }
 
 //--------------------
-ResourceAppointmentsGanttViewSettingsDialog::ResourceAppointmentsGanttViewSettingsDialog( ViewBase *view,  GanttTreeView *treeview )
-: ItemViewSettupDialog( view, treeview, true, view )
+ResourceAppointmentsGanttViewSettingsDialog::ResourceAppointmentsGanttViewSettingsDialog( GanttViewBase *gantt,  ViewBase *view )
+    : ItemViewSettupDialog( view, gantt->treeView(), true, view )
+    , m_gantt(gantt)
 {
     QTabWidget *tab = new QTabWidget();
     QWidget *w = ViewBase::createPageLayoutWidget( view );
     tab->addTab( w, w->windowTitle() );
     m_pagelayout = w->findChild<KoPageLayoutWidget*>();
     Q_ASSERT( m_pagelayout );
+    m_printingoptions = new GanttPrintingOptionsWidget( this );
+    m_printingoptions->setOptions( gantt->printingOptions() );
+    tab->addTab( m_printingoptions, m_printingoptions->windowTitle() );
     /*KPageWidgetItem *page = */insertWidget( -1, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
+
+    connect( this, SIGNAL(accepted()), this, SLOT(slotOk()) );
+}
+
+void ResourceAppointmentsGanttViewSettingsDialog::slotOk()
+{
+    debugPlan;
+    m_gantt->setPrintingOptions( m_printingoptions->options());
+    ItemViewSettupDialog::slotOk();
 }
 
 //------------------------------------------
@@ -1189,6 +1203,7 @@ ResourceAppointmentsGanttView::ResourceAppointmentsGanttView(KoPart *part, KoDoc
     m_gantt->setRowController( m_rowController );
     tv->header()->setStretchLastSection( true );
 
+    tv->setTreePosition(-1);
 
     KGantt::ProxyModel *m = static_cast<KGantt::ProxyModel*>( m_gantt->ganttProxyModel() );
     m->setRole( KGantt::ItemTypeRole, KGantt::ItemTypeRole );
@@ -1229,7 +1244,6 @@ Project *ResourceAppointmentsGanttView::project() const
 
 void ResourceAppointmentsGanttView::setProject( Project *project )
 {
-    static_cast<KGantt::DateTimeGrid*>( m_gantt->grid() )->setStartDateTime( project->startTime() );
     m_model->setProject( project );
 }
 
@@ -1270,10 +1284,11 @@ void ResourceAppointmentsGanttView::slotContextMenuRequested( const QModelIndex 
 void ResourceAppointmentsGanttView::slotOptions()
 {
     debugPlan;
-    QPointer<ItemViewSettupDialog> dlg = new ResourceAppointmentsGanttViewSettingsDialog( this, treeView() );
-//     dlg->addPrintingOptions();
-    dlg->exec();
-    delete dlg;
+    ItemViewSettupDialog *dlg = new ResourceAppointmentsGanttViewSettingsDialog(m_gantt, this);
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
 }
 
 bool ResourceAppointmentsGanttView::loadContext( const KoXmlElement &settings )

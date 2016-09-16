@@ -1028,6 +1028,7 @@ PerformanceStatusTreeView::PerformanceStatusTreeView( QWidget *parent )
     m_tree->setColumnsHidden( lst1 );
     m_tree->setSelectionMode( QAbstractItemView::ExtendedSelection );
     addWidget( m_tree );
+    m_tree->setTreePosition(-1);
 
     m_chart = new PerformanceStatusBase( this );
     addWidget( m_chart );

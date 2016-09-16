@@ -1910,6 +1910,7 @@ void DoubleTreeViewBase::init()
     addWidget( m_rightview );
     setStretchFactor( 1, 1 );
 
+    m_leftview->setTreePosition(-1); // always visual index 0
 
     connect( m_leftview, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SIGNAL(contextMenuRequested(QModelIndex,QPoint)) );
     connect( m_leftview, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotLeftHeaderContextMenuRequested(QPoint)) );
