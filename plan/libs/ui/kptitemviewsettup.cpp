@@ -141,7 +141,7 @@ ItemViewSettupDialog::ItemViewSettupDialog( ViewBase *view, TreeViewBase *treevi
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
     button(QDialogButtonBox::Ok)->setDefault(true);
 
-    button( QDialogButtonBox::Ok )->setEnabled( ! treeview->defaultColumns().isEmpty() );
+    button( QDialogButtonBox::RestoreDefaults )->setEnabled( ! treeview->defaultColumns().isEmpty() );
 
     m_panel = new ItemViewSettup( treeview, includeColumn0 );
     KPageWidgetItem *page = new KPageWidgetItem( m_panel, i18n( "Tree View" ) );
