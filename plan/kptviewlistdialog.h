@@ -27,6 +27,7 @@
 #include <KoDialog.h>
 
 #include <QWidget>
+#include <QDomDocument>
 
 
 namespace KPlato
@@ -172,7 +173,7 @@ class ViewListReportsDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    ViewListReportsDialog( View *view, ViewListWidget &viewlist, QWidget *parent=0 );
+    ViewListReportsDialog( View *view, ViewListWidget &viewlist, const QDomDocument &doc, QWidget *parent=0 );
 
 protected Q_SLOTS:
     void slotOk();
@@ -190,7 +191,7 @@ class AddReportsViewPanel : public QWidget
 {
     Q_OBJECT
 public:
-    AddReportsViewPanel( View *view, ViewListWidget &viewlist, QWidget *parent );
+    AddReportsViewPanel( View *view, ViewListWidget &viewlist, const QDomDocument &doc, QWidget *parent );
 
     bool ok();
 
@@ -216,6 +217,7 @@ private:
     QStringList m_viewtypes;
     bool m_viewnameChanged;
     bool m_viewtipChanged;
+    QDomDocument m_data;
 };
 
 

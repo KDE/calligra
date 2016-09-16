@@ -69,7 +69,6 @@ class ReportDesigner;
 class ReportData;
 class ReportSourceEditor;
 class ReportNavigator;
-class ReportDesignPanel;
 class GroupSectionEditor;
 
 class ReportPrintingDialog : public KoPrintingDialog
@@ -219,37 +218,6 @@ public Q_SLOTS:
 protected Q_SLOTS:
     void slotMaxChanged( int );
     void setButtonsEnabled();
-};
-
-class KPLATOUI_EXPORT ReportDesignDialog : public KoDialog
-{
-    Q_OBJECT
-public:
-    explicit ReportDesignDialog( QWidget *parent = 0 );
-    
-    ReportDesignDialog( const QDomElement &element, const QList<ReportData*> &models, QWidget *parent = 0 );
-
-    QDomDocument document() const;
-
-Q_SIGNALS:
-    void createReportView( ReportDesignDialog *dlg );
-    void modifyReportDefinition( KUndo2Command *cmd );
-
-public Q_SLOTS:
-    void slotViewCreated( ViewBase *view );
-
-protected Q_SLOTS:
-    void slotSaveToFile();
-    void slotSaveToView();
-    virtual void slotButtonClicked(int button);
-    void closeEvent ( QCloseEvent * e );
-
-protected:
-    void saveToView();
-
-private:
-    ReportDesignPanel *m_panel;
-    ReportView *m_view;
 };
 
 //-------------------

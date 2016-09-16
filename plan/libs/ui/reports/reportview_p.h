@@ -44,43 +44,6 @@ namespace KPlato
 
 class ReportData;
 
-class ReportDesignPanel : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit ReportDesignPanel( QWidget *parent = 0 );
-
-    ReportDesignPanel( const QDomElement &element, const QList<ReportData*> &models, QWidget *parent = 0 );
-    
-    QDomDocument document() const;
-    
-    KReportDesigner *m_designer;
-    KPropertyEditorView *m_propertyeditor;
-    ReportSourceEditor *m_sourceeditor;
-    bool m_modified;
-    QActionGroup *m_actionGroup;
-
-    QStandardItemModel *createSourceModel( QObject *parent = 0 ) const;
-
-Q_SIGNALS:
-    void insertItem( const QString &name );
-
-public Q_SLOTS:
-    void slotPropertySetChanged();
-    void slotInsertAction();
-    
-    void setReportData( const QString &tag );
-    
-    void setModified() { m_modified = true; }
-    void slotItemInserted(const QString &item);
-    
-protected:
-    ReportData *createReportData( const QString &type );
-    void populateToolbar( KToolBar *tb );
-
-private:
-    QList<ReportData*> m_reportdatamodels;
-};
 
 class GroupSectionEditor : public QObject
 {

@@ -496,14 +496,14 @@ void EditCategoryPanel::fillAfter()
 }
 
 //------ Reports
-ViewListReportsDialog::ViewListReportsDialog( View *view, ViewListWidget &viewlist, QWidget *parent )
+ViewListReportsDialog::ViewListReportsDialog( View *view, ViewListWidget &viewlist, const QDomDocument &doc, QWidget *parent )
     : KoDialog(parent)
 {
     setCaption( i18nc( "@title:window", "Add Report" ) );
     setButtons( KoDialog::Ok | KoDialog::Cancel );
     setDefaultButton( Ok );
 
-    m_panel = new AddReportsViewPanel( view, viewlist, this );
+    m_panel = new AddReportsViewPanel( view, viewlist, doc, this );
 
     setMainWidget( m_panel );
 
@@ -528,12 +528,13 @@ void ViewListReportsDialog::slotOk() {
 }
 
 //------------------------
-AddReportsViewPanel::AddReportsViewPanel( View *view, ViewListWidget &viewlist, QWidget *parent )
+AddReportsViewPanel::AddReportsViewPanel( View *view, ViewListWidget &viewlist, const QDomDocument &doc, QWidget *parent )
     : QWidget( parent ),
       m_view( view ),
       m_viewlist( viewlist ),
       m_viewnameChanged( false ),
-      m_viewtipChanged( false )
+      m_viewtipChanged( false ),
+      m_data(doc)
 {
     widget.setupUi( this );
 
@@ -638,6 +639,7 @@ bool AddReportsViewPanel::ok()
     switch ( viewtype ) {
         case 0: { // Report view
             v = m_view->createReportView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
+            static_cast<ReportView*>(v)->loadXML(m_data);
             break; }
         default:
             errorPlan<<"Unknown view type!";

@@ -2669,26 +2669,11 @@ void View::addViewListItem( const ViewListItem *item, const ViewListItem *parent
     createView( cat, item->viewType(), item->tag(), item->text( 0 ), item->toolTip( 0 ), index );
     m_viewlist->blockSignals( false );
 }
-/*
-void View::slotCreateReport()
+
+void View::createReportView(const QDomDocument &doc)
 {
-    ReportView v(getKoPart(), getPart(), 0 );
-    ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), QDomElement(), v.createReportModels( &getProject(), currentScheduleManager() ), this );
-    // The ReportDesignDialog can not know how to create and insert views,
-    // so faciclitate this in the slotCreateReportView() slot.
-    connect( dlg, SIGNAL(createReportView(ReportDesignDialog*)), SLOT(slotCreateReportView(ReportDesignDialog*)));
-    connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
-    connect(dlg, SIGNAL(modifyReportDefinition(KUndo2Command*)), SLOT(slotModifyReportDefinition(KUndo2Command*)));
-    dlg->show();
-    dlg->raise();
-    dlg->activateWindow();
-}
-*/
-void View::slotCreateReportView( ReportDesignDialog *dlg )
-{
-    QPointer<ViewListReportsDialog> vd = new ViewListReportsDialog( this, *m_viewlist, dlg );
-    connect( vd, SIGNAL(viewCreated(ViewBase*)), dlg, SLOT(slotViewCreated(ViewBase*)) );
-    vd->exec();
+    QPointer<ViewListReportsDialog> vd = new ViewListReportsDialog( this, *m_viewlist, doc, this );
+    vd->exec(); // FIXME  make non-crash
     delete vd;
 }
 
@@ -2718,16 +2703,7 @@ void View::slotOpenReportFileFinished( int result )
     }
     QDomDocument doc;
     doc.setContent( &file );
-    QDomElement e = doc.documentElement();
-    ReportDesignDialog *dlg = new ReportDesignDialog( e, Report::createBaseReportDataModels( this ), this );
-    // The ReportDesignDialog can not know how to create and insert views,
-    // so faciclitate this in the slotCreateReportView() slot.
-    connect( dlg, SIGNAL(createReportView(ReportDesignDialog*)), SLOT(slotCreateReportView(ReportDesignDialog*)));
-    connect(dlg, SIGNAL(modifyReportDefinition(KUndo2Command*)), SLOT(slotModifyReportDefinition(KUndo2Command*)));
-    connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
-    dlg->show();
-    dlg->raise();
-    dlg->activateWindow();
+    createReportView(doc);
 }
 
 void View::slotReportDesignFinished( int /*result */)
@@ -2735,13 +2711,6 @@ void View::slotReportDesignFinished( int /*result */)
     if ( sender() ) {
         sender()->deleteLater();
     }
-}
-
-void View::slotModifyReportDefinition( KUndo2Command *cmd )
-{
-    cmd->redo();
-    delete cmd; // TODO Maybe add command history to views and/or view selector?
-    m_viewlist->setModified();
 }
 
 void View::slotCreateView()

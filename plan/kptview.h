@@ -243,6 +243,8 @@ public Q_SLOTS:
     void addViewListItem( const ViewListItem *item, const ViewListItem *parent, int index );
     void removeViewListItem( const ViewListItem *item );
 
+    void slotOpenReportFile();
+
 protected Q_SLOTS:
     void slotGuiActivated( ViewBase *view, bool );
     void slotViewActivated( ViewListItem*, ViewListItem* );
@@ -293,8 +295,7 @@ protected Q_SLOTS:
 
     void slotUpdateViewInfo( ViewListItem *itm );
 
-    void slotOpenReportFile();
-    void slotModifyReportDefinition( KUndo2Command *cmd );
+    void createReportView(const QDomDocument &doc);
 
     void saveTaskModule( const QUrl &url, Project *project );
     void removeTaskModule( const QUrl &url );
@@ -321,8 +322,6 @@ private Q_SLOTS:
     void slotActionDestroyed( QObject *o );
     void slotViewListItemRemoved( ViewListItem *item );
     void slotViewListItemInserted( ViewListItem *item, ViewListItem *parent, int index );
-
-    void slotCreateReportView( ReportDesignDialog *dlg );
 
     void slotProjectEditFinished( int result );
     void slotTaskEditFinished( int result );
