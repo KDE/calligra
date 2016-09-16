@@ -124,6 +124,8 @@ ScheduleEditor::ScheduleEditor(KoPart *part, KoDocument *doc, QWidget *parent)
 
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
+    m_schedulingRange = new SchedulingRange(doc, this);
+    l->addWidget( m_schedulingRange );
     m_view = new ScheduleTreeView( this );
     l->addWidget( m_view );
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
@@ -166,6 +168,7 @@ ScheduleEditor::ScheduleEditor(KoPart *part, KoDocument *doc, QWidget *parent)
 void ScheduleEditor::draw( Project &project )
 {
     m_view->setProject( &project );
+    m_schedulingRange->setProject(&project);
 }
 
 void ScheduleEditor::draw()
@@ -770,6 +773,66 @@ QList<QAction*> ScheduleHandlerView::actionList( const QString &name ) const
         lst += v->actionList( name );
     }
     return lst;
+}
+
+SchedulingRange::SchedulingRange(KoDocument *doc, QWidget *parent)
+    : QWidget(parent)
+    , m_doc(doc)
+    , m_project(0)
+{
+    setupUi(this);
+
+    connect(targetStartTime, SIGNAL(editingFinished()), this, SLOT(slotStartChanged()));
+    connect(targetEndTime, SIGNAL(editingFinished()), this, SLOT(slotEndChanged()));
+}
+
+void SchedulingRange::setProject(Project *project)
+{
+    if (m_project) {
+        disconnect(m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotProjectChanged(Node*)));
+    }
+    m_project = project;
+    if (m_project) {
+        connect(m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotProjectChanged(Node*)));
+        slotProjectChanged(m_project);
+    }
+}
+
+void SchedulingRange::slotProjectChanged(Node *node)
+{
+    if (node != m_project) {
+        return;
+    }
+    if (targetStartTime->dateTime() != m_project->constraintStartTime()) {
+        targetStartTime->setDateTime(m_project->constraintStartTime());
+    }
+    if (targetEndTime->dateTime() != m_project->constraintEndTime()) {
+        targetEndTime->setDateTime(m_project->constraintEndTime());
+    }
+}
+
+void SchedulingRange::slotStartChanged()
+{
+    if (!m_project || !m_doc) {
+        return;
+    }
+    if (targetStartTime->dateTime() == m_project->constraintStartTime()) {
+        return;
+    }
+    NodeModifyConstraintStartTimeCmd *cmd = new NodeModifyConstraintStartTimeCmd(*m_project, targetStartTime->dateTime(), kundo2_i18n("Modify project target start time"));
+    m_doc->addCommand(cmd);
+}
+
+void SchedulingRange::slotEndChanged()
+{
+    if (!m_project || !m_doc) {
+        return;
+    }
+    if (targetEndTime->dateTime() == m_project->constraintEndTime()) {
+        return;
+    }
+    NodeModifyConstraintEndTimeCmd *cmd = new NodeModifyConstraintEndTimeCmd(*m_project, targetEndTime->dateTime(), kundo2_i18n("Modify project target end time"));
+    m_doc->addCommand(cmd);
 }
 
 } // namespace KPlato

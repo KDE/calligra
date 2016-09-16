@@ -117,6 +117,7 @@ ki18n_wrap_ui(kplatoui_LIB_SRCS
     kptperformancestatusviewsettingspanel.ui
     kptworkpackagemergepanel.ui
     kptrecalculatedialog.ui
+    kptscheduleeditor.ui
 
     locale/localemon.ui
 )
