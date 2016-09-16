@@ -64,7 +64,7 @@ bool KPlatoXmlLoader::load( const KoXmlElement& plan )
     QString syntaxVersion = plan.attribute( "version" );
     m_loader.setVersion( syntaxVersion );
     if ( syntaxVersion.isEmpty() ) {
-        int ret = KMessageBox::warningContinueCancel(
+        KMessageBox::ButtonCode ret = KMessageBox::warningContinueCancel(
                       0, i18n( "This document has no syntax version.\n"
                                "Opening it in Plan may lose information." ),
                       i18n( "File-Format Error" ), KGuiItem( i18n( "Continue" ) ) );
@@ -75,7 +75,7 @@ bool KPlatoXmlLoader::load( const KoXmlElement& plan )
         // set to max version and hope for the best
         m_loader.setVersion( KPLATO_MAX_FILE_SYNTAX_VERSION );
     } else if ( syntaxVersion > KPLATO_MAX_FILE_SYNTAX_VERSION ) {
-        int ret = KMessageBox::warningContinueCancel(
+        KMessageBox::ButtonCode ret = KMessageBox::warningContinueCancel(
                       0, i18n( "This document was created with a newer version of KPlato than Plan can load.\n"
                                "Syntax version: %1\n"
                                "Opening it in this version of Plan may lose some information.", syntaxVersion ),
@@ -118,7 +118,7 @@ bool KPlatoXmlLoader::loadWorkpackage( const KoXmlElement& plan )
     debugPlanXml;
     bool ok = false;
     if ( m_loader.workVersion() > KPLATOWORK_MAX_FILE_SYNTAX_VERSION ) {
-        int ret = KMessageBox::warningContinueCancel(
+        KMessageBox::ButtonCode ret = KMessageBox::warningContinueCancel(
                 0, i18n( "This document was created with a newer version of KPlatoWork (syntax version: %1)\n"
                 "Opening it in this version of PlanWork will lose some information.", m_loader.workVersion() ),
                 i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );

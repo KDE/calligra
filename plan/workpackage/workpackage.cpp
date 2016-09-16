@@ -604,7 +604,7 @@ int WorkPackage::queryClose( Part *part )
         }
     }
     if ( ! lst.isEmpty() ) {
-        int result = KMessageBox::warningContinueCancelList( 0,
+        KMessageBox::ButtonCode result = KMessageBox::warningContinueCancelList( 0,
                     i18np(
                         "<p>The work package <b>'%2'</b> has an open document.</p><p>Data may be lost if you continue.</p>",
                         "<p>The work package <b>'%2'</b> has open documents.</p><p>Data may be lost if you continue.</p>",
@@ -626,7 +626,7 @@ int WorkPackage::queryClose( Part *part )
     if ( ! isModified() ) {
         return KMessageBox::Yes;
     }
-    int res = KMessageBox::warningYesNoCancel( 0,
+    KMessageBox::ButtonCode res = KMessageBox::warningYesNoCancel( 0,
                 i18n("<p>The work package <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
                 QString(),
                 KStandardGuiItem::save(),

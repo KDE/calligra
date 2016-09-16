@@ -78,7 +78,7 @@ bool Context::load( const KoXmlDocument &document ) {
     }
 /*    QString m_syntaxVersion = elm.attribute( "version", "0.0" );
     if ( m_syntaxVersion > "0.0" ) {
-        int ret = KMessageBox::warningContinueCancel(
+        KMessageBox::ButtonCode ret = KMessageBox::warningContinueCancel(
                       0, i18n( "This document was created with a newer version of Plan (syntax version: %1)\n"
                                "Opening it in this version of Plan will lose some information.", m_syntaxVersion ),
                       i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );

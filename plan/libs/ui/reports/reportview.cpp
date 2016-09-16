@@ -82,7 +82,6 @@
 #include <qpushbutton.h>
 #include <QMimeDatabase>
 #include <QFileDialog>
-#include <QMessageBox>
 
 namespace KPlato
 {
@@ -378,7 +377,7 @@ void ReportWidget::exportAsTextDocument()
 {
     KReportRendererBase *renderer = m_factory.createInstance("odtframes");
     if ( renderer == 0 ) {
-        QMessageBox::warning(this, i18n("Export"), i18n("Export to text document is not supported"));
+        KMessageBox::sorry(this, i18n("Export"), i18n("Export to text document is not supported"));
         return;
     }
     KReportRendererContext context;
@@ -398,7 +397,7 @@ void ReportWidget::exportAsSpreadsheet()
     KReportRendererBase *renderer;
     renderer = m_factory.createInstance("ods");
     if ( renderer == 0 ) {
-        QMessageBox::warning(this, i18n("Export"), i18n("Export to spreadsheet document is not supported"));
+        KMessageBox::sorry(this, i18n("Export"), i18n("Export to spreadsheet document is not supported"));
         return;
     }
     KReportRendererContext context;
@@ -420,7 +419,7 @@ void ReportWidget::exportAsWebPage()
     KReportRendererBase *renderer;
     renderer = m_factory.createInstance("htmlcss");
     if ( renderer == 0 ) {
-        QMessageBox::warning(this, i18n("Export"), i18n("Export to HTML document is not supported"));
+        KMessageBox::sorry(this, i18n("Export"), i18n("Export to HTML document is not supported"));
         return;
     }
     KReportRendererContext context;
@@ -655,7 +654,7 @@ void ReportDesignDialog::slotButtonClicked( int button )
 {
     if ( button == KoDialog::Close ) {
         if ( m_panel->m_modified ) {
-            int res = KMessageBox::warningContinueCancel( this,
+            KMessageBox::ButtonCode res = KMessageBox::warningContinueCancel( this,
                     xi18nc( "@info", "The report definition has been modified.<nl/>"
                     "<emphasis>If you continue, the modifications will be lost.</emphasis>" ) );
 

@@ -202,7 +202,7 @@ bool MainDocument::loadXML( const KoXmlDocument &document, KoStore* )
     QString syntaxVersion = plan.attribute( "version", PLAN_FILE_SYNTAX_VERSION );
     m_xmlLoader.setVersion( syntaxVersion );
     if ( syntaxVersion > PLAN_FILE_SYNTAX_VERSION ) {
-        int ret = KMessageBox::warningContinueCancel(
+        KMessageBox::ButtonCode ret = KMessageBox::warningContinueCancel(
                       0, i18n( "This document was created with a newer version of Plan (syntax version: %1)\n"
                                "Opening it in this version of Plan will lose some information.", syntaxVersion ),
                       i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );
@@ -489,7 +489,7 @@ Package *MainDocument::loadWorkPackageXML( Project &project, QIODevice *, const 
         QString syntaxVersion = plan.attribute( "version", "0.0.0" );
         m_xmlLoader.setWorkVersion( syntaxVersion );
         if ( syntaxVersion > PLANWORK_FILE_SYNTAX_VERSION ) {
-            int ret = KMessageBox::warningContinueCancel(
+            KMessageBox::ButtonCode ret = KMessageBox::warningContinueCancel(
                     0, i18n( "This document was created with a newer version of PlanWork (syntax version: %1)\n"
                     "Opening it in this version of PlanWork will lose some information.", syntaxVersion ),
                     i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );

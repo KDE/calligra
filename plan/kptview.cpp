@@ -1703,7 +1703,7 @@ void View::slotBaselineSchedule( Project *project, ScheduleManager *sm )
     }
     KUndo2Command *cmd;
     if ( sm->isBaselined() ) {
-        int res = KMessageBox::warningContinueCancel( this, i18n( "This schedule is baselined. Do you want to remove the baseline?" ) );
+        KMessageBox::ButtonCode res = KMessageBox::warningContinueCancel( this, i18n( "This schedule is baselined. Do you want to remove the baseline?" ) );
         if ( res == KMessageBox::Cancel ) {
             return;
         }
@@ -2199,7 +2199,7 @@ void View::slotDeleteTask( QList<Node*> lst )
     //debugPlan;
     foreach ( Node *n, lst ) {
         if ( n->isScheduled() ) {
-            int res = KMessageBox::warningContinueCancel( this, i18n( "A task that has been scheduled will be deleted. This will invalidate the schedule." ) );
+            KMessageBox::ButtonCode res = KMessageBox::warningContinueCancel( this, i18n( "A task that has been scheduled will be deleted. This will invalidate the schedule." ) );
             if ( res == KMessageBox::Cancel ) {
                 return;
             }
@@ -2246,7 +2246,7 @@ void View::slotDeleteTask( Node *node )
         return ;
     }
     if ( node->isScheduled() ) {
-        int res = KMessageBox::warningContinueCancel( this, i18n( "This task has been scheduled. This will invalidate the schedule." ) );
+        KMessageBox::ButtonCode res = KMessageBox::warningContinueCancel( this, i18n( "This task has been scheduled. This will invalidate the schedule." ) );
         if ( res == KMessageBox::Cancel ) {
             return;
         }
@@ -2481,7 +2481,7 @@ void View::slotDeleteResourceObjects( QObjectList lst )
     foreach ( QObject *o, lst ) {
         Resource *r = qobject_cast<Resource*>( o );
         if ( r && r->isScheduled() ) {
-            int res = KMessageBox::warningContinueCancel( this, i18n( "A resource that has been scheduled will be deleted. This will invalidate the schedule." ) );
+            KMessageBox::ButtonCode res = KMessageBox::warningContinueCancel( this, i18n( "A resource that has been scheduled will be deleted. This will invalidate the schedule." ) );
             if ( res == KMessageBox::Cancel ) {
                 return;
             }
@@ -2489,7 +2489,7 @@ void View::slotDeleteResourceObjects( QObjectList lst )
         }
         ResourceGroup *g = qobject_cast<ResourceGroup*>( o );
         if ( g && g->isScheduled() ) {
-            int res = KMessageBox::warningContinueCancel( this, i18n( "A resource that has been scheduled will be deleted. This will invalidate the schedule." ) );
+            KMessageBox::ButtonCode res = KMessageBox::warningContinueCancel( this, i18n( "A resource that has been scheduled will be deleted. This will invalidate the schedule." ) );
             if ( res == KMessageBox::Cancel ) {
                 return;
             }
