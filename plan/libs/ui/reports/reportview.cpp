@@ -445,6 +445,7 @@ void ReportWidget::setupGui()
     connect(a, SIGNAL(triggered()), this, SIGNAL(editReportDesign()));
     addAction( name, a );
 
+/* TODO activate when KReport is fixed
     KActionMenu *exportMenu = new KActionMenu(koIcon("document-export"), xi18nc("@title:menu","E&xport As"), this);
     exportMenu->setToolTip( xi18nc( "@info:tooltip", "Export to file" ) );
     exportMenu->setDelayed(false);
@@ -465,7 +466,7 @@ void ReportWidget::setupGui()
     connect(a, SIGNAL(triggered()), this, SLOT(exportAsWebPage()));
     exportMenu->addAction(a);
 
-    addAction( name, exportMenu );
+    addAction( name, exportMenu );*/
 }
 
 void ReportWidget::setGuiActive( bool active ) // virtual slot
