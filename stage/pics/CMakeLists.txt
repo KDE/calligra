@@ -10,8 +10,8 @@ install( FILES
 )
 
 ecm_install_icons( ICONS
-    16-actions-black.png
-    16-actions-highlight.png
+    16-actions-pause-to-black-screen.png
+    16-actions-highlight-pointer-spot.png
 
     DESTINATION ${DATA_INSTALL_DIR}/calligrastage/icons
     THEME hicolor
