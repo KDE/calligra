@@ -106,17 +106,17 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
 {
     QActionGroup *points = new QActionGroup(this);
     // m_pointTypeGroup->setExclusive(true);
-    m_actionPathPointCorner = new QAction(koIcon("format-node-corner"), i18n("Corner point"), this);
+    m_actionPathPointCorner = new QAction(koIcon("node-type-cusp"), i18n("Corner point"), this);
     addAction("pathpoint-corner", m_actionPathPointCorner);
     m_actionPathPointCorner->setData(KoPathPointTypeCommand::Corner);
     points->addAction(m_actionPathPointCorner);
 
-    m_actionPathPointSmooth = new QAction(koIcon("format-node-smooth"), i18n("Smooth point"), this);
+    m_actionPathPointSmooth = new QAction(koIcon("node-type-smooth"), i18n("Smooth point"), this);
     addAction("pathpoint-smooth", m_actionPathPointSmooth);
     m_actionPathPointSmooth->setData(KoPathPointTypeCommand::Smooth);
     points->addAction(m_actionPathPointSmooth);
 
-    m_actionPathPointSymmetric = new QAction(koIcon("format-node-symmetric"), i18n("Symmetric Point"), this);
+    m_actionPathPointSymmetric = new QAction(koIcon("node-type-symmetric"), i18n("Symmetric Point"), this);
     addAction("pathpoint-symmetric", m_actionPathPointSymmetric);
     m_actionPathPointSymmetric->setData(KoPathPointTypeCommand::Symmetric);
     points->addAction(m_actionPathPointSymmetric);

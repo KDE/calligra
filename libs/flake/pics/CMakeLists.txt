@@ -7,15 +7,15 @@ ecm_install_icons( ICONS
     22-actions-hand.png
     22-actions-format-break-node.png
     22-actions-format-disconnect-node.png
-    22-actions-format-node-corner.png
+    22-actions-node-type-cusp.png
     22-actions-format-node-curve.png
     22-actions-format-insert-node.png
     22-actions-format-connect-node.png
     22-actions-format-node-line.png
     22-actions-format-join-node.png
     22-actions-format-remove-node.png
-    22-actions-format-node-smooth.png
-    22-actions-format-node-symmetric.png
+    22-actions-node-type-smooth.png
+    22-actions-node-type-symmetric.png
     22-actions-format-segment-curve.png
     22-actions-format-segment-line.png
     22-actions-pathshape.png

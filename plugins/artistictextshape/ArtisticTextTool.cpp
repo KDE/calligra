@@ -75,7 +75,7 @@ ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas), m_selection(canvas, this), m_currentShape(0), m_hoverText(0), m_hoverPath(0), m_hoverHandle(false)
     , m_textCursor( -1 ), m_showCursor( true ), m_currentStrategy(0)
 {
-    m_detachPath  = new QAction(koIcon("artistictext-detach-path"), i18n("Detach Path"), this);
+    m_detachPath  = new QAction(koIcon("text-remove-from-path"), i18n("Detach Path"), this);
     m_detachPath->setEnabled( false );
     connect( m_detachPath, SIGNAL(triggered()), this, SLOT(detachPath()) );
     addAction("artistictext_detach_from_path", m_detachPath);

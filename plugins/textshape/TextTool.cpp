@@ -369,7 +369,7 @@ void TextTool::createActions()
         action->setShortcut(Qt::SHIFT + Qt::Key_Return);
         connect(action, SIGNAL(triggered()), this, SLOT(lineBreak()));
 
-        action  = new QAction(koIcon("insert-pagebreak"), i18n("Page Break"), this);
+        action  = new QAction(koIcon("insert-page-break"), i18n("Page Break"), this);
         addAction("insert_framebreak", action);
         action->setShortcut(Qt::CTRL + Qt::Key_Return);
         connect(action, SIGNAL(triggered()), this, SLOT(insertFrameBreak()));
