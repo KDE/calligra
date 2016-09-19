@@ -29,11 +29,7 @@
 
 #include <QPainter>
 
-#include <math.h>
-
-#if defined(_MSC_VER) && (_MSC_VER < 1800)
-#define isfinite(x) (double)(x)
-#endif
+#include <cmath>
 
 KoSnapStrategy::KoSnapStrategy(KoSnapGuide::Strategy type)
     : m_snapType(type)
