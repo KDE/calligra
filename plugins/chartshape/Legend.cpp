@@ -439,9 +439,30 @@ void Legend::paint(QPainter &painter, const KoViewConverter &converter, KoShapeP
     }
 
     // KChart thinks in pixels, Calligra in pt
+    // KChart also for non-QWidget painting devices cares for the logicalDpi
+    // Other than PlotArea we do not control the output size via the paint method,
+    // so here have to resize the legend temporarily.
+    // Printing should only result in 1 paint call, so this should not happen too often.
+    // TODO: something in KChart seems broken in general on printer output, also seen in kchart examples
+    // so legend in print is still broken :/
+    const QSize sizePx = d->kdLegend->size();
+    const QSize newSizePx = ScreenConversions::scaleFromPtToPx(size(), painter);
+    const bool isPainterDifferentDpi = (sizePx != newSizePx);
+    if (isPainterDifferentDpi) {
+        // temporarily set a size matching the painterdevice
+        d->kdLegend->resize(newSizePx);
+        d->kdLegend->resizeLayout(newSizePx);
+    }
+
     ScreenConversions::scaleFromPtToPx(painter);
 
     d->kdLegend->paint(&painter);
+
+    if (isPainterDifferentDpi) {
+        // restore screen-dpi size
+        d->kdLegend->resize(sizePx);
+        d->kdLegend->resizeLayout(sizePx);
+    }
 
     //painter.restore();
     // Paint the cached pixmap

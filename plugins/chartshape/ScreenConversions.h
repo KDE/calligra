@@ -22,6 +22,7 @@
 #define KCHART_SCREEN_CONVERSIONS_H
 
 class QPainter;
+class QPaintDevice;
 class QPoint;
 class QPointF;
 class QSize;
@@ -35,12 +36,16 @@ class ScreenConversions
 {
 public:
     // pt --> px
+    static qreal ptToPxX(qreal pt, const QPaintDevice* paintDevice);
+    static qreal ptToPxY(qreal pt, const QPaintDevice* paintDevice);
     static qreal ptToPxX(qreal pt);
     static qreal ptToPxY(qreal pt);
     static void   scaleFromPtToPx(QPainter &painter);
-    static QPoint scaleFromPtToPx(const QPointF &point);
+    static QPoint scaleFromPtToPx(const QPointF &point, const QPaintDevice* paintDevice);
+    static QSize  scaleFromPtToPx(const QSizeF &size, const QPaintDevice* paintDevice);
+    static QSize  scaleFromPtToPx(const QSizeF &size, QPainter &painter);
     static QSize  scaleFromPtToPx(const QSizeF &size);
-    static QRect  scaleFromPtToPx(const QRectF &rect);
+    static QRect  scaleFromPtToPx(const QRectF &rect, QPainter &painter);
 
     // px --> pt
     static qreal pxToPtX(qreal px);

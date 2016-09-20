@@ -1138,7 +1138,7 @@ void PlotArea::paint(QPainter& painter, const KoViewConverter& converter, KoShap
 
     // Only paint the actual chart if there is a certain minimal size,
     // because otherwise kdchart will crash.
-    QRect kdchartRect = ScreenConversions::scaleFromPtToPx(paintRect);
+    QRect kdchartRect = ScreenConversions::scaleFromPtToPx(paintRect, painter);
     // Turn off clipping so that border (or "frame") drawn by KChart::Chart
     // is not not cut off.
     painter.setClipping(false);
