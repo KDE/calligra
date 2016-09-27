@@ -33,12 +33,19 @@ namespace KPlato
 Locale::Locale()
 {
     QLocale locale;
-    m_currencySymbol = locale.currencySymbol(QLocale::CurrencySymbol);
+    m_language = locale.language();
+    m_country = locale.country();
     m_decimalPlaces = 2;
 }
 
 Locale::~Locale()
 {
+}
+
+void Locale::setCurrencyLocale(QLocale::Language language, QLocale::Country country)
+{
+    m_language = language;
+    m_country = country;
 }
 
 void Locale::setCurrencySymbol(const QString &symbol)
@@ -48,7 +55,12 @@ void Locale::setCurrencySymbol(const QString &symbol)
 
 QString Locale::currencySymbol() const
 {
-    return m_currencySymbol;
+    QString s = m_currencySymbol;
+    if (s.isEmpty()) {
+        QLocale locale(m_language, m_country);
+        s = locale.currencySymbol(QLocale::CurrencySymbol);
+    }
+    return s;
 }
 
 void Locale::setMonetaryDecimalPlaces(int digits)
@@ -65,7 +77,7 @@ QString Locale::formatMoney(double num, const QString &currency, int precision) 
 {
     QString c = currency;
     if (c.isEmpty()) {
-        c = m_currencySymbol;
+        c = currencySymbol();
     }
     int p = precision;
     if (p < 0) {
@@ -94,6 +106,21 @@ double Locale::readMoney(const QString &numStr, bool *ok) const
         errorPlan<<"Failed to read money:"<<numStr;
     }
     return v;
+}
+
+QString Locale::currencySymbolExplicit() const
+{
+    return m_currencySymbol;
+}
+
+QLocale::Language Locale::currencyLanguage() const
+{
+    return m_language;
+}
+
+QLocale::Country Locale::currencyCountry() const
+{
+    return m_country;
 }
 
 }  //KPlato namespace

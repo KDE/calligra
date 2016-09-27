@@ -25,6 +25,7 @@
 #include "kptview.h"
 #include "kptfactory.h"
 #include "kptproject.h"
+#include "kptlocale.h"
 #include "kptresource.h"
 #include "kptcontext.h"
 #include "kptschedulerpluginloader.h"
@@ -844,6 +845,8 @@ bool MainDocument::completeLoading( KoStore *store )
         m_project->generateUniqueIds();
         m_project->setConstraintStartTime( QDateTime(QDate::currentDate(), QTime(0, 0, 0), Qt::LocalTime) );
         m_project->setConstraintEndTime( m_project->constraintStartTime().addYears( 2 ) );
+        m_project->locale()->setCurrencyLocale(QLocale::AnyLanguage, QLocale::AnyCountry);
+        m_project->locale()->setCurrencySymbol(QString());
     } else if ( isImporting() ) {
         // NOTE: I don't think this is a good idea.
         // Let the filter generate ids for non-plan files.

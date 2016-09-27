@@ -68,7 +68,7 @@ LocaleConfigMoney::~LocaleConfigMoney()
 
 void LocaleConfigMoney::slotLocaleChanged()
 {
-  m_edMonCurSym->setText( m_locale->currencySymbol() );
+  m_edMonCurSym->setText( m_locale->currencySymbolExplicit());
   m_inMonFraDig->setValue(m_locale->monetaryDecimalPlaces());
 }
 
@@ -116,7 +116,7 @@ void LocaleConfigMoney::slotTranslate()
 MacroCommand *LocaleConfigMoney::buildCommand()
 {
     MacroCommand *m = new MacroCommand();
-    if ( m_locale->currencySymbol() != m_edMonCurSym->text() ) {
+    if ( m_locale->currencySymbolExplicit() != m_edMonCurSym->text() ) {
         m->addCommand( new ModifyCurrencySymolCmd( m_locale, m_edMonCurSym->text() ) );
     }
     if (m_locale->monetaryDecimalPlaces() != m_inMonFraDig->value()) {

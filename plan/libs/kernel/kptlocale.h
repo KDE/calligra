@@ -25,7 +25,7 @@
 
 #include <QString>
 
-class KLocale;
+#include <QLocale>
 
 namespace KPlato
 {
@@ -40,6 +40,16 @@ public:
     ~Locale();
 
     /**
+     * Sets the locale used to get the currency symbol.
+     */
+    void setCurrencyLocale(QLocale::Language language, QLocale::Country country);
+    /// Return the language used when getting the currency synbol
+    QLocale::Language currencyLanguage() const;
+    /// Return the country used when getting the currency synbol
+    QLocale::Country currencyCountry() const;
+
+
+    /**
      * Changes the current currency symbol.
      *
      * This symbol should be consistant with the selected Currency Code
@@ -51,7 +61,7 @@ public:
 
     /**
      * Returns what the symbol denoting currency in the current locale
-     * as as defined by user settings should look like.
+     * is as defined by user settings should look like.
      *
      * @return The default currency symbol used by locale.
      */
@@ -103,9 +113,18 @@ public:
      */
     double readMoney(const QString &numStr, bool *ok = 0) const;
 
+    /**
+     * Returns the explicitly set currency symbol.
+     * Will be empty if not set by the user.
+     */
+    QString currencySymbolExplicit() const;
+
 private:
     QString m_currencySymbol;
     int m_decimalPlaces;
+    // to keep track of currency
+    QLocale::Language m_language;
+    QLocale::Country m_country;
 };
 
 }  //KPlato namespace

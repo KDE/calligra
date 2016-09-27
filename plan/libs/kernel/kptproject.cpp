@@ -40,7 +40,7 @@
 #include <KLocalizedString>
 
 #include <QDateTime>
-
+#include <QLocale>
 
 namespace KPlato
 {
@@ -947,11 +947,20 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
         KoXmlElement e = n.toElement();
         if ( e.tagName() == "locale" ) {
             Locale *l = locale();
-            l->setCurrencySymbol( e.attribute( "currency-symbol", l->currencySymbol() ) );
+            l->setCurrencySymbol(e.attribute( "currency-symbol", ""));
 
             if ( e.hasAttribute( "currency-digits" ) ) {
                 l->setMonetaryDecimalPlaces(e.attribute("currency-digits").toInt());
             }
+            QLocale::Language language = QLocale::AnyLanguage;
+            QLocale::Country country = QLocale::AnyCountry;
+            if (e.hasAttribute("language")) {
+                language = static_cast<QLocale::Language>(e.attribute("language").toInt());
+            }
+            if (e.hasAttribute("country")) {
+                country = static_cast<QLocale::Country>(e.attribute("country").toInt());
+            }
+            l->setCurrencyLocale(language, country);
         }
     }
     QList<Calendar*> cals;
@@ -1250,9 +1259,13 @@ void Project::save( QDomElement &element ) const
     QDomElement loc = me.ownerDocument().createElement( "locale" );
     me.appendChild( loc );
     const Locale *l = locale();
-    loc.setAttribute( "currency-symbol", l->currencySymbol() );
+    if (!l->currencySymbolExplicit().isEmpty()) {
+        loc.setAttribute("currency-symbol", l->currencySymbolExplicit());
+    }
     loc.setAttribute("currency-digits", l->monetaryDecimalPlaces());
-    
+    loc.setAttribute("language", l->currencyLanguage());
+    loc.setAttribute("country", l->currencyCountry());
+
     m_accounts.save( me );
 
     // save calendars
