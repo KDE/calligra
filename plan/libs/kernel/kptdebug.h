@@ -29,7 +29,7 @@
 
 extern const KPLATOKERNEL_EXPORT QLoggingCategory &PLAN_LOG();
 
-#define debugPlan qCDebug(PLAN_LOG)<<QString("%2:%3::%1:").arg(__func__).arg(QString(__FILE__).right(QString(__FILE__).length()-QString(__FILE__).lastIndexOf('/'))).arg(__LINE__)
+#define debugPlan qCDebug(PLAN_LOG)<<Q_FUNC_INFO
 #define warnPlan qCWarning(PLAN_LOG)
 #define errorPlan qCCritical(PLAN_LOG)
 
