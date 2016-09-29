@@ -428,9 +428,7 @@ void AppointmentIntervalList::add( const AppointmentInterval &ai )
 {
     if ( ! ai.isValid() ) {
         debugPlan<<ai;
-    }
-    Q_ASSERT( ai.isValid() );
-    if ( ! ai.isValid() ) {
+        Q_ASSERT( ai.isValid() );
         return;
     }
     QDate date = ai.startTime().date();
@@ -440,24 +438,23 @@ void AppointmentIntervalList::add( const AppointmentInterval &ai )
     QList<AppointmentInterval> lst;
     if ( date == ed ) {
         lst << ai;
-        //if ( ! lst.last().isValid() ) { debugPlan<<lst.last()<<ai; qFatal( "Add Invalid interval" ); }
     } else {
         // split intervals into separate dates
         QTime t1 = ai.startTime().time();
         while ( date < ed ) {
             lst << AppointmentInterval( DateTime( date, t1 ), DateTime( date.addDays( 1 ) ), load );
-            //if ( ! lst.last().isValid() ) { debugPlan<<lst.last()<<ai; qFatal( "Add Invalid interval" ); }
             //debugPlan<<"split:"<<date<<lst.last();
+            Q_ASSERT_X(lst.last().isValid(), "Split", "Invalid interval");
             date = date.addDays( 1 );
             t1 = QTime();
         }
         if ( ai.endTime().time() != QTime( 0, 0, 0 ) ) {
             lst << AppointmentInterval( DateTime( ed ), ai.endTime(), load );
-            //if ( ! lst.last().isValid() ) { debugPlan<<lst.last()<<ai; qFatal( "Add Invalid interval" ); }
+            Q_ASSERT_X(lst.last().isValid(), "Split", "Invalid interval");
         }
     }
     foreach ( AppointmentInterval li, lst ) {
-        //if ( ! li.isValid() ) { debugPlan<<li; qFatal( "Add Invalid interval" ); }
+        Q_ASSERT_X(lst.last().isValid(), "Add", "Invalid interval");
         date = li.startTime().date();
         if ( ! m_map.contains( date ) ) {
             m_map.insert( date, li );
@@ -469,7 +466,7 @@ void AppointmentIntervalList::add( const AppointmentInterval &ai )
         foreach ( const AppointmentInterval &vi, v ) {
             if ( ! li.isValid() ) {
                 l.insert( 0, vi );
-                //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
+                Q_ASSERT_X(l.at(0).isValid(), "Original", "Invalid interval");
                 continue;
             }
             if ( ! li.intersects( vi ) ) {
@@ -478,50 +475,52 @@ void AppointmentIntervalList::add( const AppointmentInterval &ai )
                     if ( ! l.contains( li ) ) {
                         //debugPlan<<"li < vi:"<<"insert li"<<li;
                         l.insert( 0, li );
-                        //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
+                        Q_ASSERT_X(l.at(0).isValid(), "No intersects", "Add Invalid interval");
                         li = AppointmentInterval();
                     }
                     //debugPlan<<"li < vi:"<<"insert vi"<<vi;
                     l.insert( 0, vi );
-                    //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
+                    Q_ASSERT_X(l.at(0).isValid(), "No intersects", "Add Invalid interval");
                 } else if ( vi < li ) {
                     //debugPlan<<"vi < li:"<<"insert vi"<<vi;
                     l.insert( 0, vi );
-                    //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
+                    Q_ASSERT_X(l.at(0).isValid(), "No intersects", "Add Invalid interval");
                 } else { Q_ASSERT( false ); }
             } else {
-                //debugPlan<<"overlap, merge"<<li<<vi;
+                //debugPlan<<"intersects, merge"<<li<<vi;
                 if ( li < vi ) {
                     //debugPlan<<"li < vi:";
-                    l.insert( 0, AppointmentInterval( li.startTime(), vi.startTime(), li.load() ) );
-                    //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
+                    if (li.startTime() < vi.startTime()) {
+                        l.insert(0, AppointmentInterval(li.startTime(), vi.startTime(), li.load()));
+                        Q_ASSERT_X(l.at(0).isValid(), "Intersects, start", "Add Invalid interval");
+                    }
                     l.insert( 0, AppointmentInterval( vi.startTime(), qMin( vi.endTime(), li.endTime() ), vi.load() + li.load() ) );
-                    //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
+                    Q_ASSERT_X(l.at(0).isValid(), "Intersects, middle", "Add Invalid interval");
                     li.setStartTime( l.at( 0 ).endTime() ); // if more of li, it may overlap with next vi
                     if ( l.at( 0 ).endTime() < vi.endTime() ) {
                         l.insert( 0, AppointmentInterval( l.at( 0 ).endTime(), vi.endTime(), vi.load() ) );
-                        //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
                         //debugPlan<<"li < vi: vi rest:"<<l.at( 0 );
+                        Q_ASSERT_X(l.at(0).isValid(), "Intersects, end", "Add Invalid interval");
                     }
                 } else if ( vi < li ) {
                     //debugPlan<<"vi < li:";
                     if ( vi.startTime() < li.startTime() ) {
                         l.insert( 0, AppointmentInterval( vi.startTime(), li.startTime(), vi.load() ) );
-                        //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
+                        Q_ASSERT_X(l.at(0).isValid(), "Intersects, start", "Add Invalid interval");
                     }
                     l.insert( 0, AppointmentInterval( li.startTime(), qMin( vi.endTime(), li.endTime() ), vi.load() + li.load() ) );
-                    //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
+                    Q_ASSERT_X(l.at(0).isValid(), "Intersects, middle", "Add Invalid interval");
                     li.setStartTime( l.at( 0 ).endTime() ); // if more of li, it may overlap with next vi
                     if ( l.at( 0 ).endTime() < vi.endTime() ) {
                         l.insert( 0, AppointmentInterval( l.at( 0 ).endTime(), vi.endTime(), vi.load() ) );
-                        //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
                         //debugPlan<<"vi < li: vi rest:"<<l.at( 0 );
+                        Q_ASSERT_X(l.at(0).isValid(), "Intersects, end", "Add Invalid interval");
                     }
                 } else {
                     //debugPlan<<"vi == li:";
                     li.setLoad( vi.load() + li.load() );
                     l.insert( 0, li );
-                    //if ( ! l.at(0).isValid() ) { debugPlan<<vi<<l.at(0); qFatal( "Add Invalid interval" ); }
+                    Q_ASSERT_X(l.at(0).isValid(), "Equal", "Add Invalid interval");
                     li = AppointmentInterval();
                 }
             }
@@ -532,7 +531,7 @@ void AppointmentIntervalList::add( const AppointmentInterval &ai )
             l.insert( 0, li );
         }
         foreach( const AppointmentInterval &i, l ) {
-            //if ( ! i.isValid() ) qFatal( "Invalid interval" );
+            Q_ASSERT(i.isValid());
             m_map.insert( i.startTime().date(), i );
         }
     }
