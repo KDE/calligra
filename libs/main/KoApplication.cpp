@@ -205,7 +205,8 @@ bool KoApplication::start()
     parser.addVersionOption();
 
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("print"), i18n("Only print and exit")));
-    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("template"), i18n("Open a new document with a template")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("template"), i18n("Open a new document based on the given template (desktopfile name)")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("new"), i18n("Open a new document based on the given template file")));
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("dpi"), i18n("Override display DPI"), QStringLiteral("dpiX,dpiY")));
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("export-pdf"), i18n("Only export to PDF and exit")));
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("export-filename"), i18n("Filename for export-pdf"), QStringLiteral("filename")));
@@ -443,6 +444,7 @@ bool KoApplication::start()
         const QString pdfFileName = parser.value("export-filename");
         const QString roundtripFileName = parser.value("roundtrip-filename");
         const bool doTemplate = parser.isSet("template");
+        const bool doNew = parser.isSet("new");
         const bool benchmarkLoading = parser.isSet("benchmark-loading")
                 || parser.isSet("benchmark-loading-show-window")
                 || !roundtripFileName.isEmpty();
@@ -500,7 +502,7 @@ bool KoApplication::start()
                 }
                 doc->setProfileReferenceTime(appStartTime);
 
-                // are we just trying to open a template?
+                // are we just trying to open a Calligra-style template?
                 if (doTemplate) {
                     QString templatePath;
                     if (url.isLocalFile() && QFile::exists(url.toLocalFile())) {
@@ -545,6 +547,23 @@ bool KoApplication::start()
                         }
                     }
                     // now try to load
+                }
+                else if (doNew) {
+                    if (url.isLocalFile() && !QFile::exists(url.toLocalFile())) {
+                        KMessageBox::error(0, i18n("No template found at: %1", url.toDisplayString()));
+                        delete mainWindow;
+                    } else {
+                        if (mainWindow->openDocument(part, url)) {
+                            doc->resetURL();
+                            doc->setEmpty();
+                            doc->setTitleModified();
+                            debugMain << "Template loaded...";
+                            numberOfOpenDocuments++;
+                        } else {
+                            KMessageBox::error(0, i18n("Template %1 failed to load.", url.toDisplayString()));
+                            delete mainWindow;
+                        }
+                    }
                 }
                 else if (mainWindow->openDocument(part, url)) {
                     if (benchmarkLoading) {
