@@ -272,8 +272,9 @@ bool MsooXmlReader::expectElEnd(const char* qualifiedElementName)
 
 bool MsooXmlReader::expectNS(const char* nsName)
 {
-    debugMsooXml << namespaceUri() << (namespaceUri().compare(nsName) == 0);
-    if (0 != namespaceUri().compare(nsName)) {
+    const QByteArray nsNameArray;
+    debugMsooXml << namespaceUri() << (namespaceUri().compare(nsNameArray) == 0);
+    if (0 != namespaceUri().compare(nsNameArray)) {
         raiseNSNotFoundError(nsName);
         return false;
     }
