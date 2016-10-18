@@ -123,7 +123,7 @@ public:
      * @param image the image the filter should be applied to
      * @param context the render context providing additional data
      */
-    virtual QImage processImage(const QImage &image, const KoFilterEffectRenderContext &context) const = 0;
+    virtual QImage processImage(const QImage &image, const KoFilterEffectRenderContext &context) const;
 
     /**
     * Apply the effect on a list of images.
@@ -138,13 +138,13 @@ public:
      * @param context the loading context providing additional data
      * @return true if loading was successful, else false
      */
-    virtual bool load(const KoXmlElement &element, const KoFilterEffectLoadingContext &context) = 0;
+    virtual bool load(const KoXmlElement &element, const KoFilterEffectLoadingContext &context);
 
     /**
      * Writes custom data to given xml element.
      * @param writer the xml writer to write data to
      */
-    virtual void save(KoXmlWriter &writer) = 0;
+    virtual void save(KoXmlWriter &writer);
 
 protected:
     /// Sets the required number of input images

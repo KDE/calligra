@@ -135,10 +135,24 @@ int KoFilterEffect::maximalInputCount() const
     return qMax(d->maximalInputCount, d->requiredInputCount);
 }
 
+QImage KoFilterEffect::processImage(const QImage &image, const KoFilterEffectRenderContext &/*context*/) const
+{
+    return image;
+}
+
 QImage KoFilterEffect::processImages(const QVector<QImage> &images, const KoFilterEffectRenderContext &/*context*/) const
 {
     Q_ASSERT(images.count());
     return images.first();
+}
+
+bool KoFilterEffect::load(const KoXmlElement &/*element*/, const KoFilterEffectLoadingContext &/*context*/)
+{
+    return true;
+}
+
+void KoFilterEffect::save(KoXmlWriter &/*writer*/)
+{
 }
 
 void KoFilterEffect::setRequiredInputCount(int count)

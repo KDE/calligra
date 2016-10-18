@@ -20,6 +20,8 @@ set (pictureshape_LIB_SRCS
     filters/GreyscaleFilterEffect.cpp
     filters/MonoFilterEffect.cpp
     filters/WatermarkFilterEffect.cpp
+    filters/ColoringFilterEffect.cpp
+    filters/GammaFilterEffect.cpp
 )
 
 ki18n_wrap_ui(pictureshape_LIB_SRCS forms/wdgPictureTool.ui)

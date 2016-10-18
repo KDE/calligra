@@ -145,6 +145,8 @@ public:
     void setCropRect(const QRectF& rect);
     void setMirrorMode(QFlags<MirrorMode> mode);
     void setColorMode(ColorMode mode);
+    void setColoring(qreal red, qreal green, qreal blue, qreal luminance, qreal contrast);
+    void setGamma(qreal gamma);
     KoClipPath *generateClipPath();
 
 

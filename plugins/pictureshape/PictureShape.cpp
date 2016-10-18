@@ -27,6 +27,8 @@
 #include "filters/GreyscaleFilterEffect.h"
 #include "filters/MonoFilterEffect.h"
 #include "filters/WatermarkFilterEffect.h"
+#include "filters/ColoringFilterEffect.h"
+#include "filters/GammaFilterEffect.h"
 #include "PictureDebug.h"
 
 #include <KoOdfWorkaround.h>
@@ -165,6 +167,9 @@ PictureShape::PictureShape()
     KoFilterEffectStack * effectStack = new KoFilterEffectStack();
     effectStack->setClipRect(QRectF(0, 0, 1, 1));
     setFilterEffectStack(effectStack);
+    filterEffectStack()->insertFilterEffect(0, new KoFilterEffect("NoOpFilterEffect", "NoOpFilterEffect")); // let's just set 3
+    filterEffectStack()->insertFilterEffect(1, new KoFilterEffect("NoOpFilterEffect", "NoOpFilterEffect")); // no-op filters
+    filterEffectStack()->insertFilterEffect(2, new KoFilterEffect("NoOpFilterEffect", "NoOpFilterEffect"));
 }
 
 KoImageData* PictureShape::imageData() const
@@ -516,6 +521,18 @@ QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context
         break;
     }
 
+    if (ColoringFilterEffect *cEffect = dynamic_cast<ColoringFilterEffect *>(filterEffectStack()->filterEffects()[1])) {
+        style.addProperty("draw:red", QString("%1%").arg(100*cEffect->red()));
+        style.addProperty("draw:green", QString("%1%").arg(100*cEffect->green()));
+        style.addProperty("draw:blue", QString("%1%").arg(100*cEffect->blue()));
+        style.addProperty("draw:luminance", QString("%1%").arg(100*cEffect->luminance()));
+        style.addProperty("draw:contrast", QString("%1%").arg(100*cEffect->contrast()));
+    }
+
+    if (GammaFilterEffect *gEffect = dynamic_cast<GammaFilterEffect *>(filterEffectStack()->filterEffects()[2])) {
+        style.addProperty("draw:gamma", QString("%1%").arg(100*gEffect->gamma()));
+    }
+
     KoImageData *imageData = qobject_cast<KoImageData*>(userData());
 
     if (imageData != 0) {
@@ -585,6 +602,20 @@ void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext&
         }
     }
 
+    QString red = styleStack.property(KoXmlNS::draw, "red");
+    QString green = styleStack.property(KoXmlNS::draw, "green");
+    QString blue = styleStack.property(KoXmlNS::draw, "blue");
+    QString luminance = styleStack.property(KoXmlNS::draw, "luminance");
+    QString contrast = styleStack.property(KoXmlNS::draw, "contrast");
+    setColoring(red.right(1) == "%" ? (red.left(red.length() - 1).toDouble() / 100.0) : 0.0
+              , green.right(1) == "%" ? (green.left(green.length() - 1).toDouble() / 100.0) : 0.0
+              , blue.right(1) == "%" ? (blue.left(blue.length() - 1).toDouble() / 100.0) : 0.0
+              , luminance.right(1) == "%" ? (luminance.left(luminance.length() - 1).toDouble() / 100.0) : 0.0
+              , contrast.right(1) == "%" ? (contrast.left(contrast.length() - 1).toDouble() / 100.0) : 0.0);
+
+    QString gamma = styleStack.property(KoXmlNS::draw, "gamma");
+    setGamma(gamma.right(1) == "%" ? (gamma.left(gamma.length() - 1).toDouble() / 100.0) : 0.0);
+
     // image opacity
     QString opacity(styleStack.property(KoXmlNS::draw, "image-opacity"));
     if (! opacity.isEmpty() && opacity.right(1) == "%") {
@@ -631,21 +662,47 @@ void PictureShape::setColorMode(PictureShape::ColorMode mode)
         switch(mode)
         {
         case Greyscale:
-            filterEffectStack()->appendFilterEffect(new GreyscaleFilterEffect());
+            filterEffectStack()->insertFilterEffect(0, new GreyscaleFilterEffect());
             break;
         case Mono:
-            filterEffectStack()->appendFilterEffect(new MonoFilterEffect());
+            filterEffectStack()->insertFilterEffect(0, new MonoFilterEffect());
             break;
         case Watermark:
-            filterEffectStack()->appendFilterEffect(new WatermarkFilterEffect());
+            filterEffectStack()->insertFilterEffect(0, new WatermarkFilterEffect());
             break;
+        case Standard:
         default:
+            filterEffectStack()->insertFilterEffect(0, new KoFilterEffect("NoOpFilterEffect", "NoOpFilterEffect"));
             break;
         }
 
         m_colorMode = mode;
         update();
     }
+}
+
+void PictureShape::setColoring(qreal red, qreal green, qreal blue, qreal luminance, qreal contrast)
+{
+    filterEffectStack()->removeFilterEffect(1);
+
+    ColoringFilterEffect *cEffect = new ColoringFilterEffect();
+    cEffect->setColoring(red, green, blue, luminance, contrast);
+
+    filterEffectStack()->insertFilterEffect(1, cEffect);
+
+    update();
+}
+
+void PictureShape::setGamma(qreal gamma)
+{
+    filterEffectStack()->removeFilterEffect(2);
+
+    GammaFilterEffect *gEffect = new GammaFilterEffect();
+    gEffect->setGamma(gamma);
+
+    filterEffectStack()->insertFilterEffect(2, gEffect);
+
+    update();
 }
 
 KoClipPath *PictureShape::generateClipPath()
