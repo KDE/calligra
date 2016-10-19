@@ -53,6 +53,7 @@ void NotesConfigurationDialog::footnoteSetup()
     m_notesConfig = KoTextDocument(m_document).styleManager()
                                 ->notesConfiguration(KoOdfNotesConfiguration::Footnote);
     if (!m_notesConfig) {
+        // TODO: object will be leaked, also will it never be stored on the stylemanager, so any editing is lost
         m_notesConfig = new KoOdfNotesConfiguration(KoOdfNotesConfiguration::Footnote);
     }
     widget.prefixLineEdit->setText(m_notesConfig->numberFormat().prefix());
@@ -108,6 +109,7 @@ void NotesConfigurationDialog::endnoteSetup()
     m_notesConfig = KoTextDocument(m_document).styleManager()
                                     ->notesConfiguration(KoOdfNotesConfiguration::Endnote);
     if (!m_notesConfig) {
+        // TODO: object will be leaked, also will it never be stored on the stylemanager, so any editing is lost
         m_notesConfig = new KoOdfNotesConfiguration(KoOdfNotesConfiguration::Endnote);
     }
     widget.prefixLineEdit->setText(m_notesConfig->numberFormat().prefix());

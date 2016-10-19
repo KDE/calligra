@@ -143,6 +143,7 @@ public:
 
     /**
      * set the notes configuration of the document
+     * KoStyleManager takes ownership of the passed object.
      */
     void setNotesConfiguration(KoOdfNotesConfiguration *notesConfiguration);
     /**

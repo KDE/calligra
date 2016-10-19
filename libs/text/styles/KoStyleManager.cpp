@@ -181,13 +181,13 @@ KoStyleManager::KoStyleManager(QObject *parent)
     add(cStyle);
     d->endNotesConfiguration->setCitationTextStyle(cStyle);
 
-    d->footNotesConfiguration = 0;
-    d->endNotesConfiguration = 0;
     d->bibliographyConfiguration = 0;
 }
 
 KoStyleManager::~KoStyleManager()
 {
+    delete d->footNotesConfiguration;
+    delete d->endNotesConfiguration;
     delete d;
 }
 
@@ -588,8 +588,10 @@ void KoStyleManager::slotAppliedStyle(const KoCharacterStyle *style)
 void KoStyleManager::setNotesConfiguration(KoOdfNotesConfiguration *notesConfiguration)
 {
     if (notesConfiguration->noteClass() == KoOdfNotesConfiguration::Footnote) {
+        delete d->footNotesConfiguration;
         d->footNotesConfiguration = notesConfiguration;
     } else if (notesConfiguration->noteClass() == KoOdfNotesConfiguration::Endnote) {
+        delete d->endNotesConfiguration;
         d->endNotesConfiguration = notesConfiguration;
     }
 }
