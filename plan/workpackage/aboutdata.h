@@ -46,6 +46,9 @@ KAboutData * newAboutData()
         QStringLiteral("https://www.calligra.org/plan/"));
 
     aboutData->addAuthor(i18n("Dag Andersen"), QString(), QStringLiteral("danders@get2net.dk"));
+    // standard ki18n translator strings
+    aboutData->setTranslator(i18nc("NAME OF TRANSLATORS", "Your names"),
+                             i18nc("EMAIL OF TRANSLATORS", "Your emails"));
 
     aboutData->setProductName( "calligraplan/work" );
 #if KCOREADDONS_VERSION >= 0x051600

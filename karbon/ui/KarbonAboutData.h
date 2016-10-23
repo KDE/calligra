@@ -84,6 +84,9 @@ KAboutData * newKarbonAboutData()
         i18n("Alan Horkan"),
         i18n("Helpful patches and advice"));
     // TODO: add the names of some helpful souls
+    // standard ki18n translator strings
+    aboutData->setTranslator(i18nc("NAME OF TRANSLATORS", "Your names"),
+                             i18nc("EMAIL OF TRANSLATORS", "Your emails"));
     return aboutData;
 }
 

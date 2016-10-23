@@ -45,6 +45,9 @@ KAboutData * newAboutData()
     aboutData->addAuthor(i18n("Bo Thorsen"), QString(), "bo@sonofthor.dk");
     aboutData->addAuthor(i18n("Dag Andersen"), QString(), "danders@get2net.dk");
     aboutData->addAuthor(i18n("Raphael Langerhorst"),QString(),"raphael.langerhorst@kdemail.net");
+    // standard ki18n translator strings
+    aboutData->setTranslator(i18nc("NAME OF TRANSLATORS", "Your names"),
+                             i18nc("EMAIL OF TRANSLATORS", "Your emails"));
 
     aboutData->setProductName( "calligraplan" ); // for bugs.kde.org
     aboutData->setOrganizationDomain("kde.org");

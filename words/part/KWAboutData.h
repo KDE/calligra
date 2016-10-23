@@ -80,6 +80,9 @@ KAboutData * newWordsAboutData()
     aboutData->addAuthor(i18n("Tomasz Grobelny"), i18n("Filter"), "grotk@poczta.onet.pl");
     aboutData->addAuthor(i18n("Michael Johnson"), i18n("Filter"));
     aboutData->addAuthor(i18n("Fatcow Web Hosting"), i18n("Page break icon"), "https://www.fatcow.com/free-icons");
+    // standard ki18n translator strings
+    aboutData->setTranslator(i18nc("NAME OF TRANSLATORS", "Your names"),
+                             i18nc("EMAIL OF TRANSLATORS", "Your emails"));
     return aboutData;
 }
 

@@ -96,6 +96,9 @@ static KAboutData * newAboutData()
     aboutData->addAuthor(i18n("Brad Hards"),
                          i18n("Implemented, reviewed and tested various functions"),
                          "bradh@frogmouth.net");
+    // standard ki18n translator strings
+    aboutData->setTranslator(i18nc("NAME OF TRANSLATORS", "Your names"),
+                             i18nc("EMAIL OF TRANSLATORS", "Your emails"));
     return aboutData;
 }
 

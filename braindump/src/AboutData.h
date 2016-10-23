@@ -36,6 +36,9 @@ inline KAboutData newBrainDumpAboutData()
 #endif
     aboutData.addAuthor(i18n("Somsubhra Bairi"), i18n("Maintainer"), QStringLiteral("somsubhra.bairi@gmail.com"), QStringLiteral("https://www.somsubhra.com"));
     aboutData.addAuthor(i18n("Cyrille Berger"), i18n("Former Maintainer"), QStringLiteral("cberger@cberger.net"));
+    // standard ki18n translator strings
+    aboutData.setTranslator(i18nc("NAME OF TRANSLATORS", "Your names"),
+                            i18nc("EMAIL OF TRANSLATORS", "Your emails"));
     return aboutData;
 }
 

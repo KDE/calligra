@@ -63,6 +63,9 @@ KAboutData * newKPresenterAboutData()
     aboutData->addAuthor(i18n("Martin Pfeiffer "), QString(), "hubipete@gmx.net");
     aboutData->addAuthor(i18n("Sven Langkamp "), QString(), "sven.langkamp@gmail.com");
     aboutData->addAuthor(i18n("Timothée Lacroix "), QString(), "dakeyras.khan@gmail.com");
+    // standard ki18n translator strings
+    aboutData->setTranslator(i18nc("NAME OF TRANSLATORS", "Your names"),
+                             i18nc("EMAIL OF TRANSLATORS", "Your emails"));
 
     return aboutData;
 }
