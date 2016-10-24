@@ -94,9 +94,9 @@ public:
         WPSCreator creator = WPS_MSWORKS;
         bool needCharSetEncoding = false;
         WPSConfidence confidence = WPSDocument::isFileFormatSupported(&input, kind, creator, needCharSetEncoding);
-        if (confidence == WPS_CONFIDENCE_NONE || kind != WPS_TEXT || needCharSetEncoding)
+        if (confidence == WPS_CONFIDENCE_NONE || kind != WPS_TEXT)
             return false;
-        // TODO: handle needCharSetEncoding
+        // TODO: handle needCharSetEncoding, for now falling to Western Europe encoding used as default
         return true;
     }
 
