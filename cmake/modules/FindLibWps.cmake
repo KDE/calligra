@@ -10,16 +10,16 @@
 
 include(LibFindMacros)
 libfind_package(LIBWPS LibWpd)
-libfind_pkg_check_modules(LIBWPS_PKGCONF libwps-0.3)
+libfind_pkg_check_modules(LIBWPS_PKGCONF libwps-0.4)
 
 find_path(LIBWPS_INCLUDE_DIR
     NAMES libwps/libwps.h
     HINTS ${LIBWPS_PKGCONF_INCLUDE_DIRS} ${LIBWPS_PKGCONF_INCLUDEDIR}
-    PATH_SUFFIXES libwps-0.3
+    PATH_SUFFIXES libwps-0.4
 )
 
 find_library(LIBWPS_LIBRARY
-    NAMES wps wps-0.3
+    NAMES wps wps-0.4
     HINTS ${LIBWPS_PKGCONF_LIBRARY_DIRS} ${LIBWPS_PKGCONF_LIBDIR}
 )
 

@@ -91,9 +91,12 @@ public:
     bool isSupportedFormat(librevenge::RVNGInputStream &input)
     {
         WPSKind kind = WPS_TEXT;
-        WPSConfidence confidence = WPSDocument::isFileFormatSupported(&input, kind);
-        if (confidence == WPS_CONFIDENCE_NONE || kind != WPS_TEXT)
+        WPSCreator creator = WPS_MSWORKS;
+        bool needCharSetEncoding = false;
+        WPSConfidence confidence = WPSDocument::isFileFormatSupported(&input, kind, creator, needCharSetEncoding);
+        if (confidence == WPS_CONFIDENCE_NONE || kind != WPS_TEXT || needCharSetEncoding)
             return false;
+        // TODO: handle needCharSetEncoding
         return true;
     }
 
@@ -135,7 +138,7 @@ KoFilter::ConversionStatus WPSImport::convert(const QByteArray& from, const QByt
         return KoFilter::ParsingError;
     }
 
-    if (!helper.convertDocument(input, outputFile.constData()))
+    if (!helper.convertDocument(input, false))
     {
         fprintf(stderr, "ERROR : Couldn't convert the document\n");
         return KoFilter::ParsingError;
