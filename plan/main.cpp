@@ -24,24 +24,6 @@
 
 #include <QLoggingCategory>
 
-#include "about/hi256-app-calligraplan.xpm"
-#include <QSplashScreen>
-#include <QHideEvent>
-
-#ifdef MAINTANER_WANTED_SPLASH
-class KoSplashScreen : public QSplashScreen
-{
-public:
-    explicit KoSplashScreen(const QPixmap& pixmap) : QSplashScreen(pixmap) {}
-
-    void hideEvent(QHideEvent *event)
-    {
-        event->accept();
-        deleteLater();
-    }
-};
-#endif
-
 extern "C" KPLATO_EXPORT int kdemain( int argc, char **argv )
 {
     /**
@@ -65,21 +47,6 @@ extern "C" KPLATO_EXPORT int kdemain( int argc, char **argv )
     if (!app.start()) {
 	return 1;
     }
-
-#ifdef MAINTANER_WANTED_SPLASH
-// NOTE: This has the result that the event loop never exits: the app never terminates.
-//       We need to find a different way to do this!
-
-    // After creating the KApplication then create the pixmap from an xpm: we cannot get the
-    // location of our datadir before we've started our components,
-    // so use an xpm.
-//     QSplashScreen *splashScreen = new KoSplashScreen(QPixmap(splash_screen_xpm));
-//     splashScreen->show();
-//     splashScreen->showMessage("<p style=\"color:black\">"
-//     "<b>Calligra Plan is unmaintained!</b><br><br>"
-//     "The Calligra community welcomes someone to take over.<br><br>"
-//     "See community.kde.org/Calligra</p>");
-#endif
 
     return app.exec();
 }
