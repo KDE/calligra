@@ -28,8 +28,6 @@
 #include <QMimeDatabase>
 #include <QMimeType>
 
-#include <CalligraVersionWrapper.h>
-
 #include <KoDocumentEntry.h>
 #include <KoPart.h>
 #include <KWDocument.h>
