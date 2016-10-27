@@ -8,6 +8,7 @@
 # CALLIGRA_NEEDED_PRODUCTS - list of internal needed products
 # CALLIGRA_WANTED_PRODUCTS - list of internal wanted products
 # CALLIGRA_STAGING_PRODUCTS - list of products only in staging mode
+# CALLIGRA_UNMAINTAINED_PRODUCTS - list of products basically working but without maintainer
 # temporary during qt5 port, remove after:
 # CALLIGRA_UNPORTED_PRODUCTS - list of products not yet ported
 # SHOULD_BUILD_${product_id} - boolean if product should be build
@@ -96,6 +97,13 @@ macro(calligra_drop_unbuildable_products)
       calligra_disable_product(${_product_id} "Not ready for release")
     endforeach(_product_id)
   endif(NOT CALLIGRA_SHOULD_BUILD_STAGING)
+
+  # drop all unmaintainted products if not enabled
+  if(NOT CALLIGRA_SHOULD_BUILD_UNMAINTAINED)
+    foreach(_product_id ${CALLIGRA_UNMAINTAINED_PRODUCTS})
+      calligra_disable_product(${_product_id} "No maintainer currently")
+    endforeach(_product_id)
+  endif()
 
   # can assume calligra_all_products has products in down-up order
   # 1. check all wanted products and see if they will be built,
@@ -207,7 +215,9 @@ endmacro()
 # Usage:
 #   calligra_define_product(<product_id>
 #         [NAME] <product_name>
+#         [UNMAINTAINED]
 #         [STAGING]
+#         [UNPORTED]
 #         [REQUIRES <product_id1> <feature_id1> ...]
 #       )
 macro(calligra_define_product _product_id)
@@ -230,6 +240,8 @@ macro(calligra_define_product _product_id)
       if(${_current_arg_type} STREQUAL "name")
         if(${_arg} STREQUAL "STAGING")
           list(APPEND CALLIGRA_STAGING_PRODUCTS ${_product_id})
+        elseif(${_arg} STREQUAL "UNMAINTAINED")
+          list(APPEND CALLIGRA_UNMAINTAINED_PRODUCTS ${_product_id})
         elseif(${_arg} STREQUAL "UNPORTED")
           # temporary during qt5 port, remove after
           list(APPEND CALLIGRA_UNPORTED_PRODUCTS ${_product_id})
@@ -259,7 +271,9 @@ endmacro(calligra_define_product)
 # Usage:
 #   calligra_define_feature(<feature_id>
 #         [NAME] <feature_name>
+#         [UNMAINTAINED]
 #         [STAGING]
+#         [UNPORTED]
 #         [REQUIRES <product_id1> <feature_id1> ...]
 #       )
 macro(calligra_define_feature _product_id)
@@ -282,6 +296,8 @@ macro(calligra_define_feature _product_id)
       if(${_current_arg_type} STREQUAL "name")
         if(${_arg} STREQUAL "STAGING")
           list(APPEND CALLIGRA_STAGING_PRODUCTS ${_product_id})
+        elseif(${_arg} STREQUAL "UNMAINTAINED")
+          list(APPEND CALLIGRA_UNMAINTAINED_PRODUCTS ${_product_id})
         elseif(${_arg} STREQUAL "UNPORTED")
           # temporary during qt5 port, remove after
           list(APPEND CALLIGRA_UNPORTED_PRODUCTS ${_product_id})

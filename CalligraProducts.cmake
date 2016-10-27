@@ -75,8 +75,8 @@ calligra_define_product(LIB_MSO "libmso"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(LIB_KOMSOOXML "libkomsooxml"  REQUIRES LIB_CALLIGRA LIB_KOODF2 LIB_KOMAIN)
 
 # features
-calligra_define_feature(FEATURE_SCRIPTING "Scripting feature")
-calligra_define_feature(FEATURE_RDF "RDF feature")
+calligra_define_feature(FEATURE_SCRIPTING  UNMAINTAINED  "Scripting feature")
+calligra_define_feature(FEATURE_RDF  UNMAINTAINED "RDF feature")
 
 # plugins
 calligra_define_product(PLUGIN_TEXTSHAPE "Text shape plugin"  REQUIRES LIB_CALLIGRA)
@@ -90,12 +90,12 @@ calligra_define_product(PART_COMPONENTS "QtQuick2 Plugin that provides Calligra 
 
 # apps
 calligra_define_product(APP_WORDS "Words app (for Desktop)"  REQUIRES PART_WORDS)
-calligra_define_product(APP_STAGE "Stage app (for Desktop)"  REQUIRES PART_STAGE)
+calligra_define_product(APP_STAGE "Stage app (for Desktop)"  UNMAINTAINED   REQUIRES PART_STAGE)
 calligra_define_product(APP_SHEETS "Sheets app (for Desktop)" REQUIRES PART_SHEETS)
-calligra_define_product(APP_KARBON "Karbon app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
+calligra_define_product(APP_KARBON "Karbon app (for Desktop)"  UNMAINTAINED  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
 calligra_define_product(APP_FLOW "Flow app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOMAIN LIB_KOPAGEAPP)
 calligra_define_product(APP_PLAN "Plan app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
-calligra_define_product(APP_BRAINDUMP "Braindump app (for Desktop)" REQUIRES LIB_CALLIGRA LIB_KOMAIN)
+calligra_define_product(APP_BRAINDUMP "Braindump app (for Desktop)"  UNMAINTAINED  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
 calligra_define_product(DOC "Calligra Documentations")
 
 # staging apps

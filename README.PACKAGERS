@@ -22,6 +22,7 @@ Table Of Contents
 5.1. Runtime dependency of the Okular ODP plugin
 5.2. Support for PPT, PPTX and more runtime dependency
 5.3. Support for DOC, DOCX, WPD and more runtime dependency
+6. Adding unmaintained applications/modules
 
 
 1. Debug information
@@ -176,3 +177,18 @@ will be installed from the filters/word/{msword-odf,docx/import,wordperfect/impo
 
 So with those desktop files and the Okular ODT plugin installed there is a
 runtime dependency on the respective filters.
+
+
+6. Adding unmaintained applications/modules
+===========================================
+
+A few applications and modules do not have maintainers. So there is noone
+to handle bugs experienced by users or discuss new features/improvements.
+
+Still those applications & modules are usable for certain needs. If you want
+to provide the users of your packages also with those unmaintained applications
+and modules, you will need to create a custom patch to the file CalligraProducts.cmake
+and remove the respective "UNMAINTAINED" tags from the product definitions.
+
+When doing so, please state the unmaintained state in the package description,
+so the users are aware about the lack of support at the current time.

@@ -140,8 +140,14 @@ endif()
 
 if (RELEASE_BUILD)
     set(CALLIGRA_SHOULD_BUILD_STAGING FALSE)
+    if(BUILD_UNMAINTAINED)
+        set(CALLIGRA_SHOULD_BUILD_UNMAINTAINED TRUE)
+    else()
+        set(CALLIGRA_SHOULD_BUILD_UNMAINTAINED FALSE)
+    endif()
 else ()
     set(CALLIGRA_SHOULD_BUILD_STAGING TRUE)
+    set(CALLIGRA_SHOULD_BUILD_UNMAINTAINED TRUE)
 endif ()
 
 # finally choose products/features to build
