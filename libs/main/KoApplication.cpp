@@ -135,6 +135,8 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType,
     : QApplication(argc, argv)
     , d(new KoApplicationPrivate())
 {
+    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+
     KAboutData::setApplicationData( aboutData );
 
     setWindowIcon(QIcon::fromTheme(windowIconName));
