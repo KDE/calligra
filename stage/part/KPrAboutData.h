@@ -33,7 +33,9 @@ KAboutData * newKPresenterAboutData()
         QStringLiteral("calligrastage"),
         i18nc("application name", "Calligra Stage"),
         QStringLiteral(CALLIGRA_VERSION_STRING),
-        i18n("Presentation Tool"),
+        i18n("Presentation Tool")
+        + QLatin1String("\n\n")
+        + i18n("Unmaintained at the time of release of this version. The Calligra community welcomes interested persons to take over maintainership."),
         KAboutLicense::LGPL,
         i18n("Copyright 1998-%1, The Stage Team", QStringLiteral(CALLIGRA_YEAR)),
         QString(),
@@ -43,7 +45,7 @@ KAboutData * newKPresenterAboutData()
 #if KCOREADDONS_VERSION >= 0x051600
     aboutData->setDesktopFileName(QStringLiteral("org.kde.calligrastage"));
 #endif
-    aboutData->addAuthor(i18n("Thorsten Zachmann"), i18n("Maintainer"), "zachmann@kde.org");
+    aboutData->addAuthor(i18n("Thorsten Zachmann"), i18n("Former maintainer"), "zachmann@kde.org");
     aboutData->addAuthor(i18n("Laurent Montel"), i18n("Former maintainer"), "montel@kde.org");
     aboutData->addAuthor(i18n("Reginald Stadlbauer"),i18n("Original author"), "reggie@kde.org");
     aboutData->addAuthor(i18n("Werner Trobin"), QString(), "trobin@kde.org");

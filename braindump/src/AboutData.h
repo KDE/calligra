@@ -29,13 +29,15 @@
 inline KAboutData newBrainDumpAboutData()
 {
     KAboutData aboutData(QStringLiteral("braindump"), i18n("Braindump"), QStringLiteral(BRAINDUMP_VERSION),
-                         i18n("Braindump: directly from your brain to the computer."),
+                         i18n("Braindump: directly from your brain to the computer.")
+                         + QLatin1String("\n\n")
+                         + i18n("Unmaintained at the time of release of this version. The Calligra community welcomes interested persons to take over maintainership."),
                          KAboutLicense::LGPL, i18n("(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"));
 #if KCOREADDONS_VERSION >= 0x051600
     aboutData.setDesktopFileName(QStringLiteral("org.kde.braindump"));
 #endif
-    aboutData.addAuthor(i18n("Somsubhra Bairi"), i18n("Maintainer"), QStringLiteral("somsubhra.bairi@gmail.com"), QStringLiteral("https://www.somsubhra.com"));
-    aboutData.addAuthor(i18n("Cyrille Berger"), i18n("Former Maintainer"), QStringLiteral("cberger@cberger.net"));
+    aboutData.addAuthor(i18n("Somsubhra Bairi"), i18n("Former maintainer"), QStringLiteral("somsubhra.bairi@gmail.com"), QStringLiteral("https://www.somsubhra.com"));
+    aboutData.addAuthor(i18n("Cyrille Berger"), i18n("Former maintainer"), QStringLiteral("cberger@cberger.net"));
     // standard ki18n translator strings
     aboutData.setTranslator(i18nc("NAME OF TRANSLATORS", "Your names"),
                             i18nc("EMAIL OF TRANSLATORS", "Your emails"));
