@@ -237,6 +237,12 @@ void GanttPrintingDialog::startPrinting(RemovePolicy removePolicy )
             for ( int i = pages.first() + 1; i <= last; ++i ) {
                 pages << i;
             }
+            if (m_vertPages > 1) {
+                m_image = QImage(m_sceneRect.width(), m_sceneRect.height() + m_headerHeight, QImage::Format_ARGB32);
+                m_image.fill(Qt::white);
+                QPainter p(&m_image);
+                m_gantt->print(&p, m_image.rect(), m_gantt->m_printOptions.printRowLabels, true);
+            }
         }
     }
     setPageRange( pages );
@@ -277,24 +283,34 @@ int GanttPrintingDialog::documentLastPage() const
 
 void GanttPrintingDialog::printPage( int page, QPainter &painter )
 {
-    debugPlan<<"page:"<<page<<"first"<<documentFirstPage()<<"last:"<<documentLastPage();
-    QRectF sourceRect = m_sceneRect;
+    debugPlan<<"page:"<<page<<"first"<<documentFirstPage()<<"last:"<<documentLastPage()<<m_horPages<<m_vertPages;
     int p = page - documentFirstPage();
     QRectF pageRect = printer().pageRect();
     pageRect.moveTo( 0, 0 );
     bool singlePage = m_gantt->m_printOptions.singlePage;
     int vert = singlePage ? 0 : p / m_horPages;
     int hor = singlePage ? 0 : p % m_horPages;
-    if ( ! singlePage && documentLastPage() > documentFirstPage() ) {
-        // print on multiple pages, so calculate rects to print
+//     painter.setClipRect( pageRect.adjusted( -1.0, -1.0, 1.0, 1.0 ) );
+    if (singlePage) {
+        // single page: use KGantt
+        m_gantt->print( &painter, m_sceneRect.left(), m_sceneRect.right(), pageRect, m_gantt->m_printOptions.printRowLabels, true );
+    } else if (m_vertPages == 1) {
+        // single vertical page: use KGantt
+        qreal hh = vert == 0 ? m_headerHeight : 0;
+        qreal ho = vert > 0 ? m_headerHeight : 0;
+        QRectF sourceRect = QRectF( m_sceneRect.x() + ( pageRect.width() * hor ), m_sceneRect.y() + ( ( pageRect.height() * vert ) - ho ), pageRect.width(), pageRect.height() - hh );
+        debugPlan<<p<<hor<<vert<<sourceRect;
+        m_gantt->print( &painter, sourceRect.left(), sourceRect.right(), pageRect, hor == 0 && m_gantt->m_printOptions.printRowLabels, true );
+    } else {
+        // print on multiple vertical pages: use pixmap
+        // QT5TODO Make KGantt able to print multiple pages vertically
+        QRectF sourceRect = m_image.rect();
         qreal hh = vert == 0 ? m_headerHeight : 0;
         qreal ho = vert > 0 ? m_headerHeight : 0;
         sourceRect = QRectF( sourceRect.x() + ( pageRect.width() * hor ), sourceRect.y() + ( ( pageRect.height() * vert ) - ho ), pageRect.width(), pageRect.height() - hh );
         debugPlan<<p<<hor<<vert<<sourceRect;
+        painter.drawImage(pageRect, m_image, sourceRect);
     }
-    painter.setClipRect( pageRect.adjusted( -1.0, -1.0, 1.0, 1.0 ) );
-    // QT5TODO Make KGantt able to print multiple pages vertically
-    m_gantt->print( &painter, sourceRect.left(), sourceRect.right(), pageRect, hor == 0 && m_gantt->m_printOptions.printRowLabels, vert == 0 );
 }
 
 //---------------------

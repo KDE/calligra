@@ -152,6 +152,7 @@ protected:
     int m_vertPages;
     double m_headerHeight;
     GanttPrintingOptionsWidget *m_options;
+    QImage m_image;
 };
 
 class KPLATOUI_EXPORT GanttTreeView : public TreeViewBase
