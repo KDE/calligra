@@ -590,6 +590,7 @@ void PerformanceStatusBase::refreshChart()
     // NOTE: Force grid/axis recalculation, couldn't find a better way :(
     QResizeEvent event( ui_chart->size(), QSize() );
     QApplication::sendEvent( ui_chart, &event );
+    m_legend->forceRebuild();
 }
 
 void PerformanceStatusBase::createBarChart()
