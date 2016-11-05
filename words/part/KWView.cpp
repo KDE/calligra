@@ -522,9 +522,12 @@ void KWView::showWordCountInStatusBar(bool doShow)
 
 void KWView::editFrameProperties()
 {
-    QPointer<KWFrameDialog> frameDialog = new KWFrameDialog(selectedShapes(), m_document, m_canvas);
-    frameDialog->exec();
-    delete frameDialog;
+    const QList<KoShape *> &shapes = selectedShapes();
+    if (!shapes.isEmpty()) {
+        QPointer<KWFrameDialog> frameDialog = new KWFrameDialog(shapes, m_document, m_canvas);
+        frameDialog->exec();
+        delete frameDialog;
+    }
 }
 
 KoPrintJob *KWView::createPrintJob()

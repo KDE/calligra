@@ -36,7 +36,7 @@ KWFrameConnectSelector::KWFrameConnectSelector(FrameConfigSharedState *state)
 
 bool KWFrameConnectSelector::canOpen(KoShape *shape)
 {
-    if (shape->shapeId() == TextShape_SHAPEID) {
+    if (shape->shapeId() != TextShape_SHAPEID) {
         // We should only go further if it's a textshape, ok if it is not in KWTextFrameSet
         return false;
     }
