@@ -1966,7 +1966,7 @@ void Axis::Private::updatePosition()
     // KChart
     kdAxis->setPosition(PositionToKChartAxisPosition(position));
     ChartLayout *layout = plotArea->parent()->layout();
-    layout->setPosition(title, position);
+    layout->setPosition(title, position, 10);
     layout->layout();
 
     q->requestRepaint();
