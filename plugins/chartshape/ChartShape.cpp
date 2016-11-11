@@ -1315,6 +1315,7 @@ void ChartShape::saveOdfData(KoXmlWriter &bodyWriter, KoGenStyles &mainStyles) c
 void ChartShape::update() const
 {
     KoShape::update();
+    layout()->scheduleRelayout();
 
     emit updateConfigWidget();
 }
