@@ -605,13 +605,16 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
 
     // The exact position defined in ODF overwrites the default layout position
-    if (plotAreaElement.hasAttributeNS(KoXmlNS::svg, "x") ||
-        plotAreaElement.hasAttributeNS(KoXmlNS::svg, "y") ||
-        plotAreaElement.hasAttributeNS(KoXmlNS::svg, "width") ||
-        plotAreaElement.hasAttributeNS(KoXmlNS::svg, "height"))
-    {
-        parent()->layout()->setPosition(this, FloatingPosition);
-    }
+    // NOTE: Do not do this as it means functionallity changes just because you save and load.
+    // I don't think odf has an element/attribute that can hold this type of info.
+    // Also afaics libreoffice do not do this.
+//     if (plotAreaElement.hasAttributeNS(KoXmlNS::svg, "x") ||
+//         plotAreaElement.hasAttributeNS(KoXmlNS::svg, "y") ||
+//         plotAreaElement.hasAttributeNS(KoXmlNS::svg, "width") ||
+//         plotAreaElement.hasAttributeNS(KoXmlNS::svg, "height"))
+//     {
+//         parent()->layout()->setPosition(this, FloatingPosition);
+//     }
 
     context.odfLoadingContext().fillStyleStack(plotAreaElement, KoXmlNS::chart, "style-name", "chart");
     loadOdfAttributes(plotAreaElement, context, OdfAllAttributes);
