@@ -480,7 +480,7 @@ set_package_properties(KChart PROPERTIES
 ##
 ## Test for KReport
 ##
-macro_optional_find_package(KReport 2.96.1 QUIET)
+macro_optional_find_package(KReport 3.0.0 EXACT QUIET)
 set_package_properties(KReport PROPERTIES
     DESCRIPTION "A framework for the creation and generation of reports in multiple formats"
     URL "https://community.kde.org/KReport"
