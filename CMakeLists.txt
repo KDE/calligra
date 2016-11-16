@@ -491,7 +491,7 @@ set_package_properties(KReport PROPERTIES
 ##
 ## Test for KPropertyWidgets
 ##
-macro_optional_find_package(KPropertyWidgets 2.98.0 QUIET)
+macro_optional_find_package(KPropertyWidgets 3.0.0 EXACT QUIET)
 set_package_properties(KPropertyWidgets PROPERTIES
     DESCRIPTION "A property editing framework with editor widget"
     URL "https://community.kde.org/KProperty"
