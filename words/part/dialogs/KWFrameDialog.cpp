@@ -87,6 +87,8 @@ void KWFrameDialog::okClicked()
                 m_first = false;
                 KUndo2Command::redo();
                 m_anchoringProperties->save(this, m_canvas);
+            } else {
+                KUndo2Command::redo();
             }
         }
         KWAnchoringProperties *m_anchoringProperties;
