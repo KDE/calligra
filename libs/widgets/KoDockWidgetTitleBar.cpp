@@ -69,7 +69,7 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
     d->closeButton->setIcon(q->style()->standardIcon(QStyle::SP_TitleBarCloseButton, 0, q));
     connect(d->closeButton, SIGNAL(clicked()), q, SLOT(close()));
     d->closeButton->setVisible(true);
-    d->closeButton->setToolTip(i18nc("@info:tooltip", "Close Docker"));   
+    d->closeButton->setToolTip(i18nc("@info:tooltip", "Close Docker"));
     d->closeButton->setStyleSheet("border: 0"); // border makes the header busy looking (appears on some OSs)
 
     d->collapseButton = new KoDockWidgetTitleBarButton(this);
@@ -183,7 +183,7 @@ void KoDockWidgetTitleBar::paintEvent(QPaintEvent*)
     int fw = q->isFloating() ? q->style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, 0, q) : 0;
     int mw = q->style()->pixelMetric(QStyle::PM_DockWidgetTitleMargin, 0, q);
 
-    QStyleOptionDockWidgetV2 titleOpt;
+    QStyleOptionDockWidget titleOpt;
     titleOpt.initFrom(q);
 
     QSize collapseButtonSize(0,0);
@@ -210,7 +210,7 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
 
     int fw = q->isFloating() ? q->style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, 0, q) : 0;
 
-    QStyleOptionDockWidgetV2 opt;
+    QStyleOptionDockWidget opt;
     opt.initFrom(q);
     opt.rect = QRect(QPoint(fw, fw), QSize(geometry().width() - (fw * 2), geometry().height() - (fw * 2)));
     opt.title = q->windowTitle();

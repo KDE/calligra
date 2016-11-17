@@ -64,8 +64,8 @@ void CategorizedItemDelegate::paint(QPainter * painter, const QStyleOptionViewIt
 {
     // We will need to edit the option to make sure the header isn't drawned as selected
     QStyleOptionViewItem* option = 0;
-    if(const QStyleOptionViewItemV4 *v4 = qstyleoption_cast<const QStyleOptionViewItemV4*>(&_option)) {
-        option = new QStyleOptionViewItemV4(*v4);
+    if(const QStyleOptionViewItem *v4 = qstyleoption_cast<const QStyleOptionViewItem*>(&_option)) {
+        option = new QStyleOptionViewItem(*v4);
     } else if(const QStyleOptionViewItemV3 *v3 = qstyleoption_cast<const QStyleOptionViewItemV3*>(&_option)) {
         option = new QStyleOptionViewItemV3(*v3);
     } else if(const QStyleOptionViewItemV2 *v2 = qstyleoption_cast<const QStyleOptionViewItemV2*>(&_option)) {
