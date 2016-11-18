@@ -858,14 +858,15 @@ Style StyleStorage::composeStyle(const QList<SharedSubStyle>& subStyles) const
 {
     d->ensureLoaded();
 
-    if (subStyles.isEmpty())
+    if (subStyles.isEmpty()) {
+//         debugSheetsStyle <<"StyleStorage:" << "nothing to merge, return the default style";
         return *styleManager()->defaultStyle();
-
+    }
     Style style;
     for (int i = 0; i < subStyles.count(); ++i) {
-        if (subStyles[i]->type() == Style::DefaultStyleKey)
-            style = *styleManager()->defaultStyle();
-        else if (subStyles[i]->type() == Style::NamedStyleKey) {
+        if (subStyles[i]->type() == Style::DefaultStyleKey) {
+            // skip
+        } else if (subStyles[i]->type() == Style::NamedStyleKey) {
             style.clear();
             const CustomStyle* namedStyle = styleManager()->style(static_cast<const NamedStyle*>(subStyles[i].data())->name);
             if (namedStyle) {
@@ -926,6 +927,15 @@ Style StyleStorage::composeStyle(const QList<SharedSubStyle>& subStyles) const
             // not the default anymore
             style.clearAttribute(Style::DefaultStyleKey);
         }
+    }
+    if (!styleManager()->defaultStyle()->isEmpty()) {
+        // Get any substyles from default style that is not present in style.
+        // NOTE: According to spec this should be the family default, see:
+        // http://docs.oasis-open.org/office/v1.2/os/OpenDocument-v1.2-os-part1.html#__RefHeading__1416276_253892949
+        Style tmpStyle = *styleManager()->defaultStyle();
+        tmpStyle.clearAttribute(Style::DefaultStyleKey);
+        tmpStyle.merge(style);
+        style = tmpStyle;
     }
     return style;
 }

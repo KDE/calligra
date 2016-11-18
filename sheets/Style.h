@@ -375,7 +375,7 @@ public:
         return Style::DefaultStyleKey;
     }
     virtual void dump() const {
-        debugSheets << debugData();
+        debugSheetsStyle << debugData();
     }
     virtual QString debugData(bool withName = true) const {
         QString out; if (withName) out = name(Style::DefaultStyleKey); return out;
@@ -423,7 +423,7 @@ public:
         return Style::NamedStyleKey;
     }
     virtual void dump() const {
-        debugSheets << debugData();
+        debugSheetsStyle << debugData();
     }
     virtual QString debugData(bool withName = true) const {
         QString out; if (withName) out = SubStyle::name(Style::NamedStyleKey) + ' '; out += name; return out;
