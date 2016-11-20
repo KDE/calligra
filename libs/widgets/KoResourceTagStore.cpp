@@ -183,6 +183,7 @@ void KoResourceTagStore::loadTags()
 
 void KoResourceTagStore::writeXMLFile(const QString &tagstore)
 {
+    QDir().mkpath(QFileInfo(tagstore).path());
     QFile f(tagstore);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
         warnWidgets << "Cannot write meta information to '" << tagstore << "'.";

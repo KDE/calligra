@@ -639,8 +639,8 @@ protected:
     /// write the blacklist file entries to an xml file
     void writeBlackListFile()
     {
+        QDir().mkpath(QFileInfo(m_blackListFile).path());
         QFile f(m_blackListFile);
-
         if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
             warnWidgets << "Cannot write meta information to '" << m_blackListFile << "'." << endl;
             return;
