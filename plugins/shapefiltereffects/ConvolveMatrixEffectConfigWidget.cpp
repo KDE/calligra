@@ -34,6 +34,7 @@
 #include <QTableView>
 #include <QHeaderView>
 #include <KConfigGroup>
+#include <QDialogButtonBox>
 
 ConvolveMatrixEffectConfigWidget::ConvolveMatrixEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
@@ -157,6 +158,15 @@ void ConvolveMatrixEffectConfigWidget::orderChanged(int)
     QPoint oldOrder = m_effect->order();
     if (newOrder != oldOrder) {
         m_effect->setOrder(newOrder);
+        const int newSize = newOrder.x() * newOrder.y();
+        const int oldSize = oldOrder.x() * oldOrder.y();
+        QVector<qreal> kernel = m_effect->kernel();
+        if (newSize > oldSize) {
+            kernel.insert(kernel.end(), newSize-oldSize, 0);
+        } else {
+            kernel.resize(newSize);
+        }
+        m_effect->setKernel(kernel);
         emit filterChanged();
     }
 
@@ -228,6 +238,13 @@ void ConvolveMatrixEffectConfigWidget::editKernel()
     QVBoxLayout *mainLayout = new QVBoxLayout;
     dlg->setLayout(mainLayout);
     mainLayout->addWidget(table);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, dlg);
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::Key_Return);
+    mainLayout->addWidget(buttonBox);
+    connect(buttonBox, SIGNAL(accepted()), dlg, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), dlg, SLOT(reject()));
     if (dlg->exec() == QDialog::Accepted) {
         m_effect->setKernel(m_matrixModel->matrix());
         emit filterChanged();
