@@ -43,16 +43,14 @@ KarbonConfigureDialog::KarbonConfigureDialog(KarbonView* parent)
 {
     setFaceType(List);
     setWindowTitle(i18n("Configure"));
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel|QDialogButtonBox::RestoreDefaults|QDialogButtonBox::Apply);
-    QWidget *mainWidget = new QWidget(this);
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    setLayout(mainLayout);
-    mainLayout->addWidget(mainWidget);
-    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    setStandardButtons( QDialogButtonBox::Ok |
+                        QDialogButtonBox::Cancel |
+                        QDialogButtonBox::RestoreDefaults |
+                        QDialogButtonBox::Apply);
+
+    QPushButton *okButton = button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
     m_interfacePage = new KarbonConfigInterfacePage(parent);
     KPageWidgetItem* item = addPage(m_interfacePage, i18n("Interface"));
@@ -81,13 +79,9 @@ KarbonConfigureDialog::KarbonConfigureDialog(KarbonView* parent)
     item->setHeader(i18n("Author"));
     item->setIcon(koIcon("user-identity"));
 
-
     connect(okButton, SIGNAL(clicked()), this, SLOT(slotApply()));
-    connect(buttonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(slotApply()));
-    connect(buttonBox->button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked()), this, SLOT(slotDefault()));
-
-    //PORTING SCRIPT: WARNING mainLayout->addWidget(buttonBox) must be last item in layout. Please move it.
-    mainLayout->addWidget(buttonBox);
+    connect(button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(slotApply()));
+    connect(button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked()), this, SLOT(slotDefault()));
 }
 
 void KarbonConfigureDialog::slotApply()
