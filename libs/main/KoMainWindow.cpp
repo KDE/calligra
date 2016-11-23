@@ -344,7 +344,7 @@ KoMainWindow::KoMainWindow(const QByteArray &nativeMimeType, const KoComponentDa
 
     KToggleAction *fullscreenAction  = new KToggleAction(koIcon("view-fullscreen"), i18n("Full Screen Mode"), this);
     actionCollection()->addAction("view_fullscreen", fullscreenAction);
-    fullscreenAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
+    actionCollection()->setDefaultShortcut(fullscreenAction, QKeySequence::FullScreen);
     connect(fullscreenAction, SIGNAL(toggled(bool)), this, SLOT(viewFullscreen(bool)));
 
     d->toggleDockers = new KToggleAction(i18n("Show Dockers"), this);

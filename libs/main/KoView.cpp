@@ -335,9 +335,11 @@ QPrintDialog *KoView::createPrintDialog(KoPrintJob *printJob, QWidget *parent)
 
 void KoView::setupGlobalActions()
 {
-    actionCollection()->addAction("edit_undo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::UNDO));
-    actionCollection()->addAction("edit_redo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::RED0));
+    QAction *undo = actionCollection()->addAction("edit_undo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::UNDO));
+    QAction *redo = actionCollection()->addAction("edit_redo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::RED0));
 
+    actionCollection()->setDefaultShortcut(undo, QKeySequence::Undo);
+    actionCollection()->setDefaultShortcut(redo, QKeySequence::Redo);
     d->actionAuthor  = new KSelectAction(koIcon("user-identity"), i18n("Active Author Profile"), this);
     connect(d->actionAuthor, SIGNAL(triggered(QString)), this, SLOT(changeAuthorProfile(QString)));
     actionCollection()->addAction("settings_active_author", d->actionAuthor);
