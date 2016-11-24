@@ -21,6 +21,7 @@
 #include "kptmaindocument.h"
 
 #include <KoApplication.h>
+#include <Calligra2Migration.h>
 
 #include <QLoggingCategory>
 
@@ -37,13 +38,19 @@ extern "C" KPLATO_EXPORT int kdemain( int argc, char **argv )
      */
     QLoggingCategory::setFilterRules("calligra.*.debug=false\n"
                                      "calligra.*.warning=true");
-
+    
     KAboutData* aboutData = KPlato::newAboutData();
 
     KoApplication app(PLAN_MIME_TYPE, QStringLiteral("calligraplan"), *aboutData, argc, argv);
 
     delete aboutData;
 
+    // Migrate data from kde4 to kf5 locations
+    Calligra2Migration m("calligraplan", "plan");
+    m.setConfigFiles(QStringList() << QStringLiteral("planrc"));
+    m.setUiFiles(QStringList() << QStringLiteral("plan.rc"));
+    m.migrate();
+    
     if (!app.start()) {
 	return 1;
     }
