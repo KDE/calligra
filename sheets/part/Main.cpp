@@ -23,6 +23,7 @@
 #include "sheets_common_export.h"
 
 #include <KoApplication.h>
+#include <Calligra2Migration.h>
 
 #include <QLoggingCategory>
 
@@ -50,6 +51,12 @@ extern "C" CALLIGRA_SHEETS_COMMON_EXPORT int kdemain(int argc, char **argv)
     KoApplication app(SHEETS_MIME_TYPE, QStringLiteral("calligrasheets"), *aboutData, argc, argv);
 
     delete aboutData;
+
+    // Migrate data from kde4 to kf5 locations
+    Calligra2Migration m("calligrasheets", "sheets");
+    m.setConfigFiles(QStringList() << QStringLiteral("sheetsrc"));
+    m.setUiFiles(QStringList() << QStringLiteral("sheets.rc") << QStringLiteral("sheets_readonly.rc"));
+    m.migrate();
 
     if (!app.start()) {
         return 1;
