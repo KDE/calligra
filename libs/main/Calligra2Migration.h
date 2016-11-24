@@ -17,6 +17,9 @@
  *   Boston, MA 02110-1301, USA.
  */
 
+#ifndef Calligra2Migration_h
+#define Calligra2Migration_h
+
 #include "komain_export.h"
 
 #include <QString>
@@ -50,3 +53,5 @@ private:
     QStringList m_configFiles;
     QStringList m_uiFiles;
 };
+
+#endif
