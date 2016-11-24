@@ -566,6 +566,15 @@ void ChartConfigWidget::deleteSubDialogs()
 
 void ChartConfigWidget::open(KoShape* shape)
 {
+    // reset these so we do not risc using old, deleted data
+    d->selectedDataSet = 0;
+    d->shape = 0;
+    d->tableSource = 0;
+    // these are recalculated in update() anyway
+    d->dataSetAxes.clear();
+    d->axes.clear();
+    d->dataSets.clear();
+
     if (! shape) {
         return;
     }
