@@ -48,7 +48,7 @@ extern "C" KPLATO_EXPORT int kdemain( int argc, char **argv )
     // Migrate data from kde4 to kf5 locations
     Calligra2Migration m("calligraplan", "plan");
     m.setConfigFiles(QStringList() << QStringLiteral("planrc"));
-    m.setUiFiles(QStringList() << QStringLiteral("plan.rc"));
+    m.setUiFiles(QStringList() << QStringLiteral("plan.rc") << QStringLiteral("plan_readonly.rc"));
     m.migrate();
     
     if (!app.start()) {
