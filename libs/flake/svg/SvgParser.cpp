@@ -343,6 +343,22 @@ bool SvgParser::parseGradient(const KoXmlElement &e, const KoXmlElement &referen
         if (gradhelper.gradient())
             g->setStops(gradhelper.gradient()->stops());
         gradhelper.setGradient(g);
+    } else if (b.tagName() == "conicalGradient") {
+        QConicalGradient *g = new QConicalGradient();
+        if (gradhelper.gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
+            g->setCoordinateMode(QGradient::ObjectBoundingMode);
+            g->setCenter(QPointF(SvgUtil::fromPercentage(b.attribute("cx", "50%")),
+                                 SvgUtil::fromPercentage(b.attribute("cy", "50%"))));
+            g->setAngle(SvgUtil::fromPercentage(b.attribute("a", "50%")));
+        } else {
+            g->setCenter(QPointF(SvgUtil::fromUserSpace(b.attribute("cx").toDouble()),
+                                 SvgUtil::fromUserSpace(b.attribute("cy").toDouble())));
+            g->setAngle(SvgUtil::fromUserSpace(b.attribute("a").toDouble()));
+        }
+        // preserve color stops
+        if (gradhelper.gradient())
+            g->setStops(gradhelper.gradient()->stops());
+        gradhelper.setGradient(g);
     } else {
         return false;
     }

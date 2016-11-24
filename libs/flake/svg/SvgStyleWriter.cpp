@@ -256,29 +256,18 @@ QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransf
         saveSvgColorStops(gradient->stops(), context);
         context.styleWriter().endElement();
     } else if (gradient->type() == QGradient::ConicalGradient) {
-        //const QConicalGradient * g = static_cast<const QConicalGradient*>( gradient );
-        // fake conical grad as radial.
-        // fugly but better than data loss.
-        /*
-        printIndentation( m_defs, m_indent2 );
-        *m_defs << "<radialGradient id=\"" << uid << "\" ";
-        *m_defs << "gradientUnits=\"userSpaceOnUse\" ";
-        *m_defs << "cx=\"" << g->center().x() << "\" ";
-        *m_defs << "cy=\"" << g->center().y() << "\" ";
-        *m_defs << "fx=\"" << grad.focalPoint().x() << "\" ";
-        *m_defs << "fy=\"" << grad.focalPoint().y() << "\" ";
-        double r = sqrt( pow( grad.vector().x() - grad.origin().x(), 2 ) + pow( grad.vector().y() - grad.origin().y(), 2 ) );
-        *m_defs << "r=\"" << QString().setNum( r ) << "\" ";
-        *m_defs << spreadMethod[g->spread()];
-        *m_defs << ">" << endl;
-
+        const QConicalGradient * g = static_cast<const QConicalGradient*>(gradient);
+        context.styleWriter().startElement("conicalGradient");
+        context.styleWriter().addAttribute("id", uid);
+        context.styleWriter().addAttribute("gradientTransform", SvgUtil::transformToString(gradientTransform));
+        context.styleWriter().addAttribute("gradientUnits", "objectBoundingBox");
+        context.styleWriter().addAttribute("cx", g->center().x());
+        context.styleWriter().addAttribute("cy", g->center().y());
+        context.styleWriter().addAttribute("a", g->angle());
+        context.styleWriter().addAttribute("spreadMethod", spreadMethod[g->spread()]);
         // color stops
-        getColorStops( gradient->stops() );
-
-        printIndentation( m_defs, m_indent2 );
-        *m_defs << "</radialGradient>" << endl;
-        *m_body << "url(#" << uid << ")";
-        */
+        saveSvgColorStops(gradient->stops(), context);
+        context.styleWriter().endElement();
     }
 
     return uid;
