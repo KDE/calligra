@@ -21,6 +21,7 @@
 #include <KWDocument.h>
 
 #include <KoApplication.h>
+#include <Calligra2Migration.h>
 
 #include <QLoggingCategory>
 
@@ -43,6 +44,12 @@ extern "C" WORDS_EXPORT int kdemain(int argc, char **argv)
     KoApplication app(WORDS_MIME_TYPE, QStringLiteral("calligrawords"), *aboutData, argc, argv);
 
     delete aboutData;
+
+    // Migrate data from kde4 to kf5 locations
+    Calligra2Migration m("calligrawords", "words");
+    m.setConfigFiles(QStringList() << QStringLiteral("wordsrc"));
+    m.setUiFiles(QStringList() << QStringLiteral("words.rc") << QStringLiteral("words_readonly.rc"));
+    m.migrate();
 
     if (!app.start()) {
         return 1;
