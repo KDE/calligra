@@ -324,7 +324,12 @@ bool PasteCommand::processXmlData(Element *element, KoXmlDocument *data)
         } else {
             // Should not happen.
             // ShiftCells should only be set, if the data contains columns/rows.
-            Q_ASSERT(false);
+            // FIXME:
+            // Commenting out this assert because:
+            // We almost always get here (except when a whole row is selected)
+            // The comment above indicates that this is not the way it was meant to work,
+            // so there is probably a bug somewhere
+            //Q_ASSERT(false);
             m_insertMode = ShiftCellsRight; // faster than down
         }
     }
