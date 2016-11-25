@@ -2957,7 +2957,7 @@ void View::slotMailWorkpackages( const QList<Node*> &nodes, Resource *resource )
         QUrl url = QUrl::fromLocalFile( tmpfile.fileName() );
         if ( ! getPart()->saveWorkPackageUrl( url, n, activeScheduleId(), resource ) ) {
             debugPlan<<"Failed to save to file";
-            KMessageBox::error(0, xi18nc( "@info", "Failed to save to temporary file:<br><filename>%1</filename>", url.url() ) );
+            KMessageBox::error(0, xi18nc( "@info", "Failed to save to temporary file:<br/><filename>%1</filename>", url.url() ) );
             return;
         }
         attachURLs << url.url();
