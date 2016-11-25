@@ -1,14 +1,14 @@
 install( FILES
         Plain.plant
         8HourDay-40HourWeek.plant
-        Basicproject.plant
+#         Basicproject.plant
     DESTINATION ${DATA_INSTALL_DIR}/calligraplan/templates/Simple/.source
 )
 install( FILES
         .directory
         Plain.desktop
         8HourDay-40HourWeek.desktop
-        Basicproject.desktop
+#         Basicproject.desktop
     DESTINATION ${DATA_INSTALL_DIR}/calligraplan/templates/Simple
 )
 
