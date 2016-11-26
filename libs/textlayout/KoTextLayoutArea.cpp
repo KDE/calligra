@@ -503,7 +503,11 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     d->blockRects.clear();
     delete d->endNotesArea;
     d->endNotesArea=0;
-    if (d->endOfArea) {
+    if (d->copyEndOfArea && !d->copyEndOfArea->isValid()) {
+        delete d->copyEndOfArea;
+        d->copyEndOfArea = 0;
+    }
+    if (d->endOfArea && d->endOfArea->isValid()) {
         delete d->copyEndOfArea;
         d->copyEndOfArea = new FrameIterator(d->endOfArea);
     }

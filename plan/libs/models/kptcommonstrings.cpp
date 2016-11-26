@@ -140,7 +140,7 @@ namespace KPlato
     QString WhatsThis::scheduleDistribution() { return xi18nc( "@info:whatsthis",
         "<para>The distribution to be used during scheduling</para>"
         "<para>If distribution is 'None', the tasks estimate is used as is during scheduling.</para>"
-        "<para>If distribution is 'PERT', the estimate used is calculated based on the entered optimistic- (O), pessimistic-(P) and most likely (M) estimate. The formula used for this is (O + 4 * M + P) / 6.<para>"
+        "<para>If distribution is 'PERT', the estimate used is calculated based on the entered optimistic- (O), pessimistic-(P) and most likely (M) estimate. The formula used for this is (O + 4 * M + P) / 6.</para>"
         );
     }
 

@@ -20,6 +20,7 @@
 #define FRAMEITERATOR_H
 
 #include <QTextFrame>
+#include <QPointer>
 
 class TableIterator;
 class QTextTableCell;
@@ -32,6 +33,8 @@ public:
     explicit FrameIterator(const QTextTableCell &frame);
     explicit FrameIterator(FrameIterator *other);
     ~FrameIterator();
+
+    bool isValid() const;
 
     bool operator ==(const FrameIterator &other) const;
 
@@ -51,6 +54,9 @@ public:
     FrameIterator *currentSubFrameIterator;  //useful if it is pointing to a subFrame
 
     int endNoteIndex;
+
+private:
+    QPointer<QTextFrame> m_frame;
 };
 
 #endif

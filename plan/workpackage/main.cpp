@@ -27,11 +27,20 @@
 #include <QApplication>
 #include <QDir>
 
+#include <Calligra2Migration.h>
+
 extern "C" KPLATOWORK_EXPORT int kdemain( int argc, char **argv )
 {
     QApplication app(argc, argv);
     KDBusService service(KDBusService::Unique);
     // we come here only once...
+
+    // Migrate data from kde4 to kf5 locations
+    Calligra2Migration m("calligraplanwork", "planwork");
+    m.setConfigFiles(QStringList() << QStringLiteral("planworkrc"));
+    m.setUiFiles(QStringList() << QStringLiteral("planwork.rc") << QStringLiteral("planwork_readonly.rc") << QStringLiteral("planworkui.rc"));
+    m.migrate();
+
     CommandLineParser cmd;
     QObject::connect(&service, &KDBusService::activateRequested, &cmd, &CommandLineParser::handleActivateRequest);
     cmd.handleCommandLine(QDir::current());

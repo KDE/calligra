@@ -27,6 +27,7 @@
 FrameIterator::FrameIterator(QTextFrame *frame)
 {
     it = frame->begin();
+    m_frame = it.parentFrame();
     currentTableIterator = 0;
     currentSubFrameIterator = 0;
     lineTextStart = -1;
@@ -37,6 +38,7 @@ FrameIterator::FrameIterator(const QTextTableCell &cell)
 {
     Q_ASSERT(cell.isValid());
     it = cell.begin();
+    m_frame = it.parentFrame();
     currentTableIterator = 0;
     currentSubFrameIterator = 0;
     lineTextStart = -1;
@@ -46,6 +48,7 @@ FrameIterator::FrameIterator(const QTextTableCell &cell)
 FrameIterator::FrameIterator(FrameIterator *other)
 {
     it = other->it;
+    m_frame = it.parentFrame();
     masterPageName = other->masterPageName;
     lineTextStart = other->lineTextStart;
     fragmentIterator = other->fragmentIterator;
@@ -65,6 +68,11 @@ FrameIterator::~FrameIterator()
 {
     delete currentTableIterator;
     delete currentSubFrameIterator;
+}
+
+bool FrameIterator::isValid() const
+{
+    return m_frame;
 }
 
 bool FrameIterator::operator ==(const FrameIterator &other) const

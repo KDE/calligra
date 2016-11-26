@@ -30,8 +30,7 @@
 #include <QDebug>
 
 Q_DECLARE_LOGGING_CATEGORY(CALLIGRA2MIGRATION)
-// logging category for this class, default: log stuff >= warning
-Q_LOGGING_CATEGORY(CALLIGRA2MIGRATION, "calligra.lib.migration", QtWarningMsg)
+Q_LOGGING_CATEGORY(CALLIGRA2MIGRATION, "calligra.lib.migration")
 
 Calligra2Migration::Calligra2Migration(const QString &appName, const QString &oldAppName)
     : m_newAppName(appName)
@@ -52,6 +51,20 @@ void Calligra2Migration::setUiFiles(const QStringList &uiFiles)
 
 void Calligra2Migration::migrate()
 {
+    const QString newdatapath = KoResourcePaths::saveLocation("data", m_newAppName, false);
+    QDir newdatadir(newdatapath);
+    if (newdatadir.exists()) {
+        // assume we have migrated
+        qCDebug(CALLIGRA2MIGRATION)<<"migration has been done";
+        return;
+    }
+
+    // do common calligra in case not yet migrated
+    Kdelibs4ConfigMigrator m("calligra");
+    m.setConfigFiles(QStringList() << QStringLiteral("calligrarc"));
+    m.setUiFiles(QStringList() << QStringLiteral("calligra_shell.rc") << QStringLiteral("osx.stylesheet"));
+    m.migrate();
+
     bool didSomething = false;
     Kdelibs4ConfigMigrator cm(m_oldAppName.isEmpty() ? m_newAppName : m_oldAppName);
     cm.setConfigFiles(m_configFiles);
@@ -67,11 +80,26 @@ void Calligra2Migration::migrate()
             }
             QString oldfile = QStandardPaths::locate(QStandardPaths::GenericConfigLocation, oldname);
             if (!oldfile.isEmpty()) {
+                qCDebug(CALLIGRA2MIGRATION)<<"config rename:"<<oldfile;
                 QFile f(oldfile);
-                f.rename(newname);
+                QFileInfo fi(f);
+                f.rename(fi.absolutePath() + '/' + newname);
                 didSomething = true;
-                qCDebug(CALLIGRA2MIGRATION)<<"config renamed:"<<oldfile<<"->"<<newname;
+                qCDebug(CALLIGRA2MIGRATION)<<"config renamed:"<<f.fileName();
             }
+        }
+        // subdirectory must be renamed
+        // eg: .local/share/kxmlgui5/ + m_oldAppName
+        // rename to: .local/share/kxmlgui5/ + m_newAppName
+        const QString loc = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QStringLiteral("/kxmlgui5/");
+        const QString oldui = loc + m_oldAppName;
+        const QString newui = loc + m_newAppName;
+        qCDebug(CALLIGRA2MIGRATION)<<"rename ui dir:"<<oldui;
+        QDir newdir(newui);
+        if (!newdir.exists()) {
+            newdir.rename(oldui, newui);
+            didSomething = true;
+            qCDebug(CALLIGRA2MIGRATION)<<"renamed ui dir:"<<newui;
         }
         qCDebug(CALLIGRA2MIGRATION)<<"rename ui files to new names"<<m_uiFiles;
         for (const QString &oldname : m_uiFiles) {
@@ -80,31 +108,31 @@ void Calligra2Migration::migrate()
             if (oldname == newname) {
                 continue;
             }
-            QString oldfile = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QStringLiteral("/kxmlgui5/") + m_newAppName + QLatin1Char('/') + oldname;
-            if (!oldfile.isEmpty()) {
-                QFile f(oldfile);
-                f.rename(newname);
+            const QString oldfile = newui + QLatin1Char('/') + oldname;
+            QFile f(oldfile);
+            if (f.exists()) {
+                const QString newfile = newui + QLatin1Char('/') + newname;
+                f.rename(newfile);
                 didSomething = true;
-                qCDebug(CALLIGRA2MIGRATION)<<"ui renamed:"<<oldfile<<"->"<<newname;
+                QFileInfo fi(f);
+                qCDebug(CALLIGRA2MIGRATION)<<"ui renamed:"<<oldfile<<"->"<<fi.filePath();
             }
         }
     }
-    if (!m_oldAppName.isEmpty()) {
-        // rename data dirs
-        Kdelibs4Migration m;
-        if (m.kdeHomeFound()) {
-            const QString oldpath = m.saveLocation("data", m_oldAppName);
-            if (!oldpath.isEmpty()) {
-                qCDebug(CALLIGRA2MIGRATION)<<"old data:"<<oldpath;
-                const QString newpath = KoResourcePaths::saveLocation("data", m_newAppName, false);
-                QDir newdir(newpath);
-                if (!newdir.exists()) {
-                    newdir.rename(oldpath, newpath); // copy instead?
-                    qCDebug(CALLIGRA2MIGRATION)<<"renamed data:"<<newpath;
-                }
-            }
-        } else {qCDebug(CALLIGRA2MIGRATION)<<"kde home not found";}
+
+    // migrate data dir, must be done after ui files
+    Kdelibs4Migration md;
+    if (md.kdeHomeFound()) {
+        const QString oldpath = md.saveLocation("data", m_oldAppName.isEmpty() ? m_newAppName : m_oldAppName);
+        if (!oldpath.isEmpty()) {
+            qCDebug(CALLIGRA2MIGRATION)<<"old data:"<<oldpath;
+            newdatadir.rename(oldpath, newdatapath);
+            qCDebug(CALLIGRA2MIGRATION)<<"renamed data:"<<newdatapath;
+        }
+    } else {
+        qCWarning(CALLIGRA2MIGRATION)<<"kde home not found";
     }
+
     // Copied from Kdelibs4ConfigMigrator:
     // Trigger KSharedConfig::openConfig()->reparseConfiguration() via the framework integration plugin
     if (didSomething) {
