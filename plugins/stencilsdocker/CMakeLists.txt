@@ -14,7 +14,7 @@ add_library(calligra_docker_stencils MODULE ${stencilsdocker_PART_SRCS})
 
 calligra_docker_desktop_to_json(calligra_docker_stencils calligra_docker_stencils.desktop)
 
-target_link_libraries(calligra_docker_stencils komain kowidgets flake KF5::Archive)
+target_link_libraries(calligra_docker_stencils komain kowidgets flake KF5::Archive KF5::IconThemes)
 
 if(GHNS)
     target_link_libraries(calligra_docker_stencils KF5::NewStuff)

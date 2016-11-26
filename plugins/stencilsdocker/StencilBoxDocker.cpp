@@ -35,6 +35,8 @@
 #include <KoProperties.h>
 #include <KoIcon.h>
 
+#include <kiconeffect.h>
+#include <kcolorscheme.h>
 #include <klocalizedstring.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
@@ -238,6 +240,11 @@ bool StencilBoxDocker::addCollection(const QString& path)
     QList<KoCollectionItem> templateList = model->shapeTemplateList();
     QStringList stencils = dir.entryList(QStringList("*.desktop"));
 
+    KStatefulBrush brushForeground(KColorScheme::Window, KColorScheme::NormalText);
+    KStatefulBrush brushBackground(KColorScheme::Window, KColorScheme::NormalBackground);
+    const QColor blackColor = brushForeground.brush(this).color();
+    const QColor whiteColor = brushBackground.brush(this).color();
+
     foreach(const QString & stencil, stencils) {
         if(stencil == "collection.desktop")
             continue;
@@ -277,19 +284,20 @@ bool StencilBoxDocker::addCollection(const QString& path)
         temp.name = name;
         temp.toolTip = name;
 
+        QImage img;
         const QString thumbnailFile = filename + QStringLiteral("png");
         if (QFile::exists(thumbnailFile)) {
-            temp.icon = QIcon(thumbnailFile);
+            img = QIcon(thumbnailFile).pixmap(QSize(22, 22)).toImage();
         } else {
             // generate icon using factory
-            QPixmap pix(32, 32);
+            QPixmap pix(22, 22);
             pix.fill(Qt::white);
             if (!QPixmapCache::find(source, &pix)) {
                 KoShape* shape = factory->createDefaultShape();
                 if (shape) {
                     KoZoomHandler converter;
-                    qreal diffx = 30 / converter.documentToViewX(shape->size().width());
-                    qreal diffy = 30 / converter.documentToViewY(shape->size().height());
+                    qreal diffx = 20 / converter.documentToViewX(shape->size().width());
+                    qreal diffy = 20 / converter.documentToViewY(shape->size().height());
                     converter.setZoom(qMin(diffx, diffy));
                     QPainter painter(&pix);
                     painter.setRenderHint(QPainter::Antialiasing, true);
@@ -301,9 +309,10 @@ bool StencilBoxDocker::addCollection(const QString& path)
                     delete shape;
                 }
             }
-            temp.icon = QIcon(pix);
+            img = pix.toImage();
         }
-
+        KIconEffect::toMonochrome(img, blackColor, whiteColor, 1.0f);
+        temp.icon = QIcon(QPixmap::fromImage(img));
         templateList.append(temp);
     }
     model->setShapeTemplateList(templateList);
