@@ -240,7 +240,7 @@ QVariant ChartItemModel::headerData( int section, Qt::Orientation orientation, i
                 default: return QVariant();
             }
         } else {
-            return startDate().addDays( section ).toString( i18nc( "Date format used as chart axis labels. Must follow QDate specification.", "MM.dd" ) );
+            return startDate().addDays( section ).toString( i18nc( "Date format used as chart axis labels. Must follow QDate specification", "MM.dd" ) );
         }
     } else if ( role == Qt::ToolTipRole ) {
         if ( orientation == Qt::Horizontal ) {
