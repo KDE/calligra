@@ -341,7 +341,10 @@ void ConnectionTool::mousePressEvent(KoPointerEvent * event)
                 setEditMode(EditConnection, hitShape, hitHandle);
                 if (hitHandle >= 0) {
                     // start editing connection shape
-                    m_currentStrategy = new KoPathConnectionPointStrategy(this, dynamic_cast<KoConnectionShape*>(m_currentShape), m_activeHandle);
+                    KoConnectionShape *shape = dynamic_cast<KoConnectionShape*>(m_currentShape);
+                    if (shape) {
+                        m_currentStrategy = new KoPathConnectionPointStrategy(this, shape, m_activeHandle);
+                    }
                 }
             }
         } else {
