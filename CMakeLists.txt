@@ -1189,3 +1189,7 @@ configure_file(KoConfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h )
 if (SHOULD_BUILD_DEVEL_HEADERS)
 install( FILES  ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 endif()
+
+if (BUILD_TESTING)
+    add_subdirectory(tests)
+endif(BUILD_TESTING)
