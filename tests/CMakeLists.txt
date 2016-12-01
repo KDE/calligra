@@ -21,10 +21,25 @@ if (BASH_PROGRAM AND XGETTEXT_PROGRAM AND MSGCAT_PROGRAM)
     add_custom_target(podir ALL
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/po
         COMMENT "Create podir" VERBATIM)
+    # copy parameters script
+    add_custom_target(parameters ALL
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/parameters.sh ${CMAKE_CURRENT_BINARY_DIR}/parameters.sh
+        COMMENT "Copy parameters script" VERBATIM)
 
     # add tests here
     CALLIGRA_ADD_UNIT_TEST(test_i18n)
-    CALLIGRA_ADD_UNIT_TEST(test_kundo2_i18n)
-    CALLIGRA_ADD_UNIT_TEST(test_kundo2_i18nc_long)
+    CALLIGRA_ADD_UNIT_TEST(test_i18nc)
+    CALLIGRA_ADD_UNIT_TEST(test_i18nc_long)
+    CALLIGRA_ADD_UNIT_TEST(test_i18n_noop)
+    CALLIGRA_ADD_UNIT_TEST(test_i18n_noop2)
 
+    CALLIGRA_ADD_UNIT_TEST(test_xi18n)
+    CALLIGRA_ADD_UNIT_TEST(test_xi18nc)
+    CALLIGRA_ADD_UNIT_TEST(test_xi18nc_long)
+    CALLIGRA_ADD_UNIT_TEST(test_xi18np)
+    CALLIGRA_ADD_UNIT_TEST(test_xi18ncp)
+
+    CALLIGRA_ADD_UNIT_TEST(test_kundo2_i18n)
+    CALLIGRA_ADD_UNIT_TEST(test_kundo2_i18nc)
+    CALLIGRA_ADD_UNIT_TEST(test_kundo2_i18nc_long)
 endif()

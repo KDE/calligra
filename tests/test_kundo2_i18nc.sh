@@ -1,5 +1,5 @@
 #! /bin/sh
-# test_kundo2_i18n:
+# test_kundo2_i18nc:
 # $1: calligra_xgettext.sh 
 # $2: xgettext
 # $3: msgcat
@@ -18,8 +18,8 @@ podir=$4
 # calligra_xgettext.sh wants this in one variable
 XGETTEXT="$XGETTEXT_PROGRAM $XGETTEXT_FLAGS"
 
-potfile="test_kundo2_i18n.pot"
-cppfile="test_kundo2_i18n.cpp"
+potfile="test_kundo2_i18nc.pot"
+cppfile="test_kundo2_i18nc.cpp"
 
 calligra_xgettext  $potfile $cppfile
 
@@ -33,7 +33,7 @@ if test 1 -ne `grep qtundo-format $podir/$potfile|wc -l`; then
     exit 2
 fi
 if test 2 -ne `grep msgid $podir/$potfile|wc -l`; then
-    echo "FAIL: there should be 2 message strings strings"
+    echo "FAIL: there should be 2 message strings"
     exit 3
 fi
 

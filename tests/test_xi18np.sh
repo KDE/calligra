@@ -1,5 +1,5 @@
 #! /bin/sh
-# test_kundo2_i18n:
+# test_xi18np:
 # $1: calligra_xgettext.sh 
 # $2: xgettext
 # $3: msgcat
@@ -18,8 +18,8 @@ podir=$4
 # calligra_xgettext.sh wants this in one variable
 XGETTEXT="$XGETTEXT_PROGRAM $XGETTEXT_FLAGS"
 
-potfile="test_kundo2_i18n.pot"
-cppfile="test_kundo2_i18n.cpp"
+potfile="test_xi18np.pot"
+cppfile="test_xi18np.cpp"
 
 calligra_xgettext  $potfile $cppfile
 
@@ -28,12 +28,12 @@ if test ! -e $podir/$potfile; then
     echo "FAIL: pot file not created"
     exit 1
 fi
-if test 1 -ne `grep qtundo-format $podir/$potfile|wc -l`; then
-    echo "FAIL: there should be 1 qtundo-format strings"
+if test 0 -ne `grep qtundo-format $podir/$potfile|wc -l`; then
+    echo "FAIL: there should be 0 qtundo-format strings"
     exit 2
 fi
 if test 2 -ne `grep msgid $podir/$potfile|wc -l`; then
-    echo "FAIL: there should be 2 message strings strings"
+    echo "FAIL: there should be 2 message strings"
     exit 3
 fi
 
