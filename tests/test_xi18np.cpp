@@ -1,1 +1,1 @@
-xI18np("xI18np singular", "xI18np plural", 2);
+xi18np("xi18np singular", "xi18np plural");

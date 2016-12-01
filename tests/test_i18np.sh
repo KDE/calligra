@@ -1,5 +1,5 @@
 #! /bin/sh
-# test_xi18nc_long:
+# test_i18np:
 # $1: calligra_xgettext.sh 
 # $2: xgettext
 # $3: msgcat
@@ -18,8 +18,8 @@ podir=$4
 # calligra_xgettext.sh wants this in one variable
 XGETTEXT="$XGETTEXT_PROGRAM $XGETTEXT_FLAGS"
 
-potfile="test_xi18nc_long.pot"
-cppfile="test_xi18nc_long.cpp"
+potfile="test_i18np.pot"
+cppfile="test_i18np.cpp"
 
 calligra_xgettext  $potfile $cppfile
 

@@ -10,7 +10,9 @@ function calligra_xgettext() {
     POTFILE="$podir/$1"
     shift
     if test -n "$*"; then
-        calligra_xgettext_internal $* | tee "${POTFILE}" | tail -n1 | grep "^msgstr \"\"\$" > /dev/null \
+        # we rely on last line being a 'msgstr' signaling that strings has been extracted (a header is always present)
+        # normally it ends with 'msgstr ""' but if plural it can end with eg 'msgstr[1] ""'
+        calligra_xgettext_internal $* | tee "${POTFILE}" | tail -n1 | grep "^msgstr" > /dev/null \
             || rm -f "${POTFILE}" 2> /dev/null
     fi
 }
@@ -23,7 +25,7 @@ function calligra_xgettext_internal() {
     POT_MERGED="`mktemp $podir/_merged_XXXXXXXX.pot`"
 
     $XGETTEXT ${CXG_EXTRA_ARGS} ${SRC_FILES} -o "${POT_PART_NORMAL}" --force-po
-    $XGETTEXT_PROGRAM --from-code=UTF-8 -C --kde -kkundo2_i18n:1 -kkundo2_i18np:1,2 -kkundo2_i18nc:1c,2 -kkundo2_i18ncp:1c,2,3 ${CXG_EXTRA_ARGS} ${SRC_FILES} -o "${POT_PART_QUNDOFORMAT}"
+    $XGETTEXT_PROGRAM ${XGETTEXT_FLAGS_CALLIGRA} ${CXG_EXTRA_ARGS} ${SRC_FILES} -o "${POT_PART_QUNDOFORMAT}"
 
     if [ $(cat ${POT_PART_NORMAL} ${POT_PART_QUNDOFORMAT} | grep -c \(qtundo-format\)) != 0 ]; then
         echo "ERROR: Context '(qtundo-format)' should not be added manually. Use kundo2_i18n*() calls instead." 1>&2
@@ -37,10 +39,11 @@ function calligra_xgettext_internal() {
         # Add msgctxt "(qtundo-format)" to messages not having msgctxt yet
         #
         # lastLine != "#, fuzzy" is the check for the .pot header.
+        # If lastLine starts with '"' the msgctxt has been split on several lines and is treated by sed above, so skip it
         mv "${POT_PART_QUNDOFORMAT}" "${POT_PART_QUNDOFORMAT2}"
         cat "${POT_PART_QUNDOFORMAT2}" | awk '
             /^msgid "/ {
-                if (lastLine !~ /^msgctxt/ && lastLine != "#, fuzzy") {
+                if (lastLine !~ /^\"/ && lastLine !~ /^msgctxt/ && lastLine != "#, fuzzy") {
                     print "msgctxt \"(qtundo-format)\""
                 }
             }
@@ -48,9 +51,12 @@ function calligra_xgettext_internal() {
     fi
 
     if [ -s "${POT_PART_NORMAL}" -a -s "${POT_PART_QUNDOFORMAT}" ]; then
+        # ensure an empty line or else KDE_HEADER search will fail
+        # in case POT_PART_NORMAL only contains header
+        echo "" >>${POT_PART_NORMAL}
+        
         ${MSGCAT} -F "${POT_PART_NORMAL}" "${POT_PART_QUNDOFORMAT}" > ${POT_MERGED}
         MERGED_HEADER_LINE_COUNT=$(cat ${POT_MERGED} | grep "^$" -B 100000 --max-count=1 | wc -l)
-
         KDE_HEADER="$(cat ${POT_PART_NORMAL} | grep "^$" -B 100000 --max-count=1)"
         MERGED_TAIL="$(cat ${POT_MERGED} | tail -n +$MERGED_HEADER_LINE_COUNT)"
 
@@ -58,8 +64,10 @@ function calligra_xgettext_internal() {
         echo "$KDE_HEADER"
         echo "$MERGED_TAIL"
     elif [ -s "${POT_PART_NORMAL}" ]; then
+        echo "# POT_PART_NORMAL only"
         cat "${POT_PART_NORMAL}"
     elif [ -s "${POT_PART_QUNDOFORMAT}" ]; then
+        echo "# POT_PART_QUNDOFORMAT only"
         cat "${POT_PART_QUNDOFORMAT}"
     fi
 

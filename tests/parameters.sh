@@ -19,3 +19,19 @@ XGETTEXT_FLAGS="\
 -kI18N_NOOP2:1c,2 -kI18N_NOOP2_NOSTRIP:1c,2 \
 -ktr2i18n:1 -ktr2xi18n:1 \
 "
+# copy from extract-messages.sh
+XGETTEXT_FLAGS_WWW="\
+--copyright-holder=This_file_is_part_of_KDE \
+--msgid-bugs-address=http://bugs.kde.org \
+--from-code=UTF-8 \
+-L PHP \
+-ki18n -ki18n_var -ki18n_noop \
+"
+# flags for kundo extraction
+XGETTEXT_FLAGS_CALLIGRA="\
+--copyright-holder=This_file_is_part_of_KDE \
+--msgid-bugs-address=http://bugs.kde.org \
+--from-code=UTF-8
+-C -k --kde \
+-kkundo2_i18n:1 -kkundo2_i18np:1,2 -kkundo2_i18nc:1c,2 -kkundo2_i18ncp:1c,2,3 \
+"

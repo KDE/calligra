@@ -32,7 +32,7 @@ if test 1 -ne `grep qtundo-format $podir/$potfile|wc -l`; then
     echo "FAIL: there should be 1 qtundo-format strings"
     exit 2
 fi
-if test 2 -ne `grep msgid $podir/$potfile|wc -l`; then
+if test 2 -ne `grep "^msgid \"" $podir/$potfile|wc -l`; then
     echo "FAIL: there should be 2 message strings"
     exit 3
 fi
