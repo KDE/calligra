@@ -7,6 +7,7 @@
 #     calligra_xgettext myapp.pot `find . -name \*.cpp -o -name \*.h`
 #
 function calligra_xgettext() {
+    echo -n "Creating $1 ... " 1>&2
     POTFILE="$podir/$1"
     shift
     if test -n "$*"; then
@@ -14,6 +15,10 @@ function calligra_xgettext() {
         # normally it ends with 'msgstr ""' but if plural it can end with eg 'msgstr[1] ""'
         calligra_xgettext_internal $* | tee "${POTFILE}" | tail -n1 | grep "^msgstr" > /dev/null \
             || rm -f "${POTFILE}" 2> /dev/null
+    fi
+    if [ -e ${POTFILE} ]
+    then echo "done" 1>&2
+    else echo "failed" 1>&2
     fi
 }
 
@@ -25,6 +30,15 @@ function calligra_xgettext_internal() {
     POT_MERGED="`mktemp $podir/_merged_XXXXXXXX.pot`"
 
     $XGETTEXT ${CXG_EXTRA_ARGS} ${SRC_FILES} -o "${POT_PART_NORMAL}" --force-po
+
+    XGETTEXT_FLAGS_CALLIGRA="\
+--copyright-holder=This_file_is_part_of_KDE \
+--msgid-bugs-address=http://bugs.kde.org \
+--from-code=UTF-8
+-C -k --kde \
+-kkundo2_i18n:1 -kkundo2_i18np:1,2 -kkundo2_i18nc:1c,2 -kkundo2_i18ncp:1c,2,3 \
+"
+
     $XGETTEXT_PROGRAM ${XGETTEXT_FLAGS_CALLIGRA} ${CXG_EXTRA_ARGS} ${SRC_FILES} -o "${POT_PART_QUNDOFORMAT}"
 
     if [ $(cat ${POT_PART_NORMAL} ${POT_PART_QUNDOFORMAT} | grep -c \(qtundo-format\)) != 0 ]; then

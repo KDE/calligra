@@ -27,11 +27,3 @@ XGETTEXT_FLAGS_WWW="\
 -L PHP \
 -ki18n -ki18n_var -ki18n_noop \
 "
-# flags for kundo extraction
-XGETTEXT_FLAGS_CALLIGRA="\
---copyright-holder=This_file_is_part_of_KDE \
---msgid-bugs-address=http://bugs.kde.org \
---from-code=UTF-8
--C -k --kde \
--kkundo2_i18n:1 -kkundo2_i18np:1,2 -kkundo2_i18nc:1c,2 -kkundo2_i18ncp:1c,2,3 \
-"
