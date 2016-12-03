@@ -741,7 +741,9 @@ void View::initView()
     d->zoomHandler = new KoZoomHandler();
     d->zoomController = new KoZoomController(d->canvasController, d->zoomHandler, actionCollection(), 0, this);
     d->zoomController->zoomAction()->setZoomModes(KoZoomMode::ZOOM_CONSTANT);
-    addStatusBarItem(d->zoomController->zoomAction()->createWidget(statusBar()), 0, true);
+    QWidget *zoomWidget = d->zoomController->zoomAction()->createWidget(statusBar());
+    zoomWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    addStatusBarItem(zoomWidget, 0, true);
     connect(d->zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
             this, SLOT(viewZoom(KoZoomMode::Mode,qreal)));
 
