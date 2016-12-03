@@ -39,6 +39,7 @@
 #include <QWidget>
 #include <QWheelEvent>
 #include <QFontDatabase>
+#include <QDebug>
 
 // TODO
 // improvement possibilities
@@ -236,6 +237,7 @@ void TabBarPrivate::layoutTabs()
                 break;
             }
     }
+    tabbar->updateGeometry();
 }
 
 int TabBarPrivate::tabAt(const QPoint& pos)
@@ -367,6 +369,7 @@ TabBar::TabBar(QWidget* parent, const char* /*name*/)
     d->wheelDelta = 0;
     d->autoScroll = false;
     d->offset = 64;
+    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
     // initialize the scroll buttons
     d->scrollFirstButton = new QToolButton(this);
@@ -687,7 +690,11 @@ void TabBar::resizeEvent(QResizeEvent*)
 
 QSize TabBar::sizeHint() const
 {
-    return QSize(40, style()->pixelMetric(QStyle::PM_ScrollBarExtent));
+    int h = style()->pixelMetric(QStyle::PM_ScrollBarExtent);
+    int w = 5 * h;  // we have 4 buttons, the 5 is to give some free space too
+    if (d->tabRects.size()) w += d->tabRects[d->tabRects.size() - 1].right();
+
+    return QSize(w, h);
 }
 
 void TabBar::renameTab(const QString& old_name, const QString& new_name)

@@ -771,6 +771,7 @@ void View::initView()
     d->tabScrollBarLayout = new QGridLayout(bottomPart);
     d->tabScrollBarLayout->setMargin(0);
     d->tabScrollBarLayout->setSpacing(0);
+    d->tabScrollBarLayout->setColumnStretch(1, 1);
     d->tabBar = new TabBar(0);
     d->tabScrollBarLayout->addWidget(d->tabBar, 0, 0);
     d->horzScrollBar = new QScrollBar(0);
