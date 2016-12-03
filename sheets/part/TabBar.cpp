@@ -39,7 +39,6 @@
 #include <QWidget>
 #include <QWheelEvent>
 #include <QFontDatabase>
-#include <QDebug>
 
 // TODO
 // improvement possibilities
