@@ -96,7 +96,7 @@ calligra_define_product(APP_KARBON "Karbon app (for Desktop)"  REQUIRES LIB_CALL
 calligra_define_product(APP_FLOW "Flow app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOMAIN LIB_KOPAGEAPP)
 calligra_define_product(APP_PLAN "Plan app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
 calligra_define_product(APP_BRAINDUMP "Braindump app (for Desktop)"  UNMAINTAINED  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
-calligra_define_product(DOC "Calligra Documentations")
+calligra_define_product(DOC "Calligra Documentations" STAGING)
 
 # staging apps
 calligra_define_product(APP_GEMINI "The Calligra Gemini application"  STAGING REQUIRES PART_QTQUICK PART_COMPONENTS)
