@@ -7,7 +7,6 @@
 #     calligra_xgettext myapp.pot `find . -name \*.cpp -o -name \*.h`
 #
 function calligra_xgettext() {
-    echo -n "Creating $1 ... " 1>&2
     POTFILE="$podir/$1"
     shift
     if test -n "$*"; then
@@ -15,10 +14,6 @@ function calligra_xgettext() {
         # normally it ends with 'msgstr ""' but if plural it can end with eg 'msgstr[1] ""'
         calligra_xgettext_internal $* | tee "${POTFILE}" | tail -n1 | grep "^msgstr" > /dev/null \
             || rm -f "${POTFILE}" 2> /dev/null
-    fi
-    if [ -e ${POTFILE} ]
-    then echo "done" 1>&2
-    else echo "failed" 1>&2
     fi
 }
 
