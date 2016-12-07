@@ -44,6 +44,12 @@ extern "C" STAGE_EXPORT int kdemain( int argc, char **argv )
 
     delete aboutData;
 
+    // Migrate data from kde4 to kf5 locations
+    Calligra2Migration m("calligrastage", "stage");
+    m.setConfigFiles(QStringList() << QStringLiteral("stagerc"));
+    m.setUiFiles(QStringList() << QStringLiteral("stage.rc") << QStringLiteral("stage_readonly.rc"));
+    m.migrate();
+
     if (!app.start()) {
         return 1;
     }
