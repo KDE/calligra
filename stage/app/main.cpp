@@ -21,6 +21,7 @@
 #include <KPrDocument.h>
 
 #include <KoApplication.h>
+#include <Calligra2Migration.h>
 
 #include <QLoggingCategory>
 

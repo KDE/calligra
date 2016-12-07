@@ -20,6 +20,7 @@
 #include <kcmdlineargs.h>
 
 #include <KoApplication.h>
+#include <Calligra2Migration.h>
 #include <memory>
 
 #include "FlowAboutData.h"
