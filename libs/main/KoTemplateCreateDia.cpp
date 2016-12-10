@@ -58,6 +58,7 @@
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 #include <kio/job.h>
+#include <kstandardguiitem.h>
 
 // ODF thumbnail extent
 static const int thumbnailExtent = 128;
@@ -469,7 +470,7 @@ void KoTemplateCreateDia::slotRemove() {
         }
 
     if(KMessageBox::warningContinueCancel(this, what,
-                                 removed,KGuiItem(i18n("&Delete"), koIconName("edit-delete")))==KMessageBox::Cancel) {
+                                 removed,KStandardGuiItem::del())==KMessageBox::Cancel) {
         d->m_name->setFocus();
         return;
     }

@@ -68,6 +68,7 @@
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
 #include <kxmlguifactory.h>
+#include <kstandardguiitem.h>
 
 // Calligra includes
 #include <KoComponentData.h>
@@ -1742,7 +1743,7 @@ void View::deleteSheet()
         return;
     }
     int ret = KMessageBox::warningContinueCancel(this, i18n("You are about to remove the active sheet.\nDo you want to continue?"),
-              i18n("Remove Sheet"), KGuiItem(i18n("&Delete"), koIconName("edit-delete")));
+              i18n("Remove Sheet"), KStandardGuiItem::del());
 
     if (ret == KMessageBox::Continue) {
         selection()->emitCloseEditor(false); // discard changes

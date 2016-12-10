@@ -71,6 +71,7 @@ NOT TODO:
 #include <khistorycombobox.h>
 #include <krun.h>
 #include <kcombobox.h>
+#include <kstandardguiitem.h>
 
 Thesaurus::Thesaurus()
 {
@@ -252,8 +253,7 @@ void Thesaurus::checkSection(QTextDocument *document, int startPosition, int end
         if (document)
             m_word = document->toPlainText();
         m_dialog->showButton(KoDialog::Ok, false);
-        m_dialog->setButtonGuiItem(KoDialog::Cancel,
-                KGuiItem(i18nc("@action:button Close thesaurus dialog", "&Close"), koIconName("dialog-cancel")));
+        m_dialog->setButtonGuiItem(KoDialog::Cancel, KStandardGuiItem::close());
         m_replaceLineEdit->setEnabled(false);
         m_replaceLabel->setEnabled(false);
     }
