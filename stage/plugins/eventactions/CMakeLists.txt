@@ -1,9 +1,4 @@
 include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES}  ${CMAKE_SOURCE_DIR}/stage/part)
-if(NOT QT_MAC_USE_COCOA)
-    include_directories(${PHONON_INCLUDE_DIR}/phonon)
-else()
-    include_directories(${PHONON_INCLUDE_DIR})
-endif()
 
 set(calligrastageeventactions_PART_SRCS
     sound/KPrSoundEventAction.cpp
@@ -21,8 +16,8 @@ target_link_libraries(
     calligrastageprivate
     flake
     KF5::KIOCore
-    ${PHONON_LIBS}
+    Phonon::phonon4qt5
     Qt5::Gui
-    )
+)
 
 install(TARGETS calligrastageeventactions  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/presentationeventactions)

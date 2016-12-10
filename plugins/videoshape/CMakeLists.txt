@@ -3,7 +3,6 @@ add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_video\")
 include_directories(
     ${FLAKE_INCLUDES}
     ${KOWIDGETS_INCLUDES}
-    ${PHONON_INCLUDES}
 )
 
 if(PHONON_FOUND_EXPERIMENTAL)
@@ -40,6 +39,14 @@ ki18n_wrap_ui(videoshape_LIB_SRCS forms/VideoToolWidget.ui)
 add_library(calligra_shape_video MODULE ${videoshape_LIB_SRCS})
 calligra_shape_desktop_to_json(calligra_shape_video calligra_shape_video.desktop)
 
-target_link_libraries(calligra_shape_video flake kowidgets KF5::KIOFileWidgets ${PHONON_LIBS})
+target_link_libraries(calligra_shape_video
+    flake
+    kowidgets
+    KF5::KIOFileWidgets
+    Phonon::phonon4qt5
+)
+if(PHONON_FOUND_EXPERIMENTAL)
+    target_link_libraries(calligra_shape_video Phonon::phonon4qt5experimental)
+endif()
 
 install(TARGETS calligra_shape_video DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
