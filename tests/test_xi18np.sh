@@ -1,27 +1,27 @@
 #! /bin/sh
 # test_xi18np:
-# $1: calligra_xgettext.sh 
+# $1: kundo2_aware_xgettext.sh 
 # $2: xgettext
 # $3: msgcat
 # $4: podir
 
-# source the calligra_xgettext.sh script
+# source the kundo2_aware_xgettext.sh script
 . $1
 
-# setup environment variables for calligra_xgettext.sh
+# setup environment variables for kundo2_aware_xgettext.sh
 XGETTEXT_PROGRAM=$2
 MSGCAT=$3
 podir=$4
 
 # get common parameters
 . parameters.sh
-# calligra_xgettext.sh wants this in one variable
+# kundo2_aware_xgettext.sh wants this in one variable
 XGETTEXT="$XGETTEXT_PROGRAM $XGETTEXT_FLAGS"
 
 potfile="test_xi18np.pot"
 cppfile="test_xi18np.cpp"
 
-calligra_xgettext  $potfile $cppfile
+kundo2_aware_xgettext $potfile $cppfile
 
 # check result
 if test ! -e $podir/$potfile; then

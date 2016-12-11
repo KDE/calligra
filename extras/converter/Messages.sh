@@ -1,4 +1,4 @@
 #! /bin/sh
-source ../../calligra_xgettext.sh
+source ../../kundo2_aware_xgettext.sh
 
-calligra_xgettext koconverter.pot *.cpp
+kundo2_aware_xgettext koconverter.pot *.cpp

@@ -1,18 +1,18 @@
 #
-# Helper function for extracting translatable messages from Calligra source code.
-# Usage: calligra_xgettext <pot-filename-without-path> <source-files-list>
+# Helper function for extracting translatable messages from Calligra/Krita/Kexi source code.
+# Usage: kundo2_aware_xgettext <pot-filename-without-path> <source-files-list>
 # If there are no messages or the <source-files-list> is empty, the pot file is deleted.
 #
 # Example usage that creates $podir/myapp.pot file:
-#     calligra_xgettext myapp.pot `find . -name \*.cpp -o -name \*.h`
+#     kundo2_aware_xgettext myapp.pot `find . -name \*.cpp -o -name \*.h`
 #
-function calligra_xgettext() {
+function kundo2_aware_xgettext() {
     POTFILE="$podir/$1"
     shift
     if test -n "$*"; then
         # we rely on last line being a 'msgstr' signaling that strings has been extracted (a header is always present)
         # normally it ends with 'msgstr ""' but if plural it can end with eg 'msgstr[1] ""'
-        calligra_xgettext_internal $* | tee "${POTFILE}" | tail -n1 | grep "^msgstr" > /dev/null \
+        kundo2_aware_xgettext_internal $* | tee "${POTFILE}" | tail -n1 | grep "^msgstr" > /dev/null \
             || rm -f "${POTFILE}" 2> /dev/null
     fi
 }
@@ -47,7 +47,7 @@ function add_ctxt_qtundo() {
     rm -f "${POT_PART_QUNDOFORMAT2}"
 }
 
-function calligra_xgettext_internal() {
+function kundo2_aware_xgettext_internal() {
     SRC_FILES="$*"
     POT_PART_NORMAL="`mktemp $podir/_normal_XXXXXXXX.pot`"
     POT_PART_QUNDOFORMAT="`mktemp $podir/_qundoformat_XXXXXXXX.pot`"
@@ -55,7 +55,7 @@ function calligra_xgettext_internal() {
 
     $XGETTEXT ${CXG_EXTRA_ARGS} ${SRC_FILES} -o "${POT_PART_NORMAL}" --force-po
 
-    XGETTEXT_FLAGS_CALLIGRA="\
+    XGETTEXT_FLAGS_KUNDO2="\
 --copyright-holder=This_file_is_part_of_KDE \
 --msgid-bugs-address=http://bugs.kde.org \
 --from-code=UTF-8
@@ -63,7 +63,7 @@ function calligra_xgettext_internal() {
 -kkundo2_i18n:1 -kkundo2_i18np:1,2 -kkundo2_i18nc:1c,2 -kkundo2_i18ncp:1c,2,3 \
 "
 
-    $XGETTEXT_PROGRAM ${XGETTEXT_FLAGS_CALLIGRA} ${CXG_EXTRA_ARGS} ${SRC_FILES} -o "${POT_PART_QUNDOFORMAT}"
+    $XGETTEXT_PROGRAM ${XGETTEXT_FLAGS_KUNDO2} ${CXG_EXTRA_ARGS} ${SRC_FILES} -o "${POT_PART_QUNDOFORMAT}"
 
     if [ $(cat ${POT_PART_NORMAL} ${POT_PART_QUNDOFORMAT} | grep -c \(qtundo-format\)) != 0 ]; then
         echo "ERROR: Context '(qtundo-format)' should not be added manually. Use kundo2_i18n*() calls instead." 1>&2

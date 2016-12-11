@@ -1,5 +1,5 @@
 #! /bin/sh
-source ../calligra_xgettext.sh
+source ../kundo2_aware_xgettext.sh
 
 $EXTRACTRC `find . -name \*.ui` >> rc.cpp || exit 11
-calligra_xgettext calligrafilters.pot `find . -name \*.cpp -o -name \*.cc`
+kundo2_aware_xgettext calligrafilters.pot `find . -name \*.cpp -o -name \*.cc`

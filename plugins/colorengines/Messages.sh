@@ -1,4 +1,4 @@
 #! /bin/sh
-source ../../calligra_xgettext.sh
+source ../../kundo2_aware_xgettext.sh
 
-calligra_xgettext kocolorspaces.pot `find . -name \*.cpp -o -name \*.h`
+kundo2_aware_xgettext kocolorspaces.pot `find . -name \*.cpp -o -name \*.h`

@@ -1,4 +1,4 @@
 #! /bin/sh
-source ../../calligra_xgettext.sh
+source ../../kundo2_aware_xgettext.sh
 
-calligra_xgettext calligra_shape_plugin.pot *.cpp
+kundo2_aware_xgettext calligra_shape_plugin.pot *.cpp

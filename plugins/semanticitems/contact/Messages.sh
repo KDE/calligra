@@ -1,6 +1,6 @@
 #! /bin/sh
-source ../../../calligra_xgettext.sh
+source ../../../kundo2_aware_xgettext.sh
 
 $EXTRACTRC `find . -name \*.ui` >> rc.cpp
-calligra_xgettext calligra_semanticitem_contact.pot `find . -name \*.cpp`
+kundo2_aware_xgettext calligra_semanticitem_contact.pot `find . -name \*.cpp`
 rm -f rc.cpp

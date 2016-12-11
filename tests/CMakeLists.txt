@@ -10,7 +10,7 @@ if (BASH_PROGRAM AND XGETTEXT_PROGRAM AND MSGCAT_PROGRAM)
             COMMENT "Copy test files" VERBATIM
         )
         add_test(${_TEST_NAME} ${BASH_PROGRAM} "${CMAKE_CURRENT_SOURCE_DIR}/${_TEST_NAME}.sh" 
-                                "${CMAKE_SOURCE_DIR}/calligra_xgettext.sh"
+                                "${CMAKE_SOURCE_DIR}/kundo2_aware_xgettext.sh"
                                 "${XGETTEXT_PROGRAM}"
                                 "${MSGCAT_PROGRAM}"
                                 "${CMAKE_CURRENT_BINARY_DIR}/po"
