@@ -40,7 +40,8 @@ namespace KPlato
 Node::Node(Node *parent) 
     : QObject( 0 ), // We don't use qobjects parent
       m_nodes(), m_dependChildNodes(), m_dependParentNodes(),
-      m_estimate( 0 )
+      m_estimate( 0 ),
+      m_blockChanged(false)
 {
     //debugPlan<<"("<<this<<")";
     m_parent = parent;
@@ -53,7 +54,8 @@ Node::Node(const Node &node, Node *parent)
       m_nodes(), 
       m_dependChildNodes(), 
       m_dependParentNodes(),
-      m_estimate( 0 )
+      m_estimate( 0 ),
+      m_blockChanged(false)
 {
     //debugPlan<<"("<<this<<")";
     m_parent = parent;
@@ -1225,7 +1227,15 @@ void Node::setRunningAccount(Account *acc)
     changed();
 }
 
+void Node::blockChanged(bool on)
+{
+    m_blockChanged = on;
+}
+
 void Node::changed(Node *node, int property) {
+    if (m_blockChanged) {
+        return;
+    }
     switch ( property) {
         case Type:
         case StartupCost:

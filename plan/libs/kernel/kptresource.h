@@ -177,6 +177,8 @@ public:
     DateTime startTime( long id ) const;
     DateTime endTime( long id ) const;
 
+    void blockChanged(bool on = true);
+
 #ifndef NDEBUG
 
     void printDebug( const QString& ident );
@@ -199,7 +201,7 @@ private:
     Type m_type;
 
     QList<ResourceGroupRequest*> m_requests;
-
+    bool m_blockChanged;
 };
 
 /**
@@ -492,6 +494,8 @@ public:
     /// Set the @p account
     void setAccount( Account *account );
 
+    void blockChanged(bool on = true);
+
     // for xml loading code
     
     class WorkInfoCache
@@ -564,6 +568,7 @@ private:
 
     // return this if resource has no calendar and is a material resource
     Calendar m_materialCalendar;
+    bool m_blockChanged;
 
 #ifndef NDEBUG
 public:

@@ -44,7 +44,8 @@ namespace KPlato
 {
 
 ResourceGroup::ResourceGroup()
-    : QObject( 0 ) 
+    : QObject( 0 ),
+    m_blockChanged(false)
 {
     m_project = 0;
     m_type = Type_Work;
@@ -80,8 +81,13 @@ void ResourceGroup::copy( const ResourceGroup *group )
     m_name = group->m_name;
 }
 
+void ResourceGroup::blockChanged(bool on)
+{
+    m_blockChanged = on;
+}
+
 void ResourceGroup::changed() {
-    if ( m_project ) {
+    if (m_project && !m_blockChanged) {
         m_project->changed( this );
     }
 }
@@ -319,7 +325,8 @@ Resource::Resource()
     m_project(0),
     m_parent( 0 ),
     m_autoAllocate( false ),
-    m_currentSchedule( 0 )
+    m_currentSchedule( 0 ),
+    m_blockChanged(false)
 {
     m_type = Type_Work;
     m_units = 100; // %
@@ -409,9 +416,14 @@ void Resource::copy(Resource *resource) {
     //m_externalNames = resource->m_externalNames;
 }
 
+void Resource::blockChanged(bool on)
+{
+    m_blockChanged = on;
+}
+
 void Resource::changed()
 {
-    if ( m_project ) {
+    if (m_project && !m_blockChanged) {
         m_project->changed( this );
     }
 }

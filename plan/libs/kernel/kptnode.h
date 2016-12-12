@@ -528,6 +528,8 @@ public:
     virtual void emitDocumentRemoved( Node *node, Document *doc, int idx );
     virtual void emitDocumentChanged( Node *node, Document *doc, int idx );
     
+    void blockChanged(bool on = true);
+
 public:
     // These shouldn't be available to other than those who inherits
     /// Calculate the critical path
@@ -673,7 +675,8 @@ protected:
     ResourceRequestCollection m_requests;
 
 private:
-    void init();        
+    void init();
+    bool m_blockChanged;
 };
 
 ////////////////////////////////   Estimate   ////////////////////////////////

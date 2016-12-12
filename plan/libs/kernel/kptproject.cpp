@@ -94,7 +94,16 @@ void Project::deref()
 Project::~Project()
 {
     debugPlan;
-    disconnect(); // NOTE: may be a problem if somebody uses the destroyd() signal
+    disconnect();
+    for(Node *n : nodeIdDict) {
+        n->blockChanged();
+    }
+    for (Resource *r : resourceIdDict) {
+        r->blockChanged();
+    }
+    for (ResourceGroup *g : resourceGroupIdDict) {
+        g->blockChanged();
+    }
     delete m_standardWorktime;
     while ( !m_resourceGroups.isEmpty() )
         delete m_resourceGroups.takeFirst();
