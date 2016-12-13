@@ -29,6 +29,7 @@
 
 TestColorConversionSystem::TestColorConversionSystem()
 {
+    countFail = 0;
     foreach(const KoID& modelId, KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces)) {
         foreach(const KoID& depthId, KoColorSpaceRegistry::instance()->colorDepthList(modelId, KoColorSpaceRegistry::AllColorSpaces)) {
             QList< const KoColorProfile * > profiles =
@@ -42,19 +43,39 @@ TestColorConversionSystem::TestColorConversionSystem()
     //listModels.append(ModelDepthProfile(AlphaColorModelID.id(), Integer8BitsColorDepthID.id(), ""));
 }
 
-void TestColorConversionSystem::testConnections()
+void TestColorConversionSystem::testConnections(int start, int end)
 {
-    foreach(const ModelDepthProfile& srcCS, listModels) {
-        foreach(const ModelDepthProfile& dstCS, listModels) {
+    int e = qMin(end, listModels.count());
+    for (int i = start; i < e; ++i) {
+        const ModelDepthProfile& srcCS = listModels[i];
+        dbgPigment<<i<<srcCS.model<<srcCS.depth<<srcCS.profile;
+        for (const ModelDepthProfile& dstCS : listModels) {
             QVERIFY2(KoColorSpaceRegistry::instance()->colorConversionSystem()->existsPath(srcCS.model, srcCS.depth, srcCS.profile, dstCS.model, dstCS.depth, dstCS.profile) , QString("No path between %1 / %2 and %3 / %4").arg(srcCS.model).arg(srcCS.depth).arg(dstCS.model).arg(dstCS.depth).toLatin1());
         }
     }
 }
 
-void TestColorConversionSystem::testGoodConnections()
+void TestColorConversionSystem::testConnections0()
 {
-    int countFail = 0;
-    foreach(const ModelDepthProfile& srcCS, listModels) {
+    testConnections(0, 200);
+}
+
+void TestColorConversionSystem::testConnections1()
+{
+    testConnections(200, 400);
+}
+
+void TestColorConversionSystem::testConnections2()
+{
+    testConnections(400, listModels.count());
+}
+
+void TestColorConversionSystem::testGoodConnections(int start, int end)
+{
+    int e = qMin(end, listModels.count());
+    for (int i = start; i < e; ++i) {
+        const ModelDepthProfile& srcCS = listModels[i];
+        dbgPigment<<i<<srcCS.model<<srcCS.depth<<srcCS.profile;
         foreach(const ModelDepthProfile& dstCS, listModels) {
             if (!KoColorSpaceRegistry::instance()->colorConversionSystem()->existsGoodPath(srcCS.model, srcCS.depth, srcCS.profile , dstCS.model, dstCS.depth, dstCS.profile)) {
                 ++countFail;
@@ -62,11 +83,31 @@ void TestColorConversionSystem::testGoodConnections()
             }
         }
     }
+}
+
+void TestColorConversionSystem::testGoodConnections0()
+{
+    testGoodConnections(0, 200);
+}
+
+void TestColorConversionSystem::testGoodConnections1()
+{
+    testGoodConnections(200, 400);
+}
+
+void TestColorConversionSystem::testGoodConnections2()
+{
+    testGoodConnections(400, listModels.count());
+}
+
+void TestColorConversionSystem::testFailedConnections()
+{
     int failed = 0;
     if (!KoColorSpaceRegistry::instance()->colorSpace( RGBAColorModelID.id(), Float32BitsColorDepthID.id(), 0) && KoColorSpaceRegistry::instance()->colorSpace( "KS6", Float32BitsColorDepthID.id(), 0) ) {
         failed = 42;
     }
     QVERIFY2(countFail == failed, QString("%1 tests have fails (it should have been %2)").arg(countFail).arg(failed).toLatin1());
 }
+
 
 QTEST_GUILESS_MAIN(TestColorConversionSystem)

@@ -205,13 +205,13 @@ const KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(const KoCo
 
 const KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(const QString& _colorModelId, const QString& _colorDepthId, const QString& _profileName) const
 {
-    dbgPigmentCCS << "Look for node: " << _colorModelId << " " << _colorDepthId << " " << _profileName;
+    //dbgPigmentCCS << "Look for node: " << _colorModelId << " " << _colorDepthId << " " << _profileName;
     return nodeFor(NodeKey(_colorModelId, _colorDepthId, _profileName));
 }
 
 const KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(const NodeKey& key) const
 {
-    dbgPigmentCCS << "Look for node: " << key.modelId << " " << key.depthId << " " << key.profileName << " " << d->graph.value(key);
+    //dbgPigmentCCS << "Look for node: " << key.modelId << " " << key.depthId << " " << key.profileName << " " << d->graph.value(key);
     return d->graph.value(key);
 }
 
@@ -375,7 +375,7 @@ QString KoColorConversionSystem::toDot() const
 
 bool KoColorConversionSystem::existsPath(const QString& srcModelId, const QString& srcDepthId, const QString& srcProfileName, const QString& dstModelId, const QString& dstDepthId, const QString& dstProfileName) const
 {
-    dbgPigmentCCS << "srcModelId = " << srcModelId << " srcDepthId = " << srcDepthId << " srcProfileName = " << srcProfileName << " dstModelId = " << dstModelId << " dstDepthId = " << dstDepthId << " dstProfileName = " << dstProfileName;
+    //dbgPigmentCCS << "srcModelId = " << srcModelId << " srcDepthId = " << srcDepthId << " srcProfileName = " << srcProfileName << " dstModelId = " << dstModelId << " dstDepthId = " << dstDepthId << " dstProfileName = " << dstProfileName;
     const Node* srcNode = nodeFor(srcModelId, srcDepthId, srcProfileName);
     const Node* dstNode = nodeFor(dstModelId, dstDepthId, dstProfileName);
     if (srcNode == dstNode) return true;
@@ -512,7 +512,7 @@ KoColorConversionSystem::Path KoColorConversionSystem::findBestPath(const KoColo
 {
     Q_ASSERT(srcNode);
     Q_ASSERT(dstNode);
-    dbgPigmentCCS << "Find best path between " << srcNode->id() << " and  " << dstNode->id();
+    //dbgPigmentCCS << "Find best path between " << srcNode->id() << " and  " << dstNode->id();
     if (srcNode->isHdr &&  dstNode->isHdr) {
         return findBestPathImpl(srcNode, dstNode, false);
     } else {

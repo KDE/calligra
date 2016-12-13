@@ -39,10 +39,20 @@ class TestColorConversionSystem : public QObject
 public:
     TestColorConversionSystem();
 private Q_SLOTS:
-    void testConnections();
-    void testGoodConnections();
+    void testConnections0();
+    void testConnections1();
+    void testConnections2();
+    void testGoodConnections0();
+    void testGoodConnections1();
+    void testGoodConnections2();
+    // must run after good connections
+    void testFailedConnections();
 private:
+    void testConnections(int start, int end);
+    void testGoodConnections(int start, int end);
+
     QList< ModelDepthProfile > listModels;
+    int countFail;
 };
 
 #endif
