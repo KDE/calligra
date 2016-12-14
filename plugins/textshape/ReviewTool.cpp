@@ -51,7 +51,8 @@ ReviewTool::ReviewTool(KoCanvasBase* canvas): TextTool(canvas),
     m_textEditor(0),
     m_textShapeData(0),
     m_canvas(canvas),
-    m_textShape(0)
+    m_textShape(0),
+    m_currentAnnotationShape(0)
 {
     createActions();
 }
