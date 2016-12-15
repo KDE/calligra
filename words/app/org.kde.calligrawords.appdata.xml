@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>Calligra Words</name>
+  <name xml:lang="ast">Calligra Words</name>
   <name xml:lang="ca">Words del Calligra</name>
   <name xml:lang="ca-valencia">Words del Calligra</name>
   <name xml:lang="cs">Calligra Words</name>
@@ -19,6 +20,7 @@
   <name xml:lang="uk">Calligra Words</name>
   <name xml:lang="x-test">xxCalligra Wordsxx</name>
   <summary>Word Processor</summary>
+  <summary xml:lang="ast">Procesador de Word</summary>
   <summary xml:lang="bs">Program za obradu teksta</summary>
   <summary xml:lang="ca">Processador de textos</summary>
   <summary xml:lang="ca-valencia">Processador de textos</summary>
@@ -141,6 +143,7 @@
       <li xml:lang="uk">Вбудовування об’єктів до документів.</li>
       <li xml:lang="x-test">xxAllows embedding of Documentsxx</li>
       <li>Customization of user interface</li>
+      <li xml:lang="ast">Personalización de la interfaz d'usuariu</li>
       <li xml:lang="bs">Prilagođenje korisničkog interfejsa</li>
       <li xml:lang="ca">Personalització de la interfície d'usuari</li>
       <li xml:lang="ca-valencia">Personalització de la interfície d'usuari</li>
