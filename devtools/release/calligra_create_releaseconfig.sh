@@ -1,6 +1,6 @@
 #! /bin/bash
 #
-# usage: calligra_create_releaseconfig.sh <version>
+# usage: calligra_create_releaseconfig.sh <version> <gittag>
 #
 # This script does:
 # - Clones the git repository int a temporary directory
@@ -12,12 +12,14 @@
 # This means the repository will be downloaded twice, but it means we can use a standard create_tarball_kf5.rb
 # so we do not risk messing things up for everybody else.
 #
-if [[ $# -ne 1 ]]; then
-    echo "Usage: calligra_create_releaseconfig.sh <version>"
+if [[ $# -ne 2 ]]; then
+    echo "Usage: calligra_create_releaseconfig.sh <version> <gittag>"
+    echo "Ex: calligra_create_releaseconfig.sh 3.0.0 v3.0.0"
     exit 1
 fi
 
 version=$1
+gittag=$2
 
 gitdir="./tmp"
 rm -rf "$gitdir"
@@ -26,7 +28,7 @@ mkdir "$gitdir"
 echo "Clone git repository to extract po file names..."
 here=$PWD
 cd "$gitdir"
-git archive --remote git://anongit.kde.org/calligra.git "$version" | tar -x
+git archive --remote git://anongit.kde.org/calligra.git "$gittag" | tar -x
 cd "$here"
 
 #
@@ -63,7 +65,7 @@ echo "Create config.ini file..."
 
 echo "[calligra]" > config.ini
 echo "gitModule   = yes" >> config.ini
-echo "gitTag      = $version" >> config.ini
+echo "gitTag      = $gittag" >> config.ini
 echo "mainmodule  = calligra" >> config.ini
 echo "submodule   = calligra" >> config.ini
 echo "version     = $version" >> config.ini
