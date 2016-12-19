@@ -14,7 +14,7 @@ Splitting Calligra into packages:
 
 Table Of Contents
 -----------------
-1. Debug information
+1. Recommended cmake flags
 2. Calligra plugins
 3. Calligra libraries
 4. IMPORTANT On using CPU vector capabilities in Calligra Libs
@@ -25,13 +25,20 @@ Table Of Contents
 6. Adding unmaintained applications/modules
 
 
-1. Debug information
-====================
+1. Recommended cmake flags
+==========================
 
 For alpha and beta packages, please build with debug output enabled, but for
 production packages the -DCMAKE_CXX_FLAGS="-DKDE_NO_DEBUG_OUTPUT" is recommended.
 A significant performance increase will be the result.
 
+All modules may not be ready for production release.
+It is recommended to specify -DRELEASE_BUILD=true to exclude these modules.
+
+(If you want these packages to be included anyway, specify -DRELEASE_BUILD=false.)
+
+NOTE: If RELEASE_BUILD is not set, CMAKE_BUILD_TYPE is considered.
+If it is set to Release, RelWithDebInfo or MinSizeRel, the modules are also excluded.
 
 2. Calligra plugins
 ===================
