@@ -42,6 +42,7 @@
         "Id": "org.kde.kreport.plan.text", 
         "License": "LGPL", 
         "Name": "Text", 
+        "Name[ast]": "Testu", 
         "Name[es]": "Texto", 
         "Name[fr]": "Texte", 
         "Name[it]": "Testo", 
