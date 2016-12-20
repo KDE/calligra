@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>Calligra Sheets</name>
+  <name xml:lang="ast">Calligra Sheets</name>
   <name xml:lang="ca">Sheets del Calligra</name>
   <name xml:lang="ca-valencia">Sheets del Calligra</name>
   <name xml:lang="cs">Calligra Sheets</name>
@@ -19,7 +20,6 @@
   <name xml:lang="uk">Calligra Sheets</name>
   <name xml:lang="x-test">xxCalligra Sheetsxx</name>
   <summary>Spreadsheet</summary>
-  <summary xml:lang="ast">Fueyes de cálculu</summary>
   <summary xml:lang="bs">Tablica</summary>
   <summary xml:lang="ca">Full de càlcul</summary>
   <summary xml:lang="ca-valencia">Full de càlcul</summary>
@@ -68,7 +68,6 @@
     <p xml:lang="uk">Calligra Sheets — повноцінне середовище для обчислень та роботи з електронними таблицями. Програмою можна скористатися для швидкого створення та обчислень на різноманітних пов’язаних із бізнесом електронних таблицях, зокрема вхідних та вихідних рахунках, табелів робочого часу тощо.</p>
     <p xml:lang="x-test">xxCalligra Sheets is a fully-featured calculation and spreadsheet tool. Use it to quickly create and calculate various business-related spreadsheets, such as income and expenditure, employee working hours, etc.xx</p>
     <p>Features:</p>
-    <p xml:lang="ast">Carauterístiques:</p>
     <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
     <p xml:lang="ca-valencia">Característiques:</p>
@@ -93,7 +92,6 @@
     <p xml:lang="x-test">xxFeatures:xx</p>
     <ul>
       <li>Use shapes to take notes or mind maps</li>
-      <li xml:lang="ast">Usa formes pa tomar notes o mapes mentales</li>
       <li xml:lang="bs">Koristite likove za uzimanje zabilješki ili mapa uma</li>
       <li xml:lang="ca">Usa formes per prendre notes o mapes mentals</li>
       <li xml:lang="ca-valencia">Usa formes per prendre notes o mapes mentals</li>
@@ -114,7 +112,6 @@
       <li xml:lang="uk">Використання форм для зберігання нотаток або записів на пам’ять.</li>
       <li xml:lang="x-test">xxUse shapes to take notes or mind mapsxx</li>
       <li>Large range of pre-defined templates</li>
-      <li xml:lang="ast">Rangu grande de plantíes predefiníes</li>
       <li xml:lang="bs">Širok opseg predefinisanih predložaka</li>
       <li xml:lang="ca">Àmplia gamma de plantilles predefinides</li>
       <li xml:lang="ca-valencia">Àmplia gamma de plantilles predefinides</li>
@@ -136,7 +133,6 @@
       <li xml:lang="uk">Широкий діапазон попередньо визначених шаблонів.</li>
       <li xml:lang="x-test">xxLarge range of pre-defined templatesxx</li>
       <li>Powerful and comprehensive formula list</li>
-      <li xml:lang="ast">Llistáu de fórmules poderosu y comprensible</li>
       <li xml:lang="bs">Moćna i kompaktna lista formula</li>
       <li xml:lang="ca">Llista de fórmules potent i extensa</li>
       <li xml:lang="ca-valencia">Llista de fórmules potent i extensa</li>

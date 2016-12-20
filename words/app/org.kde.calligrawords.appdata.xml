@@ -20,7 +20,6 @@
   <name xml:lang="uk">Calligra Words</name>
   <name xml:lang="x-test">xxCalligra Wordsxx</name>
   <summary>Word Processor</summary>
-  <summary xml:lang="ast">Procesador de Word</summary>
   <summary xml:lang="bs">Program za obradu teksta</summary>
   <summary xml:lang="ca">Processador de textos</summary>
   <summary xml:lang="ca-valencia">Processador de textos</summary>
@@ -71,7 +70,6 @@
     <p xml:lang="uk">Words — інтуїтивно зрозуміла у користування програма для редагування текстів та приготування матеріалів для друку. За її допомогою ви можете створювати інформативні та візуально красиві документи із задоволенням та без напруження.</p>
     <p xml:lang="x-test">xxWords is an intuitive word processor and desktop publisher application. With it, you can create informative and attractive documents with pleasure and ease.xx</p>
     <p>Features:</p>
-    <p xml:lang="ast">Carauterístiques:</p>
     <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
     <p xml:lang="ca-valencia">Característiques:</p>
@@ -143,7 +141,6 @@
       <li xml:lang="uk">Вбудовування об’єктів до документів.</li>
       <li xml:lang="x-test">xxAllows embedding of Documentsxx</li>
       <li>Customization of user interface</li>
-      <li xml:lang="ast">Personalización de la interfaz d'usuariu</li>
       <li xml:lang="bs">Prilagođenje korisničkog interfejsa</li>
       <li xml:lang="ca">Personalització de la interfície d'usuari</li>
       <li xml:lang="ca-valencia">Personalització de la interfície d'usuari</li>
