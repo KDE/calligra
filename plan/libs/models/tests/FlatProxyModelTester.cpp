@@ -547,11 +547,11 @@ void FlatProxyModelTester::testWithNodeItemModel()
     // test non 0 column
     int column = NodeModel::NodeType;
     idx = flatmodel.index(0, column);
-    QCOMPARE(flatmodel.data(idx), QVariant("Summary"));
+    QCOMPARE(flatmodel.data(idx, Qt::EditRole), QVariant(Node::Type_Summarytask));
     idx = flatmodel.index(1, column);
-    QCOMPARE(flatmodel.data(idx), QVariant("Summary"));
+    QCOMPARE(flatmodel.data(idx, Qt::EditRole), QVariant(Node::Type_Summarytask));
     idx = flatmodel.index(2, column);
-    QCOMPARE(flatmodel.data(idx), QVariant("Task"));
+    QCOMPARE(flatmodel.data(idx, Qt::EditRole), QVariant(Node::Type_Task));
     
     // test parent
     column = flatmodel.columnCount() - 1;
