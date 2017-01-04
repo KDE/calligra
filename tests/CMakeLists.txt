@@ -43,4 +43,7 @@ if (BASH_PROGRAM AND XGETTEXT_PROGRAM AND MSGCAT_PROGRAM)
     CALLIGRA_ADD_UNIT_TEST(test_kundo2_i18n)
     CALLIGRA_ADD_UNIT_TEST(test_kundo2_i18nc)
     CALLIGRA_ADD_UNIT_TEST(test_kundo2_i18nc_long)
+
+    # add test of Messages.sh
+    add_test(test_Messages ${BASH_PROGRAM} "${CMAKE_CURRENT_SOURCE_DIR}/test_messages.sh" "${CMAKE_SOURCE_DIR}")
 endif()
