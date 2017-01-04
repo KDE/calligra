@@ -125,7 +125,7 @@ Dir.chdir(gitdir)
 puts "-> Fetching git archive tag=#{options.tag} .."
 `git archive --remote git://anongit.kde.org/calligra.git #{options.tag} | tar -x`
 
-if !File.exist?("CMakeList.txt")
+if !File.exist?("CMakeLists.txt")
     puts
     puts "Failed: 'git archive' failed to fetch repository"
     puts
@@ -222,7 +222,7 @@ if options.translations
 
         # copy over the po-files we actually use in calligra
         File.foreach(pofilenames) do |pofile|
-            pofile.comp!
+            pofile.chomp!
             pofilepath = "#{tmp}/#{pofile}.po"
             if !FileTest.exist?(pofilepath)
                 # all files have not always been translated
