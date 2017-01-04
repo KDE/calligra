@@ -4,6 +4,8 @@ include_directories(  ${KOMAIN_INCLUDES}  ${CMAKE_SOURCE_DIR}/libs/widgets)
 add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
 add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
 
+find_package(KF5ThreadWeaver ${REQUIRED_KF5_VERSION} REQUIRED)
+
 #add_subdirectory(filedialogtester)
 
 # call: kowidgets_add_unit_test(<test-name> <sources> LINK_LIBRARIES <library> [<library> [...]] [GUI])

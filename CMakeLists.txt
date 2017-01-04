@@ -217,7 +217,6 @@ find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED
         Parts
         Sonnet
         TextWidgets
-        ThreadWeaver
         Wallet
         WidgetsAddons
         WindowSystem
