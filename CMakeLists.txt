@@ -195,33 +195,33 @@ set(REQUIRED_KF5_VERSION "5.7.0")
 
 find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED
     COMPONENTS
-        Archive 
-        Codecs 
+        Archive
+        Codecs
         Completion
-        Config 
-        ConfigWidgets 
+        Config
+        ConfigWidgets
         CoreAddons
         DBusAddons
         DocTools
-        GuiAddons 
-        I18n 
-        IconThemes 
+        GuiAddons
+        I18n
+        IconThemes
         ItemViews
-        KDELibs4Support
-        KIO 
-        Kross 
-        Parts 
-        Sonnet
-        TextEditor 
-        TextWidgets 
-        ThreadWeaver
-        Wallet 
-        WidgetsAddons 
-        WindowSystem
-        XmlGui 
-        NotifyConfig
-        Notifications
+        JobWidgets
         KCMUtils
+        KDELibs4Support
+        KIO
+        Kross
+        Notifications
+        NotifyConfig
+        Parts
+        Sonnet
+        TextWidgets
+        ThreadWeaver
+        Wallet
+        WidgetsAddons
+        WindowSystem
+        XmlGui
 )
 
 find_package(KF5Activities)
