@@ -22,8 +22,6 @@
 
 #include "kptdebug.h"
 
-#include <klocale.h>
-
 #include <QLocale>
 
 
