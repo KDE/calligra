@@ -45,8 +45,6 @@ target_link_libraries(kplatokernel
         kowidgetutils
         kundo2
         KF5::KIOWidgets
-    PRIVATE
-        KF5::KDELibs4Support
 )
 
 set_target_properties(kplatokernel PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
