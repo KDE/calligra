@@ -47,6 +47,7 @@ namespace KoOdfNumberStyles
     static void parseOdfTimelocale(KoXmlWriter &elementWriter, QString &format, QString &text);
     static void addCalligraNumericStyleExtension(KoXmlWriter &elementWriter, const QString &_suffix, const QString &_prefix);
 
+
 QString format(const QString &value, const NumericStyleFormat &format)
 {
     switch (format.type) {
