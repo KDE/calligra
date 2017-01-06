@@ -483,7 +483,7 @@ set_package_properties(KChart PROPERTIES
 macro_optional_find_package(KReport 3.0 QUIET)
 ## Test if the package is a stable version
 ## This is a temporary measure to avoid that the whole calligra build fails on build.kde.org
-if (KReport_FOUND AND ${KReport_VERSION_PATCH} GREATER 80)
+if (KReport_FOUND AND KReport_VERSION_PATCH GREATER 80)
     message(WARNING "KReport version found is not stable: ${KReport_VERSION}")
     set(KReport_FOUND FALSE)
 endif()
@@ -500,8 +500,8 @@ set_package_properties(KReport PROPERTIES
 macro_optional_find_package(KPropertyWidgets 3.0 QUIET)
 ## Test if the package is a stable version
 ## This is a temporary measure to avoid that the whole calligra build fails on build.kde.org
-if (KPropertyWidgets_FOUND AND ${KPropertyWidgets_VERSION_PATCH} GREATER 80)
-    message(WARNING "KProperty version found is not stable: ${KPropertyWidgets_VERSION}")
+if (KPropertyWidgets_FOUND AND KPropertyWidgets_VERSION_PATCH GREATER 80)
+    message(WARNING "KPropertyWidgets version found is not stable: ${KPropertyWidgets_VERSION}")
     set(KPropertyWidgets_FOUND FALSE)
 endif()
 set_package_properties(KPropertyWidgets PROPERTIES
