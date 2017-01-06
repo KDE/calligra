@@ -481,6 +481,12 @@ set_package_properties(KChart PROPERTIES
 ## Test for KReport
 ##
 macro_optional_find_package(KReport 3.0 QUIET)
+## Test if the package is a stable version
+## This is a temporary measure to avoid that the whole calligra build fails on build.kde.org
+if (KReport_FOUND AND ${KReport_VERSION_PATCH} GREATER 80)
+    message(WARNING "KReport version found is not stable: ${KReport_VERSION}")
+    set(KReport_FOUND FALSE)
+endif()
 set_package_properties(KReport PROPERTIES
     DESCRIPTION "A framework for the creation and generation of reports in multiple formats"
     URL "https://community.kde.org/KReport"
@@ -492,13 +498,18 @@ set_package_properties(KReport PROPERTIES
 ## Test for KPropertyWidgets
 ##
 macro_optional_find_package(KPropertyWidgets 3.0 QUIET)
+## Test if the package is a stable version
+## This is a temporary measure to avoid that the whole calligra build fails on build.kde.org
+if (KPropertyWidgets_FOUND AND ${KPropertyWidgets_VERSION_PATCH} GREATER 80)
+    message(WARNING "KProperty version found is not stable: ${KPropertyWidgets_VERSION}")
+    set(KPropertyWidgets_FOUND FALSE)
+endif()
 set_package_properties(KPropertyWidgets PROPERTIES
     DESCRIPTION "A property editing framework with editor widget"
     URL "https://community.kde.org/KProperty"
     PURPOSE "Required by Plan"
     TYPE RECOMMENDED
 )
-
 ##
 ## Test for eigen3
 ##
