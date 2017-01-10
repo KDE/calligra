@@ -258,13 +258,16 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED
 find_package(Qt5 ${REQUIRED_QT_VERSION} QUIET
     COMPONENTS
         DBus
-        Declarative
         OpenGL
         Quick
         Sql
         WebKit
         WebKitWidgets
 )
+# Qt5Declarative was removed in Qt 5.6.0 so search for it in a separate call
+# Including it in a collected find_package(Qt5 ...) call can lead to a fatal not-found error:
+# * Qt5 (required version >= 5.3.0)
+find_package(Qt5Declarative ${REQUIRED_QT_VERSION} QUIET)
 
 set_package_properties(Qt5DBus PROPERTIES
     TYPE RECOMMENDED
