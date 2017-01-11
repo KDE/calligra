@@ -130,7 +130,7 @@ namespace wvWare
         void parsePicture( const PictureData& data );
 
         //Can't create Functor for textbox in advance.  Index into plcfTxbxTxt unknown.
-        virtual void parseTextBox(uint index, bool stylesxml);
+        virtual void parseTextBox(unsigned int index, bool stylesxml);
 
     protected:
         // First all variables which don't change their state during

@@ -301,7 +301,7 @@ void Parser9x::parseTableRow( const TableRowData& data )
 #endif
 }
 
-void Parser9x::parseTextBox(uint index, bool stylesxml)
+void Parser9x::parseTextBox(unsigned int index, bool stylesxml)
 {
     const PLCF<Word97::FTXBXS>* plcftxbxTxt = 0;
     if (stylesxml) {
