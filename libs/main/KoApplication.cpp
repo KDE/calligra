@@ -139,7 +139,7 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType,
 
     KAboutData::setApplicationData( aboutData );
 
-    setWindowIcon(QIcon::fromTheme(windowIconName));
+    setWindowIcon(QIcon::fromTheme(windowIconName, windowIcon()));
 
     KoApplication::KoApp = this;
 

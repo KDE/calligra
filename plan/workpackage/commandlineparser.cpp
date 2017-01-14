@@ -40,7 +40,7 @@ CommandLineParser::CommandLineParser()
 {
     KAboutData *aboutData = KPlatoWork::newAboutData();
     KAboutData::setApplicationData( *aboutData );
-    qApp->setWindowIcon(QIcon::fromTheme(QStringLiteral("calligraplanwork")));
+    qApp->setWindowIcon(QIcon::fromTheme(QStringLiteral("calligraplanwork"), qApp->windowIcon()));
 
     aboutData->setupCommandLine(&m_commandLineParser);
     m_commandLineParser.addHelpOption();
