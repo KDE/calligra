@@ -32,6 +32,12 @@
 extern "C" KPLATOWORK_EXPORT int kdemain( int argc, char **argv )
 {
     QApplication app(argc, argv);
+#ifdef Q_OS_MACOS
+        // app.applicationName() will return "Plan Work" because of the nice name
+        // set in the Info.plist. DBus doesn't like the resulting space in the 
+        // service name, so reset the application name:
+        app.setApplicationName("calligraplanwork");
+#endif
     KDBusService service(KDBusService::Unique);
     // we come here only once...
 
