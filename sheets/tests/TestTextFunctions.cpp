@@ -26,6 +26,9 @@ void TestTextFunctions::initTestCase()
 }
 
 #define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
+// CHECK_EVAL has the side effect that the valuy 'y' is modified, e.g due to localization
+// Use CHECK_VALUE2 where this this is a problem
+#define CHECK_EVAL2(x,y,r) { Value z(y); QCOMPARE(evaluate(x,z),r); }
 
 Value TestTextFunctions::evaluate(const QString& formula, Value& ex)
 {
@@ -114,12 +117,19 @@ void TestTextFunctions::testFIND()
 
 void TestTextFunctions::testFIXED()
 {
-    CHECK_EVAL("FIXED(12345;3)", Value("12,345.000"));
+    // localize the expected value
+    QLocale loc = QLocale::system();
+    Value expected(loc.toString(12345.0, 'f', 3));
+
+    CHECK_EVAL2("FIXED(12345;3)", Value("12,345.000"), expected);
     CHECK_EVAL("ISTEXT(FIXED(12345;3))", Value(true));
-    CHECK_EVAL("FIXED(12345;3;FALSE())", Value("12,345.000"));
-    CHECK_EVAL("FIXED(12345;3.95;FALSE())", Value("12,345.000"));
-    CHECK_EVAL("FIXED(12345;4;TRUE())", Value("12345.0000"));
-    CHECK_EVAL("FIXED(123.45;1)", Value("123.5"));
+    CHECK_EVAL2("FIXED(12345;3;FALSE())", Value("12,345.000"), expected);
+    CHECK_EVAL2("FIXED(12345;3.95;FALSE())", Value("12,345.000"), expected);
+
+    expected = Value(loc.toString(12345.0, 'f', 4).remove(loc.groupSeparator()));
+    CHECK_EVAL2("FIXED(12345;4;TRUE())", Value("12345.0000"), expected);
+    expected = Value(loc.toString(123.45, 'f', 1));
+    CHECK_EVAL2("FIXED(123.45;1)", Value("123.5"), expected);
     CHECK_EVAL("FIXED(125.45; -1)", Value("130"));
     CHECK_EVAL("FIXED(125.45; -1.1)", Value("130"));
     CHECK_EVAL("FIXED(125.45; -1.9)", Value("130"));

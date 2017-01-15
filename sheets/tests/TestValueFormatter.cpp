@@ -24,6 +24,8 @@
 #include <ValueConverter.h>
 #include <ValueParser.h>
 
+#include <KLocale>
+
 #include <QTest>
 
 Q_DECLARE_METATYPE(Calligra::Sheets::Format::Type)
@@ -212,9 +214,11 @@ void TestValueFormatter::testCreateNumberFormat_data()
 
     QTest::newRow("no thousands separators") <<
             3000.0 << 0 << Format::Number << Style::DefaultFloatFormat << "" << "" << false << "3000";
-    QTest::newRow("with thousands separators") <<
+    QTest::newRow("with thousands separator") <<
             3000.0 << 0 << Format::Number << Style::DefaultFloatFormat << "" << "" << true << "3,000";
 
+    QTest::newRow("with thousands separators and decimal point") <<
+            3000123.456 << 3 << Format::Number << Style::DefaultFloatFormat << "" << "" << true << "3,000,123.456";
 }
 
 void TestValueFormatter::testCreateNumberFormat()
@@ -230,7 +234,24 @@ void TestValueFormatter::testCreateNumberFormat()
 
     Number num(value);
     PublicValueFormatter fmt(m_converter);
-    QCOMPARE(fmt.createNumberFormat(num, precision, formatType, floatFormat, currencySymbol, formatString, thousandsSep), result);
+
+    // FIXME: fix tests when ported to QLocale
+    QString res = result;
+    QString decpoint =  m_calcsettings->locale()->decimalSymbol();
+    QString thousep = m_calcsettings->locale()->thousandsSeparator();
+    int decimalpos = res.indexOf('.');
+    if (thousep != ",") {
+        if (res.contains(',')) {
+            res = res.replace(',', thousep.at(0));
+        }
+    }
+    if (decpoint != ".") {
+        if (decimalpos != -1) {
+            decimalpos = res.lastIndexOf('.'); // the thousand separator may now be '.'
+            res = res.replace(decimalpos, 1, decpoint.at(0));
+        }
+    }
+    QCOMPARE(fmt.createNumberFormat(num, precision, formatType, floatFormat, currencySymbol, formatString, thousandsSep), res);
 }
 
 

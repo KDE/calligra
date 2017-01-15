@@ -28,6 +28,8 @@
 
 #include <QTest>
 
+#include <KLocalizedString>
+
 Q_DECLARE_METATYPE(complex<Number>)
 
 using namespace Calligra::Sheets;
@@ -53,14 +55,23 @@ void TestValueConverter::initTestCase()
     // Custom reference date to make sure all date conversions use this date.
     m_calcsettings->setReferenceDate(QDate(2000, 1, 1));
 
-    // Some tests need translations of certain words. Install some xx translations into test path
-    // for some arbitrary language (nl).
-    QStandardPaths::setTestModeEnabled(true);
+    // Some tests need translations of certain words.
+    // These are available in .mo file in the data directory.
+    // Install these xx translations into test path for some arbitrary language.
+    // We use the 'nl'.
     QString dataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
     QString localePath = dataPath + "/locale/nl/LC_MESSAGES";
     QVERIFY(QDir(localePath).mkpath("."));
-    m_translationsFile = localePath + "/sheets.mo";
-    QFile::copy(QFINDTESTDATA("data/sheets.mo"), m_translationsFile);
+    m_translationsFile = localePath + "/calligrasheets.mo";
+    if (QFile::exists(m_translationsFile)) {
+        QFile::remove(m_translationsFile);
+    }
+    // NOTE: sheets.mo -> calligrasheets.mo. Maybe rename sheets.mo
+    QVERIFY(QFile::copy(QFINDTESTDATA("data/sheets.mo"), m_translationsFile));
+
+    // check that translation ok, else lot of tests will fail later
+    QString s = ki18n("true").toString(QStringList()<<"nl");
+    QVERIFY2(s == QString("xxtruexx"), "Translation failed, check that you have the correct .mo file in the data directorey and that it installs correctly");
 }
 
 void TestValueConverter::cleanupTestCase()
@@ -451,10 +462,10 @@ void TestValueConverter::testAsString_data()
 
     QTest::newRow("empty") << "C" << Value() << "";
 
-    QTest::newRow("bool true") << "C" << Value(true) << "True";
-    QTest::newRow("bool false") << "C" << Value(false) << "False";
-    QTest::newRow("bool true xx") << "nl" << Value(true) << "xxTruexx";
-    QTest::newRow("bool false xx") << "nl" << Value(false) << "xxFalsexx";
+    QTest::newRow("bool True") << "C" << Value(true) << "True";
+    QTest::newRow("bool False") << "C" << Value(false) << "False";
+    QTest::newRow("bool True xx") << "nl" << Value(true) << "xxTruexx";
+    QTest::newRow("bool False xx") << "nl" << Value(false) << "xxFalsexx";
 
     QTest::newRow("integer plain") << "C" << Value(123) << "123";
     QTest::newRow("integer percent") << "C" << ValueWithFormat(3, Value::fmt_Percent)

@@ -34,14 +34,25 @@ void TestValueParser::initTestCase()
     m_calcsettings = new CalculationSettings();
     m_parser = new ValueParser(m_calcsettings);
 
-    // Some tests need translations of certain words. Install some xx translations into test path
-    // for some arbitrary language (nl).
     QStandardPaths::setTestModeEnabled(true);
+
+    // Some tests need translations of certain words.
+    // These are available in .mo file in the data directory.
+    // Install these xx translations into test path for some arbitrary language.
+    // We use the 'nl'.
     QString dataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
     QString localePath = dataPath + "/locale/nl/LC_MESSAGES";
     QVERIFY(QDir(localePath).mkpath("."));
-    m_translationsFile = localePath + "/sheets.mo";
-    QFile::copy(QFINDTESTDATA("data/sheets.mo"), m_translationsFile);
+    m_translationsFile = localePath + "/calligrasheets.mo";
+    if (QFile::exists(m_translationsFile)) {
+        QFile::remove(m_translationsFile);
+    }
+    // NOTE: sheets.mo -> calligrasheets.mo. Maybe rename sheets.mo
+    QVERIFY(QFile::copy(QFINDTESTDATA("data/sheets.mo"), m_translationsFile));
+
+    // check that translation ok, else lot of tests will fail later
+    QString s = ki18n("true").toString(QStringList()<<"nl");
+    QVERIFY2(s == QString("xxtruexx"), "Translation failed, check that you have the correct .mo file in the data directorey and that it installs correctly");
 }
 
 void TestValueParser::cleanupTestCase()
@@ -260,22 +271,22 @@ void TestValueParser::testTryParseDate_data(bool addCol)
     QTest::newRow("IsoOrdinal error 3") << "C" << "2000-367" << false
         << Value(QDate(), m_calcsettings);
 
-    QTest::newRow("ShortDate-year us") << "us" << "06/11" << true
-        << Value(QDate(2015, 6, 11), m_calcsettings);
-    QTest::newRow("ShortDate-year us bad month 1") << "us" << "06/0" << false
+    QTest::newRow("ShortDate-year us") << "us" << "12/30" << true
+        << Value(QDate(QDate::currentDate().year(), 12, 30), m_calcsettings);
+    QTest::newRow("ShortDate-year us bad month 1") << "us" << "0/06" << false
         << Value(QDate(), m_calcsettings);
-    QTest::newRow("ShortDate-year us bad month 2") << "us" << "06/13" << true
-        << Value(QDate(2015, 6, 13), m_calcsettings);
-    QTest::newRow("ShortDate-year us bad day 1") << "us" << "0/11" << false
+    QTest::newRow("ShortDate-year us bad month 2") << "us" << "13/06" << false
         << Value(QDate(), m_calcsettings);
-    QTest::newRow("ShortDate-year us bad day 2") << "us" << "33/11" << false
+    QTest::newRow("ShortDate-year us bad day 1") << "us" << "11/0" << false
         << Value(QDate(), m_calcsettings);
-    QTest::newRow("ShortDate-year nl") << "nl" << "11/06" << true
-        << Value(QDate(2015, 6, 11), m_calcsettings);
-    QTest::newRow("ShortDate-year nl bad month 1") << "nl" << "0/06" << false
+    QTest::newRow("ShortDate-year us bad day 2") << "us" << "11/33" << false
         << Value(QDate(), m_calcsettings);
-    QTest::newRow("ShortDate-year nl bad month 2") << "nl" << "13/06" << true
-        << Value(QDate(2015, 6, 13), m_calcsettings);
+    QTest::newRow("ShortDate-year nl") << "nl" << "30/12" << true
+        << Value(QDate(QDate::currentDate().year(), 12, 30), m_calcsettings);
+    QTest::newRow("ShortDate-year nl bad month 1") << "nl" << "06/0" << false
+        << Value(QDate(), m_calcsettings);
+    QTest::newRow("ShortDate-year nl bad month 2") << "nl" << "06/13" << false
+        << Value(QDate(), m_calcsettings);
     QTest::newRow("ShortDate-year nl bad day 1") << "nl" << "11/0" << false
         << Value(QDate(), m_calcsettings);
     QTest::newRow("ShortDate-year nl bad day 2") << "nl" << "11/33" << false
