@@ -28,7 +28,7 @@
 
 #include <QTest>
 
-#include <KLocalizedString>
+#include <locale.h>
 
 Q_DECLARE_METATYPE(complex<Number>)
 
@@ -55,12 +55,23 @@ void TestValueConverter::initTestCase()
     // Custom reference date to make sure all date conversions use this date.
     m_calcsettings->setReferenceDate(QDate(2000, 1, 1));
 
+    QStandardPaths::setTestModeEnabled(true);
+
+    // If run with 'C' locale translations will fail
+    // Setting it to 'C.UTF-8' fixes this
+    char *l = setlocale(LC_MESSAGES, 0);
+    if (l && strcmp(l, "C") == 0) {
+        setlocale(LC_MESSAGES, "C.UTF-8");
+        qDebug()<<"Set locale:"<<l<<"->"<<setlocale(LC_MESSAGES, 0);
+    }
+
     // Some tests need translations of certain words.
     // These are available in .mo file in the data directory.
     // Install these xx translations into test path for some arbitrary language.
     // We use the 'nl'.
+    QString locale = "nl";
     QString dataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
-    QString localePath = dataPath + "/locale/nl/LC_MESSAGES";
+    QString localePath = dataPath + "/locale/" + locale + "/LC_MESSAGES";
     QVERIFY(QDir(localePath).mkpath("."));
     m_translationsFile = localePath + "/calligrasheets.mo";
     if (QFile::exists(m_translationsFile)) {
@@ -70,7 +81,9 @@ void TestValueConverter::initTestCase()
     QVERIFY(QFile::copy(QFINDTESTDATA("data/sheets.mo"), m_translationsFile));
 
     // check that translation ok, else lot of tests will fail later
-    QString s = ki18n("true").toString(QStringList()<<"nl");
+    *m_calcsettings->locale() = KLocale(locale, locale);
+    QCOMPARE(m_calcsettings->locale()->country(), locale);
+    QString s = ki18n("true").toString(QStringList()<<locale);
     QVERIFY2(s == QString("xxtruexx"), "Translation failed, check that you have the correct .mo file in the data directorey and that it installs correctly");
 }
 
