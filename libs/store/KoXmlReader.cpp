@@ -228,7 +228,7 @@ unsigned depth: 28;
     QString value;
 
     // it is important NOT to have a copy constructor, so that growth is optimal
-    // see http://doc.trolltech.com/4.2/containers.html#growth-strategies
+    // see https://doc.qt.io/qt-5/containers.html#growth-strategies
 #if 0
     KoXmlPackedItem(): attr(false), type(KoXmlNode::NullNode), childStart(0), depth(0) {}
 #endif
