@@ -272,6 +272,7 @@ public:
     friend CALLIGRA_SHEETS_ODF_EXPORT uint qHash(const Style& style);
     void operator=(const Style& style);
     Style operator-(const Style& style) const;
+    /// Insert and replace substyles from style
     void merge(const Style& style);
 
     /**
@@ -466,5 +467,8 @@ public:
 Q_DECLARE_TYPEINFO(Calligra::Sheets::Style, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(Calligra::Sheets::CustomStyle, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(Calligra::Sheets::SharedSubStyle, Q_MOVABLE_TYPE);
+
+CALLIGRA_SHEETS_ODF_TEST_EXPORT QDebug operator<<( QDebug dbg, const Calligra::Sheets::Style *style );
+CALLIGRA_SHEETS_ODF_TEST_EXPORT QDebug operator<<( QDebug dbg, const Calligra::Sheets::Style &style );
 
 #endif // CALLIGRA_SHEETS_STYLE

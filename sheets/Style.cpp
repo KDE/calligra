@@ -1572,3 +1572,19 @@ QSet<Style::Key> CustomStyle::definedKeys(const StyleManager *) const
     return keys;
 }
 
+QDebug operator<<(QDebug dbg, const Calligra::Sheets::Style *s)
+{
+    if (s) {
+        dbg << (*s);
+    } else {
+        dbg << "Style[0x0]";
+    }
+    return dbg;
+}
+
+QDebug operator<<(QDebug dbg, const Calligra::Sheets::Style &s)
+{
+    static const char *types[] = {"Builtin", "Custom", "Auto", "Tentative"};
+    dbg << "Style["<<types[s.type()]<<"]";
+    return dbg;
+}

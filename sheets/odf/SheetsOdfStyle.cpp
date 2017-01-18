@@ -530,30 +530,37 @@ void Odf::loadTableCellProperties(Style *style, KoOdfStylesReader& stylesReader,
         style->setTopBorderPen(pen);
         style->setBottomBorderPen(pen);
         style->setRightBorderPen(pen);
+        debugSheetsODF<<"\t\tfo:border"<<str;
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "border-left")) {
         str = styleStack.property(KoXmlNS::fo, "border-left");
         style->setLeftBorderPen(decodePen(str));
+        debugSheetsODF<<"\t\tfo:border-left"<<str;
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "border-right")) {
         str = styleStack.property(KoXmlNS::fo, "border-right");
         style->setRightBorderPen(decodePen(str));
+        debugSheetsODF<<"\t\tfo:border-right"<<str;
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "border-top")) {
         str = styleStack.property(KoXmlNS::fo, "border-top");
         style->setTopBorderPen(decodePen(str));
+        debugSheetsODF<<"\t\tfo:border-top"<<str;
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "border-bottom")) {
         str = styleStack.property(KoXmlNS::fo, "border-bottom");
         style->setBottomBorderPen(decodePen(str));
+        debugSheetsODF<<"\t\tfo:border-bottom"<<str;
     }
     if (styleStack.hasProperty(KoXmlNS::style, "diagonal-tl-br")) {
         str = styleStack.property(KoXmlNS::style, "diagonal-tl-br");
         style->setFallDiagonalPen(decodePen(str));
+        debugSheetsODF<<"\t\tfo:diagonal-tl-br"<<str;
     }
     if (styleStack.hasProperty(KoXmlNS::style, "diagonal-bl-tr")) {
         str = styleStack.property(KoXmlNS::style, "diagonal-bl-tr");
         style->setGoUpDiagonalPen(decodePen(str));
+        debugSheetsODF<<"\t\tfo:diagonal-bl-tr"<<str;
     }
 
     if (styleStack.hasProperty(KoXmlNS::draw, "style-name") || styleStack.hasProperty(KoXmlNS::calligra, "fill-style-name")) {
