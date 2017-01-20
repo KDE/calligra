@@ -1694,11 +1694,13 @@ void Axis::saveOdf(KoShapeSavingContext &context)
     const QString titleStyleName = mainStyles.insert(axisTitleStyle, "ch");
     bodyWriter.addAttribute("chart:style-name", titleStyleName);
 
-    QString axisLabel = d->titleData->document()->toPlainText();
-    if (!axisLabel.isEmpty()) {
-        bodyWriter.startElement("text:p");
-        bodyWriter.addTextNode(axisLabel);
-        bodyWriter.endElement(); // text:p
+    if (d->title->isVisible()) {
+        QString axisLabel = d->titleData->document()->toPlainText();
+        if (!axisLabel.isEmpty()) {
+            bodyWriter.startElement("text:p");
+            bodyWriter.addTextNode(axisLabel);
+            bodyWriter.endElement(); // text:p
+        }
     }
 
     bodyWriter.endElement(); // chart:title
