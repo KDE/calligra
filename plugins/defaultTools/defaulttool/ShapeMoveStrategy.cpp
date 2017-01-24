@@ -37,6 +37,7 @@ ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
     : KoInteractionStrategy(tool)
     , m_start(clicked)
     , m_canvas(tool->canvas())
+    , m_firstMove(true)
 {
     QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
     QRectF boundingRect;
@@ -60,6 +61,13 @@ void ShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifi
 {
     if(m_selectedShapes.isEmpty())
         return;
+
+    if (m_firstMove) {
+        // skip first move to avoid accidental move during mouse button press
+        m_firstMove = false;
+        return;
+    }
+
     QPointF diff = point - m_start;
 
     if (modifiers & (Qt::AltModifier | Qt::ControlModifier)) {
