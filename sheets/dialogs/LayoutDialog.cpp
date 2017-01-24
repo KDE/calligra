@@ -1658,6 +1658,21 @@ void CellFormatPageFloat::apply(StyleCommand* _obj)
             _obj->setCurrency(currency);
         }
     }
+    if (newFormatType == Format::Scientific) {
+        // FIXME: temprorary fix to at least get precision to work
+        // TODO: Add min-exponent-digits to dialog
+        // Custom format overrides precision, so create a proper one
+        QString format = "0.";
+        if (precision->value() > 0) {
+            for (int i = 0; i < precision->value(); ++i)
+                format.append('0');
+        }
+        format.append("E+00");
+        _obj->setCustomFormat(format);
+    } else {
+        // nothing else needs custom format
+        _obj->setCustomFormat(QString());
+    }
 }
 
 

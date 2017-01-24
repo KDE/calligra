@@ -266,7 +266,12 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
         if (formatString.isEmpty()) {
             return prefix + postfix;
         } else if (formatString.contains(QLatin1Char('.'))) {
-            precision = formatString.length() - formatString.indexOf(QLatin1Char('.')) - 1;
+            // if it contains an 'E', precision is zeros between '.' and 'E'
+            int len = formatString.indexOf(QLatin1Char('E'));
+            if (len == -1) {
+                len = formatString.length();
+            }
+            precision = len - formatString.indexOf(QLatin1Char('.')) - 1;
         } else if (precision != -1) {
             precision = 0;
         }
@@ -330,8 +335,28 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
     case Format::Scientific: {
         const QString decimalSymbol = m_converter->settings()->locale()->decimalSymbol();
         localizedNumber = QString::number(val, 'E', p);
-        if ((pos = localizedNumber.indexOf('.')) != -1)
+        if ((pos = localizedNumber.indexOf('.')) != -1) {
             localizedNumber.replace(pos, 1, decimalSymbol);
+        }
+        // TODO: port to QLocale or other (icu?) formatting
+        int fpos = formatString.indexOf('E');
+        if (fpos > -1) {
+            // handle min-exponent-digits
+            int exp = 0;
+            for (int pos = fpos +2; pos < formatString.length() && formatString.at(pos).isDigit(); ++pos) {
+                ++exp;
+            }
+            if (exp == 0) {
+                exp = 2; // FIXME: proper default
+            }
+            for (int pos = localizedNumber.length() - 1; localizedNumber.at(pos).isDigit(); --pos) {
+                --exp;
+            }
+            int pos = localizedNumber.indexOf('E') + 2;
+            for (; exp > 0; --exp) {
+                localizedNumber.insert(pos, '0');
+            }
+        }
         break;
     }
     default :
@@ -346,21 +371,23 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
         if (m_converter->settings()->locale()->positiveSign().isEmpty())
             localizedNumber = '+' + localizedNumber;
 
-    // Remove trailing zeros and the decimal point if necessary
-    // unless the number has no decimal point
-    if (precision == -1) {
-        QString decimalSymbol = m_converter->settings()->locale()->decimalSymbol();
-        if (decimalSymbol.isNull())
-            decimalSymbol = '.';
+    if (fmt != Format::Scientific) {
+        // Remove trailing zeros and the decimal point if necessary
+        // unless the number has no decimal point
+        if (precision == -1) {
+            QString decimalSymbol = m_converter->settings()->locale()->decimalSymbol();
+            if (decimalSymbol.isNull())
+                decimalSymbol = '.';
 
-        localizedNumber = removeTrailingZeros(localizedNumber, decimalSymbol);
-    }
+            localizedNumber = removeTrailingZeros(localizedNumber, decimalSymbol);
+        }
 
-    // Remove thousands separators if necessary
-    if (!thousandsSep) {
-        const QString separator = m_converter->settings()->locale()->thousandsSeparator();
-        if (!separator.isNull()) {
-            localizedNumber.remove(separator);
+        // Remove thousands separators if necessary
+        if (!thousandsSep) {
+            const QString separator = m_converter->settings()->locale()->thousandsSeparator();
+            if (!separator.isNull()) {
+                localizedNumber.remove(separator);
+            }
         }
     }
 

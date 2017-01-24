@@ -163,6 +163,9 @@ public:
     void setDefault() {
         m_style->setDefault();
     }
+    void setCustomFormat(const QString &format) {
+        m_style->setCustomFormat(format);
+    }
 
 protected:
     virtual bool process(Element*);
