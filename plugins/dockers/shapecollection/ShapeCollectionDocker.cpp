@@ -49,6 +49,7 @@
 #include <QSize>
 #include <QToolButton>
 #include <QDir>
+#include <QMap>
 #include <QMenu>
 #include <QPainter>
 #include <QDebug>
@@ -236,13 +237,21 @@ void ShapeCollectionDocker::unsetCanvas()
     setEnabled(false);
 }
 
+static
+bool operator<(const KoShapeTemplate &left, const KoShapeTemplate &right)
+{
+    const auto &leftId = left.templateId.isEmpty() ? left.id : left.templateId;
+    const auto &rightId = right.templateId.isEmpty() ? right.id : right.templateId;
+    return leftId < rightId;
+}
+
 void ShapeCollectionDocker::loadDefaultShapes()
 {
-    QList<KoCollectionItem> defaultList;
-    QList<KoCollectionItem> arrowList;
-    QList<KoCollectionItem> funnyList;
-    QList<KoCollectionItem> geometricList;
-    QList<KoCollectionItem> quicklist;
+    QMap<KoShapeTemplate, KoCollectionItem> defaultList;
+    QMap<KoShapeTemplate, KoCollectionItem> arrowList;
+    QMap<KoShapeTemplate, KoCollectionItem> funnyList;
+    QMap<KoShapeTemplate, KoCollectionItem> geometricList;
+    QMap<KoShapeTemplate, KoCollectionItem> quicklist;
     int quickCount=0;
 
     QStringList quickShapes;
@@ -271,13 +280,13 @@ void ShapeCollectionDocker::loadDefaultShapes()
             temp.icon = QIcon::fromTheme(shapeTemplate.iconName);
             temp.properties = shapeTemplate.properties;
             if(shapeTemplate.family == "funny")
-                funnyList.append(temp);
+                funnyList[shapeTemplate] = temp;
             else if(shapeTemplate.family == "arrow")
-                arrowList.append(temp);
+                arrowList[shapeTemplate] = temp;
             else if(shapeTemplate.family == "geometric")
-                geometricList.append(temp);
+                geometricList[shapeTemplate] = temp;
             else
-                defaultList.append(temp);
+                defaultList[shapeTemplate] = temp;
 
             QString id= temp.id;
             if (!shapeTemplate.templateId.isEmpty()) {
@@ -285,52 +294,54 @@ void ShapeCollectionDocker::loadDefaultShapes()
             }
 
             if (quickShapes.contains(id)) {
-                quicklist.append(temp);
+                quicklist[shapeTemplate] = temp;
                 quickCount++;
             }
         }
 
         if(!oneAdded) {
             KoCollectionItem temp;
-            temp.id = factory->id();
-            temp.name = factory->name();
-            temp.toolTip = factory->toolTip();
+            KoShapeTemplate tempShape;
+            temp.id = tempShape.id = factory->id();
+            temp.name = tempShape.name = factory->name();
+            temp.toolTip = tempShape.toolTip = factory->toolTip();
             temp.icon = QIcon::fromTheme(factory->iconName());
-            temp.properties = 0;
+            tempShape.iconName = factory->iconName();
+            temp.properties = tempShape.properties = 0;
             if(factory->family() == "funny")
-                funnyList.append(temp);
+                funnyList[tempShape] = temp;
             else if(factory->family() == "arrow")
-                arrowList.append(temp);
+                arrowList[tempShape] = temp;
             else if(factory->family() == "geometric")
-                geometricList.append(temp);
+                geometricList[tempShape] = temp;
             else
-                defaultList.append(temp);
+                defaultList[tempShape] = temp;
 
             if(quickShapes.contains(temp.id)) {
-                quicklist.append(temp);
+                quicklist[tempShape] = temp;
                 quickCount++;
             }
         }
     }
 
     CollectionItemModel* model = new CollectionItemModel(this);
-    model->setShapeTemplateList(defaultList);
+    model->setShapeTemplateList(defaultList.values());
     addCollection("default", i18n("Default"), model);
 
     model = new CollectionItemModel(this);
-    model->setShapeTemplateList(geometricList);
+    model->setShapeTemplateList(geometricList.values());
     addCollection("geometric", i18n("Geometrics"), model);
 
     model = new CollectionItemModel(this);
-    model->setShapeTemplateList(arrowList);
+    model->setShapeTemplateList(arrowList.values());
     addCollection("arrow", i18n("Arrows"), model);
 
     model = new CollectionItemModel(this);
-    model->setShapeTemplateList(funnyList);
+    model->setShapeTemplateList(funnyList.values());
     addCollection("funny", i18n("Funny"), model);
 
     CollectionItemModel* quickModel = new CollectionItemModel(this);
-    quickModel->setShapeTemplateList(quicklist);
+    quickModel->setShapeTemplateList(quicklist.values());
     m_quickView->setModel(quickModel);
 
     int fw = m_quickView->frameWidth();
