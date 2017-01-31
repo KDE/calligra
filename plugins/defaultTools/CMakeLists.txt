@@ -27,6 +27,7 @@ set ( defaulttools_SRCS
     defaulttool/ShapeShearStrategy.cpp
     defaulttool/SelectionDecorator.cpp
     defaulttool/SelectionTransformCommand.cpp
+    defaulttool/ChartResizeStrategy.cpp
 
     guidestool/GuidesTool.cpp
     guidestool/GuidesToolFactory.cpp

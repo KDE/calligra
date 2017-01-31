@@ -116,7 +116,7 @@ Legend::Legend(ChartShape *parent)
 {
     Q_ASSERT(parent);
 
-    setShapeId(ChartShapeId);
+    setShapeId("ChartShapeLegend");
 
     d->shape = parent;
 

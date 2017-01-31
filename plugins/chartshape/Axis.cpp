@@ -1345,7 +1345,8 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
                     setTitleText(textElement.text());
                 }
                 else {
-                    warnChart << "Error: Axis' <chart:title> element contains no <text:p>";
+                    // Note: Not an error, just mean do not show
+                    //warnChart << "Error: Axis' <chart:title> element contains no <text:p>";
                 }
 
                 if (n.hasAttributeNS(KoXmlNS::svg, "width")

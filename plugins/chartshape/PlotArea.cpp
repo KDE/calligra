@@ -251,7 +251,7 @@ PlotArea::PlotArea(ChartShape *parent)
     , KoShape()
     , d(new Private(this, parent))
 {
-    setShapeId(ChartShapeId);
+    setShapeId("ChartShapePlotArea");
 
     Q_ASSERT(d->shape);
     Q_ASSERT(d->shape->proxyModel());

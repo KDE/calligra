@@ -87,6 +87,7 @@
 #include <KoOdfWorkaround.h>
 #include <KoTextDocument.h>
 #include <KoUnit.h>
+#include <KoShapePaintingContext.h>
 
 // KoChart
 #include "Axis.h"
@@ -562,8 +563,19 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     l->setPosition(d->plotArea, CenterPosition);
     l->setPosition(d->title,    TopPosition, 0);
     l->setPosition(d->subTitle, TopPosition, 1);
-    l->setPosition(d->footer,   BottomPosition, 1);
+    l->setPosition(d->footer,   BottomPosition, 0);
     l->setPosition(d->legend,   d->legend->legendPosition());
+    l->scheduleRelayout();
+    l->layout();
+
+    l->setPosition(d->plotArea, FloatingPosition);
+    l->setPosition(d->title,    FloatingPosition);
+    l->setPosition(d->subTitle, FloatingPosition);
+    l->setPosition(d->footer,   FloatingPosition);
+    l->setPosition(d->legend,   FloatingPosition);
+    for (Axis *a : d->plotArea->axes()) {
+        l->setPosition(a->title(), FloatingPosition);
+    }
     l->layout();
 
     requestRepaint();
@@ -775,9 +787,8 @@ void ChartShape::paintComponent(QPainter &painter,
     layout()->layout();
 
     // Paint the background
+    applyConversion(painter, converter);
     if (background()) {
-        applyConversion(painter, converter);
-
         // Calculate the clipping rect
         QRectF paintRect = QRectF(QPointF(0, 0), size());
         painter.setClipRect(paintRect, Qt::IntersectClip);
@@ -785,6 +796,18 @@ void ChartShape::paintComponent(QPainter &painter,
         QPainterPath p;
         p.addRect(paintRect);
         background()->paint(painter, converter, paintContext, p);
+    }
+    // Paint border if showTextShapeOutlines is set
+    // This means that it will be painted in words but not eg in sheets
+    if (paintContext.showTextShapeOutlines) {
+        if (qAbs(rotation()) > 1) {
+            painter.setRenderHint(QPainter::Antialiasing);
+        }
+        QPen pen(QColor(210, 210, 210), 0); // use cosmetic pen
+        QPointF onePixel = converter.viewToDocument(QPointF(1.0, 1.0));
+        QRectF rect(QPointF(0.0, 0.0), size() - QSizeF(onePixel.x(), onePixel.y()));
+        painter.setPen(pen);
+        painter.drawRect(rect);
     }
 }
 
@@ -1056,8 +1079,13 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
     if (!plotareaElem.isNull()) {
         d->plotArea->setChartType(chartType);
         d->plotArea->setChartSubType(chartSubType());
-        if (!d->plotArea->loadOdf(plotareaElem, context))
+        if (!d->plotArea->loadOdf(plotareaElem, context)) {
             return false;
+        }
+        // Make the axis titles movable
+        for (Axis *a : d->plotArea->axes()) {
+            layout()->setPosition(a->title(), FloatingPosition);
+        }
 //         d->plotArea->setChartType(chartType);
 //         d->plotArea->setChartSubType(chartSubType());
     }
