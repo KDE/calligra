@@ -486,6 +486,10 @@ void Axis::Private::deleteDiagram(ChartType chartType)
     Q_ASSERT(*diagram);
 
     deregisterDiagram(*diagram);
+    // remove digram from the plane before we delete it or else KChart crashes
+    if ((*diagram)->coordinatePlane()) {
+        (*diagram)->coordinatePlane()->takeDiagram(*diagram);
+    }
     delete *diagram;
 
     *diagram = 0;
