@@ -4,6 +4,7 @@ project(calligragemini)
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-deprecated -Wno-deprecated-declarations)
 endif ()
+add_subdirectory(lib)
 
 if (WIN32)
     option(ENABLE_GEMINI_STARTUP_MAGIC "Enable Gemini's windows startup magic" ON)
@@ -84,6 +85,7 @@ target_link_libraries(calligragemini
     komain
     wordsprivate
     calligrastageprivate
+    gemini
 )
 
 install(TARGETS   calligragemini calligrageminithumbnailhelper ${INSTALL_TARGETS_DEFAULT_ARGS})
