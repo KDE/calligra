@@ -21,11 +21,10 @@ import QtQuick.Controls 1.3
 import "qml"
 import "qml/components"
 import org.kde.calligra 1.0 as Calligra
+import org.kde.kirigami 1.0 as Kirigami
 
 Item {
     id: base;
-//     width: 1280;
-//     height: 768;
     onWidthChanged: Constants.setGridWidth( width / Constants.GridColumns );
     onHeightChanged: Constants.setGridHeight( height / Constants.GridRows );
     property QtObject window: mainWindow;
@@ -36,6 +35,8 @@ Item {
         RecentFileManager.addRecent(fileName);
         mainWindow.setAlternativeSaveAction(alternativeSaveAction);
     }
+    function applicationWindow() { return base; }
+    property QtObject pageStack: mainPageStack;
     StackView {
         id: mainPageStack;
         anchors.fill: parent;

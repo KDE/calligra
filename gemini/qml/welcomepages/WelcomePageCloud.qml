@@ -23,6 +23,7 @@ import "cloud"
 
 Page {
     id: base;
+    objectName: "WelcomePageCloud";
 /*    ListModel {
         id: cloudAccounts;
         ListElement { text: "Dropbox"; selected: false; accountType: "DropBox"; stackComponent: "accountsPageDropbox"; accountDetails: [ ListElement { userkey: "asfdoijfdshaloiuhs" } ] }

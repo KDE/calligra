@@ -22,6 +22,7 @@ import "../components"
 
 Page {
     id: base;
+    objectName: "WelcomePageRecent";
     GridView {
         id: docList;
         clip: true;

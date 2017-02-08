@@ -22,6 +22,7 @@ import "../components"
 
 Page {
     id: base;
+    objectName: "WelcomePageFilebrowser";
     property string categoryUIName: (docList.model === textDocumentsModel) ? "text documents" : "presentations"
     Label {
         id: docTypeSelectorRow;
