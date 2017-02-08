@@ -289,9 +289,9 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qRegisterMetaType<QAction*>();
 
     qApp->setActiveWindow( this );
-
     setWindowTitle(i18n("Calligra Gemini"));
     setWindowIcon(koIcon("calligragemini"));//gemini"));
+    resize(QApplication::desktop()->availableGeometry().size() * 3/4);
 
     foreach(const QString &fileName, fileNames) {
         DocumentManager::instance()->recentFileManager()->addRecent( QDir::current().absoluteFilePath( fileName ) );
