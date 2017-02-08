@@ -11,3 +11,5 @@ target_link_libraries(gemini
     Qt5::Core
     Qt5::Widgets
 )
+
+install(TARGETS gemini ${INSTALL_TARGETS_DEFAULT_ARGS})
