@@ -286,6 +286,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qmlRegisterType<TemplatesModel>("org.calligra", 1, 0, "TemplatesModel");
     qmlRegisterType<CloudAccountsModel>("org.calligra", 1, 0, "CloudAccountsModel");
     qmlRegisterType<KPrViewModePresentation>();
+    qRegisterMetaType<QAction*>();
 
     qApp->setActiveWindow( this );
 
