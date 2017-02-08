@@ -942,6 +942,11 @@ void DefaultTool::activate(ToolActivation, const QSet<KoShape*> &)
     updateActions();
 }
 
+void DefaultTool::deactivate()
+{
+    repaintDecorations();
+}
+
 void DefaultTool::selectionAlignHorizontalLeft()
 {
     selectionAlign(KoShapeAlignCommand::HorizontalLeftAlignment);

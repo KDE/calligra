@@ -89,7 +89,10 @@ public:
     KoFlake::SelectionHandle handleAt(const QPointF &point, bool *innerHandleMeaning = 0);
 
 public Q_SLOTS:
+    /// Activate the tool and paint selection handles
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    /// Deactivate the tool and remove selection handles
+    virtual void deactivate();
 
 private Q_SLOTS:
     void selectionAlignHorizontalLeft();
