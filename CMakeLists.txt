@@ -816,10 +816,9 @@ set_package_properties(PopplerXPDFHeaders PROPERTIES
 
 
 ##
-## Test for libgit2 and Libqgit2
+## Test for libgit2
 ##
 macro_optional_find_package(Libgit2)
-macro_optional_find_package(Libqgit2)
 
 ##
 ## Generate a file for prefix information
@@ -1081,7 +1080,6 @@ calligra_drop_product_on_bad_condition( APP_PLAN
 
 calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
     LIBGIT2_FOUND  "libgit2 devel not found"
-    LIBQGIT2_FOUND "libqgit2 devel not found"
 )
 
 calligra_drop_product_on_bad_condition( PART_QTQUICK
