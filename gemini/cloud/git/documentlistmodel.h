@@ -23,13 +23,13 @@
 #define CALLIGRAGEMINI_GIT_DOCUMENTLISTMODEL_H
 
 #include <QAbstractListModel>
-#include <QDeclarativeParserStatus>
+#include <QQmlParserStatus>
 #include <QRunnable>
 #include <QDateTime>
 
 class SearchThread;
 
-class DocumentListModel : public QAbstractListModel, public QDeclarativeParserStatus
+class DocumentListModel : public QAbstractListModel, public QQmlParserStatus
 {
     Q_OBJECT
     Q_PROPERTY(DocumentListModel::DocumentType filter READ filter WRITE setFilter NOTIFY filterChanged)
@@ -37,7 +37,7 @@ class DocumentListModel : public QAbstractListModel, public QDeclarativeParserSt
     Q_ENUMS(GroupBy)
     Q_ENUMS(Filter)
     Q_ENUMS(DocumentType)
-    Q_INTERFACES(QDeclarativeParserStatus)
+    Q_INTERFACES(QQmlParserStatus)
 
 public:
     explicit DocumentListModel(QObject *parent = 0);

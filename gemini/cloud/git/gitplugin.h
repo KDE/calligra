@@ -22,16 +22,15 @@
 #ifndef GITPLUGIN_H
 #define GITPLUGIN_H
 
-#include <QDeclarativeExtensionPlugin>
+#include <QQmlExtensionPlugin>
 
-class GitPlugin : public QDeclarativeExtensionPlugin
+class GitPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
 public:
     virtual void registerTypes(const char* uri);
-    virtual void initializeEngine(QDeclarativeEngine* engine, const char* uri);
+    virtual void initializeEngine(QQmlEngine* engine, const char* uri);
 };
-
-Q_EXPORT_PLUGIN2(calligrageminigitplugin, GitPlugin)
 
 #endif // GITPLUGIN_H

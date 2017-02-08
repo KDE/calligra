@@ -21,19 +21,19 @@
 
 #include "checkoutcreator.h"
 
-#include <kfiledialog.h>
 #include <kpassworddialog.h>
 #include <kmessagebox.h>
 #include <kuser.h>
 #include <kemailsettings.h>
+#include <KLocalizedString>
 
 #include <QInputDialog>
 #include <QDir>
 #include <QFileDialog>
 #include <QDebug>
 
-#include <qgit2.h>
-#include <qgit2/qgitglobal.h>
+#include <git2.h>
+#include <git2/signature.h>
 
 class CheckoutCreator::Private
 {
@@ -60,7 +60,7 @@ public:
         if(!needsPrivateKeyPassphrase)
             return QString();
         KPasswordDialog dlg;
-        dlg.setCaption("Private Key Passphrase");
+        dlg.setWindowTitle("Private Key Passphrase");
         dlg.setPrompt("Your private key file requires a password. Please enter it here. You will be asked again each time it is accessed, and the password is not stored.");
         dlg.exec();
         return dlg.password();
@@ -125,12 +125,12 @@ CheckoutCreator::CheckoutCreator(QObject* parent)
     : QObject(parent)
     , d(new Private)
 {
-    LibQGit2::initLibQGit2();
+    git_libgit2_init();
 }
 
 CheckoutCreator::~CheckoutCreator()
 {
-    LibQGit2::shutdownLibQGit2();
+    git_libgit2_shutdown();
     delete d;
 }
 
@@ -139,7 +139,7 @@ QString CheckoutCreator::getFile(QString caption, QString filter, QString extraS
     QUrl searchDir;
     if(QDir::home().exists(extraSubDir))
         searchDir = QUrl(QDir::homePath().append(QDir::separator()).append(extraSubDir));
-    QString url = KFileDialog::getOpenFileName(searchDir, filter, 0, caption);
+    QString url = QFileDialog::getOpenFileName(0, caption, searchDir.toLocalFile(), filter);
     return url;
 }
 
@@ -157,11 +157,30 @@ bool CheckoutCreator::isGitDir(QString directory) const
     return false;
 }
 
+typedef struct {
+    CheckoutCreator* checkoutCreator;
+} progress_data;
+
+int fetch_progress(const git_transfer_progress *stats, void *payload)
+{
+    progress_data *pd = (progress_data*)payload;
+    CheckoutCreator* cc = pd->checkoutCreator;
+    emit cc->cloneProgress(stats->received_objects / stats->total_objects);
+    return 0;
+}
+
+void checkout_progress(const char */*path*/, size_t cur, size_t tot, void *payload)
+{
+    progress_data *pd = (progress_data*)payload;
+    CheckoutCreator* cc = pd->checkoutCreator;
+    emit cc->cloneProgress(cur / tot);
+}
+
 QString CheckoutCreator::createClone(QString userVisibleName, QString url, QString localPath, QObject* credentials) const
 {
     if(!d->checkUserDetails()) {
         KMessageBox::sorry(0, "I'm sorry, we cannot perform git actions without a name and email set, and the git setup on this machine lacks this information. As a result, we are aborting this clone. Please try again, and enter your name and email next time.");
-        LibQGit2::shutdownLibQGit2();
+        git_libgit2_shutdown();
         return QString();
     }
 
@@ -169,7 +188,7 @@ QString CheckoutCreator::createClone(QString userVisibleName, QString url, QStri
         // this should normally not be hit, as the form which calls this checks for this
         // anyway, but let's just be sure
         KMessageBox::sorry(0, "You forgot to name your account. Please do that and try again.");
-        LibQGit2::shutdownLibQGit2();
+        git_libgit2_shutdown();
         return QString();
     }
 
@@ -182,7 +201,7 @@ QString CheckoutCreator::createClone(QString userVisibleName, QString url, QStri
     if(!QFile::exists(d->publicKey) && credentialsOk) { credentialsOk = false; }
     if(!credentialsOk) {
         KMessageBox::sorry(0, "Something is wrong with your security credentials. Please check them and try again. This is likely due to one or another keyfile not existing, or there being no username entered.");
-        LibQGit2::shutdownLibQGit2();
+        git_libgit2_shutdown();
         return QString();
     }
 
@@ -196,16 +215,30 @@ QString CheckoutCreator::createClone(QString userVisibleName, QString url, QStri
     }
 
     QString checkoutLocation = QString("%1%2%3").arg(localPath).arg(QDir::separator()).arg(repoName);
-    LibQGit2::Repository repo;
-    connect(&repo, SIGNAL(cloneProgress(int)), this, SIGNAL(cloneProgress(int)));
-    try {
-        repo.setRemoteCredentials("origin", LibQGit2::Credentials::ssh(d->privateKey, d->publicKey, d->userForRemote.toUtf8(), d->getPassword().toUtf8()));
-        repo.clone(url, checkoutLocation);
-    }
-    catch (const LibQGit2::Exception& ex) {
-        qDebug() << ex.what() << ex.category();
-        return QString();
-    }
+
+    progress_data d = {0};
+    git_clone_options clone_opts = GIT_CLONE_OPTIONS_INIT;
+
+    clone_opts.checkout_opts.checkout_strategy = GIT_CHECKOUT_SAFE;
+    clone_opts.checkout_opts.progress_cb = checkout_progress;
+    clone_opts.checkout_opts.progress_payload = &d;
+//     clone_opts.checkout_opts = checkout_opts;
+    clone_opts.fetch_opts.callbacks.transfer_progress = fetch_progress;
+    clone_opts.fetch_opts.callbacks.payload = &d;
+
+    git_repository *repo = NULL;
+    int error = git_clone(&repo, url.toLatin1(), checkoutLocation.toLatin1(), &clone_opts);
+
+//     LibQGit2::Repository repo;
+//     connect(&repo, SIGNAL(cloneProgress(int)), this, SIGNAL(cloneProgress(int)));
+//     try {
+//         repo.setRemoteCredentials("origin", LibQGit2::Credentials::ssh(d->privateKey, d->publicKey, d->userForRemote.toUtf8(), d->getPassword().toUtf8()));
+//         repo.clone(url, checkoutLocation);
+//     }
+//     catch (const LibQGit2::Exception& ex) {
+//         qDebug() << ex.what() << ex.category();
+//         return QString();
+//     }
 
     return checkoutLocation;
 }

@@ -21,8 +21,11 @@
 
 #include "gitlogmodel.h"
 
-#include <qgit2.h>
-#include <qgit2/qgitglobal.h>
+// #include <qgit2.h>
+// #include <qgit2/qgitglobal.h>
+
+#include <git2.h>
+#include <git2/repository.h>
 
 #include <QDateTime>
 #include <QDebug>
@@ -123,42 +126,48 @@ void GitLogModel::setRepoDir(const QString& repoDir)
     }
 }
 
+/** log_state represents walker being configured while handling options */
+struct log_state {
+    git_repository *repo;
+    const char *repodir;
+    git_revwalk *walker;
+    int hide;
+    int sorting;
+    int revisions;
+};
+
 void GitLogModel::refreshLog()
 {
     beginResetModel();
     qDeleteAll(d->entries);
     d->entries.clear();
-    try {
-        LibQGit2::Repository repo;
-        repo.open(QString("%1/.git").arg(d->repoDir));
 
-        LibQGit2::RevWalk rw(repo);
+    git_repository* repository;
+    git_repository_open(&repository, QString("%1/.git").arg(d->repoDir).toLatin1());
 
-        rw.setSorting(LibQGit2::RevWalk::Topological);
+    git_revwalk *walker;
+    int error = git_revwalk_new(&walker, repository);
+    error = git_revwalk_push_range(walker, "HEAD~100..HEAD");
 
-        rw.pushHead();
+    git_oid oid;
+    git_commit *commit = NULL;
+    while (!git_revwalk_next(&oid, walker)) {
+        git_commit_lookup(&commit, repository, &oid);
 
-        LibQGit2::Commit commit;
-        // loop control, limit the run to the hundred most recent commits
-        int i = 100;
-        while(rw.next(commit)) {
-            if(--i < 0) {
-                break;
-            }
-            LogEntry* entry = new LogEntry();
-            entry->authorName = commit.author().name();
-            if(entry->authorName.isEmpty())
-                entry->authorName = "Unknown";
-            entry->authorEmail = commit.author().email();
-            entry->time = commit.dateTime();
-            entry->oid = commit.oid().format();
-            entry->shortMessage = commit.shortMessage();
-            entry->message = commit.message();
-            d->entries.append(entry);
-        }
+        const git_signature *author = git_commit_author(commit);
 
-    } catch (const LibQGit2::Exception& ex) {
-        qDebug() << ex.what() << ex.category();
+        LogEntry* entry = new LogEntry();
+        entry->authorName = author->name;
+        if(entry->authorName.isEmpty())
+            entry->authorName = "Unknown";
+        entry->authorEmail = author->email;
+
+        git_time_t time = git_commit_time(commit);
+        entry->time = QDateTime::fromMSecsSinceEpoch(time);
+
+        entry->oid = QString::fromAscii(git_oid_tostr_s(git_commit_id(commit)));
+        entry->message = QString::fromAscii(git_commit_message(commit));
+        entry->shortMessage = entry->message.left(120).split(QRegExp("(\\r|\\n)")).first();
     }
     endResetModel();
 }
