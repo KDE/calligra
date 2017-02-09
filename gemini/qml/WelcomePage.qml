@@ -48,21 +48,21 @@ Item {
             Kirigami.Action  {
                 text: "Recent Documents"
                 iconName: "document-open-recent"
-                onTriggered: welcomeStack.replace(welcomePageRecent);
+                onTriggered: if(welcomeStack.currentItem.objectName != "welcomePageRecent") welcomeStack.replace(welcomePageRecent);
                 checkable: true;
                 checked: welcomeStack.currentItem !== null && welcomeStack.currentItem.objectName == "WelcomePageRecent";
             },
             Kirigami.Action  {
                 text: "Library"
                 iconName: "folder-documents"
-                onTriggered: welcomeStack.replace(welcomePageFilebrowser);
+                onTriggered: if(welcomeStack.currentItem.objectName != "WelcomePageFilebrowser") welcomeStack.replace(welcomePageFilebrowser);
                 checkable: true;
                 checked: welcomeStack.currentItem !== null && welcomeStack.currentItem.objectName == "WelcomePageFilebrowser";
             },
             Kirigami.Action  {
                 text: "Cloud"
                 iconName: "folder-cloud"
-                onTriggered: welcomeStack.replace(welcomePageCloud);
+                onTriggered: if(welcomeStack.currentItem.objectName != "WelcomePageCloud") welcomeStack.replace(welcomePageCloud);
                 checkable: true;
                 checked: welcomeStack.currentItem !== null && welcomeStack.currentItem.objectName == "WelcomePageCloud";
             },
@@ -72,14 +72,14 @@ Item {
             Kirigami.Action  {
                 text: "Document"
                 iconName: "x-office-document"
-                onTriggered: welcomeStack.replace(welcomePageWords);
+                onTriggered: if(welcomeStack.currentItem.objectName != "WelcomePageWords") welcomeStack.replace(welcomePageWords);
                 checkable: true;
                 checked: welcomeStack.currentItem !== null && welcomeStack.currentItem.objectName == "WelcomePageWords";
             },
             Kirigami.Action  {
                 text: "Presentation"
                 iconName: "x-office-presentation"
-                onTriggered: welcomeStack.replace(welcomePageStage);
+                onTriggered: if(welcomeStack.currentItem.objectName != "WelcomePageStage") welcomeStack.replace(welcomePageStage);
                 checkable: true;
                 checked: welcomeStack.currentItem !== null && welcomeStack.currentItem.objectName == "WelcomePageStage";
             }
