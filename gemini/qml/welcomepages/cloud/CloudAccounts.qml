@@ -172,7 +172,10 @@ Page {
     }
     PageStack {
         id: dlgStack;
-        anchors.fill: base;
+        anchors {
+            fill: base;
+            margins: -Settings.theme.adjustedPixel(8);
+        }
         initialPage: addEmptyComp;
     }
     function addComponentFromName(name) {

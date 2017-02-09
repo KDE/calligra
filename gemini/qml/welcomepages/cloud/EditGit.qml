@@ -40,8 +40,9 @@ Rectangle {
         anchors {
             fill: parent;
             margins: -Settings.theme.adjustedPixel(16);
+            topMargin: -(Settings.theme.adjustedPixel(8) + Constants.GridHeight * 1.5);
         }
-        opacity: 0.3;
+        opacity: 0.5;
         color: "white";
         MouseArea { anchors.fill: parent; onClicked: { /*nothing */ } }
         SimpleTouchArea { anchors.fill: parent; onTouched: { /*nothing */ } }
