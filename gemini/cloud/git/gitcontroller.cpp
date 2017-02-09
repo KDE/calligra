@@ -43,11 +43,13 @@
 #include <git2/merge.h>
 #include <git2/cred_helpers.h>
 #include <git2/repository.h>
+#include <git2/tree.h>
 
 class GitOpsThread::Private {
 public:
-    Private(QString privateKey, QString publicKey, QString userForRemote, bool needsPrivateKeyPassphrase, git_signature* signature, QString gitDir, GitOperation operation, QString currentFile, QString message) 
-        : privateKey(privateKey)
+    Private(GitOpsThread* qq, QString privateKey, QString publicKey, QString userForRemote, bool needsPrivateKeyPassphrase, git_signature* signature, QString gitDir, GitOperation operation, QString currentFile, QString message) 
+        : q(qq)
+        , privateKey(privateKey)
         , publicKey(publicKey)
         , userForRemote(userForRemote)
         , needsPrivateKeyPassphrase(needsPrivateKeyPassphrase)
@@ -57,8 +59,10 @@ public:
         , signature(signature)
         , gitDir(gitDir)
         , gitOp(operation)
+        , progress(0)
     {}
 
+    GitOpsThread* q;
     QString privateKey;
     QString publicKey;
     QString userForRemote;
@@ -71,6 +75,8 @@ public:
     git_signature* signature;
     QString gitDir;
     GitOperation gitOp;
+
+    int progress;
 
     QString getPassword()
     {
@@ -99,16 +105,16 @@ public:
             return 1;
         }
 
-        Private &payload = *static_cast<Private*>(data);
-//         int percent = (int)(0.5 + 100.0 * ((double)stats->received_objects) / ((double)stats->total_objects));
-//         if (percent != payload.m_transfer_progress) {
-//             emit payload.m_parent.transferProgress(percent);
-//             payload.m_transfer_progress = percent;
-//         }
+        Private *payload = static_cast<Private*>(data);
+        int percent = (int)(0.5 + 100.0 * ((double)stats->received_objects) / ((double)stats->total_objects));
+        if (percent != payload->progress) {
+            emit payload->q->transferProgress(percent);
+            payload->progress = percent;
+        }
         return 0;
     }
 
-    static int acquireCredentialsCallback(git_cred **cred, const char *url, const char *username_from_url, unsigned int allowed_types, void *data)
+    static int acquireCredentialsCallback(git_cred **cred, const char */*url*/, const char *username_from_url, unsigned int /*allowed_types*/, void *data)
     {
         int result = -1;
         if (data) {
@@ -127,7 +133,7 @@ public:
 
 GitOpsThread::GitOpsThread(QString privateKey, QString publicKey, QString userForRemote, bool needsPrivateKeyPassphrase, git_signature* signature, QString gitDir, GitOperation operation, QString currentFile, QString message, QObject *parent)
     : QObject(parent)
-    , d(new Private(privateKey, publicKey, userForRemote, needsPrivateKeyPassphrase, signature, gitDir, operation, currentFile, message))
+    , d(new Private(this, privateKey, publicKey, userForRemote, needsPrivateKeyPassphrase, signature, gitDir, operation, currentFile, message))
 {
 }
 
@@ -161,53 +167,72 @@ void GitOpsThread::abort()
 void GitOpsThread::performPush()
 {
     git_repository* repository;
-    git_repository_open(&repository, QString("%1/.git").arg(d->gitDir).toLatin1());
+    int error = git_repository_open(&repository, QString("%1/.git").arg(d->gitDir).toLatin1());
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     // Get the current index
     git_index* index;
-    git_repository_index(&index, repository);
+    error = git_repository_index(&index, repository);
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     // refresh it, and add the file
-    git_index_read(index, true);
+    error = git_index_read(index, true);
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
     QString relative = d->currentFile.mid(d->gitDir.length() + 1);
-    git_index_add_bypath(index, relative.toLatin1());
-    git_index_write(index);
+    error = git_index_add_bypath(index, relative.toLocal8Bit());
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    error = git_index_write(index);
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     // convert the index to a tree, so we can use that to create the commit
-    git_object *obj = NULL;
-    int error = git_revparse_single(&obj, repository, "HEAD^{tree}");
-    git_tree *newTree = NULL;
-    error = git_tree_lookup(&newTree, repository, git_object_id(obj));
+    git_tree* tree;
+    git_oid tree_id;
+    error = git_index_write_tree(&tree_id, index);
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    error = git_tree_lookup(&tree, repository, &tree_id);
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+
+    // get where we want to parent things to
+    git_oid obj;
+    error = git_reference_name_to_id(&obj, repository, "HEAD");
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    git_commit *parent = NULL;
+    error = git_commit_lookup(&parent, repository, &obj);
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     // create the commit
-    git_object *headObj = NULL;
-    error = git_revparse_single(&obj, repository, "HEAD");
-    git_commit* headCommit;
-    error = git_commit_lookup(&headCommit, repository, git_object_id(obj));
-    const git_commit *parents[] = {headCommit};
-
     git_oid oid;
-    git_commit_create(&oid, repository, "HEAD", d->signature, d->signature, "UTF-8", d->message.toLatin1(), newTree, 1, parents);
+    error = git_commit_create_v(&oid, repository, "HEAD", d->signature, d->signature, "UTF-8", d->message.toLatin1(), tree, 1, parent);
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+
+    error = git_repository_state_cleanup(repository);
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+
 
     // Find the current branch's upstream remote
     git_reference *current_branch;
-    git_repository_head(&current_branch, repository);
+    error = git_repository_head(&current_branch, repository);
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     git_reference *upstream;
-    git_branch_upstream(&upstream, current_branch);
+    error = git_branch_upstream(&upstream, current_branch);
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     // Now find the name of the remote
     git_buf remote_name = {0,0,0};
-    git_branch_remote_name(&remote_name, repository, git_reference_name(upstream));
+    error = git_branch_remote_name(&remote_name, repository, git_reference_name(upstream));
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
     QString remoteName = QString::fromUtf8(remote_name.ptr);
     git_buf_free(&remote_name);
 
     // And the upstream and local branch names...
     const char *branch_name;
-    git_branch_name(&branch_name, upstream);
+    error = git_branch_name(&branch_name, upstream);
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
     QString upstreamBranchName = QString::fromUtf8(branch_name);
     upstreamBranchName.remove(0, remoteName.length() + 1);
-    git_branch_name(&branch_name, current_branch);
+    error = git_branch_name(&branch_name, current_branch);
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
     QString branchName = QString::fromUtf8(branch_name);
 
     git_remote_callbacks remoteCallbacks = GIT_REMOTE_CALLBACKS_INIT;
@@ -215,40 +240,48 @@ void GitOpsThread::performPush()
     remoteCallbacks.transfer_progress = &Private::transferProgressCallback;
     remoteCallbacks.credentials = &Private::acquireCredentialsCallback;
     git_remote* remote;
-    git_remote_lookup(&remote, repository, "origin");
-    git_strarray customHeaders;
-    git_remote_connect(remote, GIT_DIRECTION_PUSH, &remoteCallbacks, &customHeaders);
+    error = git_remote_lookup(&remote, repository, "origin");
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
 
-    git_remote_add_push(repository, "origin", QString("refs/heads/%1:refs/heads/%2").arg(branchName).arg(upstreamBranchName).toLatin1());
-    git_push_options pushOptions;
-    git_push_init_options(&pushOptions, GIT_PUSH_OPTIONS_VERSION);
-
-    char tempPath[12] = "refs/heads/";
-    char *refs[] = { strcat(tempPath, branch_name) , strcat(tempPath, branch_name) };
+    char tempPath[512] = "refs/heads/";
+    char tempPath2[512] = "refs/heads/";
+    strcat(tempPath, branch_name);
+    strcat(tempPath2, upstreamBranchName.toLocal8Bit());
+    char *refs[2] = { tempPath, tempPath2 };
     git_strarray uploadrefs;
     uploadrefs.strings = refs;
     uploadrefs.count = 2;
-    git_remote_upload(remote, &uploadrefs, &pushOptions);
+
+    git_push_options pushOptions;
+    error = git_push_init_options(&pushOptions, GIT_PUSH_OPTIONS_VERSION);
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    pushOptions.callbacks = remoteCallbacks;
+
+    error = git_remote_push(remote, &uploadrefs, &pushOptions);
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+
     emit pushCompleted();
 }
 
 void GitOpsThread::performPull()
 {
     git_repository* repository;
-    git_repository_open(&repository, QString("%1/.git").arg(d->gitDir).toLatin1());
+    int error = git_repository_open(&repository, QString("%1/.git").arg(d->gitDir).toLatin1());
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     // Find the current branch's upstream remote
     git_reference *current_branch;
-    git_repository_head(&current_branch, repository);
+    error = git_repository_head(&current_branch, repository);
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     git_reference *upstream;
-    git_branch_upstream(&upstream, current_branch);
+    error = git_branch_upstream(&upstream, current_branch);
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     // Now find the name of the remote
     git_buf remote_name = {0,0,0};
-    git_branch_remote_name(&remote_name, repository, git_reference_name(upstream));
-    QString remoteName = QString::fromUtf8(remote_name.ptr);
-    git_buf_free(&remote_name);
+    error = git_branch_remote_name(&remote_name, repository, git_reference_name(upstream));
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     // Finally set the credentials on it that we're given, and fetch it
     git_remote_callbacks remoteCallbacks = GIT_REMOTE_CALLBACKS_INIT;
@@ -256,10 +289,16 @@ void GitOpsThread::performPull()
     remoteCallbacks.transfer_progress = &Private::transferProgressCallback;
     remoteCallbacks.credentials = &Private::acquireCredentialsCallback;
     git_remote* remote;
-    git_remote_lookup(&remote, repository, remote_name.ptr);
-    git_remote_fetch(remote, NULL, NULL, NULL);
+    error = git_remote_lookup(&remote, repository, remote_name.ptr);
+    git_buf_free(&remote_name);
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    git_fetch_options fetch_options = GIT_FETCH_OPTIONS_INIT;
+    fetch_options.callbacks = remoteCallbacks;
+    error = git_remote_fetch(remote, NULL, &fetch_options, NULL);
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
 
-    git_branch_upstream(&upstream, current_branch);
+    error = git_branch_upstream(&upstream, current_branch);
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     // Let's check and see what sort of merge we should be doing...
     git_merge_analysis_t analysis;
@@ -267,146 +306,130 @@ void GitOpsThread::performPull()
     git_annotated_commit *merge_heads[1];
 
     git_annotated_commit_from_ref(&merge_heads[0], repository, upstream);
-    int error = git_merge_analysis(&analysis, &preference, repository, (const git_annotated_commit **)merge_heads, 1);
-        if(error == GIT_OK) {
-            if(GIT_MERGE_ANALYSIS_UP_TO_DATE == (analysis & GIT_MERGE_ANALYSIS_UP_TO_DATE)) {
-                // If we're already up to date, yay, no need to do anything!
-                qDebug() << "all up to date, yeah!";
-                git_annotated_commit_free(merge_heads[0]);
-            } else if(GIT_MERGE_ANALYSIS_UNBORN == (analysis & GIT_MERGE_ANALYSIS_UNBORN)) {
-                // this is silly, don't give me an unborn repository you silly person
-                qDebug() << "huh, we have an unborn repo here...";
-                git_annotated_commit_free(merge_heads[0]);
-            } else if(GIT_MERGE_ANALYSIS_FASTFORWARD == (analysis & GIT_MERGE_ANALYSIS_FASTFORWARD) && (GIT_MERGE_PREFERENCE_NO_FASTFORWARD != (preference & GIT_MERGE_PREFERENCE_NO_FASTFORWARD))) {
-                // If the analysis says we can fast forward, then let's fast forward!
-                // ...unless preferences say to never fast forward, of course
-                qDebug() << "fast forwarding all up in that thang";
-                git_merge_options mergeopts = GIT_MERGE_OPTIONS_INIT;
-                git_checkout_options checkoutopts = GIT_CHECKOUT_OPTIONS_INIT;
-                git_merge(repository, (const git_annotated_commit **)merge_heads, 1, &mergeopts, &checkoutopts);
+    error = git_merge_analysis(&analysis, &preference, repository, (const git_annotated_commit **)merge_heads, 1);
+    if(error == GIT_OK) {
+        if(GIT_MERGE_ANALYSIS_UP_TO_DATE == (analysis & GIT_MERGE_ANALYSIS_UP_TO_DATE)) {
+            // If we're already up to date, yay, no need to do anything!
+            qDebug() << "all up to date, yeah!";
+            git_annotated_commit_free(merge_heads[0]);
+        } else if(GIT_MERGE_ANALYSIS_UNBORN == (analysis & GIT_MERGE_ANALYSIS_UNBORN)) {
+            // this is silly, don't give me an unborn repository you silly person
+            qDebug() << "huh, we have an unborn repo here...";
+            git_annotated_commit_free(merge_heads[0]);
+        } else if(GIT_MERGE_ANALYSIS_FASTFORWARD == (analysis & GIT_MERGE_ANALYSIS_FASTFORWARD) && (GIT_MERGE_PREFERENCE_NO_FASTFORWARD != (preference & GIT_MERGE_PREFERENCE_NO_FASTFORWARD))) {
+            // If the analysis says we can fast forward, then let's fast forward!
+            // ...unless preferences say to never fast forward, of course
+            qDebug() << "fast forwarding all up in that thang";
+            git_merge_options mergeopts = GIT_MERGE_OPTIONS_INIT;
+            git_checkout_options checkoutopts = GIT_CHECKOUT_OPTIONS_INIT;
+            checkoutopts.checkout_strategy = GIT_CHECKOUT_SAFE;
+            git_merge(repository, (const git_annotated_commit **)merge_heads, 1, &mergeopts, &checkoutopts);
 
 
-/*
-                // the code below was modified from an original (GPL2) version by the git2r community
-                const git_oid *oid;
-                git_buf log_message = {0,0,0};
-                git_commit *commit = NULL;
-                git_tree *tree = NULL;
-                git_reference *reference = NULL;
-                git_checkout_options opts = GIT_CHECKOUT_OPTIONS_INIT;
+            // the code below was modified from an original (GPL2) version by the git2r community
+            const git_oid *oid;
+            git_buf log_message = {0,0,0};
+            git_commit *commit = NULL;
+            git_tree *tree = NULL;
+            git_reference *reference = NULL;
+            git_checkout_options opts = GIT_CHECKOUT_OPTIONS_INIT;
 
-                git_repository_message(&log_message, repository);
+            git_repository_message(&log_message, repository);
 
-                oid = git_merge_head_id(merge_heads[0]);
-                error = git_commit_lookup(&commit, repository, oid);
+            oid = git_annotated_commit_id(merge_heads[0]);
+            error = git_commit_lookup(&commit, repository, oid);
+            if (error == GIT_OK) {
+                error = git_commit_tree(&tree, commit);
                 if (error == GIT_OK) {
-                    error = git_commit_tree(&tree, commit);
+                    opts.checkout_strategy = GIT_CHECKOUT_SAFE;
+                    error = git_checkout_tree(repository, (git_object*)tree, &opts);
                     if (error == GIT_OK) {
-                        opts.checkout_strategy = GIT_CHECKOUT_SAFE;
-                        error = git_checkout_tree(repository, (git_object*)tree, &opts);
-                        if (error == GIT_OK) {
-                            error = git_repository_head(&reference, repository);
-                            if (error == GIT_OK && error != GIT_ENOTFOUND) {
-                                if (error == GIT_OK) {
-                                    if (error == GIT_ENOTFOUND) {
-                                        error = git_reference_create(
-                                            &reference,
-                                            repository,
-                                            "HEAD",
-                                            git_commit_id(commit),
-                                            0, // force 
-                                            d->signature,
-                                            log_message.ptr);
-                                    } else {
-                                        git_reference *target_ref = NULL;
+                        error = git_repository_head(&reference, repository);
+                        if (error == GIT_OK && error != GIT_ENOTFOUND) {
+                            if (error == GIT_OK) {
+                                if (error == GIT_ENOTFOUND) {
+                                    error = git_reference_create(
+                                        &reference,
+                                        repository,
+                                        "HEAD",
+                                        git_commit_id(commit),
+                                        0, // force
+                                        log_message.ptr);
+                                } else {
+                                    git_reference *target_ref = NULL;
 
-                                        error = git_reference_set_target(
-                                            &target_ref,
-                                            reference,
-                                            git_commit_id(commit),
-                                            d->signature,
-                                            log_message.ptr);
+                                    error = git_reference_set_target(
+                                        &target_ref,
+                                        reference,
+                                        git_commit_id(commit),
+                                        log_message.ptr);
 
-                                        if (target_ref) {
-                                            git_reference_free(target_ref);
-                                        }
+                                    if (target_ref) {
+                                        git_reference_free(target_ref);
                                     }
                                 }
                             }
                         }
                     }
                 }
-                if (commit) {
-                    git_commit_free(commit);
-                }
-                if (reference) {
-                    git_reference_free(reference);
-                }
-                if (tree) {
-                    git_tree_free(tree);
-                }*/
-                // Leaving this code in for now - this /should/ as far as i can tell do the same
-                // as the code above. However, it looks as though it doesn't. If anybody can work
-                // out why, i would appreciate learning what went wrong :P
-                //const git_oid* id = git_merge_head_id(merge_heads[0]);
-                //LibQGit2::OId mergeId(id);
-                //LibQGit2::Commit headCommit = qrepo.lookupCommit(mergeId);
-
-                //qrepo.checkoutTree(headCommit.tree());
-                //qrepo.head().setTarget(headCommit.oid());
-                //qrepo.reset(headCommit);
-                git_annotated_commit_free(merge_heads[0]);
-                git_repository_state_cleanup(repository);
             }
-            else if(GIT_MERGE_ANALYSIS_NORMAL == (analysis & GIT_MERGE_ANALYSIS_NORMAL)) {
-                // If the analysis says we are able to do a normal merge, let's attempt one of those...
-//                 if(GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY == (preference & GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY)) {
-                    // but only if we're not told to not try and not do fast forwards!
-                    KMessageBox::sorry(0, "Fast Forward Only", "We're attempting to merge, but the repository is set to only do fast forwarding - sorry, we don't support this scenario and you'll need to handle things yourself...");
-//                 } else {
-//                     git_merge(repository, (const git_annotated_commit **) merge_heads, 1, NULL, NULL);
-//                     git_annotated_commit_free(merge_heads[0]);
-//                     if (qrepo.index().hasConflicts()) {
-//                         qDebug() << "There were conflicts merging. Please resolve them and commit";
-//                     } else {
-//                         git_oid commit_id;
-//                         git_buf message = {0,0,0};
-//                         git_commit *parents[2];
-//                         git_index* index;
-//                         git_repository_index(&index, repository);
-//                         git_tree* tree;
-//                         LibQGit2::OId tree_id = index.createTree();
-//                         LibQGit2::Tree tree = qrepo.lookupTree(tree_id);
-// 
-//                         git_repository_message(&message, repository);
-//                         const char *branch_name;
-//                         git_branch_name(&branch_name, upstream);
-//                         QString upstreamBranchName = QString::fromUtf8(branch_name);
-//                         git_branch_name(&branch_name, current_branch);
-//                         QString branchName = QString::fromUtf8(branch_name);
-// 
-//                         git_reference *upstream;
-//                         git_branch_upstream(&upstream, current_branch);
-//                         LibQGit2::Reference upstreamRef(upstream);
-// 
-//                         error = git_commit_lookup(&parents[0], repository, qrepo.head().target().data());
-//                         d->check_error(error, "looking up current branch");
-//                         error = git_commit_lookup(&parents[1], repository, upstreamRef.target().data());
-//                         d->check_error(error, "looking up remote branch");
-// 
-//                         git_commit_create(&commit_id, repository, "HEAD", d->signature, d->signature,
-//                                         NULL, message.ptr,
-//                                         tree.data(), 2, (const git_commit **) parents);
-//                     }
-//                 }
-            } else {
-                // how did i get here, i am not good with undefined entries in enums
-                qDebug() << "wait, what?";
-                git_annotated_commit_free(merge_heads[0]);
+            if (commit) {
+                git_commit_free(commit);
             }
+            if (reference) {
+                git_reference_free(reference);
+            }
+            if (tree) {
+                git_tree_free(tree);
+            }
+            git_annotated_commit_free(merge_heads[0]);
+            git_repository_state_cleanup(repository);
         }
-        git_repository_state_cleanup(repository);
-        emit pullCompleted();
+        else if(GIT_MERGE_ANALYSIS_NORMAL == (analysis & GIT_MERGE_ANALYSIS_NORMAL)) {
+            // If the analysis says we are able to do a normal merge, let's attempt one of those...
+            if(GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY == (preference & GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY)) {
+            // but only if we're not told to not try and not do fast forwards!
+            KMessageBox::sorry(0, "Fast Forward Only", "We're attempting to merge, but the repository is set to only do fast forwarding - sorry, we don't support this scenario and you'll need to handle things yourself...");
+            } else {
+                git_merge(repository, (const git_annotated_commit **) merge_heads, 1, NULL, NULL);
+                git_annotated_commit_free(merge_heads[0]);
+                git_index* index;
+                git_repository_index(&index, repository);
+                if (git_index_has_conflicts(index)) {
+                    qDebug() << "There were conflicts merging. Please resolve them and commit";
+                } else {
+                    git_buf message = {0, 0, 0};
+                    git_oid commit_id, tree_id;
+                    git_commit *parents[2];
+                    git_tree *tree;
+
+                    git_index_write_tree(&tree_id, index);
+
+                    git_repository_message(&message, repository);
+
+                    git_tree_lookup(&tree, repository, &tree_id);
+
+                    error = git_commit_lookup(&parents[0], repository, git_reference_target(current_branch));
+                    d->check_error(error, "looking up current branch");
+                    error = git_commit_lookup(&parents[1], repository, git_reference_target(upstream));
+                    d->check_error(error, "looking up remote branch");
+
+                    git_commit_create(&commit_id, repository, "HEAD", d->signature, d->signature,
+                                                NULL, message.ptr,
+                                                tree, 2, (const git_commit **) parents);
+                    git_tree_free(tree);
+                }
+                git_index_free(index);
+            }
+        } else {
+            // how did i get here, i am not good with undefined entries in enums
+            qDebug() << "wait, what?";
+            git_annotated_commit_free(merge_heads[0]);
+        }
+    }
+    git_repository_state_cleanup(repository);
+    git_repository_free(repository);
+    emit pullCompleted();
 }
 
 class GitController::Private {
@@ -451,12 +474,21 @@ public:
 
     bool checkUserDetails()
     {
+        git_config* configActual;
+        int error = git_config_open_default(&configActual);
+        if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return false; }
+
         git_config* config;
-        git_config_open_default(&config);
+        error = git_config_snapshot(&config, configActual);
+        if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return false; }
+
         const char* name;
-        git_config_get_string(&name, config, "user.name");
+        error = git_config_get_string(&name, config, "user.name");
+        if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return false; }
+
         const char* email;
-        git_config_get_string(&email, config, "user.email");
+        error = git_config_get_string(&email, config, "user.email");
+        if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return false; }
 
         userName = QString::fromLocal8Bit(name);
         userEmail = QString::fromLocal8Bit(email);
@@ -475,7 +507,8 @@ public:
                 return false;
             }
             userName = newName;
-            git_config_set_string(config, "user.name", newName.toLocal8Bit());
+            error = git_config_set_string(config, "user.name", newName.toLocal8Bit());
+            if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return false; }
         }
         if(userEmail.isEmpty()) {
             bool ok;
@@ -491,7 +524,8 @@ public:
                 return false;
             }
             userEmail = newEmail;
-            git_config_set_string(config, "user.email", newEmail.toLocal8Bit());
+            error = git_config_set_string(config, "user.email", newEmail.toLocal8Bit());
+            if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return false; }
         }
 
         git_config_free(config);
@@ -499,7 +533,8 @@ public:
         if(userName.isEmpty() || userEmail.isEmpty()) {
             return false;
         }
-        git_signature_now(&signature, userName.toLocal8Bit(), userEmail.toLocal8Bit());
+        error = git_signature_now(&signature, userName.toLocal8Bit(), userEmail.toLocal8Bit());
+        if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return false; }
         return true;
     }
 

@@ -222,23 +222,12 @@ QString CheckoutCreator::createClone(QString userVisibleName, QString url, QStri
     clone_opts.checkout_opts.checkout_strategy = GIT_CHECKOUT_SAFE;
     clone_opts.checkout_opts.progress_cb = checkout_progress;
     clone_opts.checkout_opts.progress_payload = &d;
-//     clone_opts.checkout_opts = checkout_opts;
     clone_opts.fetch_opts.callbacks.transfer_progress = fetch_progress;
     clone_opts.fetch_opts.callbacks.payload = &d;
 
     git_repository *repo = NULL;
     int error = git_clone(&repo, url.toLatin1(), checkoutLocation.toLatin1(), &clone_opts);
-
-//     LibQGit2::Repository repo;
-//     connect(&repo, SIGNAL(cloneProgress(int)), this, SIGNAL(cloneProgress(int)));
-//     try {
-//         repo.setRemoteCredentials("origin", LibQGit2::Credentials::ssh(d->privateKey, d->publicKey, d->userForRemote.toUtf8(), d->getPassword().toUtf8()));
-//         repo.clone(url, checkoutLocation);
-//     }
-//     catch (const LibQGit2::Exception& ex) {
-//         qDebug() << ex.what() << ex.category();
-//         return QString();
-//     }
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return QString(); }
 
     return checkoutLocation;
 }

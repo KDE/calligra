@@ -126,16 +126,6 @@ void GitLogModel::setRepoDir(const QString& repoDir)
     }
 }
 
-/** log_state represents walker being configured while handling options */
-struct log_state {
-    git_repository *repo;
-    const char *repodir;
-    git_revwalk *walker;
-    int hide;
-    int sorting;
-    int revisions;
-};
-
 void GitLogModel::refreshLog()
 {
     beginResetModel();
@@ -143,16 +133,20 @@ void GitLogModel::refreshLog()
     d->entries.clear();
 
     git_repository* repository;
-    git_repository_open(&repository, QString("%1/.git").arg(d->repoDir).toLatin1());
+    int error = git_repository_open(&repository, QString("%1/.git").arg(d->repoDir).toLatin1());
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     git_revwalk *walker;
-    int error = git_revwalk_new(&walker, repository);
+    error = git_revwalk_new(&walker, repository);
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
     error = git_revwalk_push_range(walker, "HEAD~100..HEAD");
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     git_oid oid;
     git_commit *commit = NULL;
-    while (!git_revwalk_next(&oid, walker)) {
-        git_commit_lookup(&commit, repository, &oid);
+    while (git_revwalk_next(&oid, walker) == 0) {
+        error = git_commit_lookup(&commit, repository, &oid);
+        if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
 
         const git_signature *author = git_commit_author(commit);
 
@@ -168,6 +162,11 @@ void GitLogModel::refreshLog()
         entry->oid = QString::fromAscii(git_oid_tostr_s(git_commit_id(commit)));
         entry->message = QString::fromAscii(git_commit_message(commit));
         entry->shortMessage = entry->message.left(120).split(QRegExp("(\\r|\\n)")).first();
+
+        d->entries.append(entry);
+
+        git_commit_free(commit);
     }
+    git_repository_free(repository);
     endResetModel();
 }
