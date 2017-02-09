@@ -41,6 +41,7 @@ Item {
             if(DocumentManager.doc()) {
                 DocumentManager.doc().sigProgress(progress);
             }
+            console.log("Transfer progress: " + progress);
         }
         onOperationBegun: {
             console.log(message);
