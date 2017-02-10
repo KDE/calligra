@@ -17,6 +17,7 @@
  */
 
 import QtQuick 2.0
+import org.kde.kirigami 1.0 as Kirigami
 import org.calligra 1.0
 import "../components"
 
@@ -24,6 +25,26 @@ Page {
     id: base;
     objectName: "WelcomePageFilebrowser";
     property string categoryUIName: (docList.model === textDocumentsModel) ? "text documents" : "presentations"
+    GridView {
+        id: docList;
+        contentWidth: width;
+        anchors {
+            margins: Constants.DefaultMargin;
+            top: docTypeSelectorRow.bottom;
+            left: parent.left;
+            right: parent.right;
+            bottom: parent.bottom;
+            bottomMargin: 0;
+        }
+        cellWidth: width / 4 - Constants.DefaultMargin;
+        cellHeight: cellWidth + Settings.theme.font("templateLabel").pixelSize + Constants.DefaultMargin * 4;
+        model: textDocumentsModel;
+        delegate: documentTile;
+        ScrollDecorator { flickableItem: docList; }
+    }
+    Rectangle {
+        anchors.fill: docTypeSelectorRow;
+    }
     Label {
         id: docTypeSelectorRow;
         anchors {
@@ -77,31 +98,11 @@ Page {
             }
         }
     }
-    GridView {
-        id: docList;
-        clip: true;
-        contentWidth: width;
-        anchors {
-            margins: Constants.DefaultMargin;
-            top: docTypeSelectorRow.bottom;
-            left: parent.left;
-            right: parent.right;
-            bottom: parent.bottom;
-            bottomMargin: 0;
-        }
-        cellWidth: width / 4 - Constants.DefaultMargin;
-        cellHeight: cellWidth + Settings.theme.font("templateLabel").pixelSize + Constants.DefaultMargin * 4;
-        model: textDocumentsModel;
-        delegate: documentTile;
-        ScrollDecorator { flickableItem: docList; }
-    }
-    Label {
+    Kirigami.Label {
         anchors.fill: parent;
         text: "No %1\n\nPlease drop some into your Documents folder\n(%2)".arg(base.categoryUIName).arg(docList.model.documentsFolder);
         horizontalAlignment: Text.AlignHCenter;
         verticalAlignment: Text.AlignVCenter;
-        font: Settings.theme.font("templateLabel");
-        color: "#5b6573";
         visible: docList.count === 0;
     }
     Component {
@@ -109,7 +110,18 @@ Page {
         Item {
             width: docList.cellWidth;
             height: docList.cellHeight
+            Rectangle {
+                x: documentImage.x - Constants.DefaultMargin + (documentImage.width - documentImage.paintedWidth) / 2;
+                y: documentImage.y - Constants.DefaultMargin + (documentImage.height - documentImage.paintedHeight) / 2;
+                width: documentImage.paintedWidth + Constants.DefaultMargin * 2;
+                height: documentImage.paintedHeight + Constants.DefaultMargin * 2;
+                border {
+                    color: "silver";
+                    width: 1;
+                }
+            }
             Image {
+                id: documentImage;
                 source: "image://recentimage/" + model.filePath;
                 anchors {
                     top: parent.top;
@@ -122,7 +134,7 @@ Page {
                 smooth: true;
                 asynchronous: true;
             }
-            Label {
+            Kirigami.Label {
                 id: lblName;
                 anchors {
                     left: parent.left;
@@ -135,8 +147,6 @@ Page {
                 horizontalAlignment: Text.AlignHCenter;
                 verticalAlignment: Text.AlignVCenter;
                 text: model.fileName ? model.fileName : "";
-                font: Settings.theme.font("templateLabel");
-                color: "#5b6573";
             }
             MouseArea {
                 anchors.fill: parent;
