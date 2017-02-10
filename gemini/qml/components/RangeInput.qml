@@ -54,8 +54,8 @@ Item {
         if (textField.text != value) {
             textField.text = value.toFixed(decimals);
         }
-        if (valueSlider.value !== value) {
-            valueSlider.value = ( (value - min) / (max - min) ) * 100;
+        if (valueSlider.value !== (value / (max - min))) {
+            valueSlider.value = ( (value - min) / (max - min) );
         }
     }
 
@@ -67,7 +67,7 @@ Item {
             right: parent.right;
         }
         inputMethodHints: Qt.ImhFormattedNumbersOnly;
-        onAccepted: value = text;
+        onAccepted: value = (text / (base.max - base.min));
     }
     QtControls.Slider {
         id: valueSlider;
@@ -78,6 +78,6 @@ Item {
             leftMargin: Constants.DefaultMargin;
             rightMargin: Constants.DefaultMargin;
         }
-        onValueChanged: base.value = base.min + ((value / 100) * (base.max - base.min));
+        onValueChanged: base.value = base.min + (value * (base.max - base.min));
     }
 }
