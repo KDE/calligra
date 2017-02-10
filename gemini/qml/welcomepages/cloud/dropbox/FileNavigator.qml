@@ -297,7 +297,7 @@ Item {
         }
     }
 
-    BusyIndicator {
+    QtControls.BusyIndicator {
         id: b_indicator
         anchors.centerIn: parent
         running: b_indicator.visible;
