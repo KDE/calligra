@@ -17,27 +17,20 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Controls 1.4 as QtControls
 
 Item {
     id: base;
 
     property bool enabled: true;
-    property alias placeholder: textField.placeholder;
+    property alias placeholder: textField.placeholderText;
     property real value: 0;
     property real min: 0;
     property real max: 1000;
     property int decimals: 2;
-    property alias useExponentialValue: valueSlider.useExponentialValue;
 
     height: textField.height + valueSlider.height;
 
-    property alias border: valueSlider.border;
-    property alias background: valueSlider.background;
-
-    onDecimalsChanged: d.fixHandle();
-    onUseExponentialValueChanged: d.fixHandle();
-    onMinChanged: d.fixHandle();
-    onMaxChanged: d.fixHandle();
     onValueChanged: {
         if (decimals === 0) {
             if (value !== Math.round(value))
@@ -61,35 +54,22 @@ Item {
         if (textField.text != value) {
             textField.text = value.toFixed(decimals);
         }
-        if (useExponentialValue) {
-            var newValue = ( (value - min) / (max - min) ) * 100;
-             if (valueSlider.exponentialValue !== newValue) {
-                 valueSlider.exponentialValue = newValue;
-             }
-        }
-        else {
-            if (valueSlider.value !== value) {
-                valueSlider.value = ( (value - min) / (max - min) ) * 100;
-            }
+        if (valueSlider.value !== value) {
+            valueSlider.value = ( (value - min) / (max - min) ) * 100;
         }
     }
 
-    PanelTextField {
+    QtControls.TextField {
         id: textField
         anchors {
             top: parent.top;
             left: parent.left;
             right: parent.right;
         }
-        onFocusLost: value = text;
+        inputMethodHints: Qt.ImhFormattedNumbersOnly;
         onAccepted: value = text;
-        numeric: true;
-
-        border.width: valueSlider.border.width;
-        border.color: valueSlider.border.color;
-        background: valueSlider.background;
     }
-    Slider {
+    QtControls.Slider {
         id: valueSlider;
         anchors {
             top: textField.bottom;
@@ -98,27 +78,6 @@ Item {
             leftMargin: Constants.DefaultMargin;
             rightMargin: Constants.DefaultMargin;
         }
-        highPrecision: true;
-        onExponentialValueChanged: {
-            if (useExponentialValue) {
-                base.value = base.min + ((exponentialValue / 100) * (base.max - base.min))
-            }
-        }
-        onValueChanged: {
-            if (!useExponentialValue) {
-                base.value = base.min + ((value / 100) * (base.max - base.min));
-            }
-        }
-    }
-    QtObject {
-        id: d;
-        function fixHandle() {
-            var currentVal = base.value;
-            // Set the value to something it isn't currently
-            base.value = base.min;
-            base.value = base.max;
-            // Set it back to what it was
-            base.value = currentVal;
-        }
+        onValueChanged: base.value = base.min + ((value / 100) * (base.max - base.min));
     }
 }
