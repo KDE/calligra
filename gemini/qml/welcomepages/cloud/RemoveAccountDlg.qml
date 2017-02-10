@@ -18,8 +18,9 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Controls 1.4 as QtControls
+import org.kde.kirigami 1.0 as Kirigami
 import org.calligra 1.0
-import "../../components"
 
 Rectangle {
     anchors.fill: parent;
@@ -43,7 +44,7 @@ Rectangle {
         MouseArea { anchors.fill: parent; onClicked: { /*nothing */ } }
         SimpleTouchArea { anchors.fill: parent; onTouched: { /*nothing */ } }
     }
-    Text {
+    Kirigami.Label {
         anchors {
             bottom: parent.verticalCenter;
             left: parent.left;
@@ -52,10 +53,9 @@ Rectangle {
         }
         verticalAlignment: Text.AlignVCenter;
         horizontalAlignment: Text.AlignHCenter;
-        font: Settings.theme.font("application");
         text: "Do you wish to remove this account?";
     }
-    Text {
+    Kirigami.Label {
         id: nameField;
         anchors {
             top: parent.verticalCenter;
@@ -65,9 +65,8 @@ Rectangle {
         }
         verticalAlignment: Text.AlignVCenter;
         horizontalAlignment: Text.AlignHCenter;
-        font: Settings.theme.font("application");
     }
-    Text {
+    Kirigami.Label {
         anchors {
             top: nameField.bottom;
             left: parent.left;
@@ -76,10 +75,9 @@ Rectangle {
         }
         verticalAlignment: Text.AlignVCenter;
         horizontalAlignment: Text.AlignHCenter;
-        font: Settings.theme.font("applicationSemi");
         text: "(removing the account will leave all files in place, this only removes it from Calligra Gemini's list)";
     }
-    CohereButton {
+    QtControls.Button {
         id: okButton;
         anchors {
             bottom: parent.bottom;
@@ -87,15 +85,12 @@ Rectangle {
             margins: Settings.theme.adjustedPixel(8);
         }
         text: "Remove Account";
-        textColor: "#5b6573";
-        textSize: Settings.theme.adjustedPixel(18);
-        color: "#D2D4D5";
         onClicked: {
             cloudAccounts.removeAccount(base.accountIndex);
             dlgStack.replace(addEmpty);
         }
     }
-    CohereButton {
+    QtControls.Button {
         id: cancelButton;
         anchors {
             bottom: parent.bottom;
@@ -103,9 +98,6 @@ Rectangle {
             margins: Settings.theme.adjustedPixel(8);
         }
         text: "Cancel";
-        textColor: "#5b6573";
-        textSize: Settings.theme.adjustedPixel(18);
-        color: "#D2D4D5";
         onClicked: dlgStack.replace(addEmpty);
     }
 }

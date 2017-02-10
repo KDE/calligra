@@ -17,6 +17,7 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Controls 1.4 as QtControls
 import org.calligra 1.0
 import "../../components"
 
@@ -47,7 +48,7 @@ Rectangle {
         MouseArea { anchors.fill: parent; onClicked: { /*nothing */ } }
         SimpleTouchArea { anchors.fill: parent; onTouched: { /*nothing */ } }
     }
-    TextField {
+    QtControls.TextField {
         id: nameField;
         anchors {
             verticalCenter: parent.verticalCenter;
@@ -55,9 +56,9 @@ Rectangle {
             right: parent.right;
             margins: Settings.theme.adjustedPixel(16);
         }
-        placeholder: "Account Name";
+        placeholderText: "Account Name";
     }
-    CohereButton {
+    QtControls.Button {
         id: credentialsButton;
         anchors {
             top: nameField.bottom;
@@ -65,9 +66,6 @@ Rectangle {
             margins: Settings.theme.adjustedPixel(8);
         }
         text: "Edit User Credentials";
-        textColor: "#5b6573";
-        textSize: Settings.theme.adjustedPixel(18);
-        color: "#D2D4D5";
         onClicked: {
             dlgStack.push(userCredentials.item);
             if(accountDetails.readProperty("userForRemote") !== undefined) {
@@ -84,7 +82,7 @@ Rectangle {
             }
         }
     }
-    CohereButton {
+    QtControls.Button {
         id: okButton;
         anchors {
             bottom: parent.bottom;
@@ -92,15 +90,12 @@ Rectangle {
             margins: Settings.theme.adjustedPixel(8);
         }
         text: "Save";
-        textColor: "#5b6573";
-        textSize: Settings.theme.adjustedPixel(18);
-        color: "#D2D4D5";
         onClicked: {
             cloudAccounts.renameAccount(base.accountIndex, nameField.text);
             dlgStack.replace(addEmpty);
         }
     }
-    CohereButton {
+    QtControls.Button {
         id: cancelButton;
         anchors {
             bottom: parent.bottom;
@@ -108,9 +103,6 @@ Rectangle {
             margins: Settings.theme.adjustedPixel(8);
         }
         text: "Cancel";
-        textColor: "#5b6573";
-        textSize: Settings.theme.adjustedPixel(18);
-        color: "#D2D4D5";
         onClicked: dlgStack.replace(addEmpty);
     }
 

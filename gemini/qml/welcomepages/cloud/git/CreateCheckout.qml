@@ -132,13 +132,10 @@ Item {
             Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
             placeholderText: "Clone URL (https or git)";
         }
-        CohereButton {
+        QtControls.Button {
             anchors.right: parent.right;
             onClicked: dlgStack.push(userCredentials);
             text: "Set User Credentials";
-            textColor: "#5b6573";
-            textSize: Settings.theme.adjustedPixel(18);
-            color: "#D2D4D5";
         }
         Kirigami.Label {
             id: errorLabel;
@@ -146,16 +143,13 @@ Item {
             height: cloneAdd.height + Settings.theme.adjustedPixel(16);
             verticalAlignment: Text.AlignVCenter
             color: "red";
-            CohereButton {
+            QtControls.Button {
                 id: cloneAdd;
                 anchors {
                     verticalCenter: parent.verticalCenter;
                     right: parent.right;
                 }
                 text: "Add Now";
-                textColor: "#5b6573";
-                textSize: Settings.theme.adjustedPixel(18);
-                color: "#D2D4D5";
                 onClicked: {
                     if(checkoutName.text.length < 1) {
                         errorLabel.text = "You need to enter a name for the account."

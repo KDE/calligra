@@ -18,7 +18,7 @@
 
 import QtQuick 2.0
 import org.calligra 1.0
-import "../../components"
+import QtQuick.Controls 1.4 as QtControls
 import "dropbox" as Dropbox
 
 Rectangle {
@@ -43,16 +43,13 @@ Rectangle {
         anchors.fill: parent;
         anchors.margins: Settings.theme.adjustedPixel(8);
     }
-    CohereButton {
+    QtControls.Button {
         anchors {
             bottom: parent.bottom;
             right: parent.right;
             margins: Settings.theme.adjustedPixel(8);
         }
         text: "Close";
-        textColor: "#5b6573";
-        textSize: Settings.theme.adjustedPixel(18);
-        color: "#D2D4D5";
         onClicked: dlgStack.replace(addEmpty);
     }
 } 

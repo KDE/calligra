@@ -19,6 +19,7 @@
 
 import QtQuick 2.0
 import org.calligra 1.0
+import QtQuick.Controls 1.4 as QtControls
 import "../../components"
 
 Rectangle {
@@ -53,7 +54,7 @@ Rectangle {
         }
         placeholder: "Account Name";
     }
-    CohereButton {
+    QtControls.Button {
         id: okButton;
         anchors {
             bottom: parent.bottom;
@@ -61,15 +62,12 @@ Rectangle {
             margins: Settings.theme.adjustedPixel(8);
         }
         text: "Save";
-        textColor: "#5b6573";
-        textSize: Settings.theme.adjustedPixel(18);
-        color: "#D2D4D5";
         onClicked: {
             cloudAccounts.renameAccount(base.accountIndex, nameField.text);
             dlgStack.replace(addEmpty);
         }
     }
-    CohereButton {
+    QtControls.Button {
         id: cancelButton;
         anchors {
             bottom: parent.bottom;
@@ -77,9 +75,6 @@ Rectangle {
             margins: Settings.theme.adjustedPixel(8);
         }
         text: "Cancel";
-        textColor: "#5b6573";
-        textSize: Settings.theme.adjustedPixel(18);
-        color: "#D2D4D5";
         onClicked: dlgStack.replace(addEmpty);
     }
 }
