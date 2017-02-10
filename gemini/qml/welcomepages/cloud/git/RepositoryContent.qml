@@ -184,6 +184,7 @@ Item {
                 }
             }
         }
+        ScrollDecorator { flickableItem: logListView; anchors.fill: logListView; }
     }
     GridView {
         id: docList;
