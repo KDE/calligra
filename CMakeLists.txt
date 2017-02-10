@@ -262,8 +262,14 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} QUIET
         Quick
         Sql
         WebKit
-        WebKitWidgets
+#         WebKitWidgets
 )
+message("**********************************************************************************************************************")
+message("**********************************************************************************************************************")
+message("Qt WebKitWidgets is required for Stage's html export preview. This will need porting, as that module no longer exists.")
+message("**********************************************************************************************************************")
+message("**********************************************************************************************************************")
+
 # Qt5Declarative was removed in Qt 5.6.0 so search for it in a separate call
 # Including it in a collected find_package(Qt5 ...) call can lead to a fatal not-found error:
 # * Qt5 (required version >= 5.3.0)
@@ -986,9 +992,9 @@ calligra_drop_product_on_bad_condition( FEATURE_RDF
     Soprano_FOUND "Soprano not found"
 )
 
-calligra_drop_product_on_bad_condition( PART_STAGE
-    Qt5WebKitWidgets_FOUND "Qt5WebKitWidgets devel not found"
-)
+# calligra_drop_product_on_bad_condition( PART_STAGE
+#     Qt5WebKitWidgets_FOUND "Qt5WebKitWidgets devel not found"
+# )
 
 calligra_drop_product_on_bad_condition( PART_SHEETS
     EIGEN3_FOUND "Eigen devel not found"
