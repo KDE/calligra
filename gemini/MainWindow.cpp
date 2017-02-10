@@ -631,7 +631,7 @@ void MainWindow::openFile()
     dialog.setMimeTypeFilters(mimeFilter);
     QString filename = dialog.filename();
     if(!filename.isEmpty()) {
-        QMetaObject::invokeMethod(d->touchView->rootObject(), "openFile", Q_ARG(QVariant, filename));
+        QMetaObject::invokeMethod(d->touchView->rootObject(), "openFile", Q_ARG(QVariant, filename), Q_ARG(QVariant, 0));
     }
 }
 
