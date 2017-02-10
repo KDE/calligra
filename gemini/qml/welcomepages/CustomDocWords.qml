@@ -17,6 +17,7 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Controls 1.4 as QtControls
 import org.calligra 1.0
 import "../components"
 
@@ -172,10 +173,9 @@ Page {
                 width: parent.width;
                 text: "Unit:"
             }
-            ExpandingListView {
+            QtControls.ComboBox {
                 id: unitList;
                 width: parent.width;
-                expandedHeight: Constants.GridHeight * 3;
                 currentIndex: 6;
                 model: ListModel {
                     id: unitModel;
@@ -192,10 +192,9 @@ Page {
                 width: parent.width;
                 text: "Size:"
             }
-            ExpandingListView {
+            QtControls.ComboBox {
                 id: paperSizeList;
                 width: parent.width;
-                expandedHeight: Constants.GridHeight * 6;
                 currentIndex: 7;
                 onCurrentIndexChanged: {
                     if(widthInput !== null) {
@@ -363,7 +362,6 @@ Page {
                     id: columnSpacing;
                     width: parent.width / 2;
                     placeholder: "Spacing";
-                    useExponentialValue: true;
                     min: 0;
                     max: (heightInput.text > widthInput.text ? heightInput.text : widthInput.text) / columnCount.value;
                     decimals: 2;
@@ -386,7 +384,6 @@ Page {
                     id: marginTop;
                     width: parent.width / 3;
                     placeholder: "Top";
-                    useExponentialValue: true;
                     min: 1; max: 999; decimals: 2;
                     value: 20;
                 }
@@ -398,7 +395,6 @@ Page {
                     id: marginLeft;
                     width: parent.width / 3;
                     placeholder: facingCheck.checked ? "Binding" : "Left";
-                    useExponentialValue: true;
                     min: 1; max: 999; decimals: 2;
                     value: 20;
                 }
@@ -413,7 +409,6 @@ Page {
                     id: marginRight;
                     width: parent.width / 3;
                     placeholder: facingCheck.checked ? "Outside" : "Right";
-                    useExponentialValue: true;
                     min: 1; max: 999; decimals: 2;
                     value: 20;
                 }
@@ -429,14 +424,13 @@ Page {
                     id: marginBottom;
                     width: parent.width / 3;
                     placeholder: "Bottom";
-                    useExponentialValue: true;
                     min: 1; max: 999; decimals: 2;
                     value: 20;
                 }
             }
         }
     }
-    CohereButton {
+    QtControls.Button {
         id: createDocButton;
         anchors {
             right: parent.right;
@@ -444,9 +438,6 @@ Page {
             margins: Constants.DefaultMargin;
         }
         text: "Create Document";
-        textColor: "white";
-        textSize: Settings.theme.adjustedPixel(18);
-        color: "#4e5359";
         onClicked: {
             var queryString = "newfile:///";
             queryString += "?mimetype=" + WORDS_MIME_TYPE;
