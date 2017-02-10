@@ -252,9 +252,9 @@ Page {
                         right: parent.horizontalCenter;
                     }
                     width: parent.width;
-                    placeholder: landscapeCheck.checked ? "Height" : "Width";
+                    placeholderText: landscapeCheck.checked ? "Height" : "Width";
                     validator: DoubleValidator{ bottom: 1; top: 999999; decimals: 2; }
-                    numeric: true;
+                    inputMethodHints: Qt.ImhFormattedNumbersOnly;
                 }
                 QtControls.TextField {
                     id: heightInput;
@@ -264,9 +264,9 @@ Page {
                         right: parent.right;
                     }
                     width: parent.width;
-                    placeholder: landscapeCheck.checked ? "Width" : "Height";
+                    placeholderText: landscapeCheck.checked ? "Width" : "Height";
                     validator: DoubleValidator{ bottom: 1; top: 999999; decimals: 2; }
-                    numeric: true;
+                    inputMethodHints: Qt.ImhFormattedNumbersOnly;
                 }
             }
             Label {
