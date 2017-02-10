@@ -99,7 +99,7 @@ calligra_define_product(APP_BRAINDUMP "Braindump app (for Desktop)"  UNMAINTAINE
 calligra_define_product(DOC "Calligra Documentations" STAGING)
 
 # staging apps
-calligra_define_product(APP_GEMINI "The Calligra Gemini application"  STAGING REQUIRES PART_QTQUICK PART_COMPONENTS)
+calligra_define_product(APP_GEMINI "The Calligra Gemini application"  REQUIRES PART_COMPONENTS)
 # TODO: this needs to be split up by app products
 
 
@@ -132,7 +132,7 @@ calligra_define_product(PLUGIN_SEMANTICITEMS "Semantic items plugins" REQUIRES F
 calligra_define_product(PLUGIN_SHAPEFILTEREFFECTS "Default shape filtereffects plugin" REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_STENCILSDOCKER "Stencils docker plugin" REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_KARBONPLUGINS "Semantic items plugins" REQUIRES LIB_CALLIGRA)
-calligra_define_product(PLUGIN_CALLIGRAGEMINI_GIT "Git support plugin for Calligra Gemini" UNPORTED)
+calligra_define_product(PLUGIN_CALLIGRAGEMINI_GIT "Git support plugin for Calligra Gemini")
 
 # staging plugins
 calligra_define_product(PLUGIN_THREEDSHAPE "3D shape plugin"  STAGING  REQUIRES LIB_CALLIGRA)
