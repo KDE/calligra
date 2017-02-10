@@ -195,7 +195,7 @@ Page {
             QtControls.ComboBox {
                 id: paperSizeList;
                 width: parent.width;
-                currentIndex: 7;
+                Component.onCompleted: currentIndex = 7;
                 onCurrentIndexChanged: {
                     if(widthInput !== null) {
                         widthInput.text = paperSizeModel.get(currentIndex).width;
@@ -244,7 +244,7 @@ Page {
                 opacity: paperSizeList.currentIndex === 0 ? 1 : 0;
                 Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
                 clip: true;
-                PanelTextField {
+                QtControls.TextField {
                     id: widthInput;
                     anchors {
                         top: parent.top;
@@ -256,7 +256,7 @@ Page {
                     validator: DoubleValidator{ bottom: 1; top: 999999; decimals: 2; }
                     numeric: true;
                 }
-                PanelTextField {
+                QtControls.TextField {
                     id: heightInput;
                     anchors {
                         top: parent.top;
