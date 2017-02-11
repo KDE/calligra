@@ -24,6 +24,7 @@
 #include "gitlogmodel.h"
 #include "checkoutcreator.h"
 
+#include <QtQml/QtQml>
 #include <QQmlEngine>
 #include <QQmlContext>
 #include <QApplication>

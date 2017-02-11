@@ -11,9 +11,10 @@ set(git_plugin_SRCS
 add_library(calligrageminigitplugin SHARED ${git_plugin_SRCS})
 
 target_link_libraries(calligrageminigitplugin
-    Qt5::Quick
-    Qt5::Gui
     Qt5::Core
+    Qt5::Gui
+    Qt5::Qml
+    Qt5::Quick
     ${LIBGIT2_LIBRARIES}
     komain
     KF5::I18n
