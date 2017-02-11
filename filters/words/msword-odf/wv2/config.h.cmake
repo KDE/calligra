@@ -12,6 +12,9 @@
 /* Define to 1 if you have the <float.h> header file. */
 #cmakedefine HAVE_FLOAT_H 1
 
+/* Define if you have isfinite */
+#cmakedefine HAVE_FUNC_ISFINITE
+
 /* Define if you have finite */
 #cmakedefine HAVE_FUNC_FINITE
 

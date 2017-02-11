@@ -64,6 +64,7 @@ endif()
 
 check_function_exists( isinf HAVE_FUNC_ISINF )
 check_function_exists( isnan HAVE_FUNC_ISNAN )
+check_function_exists( isfinite HAVE_FUNC_ISFINITE )
 check_function_exists( finite HAVE_FUNC_FINITE )
 check_function_exists( _finite HAVE_FUNC__FINITE )
 
