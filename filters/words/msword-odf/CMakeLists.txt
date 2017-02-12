@@ -22,7 +22,7 @@ kde_enable_exceptions()
 add_library(calligra_filter_doc2odt MODULE ${doc2odt_PART_SRCS})
 calligra_filter_desktop_to_json(calligra_filter_doc2odt calligra_filter_doc2odt.desktop)
 
-target_link_libraries(calligra_filter_doc2odt kowv2 komain mso)
+target_link_libraries(calligra_filter_doc2odt mso kowv2 komain)
 
 install(TARGETS calligra_filter_doc2odt  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
