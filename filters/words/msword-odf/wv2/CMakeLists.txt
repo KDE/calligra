@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.8.0)
 
+add_definitions("-DUNICODE -D_UNICODE")
+
 #cmake_policy CMP0017 was introduced in version 2.8.4
 if(${CMAKE_VERSION} VERSION_GREATER 2.8.3)
     cmake_policy(SET CMP0017 NEW)
@@ -64,7 +66,9 @@ endif()
 
 check_function_exists( isinf HAVE_FUNC_ISINF )
 check_function_exists( isnan HAVE_FUNC_ISNAN )
-check_function_exists( isfinite HAVE_FUNC_ISFINITE )
+if(MINGW)
+add_definitions( -DHAVE_FUNC_ISFINITE )
+endif()
 check_function_exists( finite HAVE_FUNC_FINITE )
 check_function_exists( _finite HAVE_FUNC__FINITE )
 
