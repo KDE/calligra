@@ -8,7 +8,11 @@ set(git_plugin_SRCS
     checkoutcreator.cpp
 )
 
+if(WIN32)
+add_library(calligrageminigitplugin MODULE ${git_plugin_SRCS})
+else()
 add_library(calligrageminigitplugin SHARED ${git_plugin_SRCS})
+endif()
 
 target_link_libraries(calligrageminigitplugin
     Qt5::Core

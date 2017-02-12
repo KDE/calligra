@@ -28,7 +28,11 @@ set(components_SRCS
     impl/ComponentsKoCanvasController.cpp
 )
 
+if(WIN32)
+add_library(CalligraComponentsPlugin MODULE ${components_SRCS})
+else()
 add_library(CalligraComponentsPlugin SHARED ${components_SRCS})
+endif()
 target_include_directories(CalligraComponentsPlugin
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
