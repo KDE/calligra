@@ -56,6 +56,7 @@ int main( int argc, char** argv )
 #endif
 
     QApplication app(argc, argv);
+    app.setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
     KAboutData::setApplicationData(aboutData);
 
     QCommandLineParser parser;
@@ -87,12 +88,8 @@ int main( int argc, char** argv )
 
     QString envStringSet;
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    if (!env.contains("KDESYCOCA")) {
-        _putenv_s("KDESYCOCA", QString(appdir.absolutePath() + "/sycoca").toLocal8Bit());
-        envStringSet.append("KDESYCOCA ");
-    }
     if (!env.contains("XDG_DATA_DIRS")) {
-        _putenv_s("XDG_DATA_DIRS", QString(appdir.absolutePath() + "/share").toLocal8Bit());
+        _putenv_s("XDG_DATA_DIRS", QString(appdir.absolutePath() + "/bin/data").toLocal8Bit());
         envStringSet.append("XDG_DATA_DIRS ");
     }
     _putenv_s("PATH", QString(appdir.absolutePath() + "/bin" + ";"
@@ -103,7 +100,11 @@ int main( int argc, char** argv )
     if(envStringSet.length() > 0) {
         qDebug() << envStringSet << "were set from main, restarting application in new environment!";
         // Pass all the arguments along, but don't include the application name...
-        QProcess::startDetached(app.applicationFilePath(), KCmdLineArgs::allArguments().mid(1));
+        QStringList allArguments;
+        for(int i = 0; i < argc; i++) {
+            allArguments << argv[i];
+        }
+        QProcess::startDetached(app.applicationFilePath(), allArguments.mid(1));
         exit(0);
     }
 
