@@ -64,10 +64,12 @@ TextContentsModelImpl::TextContentsModelImpl(KoDocument* document, KoCanvasBase*
 {
     d->document = qobject_cast<KWDocument*>(document);
     Q_ASSERT(d->document);
-    d->textDocument = d->document->mainFrameSet()->document();
-    d->layout = qobject_cast<KoTextDocumentLayout*>(d->textDocument->documentLayout());
-    connect(d->layout, &KoTextDocumentLayout::finishedLayout, this, &TextContentsModelImpl::documentLayoutFinished);
-    d->layout->scheduleLayout();
+    if(d->document->mainFrameSet() && d->document->mainFrameSet()->document()) {
+        d->textDocument = d->document->mainFrameSet()->document();
+        d->layout = qobject_cast<KoTextDocumentLayout*>(d->textDocument->documentLayout());
+        connect(d->layout, &KoTextDocumentLayout::finishedLayout, this, &TextContentsModelImpl::documentLayoutFinished);
+        d->layout->scheduleLayout();
+    }
     d->canvas = canvas;
 }
 

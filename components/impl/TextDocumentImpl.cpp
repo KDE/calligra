@@ -39,6 +39,7 @@
 #include <QTextDocument>
 #include <QTextFrame>
 #include <QTextLayout>
+#include <QDebug>
 
 #include "ComponentsKoCanvasController.h"
 #include <libs/textlayout/KoTextShapeData.h>
@@ -184,6 +185,7 @@ bool TextDocumentImpl::load(const QUrl& url)
     d->document->setCheckAutoSaveFile(false);
 
     bool retval = d->document->openUrl(url);
+    qDebug() << "Attempting to open" << url << "and our success was" << retval;
 
     d->canvas = static_cast<KWCanvasItem*>(d->part->canvasItem(d->document));
 
