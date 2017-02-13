@@ -260,6 +260,7 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} QUIET
         DBus
         OpenGL
         Quick
+        QuickWidgets
         Sql
         WebKit
 #         WebKitWidgets
@@ -288,6 +289,10 @@ set_package_properties(Qt5OpenGL PROPERTIES
 )
 set_package_properties(Qt5Quick PROPERTIES
     PURPOSE "Required for QtQuick2 components"
+    TYPE RECOMMENDED
+)
+set_package_properties(Qt5QuickWidgets PROPERTIES
+    PURPOSE "Required for Calligra Gemini"
     TYPE RECOMMENDED
 )
 set_package_properties(Qt5Sql PROPERTIES
@@ -359,9 +364,11 @@ endif()
 
 # overcome some platform incompatibilities
 if(WIN32)
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/winquirks)
-    add_definitions(-D_USE_MATH_DEFINES)
-    add_definitions(-DNOMINMAX)
+	if(NOT MINGW)
+		include_directories(${CMAKE_CURRENT_SOURCE_DIR}/winquirks)
+		add_definitions(-D_USE_MATH_DEFINES)
+		add_definitions(-DNOMINMAX)
+	endif()
     set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
 endif()
 
