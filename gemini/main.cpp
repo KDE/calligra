@@ -77,11 +77,6 @@ int main( int argc, char** argv )
         }
     }
 
-    KIconLoader::global()->addAppDir("calligrawords");
-    KIconLoader::global()->addAppDir("words");
-    KIconLoader::global()->addAppDir("calligrastage");
-    KIconLoader::global()->addAppDir("stage");
-
 #ifdef Q_OS_WIN
     QDir appdir(app.applicationDirPath());
     appdir.cdUp();
@@ -112,26 +107,14 @@ int main( int argc, char** argv )
     app.addLibraryPath(appdir.absolutePath() + "/bin");
     app.addLibraryPath(appdir.absolutePath() + "/lib");
     app.addLibraryPath(appdir.absolutePath() + "/lib/kde4");
-
-    QStringList iconThemePaths;
-    iconThemePaths << appdir.absolutePath() + "/share/icons";
-    QIcon::setThemeSearchPaths(iconThemePaths);
-    QIcon::setThemeName("oxygen");
 #endif
 
-    if (qgetenv("KDE_FULL_SESSION").isEmpty()) {
-        // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
-        qobject_cast<QApplication*>(QApplication::instance())->setStyle("Plastique");
-        qobject_cast<QApplication*>(QApplication::instance())->setStyle("Oxygen");
-    }
+    KIconLoader::global()->addAppDir("calligra");
+    KIconLoader::global()->addAppDir("calligragemini");
+    KIconLoader::global()->addAppDir("calligrawords");
+    KIconLoader::global()->addAppDir("calligrastage");
+    KIconLoader::global()->addAppDir("calligrasheets");
 
-    // then create the pixmap from an xpm: we cannot get the
-    // location of our datadir before we've started our components,
-    // so use an xpm.
-//     QPixmap pm(splash_screen_xpm);
-//     QSplashScreen splash(pm);
-//     splash.show();
-//     splash.showMessage(".");
     app.processEvents();
 
     MainWindow window(fileNames);
@@ -145,7 +128,6 @@ int main( int argc, char** argv )
 #else
     window.show();
 #endif
-//    splash.finish(&window);
 
     return app.exec();
 }
