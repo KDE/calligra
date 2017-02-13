@@ -40,7 +40,6 @@
 #include <QUrl>
 #include <QStandardPaths>
 
-#include <kiconloader.h>
 #include <kactioncollection.h>
 #include <ktoolbar.h>
 #include <kmessagebox.h>
@@ -217,8 +216,6 @@ public:
         if(settings->currentFile().isEmpty()) {
             return;
         }
-        // Tell the iconloader about share/apps/calligra/icons
-        KIconLoader::global()->addAppDir("calligra");
         // Initialize all Calligra directories etc.
         KoGlobal::initialize();
 
