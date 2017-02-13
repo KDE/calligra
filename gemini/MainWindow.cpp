@@ -25,7 +25,7 @@
 
 #include <QApplication>
 #include <QResizeEvent>
-#include <QQuickView>
+#include <QQuickWidget>
 #include <QQmlContext>
 #include <QQmlEngine>
 #include <QGraphicsObject>
@@ -128,8 +128,7 @@ public:
     }
     MainWindow* q;
     bool allowClose;
-    QWidget* touchWidget;
-    QQuickView* touchView;
+    QQuickWidget* touchView;
     QPointer<KoMainWindow> desktopView;
     QObject* currentView;
     Settings *settings;
@@ -155,7 +154,7 @@ public:
 
     void initTouchView(QObject* parent)
     {
-        touchView = new QQuickView();
+        touchView = new QQuickWidget();
         QmlGlobalEngine::instance()->setEngine(touchView->engine());
         touchView->engine()->addImageProvider(QLatin1String("recentimage"), new RecentImageImageProvider);
         touchView->engine()->rootContext()->setContextProperty("mainWindow", parent);
@@ -187,7 +186,8 @@ public:
         touchView->engine()->addImportPath(appdir.canonicalPath() + "/imports");
         touchView->engine()->addImportPath(appdir.canonicalPath() + "/lib/calligra/imports");
         touchView->engine()->addImportPath(appdir.canonicalPath() + "/lib64/calligra/imports");
-        QString mainqml = appdir.canonicalPath() + "/share/apps/calligragemini/calligragemini.qml";
+        touchView->engine()->addImportPath(appdir.canonicalPath() + "/bin/data/calligragemini");
+        QString mainqml = appdir.canonicalPath() + "/bin/data/calligragemini/calligragemini.qml";
 #else
         QString mainqml = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("calligragemini/calligragemini.qml"));
 #endif
@@ -199,7 +199,7 @@ public:
         QFileInfo fi(mainqml);
 
         touchView->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
-        touchView->setResizeMode( QQuickView::SizeRootObjectToView );
+        touchView->setResizeMode( QQuickWidget::SizeRootObjectToView );
 
         toDesktop = new QAction(q);
         toDesktop->setEnabled(true);
@@ -349,6 +349,7 @@ void MainWindow::switchToTouch()
 {
     QTime timer;
     timer.start();
+    qDebug() << "Switching to touch";
 
     if (d->toTouch)
     {
@@ -370,13 +371,7 @@ void MainWindow::switchToTouch()
         d->desktopView->setParent(0);
     }
 
-    QWidget* container = QWidget::createWindowContainer(d->touchView);
-    d->touchWidget = new QWidget();
-    d->touchWidget->setLayout(new QVBoxLayout());
-    d->touchWidget->layout()->setContentsMargins(0,0,0,0);
-    d->touchWidget->layout()->setSpacing(0);
-    d->touchWidget->layout()->addWidget(container);
-    setCentralWidget(d->touchWidget);
+    setCentralWidget(d->touchView);
     qApp->processEvents();
     d->touchView->setVisible(true);
     resize(size());
@@ -394,7 +389,7 @@ void MainWindow::switchToTouch()
 
 void MainWindow::touchChange()
 {
-    if (centralWidget() != d->touchWidget || !d->syncObject)
+    if (centralWidget() != d->touchView || !d->syncObject)
         return;
 
     if (d->desktopView)
@@ -424,6 +419,7 @@ void MainWindow::switchToDesktop()
 {
     QTime timer;
     timer.start();
+    qDebug() << "Switching to desktop";
 
     if (d->toDesktop)
         d->toDesktop->setEnabled(false);
@@ -443,13 +439,9 @@ void MainWindow::switchToDesktop()
 
     if (d->currentTouchPage == "MainPage")
     {
-        d->touchWidget->setParent(0);
         d->touchView->setParent(0);
         d->touchView->setVisible(false);
         setCentralWidget(d->desktopView);
-        if(d->touchWidget) {
-            d->touchWidget = 0;
-        }
     }
 
     if (view) {
@@ -471,6 +463,7 @@ void MainWindow::setDocAndPart(QObject* document, QObject* part)
     if(DocumentManager::instance()->document()) {
         disconnect(DocumentManager::instance()->document(), SIGNAL(modified(bool)), this, SLOT(resetWindowTitle()));
     }
+    qDebug() << "Attempting to set doc and part to" << document << "and" << part;
     DocumentManager::instance()->setDocAndPart(qobject_cast<KoDocument*>(document), qobject_cast<KoPart*>(part));
     d->touchEventReceiver = d->touchView->rootObject()->findChild<QQuickItem*>("controllerItem");
     if(DocumentManager::instance()->document()) {
@@ -692,7 +685,7 @@ void MainWindow::resourceChanged(int key, const QVariant& v)
 {
     Q_UNUSED(key)
     Q_UNUSED(v)
-    if(centralWidget() == d->touchWidget)
+    if(centralWidget() == d->touchView)
         return;
 }
 
