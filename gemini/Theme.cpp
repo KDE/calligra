@@ -323,6 +323,11 @@ QUrl Theme::icon(const QString& name, bool useSystemFallback)
     return QUrl::fromLocalFile(url);
 }
 
+QIcon Theme::iconActual(const QString& name)
+{
+    return QIcon(icon(name).toLocalFile());
+}
+
 QString Theme::imagePath() const
 {
     return d->imagePath;
