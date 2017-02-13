@@ -40,7 +40,7 @@ Item {
             bottom: parent.bottom;
         }
         title: "Calligra Gemini"
-        titleIcon: "calligragemini"
+        titleIcon: Settings.theme.iconActual("Calligra-MockIcon-1");
         actions: [
             Kirigami.Action  {
                 text: "OPEN"
