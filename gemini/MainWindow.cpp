@@ -102,7 +102,7 @@ public:
         , desktopView(0)
         , currentView(0)
         , settings(0)
-        , slateMode(true)
+        , slateMode(false)
         , docked(false)
         , touchKoView(0)
         , touchEventReceiver(0)
@@ -118,8 +118,8 @@ public:
         , alternativeSaveAction(0)
     {
 #ifdef Q_OS_WIN
-//         slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
-//         docked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
+        // slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
+        // docked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
 #endif
         fullScreenThrottle = new QTimer(qq);
         fullScreenThrottle->setInterval(500);
@@ -461,8 +461,8 @@ void MainWindow::setDocAndPart(QObject* document, QObject* part)
         disconnect(DocumentManager::instance()->document(), SIGNAL(modified(bool)), this, SLOT(resetWindowTitle()));
     }
     qDebug() << "Attempting to set doc and part to" << document << "and" << part;
-    DocumentManager::instance()->setDocAndPart(qobject_cast<KoDocument*>(document), qobject_cast<KoPart*>(part));
     d->touchEventReceiver = d->touchView->rootObject()->findChild<QQuickItem*>("controllerItem");
+    DocumentManager::instance()->setDocAndPart(qobject_cast<KoDocument*>(document), qobject_cast<KoPart*>(part));
     if(DocumentManager::instance()->document()) {
         connect(DocumentManager::instance()->document(), SIGNAL(modified(bool)), this, SLOT(resetWindowTitle()));
     }
