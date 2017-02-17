@@ -168,71 +168,71 @@ void GitOpsThread::performPush()
 {
     git_repository* repository;
     int error = git_repository_open(&repository, QString("%1/.git").arg(d->gitDir).toLatin1());
-    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Push 1, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     // Get the current index
     git_index* index;
     error = git_repository_index(&index, repository);
-    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Push 2, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     // refresh it, and add the file
     error = git_index_read(index, true);
-    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
-    QString relative = d->currentFile.mid(d->gitDir.length() + 1);
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Push 3, error code from git2 was" << error << "which is described as" << err->message; return; }
+    QString relative = d->currentFile.mid(d->gitDir.length() + 9); // That is, 1 for the leading slash, and 8 for the file:///
     error = git_index_add_bypath(index, relative.toLocal8Bit());
-    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Push 4, error code from git2 was" << error << "which is described as" << err->message; return; }
     error = git_index_write(index);
-    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Push 5, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     // convert the index to a tree, so we can use that to create the commit
     git_tree* tree;
     git_oid tree_id;
     error = git_index_write_tree(&tree_id, index);
-    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Push 6, error code from git2 was" << error << "which is described as" << err->message; return; }
     error = git_tree_lookup(&tree, repository, &tree_id);
-    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Push 7, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     // get where we want to parent things to
     git_oid obj;
     error = git_reference_name_to_id(&obj, repository, "HEAD");
-    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Push 8, error code from git2 was" << error << "which is described as" << err->message; return; }
     git_commit *parent = NULL;
     error = git_commit_lookup(&parent, repository, &obj);
-    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Push 9, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     // create the commit
     git_oid oid;
     error = git_commit_create_v(&oid, repository, "HEAD", d->signature, d->signature, "UTF-8", d->message.toLatin1(), tree, 1, parent);
-    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Push 10, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     error = git_repository_state_cleanup(repository);
-    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Push 11, error code from git2 was" << error << "which is described as" << err->message; return; }
 
 
     // Find the current branch's upstream remote
     git_reference *current_branch;
     error = git_repository_head(&current_branch, repository);
-    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Push 12, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     git_reference *upstream;
     error = git_branch_upstream(&upstream, current_branch);
-    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Push 13, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     // Now find the name of the remote
     git_buf remote_name = {0,0,0};
     error = git_branch_remote_name(&remote_name, repository, git_reference_name(upstream));
-    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Push 14, error code from git2 was" << error << "which is described as" << err->message; return; }
     QString remoteName = QString::fromUtf8(remote_name.ptr);
     git_buf_free(&remote_name);
 
     // And the upstream and local branch names...
     const char *branch_name;
     error = git_branch_name(&branch_name, upstream);
-    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Push 15, error code from git2 was" << error << "which is described as" << err->message; return; }
     QString upstreamBranchName = QString::fromUtf8(branch_name);
     upstreamBranchName.remove(0, remoteName.length() + 1);
     error = git_branch_name(&branch_name, current_branch);
-    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Push 16, error code from git2 was" << error << "which is described as" << err->message; return; }
     QString branchName = QString::fromUtf8(branch_name);
 
     git_remote_callbacks remoteCallbacks = GIT_REMOTE_CALLBACKS_INIT;
@@ -241,7 +241,7 @@ void GitOpsThread::performPush()
     remoteCallbacks.credentials = &Private::acquireCredentialsCallback;
     git_remote* remote;
     error = git_remote_lookup(&remote, repository, "origin");
-    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Push 17, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     char tempPath[512] = "refs/heads/";
     char tempPath2[512] = "refs/heads/";
@@ -254,11 +254,11 @@ void GitOpsThread::performPush()
 
     git_push_options pushOptions;
     error = git_push_init_options(&pushOptions, GIT_PUSH_OPTIONS_VERSION);
-    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Push 18, error code from git2 was" << error << "which is described as" << err->message; return; }
     pushOptions.callbacks = remoteCallbacks;
 
     error = git_remote_push(remote, &uploadrefs, &pushOptions);
-    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Kapow, error code from git2 was" << error << "which is described as" << err->message; return; }
+    if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Push 19, error code from git2 was" << error << "which is described as" << err->message; return; }
 
     emit pushCompleted();
 }
@@ -586,9 +586,9 @@ void GitController::setCurrentFile(QString& newFile)
     // OK, so some silliness here. This ensures a bit of sanity later, because otherwise we
     // end up comparing a localised checkout dir to a non-localised current file (since that
     // is created from a URL, and the checkout dir isn't)
-    if("\\" == QDir::separator() &&  newFile.contains("/")) {
-        d->currentFile = d->currentFile.replace("/", QDir::separator());
-    }
+    // if("\\" == QDir::separator() &&  newFile.contains("/")) {
+        // d->currentFile = d->currentFile.replace("/", QDir::separator());
+    // }
     emit currentFileChanged();
 }
 
@@ -663,7 +663,7 @@ void GitController::commitAndPushCurrentFile()
         return;
     }
 
-    if(d->currentFile.startsWith(d->cloneDir)) {
+    if(d->currentFile.startsWith(QString("file:///%1").arg(d->cloneDir))) {
         // ask commit message and checkbox for push (default on, remember?)
         bool ok = false;
         QString message = QInputDialog::getMultiLineText(0,
