@@ -38,14 +38,17 @@
 class CheckoutCreator::Private
 {
 public:
-    Private()
-        : needsPrivateKeyPassphrase(false)
+    Private(CheckoutCreator* qq)
+        : q(qq)
+        , needsPrivateKeyPassphrase(false)
         , signature(0)
+        , progress(0)
     {}
     ~Private()
     {
         git_signature_free(signature);
     }
+    CheckoutCreator* q;
     QString privateKey;
     QString publicKey;
     QString userForRemote;
@@ -54,6 +57,8 @@ public:
     QString userName;
     QString userEmail;
     git_signature* signature;
+
+    int progress;
 
     QString getPassword()
     {
@@ -119,11 +124,42 @@ public:
         git_signature_now(&signature, userName.toLocal8Bit(), userEmail.toLocal8Bit());
         return true;
     }
+
+    static int transferProgressCallback(const git_transfer_progress* stats, void* data)
+    {
+        if (!data) {
+            return 1;
+        }
+
+        Private *payload = static_cast<Private*>(data);
+        int percent = (int)(0.5 + 100.0 * ((double)stats->received_objects) / ((double)stats->total_objects));
+        if (percent != payload->progress) {
+            emit payload->q->cloneProgress(percent);
+            payload->progress = percent;
+        }
+        return 0;
+    }
+
+    static int acquireCredentialsCallback(git_cred **cred, const char */*url*/, const char *username_from_url, unsigned int /*allowed_types*/, void *data)
+    {
+        int result = -1;
+        if (data) {
+            Private* payload = static_cast<Private*>(data);
+            if(payload->needsPrivateKeyPassphrase) {
+                result = git_cred_ssh_key_new(cred, username_from_url, payload->publicKey.toLatin1(), payload->privateKey.toLatin1(), payload->getPassword().toLatin1());
+            }
+            else {
+                result = git_cred_ssh_key_new(cred, username_from_url, payload->publicKey.toLatin1(), payload->privateKey.toLatin1(), "");
+            }
+        }
+
+        return result;
+    }
 };
 
 CheckoutCreator::CheckoutCreator(QObject* parent)
     : QObject(parent)
-    , d(new Private)
+    , d(new Private(this))
 {
     git_libgit2_init();
 }
@@ -155,25 +191,6 @@ bool CheckoutCreator::isGitDir(QString directory) const
     if(dir.exists(".git/config"))
         return true;
     return false;
-}
-
-typedef struct {
-    CheckoutCreator* checkoutCreator;
-} progress_data;
-
-int fetch_progress(const git_transfer_progress *stats, void *payload)
-{
-    progress_data *pd = (progress_data*)payload;
-    CheckoutCreator* cc = pd->checkoutCreator;
-    emit cc->cloneProgress(stats->received_objects / stats->total_objects);
-    return 0;
-}
-
-void checkout_progress(const char */*path*/, size_t cur, size_t tot, void *payload)
-{
-    progress_data *pd = (progress_data*)payload;
-    CheckoutCreator* cc = pd->checkoutCreator;
-    emit cc->cloneProgress(cur / tot);
 }
 
 QString CheckoutCreator::createClone(QString userVisibleName, QString url, QString localPath, QObject* credentials) const
@@ -216,14 +233,13 @@ QString CheckoutCreator::createClone(QString userVisibleName, QString url, QStri
 
     QString checkoutLocation = QString("%1%2%3").arg(localPath).arg(QDir::separator()).arg(repoName);
 
-    progress_data d = {0};
     git_clone_options clone_opts = GIT_CLONE_OPTIONS_INIT;
-
     clone_opts.checkout_opts.checkout_strategy = GIT_CHECKOUT_SAFE;
-    clone_opts.checkout_opts.progress_cb = checkout_progress;
-    clone_opts.checkout_opts.progress_payload = &d;
-    clone_opts.fetch_opts.callbacks.transfer_progress = fetch_progress;
-    clone_opts.fetch_opts.callbacks.payload = &d;
+    // clone_opts.checkout_opts.progress_cb = &Private::transferProgressCallback;
+    // clone_opts.checkout_opts.progress_payload = (void*)this->d;
+    clone_opts.fetch_opts.callbacks.transfer_progress = &Private::transferProgressCallback;
+    clone_opts.fetch_opts.callbacks.credentials = &Private::acquireCredentialsCallback;
+    clone_opts.fetch_opts.callbacks.payload = (void*)this->d;
 
     git_repository *repo = NULL;
     int error = git_clone(&repo, url.toLatin1(), checkoutLocation.toLatin1(), &clone_opts);
