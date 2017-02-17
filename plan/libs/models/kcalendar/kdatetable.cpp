@@ -835,6 +835,10 @@ bool KDateTable::setDate(const QDate& date_)
     if (d->m_date != date_) {
         const QDate oldDate = d->m_date;
         d->m_date = date_;
+        if (oldDate.year() != date_.year() || oldDate.month() != date_.month()) {
+            QDate dt(date_.year(), date_.month(), 1);
+            d->m_weekDayFirstOfMonth = dt.dayOfWeek();
+        }
         emit(dateChanged(oldDate, date_));
         emit(dateChanged(date_));
     }
