@@ -23,6 +23,7 @@ import org.kde.kirigami 1.0 as Kirigami
 import org.calligra 1.0
 
 Rectangle {
+    id: base;
     anchors.fill: parent;
     anchors.margins: Settings.theme.adjustedPixel(16);
     property int accountIndex: -1;
