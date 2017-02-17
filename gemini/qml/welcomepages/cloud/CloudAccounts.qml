@@ -29,6 +29,7 @@ Page {
     id: base;
     property string pageName: "accountsPage";
     property QtObject accountsList;
+    signal showAccount(var index, var stackComponent, var accountDetails);
 
     Connections {
         target: controllerMIT;
@@ -60,13 +61,23 @@ Page {
             height: Settings.theme.adjustedPixel(64);
             width: ListView.view.width;
             Kirigami.Label {
-                anchors.fill: parent;
+                anchors {
+                    top: parent.top;
+                    left: parent.left;
+                    right: accountControls.left;
+                    bottom: parent.bottom;
+                }
                 text: model.text;
                 horizontalAlignment: Text.AlignLeft;
                 verticalAlignment: Text.AlignVCenter;
                 font: Settings.theme.font("templateLabel");
+                MouseArea {
+                    anchors.fill: parent;
+                    onClicked: base.showAccount(model.index, model.stackComponent, model.accountDetails);
+                }
             }
             Row {
+                id: accountControls;
                 anchors {
                     verticalCenter: parent.verticalCenter;
                     right: parent.right;
