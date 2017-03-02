@@ -2,6 +2,7 @@
 
    Copyright 2007 Johannes Simon <johannes.simon@gmail.com>
    Copyright 2009 Inge Wallin    <inge@lysator.liu.se>
+   Copyright 2017 Dag Andersen   <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1960,11 +1961,14 @@ void Axis::Private::updatePosition()
                                                : plotArea->yAxis() == q;
 
     Position position;
-    if (q->orientation() == Qt::Horizontal)
+    ItemType type = GenericItemType;
+    if (q->orientation() == Qt::Horizontal) {
         position = first ? BottomPosition : TopPosition;
-    else
+        type = first ? XAxisTitleType : SecondaryXAxisTitleType;
+    } else {
         position = first ? StartPosition : EndPosition;
-
+        type = first ? YAxisTitleType : SecondaryYAxisTitleType;
+    }
     if (position == StartPosition)
         title->rotate(-90 - title->rotation());
     else if (position == EndPosition)
@@ -1973,7 +1977,7 @@ void Axis::Private::updatePosition()
     // KChart
     kdAxis->setPosition(PositionToKChartAxisPosition(position));
     ChartLayout *layout = plotArea->parent()->layout();
-    layout->setPosition(title, position, 10);
+    layout->setPosition(title, position, type);
     layout->layout();
 
     q->requestRepaint();

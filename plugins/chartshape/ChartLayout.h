@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
 
+   Copyright 2017 Dag Andersen <danders@get2net.dk>
    Copyright 2010 Johannes Simon <johannes.simon@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -24,6 +25,7 @@
 // Qt
 #include <QList>
 #include <QMap>
+#include <QSizeF>
 
 // Calligra
 #include <KoShapeContainerModel.h>
@@ -31,8 +33,6 @@
 // KoChart
 #include "kochart_global.h"
 
-
-class QSizeF;
 
 
 namespace KoChart {
@@ -160,8 +160,37 @@ public:
      * Sets the horizontal and vertical margin that will be applied during layout
      */
     void setMargins (qreal hMargin, qreal vMargin);
+    /// Returns the margins defined for this layout
+    QPointF margins() const;
+    /// Set spacing in points to @p hSpacing, @p vSpacing to be used for this layout
+    void setSpacing(qreal hSpacing, qreal vSpacing);
+    /// Returns the horizontal and vertical spacing in points defined for this layout
+    /// Default: uses the margins
+    QPointF spacing() const;
+
+    /**
+     * Calculates the layouting of the shapes with @p shape visibility @p show,
+     * in accordance with the @p shapes default positioning set
+     * when the shapes where added to this layout.
+     * 
+     * This will normally be used when @p shape changes visibility, but can also
+     * be used to trigger relayout due to other changes in shape (resize).
+     * 
+     * Note that shape->isVisible() together with @p show is used to determine
+     * if the shape changes visibility, hence you should call this method
+     * before you call shape->setVisible()
+     *
+     * Returns the new position and size of shapes that must be moved and/or resized
+     */
+    QMap<KoShape*, QRectF> calculateLayout(const KoShape *shape, bool show) const;
+
+    /// Enable/disable automatic layout
+    void setAutoLayoutEnabled(bool on);
 
 private:
+    /// Set the chart size to @p size and schedule relayout
+    void setContainerSize(const QSizeF &size);
+
     /**
      * Lays out all items in TopPosition, and returns the y value of
      * the bottom-most item's bottom.
@@ -191,12 +220,44 @@ private:
     void layoutTopEnd(KoShape *shape);
     void layoutBottomEnd(KoShape *shape);
 
-    class LayoutData;
+    QMap<KoShape*, QRectF> calculateLayoutTop(KoShape *shape, KoShape *center, bool hide) const;
+    QMap<KoShape*, QRectF> calculateLayoutBottom(KoShape *shape, KoShape *center, bool hide) const;
+    QMap<KoShape*, QRectF> calculateLayoutStart(KoShape *shape, KoShape *center, bool hide) const;
+    QMap<KoShape*, QRectF> calculateLayoutEnd(KoShape *shape, KoShape *center, bool hide) const;
+    QMap<KoShape*, QRectF> calculateLayoutTopStart(KoShape *shape, KoShape *center, bool hide) const;
+    QMap<KoShape*, QRectF> calculateLayoutBottomStart(KoShape *shape, KoShape *center, bool hide) const;
+    QMap<KoShape*, QRectF> calculateLayoutTopEnd(KoShape *shape, KoShape *center, bool hide) const;
+    QMap<KoShape*, QRectF> calculateLayoutBottomEnd(KoShape *shape, KoShape *center, bool hide) const;
+
+    QRectF layoutArea(Position area, const KoShape *plotArea) const;
+    Position itemArea(const KoShape *item, const KoShape *plotArea) const;
+    /// Returns the position where the @p shape shall be inserted.
+    /// @p defaultValue is used if position cannot/shall not be calculated (eg shape layout position is FloatingPosition)
+    /// @p itemstart and @p itemend the shapes start and end
+    /// @p areastart and @p areacend the start and end of the area in which the item shall be positioned
+    qreal itemDefaultPosition(const KoShape *shape, qreal defaultValue, qreal itemstart, qreal itemend, qreal areastart, qreal areaend) const;
+
+    bool isShapeToBeMoved(const KoShape *shape, Position area, const KoShape *plotArea) const;
+
+    QString dbg(const KoShape *shape) const;
+#ifdef COMPILING_TESTS
+public:
+#endif
+    static qreal relativePosition(qreal start1, qreal length1, qreal start2, qreal length2, qreal start, qreal length);
+    static QPointF itemPosition(const KoShape *shape);
+    static QSizeF  itemSize(const KoShape *shape);
+    static QRectF  itemRect(const KoShape *shape);
+    static void    setItemPosition(KoShape *shape, const QPointF& pos);
+
+private:
     bool m_doingLayout;
     bool m_relayoutScheduled;
     QSizeF m_containerSize;
     qreal m_hMargin;
     qreal m_vMargin;
+    QPointF m_spacing;
+    bool m_autoLayoutEnabled;
+    class LayoutData;
     QMap<KoShape*, LayoutData*> m_layoutItems;
 };
 

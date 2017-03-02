@@ -99,7 +99,7 @@ Legend::Private::Private()
     framePen = QPen();
     backgroundBrush = QBrush();
     expansion = HighLegendExpansion;
-    alignment = Qt::AlignRight;
+    alignment = Qt::AlignCenter;
     pixmapRepaintRequested = true;
     position = EndPosition;
 }
@@ -370,7 +370,7 @@ void Legend::setLegendPosition(Position position)
     d->position = position;
     d->pixmapRepaintRequested = true;
 
-    d->shape->layout()->setPosition(this, position);
+    d->shape->layout()->setPosition(this, position, LegendType);
 }
 
 void Legend::setSize(const QSizeF &newSize)
@@ -490,22 +490,8 @@ bool Legend::loadOdf(const KoXmlElement &legendElement,
     if (!legendElement.isNull()) {
         int attributesToLoad = OdfAllAttributes;
         QString lp = legendElement.attributeNS(KoXmlNS::chart, "legend-position", QString());
-        if (!lp.isEmpty()) {
-            attributesToLoad ^= OdfPosition;
-        }
 
-        // FIXME according to odf if legend-position is provided the x
-        // and y value should not be used.
-        //
-        // FIXME also width and height are not supported at this place
-        if (legendElement.hasAttributeNS(KoXmlNS::svg, "x") ||
-            legendElement.hasAttributeNS(KoXmlNS::svg, "y") ||
-            legendElement.hasAttributeNS(KoXmlNS::svg, "width") ||
-            legendElement.hasAttributeNS(KoXmlNS::svg, "height"))
-        {
-            d->shape->layout()->setPosition(this, FloatingPosition);
-        }
-
+        // Note: load position even if it might not be used (if alignment is specified)
         loadOdfAttributes(legendElement, context, attributesToLoad);
 
         QString lalign = legendElement.attributeNS(KoXmlNS::chart, "legend-align", QString());
@@ -526,8 +512,10 @@ bool Legend::loadOdf(const KoXmlElement &legendElement,
         else if (lalign == "end") {
             setAlignment(Qt::AlignRight);
         }
-        else {
+        else if (lalign == "center") {
             setAlignment(Qt::AlignCenter);
+        } else {
+            setAlignment(Qt::AlignJustify); // Means: use shapes position
         }
 
         if (lp == "start") {
@@ -580,8 +568,7 @@ bool Legend::loadOdf(const KoXmlElement &legendElement,
     }
     else {
         // No legend element, use default legend.
-        // FIXME: North??  Isn't that a bit strange as default? /IW
-        setLegendPosition(TopPosition);
+        setLegendPosition(EndPosition);
         setAlignment(Qt::AlignCenter);
     }
 
@@ -602,7 +589,13 @@ void Legend::saveOdf(KoShapeSavingContext &context) const
     if (!lp.isEmpty()) {
         bodyWriter.addAttribute("chart:legend-position", lp);
     }
-    QString lalign;  // FIXME: This string is always empty.  What gives?
+    QString lalign;
+    switch (d->alignment) {
+        case Qt::AlignLeft: lalign = "start"; break;
+        case Qt::AlignRight: lalign = "end"; break;
+        case Qt::AlignCenter: lalign = "center"; break;
+        default: break;
+    }
     if (!lalign.isEmpty()) {
         bodyWriter.addAttribute("chart:legend-align", lalign);
     }

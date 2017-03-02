@@ -3,6 +3,7 @@
    Copyright 2007 Stefan Nikolaus     <stefan.nikolaus@kdemail.net>
    Copyright 2007-2010 Inge Wallin    <inge@lysator.liu.se>
    Copyright 2007-2008 Johannes Simon <johannes.simon@gmail.com>
+   Copyright 2017 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -169,7 +170,7 @@ QString saveOdfFont(KoGenStyles& mainStyles,
 
 
 void saveOdfLabel(KoShape *label, KoXmlWriter &bodyWriter,
-                  KoGenStyles &mainStyles, LabelType labelType)
+                  KoGenStyles &mainStyles, ItemType labelType)
 {
     // Don't save hidden labels, as that's the way of removing them
     // from a chart.
@@ -559,24 +560,18 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     KoShapeStroke *stroke = new KoShapeStroke(0, Qt::black);
     setStroke(stroke);
 
+    // set the default positioning, and do initial layout
     ChartLayout *l = layout();
-    l->setPosition(d->plotArea, CenterPosition);
-    l->setPosition(d->title,    TopPosition, 0);
-    l->setPosition(d->subTitle, TopPosition, 1);
-    l->setPosition(d->footer,   BottomPosition, 0);
-    l->setPosition(d->legend,   d->legend->legendPosition());
+    l->setPosition(d->plotArea, CenterPosition, PlotAreaType);
+    l->setPosition(d->title,    TopPosition, TitleLabelType);
+    l->setPosition(d->subTitle, TopPosition, SubTitleLabelType);
+    l->setPosition(d->footer,   BottomPosition, FooterLabelType);
+    l->setPosition(d->legend,   d->legend->legendPosition(), LegendType);
     l->scheduleRelayout();
     l->layout();
 
-    l->setPosition(d->plotArea, FloatingPosition);
-    l->setPosition(d->title,    FloatingPosition);
-    l->setPosition(d->subTitle, FloatingPosition);
-    l->setPosition(d->footer,   FloatingPosition);
-    l->setPosition(d->legend,   FloatingPosition);
-    for (Axis *a : d->plotArea->axes()) {
-        l->setPosition(a->title(), FloatingPosition);
-    }
-    l->layout();
+    // Let user/odf control positioning
+    l->setAutoLayoutEnabled(false);
 
     requestRepaint();
 }
@@ -958,7 +953,25 @@ bool ChartShape::loadOdf(const KoXmlElement &element,
     // Load common attributes of (frame) shapes.  If you change here,
     // don't forget to also change in saveOdf().
     loadOdfAttributes(element, context, OdfAllAttributes);
-    return loadOdfFrame(element, context);
+    bool r = loadOdfFrame(element, context);
+
+    if (d->legend->isVisible() && d->legend->alignment() != Qt::AlignJustify) {
+        // The legend is positioned into an area, not using the x,y coordinates,
+        // so we need to let ChartLayout ley it out accordingly
+        // This may move/resize other components, but maybe that is ok
+        d->legend->setVisible(false);
+        const QMap<KoShape*, QRectF> map = layout()->calculateLayout(d->legend, true);
+        qDebug()<<"loadOdf:"<<d->legend<<"legend:"<<d->legend->position()<<map;
+        QMap<KoShape*, QRectF>::const_iterator it;
+        for (it = map.constBegin(); it != map.constEnd(); ++it) {
+            it.key()->setPosition(it.value().topLeft());
+            it.key()->setSize(it.value().size());
+        }
+        d->legend->setVisible(true);
+        layout()->scheduleRelayout();
+    }
+
+    return r;
 }
 
 // Used to load the actual contents from the ODF frame that surrounds
@@ -1081,10 +1094,6 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
         d->plotArea->setChartSubType(chartSubType());
         if (!d->plotArea->loadOdf(plotareaElem, context)) {
             return false;
-        }
-        // Make the axis titles movable
-        for (Axis *a : d->plotArea->axes()) {
-            layout()->setPosition(a->title(), FloatingPosition);
         }
 //         d->plotArea->setChartType(chartType);
 //         d->plotArea->setChartSubType(chartSubType());

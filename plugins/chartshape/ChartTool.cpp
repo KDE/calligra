@@ -53,6 +53,7 @@
 // KoChart
 #include "Surface.h"
 #include "PlotArea.h"
+#include "ChartLayout.h"
 #include "Axis.h"
 #include "DataSet.h"
 #include "Legend.h"
@@ -262,7 +263,7 @@ void ChartTool::deactivate()
 QWidget *ChartTool::createOptionWidget()
 {
     ChartConfigWidget  *widget = new ChartConfigWidget();
-    
+
     connect(widget, SIGNAL(dataSetXDataRegionChanged(DataSet*,CellRegion)),
             this,   SLOT(setDataSetXDataRegion(DataSet*,CellRegion)));
     connect(widget, SIGNAL(dataSetYDataRegionChanged(DataSet*,CellRegion)),
@@ -748,12 +749,30 @@ void ChartTool::addAxis(AxisDimension dimension, const QString& title)
     Axis *axis = new Axis(d->shape->plotArea(), dimension);
     axis->setTitleText(title);
     d->shape->update();
+    // TODO: undo command
+    axis->title()->setVisible(false);
+    QMap<KoShape*, QRectF> map = d->shape->layout()->calculateLayout(axis->title(), true);
+    QMap<KoShape*, QRectF>::const_iterator it;
+    for (it = map.constBegin(); it != map.constEnd(); ++it) {
+        it.key()->setPosition(it.value().topLeft());
+        it.key()->setSize(it.value().size());
+    }
+    axis->title()->setVisible(true);
+    d->shape->update();
 }
 
 void ChartTool::removeAxis(Axis *axis)
 {
     Q_ASSERT(d->shape);
-
+    // TODO: undo command
+    if (axis->title()->isVisible()) {
+        QMap<KoShape*, QRectF> map = d->shape->layout()->calculateLayout(axis->title(), false);
+        QMap<KoShape*, QRectF>::const_iterator it;
+        for (it = map.constBegin(); it != map.constEnd(); ++it) {
+            it.key()->setPosition(it.value().topLeft());
+            it.key()->setSize(it.value().size());
+        }
+    }
     d->shape->plotArea()->removeAxis(axis);
     d->shape->update();
 }
@@ -887,6 +906,11 @@ void ChartTool::setShowLegend(bool show)
     Q_ASSERT(d->shape);
 
     ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->legend(), d->shape, show);
+    if (show) {
+        command->setText(kundo2_i18n("Show Legend"));
+    } else {
+        command->setText(kundo2_i18n("Hide Legend"));
+    }
     canvas()->addCommand(command);
 
     d->shape->legend()->update();

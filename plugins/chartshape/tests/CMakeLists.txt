@@ -13,6 +13,10 @@ macro(CHARTSHAPE_ADD_UNIT_TEST _TEST_NAME)
     )
 endmacro()
 
+chartshape_add_unit_test(TestChartLayout
+    TestChartLayout.cpp
+    LINK_LIBRARIES chartshapecore Qt5::Test
+)
 
 chartshape_add_unit_test(TestProxyModel
     TestProxyModel.cpp

@@ -1,4 +1,5 @@
 /*
+   Copyright (c) 2017 Dag Andersen <danders@get2net.dk>*
    Copyright (c) 2015 Friedrich W. H. Kossebau <kossebau@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -29,5 +30,11 @@ extern const QLoggingCategory &CHART_LOG();
 #define debugChart qCDebug(CHART_LOG)
 #define warnChart qCWarning(CHART_LOG)
 #define errorChart qCCritical(CHART_LOG)
+
+extern const QLoggingCategory &CHARTLAYOUT_LOG();
+
+#define debugChartLayout qCDebug(CHARTLAYOUT_LOG)
+#define warnChartLayout qCWarning(CHARTLAYOUT_LOG)
+#define errorChartLayout qCCritical(CHARTLAYOUT_LOG)
 
 #endif

@@ -80,3 +80,22 @@ int numDimensions(ChartType type)
 }
 
 } // namespace KoChart
+
+QDebug operator<<(QDebug dbg, KoChart::Position p)
+{
+    switch (p) {
+    case KoChart::StartPosition: dbg << "(StartPosition)"; break;
+    case KoChart::TopPosition: dbg << "(TopPosition)"; break;
+    case KoChart::EndPosition: dbg << "(EndPosition)"; break;
+    case KoChart::BottomPosition: dbg << "(BottomPosition)"; break;
+    case KoChart::TopStartPosition: dbg << "(BottomPosition)"; break;
+    case KoChart::TopEndPosition: dbg << "(TopEndPosition)"; break;
+    case KoChart::BottomStartPosition: dbg << "(BottomStartPosition)"; break;
+    case KoChart::BottomEndPosition: dbg << "(BottomEndPosition)"; break;
+    case KoChart::CenterPosition: dbg << "(CenterPosition)"; break;
+    case KoChart::FloatingPosition: dbg << "(FloatingPosition)"; break;
+    default: break;
+        Q_ASSERT(false); // Unknown position
+    }
+    return dbg;
+}

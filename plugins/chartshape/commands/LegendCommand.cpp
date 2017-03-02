@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright 2017 Dag Andersen <danders@get2net.dk>
    Copyright 2012 Brijesh Patel <brijesh3105@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -24,6 +25,8 @@
 
 // KoChart
 #include "Legend.h"
+#include "ChartShape.h"
+#include "ChartLayout.h"
 #include "ChartDebug.h"
 
 using namespace KoChart;
@@ -33,6 +36,10 @@ using namespace KChart;
 LegendCommand::LegendCommand(KoChart::Legend* legend)
     : m_legend(legend)
 {
+    QObject *l = qobject_cast<QObject*>(legend); // legend is both KoShape and QObject, both with parent() method
+    m_chart = dynamic_cast<ChartShape*>(l->parent());
+    Q_ASSERT(m_chart);
+
     m_newFont = legend->font();
     m_newTitle = legend->title();
     m_newFontSize = legend->fontSize();
@@ -62,6 +69,13 @@ void LegendCommand::redo()
     m_legend->setFontSize(m_newFontSize);
     m_legend->setExpansion(m_newExpansion);
     m_legend->setShowFrame(m_newShowFrame);
+
+    // FIXME: temporary hack, this needs proper undo command
+    QMap<KoShape*, QRectF> map = m_chart->layout()->calculateLayout(m_legend, m_legend->isVisible());
+    for (KoShape *s : map.keys()) {
+        s->setPosition(map[s].topLeft());
+        s->setSize(map[s].size());
+    }
     m_legend->update();
 }
 
@@ -76,6 +90,13 @@ void LegendCommand::undo()
     m_legend->setFontSize(m_oldFontSize);
     m_legend->setExpansion(m_oldExpansion);
     m_legend->setShowFrame(m_oldShowFrame);
+
+    // FIXME: temporary hack, this needs proper undo command
+    QMap<KoShape*, QRectF> map = m_chart->layout()->calculateLayout(m_legend, m_legend->isVisible());
+    for (KoShape *s : map.keys()) {
+        s->setPosition(map[s].topLeft());
+        s->setSize(map[s].size());
+    }
     m_legend->update();
 }
 
