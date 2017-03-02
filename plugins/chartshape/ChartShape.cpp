@@ -434,12 +434,14 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     d->plotArea->setZIndex(0);
     setClipped(d->plotArea, true);
     setInheritsTransform(d->plotArea, true);
+    d->plotArea->setDeletable(false);
 
     // Configure the legend.
     d->legend->setVisible(true);
     d->legend->setZIndex(1);
     setClipped(d->legend, true);
     setInheritsTransform(d->legend, true);
+    d->legend->setDeletable(false);
 
     // A few simple defaults (chart type and subtype in this case)
     setChartType(BarChartType);
@@ -488,6 +490,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     d->title->setZIndex(2);
     setClipped(d->title, true);
     setInheritsTransform(d->title, true);
+    d->title->setDeletable(false);
 
     // Create the Subtitle and add it to the shape.
     if (textShapeFactory)
@@ -515,6 +518,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     d->subTitle->setZIndex(3);
     setClipped(d->subTitle, true);
     setInheritsTransform(d->subTitle, true);
+    d->subTitle->setDeletable(false);
 
     // Create the Footer and add it to the shape.
     if (textShapeFactory)
@@ -542,6 +546,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     d->footer->setZIndex(4);
     setClipped(d->footer, true);
     setInheritsTransform(d->footer, true);
+    d->footer->setDeletable(false);
 
     // Set default contour (for how text run around is done around this shape)
     // to prevent a crash in LO

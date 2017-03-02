@@ -97,6 +97,7 @@ public:
     int geometryProtected : 1;
     int keepAspect : 1;
     int selectable : 1;
+    int deletable : 1;
     int detectCollision : 1;
     int protectContent : 1;
 

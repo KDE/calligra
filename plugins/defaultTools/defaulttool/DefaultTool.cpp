@@ -815,7 +815,7 @@ void DefaultTool::deleteSelection()
 {
     QList<KoShape *> shapes;
     foreach (KoShape *s, canvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        if (s->isGeometryProtected())
+        if (!s->isDeletable() || s->isGeometryProtected())
             continue;
         shapes << s;
     }

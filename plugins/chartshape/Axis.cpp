@@ -883,6 +883,7 @@ Axis::Axis(PlotArea *parent, AxisDimension dimension)
     d->plotArea->parent()->addShape(d->title);
     d->plotArea->parent()->setClipped(d->title, true);
     d->plotArea->parent()->setInheritsTransform(d->title, true);
+    d->title->setDeletable(false);
 
     connect(d->plotArea, SIGNAL(gapBetweenBarsChanged(int)),
             this,        SLOT(setGapBetweenBars(int)));

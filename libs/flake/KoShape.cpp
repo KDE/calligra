@@ -96,6 +96,7 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       geometryProtected(false),
       keepAspect(false),
       selectable(true),
+      deletable(true),
       detectCollision(false),
       protectContent(false),
       textRunAroundSide(KoShape::BiggestRunAroundSide),
@@ -677,6 +678,7 @@ void KoShape::copySettings(const KoShape *shape)
     d->selectable = shape->isSelectable();
     d->keepAspect = shape->keepAspectRatio();
     d->localMatrix = shape->d_ptr->localMatrix;
+    d->deletable = shape->isDeletable();
 }
 
 void KoShape::notifyChanged()
@@ -1128,6 +1130,18 @@ bool KoShape::isContentProtected() const
 {
     Q_D(const KoShape);
     return d->protectContent;
+}
+
+void KoShape::setDeletable(bool deletable)
+{
+    Q_D(KoShape);
+    d->deletable = deletable;
+}
+
+bool KoShape::isDeletable() const
+{
+    Q_D(const KoShape);
+    return d->deletable;
 }
 
 KoShapeContainer *KoShape::parent() const

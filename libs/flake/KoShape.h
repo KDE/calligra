@@ -1103,6 +1103,21 @@ public:
     void setHyperLink(const QString &hyperLink);
 
     /**
+     * Makes it possible for the user to delete this shape.
+     * This parameter defaults to true.
+     * @param deletable when true; set the shape to be deletable by the user.
+     * @see isDeletable(), setGeometryProtected(), setContentProtected(), setSelectable()
+     */
+    void setDeletable(bool deletable);
+
+    /**
+     * Returns if this shape can be deleted by the user.
+     * @return true only when this shape is deletable.
+     * @see setDeletable(), isGeometryProtected(), isContentProtected(), isSelectable()
+     */
+    bool isDeletable() const;
+
+    /**
      * \internal
      * Returns the private object for use within the flake lib
      */
