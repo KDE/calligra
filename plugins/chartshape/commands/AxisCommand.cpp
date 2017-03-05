@@ -115,6 +115,9 @@ void AxisCommand::setAxisShowTitle(bool show)
 
 void AxisCommand::setAxisTitle(const QString &title)
 {
+    // Note:
+    // As long as changing the title do not require a relayout of the chart,
+    // we do not need to use ChartTextShapeCommand
     m_newTitleText = title;
 
     setText(kundo2_i18n("Set Axis Title"));

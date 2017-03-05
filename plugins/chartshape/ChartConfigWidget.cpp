@@ -529,8 +529,8 @@ ChartConfigWidget::ChartConfigWidget()
     d->ui.addAxis->setIcon(koIcon("list-add"));
     d->ui.removeAxis->setIcon(koIcon("list-remove"));
 
-    connect(d->ui.axisTitle, SIGNAL(textChanged(QString)),
-            this, SLOT(ui_axisTitleChanged(QString)));
+    connect(d->ui.axisTitle, SIGNAL(editingFinished()),
+            this, SLOT(ui_axisEditingFinished()));
     connect(d->ui.axisShowTitle, SIGNAL(toggled(bool)),
             this, SLOT(ui_axisShowTitleChanged(bool)));
     connect(d->ui.axisShowGridLines, SIGNAL(toggled(bool)),
@@ -1751,19 +1751,21 @@ void ChartConfigWidget::ui_dataSetAxisSelectionChanged(int index)
     emit dataSetAxisChanged(dataSet, axis);
 }
 
-void ChartConfigWidget::ui_axisTitleChanged(const QString& title)
+void ChartConfigWidget::ui_axisEditingFinished()
 {
-    if (d->ui.axes->currentIndex() < 0 || d->ui.axes->currentIndex() >= d->axes.size())
+    if (d->ui.axes->currentIndex() < 0 || d->ui.axes->currentIndex() >= d->axes.size()) {
         return;
-
+    }
     const int index = d->ui.axes->currentIndex();
     Axis *axis = d->axes[index];
+    // Seems to get multiple editingFinished signals
+    if (axis->titleText() == d->ui.axisTitle->text()) {
+        return;
+    }
+    emit axisTitleChanged(axis, d->ui.axisTitle->text());
 
-    emit axisTitleChanged(axis, title);
-
+    // TODO: This should be triggered by the actual change to the title (so undo/redo works)
     QString nonEmptyTitle = nonEmptyAxisTitle(axis, index);
-
-    // TODO: This can surely be done better
     int dataSetAxisIndex = d->dataSetAxes.indexOf(axis);
     d->ui.dataSetAxes->setItemText(dataSetAxisIndex, nonEmptyTitle);
     d->ui.axes->setItemText(index, nonEmptyTitle);

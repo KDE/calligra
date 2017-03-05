@@ -111,7 +111,7 @@ public Q_SLOTS:
     void updateFixedPosition(Position position);
     
     void ui_axisSelectionChanged(int index);
-    void ui_axisTitleChanged(const QString& title);
+    void ui_axisEditingFinished();
     void ui_axisShowTitleChanged(bool b);
     void ui_axisShowGridLinesChanged(bool b);
     void ui_axisUseLogarithmicScalingChanged(bool b);
