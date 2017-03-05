@@ -143,10 +143,6 @@ public:
     bool useAutomaticMinimumRange;
     bool useAutomaticMaximumRange;
 
-    /// Font used for axis labels
-    /// TODO: Save to ODF
-    QFont font;
-
     KChart::CartesianAxis            *const kdAxis;
     KChart::CartesianCoordinatePlane *kdPlane;
     KChart::PolarCoordinatePlane     *kdPolarPlane;
@@ -853,6 +849,7 @@ Axis::Axis(PlotArea *parent, AxisDimension dimension)
     KChart::BackgroundAttributes batt(d->kdAxis->backgroundAttributes());
     batt.setBrush(QBrush(Qt::white));
     d->kdAxis->setBackgroundAttributes(batt);
+    setFontSize(8.0); // also sets MeasureCalculationModeAbsolute
     d->kdPlane = parent->kdCartesianPlane(this);
     d->kdPolarPlane = parent->kdPolarPlane();
     d->kdRadarPlane = parent->kdRadarPlane();
@@ -1483,35 +1480,26 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
 
         styleStack.setTypeProperties("text");
         if (styleStack.hasProperty(KoXmlNS::fo, "font-size")) {
-            QString fontSizeString =  styleStack.property(KoXmlNS::fo, "font-size");
-            const QString unitString = fontSizeString.right(2);
-            fontSizeString.remove(unitString);
-            bool ok = false;
-            qreal fontSize = fontSizeString.toDouble(&ok);
-            if (unitString == "cm")
-                fontSize = CM_TO_POINT(fontSize);
-            else if (unitString == "pc")
-                fontSize = PI_TO_POINT(fontSize);
-            else if (unitString == "mm")
-                fontSize = MM_TO_POINT(fontSize);
-            else if (unitString == "in")
-                fontSize = INCH_TO_POINT(fontSize);
-            if (ok) {
-                KChart::TextAttributes tatt =  kdAxis()->textAttributes();
-                tatt.setFontSize(KChart::Measure(fontSize, KChartEnums::MeasureCalculationModeAbsolute));
-                kdAxis()->setTextAttributes(tatt);
-            }
+            const qreal fontSize = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "font-size"));
+            setFontSize(fontSize);
         }
         if (styleStack.hasProperty(KoXmlNS::fo, "font-color")) {
             QString fontColorString =  styleStack.property(KoXmlNS::fo, "font-color");
             QColor color(fontColorString);
-            if (color.isValid())
-            {
+            if (color.isValid()) {
                 KChart::TextAttributes tatt =  kdAxis()->textAttributes();
                 QPen pen = tatt.pen();
                 pen.setColor(color);
                 tatt.setPen(pen);
                 kdAxis()->setTextAttributes(tatt);
+            }
+        }
+        if (styleStack.hasProperty(KoXmlNS::fo, "font-family")) {
+            QString fontFamilyString = styleStack.property(KoXmlNS::fo, "font-family");
+            if (!fontFamilyString.isEmpty()) {
+                QFont f = this->font();
+                f.setFamily(fontFamilyString);
+                setFont(f);
             }
         }
     } else {
@@ -1640,7 +1628,7 @@ void Axis::saveOdf(KoShapeSavingContext &context)
     QPen pen = tatt.pen();
     axisStyle.addProperty("fo:font-color", pen.color().name(), KoGenStyle::TextType);
     axisStyle.addProperty("fo:font-family", tatt.font().family(), KoGenStyle::TextType);
-    axisStyle.addPropertyPt("fo:font-size", tatt.font().pointSize(), KoGenStyle::TextType);
+    axisStyle.addPropertyPt("fo:font-size", fontSize(), KoGenStyle::TextType);
 
     const QString styleName = mainStyles.insert(axisStyle, "ch");
     bodyWriter.addAttribute("chart:style-name", styleName);
@@ -2123,15 +2111,12 @@ void Axis::setPieAngleOffset(qreal angle)
 
 QFont Axis::font() const
 {
-    return d->font;
+    return d->kdAxis->textAttributes().font();
 }
 
 void Axis::setFont(const QFont &font)
 {
-    // Save the font for later retrieval
-    d->font = font;
-
-    // Set the KChart axis to use this font as well.
+    // Set the KChart axis to use this font
     KChart::TextAttributes attr = d->kdAxis->textAttributes();
     attr.setFont(font);
     d->kdAxis->setTextAttributes(attr);
@@ -2139,14 +2124,12 @@ void Axis::setFont(const QFont &font)
 
 qreal Axis::fontSize() const
 {
-    return d->font.pointSizeF();
+    return d->kdAxis->textAttributes().fontSize().value();
 }
 
 void Axis::setFontSize(qreal size)
 {
-    d->font.setPointSizeF(size);
-
-    // KChart
+    // KChart has its own fontsize storage, it does not use QFont
     KChart::TextAttributes attributes = d->kdAxis->textAttributes();
     attributes.setFontSize(KChart::Measure(size, KChartEnums::MeasureCalculationModeAbsolute));
     d->kdAxis->setTextAttributes(attributes);
