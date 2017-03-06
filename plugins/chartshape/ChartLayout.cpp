@@ -246,19 +246,19 @@ void ChartLayout::layout()
         }
     }
 
-    qreal topY = layoutTop(top);
-    qreal bottomY = layoutBottom(bottom);
-    qreal startX = layoutStart(start);
-    qreal endX = layoutEnd(end);
+    qreal topY = layoutTop(top, p);
+    qreal bottomY = layoutBottom(bottom, p);
+    qreal startX = layoutStart(start, p);
+    qreal endX = layoutEnd(end, p);
     if (p) {
         setItemPosition(p, QPointF(startX, topY));
         p->setSize(QSizeF(endX - startX, bottomY - topY));
     }
 
-    layoutTopStart(topStart);
-    layoutBottomStart(bottomStart);
-    layoutTopEnd(topEnd);
-    layoutBottomEnd(bottomEnd);
+    layoutTopStart(topStart, p);
+    layoutBottomStart(bottomStart, p);
+    layoutTopEnd(topEnd, p);
+    layoutBottomEnd(bottomEnd, p);
 
     m_doingLayout = false;
     m_relayoutScheduled = false;
@@ -266,79 +266,191 @@ void ChartLayout::layout()
 
 
 
-qreal ChartLayout::layoutTop(const QMap<int, KoShape*>& shapes)
+qreal ChartLayout::layoutTop(const QMap<int, KoShape*>& shapes, KoShape *p)
 {
     qreal top = m_vMargin;
-    qreal pX = m_containerSize.width() / 2.0;
+    qreal pX = m_containerSize.width() / 2.0; // default
     foreach(KoShape *shape, shapes) {
-        QSizeF size = itemSize(shape);
-        setItemPosition(shape, QPointF(pX - size.width() / 2.0, top));
-        top += size.height() + m_spacing.y();
+        QRectF itmRect = itemRect(shape);
+        switch (m_layoutItems[shape]->itemType) {
+            case LegendType:
+                if (p) {
+                    // default is AlignCenter
+                    QRectF pr = itemRect(p);
+                    pX = pr.top() + (pr.width() / 2.0);
+                    // Legend may have horizontal alignment specified
+                    if (static_cast<Legend*>(shape)->alignment() == Qt::AlignLeft) {
+                        pX = pr.left() + (itmRect.width() / 2.0);
+                    } else if (static_cast<Legend*>(shape)->alignment() == Qt::AlignRight) {
+                        pX = pr.right() - (itmRect.width() / 2.0);
+                    }
+                }
+                break;
+            case SecondaryYAxisTitleType:
+            case YAxisTitleType:
+                // AlignCenter with plot area
+                if (p) {
+                    QRectF pr = itemRect(p);
+                    pX = pr.left() + (pr.width() / 2.0);
+                }
+                break;
+            default:
+                break;
+        }
+        setItemPosition(shape, QPointF(pX - itmRect.width() / 2.0, top));
+        top += itmRect.height() + m_spacing.y();
     }
     return top;
 }
 
-qreal ChartLayout::layoutBottom(const QMap<int, KoShape*>& shapes)
+qreal ChartLayout::layoutBottom(const QMap<int, KoShape*>& shapes, KoShape *p)
 {
     qreal bottom = m_containerSize.height() - m_vMargin;
     qreal pX = m_containerSize.width() / 2.0;
     foreach(KoShape *shape, shapes) {
-        QSizeF size = itemSize(shape);
-        bottom -= size.height();
-        setItemPosition(shape, QPointF(pX - size.width() / 2.0, bottom));
+        QRectF itmRect = itemRect(shape);
+        switch (m_layoutItems[shape]->itemType) {
+            case LegendType:
+                if (p) {
+                    // default is AlignCenter
+                    QRectF pr = itemRect(p);
+                    pX = pr.left() + (pr.width() / 2.0);
+                    // Legend may have horizontal alignment specified
+                    if (static_cast<Legend*>(shape)->alignment() == Qt::AlignLeft) {
+                        pX = pr.left() + (itmRect.width() / 2.0);
+                    } else if (static_cast<Legend*>(shape)->alignment() == Qt::AlignRight) {
+                        pX = pr.right() - (itmRect.width() / 2.0);
+                    }
+                }
+                break;
+            case SecondaryYAxisTitleType:
+            case YAxisTitleType:
+                // AlignCenter with plot area
+                if (p) {
+                    QRectF pr = itemRect(p);
+                    pX = pr.left() + (pr.width() / 2.0);
+                }
+                break;
+            default:
+                break;
+        }
+        bottom -= itmRect.height();
+        setItemPosition(shape, QPointF(pX - itmRect.width() / 2.0, bottom));
         bottom -= m_spacing.y();
     }
     return bottom;
 }
 
-qreal ChartLayout::layoutStart(const QMap<int, KoShape*>& shapes)
+qreal ChartLayout::layoutStart(const QMap<int, KoShape*>& shapes, KoShape *p)
 {
     qreal start = m_hMargin;
     qreal pY = m_containerSize.height() / 2.0;
     foreach(KoShape *shape, shapes) {
-        QSizeF size = itemSize(shape);
-        setItemPosition(shape, QPointF(start, pY - size.height() / 2.0));
-        start += size.width() + m_spacing.x();
+        QRectF itmRect = itemRect(shape);
+        switch (m_layoutItems[shape]->itemType) {
+            case LegendType:
+                if (p) {
+                    // default is AlignCenter
+                    QRectF pr = itemRect(p);
+                    pY = pr.top() + (pr.height() / 2.0);
+                    // Legend may have vertical alignment specified
+                    if (static_cast<Legend*>(shape)->alignment() == Qt::AlignLeft) {
+                        pY = pr.top() + (itmRect.height() / 2.0);
+                    } else if (static_cast<Legend*>(shape)->alignment() == Qt::AlignRight) {
+                        pY = pr.bottom() - (itmRect.height() / 2.0);
+                    }
+                }
+                break;
+            case SecondaryYAxisTitleType:
+            case YAxisTitleType:
+                // AlignCenter with plot area
+                if (p) {
+                    QRectF pr = itemRect(p);
+                    pY = pr.top() + (pr.height() / 2.0);
+                }
+                break;
+            default:
+                break;
+        }
+        setItemPosition(shape, QPointF(start, pY - itmRect.height() / 2.0));
+        start += itmRect.width() + m_spacing.x();
     }
     return start;
 }
 
-qreal ChartLayout::layoutEnd(const QMap<int, KoShape*>& shapes)
+qreal ChartLayout::layoutEnd(const QMap<int, KoShape*>& shapes, KoShape *p)
 {
     qreal end = m_containerSize.width() - m_hMargin;
     qreal pY = m_containerSize.height() / 2.0;
     foreach(KoShape *shape, shapes) {
-        QSizeF size = itemSize(shape);
-        end -= size.width();
-        setItemPosition(shape, QPointF(end, pY - size.height() / 2.0));
+        QRectF itmRect = itemRect(shape);
+        switch (m_layoutItems[shape]->itemType) {
+            case LegendType:
+                if (p) {
+                    // default is AlignCenter
+                    QRectF pr = itemRect(p);
+                    pY = pr.top() + pr.height() / 2.0;
+                    // Legend may have vertical alignment specified
+                    if (static_cast<Legend*>(shape)->alignment() == Qt::AlignLeft) {
+                        pY = pr.top() + (itmRect.height() / 2.0);
+                    } else if (static_cast<Legend*>(shape)->alignment() == Qt::AlignRight) {
+                        pY = pr.bottom() - (itmRect.height() / 2.0);
+                    }
+                }
+                break;
+            case SecondaryYAxisTitleType:
+            case YAxisTitleType:
+                // AlignCenter with plot area
+                if (p) {
+                    QRectF pr = itemRect(p);
+                    pY = pr.top() + (pr.height() / 2.0);
+                }
+                break;
+            default:
+                break;
+        }
+        end -= itmRect.width();
+        setItemPosition(shape, QPointF(end, pY - itmRect.height() / 2.0));
         end -= m_spacing.x();
     }
     return end;
 }
 
-void ChartLayout::layoutTopStart(KoShape *shape)
+void ChartLayout::layoutTopStart(KoShape *shape, KoShape *p)
 {
+    // TODO: shape could change size of other areas
+    Q_UNUSED(p);
+
     if (!shape)
         return;
     setItemPosition(shape, QPointF(m_hMargin, m_vMargin));
 }
 
-void ChartLayout::layoutBottomStart(KoShape *shape)
+void ChartLayout::layoutBottomStart(KoShape *shape, KoShape *p)
 {
+    // TODO: shape could change size of other areas
+    Q_UNUSED(p);
+
     if (!shape)
         return;
     setItemPosition(shape, QPointF(0, m_containerSize.height() - itemSize(shape).height()));
 }
 
-void ChartLayout::layoutTopEnd(KoShape *shape)
+void ChartLayout::layoutTopEnd(KoShape *shape, KoShape *p)
 {
+    // TODO: shape could change size of other areas
+    Q_UNUSED(p);
+
     if (!shape)
         return;
     setItemPosition(shape, QPointF(m_containerSize.width() - itemSize(shape).width() - m_hMargin, m_vMargin));
 }
 
-void ChartLayout::layoutBottomEnd(KoShape *shape)
+void ChartLayout::layoutBottomEnd(KoShape *shape, KoShape *p)
 {
+    // TODO: shape could change size of other areas
+    Q_UNUSED(p);
+
     if (!shape)
         return;
     const QSizeF size = itemSize(shape);
@@ -1203,7 +1315,7 @@ QString ChartLayout::dbg(const KoShape *shape) const
     QString s;
     LayoutData *data = m_layoutItems[const_cast<KoShape*>(shape)];
     switch(data->itemType) {
-        case GenericItemType: s = "KoShape[Generic]"; break;
+        case GenericItemType: s = "KoShape[Generic:"+ shape->shapeId() + "]"; break;
         case TitleLabelType: s = "KoShape[ChartTitle]"; break;
         case SubTitleLabelType: s = "KoShape[ChartSubTitle]"; break;
         case FooterLabelType: s = "KoShape[ChartFooter]"; break;
@@ -1211,9 +1323,9 @@ QString ChartLayout::dbg(const KoShape *shape) const
         case LegendType:
             s = "KoShape[Legend";
             switch(static_cast<const Legend*>(shape)->alignment()) {
-                case Qt::AlignLeft: s += ":Left"; break;
+                case Qt::AlignLeft: s += ":Start"; break;
                 case Qt::AlignCenter: s += ":Center"; break;
-                case Qt::AlignRight: s += ":Right"; break;
+                case Qt::AlignRight: s += ":End"; break;
                 default: s += ":Float"; break;
             }
             s += ']';

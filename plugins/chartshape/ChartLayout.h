@@ -195,30 +195,30 @@ private:
      * Lays out all items in TopPosition, and returns the y value of
      * the bottom-most item's bottom.
      */
-    qreal layoutTop(const QMap<int, KoShape*>& shapes);
+    qreal layoutTop(const QMap<int, KoShape*>& shapes, KoShape *p);
 
     /**
      * Lays out all items in BottomPosition, and returns the y value of
      * the top-most item's top.
      */
-    qreal layoutBottom(const QMap<int, KoShape*>& shapes);
+    qreal layoutBottom(const QMap<int, KoShape*>& shapes, KoShape *p);
 
     /**
      * Lays out all items in StartPosition, and returns the x value of
      * the right-most item's right.
      */
-    qreal layoutStart(const QMap<int, KoShape*>& shapes);
+    qreal layoutStart(const QMap<int, KoShape*>& shapes, KoShape *p);
 
     /**
      * Lays out all items in EndPosition, and returns the x value of
      * the left-most item's left.
      */
-    qreal layoutEnd(const QMap<int, KoShape*>& shapes);
+    qreal layoutEnd(const QMap<int, KoShape*>& shapes, KoShape *p);
 
-    void layoutTopStart(KoShape *shape);
-    void layoutBottomStart(KoShape *shape);
-    void layoutTopEnd(KoShape *shape);
-    void layoutBottomEnd(KoShape *shape);
+    void layoutTopStart(KoShape *shape, KoShape *p);
+    void layoutBottomStart(KoShape *shape, KoShape *p);
+    void layoutTopEnd(KoShape *shape, KoShape *p);
+    void layoutBottomEnd(KoShape *shape, KoShape *p);
 
     QMap<KoShape*, QRectF> calculateLayoutTop(KoShape *shape, KoShape *center, bool hide) const;
     QMap<KoShape*, QRectF> calculateLayoutBottom(KoShape *shape, KoShape *center, bool hide) const;
