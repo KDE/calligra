@@ -46,6 +46,7 @@
 #include "Axis.h"
 #include "Legend.h"
 #include "TableSource.h"
+#include "ChartLayout.h"
 
 
 using namespace KoChart;
@@ -168,46 +169,13 @@ KoShape *ChartShapeFactory::createDefaultShape(KoDocumentResourceManager *docume
     proxyModel->setFirstColumnIsLabel(true);
     proxyModel->reset(CellRegion(internalTable, QRect(1, 1, 5, 4)));
 
-    const QSizeF shapeSize = shape->size();
+    shape->plotArea()->xAxis()->setTitleText(i18n("Month"));
+    shape->plotArea()->yAxis()->setTitleText(i18n("Growth in %"));
 
-    QPointF  plotAreaPos(0.0, 0.0);
-    QSizeF   plotAreaSize(shapeSize);
-    Legend *legend = shape->legend();
-    legend->rebuild();          // Implies update()
-
-    QPointF  legendPos(0.0, 0.0);
-    QSizeF   legendSize = legend->size();
-    legendPos.ry() = shapeSize.height() / 2.0 - legendSize.height() / 2.0;
-    plotAreaSize.rwidth() -= legendSize.width();
-
-    Axis    *xAxis      = shape->plotArea()->xAxis();
-    KoShape *xAxisTitle = xAxis->title();
-    if (xAxisTitle) {
-        xAxis->setTitleText(i18n("Month"));
-        xAxisTitle->setPosition(QPointF(shapeSize.width() / 2.0 - xAxisTitle->size().width() / 2.0,
-                                        shapeSize.height() - xAxisTitle->size().height()));
-        plotAreaSize.rheight() -= xAxisTitle->size().height();
-    }
-
-    Axis    *yAxis      = shape->plotArea()->yAxis();
-    KoShape *yAxisTitle = yAxis->title();
-    if (yAxisTitle) {
-        yAxis->setTitleText(i18n("Growth in %"));
-        yAxisTitle->setPosition(QPointF(-yAxisTitle->size().width() / 2.0 + yAxisTitle->size().height() / 2.0,
-                                        shapeSize.height() / 2.0 - yAxisTitle->size().height() / 2.0));
-
-        plotAreaPos.rx() += yAxisTitle->size().height();
-        legendPos.rx() += yAxisTitle->size().height();
-        plotAreaSize.rwidth() -= yAxisTitle->size().height();
-    }
-
-    if (legend) {
-        legendPos.rx() += plotAreaSize.width();
-        legend->setPosition(legendPos);
-    }
-
-    shape->plotArea()->setPosition(plotAreaPos);
-    shape->plotArea()->setSize(plotAreaSize );
+    shape->layout()->setAutoLayoutEnabled(true);
+    shape->layout()->scheduleRelayout();
+    shape->layout()->layout();
+    shape->layout()->setAutoLayoutEnabled(false);
 
     return shape;
 }
