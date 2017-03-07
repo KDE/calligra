@@ -30,7 +30,7 @@
 #include "KoShapeStrokeModel.h"
 #include "KoShapeStroke.h"
 
-#include "kzip.h"
+#include <kzip.h>
 
 MctEmbObjProperties::MctEmbObjProperties(const QString &name)
     : MctPropertyBase(name)

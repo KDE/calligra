@@ -28,7 +28,7 @@
 #include "MctChangeEntities.h"
 #include "MctChangeTypes.h"
 
-#include "kzip.h"
+#include <kzip.h>
 
 #include <QTextBlock>
 

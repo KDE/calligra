@@ -27,8 +27,8 @@
 #include "MctCell.h"
 #include "MctChangeEntities.h"
 
-#include "kzip.h"
-#include "kurl.h"
+#include <kzip.h>
+//#include <kurl.h>
 #include "ExtractFile.h"
 
 #include "KoDocument.h"
@@ -1274,7 +1274,7 @@ MctChange* MctAbstractGraph::correctChangeNode(MctChange *changeNode, MctChange 
 
 void MctAbstractGraph::correctParInPosition(MctPosition *pos, MctPosition *prevpos, MctChangeTypes prevchangetype)
 {
-    if(pos == NULL or prevpos == NULL) {
+    if(pos == NULL || prevpos == NULL) {
         return;
     }
 

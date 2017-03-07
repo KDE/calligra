@@ -19,7 +19,8 @@
 
 #include "ExtractFile.h"
 
-#include <QtCore/QFile>
+#include <QFile>
+#include <QtCore/QIODevice>
 
 bool copyTo(const QString &dest, const QString &name, const KZipFileEntry * zipEntry)
 {
