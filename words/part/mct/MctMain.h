@@ -83,7 +83,7 @@ private:
     KoTextDocument *m_koTextDoc;
     KoTextEditor *m_editor;
 
-    //QMetaObject::Connection editorConnection;
+    QMetaObject::Connection editorConnection;
 
     MctUndoClass *m_undoop;
     MctRedoClass *m_redoop;

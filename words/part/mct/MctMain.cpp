@@ -549,11 +549,9 @@ void MctMain::createShapeStyleChanged(const QString &type, const QPointF &pos, K
 
 void MctMain::createRevision(const QString &author, const QString &comment)
 {
-#if QT_VERSION < 0x050000
-    bool oldState = m_editor->blockSignals(true);
-#else
+
     QObject::disconnect(editorConnection);
-#endif
+
     normailizeChangebuffer();
     // already saved, no need to do it again
     if(! (author == "System" && comment == "revision on save")) {
@@ -564,11 +562,9 @@ void MctMain::createRevision(const QString &author, const QString &comment)
     emit adjustListOfRevisions();
     MctStaticData::instance()->clearChanges();
     qDebug() << "revision created";    
-#if QT_VERSION < 0x050000
-    m_editor->blockSignals(oldState);
-#else
-    editorConnection = connect(editor, &KoTextEditor::createMctChange, this, &MctMain::createMctChange);
-#endif
+
+    editorConnection = connect(m_editor, &KoTextEditor::createMctChange, this, &MctMain::createMctChange);
+
 }
 
 /**
@@ -577,11 +573,8 @@ void MctMain::createRevision(const QString &author, const QString &comment)
  */
 void MctMain::restoreRevision(QString &target)
 {
-#if QT_VERSION < 0x050000
-    bool oldState = m_editor->blockSignals(true);
-#else
     QObject::disconnect(editorConnection);
-#endif
+
     int rev;    
     if(target.startsWith(MctStaticData::REDOCHAR)) {
         target.replace(MctStaticData::REDOCHAR, "");
@@ -595,11 +588,9 @@ void MctMain::restoreRevision(QString &target)
     emit adjustListOfRevisions();    
     MctStaticData::instance()->exportGraphs();
     MctStaticData::instance()->clearChanges();
-#if QT_VERSION < 0x050000
-    m_editor->blockSignals(oldState);
-#else
-    editorConnection = connect(editor, &KoTextEditor::createMctChange, this, &MctMain::createMctChange);
-#endif
+
+    editorConnection = connect(m_editor, &KoTextEditor::createMctChange, this, &MctMain::createMctChange);
+
 }
 
 /**
@@ -876,19 +867,12 @@ void MctMain::documentSavedAs(const QString &fileUrl)
 
 void MctMain::connectSignals()
 {
-    #if QT_VERSION < 0x050000
-        connect(m_editor, SIGNAL(shapeOperationSignal(KoShape*,ChangeAction)), this, SLOT(shapeOperationSlot(KoShape*,ChangeAction)));
-        connect(m_doc, SIGNAL(createShapeMctChange(QString,QPointF,KoShape&,ChangeAction,QPointF*)), this, SLOT(createShapeMctChange(QString,QPointF,KoShape&,ChangeAction,QPointF*)));
-        connect(m_doc, SIGNAL(createShapeStyleChanged(QString,QPointF,KoShape&,KoShapeStroke*,KoShapeShadow*,QPointF*,QSizeF,double)), this, SLOT(createShapeStyleChanged(QString,QPointF,KoShape&,KoShapeStroke*,KoShapeShadow*,QPointF*,QSizeF,double)));
-        connect(m_doc, SIGNAL(shapePositionChanged(KoShape*,QPointF,QPointF*)), this, SLOT(createShapePositionChanged(KoShape*,QPointF,QPointF*)));
-        connect(m_editor, SIGNAL(createMctChange(QTextCursor&,MctChangeTypes,KUndo2MagicString,QTextFormat,QTextFormat)), this, SLOT(createMctChange(QTextCursor&,MctChangeTypes,KUndo2MagicString,QTextFormat,QTextFormat)));
-    #else
-        connect(editor, &KoTextEditor::shapeOperationSignal, this, &MctMain::shapeOperationSlot);
-        connect(doc, &KoDocument::createShapeMctChange, this, &MctMain::createShapeMctChange);
-        connect(doc, &KoDocument::createShapeStyleChanged, this, &MctMain::createShapeStyleChanged);
-        connect(doc, &KoDocument::shapePositionChanged, this, &MctMain::createShapePositionChanged);
-        editorConnection = connect(editor, &KoTextEditor::createMctChange, this, &MctMain::createMctChange);
-    #endif
+        connect(m_editor, &KoTextEditor::shapeOperationSignal, this, &MctMain::shapeOperationSlot);
+        connect(m_doc, &KoDocument::createShapeMctChange, this, &MctMain::createShapeMctChange);
+        connect(m_doc, &KoDocument::createShapeStyleChanged, this, &MctMain::createShapeStyleChanged);
+        connect(m_doc, &KoDocument::shapePositionChanged, this, &MctMain::createShapePositionChanged);
+        editorConnection = connect(m_editor, &KoTextEditor::createMctChange, this, &MctMain::createMctChange);
+
 }
 
 void MctMain::disconnectSignals()
