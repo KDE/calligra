@@ -41,7 +41,7 @@ public:
     explicit MctMergeManagerDialog(QWidget *parent = 0, MctUndoClass *undoop = nullptr, MctRedoClass *redoop = nullptr);
     ~MctMergeManagerDialog();
 
-private slots:
+private Q_SLOTS:
     void on_mergeRevButton_clicked();
     void on_browseButton_clicked();
     void on_tabCurrent_currentChanged(int index);
@@ -53,7 +53,7 @@ private slots:
 
     void on_treeRedoOpened_itemSelectionChanged();
 
-signals:
+Q_SIGNALS:
     void adjustListOfRevisions();
     void normalizeBuffer();
 

@@ -44,7 +44,7 @@ public:
     explicit MctRevisionManager(QWidget *parent = 0,  MctUndoClass *m_undoop = nullptr, MctRedoClass *m_redoop = nullptr);
     ~MctRevisionManager();          
 
-private slots:
+private Q_SLOTS:
     void on_undoButton_clicked();
     void on_deleteButton_clicked();
     void on_redoButton_clicked();
@@ -53,7 +53,7 @@ private slots:
     void on_revTree_expanded(const QModelIndex &index);
     void on_undidRevTree_expanded(const QModelIndex &index);
 
-signals:
+Q_SIGNALS:
     void clearingProcess();
     void adjustListOfRevisions();
     void normalizeBuffer();

@@ -47,13 +47,13 @@ private:
     KWDocument *getKoDoc();
     void setFileUrl(QString url);
 
-public slots:
+public Q_SLOTS:
     void updateFileStatus(bool enabled);
     void startChangeTracking();
     void createMctChange(KoShape &selection, MctChangeTypes changeType, const KUndo2MagicString title, QString m_fileUrl, ChangeAction action);
     void createRevisionOnSave();
 
-private slots:
+private Q_SLOTS:
     void on_buttonStart_clicked();
     void on_buttonStop_clicked();
     void on_buttonCreate_clicked();
@@ -75,7 +75,7 @@ private slots:
 
     void updateMctStatus(bool enable);
 
-signals:
+Q_SIGNALS:
     void start();
     void sendMctStatus(bool status);
     void createRevision(QString author, QString comment);

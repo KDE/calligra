@@ -67,10 +67,10 @@ public:
 
     void connectSignals();
     void disconnectSignals();
-signals:
+Q_SIGNALS:
     void adjustListOfRevisions();
 
-public slots:
+public Q_SLOTS:
     void createMctChange(QTextCursor &selection, MctChangeTypes changeType, const KUndo2MagicString title, QTextFormat format, QTextFormat prevFormat);
     void addGraphicMctChange(KoShape &selection, MctChangeTypes changeType, const KUndo2MagicString title, const QString &fileUrl, ChangeAction action);
     void shapeOperationSlot(KoShape *shape, ChangeAction action);
