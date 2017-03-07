@@ -1471,7 +1471,10 @@ void ChartConfigWidget::ui_axisSelectionChanged(int index)
     }
 
     // Don't let the user remove the last axis of a particular dimension
-    d->ui.removeAxis->setEnabled(numAxesOfSameDimension > 1);
+    //d->ui.removeAxis->setEnabled(numAxesOfSameDimension > 1);
+
+    // KChart do not support removing x- or y-axis
+    d->ui.removeAxis->setEnabled(index >= 2);
 
     d->ui.axisTitle->blockSignals(true);
     d->ui.axisTitle->setText(axis->titleText());
