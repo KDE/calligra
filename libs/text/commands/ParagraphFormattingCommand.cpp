@@ -52,20 +52,14 @@ public:
             visitFragmentSelection(fragmentSelection);
         }
 
-        QTextCursor cursor(caret);
-        cursor.mergeBlockFormat(m_deltaBlockFormat);
-        cursor.mergeBlockCharFormat(m_deltaCharFormat);
-
         QList<QTextCharFormat>::ConstIterator it = m_formats.constBegin();
         foreach(QTextCursor cursor, m_cursors) {
+            QTextFormat prevFormat(cursor.charFormat());
             cursor.setCharFormat(*it);
             emit  editor()->emitCreateMctChange(cursor, MctChangeTypes::StyleChange, kundo2_i18n("Formatting"), *it, prevFormat);
             ++it;
         }
         QTextCursor cursor(caret);
-        QTextFormat prevFormat(cursor.blockFormat());
-        emit  editor()->emitCreateMctChange(cursor, MctChangeTypes::StyleChange, kundo2_i18n("Formatting"), m_deltaBlockFormat, prevFormat);
-
         cursor.mergeBlockFormat(m_deltaBlockFormat);
         cursor.mergeBlockCharFormat(m_deltaCharFormat);
     }

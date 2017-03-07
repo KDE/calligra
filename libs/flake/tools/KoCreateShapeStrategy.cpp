@@ -29,9 +29,11 @@
 #include "KoShapeFactoryBase.h"
 #include "KoShapeController.h"
 #include "KoViewConverter.h"
+#include "KoProperties.h"
+
 #include "MctStaticData.h"
 #include "KoDocument.h"
-#include "KoProperties.h"
+
 
 #include <QPainter>
 

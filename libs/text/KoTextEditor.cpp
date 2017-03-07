@@ -1798,14 +1798,10 @@ const QTextTable *KoTextEditor::currentTable () const
     return d->caret.currentTable();
 }
 
-<<<<<<< HEAD:libs/kotext/KoTextEditor.cpp
 void KoTextEditor::shapeOperation(KoShape *shape, ChangeAction action)
 {
     emit shapeOperationSignal(shape, action);
 }
 
-#include <KoTextEditor.moc>
-=======
 //have to include this because of Q_PRIVATE_SLOT
 #include "moc_KoTextEditor.cpp"
->>>>>>> master:libs/text/KoTextEditor.cpp

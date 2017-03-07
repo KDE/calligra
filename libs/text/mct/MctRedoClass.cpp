@@ -408,8 +408,8 @@ MctChange* MctRedoClass::redoChange(MctChange *changeNode)
                  QTextListFormat currentTextListFormat = format.toListFormat();
                  KoListStyle *listStyle = m_doc->styleManager()->defaultListStyle()->clone();
                  KoListLevelProperties llp = listStyle->levelProperties(1);
-                 llp.setStyle(static_cast<KoListStyle::Style>(currentTextListFormat.style()));
-                 KoListStyle::Style currentStyle = static_cast<KoListStyle::Style>(currentTextListFormat.style());
+                 llp.setStyleId(currentTextListFormat.style());
+                 QTextListFormat::Style currentStyle = currentTextListFormat.style();
                  if (KoListStyle::isNumberingStyle(currentStyle)) {
                      llp.setStartValue(1);
                      llp.setListItemSuffix(".");
