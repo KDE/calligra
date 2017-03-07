@@ -26,6 +26,8 @@
 #include "MctChangeEntities.h"
 #include "KoShape.h"
 
+#include "kotext_export.h"
+
 #include <QList>
 
 /**
@@ -35,7 +37,7 @@
  * It behaves like a hub, gathers uncommited changes, decide the type of each change,
  * collect type depending information, APPLY the change and than add it to the abstract graph (undo).
  */
-class MctRedoClass : public MctDoBase
+class KOTEXT_EXPORT MctRedoClass : public MctDoBase
 {
 public:
     /// constructor

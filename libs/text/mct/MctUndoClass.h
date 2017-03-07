@@ -25,6 +25,8 @@
 #include "MctDoBase.h"
 #include "MctRedoGraph.h"
 
+#include "kotext_export.h"
+
 #include <QList>
 /**
  * Do undo operation for all changes of a revision
@@ -33,7 +35,7 @@
  * It behaves like a hub, gathers uncommited changes, decide the type of each change,
  * collect type depending information, APPLY the change and than add it to the abstract graph (redo).
  */
-class MctUndoClass : MctDoBase
+class KOTEXT_EXPORT MctUndoClass : MctDoBase
 {
 public:
     /// constructor

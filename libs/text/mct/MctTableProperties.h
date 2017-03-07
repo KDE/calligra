@@ -22,10 +22,12 @@
 
 #include "MctPropertyBase.h"
 
+#include "kotext_export.h"
+
 /**
  * Text table properties
  */
-class MctTableProperties : public MctPropertyBase
+class KOTEXT_EXPORT MctTableProperties : public MctPropertyBase
 {
 public:
     /// constructor

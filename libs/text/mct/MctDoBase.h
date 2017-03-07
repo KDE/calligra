@@ -23,6 +23,8 @@
 #include "MctChange.h"
 #include "MctStaticData.h"
 
+#include "kotext_export.h"
+
 class KoTextDocument;
 
 /**
@@ -30,7 +32,7 @@ class KoTextDocument;
  *
  * This class is responsible for the connection with Calligra via containing the KoDocument pointer.
  */
-class MctDoBase
+class KOTEXT_EXPORT MctDoBase
 {
 public:
     /// constructor

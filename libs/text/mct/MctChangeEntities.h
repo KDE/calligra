@@ -27,6 +27,8 @@
 #include <QTextBlockFormat>
 #include <QTextCharFormat>
 
+#include "kotext_export.h"
+
 class MctPropertyBase;
 class MctEmbObjProperties;
 class MctTableProperties;
@@ -50,7 +52,7 @@ using PropertyMap = QMap<int, QPair<QString, ChangeAction>>;
 
 
 /// Base class for Table related changes
-class MctTable : public virtual MctNode , public MctCell
+class KOTEXT_EXPORT MctTable : public virtual MctNode , public MctCell
 {
 public:
     MctTable(const QString &m_cellName = "", const QString &m_tableName = "", MctCell *cellInfo = NULL);
@@ -58,28 +60,28 @@ public:
 };
 
 /// Base class for Paragraph related changes
-class MctParagraphBreak : public virtual MctNode
+class KOTEXT_EXPORT MctParagraphBreak : public virtual MctNode
 {
 public:
     MctParagraphBreak();
     ~MctParagraphBreak();
 };
 
-class MctParagraphBreakInTable : public MctParagraphBreak , public MctTable
+class KOTEXT_EXPORT MctParagraphBreakInTable : public MctParagraphBreak , public MctTable
 {
 public:
     MctParagraphBreakInTable(const QString &m_cellName = "", const QString &m_tableName = "", MctCell *cellInfo = NULL);
     ~MctParagraphBreakInTable();
 };
 
-class MctDelParagraphBreak : public virtual MctNode
+class KOTEXT_EXPORT MctDelParagraphBreak : public virtual MctNode
 {
 public:
     MctDelParagraphBreak();
     ~MctDelParagraphBreak();
 };
 
-class MctDelParagraphBreakInTable : public MctDelParagraphBreak , public MctTable
+class KOTEXT_EXPORT MctDelParagraphBreakInTable : public MctDelParagraphBreak , public MctTable
 {
 public:
     MctDelParagraphBreakInTable(const QString &m_cellName = "", const QString &m_tableName = "", MctCell *cellInfo = NULL);
@@ -87,7 +89,7 @@ public:
 };
 
 /// Base class for String related changes
-class MctStringChange : public virtual MctNode
+class KOTEXT_EXPORT MctStringChange : public virtual MctNode
 {
 public:
     MctStringChange(const QString &string = "");
@@ -98,7 +100,7 @@ private:
     QString m_string;
 };
 
-class MctStringChangeInTable : public MctStringChange , public MctTable
+class KOTEXT_EXPORT MctStringChangeInTable : public MctStringChange , public MctTable
 {
 public:
     MctStringChangeInTable(const QString &string = "", const QString &cellName = "", const QString &tableName = "", MctCell *cellInfo = NULL);
@@ -106,7 +108,7 @@ public:
 };
 
 // FIXME: ::com::sun::star::beans::PropertyChangeEvent in the python legacy code is similar struct
-class ChangeEvent
+class KOTEXT_EXPORT ChangeEvent
 {
 public:
     ChangeEvent(const QTextFormat &o, const QTextFormat &n);
@@ -181,7 +183,7 @@ private:
  *
  * @todo refactor this, merge with ChangeEvent for example
  */
-class MctStylePropertyChange : public virtual MctNode
+class KOTEXT_EXPORT MctStylePropertyChange : public virtual MctNode
 {
 public:
     MctStylePropertyChange(ChangeEventList *changeList);
@@ -216,14 +218,14 @@ private:
     // QList< QMap<unsigned long int, PropertyChangeEvent*> > nonUnoPropertyChanges;
 };
 
-class MctAddedTextFrame : public virtual MctNode
+class KOTEXT_EXPORT MctAddedTextFrame : public virtual MctNode
 {
 public:
     MctAddedTextFrame();
     ~MctAddedTextFrame();
 };
 
-class MctRemovedTextFrame : public virtual MctNode
+class KOTEXT_EXPORT MctRemovedTextFrame : public virtual MctNode
 {
 public:
     MctRemovedTextFrame();
@@ -231,7 +233,7 @@ public:
 };
 
 /// Base of text object changes
-class MctChangedTexObjectBase : public virtual MctNode
+class KOTEXT_EXPORT MctChangedTexObjectBase : public virtual MctNode
 {
 public:
     MctChangedTexObjectBase(const QString &name, MctPropertyBase *objectProperties = NULL);
@@ -248,42 +250,42 @@ protected:
     MctPropertyBase *m_objectProperties; ///< property container
 };
 
-class MctAddedTextGraphicObject : public MctChangedTexObjectBase
+class KOTEXT_EXPORT MctAddedTextGraphicObject : public MctChangedTexObjectBase
 {
 public:
     MctAddedTextGraphicObject(const QString &name, MctEmbObjProperties* embObjProps = NULL);
     ~MctAddedTextGraphicObject();
 };
 
-class MctRemovedTextGraphicObject : public MctChangedTexObjectBase
+class KOTEXT_EXPORT MctRemovedTextGraphicObject : public MctChangedTexObjectBase
 {
 public:
     MctRemovedTextGraphicObject(const QString &name, MctEmbObjProperties* embObjProps = NULL);
     ~MctRemovedTextGraphicObject();
 };
 
-class MctAddedTextGraphicObjectInTable : public MctAddedTextGraphicObject , public MctTable
+class KOTEXT_EXPORT MctAddedTextGraphicObjectInTable : public MctAddedTextGraphicObject , public MctTable
 {
 public:
     MctAddedTextGraphicObjectInTable(const QString &name, MctEmbObjProperties* embObjProps = NULL, const QString &m_cellName = "", const QString &m_tableName = "", MctCell *cellInfo = NULL);
     ~MctAddedTextGraphicObjectInTable();
 };
 
-class MctRemovedTextGraphicObjectInTable : public MctRemovedTextGraphicObject , public MctTable
+class KOTEXT_EXPORT MctRemovedTextGraphicObjectInTable : public MctRemovedTextGraphicObject , public MctTable
 {
 public:
     MctRemovedTextGraphicObjectInTable(const QString &name, MctEmbObjProperties* embObjProps = NULL, const QString &m_cellName = "", const QString &m_tableName = "", MctCell *cellInfo = NULL);
     ~MctRemovedTextGraphicObjectInTable();
 };
 
-class MctAddedEmbeddedObject : public virtual MctNode
+class KOTEXT_EXPORT MctAddedEmbeddedObject : public virtual MctNode
 {
 public:
     MctAddedEmbeddedObject(const QString &name);
     ~MctAddedEmbeddedObject();
 };
 
-class MctRemovedEmbeddedObject : public virtual MctNode
+class KOTEXT_EXPORT MctRemovedEmbeddedObject : public virtual MctNode
 {
 public:
     MctRemovedEmbeddedObject();
@@ -291,7 +293,7 @@ public:
 };
 
 /// Table related changes
-class MctAddedTextTable : public MctChangedTexObjectBase
+class KOTEXT_EXPORT MctAddedTextTable : public MctChangedTexObjectBase
 {
 public:    
     MctAddedTextTable(const QString &name, MctTableProperties* tableProps = NULL);
@@ -311,35 +313,35 @@ protected:
     QTextTableFormat m_tableFormat;
 };
 
-class MctRemovedTextTable : public MctChangedTexObjectBase
+class KOTEXT_EXPORT MctRemovedTextTable : public MctChangedTexObjectBase
 {
 public:
     MctRemovedTextTable(const QString &name, MctTableProperties* tableProps = NULL);
     ~MctRemovedTextTable();
 };
 
-class MctAddedTextTableInTable : public MctAddedTextTable , public MctTable
+class KOTEXT_EXPORT MctAddedTextTableInTable : public MctAddedTextTable , public MctTable
 {
 public:
     MctAddedTextTableInTable(const QString &name, MctTableProperties* tableProps = NULL, const QString &cellName = "", const QString &tableName = "", MctCell *cellInfo = NULL);
     ~MctAddedTextTableInTable();
 };
 
-class MctRemovedTextTableInTable : public MctRemovedTextTable , public MctTable
+class KOTEXT_EXPORT MctRemovedTextTableInTable : public MctRemovedTextTable , public MctTable
 {
 public:
     MctRemovedTextTableInTable(const QString &name, MctTableProperties* tableProps = NULL, const QString &cellName = "", const QString &tableName = "", MctCell *cellInfo = NULL);
     ~MctRemovedTextTableInTable();
 };
 
-class MctStylePropertyChangeInTable : public MctStylePropertyChange , public MctTable
+class KOTEXT_EXPORT MctStylePropertyChangeInTable : public MctStylePropertyChange , public MctTable
 {
 public:
     MctStylePropertyChangeInTable(ChangeEventList *propChanges, const QString &cellName = "", const QString &tableName = "", MctCell *cellInfo = NULL);
     ~MctStylePropertyChangeInTable();
 };
 
-class MctRowChangeInTable : public virtual MctNode
+class KOTEXT_EXPORT MctRowChangeInTable : public virtual MctNode
 {
 public:
     MctRowChangeInTable(int startRow, int rowCount, const QString &tableName);
@@ -356,7 +358,7 @@ private:
     QString m_tableName;
 };
 
-class MctColChangeInTable : public virtual MctNode
+class KOTEXT_EXPORT MctColChangeInTable : public virtual MctNode
 {
 public:
     MctColChangeInTable(int startCol, int colCount, const QString &tableName);
@@ -373,28 +375,28 @@ private:
     QString m_tableName;
 };
 
-class MctAddedRowInTable : public MctRowChangeInTable
+class KOTEXT_EXPORT MctAddedRowInTable : public MctRowChangeInTable
 {
 public:
     MctAddedRowInTable(int m_startRow, int rowCount, const QString &m_tableName);
     ~MctAddedRowInTable();
 };
 
-class MctRemovedRowInTable : public MctRowChangeInTable
+class KOTEXT_EXPORT MctRemovedRowInTable : public MctRowChangeInTable
 {
 public:
     MctRemovedRowInTable(int m_startRow, int rowCount, const QString &m_tableName);
     ~MctRemovedRowInTable();
 };
 
-class MctAddedColInTable : public MctColChangeInTable
+class KOTEXT_EXPORT MctAddedColInTable : public MctColChangeInTable
 {
 public:
     MctAddedColInTable(int m_startCol, int colCount, const QString &tableName);
     ~MctAddedColInTable();
 };
 
-class MctRemovedColInTable : public MctColChangeInTable
+class KOTEXT_EXPORT MctRemovedColInTable : public MctColChangeInTable
 {
 public:
     MctRemovedColInTable(int m_startCol, int colCount, const QString &tableName);

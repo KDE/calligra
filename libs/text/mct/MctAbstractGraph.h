@@ -30,6 +30,8 @@
 #include "KoShape.h"
 #include "KoProperties.h"
 
+#include "kotext_export.h"
+
 class MctChange;
 class MctChangeset;
 class MctPosition;
@@ -45,7 +47,7 @@ class KoTextDocument;
  * The MctAbstractGraph contains all the changes of the actual document.
  * Each document must have two abstract graph (undo and redo).
  */
-class MctAbstractGraph
+class KOTEXT_EXPORT MctAbstractGraph
 {
 public:
     /**

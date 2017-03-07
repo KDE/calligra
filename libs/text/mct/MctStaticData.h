@@ -28,6 +28,8 @@
 #include <QTextCursor>
 #include <QtGlobal>
 
+#include "kotext_export.h"
+
 class MctChange;
 class MctPosition;
 class MctEmbObjProperties;
@@ -54,7 +56,7 @@ using XMLns = QString;
 /**
  * Contains all static const global variable and function
  */
-class MctStaticData
+class KOTEXT_EXPORT MctStaticData
 {
 public:    
 

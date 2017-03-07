@@ -25,6 +25,8 @@
 #include <QTextTableCell>
 #include <KoParagraphStyle.h>
 
+#include "kotext_export.h"
+
 class MctCell;
 
 /**
@@ -34,7 +36,7 @@ class MctCell;
  * The starting and ending paragraphs are counted and so the character positions.
  * Sometimes ending information is not give for example when Paragraph change is in action.
  */
-class MctPosition
+class KOTEXT_EXPORT MctPosition
 {
 public:
     /// constructor

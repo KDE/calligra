@@ -22,13 +22,15 @@
 
 #include "MctRedoGraphXMLfilter.h"
 
+#include "kotext_export.h"
+
 class ChangeEvent;
 using ChangeEventList = QList<ChangeEvent*>;
 
 /**
  * Export changes from abstract redo graph to XML
  */
-class MctRedoGraph : public MctRedoGraphXMLfilter
+class KOTEXT_EXPORT MctRedoGraph : public MctRedoGraphXMLfilter
 {
 public:
     MctRedoGraph(const QString &odt, KoTextDocument *m_koTextDoc);

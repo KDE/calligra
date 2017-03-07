@@ -21,10 +21,13 @@
 #define MCTNODE_H
 
 #include <QString>
+
+#include "kotext_export.h"
+
 /**
  * A basic node for the abstract graph
  */
-class MctNode
+class KOTEXT_EXPORT MctNode
 {
 public:
     /// constructor

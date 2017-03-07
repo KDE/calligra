@@ -25,6 +25,8 @@
 
 #include "KoXmlReader.h"
 
+#include "kotext_export.h"
+
 class MctPosition;
 /**
  * Practial node in the abstract change-tracking graph
@@ -32,7 +34,7 @@ class MctPosition;
  * The MctChange represents an actual change in the document history.
  * The class connect the position, the change type, the id and the related Dom element.
  */
-class MctChange : public MctNode
+class KOTEXT_EXPORT MctChange : public MctNode
 {
 public:
     /// constructor

@@ -3,7 +3,8 @@ project(wordspart)
 #TODO port to textlayout-rework
 add_subdirectory( tests )
 
-include_directories( ${KORDF_INCLUDES} ${KOTEXT_INCLUDES} ${TEXTLAYOUT_INCLUDES})
+include_directories(${KORDF_INCLUDES} ${KOTEXT_INCLUDES} ${TEXTLAYOUT_INCLUDES})
+include_directories(${KOMAIN_INCLUDES} {CMAKE_SOURCE_DIR}/libs/text/mct)
 
 ########### WordsPrivate library ###############
 

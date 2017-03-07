@@ -22,10 +22,12 @@
 
 #include "MctPropertyBase.h"
 
+#include "kotext_export.h"
+
 /**
  * Representation of a table cell
  */
-class MctCell : public MctPropertyBase
+class KOTEXT_EXPORT MctCell : public MctPropertyBase
 {
 public:
     MctCell(const QString &m_cellName, const QString &m_tableName, int m_row = -1, int m_col = -1);

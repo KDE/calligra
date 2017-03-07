@@ -22,13 +22,15 @@
 
 #include "MctUndoGraphXMLfilter.h"
 
+#include "kotext_export.h"
+
 class ChangeEvent;
 using ChangeEventList = QList<ChangeEvent*>;
 
 /**
  * Export changes from abstract undo graph to XML
  */
-class MctUndoGraph : public MctUndoGraphXMLfilter
+class KOTEXT_EXPORT MctUndoGraph : public MctUndoGraphXMLfilter
 {
 public:
     MctUndoGraph(const QString &odt, KoTextDocument *m_koTextDoc);

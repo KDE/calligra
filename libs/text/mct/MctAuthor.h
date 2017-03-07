@@ -22,10 +22,12 @@
 
 #include "MctNode.h"
 
+#include "kotext_export.h"
+
 /**
  * Author class represents the author of a change
  */
-class MctAuthor : public MctNode
+class KOTEXT_EXPORT MctAuthor : public MctNode
 {
 public:
     /// constructor

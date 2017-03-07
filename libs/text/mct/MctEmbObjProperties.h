@@ -25,6 +25,8 @@
 #include "KoShapeStroke.h"
 #include "KoShapeShadow.h"
 
+#include "kotext_export.h"
+
 #include <QSize>
 
 /**
@@ -33,7 +35,7 @@
  * @note this class was also designed for UNO interface
  * @todo refactoring, re-thinking is suggested
  */
-class MctEmbObjProperties : public MctPropertyBase
+class KOTEXT_EXPORT MctEmbObjProperties : public MctPropertyBase
 {
 public:
     MctEmbObjProperties(const QString &name);
