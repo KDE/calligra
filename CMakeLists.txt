@@ -899,7 +899,7 @@ set(VECTORIMAGE_INCLUDES
 set(KOTEXT_INCLUDES
                    ${CMAKE_SOURCE_DIR}/libs/text
                    ${CMAKE_BINARY_DIR}/libs/text
-		   ${CMAKE_SOURCE_DIR}/libs/kotext/mct
+                   ${CMAKE_SOURCE_DIR}/libs/text/mct
                    ${CMAKE_SOURCE_DIR}/libs/text/changetracker
                    ${CMAKE_SOURCE_DIR}/libs/text/styles
                    ${CMAKE_SOURCE_DIR}/libs/text/opendocument

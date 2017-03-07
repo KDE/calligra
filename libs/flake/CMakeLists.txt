@@ -1,6 +1,6 @@
 project(flake)
 
-include_directories(${FLAKE_INCLUDES} ${CMAKE_SOURCE_DIR}/libs/main ${CMAKE_SOURCE_DIR}/libs/text/mct ${QT_INCLUDES})
+include_directories(${FLAKE_INCLUDES} ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs/text/mct)
 
 add_subdirectory(styles)
 add_subdirectory(tests)

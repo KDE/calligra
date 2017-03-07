@@ -1,6 +1,7 @@
 include_directories(${KOTEXT_INCLUDES}
                     ${FONTCONFIG_INCLUDE_DIR}
-                    ${FREETYPE_INCLUDE_DIRS})
+                    ${FREETYPE_INCLUDE_DIRS}
+                    ${KOMAIN_INCLUDES})
 
 add_subdirectory( tests )
 add_subdirectory( styles/tests )
@@ -155,7 +156,7 @@ if( SHOULD_BUILD_FEATURE_RDF )
     )
 endif()
 
-## add_library(kotext STATIC ${kotext_LIB_SRCS})
+##add_library(kotext STATIC ${kotext_LIB_SRCS})
 add_library(kotext SHARED ${kotext_LIB_SRCS})
 generate_export_header(kotext BASE_NAME kotext)
 
@@ -163,6 +164,7 @@ target_link_libraries(kotext
     PUBLIC
         flake
         KF5::TextWidgets
+        KF5::Archive
     PRIVATE
         koplugin
         KF5::WindowSystem # KoFind to activate the window with content found
