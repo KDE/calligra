@@ -61,8 +61,13 @@ namespace KoChart {
  * I - CenterPosition
  * J - FloatingPosition
  *
- * Layout elements with the same position that are in one of the positions B, D, G or E
- * will be placed more towards the center based on a "weight".
+ * Layout elements with the same position that are in one of the positions B, D, E or G
+ * will be placed more towards the center based on item type.
+ * 
+ * Note that layouting is heavily dependent on that the CenterPosition is
+ * occopied by a PlotArea shape. If this is not the case the result is unpredictable.
+ * 
+ * This should not be a problem, a chart without a PlotArea in the middle is hardly a chart.
  */
 class ChartLayout : public KoShapeContainerModel
 {
@@ -239,15 +244,19 @@ private:
 
     bool isShapeToBeMoved(const KoShape *shape, Position area, const KoShape *plotArea) const;
 
-    QString dbg(const KoShape *shape) const;
 #ifdef COMPILING_TESTS
 public:
 #endif
+    QString dbg(const KoShape *shape) const;
     static qreal relativePosition(qreal start1, qreal length1, qreal start2, qreal length2, qreal start, qreal length);
     static QPointF itemPosition(const KoShape *shape);
     static QSizeF  itemSize(const KoShape *shape);
     static QRectF  itemRect(const KoShape *shape);
     static void    setItemPosition(KoShape *shape, const QPointF& pos);
+    /// Returns the plot area minus axis labels
+    static QRectF diagramArea(const KoShape *shape);
+    /// Returns the @p rect minus axis labels
+    static QRectF diagramArea(const KoShape *shape, const QRectF &rect);
 
 private:
     bool m_doingLayout;

@@ -28,6 +28,8 @@
 #include "Legend.h"
 #include "ChartDebug.h"
 #include "PlotArea.h"
+#include "Axis.h"
+#include "ScreenConversions.h"
 
 // Calligra
 #include <KoShapeContainer.h>
@@ -276,7 +278,7 @@ qreal ChartLayout::layoutTop(const QMap<int, KoShape*>& shapes, KoShape *p)
             case LegendType:
                 if (p) {
                     // default is AlignCenter
-                    QRectF pr = itemRect(p);
+                    QRectF pr = diagramArea(p);
                     pX = pr.top() + (pr.width() / 2.0);
                     // Legend may have horizontal alignment specified
                     if (static_cast<Legend*>(shape)->alignment() == Qt::AlignLeft) {
@@ -290,7 +292,7 @@ qreal ChartLayout::layoutTop(const QMap<int, KoShape*>& shapes, KoShape *p)
             case YAxisTitleType:
                 // AlignCenter with plot area
                 if (p) {
-                    QRectF pr = itemRect(p);
+                    QRectF pr = diagramArea(p);
                     pX = pr.left() + (pr.width() / 2.0);
                 }
                 break;
@@ -313,7 +315,7 @@ qreal ChartLayout::layoutBottom(const QMap<int, KoShape*>& shapes, KoShape *p)
             case LegendType:
                 if (p) {
                     // default is AlignCenter
-                    QRectF pr = itemRect(p);
+                    QRectF pr = diagramArea(p);
                     pX = pr.left() + (pr.width() / 2.0);
                     // Legend may have horizontal alignment specified
                     if (static_cast<Legend*>(shape)->alignment() == Qt::AlignLeft) {
@@ -327,7 +329,7 @@ qreal ChartLayout::layoutBottom(const QMap<int, KoShape*>& shapes, KoShape *p)
             case YAxisTitleType:
                 // AlignCenter with plot area
                 if (p) {
-                    QRectF pr = itemRect(p);
+                    QRectF pr = diagramArea(p);
                     pX = pr.left() + (pr.width() / 2.0);
                 }
                 break;
@@ -351,7 +353,7 @@ qreal ChartLayout::layoutStart(const QMap<int, KoShape*>& shapes, KoShape *p)
             case LegendType:
                 if (p) {
                     // default is AlignCenter
-                    QRectF pr = itemRect(p);
+                    QRectF pr = diagramArea(p);
                     pY = pr.top() + (pr.height() / 2.0);
                     // Legend may have vertical alignment specified
                     if (static_cast<Legend*>(shape)->alignment() == Qt::AlignLeft) {
@@ -365,7 +367,7 @@ qreal ChartLayout::layoutStart(const QMap<int, KoShape*>& shapes, KoShape *p)
             case YAxisTitleType:
                 // AlignCenter with plot area
                 if (p) {
-                    QRectF pr = itemRect(p);
+                    QRectF pr = diagramArea(p);
                     pY = pr.top() + (pr.height() / 2.0);
                 }
                 break;
@@ -388,7 +390,7 @@ qreal ChartLayout::layoutEnd(const QMap<int, KoShape*>& shapes, KoShape *p)
             case LegendType:
                 if (p) {
                     // default is AlignCenter
-                    QRectF pr = itemRect(p);
+                    QRectF pr = diagramArea(p);
                     pY = pr.top() + pr.height() / 2.0;
                     // Legend may have vertical alignment specified
                     if (static_cast<Legend*>(shape)->alignment() == Qt::AlignLeft) {
@@ -402,7 +404,7 @@ qreal ChartLayout::layoutEnd(const QMap<int, KoShape*>& shapes, KoShape *p)
             case YAxisTitleType:
                 // AlignCenter with plot area
                 if (p) {
-                    QRectF pr = itemRect(p);
+                    QRectF pr = diagramArea(p);
                     pY = pr.top() + (pr.height() / 2.0);
                 }
                 break;
@@ -657,6 +659,33 @@ QMap<KoShape*, QRectF> ChartLayout::calculateLayoutTop(KoShape *shape, KoShape *
                     debugChartLayout<<"moved:"<<dbg(i.key())<<r;
                 }
             }
+            if (data->itemType == LegendType && (i.key() == shape || i.key()->isVisible())) {
+                // alignment
+                QRectF r(i.value());
+                if (newlayout.contains(i.key())) {
+                    r = newlayout[i.key()];
+                }
+                QRectF n = diagramArea(plotArea, newPARect);
+                qreal xpos = r.left();
+                switch (static_cast<Legend*>(shape)->alignment()) {
+                    case Qt::AlignLeft:
+                        xpos = n.left();
+                        break;
+                    case Qt::AlignCenter:
+                        xpos = n.left() + ((n.width() - r.width()) * 0.5);
+                        break;
+                    case Qt::AlignRight:
+                        xpos = n.right() - r.width();
+                        break;
+                    default:
+                        break;
+                }
+                if (xpos != r.left()) {
+                    r.moveLeft(xpos);
+                    newlayout[it.key()] = r;
+                    debugChartLayout<<"aligned:"<<dbg(it.key())<<r;
+                }
+            }
         }
     }
     QMap<KoShape*, QRectF> result;
@@ -787,6 +816,33 @@ QMap<KoShape*, QRectF> ChartLayout::calculateLayoutBottom(KoShape *shape, KoShap
                     debugChartLayout<<"moved:"<<dbg(i.key())<<r;
                 }
             }
+            if (data->itemType == LegendType && (i.key() == shape || i.key()->isVisible())) {
+                // alignment
+                QRectF r(i.value());
+                if (newlayout.contains(i.key())) {
+                    r = newlayout[i.key()];
+                }
+                QRectF n = diagramArea(plotArea, newPARect);
+                qreal xpos = r.left();
+                switch (static_cast<Legend*>(shape)->alignment()) {
+                    case Qt::AlignLeft:
+                        xpos = n.left();
+                        break;
+                    case Qt::AlignCenter:
+                        xpos = n.left() + ((n.width() - r.width()) * 0.5);
+                        break;
+                    case Qt::AlignRight:
+                        xpos = n.right() - r.width();
+                        break;
+                    default:
+                        break;
+                }
+                if (xpos != r.left()) {
+                    r.moveLeft(xpos);
+                    newlayout[it.key()] = r;
+                    debugChartLayout<<"aligned:"<<dbg(it.key())<<r;
+                }
+            }
         }
     }
     QMap<KoShape*, QRectF> result;
@@ -906,19 +962,46 @@ QMap<KoShape*, QRectF> ChartLayout::calculateLayoutStart(KoShape *shape, KoShape
         const QRectF oldPlotAreaRect = oldlayout[plotArea];
         const QRectF newPlotAreaRect = newlayout[plotArea];
         {QMap<KoShape*, QRectF>::const_iterator it;
-            for (it = oldlayout.constBegin(); it != oldlayout.constEnd(); ++it) {
-                LayoutData *data = m_layoutItems[it.key()];
-                if ((data->itemType == LegendType && !it.key()->isVisible()) || data->itemType == XAxisTitleType || data->itemType == SecondaryXAxisTitleType) {
-                    QRectF r(it.value());
-                    debugChartLayout<<"move check:"<<dbg(it.key())<<r;
-                    qreal xpos = relativePosition(oldPlotAreaRect.left(), oldPlotAreaRect.width(), newPlotAreaRect.left(),  newPlotAreaRect.width(), r.left(), r.width());
-                    if (xpos != r.left()) {
-                        r.moveLeft(xpos);
-                        newlayout[it.key()] = r;
-                        debugChartLayout<<"moved:"<<dbg(it.key())<<r;
-                    }
+        for (it = oldlayout.constBegin(); it != oldlayout.constEnd(); ++it) {
+            LayoutData *data = m_layoutItems[it.key()];
+            if ((data->itemType == LegendType && !it.key()->isVisible()) || data->itemType == XAxisTitleType || data->itemType == SecondaryXAxisTitleType) {
+                QRectF r(it.value());
+                debugChartLayout<<"move check:"<<dbg(it.key())<<r;
+                qreal xpos = relativePosition(oldPlotAreaRect.left(), oldPlotAreaRect.width(), newPlotAreaRect.left(),  newPlotAreaRect.width(), r.left(), r.width());
+                if (xpos != r.left()) {
+                    r.moveLeft(xpos);
+                    newlayout[it.key()] = r;
+                    debugChartLayout<<"moved:"<<dbg(it.key())<<r;
                 }
-            }}
+            }
+            if (data->itemType == LegendType && (it.key() == shape || it.key()->isVisible())) {
+                // alignment
+                QRectF r(it.value());
+                if (newlayout.contains(it.key())) {
+                    r = newlayout[it.key()];
+                }
+                QRectF n = diagramArea(plotArea, newPlotAreaRect);
+                qreal ypos = r.top();
+                switch (static_cast<Legend*>(shape)->alignment()) {
+                    case Qt::AlignLeft:
+                        ypos = n.top();
+                        break;
+                    case Qt::AlignCenter:
+                        ypos = n.top() + ((n.height() - r.height()) * 0.5);
+                        break;
+                    case Qt::AlignRight:
+                        ypos = n.bottom() - r.height();
+                        break;
+                    default:
+                        break;
+                }
+                if (ypos != r.top()) {
+                    r.moveTop(ypos);
+                    newlayout[it.key()] = r;
+                    debugChartLayout<<"aligned:"<<dbg(it.key())<<r;
+                }
+            }
+        }}
     }
     QMap<KoShape*, QRectF> result;
     {QMap<KoShape*, QRectF>::const_iterator it;
@@ -1039,7 +1122,7 @@ QMap<KoShape*, QRectF> ChartLayout::calculateLayoutEnd(KoShape *shape, KoShape *
         }
     }
     if (newlayout.contains(plotArea)) {
-        // handle axis titles
+        // handle axis titles/legend
         debugChartLayout<<"Handle axis titles"<<plotAreaRect;
         const QRectF oldPlotAreaRect = oldlayout[plotArea];
         const QRectF newPlotAreaRect = newlayout[plotArea];
@@ -1053,6 +1136,33 @@ QMap<KoShape*, QRectF> ChartLayout::calculateLayoutEnd(KoShape *shape, KoShape *
                     r.moveLeft(xpos);
                     newlayout[it.key()] = r;
                     debugChartLayout<<"moved:"<<dbg(it.key())<<r;
+                }
+            }
+            if (m_layoutItems[it.key()]->itemType == LegendType && (it.key() == shape || it.key()->isVisible())) {
+                // alignment
+                QRectF r(it.value());
+                if (newlayout.contains(it.key())) {
+                    r = newlayout[it.key()];
+                }
+                QRectF n = diagramArea(plotArea, newPlotAreaRect);
+                qreal ypos = r.top();
+                switch (static_cast<Legend*>(shape)->alignment()) {
+                    case Qt::AlignLeft:
+                        ypos = n.top();
+                        break;
+                    case Qt::AlignCenter:
+                        ypos = n.top() + ((n.height() - r.height()) * 0.5);
+                        break;
+                    case Qt::AlignRight:
+                        ypos = n.bottom() - r.height();
+                        break;
+                    default:
+                        break;
+                }
+                if (ypos != r.top()) {
+                    r.moveTop(ypos);
+                    newlayout[it.key()] = r;
+                    debugChartLayout<<"aligned:"<<dbg(it.key())<<r;
                 }
             }
         }}
@@ -1308,6 +1418,44 @@ bool ChartLayout::isShapeToBeMoved(const KoShape *shape, Position area, const Ko
 {
     const QPointF offset =  shape->position() - itemPosition(shape);
     shape->setPosition(pos + offset);
+}
+
+QRectF ChartLayout::diagramArea(const KoShape *shape)
+{
+    return diagramArea(shape, itemRect(shape));
+}
+
+// FIXME: Get the actual plot area ex axis labels from KChart
+QRectF ChartLayout::diagramArea(const KoShape *shape, const QRectF &rect)
+{
+    const PlotArea* plotArea = dynamic_cast<const PlotArea*>(shape);
+    if (!plotArea) {
+        return rect;
+    }
+    qreal bottom = 0.0;
+    qreal left = 0.0;
+    qreal top = 0.0;
+    qreal right = 0.0;
+    // HACK: KChart has some spacing between axis and label
+    qreal xspace = ScreenConversions::pxToPtX(6.0) * 2.0;
+    qreal yspace = ScreenConversions::pxToPtY(6.0) * 2.0;
+    if (plotArea->xAxis() && plotArea->xAxis()->showLabels()) {
+        bottom = plotArea->xAxis()->fontSize();
+        bottom += yspace;
+    }
+    if (plotArea->yAxis() && plotArea->yAxis()->showLabels()) {
+        left = plotArea->yAxis()->fontSize();
+        left += xspace;
+    }
+    if (plotArea->secondaryXAxis() && plotArea->secondaryXAxis()->showLabels()) {
+        top = plotArea->secondaryXAxis()->fontSize();
+        top += yspace;
+    }
+    if (plotArea->secondaryYAxis() && plotArea->secondaryYAxis()->showLabels()) {
+        right = plotArea->secondaryYAxis()->fontSize();
+        right += xspace;
+    }
+    return rect.adjusted(left, top, -right, -bottom);
 }
 
 QString ChartLayout::dbg(const KoShape *shape) const
