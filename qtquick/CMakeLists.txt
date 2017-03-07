@@ -69,24 +69,24 @@ include_directories(
     ${CMAKE_BINARY_DIR}
     ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/words/part
-    ${CMAKE_SOURCE_DIR}/words/gemini
 #    ${CMAKE_SOURCE_DIR}/sheets
-    ${CMAKE_SOURCE_DIR}/libs/kopageapp
+    ${CMAKE_SOURCE_DIR}/libs/pageapp
 )
 
-automoc4_add_library(calligraqtquickcomponentsplugin MODULE ${calligraqtquickcomponents_SRCS})
+add_library(calligraqtquickcomponentsplugin SHARED ${calligraqtquickcomponents_SRCS})
 
 target_link_libraries(calligraqtquickcomponentsplugin
-    ${QT_QTDECLARATIVE_LIBRARY}
-    ${QT_QTOPENGL_LIBRARY}
-    ${QT_LIBRARIES}
+    Qt5::Declarative
+    Qt5::OpenGL
+    Qt5::Svg
     komain
     kotextlayout
     wordsprivate
 #    calligrasheetscommon
     kopageapp
+    koplugin
     calligrastageprivate)
 
 install(TARGETS calligraqtquickcomponentsplugin
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/calligra/CalligraComponents)
-install(FILES qmldir DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/calligra/CalligraComponents)
+    DESTINATION ${QML_INSTALL_DIR}/org/calligra/CalligraComponents)
+install(FILES qmldir DESTINATION ${QML_INSTALL_DIR}/org/calligra/CalligraComponents)

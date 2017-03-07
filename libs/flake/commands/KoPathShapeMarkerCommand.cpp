@@ -22,7 +22,7 @@
 #include "KoMarker.h"
 #include "KoPathShape.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KoPathShapeMarkerCommand::KoPathShapeMarkerCommand(const QList<KoPathShape*> &shapes, KoMarker *marker, KoMarkerData::MarkerPosition position, KUndo2Command *parent)
 : KUndo2Command(parent)
@@ -54,7 +54,7 @@ void KoPathShapeMarkerCommand::redo()
 void KoPathShapeMarkerCommand::undo()
 {
     KUndo2Command::undo();
-    QList<KoMarker*>::iterator markerIt = m_oldMarkers.begin();
+    QList<KoMarker*>::ConstIterator markerIt = m_oldMarkers.constBegin();
     foreach(KoPathShape *shape, m_shapes) {
         shape->setMarker(*markerIt, m_position);
         shape->update();

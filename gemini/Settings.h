@@ -22,7 +22,7 @@
 
 #include <QObject>
 #include <QString>
-#include <QDeclarativeItem>
+#include <QQuickItem>
 
 class Settings : public QObject
 {
@@ -30,7 +30,7 @@ class Settings : public QObject
     Q_PROPERTY(QString currentFile READ currentFile WRITE setCurrentFile NOTIFY currentFileChanged)
     Q_PROPERTY(QString currentFileClass READ currentFileClass NOTIFY currentFileChanged)
     Q_PROPERTY(bool temporaryFile READ isTemporaryFile WRITE setTemporaryFile NOTIFY temporaryFileChanged)
-    Q_PROPERTY(QDeclarativeItem* focusItem READ focusItem WRITE setFocusItem NOTIFY focusItemChanged)
+    Q_PROPERTY(QQuickItem* focusItem READ focusItem WRITE setFocusItem NOTIFY focusItemChanged)
     Q_PROPERTY(QObject* theme READ theme NOTIFY themeChanged)
     Q_PROPERTY(QString themeID READ themeID WRITE setThemeID NOTIFY themeChanged)
 
@@ -47,8 +47,8 @@ public Q_SLOTS:
     bool isTemporaryFile() const;
     void setTemporaryFile(bool temp);
 
-    QDeclarativeItem *focusItem();
-    void setFocusItem(QDeclarativeItem *item);
+    QQuickItem *focusItem();
+    void setFocusItem(QQuickItem *item);
 
     QObject* theme() const;
 

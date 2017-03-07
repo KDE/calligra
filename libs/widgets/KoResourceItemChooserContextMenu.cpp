@@ -25,7 +25,7 @@
 #include <QGridLayout>
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <klineedit.h>
 
 #include "KoResource.h"
@@ -52,7 +52,7 @@ KoLineEditAction::~KoLineEditAction()
 
 }
 
-void KoLineEditAction::setIcon(QIcon icon)
+void KoLineEditAction::setIcon(const QIcon &icon)
 {
     QPixmap pixmap = QPixmap(icon.pixmap(16,16));
     m_label->setPixmap(pixmap);
@@ -81,9 +81,9 @@ void KoLineEditAction::onTriggered(const QString& text)
     }
 }
 
-void KoLineEditAction::setClickMessage(const QString& clickMessage)
+void KoLineEditAction::setPlaceholderText(const QString& clickMessage)
 {
-    m_editBox->setClickMessage(clickMessage);
+    m_editBox->setPlaceholderText(clickMessage);
 }
 
 void KoLineEditAction::setText(const QString& text)
@@ -103,7 +103,7 @@ void KoLineEditAction::setVisible(bool showAction)
     defaultWidget()->setVisible(showAction);
 }
 
-ContextMenuExistingTagAction::ContextMenuExistingTagAction(KoResource* resource, QString tag, QObject* parent)
+ContextMenuExistingTagAction::ContextMenuExistingTagAction(KoResource* resource, const QString &tag, QObject* parent)
     : QAction(parent)
     , m_resource(resource)
     , m_tag(tag)
@@ -130,7 +130,7 @@ NewTagAction::NewTagAction(KoResource* resource, QMenu* parent)
 {
     m_resource = resource;
     setIcon(koIcon("document-new"));
-    setClickMessage(i18n("New tag"));
+    setPlaceholderText(i18n("New tag"));
     closeParentOnTrigger(true);
 
     connect (this, SIGNAL(triggered(QString)),
@@ -211,4 +211,3 @@ KoResourceItemChooserContextMenu::~KoResourceItemChooserContextMenu()
 {
 
 }
-#include "KoResourceItemChooserContextMenu.moc"

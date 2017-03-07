@@ -23,8 +23,9 @@
 
 #include <gnumericexport.h>
 #include <kdebug.h>
-#include <kfilterdev.h>
+#include <KCompressionDevice>
 #include <kpluginfactory.h>
+#include <klocale.h>
 #include <KoFilterChain.h>
 #include <KoZoomHandler.h>
 #include <QApplication>
@@ -57,8 +58,8 @@
 
 using namespace Calligra::Sheets;
 
-K_PLUGIN_FACTORY(GNUMERICExportFactory, registerPlugin<GNUMERICExport>();)
-K_EXPORT_PLUGIN(GNUMERICExportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(GNUMERICExportFactory, "calligra_filter_sheets2gnumeric.json",
+                           registerPlugin<GNUMERICExport>();)
 
 GNUMERICExport::GNUMERICExport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
@@ -648,16 +649,16 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc, const Cell& 
     cell_style.setAttribute("Rotation", QString::number(-1*style.angle()));
 
     // The indentation in GNumeric is an integer value. In Calligra Sheets, it's a double.
-    // Save the double anyway, makes it even better when importing the document back in KSpread.
+    // Save the double anyway, makes it even better when importing the document back in Calligra Sheets.
     // TODO verify if it's correct, in import we "* 10.0"
     cell_style.setAttribute("Indent", QString::number(style.indentation()));
 
-    cell_style.setAttribute("Locked", !style.notProtected());
+    cell_style.setAttribute("Locked", QString::number(!style.notProtected()));
 
-    // A KSpread cell can have two options to hide: only formula hidden, or everything hidden.
+    // A Calligra Sheets cell can have two options to hide: only formula hidden, or everything hidden.
     // I only consider a cell with everything hidden as hidden.
     // Gnumeric hides everything or nothing.
-    cell_style.setAttribute("Hidden", style.hideAll());
+    cell_style.setAttribute("Hidden", QString::number(style.hideAll()));
 
     QColor patColor =  style.backgroundBrush().color();
     red = patColor.red() << 8;
@@ -972,7 +973,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
     addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::show_horizontal_scrollbar", ksdoc->map()->settings()->showHorizontalScrollBar());
     addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::show_vertical_scrollbar", ksdoc->map()->settings()->showVerticalScrollBar());
     addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::show_notebook_tabs", ksdoc->map()->settings()->showTabBar());
-    if (ksdoc->map()->settings()->completionMode() == KGlobalSettings::CompletionAuto)
+    if (ksdoc->map()->settings()->completionMode() == KCompletion::CompletionAuto)
         addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::do_auto_completion", "true");
     else
         addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::do_auto_completion", "false");
@@ -1065,8 +1066,8 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
     foreach(Sheet* table, ksdoc->map()->sheetList()) {
         if (table->printSettings()->pageLayout().format == KoPageFormat::CustomSize) {
             customSize = gnumeric_doc.createElement("gmr:Geometry");
-            customSize.setAttribute("Width", POINT_TO_MM(table->printSettings()->pageLayout().width));
-            customSize.setAttribute("Height", POINT_TO_MM(table->printSettings()->pageLayout().width));
+            customSize.setAttribute("Width", QString::number(POINT_TO_MM(table->printSettings()->pageLayout().width)));
+            customSize.setAttribute("Height", QString::number(POINT_TO_MM(table->printSettings()->pageLayout().width)));
             sheets.appendChild(customSize);
             //<gmr:Geometry Width="768" Height="365"/>
         }
@@ -1079,7 +1080,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
         sheet.setAttribute("HideGrid", !table->getShowGrid() ? "true" : "false");
         sheet.setAttribute("HideColHeader", (!ksdoc->map()->settings()->showColumnHeader() ? "true" : "false"));
         sheet.setAttribute("HideRowHeader", (!ksdoc->map()->settings()->showRowHeader() ? "true" : "false"));
-        /* Not available in KSpread ?
+        /* Not available in Calligra Sheets ?
          * sheet.setAttribute("DisplayOutlines", "true");
          * sheet.setAttribute("OutlineSymbolsBelow", "true");
          * sheet.setAttribute("OutlineSymbolsRight", "true");
@@ -1105,7 +1106,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
         sheet.appendChild(tmp);
 
         // Zoom value doesn't appear to be correct
-        // KSpread 200% gives zoom() = 2.5, this in GNumeric = 250%
+        // Calligra Sheets 200% gives zoom() = 2.5, this in GNumeric = 250%
         tmp = gnumeric_doc.createElement("gmr:Zoom");
         if (view)
             tmp.appendChild(gnumeric_doc.createTextNode(QString::number(view->zoomHandler()->zoom())));
@@ -1118,22 +1119,22 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
         margins = gnumeric_doc.createElement("gmr:Margins");
 
         topMargin = gnumeric_doc.createElement("gmr:top");
-        topMargin.setAttribute("Points", table->printSettings()->pageLayout().topMargin);
+        topMargin.setAttribute("Points", QString::number(table->printSettings()->pageLayout().topMargin));
         topMargin.setAttribute("PrefUnit", "mm");
         margins.appendChild(topMargin);
 
         bottomMargin = gnumeric_doc.createElement("gmr:bottom");
-        bottomMargin.setAttribute("Points", table->printSettings()->pageLayout().bottomMargin);
+        bottomMargin.setAttribute("Points", QString::number(table->printSettings()->pageLayout().bottomMargin));
         bottomMargin.setAttribute("PrefUnit", "mm");
         margins.appendChild(bottomMargin);
 
         leftMargin = gnumeric_doc.createElement("gmr:left");
-        leftMargin.setAttribute("Points", table->printSettings()->pageLayout().leftMargin);
+        leftMargin.setAttribute("Points", QString::number(table->printSettings()->pageLayout().leftMargin));
         leftMargin.setAttribute("PrefUnit", "mm");
         margins.appendChild(leftMargin);
 
         rightMargin = gnumeric_doc.createElement("gmr:right");
-        rightMargin.setAttribute("Points", table->printSettings()->pageLayout().rightMargin);
+        rightMargin.setAttribute("Points", QString::number(table->printSettings()->pageLayout().rightMargin));
         rightMargin.setAttribute("PrefUnit", "mm");
         margins.appendChild(rightMargin);
 
@@ -1447,7 +1448,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
             sheet.appendChild(merged);
     }
     QDomElement uidata = gnumeric_doc.createElement("gmr:UIData");
-    uidata.setAttribute("SelectedTab", indexActiveTable);
+    uidata.setAttribute("SelectedTab", QString::number(indexActiveTable));
     workbook.appendChild(uidata);
 
     str = gnumeric_doc.toString();
@@ -1456,7 +1457,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
 
     // Ok, now write to export file
 
-    QIODevice* out = KFilterDev::deviceForFile(m_chain->outputFile(), "application/x-gzip");
+    QIODevice* out = new KCompressionDevice(m_chain->outputFile(), KCompressionDevice::GZip);
 
     if (!out) {
         kError(30521) << "No output file! Aborting!" << endl;

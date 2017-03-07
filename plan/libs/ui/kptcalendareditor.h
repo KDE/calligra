@@ -131,9 +131,9 @@ protected:
 private:
     CalendarDayItemModel *m_model;
     
-    KAction *actionSetUndefined;
-    KAction *actionSetVacation;
-    KAction *actionSetWork;
+    QAction *actionSetUndefined;
+    QAction *actionSetVacation;
+    QAction *actionSetWork;
 
     bool m_readwrite;
 };
@@ -171,8 +171,8 @@ protected Q_SLOTS:
 private Q_SLOTS:
     void slotContextMenuCalendar( const QModelIndex& index, const QPoint& pos );
     void slotContextMenuDay( const QModelIndex& index, const QPoint& pos );
-    void slotContextMenuDate( KMenu*, const QDate& );
-    void slotContextMenuDate( KMenu*, const QList<QDate>& );
+    void slotContextMenuDate( QMenu*, const QDate& );
+    void slotContextMenuDate( QMenu*, const QList<QDate>& );
     
     void slotCalendarSelectionChanged( const QModelIndexList& );
     void slotCurrentCalendarChanged( const QModelIndex& );
@@ -200,17 +200,17 @@ private:
     KDatePicker *m_datePicker;
     DateTableDataModel *m_model;
     
-    KAction *actionAddCalendar;
-    KAction *actionAddSubCalendar;
-    KAction *actionDeleteSelection;
+    QAction *actionAddCalendar;
+    QAction *actionAddSubCalendar;
+    QAction *actionDeleteSelection;
 
-    KAction *actionAddDay;
-    KAction *actionAddWorkInterval;
-    KAction *actionDeleteDaySelection;
+    QAction *actionAddDay;
+    QAction *actionAddWorkInterval;
+    QAction *actionDeleteDaySelection;
 
-    KAction *actionSetUndefined;
-    KAction *actionSetVacation;
-    KAction *actionSetWork;
+    QAction *actionSetUndefined;
+    QAction *actionSetVacation;
+    QAction *actionSetWork;
     
     QList<QDate> m_currentMenuDateList;
 

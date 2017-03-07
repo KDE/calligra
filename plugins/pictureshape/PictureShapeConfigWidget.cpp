@@ -19,17 +19,18 @@
 
 #include "PictureShapeConfigWidget.h"
 #include "PictureShape.h"
+#include "PictureDebug.h"
 
 #include <KoImageData.h>
 #include <KoImageCollection.h>
 
-#include <kdebug.h>
 #include <kfilewidget.h>
 #include <kjobuidelegate.h>
 #include <KIO/Job>
 
 #include <QGridLayout>
 #include <QImageReader>
+#include <QUrl>
 
 void PictureShapeLoadWaiter::setImageData(KJob *job)
 {
@@ -87,13 +88,12 @@ void PictureShapeConfigWidget::open(KoShape *shape)
     Q_ASSERT(m_shape);
     delete m_fileWidget;
     QVBoxLayout *layout = new QVBoxLayout(this);
-    m_fileWidget = new KFileWidget(KUrl("kfiledialog:///OpenDialog"), this);
+    m_fileWidget = new KFileWidget(QUrl(/* QT5TODO:"kfiledialog:///OpenDialog"*/), this);
     m_fileWidget->setMode(KFile::Files | KFile::ExistingOnly);
     m_fileWidget->setOperationMode(KFileWidget::Opening);
     QStringList imageFilters;
-    // ## this is awful. Qt5: use m_fileWidget->setMimeFilter(QImageReader::supportedMimeTypes()) directly
-    foreach(const QByteArray &format, QImageReader::supportedImageFormats()) {
-        imageFilters << "image/" + format;
+    foreach(const QByteArray &mimeType, QImageReader::supportedMimeTypes()) {
+        imageFilters << QLatin1String(mimeType);
     }
     m_fileWidget->setMimeFilter(imageFilters);
     layout->addWidget(m_fileWidget);
@@ -106,7 +106,7 @@ void PictureShapeConfigWidget::save()
     if (!m_shape)
         return;
     m_fileWidget->accept();
-    KUrl url = m_fileWidget->selectedUrl();
+    QUrl url = m_fileWidget->selectedUrl();
     if (!url.isEmpty()) {
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
         PictureShapeLoadWaiter *waiter = new PictureShapeLoadWaiter(m_shape);

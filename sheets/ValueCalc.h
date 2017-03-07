@@ -27,7 +27,7 @@
 #include "Number.h"
 #include "Value.h"
 
-#include "calligra_sheets_export.h"
+#include "sheets_odf_export.h"
 
 #ifdef max
 # undef max

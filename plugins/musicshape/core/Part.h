@@ -71,7 +71,7 @@ public:
     int staffCount() const;
 
     /**
-     * Returns the staff at the given index. If index < 0 or index >= staffCount, this method returns NULL.
+     * Returns the staff at the given index. If index < 0 or index >= staffCount, this method returns nullptr.
      *
      * @param index the index of the staff to return.
      */

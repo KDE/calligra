@@ -24,16 +24,20 @@
 #include <QPainter>
 #include <QDir>
 #include <QWebFrame>
+#include <QUrl>
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QStandardPaths>
 
-#include <klocale.h>
-#include <kstandarddirs.h>
-#include <kfiledialog.h>
+#include <klocalizedstring.h>
 #include <kzip.h>
+
+#include <KPrView.h>
 
 #include "KPrHtmlExport.h"
 
 KPrHtmlExportDialog::KPrHtmlExportDialog(const QList<KoPAPageBase*> &slides, const QString &title, const QString &author, QWidget *parent)
-: KDialog(parent)
+: KoDialog(parent)
 , m_allSlides(slides)
 , m_title(title)
 {
@@ -45,18 +49,18 @@ KPrHtmlExportDialog::KPrHtmlExportDialog(const QList<KoPAPageBase*> &slides, con
     ui.klineedit_title->setText(m_title);
     ui.klineedit_author->setText(author);
 
-    connect(ui.kpushbuttonBrowseTemplate, SIGNAL(clicked()), this, SLOT(browserAction()));
+    connect(ui.pushbuttonBrowseTemplate, SIGNAL(clicked()), this, SLOT(browserAction()));
 
     connect(&preview, SIGNAL(loadFinished(bool)), this, SLOT(renderPreview()));
     connect(ui.klineedit_title, SIGNAL(editingFinished()), this, SLOT(generatePreview()));
     connect(ui.klineedit_author, SIGNAL(editingFinished()), this, SLOT(generatePreview()));
     connect(ui.kListBox_slides, SIGNAL(currentRowChanged(int)), this, SLOT(generatePreview(int)));
     connect(ui.kcombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(generatePreview()));
-    connect(ui.kPushButton_selectAll, SIGNAL(clicked()), this, SLOT(checkAllItems()));
-    connect(ui.kPushButton_deselectAll, SIGNAL(clicked()), this, SLOT(uncheckAllItems()));
+    connect(ui.pushButton_selectAll, SIGNAL(clicked()), this, SLOT(checkAllItems()));
+    connect(ui.pushButton_deselectAll, SIGNAL(clicked()), this, SLOT(uncheckAllItems()));
     connect(ui.toolButton_previous, SIGNAL(clicked()), this, SLOT(generatePrevious()));
     connect(ui.toolButton_next, SIGNAL(clicked()), this, SLOT(generateNext()));
-    connect(ui.kPushButton_Favorite, SIGNAL(clicked()), this, SLOT(favoriteAction()));
+    connect(ui.pushButton_Favorite, SIGNAL(clicked()), this, SLOT(favoriteAction()));
     connect(ui.kcombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateFavoriteButton()));
 
     this->updateFavoriteButton();
@@ -105,9 +109,9 @@ QStringList KPrHtmlExportDialog::slidesNames(){
     return names;
 }
 
-KUrl KPrHtmlExportDialog::templateUrl()
+QUrl KPrHtmlExportDialog::templateUrl()
 {
-    return KUrl(ui.kcombobox->itemData(ui.kcombobox->currentIndex()).toString());
+    return QUrl::fromLocalFile(ui.kcombobox->itemData(ui.kcombobox->currentIndex()).toString());
 }
 
 void KPrHtmlExportDialog::generateSlidesNames(const QList<KoPAPageBase*> &slides)
@@ -129,8 +133,9 @@ void KPrHtmlExportDialog::generateSlidesNames(const QList<KoPAPageBase*> &slides
 
 void KPrHtmlExportDialog::loadTemplatesList()
 {
-    KStandardDirs std;
-    QStringList dirs = std.findDirs("data", "stage/templates/exportHTML/templates");
+    const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
+                                                       QStringLiteral("calligrastage/templates/exportHTML/templates"),
+                                                       QStandardPaths::LocateDirectory);
     for (QStringList::ConstIterator path=dirs.constBegin(); path!=dirs.constEnd(); ++path) {
         QDir dir(*path);
         dir.setFilter(QDir::Files);
@@ -150,8 +155,8 @@ void KPrHtmlExportDialog::loadTemplatesList()
 
 void KPrHtmlExportDialog::addSelectedTemplateToFavorite()
 {
-    QString savePath = KStandardDirs::locateLocal("data", "stage/templates/exportHTML/templates/");
-    KUrl templatePath(ui.kcombobox->itemData(ui.kcombobox->currentIndex()).toString());
+    QString savePath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/stage/templates/exportHTML/templates/");
+    QUrl templatePath = QUrl::fromLocalFile(ui.kcombobox->itemData(ui.kcombobox->currentIndex()).toString());
     savePath += templatePath.fileName();
     if(!(QFile::copy(templatePath.toLocalFile(), savePath))){
         QMessageBox::information(this, i18n("Error"), i18n("There is already a favorite file with this name"));
@@ -179,14 +184,16 @@ void KPrHtmlExportDialog::delSelectedTemplateFromFavorite()
 
 void KPrHtmlExportDialog::browserAction()
 {
-    KFileDialog dialog(KUrl(), QString("*.zip"), this);
+    QFileDialog dialog(this);
+    dialog.setMimeTypeFilters(QStringList(QStringLiteral("application/zip")));
     if (dialog.exec() == QDialog::Accepted) {
-        if (verifyZipFile(dialog.selectedFile())) {
-            QString name (dialog.selectedUrl().fileName());
+        const QString filePath = dialog.selectedFiles().first();
+        if (verifyZipFile(filePath)) {
+            QString name = QFileInfo(filePath).fileName();
             if (name.endsWith(QLatin1String(".zip"), Qt::CaseInsensitive)) {
                 name.chop(4);
             }
-            ui.kcombobox->addItem(name, dialog.selectedFile());
+            ui.kcombobox->addItem(name, filePath);
             ui.kcombobox->setCurrentIndex(ui.kcombobox->count() - 1);
         }
         this->updateFavoriteButton();
@@ -253,7 +260,7 @@ void KPrHtmlExportDialog::generatePreview(int item)
     slides.append(this->m_allSlides.at(frameToRender));
     slidesNames.append(ui.kListBox_slides->item(frameToRender)->text());
 
-    KUrl url = previewGenerator.exportPreview(KPrHtmlExport::Parameter(this->templateUrl(), (KPrView*)this->parentWidget(), slides, KUrl(),
+    QUrl url = previewGenerator.exportPreview(KPrHtmlExport::Parameter(templateUrl(), static_cast<KPrView*>(parentWidget()), slides, QUrl(),
                                               this->author(), ui.klineedit_title->text(), slidesNames, false));
     preview.mainFrame()->load(url);
 }
@@ -276,7 +283,7 @@ void KPrHtmlExportDialog::renderPreview()
 bool KPrHtmlExportDialog::selectedTemplateIsFavorite()
 {
     QString templatePath(ui.kcombobox->itemData(ui.kcombobox->currentIndex()).toString());
-    return templatePath.contains(KStandardDirs::locateLocal("data","stage/templates/exportHTML"));
+    return templatePath.startsWith(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation));
 }
 
 bool KPrHtmlExportDialog::selectedTemplateIsSystemFavorite()
@@ -284,10 +291,13 @@ bool KPrHtmlExportDialog::selectedTemplateIsSystemFavorite()
     QString templatePath(ui.kcombobox->itemData(ui.kcombobox->currentIndex()).toString());
     QString dir;
 
-    QStringList dirs(KStandardDirs().findDirs("data", "stage/templates/exportHTML"));
-    for (QStringList::ConstIterator path=dirs.constBegin(); path!=dirs.constEnd(); ++path) {
-        if (!path->contains(KStandardDirs::locateLocal("data","stage/templates/exportHTML"))) {
-            dir = *path;
+    const QString writablePath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+    const QStringList paths = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
+                                                        QStringLiteral("calligrastage/templates/exportHTML"),
+                                                        QStandardPaths::LocateDirectory);
+    foreach (const QString &path, paths) {
+        if (!path.startsWith(writablePath)) {
+            dir = path;
         }
     }
 
@@ -297,20 +307,20 @@ bool KPrHtmlExportDialog::selectedTemplateIsSystemFavorite()
 void KPrHtmlExportDialog::updateFavoriteButton()
 {
     if (this->selectedTemplateIsFavorite() || this->selectedTemplateIsSystemFavorite()) {
-        ui.kPushButton_Favorite->setText(i18n("Delete Template"));
+        ui.pushButton_Favorite->setText(i18n("Delete Template"));
         if (this->selectedTemplateIsSystemFavorite()) {
-            ui.kPushButton_Favorite->setEnabled(false);
-            ui.kPushButton_Favorite->setToolTip(i18n("You may not remove the templates provided with the application"));
+            ui.pushButton_Favorite->setEnabled(false);
+            ui.pushButton_Favorite->setToolTip(i18n("You may not remove the templates provided with the application"));
         }
         else {
-            ui.kPushButton_Favorite->setEnabled(true);
-            ui.kPushButton_Favorite->setToolTip("");
+            ui.pushButton_Favorite->setEnabled(true);
+            ui.pushButton_Favorite->setToolTip("");
         }
     }
     else {
-        ui.kPushButton_Favorite->setText(i18n("Add Template"));
-        ui.kPushButton_Favorite->setEnabled(true);
-        ui.kPushButton_Favorite->setToolTip("");
+        ui.pushButton_Favorite->setText(i18n("Add Template"));
+        ui.pushButton_Favorite->setEnabled(true);
+        ui.pushButton_Favorite->setToolTip("");
     }
 }
 
@@ -328,5 +338,3 @@ void KPrHtmlExportDialog::favoriteAction()
         this->addSelectedTemplateToFavorite();
     }
 }
-
-#include "KPrHtmlExportDialog.moc"

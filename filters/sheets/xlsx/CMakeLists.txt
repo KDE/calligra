@@ -1,6 +1,10 @@
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30527)
 
-include_directories( ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/filters/libmsooxml )
+include_directories(${KOMAIN_INCLUDES}
+                    ${KOODF2_INCLUDES}           # For KoOdfChartWriter
+                    ${CMAKE_SOURCE_DIR}/filters/libmso
+                    ${CMAKE_SOURCE_DIR}/filters/libmsooxml
+)
 
 ########### next target ###############
 
@@ -15,30 +19,27 @@ set(xlsx2ods_PART_SRCS
     XlsxXmlChartReader.cpp
     XlsxXmlCommentsReader.cpp
     XlsxXmlTableReader.cpp
-    NumberFormatParser.cpp
-    ChartExport.cpp
+
+    XlsxChartOdfWriter.cpp
     FormulaParser.cpp
 )
 
-kde4_add_plugin(calligra_filter_xlsx2ods ${xlsx2ods_PART_SRCS})
+add_library(calligra_filter_xlsx2ods MODULE ${xlsx2ods_PART_SRCS})
+calligra_filter_desktop_to_json(calligra_filter_xlsx2ods calligra_filter_xlsx2ods.desktop)
 
 target_link_libraries(
     calligra_filter_xlsx2ods
+    koodf2
     komsooxml
+    mso
     koodf
     komain
     calligrasheetscommon
 )
 
-install(TARGETS calligra_filter_xlsx2ods DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_xlsx2ods DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 ########### install files ###############
-
-install( FILES
-  calligra_filter_xlsx2ods.desktop
-#  calligra_filter_ods2xlsx.desktop
-  DESTINATION ${SERVICES_INSTALL_DIR}/calligra
-)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES sheets_xlsx_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
@@ -51,5 +52,8 @@ set(TestFormulaParser_SRCS
     TestFormulaParser.cpp
 )
 
-kde4_add_unit_test(TestFormulaParser TESTNAME sheets-xlsx-FormulaParser ${TestFormulaParser_SRCS})
-target_link_libraries(TestFormulaParser komsooxml calligrasheetscommon ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
+ecm_add_test( ${TestFormulaParser_SRCS}
+    TEST_NAME "FormulaParser"
+    NAME_PREFIX "filter-xlsx2ods-"
+    LINK_LIBRARIES komsooxml calligrasheetscommon Qt5::Test
+)

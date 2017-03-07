@@ -23,8 +23,8 @@
 #include <KarbonDocument.h>
 #include <KarbonPart.h>
 
-#include <kdebug.h>
 #include <kpluginfactory.h>
+
 #include <KoFilterChain.h>
 #include <KoShapeStroke.h>
 #include <KoShape.h>
@@ -38,8 +38,9 @@
 TODO: bs.wmf stroke in red with MSword and in brown with Words ??
 */
 
-K_PLUGIN_FACTORY(WmfExportFactory, registerPlugin<WmfExport>();)
-K_EXPORT_PLUGIN(WmfExportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(WmfExportFactory, "calligra_filter_karbon2wmf.json",
+			   registerPlugin<WmfExport>();)
+
 
 
 WmfExport::WmfExport(QObject*parent, const QVariantList&) :

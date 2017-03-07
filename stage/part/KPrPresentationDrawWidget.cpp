@@ -26,15 +26,16 @@
 #include <QVBoxLayout>
 #include <QPainter>
 #include <QPaintEvent>
-#include <QList>
 #include <QMenu>
 #include <QIcon>
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
 
 #include <KoPACanvasBase.h>
 #include <KoPointerEvent.h>
+
+#include "StageDebug.h"
+
 
 KPrPresentationDrawWidget::KPrPresentationDrawWidget(KoPACanvasBase * canvas)
 : KPrPresentationToolEventForwarder(canvas)
@@ -58,7 +59,7 @@ void KPrPresentationDrawWidget::paintEvent(QPaintEvent * event)
     QPainter painter( this );
     QBrush brush( Qt::SolidPattern );
     QPen pen( brush, m_penSize, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin );
-    foreach ( const Path &path, m_pointVectors ) {
+    foreach ( const KPrPresentationDrawPath &path, m_pointVectors ) {
         pen.setColor( path.color );
         pen.setWidth( path.size );
         painter.setPen( pen );
@@ -68,7 +69,7 @@ void KPrPresentationDrawWidget::paintEvent(QPaintEvent * event)
 
 void KPrPresentationDrawWidget::mousePressEvent( QMouseEvent* e )
 {
-    struct Path path;
+    KPrPresentationDrawPath path;
     path.color = m_penColor;
     path.size = m_penSize;
     path.points = QVector<QPointF>() << e->pos();
@@ -134,7 +135,7 @@ QAction* KPrPresentationDrawWidget::buildActionSize( int size )
     return action;
 }
 
-QAction* KPrPresentationDrawWidget::buildActionColor( QColor color, QString name )
+QAction* KPrPresentationDrawWidget::buildActionColor( const QColor &color, const QString &name )
 {
     QAction *action;
     action = new QAction( buildIconColor ( color ) , name, this );
@@ -156,7 +157,7 @@ QIcon KPrPresentationDrawWidget::buildIconSize( int size )
     return thumbIcon;
 }
 
-QIcon KPrPresentationDrawWidget::buildIconColor( QColor color )
+QIcon KPrPresentationDrawWidget::buildIconColor( const QColor &color )
 {
     QPixmap thumbPixmap( QSize ( 24, 20 ) );
     thumbPixmap.fill( color );

@@ -31,8 +31,9 @@
 #include <KoCanvasBase.h>
 #include <KoViewConverter.h>
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
+#include <QUrl>
 #include <QPointer>
 #include <QPainter>
 
@@ -115,11 +116,11 @@ void VideoTool::changeUrlPressed()
         return;
     }
 
-    QPointer<KDialog> diag = new KDialog();
+    QPointer<KoDialog> diag = new KoDialog();
     SelectVideoWidget *fileSelectionWidget = new SelectVideoWidget(diag);
     diag->setMainWidget(fileSelectionWidget);
 
-    if (diag->exec() == KDialog::Accepted) {
+    if (diag->exec() == KoDialog::Accepted) {
         fileSelectionWidget->accept();
         VideoData *data = 0;
         data = m_videoShape->videoCollection()->createExternalVideoData(fileSelectionWidget->selectedUrl(), fileSelectionWidget->saveEmbedded());

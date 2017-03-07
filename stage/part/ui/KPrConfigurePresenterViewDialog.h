@@ -20,13 +20,13 @@
 #ifndef KPRCONFIGUREPRESENTERVIEWDIALOG_H
 #define KPRCONFIGUREPRESENTERVIEWDIALOG_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include "ui_KPrConfigurePresenterView.h"
 
 class KPrDocument;
 
-class KPrConfigurePresenterViewDialog : public KDialog
+class KPrConfigurePresenterViewDialog : public KoDialog
 {
     Q_OBJECT
 public:

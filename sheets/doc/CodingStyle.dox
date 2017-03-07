@@ -7,7 +7,7 @@
 \par Status:
     FINISHED
 
-KSpread follows the
+Calligra Sheets follows the
 <a href="http://techbase.kde.org/Policies/Kdelibs_Coding_Style">KDElibs Coding Style</a>.
 \par Example (for details see the link above):
 \code
@@ -45,7 +45,7 @@ void Foo::doSomething()
 \endcode
 
 <p>Write <b>clean code</b>. To be correct is better than to be fast.
-KSpread source code is known to grow very fast in its early days and but later
+Calligra Sheets source code is known to grow very fast in its early days and but later
 on also more difficult to understand.</p>
 
 <p>Put comment as documentation for classes and member functions. There is still

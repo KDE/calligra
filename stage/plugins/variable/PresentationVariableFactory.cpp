@@ -28,8 +28,7 @@
 #include <KoProperties.h>
 #include <KoXmlNS.h>
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
 
 PresentationVariableFactory::PresentationVariableFactory()
     : KoInlineObjectFactoryBase("PresentationVariable", Other)

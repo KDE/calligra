@@ -24,7 +24,7 @@
 #define TABLEDATAELEMENT_H
 
 #include "RowElement.h"
-#include "kformula_export.h"
+#include "koformula_export.h"
 
 /**
  * @short Implementation of the MathML mtd element

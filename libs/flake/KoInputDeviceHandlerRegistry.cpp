@@ -18,9 +18,12 @@
  */
 
 #include "KoInputDeviceHandlerRegistry.h"
-#include <kglobal.h>
+
+#include <QGlobalStatic>
 
 #include <KoPluginLoader.h>
+
+Q_GLOBAL_STATIC(KoInputDeviceHandlerRegistry, s_instance)
 
 KoInputDeviceHandlerRegistry::KoInputDeviceHandlerRegistry()
 {
@@ -32,8 +35,7 @@ void KoInputDeviceHandlerRegistry::init()
     config.whiteList = "DevicePlugins";
     config.blacklist = "DevicePluginsDisabled";
     config.group = "calligra";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Device"),
-                                     QString::fromLatin1("[X-Flake-PluginVersion] == 28"), config);
+    KoPluginLoader::load(QStringLiteral("calligra/devices"), config);
 
     foreach(const QString & id, keys()) {
         KoInputDeviceHandler * d = value(id);
@@ -60,7 +62,6 @@ KoInputDeviceHandlerRegistry::~KoInputDeviceHandlerRegistry()
 
 KoInputDeviceHandlerRegistry* KoInputDeviceHandlerRegistry::instance()
 {
-    K_GLOBAL_STATIC(KoInputDeviceHandlerRegistry, s_instance)
     if (!s_instance.exists()) {
         s_instance->init();
     }

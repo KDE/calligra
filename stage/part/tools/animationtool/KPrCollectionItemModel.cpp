@@ -21,7 +21,7 @@
 
 #include "KPrCollectionItemModel.h"
 
-#include <kdebug.h>
+#include "StageDebug.h"
 
 KPrCollectionItemModel::KPrCollectionItemModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -61,7 +61,7 @@ int KPrCollectionItemModel::rowCount(const QModelIndex &parent) const
     return m_animationClassList.count();
 }
 
-void KPrCollectionItemModel::setAnimationClassList(const QList<KPrCollectionItem> &newlist)
+void KPrCollectionItemModel::setAnimationClassList(const QVector<KPrCollectionItem> &newlist)
 {
     m_animationClassList = newlist;
     reset();
@@ -76,5 +76,3 @@ Qt::ItemFlags KPrCollectionItemModel::flags(const QModelIndex &index) const
 {
     return QAbstractListModel::flags(index);
 }
-
-#include <KPrCollectionItemModel.moc>

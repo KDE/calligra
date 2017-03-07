@@ -23,11 +23,10 @@
 #include <QList>
 
 class KoOpenPanePrivate;
-class KComponentData;
 class QPixmap;
 class KoTemplatesPane;
 class KoDetailsPane;
-class KUrl;
+class QUrl;
 class QTreeWidgetItem;
 class QString;
 class QStringList;
@@ -41,10 +40,9 @@ public:
     /**
      * Constructor
      * @param parent the parent widget
-     * @param instance the KComponentData to be used for KConfig data
      * @param templateType the template-type (group) that should be selected on creation.
      */
-    KoOpenPane(QWidget *parent, const KComponentData &instance, const QStringList& mimeFilter, const QString& templatesResourcePath = QString());
+    KoOpenPane(QWidget *parent, const QStringList& mimeFilter, const QString& templatesResourcePath = QString());
     virtual ~KoOpenPane();
 
     QTreeWidgetItem* addPane(const QString &title, const QString &iconName, QWidget *widget, int sortWeight);
@@ -73,8 +71,8 @@ private Q_SLOTS:
     void openFileDialog();
 
 Q_SIGNALS:
-    void openExistingFile(const KUrl&);
-    void openTemplate(const KUrl&);
+    void openExistingFile(const QUrl&);
+    void openTemplate(const QUrl&);
 
     /// Emitted when the always use template has changed
     void alwaysUseChanged(KoTemplatesPane* sender, const QString& alwaysUse);

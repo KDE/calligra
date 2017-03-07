@@ -41,12 +41,13 @@ public:
     /// Creates the stroke docker
     SnapGuideDocker();
     virtual ~SnapGuideDocker();
-    QString observerName() { return "SnapGuideDocker"; }
+
 private Q_SLOTS:
     void locationChanged(Qt::DockWidgetArea area);
 
 private:
     /// reimplemented
+    virtual QString observerName() const { return QStringLiteral("SnapGuideDocker"); }
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 

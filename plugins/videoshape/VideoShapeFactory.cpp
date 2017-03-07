@@ -22,22 +22,22 @@
 
 #include "VideoShape.h"
 #include "VideoShapeConfigWidget.h"
+#include "VideoCollection.h"
+#include "VideoDebug.h"
 
 #include <KoDocumentResourceManager.h>
 #include <KoXmlNS.h>
 #include "KoShapeBasedDocumentBase.h"
 #include <KoShapeLoadingContext.h>
-#include "VideoCollection.h"
 #include <KoIcon.h>
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
 
 VideoShapeFactory::VideoShapeFactory()
     : KoShapeFactoryBase(VIDEOSHAPEID, i18n("Video"))
 {
     setToolTip(i18n("Video, embedded or fullscreen"));
-    setIconName(koIconNameCStr("video-x-generic"));
+    setIconName(koIconName("video-x-generic"));
     setXmlElementNames(KoXmlNS::draw, QStringList("plugin"));
     setLoadingPriority(2);
 }

@@ -17,8 +17,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include <kdebug.h>
 
+#include "MsDocDebug.h"
 #include "ODrawToOdf.h"
 #include "pictures.h"
 #include "graphicshandler.h"
@@ -51,7 +51,7 @@ WordsGraphicsHandler::DrawClient::getRect(const MSO::OfficeArtClientAnchor& ca)
 {
     const DocOfficeArtClientAnchor* a = ca.anon.get<DocOfficeArtClientAnchor>();
     if (!a || (a->clientAnchor == -1)) {
-        kDebug(30513) << "INVALID DocOfficeArtClientAnchor, returning QRect(0, 0, 1, 1)";
+        debugMsDoc << "INVALID DocOfficeArtClientAnchor, returning QRect(0, 0, 1, 1)";
         return QRect(0, 0, 1, 1);
     }
     const PLCF<Word97::FSPA>* plcfSpa = 0;
@@ -61,7 +61,7 @@ WordsGraphicsHandler::DrawClient::getRect(const MSO::OfficeArtClientAnchor& ca)
         plcfSpa = gh->m_drawings->getSpaMom();
     }
     if (!plcfSpa) {
-        kDebug(30513) << "MISSING plcfSpa, returning QRectF()";
+        debugMsDoc << "MISSING plcfSpa, returning QRectF()";
         return QRectF();
     }
 
@@ -101,7 +101,7 @@ WordsGraphicsHandler::DrawClient::processClientTextBox(const MSO::OfficeArtClien
     Q_UNUSED(out);
     const DocOfficeArtClientTextBox* tb = ct.anon.get<DocOfficeArtClientTextBox>();
     if (!tb) {
-        kDebug(30513) << "DocOfficeArtClientTextBox missing!";
+        debugMsDoc << "DocOfficeArtClientTextBox missing!";
         return;
     }
     //NOTE: Dividing the high 2 bytes by 0x10000 specifies a 1-based index into

@@ -25,19 +25,17 @@
 // Qt
 #include <QtGlobal>
 
-// KDE
-#include "kdebug.h"
-
 // Calligra
 #include <KoXmlWriter.h>
 
 // This filter
 #include "OdfReaderDocxContext.h"
+#include "DocxExportDebug.h"
 
 
 #if 0
 #define DEBUG_BACKEND() \
-    kDebug(30503) << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
+    debugDocx << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
     << reader.qualifiedName().toString()
 #else
 #define DEBUG_BACKEND() \

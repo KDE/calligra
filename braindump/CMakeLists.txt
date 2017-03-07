@@ -1,6 +1,8 @@
 project("braindump")
 
-include_directories (${KDE4_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/braindumpcore)
+add_definitions(-DTRANSLATION_DOMAIN=\"braindump\")
+
+include_directories ( ${CMAKE_CURRENT_SOURCE_DIR}/braindumpcore)
 
 add_subdirectory(data)
 add_subdirectory(src)

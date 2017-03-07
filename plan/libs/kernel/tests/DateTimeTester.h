@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2007 Dag Andersen <danders@get2net.dk>
-
+   Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -20,23 +21,9 @@
 #ifndef KPlato_DateTimeTester_h
 #define KPlato_DateTimeTester_h
 
-#include <QtTest>
+#include <QObject>
 
 #include "kptdatetime.h"
-namespace QTest
-{
-    template<>
-    char *toString(const KPlato::DateTime &dt)
-    {
-        QString s;
-        switch ( dt.timeSpec() ) {
-            case Qt::LocalTime: s = " LocalTime"; break;
-            case Qt::UTC: s = " UTC"; break;
-            case Qt::OffsetFromUTC: s = " OffsetFromUTC"; break;
-        }
-        return toString( QString( "%1T%2 %3" ).arg( dt.date().toString(Qt::ISODate) ).arg( dt.time().toString( "hh:mm:ss.zzz" ) ).arg( s ) );
-    }
-}
 
 namespace KPlato
 {
@@ -49,10 +36,7 @@ private Q_SLOTS:
     void subtractHour();
     void subtractMinute();
     void subtractSecond();
-
-#if QT_VERSION  >= 0x040700
     void subtractMillisecond();
-#endif
 
     void addDay();
     void addHour();
@@ -60,6 +44,7 @@ private Q_SLOTS:
     void addSecond();
     void addMillisecond();
 
+    void timeZones();
 };
 
 } //namespace KPlato

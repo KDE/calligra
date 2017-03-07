@@ -27,14 +27,14 @@
 #include <QTextEdit>
 #include <QToolButton>
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoPACanvas.h>
 #include <KoPAPageBase.h>
 #include <KoShape.h>
 #include <KoTextShapeData.h>
 
+#include "StageDebug.h"
 #include "KPrEndOfSlideShowPage.h"
 #include "KPrNotes.h"
 #include "KPrPage.h"
@@ -130,6 +130,3 @@ void KPrPresenterViewInterface::setPreviewSize( const QSize &size )
     }
     m_nextSlidePreview->setPixmap( nextPage->thumbnail( m_previewSize ) );
 }
-
-#include "KPrPresenterViewInterface.moc"
-

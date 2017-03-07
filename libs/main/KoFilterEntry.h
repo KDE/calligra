@@ -21,27 +21,30 @@ Boston, MA 02110-1301, USA.
 #ifndef __ko_filter_entry_h__
 #define __ko_filter_entry_h__
 
-#include <kservice.h>
-#include <ksharedptr.h>
+#include <QExplicitlySharedDataPointer>
 #include <QList>
+#include <QStringList>
 #include "komain_export.h"
 
 class QObject;
-class QStringList;
+class QPluginLoader;
 class KoFilter;
 class KoFilterChain;
 /**
  *  Represents an available filter.
  */
-class KOMAIN_TEST_EXPORT KoFilterEntry : public KShared
+class KOMAIN_TEST_EXPORT KoFilterEntry : public QSharedData
 {
 
 public:
-    typedef KSharedPtr<KoFilterEntry> Ptr;
+    typedef QExplicitlySharedDataPointer<KoFilterEntry> Ptr;
 
     //KoFilterEntry() : weight( 0 ) { m_service = 0; } // for QList
-    explicit KoFilterEntry(const KService::Ptr& service);
-    ~KoFilterEntry() { }
+    /**
+     * @param loader pluginloader for the filter, KoFilterEntry takes ownership
+     */
+    explicit KoFilterEntry(QPluginLoader *loader);
+    ~KoFilterEntry();
 
     KoFilter* createFilter(KoFilterChain* chain, QObject* parent = 0);
 
@@ -79,17 +82,16 @@ public:
         return (export_.contains(_m));
     }
 
+    QString fileName() const;
+
     /**
      *  This function will query KDED to find all available filters.
      */
     static QList<KoFilterEntry::Ptr> query();
 
-    KService::Ptr service() const {
-        return m_service;
-    }
 
 private:
-    KService::Ptr m_service;
+    QPluginLoader * const m_loader;
 };
 
 #endif

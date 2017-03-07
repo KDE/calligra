@@ -20,9 +20,11 @@
 #define KS_colMax 10
 #define KS_rowMax 10
 
+#include "TestPointStorage.h"
+
 #include "PointStorage.h"
 
-#include "TestPointStorage.h"
+#include <QTest>
 
 using namespace Calligra::Sheets;
 
@@ -1197,5 +1199,3 @@ void PointStorageTest::testSubStorage()
 }
 
 QTEST_MAIN(PointStorageTest)
-
-#include "TestPointStorage.moc"

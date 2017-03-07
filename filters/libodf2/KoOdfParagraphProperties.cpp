@@ -25,13 +25,11 @@
 // Qt
 #include <QString>
 
-// KDE
-#include <kdebug.h>
-
 // odflib
 #include <KoXmlStreamReader.h>
 #include <KoXmlWriter.h>
 
+#include "Odf2Debug.h"
 
 // ----------------------------------------------------------------
 //                         private class

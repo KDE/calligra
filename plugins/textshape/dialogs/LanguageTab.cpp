@@ -26,8 +26,6 @@
 #include <QSet>
 #include <QStringList>
 
-#include <LanguageTab.moc>
-
 LanguageTab::LanguageTab(/*KSpell2::Loader::Ptr loader,*/bool uniqueFormat, QWidget* parent, Qt::WFlags fl)
         : QWidget(parent),
         m_uniqueFormat(uniqueFormat)
@@ -60,7 +58,7 @@ LanguageTab::LanguageTab(/*KSpell2::Loader::Ptr loader,*/bool uniqueFormat, QWid
         } else
             widget.languageList->addItem(*itName);
     }
-    connect(widget.languageList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
+    connect(widget.languageList, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
             this, SIGNAL(languageChanged()));
 }
 

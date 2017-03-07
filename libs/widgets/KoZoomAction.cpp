@@ -38,8 +38,9 @@
 #include <QButtonGroup>
 #include <QComboBox>
 
-#include <klocale.h>
-#include <kdebug.h>
+
+#include <klocalizedstring.h>
+#include <WidgetsDebug.h>
 
 #include <math.h>
 
@@ -128,7 +129,7 @@ KoZoomAction::KoZoomAction(KoZoomMode::Modes zoomModes, const QString& text, QOb
     d->effectiveZoom = 1.0;
     regenerateItems(d->effectiveZoom, true);
 
-    connect( this, SIGNAL( triggered( const QString& ) ), SLOT( triggered( const QString& ) ) );
+    connect( this, SIGNAL(triggered(QString)), SLOT(triggered(QString)) );
 }
 
 KoZoomAction::~KoZoomAction()
@@ -200,10 +201,10 @@ void KoZoomAction::regenerateItems(const qreal zoom, bool asCurrent)
     }
 
     foreach(qreal value, zoomLevels) {
-        if(value>10.0)
-            values << i18n("%1%", KGlobal::locale()->formatNumber(value * 100, 0));
-        else
-            values << i18n("%1%", KGlobal::locale()->formatNumber(value * 100, 1));
+        const qreal valueInPercent = value * 100;
+        const int precision = (value > 10.0) ? 0 : 1;
+
+        values << i18n("%1%", QLocale().toString(valueInPercent, 'f', precision));
     }
 
     setItems( values );
@@ -212,11 +213,11 @@ void KoZoomAction::regenerateItems(const qreal zoom, bool asCurrent)
 
     if(asCurrent)
     {
-        QString valueString;
-        if(zoom*100>10.0)
-            valueString = i18n("%1%", KGlobal::locale()->formatNumber(zoom*100, 0));
-        else
-            valueString = i18n("%1%", KGlobal::locale()->formatNumber(zoom*100, 1));
+        const qreal zoomInPercent = zoom * 100;
+        // TODO: why zoomInPercent and not zoom here? different from above
+        const int precision = (zoomInPercent > 10.0) ? 0 : 1;
+
+        const QString valueString = i18n("%1%", QLocale().toString(zoomInPercent, 'f', precision));
 
         setCurrentAction(valueString);
 
@@ -278,7 +279,7 @@ QWidget * KoZoomAction::createWidget(QWidget *parent)
     connect(this, SIGNAL(sliderChanged(int)), zoomWidget, SLOT(setSliderValue(int)));
     connect(this, SIGNAL(aspectModeChanged(bool)), zoomWidget, SLOT(setAspectMode(bool)));
     connect(zoomWidget, SIGNAL(sliderValueChanged(int)), this, SLOT(sliderValueChanged(int)));
-    connect(zoomWidget, SIGNAL(zoomLevelChanged(const QString&)), this, SLOT(triggered(const QString&)));
+    connect(zoomWidget, SIGNAL(zoomLevelChanged(QString)), this, SLOT(triggered(QString)));
     connect(zoomWidget, SIGNAL(aspectModeChanged(bool)), this, SIGNAL(aspectModeChanged(bool)));
     connect(zoomWidget, SIGNAL(zoomedToSelection()), this, SIGNAL(zoomedToSelection()));
     connect(zoomWidget, SIGNAL(zoomedToAll()), this, SIGNAL(zoomedToAll()));
@@ -365,6 +366,3 @@ void KoZoomAction::setMaximumZoom(qreal zoom)
     regenerateItems(d->effectiveZoom, true);
     syncSliderWithZoom();
 }
-
-
-#include <KoZoomAction.moc>

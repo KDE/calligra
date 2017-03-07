@@ -20,13 +20,10 @@
 
 #include "kptconfig.h"
 
-#include "plansettings.h"
+#include "calligraplansettings.h"
 #include "kptconfigskeleton.h"
 #include "kptfactory.h"
 #include "kptdebug.h"
-
-#include <kdebug.h>
-#include <kcomponentdata.h>
 
 #include <QBrush>
 
@@ -35,8 +32,9 @@ namespace KPlato
 {
 
 Config::Config()
+    : ConfigBase()
 {
-    kDebug(planDbg())<<"Leader:"<<KPlatoSettings::leader();
+    debugPlan<<"Leader:"<<KPlatoSettings::leader();
 }
 
 Config::~Config()
@@ -51,7 +49,7 @@ void Config::saveSettings()
     if ( ! m_readWrite ) {
         return;
     }
-    KPlatoSettings::self()->writeConfig();
+    KPlatoSettings::self()->save();
 }
 
 void Config::setDefaultValues( Task &task )
@@ -110,7 +108,7 @@ bool Config::checkForWorkPackages() const
     return KPlatoSettings::checkForWorkPackages();
 }
 
-KUrl Config::retrieveUrl() const
+QUrl Config::retrieveUrl() const
 {
     return KPlatoSettings::retrieveUrl();
 }
@@ -239,5 +237,3 @@ QBrush Config::milestoneFinishedColor() const
 }
 
 }  //KPlato namespace
-
-#include "kptconfig.moc"

@@ -57,9 +57,9 @@ public:
 
         KoTemplateTree* tree(0);
         if(templateType == WORDS_MIME_TYPE)
-            tree = new KoTemplateTree("words/templates/", KWFactory::componentData(), true);
+            tree = new KoTemplateTree("calligrawords/templates/", true);
         else if(templateType == STAGE_MIME_TYPE)
-            tree = new KoTemplateTree("stage/templates/", KPrFactory::componentData(), true);
+            tree = new KoTemplateTree("calligrastage/templates/", true);
         if(!tree)
             return;
 
@@ -192,5 +192,3 @@ void TemplatesModel::setShowWide(const bool& newValue)
     d->refresh();
     endResetModel();
 }
-
-#include "TemplatesModel.moc"

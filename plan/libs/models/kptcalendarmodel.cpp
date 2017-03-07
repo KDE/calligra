@@ -34,12 +34,10 @@
 
 #include <QMimeData>
 #include <QPainter>
+#include <QLocale>
+#include <QTimeZone>
 
-#include <kglobal.h>
-#include <klocale.h>
-#include <kcalendarsystem.h>
-#include <ksystemtimezone.h>
-#include <ktimezone.h>
+#include <KFormat>
 
 
 namespace KPlato
@@ -74,10 +72,12 @@ void CalendarDayItemModelBase::setProject( Project *project )
 {
     setCalendar( 0 );
     if ( m_project ) {
+        disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         disconnect( m_project, SIGNAL(calendarToBeRemoved(const Calendar*)), this, SLOT(slotCalendarToBeRemoved(const Calendar*)) );
     }
     m_project = project;
     if ( project ) {
+        connect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         connect( m_project, SIGNAL(calendarToBeRemoved(const Calendar*)), this, SLOT(slotCalendarToBeRemoved(const Calendar*)) );
     }
     reset();
@@ -102,7 +102,7 @@ const QMetaEnum CalendarItemModel::columnMap() const
 
 void CalendarItemModel::slotCalendarToBeInserted( const Calendar *parent, int row )
 {
-    //kDebug(planDbg())<<(parent?parent->name():"Top level")<<","<<row;
+    //debugPlan<<(parent?parent->name():"Top level")<<","<<row;
     Q_ASSERT( m_calendar == 0 );
     m_calendar = const_cast<Calendar *>(parent);
     beginInsertRows( index( parent ), row, row );
@@ -110,7 +110,7 @@ void CalendarItemModel::slotCalendarToBeInserted( const Calendar *parent, int ro
 
 void CalendarItemModel::slotCalendarInserted( const Calendar *calendar )
 {
-    //kDebug(planDbg())<<calendar->name();
+    //debugPlan<<calendar->name();
     Q_ASSERT( calendar->parentCal() == m_calendar );
 #ifdef NDEBUG
     Q_UNUSED(calendar)
@@ -122,20 +122,21 @@ void CalendarItemModel::slotCalendarInserted( const Calendar *calendar )
 
 void CalendarItemModel::slotCalendarToBeRemoved( const Calendar *calendar )
 {
-    //kDebug(planDbg())<<calendar->name();
+    //debugPlan<<calendar->name();
     int row = index( calendar ).row();
     beginRemoveRows( index( calendar->parentCal() ), row, row );
 }
 
 void CalendarItemModel::slotCalendarRemoved( const Calendar * )
 {
-    //kDebug(planDbg())<<calendar->name();
+    //debugPlan<<calendar->name();
     endRemoveRows();
 }
 
 void CalendarItemModel::setProject( Project *project )
 {
     if ( m_project ) {
+        disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         disconnect( m_project , SIGNAL(calendarChanged(Calendar*)), this, SLOT(slotCalendarChanged(Calendar*)) );
 
         disconnect( m_project, SIGNAL(calendarAdded(const Calendar*)), this, SLOT(slotCalendarInserted(const Calendar*)) );
@@ -146,6 +147,7 @@ void CalendarItemModel::setProject( Project *project )
     }
     m_project = project;
     if ( project ) {
+        connect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         connect( m_project, SIGNAL(calendarChanged(Calendar*)), this, SLOT(slotCalendarChanged(Calendar*)) );
 
         connect( m_project, SIGNAL(calendarAdded(const Calendar*)), this, SLOT(slotCalendarInserted(const Calendar*)) );
@@ -194,7 +196,7 @@ QModelIndex CalendarItemModel::parent( const QModelIndex &index ) const
     if ( !index.isValid() || m_project == 0 ) {
         return QModelIndex();
     }
-    //kDebug(planDbg())<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
+    //debugPlan<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
     Calendar *a = calendar( index );
     if ( a == 0 ) {
         return QModelIndex();
@@ -208,7 +210,7 @@ QModelIndex CalendarItemModel::parent( const QModelIndex &index ) const
         } else {
             row = m_project->indexOf( par );
         }
-        //kDebug(planDbg())<<par->name()<<":"<<row;
+        //debugPlan<<par->name()<<":"<<row;
         return createIndex( row, 0, par );
     }
     return QModelIndex();
@@ -269,14 +271,14 @@ int CalendarItemModel::rowCount( const QModelIndex &parent ) const
 
 QVariant CalendarItemModel::name( const Calendar *a, int role ) const
 {
-    //kDebug(planDbg())<<res->name()<<","<<role;
+    //debugPlan<<res->name()<<","<<role;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
             return a->name();
         case Qt::ToolTipRole:
             if ( a->isDefault() ) {
-                return i18nc( "1=calendar name", "%1 (Default calendar)", a->name() );
+                return xi18nc( "1=calendar name", "%1 (Default calendar)", a->name() );
             }
             return a->name();
         case Qt::StatusTipRole:
@@ -321,23 +323,23 @@ bool CalendarItemModel::setName( Calendar *a, const QVariant &value, int role )
 
 QVariant CalendarItemModel::timeZone( const Calendar *a, int role ) const
 {
-    //kDebug(planDbg())<<res->name()<<","<<role;
+    //debugPlan<<res->name()<<","<<role;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
         case Qt::ToolTipRole:
-            return i18n( a->timeZone().name().toUtf8() );
+            return i18n( a->timeZone().id() );
         case Role::EnumList: {
             QStringList lst;
-            foreach ( const KTimeZone &tz, KSystemTimeZones::timeZones()->zones() ) {
-                lst << i18n( tz.name().toUtf8() );
+            foreach ( const QByteArray &id, QTimeZone::availableTimeZoneIds() ) {
+                lst << i18n( id );
             }
             lst.sort();
             return lst;
         }
         case Role::EnumListValue: {
             QStringList lst = timeZone( a, Role::EnumList ).toStringList();
-            return lst.indexOf( i18n ( a->timeZone().name().toUtf8() ) );
+            return lst.indexOf( i18n ( a->timeZone().id() ) );
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -355,10 +357,10 @@ bool CalendarItemModel::setTimeZone( Calendar *a, const QVariant &value, int rol
             }
             QStringList lst = timeZone( a, Role::EnumList ).toStringList();
             QString name = lst.value( value.toInt() );
-            KTimeZone tz;
-            foreach ( const QString &s, KSystemTimeZones::timeZones()->zones().keys() ) {
-                if ( name == i18n( s.toUtf8() ) ) {
-                    tz = KSystemTimeZones::zone( s );
+            QTimeZone tz;
+            foreach ( const QByteArray &id, QTimeZone::availableTimeZoneIds() ) {
+                if ( name == i18n( id ) ) {
+                    tz = QTimeZone( id );
                     break;
                 }
             }
@@ -383,7 +385,7 @@ QVariant CalendarItemModel::data( const QModelIndex &index, int role ) const
         case Name: result = name( a, role ); break;
         case TimeZone: result = timeZone( a, role ); break;
         default:
-            kDebug(planDbg())<<"data: invalid display value column"<<index.column();
+            debugPlan<<"data: invalid display value column"<<index.column();
             return QVariant();
     }
     return result;
@@ -403,7 +405,7 @@ bool CalendarItemModel::setData( const QModelIndex &index, const QVariant &value
         case Name: return setName( a, value, role );
         case TimeZone: return setTimeZone( a, value, role );
         default:
-            kWarning()<<"data: invalid display value column "<<index.column();
+            warnPlan<<"data: invalid display value column "<<index.column();
             return false;
     }
     return false;
@@ -414,8 +416,8 @@ QVariant CalendarItemModel::headerData( int section, Qt::Orientation orientation
     if ( orientation == Qt::Horizontal ) {
         if ( role == Qt::DisplayRole ) {
             switch ( section ) {
-                case Name: return i18nc( "@title:column", "Name" );
-                case TimeZone: return i18nc( "@title:column", "Timezone" );
+                case Name: return xi18nc( "@title:column", "Name" );
+                case TimeZone: return xi18nc( "@title:column", "Timezone" );
                 default: return QVariant();
             }
         } else if ( role == Qt::TextAlignmentRole ) {
@@ -470,7 +472,7 @@ QMimeData *CalendarItemModel::mimeData( const QModelIndexList & indexes ) const
     QList<int> rows;
     foreach (const QModelIndex &index, indexes) {
         if ( index.isValid() && !rows.contains( index.row() ) ) {
-            kDebug(planDbg())<<index.row();
+            debugPlan<<index.row();
             Calendar *c = calendar( index );
             if ( c ) {
                 stream << c->id();
@@ -483,7 +485,7 @@ QMimeData *CalendarItemModel::mimeData( const QModelIndexList & indexes ) const
 
 bool CalendarItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int /*column*/, const QModelIndex &parent )
 {
-    kDebug(planDbg())<<action<<row;
+    debugPlan<<action<<row;
     if (action == Qt::IgnoreAction) {
         return true;
     }
@@ -491,7 +493,7 @@ bool CalendarItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         return false;
     }
     if ( action == Qt::MoveAction ) {
-        kDebug(planDbg())<<"MoveAction";
+        debugPlan<<"MoveAction";
 
         QByteArray encodedData = data->data( "application/x-vnd.kde.plan.calendarid.internal" );
         QDataStream stream(&encodedData, QIODevice::ReadOnly);
@@ -514,7 +516,7 @@ bool CalendarItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
             emit executeCommand( cmd );
             return true;
         }
-        //kDebug(planDbg())<<row<<","<<column<<" parent="<<parent.row()<<","<<parent.column()<<":"<<par->name();
+        //debugPlan<<row<<","<<column<<" parent="<<parent.row()<<","<<parent.column()<<":"<<par->name();
     }
     return false;
 }
@@ -535,7 +537,7 @@ QList<Calendar*> CalendarItemModel::calendarList( QDataStream &stream ) const
 
 bool CalendarItemModel::dropAllowed( Calendar *on, const QMimeData *data )
 {
-    kDebug(planDbg())<<on<<data->hasFormat("application/x-vnd.kde.plan.calendarid.internal");
+    debugPlan<<on<<data->hasFormat("application/x-vnd.kde.plan.calendarid.internal");
     if ( !data->hasFormat("application/x-vnd.kde.plan.calendarid.internal") ) {
         return false;
     }
@@ -561,7 +563,7 @@ bool CalendarItemModel::dropAllowed( Calendar *on, const QMimeData *data )
 
 QModelIndex CalendarItemModel::insertCalendar ( Calendar *calendar, int pos, Calendar *parent )
 {
-    //kDebug(planDbg())<<calendar<<pos<<parent;
+    //debugPlan<<calendar<<pos<<parent;
     emit executeCommand( new CalendarAddCmd( m_project, calendar, pos, parent, kundo2_i18n( "Add calendar" ) ) );
     int row = -1;
     if ( parent ) {
@@ -570,7 +572,7 @@ QModelIndex CalendarItemModel::insertCalendar ( Calendar *calendar, int pos, Cal
         row = m_project->indexOf( calendar );
     }
     if ( row != -1 ) {
-        //kDebug(planDbg())<<"Inserted:"<<calendar->name()<<"row="<<row;
+        //debugPlan<<"Inserted:"<<calendar->name()<<"row="<<row;
         return createIndex( row, 0, calendar );
     }
     return QModelIndex();
@@ -602,7 +604,7 @@ CalendarDayItemModel::~CalendarDayItemModel()
 void CalendarDayItemModel::slotWorkIntervalAdded( CalendarDay *day, TimeInterval *ti )
 {
     Q_UNUSED(ti);
-    //kDebug(planDbg())<<day<<","<<ti;
+    //debugPlan<<day<<","<<ti;
     int c = m_calendar->indexOfWeekday( day );
     if ( c == -1 ) {
         return;
@@ -626,7 +628,7 @@ void CalendarDayItemModel::slotDayChanged( CalendarDay *day )
     if ( c == -1 ) {
         return;
     }
-    kDebug(planDbg())<<day<<", "<<c;
+    debugPlan<<day<<", "<<c;
     emit dataChanged( createIndex( 0, c, day ), createIndex( 0, c, day ) );
 }
 
@@ -643,7 +645,7 @@ void CalendarDayItemModel::slotTimeIntervalChanged( TimeInterval *ti )
 
 void CalendarDayItemModel::setCalendar( Calendar *calendar )
 {
-    //kDebug(planDbg())<<m_calendar<<" -->"<<calendar;
+    //debugPlan<<m_calendar<<" -->"<<calendar;
     if ( m_calendar ) {
         disconnect( m_calendar, SIGNAL(changed(CalendarDay*)), this, SLOT(slotDayChanged(CalendarDay*)) );
         disconnect( m_calendar, SIGNAL(changed(TimeInterval*)), this, SLOT(slotTimeIntervalChanged(TimeInterval*)) );
@@ -679,7 +681,7 @@ QModelIndex CalendarDayItemModel::parent( const QModelIndex &index ) const
 
 bool CalendarDayItemModel::hasChildren( const QModelIndex &parent ) const
 {
-    //kDebug(planDbg())<<parent.internalPointer()<<":"<<parent.row()<<","<<parent.column();
+    //debugPlan<<parent.internalPointer()<<":"<<parent.row()<<","<<parent.column();
     if ( m_project == 0 || m_calendar == 0 ) {
         return false;
     }
@@ -728,16 +730,16 @@ int CalendarDayItemModel::rowCount( const QModelIndex &parent ) const
 
 QVariant CalendarDayItemModel::name( int weekday, int role ) const
 {
-    //kDebug(planDbg())<<res->name()<<","<<role;
+    //debugPlan<<res->name()<<","<<role;
     switch ( role ) {
         case Qt::DisplayRole:
             if ( weekday >= 1 && weekday <= 7 ) {
-                return KGlobal::locale()->calendar()->weekDayName( weekday, KCalendarSystem::ShortDayName );
+                return QLocale().dayName( weekday, QLocale::ShortFormat );
             }
             break;
         case Qt::ToolTipRole:
             if ( weekday >= 1 && weekday <= 7 ) {
-                return KGlobal::locale()->calendar()->weekDayName( weekday );
+                return QLocale().dayName( weekday, QLocale::LongFormat );
             }
             break;
         case Qt::EditRole:
@@ -780,7 +782,7 @@ QVariant CalendarDayItemModel::dayState( const CalendarDay *d, int role ) const
 }
 bool CalendarDayItemModel::setDayState( CalendarDay *d, const QVariant &value, int role )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     switch ( role ) {
         case Qt::EditRole:
             int v = value.toInt();
@@ -792,20 +794,20 @@ bool CalendarDayItemModel::setDayState( CalendarDay *d, const QVariant &value, i
 
 QVariant CalendarDayItemModel::workDuration( const CalendarDay *day, int role ) const
 {
-    //kDebug(planDbg())<<day->date()<<","<<role;
+    //debugPlan<<day->date()<<","<<role;
     switch ( role ) {
         case Qt::DisplayRole: {
             if ( day->state() == CalendarDay::Working ) {
-                return KGlobal::locale()->formatNumber( day->workDuration().toDouble( Duration::Unit_h ), 1 );
+                return QLocale().toString( day->workDuration().toDouble( Duration::Unit_h ), 'f', 1 );
             }
             return QVariant();
         }
         case Qt::ToolTipRole: {
             if ( day->state() == CalendarDay::Working ) {
-                KLocale *l = KGlobal::locale();
+                QLocale locale;
                 QStringList tip;
                 foreach ( TimeInterval *i, day->timeIntervals() ) {
-                    tip <<  i18nc( "1=time 2=The number of hours of work duration (non integer)", "%1, %2 hours", l->formatTime( i->startTime() ), l->formatNumber( i->hours() ) );
+                    tip <<  i18nc( "1=time 2=The number of hours of work duration (non integer)", "%1, %2 hours", locale.toString( i->startTime(), QLocale::ShortFormat ), locale.toString( i->hours(), 'f', 2 ) );
                 }
                 return tip.join( "\n" );
             }
@@ -860,17 +862,18 @@ QVariant CalendarDayItemModel::data( const QModelIndex &index, int role ) const
         }
         case Qt::ToolTipRole: {
             if ( d->state() == CalendarDay::Undefined ) {
-                return i18nc( "@info:tooltip", "Undefined" );
+                return xi18nc( "@info:tooltip", "Undefined" );
             }
             if ( d->state() == CalendarDay::NonWorking ) {
-                return i18nc( "@info:tooltip", "Non-working" );
+                return xi18nc( "@info:tooltip", "Non-working" );
             }
-            KLocale *l = KGlobal::locale();
+            QLocale locale;
+            KFormat format(locale);
             QStringList tip;
             foreach ( TimeInterval *i, d->timeIntervals() ) {
-                tip <<  i18nc( "@info:tooltip 1=time 2=The work duration (non integer)", "%1, %2", l->formatLocaleTime( i->startTime(), KLocale::TimeWithoutSeconds ), l->formatDuration( i->second ) );
+                tip <<  xi18nc( "@info:tooltip 1=time 2=The work duration (non integer)", "%1, %2", locale.toString( i->startTime(), QLocale::ShortFormat ), format.formatDuration( i->second ) );
             }
-            return tip.join( "\n" );
+            return tip.join( "<nl/>" );
         }
         case Qt::FontRole: {
             if ( d->state() != CalendarDay::Undefined ) {
@@ -981,7 +984,7 @@ QVariant DateTableDataModel::data( const Calendar &cal, const QDate &date, int r
             }
             double v;
             v = day->workDuration().toDouble( Duration::Unit_h );
-            return KGlobal::locale()->formatNumber( v, 1 );
+            return QLocale().toString( v, 'f', 1 );
         }
         case Qt::TextAlignmentRole:
             return (uint)( Qt::AlignHCenter | Qt::AlignBottom );
@@ -1008,22 +1011,23 @@ QVariant DateTableDataModel::data( const Calendar &cal, const QDate &date, int r
 
 QVariant DateTableDataModel::data( const QDate &date, int role, int dataType ) const
 {
-    //kDebug(planDbg())<<date<<role<<dataType;
+    //debugPlan<<date<<role<<dataType;
     if ( role ==  Qt::ToolTipRole ) {
         if ( m_calendar == 0 ) {
             return QVariant();
         }
         CalendarDay *day = m_calendar->findDay( date );
         if ( day == 0 || day->state() == CalendarDay::Undefined ) {
-            return i18nc( "@info:tooltip", "Undefined" );
+            return xi18nc( "@info:tooltip", "Undefined" );
         }
         if ( day->state() == CalendarDay::NonWorking ) {
-            return i18nc( "@info:tooltip", "Non-working" );
+            return xi18nc( "@info:tooltip", "Non-working" );
         }
-        KLocale *l = KGlobal::locale();
+        QLocale locale;
+        KFormat format(locale);
         QStringList tip;
         foreach ( TimeInterval *i, day->timeIntervals() ) {
-            tip <<  i18nc( "@info:tooltip 1=time 2=The work duration (non integer)", "%1, %2", l->formatLocaleTime( i->startTime(), KLocale::TimeWithoutSeconds ), l->formatDuration( i->second ) );
+            tip <<  xi18nc( "@info:tooltip 1=time 2=The work duration (non integer)", "%1, %2", locale.toString( i->startTime(), QLocale::ShortFormat ), format.formatDuration( i->second ) );
         }
         return tip.join( "\n" );
     }
@@ -1079,21 +1083,20 @@ DateTableDateDelegate::DateTableDateDelegate( QObject *parent )
 
 QRectF DateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewItem &option, const QDate &date, KDateTableDataModel *model )
 {
-    //kDebug(planDbg())<<date;
+    //debugPlan<<date;
     QRectF r;
     StyleOptionViewItem style = option;
     style.font.setPointSize( style.font.pointSize() - 2 );
-    //kDebug(planDbg())<<" fonts: "<<option.font.pointSize()<<style.font.pointSize();
+    //debugPlan<<" fonts: "<<option.font.pointSize()<<style.font.pointSize();
     r = KDateTableDateDelegate::paint( painter, style, date, model );
     if ( model == 0 ) {
         return r;
     }
     painter->save();
-    //const KCalendarSystem * calendar = KGlobal::locale()->calendar();
 
     painter->translate( r.width(), 0.0 );
     QRectF rect( 1, 1, option.rectF.right() - r.width(), option.rectF.bottom() );
-    //kDebug(planDbg())<<" rects: "<<r<<rect;
+    //debugPlan<<" rects: "<<r<<rect;
 
     QString text = model->data( date, Qt::DisplayRole, 0 ).toString();
     int align = model->data( date, Qt::TextAlignmentRole, 0 ).toInt();
@@ -1165,7 +1168,7 @@ QVariant CalendarExtendedItemModel::data( const QModelIndex &index, int role ) c
     }
     switch ( col ) {
         default:
-            kDebug(planDbg())<<"Fetching data from weekdays and date is not supported";
+            debugPlan<<"Fetching data from weekdays and date is not supported";
             break;
     }
     return result;
@@ -1301,8 +1304,8 @@ QVariant CalendarExtendedItemModel::headerData( int section, Qt::Orientation ori
     if ( orientation == Qt::Horizontal ) {
         if ( role == Qt::DisplayRole ) {
             switch ( col ) {
-                case 0: return i18nc( "@title:column", "Weekday" );
-                case 1: return i18nc( "@title:column", "Date" );
+                case 0: return xi18nc( "@title:column", "Weekday" );
+                case 1: return xi18nc( "@title:column", "Date" );
                 default: return QVariant();
             }
         } else if ( role == Qt::TextAlignmentRole ) {
@@ -1331,5 +1334,3 @@ int CalendarExtendedItemModel::columnNumber(const QString& name) const
 }
 
 } // namespace KPlato
-
-#include "kptcalendarmodel.moc"

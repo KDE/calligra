@@ -48,16 +48,13 @@
 #include <KoStyleStack.h>
 #include <KoOdfLoadingContext.h>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <QPainter>
 
-#ifndef QT_NO_DEBUG
 #include <qnumeric.h> // for qIsNaN
 static bool qIsNaNPoint(const QPointF &p) {
     return qIsNaN(p.x()) || qIsNaN(p.y());
 }
-#endif
-
 static const qreal DefaultMarkerWidth = 3.0;
 
 KoPathShapePrivate::KoPathShapePrivate(KoPathShape *q)
@@ -393,7 +390,7 @@ void KoPathShapePrivate::paintDebug(QPainter &painter)
     KoSubpathList::const_iterator pathIt(q->m_subpaths.constBegin());
     int i = 0;
 
-    QPen pen(Qt::black);
+    QPen pen(Qt::black, 0);
     painter.save();
     painter.setPen(pen);
     for (; pathIt != q->m_subpaths.constEnd(); ++pathIt) {
@@ -403,7 +400,7 @@ void KoPathShapePrivate::paintDebug(QPainter &painter)
             KoPathPoint *point = (*it);
             QRectF r(point->point(), QSizeF(5, 5));
             r.translate(-2.5, -2.5);
-            QPen pen(Qt::black);
+            QPen pen(Qt::black, 0);
             painter.setPen(pen);
             if (point->activeControlPoint1() && point->activeControlPoint2()) {
                 QBrush b(Qt::red);
@@ -419,7 +416,7 @@ void KoPathShapePrivate::paintDebug(QPainter &painter)
         }
     }
     painter.restore();
-    kDebug(30006) << "nop =" << i;
+    debugFlake << "nop =" << i;
 }
 
 void KoPathShapePrivate::debugPath() const
@@ -429,7 +426,7 @@ void KoPathShapePrivate::debugPath() const
     for (; pathIt != q->m_subpaths.constEnd(); ++pathIt) {
         KoSubpath::const_iterator it((*pathIt)->constBegin());
         for (; it != (*pathIt)->constEnd(); ++it) {
-            kDebug(30006) << "p:" << (*pathIt) << "," << *it << "," << (*it)->point() << "," << (*it)->properties();
+            debugFlake << "p:" << (*pathIt) << "," << *it << "," << (*it)->point() << "," << (*it)->properties();
         }
     }
 }
@@ -694,7 +691,7 @@ int KoPathShape::arcToCurve(qreal rx, qreal ry, qreal startAngle, qreal sweepAng
     //center berechnen
     QPointF center(startpoint - QPointF(cossa * rx, -sinsa * ry));
 
-    //kDebug(30006) <<"kappa" << kappa <<"parts" << parts;
+    //debugFlake <<"kappa" << kappa <<"parts" << parts;
 
     for (int part = 0; part < parts; ++part) {
         // start tangent
@@ -1416,7 +1413,7 @@ void KoPathShapePrivate::loadNodeTypes(const KoXmlElement &element)
             for (; it != (*pathIt)->constEnd(); ++it, nIt++) {
                 // be sure not to crash if there are not enough nodes in nodeTypes
                 if (nIt == nodeTypes.constEnd()) {
-                    kWarning(30006) << "not enough nodes in calligra:nodeTypes";
+                    warnFlake << "not enough nodes in calligra:nodeTypes";
                     return;
                 }
                 // the first node is always of type 'c'
@@ -1605,7 +1602,7 @@ QPainterPath KoPathShape::pathStroke(const QPen &pen) const
         if (firstSegment.isValid()) {
             QRectF pathBoundingRect = markerPath.boundingRect();
             qreal shortenLength = pathBoundingRect.height() * shortenFactor;
-            kDebug(30006) << "length" << firstSegment.length() << shortenLength;
+            debugFlake << "length" << firstSegment.length() << shortenLength;
             qreal t = firstSegment.paramAtLength(shortenLength);
             firstSegments = firstSegment.splitAt(t);
             // transform the marker so that it goes from the first point of the first segment to the second point of the first segment
@@ -1626,7 +1623,7 @@ QPainterPath KoPathShape::pathStroke(const QPen &pen) const
             if (firstPoint->properties() & KoPathPoint::StartSubpath) {
                 firstSegments.second.first()->setProperty(KoPathPoint::StartSubpath);
             }
-            kDebug(30006) << "start marker" << angle << startPoint << newStartPoint << firstPoint->point();
+            debugFlake << "start marker" << angle << startPoint << newStartPoint << firstPoint->point();
 
             if (!twoPointPath) {
                 if (firstSegment.second()->activeControlPoint2()) {
@@ -1674,7 +1671,7 @@ QPainterPath KoPathShape::pathStroke(const QPen &pen) const
             endOutline = endOutline.united(markerPath);
             pathOutline.addPath(endOutline);
             lastPoint = firstSubpath->last();
-            kDebug(30006) << "end marker" << angle << startPoint << newStartPoint << lastPoint->point();
+            debugFlake << "end marker" << angle << startPoint << newStartPoint << lastPoint->point();
             if (twoPointPath) {
                 if (firstSegments.second.isValid()) {
                     if (lastSegments.first.first()->activeControlPoint2()) {

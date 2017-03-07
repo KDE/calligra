@@ -37,8 +37,8 @@
 #include <QPointer>
 #include <QScrollArea>
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
+#include <WidgetsDebug.h>
 
 #include <KoColorSet.h>
 

@@ -29,10 +29,10 @@
 #include <QMessageBox>
 #include <QPointer>
 
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
-#include <klocale.h>
-#include <kglobal.h>
+#include <klocalizedstring.h>
+#include <ksharedconfig.h>
 
 #include "KoTagFilterWidget.h"
 #include "KoTagChooserWidget.h"
@@ -92,8 +92,8 @@ KoResourceTaggingManager::KoResourceTaggingManager(KoResourceModel *model, QWidg
             this, SLOT(contextCreateNewTag(QString)));
     connect(d->tagChooser, SIGNAL(tagDeletionRequested(QString)),
             this, SLOT(removeTagFromComboBox(QString)));
-    connect(d->tagChooser, SIGNAL(tagRenamingRequested(QString, QString)),
-            this, SLOT(renameTag(QString, QString)));
+    connect(d->tagChooser, SIGNAL(tagRenamingRequested(QString,QString)),
+            this, SLOT(renameTag(QString,QString)));
     connect(d->tagChooser, SIGNAL(tagUndeletionRequested(QString)),
             this, SLOT(undeleteTag(QString)));
     connect(d->tagChooser, SIGNAL(tagUndeletionListPurgeRequested()),
@@ -132,7 +132,7 @@ void KoResourceTaggingManager::showTaggingBar(bool show)
 
     QString tag("All");
     if (show) {
-        KConfigGroup group = KGlobal::config()->group("SelectedTags");
+        KConfigGroup group =  KSharedConfig::openConfig()->group("SelectedTags");
         tag = group.readEntry<QString>(d->model->serverType(), "All");
     }
 
@@ -362,14 +362,14 @@ void KoResourceTaggingManager::contextMenuRequested(KoResource* resource, const 
                                           d->tagChooser->currentlySelectedTag(),
                                           d->tagChooser->allTags());
 
-    connect(&menu, SIGNAL(resourceTagAdditionRequested(KoResource*, QString)),
-            this, SLOT(contextAddTagToResource(KoResource*, QString)));
+    connect(&menu, SIGNAL(resourceTagAdditionRequested(KoResource*,QString)),
+            this, SLOT(contextAddTagToResource(KoResource*,QString)));
 
-    connect(&menu, SIGNAL(resourceTagRemovalRequested(KoResource*, QString)),
-            this, SLOT(contextRemoveTagFromResource(KoResource*, QString)));
+    connect(&menu, SIGNAL(resourceTagRemovalRequested(KoResource*,QString)),
+            this, SLOT(contextRemoveTagFromResource(KoResource*,QString)));
 
-    connect(&menu, SIGNAL(resourceAssignmentToNewTagRequested(KoResource*, QString)),
-            this, SLOT(contextCreateNewTag(KoResource*, QString)));
+    connect(&menu, SIGNAL(resourceAssignmentToNewTagRequested(KoResource*,QString)),
+            this, SLOT(contextCreateNewTag(KoResource*,QString)));
     menu.exec(pos);
 }
 

@@ -19,7 +19,6 @@
 
 #include "KoRdfFoaF.h"
 #include "KoDocumentRdf.h"
-#include "KoRdfSemanticItem_p.h"
 #include "KoTextRdfCore.h"
 #include "KoRdfFoaFTreeWidgetItem.h"
 #include <QUuid>
@@ -40,13 +39,13 @@
 using namespace Soprano;
 
 
-KoRdfFoaF::KoRdfFoaF(QObject *parent, const KoDocumentRdf *m_rdf)
-    : KoRdfSemanticItem(m_rdf, parent)
+KoRdfFoaF::KoRdfFoaF(QObject *parent, const KoDocumentRdf *rdf)
+    : KoRdfSemanticItem(parent, rdf)
 {
 }
 
-KoRdfFoaF::KoRdfFoaF(QObject *parent, const KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it)
-    : KoRdfSemanticItem(m_rdf, it, parent)
+KoRdfFoaF::KoRdfFoaF(QObject *parent, const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it)
+    : KoRdfSemanticItem(parent, rdf, it)
 {
     m_uri      = it.binding("person").toString();
     m_name     = it.binding("name").toString();
@@ -101,7 +100,7 @@ void KoRdfFoaF::updateFromEditorData()
 KoRdfSemanticTreeWidgetItem *KoRdfFoaF::createQTreeWidgetItem(QTreeWidgetItem *parent)
 {
     kDebug(30015) << "format(), default stylesheet:" << defaultStylesheet()->name();
-    KoRdfFoaFTreeWidgetItem *item = new KoRdfFoaFTreeWidgetItem(parent, hKoRdfSemanticItem(this));
+    KoRdfFoaFTreeWidgetItem *item = new KoRdfFoaFTreeWidgetItem(parent, hKoRdfFoaF(this));
     return item;
 }
 
@@ -204,7 +203,7 @@ void KoRdfFoaF::saveToKABC()
     item.setMimeType(KABC::Addressee::mimeType());
 
     Akonadi::ItemCreateJob *itemCreateJob = new Akonadi::ItemCreateJob(item, collection);
-    connect(itemCreateJob, SIGNAL(result(KJob*) ), SLOT(onCreateJobFinished(KJob*)));
+    connect(itemCreateJob, SIGNAL(result(KJob*)), SLOT(onCreateJobFinished(KJob*)));
 #endif
 }
 

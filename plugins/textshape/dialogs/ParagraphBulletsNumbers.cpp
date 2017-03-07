@@ -26,12 +26,13 @@
 #include <KoImageData.h>
 #include <KoImageCollection.h>
 #include <KoUnit.h>
+#include <KoFileDialog.h>
+#include <KoDialog.h>
 
-#include <kdebug.h>
+#include <QDebug>
+#include <QUrl>
+
 #include <kcharselect.h>
-#include <kdialog.h>
-#include <kurl.h>
-#include <kfiledialog.h>
 #include <KIO/Job>
 
 ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
@@ -42,13 +43,6 @@ ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
         m_fontSize(0)
 {
     widget.setupUi(this);
-
-    foreach(const Lists::ListStyleItem & item, Lists::genericListStyleItems())
-        addStyle(item);
-    addStyle(Lists::ListStyleItem(i18n("Custom Bullet"), KoListStyle::CustomCharItem));
-    m_blankCharIndex = addStyle(Lists::ListStyleItem(i18n("No Bullet"), KoListStyle::CustomCharItem));
-    foreach(const Lists::ListStyleItem & item, Lists::otherListStyleItems())
-        addStyle(item);
 
     widget.alignment->addItem(i18nc("Automatic horizontal alignment", "Auto"));
     widget.alignment->addItem(i18nc("Text alignment", "Left"));
@@ -67,8 +61,8 @@ ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
     connect(widget.listTypes, SIGNAL(currentRowChanged(int)), this, SLOT(styleChanged(int)));
     connect(widget.customCharacter, SIGNAL(clicked(bool)), this, SLOT(customCharButtonPressed()));
     connect(widget.letterSynchronization, SIGNAL(toggled(bool)), widget.startValue, SLOT(setLetterSynchronization(bool)));
-    connect(widget.prefix, SIGNAL(textChanged(const QString&)), this, SLOT(recalcPreview()));
-    connect(widget.suffix, SIGNAL(textChanged(const QString&)), this, SLOT(recalcPreview()));
+    connect(widget.prefix, SIGNAL(textChanged(QString)), this, SLOT(recalcPreview()));
+    connect(widget.suffix, SIGNAL(textChanged(QString)), this, SLOT(recalcPreview()));
     connect(widget.depth, SIGNAL(valueChanged(int)), this, SLOT(recalcPreview()));
     connect(widget.levels, SIGNAL(valueChanged(int)), this, SLOT(recalcPreview()));
     connect(widget.startValue, SIGNAL(valueChanged(int)), this, SLOT(recalcPreview()));
@@ -80,12 +74,12 @@ ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
 
 int ParagraphBulletsNumbers::addStyle(const Lists::ListStyleItem &lsi)
 {
-    m_mapping.insert(widget.listTypes->count(), lsi.style);
+    m_mapping.insert(widget.listTypes->count(), lsi.labelType);
     widget.listTypes->addItem(lsi.name);
     return widget.listTypes->count() - 1;
 }
 
-void ParagraphBulletsNumbers::setDisplay(KoParagraphStyle *style, int level)
+void ParagraphBulletsNumbers::setDisplay(KoParagraphStyle *style, int level, bool directFormattingMode)
 {
     KoListStyle *listStyle = style->listStyle();
     widget.listPropertiesPane->setEnabled(listStyle != 0);
@@ -100,9 +94,9 @@ void ParagraphBulletsNumbers::setDisplay(KoParagraphStyle *style, int level)
     widget.prefix->setText(llp.listItemPrefix());
     widget.suffix->setText(llp.listItemSuffix());
     widget.letterSynchronization->setChecked(llp.letterSynchronization());
-    KoListStyle::Style s = llp.style();
+    KoListStyle::LabelType labelType = llp.labelType();
     foreach(int row, m_mapping.keys()) {
-        if (m_mapping[row] == s) {
+        if (m_mapping[row] == labelType) {
             widget.listTypes->setCurrentRow(row);
             break;
         }
@@ -121,10 +115,10 @@ void ParagraphBulletsNumbers::setDisplay(KoParagraphStyle *style, int level)
     widget.depth->setValue(llp.level());
     widget.levels->setValue(llp.displayLevel());
     widget.startValue->setValue(llp.startValue());
-    if (s == KoListStyle::CustomCharItem)
+    if (labelType == KoListStyle::BulletCharLabelType)
         widget.customCharacter->setText(llp.bulletCharacter());
 
-    if (s == KoListStyle::ImageItem) {
+    if (labelType == KoListStyle::ImageLabelType) {
         m_data = llp.bulletImage();
         widget.imageHeight->setValue(llp.height());
         widget.imageWidth->setValue(llp.width());
@@ -182,8 +176,8 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
     KoUnit unit(KoUnit::Centimeter);
 
     const int currentRow = widget.listTypes->currentRow();
-    KoListStyle::Style style = m_mapping[currentRow];
-    if (style == KoListStyle::None) {
+    KoListStyle::LabelType labelType = m_mapping[currentRow];
+    if (labelType == KoListStyle::None) {
         savingStyle->setListStyle(0);
         return;
     }
@@ -193,7 +187,7 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
     }
     KoListStyle *listStyle = savingStyle->listStyle();
     KoListLevelProperties llp = listStyle->levelProperties(widget.depth->value());
-    llp.setStyle(style);
+    llp.setLabelType(labelType);
     llp.setLevel(widget.depth->value());
     llp.setDisplayLevel(widget.levels->value());
     llp.setStartValue(widget.startValue->value());
@@ -219,17 +213,17 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
         llp.setTextIndent(unit.fromUserValue(widget.doubleSpinBox_3->value())-unit.fromUserValue(widget.doubleSpinBox_2->value()));
     }
 
-    if (style == KoListStyle::ImageItem) {
+    if (labelType == KoListStyle::ImageLabelType) {
         if (m_data) {
             llp.setBulletImage(m_data);
         }
         llp.setWidth(widget.imageWidth->value());
         llp.setHeight(widget.imageHeight->value());
-    } else if (style == KoListStyle::CustomCharItem) {
+    } else if (labelType == KoListStyle::BulletCharLabelType) {
         llp.setBulletCharacter((currentRow == m_blankCharIndex) ? QChar() : widget.customCharacter->text().remove('&').at(0));
     }
-    // it is important to not use 45 for CustomCharItem as it is also char based
-    else if (!KoListStyle::isNumberingStyle(style)) {
+    // it is important to not use 45 for BulletCharLabelType as it is also char based
+    else if (!KoListStyle::isNumberingStyle(labelType)) {
         llp.setRelativeBulletSize(45); //for non-numbering bullets the default relative bullet size is 45%(The spec does not say it; we take it)
     }
 
@@ -251,10 +245,10 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
 
 void ParagraphBulletsNumbers::styleChanged(int index)
 {
-    KoListStyle::Style style = m_mapping[index];
+    KoListStyle::LabelType labelType = m_mapping[index];
     bool showLetterSynchronization = false;
 
-    if (style == KoListStyle::ImageItem) {
+    if (labelType == KoListStyle::ImageLabelType) {
         widget.startValue->setValue(1);
         widget.startValue->setEnabled(false);
         widget.levels->setValue(1);
@@ -267,8 +261,8 @@ void ParagraphBulletsNumbers::styleChanged(int index)
             widget.imageHeight->setValue(m_fontSize);
             widget.imageWidth->setValue(m_fontSize);
         }
-    } else if (!KoListStyle::isNumberingStyle(style)) {
-        widget.startValue->setCounterType(KoListStyle::DecimalItem);
+    } else if (!KoListStyle::isNumberingStyle(labelType)) {
+        //widget.startValue->setNumberFormat();
         widget.startValue->setValue(1);
         widget.startValue->setEnabled(false);
         widget.levels->setValue(1);
@@ -279,51 +273,44 @@ void ParagraphBulletsNumbers::styleChanged(int index)
         widget.imageHeight->setValue(0);
         widget.imageWidth->setValue(0);
     } else {
-        switch (style) {
-        case KoListStyle::AlphaLowerItem:
-        case KoListStyle::UpperAlphaItem:
-            showLetterSynchronization = true;
-            // fall through
-        default:
-            widget.levels->setEnabled(true);
-            widget.startValue->setEnabled(true);
-            widget.startValue->setCounterType(style);
-            int value = widget.startValue->value();
-            widget.startValue->setValue(value + 1);
-            widget.startValue->setValue(value); // surely to trigger a change event.
-            widget.insertImage->setEnabled(false);
-            widget.imageHeight->setEnabled(false);
-            widget.imageWidth->setEnabled(false);
-        }
+        widget.levels->setEnabled(true);
+        widget.startValue->setEnabled(true);
+        //widget.startValue->setNumberFormat();
+        int value = widget.startValue->value();
+        widget.startValue->setValue(value + 1);
+        widget.startValue->setValue(value); // surely to trigger a change event.
+        widget.insertImage->setEnabled(false);
+        widget.imageHeight->setEnabled(false);
+        widget.imageWidth->setEnabled(false);
         widget.imageHeight->setValue(0);
         widget.imageWidth->setValue(0);
     }
 
-    widget.customCharacter->setEnabled(style == KoListStyle::CustomCharItem && index != m_blankCharIndex);
+    widget.customCharacter->setEnabled(labelType == KoListStyle::BulletCharLabelType && index != m_blankCharIndex);
     widget.letterSynchronization->setVisible(showLetterSynchronization);
-    widget.listPropertiesPane->setEnabled(style != KoListStyle::None);
+    widget.listPropertiesPane->setEnabled(labelType != KoListStyle::None);
     recalcPreview();
 }
 
 void ParagraphBulletsNumbers::customCharButtonPressed()
 {
-    KDialog *dialog = new KDialog(this);
+    KoDialog *dialog = new KoDialog(this);
     dialog->setModal(true);
-    dialog->setButtons(KDialog::Ok | KDialog::Cancel);
-    dialog->setDefaultButton(KDialog::Ok);
+    dialog->setButtons(KoDialog::Ok | KoDialog::Cancel);
+    dialog->setDefaultButton(KoDialog::Ok);
 
     KCharSelect *kcs = new KCharSelect(dialog, 0,
             KCharSelect::SearchLine | KCharSelect::FontCombo | KCharSelect::BlockCombos
             | KCharSelect::CharacterTable | KCharSelect::DetailBrowser);
 
     dialog->setMainWidget(kcs);
-    if (dialog->exec() == KDialog::Accepted) {
+    if (dialog->exec() == KoDialog::Accepted) {
         QChar character = kcs->currentChar();
         widget.customCharacter->setText(character);
 
         // also switch to the custom list style.
         foreach(int row, m_mapping.keys()) {
-            if (m_mapping[row] == KoListStyle::CustomCharItem) {
+            if (m_mapping[row] == KoListStyle::BulletCharLabelType) {
                 widget.listTypes->setCurrentRow(row);
                 break;
             }
@@ -356,7 +343,9 @@ void ParagraphBulletsNumbers::setImageCollection(KoImageCollection *imageCollect
 
 void ParagraphBulletsNumbers::selectListImage()
 {
-    KUrl url = KFileDialog::getOpenUrl();
+    KoFileDialog dlg(0, KoFileDialog::OpenFile, "bullets");
+    dlg.setCaption(i18n("Select a list image"));
+    QUrl url = QUrl::fromLocalFile(dlg.filename());
     if (!url.isEmpty()) {
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
         connect(job, SIGNAL(result(KJob*)), this, SLOT(setImageData(KJob*)));
@@ -378,5 +367,3 @@ void ParagraphBulletsNumbers::setFontSize(const KoCharacterStyle *style)
 {
     m_fontSize = style->fontPointSize();
 }
-
-#include <ParagraphBulletsNumbers.moc>

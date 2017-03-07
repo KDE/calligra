@@ -26,8 +26,8 @@
 #include <QStylePainter>
 #include <QToolButton>
 
-// KDE
-#include <klocale.h>
+// KF5
+#include <KLocalizedString>
 
 class KoGroupButton::Private
 {
@@ -120,7 +120,7 @@ void KoGroupButton::paintEvent(QPaintEvent* event)
     painter.setOpacity(0.4);
     if (d->groupPosition != GroupRight) {
         const int x = opt.rect.right();
-        painter.setPen(opt.palette.color(QPalette::Dark));
+        painter.setPen(QPen(opt.palette.color(QPalette::Dark), 0));
         painter.drawLine(x, y1, x, y2);
     }
     painter.setOpacity(1.0);
@@ -142,5 +142,3 @@ void KoGroupButton::paintEvent(QPaintEvent* event)
         setToolTip(i18nc("@info:tooltip of custom triple button", "%1", action->toolTip()));
     }
 }
-
-#include <KoGroupButton.moc>

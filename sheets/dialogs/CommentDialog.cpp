@@ -27,10 +27,10 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <ktextedit.h>
 
-//KSpread includes
+// Sheets
 #include "Cell.h"
 #include "ui/Selection.h"
 #include "Sheet.h"
@@ -40,7 +40,7 @@
 using namespace Calligra::Sheets;
 
 CommentDialog::CommentDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Cell Comment"));
     setModal(true);
@@ -83,5 +83,3 @@ void CommentDialog::slotOk()
     command->execute(m_selection->canvas());
     accept();
 }
-
-#include "CommentDialog.moc"

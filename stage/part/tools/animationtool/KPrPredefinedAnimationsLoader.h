@@ -86,7 +86,7 @@ private:
       * @param id QString holding the animation id
       * @return a QString holding the name
       */
-    QString animationName(const QString id) const;
+    QString animationName(const QString &id) const;
 
     /**
       * Return the animation class icon (Ex of classes: zoom, swivel, appear, etc)
@@ -94,7 +94,7 @@ private:
       * @param id QString holding the animation id
       * @return a QIcon depending on animation class
       */
-    QIcon loadAnimationIcon(const QString id);
+    QIcon loadAnimationIcon(const QString &id);
 
     /**
       * Return the animation sub type icon (Ex of subtypes: up, down, from left, etc)
@@ -102,7 +102,7 @@ private:
       * @param id QString holding the animation id
       * @return a QIcon depending on animation sub type
       */
-    QIcon loadSubTypeIcon(const QString mainId, const QString subTypeId);
+    QIcon loadSubTypeIcon(const QString &mainId, const QString &subTypeId);
 
     /**
       * Return an animation icon created using the motion path

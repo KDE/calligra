@@ -32,6 +32,7 @@
 #include "Sheet.h"
 #include "Value.h"
 #include "ValueConverter.h"
+#include "odf/SheetsOdf.h"
 
 using namespace Calligra::Sheets;
 
@@ -264,7 +265,7 @@ public:
             else if (string == "bottom percent")
                 operation = BottomPercent;
             else {
-                kDebug() << "table:operator: unknown value";
+                debugSheets << "table:operator: unknown value";
                 return false;
             }
         }
@@ -342,7 +343,7 @@ public:
         const Sheet* sheet = database.range().lastSheet();
         const QRect range = database.range().lastRange();
         const int start = database.orientation() == Qt::Vertical ? range.left() : range.top();
-//         kDebug() <<"index:" << index <<" start:" << start <<" fieldNumber:" << fieldNumber;
+//         debugSheets <<"index:" << index <<" start:" << start <<" fieldNumber:" << fieldNumber;
         const Value value = database.orientation() == Qt::Vertical
                             ? sheet->cellStorage()->value(start + fieldNumber, index)
                             : sheet->cellStorage()->value(index, start + fieldNumber);
@@ -350,14 +351,14 @@ public:
         switch (operation) {
         case Match: {
             const bool result = QString::compare(this->value, testString, caseSensitivity) == 0;
-//                 kDebug() <<"Match" << this->value <<"?" << testString <<"" << result;
+//                 debugSheets <<"Match" << this->value <<"?" << testString <<"" << result;
             if (result)
                 return true;
             break;
         }
         case NotMatch: {
             const bool result = QString::compare(this->value, testString, caseSensitivity) != 0;
-//                 kDebug() <<"Not Match" << this->value <<"?" << testString <<"" << result;
+//                 debugSheets <<"Not Match" << this->value <<"?" << testString <<"" << result;
             if (result)
                 return true;
             break;
@@ -378,7 +379,7 @@ public:
     }
     virtual void removeConditions(int fieldNumber) {
         if (this->fieldNumber == fieldNumber) {
-//             kDebug() <<"removing condition for fieldNumber" << fieldNumber;
+//             debugSheets <<"removing condition for fieldNumber" << fieldNumber;
             this->fieldNumber = -1;
         }
     }
@@ -638,7 +639,7 @@ QHash<QString, Filter::Comparison> Filter::conditions(int fieldNumber) const
 void Filter::removeConditions(int fieldNumber)
 {
     if (fieldNumber == -1) {
-//         kDebug() <<"removing all conditions";
+//         debugSheets <<"removing all conditions";
         delete d->condition;
         d->condition = 0;
         return;
@@ -667,7 +668,7 @@ bool Filter::loadOdf(const KoXmlElement& element, const Map* map)
     if (element.hasAttributeNS(KoXmlNS::table, "target-range-address")) {
         const QString address = element.attributeNS(KoXmlNS::table, "target-range-address", QString());
         // only absolute addresses allowed; no fallback sheet needed
-        d->targetRangeAddress = Region(Region::loadOdf(address), map);
+        d->targetRangeAddress = Region(Odf::loadRegion(address), map);
         if (!d->targetRangeAddress.isValid())
             return false;
     }
@@ -680,7 +681,7 @@ bool Filter::loadOdf(const KoXmlElement& element, const Map* map)
     if (element.hasAttributeNS(KoXmlNS::table, "condition-source-range-address")) {
         const QString address = element.attributeNS(KoXmlNS::table, "condition-source-range-address", QString());
         // only absolute addresses allowed; no fallback sheet needed
-        d->conditionSourceRangeAddress = Region(Region::loadOdf(address), map);
+        d->conditionSourceRangeAddress = Region(Odf::loadRegion(address), map);
     }
     if (element.hasAttributeNS(KoXmlNS::table, "display-duplicates")) {
         if (element.attributeNS(KoXmlNS::table, "display-duplicates", "true") == "false")
@@ -717,11 +718,11 @@ void Filter::saveOdf(KoXmlWriter& xmlWriter) const
         return;
     xmlWriter.startElement("table:filter");
     if (!d->targetRangeAddress.isEmpty())
-        xmlWriter.addAttribute("table:target-range-address", d->targetRangeAddress.saveOdf());
+        xmlWriter.addAttribute("table:target-range-address", Odf::saveRegion(d->targetRangeAddress.name()));
     if (d->conditionSource != Private::Self)
         xmlWriter.addAttribute("table:condition-source", "cell-range");
     if (!d->conditionSourceRangeAddress.isEmpty())
-        xmlWriter.addAttribute("table:condition-source-range-address", d->conditionSourceRangeAddress.saveOdf());
+        xmlWriter.addAttribute("table:condition-source-range-address", Odf::saveRegion(d->conditionSourceRangeAddress.name()));
     if (!d->displayDuplicates)
         xmlWriter.addAttribute("table:display-duplicates", "false");
     d->condition->saveOdf(xmlWriter);
@@ -759,9 +760,9 @@ bool Filter::operator==(const Filter& other) const
 void Filter::dump() const
 {
     if (d->condition)
-        kDebug() << "Condition:" + d->condition->dump();
+        debugSheets << "Condition:" + d->condition->dump();
     else
-        kDebug() << "Condition: 0";
+        debugSheets << "Condition: 0";
 }
 
 bool AbstractCondition::listsAreEqual(const QList<AbstractCondition *> &a, const QList<AbstractCondition *> &b)

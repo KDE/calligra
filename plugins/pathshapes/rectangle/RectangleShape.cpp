@@ -36,7 +36,8 @@ RectangleShape::RectangleShape()
 : m_cornerRadiusX(0)
 , m_cornerRadiusY(0)
 {
-    QList<QPointF> handles;
+    QVector<QPointF> handles;
+    handles.reserve(2);
     handles.push_back(QPointF(100, 0));
     handles.push_back(QPointF(100, 0));
     setHandles(handles);
@@ -134,7 +135,8 @@ void RectangleShape::moveHandleAction(int handleId, const QPointF & point, Qt::K
 
 void RectangleShape::updateHandles()
 {
-    QList<QPointF> handles;
+    QVector<QPointF> handles;
+    handles.reserve(2);
     handles.append(QPointF(size().width() - m_cornerRadiusX/100.0 * 0.5 * size().width(), 0.0));
     handles.append(QPointF(size().width(), m_cornerRadiusY/100.0 * 0.5 * size().height()));
     setHandles(handles);

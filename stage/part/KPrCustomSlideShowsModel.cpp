@@ -28,8 +28,8 @@
 #include "commands/KPrDelCustomSlideShowCommand.h"
 #include "commands/KPrRenameCustomSlideShowCommand.h"
 
-//KDE headers
-#include "KLocalizedString"
+//KF5 headers
+#include <klocalizedstring.h>
 
 //Qt headers
 #include <QIcon>
@@ -221,10 +221,10 @@ bool KPrCustomSlideShowsModel::dropMimeData(const QMimeData *data, Qt::DropActio
     return false;
 }
 
-QList<KoPAPageBase *> KPrCustomSlideShowsModel::decodeSlidesList(QByteArray encoded)
+QList<KoPAPageBase *> KPrCustomSlideShowsModel::decodeSlidesList(const QByteArray &encoded)
 {
     QList<KoPAPageBase *> slides;
-    QDataStream stream(&encoded, QIODevice::ReadOnly);
+    QDataStream stream(encoded);
 
     // decode the data
     while(!stream.atEnd()) {

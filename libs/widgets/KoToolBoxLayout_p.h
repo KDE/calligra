@@ -21,7 +21,7 @@
 #ifndef _KO_TOOLBOX_LAYOUT_H_
 #define _KO_TOOLBOX_LAYOUT_H_
 
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 #include <QLayout>
 #include <QMap>
 #include <QRect>
@@ -156,7 +156,7 @@ public:
         return m_name;
     }
 
-    void setButtonSize(QSize size)
+    void setButtonSize(const QSize& size)
     {
         m_layout->setButtonSize(size);
     }
@@ -286,6 +286,12 @@ public:
         bool firstSection = true;
         foreach (QWidgetItem *wi, m_sections) {
             Section *section = static_cast<Section*> (wi->widget());
+            // Since sections can overlap (if a section occupies two rows, and there
+            // is space on the second row for all of the next section, the next section
+            // will be placed overlapping with the previous section), it's important that
+            // later sections will be higher in the widget z-order than previous
+            // sections, so raise it.
+            section->raise();
             const int buttonCount = section->visibleButtonCount();
             if (buttonCount == 0) {
                 // move out of view, not perfect TODO: better solution

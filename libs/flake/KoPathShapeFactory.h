@@ -28,11 +28,11 @@
 class KoShape;
 
 /// Factory for path shapes.
-class FLAKE_TEST_EXPORT KoPathShapeFactory : public KoShapeFactoryBase
+class FLAKE_EXPORT KoPathShapeFactory : public KoShapeFactoryBase
 {
 public:
     /// constructor
-    KoPathShapeFactory(const QStringList&);
+    explicit KoPathShapeFactory(const QStringList&);
     ~KoPathShapeFactory() {}
     virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
     bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const;

@@ -95,7 +95,7 @@ public:
 
 
 KoSemanticStylesheetsEditor::KoSemanticStylesheetsEditor(QWidget *parent, KoDocumentRdf *rdf)
-        : KDialog(parent),
+        : KoDialog(parent),
         d(new Private())
 {
     d->m_rdf = rdf;
@@ -109,8 +109,8 @@ KoSemanticStylesheetsEditor::KoSemanticStylesheetsEditor(QWidget *parent, KoDocu
             this, SLOT(newStylesheet()));
     connect(d->m_ui->deleteStylesheet, SIGNAL(clicked()),
             this, SLOT(deleteStylesheet()));
-    connect(d->m_ui->stylesheets, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
-            this, SLOT(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
+    connect(d->m_ui->stylesheets, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
+            this, SLOT(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)));
     d->m_ui->stylesheets->setSelectionBehavior(QAbstractItemView::SelectRows);
     d->m_ui->stylesheets->sortItems(ColName, Qt::DescendingOrder);
     connect(d->m_ui->definition, SIGNAL(textChanged()),
@@ -125,7 +125,8 @@ KoSemanticStylesheetsEditor::KoSemanticStylesheetsEditor(QWidget *parent, KoDocu
     treewidget = d->m_systemSheetsParentItem;
     const QStringList classNames = KoRdfSemanticItemRegistry::instance()->classNames();
     foreach (const QString &semanticClass, classNames) {
-        hKoRdfSemanticItem si = rdf->createSemanticItem(semanticClass, this);
+	hKoRdfSemanticItem si(static_cast<KoRdfSemanticItem *>(
+	    rdf->createSemanticItem(semanticClass, this).data()));
         KoSemanticStylesheetWidgetItem *item = new KoSemanticStylesheetWidgetItem(rdf, si, treewidget);
         item->setText(ColName, semanticClass);
         d->m_systemSheetsItems[semanticClass] = item;
@@ -138,7 +139,8 @@ KoSemanticStylesheetsEditor::KoSemanticStylesheetsEditor(QWidget *parent, KoDocu
 
     treewidget = d->m_userSheetsParentItem;
     foreach (const QString &semanticClass, classNames) {
-        hKoRdfSemanticItem si = rdf->createSemanticItem(semanticClass, this);
+	hKoRdfSemanticItem si(static_cast<KoRdfSemanticItem *>(
+	    rdf->createSemanticItem(semanticClass, this).data()));
         KoSemanticStylesheetWidgetItem* item = new KoSemanticStylesheetWidgetItem(rdf, si, treewidget);
         item->setText(ColName, semanticClass);
         d->m_userSheetsItems[semanticClass] = item;
@@ -148,7 +150,8 @@ KoSemanticStylesheetsEditor::KoSemanticStylesheetsEditor(QWidget *parent, KoDocu
     // initialize stylesheets tree
     foreach (const QString &semanticClass, classNames) {
         kDebug(30015) << "semanticClass:" << semanticClass;
-        hKoRdfSemanticItem p = rdf->createSemanticItem(semanticClass, this);
+	hKoRdfSemanticItem p(static_cast<KoRdfSemanticItem *>(
+	    rdf->createSemanticItem(semanticClass, this).data()));
         setupStylesheetsItems(semanticClass, p, p->stylesheets(), d->m_systemSheetsItems);
         setupStylesheetsItems(semanticClass, p, p->userStylesheets(), d->m_userSheetsItems, true);
     }

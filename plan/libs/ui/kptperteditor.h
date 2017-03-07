@@ -32,9 +32,6 @@
 #include "kptcommand.h"
 #include "kptnode.h"
 
-#include <klocale.h>
-#include <kdebug.h>
-
 #include <QList>
 
 

@@ -36,10 +36,10 @@
 #include <KoShapePaintingContext.h>
 #include <KoStrokeConfigWidget.h>
 
-#include <knuminput.h>
-#include <klocale.h>
-#include <kcombobox.h>
+#include <klocalizedstring.h>
 
+#include <QDoubleSpinBox>
+#include <QComboBox>
 #include <QStackedWidget>
 #include <QGroupBox>
 #include <QCheckBox>
@@ -89,7 +89,7 @@ void KoPencilTool::paint(QPainter &painter, const KoViewConverter &converter)
         painter.setTransform(m_hoveredPoint->parent()->absoluteTransformation(&converter), true);
         KoShape::applyConversion(painter, converter);
 
-        painter.setPen(Qt::blue);      //TODO make configurable
+        painter.setPen(QPen(Qt::blue, 0));      //TODO make configurable
         painter.setBrush(Qt::white);   //TODO make configurable
         m_hoveredPoint->paint(painter, handleRadius(), KoPathPoint::Node);
 
@@ -220,8 +220,8 @@ void KoPencilTool::finish(bool closePath)
         return;
 
     KoPathShape * path = 0;
-    QList<QPointF> complete;
-    QList<QPointF> *points = &m_points;
+    QVector<QPointF> complete;
+    QVector<QPointF> *points = &m_points;
 
     if (m_mode == ModeStraight || m_optimizeRaw || m_optimizeCurve) {
         float combineAngle;
@@ -284,7 +284,7 @@ QList<QPointer<QWidget> > KoPencilTool::createOptionWidgets()
     QHBoxLayout *modeLayout = new QHBoxLayout;
     modeLayout->setSpacing(3);
     QLabel *modeLabel = new QLabel(i18n("Precision:"), optionWidget);
-    KComboBox * modeBox = new KComboBox(optionWidget);
+    QComboBox * modeBox = new QComboBox(optionWidget);
     modeBox->addItem(i18nc("The raw line data", "Raw"));
     modeBox->addItem(i18n("Curve"));
     modeBox->addItem(i18n("Straight"));
@@ -303,17 +303,26 @@ QList<QPointer<QWidget> > KoPencilTool::createOptionWidgets()
     QWidget * curveBox = new QWidget(stackedWidget);
     QHBoxLayout * curveLayout = new QHBoxLayout(curveBox);
     QCheckBox * optimizeCurve = new QCheckBox(i18n("Optimize"), curveBox);
-    KDoubleNumInput * fittingError = new KDoubleNumInput(0.0, 400.0, m_fittingError, curveBox, 0.50, 3);
+    QDoubleSpinBox * fittingError = new QDoubleSpinBox(curveBox);
+    fittingError->setValue(0.50);
+    fittingError->setMaximum(400.0);
+    fittingError->setMinimum(0.0);
+    fittingError->setSingleStep(m_fittingError);
     fittingError->setToolTip(i18n("Exactness:"));
     curveLayout->addWidget(optimizeCurve);
     curveLayout->addWidget(fittingError);
     curveLayout->setContentsMargins(0, 0, 0, 0);
 
-    QWidget * straightBox = new QWidget(stackedWidget);
-    QVBoxLayout * straightLayout = new QVBoxLayout(straightBox);
-    KDoubleNumInput * combineAngle = new KDoubleNumInput(0.0, 360.0, m_combineAngle, straightBox, 0.50, 3);
+    QWidget *straightBox = new QWidget(stackedWidget);
+    QVBoxLayout *straightLayout = new QVBoxLayout(straightBox);
+    QDoubleSpinBox *combineAngle = new QDoubleSpinBox(straightBox);
+    combineAngle->setValue(0.50);
+    combineAngle->setMaximum(360.0);
+    combineAngle->setMinimum(0.0);
+    combineAngle->setSingleStep(m_combineAngle);
     combineAngle->setSuffix(" deg");
-    combineAngle->setLabel(i18n("Combine angle:"), Qt::AlignLeft | Qt::AlignVCenter);
+    // QT5TODO
+    //combineAngle->setLabel(i18n("Combine angle:"), Qt::AlignLeft | Qt::AlignVCenter);
     straightLayout->addWidget(combineAngle);
     straightLayout->setContentsMargins(0, 0, 0, 0);
 
@@ -538,5 +547,3 @@ qreal KoPencilTool::getFittingError(){
 void KoPencilTool::setFittingError(qreal fittingError){
     this->m_fittingError = fittingError;
 }
-
-#include "KoPencilTool.moc"

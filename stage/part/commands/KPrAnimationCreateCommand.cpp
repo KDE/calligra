@@ -19,7 +19,7 @@
 
 #include "KPrAnimationCreateCommand.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KPrDocument.h"
 #include "animations/KPrShapeAnimation.h"

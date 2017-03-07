@@ -1,20 +1,24 @@
-#add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30529)
-
-if(QCA2_FOUND)
+if(Qca-qt5_FOUND)
     add_definitions( -DHAVE_QCA2 )
-    include_directories(${QCA2_INCLUDE_DIR})
 endif()
+
+# TEMPORARY: for std::auto_ptr deprecation warnings are only annoying noise
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    add_definitions(-Wno-deprecated-declarations)
+endif ()
 
 include_directories(
     ${KOMAIN_INCLUDES}
-    ${KOODF2_INCLUDES}
+    ${KOODF2_INCLUDES} # For charts
     ${CMAKE_CURRENT_SOURCE_DIRECTORY}
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx # for Charting
+    ${CMAKE_SOURCE_DIR}/filters/libmso # For NumberFormatParser
+    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx # For ChartExport  FIXME: Remove when moved to libodf2
 )
 
 ########### next target ###############
 
 set(msooxml_LIB_SRCS
+    MsooXmlDebug.cpp
     MsooXmlGlobal.cpp
     MsooXmlUtils.cpp
     MsooXmlReader.cpp
@@ -33,28 +37,38 @@ set(msooxml_LIB_SRCS
     VmlDrawingReader.cpp
     PredefinedShapeHelper.cpp
     ComplexShapeHandler.cpp
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/ChartExport.cpp
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/NumberFormatParser.cpp
+    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxChartOdfWriter.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libodf2/chart/KoOdfChartWriter.cpp
     # TODO: move back to kolibs
     KoOdfExporter.cpp
 )
 
-kde4_add_library(komsooxml SHARED ${msooxml_LIB_SRCS})
+add_library(komsooxml SHARED ${msooxml_LIB_SRCS})
+generate_export_header(komsooxml BASE_NAME komsooxml)
 
-target_link_libraries(komsooxml koodf2 koodf komain)
-if(QCA2_FOUND)
-   target_link_libraries(komsooxml ${QCA2_LIBRARIES})
+target_link_libraries(komsooxml
+    PUBLIC
+        mso
+        koodf2
+        komain
+    PRIVATE
+        KF5::Archive
+    )
+if(Qca-qt5_FOUND)
+   target_link_libraries(komsooxml PRIVATE qca-qt5)
 endif()
 
 set_target_properties(komsooxml PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS komsooxml ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install(FILES msooxml-all.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
-update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})
+if (SharedMimeInfo_FOUND)
+    install(FILES msooxml-all.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
+    update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})
+endif()
 
 if (FALSE) # these headers are private for now
 install( FILES
-    komsooxml_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/komsooxml_export.h
     MsooXmlContentTypes.h
     MsooXmlReader.h
     MsooXmlReader_p.h
@@ -63,6 +77,7 @@ install( FILES
     MsooXmlCommonReaderMethods.h
     MsooXmlSchemas.h
     MsooXmlThemesReader.h
+    MsooXmlTheme.h
     MsooXmlUtils.h
     MsooXmlRelationships.h
     MsooXmlImport.h

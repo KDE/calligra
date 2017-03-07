@@ -189,7 +189,7 @@ private Q_SLOTS:
     void updateModel();
 
 private:
-    QList<KoPAPageBase *> decodeSlidesList(QByteArray encoded);
+    QList<KoPAPageBase *> decodeSlidesList(const QByteArray &encoded);
 
     KPrCustomSlideShows *m_customSlideShows;
     QString m_activeCustomSlideShowName;

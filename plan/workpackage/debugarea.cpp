@@ -19,7 +19,8 @@
 
 #include "debugarea.h"
 
-int planworkDbg() {
-    static int s_area = KDebug::registerArea( "planwork" );
-    return s_area;
+const QLoggingCategory &PLANWORK_LOG()
+{
+    static const QLoggingCategory category("calligra.planwork");
+    return category;
 }

@@ -37,8 +37,7 @@
 #include <QComboBox>
 #include <QSpinBox>
 
-#include <kstatusbar.h>
-#include <kvbox.h>
+#include <KoVBox.h>
 
 #include <sonnet/configwidget.h>
 
@@ -67,22 +66,22 @@ DocumentSettingsDialog::DocumentSettingsDialog(Selection* selection, QWidget* pa
         , d(new Private)
 {
     setObjectName(QLatin1String("DocumentSettingsDialog"));
-    setCaption(i18n("Document Settings"));
+    setWindowTitle(i18n("Document Settings"));
 //     setFaceType(List);
-    setButtons(Ok | Cancel/* | Default | Reset*/);
-    setDefaultButton(Ok);
+    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel/* | QDialogButtonBox::RestoreDefaults | QDialogButtonBox::Reset*/);
+    button(QDialogButtonBox::Ok)->setDefault(true);
 
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotApply()));
-//     connect(this, SIGNAL(defaultClicked()), this,SLOT(slotDefault()));
-//     connect(this, SIGNAL(resetClicked()), this, SLOT(slotReset()));
+    connect(this, SIGNAL(accepted()), this, SLOT(slotApply()));
+//     connect(button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), this, SLOT(slotDefault()));
+//     connect(button(QDialogButtonBox::Reset), SIGNAL(clicked(bool)), this, SLOT(slotReset()));
 
-    KVBox *p1 = new KVBox();
+    KoVBox *p1 = new KoVBox();
     d->page1 = addPage(p1, i18n("Calculation"));
     d->page1->setHeader(QString(""));
     d->page1->setIcon(koIcon("application-vnd.oasis.opendocument.spreadsheet"));
     d->calcPage = new calcSettings(selection, p1);
 
-    KVBox *p2 = new KVBox();
+    KoVBox *p2 = new KoVBox();
     d->page2 = addPage(p2, i18n("Locale"));
     d->page2->setHeader(QString(""));
     d->page2->setIcon(koIcon("preferences-desktop-locale"));
@@ -109,7 +108,7 @@ void DocumentSettingsDialog::slotReset()
 }
 
 
-calcSettings::calcSettings(Selection* selection, KVBox *box)
+calcSettings::calcSettings(Selection* selection, KoVBox *box)
         : QObject(box->parent())
 {
     m_cs = selection->activeSheet()->map()->calculationSettings();
@@ -163,7 +162,7 @@ void calcSettings::apply()
     m_cs->setReferenceYear(m_nullYearEdit->value());
 }
 
-parameterLocale::parameterLocale(Selection* selection, KVBox *box)
+parameterLocale::parameterLocale(Selection* selection, KoVBox *box)
         : QObject(box->parent())
 {
     m_selection = selection;
@@ -213,5 +212,3 @@ void parameterLocale::updateToMatchLocale(KLocale* locale)
     m_time->setText(i18n("Time format: %1", locale->formatTime(QTime::currentTime())));
     m_money->setText(i18n("Currency format: %1", locale->formatMoney(12.55)));
 }
-
-#include "DocumentSettingsDialog.moc"

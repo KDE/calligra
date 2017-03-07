@@ -21,7 +21,7 @@
 
 #include "KoToolBase.h"
 
-#include <KShortcut>
+#include <QKeySequence>
 
 class KoToolFactoryBase::Private
 {
@@ -37,7 +37,7 @@ public:
     QString activationId;
     QString iconName;
     const QString id;
-    KShortcut shortcut;
+    QKeySequence shortcut;
 };
 
 
@@ -81,7 +81,7 @@ QString KoToolFactoryBase::activationShapeId() const
     return d->activationId;
 }
 
-KShortcut KoToolFactoryBase::shortcut() const
+QKeySequence KoToolFactoryBase::shortcut() const
 {
     return d->shortcut;
 }
@@ -101,11 +101,6 @@ void KoToolFactoryBase::setToolType(const QString & toolType)
     d->toolType = toolType;
 }
 
-void KoToolFactoryBase::setIconName(const char *iconName)
-{
-    d->iconName = QLatin1String(iconName);
-}
-
 void KoToolFactoryBase::setIconName(const QString &iconName)
 {
     d->iconName = iconName;
@@ -116,7 +111,7 @@ void KoToolFactoryBase::setPriority(int newPriority)
     d->priority = newPriority;
 }
 
-void KoToolFactoryBase::setShortcut(const KShortcut & shortcut)
+void KoToolFactoryBase::setShortcut(const QKeySequence &shortcut)
 {
     d->shortcut = shortcut;
 }

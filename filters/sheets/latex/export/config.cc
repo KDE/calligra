@@ -21,7 +21,8 @@
 
 #include "config.h"
 
-#include <kdebug.h>  /* for kDebug() stream */
+#include "LatexDebug.h"
+
 #include <QTextStream>
 
 /* Static variable */
@@ -60,17 +61,17 @@ Config::~Config()
 
 void Config::indent()
 {
-    kDebug(30522) << "Indent tab =" << (_tabulation + getTabSize());
+    debugLatex << "Indent tab =" << (_tabulation + getTabSize());
     _tabulation = _tabulation + getTabSize();
 }
 
 void Config::unindent()
 {
     if ((_tabulation - getTabSize()) > 0) {
-        kDebug(30522) << "Unindent tab =" << (_tabulation - getTabSize());
+        debugLatex << "Unindent tab =" << (_tabulation - getTabSize());
         _tabulation = _tabulation - getTabSize();
     } else {
-        kDebug(30522) << "Unindent tab = 0";
+        debugLatex << "Unindent tab = 0";
         _tabulation = 0;
     }
 }

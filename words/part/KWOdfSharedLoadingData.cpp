@@ -34,7 +34,6 @@
 #include <KoUnit.h>
 
 #include <QTextCursor>
-#include <kdebug.h>
 
 KWOdfSharedLoadingData::KWOdfSharedLoadingData(KWOdfLoader *loader)
         : KoTextSharedLoadingData()

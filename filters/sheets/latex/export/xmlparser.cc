@@ -21,7 +21,8 @@
 
 #include "xmlparser.h"
 
-#include <kdebug.h>
+#include "LatexDebug.h"
+
 #include <KoStore.h>
 
 #include <QFile>
@@ -29,7 +30,7 @@
 /* Init static data */
 FileHeader* XmlParser::_fileHeader = 0;
 Document* XmlParser::_root = 0;
-KoStore* XmlParser::_in = NULL;
+KoStore* XmlParser::_in = nullptr;
 
 XmlParser::XmlParser(const QString &filename): _filename(filename)
 {
@@ -53,7 +54,7 @@ XmlParser::XmlParser(const KoStore* in)
 {
     _in = const_cast<KoStore*>(in);
     if (!_in->open("root")) {
-        kError(30522) << "Unable to open input file!" << endl;
+        errorLatex << "Unable to open input file!" << endl;
         return;
     }
     /* input file Reading */
@@ -67,14 +68,14 @@ XmlParser::XmlParser()
 
 XmlParser::~XmlParser()
 {
-    if (_in != NULL)
+    if (_in != nullptr)
         _in->close();
 }
 
 QDomNode XmlParser::getChild(const QDomNode &node, QString name)
 {
     QDomNode childNode = getChild(node, name, 0);
-    kDebug(30522) << childNode.nodeName();
+    debugLatex << childNode.nodeName();
     return childNode;
 }
 

@@ -81,7 +81,7 @@ public:
     void paint(QPainter &painter, const KoViewConverter &converter);
 
     /// returns the bounding rect of the guide
-    QRectF boundingRect();
+    QRectF boundingRect() const;
 
     /// Adds an additional shape to snap to (useful when creating a path)
     void setEditedShape(KoShape *shape);

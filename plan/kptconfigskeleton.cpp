@@ -22,7 +22,7 @@
 
 #include "kptfactory.h"
 
-#include <kcomponentdata.h>
+#include <KoComponentData.h>
 
 KPlatoConfigSkeleton::KPlatoConfigSkeleton()
     : KConfigSkeleton( KPlato::Factory::global().config() )
@@ -30,6 +30,3 @@ KPlatoConfigSkeleton::KPlatoConfigSkeleton()
 
 KPlatoConfigSkeleton::~KPlatoConfigSkeleton()
 {}
-
-
-#include "kptconfigskeleton.moc"

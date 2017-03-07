@@ -1,17 +1,13 @@
 project(flake)
 
-include_directories(${FLAKE_INCLUDES} ${CMAKE_SOURCE_DIR}/libs/main ${CMAKE_SOURCE_DIR}/libs/kotext/mct ${QT_INCLUDES})
-
-if(KDE4_BUILD_TESTS)
-    # only with this definition will the FLAKE_TEST_EXPORT macro do something
-    add_definitions(-DCOMPILING_TESTS)
-endif()
+include_directories(${FLAKE_INCLUDES} ${CMAKE_SOURCE_DIR}/libs/main ${CMAKE_SOURCE_DIR}/libs/text/mct ${QT_INCLUDES})
 
 add_subdirectory(styles)
 add_subdirectory(tests)
 add_subdirectory(pics)
 
 set(flake_SRCS
+    KoGradientHelper.cpp
     KoFlake.cpp
     KoCanvasBase.cpp
     KoResourceManager_p.cpp
@@ -209,25 +205,31 @@ set(flake_SRCS
     svg/SvgClipPathHelper.cpp
     svg/SvgLoadingContext.cpp
     svg/SvgShapeFactory.cpp
+
+    FlakeDebug.cpp
 )
 
-kde4_add_ui_files(flake_SRCS
+ki18n_wrap_ui(flake_SRCS
     tools/PathToolOptionWidgetBase.ui
     KoConnectionShapeConfigWidget.ui
     SnapGuideConfigWidget.ui
     tools/KoZoomToolWidget.ui
 )
 
-kde4_add_library(flake SHARED ${flake_SRCS})
+add_library(flake SHARED ${flake_SRCS})
+generate_export_header(flake BASE_NAME flake)
 
-target_link_libraries(flake ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} pigmentcms kowidgetutils koodf)
-target_link_libraries(flake LINK_INTERFACE_LIBRARIES ${KDE4_KDEUI_LIBS} pigmentcms kowidgetutils koodf)
-target_link_libraries(flake kundo2)
-target_link_libraries(flake LINK_INTERFACE_LIBRARIES kundo2)
-
-if(HAVE_OPENGL)
-    target_link_libraries(flake ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY})
-endif()
+target_link_libraries(flake
+    PUBLIC
+        pigmentcms
+        kowidgetutils
+        koodf
+        kundo2
+    PRIVATE
+        koplugin
+        KF5::IconThemes
+        Qt5::Svg
+)
 
 set_target_properties(flake PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -236,19 +238,19 @@ set_target_properties(flake PROPERTIES
 ########### install files ###############
 
 install(TARGETS flake  ${INSTALL_TARGETS_DEFAULT_ARGS})
-install( FILES
-    flake.desktop
-    flaketool.desktop
-    flakeshape.desktop
-    flakedevice.desktop
-    presentationeventaction.desktop
-    scripteventaction.desktop
-    filtereffect.desktop
-    DESTINATION ${SERVICETYPES_INSTALL_DIR})
+# TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
+#     flake.desktop
+#     flaketool.desktop
+#     flakeshape.desktop
+#     flakedevice.desktop
+#     presentationeventaction.desktop
+#     scripteventaction.desktop
+#     filtereffect.desktop
+
+if (SHOULD_BUILD_DEVEL_HEADERS)
 
 install(
     FILES
-    flake_export.h
     KoCanvasBase.h
     KoCanvasController.h
     KoCanvasControllerWidget.h
@@ -350,3 +352,5 @@ install(
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
 )
+
+endif()

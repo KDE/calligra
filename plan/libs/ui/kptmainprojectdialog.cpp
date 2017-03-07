@@ -23,15 +23,14 @@
 #include "kptmainprojectpanel.h"
 #include "kptcommand.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
-#include <kdebug.h>
 
 namespace KPlato
 {
 
 MainProjectDialog::MainProjectDialog(Project &p, QWidget *parent, const char */*name*/)
-    : KDialog( parent),
+    : KoDialog( parent),
       project(p)
 {
     setWindowTitle( i18n("Project Settings") );
@@ -68,5 +67,3 @@ MacroCommand *MainProjectDialog::buildCommand() {
 }
 
 }  //KPlato namespace
-
-#include "kptmainprojectdialog.moc"

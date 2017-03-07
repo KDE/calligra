@@ -41,10 +41,10 @@ void Edge::relax(const Vertex* predecessor, PriorityQueue<Vertex>& queue)
 void Edge::dump(const QByteArray& indent) const
 {
     if (m_vertex)
-        kDebug(30500) << indent << "Edge -> '" << m_vertex->mimeType()
+        debugFilter << indent << "Edge -> '" << m_vertex->mimeType()
         << "' (" << m_filterEntry->weight << ")" << endl;
     else
-        kDebug(30500) << indent << "Edge -> '(null)' ("
+        debugFilter << indent << "Edge -> '(null)' ("
         << m_filterEntry->weight << ")" << endl;
 }
 

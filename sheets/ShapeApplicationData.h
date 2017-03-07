@@ -21,7 +21,8 @@
 #define CALLIGRA_SHEETS_SHAPE_APPLICATION_DATA
 
 #include <KoShapeApplicationData.h>
-#include "calligra_sheets_export.h"
+
+#include "sheets_odf_export.h"
 
 namespace Calligra
 {
@@ -30,7 +31,7 @@ namespace Sheets
 
 /**
  * \ingroup Embedding
- * KSpread specific data attached to each shape.
+ * Calligra Sheets specific data attached to each shape.
  */
 class CALLIGRA_SHEETS_ODF_EXPORT ShapeApplicationData : public KoShapeApplicationData
 {

@@ -24,10 +24,9 @@
 #include "TestCellRegion.h"
 
 // Qt
-#include <QtTest>
-#include <QDebug>
+#include <QTest>
 
-// KChart
+// KoChart
 #include "CellRegion.h"
 
 TestCellRegion::TestCellRegion()
@@ -158,5 +157,3 @@ void TestCellRegion::testFromStringWithSpecialCharactersMultipleTables()
 }
 
 QTEST_MAIN(TestCellRegion)
-
-#include "TestCellRegion.moc"

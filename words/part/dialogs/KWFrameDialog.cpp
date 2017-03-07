@@ -58,8 +58,8 @@ KWFrameDialog::KWFrameDialog(const QList<KoShape *> &shapes, KWDocument *documen
         }
     }
 
-    connect(this, SIGNAL(okClicked()), this, SLOT(okClicked()));
-    connect(this, SIGNAL(cancelClicked()), this, SLOT(cancelClicked()));
+    connect(this, SIGNAL(accepted()), this, SLOT(okClicked()));
+    connect(this, SIGNAL(rejected()), this, SLOT(cancelClicked()));
 }
 
 KWFrameDialog::~KWFrameDialog()
@@ -87,6 +87,8 @@ void KWFrameDialog::okClicked()
                 m_first = false;
                 KUndo2Command::redo();
                 m_anchoringProperties->save(this, m_canvas);
+            } else {
+                KUndo2Command::redo();
             }
         }
         KWAnchoringProperties *m_anchoringProperties;

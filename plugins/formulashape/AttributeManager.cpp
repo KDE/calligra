@@ -18,14 +18,18 @@
 */
 
 #include "AttributeManager.h"
+
 #include "BasicElement.h"
 #include "ElementFactory.h"
+#include "FormulaDebug.h"
+
 #include <KoUnit.h>
 #include <KoViewConverter.h>
 #include <KoPostscriptPaintDevice.h>
+
 #include <QFontMetricsF>
 #include <QColor>
-#include <kdebug.h>
+
 //// Copied from calligra KoUnit.h
 //
 //// 1 inch ^= 72 pt
@@ -63,7 +67,7 @@ QString AttributeManager::findValue( const QString& attribute, const BasicElemen
     // check if the current element has a value assigned
     QString value = element->attribute( attribute );
     if( !value.isEmpty() ) {
-//         kDebug()<<"checking for attribute "<<attribute <<" returning (s)"<<value;
+//         debugFormula << "checking for attribute "<<attribute <<" returning (s)"<<value;
         return value;
     }
     // if not, check if any of the parent elements inherits a value
@@ -72,7 +76,7 @@ QString AttributeManager::findValue( const QString& attribute, const BasicElemen
     {
         value = tmpParent->inheritsAttribute( attribute );
         if( !value.isEmpty() ) {
-//             kDebug()<<"checking for attribute "<<attribute <<" returning (p)"<<value;
+//             debugFormula << "checking for attribute "<<attribute <<" returning (p)"<<value;
             return value;
         }
         else {
@@ -81,7 +85,7 @@ QString AttributeManager::findValue( const QString& attribute, const BasicElemen
     }
 
     // if not, return the default value of the attribute
-//     kDebug()<<"checking for attribute "<<attribute <<" returning (d) "<<element->attributesDefaultValue( attribute );
+//     debugFormula << "checking for attribute "<<attribute <<" returning (d) "<<element->attributesDefaultValue( attribute );
     return element->attributesDefaultValue( attribute );
 }
 

@@ -24,9 +24,11 @@
 #include "ClipCommand.h"
 #include "CropWidget.h"
 
-#include <klocale.h>
-#include <kurl.h>
-#include <kfiledialog.h>
+#include <QUrl>
+#include <QFileDialog>
+#include <QImageReader>
+
+#include <klocalizedstring.h>
 #include <KIO/Job>
 
 #include <KoIcon.h>
@@ -120,7 +122,7 @@ QWidget *PictureTool::createOptionWidget()
     connect(m_pictureToolUI->cbAspect, SIGNAL(toggled(bool)), this, SLOT(aspectCheckBoxChanged(bool)));
     connect(m_pictureToolUI->bnFill, SIGNAL(pressed()), this, SLOT(fillButtonPressed()));
     connect(m_pictureToolUI->cbContour, SIGNAL(toggled(bool)), this, SLOT(contourCheckBoxChanged(bool)));
-    connect(m_pictureToolUI->cropWidget, SIGNAL(sigCropRegionChanged(QRectF, bool)), this, SLOT(cropRegionChanged(QRectF, bool)));
+    connect(m_pictureToolUI->cropWidget, SIGNAL(sigCropRegionChanged(QRectF,bool)), this, SLOT(cropRegionChanged(QRectF,bool)));
 
     return m_pictureToolUI;
 }
@@ -159,7 +161,18 @@ void PictureTool::changeUrlPressed()
 {
     if (m_pictureshape == 0)
         return;
-    KUrl url = KFileDialog::getOpenUrl();
+    // TODO: think about using KoFileDialog everywhere, after extending it to support remote urls
+    QFileDialog *dialog = new QFileDialog();
+    QStringList imageMimeTypes;
+    foreach(const QByteArray &mimeType, QImageReader::supportedMimeTypes()) {
+        imageMimeTypes << QLatin1String(mimeType);
+    }
+    dialog->setMimeTypeFilters(imageMimeTypes);
+    dialog->setFileMode(QFileDialog::ExistingFile);
+    dialog->setAcceptMode(QFileDialog::AcceptOpen);
+    dialog->exec();
+    QUrl url = dialog->selectedUrls().value(0);
+
     if (!url.isEmpty()) {
         // TODO move this to an action in the libs, with a nice dialog or something.
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);

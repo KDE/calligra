@@ -18,7 +18,7 @@
 */
 
 /*
- * This class is heavily inspired by KLineEdit, so here goes credit because credit is due (from klineedit.h):
+ * This class is heavily inspired by QLineEdit, so here goes credit because credit is due (from klineedit.h):
  *  This class was originally inspired by Torben Weis'
  *  fileentry.cpp for KFM II.
 
@@ -46,9 +46,9 @@
 #include <QPushButton>
 #include <QString>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
-#include <kdebug.h>
+#include <QDebug>
 
 StylesComboPreview::StylesComboPreview(QWidget *parent) :
     QLineEdit(parent),
@@ -194,5 +194,3 @@ void StylesComboPreview::addNewStyle()
     setReadOnly(false);
     this->setFocus();
 }
-
-#include "StylesComboPreview.moc"

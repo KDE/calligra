@@ -20,7 +20,6 @@
 
 #include "KPrAnimationEditNodeTypeCommand.h"
 #include "KPrShapeAnimations.h"
-#include "KLocale"
 
 const int INVALID = -1;
 

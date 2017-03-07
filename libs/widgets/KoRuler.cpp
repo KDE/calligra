@@ -27,14 +27,14 @@
 #include <KoToolBase.h>
 #include <KoToolManager.h>
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <kglobalsettings.h>
+#include <klocalizedstring.h>
+#include <WidgetsDebug.h>
 
 #include <QPainter>
 #include <QResizeEvent>
 #include <QMenu>
 #include <QMouseEvent>
+#include <QFontDatabase>
 
 #include <KoViewConverter.h>
 
@@ -79,7 +79,7 @@ void RulerTabChooser::paintEvent(QPaintEvent *)
     QPainter painter(this);
     QPolygonF polygon;
 
-    painter.setPen(palette().color(QPalette::Text));
+    painter.setPen(QPen(palette().color(QPalette::Text), 0));
     painter.setBrush(palette().color(QPalette::Text));
     painter.setRenderHint( QPainter::Antialiasing );
 
@@ -140,7 +140,10 @@ QRectF HorizontalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPain
           d->viewConverter->documentToViewX(d->effectiveActiveRangeEnd()) + d->offset));
     activeRangeRectangle.setHeight(rectangle.height() - 2);
 
-    painter.setPen(d->ruler->palette().color(QPalette::Mid));
+    painter.setPen(QPen(d->ruler->palette().color(QPalette::Mid), 0));
+
+
+    painter.fillRect(rectangle,d->ruler->palette().color(QPalette::AlternateBase)); // make background slightly different so it is easier to see
     painter.drawRect(rectangle);
 
     if(d->effectiveActiveRangeStart() != d->effectiveActiveRangeEnd())
@@ -169,7 +172,7 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
     QPolygonF polygon;
 
     const QColor tabColor = d->ruler->palette().color(QPalette::Text);
-    painter.setPen(tabColor);
+    painter.setPen(QPen(tabColor, 0));
     painter.setBrush(tabColor);
     painter.setRenderHint( QPainter::Antialiasing );
 
@@ -257,7 +260,7 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
     int numberStepPixel = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(numberStep)));
 //    const bool adjustMillimeters = (d->unit.type() == KoUnit::Millimeter);
 
-    const QFont font = KGlobalSettings::smallestReadableFont();
+    const QFont font = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
     const QFontMetrics fontMetrics(font);
     painter.setFont(font);
 
@@ -297,8 +300,8 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
     int quarterStepCount = (start / qRound(numberStepPixel * 0.25)) + 1;
 
     int pos = 0;
-    const QPen numberPen(d->ruler->palette().color(QPalette::Text));
-    const QPen markerPen(d->ruler->palette().color(QPalette::Inactive, QPalette::Text));
+    const QPen numberPen(d->ruler->palette().color(QPalette::Text), 0);
+    const QPen markerPen(d->ruler->palette().color(QPalette::Inactive, QPalette::Text), 0);
     painter.setPen(markerPen);
 
     if(d->offset > 0)
@@ -431,7 +434,7 @@ void HorizontalPaintingStrategy::drawIndents(const KoRulerPrivate *d, QPainter &
 QSize HorizontalPaintingStrategy::sizeHint()
 {
     // assumes that digits for the number only use glyphs which do not go below the baseline
-    const QFontMetrics fm(KGlobalSettings::smallestReadableFont());
+    const QFontMetrics fm(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
     const int digitsHeight = fm.ascent() + 1; // +1 for baseline
     const int minimum = digitsHeight + fullStepMarkerLength + 2*measurementTextAboveBelowMargin;
 
@@ -456,7 +459,9 @@ QRectF VerticalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainte
     activeRangeRectangle.setBottom(qMin(rectangle.bottom() - 1,
         d->viewConverter->documentToViewY(d->effectiveActiveRangeEnd()) + d->offset));
 
-    painter.setPen(d->ruler->palette().color(QPalette::Mid));
+    painter.setPen(QPen(d->ruler->palette().color(QPalette::Mid), 0));
+
+    painter.fillRect(rectangle,d->ruler->palette().color(QPalette::AlternateBase));
     painter.drawRect(rectangle);
 
     if(d->effectiveActiveRangeStart() != d->effectiveActiveRangeEnd())
@@ -485,7 +490,7 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
     if (numberStepPixel <= 0)
         return;
 
-    const QFont font = KGlobalSettings::smallestReadableFont();
+    const QFont font = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
     const QFontMetrics fontMetrics(font);
     painter.setFont(font);
 
@@ -514,8 +519,8 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
     int halfStepCount = (start / qRound(numberStepPixel * 0.5)) + 1;
     int quarterStepCount = (start / qRound(numberStepPixel * 0.25)) + 1;
 
-    const QPen numberPen(d->ruler->palette().color(QPalette::Text));
-    const QPen markerPen(d->ruler->palette().color(QPalette::Inactive, QPalette::Text));
+    const QPen numberPen(d->ruler->palette().color(QPalette::Text), 0);
+    const QPen markerPen(d->ruler->palette().color(QPalette::Inactive, QPalette::Text), 0);
     painter.setPen(markerPen);
 
     if(d->offset > 0)
@@ -594,7 +599,7 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
 QSize VerticalPaintingStrategy::sizeHint()
 {
     // assumes that digits for the number only use glyphs which do not go below the baseline
-    const QFontMetrics fm(KGlobalSettings::smallestReadableFont());
+    const QFontMetrics fm(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
     const int digitsHeight = fm.ascent() + 1; // +1 for baseline
     const int minimum = digitsHeight + fullStepMarkerLength + 2*measurementTextAboveBelowMargin;
 
@@ -611,7 +616,7 @@ void HorizontalDistancesPaintingStrategy::drawDistanceLine(const KoRulerPrivate 
 
     painter.save();
     painter.translate(d->offset, d->ruler->height() / 2);
-    painter.setPen(d->ruler->palette().color(QPalette::Text));
+    painter.setPen(QPen(d->ruler->palette().color(QPalette::Text), 0));
     painter.setBrush(d->ruler->palette().color(QPalette::Text));
 
     QLineF line(QPointF(d->viewConverter->documentToViewX(start), 0),
@@ -619,7 +624,7 @@ void HorizontalDistancesPaintingStrategy::drawDistanceLine(const KoRulerPrivate 
     QPointF midPoint = line.pointAt(0.5);
 
     // Draw the label text
-    const QFont font = KGlobalSettings::smallestReadableFont();
+    const QFont font = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
     const QFontMetrics fontMetrics(font);
     QString label = d->unit.toUserStringValue(
             d->viewConverter->viewToDocumentX(line.length())) + ' ' + d->unit.symbol();
@@ -1331,12 +1336,7 @@ void KoRuler::createGuideToolConnection(KoCanvasBase *canvas)
 {
     Q_ASSERT(canvas);
     KoToolBase *tool = KoToolManager::instance()->toolById(canvas, QLatin1String("GuidesTool_ID"));
-    if (tool == 0) {
-        kWarning(30003) << "No guides tool found, skipping connection";
-        return;
-    }
+    if (!tool) return; // It's perfectly fine to have no guides tool, we don't have to warn the user about it
     connect(this, SIGNAL(guideLineCreated(Qt::Orientation,qreal)),
         tool, SLOT(createGuideLine(Qt::Orientation,qreal)));
 }
-
-#include <KoRuler.moc>

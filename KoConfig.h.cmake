@@ -1,6 +1,6 @@
 // Check windows
 #ifdef Q_OS_WIN
-   #if _WIN64
+   #ifdef _WIN64
      #define ENV64BIT
   #else
     #define ENV32BIT
@@ -31,9 +31,6 @@
 /* Defines if you Get Hot New Stuff support */
 #cmakedefine GHNS 1
 
-/* Defines if the krita crash handler is built */
-#cmakedefine USE_BREAKPAD 1
-
 /* Number of bits in a file offset, on hosts where this is settable. */
 #define _FILE_OFFSET_BITS 64
 
@@ -57,6 +54,5 @@
 /* Defines if we use KActivities */
 #cmakedefine HAVE_KACTIVITIES 1
 
-/* This file contains all the paths that change when changing the installation prefix */
-#define CALLIGRAPREFIX "${CMAKE_INSTALL_PREFIX}"
-
+/* Defines if the old plugin metadata for mimetypes is used */
+#cmakedefine CALLIGRA_OLD_PLUGIN_METADATA 1

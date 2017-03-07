@@ -1,6 +1,8 @@
-add_subdirectory( tests )
+if (BUILD_TESTING)
+    add_subdirectory( tests )
+endif ()
 
-add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+kde_enable_exceptions()
 
 if (APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)
@@ -10,13 +12,14 @@ include_directories( ${KOMAIN_INCLUDES})
 
 ########### next target ###############
 
-if( QCA2_FOUND )
+if( Qca-qt5_FOUND )
    add_definitions( -DQCA2 )
 endif()
 
 set(komain_LIB_SRCS
     KoAutoSaveRecoveryDialog.cpp
     KoApplication.cpp
+    KoComponentData.cpp
     KoDockerManager.cpp
     KoDocument.cpp
     KoDocumentEntry.cpp
@@ -58,16 +61,17 @@ set(komain_LIB_SRCS
     KoFindBase.cpp
     KoFindMatch.cpp
     KoFindText.cpp
-    KoFindToolbar.cpp
     KoFindOption.cpp
     KoFindOptionSet.cpp
     KoFindStyle.cpp
 
     KoPart.cpp
 
+    MainDebug.cpp
+    Calligra2Migration.cpp
 )
 
-if( QT_QTDBUS_FOUND )
+if( Qt5DBus_FOUND )
     set(komain_LIB_SRCS ${komain_LIB_SRCS}
         KoApplicationAdaptor.cpp
         KoViewAdaptor.cpp
@@ -75,36 +79,39 @@ if( QT_QTDBUS_FOUND )
     )
 endif()
 
-if (APPLE)
-    set(komain_LIB_SRCS ${komain_LIB_SRCS}
-        MacSupport.mm
-    )
-endif ()
-
-kde4_add_ui_files( komain_LIB_SRCS
+ki18n_wrap_ui( komain_LIB_SRCS
    KoOpenPaneBase.ui
    KoDetailsPaneBase.ui
 )
-kde4_add_library(komain SHARED ${komain_LIB_SRCS})
+
+QT5_WRAP_CPP(komain_HEADERS_MOC KoDocumentSectionPropertyAction_p.h)
+
+add_library(komain SHARED ${komain_HEADERS_MOC}  ${komain_LIB_SRCS})
+generate_export_header(komain
+    EXPORT_FILE_NAME komain_generated_export.h
+    )
 
 target_link_libraries(komain
-    ${KDE4_KFILE_LIBRARY}
-    ${KDE4_KIO_LIBS}
-    kowidgets
-    kotextlayout
+    PUBLIC
+        kowidgets
+        kotextlayout
+        koversion
+    PRIVATE
+        koplugin
+        KF5::Notifications
+        KF5::ItemViews
+        KF5::KIOFileWidgets
+        KF5::IconThemes
+        KF5::DBusAddons
 )
 
-if( KActivities_FOUND )
-    include_directories(${KACTIVITIES_INCLUDES})
-    target_link_libraries(komain ${KACTIVITIES_LIBRARY})
-    target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${KACTIVITIES_LIBRARY})
+if( KF5Activities_FOUND )
+    target_link_libraries(komain PRIVATE KF5::Activities)
 endif()
 
 if (APPLE)
-    target_link_libraries(komain ${FOUNDATION_LIBRARY})
+    target_link_libraries(komain PRIVATE ${FOUNDATION_LIBRARY})
 endif ()
-
-target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets ${KDE4_KIO_LIBS})
 
 set_target_properties(komain PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -113,18 +120,23 @@ install(TARGETS komain ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 ########### install files ###############
 
-install(FILES calligradocker.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
+# TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
+# calligradocker.desktop
+
 install(FILES calligra_shell.rc DESTINATION ${DATA_INSTALL_DIR}/calligra )
 
 if (APPLE)
     install(FILES osx.stylesheet DESTINATION ${DATA_INSTALL_DIR}/calligra )
 endif ()
 
+if (SHOULD_BUILD_DEVEL_HEADERS)
+
 # For now, don't install the header files because of the conflict with the komvc
 # library.
 if (FALSE)
 install( FILES
     KoApplication.h
+    KoComponentData.h
     KoDocument.h
     KoDocumentEntry.h
     KoDocumentSectionModel.h
@@ -137,7 +149,6 @@ install( FILES
     KoFilterVertex.h
     KoFindBase.h
     KoFindText.h
-    KoFindToolbar.h
     KoFindMatch.h
     KoFindOption.h
     KoFindOptionSet.h
@@ -152,7 +163,7 @@ install( FILES
     komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 
-if( QT_QTDBUS_FOUND )
+if( Qt5DBus_FOUND )
     install( FILES
         KoApplicationAdaptor.h
         KoViewAdaptor.h
@@ -160,3 +171,4 @@ if( QT_QTDBUS_FOUND )
 endif()
 endif()
 
+endif()

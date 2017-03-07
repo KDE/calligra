@@ -24,9 +24,9 @@
 
 #include "ui_kptworkpackagemergepanel.h"
 
-#include <kdialog.h>
-#include <kdatetime.h>
+#include <KoDialog.h>
 
+#include <QDateTime>
 #include <QMap>
 #include <QFrame>
 
@@ -61,13 +61,13 @@ public:
     explicit WorkPackageMergePanel(QWidget *parent = 0);
 };
 
-class KPLATOUI_EXPORT WorkPackageMergeDialog : public KDialog
+class KPLATOUI_EXPORT WorkPackageMergeDialog : public KoDialog
 {
     Q_OBJECT
 public:
     enum Columns { CheckColumn = 0, TaskNameColumn, OwnerNameColumn, DateTimeColumn };
 
-    WorkPackageMergeDialog( const QString &text, const QMap<KDateTime, Package*> &list, QWidget *parent = 0 );
+    WorkPackageMergeDialog( const QString &text, const QMap<QDateTime, Package*> &list, QWidget *parent = 0 );
     ~WorkPackageMergeDialog();
 
     QList<int> checkedList() const;

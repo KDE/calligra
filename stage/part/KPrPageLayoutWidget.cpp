@@ -23,17 +23,17 @@
 #include <QSize>
 #include <QGridLayout>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoPADocument.h>
 
+#include "StageDebug.h"
 #include "KPrPage.h"
 #include "KPresenter.h"
 #include "KPrView.h"
 #include "pagelayout/KPrPageLayout.h"
 #include "pagelayout/KPrPageLayouts.h"
 
-#include <kdebug.h>
 
 // this is needed so it can be used in a QVariant
 Q_DECLARE_METATYPE( KPrPageLayout* )
@@ -162,5 +162,3 @@ void KPrPageLayoutWidget::applyLayout( QListWidgetItem * item )
         }
     }
 }
-
-#include "KPrPageLayoutWidget.moc"

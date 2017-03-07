@@ -21,7 +21,7 @@
 #include <QVector>
 
 
-struct KoCompositeColorTransformation::Private
+struct Q_DECL_HIDDEN KoCompositeColorTransformation::Private
 {
     ~Private() {
         qDeleteAll(transformations);
@@ -35,6 +35,7 @@ KoCompositeColorTransformation::KoCompositeColorTransformation(Mode mode)
     : m_d(new Private)
 {
     Q_ASSERT_X(mode == INPLACE, "KoCompositeColorTransformation", "BUFFERED mode is not implemented yet!");
+    Q_UNUSED(mode)
 }
 
 KoCompositeColorTransformation::~KoCompositeColorTransformation()
@@ -50,9 +51,9 @@ void KoCompositeColorTransformation::appendTransform(KoColorTransformation *tran
 
 void KoCompositeColorTransformation::transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
 {
-    QVector<KoColorTransformation*>::const_iterator begin = m_d->transformations.begin();
+    QVector<KoColorTransformation*>::const_iterator begin = m_d->transformations.constBegin();
     QVector<KoColorTransformation*>::const_iterator it = begin;
-    QVector<KoColorTransformation*>::const_iterator end = m_d->transformations.end();
+    QVector<KoColorTransformation*>::const_iterator end = m_d->transformations.constEnd();
 
     for (; it != end; ++it) {
         if (it == begin) {

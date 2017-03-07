@@ -85,8 +85,8 @@ WorkPackageMergePanel::WorkPackageMergePanel( QWidget *parent )
     setupUi( this );
 }
 
-WorkPackageMergeDialog::WorkPackageMergeDialog( const QString &text, const QMap<KDateTime, Package*> &list, QWidget *parent )
-    : KDialog( parent ),
+WorkPackageMergeDialog::WorkPackageMergeDialog( const QString &text, const QMap<QDateTime, Package*> &list, QWidget *parent )
+    : KoDialog( parent ),
     m_packages( list.values() )
 {
     panel.ui_text->setText( text );
@@ -98,7 +98,7 @@ WorkPackageMergeDialog::WorkPackageMergeDialog( const QString &text, const QMap<
         panel.ui_icon->setPixmap( icon.pixmap( style()->pixelMetric( QStyle::PM_MessageBoxIconSize, &option, this ) ) );
     }
 
-    setButtons( KDialog::Yes | KDialog::No );
+    setButtons( KoDialog::Yes | KoDialog::No );
 
     panel.ui_view->setHeaderHidden( true );
     panel.ui_view->setRootIsDecorated( false );
@@ -111,7 +111,7 @@ WorkPackageMergeDialog::WorkPackageMergeDialog( const QString &text, const QMap<
         items << new QStandardItem();
         items << new QStandardItem( p->project->childNode( 0 )->name() );
         items << new QStandardItem( static_cast<Task*>( p->project->childNode( 0 ) )->workPackage().ownerName() );
-        items << new QStandardItem( KGlobal::locale()->formatDateTime( p->timeTag ) );
+        items << new QStandardItem( QLocale().toString(p->timeTag, QLocale::ShortFormat) );
 
         if ( p->toTask ) {
             items[ CheckColumn ]->setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable );
@@ -183,9 +183,7 @@ QList<int> WorkPackageMergeDialog::checkedList() const
 }
 void WorkPackageMergeDialog::slotChanged()
 {
-    enableButton( KDialog::Yes, m_model->rowCount() > 0 );
+    enableButton( KoDialog::Yes, m_model->rowCount() > 0 );
 }
 
 } // namespace KPlato
-
-#include "kptworkpackagemergedialog.moc"

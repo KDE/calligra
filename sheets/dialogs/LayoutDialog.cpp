@@ -35,6 +35,7 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include <QIntValidator>
 #include <QCheckBox>
 #include <QFrame>
 #include <QLabel>
@@ -47,19 +48,18 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QPixmap>
+#include <QSpinBox>
 
-#include <knuminput.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
-#include <kdebug.h>
 #include <klineedit.h>
-#include <knumvalidator.h>
 
 #include <KoIcon.h>
 #include <KoCanvasBase.h>
 #include <KoUnitDoubleSpinBox.h>
 #include <KoUnit.h>
 
+#include "SheetsDebug.h"
 #include "CalculationSettings.h"
 #include "Cell.h"
 #include "CellStorage.h"
@@ -231,14 +231,14 @@ void GeneralTab::styleNameChanged(const QString& name)
     if (!m_dlg->getStyleManager()->validateStyleName(name, m_dlg->getStyle())) {
         m_nameStatus->setText(i18n("A style with this name already exists."));
         m_nameStatus->show();
-        m_dlg->enableButtonOk(false);
+        m_dlg->setOkButtonEnabled(false);
     } else if (name.isEmpty()) {
         m_nameStatus->setText(i18n("The style name can not be empty."));
         m_nameStatus->show();
-        m_dlg->enableButtonOk(false);
+        m_dlg->setOkButtonEnabled(false);
     } else {
         m_nameStatus->hide();
-        m_dlg->enableButtonOk(true);
+        m_dlg->setOkButtonEnabled(true);
     }
 }
 
@@ -247,15 +247,15 @@ void GeneralTab::parentChanged(const QString& parentName)
     if (m_nameEdit->text() == parentName) {
         m_parentStatus->setText(i18n("A style cannot inherit from itself."));
         m_parentStatus->show();
-        m_dlg->enableButtonOk(false);
+        m_dlg->setOkButtonEnabled(false);
     } else if (!m_dlg->checkCircle(m_nameEdit->text(), parentName)) {
         m_parentStatus->setText(i18n("The style cannot inherit from '%1' because of recursive references.",
                                      m_parentBox->currentText()));
         m_parentStatus->show();
-        m_dlg->enableButtonOk(false);
+        m_dlg->setOkButtonEnabled(false);
     } else {
         m_parentStatus->hide();
-        m_dlg->enableButtonOk(true);
+        m_dlg->setOkButtonEnabled(true);
     }
 
     if (parentName.isEmpty() || parentName == i18n("Default"))
@@ -623,6 +623,12 @@ KLocale* CellFormatDialog::locale() const
     return m_sheet->map()->calculationSettings()->locale();
 }
 
+void CellFormatDialog::setOkButtonEnabled(bool enabled)
+{
+    buttonBox()->button(QDialogButtonBox::Ok)->setEnabled(enabled);
+}
+
+
 void CellFormatDialog::checkBorderRight(const Style& style)
 {
     if (borders[BorderType_Right].style != style.rightBorderPen().style() ||
@@ -746,8 +752,7 @@ void CellFormatDialog::init()
         formatRedAlwaysSignedPixmap  = paintFormatPixmap("+123.456", Qt::black, "-123.456", Qt::red);
     }
 
-    setCaption(i18n("Cell Format"));
-    setButtons(KDialog::Ok | KDialog::Cancel);
+    setWindowTitle(i18n("Cell Format"));
     setFaceType(KPageDialog::Tabbed);
     setMinimumWidth(600);
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
@@ -781,7 +786,7 @@ void CellFormatDialog::init()
     protectPage = new CellFormatPageProtection(this, this);
     addPage(protectPage, i18n("&Cell Protection"));
 
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotApply()));
+    connect(this, SIGNAL(accepted()), this, SLOT(slotApply()));
 }
 
 QPixmap * CellFormatDialog::paintFormatPixmap(const char * _string1, const QColor & _color1,
@@ -956,10 +961,11 @@ CellFormatPageFloat::CellFormatPageFloat(QWidget* parent, CellFormatDialog *_dlg
     postfix = new KLineEdit(box);
     postfix->setWhatsThis(i18n("You can add here a Postfix such as a $HK symbol to the end of each cell content in the checked format."));
     grid->addWidget(postfix, 2, 1);
-    precision = new KIntNumInput(dlg->precision, box, 10);
+    precision = new QSpinBox(box);
+    precision->setValue(dlg->precision);
     precision->setSpecialValueText(i18n("variable"));
-    precision->setRange(-1, 10, 1);
-    precision->setSliderEnabled(false);
+    precision->setRange(-1, 10);
+    precision->setSingleStep(1);
     precision->setWhatsThis(i18n("You can control how many digits are displayed after the decimal point for numeric values. This can also be changed using the Increase precision or Decrease precision icons in the Format toolbar. "));
     grid->addWidget(precision, 1, 1);
 
@@ -1652,6 +1658,21 @@ void CellFormatPageFloat::apply(StyleCommand* _obj)
             _obj->setCurrency(currency);
         }
     }
+    if (newFormatType == Format::Scientific) {
+        // FIXME: temprorary fix to at least get precision to work
+        // TODO: Add min-exponent-digits to dialog
+        // Custom format overrides precision, so create a proper one
+        QString format = "0.";
+        if (precision->value() > 0) {
+            for (int i = 0; i < precision->value(); ++i)
+                format.append('0');
+        }
+        format.append("E+00");
+        _obj->setCustomFormat(format);
+    } else {
+        // nothing else needs custom format
+        _obj->setCustomFormat(QString());
+    }
 }
 
 
@@ -1745,7 +1766,7 @@ CellFormatPageFont::CellFormatPageFont(QWidget* parent, CellFormatDialog *_dlg)
 
     if (dlg->bTextFontFamily) {
         selFont.setFamily(dlg->fontFamily);
-        // kDebug(36001) <<"Family =" << dlg->fontFamily;
+        // debugSheets <<"Family =" << dlg->fontFamily;
 
         if (family_combo->findItems(dlg->fontFamily, Qt::MatchExactly).size() == 0) {
             family_combo->insertItem(0, "");
@@ -1920,7 +1941,7 @@ void CellFormatPageFont::setCombos()
 
     combo = size_combo;
     if (dlg->bTextFontSize) {
-//      kDebug(36001) <<"SIZE=" << dlg->fontSize;
+//      debugSheets <<"SIZE=" << dlg->fontSize;
         selFont.setPointSize(dlg->fontSize);
         number_of_entries = size_combo->count();
         string.setNum(dlg->fontSize);
@@ -1928,7 +1949,7 @@ void CellFormatPageFont::setCombos()
         for (int i = 0; i < number_of_entries ; i++) {
             if (string == (QString) combo->itemText(i)) {
                 combo->setCurrentIndex(i);
-                // kDebug(36001) <<"Found Size" << string.data() <<" setting to item" i;
+                // debugSheets <<"Found Size" << string.data() <<" setting to item" i;
                 break;
             }
         }
@@ -2422,14 +2443,14 @@ void CellFormatPageBorder::InitializeGrids()
     const char shortcutButtonNames[BorderShortcutType_END][20] = {"remove", "all", "outline"};
 
     QString borderButtonIconNames[BorderType_END] = {
-        koIconName("border_top"), koIconName("border_bottom"),
-        koIconName("border_left"), koIconName("border_right"),
-        koIconName("border_vertical"), koIconName("border_horizontal"),
-        koIconName("border_fall"), koIconName("border_up")
+        koIconName("format-border-set-top"), koIconName("format-border-set-bottom"),
+        koIconName("format-border-set-left"), koIconName("format-border-set-right"),
+        koIconName("format-border-set-internal-vertical"), koIconName("format-border-set-internal-horizontal"),
+        koIconName("format-border-set-diagonal-tl-br"), koIconName("format-border-set-diagonal-bl-tr")
     };
 
     QString shortcutButtonIconNames[BorderShortcutType_END] = {
-        koIconName("border_remove"), QString(), koIconName("border_outline")
+        koIconName("format-border-set-none"), QString(), koIconName("format-border-set-external")
     };
 
     int borderButtonPositions[BorderType_END][2] = {{0, 2}, {4, 2}, {2, 0}, {2, 4}, {4, 4}, {4, 0}, {0, 0}, {0, 4}};
@@ -2474,11 +2495,11 @@ void CellFormatPageBorder::InitializeGrids()
     /* the "all" button is different depending on what kind of region is currently
        selected */
     if ((dlg->oneRow == true) && (dlg->oneCol == false)) {
-        shortcutButtonIconNames[BorderShortcutType_All] = koIconName("border_vertical");
+        shortcutButtonIconNames[BorderShortcutType_All] = koIconName("format-border-set-internal-vertical");
     } else if ((dlg->oneRow == false) && (dlg->oneCol == true)) {
-        shortcutButtonIconNames[BorderShortcutType_All] = koIconName("border_horizontal");
+        shortcutButtonIconNames[BorderShortcutType_All] = koIconName("format-border-set-internal-horizontal");
     } else {
-        shortcutButtonIconNames[BorderShortcutType_All] = koIconName("border_inside");
+        shortcutButtonIconNames[BorderShortcutType_All] = koIconName("format-border-set-internal");
     }
 
     for (int i = BorderShortcutType_Remove; i < BorderShortcutType_END; i++) {
@@ -2537,7 +2558,7 @@ void CellFormatPageBorder::InitializeGrids()
     size = new KComboBox(tmpQGroupBox);
     size->setEditable(true);
     grid2->addWidget(size, 7, 1);
-    size->setValidator(new KIntValidator(size));
+    size->setValidator(new QIntValidator(size));
     QString tmp;
     for (int i = 0; i < 10; i++) {
         tmp = tmp.setNum(i);
@@ -2690,7 +2711,7 @@ void CellFormatPageBorder::slotChangeStyle(int)
             preview->setPattern(preview->getColor(), penSize, Qt::SolidLine);
             break;
         default:
-            kDebug(36001) << "Error in combobox";
+            debugSheets << "Error in combobox";
             break;
         }
     }
@@ -2711,7 +2732,7 @@ QPixmap CellFormatPageBorder::paintFormatPixmap(Qt::PenStyle _style)
 
 void CellFormatPageBorder::loadIcon(const QString &iconName, BorderButton *_button)
 {
-    _button->setIcon(KIcon(iconName));
+    _button->setIcon(QIcon::fromTheme(iconName));
 }
 
 void CellFormatPageBorder::apply(StyleCommand* obj)
@@ -3390,8 +3411,8 @@ CellFormatPagePattern::CellFormatPagePattern(QWidget* parent, CellFormatDialog *
     brush10->setPattern(Qt::red, Qt::CrossPattern);
     brush11->setPattern(Qt::red, Qt::BDiagPattern);
     brush12->setPattern(Qt::red, Qt::FDiagPattern);
-    brush13->setPattern(Qt::red, Qt::VerPattern);
-    brush14->setPattern(Qt::red, Qt::DiagCrossPattern);
+    brush13->setPattern(Qt::red, Qt::DiagCrossPattern);
+    brush14->setPattern(Qt::red, Qt::SolidPattern);
     brush15->setPattern(Qt::red, Qt::NoBrush);
 
     current->setPattern(dlg->brushColor, dlg->brushStyle);
@@ -3454,14 +3475,14 @@ void CellFormatPagePattern::init()
         brush11->slotSelect();
     } else if (dlg->brushStyle == Qt::FDiagPattern) {
         brush12->slotSelect();
-    } else if (dlg->brushStyle == Qt::VerPattern) {
-        brush13->slotSelect();
     } else if (dlg->brushStyle == Qt::DiagCrossPattern) {
+        brush13->slotSelect();
+    } else if (dlg->brushStyle == Qt::SolidPattern) {
         brush14->slotSelect();
     } else if (dlg->brushStyle == Qt::NoBrush) {
         brush15->slotSelect();
     } else
-        kDebug(36001) << "Error in brushStyle";
+        debugSheets << "Error in brushStyle";
 }
 
 void CellFormatPagePattern::slotSetColorButton(const QColor &_color)
@@ -3548,5 +3569,3 @@ void CellFormatPagePattern::apply(StyleCommand *_obj)
     if (!b_notAnyColor)
         _obj->setBackgroundColor(bgColor);
 }
-
-#include "LayoutDialog.moc"

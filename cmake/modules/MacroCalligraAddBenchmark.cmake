@@ -23,7 +23,8 @@ macro (CALLIGRA_ADD_BENCHMARK _test_NAME)
         set(_nogui "NOGUI")
     endif()
 
-    kde4_add_executable( ${_test_NAME} TEST ${_srcList} )
+    add_executable( ${_test_NAME} ${_srcList} )
+    ecm_mark_as_test(${_test_NAME})
 
     if(NOT KDE4_TEST_OUTPUT)
         set(KDE4_TEST_OUTPUT plaintext)
@@ -69,7 +70,7 @@ macro (CALLIGRA_ADD_BENCHMARK _test_NAME)
 
     if (NOT MSVC_IDE)   #not needed for the ide
         # if the tests are EXCLUDE_FROM_ALL, add a target "buildtests" to build all tests
-        if (NOT KDE4_BUILD_TESTS)
+        if (NOT BUILD_TESTING)
            get_directory_property(_buildtestsAdded BUILDTESTS_ADDED)
            if(NOT _buildtestsAdded)
               add_custom_target(buildtests)

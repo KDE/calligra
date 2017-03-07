@@ -26,8 +26,6 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
-#include <klocale.h>
-
 using namespace Calligra::Sheets;
 
 // prototypes (sorted alphabetically)
@@ -44,7 +42,7 @@ Value func_true(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_xor(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("logic", LogicModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadlogicmodule.json", LogicModule)
 
 
 LogicModule::LogicModule(QObject* parent, const QVariantList&)
@@ -302,4 +300,4 @@ Value func_xor(valVector args, ValueCalc *calc, FuncExtra *)
     return Value((count.asInteger() & 1) == 1);
 }
 
-#include "LogicModule.moc"
+#include "logic.moc"

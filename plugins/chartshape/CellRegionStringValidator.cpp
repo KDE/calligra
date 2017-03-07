@@ -21,13 +21,10 @@
 // Own
 #include "CellRegionStringValidator.h"
 
-// Qt
-#include <QDebug>
-
-// KChart
+// KoChart
 #include "CellRegion.h"
 
-using namespace KChart;
+using namespace KoChart;
 
 class CellRegionStringValidator::Private
 {

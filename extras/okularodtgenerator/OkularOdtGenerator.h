@@ -20,14 +20,19 @@
 #ifndef OKULARODTGENERATOR_H
 #define OKULARODTGENERATOR_H
 
+#include "kookulargenerator_odt_export.h"
+
 #include <okular/core/generator.h>
 #include <okular/core/document.h>
 #include <okular/core/version.h>
 
 class KWDocument;
 
-class OkularOdtGenerator : public Okular::Generator
+class KOOKULARGENERATOR_ODT_EXPORT OkularOdtGenerator : public Okular::Generator
 {
+    Q_OBJECT
+    Q_INTERFACES( Okular::Generator )
+
 public:
     OkularOdtGenerator( QObject *parent, const QVariantList &args );
     ~OkularOdtGenerator();
@@ -37,15 +42,14 @@ public:
     bool canGeneratePixmap() const;
     void generatePixmap( Okular::PixmapRequest *request );
 
-#if OKULAR_IS_VERSION(0, 20, 60)
     Okular::DocumentInfo generateDocumentInfo( const QSet<Okular::DocumentInfo::Key> &keys ) const;
-#else
-    const Okular::DocumentInfo* generateDocumentInfo();
-#endif
     const Okular::DocumentSynopsis* generateDocumentSynopsis();
+
+    bool canGenerateTextPage() const;
 
 protected:
     bool doCloseDocument();
+    Okular::TextPage* textPage( Okular::Page *page );
 
 private:
     KWDocument* m_doc;

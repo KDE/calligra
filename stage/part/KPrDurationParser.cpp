@@ -21,14 +21,14 @@
 
 #include <QRegExp>
 #include <QStringList>
-#include <kglobal.h>
+#include <QGlobalStatic>
+
+// define the regex used as statics
+Q_GLOBAL_STATIC_WITH_ARGS(QRegExp, clockRegEx, ("^(?:(\\d+):)?(\\d{2}):(\\d{2}(?:\\.\\d+)?)$"))
+Q_GLOBAL_STATIC_WITH_ARGS(QRegExp, timecountRegEx, ("^(\\d+(?:\\.\\d+)?)(h|min|s|ms)?$"))
 
 int KPrDurationParser::durationMs(const QString & duration)
 {
-    // define the regex used as statics
-    K_GLOBAL_STATIC_WITH_ARGS(QRegExp, clockRegEx, ("^(?:(\\d+):)?(\\d{2}):(\\d{2}(?:\\.\\d+)?)$"))
-    K_GLOBAL_STATIC_WITH_ARGS(QRegExp, timecountRegEx, ("^(\\d+(?:\\.\\d+)?)(h|min|s|ms)?$"))
-
     int ms = -1;
     if (clockRegEx->indexIn(duration) != -1) {
         QStringList result(clockRegEx->capturedTexts());

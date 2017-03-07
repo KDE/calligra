@@ -34,13 +34,12 @@
 
 #include <KoIcon.h>
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <kstandarddirs.h>
-#include <kcomponentdata.h>
+#include <klocalizedstring.h>
+#include <KoResourcePaths.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
+#include <ksharedconfig.h>
 
 #include <QGridLayout>
 #include <QListView>
@@ -50,8 +49,10 @@
 #include <QSize>
 #include <QToolButton>
 #include <QDir>
+#include <QMap>
 #include <QMenu>
 #include <QPainter>
+#include <QDebug>
 
 //This class is needed so that the menu returns a sizehint based on the layout and not on the number (0) of menu items
 class CollectionMenu : public QMenu
@@ -148,10 +149,10 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget* parent)
     m_layout->setRowStretch(1, 1);
     m_layout->setColumnStretch(2, 1);
 
-    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea )), this, SLOT(locationChanged(Qt::DockWidgetArea)));
+    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(locationChanged(Qt::DockWidgetArea)));
 
-    connect(m_quickView, SIGNAL(clicked(const QModelIndex&)),
-            this, SLOT(activateShapeCreationToolFromQuick(const QModelIndex&)));
+    connect(m_quickView, SIGNAL(clicked(QModelIndex)),
+            this, SLOT(activateShapeCreationToolFromQuick(QModelIndex)));
 
     m_moreShapes = new QToolButton(mainWidget);
     m_moreShapes->setText(i18n("More"));
@@ -176,8 +177,8 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget* parent)
     m_collectionChooser->setMovement(QListView::Static);
     m_collectionChooser->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_collectionChooser->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    connect(m_collectionChooser, SIGNAL(itemClicked(QListWidgetItem *)),
-            this, SLOT(activateShapeCollection(QListWidgetItem *)));
+    connect(m_collectionChooser, SIGNAL(itemClicked(QListWidgetItem*)),
+            this, SLOT(activateShapeCollection(QListWidgetItem*)));
 
 
     m_addCollectionButton = new QToolButton (m_moreShapesContainer);
@@ -198,10 +199,16 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget* parent)
     connect(m_closeCollectionButton, SIGNAL(clicked()),
             this, SLOT(removeCurrentCollection()));
 
-    if(! KGlobal::activeComponent().dirs()->resourceDirs("app_shape_collections").isEmpty())
-    {
-        buildAddCollectionMenu();
-    }
+    // QT5TODO: app_shape_collections was only used with Flow in 2.x times
+    // Now the StencilBoxDocker parses all the stencils and adds them to the KoShapeRegistry,
+    // worse, sometimes does it before and sometimes after this constructor is run.
+    // As temporary solution StencilBoxDocker only shows all stencils, and only those,
+    // while all other shapes are only available by this docker.
+    // See family "stencil"
+//     if(! KoResourcePaths::resourceDirs("app_shape_collections").isEmpty())
+//     {
+//         buildAddCollectionMenu();
+//     }
 
     m_collectionView = new QListView (m_moreShapesContainer);
     containerLayout->addWidget(m_collectionView, 0, 2, -1, 1);
@@ -213,8 +220,8 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget* parent)
     m_collectionView->setFixedSize(QSize(165,345));
     m_collectionView->setWordWrap(true);
 
-    connect(m_collectionView, SIGNAL(clicked(const QModelIndex&)),
-            this, SLOT(activateShapeCreationTool(const QModelIndex&)));
+    connect(m_collectionView, SIGNAL(clicked(QModelIndex)),
+            this, SLOT(activateShapeCreationTool(QModelIndex)));
 
     // Load the default shapes and add them to the combobox
     loadDefaultShapes();
@@ -230,24 +237,36 @@ void ShapeCollectionDocker::unsetCanvas()
     setEnabled(false);
 }
 
+static
+bool operator<(const KoShapeTemplate &left, const KoShapeTemplate &right)
+{
+    const auto &leftId = left.templateId.isEmpty() ? left.id : left.templateId;
+    const auto &rightId = right.templateId.isEmpty() ? right.id : right.templateId;
+    return leftId < rightId;
+}
+
 void ShapeCollectionDocker::loadDefaultShapes()
 {
-    QList<KoCollectionItem> defaultList;
-    QList<KoCollectionItem> arrowList;
-    QList<KoCollectionItem> funnyList;
-    QList<KoCollectionItem> geometricList;
-    QList<KoCollectionItem> quicklist;
+    QMap<KoShapeTemplate, KoCollectionItem> defaultList;
+    QMap<KoShapeTemplate, KoCollectionItem> arrowList;
+    QMap<KoShapeTemplate, KoCollectionItem> funnyList;
+    QMap<KoShapeTemplate, KoCollectionItem> geometricList;
+    QMap<KoShapeTemplate, KoCollectionItem> quicklist;
     int quickCount=0;
 
     QStringList quickShapes;
     quickShapes << "TextShapeID" << "PictureShape" << "ChartShape" << "ArtisticText";
-    KConfigGroup cfg = KGlobal::config()->group("KoShapeCollection");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoShapeCollection");
     quickShapes = cfg.readEntry("QuickShapes", quickShapes);
 
     foreach(const QString & id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(id);
         // don't show hidden factories
         if ( factory->hidden() ) {
+            continue;
+        }
+        // don't show stencil factories for now, exclusively available by StencilBox
+        if ( factory->family() == QLatin1String("stencil") ) {
             continue;
         }
         bool oneAdded = false;
@@ -258,16 +277,16 @@ void ShapeCollectionDocker::loadDefaultShapes()
             temp.id = shapeTemplate.id;
             temp.name = shapeTemplate.name;
             temp.toolTip = shapeTemplate.toolTip;
-            temp.icon = KIcon(shapeTemplate.iconName);
+            temp.icon = QIcon::fromTheme(shapeTemplate.iconName);
             temp.properties = shapeTemplate.properties;
             if(shapeTemplate.family == "funny")
-                funnyList.append(temp);
+                funnyList[shapeTemplate] = temp;
             else if(shapeTemplate.family == "arrow")
-                arrowList.append(temp);
+                arrowList[shapeTemplate] = temp;
             else if(shapeTemplate.family == "geometric")
-                geometricList.append(temp);
+                geometricList[shapeTemplate] = temp;
             else
-                defaultList.append(temp);
+                defaultList[shapeTemplate] = temp;
 
             QString id= temp.id;
             if (!shapeTemplate.templateId.isEmpty()) {
@@ -275,52 +294,54 @@ void ShapeCollectionDocker::loadDefaultShapes()
             }
 
             if (quickShapes.contains(id)) {
-                quicklist.append(temp);
+                quicklist[shapeTemplate] = temp;
                 quickCount++;
             }
         }
 
         if(!oneAdded) {
             KoCollectionItem temp;
-            temp.id = factory->id();
-            temp.name = factory->name();
-            temp.toolTip = factory->toolTip();
-            temp.icon = KIcon(factory->iconName());
-            temp.properties = 0;
+            KoShapeTemplate tempShape;
+            temp.id = tempShape.id = factory->id();
+            temp.name = tempShape.name = factory->name();
+            temp.toolTip = tempShape.toolTip = factory->toolTip();
+            temp.icon = QIcon::fromTheme(factory->iconName());
+            tempShape.iconName = factory->iconName();
+            temp.properties = tempShape.properties = 0;
             if(factory->family() == "funny")
-                funnyList.append(temp);
+                funnyList[tempShape] = temp;
             else if(factory->family() == "arrow")
-                arrowList.append(temp);
+                arrowList[tempShape] = temp;
             else if(factory->family() == "geometric")
-                geometricList.append(temp);
+                geometricList[tempShape] = temp;
             else
-                defaultList.append(temp);
+                defaultList[tempShape] = temp;
 
             if(quickShapes.contains(temp.id)) {
-                quicklist.append(temp);
+                quicklist[tempShape] = temp;
                 quickCount++;
             }
         }
     }
 
     CollectionItemModel* model = new CollectionItemModel(this);
-    model->setShapeTemplateList(defaultList);
+    model->setShapeTemplateList(defaultList.values());
     addCollection("default", i18n("Default"), model);
 
     model = new CollectionItemModel(this);
-    model->setShapeTemplateList(geometricList);
+    model->setShapeTemplateList(geometricList.values());
     addCollection("geometric", i18n("Geometrics"), model);
 
     model = new CollectionItemModel(this);
-    model->setShapeTemplateList(arrowList);
+    model->setShapeTemplateList(arrowList.values());
     addCollection("arrow", i18n("Arrows"), model);
 
     model = new CollectionItemModel(this);
-    model->setShapeTemplateList(funnyList);
+    model->setShapeTemplateList(funnyList.values());
     addCollection("funny", i18n("Funny"), model);
 
     CollectionItemModel* quickModel = new CollectionItemModel(this);
-    quickModel->setShapeTemplateList(quicklist);
+    quickModel->setShapeTemplateList(quicklist.values());
     m_quickView->setModel(quickModel);
 
     int fw = m_quickView->frameWidth();
@@ -381,7 +402,7 @@ void ShapeCollectionDocker::activateShapeCollection(QListWidgetItem *item)
         m_collectionView->setModel(m_modelMap[id]);
     }
     else
-        kWarning(31000) << "Didn't find a model with id ==" << id;
+        qCritical() << "Didn't find a model with id ==" << id;
 
     m_closeCollectionButton->setEnabled(id != "default");
 }
@@ -401,7 +422,7 @@ bool ShapeCollectionDocker::addCollection(const QString& id, const QString& titl
 
 void ShapeCollectionDocker::buildAddCollectionMenu()
 {
-    QStringList dirs = KGlobal::activeComponent().dirs()->resourceDirs("app_shape_collections");
+    QStringList dirs = KoResourcePaths::resourceDirs("app_shape_collections");
     QMenu* menu = new QMenu(m_addCollectionButton);
     m_addCollectionButton->setMenu(menu);
 
@@ -431,7 +452,6 @@ void ShapeCollectionDocker::scanCollectionDir(const QString& path, QMenu* menu)
     QString name = dg.readEntry("Name");
     QString icon = dg.readEntry("Icon");
     QString type = dg.readEntry("X-KDE-DirType");
-    //kDebug() << name << type;
 
     if(type == "subdir") {
         QMenu* submenu = menu->addMenu(QIcon(dir.absoluteFilePath(icon)), name);
@@ -470,8 +490,8 @@ void ShapeCollectionDocker::loadCollection()
     if(type == "odg-collection")
     {
         OdfCollectionLoader* loader = new OdfCollectionLoader(path, this);
-        connect(loader, SIGNAL(loadingFailed(const QString&)),
-                this, SLOT(onLoadingFailed(const QString&)));
+        connect(loader, SIGNAL(loadingFailed(QString)),
+                this, SLOT(onLoadingFailed(QString)));
         connect(loader, SIGNAL(loadingFinished()),
                 this, SLOT(onLoadingFinished()));
 
@@ -500,7 +520,7 @@ void ShapeCollectionDocker::onLoadingFinished()
 
     if(!loader)
     {
-        kWarning(31000) << "Not called by a OdfCollectionLoader!";
+        qWarning() << "Not called by a OdfCollectionLoader!";
         return;
     }
 
@@ -570,5 +590,3 @@ void ShapeCollectionDocker::removeCurrentCollection()
 {
 //TODO    removeCollection(m_collectionsCombo->itemData(m_collectionsCombo->currentIndex()).toString());
 }
-
-#include <ShapeCollectionDocker.moc>

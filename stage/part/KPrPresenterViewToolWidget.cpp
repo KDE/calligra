@@ -117,6 +117,3 @@ void KPrPresenterViewToolWidget::updateClock()
     m_timerLabel->setText( QString( "%1:%2:%3").arg( hour, 2, 10, QChar( '0' ) )
             .arg( min, 2, 10, QChar( '0' ) ).arg( sec, 2, 10, QChar( '0' ) ) );
 }
-
-#include "KPrPresenterViewToolWidget.moc"
-

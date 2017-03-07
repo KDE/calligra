@@ -21,7 +21,6 @@
 #define _SECTION_CONTAINER_H_
 
 #include <KoShapeBasedDocumentBase.h>
-
 #include <KoShapeContainer.h>
 
 class KoShapeLayer;

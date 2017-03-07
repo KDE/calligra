@@ -45,7 +45,7 @@
 
 #include <QPainter>
 #include <QTimer>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 
 void KoShapeManager::Private::updateTree()
@@ -230,7 +230,7 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
         unsortedShapes = d->tree.intersects(rect);
     } else {
         unsortedShapes = shapes();
-        kWarning() << "KoShapeManager::paint  Painting with a painter that has no clipping will lead to too much being painted!";
+        warnFlake << "KoShapeManager::paint  Painting with a painter that has no clipping will lead to too much being painted!";
     }
 
     // filter all hidden shapes from the list
@@ -404,7 +404,7 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
                     result = filterEffect->processImage(imageBuffers.value(input), renderContext);
                 }
             } else {
-                QList<QImage> inputImages;
+                QVector<QImage> inputImages;
                 foreach(const QString &input, filterEffect->inputs()) {
                     QImage image = imageBuffers.value(input);
                     if (!image.isNull())
@@ -587,4 +587,5 @@ KoCanvasBase *KoShapeManager::canvas()
     return d->canvas;
 }
 
-#include <KoShapeManager.moc>
+//have to include this because of Q_PRIVATE_SLOT
+#include "moc_KoShapeManager.cpp"

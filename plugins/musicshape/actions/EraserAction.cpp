@@ -38,8 +38,8 @@
 
 #include <KoIcon.h>
 
-#include <kdebug.h>
-#include <klocale.h>
+#include "MusicDebug.h"
+#include <klocalizedstring.h>
 
 #include <math.h>
 

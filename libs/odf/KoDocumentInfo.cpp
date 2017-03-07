@@ -30,13 +30,12 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
-#include <kglobal.h>
-#include <klocale.h>
+#include <OdfDebug.h>
+#include <klocalizedstring.h>
 #include <kuser.h>
 #include <kemailsettings.h>
 
-#include <calligraversion.h>
+#include <CalligraVersionWrapper.h>
 
 
 KoDocumentInfo::KoDocumentInfo(QObject *parent) : QObject(parent)
@@ -122,7 +121,7 @@ bool KoDocumentInfo::saveOasis(KoStore *store)
 
     xmlWriter->startElement("meta:generator");
     xmlWriter->addTextNode(QString("Calligra/%1")
-                           .arg(CALLIGRA_VERSION_STRING));
+                           .arg(CalligraVersionWrapper::versionString()));
     xmlWriter->endElement();
 
     if (!saveOasisAboutInfo(*xmlWriter))
@@ -275,12 +274,12 @@ bool KoDocumentInfo::saveOasisAboutInfo(KoXmlWriter &xmlWriter)
             } else if (tag == "title" || tag == "description" || tag == "subject" ||
                        tag == "date" || tag == "language") {
                 QByteArray elementName(QString("dc:" + tag).toLatin1());
-                xmlWriter.startElement(elementName);
+                xmlWriter.startElement(elementName.constData());
                 xmlWriter.addTextNode(aboutInfo(tag));
                 xmlWriter.endElement();
             } else {
                 QByteArray elementName(QString("meta:" + tag).toLatin1());
-                xmlWriter.startElement(elementName);
+                xmlWriter.startElement(elementName.constData());
                 xmlWriter.addTextNode(aboutInfo(tag));
                 xmlWriter.endElement();
             }
@@ -300,7 +299,7 @@ bool KoDocumentInfo::loadOasisAboutInfo(const KoXmlNode &metaDoc)
             continue;
         }
 
-        //kDebug( 30003 )<<"localName="<<e.localName();
+        //debugOdf<<"localName="<<e.localName();
         if (tag == "keyword") {
             if (!e.text().isEmpty())
                 keywords << e.text().trimmed();
@@ -466,5 +465,3 @@ void KoDocumentInfo::setOriginalGenerator(const QString &generator)
 {
     m_generator = generator;
 }
-
-#include <KoDocumentInfo.moc>

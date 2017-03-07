@@ -52,7 +52,7 @@ void ParagraphDropCaps::dropCapsStateChanged()
     emit parStyleChanged();
 }
 
-void ParagraphDropCaps::setDisplay(KoParagraphStyle *style)
+void ParagraphDropCaps::setDisplay(KoParagraphStyle *style, bool directFormattingMode)
 {
     if (!style)
         return;
@@ -66,10 +66,10 @@ void ParagraphDropCaps::setDisplay(KoParagraphStyle *style)
     widget.characters->setValue(style->dropCapsLength());
     widget.lines->setValue(style->dropCapsLines());
 
-    m_dropCapsInherited = !style->hasProperty(KoParagraphStyle::DropCaps);
-    m_capsDistanceInherited = !style->hasProperty(KoParagraphStyle::DropCapsDistance);
-    m_capsLengthInherited = !style->hasProperty(KoParagraphStyle::DropCapsLength);
-    m_capsLinesInherited = !style->hasProperty(KoParagraphStyle::DropCapsLines);
+    m_dropCapsInherited = directFormattingMode || !style->hasProperty(KoParagraphStyle::DropCaps);
+    m_capsDistanceInherited = directFormattingMode || !style->hasProperty(KoParagraphStyle::DropCapsDistance);
+    m_capsLengthInherited = directFormattingMode || !style->hasProperty(KoParagraphStyle::DropCapsLength);
+    m_capsLinesInherited = directFormattingMode || !style->hasProperty(KoParagraphStyle::DropCapsLines);
 }
 
 void ParagraphDropCaps::save(KoParagraphStyle *style)

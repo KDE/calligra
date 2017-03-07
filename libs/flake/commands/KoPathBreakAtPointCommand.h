@@ -53,7 +53,7 @@ private:
     QList<KoPathPoint*> m_points;
     // used for storing where to open the subpath. In case it not used for the open
     // status use .second to the store offset caused by a open of a subpath.
-    QList<KoPathPointIndex> m_closedIndex;
+    QVector<KoPathPointIndex> m_closedIndex;
     bool m_deletePoints;
 };
 

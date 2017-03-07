@@ -41,7 +41,7 @@
 using namespace Calligra::Sheets;
 
 GotoDialog::GotoDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Goto Cell"));
     setObjectName(QLatin1String("GotoDialog"));
@@ -95,5 +95,3 @@ void GotoDialog::slotOk()
         m_nameCell->setItemText(m_nameCell->currentIndex(), "");
     }
 }
-
-#include "GotoDialog.moc"

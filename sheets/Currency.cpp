@@ -21,7 +21,7 @@
 // Locale
 #include "Currency.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 using namespace Calligra::Sheets;
 
@@ -142,7 +142,7 @@ static const Money lMoney[] = {
     { "CUP", I18N_NOOP("Cuba"), I18N_NOOP("Cuban Peso"), I18N_NOOP("CUP") },
     { "EUR", I18N_NOOP("Cyprus"), I18N_NOOP("Euro"), I18N_NOOP("EUR") },
     { "CYP", I18N_NOOP("Cyprus"), I18N_NOOP("Cyprus Pound"), I18N_NOOP("CYP") },
-    { "CZK", I18N_NOOP("Czech Republic"), I18N_NOOP("Czech Koruna"), I18N_NOOP("Kc") },
+    { "CZK", I18N_NOOP("Czechia"), I18N_NOOP("Czech Koruna"), I18N_NOOP("Kc") },
     { "DKK", I18N_NOOP("Denmark"), I18N_NOOP("Danish Krone"), I18N_NOOP("kr") },
     { "DJF", I18N_NOOP("Djibouti"), I18N_NOOP("Djibouti Franc"), I18N_NOOP("DJF") },
     { "XCD", I18N_NOOP("Dominica"), I18N_NOOP("East Caribbean Dollar"), I18N_NOOP("RD$") },

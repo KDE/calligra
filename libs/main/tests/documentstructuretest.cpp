@@ -19,11 +19,7 @@
 
 #include "documentstructuretest.h"
 
-#include <QDebug>
-#include <QtTest>
-#include <QtGui>
-
-
+#include <QTest>
 
 #include <KoDocument.h>
 #include <KoDocumentInfo.h>
@@ -31,17 +27,14 @@
 #include <KoXmlReader.h>
 #include <KoOdfReadStore.h>
 #include <KoXmlNS.h>
-#include <kcomponentdata.h>
 
 // May the testing begin
 DocumentStructureTest::DocumentStructureTest()
 {
-    componentData = new KComponentData("DocumentStructureTest");
 }
 
 DocumentStructureTest::~DocumentStructureTest()
 {
-    delete componentData;
 }
 
 // initTestCase/cleanupTestCase are called beginning and end of test suite
@@ -159,5 +152,3 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     return QTest::qExec(new DocumentStructureTest, argc, argv);
 }
-
-#include <documentstructuretest.moc>

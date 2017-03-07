@@ -19,7 +19,6 @@
 #ifndef RGBCOMPOSITEOPIN_H
 #define RGBCOMPOSITEOPIN_H
 
-#include "KoColorSpaceMaths.h"
 #include <KoCompositeOp.h>
 
 #define SCALE_TO_FLOAT( v ) KoColorSpaceMaths< channels_type, float>::scaleToA( v )
@@ -33,8 +32,9 @@ class RgbCompositeOpIn : public KoCompositeOp
 
 public:
 
-    RgbCompositeOpIn(KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_IN, i18n("In"), "") {
+    RgbCompositeOpIn(KoColorSpace *cs)
+        : KoCompositeOp(cs, COMPOSITE_IN, i18n("In"), "")
+    {
     }
 
     using KoCompositeOp::composite;
@@ -44,12 +44,14 @@ public:
                    const quint8 *maskRowStart, qint32 maskRowStride,
                    qint32 rows, qint32 numColumns,
                    quint8 opacity,
-                   const QBitArray & channelFlags) const {
+                   const QBitArray &channelFlags) const
+    {
         Q_UNUSED(maskRowStart);
         Q_UNUSED(maskRowStride);
 
-        if (opacity == OPACITY_TRANSPARENT_U8)
+        if (opacity == OPACITY_TRANSPARENT_U8) {
             return;
+        }
 
         channels_type *d;
         const channels_type *s;
@@ -67,15 +69,18 @@ public:
                 if (s[_CSTraits::alpha_pos] == NATIVE_OPACITY_TRANSPARENT) {
                     d[_CSTraits::alpha_pos] = NATIVE_OPACITY_TRANSPARENT;
                     continue;
-                } else if (s[_CSTraits::alpha_pos] == NATIVE_OPACITY_OPAQUE)
+                } else if (s[_CSTraits::alpha_pos] == NATIVE_OPACITY_OPAQUE) {
                     continue;
-                if (d[_CSTraits::alpha_pos] == NATIVE_OPACITY_TRANSPARENT)
+                }
+                if (d[_CSTraits::alpha_pos] == NATIVE_OPACITY_TRANSPARENT) {
                     continue;
+                }
 
                 alpha = (qreal)(s[_CSTraits::alpha_pos]) * d[_CSTraits::alpha_pos] / NATIVE_OPACITY_OPAQUE;
 
-                if (channelFlags.isEmpty() || channelFlags.testBit(_CSTraits::alpha_pos))
+                if (channelFlags.isEmpty() || channelFlags.testBit(_CSTraits::alpha_pos)) {
                     d[_CSTraits::alpha_pos] = (channels_type)((d[_CSTraits::alpha_pos] * alpha / NATIVE_OPACITY_OPAQUE) + 0.5);
+                }
 
             }
             dstRowStart += dstRowStride;

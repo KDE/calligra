@@ -22,18 +22,16 @@
 #include "KoPathPoint.h"
 #include "KoPathShape.h"
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <QPainter>
 #include <QPointF>
 
 #include <math.h>
 
-#ifndef QT_NO_DEBUG
 #include <qnumeric.h> // for qIsNaN
 static bool qIsNaNPoint(const QPointF &p) {
     return qIsNaN(p.x()) || qIsNaN(p.y());
 }
-#endif
 
 class KoPathPoint::Private
 {
@@ -124,7 +122,8 @@ void KoPathPoint::setPoint(const QPointF &point)
 
 void KoPathPoint::setControlPoint1(const QPointF &point)
 {
-    Q_ASSERT(!qIsNaNPoint(point));
+    if (qIsNaNPoint(point)) return;
+
     d->controlPoint1 = point;
     d->activeControlPoint1 = true;
     if (d->shape)
@@ -133,7 +132,8 @@ void KoPathPoint::setControlPoint1(const QPointF &point)
 
 void KoPathPoint::setControlPoint2(const QPointF &point)
 {
-    Q_ASSERT(!qIsNaNPoint(point));
+    if (qIsNaNPoint(point)) return;
+
     d->controlPoint2 = point;
     d->activeControlPoint2 = true;
     if (d->shape)

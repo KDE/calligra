@@ -61,6 +61,7 @@ public:
 
     // for multi clicking (double click or triple click) we need the following
     int multiClickCount;
+    Qt::MouseButton multiClickButton;
     QPointF multiClickGlobalPoint;
     QTime multiClickTimeStamp;
 };

@@ -25,6 +25,8 @@
 // Local
 #include "ValidityDialog.h"
 
+#include <QIntValidator>
+#include <QDoubleValidator>
 #include <QCheckBox>
 #include <QPushButton>
 #include <QLabel>
@@ -32,10 +34,9 @@
 #include <QFrame>
 
 #include <kcombobox.h>
-#include <kdebug.h>
+#include "SheetsDebug.h"
 #include <klineedit.h>
 #include <kmessagebox.h>
-#include <knumvalidator.h>
 #include <ktextedit.h>
 
 #include "CalculationSettings.h"
@@ -59,10 +60,10 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
 
 {
     setFaceType(Tabbed);
-    setCaption(i18n("Validity"));
+    setWindowTitle(i18n("Validity"));
     setModal(true);
-    setButtons(Ok | Cancel | User1);
-    setButtonGuiItem(User1, KGuiItem(i18n("Clear &All")));
+
+    QPushButton *clearAllButton = buttonBox()->addButton(i18n("Clear &All"), QDialogButtonBox::ActionRole);
 
     m_selection = selection;
 
@@ -112,7 +113,7 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
 
     val_min = new KLineEdit(page1);
     tmpGridLayout->addWidget(val_min, 3, 1);
-    val_min->setValidator(new KDoubleValidator(val_min));
+    val_min->setValidator(new QDoubleValidator(val_min));
 
     edit2 = new QLabel(page1);
     edit2->setText(i18n("Maximum:"));
@@ -120,7 +121,7 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
 
     val_max = new KLineEdit(page1);
     tmpGridLayout->addWidget(val_max, 4, 1);
-    val_max->setValidator(new KDoubleValidator(val_max));
+    val_max->setValidator(new QDoubleValidator(val_max));
 
     //Apply minimum width of column1 to avoid horizontal move when changing option
     //A bit ugly to apply text always, but I couldn't get a label->QFontMetrix.boundingRect("text").width()
@@ -212,8 +213,8 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
 
     connect(choose, SIGNAL(activated(int)), this, SLOT(changeIndexCond(int)));
     connect(chooseType, SIGNAL(activated(int)), this, SLOT(changeIndexType(int)));
-    connect(this, SIGNAL(okClicked()), SLOT(OkPressed()));
-    connect(this, SIGNAL(user1Clicked()), SLOT(clearAllPressed()));
+    connect(this, SIGNAL(accepted()), SLOT(OkPressed()));
+    connect(clearAllButton, SIGNAL(clicked(bool)), SLOT(clearAllPressed()));
 
     init();
 }
@@ -270,8 +271,8 @@ void ValidityDialog::changeIndexType(int _index)
     case 1:
         val_min->setEnabled(true);
         choose->setEnabled(true);
-        val_min->setValidator(new KDoubleValidator(val_min));
-        val_max->setValidator(new KDoubleValidator(val_max));
+        val_min->setValidator(new QDoubleValidator(val_min));
+        val_max->setValidator(new QDoubleValidator(val_max));
         if (choose->currentIndex() <= 4) {
             edit1->setText(i18n("Number:"));
             edit2->setText("");
@@ -286,8 +287,8 @@ void ValidityDialog::changeIndexType(int _index)
     case 6:
         val_min->setEnabled(true);
         choose->setEnabled(true);
-        val_min->setValidator(new KIntValidator(val_min));
-        val_max->setValidator(new KIntValidator(val_max));
+        val_min->setValidator(new QIntValidator(val_min));
+        val_max->setValidator(new QIntValidator(val_max));
         if (choose->currentIndex() <= 4) {
             edit1->setText(i18n("Number:"));
             edit2->setText("");
@@ -428,9 +429,9 @@ void ValidityDialog::init()
             break;
         case Validity::Time:
             chooseType->setCurrentIndex(5);
-            val_min->setText(locale->formatTime(validity.minimumValue().asTime(settings), true));
+            val_min->setText(locale->formatTime(validity.minimumValue().asTime(), true));
             if (validity.condition() >= 5)
-                val_max->setText(locale->formatTime(validity.maximumValue().asTime(settings), true));
+                val_max->setText(locale->formatTime(validity.maximumValue().asTime(), true));
             break;
         case Validity::List: {
             chooseType->setCurrentIndex(7);
@@ -613,5 +614,3 @@ void ValidityDialog::OkPressed()
 
     accept();
 }
-
-#include "ValidityDialog.moc"

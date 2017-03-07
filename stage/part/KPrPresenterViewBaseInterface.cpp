@@ -34,6 +34,3 @@ void KPrPresenterViewBaseInterface::setActivePage( int pageIndex )
 {
     m_activePage = pageIndex;
 }
-
-#include "KPrPresenterViewBaseInterface.moc"
-

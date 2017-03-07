@@ -24,15 +24,13 @@
 #include "kpttask.h"
 #include "kptnode.h"
 
-#include <klocale.h>
-
-#include <kdebug.h>
+#include <KLocalizedString>
 
 namespace KPlato
 {
 
 TaskProgressDialog::TaskProgressDialog(Task &task, ScheduleManager *sm, StandardWorktime *workTime, QWidget *p)
-    : KDialog( p),
+    : KoDialog( p),
     m_node( &task )
 {
     setCaption( i18n("Task Progress") );
@@ -80,5 +78,3 @@ MacroCommand *TaskProgressDialog::buildCommand() {
 
 
 }  //KPlato namespace
-
-#include "kpttaskprogressdialog.moc"

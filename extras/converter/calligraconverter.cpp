@@ -20,15 +20,15 @@
 */
 
 #include <QTimer>
+#include <QMimeDatabase>
+#include <QMimeType>
+#include <QCommandLineParser>
+#include <QApplication>
+#include <QDebug>
 
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
-#include <klocale.h>
-#include <kglobal.h>
-#include <kmimetype.h>
-#include <kapplication.h>
-#include <kdebug.h>
-#include <kio/netaccess.h>
+#include <KAboutData>
+#include <klocalizedstring.h>
+#include <KoNetAccess.h>
 #include <kio/job.h>
 
 #include <KoDocumentEntry.h>
@@ -37,10 +37,10 @@
 #include <KoFilterManager.h>
 #include <KoPrintJob.h>
 #include <KoView.h>
-
 #include <calligraversion.h>
 
-bool convertPdf(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, const QString &outputFormat, const QString &orientation, const QString &papersize, const QString &margin)
+
+bool convertPdf(const QUrl &uIn, const QString &inputFormat, const QUrl &uOut, const QString &outputFormat, const QString &orientation, const QString &papersize, const QString &margin)
 {
     Q_UNUSED(outputFormat);
 
@@ -126,7 +126,7 @@ bool convertPdf(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, c
     return true;
 }
 
-bool convert(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, const QString &outputFormat, bool batch)
+bool convert(const QUrl &uIn, const QString &inputFormat, const QUrl &uOut, const QString &outputFormat, bool batch)
 {
     Q_UNUSED(inputFormat);
 
@@ -140,99 +140,112 @@ bool convert(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, cons
     return status == KoFilter::OK;
 }
 
+QUrl urlFromFileArg(const QString &file)
+{
+    const QRegExp withProtocolChecker( QStringLiteral("^[a-zA-Z]+:") );
+    // convert to an url
+    const bool startsWithProtocol = (withProtocolChecker.indexIn(file) == 0);
+    return startsWithProtocol ? QUrl::fromUserInput(file) : QUrl::fromLocalFile(file);
+}
+
+
 int main(int argc, char **argv)
 {
-    KAboutData aboutData("calligraconverter", 0, ki18n("CalligraConverter"), CALLIGRA_VERSION_STRING,
-                         ki18n("Calligra Document Converter"),
-                         KAboutData::License_GPL,
-                         ki18n("(c) 2001-2011 Calligra developers"));
-    aboutData.addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");
-    aboutData.addAuthor(ki18n("Nicolas Goutte"), KLocalizedString(), "goutte@kde.org");
-    aboutData.addAuthor(ki18n("Dan Leinir Turthra Jensen"), KLocalizedString(), "admin@leinir.dk");
-    KCmdLineArgs::init(argc, argv, &aboutData);
+    KLocalizedString::setApplicationDomain( "koconverter" );
 
-    KCmdLineOptions options;
-    options.add("+in", ki18n("Input file"));
-    options.add("+out", ki18n("Output file"));
-    options.add("backup", ki18n("Make a backup of the destination file"));
-    options.add("batch", ki18n("Batch mode: do not show dialogs"));
-    options.add("interactive", ki18n("Interactive mode: show dialogs (default)"));
-    options.add("mimetype <mime>", ki18n("Mimetype of the output file"));
+    KAboutData aboutData("calligraconverter", i18n("CalligraConverter"),
+                         QStringLiteral(CALLIGRA_VERSION_STRING),
+                         i18n("Calligra Document Converter"),
+                         KAboutLicense::GPL,
+                         i18n("Copyright 2001-%1 Calligra developers", QStringLiteral(CALLIGRA_YEAR)));
+    aboutData.addAuthor(i18n("David Faure"), QString(), "faure@kde.org");
+    aboutData.addAuthor(i18n("Nicolas Goutte"), QString(), "goutte@kde.org");
+    aboutData.addAuthor(i18n("Dan Leinir Turthra Jensen"), QString(), "admin@leinir.dk");
+
+    QApplication app(argc, argv);
+    KAboutData::setApplicationData(aboutData);
+
+    QCommandLineParser parser;
+    aboutData.setupCommandLine(&parser);
+    parser.addHelpOption();
+    parser.addVersionOption();
+
+    parser.addPositionalArgument(QStringLiteral("in"), i18n("Input file"));
+    parser.addPositionalArgument(QStringLiteral("out"), i18n("Output file"));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("backup"), i18n("Make a backup of the destination file")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("batch"), i18n("Batch mode: do not show dialogs")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("interactive"), i18n("Interactive mode: show dialogs (default)")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("mimetype"), i18n("Mimetype of the output file"), QStringLiteral("mime")));
 
     // PDF related options.
-    options.add("print-orientation <name>", ki18n("The print orientation. This could be either Portrait or Landscape."));
-    options.add("print-papersize <name>", ki18n("The paper size. A4, Legal, Letter, ..."));
-    options.add("print-margin <size>", ki18n("The size of the paper margin. By default this is 0.2."));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("print-orientation"), i18n("The print orientation. This could be either Portrait or Landscape."), QStringLiteral("name")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("print-papersize"), i18n("The paper size. A4, Legal, Letter, ..."), QStringLiteral("name")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("print-margin"), i18n("The size of the paper margin. By default this is 0.2."), QStringLiteral("size")));
 
-    KCmdLineArgs::addCmdLineOptions(options);
+    parser.process(app);
+    aboutData.processCommandLine(&parser);
 
-    KApplication app;
-
-    // Install the libcalligra* translations
-    KGlobal::locale()->insertCatalog("calligra");
-
-    // Get the command line arguments which we have to parse
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    if (args->count() != 2) {
-        KCmdLineArgs::usageError(i18n("Two arguments required"));
+    const QStringList files = parser.positionalArguments();
+    if (files.count() != 2) {
+        qCritical() << i18n("Two arguments required");
         return 3;
     }
 
-    KUrl urlIn = args->url(0);
-    KUrl urlOut = args->url(1);
+    const QUrl urlIn = urlFromFileArg(files.at(0));
+    const QUrl urlOut = urlFromFileArg(files.at(1));
 
     // Are we in batch mode or in interactive mode.
-    bool batch = args->isSet("batch");
-    if (args->isSet("interactive")) {
+    bool batch = parser.isSet("batch");
+    if (parser.isSet("interactive")) {
         batch = false;
     }
 
-    if (args->isSet("backup")) {
+    if (parser.isSet("backup")) {
         // Code form koDocument.cc
         KIO::UDSEntry entry;
         if (KIO::NetAccess::stat(urlOut, entry, 0L)) {   // this file exists => backup
-            kDebug() << "Making backup...";
-            KUrl backup(urlOut);
+            qDebug() << "Making backup...";
+            QUrl backup(urlOut);
             backup.setPath(urlOut.path() + '~');
             KIO::FileCopyJob *job = KIO::file_copy(urlOut, backup, -1, KIO::Overwrite | KIO::HideProgressInfo);
             job->exec();
         }
     }
 
-
-    KMimeType::Ptr inputMimetype = KMimeType::findByUrl(urlIn);
-    if (inputMimetype->name() == KMimeType::defaultMimeType()) {
-        kError() << i18n("Mimetype for input file %1 not found!", urlIn.prettyUrl()) << endl;
+    QMimeDatabase db;
+    QMimeType inputMimetype = db.mimeTypeForUrl(urlIn);
+    if (!inputMimetype.isValid() || inputMimetype.isDefault()) {
+        qCritical() << i18n("Mimetype for input file %1 not found!", urlIn.toDisplayString());
         return 1;
     }
 
-    KMimeType::Ptr outputMimetype;
-    if (args->isSet("mimetype")) {
-        QString mime = args->getOption("mimetype");
-        outputMimetype = KMimeType::mimeType(mime);
-        if (! outputMimetype) {
-            kError() << i18n("Mimetype not found %1", mime) << endl;
+    QMimeType outputMimetype;
+    if (parser.isSet("mimetype")) {
+        QString mime = parser.value("mimetype");
+        outputMimetype = db.mimeTypeForName(mime);
+        if (! outputMimetype.isValid()) {
+            qCritical() << i18n("Mimetype not found %1", mime);
             return 1;
         }
     } else {
-        outputMimetype = KMimeType::findByUrl(urlOut, 0, false, true /* file doesn't exist */);
-        if (outputMimetype->name() == KMimeType::defaultMimeType()) {
-            kError() << i18n("Mimetype not found, try using the -mimetype option") << endl;
+        outputMimetype = db.mimeTypeForUrl(urlOut);
+        if (!outputMimetype.isValid() || outputMimetype.isDefault()) {
+            qCritical() << i18n("Mimetype not found, try using the -mimetype option");
             return 1;
         }
     }
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    QString outputFormat = outputMimetype->name();
+    QString outputFormat = outputMimetype.name();
     bool ok = false;
     if (outputFormat == "application/pdf") {
-        QString orientation = args->getOption("print-orientation");
-        QString papersize = args->getOption("print-papersize");
-        QString margin = args->getOption("print-margin");
-        ok = convertPdf(urlIn, inputMimetype->name(), urlOut, outputFormat, orientation, papersize, margin);
+        QString orientation = parser.value("print-orientation");
+        QString papersize = parser.value("print-papersize");
+        QString margin = parser.value("print-margin");
+        ok = convertPdf(urlIn, inputMimetype.name(), urlOut, outputFormat, orientation, papersize, margin);
     } else {
-        ok = convert(urlIn, inputMimetype->name(), urlOut, outputFormat, batch);
+        ok = convert(urlIn, inputMimetype.name(), urlOut, outputFormat, batch);
     }
 
     QTimer::singleShot(0, &app, SLOT(quit()));
@@ -241,7 +254,7 @@ int main(int argc, char **argv)
     QApplication::restoreOverrideCursor();
 
     if (!ok) {
-        kError() << i18n("*** The conversion failed! ***") << endl;
+        qCritical() << i18n("*** The conversion failed! ***");
         return 2;
     }
 

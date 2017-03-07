@@ -30,7 +30,7 @@
 #include <KoParameterShape.h>
 #include <KoUnit.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QStackedWidget>
 
@@ -74,12 +74,12 @@ void ShapePropertiesDocker::setCanvas( KoCanvasBase *canvas )
     d->canvas = canvas;
 
     if( d->canvas )  {
-        connect( d->canvas->shapeManager(), SIGNAL( selectionChanged() ),
-            this, SLOT( selectionChanged() ) );
-        connect( d->canvas->shapeManager(), SIGNAL( selectionContentChanged() ),
-            this, SLOT( selectionChanged() ) );
-        connect( d->canvas->resourceManager(), SIGNAL( canvasResourceChanged( int, const QVariant& ) ),
-            this, SLOT( canvasResourceChanged( int, const QVariant& ) ) );
+        connect( d->canvas->shapeManager(), SIGNAL(selectionChanged()),
+            this, SLOT(selectionChanged()) );
+        connect( d->canvas->shapeManager(), SIGNAL(selectionContentChanged()),
+            this, SLOT(selectionChanged()) );
+        connect( d->canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+            this, SLOT(canvasResourceChanged(int,QVariant)) );
     }
 }
 
@@ -174,5 +174,3 @@ void ShapePropertiesDocker::canvasResourceChanged(int key, const QVariant &varia
     if (key == KoCanvasResourceManager::Unit && d->currentPanel)
         d->currentPanel->setUnit(variant.value<KoUnit>());
 }
-
-#include <ShapePropertiesDocker.moc>

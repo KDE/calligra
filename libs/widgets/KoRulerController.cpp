@@ -25,7 +25,7 @@
 #include <KoCanvasResourceManager.h>
 #include <KoTextDocument.h>
 
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 #include <QVariant>
 #include <QTextOption>
@@ -34,7 +34,6 @@
 #include <QTextBlockFormat>
 #include <QTextLayout>
 #include <QTextCursor>
-#include <QLocale>
 
 #include <KoRuler.h>
 
@@ -42,10 +41,10 @@ KoRulerController::KoRulerController(KoRuler *horizontalRuler, KoCanvasResourceM
         : QObject(horizontalRuler),
         d(new Private(horizontalRuler, crp))
 {
-    connect(crp, SIGNAL(canvasResourceChanged(int, const QVariant &)), this, SLOT(canvasResourceChanged(int)));
+    connect(crp, SIGNAL(canvasResourceChanged(int,QVariant)), this, SLOT(canvasResourceChanged(int)));
     connect(horizontalRuler, SIGNAL(indentsChanged(bool)), this, SLOT(indentsChanged()));
     connect(horizontalRuler, SIGNAL(aboutToChange()), this, SLOT(tabChangeInitiated()));
-    connect(horizontalRuler, SIGNAL(tabChanged(int, KoRuler::Tab*)), this, SLOT(tabChanged(int, KoRuler::Tab*)));
+    connect(horizontalRuler, SIGNAL(tabChanged(int,KoRuler::Tab*)), this, SLOT(tabChanged(int,KoRuler::Tab*)));
 }
 
 KoRulerController::~KoRulerController()
@@ -53,5 +52,5 @@ KoRulerController::~KoRulerController()
     delete d;
 }
 
-#include <KoRulerController.moc>
-
+//have to include this because of Q_PRIVATE_SLOT
+#include <moc_KoRulerController.cpp>

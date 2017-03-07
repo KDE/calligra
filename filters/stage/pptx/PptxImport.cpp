@@ -24,8 +24,10 @@
  */
 
 #include "PptxImport.h"
+
 #include "PptxXmlDocumentReader.h"
 #include "PptxXmlSlideReader.h"
+#include "PptxDebug.h"
 
 #include <MsooXmlUtils.h>
 #include <MsooXmlSchemas.h>
@@ -39,7 +41,6 @@
 #include <QRegExp>
 #include <QImage>
 
-#include <kdebug.h>
 #include <kpluginfactory.h>
 
 #include <KoEmbeddedDocumentSaver.h>
@@ -50,8 +51,7 @@
 
 #include <memory>
 
-K_PLUGIN_FACTORY(PptxImportFactory, registerPlugin<PptxImport>();)
-K_EXPORT_PLUGIN(PptxImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(PptxImportFactory, "calligra_filter_pptx2odp.json", registerPlugin<PptxImport>();)
 
 enum PptxDocumentType {
     PptxDocumentPresentation,
@@ -90,7 +90,7 @@ PptxImport::~PptxImport()
 
 bool PptxImport::acceptsSourceMimeType(const QByteArray& mime) const
 {
-    kDebug() << "Entering PPTX Import filter: from " << mime;
+    debugPptx << "Entering PPTX Import filter: from " << mime;
     if (mime == "application/vnd.openxmlformats-officedocument.presentationml.presentation") {
         d->type = PptxDocumentPresentation;
         d->macrosEnabled = false;
@@ -122,7 +122,7 @@ bool PptxImport::acceptsSourceMimeType(const QByteArray& mime) const
 
 bool PptxImport::acceptsDestinationMimeType(const QByteArray& mime) const
 {
-    kDebug() << "Entering PPTX Import filter: to " << mime;
+    debugPptx << "Entering PPTX Import filter: to " << mime;
     return mime == "application/vnd.oasis.opendocument.presentation";
 }
 
@@ -1094,7 +1094,7 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
     const QString documentPathAndFile(partNames.first());
     QString documentPath, documentFile;
     MSOOXML::Utils::splitPathAndFile(documentPathAndFile, &documentPath, &documentFile);
-    kDebug() << documentPathAndFile << documentPath << documentFile;
+    debugPptx << documentPathAndFile << documentPath << documentFile;
     {
         PptxXmlDocumentReaderContext context(
             *this,

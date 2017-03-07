@@ -20,7 +20,7 @@
 #include "BarnZigZagWipeEffectFactory.h"
 #include "BarnZigZagWipeStrategy.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #define BarnZigZagWipeEffectId "BarnZigZagWipeEffect"
 

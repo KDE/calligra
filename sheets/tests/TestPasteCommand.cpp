@@ -18,9 +18,9 @@
 */
 #include "TestPasteCommand.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
-#include <KoPart.h>
+#include "MockPart.h"
 
 #include "part/CanvasItem.h"
 #include "part/Doc.h"
@@ -60,10 +60,8 @@ void PasteCommandTest::testKSpreadSnippet()
     command->setPasteFC(true);
     command->execute(&canvas);
 
-    kDebug() << Cell(sheet, 2, 4).value() << Cell(sheet, 1, 3).value() << Value(3);
+    qDebug() << Cell(sheet, 2, 4).value() << Cell(sheet, 1, 3).value() << Value(3);
     QCOMPARE(Cell(sheet, 2, 4).value(), Value(3));
 }
 
-QTEST_KDEMAIN(PasteCommandTest, GUI)
-
-#include "TestPasteCommand.moc"
+QTEST_MAIN(PasteCommandTest)

@@ -19,16 +19,20 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "VideoCollection.h"
-#include "VideoData.h"
-#include "KoShapeSavingContext.h"
 
+#include "VideoData.h"
+#include "VideoDebug.h"
+
+#include "KoShapeSavingContext.h"
 #include <KoStoreDevice.h>
 #include <QCryptographicHash>
 #include <KoXmlWriter.h>
 
 #include <QMap>
-#include <kdebug.h>
-#include <kmimetype.h>
+#include <QUrl>
+#include <QMimeDatabase>
+#include <QMimeType>
+
 
 class VideoCollection::Private
 {
@@ -67,9 +71,9 @@ bool VideoCollection::completeLoading(KoStore *store)
 bool VideoCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context)
 {
     Q_UNUSED(context);
-    QMap<qint64, VideoData *>::iterator dataIt(d->videos.begin());
+    QMap<qint64, VideoData *>::ConstIterator dataIt(d->videos.constBegin());
 
-    while (dataIt != d->videos.end()) {
+    while (dataIt != d->videos.constEnd()) {
         if (!dataIt.value()->saveName().isEmpty()) {
             VideoData *videoData = dataIt.value();
             if (store->open(videoData->saveName())) {
@@ -78,13 +82,14 @@ bool VideoCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWriter
                 store->close();
                 // TODO error handling
                 if (ok) {
-                    const QString mimetype(KMimeType::findByPath(videoData->saveName(), 0 , true)->name());
+                    QMimeDatabase db;
+                    const QString mimetype(db.mimeTypeForFile(videoData->saveName(), QMimeDatabase::MatchExtension).name());
                     manifestWriter->addManifestEntry(videoData->saveName(), mimetype);
                 } else {
-                    kWarning(30006) << "saving video failed";
+                    warnVideo << "saving video failed";
                 }
             } else {
-                kWarning(30006) << "saving video failed: open store failed";
+                warnVideo << "saving video failed: open store failed";
             }
             dataIt.value()->setSaveName(QString());
         }
@@ -118,7 +123,7 @@ VideoData *VideoCollection::createVideoData(const QString &href, KoStore *store)
 {
     // the tricky thing with a 'store' is that we need to read the data now
     // as the store will no longer be readable after the loading completed.
-    // The solution we use is to read the data, store it in a KTemporaryFile
+    // The solution we use is to read the data, store it in a QTemporaryFile
     // and read and parse it on demand when the video data is actually needed.
     // This leads to having two keys, one for the store and one for the
     // actual video data. We need the latter so if someone else gets the same

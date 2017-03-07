@@ -25,13 +25,14 @@
 #include "kptview.h"
 #include "kptfactory.h"
 #include "kptproject.h"
+#include "kptlocale.h"
 #include "kptresource.h"
 #include "kptcontext.h"
 #include "kptschedulerpluginloader.h"
 #include "kptschedulerplugin.h"
 #include "kptbuiltinschedulerplugin.h"
 #include "kptcommand.h"
-#include "plansettings.h"
+#include "calligraplansettings.h"
 #include "kpttask.h"
 #include "KPlatoXmlLoader.h"
 #include "kptpackage.h"
@@ -51,15 +52,10 @@
 #include <QPainter>
 #include <QDir>
 #include <QMutableMapIterator>
+#include <QTemporaryFile>
 
-#include <kdebug.h>
-#include <klocale.h>
 #include <kmessagebox.h>
-#include <ktemporaryfile.h>
-#include <kio/global.h>
-#include <kio/jobclasses.h>
-#include <kio/netaccess.h>
-#include <kio/copyjob.h>
+#include <KIO/CopyJob>
 
 
 namespace KPlato
@@ -75,18 +71,6 @@ MainDocument::MainDocument(KoPart *part)
 {
     Q_ASSERT(part);
     m_config.setReadWrite( true );
-    // Add library translation files
-    KLocale *locale = KGlobal::locale();
-    if ( locale ) {
-        locale->insertCatalog( "planlibs" );
-        locale->insertCatalog( "kdgantt" );
-        locale->insertCatalog( "timezones4" );
-#ifdef PLAN_KDEPIMLIBS_FOUND
-        locale->insertCatalog( "kabc" );
-#endif
-
-        m_config.setLocale( new KLocale( *locale ) );
-    }
 
     loadSchedulerPlugins();
 
@@ -127,7 +111,7 @@ void MainDocument::loadSchedulerPlugins()
 
 void MainDocument::addSchedulerPlugin( const QString &key, SchedulerPlugin *plugin)
 {
-    kDebug(planDbg())<<plugin;
+    debugPlan<<plugin;
     m_schedulerPlugins[key] = plugin;
 }
 
@@ -154,7 +138,7 @@ void MainDocument::setProject( Project *project )
 
 bool MainDocument::loadOdf( KoOdfReadStore &odfStore )
 {
-    kWarning()<< "OpenDocument not supported, let's try native xml format";
+    warnPlan<< "OpenDocument not supported, let's try native xml format";
     return loadXML( odfStore.contentDoc(), 0 ); // We have only one format, so try to load that!
 }
 
@@ -173,7 +157,7 @@ bool MainDocument::loadXML( const KoXmlDocument &document, KoStore* )
     // Check if this is the right app
     value = plan.attribute( "mime", QString() );
     if ( value.isEmpty() ) {
-        kError() << "No mime type specified!";
+        errorPlan << "No mime type specified!";
         setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
         return false;
     }
@@ -189,13 +173,13 @@ bool MainDocument::loadXML( const KoXmlDocument &document, KoStore* )
         if ( ok ) {
             setProject( newProject );
             setModified( false );
-            kDebug(planDbg())<<newProject->schedules();
+            debugPlan<<newProject->schedules();
             // Cleanup after possible bug:
             // There should *not* be any deleted schedules (or with parent == 0)
             foreach ( Node *n, newProject->nodeDict()) {
                 foreach ( Schedule *s, n->schedules()) {
                     if ( s->isDeleted() ) { // true also if parent == 0
-                        kError()<<n->name()<<s;
+                        errorPlan<<n->name()<<s;
                         n->takeSchedule( s );
                         delete s;
                     }
@@ -212,14 +196,14 @@ bool MainDocument::loadXML( const KoXmlDocument &document, KoStore* )
         return ok;
     }
     if ( value != "application/x-vnd.kde.plan" ) {
-        kError() << "Unknown mime type " << value;
+        errorPlan << "Unknown mime type " << value;
         setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.plan, got %1", value ) );
         return false;
     }
     QString syntaxVersion = plan.attribute( "version", PLAN_FILE_SYNTAX_VERSION );
     m_xmlLoader.setVersion( syntaxVersion );
     if ( syntaxVersion > PLAN_FILE_SYNTAX_VERSION ) {
-        int ret = KMessageBox::warningContinueCancel(
+        KMessageBox::ButtonCode ret = KMessageBox::warningContinueCancel(
                       0, i18n( "This document was created with a newer version of Plan (syntax version: %1)\n"
                                "Opening it in this version of Plan will lose some information.", syntaxVersion ),
                       i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );
@@ -240,8 +224,8 @@ bool MainDocument::loadXML( const KoXmlDocument &document, KoStore* )
 This test does not work any longer. KoXml adds a couple of elements not present in the file!!
     if ( numNodes > 2 ) {
         //TODO: Make a proper bitching about this
-        kDebug(planDbg()) <<"*** Error ***";
-        kDebug(planDbg()) <<"  Children count should be maximum 2, but is" << numNodes;
+        debugPlan <<"*** Error ***";
+        debugPlan <<"  Children count should be maximum 2, but is" << numNodes;
         return false;
     }
 #endif
@@ -267,7 +251,7 @@ This test does not work any longer. KoXml adds a couple of elements not present 
                 foreach ( Node *n, newProject->nodeDict()) {
                     foreach ( Schedule *s, n->schedules()) {
                         if ( s->isDeleted() ) { // true also if parent == 0
-                            kError()<<n->name()<<s;
+                            errorPlan<<n->name()<<s;
                             n->takeSchedule( s );
                             delete s;
                         }
@@ -291,7 +275,7 @@ This test does not work any longer. KoXml adds a couple of elements not present 
 
 QDomDocument MainDocument::saveXML()
 {
-    kDebug(planDbg());
+    debugPlan;
     QDomDocument document( "plan" );
 
     document.appendChild( document.createProcessingInstruction(
@@ -312,7 +296,7 @@ QDomDocument MainDocument::saveXML()
 
 QDomDocument MainDocument::saveWorkPackageXML( const Node *node, long id, Resource *resource )
 {
-    kDebug(planDbg());
+    debugPlan;
     QDomDocument document( "plan" );
 
     document.appendChild( document.createProcessingInstruction(
@@ -332,7 +316,7 @@ QDomDocument MainDocument::saveWorkPackageXML( const Node *node, long id, Resour
         wp.setAttribute( "owner", resource->name() );
         wp.setAttribute( "owner-id", resource->id() );
     }
-    wp.setAttribute( "time-tag", KDateTime::currentLocalDateTime().toString( KDateTime::ISODate ) );
+    wp.setAttribute( "time-tag", QDateTime::currentDateTime().toString( Qt::ISODate ) );
     doc.appendChild( wp );
 
     // Save the project
@@ -349,25 +333,25 @@ bool MainDocument::saveWorkPackageToStream( QIODevice *dev, const Node *node, lo
     dev->open( QIODevice::WriteOnly );
     int nwritten = dev->write( s.data(), s.size() );
     if ( nwritten != (int)s.size() ) {
-        kWarning()<<"wrote:"<<nwritten<<"- expected:"<< s.size();
+        warnPlan<<"wrote:"<<nwritten<<"- expected:"<< s.size();
     }
     return nwritten == (int)s.size();
 }
 
 bool MainDocument::saveWorkPackageFormat( const QString &file, const Node *node, long id, Resource *resource  )
 {
-    kDebug(planDbg()) <<"Saving to store";
+    debugPlan <<"Saving to store";
 
     KoStore::Backend backend = KoStore::Zip;
 #ifdef QCA2
 /*    if ( d->m_specialOutputFlag == SaveEncrypted ) {
         backend = KoStore::Encrypted;
-        kDebug(planDbg()) <<"Saving using encrypted backend.";
+        debugPlan <<"Saving using encrypted backend.";
     }*/
 #endif
 
     QByteArray mimeType = "application/x-vnd.kde.plan.work";
-    kDebug(planDbg()) <<"MimeType=" << mimeType;
+    debugPlan <<"MimeType=" << mimeType;
 
     KoStore *store = KoStore::createStore( file, KoStore::Write, mimeType, backend );
 /*    if ( d->m_specialOutputFlag == SaveEncrypted && !d->m_password.isNull( ) ) {
@@ -388,13 +372,13 @@ bool MainDocument::saveWorkPackageFormat( const QString &file, const Node *node,
     }
     KoStoreDevice dev( store );
     if ( !saveWorkPackageToStream( &dev, node, id, resource ) || !store->close() ) {
-        kDebug(planDbg()) <<"saveToStream failed";
+        debugPlan <<"saveToStream failed";
         delete store;
         return false;
     }
     node->documents().saveToStore( store );
 
-    kDebug(planDbg()) <<"Saving done of url:" << file;
+    debugPlan <<"Saving done of url:" << file;
     if ( !store->finalize() ) {
         delete store;
         return false;
@@ -405,9 +389,9 @@ bool MainDocument::saveWorkPackageFormat( const QString &file, const Node *node,
     return true;
 }
 
-bool MainDocument::saveWorkPackageUrl( const KUrl &_url, const Node *node, long id, Resource *resource )
+bool MainDocument::saveWorkPackageUrl( const QUrl &_url, const Node *node, long id, Resource *resource )
 {
-    //kDebug(planDbg())<<_url;
+    //debugPlan<<_url;
     QApplication::setOverrideCursor( Qt::WaitCursor );
     emit statusBarMessage( i18n("Saving...") );
     bool ret = false;
@@ -417,24 +401,24 @@ bool MainDocument::saveWorkPackageUrl( const KUrl &_url, const Node *node, long 
     return ret;
 }
 
-bool MainDocument::loadWorkPackage( Project &project, const KUrl &url )
+bool MainDocument::loadWorkPackage( Project &project, const QUrl &url )
 {
-    kDebug(planDbg())<<url;
+    debugPlan<<url;
     if ( ! url.isLocalFile() ) {
-        kDebug(planDbg())<<"TODO: download if url not local";
+        debugPlan<<"TODO: download if url not local";
         return false;
     }
     KoStore *store = KoStore::createStore( url.path(), KoStore::Read, "", KoStore::Auto );
     if ( store->bad() ) {
 //        d->lastErrorMessage = i18n( "Not a valid Calligra file: %1", file );
-        kDebug(planDbg())<<"bad store"<<url.prettyUrl();
+        debugPlan<<"bad store"<<url.toDisplayString();
         delete store;
 //        QApplication::restoreOverrideCursor();
         return false;
     }
     if ( ! store->open( "root" ) ) { // "old" file format (maindoc.xml)
         // i18n( "File does not have a maindoc.xml: %1", file );
-        kDebug(planDbg())<<"No root"<<url.prettyUrl();
+        debugPlan<<"No root"<<url.toDisplayString();
         delete store;
 //        QApplication::restoreOverrideCursor();
         return false;
@@ -445,7 +429,7 @@ bool MainDocument::loadWorkPackage( Project &project, const KUrl &url )
     int errorLine, errorColumn;
     bool ok = doc.setContent( store->device(), &errorMsg, &errorLine, &errorColumn );
     if ( ! ok ) {
-        kError() << "Parsing error in " << url.url() << "! Aborting!" << endl
+        errorPlan << "Parsing error in " << url.url() << "! Aborting!" << endl
                 << " In line: " << errorLine << ", column: " << errorColumn << endl
                 << " Error message: " << errorMsg;
         //d->lastErrorMessage = i18n( "Parsing error in %1 at line %2, column %3\nError message: %4",filename  ,errorLine, errorColumn , QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0, QCoreApplication::UnicodeUTF8));
@@ -471,7 +455,7 @@ bool MainDocument::loadWorkPackage( Project &project, const KUrl &url )
     return true;
 }
 
-Package *MainDocument::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document, const KUrl &/*url*/ )
+Package *MainDocument::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document, const QUrl &/*url*/ )
 {
     QString value;
     bool ok = true;
@@ -482,7 +466,7 @@ Package *MainDocument::loadWorkPackageXML( Project &project, QIODevice *, const 
     // Check if this is the right app
     value = plan.attribute( "mime", QString() );
     if ( value.isEmpty() ) {
-        kDebug(planDbg()) << "No mime type specified!";
+        debugPlan << "No mime type specified!";
         setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
         return 0;
     } else if ( value == "application/x-vnd.kde.kplato.work" ) {
@@ -497,16 +481,16 @@ Package *MainDocument::loadWorkPackageXML( Project &project, QIODevice *, const 
             return 0;
         }
         package = loader.package();
-        package->timeTag = KDateTime::fromString( loader.timeTag(), KDateTime::ISODate );
+        package->timeTag = QDateTime::fromString( loader.timeTag(), Qt::ISODate );
     } else if ( value != "application/x-vnd.kde.plan.work" ) {
-        kDebug(planDbg()) << "Unknown mime type " << value;
+        debugPlan << "Unknown mime type " << value;
         setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.plan.work, got %1", value ) );
         return 0;
     } else {
         QString syntaxVersion = plan.attribute( "version", "0.0.0" );
         m_xmlLoader.setWorkVersion( syntaxVersion );
         if ( syntaxVersion > PLANWORK_FILE_SYNTAX_VERSION ) {
-            int ret = KMessageBox::warningContinueCancel(
+            KMessageBox::ButtonCode ret = KMessageBox::warningContinueCancel(
                     0, i18n( "This document was created with a newer version of PlanWork (syntax version: %1)\n"
                     "Opening it in this version of PlanWork will lose some information.", syntaxVersion ),
                     i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );
@@ -534,10 +518,10 @@ Package *MainDocument::loadWorkPackageXML( Project &project, QIODevice *, const 
                     //TODO add some ui here
                 }
             } else if ( e.tagName() == "workpackage" ) {
-                package->timeTag = KDateTime::fromString( e.attribute( "time-tag" ), KDateTime::ISODate );
+                package->timeTag = QDateTime::fromString( e.attribute( "time-tag" ), Qt::ISODate );
                 package->ownerId = e.attribute( "owner-id" );
                 package->ownerName = e.attribute( "owner" );
-                kDebug(planDbg())<<"workpackage:"<<package->timeTag<<package->ownerId<<package->ownerName;
+                debugPlan<<"workpackage:"<<package->timeTag<<package->ownerId<<package->ownerName;
                 KoXmlElement elem;
                 forEachElement( elem, e ) {
                     if ( elem.tagName() != "settings" ) {
@@ -557,7 +541,7 @@ Package *MainDocument::loadWorkPackageXML( Project &project, QIODevice *, const 
                 wp.setOwnerId( package->ownerId );
                 wp.setOwnerName( package->ownerName );
             }
-            kDebug(planDbg())<<"Task set:"<<package->task->name();
+            debugPlan<<"Task set:"<<package->task->name();
         }
         m_xmlLoader.stopLoad();
     }
@@ -570,7 +554,7 @@ Package *MainDocument::loadWorkPackageXML( Project &project, QIODevice *, const 
             m_mergedPackages[ package->timeTag ] = proj; // register this for next time
         }
         if ( ok && ! package->timeTag.isValid() ) {
-            kWarning()<<"Work package is not time tagged:"<<proj->childNode( 0 )->name()<<package->url;
+            warnPlan<<"Work package is not time tagged:"<<proj->childNode( 0 )->name()<<package->url;
             ok = false;
         }
     }
@@ -586,7 +570,7 @@ Package *MainDocument::loadWorkPackageXML( Project &project, QIODevice *, const 
 bool MainDocument::extractFiles( KoStore *store, Package *package )
 {
     if ( package->task == 0 ) {
-        kError()<<"No task!";
+        errorPlan<<"No task!";
         return false;
     }
     foreach ( Document *doc, package->task->documents().documents() ) {
@@ -602,18 +586,18 @@ bool MainDocument::extractFiles( KoStore *store, Package *package )
 
 bool MainDocument::extractFile( KoStore *store, Package *package, const Document *doc )
 {
-    KTemporaryFile tmpfile;
+    QTemporaryFile tmpfile;
     if ( ! tmpfile.open() ) {
-        kError()<<"Failed to open temporary file";
+        errorPlan<<"Failed to open temporary file";
         return false;
     }
     if ( ! store->extractFile( doc->url().fileName(), tmpfile.fileName() ) ) {
-        kError()<<"Failed to extract file:"<<doc->url().fileName()<<"to:"<<tmpfile.fileName();
+        errorPlan<<"Failed to extract file:"<<doc->url().fileName()<<"to:"<<tmpfile.fileName();
         return false;
     }
     package->documents.insert( tmpfile.fileName(), doc->url() );
     tmpfile.setAutoRemove( false );
-    kDebug(planDbg())<<"extracted:"<<doc->url().fileName()<<"->"<<tmpfile.fileName();
+    debugPlan<<"extracted:"<<doc->url().fileName()<<"->"<<tmpfile.fileName();
     return true;
 }
 
@@ -644,14 +628,14 @@ void MainDocument::checkForWorkPackages( bool keep )
 void MainDocument::checkForWorkPackage()
 {
     if ( ! m_infoList.isEmpty() ) {
-        loadWorkPackage( *m_project, KUrl( m_infoList.takeLast().absoluteFilePath() ) );
+        loadWorkPackage( *m_project, QUrl::fromLocalFile( m_infoList.takeLast().absoluteFilePath() ) );
         if ( ! m_infoList.isEmpty() ) {
             QTimer::singleShot ( 0, this, SLOT(checkForWorkPackage()) );
             return;
         }
         // all files read
         // remove other projects
-        QMutableMapIterator<KDateTime, Package*> it( m_workpackages );
+        QMutableMapIterator<QDateTime, Package*> it( m_workpackages );
         while ( it.hasNext() ) {
             it.next();
             Package *package = it.value();
@@ -678,7 +662,7 @@ void MainDocument::workPackageMergeDialogFinished( int result )
     if ( dlg == 0 ) {
         return;
     }
-    if ( result == KDialog::Yes ) {
+    if ( result == KoDialog::Yes ) {
         // merge the oldest first
         foreach( int i, dlg->checkedList() ) {
             mergeWorkPackage( m_workpackages.values().at( i ) );
@@ -714,7 +698,7 @@ void MainDocument::terminateWorkPackage( const Package *package )
         if ( ! dir.exists() ) {
             if ( ! dir.mkpath( dir.path() ) ) {
                 //TODO message
-                kDebug(planDbg())<<"Could not create directory:"<<dir.path();
+                debugPlan<<"Could not create directory:"<<dir.path();
                 return;
             }
         }
@@ -736,7 +720,7 @@ void MainDocument::terminateWorkPackage( const Package *package )
         }
         if ( ! ok ) {
             //TODO message
-            kDebug(planDbg())<<"terminateWorkPackage: Failed to save"<<file.fileName();
+            debugPlan<<"terminateWorkPackage: Failed to save"<<file.fileName();
         }
     }
 }
@@ -782,7 +766,7 @@ void MainDocument::mergeWorkPackage( Task *to, const Task *from, const Package *
         // remove entries
         foreach ( const QDate &d, org.entries().keys() ) {
             if ( ! curr.entries().contains( d ) ) {
-                kDebug(planDbg())<<"remove entry "<<d;
+                debugPlan<<"remove entry "<<d;
                 cmd->addCommand( new RemoveCompletionEntryCmd( org, d ) );
             }
         }
@@ -813,15 +797,15 @@ void MainDocument::mergeWorkPackage( Task *to, const Task *from, const Package *
     bool docsaved = false;
     if ( package->settings.documents ) {
         //TODO: handle remote files
-        QMap<QString, KUrl>::const_iterator it = package->documents.constBegin();
-        QMap<QString, KUrl>::const_iterator end = package->documents.constEnd();
+        QMap<QString, QUrl>::const_iterator it = package->documents.constBegin();
+        QMap<QString, QUrl>::const_iterator end = package->documents.constEnd();
         for ( ; it != end; ++it ) {
-            KUrl src( it.key() );
-            KIO::Job *job = KIO::move( src, it.value(), KIO::Overwrite );
-            if ( KIO::NetAccess::synchronousRun( job, 0 ) ) {
+            const QUrl src = QUrl::fromLocalFile(it.key());
+            KIO::CopyJob *job = KIO::move( src, it.value(), KIO::Overwrite );
+            if ( job->exec() ) {
                 docsaved = true;
                 //TODO: async
-                kDebug(planDbg())<<"Moved file:"<<src<<it.value();
+                debugPlan<<"Moved file:"<<src<<it.value();
             }
         }
     }
@@ -857,10 +841,12 @@ bool MainDocument::completeLoading( KoStore *store )
 {
     // If we get here the new project is loaded and set
     if ( m_loadingTemplate ) {
-        //kDebug(planDbg())<<"Loading template, generate unique ids";
+        //debugPlan<<"Loading template, generate unique ids";
         m_project->generateUniqueIds();
-        m_project->setConstraintStartTime( KDateTime( KDateTime::currentLocalDateTime().date(), QTime( 0, 0, 0 ) ) );
+        m_project->setConstraintStartTime( QDateTime(QDate::currentDate(), QTime(0, 0, 0), Qt::LocalTime) );
         m_project->setConstraintEndTime( m_project->constraintStartTime().addYears( 2 ) );
+        m_project->locale()->setCurrencyLocale(QLocale::AnyLanguage, QLocale::AnyCountry);
+        m_project->locale()->setCurrencySymbol(QString());
     } else if ( isImporting() ) {
         // NOTE: I don't think this is a good idea.
         // Let the filter generate ids for non-plan files.
@@ -871,7 +857,7 @@ bool MainDocument::completeLoading( KoStore *store )
     }
     if ( store == 0 ) {
         // can happen if loading a template
-        kDebug(planDbg())<<"No store";
+        debugPlan<<"No store";
         return true; // continue anyway
     }
     delete m_context;
@@ -880,7 +866,7 @@ bool MainDocument::completeLoading( KoStore *store )
     if ( loadAndParse( store, "context.xml", doc ) ) {
         store->close();
         m_context->load( doc );
-    } else kWarning()<<"No context";
+    } else warnPlan<<"No context";
     return true;
 }
 
@@ -919,11 +905,11 @@ bool MainDocument::completeSaving( KoStore *store )
 
 bool MainDocument::loadAndParse(KoStore *store, const QString &filename, KoXmlDocument &doc)
 {
-    //kDebug(planDbg()) << "oldLoadAndParse: Trying to open " << filename;
+    //debugPlan << "oldLoadAndParse: Trying to open " << filename;
 
     if (!store->open(filename))
     {
-        kWarning() << "Entry " << filename << " not found!";
+        warnPlan << "Entry " << filename << " not found!";
 //        d->lastErrorMessage = i18n( "Could not find %1",filename );
         return false;
     }
@@ -933,7 +919,7 @@ bool MainDocument::loadAndParse(KoStore *store, const QString &filename, KoXmlDo
     bool ok = doc.setContent( store->device(), &errorMsg, &errorLine, &errorColumn );
     if ( !ok )
     {
-        kError() << "Parsing error in " << filename << "! Aborting!" << endl
+        errorPlan << "Parsing error in " << filename << "! Aborting!" << endl
             << " In line: " << errorLine << ", column: " << errorColumn << endl
             << " Error message: " << errorMsg;
 /*        d->lastErrorMessage = i18n( "Parsing error in %1 at line %2, column %3\nError message: %4"
@@ -943,56 +929,54 @@ bool MainDocument::loadAndParse(KoStore *store, const QString &filename, KoXmlDo
         store->close();
         return false;
     }
-    kDebug(planDbg()) << "File " << filename << " loaded and parsed";
+    debugPlan << "File " << filename << " loaded and parsed";
     return true;
 }
 
-void MainDocument::insertFile( const QString &filename, Node *parent, Node *after )
+void MainDocument::insertFile( const QUrl &url, Node *parent, Node *after )
 {
     Part *part = new Part( this );
     MainDocument *doc = new MainDocument( part );
     part->setDocument( doc );
     doc->disconnect(); // doc shall not handle feedback from openUrl()
     doc->setAutoSave( 0 ); //disable
-    doc->m_insertFileInfo.url = filename;
+    doc->m_insertFileInfo.url = url;
     doc->m_insertFileInfo.parent = parent;
     doc->m_insertFileInfo.after = after;
     connect(doc, SIGNAL(completed()), SLOT(insertFileCompleted()));
     connect(doc, SIGNAL(canceled(QString)), SLOT(insertFileCancelled(QString)));
 
-    doc->openUrl( KUrl( filename ) );
+    doc->openUrl( url );
 }
 
 void MainDocument::insertFileCompleted()
 {
-    kDebug(planDbg())<<sender();
-    Part *part = qobject_cast<Part*>( sender() );
-    if ( part ) {
-        MainDocument *doc = qobject_cast<MainDocument*>( part->document() );
-        if ( doc ) {
-            Project &p = doc->getProject();
-            insertProject( p, doc->m_insertFileInfo.parent, doc->m_insertFileInfo.after );
-        } else {
-            KMessageBox::error( 0, i18n("Internal error, failed to insert file.") );
-        }
-        part->deleteLater(); // also deletes document
+    debugPlan<<sender();
+    MainDocument *doc = qobject_cast<MainDocument*>( sender() );
+    if ( doc ) {
+        Project &p = doc->getProject();
+        insertProject( p, doc->m_insertFileInfo.parent, doc->m_insertFileInfo.after );
+        doc->documentPart()->deleteLater(); // also deletes document
+    } else {
+        KMessageBox::error( 0, i18n("Internal error, failed to insert file.") );
     }
 }
 
 void MainDocument::insertFileCancelled( const QString &error )
 {
-    kDebug(planDbg())<<sender()<<"error="<<error;
+    debugPlan<<sender()<<"error="<<error;
     if ( ! error.isEmpty() ) {
         KMessageBox::error( 0, error );
     }
-    Part *part = qobject_cast<Part*>( sender() );
-    if ( part ) {
-        part->deleteLater(); // also deletes document
+    MainDocument *doc = qobject_cast<MainDocument*>( sender() );
+    if ( doc ) {
+        doc->documentPart()->deleteLater(); // also deletes document
     }
 }
 
 bool MainDocument::insertProject( Project &project, Node *parent, Node *after )
 {
+    debugPlan<<&project;
     // make sure node ids in new project is unique also in old project
     QList<QString> existingIds = m_project->nodeDict().keys();
     foreach ( Node *n, project.allNodes() ) {
@@ -1028,7 +1012,7 @@ void MainDocument::removeViewListItem( View */*view*/, const ViewListItem *item 
 
 void MainDocument::setModified( bool mod )
 {
-    kDebug(planDbg())<<mod<<m_viewlistModified;
+    debugPlan<<mod<<m_viewlistModified;
     KoDocument::setModified( mod || m_viewlistModified ); // Must always call to activate autosave
 }
 
@@ -1053,7 +1037,7 @@ void MainDocument::createNewProject()
 
     m_project->generateUniqueIds();
     Duration dur = m_project->constraintEndTime() - m_project->constraintStartTime();
-    m_project->setConstraintStartTime( KDateTime( KDateTime::currentLocalDateTime().date(), QTime( 0, 0, 0 ) ) );
+    m_project->setConstraintStartTime( QDateTime(QDate::currentDate(), QTime(0, 0, 0), Qt::LocalTime) );
     m_project->setConstraintEndTime( m_project->constraintStartTime() +  dur );
 
     while ( m_project->numScheduleManagers() > 0 ) {
@@ -1088,5 +1072,3 @@ void MainDocument::createNewProject()
 }
 
 }  //KPlato namespace
-
-#include "kptmaindocument.moc"

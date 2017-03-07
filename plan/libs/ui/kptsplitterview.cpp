@@ -22,8 +22,6 @@
 #include "KoDocument.h"
 #include <KoXmlReader.h>
 
-#include <ktabwidget.h>
-
 #include <QVBoxLayout>
 #include <QSplitter>
 #include <QTabWidget>
@@ -44,9 +42,9 @@ SplitterView::SplitterView(KoPart *part, KoDocument *doc, QWidget *parent)
     b->addWidget( m_splitter );
 }
     
-KTabWidget *SplitterView::addTabWidget(  )
+QTabWidget *SplitterView::addTabWidget(  )
 {
-    KTabWidget *w = new KTabWidget( m_splitter );
+    QTabWidget *w = new QTabWidget( m_splitter );
     m_splitter->addWidget( w );
     connect( w, SIGNAL(currentChanged(int)), SLOT(currentTabChanged(int)) );
     return w;
@@ -54,7 +52,7 @@ KTabWidget *SplitterView::addTabWidget(  )
 
 void SplitterView::currentTabChanged( int )
 {
-    ViewBase *v = qobject_cast<ViewBase*>( qobject_cast<KTabWidget*>( sender() )->currentWidget() );
+    ViewBase *v = qobject_cast<ViewBase*>( qobject_cast<QTabWidget*>( sender() )->currentWidget() );
     if ( v && v != m_activeview ) {
         if ( m_activeview ) {
             m_activeview->setGuiActive( false );
@@ -82,7 +80,7 @@ void SplitterView::addView( ViewBase *view, QTabWidget *tab, const QString &labe
 // reimp
 void SplitterView::setGuiActive( bool active ) // virtual slot
 {
-    kDebug(planDbg())<<active<<m_activeview;
+    debugPlan<<active<<m_activeview;
     if ( m_activeview ) {
         m_activeview->setGuiActive( active );
     } else {
@@ -92,7 +90,7 @@ void SplitterView::setGuiActive( bool active ) // virtual slot
 
 void SplitterView::slotGuiActivated( ViewBase *v, bool active )
 {
-    kDebug(planDbg())<<active<<m_activeview<<" -> "<<v;
+    debugPlan<<active<<m_activeview<<" -> "<<v;
     if ( active ) {
         if ( m_activeview ) {
             emit guiActivated( m_activeview, false );
@@ -109,14 +107,14 @@ ViewBase *SplitterView::findView( const QPoint &pos ) const
     for ( int i = 0; i < m_splitter->count(); ++i ) {
         ViewBase *w = dynamic_cast<ViewBase*>( m_splitter->widget( i ) );
         if ( w && w->frameGeometry().contains( pos ) ) {
-            kDebug(planDbg())<<pos<<" in "<<w->frameGeometry();
+            debugPlan<<pos<<" in "<<w->frameGeometry();
             return w;
         }
         QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
         if (tw && tw->frameGeometry().contains( pos ) ) {
             w = dynamic_cast<ViewBase*>( tw->currentWidget() );
             if ( w ) {
-                kDebug(planDbg())<<pos<<" in "<<w->frameGeometry();
+                debugPlan<<pos<<" in "<<w->frameGeometry();
                 return w;
             }
         }
@@ -204,10 +202,10 @@ void SplitterView::updateReadWrite( bool mode )
 ViewBase *SplitterView::focusView() const
 {
     QList<ViewBase*> lst = findChildren<ViewBase*>();
-    kDebug(planDbg())<<lst;
+    debugPlan<<lst;
     foreach ( ViewBase *v, lst ) {
         if ( v->isActive() ) {
-            kDebug(planDbg())<<v;
+            debugPlan<<v;
             return v;
         }
     }
@@ -239,7 +237,7 @@ QList<QAction*> SplitterView::actionList( const QString &name ) const
 QList<QAction*> SplitterView::contextActionList() const
 {
     ViewBase *view = focusView();
-    kDebug(planDbg())<<this<<view;
+    debugPlan<<this<<view;
     if ( view ) {
         return view->contextActionList();
     }
@@ -340,5 +338,3 @@ void SplitterView::slotEditCopy()
 }
 
 } // namespace KPlato
-
-#include "kptsplitterview.moc"

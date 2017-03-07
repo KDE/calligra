@@ -37,7 +37,6 @@
 #include "ValueConverter.h"
 
 #include <kcalendarsystem.h>
-#include <klocale.h>
 
 #include <math.h>
 
@@ -109,7 +108,7 @@ Value func_yieldmat(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_zero_coupon(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("financial", FinancialModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadfinancialmodule.json", FinancialModule)
 
 FinancialModule::FinancialModule(QObject* parent, const QVariantList&)
         : FunctionModule(parent)
@@ -416,7 +415,7 @@ static Value getPay(ValueCalc *calc, Value rate,
                            fvifa);
 
 
-    kDebug() << "(1.0 + " << rate << "*" << type << ")*" << fvifa << ") =" << val2;
+    debugSheets << "(1.0 + " << rate << "*" << type << ")*" << fvifa << ") =" << val2;
     return calc->div(val1, val2);
 }
 
@@ -649,7 +648,7 @@ Value func_accrint(valVector args, ValueCalc *calc, FuncExtra *)
         return Value::errorVALUE();
 
     if (maturity >= settlement) {
-        kDebug() << "maturity >= settlement";
+        debugSheets << "maturity >= settlement";
         return Value::errorVALUE();
     }
 
@@ -1440,8 +1439,8 @@ Value func_duration_add(valVector args, ValueCalc *calc, FuncExtra *)
 
     int numOfCoups = Value(func_coupnum(param, calc, 0)).asInteger();
 
-    kDebug(36002) << "DURATION";
-    kDebug(36002) << "numOfCoup =" << numOfCoups;
+    debugSheetsFormula << "DURATION";
+    debugSheetsFormula << "numOfCoup =" << numOfCoups;
 
 
     return Value(duration(date0, settlement, maturity, coup, yield, freq, basis, numOfCoups));
@@ -1908,8 +1907,8 @@ Value func_oddlprice(valVector args, ValueCalc *calc, FuncExtra *)
     conv.frequency = freq;
     conv.eom = true;
 
-//   kDebug(36002)<<"ODDLPRICE";
-//   kDebug(36002)<<"settlement ="<<settlement<<" maturity="<<maturity<<" last="<<last<<" rate="<<rate<<" yield="<<yield<<" redemp="<<redemp<<" freq="<<freq<<" basis="<<basis;
+//   debugSheetsFormula<<"ODDLPRICE";
+//   debugSheetsFormula<<"settlement ="<<settlement<<" maturity="<<maturity<<" last="<<last<<" rate="<<rate<<" yield="<<yield<<" redemp="<<redemp<<" freq="<<freq<<" basis="<<basis;
 
     // TODO check frequency
     if (yield <= 0.0 || rate <= 0.0 || maturity <= settlement || settlement <= last)
@@ -1953,8 +1952,8 @@ Value func_oddlyield(valVector args, ValueCalc *calc, FuncExtra *)
     conv.frequency = freq;
     conv.eom = true;
 
-//   kDebug(36002)<<"ODDLYIELD";
-//   kDebug(36002)<<"settlement ="<<settlement<<" maturity="<<maturity<<" last="<<last<<" rate="<<rate<<" price="<<price<<" redemp="<<redemp<<" freq="<<freq<<" basis="<<basis;
+//   debugSheetsFormula<<"ODDLYIELD";
+//   debugSheetsFormula<<"settlement ="<<settlement<<" maturity="<<maturity<<" last="<<last<<" rate="<<rate<<" price="<<price<<" redemp="<<redemp<<" freq="<<freq<<" basis="<<basis;
 
     // TODO check frequency
     if (rate < 0.0 || price <= 0.0 || maturity <= settlement || settlement <= last)
@@ -2024,7 +2023,7 @@ Value func_ppmt(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() > 4) fv = args[4];
     if (args.count() == 6) type = args[5];
 
-    kDebug() << "Type=" << type;
+    debugSheets << "Type=" << type;
 
     Value pay  = getPay(calc, rate, nper, pv, fv, type);
     Value ipmt = func_ipmt(args, calc, 0);
@@ -2048,8 +2047,8 @@ Value func_pricemat(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() > 5)
         basis = calc->conv()->asInteger(args[5]).asInteger();
 
-    //kDebug(36002)<<"PRICEMAT";
-    //kDebug(36002)<<"settlement ="<<settlement<<" maturity="<<maturity<<" issue="<<issue<<" rate="<<rate<<" yield="<<yield<<" basis="<<basis;
+    //debugSheetsFormula<<"PRICEMAT";
+    //debugSheetsFormula<<"settlement ="<<settlement<<" maturity="<<maturity<<" issue="<<issue<<" rate="<<rate<<" yield="<<yield<<" basis="<<basis;
 
     if (rate < 0.0 || yield < 0.0 || settlement >= maturity)
         return Value::errorVALUE();
@@ -2612,4 +2611,4 @@ Value func_zero_coupon(valVector args, ValueCalc *calc, FuncExtra *)
     return calc->div(face, calc->pow(calc->add(rate, 1), years));
 }
 
-#include "FinancialModule.moc"
+#include "financial.moc"

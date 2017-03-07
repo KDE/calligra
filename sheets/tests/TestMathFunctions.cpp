@@ -50,9 +50,9 @@ Value TestMathFunctions::TestDouble(const QString& formula, const Value& v2, int
     bool res = fabs(v2.asFloat() - result.asFloat()) < epsilon;
 
     if (!res)
-        kDebug(36002) << "check failed -->" << "Epsilon =" << epsilon << "" << (double) v2.asFloat() << " to" << (double)result.asFloat() << "  diff =" << (double)(v2.asFloat() - result.asFloat());
+        qDebug() << "check failed -->" << "Epsilon =" << epsilon << "" << (double) v2.asFloat() << " to" << (double)result.asFloat() << "  diff =" << (double)(v2.asFloat() - result.asFloat());
     /*  else
-        kDebug(36002)<<"check -->" <<"  diff =" << v2.asFloat()-result.asFloat();*/
+        qDebug()<<"check -->" <<"  diff =" << v2.asFloat()-result.asFloat();*/
     if (res)
         return v2;
     else
@@ -955,6 +955,4 @@ void TestMathFunctions::testTRUNC()
     CHECK_EVAL("=TRUNC(-1.5)",     Value(-1));
 }
 
-QTEST_KDEMAIN(TestMathFunctions, GUI)
-
-#include "TestMathFunctions.moc"
+QTEST_MAIN(TestMathFunctions)

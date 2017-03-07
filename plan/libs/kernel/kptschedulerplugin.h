@@ -31,6 +31,7 @@
 #include <QMutex>
 #include <QThread>
 #include <QTimer>
+#include <QEventLoopLocker>
 
 
 namespace KPlato
@@ -247,6 +248,7 @@ protected:
     mutable QMutex m_progressMutex;
     QVector<Schedule::Log> m_logs;
     mutable QMutex m_logMutex;
+    QEventLoopLocker m_eventLoopLocker; /// to keep locale around, TODO: check if still needed with QLocale
 };
 
 } //namespace KPlato

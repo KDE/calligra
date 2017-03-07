@@ -26,7 +26,7 @@
 #include <QWidget>
 #include <QPen>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "CellStorage.h"
 #include "Damages.h"

@@ -1,0 +1,6 @@
+File=calligraplanworksettings.kcfg
+ClassName=PlanWorkSettings
+Singleton=true
+Mutators=true
+TranslationSystem=kde
+TranslationDomain=calligraplanwork

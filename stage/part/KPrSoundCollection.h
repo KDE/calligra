@@ -33,6 +33,7 @@ class KoStore;
  * An collection of KPrSoundData objects to allow loading and saving them all together to the KoStore.
  */
 class STAGE_EXPORT KPrSoundCollection : public QObject, public KoDataCenterBase {
+    Q_OBJECT
 public:
     /// constructor
     explicit KPrSoundCollection(QObject *parent = 0);
@@ -51,7 +52,7 @@ public:
      */
     bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context );
 
-    KPrSoundData *findSound(QString title);
+    KPrSoundData *findSound(const QString &title);
 
     QStringList titles();
 

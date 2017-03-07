@@ -21,8 +21,6 @@
 #ifndef KPLATORCPSSCHEDULER_H
 #define KPLATORCPSSCHEDULER_H
 
-#include "kplatorcps_export.h"
-
 #include "kptschedulerplugin.h"
 
 #include "kptdatetime.h"
@@ -33,8 +31,6 @@
 #include <QList>
 
 class ProgressInfo;
-
-class KLocale;
 
 struct rcps_fitness;
 
@@ -144,7 +140,6 @@ protected:
     void setWeights();
 
 private:
-    KLocale *locale() const;
     int toRcpsTime( const DateTime &time ) const;
     DateTime fromRcpsTime( int time ) const;
 

@@ -33,19 +33,18 @@
 #include <QList>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QListWidget>
+#include <QPushButton>
 
-// KDE
+// KF5
 #include <kcombobox.h>
-#include <kdebug.h>
 #include <klineedit.h>
-#include <klistwidget.h>
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>
-#include <kpushbutton.h>
 
 #include <KoCanvasBase.h>
 
-// KSpread
+// Sheets
 #include "Localization.h"
 #include "Map.h"
 #include "NamedAreaManager.h"
@@ -58,11 +57,11 @@
 using namespace Calligra::Sheets;
 
 NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
         , m_selection(selection)
 {
-    setButtons(KDialog::Ok | KDialog::Close);
-    setButtonText(KDialog::Ok, i18n("&Select"));
+    setButtons(KoDialog::Ok | KoDialog::Close);
+    setButtonText(KoDialog::Ok, i18n("&Select"));
     setCaption(i18n("Named Areas"));
     setModal(true);
     setObjectName(QLatin1String("NamedAreaDialog"));
@@ -75,7 +74,7 @@ NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
 
     QVBoxLayout *vboxLayout = new QVBoxLayout();
 
-    m_list = new KListWidget(this);
+    m_list = new QListWidget(this);
     m_list->setSortingEnabled(true);
     vboxLayout->addWidget(m_list);
 
@@ -88,11 +87,11 @@ NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
     // list buttons
     QVBoxLayout *listButtonLayout = new QVBoxLayout();
 
-    m_newButton = new KPushButton(i18n("&New..."), widget);
+    m_newButton = new QPushButton(i18n("&New..."), widget);
     listButtonLayout->addWidget(m_newButton);
-    m_editButton = new KPushButton(i18n("&Edit..."), widget);
+    m_editButton = new QPushButton(i18n("&Edit..."), widget);
     listButtonLayout->addWidget(m_editButton);
-    m_removeButton = new KPushButton(i18n("&Remove"), widget);
+    m_removeButton = new QPushButton(i18n("&Remove"), widget);
     listButtonLayout->addWidget(m_removeButton);
     listButtonLayout->addStretch(1);
 
@@ -227,7 +226,7 @@ void NamedAreaDialog::slotRemove()
 
 
 EditNamedAreaDialog::EditNamedAreaDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
         , m_selection(selection)
 {
     setButtons(Ok | Cancel);
@@ -334,5 +333,3 @@ void EditNamedAreaDialog::slotAreaNameModified(const QString& name)
 {
     enableButtonOk(!name.isEmpty());
 }
-
-#include "NamedAreaDialog.moc"

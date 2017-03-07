@@ -228,9 +228,6 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
   <tabstop>capitalizeFirstLetterCheckBox</tabstop>
   <tabstop>showCommentIndicatorCheckBox</tabstop>
  </tabstops>
- <includes>
-  <include location="global">kdialog.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

@@ -50,7 +50,7 @@ CSThumbProviderWords::~CSThumbProviderWords()
 {
 }
 
-QList<QImage> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
+QVector<QImage> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
 {
     KWCanvasItem *canvasItem = static_cast<KWCanvasItem*>(m_doc->documentPart()->canvasItem(m_doc));
     KoZoomHandler zoomHandler;
@@ -65,7 +65,7 @@ QList<QImage> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
     KWPageManager *pageManager = m_doc->pageManager();
     KoShapeManager *shapeManager = canvasItem->shapeManager();
 
-    QList<QImage> thumbnails;
+    QVector<QImage> thumbnails;
 
     foreach(const KWPage &page, pageManager->pages()) {
 

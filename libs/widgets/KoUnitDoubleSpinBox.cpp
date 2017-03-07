@@ -23,16 +23,9 @@
 
 #include <KoUnit.h>
 
-#include <kdebug.h>
-#include <kglobal.h>
-#include <klocale.h>
+#include <WidgetsDebug.h>
 
-#ifdef Q_OS_WIN
-#include <float.h>
-#ifndef __MINGW32__
-#define isnan _isnan
-#endif
-#endif
+#include <klocalizedstring.h>
 
 // #define DEBUG_VALIDATOR
 // #define DEBUG_VALUEFROMTEXT
@@ -62,7 +55,7 @@ KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent)
     setUnit( KoUnit(KoUnit::Point) );
     setAlignment( Qt::AlignRight );
 
-    connect(this, SIGNAL(valueChanged( double )), SLOT(privateValueChanged()));
+    connect(this, SIGNAL(valueChanged(double)), SLOT(privateValueChanged()));
 }
 
 KoUnitDoubleSpinBox::~KoUnitDoubleSpinBox()
@@ -73,7 +66,7 @@ KoUnitDoubleSpinBox::~KoUnitDoubleSpinBox()
 QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
 {
 #ifdef DEBUG_VALIDATOR
-    kDebug(30004) <<"KoUnitDoubleSpinBox::validate :" << input <<" at" << pos;
+    debugWidgets <<"KoUnitDoubleSpinBox::validate :" << input <<" at" << pos;
 #else
     Q_UNUSED(pos);
 #endif
@@ -85,7 +78,7 @@ QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
     {
         // Nothing like an unit? The user is probably editing the unit
 #ifdef DEBUG_VALIDATOR
-        kDebug(30004) <<"Intermediate (no unit)";
+        debugWidgets <<"Intermediate (no unit)";
 #endif
         return QValidator::Intermediate;
     }
@@ -95,12 +88,12 @@ QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
     const QString unitName ( regexp.cap( 1 ).trimmed().toLower() );
 
 #ifdef DEBUG_VALIDATOR
-    kDebug(30004) <<"Split:" << number <<":" << unitName <<":";
+    debugWidgets <<"Split:" << number <<":" << unitName <<":";
 #endif
 
     const double value = valueFromText( number );
     double newVal = 0.0;
-    if (!isnan(value)) {
+    if (!qIsNaN(value)) {
         bool ok;
         const KoUnit unit = KoUnit::fromSymbol(unitName, &ok);
         if ( ok )
@@ -109,14 +102,14 @@ QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
         {
             // Probably the user is trying to edit the unit
 #ifdef DEBUG_VALIDATOR
-            kDebug(30004) <<"Intermediate (unknown unit)";
+            debugWidgets <<"Intermediate (unknown unit)";
 #endif
             return QValidator::Intermediate;
         }
     }
     else
     {
-        kWarning(30004) << "Not a number: " << number;
+        warnWidgets << "Not a number: " << number;
         return QValidator::Invalid;
     }
     newVal = KoUnit::ptToUnit( newVal, d->unit );
@@ -196,32 +189,31 @@ void KoUnitDoubleSpinBox::setMinMaxStep( double min, double max, double step )
 
 QString KoUnitDoubleSpinBox::textFromValue( double value ) const
 {
-    //kDebug(30004) <<"textFromValue:" << QString::number( value, 'f', 12 ) <<" =>" << num;
-    //const QString num(QString("%1%2").arg(KGlobal::locale()->formatNumber(value, d->precision ), m_unit.symbol()));
-    //const QString num ( QString( "%1").arg( KGlobal::locale()->formatNumber( value, d->precision )) );
-    return KGlobal::locale()->formatNumber( value, decimals() );
+    //debugWidgets <<"textFromValue:" << QString::number( value, 'f', 12 ) <<" =>" << num;
+    //const QString num(QString("%1%2").arg(QLocale().toString(value, d->precision ), m_unit.symbol()));
+    //const QString num ( QString( "%1").arg( QLocale().toString( value, d->precision )) );
+    return QLocale().toString( value, 'f', decimals() );
 }
 
 double KoUnitDoubleSpinBox::valueFromText( const QString& str ) const
 {
     QString str2( str );
-    /* KLocale::readNumber wants the thousand separator exactly at 1000.
-       But when editing, it might be anywhere. So we need to remove it. */
-    const QString sep( KGlobal::locale()->thousandsSeparator() );
-    if ( !sep.isEmpty() )
-        str2.remove( sep );
     str2.remove(d->unit.symbol());
-    bool ok;
-    const double dbl = KGlobal::locale()->readNumber( str2, &ok );
-#ifdef DEBUG_VALUEFROMTEXT
-    if ( ok )
-      kDebug(30004) <<"valueFromText:" << str <<": => :" << str2 <<": =>" << QString::number( dbl, 'f', 12 );
-    else
-        kWarning(30004) << "valueFromText error:" << str << ": => :" << str2 << ":";
-#endif
-    return dbl;
+    return QLocale().toDouble(str2);
+//    QString str2( str );
+//    /* KLocale::readNumber wants the thousand separator exactly at 1000.
+//       But when editing, it might be anywhere. So we need to remove it. */
+//    const QString sep( KGlobal::locale()->thousandsSeparator() );
+//    if ( !sep.isEmpty() )
+//        str2.remove( sep );
+//    str2.remove(d->unit.symbol());
+//    bool ok;
+//    const double dbl = KGlobal::locale()->readNumber( str2, &ok );
+//#ifdef DEBUG_VALUEFROMTEXT
+//    if ( ok )
+//      debugWidgets <<"valueFromText:" << str <<": => :" << str2 <<": =>" << QString::number( dbl, 'f', 12 );
+//    else
+//        warnWidgets << "valueFromText error:" << str << ": => :" << str2 << ":";
+//#endif
+//    return dbl;
 }
-
-
-
-#include <KoUnitDoubleSpinBox.moc>

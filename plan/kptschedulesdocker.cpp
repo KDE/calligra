@@ -22,7 +22,7 @@
 #include "kptschedule.h"
 #include <kptdebug.h>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <QAbstractItemView>
 #include <QModelIndex>
@@ -67,7 +67,7 @@ void SchedulesDocker::slotSelectionChanged()
 
 void SchedulesDocker::setProject( Project *project )
 {
-    kDebug(planDbg())<<project;
+    debugPlan<<project;
     m_model.setProject( project );
 }
 
@@ -109,6 +109,3 @@ QDockWidget* SchedulesDockerFactory::createDockWidget()
 }
 
 } //namespace KPlato
-
-#include "kptschedulesdocker.moc"
-

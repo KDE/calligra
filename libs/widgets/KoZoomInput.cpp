@@ -18,8 +18,8 @@
 
 #include "KoZoomInput.h"
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <WidgetsDebug.h>
+#include <klocalizedstring.h>
 
 #include <QComboBox>
 #include <QLabel>
@@ -73,7 +73,7 @@ KoZoomInput::KoZoomInput(QWidget* parent)
     addWidget(d->combo);
     d->inside = false;
 
-    connect(d->combo, SIGNAL(activated(const QString&)), this, SIGNAL(zoomLevelChanged(const QString&)));
+    connect(d->combo, SIGNAL(activated(QString)), this, SIGNAL(zoomLevelChanged(QString)));
 }
 
 KoZoomInput::~KoZoomInput()
@@ -144,5 +144,3 @@ bool KoZoomInput::eventFilter(QObject* watched, QEvent* event)
     }
     return false;
 }
-
-#include <KoZoomInput.moc>

@@ -24,13 +24,9 @@
 #include "kptcalendar.h"
 
 #include <QMap>
-#include <QDateTime>
 #include <QString>
 #include <QPair>
 
-#include <kdebug.h>
-#include <kglobal.h>
-#include <klocale.h>
 
 namespace KPlato
 {
@@ -45,7 +41,7 @@ public:
     virtual bool contains(const QDate &date) const { return DateMapType::contains(date.toString(Qt::ISODate)); }
 
     void insert(const QString &date, int state=CalendarDay::NonWorking) {
-        //kDebug()<<date<<"="<<state;
+        //debugPlan<<date<<"="<<state;
         if (state == CalendarDay::None)
             DateMapType::remove(date);
         else
@@ -54,16 +50,16 @@ public:
     void insert(const QDate &date, int state=CalendarDay::NonWorking) { insert(date.toString(Qt::ISODate), state); }
 
     void remove(const QDate &date) {
-        //kDebug()<<date.toString(Qt::ISODate);
+        //debugPlan<<date.toString(Qt::ISODate);
         DateMapType::remove(date.toString(Qt::ISODate));
     }
 
-    int state(const QString &date) {
-        DateMapType::iterator it = find(date);
+    int state(const QString &date) const {
+        DateMapType::ConstIterator it = find(date);
         if (it == end()) return 0;
         else return it.value();
     }
-    int state(QDate date) { return state(date.toString(Qt::ISODate)); }
+    int state(const QDate &date) const { return state(date.toString(Qt::ISODate)); }
 
     bool operator==(const DateMap &m) const {
         return keys() == m.keys() && values() == m.values();
@@ -74,7 +70,7 @@ public:
 
     // boolean use
     void toggle(const QString &date, int state=CalendarDay::NonWorking) {
-        //kDebug()<<date<<"="<<state;
+        //debugPlan<<date<<"="<<state;
         if (DateMapType::contains(date))
             DateMapType::remove(date);
         else
@@ -82,7 +78,7 @@ public:
     }
     void toggle(const QDate &date, int state=CalendarDay::NonWorking) { return toggle(date.toString(Qt::ISODate), state); }
     void toggleClear(const QString &date, int state=CalendarDay::NonWorking) {
-        //kDebug()<<date<<"="<<state;
+        //debugPlan<<date<<"="<<state;
         bool s = DateMapType::contains(date);
         clear();
         if (!s) insert(date, state);
@@ -105,8 +101,8 @@ public:
         else
             IntMapType::insert(key, state); }
 
-    virtual int state(int key) {
-        IntMapType::iterator it = IntMapType::find(key);
+    virtual int state(int key) const {
+        IntMapType::ConstIterator it = IntMapType::find(key);
         if (it == IntMapType::end()) return 0;
         else return it.value();
     }
@@ -139,7 +135,7 @@ public:
     bool contains(const QPair<int,int> &week) { return contains(week.first,  week.second); }
 
     void insert(int week, int year, int state=CalendarDay::NonWorking) {
-        if (week < 1 || week > 53) { kError()<<"Illegal week number: "<<week<<endl; return; }
+        if (week < 1 || week > 53) { errorPlan<<"Illegal week number: "<<week<<endl; return; }
         IntMap::insert(week*10000 + year, state);
     }
     void insert(const QPair<int,int> &week, int state=CalendarDay::NonWorking) { insert(week.first, week.second, state); }
@@ -151,15 +147,15 @@ public:
     static QPair<int, int> week(int key) { return QPair<int, int>(key/10000, key%10000); }
 
     using IntMap::state;
-    int state(const QPair<int, int> &week) { return IntMap::state(week.first*10000 + week.second); }
-    int state(int week, int year) { return state(QPair<int, int>(week, year)); }
+    int state(const QPair<int, int> &week) const { return IntMap::state(week.first*10000 + week.second); }
+    int state(int week, int year) const { return state(QPair<int, int>(week, year)); }
 
     void toggle(const QPair<int,int> &week, int state=CalendarDay::NonWorking) {
-        if (week.first < 1 || week.first > 53) { kError()<<"Illegal week number: "<<week.first<<endl; return; }
+        if (week.first < 1 || week.first > 53) { errorPlan<<"Illegal week number: "<<week.first<<endl; return; }
         IntMap::toggle(week.first*10000 + week.second, state);
     }
     void toggleClear(const QPair<int,int> &week, int state=CalendarDay::NonWorking) {
-        if (week.first < 1 || week.first > 53) { kError()<<"Illegal week number: "<<week.first<<endl; return; }
+        if (week.first < 1 || week.first > 53) { errorPlan<<"Illegal week number: "<<week.first<<endl; return; }
         IntMap::toggleClear(week.first*10000 + week.second, state);
     }
 };

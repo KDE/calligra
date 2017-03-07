@@ -18,11 +18,13 @@
 */
 
 #include "IdentifierElement.h"
+
 #include "AttributeManager.h"
 #include "Dictionary.h"
+#include "FormulaDebug.h"
+
 #include <QFontMetricsF>
 
-#include <kdebug.h>
 
 IdentifierElement::IdentifierElement( BasicElement* parent ) : TokenElement( parent )
 {}

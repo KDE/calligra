@@ -21,8 +21,6 @@
 
 #include "TreeSortFilter.h"
 
-#include <QtDebug>
-
 TreeSortFilter::TreeSortFilter(QObject *p) : QSortFilterProxyModel(p)
 {
     Q_ASSERT(p);

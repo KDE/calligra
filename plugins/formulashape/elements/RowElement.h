@@ -24,7 +24,7 @@
 #define ROWELEMENT_H
 
 #include "BasicElement.h"
-#include "kformula_export.h"
+#include "koformula_export.h"
 
 class FormulaCursor;
 

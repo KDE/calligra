@@ -28,6 +28,7 @@
 #include "komsooxml_export.h"
 
 struct KoOdfWriters;
+class QString;
 
 namespace MSOOXML
 {

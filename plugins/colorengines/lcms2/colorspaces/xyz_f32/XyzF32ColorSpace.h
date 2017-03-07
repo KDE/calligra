@@ -21,11 +21,12 @@
 #define KIS_XYZ_F32_COLORSPACE_H_
 
 #include <LcmsColorSpace.h>
-#include <KoColorSpaceTraits.h>
 
 #define TYPE_XYZA_FLT         (FLOAT_SH(1)|COLORSPACE_SH(PT_XYZ)|EXTRA_SH(1)|CHANNELS_SH(3)|BYTES_SH(4))
 
 #include <KoColorModelStandardIds.h>
+
+struct KoXyzF32Traits;
 
 class XyzF32ColorSpace : public LcmsColorSpace<KoXyzF32Traits>
 {
@@ -35,30 +36,36 @@ public:
 
     virtual bool willDegrade(ColorSpaceIndependence independence) const;
 
-    virtual KoID colorModelId() const {
+    virtual KoID colorModelId() const
+    {
         return XYZAColorModelID;
     }
 
-    virtual KoID colorDepthId() const {
+    virtual KoID colorDepthId() const
+    {
         return Float32BitsColorDepthID;
     }
 
-    virtual KoColorSpace* clone() const;
+    virtual KoColorSpace *clone() const;
 
-    virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
+    virtual void colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const;
 
     virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
+    virtual void toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const;
+    virtual QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const;
+    virtual void toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const;
+    virtual QVector <double> fromYUV(qreal *y, qreal *u, qreal *v) const;
 
     static QString colorSpaceId()
     {
         return QString("XYZAF32");
     }
 
-    virtual bool hasHighDynamicRange() const {
+    virtual bool hasHighDynamicRange() const
+    {
         return true;
     }
 };
-
 
 class XyzF32ColorSpaceFactory : public LcmsColorSpaceFactory
 {
@@ -69,44 +76,50 @@ public:
     {
     }
 
-    virtual QString id() const {
+    virtual QString id() const
+    {
         return XyzF32ColorSpace::colorSpaceId();
     }
 
-    virtual QString name() const {
+    virtual QString name() const
+    {
         return i18n("XYZ (32-bit float/channel)");
     }
 
-    virtual bool userVisible() const {
+    virtual bool userVisible() const
+    {
         return true;
     }
 
-    virtual KoID colorModelId() const {
+    virtual KoID colorModelId() const
+    {
         return XYZAColorModelID;
     }
 
-    virtual KoID colorDepthId() const {
+    virtual KoID colorDepthId() const
+    {
         return Float32BitsColorDepthID;
     }
 
-    virtual int referenceDepth() const {
+    virtual int referenceDepth() const
+    {
         return 32;
     }
 
-    virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const {
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const
+    {
         return new XyzF32ColorSpace(name(), p->clone());
     }
 
-    virtual QString defaultProfile() const {
+    virtual QString defaultProfile() const
+    {
         return "XYZ identity built-in";
     }
-
 
     virtual bool isHdr() const
     {
         return true;
     }
 };
-
 
 #endif

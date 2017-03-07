@@ -21,8 +21,11 @@
 #ifndef __ko_document_entry_h__
 #define __ko_document_entry_h__
 
-#include <kservice.h>
 #include <QList>
+#include <QString>
+#include <QSharedPointer>
+#include <QPluginLoader>
+
 #include "komain_export.h"
 
 class QStringList;
@@ -43,11 +46,14 @@ public:
     explicit KoDocumentEntry();
     /**
      * Represents a valid entry
+     * @param loader pluginloader for the service, KoDocumentEntry takes ownership
      */
-    explicit KoDocumentEntry(const KService::Ptr& service);
+    explicit KoDocumentEntry(QPluginLoader *loader);
     ~KoDocumentEntry();
 
-    KService::Ptr service() const;
+    QJsonObject metaData() const;
+
+    QString fileName() const;
 
     /**
      * @return TRUE if the service pointer is null
@@ -94,7 +100,7 @@ public:
     static KoDocumentEntry queryByMimeType(const QString & mimetype);
 
 private:
-    KService::Ptr m_service;
+    QSharedPointer<QPluginLoader> m_loader;
 };
 
 #endif

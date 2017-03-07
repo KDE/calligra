@@ -18,11 +18,14 @@
 */
 
 #include "FixedElement.h"
+
 #include "FormulaCursor.h"
+#include "FormulaDebug.h"
+
 #include <KoXmlReader.h>
+
 #include <QPainter>
 
-#include <kdebug.h>
 
 FixedElement::FixedElement( BasicElement* parent ) : BasicElement( parent )
 {

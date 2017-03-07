@@ -29,8 +29,7 @@
 #include <QTextStream>
 #include <QVariant>
 
-#include <kdebug.h>
-
+#include "SheetsDebug.h"
 #include "Number.h"
 
 using namespace std;
@@ -171,7 +170,7 @@ public:
      * Creates a floating-point value from time.
      * See also note above.
      */
-    Value(const QTime& time, const CalculationSettings* settings);
+    explicit Value(const QTime& time);
 
     /**
      * Creates a floating-point value from date.
@@ -310,7 +309,7 @@ public:
      * Returns the double quoted string value of this value.
      *
      * Same as \a asString but with double quotes around. This
-     * is needed for example in Conditions::saveOdfConditionValue
+     * is needed for example in Odf::saveConditionValue
      * to save Value strings with double quotes.
      */
     QString asStringWithDoubleQuotes() const;
@@ -333,7 +332,7 @@ public:
     /**
      * Returns the time representation of this value.
      */
-    QTime asTime(const CalculationSettings* settings) const;
+    QTime asTime() const;
 
     /**
      * Returns an element in the array value.
@@ -531,7 +530,7 @@ CALLIGRA_SHEETS_ODF_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Sh
 CALLIGRA_SHEETS_ODF_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Sheets::Value value);
 
 /***************************************************************************
-  kDebug support
+  QDebug support
 ****************************************************************************/
 
 CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::Value& v);

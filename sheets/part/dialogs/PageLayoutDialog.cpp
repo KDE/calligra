@@ -19,7 +19,7 @@
 
 #include "PageLayoutDialog.h"
 
-// KSpread
+// Sheets
 #include "part/Doc.h"
 #include "Map.h"
 #include "PrintSettings.h"
@@ -33,8 +33,8 @@
 // Calligra
 #include <KoUnit.h>
 
-// KDE
-#include <klocale.h>
+// KF5
+#include <KLocalizedString>
 
 using namespace Calligra::Sheets;
 

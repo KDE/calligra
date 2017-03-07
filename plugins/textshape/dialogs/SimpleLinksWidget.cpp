@@ -23,7 +23,7 @@
 #include "SimpleLinksWidget.h"
 
 #include "ReferencesTool.h"
-#include <KAction>
+#include <QAction>
 #include <KoBookmarkManager.h>
 #include "ManageBookmarkDialog.h"
 #include <KoTextDocument.h>
@@ -41,7 +41,6 @@ SimpleLinksWidget::SimpleLinksWidget(ReferencesTool *tool, QWidget *parent)
     Q_ASSERT(tool);
     widget.insertLink->setDefaultAction(tool->action("insert_link"));
     widget.invokeBookmarkHandler->setDefaultAction(tool->action("invoke_bookmark_handler"));
-    widget.invokeBookmarkHandler->setNumColumns(1);
     connect(widget.insertLink, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.invokeBookmarkHandler, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.invokeBookmarkHandler, SIGNAL(aboutToShowMenu()), this, SLOT(preparePopUpMenu()));
@@ -63,8 +62,8 @@ void SimpleLinksWidget::manageBookmarks()
     QString name;
     const KoBookmarkManager *manager =  KoTextDocument(m_referenceTool->editor()->document()).textRangeManager()->bookmarkManager();
     QPointer<ManageBookmarkDialog> dia = new ManageBookmarkDialog(manager->bookmarkNameList(), m_referenceTool->editor(), m_referenceTool->canvas()->canvasWidget());
-    connect(dia, SIGNAL(nameChanged(const QString &, const QString &)), manager, SLOT(rename(const QString &, const QString &)));
-    connect(dia, SIGNAL(bookmarkDeleted(const QString &)), manager, SLOT(remove(const QString &)));
+    connect(dia, SIGNAL(nameChanged(QString,QString)), manager, SLOT(rename(QString,QString)));
+    connect(dia, SIGNAL(bookmarkDeleted(QString)), manager, SLOT(remove(QString)));
     if (dia->exec() == QDialog::Accepted) {
         name = dia->selectedBookmarkName();
     } else {

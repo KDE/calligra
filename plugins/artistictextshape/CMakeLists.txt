@@ -1,5 +1,7 @@
 project( artistictextshape )
 
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_artistictext\")
+
 include_directories(
     ${CMAKE_SOURCE_DIR}/libs/widgets
     ${CMAKE_SOURCE_DIR}/libs/main # for KoFontComboBox.h
@@ -30,17 +32,15 @@ set ( ArtisticTextShape_SRCS
     ReplaceTextRangeCommand.cpp
 )
 
-kde4_add_ui_files( ArtisticTextShape_SRCS
+ki18n_wrap_ui( ArtisticTextShape_SRCS
     ArtisticTextShapeConfigWidget.ui
     ArtisticTextShapeOnPathWidget.ui
 )
 
-kde4_add_plugin( calligra_shape_artistictext ${ArtisticTextShape_SRCS} )
+add_library(calligra_shape_artistictext MODULE ${ArtisticTextShape_SRCS} )
+
+calligra_shape_desktop_to_json(calligra_shape_artistictext calligra_shape_artistictext.desktop)
 
 target_link_libraries(calligra_shape_artistictext flake)
 
-install( TARGETS calligra_shape_artistictext DESTINATION ${PLUGIN_INSTALL_DIR} )
-
-########### install files ###############
-
-install( FILES calligra_shape_artistictext.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
+install( TARGETS calligra_shape_artistictext DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes )

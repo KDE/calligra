@@ -22,7 +22,7 @@
 #include "KPrPlaceholderTool.h"
 #include "KPrPlaceholderShape.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KPrPlaceholderToolFactory::KPrPlaceholderToolFactory()
     : KoToolFactoryBase("Layout Tool")

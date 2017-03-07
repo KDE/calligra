@@ -21,8 +21,8 @@
 #include <KoPathShape.h>
 #include <KoPathPointData.h>
 #include <KoPathPointInsertCommand.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
+
 
 class KarbonPathRefineCommand::Private {
 public:

@@ -25,9 +25,6 @@
 #include <QPainter>
 #include <QString>
 
-// KDE
-#include <kdebug.h>
-
 // Calligra
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
@@ -42,6 +39,7 @@
 
 // Shape
 #include "utils.h"
+#include "ThreedDebug.h"
 
 
 //#define OdfObjectAttributes (OdfAllAttributes & ~(OdfGeometry | OdfTransformation))
@@ -83,7 +81,7 @@ bool Sphere::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &c
     dummy = objectElement.attributeNS(KoXmlNS::dr3d, "size", "(5000.0 5000.0 5000.0)");
     m_size = odfToVector3D(dummy);
 
-    kDebug(31000) << "Sphere:" << m_center << m_size;
+    debugThreed << "Sphere:" << m_center << m_size;
     return true;
 }
 
@@ -94,7 +92,7 @@ void Sphere::saveOdf(KoShapeSavingContext &context) const
 
 void Sphere::saveObjectOdf(KoShapeSavingContext &context) const
 {
-    kDebug(31000) << "Saving Sphere:" << m_center << m_size;
+    debugThreed << "Saving Sphere:" << m_center << m_size;
 
     KoXmlWriter &writer = context.xmlWriter();
     writer.startElement("dr3d:sphere");
@@ -147,7 +145,7 @@ bool Cube::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &con
     dummy = objectElement.attributeNS(KoXmlNS::dr3d, "max-edge", "(2500.0 2500.0 2500.0)");
     m_maxEdge = odfToVector3D(dummy);
 
-    kDebug(31000) << "Cube:" << m_minEdge << m_maxEdge;
+    debugThreed << "Cube:" << m_minEdge << m_maxEdge;
     return true;
 }
 
@@ -158,7 +156,7 @@ void Cube::saveOdf(KoShapeSavingContext &context) const
 
 void Cube::saveObjectOdf(KoShapeSavingContext &context) const
 {
-    kDebug(31000) << "Saving Cube:" << m_minEdge << m_maxEdge;
+    debugThreed << "Saving Cube:" << m_minEdge << m_maxEdge;
 
     KoXmlWriter &writer = context.xmlWriter();
     writer.startElement("dr3d:cube");
@@ -213,7 +211,7 @@ bool Extrude::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &
     m_path = objectElement.attributeNS(KoXmlNS::svg, "d", "");
     m_viewBox = objectElement.attributeNS(KoXmlNS::svg, "viewBox", "");
 
-    kDebug(31000) << "Extrude:" << m_path;
+    debugThreed << "Extrude:" << m_path;
     return true;
 }
 
@@ -224,7 +222,7 @@ void Extrude::saveOdf(KoShapeSavingContext &context) const
 
 void Extrude::saveObjectOdf(KoShapeSavingContext &context) const
 {
-    kDebug(31000) << "Saving Extrude:" << m_path;
+    debugThreed << "Saving Extrude:" << m_path;
 
     KoXmlWriter &writer = context.xmlWriter();
     writer.startElement("dr3d:extrude");
@@ -331,7 +329,7 @@ bool Rotate::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &c
     m_path = objectElement.attributeNS(KoXmlNS::svg, "d", "");
     m_viewBox = objectElement.attributeNS(KoXmlNS::svg, "viewBox", "");
 
-    kDebug(31000) << "Rotate:" << m_path;
+    debugThreed << "Rotate:" << m_path;
     return true;
 }
 
@@ -342,7 +340,7 @@ void Rotate::saveOdf(KoShapeSavingContext &context) const
 
 void Rotate::saveObjectOdf(KoShapeSavingContext &context) const
 {
-    kDebug(31000) << "Saving Rotate:" << m_path;
+    debugThreed << "Saving Rotate:" << m_path;
 
     KoXmlWriter &writer = context.xmlWriter();
     writer.startElement("dr3d:rotate");

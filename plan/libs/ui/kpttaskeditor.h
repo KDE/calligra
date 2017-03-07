@@ -26,11 +26,8 @@
 #include "kptnodeitemmodel.h"
 #include "kptviewbase.h"
 
-#include <klocale.h>
-
 class KoDocument;
 
-class KAction;
 class KActionMenu;
 
 namespace KPlato
@@ -144,8 +141,8 @@ Q_SIGNALS:
     void unindentTask();
 
     void loadTaskModules( const QStringList &files );
-    void saveTaskModule( const KUrl &url, Project *project );
-    void removeTaskModule( const KUrl &url );
+    void saveTaskModule( const QUrl &url, Project *project );
+    void removeTaskModule( const QUrl &url );
 
 public Q_SLOTS:
     /// Activate/deactivate the gui
@@ -182,24 +179,24 @@ private Q_SLOTS:
     void slotProjectShown( bool );
 
 private:
-    void edit( QModelIndex index );
+    void edit( const QModelIndex &index );
 
 private:
     TaskEditorTreeView *m_view;
 
     KActionMenu *menuAddTask;
     KActionMenu *menuAddSubTask;
-    KAction *actionAddTask;
-    KAction *actionAddMilestone;
-    KAction *actionAddSubtask;
-    KAction *actionAddSubMilestone;
-    KAction *actionDeleteTask;
-    KAction *actionMoveTaskUp;
-    KAction *actionMoveTaskDown;
-    KAction *actionIndentTask;
-    KAction *actionUnindentTask;
+    QAction *actionAddTask;
+    QAction *actionAddMilestone;
+    QAction *actionAddSubtask;
+    QAction *actionAddSubMilestone;
+    QAction *actionDeleteTask;
+    QAction *actionMoveTaskUp;
+    QAction *actionMoveTaskDown;
+    QAction *actionIndentTask;
+    QAction *actionUnindentTask;
 
-    KAction *actionShowProject;
+    QAction *actionShowProject;
 };
 
 class KPLATOUI_EXPORT TaskView : public ViewBase
@@ -256,7 +253,7 @@ private Q_SLOTS:
 
 private:
     NodeTreeView *m_view;
-    KAction *actionShowProject;
+    QAction *actionShowProject;
 
 };
 
@@ -345,7 +342,7 @@ private:
     WorkPackageTreeView *m_view;
     MacroCommand *m_cmd;
 
-    KAction *actionMailWorkpackage;
+    QAction *actionMailWorkpackage;
 
 };
 

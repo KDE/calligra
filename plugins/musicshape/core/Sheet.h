@@ -57,7 +57,7 @@ public:
     int partCount() const;
 
     /**
-     * Returns the part at the given index, or NULL if index < 0 or >= partCount().
+     * Returns the part at the given index, or nullptr if index < 0 or >= partCount().
      *
      * @param index the index of the part to return
      */

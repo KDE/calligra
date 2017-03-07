@@ -28,8 +28,8 @@
 #include <QPen>
 #include <QDrag>
 
-//Kde headers
-#include <klocale.h>
+//KF5 headers
+#include <klocalizedstring.h>
 #include <kiconloader.h>
 
 KPrSlidesManagerView::KPrSlidesManagerView(QWidget *parent)

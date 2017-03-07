@@ -19,7 +19,7 @@
 
 // A quick hack on the button to make it work more akin to how Cohere demands text-only buttons must work
 
-import QtQuick 1.1
+import QtQuick 2.0
 import org.calligra 1.0
 
 Item {

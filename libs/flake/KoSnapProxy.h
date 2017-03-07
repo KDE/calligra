@@ -25,6 +25,7 @@ class KoShape;
 class KoPathSegment;
 class KoCanvasBase;
 #include <QList>
+#include <QVector>
 #include "flake_export.h"
 
 class QPointF;
@@ -32,28 +33,28 @@ class QRectF;
 /**
  * This class provides access to different shape related snap targets to snap strategies.
  */
-class FLAKE_TEST_EXPORT KoSnapProxy
+class FLAKE_EXPORT KoSnapProxy
 {
 public:
-    KoSnapProxy(KoSnapGuide *snapGuide);
+    explicit KoSnapProxy(KoSnapGuide *snapGuide);
 
     /// returns list of points in given rectangle in document coordinates
-    QList<QPointF> pointsInRect(const QRectF &rect);
+    QVector<QPointF> pointsInRect(const QRectF &rect) const;
 
     /// returns list of shape in given rectangle in document coordinates
-    QList<KoShape*> shapesInRect(const QRectF &rect, bool omitEditedShape = false);
+    QList<KoShape*> shapesInRect(const QRectF &rect, bool omitEditedShape = false) const;
 
     /// returns list of points from given shape
-    QList<QPointF> pointsFromShape(KoShape *shape);
+    QVector<QPointF> pointsFromShape(KoShape *shape) const;
 
     /// returns list of points in given rectangle in document coordinates
-    QList<KoPathSegment> segmentsInRect(const QRectF &rect);
+    QList<KoPathSegment> segmentsInRect(const QRectF &rect) const;
 
     /// returns list of all shapes
-    QList<KoShape*> shapes(bool omitEditedShape = false);
+    QList<KoShape*> shapes(bool omitEditedShape = false) const;
 
     /// returns canvas we are working on
-    KoCanvasBase *canvas();
+    KoCanvasBase *canvas() const;
 
 private:
     KoSnapGuide *m_snapGuide;

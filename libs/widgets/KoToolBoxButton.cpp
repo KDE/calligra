@@ -20,10 +20,11 @@
 #include "KoToolBoxButton_p.h"
 
 #include <KoToolManager.h>
-#include <kicon.h>
-#include <klocale.h>
-#include <kshortcut.h>
-#include <KoIcon.h>
+#include <QIcon>
+#include <QPalette>
+#include <QApplication>
+#include <klocalizedstring.h>
+#include <QKeySequence>
 
 KoToolBoxButton::KoToolBoxButton(KoToolAction *toolAction, QWidget *parent)
     : QToolButton(parent)
@@ -33,22 +34,32 @@ KoToolBoxButton::KoToolBoxButton(KoToolAction *toolAction, QWidget *parent)
     // ensure same L&F
     setCheckable(true);
     setAutoRaise(true);
-#if QT_VERSION >= 0x040700
-    setIcon(KIcon(m_toolAction->iconName()));
-#else
-    setIcon(themedIcon(m_toolAction->iconName()));
-#endif
+    setIcon(QIcon::fromTheme(m_toolAction->iconName()));
+
     setDataFromToolAction();
 
     connect(this, SIGNAL(clicked(bool)), m_toolAction, SLOT(trigger()));
     connect(m_toolAction, SIGNAL(changed()), SLOT(setDataFromToolAction()));
 }
 
+void KoToolBoxButton::setHighlightColor()
+{
+    QPalette p = qApp->palette();
+    if (isChecked()) {
+        QPalette palette_highlight(p);
+        QColor c = p.color(QPalette::Highlight);
+        palette_highlight.setColor(QPalette::Button, c);
+        setPalette(palette_highlight);
+    }
+    else {
+        setPalette(p);
+    }
+}
 
 void KoToolBoxButton::setDataFromToolAction()
 {
     const QString plainToolTip = m_toolAction->toolTip();
-    const KShortcut shortcut = m_toolAction->shortcut();
+    const QKeySequence shortcut = m_toolAction->shortcut();
     const QString toolTip =
         shortcut.isEmpty() ?
             i18nc("@info:tooltip", "%1", plainToolTip) :

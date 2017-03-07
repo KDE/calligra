@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright (C) 2012-2013 Inge Wallin            <inge@lysator.liu.se>
+   Copyright (C) 2012-2014 Inge Wallin            <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,8 +26,7 @@
 #include <QStringList>
 #include <QBuffer>
 
-// KDE
-#include <kdebug.h>
+// KF5
 #include <klocalizedstring.h>
 
 // Calligra
@@ -39,9 +38,7 @@
 #include "OdtReaderBackend.h"
 #include "OdfReaderContext.h"
 #include "OdfTextReader.h"
-
-
-static void prepareForOdfInternal(KoXmlStreamReader &reader);
+#include "OdfReaderDebug.h"
 
 
 #if 0
@@ -53,7 +50,7 @@ static int debugIndent = 0;
     DEBUG_READING("exiting"); \
     --debugIndent
 #define DEBUG_READING(param) \
-    kDebug(30503) << QString("%1").arg(" ", debugIndent * 2) << param << ": " \
+    debugOdfReader << QString("%1").arg(" ", debugIndent * 2) << param << ": " \
     << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
     << reader.qualifiedName().toString()
 #else
@@ -67,9 +64,7 @@ static int debugIndent = 0;
 
 
 OdtReader::OdtReader()
-    : m_backend(0)
-    , m_context(0)
-    , m_textReader(0)
+    : OdfReader()
 {
 }
 
@@ -77,104 +72,11 @@ OdtReader::~OdtReader()
 {
 }
 
-
-void OdtReader::setTextReader(OdfTextReader *textReader)
-{
-    m_textReader = textReader;
-}
-
-bool OdtReader::analyzeContent(OdfReaderContext *context)
-{
-    // Extract styles, manifest, settings, etc
-    if (context->analyzeOdfFile() != KoFilter::OK) {
-        return false;
-    }
-    kDebug(30503) << "analyze ok";
-    return true;
-}
-
-bool OdtReader::readContent(OdtReaderBackend *backend, OdfReaderContext *context)
-{
-    kDebug(30503) << "entering";
-
-    m_backend = backend;
-    m_context = context;
-
-    if (m_textReader) {
-        m_textReader->setContext(context);
-    }
-
-    // ----------------------------------------------------------------
-    // Read the body from content.xml
-
-    KoStore *odfStore = m_context->odfStore();
-
-    if (!odfStore->open("content.xml")) {
-        kError(30503) << "Unable to open input file content.xml" << endl;
-        return false;
-    }
-    kDebug(30503) << "open content.xml ok";
-
-    KoXmlStreamReader reader;
-    prepareForOdfInternal(reader);
-
-    reader.setDevice(odfStore->device());
-    bool  foundContent = false;
-    while (!reader.atEnd()) {
-        reader.readNext();
-
-        if (reader.isStartElement() && reader.qualifiedName() == "office:document-content") {
-            foundContent = true;
-            break;
-        }
-    }
-    if (!foundContent) {
-        kError(30503) << "Couldn't find the content in content.xml" << endl;
-    }
-
-    m_backend->elementOfficeDocumentcontent(reader, m_context);
-
-    // <office:document-content> has the following children in ODF 1.2:
-    //          <office:automatic-styles> 3.15.3
-    //   [done] <office:body> 3.3
-    //          <office:font-face-decls> 3.14
-    //          <office:scripts> 3.12.
-    while (reader.readNextStartElement()) {
-        QString tagName = reader.qualifiedName().toString();
-        
-        if (tagName == "office:automatic-styles") {
-            // We already have the styles in the context.  No need to read them again.
-            reader.skipCurrentElement();
-        }
-        else if (tagName == "office:body") {
-            // This is the big one.
-            readElementOfficeBody(reader);
-        }
-        else if (tagName == "office:font-face-decls") {
-            // FIXME: Not yet implemented
-            reader.skipCurrentElement();
-        }
-        else if (tagName == "office:scripts") {
-            // FIXME: Not yet implemented
-            reader.skipCurrentElement();
-        }
-        else {
-            reader.skipCurrentElement();
-        }
-    }
-
-    m_backend->elementOfficeDocumentcontent(reader, m_context);
-    odfStore->close();
-
-    return true;
-}
-
-
 #if 0
 // This is a template function for the reader library.
 // Copy this one and change the name and fill in the code.
 void OdtReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
-{ 
+{
    DEBUGSTART();
 
     // <namespace:tagname> has the following children in ODF 1.2:
@@ -185,7 +87,7 @@ void OdtReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
     //          <office:scripts> 3.12.
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
+
         if (tagName == "office:automatic-styles") {
             // FIXME: NYI
         }
@@ -203,41 +105,12 @@ void OdtReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
 }
 #endif
 
-
-void OdtReader::readElementOfficeBody(KoXmlStreamReader &reader)
-{
-    DEBUGSTART();
-    m_backend->elementOfficeBody(reader, m_context);
-
-    // <office:body> has the following children in ODF 1.2:
-    //          <office:chart> 3.8,
-    //          <office:database> 12.1
-    //          <office:drawing> 3.5
-    //          <office:image> 3.9
-    //          <office:presentation> 3.6
-    //          <office:spreadsheet> 3.7
-    //   [done] <office:text> 3.4
-    //
-    // Of those only <office:text> is present in a text document (odt).
-    while (reader.readNextStartElement()) {
-        QString tagName = reader.qualifiedName().toString();
-        
-        if (tagName == "office:text") {
-            readElementOfficeText(reader);
-        }
-        else {
-            reader.skipCurrentElement();
-        }
-    }
-
-    m_backend->elementOfficeBody(reader, m_context);
-    DEBUGEND();
-}
-
+// Reimplemented from OdfReader
 void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
 {
     DEBUGSTART();
-    m_backend->elementOfficeText(reader, m_context);
+    OdtReaderBackend *backend = dynamic_cast<OdtReaderBackend *>(m_backend);
+    backend->elementOfficeText(reader, m_context);
 
     // <office:text> has the following children in ODF 1.2:
     //
@@ -265,7 +138,7 @@ void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
     // FIXME: For now, none of these are handled
     while (reader.readNextStartElement()) {
         DEBUG_READING("loop-start");
-        
+
         QString tagName = reader.qualifiedName().toString();
         if (tagName == "office:forms") {
             // FIXME: NYI
@@ -327,97 +200,10 @@ void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
         DEBUG_READING("loop-end");
     }
 
-    m_backend->elementOfficeText(reader, m_context);
+    backend->elementOfficeText(reader, m_context);
     DEBUGEND();
 }
 
 
 // ----------------------------------------------------------------
 //                             Other functions
-
-
-void OdtReader::readUnknownElement(KoXmlStreamReader &reader)
-{
-    DEBUGSTART();
-
-#if 1
-    // FIXME: We need to handle this.
-    reader.skipCurrentElement();
-#else
-    if (m_context->isInsideParagraph()) {
-        // readParagraphContents expect to have the reader point to the
-        // contents of the paragraph so we have to read past the text:p
-        // start tag here.
-        reader.readNext();
-        readParagraphContents(reader);
-    }
-    else {
-        while (reader.readNextStartElement()) {
-            readTextLevelElement(reader);
-        }
-    }
-#endif
-
-    DEBUGEND();
-}
-
-
-// FIXME: Remove this function when it is exported from libs/odf/KoXmlStreamReader.cpp
-//
-static void prepareForOdfInternal(KoXmlStreamReader &reader)
-{
-    // This list of namespaces is taken from KoXmlNs.cpp
-    // Maybe not all of them are expected in an ODF document?
-    reader.addExpectedNamespace("office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
-    reader.addExpectedNamespace("meta", "urn:oasis:names:tc:opendocument:xmlns:meta:1.0");
-    reader.addExpectedNamespace("config", "urn:oasis:names:tc:opendocument:xmlns:config:1.0");
-    reader.addExpectedNamespace("text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0");
-    reader.addExpectedNamespace("table", "urn:oasis:names:tc:opendocument:xmlns:table:1.0");
-    reader.addExpectedNamespace("draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0");
-    reader.addExpectedNamespace("presentation", "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0");
-    reader.addExpectedNamespace("dr3d", "urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0");
-    reader.addExpectedNamespace("chart", "urn:oasis:names:tc:opendocument:xmlns:chart:1.0");
-    reader.addExpectedNamespace("form", "urn:oasis:names:tc:opendocument:xmlns:form:1.0");
-    reader.addExpectedNamespace("script", "urn:oasis:names:tc:opendocument:xmlns:script:1.0");
-    reader.addExpectedNamespace("style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0");
-    reader.addExpectedNamespace("number", "urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0");
-    reader.addExpectedNamespace("manifest", "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0");
-    reader.addExpectedNamespace("anim", "urn:oasis:names:tc:opendocument:xmlns:animation:1.0");
-
-    reader.addExpectedNamespace("math", "http://www.w3.org/1998/Math/MathML");
-    reader.addExpectedNamespace("svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
-    reader.addExpectedNamespace("fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0");
-    reader.addExpectedNamespace("dc", "http://purl.org/dc/elements/1.1/");
-    reader.addExpectedNamespace("xlink", "http://www.w3.org/1999/xlink");
-    reader.addExpectedNamespace("VL", "http://openoffice.org/2001/versions-list");
-    reader.addExpectedNamespace("smil", "urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0");
-    reader.addExpectedNamespace("xhtml", "http://www.w3.org/1999/xhtml");
-    reader.addExpectedNamespace("xml", "http://www.w3.org/XML/1998/namespace");
-
-    reader.addExpectedNamespace("calligra", "http://www.calligra.org/2005/");
-    reader.addExpectedNamespace("officeooo", "http://openoffice.org/2009/office");
-    reader.addExpectedNamespace("ooo", "http://openoffice.org/2004/office");
-
-    reader.addExpectedNamespace("delta", "http://www.deltaxml.com/ns/track-changes/delta-namespace");
-    reader.addExpectedNamespace("split", "http://www.deltaxml.com/ns/track-changes/split-namespace");
-    reader.addExpectedNamespace("ac", "http://www.deltaxml.com/ns/track-changes/attribute-change-namespace");
-
-    // This list of namespaces is taken from KoXmlReader::fixNamespace()
-    // They were generated by old versions of OpenOffice.org.
-    reader.addExtraNamespace("office",    "http://openoffice.org/2000/office");
-    reader.addExtraNamespace("text",      "http://openoffice.org/2000/text");
-    reader.addExtraNamespace("style",     "http://openoffice.org/2000/style");
-    reader.addExtraNamespace("fo",        "http://www.w3.org/1999/XSL/Format");
-    reader.addExtraNamespace("table",     "http://openoffice.org/2000/table");
-    reader.addExtraNamespace("drawing",   "http://openoffice.org/2000/drawing");
-    reader.addExtraNamespace("datastyle", "http://openoffice.org/2000/datastyle");
-    reader.addExtraNamespace("svg",       "http://www.w3.org/2000/svg");
-    reader.addExtraNamespace("chart",     "http://openoffice.org/2000/chart");
-    reader.addExtraNamespace("dr3d",      "http://openoffice.org/2000/dr3d");
-    reader.addExtraNamespace("form",      "http://openoffice.org/2000/form");
-    reader.addExtraNamespace("script",    "http://openoffice.org/2000/script");
-    reader.addExtraNamespace("meta",      "http://openoffice.org/2000/meta");
-    reader.addExtraNamespace("config",    "http://openoffice.org/2001/config");
-    reader.addExtraNamespace("pres",      "http://openoffice.org/2000/presentation");
-    reader.addExtraNamespace("manifest",  "http://openoffice.org/2001/manifest");
-}

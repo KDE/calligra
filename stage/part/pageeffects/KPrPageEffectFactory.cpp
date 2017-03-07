@@ -29,8 +29,7 @@
 
 #include "KPrPageEffectStrategy.h"
 #include "KPrDurationParser.h"
-
-#include <kdebug.h>
+#include "StageDebug.h"
 
 struct SmilData : boost::multi_index::composite_key<
     KPrPageEffectStrategy,
@@ -53,7 +52,7 @@ typedef boost::multi_index_container<
     >
 > EffectStrategies;
 
-struct KPrPageEffectFactory::Private
+struct Q_DECL_HIDDEN KPrPageEffectFactory::Private
 {
     Private( const QString & id, const QString & name )
     : id( id )
@@ -138,7 +137,7 @@ KPrPageEffect * KPrPageEffectFactory::createPageEffect( const KoXmlElement & ele
             pageEffect = new KPrPageEffect( duration, d->id, strategy );
         }
         else {
-            kWarning(33002) << "effect for " << d->id << smilSubType << reverse << "not supported";
+            warnStagePageEffect << "effect for " << d->id << smilSubType << reverse << "not supported";
         }
     }
 

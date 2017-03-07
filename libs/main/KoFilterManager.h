@@ -149,7 +149,7 @@ public:
     bool getBatchMode(void) const;
 
     /**
-     * Return the KoProgressUpdater or NULL if there is none.
+     * Return the KoProgressUpdater or nullptr if there is none.
      **/
     KoProgressUpdater *progressUpdater() const;
 

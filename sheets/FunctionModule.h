@@ -20,15 +20,13 @@
 #ifndef CALLIGRA_SHEETS_FUNCTION_MODULE
 #define CALLIGRA_SHEETS_FUNCTION_MODULE
 
-#include <calligraversion.h>
-
 #include <QList>
 #include <QObject>
 #include <QSharedPointer>
 #include <QString>
 #include <kpluginfactory.h>
 
-#include "calligra_sheets_export.h"
+#include "sheets_odf_export.h"
 
 namespace Calligra
 {
@@ -99,10 +97,8 @@ private:
 * Register a function module when it is contained in a loadable plugin
 */
 #ifndef SHEETS_NO_PLUGINMODULES
-#define CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE(libname, classname) \
-    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
-    K_EXPORT_PLUGIN(factory("calligra-sheets-functions-" #libname)) \
-    K_EXPORT_PLUGIN_VERSION(CALLIGRA_VERSION)
+#define CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE(jsonfile, classname) \
+    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonfile, registerPlugin<classname>();)
 #else
 #define CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE(libname, classname)
 #endif

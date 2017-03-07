@@ -23,22 +23,20 @@
 #include "KPrDocument.h"
 #include "KPrFactory.h"
 
+#include <KoComponentData.h>
 #include <KoPACanvasItem.h>
 #include <KoCanvasBase.h>
-#include <KoInteractionTool.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeManager.h>
 #include "KPrShapeManagerDisplayMasterStrategy.h"
 #include "KPrPageSelectStrategyActive.h"
 
-#include <kglobal.h>
 #include <kmessagebox.h>
 
 KPrPart::KPrPart(QObject *parent)
-    : KoPart(parent)
+    : KoPart(KPrFactory::componentData(), parent)
 {
-    setTemplatesResourcePath(QLatin1String("stage/templates/"));
-    setComponentData(KPrFactory::componentData());
+    setTemplatesResourcePath(QLatin1String("calligrastage/templates/"));
 }
 
 KPrPart::~KPrPart()

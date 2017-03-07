@@ -22,7 +22,7 @@
 #include <KoPathShape.h>
 #include <KoPathPoint.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <math.h>
 
 // the original data of a path point

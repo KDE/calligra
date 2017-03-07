@@ -31,8 +31,8 @@
  * Model class for use with KoDocumentSectionView. The document
  * sections that an application uses need to inherit from this class
  * to be displayable in the KoDocumentSectionView. That would be,
- * for instance, pages in Words or KPresenter, layers in Krita or
- * Karbon, sheets in KSpread.
+ * for instance, pages in Words or Stage, layers in Karbon,
+ * sheets in Calligra Sheets.
  *
  * The KoDocumentSectionView will display a thumbnail and a row of
  * icon properties for every document section.
@@ -95,7 +95,7 @@ class KoDocumentSectionModel: public QAbstractItemModel
         AlternateActiveRole,
 
         /// This is to ensure that we can extend the data role in the future, since it's not possible to add a role after BeginThumbnailRole (due to "Hack")
-        ReservedRole = 99,
+        ReservedRole = Qt::UserRole + 99,
 
         /**
          * For values of BeginThumbnailRole or higher, a thumbnail of the layer of which neither dimension

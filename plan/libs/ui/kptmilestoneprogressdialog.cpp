@@ -23,9 +23,8 @@
 #include "kptnode.h"
 #include "kptproject.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
-#include <kdebug.h>
 
 namespace KPlato
 {
@@ -33,7 +32,7 @@ namespace KPlato
 class MacroCommand;
 
 MilestoneProgressDialog::MilestoneProgressDialog(Task &task, QWidget *p)
-    : KDialog(p),
+    : KoDialog(p),
     m_node( &task )
 {
     setCaption( i18n("Milestone Progress") );
@@ -70,5 +69,3 @@ MacroCommand *MilestoneProgressDialog::buildCommand() {
 
 
 }  //KPlato namespace
-
-#include "kptmilestoneprogressdialog.moc"

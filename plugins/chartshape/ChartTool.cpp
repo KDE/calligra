@@ -31,9 +31,8 @@
 #include <QBrush>
 #include <QPainter>
 
-// KDE
-#include <klocale.h>
-#include <kdebug.h>
+// KF5
+#include <klocalizedstring.h>
 
 // Calligra
 #include <KoCanvasBase.h>
@@ -43,15 +42,15 @@
 #include <KoTextShapeData.h>
 #include <KoViewConverter.h>
 
-// KDChart
-#include <KDChartChart>
-#include <KDChartCartesianAxis>
-#include <KDChartGridAttributes>
-#include <KDChartAbstractCartesianDiagram>
-#include <KDChartCartesianCoordinatePlane>
-#include <KDChartPosition>
-
 // KChart
+#include <KChartChart>
+#include <KChartCartesianAxis>
+#include <KChartGridAttributes>
+#include <KChartAbstractCartesianDiagram>
+#include <KChartCartesianCoordinatePlane>
+#include <KChartPosition>
+
+// KoChart
 #include "Surface.h"
 #include "PlotArea.h"
 #include "Axis.h"
@@ -59,15 +58,16 @@
 #include "Legend.h"
 #include "ChartProxyModel.h"
 #include "ChartConfigWidget.h"
-#include "KDChartConvertions.h"
+#include "KChartConvertions.h"
 #include "commands/ChartTypeCommand.h"
 #include "commands/LegendCommand.h"
 #include "commands/AxisCommand.h"
 #include "commands/DatasetCommand.h"
 #include "commands/ChartTextShapeCommand.h"
+#include "ChartDebug.h"
 
 
-using namespace KChart;
+using namespace KoChart;
 
 
 class ChartTool::Private
@@ -891,5 +891,3 @@ void ChartTool::setShowLegend(bool show)
 
     d->shape->legend()->update();
 }
-
-#include "ChartTool.moc"

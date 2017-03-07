@@ -19,10 +19,11 @@
 
 #include "ChapterVariable.h"
 
+#include "VariablesDebug.h"
+
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoProperties.h>
-#include <kdebug.h>
 #include <KoShape.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
@@ -32,16 +33,16 @@
 #include <KoParagraphStyle.h>
 #include <KoTextBlockData.h>
 
+#include <klocalizedstring.h>
+
 #include <QFontMetricsF>
 #include <QTextDocument>
 #include <QAbstractTextDocumentLayout>
 #include <QTextInlineObject>
-#include <QDebug>
 #include <QLabel>
 #include <QComboBox>
 #include <QGridLayout>
-#include <knuminput.h>
-#include <klocale.h>
+#include <QSpinBox>
 
 ChapterVariable::ChapterVariable()
         : KoVariable(true)
@@ -223,7 +224,7 @@ QWidget* ChapterVariable::createOptionsWidget()
     QLabel *levelLabel = new QLabel(i18n("Level:"), widget);
     levelLabel->setAlignment(Qt::AlignRight);
     layout->addWidget(levelLabel, 1, 0);
-    KIntNumInput *levelEdit = new KIntNumInput(widget);
+    QSpinBox *levelEdit = new QSpinBox(widget);
     levelLabel->setBuddy(levelEdit);
     levelEdit->setMinimum(1);
     levelEdit->setValue(m_level);

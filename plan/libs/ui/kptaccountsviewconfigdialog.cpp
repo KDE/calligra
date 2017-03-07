@@ -26,10 +26,11 @@
 
 #include "KoPageLayoutWidget.h"
 
+#include <KLocalizedString>
+
+#include <QPushButton>
 #include <QCheckBox>
 #include <QString>
-
-#include <klocale.h>
 
 
 namespace KPlato
@@ -40,10 +41,7 @@ AccountsviewConfigDialog::AccountsviewConfigDialog( ViewBase *view, AccountsTree
     m_view( view ),
     m_treeview( treeview )
 {
-    setCaption( i18n("Settings") );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
+    setWindowTitle( i18n("Settings") );
     m_panel = new AccountsviewConfigPanel( this );
     switch ( treeview->startMode() ) {
         case CostBreakdownItemModel::StartMode_Project: 
@@ -90,16 +88,20 @@ AccountsviewConfigDialog::AccountsviewConfigDialog( ViewBase *view, AccountsTree
     page = addPage( tab, i18n( "Printing" ) );
     page->setHeader( i18n( "Printing Options" ) );
 
-    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect( this, SIGNAL(accepted()), this, SLOT(slotOk()));
 
-    connect(m_panel, SIGNAL(changed(bool)), SLOT(enableButtonOk(bool)));
-    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()) );
+    connect(m_panel, SIGNAL(changed(bool)), SLOT(enableOkButton(bool)));
+}
+
+void AccountsviewConfigDialog::enableOkButton(bool enabled)
+{
+    button( QDialogButtonBox::Ok )->setEnabled( enabled );
 }
 
 
 void AccountsviewConfigDialog::slotOk()
 {
-    kDebug(planDbg());
+    debugPlan;
     m_treeview->setPeriodType( m_panel->ui_periodBox->currentIndex() );
     m_treeview->setCumulative( m_panel->ui_cumulative->isChecked() );
     m_treeview->setShowMode( m_panel->ui_showBox->currentIndex() );
@@ -151,5 +153,3 @@ void AccountsviewConfigPanel::slotChanged() {
 
 
 }  //KPlato namespace
-
-#include "kptaccountsviewconfigdialog.moc"

@@ -1,4 +1,4 @@
-include_directories(${QT_INCLUDES} ${KDE4_INCLUDES})
+include_directories(${KUNDO2_INCLUDES})
 
 set(kundo2_LIB_SRCS
 	kundo2stack.cpp
@@ -9,17 +9,28 @@ set(kundo2_LIB_SRCS
 	kundo2commandextradata.cpp
 )
 
-kde4_add_library(kundo2 SHARED ${kundo2_LIB_SRCS})
+add_library(kundo2 SHARED ${kundo2_LIB_SRCS})
+generate_export_header(kundo2 BASE_NAME kundo2)
 
-target_link_libraries(kundo2 ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS})
+target_link_libraries(kundo2
+    PUBLIC
+        KF5::I18n
+        KF5::XmlGui
+        Qt5::Core
+        Qt5::Widgets
+    PRIVATE
+        KF5::ConfigWidgets
+)
 
 set_target_properties(kundo2 PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS kundo2 ${INSTALL_TARGETS_DEFAULT_ARGS})
 
+if (SHOULD_BUILD_DEVEL_HEADERS)
+
 install(FILES
-    kundo2_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/kundo2_export.h
     kundo2stack.h
     kundo2qstack.h
     kundo2group.h
@@ -29,3 +40,5 @@ install(FILES
     kundo2magicstring.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
 )
+
+endif()

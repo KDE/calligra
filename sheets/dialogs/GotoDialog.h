@@ -25,7 +25,7 @@
 #ifndef CALLIGRA_SHEETS_GOTO_DIALOG
 #define CALLIGRA_SHEETS_GOTO_DIALOG
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class KComboBox;
 
@@ -39,7 +39,7 @@ class Selection;
  * \ingroup UI
  * Dialog to go to a specific cell location.
  */
-class GotoDialog : public KDialog
+class GotoDialog : public KoDialog
 {
     Q_OBJECT
 public:

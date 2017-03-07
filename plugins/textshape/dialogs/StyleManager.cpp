@@ -35,7 +35,7 @@
 #include <QMessageBox>
 #include <QInputDialog>
 
-#include <kdebug.h>
+#include <QDebug>
 
 StyleManager::StyleManager(QWidget *parent)
         : QWidget(parent)
@@ -76,8 +76,8 @@ StyleManager::StyleManager(QWidget *parent)
     widget.paragraphStylesListView->setModel(m_paragraphProxyModel);
     widget.characterStylesListView->setModel(m_characterProxyModel);
 
-    connect(widget.paragraphStylesListView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotParagraphStyleSelected(QModelIndex)));
-    connect(widget.characterStylesListView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotCharacterStyleSelected(QModelIndex)));
+    connect(widget.paragraphStylesListView, SIGNAL(clicked(QModelIndex)), this, SLOT(slotParagraphStyleSelected(QModelIndex)));
+    connect(widget.characterStylesListView, SIGNAL(clicked(QModelIndex)), this, SLOT(slotCharacterStyleSelected(QModelIndex)));
 
     connect(widget.bNew, SIGNAL(pressed()), this, SLOT(buttonNewPressed()));
     //connect(widget.bDelete, SIGNAL(pressed()), this, SLOT(buttonDeletePressed()));
@@ -139,8 +139,8 @@ void StyleManager::setParagraphStyle(KoParagraphStyle *style)
     KoParagraphStyle *localStyle = 0;
 
     if (style) {
-        QMap<KoParagraphStyle*, KoParagraphStyle*>::iterator it = m_modifiedParagraphStyles.find(style);
-        if (it == m_modifiedParagraphStyles.end()) {
+        QMap<KoParagraphStyle*, KoParagraphStyle*>::ConstIterator it = m_modifiedParagraphStyles.constFind(style);
+        if (it == m_modifiedParagraphStyles.constEnd()) {
             localStyle = style->clone();
             m_modifiedParagraphStyles.insert(localStyle, style);
             m_paragraphStylesModel->replaceStyle(style, localStyle);
@@ -151,7 +151,7 @@ void StyleManager::setParagraphStyle(KoParagraphStyle *style)
 
         widget.paragraphStylesListView->setCurrentIndex(m_paragraphProxyModel->mapFromSource(m_paragraphStylesModel->styleIndex(localStyle)));
     }
-    widget.paragraphStylePage->setStyle(localStyle);
+    widget.paragraphStylePage->setStyle(localStyle, 0, false);
     widget.stackedWidget->setCurrentWidget(widget.paragraphStylePage);
     widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.paragraphStylesListView));
     widget.paragraphStylesListView->setEnabled(style != 0);
@@ -165,8 +165,9 @@ void StyleManager::setCharacterStyle(KoCharacterStyle *style, bool canDelete)
     KoCharacterStyle *localStyle = 0;
 
     if (style) {
-        QMap<KoCharacterStyle*, KoCharacterStyle*>::iterator it = m_modifiedCharacterStyles.find(style);
-        if (it == m_modifiedCharacterStyles.end()) {
+        QMap<KoCharacterStyle*, KoCharacterStyle*>::ConstIterator it =
+        m_modifiedCharacterStyles.constFind(style);
+        if (it == m_modifiedCharacterStyles.constEnd()) {
             localStyle = style->clone();
             m_modifiedCharacterStyles.insert(localStyle, style);
             m_characterStylesModel->replaceStyle(style, localStyle);
@@ -176,7 +177,7 @@ void StyleManager::setCharacterStyle(KoCharacterStyle *style, bool canDelete)
         }
         widget.characterStylesListView->setCurrentIndex(m_characterProxyModel->mapFromSource(m_characterStylesModel->styleIndex(localStyle)));
     }
-    widget.characterStylePage->setStyle(localStyle);
+    widget.characterStylePage->setStyle(localStyle, false);
     widget.stackedWidget->setCurrentWidget(widget.characterStylePage);
     widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.characterStylesListView));
     widget.characterStylePage->setEnabled(style != 0);
@@ -195,12 +196,12 @@ void StyleManager::save()
     }
     widget.paragraphStylePage->save();
     widget.characterStylePage->save();
-    widget.paragraphStylePage->setStyle(0);
-    widget.characterStylePage->setStyle(0);
+    widget.paragraphStylePage->setStyle(0, 0, false);
+    widget.characterStylePage->setStyle(0, false);
 
     m_styleManager->beginEdit();
 
-    for (QMap<KoParagraphStyle*, KoParagraphStyle*>::iterator it(m_modifiedParagraphStyles.begin()); it != m_modifiedParagraphStyles.end(); ++it) {
+    for (QMap<KoParagraphStyle*, KoParagraphStyle*>::ConstIterator it(m_modifiedParagraphStyles.constBegin()); it != m_modifiedParagraphStyles.constEnd(); ++it) {
         if (it.value() == 0) {
             m_styleManager->add(it.key());
         }
@@ -213,7 +214,7 @@ void StyleManager::save()
     }
     m_modifiedParagraphStyles.clear();
 
-    for (QMap<KoCharacterStyle*, KoCharacterStyle*>::iterator it(m_modifiedCharacterStyles.begin()); it != m_modifiedCharacterStyles.end(); ++it) {
+    for (QMap<KoCharacterStyle*, KoCharacterStyle*>::ConstIterator it(m_modifiedCharacterStyles.constBegin()); it != m_modifiedCharacterStyles.constEnd(); ++it) {
         if (it.value() == 0) {
             m_styleManager->add(it.key());
         }
@@ -446,5 +447,3 @@ bool StyleManager::checkUniqueStyleName(int widgetIndex)
     }
     return unique;
 }
-
-#include <StyleManager.moc>

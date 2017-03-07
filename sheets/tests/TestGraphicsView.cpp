@@ -21,8 +21,6 @@
 #include <QGraphicsScene>
 #include <QDebug>
 
-#include <kcomponentdata.h>
-
 #include <KoGlobal.h>
 #include <KoZoomHandler.h>
 
@@ -35,14 +33,13 @@
 int main(int argc, char** argv)
 {
     QApplication qapp(argc, argv);
-    KComponentData cd("graphicsview-test");
 
     Calligra::Sheets::Part part;
     Calligra::Sheets::Doc doc(&part);
     part.setDocument(&doc);
 
 
-    bool ok = doc.openUrl(KUrl("/home/marijn/kde/src/calligra/docs/oos_AMSAT-IARU_Link_Model.ods"));
+    bool ok = doc.openUrl(QUrl("/home/marijn/kde/src/calligra/docs/oos_AMSAT-IARU_Link_Model.ods"));
     if (!ok) {
         qDebug() << "failed to load";
         return 0;

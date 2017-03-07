@@ -17,11 +17,12 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <kcmdlineargs.h>
 
-#include <kuniqueapplication.h>
+#include <QApplication>
+#include <QCommandLineParser>
+#include <QLoggingCategory>
+
 #include <kiconloader.h>
-#include <memory>
 
 #include "AboutData.h"
 #include "MainWindow.h"
@@ -29,21 +30,49 @@
 #include "RootSection.h"
 #include "SectionsIO.h"
 
+#include <Calligra2Migration.h>
+
 int main(int argc, char **argv)
 {
-    KAboutData* about = newBrainDumpAboutData();
-    KCmdLineArgs::init(argc, argv, about);
+    /**
+     * Disable debug output by default, only log warnings.
+     * Debug logs can be controlled by the environment variable QT_LOGGING_RULES.
+     *
+     * For example, to get full debug output, run the following:
+     * QT_LOGGING_RULES="calligra.*=true" braindump
+     *
+     * See: http://doc.qt.io/qt-5/qloggingcategory.html
+     */
+    QLoggingCategory::setFilterRules("calligra.*.debug=false\n"
+                                     "calligra.*.warning=true");
 
-    KUniqueApplication app;
+    QApplication app(argc, argv);
+
+    // Migrate data from kde4 to kf5 locations
+    Calligra2Migration m("braindump");
+    m.setConfigFiles(QStringList() << QStringLiteral("braindumprc"));
+    m.setUiFiles(QStringList() << QStringLiteral("braindumpview.rc"));
+    m.migrate();
+
+    KAboutData about = newBrainDumpAboutData();
+    KAboutData::setApplicationData(about);
+
+    QCommandLineParser parser;
+
+    parser.addVersionOption();
+    parser.addHelpOption();
+    about.setupCommandLine(&parser);
+
+    parser.process(app);
+
+    about.processCommandLine(&parser);
 
     KIconLoader::global()->addAppDir("calligra");
     KoGlobal::initialize();
 
-    KComponentData* m_documentData = new KComponentData(about);
-
     RootSection* doc = new RootSection;
 
-    MainWindow* window = new MainWindow(doc, *m_documentData);
+    MainWindow* window = new MainWindow(doc);
     window->setVisible(true);
 
     app.exec();

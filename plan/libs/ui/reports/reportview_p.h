@@ -25,16 +25,14 @@
 
 #include "ui_reportgroupsectionswidget.h"
 
-#include "KoReportDesigner.h"
-
 #include <QSplitter>
 #include <QStandardItemModel>
 #include <QStandardItem>
 #include <QMap>
 #include <QAction>
 
-class ReportSectionDetailGroup;
-class KoReportDesigner;
+class KReportDesignerSectionDetailGroup;
+class KReportDesigner;
 
 class KToolBar;
 
@@ -46,43 +44,6 @@ namespace KPlato
 
 class ReportData;
 
-class ReportDesignPanel : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit ReportDesignPanel( QWidget *parent = 0 );
-
-    ReportDesignPanel( const QDomElement &element, const QList<ReportData*> &models, QWidget *parent = 0 );
-    
-    QDomDocument document() const;
-    
-    KoReportDesigner *m_designer;
-    KoProperty::EditorView *m_propertyeditor;
-    ReportSourceEditor *m_sourceeditor;
-    bool m_modified;
-    QActionGroup *m_actionGroup;
-
-    QStandardItemModel *createSourceModel( QObject *parent = 0 ) const;
-
-Q_SIGNALS:
-    void insertItem( const QString &name );
-
-public Q_SLOTS:
-    void slotPropertySetChanged();
-    void slotInsertAction();
-    
-    void setReportData( const QString &tag );
-    
-    void setModified() { m_modified = true; }
-    void slotItemInserted(const QString &item);
-    
-protected:
-    ReportData *createReportData( const QString &type );
-    void populateToolbar( KToolBar *tb );
-
-private:
-    QList<ReportData*> m_reportdatamodels;
-};
 
 class GroupSectionEditor : public QObject
 {
@@ -92,7 +53,7 @@ public:
 
     void setupUi( QWidget *widget );
     void clear();
-    void setData( KoReportDesigner *designer, ReportData *rd );
+    void setData( KReportDesigner *designer, ReportData *rd );
 
 protected Q_SLOTS:
     void slotSelectionChanged(const QItemSelection &sel );
@@ -103,15 +64,15 @@ protected Q_SLOTS:
 
 private:
     Ui::ReportGroupSectionsWidget gsw;
-    KoReportDesigner *designer;
+    KReportDesigner *designer;
     ReportData *reportdata;
     QStandardItemModel model;
 
     class Item : public QStandardItem
     {
     public:
-        explicit Item(ReportSectionDetailGroup *g) : QStandardItem(), group( g ) {}
-        ReportSectionDetailGroup *group;
+        explicit Item(KReportDesignerSectionDetailGroup *g) : QStandardItem(), group( g ) {}
+        KReportDesignerSectionDetailGroup *group;
 
         QStringList names;
         QStringList keys;
@@ -120,35 +81,35 @@ private:
     class ColumnItem : public Item
     {
     public:
-        explicit ColumnItem(ReportSectionDetailGroup *g);
+        explicit ColumnItem(KReportDesignerSectionDetailGroup *g);
         QVariant data( int role = Qt::DisplayRole ) const;
         void setData( const QVariant &value, int role = Qt::EditRole );
     };
     class SortItem : public Item
     {
     public:
-        explicit SortItem(ReportSectionDetailGroup *g);
+        explicit SortItem(KReportDesignerSectionDetailGroup *g);
         QVariant data( int role = Qt::DisplayRole ) const;
         void setData( const QVariant &value, int role = Qt::EditRole );
     };
     class HeaderItem : public Item
     {
     public:
-        explicit HeaderItem(ReportSectionDetailGroup *g);
+        explicit HeaderItem(KReportDesignerSectionDetailGroup *g);
         QVariant data( int role = Qt::DisplayRole ) const;
         void setData( const QVariant &value, int role = Qt::EditRole );
     };
     class FooterItem : public Item
     {
     public:
-        explicit FooterItem(ReportSectionDetailGroup *g);
+        explicit FooterItem(KReportDesignerSectionDetailGroup *g);
         QVariant data( int role = Qt::DisplayRole ) const;
         void setData( const QVariant &value, int role = Qt::EditRole );
     };
     class PageBreakItem : public Item
     {
     public:
-        explicit PageBreakItem(ReportSectionDetailGroup *g);
+        explicit PageBreakItem(KReportDesignerSectionDetailGroup *g);
         QVariant data( int role = Qt::DisplayRole ) const;
         void setData( const QVariant &value, int role = Qt::EditRole );
     };

@@ -20,7 +20,7 @@
 #ifndef KSPREAD_CELL_STORAGE_P
 #define KSPREAD_CELL_STORAGE_P
 
-// KSpread
+// Sheets
 #include "Binding.h"
 #include "Condition.h"
 #include "Formula.h"

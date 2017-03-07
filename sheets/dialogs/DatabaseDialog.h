@@ -32,18 +32,18 @@
 #include <QSqlDatabase>
 
 class QCheckBox;
-class KComboBox;
 class QFrame;
 class QLabel;
-class KLineEdit;
 class QTreeWidget;
 class QListWidget;
 class QListWidgetItem;
 class QRadioButton;
-class KTextEdit;
+class QPushButton;
 
+class KLineEdit;
+class KComboBox;
+class KTextEdit;
 class KPageWidgetItem;
-class KPushButton;
 
 namespace Calligra
 {
@@ -99,7 +99,7 @@ private:
     QLabel       * m_Type;
     KPageWidgetItem * m_table;
     KComboBox    * m_databaseList;
-    KPushButton  * m_connectButton;
+    QPushButton  * m_connectButton;
     QLabel       * m_tableStatus;
     QLabel       * m_SelectTableLabel;
     QListWidget  * m_tableView;

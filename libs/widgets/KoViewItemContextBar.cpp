@@ -25,8 +25,8 @@
 #include "KoContextBarButton.h"
 #include <KoIcon.h>
 
-//KDE headers
-#include <klocale.h>
+// KF5
+#include <klocalizedstring.h>
 
 //Qt Headers
 #include <QAbstractItemView>
@@ -45,14 +45,14 @@ KoViewItemContextBar::KoViewItemContextBar(QAbstractItemView *parent)
     , m_enabled(true)
     , m_showToggleButton(true)
 {
-    connect(parent, SIGNAL(entered(const QModelIndex&)),
-            this, SLOT(slotEntered(const QModelIndex&)));
+    connect(parent, SIGNAL(entered(QModelIndex)),
+            this, SLOT(slotEntered(QModelIndex)));
     connect(parent, SIGNAL(viewportEntered()),
             this, SLOT(slotViewportEntered()));
 
     m_ContextBar = new QWidget(m_view->viewport());
     m_ContextBar->hide();
-    m_ToggleSelectionButton = new KoContextBarButton("list-add");
+    m_ToggleSelectionButton = new KoContextBarButton(koIconName("list-add"));
 
     m_Layout = new QHBoxLayout(m_ContextBar);
     m_Layout->setMargin(2);
@@ -62,8 +62,8 @@ KoViewItemContextBar::KoViewItemContextBar(QAbstractItemView *parent)
     connect(m_ToggleSelectionButton, SIGNAL(clicked()),
             this, SLOT(setItemSelected()));
     // Hides context bar if item removed
-    connect(m_view->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
-            this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
+    connect(m_view->model(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
+            this, SLOT(slotRowsRemoved(QModelIndex,int,int)));
 
     connect(m_view->model(), SIGNAL(modelReset()), this, SLOT(slotModelReset()));
 
@@ -196,7 +196,7 @@ void KoViewItemContextBar::updateToggleSelectionButton()
     const bool isHoveredIndexSelected = m_view->selectionModel()->isSelected(m_IndexUnderCursor);
     const char *const iconName = (isHoveredIndexSelected ? koIconNameCStr("list-remove") : koIconNameCStr("list-add"));
 
-    m_ToggleSelectionButton->setIcon(KIcon(QLatin1String(iconName)));
+    m_ToggleSelectionButton->setIcon(QIcon::fromTheme(QLatin1String(iconName)));
     m_ToggleSelectionButton->setToolTip(isHoveredIndexSelected ? i18n("deselect item") : i18n("select item"));
 }
 
@@ -257,5 +257,3 @@ void KoViewItemContextBar::disableContextBar()
 {
     m_enabled = false;
 }
-
-#include "KoViewItemContextBar.moc"

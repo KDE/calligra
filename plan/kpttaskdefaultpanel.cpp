@@ -21,7 +21,7 @@
 
 #include "kptduration.h"
 #include "kptmycombobox_p.h"
-#include "plansettings.h"
+#include "calligraplansettings.h"
 
 #ifdef PLAN_KDEPIMLIBS_FOUND
 #include <akonadi/contact/emailaddressselectiondialog.h>
@@ -33,7 +33,6 @@
 
 #include <kactioncollection.h>
 #include <ktextedit.h>
-#include <kdebug.h>
 
 namespace KPlato
 {
@@ -88,7 +87,7 @@ void ConfigTaskPanelImpl::initDescription()
                                             KRichTextWidget::SupportAlignment |
                                             KRichTextWidget::SupportFormatPainting );
 
-    kcfg_Description->createActions( collection );
+    collection->addActions(kcfg_Description->createActions());
 
     toolbar->addAction( collection->action( "format_text_bold" ) );
     toolbar->addAction( collection->action( "format_text_italic" ) );
@@ -177,5 +176,3 @@ void ConfigTaskPanelImpl::currentUnitChanged( int unit )
 }
 
 }  //KPlato namespace
-
-#include "kpttaskdefaultpanel.moc"

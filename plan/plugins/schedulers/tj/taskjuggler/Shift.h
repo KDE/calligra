@@ -3,6 +3,7 @@
  *
  * Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006
  * by Chris Schlaeger <cs@kde.org>
+ * Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of version 2 of the GNU General Public License as
@@ -59,8 +60,12 @@ public:
 
     bool isVacationDay(time_t day) const;
 
+    /// Add non-overlapping work intervals 
+    /// This will override usage of workingHours[]
+    void addWorkingInterval(const Interval &interval);
 private:
     QList<Interval*>* workingHours[7];
+    QList<Interval> workingIntervals;
 };
 
 } // namespace TJ

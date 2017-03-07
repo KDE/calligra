@@ -26,9 +26,6 @@
 #include <QString>
 #include <QPair>
 
-// KDE
-#include <kdebug.h>
-
 // odf lib
 #include "KoStore.h"
 #include <KoXmlStreamReader.h>
@@ -37,6 +34,7 @@
 
 #include "KoOdfStyle.h"
 #include "KoOdfListStyle.h"
+#include "Odf2Debug.h"
 
 
 // ================================================================
@@ -69,7 +67,7 @@ KoOdfStyleManager::~KoOdfStyleManager()
 
 KoOdfStyle *KoOdfStyleManager::style(const QString &name, const QString &family) const
 {
-    kDebug() << d->styles.value(qMakePair(name, family), 0);
+    debugOdf2 << d->styles.value(qMakePair(name, family), 0);
     return d->styles.value(qMakePair(name, family), 0);
 }
 
@@ -136,12 +134,12 @@ bool KoOdfStyleManager::loadStyles(KoStore *odfStore)
     // ----------------------------------------------------------------
     // Get styles from styles.xml.
 
-    kDebug() << "================================================================\n"
+    debugOdf2 << "================================================================\n"
              << "Loading styles from styles.xml";
 
     // Try to open and set styles.xml as a KoXmlDocument. Return if it failed.
     if (!odfStore->open("styles.xml")) {
-        kError(30503) << "Unable to open input file styles.xml" << endl;
+        errorOdf2 << "Unable to open input file styles.xml" << endl;
         return false;
     }
 
@@ -156,13 +154,13 @@ bool KoOdfStyleManager::loadStyles(KoStore *odfStore)
     // Get styles from content.xml.
 
     // Try to open content.xml. Return if it failed.
-    //kDebug(30503) << "parse content.xml styles";
+    //debugOdf2 << "parse content.xml styles";
     if (!odfStore->open("content.xml")) {
-        kError(30503) << "Unable to open input file content.xml" << endl;
+        errorOdf2 << "Unable to open input file content.xml" << endl;
         return false;
     }
 
-    kDebug() << "================================================================\n"
+    debugOdf2 << "================================================================\n"
              << "Loading styles from content.xml";
 
     reader.setDevice(odfStore->device());
@@ -178,14 +176,14 @@ bool KoOdfStyleManager::loadStyles(KoStore *odfStore)
 
 void KoOdfStyleManager::collectStyleSet(KoXmlStreamReader &reader, bool fromStylesXml)
 {
-    kDebug() << "incoming element:" << reader.qualifiedName().toString();
+    debugOdf2 << "incoming element:" << reader.qualifiedName().toString();
 
     while (!reader.atEnd() && !reader.isEndDocument ()) {
         reader.readNext();
         if (!reader.isStartElement()) {
             continue;
         }
-        kDebug() << "---------------- style element:" << reader.qualifiedName().toString();
+        debugOdf2 << "---------------- style element:" << reader.qualifiedName().toString();
         QString tagName = reader.qualifiedName().toString();
 
             if (tagName == "office:styles"
@@ -205,9 +203,9 @@ void KoOdfStyleManager::collectStyleSet(KoXmlStreamReader &reader, bool fromStyl
 
             KoXmlStreamAttributes  attrs = reader.attributes();
 #if 0  // debug
-            kDebug() << "Attributes:";
+            debugOdf2 << "Attributes:";
             for (int i = 0; i < attrs.size(); ++i) {
-                kDebug() << "  " << attrs[i].qualifiedName().toString()
+                debugOdf2 << "  " << attrs[i].qualifiedName().toString()
                          << attrs[i].value().toString();
             }
 #endif
@@ -219,12 +217,12 @@ void KoOdfStyleManager::collectStyleSet(KoXmlStreamReader &reader, bool fromStyl
                     KoOdfStyle *style = new KoOdfStyle;
 
                     style->setIsFromStylesXml(fromStylesXml);
-                    //kDebug() << "This style should be loaded:" << tagName << "Family:" <<family;
+                    //debugOdf2 << "This style should be loaded:" << tagName << "Family:" <<family;
 
                     style->setIsDefaultStyle(tagName == "style:default-style");
                     style->readOdf(reader);
 #if 0 // debug
-                    kDebug(30503) << "==" << styleName << ":\t"
+                    debugOdf2 << "==" << styleName << ":\t"
                                   << style->family()
                                   << style->parent()
                                   << style->isDefaultStyle;

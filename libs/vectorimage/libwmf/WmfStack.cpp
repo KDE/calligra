@@ -21,12 +21,12 @@
 // Own
 #include "WmfStack.h"
 
-// KDE
-#include <kdebug.h>
-
 // Local
 #include "WmfAbstractBackend.h"
 #include "WmfDeviceContext.h"
+
+// lib
+#include "VectorImageDebug.h"
 
 
 /**
@@ -43,7 +43,7 @@ void KoWmfBrushHandle::apply(WmfDeviceContext *dc)
 
 void KoWmfPenHandle::apply(WmfDeviceContext *dc)
 {
-    kDebug(31000) << "Setting pen" << pen;
+    debugVectorImage << "Setting pen" << pen;
     dc->pen = pen;
     dc->changedItems |= DCPen;
 }

@@ -23,6 +23,7 @@
 #include "KoTextLayoutCellHelper.h"
 #include "TableIterator.h"
 #include "KoPointedAt.h"
+#include "KoCharAreaInfo.h"
 
 #include <KoTableColumnAndRowStyleManager.h>
 #include <KoTableColumnStyle.h>
@@ -151,8 +152,7 @@ KoTextLayoutTableArea::KoTextLayoutTableArea(QTextTable *table, KoTextLayoutArea
     for (int row = 0; row < table->rows(); ++row) {
         d->cellAreas[row].resize(table->columns());
     }
-    KoTableStyle tableStyle(d->table->format());
-    d->collapsing = tableStyle.collapsingBorderModel();
+    d->collapsing = d->table->format().boolProperty(KoTableStyle::CollapsingBorders);
 }
 
 KoTextLayoutTableArea::~KoTextLayoutTableArea()
@@ -266,6 +266,58 @@ KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccu
     }
 
     return KoPointedAt();
+}
+
+QVector<KoCharAreaInfo> KoTextLayoutTableArea::generateCharAreaInfos() const
+{
+    QVector<KoCharAreaInfo> result;
+
+    if (d->startOfArea == 0) { // We have not been layouted yet
+        return result;
+    }
+
+    int lastRow = d->endOfArea->row;
+    if (d->lastRowHasSomething == false) {
+        --lastRow;
+    }
+    if (lastRow <  d->startOfArea->row) {
+        return result; // empty
+    }
+
+    // TODO: check why paint() does use visitedCells only for non-header rows
+    QSet<QPair<int, int> > visitedCells;
+
+    const int firstRow = qMax(d->startOfArea->row, d->headerRows);
+    for (int row = 0; row < d->headerRows; ++row) {
+        // TODO: use lambda to shware inner loop with below
+        for (int column = 0; column < d->table->columns(); ++column) {
+            QTextTableCell tableCell = d->table->cellAt(row, column);
+
+            const int testRow = (row == firstRow ? tableCell.row() : row);
+            if (d->cellAreas[testRow][column] && !visitedCells.contains(QPair<int, int>(testRow, column))) {
+                const int column = tableCell.column();
+
+                result.append(d->cellAreas[testRow][column]->generateCharAreaInfos());
+                visitedCells.insert(QPair<int, int>(testRow, column));
+            }
+        }
+    }
+
+    for (int row = firstRow; row <= lastRow; ++row) {
+        for (int column = 0; column < d->table->columns(); ++column) {
+            QTextTableCell tableCell = d->table->cellAt(row, column);
+
+            const int testRow = (row == firstRow ? tableCell.row() : row);
+            if (d->cellAreas[testRow][column] && !visitedCells.contains(QPair<int, int>(testRow, column))) {
+                const int column = tableCell.column();
+
+                result.append(d->cellAreas[testRow][column]->generateCharAreaInfos());
+                visitedCells.insert(QPair<int, int>(testRow, column));
+            }
+        }
+    }
+
+    return result;
 }
 
 QRectF KoTextLayoutTableArea::selectionBoundingBox(QTextCursor &cursor) const
@@ -580,8 +632,6 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
 
     Q_ASSERT(row >= 0);
     Q_ASSERT(row < d->table->rows());
-
-    QTextTableFormat tableFormat = d->table->format();
 
     /*
      * Implementation Note:
@@ -958,7 +1008,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
 
     if (context.showTableBorders) {
         QPen pen(painter->pen());
-        painter->setPen(QPen(QColor(0,0,0,96)));
+        painter->setPen(QPen(QColor(0,0,0,96), 0));
         painter->drawLines(accuBlankBorders);
         painter->setPen(pen);
     }

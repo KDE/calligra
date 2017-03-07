@@ -1,8 +1,8 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"krossmoduleplan\")
 
 include_directories( 
     ${CMAKE_SOURCE_DIR}/plan
     ${KPLATO_INCLUDES}
-    
     ${KOKROSS_INCLUDES}
 )
 
@@ -20,30 +20,28 @@ set(krossmoduleplan_PART_SRCS
     Module.cpp
     ScriptingPart.cpp
     ScriptingWidgets.cpp
+    ScriptingDebug.cpp
 )
 
-kde4_add_ui_files(krossmoduleplan_PART_SRCS
+ki18n_wrap_ui(krossmoduleplan_PART_SRCS
     ScriptingDataQueryView.ui
 )
 
-
-qt4_wrap_cpp(krossmoduleplan_PART_SRCS
+# TODO: plugin should not be SHARED, but MODULE. Needs to be SHARED because tests link to it -> fix with util lib/objects
+add_library(krossmoduleplan SHARED ${krossmoduleplan_PART_SRCS})
+generate_export_header(krossmoduleplan
+    BASE_NAME kplatoscripting
+    EXPORT_FILE_NAME kplatoscripting_generated_export.h
 )
+calligraplan_viewplugin_desktop_to_json(krossmoduleplan planscripting.desktop)
 
-kde4_add_plugin(krossmoduleplan SHARED ${krossmoduleplan_PART_SRCS})
-
-target_link_libraries(
-    krossmoduleplan
-    kokross
+target_link_libraries(krossmoduleplan
     planprivate
     kplatokernel
     kplatomodels
     komain
+    kokross
 )
 
-set_target_properties(krossmoduleplan PROPERTIES DEFINE_SYMBOL MAKE_KPLATOSCRIPTING_LIB)
-
-install(TARGETS krossmoduleplan DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES krossmoduleplan.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-install(FILES planscripting.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-install(FILES scripting.rc DESTINATION ${DATA_INSTALL_DIR}/plan/viewplugins)
+install(TARGETS krossmoduleplan DESTINATION ${PLUGIN_INSTALL_DIR}/calligraplan/extensions)
+install(FILES scripting.rc DESTINATION ${DATA_INSTALL_DIR}/calligraplan/viewplugins)

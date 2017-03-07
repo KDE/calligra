@@ -24,7 +24,7 @@
 #ifndef CALLIGRA_SHEETS_ADD_NAMED_AREA_DIALOG
 #define CALLIGRA_SHEETS_ADD_NAMED_AREA_DIALOG
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class KLineEdit;
 
@@ -38,7 +38,7 @@ class Selection;
  * \ingroup UI
  * Dialog to add a named area.
  */
-class AddNamedAreaDialog : public KDialog
+class AddNamedAreaDialog : public KoDialog
 {
     Q_OBJECT
 

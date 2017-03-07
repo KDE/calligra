@@ -83,6 +83,9 @@ public:
     /// reimplemented method from superclass
     virtual void updateInputMethodInfo();
 
+    /// reimplemented method from superclass
+    virtual void updateCanvas(const QRectF &rc);
+
     virtual void setCursor(const QCursor &cursor);
 
 public Q_SLOTS:
@@ -99,6 +102,9 @@ Q_SIGNALS:
      * @param size the content area size, in pixels.
      */
     void documentSize(const QSizeF &size);
+
+    /// Emitted when updateCanvas has been called.
+    void canvasUpdated();
 
 protected: //QGraphicsWidget
     /// reimplemented method from superclass

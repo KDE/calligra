@@ -29,12 +29,12 @@ KoSnapData::~KoSnapData()
 {
 }
 
-QList<QPointF> KoSnapData::snapPoints() const
+QVector<QPointF> KoSnapData::snapPoints() const
 {
     return m_points;
 }
 
-void KoSnapData::setSnapPoints(const QList<QPointF> &snapPoints)
+void KoSnapData::setSnapPoints(const QVector<QPointF> &snapPoints)
 {
     m_points = snapPoints;
 }

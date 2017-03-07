@@ -33,7 +33,7 @@
 #include <QTimer>
 
 ParagraphSettingsDialog::ParagraphSettingsDialog(TextTool *tool, KoTextEditor *editor, QWidget* parent)
-        : KDialog(parent)
+        : KoDialog(parent)
         , m_tool(tool)
         , m_editor(editor)
         , m_styleChanged(false)
@@ -63,7 +63,7 @@ ParagraphSettingsDialog::~ParagraphSettingsDialog()
 void ParagraphSettingsDialog::initTabs()
 {
     KoParagraphStyle *style = KoParagraphStyle::fromBlock(m_editor->block());
-    m_paragraphGeneral->setStyle(style, KoList::level(m_editor->block()));
+    m_paragraphGeneral->setStyle(style, KoList::level(m_editor->block()), true);
 }
 
 void ParagraphSettingsDialog::styleChanged(bool state)
@@ -74,7 +74,7 @@ void ParagraphSettingsDialog::styleChanged(bool state)
 void ParagraphSettingsDialog::slotOk()
 {
     slotApply();
-    KDialog::accept();
+    KoDialog::accept();
 }
 
 void ParagraphSettingsDialog::slotApply()
@@ -94,7 +94,7 @@ void ParagraphSettingsDialog::slotApply()
     if (chosenStyle.listStyle()) {
         llp = chosenStyle.listStyle()->levelProperties(chosenStyle.listStyle()->listLevels().first());
     } else {
-        llp.setStyle(KoListStyle::None);
+        llp.setLabelType(KoListStyle::None);
     }
 
     m_editor->applyDirectFormatting(cformat, format, llp);
@@ -111,5 +111,3 @@ void ParagraphSettingsDialog::setImageCollection(KoImageCollection *imageCollect
 {
     m_paragraphGeneral->setImageCollection(imageCollection);
 }
-
-#include <ParagraphSettingsDialog.moc>

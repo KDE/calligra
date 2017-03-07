@@ -27,22 +27,22 @@
 */
 
 #include "ui/splash/hi256-app-calligrakarbon.xpm"
-#include <ksplashscreen.h>
+#include <QSplashScreen>
 #include <QHideEvent>
+#include <QLoggingCategory>
 
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
-#include <klocale.h>
 #include <KoApplication.h>
+#include <Calligra2Migration.h>
 
 #include <KarbonFactory.h>
 #include <KarbonDocument.h>
+#include <ui/KarbonAboutData.h>
 
 #ifdef MAINTANER_WANTED_SPLASH
-class KoSplashScreen : public KSplashScreen
+class KoSplashScreen : public QSplashScreen
 {
 public:
-    explicit KoSplashScreen(const QPixmap& pixmap) : KSplashScreen(pixmap) {}
+    explicit KoSplashScreen(const QPixmap& pixmap) : QSplashScreen(pixmap) {}
 
     void hideEvent(QHideEvent *event)
     {
@@ -52,18 +52,38 @@ public:
 };
 #endif
 
-extern "C" KDE_EXPORT int kdemain( int argc, char* argv[] )
+extern "C" KARBONUI_EXPORT int kdemain( int argc, char* argv[] )
 {
-    KCmdLineArgs::init( argc, argv, KarbonFactory::aboutData() );
+    /**
+     * Disable debug output by default, only log warnings.
+     * Debug logs can be controlled by the environment variable QT_LOGGING_RULES.
+     *
+     * For example, to get full debug output, run the following:
+     * QT_LOGGING_RULES="calligra.*=true" karbon
+     *
+     * See: http://doc.qt.io/qt-5/qloggingcategory.html
+     */
+    QLoggingCategory::setFilterRules("calligra.*.debug=false\n"
+                                     "calligra.*.warning=true");
 
-    KCmdLineOptions options;
-    options.add("+[file]", ki18n( "File to open" ));
-    KCmdLineArgs::addCmdLineOptions( options );
+    KAboutData *aboutData = newKarbonAboutData();
 
-    KoApplication app(KARBON_MIME_TYPE);
+    KoApplication app(KARBON_MIME_TYPE, QStringLiteral("calligrakarbon"), *aboutData, argc, argv);
+
+    delete aboutData;
+
+    // Migrate data from kde4 to kf5 locations
+    Calligra2Migration m("karbon");
+    m.setConfigFiles(QStringList() << QStringLiteral("karbonrc"));
+    m.setUiFiles(QStringList() << QStringLiteral("karbon.rc")<< QStringLiteral("karbon_readonly.rc"));
+    m.migrate();
+
+    if (!app.start()) {  // parses command line args, create initial docs and mainwindows
+        return 1;
+    }
 
 #ifdef MAINTANER_WANTED_SPLASH
-    // After creating the KApplication then create the pixmap from an xpm: we cannot get the
+    // After creating the KoApplication then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.
     QSplashScreen *splashScreen = new KoSplashScreen(QPixmap(splash_screen_xpm));
@@ -73,9 +93,6 @@ extern "C" KDE_EXPORT int kdemain( int argc, char* argv[] )
     "The Calligra community welcomes someone to take over.<br><br>"
     "See community.kde.org/Calligra</p>");
 #endif
-
-    if( !app.start() )  // parses command line args, create initial docs and mainwindows
-        return 1;
 
     return app.exec();
 }

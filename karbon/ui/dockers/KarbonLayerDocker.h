@@ -52,7 +52,8 @@ class KarbonLayerDocker : public QDockWidget, public KoCanvasObserverBase
 public:
     KarbonLayerDocker();
     virtual ~KarbonLayerDocker();
-    QString observerName() { return "KarbonLayerDocker"; }
+
+    virtual QString observerName() const { return QStringLiteral("KarbonLayerDocker"); }
 
 public Q_SLOTS:
     void updateView();
@@ -75,7 +76,7 @@ private:
     KoShape * shapeFromIndex(const QModelIndex &index);
 
     void setViewMode(KoDocumentSectionView::DisplayMode mode);
-    void selectLayers(QList<KoShapeLayer*> layers);
+    void selectLayers(const QList<KoShapeLayer*> &layers);
 
     KarbonDocument * m_doc;
     KarbonLayerModel * m_model;

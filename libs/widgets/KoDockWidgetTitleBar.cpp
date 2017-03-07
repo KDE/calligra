@@ -24,8 +24,8 @@
 
 #include <KoIcon.h>
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <WidgetsDebug.h>
+#include <klocalizedstring.h>
 
 #include <QAbstractButton>
 #include <QAction>
@@ -40,41 +40,49 @@ static inline bool hasFeature(const QDockWidget *dockwidget, QDockWidget::DockWi
     return (dockwidget->features() & feature) == feature;
 }
 
+static QIcon openIcon(QDockWidget *q)
+{
+    QIcon icon = q->style()->standardIcon(QStyle::SP_TitleBarShadeButton);
+    return icon.isNull() ? koIcon("arrow-down") : icon;
+}
+
+static QIcon closeIcon(QDockWidget *q)
+{
+    QIcon icon = q->style()->standardIcon(QStyle::SP_TitleBarUnshadeButton);
+    return icon.isNull() ? koIcon("arrow-right") : icon;
+}
+
+
 KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
         : QWidget(dockWidget), d(new Private(this))
 {
     QDockWidget *q = dockWidget;
 
-    d->floatIcon = themedIcon("docker_float");
     d->floatButton = new KoDockWidgetTitleBarButton(this);
-    d->floatButton->setIcon(d->floatIcon);
+    d->floatButton->setIcon(q->style()->standardIcon(QStyle::SP_TitleBarNormalButton, 0, q));
     connect(d->floatButton, SIGNAL(clicked()), SLOT(toggleFloating()));
     d->floatButton->setVisible(true);
     d->floatButton->setToolTip(i18nc("@info:tooltip", "Float Docker"));
     d->floatButton->setStyleSheet("border: 0");
 
-    d->removeIcon = themedIcon("docker_close");
     d->closeButton = new KoDockWidgetTitleBarButton(this);
-    d->closeButton->setIcon(d->removeIcon);
+    d->closeButton->setIcon(q->style()->standardIcon(QStyle::SP_TitleBarCloseButton, 0, q));
     connect(d->closeButton, SIGNAL(clicked()), q, SLOT(close()));
     d->closeButton->setVisible(true);
-    d->closeButton->setToolTip(i18nc("@info:tooltip", "Close Docker"));   
+    d->closeButton->setToolTip(i18nc("@info:tooltip", "Close Docker"));
     d->closeButton->setStyleSheet("border: 0"); // border makes the header busy looking (appears on some OSs)
 
-    d->openIcon = themedIcon("docker_collapse_a");
-    d->closeIcon = themedIcon("docker_collapsed_b");
     d->collapseButton = new KoDockWidgetTitleBarButton(this);
-    d->collapseButton->setIcon(d->openIcon);
+    d->collapseButton->setIcon(openIcon(q));
     connect(d->collapseButton, SIGNAL(clicked()), SLOT(toggleCollapsed()));
     d->collapseButton->setVisible(true);
     d->collapsable = true;
     d->collapseButton->setToolTip(i18nc("@info:tooltip", "Collapse Docker"));
     d->collapseButton->setStyleSheet("border: 0");
 
-    d->lockIcon = themedIcon("docker_lock_a");
     d->lockButton = new KoDockWidgetTitleBarButton(this);
     d->lockButton->setCheckable(true);
-    d->lockButton->setIcon(d->lockIcon);
+    d->lockButton->setIcon(koIcon("object-unlocked"));
     connect(d->lockButton, SIGNAL(toggled(bool)), SLOT(setLocked(bool)));
     d->lockButton->setVisible(true);
     d->lockable = true;
@@ -175,7 +183,7 @@ void KoDockWidgetTitleBar::paintEvent(QPaintEvent*)
     int fw = q->isFloating() ? q->style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, 0, q) : 0;
     int mw = q->style()->pixelMetric(QStyle::PM_DockWidgetTitleMargin, 0, q);
 
-    QStyleOptionDockWidgetV2 titleOpt;
+    QStyleOptionDockWidget titleOpt;
     titleOpt.initFrom(q);
 
     QSize collapseButtonSize(0,0);
@@ -202,7 +210,7 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
 
     int fw = q->isFloating() ? q->style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, 0, q) : 0;
 
-    QStyleOptionDockWidgetV2 opt;
+    QStyleOptionDockWidget opt;
     opt.initFrom(q);
     opt.rect = QRect(QPoint(fw, fw), QSize(geometry().width() - (fw * 2), geometry().height() - (fw * 2)));
     opt.title = q->windowTitle();
@@ -337,7 +345,7 @@ void KoDockWidgetTitleBar::Private::toggleCollapsed()
     q->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX); // will be overwritten again next
     if (q->widget()) {
         q->widget()->setVisible(q->widget()->isHidden());
-        collapseButton->setIcon(q->widget()->isHidden() ? themedIcon("docker_collapse_b") : themedIcon("docker_collapse_a"));
+        collapseButton->setIcon(q->widget()->isHidden() ? closeIcon(q) : openIcon(q));
     }
 }
 
@@ -351,24 +359,23 @@ void KoDockWidgetTitleBar::Private::featuresChanged(QDockWidget::DockWidgetFeatu
     thePublic->resizeEvent(0);
 }
 
-
+// QT5TODO: this is not yet triggered by theme changes it seems
 void KoDockWidgetTitleBar::Private::updateIcons()
-{    
+{
     QDockWidget *q = qobject_cast<QDockWidget*>(thePublic->parentWidget());
 
-    lockIcon = (!locked) ? themedIcon("docker_lock_a", true) : themedIcon("docker_lock_b", true);
-    lockButton->setIcon(lockIcon);
+    lockButton->setIcon((!locked) ? koIcon("object-unlocked") : koIcon("object-locked"));
 
     // this method gets called when switching themes, so update all of the themed icons now
-   floatButton->setIcon(themedIcon("docker_float", true));
-   closeButton->setIcon(themedIcon("docker_close", true));
+   floatButton->setIcon(q->style()->standardIcon(QStyle::SP_TitleBarNormalButton, 0, q));
+   closeButton->setIcon(q->style()->standardIcon(QStyle::SP_TitleBarCloseButton, 0, q));
 
     if (q->widget()) {
-        collapseButton->setIcon(q->widget()->isHidden() ? themedIcon("docker_collapse_b") : themedIcon("docker_collapse_a"));
+        collapseButton->setIcon(q->widget()->isHidden() ? closeIcon(q) : openIcon(q));
     }
     thePublic->resizeEvent(0);
 
 }
 
-
-#include <KoDockWidgetTitleBar.moc>
+//have to include this because of Q_PRIVATE_SLOT
+#include "moc_KoDockWidgetTitleBar.cpp"

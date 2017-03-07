@@ -1,6 +1,6 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kspread   )
 
 
 ########### next target ###############
@@ -8,9 +8,9 @@ include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KDE4_INCLUDES}  )
 set(kspreadexport_LIB_SRCS KSpreadLeader.cc KSpreadBaseWorker.cc )
 
 
-kde4_add_library(kspreadexport SHARED ${kspreadexport_LIB_SRCS})
+add_library(kspreadexport SHARED ${kspreadexport_LIB_SRCS})
 
-target_link_libraries(kspreadexport  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kspreadexport   )
 
 set_target_properties(kspreadexport PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS kspreadexport  ${INSTALL_TARGETS_DEFAULT_ARGS})

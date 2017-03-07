@@ -19,13 +19,17 @@
 
 #include "KoCompositeOpRegistry.h"
 
-#include <kglobal.h>
-#include <klocale.h>
-#include <KoID.h>
+#include <QGlobalStatic>
 #include <QList>
 
+#include <klocalizedstring.h>
+
+#include <KoID.h>
 #include "KoCompositeOp.h"
 #include "KoColorSpace.h"
+
+Q_GLOBAL_STATIC(KoCompositeOpRegistry, registry)
+
 
 KoCompositeOpRegistry::KoCompositeOpRegistry()
 {
@@ -74,6 +78,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
 
     m_map.insert(m_categories[4], KoID(COMPOSITE_OVER          , i18n("Normal")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_BEHIND        , i18n("Behind")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_GREATER        , i18n("Greater")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_OVERLAY       , i18n("Overlay")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_ERASE         , i18n("Erase")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_ALPHA_DARKEN  , i18n("Alpha Darken")));
@@ -91,6 +96,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[5], KoID(COMPOSITE_COPY_GREEN, i18n("Copy Green")));
     m_map.insert(m_categories[5], KoID(COMPOSITE_COPY_BLUE , i18n("Copy Blue")));
     m_map.insert(m_categories[5], KoID(COMPOSITE_COPY      , i18n("Copy")));
+    m_map.insert(m_categories[5], KoID(COMPOSITE_TANGENT_NORMALMAP, i18n("Tangent Normalmap")));
 
     m_map.insert(m_categories[6], KoID(COMPOSITE_COLOR         , i18n("Color")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_HUE           , i18n("Hue")));
@@ -131,7 +137,6 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
 
 const KoCompositeOpRegistry& KoCompositeOpRegistry::instance()
 {
-    K_GLOBAL_STATIC(KoCompositeOpRegistry, registry);
     return *registry;
 }
 
@@ -163,9 +168,7 @@ KoCompositeOpRegistry::KoIDList KoCompositeOpRegistry::getCompositeOps(const KoI
     KoIDMap::const_iterator end = beg + num;
 
     KoIDList list;
-#if QT_VERSION >= 0x040700
     list.reserve(num);
-#endif
 
     if(colorSpace) {
         for(; beg!=end; ++beg){
@@ -187,9 +190,7 @@ KoCompositeOpRegistry::KoIDList KoCompositeOpRegistry::getCompositeOps(const KoC
     KoIDMap::const_iterator end = m_map.end();
 
     KoIDList list;
-#if QT_VERSION >= 0x040700
     list.reserve(m_map.size());
-#endif
 
     if(colorSpace) {
         for(; beg!=end; ++beg){

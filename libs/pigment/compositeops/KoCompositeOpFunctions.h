@@ -107,6 +107,16 @@ inline void cfHue(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db)
 }
 
 template<class HSXType, class TReal>
+inline void cfTangentNormalmap(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
+    using namespace Arithmetic;
+    TReal half=halfValue<TReal>();
+    
+    dr = sr+(dr-half);
+    dg = sg+(dg-half);
+    db = sb+(db-unitValue<TReal>());
+} 
+    
+template<class HSXType, class TReal>
 inline void cfDarkerColor(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
     
     TReal lum = getLightness<HSXType>(dr, dg, db);
@@ -139,7 +149,6 @@ inline void cfLighterColor(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, T
         dg = sg;
         db = sb;
     }
-
 }
 
 template<class T>

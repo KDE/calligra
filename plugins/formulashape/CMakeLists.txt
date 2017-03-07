@@ -1,3 +1,5 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_formula\")
+
 # To hide all the warnings from the generated itex2MML code
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-unused-label)
@@ -9,13 +11,14 @@ set(ITEXTOMML_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/itexToMML")
 
 include_directories( ${CMAKE_SOURCE_DIR}/plugins/formulashape
                      ${CMAKE_SOURCE_DIR}/plugins/formulashape/elements
-                     ${QT_INCLUDES}
+                     
                      ${KOMAIN_INCLUDES}
 )
 
-########### KFormula Library ###############
+########### KoFormula Library ###############
 
-set( kformula_LIB_SRCS
+set( koformula_LIB_SRCS
+   FormulaDebug.cpp
    AttributeManager.cpp
    FormulaRenderer.cpp
    FormulaData.cpp
@@ -57,21 +60,26 @@ set( kformula_LIB_SRCS
    elements/UnknownElement.cpp
 )
 
-kde4_add_library(kformula SHARED ${kformula_LIB_SRCS})
+add_library(koformula SHARED ${koformula_LIB_SRCS})
+generate_export_header(koformula EXPORT_MACRO_NAME KOFORMULA_EXPORT)
 
-target_link_libraries(kformula komain)
-target_link_libraries(kformula LINK_INTERFACE_LIBRARIES komain)
+target_link_libraries(koformula  PUBLIC komain)
 
-set_target_properties(kformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+set_target_properties(koformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
-install(TARGETS kformula ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS koformula ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### FormulaShape Plugin ###############
 
 find_package(Cauchy)
 
 macro_optional_find_package(Cauchy)
-macro_log_feature(M2MML_FOUND "Cauchy's M2MML" "Matlab/Octave to MathML compiler" "https://bitbucket.org/cyrille/cauchy" FALSE "" "Required for the matlab/octave formula tool")
+set_package_properties(Cauchy PROPERTIES
+    DESCRIPTION "Cauchy's M2MML, a Matlab/Octave to MathML compiler"
+    URL "https://bitbucket.org/cyrille/cauchy"
+    PURPOSE "Required for the matlab/octave formula tool"
+    TYPE OPTIONAL
+)
 
 if(M2MML_FOUND)
     set(M2MML_TOOL_LIBRARIES ${M2MML_LIBRARY})
@@ -102,23 +110,21 @@ set (formulashape_PART_SRCS
 )
 endif ()
 
-kde4_add_ui_files( formulashape_PART_SRCS
+ki18n_wrap_ui( formulashape_PART_SRCS
     FormulaToolWidget.ui
 )
 
-kde4_add_plugin(calligra_shape_formular ${formulashape_PART_SRCS})
+add_library(calligra_shape_formula MODULE ${formulashape_PART_SRCS})
+calligra_shape_desktop_to_json(calligra_shape_formula calligra_shape_formula.desktop)
 
-target_link_libraries(calligra_shape_formular kformula ${KDE4_KFILE_LIBS} ${M2MML_TOOL_LIBRARIES})
+target_link_libraries(calligra_shape_formula koformula ${M2MML_TOOL_LIBRARIES})
 
 
-#set_target_properties(kformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
-install(TARGETS calligra_shape_formular  DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES calligra_shape_formular.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+#set_target_properties(koformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+install(TARGETS calligra_shape_formula  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
 
 add_subdirectory( pics ) 
-add_subdirectory( fonts ) 
+# TODO: those font files seem unused currently, investigate if still needed
+# add_subdirectory( fonts )
 add_subdirectory( tests )
 add_subdirectory( templates )
-
-install( FILES  kformulapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-

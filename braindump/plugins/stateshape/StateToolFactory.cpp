@@ -18,18 +18,20 @@
  */
 
 #include "StateToolFactory.h"
-#include "StateTool.h"
-#include "StateShape.h"
+
+#include <KLocalizedString>
 
 #include <KoIcon.h>
-#include <klocale.h>
+
+#include "StateTool.h"
+#include "StateShape.h"
 
 StateToolFactory::StateToolFactory()
     : KoToolFactoryBase("StateToolFactoryID")
 {
     setToolTip(i18n("State editing"));
     setToolType(dynamicToolType());
-    setIconName(koIconNameCStr("statetool"));
+    setIconName(koIconName("statetool"));
     setPriority(1);
     setActivationShapeId(STATESHAPEID);
 }

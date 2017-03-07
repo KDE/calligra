@@ -30,7 +30,7 @@
 #include <KoSelection.h>
 
 #include <kactioncollection.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <math.h>
 
@@ -223,4 +223,3 @@ void KarbonZoomController::zoomOutRelative()
     requestZoomBy(sqrt(0.5));
 }
 
-#include "KarbonZoomController.moc"

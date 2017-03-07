@@ -18,6 +18,8 @@
 */
 
 #include "kptresourcedialog.h"
+
+#include "kptlocale.h"
 #include "kptcommand.h"
 #include "kptproject.h"
 #include "kptresource.h"
@@ -35,8 +37,6 @@
 #include <akonadi/contact/emailaddressselectionwidget.h>
 #include <akonadi/contact/emailaddressselection.h>
 #endif
-
-#include <klocale.h>
 
 
 namespace KPlato
@@ -61,7 +61,7 @@ ResourceDialogImpl::ResourceDialogImpl( const Project &project, Resource &resour
     QStandardItemModel *m = new QStandardItemModel( ui_teamView );
     pr->setSourceModel( new QStandardItemModel( ui_teamView ) );
     ui_teamView->setModel( m );
-    m->setHorizontalHeaderLabels( QStringList() << i18nc( "title:column", "Select team members" ) << i18nc( "title:column", "Group" ) );
+    m->setHorizontalHeaderLabels( QStringList() << xi18nc( "title:column", "Select team members" ) << xi18nc( "title:column", "Group" ) );
     foreach ( Resource *r, m_project.resourceList() ) {
         if ( r->type() != Resource::Type_Work || r->id() == m_resource.id() ) {
             continue;
@@ -190,7 +190,7 @@ void ResourceDialogImpl::slotUseRequiredChanged( int state )
 void ResourceDialogImpl::slotAvailableFromChanged(const QDateTime&) {
     if (availableUntil->dateTime() < availableFrom->dateTime()) {
         disconnect(availableUntil, SIGNAL(dateTimeChanged(QDateTime)), this,  SLOT(slotAvailableUntilChanged(QDateTime)));
-        //kDebug(planDbg())<<"From:"<<availableFrom->dateTime().toString()<<" until="<<availableUntil->dateTime().toString();
+        //debugPlan<<"From:"<<availableFrom->dateTime().toString()<<" until="<<availableUntil->dateTime().toString();
         availableUntil->setDateTime(availableFrom->dateTime());
         connect(availableUntil, SIGNAL(dateTimeChanged(QDateTime)), SLOT(slotAvailableUntilChanged(QDateTime)));
     }
@@ -199,7 +199,7 @@ void ResourceDialogImpl::slotAvailableFromChanged(const QDateTime&) {
 void ResourceDialogImpl::slotAvailableUntilChanged(const QDateTime&) {
     if (availableFrom->dateTime() > availableUntil->dateTime()) {
         disconnect(availableFrom, SIGNAL(dateTimeChanged(QDateTime)), this,  SLOT(slotAvailableFromChanged(QDateTime)));
-        //kDebug(planDbg())<<"Until:"<<availableUntil->dateTime().toString()<<" from="<<availableFrom->dateTime().toString();
+        //debugPlan<<"Until:"<<availableUntil->dateTime().toString()<<" from="<<availableFrom->dateTime().toString();
         availableFrom->setDateTime(availableUntil->dateTime());
         connect(availableFrom, SIGNAL(dateTimeChanged(QDateTime)), SLOT(slotAvailableFromChanged(QDateTime)));
     }
@@ -221,9 +221,9 @@ void ResourceDialogImpl::slotChooseResource()
             const Akonadi::EmailAddressSelection s = selections.first();
             nameEdit->setText( s.name() );
             emailEdit->setText( s.email() );
-            QStringList l = s.name().split(' ');
+            const QStringList l = s.name().split(' ');
             QString in;
-            QStringList::Iterator it = l.begin();
+            QStringList::ConstIterator it = l.begin();
             for (/*int i = 0*/; it != l.end(); ++it) {
                 in += (*it)[0];
             }
@@ -236,7 +236,7 @@ void ResourceDialogImpl::slotChooseResource()
 //////////////////  ResourceDialog  ////////////////////////
 
 ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *parent, const char *name)
-    : KDialog(parent),
+    : KoDialog(parent),
       m_project( project ),
       m_original(resource),
       m_resource(resource),
@@ -250,7 +250,7 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     showButtonSeparator( true );
     dia = new ResourceDialogImpl(project, m_resource, resource->isBaselined(), this);
     setMainWidget(dia);
-    KDialog::enableButtonOk(false);
+    KoDialog::enableButtonOk(false);
 
     if ( resource->parentGroup() == 0 ) {
         //HACK to handle calls from ResourcesPanel
@@ -274,7 +274,7 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     } else {
         dia->ui_rbfromunlimited->click();
     }
-    dia->availableFrom->setDateTime( dt.isValid() ? dt : QDateTime( QDate::currentDate(), QTime( 0, 0, 0 ) ) );
+    dia->availableFrom->setDateTime( dt.isValid() ? dt : QDateTime( QDate::currentDate(), QTime( 0, 0, 0 ), Qt::LocalTime ) );
     dia->availableFrom->setEnabled( dt.isValid() );
 
     dt = resource->availableUntil();
@@ -283,7 +283,7 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     } else {
         dia->ui_rbuntilunlimited->click();
     }
-    dia->availableUntil->setDateTime( dt.isValid() ? dt : QDateTime( QDate::currentDate().addYears( 2 ), QTime( 0, 0, 0 ) ) );
+    dia->availableUntil->setDateTime( dt.isValid() ? dt : QDateTime( QDate::currentDate().addYears( 2 ), QTime( 0, 0, 0 ), Qt::LocalTime ) );
     dia->availableUntil->setEnabled( dt.isValid() );
     dia->rateEdit->setText(project.locale()->formatMoney(resource->normalRate()));
     dia->overtimeEdit->setText(project.locale()->formatMoney(resource->overtimeRate()));
@@ -337,7 +337,7 @@ void ResourceDialog::slotResourceRemoved( const Resource *resource )
 }
 
 void ResourceDialog::enableButtonOk() {
-		KDialog::enableButtonOk(true);
+		KoDialog::enableButtonOk(true);
 }
 
 void ResourceDialog::slotCalculationNeeded() {
@@ -345,10 +345,10 @@ void ResourceDialog::slotCalculationNeeded() {
 }
 
 void ResourceDialog::slotButtonClicked(int button) {
-    if (button == KDialog::Ok) {
+    if (button == KoDialog::Ok) {
         slotOk();
     } else {
-        KDialog::slotButtonClicked(button);
+        KoDialog::slotButtonClicked(button);
     }
 }
 
@@ -448,7 +448,7 @@ MacroCommand *ResourceDialog::buildCommand(Resource *original, Resource &resourc
         m->addCommand(new ResourceModifyAccountCmd(*original, original->account(), resource.account()));
     }
     if ( resource.type() == Resource::Type_Team ) {
-        //kDebug(planDbg())<<original->teamMembers()<<resource.teamMembers();
+        //debugPlan<<original->teamMembers()<<resource.teamMembers();
         foreach ( const QString &id, resource.teamMemberIds() ) {
             if ( ! original->teamMemberIds().contains( id ) ) {
                 if (!m) m = new MacroCommand(n);
@@ -466,5 +466,3 @@ MacroCommand *ResourceDialog::buildCommand(Resource *original, Resource &resourc
 }
 
 }  //KPlato namespace
-
-#include "kptresourcedialog.moc"

@@ -22,15 +22,6 @@
 #include "ToolDocker.h"
 #include "ToolDocker_p.h"
 
-#include <KoDockWidgetTitleBar.h>
-
-#include <KoIcon.h>
-
-#include <klocale.h>
-#include <kdebug.h>
-#include <kconfiggroup.h>
-#include <kglobal.h>
-
 #include <QPointer>
 #include <QGridLayout>
 #include <QScrollArea>
@@ -42,13 +33,20 @@
 #include <QToolButton>
 #include <QTabWidget>
 
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
+#include <klocalizedstring.h>
+
+#include <KoDockWidgetTitleBar.h>
+#include <KoIcon.h>
+
 ToolDocker::ToolDocker(QWidget *parent)
     : QDockWidget(i18n("Tool Options"), parent),
       d(new Private(this))
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::TopDockWidgetArea);
 
-    KConfigGroup cfg = KGlobal::config()->group("DockWidget sharedtooldocker");
+    KConfigGroup cfg(KSharedConfig::openConfig(), "DockWidget sharedtooldocker");
     d->tabbed = cfg.readEntry("TabbedMode", false);
     d->hasTitle = cfg.readEntry("Locked", true);
 
@@ -99,7 +97,7 @@ ToolDocker::ToolDocker(QWidget *parent)
 
 ToolDocker::~ToolDocker()
 {
-    KConfigGroup cfg = KGlobal::config()->group("DockWidget sharedtooldocker");
+    KConfigGroup cfg(KSharedConfig::openConfig(), "DockWidget sharedtooldocker");
     cfg.writeEntry("TabbedMode", d->tabbed);
     cfg.writeEntry("Locked", d->hasTitle);
     cfg.sync();
@@ -124,4 +122,4 @@ void ToolDocker::resizeEvent(QResizeEvent*)
     d->tabButton->move(d->lockButton->x() - d->tabButton->width() - 2, d->lockButton->y());
 }
 
-#include <ToolDocker.moc>
+#include <moc_ToolDocker.cpp>

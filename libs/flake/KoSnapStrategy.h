@@ -23,6 +23,7 @@
 #include "KoSnapGuide.h"
 
 #include <QLineF>
+#include <QVector>
 
 class TestSnapStrategy;
 class KoPathPoint;
@@ -32,10 +33,10 @@ class KoViewConverter;
 class QTransform;
 class QPainterPath;
 
-class FLAKE_TEST_EXPORT KoSnapStrategy
+class FLAKE_EXPORT KoSnapStrategy
 {
 public:
-    KoSnapStrategy(KoSnapGuide::Strategy type);
+    explicit KoSnapStrategy(KoSnapGuide::Strategy type);
     virtual ~KoSnapStrategy() {};
 
     virtual bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance) = 0;
@@ -62,7 +63,7 @@ private:
 };
 
 /// snaps to x- or y-coordinates of path points
-class FLAKE_TEST_EXPORT OrthogonalSnapStrategy : public KoSnapStrategy
+class FLAKE_EXPORT OrthogonalSnapStrategy : public KoSnapStrategy
 {
 public:
     OrthogonalSnapStrategy();
@@ -74,7 +75,7 @@ private:
 };
 
 /// snaps to path points
-class FLAKE_TEST_EXPORT NodeSnapStrategy : public KoSnapStrategy
+class FLAKE_EXPORT NodeSnapStrategy : public KoSnapStrategy
 {
 public:
     NodeSnapStrategy();
@@ -83,7 +84,7 @@ public:
 };
 
 /// snaps extension lines of path shapes
-class FLAKE_TEST_EXPORT ExtensionSnapStrategy : public KoSnapStrategy
+class FLAKE_EXPORT ExtensionSnapStrategy : public KoSnapStrategy
 {
     friend class TestSnapStrategy;
 public:
@@ -94,11 +95,11 @@ private:
     qreal project(const QPointF &lineStart , const QPointF &lineEnd, const QPointF &point);
     QPointF extensionDirection(KoPathPoint * point, const QTransform &matrix);
     bool snapToExtension(QPointF &position, KoPathPoint * point, const QTransform &matrix);
-    QList<QLineF> m_lines;
+    QVector<QLineF> m_lines;
 };
 
 /// snaps to intersections of shapes
-class FLAKE_TEST_EXPORT IntersectionSnapStrategy : public KoSnapStrategy
+class FLAKE_EXPORT IntersectionSnapStrategy : public KoSnapStrategy
 {
 public:
     IntersectionSnapStrategy();
@@ -107,7 +108,7 @@ public:
 };
 
 /// snaps to the canvas grid
-class FLAKE_TEST_EXPORT GridSnapStrategy : public KoSnapStrategy
+class FLAKE_EXPORT GridSnapStrategy : public KoSnapStrategy
 {
 public:
     GridSnapStrategy();
@@ -116,7 +117,7 @@ public:
 };
 
 /// snaps to shape bounding boxes
-class FLAKE_TEST_EXPORT BoundingBoxSnapStrategy : public KoSnapStrategy
+class FLAKE_EXPORT BoundingBoxSnapStrategy : public KoSnapStrategy
 {
     friend class TestSnapStrategy;
 public:
@@ -129,7 +130,7 @@ private:
 };
 
 /// snaps to line guides
-class FLAKE_TEST_EXPORT LineGuideSnapStrategy : public KoSnapStrategy
+class FLAKE_EXPORT LineGuideSnapStrategy : public KoSnapStrategy
 {
 public:
     LineGuideSnapStrategy();

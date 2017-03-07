@@ -18,7 +18,8 @@ Boston, MA 02110-1301, USA.
 */
 #include "KoFilterChainLink.h"
 #include <QMetaMethod>
-#include <kdebug.h>
+#include <QPluginLoader>
+#include <MainDebug.h>
 #include "KoFilterEntry.h"
 #include "KoFilterManager.h"
 #include "KoProgressUpdater.h"
@@ -65,14 +66,14 @@ namespace CalligraFilter {
     KoFilter::ConversionStatus ChainLink::invokeFilter(const ChainLink *const parentChainLink)
     {
         if (!m_filterEntry) {
-            kError(30500) << "This filter entry is null. Strange stuff going on." << endl;
+            errorFilter << "This filter entry is null. Strange stuff going on." << endl;
             return KoFilter::FilterEntryNull;
         }
 
         m_filter = m_filterEntry->createFilter(m_chain);
 
         if (!m_filter) {
-            kError(30500) << "Couldn't create the filter." << endl;
+            errorFilter << "Couldn't create the filter." << endl;
             return KoFilter::FilterCreationError;
         }
 
@@ -96,7 +97,7 @@ namespace CalligraFilter {
 
     void ChainLink::dump() const
     {
-        kDebug(30500) << "   Link:" << m_filterEntry->service()->name();
+        debugFilter << "   Link:" << m_filterEntry->fileName();
     }
 
     void ChainLink::setupCommunication(const KoFilter *const parentFilter) const
@@ -122,24 +123,24 @@ namespace CalligraFilter {
 
         int senderMethodCount = parent->methodCount();
         for (int i = 0; i < senderMethodCount; ++i) {
-            QMetaMethod signal = parent->method(i);
-            if (signal.methodType() != QMetaMethod::Signal)
+            QMetaMethod metaMethodSignal = parent->method(i);
+            if (metaMethodSignal.methodType() != QMetaMethod::Signal)
                 continue;
             // ### untested (QMetaMethod::signature())
-            if (strncmp(signal.signature(), SIGNAL_PREFIX, SIGNAL_PREFIX_LEN) == 0) {
+            if (strncmp(metaMethodSignal.methodSignature(), SIGNAL_PREFIX, SIGNAL_PREFIX_LEN) == 0) {
                 int receiverMethodCount = child->methodCount();
                 for (int j = 0; j < receiverMethodCount; ++j) {
-                    QMetaMethod slot = child->method(j);
-                    if (slot.methodType() != QMetaMethod::Slot)
+                    QMetaMethod metaMethodSlot = child->method(j);
+                    if (metaMethodSlot.methodType() != QMetaMethod::Slot)
                         continue;
-                    if (strncmp(slot.signature(), SLOT_PREFIX, SLOT_PREFIX_LEN) == 0) {
-                        if (strcmp(signal.signature() + SIGNAL_PREFIX_LEN, slot.signature() + SLOT_PREFIX_LEN) == 0) {
+                    if (strncmp(metaMethodSlot.methodSignature().constData(), SLOT_PREFIX, SLOT_PREFIX_LEN) == 0) {
+                        if (strcmp(metaMethodSignal.methodSignature().constData() + SIGNAL_PREFIX_LEN, metaMethodSlot.methodSignature().constData() + SLOT_PREFIX_LEN) == 0) {
                             QByteArray signalString;
                             signalString.setNum(QSIGNAL_CODE);
-                            signalString += signal.signature();
+                            signalString += metaMethodSignal.methodSignature();
                             QByteArray slotString;
                             slotString.setNum(QSLOT_CODE);
-                            slotString += slot.signature();
+                            slotString += metaMethodSlot.methodSignature();
                             QObject::connect(sender, signalString, receiver, slotString);
                         }
                     }

@@ -48,7 +48,7 @@ public:
     * @brief addMasterDateTimeSection(KoXmlWriter& xmlWriter) - Add DateTime section Master styles in styles.xml
     * @param KoXmlWriter - Content Writer
     */
-    void addMasterDateTimeSection(KoXmlWriter& xmlWriter, QString tStyle);
+    void addMasterDateTimeSection(KoXmlWriter& xmlWriter, const QString &tStyle);
 
     /**
     * @brief addDateTimeAutoStyles - Add DateTime styles in styles.xml
@@ -83,7 +83,7 @@ private:
      */
     void addDateStyle(KoGenStyles& styles,
                       bool dayofweek, bool longMonth, bool textualmonth, bool longyear,
-                      QString separator = "/");
+                      const QString &separator = QLatin1String("/"));
 
     /**
      * @brief addTimeStyle - Add Time styles in as per the formatId in styles.xml.
@@ -92,7 +92,7 @@ private:
      * @param bool second - Second is required in time or not.
      * @param QString separator=":" - Separator b/w time.
      */
-    void addTimeStyle(KoGenStyles& styles, bool hr12Format, bool second, QString separator = ":");
+    void addTimeStyle(KoGenStyles& styles, bool hr12Format, bool second, const QString &separator = QLatin1String(":"));
 
     /**
      * @brief setDateStyleName - set the date style name for further usage.

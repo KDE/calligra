@@ -28,6 +28,7 @@
 #include "frames/KWFrame.h"
 #include "frames/KWTextFrameSet.h"
 
+#include "KoRdfSemanticTreeWidgetItem.h"
 #include <KoTextEditor.h>
 #include <KoShapeController.h>
 #include <KoToolProxy.h>
@@ -35,13 +36,12 @@
 
 #include <KoIcon.h>
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <kmenu.h>
+#include <klocalizedstring.h>
+#include <WordsDebug.h>
 
 #include <QTextDocument>
-#include <kmenu.h>
 
-#include "KoRdfSemanticTreeWidgetItem.h"
 
 KWRdfDocker::KWRdfDocker()
     : m_canvas(0),
@@ -58,8 +58,8 @@ KWRdfDocker::KWRdfDocker()
     m_rdfSemanticTree = KoRdfSemanticTree::createTree(widgetDocker.semanticView);
 
     widgetDocker.semanticView->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(widgetDocker.semanticView, SIGNAL(customContextMenuRequested(const QPoint &)),
-            this, SLOT(showSemanticViewContextMenu(const QPoint &)));
+    connect(widgetDocker.semanticView, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(showSemanticViewContextMenu(QPoint)));
     setWidget(widget);
 }
 
@@ -85,14 +85,14 @@ void KWRdfDocker::setCanvas(KoCanvasBase *canvas)
 
         m_document = newDoc;
         widgetDocker.semanticView->setDocumentRdf(static_cast<KoDocumentRdf*>(m_document->documentRdf()));
-        connect(static_cast<KoDocumentRdf*>(m_document->documentRdf()), SIGNAL(semanticObjectAdded(hKoRdfSemanticItem)),
-                this, SLOT(semanticObjectAdded(hKoRdfSemanticItem)));
-        connect(m_document->documentRdf(), SIGNAL(semanticObjectUpdated(hKoRdfSemanticItem)),
-                this, SLOT(semanticObjectUpdated(hKoRdfSemanticItem)));
+        connect(static_cast<KoDocumentRdf*>(m_document->documentRdf()), SIGNAL(semanticObjectAdded(hKoRdfBasicSemanticItem)),
+                this, SLOT(semanticObjectAdded(hKoRdfBasicSemanticItem)));
+        connect(m_document->documentRdf(), SIGNAL(semanticObjectUpdated(hKoRdfBasicSemanticItem)),
+                this, SLOT(semanticObjectUpdated(hKoRdfBasicSemanticItem)));
     }
     widgetDocker.semanticView->setCanvas(m_canvas);
-    connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,const QVariant&)),
-            this, SLOT(canvasResourceChanged(int,const QVariant&)));
+    connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+            this, SLOT(canvasResourceChanged(int,QVariant)));
 }
 
 void KWRdfDocker::unsetCanvas()
@@ -108,14 +108,14 @@ KoCanvasBase* KWRdfDocker::canvas()
 }
 
 
-void KWRdfDocker::semanticObjectAdded(hKoRdfSemanticItem item)
+void KWRdfDocker::semanticObjectAdded(hKoRdfBasicSemanticItem item)
 {
     Q_UNUSED(item);
     //kDebug(30015) << "new item...";
     updateData();
 }
 
-void KWRdfDocker::semanticObjectUpdated(hKoRdfSemanticItem item)
+void KWRdfDocker::semanticObjectUpdated(hKoRdfBasicSemanticItem item)
 {
     Q_UNUSED(item);
     //kDebug(30015) << "updated item...";
@@ -128,14 +128,14 @@ void KWRdfDocker::semanticObjectUpdated(hKoRdfSemanticItem item)
 void KWRdfDocker::showSemanticViewContextMenu(const QPoint &position)
 {
     KMenu* menu = new KMenu(0);
-    QList<KAction *> actions;
+    QList<QAction *> actions;
     if (QTreeWidgetItem *baseitem = widgetDocker.semanticView->itemAt(position)) {
         if (KoRdfSemanticTreeWidgetItem *item = dynamic_cast<KoRdfSemanticTreeWidgetItem*>(baseitem)) {
             actions = item->actions(menu, m_canvas);
         }
     }
     if (actions.count() > 0) {
-        foreach (KAction *a, actions) {
+        foreach (QAction *a, actions) {
             menu->addAction(a);
         }
         menu->exec(widgetDocker.semanticView->mapToGlobal(position));

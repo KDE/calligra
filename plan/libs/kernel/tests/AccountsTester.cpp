@@ -25,7 +25,7 @@
 #include "kpttask.h"
 
 #include "debug.cpp"
-#include <qtest_kde.h>
+#include <QTest>
 
 namespace KPlato
 {
@@ -66,7 +66,7 @@ void AccountsTester::init()
     ResourceGroup *g = new ResourceGroup();
     project->addResourceGroup( g );
     r = new Resource();
-    r->setAvailableFrom( QDateTime( yesterday, QTime() ) );
+    r->setAvailableFrom( QDateTime( yesterday, QTime(), Qt::LocalTime ) );
     r->setCalendar( c );
     r->setNormalRate( 100.0 );
     project->addResource( g, r );
@@ -576,6 +576,4 @@ void AccountsTester::subaccounts()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::AccountsTester )
-
-#include "AccountsTester.moc"
+QTEST_GUILESS_MAIN( KPlato::AccountsTester )

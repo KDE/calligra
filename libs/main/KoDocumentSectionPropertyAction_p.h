@@ -48,7 +48,7 @@ class KoDocumentSectionView::PropertyAction: public QAction
         PropertyAction( int num, const Model::Property &p, const QPersistentModelIndex &index, QObject *parent = 0 )
             : QAction( parent ), m_property( p ), m_num( num ), m_index( index )
         {
-            connect( this, SIGNAL( triggered( bool ) ), this, SLOT( slotTriggered() ) );
+            connect( this, SIGNAL(triggered(bool)), this, SLOT(slotTriggered()) );
             setText( m_property.name );
             setIcon( m_property.state.toBool() ? m_property.onIcon : m_property.offIcon );
         }

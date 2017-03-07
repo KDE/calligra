@@ -21,6 +21,7 @@
 */
 
 #include "FormulaCursor.h"
+
 #include "BasicElement.h"
 #include "RowElement.h"
 #include "FixedElement.h"
@@ -30,12 +31,14 @@
 #include "IdentifierElement.h"
 #include "ElementFactory.h"
 #include "FormulaCommand.h"
+#include "FormulaDebug.h"
+
+#include <KoOdfLoadingContext.h>
+
 #include <QPainter>
 #include <QPen>
 #include <algorithm>
 
-#include <kdebug.h>
-#include <KoOdfLoadingContext.h>
 
 FormulaCursor::FormulaCursor(BasicElement* element, bool selecting, int position, int mark) {
     m_currentElement=element;
@@ -69,7 +72,7 @@ FormulaCursor::FormulaCursor (const FormulaCursor& other )
 
 void FormulaCursor::paint( QPainter& painter ) const
 {
-    kDebug() << "Drawing cursor with selecting: "<< isSelecting() << " from "
+    debugFormula << "Drawing cursor with selecting: "<< isSelecting() << " from "
     << mark()<<" to " << position() << " in "<<ElementFactory::elementName(m_currentElement->elementType());
     if( !m_currentElement )
         return;

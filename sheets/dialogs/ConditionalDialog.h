@@ -23,8 +23,7 @@
 #ifndef CALLIGRA_SHEETS_CONDITIONAL_DIALOG
 #define CALLIGRA_SHEETS_CONDITIONAL_DIALOG
 
-#include <kdialog.h>
-#include <QWidget>
+#include <KoDialog.h>
 
 #include "Condition.h"
 
@@ -75,7 +74,7 @@ public Q_SLOTS:
  * \ingroup UI
  * Dialog to set conditional cell styles.
  */
-class ConditionalDialog : public KDialog
+class ConditionalDialog : public KoDialog
 {
     Q_OBJECT
 public:

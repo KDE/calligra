@@ -39,8 +39,8 @@ public:
      * @param newSizes the new sizes; in a list with a member for each shape
      * @param parent the parent command used for macro commands
      */
-    KoShapeSizeCommand(const QList<KoShape*> &shapes, const QList<QSizeF> &previousSizes,
-            const QList<QSizeF> &newSizes, KUndo2Command *parent = 0);
+    KoShapeSizeCommand(const QList<KoShape*> &shapes, const QVector<QSizeF> &previousSizes,
+            const QVector<QSizeF> &newSizes, KUndo2Command *parent = 0);
     ~KoShapeSizeCommand();
 
     /// redo the command

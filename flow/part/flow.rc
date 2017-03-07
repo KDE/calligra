@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="flow" version="34">
+<kpartgui name="flow" version="34" translationDomain="flow">
     <MenuBar>
         <Menu name="file">
             <Text>&amp;File</Text>

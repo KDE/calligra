@@ -17,11 +17,13 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "BenchmarkCluster.h"
+
 #include "BenchmarkHelper.h"
 #include "Cluster.h"
 #include "Global.h"
 
-#include "BenchmarkCluster.h"
+#include <QTest>
 
 using namespace KSpread;
 class Cell;
@@ -251,5 +253,3 @@ void ClusterBenchmark::testShiftDownPerformance()
 
 
 QTEST_MAIN(ClusterBenchmark)
-
-#include "BenchmarkCluster.moc"

@@ -23,14 +23,14 @@
 #include <QKeyEvent>
 #include <QStackedLayout>
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoPACanvas.h>
 #include <KoPAPageBase.h>
 #include <KoPAViewBase.h>
 #include <KoShape.h>
 
+#include "StageDebug.h"
 #include "KPrAnimationDirector.h"
 #include "KPrPresenterViewInterface.h"
 #include "KPrPresenterViewSlidesInterface.h"
@@ -144,6 +144,3 @@ void KPrPresenterViewWidget::requestChangePage( int index, bool enableMainView )
     m_mainWidget->setActivePage( index );
     m_slidesWidget->setActivePage( index );
 }
-
-#include "KPrPresenterViewWidget.moc"
-

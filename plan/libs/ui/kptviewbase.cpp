@@ -22,7 +22,6 @@
 #include "kptproject.h"
 #include "kptdebug.h"
 
-#include <kaction.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -47,6 +46,7 @@
 #include <QAbstractScrollArea>
 #include <QMetaEnum>
 #include <QPainter>
+#include <QAction>
 #include <QMenu>
 #include <QFocusEvent>
 #include <QKeyEvent>
@@ -124,9 +124,9 @@ bool DockWidget::saveXml( QDomElement &context ) const
     QDomElement e = context.ownerDocument().createElement( "docker" );
     context.appendChild( e );
     e.setAttribute( "id", id );
-    e.setAttribute( "location", location );
-    e.setAttribute( "floating", isFloating() );
-    e.setAttribute( "visible", m_shown );
+    e.setAttribute( "location", QString::number(location) );
+    e.setAttribute( "floating", QString::number(isFloating()) );
+    e.setAttribute( "visible", QString::number(m_shown) );
     return true;
 }
 
@@ -166,19 +166,19 @@ void PrintingOptions::saveXml( QDomElement &element ) const
 
     QDomElement h = me.ownerDocument().createElement( "header" );
     me.appendChild( h );
-    h.setAttribute( "group", headerOptions.group );
-    h.setAttribute( "project", headerOptions.project );
-    h.setAttribute( "date", headerOptions.date );
-    h.setAttribute( "manager", headerOptions.manager );
-    h.setAttribute( "page", headerOptions.page );
+    h.setAttribute( "group", QString::number(headerOptions.group) );
+    h.setAttribute( "project", QString::number(headerOptions.project) );
+    h.setAttribute( "date", QString::number(headerOptions.date) );
+    h.setAttribute( "manager", QString::number(headerOptions.manager) );
+    h.setAttribute( "page", QString::number(headerOptions.page) );
 
     QDomElement f = me.ownerDocument().createElement( "footer" );
     me.appendChild( f );
-    f.setAttribute( "group", footerOptions.group );
-    f.setAttribute( "project", footerOptions.project );
-    f.setAttribute( "date", footerOptions.date );
-    f.setAttribute( "manager", footerOptions.manager );
-    f.setAttribute( "page", footerOptions.page );
+    f.setAttribute( "group", QString::number(footerOptions.group) );
+    f.setAttribute( "project", QString::number(footerOptions.project) );
+    f.setAttribute( "date", QString::number(footerOptions.date) );
+    f.setAttribute( "manager", QString::number(footerOptions.manager) );
+    f.setAttribute( "page", QString::number(footerOptions.page) );
 }
 
 //----------------------
@@ -204,12 +204,12 @@ PrintingHeaderFooter::PrintingHeaderFooter( const PrintingOptions &opt, QWidget 
 
 PrintingHeaderFooter::~PrintingHeaderFooter()
 {
-    //kDebug(planDbg());
+    //debugPlan;
 }
 
 void PrintingHeaderFooter::slotChanged()
 {
-    kDebug(planDbg());
+    debugPlan;
     emit changed( options() );
 }
 
@@ -232,7 +232,7 @@ void PrintingHeaderFooter::setOptions( const PrintingOptions &options )
 
 PrintingOptions PrintingHeaderFooter::options() const
 {
-    //kDebug(planDbg());
+    //debugPlan;
     PrintingOptions opt;
     opt.headerOptions.group = ui_header->isChecked();
     opt.headerOptions.project = ui_headerProject->checkState();
@@ -260,7 +260,7 @@ PrintingDialog::PrintingDialog( ViewBase *view )
     px.setDotsPerMeterY( dpm );
     QPainter p( &px );
     m_textheight = p.boundingRect( QRectF(), Qt::AlignTop, "Aj" ).height();
-    kDebug(planDbg())<<"textheight:"<<m_textheight;
+    debugPlan<<"textheight:"<<m_textheight;
 }
 
 PrintingDialog::~PrintingDialog()
@@ -282,7 +282,7 @@ PrintingOptions PrintingDialog::printingOptions() const
 
 void PrintingDialog::setPrintingOptions( const PrintingOptions &opt )
 {
-    kDebug(planDbg());
+    debugPlan;
     m_view->setPrintingOptions( opt );
     emit changed( opt );
     emit changed();
@@ -320,7 +320,7 @@ QWidget *PrintingDialog::createPageLayoutWidget() const
 
 QList<QWidget*> PrintingDialog::createOptionWidgets() const
 {
-    //kDebug(planDbg());
+    //debugPlan;
     PrintingHeaderFooter *w = new PrintingHeaderFooter( printingOptions() );
     connect(w, SIGNAL(changed(PrintingOptions)), this, SLOT(setPrintingOptions(PrintingOptions)));
     const_cast<PrintingDialog*>( this )->m_widget = w;
@@ -333,11 +333,25 @@ QList<KoShape*> PrintingDialog::shapesOnPage(int)
     return QList<KoShape*>();
 }
 
-void PrintingDialog::drawBottomRect( QPainter &p, const QRect &r )
+void PrintingDialog::drawRect( QPainter &p, const QRect &r, Qt::Edges edges )
 {
-    p.drawLine( r.topLeft(), r.bottomLeft() );
-    p.drawLine( r.bottomLeft(), r.bottomRight() );
-    p.drawLine( r.topRight(), r.bottomRight() );
+    p.save();
+    QPen pen = p.pen();
+    pen.setColor(Qt::gray);
+    p.setPen(pen);
+    if (edges & Qt::LeftEdge) {
+        p.drawLine( r.topLeft(), r.bottomLeft() );
+    }
+    if (edges & Qt::BottomEdge) {
+        p.drawLine( r.bottomLeft(), r.bottomRight() );
+    }
+    if (edges & Qt::TopEdge) {
+        p.drawLine( r.topRight(), r.bottomRight() );
+    }
+    if (edges & Qt::RightEdge) {
+        p.drawLine( r.topRight(), r.bottomRight() );
+    }
+    p.restore();
 }
 
 QRect PrintingDialog::headerRect() const
@@ -370,7 +384,7 @@ int PrintingDialog::headerFooterHeight( const PrintingOptions::Data &options ) c
     if (  options.project == Qt::Checked && options.manager == Qt::Checked && ( options.date == Qt::Checked || options.page == Qt::Checked ) ) {
        height *= 2.0;
     }
-    kDebug(planDbg())<<height;
+    debugPlan<<height;
     return height;
 }
 
@@ -397,7 +411,7 @@ void PrintingDialog::paint( QPainter &p, const PrintingOptions::Data &options, c
     QRect managerRect;
     QString manager = project.leader();
     QRect dateRect;
-    QString date = KGlobal::locale()->formatDate( QDate::currentDate() );
+    QString date = QLocale().toString(QDate::currentDate(), QLocale::ShortFormat);
 
     QRect rect_1 = rect;
     QRect rect_2 = rect;
@@ -414,25 +428,49 @@ void PrintingDialog::paint( QPainter &p, const PrintingOptions::Data &options, c
         pageRect = p.boundingRect( rect_1, Qt::AlignRight|Qt::AlignTop, page );
         pageRect.setHeight( rect_1.height() );
         rect_1.setRight( pageRect.left() - 2 );
+        p.save();
+        QFont f = p.font();
+        f.setPointSize( f.pointSize() * 0.5 );
+        p.setFont( f );
+        QRect r = p.boundingRect( rect_1, Qt::AlignRight|Qt::AlignTop, i18n("Page:") );
+        if (r.left() > pageRect.left()) {
+            pageRect.setLeft(r.left());
+        }
+        p.restore();
         if ( options.project == Qt::Checked || options.manager == Qt::Checked || options.date == Qt::Checked ) {
             p.drawLine( rect_1.topRight(), rect_1.bottomRight() );
         }
     }
     if ( options.date == Qt::Checked ) {
+            p.save();
+            QFont f = p.font();
+            f.setPointSize( f.pointSize() * 0.5 );
+            p.setFont( f );
+            QRect rct = p.boundingRect( rect_1, Qt::AlignRight|Qt::AlignTop, i18n("Date:") );
+            p.restore();
         if ( ( options.project == Qt::Checked && options.manager != Qt::Checked ) ||
              ( options.project != Qt::Checked && options.manager == Qt::Checked ) )
         {
             dateRect = p.boundingRect( rect_1, Qt::AlignRight|Qt::AlignTop, date );
             dateRect.setHeight( rect_1.height() );
             rect_1.setRight( dateRect.left() - 2 );
+            if (rct.right() > dateRect.right()) {
+                dateRect.setRight(rct.right());
+            }
             p.drawLine( rect_1.topRight(), rect_1.bottomRight() );
         } else if ( options.project == Qt::Checked && options.manager == Qt::Checked ) {
             dateRect = p.boundingRect( rect_2, Qt::AlignRight|Qt::AlignTop, date );
             dateRect.setHeight( rect_2.height() );
             rect_2.setRight( dateRect.left() - 2 );
+            if (rct.right() > dateRect.right()) {
+                dateRect.setRight(rct.right());
+            }
             p.drawLine( rect_2.topRight(), rect_2.bottomRight() );
         } else {
             dateRect = p.boundingRect( rect_2, Qt::AlignLeft|Qt::AlignTop, date );
+            if (rct.right() > dateRect.right()) {
+                dateRect.setRight(rct.right());
+            }
             dateRect.setHeight( rect_2.height() );
             rect_2.setRight( dateRect.left() - 2 );
             if ( rect_2.left() != rect.left() ) {
@@ -441,35 +479,59 @@ void PrintingDialog::paint( QPainter &p, const PrintingOptions::Data &options, c
         }
     }
     if ( options.manager == Qt::Checked ) {
+        p.save();
+        QFont f = p.font();
+        f.setPointSize( f.pointSize() * 0.5 );
+        p.setFont( f );
+        QRect rct = p.boundingRect( rect_1, Qt::AlignRight|Qt::AlignTop, i18n("Manager:") );
+        p.restore();
         if ( options.project != Qt::Checked ) {
             managerRect = p.boundingRect( rect_1, Qt::AlignLeft|Qt::AlignTop, manager );
             managerRect.setHeight( rect_1.height() );
+            if (rct.right() > managerRect.right()) {
+                managerRect.setRight(rct.right());
+            }
         } else if ( options.date != Qt::Checked && options.page != Qt::Checked ) {
             managerRect = p.boundingRect( rect_1, Qt::AlignRight|Qt::AlignTop, manager );
             managerRect.setHeight( rect_1.height() );
+            if (rct.right() > managerRect.right()) {
+                managerRect.setRight(rct.right());
+            }
             rect_1.setRight( managerRect.left() - 2 );
             p.drawLine( rect_1.topRight(), rect_1.bottomRight() );
         } else {
             managerRect = p.boundingRect( rect_2, Qt::AlignLeft|Qt::AlignTop, manager );
             managerRect.setHeight( rect_2.height() );
+            if (rct.right() > managerRect.right()) {
+                managerRect.setRight(rct.right());
+            }
         }
     }
     if ( options.project == Qt::Checked ) {
         projectRect = p.boundingRect( rect_1, Qt::AlignLeft|Qt::AlignTop, projectName );
         projectRect.setHeight( rect_1.height() );
+        p.save();
+        QFont f = p.font();
+        f.setPointSize( f.pointSize() * 0.5 );
+        p.setFont( f );
+        QRect rct = p.boundingRect( rect_1, Qt::AlignRight|Qt::AlignTop, i18n("Project:") );
+        if (rct.right() > projectRect.right()) {
+            projectRect.setRight(rct.right());
+        }
+        p.restore();
     }
 
     if ( options.page == Qt::Checked ) {
         p.drawText( pageRect, Qt::AlignHCenter|Qt::AlignBottom, page );
     }
     if ( options.project == Qt::Checked ) {
-        p.drawText( projectRect, Qt::AlignLeft|Qt::AlignBottom, projectName );
+        p.drawText( projectRect.adjusted(3, 0, 3, 0), Qt::AlignLeft|Qt::AlignBottom, projectName );
     }
     if ( options.date == Qt::Checked ) {
         p.drawText( dateRect, Qt::AlignHCenter|Qt::AlignBottom, date );
     }
     if ( options.manager == Qt::Checked ) {
-        p.drawText( managerRect, Qt::AlignLeft|Qt::AlignBottom, manager );
+        p.drawText( managerRect.adjusted(3, 0, 3, 0), Qt::AlignLeft|Qt::AlignBottom, manager );
     }
     QFont f = p.font();
     f.setPointSize( f.pointSize() * 0.5 );
@@ -548,7 +610,7 @@ void ViewBase::updateReadWrite( bool readwrite )
 
 void ViewBase::setGuiActive( bool active ) // virtual slot
 {
-    //kDebug(planDbg())<<active;
+    //debugPlan<<active;
     emit guiActivated( this, active );
 }
 
@@ -568,7 +630,7 @@ KoPrintJob *ViewBase::createPrintJob()
 QWidget *ViewBase::createPageLayoutWidget( ViewBase *view )
 {
     QWidget *widget = new QWidget();
-    widget->setWindowTitle( i18nc( "@title:tab", "Page Layout" ) );
+    widget->setWindowTitle( xi18nc( "@title:tab", "Page Layout" ) );
 
     QHBoxLayout *lay = new QHBoxLayout(widget);
 
@@ -589,7 +651,7 @@ QWidget *ViewBase::createPageLayoutWidget( ViewBase *view )
 PrintingHeaderFooter *ViewBase::createHeaderFooterWidget( ViewBase *view )
 {
     PrintingHeaderFooter *widget = new PrintingHeaderFooter( view->printingOptions() );
-    widget->setWindowTitle( i18nc( "@title:tab", "Header and Footer" ) );
+    widget->setWindowTitle( xi18nc( "@title:tab", "Header and Footer" ) );
     widget->setOptions( view->printingOptions() );
 
     return widget;
@@ -597,7 +659,7 @@ PrintingHeaderFooter *ViewBase::createHeaderFooterWidget( ViewBase *view )
 
 void ViewBase::slotHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug(planDbg());
+    debugPlan;
     QList<QAction*> lst = contextActionList();
     if ( ! lst.isEmpty() ) {
         QMenu::exec( lst, pos, lst.first() );
@@ -606,7 +668,7 @@ void ViewBase::slotHeaderContextMenuRequested( const QPoint &pos )
 
 void ViewBase::createOptionAction()
 {
-    actionOptions = new KAction(koIcon("configure"), i18n("Configure View..."), this);
+    actionOptions = new QAction(koIcon("configure"), i18n("Configure View..."), this);
     connect(actionOptions, SIGNAL(triggered(bool)), SLOT(slotOptions()));
     addContextAction( actionOptions );
 }
@@ -655,12 +717,12 @@ void ViewBase::saveContext( QDomElement &context ) const
     context.appendChild( me );
     me.setAttribute( "format", KoPageFormat::formatString( m_pagelayout.format ) );
     me.setAttribute( "orientation", m_pagelayout.orientation == KoPageFormat::Portrait ? "portrait" : "landscape" );
-    me.setAttribute( "width", m_pagelayout.width );
-    me.setAttribute( "height",m_pagelayout. height );
-    me.setAttribute( "left-margin", m_pagelayout.leftMargin );
-    me.setAttribute( "right-margin", m_pagelayout.rightMargin );
-    me.setAttribute( "top-margin", m_pagelayout.topMargin );
-    me.setAttribute( "bottom-margin", m_pagelayout.bottomMargin );
+    me.setAttribute( "width", QString::number(m_pagelayout.width) );
+    me.setAttribute( "height",QString::number(m_pagelayout. height) );
+    me.setAttribute( "left-margin", QString::number(m_pagelayout.leftMargin) );
+    me.setAttribute( "right-margin", QString::number(m_pagelayout.rightMargin) );
+    me.setAttribute( "top-margin", QString::number(m_pagelayout.topMargin) );
+    me.setAttribute( "bottom-margin",QString::number( m_pagelayout.bottomMargin) );
 
     m_printingOptions.saveXml( context );
 
@@ -718,7 +780,7 @@ int TreeViewPrintingDialog::documentLastPage() const
 
 int TreeViewPrintingDialog::firstRow( int page ) const
 {
-    kDebug(planDbg())<<page;
+    debugPlan<<page;
     int pageNumber = page - documentFirstPage();
     QHeaderView *mh = m_tree->header();
     int height = mh->height();
@@ -749,7 +811,7 @@ int TreeViewPrintingDialog::firstRow( int page ) const
         row = 0;
         while ( idx.isValid() ) {
             if ( row >= rowsPrPage * pageNumber ) {
-                kDebug(planDbg())<<page<<pageNumber;
+                debugPlan<<page<<pageNumber;
                 break;
             }
             ++row;
@@ -759,7 +821,7 @@ int TreeViewPrintingDialog::firstRow( int page ) const
             row = -1;
         }
     }
-    kDebug(planDbg())<<"Page"<<page<<":"<<(row==-1?"empty":"first row=")<<row<<"("<<rowsPrPage<<")";
+    debugPlan<<"Page"<<page<<":"<<(row==-1?"empty":"first row=")<<row<<"("<<rowsPrPage<<")";
     return row;
 }
 
@@ -786,7 +848,7 @@ void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
 
     QAbstractItemModel *model = m_tree->model();
 
-    kDebug(planDbg())<<pageRect<<paperRect;
+    debugPlan<<pageRect<<paperRect;
 
     painter.translate( pageRect.topLeft() );
 
@@ -817,26 +879,36 @@ void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
 
     painter.setPen(Qt::black);
     painter.setBrush( Qt::lightGray );
+    int higestIndex = 0;
+    int rightpos = 0;
     for ( int i = 0; i < mh->count(); ++i ) {
         QString text = model->headerData( i, Qt::Horizontal ).toString();
         QVariant a = model->headerData( i, Qt::Horizontal, Qt::TextAlignmentRole );
         int align = a.isValid() ? a.toInt() : (int)(Qt::AlignLeft|Qt::AlignVCenter);
         if ( ! mh->isSectionHidden( i ) ) {
-            QRect r( mh->sectionPosition( i ), 0, mh->sectionSize( i ), height );
+            QRect r = QRect( mh->sectionPosition( i ), 0, mh->sectionSize( i ), height ).adjusted(0, 0, 0, -painter.pen().width());
+            if (rightpos < r.right()) {
+                higestIndex = i;
+                rightpos = r.right();
+            }
             painter.drawRect( r );
-            painter.drawText( r, align, text );
-            //kDebug(planDbg())<<text<<r<<r.left() * sx<<align;
+            // FIXME There is a bug somewhere, the text somehow overwites the rect outline for the first column!
+            painter.save();
+            painter.setBrush(QBrush());
+            painter.drawText( r.adjusted(3, 1, -3, -1), align, text );
+            painter.drawRect( r );
+            painter.restore();
         }
-        //kDebug(planDbg())<<text<<"hidden="<<h->isSectionHidden( i )<<h->sectionPosition( i );
+        //debugPlan<<text<<"hidden="<<h->isSectionHidden( i )<<h->sectionPosition( i );
     }
     if ( m_firstRow == -1 ) {
-        kDebug(planDbg())<<"No data";
+        debugPlan<<"No data";
         return;
     }
     painter.setBrush( QBrush() );
     QModelIndex idx = model->index( m_firstRow, 0, QModelIndex() );
     int numRows = 0;
-    //kDebug(planDbg())<<page<<rowsPrPage;
+    //debugPlan<<page<<rowsPrPage;
     while ( idx.isValid() && numRows < rowsPrPage ) {
         painter.translate( 0, height );
         h += height;
@@ -844,13 +916,18 @@ void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
             if ( mh->isSectionHidden( i ) ) {
                 continue;
             }
+            Qt::Edges edges = Qt::BottomEdge | Qt::LeftEdge;
             QModelIndex index = model->index( idx.row(), i, idx.parent() );
             QString text = model->data( index ).toString();
             QVariant a = model->data( index, Qt::TextAlignmentRole );
             int align = a.isValid() ? a.toInt() : (int)(Qt::AlignLeft|Qt::AlignVCenter);
             QRect r( mh->sectionPosition( i ),  0, mh->sectionSize( i ), height );
-            drawBottomRect( painter, r );
-            painter.drawText( r, align, text );
+            if (higestIndex == i) {
+                edges |= Qt::RightEdge;
+                r.adjust(0, 0, 1, 0);
+            }
+            drawRect( painter, r, edges );
+            painter.drawText( r.adjusted(3, 1, -3, -1) , align, text );
         }
         ++numRows;
         idx = m_tree->indexBelow( idx );
@@ -882,7 +959,7 @@ TreeViewBase::TreeViewBase( QWidget *parent )
 
 void TreeViewBase::dropEvent( QDropEvent *e )
 {
-    kDebug(planDbg());
+    debugPlan;
     QTreeView::dropEvent( e );
 }
 
@@ -914,13 +991,13 @@ void TreeViewBase::createItemDelegates( ItemModelBase *model )
 
 void TreeViewBase::slotHeaderContextMenuRequested( const QPoint& pos )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     emit headerContextMenuRequested( header()->mapToGlobal( pos ) );
 }
 
 void TreeViewBase::setColumnsHidden( const QList<int> &lst )
 {
-    //kDebug(planDbg())<<m_hideList;
+    //debugPlan<<m_hideList;
     int prev = -1;
     QList<int> xlst;
     foreach ( int c, lst ) {
@@ -1000,7 +1077,7 @@ QModelIndex TreeViewBase::lastEditable( int row, const QModelIndex &parent )
 // Reimplemented to fix qt bug 160083: Doesn't scroll horisontally.
 void TreeViewBase::scrollTo(const QModelIndex &index, ScrollHint hint)
 {
-    //kDebug(planDbg())<<objectName()<<index<<hint;
+    //debugPlan<<objectName()<<index<<hint;
     if ( ! hasFocus() ) {
         return;
     }
@@ -1026,7 +1103,7 @@ void TreeViewBase::scrollTo(const QModelIndex &index, ScrollHint hint)
 
 void TreeViewBase::focusInEvent(QFocusEvent *event)
 {
-    //kDebug(planDbg())<<event->reason();
+    //debugPlan<<event->reason();
     QAbstractScrollArea::focusInEvent(event); //NOTE: not QTreeView
     if ( event->reason() == Qt::MouseFocusReason ) {
         return;
@@ -1051,7 +1128,7 @@ void TreeViewBase::focusInEvent(QFocusEvent *event)
  */
 void TreeViewBase::keyPressEvent(QKeyEvent *event)
 {
-    //kDebug(planDbg())<<objectName()<<event->key()<<","<<m_arrowKeyNavigation;
+    //debugPlan<<objectName()<<event->key()<<","<<m_arrowKeyNavigation;
     if ( !m_arrowKeyNavigation ) {
         QTreeView::keyPressEvent( event );
         return;
@@ -1137,7 +1214,7 @@ void TreeViewBase::mousePressEvent(QMouseEvent *event)
     // If  the mouse is pressed outside any item, the current item should be/remain selected
     QPoint pos = event->pos();
     QModelIndex index = indexAt(pos);
-    kDebug(planDbg())<<index<<event->pos();
+    debugPlan<<index<<event->pos();
     if ( ! index.isValid() ) {
         index = selectionModel()->currentIndex();
         if ( index.isValid() && ! selectionModel()->isSelected( index ) ) {
@@ -1145,7 +1222,7 @@ void TreeViewBase::mousePressEvent(QMouseEvent *event)
             QMouseEvent e( event->type(), pos, mapToGlobal( pos ), event->button(), event->buttons(), event->modifiers() );
             QTreeView::mousePressEvent( &e );
             event->setAccepted( e.isAccepted() );
-            kDebug(planDbg())<<index<<e.pos();
+            debugPlan<<index<<e.pos();
         }
         return;
     }
@@ -1154,10 +1231,10 @@ void TreeViewBase::mousePressEvent(QMouseEvent *event)
 
 void TreeViewBase::closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint)
 {
-    //kDebug(planDbg())<<editor<<hint;
+    //debugPlan<<editor<<hint;
     ItemDelegate *delegate = ::qobject_cast<ItemDelegate*>( sender() );
     if ( delegate == 0 ) {
-        kWarning()<<"Not a KPlato::ItemDelegate, try standard treatment"<<editor<<hint;
+        warnPlan<<"Not a KPlato::ItemDelegate, try standard treatment"<<editor<<hint;
         return QTreeView::closeEditor( editor, hint );
     }
     // Hacky, if only hint was an int!
@@ -1181,12 +1258,12 @@ void TreeViewBase::closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHi
             index = moveToEditable( currentIndex(), MoveUp );
             break;
         default:
-            //kDebug(planDbg())<<"Standard treatment"<<editor<<hint;
+            //debugPlan<<"Standard treatment"<<editor<<hint;
             return QTreeView::closeEditor( editor, hint ); // standard treatment
     }
     if (index.isValid()) {
         QItemSelectionModel::SelectionFlags flags = QItemSelectionModel::ClearAndSelect | selectionBehaviorFlags();
-        //kDebug(planDbg())<<flags;
+        //debugPlan<<flags;
         QPersistentModelIndex persistent(index);
         selectionModel()->setCurrentIndex(persistent, flags);
         // currentChanged signal would have already started editing
@@ -1202,7 +1279,7 @@ QModelIndex TreeViewBase::moveToEditable( const QModelIndex &index, CursorAction
     do {
         ix = moveCursor( ix, cursorAction );
     } while ( ix.isValid() &&  ! ( model()->flags( ix ) & Qt::ItemIsEditable ) );
-    //kDebug(planDbg())<<ix;
+    //debugPlan<<ix;
     if ( ! ix.isValid() ) {
         switch ( cursorAction ) {
             case MovePrevious:
@@ -1225,7 +1302,7 @@ QModelIndex TreeViewBase::moveToEditable( const QModelIndex &index, CursorAction
 QModelIndex TreeViewBase::moveCursor( CursorAction cursorAction, Qt::KeyboardModifiers modifiers )
 {
     QModelIndex current = currentIndex();
-    //kDebug(planDbg())<<cursorAction<<current;
+    //debugPlan<<cursorAction<<current;
     if (!current.isValid()) {
         return QTreeView::moveCursor( cursorAction, modifiers );
     }
@@ -1247,7 +1324,7 @@ QModelIndex TreeViewBase::moveCursor( const QModelIndex &index, CursorAction cur
             // that has a column in current.column()
             ix = indexBelow( current );
             while ( ix.isValid() && col >= model()->columnCount(ix.parent()) ) {
-                //kDebug(planDbg())<<col<<model()->columnCount(ix.parent())<<ix;
+                //debugPlan<<col<<model()->columnCount(ix.parent())<<ix;
                 ix = indexBelow( ix );
             }
             if ( ix.isValid() ) {
@@ -1336,7 +1413,7 @@ QModelIndex TreeViewBase::moveCursor( const QModelIndex &index, CursorAction cur
 
 void TreeViewBase::contextMenuEvent ( QContextMenuEvent *event )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     emit contextMenuRequested( indexAt(event->pos()), event->globalPos() );
 }
 
@@ -1387,10 +1464,10 @@ int TreeViewBase::section( int col ) const
 
 void TreeViewBase::dragMoveEvent(QDragMoveEvent *event)
 {
-    //kDebug(planDbg());
+    //debugPlan;
     if (dragDropMode() == InternalMove
         && (event->source() != this || !(event->possibleActions() & Qt::MoveAction))) {
-        //kDebug(planDbg())<<"Internal:"<<event->isAccepted();
+        //debugPlan<<"Internal:"<<event->isAccepted();
         return;
     }
     QTreeView::dragMoveEvent( event );
@@ -1398,14 +1475,14 @@ void TreeViewBase::dragMoveEvent(QDragMoveEvent *event)
         if ( ! m_acceptDropsOnView ) {
             event->ignore();
         }
-        kDebug(planDbg())<<"On viewport:"<<event->isAccepted();
+        debugPlan<<"On viewport:"<<event->isAccepted();
     } else {
         QModelIndex index = indexAt( event->pos() );
         if ( index.isValid() ) {
             emit dropAllowed( index, dropIndicatorPosition(), event );
         } else {
             event->ignore();
-            kDebug(planDbg())<<"Invalid index:"<<event->isAccepted();
+            debugPlan<<"Invalid index:"<<event->isAccepted();
         }
     }
     if ( event->isAccepted() ) {
@@ -1415,7 +1492,7 @@ void TreeViewBase::dragMoveEvent(QDragMoveEvent *event)
     } else if ( viewport()->cursor().shape() != Qt::ForbiddenCursor ) {
         viewport()->setCursor( Qt::ForbiddenCursor );
     }
-    kDebug(planDbg())<<event->isAccepted()<<viewport()->cursor().shape();
+    debugPlan<<event->isAccepted()<<viewport()->cursor().shape();
 }
 
 QModelIndex TreeViewBase::firstVisibleIndex( const QModelIndex &idx ) const
@@ -1432,33 +1509,33 @@ QModelIndex TreeViewBase::firstVisibleIndex( const QModelIndex &idx ) const
 
 bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &element )
 {
-    //kDebug(planDbg())<<objectName();
+    //debugPlan<<objectName();
     header()->setStretchLastSection( (bool)( element.attribute( "stretch-last-column", "1" ).toInt() ) );
     KoXmlElement e = element.namedItem( "columns" ).toElement();
     if ( ! e.isNull() ) {
         if ( ! map.isValid() ) {
             // try numbers
-            kDebug(planDbg())<<"invalid map";
+            debugPlan<<"invalid map";
             for ( int i = model()->columnCount() - 1; i >= 0; --i ) {
                 QString s = e.attribute( QString( "column-%1" ).arg( i ), "" );
                 if ( s == "hidden" ) {
                     hideColumn( i );
                 } else if ( s == "shown" ) {
                     showColumn( i );
-                } else kDebug(planDbg())<<objectName()<<"Unknown column:"<<s;
+                } else debugPlan<<objectName()<<"Unknown column:"<<s;
             }
         } else {
             for ( int i = model()->columnCount() - 1; i >= 0; --i ) {
                 QString n = map.key( i );
-                //kDebug(planDbg())<<i<<"="<<n;
+                //debugPlan<<i<<"="<<n;
                 if ( ! n.isEmpty() ) {
                     QString s = e.attribute( n, "" );
                     if ( s == "hidden" ) {
                         hideColumn( i );
                     } else if ( s == "shown" ) {
                         showColumn( i );
-                    } else kDebug(planDbg())<<objectName()<<"Unknown column:"<<s;
-                } else kDebug(planDbg())<<"Column not in enum:"<<i;
+                    } else debugPlan<<objectName()<<"Unknown column:"<<s;
+                } else debugPlan<<"Column not in enum:"<<i;
             }
         }
     }
@@ -1500,18 +1577,18 @@ bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &elemen
 
 void TreeViewBase::saveContext( const QMetaEnum &map, QDomElement &element ) const
 {
-    //kDebug(planDbg())<<objectName();
-    element.setAttribute( "stretch-last-column", header()->stretchLastSection() );
+    //debugPlan<<objectName();
+    element.setAttribute( "stretch-last-column", QString::number(header()->stretchLastSection()) );
     QDomElement e = element.ownerDocument().createElement( "columns" );
     element.appendChild( e );
     for ( int i = 0; i < model()->columnCount(); ++i ) {
         bool h = isColumnHidden( i );
         if ( ! map.isValid() ) {
-            kDebug(planDbg())<<"invalid map";
+            debugPlan<<"invalid map";
             e.setAttribute( QString( "column-%1" ).arg( i ), h ? "hidden" : "shown" );
         } else {
             QString n = map.key( i );
-            //kDebug(planDbg())<<i<<"="<<n;
+            //debugPlan<<i<<"="<<n;
             if ( ! n.isEmpty() ) {
                 e.setAttribute( n, h ? "hidden" : "shown" );
             }
@@ -1557,7 +1634,7 @@ DoubleTreeViewPrintingDialog::DoubleTreeViewPrintingDialog( ViewBase *view, Doub
 
 int DoubleTreeViewPrintingDialog::documentLastPage() const
 {
-    kDebug(planDbg())<<KoPageFormat::formatString( m_view->pageLayout().format );
+    debugPlan<<KoPageFormat::formatString( m_view->pageLayout().format );
     int page = documentFirstPage();
     while ( firstRow( page ) != -1 ) {
         ++page;
@@ -1570,7 +1647,7 @@ int DoubleTreeViewPrintingDialog::documentLastPage() const
 
 int DoubleTreeViewPrintingDialog::firstRow( int page ) const
 {
-    kDebug(planDbg())<<page;
+    debugPlan<<page;
     int pageNumber = page - documentFirstPage();
     QHeaderView *mh = m_tree->masterView()->header();
     QHeaderView *sh = m_tree->slaveView()->header();
@@ -1589,7 +1666,7 @@ int DoubleTreeViewPrintingDialog::firstRow( int page ) const
     }
     int rowsPrPage = pageHeight / height;
 
-    kDebug(planDbg())<<"rowsPrPage"<<rowsPrPage;
+    debugPlan<<"rowsPrPage"<<rowsPrPage;
     Q_ASSERT( rowsPrPage > 0 );
 
     int rows = m_tree->model()->rowCount();
@@ -1605,7 +1682,7 @@ int DoubleTreeViewPrintingDialog::firstRow( int page ) const
         row = 0;
         while ( idx.isValid() ) {
             if ( row >= rowsPrPage * pageNumber ) {
-                kDebug(planDbg())<<page<<pageNumber;
+                debugPlan<<page<<pageNumber;
                 break;
             }
             ++row;
@@ -1615,7 +1692,7 @@ int DoubleTreeViewPrintingDialog::firstRow( int page ) const
             row = -1;
         }
     }
-    kDebug(planDbg())<<"Page"<<page<<":"<<(row==-1?"empty":"first row=")<<row<<"("<<rowsPrPage<<")";
+    debugPlan<<"Page"<<page<<":"<<(row==-1?"empty":"first row=")<<row<<"("<<rowsPrPage<<")";
     return row;
 }
 
@@ -1629,10 +1706,10 @@ QList<QWidget*> DoubleTreeViewPrintingDialog::createOptionWidgets() const
 
 void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
 {
-    kDebug(planDbg())<<page<<"paper size:"<<printer().paperSize()<<"---------------------------";
+    debugPlan<<page<<"paper size:"<<printer().paperSize()<<"---------------------------";
     setPrinterPageLayout( m_view->pageLayout() );
     qreal t, l, b, r; printer().getPageMargins( &l, &t, &r, &b, QPrinter::Point );
-    kDebug(planDbg())<<page<<"paper size:"<<printer().paperSize()<<printer().pageRect()<<l<<t<<r<<b;
+    debugPlan<<page<<"paper size:"<<printer().paperSize()<<printer().pageRect()<<l<<t<<r<<b;
     painter.save();
 
     m_firstRow = firstRow( page );
@@ -1649,7 +1726,7 @@ void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
 
     QAbstractItemModel *model = m_tree->model();
     Q_ASSERT( model != 0 );
-    kDebug(planDbg())<<pageRect<<paperRect;
+    debugPlan<<pageRect<<paperRect;
 
     painter.translate( pageRect.topLeft() );
 
@@ -1679,24 +1756,39 @@ void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
 
     painter.setPen(Qt::black);
     painter.setBrush( Qt::lightGray );
+    int higestIndex = 0;
+    int rightpos = 0;
     for ( int i = 0; i < mh->count(); ++i ) {
         QString text = model->headerData( i, Qt::Horizontal ).toString();
         QVariant a = model->headerData( i, Qt::Horizontal, Qt::TextAlignmentRole );
         int align = a.isValid() ? a.toInt() : (int)(Qt::AlignLeft|Qt::AlignVCenter);
         if ( ! mh->isSectionHidden( i ) ) {
-            QRect r( mh->sectionPosition( i ), 0, mh->sectionSize( i ), height );
+            QRect r = QRect( mh->sectionPosition( i ), 0, mh->sectionSize( i ), height ).adjusted(0, 0, 0, -painter.pen().width());
+            if (rightpos < r.right()) {
+                higestIndex = i;
+                rightpos = r.right();
+            }
             painter.drawRect( r );
-            painter.drawText( r, align, text );
+            // FIXME There is a bug somewhere, the text somehow overwites the rect outline for the first column!
+            painter.save();
+            painter.setBrush(QBrush());
+            painter.drawText( r.adjusted(3, 1, -3, -1), align, text );
+            painter.drawRect( r );
+            painter.restore();
         }
         if ( ! sh->isSectionHidden( i ) ) {
-            QRect r( sh->sectionPosition( i ) + mh->length(), 0, sh->sectionSize( i ), height );
+            QRect r = QRect( sh->sectionPosition( i ) + mh->length(), 0, sh->sectionSize( i ), height ).adjusted(0, 0, 0, -painter.pen().width());
+            if (rightpos < r.right()) {
+                higestIndex = i;
+                rightpos = r.right();
+            }
             painter.drawRect( r );
-            painter.drawText( r, align, text );
+            painter.drawText( r.adjusted(3, 1, -3, -1), align, text );
         }
-        //kDebug(planDbg())<<text<<"hidden="<<h->isSectionHidden( i )<<h->sectionPosition( i );
+        //debugPlan<<text<<"hidden="<<h->isSectionHidden( i )<<h->sectionPosition( i );
     }
     if ( m_firstRow == -1 || model->rowCount() == 0 ) {
-        kDebug(planDbg())<<"No data";
+        debugPlan<<"No data";
         painter.restore();
         return;
     }
@@ -1707,28 +1799,37 @@ void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
         idx = m_tree->masterView()->indexBelow( idx );
     }
     int numRows = 0;
-    //kDebug(planDbg())<<page<<rowsPrPage;
+    //debugPlan<<page<<rowsPrPage;
     while ( idx.isValid() && numRows < rowsPrPage ) {
-        kDebug(planDbg())<<"print:"<<idx;
+        debugPlan<<"print:"<<idx;
         painter.translate( 0, height );
         h += height;
         for ( int i = 0; i < mh->count(); ++i ) {
             if ( mh->isSectionHidden( i ) &&  sh->isSectionHidden( i ) ) {
                 continue;
             }
+            Qt::Edges edges = Qt::BottomEdge | Qt::LeftEdge;
             QModelIndex index = model->index( idx.row(), i, idx.parent() );
             QString text = model->data( index ).toString();
             QVariant a = model->data( index, Qt::TextAlignmentRole );
             int align = a.isValid() ? a.toInt() : (int)(Qt::AlignLeft|Qt::AlignVCenter);
             if ( ! mh->isSectionHidden( i ) ) {
                 QRect r( mh->sectionPosition( i ),  0, mh->sectionSize( i ), height );
-                drawBottomRect( painter, r );
-                painter.drawText( r, align, text );
+                if (higestIndex == i) {
+                    edges |= Qt::RightEdge;
+                    r.adjust(0, 0, 1, 0);
+                }
+                drawRect( painter, r, edges );
+                painter.drawText( r.adjusted(3, 1, -3, -1) , align, text );
             }
             if ( ! sh->isSectionHidden( i ) ) {
                 QRect r( sh->sectionPosition( i ) + mh->length(), 0, sh->sectionSize( i ), height );
-                drawBottomRect( painter, r );
-                painter.drawText( r, align, text );
+                if (higestIndex == i) {
+                    edges |= Qt::RightEdge;
+                    r.adjust(0, 0, 1, 0);
+                }
+                drawRect( painter, r, edges );
+                painter.drawText( r.adjusted(3, 1, -3, -1), align, text );
             }
         }
         ++numRows;
@@ -1781,7 +1882,7 @@ void DoubleTreeViewBase::expandAll()
 
 void DoubleTreeViewBase::setParentsExpanded( const QModelIndex &idx, bool expanded )
 {
-    //kDebug(planDbg())<<idx<<m_leftview->isExpanded( idx )<<m_rightview->isExpanded( idx );
+    //debugPlan<<idx<<m_leftview->isExpanded( idx )<<m_rightview->isExpanded( idx );
     QModelIndex p = model()->parent( idx );
     QList<QModelIndex> lst;
     while ( p.isValid() ) {
@@ -1792,7 +1893,7 @@ void DoubleTreeViewBase::setParentsExpanded( const QModelIndex &idx, bool expand
         p = lst.takeLast();
         m_leftview->setExpanded( p, expanded );
         m_rightview->setExpanded( m_rightview->firstVisibleIndex( p ), expanded ); //HACK: qt can't handle that column 0 is hidden!
-        //kDebug(planDbg())<<p<<m_leftview->isExpanded( p )<<m_rightview->isExpanded( p );
+        //debugPlan<<p<<m_leftview->isExpanded( p )<<m_rightview->isExpanded( p );
     }
 }
 
@@ -1809,6 +1910,7 @@ void DoubleTreeViewBase::init()
     addWidget( m_rightview );
     setStretchFactor( 1, 1 );
 
+    m_leftview->setTreePosition(-1); // always visual index 0
 
     connect( m_leftview, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SIGNAL(contextMenuRequested(QModelIndex,QPoint)) );
     connect( m_leftview, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotLeftHeaderContextMenuRequested(QPoint)) );
@@ -1835,7 +1937,7 @@ void DoubleTreeViewBase::init()
     connect( m_leftview, SIGNAL(dropAllowed(QModelIndex,int,QDragMoveEvent*)), this, SIGNAL(dropAllowed(QModelIndex,int,QDragMoveEvent*)) );
     connect( m_rightview, SIGNAL(dropAllowed(QModelIndex,int,QDragMoveEvent*)), this, SIGNAL(dropAllowed(QModelIndex,int,QDragMoveEvent*)) );
 
-    m_actionSplitView = new KAction(koIcon("view-split-left-right"), QString(), this);
+    m_actionSplitView = new QAction(koIcon("view-split-left-right"), QString(), this);
     setViewSplitMode( true );
 
     connect( m_leftview->header(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), SLOT(slotLeftSortIndicatorChanged(int,Qt::SortOrder)) );
@@ -1903,12 +2005,12 @@ void DoubleTreeViewBase::hideColumns( const QList<int> &masterList, const QList<
         QList<int> lst;
         for ( int c = 0; c < model()->columnCount(); ++c ) {
             // only hide columns hidden in *both* views
-            //kDebug(planDbg())<<c<<(mlst.indexOf( c ))<<(slst.indexOf( c ));
+            //debugPlan<<c<<(mlst.indexOf( c ))<<(slst.indexOf( c ));
             if ( (mlst.indexOf( c ) >= 0) && (slst.indexOf( c ) >= 0) ) {
                 lst << c;
             }
         }
-        //kDebug(planDbg())<<lst;
+        //debugPlan<<lst;
         m_leftview->setColumnsHidden( lst );
     } else {
         setStretchFactors();
@@ -1917,7 +2019,7 @@ void DoubleTreeViewBase::hideColumns( const QList<int> &masterList, const QList<
 
 void DoubleTreeViewBase::slotToRightView( const QModelIndex &index )
 {
-    //kDebug(planDbg())<<index.column();
+    //debugPlan<<index.column();
     QModelIndex nxt = m_rightview->firstColumn( index.row(), model()->parent( index ) );
     m_rightview->setFocus();
     if ( nxt.isValid() ) {
@@ -1927,7 +2029,7 @@ void DoubleTreeViewBase::slotToRightView( const QModelIndex &index )
 
 void DoubleTreeViewBase::slotToLeftView( const QModelIndex &index )
 {
-    //kDebug(planDbg())<<index.column();
+    //debugPlan<<index.column();
     QModelIndex prv = m_leftview->lastColumn( index.row(), model()->parent( index ) );
     m_leftview->setFocus();
     if ( prv.isValid() ) {
@@ -1937,7 +2039,7 @@ void DoubleTreeViewBase::slotToLeftView( const QModelIndex &index )
 
 void DoubleTreeViewBase::slotEditToRightView( const QModelIndex &index )
 {
-    //kDebug(planDbg())<<index.column()<<endl;
+    //debugPlan<<index.column()<<endl;
     if ( m_rightview->isHidden() ) {
         return;
     }
@@ -1953,7 +2055,7 @@ void DoubleTreeViewBase::slotEditToRightView( const QModelIndex &index )
 
 void DoubleTreeViewBase::slotEditToLeftView( const QModelIndex &index )
 {
-    //kDebug(planDbg())<<index.column()<<endl;
+    //debugPlan<<index.column()<<endl;
     if ( m_leftview->isHidden() ) {
         return;
     }
@@ -2112,14 +2214,14 @@ void DoubleTreeViewBase::setDefaultDropAction( Qt::DropAction action )
 
 void DoubleTreeViewBase::slotRightHeaderContextMenuRequested( const QPoint &pos )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     emit slaveHeaderContextMenuRequested( pos );
     emit headerContextMenuRequested( pos );
 }
 
 void DoubleTreeViewBase::slotLeftHeaderContextMenuRequested( const QPoint &pos )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     emit masterHeaderContextMenuRequested( pos );
     emit headerContextMenuRequested( pos );
 }
@@ -2129,12 +2231,12 @@ void DoubleTreeViewBase::setStretchFactors()
     int lc = m_leftview->header()->count() - m_leftview->header()->hiddenSectionCount();
     int rc = m_rightview->header()->count() - m_rightview->header()->hiddenSectionCount();
     setStretchFactor( indexOf( m_rightview ), qMax( 1, qMin( 4, rc / qMax( 1, lc ) ) ) );
-    //kDebug(planDbg())<<this<<"set stretch factor="<<qMax( 1, qMin( 4, rc / lc ) );
+    //debugPlan<<this<<"set stretch factor="<<qMax( 1, qMin( 4, rc / lc ) );
 }
 
 bool DoubleTreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &element )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     QList<int> lst1;
     QList<int> lst2;
     KoXmlElement e = element.namedItem( "slave" ).toElement();
@@ -2155,7 +2257,7 @@ bool DoubleTreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &
 
 void DoubleTreeViewBase::saveContext( const QMetaEnum &map, QDomElement &element ) const
 {
-    //kDebug(planDbg())<<objectName();
+    //debugPlan<<objectName();
     QDomElement e = element.ownerDocument().createElement( "master" );
     element.appendChild( e );
     m_leftview->saveContext( map, e );
@@ -2234,5 +2336,3 @@ QModelIndex DoubleTreeViewBase::indexAt( const QPoint &pos ) const
 }
 
 } // namespace KPlato
-
-#include "kptviewbase.moc"

@@ -40,6 +40,7 @@
 #include <KoXmlReader.h>
 #include <KoStore.h>
 #include <KoDocumentInfo.h>
+#include <KoResourcePaths.h>
 
 #include <QPainter>
 #include <QFileInfo>
@@ -48,24 +49,20 @@
 #include <QFileSystemWatcher>
 #include <kundo2qstack.h>
 #include <QPointer>
+#include <QUrl>
+#include <QMimeDatabase>
+#include <QApplication>
 
-#include <kdebug.h>
-#include <kcomponentdata.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kparts/partmanager.h>
-#include <kurl.h>
 #include <kopenwithdialog.h>
-#include <kmimetype.h>
 #include <kmimetypetrader.h>
 //#include <kserviceoffer.h>
+#include <KIO/DesktopExecParser>
 #include <krun.h>
 #include <kprocess.h>
-#include <kaction.h>
 #include <kactioncollection.h>
-
-#include <KoMainWindow.h>
 
 #include "debugarea.h"
 
@@ -89,7 +86,7 @@ DocumentChild::DocumentChild( WorkPackage *parent)
 {
 }
 
-// DocumentChild::DocumentChild( KParts::ReadWritePart *editor, const KUrl &url, const Document *doc, Part *parent)
+// DocumentChild::DocumentChild( KParts::ReadWritePart *editor, const QUrl &url, const Document *doc, Part *parent)
 //     : KoDocumentChild( parent ),
 //     m_doc( doc ),
 //     m_type( Type_Unknown ),
@@ -101,11 +98,11 @@ DocumentChild::DocumentChild( WorkPackage *parent)
 // {
 //     setFileInfo( url );
 //     if ( dynamic_cast<KoDocument*>( editor ) ) {
-//         kDebug(planworkDbg())<<"Creating Calligra doc";
+//         debugPlanWork<<"Creating Calligra doc";
 //         m_type = Type_Calligra;
 //         connect( static_cast<KoDocument*>( editor ), SIGNAL(modified(bool)), this, SLOT(setModified(bool)) );
 //     } else {
-//         kDebug(planworkDbg())<<"Creating KParts doc";
+//         debugPlanWork<<"Creating KParts doc";
 //         m_type = Type_KParts;
 //         slotUpdateModified();
 //     }
@@ -113,7 +110,7 @@ DocumentChild::DocumentChild( WorkPackage *parent)
 
 DocumentChild::~DocumentChild()
 {
-    kDebug(planworkDbg());
+    debugPlanWork;
     disconnect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(slotDirty(QString)));
     m_fileSystemWatcher->removePath( filePath() );
 
@@ -127,12 +124,12 @@ WorkPackage *DocumentChild::parentPackage() const
     return static_cast<WorkPackage*>( parent() );
 }
 
-void DocumentChild::setFileInfo( const KUrl &url )
+void DocumentChild::setFileInfo( const QUrl &url )
 {
     m_fileinfo.setFile( url.path() );
-    //kDebug(planworkDbg())<<url;
+    //debugPlanWork<<url;
     bool res = connect( m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(slotDirty(QString)) );
-    //kDebug(planworkDbg())<<res<<filePath();
+    //debugPlanWork<<res<<filePath();
 #ifndef NDEBUG
     Q_ASSERT( res );
 #else
@@ -143,7 +140,7 @@ void DocumentChild::setFileInfo( const KUrl &url )
 
 void DocumentChild::setModified( bool mod )
 {
-    kDebug(planworkDbg())<<mod<<filePath();
+    debugPlanWork<<mod<<filePath();
     if ( m_editormodified != mod ) {
         m_editormodified = mod;
         emit modified( mod );
@@ -152,9 +149,9 @@ void DocumentChild::setModified( bool mod )
 
 void DocumentChild::slotDirty( const QString &file )
 {
-    //kDebug(planworkDbg())<<filePath()<<file<<m_filemodified;
+    //debugPlanWork<<filePath()<<file<<m_filemodified;
     if ( file == filePath() && ! m_filemodified ) {
-        kDebug(planworkDbg())<<file<<"is modified";
+        debugPlanWork<<file<<"is modified";
         m_filemodified = true;
         emit fileModified( true );
     }
@@ -172,11 +169,11 @@ bool DocumentChild::setDoc( const Document *doc )
 {
     Q_ASSERT ( m_doc == 0 );
     if ( isOpen() ) {
-        KMessageBox::error( 0, i18n( "Document is already open:<br>%1", doc->url().pathOrUrl() ) );
+        KMessageBox::error( 0, i18n( "Document is already open:<br>%1", doc->url().url() ) );
         return false;
     }
     m_doc = doc;
-    KUrl url;
+    QUrl url;
     if ( parentPackage()->newDocuments().contains( doc ) ) {
         url = parentPackage()->newDocuments().value( doc );
         Q_ASSERT( url.isValid() );
@@ -184,7 +181,7 @@ bool DocumentChild::setDoc( const Document *doc )
     } else if ( doc->sendAs() == Document::SendAs_Copy ) {
         url = parentPackage()->extractFile( doc );
         if ( url.url().isEmpty() ) {
-            KMessageBox::error( 0, i18n( "Could not extract document from storage:<br>%1", doc->url().pathOrUrl() ) );
+            KMessageBox::error( 0, i18n( "Could not extract document from storage:<br>%1", doc->url().url() ) );
             return false;
         }
         m_copy = true;
@@ -192,7 +189,7 @@ bool DocumentChild::setDoc( const Document *doc )
         url = doc->url();
     }
     if ( ! url.isValid() ) {
-        KMessageBox::error( 0, i18n( "Invalid URL:<br>%1", url.pathOrUrl() ) );
+        KMessageBox::error( 0, i18n( "Invalid URL:<br>%1", url.url() ) );
         return false;
     }
     setFileInfo( url );
@@ -203,15 +200,15 @@ bool DocumentChild::openDoc( const Document *doc, KoStore *store )
 {
     Q_ASSERT ( m_doc == 0 );
     if ( isOpen() ) {
-        KMessageBox::error( 0, i18n( "Document is already open:<br>%1", doc->url().pathOrUrl() ) );
+        KMessageBox::error( 0, i18n( "Document is already open:<br>%1", doc->url().path() ) );
         return false;
     }
     m_doc = doc;
-    KUrl url;
+    QUrl url;
     if ( doc->sendAs() == Document::SendAs_Copy ) {
         url = parentPackage()->extractFile( doc, store );
         if ( url.url().isEmpty() ) {
-            KMessageBox::error( 0, i18n( "Could not extract document from storage:<br>%1", doc->url().pathOrUrl() ) );
+            KMessageBox::error( 0, i18n( "Could not extract document from storage:<br>%1", doc->url().path() ) );
             return false;
         }
         m_copy = true;
@@ -219,7 +216,7 @@ bool DocumentChild::openDoc( const Document *doc, KoStore *store )
         url = doc->url();
     }
     if ( ! url.isValid() ) {
-        KMessageBox::error( 0, i18n( "Invalid URL:<br>%1", url.pathOrUrl() ) );
+        KMessageBox::error( 0, i18n( "Invalid URL:<br>%1", url.url() ) );
         return false;
     }
     setFileInfo( url );
@@ -229,18 +226,18 @@ bool DocumentChild::openDoc( const Document *doc, KoStore *store )
 bool DocumentChild::editDoc()
 {
     Q_ASSERT( m_doc != 0 );
-    kDebug(planworkDbg())<<"file:"<<filePath();
+    debugPlanWork<<"file:"<<filePath();
     if ( isOpen() ) {
-        KMessageBox::error( 0, i18n( "Document is already open:<br> %1", m_doc->url().pathOrUrl() ) );
+        KMessageBox::error( 0, i18n( "Document is already open:<br> %1", m_doc->url().path() ) );
         return false;
     }
     if ( ! m_fileinfo.exists() ) {
         KMessageBox::error( 0, i18n( "File does not exist:<br>%1", fileName() )  );
         return false;
     }
-    KUrl filename( filePath() );
-    KMimeType::Ptr mimetype = KMimeType::findByUrl( filename, 0, true );
-    KService::Ptr service = KMimeTypeTrader::self()->preferredService( mimetype->name() );
+    QUrl filename = QUrl::fromLocalFile( filePath() );
+    const QMimeType mimetype = QMimeDatabase().mimeTypeForUrl( filename );
+    KService::Ptr service = KMimeTypeTrader::self()->preferredService( mimetype.name() );
     bool editing = startProcess( service, filename );
     if ( editing ) {
         m_type = Type_Other; // FIXME: try to be more specific
@@ -248,35 +245,37 @@ bool DocumentChild::editDoc()
     return editing;
 }
 
-bool DocumentChild::startProcess( KService::Ptr service, const KUrl &url )
+bool DocumentChild::startProcess( KService::Ptr service, const QUrl &url )
 {
     QStringList args;
-    KUrl::List files;
+    QList<QUrl> files;
     if ( url.isValid() ) {
         files << url;
     }
     if ( service ) {
-        args = KRun::processDesktopExec( *service, files );
+        KIO::DesktopExecParser parser(*service, files);
+        parser.setUrlsAreTempFiles(false);
+        args = parser.resultingArguments();
     } else {
-        KUrl::List list;
+        QList<QUrl> list;
         QPointer<KOpenWithDialog> dlg = new KOpenWithDialog( list, i18n("Edit with:"), QString(), 0 );
         if ( dlg->exec() == QDialog::Accepted && dlg ){
             args << dlg->text();
         }
         if ( args.isEmpty() ) {
-            kDebug(planworkDbg())<<"No executable selected";
+            debugPlanWork<<"No executable selected";
             return false;
         }
         args << url.url();
         delete dlg;
     }
-    kDebug(planworkDbg())<<args;
+    debugPlanWork<<args;
     m_process = new KProcess();
     m_process->setProgram( args );
     connect( m_process, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(slotEditFinished(int,QProcess::ExitStatus)) );
     connect( m_process, SIGNAL(error(QProcess::ProcessError)), SLOT(slotEditError(QProcess::ProcessError)) );
     m_process->start();
-    //kDebug(planworkDbg())<<m_process->pid()<<m_process->program();
+    //debugPlanWork<<m_process->pid()<<m_process->program();
     return true;
 }
 
@@ -292,23 +291,23 @@ bool DocumentChild::isFileModified() const
 
 void DocumentChild::slotEditFinished( int /*par*/,  QProcess::ExitStatus )
 {
-    //kDebug(planworkDbg())<<par<<filePath();
+    //debugPlanWork<<par<<filePath();
     delete m_process;
     m_process = 0;
 }
 
 void DocumentChild::slotEditError( QProcess::ProcessError status )
 {
-    kDebug(planworkDbg())<<status;
+    debugPlanWork<<status;
     if ( status == QProcess::FailedToStart || status == QProcess::Crashed ) {
         m_process->deleteLater();
         m_process = 0;
-    } else kDebug(planworkDbg())<<"Error="<<status<<" what to do?";
+    } else debugPlanWork<<"Error="<<status<<" what to do?";
 }
 
 bool DocumentChild::saveToStore( KoStore *store )
 {
-    kDebug(planworkDbg())<<filePath();
+    debugPlanWork<<filePath();
     m_fileSystemWatcher->removePath( filePath() );
     bool ok = false;
     bool wasmod = m_filemodified;
@@ -320,14 +319,14 @@ bool DocumentChild::saveToStore( KoStore *store )
         }
     } else if ( m_type == Type_Other ) {
         if ( isOpen() ) {
-            kWarning()<<"External editor open";
+            warnPlanWork<<"External editor open";
         }
         ok = true;
     } else {
-        kError()<<"Unknown document type";
+        errorPlanWork<<"Unknown document type";
     }
     if ( ok ) {
-        kDebug(planworkDbg())<<"Add to store:"<<fileName();
+        debugPlanWork<<"Add to store:"<<fileName();
         store->addLocalFile( filePath(), fileName() );
         m_filemodified = false;
         if ( wasmod != m_filemodified ) {
@@ -347,20 +346,12 @@ Part::Part( QWidget *parentWidget, QObject *parent, const QVariantList & /*args*
     m_loadingFromProjectStore( false ),
     m_undostack( new KUndo2QStack( this ) )
 {
-    kDebug(planworkDbg());
-    setComponentData( Factory::global() );
-    // Add library translation files
-    KLocale *locale = KGlobal::locale();
-    if ( locale ) {
-        locale->insertCatalog( "planlibs" );
-#ifdef PLAN_KDEPIMLIBS_FOUND
-        locale->insertCatalog( "kabc" );
-#endif
-    }
+    debugPlanWork;
+    setComponentData( *Factory::aboutData() );
     if ( isReadWrite() ) {
-        setXMLFile( "planwork.rc" );
+        setXMLFile( "calligraplanwork.rc" );
     } else {
-        setXMLFile( "planwork_readonly.rc" );
+        setXMLFile( "calligraplanwork_readonly.rc" );
     }
 
     View *v = new View( this, parentWidget, actionCollection() );
@@ -375,7 +366,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, const QVariantList & /*args*
 
 Part::~Part()
 {
-    kDebug(planworkDbg());
+    debugPlanWork;
 //    m_config.save();
     qDeleteAll( m_packageMap );
 }
@@ -389,7 +380,7 @@ void Part::addCommand( KUndo2Command *cmd )
 
 bool Part::setWorkPackage( WorkPackage *wp, KoStore *store )
 {
-    //kDebug(planworkDbg());
+    //debugPlanWork;
     QString id = wp->id();
     if ( m_packageMap.contains( id ) ) {
         if ( KMessageBox::warningYesNo( 0, i18n("<p>The work package already exists in the projects store.</p>"
@@ -417,7 +408,7 @@ bool Part::setWorkPackage( WorkPackage *wp, KoStore *store )
 
 void Part::removeWorkPackage( Node *node, MacroCommand *m )
 {
-    //kDebug(planworkDbg())<<node->name();
+    //debugPlanWork<<node->name();
     WorkPackage *wp = findWorkPackage( node );
     if ( wp == 0 ) {
         KMessageBox::error( 0, i18n("Remove failed. Cannot find work package") );
@@ -433,7 +424,7 @@ void Part::removeWorkPackage( Node *node, MacroCommand *m )
 
 void Part::removeWorkPackages( const QList<Node*> &nodes )
 {
-    //kDebug(planworkDbg())<<node->name();
+    //debugPlanWork<<node->name();
     MacroCommand *m = new MacroCommand( kundo2_i18np( "Remove work package", "Remove work packages", nodes.count() ) );
     foreach ( Node *n, nodes ) {
         removeWorkPackage( n, m );
@@ -447,7 +438,7 @@ void Part::removeWorkPackages( const QList<Node*> &nodes )
 
 void Part::removeWorkPackage( WorkPackage *wp )
 {
-    //kDebug(planworkDbg());
+    //debugPlanWork;
     int row = indexOf( wp );
     if ( row >= 0 ) {
         m_packageMap.remove( m_packageMap.keys().at( row ) );
@@ -457,7 +448,7 @@ void Part::removeWorkPackage( WorkPackage *wp )
 
 void Part::addWorkPackage( WorkPackage *wp )
 {
-    //kDebug(planworkDbg());
+    //debugPlanWork;
     QString id = wp->id();
     Q_ASSERT( ! m_packageMap.contains( id ) );
     m_packageMap[ id ] = wp;
@@ -467,9 +458,8 @@ void Part::addWorkPackage( WorkPackage *wp )
 bool Part::loadWorkPackages()
 {
     m_loadingFromProjectStore = true;
-    KStandardDirs *sd = componentData().dirs();
-    QStringList lst = sd->findAllResources( "projects", "*.planwork", KStandardDirs::Recursive | KStandardDirs::NoDuplicates );
-    //kDebug(planworkDbg())<<lst;
+    const QStringList lst = KoResourcePaths::findAllResources( "projects", "*.planwork", KoResourcePaths::Recursive | KoResourcePaths::NoDuplicates );
+    //debugPlanWork<<lst;
     foreach ( const QString &file, lst ) {
         if ( ! loadNativeFormatFromStore( file ) ) {
             KMessageBox::information( 0, i18n( "Failed to load file:<br>%1" , file ) );
@@ -482,7 +472,7 @@ bool Part::loadWorkPackages()
 
 bool Part::loadNativeFormatFromStore(const QString& file)
 {
-    kDebug(planworkDbg())<<file;
+    debugPlanWork<<file;
     KoStore * store = KoStore::createStore(file, KoStore::Read, "", KoStore::Auto);
 
     if (store->bad()) {
@@ -513,7 +503,7 @@ bool Part::loadNativeFormatFromStoreInternal(KoStore * store)
         }
 
     } else {
-        kError(30003) << "ERROR: No maindoc.xml" << endl;
+        errorPlanWork << "ERROR: No maindoc.xml" << endl;
         KMessageBox::error( 0, i18n("Invalid document. The document does not contain 'maindoc.xml'.") );
         QApplication::restoreOverrideCursor();
         return false;
@@ -524,7 +514,7 @@ bool Part::loadNativeFormatFromStoreInternal(KoStore * store)
 //             d->m_docInfo->load(doc);
 //         }
 //     } else {
-//         //kDebug(planworkDbg()) <<"cannot open document info";
+//         //debugPlanWork <<"cannot open document info";
 //         delete d->m_docInfo;
 //         d->m_docInfo = new KoDocumentInfo(this);
 //     }
@@ -536,10 +526,10 @@ bool Part::loadNativeFormatFromStoreInternal(KoStore * store)
 
 bool Part::loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc)
 {
-    //kDebug(planworkDbg()) <<"Trying to open" << filename;
+    //debugPlanWork <<"Trying to open" << filename;
 
     if (!store->open(filename)) {
-        kWarning() << "Entry " << filename << " not found!";
+        warnPlanWork << "Entry " << filename << " not found!";
         KMessageBox::error( 0, i18n("Failed to open file: %1", filename) );
         return false;
     }
@@ -549,7 +539,7 @@ bool Part::loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& 
     bool ok = doc.setContent(store->device(), &errorMsg, &errorLine, &errorColumn);
     store->close();
     if (!ok) {
-        kError() << "Parsing error in " << filename << "! Aborting!" << endl
+        errorPlanWork << "Parsing error in " << filename << "! Aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl
         << " Error message: " << errorMsg;
         KMessageBox::error( 0, i18n("Parsing error in file '%1' at line %2, column %3<br>Error message: %4", filename  , errorLine, errorColumn ,
@@ -562,27 +552,27 @@ bool Part::loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& 
 
 bool Part::loadXML( const KoXmlDocument &document, KoStore* store )
 {
-    kDebug(planworkDbg());
+    debugPlanWork;
     QString value;
     KoXmlElement plan = document.documentElement();
 
     // Check if this is the right app
     value = plan.attribute( "mime", QString() );
     if ( value.isEmpty() ) {
-        kError() << "No mime type specified!" << endl;
+        errorPlanWork << "No mime type specified!" << endl;
         KMessageBox::error( 0, i18n( "Invalid document. No mimetype specified." ) );
         return false;
     } else if ( value == "application/x-vnd.kde.kplato.work" ) {
         return loadKPlatoXML( document, store );
     } else if ( value != "application/x-vnd.kde.plan.work" ) {
-        kError() << "Unknown mime type " << value;
+        errorPlanWork << "Unknown mime type " << value;
         KMessageBox::error( 0, i18n( "Invalid document. Expected mimetype application/x-vnd.kde.plan.work, got %1", value ) );
         return false;
     }
     QString syntaxVersion = plan.attribute( "version", PLANWORK_FILE_SYNTAX_VERSION );
     m_xmlLoader.setWorkVersion( syntaxVersion );
     if ( syntaxVersion > PLANWORK_FILE_SYNTAX_VERSION ) {
-        int ret = KMessageBox::warningContinueCancel(
+        KMessageBox::ButtonCode ret = KMessageBox::warningContinueCancel(
                       0, i18n( "This document is a newer version than supported by PlanWork (syntax version: %1)<br>"
                                "Opening it in this version of PlanWork will lose some information.", syntaxVersion ),
                       i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );
@@ -605,25 +595,25 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* store )
 
 bool Part::loadKPlatoXML( const KoXmlDocument &document, KoStore* )
 {
-    kDebug(planworkDbg());
+    debugPlanWork;
     QString value;
     KoXmlElement plan = document.documentElement();
 
     // Check if this is the right app
     value = plan.attribute( "mime", QString() );
     if ( value.isEmpty() ) {
-        kError() << "No mime type specified!" << endl;
+        errorPlanWork << "No mime type specified!" << endl;
         KMessageBox::error( 0, i18n( "Invalid document. No mimetype specified." ) );
         return false;
     } else if ( value != "application/x-vnd.kde.kplato.work" ) {
-        kError() << "Unknown mime type " << value;
+        errorPlanWork << "Unknown mime type " << value;
         KMessageBox::error( 0, i18n( "Invalid document. Expected mimetype application/x-vnd.kde.kplato.work, got %1", value ) );
         return false;
     }
     QString syntaxVersion = plan.attribute( "version", KPLATOWORK_MAX_FILE_SYNTAX_VERSION );
     m_xmlLoader.setWorkVersion( syntaxVersion );
     if ( syntaxVersion > KPLATOWORK_MAX_FILE_SYNTAX_VERSION ) {
-        int ret = KMessageBox::warningContinueCancel(
+        KMessageBox::ButtonCode ret = KMessageBox::warningContinueCancel(
                       0, i18n( "This document is a newer version than supported by PlanWork (syntax version: %1)<br>"
                                "Opening it in this version of PlanWork will lose some information.", syntaxVersion ),
                       i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );
@@ -650,10 +640,10 @@ bool Part::completeLoading( KoStore * )
     return true;
 }
 
-KUrl Part::extractFile( const Document *doc )
+QUrl Part::extractFile( const Document *doc )
 {
     WorkPackage *wp = findWorkPackage( doc );
-    return wp == 0 ? KUrl() : wp->extractFile( doc );
+    return wp == 0 ? QUrl() : wp->extractFile( doc );
 }
 
 int Part::docType( const Document *doc ) const
@@ -703,7 +693,7 @@ WorkPackage *Part::findWorkPackage( const Node *node ) const
 
 bool Part::editWorkpackageDocument( const Document *doc )
 {
-    //kDebug(planworkDbg())<<doc<<doc->url();
+    //debugPlanWork<<doc<<doc->url();
     // start in any suitable application
     return editOtherDocument( doc );
 }
@@ -711,7 +701,7 @@ bool Part::editWorkpackageDocument( const Document *doc )
 bool Part::editOtherDocument( const Document *doc )
 {
     Q_ASSERT( doc != 0 );
-    //kDebug(planworkDbg())<<doc->url();
+    //debugPlanWork<<doc->url();
     WorkPackage *wp = findWorkPackage( doc );
     if ( wp == 0 ) {
         KMessageBox::error( 0, i18n( "Edit failed. Cannot find a work package." ) );
@@ -722,11 +712,11 @@ bool Part::editOtherDocument( const Document *doc )
 
 void Part::viewWorkpackageDocument( Document *doc )
 {
-    kDebug(planworkDbg())<<doc;
+    debugPlanWork<<doc;
     if ( doc == 0 ) {
         return;
     }
-    KUrl filename;
+    QUrl filename;
     if ( doc->sendAs() == Document::SendAs_Copy ) {
         filename = extractFile( doc );
     } else {
@@ -748,9 +738,9 @@ bool Part::removeDocument( Document *doc )
     return wp->removeDocument( this, doc );
 }
 
-bool Part::viewDocument( const KUrl &filename )
+bool Part::viewDocument( const QUrl &filename )
 {
-    kDebug(planworkDbg())<<"url:"<<filename;
+    debugPlanWork<<"url:"<<filename;
     if ( ! filename.isValid() ) {
         //KMessageBox::error( 0, i18n( "Cannot open document. Invalid url: %1", filename.pathOrUrl() ) );
         return false;
@@ -762,7 +752,7 @@ bool Part::viewDocument( const KUrl &filename )
 
 void Part::setDocumentClean( bool clean )
 {
-    kDebug(planworkDbg())<<clean;
+    debugPlanWork<<clean;
     setModified( ! clean );
     if ( ! clean ) {
         saveModifiedWorkPackages();
@@ -776,7 +766,7 @@ void Part::setModified( bool mod )
     emit captionChanged( QString(), mod );
 }
 
-bool Part::saveAs( const KUrl &/*url*/ )
+bool Part::saveAs( const QUrl &/*url*/ )
 {
     return false;
 }
@@ -798,7 +788,7 @@ void Part::saveWorkPackage( WorkPackage *wp )
 
 bool Part::saveWorkPackages( bool silent )
 {
-    kDebug(planworkDbg())<<silent;
+    debugPlanWork<<silent;
     foreach ( WorkPackage *wp, m_packageMap ) {
         wp->saveToProjects( this );
     }
@@ -813,13 +803,13 @@ bool Part::completeSaving( KoStore */*store*/ )
 
 QDomDocument Part::saveXML()
 {
-    kDebug(planworkDbg());
+    debugPlanWork;
     return QDomDocument();
 }
 
 bool Part::queryClose()
 {
-    kDebug(planworkDbg());
+    debugPlanWork;
     QList<WorkPackage*> modifiedList;
     foreach ( WorkPackage *wp, m_packageMap ) {
         switch ( wp->queryClose( this ) ) {
@@ -827,7 +817,7 @@ bool Part::queryClose()
                 modifiedList << wp;
                 break;
             case KMessageBox::Cancel:
-                kDebug(planworkDbg())<<"Cancel";
+                debugPlanWork<<"Cancel";
                 return false;
         }
     }
@@ -841,7 +831,7 @@ bool Part::queryClose()
 
 bool Part::openFile()
 {
-    kDebug(planworkDbg())<<localFilePath();
+    debugPlanWork<<localFilePath();
     return loadNativeFormatFromStore( localFilePath() );
 }
 
@@ -851,5 +841,3 @@ bool Part::saveFile()
 }
 
 }  //KPlatoWork namespace
-
-#include "part.moc"

@@ -23,8 +23,9 @@
 
 #include <QHash>
 #include <QMetaType>
+#include <QString>
 
-#include "calligra_sheets_export.h"
+#include "sheets_odf_export.h"
 
 namespace Calligra
 {

@@ -35,9 +35,8 @@
 #include <QPointer>
 #include <QScrollArea>
 
-#include <kglobal.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
+#include <ksharedconfig.h>
 
 #include <KoColorSet.h>
 #include <KoColorPatch.h>
@@ -65,7 +64,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::fillColors()
             patch->setFrameStyle(QFrame::Plain | QFrame::Box);
             patch->setLineWidth(1);
             patch->setColor(colorSet->getColor(i).color);
-            connect(patch, SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
+            connect(patch, SIGNAL(triggered(KoColorPatch*)), thePublic, SLOT(colorTriggered(KoColorPatch*)));
             colorSetLayout->addWidget(patch, p/16, p%16);
             ++p;
         }
@@ -81,7 +80,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
 
     Q_ASSERT(colorSet);
     KoEditColorSetDialog *dlg = new KoEditColorSetDialog(palettes, colorSet->name(), thePublic);
-    if (dlg->exec() == KDialog::Accepted ) { // always reload the color set
+    if (dlg->exec() == KoDialog::Accepted ) { // always reload the color set
         KoColorSet * cs = dlg->activeColorSet();
         // check if the selected colorset is predefined
         if( cs && !palettes.contains( cs ) ) {
@@ -117,7 +116,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRecent(const KoColor &color)
         recentPatches[numRecents] = new KoColorPatch(thePublic);
         recentPatches[numRecents]->setFrameShape(QFrame::Box);
         recentsLayout->insertWidget(numRecents+1, recentPatches[numRecents]);
-        connect(recentPatches[numRecents], SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
+        connect(recentPatches[numRecents], SIGNAL(triggered(KoColorPatch*)), thePublic, SLOT(colorTriggered(KoColorPatch*)));
         numRecents++;
     }
     // shift colors to the right
@@ -235,4 +234,6 @@ void KoColorSetWidget::resizeEvent(QResizeEvent *event)
     QFrame::resizeEvent(event);
 }
 
-#include <KoColorSetWidget.moc>
+//have to include this because of Q_PRIVATE_SLOT
+#include "moc_KoColorSetWidget.cpp"
+

@@ -28,8 +28,7 @@
 #include "KPrCustomSlideShows.h"
 #include "KPrSlidesSorterItemDelegate.h"
 #include "KPrView.h"
-
-#include <KoIcon.h>
+#include "StageDebug.h"
 
 //Qt Headers
 #include <QMenu>
@@ -54,12 +53,12 @@
 #include <KoCopyController.h>
 #include <KoCutController.h>
 #include <KoViewItemContextBar.h>
+#include <KoComponentData.h>
+#include <KoIcon.h>
 
-//KDE Headers
-#include <klocale.h>
-#include <kdebug.h>
+// KF5 Headers
+#include <klocalizedstring.h>
 #include <kconfiggroup.h>
-#include <kglobalsettings.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 
@@ -504,7 +503,7 @@ void KPrViewModeSlidesSorter::updateZoom(KoZoomMode::Mode mode, qreal zoom)
     setZoom(qRound(zoom * 100.));
 }
 
-void KPrViewModeSlidesSorter::setIconSize(QSize size)
+void KPrViewModeSlidesSorter::setIconSize(const QSize &size)
 {
     if (size != m_iconSize) {
         m_iconSize = size;
@@ -598,7 +597,7 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
 
     //Decide show or hide Custom Slide Shows View
     if (panelVisible != m_editCustomSlideShow) {
-        const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
+        const bool animate = m_centralWidget->style()->styleHint(QStyle::SH_Widget_Animate);
         const int duration = animate ? 250 : 1;
         QPropertyAnimation *animation = new QPropertyAnimation(m_customSlideShowView, "maximumHeight");
 

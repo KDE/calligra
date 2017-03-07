@@ -23,7 +23,6 @@
 #include <float.h>
 #include <QPainterPath>
 
-#include <kdebug.h>
 
 KPrClockWipeSubpathHelper::KPrClockWipeSubpathHelper()
 {

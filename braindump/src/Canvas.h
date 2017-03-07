@@ -23,6 +23,7 @@
 
 #include <QWidget>
 #include <QList>
+
 #include <KoCanvasBase.h>
 
 class View;

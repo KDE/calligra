@@ -26,14 +26,9 @@
 #include <QPen>
 #include <QStringList>
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
-#include <KoGenStyle.h>
-#include <KoOdfStylesReader.h>
-#include <KoXmlReader.h>
-#include <KoXmlNS.h>
-
+#include "SheetsDebug.h"
 #include "CalculationSettings.h"
 #include "Condition.h"
 #include "Map.h"
@@ -52,113 +47,14 @@ StyleManager::~StyleManager()
     qDeleteAll(m_styles);
 }
 
-void StyleManager::saveOdf(KoGenStyles &mainStyles)
-{
-    kDebug(36003) << "StyleManager: Saving default cell style";
-    KoGenStyle defStyle = KoGenStyle(KoGenStyle::TableCellStyle, "table-cell");
-    defaultStyle()->saveOdf(defStyle, mainStyles, this);
-
-    m_oasisStyles.clear();
-
-    CustomStyles::ConstIterator end = m_styles.constEnd();
-    for (CustomStyles::ConstIterator it(m_styles.constBegin()); it != end; ++it) {
-        kDebug(36003) << "StyleManager: Saving common cell style" << it.key();
-        KoGenStyle customStyle = KoGenStyle(KoGenStyle::TableCellStyle, "table-cell");
-        const QString oasisName = (*it)->saveOdf(customStyle, mainStyles, this);
-        m_oasisStyles[(*it)->name()] = oasisName;
-    }
-}
-
-void StyleManager::loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* map)
-{
-    // reset the map of OpenDocument Styles
-    m_oasisStyles.clear();
-
-    // loading default style first
-    const KoXmlElement* defStyle = stylesReader.defaultStyle("table-cell");
-    if (defStyle) {
-        kDebug(36003) << "StyleManager: Loading default cell style";
-        Conditions conditions;
-        defaultStyle()->loadOdf(stylesReader, *defStyle, "Default", conditions, this, map->parser());
-        defaultStyle()->setType(Style::BUILTIN);
-        if (map) {
-            // Load the default precision to be used, if the (default) cell style
-            // is set to arbitrary precision.
-            KoXmlNode n = defStyle->firstChild();
-            while (!n.isNull()) {
-                if (n.isElement() &&
-                        n.namespaceURI() == KoXmlNS::style &&
-                        n.localName() == "table-cell-properties") {
-                    KoXmlElement e = n.toElement();
-                    if (n.toElement().hasAttributeNS(KoXmlNS::style, "decimal-places")) {
-                        bool ok;
-                        const int precision = n.toElement().attributeNS(KoXmlNS::style, "decimal-places").toInt(&ok);
-                        if (ok && precision > -1) {
-                            kDebug(36003) << "Default decimal precision:" << precision;
-                            map->calculationSettings()->setDefaultDecimalPrecision(precision);
-                        }
-                    }
-                }
-                n = n.nextSibling();
-            }
-        }
-    } else
-        resetDefaultStyle();
-
-    QList<KoXmlElement*> customStyles(stylesReader.customStyles("table-cell").values());
-    uint nStyles = customStyles.count();
-    for (unsigned int item = 0; item < nStyles; item++) {
-        KoXmlElement* styleElem = customStyles[item];
-        if (!styleElem) continue;
-
-        // assume the name assigned by the application
-        const QString oasisName = styleElem->attributeNS(KoXmlNS::style, "name", QString());
-
-        // then replace by user-visible one (if any)
-        const QString name = styleElem->attributeNS(KoXmlNS::style, "display-name", oasisName);
-        kDebug(36003) << " StyleManager: Loading common cell style:" << oasisName << " (display name:" << name << ")";
-
-        if (!name.isEmpty()) {
-            // The style's parent name will be set in Style::loadOdf(..).
-            // After all styles are loaded the pointer to the parent is set.
-            CustomStyle * style = new CustomStyle(name);
-
-            Conditions conditions;
-            style->loadOdf(stylesReader, *styleElem, name, conditions, this, map->parser());
-            // TODO Stefan: conditions
-            insertStyle(style);
-            // insert it into the map sorted the OpenDocument name
-            m_oasisStyles[oasisName] = style->name();
-            kDebug(36003) << "Style" << style->name() << ":" << style;
-        }
-    }
-
-    // replace all OpenDocument internal parent names by KSpread's style names
-    foreach(CustomStyle* style, m_styles) {
-        if (!style->parentName().isNull()) {
-            const QString parentOdfName = style->parentName();
-            const CustomStyle* parentStyle = this->style(m_oasisStyles.value(parentOdfName));
-            if (!parentStyle) {
-                kWarning(36003) << parentOdfName << " not found.";
-                continue;
-            }
-            style->setParentName(m_oasisStyles.value(parentOdfName));
-            kDebug(36003) << style->name() << " (" << style << ") gets" << style->parentName() << " (" << parentOdfName << ") as parent.";
-        } else {
-            style->setParentName("Default");
-            kDebug(36003) << style->name() << " (" << style << ") has" << style->parentName() << " as parent.";
-        }
-    }
-}
-
 QDomElement StyleManager::save(QDomDocument & doc)
 {
     QDomElement styles = doc.createElement("styles");
 
     m_defaultStyle->save(doc, styles, this);
 
-    CustomStyles::iterator iter = m_styles.begin();
-    CustomStyles::iterator end  = m_styles.end();
+    CustomStyles::ConstIterator iter = m_styles.constBegin();
+    CustomStyles::ConstIterator end  = m_styles.constEnd();
 
     while (iter != end) {
         CustomStyle * styleData = iter.value();
@@ -202,15 +98,15 @@ bool StyleManager::loadXML(KoXmlElement const & styles)
             if (style->type() == Style::AUTO)
                 style->setType(Style::CUSTOM);
             insertStyle(style);
-            kDebug(36003) << "Style" << name << ":" << style;
+            debugSheetsODF << "Style" << name << ":" << style;
         }
 
         e = e.nextSibling().toElement();
     }
 
     // reparent all styles
-    QStringList names = styleNames();
-    QStringList::iterator it;
+    const QStringList names = styleNames();
+    QStringList::ConstIterator it;
     for (it = names.begin(); it != names.end(); ++it) {
         if (*it != "Default") {
             CustomStyle * styleData = style(*it);
@@ -249,6 +145,12 @@ void StyleManager::createBuiltinStyles()
     m_styles[ header2->name()] = header2;
 }
 
+// Mapping between Oasis and our styles. Only used in loading/saving.
+void StyleManager::defineOasisStyle(const QString &oasisName, const QString &styleName)
+{
+    m_oasisStyles[oasisName] = styleName;
+}
+
 CustomStyle * StyleManager::style(QString const & name) const
 {
     if (name.isEmpty())
@@ -271,8 +173,8 @@ void StyleManager::takeStyle(CustomStyle * style)
 {
     const QString parentName = style->parentName();
 
-    CustomStyles::iterator iter = m_styles.begin();
-    CustomStyles::iterator end  = m_styles.end();
+    CustomStyles::ConstIterator iter = m_styles.constBegin();
+    CustomStyles::ConstIterator end  = m_styles.constEnd();
 
     while (iter != end) {
         if (iter.value()->parentName() == style->name())
@@ -284,7 +186,7 @@ void StyleManager::takeStyle(CustomStyle * style)
     CustomStyles::iterator i(m_styles.find(style->name()));
 
     if (i != m_styles.end()) {
-        kDebug(36003) << "Erasing style entry for" << style->name();
+        debugSheetsODF << "Erasing style entry for" << style->name();
         m_styles.erase(i);
     }
 }
@@ -355,11 +257,11 @@ void StyleManager::insertStyle(CustomStyle *style)
     m_styles[name] = style;
 }
 
-QStringList StyleManager::styleNames() const
+QStringList StyleManager::styleNames(bool includeDefault) const
 {
     QStringList list;
 
-    list.push_back(i18n("Default"));
+    if (includeDefault) list.push_back(i18n("Default"));
 
     CustomStyles::const_iterator iter = m_styles.begin();
     CustomStyles::const_iterator end  = m_styles.end();
@@ -373,43 +275,8 @@ QStringList StyleManager::styleNames() const
     return list;
 }
 
-Styles StyleManager::loadOdfAutoStyles(KoOdfStylesReader& stylesReader,
-                                       QHash<QString, Conditions>& conditionalStyles,
-                                       const ValueParser *parser)
+void StyleManager::clearOasisStyles()
 {
-    Styles autoStyles;
-    foreach(KoXmlElement* element, stylesReader.autoStyles("table-cell")) {
-        if (element->hasAttributeNS(KoXmlNS::style , "name")) {
-            QString name = element->attributeNS(KoXmlNS::style , "name" , QString());
-            kDebug(36003) << "StyleManager: Preloading automatic cell style:" << name;
-            autoStyles.remove(name);
-            Conditions conditions;
-            autoStyles[name].loadOdfStyle(stylesReader, *(element), conditions, this, parser);
-            if (!conditions.isEmpty()) {
-                kDebug() << "\t\tCONDITIONS";
-                conditionalStyles[name] = conditions;
-            }
-
-            if (element->hasAttributeNS(KoXmlNS::style, "parent-style-name")) {
-                const QString parentOdfName = element->attributeNS(KoXmlNS::style, "parent-style-name", QString());
-                const CustomStyle* parentStyle = style(m_oasisStyles.value(parentOdfName));
-                if (!parentStyle) {
-                    kWarning(36003) << parentOdfName << " not found.";
-                    continue;
-                }
-                autoStyles[name].setParentName(parentStyle->name());
-                kDebug(36003) << "\t parent-style-name:" << autoStyles[name].parentName();
-            }
-        }
-    }
-    return autoStyles;
-}
-
-void StyleManager::releaseUnusedAutoStyles(Styles autoStyles)
-{
-    // Just clear the list. The styles are released, if not used.
-    autoStyles.clear();
-
     // Now, we can clear the map of styles sorted by OpenDocument name.
     m_oasisStyles.clear();
 }
@@ -421,8 +288,8 @@ QString StyleManager::openDocumentName(const QString& name) const
 
 void StyleManager::dump() const
 {
-    kDebug(36006) << "Custom styles:";
+    debugSheetsStyle << "Custom styles:";
     foreach(const QString &name, m_styles.keys()) {
-        kDebug(36006) << name;
+        debugSheetsStyle << name;
     }
 }

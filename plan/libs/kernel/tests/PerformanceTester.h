@@ -20,25 +20,11 @@
 #ifndef KPlato_PerformanceTester_h
 #define KPlato_PerformanceTester_h
 
-#include <QtTest>
+#include <QObject>
 
 #include "kptdatetime.h"
 #include "kptproject.h"
 #include "kptduration.h"
-
-namespace QTest
-{
-    template<>
-    char *toString(const KPlato::DateTime &dt)
-    {
-        return toString( dt.toString() );
-    }
-    template<>
-    char *toString(const KPlato::Duration &d)
-    {
-        return toString( d.toString() );
-    }
-}
 
 namespace KPlato
 {

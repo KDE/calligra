@@ -43,8 +43,8 @@
 
 #include <math.h>
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
+#include <QDebug>
 
 FormattingPreview::FormattingPreview(QWidget* parent)
         : QFrame(parent),
@@ -127,5 +127,3 @@ void FormattingPreview::paintEvent(QPaintEvent *event)
     p->restore();
     delete p;
 }
-
-#include <FormattingPreview.moc>

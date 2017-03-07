@@ -67,8 +67,8 @@ KoPageLayoutWidget::KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layo
 
     connect(d->widget.sizes, SIGNAL(currentIndexChanged(int)), this, SLOT(sizeChanged(int)));
     connect(d->widget.units, SIGNAL(currentIndexChanged(int)), this, SLOT(unitChanged(int)));
-    connect(group2, SIGNAL(buttonClicked (int)), this, SLOT(facingPagesChanged()));
-    connect(d->orientationGroup, SIGNAL(buttonClicked (int)), this, SLOT(orientationChanged()));
+    connect(group2, SIGNAL(buttonClicked(int)), this, SLOT(facingPagesChanged()));
+    connect(d->orientationGroup, SIGNAL(buttonClicked(int)), this, SLOT(orientationChanged()));
     connect(d->widget.width, SIGNAL(valueChangedPt(qreal)), this, SLOT(optionsChanged()));
     connect(d->widget.height, SIGNAL(valueChangedPt(qreal)), this, SLOT(optionsChanged()));
     connect(d->widget.topMargin, SIGNAL(valueChangedPt(qreal)), this, SLOT(marginsChanged()));
@@ -222,7 +222,7 @@ void KoPageLayoutWidget::marginsChanged()
         d->pageLayout.bindingSide = left;
         d->pageLayout.pageEdge = right;
     }
-    // kDebug() << "  " << d->pageLayout.left <<"|"<< d->pageLayout.bindingSide << "," <<
+    // debugWidgets << "  " << d->pageLayout.left <<"|"<< d->pageLayout.bindingSide << "," <<
     //    d->pageLayout.right << "|"<< d->pageLayout.pageEdge;
     emit layoutChanged(d->pageLayout);
     d->allowSignals = true;

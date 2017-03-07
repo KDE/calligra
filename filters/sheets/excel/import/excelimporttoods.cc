@@ -22,7 +22,6 @@
 */
 
 #include <excelimporttoods.h>
-#include <excelimporttoods.moc>
 
 #include <QString>
 #include <QDate>
@@ -37,10 +36,9 @@
 #include <KoOdfWriteStore.h>
 #include <KoGenStyles.h>
 #include <KoGenStyle.h>
-#include <KoOdfNumberStyles.h>
 
 #include <Charting.h>
-#include <ChartExport.h>
+#include <KoOdfChartWriter.h>
 #include <NumberFormatParser.h>
 
 #include "swinder.h"
@@ -64,6 +62,18 @@ K_EXPORT_PLUGIN(ExcelImportFactory("calligrafilters"))
 #define UNICODE_JPY 0x00A5
 
 using namespace writeodf;
+
+QUrl urlFromArg(const QString& arg)
+{
+#if QT_VERSION >= 0x050400
+    return QUrl::fromUserInput(arg, QDir::currentPath(), QUrl::AssumeLocalFile);
+#else
+    // Logic from QUrl::fromUserInput(QString, QString, UserInputResolutionOptions)
+    return (QUrl(arg, QUrl::TolerantMode).isRelative() && !QDir::isAbsolutePath(arg))
+           ? QUrl::fromLocalFile(QDir::current().absoluteFilePath(arg))
+           : QUrl::fromUserInput(arg);
+#endif
+}
 
 namespace Swinder
 {
@@ -117,7 +127,7 @@ public:
     QString subScriptStyle, superScriptStyle;
     QHash<QString, KoGenStyle> valueFormatCache;
     QHash<CellFormatKey, QString> cellFormatCache;
-    QList<ChartExport*> charts;
+    QList<KoOdfChartWriter*> charts;
     QHash<Cell*, QByteArray> cellShapes;
     QHash<Sheet*, QByteArray> sheetShapes;
 
@@ -526,7 +536,7 @@ bool ExcelImport::Private::createSettings(KoOdfWriteStore* store)
         addConfigItem(entry, "FirstLetterUpper", false);
         addConfigItem(entry, "ShowFormulaIndicator", false);
         addConfigItem(entry, "ShowCommentIndicator", true);
-        addConfigItem(entry, "ShowPageOutline", sheet->isPageBreakViewEnabled()); // best match kspread provides
+        addConfigItem(entry, "ShowPageOutline", sheet->isPageBreakViewEnabled()); // best match Sheets provides
         addConfigItem(entry, "lcmode", false);
         addConfigItem(entry, "autoCalc", sheet->autoCalc());
         addConfigItem(entry, "ShowColumnNumber", false);
@@ -1298,7 +1308,7 @@ void ExcelImport::Private::processCellContentForBody(Cell* cell,
         }
 
         if (!cellValue.linkName.isEmpty()) {
-            text_a a(p.add_text_a(cellValue.linkLocation));
+            text_a a(p.add_text_a(urlFromArg(cellValue.linkLocation)));
             const QString targetFrameName = cellValue.link.targetFrameName;
             if (! targetFrameName.isEmpty())
                 a.set_office_target_frame_name(targetFrameName);
@@ -1324,7 +1334,7 @@ void ExcelImport::Private::processCellContentForBody(Cell* cell,
             continue;
         }
 
-        ChartExport *c = new ChartExport(chart->m_chart);
+        KoOdfChartWriter *c = new KoOdfChartWriter(chart->m_chart);
         c->m_href = QString("Chart%1").arg(this->charts.count()+1);
         c->m_endCellAddress = encodeAddress(sheet->name(), chart->m_colR, chart->m_rwB);
         c->m_notifyOnUpdateOfRanges = "Sheet1.D2:Sheet1.F2";
@@ -1358,7 +1368,7 @@ void ExcelImport::Private::processCellContentForBody(Cell* cell,
 
 void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
 {
-    foreach(ChartExport *c, this->charts) {
+    foreach(KoOdfChartWriter *c, this->charts) {
         c->saveContent(this->storeout, manifestWriter);
     }
 }
@@ -1756,7 +1766,7 @@ void ExcelImport::Private::processSheetBackground(Sheet* sheet, KoGenStyle& styl
 
     //TODO add the manifest entry
     style_background_image bg(&writer);
-    bg.set_xlink_href(sheet->backgroundImage());
+    bg.set_xlink_href(urlFromArg(sheet->backgroundImage()));
     bg.set_xlink_type("simple");
     bg.set_xlink_show("embed");
     bg.set_xlink_actuate("onLoad");
@@ -1808,3 +1818,4 @@ void ExcelImport::Private::insertPictureManifest(const QString &fileName)
     manifestEntries.insert(fileName, mimeType);
 }
 
+#include <excelimporttoods.moc>

@@ -119,7 +119,7 @@ public:
      * Reimplemented from KoParts::ReadWritePart for internal reasons
      * (for the autosave functionality)
      */
-    virtual bool openUrl(const KUrl & url);
+    virtual bool openUrl(const QUrl &url);
 
     /**
      * Opens the document given by @p url, without storing the URL
@@ -131,7 +131,7 @@ public:
      *       Open operation (in any reimplementation of openUrl() or openFile())
      *       call isImporting().
      */
-    bool importDocument(const KUrl &url);
+    bool importDocument(const QUrl &url);
 
     /**
      * Saves the document as @p url without changing the state of the
@@ -143,7 +143,7 @@ public:
      *       from an ordinary Save operation (in any reimplementation of
      *       saveFile()) call isExporting().
      */
-    bool exportDocument(const KUrl &url);
+    bool exportDocument(const QUrl &url);
 
     /**
      * @brief Sets whether the document can be edited or is read only.
@@ -517,7 +517,7 @@ public:
      * Sets the document URL to empty URL
      * KParts doesn't allow this, but %Calligra apps have e.g. templates
      * After using loadNativeFormat on a template, one wants
-     * to set the url to KUrl()
+     * to set the url to QUrl()
      */
     void resetURL();
 
@@ -751,12 +751,12 @@ public:
 
     bool isReadWrite() const;
 
-    KUrl url() const;
-    void setUrl(const KUrl &url);
+    QUrl url() const;
+    void setUrl(const QUrl &url);
 
     virtual bool closeUrl(bool promptToSave = true);
 
-    virtual bool saveAs( const KUrl &url );
+    virtual bool saveAs( const QUrl &url );
 
     void emitSendPosition(QPointF pos, KoShape **shape) {
         emit sendPosition(pos, shape);
@@ -801,7 +801,7 @@ protected:
 private:
     bool saveToStream(QIODevice *dev);
 
-    QString checkImageMimeTypes(const QString &mimeType, const KUrl& url) const;
+    QString checkImageMimeTypes(const QString &mimeType, const QUrl &url) const;
 
     bool loadNativeFormatFromStore(const QString& file);
     bool loadNativeFormatFromStoreInternal(KoStore *store);
@@ -813,7 +813,7 @@ private:
 
     bool queryClose();
     bool saveToUrl();
-    bool openUrlInternal(const KUrl &url);
+    bool openUrlInternal(const QUrl &url);
 
     void abortLoad();
 

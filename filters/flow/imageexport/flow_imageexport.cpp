@@ -27,7 +27,7 @@
 #include <QList>
 
 #include <kmessagebox.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kpluginfactory.h>
 #include <kdebug.h>
 

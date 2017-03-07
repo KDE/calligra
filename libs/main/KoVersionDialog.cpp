@@ -34,16 +34,16 @@
 #include <QToolButton>
 #include <QTreeWidget>
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <MainDebug.h>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 
 #include <QTextEdit>
 
 
 KoVersionDialog::KoVersionDialog(QWidget* parent, KoDocument *doc)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Version"));
     setButtons(Close);
@@ -85,7 +85,6 @@ KoVersionDialog::KoVersionDialog(QWidget* parent, KoDocument *doc)
     connect(m_pAdd, SIGNAL(clicked()), this, SLOT(slotAdd()));
     connect(m_pOpen, SIGNAL(clicked()), this, SLOT(slotOpen()));
     connect(m_pModify, SIGNAL(clicked()), this, SLOT(slotModify()));
-    connect(list, SIGNAL(itemActivated(QTreeWidgetItem *, int)), this, SLOT(slotOpen()));
 
     updateButton();
 
@@ -191,7 +190,7 @@ void KoVersionDialog::slotOpen()
     if (!version)
         return;
 
-    KTemporaryFile tmp;
+    QTemporaryFile tmp;
     tmp.setAutoRemove(false);
     tmp.open();
     tmp.write(version->data);
@@ -213,10 +212,10 @@ void KoVersionDialog::slotOpen()
             return;
         }
         KoMainWindow *mainWindow = part->createMainWindow();
-        mainWindow ->openDocument(tmp.fileName());
+        mainWindow ->openDocument(QUrl::fromLocalFile(tmp.fileName()));
         mainWindow ->show();
     } else {
-        m_doc->openUrl(tmp.fileName());
+        m_doc->openUrl(QUrl::fromUserInput(tmp.fileName()));
     }
 
     tmp.setAutoRemove(true);
@@ -224,7 +223,7 @@ void KoVersionDialog::slotOpen()
 }
 
 KoVersionModifyDialog::KoVersionModifyDialog(QWidget* parent, KoVersionInfo *info)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Comment"));
     setButtons(Ok | Cancel);
@@ -254,6 +253,3 @@ QString KoVersionModifyDialog::comment() const
 {
     return m_textEdit->toPlainText();
 }
-
-
-#include <KoVersionDialog.moc>

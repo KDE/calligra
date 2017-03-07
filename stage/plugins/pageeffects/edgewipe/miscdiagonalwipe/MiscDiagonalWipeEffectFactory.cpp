@@ -18,7 +18,8 @@
  */
 
 #include "MiscDiagonalWipeEffectFactory.h"
-#include <klocale.h>
+
+#include <klocalizedstring.h>
 
 #include "DoubleBarnDoorWipeStrategy.h"
 #include "DoubleDiamondWipeStrategy.h"

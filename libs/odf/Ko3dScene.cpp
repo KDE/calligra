@@ -21,8 +21,7 @@
 // Own
 #include "Ko3dScene.h"
 
-// KDE
-#include <kdebug.h>
+#include "OdfDebug.h"
 
 // Calligra
 #include <KoXmlReader.h>
@@ -244,7 +243,7 @@ bool Ko3dScene::loadOdf(const KoXmlElement &sceneElement)
         }
     }
 
-    //kDebug(31000) << "Lights:" << d->lights.size();
+    //debugOdf << "Lights:" << d->lights.size();
 
     return true;
 }

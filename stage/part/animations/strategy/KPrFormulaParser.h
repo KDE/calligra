@@ -171,8 +171,8 @@ public:
     unsigned itemCount() const;
     void push(const Token& Token);
     Token pop();
-    const Token& top();
-    const Token& top(unsigned index);
+    const Token& top() const;
+    const Token& top(unsigned index) const;
 private:
     void ensureSpace();
     unsigned topIndex;

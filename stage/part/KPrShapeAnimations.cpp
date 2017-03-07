@@ -37,18 +37,18 @@
 #include <commands/KPrAnimationEditNodeTypeCommand.h>
 #include <commands/KPrReplaceAnimationCommand.h>
 #include <commands/KPrAnimationCreateCommand.h>
+#include "StageDebug.h"
 
 //Calligra Headers
 #include <KoShape.h>
 #include <KoShapePainter.h>
 #include <KoShapeContainer.h>
 #include <KoPathShape.h>
-
-//KDE Headers
 #include <KoIcon.h>
+
+//KF5 Headers
 #include <kiconloader.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
 
 const int COLUMN_COUNT = 10;
 const int INVALID = -1;
@@ -128,14 +128,11 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
             case StepCount: return QVariant();
             case TriggerEvent:
                 if (nodeType == KPrShapeAnimation::OnClick)
-                    return koIcon("onclick").pixmap(KIconLoader::SizeSmall,
-                                                   KIconLoader::SizeSmall);
+                    return koIcon("onclick");
                 if (nodeType == KPrShapeAnimation::AfterPrevious)
-                    return koIcon("after_previous").pixmap(KIconLoader::SizeSmall,
-                                                          KIconLoader::SizeSmall);
+                    return koIcon("after_previous");
                 if (nodeType == KPrShapeAnimation::WithPrevious)
-                    return koIcon("with_previous").pixmap(KIconLoader::SizeSmall,
-                                                         KIconLoader::SizeSmall);
+                    return koIcon("with_previous");
             case Name: return QVariant();
             case ShapeThumbnail: return getAnimationShapeThumbnail(thisAnimation);
             case AnimationIcon:  return getAnimationIcon(thisAnimation);
@@ -207,6 +204,7 @@ QVariant KPrShapeAnimations::headerData(int section, Qt::Orientation orientation
 
 void KPrShapeAnimations::dump() const
 {
+<<<<<<< HEAD
     kDebug() << "Share animations:";
     foreach (KPrAnimationStep *step, m_shapeAnimations) {
         kDebug() << "  Step:";
@@ -214,10 +212,20 @@ void KPrShapeAnimations::dump() const
             QAbstractAnimation *animation = step->animationAt(i);
             if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
                 kDebug() << "    Substep" << a;
+=======
+    debugStageAnimation << "Share animations:";
+    foreach (KPrAnimationStep *step, m_shapeAnimations) {
+        debugStageAnimation << "  Step:";
+        for (int i=0; i < step->animationCount(); i++) {
+            QAbstractAnimation *animation = step->animationAt(i);
+            if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
+                debugStageAnimation << "    Substep" << a;
+>>>>>>> master
                 for (int sub=0; sub < a->animationCount(); ++sub) {
                     QAbstractAnimation *baseAnim = a->animationAt(sub);
                     KPrShapeAnimation *anim = dynamic_cast<KPrShapeAnimation *>(baseAnim);
                     if (anim) {
+<<<<<<< HEAD
                         kDebug() << "      Animation" << anim << getAnimationName(anim);
                     } else {
                         kDebug() << "      NOT a KPrShapeAnimation!" << anim;
@@ -225,6 +233,15 @@ void KPrShapeAnimations::dump() const
                 }
             } else {
                 kDebug() << "    NOT a KPrAnimationSubStep!" << animation;
+=======
+                        debugStageAnimation << "      Animation" << anim << getAnimationName(anim);
+                    } else {
+                        debugStageAnimation << "      NOT a KPrShapeAnimation!" << anim;
+                    }
+                }
+            } else {
+                debugStageAnimation << "    NOT a KPrAnimationSubStep!" << animation;
+>>>>>>> master
             }
         }
     }
@@ -292,13 +309,14 @@ bool KPrShapeAnimations::setData(const QModelIndex &index, const QVariant &value
     return false;
 }
 
-void KPrShapeAnimations::init(const QList<KPrAnimationStep *> animations)
+void KPrShapeAnimations::init(const QList<KPrAnimationStep *> &animations)
 {
     m_shapeAnimations = animations;
 }
 
 void KPrShapeAnimations::add(KPrShapeAnimation *animation)
 {
+    // TODO: what is the purpose of this empty KPrAnimationStep?
     if (m_shapeAnimations.isEmpty()) {
         m_shapeAnimations.append(new KPrAnimationStep());
     }
@@ -792,7 +810,7 @@ QModelIndex KPrShapeAnimations::removeAnimationByIndex(const QModelIndex &index)
     return QModelIndex();
 }
 
-KoShape *KPrShapeAnimations::shapeByIndex(const QModelIndex &index)
+KoShape *KPrShapeAnimations::shapeByIndex(const QModelIndex &index) const
 {
     if (index.isValid()) {
         KPrShapeAnimation *animation = animationByRow(index.row());
@@ -803,7 +821,7 @@ KoShape *KPrShapeAnimations::shapeByIndex(const QModelIndex &index)
     return 0;
 }
 
-QModelIndex KPrShapeAnimations::indexByShape(KoShape *shape)
+QModelIndex KPrShapeAnimations::indexByShape(KoShape *shape) const
 {
     int rowCount = 0;
     foreach (KPrAnimationStep *step, m_shapeAnimations) {
@@ -976,13 +994,8 @@ QPixmap KPrShapeAnimations::getAnimationShapeThumbnail(KPrShapeAnimation *animat
        QPixmap thumbnail = koIcon("calligrastage").pixmap(KIconLoader::SizeMedium, KIconLoader::SizeMedium);
 
         if (
-#if QT_VERSION >= 0x040700
             thumbnail.convertFromImage(createThumbnail(animation->shape(),
                                                        QSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium)))
-#else
-            !(thumbnail = QPixmap::fromImage(createThumbnail(animation->shape(),
-                                                            QSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium)))).isNull()
-#endif
         ) {
             thumbnail.scaled(QSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium), Qt::KeepAspectRatio);
         }
@@ -1027,13 +1040,7 @@ QPixmap KPrShapeAnimations::getAnimationIcon(KPrShapeAnimation *animation) const
                                 Qt::FlatCap, Qt::MiterJoin));
             painter.drawPath(m_path);
             QPixmap iconPixmap;
-            if (
-#if QT_VERSION >= 0x040700
-                iconPixmap.convertFromImage(thumb)
-#else
-                !(iconPixmap = QPixmap::fromImage(thumb)).isNull()
-#endif
-            ) {
+            if (iconPixmap.convertFromImage(thumb)) {
                 return iconPixmap;
             }
         }
@@ -1044,7 +1051,7 @@ QPixmap KPrShapeAnimations::getAnimationIcon(KPrShapeAnimation *animation) const
         name.replace(QLatin1Char(' '), QLatin1Char('_'));
         QString path = KIconLoader::global()->iconPath(name, KIconLoader::Toolbar, true);
         if (!path.isNull()) {
-            return KIcon(name).pixmap(KIconLoader::SizeHuge, KIconLoader::SizeHuge);
+            return QIcon::fromTheme(name).pixmap(KIconLoader::SizeHuge, KIconLoader::SizeHuge);
         }
     }
     return koIcon("unrecognized_animation").pixmap(KIconLoader::SizeMedium, KIconLoader::SizeMedium);
@@ -1097,7 +1104,7 @@ void KPrShapeAnimations::setTimeRangeIncrementalChange(KPrShapeAnimation *item, 
     }
 }
 
-QModelIndex KPrShapeAnimations::indexByAnimation(KPrShapeAnimation *animation)
+QModelIndex KPrShapeAnimations::indexByAnimation(KPrShapeAnimation *animation) const
 {
     int rowCount = 0;
     foreach (KPrAnimationStep *step, m_shapeAnimations) {
@@ -1151,7 +1158,7 @@ KPrShapeAnimation::NodeType KPrShapeAnimations::triggerEventByIndex(const QModel
     return nodeType;
 }
 
-QList<KPrShapeAnimation *> KPrShapeAnimations::getWithPreviousSiblings(KPrShapeAnimation *animation)
+QList<KPrShapeAnimation *> KPrShapeAnimations::getWithPreviousSiblings(KPrShapeAnimation *animation) const
 {
     bool startAdding = false;
     QList<KPrShapeAnimation *> siblings = QList<KPrShapeAnimation *>();
@@ -1174,7 +1181,7 @@ QList<KPrShapeAnimation *> KPrShapeAnimations::getWithPreviousSiblings(KPrShapeA
     return siblings;
 }
 
-QList<KPrAnimationSubStep *> KPrShapeAnimations::getSubSteps(int start, int end, KPrAnimationStep *step)
+QList<KPrAnimationSubStep *> KPrShapeAnimations::getSubSteps(int start, int end, KPrAnimationStep *step) const
 {
     QList<KPrAnimationSubStep *>movedSubSteps = QList<KPrAnimationSubStep *>();
     for (int i = start; i < end; i++) {

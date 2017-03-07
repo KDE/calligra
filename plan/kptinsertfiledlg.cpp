@@ -21,18 +21,17 @@
 #include "kptnode.h"
 #include "kptproject.h"
 
-#include <klocale.h>
-#include <kio/netaccess.h>
-#include <kdebug.h>
+#include <KLocalizedString>
+#include <KIO/StatJob>
 
 namespace KPlato
 {
 
 InsertFileDialog::InsertFileDialog( Project &project, Node *currentNode, QWidget *parent )
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     setCaption( i18n("Insert File") );
-    setButtons( KDialog::Ok | KDialog::Cancel );
+    setButtons( KoDialog::Ok | KoDialog::Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
     
@@ -45,7 +44,7 @@ InsertFileDialog::InsertFileDialog( Project &project, Node *currentNode, QWidget
     connect( m_panel, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOk(bool)) );
 }
 
-KUrl InsertFileDialog::url() const
+QUrl InsertFileDialog::url() const
 {
     return m_panel->url();
 }
@@ -91,10 +90,15 @@ void InsertFilePanel::slotOpenFileDialog( KUrlRequester * )
 
 void InsertFilePanel::changed( const QString &text )
 {
-    emit enableButtonOk( KIO::NetAccess::exists( KUrl( text ), KIO::NetAccess::SourceSide, 0 ) );
+    KIO::StatJob* statJob = KIO::stat( QUrl::fromUserInput(text) );
+    statJob->setSide( KIO::StatJob::SourceSide );
+
+    const bool isUrlReadable = statJob->exec();
+
+    emit enableButtonOk( isUrlReadable );
 }
 
-KUrl InsertFilePanel::url() const
+QUrl InsertFilePanel::url() const
 {
     return ui.ui_url->url();
 }
@@ -123,5 +127,3 @@ Node *InsertFilePanel::afterNode() const
 
 
 }  //KPlato namespace
-
-#include "kptinsertfiledlg.moc"

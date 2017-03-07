@@ -24,8 +24,6 @@
 #include <QPainter>
 #include <QGraphicsWidget>
 
-#include <kdebug.h>
-
 #include <KoDocumentResourceManager.h>
 #include <KoRuler.h>
 #include <KoSelection.h>
@@ -41,6 +39,7 @@
 #include <KoPAPageBase.h>
 #include <KoPAView.h>
 
+#include "StageDebug.h"
 #include "KPrNotes.h"
 #include "KPrPage.h"
 
@@ -176,7 +175,7 @@ void KPrViewModeNotes::updateActivePage(KoPAPageBase *page)
     }
     KPrNotes *notes = prPage->pageNotes();
     notes->updatePageThumbnail();
-    KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>(notes->shapes().last());
+    KoShapeLayer* layer = static_cast<KoShapeLayer*>(notes->shapes().last());
 
     m_canvas->shapeManager()->setShapes(layer->shapes());
     m_canvas->masterShapeManager()->setShapes(QList<KoShape*>());

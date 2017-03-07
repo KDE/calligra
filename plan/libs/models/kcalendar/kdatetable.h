@@ -2,6 +2,7 @@
     This file is part of the KDE libraries
     Copyright (C) 1997 Tim D. Gilman (tdgilman@best.org)
               (C) 1998-2001 Mirko Boehm (mirko@kde.org)
+              (C) 2007 John Layt <john@layt.net>
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
     License as published by the Free Software Foundation; either
@@ -17,21 +18,19 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
+
 #ifndef KPTDATETBL_H
 #define KPTDATETBL_H
 
-#include "../kplatomodels_export.h"
+#include "kplatomodels_export.h"
 
-#include <QValidator>
-#include <QLineEdit>
-#include <QDateTime>
-#include <QHash>
+#include <QWidget>
+#include <QDate>
 #include <QList>
 #include <QStyleOptionViewItem>
 #include <QStyleOptionHeader>
-#include <QFrame>
 
-class KMenu;
+class QMenu;
 
 namespace KPlato
 {
@@ -43,98 +42,6 @@ class KDateTableWeekNumberDelegate;
 
 class StyleOptionHeader;
 class StyleOptionViewItem;
-
-class KPLATOMODELS_EXPORT Frame: public QFrame
-{
-    Q_OBJECT
-public:
-    Frame( QWidget *parent = 0 );
-
-public Q_SLOTS:
-    void updateFocus( QFocusEvent *e );
-
-protected:
-    virtual void paintEvent(QPaintEvent *e);
-    void drawFrame(QPainter *p);
-};
-
-
-/**
- * Frame with popup menu behavior.
- * @author Tim Gilman, Mirko Boehm
- */
-class  KPopupFrame : public QFrame
-{
-  Q_OBJECT
-protected:
-  /**
-   * Catch key press events.
-   */
-  virtual void keyPressEvent(QKeyEvent* e);
-  
-public Q_SLOTS:
-  /**
-   * Close the popup window. This is called from the main widget, usually.
-   * @p r is the result returned from exec().
-   */
-  void close(int r);
-public:
-  /**
-   * The contructor. Creates a dialog without buttons.
-   */
-  KPopupFrame(QWidget* parent=0);
-  /**
-   * The destructor
-   */
-  ~KPopupFrame();
-  /**
-   * Set the main widget. You cannot set the main widget from the constructor,
-   * since it must be a child of the frame itselfes.
-   * Be careful: the size is set to the main widgets size. It is up to you to
-   * set the main widgets correct size before setting it as the main
-   * widget.
-   */
-  void setMainWidget(QWidget* m);
-  /**
-   * The resize event. Simply resizes the main widget to the whole
-   * widgets client size.
-   */
-  virtual void resizeEvent(QResizeEvent*);
-  /**
-   * Open the popup window at position pos.
-   */
-  void popup(const QPoint &pos);
-  /**
-   * Execute the popup window.
-   */
-  int exec(const QPoint &p);
-  /**
-   * Execute the popup window.
-   */
-  int exec(int x, int y);
-
-Q_SIGNALS:
-  void leaveModality();
-
-private:
-  class KPopupFramePrivate;
-  friend class KPopupFramePrivate;
-  KPopupFramePrivate * const d;
-  
-  Q_DISABLE_COPY(KPopupFrame)
-};
-
-/**
-* Validates user-entered dates.
-*/
-class  KDateValidator : public QValidator
-{
-public:
-    KDateValidator(QWidget* parent=0);
-    virtual State validate(QString&, int&) const;
-    virtual void fixup ( QString & input ) const;
-    State date(const QString&, QDate&) const;
-};
 
 /**
  * Date selection table.
@@ -177,7 +84,7 @@ public:
      * to be done there anyway. The size is stored in maxCell. The
      * sizeHint() simply returns a multiple of maxCell.
      */
-    virtual QSize sizeHint() const;
+    QSize sizeHint() const Q_DECL_OVERRIDE;
     /**
      * Set the font size of the date table.
      */
@@ -185,8 +92,9 @@ public:
     /**
      * Select and display this date.
      */
-    bool setDate(const QDate&);
+    bool setDate(const QDate &date);
 
+    // KDE5 remove the const & from the returned QDate
     /**
      * @returns the selected date.
      */
@@ -211,7 +119,8 @@ public:
      * Makes a given date be painted with a given foregroundColor, and background
      * (a rectangle, or a circle/ellipse) in a given color.
      */
-    void setCustomDatePainting( const QDate &date, const QColor &fgColor, BackgroundMode bgMode=NoBgMode, const QColor &bgColor=QColor());
+    void setCustomDatePainting( const QDate &date, const QColor &fgColor,
+                                BackgroundMode bgMode=NoBgMode, const QColor &bgColor = QColor());
 
     /**
      * Unsets the custom painting of a date so that the date is painted as usual.
@@ -227,9 +136,13 @@ public:
     void setModel( KDateTableDataModel *model );
     KDateTableDataModel *model() const;
     
+    // datetable takes ownership of delegate
     void setDateDelegate( KDateTableDateDelegate *delegate );
+    // datetable takes ownership of delegate
     void setDateDelegate( const QDate &date, KDateTableDateDelegate *delegate );
+    // datetable takes ownership of delegate
     void setWeekDayDelegate( KDateTableWeekDayDelegate *delegate );
+    // datetable takes ownership of delegate
     void setWeekNumberDelegate( KDateTableWeekNumberDelegate *delegate );
     void setWeekNumbersEnabled( bool enable );
     
@@ -242,7 +155,8 @@ public:
     
 protected:
     /**
-     * calculate the position of the cell in the matrix for the given date. The result is the 0-based index.
+     * calculate the position of the cell in the matrix for the given date.
+     * The result is the 0-based index.
      */
     virtual int posFromDate( const QDate &date ); 
     /**
@@ -251,23 +165,26 @@ protected:
      */
     virtual QDate dateFromPos( int pos ); 
 
-    virtual void paintEvent(QPaintEvent *e);
+    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
     /**
      * React on mouse clicks that select a date.
      */
-    virtual void mousePressEvent(QMouseEvent *);
-    virtual void wheelEvent( QWheelEvent * e );
-    virtual void keyPressEvent( QKeyEvent *e );
-    virtual void focusInEvent( QFocusEvent *e );
-    virtual void focusOutEvent( QFocusEvent *e );
+    void mousePressEvent(QMouseEvent *e ) Q_DECL_OVERRIDE;
+    void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
+    void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
+    void focusInEvent(QFocusEvent *e) Q_DECL_OVERRIDE;
+    void focusOutEvent(QFocusEvent *e) Q_DECL_OVERRIDE;
 
-    virtual bool event( QEvent *e );
+    /**
+     * Cell highlight on mouse hovering
+     */
+    bool event(QEvent *e) Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     /**
      * The selected date changed.
      */
-    void dateChanged(const QDate&);
+    void dateChanged(const QDate &date);
     /**
      * This function behaves essentially like the one above.
      * The selected date changed.
@@ -285,19 +202,17 @@ Q_SIGNALS:
      * right clicks on that date and the popup menu is enabled). Connect
      * the slot where you fill the menu to this signal.
      */
-    void aboutToShowContextMenu( KMenu * menu, const QDate &date );
+    void aboutToShowContextMenu( QMenu * menu, const QDate &date );
 
     /**
      * A popup menu for selected dates is about to be shown.
      * Connect the slot where you fill the menu to this signal.
      */
-    void aboutToShowContextMenu( KMenu * menu, const QList<QDate>& );
+    void aboutToShowContextMenu( QMenu * menu, const QList<QDate>& );
 
     //----->
     void selectionChanged( const QList<QDate>& );
-    
-    void focusChanged( QFocusEvent *e );
-    
+
 protected Q_SLOTS:
     void slotReset();
     void slotDataChanged( const QDate &start, const QDate &end );
@@ -316,9 +231,9 @@ private:
     friend class KDateTablePrivate;
     KDateTablePrivate * const d;
 
+    void initWidget(const QDate &date);
     void initAccels();
     void paintCell(QPainter *painter, int row, int col);
-    void init();
     
     Q_DISABLE_COPY(KDateTable)
 };
@@ -404,14 +319,14 @@ public:
     QRectF rectF;
 };
 
-class StyleOptionViewItem : public QStyleOptionViewItemV3
+class StyleOptionViewItem : public QStyleOptionViewItem
 {
 public:
     StyleOptionViewItem() 
-    : QStyleOptionViewItemV3()
+    : QStyleOptionViewItem()
     {}
     StyleOptionViewItem( const StyleOptionViewItem &style ) 
-    : QStyleOptionViewItemV3( style )
+    : QStyleOptionViewItem( style )
     {
         rectF = style.rectF;
     }

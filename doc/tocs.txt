@@ -139,12 +139,6 @@ Reference Guide
 
 --------------------------------------------------------------------------------
 
-Kexi
-
-The Handbook is at advanced stage already; see doc/kexi/README.
-
---------------------------------------------------------------------------------
-
 Flow
 
 Introduction
@@ -165,21 +159,6 @@ Introduction
 Working with Karbon
     Working with shapes ("objects"?)
     Working with effects
-    <more technologies?>
-<usecases>
-Reference Guide
-
---------------------------------------------------------------------------------
-
-Krita
-
-Introduction
-    Basically a copy of the goals described in the general Calligra handbook.
-Working with Krita
-    Working with painting tools
-    Working with filters
-    Working with selections
-    Working with layers
     <more technologies?>
 <usecases>
 Reference Guide

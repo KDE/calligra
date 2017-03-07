@@ -30,12 +30,15 @@
 
 class QAction;
 
-struct Path
+struct KPrPresentationDrawPath
 {
     QVector<QPointF> points;
     QColor color;
     int size;
 };
+
+Q_DECLARE_TYPEINFO(KPrPresentationDrawPath, Q_MOVABLE_TYPE);
+
 
 class KPrPresentationDrawWidget : public KPrPresentationToolEventForwarder
 {
@@ -63,15 +66,15 @@ public Q_SLOTS:
     void updateSize( int size );
 
 private :
-    QIcon buildIconColor( QColor );
+    QIcon buildIconColor( const QColor& );
     QIcon buildIconSize( int );
-    QAction* buildActionColor( QColor, QString );
+    QAction* buildActionColor( const QColor&, const QString& );
     QAction* buildActionSize( int );
 
     bool m_draw;
     int m_penSize;
     QColor m_penColor;
-    QList<Path> m_pointVectors;
+    QVector<KPrPresentationDrawPath> m_pointVectors;
 };
 
 #endif /* KPRPRESENTATIONDRAWWIDGET_H */

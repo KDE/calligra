@@ -21,7 +21,7 @@
 // Local
 #include "helper.h"
 
-#include <kdebug.h>
+#include "SheetsDebug.h"
 
 #include <QDate>
 
@@ -261,7 +261,7 @@ long double Calligra::Sheets::yearFrac(const QDate& refDate, const QDate& startD
 
     int days = date1.daysTo(date2);
 
-//   kDebug(36002) <<"date1 =" << date1 <<"    date2 =" << date2 <<"    days =" << days <<"    basis =" << basis;
+//   debugSheetsFormula <<"date1 =" << date1 <<"    date2 =" << date2 <<"    days =" << days <<"    basis =" << basis;
 
     long double res = 0;
     long double peryear = 0;
@@ -316,7 +316,7 @@ long double Calligra::Sheets::yearFrac(const QDate& refDate, const QDate& startD
     }
 
     res = (long double)(nYears) + (long double)days / (long double) peryear;
-//   kDebug(36002)<<"getYearFrac res="<<res;
+//   debugSheetsFormula<<"getYearFrac res="<<res;
     return res;
 }
 
@@ -344,8 +344,8 @@ long double Calligra::Sheets::duration(const QDate& refDate, const QDate& settle
     long double yield = yield_;
     long double coup = coup_;
 
-//   kDebug(36002)<<"DURATION_HELPER";
-//   kDebug(36002)<<"sett ="<<settlement<<" mat ="<<maturity<<" coup ="<<coup<<" yield ="<<yield<<" freq ="<<freq<<" basis ="<<basis;
+//   debugSheetsFormula<<"DURATION_HELPER";
+//   debugSheetsFormula<<"sett ="<<settlement<<" mat ="<<maturity<<" coup ="<<coup<<" yield ="<<yield<<" freq ="<<freq<<" basis ="<<basis;
 
 
     long double yearfrac = yearFrac(refDate, settlement, maturity, basis);

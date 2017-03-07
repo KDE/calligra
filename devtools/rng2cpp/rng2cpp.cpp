@@ -23,12 +23,10 @@
 #include <QtGlobal>
 #include <QSharedPointer>
 #include <QStringList>
+#include <QSet>
+#include <QVector>
 
-#if QT_VERSION < 0x040800
-#   define assert(cond, what) (Q_ASSERT_X(cond, "", qPrintable(QString(what))))
-#else
-#   define assert(cond, what) (Q_ASSERT_X(cond, "", qPrintable(what)))
-#endif
+#define assert(cond, what) Q_ASSERT_X(cond, "", qPrintable(what))
 
 static const QString ns = "writeodf";
 
@@ -1362,7 +1360,7 @@ void Files::closeNamespace()
 /**
  * Write the header files.
  */
-void write(const RNGItemList& items, QString outdir)
+void write(const RNGItemList& items, const QString &outdir)
 {
     Files files(outdir);
 

@@ -25,9 +25,6 @@
 // Qt
 #include <QtGlobal>
 
-// KDE
-#include "kdebug.h"
-
 // Calligra
 #include <KoXmlWriter.h>
 #include <KoOdfStyle.h>
@@ -37,10 +34,11 @@
 // This filter
 #include "OdfReaderDocxContext.h"
 #include "DocxStyleHelper.h"
+#include "DocxExportDebug.h"
 
 #if 0
 #define DEBUG_BACKEND() \
-    kDebug(30503) << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
+    debugDocx << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
     << reader.qualifiedName().toString()
 #else
 #define DEBUG_BACKEND() \
@@ -232,7 +230,7 @@ void OdfTextReaderDocxBackend::characterData(KoXmlStreamReader &reader, OdfReade
     if (!docxContext) {
         return;
     }
-    //kDebug(30503) << reader.text().toString();
+    //debugDocx << reader.text().toString();
 
     if (m_insideDcCreator) {
         KoXmlWriter *commentsWriter = docxContext->m_commentsWriter;

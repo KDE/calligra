@@ -22,7 +22,7 @@
 #include "SelectionDecorator.h"
 #include "SelectionTransformCommand.h"
 
-#include <KoInteractionTool.h>
+#include <KoToolBase.h>
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoPointerEvent.h>
@@ -31,7 +31,7 @@
 
 #include <QPointF>
 #include <math.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 ShapeRotateStrategy::ShapeRotateStrategy(KoToolBase *tool, const QPointF &clicked, Qt::MouseButtons buttons)
 : KoInteractionStrategy(tool)
@@ -129,7 +129,7 @@ void ShapeRotateStrategy::paint( QPainter &painter, const KoViewConverter &conve
     decorator.paint(painter, converter);
 
     // paint the rotation center
-    painter.setPen( QPen(Qt::red));
+    painter.setPen(QPen(Qt::red, 0));
     painter.setBrush( QBrush(Qt::red));
     painter.setRenderHint( QPainter::Antialiasing, true );
     QRectF circle( 0, 0, 5, 5 );
@@ -138,7 +138,8 @@ void ShapeRotateStrategy::paint( QPainter &painter, const KoViewConverter &conve
 }
 
 KUndo2Command* ShapeRotateStrategy::createCommand() {
-    QList<QTransform> newTransforms;
+    QVector<QTransform> newTransforms;
+    newTransforms.reserve(m_selectedShapes.count());
     foreach( KoShape* shape, m_selectedShapes )
         newTransforms << shape->transformation();
 

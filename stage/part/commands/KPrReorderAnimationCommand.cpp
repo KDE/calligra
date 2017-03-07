@@ -22,7 +22,6 @@
 
 #include "KPrShapeAnimations.h"
 #include "animations/KPrShapeAnimation.h"
-#include "KLocale"
 
 KPrReorderAnimationCommand::KPrReorderAnimationCommand(KPrShapeAnimations *shapeAnimationsModel, KPrShapeAnimation *oldAnimation,
                                                        KPrShapeAnimation *newAnimation, KUndo2Command *parent)

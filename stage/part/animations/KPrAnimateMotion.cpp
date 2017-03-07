@@ -29,7 +29,7 @@
 #include <KoXmlNS.h>
 #include <KoPathShape.h>
 #include <KoPathShapeLoader.h>
-#include <QDebug>
+
 
 KPrAnimateMotion::KPrAnimateMotion(KPrShapeAnimation *shapeAnimation)
 : KPrAnimationBase(shapeAnimation)
@@ -84,18 +84,18 @@ void KPrAnimateMotion::init(KPrAnimationCache *animationCache, int step)
     }
 }
 
-QPainterPath KPrAnimateMotion::pathOutline()
+QPainterPath KPrAnimateMotion::pathOutline() const
 {
     QPainterPath path = m_motionPath->outline();
     return path;
 }
 
-KoPathShape *KPrAnimateMotion::path()
+KoPathShape *KPrAnimateMotion::path() const
 {
     return m_motionPath;
 }
 
-KoPathShape *KPrAnimateMotion::getPath(qreal zoom, QSizeF pageSize, bool absolutePosition) const
+KoPathShape *KPrAnimateMotion::getPath(qreal zoom, const QSizeF &pageSize, bool absolutePosition) const
 {
     QPointF point = m_motionPath->position();
     qreal xCorrection = pageSize.width() * zoom / (m_currentZoom * m_currentPageSize.width());
@@ -121,12 +121,12 @@ KoPathShape *KPrAnimateMotion::getPath(qreal zoom, QSizeF pageSize, bool absolut
     return m_motionPath;
 }
 
-QSizeF KPrAnimateMotion::currentPageSize()
+QSizeF KPrAnimateMotion::currentPageSize() const
 {
     return m_currentPageSize;
 }
 
-qreal KPrAnimateMotion::currentZoom()
+qreal KPrAnimateMotion::currentZoom() const
 {
     return m_currentZoom;
 }

@@ -5663,9 +5663,9 @@ all changes will be overwritten on the next script run
 
 <sect3 id="CEIL">
 <title>CEIL</title>
-<para>The CEIL() function rounds x up to the nearest integer, returning that value as a double.</para>
+<para>The CEIL() function rounds x up to the nearest integer which is greater than the input, returning that value as a double.</para>
 <para><segmentedlist><segtitle>Return type</segtitle>
-<seglistitem><seg>A floating point value (like 1.3, 0.343, 253 )</seg></seglistitem></segmentedlist></para>
+<seglistitem><seg>An integer (like 0, -5, 14 )</seg></seglistitem></segmentedlist></para>
 <variablelist>
 <varlistentry><term>Syntax</term>
 <listitem><para>CEIL(x)</para></listitem>
@@ -5684,6 +5684,8 @@ all changes will be overwritten on the next script run
 <listitem><simplelist>
 <member><link linkend="CEILING">CEILING</link>&nbsp;</member>
 <member><link linkend="FLOOR">FLOOR</link>&nbsp;</member>
+<member><link linkend="ROUND">ROUND</link>&nbsp;</member>
+<member><link linkend="ROUNDUP">ROUNDUP</link>&nbsp;</member>
 </simplelist></listitem>
 </varlistentry>
 </variablelist>
@@ -5691,9 +5693,9 @@ all changes will be overwritten on the next script run
 
 <sect3 id="CEILING">
 <title>CEILING</title>
-<para>The CEILING() function rounds x up (away from zero) to the nearest multiple of Significance. The default value for Significance is 1 (or -1 if the value is negative), which means rounding up to the nearest integer. If the Mode parameter is non-zero, the function rounds away from zero, instead of up towards the positive infinity.</para>
+<para>The CEILING() function rounds x up (away from zero) to the nearest multiple of Significance which is greater than the input. The default value for Significance is 1 (or -1 if the value is negative), which means rounding up to the nearest integer. If the Mode parameter is non-zero, the function rounds away from zero, instead of up towards the positive infinity.</para>
 <para><segmentedlist><segtitle>Return type</segtitle>
-<seglistitem><seg>A floating point value (like 1.3, 0.343, 253 )</seg></seglistitem></segmentedlist></para>
+<seglistitem><seg>An integer (like 0, -5, 14 )</seg></seglistitem></segmentedlist></para>
 <variablelist>
 <varlistentry><term>Syntax</term>
 <listitem><para>CEILING(x)</para></listitem>
@@ -5720,6 +5722,8 @@ all changes will be overwritten on the next script run
 <listitem><simplelist>
 <member><link linkend="CEIL">CEIL</link>&nbsp;</member>
 <member><link linkend="FLOOR">FLOOR</link>&nbsp;</member>
+<member><link linkend="ROUND">ROUND</link>&nbsp;</member>
+<member><link linkend="ROUNDUP">ROUNDUP</link>&nbsp;</member>
 </simplelist></listitem>
 </varlistentry>
 </variablelist>
@@ -6037,14 +6041,14 @@ all changes will be overwritten on the next script run
 <sect3 id="FLOOR">
 <title>FLOOR</title>
 <para>Round a number x down to the nearest multiple of the second parameter, Significance.</para>
-<para>The FLOOR() function rounds x down (towards zero) to the nearest multiple of Significance.
+<para>The FLOOR() function rounds x down (towards zero) to the nearest multiple of Significance which is smaller than the input.
                 The default value for Significance is 1, if x is positive. It is -1, if the value is negative,
                 which means rounding up to the nearest integer.
                 If mode is given and not equal to zero, the amount of x is rounded toward zero to a multiple
                 of significance and then the sign applied. Otherwise, it rounds toward negative infinity.
                     If any of the two parameters x or Significance is zero, the result is zero.</para>
 <para><segmentedlist><segtitle>Return type</segtitle>
-<seglistitem><seg>A floating point value (like 1.3, 0.343, 253 )</seg></seglistitem></segmentedlist></para>
+<seglistitem><seg>An integer (like 0, -5, 14 )</seg></seglistitem></segmentedlist></para>
 <variablelist>
 <varlistentry><term>Syntax</term>
 <listitem><para>FLOOR(x)</para></listitem>
@@ -6071,6 +6075,8 @@ all changes will be overwritten on the next script run
 <listitem><simplelist>
 <member><link linkend="CEIL">CEIL</link>&nbsp;</member>
 <member><link linkend="CEILING">CEILING</link>&nbsp;</member>
+<member><link linkend="ROUND">ROUND</link>&nbsp;</member>
+<member><link linkend="ROUNDDOWN">ROUNDDOWN</link>&nbsp;</member>
 </simplelist></listitem>
 </varlistentry>
 </variablelist>

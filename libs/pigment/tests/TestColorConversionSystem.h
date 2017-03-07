@@ -20,7 +20,9 @@
 #ifndef TestColorConversionSystem_H
 #define TestColorConversionSystem_H
 
-#include <QtTest>
+#include <QObject>
+#include <QList>
+#include <QString>
 
 struct ModelDepthProfile {
     ModelDepthProfile(const QString& _model, const QString& _depth, const QString& _profile)
@@ -37,10 +39,14 @@ class TestColorConversionSystem : public QObject
 public:
     TestColorConversionSystem();
 private Q_SLOTS:
+    void testConnections_data();
     void testConnections();
+    void testGoodConnections_data();
     void testGoodConnections();
+    void testFailedConnections();
 private:
     QList< ModelDepthProfile > listModels;
+    int countFail;
 };
 
 #endif

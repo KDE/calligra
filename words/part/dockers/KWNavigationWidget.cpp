@@ -40,11 +40,10 @@ KWNavigationWidget::KWNavigationWidget(QWidget *parent)
     , m_document(0)
     , m_canvas(0)
     , m_layout(0)
-    , m_updateTimer(0)
+    , m_updateTimer(new QTimer(this))
 {
     m_model = new QStandardItemModel(this);
 
-    m_updateTimer = new QTimer(this);
     m_updateTimer->setSingleShot(true);
 
     initUi();

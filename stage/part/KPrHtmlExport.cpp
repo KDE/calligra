@@ -22,9 +22,11 @@
 
 #include <QTextStream>
 #include <QDir>
+#include <QUrl>
+#include <QTemporaryDir>
+#include <QStandardPaths>
+
 #include <kio/copyjob.h>
-#include <ktempdir.h>
-#include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <krun.h>
 #include <kzip.h>
@@ -46,8 +48,8 @@ void KPrHtmlExport::exportHtml(const KPrHtmlExport::Parameter &parameters)
     m_parameters = parameters;
 
     // Create a temporary dir
-    KTempDir tmpDir;
-    m_tmpDirPath = tmpDir.name();
+    QTemporaryDir tmpDir;
+    m_tmpDirPath = tmpDir.path();
     tmpDir.setAutoRemove(false);
     extractStyle();
     exportImageToTmpDir();
@@ -63,31 +65,28 @@ void KPrHtmlExport::extractStyle()
     zip.directory()->copyTo(m_tmpDirPath, true);
 }
 
-KUrl KPrHtmlExport::exportPreview(const Parameter &parameters)
+QUrl KPrHtmlExport::exportPreview(const Parameter &parameters)
 {
     m_parameters = parameters;
 
     // Create a temporary dir
-    KTempDir tmpDir;
+    QTemporaryDir tmpDir;
     tmpDir.setAutoRemove(false);
-    m_tmpDirPath = tmpDir.name();
+    m_tmpDirPath = tmpDir.path();
     extractStyle();
     exportImageToTmpDir();
     generateHtml();
 
-    KUrl previewUrl;
-    previewUrl.setPath(tmpDir.name());
-    previewUrl.addPath("slide0.html");
+    QUrl previewUrl = QUrl::fromLocalFile(tmpDir.path()+QLatin1String("/slide0.html"));
     return previewUrl;
 }
 
 void KPrHtmlExport::exportImageToTmpDir()
 {
     // Export slides as image into the temporary export directory
-    KUrl fileUrl;
+    QUrl fileUrl;
     for(int i=0; i < m_parameters.slides.size(); ++i){
-        fileUrl = m_tmpDirPath;
-        fileUrl.addPath(QString("slide%1.png").arg(i));
+        fileUrl = QUrl::fromLocalFile(m_tmpDirPath+QString::fromLatin1("/slide%1.png").arg(i));
         KoPAPageBase *slide = m_parameters.slides.at(i);
         m_parameters.kprView->exportPageThumbnail(slide,fileUrl, slide->size().toSize(), "PNG", -1);
     }
@@ -95,7 +94,7 @@ void KPrHtmlExport::exportImageToTmpDir()
 
 void KPrHtmlExport::generateHtml()
 {
-    QFile file(KStandardDirs::locate("data", "stage/templates/exportHTML/slides.html"));
+    QFile file(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("calligrastage/templates/exportHTML/slides.html")));
     file.open(QIODevice::ReadOnly);
     QString slideContent = file.readAll();
     file.close();
@@ -124,7 +123,7 @@ void KPrHtmlExport::generateToc()
         toc.append(QString("<li><a href=\"slide%1.html\">%2</a></li>").arg(i).arg(m_parameters.slidesNames.at(i)));
     }
     toc.append("</ul>");
-    QFile file(KStandardDirs::locate("data", "stage/templates/exportHTML/toc.html"));
+    QFile file(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("calligrastage/templates/exportHTML/toc.html")));
     file.open(QIODevice::ReadOnly);
     QString content = file.readAll();
     file.close();
@@ -136,8 +135,8 @@ void KPrHtmlExport::generateToc()
 
 void KPrHtmlExport::writeHtmlFileToTmpDir(const QString &fileName, const QString &htmlBody)
 {
-    KUrl fileUrl(m_tmpDirPath, fileName);
-    QFile file(fileUrl.toLocalFile());
+    const QString filePath = m_tmpDirPath + QLatin1Char('/') + fileName;
+    QFile file(filePath);
     file.open(QIODevice::WriteOnly);
     QTextStream stream(&file);
     stream << htmlBody;
@@ -145,7 +144,7 @@ void KPrHtmlExport::writeHtmlFileToTmpDir(const QString &fileName, const QString
 
 void KPrHtmlExport::copyFromTmpToDest()
 {
-    KIO::CopyJob *job = KIO::moveAs(m_tmpDirPath, m_parameters.destination);
+    KIO::CopyJob *job = KIO::moveAs(QUrl::fromLocalFile(m_tmpDirPath), m_parameters.destination);
     job->setWriteIntoExistingDirectories(true);
     job->setUiDelegate(new KPrHtmlExportUiDelegate);
     connect(job, SIGNAL(result(KJob*)), this, SLOT(moveResult(KJob*)));
@@ -154,16 +153,15 @@ void KPrHtmlExport::copyFromTmpToDest()
 
 void KPrHtmlExport::moveResult(KJob *job)
 {
-    KTempDir::removeDir(m_tmpDirPath);
+    QDir((m_tmpDirPath)).removeRecursively();
     if (job->error()) {
         KMessageBox::error(m_parameters.kprView, job->errorText());
     }
     else {
         if(m_parameters.openBrowser){
-            KUrl url(m_parameters.destination, "index.html");
+            QUrl url = m_parameters.destination;
+            url.setPath(url.path() + QLatin1String("/index.html"));
             KRun::runUrl(url, "text/html", m_parameters.kprView);
         }
     }
 }
-
-#include "KPrHtmlExport.moc"

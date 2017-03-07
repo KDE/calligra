@@ -29,10 +29,11 @@
 #include <KoToolBase.h>
 
 #include <kmessagebox.h>
-#include <kmimetype.h>
 #include <krun.h>
 
+#include <QMimeDatabase>
 #include <QTimer>
+#include <QUrl>
 
 using namespace Calligra::Sheets;
 
@@ -45,7 +46,7 @@ public:
 };
 
 HyperlinkStrategy::HyperlinkStrategy(CellToolBase *cellTool,
-                                     const QPointF documentPos, Qt::KeyboardModifiers modifiers,
+                                     const QPointF& documentPos, Qt::KeyboardModifiers modifiers,
                                      const QString& url, const QRectF& textRect)
         : AbstractSelectionStrategy(cellTool, documentPos, modifiers)
         , d(new Private)
@@ -78,7 +79,7 @@ void HyperlinkStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     Q_UNUSED(modifiers)
     selection()->activeSheet()->showStatusMessage(i18n("Link %1 activated", d->url));
 
-    const KUrl url(d->url);
+    const QUrl url(d->url);
     if (!url.isValid() || url.isRelative()) {
         const Region region(d->url, selection()->activeSheet()->map(), selection()->activeSheet());
         if (region.isValid()) {
@@ -92,7 +93,7 @@ void HyperlinkStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
             }
         }
     } else {
-        const QString type = KMimeType::findByUrl(url, 0, url.isLocalFile())->name();
+        const QString type = QMimeDatabase().mimeTypeForUrl(url).name();
         if (!Util::localReferenceAnchor(d->url)) {
             const bool executable = KRun::isExecutableFile(url, type);
             if (executable) {
@@ -107,7 +108,7 @@ void HyperlinkStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
                     return;
                 }
             }
-            new KRun(url, tool()->canvas()->canvasWidget(), 0, url.isLocalFile());
+            new KRun(url, tool()->canvas()->canvasWidget(), 0);
         }
     }
 

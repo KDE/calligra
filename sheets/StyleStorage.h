@@ -25,7 +25,7 @@
 #include <QPoint>
 #include <QRect>
 
-#include "calligra_sheets_export.h"
+#include "sheets_odf_export.h"
 #include <Region.h>
 #include <Style.h>
 
@@ -34,7 +34,6 @@ namespace Calligra
 namespace Sheets
 {
 class Map;
-class OdfSavingContext;
 class Style;
 class StyleManager;
 class SubStyle;
@@ -97,7 +96,7 @@ public:
      * \return the OpenDocument column/row default cell styles
      * \ingroup OpenDocument
      */
-    void saveOdfCreateDefaultStyles(int& maxCols, int& maxRows, OdfSavingContext& tableContext) const;
+   void saveCreateDefaultStyles(int& maxCols, int& maxRows, QMap<int, Style> &columnDefaultStyles, QMap<int, Style> &rowDefaultStyles) const;
 
     /**
      * Returns the index of the next column-wide cell style after \p column or zero

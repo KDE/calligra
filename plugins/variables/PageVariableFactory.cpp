@@ -19,13 +19,14 @@
  */
 
 #include "PageVariableFactory.h"
+
 #include "PageVariable.h"
+#include "VariablesDebug.h"
 
 #include <KoProperties.h>
 #include <KoXmlNS.h>
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
 
 PageVariableFactory::PageVariableFactory()
     : KoInlineObjectFactoryBase("page", TextVariable)

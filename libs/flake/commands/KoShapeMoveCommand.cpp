@@ -21,16 +21,18 @@
 #include "KoShapeMoveCommand.h"
 
 #include <KoShape.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class KoShapeMoveCommand::Private
 {
 public:
     QList<KoShape*> shapes;
-    QList<QPointF> previousPositions, newPositions;
+    QVector<QPointF> previousPositions, newPositions;
 };
 
-KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions, KUndo2Command *parent)
+KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape*> &shapes,
+                                       const QVector<QPointF> &previousPositions, const QVector<QPointF> &newPositions,
+                                       KUndo2Command *parent)
         : KUndo2Command(parent),
         d(new Private())
 {
@@ -69,7 +71,7 @@ void KoShapeMoveCommand::undo()
 }
 
 /// update newPositions list with new postions.
-void KoShapeMoveCommand::setNewPositions(QList<QPointF> newPositions)
+void KoShapeMoveCommand::setNewPositions(const QVector<QPointF> &newPositions)
 {
     d->newPositions = newPositions;
 }

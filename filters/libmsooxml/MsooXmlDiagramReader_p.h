@@ -34,6 +34,7 @@
 #include <QPair>
 #include <QRect>
 #include <QExplicitlySharedDataPointer>
+#include <QVariant>
 
 extern QVariant val;
 namespace MSOOXML {

@@ -29,7 +29,7 @@
 #include <QListWidget>
 #include <QVBoxLayout>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "Damages.h"
 #include "Map.h"
@@ -42,7 +42,7 @@
 using namespace Calligra::Sheets;
 
 ShowDialog::ShowDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
         , m_selection(selection)
 {
     setCaption(i18n("Show Sheet"));
@@ -62,8 +62,6 @@ ShowDialog::ShowDialog(QWidget* parent, Selection* selection)
     lay1->addWidget(m_listWidget);
 
     m_listWidget->setSelectionMode(QListWidget::MultiSelection);
-    QString text;
-    QStringList::Iterator it;
     QStringList tabsList = m_selection->activeSheet()->map()->hiddenSheets();
     m_listWidget->addItems(tabsList);
     if (!m_listWidget->count())
@@ -94,7 +92,5 @@ void ShowDialog::accept()
     map->addCommand(macroCommand);
     // Just repaint everything visible; no need to invalidate the visual cache.
     map->addDamage(new SheetDamage(m_selection->activeSheet(), SheetDamage::ContentChanged));
-    KDialog::accept();
+    KoDialog::accept();
 }
-
-#include "ShowDialog.moc"

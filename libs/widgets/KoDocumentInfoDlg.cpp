@@ -31,14 +31,23 @@
 #include <KoDocumentRdfBase.h>
 #include <KoIcon.h>
 
-#include <kmimetype.h>
-#include <klocale.h>
-#include <kglobal.h>
+#include <klocalizedstring.h>
+#include <kiconloader.h>
+
 #include <kmessagebox.h>
 #include <kmainwindow.h>
+#include <KoDialog.h>
 
+#include <QUrl>
 #include <QLineEdit>
 #include <QDateTime>
+#include <QMimeDatabase>
+#include <QMimeType>
+
+
+// see KoIcon.h
+#define koSmallIcon(name) (SmallIcon(QStringLiteral(name)))
+
 
 class KoPageWidgetItemAdapter : public KPageWidgetItem
 {
@@ -48,7 +57,7 @@ public:
       , m_item(item)
     {
         setHeader(item->name());
-        setIcon(KIcon(item->iconName()));
+        setIcon(QIcon::fromTheme(item->iconName()));
     }
     ~KoPageWidgetItemAdapter() { delete m_item; }
 
@@ -86,11 +95,11 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
 {
     d->info = docInfo;
 
-    setCaption(i18n("Document Information"));
-    setInitialSize(QSize(500, 500));
+    setWindowTitle(i18n("Document Information"));
+//    setInitialSize(QSize(500, 500));
     setFaceType(KPageDialog::List);
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    setDefaultButton(KDialog::Ok);
+    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    button(QDialogButtonBox::Ok)->setDefault(true);
 
     d->aboutUi = new Ui::KoDocumentInfoAboutWidget();
     QWidget *infodlg = new QWidget();
@@ -110,10 +119,11 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     // Ugly hack, the mimetype should be a parameter, instead
     KoDocumentBase* doc = dynamic_cast< KoDocumentBase* >(d->info->parent());
     if (doc) {
-        KMimeType::Ptr mime = KMimeType::mimeType(doc->mimeType());
-        if (! mime)
-            mime = KMimeType::defaultMimeTypePtr();
-        page->setIcon(KIcon(mime->iconName()));
+        QMimeDatabase db;
+        QMimeType mime = db.mimeTypeForName(doc->mimeType());
+        if (mime.isValid()) {
+            page->setIcon(QIcon::fromTheme(mime.iconName()));
+        }
     } else {
         // hide all entries not used in pages for KoDocumentInfoPropsPage
         d->aboutUi->filePathInfoLabel->setVisible(false);
@@ -137,10 +147,6 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     d->pages.append(page);
 
     initAuthorTab();
-
-    // Saving encryption implies saving the document, this is done after closing the dialog
-    connect(this, SIGNAL(hidden()), this, SLOT(slotSaveEncryption()));
-
 }
 
 KoDocumentInfoDlg::~KoDocumentInfoDlg()
@@ -150,24 +156,28 @@ KoDocumentInfoDlg::~KoDocumentInfoDlg()
     delete d;
 }
 
-void KoDocumentInfoDlg::slotButtonClicked(int button)
+void KoDocumentInfoDlg::accept()
 {
-    emit buttonClicked(static_cast<KDialog::ButtonCode>(button));
-    switch (button) {
-    case Ok:
-        foreach(KPageWidgetItem* item, d->pages) {
-            KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
-            if (page) {
-                if (page->shouldDialogCloseBeVetoed()) {
-                    return;
-                }
+    // check if any pages veto the close
+    foreach(KPageWidgetItem* item, d->pages) {
+        KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
+        if (page) {
+            if (page->shouldDialogCloseBeVetoed()) {
+                return;
             }
         }
-        slotApply();
-        accept();
-        return;
     }
-    KPageDialog::slotButtonClicked(button);
+
+    // all fine, go and apply
+    saveAboutData();
+    foreach(KPageWidgetItem* item, d->pages) {
+        KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
+        if (page) {
+            page->apply();
+        }
+    }
+
+    KPageDialog::accept();
 }
 
 bool KoDocumentInfoDlg::isDocumentSaved()
@@ -194,21 +204,22 @@ void KoDocumentInfoDlg::initAboutTab()
 
     d->aboutUi->meComments->setPlainText(d->info->aboutInfo("description"));
     if (doc && !doc->mimeType().isEmpty()) {
-        KMimeType::Ptr docmime = KMimeType::mimeType(doc->mimeType());
-        if (docmime)
-            d->aboutUi->lblType->setText(docmime->comment());
+        QMimeDatabase db;
+        QMimeType docmime = db.mimeTypeForName(doc->mimeType());
+        if (docmime.isValid())
+            d->aboutUi->lblType->setText(docmime.comment());
     }
     if (!d->info->aboutInfo("creation-date").isEmpty()) {
         QDateTime t = QDateTime::fromString(d->info->aboutInfo("creation-date"),
                                             Qt::ISODate);
-        QString s = KGlobal::locale()->formatDateTime(t);
+        QString s = QLocale().toString(t);
         d->aboutUi->lblCreated->setText(s + ", " +
                                         d->info->aboutInfo("initial-creator"));
     }
 
     if (!d->info->aboutInfo("date").isEmpty()) {
         QDateTime t = QDateTime::fromString(d->info->aboutInfo("date"), Qt::ISODate);
-        QString s = KGlobal::locale()->formatDateTime(t);
+        QString s = QLocale().toString(t);
         d->aboutUi->lblModified->setText(s + ", " + d->info->authorInfo("creator"));
     }
 
@@ -263,17 +274,6 @@ void KoDocumentInfoDlg::initAuthorTab()
     d->authorUi->position->setText(d->info->authorInfo("position"));
 }
 
-void KoDocumentInfoDlg::slotApply()
-{
-    saveAboutData();
-    foreach(KPageWidgetItem* item, d->pages) {
-        KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
-        if (page) {
-            page->apply();
-        }
-    }
-}
-
 void KoDocumentInfoDlg::saveAboutData()
 {
     d->info->setAboutInfo("keyword", d->aboutUi->leKeywords->text());
@@ -284,6 +284,15 @@ void KoDocumentInfoDlg::saveAboutData()
     d->applyToggleEncryption = d->toggleEncryption;
 }
 
+void KoDocumentInfoDlg::hideEvent( QHideEvent *event )
+{
+    Q_UNUSED(event);
+
+    // Saving encryption implies saving the document, this is done after closing the dialog
+    // TODO: shouldn't this be skipped if cancel is pressed?
+    saveEncryption();
+}
+
 void KoDocumentInfoDlg::slotResetMetaData()
 {
     d->info->resetMetaData();
@@ -291,14 +300,14 @@ void KoDocumentInfoDlg::slotResetMetaData()
     if (!d->info->aboutInfo("creation-date").isEmpty()) {
         QDateTime t = QDateTime::fromString(d->info->aboutInfo("creation-date"),
                                             Qt::ISODate);
-        QString s = KGlobal::locale()->formatDateTime(t);
+        QString s = QLocale().toString(t);
         d->aboutUi->lblCreated->setText(s + ", " +
                                         d->info->aboutInfo("initial-creator"));
     }
 
     if (!d->info->aboutInfo("date").isEmpty()) {
         QDateTime t = QDateTime::fromString(d->info->aboutInfo("date"), Qt::ISODate);
-        QString s = KGlobal::locale()->formatDateTime(t);
+        QString s = QLocale().toString(t);
         d->aboutUi->lblModified->setText(s + ", " + d->info->authorInfo("creator"));
     }
 
@@ -336,7 +345,7 @@ void KoDocumentInfoDlg::slotToggleEncryption()
     }
 }
 
-void KoDocumentInfoDlg::slotSaveEncryption()
+void KoDocumentInfoDlg::saveEncryption()
 {
     if (!d->applyToggleEncryption)
         return;
@@ -386,8 +395,9 @@ void KoDocumentInfoDlg::slotSaveEncryption()
         // Encrypt
         bool modified = doc->isModified();
         if (!doc->url().isEmpty() && !(doc->mimeType().startsWith("application/vnd.oasis.opendocument.") && doc->specialOutputFlag() == 0)) {
-            KMimeType::Ptr mime = KMimeType::mimeType(doc->mimeType());
-            QString comment = mime ? mime->comment() : i18n("%1 (unknown file type)", QString::fromLatin1(doc->mimeType()));
+            QMimeDatabase db;
+            QMimeType mime = db.mimeTypeForName(doc->mimeType());
+            QString comment = mime.isValid() ? mime.comment() : i18n("%1 (unknown file type)", QString::fromLatin1(doc->mimeType()));
             if (KMessageBox::warningContinueCancel(
                         this,
                         i18n("<qt>The document is currently saved as %1. The document needs to be changed to <b>OASIS OpenDocument</b> to be encrypted."
@@ -458,5 +468,3 @@ void KoDocumentInfoDlg::addPageItem(KoPageWidgetItem *item)
     addPage(page);
     d->pages.append(page);
 }
-
-#include <KoDocumentInfoDlg.moc>

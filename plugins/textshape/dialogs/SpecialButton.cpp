@@ -27,7 +27,7 @@
 #include <QHideEvent>
 #include <QShowEvent>
 
-#include <kdebug.h>
+#include <QDebug>
 
 SpecialButton::SpecialButton(QWidget *parent)
     : QFrame(parent),
@@ -105,5 +105,3 @@ void SpecialButton::mousePressEvent(QMouseEvent *)
         hidePopup();
     }
 }
-
-#include <SpecialButton.moc>

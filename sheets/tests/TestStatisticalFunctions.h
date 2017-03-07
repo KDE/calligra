@@ -21,8 +21,7 @@
 #ifndef CALLIGRA_SHEETS_TEST_STATISTICAL_FUNCTIONS
 #define CALLIGRA_SHEETS_TEST_STATISTICAL_FUNCTIONS
 
-#include <QtGui>
-#include <QtTest>
+#include <QObject>
 
 #include <Value.h>
 
@@ -45,7 +44,7 @@ private Q_SLOTS:
     void testAVERAGEA();
     void testBETADIST();
     void testBETAINV();
-//     void testBINO(); // kspread version of BINOMDIST with 3 Parameters
+//     void testBINO(); // Calligra Sheets version of BINOMDIST with 3 Parameters
     void testBINOMDIST();
     void testCHIDIST();
 //     void testCOMBIN();  // in -> TestMathFunctions

@@ -21,6 +21,7 @@
 #include "KWDocument.h"
 #include "frames/KWTextFrameSet.h"
 #include "Words.h"
+#include "WordsDebug.h"
 
 KWFrameConnectSelector::KWFrameConnectSelector(FrameConfigSharedState *state)
         : m_state(state),
@@ -28,15 +29,17 @@ KWFrameConnectSelector::KWFrameConnectSelector(FrameConfigSharedState *state)
 {
     widget.setupUi(this);
 
-    connect(widget.framesList, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
+    connect(widget.framesList, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
             this, SLOT(frameSetSelected()));
-    connect(widget.frameSetName, SIGNAL(textChanged(const QString &)),
-            this, SLOT(nameChanged(const QString &)));
+    connect(widget.existingRadio, SIGNAL(clicked(bool)),
+            this, SLOT(existingRadioClicked(bool)));
+    connect(widget.frameSetName, SIGNAL(textChanged(QString)),
+            this, SLOT(nameChanged(QString)));
 }
 
 bool KWFrameConnectSelector::canOpen(KoShape *shape)
 {
-    if (shape->shapeId() == TextShape_SHAPEID) {
+    if (shape->shapeId() != TextShape_SHAPEID) {
         // We should only go further if it's a textshape, ok if it is not in KWTextFrameSet
         return false;
     }
@@ -48,6 +51,17 @@ bool KWFrameConnectSelector::canOpen(KoShape *shape)
     }
 
     return true;
+}
+
+void KWFrameConnectSelector::existingRadioClicked(bool on)
+{
+    // make sure there is a selcted frameset
+    if (on && !widget.framesList->currentItem() && widget.framesList->model()->rowCount() > 0) {
+        QModelIndex curr = widget.framesList->model()->index(0, 0);
+        widget.framesList->setCurrentIndex(curr);
+        widget.framesList->selectionModel()->select(curr, QItemSelectionModel::Select);
+    }
+    debugWords<<Q_FUNC_INFO<<on<<widget.framesList->currentItem();
 }
 
 void KWFrameConnectSelector::frameSetSelected()

@@ -92,7 +92,7 @@ private:
     const QString createOpacityGradientStyle(int opacity);
     const QString createMarkerStyle(int markerType);
     const QString createStrokeDashStyle(int strokeStyle);
-    const QString createHatchStyle(int brushStyle, QString fillColor);
+    const QString createHatchStyle(int brushStyle, const QString &fillColor);
     const QString createParagraphStyle(const KoXmlElement& element);
     const QString createTextStyle(const KoXmlElement& element);
     const QString createListStyle(const KoXmlElement& element);

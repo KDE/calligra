@@ -62,7 +62,6 @@ Name[zh_CN]=词典工具
 Name[zh_TW]=同義字工具
 X-KDE-Library=calligra_textediting_thesaurus
 Type=Service
-Commands=thesaurus
 Comment=Show Related Words
 Comment[af]=Vertoon Verwanter Woorde
 Comment[bg]=Търсене на синоними

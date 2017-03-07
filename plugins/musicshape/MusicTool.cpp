@@ -17,10 +17,10 @@
  * Boston, MA 02110-1301, USA.
  */
 #include <QPainter>
-#include <ktabwidget.h>
+#include <QTabWidget>
 
-#include <kdebug.h>
-#include <klocale.h>
+#include "MusicDebug.h"
+#include <klocalizedstring.h>
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -28,7 +28,6 @@
 #include "MusicShape.h"
 
 #include "MusicTool.h"
-#include <MusicTool.moc>
 
 #include "dialogs/PartsWidget.h"
 
@@ -45,7 +44,7 @@ MusicTool::~MusicTool()
 void MusicTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     Q_UNUSED(toolActivation);
-    //kDebug() ;
+    //debugMusic ;
 
     foreach (KoShape *shape, shapes) {
         m_musicshape = dynamic_cast<MusicShape*>( shape );
@@ -63,7 +62,7 @@ void MusicTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sh
 
 void MusicTool::deactivate()
 {
-  //kDebug()<<"MusicTool::deactivate";
+  //debugMusic<<"MusicTool::deactivate";
   m_musicshape = 0;
 }
 
@@ -93,7 +92,7 @@ void MusicTool::addCommand(KUndo2Command* command)
 
 QWidget * MusicTool::createOptionWidget()
 {
-    KTabWidget *widget = new KTabWidget();
+    QTabWidget *widget = new QTabWidget();
 
     PartsWidget *pw = new PartsWidget(this, widget);
     widget->addTab(pw, i18n("Parts"));

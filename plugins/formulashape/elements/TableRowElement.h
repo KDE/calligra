@@ -26,7 +26,7 @@
 
 #include "BasicElement.h"
 #include "AttributeManager.h"
-#include "kformula_export.h"
+#include "koformula_export.h"
 
 class TableDataElement;
 

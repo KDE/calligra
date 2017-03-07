@@ -59,7 +59,7 @@ public:
     int filtersize;
 };
 PivotMain::PivotMain(QWidget* parent, Selection* selection) :
-    KDialog(parent),
+    KoDialog(parent),
     d(new Private)
 {
     QWidget* widget = new QWidget(this);
@@ -329,7 +329,7 @@ Sheet* PivotMain::filter()
 }
 
 //This helps the filter function in analyzing the data(condition) received from Add Filter dialog.
-bool PivotMain::checkCondition(QString field,QString condition,QString value,int line)
+bool PivotMain::checkCondition(const QString &field , const QString &condition, const QString &value, int line)
 {
   Sheet *const sheet1 = d->selection->lastSheet();
   const QRect range2 = d->selection->lastRange();
@@ -339,9 +339,10 @@ bool PivotMain::checkCondition(QString field,QString condition,QString value,int
   
   QVector<QString> vect;
   
-  for(int i=range2.left();i<=r;i++)
+  for(int i=range2.left();i<=r;i++) {
     vect.append(Cell(sheet1,i,row).displayText());  
-  
+  }
+
     if(condition==">"){
       if(Cell(sheet1,vect.indexOf(field)+1,line).displayText() > value){
 		 
@@ -695,7 +696,7 @@ void PivotMain::Summarize()
   
 }//Summarize
 
-QVector<QString> PivotMain::ValueData(QString str)
+QVector<QString> PivotMain::ValueData(const QString &str)
 {
   
       Sheet *const sheet = d->selection->lastSheet();

@@ -19,8 +19,8 @@
 
 #include "KPrIrisWipeEffectFactory.h"
 
-//KDE includes
-#include <klocale.h>
+//KF5 includes
+#include <klocalizedstring.h>
 
 #include "../KPrIrisWipeEffectStrategyBase.h"
 

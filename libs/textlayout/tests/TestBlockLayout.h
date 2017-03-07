@@ -21,7 +21,6 @@
 #define TESTBLOCKLAYOUT_H
 
 #include <QObject>
-#include <qtest_kde.h>
 
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
@@ -83,7 +82,7 @@ private Q_SLOTS:
     //etc
     //void testParagOffset();
     void testParagraphBorders();
-    void testBorderData();
+    void testParagraphMargins();
     void testDropCaps();
 
 private:

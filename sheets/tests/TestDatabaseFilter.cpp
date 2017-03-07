@@ -21,7 +21,7 @@
 
 #include <sheets/database/Filter.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 using namespace Calligra::Sheets;
 
@@ -87,6 +87,4 @@ void DatabaseFilterTest::testOrEquals()
     QVERIFY(a == b);
 }
 
-QTEST_KDEMAIN(DatabaseFilterTest, GUI)
-
-#include "TestDatabaseFilter.moc"
+QTEST_MAIN(DatabaseFilterTest)

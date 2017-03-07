@@ -18,7 +18,7 @@
 */
 #include "TestSheet.h"
 
-#include <QPainter>
+#include "MockPart.h"
 
 #include <KoViewConverter.h>
 #include <KoShape.h>
@@ -26,15 +26,14 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoEmbeddedDocumentSaver.h>
-#include <KoPart.h>
 
 #include <part/Doc.h> // FIXME detach from part
 #include <Map.h>
 #include <Sheet.h>
 #include <CellStorage.h>
-#include <OdfSavingContext.h>
 
-#include <qtest_kde.h>
+#include <QPainter>
+#include <QTest>
 
 using namespace Calligra::Sheets;
 
@@ -174,6 +173,7 @@ void SheetTest::testDocumentToCellCoordinates()
     QCOMPARE(m_sheet->documentToCellCoordinates(area), result);
 }
 
+#if 0
 // test if embedded objects are propare taken into account (tests for bug 287997)
 void SheetTest::testCompareRows()
 {
@@ -201,7 +201,6 @@ void SheetTest::testCompareRows()
     QCOMPARE(m_sheet->compareRows(12,20,1024,tableContext), false);
     QCOMPARE(m_sheet->compareRows(12,21,1024,tableContext), true);
 }
+#endif
 
-QTEST_KDEMAIN(SheetTest, GUI)
-
-#include "TestSheet.moc"
+QTEST_MAIN(SheetTest)

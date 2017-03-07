@@ -16,19 +16,33 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 1.1
+import QtQuick 2.0
 import "components"
-import org.calligra.CalligraComponents 0.1 as Calligra
+import org.kde.calligra 1.0 as Calligra
 
 Item {
     id: base;
     signal canvasInteractionStarted();
-    property alias document: stageCanvas.document;
-    property alias textEditor: stageCanvas.textEditor;
+    property alias document: stageDocument.document;
+    property alias textEditor: stageDocument.textEditor;
     property QtObject canvas: stageCanvas;
-    property alias source: stageCanvas.source;
+    property alias source: stageDocument.source;
     property alias navigateMode: controllerFlickable.enabled;
     property double toolbarOpacity: 1;
+    Calligra.Document {
+        id: stageDocument;
+        onStatusChanged: {
+            if(status == Calligra.DocumentStatus.Loading) {
+                baseLoadingDialog.visible = true;
+            }
+            else if(status == Calligra.DocumentStatus.Loaded) {
+                console.debug("doc and part: " + stageDocument.doc + " " + stageDocument.part);
+                mainWindow.setDocAndPart(stageDocument.doc, stageDocument.part);
+                baseLoadingDialog.hideMe();
+//                 thumbnailSize = Qt.size(Settings.theme.adjustedPixel(280), Settings.theme.adjustedPixel(360));
+            }
+        }
+    }
     onNavigateModeChanged: {
         if(navigateMode === true) {
             // This means we've just changed back from having edited stuff.
@@ -54,23 +68,28 @@ Item {
         Item {
             anchors.centerIn: parent;
             
-            width: Math.min(controllerItem.documentSize.width, parent.width);
-            height: Math.min(controllerItem.documentSize.height, parent.height);
+            width: Math.min(stageDocument.documentSize.width, parent.width);
+            height: Math.min(stageDocument.documentSize.height, parent.height);
         
-            Calligra.PresentationCanvas {
+            Calligra.View {
                 id: stageCanvas;
-                
                 anchors.fill: parent;
-
-                onLoadingBegun: baseLoadingDialog.visible = true;
-                onLoadingFinished: {
-                    console.debug("doc and part: " + doc() + " " + part());
-                    mainWindow.setDocAndPart(doc(), part());
-                    baseLoadingDialog.hideMe();
-                }
-                onCurrentSlideChanged: navigatorListView.positionViewAtIndex(currentSlide, ListView.Contain);
+                document: stageDocument;
             }
-            
+//             Calligra.PresentationCanvas {
+//                 id: stageCanvas;
+//                 
+//                 anchors.fill: parent;
+// 
+//                 onLoadingBegun: baseLoadingDialog.visible = true;
+//                 onLoadingFinished: {
+//                     console.debug("doc and part: " + doc() + " " + part());
+//                     mainWindow.setDocAndPart(doc(), part());
+//                     baseLoadingDialog.hideMe();
+//                 }
+//                 onCurrentSlideChanged: navigatorListView.positionViewAtIndex(currentSlide, ListView.Contain);
+//             }
+
             Flickable {
                 id: controllerFlickable;
                 anchors {
@@ -79,15 +98,22 @@ Item {
                     right: parent.right;
                     bottom: enabled ? parent.bottom : parent.top;
                 }
-                
-                boundsBehavior: controllerItem.documentSize.width < base.width ? Flickable.StopAtBounds : Flickable.DragAndOvershootBounds;
 
-                Calligra.CanvasControllerItem {
+                boundsBehavior: stageDocument.documentSize.width < base.width ? Flickable.StopAtBounds : Flickable.DragAndOvershootBounds;
+
+                Calligra.ViewController {
                     id: controllerItem;
-                    canvas: stageCanvas;
+                    objectName: "controllerItem";
+                    view: stageCanvas;
                     flickable: controllerFlickable;
-                    minimumZoom: 0.5;
-                    zoom: 1.0;
+                    minimumZoomFitsWidth: true;
+                    Calligra.LinkArea {
+                        anchors.fill: parent;
+                        document: stageDocument;
+                        onClicked: console.debug("clicked somewhere without a link");
+                        onLinkClicked: console.debug("clicked on the link: " + linkTarget);
+                        controllerZoom: controllerItem.zoom;
+                    }
                 }
 
                 PinchArea {
@@ -97,31 +123,32 @@ Item {
                     width: controllerFlickable.width;
 
                     onPinchStarted: {
-                        controllerItem.beginZoomGesture();
                         base.canvasInteractionStarted();
                     }
                     onPinchUpdated: {
                         var newCenter = mapToItem( controllerFlickable, pinch.center.x, pinch.center.y );
-                        controllerItem.zoomBy(pinch.scale - pinch.previousScale, Qt.point( newCenter.x, newCenter.y ) );
+                        controllerItem.zoomAroundPoint(pinch.scale - pinch.previousScale, newCenter.x, newCenter.y );
                     }
-                    onPinchFinished: { controllerItem.endZoomGesture(); controllerFlickable.returnToBounds(); controllerItem.returnToBounds(); }
+                    onPinchFinished: {
+                        controllerFlickable.returnToBounds();
+                    }
 
                     MouseArea {
                         anchors.fill: parent;
                         onClicked: {
                             if(mouse.x < width / 6) {
-                                if(stageCanvas.currentSlide === 0) {
-                                    stageCanvas.currentSlide = stageCanvas.slideCount() - 1;
+                                if(stageDocument.currentIndex === 0) {
+                                    stageDocument.currentIndex = stageCanvas.indexCount() - 1;
                                 }
                                 else {
-                                    stageCanvas.currentSlide = stageCanvas.currentSlide - 1;
+                                    stageDocument.currentIndex = stageDocument.currentIndex - 1;
                                 }
                             }
                             else if(mouse.x > width * 5 / 6) {
-                                var currentSlide = stageCanvas.currentSlide;
-                                stageCanvas.currentSlide = stageCanvas.currentSlide + 1;
-                                if(currentSlide === stageCanvas.currentSlide) {
-                                    stageCanvas.currentSlide = 0;
+                                var currentIndex = stageDocument.currentIndex;
+                                stageDocument.currentIndex = stageDocument.currentIndex + 1;
+                                if(currentIndex === stageDocument.currentIndex) {
+                                    stageDocument.currentIndex = 0;
                                 }
                             }
                             base.canvasInteractionStarted();
@@ -168,9 +195,9 @@ Item {
                 fill: parent;
                 topMargin: Settings.theme.adjustedPixel(86);
             }
-            model: Calligra.PresentationModel {
+            model: Calligra.ContentsModel {
                     id: stageNavigatorModel;
-                    canvas: stageCanvas;
+                    document: stageDocument;
                     thumbnailSize: Qt.size(Settings.theme.adjustedPixel(104) * 2, (navigatorListView.width - Settings.theme.adjustedPixel(56)) * 2);
                 }
             delegate: Item {
@@ -178,7 +205,7 @@ Item {
                 width: ListView.view.width;
                 Rectangle {
                     anchors.fill: parent;
-                    opacity: index === stageCanvas.currentSlide ? 0.6 : 0;
+                    opacity: index === stageDocument.currentIndex ? 0.6 : 0;
                     Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
                     color: "#00adf5";
                 }
@@ -189,12 +216,12 @@ Item {
                         bottom: parent.bottom;
                     }
                     width: Settings.theme.adjustedPixel(40);
-                    color: index === stageCanvas.currentSlide ? "white" : "#c1cdd1";
+                    color: index === stageDocument.currentIndex ? "white" : "#c1cdd1";
                     text: index + 1;
                     horizontalAlignment: Text.AlignHCenter;
                     verticalAlignment: Text.AlignVCenter;
                 }
-                Calligra.Thumbnail {
+                Calligra.ImageDataItem {
                     anchors {
                         top: parent.top;
                         right: parent.right;
@@ -202,12 +229,12 @@ Item {
                         margins: Settings.theme.adjustedPixel(16);
                     }
                     width: parent.width - Settings.theme.adjustedPixel(56);
-                    content: stageNavigatorModel.thumbnail(index);
+                    data: model.thumbnail;
                 }
                 MouseArea {
                     anchors.fill: parent;
                     onClicked: {
-                        stageCanvas.currentSlide = index;
+                        stageDocument.currentIndex = index;
                         base.canvasInteractionStarted();
                     }
                 }

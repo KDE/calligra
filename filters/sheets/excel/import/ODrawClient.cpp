@@ -281,7 +281,7 @@ const MSO::OfficeArtSpContainer* ODrawClient::getMasterShapeContainer(quint32 sp
 {
     Q_UNUSED(spid);
     //TODO: locate the OfficeArtSpContainer with shapeProp/spid == spid
-    MSO::OfficeArtSpContainer* sp = NULL;
+    MSO::OfficeArtSpContainer* sp = nullptr;
     return sp;
 }
 

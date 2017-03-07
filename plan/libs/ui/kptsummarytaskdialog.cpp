@@ -25,15 +25,14 @@
 #include "kpttask.h"
 #include "kptproject.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
-#include <kdebug.h>
 
 namespace KPlato
 {
 
 SummaryTaskDialog::SummaryTaskDialog(Task &task, QWidget *p)
-    : KDialog(p),
+    : KoDialog(p),
     m_node( &task )
 {
     setCaption( i18n("Summary Task Settings") );
@@ -76,16 +75,14 @@ MacroCommand *SummaryTaskDialog::buildCommand() {
 }
 
 void SummaryTaskDialog::slotButtonClicked(int button) {
-    if (button == KDialog::Ok) {
+    if (button == KoDialog::Ok) {
         if (!m_generalTab->ok())
             return;
         accept();
     } else {
-        KDialog::slotButtonClicked(button);
+        KoDialog::slotButtonClicked(button);
     }
 }
 
 
 }  //KPlato namespace
-
-#include "kptsummarytaskdialog.moc"

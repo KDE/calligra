@@ -21,7 +21,7 @@
 #define CALLIGRA_SHEETS_AUTOFILL_STRATEGY
 
 #include "AbstractSelectionStrategy.h"
-#include "calligra_sheets_export.h"
+#include "sheets_common_export.h"
 
 namespace Calligra
 {
@@ -40,7 +40,7 @@ public:
     /**
      * Constructor.
      */
-    AutoFillStrategy(CellToolBase *cellTool, const QPointF position, Qt::KeyboardModifiers modifiers);
+    AutoFillStrategy(CellToolBase *cellTool, const QPointF &position, Qt::KeyboardModifiers modifiers);
 
     /**
      * Destructor.

@@ -24,7 +24,7 @@
 
 #include "BasicElement.h"
 #include "FixedElement.h"
-#include "kformula_export.h"
+#include "koformula_export.h"
 #include <QLineF>
 
 /**

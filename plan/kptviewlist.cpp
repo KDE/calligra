@@ -25,8 +25,8 @@
 #include <QStyle>
 #include <QBrush>
 #include <QContextMenuEvent>
+#include <QMenu>
 
-#include <kmenu.h>
 #include <kmessagebox.h>
 #include <kcombobox.h>
 
@@ -177,7 +177,7 @@ QString ViewListItem::viewType() const
 
 void ViewListItem::save( QDomElement &element ) const
 {
-    element.setAttribute( "itemtype", type() );
+    element.setAttribute( "itemtype", QString::number(type()) );
     element.setAttribute( "tag", tag() );
 
     if ( type() == ItemType_SubView ) {
@@ -185,7 +185,7 @@ void ViewListItem::save( QDomElement &element ) const
         element.setAttribute( "name", m_viewinfo.name == text( 0 ) ? "" : text( 0 ) );
         element.setAttribute( "tooltip", m_viewinfo.tip == toolTip( 0 ) ? TIP_USE_DEFAULT_TEXT : toolTip( 0 ) );
     } else if ( type() == ItemType_Category ) {
-        kDebug(planDbg())<<text(0)<<m_viewinfo.name;
+        debugPlan<<text(0)<<m_viewinfo.name;
         element.setAttribute( "name", text( 0 ) == m_viewinfo.name ? "" : text( 0 ) );
         element.setAttribute( "tooltip", toolTip( 0 ).isEmpty() ? TIP_USE_DEFAULT_TEXT : toolTip( 0 ) );
     }
@@ -194,7 +194,7 @@ void ViewListItem::save( QDomElement &element ) const
 ViewListTreeWidget::ViewListTreeWidget( QWidget *parent )
     : QTreeWidget( parent )
 {
-    setWhatsThis( i18nc( "@info:whatsthis",
+    setWhatsThis( xi18nc( "@info:whatsthis",
         "<para>This is the list of available views and editors.</para>"
         "<para>You can configure the list by using the context menu:"
         "<list>"
@@ -224,7 +224,7 @@ void ViewListTreeWidget::drawRow( QPainter *painter, const QStyleOptionViewItem 
 
 void ViewListTreeWidget::handleMousePress( QTreeWidgetItem *item )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     if ( item == 0 )
         return ;
 
@@ -398,7 +398,7 @@ void ViewListWidget::setReadWrite( bool rw )
 
 void ViewListWidget::slotItemChanged( QTreeWidgetItem */*item*/, int /*col */)
 {
-    //kDebug(planDbg());
+    //debugPlan;
 }
 
 void ViewListWidget::slotActivated( QTreeWidgetItem *item, QTreeWidgetItem *prev )
@@ -419,7 +419,7 @@ void ViewListWidget::slotActivated( QTreeWidgetItem *item, QTreeWidgetItem *prev
 
 ViewListItem *ViewListWidget::addCategory( const QString &tag, const QString& name )
 {
-    //kDebug(planDbg()) ;
+    //debugPlan ;
     ViewListItem *item = m_viewlist->findCategory( tag );
     if ( item == 0 ) {
         item = new ViewListItem( m_viewlist, tag, QStringList( name ), ViewListItem::ItemType_Category );
@@ -467,7 +467,7 @@ ViewListItem *ViewListWidget::addView(QTreeWidgetItem *category, const QString &
     item->setView( view );
     item->setDocument( doc );
     if (! iconName.isEmpty()) {
-        item->setData(0, Qt::DecorationRole, KIcon(iconName));
+        item->setData(0, Qt::DecorationRole, QIcon::fromTheme(iconName));
     }
     item->setFlags( ( item->flags() | Qt::ItemIsEditable ) & ~Qt::ItemIsDropEnabled );
     insertViewListItem( item, category, index );
@@ -479,7 +479,7 @@ ViewListItem *ViewListWidget::addView(QTreeWidgetItem *category, const QString &
 
 void ViewListWidget::setSelected( QTreeWidgetItem *item )
 {
-    //kDebug(planDbg())<<item<<","<<m_viewlist->currentItem();
+    //debugPlan<<item<<","<<m_viewlist->currentItem();
     if ( item == 0 && m_viewlist->currentItem() ) {
         m_viewlist->currentItem()->setSelected( false );
         if ( m_prev ) {
@@ -487,13 +487,13 @@ void ViewListWidget::setSelected( QTreeWidgetItem *item )
         }
     }
     m_viewlist->setCurrentItem( item );
-    //kDebug(planDbg())<<item<<","<<m_viewlist->currentItem();
+    //debugPlan<<item<<","<<m_viewlist->currentItem();
 }
 
 void ViewListWidget::setCurrentItem( QTreeWidgetItem *item )
 {
     m_viewlist->setCurrentItem( item );
-    //kDebug(planDbg())<<item<<","<<m_viewlist->currentItem();
+    //debugPlan<<item<<","<<m_viewlist->currentItem();
 }
 
 ViewListItem *ViewListWidget::currentItem() const
@@ -545,7 +545,7 @@ ViewListItem *ViewListWidget::findItem( const QString &tag, QTreeWidgetItem *par
     for (int i = 0; i < parent->childCount(); ++i ) {
         ViewListItem * ch = static_cast<ViewListItem*>( parent->child( i ) );
         if ( ch->tag() == tag ) {
-            //kDebug(planDbg())<<ch<<","<<view;
+            //debugPlan<<ch<<","<<view;
             return ch;
         }
         ch = findItem( tag, ch );
@@ -564,7 +564,7 @@ ViewListItem *ViewListWidget::findItem(  const ViewBase *view, QTreeWidgetItem *
     for (int i = 0; i < parent->childCount(); ++i ) {
         ViewListItem * ch = static_cast<ViewListItem*>( parent->child( i ) );
         if ( ch->view() == view ) {
-            //kDebug(planDbg())<<ch<<","<<view;
+            //debugPlan<<ch<<","<<view;
             return ch;
         }
         ch = findItem( view, ch );
@@ -588,7 +588,7 @@ void ViewListWidget::slotRemoveCategory()
     if ( m_contextitem->type() != ViewListItem::ItemType_Category ) {
         return;
     }
-    kDebug(planDbg())<<m_contextitem<<":"<<m_contextitem->type();
+    debugPlan<<m_contextitem<<":"<<m_contextitem->type();
     if ( m_contextitem->childCount() > 0 ) {
         if ( KMessageBox::warningContinueCancel( this, i18n( "Removing this category will also remove all its views." ) ) == KMessageBox::Cancel ) {
             return;
@@ -621,7 +621,7 @@ void ViewListWidget::slotEditViewTitle()
 {
     //QTreeWidgetItem *item = m_viewlist->currentItem();
     if ( m_contextitem ) {
-        kDebug(planDbg())<<m_contextitem<<":"<<m_contextitem->type();
+        debugPlan<<m_contextitem<<":"<<m_contextitem->type();
         QString title = m_contextitem->text( 0 );
         m_viewlist->editItem( m_contextitem );
         if ( title != m_contextitem->text( 0 ) ) {
@@ -635,9 +635,9 @@ void ViewListWidget::slotConfigureItem()
     if ( m_contextitem == 0 ) {
         return;
     }
-    KDialog *dlg = 0;
+    KoDialog *dlg = 0;
     if ( m_contextitem->type() == ViewListItem::ItemType_Category ) {
-        kDebug(planDbg())<<m_contextitem<<":"<<m_contextitem->type();
+        debugPlan<<m_contextitem<<":"<<m_contextitem->type();
         dlg = new ViewListEditCategoryDialog( *this, m_contextitem, this );
     } else if ( m_contextitem->type() == ViewListItem::ItemType_SubView ) {
         dlg = new ViewListEditViewDialog( *this, m_contextitem, this );
@@ -664,7 +664,7 @@ void ViewListWidget::slotEditDocumentTitle()
 {
     //QTreeWidgetItem *item = m_viewlist->currentItem();
     if ( m_contextitem ) {
-        kDebug(planDbg())<<m_contextitem<<":"<<m_contextitem->type();
+        debugPlan<<m_contextitem<<":"<<m_contextitem->type();
         QString title = m_contextitem->text( 0 );
         m_viewlist->editItem( m_contextitem );
     }
@@ -726,15 +726,15 @@ void ViewListWidget::setupContextMenus()
     // NOTE: can't use xml file as there may not be a factory()
     QAction *action;
     // view actions
-    action = new QAction(koIcon("edit-rename"), i18nc("@action:inmenu rename view", "Rename"), this);
+    action = new QAction(koIcon("edit-rename"), xi18nc("@action:inmenu rename view", "Rename"), this);
     connect( action, SIGNAL(triggered(bool)), this, SLOT(slotEditViewTitle()) );
     m_viewactions.append( action );
 
-    action = new QAction(koIcon("configure"), i18nc("@action:inmenu configure view", "Configure..."), this );
+    action = new QAction(koIcon("configure"), xi18nc("@action:inmenu configure view", "Configure..."), this );
     connect( action, SIGNAL(triggered(bool)), this, SLOT(slotConfigureItem()) );
     m_viewactions.append( action );
 
-    action = new QAction(koIcon("list-remove"), i18nc("@action:inmenu remove view", "Remove"), this);
+    action = new QAction(koIcon("list-remove"), xi18nc("@action:inmenu remove view", "Remove"), this);
     connect( action, SIGNAL(triggered(bool)), this, SLOT(slotRemoveView()) );
     m_viewactions.append( action );
 
@@ -743,15 +743,15 @@ void ViewListWidget::setupContextMenus()
     m_viewactions.append( action );
 
     // Category actions
-    action = new QAction(koIcon("edit-rename"), i18nc("@action:inmenu rename view category", "Rename"), this);
+    action = new QAction(koIcon("edit-rename"), xi18nc("@action:inmenu rename view category", "Rename"), this);
     connect( action, SIGNAL(triggered(bool)), SLOT(renameCategory()) );
     m_categoryactions.append( action );
 
-    action = new QAction(koIcon("configure"), i18nc("@action:inmenu configure view category", "Configure..."), this);
+    action = new QAction(koIcon("configure"), xi18nc("@action:inmenu configure view category", "Configure..."), this);
     connect( action, SIGNAL(triggered(bool)), this, SLOT(slotConfigureItem()) );
     m_categoryactions.append( action );
 
-    action = new QAction(koIcon("list-remove"), i18nc("@action:inmenu Remove view category", "Remove"),this);
+    action = new QAction(koIcon("list-remove"), xi18nc("@action:inmenu Remove view category", "Remove"),this);
     connect( action, SIGNAL(triggered(bool)), this, SLOT(slotRemoveCategory()) );
     m_categoryactions.append( action );
 
@@ -760,7 +760,7 @@ void ViewListWidget::setupContextMenus()
     m_categoryactions.append( action );
 
     // list actions
-    action = new QAction(koIcon("list-add"), i18nc("@action:inmenu Insert View", "Insert..."), this);
+    action = new QAction(koIcon("list-add"), xi18nc("@action:inmenu Insert View", "Insert..."), this);
     connect( action, SIGNAL(triggered(bool)), this, SLOT(slotAddView()) );
     m_listactions.append( action );
 }
@@ -775,7 +775,7 @@ void ViewListWidget::renameCategory()
 
 void ViewListWidget::contextMenuEvent ( QContextMenuEvent *event )
 {
-    KMenu menu;
+    QMenu menu;
     QList<QAction*> lst;
     m_contextitem = static_cast<ViewListItem*>(m_viewlist->itemAt( event->pos() ) );
     if ( m_contextitem == 0 ) {
@@ -810,33 +810,33 @@ void ViewListWidget::save( QDomElement &element ) const
 
 void ViewListWidget::setProject( Project *project )
 {
-    kDebug(planDbg())<<project;
+    debugPlan<<project;
     m_model.setProject( project );
 }
 
 void ViewListWidget::slotCurrentScheduleChanged( int idx )
 {
-    kDebug(planDbg())<<idx<<selectedSchedule();
+    debugPlan<<idx<<selectedSchedule();
     emit selectionChanged( selectedSchedule() );
 }
 
 ScheduleManager *ViewListWidget::selectedSchedule() const
 {
     QModelIndex idx = m_sfModel.index( m_currentSchedule->currentIndex(), m_currentSchedule->modelColumn() );
-    kDebug(planDbg())<<idx;
+    debugPlan<<idx;
     return m_sfModel.manager( idx );
 }
 
 void ViewListWidget::setSelectedSchedule( ScheduleManager *sm )
 {
-    kDebug(planDbg())<<sm<<m_model.index( sm );
+    debugPlan<<sm<<m_model.index( sm );
     QModelIndex idx = m_sfModel.mapFromSource( m_model.index( sm ) );
     if ( sm && ! idx.isValid()) {
         m_temp = sm;
         return;
     }
     m_currentSchedule->setCurrentIndex( idx.row() );
-    kDebug(planDbg())<<sm<<idx;
+    debugPlan<<sm<<idx;
     m_temp = 0;
 }
 
@@ -854,5 +854,3 @@ void ViewListWidget::setModified()
 }
 
 }  //KPlato namespace
-
-#include "kptviewlist.moc"

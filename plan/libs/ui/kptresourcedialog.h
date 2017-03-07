@@ -25,7 +25,7 @@
 #include "ui_resourcedialogbase.h"
 #include "kptresource.h"
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include <QMap>
 
@@ -67,7 +67,7 @@ private:
     QList<QPersistentModelIndex> m_currentIndexes;
 };
 
-class KPLATOUI_EXPORT ResourceDialog : public KDialog {
+class KPLATOUI_EXPORT ResourceDialog : public KoDialog {
     Q_OBJECT
 public:
     ResourceDialog(Project &project, Resource *resource, QWidget *parent=0, const char *name=0);

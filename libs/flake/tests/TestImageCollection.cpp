@@ -25,15 +25,16 @@
 
 #include <QImage>
 #include <QPixmap>
-#include <kurl.h>
-#include <kdebug.h>
+#include <QBuffer>
+#include <QUrl>
+#include <FlakeDebug.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 void TestImageCollection::testGetImageImage()
 {
     KoImageCollection collection;
-    QImage image(KDESRCDIR "/logo-calligra.png");
+    QImage image(QFINDTESTDATA("logo-calligra.png"));
 
     KoImageData *id1 = collection.createImageData(image);
     QCOMPARE(id1->hasCachedImage(), true);
@@ -45,7 +46,7 @@ void TestImageCollection::testGetImageImage()
     QCOMPARE(id3->hasCachedImage(), true);
     QCOMPARE(id1->key(), id3->key());
     QCOMPARE(id1->priv(), id3->priv());
-    QImage image2(KDESRCDIR "/logo-kpresenter.png");
+    QImage image2(QFINDTESTDATA("logo-kpresenter.png"));
     KoImageData *id4 = collection.createImageData(image2);
     QCOMPARE(id4->hasCachedImage(), true);
     QVERIFY(id1->key() != id4->key());
@@ -71,32 +72,10 @@ void TestImageCollection::testGetImageImage()
     delete id5;
 }
 
-void TestImageCollection::testGetExternalImage()
-{
-    KoImageCollection collection;
-    QUrl url = QUrl::fromLocalFile(KDESRCDIR "/logo-calligra.png");
-    KoImageData *id1 = collection.createExternalImageData(url);
-    QCOMPARE(id1->suffix(), QString("png"));
-    QCOMPARE(id1->hasCachedImage(), false);
-    KoImageData *id2 = collection.createExternalImageData(url);
-    QCOMPARE(id2->hasCachedImage(), false);
-    QCOMPARE(id1->priv(), id2->priv());
-    KoImageData *id3 = collection.createExternalImageData(url);
-    QCOMPARE(id1->key(), id3->key());
-    QCOMPARE(id1->priv(), id3->priv());
-    QUrl url2 = QUrl::fromLocalFile(KDESRCDIR "/logo-kpresenter.png");
-    KoImageData *id4 = collection.createExternalImageData(url2);
-    QCOMPARE(id4->hasCachedImage(), false);
-    QVERIFY(id1->key() != id4->key());
-    QCOMPARE(collection.size(), 2);
-    delete id4;
-    QCOMPARE(collection.size(), 1);
-}
-
 void TestImageCollection::testGetImageStore()
 {
     KoImageCollection collection;
-    KoStore *store = KoStore::createStore(KDESRCDIR "/store.zip", KoStore::Read);
+    KoStore *store = KoStore::createStore(QFINDTESTDATA("store.zip"), KoStore::Read);
     QString image("logo-calligra.jpg");
     KoImageData *id1 = collection.createImageData(image, store);
     QCOMPARE(id1->suffix(), QString("jpg"));
@@ -107,25 +86,6 @@ void TestImageCollection::testGetImageStore()
     QCOMPARE(id1->key(), id2->key());
     QCOMPARE(collection.count(), 1);
 
-    // opening the exact same file from either a KoStore or a "File://" url may
-    // naively make you think it should have the same key, but thats not the case.
-    // Opening a file from your local filesystem prioritizes over the url instead
-    // of on the content since if the user updates the image on his filesystem we
-    // want to data to be refreshed.  So the key is based on the url.
-    // Opening a KoStore based file we only have the content, and we always have to
-    // read the full content anyway due to the store being deleted soon after.
-    // So the key is based on the image data.
-    KoImageData *id3 = collection.createExternalImageData(image);
-    QCOMPARE(collection.count(), 2);
-    QVERIFY(id1->key() != id3->key());
-    QVERIFY(id1->priv() != id3->priv());
-    QString image2("logo-kpresenter.png");
-    KoImageData *id4 = collection.createExternalImageData(image2);
-    QCOMPARE(id4->hasCachedImage(), false);
-    QVERIFY(id1->key() != id4->key());
-    QCOMPARE(collection.count(), 3);
-    delete id4;
-    QCOMPARE(collection.count(), 2);
     delete store;
 }
 
@@ -199,31 +159,10 @@ void TestImageCollection::testPreload1()
     QCOMPARE(data.hasCachedImage(), true);
 }
 
-void TestImageCollection::testPreload2()
-{
-    KoImageData data;
-    QUrl url = QUrl::fromLocalFile(KDESRCDIR "/logo-calligra.png");
-    data.setExternalImage(url);
-
-    QCOMPARE(data.hasCachedImage(), false);
-    QCOMPARE(data.hasCachedPixmap(), false);
-    QPixmap pixmap = data.pixmap(QSize(40, 41));
-    QCOMPARE(data.hasCachedImage(), true);
-    QCOMPARE(pixmap.width(), 40);
-    QCOMPARE(pixmap.height(), 41);
-    QCOMPARE(data.hasCachedPixmap(), true);
-    QCOMPARE(data.hasCachedImage(), true);
-    QPixmap pixmap2 = data.pixmap(QSize(40, 41));
-    QCOMPARE(pixmap.cacheKey(), pixmap2.cacheKey());
-
-    QPixmap pixmap3 = data.pixmap();
-    QCOMPARE(pixmap.cacheKey(), pixmap3.cacheKey());
-}
-
 void TestImageCollection::testPreload3()
 {
     KoImageData data;
-    KoStore *store = KoStore::createStore(KDESRCDIR "/store.zip", KoStore::Read);
+    KoStore *store = KoStore::createStore(QFINDTESTDATA("store.zip"), KoStore::Read);
     QString image("logo-calligra.png");
     data.setImage(image, store);
 
@@ -254,7 +193,7 @@ void TestImageCollection::testPreload3()
 
 void TestImageCollection::testSameKey()
 {
-    KoStore *store = KoStore::createStore(KDESRCDIR "/store.zip", KoStore::Read);
+    KoStore *store = KoStore::createStore(QFINDTESTDATA("store.zip"), KoStore::Read);
     QString image("logo-calligra.png");
     KoImageData data;
     data.setImage(image, store);
@@ -264,7 +203,7 @@ void TestImageCollection::testSameKey()
 
     QCOMPARE(data.key(), data2.key());
 
-    QFile file(KDESRCDIR "/logo-calligra.png");
+    QFile file(QFINDTESTDATA("logo-calligra.png"));
     file.open(QIODevice::ReadOnly);
     QByteArray imageData = file.readAll();
     KoImageData data3;
@@ -272,16 +211,16 @@ void TestImageCollection::testSameKey()
     QCOMPARE(data.key(), data3.key());
     QCOMPARE(data2.key(), data3.key());
 
-    QImage qImage1(KDESRCDIR "/logo-calligra.png");
-    QImage qImage2(KDESRCDIR "/logo-calligra.png");
+    QImage qImage1(QFINDTESTDATA("logo-calligra.png"));
+    QImage qImage2(QFINDTESTDATA("logo-calligra.png"));
     KoImageData data4;
     data4.setImage(qImage1);
     KoImageData data5;
     data5.setImage(qImage2);
     QCOMPARE(data4.key(), data5.key());
 
-    QImage qImage3(KDESRCDIR "/logo-calligra-big.png");
-    QImage qImage4(KDESRCDIR "/logo-calligra-big.png");
+    QImage qImage3(QFINDTESTDATA("logo-calligra-big.png"));
+    QImage qImage4(QFINDTESTDATA("logo-calligra-big.png"));
     KoImageData data6;
     data6.setImage(qImage3);
     KoImageData data7;
@@ -307,5 +246,4 @@ void TestImageCollection::testIsValid()
     QCOMPARE(data.isValid(), false);
 }
 
-QTEST_KDEMAIN(TestImageCollection, GUI)
-#include <TestImageCollection.moc>
+QTEST_MAIN(TestImageCollection)

@@ -29,7 +29,7 @@
 // Local
 #include "SortDialog.h"
 
-// KSpread
+// Sheets
 #include "Map.h"
 #include "ui/Selection.h"
 #include "Sheet.h"
@@ -40,11 +40,11 @@
 
 #include <KoIcon.h>
 
-#include <kcomponentdata.h>
-
 // ui
 #include "ui_SortWidget.h"
 #include "ui_SortDetailsWidget.h"
+
+#include <KSharedConfig>
 
 // Qt
 #include <QStyledItemDelegate>
@@ -315,7 +315,7 @@ void SortDialog::Private::initCriteria(Qt::Orientation orientation, SortDialog *
 
 
 SortDialog::SortDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
         , d(new Private(this))
 {
     d->selection = selection;
@@ -382,7 +382,7 @@ void SortDialog::init()
     ',' + i18n("Thursday") + ',' + i18n("Friday") + ',' + i18n("Saturday") +
     ',' + i18n("Sunday");
 
-    KSharedConfigPtr config = KGlobal::activeComponent().config();
+    KSharedConfigPtr config = KSharedConfig::openConfig();
     const QStringList other = config->group("Parameters").readEntry("Other list", QStringList());
     QString tmp;
     for (QStringList::ConstIterator it = other.begin(); it != other.end(); ++it) {
@@ -511,7 +511,7 @@ void SortDialog::accept()
     command->execute(d->selection->canvas());
 
     d->selection->emitModified();
-    KDialog::accept();
+    KoDialog::accept();
 }
 
 void SortDialog::slotButtonClicked(int button)
@@ -521,7 +521,7 @@ void SortDialog::slotButtonClicked(int button)
         const Qt::Orientation orientation = horizontal ? Qt::Vertical : Qt::Horizontal;
         d->initCriteria(orientation, this);
     }
-    KDialog::slotButtonClicked(button);
+    KoDialog::slotButtonClicked(button);
 }
 
 void SortDialog::useHeaderChanged(bool enable)
@@ -694,5 +694,3 @@ void SortDialog::moveCriterionDown()
     }
     itemSelectionChanged();
 }
-
-#include "SortDialog.moc"

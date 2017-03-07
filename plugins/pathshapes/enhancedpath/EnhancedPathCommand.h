@@ -47,7 +47,7 @@ public:
     QString toString() const;
 private:
     /// Returns a list of points, created from the parameter list
-    QList<QPointF> pointsFromParameters();
+    QVector<QPointF> pointsFromParameters() const;
     /// Calculates angle from given point
     qreal angleFromPoint(const QPointF &point) const;
     /// Returns sweep angle from start to stop and given direction

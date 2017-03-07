@@ -113,8 +113,8 @@ public:
 
     int queryClose( Part *part );
 
-    KUrl extractFile( const Document *doc );
-    KUrl extractFile( const Document *doc, KoStore *store );
+    QUrl extractFile( const Document *doc );
+    QUrl extractFile( const Document *doc, KoStore *store );
 
     QString id() const;
 
@@ -123,7 +123,7 @@ public:
     WorkPackageSettings &settings() { return m_settings; }
     void setSettings( const WorkPackageSettings &settings );
 
-    QMap<const Document*, KUrl> newDocuments() const { return m_newdocs; }
+    QMap<const Document*, QUrl> newDocuments() const { return m_newdocs; }
     void removeNewDocument( const Document *doc ) { m_newdocs.remove( doc ); }
 
 Q_SIGNALS:
@@ -150,7 +150,7 @@ protected:
     QString m_filePath;
     bool m_fromProjectStore;
     QList<DocumentChild*> m_childdocs;
-    QMap<const Document*, KUrl> m_newdocs; // new documents that does not exists in the project store (yet)
+    QMap<const Document*, QUrl> m_newdocs; // new documents that does not exists in the project store (yet)
 
     bool m_modified;
 

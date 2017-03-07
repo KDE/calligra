@@ -271,10 +271,12 @@ Value ValueConverter::asString(const Value &value) const
     case Value::Empty:
         val = Value(QString());
         break;
-    case Value::Boolean:
-        val = Value(value.asBoolean() ? ki18n("True").toString(m_parser->settings()->locale()) :
-                    ki18n("False").toString(m_parser->settings()->locale()));
+    case Value::Boolean: {
+        const QStringList localeCodes(m_parser->settings()->locale()->country());
+        val = Value(value.asBoolean() ? ki18n("True").toString(localeCodes) :
+                    ki18n("False").toString(localeCodes));
         break;
+    }
     case Value::Integer: {
         fmt = value.format();
         if (fmt == Value::fmt_Percent)
@@ -284,7 +286,7 @@ Value ValueConverter::asString(const Value &value) const
         else if (fmt == Value::fmt_Date)
             val = Value(m_parser->settings()->locale()->formatDate(value.asDate(settings())));
         else if (fmt == Value::fmt_Time)
-            val = Value(m_parser->settings()->locale()->formatTime(value.asTime(settings())));
+            val = Value(m_parser->settings()->locale()->formatTime(value.asTime()));
         else
             val = Value(QString::number(value.asInteger()));
     }
@@ -296,7 +298,7 @@ Value ValueConverter::asString(const Value &value) const
         else if (fmt == Value::fmt_Date)
             val = Value(m_parser->settings()->locale()->formatDate(value.asDate(settings()), KLocale::ShortDate));
         else if (fmt == Value::fmt_Time)
-            val = Value(m_parser->settings()->locale()->formatTime(value.asTime(settings())));
+            val = Value(m_parser->settings()->locale()->formatTime(value.asTime()));
         else {
             //convert the number, change decimal point from English to local
             s = QString::number(numToDouble(value.asFloat()), 'g', 10);
@@ -315,7 +317,7 @@ Value ValueConverter::asString(const Value &value) const
         else if (fmt == Value::fmt_Date)
             val = Value(m_parser->settings()->locale()->formatDate(value.asDate(settings()), KLocale::ShortDate));
         else if (fmt == Value::fmt_Time)
-            val = Value(m_parser->settings()->locale()->formatTime(value.asTime(settings())));
+            val = Value(m_parser->settings()->locale()->formatTime(value.asTime()));
         else {
             //convert the number, change decimal point from English to local
             const QString decimalSymbol = m_parser->settings()->locale()->decimalSymbol();
@@ -449,11 +451,11 @@ Value ValueConverter::asTime(const Value &value, bool* ok) const
 
     switch (value.type()) {
     case Value::Empty:
-        val = Value(QTime::currentTime(), settings());
+        val = Value(QTime::currentTime());
         break;
     case Value::Boolean:
         //ignore the bool value... any better idea? ;)
-        val = Value(QTime::currentTime(), settings());
+        val = Value(QTime::currentTime());
         break;
     case Value::Integer:
     case Value::Float:
@@ -518,5 +520,5 @@ QDate ValueConverter::toDate(const Value& value) const
 
 QTime ValueConverter::toTime(const Value& value) const
 {
-    return asTime(value).asTime(settings());
+    return asTime(value).asTime();
 }

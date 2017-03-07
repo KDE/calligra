@@ -59,14 +59,14 @@ void InitialsCommentShape::paint(QPainter& painter, const KoViewConverter& conve
     const QBrush brush(gradient);
     painter.setBrush(brush);
 
-    painter.setPen(Qt::black);
+    painter.setPen(QPen(Qt::black, 0));
 
     painter.drawRect(QRectF(initialsBoxPoint, initialsBoxSize));
 
     painter.drawText(QRectF(initialsBoxPoint, initialsBoxSize), Qt::AlignCenter, m_initials);
 }
 
-void InitialsCommentShape::setInitials(QString initials)
+void InitialsCommentShape::setInitials(const QString &initials)
 {
     m_initials = initials;
 }

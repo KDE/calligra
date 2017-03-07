@@ -26,7 +26,7 @@
 #include <KoOdfGraphicStyles.h>
 #include <KoShapeSavingContext.h>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #include <QSharedPointer>
 #include <QBrush>
@@ -65,6 +65,8 @@ KoGradientBackground::KoGradientBackground(const QGradient & gradient, const QTr
 
 KoGradientBackground::~KoGradientBackground()
 {
+    Q_D(KoGradientBackground);
+    delete d->gradient;
 }
 
 void KoGradientBackground::setTransform(const QTransform &matrix)

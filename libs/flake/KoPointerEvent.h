@@ -44,6 +44,8 @@ struct KoTouchPoint
 
 };
 
+Q_DECLARE_TYPEINFO(KoTouchPoint, Q_MOVABLE_TYPE);
+
 /**
  * KoPointerEvent is a synthetic event that can be built from a mouse,
  * touch or tablet event. In addition to always providing tools with tablet
@@ -93,7 +95,7 @@ public:
      * @param point the zoomed point of the primary touch event in the normal coordinate system.
      * @param touchpoints the zoomed points of the touch event in the normal coordinate system.
      */
-    KoPointerEvent(QTouchEvent *event, const QPointF &point, QList<KoTouchPoint> _touchPoints);
+    KoPointerEvent(QTouchEvent *event, const QPointF &point, const QVector<KoTouchPoint> &_touchPoints);
 
     /**
      * Constructor.
@@ -245,7 +247,7 @@ public:
     /// The point in document coordinates.
     const QPointF point;
 
-    const QList<KoTouchPoint> touchPoints;
+    const QVector<KoTouchPoint> touchPoints;
     /**
      * Returns if the event comes from a tablet
      */

@@ -22,8 +22,7 @@
 #include "ui_KoDetailsPaneBase.h"
 
 class QEvent;
-class KComponentData;
-class KUrl;
+class QUrl;
 class QStandardItemModel;
 
 class KoDetailsPanePrivate;
@@ -33,10 +32,8 @@ class KoDetailsPane : public QWidget, public Ui_KoDetailsPaneBase
     Q_OBJECT
 
 public:
-    KoDetailsPane(QWidget* parent, const KComponentData &_componentData, const QString& header);
+    KoDetailsPane(QWidget* parent, const QString& header);
     virtual ~KoDetailsPane();
-
-    KComponentData componentData() const;
 
     virtual bool eventFilter(QObject* watched, QEvent* e);
 
@@ -45,7 +42,7 @@ public:
 
 Q_SIGNALS:
     /// Emitted when a file is requested to be opened
-    void openUrl(const KUrl&);
+    void openUrl(const QUrl&);
 
     /// This is used to keep all splitters in different details panes synced
     void splitterResized(KoDetailsPane* sender, const QList<int>& sizes);

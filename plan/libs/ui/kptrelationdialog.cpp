@@ -23,9 +23,8 @@
 #include "kptproject.h"
 #include "kptcommand.h"
 
+#include <KLocalizedString>
 
-#include <klocale.h>
-#include <kdebug.h>
 
 namespace KPlato
 {
@@ -34,14 +33,14 @@ RelationPanel::RelationPanel(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
-    lagLabel->setText( i18nc( "@label:spinbox Time lag", "Lag:" ) );
-    QString tt = i18nc( "@info:tooltip", "<emphasis>Lag</emphasis> is the time the dependent task is delayed" );
+    lagLabel->setText( xi18nc( "@label:spinbox Time lag", "Lag:" ) );
+    QString tt = xi18nc( "@info:tooltip", "<emphasis>Lag</emphasis> is the time the dependent task is delayed" );
     lagLabel->setToolTip( tt );
     lag->setToolTip( tt );
 }
     
 AddRelationDialog::AddRelationDialog(Project &project, Relation *rel, QWidget *p, const QString& caption, ButtonCodes buttons)
-    : KDialog(p),
+    : KoDialog(p),
     m_project( project ),
     m_relation( rel ),
     m_deleterelation( true )
@@ -51,7 +50,7 @@ AddRelationDialog::AddRelationDialog(Project &project, Relation *rel, QWidget *p
     setDefaultButton( Ok );
     showButtonSeparator( true );
     if ( caption.isEmpty() ) {
-        setCaption( i18nc( "@title:window", "Add Dependency" ) );
+        setCaption( xi18nc( "@title:window", "Add Dependency" ) );
     }
     m_relation = rel;
     m_panel = new RelationPanel(this);
@@ -107,17 +106,17 @@ void AddRelationDialog::slotOk() {
     accept();
 }
 void AddRelationDialog::slotFinishStartToggled(bool ch) {
-    //kDebug(planDbg())<<ch;
+    //debugPlan<<ch;
     if (ch && m_relation->type() != Relation::FinishStart)
         enableButtonOk(true);
 }
 void AddRelationDialog::slotFinishFinishToggled(bool ch) {
-    //kDebug(planDbg())<<ch;
+    //debugPlan<<ch;
     if (ch && m_relation->type() != Relation::FinishFinish)
         enableButtonOk(true);
 }
 void AddRelationDialog::slotStartStartToggled(bool ch) {
-    //kDebug(planDbg())<<ch;
+    //debugPlan<<ch;
     if (ch && m_relation->type() != Relation::StartStart)
         enableButtonOk(true);
 }
@@ -143,11 +142,11 @@ int AddRelationDialog::selectedRelationType() const {
 //////////////////
 
 ModifyRelationDialog::ModifyRelationDialog(Project &project, Relation *rel, QWidget *p)
-    : AddRelationDialog(project, rel, p, i18nc( "@title:window", "Edit Dependency"), Ok|Cancel|User1)
+    : AddRelationDialog(project, rel, p, xi18nc( "@title:window", "Edit Dependency"), Ok|Cancel|User1)
 {
     m_deleterelation = false;
 
-    setButtonText( KDialog::User1, i18nc( "@action:button", "Delete") );
+    setButtonText( KoDialog::User1, xi18nc( "@action:button", "Delete") );
     m_deleted = false;
     enableButtonOk(false);
     
@@ -182,7 +181,7 @@ MacroCommand *ModifyRelationDialog::buildCommand() {
             cmd = new MacroCommand( s );
         cmd->addCommand(new ModifyRelationTypeCmd(m_relation, (Relation::Type)(selectedRelationType())));
         
-        //kDebug(planDbg())<<m_panel->relationType->selectedId();
+        //debugPlan<<m_panel->relationType->selectedId();
     }
     Duration d(m_panel->lag->value(), m_panel->lag->unit());
     if (m_relation->lag() != d) {
@@ -194,5 +193,3 @@ MacroCommand *ModifyRelationDialog::buildCommand() {
 }
 
 }  //KPlato namespace
-
-#include "kptrelationdialog.moc"

@@ -28,8 +28,6 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
-#include <klocale.h>
-
 // used by the CONVERT function
 #include <QMap>
 
@@ -95,7 +93,7 @@ Value func_oct2bin(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_oct2hex(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("engineering", EngineeringModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadengineeringmodule.json", EngineeringModule)
 
 
 EngineeringModule::EngineeringModule(QObject* parent, const QVariantList&)
@@ -103,7 +101,7 @@ EngineeringModule::EngineeringModule(QObject* parent, const QVariantList&)
 {
     Function *f;
 
-    f = new Function("BASE",        func_base);     // KSpread-specific, like in Quattro-Pro
+    f = new Function("BASE",        func_base);     // Calligra Sheets-specific, like in Quattro-Pro
     f->setParamCount(1, 3);
     add(f);
     f = new Function("BESSELI",     func_besseli);
@@ -1520,4 +1518,4 @@ Value func_gestep(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(result);
 }
 
-#include "EngineeringModule.moc"
+#include "engineering.moc"

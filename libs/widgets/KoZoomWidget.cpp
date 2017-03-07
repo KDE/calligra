@@ -25,7 +25,7 @@
 #include <QToolButton>
 #include <QBoxLayout>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KoZoomInput.h"
 #include "KoIcon.h"
@@ -57,7 +57,7 @@ KoZoomWidget::KoZoomWidget(QWidget* parent, KoZoomAction::SpecialButtons special
     layout->setSpacing(0);
 
     d->input = new KoZoomInput(this);
-    connect(d->input, SIGNAL(zoomLevelChanged(const QString&)), this, SIGNAL(zoomLevelChanged(const QString&)));
+    connect(d->input, SIGNAL(zoomLevelChanged(QString)), this, SIGNAL(zoomLevelChanged(QString)));
     layout->addWidget(d->input);
 
     d->slider = new QSlider(Qt::Horizontal);
@@ -132,5 +132,3 @@ void KoZoomWidget::setAspectMode(bool status)
         d->aspectButton->blockSignals(false);
     }
 }
-
-#include "KoZoomWidget.moc"

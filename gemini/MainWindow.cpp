@@ -20,33 +20,32 @@
  */
 
 #include "MainWindow.h"
+#include <QHBoxLayout>
 #include "desktopviewproxy.h"
 
 #include <QApplication>
 #include <QResizeEvent>
-#include <QDeclarativeView>
-#include <QDeclarativeContext>
-#include <QDeclarativeEngine>
+#include <QQuickView>
+#include <QQmlContext>
+#include <QQmlEngine>
 #include <QGraphicsObject>
 #include <QDir>
 #include <QFile>
 #include <QMessageBox>
 #include <QToolButton>
-#include <QDesktopServices>
+#include <QMenuBar>
+#include <QAction>
 #include <QDesktopWidget>
 #include <QFileInfo>
-#include <QGLWidget>
+#include <QUrl>
+#include <QStandardPaths>
 
-#include <kcmdlineargs.h>
-#include <kurl.h>
-#include <kstandarddirs.h>
+#include <kiconloader.h>
 #include <kactioncollection.h>
-#include <kaboutdata.h>
 #include <ktoolbar.h>
 #include <kmessagebox.h>
-#include <kmenubar.h>
 #include <KConfigGroup>
-#include <kdialog.h>
+#include <KSharedConfig>
 
 #include <gemini/ViewModeSwitchEvent.h>
 #include <KoCanvasBase.h>
@@ -65,9 +64,11 @@
 #include <KoAbstractGradient.h>
 #include <KoZoomController.h>
 #include <KoFileDialog.h>
+#include <KoDialog.h>
+#include <KoIcon.h>
+#include <KoConfig.h> // CALLIGRA_OLD_PLUGIN_METADATA
 
 #include "PropertyContainer.h"
-#include "TouchDeclarativeView.h"
 #include "RecentFileManager.h"
 #include "DocumentManager.h"
 #include "QmlGlobalEngine.h"
@@ -102,9 +103,10 @@ public:
         , desktopView(0)
         , currentView(0)
         , settings(0)
-        , slateMode(false)
+        , slateMode(true)
         , docked(false)
         , touchKoView(0)
+        , touchEventReceiver(0)
         , desktopKoView(0)
         , desktopViewProxy(0)
         , forceDesktop(false)
@@ -126,7 +128,8 @@ public:
     }
     MainWindow* q;
     bool allowClose;
-    TouchDeclarativeView* touchView;
+    QWidget* touchWidget;
+    QQuickView* touchView;
     QPointer<KoMainWindow> desktopView;
     QObject* currentView;
     Settings *settings;
@@ -135,6 +138,7 @@ public:
     bool docked;
     QString currentTouchPage;
     KoView* touchKoView;
+    QObject* touchEventReceiver;
     KoView* desktopKoView;
     DesktopViewProxy* desktopViewProxy;
 
@@ -143,15 +147,15 @@ public:
     bool temporaryFile;
     ViewModeSynchronisationObject* syncObject;
 
-    KAction* toDesktop;
-    KAction* toTouch;
+    QAction* toDesktop;
+    QAction* toTouch;
     QToolButton* switcher;
     QAction* alternativeSaveAction;
     QTimer* fullScreenThrottle;
 
     void initTouchView(QObject* parent)
     {
-        touchView = new TouchDeclarativeView();
+        touchView = new QQuickView();
         QmlGlobalEngine::instance()->setEngine(touchView->engine());
         touchView->engine()->addImageProvider(QLatin1String("recentimage"), new RecentImageImageProvider);
         touchView->engine()->rootContext()->setContextProperty("mainWindow", parent);
@@ -179,18 +183,13 @@ public:
         // for now, the app in bin/ and we still use the env.bat script
         appdir.cdUp();
 
+        // QT5TODO: adapt to QML_IMPORT_PATH usage and install to ${QML_INSTALL_DIR}
         touchView->engine()->addImportPath(appdir.canonicalPath() + "/imports");
         touchView->engine()->addImportPath(appdir.canonicalPath() + "/lib/calligra/imports");
         touchView->engine()->addImportPath(appdir.canonicalPath() + "/lib64/calligra/imports");
         QString mainqml = appdir.canonicalPath() + "/share/apps/calligragemini/calligragemini.qml";
 #else
-        QStringList dirs = KGlobal::dirs()->findDirs("lib", "calligra/imports");
-        if(dirs.length() < 1) {
-            KMessageBox::sorry(q, i18n("The Calligra Qt Quick components were not found. This means your installation is broken."));
-        } else {
-            touchView->engine()->addImportPath(dirs.value(0));
-        }
-        QString mainqml = KGlobal::dirs()->findResource("data", "calligragemini/calligragemini.qml");
+        QString mainqml = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("calligragemini/calligragemini.qml"));
 #endif
 
         Q_ASSERT(QFile::exists(mainqml));
@@ -200,16 +199,16 @@ public:
         QFileInfo fi(mainqml);
 
         touchView->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
-        touchView->setResizeMode( QDeclarativeView::SizeRootObjectToView );
+        touchView->setResizeMode( QQuickView::SizeRootObjectToView );
 
-        toDesktop = new KAction(q);
+        toDesktop = new QAction(q);
         toDesktop->setEnabled(true);
         toDesktop->setText(tr("Switch to Desktop"));
         // useful for monkey-testing to crash...
         //toDesktop->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
         //q->addAction(toDesktop);
-        //connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchDesktopForced()));
-        connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchToDesktop()));
+        //connect(toDesktop, SIGNAL(triggered(bool)), q, SLOT(switchDesktopForced()));
+        connect(toDesktop, SIGNAL(triggered(bool)), q, SLOT(switchToDesktop()));
         touchView->engine()->rootContext()->setContextProperty("switchToDesktopAction", toDesktop);
     }
 
@@ -224,7 +223,7 @@ public:
         KoGlobal::initialize();
 
         // The default theme is not what we want for Gemini
-        KConfigGroup group(KGlobal::config(), "theme");
+        KConfigGroup group(KSharedConfig::openConfig(), "theme");
         if(group.readEntry("Theme", "no-theme-is-set") == QLatin1String("no-theme-is-set")) {
             group.writeEntry("Theme", "Krita-dark");
         }
@@ -241,10 +240,10 @@ public:
             return;
         }
 
-        toTouch = new KAction(desktopView);
+        toTouch = new QAction(desktopView);
         toTouch->setEnabled(false);
         toTouch->setText(tr("Switch to Touch"));
-        toTouch->setIcon(QIcon::fromTheme("system-reboot"));
+        toTouch->setIcon(koIcon("system-reboot"));
         toTouch->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
         //connect(toTouch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchTouchForced()));
         connect(toTouch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchToTouch()));
@@ -252,7 +251,7 @@ public:
         switcher = new QToolButton();
         switcher->setEnabled(false);
         switcher->setText(tr("Switch to Touch"));
-        switcher->setIcon(QIcon::fromTheme("system-reboot"));
+        switcher->setIcon(koIcon("system-reboot"));
         switcher->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         //connect(switcher, SIGNAL(clicked(bool)), q, SLOT(switchDesktopForced()));
         connect(switcher, SIGNAL(clicked(bool)), q, SLOT(switchToTouch()));
@@ -291,7 +290,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qApp->setActiveWindow( this );
 
     setWindowTitle(i18n("Calligra Gemini"));
-    setWindowIcon(KIcon("calligragemini"));//gemini"));
+    setWindowIcon(koIcon("calligragemini"));//gemini"));
 
     foreach(const QString &fileName, fileNames) {
         DocumentManager::instance()->recentFileManager()->addRecent( QDir::current().absoluteFilePath( fileName ) );
@@ -317,18 +316,18 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
 void MainWindow::resetWindowTitle()
 {
-    KUrl url(DocumentManager::instance()->settingsManager()->currentFile());
+    QUrl url(DocumentManager::instance()->settingsManager()->currentFile());
     QString fileName = url.fileName();
-    if(url.protocol() == "temp")
+    if(url.scheme() == "temp")
         fileName = i18n("Untitled");
 
-    KDialog::CaptionFlags flags = KDialog::HIGCompliantCaption;
+    KoDialog::CaptionFlags flags = KoDialog::HIGCompliantCaption;
     KoDocument* document = DocumentManager::instance()->document();
     if (document && document->isModified() ) {
-        flags |= KDialog::ModifiedCaption;
+        flags |= KoDialog::ModifiedCaption;
     }
 
-    setWindowTitle( KDialog::makeStandardCaption(fileName, this, flags) );
+    setWindowTitle( KoDialog::makeStandardCaption(fileName, this, flags) );
 }
 
 void MainWindow::switchDesktopForced()
@@ -370,7 +369,16 @@ void MainWindow::switchToTouch()
         d->desktopView->setParent(0);
     }
 
-    setCentralWidget(d->touchView);
+    QWidget* container = QWidget::createWindowContainer(d->touchView);
+    d->touchWidget = new QWidget();
+    d->touchWidget->setLayout(new QVBoxLayout());
+    d->touchWidget->layout()->setContentsMargins(0,0,0,0);
+    d->touchWidget->layout()->setSpacing(0);
+    d->touchWidget->layout()->addWidget(container);
+    setCentralWidget(d->touchWidget);
+    qApp->processEvents();
+    d->touchView->setVisible(true);
+    resize(size());
     emit switchedToTouch();
 
     if (d->slateMode) {
@@ -385,7 +393,7 @@ void MainWindow::switchToTouch()
 
 void MainWindow::touchChange()
 {
-    if (centralWidget() != d->touchView || !d->syncObject)
+    if (centralWidget() != d->touchWidget || !d->syncObject)
         return;
 
     if (d->desktopView)
@@ -400,7 +408,7 @@ void MainWindow::touchChange()
         //Notify the new view that we just switched to it, passing our synchronisation object
         //so it can use those values to sync with the old view.
         ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToTouchModeEvent, view, d->touchView, d->syncObject);
-        QApplication::sendEvent(d->touchView, &switchedEvent);
+        QApplication::sendEvent(d->touchEventReceiver, &switchedEvent);
         d->syncObject = 0;
         qApp->processEvents();
     }
@@ -429,13 +437,18 @@ void MainWindow::switchToDesktop()
     //Notify the view we are switching away from that we are about to switch away from it
     //giving it the possibility to set up the synchronisation object.
     ViewModeSwitchEvent aboutToSwitchEvent(ViewModeSwitchEvent::AboutToSwitchViewModeEvent, d->touchView, view, syncObject);
-    QApplication::sendEvent(d->touchView, &aboutToSwitchEvent);
+    QApplication::sendEvent(d->touchEventReceiver, &aboutToSwitchEvent);
     qApp->processEvents();
 
     if (d->currentTouchPage == "MainPage")
     {
+        d->touchWidget->setParent(0);
         d->touchView->setParent(0);
+        d->touchView->setVisible(false);
         setCentralWidget(d->desktopView);
+        if(d->touchWidget) {
+            d->touchWidget = 0;
+        }
     }
 
     if (view) {
@@ -458,6 +471,7 @@ void MainWindow::setDocAndPart(QObject* document, QObject* part)
         disconnect(DocumentManager::instance()->document(), SIGNAL(modified(bool)), this, SLOT(resetWindowTitle()));
     }
     DocumentManager::instance()->setDocAndPart(qobject_cast<KoDocument*>(document), qobject_cast<KoPart*>(part));
+    d->touchEventReceiver = d->touchView->rootObject()->findChild<QQuickItem*>("controllerItem");
     if(DocumentManager::instance()->document()) {
         connect(DocumentManager::instance()->document(), SIGNAL(modified(bool)), this, SLOT(resetWindowTitle()));
     }
@@ -582,22 +596,39 @@ void MainWindow::enableAltSaveAction()
 
 void MainWindow::openFile()
 {
+    QStringList mimeFilter;
+
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(WORDS_MIME_TYPE);
-    KService::Ptr service = entry.service();
-    QStringList mimeFilter = KoFilterManager::mimeFilter(WORDS_MIME_TYPE,
-                                                               KoFilterManager::Import,
-                                                               service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
+    if (!entry.isEmpty()) {
+        QJsonObject json = entry.metaData();
+#ifdef CALLIGRA_OLD_PLUGIN_METADATA
+        QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+#else
+        QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
+#endif
+
+        mimeFilter << KoFilterManager::mimeFilter(WORDS_MIME_TYPE,
+                                                  KoFilterManager::Import,
+                                                  mimeTypes);
+    }
     entry = KoDocumentEntry::queryByMimeType(STAGE_MIME_TYPE);
-    service = entry.service();
-    mimeFilter << KoFilterManager::mimeFilter(STAGE_MIME_TYPE,
-                                              KoFilterManager::Import,
-                                              service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
+    if (!entry.isEmpty()) {
+        QJsonObject json = entry.metaData();
+#ifdef CALLIGRA_OLD_PLUGIN_METADATA
+        QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+#else
+        QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
+#endif
+        mimeFilter << KoFilterManager::mimeFilter(STAGE_MIME_TYPE,
+                                                  KoFilterManager::Import,
+                                                  mimeTypes);
+    }
 
     KoFileDialog dialog(d->desktopView, KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Open Document"));
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+    dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     dialog.setMimeTypeFilters(mimeFilter);
-    QString filename = dialog.url();
+    QString filename = dialog.filename();
     if(!filename.isEmpty()) {
         QMetaObject::invokeMethod(d->touchView->rootObject(), "openFile", Q_ARG(QVariant, filename));
     }
@@ -660,7 +691,7 @@ void MainWindow::resourceChanged(int key, const QVariant& v)
 {
     Q_UNUSED(key)
     Q_UNUSED(v)
-    if(centralWidget() == d->touchView)
+    if(centralWidget() == d->touchWidget)
         return;
 }
 
@@ -837,5 +868,3 @@ void MainWindow::Private::notifyDockingModeChange()
     }
 #endif
 }
-
-#include "MainWindow.moc"

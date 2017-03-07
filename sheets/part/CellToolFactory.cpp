@@ -20,7 +20,7 @@
 // Local
 #include "CellToolFactory.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <KoIcon.h>
 #include "CellTool.h"
@@ -31,7 +31,7 @@ CellToolFactory::CellToolFactory(const QString& id)
         : KoToolFactoryBase(id)
 {
     setToolTip(i18n("Cell formatting"));
-    setIconName(koIconNameCStr("tool_cellformatting"));
+    setIconName(koIconName("tool_cellformatting"));
     setToolType(dynamicToolType()+",calligrasheets");
     setPriority(0);
     setActivationShapeId("flake/always");

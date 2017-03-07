@@ -123,7 +123,7 @@ Q_SIGNALS:
      * Emitted whenever a match is found. The argument is the first
      * match if there are more then one.
      */
-    void matchFound(KoFindMatch match);
+    void matchFound(const KoFindMatch &match);
     /**
      * Emitted when the canvas should be redrawn due to a change in
      * the underlying list of matches.

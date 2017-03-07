@@ -23,8 +23,7 @@
 #include <QRegExp>
 #include <QStringList>
 
-#include <kdebug.h>
-
+#include "SheetsDebug.h"
 #include "Cell.h"
 #include "calligra_sheets_limits.h"
 #include "Map.h"
@@ -147,7 +146,7 @@ Region::Region(const QRect& rect, Sheet* sheet)
 
     Q_ASSERT(!rect.isNull());
     if (rect.isNull()) {
-        kError(36001) << "Region::Region(const QRect&): QRect is empty!" << endl;
+        errorSheets << "Region::Region(const QRect&): QRect is empty!" << endl;
         return;
     }
     add(rect, sheet);
@@ -159,7 +158,7 @@ Region::Region(const QPoint& point, Sheet* sheet)
 
     Q_ASSERT(!point.isNull());
     if (point.isNull()) {
-        kError(36001) << "Region::Region(const QPoint&): QPoint is empty!" << endl;
+        errorSheets << "Region::Region(const QPoint&): QPoint is empty!" << endl;
         return;
     }
     add(point, sheet);
@@ -169,9 +168,7 @@ Region::Region(const Region& list)
 {
     d = new Private();
     d->map = list.d->map;
-#if QT_VERSION >= 0x040700
     d->cells.reserve(list.d->cells.size());
-#endif
     ConstIterator end(list.d->cells.constEnd());
     for (ConstIterator it = list.d->cells.constBegin(); it != end; ++it) {
         Element *element = *it;
@@ -191,7 +188,7 @@ Region::Region(int x, int y, Sheet* sheet)
 
     Q_ASSERT(isValid(QPoint(x, y)));
     if (!isValid(QPoint(x, y))) {
-        kError(36001) << "Region::Region(" << x << ", " << y << "): Coordinates are invalid!" << endl;
+        errorSheets << "Region::Region(" << x << ", " << y << "): Coordinates are invalid!" << endl;
         return;
     }
     add(QPoint(x, y), sheet);
@@ -203,7 +200,7 @@ Region::Region(int x, int y, int width, int height, Sheet* sheet)
 
     Q_ASSERT(isValid(QRect(x, y, width, height)));
     if (!isValid(QRect(x, y, width, height))) {
-        kError(36001) << "Region::Region(" << x << ", " << y << ", " << width << ", " << height << "): Dimensions are invalid!" << endl;
+        errorSheets << "Region::Region(" << x << ", " << y << ", " << width << ", " << height << "): Dimensions are invalid!" << endl;
         return;
     }
     add(QRect(x, y, width, height), sheet);
@@ -811,214 +808,6 @@ bool Region::isValid(const QRect& rect)
         return false;
     else
         return true;
-}
-
-static void append(const QChar *from, const QChar *to, QChar **dest)
-{
-    while (from < to) {
-        **dest = *from;
-        ++from;
-        ++*dest;
-    }
-}
-
-// static
-void Region::loadOdf(const QChar *&data, const QChar *&end, QChar *&out)
-{
-    enum { Start, InQuotes } state = Start;
-
-    if (*data == QChar('$', 0)) {
-        ++data;
-    }
-
-    bool isRange = false;
-
-    const QChar *pos = data;
-    while (data < end) {
-        switch (state) {
-        case Start:
-            switch (data->unicode()) {
-            case '\'': // quoted sheet name or named area
-                state = InQuotes;
-                break;
-            case '.': // sheet name separator
-                if (pos != data && !isRange) {
-                    append(pos, data, &out);
-                    *out = QChar('!', 0);
-                    ++out;
-                }
-                pos = data;
-                ++pos;
-                break;
-            case ':': { // cell separator
-                isRange = true;
-                append(pos, data, &out);
-                *out = *data; // append :
-                ++out;
-                const QChar * next = data + 1;
-                if (!next->isNull()) {
-                    const QChar * nextnext = next + 1;
-                    if (!nextnext->isNull() && *next == QChar('$', 0) && *nextnext != QChar('.', 0)) {
-                        ++data;
-                    }
-                }
-                pos = data + 1;
-            }   break;
-            case ' ': // range separator
-                append(pos, data, &out);
-                *out = QChar(';', 0);
-                ++out;
-                pos = data;
-                break;
-            default:
-                break;
-            }
-            break;
-        case InQuotes:
-            if (data->unicode() == '\'') {
-                // an escaped apostrophe?
-                // As long as Calligra Sheets does not support fixed sheets eat the dollar sign.
-                const QChar * next = data + 1;
-                if (!next->isNull() && *next == QChar('\'', 0)) {
-                    ++data;
-                }
-                else { // the end
-                    state = Start;
-                }
-            }
-            break;
-        }
-        ++data;
-    }
-    append(pos, data, &out);
-}
-
-// static
-QString Region::loadOdf(const QString& expression)
-{
-    QString result;
-    QString temp;
-    bool isRange = false;
-    enum { Start, InQuotes } state = Start;
-    int i = 0;
-    // NOTE Stefan: As long as KSpread does not support fixed sheets eat the dollar sign.
-    if (expression[i] == '$')
-        ++i;
-    while (i < expression.count()) {
-        switch (state) {
-        case Start: {
-            if (expression[i] == '\'') { // quoted sheet name or named area
-                temp.append(expression[i]);
-                state = InQuotes;
-            } else if (expression[i] == '.') { // sheet name separator
-                // was there already a sheet name?
-                if (!temp.isEmpty() && !isRange) {
-                    result.append(temp);
-                    result.append('!');
-                }
-                temp.clear();
-            } else if (expression[i] == ':') { // cell separator
-                isRange = true;
-                result.append(temp);
-                result.append(':');
-                temp.clear();
-                // NOTE Stefan: As long as KSpread does not support fixed sheets eat the dollar sign.
-                if (i + 2 < expression.count() && expression[i+1] == '$' && expression[i+2] != '.')
-                    ++i;
-            } else if (expression[i] == ' ') { // range separator
-                result.append(temp);
-                result.append(';');
-                temp.clear();
-            } else
-                temp.append(expression[i]);
-            ++i;
-            break;
-        }
-        case InQuotes: {
-            temp.append(expression[i]);
-            if (expression[i] == '\'') {
-                // an escaped apostrophe?
-                if (i + 1 < expression.count() && expression[i+1] == '\'')
-                    ++i; // eat it
-                else // the end
-                    state = Start;
-            }
-            ++i;
-            break;
-        }
-        }
-    }
-    return result + temp;
-}
-
-// static
-QString Region::saveOdf(const QString& expression)
-{
-    QString result;
-    QString sheetName;
-    QString temp;
-    enum { Start, InQuotes } state = Start;
-    int i = 0;
-    while (i < expression.count()) {
-        switch (state) {
-        case Start: {
-            if (expression[i] == '\'') {
-                temp.append(expression[i]);
-                state = InQuotes;
-            } else if (expression[i] == '!') { // sheet name separator
-                // There has to be a sheet name.
-                if (temp.isEmpty())
-                    return expression; // error
-                if (temp.count() > 2 && (temp[0] != '\'' && temp[temp.count()-1] != '\'')) {
-                    temp.replace('\'', "''");
-                    if (temp.contains(' ') || temp.contains('.') ||
-                            temp.contains(';') || temp.contains('!') ||
-                            temp.contains('$') || temp.contains(']'))
-                        temp = '\'' + temp + '\'';
-                }
-                sheetName = temp;
-                result.append(temp);
-                result.append('.');
-                temp.clear();
-            } else if (expression[i] == ':') { // cell separator
-                if (result.isEmpty())
-                    result = '.';
-                result.append(temp);
-                result.append(':');
-                result.append(sheetName);
-                result.append('.');
-                temp.clear();
-            } else if (expression[i] == ';') { // range separator
-                result.append(temp);
-                result.append(' ');
-                temp.clear();
-            } else
-                temp.append(expression[i]);
-            ++i;
-            break;
-        }
-        case InQuotes: {
-            temp.append(expression[i]);
-            if (expression[i] == '\'') {
-                // an escaped apostrophe?
-                if (i + 1 < expression.count() && expression[i+1] == '\'')
-                    ++i; // eat it
-                else // the end
-                    state = Start;
-            }
-            ++i;
-            break;
-        }
-        }
-    }
-    if (result.isEmpty())
-        result = '.';
-    return result + temp;
-}
-
-QString Region::saveOdf() const
-{
-    return saveOdf(Region::name());
 }
 
 QList<Region::Element*>& Region::cells() const

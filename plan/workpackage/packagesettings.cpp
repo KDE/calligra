@@ -22,20 +22,20 @@
 
 #include <QComboBox>
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
+
 
 namespace KPlatoWork
 {
 
 PackageSettingsDialog::PackageSettingsDialog(WorkPackage &p, QWidget *parent)
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     setCaption( i18n("Work Package Settings") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
-    //kDebug(planworkDbg())<<&p;
+    //debugPlanWork<<&p;
 
     dia = new PackageSettingsPanel(p, this);
 
@@ -47,7 +47,7 @@ PackageSettingsDialog::PackageSettingsDialog(WorkPackage &p, QWidget *parent)
 
 KUndo2Command *PackageSettingsDialog::buildCommand()
 {
-    //kDebug(planworkDbg());
+    //debugPlanWork;
     return dia->buildCommand();
 }
 
@@ -67,7 +67,7 @@ PackageSettingsPanel::PackageSettingsPanel(WorkPackage &p, QWidget *parent)
 
 KUndo2Command *PackageSettingsPanel::buildCommand()
 {
-    //kDebug(planworkDbg());
+    //debugPlanWork;
     WorkPackageSettings s = settings();
     if ( s == m_package.settings() ) {
         return 0;
@@ -96,6 +96,3 @@ void PackageSettingsPanel::setSettings( const WorkPackageSettings &s )
 }
 
 }  //KPlatoWork namespace
-
-
-#include "packagesettings.moc"

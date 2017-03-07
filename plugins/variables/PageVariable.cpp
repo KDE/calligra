@@ -21,10 +21,11 @@
 
 #include "PageVariable.h"
 
+#include "VariablesDebug.h"
+
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoProperties.h>
-#include <kdebug.h>
 #include <KoShape.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
@@ -37,7 +38,6 @@
 #include <QTextDocument>
 #include <QAbstractTextDocumentLayout>
 #include <QTextInlineObject>
-#include <QDebug>
 
 PageVariable::PageVariable()
         : KoVariable(true),

@@ -38,7 +38,7 @@ public:
     explicit KPrPageLayouts(QObject *parent = 0);
     ~KPrPageLayouts();
 
-    bool saveOdf( KoPASavingContext & context );
+    bool saveOdf( KoPASavingContext & context ) const;
 
     /**
      * load all not yet loaded styles and add application styles

@@ -29,6 +29,8 @@
 
 #include <QStyleOptionGraphicsItem>
 
+#include <KoPluginLoader.h>
+#include <KoDocumentEntry.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
@@ -44,16 +46,16 @@
 #include <KoPAPageBase.h>
 #include <stage/part/KPrDocument.h>
 
-#include <KDebug>
 #include <KActionCollection>
-#include <KMimeType>
-#include <KService>
 
+#include <QPluginLoader>
+#include <QMimeDatabase>
 #include <QGraphicsWidget>
 #include <QTextDocument>
 #include <QTextFrame>
 #include <QTextLayout>
 #include <QApplication>
+
 
 
 class CQPresentationCanvas::Private
@@ -246,24 +248,35 @@ void CQPresentationCanvas::setShapeTransparency(qreal newTransparency)
 void CQPresentationCanvas::openFile(const QString& uri)
 {
     emit loadingBegun();
-    KService::Ptr service = KService::serviceByDesktopName("stagepart");
-    if (service.isNull()) {
+
+    KoDocumentEntry entry;
+    QList<QPluginLoader*> pluginLoaders = KoPluginLoader::pluginLoaders("calligra/parts");
+    Q_FOREACH (QPluginLoader *loader, pluginLoaders) {
+        if (loader->fileName().contains(QLatin1String("stagepart"))) {
+            entry = KoDocumentEntry(loader);
+            pluginLoaders.removeOne(loader);
+            break;
+        }
+    }
+    qDeleteAll(pluginLoaders);
+    if (entry.isEmpty()) {
         qWarning("Unable to load Stage plugin, aborting!");
         return;
     }
 
-    d->part = service->createInstance<KoPart>(this);
+    // QT5TODO: ownership of d->part unclear
+    d->part = entry.createKoPart();
     d->document = dynamic_cast<KPrDocument*>(d->part->document());
     d->document->setAutoSave(0);
     d->document->setCheckAutoSaveFile(false);
     if (uri.endsWith(QLatin1String("otp"), Qt::CaseInsensitive)) {
-        KUrl url(uri);
+        QUrl url(uri);
         bool ok = d->document->loadNativeFormat(url.toLocalFile());
         d->document->setModified(false);
         d->document->undoStack()->clear();
 
         if (ok) {
-            QString mimeType = KMimeType::findByUrl( url, 0, true )->name();
+            QString mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
             // in case this is a open document template remove the -template from the end
             mimeType.remove( QRegExp( "-template$" ) );
             d->document->setMimeTypeAfterLoading(mimeType);
@@ -275,7 +288,7 @@ void CQPresentationCanvas::openFile(const QString& uri)
             d->document->initEmpty();
         }
     } else {
-        d->document->openUrl (KUrl (uri));
+        d->document->openUrl (QUrl (uri));
     }
 
     d->document->setModified(false);

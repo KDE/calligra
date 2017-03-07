@@ -26,7 +26,7 @@
 
 #include <QPair>
 
-#include "calligra_sheets_export.h"
+#include "sheets_odf_export.h"
 
 class QSize;
 
@@ -221,25 +221,6 @@ public:
      * Set it to QPair (0, 0) to undefine it
      */
     void setRepeatedRows(const QPair<int, int>& repeatedRows);
-
-    /**
-     * Saves a page layout style.
-     * Adds the style to \p mainStyles.
-     * Saved OpenDocument properties:
-     * \li 15.2.1 Page Size
-     * \li 15.2.4 Print Orientation
-     * \li 15.2.5 Margins
-     * \li 15.2.13 Print
-     * \li 15.2.14 Print Page Order
-     * \li 15.2.16 Scale
-     * \li 15.2.17 Table Centering
-     * \param mainStyles generic styles
-     * \param formulas print formulas
-     * \param zeros print zero values
-     * \return the style's name
-     * \ingroup OpenDocument
-     */
-    QString saveOdfPageLayout(KoGenStyles &mainStyles, bool formulas, bool zeros);
 
     /**
      * Assignment operator.

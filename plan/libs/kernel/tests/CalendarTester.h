@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2007 Dag Andersen <danders@get2net.dk>
-
+   Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -20,7 +21,7 @@
 #ifndef KPlato_CalendarTester_h
 #define KPlato_CalendarTester_h
 
-#include <QtTest>
+#include <QObject>
 
 namespace KPlato
 {
@@ -29,18 +30,13 @@ class CalendarTester : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void initTestCase();
-    void cleanupTestCase();
-
     void testSingleDay();
     void testWeekdays();
     void testCalendarWithParent();
     void testTimezone();
     void workIntervals();
     void workIntervalsFullDays();
-
-private:
-    void removeDir(const QString &dir);
+    void dstSpring();
 };
 
 } //namespace KPlato

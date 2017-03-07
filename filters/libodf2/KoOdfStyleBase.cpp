@@ -25,9 +25,6 @@
 // Qt
 #include <QString>
 
-// KDE
-#include <kdebug.h>
-
 // Odflib
 #include "KoXmlStreamReader.h"
 //#include "KoOdfStyleProperties.h"
@@ -35,6 +32,7 @@
 //#include "KoOdfParagraphProperties.h"
 //#include "KoOdfGraphicProperties.h"
 
+#include "Odf2Debug.h"
 
 // ================================================================
 //                         class KoOdfStyleBase

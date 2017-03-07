@@ -40,13 +40,12 @@ public:
     /**
      * Constructor.
      * @param parent the parent widget
-     * @param _componentData the instance object for the app
      * @param header string used as header text in the listview
      * @param group the group of templates this widget will show.
      * @param defaultTemplate pointer to the default template. Used to select a
      * template when none has been selected before.
     */
-    KoTemplatesPane(QWidget* parent, const KComponentData &_componentData, const QString& header,
+    KoTemplatesPane(QWidget* parent, const QString& header,
                     KoTemplateGroup* group, KoTemplate* defaultTemplate);
     ~KoTemplatesPane();
 

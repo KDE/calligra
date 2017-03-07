@@ -22,12 +22,12 @@
 #include <KoXmlReader.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
-#include <kdebug.h>
 
 #include <QUrl>
 
 #include "VideoData.h"
 #include "VideoShape.h"
+#include "VideoDebug.h"
 
 #include "FullScreenPlayer.h"
 

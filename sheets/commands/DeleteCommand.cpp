@@ -26,7 +26,7 @@
 #include "Sheet.h"
 #include "Validity.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 using namespace Calligra::Sheets;
 
@@ -130,7 +130,7 @@ bool DeleteCommand::mainProcessing()
             m_sheet->insertColumnFormat(new ColumnFormat(*columnFormat));
         }
         foreach(RowFormat* rowFormat, m_rowFormats) {
-            m_sheet->insertRowFormat(new RowFormat(*rowFormat));
+            m_sheet->insertRowFormat(rowFormat);
         }
     }
     return AbstractDataManipulator::mainProcessing();

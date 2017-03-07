@@ -24,7 +24,7 @@
 
 #include <QByteArray>
 
-#include "calligra_sheets_export.h"
+#include "sheets_odf_export.h"
 
 namespace Calligra
 {
@@ -78,11 +78,6 @@ public:
      * \ingroup NativeFormat
      */
     void loadXmlProtection(const KoXmlElement& element);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    void loadOdfProtection(const KoXmlElement& element);
 
 private:
     // disable assignment operator

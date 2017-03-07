@@ -20,13 +20,22 @@
 
 #include <QTest>
 #include <QCoreApplication>
+#include <QFileInfo>
 
-#include <qtest_kde.h>
 #include <kactioncollection.h>
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 #include "KoResource.h"
 #include "KoResourceServerProvider.h"
+
+
+void KoResourceTaggingTest::initTestCase()
+{
+    // use global png files as dummy pattern dir for now
+    const QFileInfo file(QFINDTESTDATA("../../../pics/hicolor/16-actions-borderpainter.png"));
+    Q_ASSERT(file.exists());
+    KoResourcePaths::addResourceDir("ko_patterns", file.absolutePath());
+}
 
 void KoResourceTaggingTest::testInitialization()
 {
@@ -142,6 +151,4 @@ void KoResourceTaggingTest::testReadWriteXML()
     QVERIFY(resources.size() == 0);
 }
 
-QTEST_KDEMAIN(KoResourceTaggingTest, GUI)
-
-#include <KoResourceTaggingTest.moc>
+QTEST_MAIN(KoResourceTaggingTest)

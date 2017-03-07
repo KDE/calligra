@@ -24,10 +24,10 @@
 #include <QScrollArea>
 #include <QHBoxLayout>
 #include <QFileInfo>
+#include <QColorDialog>
+#include <QInputDialog>
 
-#include <klocale.h>
-#include <kcolordialog.h>
-#include <kinputdialog.h>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 
 #include <KoColorSet.h>
@@ -36,7 +36,7 @@
 #include <KoFileDialog.h>
 
 // debug
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 KoEditColorSetWidget::KoEditColorSetWidget(const QList<KoColorSet *> &palettes, const QString &activePalette, QWidget *parent)
     : QWidget(parent),
@@ -126,7 +126,7 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
         for (int i = 0; i < m_activeColorSet->nColors(); i++) {
             KoColorPatch *patch = new KoColorPatch(widget.patchesFrame);
             patch->setColor(m_activeColorSet->getColor(i).color);
-            connect(patch, SIGNAL(triggered(KoColorPatch *)), this, SLOT(setTextLabel(KoColorPatch *)));
+            connect(patch, SIGNAL(triggered(KoColorPatch*)), this, SLOT(setTextLabel(KoColorPatch*)));
             m_gridLayout->addWidget(patch, i/16, i%16);
         }
     }
@@ -151,14 +151,15 @@ void KoEditColorSetWidget::setTextLabel(KoColorPatch *patch)
 void KoEditColorSetWidget::addColor()
 {
     QColor color;
-    int result = KColorDialog::getColor(color);
-    if (result == KColorDialog::Accepted) {
+
+    color = QColorDialog::getColor(color);
+    if (color.isValid()) {
         KoColorSetEntry newEntry;
         newEntry.color = KoColor(color, KoColorSpaceRegistry::instance()->rgb8());
-        newEntry.name = KInputDialog::getText(i18n("Add Color To Palette"), i18n("Color name:"));
+        newEntry.name = QInputDialog::getText(this, i18n("Add Color To Palette"), i18n("Color name:"));
         KoColorPatch *patch = new KoColorPatch(widget.patchesFrame);
         patch->setColor(newEntry.color);
-        connect(patch, SIGNAL(triggered(KoColorPatch *)), this, SLOT(setTextLabel(KoColorPatch *)));
+        connect(patch, SIGNAL(triggered(KoColorPatch*)), this, SLOT(setTextLabel(KoColorPatch*)));
         Q_ASSERT(m_gridLayout);
         Q_ASSERT(m_activeColorSet);
         m_gridLayout->addWidget(patch, m_activeColorSet->nColors()/16, m_activeColorSet->nColors()%16);
@@ -184,7 +185,7 @@ void KoEditColorSetWidget::open()
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenColorSet");
     dialog.setDefaultDir(m_activeColorSet->filename());
     dialog.setNameFilter(i18n("Gimp Color Palette (*.gpl)"));
-    QString fileName = dialog.url();
+    QString fileName = dialog.filename();
     KoColorSet *colorSet = new KoColorSet(fileName);
     colorSet->load();
     m_colorSets.append(colorSet);
@@ -206,12 +207,12 @@ KoColorSet *KoEditColorSetWidget::activeColorSet()
 }
 
 KoEditColorSetDialog::KoEditColorSetDialog(const QList<KoColorSet *> &palettes, const QString &activePalette, QWidget *parent)
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     ui = new KoEditColorSetWidget(palettes, activePalette, this);
     setMainWidget(ui);
     setCaption(i18n("Add/Remove Colors"));
-    enableButton(KDialog::Ok, ui->isEnabled());
+    enableButton(KoDialog::Ok, ui->isEnabled());
 }
 
 KoEditColorSetDialog::~KoEditColorSetDialog()
@@ -223,5 +224,3 @@ KoColorSet *KoEditColorSetDialog::activeColorSet()
 {
     return ui->activeColorSet();
 }
-
-#include <KoEditColorSetDialog.moc>

@@ -28,7 +28,7 @@ namespace Sheets
 {
 
 /**
- * KSpread specific canvas resources
+ * Calligra Sheets specific canvas resources
  */
 namespace CanvasResource
 {

@@ -65,5 +65,3 @@ QObject *Scripting::Schedule::childAt( int index )
     }
     return 0;
 }
-
-#include "Schedule.moc"

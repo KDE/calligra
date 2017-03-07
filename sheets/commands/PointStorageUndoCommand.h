@@ -26,7 +26,7 @@
 #include <kundo2command.h>
 #include <QVector>
 
-// KSpread
+// Sheets
 #include "Formula.h"
 
 namespace Calligra

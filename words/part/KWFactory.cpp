@@ -19,10 +19,8 @@
 */
 
 #include "KWFactory.h"
-#include <kdebug.h>
 #include "KWAboutData.h"
 #include "KWDocument.h"
-#include <kcomponentdata.h>
 
 #include <kiconloader.h>
 
@@ -31,6 +29,7 @@
 #include <KoDocumentRdfBase.h>
 #include <KoToolRegistry.h>
 #include <KoMainWindow.h>
+#include <KoComponentData.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>
@@ -38,19 +37,19 @@
 #include "dockers/KWRdfDocker.h"
 #include "dockers/KWRdfDockerFactory.h"
 #endif
-#include "dockers/KWStatisticsDocker.h"
+
 #include "pagetool/KWPageToolFactory.h"
+#include "dockers/KWStatisticsDocker.h"
 #include "dockers/KWNavigationDockerFactory.h"
 
 #ifndef NDEBUG
 #include "dockers/KWDebugDockerFactory.h"
 #endif
 
-KComponentData *KWFactory::s_instance = 0;
-KAboutData *KWFactory::s_aboutData = 0;
+KoComponentData *KWFactory::s_componentData = 0;
 
-KWFactory::KWFactory(QObject *parent)
-        : KPluginFactory(*aboutData(), parent)
+KWFactory::KWFactory()
+    : KPluginFactory()
 {
     // Create our instance, so that it becomes KGlobal::instance if the
     // main app is Words.
@@ -59,10 +58,8 @@ KWFactory::KWFactory(QObject *parent)
 
 KWFactory::~KWFactory()
 {
-    delete s_aboutData;
-    s_aboutData = 0;
-    delete s_instance;
-    s_instance = 0;
+    delete s_componentData;
+    s_componentData = 0;
 }
 
 QObject* KWFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args, const QString& keyword)
@@ -77,18 +74,12 @@ QObject* KWFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QOb
     return part;
 }
 
-KAboutData *KWFactory::aboutData()
+const KoComponentData &KWFactory::componentData()
 {
-    if (!s_aboutData) {
-        s_aboutData = newWordsAboutData();
-    }
-    return s_aboutData;
-}
-
-const KComponentData &KWFactory::componentData()
-{
-    if (!s_instance) {
-        s_instance = new KComponentData(aboutData());
+    if (!s_componentData) {
+        KAboutData *aboutData = newWordsAboutData();
+        s_componentData = new KoComponentData(*aboutData);
+        delete aboutData;
 
         KIconLoader::global()->addAppDir("calligra");
 
@@ -103,7 +94,7 @@ const KComponentData &KWFactory::componentData()
 // TODO reenable after release
         dockRegistry->add(new KWRdfDockerFactory());
 #endif
-
+        dockRegistry->remove("StencilBox"); //don't want this in Words
     }
-    return *s_instance;
+    return *s_componentData;
 }

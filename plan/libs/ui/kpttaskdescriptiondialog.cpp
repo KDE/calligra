@@ -22,10 +22,9 @@
 #include "kpttask.h"
 #include "kptcommand.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <ktextedit.h>
 #include <kactioncollection.h>
-#include <kdebug.h>
 
 namespace KPlato
 {
@@ -87,7 +86,7 @@ void TaskDescriptionPanel::initDescription( bool readOnly )
                                             KRichTextWidget::SupportAlignment |
                                             KRichTextWidget::SupportFormatPainting );
 
-    descriptionfield->createActions( collection );
+    collection->addActions(descriptionfield->createActions());
 
     toolbar->addAction( collection->action( "format_text_bold" ) );
     toolbar->addAction( collection->action( "format_text_italic" ) );
@@ -132,7 +131,7 @@ void TaskDescriptionPanelImpl::slotChanged()
 
 //-----------------------------
 TaskDescriptionDialog::TaskDescriptionDialog( Task &task, QWidget *p, bool readOnly )
-    : KDialog(p)
+    : KoDialog(p)
 {
     setCaption( i18n( "Task Description" ) );
     if ( readOnly ) {
@@ -158,17 +157,15 @@ MacroCommand *TaskDescriptionDialog::buildCommand()
 
 void TaskDescriptionDialog::slotButtonClicked( int button )
 {
-    if (button == KDialog::Ok) {
+    if (button == KoDialog::Ok) {
         if ( ! m_descriptionTab->ok() ) {
             return;
         }
         accept();
     } else {
-        KDialog::slotButtonClicked( button );
+        KoDialog::slotButtonClicked( button );
     }
 }
 
 
 }  //KPlato namespace
-
-#include "kpttaskdescriptiondialog.moc"

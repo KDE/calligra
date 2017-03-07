@@ -21,7 +21,7 @@
 #define FORMULARENDERER_H
 
 #include <QPainter>
-#include "kformula_export.h"
+#include "koformula_export.h"
 
 class AttributeManager;
 class BasicElement;

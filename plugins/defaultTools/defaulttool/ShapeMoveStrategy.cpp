@@ -31,17 +31,18 @@
 #include <KoPointerEvent.h>
 #include <KoToolBase.h>
 #include <KoSelection.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
     : KoInteractionStrategy(tool)
     , m_start(clicked)
     , m_canvas(tool->canvas())
+    , m_firstMove(true)
 {
     QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
     QRectF boundingRect;
     foreach(KoShape *shape, selectedShapes) {
-        if (! shape->isEditable())
+        if (! shape->isEditable()) // FIXME: this should check if the shape is movable
             continue;
         m_selectedShapes << shape;
         m_previousPositions << shape->position();
@@ -60,6 +61,13 @@ void ShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifi
 {
     if(m_selectedShapes.isEmpty())
         return;
+
+    if (m_firstMove) {
+        // skip first move to avoid accidental move during mouse button press
+        m_firstMove = false;
+        return;
+    }
+
     QPointF diff = point - m_start;
 
     if (modifiers & (Qt::AltModifier | Qt::ControlModifier)) {
@@ -121,10 +129,26 @@ void ShapeMoveStrategy::moveSelection()
 
 KUndo2Command* ShapeMoveStrategy::createCommand()
 {
-    tool()->canvas()->snapGuide()->reset();
-    if(m_diff.x() == 0 && m_diff.y() == 0)
+    if(m_diff.x() == 0 && m_diff.y() == 0) {
         return 0;
-    return new KoShapeMoveCommand(m_selectedShapes, m_previousPositions, m_newPositions);
+    }
+    // get the shapes that has actually been moved
+    QVector<QPointF> oldPositions;
+    QVector<QPointF> newPositions;
+    QList<KoShape*> movedShapes;
+    for (int i = 0; i < m_selectedShapes.count(); ++i) {
+        KoShape *shape = m_selectedShapes.at(i);
+        if (shape->position() != m_previousPositions.at(i)) {
+            movedShapes << shape;
+            oldPositions << m_previousPositions.at(i);
+            newPositions << m_newPositions.at(i);
+        }
+    }
+    if (movedShapes.isEmpty()) {
+        return 0;
+    }
+    tool()->canvas()->snapGuide()->reset();
+    return new KoShapeMoveCommand(movedShapes, oldPositions, newPositions);
 }
 
 void ShapeMoveStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)

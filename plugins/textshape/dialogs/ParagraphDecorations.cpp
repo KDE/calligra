@@ -20,14 +20,14 @@
 
 #include "ParagraphDecorations.h"
 
-#include <kdebug.h>
+#include <QDebug>
 
 ParagraphDecorations::ParagraphDecorations(QWidget* parent)
         : QWidget(parent)
 {
     widget.setupUi(this);
 
-    connect(widget.backgroundColor, SIGNAL(changed(const QColor&)), this, SLOT(slotBackgroundColorChanged()));
+    connect(widget.backgroundColor, SIGNAL(changed(QColor)), this, SLOT(slotBackgroundColorChanged()));
     connect(widget.resetBackgroundColor, SIGNAL(clicked()), this, SLOT(clearBackgroundColor()));
 }
 
@@ -37,7 +37,7 @@ void ParagraphDecorations::slotBackgroundColorChanged()
     emit parStyleChanged();
 }
 
-void ParagraphDecorations::setDisplay(KoParagraphStyle *style)
+void ParagraphDecorations::setDisplay(KoParagraphStyle *style, bool directFormattingMode)
 {
     m_backgroundColorChanged = false;
     m_backgroundColorReset = style->background().style() == Qt::NoBrush;
@@ -65,5 +65,3 @@ void ParagraphDecorations::clearBackgroundColor()
     m_backgroundColorReset = true;
     emit parStyleChanged();
 }
-
-#include <ParagraphDecorations.moc>

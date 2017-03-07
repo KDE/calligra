@@ -20,7 +20,6 @@
 #ifndef KOCOMPOSITEOPREGISTRY_H
 #define KOCOMPOSITEOPREGISTRY_H
 
-#include <klocale.h>
 #include <QString>
 #include <QList>
 #include <QMultiMap>
@@ -59,6 +58,7 @@ const QString COMPOSITE_EXCLUSION     = "exclusion";
 const QString COMPOSITE_HARD_MIX      = "hard mix";
 const QString COMPOSITE_OVERLAY       = "overlay";
 const QString COMPOSITE_BEHIND        = "behind";
+const QString COMPOSITE_GREATER        = "greater";
 
 const QString COMPOSITE_DARKEN      = "darken";
 const QString COMPOSITE_BURN        = "burn";//this is also known as 'color burn'.
@@ -117,6 +117,7 @@ const QString COMPOSITE_COPY         = "copy";
 const QString COMPOSITE_COPY_RED     = "copy_red";
 const QString COMPOSITE_COPY_GREEN   = "copy_green";
 const QString COMPOSITE_COPY_BLUE    = "copy_blue";
+const QString COMPOSITE_TANGENT_NORMALMAP    = "tangent_normalmap";
 
 const QString COMPOSITE_COLORIZE     = "colorize";
 const QString COMPOSITE_BUMPMAP      = "bumpmap";
@@ -135,9 +136,9 @@ class PIGMENTCMS_EXPORT KoCompositeOpRegistry
 {
     typedef QMultiMap<KoID,KoID> KoIDMap;
     typedef QList<KoID>          KoIDList;
-    KoCompositeOpRegistry();
 
 public:
+    KoCompositeOpRegistry();
     static const KoCompositeOpRegistry& instance();
 
     KoID     getDefaultCompositeOp() const;

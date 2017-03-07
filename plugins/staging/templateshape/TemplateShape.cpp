@@ -24,7 +24,7 @@
 // Qt
 #include <QPainter>
 
-// KDE
+// KF5
 #include <kdebug.h>
 
 // Calligra
@@ -54,7 +54,7 @@ TemplateShape::~TemplateShape()
 void TemplateShape::paint(QPainter &painter, const KoViewConverter &converter,
                           KoShapePaintingContext &context)
 {
-    painter.setPen(QPen(QColor(0, 0, 0)));
+    painter.setPen(QPen(QColor(0, 0, 0), 0));
 
     // Example painting code: Draw a rectangle around the shape
     painter.drawRect(converter.documentToView(QRectF(QPoint(0, 0), size())));
@@ -91,6 +91,3 @@ bool TemplateShape::loadOdf(const KoXmlElement &templateElement, KoShapeLoadingC
 void TemplateShape::waitUntilReady(const KoViewConverter &converter, bool asynchronous) const
 {
 }
-
-
-#include <TemplateShape.moc>

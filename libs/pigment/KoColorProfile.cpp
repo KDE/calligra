@@ -19,10 +19,13 @@
 
 #include "KoColorProfile.h"
 #include "DebugPigment.h"
-struct KoColorProfile::Private {
+
+struct Q_DECL_HIDDEN KoColorProfile::Private {
     QString name;
     QString info;
     QString fileName;
+    QString manufacturer;
+    QString copyright;
 };
 
 KoColorProfile::KoColorProfile(const QString &fileName) : d(new Private)
@@ -62,7 +65,14 @@ QString KoColorProfile::info() const
 {
     return d->info;
 }
-
+QString KoColorProfile::manufacturer() const
+{
+    return d->manufacturer;
+}
+QString KoColorProfile::copyright() const
+{
+    return d->copyright;
+}
 QString KoColorProfile::fileName() const
 {
     return d->fileName;
@@ -80,4 +90,12 @@ void KoColorProfile::setName(const QString &name)
 void KoColorProfile::setInfo(const QString &info)
 {
     d->info = info;
+}
+void KoColorProfile::setManufacturer(const QString &manufacturer)
+{
+    d->manufacturer = manufacturer;
+}
+void KoColorProfile::setCopyright(const QString &copyright)
+{
+    d->copyright = copyright;
 }

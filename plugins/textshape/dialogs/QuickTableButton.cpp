@@ -21,8 +21,8 @@
 #include "QuickTableButton.h"
 
 #include <KoIcon.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
+#include <QDebug>
 
 #include <QMenu>
 #include <QFrame>
@@ -177,5 +177,3 @@ void QuickTableButton::emitCreate(int rows, int columns)
     m_menu->hide();
     emit create(rows, columns);
 }
-
-#include <QuickTableButton.moc>

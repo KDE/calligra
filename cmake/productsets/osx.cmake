@@ -4,16 +4,13 @@
 calligra_define_productset(OSX "Calligra for OS X Desktop"
     OPTIONAL
         # apps
-        AUTHOR
         BRAINDUMP
         FLOW
         KARBON
-        KRITA
         PLAN
         SHEETS
         STAGE
         WORDS
-        KEXI
         # features
         FEATURE_SCRIPTING
         FEATURE_RDF

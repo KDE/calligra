@@ -19,20 +19,15 @@
 
 #include "LocationComboBox.h"
 
-// KSpread
+// Sheets
 #include "CellStorage.h"
 #include "Map.h"
 #include "NamedAreaManager.h"
 #include "Selection.h"
 #include "Sheet.h"
+#include "SheetsDebug.h"
 
 #include "commands/NamedAreaCommand.h"
-
-// Calligra
-
-// KDE
-#include <kdebug.h>
-#include <kglobalsettings.h>
 
 // Qt
 #include <QKeyEvent>
@@ -45,7 +40,7 @@ LocationComboBox::LocationComboBox(QWidget *_parent)
         , m_selection(0)
 {
     setCompletionObject(&completionList, true);
-    setCompletionMode(KGlobalSettings::CompletionAuto);
+    setCompletionMode(KCompletion::CompletionAuto);
 
     connect(this, SIGNAL(activated(QString)),
             this, SLOT(slotActivateItem()));
@@ -154,7 +149,7 @@ void LocationComboBox::addCompletionItem(const QString &_item)
 {
     if (completionList.items().contains(_item) == 0) {
         completionList.addItem(_item);
-        kDebug(36005) << _item;
+        debugSheetsUI << _item;
     }
 }
 
@@ -273,5 +268,3 @@ void LocationComboBox::slotSelectionChanged()
         updateAddress();
     }
 }
-
-#include "LocationComboBox.moc"

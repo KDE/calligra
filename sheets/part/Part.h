@@ -33,7 +33,7 @@
 #include <KoDocument.h>
 #include <KoPart.h>
 
-#include "../calligra_sheets_export.h"
+#include "sheets_common_export.h"
 
 class QWidget;
 class QGraphicsItem;
@@ -67,7 +67,7 @@ public:
 protected:
     virtual KoView* createViewInstance(KoDocument *document, QWidget*); /// reimplemented
 
-    virtual void openTemplate(const KUrl& url); /// reimplemented
+    virtual void openTemplate(const QUrl& url); /// reimplemented
 
     Doc *m_document;
 

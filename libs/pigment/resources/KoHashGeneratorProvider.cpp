@@ -19,12 +19,13 @@
 #include "KoHashGeneratorProvider.h"
 
 #include <QMutexLocker>
+#include <QGlobalStatic>
 
 #include "KoMD5Generator.h"
 
-#include <kglobal.h>
 KoHashGeneratorProvider *KoHashGeneratorProvider::instance_var = 0;
-
+Q_GLOBAL_STATIC(KoHashGeneratorProvider, s_instance);
+    
 KoHashGeneratorProvider::KoHashGeneratorProvider()
 {
     // Initialize default generators
@@ -36,15 +37,16 @@ KoHashGeneratorProvider::~KoHashGeneratorProvider()
     qDeleteAll(hashGenerators);
 }
 
-KoHashGenerator *KoHashGeneratorProvider::getGenerator(QString algorithm)
+KoHashGenerator *KoHashGeneratorProvider::getGenerator(const QString &algorithm)
 {
     QMutexLocker locker(&mutex);
     return hashGenerators.value(algorithm);
 }
 
-void KoHashGeneratorProvider::setGenerator(QString algorithm, KoHashGenerator *generator)
+void KoHashGeneratorProvider::setGenerator(const QString &algorithm, KoHashGenerator *generator)
 {
-    if(hashGenerators.contains(algorithm)) {
+    if (hashGenerators.contains(algorithm)) {
+        delete hashGenerators.take(algorithm);
         hashGenerators[algorithm] = generator;
     }
     else
@@ -53,6 +55,5 @@ void KoHashGeneratorProvider::setGenerator(QString algorithm, KoHashGenerator *g
 
 KoHashGeneratorProvider *KoHashGeneratorProvider::instance()
 {
-    K_GLOBAL_STATIC(KoHashGeneratorProvider, s_instance);
     return s_instance;
 }

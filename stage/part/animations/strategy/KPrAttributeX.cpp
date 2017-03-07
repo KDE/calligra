@@ -18,12 +18,14 @@
  */
 
 #include "KPrAttributeX.h"
-#include "../KPrAnimationCache.h"
-#include "KoShape.h"
-#include "../KPrShapeAnimation.h"
-#include "kdebug.h"
 
+#include "../KPrAnimationCache.h"
+#include "../KPrShapeAnimation.h"
+#include "StageDebug.h"
+
+#include "KoShape.h"
 #include "KoTextBlockData.h"
+
 KPrAttributeX::KPrAttributeX() : KPrAnimationAttribute("x")
 {
 }

@@ -22,14 +22,14 @@
 #include "KoFormulaShape.h"
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KoFormulaToolFactory::KoFormulaToolFactory()
            : KoToolFactoryBase("KoFormulaToolFactoryId")
 {
     setToolTip( i18n( "Formula editing" ) );
     setToolType( dynamicToolType() );
-    setIconName(koIconNameCStr("edittext"));
+    setIconName(koIconName("edittext"));
     setPriority( 1 );
     setActivationShapeId( KoFormulaShapeId );
 }

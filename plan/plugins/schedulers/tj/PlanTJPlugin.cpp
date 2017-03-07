@@ -28,19 +28,17 @@
 
 #include "kptdebug.h"
 
+#include <KLocalizedString>
+
 #include <QApplication>
 
-KPLATO_SCHEDULERPLUGIN_EXPORT(PlanTJPlugin)
+KPLATO_SCHEDULERPLUGIN_EXPORT(PlanTJPlugin, "plantjscheduler.json")
 
 using namespace KPlato;
 
 PlanTJPlugin::PlanTJPlugin( QObject * parent, const QVariantList & )
     : KPlato::SchedulerPlugin(parent)
 {
-    KLocale *locale = KGlobal::locale();
-    if ( locale ) {
-        locale->insertCatalog( "plantjplugin" );
-    }
     m_granularities << (long unsigned int) 5 * 60 * 1000
                     << (long unsigned int) 15 * 60 * 1000
                     << (long unsigned int) 30 * 60 * 1000
@@ -126,7 +124,7 @@ void PlanTJPlugin::stopCalculation( SchedulerThread *sch )
 
 void PlanTJPlugin::slotStarted( SchedulerThread */*job*/ )
 {
-//    kDebug(planDbg())<<"PlanTJPlugin::slotStarted:";
+//    debugPlan<<"PlanTJPlugin::slotStarted:";
 }
 
 void PlanTJPlugin::slotFinished( SchedulerThread *j )
@@ -134,7 +132,7 @@ void PlanTJPlugin::slotFinished( SchedulerThread *j )
     PlanTJScheduler *job = static_cast<PlanTJScheduler*>( j );
     Project *mp = job->mainProject();
     ScheduleManager *sm = job->mainManager();
-    //kDebug(planDbg())<<"PlanTJPlugin::slotFinished:"<<mp<<sm<<job->isStopped();
+    //debugPlan<<"PlanTJPlugin::slotFinished:"<<mp<<sm<<job->isStopped();
     if ( job->isStopped() ) {
         sm->setCalculationResult( ScheduleManager::CalculationCanceled );
     } else {

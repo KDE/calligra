@@ -29,7 +29,7 @@
 #include <QToolButton>
 #include <QGridLayout>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kcombobox.h>
 
 #include <KoIcon.h>
@@ -73,7 +73,7 @@ KoTagChooserWidget::KoTagChooserWidget(QWidget* parent): QWidget(parent)
             this, SIGNAL(tagChosen(QString)));
 
     connect(d->tagToolButton, SIGNAL(popupMenuAboutToShow()),
-            this, SLOT (tagOptionsContextMenuAboutToShow()));
+            this, SLOT(tagOptionsContextMenuAboutToShow()));
     connect(d->tagToolButton, SIGNAL(newTagRequested(QString)),
             this, SIGNAL(newTagRequested(QString)));
     connect(d->tagToolButton, SIGNAL(deletionOfCurrentTagRequested()),
@@ -118,22 +118,22 @@ void KoTagChooserWidget::setCurrentIndex(int index)
     d->comboBox->setCurrentIndex(index);
 }
 
-int KoTagChooserWidget::findIndexOf(QString tagName)
+int KoTagChooserWidget::findIndexOf(const QString &tagName)
 {
     return d->comboBox->findText(tagName);
 }
 
-void KoTagChooserWidget::addReadOnlyItem(QString tagName)
+void KoTagChooserWidget::addReadOnlyItem(const QString &tagName)
 {
     d->readOnlyTags.append(tagName);
 }
 
-void KoTagChooserWidget::insertItem(QString tagName)
+void KoTagChooserWidget::insertItem(const QString &tagName)
 {
     QStringList tags = allTags();
     tags.append(tagName);
     tags.sort();
-    foreach (QString readOnlyTag, d->readOnlyTags) {
+    foreach (const QString &readOnlyTag, d->readOnlyTags) {
         tags.prepend(readOnlyTag);
     }
 
@@ -145,7 +145,7 @@ void KoTagChooserWidget::insertItem(QString tagName)
 
 }
 
-void KoTagChooserWidget::insertItemAt(int index, QString tag)
+void KoTagChooserWidget::insertItemAt(int index, const QString &tag)
 {
     d->comboBox->insertItem(index,tag);
 }
@@ -185,7 +185,7 @@ void KoTagChooserWidget::clear()
     d->comboBox->clear();
 }
 
-void KoTagChooserWidget::removeItem(QString item)
+void KoTagChooserWidget::removeItem(const QString &item)
 {
     int pos = d->comboBox->findText(item);
     if (pos >= 0) {
@@ -198,4 +198,9 @@ void KoTagChooserWidget::tagOptionsContextMenuAboutToShow()
     /* only enable the save button if the selected tag set is editable */
     d->tagToolButton->readOnlyMode(selectedTagIsReadOnly());
     emit popupMenuAboutToShow();
+}
+
+void KoTagChooserWidget::showTagToolButton(bool show)
+{
+    d->tagToolButton->setVisible(show);
 }

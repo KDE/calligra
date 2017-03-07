@@ -1,8 +1,11 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_picture\")
+
 include_directories( ${FLAKE_INCLUDES} )
 
 ########### Flake Plugin library ###############
 
 set (pictureshape_LIB_SRCS
+    PictureDebug.cpp
     PictureShape.cpp
     PictureShapeFactory.cpp
     PictureTool.cpp
@@ -17,16 +20,18 @@ set (pictureshape_LIB_SRCS
     filters/GreyscaleFilterEffect.cpp
     filters/MonoFilterEffect.cpp
     filters/WatermarkFilterEffect.cpp
+    filters/ColoringFilterEffect.cpp
+    filters/GammaFilterEffect.cpp
 )
 
-kde4_add_ui_files(pictureshape_LIB_SRCS forms/wdgPictureTool.ui)
-kde4_add_plugin(calligra_shape_picture ${pictureshape_LIB_SRCS})
+ki18n_wrap_ui(pictureshape_LIB_SRCS forms/wdgPictureTool.ui)
+add_library(calligra_shape_picture MODULE ${pictureshape_LIB_SRCS})
+calligra_shape_desktop_to_json(calligra_shape_picture calligra_shape_picture.desktop)
 
-target_link_libraries(calligra_shape_picture flake ${KDE4_KFILE_LIBRARY}
-${KDE4_KIO_LIBS})
-install(TARGETS calligra_shape_picture DESTINATION ${PLUGIN_INSTALL_DIR})
-
-########### install files ###############
-
-install( FILES calligra_shape_picture.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
+target_link_libraries(calligra_shape_picture
+    flake
+    KF5::I18n
+    KF5::KIOFileWidgets
+    KF5::GuiAddons
+)
+install(TARGETS calligra_shape_picture DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)

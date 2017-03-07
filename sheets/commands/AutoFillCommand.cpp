@@ -35,12 +35,11 @@
 #include "Sheet.h"
 #include "Value.h"
 #include "ValueConverter.h"
+#include "SheetsDebug.h"
 
-#include <kglobal.h>
+#include <KSharedConfig>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kcomponentdata.h>
-#include <kdebug.h>
 
 #include <QList>
 #include <QRegExp>
@@ -182,7 +181,7 @@ AutoFillSequenceItem::AutoFillSequenceItem(const Cell& cell)
 
         if (AutoFillCommand::other == 0) {
             // AutoFillCommand::other = new QStringList();
-            KSharedConfigPtr config = KGlobal::activeComponent().config();
+            KSharedConfigPtr config = KSharedConfig::openConfig();
             AutoFillCommand::other = new QStringList(config->group("Parameters").readEntry("Other list", QStringList()));
         }
 
@@ -521,14 +520,14 @@ static QList<Value> findInterval(const AutoFillSequence& _seqList)
 
     QList<Value> deltaSequence;
 
-    kDebug() << "Sequence length:" << _seqList.count();
+    debugSheets << "Sequence length:" << _seqList.count();
 
     // How big is the interval. It is in the range from [1...n].
     //
     // We try to find the shortest interval.
     int intervalLength = 1;
     for (intervalLength = 1; intervalLength < _seqList.count(); ++intervalLength) {
-        kDebug() << "Checking interval of length:" << intervalLength;
+        debugSheets << "Checking interval of length:" << intervalLength;
 
         // Create the delta list.
         deltaSequence = _seqList.createDeltaSequence(intervalLength);
@@ -545,7 +544,7 @@ static QList<Value> findInterval(const AutoFillSequence& _seqList)
                 str += v.asString() + ' ';
         }
         str += ']';
-        kDebug() << str;
+        debugSheets << str;
 
         // Verify the delta by looking at cells intervalLength.._seqList.count().
         // We only looked at the cells 0..2*intervalLength-1.
@@ -554,10 +553,10 @@ static QList<Value> findInterval(const AutoFillSequence& _seqList)
         // and for all s=0...intervalLength-1.
         for (int i = 1; (i + 1) * intervalLength < _seqList.count(); ++i) {
             AutoFillSequence tail = _seqList.mid(i * intervalLength);
-//             kDebug() <<"Verifying for sequence after" << i * intervalLength <<", length:" << tail.count();
+//             debugSheets <<"Verifying for sequence after" << i * intervalLength <<", length:" << tail.count();
             QList<Value> otherDeltaSequence = tail.createDeltaSequence(intervalLength);
             if (deltaSequence != otherDeltaSequence) {
-                kDebug() << "Interval does not match.";
+                debugSheets << "Interval does not match.";
                 deltaSequence.clear();
                 break;
             }
@@ -585,7 +584,7 @@ static QList<Value> findInterval(const AutoFillSequence& _seqList)
                 str += v.asString() + ' ';
         }
         str += ']';
-        kDebug() << str;
+        debugSheets << str;
     }
 
     return deltaSequence;
@@ -602,7 +601,7 @@ static void fillSequence(const QList<Cell>& _srcList,
     int s = _srcList.count() % intervalLength;
     // Amount of intervals (blocks)
     int block = _srcList.count() / intervalLength;
-    kDebug() << "Valid interval, number of intervals:" << block;
+    debugSheets << "Valid interval, number of intervals:" << block;
 
     // Start iterating with the first cell
     Cell cell;
@@ -631,7 +630,7 @@ static void fillSequence(const QList<Cell>& _srcList,
             }
         }
 
-        kDebug() << "Cell:" << cell.name() << ", position:" << s << ", block:" << block;
+        debugSheets << "Cell:" << cell.name() << ", position:" << s << ", block:" << block;
 
         // Calculate the new value of 'cell' by adding 'block' times the delta to the
         // value of cell 's'.
@@ -827,7 +826,7 @@ void AutoFillCommand::fillSequence(const QList<Cell>& _srcList,
         const Cell cell = _srcList.value(0);
         if (cell.isTime() || cell.value().format() == Value::fmt_DateTime) {
             // TODO Stefan: delta depending on minimum unit of format
-            deltaSequence.append(Value(QTime(1, 0), m_sheet->map()->calculationSettings()));
+            deltaSequence.append(Value(QTime(1, 0)));
         } else if (cell.isDate()) {
             // TODO Stefan: delta depending on minimum unit of format
             Value value(1);

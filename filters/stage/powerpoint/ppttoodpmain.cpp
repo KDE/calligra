@@ -21,6 +21,7 @@
 #include <QCoreApplication>
 #include <QDir>
 #include <QBuffer>
+#include <QDebug>
 
 int
 convert(const QString& in, KoStore* out)

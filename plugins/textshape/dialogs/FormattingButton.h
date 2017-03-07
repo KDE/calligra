@@ -37,11 +37,14 @@ class FormattingButton : public QToolButton
 public:
     explicit FormattingButton(QWidget *parent = 0);
 
-    void setNumColumns(int columns);
-    void setItemsBackground(const QColor &color);
-    void addItem(const QPixmap &pm, int id, const QString &toolTip = QString());
+    ItemChooserAction *addItemChooser(int columns, const QString &title = QString());
+    void setItemsBackground(ItemChooserAction *chooser, const QColor &color);
+    void addItem(ItemChooserAction *chooser, const QPixmap &pm, int id, const QString &toolTip = QString());
+    QAction *addItemMenuItem(ItemChooserAction *chooser, int id, const QString &text);
+    void addBlanks(ItemChooserAction *chooser, int n);
+    void removeLastItem(ItemChooserAction *chooser);
+
     void addAction(QAction *action);
-    void addBlanks(int n);
     void addSeparator();
     bool hasItemId(int id);
     bool isFirstTimeMenuShown();
@@ -54,13 +57,12 @@ Q_SIGNALS:
 private Q_SLOTS:
     void itemSelected();
     void menuShown();
+    void recalcMenuSize();
 
 private:
     int m_lastId ;
     QMenu *m_menu;
     QMap<int, QObject *> m_styleMap;
-    ItemChooserAction *m_styleAction;
-    int m_columns;
     bool m_menuShownFirstTime;
 };
 

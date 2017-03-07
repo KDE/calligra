@@ -22,9 +22,10 @@
 
 #include <kpluginfactory.h>
 
-#include "calligra_sheets_export.h"
+#include "sheets_common_export.h"
 
 class KAboutData;
+class KoComponentData;
 
 namespace Calligra
 {
@@ -35,18 +36,17 @@ class CALLIGRA_SHEETS_COMMON_EXPORT Factory : public KPluginFactory
 {
     Q_OBJECT
 public:
-    explicit Factory(QObject* parent = 0);
+    explicit Factory();
     ~Factory();
 
     virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
 
-    static const KComponentData &global();
+    static const KoComponentData &global();
 
-    // _Creates_ a KAboutData but doesn't keep ownership
     static KAboutData* aboutData();
 
 private:
-    static KComponentData* s_global;
+    static KoComponentData* s_global;
     static KAboutData* s_aboutData;
 };
 

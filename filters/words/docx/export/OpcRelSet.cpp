@@ -27,8 +27,8 @@
 #include <QByteArray>
 #include <QList>
 
-// KDE
-#include <kdebug.h>
+// This filter
+#include "DocxExportDebug.h"
 
 
 // ================================================================

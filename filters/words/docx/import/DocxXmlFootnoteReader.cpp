@@ -22,8 +22,12 @@
  */
 
 #include "DocxXmlFootnoteReader.h"
+
+#include "DocxDebug.h"
+
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
+
 #include <KoXmlWriter.h>
 #include <limits.h>
 
@@ -32,6 +36,7 @@
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
 
 #include <MsooXmlReader_p.h>
+
 
 class DocxXmlFootnoteReader::Private
 {
@@ -67,14 +72,14 @@ KoFilter::ConversionStatus DocxXmlFootnoteReader::read(MSOOXML::MsooXmlReaderCon
 {
     m_context = static_cast<DocxXmlDocumentReaderContext*>(context);
 
-    kDebug() << "=============================";
+    debugDocx << "=============================";
     readNext();
     if (!isStartDocument()) {
         return KoFilter::WrongFormat;
     }
     readNext();
 
-    kDebug() << *this << namespaceUri();
+    debugDocx << *this << namespaceUri();
     if (!expectEl(QList<QByteArray>() << "w:footnotes")) {
         return KoFilter::WrongFormat;
     }
@@ -98,7 +103,7 @@ KoFilter::ConversionStatus DocxXmlFootnoteReader::read(MSOOXML::MsooXmlReaderCon
     if (!expectElEnd(qn)) {
         return KoFilter::WrongFormat;
     }
-    kDebug() << "===========finished============";
+    debugDocx << "===========finished============";
 
     return KoFilter::OK;
 }

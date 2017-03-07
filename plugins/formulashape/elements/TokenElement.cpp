@@ -18,14 +18,17 @@
 */
 
 #include "TokenElement.h"
+
 #include "AttributeManager.h"
 #include "FormulaCursor.h"
 #include "Dictionary.h"
 #include "GlyphElement.h"
+#include "FormulaDebug.h"
+
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
+
 #include <QPainter>
-#include <kdebug.h>
 
 TokenElement::TokenElement( BasicElement* parent ) : BasicElement( parent )
 {
@@ -58,7 +61,7 @@ void TokenElement::paint( QPainter& painter, AttributeManager* am )
     if(m_stretchHorizontally || m_stretchVertically)
         painter.scale(width() / m_originalSize.width(), height() / m_originalSize.height());
 
-    painter.setPen( color );
+    painter.setPen( Qt::NoPen );
     painter.setBrush( QBrush( color ) );
     painter.drawPath( m_contentPath );
 }

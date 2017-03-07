@@ -29,6 +29,8 @@
 
 #include "gemini/ViewModeSwitchEvent.h"
 
+#include <KoPluginLoader.h>
+#include <KoDocumentEntry.h>
 #include <KoUnit.h>
 #include <KoDocument.h>
 #include <KoDocumentResourceManager.h>
@@ -55,10 +57,9 @@
 #include <commands/KWShapeCreateCommand.h>
 
 #include <KActionCollection>
-#include <KDebug>
-#include <KMimeType>
-#include <KService>
 
+#include <QPluginLoader>
+#include <QMimeDatabase>
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsWidget>
 #include <QTextDocument>
@@ -68,6 +69,7 @@
 #include <QTextDocumentFragment>
 #include <QSvgRenderer>
 #include <QApplication>
+#include <QDebug>
 
 class CQTextDocumentCanvas::Private
 {
@@ -232,19 +234,30 @@ CQTextDocumentCanvas::~CQTextDocumentCanvas()
 void CQTextDocumentCanvas::openFile(const QString& uri)
 {
     emit loadingBegun();
-    KService::Ptr service = KService::serviceByDesktopName("wordspart");
-    if (service.isNull()) {
+
+    KoDocumentEntry entry;
+    QList<QPluginLoader*> pluginLoaders = KoPluginLoader::pluginLoaders("calligra/parts");
+    Q_FOREACH (QPluginLoader *loader, pluginLoaders) {
+        if (loader->fileName().contains(QLatin1String("wordspart"))) {
+            entry = KoDocumentEntry(loader);
+            pluginLoaders.removeOne(loader);
+            break;
+        }
+    }
+    qDeleteAll(pluginLoaders);
+    if (entry.isEmpty()) {
         qWarning("Unable to load Words plugin, aborting!");
         return;
     }
 
-    d->part = service->createInstance<KoPart>(this);
+    // QT5TODO: ownership of d->part unclear
+    d->part = entry.createKoPart();
     KoDocument* document = d->part->document();
     document->setAutoSave(0);
     document->setCheckAutoSaveFile(false);
 
-    KUrl url(uri);
-    if (url.protocol() == "newfile") {
+    QUrl url(uri);
+    if (url.scheme() == "newfile") {
         KWDocument* doc = qobject_cast<KWDocument*>(document);
         doc->initEmpty();
         KWPageStyle style = doc->pageManager()->defaultPageStyle();
@@ -276,7 +289,7 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
 
         doc->setUnit(KoUnit::fromSymbol(url.queryItemValue("unit")));
         doc->relayout();
-    } else if (url.protocol() == "template") {
+    } else if (url.scheme() == "template") {
         qApp->setOverrideCursor(Qt::BusyCursor);
         // Nip away the manually added template:// bit of the uri passed from the caller
         bool ok = document->loadNativeFormat(uri.mid(11));
@@ -284,7 +297,7 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
         document->undoStack()->clear();
 
         if (ok) {
-            QString mimeType = KMimeType::findByUrl( url, 0, true )->name();
+            QString mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
             // in case this is a open document template remove the -template from the end
             mimeType.remove( QRegExp( "-template$" ) );
             document->setMimeTypeAfterLoading(mimeType);
@@ -533,7 +546,7 @@ void CQTextDocumentCanvas::addNote(const QString& text, const QString& color, co
     font.setFamily("Permanent Marker");
     font.setStyle(QFont::StyleNormal);
     font.setPixelSize(40);
-    painter.setPen(QColor(color));
+    painter.setPen(QPen(QColor(color), 0));
     painter.setFont(font);
     painter.drawText(image.rect().adjusted(10, 10, -20, -20), Qt::AlignCenter | Qt::TextWordWrap, text);
     painter.end();
@@ -771,7 +784,7 @@ void CQTextDocumentCanvas::findMatchFound(const KoFindMatch &match)
 
 void CQTextDocumentCanvas::findNoMatchFound()
 {
-    kDebug() << "Match for " << d->searchTerm << " not found";
+    qDebug() << "Match for " << d->searchTerm << " not found";
 }
 
 void CQTextDocumentCanvas::updateCanvas()

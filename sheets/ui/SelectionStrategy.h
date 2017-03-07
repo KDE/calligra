@@ -21,7 +21,7 @@
 #define CALLIGRA_SHEETS_SELECTION_STRATEGY
 
 #include "AbstractSelectionStrategy.h"
-#include "calligra_sheets_export.h"
+#include "sheets_common_export.h"
 
 namespace Calligra
 {
@@ -44,7 +44,7 @@ public:
     /**
      * Constructor.
      */
-    SelectionStrategy(CellToolBase *cellTool, const QPointF position, Qt::KeyboardModifiers modifiers);
+    SelectionStrategy(CellToolBase *cellTool, const QPointF &position, Qt::KeyboardModifiers modifiers);
 
     /**
      * Destructor.

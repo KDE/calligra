@@ -32,7 +32,8 @@
 
 #include <kpagedialog.h>
 
-class KVBox;
+class KoVBox;
+class KLocale;
 class QCheckBox;
 class QSpinBox;
 class QComboBox;
@@ -57,7 +58,7 @@ class calcSettings :  public QObject
 {
     Q_OBJECT
 public:
-    calcSettings(Selection* selection, KVBox *box);
+    calcSettings(Selection* selection, KoVBox *box);
     void apply();
 protected:
     CalculationSettings *m_cs;
@@ -74,7 +75,7 @@ class parameterLocale :  public QObject
 {
     Q_OBJECT
 public:
-    parameterLocale(Selection* selection, KVBox *box);
+    parameterLocale(Selection* selection, KoVBox *box);
     void apply();
 public Q_SLOTS:
     void updateDefaultSystemConfig();

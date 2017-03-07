@@ -91,7 +91,7 @@ void KPrPlaceholderTextStrategy::paint( QPainter & painter, const KoViewConverte
         m_textShape->paint( painter, converter, paintcontext);
 
         KoShape::applyConversion( painter, converter );
-        QPen pen( Qt::gray );
+        QPen pen(Qt::gray, 0);
         //pen.setStyle( Qt::DashLine ); // endless loop
         painter.setPen( pen );
         painter.drawRect( rect );

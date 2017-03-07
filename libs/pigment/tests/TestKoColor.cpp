@@ -19,7 +19,7 @@
 
 #include "TestKoColor.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QDomElement>
 
@@ -85,6 +85,4 @@ void TestKoColor::testConversion()
     kc.convertTo(csDst);
 }
 
-QTEST_KDEMAIN(TestKoColor, NoGUI)
-#include <TestKoColor.moc>
-
+QTEST_GUILESS_MAIN(TestKoColor)

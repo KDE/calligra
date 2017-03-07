@@ -45,9 +45,7 @@
 
 #include <QPainter>
 
-#include <kaction.h>
-#include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
@@ -56,6 +54,7 @@
 #include <KoShapeManager.h>
 #include <KoViewConverter.h>
 
+#include "SheetsDebug.h"
 #include "Cell.h"
 #include "Canvas.h"
 #include "Doc.h"
@@ -87,11 +86,11 @@ CellTool::CellTool(KoCanvasBase* canvas)
 {
     d->canvas = static_cast<CanvasBase*>(canvas);
 
-    KAction* action = 0;
+    QAction* action = 0;
 
     // -- misc actions --
 
-    action = new KAction(i18n("Define Print Range"), this);
+    action = new QAction(i18n("Define Print Range"), this);
     addAction("definePrintRange", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(definePrintRange()));
     action->setToolTip(i18n("Define the print range in the current sheet"));
@@ -163,5 +162,3 @@ void CellTool::definePrintRange()
     command->add(*selection());
     d->canvas->doc()->addCommand(command);
 }
-
-#include "CellTool.moc"

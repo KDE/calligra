@@ -22,14 +22,12 @@
 // Own
 #include "OdfParser.h"
 
-// KDE
-#include <kdebug.h>
-
 // Calligra
 #include <KoStore.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
+#include "OdfReaderDebug.h"
 
 OdfParser::OdfParser()
 {
@@ -45,7 +43,7 @@ KoFilter::ConversionStatus OdfParser::parseMetadata(KoStore &odfStore,
                                                     QHash<QString, QString> *metadata)
 {
     if (!odfStore.open("meta.xml")) {
-        kDebug(30503) << "Cannot open meta.xml";
+        debugOdfReader << "Cannot open meta.xml";
         return KoFilter::FileNotFound;
     }
 
@@ -55,7 +53,7 @@ KoFilter::ConversionStatus OdfParser::parseMetadata(KoStore &odfStore,
     int errorLine;
     int errorColumn;
     if (!doc.setContent(odfStore.device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug() << "Error occurred while parsing meta.xml "
+        debugOdfReader << "Error occurred while parsing meta.xml "
                  << errorMsg << " in Line: " << errorLine
                  << " Column: " << errorColumn;
         odfStore.close();
@@ -79,7 +77,7 @@ KoFilter::ConversionStatus OdfParser::parseManifest(KoStore &odfStore,
                                                     QHash<QString, QString> *manifest)
 {
     if (!odfStore.open("META-INF/manifest.xml")) {
-        kDebug(30503) << "Cannot to open manifest.xml.";
+        debugOdfReader << "Cannot to open manifest.xml.";
         return KoFilter::FileNotFound;
     }
 
@@ -88,7 +86,7 @@ KoFilter::ConversionStatus OdfParser::parseManifest(KoStore &odfStore,
     QString errorMsg;
     int errorLine, errorColumn;
     if (!doc.setContent(odfStore.device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug() << "Error occurred while parsing meta.xml "
+        debugOdfReader << "Error occurred while parsing meta.xml "
                  << errorMsg << " in Line: " << errorLine
                  << " Column: " << errorColumn;
         return KoFilter::ParsingError;

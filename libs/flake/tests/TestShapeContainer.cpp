@@ -28,6 +28,8 @@
 #include <KoShapeGroup.h>
 #include <KoSelection.h>
 
+#include <QTest>
+
 
 void TestShapeContainer::testModel()
 {
@@ -128,8 +130,8 @@ void TestShapeContainer::testScaling()
     QTransform matrix;
     matrix.scale(0.5, 0.5);
 
-    QList<QTransform> oldTransformations;
-    QList<QTransform> newTransformations;
+    QVector<QTransform> oldTransformations;
+    QVector<QTransform> newTransformations;
     foreach(const KoShape* shape, transformShapes) {
         QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
@@ -138,7 +140,7 @@ void TestShapeContainer::testScaling()
         newTransformations.append(localTransform*oldTransform);
     }
 
-    QList<QPointF> oldPositions;
+    QVector<QPointF> oldPositions;
     for(int i=0; i< transformShapes.size(); i++) {
         oldPositions.append(transformShapes.at(i)->absolutePosition(KoFlake::TopLeftCorner));
     }
@@ -188,15 +190,15 @@ void TestShapeContainer::testScaling2()
     QTransform matrix;
     matrix.scale(0.5, 0.5);
 
-    QList<QTransform> oldTransformations;
-    QList<QTransform> newTransformations;
+    QVector<QTransform> oldTransformations;
+    QVector<QTransform> newTransformations;
     foreach(const KoShape* shape, transformShapes) {
         QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
         newTransformations.append(oldTransform*matrix);
     }
 
-    QList<QPointF> oldPositions;
+    QVector<QPointF> oldPositions;
     for(int i=0; i< transformShapes.size(); i++) {
         oldPositions.append(transformShapes.at(i)->absolutePosition(KoFlake::TopLeftCorner));
     }
@@ -220,4 +222,3 @@ void TestShapeContainer::testScaling2()
 }
 
 QTEST_MAIN(TestShapeContainer)
-#include "TestShapeContainer.moc"

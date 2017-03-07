@@ -26,7 +26,6 @@
 
 #include "KPrClockWipeSubpathHelper.h"
 
-#include <kdebug.h>
 
 KPrSweepWipeStrategy::KPrSweepWipeStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse )
     : KPrPageEffectStrategy( subType, smilType, smilSubType, reverse )

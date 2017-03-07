@@ -19,7 +19,7 @@
 
 #include "AutocorrectConfigDialog.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kcharselect.h>
 
 #include <QHeaderView>
@@ -82,9 +82,9 @@ AutocorrectConfig::AutocorrectConfig(Autocorrect *autocorrect, QWidget *parent)
     connect(widget.autoCorrectionWithFormat, SIGNAL(stateChanged(int)), this, SLOT(enableAutocorrectFormat(int)));
     connect(widget.addButton, SIGNAL(clicked()), this, SLOT(addAutocorrectEntry()));
     connect(widget.removeButton, SIGNAL(clicked()), this, SLOT(removeAutocorrectEntry()));
-    connect(widget.tableWidget, SIGNAL(cellClicked(int, int)), this, SLOT(setFindReplaceText(int, int)));
-    connect(widget.find, SIGNAL(textChanged(const QString &)), this, SLOT(enableAddRemoveButton()));
-    connect(widget.replace, SIGNAL(textChanged(const QString &)), this, SLOT(enableAddRemoveButton()));
+    connect(widget.tableWidget, SIGNAL(cellClicked(int,int)), this, SLOT(setFindReplaceText(int,int)));
+    connect(widget.find, SIGNAL(textChanged(QString)), this, SLOT(enableAddRemoveButton()));
+    connect(widget.replace, SIGNAL(textChanged(QString)), this, SLOT(enableAddRemoveButton()));
     connect(widget.changeFormat, SIGNAL(clicked()), this, SLOT(changeCharFormat()));
 
     /* tab 4 - Exceptions */
@@ -95,8 +95,8 @@ AutocorrectConfig::AutocorrectConfig(Autocorrect *autocorrect, QWidget *parent)
     widget.add1->setEnabled(false);
     widget.add2->setEnabled(false);
 
-    connect(widget.abbreviation, SIGNAL(textChanged(const QString &)), this, SLOT(abbreviationChanged(const QString &)));
-    connect(widget.twoUpperLetter, SIGNAL(textChanged(const QString &)), this, SLOT(twoUpperLetterChanged(const QString &)));
+    connect(widget.abbreviation, SIGNAL(textChanged(QString)), this, SLOT(abbreviationChanged(QString)));
+    connect(widget.twoUpperLetter, SIGNAL(textChanged(QString)), this, SLOT(twoUpperLetterChanged(QString)));
     connect(widget.add1, SIGNAL(clicked()), this, SLOT(addAbbreviationEntry()));
     connect(widget.remove1, SIGNAL(clicked()), this, SLOT(removeAbbreviationEntry()));
     connect(widget.add2, SIGNAL(clicked()), this, SLOT(addTwoUpperLetterEntry()));
@@ -369,7 +369,7 @@ void AutocorrectConfig::removeTwoUpperLetterEntry()
 }
 
 AutocorrectConfigDialog::AutocorrectConfigDialog(Autocorrect *autocorrect, QWidget *parent)
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     ui = new AutocorrectConfig(autocorrect, this);
     connect(this, SIGNAL(okClicked()), ui, SLOT(applyConfig()));
@@ -383,7 +383,7 @@ AutocorrectConfigDialog::~AutocorrectConfigDialog()
 }
 
 CharSelectDialog::CharSelectDialog(QWidget *parent)
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     m_charSelect = new KCharSelect(this, 0,
             KCharSelect::FontCombo | KCharSelect::BlockCombos | KCharSelect::CharacterTable);
@@ -400,5 +400,3 @@ void CharSelectDialog::setCurrentChar(const QChar &c)
 {
     m_charSelect->setCurrentChar(c);
 }
-
-#include <AutocorrectConfigDialog.moc>

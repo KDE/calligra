@@ -20,7 +20,7 @@
 
 #include <QVector>
 #include <QDebug>
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "../RowFormatStorage.h"
 #include "../calligra_sheets_limits.h"
@@ -319,6 +319,4 @@ void TestRowFormatStorage::testRemoveRows()
     }
 }
 
-QTEST_KDEMAIN(TestRowFormatStorage, GUI)
-
-#include "TestRowFormatStorage.moc"
+QTEST_MAIN(TestRowFormatStorage)

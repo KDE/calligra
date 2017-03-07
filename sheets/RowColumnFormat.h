@@ -23,9 +23,9 @@
 
 #include <QBrush>
 
-#include "calligra_sheets_export.h"
 #include <KoXmlReader.h>
 
+#include "sheets_odf_export.h"
 #include "Global.h"
 #include "Style.h"
 
@@ -54,7 +54,6 @@ public:
 
     QDomElement save(QDomDocument&, int yshift = 0) const;
     bool load(const KoXmlElement& row, int yshift = 0, Paste::Mode mode = Paste::Normal);
-    bool loadOdf(const KoXmlElement& row, KoXmlElement * rowStyle);
 
     /**
      * \return the row's height

@@ -104,7 +104,7 @@ void MusicRenderer::renderPart(QPainter& painter, Part* part, int firstBar, int 
         QPointF p = bar->position();
         painter.drawLine(QPointF(p.x() + bar->size(), p.y() + firstStaff), QPointF(p.x() + bar->size(), p.y() + lastStaff));
         if (m_debug) {
-            painter.setPen(QPen(Qt::green));
+            painter.setPen(QPen(Qt::green, 0));
             painter.drawLine(QPointF(p.x(), p.y() + firstStaff - 3), QPointF(p.x(), p.y() + lastStaff + 3));
             painter.drawLine(QPointF(p.x() - bar->prefix(), p.y() + firstStaff - 3), QPointF(p.x() - bar->prefix(), p.y() + lastStaff + 3));
         }
@@ -186,14 +186,14 @@ void MusicRenderer::renderElement(QPainter& painter, VoiceElement* me, Voice* vo
     qreal top = 0;
     if (me->staff()) top += me->staff()->top();
     if (m_debug) {
-        painter.setPen(QPen(Qt::blue));
+        painter.setPen(QPen(Qt::blue, 0));
         painter.drawLine(pos + QPointF(me->x(), top + me->y() - 4), pos + QPointF(me->x(), top + me->y() + me->height() + 4));
         painter.drawLine(pos + QPointF(me->x() + me->width(), top + me->y() - 4), pos + QPointF(me->x() + me->width(), top + me->y() + me->height() + 4));
 
         painter.drawLine(pos + QPointF(me->x() - 4, top + me->y()), pos + QPointF(me->x() + me->width() + 4, top + me->y()));
         painter.drawLine(pos + QPointF(me->x() - 4, top + me->y() + me->height()), pos + QPointF(me->x() + me->width() + 4, top + me->y() + me->height()));
 
-        painter.setPen(QPen(Qt::red));
+        painter.setPen(QPen(Qt::red, 0));
         painter.drawLine(pos + QPointF(me->x() + me->beatline(), top + me->y() - 10), pos + QPointF(me->x() + me->beatline(), top + me->y() + me->height() + 10));
     }
 
@@ -207,7 +207,7 @@ void MusicRenderer::renderStaffElement(QPainter& painter, MusicCore::StaffElemen
     qreal top = 0;
     top += se->staff()->top();
     if (m_debug) {
-        painter.setPen(QPen(Qt::blue));
+        painter.setPen(QPen(Qt::blue, 0));
         painter.drawLine(pos + QPointF(se->x(), top + se->y() - 20), pos + QPointF(se->x(), top + se->y() + 20));
         painter.drawLine(pos + QPointF(se->x() + se->width(), top + se->y() - 20), pos + QPointF(se->x() + se->width(), top + se->y() + 20));
 

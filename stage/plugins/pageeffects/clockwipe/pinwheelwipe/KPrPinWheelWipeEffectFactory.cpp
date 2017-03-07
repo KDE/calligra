@@ -18,7 +18,8 @@
 */
 
 #include "KPrPinWheelWipeEffectFactory.h"
-#include <klocale.h>
+
+#include <klocalizedstring.h>
 
 #include "KPrClockWipeStrategy.h"
 

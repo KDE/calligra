@@ -29,7 +29,7 @@ CommentToolFactory::CommentToolFactory()
 {
     setToolTip(i18n("Comment"));
     setToolType(mainToolType());
-    setIconName(koIconNameCStr("tool_comment"));
+    setIconName(koIconName("tool_comment"));
     setActivationShapeId(COMMENTSHAPEID);
 }
 

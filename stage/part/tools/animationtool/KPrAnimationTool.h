@@ -31,7 +31,7 @@ class KPrAnimateMotion;
 class KPrShapeAnimationDocker;
 
 /**
- * The animation tool (associated with the clapperboard icon) is the tool in KPresenter where the user
+ * The animation tool (associated with the clapperboard icon) is the tool in Stage where the user
  * animates shapes and sets up slide transitions.
  */
 class KPrAnimationTool : public KoPathTool

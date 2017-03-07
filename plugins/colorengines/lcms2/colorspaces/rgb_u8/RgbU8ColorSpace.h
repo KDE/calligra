@@ -18,10 +18,11 @@
 #ifndef KO_STRATEGY_COLORSPACE_RGB_H_
 #define KO_STRATEGY_COLORSPACE_RGB_H_
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <LcmsColorSpace.h>
-#include <KoColorSpaceTraits.h>
 #include "KoColorModelStandardIds.h"
+
+struct KoBgrU8Traits;
 
 class RgbU8ColorSpace : public LcmsColorSpace<KoBgrU8Traits>
 {
@@ -30,27 +31,35 @@ public:
 
     RgbU8ColorSpace(const QString &name, KoColorProfile *p);
 
-    virtual bool willDegrade(ColorSpaceIndependence) const {
+    virtual bool willDegrade(ColorSpaceIndependence) const
+    {
         return false;
     }
 
-    virtual KoColorTransformation* createInvertTransformation() const;
+    virtual KoColorTransformation *createInvertTransformation() const;
 
-    virtual KoID colorModelId() const {
+    virtual KoID colorModelId() const
+    {
         return RGBAColorModelID;
     }
 
-    virtual KoID colorDepthId() const {
+    virtual KoID colorDepthId() const
+    {
         return Integer8BitsColorDepthID;
     }
 
-    virtual KoColorSpace* clone() const;
+    virtual KoColorSpace *clone() const;
 
-    virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
+    virtual void colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const;
 
-    virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
+    virtual void colorFromXML(quint8 *pixel, const QDomElement &elt) const;
 
     virtual quint8 intensity8(const quint8 * src) const;
+    
+    virtual void toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const;
+    virtual QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const;
+    virtual void toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const;
+    virtual QVector <double> fromYUV(qreal *y, qreal *u, qreal *v) const;
 
     static QString colorSpaceId()
     {
@@ -65,35 +74,43 @@ public:
 
     RgbU8ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_BGRA_8, cmsSigRgbData) {}
 
-    virtual bool userVisible() const {
+    virtual bool userVisible() const
+    {
         return true;
     }
 
-    virtual QString id() const {
+    virtual QString id() const
+    {
         return RgbU8ColorSpace::colorSpaceId();
     }
 
-    virtual QString name() const {
+    virtual QString name() const
+    {
         return i18n("RGB (8-bit integer/channel)");
     }
 
-    virtual KoID colorModelId() const {
+    virtual KoID colorModelId() const
+    {
         return RGBAColorModelID;
     }
 
-    virtual KoID colorDepthId() const {
+    virtual KoID colorDepthId() const
+    {
         return Integer8BitsColorDepthID;
     }
 
-    virtual int referenceDepth() const {
+    virtual int referenceDepth() const
+    {
         return 8;
     }
 
-    virtual KoColorSpace *createColorSpace(const KoColorProfile * p) const {
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const
+    {
         return new RgbU8ColorSpace(name(), p->clone());
     }
 
-    virtual QString defaultProfile() const {
+    virtual QString defaultProfile() const
+    {
         return "sRGB-elle-V2-srgbtrc.icc";
     }
 };

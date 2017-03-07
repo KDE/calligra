@@ -33,6 +33,8 @@
 
 #include <kselectaction.h>
 
+class QIcon;
+
 /**
  * An action to select a font family.
  * On a toolbar this will show a combobox with all the fonts on the system.
@@ -46,7 +48,7 @@ public:
     KoFontFamilyAction(uint fontListCriteria, QObject *parent);
     explicit KoFontFamilyAction(QObject *parent);
     KoFontFamilyAction(const QString& text, QObject *parent);
-    KoFontFamilyAction(const KIcon &icon, const QString &text, QObject *parent);
+    KoFontFamilyAction(const QIcon &icon, const QString &text, QObject *parent);
     virtual ~KoFontFamilyAction();
 
     QString font() const;

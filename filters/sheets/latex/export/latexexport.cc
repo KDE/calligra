@@ -20,15 +20,15 @@
 #include "latexexport.h"
 
 #include "latexexportdialog.h"
-// KDE
-#include <kdebug.h>
+#include "LatexDebug.h"
+// KF5
 #include <KoFilterChain.h>
 #include <kpluginfactory.h>
 // Qt
 #include <QByteArray>
 
-K_PLUGIN_FACTORY(LATEXExportFactory, registerPlugin<LATEXExport>();)
-K_EXPORT_PLUGIN(LATEXExportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(LATEXExportFactory, "calligra_filter_kspread2tex.json",
+                           registerPlugin<LATEXExport>();)
 
 
 LATEXExport::LATEXExport(QObject* parent, const QVariantList&) :
@@ -45,11 +45,11 @@ KoFilter::ConversionStatus LATEXExport::convert(const QByteArray& from, const QB
 
     KoStore* in = KoStore::createStore(m_chain->inputFile(), KoStore::Read);
     if (!in || !in->open("root")) {
-        kError(30503) << "Unable to open input file!" << endl;
+        errorLatex << "Unable to open input file!" << endl;
         delete in;
         return KoFilter::FileNotFound;
     }
-    kDebug(30522) << "In the kspread latex export filter...";
+    debugLatex << "In the kspread latex export filter...";
     /* input file Reading */
     in->close();
 

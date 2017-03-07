@@ -21,9 +21,7 @@
 
 #include "kptduration.h"
 #include "kptmycombobox_p.h"
-#include "plansettings.h"
-
-#include <kdebug.h>
+#include "calligraplansettings.h"
 
 namespace KPlato
 {
@@ -39,5 +37,3 @@ WorkPackageConfigPanel::WorkPackageConfigPanel(QWidget *p )
 }
 
 }  //KPlato namespace
-
-#include "kptworkpackageconfigpanel.moc"

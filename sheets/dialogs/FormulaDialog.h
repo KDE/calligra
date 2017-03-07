@@ -33,12 +33,13 @@
 #include <QListView>
 
 #include <kcompletion.h>
-#include <kdialog.h>
+#include <KoDialog.h>
 
+class QUrl;
 class QLabel;
 class QPushButton;
-class KTabWidget;
-class KTextBrowser;
+class QTabWidget;
+class QTextBrowser;
 class QStringListModel;
 class QSortFilterProxyModel;
 class KComboBox;
@@ -56,7 +57,7 @@ class Selection;
  * \ingroup UI
  * Dialog to compose a formula.
  */
-class FormulaDialog : public KDialog
+class FormulaDialog : public KoDialog
 {
     Q_OBJECT
 public:
@@ -98,7 +99,7 @@ private Q_SLOTS:
      * This will switch the active function and show help page
      * of the function as well.
      */
-    void slotShowFunction(const QString& function);
+    void slotShowFunction(const QUrl& functionUrl);
     /**
      * Called if the user double clicked on some method name.
      * That will switch into editing mode, allowing the user
@@ -143,8 +144,8 @@ private:
     Selection* m_selection;
     CellEditorBase* m_editor;
 
-    KTabWidget* m_tabwidget;
-    KTextBrowser* m_browser;
+    QTabWidget* m_tabwidget;
+    QTextBrowser* m_browser;
     QWidget* m_input;
 
     QPushButton *selectFunction;

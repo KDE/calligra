@@ -20,7 +20,6 @@
 
 #include "KPrCustomSlideShows.h"
 
-#include <kdebug.h>
 //Calligra includes
 #include <KoPAPageBase.h>
 #include <KoPAPage.h>
@@ -30,8 +29,9 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 
-//KPresenter includes
+//Stage includes
 #include <KPrDocument.h>
+#include "StageDebug.h"
 
 KPrCustomSlideShows::KPrCustomSlideShows()
 {
@@ -184,26 +184,26 @@ void KPrCustomSlideShows::loadOdf( const KoXmlElement & presentationSettings, Ko
                         slideShow.append( page );
                     }
                     else {
-                        kWarning(33001) << "missing attributes is presentation:show";
+                        warnStage << "missing attributes is presentation:show";
                     }
                 }
                 if ( !m_customSlideShows.contains( name ) ) {
                     m_customSlideShows.insert( name, slideShow );
                 }
                 else {
-                    kWarning(33001) << "slide show with name" << name << "already existing. It will not be inserted.";
+                    warnStage << "slide show with name" << name << "already existing. It will not be inserted.";
                 }
             }
             else {
-                kWarning(33001) << "missing attributes is presentation:show";
+                warnStage << "missing attributes is presentation:show";
             }
         }
     }
 }
 
-QStringList KPrCustomSlideShows::namesByPage(KoPAPageBase *page)
+QStringList KPrCustomSlideShows::namesByPage(KoPAPageBase *page) const
 {
-    QMap< QString, QList<KoPAPageBase*> >::iterator it = m_customSlideShows.begin();
+    QMap< QString, QList<KoPAPageBase*> >::ConstIterator it = m_customSlideShows.begin();
     QStringList names;
     while(it != m_customSlideShows.end()) {
         if (it.value().contains(page)) {

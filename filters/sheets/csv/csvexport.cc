@@ -43,8 +43,7 @@
 
 using namespace Calligra::Sheets;
 
-K_PLUGIN_FACTORY(CSVExportFactory, registerPlugin<CSVExport>();)
-K_EXPORT_PLUGIN(CSVExportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(CSVExportFactory, "calligra_filter_sheets2csv.json", registerPlugin<CSVExport>();)
 
 class Cell
 {
@@ -85,7 +84,7 @@ QString CSVExport::exportCSVCell(const Calligra::Sheets::Doc* doc, Sheet const *
         else if (!cell.link().isEmpty())
             text = cell.userInput(); // untested
         else if (cell.isTime())
-            text = cell.value().asTime(sheet->map()->calculationSettings()).toString("hh:mm:ss");
+            text = cell.value().asTime().toString("hh:mm:ss");
         else if (cell.isDate())
             text = cell.value().asDate(sheet->map()->calculationSettings()).toString("yyyy-MM-dd");
         else

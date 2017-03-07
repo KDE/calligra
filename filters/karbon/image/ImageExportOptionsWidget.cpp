@@ -22,7 +22,7 @@
 #include <KoUnit.h> // for POINT_TO_INCH
 #include <KoDpi.h>
 
-ImageExportOptionsWidget::ImageExportOptionsWidget(QSizeF pointSize, QWidget * parent)
+ImageExportOptionsWidget::ImageExportOptionsWidget(const QSizeF &pointSize, QWidget * parent)
         : QWidget(parent), m_pointSize(pointSize)
 {
     KoUnit unit;
@@ -220,5 +220,3 @@ void ImageExportOptionsWidget::enableBackgroundOpacity(bool enable)
     widget.opacity->setVisible(enable);
     widget.labelOpacity->setVisible(enable);
 }
-
-#include "ImageExportOptionsWidget.moc"

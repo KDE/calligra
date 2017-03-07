@@ -22,17 +22,16 @@
 #include "kptdocumentspanel.h"
 #include "kpttask.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
-#include <kdebug.h>
 
 namespace KPlato
 {
 
 WorkPackageSendDialog::WorkPackageSendDialog( const QList<Node*> &tasks,  ScheduleManager *sm, QWidget *p)
-    : KDialog(p)
+    : KoDialog(p)
 {
-    setCaption( i18nc( "@title:window", "Send Work Packages") );
+    setCaption( xi18nc( "@title:window", "Send Work Packages") );
     setButtons( Close );
     setDefaultButton( Close );
     showButtonSeparator( true );
@@ -43,5 +42,3 @@ WorkPackageSendDialog::WorkPackageSendDialog( const QList<Node*> &tasks,  Schedu
 
 
 }  //KPlato namespace
-
-#include "kptworkpackagesenddialog.moc"

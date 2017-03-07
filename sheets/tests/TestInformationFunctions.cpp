@@ -18,6 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "TestInformationFunctions.h"
+
 #include <CellStorage.h>
 #include <Formula.h>
 #include <Map.h>
@@ -26,7 +28,7 @@
 
 #include "TestKspreadCommon.h"
 
-#include "TestInformationFunctions.h"
+#include <KLocale>
 
 // because we may need to promote expected value from integer to float
 #define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
@@ -53,6 +55,9 @@ void TestInformationFunctions::initTestCase()
 {
     FunctionModuleRegistry::instance()->loadFunctionModules();
     m_map = new Map(0 /* no Doc */);
+    // some tests are sensitive to locale, so use C for all tests
+    *(m_map->calculationSettings()->locale()) = KLocale("C", "C");
+
     m_map->addNewSheet();
     Sheet* sheet = m_map->sheet(0);
     sheet->setSheetName("Sheet1");
@@ -620,6 +625,4 @@ void TestInformationFunctions::cleanupTestCase()
     delete m_map;
 }
 
-QTEST_KDEMAIN(TestInformationFunctions, GUI)
-
-#include "TestInformationFunctions.moc"
+QTEST_MAIN(TestInformationFunctions)

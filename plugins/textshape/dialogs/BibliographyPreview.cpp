@@ -26,7 +26,6 @@
 
 #include <KoInlineTextObjectManager.h>
 #include <KoParagraphStyle.h>
-#include <KoPageProvider.h>
 #include <KoShapePaintingContext.h>
 
 

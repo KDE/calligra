@@ -21,15 +21,12 @@ Copyright 2011 Paul Mendez <paulestebanms@gmail.com>
 
 #include "KoContextBarButton.h"
 
-// KDE
-#include <kiconloader.h>
-#include <kicon.h>
-#include <kglobalsettings.h>
-
 // Qt
+#include <QIcon>
 #include <QStyleOptionToolButton>
 #include <QStylePainter>
 #include <QPainterPath>
+#include <QApplication>
 
 /** How lighter is the border of context bar buttons */
 const int CONTEXTBAR_BORDER_LIGHTNESS = 140;
@@ -49,10 +46,10 @@ KoContextBarButton::KoContextBarButton(const QString &iconName, QWidget* parent)
 , m_fadingValue(0)
 , m_fadingTimeLine(0)
 {
-    const int size = IconSize(KIconLoader::Small);
+    const int size = QApplication::style()->pixelMetric(QStyle::PM_ButtonIconSize);
     setIconSize(QSize(size, size));
     setAutoRaise(true);
-    setIcon(KIcon(iconName));
+    setIcon(QIcon::fromTheme(iconName));
 }
 
 
@@ -112,7 +109,7 @@ void KoContextBarButton::paintEvent(QPaintEvent*)
     }
 
     // Border
-    painter.setPen(borderColor);
+    painter.setPen(QPen(borderColor, 0));
     painter.drawPath(path);
 
     // Content
@@ -123,8 +120,7 @@ void KoContextBarButton::startFading()
 {
     Q_ASSERT(!m_fadingTimeLine);
 
-    const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
-    const int duration = animate ? 300 : 1;
+    const int duration = 300;
 
     m_fadingTimeLine = new QTimeLine(duration, this);
     connect(m_fadingTimeLine, SIGNAL(frameChanged(int)),
@@ -188,5 +184,3 @@ void KoContextBarButton::hideEvent(QHideEvent *event)
     stopFading();
     QToolButton::hideEvent(event);
 }
-// Self
-#include "KoContextBarButton.moc"

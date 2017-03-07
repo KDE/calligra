@@ -19,17 +19,18 @@
 
 #include "ChartTextShapeCommand.h"
 
-// KDE
-#include <kdebug.h>
+// KF5
 #include <klocalizedstring.h>
 
-// KChart
-#include "ChartShape.h"
-#include "ChartLayout.h"
-
+// Calligra
 #include "KoShape.h"
 
-using namespace KChart;
+// KoChart
+#include "ChartShape.h"
+#include "ChartLayout.h"
+#include "ChartDebug.h"
+
+using namespace KoChart;
 
 ChartTextShapeCommand::ChartTextShapeCommand(KoShape* textShape, ChartShape *chart, bool isVisible)
     : m_textShape(textShape)

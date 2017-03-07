@@ -140,14 +140,14 @@ private:
     StatisticsPreferencesPopup *m_menu;
 
     // The actual data.
-    long m_words;
-    long m_sentences;
-    long m_syllables;
-    long m_cjkChars;
-    long m_charsWithSpace;
-    long m_charsWithoutSpace;
-    long m_lines;
-    long m_paragraphs;
+    int m_words;
+    int m_sentences;
+    int m_syllables;
+    int m_cjkChars;
+    int m_charsWithSpace;
+    int m_charsWithoutSpace;
+    int m_lines;
+    int m_paragraphs;
 
     // to ensure we're not running over ourselves.
     bool m_running;

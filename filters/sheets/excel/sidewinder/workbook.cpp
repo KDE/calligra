@@ -143,7 +143,7 @@ std::map<std::pair<unsigned, QString>, QString>& Workbook::namedAreas()
     return d->namedAreas;
 }
 
-void Workbook::setNamedArea(unsigned sheet, QString name, QString formula)
+void Workbook::setNamedArea(unsigned sheet, const QString &name, const QString &formula)
 {
     d->namedAreas[std::make_pair(sheet, name)] = formula;
 }

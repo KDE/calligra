@@ -21,16 +21,14 @@
 #include "locale/localemon.h"
 
 #include "kptcommand.h"
+#include "kptlocale.h"
 
-#include <klocale.h>
-
-#include <kdebug.h>
 
 namespace KPlato
 {
 
-LocaleConfigMoneyDialog::LocaleConfigMoneyDialog( KLocale *locale, QWidget *p)
-    : KDialog( p)
+LocaleConfigMoneyDialog::LocaleConfigMoneyDialog( Locale *locale, QWidget *p)
+    : KoDialog( p)
 {
     setCaption( i18n("Currency Settings") );
     setButtons( Ok|Cancel );
@@ -63,5 +61,3 @@ KUndo2Command *LocaleConfigMoneyDialog::buildCommand( Project &project ) {
 
 
 }  //KPlato namespace
-
-#include "kptlocaleconfigmoneydialog.moc"

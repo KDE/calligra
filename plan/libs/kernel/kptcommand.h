@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
   Copyright (C) 2004-2007 Dag Andersen <danders@get2net.dk>
   Copyright (C) 2011 Dag Andersen <danders@get2net.dk>
-
+  Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
+  
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
   License as published by the Free Software Foundation; either
@@ -43,6 +44,7 @@ class QString;
 namespace KPlato
 {
 
+class Locale;
 class Account;
 class Accounts;
 class Project;
@@ -188,15 +190,15 @@ private:
 class KPLATOKERNEL_EXPORT CalendarModifyTimeZoneCmd : public NamedCommand
 {
 public:
-    CalendarModifyTimeZoneCmd( Calendar *cal, const KTimeZone &value, const KUndo2MagicString& name = KUndo2MagicString() );
+    CalendarModifyTimeZoneCmd( Calendar *cal, const QTimeZone &value, const KUndo2MagicString& name = KUndo2MagicString() );
     ~CalendarModifyTimeZoneCmd();
     void execute();
     void unexecute();
 
 private:
     Calendar *m_cal;
-    KTimeZone m_newvalue;
-    KTimeZone m_oldvalue;
+    QTimeZone m_newvalue;
+    QTimeZone m_oldvalue;
     MacroCommand *m_cmd;
 };
 
@@ -456,7 +458,7 @@ private:
     Node &m_node;
     QDateTime newTime;
     DateTime oldTime;
-    KDateTime::Spec m_spec;
+    QTimeZone m_timeZone;
 };
 class KPLATOKERNEL_EXPORT NodeModifyConstraintEndTimeCmd : public NamedCommand
 {
@@ -469,7 +471,7 @@ private:
     Node &m_node;
     QDateTime newTime;
     DateTime oldTime;
-    KDateTime::Spec m_spec;
+    QTimeZone m_timeZone;
 };
 class KPLATOKERNEL_EXPORT NodeModifyStartTimeCmd : public NamedCommand
 {
@@ -482,7 +484,7 @@ private:
     Node &m_node;
     QDateTime newTime;
     DateTime oldTime;
-    KDateTime::Spec m_spec;
+    QTimeZone m_timeZone;
 };
 class KPLATOKERNEL_EXPORT NodeModifyEndTimeCmd : public NamedCommand
 {
@@ -495,7 +497,7 @@ private:
     Node &m_node;
     QDateTime newTime;
     DateTime oldTime;
-    KDateTime::Spec m_spec;
+    QTimeZone m_timeZone;
 };
 class KPLATOKERNEL_EXPORT NodeModifyIdCmd : public NamedCommand
 {
@@ -962,7 +964,7 @@ private:
     Resource *m_resource;
     QDateTime m_newvalue;
     DateTime m_oldvalue;
-    KDateTime::Spec m_spec;
+    QTimeZone m_timeZone;
 };
 class KPLATOKERNEL_EXPORT ModifyResourceAvailableUntilCmd : public NamedCommand
 {
@@ -975,7 +977,7 @@ private:
     Resource *m_resource;
     QDateTime m_newvalue;
     DateTime m_oldvalue;
-    KDateTime::Spec m_spec;
+    QTimeZone m_timeZone;
 };
 
 class KPLATOKERNEL_EXPORT ModifyResourceNormalRateCmd : public NamedCommand
@@ -1162,7 +1164,7 @@ private:
     Completion &m_completion;
     DateTime oldvalue;
     QDateTime newvalue;
-    KDateTime::Spec m_spec;
+    QTimeZone m_timeZone;
 };
 
 class KPLATOKERNEL_EXPORT ModifyCompletionFinishTimeCmd : public NamedCommand
@@ -1176,7 +1178,7 @@ private:
     Completion &m_completion;
     DateTime oldvalue;
     QDateTime newvalue;
-    KDateTime::Spec m_spec;
+    QTimeZone m_timeZone;
 };
 
 class KPLATOKERNEL_EXPORT AddCompletionEntryCmd : public NamedCommand
@@ -1483,7 +1485,7 @@ private:
     Project &m_node;
     QDateTime newTime;
     DateTime oldTime;
-    KDateTime::Spec m_spec;
+    QTimeZone m_timeZone;
 };
 
 class KPLATOKERNEL_EXPORT ProjectModifyEndTimeCmd : public NamedCommand
@@ -1497,7 +1499,7 @@ private:
     Project &m_node;
     QDateTime newTime;
     DateTime oldTime;
-    KDateTime::Spec m_spec;
+    QTimeZone m_timeZone;
 };
 
 
@@ -1732,13 +1734,13 @@ private:
 class KPLATOKERNEL_EXPORT DocumentModifyUrlCmd : public NamedCommand
 {
 public:
-    DocumentModifyUrlCmd( Document *doc, const KUrl &url, const KUndo2MagicString& name = KUndo2MagicString() );
+    DocumentModifyUrlCmd( Document *doc, const QUrl &url, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 private:
     Document *m_doc;
-    KUrl m_value;
-    KUrl m_oldvalue;
+    QUrl m_value;
+    QUrl m_oldvalue;
 };
 
 class KPLATOKERNEL_EXPORT DocumentModifyNameCmd : public NamedCommand
@@ -1848,12 +1850,12 @@ private:
 class KPLATOKERNEL_EXPORT ModifyCurrencySymolCmd : public NamedCommand
 {
 public:
-    ModifyCurrencySymolCmd(  KLocale *locale, const QString &value, const KUndo2MagicString& name = KUndo2MagicString() );
+    ModifyCurrencySymolCmd( Locale *locale, const QString &value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
 private:
-    KLocale *m_locale;
+    Locale *m_locale;
     QString m_newvalue;
     QString m_oldvalue;
 };
@@ -1861,64 +1863,12 @@ private:
 class  KPLATOKERNEL_EXPORT ModifyCurrencyFractionalDigitsCmd : public NamedCommand
 {
 public:
-    ModifyCurrencyFractionalDigitsCmd(  KLocale *locale, int value, const KUndo2MagicString& name = KUndo2MagicString() );
+    ModifyCurrencyFractionalDigitsCmd( Locale *locale, int value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
 private:
-    KLocale *m_locale;
-    int m_newvalue;
-    int m_oldvalue;
-};
-
-class  KPLATOKERNEL_EXPORT ModifyPositivePrefixCurrencySymolCmd : public NamedCommand
-{
-public:
-    ModifyPositivePrefixCurrencySymolCmd(  KLocale *locale, bool value, const KUndo2MagicString& name = KUndo2MagicString() );
-    void execute();
-    void unexecute();
-
-private:
-    KLocale *m_locale;
-    bool m_newvalue;
-    bool m_oldvalue;
-};
-
-class  KPLATOKERNEL_EXPORT ModifyNegativePrefixCurrencySymolCmd : public NamedCommand
-{
-public:
-    ModifyNegativePrefixCurrencySymolCmd(  KLocale *locale, bool value, const KUndo2MagicString& name = KUndo2MagicString() );
-    void execute();
-    void unexecute();
-
-private:
-    KLocale *m_locale;
-    bool m_newvalue;
-    bool m_oldvalue;
-};
-
-class  KPLATOKERNEL_EXPORT ModifyPositiveMonetarySignPositionCmd : public NamedCommand
-{
-public:
-    ModifyPositiveMonetarySignPositionCmd( KLocale *locale, int value, const KUndo2MagicString& name = KUndo2MagicString() );
-    void execute();
-    void unexecute();
-
-private:
-    KLocale *m_locale;
-    int m_newvalue;
-    int m_oldvalue;
-};
-
-class  KPLATOKERNEL_EXPORT ModifyNegativeMonetarySignPositionCmd : public NamedCommand
-{
-public:
-    ModifyNegativeMonetarySignPositionCmd( KLocale *locale, int value, const KUndo2MagicString& name = KUndo2MagicString() );
-    void execute();
-    void unexecute();
-
-private:
-    KLocale *m_locale;
+    Locale *m_locale;
     int m_newvalue;
     int m_oldvalue;
 };

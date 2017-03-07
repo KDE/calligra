@@ -58,8 +58,8 @@ How list tab is defined if relative tabs:
        |>-------------------|
             tab-position
 
-text-indent is equal to list:text-indent unless paragraph:text-indent is defined and not zero
-margin is equal to list:margin-left unless paragraph:margin-left is defined and not zero
+text-indent is taken from list:text-indent unless paragraph:text-indent is defined and not zero
+margin      is taken from list:margin-left unless paragraph:margin-left is defined and not zero
 
 
 LABEL was shown above center aligned. to illustrate the alignment the LABEL box and a sample label is shown below in all of the three alignments and how it relates to the position defined by text-indent:

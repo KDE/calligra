@@ -82,7 +82,7 @@ public:
     static VectorShape::VectorType vectorType(const QByteArray &contents);
 
 private Q_SLOTS:
-    void renderFinished(QSize boundingSize, QImage *image);
+    void renderFinished(const QSize &boundingSize, QImage *image);
 
 private:
     static bool isWmf(const QByteArray &bytes);
@@ -110,7 +110,7 @@ public:
     virtual ~RenderThread();
     virtual void run();
 Q_SIGNALS:
-    void finished(QSize boundingSize, QImage *image);
+    void finished(const QSize &boundingSize, QImage *image);
 private:
     void draw(QPainter &painter);
     void drawNull(QPainter &painter) const;

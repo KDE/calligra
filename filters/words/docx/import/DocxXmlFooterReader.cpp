@@ -22,8 +22,12 @@
  */
 
 #include "DocxXmlFooterReader.h"
+
+#include "DocxDebug.h"
+
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
+
 #include <KoXmlWriter.h>
 #include <limits.h>
 
@@ -32,6 +36,7 @@
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
 
 #include <MsooXmlReader_p.h>
+
 
 class DocxXmlFooterReader::Private
 {
@@ -72,14 +77,14 @@ KoFilter::ConversionStatus DocxXmlFooterReader::read(MSOOXML::MsooXmlReaderConte
 {
     m_context = static_cast<DocxXmlDocumentReaderContext*>(context);
 
-    kDebug() << "=============================";
+    debugDocx << "=============================";
     readNext();
     if (!isStartDocument()) {
         return KoFilter::WrongFormat;
     }
     readNext();
 
-    kDebug() << *this << namespaceUri();
+    debugDocx << *this << namespaceUri();
     if (!expectEl(QList<QByteArray>() << "w:ftr")) {
         return KoFilter::WrongFormat;
     }
@@ -103,7 +108,7 @@ KoFilter::ConversionStatus DocxXmlFooterReader::read(MSOOXML::MsooXmlReaderConte
     if (!expectElEnd(qn)) {
         return KoFilter::WrongFormat;
     }
-    kDebug() << "===========finished============";
+    debugDocx << "===========finished============";
 
     return KoFilter::OK;
 }

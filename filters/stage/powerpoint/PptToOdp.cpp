@@ -23,6 +23,7 @@
 
 #include "PptToOdp.h"
 
+#include "PptDebug.h"
 #include "PowerPointImport.h"
 #include "globalobjectcollectors.h"
 #include "pictures.h"
@@ -31,7 +32,6 @@
 #include "msppt.h"
 #include "msoleps.h"
 
-#include <kdebug.h>
 #include <KoOdf.h>
 #include <KoOdfWriteStore.h>
 #include <KoXmlWriter.h>
@@ -43,6 +43,7 @@
 #include <writeodf/helpers.h>
 
 #include <QTime>
+#include <QDir>
 #include <QBuffer>
 #include <qmath.h>
 
@@ -54,6 +55,19 @@
 
 using namespace MSO;
 using namespace writeodf;
+
+
+QUrl urlFromArg(const QString& arg)
+{
+#if QT_VERSION >= 0x050400
+    return QUrl::fromUserInput(arg, QDir::currentPath(), QUrl::AssumeLocalFile);
+#else
+    // Logic from QUrl::fromUserInput(QString, QString, UserInputResolutionOptions)
+    return (QUrl(arg, QUrl::TolerantMode).isRelative() && !QDir::isAbsolutePath(arg))
+           ? QUrl::fromLocalFile(QDir::current().absoluteFilePath(arg))
+           : QUrl::fromUserInput(arg);
+#endif
+}
 
 /**
  * This class represents an opened <text:list> tag with an optionally opened
@@ -635,8 +649,8 @@ QColor PptToOdp::DrawClient::toQColor(const MSO::OfficeArtCOLORREF& c)
     //required.  Testing required to implement the correct logic.
 
     const MSO::MasterOrSlideContainer* mc = dc_data->masterSlide;
-    const MSO::MainMasterContainer* mm = NULL;
-    const MSO::SlideContainer* tm = NULL;
+    const MSO::MainMasterContainer* mm = nullptr;
+    const MSO::SlideContainer* tm = nullptr;
     QColor ret;
 
     if (mc) {
@@ -875,12 +889,12 @@ PptToOdp::convert(const QString& inputFile, const QString& to, KoStore::Backend 
     // open inputFile
     POLE::Storage storage(inputFile.toLocal8Bit());
     if (!storage.open()) {
-        qDebug() << "Cannot open " << inputFile;
+        debugPpt << "Cannot open " << inputFile;
         return KoFilter::InvalidFormat;
     }
 
     if (!parse(storage)) {
-        qDebug() << "Parsing and setup failed.";
+        debugPpt << "Parsing and setup failed.";
         return KoFilter::InvalidFormat;
     }
 
@@ -893,7 +907,7 @@ PptToOdp::convert(const QString& inputFile, const QString& to, KoStore::Backend 
     KoStore* storeout = KoStore::createStore(to, KoStore::Write,
                         KoOdf::mimeType(KoOdf::Presentation), storeType);
     if (!storeout) {
-        kWarning() << "Couldn't open the requested file.";
+        warnPpt << "Couldn't open the requested file.";
         return KoFilter::FileNotFound;
     }
 
@@ -911,7 +925,7 @@ KoFilter::ConversionStatus
 PptToOdp::convert(POLE::Storage& storage, KoStore* storeout)
 {
     if (!parse(storage)) {
-        qDebug() << "Parsing and setup failed.";
+        debugPpt << "Parsing and setup failed.";
         return KoFilter::InvalidFormat;
     }
     return doConversion(storeout);
@@ -939,7 +953,7 @@ PptToOdp::doConversion(KoStore* storeout)
 
     // store document content
     if (!storeout->open("content.xml")) {
-        kWarning() << "Couldn't open the file 'content.xml'.";
+        warnPpt << "Couldn't open the file 'content.xml'.";
         delete p;
         p = 0;
         return KoFilter::CreationError;
@@ -956,7 +970,7 @@ PptToOdp::doConversion(KoStore* storeout)
     styles.saveOdfStylesDotXml(storeout, manifest);
 
     if (!storeout->open("meta.xml")) {
-        kWarning() << "Couldn't open the file 'meta.xml'.";
+        warnPpt << "Couldn't open the file 'meta.xml'.";
         delete p;
         p = 0;
         return KoFilter::CreationError;
@@ -970,7 +984,7 @@ PptToOdp::doConversion(KoStore* storeout)
     manifest->addManifestEntry("meta.xml", "text/xml");
 
     if (!storeout->open("settings.xml")) {
-        kWarning() << "Couldn't open the file 'settings.xml'.";
+        warnPpt << "Couldn't open the file 'settings.xml'.";
         delete p;
         p = 0;
         return KoFilter::CreationError;
@@ -1203,7 +1217,7 @@ QString PptToOdp::getPicturePath(const quint32 pib) const
         if (pictureNames.contains(rgbUid)) {
             return "Pictures/" + pictureNames[rgbUid];
         } else {
-            qDebug() << "UNKNOWN picture reference:" << rgbUid.toHex();
+            debugPpt << "UNKNOWN picture reference:" << rgbUid.toHex();
             use_offset = true;
             rgbUid.clear();
         }
@@ -1225,7 +1239,7 @@ QString PptToOdp::getPicturePath(const quint32 pib) const
 
                     if (!rgbUid.isEmpty()) {
                         if (pictureNames.contains(rgbUid)) {
-                            qDebug() << "Reusing OfficeArtBlip offset:" << offset;
+                            debugPpt << "Reusing OfficeArtBlip offset:" << offset;
                             return "Pictures/" + pictureNames[rgbUid];
                         }
                     }
@@ -1270,14 +1284,14 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
     }
     if (font) {
 #ifdef DEBUG_PPTTOODP_FONTS
-        qDebug() << "DEBUG: FontEntityAtom";
-        qDebug() << "> IfCharSet:" << font->lfCharSet;
-        qDebug() << "> fEmbedSubsetted:" << font->fEmbedSubsetted;
-        qDebug() << "> rasterFontType:" << font->rasterFontType;
-        qDebug() << "> deviceFontType:" << font->deviceFontType;
-        qDebug() << "> truetypeFontType:" << font->truetypeFontType;
-        qDebug() << "> fNoFontSubstitution:" << font->fNoFontSubstitution;
-        qDebug() << "DEBUG END: FontEntityAtom";
+        debugPpt << "DEBUG: FontEntityAtom";
+        debugPpt << "> IfCharSet:" << font->lfCharSet;
+        debugPpt << "> fEmbedSubsetted:" << font->fEmbedSubsetted;
+        debugPpt << "> rasterFontType:" << font->rasterFontType;
+        debugPpt << "> deviceFontType:" << font->deviceFontType;
+        debugPpt << "> truetypeFontType:" << font->truetypeFontType;
+        debugPpt << "> fNoFontSubstitution:" << font->fNoFontSubstitution;
+        debugPpt << "DEBUG END: FontEntityAtom";
 #endif
         const QString name = QString::fromUtf16(font->lfFaceName.data(), font->lfFaceName.size());
         style.addProperty("fo:font-family", name, text);
@@ -1687,7 +1701,7 @@ void PptToOdp::defineListStyleProperties(KoXmlWriter& out, bool imageBullet, con
             bool ok = false;
             qreal size = pictureSize.toDouble(&ok);
             if (!ok) {
-                qDebug() << "defineBulletStyle: error converting" << pictureSize << "to double";
+                debugPpt << "defineBulletStyle: error converting" << pictureSize << "to double";
             }
             size = m_firstChunkFontSize * size / 100.0;
             pictureSize = pt(size);
@@ -1787,7 +1801,7 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
     if (imageBullet) {
         elementName = "text:list-level-style-image";
         text_list_level_style_image image(&out, depth + 1);
-        image.set_xlink_href(bulletPictureNames.value(i.pf.bulletBlipRef()));
+        image.set_xlink_href(urlFromArg(bulletPictureNames.value(i.pf.bulletBlipRef())));
         image.set_xlink_type("simple");
         defineListStyleProperties(out, imageBullet, bulletSize, i.pf);
     }
@@ -1875,7 +1889,7 @@ public:
                     const TextContainer* tc = a.anon.get<TextContainer>();
                     if (tc && tc->textHeaderAtom.textType == wanted) {
                         if (sp) {
-                            qDebug() << "Already found a placeholder with the right type " << wanted;
+                            debugPpt << "Already found a placeholder with the right type " << wanted;
                         } else {
                             sp = &o;
                         }
@@ -1935,7 +1949,7 @@ void PptToOdp::defineMasterStyles(KoGenStyles& styles)
             masterPresentationStyles[m][5] = styles.insert(style);
         }
     }
-    m_currentMaster = NULL;
+    m_currentMaster = nullptr;
 }
 
 void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
@@ -2116,7 +2130,7 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         (m_filter->*m_setProgress)(55);
     }
 
-    // NOTE: kpresenter specific: default graphic style and
+    // NOTE: Stage specific: default graphic style and
     // drawing-page style have higher precedence than those defined by
     // the corresponding <master-page> element.  This is the case when
     // the presentation slide inherits background objects from the
@@ -2451,7 +2465,7 @@ void PptToOdp::addListElement(KoXmlWriter& out, const QString& listStyle,
     if (!listStyle.isEmpty()) {
         list.set_text_style_name(listStyle);
     } else {
-        qDebug() << "Warning: list style name not provided!";
+        debugPpt << "Warning: list style name not provided!";
     }
     if (pf.fBulletHasAutoNumber()) {
         QString xmlId = QString("lvl%1").arg(level);
@@ -2486,7 +2500,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
                               const QString& text, const int start, int end, quint16* p_fs)
 {
     if (!tc) {
-        qDebug() << "processTextSpan: TextContainer missing!";
+        debugPpt << "processTextSpan: TextContainer missing!";
         return -1;
     }
 
@@ -2497,10 +2511,10 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
     *p_fs = cf.fontSize();
 
 #ifdef DEBUG_PPTTOODP
-    qDebug() << "(TextCFRun) num. of characters:" << count;
-    qDebug() << "(TextCFRun) formatted characters:" << num;
-    qDebug() << "(Text position) start:" << start << "| end:" << end;
-    qDebug() << "font size:" << *p_fs;
+    debugPpt << "(TextCFRun) num. of characters:" << count;
+    debugPpt << "(TextCFRun) formatted characters:" << num;
+    debugPpt << "(Text position) start:" << start << "| end:" << end;
+    debugPpt << "font size:" << *p_fs;
 #endif
 
     bool isSymbol = false;
@@ -2672,7 +2686,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
 
     if (meta) {
         if (!href.isNull()) {
-            text_a a(span.add_text_a(href));
+            text_a a(span.add_text_a(urlFromArg(href)));
             text_meta m(a.add_text_meta());
             writeMeta(*meta, m_processingMasters, m);
         } else {
@@ -2683,7 +2697,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
         int len = end - start;
         const QString txt = text.mid(start, len).replace('\r', '\n').replace('\v', '\n');
         if (!href.isNull()) {
-            text_a a(span.add_text_a(href));
+            text_a a(span.add_text_a(urlFromArg(href)));
             addTextSpan(a, txt);
         } else {
             addTextSpan(span, txt);
@@ -2708,7 +2722,7 @@ int PptToOdp::processTextSpans(Writer& out, PptTextCFRun& cf, const MSO::TextCon
         }
         if (r < pos) {
             // some error
-            qDebug() << "pos: " << pos << "| end: " << end << " r: " << r;
+            debugPpt << "pos: " << pos << "| end: " << end << " r: " << r;
             return -2;
         }
         pos = r;
@@ -2740,8 +2754,8 @@ PptToOdp::processParagraph(Writer& out,
 
     const QString substr = text.mid(start, (end - start));
 #ifdef DEBUG_PPTTOODP
-    qDebug() << "> current paragraph:" << substr;
-    qDebug() << "> (hex):" << hex << substr.toUcs4() << dec;
+    debugPpt << "> current paragraph:" << substr;
+    debugPpt << "> (hex):" << hex << substr.toUcs4() << dec;
 #endif
 
     const PptOfficeArtClientData* pcd = 0;
@@ -2780,7 +2794,7 @@ PptToOdp::processParagraph(Writer& out,
     quint16 min_fontsize = FONTSIZE_MAX;
     processTextSpans(o, cf, tc, text, start, end, &min_fontsize);
 
-    //NOTE: Process empty list items as paragraphs to prevent kpresenter
+    //NOTE: Process empty list items as paragraphs to prevent Stage
     //displaying those.
     m_isList = ( pf.isList() && (start < end) );
 
@@ -2884,7 +2898,7 @@ int PptToOdp::processTextForBody(Writer& out, const MSO::OfficeArtClientData* cl
     // used.  Common shapes should not refer to a color scheme.
 
     if (!tc) {
-        qDebug() << "MISSING TextContainer, big mess-up!";
+        debugPpt << "MISSING TextContainer, big mess-up!";
         return -1;
     }
 
@@ -2897,8 +2911,8 @@ int PptToOdp::processTextForBody(Writer& out, const MSO::OfficeArtClientData* cl
     txt.replace('\n', "<newline>");
     txt.replace('\t', "<tab>");
     txt.replace('\f', "<ff>");
-    qDebug() << "\n> textType:" << txt_type;
-    qDebug() << "> current text:" << txt << "| length:" << len;
+    debugPpt << "\n> textType:" << txt_type;
+    debugPpt << "> current text:" << txt << "| length:" << len;
 #endif
 
     // Let's assume text stored in paragraphs.
@@ -3027,8 +3041,8 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
         odrawtoodf.processGroupShape(spgr, out);
     }
 
-    m_currentMaster = NULL;
-    m_currentSlide = NULL;
+    m_currentMaster = nullptr;
+    m_currentSlide = nullptr;
 
     if (slide->drawing.OfficeArtDg.shape) {
         // leave it out until it is understood
@@ -3157,15 +3171,15 @@ QColor PptToOdp::toQColor(const ColorIndexStruct &color)
         return ret;
     }
 
-    const QList<ColorStruct>* colorScheme = NULL;
+    const QList<ColorStruct>* colorScheme = nullptr;
     const MSO::MasterOrSlideContainer* m = m_currentMaster;
-    const MSO::MainMasterContainer* mmc = NULL;
-    const MSO::SlideContainer* tmc = NULL;
+    const MSO::MainMasterContainer* mmc = nullptr;
+    const MSO::SlideContainer* tmc = nullptr;
     const MSO::SlideContainer* sc = m_currentSlide;
 
     //TODO: hande the case of a notes master slide/notes slide pair
-//     const MSO::NotesContainer* nmc = NULL;
-//     const MSO::NotesContainer* nc = NULL;
+//     const MSO::NotesContainer* nmc = nullptr;
+//     const MSO::NotesContainer* nc = nullptr;
 
 //     if (m) {
 //         if (m->anon.is<MainMasterContainer>()) {
@@ -3187,7 +3201,7 @@ QColor PptToOdp::toQColor(const ColorIndexStruct &color)
         } else {
             mmc = m->anon.get<MainMasterContainer>();
             colorScheme = &mmc->slideSchemeColorSchemeAtom.rgSchemeColor;
-            m = NULL;
+            m = nullptr;
         }
     }
 
@@ -3207,12 +3221,12 @@ QColor PptToOdp::toQColor(const ColorIndexStruct &color)
             colorScheme = &tmc->slideSchemeColorSchemeAtom.rgSchemeColor;
         }
         if (!colorScheme) {
-            qWarning() << "Warning: Ivalid color scheme! Returning an invalid color!";
+            warnPpt << "Warning: Ivalid color scheme! Returning an invalid color!";
             return ret;
         }
     }
     if (colorScheme->size() <= color.index) {
-        qWarning() << "Warning: Incorrect size of rgSchemeColor! Returning an invalid color!";
+        warnPpt << "Warning: Incorrect size of rgSchemeColor! Returning an invalid color!";
     } else {
         const ColorStruct cs = colorScheme->at(color.index);
         ret = QColor(cs.red, cs.green, cs.blue);
@@ -3230,12 +3244,12 @@ QColor PptToOdp::toQColor(const MSO::OfficeArtCOLORREF& c,
     //defined color scheme will be used to determine the color (MS-ODRAW)
     if (c.fSchemeIndex) {
 
-        const QList<ColorStruct>* colorScheme = NULL;
-        const MSO::MainMasterContainer* mmc = NULL;
-        const MSO::SlideContainer* tmc = NULL;
-        const MSO::SlideContainer* sc = NULL;
-        const MSO::NotesContainer* nmc = NULL;
-        const MSO::NotesContainer* nc = NULL;
+        const QList<ColorStruct>* colorScheme = nullptr;
+        const MSO::MainMasterContainer* mmc = nullptr;
+        const MSO::SlideContainer* tmc = nullptr;
+        const MSO::SlideContainer* sc = nullptr;
+        const MSO::NotesContainer* nmc = nullptr;
+        const MSO::NotesContainer* nc = nullptr;
 
         // Get the color scheme of the current main master/title master or
         // notes master slide.
@@ -3248,7 +3262,7 @@ QColor PptToOdp::toQColor(const MSO::OfficeArtCOLORREF& c,
             } else if ((tmc = dynamic_cast<MSO::SlideContainer*>(m))) {
                 colorScheme = &tmc->slideSchemeColorSchemeAtom.rgSchemeColor;
             } else {
-                qWarning() << "Warning: Incorrect container!";
+                warnPpt << "Warning: Incorrect container!";
             }
         }
         // Get the color scheme of the current presentation slide or notes
@@ -3264,7 +3278,7 @@ QColor PptToOdp::toQColor(const MSO::OfficeArtCOLORREF& c,
                     colorScheme = &nc->slideSchemeColorSchemeAtom.rgSchemeColor;
                 }
 	    } else {
-                qWarning() << "Warning: Incorrect container! Provide SlideContainer of NotesContainer.";
+                warnPpt << "Warning: Incorrect container! Provide SlideContainer of NotesContainer.";
             }
         }
         if (!colorScheme) {
@@ -3278,13 +3292,13 @@ QColor PptToOdp::toQColor(const MSO::OfficeArtCOLORREF& c,
                 colorScheme = &tmc->slideSchemeColorSchemeAtom.rgSchemeColor;
             }
             if (!colorScheme) {
-                qWarning() << "Warning: Ivalid color scheme! Returning an invalid color!";
+                warnPpt << "Warning: Ivalid color scheme! Returning an invalid color!";
                 return ret;
             }
         }
         // Use the red color channel's value as index according to MS-ODRAW
         if (colorScheme->size() <= c.red) {
-            qWarning() << "Warning: Incorrect size of rgSchemeColor! Returning an invalid color!";
+            warnPpt << "Warning: Incorrect size of rgSchemeColor! Returning an invalid color!";
             return ret;
         } else {
             const ColorStruct cs = colorScheme->value(c.red);
@@ -3593,7 +3607,7 @@ void PptToOdp::insertNotesDeclaration(DeclarationType type, const QString &name,
 // @return pointer to the OfficeArtSpContainer
 const OfficeArtSpContainer* checkGroupShape(const OfficeArtSpgrContainer& o, quint32 spid)
 {
-    if (o.rgfb.size() < 2) return NULL;
+    if (o.rgfb.size() < 2) return nullptr;
 
     const OfficeArtSpContainer* sp = 0;
     foreach(const OfficeArtSpgrContainerFileBlock& co, o.rgfb) {
@@ -3605,7 +3619,7 @@ const OfficeArtSpContainer* checkGroupShape(const OfficeArtSpgrContainer& o, qui
 	}
         //TODO: the shape could be located deeper in the hierarchy
     }
-    return NULL;
+    return nullptr;
 }
 
 const OfficeArtSpContainer* PptToOdp::retrieveMasterShape(quint32 spid) const
@@ -3666,5 +3680,5 @@ const OfficeArtSpContainer* PptToOdp::retrieveMasterShape(quint32 spid) const
         }
     }
 #endif
-    return NULL;
+    return nullptr;
 }

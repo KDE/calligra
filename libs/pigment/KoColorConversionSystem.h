@@ -87,7 +87,7 @@ public:
      * @param toCS the revert conversion to the source color space will be affected to this
      *             variable
      */
-    void createColorConverters(const KoColorSpace* colorSpace, QList< QPair<KoID, KoID> >& possibilities, KoColorConversionTransformation*& fromCS, KoColorConversionTransformation*& toCS) const;
+    void createColorConverters(const KoColorSpace* colorSpace, const QList< QPair<KoID, KoID> >& possibilities, KoColorConversionTransformation*& fromCS, KoColorConversionTransformation*& toCS) const;
 public:
     /**
      * This function return a text that can be compiled using dot to display
@@ -110,13 +110,13 @@ public:
      */
     bool existsGoodPath(const QString& srcModelId, const QString& srcDepthId, const QString& srcProfileName, const QString& dstModelId, const QString& dstDepthId, const QString& dstProfileName) const;
 private:
-    QString vertexToDot(Vertex* v, QString options) const;
+    QString vertexToDot(Vertex* v, const QString &options) const;
 private:
     /**
      * Insert an engine.
      */
     Node* insertEngine(const KoColorSpaceEngine* engine);
-    KoColorConversionTransformation* createTransformationFromPath(const Path* path, const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) const;
+    KoColorConversionTransformation* createTransformationFromPath(const KoColorConversionSystem::Path& path, const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) const;
     /**
      * Query the registry to get the color space associated with this
      * node. (default profile)
@@ -156,7 +156,7 @@ private:
     /**
      * looks for the best path between two nodes
      */
-    Path* findBestPath(const Node* srcNode, const Node* dstNode) const;
+    Path findBestPath(const Node* srcNode, const Node* dstNode) const;
     /**
      * Delete all the paths of the list given in argument.
      */
@@ -165,12 +165,12 @@ private:
      * Don't call that function, but raher findBestPath
      * @internal
      */
-    inline Path* findBestPathImpl2(const Node* srcNode, const Node* dstNode, bool ignoreHdr, bool ignoreColorCorrectness) const;
+    inline Path findBestPathImpl2(const Node* srcNode, const Node* dstNode, bool ignoreHdr, bool ignoreColorCorrectness) const;
     /**
      * Don't call that function, but raher findBestPath
      * @internal
      */
-    inline Path* findBestPathImpl(const Node* srcNode, const Node* dstNode, bool ignoreHdr) const;
+    inline Path findBestPathImpl(const Node* srcNode, const Node* dstNode, bool ignoreHdr) const;
 
 private:
     struct Private;

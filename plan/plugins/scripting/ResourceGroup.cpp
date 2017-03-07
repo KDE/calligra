@@ -62,6 +62,3 @@ QObject *Scripting::ResourceGroup::childAt( int index ) const
 {
     return m_project->resource( m_group->resourceAt( index ) );
 }
-
-
-#include "ResourceGroup.moc"

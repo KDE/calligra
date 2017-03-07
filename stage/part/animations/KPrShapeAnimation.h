@@ -73,15 +73,6 @@ public:
     virtual void init(KPrAnimationCache *animationCache, int step);
 
     virtual void deactivate();
-    /**
-     * @return true if this shape animation change the visibility
-     */
-    bool visibilityChange();
-
-    /**
-     * @return true if this shape animation enable visibility of the shape
-     */
-    bool visible();
 
     /**
      * Read the value from the first KPrAnimationBase object
@@ -135,9 +126,9 @@ public:
      *
      * @param id QString with the animation name
      */
-    void setId(QString id);
+    void setId(const QString &id);
 
-    void setPresetSubType(QString subType);
+    void setPresetSubType(const QString &subType);
 
     /**
      * @brief Returns stored class of the animation

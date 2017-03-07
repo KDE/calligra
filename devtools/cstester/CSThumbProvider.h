@@ -23,7 +23,7 @@
 #ifndef CSTHUMBPROVIDER_H
 #define CSTHUMBPROVIDER_H
 
-#include <QList>
+#include <QVector>
 
 class QImage;
 class QSize;
@@ -34,7 +34,7 @@ public:
     CSThumbProvider() {}
     virtual ~CSThumbProvider() {}
 
-    virtual QList<QImage> createThumbnails(const QSize &thumbSize) = 0;
+    virtual QVector<QImage> createThumbnails(const QSize &thumbSize) = 0;
 };
 
 #endif /* CSTHUMBPROVIDER_H */

@@ -20,12 +20,12 @@
 #include "ViewManager.h"
 
 #include <KoShapeManager.h>
+#include <KoShapeLayer.h>
 
 #include "Canvas.h"
 #include "Section.h"
 #include "View.h"
 #include "SectionContainer.h"
-#include <KoShapeLayer.h>
 #include "RootSection.h"
 #include "Utils.h"
 

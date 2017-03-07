@@ -33,7 +33,7 @@ public:
     explicit ParagraphDecorations(QWidget* parent = 0);
     ~ParagraphDecorations() {}
 
-    void setDisplay(KoParagraphStyle *style);
+    void setDisplay(KoParagraphStyle *style, bool directFormattingMode);
     void save(KoParagraphStyle *style) const;
 
 Q_SIGNALS:

@@ -19,21 +19,20 @@
 
 #include "StateShapePlugin.h"
 
-#include <kgenericfactory.h>
+#include <KPluginFactory>
+
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
 #include "StateShapeFactory.h"
 #include "StateToolFactory.h"
 
-K_PLUGIN_FACTORY(StateShapePluginFactory, registerPlugin<StateShapePlugin>();)
-K_EXPORT_PLUGIN(StateShapePluginFactory( "StateShapePlugin" ) )
+K_PLUGIN_FACTORY_WITH_JSON(StateShapePluginFactory, "braindump_shape_state.json", registerPlugin<StateShapePlugin>();)
 
 
 StateShapePlugin::StateShapePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    KGlobal::locale()->insertCatalog("braindump");
     // register the shape's factory
     KoShapeRegistry::instance()->add(
         new StateShapeFactory());

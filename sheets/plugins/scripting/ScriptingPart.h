@@ -51,11 +51,6 @@ public:
 
 private:
     Q_DISABLE_COPY(ScriptingPart)
-
-    /// \internal d-pointer class.
-    class Private;
-    /// \internal d-pointer instance.
-    Private* const d;
 };
 
 #endif

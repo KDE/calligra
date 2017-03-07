@@ -19,9 +19,13 @@
 #include "rtreetestapp.h"
 
 #include <QApplication>
-#include <QtGui>
+#include <QMessageBox>
+#include <QMenuBar>
+#include <QStatusBar>
+#include <QMenu>
 #include <QPainterPath>
 #include <QLayout>
+#include <QTimer>
 #include <QPoint>
 #include <QPointF>
 #include <QDebug>
@@ -329,5 +333,3 @@ void MainWindow::createStatusBar()
 {
     statusBar()->showMessage(tr("Ready"));
 }
-
-#include <rtreetestapp.moc>

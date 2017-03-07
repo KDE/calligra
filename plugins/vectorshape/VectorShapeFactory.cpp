@@ -24,6 +24,7 @@
 // VectorShape
 #include "VectorShape.h"
 #include "VectorShapeConfigWidget.h"
+#include "VectorDebug.h"
 
 // Calligra
 #include <KoXmlNS.h>
@@ -31,16 +32,15 @@
 #include <KoOdfLoadingContext.h>
 #include <KoIcon.h>
 
-// KDE
-#include <klocale.h>
-#include <kdebug.h>
+// KF5
+#include <klocalizedstring.h>
 
 
 VectorShapeFactory::VectorShapeFactory()
     : KoShapeFactoryBase(VectorShape_SHAPEID, i18n("Vector image"))
 {
     setToolTip(i18n("A shape that shows a vector image (EMF/WMF/SVM)"));
-    setIconName(koIconNameCStrNeededWithSubs("a generic vector image icon", "x-shape-vectorimage", "application-x-wmf"));
+    setIconName(koIconNameNeededWithSubs("a generic vector image icon", "x-shape-vectorimage", "application-x-wmf"));
     setXmlElementNames(KoXmlNS::draw, QStringList("image"));
     setLoadingPriority(5);
 }
@@ -80,7 +80,7 @@ bool VectorShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext 
                 mimetype.isEmpty() ||
                 // next for compatibility with OO/LO and our filters
                 // see drwho.virtadpt.net%2Ffiles%2FNOVALUG-Tor.odp
-                mimetype.startsWith("application/x-openoffice");
+                mimetype.startsWith(QLatin1String("application/x-openoffice"));
         }
         return true;
     }

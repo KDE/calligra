@@ -1,6 +1,4 @@
-include_directories( 
-        ${KDE4_INCLUDE_DIR} 
-        ${QT_INCLUDES} 
+include_directories(
         ${KOODF_INCLUDES}
         ${KOMAIN_INCLUDES}
         ${CMAKE_SOURCE_DIR}/karbon/
@@ -12,6 +10,7 @@ include_directories(
 )
 
 set(karbonui_SRCS
+    KarbonUiDebug.cpp
     KarbonFactory.cpp
     KarbonDocument.cpp
     KarbonPart.cpp
@@ -29,24 +28,26 @@ set(karbonui_SRCS
     dockers/KarbonLayerSortingModel.cpp
 
     widgets/KarbonCanvas.cpp
-    widgets/KarbonGradientWidget.cpp
-    widgets/KarbonGradientEditWidget.cpp
     widgets/KarbonSmallStylePreview.cpp
-    widgets/KarbonPatternOptionsWidget.cpp
     widgets/KarbonPaletteBarWidget.cpp
     widgets/KarbonPaletteWidget.cpp
     widgets/KarbonConfigInterfacePage.cpp
 )
 
-kde4_add_ui_files(karbonui_SRCS
-    widgets/KarbonPatternOptionsWidget.ui
+add_library( karbonui SHARED ${karbonui_SRCS} )
+generate_export_header(karbonui BASE_NAME karbonui)
+
+target_link_libraries(karbonui
+    PUBLIC
+        karboncommon
+        flake
+    PRIVATE
+        kowidgets
+        koodf
+        koplugin
+        KF5::IconThemes
+        KF5::GuiAddons
 )
-
-
-kde4_add_library( karbonui SHARED ${karbonui_SRCS} )
-
-target_link_libraries(karbonui karboncommon kowidgets koodf)
-target_link_libraries(karbonui LINK_INTERFACE_LIBRARIES karboncommon)
 
 set_target_properties(karbonui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 

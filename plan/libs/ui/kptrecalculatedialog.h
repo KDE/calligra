@@ -24,6 +24,8 @@
 
 #include "ui_kptrecalculatedialog.h"
 
+#include <KoDialog.h>
+
 namespace KPlato
 {
 
@@ -35,7 +37,7 @@ public:
 
 };
 
-class KPLATOUI_EXPORT RecalculateDialog : public KDialog
+class KPLATOUI_EXPORT RecalculateDialog : public KoDialog
 {
     Q_OBJECT
 public:

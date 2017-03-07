@@ -50,7 +50,7 @@ void KPrPresentationHighlightWidget::paintEvent( QPaintEvent * event )
 {
     Q_UNUSED(event);
     QPainter painter( this );
-    QPen myPen;
+    QPen myPen(Qt::black, 0);
     QColor c( Qt::black );
     // TODO make alpha configurable
     c.setAlphaF( 0.5 );

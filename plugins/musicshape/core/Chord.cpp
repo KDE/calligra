@@ -388,8 +388,8 @@ qreal Chord::stemEndY(bool interpolateBeams) const
         return (stemX() - sx) * dydx + sy;
     }
 
-    Staff* topStaff = NULL;
-    Staff* bottomStaff = NULL;
+    Staff* topStaff = nullptr;
+    Staff* bottomStaff = nullptr;
     qreal top = 1e9, bottom = -1e9;
     Clef* clef = staff()->lastClefChange(voiceBar()->bar(), 0);
 
@@ -550,5 +550,3 @@ void Chord::setBeam(int index, Chord* beamStart, Chord* beamEnd, BeamType type)
 }
 
 } // namespace MusicCore
-
-#include <Chord.moc>

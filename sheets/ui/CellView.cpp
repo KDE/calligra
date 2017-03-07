@@ -57,14 +57,15 @@
 #include <QThread>
 #endif
 
-// KDE
+// KF5
 #include <kcolorutils.h>
+#include <klocale.h>
 
 // Calligra
 #include <KoPostscriptPaintDevice.h>
 #include <KoZoomHandler.h>
 
-// KSpread
+// Sheets
 #include "ApplicationSettings.h"
 #include "CalculationSettings.h"
 #include "CellStorage.h"
@@ -1093,7 +1094,7 @@ void CellView::paintText(QPainter& painter,
         }
     }
 
-    QPen tmpPen(textColorPrint);
+    QPen tmpPen(textColorPrint, 0);
     QFont font = d->calculateFont();
 
     // Check for red font color for negative values.
@@ -1274,7 +1275,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
             && cell.row() <= printRange.bottom() + 1) {
         if (print->isColumnOnNewPage(cell.column())
                 && cell.row() <= printRange.bottom()) {
-            painter.setPen(cell.sheet()->map()->settings()->pageOutlineColor());
+            painter.setPen(QPen(cell.sheet()->map()->settings()->pageOutlineColor(), 0));
 
             if (cell.sheet()->layoutDirection() == Qt::RightToLeft)
                 line = QLineF(coordinate.x() + d->width, coordinate.y(),
@@ -1287,7 +1288,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
 
         if (print->isRowOnNewPage(cell.row()) &&
                 (cell.column() <= printRange.right())) {
-            painter.setPen(cell.sheet()->map()->settings()->pageOutlineColor());
+            painter.setPen(QPen(cell.sheet()->map()->settings()->pageOutlineColor(), 0));
             line = QLineF(coordinate.x(),  coordinate.y(),
                           coordinate.x() + d->width, coordinate.y());
             painter.drawLine(line);
@@ -1296,7 +1297,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
         if (paintBorder & RightBorder) {
             if (print->isColumnOnNewPage(cell.column() + 1)
                     && cell.row() <= printRange.bottom()) {
-                painter.setPen(cell.sheet()->map()->settings()->pageOutlineColor());
+                painter.setPen(QPen(cell.sheet()->map()->settings()->pageOutlineColor(), 0));
 
                 if (cell.sheet()->layoutDirection() == Qt::RightToLeft)
                     line = QLineF(coordinate.x(), coordinate.y(),
@@ -1311,7 +1312,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
         if (paintBorder & BottomBorder) {
             if (print->isRowOnNewPage(cell.row() + 1)
                     && cell.column() <= printRange.right()) {
-                painter.setPen(cell.sheet()->map()->settings()->pageOutlineColor());
+                painter.setPen(QPen(cell.sheet()->map()->settings()->pageOutlineColor(), 0));
                 line = QLineF(coordinate.x(),  coordinate.y() + d->height,
                               coordinate.x() + d->width, coordinate.y() + d->height);
                 painter.drawLine(line);
@@ -1369,7 +1370,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF& paintRect,
     if ((paintBorder & LeftBorder) && leftPen.style() != Qt::NoPen) {
         painter.setPen(leftPen);
 
-        //kDebug(36004) <<"    painting left border of cell" << name();
+        //debugSheetsRender <<"    painting left border of cell" << name();
 
         // If we are on paper printout, we limit the length of the lines.
         // On paper, we always have full cells, on screen not.
@@ -1388,7 +1389,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF& paintRect,
     if ((paintBorder & RightBorder) && rightPen.style() != Qt::NoPen) {
         painter.setPen(rightPen);
 
-        //kDebug(36004) <<"    painting right border of cell" << name();
+        //debugSheetsRender <<"    painting right border of cell" << name();
 
         // If we are on paper printout, we limit the length of the lines.
         // On paper, we always have full cells, on screen not.
@@ -1408,7 +1409,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF& paintRect,
     if ((paintBorder & TopBorder) && topPen.style() != Qt::NoPen) {
         painter.setPen(topPen);
 
-        //kDebug(36004) <<"    painting top border of cell" << name()
+        //debugSheetsRender <<"    painting top border of cell" << name()
         //       << " [" << coordinate.x() << "," << coordinate.x() + d->width
         //       << ": " << coordinate.x() + d->width - coordinate.x() << "]" << endl;
 
@@ -1429,7 +1430,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF& paintRect,
     if ((paintBorder & BottomBorder) && bottomPen.style() != Qt::NoPen) {
         painter.setPen(bottomPen);
 
-        //kDebug(36004) <<"    painting bottom border of cell" << name()
+        //debugSheetsRender <<"    painting bottom border of cell" << name()
         //       << " [" << coordinate.x() << "," << coordinate.x() + d->width
         //       << ": " << coordinate.x() + d->width - coordinate.x() << "]" << endl;
 

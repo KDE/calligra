@@ -21,7 +21,11 @@
  *
  */
 
+// Own
 #include "XlsxXmlDocumentReader.h"
+
+#include <KoBorder.h>  // needed by DrawingMLMethodso
+
 #include "XlsxXmlWorksheetReader.h"
 #include "XlsxXmlCommentsReader.h"
 #include "XlsxImport.h"
@@ -45,8 +49,8 @@ XlsxXmlDocumentReaderContext::XlsxXmlDocumentReaderContext(
     const XlsxComments& _comments,
     const XlsxStyles& _styles,
     MSOOXML::MsooXmlRelationships& _relationships,
-    QString _file,
-    QString _path
+    const QString &_file,
+    const QString &_path
     )
         : MSOOXML::MsooXmlReaderContext(&_relationships)
         , import(&_import)

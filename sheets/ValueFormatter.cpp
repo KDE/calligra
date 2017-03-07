@@ -26,10 +26,10 @@
 #include "Cell.h"
 #include "Localization.h"
 #include "ValueConverter.h"
+#include "SheetsDebug.h"
 
 #include <kcalendarsystem.h>
-#include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <float.h>
 #include <math.h>
@@ -150,7 +150,7 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
     if (!postfix.isEmpty())
         result = Value(result.asString() + ' ' + postfix);
 
-    //kDebug() <<"ValueFormatter says:" << str;
+    //debugSheets <<"ValueFormatter says:" << str;
     return result;
 }
 
@@ -266,7 +266,12 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
         if (formatString.isEmpty()) {
             return prefix + postfix;
         } else if (formatString.contains(QLatin1Char('.'))) {
-            precision = formatString.length() - formatString.indexOf(QLatin1Char('.')) - 1;
+            // if it contains an 'E', precision is zeros between '.' and 'E'
+            int len = formatString.indexOf(QLatin1Char('E'));
+            if (len == -1) {
+                len = formatString.length();
+            }
+            precision = len - formatString.indexOf(QLatin1Char('.')) - 1;
         } else if (precision != -1) {
             precision = 0;
         }
@@ -324,19 +329,40 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
             postfix += '%';
         break;
     case Format::Money:
+        // There is no substitute for this in QLocale (toCurrencyString cannot set precision) :(
         localizedNumber = m_converter->settings()->locale()->formatMoney(val, currencySymbol.isEmpty() ? m_converter->settings()->locale()->currencySymbol() : currencySymbol, p);
         break;
     case Format::Scientific: {
         const QString decimalSymbol = m_converter->settings()->locale()->decimalSymbol();
         localizedNumber = QString::number(val, 'E', p);
-        if ((pos = localizedNumber.indexOf('.')) != -1)
+        if ((pos = localizedNumber.indexOf('.')) != -1) {
             localizedNumber.replace(pos, 1, decimalSymbol);
+        }
+        // TODO: port to QLocale or other (icu?) formatting
+        int fpos = formatString.indexOf('E');
+        if (fpos > -1) {
+            // handle min-exponent-digits
+            int exp = 0;
+            for (int pos = fpos +2; pos < formatString.length() && formatString.at(pos).isDigit(); ++pos) {
+                ++exp;
+            }
+            if (exp == 0) {
+                exp = 2; // FIXME: proper default
+            }
+            for (int pos = localizedNumber.length() - 1; localizedNumber.at(pos).isDigit(); --pos) {
+                --exp;
+            }
+            int pos = localizedNumber.indexOf('E') + 2;
+            for (; exp > 0; --exp) {
+                localizedNumber.insert(pos, '0');
+            }
+        }
         break;
     }
     default :
         //other formatting?
         // This happens with Format::Custom...
-        kDebug(36001) << "Wrong usage of ValueFormatter::createNumberFormat fmt=" << fmt << "";
+        debugSheets << "Wrong usage of ValueFormatter::createNumberFormat fmt=" << fmt << "";
         break;
     }
 
@@ -345,21 +371,23 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
         if (m_converter->settings()->locale()->positiveSign().isEmpty())
             localizedNumber = '+' + localizedNumber;
 
-    // Remove trailing zeros and the decimal point if necessary
-    // unless the number has no decimal point
-    if (precision == -1) {
-        QString decimalSymbol = m_converter->settings()->locale()->decimalSymbol();
-        if (decimalSymbol.isNull())
-            decimalSymbol = '.';
+    if (fmt != Format::Scientific) {
+        // Remove trailing zeros and the decimal point if necessary
+        // unless the number has no decimal point
+        if (precision == -1) {
+            QString decimalSymbol = m_converter->settings()->locale()->decimalSymbol();
+            if (decimalSymbol.isNull())
+                decimalSymbol = '.';
 
-        localizedNumber = removeTrailingZeros(localizedNumber, decimalSymbol);
-    }
+            localizedNumber = removeTrailingZeros(localizedNumber, decimalSymbol);
+        }
 
-    // Remove thousands separators if necessary
-    if (!thousandsSep) {
-        const QString separator = m_converter->settings()->locale()->thousandsSeparator();
-        if (!separator.isNull()) {
-            localizedNumber.remove(separator);
+        // Remove thousands separators if necessary
+        if (!thousandsSep) {
+            const QString separator = m_converter->settings()->locale()->thousandsSeparator();
+            if (!separator.isNull()) {
+                localizedNumber.remove(separator);
+            }
         }
     }
 
@@ -416,7 +444,7 @@ QString ValueFormatter::fractionFormat(Number value, Format::Type fmtType)
         limit = 999;
         break;
     default:
-        kDebug(36001) << "Error in Fraction format";
+        debugSheets << "Error in Fraction format";
         return prefix + QString::number((double) numToDouble(value));
         break;
     } /* switch */

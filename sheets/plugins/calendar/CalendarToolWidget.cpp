@@ -21,12 +21,13 @@
 *   OTHER DEALINGS IN THE SOFTWARE.                                       *
 ***************************************************************************/
 
-#include <CalendarToolWidget.h>
+#include "CalendarToolWidget.h"
+
+#include "SheetsDebug.h"
 
 #include <KoIcon.h>
 
 #include <kdatepicker.h>
-#include <kdebug.h>
 
 #include <QPushButton>
 
@@ -51,7 +52,7 @@ CalendarToolWidget::CalendarToolWidget(QWidget* parent)
     this->m_startDateWidget->setDate(first_day_in_month);
     this->m_endDateWidget->setDate(last_day_in_month);
 
-    const KIcon calendarIcon(koIconName("x-office-calendar"));
+    const QIcon calendarIcon = koIcon("x-office-calendar");
     this->m_selectStartDateButton->setIcon(calendarIcon);
     this->m_selectEndDateButton->setIcon(calendarIcon);
 
@@ -87,7 +88,7 @@ bool CalendarToolWidget::buildDatePickerFrame()
 
 void CalendarToolWidget::datePickerDeleted()
 {
-    kDebug() << "date picker deleted";
+    debugSheets << "date picker deleted";
     m_datePicker = 0;
 }
 
@@ -138,5 +139,3 @@ QDate CalendarToolWidget::endDate() const
 
 } // namespace Sheets
 } // namespace Calligra
-
-#include "CalendarToolWidget.moc"

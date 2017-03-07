@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2007 Dag Andersen <danders@get2net.dk>
-
+   Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -21,9 +22,7 @@
 #include <kptdatetime.h>
 #include <kptduration.h>
 
-
-#include <qtest_kde.h>
-#include <kdebug.h>
+#include "debug.cpp"
 
 namespace KPlato
 {
@@ -70,7 +69,6 @@ void DateTimeTester::subtractSecond()
     
 }
 
-#if QT_VERSION  >= 0x040700
 void DateTimeTester::subtractMillisecond()
 {
     DateTime dt1(QDate(2006, 1, 1), QTime(0, 0, 0, 0 ));
@@ -95,10 +93,8 @@ void DateTimeTester::subtractMillisecond()
 
     QVERIFY((dt2-dt1).toString() == d.toString());
     QVERIFY((dt1-dt2).toString() == d.toString()); // result always positive
-    QVERIFY((dt2-d) == dt1);
-    
+    QVERIFY((dt2-d) == dt1);   
 }
-#endif
 
 void DateTimeTester::addDay()
 {
@@ -143,8 +139,48 @@ void DateTimeTester::addMillisecond()
     
 }
 
+void DateTimeTester::timeZones()
+{
+    QByteArray tz("TZ=Europe/Copenhagen");
+    putenv(tz.data());
+    
+    QTimeZone testZone("Europe/London");
+    
+    DateTime dt1(QDate(2006, 1, 1), QTime(8, 0, 0, 0 ), testZone);
+    
+    DateTime dt2 = dt1;
+    qDebug()<<dt1<<dt2;
+    QCOMPARE(dt1.timeZone(), dt2.timeZone());
+    
+    dt2 += Duration(1, 0, 0, 0, 0);
+    qDebug()<<dt2;
+    QCOMPARE(dt1.timeZone(), dt2.timeZone());
+    
+    dt2 -= Duration(1, 0, 0, 0, 0);
+    qDebug()<<dt1<<dt2;
+    QCOMPARE(dt1.timeZone(), dt2.timeZone());
+    QCOMPARE(dt2, dt1);
+    
+    dt2 = dt1 + Duration(1, 0, 0, 0, 0);
+    qDebug()<<dt1<<dt2;
+    QCOMPARE(dt1.timeZone(), dt2.timeZone());
+
+    dt2 = dt2 - Duration(1, 0, 0, 0, 0);
+    qDebug()<<dt1<<dt2;
+    QCOMPARE(dt1.timeZone(), dt2.timeZone());
+    QCOMPARE(dt2, dt1);
+    
+    DateTime dt3 = QDateTime(QDate(2006, 1, 1), QTime(8, 0, 0, 0 ), testZone);
+    qDebug()<<dt3;
+    QCOMPARE(dt3.timeZone(), testZone);
+    
+    DateTime dt4(QDateTime(QDate(2006, 1, 1), QTime(8, 0, 0, 0 ), Qt::UTC));
+    dt4 += Duration(1, 0, 0, 0, 0);
+    qDebug()<<dt4;
+    QCOMPARE(dt4.timeSpec(), Qt::UTC);
+    
+}
+
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::DateTimeTester )
-
-#include "DateTimeTester.moc"
+QTEST_GUILESS_MAIN( KPlato::DateTimeTester )

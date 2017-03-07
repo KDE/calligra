@@ -41,7 +41,7 @@
 #include "../Global.h"
 #include "../DocBase.h"
 
-#include "../calligra_sheets_export.h"
+#include "sheets_common_export.h"
 
 class QDomDocument;
 class QPainter;
@@ -96,12 +96,6 @@ public:
      */
     virtual bool loadXML(const KoXmlDocument& doc, KoStore *store);
 
-    /**
-     * \ingroup OpenDocument
-     */
-    void loadOdfCalculationSettings(const KoXmlElement& body);
-
-
     virtual int supportedSpecialFormats() const;
 
     virtual bool loadChildren(KoStore* _store);
@@ -124,9 +118,7 @@ public:
     void loadConfigFromFile();
     bool configLoadFromFile() const;
 
-
-    virtual bool saveOdfHelper(SavingContext &documentContext, SaveFlag saveFlag,
-                       QString* plainText = 0);
+    virtual bool saveOdf(SavingContext &documentContext);
 
     /**
      * Requests an update of all attached user interfaces (views).
@@ -158,8 +150,6 @@ protected:
      */
     virtual bool completeLoading(KoStore*);
 
-    virtual void saveOdfViewSettings(KoXmlWriter& settingsWriter);
-    virtual void saveOdfViewSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter);
 private:
     Q_DISABLE_COPY(Doc)
 

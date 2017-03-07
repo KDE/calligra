@@ -23,10 +23,9 @@
 #include <KoParagraphStyle.h>
 #include <KoStyleManager.h>
 
-#include <klocale.h>
-#include <kstringhandler.h>
+#include <klocalizedstring.h>
 
-#include <kdebug.h>
+#include <QDebug>
 
 #include "StylesModel.h"
 
@@ -38,7 +37,7 @@ DockerStylesComboModel::DockerStylesComboModel(QObject *parent) :
 
 Qt::ItemFlags DockerStylesComboModel::flags(const QModelIndex &index) const
 {
-    if (index.internalId() == UsedStyleId || index.internalId() == UnusedStyleId) {
+    if (index.internalId() == (quintptr)UsedStyleId || index.internalId() == (quintptr)UnusedStyleId) {
         return (Qt::NoItemFlags);
     }
     return (Qt::ItemIsEnabled | Qt::ItemIsSelectable);
@@ -65,15 +64,15 @@ QVariant DockerStylesComboModel::data(const QModelIndex &index, int role) const
 
     switch (role){
     case AbstractStylesModel::isTitleRole: {
-        if (index.internalId() == UsedStyleId || index.internalId() == UnusedStyleId) {
+        if (index.internalId() == (quintptr)UsedStyleId || index.internalId() == (quintptr)UnusedStyleId) {
             return true;
         }
     }
     case Qt::DisplayRole: {
-        if (index.internalId() == UsedStyleId) {
+        if (index.internalId() == (quintptr)UsedStyleId) {
             return i18n("Used Styles");
         }
-        if (index.internalId() == UnusedStyleId) {
+        if (index.internalId() == (quintptr)UnusedStyleId) {
             return i18n("Unused Styles");
         }
         return QVariant();
@@ -114,7 +113,7 @@ void DockerStylesComboModel::setStyleManager(KoStyleManager *sm)
 
 void DockerStylesComboModel::styleApplied(const KoCharacterStyle *style)
 {
-    QModelIndex sourceIndex = m_sourceModel->indexOf(*style);
+    QModelIndex sourceIndex = m_sourceModel->indexOf(style);
     if (!sourceIndex.isValid()) {
         return; // Probably default style.
     }

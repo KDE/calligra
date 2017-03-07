@@ -20,6 +20,8 @@
 #include "kptduration.h"
 #include "kptnode.h"
 
+#include <QTest>
+
 namespace KPlato
 {
 
@@ -269,6 +271,4 @@ void EstimateTester::pert() {
 
 } //namespace KPlato
 
-QTEST_MAIN( KPlato::EstimateTester )
-
-#include "EstimateTester.moc"
+QTEST_GUILESS_MAIN( KPlato::EstimateTester )

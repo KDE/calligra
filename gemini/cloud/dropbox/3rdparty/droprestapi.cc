@@ -88,14 +88,16 @@ QNetworkRequest DropRestAPI::file_transfer(QString filename, QString dropbox_fol
 }
 
 QNetworkRequest DropRestAPI::file_transfer_download(QString dropbox_filepath){
-    QUrl url = QString("%1%2").arg(FILES_TRANSFER_URL).arg(dropbox_filepath);
+    QUrl url;
+    url.setUrl(QString("%1%2").arg(FILES_TRANSFER_URL).arg(dropbox_filepath));
     QNetworkRequest rt(url);
     oauth->sign("GET", &rt);
     return rt;
 }
 
 QNetworkRequest DropRestAPI::__delete(QString dropbox_filepath){
-    QUrl url = QString("%1").arg(FILE_DELETE_URL);
+    QUrl url;
+    url.setUrl(QString("%1").arg(FILE_DELETE_URL));
     url.addQueryItem("root","dropbox");
     url.addQueryItem("path",dropbox_filepath);
     QNetworkRequest rt(url);
@@ -104,7 +106,8 @@ QNetworkRequest DropRestAPI::__delete(QString dropbox_filepath){
 }
 
 QNetworkRequest DropRestAPI::__create(QString dropbox_filepath){
-    QUrl url = QString("%1").arg(CREATE_FOLDER_URL);
+    QUrl url;
+    url.setUrl(QString("%1").arg(CREATE_FOLDER_URL));
     url.addQueryItem("root","dropbox");
     url.addQueryItem("path",dropbox_filepath);
     QNetworkRequest rt(url);
@@ -113,7 +116,8 @@ QNetworkRequest DropRestAPI::__create(QString dropbox_filepath){
 }
 
 QNetworkRequest DropRestAPI::__move(QString path_source, QString path_destination){
-    QUrl url = QString("%1").arg(FILE_MOVE_URL);
+    QUrl url;
+    url.setUrl(QString("%1").arg(FILE_MOVE_URL));
     url.addQueryItem("root", "dropbox");
     url.addQueryItem("from_path", path_source);
     url.addQueryItem("to_path", path_destination);
@@ -124,7 +128,8 @@ QNetworkRequest DropRestAPI::__move(QString path_source, QString path_destinatio
 }
 
 QNetworkRequest DropRestAPI::__copy(QString path_source, QString path_destination){
-    QUrl url = QString("%1").arg(FILE_COPY_URL);
+    QUrl url;
+    url.setUrl(QString("%1").arg(FILE_COPY_URL));
     url.addQueryItem("root", "dropbox");
     url.addQueryItem("from_path", path_source);
     url.addQueryItem("to_path", path_destination);
@@ -135,7 +140,8 @@ QNetworkRequest DropRestAPI::__copy(QString path_source, QString path_destinatio
 }
 
 QNetworkRequest DropRestAPI::__shares(QString dropbox_filepath){
-    QUrl url = QString("%1").arg(SHARES_URL);
+    QUrl url;
+    url.setUrl(QString("%1").arg(SHARES_URL));
     url.addQueryItem("root","dropbox");
     url.addQueryItem("path",dropbox_filepath);
 
@@ -145,7 +151,8 @@ QNetworkRequest DropRestAPI::__shares(QString dropbox_filepath){
 }
 
 QNetworkRequest DropRestAPI::accountinfo() {
-    QUrl url = QString("%1").arg(ACCOUNT_INFO_URL);
+    QUrl url;
+    url.setUrl(QString("%1").arg(ACCOUNT_INFO_URL));
     QNetworkRequest rt(url);
     oauth->sign("GET", &rt);
     return rt;

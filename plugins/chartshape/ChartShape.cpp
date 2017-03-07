@@ -33,33 +33,32 @@
 #include <QSizeF>
 #include <QTextDocument>
 #include <QStandardItemModel>
+#include <QUrl>
 
-// KDE
-#include <kdebug.h>
+// KF5
 #include <kmessagebox.h>
-#include <kurl.h>
 
-// KDChart
-#include <KDChartChart>
-#include <KDChartAbstractDiagram>
-#include <KDChartCartesianAxis>
-#include <KDChartCartesianCoordinatePlane>
-#include <KDChartPolarCoordinatePlane>
-#include "KDChartConvertions.h"
+// KChart
+#include <KChartChart>
+#include <KChartAbstractDiagram>
+#include <KChartCartesianAxis>
+#include <KChartCartesianCoordinatePlane>
+#include <KChartPolarCoordinatePlane>
+#include "KChartConvertions.h"
 // Attribute Classes
-#include <KDChartDataValueAttributes>
-#include <KDChartGridAttributes>
-#include <KDChartTextAttributes>
-#include <KDChartMarkerAttributes>
-#include <KDChartThreeDPieAttributes>
-#include <KDChartThreeDBarAttributes>
-#include <KDChartThreeDLineAttributes>
+#include <KChartDataValueAttributes>
+#include <KChartGridAttributes>
+#include <KChartTextAttributes>
+#include <KChartMarkerAttributes>
+#include <KChartThreeDPieAttributes>
+#include <KChartThreeDBarAttributes>
+#include <KChartThreeDLineAttributes>
 // Diagram Classes
-#include <KDChartBarDiagram>
-#include <KDChartPieDiagram>
-#include <KDChartLineDiagram>
-#include <KDChartRingDiagram>
-#include <KDChartPolarDiagram>
+#include <KChartBarDiagram>
+#include <KChartPieDiagram>
+#include <KChartLineDiagram>
+#include <KChartRingDiagram>
+#include <KChartPolarDiagram>
 
 // Calligra
 #include <KoShapeLoadingContext.h>
@@ -88,8 +87,9 @@
 #include <KoOdfWorkaround.h>
 #include <KoTextDocument.h>
 #include <KoUnit.h>
+#include <KoShapePaintingContext.h>
 
-// KChart
+// KoChart
 #include "Axis.h"
 #include "DataSet.h"
 #include "Legend.h"
@@ -103,6 +103,7 @@
 #include "TableSource.h"
 #include "OdfLoadingHelper.h"
 #include "SingleModelHelper.h"
+#include "ChartDebug.h"
 
 
 // Define the protocol used here for embedded documents' URL
@@ -111,7 +112,7 @@
 #define STORE_PROTOCOL "tar"
 #define INTERNAL_PROTOCOL "intern"
 
-namespace KChart {
+namespace KoChart {
 
 /// @see ChartShape::setEnableUserInteraction()
 static bool ENABLE_USER_INTERACTION = true;
@@ -153,7 +154,7 @@ void saveOdfFont(KoGenStyle &style, const QFont& font, const QColor& color)
     style.addPropertyPt("fo:font-size", font.pointSize(), KoGenStyle::TextType);
     style.addProperty("fo:color", color.isValid() ? color.name() : "#000000", KoGenStyle::TextType);
     int w = font.weight();
-    style.addProperty("fo:font-weight", w == 50 ? "normal" : w == 75 ? "bold" : QString::number(qRound(w / 10) * 100), KoGenStyle::TextType);
+    style.addProperty("fo:font-weight", w == 50 ? "normal" : w == 75 ? "bold" : QString::number(qRound(w / 10.0) * 100), KoGenStyle::TextType);
     style.addProperty("fo:font-style", font.italic() ? "italic" : "normal", KoGenStyle::TextType);
 }
 
@@ -262,7 +263,7 @@ public:
     PlotArea  *plotArea;
 
     // Data
-    ChartProxyModel     *proxyModel;	 /// What's presented to KDChart
+    ChartProxyModel     *proxyModel;	 /// What's presented to KChart
     QAbstractItemModel  *internalModel;
     TableSource          tableSource;
     SingleModelHelper   *internalModelHelper;
@@ -562,8 +563,19 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     l->setPosition(d->plotArea, CenterPosition);
     l->setPosition(d->title,    TopPosition, 0);
     l->setPosition(d->subTitle, TopPosition, 1);
-    l->setPosition(d->footer,   BottomPosition, 1);
+    l->setPosition(d->footer,   BottomPosition, 0);
     l->setPosition(d->legend,   d->legend->legendPosition());
+    l->scheduleRelayout();
+    l->layout();
+
+    l->setPosition(d->plotArea, FloatingPosition);
+    l->setPosition(d->title,    FloatingPosition);
+    l->setPosition(d->subTitle, FloatingPosition);
+    l->setPosition(d->footer,   FloatingPosition);
+    l->setPosition(d->legend,   FloatingPosition);
+    for (Axis *a : d->plotArea->axes()) {
+        l->setPosition(a->title(), FloatingPosition);
+    }
     l->layout();
 
     requestRepaint();
@@ -775,9 +787,8 @@ void ChartShape::paintComponent(QPainter &painter,
     layout()->layout();
 
     // Paint the background
+    applyConversion(painter, converter);
     if (background()) {
-        applyConversion(painter, converter);
-
         // Calculate the clipping rect
         QRectF paintRect = QRectF(QPointF(0, 0), size());
         painter.setClipRect(paintRect, Qt::IntersectClip);
@@ -785,6 +796,18 @@ void ChartShape::paintComponent(QPainter &painter,
         QPainterPath p;
         p.addRect(paintRect);
         background()->paint(painter, converter, paintContext, p);
+    }
+    // Paint border if showTextShapeOutlines is set
+    // This means that it will be painted in words but not eg in sheets
+    if (paintContext.showTextShapeOutlines) {
+        if (qAbs(rotation()) > 1) {
+            painter.setRenderHint(QPainter::Antialiasing);
+        }
+        QPen pen(QColor(210, 210, 210), 0); // use cosmetic pen
+        QPointF onePixel = converter.viewToDocument(QPointF(1.0, 1.0));
+        QRectF rect(QPointF(0.0, 0.0), size() - QSizeF(onePixel.x(), onePixel.y()));
+        painter.setPen(pen);
+        painter.drawRect(rect);
     }
 }
 
@@ -818,7 +841,7 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store,
                                       const KoOdfLoadingContext &loadingContext)
 {
     if (!objectElement.hasAttributeNS(KoXmlNS::xlink, "href")) {
-        kError() << "Object element has no valid xlink:href attribute";
+        errorChart << "Object element has no valid xlink:href attribute";
         return false;
     }
 
@@ -834,8 +857,8 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store,
     if (url[0] == '#')
         url.remove(0, 1);
 
-    if (KUrl::isRelativeUrl(url)) {
-        if (url.startsWith("./"))
+    if (QUrl::fromUserInput(url).isRelative()) {
+        if (url.startsWith(QLatin1String("./")))
             tmpURL = QString(INTERNAL_PROTOCOL) + ":/" + url.mid(2);
         else
             tmpURL = QString(INTERNAL_PROTOCOL) + ":/" + url;
@@ -848,42 +871,42 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store,
         path = store->currentPath();
         if (!path.isEmpty() && !path.endsWith('/'))
             path += '/';
-        QString relPath = KUrl(tmpURL).path();
+        QString relPath = QUrl::fromUserInput(tmpURL).path();
         path += relPath.mid(1); // remove leading '/'
     }
     if (!path.endsWith('/'))
         path += '/';
 
     const QString mimeType = loadingContext.mimeTypeForPath(path);
-    //kDebug(35001) << "path for manifest file=" << path << "mimeType=" << mimeType;
+    //debugChart << "path for manifest file=" << path << "mimeType=" << mimeType;
     if (mimeType.isEmpty()) {
-        //kDebug(35001) << "Manifest doesn't have media-type for" << path;
+        //debugChart << "Manifest doesn't have media-type for" << path;
         return false;
     }
 
-    const bool isOdf = mimeType.startsWith("application/vnd.oasis.opendocument");
+    const bool isOdf = mimeType.startsWith(QLatin1String("application/vnd.oasis.opendocument"));
     if (!isOdf) {
         tmpURL += "/maindoc.xml";
-        //kDebug(35001) << "tmpURL adjusted to" << tmpURL;
+        //debugChart << "tmpURL adjusted to" << tmpURL;
     }
 
-    //kDebug(35001) << "tmpURL=" << tmpURL;
+    //debugChart << "tmpURL=" << tmpURL;
 
     bool res = true;
     if (tmpURL.startsWith(STORE_PROTOCOL)
          || tmpURL.startsWith(INTERNAL_PROTOCOL)
-         || KUrl::isRelativeUrl(tmpURL))
+         || QUrl::fromUserInput(tmpURL).isRelative())
     {
         if (isOdf) {
             store->pushDirectory();
             Q_ASSERT(tmpURL.startsWith(INTERNAL_PROTOCOL));
-            QString relPath = KUrl(tmpURL).path().mid(1);
+            QString relPath = QUrl::fromUserInput(tmpURL).path().mid(1);
             store->enterDirectory(relPath);
             res = d->document->loadOasisFromStore(store);
             store->popDirectory();
         } else {
             if (tmpURL.startsWith(INTERNAL_PROTOCOL))
-                tmpURL = KUrl(tmpURL).path().mid(1);
+                tmpURL = QUrl::fromUserInput(tmpURL).path().mid(1);
             res = d->document->loadFromStore(store, tmpURL);
         }
         d->document->setStoreInternal(true);
@@ -891,7 +914,7 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store,
     else {
         // Reference to an external document. Hmmm...
         d->document->setStoreInternal(false);
-        KUrl url(tmpURL);
+        QUrl url = QUrl::fromUserInput(tmpURL);
         if (!url.isLocalFile()) {
             //QApplication::restoreOverrideCursor();
 
@@ -930,7 +953,7 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store,
 bool ChartShape::loadOdf(const KoXmlElement &element,
                          KoShapeLoadingContext &context)
 {
-    //struct Timer{QTime t;Timer(){t.start();} ~Timer(){qDebug()<<">>>>>"<<t.elapsed();}} timer;
+    //struct Timer{QTime t;Timer(){t.start();} ~Timer(){debugChart<<">>>>>"<<t.elapsed();}} timer;
 
     // Load common attributes of (frame) shapes.  If you change here,
     // don't forget to also change in saveOdf().
@@ -948,7 +971,7 @@ bool ChartShape::loadOdfFrameElement(const KoXmlElement &element,
                                     element,
                                     context.odfLoadingContext());
 
-    qWarning() << "Unknown frame element <" << element.tagName() << ">";
+    warnChart << "Unknown frame element <" << element.tagName() << ">";
     return false;
 }
 
@@ -970,14 +993,14 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
     helper->tableSource = &d->tableSource;
     helper->chartUsesInternalModelOnly = d->usesInternalModelOnly;
 
-    // Get access to sheets in KSpread
+    // Get access to sheets in Calligra Sheets
     QAbstractItemModel *sheetAccessModel = 0;
     if (resourceManager() &&
-         resourceManager()->hasResource(75751149)) { // duplicated from kspread
+         resourceManager()->hasResource(75751149)) { // duplicated from Calligra Sheets
         QVariant var = resourceManager()->resource(75751149);
         sheetAccessModel = static_cast<QAbstractItemModel*>(var.value<void*>());
         if (sheetAccessModel) {
-            // We're embedded in KSpread, which means KSpread provides the data
+            // We're embedded in Calligra Sheets, which means Calligra Sheets provides the data
             d->usesInternalModelOnly = false;
             d->tableSource.setSheetAccessModel(sheetAccessModel);
             helper->chartUsesInternalModelOnly = d->usesInternalModelOnly;
@@ -1006,7 +1029,7 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
 
     // Check if we're loading an embedded document
     if (!chartElement.hasAttributeNS(KoXmlNS::chart, "class")) {
-        kDebug(35001) << "Error: Embedded document has no chart:class attribute.";
+        debugChart << "Error: Embedded document has no chart:class attribute.";
         return false;
     }
 
@@ -1015,12 +1038,12 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
 
     // 1. Load the chart type.
     const QString chartClass = chartElement.attributeNS(KoXmlNS::chart, "class", QString());
-    KChart::ChartType chartType = KChart::BarChartType;
+    KoChart::ChartType chartType = KoChart::BarChartType;
     // Find out what charttype the chart class corresponds to.
     bool  knownType = false;
     for (int type = 0; type < (int)LastChartType; ++type) {
         if (chartClass == ODF_CHARTTYPES[(ChartType)type]) {
-            //kDebug(35001) <<"found chart of type" << chartClass;
+            //debugChart <<"found chart of type" << chartClass;
 
             chartType = (ChartType)type;
             // Set the dimensionality of the data points, we can not call
@@ -1041,9 +1064,9 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
 
     // 2. Load the data
 //     int dimensions = numDimensions(chartType);
-//     qDebug() << "DIMENSIONS" << dimensions;
+//     debugChart << "DIMENSIONS" << dimensions;
 //     d->proxyModel->setDataDimensions(dimensions);
-//     qDebug() << d->proxyModel->dataSets().count();
+//     debugChart << d->proxyModel->dataSets().count();
     KoXmlElement  dataElem = KoXml::namedItemNS(chartElement, KoXmlNS::table, "table");
     if (!dataElem.isNull()) {
         if (!loadOdfData(dataElem, context))
@@ -1056,8 +1079,13 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
     if (!plotareaElem.isNull()) {
         d->plotArea->setChartType(chartType);
         d->plotArea->setChartSubType(chartSubType());
-        if (!d->plotArea->loadOdf(plotareaElem, context))
+        if (!d->plotArea->loadOdf(plotareaElem, context)) {
             return false;
+        }
+        // Make the axis titles movable
+        for (Axis *a : d->plotArea->axes()) {
+            layout()->setPosition(a->title(), FloatingPosition);
+        }
 //         d->plotArea->setChartType(chartType);
 //         d->plotArea->setChartSubType(chartSubType());
     }
@@ -1150,7 +1178,7 @@ void ChartShape::saveOdf(KoShapeSavingContext & context) const
     //        1. Checking the tag hierarchy is hardly the right way to do this
     //        2. The position doesn't seem to be saved yet.
     //
-    //        Also, I have to check with the other apps, e.g. kspread,
+    //        Also, I have to check with the other apps, e.g. Calligra Sheets,
     //        if it works there too.
     //
     QList<const char*>  tagHierarchy = bodyWriter.tagHierarchy();
@@ -1241,7 +1269,7 @@ static void saveOdfDataRow(KoXmlWriter &bodyWriter, QAbstractItemModel *table, i
             valStr  = ""; /* like in saveXML, but why? */
             break;
         default:
-            kDebug(35001) <<"ERROR: cell" << row <<"," << col
+            debugChart <<"ERROR: cell" << row <<"," << col
                           << " has unknown type." << endl;
         }
 
@@ -1315,6 +1343,7 @@ void ChartShape::saveOdfData(KoXmlWriter &bodyWriter, KoGenStyles &mainStyles) c
 void ChartShape::update() const
 {
     KoShape::update();
+    layout()->scheduleRelayout();
 
     emit updateConfigWidget();
 }
@@ -1342,4 +1371,4 @@ void ChartShape::setEnableUserInteraction(bool enable)
     ENABLE_USER_INTERACTION = enable;
 }
 
-} // Namespace KChart
+} // Namespace KoChart

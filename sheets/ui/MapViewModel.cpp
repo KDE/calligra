@@ -31,7 +31,6 @@
 #include <KoShapeManager.h>
 #include <KoIcon.h>
 
-#include <kaction.h>
 #include <kxmlguiclient.h>
 
 using namespace Calligra::Sheets;
@@ -186,7 +185,7 @@ void MapViewModel::addSheet(Sheet *sheet)
 
     // Update the goto sheet action group
     const QString name = sheet->sheetName();
-    QAction *action = new KAction(koIcon("x-office-spreadsheet"), name, this);
+    QAction *action = new QAction(koIcon("x-office-spreadsheet"), name, this);
     action->setCheckable(true);
     action->setToolTip(i18nc("Activate sheet named foo", "Activate %1", name));
 
@@ -256,5 +255,3 @@ void MapViewModel::gotoSheetActionTriggered(QAction *action)
         }
     }
 }
-
-#include "MapViewModel.moc"

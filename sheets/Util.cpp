@@ -23,9 +23,13 @@
 
 #include <ctype.h>
 
+#include <QPen>
 
-#include <kdebug.h>
+#include <KCharsets>
 
+#include <KoUnit.h>
+
+#include "SheetsDebug.h"
 #include "Formula.h"
 #include "calligra_sheets_limits.h"
 #include "Localization.h"
@@ -34,9 +38,7 @@
 #include "Region.h"
 #include "Sheet.h"
 #include "Style.h"
-
-#include <QPen>
-#include <KoUnit.h>
+#include "odf/SheetsOdf.h"
 
 using namespace Calligra::Sheets;
 
@@ -58,7 +60,7 @@ int Calligra::Sheets::Util::decodeColumnLabelText(const QString &labelText)
             break;
     }
     if (labelTextLength == 0) {
-        kWarning(36001) << "No column label text found for col:" << labelText;
+        warnSheets << "No column label text found for col:" << labelText;
         return 0;
     }
     for (uint i = 0; i < labelTextLength; i++) {
@@ -140,8 +142,8 @@ QDomElement Calligra::Sheets::NativeFormat::createElement(const QString & tagNam
     QDomElement e(doc.createElement(tagName));
 
     e.setAttribute("family", font.family());
-    e.setAttribute("size", font.pointSize());
-    e.setAttribute("weight", font.weight());
+    e.setAttribute("size", QString::number(font.pointSize()));
+    e.setAttribute("weight", QString::number(font.weight()));
     if (font.bold())
         e.setAttribute("bold", "yes");
     if (font.italic())
@@ -150,7 +152,7 @@ QDomElement Calligra::Sheets::NativeFormat::createElement(const QString & tagNam
         e.setAttribute("underline", "yes");
     if (font.strikeOut())
         e.setAttribute("strikeout", "yes");
-    //e.setAttribute( "charset", KGlobal::charsets()->name( font ) );
+    //e.setAttribute( "charset", KCharsets::charsets()->name( font ) );
 
     return e;
 }
@@ -159,8 +161,8 @@ QDomElement Calligra::Sheets::NativeFormat::createElement(const QString & tagnam
 {
     QDomElement e(doc.createElement(tagname));
     e.setAttribute("color", pen.color().name());
-    e.setAttribute("style", (int)pen.style());
-    e.setAttribute("width", (int)pen.width());
+    e.setAttribute("style", QString::number((int)pen.style()));
+    e.setAttribute("width", QString::number((int)pen.width())); // not qreal, would need spec change
     return e;
 }
 
@@ -193,11 +195,11 @@ QFont Calligra::Sheets::NativeFormat::toFont(KoXmlElement & element)
     /* Uncomment when charset is added to kspread_dlg_layout
        + save a document-global charset
        if ( element.hasAttribute( "charset" ) )
-         KGlobal::charsets()->setQFont( f, element.attribute("charset") );
+         KCharsets::charsets()->setQFont( f, element.attribute("charset") );
         else
     */
     // ######## Not needed anymore in 3.0?
-    //KGlobal::charsets()->setQFont( f, KGlobal::locale()->charset() );
+    //KCharsets::charsets()->setQFont( f, KLocale::global()->charset() );
 
     return f;
 }
@@ -318,80 +320,6 @@ QString Calligra::Sheets::Odf::convertRefToRange(const QString & sheet, const QR
 QString Calligra::Sheets::Odf::convertRangeToRef(const QString & sheetName, const QRect & _area)
 {
     return sheetName + '.' + Cell::name(_area.left(), _area.top()) + ':' + sheetName + '.' + Cell::name(_area.right(), _area.bottom());
-}
-
-QString Calligra::Sheets::Odf::encodePen(const QPen & pen)
-{
-//     kDebug()<<"encodePen( const QPen & pen ) :"<<pen;
-    // NOTE Stefan: QPen api docs:
-    //              A line width of zero indicates a cosmetic pen. This means
-    //              that the pen width is always drawn one pixel wide,
-    //              independent of the transformation set on the painter.
-    QString s = QString("%1pt ").arg((pen.width() == 0) ? 1 : pen.width());
-    switch (pen.style()) {
-    case Qt::NoPen:
-        return "none";
-    case Qt::SolidLine:
-        s += "solid";
-        break;
-    case Qt::DashLine:
-        s += "dashed";
-        break;
-    case Qt::DotLine:
-        s += "dotted";
-        break;
-    case Qt::DashDotLine:
-        s += "dot-dash";
-        break;
-    case Qt::DashDotDotLine:
-        s += "dot-dot-dash";
-        break;
-    default: break;
-    }
-    //kDebug() << " encodePen :" << s;
-    if (pen.color().isValid()) {
-        s += ' ' + Style::colorName(pen.color());
-    }
-    return s;
-}
-
-QPen Calligra::Sheets::Odf::decodePen(const QString &border)
-{
-    QPen pen;
-    //string like "0.088cm solid #800000"
-    if (border.isEmpty() || border == "none" || border == "hidden") { // in fact no border
-        pen.setStyle(Qt::NoPen);
-        return pen;
-    }
-    //code from koborder, for the moment kspread doesn't use koborder
-    // ## isn't it faster to use QStringList::split than parse it 3 times?
-    QString _width = border.section(' ', 0, 0);
-    QByteArray _style = border.section(' ', 1, 1).toLatin1();
-    QString _color = border.section(' ', 2, 2);
-
-    pen.setWidth((int)(KoUnit::parseValue(_width, 1.0)));
-
-    if (_style == "none")
-        pen.setStyle(Qt::NoPen);
-    else if (_style == "solid")
-        pen.setStyle(Qt::SolidLine);
-    else if (_style == "dashed")
-        pen.setStyle(Qt::DashLine);
-    else if (_style == "dotted")
-        pen.setStyle(Qt::DotLine);
-    else if (_style == "dot-dash")
-        pen.setStyle(Qt::DashDotLine);
-    else if (_style == "dot-dot-dash")
-        pen.setStyle(Qt::DashDotDotLine);
-    else
-        kDebug() << " style undefined :" << _style;
-
-    if (_color.isEmpty())
-        pen.setColor(QColor());
-    else
-        pen.setColor(QColor(_color));
-
-    return pen;
 }
 
 //Return true when it's a reference to cell from sheet.
@@ -560,7 +488,7 @@ QString Calligra::Sheets::Odf::decodeFormula(const QString& expression_, const K
         case InReference:
             switch (data->unicode()) {
             case ']':
-                Region::loadOdf(pos, data, out);
+                Odf::loadRegion(pos, data, out);
                 pos = data;
                 state = Start;
                 break;
@@ -616,9 +544,9 @@ QString Calligra::Sheets::Odf::encodeFormula(const QString& expr, const KLocale*
             // FIXME Stefan: Hack to get the apostrophes right. Fix and remove!
             const int pos = tokenText.lastIndexOf('!');
             if (pos != -1 && tokenText.left(pos).contains(' '))
-                result.append(Region::saveOdf('\'' + tokenText.left(pos) + '\'' + tokenText.mid(pos)));
+                result.append(Odf::saveRegion('\'' + tokenText.left(pos) + '\'' + tokenText.mid(pos)));
             else
-                result.append(Region::saveOdf(tokenText));
+                result.append(Odf::saveRegion(tokenText));
             result.append(']');
             break;
         }

@@ -310,7 +310,7 @@ void KoTblStyle::prepareStyle(KoGenStyle& style) const
 
     // style:width may not be 0, use style:rel-width if width is 0
     if (m_widthUnit == PercentageUnit || m_width <= 0) {
-        style.addProperty("style:rel-width", QString::number(m_width) + "%");
+        style.addProperty("style:rel-width", QString::number(m_width) + QLatin1Char('%'));
     } else {
         style.addPropertyPt("style:width", m_width);
     }

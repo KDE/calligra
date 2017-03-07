@@ -21,8 +21,10 @@
 
 #include "map.h"
 
+#include "LatexDebug.h"
+
 #include <stdlib.h>  /* for atoi function    */
-#include <kdebug.h>  /* for kDebug() stream */
+
 #include <QTextStream>
 
 /*******************************************/
@@ -37,7 +39,7 @@ Map::Map()
 /*******************************************/
 Map::~Map()
 {
-    kDebug(30522) << "Destruction of a map.";
+    debugLatex << "Destruction of a map.";
 }
 
 /*******************************************/
@@ -46,7 +48,7 @@ Map::~Map()
 void Map::analyze(const QDomNode node)
 {
     /* Analysis of the parameters */
-    kDebug(30522) << "ANALYZE A MAP";
+    debugLatex << "ANALYZE A MAP";
 
     /* Analysis of the child markups */
     for (int index = 0; index < getNbChild(node); index++) {
@@ -55,7 +57,7 @@ void Map::analyze(const QDomNode node)
         table->analyze(getChild(node, index));
         _tables.append(table);
     }
-    kDebug(30522) << "END OF MAP";
+    debugLatex << "END OF MAP";
 }
 
 /*******************************************/
@@ -66,11 +68,11 @@ void Map::analyze(const QDomNode node)
 /*******************************************/
 void Map::generate(QTextStream &out)
 {
-    kDebug(30522) << "  MAP GENERATION";
+    debugLatex << "  MAP GENERATION";
     foreach(Table* table, _tables) {
         table->generate(out);
     }
 
-    kDebug(30522) << "MAP GENERATED";
+    debugLatex << "MAP GENERATED";
 }
 

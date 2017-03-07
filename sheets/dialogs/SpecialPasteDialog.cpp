@@ -25,7 +25,7 @@
 #include "SpecialPasteDialog.h"
 
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "commands/PasteCommand.h"
 #include "Map.h"
@@ -35,7 +35,7 @@
 using namespace Calligra::Sheets;
 
 SpecialPasteDialog::SpecialPasteDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent),
+        : KoDialog(parent),
         m_selection(selection)
 {
     setButtons(Ok | Cancel);
@@ -108,5 +108,3 @@ void SpecialPasteDialog::slotToggled(bool b)
     multiplicationButton->setEnabled(!b);
     divisionButton->setEnabled(!b);
 }
-
-#include "SpecialPasteDialog.moc"

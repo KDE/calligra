@@ -27,7 +27,7 @@
 #ifndef CALLIGRA_SHEETS_AUTO_FORMAT_DIALOG
 #define CALLIGRA_SHEETS_AUTO_FORMAT_DIALOG
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 namespace Calligra
 {
@@ -39,7 +39,7 @@ class Selection;
  * \ingroup UI
  * Dialog for the "Auto-Format..." action.
  */
-class AutoFormatDialog : public KDialog
+class AutoFormatDialog : public KoDialog
 {
     Q_OBJECT
 public:

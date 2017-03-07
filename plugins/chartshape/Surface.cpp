@@ -26,7 +26,6 @@
 #include <QPointF>
 #include <QBrush>
 #include <QPen>
-#include <QDebug>
 
 // Calligra
 #include <KoXmlReader.h>
@@ -44,18 +43,17 @@
 #include <KoImageData.h>
 #include <KoUnit.h>
 
-#include <kdebug.h>
-
-// KDChart
-#include <KDChartCartesianCoordinatePlane>
-#include <KDChartBackgroundAttributes>
-#include <KDChartFrameAttributes>
-
 // KChart
+#include <KChartCartesianCoordinatePlane>
+#include <KChartBackgroundAttributes>
+#include <KChartFrameAttributes>
+
+// KoChart
 #include "PlotArea.h"
+#include "ChartDebug.h"
 
 
-using namespace KChart;
+using namespace KoChart;
 
 class Surface::Private
 {
@@ -71,7 +69,7 @@ public:
     QBrush   brush;
     QPen     framePen;
 
-    KDChart::CartesianCoordinatePlane *kdPlane;
+    KChart::CartesianCoordinatePlane *kdPlane;
 };
 
 Surface::Private::Private(PlotArea *parent)
@@ -154,8 +152,8 @@ bool Surface::loadOdf(const KoXmlElement &surfaceElement,
     bool brushLoaded = false;
     
     if (surfaceElement.hasAttributeNS(KoXmlNS::chart, "style-name")) {
-        KDChart::BackgroundAttributes backgroundAttributes = d->kdPlane->backgroundAttributes();
-        KDChart::FrameAttributes frameAttributes = d->kdPlane->frameAttributes();
+        KChart::BackgroundAttributes backgroundAttributes = d->kdPlane->backgroundAttributes();
+        KChart::FrameAttributes frameAttributes = d->kdPlane->frameAttributes();
         
         // Add the chart style to the style stack.
         styleStack.clear();
@@ -208,7 +206,7 @@ bool Surface::loadOdf(const KoXmlElement &surfaceElement,
 
 #ifndef NWORKAROUND_ODF_BUGS
     if (!brushLoaded) {
-        KDChart::BackgroundAttributes backgroundAttributes = d->kdPlane->backgroundAttributes();
+        KChart::BackgroundAttributes backgroundAttributes = d->kdPlane->backgroundAttributes();
         QColor fillColor = KoOdfWorkaround::fixMissingFillColor(surfaceElement, context);
         if (fillColor.isValid()) {
             backgroundAttributes.setVisible(true);
@@ -273,7 +271,7 @@ QBrush Surface::loadOdfPatternStyle(const KoStyleStack &styleStack,
 
     // read the pattern repeat style
     QString style = styleStack.property(KoXmlNS::style, "repeat");
-    kDebug(35001) << "pattern style =" << style;
+    debugChart << "pattern style =" << style;
 
     QSize imageSize = data.image().size();
 
@@ -301,9 +299,9 @@ QBrush Surface::loadOdfPatternStyle(const KoStyleStack &styleStack,
         }
     }
 
-    kDebug(35001) << "shape size =" << size;
-    kDebug(35001) << "original image size =" << data.image().size();
-    kDebug(35001) << "resulting image size =" << imageSize;
+    debugChart << "shape size =" << size;
+    debugChart << "original image size =" << data.image().size();
+    debugChart << "resulting image size =" << imageSize;
 
     QBrush resultBrush(QPixmap::fromImage(data.image()).scaled(imageSize));
 
@@ -312,7 +310,7 @@ QBrush Surface::loadOdfPatternStyle(const KoStyleStack &styleStack,
         if (styleStack.hasProperty(KoXmlNS::draw, "fill-image-ref-point")) {
             // align pattern to the given size
             QString align = styleStack.property(KoXmlNS::draw, "fill-image-ref-point");
-            kDebug(35001) << "pattern align =" << align;
+            debugChart << "pattern align =" << align;
             if (align == "top-left")
                 matrix.translate(0, 0);
             else if (align == "top")

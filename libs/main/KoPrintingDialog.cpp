@@ -27,8 +27,8 @@
 #include <KoProgressBar.h>
 
 #include <QCoreApplication>
-#include <kdebug.h>
-#include <klocale.h>
+#include <MainDebug.h>
+#include <klocalizedstring.h>
 #include <QPainter>
 #include <QPrinter>
 #include <QGridLayout>
@@ -119,17 +119,15 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy)
             for (int i=d->printer->fromPage(); i <= d->printer->toPage(); i++)
                 d->pages.append(i);
             break;
-#if QT_VERSION >= 0x040700
         case QAbstractPrintDialog::CurrentPage:
             d->pages.append(documentCurrentPage());
             break;
-#endif
         default:
             return;
         }
     }
     if (d->pages.isEmpty()) {
-        kWarning(30004) << "KoPrintingDialog::startPrinting: No pages to print, did you forget to call setPageRange()?";
+        qWarning(/*30004*/) << "KoPrintingDialog::startPrinting: No pages to print, did you forget to call setPageRange()?";
         return;
     }
 
@@ -160,9 +158,9 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy)
             }
         }
         if (d->printer->pageOrder() == QPrinter::LastPageFirst) {
-            QList<int> pages = d->pages;
+            const QList<int> pages = d->pages;
             d->pages.clear();
-            QList<int>::Iterator iter = pages.end();
+            QList<int>::ConstIterator iter = pages.end();
             do {
                 --iter;
                 d->pages << *iter;
@@ -207,4 +205,5 @@ QRectF KoPrintingDialog::preparePage(int)
     return QRectF();
 }
 
-#include <KoPrintingDialog.moc>
+// have to include this because of Q_PRIVATE_SLOT
+#include <moc_KoPrintingDialog.cpp>

@@ -19,8 +19,11 @@
 */
 
 #include "KPrSlidesSorterDocumentModel.h"
+
 #include "KPrViewModeSlidesSorter.h"
 #include "KPrDocument.h"
+#include "commands/KPrDeleteSlidesCommand.h"
+#include "StageDebug.h"
 
 //Calligra headers
 #include <KoPADocument.h>
@@ -31,7 +34,6 @@
 #include <KoDrag.h>
 #include <KoPAPageMoveCommand.h>
 #include <KoShapeRenameCommand.h>
-#include "commands/KPrDeleteSlidesCommand.h"
 #include <KoIcon.h>
 
 //Qt Headers
@@ -358,7 +360,7 @@ void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPage
         return;
     }
     default:
-        qDebug("Unknown action: %d ", (int)action);
+        debugStage << "Unknown action:" << (int)action;
         return;
     }
 }
@@ -427,5 +429,3 @@ bool KPrSlidesSorterDocumentModel::moveSlides(const QList<KoPAPageBase *> &slide
     }
     return false;
 }
-
-#include "KPrSlidesSorterDocumentModel.moc"

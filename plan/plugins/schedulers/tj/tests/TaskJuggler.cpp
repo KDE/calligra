@@ -35,13 +35,7 @@
 #include "kpttask.h"
 #include "kptschedule.h"
 
-#include <cstdlib>
-#include <QDir>
-#include <klocale.h>
-#include <kconfiggroup.h>
-
-#include <qtest_kde.h>
-#include <kdebug.h>
+#include <QTest>
 
 #include "tests/DateTimeTester.h"
 
@@ -50,51 +44,11 @@
 namespace KPlato
 {
 
-void TaskJuggler::initTimezone()
-{
-    QVERIFY( m_tmp.exists() );
-
-    QFile f;
-    f.setFileName( m_tmp.name() + QLatin1String( "zone.tab" ) );
-    f.open(QIODevice::WriteOnly);
-    QTextStream fStream(&f);
-    fStream << "DE  +5230+01322 Europe/Berlin\n"
-               "EG  +3003+03115 Africa/Cairo\n"
-               "FR  +4852+00220 Europe/Paris\n"
-               "GB  +512830-0001845 Europe/London   Great Britain\n"
-               "US  +340308-1181434 America/Los_Angeles Pacific Time\n";
-    f.close();
-    QDir dir(m_tmp.name());
-    QVERIFY(dir.mkdir("Africa"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Cairo"), m_tmp.name() + QLatin1String("Africa/Cairo"));
-    QVERIFY(dir.mkdir("America"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Los_Angeles"), m_tmp.name() + QLatin1String("America/Los_Angeles"));
-    QVERIFY(dir.mkdir("Europe"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Berlin"), m_tmp.name() + QLatin1String("Europe/Berlin"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/London"), m_tmp.name() + QLatin1String("Europe/London"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Paris"), m_tmp.name() + QLatin1String("Europe/Paris"));
-
-    // NOTE: QTEST_KDEMAIN_CORE puts the config file in QDir::homePath() + "/.kde-unit-test"
-    //       and hence, this is common to all unit tests
-    KConfig config("ktimezonedrc");
-    KConfigGroup group(&config, "TimeZones");
-    group.writeEntry("ZoneinfoDir", m_tmp.name());
-    group.writeEntry("Zonetab", QString(m_tmp.name() + QString::fromLatin1("zone.tab")));
-    group.writeEntry("LocalZone", QString::fromLatin1("Europe/Berlin"));
-    config.sync();
-}
-
-void TaskJuggler::cleanupTimezone()
-{
-}
-
 void TaskJuggler::initTestCase()
 {
     DebugCtrl.setDebugLevel(0);
     DebugCtrl.setDebugMode(0xffff);
 
-    initTimezone();
-    qDebug()<<"Time zone initiated";
     project = new TJ::Project();
     qDebug()<<"Project created:"<<project;
     project->setScheduleGranularity( TJ::ONEHOUR ); // seconds
@@ -137,7 +91,6 @@ void TaskJuggler::cleanupTestCase()
     DebugCtrl.setDebugMode(0);
 
     delete project;
-    cleanupTimezone();
 }
 
 void TaskJuggler::projectTest()
@@ -1060,7 +1013,4 @@ void TaskJuggler::units()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::TaskJuggler )
-
-#include "TaskJuggler.moc"
-
+QTEST_GUILESS_MAIN( KPlato::TaskJuggler )

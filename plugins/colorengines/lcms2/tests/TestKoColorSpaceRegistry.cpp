@@ -1,7 +1,7 @@
 
 #include "TestKoColorSpaceRegistry.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColorSpace.h"
@@ -11,7 +11,7 @@
 
 void TestKoColorSpaceRegistry::testConstruction()
 {
-    KoColorSpaceRegistry* instance = KoColorSpaceRegistry::instance();
+    KoColorSpaceRegistry *instance = KoColorSpaceRegistry::instance();
     Q_ASSERT(instance);
 }
 
@@ -92,6 +92,4 @@ void TestKoColorSpaceRegistry::testLab()
 
 }
 
-QTEST_KDEMAIN(TestKoColorSpaceRegistry, NoGUI)
-#include <TestKoColorSpaceRegistry.moc>
-
+QTEST_GUILESS_MAIN(TestKoColorSpaceRegistry)

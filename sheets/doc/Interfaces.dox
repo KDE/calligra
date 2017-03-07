@@ -5,18 +5,18 @@
  *
  *
  * \section intro Introduction
- * This page describes how external applications can interact with KSpread.
+ * This page describes how external applications can interact with Calligra Sheets.
  *
  * \subsection resources Development Resources
  * The interfaces are located in KoTableInterface.h.
  * Pointers to them are stored as canvas resources (KoResourceManager).
  *
  * \subsection ranges About Cell Ranges
- * KSpread is able to export data from and import data to cell ranges. Those cell
+ * Calligra Sheets is able to export data from and import data to cell ranges. Those cell
  * ranges will be modified by column/row/cell range insertions/removals, as every
  * other cell range does. I.e. their location is variable and external applications
  * need to get informed about their movements.
- * For this case, KSpread's interfaces provide methods, that return an <b>extended
+ * For this case, Calligra Sheets' interfaces provide methods, that return an <b>extended
  * model</b> - extended by a method returning the current cell range address.
  *
  *
@@ -52,7 +52,7 @@
  * variable cell range address.
  * If the external application does not want to provide a model itself, but just wants to write
  * to the cell range, the data model parameter can also be null. Then, a writable table model is
- * created by KSpread and returned as extended model.
+ * created by Calligra Sheets and returned as extended model.
  *
  * In order to remove a cell range, that retrieves external data, a method taking the extended model
  * as parameter is provided.

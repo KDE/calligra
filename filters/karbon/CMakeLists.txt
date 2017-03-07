@@ -7,7 +7,7 @@ include_directories(
         ${CMAKE_SOURCE_DIR}/karbon/common
         ${CMAKE_SOURCE_DIR}/karbon/ui
         ${CMAKE_BINARY_DIR}/karbon
-        ${KDE4_INCLUDES}
+        
         ${CMAKE_SOURCE_DIR}/plugins/ )
 
 if(SHOULD_BUILD_FILTER_KARBON_TO_IMAGE)

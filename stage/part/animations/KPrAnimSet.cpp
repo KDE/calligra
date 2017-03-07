@@ -21,17 +21,19 @@
 #include "KPrAnimSet.h"
 
 #include <QString>
+
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoShapeLoadingContext.h>
 #include <KoPASavingContext.h>
 #include <KoTextBlockData.h>
+
 #include "KPrAnimationCache.h"
 #include "KPrTextBlockPaintStrategy.h"
 #include "KPrShapeAnimation.h"
 #include "KoXmlWriter.h"
 #include "KPrDurationParser.h"
-#include <kdebug.h>
+#include "StageDebug.h"
 
 KPrAnimSet::KPrAnimSet(KPrShapeAnimation *shapeAnimation)
 : KPrAnimationBase(shapeAnimation)
@@ -50,10 +52,10 @@ bool KPrAnimSet::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
     if (attributeName == "visibility") {
         m_visible = element.attributeNS(KoXmlNS::smil, "to", "hidden") == "visible";
         retval = true;
-        kDebug(33003) << "animate visibility for shape with id" << m_visible;
+        debugStageAnimation << "animate visibility for shape with id" << m_visible;
     }
     else {
-        kWarning(33003) << "attributeName" << attributeName << "not yet supported";
+        warnStageAnimation << "attributeName" << attributeName << "not yet supported";
     }
     KPrAnimationBase::loadOdf(element, context);
 

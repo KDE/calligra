@@ -160,7 +160,7 @@ public:
     virtual ~KUndo2QStack();
     void clear();
 
-    void push(KUndo2Command *cmd);
+    bool push(KUndo2Command *cmd);
 
     bool canUndo() const;
     bool canRedo() const;

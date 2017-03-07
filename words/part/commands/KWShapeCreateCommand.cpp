@@ -25,8 +25,6 @@
 #include <KoShapeAnchor.h>
 #include <KWDocument.h>
 
-#include <klocale.h>
-
 // class KoShapeCreateCommand::Private
 // {
 // public:

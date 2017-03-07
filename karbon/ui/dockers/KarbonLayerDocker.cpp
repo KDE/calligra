@@ -42,16 +42,17 @@
 #include <KoShapeGroup.h>
 #include <KoIcon.h>
 
-#include <klocale.h>
-#include <kinputdialog.h>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <kmenu.h>
 #include <kconfiggroup.h>
 
+#include <QMenu>
+#include <QInputDialog>
 #include <QGridLayout>
 #include <QPushButton>
 #include <QButtonGroup>
 #include <QToolButton>
+#include <KConfigGroup>
 
 enum ButtonIds {
     Button_New,
@@ -114,7 +115,7 @@ KarbonLayerDocker::KarbonLayerDocker()
     layout->addWidget(button, 1, 3);
 
     QToolButton * toolButton = new QToolButton(mainWidget);
-    KMenu * menu = new KMenu(this);
+    QMenu * menu = new QMenu(this);
     QActionGroup *group = new QActionGroup(this);
 
     m_viewModeActions.insert(KoDocumentSectionView::MinimalMode,
@@ -156,7 +157,7 @@ KarbonLayerDocker::KarbonLayerDocker()
     m_layerView->setSortingEnabled(true);
 
     KoDocumentSectionView::DisplayMode mode = KoDocumentSectionView::MinimalMode;
-    KSharedConfigPtr config = KarbonFactory::componentData().config();
+    KSharedConfigPtr config = KarbonFactory::karbonConfig();
     if (config->hasGroup("Interface")) {
         QString modeStr = config->group("Interface").readEntry("LayerDockerMode", "minimal");
         if (modeStr == "detailed")
@@ -175,7 +176,7 @@ KarbonLayerDocker::KarbonLayerDocker()
 
 KarbonLayerDocker::~KarbonLayerDocker()
 {
-    KSharedConfigPtr config = KarbonFactory::componentData().config();
+    KSharedConfigPtr config = KarbonFactory::karbonConfig();
     QString modeStr;
     switch (m_layerView->displayMode()) {
     case KoDocumentSectionView::MinimalMode:
@@ -218,6 +219,7 @@ void KarbonLayerDocker::unsetCanvas()
     m_model->update();
 }
 
+//Adapt code and connect okbutton or other to new slot. It doesn't exist in qdialog
 void KarbonLayerDocker::slotButtonClicked(int buttonId)
 {
     switch (buttonId) {
@@ -278,9 +280,11 @@ void KarbonLayerDocker::itemClicked(const QModelIndex &index)
 void KarbonLayerDocker::addLayer()
 {
     bool ok = true;
-    QString name = KInputDialog::getText(i18n("New Layer"),
+    QString name = QInputDialog::getText(this,
+                                         i18n("New Layer"),
                                          i18n("Enter the name of the new layer:"),
-                                         i18n("New layer"), &ok, this);
+                                         QLineEdit::Normal,
+                                         i18n("New layer"), &ok);
     if (ok) {
         KoShapeLayer* layer = new KoShapeLayer();
         layer->setName(name);
@@ -393,9 +397,8 @@ void KarbonLayerDocker::lowerItem()
     }
 }
 
-void KarbonLayerDocker::selectLayers(QList<KoShapeLayer*> layers)
+void KarbonLayerDocker::selectLayers(const QList<KoShapeLayer*> &layers)
 {
-    QModelIndex root = m_layerView->rootIndex();
     QItemSelectionModel * selModel = m_layerView->selectionModel();
     selModel->clearSelection();
     foreach(KoShapeLayer * layer, layers) {
@@ -485,6 +488,5 @@ void KarbonLayerDocker::setViewMode(KoDocumentSectionView::DisplayMode mode)
     m_viewModeActions[mode]->setChecked(true);
 }
 
-#include "KarbonLayerDocker.moc"
 
 // kate: replace-tabs on; space-indent on; indent-width 4; mixedindent off; indent-mode cstyle;

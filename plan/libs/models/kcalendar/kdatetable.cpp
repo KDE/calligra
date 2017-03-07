@@ -2,6 +2,7 @@
     This file is part of the KDE libraries
     Copyright (C) 1997 Tim D. Gilman (tdgilman@best.org)
               (C) 1998-2001 Mirko Boehm (mirko@kde.org)
+              (C) 2007 John Layt <john@layt.net>
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
     License as published by the Free Software Foundation; either
@@ -18,224 +19,85 @@
     Boston, MA 02110-1301, USA.
 */
 
-/////////////////// KDateTable widget class //////////////////////
-//
-// Copyright (C) 1997 Tim D. Gilman
-//           (C) 1998-2001 Mirko Boehm
-// Written using Qt (http://www.troll.no) for the
-// KDE project (http://www.kde.org)
-//
-// This is a support class for the KDatePicker class.  It just
-// draws the calendar table without titles, but could theoretically
-// be used as a standalone.
-//
-// When a date is selected by the user, it emits a signal:
-//      dateSelected(QDate)
-
 #include "kdatetable.h"
-#include "kdatetable_p.h"
 
-#include <kdeversion.h>
-#include <kconfig.h>
-#include <kcolorscheme.h>
-#include <kglobal.h>
-#include <kglobalsettings.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <knotification.h>
-#include <kcalendarsystem.h>
-#include <kshortcut.h>
-#include <kstandardshortcut.h>
 #include "kdatepicker.h"
-#include "kmenu.h"
-#include "kactioncollection.h"
-#include "kaction.h"
+#include "kptdebug.h"
 
+#include <kconfig.h>
+#include <knotification.h>
+#include <kstandardshortcut.h>
+#include <kactioncollection.h>
+
+#include <QLocale>
+#include <QFontDatabase>
 #include <QDate>
-#include <QCharRef>
 #include <QPen>
 #include <QPainter>
-#include <QDialog>
 #include <QActionEvent>
+#include <QMenu>
 #include <QHash>
-#include <QApplication>
 #include <QToolTip>
-
-#include <assert.h>
+#include <qdrawutil.h>
 
 #include <cmath>
-
-#include "kptdebug.h"
 
 namespace KPlato
 {
 
-Frame::Frame( QWidget *parent )
-    : QFrame( parent )
-{
-    setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
-    setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
-    setLineWidth(1);
-}
-
-void Frame::updateFocus(QFocusEvent *e)
-{
-    if ( e->type() == QEvent::FocusIn ) {
-        setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-    } else {
-        setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
-    }
-    update();
-}
-
-void Frame::paintEvent(QPaintEvent *e)
-{
-    Q_UNUSED(e);
-    //kDebug(planDbg())<<e;
-    QPainter paint(this);
-    drawFrame(&paint);
-}
-
-void Frame::drawFrame(QPainter *p)
-{
-    QPoint p1, p2;
-    QStyleOptionFrame opt;
-    opt.init(this);
-    if ( hasFocus() ) {
-        opt.state |= QStyle::State_HasFocus;
-    }
-    int frameShape  = frameStyle() & QFrame::Shape_Mask;
-    int frameShadow = frameStyle() & QFrame::Shadow_Mask;
-
-    int lw = 0;
-    int mlw = 0;
-    opt.rect = frameRect();
-    switch (frameShape) {
-        case QFrame::Box:
-        case QFrame::HLine:
-        case QFrame::VLine:
-        case QFrame::StyledPanel:
-            lw = lineWidth();
-            mlw = midLineWidth();
-            break;
-        default:
-            // most frame styles do not handle customized line and midline widths
-            // (see updateFrameWidth()).
-            lw = frameWidth();
-            break;
-    }
-    opt.lineWidth = lw;
-    opt.midLineWidth = mlw;
-    if (frameShadow == Sunken)
-        opt.state |= QStyle::State_Sunken;
-    else if (frameShadow == Raised)
-        opt.state |= QStyle::State_Raised;
-
-    switch (frameShape) {
-        case Box:
-            if (frameShadow == Plain)
-                qDrawPlainRect(p, opt.rect, opt.palette.foreground().color(), lw);
-            else
-                qDrawShadeRect(p, opt.rect, opt.palette, frameShadow == Sunken, lw, mlw);
-            break;
-
-
-        case StyledPanel:
-            style()->drawPrimitive(QStyle::PE_Frame, &opt, p, this);
-            break;
-
-        case Panel:
-            if (frameShadow == Plain)
-                qDrawPlainRect(p, opt.rect, opt.palette.foreground().color(), lw);
-            else
-                qDrawShadePanel(p, opt.rect, opt.palette, frameShadow == Sunken, lw);
-            break;
-
-        case WinPanel:
-            if (frameShadow == Plain)
-                qDrawPlainRect(p, opt.rect, opt.palette.foreground().color(), lw);
-            else
-                qDrawWinPanel(p, opt.rect, opt.palette, frameShadow == Sunken);
-            break;
-        case HLine:
-        case VLine:
-            if (frameShape == HLine) {
-                p1 = QPoint(opt.rect.x(), opt.rect.height() / 2);
-                p2 = QPoint(opt.rect.x() + opt.rect.width(), p1.y());
-            } else {
-                p1 = QPoint(opt.rect.x()+opt.rect.width() / 2, 0);
-                p2 = QPoint(p1.x(), opt.rect.height());
-            }
-            if (frameShadow == Plain) {
-                QPen oldPen = p->pen();
-                p->setPen(QPen(opt.palette.foreground().color(), lw));
-                p->drawLine(p1, p2);
-                p->setPen(oldPen);
-            } else {
-                qDrawShadeLine(p, p1, p2, opt.palette, frameShadow == Sunken, lw, mlw);
-            }
-            break;
-    }
-}
-
-
 class KDateTable::KDateTablePrivate
 {
 public:
-   KDateTablePrivate(KDateTable *q): q(q)
-   {
-      popupMenuEnabled=false;
-      m_selectionmode = KDateTable::SingleSelection;
-      m_paintweeknumbers = false;
-      m_model = 0;
-      m_grid = false;
-   }
+    KDateTablePrivate(KDateTable *q): q(q)
+    {
+        m_popupMenuEnabled = false;
+        m_selectionmode = KDateTable::SingleSelection;
+        m_paintweeknumbers = false;
+        m_hoveredPos = -1;
+        m_model = 0;
+        m_grid = false;
+    }
 
-   ~KDateTablePrivate()
-   {
-       foreach( KDateTableDateDelegate *delegate, customPaintingModes ) {
-           delete delegate;
-       }
-   }
+    ~KDateTablePrivate()
+    {
+        qDeleteAll(customPaintingModes);
+        delete m_dateDelegate;
+        delete m_weekDayDelegate;
+        delete m_weekNumberDelegate;
+    }
 
-   void nextMonth();
-   void previousMonth();
-   void beginningOfMonth();
-   void endOfMonth();
-   void beginningOfWeek();
-   void endOfWeek();
+    void nextMonth();
+    void previousMonth();
+    void beginningOfMonth();
+    void endOfMonth();
+    void beginningOfWeek();
+    void endOfWeek();
 
-   KDateTable *q;
+    KDateTable *q;
 
-   /**
-   * The font size of the displayed text.
-   */
-   int fontsize;
-   /**
-   * The currently selected date.
-   */
-   QDate mDate;
-   /**
-    * The day of the first day in the month [1..7].
-    */
-   int firstday;
-   /**
-    * The number of days in the current month.
-    */
-   int numdays;
-   /**
-    * The number of days in the previous month.
-    */
-   int numDaysPrevMonth;
-   /**
-    * Save the size of the largest used cell content.
-    */
-   QRectF maxCell;
+    /**
+     * The currently selected date.
+     */
+    QDate m_date;
+    /**
+     * The weekday number of the first day in the month [1..7].
+     */
+    int m_weekDayFirstOfMonth;
+    /**
+     * Save the size of the largest used cell content.
+     */
+    QRectF m_maxCell;
+    /**
+     * The font size of the displayed text.
+     */
+    int fontsize;
 
-   bool popupMenuEnabled;
+    bool m_popupMenuEnabled;
 
     //----->
-    QHash <QString, KDateTableDateDelegate*> customPaintingModes;
+    QHash <qint64, KDateTableDateDelegate*> customPaintingModes;
+
+    int m_hoveredPos;
 
     KDateTableDataModel *m_model;
 
@@ -254,92 +116,24 @@ public:
     bool m_grid;
 };
 
-class KPopupFrame::KPopupFramePrivate
+
+KDateTable::KDateTable(const QDate& date, QWidget* parent)
+  : QWidget(parent),
+    d(new KDateTablePrivate(this))
 {
-public:
-  KPopupFramePrivate(KPopupFrame *q):
-    q(q),
-    result(0), // rejected
-    main(0) {}
-
-  KPopupFrame *q;
-
-  /**
-   * The result. It is returned from exec() when the popup window closes.
-   */
-  int result;
-  /**
-   * The only subwidget that uses the whole dialog window.
-   */
-  QWidget *main;
-};
-
-
-KDateValidator::KDateValidator(QWidget* parent)
-    : QValidator(parent)
-{
-}
-
-QValidator::State
-KDateValidator::validate(QString& text, int&) const
-{
-  QDate temp;
-  // ----- everything is tested in date():
-  return date(text, temp);
-}
-
-QValidator::State
-KDateValidator::date(const QString& text, QDate& d) const
-{
-  QDate tmp = KGlobal::locale()->readDate(text);
-  if (!tmp.isNull())
-    {
-      d = tmp;
-      return Acceptable;
-    } else
-      return QValidator::Intermediate;
-}
-
-void
-KDateValidator::fixup( QString& ) const
-{
-
-}
-
-KDateTable::KDateTable(const QDate& date_, QWidget* parent)
-  : QWidget(parent), d(new KDateTablePrivate(this))
-{
-  setFontSize(10);
-  setFocusPolicy(Qt::StrongFocus);
-  QPalette palette;
-  palette.setColor(backgroundRole(), KColorScheme(QPalette::Active, KColorScheme::View).background().color() );
-
-  setPalette(palette);
-
-  if(!date_.isValid())
-  {
-    kDebug(planDbg()) << "KDateTable ctor: WARNING: Given date is invalid, using current date.";
-    setDate(QDate::currentDate()); // this initializes firstday, numdays, numDaysPrevMonth
-  }
-  else
-    setDate(date_); // this initializes firstday, numdays, numDaysPrevMonth
-  initAccels();
-
-  init();
+    if (!date.isValid()) {
+        debugPlan << "KDateTable ctor: WARNING: Given date is invalid, using current date.";
+        initWidget(QDate::currentDate()); // this initializes m_weekDayFirstOfMonth, m_numDaysThisMonth, numDaysPrevMonth
+    } else {
+        initWidget(date); // this initializes m_weekDayFirstOfMonth, m_numDaysThisMonth, numDaysPrevMonth
+    }
 }
 
 KDateTable::KDateTable(QWidget *parent)
-  : QWidget(parent), d(new KDateTablePrivate(this))
+  : QWidget(parent),
+    d(new KDateTablePrivate(this))
 {
-  setFontSize(10);
-  setFocusPolicy(Qt::StrongFocus);
-  QPalette palette;
-  palette.setColor(backgroundRole(),  KColorScheme(QPalette::Active, KColorScheme::View).background().color() );
-  setPalette(palette);
-  setDate(QDate::currentDate()); // this initializes firstday, numdays, numDaysPrevMonth
-  initAccels();
-
-  init();
+    initWidget(QDate::currentDate());
 }
 
 KDateTable::~KDateTable()
@@ -347,8 +141,16 @@ KDateTable::~KDateTable()
   delete d;
 }
 
-void KDateTable::init()
+void KDateTable::initWidget(const QDate &date)
 {
+    setFontSize(10);
+    setFocusPolicy(Qt::StrongFocus);
+    setBackgroundRole(QPalette::Base);
+    setAutoFillBackground(true);
+
+    initAccels();
+    setAttribute(Qt::WA_Hover, true);
+
     d->m_dateDelegate = new KDateTableDateDelegate( this );
     d->m_weekDayDelegate = new KDateTableWeekDayDelegate( this );
     d->m_weekNumberDelegate = new KDateTableWeekNumberDelegate( this );
@@ -363,6 +165,7 @@ void KDateTable::init()
     d->m_styleOptionWeekNumber.textAlignment = Qt::AlignCenter;
 
     //setModel( new KDateTableDataModel( this ) );
+    setDate(date);
 }
 
 void KDateTable::setStyleOptionDate( const StyleOptionViewItem &so )
@@ -419,8 +222,8 @@ void KDateTable::setDateDelegate( KDateTableDateDelegate *delegate )
 
 void KDateTable::setDateDelegate( const QDate &date, KDateTableDateDelegate *delegate )
 {
-    delete d->customPaintingModes.take( date.toString() );
-    d->customPaintingModes[ date.toString() ] = delegate;
+    delete d->customPaintingModes.take(date.toJulianDay());
+    d->customPaintingModes.insert(date.toJulianDay(), delegate);
 }
 
 void KDateTable::setWeekDayDelegate( KDateTableWeekDayDelegate *delegate )
@@ -477,313 +280,255 @@ void KDateTable::initAccels()
   localCollection->readSettings();
 }
 
-int KDateTable::posFromDate( const QDate &dt )
+int KDateTable::posFromDate( const QDate &date )
 {
-  const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+    int initialPosition = date.day();
+    int offset = (d->m_weekDayFirstOfMonth - QLocale().firstDayOfWeek() + 7) % 7;
 
-  // ISO Week numbering always uses Monday as first day of week
-  const int firstWeekDay = (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber)
-      ? Qt::Monday
-      : KGlobal::locale()->weekStartDay();
-
-  int pos = calendar->day( dt );
-  int offset = (d->firstday - firstWeekDay + 7) % 7;
-  // make sure at least one day of the previous month is visible.
-  // adjust this <1 if more days should be forced visible:
-  if ( offset < 1 ) offset += 7;
-  return pos + offset;
-}
-
-QDate KDateTable::dateFromPos( int pos )
-{
-  QDate pCellDate;
-  const KCalendarSystem * calendar = KGlobal::locale()->calendar();
-  calendar->setDate(pCellDate, calendar->year(d->mDate), calendar->month(d->mDate), 1);
-
-  // ISO Week numbering always uses Monday as first day of week
-  const int firstWeekDay = (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber)
-      ? Qt::Monday
-      : KGlobal::locale()->weekStartDay();
-
-  int offset = (d->firstday - firstWeekDay + 7) % 7;
-  // make sure at least one day of the previous month is visible.
-  // adjust this <1 if more days should be forced visible:
-  if ( offset < 1 ) offset += 7;
-  pCellDate = calendar->addDays( pCellDate, pos - offset );
-  return pCellDate;
-}
-
-bool KDateTable::event( QEvent *event )
-{
-    if ( event->type() == QEvent::ToolTip ) {
-        //kDebug(planDbg())<<"Tooltip";
-        QHelpEvent *e = static_cast<QHelpEvent*>( event );
-
-        double cellWidth = width() / ( d->m_paintweeknumbers ?  8.0 : 7.0 );
-        double cellHeight = height() / 7.0;
-        int column = (int)floor(e->pos().x() / cellWidth);
-        int row = (int)floor(e->pos().y() / cellHeight);
-        QString text;
-        if ( row == 0 && column == 0 && d->m_paintweeknumbers ) {
-            // corner
-        } else if ( row == 0 ) { // we are drawing the headline (weekdays)
-            int col = d->m_paintweeknumbers ? column - 1 : column;
-
-            // ISO Week numbering always uses Monday as first day of week
-            const int firstWeekDay = (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber)
-                ? Qt::Monday
-                : KGlobal::locale()->weekStartDay();
-
-            int day = ( col+firstWeekDay < 8 ) ? col+firstWeekDay : col+firstWeekDay-7;
-            if ( d->m_weekDayDelegate )
-            {
-                text = d->m_weekDayDelegate->data( day, Qt::ToolTipRole, d->m_model ).toString();
-            }
-        }
-        else if ( d->m_paintweeknumbers && column == 0 )
-        {
-            int pos=7*(row-1);
-            QDate pCellDate = dateFromPos( pos );
-            if ( d->m_weekNumberDelegate )
-            {
-                const KCalendarSystem * calendar = KGlobal::locale()->calendar();
-#if KDE_IS_VERSION(4,7,0)
-                const int weekNumber = calendar->week( pCellDate );
-#else
-                const int weekNumber = calendar->weekNumber( pCellDate );
-#endif
-                text = d->m_weekNumberDelegate->data( weekNumber, Qt::ToolTipRole, d->m_model ).toString();
-            }
-        }
-        else
-        {
-            // draw the dates
-            int col = d->m_paintweeknumbers ? column - 1 : column;
-            int pos=7*(row-1)+col;
-            QDate pCellDate = dateFromPos( pos );
-            if ( d->m_dateDelegate ) {
-                text = d->m_dateDelegate->data( pCellDate, Qt::ToolTipRole, d->m_model ).toString();
-            }
-        }
-        //kDebug(planDbg())<<row<<column<<text;
-        if ( text.isEmpty() ) {
-            QToolTip::hideText();
-        } else {
-            QToolTip::showText( e->globalPos(), text );
-        }
-        e->accept();
-        return true;
+    // make sure at least one day of the previous month is visible.
+    // adjust this <1 if more days should be forced visible:
+    if ( offset < 1 ) {
+        offset += 7;
     }
-    return QWidget::event( event );
+
+    return initialPosition + offset;
+}
+
+QDate KDateTable::dateFromPos( int position )
+{
+    int offset = (d->m_weekDayFirstOfMonth - QLocale().firstDayOfWeek() + 7) % 7;
+
+    // make sure at least one day of the previous month is visible.
+    // adjust this <1 if more days should be forced visible:
+    if ( offset < 1 ) {
+        offset += 7;
+    }
+
+    return QDate(d->m_date.year(), d->m_date.month(), 1).addDays(position - offset);
 }
 
 void KDateTable::paintEvent(QPaintEvent *e)
 {
-  QPainter p(this);
-  const QRect &rectToUpdate = e->rect();
-  double cellWidth = width() / ( d->m_paintweeknumbers ?  8.0 : 7.0 );
-  double cellHeight = height() / 7.0;
-  int leftCol = (int)floor(rectToUpdate.left() / cellWidth);
-  int topRow = (int)floor(rectToUpdate.top() / cellHeight);
-  int rightCol = (int)ceil(rectToUpdate.right() / cellWidth);
-  int bottomRow = (int)ceil(rectToUpdate.bottom() / cellHeight);
-  bottomRow = qMin(bottomRow, 6);
-  rightCol = qMin(rightCol, ( d->m_paintweeknumbers ?  7 : 6 ) );
-  p.translate(leftCol * cellWidth, topRow * cellHeight);
-  for (int i = leftCol; i <= rightCol; ++i) {
-    for (int j = topRow; j <= bottomRow; ++j) {
-      paintCell(&p, j, i);
-      p.translate(0, cellHeight);
+    QPainter p(this);
+    const QRect &rectToUpdate = e->rect();
+    double cellWidth = width() / ( d->m_paintweeknumbers ?  8.0 : 7.0 );
+    double cellHeight = height() / 7.0;
+    int leftCol = (int)std::floor(rectToUpdate.left() / cellWidth);
+    int topRow = (int)std::floor(rectToUpdate.top() / cellHeight);
+    int rightCol = (int)std::ceil(rectToUpdate.right() / cellWidth);
+    int bottomRow = (int)std::ceil(rectToUpdate.bottom() / cellHeight);
+    bottomRow = qMin(bottomRow, 7 - 1);
+    rightCol = qMin(rightCol, ( d->m_paintweeknumbers ?  8 : 7 ) - 1);
+    if (layoutDirection() == Qt::RightToLeft) {
+        p.translate((( d->m_paintweeknumbers ?  8 : 7 ) - leftCol - 1) * cellWidth, topRow * cellHeight);
+    } else {
+        p.translate(leftCol * cellWidth, topRow * cellHeight);
     }
+    for (int i = leftCol; i <= rightCol; ++i) {
+        for (int j = topRow; j <= bottomRow; ++j) {
+            paintCell(&p, j, i);
+            p.translate(0, cellHeight);
+        }
 
-    p.translate(cellWidth, 0);
-    p.translate(0, -cellHeight * (bottomRow - topRow + 1));
-  }
+        if (layoutDirection() == Qt::RightToLeft) {
+            p.translate(-cellWidth, 0);
+        } else {
+            p.translate(cellWidth, 0);
+        }
+        p.translate(0, -cellHeight * (bottomRow - topRow + 1));
+    }
 }
 
-void
-KDateTable::paintCell(QPainter *painter, int row, int column)
+void KDateTable::paintCell(QPainter *painter, int row, int column)
 {
-  //kDebug(planDbg());
+  //debugPlan;
 
-  const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+    double w = (width() / ( d->m_paintweeknumbers ? 8.0 : 7.0 )) - 1;
+    double h = (height() / 7.0) - 1;
+    QRectF rect( 0, 0, w, h );
+    QSizeF cell;
 
-  QSizeF size;
-  QString text;
-  QPen pen;
-  double w = width() / ( d->m_paintweeknumbers ? 8.0 : 7.0 );
-  double h = height() / 7.0;
-  w -= 1;
-  h -= 1;
-  QRectF rect( 0, 0, w, h );
-  if ( row == 0 && column == 0 && d->m_paintweeknumbers )
-  {
-    // paint something in the corner??
-/*    painter->setPen(palette().color(QPalette::Text));
-    painter->drawRect( rect );*/
-    return;
-  }
-  if ( row == 0 )
-  { // we are drawing the headline (weekdays)
-    d->m_styleOptionWeekDay.rectF = rect;
-    d->m_styleOptionWeekDay.state = QStyle::State_None;
-
-    int col = d->m_paintweeknumbers ? column - 1 : column;
-
-    // ISO Week numbering always uses Monday as first day of week
-    const int firstWeekDay = (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber)
-        ? Qt::Monday
-        : KGlobal::locale()->weekStartDay();
-
-    int day = ( col+firstWeekDay < 8 ) ? col+firstWeekDay : col+firstWeekDay-7;
-    if ( d->m_weekDayDelegate )
-    {
-        size = d->m_weekDayDelegate->paint( painter, d->m_styleOptionWeekDay, day, d->m_model ).size();
-    }
-  }
-  else if ( d->m_paintweeknumbers && column == 0 )
-  {
-    d->m_styleOptionWeekNumber.rectF = rect;
-    d->m_styleOptionWeekNumber.state = QStyle::State_None;
-
-    int pos=7*(row-1);
-    QDate pCellDate = dateFromPos( pos );
-    if ( d->m_weekNumberDelegate )
-    {
-#if KDE_IS_VERSION(4,7,0)
-      const int weekNumber = calendar->week( pCellDate );
-#else
-      const int weekNumber = calendar->weekNumber( pCellDate );
-#endif
-      size = d->m_weekNumberDelegate->paint( painter, d->m_styleOptionWeekNumber, weekNumber, d->m_model ).size();
-    }
-  }
-  else
-  {
-    // draw the dates
-    int col = d->m_paintweeknumbers ? column - 1 : column;
-    int pos=7*(row-1)+col;
-
-    if ( d->m_grid )
-    {
-        painter->save();
-        QPen pen( "lightgrey" );
-        pen.setWidthF( 0.5 );
-        painter->setPen( pen );
-        double pw = painter->pen().width();
-        if ( col > 0 )
-        {
-          painter->drawLine( rect.topLeft(), rect.bottomLeft() );
+    if ( row == 0 ) {
+        if (column == 0 && d->m_paintweeknumbers ) {
+            // paint something in the corner??
+    /*        painter->setPen(palette().color(QPalette::Text));
+            painter->drawRect( rect );*/
+            return;
         }
-        if ( row > 1 )
-        {
-          painter->drawLine( rect.topLeft(), rect.topRight() );
+        // we are drawing the headline (weekdays)
+        d->m_styleOptionWeekDay.rectF = rect;
+        d->m_styleOptionWeekDay.state = QStyle::State_None;
+
+        int col = d->m_paintweeknumbers ? column - 1 : column;
+
+        int day = col + QLocale().firstDayOfWeek();
+        if (day >= 8 ) {
+            day -= 7;
         }
-        rect = rect.adjusted(pw, pw, 0, 0 );
-        painter->restore();
-        //kDebug(planDbg())<<d->m_grid<<" "<<pw<<" "<<rect;
-    }
+        if ( d->m_weekDayDelegate ) {
+            cell = d->m_weekDayDelegate->paint( painter, d->m_styleOptionWeekDay, day, d->m_model ).size();
+        }
+    } else {
+        if ( d->m_paintweeknumbers && column == 0 ) {
+            d->m_styleOptionWeekNumber.rectF = rect;
+            d->m_styleOptionWeekNumber.state = QStyle::State_None;
 
-    d->m_styleOptionDate.rectF = rect;
-    d->m_styleOptionDate.state = QStyle::State_None;
+            int pos = 7 * (row-1);
+            QDate pCellDate = dateFromPos( pos );
+            if ( d->m_weekNumberDelegate ) {
+                cell = d->m_weekNumberDelegate->paint( painter, d->m_styleOptionWeekNumber, pCellDate.weekNumber(), d->m_model ).size();
+            }
+        } else {
+            // draw the dates
+            int col = d->m_paintweeknumbers ? column - 1 : column;
+            int pos = 7 * (row-1) + col;
 
+            if ( d->m_grid ) {
+                painter->save();
+                // TODO: do not hardcode color!
+                QPen pen( "lightgrey" );
+                pen.setWidthF( 0.5 );
+                painter->setPen( pen );
+                double pw = painter->pen().width();
+                if ( col > 0 ) {
+                    painter->drawLine( rect.topLeft(), rect.bottomLeft() );
+                }
+                if ( row > 1 ) {
+                    painter->drawLine( rect.topLeft(), rect.topRight() );
+                }
+                rect = rect.adjusted(pw, pw, 0, 0 );
+                painter->restore();
+                //debugPlan<<d->m_grid<<" "<<pw<<" "<<rect;
+            }
 
-    QDate pCellDate = dateFromPos( pos );
-    if( calendar->month(pCellDate) == calendar->month(d->mDate) )
-    {
-        d->m_styleOptionDate.state |= QStyle::State_Active;
-    }
-    if ( d->m_selectedDates.contains( pCellDate ) )
-    {
-        d->m_styleOptionDate.state |= QStyle::State_Selected;
-    }
-    if ( isEnabled() )
-    {
-        d->m_styleOptionDate.state |= QStyle::State_Enabled;
-    }
-    if ( pCellDate == d->mDate )
-    {
-        d->m_styleOptionDate.state |= QStyle::State_Active;
-        if ( d->m_selectionmode != SingleSelection && hasFocus() )
-        {
-            d->m_styleOptionDate.state |= QStyle::State_HasFocus;
+            d->m_styleOptionDate.rectF = rect;
+            d->m_styleOptionDate.state = QStyle::State_None;
+
+            QDate pCellDate = dateFromPos( pos );
+            if( pCellDate.month() == d->m_date.month() ) {
+                d->m_styleOptionDate.state |= QStyle::State_Active;
+            }
+            if ( d->m_selectedDates.contains( pCellDate ) ) {
+                d->m_styleOptionDate.state |= QStyle::State_Selected;
+            }
+            if ( isEnabled() ) {
+                d->m_styleOptionDate.state |= QStyle::State_Enabled;
+                if (pos == d->m_hoveredPos) {
+                    d->m_styleOptionDate.state |= QStyle::State_MouseOver;
+                }
+            }
+            if ( pCellDate == d->m_date ) {
+                d->m_styleOptionDate.state |= QStyle::State_Active;
+                if ( d->m_selectionmode != SingleSelection && hasFocus() ) {
+                    d->m_styleOptionDate.state |= QStyle::State_HasFocus;
+                }
+            }
+            KDateTableDateDelegate *del = d->customPaintingModes.value( pCellDate.toJulianDay() );
+            if ( del == 0 ) {
+                del = d->m_dateDelegate;
+            }
+            if ( del ) {
+                //debugPlan<<del;
+                cell = del->paint( painter, d->m_styleOptionDate, pCellDate, d->m_model ).size();
+            } else {
+                warnPlan<<"No delegate!";
+            }
         }
     }
-    KDateTableDateDelegate *del = d->customPaintingModes.value( pCellDate.toString() );
-    if ( del == 0 ) {
-      del = d->m_dateDelegate;
+
+    // If the day cell we just drew is bigger than the current max cell sizes,
+    // then adjust the max to the current cell
+    if (cell.width() > d->m_maxCell.width()) {
+        d->m_maxCell.setWidth(cell.width());
     }
-    if ( del ) {
-        //kDebug(planDbg())<<del;
-        size = del->paint( painter, d->m_styleOptionDate, pCellDate, d->m_model ).size();
-    } else kWarning()<<"No delegate!";
-  }
-  if(size.width() > d->maxCell.width()) d->maxCell.setWidth(size.width());
-  if(size.height() > d->maxCell.height()) d->maxCell.setHeight(size.height());
+    if (cell.height() > d->m_maxCell.height()) {
+        d->m_maxCell.setHeight(cell.height());
+    }
 }
 
 void KDateTable::KDateTablePrivate::nextMonth()
 {
-  const KCalendarSystem * calendar = KGlobal::locale()->calendar();
-  q->setDate(calendar->addMonths( mDate, 1 ));
+    // setDate does validity checking for us
+    q->setDate(m_date.addMonths(1));
 }
 
 void KDateTable::KDateTablePrivate::previousMonth()
 {
-  const KCalendarSystem * calendar = KGlobal::locale()->calendar();
-  q->setDate(calendar->addMonths( mDate, -1 ));
+    // setDate does validity checking for us
+    q->setDate(m_date.addMonths(-1));
 }
 
 void KDateTable::KDateTablePrivate::beginningOfMonth()
 {
-  q->setDate(mDate.addDays(1 - mDate.day()));
+    // setDate does validity checking for us
+    q->setDate(QDate(m_date.year(), m_date.month(), 1));
 }
 
 void KDateTable::KDateTablePrivate::endOfMonth()
 {
-  q->setDate(mDate.addDays(mDate.daysInMonth() - mDate.day()));
+    // setDate does validity checking for us
+    q->setDate(QDate(m_date.year(), m_date.month() + 1, 0));
 }
 
 void KDateTable::KDateTablePrivate::beginningOfWeek()
 {
-  q->setDate(mDate.addDays(1 - mDate.dayOfWeek()));
+    // setDate does validity checking for us
+    q->setDate(m_date.addDays(1 - m_date.dayOfWeek()));
 }
 
 void KDateTable::KDateTablePrivate::endOfWeek()
 {
-  q->setDate(mDate.addDays(7 - mDate.dayOfWeek()));
+    // setDate does validity checking for us
+    q->setDate(m_date.addDays(7 - m_date.dayOfWeek()));
 }
 
-void
-KDateTable::keyPressEvent( QKeyEvent *e )
+void KDateTable::keyPressEvent( QKeyEvent *e )
 {
-    QDate cd = d->mDate;
+    QDate cd = d->m_date;
+
     switch( e->key() ) {
     case Qt::Key_Up:
-        setDate(d->mDate.addDays(-7));
+        // setDate does validity checking for us
+        setDate(d->m_date.addDays(-7));
         break;
     case Qt::Key_Down:
-        setDate(d->mDate.addDays(7));
+        // setDate does validity checking for us
+        setDate(d->m_date.addDays(7));
         break;
     case Qt::Key_Left:
-        setDate(d->mDate.addDays(-1));
+        // setDate does validity checking for us
+        setDate(d->m_date.addDays(-1));
         break;
     case Qt::Key_Right:
-        setDate(d->mDate.addDays(1));
+        // setDate does validity checking for us
+        setDate(d->m_date.addDays(1));
         break;
     case Qt::Key_Minus:
-        setDate(d->mDate.addDays(-1));
+        // setDate does validity checking for us
+        setDate(d->m_date.addDays(-1));
         break;
     case Qt::Key_Plus:
-        setDate(d->mDate.addDays(1));
+        // setDate does validity checking for us
+        setDate(d->m_date.addDays(1));
         break;
     case Qt::Key_N:
+        // setDate does validity checking for us
         setDate(QDate::currentDate());
         break;
     case Qt::Key_Return:
     case Qt::Key_Enter:
         emit tableClicked();
         break;
+    case Qt::Key_Control:
+    case Qt::Key_Alt:
+    case Qt::Key_Meta:
+    case Qt::Key_Shift:
+        // Don't beep for modifiers
+        break;
+    default:
+        if (!e->modifiers()) { // hm
+            KNotification::beep();
+        }
     }
 
     switch( e->key() ) {
@@ -795,8 +540,8 @@ KDateTable::keyPressEvent( QKeyEvent *e )
     case Qt::Key_Plus: {
         if ( d->m_selectionmode == ExtendedSelection ) {
             if ( e->modifiers() & Qt::ShiftModifier ) {
-                int inc = cd > d->mDate ? 1 : -1;
-                for ( QDate dd = d->mDate;  dd != cd; dd = dd.addDays( inc ) ) {
+                int inc = cd > d->m_date ? 1 : -1;
+                for ( QDate dd = d->m_date;  dd != cd; dd = dd.addDays( inc ) ) {
                     if ( ! d->m_selectedDates.contains( dd ) ) {
                         d->m_selectedDates << dd;
                     }
@@ -812,31 +557,31 @@ KDateTable::keyPressEvent( QKeyEvent *e )
     case Qt::Key_Select:
         if ( d->m_selectionmode == ExtendedSelection ) {
             if ( e->modifiers() & Qt::ControlModifier ) {
-                if ( d->m_selectedDates.contains( d->mDate ) ) {
-                    d->m_selectedDates.removeAt( d->m_selectedDates.indexOf( d->mDate ) );
+                if ( d->m_selectedDates.contains( d->m_date ) ) {
+                    d->m_selectedDates.removeAt( d->m_selectedDates.indexOf( d->m_date ) );
                 } else {
-                    d->m_selectedDates << d->mDate;
+                    d->m_selectedDates << d->m_date;
                 }
-            } else if ( ! d->m_selectedDates.contains( d->mDate ) ) {
-                d->m_selectedDates << d->mDate;
+            } else if ( ! d->m_selectedDates.contains( d->m_date ) ) {
+                d->m_selectedDates << d->m_date;
             }
             update();
         }
         break;
     case Qt::Key_Menu:
-        if (  d->popupMenuEnabled )
+        if ( d->m_popupMenuEnabled )
         {
-            KMenu *menu = new KMenu();
+            QMenu *menu = new QMenu();
             if ( d->m_selectionmode == ExtendedSelection ) {
                 emit aboutToShowContextMenu( menu, d->m_selectedDates );
             } else {
-                menu->addTitle( KGlobal::locale()->formatDate(d->mDate) );
-                emit aboutToShowContextMenu( menu, d->mDate );
+                menu->setTitle( QLocale().toString(d->m_date, QLocale::ShortFormat) );
+                emit aboutToShowContextMenu( menu, d->m_date );
             }
             if ( menu->isEmpty() ) {
                 delete menu;
             } else {
-                int p = posFromDate( d->mDate ) - 1;
+                int p = posFromDate( d->m_date ) - 1;
                 int col = p % 7;
                 int row = p / 7;
                 QPoint pos = geometry().topLeft();
@@ -844,97 +589,159 @@ KDateTable::keyPressEvent( QKeyEvent *e )
                 int sx = size.width() / 8;
                 int sy = size.height() / 7;
                 pos = QPoint( pos.x() + sx + sx / 2 + sx * col, pos.y() + sy + sy * row );
-                kDebug(planDbg())<<pos<<p<<col<<row;
+                debugPlan<<pos<<p<<col<<row;
                 menu->popup(mapToGlobal(pos));
             }
         }
         break;
-    case Qt::Key_Control:
-    case Qt::Key_Alt:
-    case Qt::Key_Meta:
-    case Qt::Key_Shift:
-        // Don't beep for modifiers
-        break;
-    default:
-        if (!e->modifiers()) { // hm
-            KNotification::beep();
-        }
     }
 }
 
-void
-KDateTable::setFontSize(int size)
+void KDateTable::setFontSize(int size)
 {
-  int count;
-  QFontMetricsF metrics(fontMetrics());
-  QRectF rect;
-  // ----- store rectangles:
-  d->fontsize=size;
-  // ----- find largest day name:
-  d->maxCell.setWidth(0);
-  d->maxCell.setHeight(0);
-  for(count=0; count<7; ++count)
-    {
-      rect=metrics.boundingRect(KGlobal::locale()->calendar()
-                                ->weekDayName(count+1, KCalendarSystem::ShortDayName));
-      d->maxCell.setWidth(qMax(d->maxCell.width(), rect.width()));
-      d->maxCell.setHeight(qMax(d->maxCell.height(), rect.height()));
+    QFontMetricsF metrics(fontMetrics());
+    QRectF rect;
+    // ----- store rectangles:
+    d->fontsize = size;
+    // ----- find largest day name:
+    d->m_maxCell.setWidth(0);
+    d->m_maxCell.setHeight(0);
+    QLocale locale;
+    for (int weekday = 1; weekday <= 7; ++weekday) {
+        rect = metrics.boundingRect(locale.dayName(weekday, QLocale::ShortFormat));
+        d->m_maxCell.setWidth(qMax(d->m_maxCell.width(), rect.width()));
+        d->m_maxCell.setHeight(qMax(d->m_maxCell.height(), rect.height()));
     }
-  // ----- compare with a real wide number and add some space:
-  rect=metrics.boundingRect(QLatin1String("88"));
-  d->maxCell.setWidth(qMax(d->maxCell.width()+2, rect.width()));
-  d->maxCell.setHeight(qMax(d->maxCell.height()+4, rect.height()));
+    // ----- compare with a real wide number and add some space:
+    rect = metrics.boundingRect(QStringLiteral("88"));
+    d->m_maxCell.setWidth(qMax(d->m_maxCell.width() + 2, rect.width()));
+    d->m_maxCell.setHeight(qMax(d->m_maxCell.height() + 4, rect.height()));
 }
 
-void
-KDateTable::wheelEvent ( QWheelEvent * e )
+void KDateTable::wheelEvent ( QWheelEvent * e )
 {
-    setDate(d->mDate.addMonths( -(int)(e->delta()/120)) );
+    setDate(d->m_date.addMonths( -(int)(e->delta()/120)) );
     e->accept();
 }
 
-void
-KDateTable::mousePressEvent(QMouseEvent *e)
+bool KDateTable::event( QEvent *ev )
 {
-  if(e->type()!=QEvent::MouseButtonPress)
-    { // the KDatePicker only reacts on mouse press events:
-      return;
+    switch (ev->type()) {
+    case QEvent::HoverMove: {
+        QHoverEvent *e = static_cast<QHoverEvent *>(ev);
+        const int row = e->pos().y() * 7 / height();
+        int col;
+        if (layoutDirection() == Qt::RightToLeft) {
+            col = (d->m_paintweeknumbers ? 8 : 7) - (e->pos().x() * (d->m_paintweeknumbers ? 8 : 7) / width()) - 1;
+        } else {
+            col = e->pos().x() * (d->m_paintweeknumbers ? 8 : 7) / width();
+        }
+
+        const int pos = row < 1 ? -1 : ((d->m_paintweeknumbers ? 8 : 7) * (row - 1)) + col;
+
+        if (pos != d->m_hoveredPos) {
+            d->m_hoveredPos = pos;
+            update();
+        }
+        break;
     }
-  if(!isEnabled())
-    {
-      KNotification::beep();
-      return;
+    case QEvent::HoverLeave:
+        if (d->m_hoveredPos != -1) {
+            d->m_hoveredPos = -1;
+            update();
+        }
+        break;
+    case QEvent::ToolTip: {
+        //debugPlan<<"Tooltip";
+        QHelpEvent *e = static_cast<QHelpEvent*>( ev );
+
+        double cellWidth = width() / ( d->m_paintweeknumbers ?  8.0 : 7.0 );
+        double cellHeight = height() / 7.0;
+        int column = (int)std::floor(e->pos().x() / cellWidth);
+        int row = (int)std::floor(e->pos().y() / cellHeight);
+        QString text;
+        if ( row == 0 ) {
+            if (column == 0 && d->m_paintweeknumbers ) {
+                // corner
+            } else {
+                // we are drawing the headline (weekdays)
+                int col = d->m_paintweeknumbers ? column - 1 : column;
+
+                int day = col + QLocale().firstDayOfWeek();
+                if (day >= 8 ) {
+                    day -= 7;
+                }
+                if ( d->m_weekDayDelegate ) {
+                    text = d->m_weekDayDelegate->data( day, Qt::ToolTipRole, d->m_model ).toString();
+                }
+            }
+        } else {
+            if ( d->m_paintweeknumbers && column == 0 ) {
+                int pos = 7 * (row-1);
+                QDate pCellDate = dateFromPos( pos );
+                if ( d->m_weekNumberDelegate ) {
+                    text = d->m_weekNumberDelegate->data( pCellDate.weekNumber(), Qt::ToolTipRole, d->m_model ).toString();
+                }
+            } else {
+                // draw the dates
+                int col = d->m_paintweeknumbers ? column - 1 : column;
+                int pos=7*(row-1)+col;
+                QDate pCellDate = dateFromPos( pos );
+                if ( d->m_dateDelegate ) {
+                    text = d->m_dateDelegate->data( pCellDate, Qt::ToolTipRole, d->m_model ).toString();
+                }
+            }
+        }
+        //debugPlan<<row<<column<<text;
+        if ( text.isEmpty() ) {
+            QToolTip::hideText();
+        } else {
+            QToolTip::showText( e->globalPos(), text );
+        }
+        e->accept();
+        return true;
+        break;
+    }
+    default:
+        break;
+    }
+    return QWidget::event(ev);
+}
+
+void KDateTable::mousePressEvent(QMouseEvent *e)
+{
+    if(e->type()!=QEvent::MouseButtonPress) { // the KDatePicker only reacts on mouse press events:
+        return;
+    }
+    if(!isEnabled()) {
+        KNotification::beep();
+        return;
     }
 
-  // -----
-  int row, col, pos;
-  QPoint mouseCoord;
-  // -----
-  mouseCoord = e->pos();
-  row=mouseCoord.y() / ( height() / 7 );
-  col=mouseCoord.x() / ( width() / ( d->m_paintweeknumbers ? 8 : 7 ) );
-  //kDebug(planDbg())<<d->maxCell<<", "<<size()<<row<<", "<<col<<", "<<mouseCoord;
-  if(row<1 )
-  { // the user clicked on the frame of the table
-      //kDebug(planDbg())<<"weekday "<<col;
-      return;
-  }
-  if ( col < ( d->m_paintweeknumbers ? 1 : 0 ) )
-  {
-      //kDebug(planDbg())<<"weeknumber "<<row;
-      return;
-  }
-  if ( d->m_paintweeknumbers ) {
-      --col;
-  }
+    int row, col, pos;
 
-  // Rows and columns are zero indexed.  The (row - 1) below is to avoid counting
-  // the row with the days of the week in the calculation.
+    QPoint mouseCoord = e->pos();
+    row = mouseCoord.y() * 7 / height();
+    if (layoutDirection() == Qt::RightToLeft) {
+        col = ( d->m_paintweeknumbers ? 8 : 7 ) - (mouseCoord.x() * ( d->m_paintweeknumbers ? 8 : 7 ) / width()) - 1;
+    } else {
+        col = mouseCoord.x() * ( d->m_paintweeknumbers ? 8 : 7 ) / width();
+    }
 
-  // old selected date:
-  // new position and date
-  pos = (7 * (row - 1)) + col;
-  QDate clickedDate = dateFromPos( pos );
+    //debugPlan<<d->m_maxCell<<", "<<size()<<row<<", "<<col<<", "<<mouseCoord;
+    if ( d->m_paintweeknumbers ) {
+        --col;
+    }
+    if (row < 1 || col < 0) {  // the user clicked on the frame of the table
+        return;
+    }
+
+    // Rows and columns are zero indexed.  The (row - 1) below is to avoid counting
+    // the row with the days of the week in the calculation.
+
+    // new position and date
+    pos = (7 * (row - 1)) + col;
+    QDate clickedDate = dateFromPos( pos );
 
   if ( d->m_selectionmode != ExtendedSelection || e->button() !=  Qt::RightButton || ! d->m_selectedDates.contains( clickedDate ) )
   {
@@ -943,16 +750,16 @@ KDateTable::mousePressEvent(QMouseEvent *e)
         case SingleSelection:
             break;
         case ExtendedSelection:
-            //kDebug(planDbg())<<"extended "<<e->modifiers()<<", "<<clickedDate;
+            //debugPlan<<"extended "<<e->modifiers()<<", "<<clickedDate;
             if ( e->modifiers() & Qt::ShiftModifier )
             {
                 if ( d->m_selectedDates.isEmpty() )
                 {
                     d->m_selectedDates << clickedDate;
                 }
-                else if ( d->mDate != clickedDate )
+                else if ( d->m_date != clickedDate )
                 {
-                    QDate dt = d->mDate;
+                    QDate dt = d->m_date;
                     int nxt = dt < clickedDate ? 1 : -1;
                     if ( d->m_selectedDates.contains( clickedDate ) )
                     {
@@ -995,6 +802,7 @@ KDateTable::mousePressEvent(QMouseEvent *e)
     }
     // set the new date. If it is in the previous or next month, the month will
     // automatically be changed, no need to do that manually...
+    // validity checking done inside setDate
     setDate( clickedDate );
 
     // This could be optimized to only call update over the regions
@@ -1005,103 +813,83 @@ KDateTable::mousePressEvent(QMouseEvent *e)
   }
   emit tableClicked();
 
-  if (  e->button() == Qt::RightButton && d->popupMenuEnabled )
-  {
-        KMenu *menu = new KMenu();
+  if (e->button() == Qt::RightButton && d->m_popupMenuEnabled ) {
+        QMenu *menu = new QMenu();
         if ( d->m_selectionmode == ExtendedSelection ) {
             emit aboutToShowContextMenu( menu, d->m_selectedDates );
         } else {
-            menu->addTitle( KGlobal::locale()->formatDate(clickedDate) );
+            menu->setTitle( QLocale().toString(clickedDate, QLocale::ShortFormat) );
             emit aboutToShowContextMenu( menu, clickedDate );
         }
         menu->popup(e->globalPos());
   }
 }
 
-bool
-KDateTable::setDate(const QDate& date_)
+bool KDateTable::setDate(const QDate& date_)
 {
-  bool changed=false;
-  QDate temp;
-  // -----
-  if(!date_.isValid())
-    {
-      kDebug(planDbg()) << "KDateTable::setDate: refusing to set invalid date.";
-      return false;
+    if (!date_.isValid()) {
+        debugPlan << "KDateTable::setDate: refusing to set invalid date.";
+        return false;
     }
-  if(d->mDate!=date_)
-    {
-      emit(dateChanged(d->mDate, date_));
-      d->mDate=date_;
-      emit(dateChanged(d->mDate));
-      changed=true;
-    }
-  if ( d->m_selectionmode == KDateTable::SingleSelection )
-  {
-      d->m_selectedDates.clear();
-      d->m_selectedDates << date_;
-      emit selectionChanged( d->m_selectedDates );
-  }
-  const KCalendarSystem * calendar = KGlobal::locale()->calendar();
 
-  calendar->setDate(temp, calendar->year(d->mDate), calendar->month(d->mDate), 1);
-  //temp.setDate(d->mDate.year(), d->mDate.month(), 1);
-  //kDebug(planDbg()) << "firstDayInWeek: " << temp.toString();
-  d->firstday=temp.dayOfWeek();
-  d->numdays=calendar->daysInMonth(d->mDate);
-
-  temp = calendar->addMonths(temp, -1);
-  d->numDaysPrevMonth=calendar->daysInMonth(temp);
-  if(changed)
-    {
-      update();
+    if (d->m_date != date_) {
+        const QDate oldDate = d->m_date;
+        d->m_date = date_;
+        if (oldDate.year() != date_.year() || oldDate.month() != date_.month()) {
+            QDate dt(date_.year(), date_.month(), 1);
+            d->m_weekDayFirstOfMonth = dt.dayOfWeek();
+        }
+        emit(dateChanged(oldDate, date_));
+        emit(dateChanged(date_));
     }
-  return true;
+
+    if ( d->m_selectionmode == KDateTable::SingleSelection )
+    {
+        d->m_selectedDates.clear();
+        d->m_selectedDates << date_;
+        emit selectionChanged( d->m_selectedDates );
+    }
+
+    update();
+
+    return true;
 }
 
-const QDate&
-KDateTable::date() const
+const QDate &KDateTable::date() const
 {
-  return d->mDate;
+  return d->m_date;
 }
 
-// what are those repaintContents() good for? (pfeiffer)
 void KDateTable::focusInEvent( QFocusEvent *e )
 {
-//    repaintContents(false);
     QWidget::focusInEvent( e );
-    emit focusChanged( e );
 }
 
 void KDateTable::focusOutEvent( QFocusEvent *e )
 {
-//    repaintContents(false);
     QWidget::focusOutEvent( e );
-    emit focusChanged( e );
 }
 
-QSize
-KDateTable::sizeHint() const
+QSize KDateTable::sizeHint() const
 {
-  if(d->maxCell.height()>0 && d->maxCell.width()>0)
-    {
-      int s = d->m_paintweeknumbers ? 8 : 7;
-      return QSize(qRound(d->maxCell.width()*s),
-             (qRound(d->maxCell.height()+2)*7));
+    if(d->m_maxCell.height() > 0 && d->m_maxCell.width() > 0) {
+        int s = d->m_paintweeknumbers ? 8 : 7;
+        return QSize(qRound(d->m_maxCell.width() * s),
+                     (qRound(d->m_maxCell.height() + 2) * s));
     } else {
-      kDebug(planDbg()) << "KDateTable::sizeHint: obscure failure - ";
-      return QSize(-1, -1);
+        debugPlan << "KDateTable::sizeHint: obscure failure - ";
+        return QSize(-1, -1);
     }
 }
 
 void KDateTable::setPopupMenuEnabled( bool enable )
 {
-   d->popupMenuEnabled=enable;
+   d->m_popupMenuEnabled=enable;
 }
 
 bool KDateTable::popupMenuEnabled() const
 {
-   return d->popupMenuEnabled;
+   return d->m_popupMenuEnabled;
 }
 
 void KDateTable::setCustomDatePainting(const QDate &date, const QColor &fgColor, BackgroundMode bgMode, const QColor &bgColor)
@@ -1114,171 +902,14 @@ void KDateTable::setCustomDatePainting(const QDate &date, const QColor &fgColor,
     update();
 }
 
-void KDateTable::unsetCustomDatePainting( const QDate &date )
+void KDateTable::unsetCustomDatePainting(const QDate &date)
 {
-    d->customPaintingModes.remove( date.toString() );
+    d->customPaintingModes.remove(date.toJulianDay());
 }
 
 void KDateTable::setSelectionMode( SelectionMode mode )
 {
     d->m_selectionmode = mode;
-}
-
-KDateInternalYearSelector::KDateInternalYearSelector
-(QWidget* parent)
-  : QLineEdit(parent),
-    val(new QIntValidator(this)),
-    result(0)
-{
-  QFont font;
-  // -----
-  font=KGlobalSettings::generalFont();
-  setFont(font);
-  setFrame(false);
-  // we have to respect the limits of QDate here, I fear:
-  val->setRange(0, 8000);
-  setValidator(val);
-  connect(this, SIGNAL(returnPressed()), SLOT(yearEnteredSlot()));
-}
-
-void KDateInternalYearSelector::focusOutEvent(QFocusEvent*)
-{
-    emit(closeMe(1));
-}
-
-void
-KDateInternalYearSelector::yearEnteredSlot()
-{
-  bool ok;
-  int year;
-  QDate date;
-  // ----- check if this is a valid year:
-  year=text().toInt(&ok);
-  if(!ok)
-    {
-      KNotification::beep();
-      return;
-    }
-  //date.setDate(year, 1, 1);
-  KGlobal::locale()->calendar()->setDate(date, year, 1, 1);
-  if(!date.isValid())
-    {
-      KNotification::beep();
-      return;
-    }
-  result=year;
-  emit(closeMe(1));
-}
-
-int
-KDateInternalYearSelector::getYear()
-{
-  return result;
-}
-
-void
-KDateInternalYearSelector::setYear(int year)
-{
-  QString temp;
-  // -----
-  temp.setNum(year);
-  setText(temp);
-}
-
-KPopupFrame::KPopupFrame(QWidget* parent)
-  : QFrame(parent, Qt::Popup), d(new KPopupFramePrivate(this))
-{
-  setFrameStyle(QFrame::Box|QFrame::Raised);
-  setMidLineWidth(2);
-}
-
-KPopupFrame::~KPopupFrame()
-{
-  delete d;
-}
-
-void
-KPopupFrame::keyPressEvent(QKeyEvent* e)
-{
-  if(e->key()==Qt::Key_Escape)
-    {
-      d->result=0; // rejected
-      emit leaveModality();
-      //qApp->exit_loop();
-    }
-}
-
-void
-KPopupFrame::close(int r)
-{
-  d->result=r;
-  emit leaveModality();
-  //qApp->exit_loop();
-}
-
-void
-KPopupFrame::setMainWidget(QWidget* m)
-{
-  d->main=m;
-  if(d->main)
-    {
-      resize(d->main->width()+2*frameWidth(), d->main->height()+2*frameWidth());
-    }
-}
-
-void
-KPopupFrame::resizeEvent(QResizeEvent*)
-{
-  if(d->main)
-    {
-      d->main->setGeometry(frameWidth(), frameWidth(),
-          width()-2*frameWidth(), height()-2*frameWidth());
-    }
-}
-
-void
-KPopupFrame::popup(const QPoint &pos)
-{
-  // Make sure the whole popup is visible.
-  QRect d = KGlobalSettings::desktopGeometry(pos);
-
-  int x = pos.x();
-  int y = pos.y();
-  int w = width();
-  int h = height();
-  if (x+w > d.x()+d.width())
-    x = d.width() - w;
-  if (y+h > d.y()+d.height())
-    y = d.height() - h;
-  if (x < d.x())
-    x = 0;
-  if (y < d.y())
-    y = 0;
-
-  // Pop the thingy up.
-  move(x, y);
-  show();
-}
-
-int
-KPopupFrame::exec(const QPoint &pos)
-{
-  popup(pos);
-  repaint();
-  QEventLoop eventLoop;
-  connect(this, SIGNAL(leaveModality()),
-          &eventLoop, SLOT(quit()));
-  eventLoop.exec();
-
-  hide();
-  kDebug(planDbg())<<d->result;
-  return d->result;
-}
-
-int
-KPopupFrame::exec(int x, int y)
-{
-  return exec(QPoint(x, y));
 }
 
 //-----------------------
@@ -1321,7 +952,7 @@ KDateTableDateDelegate::KDateTableDateDelegate( QObject *parent )
 
 QVariant KDateTableDateDelegate::data( const QDate &date, int role, KDateTableDataModel *model )
 {
-    //kDebug(planDbg())<<date<<role<<model;
+    //debugPlan<<date<<role<<model;
     if ( model == 0 ) {
         return QVariant();
     }
@@ -1330,9 +961,8 @@ QVariant KDateTableDateDelegate::data( const QDate &date, int role, KDateTableDa
 
 QRectF KDateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewItem &option, const QDate &date, KDateTableDataModel *model )
 {
-    //kDebug(planDbg())<<date;
+    //debugPlan<<date;
     painter->save();
-    const KCalendarSystem * calendar = KGlobal::locale()->calendar();
     QRectF r;
 
     QPalette palette = option.palette;
@@ -1342,11 +972,12 @@ QRectF KDateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewIt
         palette.setCurrentColorGroup( QPalette::Inactive );
     }
 
+    // TODO: honor QStyle::State_MouseOver, and perhaps switch to style()->drawPrimitive(QStyle::PE_PanelItemViewItem, ...
     QFont font = option.font;
     QColor textColor = palette.text().color();
     QBrush bg( palette.base() );
     Qt::Alignment align = option.displayAlignment;
-    QString text = calendar->formatDate(date, KLocale::Day, KLocale::ShortNumber);
+    QString text = QLocale().toString(date.day());
 
     if ( model )
     {
@@ -1416,9 +1047,9 @@ KDateTableCustomDateDelegate::KDateTableCustomDateDelegate( QObject *parent )
 
 QRectF KDateTableCustomDateDelegate::paint( QPainter *painter, const StyleOptionViewItem &option, const QDate &date, KDateTableDataModel *model )
 {
-    //kDebug(planDbg())<<date;
+    //debugPlan<<date;
     painter->save();
-    const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+
     QRectF r;
     bool paintRect=true;
     QBrush bg(option.palette.base());
@@ -1454,16 +1085,16 @@ QRectF KDateTableCustomDateDelegate::paint( QPainter *painter, const StyleOption
       if ( option.state & QStyle::State_Selected )
       {
         // draw the currently selected date
-        //kDebug(planDbg())<<"selected: "<<date;
+        //debugPlan<<"selected: "<<date;
         if ( option.state & QStyle::State_Enabled )
         {
-          //kDebug(planDbg())<<"enabled & selected: "<<date;
+          //debugPlan<<"enabled & selected: "<<date;
           painter->setPen(option.palette.color(QPalette::Highlight));
           painter->setBrush(option.palette.color(QPalette::Highlight));
         }
         else
         {
-          //kDebug(planDbg())<<"disabled & selected: "<<date;
+          //debugPlan<<"disabled & selected: "<<date;
           painter->setPen(option.palette.color(QPalette::Text));
           painter->setBrush(option.palette.color(QPalette::Text));
         }
@@ -1485,7 +1116,7 @@ QRectF KDateTableCustomDateDelegate::paint( QPainter *painter, const StyleOption
         painter->drawRect(option.rectF);
       }
       painter->setPen(pen);
-      QString text = calendar->formatDate(date, KLocale::Day, KLocale::ShortNumber);
+      QString text = QLocale().toString(date.day());
       if ( model )
       {
         QVariant v = model->data( date );
@@ -1508,7 +1139,7 @@ KDateTableWeekDayDelegate::KDateTableWeekDayDelegate( QObject *parent )
 
 QVariant KDateTableWeekDayDelegate::data( int day, int role, KDateTableDataModel *model )
 {
-    //kDebug(planDbg())<<day<<role<<model;
+    //debugPlan<<day<<role<<model;
     if ( model == 0 ) {
         return QVariant();
     }
@@ -1517,9 +1148,8 @@ QVariant KDateTableWeekDayDelegate::data( int day, int role, KDateTableDataModel
 
 QRectF KDateTableWeekDayDelegate::paint( QPainter *painter, const StyleOptionHeader &option, int daynum, KDateTableDataModel *model )
 {
-    //kDebug(planDbg())<<daynum;
+    //debugPlan<<daynum;
     painter->save();
-    const KCalendarSystem * calendar = KGlobal::locale()->calendar();
 
     QPalette palette = option.palette;
     if ( option.state & QStyle::State_Active ) {
@@ -1528,7 +1158,7 @@ QRectF KDateTableWeekDayDelegate::paint( QPainter *painter, const StyleOptionHea
         palette.setCurrentColorGroup( QPalette::Inactive );
     }
     QRectF rect;
-    QFont font = KGlobalSettings::generalFont();
+    QFont font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
 //    font.setBold(true);
     painter->setFont(font);
 
@@ -1539,14 +1169,17 @@ QRectF KDateTableWeekDayDelegate::paint( QPainter *painter, const StyleOptionHea
     painter->setBrush(titleColor);
     painter->drawRect(option.rectF);
 
-    QString value = calendar->weekDayName( daynum, KCalendarSystem::ShortDayName );
-    //kDebug(planDbg())<<daynum<<": "<<value;
+    QString value;
     if ( model ) {
         QVariant v = model->weekDayData( daynum, Qt::DisplayRole );
         if ( v.isValid() ) {
             value = v.toString();
         }
     }
+    if (value.isEmpty()) {
+         value = QLocale().dayName(daynum, QLocale::ShortFormat);
+    }
+    //debugPlan<<daynum<<": "<<value;
     painter->setPen( textColor );
     painter->drawText(option.rectF, option.textAlignment, value, &rect);
 
@@ -1565,7 +1198,7 @@ KDateTableWeekNumberDelegate::KDateTableWeekNumberDelegate( QObject *parent )
 
 QVariant KDateTableWeekNumberDelegate::data( int week, int role, KDateTableDataModel *model )
 {
-    //kDebug(planDbg())<<week<<role<<model;
+    //debugPlan<<week<<role<<model;
     if ( model == 0 ) {
         return QVariant();
     }
@@ -1574,10 +1207,10 @@ QVariant KDateTableWeekNumberDelegate::data( int week, int role, KDateTableDataM
 
 QRectF KDateTableWeekNumberDelegate::paint( QPainter *painter, const StyleOptionHeader &option, int week, KDateTableDataModel *model )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     painter->save();
     QRectF result;
-    QFont font = KGlobalSettings::generalFont();
+    QFont font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     painter->setFont(font);
 
     QColor titleColor( option.palette.button().color() );
@@ -1606,5 +1239,4 @@ QRectF KDateTableWeekNumberDelegate::paint( QPainter *painter, const StyleOption
 
 } //namespace KPlato
 
-#include "kdatetable.moc"
-#include "kdatetable_p.moc"
+#include "moc_kdatetable.cpp"

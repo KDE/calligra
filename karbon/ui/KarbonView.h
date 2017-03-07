@@ -35,7 +35,6 @@
 #define __KARBON_VIEW__
 
 #include <KoView.h>
-#include <QPointF>
 #include <KoShapeAlignCommand.h>
 #include <KoShapeDistributeCommand.h>
 #include <karbonui_export.h>
@@ -148,7 +147,7 @@ protected:
     virtual void updateReadWrite(bool readwrite);
     virtual void resizeEvent(QResizeEvent* event);
     virtual void dragEnterEvent(QDragEnterEvent * event);
-    virtual void addImages(const QList<QImage> &imageList, const QPoint &insertAt);
+    virtual void addImages(const QVector<QImage> &imageList, const QPoint &insertAt);
 
     void createLayersTabDock();
     void createStrokeDock();

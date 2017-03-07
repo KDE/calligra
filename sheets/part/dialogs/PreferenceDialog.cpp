@@ -35,21 +35,22 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QScrollBar>
+#include <QPushButton>
 
+#include <KConfigGroup>
 #include <kcombobox.h>
 #include <kconfig.h>
-#include <kglobalsettings.h>
-#include <kstatusbar.h>
-#include <knuminput.h>
+#include <KCompletion>
+
+#include <KPluginMetaData>
+#include <KPluginInfo>
+#include <KPluginSelector>
+#include <ksharedconfig.h>
+#include <sonnet/configwidget.h>
 
 #include <KoConfigAuthorPage.h>
 #include <KoUnit.h>
-
-#include <kplugininfo.h>
-#include <kpluginselector.h>
-#include <kservicetypetrader.h>
-#include <ksharedconfig.h>
-#include <sonnet/configwidget.h>
+#include <KoComponentData.h>
 
 #include "ApplicationSettings.h"
 #include "CalculationSettings.h"
@@ -81,7 +82,6 @@ public:
     MethodOfCalc oldFunction;
     KoUnit oldUnit;
     double oldIndentationStep;
-    bool oldCaptureAllArrowKeys;
     QColor oldGridColor;
     QColor oldPageOutlineColor;
 
@@ -155,13 +155,6 @@ void PreferenceDialog::Private::applyInterfaceOptions()
         oldIndentationStep = value;
     }
 
-    const bool capture = interfaceOptions.m_captureAllArrowKeys->isChecked();
-    if (capture != view->doc()->map()->settings()->captureAllArrowKeys()) {
-        view->doc()->map()->settings()->setCaptureAllArrowKeys(capture);
-        config->group("Editor").writeEntry("CaptureAllArrowKeys", capture);
-        oldCaptureAllArrowKeys = capture;
-    }
-
     const QColor gridColor = interfaceOptions.m_gridColor->color();
     if (gridColor != view->doc()->map()->settings()->gridColor()) {
         view->doc()->map()->settings()->setGridColor(gridColor);
@@ -177,22 +170,22 @@ void PreferenceDialog::Private::applyInterfaceOptions()
     }
 
 #if 0 // CALLIGRA_SHEETS_COMPLETION_MODE_SETTING
-    KGlobalSettings::Completion tmpCompletion = KGlobalSettings::CompletionNone;
+    KCompletion::CompletionMode tmpCompletion = KCompletion::CompletionNone;
     switch (typeCompletion->currentIndex()) {
     case 0:
-        tmpCompletion = KGlobalSettings::CompletionNone;
+        tmpCompletion = KCompletion::CompletionNone;
         break;
     case 1:
-        tmpCompletion = KGlobalSettings::CompletionShell;
+        tmpCompletion = KCompletion::CompletionShell;
         break;
     case 2:
-        tmpCompletion = KGlobalSettings::CompletionPopup;
+        tmpCompletion = KCompletion::CompletionPopup;
         break;
     case 3:
-        tmpCompletion = KGlobalSettings::CompletionAuto;
+        tmpCompletion = KCompletion::CompletionAuto;
         break;
     case 4:
-        tmpCompletion = KGlobalSettings::CompletionMan;
+        tmpCompletion = KCompletion::CompletionMan;
         break;
     }
 
@@ -210,7 +203,6 @@ void PreferenceDialog::Private::defaultInterfaceOptions()
     interfaceOptions.m_statusBarFunction->setCurrentIndex(0);
     interfaceOptions.m_unit->setCurrentIndex(0);
     interfaceOptions.m_indentationStep->changeValue(10.0);
-    interfaceOptions.m_captureAllArrowKeys->setChecked(true);
     interfaceOptions.m_gridColor->setColor(Qt::lightGray);
     interfaceOptions.m_pageOutlineColor->setColor(Qt::red);
 #if 0 // CALLIGRA_SHEETS_COMPLETION_MODE_SETTING
@@ -227,7 +219,6 @@ void PreferenceDialog::Private::resetInterfaceOptions()
     oldFunction = view->doc()->map()->settings()->getTypeOfCalc();
     oldUnit = view->doc()->unit();
     oldIndentationStep = view->doc()->map()->settings()->indentValue();
-    oldCaptureAllArrowKeys = view->doc()->map()->settings()->captureAllArrowKeys();
 
     const KConfigGroup colorGroup = config->group("KSpread Color");
     oldGridColor = colorGroup.readEntry("GridColor", QColor(Qt::lightGray));
@@ -239,7 +230,6 @@ void PreferenceDialog::Private::resetInterfaceOptions()
     interfaceOptions.m_statusBarFunction->setCurrentIndex(functionIndex);
     interfaceOptions.m_unit->setCurrentIndex(oldUnit.indexInListForUi(KoUnit::ListAll));
     interfaceOptions.m_indentationStep->changeValue(oldIndentationStep);
-    interfaceOptions.m_captureAllArrowKeys->setChecked(oldCaptureAllArrowKeys);
     interfaceOptions.m_gridColor->setColor(oldGridColor);
     interfaceOptions.m_pageOutlineColor->setColor(oldPageOutlineColor);
 }
@@ -293,6 +283,16 @@ void PreferenceDialog::Private::resetOpenSaveOptions()
     fileOptions.m_autoSaveDelay->setValue(oldAutoSaveDelay);
 }
 
+QList<KPluginInfo> pluginInfos(const QString &directory)
+{
+    QList<KPluginInfo> result;
+    QVector<KPluginMetaData> pluginMetaDataList = KPluginLoader::findPlugins(directory);
+    result.reserve(pluginMetaDataList.size());
+    foreach(const KPluginMetaData &metaData, pluginMetaDataList) {
+        result.append(KPluginInfo::fromMetaData(metaData));
+    }
+    return result;
+}
 
 
 PreferenceDialog::PreferenceDialog(View* view)
@@ -300,16 +300,16 @@ PreferenceDialog::PreferenceDialog(View* view)
         , d(new Private)
 {
     setObjectName(QLatin1String("PreferenceDialog"));
-    setCaption(i18nc("@title:window", "Configure"));
+    setWindowTitle(i18nc("@title:window", "Configure"));
     setFaceType(List);
-    setButtons(Ok | Cancel | Default | Reset);
-    setDefaultButton(Ok);
+    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults | QDialogButtonBox::Reset);
+    button(QDialogButtonBox::Ok)->setDefault(true);
 
     d->view = view;
 
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotApply()));
-    connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));
-    connect(this, SIGNAL(resetClicked()), this, SLOT(slotReset()));
+    connect(this, SIGNAL(accepted()), this, SLOT(slotApply()));
+    connect(button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), this, SLOT(slotDefault()));
+    connect(button(QDialogButtonBox::Reset), SIGNAL(clicked(bool)), this, SLOT(slotReset()));
 
     QWidget* widget = 0;
     KPageWidgetItem* page = 0;
@@ -359,13 +359,11 @@ PreferenceDialog::PreferenceDialog(View* view)
 
     // Plugin Options Widget
     d->pluginSelector = new KPluginSelector(this);
-    const QString serviceType = QLatin1String("CalligraSheets/Plugin");
-    const QString query = QLatin1String("([X-CalligraSheets-InterfaceVersion] == 0)");
-    const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
-    const QList<KPluginInfo> pluginInfoList = KPluginInfo::fromServices(offers);
-    d->pluginSelector->addPlugins(pluginInfoList, KPluginSelector::ReadConfigFile,
+    const QList<KPluginInfo> functionPluginInfos = pluginInfos(QStringLiteral("calligrasheets/functions"));
+    const QList<KPluginInfo> toolPluginInfos = pluginInfos(QStringLiteral("calligrasheets/tools"));
+    d->pluginSelector->addPlugins(functionPluginInfos, KPluginSelector::ReadConfigFile,
                                   i18n("Function Modules"), "FunctionModule");
-    d->pluginSelector->addPlugins(pluginInfoList, KPluginSelector::ReadConfigFile,
+    d->pluginSelector->addPlugins(toolPluginInfos, KPluginSelector::ReadConfigFile,
                                   i18n("Tools"), "Tool");
     d->pluginSelector->load();
     page = new KPageWidgetItem(d->pluginSelector, i18n("Plugins"));
@@ -375,7 +373,7 @@ PreferenceDialog::PreferenceDialog(View* view)
 
     // Spell Checker Options
     KSharedConfig::Ptr sharedConfigPtr = Factory::global().config();
-    d->spellCheckPage = new Sonnet::ConfigWidget(sharedConfigPtr.data(), this);
+    d->spellCheckPage = new Sonnet::ConfigWidget(this);
     page = new KPageWidgetItem(d->spellCheckPage, i18n("Spelling"));
     page->setIcon(koIcon("tools-check-spelling"));
     page->setHeader(i18n("Spell Checker Behavior"));
@@ -446,7 +444,7 @@ void PreferenceDialog::slotReset()
     } else if (currentPage() == d->page4) {
         // TODO
     } else if (currentPage() == d->pluginPage) {
-        d->pluginSelector->load(); // FIXME
+        d->pluginSelector->load();
     }
 }
 
@@ -474,5 +472,3 @@ typeCompletion->setCurrentIndex(0);
 comboChanged = false;
 connect(typeCompletion, SIGNAL(activated(QString)), this, SLOT(slotTextComboChanged(QString)));
 #endif
-
-#include "PreferenceDialog.moc"

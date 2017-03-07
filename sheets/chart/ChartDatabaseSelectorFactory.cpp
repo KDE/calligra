@@ -20,7 +20,7 @@
 
 #include "ChartDatabaseSelectorFactory.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <KoChartInterface.h>
 

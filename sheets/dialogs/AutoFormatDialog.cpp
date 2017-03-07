@@ -33,10 +33,11 @@
 #include <QVBoxLayout>
 
 #include <kcombobox.h>
+#include <kglobal.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
-#include <kcomponentdata.h>
-#include <kstandarddirs.h>
+
+#include <KoResourcePaths.h>
 
 #include <KoXmlReader.h>
 
@@ -73,7 +74,7 @@ public:
 };
 
 AutoFormatDialog::AutoFormatDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
         , d(new Private())
 {
     setCaption(i18n("Sheet Style"));
@@ -94,8 +95,7 @@ AutoFormatDialog::AutoFormatDialog(QWidget* parent, Selection* selection)
     vbox->addWidget(d->combo);
     vbox->addWidget(d->label, 1);
 
-    const KStandardDirs *const dirs = KGlobal::activeComponent().dirs();
-    const QStringList lst = dirs->findAllResources("sheet-styles", "*.ksts", KStandardDirs::Recursive);
+    const QStringList lst = KoResourcePaths::findAllResources("sheet-styles", "*.ksts", KoResourcePaths::Recursive);
 
     int index = 0;
     QStringList::ConstIterator it = lst.begin();
@@ -129,8 +129,7 @@ void AutoFormatDialog::slotActivated(int index)
 {
     enableButtonOk(true);
 
-    const KStandardDirs *const dirs = KGlobal::activeComponent().dirs();
-    QString image = dirs->findResource("sheet-styles", d->entries[index].image);
+    QString image = KoResourcePaths::findResource("sheet-styles", d->entries[index].image);
     if (image.isEmpty()) {
         KMessageBox::error(this, i18n("Could not find image %1.", d->entries[index].image));
         enableButtonOk(false);
@@ -148,8 +147,7 @@ void AutoFormatDialog::slotActivated(int index)
 
 void AutoFormatDialog::slotOk()
 {
-    const KStandardDirs *const dirs = KGlobal::activeComponent().dirs();
-    QString xml = dirs->findResource("sheet-styles", d->entries[d->combo->currentIndex()].xml);
+    QString xml = KoResourcePaths::findResource("sheet-styles", d->entries[d->combo->currentIndex()].xml);
     if (xml.isEmpty()) {
         KMessageBox::error(this, i18n("Could not find sheet-style XML file '%1'.", d->entries[d->combo->currentIndex()].xml));
         return;
@@ -204,5 +202,3 @@ bool AutoFormatDialog::Private::parseXML(const KoXmlDocument& doc)
     }
     return true;
 }
-
-#include "AutoFormatDialog.moc"

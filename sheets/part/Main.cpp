@@ -17,33 +17,50 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <KoApplication.h>
-#include <kcmdlineargs.h>
-
-// #include <dcopclient.h>
 #include "AboutData.h"
 #include "DocBase.h"
 
+#include "sheets_common_export.h"
+
+#include <KoApplication.h>
+#include <Calligra2Migration.h>
+
+#include <QLoggingCategory>
+
 using namespace Calligra::Sheets;
 
-extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
+extern "C" CALLIGRA_SHEETS_COMMON_EXPORT int kdemain(int argc, char **argv)
 {
-    KAboutData * aboutData = newAboutData();
+    /**
+     * Disable debug output by default, only log warnings.
+     * Debug logs can be controlled by the environment variable QT_LOGGING_RULES.
+     *
+     * For example, to get full debug output, run the following:
+     * QT_LOGGING_RULES="calligra.*=true" calligrasheets
+     *
+     * See: http://doc.qt.io/qt-5/qloggingcategory.html
+     */
+    QLoggingCategory::setFilterRules("calligra.*.debug=false\n"
+                                     "calligra.*.warning=true");
 
-    KCmdLineArgs::init(argc, argv, aboutData);
+    KAboutData* aboutData = newAboutData();
 
-    KCmdLineOptions options;
-    options.add("+[file]", ki18n("File to open"));
-    options.add("scriptfile <scriptfile>", ki18n("Execute the scriptfile after startup."));
-    KCmdLineArgs::addCmdLineOptions(options);
+    // QT5TODO: support custom options
+//     options.add("scriptfile <scriptfile>", ki18n("Execute the scriptfile after startup."));
 
-    KoApplication app(SHEETS_MIME_TYPE);
+    KoApplication app(SHEETS_MIME_TYPE, QStringLiteral("calligrasheets"), *aboutData, argc, argv);
 
-    if (!app.start())
+    delete aboutData;
+
+    // Migrate data from kde4 to kf5 locations
+    Calligra2Migration m("calligrasheets", "sheets");
+    m.setConfigFiles(QStringList() << QStringLiteral("sheetsrc"));
+    m.setUiFiles(QStringList() << QStringLiteral("sheets.rc") << QStringLiteral("sheets_readonly.rc"));
+    m.migrate();
+
+    if (!app.start()) {
         return 1;
-    app.exec();
+    }
 
-    delete(aboutData);
-
-    return 0;
+    return app.exec();
 }

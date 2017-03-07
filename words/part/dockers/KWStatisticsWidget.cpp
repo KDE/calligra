@@ -34,6 +34,10 @@
 #include <KoIcon.h>
 #include <KoTextDocumentLayout.h>
 
+#include <KSharedConfig>
+#include <kconfiggroup.h>
+
+#include <QLocale>
 #include <QTextLayout>
 #include <QTextDocument>
 #include <QTextBlock>
@@ -87,7 +91,7 @@ KWStatisticsWidget::KWStatisticsWidget(QWidget *parent, bool shortVersion)
     //use to refresh statistics
     connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData())); // FIXME: better idea ?
 
-    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
+    KConfigGroup cfgGroup = KSharedConfig::openConfig()->group("Statistics");
     bool visible = false;
 
     // --- Elements present in short AND full version ---
@@ -273,16 +277,38 @@ void KWStatisticsWidget::updateData()
     // parts of words for better counting of syllables:
     // (only use reg exp if necessary -> speed up)
 
-    QStringList subs_syl;
-    subs_syl << "cial" << "tia" << "cius" << "cious" << "giu" << "ion" << "iou";
-    QStringList subs_syl_regexp;
-    subs_syl_regexp << "sia$" << "ely$";
+    const QStringList subs_syl {
+        QStringLiteral("cial"),
+        QStringLiteral("tia"),
+        QStringLiteral("cius"),
+        QStringLiteral("cious"),
+        QStringLiteral("giu"),
+        QStringLiteral("ion"),
+        QStringLiteral("iou")
+    };
+    const QStringList subs_syl_regexp {
+        QStringLiteral("sia$"),
+        QStringLiteral("ely$")
+    };
 
-    QStringList add_syl;
-    add_syl << "ia" << "riet" << "dien" << "iu" << "io" << "ii";
-    QStringList add_syl_regexp;
-    add_syl_regexp << "[aeiouym]bl$" << "[aeiou]{3}" << "^mc" << "ism$"
-    << "[^l]lien" << "^coa[dglx]." << "[^gq]ua[^auieo]" << "dnt$";
+    const QStringList add_syl {
+        QStringLiteral("ia"),
+        QStringLiteral("riet"),
+        QStringLiteral("dien"),
+        QStringLiteral("iu"),
+        QStringLiteral("io"),
+        QStringLiteral("ii")
+    };
+    const QStringList add_syl_regexp {
+        QStringLiteral("[aeiouym]bl$"),
+        QStringLiteral("[aeiou]{3}"),
+        QStringLiteral("^mc"),
+        QStringLiteral("ism$"),
+        QStringLiteral("[^l]lien"),
+        QStringLiteral("^coa[dglx]."),
+        QStringLiteral("[^gq]ua[^auieo]"),
+        QStringLiteral("dnt$")
+    };
 
     foreach (KWFrameSet *fs, m_document->frameSets()) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
@@ -325,25 +351,25 @@ void KWStatisticsWidget::updateData()
                 re.setPattern("e$");
                 word.remove(re);
                 re.setPattern("[^aeiouy]+");
-                QStringList syls = word.split(re, QString::SkipEmptyParts);
+                const QStringList syls = word.split(re, QString::SkipEmptyParts);
                 int word_syllables = 0;
-                for (QStringList::Iterator it = subs_syl.begin(); it != subs_syl.end(); ++it) {
+                for (QStringList::ConstIterator it = subs_syl.begin(); it != subs_syl.end(); ++it) {
                     if (word.indexOf(*it, 0, Qt::CaseInsensitive) != -1) {
                         word_syllables--;
                     }
                 }
-                for (QStringList::Iterator it = subs_syl_regexp.begin(); it != subs_syl_regexp.end(); ++it) {
+                for (QStringList::ConstIterator it = subs_syl_regexp.begin(); it != subs_syl_regexp.end(); ++it) {
                     re.setPattern(*it);
                     if (word.indexOf(re) != -1) {
                         word_syllables--;
                     }
                 }
-                for (QStringList::Iterator it = add_syl.begin(); it != add_syl.end(); ++it) {
+                for (QStringList::ConstIterator it = add_syl.begin(); it != add_syl.end(); ++it) {
                     if (word.indexOf(*it, 0, Qt::CaseInsensitive) != -1) {
                         word_syllables++;
                     }
                 }
-                for (QStringList::Iterator it = add_syl_regexp.begin(); it != add_syl_regexp.end(); ++it) {
+                for (QStringList::ConstIterator it = add_syl_regexp.begin(); it != add_syl_regexp.end(); ++it) {
                     re.setPattern(*it);
                     if (word.indexOf(re) != -1) {
                         word_syllables++;
@@ -422,32 +448,33 @@ void KWStatisticsWidget::unsetCanvas()
 
 void KWStatisticsWidget::updateDataUi()
 {
+    QLocale locale;
     // calculate Flesch reading ease score:
     float flesch_score = 0;
     if (m_words > 0 && m_sentences > 0) {
         flesch_score = 206.835 - (1.015 * (m_words / m_sentences)) - (84.6 * m_syllables / m_words);
     }
-    QString flesch = KGlobal::locale()->formatNumber(flesch_score);
+    QString flesch = locale.toString(flesch_score, 'f', 2);
     QString newText[8];
-    newText[0] = KGlobal::locale()->formatNumber(m_words, 0);
+    newText[0] = locale.toString(m_words);
     m_countWords->setText(newText[0]);
 
-    newText[1] = KGlobal::locale()->formatNumber(m_sentences, 0);
+    newText[1] = locale.toString(m_sentences);
     m_countSentences->setText(newText[1]);
 
-    newText[2] = KGlobal::locale()->formatNumber(m_syllables, 0);
+    newText[2] = locale.toString(m_syllables);
     m_countSyllables->setText(newText[2]);
 
-    newText[3] = KGlobal::locale()->formatNumber(m_lines, 0);
+    newText[3] = locale.toString(m_lines);
     m_countLines->setText(newText[3]);
 
-    newText[4] = KGlobal::locale()->formatNumber(m_charsWithSpace, 0);
+    newText[4] = locale.toString(m_charsWithSpace);
     m_countSpaces->setText(newText[4]);
 
-    newText[5] = KGlobal::locale()->formatNumber(m_charsWithoutSpace, 0);
+    newText[5] = locale.toString(m_charsWithoutSpace);
     m_countNospaces->setText(newText[5]);
 
-    newText[6] = KGlobal::locale()->formatNumber(m_cjkChars, 0);
+    newText[6] = locale.toString(m_cjkChars);
     m_countCjkchars->setText(newText[6]);
 
     newText[7] = flesch;
@@ -501,7 +528,7 @@ int KWStatisticsWidget::countCJKChars(const QString &text)
 
 void KWStatisticsWidget::wordsDisplayChanged(int state)
 {
-    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
+    KConfigGroup cfgGroup = KSharedConfig::openConfig()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         m_wordsLabel->show();
@@ -522,7 +549,7 @@ void KWStatisticsWidget::wordsDisplayChanged(int state)
 
 void KWStatisticsWidget::sentencesDisplayChanged(int state)
 {
-    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
+    KConfigGroup cfgGroup = KSharedConfig::openConfig()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         m_sentencesLabel->show();
@@ -543,7 +570,7 @@ void KWStatisticsWidget::sentencesDisplayChanged(int state)
 
 void KWStatisticsWidget::linesDisplayChanged(int state)
 {
-    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
+    KConfigGroup cfgGroup = KSharedConfig::openConfig()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         m_linesLabel->show();
@@ -564,7 +591,7 @@ void KWStatisticsWidget::linesDisplayChanged(int state)
 
 void KWStatisticsWidget::syllablesDisplayChanged(int state)
 {
-    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
+    KConfigGroup cfgGroup = KSharedConfig::openConfig()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         m_syllablesLabel->show();
@@ -585,7 +612,7 @@ void KWStatisticsWidget::syllablesDisplayChanged(int state)
 
 void KWStatisticsWidget::charspaceDisplayChanged(int state)
 {
-    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
+    KConfigGroup cfgGroup = KSharedConfig::openConfig()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         m_spacesLabel->show();
@@ -606,7 +633,7 @@ void KWStatisticsWidget::charspaceDisplayChanged(int state)
 
 void KWStatisticsWidget::charnospaceDisplayChanged(int state)
 {
-    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
+    KConfigGroup cfgGroup = KSharedConfig::openConfig()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         m_nospacesLabel->show();
@@ -627,7 +654,7 @@ void KWStatisticsWidget::charnospaceDisplayChanged(int state)
 
 void KWStatisticsWidget::eastDisplayChanged(int state)
 {
-    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
+    KConfigGroup cfgGroup = KSharedConfig::openConfig()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         m_cjkcharsLabel->show();
@@ -648,7 +675,7 @@ void KWStatisticsWidget::eastDisplayChanged(int state)
 
 void KWStatisticsWidget::fleschDisplayChanged(int state)
 {
-    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
+    KConfigGroup cfgGroup = KSharedConfig::openConfig()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         m_fleschLabel->show();

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2009, 2010, 2011, 2012 Dag Andersen <danders@get2net.dk>
+ * Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -45,10 +46,10 @@
 #include <QTime>
 #include <QMutexLocker>
 #include <QMap>
+#include <QLocale>
 
-#include <kglobal.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <KLocalizedString>
+#include <KFormat>
 
 #include <iostream>
 
@@ -78,14 +79,9 @@ PlanTJScheduler::~PlanTJScheduler()
     delete m_tjProject;
 }
 
-KLocale *PlanTJScheduler::locale() const
-{
-    return KGlobal::locale();
-}
-
 void PlanTJScheduler::slotMessage( int type, const QString &msg, TJ::CoreAttributes *object )
 {
-//     kDebug(planDbg())<<"PlanTJScheduler::slotMessage:"<<msg;
+//     debugPlan<<"PlanTJScheduler::slotMessage:"<<msg;
     Schedule::Log log;
     if ( object &&  object->getType() == CA_Task && m_taskmap.contains( static_cast<TJ::Task*>( object ) ) ) {
         log = Schedule::Log( static_cast<Node*>( m_taskmap[ static_cast<TJ::Task*>( object ) ] ), type, msg );
@@ -142,19 +138,20 @@ void PlanTJScheduler::run()
         }
         m_project->setCurrentSchedule( m_manager->expected()->id() );
 
-        m_schedule->setPhaseName( 0, i18nc( "@info/plain" , "Init" ) );
-        if ( ! m_backward && locale() ) {
-            logDebug( m_project, 0, QString( "Schedule project using TJ Scheduler, starting at %1, granularity %2" ).arg( QDateTime::currentDateTime().toString() ).arg( locale()->formatDuration( m_granularity ) ), 0 );
+        m_schedule->setPhaseName( 0, xi18nc( "@info/plain" , "Init" ) );
+        QLocale locale;
+        KFormat format(locale);
+        if ( ! m_backward ) {
+            logDebug( m_project, 0, QString( "Schedule project using TJ Scheduler, starting at %1, granularity %2" ).arg( QDateTime::currentDateTime().toString() ).arg( format.formatDuration( m_granularity ) ), 0 );
             if ( m_recalculate ) {
-                logInfo( m_project, 0, i18nc( "@info/plain" , "Re-calculate project from start time: %1", locale()->formatDateTime( m_project->constraintStartTime() ) ), 0 );
+                logInfo( m_project, 0, xi18nc( "@info/plain" , "Re-calculate project from start time: %1", locale.toString(m_project->constraintStartTime(), QLocale::ShortFormat) ), 0 );
             } else {
-                logInfo( m_project, 0, i18nc( "@info/plain" , "Schedule project from start time: %1", locale()->formatDateTime( m_project->constraintStartTime() ) ), 0 );
+                logInfo( m_project, 0, xi18nc( "@info/plain" , "Schedule project from start time: %1", locale.toString(m_project->constraintStartTime(), QLocale::ShortFormat) ), 0 );
             }
-            logInfo( m_project, 0, i18nc( "@info/plain" , "Project target finish time: %1", locale()->formatDateTime( m_project->constraintEndTime() ) ), 0 );
-        }
-        if ( m_backward && locale() ) {
-            logDebug( m_project, 0, QString( "Schedule project backward using TJ Scheduler, starting at %1, granularity %2" ).arg( locale()->formatDateTime( QDateTime::currentDateTime() ) ).arg( locale()->formatDuration( m_granularity ) ), 0 );
-            logInfo( m_project, 0, i18nc( "@info/plain" , "Schedule project from end time: %1", locale()->formatDateTime( m_project->constraintEndTime() ) ), 0 );
+            logInfo( m_project, 0, xi18nc( "@info/plain" , "Project target finish time: %1", locale.toString(m_project->constraintEndTime(), QLocale::ShortFormat) ), 0 );
+        } else {
+            logDebug( m_project, 0, QString( "Schedule project backward using TJ Scheduler, starting at %1, granularity %2" ).arg( locale.toString(QDateTime::currentDateTime(), QLocale::ShortFormat) ).arg( format.formatDuration( m_granularity ) ), 0 );
+            logInfo( m_project, 0, xi18nc( "@info/plain" , "Schedule project from end time: %1", locale.toString(m_project->constraintEndTime(), QLocale::ShortFormat) ), 0 );
         }
 
         m_managerMutex.unlock();
@@ -169,29 +166,29 @@ void PlanTJScheduler::run()
     setMaxProgress( PROGRESS_MAX_VALUE );
     connect(m_tjProject, SIGNAL(updateProgressBar(int,int)), this, SLOT(setProgress(int)));
 
-    m_schedule->setPhaseName( 1, i18nc( "@info/plain" , "Schedule" ) );
+    m_schedule->setPhaseName( 1, xi18nc( "@info/plain" , "Schedule" ) );
     logInfo( m_project, 0, "Start scheduling", 1 );
     bool r = solve();
     if ( ! r ) {
-        kDebug(planDbg())<<"Scheduling failed";
+        debugPlan<<"Scheduling failed";
         result = 2;
-        logError( m_project, 0, i18nc( "@info/plain" , "Failed to schedule project" ) );
+        logError( m_project, 0, xi18nc( "@info/plain" , "Failed to schedule project" ) );
         setProgress( PROGRESS_MAX_VALUE );
         return;
     }
     if ( m_haltScheduling ) {
-        kDebug(planDbg())<<"Scheduling halted";
+        debugPlan<<"Scheduling halted";
         logInfo( m_project, 0, "Scheduling halted" );
         deleteLater();
         return;
     }
-    m_schedule->setPhaseName( 2, i18nc( "@info/plain" , "Update" ) );
+    m_schedule->setPhaseName( 2, xi18nc( "@info/plain" , "Update" ) );
     logInfo( m_project, 0, "Scheduling finished, update project", 2 );
     if ( ! kplatoFromTJ() ) {
         logError( m_project, 0, "Project update failed" );
     }
     setProgress( PROGRESS_MAX_VALUE );
-    m_schedule->setPhaseName( 3, i18nc( "@info/plain" , "Finish" ) );
+    m_schedule->setPhaseName( 3, xi18nc( "@info/plain" , "Finish" ) );
 }
 
 bool PlanTJScheduler::check()
@@ -203,12 +200,10 @@ bool PlanTJScheduler::check()
 
 bool PlanTJScheduler::solve()
 {
-    kDebug(planDbg())<<"PlanTJScheduler::solve()";
+    debugPlan<<"PlanTJScheduler::solve()";
     TJ::Scenario *sc = m_tjProject->getScenario( 0 );
     if ( ! sc ) {
-        if ( locale() ) {
-            logError( m_project, 0, i18nc( "@info/plain" , "Failed to find scenario to schedule" ) );
-        }
+        logError( m_project, 0, xi18nc( "@info/plain" , "Failed to find scenario to schedule" ) );
         return false;
     }
     DebugCtrl.setDebugLevel(0);
@@ -315,20 +310,20 @@ int PlanTJScheduler::toTJDayOfWeek( int day )
 }
 
 // static
-DateTime PlanTJScheduler::fromTime_t( time_t t ) {
-    return DateTime ( QDateTime::fromTime_t( t ) );
+DateTime PlanTJScheduler::fromTime_t( time_t t, const QTimeZone &tz ) {
+    return DateTime ( QDateTime::fromTime_t( t ).toTimeZone( tz ) );
 }
 
 time_t PlanTJScheduler::toTJTime_t( const QDateTime &dt, ulong granularity )
 {
     int secs = QTime( 0, 0, 0 ).secsTo( dt.time() );
     secs -= secs % granularity;
-    return QDateTime( dt.date(), QTime( 0, 0, 0 ).addSecs( secs ) ).toTime_t();
+    return QDateTime( dt.date(), QTime( 0, 0, 0 ).addSecs( secs ), dt.timeZone() ).toTime_t();
 }
 
 // static
-AppointmentInterval PlanTJScheduler::fromTJInterval( const TJ::Interval &tji ) {
-    AppointmentInterval a( fromTime_t( tji.getStart() ), fromTime_t( tji.getEnd() ).addSecs( 1 ) );
+AppointmentInterval PlanTJScheduler::fromTJInterval( const TJ::Interval &tji, const QTimeZone &tz ) {
+    AppointmentInterval a( fromTime_t( tji.getStart(), tz ), fromTime_t( tji.getEnd(), tz ).addSecs( 1 ) );
     return a;
 }
 
@@ -336,10 +331,10 @@ AppointmentInterval PlanTJScheduler::fromTJInterval( const TJ::Interval &tji ) {
 TJ::Interval PlanTJScheduler::toTJInterval( const QDateTime &start, const QDateTime &end, ulong granularity ) {
     int secs = QTime( 0, 0, 0 ).secsTo( start.time() );
     secs -= secs % granularity;
-    QDateTime s( start.date(), QTime( 0, 0, 0 ).addSecs( secs ) );
+    QDateTime s( start.date(), QTime( 0, 0, 0 ).addSecs( secs ), start.timeZone() );
     secs = QTime( 0, 0, 0 ).secsTo( end.time() );
     secs -= secs % granularity;
-    QDateTime e( end.date(), QTime( 0, 0, 0 ).addSecs( secs ) );
+    QDateTime e( end.date(), QTime( 0, 0, 0 ).addSecs( secs ), end.timeZone() );
     TJ::Interval ti( s.toTime_t(), e.addSecs( -1 ).toTime_t() );
     return ti;
 }
@@ -393,12 +388,11 @@ bool PlanTJScheduler::kplatoFromTJ()
         }
     }
 
-    if ( locale() ) {
-        logInfo( m_project, 0, i18nc( "@info/plain" , "Project scheduled to start at %1 and finish at %2", locale()->formatDateTime( m_project->startTime() ), locale()->formatDateTime( m_project->endTime() ) ) );
-    }
+    QLocale locale;
+    logInfo( m_project, 0, xi18nc( "@info/plain" , "Project scheduled to start at %1 and finish at %2", locale.toString(m_project->startTime(), QLocale::ShortFormat), locale.toString(m_project->endTime(), QLocale::ShortFormat) ) );
 
     if ( m_manager ) {
-        if ( locale() ) logDebug( m_project, 0, QString( "Project scheduling finished at %1" ).arg( QDateTime::currentDateTime().toString() ) );
+        logDebug( m_project, 0, QString( "Project scheduling finished at %1" ).arg( locale.toString(QDateTime::currentDateTime(), QLocale::ShortFormat) ) );
         m_project->finishCalculation( *m_manager );
         m_manager->scheduleChanged( cs );
     }
@@ -412,7 +406,8 @@ bool PlanTJScheduler::taskFromTJ( TJ::Task *job, Task *task )
     }
     Schedule *cs = task->currentSchedule();
     Q_ASSERT( cs );
-    kDebug(planDbg())<<"taskFromTJ:"<<task<<task->name()<<cs->id();
+    QTimeZone tz = m_project->timeZone();
+    debugPlan<<"taskFromTJ:"<<task<<task->name()<<cs->id()<<tz;
     time_t s = job->getStart( 0 );
     if ( s < m_tjProject->getStart() || s > m_tjProject->getEnd() ) {
         m_project->currentSchedule()->setSchedulingError( true );
@@ -428,16 +423,17 @@ bool PlanTJScheduler::taskFromTJ( TJ::Task *job, Task *task )
         cs->setSchedulingError( true );
         e = s + (8*60*60);
     }
-    task->setStartTime( DateTime( QDateTime::fromTime_t( s ) ) );
-    task->setEndTime( DateTime( QDateTime::fromTime_t( e + 1 ) ) );
+    task->setStartTime( fromTime_t( s, tz ) );
+    task->setEndTime( fromTime_t( e + 1, tz ) );
     task->setDuration( task->endTime() - task->startTime() );
 
+    debugPlan<<TJ::time2ISO(s)<<task->startTime()<<"-- "<<TJ::time2ISO(e+1)<<task->endTime();
     if ( ! task->startTime().isValid() ) {
-        logError( task, 0, i18nc( "@info/plain", "Invalid start time" ) );
+        logError( task, 0, xi18nc( "@info/plain", "Invalid start time" ) );
         return false;
     }
     if ( ! task->endTime().isValid() ) {
-        logError( task, 0, i18nc( "@info/plain", "Invalid end time" ) );
+        logError( task, 0, xi18nc( "@info/plain", "Invalid end time" ) );
         return false;
     }
     if ( m_project->startTime() > task->startTime() ) {
@@ -451,19 +447,18 @@ bool PlanTJScheduler::taskFromTJ( TJ::Task *job, Task *task )
         Resource *res = m_resourcemap[ r ];
         const QVector<TJ::Interval> lst = r->getBookedIntervals( 0, job );
         foreach ( const TJ::Interval &tji, lst ) {
-            AppointmentInterval ai = fromTJInterval( tji );
+            AppointmentInterval ai = fromTJInterval( tji, tz );
             double load = res->type() == Resource::Type_Material ? res->units() : ai.load() * r->getEfficiency();
             res->addAppointment( cs, ai.startTime(), ai.endTime(), load );
             logDebug( task, 0, '\'' + res->name() + "' added appointment: " +  ai.startTime().toString( Qt::ISODate ) + " - " + ai.endTime().toString( Qt::ISODate ) );
         }
     }
     cs->setScheduled( true );
-    if ( locale() ) {
-        if ( task->type() == Node::Type_Milestone ) {
-            logInfo( task, 0, i18nc( "@info/plain" , "Scheduled milestone: %1", locale()->formatDateTime( task->startTime() ) ) );
-        } else {
-            logInfo( task, 0, i18nc( "@info/plain" , "Scheduled task: %1 - %2", locale()->formatDateTime( task->startTime() ), locale()->formatDateTime( task->endTime() ) ) );
-        }
+    QLocale locale;
+    if ( task->type() == Node::Type_Milestone ) {
+        logInfo( task, 0, xi18nc( "@info/plain" , "Scheduled milestone: %1", locale.toString(task->startTime(), QLocale::ShortFormat) ) );
+    } else {
+        logInfo( task, 0, xi18nc( "@info/plain" , "Scheduled task: %1 - %2", locale.toString(task->startTime(), QLocale::ShortFormat), locale.toString(task->endTime(), QLocale::ShortFormat) ) );
     }
     return true;
 }
@@ -548,7 +543,7 @@ void PlanTJScheduler::calcPertValues( Task *t )
         m_project->currentSchedule()->setSchedulingError( true );
         logError( t, 0, i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", t->constraintToString( true ), t->negativeFloat().toString( Duration::Format_i18nHour ) ) );
     }
-    kDebug(planDbg())<<t->name()<<t->startTime()<<t->endTime();
+    debugPlan<<t->name()<<t->startTime()<<t->endTime();
     Duration negativefloat;
     foreach ( const Relation *r, t->dependParentNodes() + t->parentProxyRelations() ) {
         if ( r->parent()->endTime() + r->lag() > t->startTime() ) {
@@ -561,7 +556,7 @@ void PlanTJScheduler::calcPertValues( Task *t )
     if ( negativefloat > 0 ) {
         t->currentSchedule()->setSchedulingError( true );
         m_project->currentSchedule()->setSchedulingError( true );
-        logError( t, 0, i18nc( "@info/plain", "Failed to meet dependency. Negative float=%1", negativefloat.toString( Duration::Format_i18nHour ) ) );
+        logError( t, 0, xi18nc( "@info/plain", "Failed to meet dependency. Negative float=%1", negativefloat.toString( Duration::Format_i18nHour ) ) );
         if ( t->negativeFloat() < negativefloat ) {
             t->setNegativeFloat( negativefloat );
         }
@@ -591,7 +586,7 @@ bool PlanTJScheduler::exists( QList<CalendarDay*> &lst, CalendarDay *day )
 TJ::Resource *PlanTJScheduler::addResource( KPlato::Resource *r)
 {
     if ( m_resourcemap.values().contains( r ) ) {
-        kDebug(planDbg())<<r->name()<<"already exist";
+        debugPlan<<r->name()<<"already exist";
         return m_resourcemap.key( r );
     }
     TJ::Resource *res = new TJ::Resource( m_tjProject, r->id(), r->name(), 0 );
@@ -601,8 +596,8 @@ TJ::Resource *PlanTJScheduler::addResource( KPlato::Resource *r)
         res->setEfficiency( (double)(r->units()) / 100. );
     }
     Calendar *cal = r->calendar();
-    QDateTime start = qMax( r->availableFrom(), m_project->constraintStartTime() );
-    QDateTime end = m_project->constraintEndTime();
+    DateTime start = qMax( r->availableFrom(), m_project->constraintStartTime() );
+    DateTime end = m_project->constraintEndTime();
     if ( r->availableUntil().isValid() && end > r->availableUntil() ) {
         end = r->availableUntil();
     }
@@ -610,54 +605,11 @@ TJ::Resource *PlanTJScheduler::addResource( KPlato::Resource *r)
 //    qDebug()<<r->name()<<lst;
     QMultiMap<QDate, AppointmentInterval>::const_iterator mapend = lst.map().constEnd();
     QMultiMap<QDate, AppointmentInterval>::const_iterator it = lst.map().constBegin();
-    QDate date;
-    QDateTime ivstart;
-    QDateTime ivend;
-    TJ::Shift *shift = 0;
-    QList<TJ::Interval*> ivs;
+    TJ::Shift *shift = new TJ::Shift( m_tjProject, r->id(), r->name(), 0, QString(), 0 );
     for ( ; it != mapend; ++it ) {
-        if ( date < it.key() ) {
-            if ( date.isValid() ) {
-                if ( ivs.isEmpty() ) {
-                    delete shift;
-                    shift = 0;
-                }
-                if ( shift ) {
-                    shift->setWorkingHours( toTJDayOfWeek( date.dayOfWeek() ), ivs );
-                    TJ::Interval interval = toTJInterval( ivstart, ivend, tjGranularity() );
-                    if (!res->addShift( interval, shift )) {
-                        kWarning()<<"Failed to add shift:"<<r->name()<<interval<<ivs;
-                    } else {
-//                        qDebug()<<r->name()<<"add shift:"<<date<<interval<<ivs;
-                    }
-                    qDeleteAll( ivs );
-                    ivs.clear();
-                }
-            }
-            date = it.key();
-            shift = new TJ::Shift( m_tjProject, r->id() + date.toString( Qt::ISODate ), r->name(), 0, QString(), 0 );
-            ivstart = ivend = QDateTime();
-        }
-        ivs << new TJ::Interval( toTJInterval( it.value().startTime().time(), it.value().endTime().time(), tjGranularity() ) );
-        if ( ! ivstart.isValid() ) {
-            ivstart = it.value().startTime();
-        }
-        if ( ivend < it.value().endTime() ) {
-            ivend = it.value().endTime();
-        }
+        shift->addWorkingInterval( toTJInterval( it.value().startTime(), it.value().endTime(), m_granularity/1000 ) );
     }
-    if ( date.isValid() && shift && ! ivs.isEmpty() ) {
-        // add the last day
-        shift->setWorkingHours( toTJDayOfWeek( date.dayOfWeek() ), ivs );
-        TJ::Interval interval = toTJInterval( ivstart, ivend, tjGranularity() );
-        if (!res->addShift( interval, shift )) {
-            kWarning()<<"Failed to add shift:"<<r->name()<<interval<<ivs;
-        } else {
-//            qDebug()<<r->name()<<"add shift:"<<date<<interval<<ivs;
-        }
-        qDeleteAll( ivs );
-        ivs.clear();
-    }
+    res->addShift( toTJInterval( start, end, m_granularity/1000 ), shift );
     m_resourcemap[res] = r;
     logDebug( m_project, 0, "Added resource: " + r->name() );
 /*    QListIterator<TJ::Interval*> it = res->getVacationListIterator();
@@ -676,7 +628,7 @@ TJ::Task *PlanTJScheduler::addTask( KPlato::Task *task, TJ::Task *parent )
     }*/
     TJ::Task *t = new TJ::Task(m_tjProject, task->id(), task->name(), parent, QString(), 0);
     m_taskmap[ t ] = task;
-//     if ( locale() ) { logDebug( m_project, 0, "Added task: " + task->name() ); }
+//     logDebug( m_project, 0, "Added task: " + task->name() );
     addWorkingTime( task, t );
     return t;
 }
@@ -688,66 +640,23 @@ void PlanTJScheduler::addWorkingTime( KPlato::Task *task, TJ::Task *job )
     }
     int id = 0;
     Calendar *cal = task->estimate()->calendar();
-    QDateTime start = m_project->constraintStartTime();
-    QDateTime end = m_project->constraintEndTime();
+    DateTime start = m_project->constraintStartTime();
+    DateTime end = m_project->constraintEndTime();
 
     AppointmentIntervalList lst = cal->workIntervals( start, end, 1.0 );
     QMultiMap<QDate, AppointmentInterval>::const_iterator mapend = lst.map().constEnd();
     QMultiMap<QDate, AppointmentInterval>::const_iterator it = lst.map().constBegin();
-    QDate date;
-    QDateTime ivstart;
-    QDateTime ivend;
-    TJ::Shift *shift = 0;
-    QList<TJ::Interval*> ivs;
-    for ( ; it != mapend; ++it ) {
-        if ( date < it.key() ) {
-            if ( date.isValid() ) {
-                if ( ivs.isEmpty() ) {
-                    delete shift;
-                    shift = 0;
-                }
-                if ( shift ) {
-                    shift->setWorkingHours( toTJDayOfWeek( date.dayOfWeek() ), ivs );
-                    TJ::Interval interval = toTJInterval( ivstart, ivend, tjGranularity() );
-                    if ( ! job->addShift( interval, shift ) ) {
-                        kWarning()<<"Failed to add shift:"<<task->name()<<interval<<ivs;
-                    } else {
-//                        qDebug()<<task->name()<<"add shift:"<<date<<interval<<ivs;
-                    }
-                    qDeleteAll( ivs );
-                    ivs.clear();
-                }
-            }
-            date = it.key();
-            shift = new TJ::Shift( m_tjProject, task->id() + QString( "-%1" ).arg( ++id ), task->name(), 0, QString(), 0 );
-            ivstart = ivend = QDateTime();
-        }
-        ivs << new TJ::Interval( toTJInterval( it.value().startTime().time(), it.value().endTime().time(), tjGranularity() ) );
-        if ( ! ivstart.isValid() ) {
-            ivstart = it.value().startTime();
-        }
-        if ( ivend < it.value().endTime() ) {
-            ivend = it.value().endTime();
-        }
-    }
-    if ( date.isValid() && shift && ! ivs.isEmpty() ) {
-        // add the last day
-        shift->setWorkingHours( toTJDayOfWeek( date.dayOfWeek() ), ivs );
-        TJ::Interval interval = toTJInterval( ivstart, ivend, tjGranularity() );
-        if ( ! job->addShift( interval, shift ) ) {
-            kWarning()<<"Failed to add shift:"<<task->name()<<interval<<ivs;
-        } else {
-//            qDebug()<<task->name()<<"add shift:"<<date<<interval<<ivs;
-        }
-        qDeleteAll( ivs );
-        ivs.clear();
-    }
 
+    TJ::Shift *shift = new TJ::Shift( m_tjProject, task->id() + QString( "-%1" ).arg( ++id ), task->name(), 0, QString(), 0 );
+    for ( ; it != mapend; ++it ) {
+        shift->addWorkingInterval(toTJInterval(it.value().startTime(), it.value().endTime(), m_granularity/1000));
+    }
+    job->addShift(toTJInterval(start, end, m_granularity/1000), shift);
 }
 
 void PlanTJScheduler::addTasks()
 {
-    kDebug(planDbg());
+    debugPlan;
     QList<Node*> list = m_project->allNodes();
     for (int i = 0; i < list.count(); ++i) {
         Node *n = list.at(i);
@@ -800,10 +709,8 @@ void PlanTJScheduler::addDependencies( KPlato::Task *task )
                 break;
             case Relation::FinishFinish:
             case Relation::StartStart:
-                kWarning()<<"Dependency type not handled. Using FinishStart.";
-                if ( locale() ) {
-                    logWarning( task, 0, i18nc( "@info/plain" , "Dependency type '%1' not handled. Using FinishStart.", r->typeToString( true ) ) );
-                }
+                warnPlan<<"Dependency type not handled. Using FinishStart.";
+                logWarning( task, 0, xi18nc( "@info/plain" , "Dependency type '%1' not handled. Using FinishStart.", r->typeToString( true ) ) );
                 break;
         }
         switch ( task->constraint() ) {
@@ -864,7 +771,7 @@ void PlanTJScheduler::setConstraint( TJ::Task *job, KPlato::Task *task )
                 job->setSpecifiedStart( 0, task->constraintStartTime().toTime_t() );
                 logDebug( task, 0, QString( "MSO: set specified start: %1").arg( TJ::time2ISO( task->constraintStartTime().toTime_t() ) ) );
             } else {
-                if ( locale() ) logWarning( task, 0, i18nc( "@info/plain", "%1: Invalid start constraint", task->constraintToString( true ) ) );
+                logWarning( task, 0, xi18nc( "@info/plain", "%1: Invalid start constraint", task->constraintToString( true ) ) );
             }
             break;
         case Node::StartNotEarlier: {
@@ -877,7 +784,7 @@ void PlanTJScheduler::setConstraint( TJ::Task *job, KPlato::Task *task )
                 job->setSpecifiedEnd( 0, task->constraintEndTime().toTime_t() - 1 );
                 logDebug( task, 0, QString( "MFO: set specified end: %1").arg( TJ::time2ISO( task->constraintEndTime().toTime_t() ) ) );
             } else {
-                if ( locale() ) logWarning( task, 0, i18nc( "@info/plain", "%1: Invalid end constraint", task->constraintToString( true ) ) );
+                logWarning( task, 0, xi18nc( "@info/plain", "%1: Invalid end constraint", task->constraintToString( true ) ) );
             }
             break;
         case Node::FinishNotLater: {
@@ -900,7 +807,7 @@ void PlanTJScheduler::setConstraint( TJ::Task *job, KPlato::Task *task )
             break;
         }
         default:
-            if ( locale() ) logWarning( task, 0, i18nc( "@info/plain", "Unhandled time constraint type" ) );
+            logWarning( task, 0, xi18nc( "@info/plain", "Unhandled time constraint type" ) );
             break;
     }
 }
@@ -911,7 +818,7 @@ TJ::Task *PlanTJScheduler::addStartNotEarlier( Node *task )
     if ( task->estimate()->type() == Estimate::Type_Duration && task->estimate()->calendar() != 0 ) {
         Calendar *cal = task->estimate()->calendar();
         if ( cal != m_project->defaultCalendar() && cal != m_project->calendars().value( 0 ) ) {
-            if ( locale() ) logWarning( task, 0, i18nc( "@info/plain", "Could not use the correct calendar for calculation of task duration" ) );
+            logWarning( task, 0, xi18nc( "@info/plain", "Could not use the correct calendar for calculation of task duration" ) );
         } else {
             time = cal->firstAvailableAfter( time, m_project->constraintEndTime() );
         }
@@ -919,6 +826,7 @@ TJ::Task *PlanTJScheduler::addStartNotEarlier( Node *task )
     TJ::Task *p = new TJ::Task( m_tjProject, QString("%1-sne").arg( m_tjProject->taskCount() + 1 ), task->name() + "-sne", 0, QString(), 0 );
     p->setSpecifiedStart( 0, toTJTime_t( time, tjGranularity() ) );
     p->setSpecifiedEnd( 0, m_tjProject->getEnd() - 1 );
+    qDebug()<<"PlanTJScheduler::addStartNotEarlier:"<<time<<TJ::time2ISO(toTJTime_t( time, tjGranularity() ));
     return p;
 }
 
@@ -928,7 +836,7 @@ TJ::Task *PlanTJScheduler::addFinishNotLater( Node *task )
     if ( task->estimate()->type() == Estimate::Type_Duration && task->estimate()->calendar() != 0 ) {
         Calendar *cal = task->estimate()->calendar();
         if ( cal != m_project->defaultCalendar() && cal != m_project->calendars().value( 0 ) ) {
-            if ( locale() ) logWarning( task, 0, i18nc( "@info/plain", "Could not use the correct calendar for calculation of task duration" ) );
+            logWarning( task, 0, xi18nc( "@info/plain", "Could not use the correct calendar for calculation of task duration" ) );
         } else {
             time = cal->firstAvailableBefore( time, m_project->constraintStartTime() );
         }
@@ -942,7 +850,7 @@ TJ::Task *PlanTJScheduler::addFinishNotLater( Node *task )
 
 void PlanTJScheduler::addRequests()
 {
-    kDebug(planDbg());
+    debugPlan;
     QMap<TJ::Task*, Task*> ::const_iterator it = m_taskmap.constBegin();
     for ( ; it != m_taskmap.constEnd(); ++it ) {
         addRequest( it.key(), it.value() );
@@ -951,7 +859,7 @@ void PlanTJScheduler::addRequests()
 
 void PlanTJScheduler::addRequest( TJ::Task *job, Task *task )
 {
-    kDebug(planDbg());
+    debugPlan;
     if ( task->type() == Node::Type_Milestone || task->estimate() == 0 || ( m_recalculate && task->completion().isFinished() ) ) {
         job->setMilestone( true );
         job->setDuration( 0, 0.0 );
@@ -989,14 +897,11 @@ void PlanTJScheduler::addRequest( TJ::Task *job, Task *task )
         }
         a->addCandidate( tjr );
         job->addAllocation( a );
-        if ( locale() ) { logDebug( task, 0, "Added resource candidate: " + rr->resource()->name() ); }
+        logDebug( task, 0, "Added resource candidate: " + rr->resource()->name() );
         foreach ( Resource *r, rr->requiredResources() ) {
             TJ::Resource *tr = addResource( r );
             a->addRequiredResource( tjr, tr );
-            if ( locale() ) { logDebug( task, 0, "Added required resource: " + r->name() ); }
+            logDebug( task, 0, "Added required resource: " + r->name() );
         }
     }
 }
-
-
-#include "PlanTJScheduler.moc"

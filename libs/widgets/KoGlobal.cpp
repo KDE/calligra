@@ -21,47 +21,35 @@
 #include "KoGlobal.h"
 
 #include <KoConfig.h>
+#include <KoResourcePaths.h>
 
 #include <QPaintDevice>
 #include <QFont>
 #include <QFontInfo>
-#ifdef Q_WS_X11
-#include <QX11Info>
-#endif
+#include <QFontDatabase>
+#include <QGlobalStatic>
 
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 #include <kconfiggroup.h>
-#include <kglobalsettings.h>
-#include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
+#include <ksharedconfig.h>
 #include <kconfig.h>
-#include <kstandarddirs.h>
 
+Q_GLOBAL_STATIC(KoGlobal, s_instance)
 
 KoGlobal* KoGlobal::self()
 {
-    K_GLOBAL_STATIC(KoGlobal, s_instance)
     return s_instance;
 }
 
 KoGlobal::KoGlobal()
-        : m_pointSize(-1), m_calligraConfig(0)
+    : m_pointSize(-1)
+    , m_calligraConfig(0)
 {
-    if (KGlobal::locale()) {
-        // Install the libcalligra* translations
-        KGlobal::locale()->insertCatalog("calligra");
-    }
-
-    // When running unittests, there is not necessarily a main component
-    if (KGlobal::hasMainComponent()) {
-        // Tell KStandardDirs about the calligra prefix
-        KGlobal::dirs()->addPrefix(CALLIGRAPREFIX);
-    }
-
     // Fixes a bug where values from some config files are not picked up
-    // due to KGlobal::config() being initialized before paths have been set up above.
+    // due to  KSharedConfig::openConfig() being initialized before paths have been set up above.
     // NOTE: Values set without a sync() call before KoGlobal has been initialized will not stick
-    KGlobal::config()->reparseConfiguration();
+     KSharedConfig::openConfig()->reparseConfiguration();
 }
 
 KoGlobal::~KoGlobal()
@@ -71,7 +59,7 @@ KoGlobal::~KoGlobal()
 
 QFont KoGlobal::_defaultFont()
 {
-    QFont font = KGlobalSettings::generalFont();
+    QFont font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     // we have to use QFontInfo, in case the font was specified with a pixel size
     if (font.pointSize() == -1) {
         // cache size into m_pointSize, since QFontInfo loads the font -> slow
@@ -80,8 +68,8 @@ QFont KoGlobal::_defaultFont()
         Q_ASSERT(m_pointSize != -1);
         font.setPointSize(m_pointSize);
     }
-    //kDebug( 30003 )<<"QFontInfo(font).pointSize() :"<<QFontInfo(font).pointSize();
-    //kDebug( 30003 )<<"font.name() :"<<font.family ();
+    //debugWidgets<<"QFontInfo(font).pointSize() :"<<QFontInfo(font).pointSize();
+    //debugWidgets<<"font.name() :"<<font.family ();
     return font;
 }
 
@@ -101,7 +89,7 @@ QStringList KoGlobal::_listOfLanguages()
 
 void KoGlobal::createListOfLanguages()
 {
-    KConfig config("all_languages", KConfig::NoGlobals, "locale");
+    KConfig config("all_languages", KConfig::NoGlobals);
     // Note that we could also use KLocale::allLanguagesTwoAlpha
 
     QMap<QString, bool> seenLanguages;
@@ -123,7 +111,7 @@ void KoGlobal::createListOfLanguages()
     // Many of them are already in all_languages but all_languages doesn't
     // currently have en_GB or en_US etc.
 
-    const QStringList translationList = KGlobal::dirs()->findAllResources("locale",
+    const QStringList translationList = KoResourcePaths::findAllResources("locale",
                                         QString::fromLatin1("*/entry.desktop"));
     for (QStringList::ConstIterator it = translationList.begin();
             it != translationList.end(); ++it) {

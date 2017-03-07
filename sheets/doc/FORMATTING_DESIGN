@@ -6,8 +6,8 @@ this can help give a start to whomever does the work.  I don't think
 anything here is definitive, and certainly if there are better ideas
 than we should scrap these.  For Norbert/Phillip/Ariya this is just
 to help keep track of our ideas, and hopefully the future will see
-many more KSpread hackers who can use this as a head-start in thinking
-about KSpread design.
+many more Calligra Sheets hackers who can use this as a head-start in thinking
+about Calligra Sheets design.
 
 
 NOTE: when I say 'pointer' in this description, I'm thinking of some shared
@@ -90,7 +90,7 @@ How fine grained to make the format objects?
 There's probably much more that can be put in here.
 
 
-BTW, I hope to stay involved at least a little with KSpread.  It is unlikely
+BTW, I hope to stay involved at least a little with Calligra Sheets.  It is unlikely
 however that I will try to take on any large chunks of code unless I just get 
 in a random programming fit on a weekend  :-)  
 

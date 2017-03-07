@@ -20,9 +20,7 @@
 #include "KarbonPathFlattenCommand.h"
 #include <KoPathShape.h>
 #include <KoPathPoint.h>
-#include <KoPathPointData.h>
-#include <klocale.h>
-#include <QtGlobal>
+#include <klocalizedstring.h>
 #include <math.h>
 
 #ifndef log2

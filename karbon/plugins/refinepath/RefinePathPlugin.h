@@ -24,7 +24,7 @@
 #define REFINEPATHPLUGIN_H
 
 #include <kxmlguiclient.h>
-#include <kdialog.h>
+#include <QDialog>
 #include <QVariantList>
 
 class RefinePathDlg;
@@ -43,9 +43,9 @@ private:
     RefinePathDlg * m_RefinePathDlg;
 };
 
-class KIntSpinBox;
+class QSpinBox;
 
-class RefinePathDlg : public KDialog
+class RefinePathDlg : public QDialog
 {
     Q_OBJECT
 
@@ -56,7 +56,7 @@ public:
     void setKnots(uint value);
 
 private:
-    KIntSpinBox * m_knots;
+    QSpinBox * m_knots;
 };
 
 #endif // REFINEPATHPLUGIN_H

@@ -33,6 +33,7 @@ fi
 
 for file in ${1}/*
 do
+    file=${file/${1}/}
     md5_1="${2}/${file}.check/md5.txt"
     md5_2="${3}/${file}.check/md5.txt"
     if [ ! -e "${md5_1}" -o  ! -e "${md5_2}" ]

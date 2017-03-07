@@ -23,7 +23,7 @@
 #include <QStyle>
 #include <QStyleOptionToolButton>
 
-#include "kdebug.h"
+#include "WidgetsDebug.h"
 
 KoColorPopupButton::KoColorPopupButton(QWidget *parent)
     : QToolButton(parent)
@@ -60,5 +60,3 @@ void KoColorPopupButton::resizeEvent(QResizeEvent *e)
 
     emit iconSizeChanged();
 }
-
-#include <KoColorPopupButton.moc>

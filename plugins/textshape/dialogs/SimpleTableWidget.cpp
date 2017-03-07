@@ -26,8 +26,8 @@
 #include <KoColor.h>
 #include <KoIcon.h>
 
-#include <kaction.h>
-#include <kdebug.h>
+#include <QAction>
+#include <QDebug>
 
 #include <QWidget>
 #include <QPixmap>
@@ -48,10 +48,8 @@ SimpleTableWidget::SimpleTableWidget(TextTool *tool, QWidget *parent)
     widget.mergeCells->setDefaultAction(tool->action("merge_tablecells"));
     widget.splitCells->setDefaultAction(tool->action("split_tablecells"));
 
-    connect(tool->action("activate_borderpainter"), SIGNAL(activated()), this, SLOT(restartPainting()));
+    connect(tool->action("activate_borderpainter"), SIGNAL(triggered(bool)), this, SLOT(restartPainting()));
     widget.border->setDefaultAction(tool->action("activate_borderpainter"));
-
-    widget.border->setNumColumns(9);
 
     fillBorderButton(QColor(0,0,0));
 
@@ -59,7 +57,7 @@ SimpleTableWidget::SimpleTableWidget(TextTool *tool, QWidget *parent)
     actionBorderColor->setIcon(koIcon("format-fill-color"));
     actionBorderColor->setText(i18n("Set Border Color..."));
     widget.border->addAction(actionBorderColor);
-    connect(actionBorderColor, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setBorderColor(const KoColor &)));
+    connect(actionBorderColor, SIGNAL(colorChanged(KoColor)), this, SLOT(setBorderColor(KoColor)));
 
     connect(widget.addRowAbove, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.addRowBelow, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
@@ -97,6 +95,8 @@ void SimpleTableWidget::setBorderColor(const KoColor &koColor)
 
 void SimpleTableWidget::fillBorderButton(const QColor &color)
 {
+    ItemChooserAction *chooser = widget.border->addItemChooser(9);
+
     qDeleteAll(m_cellStyles);
     m_cellStyles.clear();
 
@@ -161,7 +161,7 @@ void SimpleTableWidget::fillBorderButton(const QColor &color)
     KoZoomHandler zoomHandler;
     foreach(KoTableCellStyle *style, m_cellStyles) {
         if (style == 0) {
-            widget.border->addBlanks(1);
+            widget.border->addBlanks(chooser, 1);
             i++;
             continue;
         }
@@ -177,15 +177,15 @@ void SimpleTableWidget::fillBorderButton(const QColor &color)
             qreal width = style->topBorderWidth();
             cellStyleHelper.drawTopHorizontalBorder(p, 0, 8/zoomHandler.zoomedResolutionY() - width/2, pm.width()/zoomHandler.zoomedResolutionX(), 0);
 
-            widget.border->addItem(pm, i, KoUnit().toUserStringValue(style->topBorderWidth())+"pt");
+            widget.border->addItem(chooser, pm, i, KoUnit().toUserStringValue(style->topBorderWidth())+"pt");
         } else
         {
             p.drawText(0, 0, 48, 16, Qt::AlignCenter, i18nc("No border - has to fit in 48pixels","None"));
-            widget.border->addItem(pm, i, i18n("No Border"));
+            widget.border->addItem(chooser, pm, i, i18n("No Border"));
         }
         i++;
     }
-    widget.border->setItemsBackground(QColor(Qt::white));
+    widget.border->setItemsBackground(chooser, QColor(Qt::white));
 
    // widget.borderType->addItem("None");
 
@@ -210,5 +210,3 @@ void SimpleTableWidget::fillBorderButton(const QColor &color)
     action->setMenu(listLevelMenu);
     */
 }
-
-#include <SimpleTableWidget.moc>

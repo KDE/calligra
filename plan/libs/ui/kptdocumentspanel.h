@@ -72,7 +72,7 @@ private:
     Documents m_docs;
     enum State { Unmodified = 1, Modified = 2, Added = 4, Removed = 8 };
     QMap<Document*, State> m_state;
-    QMap<Document*, KUrl> m_orgurl;
+    QMap<Document*, QUrl> m_orgurl;
     KUndo2QStack m_cmds;
     DocumentTreeView *m_view;
 };

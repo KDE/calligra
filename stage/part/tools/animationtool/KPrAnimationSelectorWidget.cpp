@@ -26,6 +26,7 @@
 #include <KPrPredefinedAnimationsLoader.h>
 #include "KPrViewModePreviewShapeAnimations.h"
 #include "KPrFactory.h"
+#include "StageDebug.h"
 
 //Qt Headers
 #include <QCheckBox>
@@ -34,14 +35,12 @@
 #include <QListView>
 #include <QFont>
 #include <QToolButton>
+#include <QFontDatabase>
 
-//KDE Headers
-#include <klocale.h>
+//KF5 Headers
+#include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <kicon.h>
 #include <kconfiggroup.h>
-#include <kglobalsettings.h>
-#include <kdebug.h>
 
 //Calligra Headers
 #include <KoXmlReader.h>
@@ -49,6 +48,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoViewItemContextBar.h>
+#include <KoComponentData.h>
 
 KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *docker, KPrPredefinedAnimationsLoader *animationsData,
                                                        QWidget *parent)
@@ -68,8 +68,8 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
     m_previewCheckBox->setChecked(loadPreviewConfig());
     m_showAutomaticPreview = m_previewCheckBox->isChecked();
 
-    QFont viewWidgetFont  = KGlobalSettings::generalFont();
-    qreal pointSize = KGlobalSettings::smallestReadableFont().pointSizeF();
+    QFont viewWidgetFont  = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
+    qreal pointSize = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF();
     viewWidgetFont.setPointSizeF(pointSize);
 
     m_collectionChooser = new QListWidget;
@@ -260,7 +260,7 @@ void KPrAnimationSelectorWidget::setAnimation(const QModelIndex &index)
 
     KoShape *shape = m_docker->getSelectedShape();
     if (!shape) {
-        kWarning(31000) << "No shape found";
+        warnStageAnimation << "No shape found";
         return;
     }
 

@@ -52,6 +52,8 @@ public:
     /// Calc a bounding box rect of the selection
     QRectF selectionBoundingBox(QTextCursor &cursor) const;
 
+    QVector<KoCharAreaInfo> generateCharAreaInfos() const;
+
 private:
     void layoutColumns();
     void collectBorderThicknesss(int row, qreal &topBorderWidth, qreal &bottomBorderWidth);

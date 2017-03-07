@@ -19,15 +19,15 @@
 
 #include "kptmainprojectpanel.h"
 
-#include <klocale.h>
 #include "kptdebug.h"
+
+#include <KLocalizedString>
 
 #ifdef PLAN_KDEPIMLIBS_FOUND
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>
 #include <akonadi/contact/emailaddressselection.h>
 #endif
-
 
 #include "kptproject.h"
 #include "kptcommand.h"
@@ -72,9 +72,9 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent)
     DateTime st = project.constraintStartTime();
     DateTime et = project.constraintEndTime();
     startDate->setDate(st.date());
-    startTime->setTime( QTime( st.time().hour(), st.time().minute() ) );
+    startTime->setTime( QTime( st.time().hour(), st.time().minute(), 0 ) );
     endDate->setDate(et.date());
-    endTime->setTime( QTime( et.time().hour(), et.time().minute() ) );
+    endTime->setTime( QTime( et.time().hour(), et.time().minute(), 0 ) );
     enableDateTime();
     namefield->setFocus();
 
@@ -124,7 +124,7 @@ MacroCommand *MainProjectPanel::buildCommand() {
 void MainProjectPanel::slotCheckAllFieldsFilled()
 {
     emit changed();
-    emit obligatedFieldsFilled(!namefield->text().isEmpty() && !leaderfield->text().isEmpty());
+    emit obligatedFieldsFilled(true); // never block save
 }
 
 
@@ -173,7 +173,7 @@ void MainProjectPanel::slotEndDateClicked()
 
 void MainProjectPanel::enableDateTime()
 {
-    kDebug(planDbg());
+    debugPlan;
     startTime->setEnabled(true);
     startDate->setEnabled(true);
     endTime->setEnabled(true);
@@ -183,16 +183,14 @@ void MainProjectPanel::enableDateTime()
 
 QDateTime MainProjectPanel::startDateTime()
 {
-    return QDateTime(startDate->date(), startTime->time());
+    return QDateTime(startDate->date(), startTime->time(), Qt::LocalTime);
 }
 
 
 QDateTime MainProjectPanel::endDateTime()
 {
-    return QDateTime(endDate->date(), endTime->time());
+    return QDateTime(endDate->date(), endTime->time(), Qt::LocalTime);
 }
 
 
 }  //KPlato namespace
-
-#include "kptmainprojectpanel.moc"

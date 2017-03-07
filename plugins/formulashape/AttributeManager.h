@@ -21,7 +21,7 @@
 #define ATTRIBUTEMANAGER_H
 
 #include <QFont>
-#include "kformula_export.h"
+#include "koformula_export.h"
 
 class KoViewConverter;
 class BasicElement;

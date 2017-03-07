@@ -20,21 +20,12 @@
 #ifndef KPlato_ResourceModelTester_h
 #define KPlato_ResourceModelTester_h
 
-#include <QtTest>
+#include <QObject>
 
 #include "kptresourceappointmentsmodel.h"
 
 #include "kptproject.h"
 #include "kptdatetime.h"
-
-namespace QTest
-{
-    template<>
-            char *toString(const KPlato::DateTime &dt)
-    {
-        return toString( dt.toString() );
-    }
-}
 
 namespace KPlato
 {

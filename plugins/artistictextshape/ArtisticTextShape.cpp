@@ -39,9 +39,9 @@
 #include <SvgWriter.h>
 #include <SvgStyleWriter.h>
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
 
+#include <QDebug>
 #include <QBuffer>
 #include <QPen>
 #include <QPainter>
@@ -80,7 +80,7 @@ void ArtisticTextShape::saveOdf(KoShapeSavingContext &context) const
         return;
 
     if(!svgWriter.save(fileContentDevice)) {
-        kWarning() << "Could not write svg content";
+        qWarning() << "Could not write svg content";
         return;
     }
 

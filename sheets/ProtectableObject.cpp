@@ -20,12 +20,12 @@
 #include "ProtectableObject.h"
 
 #include "part/Digest.h" // FIXME detach from part
+#include "SheetsDebug.h"
 
 #include <KoXmlNS.h>
 
 #include <kcodecs.h>
-#include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 #include <knewpassworddialog.h>
 #include <kpassworddialog.h>
@@ -103,14 +103,3 @@ void ProtectableObject::loadXmlProtection(const KoXmlElement& element)
     }
 }
 
-void ProtectableObject::loadOdfProtection(const KoXmlElement& element)
-{
-    if (element.hasAttributeNS(KoXmlNS::table, "protection-key")) {
-        QString p = element.attributeNS(KoXmlNS::table, "protection-key", QString());
-        if (!p.isNull()) {
-            QByteArray str(p.toUtf8());
-            kDebug(30518) <<"Decoding password:" << str;
-            m_password = KCodecs::base64Decode(str);
-        }
-    }
-}

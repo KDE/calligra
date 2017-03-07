@@ -160,13 +160,7 @@ void KPrTimeLineView::mousePressEvent(QMouseEvent *event)
                     startDragPos = event->x() - lineRect.x();
                     m_move = true;
                     m_resizedRow = row;
-                    setCursor(
-#if QT_VERSION >= 0x040700
-                              Qt::DragMoveCursor
-#else
-                              Qt::ClosedHandCursor
-#endif
-                              );
+                    setCursor(Qt::DragMoveCursor);
                 }
             }
         }
@@ -261,13 +255,7 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
         }
         else {
             if (lineRect.contains(event->x(), event->y())) {
-                setCursor(
-#if QT_VERSION >= 0x040700
-                          Qt::DragMoveCursor
-#else
-                          Qt::ClosedHandCursor
-#endif
-                          );
+                setCursor(Qt::DragMoveCursor);
             }
             else {
                 setCursor(Qt::ArrowCursor);
@@ -485,6 +473,6 @@ void KPrTimeLineView::paintItemBackground(QPainter *painter, const QRect &rect, 
     gradient.setColorAt(1, color);
     painter->fillRect(rect, selected ? gradient : palette().base());
     m_mainView->paintItemBorder(painter, palette(), rect);
-    painter->setPen(selected ? palette().highlightedText().color()
-                             : palette().windowText().color());
+    painter->setPen(QPen(selected ? palette().highlightedText().color()
+                                 : palette().windowText().color(), 0));
 }

@@ -21,7 +21,7 @@
 
 #include <QSvgRenderer>
 
-struct State::Private {
+struct Q_DECL_HIDDEN State::Private {
     QString id, name;
     StateCategory* category;
     QSvgRenderer* render;

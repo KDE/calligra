@@ -22,7 +22,7 @@
 #include <QImage>
 #include <QPixmap>
 
-#include <kdebug.h>
+#include <MainDebug.h>
 
 #include <kiconloader.h>
 
@@ -45,7 +45,7 @@ const QPixmap &KoTemplate::loadPicture()
     if (m_picture[ 0 ] == '/') {
         QImage img(m_picture);
         if (img.isNull()) {
-            kWarning() << "Couldn't find icon " << m_picture;
+            qWarning() << "Couldn't find icon " << m_picture;
             m_pixmap = QPixmap();
             return m_pixmap;
         }

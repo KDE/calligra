@@ -23,8 +23,7 @@
 
 #include <QFile>
 
-// KDE
-#include <kdebug.h>
+// KF5
 #include <kpluginfactory.h>
 
 // Calligra
@@ -39,10 +38,13 @@
 // This filter
 #include "OdtReaderWikiBackend.h"
 #include "OdfReaderWikiContext.h"
+#include "WikiExportDebug.h"
 
+K_PLUGIN_FACTORY_WITH_JSON(WikiExportFactory, "calligra_filter_odt2wiki.json",
+			   registerPlugin<WikiExport>();)
 
-K_PLUGIN_FACTORY(WikiExportFactory, registerPlugin<WikiExport>();)
-K_EXPORT_PLUGIN(WikiExportFactory("wordswikiexportng", "calligrafilters"))
+// Needed to instantiate the plugin factory.
+#include "WikiExport.moc"
 
 
 WikiExport::WikiExport(QObject *parent, const QVariantList &)
@@ -65,7 +67,7 @@ KoFilter::ConversionStatus WikiExport::convert(const QByteArray& from, const QBy
     KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read,
                                              "", KoStore::Auto);
     if (!odfStore->open("mimetype")) {
-        kError(30503) << "Unable to open input file!" << endl;
+        errorWiki << "Unable to open input file!" << endl;
         delete odfStore;
         return KoFilter::FileNotFound;
     }
@@ -74,7 +76,7 @@ KoFilter::ConversionStatus WikiExport::convert(const QByteArray& from, const QBy
     // Create output file.
     QFile outfile(m_chain->outputFile());
     if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text )) {
-        kError(30501) << "Unable to open output file!" << endl;
+        errorWiki << "Unable to open output file!" << endl;
         outfile.close();
         return KoFilter::FileNotFound;
     }

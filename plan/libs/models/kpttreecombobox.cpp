@@ -19,8 +19,7 @@
 
 #include "kpttreecombobox.h"
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <KLocalizedString>
 
 #include <QModelIndex>
 #include <QTreeView>
@@ -154,6 +153,3 @@ void TreeComboBox::updateCurrentIndexes( const QModelIndexList &lst )
 }
 
 } //namespace KPlato
-
-#include "kpttreecombobox.moc"
-

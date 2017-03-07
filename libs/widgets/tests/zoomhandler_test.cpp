@@ -21,7 +21,7 @@
 #include <QTest>
 #include <QCoreApplication>
 
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 #include "KoZoomHandler.h"
 #include "KoDpi.h"
@@ -121,5 +121,3 @@ void zoomhandler_test::testDocumentToView()
 
 
 QTEST_APPLESS_MAIN(zoomhandler_test)
-
-#include <zoomhandler_test.moc>

@@ -19,23 +19,18 @@
 
 #include "FunctionCompletion.h"
 
-// KSpread
+// Sheets
 #include "CellEditor.h"
 #include "Function.h"
 #include "FunctionDescription.h"
 #include "FunctionRepository.h"
-
-// Calligra
-
-// KDE
-#include <kdebug.h>
-#include <klistwidget.h>
 
 // Qt
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QKeyEvent>
 #include <QLabel>
+#include <QListWidget>
 #include <QScrollBar>
 #include <QToolTip>
 #include <QVBoxLayout>
@@ -47,7 +42,7 @@ class FunctionCompletion::Private
 public:
     CellEditor* editor;
     QFrame *completionPopup;
-    KListWidget *completionListBox;
+    QListWidget *completionListBox;
     QLabel* hintLabel;
 };
 
@@ -67,7 +62,7 @@ FunctionCompletion::FunctionCompletion(CellEditor* editor)
     layout->setMargin(0);
     layout->setSpacing(0);
 
-    d->completionListBox = new KListWidget(d->completionPopup);
+    d->completionListBox = new QListWidget(d->completionPopup);
     d->completionPopup->setFocusProxy(d->completionListBox);
     d->completionListBox->setFrameStyle(QFrame::NoFrame);
 //   d->completionListBox->setVariableWidth( true );
@@ -218,5 +213,3 @@ void FunctionCompletion::showCompletion(const QStringList &choices)
     d->completionListBox->setFocus();
     d->completionPopup->show();
 }
-
-#include "FunctionCompletion.moc"

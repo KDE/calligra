@@ -29,8 +29,7 @@
 #include "calligra_sheets_limits.h"
 #include "Region.h"
 #include "Sheet.h"
-
-#include <kdebug.h>
+#include "SheetsDebug.h"
 
 using namespace Calligra::Sheets;
 
@@ -442,7 +441,7 @@ QRect SheetPrint::cellRange(int page) const
     if (page - 1 > pageCount()) {
         return QRect();
     }
-    kDebug() << "page:" << page << "of" << pageCount();
+    debugSheets << "page:" << page << "of" << pageCount();
 
     int horizontalIndex = 0;
     int verticalIndex = 0;
@@ -453,8 +452,8 @@ QRect SheetPrint::cellRange(int page) const
         horizontalIndex = (page - 1) / d->m_lnewPageListY.count();
         verticalIndex = (page - 1) % d->m_lnewPageListY.count();
     }
-    kDebug() << "horizontal:" << horizontalIndex + 1 << "of" << d->m_lnewPageListX.count();
-    kDebug() << "vertical:" << verticalIndex + 1 << "of" << d->m_lnewPageListY.count();
+    debugSheets << "horizontal:" << horizontalIndex + 1 << "of" << d->m_lnewPageListX.count();
+    debugSheets << "vertical:" << verticalIndex + 1 << "of" << d->m_lnewPageListY.count();
 
     const PrintNewPageEntry horizontalParameters = d->m_lnewPageListX[horizontalIndex];
     const PrintNewPageEntry verticalParameters = d->m_lnewPageListY[verticalIndex];

@@ -20,8 +20,6 @@
 
 #include "ScriptingListener.h"
 
-#include <klocale.h>
-
 #include <Binding.h>
 #include <CellStorage.h>
 #include <Sheet.h>
@@ -76,5 +74,3 @@ void ScriptingCellListener::slotChanged(const Region& region)
                 emit cellChanged(col, row);
     }
 }
-
-#include "ScriptingListener.moc"

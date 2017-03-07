@@ -1,24 +1,13 @@
 
 
 include_directories(
-    ${KDCHART_INCLUDES}
-    ${KDGANTT_INCLUDES}
-
     ${CMAKE_SOURCE_DIR}/plan/libs/kernel
     ${CMAKE_SOURCE_DIR}/plan/libs/models
     ${CMAKE_BINARY_DIR}/plan/libs/models
-    ${CMAKE_SOURCE_DIR}/plan/libs/ui/reports/odt
     ${CMAKE_BINARY_DIR}/plan/libs/ui
-
-    ${KOPROPERTY_INCLUDES}
-
-    ${KOREPORT_INCLUDES}
-
-    ${KOPROPERTIES_INCLUDES}
 
     ${KOMAIN_INCLUDES}
     ${KDEPIMLIBS_INCLUDE_DIR}
-    ${Boost_INCLUDE_DIR}
 )
 
 #add_subdirectory( tests )
@@ -30,7 +19,6 @@ set(kplatoui_LIB_SRCS
     reports/reportdata.cpp
     reports/reportsourceeditor.cpp
     reports/reportscripts.cpp
-    reports/reportexportpanel.cpp
 
     kptganttitemdelegate.cpp
 
@@ -88,10 +76,9 @@ set(kplatoui_LIB_SRCS
     locale/localemon.cpp
     kptlocaleconfigmoneydialog.cpp
 )
-kde4_add_ui_files(kplatoui_LIB_SRCS
+ki18n_wrap_ui(kplatoui_LIB_SRCS
     reports/reportsourceeditor.ui
     reports/reportnavigator.ui
-    reports/reportexportpanel.ui
     reports/reportsectionswidget.ui
     reports/reportgroupsectionswidget.ui
     reports/reporttoolswidget.ui
@@ -130,19 +117,36 @@ kde4_add_ui_files(kplatoui_LIB_SRCS
     kptperformancestatusviewsettingspanel.ui
     kptworkpackagemergepanel.ui
     kptrecalculatedialog.ui
+    kptscheduleeditor.ui
 
     locale/localemon.ui
 )
 
-kde4_add_library(kplatoui SHARED ${kplatoui_LIB_SRCS})
+add_library(kplatoui SHARED ${kplatoui_LIB_SRCS})
+generate_export_header(kplatoui)
 
-set(KPLATO_REPORTS_LIBS  ${KOREPORT_LIBS} ${KOPROPERTY_LIBS})
-target_link_libraries(kplatoui ${KDEPIMLIBS_AKONADI_CONTACT_LIBS} ${KPLATO_REPORTS_LIBS} komain kplatokernel kplatomodels ${KDCHART_LIBS} calligrakdgantt ${KDE4_KHTML_LIBS} )
+target_link_libraries(kplatoui
+    PUBLIC
+        komain
+        kplatokernel
+        kplatomodels
+        KReport
+        KGantt
+        KF5::KHtml
+    PRIVATE
+        KPropertyWidgets
+        KChart
+        KF5::ItemViews
+        KF5::IconThemes
+)
+if(KF5AkonadiContact_FOUND)
+    target_link_libraries(kplatoui  PRIVATE KF5::AkonadiContact)
+endif()
 
 set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
 install(TARGETS kplatoui ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
-
+add_subdirectory(reports/items)
 

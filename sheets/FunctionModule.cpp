@@ -82,5 +82,3 @@ void FunctionModule::add(Function* function)
     }
     d->functions.append(QSharedPointer<Function>(function));
 }
-
-#include "FunctionModule.moc"

@@ -24,13 +24,13 @@ KPrHtmlExportUiDelegate::KPrHtmlExportUiDelegate()
 {
 }
 
-KIO::RenameDialog_Result KPrHtmlExportUiDelegate::askFileRename ( KJob* job, const QString& caption, const QString& src,
-                                                                  const QString& dest, KIO::RenameDialog_Mode mode, QString& newDest,
-                                                                  KIO::filesize_t sizeSrc, KIO::filesize_t sizeDest, time_t ctimeSrc,
-                                                                  time_t ctimeDest, time_t mtimeSrc, time_t mtimeDest)
+KIO::RenameDialog_Result KPrHtmlExportUiDelegate::askFileRename ( KJob* job, const QString& caption, const QUrl& src,
+                                                                  const QUrl& dest, KIO::RenameDialog_Options options, QString& newDest,
+                                                                  KIO::filesize_t sizeSrc, KIO::filesize_t sizeDest, const QDateTime &ctimeSrc,
+                                                                  const QDateTime &ctimeDest, const QDateTime &mtimeSrc, const QDateTime &mtimeDest)
 {
-    // Change mode, remove rename possibility
-    mode = (KIO::RenameDialog_Mode)(mode | KIO::M_NORENAME);
-    return KIO::JobUiDelegate::askFileRename(job, caption, src, dest, mode, newDest, sizeSrc,
+    // Change options, remove rename possibility
+    options = (KIO::RenameDialog_Options)(options | KIO::M_NORENAME);
+    return KIO::JobUiDelegate::askFileRename(job, caption, src, dest, options, newDest, sizeSrc,
                                              sizeDest, ctimeSrc, ctimeDest, mtimeSrc, mtimeDest);
 }

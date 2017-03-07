@@ -27,7 +27,6 @@
 #include <QFile>
 #include <QFont>
 #include <QPen>
-#include <QtXml>
 #include <QList>
 #include <QByteArray>
 
@@ -64,8 +63,8 @@
 
 using namespace Calligra::Sheets;
 
-K_PLUGIN_FACTORY(OpenCalcImportFactory, registerPlugin<OpenCalcImport>();)
-K_EXPORT_PLUGIN(OpenCalcImportFactory("kspreadopencalcimport","calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(OpenCalcImportFactory, "calligra_filter_opencalc2sheets.json",
+                           registerPlugin<OpenCalcImport>();)
 
 OpenCalcImport::OpenCalcPoint::OpenCalcPoint(QString const & str)
         : isRange(false)
@@ -590,7 +589,7 @@ bool OpenCalcImport::readCells(KoXmlElement & rowNode, Sheet  * table, int row, 
                 if (ok) {
                     // KSpreadValue kval( timeToNum( hours, minutes, seconds ) );
                     // cell.setValue( kval );
-                    cell.setValue(Value(QTime(hours % 24, minutes, seconds), cell.sheet()->map()->calculationSettings()));
+                    cell.setValue(Value(QTime(hours % 24, minutes, seconds)));
                     style.setFormatType(Format::Custom);
                 }
             }

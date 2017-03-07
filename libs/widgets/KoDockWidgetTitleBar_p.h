@@ -25,7 +25,7 @@
 
 #include <KoIcon.h>
 
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 #include <QAbstractButton>
 #include <QAction>
@@ -50,7 +50,6 @@ public:
     }
 
     KoDockWidgetTitleBar* thePublic;
-    KIcon openIcon, closeIcon, lockIcon, floatIcon, removeIcon; // close/open are for collapsing
     QAbstractButton* closeButton;
     QAbstractButton* floatButton;
     QAbstractButton* collapseButton;

@@ -22,6 +22,9 @@
  */
 
 #include "DocxXmlNumberingReader.h"
+
+#include "DocxDebug.h"
+
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
 #include <MsooXmlUnits.h>
@@ -31,6 +34,7 @@
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
 
 #include <MsooXmlReader_p.h>
+
 
 class DocxXmlNumberingReader::Private
 {
@@ -68,7 +72,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read(MSOOXML::MsooXmlReaderCo
         return KoFilter::WrongFormat;
     }
     readNext();
-    kDebug() << *this << namespaceUri();
+    debugDocx << *this << namespaceUri();
     if (!expectEl(QList<QByteArray>() << "w:numbering")) {
         return KoFilter::WrongFormat;
     }
@@ -77,7 +81,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read(MSOOXML::MsooXmlReaderCo
     }
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
     /*    for (int i = 0; i < namespaces.count(); i++) {
-        kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
+        debugDocx << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }*/
     //! @todo find out whether the namespace returned by namespaceUri()
     //!       is exactly the same ref as the element of namespaceDeclarations()
@@ -94,7 +98,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read(MSOOXML::MsooXmlReaderCo
     if (!expectElEnd(qn)) {
         return KoFilter::WrongFormat;
     }
-    kDebug() << "===========finished============";
+    debugDocx << "===========finished============";
     return KoFilter::OK;
 }
 

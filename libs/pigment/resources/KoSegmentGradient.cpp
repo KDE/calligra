@@ -36,8 +36,8 @@
 #include "KoColorSpace.h"
 #include "KoMixColorsOp.h"
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <DebugPigment.h>
+#include <klocalizedstring.h>
 
 KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInterpolationStrategy::m_instance = 0;
 KoGradientSegment::HSVCWColorInterpolationStrategy *KoGradientSegment::HSVCWColorInterpolationStrategy::m_instance = 0;
@@ -79,7 +79,7 @@ bool KoSegmentGradient::load()
 {
     QFile file(filename());
     if (!file.open(QIODevice::ReadOnly)) {
-        kWarning() << "Can't open file " << filename();
+        warnPigment << "Can't open file " << filename();
         return false;
     }
     bool res = loadFromDevice(&file);
@@ -114,7 +114,7 @@ bool KoSegmentGradient::loadFromDevice(QIODevice *dev)
         numSegmentsText = nameDefinition;
     }
 
-    kDebug(30009) << "Loading gradient: " << name();
+    dbgPigment << "Loading gradient: " << name();
 
     int numSegments;
     bool ok;
@@ -125,7 +125,7 @@ bool KoSegmentGradient::loadFromDevice(QIODevice *dev)
         return false;
     }
 
-    kDebug(30009) << "Number of segments = " << numSegments;
+    dbgPigment << "Number of segments = " << numSegments;
 
     const KoColorSpace* rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
 
@@ -490,18 +490,41 @@ KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInt
 
 void KoGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const
 {
+    
+    KoColor startDummy, endDummy;
+    //hack to get a color space with the bitdepth of the gradients(8bit), but with the colour profile of the image//
+    const KoColorSpace* mixSpace = KoColorSpaceRegistry::instance()->rgb8(dst.colorSpace()->profile());
+    //convert to the right colorspace for the start and end if we have our mixSpace.
+    if (mixSpace){
+        startDummy = KoColor(start, mixSpace);
+        endDummy = KoColor(end, mixSpace);
+    } else {
+        startDummy = start;
+        endDummy = end;
+    }
+    
     m_start.fromKoColor(start);
     m_end.fromKoColor(end);
-
+    
     const quint8 *colors[2];
-    colors[0] = start.data();
-    colors[1] = end.data();
+    colors[0] = startDummy.data();
+    colors[1] = endDummy.data();
 
     qint16 colorWeights[2];
     colorWeights[0] = static_cast<quint8>((1.0 - t) * 255 + 0.5);
     colorWeights[1] = 255 - colorWeights[0];
 
-    m_colorSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
+    //check if our mixspace exists, it doesn't at startup.
+    if (mixSpace){
+        if ( !(*buffer.colorSpace() == *mixSpace)) {
+            buffer = KoColor(mixSpace);
+            }
+        mixSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
+    }
+    else {
+        buffer = KoColor(m_colorSpace);
+        m_colorSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
+    }
 
     dst.fromKoColor(buffer);
 }

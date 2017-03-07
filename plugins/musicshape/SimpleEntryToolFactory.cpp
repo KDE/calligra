@@ -16,7 +16,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <KoIcon.h>
 
 #include "MusicShape.h"
@@ -29,7 +29,7 @@ SimpleEntryToolFactory::SimpleEntryToolFactory()
     : KoToolFactoryBase("SimpleEntryToolFactoryId")
 {
     setToolTip( i18n( "Music editing" ) );
-    setIconName(koIconNameCStr("music-note-16th"));
+    setIconName(koIconName("music-note-16th"));
     setToolType( dynamicToolType() );
     setPriority( 1 );
     setActivationShapeId( MusicShapeId );

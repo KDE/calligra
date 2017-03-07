@@ -113,9 +113,6 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
       <pixmap></pixmap>
     </customwidget>
  </customwidgets>
- <includes>
-  <include location="global" >kdialog.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

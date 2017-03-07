@@ -22,13 +22,13 @@
 
 #include <KoIcon.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <phonon/videowidget.h>
 #include <phonon/audiooutput.h>
 #include <phonon/mediaobject.h>
-#include <Phonon/VolumeSlider>
-#include <Phonon/SeekSlider>
+#include <phonon/VolumeSlider>
+#include <phonon/SeekSlider>
 
 #include <QUrl>
 #include <QVBoxLayout>
@@ -211,5 +211,3 @@ void FullScreenPlayer::muteStateChanged(bool muted)
         m_volumeIconUnmuted->setVisible(true);
     }
 }
-
-#include <FullScreenPlayer.moc>

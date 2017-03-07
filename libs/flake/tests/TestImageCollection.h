@@ -20,7 +20,7 @@
 #ifndef TESTIMAGECOLLECTION_H
 #define TESTIMAGECOLLECTION_H
 
-#include <QtTest>
+#include <QObject>
 
 class TestImageCollection : public QObject
 {
@@ -28,14 +28,12 @@ class TestImageCollection : public QObject
 private Q_SLOTS:
     // tests
     void testGetImageImage();
-    void testGetExternalImage();
     void testGetImageStore();
     void testInvalidImageData();
 
     // imageData tests
     void testImageDataAsSharedData();
     void testPreload1();
-    void testPreload2();
     void testPreload3();
     void testSameKey();
     void testIsValid();

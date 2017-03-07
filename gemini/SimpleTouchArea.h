@@ -19,13 +19,13 @@
 #ifndef SIMPLETOUCHAREA_H
 #define SIMPLETOUCHAREA_H
 
-#include <qdeclarativeitem.h>
+#include <QQuickItem>
 
-class SimpleTouchArea : public QDeclarativeItem
+class SimpleTouchArea : public QQuickItem
 {
     Q_OBJECT
 public:
-    explicit SimpleTouchArea(QDeclarativeItem* parent = 0);
+    explicit SimpleTouchArea(QQuickItem* parent = 0);
     virtual ~SimpleTouchArea();
 
 Q_SIGNALS:
@@ -33,7 +33,7 @@ Q_SIGNALS:
 
 protected:
     virtual bool event(QEvent* event);
-    virtual bool sceneEvent(QEvent*);
+    virtual void touchEvent(QTouchEvent*);
 };
 
 #endif // SIMPLETOUCHAREA_H

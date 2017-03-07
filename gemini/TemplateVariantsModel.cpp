@@ -123,5 +123,3 @@ QModelIndex TemplateVariantsModel::firstIndex()
 {
     return createIndex(0, 0);
 }
-
-#include "TemplateVariantsModel.moc"

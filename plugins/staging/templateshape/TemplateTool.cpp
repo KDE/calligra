@@ -25,11 +25,11 @@
 // Qt
 #include <QToolButton>
 #include <QGridLayout>
+#include <QUrl>
+#include <QFileDialog>
 
-// KDE
-#include <klocale.h>
-#include <kurl.h>
-#include <kfiledialog.h>
+// KF5
+#include <klocalizedstring.h>
 
 // Calligra
 #include <KoCanvasBase.h>
@@ -104,7 +104,7 @@ void TemplateTool::openPressed()
     if (m_templateshape == 0)
         return;
 
-    KUrl url = KFileDialog::getOpenUrl();
+    QUrl url = QFileDialog::getOpenFileUrl();
     if (!url.isEmpty()) {
         // Template: do something with the file here.
     }
@@ -134,5 +134,3 @@ void TemplateTool::mouseDoubleClickEvent(KoPointerEvent *event)
 
     openPressed();
 }
-
-#include <TemplateTool.moc>

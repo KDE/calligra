@@ -47,13 +47,13 @@ public:
 protected:
     QString nextLine(QTextStream &);
     QChar   specCharfind(QChar , QChar);
-    void    writePen(QString &, int, int, QString);
+    void    writePen(QString &, int, int, const QString&);
     QString writeColor(t_mycolor *);
     void    readTypefaceTable(QTextStream &, QStringList &);
     void    readColormap(QTextStream &, QList<t_mycolor*> &);
-    void    readView(QTextStream &, QString, t_rc &);
-    void    filterSHFGBG(QString, int *, int *, int *);
-    void    transPenFormat(QString, int *, int *);
+    void    readView(QTextStream &, const QString&, t_rc &);
+    void    filterSHFGBG(const QString&, int *, int *, int *);
+    void    transPenFormat(const QString&, int *, int *);
     int     readHeader(QTextStream &);
     int     translateColumnNumber(const QString&);
     QString convertFormula(const QString& input) const;

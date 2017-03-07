@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
-  <title>KSpread Development Notes</title>
+  <title>Calligra Sheets Development Notes</title>
 </head>
 
 <body>
 
-<h1>KSpread Development Notes</h1>
+<h1>Calligra Sheets Development Notes</h1>
 
 <p>Maintainer: Ariya Hidayat (<a href="mailto:ariya@kde.org">ariya@kde.org</a>)</p>
 <p>Some portions by Tomas Mecir (<a href="mailto: mecirt@gmail.com">mecirt@gmail.com</a>)</p>
@@ -15,7 +15,7 @@
 
 <h2>Introduction</h2>
 
-<p>This document contains information about internal structure of KSpread
+<p>This document contains information about internal structure of Calligra Sheets
 as well as some notes of upcoming redesign. The sources for this document
 are mainly the discussions which take place in calligra-devel mailing-list
 and the source code itself.</p>
@@ -106,7 +106,7 @@ cell's content or formatting.</p>
 
 <p>Status: OUTDATED.</p>
 
-<p>Until lately, to implement undo and redo, KSpread creates corresponding
+<p>Until lately, to implement undo and redo, Calligra Sheets creates corresponding
 KSpreadUndo classes for each action and runs them when the user undoes
 those actions. KSpreadUndo also has redo function whose job is to redo
 again the action after being undone.</p>

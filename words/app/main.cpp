@@ -17,33 +17,43 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <KoApplication.h>
-#include <kcmdlineargs.h>
 #include <KWAboutData.h>
 #include <KWDocument.h>
 
-extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
+#include <KoApplication.h>
+#include <Calligra2Migration.h>
+
+#include <QLoggingCategory>
+
+extern "C" WORDS_EXPORT int kdemain(int argc, char **argv)
 {
-    KAboutData * aboutData = newWordsAboutData();
+    /**
+     * Disable debug output by default, only log warnings.
+     * Debug logs can be controlled by the environment variable QT_LOGGING_RULES.
+     *
+     * For example, to get full debug output, run the following:
+     * QT_LOGGING_RULES="calligra.*=true" calligrawords
+     *
+     * See: http://doc.qt.io/qt-5/qloggingcategory.html
+     */
+    QLoggingCategory::setFilterRules("calligra.*.debug=false\n"
+                                     "calligra.*.warning=true");
 
-#ifdef Q_WS_X11
-    // the "raster" graphicssystem is way faster then the "native" graphicssystem on x11 with Calligra Words
-    QApplication::setGraphicsSystem( QLatin1String("raster") );
-#endif
+    KAboutData* aboutData = newWordsAboutData();
 
-    KCmdLineArgs::init(argc, argv, aboutData);
+    KoApplication app(WORDS_MIME_TYPE, QStringLiteral("calligrawords"), *aboutData, argc, argv);
 
-    KCmdLineOptions options;
-    options.add("+[file]", ki18n("File to open"));
-    KCmdLineArgs::addCmdLineOptions(options);
+    delete aboutData;
 
-    KoApplication app(WORDS_MIME_TYPE);
+    // Migrate data from kde4 to kf5 locations
+    Calligra2Migration m("calligrawords", "words");
+    m.setConfigFiles(QStringList() << QStringLiteral("wordsrc"));
+    m.setUiFiles(QStringList() << QStringLiteral("words.rc") << QStringLiteral("words_readonly.rc"));
+    m.migrate();
 
-    if (!app.start())
+    if (!app.start()) {
         return 1;
-    app.exec();
+    }
 
-    delete(aboutData);
-
-    return 0;
+    return app.exec();
 }

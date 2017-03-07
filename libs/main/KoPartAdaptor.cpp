@@ -24,10 +24,9 @@
 
 #include "KoDocument.h"
 #include "KoPart.h"
-#include "KoDocumentInfoDlg.h"
 #include "KoDocumentInfo.h"
 #include "KoView.h"
-#include <kdebug.h>
+#include <MainDebug.h>
 
 
 KoPartAdaptor::KoPartAdaptor(KoPart *doc)
@@ -43,7 +42,7 @@ KoPartAdaptor::~KoPartAdaptor()
 
 void KoPartAdaptor::openUrl(const QString & url)
 {
-    m_pDoc->document()->openUrl(KUrl(url));
+    m_pDoc->document()->openUrl(QUrl(url));
 }
 
 bool KoPartAdaptor::isLoading()
@@ -83,7 +82,7 @@ void KoPartAdaptor::save()
 
 void KoPartAdaptor::saveAs(const QString & url)
 {
-    m_pDoc->document()->saveAs(KUrl(url));
+    m_pDoc->document()->saveAs(QUrl(url));
     m_pDoc->document()->waitSaveComplete(); // see ReadWritePart
 }
 
@@ -109,7 +108,7 @@ QString KoPartAdaptor::documentInfoCompanyName() const
 
 QString KoPartAdaptor::documentInfoTelephone() const
 {
-    kDebug(30003) << " Keep compatibility with calligra <= 1.3 : use documentInfoTelephoneWork";
+    debugMain << " Keep compatibility with calligra <= 1.3 : use documentInfoTelephoneWork";
     return documentInfoTelephoneWork();
 }
 
@@ -211,7 +210,7 @@ void KoPartAdaptor::setDocumentInfoAuthorPosition(const QString &text)
 
 void KoPartAdaptor::setDocumentInfoTelephone(const QString &text)
 {
-    kDebug(30003) << "Keep compatibility with calligra <= 1.3 : use setDocumentInfoTelephoneWork";
+    debugMain << "Keep compatibility with calligra <= 1.3 : use setDocumentInfoTelephoneWork";
     setDocumentInfoTelephoneWork(text);
 }
 
@@ -264,6 +263,3 @@ void KoPartAdaptor::setDocumentInfoAbstract(const QString &text)
 {
     m_pDoc->document()->documentInfo()->setAboutInfo("comments", text);
 }
-
-
-#include <KoPartAdaptor.moc>

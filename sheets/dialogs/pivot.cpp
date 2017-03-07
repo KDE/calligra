@@ -40,7 +40,7 @@ public:
 
 
 Pivot::Pivot(QWidget* parent,Selection* selection):
-    KDialog(parent),
+    KoDialog(parent),
     d(new Private)
 {
     setCaption(i18n("Select Source"));

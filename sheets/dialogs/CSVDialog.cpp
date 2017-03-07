@@ -34,8 +34,7 @@
 
 #include <KoCanvasBase.h>
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 
 #include "Cell.h"
@@ -78,7 +77,7 @@ CSVDialog::CSVDialog(QWidget* parent, Selection* selection, Mode mode)
         KoFileDialog dialog(parent, KoFileDialog::ImportFile, "OpenDocument");
         dialog.setCaption(i18n("Import CSV Data File"));
         dialog.setNameFilter(i18n("CSV data files (*.csv)"));
-        m_filename = dialog.url();
+        m_filename = dialog.filename();
         //cancel action !
         if (m_filename.isEmpty()) {
             enableButton(Ok, false);
@@ -198,10 +197,7 @@ void CSVDialog::accept()
     if (!command->execute(m_selection->canvas()))
         delete command;
 
-    const CellDamage::Changes changes = CellDamage::Appearance | CellDamage::Value | CellDamage::Formula;
-    sheet->map()->addDamage(new CellDamage(sheet, Region(range, sheet), changes));
-    m_selection->clear();
-    m_selection->add(range, sheet);
+    m_selection->initialize(range, sheet);
     m_selection->emitModified();
     KoCsvImportDialog::accept();
 }

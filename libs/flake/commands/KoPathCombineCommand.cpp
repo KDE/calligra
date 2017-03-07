@@ -21,7 +21,7 @@
 #include "KoPathCombineCommand.h"
 #include "KoShapeBasedDocumentBase.h"
 #include "KoShapeContainer.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class KoPathCombineCommand::Private
 {

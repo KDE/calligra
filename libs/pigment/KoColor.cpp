@@ -103,7 +103,7 @@ KoColor::KoColor(const KoColor &src, const KoColorSpace * colorSpace)
     d->data = new quint8[colorSpace->pixelSize()];
     memset(d->data, 0, d->colorSpace->pixelSize());
 
-    src.colorSpace()->convertPixelsTo(src.d->data, d->data, colorSpace, 1, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+    src.colorSpace()->convertPixelsTo(src.d->data, d->data, colorSpace, 1, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
 }
 
 KoColor::KoColor(const KoColor & rhs)
@@ -161,8 +161,8 @@ void KoColor::convertTo(const KoColorSpace * cs, KoColorConversionTransformation
 void KoColor::convertTo(const KoColorSpace * cs)
 {
     convertTo(cs,
-              KoColorConversionTransformation::InternalRenderingIntent,
-              KoColorConversionTransformation::InternalConversionFlags);
+              KoColorConversionTransformation::internalRenderingIntent(),
+              KoColorConversionTransformation::internalConversionFlags());
 }
 
 void KoColor::setColor(const quint8 * data, const KoColorSpace * colorSpace)
@@ -204,7 +204,7 @@ void KoColor::fromQColor(const QColor& c) const
 #ifndef NDEBUG
 void KoColor::dump() const
 {
-    //dbgPigment <<"KoColor (" << this <<")," << d->colorSpace->id().name() <<"";
+    dbgPigment <<"KoColor (" << this <<")," << d->colorSpace->id() <<"";
     QList<KoChannelInfo *> channels = d->colorSpace->channels();
 
     QList<KoChannelInfo *>::const_iterator begin = channels.constBegin();
@@ -215,13 +215,13 @@ void KoColor::dump() const
         // XXX: setNum always takes a byte.
         if (ch->size() == sizeof(quint8)) {
             // Byte
-            //dbgPigment <<"Channel (byte):" << ch->name() <<":" << QString().setNum(d->data[ch->pos()]) <<"";
+            dbgPigment <<"Channel (byte):" << ch->name() <<":" << QString().setNum(d->data[ch->pos()]) <<"";
         } else if (ch->size() == sizeof(quint16)) {
             // Short (may also by an nvidia half)
-            //dbgPigment <<"Channel (short):" << ch->name() <<":" << QString().setNum(*((const quint16 *)(d->data+ch->pos())))  <<"";
+            dbgPigment <<"Channel (short):" << ch->name() <<":" << QString().setNum(*((const quint16 *)(d->data+ch->pos())))  <<"";
         } else if (ch->size() == sizeof(quint32)) {
             // Integer (may also be float... Find out how to distinguish these!)
-            //dbgPigment <<"Channel (int):" << ch->name() <<":" << QString().setNum(*((const quint32 *)(d->data+ch->pos())))  <<"";
+            dbgPigment <<"Channel (int):" << ch->name() <<":" << QString().setNum(*((const quint32 *)(d->data+ch->pos())))  <<"";
         }
     }
 }
@@ -229,7 +229,7 @@ void KoColor::dump() const
 
 void KoColor::fromKoColor(const KoColor& src)
 {
-    src.colorSpace()->convertPixelsTo(src.d->data, d->data, colorSpace(), 1, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+    src.colorSpace()->convertPixelsTo(src.d->data, d->data, colorSpace(), 1, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
 }
 
 const KoColorProfile *  KoColor::profile() const
@@ -295,8 +295,9 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString & bitDepthId, con
     QString profileName;
     if (elt.tagName() != "sRGB") {
         profileName = elt.attribute("space", "");
-        if (aliases.contains(profileName)) {
-            profileName = aliases.value(profileName);
+        const QHash<QString, QString>::ConstIterator it = aliases.find(profileName);
+        if (it != aliases.end()) {
+            profileName = it.value();
         }
         if (!KoColorSpaceRegistry::instance()->profileByName(profileName)) {
             profileName.clear();

@@ -25,9 +25,9 @@
 
 #include <QListView>
 #include <QMouseEvent>
-#include <QStyleOptionViewItemV4>
+#include <QStyleOptionViewItem>
 
-#include <kdebug.h>
+#include <QDebug>
 
 StylesCombo::StylesCombo(QWidget *parent)
     : QComboBox(parent),
@@ -178,7 +178,7 @@ bool StylesCombo::eventFilter(QObject *object, QEvent *event)
         //manually though.
         QModelIndex index = view()->indexAt(mouseEvent->pos());
         QModelIndex buddy = m_stylesModel->buddy(index);
-        QStyleOptionViewItemV4 options;
+        QStyleOptionViewItem options;
         options.rect = view()->visualRect(buddy);
         options.widget = m_view;
         options.state |= (buddy == view()->currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
@@ -215,6 +215,3 @@ void StylesCombo::showEditIcon(bool show){
     }
     delegate->setEditButtonEnable(show);
 }
-
-#include <StylesCombo.moc>
-

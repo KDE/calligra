@@ -1,6 +1,6 @@
-install(FILES scripts.rc DESTINATION ${DATA_INSTALL_DIR}/words/scripts)
+install(FILES scripts.rc DESTINATION ${DATA_INSTALL_DIR}/calligrawords/scripts)
 
-#install(FILES variable_readfile.py DESTINATION ${DATA_INSTALL_DIR}/words/scripts/variables)
+#install(FILES variable_readfile.py DESTINATION ${DATA_INSTALL_DIR}/calligrawords/scripts/variables)
 
 install(FILES
     importfile.py
@@ -11,7 +11,7 @@ install(FILES
     xmlviewer.py
     doctree.rb
     onlinehelp.py
-    DESTINATION ${DATA_INSTALL_DIR}/words/scripts/extensions)
+    DESTINATION ${DATA_INSTALL_DIR}/calligrawords/scripts/extensions)
 
 install(FILES
     sample_cursor.rb
@@ -25,4 +25,4 @@ install(FILES
     sample_variables.py
     sample_insertshape.py
     sample_allshapes.py
-    DESTINATION ${DATA_INSTALL_DIR}/words/scripts/samples)
+    DESTINATION ${DATA_INSTALL_DIR}/calligrawords/scripts/samples)

@@ -18,9 +18,10 @@
 
 #include "CategorizedItemDelegate.h"
 
-#include <kcategorydrawer.h>
-#include <kcategorizedsortfilterproxymodel.h>
 #include <QPainter>
+
+#include <KCategoryDrawer>
+#include <KCategorizedSortFilterProxyModel>
 
 struct CategorizedItemDelegate::Private {
     QAbstractItemDelegate* fallback;
@@ -41,7 +42,8 @@ CategorizedItemDelegate::CategorizedItemDelegate(QAbstractItemDelegate* _fallbac
 {
     _fallback->setParent(this);
     d->fallback = _fallback;
-    d->categoryDrawer = new KCategoryDrawer;
+    // QT5TODO: Pass correct param to KCategoryDrawer
+    d->categoryDrawer = new KCategoryDrawer(0);
 }
 CategorizedItemDelegate::~CategorizedItemDelegate()
 {
@@ -62,8 +64,8 @@ void CategorizedItemDelegate::paint(QPainter * painter, const QStyleOptionViewIt
 {
     // We will need to edit the option to make sure the header isn't drawned as selected
     QStyleOptionViewItem* option = 0;
-    if(const QStyleOptionViewItemV4 *v4 = qstyleoption_cast<const QStyleOptionViewItemV4*>(&_option)) {
-        option = new QStyleOptionViewItemV4(*v4);
+    if(const QStyleOptionViewItem *v4 = qstyleoption_cast<const QStyleOptionViewItem*>(&_option)) {
+        option = new QStyleOptionViewItem(*v4);
     } else if(const QStyleOptionViewItemV3 *v3 = qstyleoption_cast<const QStyleOptionViewItemV3*>(&_option)) {
         option = new QStyleOptionViewItemV3(*v3);
     } else if(const QStyleOptionViewItemV2 *v2 = qstyleoption_cast<const QStyleOptionViewItemV2*>(&_option)) {

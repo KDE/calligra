@@ -37,7 +37,6 @@
 #include <sheets/Map.h>
 #include <sheets/Sheet.h>
 #include <KoShape.h>
-#include <KDebug>
 #include <KActionCollection>
 #include <QGraphicsWidget>
 #include <QTextFrame>
@@ -174,7 +173,7 @@ void CQSpreadsheetCanvas::openFile(const QString& uri)
     d->document = static_cast<Calligra::Sheets::Doc*> (part->document());
     d->document->setAutoSave(0);
     d->document->setCheckAutoSaveFile(false);
-    d->document->openUrl (KUrl (uri));
+    d->document->openUrl (QUrl (uri));
 
     d->canvas = dynamic_cast<Calligra::Sheets::CanvasItem*> (part->canvasItem(part->document()));
     createAndSetCanvasControllerOn(d->canvas);

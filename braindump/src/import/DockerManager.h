@@ -20,11 +20,11 @@
 #ifndef DOCKER_MANAGER_H
 #define DOCKER_MANAGER_H
 
-#include "komain_export.h"
-
 #include <QObject>
 #include <QMap>
 #include <QPointer>
+
+#include "komain_export.h"
 
 class MainWindow;
 

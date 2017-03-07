@@ -128,13 +128,13 @@ protected:
      * Get the handle positions for manipulating the parameters.
      * @see setHandles, handleCount()
      */
-    QList<QPointF> handles() const;
+    QVector<QPointF> handles() const;
 
     /**
      * Set the new handle positions which are used by the user to manipulate the parameters.
      * @see handles(), handleCount()
      */
-    void setHandles(const QList<QPointF> &handles);
+    void setHandles(const QVector<QPointF> &handles);
 
     /// constructor
     KoParameterShape(KoParameterShapePrivate &);

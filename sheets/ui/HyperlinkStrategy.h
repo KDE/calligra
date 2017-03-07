@@ -44,7 +44,7 @@ public:
      * Constructor.
      */
     HyperlinkStrategy(CellToolBase *cellTool,
-                      const QPointF position, Qt::KeyboardModifiers modifiers,
+                      const QPointF& position, Qt::KeyboardModifiers modifiers,
                       const QString& url, const QRectF& textRect);
 
     /**

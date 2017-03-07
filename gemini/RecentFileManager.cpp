@@ -20,13 +20,13 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
+#include <QUrl>
+#include <QDebug>
 
-#include <kurl.h>
-#include <kglobal.h>
+#include <KSharedConfig>
 #include <kconfiggroup.h>
 #include <kconfig.h>
-#include <klocale.h>
-#include <kstandarddirs.h>
+
 
 // Much of this is a gui-less clone of KRecentFilesAction, so the format of
 // storing recent files is compatible.
@@ -34,7 +34,7 @@ class RecentFileManager::Private {
 public:
     Private()
     {
-        KConfigGroup grp(KGlobal::config(), "RecentFiles");
+        KConfigGroup grp(KSharedConfig::openConfig(), "RecentFiles");
         maxItems = grp.readEntry("maxRecentFileItems", 100);
 
         loadEntries(grp);
@@ -47,7 +47,7 @@ public:
 
         QString value;
         QString nameValue;
-        KUrl url;
+        QUrl url;
 
         KConfigGroup cg = grp;
 
@@ -60,15 +60,20 @@ public:
 
             value = cg.readPathEntry(QString("File%1").arg(i), QString());
             if (value.isEmpty()) continue;
-            url = KUrl(value);
+            url = QUrl(value);
 
-            // krita sketch only handles local files
-            if (!url.isLocalFile())
+            // gemini only handles local files
+            // yes, i know the second half here isn't good on windows... but without it we fail on linux, and second part for windows
+            if (!url.isLocalFile() && !value.startsWith('/') && value.midRef(2, 1) != QLatin1String(":")) {
+                qDebug() << "Not a local file:" << url;
                 continue;
+            }
 
             // Don't restore if file doesn't exist anymore
-            if (!QFile::exists(url.toLocalFile()))
+            if (!QFile::exists(url.toLocalFile()) && !QFile::exists(value)) {
+                qDebug() << "Recent file apparently no longer exists:" << url.toLocalFile();
                 continue;
+            }
 
             value = QDir::toNativeSeparators( value );
 
@@ -118,7 +123,7 @@ RecentFileManager::RecentFileManager(QObject *parent)
 
 RecentFileManager::~RecentFileManager()
 {
-    KConfigGroup grp(KGlobal::config(), "RecentFiles");
+    KConfigGroup grp(KSharedConfig::openConfig(), "RecentFiles");
     grp.writeEntry("maxRecentFileItems", d->maxItems);
     delete d;
 }
@@ -155,7 +160,7 @@ void RecentFileManager::addRecent(const QString &_url)
     d->recentFiles.insert(0, localFile);
     d->recentFilesIndex.insert(0, fileName);
 
-    d->saveEntries(KConfigGroup(KGlobal::config(), "RecentFiles"));
+    d->saveEntries(KConfigGroup(KSharedConfig::openConfig(), "RecentFiles"));
     emit recentFilesListChanged();
 }
 

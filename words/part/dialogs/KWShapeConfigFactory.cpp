@@ -25,7 +25,7 @@
 #include <frames/KWFrame.h>
 #include <frames/KWFrameSet.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KoShapeConfigWidgetBase *KWFrameConnectSelectorFactory::createConfigWidget(KoShape *shape)
 {
@@ -110,5 +110,3 @@ void FrameConfigSharedState::setKeepAspectRatio(bool on)
     m_protectAspectRatio = on;
     emit keepAspectRatioChanged(on);
 }
-
-#include <KWShapeConfigFactory.moc>

@@ -21,8 +21,7 @@
 
 #include <QPainter>
 #include <QSvgRenderer>
-
-#include <kdebug.h>
+#include <QDebug>
 
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
@@ -52,7 +51,7 @@ void StateShape::paint(QPainter &painter,
     if(state) {
         state->renderer()->render(&painter, target);
     } else {
-        kError() << "No state found for m_categoryId = " << m_categoryId << " m_stateId = " << m_stateId;
+        qCritical() << "No state found for m_categoryId = " << m_categoryId << " m_stateId = " << m_stateId;
     }
 }
 

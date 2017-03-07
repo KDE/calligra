@@ -27,7 +27,6 @@
 
 #include <KWPage.h>
 #include <KWDocument.h>
-#include <KDebug>
 
 CQTextDocumentModel::CQTextDocumentModel(QObject* parent, KWDocument* document, KoShapeManager *shapemanager)
     : QAbstractListModel(parent), kw_document(document), kw_shapemanager(shapemanager), m_thumbnailSize(QSize(512, 512))

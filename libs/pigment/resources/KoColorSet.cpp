@@ -19,7 +19,7 @@
 #include "KoColorSet.h"
 
 #include <sys/types.h>
-#include <netinet/in.h> // htonl
+#include <QtEndian> // qFromLittleEndian
 
 #include <QImage>
 #include <QPoint>
@@ -31,8 +31,8 @@
 #include <QByteArray>
 #include <QPainter>
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <DebugPigment.h>
+#include <klocalizedstring.h>
 
 #include "KoColor.h"
 #include "KoColorSpaceRegistry.h"
@@ -101,7 +101,7 @@ bool KoColorSet::load()
     QFile file(filename());
     if (file.size() == 0) return false;
     if (!file.open(QIODevice::ReadOnly)) {
-        kWarning() << "Can't open file " << filename();
+        warnPigment << "Can't open file " << filename();
         return false;
     }
     bool res =  loadFromDevice(&file);
@@ -162,13 +162,13 @@ bool KoColorSet::init()
     m_colors.clear(); // just in case this is a reload (eg by KoEditColorSetDialog),
 
     if (filename().isNull()) {
-        qWarning() << "Cannot load palette" << name() << "there is no filename set";
+        warnPigment << "Cannot load palette" << name() << "there is no filename set";
         return false;
     }
     if (m_data.isNull()) {
         QFile file(filename());
         if (file.size() == 0) {
-            qWarning() << "Cannot load palette" << name() << "there is no data available";
+            warnPigment << "Cannot load palette" << name() << "there is no data available";
             return false;
         }
         file.open(QIODevice::ReadOnly);
@@ -233,12 +233,9 @@ void KoColorSet::add(const KoColorSetEntry & c)
 
 void KoColorSet::remove(const KoColorSetEntry & c)
 {
-    QVector<KoColorSetEntry>::iterator it = m_colors.begin();
-    QVector<KoColorSetEntry>::iterator end = m_colors.end();
-
-    while (it != end) {
+    for (auto it = m_colors.begin(); it != m_colors.end(); /*noop*/) {
         if ((*it) == c) {
-            m_colors.erase(it);
+            it = m_colors.erase(it);
             return;
         }
         ++it;
@@ -276,7 +273,7 @@ bool KoColorSet::loadGpl()
     QString s = QString::fromUtf8(m_data.data(), m_data.count());
 
     if (s.isEmpty() || s.isNull() || s.length() < 50) {
-        kWarning(30009) << "Illegal Gimp palette file: " << filename();
+        warnPigment << "Illegal Gimp palette file: " << filename();
         return false;
     }
 
@@ -294,7 +291,7 @@ bool KoColorSet::loadGpl()
 
     // Read name
     if (!lines[0].startsWith("GIMP") || !lines[1].startsWith("Name: ")) {
-        kWarning(30009) << "Illegal Gimp palette file: " << filename();
+        warnPigment << "Illegal Gimp palette file: " << filename();
         return false;
     }
 
@@ -377,7 +374,7 @@ bool KoColorSet::loadRiff()
 
     RiffHeader header;
     memcpy(&header, m_data.constData(), sizeof(RiffHeader));
-    header.colorcount = ntohl(header.colorcount);
+    header.colorcount = qFromBigEndian(header.colorcount);
 
     for (int i = sizeof(RiffHeader);
          (i < (int)(sizeof(RiffHeader) + header.colorcount) && i < m_data.size());
@@ -442,7 +439,7 @@ quint16 readShort(QIODevice *io) {
     quint16 val;
     quint64 read = io->read((char*)&val, 2);
     if (read != 2) return false;
-    return ntohs(val);
+    return qFromBigEndian(val);
 }
 
 bool KoColorSet::loadAco()
@@ -503,19 +500,19 @@ bool KoColorSet::loadAco()
             e.color.setOpacity(OPACITY_OPAQUE_U8);
         }
         else {
-            kWarning() << "Unsupported colorspace in palette" << filename() << "(" << colorSpace << ")";
+            warnPigment << "Unsupported colorspace in palette" << filename() << "(" << colorSpace << ")";
             skip = true;
         }
         if (version == 2) {
             quint16 v2 = readShort(&buf);
             if (v2 != 2) {
-                kWarning() << "Version 2 block is not version 2" << filename() << "(" << v2 << ")";
+                warnPigment << "Version 2 block is not version 2" << filename() << "(" << v2 << ")";
                 return false;
             }
             quint16 size = readShort(&buf);
             QByteArray ba = buf.read(size);
             if (ba.size() != size) {
-                kWarning() << "Version 2 name block is the wrong size" << filename();
+                warnPigment << "Version 2 name block is the wrong size" << filename();
                 return false;
             }
             e.name = QString::fromUtf8(ba.constData(), ba.size());

@@ -26,7 +26,7 @@
 
 #include <KoShape.h>
 
-#include <kdebug.h>
+#include <WordsDebug.h>
 
 #define DEBUG_PAGES
 
@@ -59,7 +59,7 @@ qreal KWPageManagerPrivate::pageOffset(int pageNum/*, bool bottom*/) const
 #else
     //Q_ASSERT(pageOffsets.contains(pageNum));
     qreal offset = pageOffsets.value(pageNum);
-    //kDebug(32001) << "pageNum=" << pageNum << "offset=" << offset;
+    //debugWords << "pageNum=" << pageNum << "offset=" << offset;
     return offset;
 #endif
 }
@@ -90,7 +90,7 @@ void KWPageManagerPrivate::setVisiblePageNumber(int pageId, int newPageNumber)
     foreach (int id, oldPages.keys()) {
         Page page = oldPages[id];
         if (diff < 0 && page.pageNumber >= from && page.pageNumber < to) {
-            kWarning(32001) << "you requested to change the page number to a number that already exist, all will end soon";
+            warnWords << "you requested to change the page number to a number that already exist, all will end soon";
             return;
         }
 #ifdef DEBUG_PAGES
@@ -99,7 +99,7 @@ void KWPageManagerPrivate::setVisiblePageNumber(int pageId, int newPageNumber)
         if (page.pageNumber >= from)
             page.pageNumber += diff;
 #ifdef DEBUG_PAGES
-        kDebug(32001) << "adjusting page number from" << oldPageNumber << "to" << page.pageNumber << "side" << page.pageSide;
+        debugWords << "adjusting page number from" << oldPageNumber << "to" << page.pageNumber << "side" << page.pageSide;
 #endif
         if (page.pageSide == KWPage::PageSpread) {
             if (page.pageNumber % 2 == 1) { // pagespreads can only be on even pageNumbers
@@ -127,13 +127,13 @@ void KWPageManagerPrivate::setVisiblePageNumber(int pageId, int newPageNumber)
 void KWPageManagerPrivate::insertPage(const Page &newPage)
 {
 #ifdef DEBUG_PAGES
-    kDebug(32001) << "pageNumber=" << newPage.pageNumber;
+    debugWords << "pageNumber=" << newPage.pageNumber;
 #endif
 
     // increase the pagenumbers of pages following the pageNumber
     if (!pageNumbers.isEmpty()) {
-        QMap<int, int> numbers = pageNumbers;
-        QMap<int, int>::iterator iter = numbers.end();
+        const QMap<int, int> numbers = pageNumbers;
+        QMap<int, int>::ConstIterator iter = numbers.end();
         do {
             --iter;
 
@@ -207,7 +207,7 @@ KWPage KWPageManager::page(int pageNum) const
         return KWPage(d, d->pageNumbers.value(pageNum));
 
 #ifdef DEBUG_PAGES
-    kWarning(32001) << "KWPageManager::page(" << pageNum << ") failed; Requested page does not exist";
+    warnWords << "KWPageManager::page(" << pageNum << ") failed; Requested page does not exist";
 #endif
     return KWPage();
 }
@@ -233,7 +233,7 @@ KWPage KWPageManager::insertPage(int pageNumber, const KWPageStyle &pageStyle)
         return appendPage(pageStyle);
 
 #ifdef DEBUG_PAGES
-    kDebug(32001) << "pageNumber=" << pageNumber << "pageStyle=" << (pageStyle.isValid() ? pageStyle.name() : QString());
+    debugWords << "pageNumber=" << pageNumber << "pageStyle=" << (pageStyle.isValid() ? pageStyle.name() : QString());
 #endif
 
     KWPageManagerPrivate::Page newPage;
@@ -264,7 +264,7 @@ KWPage KWPageManager::appendPage(const KWPageStyle &pageStyle)
     KWPageManagerPrivate::Page page;
 
     if (! d->pages.isEmpty()) {
-        QMap<int, int>::iterator end = d->pageNumbers.end();
+        QMap<int, int>::ConstIterator end = d->pageNumbers.constEnd();
         --end; // last one is one before the imaginary 'end'
         KWPageManagerPrivate::Page lastPage = d->pages[end.value()];
         page = lastPage;
@@ -298,7 +298,7 @@ KWPage KWPageManager::appendPage(const KWPageStyle &pageStyle)
     d->pageNumbers.insert(page.pageNumber, d->lastId);
 
 #ifdef DEBUG_PAGES
-    kDebug(32001) << "pageNumber=" << page.pageNumber << "pageCount=" << pageCount() << "pageStyle=" << (pageStyle.isValid() ? pageStyle.name() : QString());
+    debugWords << "pageNumber=" << page.pageNumber << "pageCount=" << pageCount() << "pageStyle=" << (pageStyle.isValid() ? pageStyle.name() : QString());
 #endif
 
     return KWPage(d, d->lastId);
@@ -324,15 +324,15 @@ void KWPageManager::removePage(int pageNumber)
 void KWPageManager::removePage(const KWPage &page)
 {
     Q_ASSERT(page.isValid());
-    kDebug(32001) << page.pageNumber();
+    debugWords << page.pageNumber();
 
     const int removedPageNumber = page.pageNumber();
     d->pages.remove(d->pageNumbers[removedPageNumber]);
     d->visiblePageNumbers.remove(removedPageNumber);
 
     // decrease the pagenumbers of pages following the pageNumber
-    QMap<int, int> pageNumbers = d->pageNumbers;
-    QMap<int, int>::iterator iter = pageNumbers.begin();
+    const QMap<int, int> pageNumbers = d->pageNumbers;
+    QMap<int, int>::ConstIterator iter = pageNumbers.begin();
     while (iter != pageNumbers.end()) {
         if (iter.key() < removedPageNumber) {
             //  don't touch those
@@ -349,13 +349,13 @@ void KWPageManager::removePage(const KWPage &page)
     }
 
 #ifdef DEBUG_PAGES
-    kDebug(32001) << "pageNumber=" << removedPageNumber << "pageCount=" << pageCount();
+    debugWords << "pageNumber=" << removedPageNumber << "pageCount=" << pageCount();
 #endif
 }
 
-QList<KWPage> KWPageManager::pages(const QString &pageStyle) const
+QVector<KWPage> KWPageManager::pages(const QString &pageStyle) const
 {
-    QList<KWPage> answer;
+    QVector<KWPage> answer;
     const bool checkForStyle = !pageStyle.isEmpty();
     QHash<int, KWPageManagerPrivate::Page>::ConstIterator it = d->pages.constBegin();
     QHash<int, KWPageManagerPrivate::Page>::ConstIterator end = d->pages.constEnd();
@@ -364,7 +364,7 @@ QList<KWPage> KWPageManager::pages(const QString &pageStyle) const
             continue;
         answer << KWPage(d, it.key());
     }
-    qSort(answer.begin(), answer.end());
+    std::sort(answer.begin(), answer.end());
     return answer;
 }
 
@@ -417,14 +417,14 @@ const KWPage KWPageManager::begin() const
 {
     if (d->pages.isEmpty())
         return KWPage();
-    return KWPage(d, d->pageNumbers.begin().value());
+    return KWPage(d, d->pageNumbers.constBegin().value());
 }
 
 const KWPage KWPageManager::last() const
 {
     if (d->pages.isEmpty())
         return KWPage();
-    QMap<int, int>::iterator end = d->pageNumbers.end();
+    QMap<int, int>::ConstIterator end = d->pageNumbers.constEnd();
     --end; // last one is one before the imaginary 'end'
     return KWPage(d, end.value());
 }
@@ -440,7 +440,7 @@ KWPage KWPageManager::last()
 {
     if (d->pages.isEmpty())
         return KWPage();
-    QMap<int, int>::iterator end = d->pageNumbers.end();
+    QMap<int, int>::ConstIterator end = d->pageNumbers.constEnd();
     --end; // last one is one before the imaginary 'end'
     return KWPage(d, end.value());
 }

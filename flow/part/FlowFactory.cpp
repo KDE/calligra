@@ -34,19 +34,18 @@ KAboutData* FlowFactory::s_aboutData = 0;
 
 static int factoryCount = 0;
 
-FlowFactory::FlowFactory(QObject* parent)
-  : KPluginFactory(*aboutData(), parent)
+FlowFactory::FlowFactory()
+    : KPluginFactory()
 {
     (void) componentData();
 
     if (factoryCount == 0) {
 
         // Load the KoPA-specific tools
-        KoPluginLoader::instance()->load(QLatin1String("CalligraPageApp/Tool"),
-                                         QLatin1String("[X-KoPageApp-Version] == 28"));
+        KoPluginLoader::load(QStringLiteral("CalligraPageApp/Tool"));
 
         // Load Flow specific dockers
-        KoPluginLoader::instance()->load(QLatin1String("Flow/Dock"));
+        KoPluginLoader::load(QStringLiteral("Flow/Dock"));
     }
     factoryCount++;
 }

@@ -52,7 +52,7 @@
 #include <KoChangeTrackerElement.h>
 #include <KoImageData.h>
 
-#include <kdebug.h>
+#include <TextLayoutDebug.h>
 #include <KoSection.h>
 #include <KoSectionEnd.h>
 #include <KoSectionUtils.h>
@@ -82,7 +82,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
     struct Timer {
         QTime d->time;
         Timer() { d->time.start(); }
-        ~Timer() { kDebug() << "elapsed=" << d->time.elapsed(); }
+        ~Timer() { warnTextLayout << "elapsed=" << d->time.elapsed(); }
     };
     Timer timer;
     */
@@ -113,7 +113,6 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
         QTextFrame *subFrame = it.currentFrame();
-        QTextBlockFormat format = block.blockFormat();
 
         if (!block.isValid()) {
             if (lastBorder) { // draw previous block's border
@@ -399,7 +398,7 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, QTextBlock &block)
         if (! blockData.counterText().isEmpty()) {
             QFont font(blockData.labelFormat().font(), d->documentLayout->paintDevice());
 
-            KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(listFormat.style());
+            KoListStyle::LabelType labelType = static_cast<KoListStyle::LabelType>(listFormat.style());
             QString result = blockData.counterText();
 
             QTextLayout layout(result, font, d->documentLayout->paintDevice());
@@ -447,7 +446,7 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, QTextBlock &block)
             if (block.layout()->lineCount() > 0) {
                 // if there is text, then baseline align the counter.
                 QTextLine firstParagLine = block.layout()->lineAt(0);
-                if (KoListStyle::isNumberingStyle(listStyle)) {
+                if (KoListStyle::isNumberingStyle(labelType)) {
                     //if numbered list baseline align
                     counterPosition += QPointF(0, firstParagLine.ascent() - layout.lineAt(0).ascent());
                 } else {
@@ -458,15 +457,15 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, QTextBlock &block)
             layout.draw(painter, counterPosition);
 
             //decorate the list label iff it is a numbered list
-            if (KoListStyle::isNumberingStyle(listStyle)) {
+            if (KoListStyle::isNumberingStyle(labelType)) {
                 painter->save();
                 decorateListLabel(painter, blockData, layout.lineAt(0), block);
                 painter->restore();
             }
         }
 
-        KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(listFormat.style());
-        if (listStyle == KoListStyle::ImageItem) {
+        KoListStyle::LabelType labelType = static_cast<KoListStyle::LabelType>(listFormat.style());
+        if (labelType == KoListStyle::ImageLabelType) {
             QFontMetricsF fm(blockData.labelFormat().font(), d->documentLayout->paintDevice());
             qreal x = qMax(qreal(1), blockData.counterPosition().x());
             qreal width = qMax(listFormat.doubleProperty(KoListStyle::Width), (qreal)1.0);
@@ -886,8 +885,8 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, b
         pen.setDashPattern(pattern);
         painter->setPen(pen);
 
-        QList<KoTextBlockData::MarkupRange>::Iterator markIt = blockData.markupsBegin(KoTextBlockData::Misspell);
-        QList<KoTextBlockData::MarkupRange>::Iterator markEnd = blockData.markupsEnd(KoTextBlockData::Misspell);
+        QVector<KoTextBlockData::MarkupRange>::Iterator markIt = blockData.markupsBegin(KoTextBlockData::Misspell);
+        QVector<KoTextBlockData::MarkupRange>::Iterator markEnd = blockData.markupsEnd(KoTextBlockData::Misspell);
         for (int i = 0 ; i < layout->lineCount(); ++i) {
             if (markIt == markEnd) {
                 break;

@@ -72,7 +72,7 @@ void BibliographyConfigureDialog::save(QAbstractButton *button)
         m_bibConfiguration->setSortByPosition(dialog.sortByPosition->isChecked());
         m_bibConfiguration->setNumberedEntries(dialog.numberedEntries->isChecked());
 
-        QList<SortKeyPair> sortKeys;
+        QVector<SortKeyPair> sortKeys;
 
         foreach (QObject *o, dialog.sortKeyGroupBox->children()) {
             SortKeyWidget *widget = dynamic_cast<SortKeyWidget*>(o);

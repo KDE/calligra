@@ -58,7 +58,7 @@ LinkInsertionDialog::LinkInsertionDialog(KoTextEditor* editor, QWidget* parent)
     setUpdatesEnabled(true);
 
     ///setting up the bookmark link insertion tab
-    //connect(dlg.bookmarkListWidget, SIGNAL(itemActivated(QListWidgetItem *)), this, SLOT(slotItemClicked(QListWidgetItem *)));
+    //connect(dlg.bookmarkListWidget, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(slotItemClicked(QListWidgetItem*)));
     m_bookmarkManager =  KoTextDocument(editor->document()).textRangeManager()->bookmarkManager();
     m_bookmarkList = m_bookmarkManager->bookmarkNameList();
     QCompleter *bookmarkAutoCompleter = new QCompleter(m_bookmarkList, this);

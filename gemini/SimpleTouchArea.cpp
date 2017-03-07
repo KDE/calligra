@@ -20,10 +20,10 @@
 #include <QTouchEvent>
 #include <QApplication>
 
-SimpleTouchArea::SimpleTouchArea(QDeclarativeItem* parent)
-    : QDeclarativeItem(parent)
+SimpleTouchArea::SimpleTouchArea(QQuickItem* parent)
+    : QQuickItem(parent)
 {
-    setAcceptTouchEvents(true);
+    setAcceptedMouseButtons(Qt::AllButtons);
 }
 
 SimpleTouchArea::~SimpleTouchArea()
@@ -41,10 +41,10 @@ bool SimpleTouchArea::event(QEvent* event)
         default:
             break;
     }
-    return QDeclarativeItem::event(event);
+    return QQuickItem::event(event);
 }
 
-bool SimpleTouchArea::sceneEvent(QEvent* event)
+void SimpleTouchArea::touchEvent(QTouchEvent* event)
 {
     switch (event->type())
     {
@@ -54,12 +54,8 @@ bool SimpleTouchArea::sceneEvent(QEvent* event)
     case QEvent::TabletPress:
     case QEvent::GraphicsSceneMousePress:
         event->accept();
-        return true;
+        return;
     default:
         break;
     }
-
-    return QDeclarativeItem::sceneEvent(event);
 }
-
-#include "SimpleTouchArea.moc"

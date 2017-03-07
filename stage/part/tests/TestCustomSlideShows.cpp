@@ -25,7 +25,7 @@
 #include "PAMock.h"
 #include <KPrCustomSlideShows.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 
 void TestCustomSlideShows::populateDoc(MockDocument &doc, QList<KoPAPageBase*> &slideList1, QList<KoPAPageBase*> &slideList2,
@@ -394,5 +394,4 @@ void TestCustomSlideShows::removeSlidesFromAllCustomSlideShows()
     QCOMPARE(doc.customSlideShows()->getByName(customShowName2), slideList2);
 }
 
-QTEST_KDEMAIN(TestCustomSlideShows,  GUI)
-#include "TestCustomSlideShows.moc"
+QTEST_MAIN(TestCustomSlideShows)

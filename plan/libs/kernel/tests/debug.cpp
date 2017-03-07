@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2009, 2010 Dag Andersen <danders@get2net.dk>
-
+   Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -26,11 +27,32 @@
 #include "kpttask.h"
 #include "kptschedule.h"
 
-#include <kdebug.h>
-
 #include <QTest>
 #include <QStringList>
 #include <QString>
+
+
+namespace QTest
+{
+    template<>
+    char *toString(const KPlato::DateTime &dt)
+    {
+        QString s;
+        switch ( dt.timeSpec() ) {
+            case Qt::LocalTime: s = " LocalTime"; break;
+            case Qt::UTC: s = " UTC"; break;
+            case Qt::OffsetFromUTC: s = " OffsetFromUTC"; break;
+            case Qt::TimeZone: s = " TimeZone (" + dt.timeZone().id() + ')'; break;
+        }
+        return toString( QString( "%1T%2 %3" ).arg( dt.date().toString(Qt::ISODate) ).arg( dt.time().toString( "hh:mm:ss.zzz" ) ).arg( s ) );
+    }
+
+    template<>
+    char *toString(const KPlato::Duration &d)
+    {
+        return toString( d.toString() );
+    }
+}
 
 namespace KPlato
 {
@@ -42,15 +64,8 @@ public:
 static
 void print( Calendar *c, const QString &str, bool full = true ) {
     Q_UNUSED(full);
-    QString s;
-    switch ( c->timeSpec().type() ) {
-        case KDateTime::Invalid: s = "Invalid"; break;
-        case KDateTime::UTC: s = "UTC"; break;
-        case KDateTime::OffsetFromUTC: s = "OffsetFromUTC"; break;
-        case KDateTime::TimeZone: s = "TimeZone: " + c->timeSpec().timeZone().name(); break;
-        case KDateTime::LocalZone: s = "LocalZone"; break;
-        case KDateTime::ClockTime: s = "Clocktime"; break;
-    }
+    QTimeZone tz = c->timeZone();
+    QString s = tz.isValid() ? QString::fromLatin1(tz.id()) : QStringLiteral("LocalTime");
 
     qDebug()<<"Debug info: Calendar"<<c->name()<<s<<str;
     for ( int wd = 1; wd <= 7; ++wd ) {
@@ -349,7 +364,7 @@ void print( const AppointmentInterval &i, const QString &indent = QString() )
     if ( ! i.isValid() ) {
         qDebug()<<s<<"Not valid";
     } else {
-        qDebug()<<s<<i.startTime().toString()<<i.endTime().toString()<<i.load()<<'%';
+        qDebug()<<s<<i.startTime()<<i.endTime()<<i.load()<<'%';
     }
 }
 

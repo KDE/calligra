@@ -46,11 +46,11 @@
 #include <QPainter>
 #include <QGraphicsItem>
 
-#include <kdebug.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kmessagebox.h>
 
-#include <KoApplication.h>
+#include <KoComponentData.h>
 #include <KoDocumentInfo.h>
 #include <KoMainWindow.h>
 #include <KoOasisSettings.h>
@@ -64,10 +64,10 @@
 #include <KoShapeSavingContext.h>
 #include <KoUpdater.h>
 #include <KoProgressUpdater.h>
-#include <KoInteractionTool.h>
 #include <KoView.h>
 #include <KoUnit.h>
 
+#include "SheetsDebug.h"
 #include "BindingManager.h"
 #include "CalculationSettings.h"
 #include "Canvas.h"
@@ -149,7 +149,7 @@ Doc::Doc(KoPart *part)
     QDBusConnection::sessionBus().registerObject('/' + objectName() + '/' + d->map->objectName(), d->map);
 #endif
 
-    // Init chart shape factory with KSpread's specific configuration panels.
+    // Init chart shape factory with Calligra Sheets' specific configuration panels.
     KoShapeFactoryBase *chartShape = KoShapeRegistry::instance()->value(ChartShapeId);
     if (chartShape) {
         QList<KoShapeConfigFactoryBase*> panels = ChartDialog::panels(d->map);
@@ -227,12 +227,12 @@ QDomDocument Doc::saveXML()
     QDomElement spread = doc.documentElement();
     spread.setAttribute("editor", "Calligra Sheets");
     spread.setAttribute("mime", "application/x-kspread");
-    spread.setAttribute("syntaxVersion", CURRENT_SYNTAX_VERSION);
+    spread.setAttribute("syntaxVersion", QString::number(CURRENT_SYNTAX_VERSION));
 
     if (!d->spellListIgnoreAll.isEmpty()) {
         QDomElement spellCheckIgnore = doc.createElement("SPELLCHECKIGNORELIST");
         spread.appendChild(spellCheckIgnore);
-        for (QStringList::Iterator it = d->spellListIgnoreAll.begin(); it != d->spellListIgnoreAll.end(); ++it) {
+        for (QStringList::ConstIterator it = d->spellListIgnoreAll.constBegin(); it != d->spellListIgnoreAll.constEnd(); ++it) {
             QDomElement spellElem = doc.createElement("SPELLCHECKIGNOREWORD");
             spellCheckIgnore.appendChild(spellElem);
             spellElem.setAttribute("word", *it);
@@ -254,10 +254,10 @@ QDomDocument Doc::saveXML()
         View *const view = static_cast<View*>(views().first());
         Canvas *const canvas = view->canvasWidget();
         e.setAttribute("activeTable",  canvas->activeSheet()->sheetName());
-        e.setAttribute("markerColumn", view->selection()->marker().x());
-        e.setAttribute("markerRow",    view->selection()->marker().y());
-        e.setAttribute("xOffset",      canvas->xOffset());
-        e.setAttribute("yOffset",      canvas->yOffset());
+        e.setAttribute("markerColumn", QString::number(view->selection()->marker().x()));
+        e.setAttribute("markerRow",    QString::number(view->selection()->marker().y()));
+        e.setAttribute("xOffset",      QString::number(canvas->xOffset()));
+        e.setAttribute("yOffset",      QString::number(canvas->yOffset()));
 */
     spread.appendChild(e);
 
@@ -464,12 +464,12 @@ void Doc::loadPaper(KoXmlElement const & paper)
 
 bool Doc::completeLoading(KoStore* store)
 {
-    kDebug(36001) << "------------------------ COMPLETING --------------------";
+    debugSheets << "------------------------ COMPLETING --------------------";
 
     setModified(false);
     bool ok = map()->completeLoading(store);
 
-    kDebug(36001) << "------------------------ COMPLETION DONE --------------------";
+    debugSheets << "------------------------ COMPLETION DONE --------------------";
     return ok;
 }
 
@@ -565,38 +565,7 @@ void Doc::sheetAdded(Sheet* sheet)
 #endif
 }
 
-void Doc::saveOdfViewSettings(KoXmlWriter& settingsWriter)
-{
-    Q_UNUSED(settingsWriter);
-    /*FIXME
-    // Save visual info for the first view, such as active sheet and active cell
-    // It looks like a hack, but reopening a document creates only one view anyway (David)
-    View *const view = static_cast<View*>(views().first());
-    // save current sheet selection before to save marker, otherwise current pos is not saved
-    view->saveCurrentSheetSelection();
-    //<config:config-item config:name="ActiveTable" config:type="string">Feuille1</config:config-item>
-    if (Sheet *sheet = view->activeSheet()) {
-        settingsWriter.addConfigItem("ActiveTable", sheet->sheetName());
-    }
-    */
-}
-
-void Doc::saveOdfViewSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter)
-{
-    Q_UNUSED(sheet);
-    Q_UNUSED(settingsWriter);
-    /*FIXME
-    View *const view = static_cast<View*>(views().first());
-    QPoint marker = view->markerFromSheet(sheet);
-    QPointF offset = view->offsetFromSheet(sheet);
-    settingsWriter.addConfigItem("CursorPositionX", marker.x() - 1);
-    settingsWriter.addConfigItem("CursorPositionY", marker.y() - 1);
-    settingsWriter.addConfigItem("xOffset", offset.x());
-    settingsWriter.addConfigItem("yOffset", offset.y());
-    */
-}
-
-bool Doc::saveOdfHelper(SavingContext &documentContext, SaveFlag saveFlag, QString *plainText)
+bool Doc::saveOdf(SavingContext &documentContext)
 {
     /* don't pull focus away from the editor if this is just a background
        autosave */
@@ -608,7 +577,5 @@ bool Doc::saveOdfHelper(SavingContext &documentContext, SaveFlag saveFlag, QStri
         emit closeEditor(true);
     }
 
-    return DocBase::saveOdfHelper(documentContext, saveFlag, plainText);
+    return DocBase::saveOdf(documentContext);
 }
-
-#include "Doc.moc"

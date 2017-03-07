@@ -19,7 +19,7 @@
 
 #include "CellEditor.h"
 
-// KSpread
+// Sheets
 #include "ApplicationSettings.h"
 #include "CellToolBase.h"
 #include "Formula.h"
@@ -36,13 +36,13 @@
 #include "Map.h"
 #include "Value.h"
 #include "CellStorage.h"
+#include "SheetsDebug.h"
 
 // Calligra
 #include <KoDpi.h>
 #include <KoUnit.h>
 #include <KoViewConverter.h>
-// KDE
-#include <kdebug.h>
+// KF5
 #include <ktextedit.h>
 
 // Qt
@@ -50,7 +50,6 @@
 #include <QKeyEvent>
 #include <QCompleter>
 #include <QAbstractItemView>
-#include <QtDebug>
 #include <QStringListModel>
 #include <QScrollBar>
 #include <QList>
@@ -90,7 +89,7 @@ void CellEditor::Private::updateActiveSubRegion(const Tokens &tokens)
     }
 
     const int cursorPosition = textEdit->textCursor().position() - 1; // without '='
-    kDebug() << "cursorPosition:" << cursorPosition << "textLength:" << textEdit->toPlainText().length() - 1;
+    debugSheets << "cursorPosition:" << cursorPosition << "textLength:" << textEdit->toPlainText().length() - 1;
 
     uint rangeCounter = 0; // counts the ranges in the sub-region
     uint currentRange = 0; // range index denoting the current range
@@ -234,7 +233,7 @@ void CellEditor::Private::updateActiveSubRegion(const Tokens &tokens)
     }
 
     const int regionLength = regionEnd - regionStart + 1;
-    kDebug() << "currentRange:" << currentRange << "regionStart:" << regionStart
+    debugSheets << "currentRange:" << currentRange << "regionStart:" << regionStart
     << "regionEnd:" << regionEnd << "regionLength:" << regionLength;
 
     selection->setActiveSubRegion(regionStart, regionLength, currentRange);
@@ -249,7 +248,7 @@ CellEditor::CellEditor(CellToolBase *cellTool,QHash<int,QString> &wordList, QWid
     d->selection = cellTool->selection();
     d->textEdit = this;
     d->globalCursorPos = QPoint();
-    d->captureAllKeyEvents = d->selection->activeSheet()->map()->settings()->captureAllArrowKeys();
+    d->captureAllKeyEvents = false;
     d->selectionChangedLocked = false;
     d->currentToken = 0;
     d->wordCollection = &wordList;
@@ -305,6 +304,16 @@ Selection* CellEditor::selection() const
 QPoint CellEditor::globalCursorPosition() const
 {
     return d->globalCursorPos;
+}
+
+bool CellEditor::captureArrowKeys() const
+{
+    return d->captureAllKeyEvents;
+}
+
+void CellEditor::setCaptureArrowKeys(bool capture)
+{
+    d->captureAllKeyEvents = capture;
 }
 
 //AutoCompletion Functions
@@ -452,7 +461,7 @@ void CellEditor::setEditorFont(QFont const & font, bool updateSize, const KoView
     }
 }
 
-void CellEditor::slotCompletionModeChanged(KGlobalSettings::Completion _completion)
+void CellEditor::slotCompletionModeChanged(KCompletion::CompletionMode _completion)
 {
     selection()->activeSheet()->map()->settings()->setCompletionMode(_completion);
 }
@@ -696,7 +705,7 @@ void CellEditor::focusInEvent(QFocusEvent *event)
      KTextEdit::focusInEvent(event);
     // If the focussing is user induced.
     if (event->reason() != Qt::OtherFocusReason) {
-        kDebug() << "induced by user";
+        debugSheets << "induced by user";
         d->cellTool->setLastEditorWithFocus(CellToolBase::EmbeddedEditor);
     }
     KTextEdit::focusInEvent(event);
@@ -899,5 +908,3 @@ void CellEditor::setActiveSubRegion(int index)
         }
     }
 }
-
-#include "CellEditor.moc"

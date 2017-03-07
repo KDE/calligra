@@ -22,11 +22,13 @@
  */
 
 #include "KWOdfLoader.h"
+
 #include "KWOdfSharedLoadingData.h"
 #include "KWDocument.h"
 #include "KWPage.h"
 #include "KWPageManager.h"
 #include "frames/KWTextFrameSet.h"
+#include "WordsDebug.h"
 
 // calligra
 #include <KoOdfStylesReader.h>
@@ -45,17 +47,15 @@
 #include <KoProgressUpdater.h>
 #include <KoVariableManager.h>
 #include <KoInlineTextObjectManager.h>
-#include <KoApplication.h>
-#include <KoSectionManager.h>
 #include <KoUnit.h>
+#include <KoSectionModel.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>
 #endif
 
-// KDE + Qt includes
+// Qt includes
 #include <QTextCursor>
-#include <kdebug.h>
 
 #include <KoDocumentRdfBase.h>
 
@@ -78,7 +78,7 @@ KWDocument *KWOdfLoader::document() const
 //1.6: KWDocument::loadOasis
 bool KWOdfLoader::load(KoOdfReadStore &odfStore)
 {
-    //kDebug(32001) << "========================> KWOdfLoader::load START";
+    //debugWords << "========================> KWOdfLoader::load START";
 
     QPointer<KoUpdater> updater;
     QPointer<KoUpdater> loadUpdater;
@@ -92,14 +92,14 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     KoXmlElement content = odfStore.contentDoc().documentElement();
     KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
     if (realBody.isNull()) {
-        kError(32001) << "No office:body found!" << endl;
+        errorWords << "No office:body found!" << endl;
         m_document->setErrorMessage(i18n("Invalid OASIS OpenDocument file. No office:body tag found."));
         return false;
     }
 
     KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "text");
     if (body.isNull()) {
-        kError(32001) << "No office:text found!" << endl;
+        errorWords << "No office:text found!" << endl;
         KoXmlElement childElem;
         QString localName;
         forEachElement(childElem, realBody)
@@ -121,7 +121,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
 
     if (updater) updater->setProgress(20);
 
-    KoOdfLoadingContext odfContext(odfStore.styles(), odfStore.store(), QLatin1String("words/styles/"));
+    KoOdfLoadingContext odfContext(odfStore.styles(), odfStore.store(), QLatin1String("calligrawords/styles/"));
     KoShapeLoadingContext sc(odfContext, m_document->resourceManager());
     sc.setDocumentRdf(m_document->documentRdf());
 
@@ -217,7 +217,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     mainFs->setPageStyle(m_document->pageManager()->pageStyle("Standard"));
     m_document->addFrameSet(mainFs);
     textShapeData.setDocument(mainFs->document(), false);
-    sc.setSectionManager(new KoSectionManager(mainFs->document()));
+    sc.setSectionModel(new KoSectionModel(mainFs->document()));
 
     // disable the undo recording during load so the kotexteditor is in sync with
     // the app's undostack
@@ -269,7 +269,7 @@ void KWOdfLoader::loadSettings(const KoXmlDocument &settingsDoc, QTextDocument *
     if (settingsDoc.isNull())
         return;
 
-    kDebug(32001) << "KWOdfLoader::loadSettings";
+    debugWords << "KWOdfLoader::loadSettings";
     KoOasisSettings settings(settingsDoc);
     KoOasisSettings::Items viewSettings = settings.itemSet("ooo:view-settings");
     if (!viewSettings.isNull()) {
@@ -279,7 +279,7 @@ void KWOdfLoader::loadSettings(const KoXmlDocument &settingsDoc, QTextDocument *
     KoOasisSettings::Items configurationSettings = settings.itemSet("ooo:configuration-settings");
     if (!configurationSettings.isNull()) {
         const QString ignorelist = configurationSettings.parseConfigItemString("SpellCheckerIgnoreList");
-        kDebug(32001) << "Ignorelist:" << ignorelist;
+        debugWords << "Ignorelist:" << ignorelist;
 
         KoTextDocument(textDoc).setRelativeTabs(configurationSettings.parseConfigItemBool("TabsRelativeToIndent", true));
 
@@ -290,8 +290,8 @@ void KWOdfLoader::loadSettings(const KoXmlDocument &settingsDoc, QTextDocument *
 
 void KWOdfLoader::loadMasterPageStyles(KoShapeLoadingContext &context)
 {
-    kDebug(32001) << " !!!!!!!!!!!!!! loadMasterPageStyles called !!!!!!!!!!!!!!";
-    kDebug(32001) << "Number of items :" << context.odfLoadingContext().stylesReader().masterPages().size();
+    debugWords << " !!!!!!!!!!!!!! loadMasterPageStyles called !!!!!!!!!!!!!!";
+    debugWords << "Number of items :" << context.odfLoadingContext().stylesReader().masterPages().size();
 
     //TODO probably we should introduce more logic to handle the "standard" even
     //in faulty documents. See also bugreport #129585 as example.
@@ -327,7 +327,7 @@ void KWOdfLoader::loadHeaderFooterFrame(KoShapeLoadingContext &context, const KW
     fs->setPageStyle(pageStyle);
     m_document->addFrameSet(fs);
 
-    kDebug(32001) << "KWOdfLoader::loadHeaderFooterFrame localName=" << elem.localName() << " type=" << fs->name();
+    debugWords << "KWOdfLoader::loadHeaderFooterFrame localName=" << elem.localName() << " type=" << fs->name();
 
     // use auto-styles from styles.xml, not those from content.xml
     context.odfLoadingContext().setUseStylesAutoStyles(true);
@@ -348,18 +348,18 @@ void KWOdfLoader::loadHeaderFooterFrame(KoShapeLoadingContext &context, const KW
 
 //1.6: KWOasisLoader::loadOasisHeaderFooter
 void KWOdfLoader::loadHeaderFooter(KoShapeLoadingContext &context, KWPageStyle &pageStyle,
-				   const KoXmlElement &masterPage, HFLoadType headerFooter)
+                                   const KoXmlElement &masterPage, HFLoadType headerFooter)
 {
     // The actual content of the header/footer.
     KoXmlElement elem = KoXml::namedItemNS(masterPage, KoXmlNS::style,
-					   headerFooter == LoadHeader ? "header" : "footer");
+                                           headerFooter == LoadHeader ? "header" : "footer");
 
     // The two additional elements <style:header-left> and <style:footer-left>
     // specifies if defined that even and odd pages should be displayed
     // different. If they are missing, the content of odd and even (aka left
     // and right) pages are the same.
     KoXmlElement leftElem = KoXml::namedItemNS(masterPage, KoXmlNS::style,
-					       headerFooter == LoadHeader ? "header-left" : "footer-left");
+                                               headerFooter == LoadHeader ? "header-left" : "footer-left");
 
     // Used in KWPageStyle to determine if, and what kind of header/footer to use.
     Words::HeaderFooterType hfType = elem.isNull() ? Words::HFTypeNone
@@ -369,15 +369,15 @@ void KWOdfLoader::loadHeaderFooter(KoShapeLoadingContext &context, KWPageStyle &
     // header-left and footer-left
     if (! leftElem.isNull()) {
         loadHeaderFooterFrame(context, pageStyle, leftElem,
-			      headerFooter == LoadHeader ? Words::EvenPagesHeaderTextFrameSet
-			                                 : Words::EvenPagesFooterTextFrameSet);
+                              headerFooter == LoadHeader ? Words::EvenPagesHeaderTextFrameSet
+                                                         : Words::EvenPagesFooterTextFrameSet);
     }
 
     // header and footer
     if (! elem.isNull()) {
         loadHeaderFooterFrame(context, pageStyle, elem,
-			      headerFooter == LoadHeader ? Words::OddPagesHeaderTextFrameSet
-			                                 : Words::OddPagesFooterTextFrameSet);
+                              headerFooter == LoadHeader ? Words::OddPagesHeaderTextFrameSet
+                                                         : Words::OddPagesFooterTextFrameSet);
     }
 
     if (headerFooter == LoadHeader) {

@@ -59,18 +59,11 @@
 # TODO: some products have multiple optional requirements, but need at least one.
 # See APP_CONVERTER, FILEMANAGER_*
 
-# 3rd-party libs
-calligra_define_product(LIB_KDGANTT "libkdgantt")
-calligra_define_product(LIB_KDCHART "libkdchart")
-
 # building tools
 calligra_define_product(BUILDTOOL_RNG2CPP "rng2cpp")
 
 # Calligra-independent utility libs
 calligra_define_product(LIB_KOVECTORIMAGE "libkovectorimage")
-calligra_define_product(LIB_KOPROPERTY "libkoproperty")
-calligra_define_product(LIB_CALLIGRADB "libcalligradb")
-calligra_define_product(LIB_KOREPORT "libkoreport"  REQUIRES LIB_KOPROPERTY LIB_CALLIGRADB)
 
 # calligra libs
 calligra_define_product(LIB_CALLIGRA "Calligra core libs"  REQUIRES BUILDTOOL_RNG2CPP)
@@ -82,8 +75,8 @@ calligra_define_product(LIB_MSO "libmso"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(LIB_KOMSOOXML "libkomsooxml"  REQUIRES LIB_CALLIGRA LIB_KOODF2 LIB_KOMAIN)
 
 # features
-calligra_define_feature(FEATURE_SCRIPTING "Scripting feature") # TODO
-calligra_define_feature(FEATURE_RDF "RDF feature")
+calligra_define_feature(FEATURE_SCRIPTING  UNMAINTAINED  "Scripting feature")
+calligra_define_feature(FEATURE_RDF  UNMAINTAINED "RDF feature")
 
 # plugins
 calligra_define_product(PLUGIN_TEXTSHAPE "Text shape plugin"  REQUIRES LIB_CALLIGRA)
@@ -92,52 +85,54 @@ calligra_define_product(PLUGIN_TEXTSHAPE "Text shape plugin"  REQUIRES LIB_CALLI
 calligra_define_product(PART_WORDS "Words engine"  REQUIRES LIB_CALLIGRA LIB_KOMAIN PLUGIN_TEXTSHAPE)
 calligra_define_product(PART_STAGE "Stage engine"  REQUIRES LIB_CALLIGRA LIB_KOMAIN LIB_KOPAGEAPP)
 calligra_define_product(PART_SHEETS "Sheets engine"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
-calligra_define_product(PART_QTQUICK "QtQuick Plugin that provides Calligra components" REQUIRES PART_WORDS PART_STAGE)# SHEETS_PART)
+calligra_define_product(PART_QTQUICK "QtQuick Plugin that provides Calligra components"  REQUIRES PART_WORDS PART_STAGE)# SHEETS_PART)
+calligra_define_product(PART_COMPONENTS "QtQuick2 Plugin that provides Calligra components"  REQUIRES PART_WORDS PART_STAGE PART_SHEETS)
 
 # apps
 calligra_define_product(APP_WORDS "Words app (for Desktop)"  REQUIRES PART_WORDS)
-calligra_define_product(APP_STAGE "Stage app (for Desktop)"  REQUIRES PART_STAGE)
-calligra_define_product(APP_SHEETS "Sheets app (for Desktop)"  REQUIRES PART_SHEETS)
-calligra_define_product(APP_AUTHOR "Author app (for Desktop)"  REQUIRES PART_WORDS)
+calligra_define_product(APP_STAGE "Stage app (for Desktop)"  UNMAINTAINED   REQUIRES PART_STAGE)
+calligra_define_product(APP_SHEETS "Sheets app (for Desktop)" REQUIRES PART_SHEETS)
 calligra_define_product(APP_KARBON "Karbon app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
-calligra_define_product(APP_KRITA "Krita app (for Desktop)"  REQUIRES LIB_CALLIGRA)
-calligra_define_product(APP_KEXI "Kexi app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOREPORT LIB_CALLIGRADB)
-calligra_define_product(APP_FLOW "Flow app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOMAIN LIB_KOPAGEAPP)
-calligra_define_product(APP_PLAN "Plan app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOMAIN LIB_KOREPORT LIB_KDCHART LIB_KDGANTT)
-calligra_define_product(APP_BRAINDUMP "Braindump app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
-calligra_define_product(APP_GEMINI "The Calligra Gemini application" REQUIRES PART_QTQUICK)
+calligra_define_product(APP_FLOW "Flow app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOMAIN LIB_KOPAGEAPP)
+calligra_define_product(APP_PLAN "Plan app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
+calligra_define_product(APP_BRAINDUMP "Braindump app (for Desktop)"  UNMAINTAINED  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
+calligra_define_product(DOC "Calligra Documentations" STAGING)
+
+# staging apps
+calligra_define_product(APP_GEMINI "The Calligra Gemini application"  STAGING REQUIRES PART_QTQUICK PART_COMPONENTS)
 # TODO: this needs to be split up by app products
-calligra_define_product(DOC "Calligra Documentations")
+
 
 # extras
-calligra_define_product(APP_CONVERTER "Format converter for commandline"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
+calligra_define_product(APP_CONVERTER "Format converter for commandline" REQUIRES LIB_CALLIGRA LIB_KOMAIN)
 calligra_define_product(FILEMANAGER_PROPERTIES "Plugin for the KDE file properties dialog"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(FILEMANAGER_THUMBNAIL "Plugins for KDE filesystem thumbnailing"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
 calligra_define_product(FILEMANAGER_QUICKPRINT "Plugin for the filemanager adding a \"Print\" action")
 calligra_define_product(FILEMANAGER_TEMPLATES "File templates for filemanager")
 calligra_define_product(OKULAR_GENERATOR_ODP "Plugin for Okular adding support for ODP"  REQUIRES PART_STAGE)
-calligra_define_product(OKULAR_GENERATOR_ODT "Plugin for Okular adding support for ODT" REQUIRES PART_WORDS)
+calligra_define_product(OKULAR_GENERATOR_ODT "Plugin for Okular adding support for ODT"  REQUIRES PART_WORDS)
 
 # more plugins
 calligra_define_product(PLUGIN_COLORENGINES "Colorengine plugins"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_MUSICSHAPE "Music shape plugin"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_SPACENAVIGATOR "SpaceNavigator input plugin"  REQUIRES LIB_CALLIGRA)
-calligra_define_product(PLUGIN_ARTISTICTEXTSHAPE "Artistic shape plugin"  REQUIRES LIB_CALLIGRA)
-calligra_define_product(PLUGIN_DOCKERS "Default dockers plugin"  REQUIRES LIB_CALLIGRA)
+calligra_define_product(PLUGIN_ARTISTICTEXTSHAPE "Artistic shape plugin" REQUIRES LIB_CALLIGRA)
+calligra_define_product(PLUGIN_DOCKERS "Default dockers plugin" REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_TEXTEDITING "Textediting plugins"  REQUIRES LIB_CALLIGRA)
-calligra_define_product(PLUGIN_KEXI_SPREADSHEETMIGRATION "Import from ODS plugin for Kexi"  REQUIRES APP_KEXI PART_SHEETS)
-calligra_define_product(PLUGIN_DEFAULTTOOLS "Default Flake tools plugin"  REQUIRES LIB_CALLIGRA)
-calligra_define_product(PLUGIN_PATHSHAPES "Path shape plugins"  REQUIRES LIB_CALLIGRA)
+calligra_define_product(PLUGIN_DEFAULTTOOLS "Default Flake tools plugin" REQUIRES LIB_CALLIGRA)
+calligra_define_product(PLUGIN_PATHSHAPES "Path shape plugins" REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_VARIABLES "Text variables plugin"  REQUIRES LIB_CALLIGRA)
-calligra_define_product(PLUGIN_CHARTSHAPE "Chart shape plugin"  REQUIRES LIB_CALLIGRA LIB_KOMAIN LIB_KDCHART)
-calligra_define_product(PLUGIN_PICTURESHAPE "Picture shape plugin"  REQUIRES LIB_CALLIGRA)
-calligra_define_product(PLUGIN_PLUGINSHAPE "Plugin shape plugin"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
+calligra_define_product(PLUGIN_CHARTSHAPE "Chart shape plugin"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
+calligra_define_product(PLUGIN_PICTURESHAPE "Picture shape plugin" REQUIRES LIB_CALLIGRA)
+calligra_define_product(PLUGIN_PLUGINSHAPE "Plugin shape plugin" REQUIRES LIB_CALLIGRA LIB_KOMAIN)
 calligra_define_product(PLUGIN_FORMULASHAPE "Formula shape plugin"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
-calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligra"  REQUIRES LIB_CALLIGRA)
+calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligra" REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_VECTORSHAPE "Vectorgraphic shape plugin"  REQUIRES LIB_CALLIGRA LIB_KOVECTORIMAGE)
-calligra_define_product(PLUGIN_REPORTING "Renderer plugins for libkoreport"  REQUIRES LIB_KOREPORT LIB_KDCHART)
-calligra_define_product(PLUGIN_SEMANTICITEMS "Semantic items plugins"  REQUIRES FEATURE_RDF LIB_CALLIGRA)
-calligra_define_product(PLUGIN_CALLIGRAGEMINI_GIT "Git support plugin for Calligra Gemini")
+calligra_define_product(PLUGIN_SEMANTICITEMS "Semantic items plugins" REQUIRES FEATURE_RDF LIB_CALLIGRA)
+calligra_define_product(PLUGIN_SHAPEFILTEREFFECTS "Default shape filtereffects plugin" REQUIRES LIB_CALLIGRA)
+calligra_define_product(PLUGIN_STENCILSDOCKER "Stencils docker plugin" REQUIRES LIB_CALLIGRA)
+calligra_define_product(PLUGIN_KARBONPLUGINS "Semantic items plugins" REQUIRES LIB_CALLIGRA)
+calligra_define_product(PLUGIN_CALLIGRAGEMINI_GIT "Git support plugin for Calligra Gemini" UNPORTED)
 
 # staging plugins
 calligra_define_product(PLUGIN_THREEDSHAPE "3D shape plugin"  STAGING  REQUIRES LIB_CALLIGRA)
@@ -147,7 +142,7 @@ calligra_define_product(FILTER_XLSX_TO_ODS "XLSX to ODS filter"  REQUIRES LIB_KO
 calligra_define_product(FILTER_XLS_TO_SHEETS "Sheets XLS import filter"  REQUIRES LIB_MSO LIB_KOMSOOXML PART_SHEETS)
 calligra_define_product(FILTER_SHEETS_TO_XLS "Sheets XLS export filter"  REQUIRES LIB_MSO LIB_KOMSOOXML PART_SHEETS)
 calligra_define_product(FILTER_CSV_TO_SHEETS "Sheets CSV import filter"  REQUIRES PART_SHEETS)
-calligra_define_product(FILTER_SHEETS_TO_CSV "Sheets CSV export filter"  REQUIRES PART_SHEETS)
+calligra_define_product(FILTER_SHEETS_TO_CSV "Sheets CSV export filter"  REQUIRES  PART_SHEETS)
 calligra_define_product(FILTER_APPLIXSPREAD_TO_KSPREAD "Applix Spreadsheet to KSpread filter"  REQUIRES PART_SHEETS)
 calligra_define_product(FILTER_DBASE_TO_KSPREAD "dBASE to KSpread filter"  REQUIRES LIB_KOMAIN)
 calligra_define_product(FILTER_GNUMERIC_TO_SHEETS "Sheets GNUMERIC import filter"  REQUIRES PART_SHEETS)
@@ -161,7 +156,7 @@ calligra_define_product(FILTER_KSPREAD_TO_LATEX "KSpread to LaTeX filter"  REQUI
 
 # Flow filters
 calligra_define_product(FILTER_VISIO_TO_ODG "Visio to ODG filter"  REQUIRES LIB_KOMAIN)
-calligra_define_product(FILTER_WPG_TO_ODG "WPG to ODG filter"  REQUIRES LIB_KOMAIN)
+calligra_define_product(FILTER_WPG_TO_ODG "WPG to ODG filter" REQUIRES LIB_KOMAIN)
 
 # Stage filters
 calligra_define_product(FILTER_KEY_TO_ODP "Apple Keynote to ODP filter"  REQUIRES LIB_KOMAIN)
@@ -172,20 +167,17 @@ calligra_define_product(FILTER_PPTX_TO_ODP "PPTX to ODP filter"  REQUIRES LIB_KO
 # Words filters
 calligra_define_product(FILTER_DOC_TO_ODT "DOC to ODT filter"  REQUIRES LIB_MSO LIB_KOMSOOXML LIB_KOMAIN)
 calligra_define_product(FILTER_DOCX_TO_ODT "DOCX to ODT filter"  REQUIRES LIB_KOMSOOXML LIB_KOODF2 LIB_KOMAIN)
-calligra_define_product(FILTER_ODT_TO_DOCX "ODT to DOCX filter"  REQUIRES LIB_KOODFREADER LIB_KOODF2 LIB_KOMAIN)
+calligra_define_product(FILTER_ODT_TO_DOCX "ODT to DOCX filter" REQUIRES LIB_KOODFREADER LIB_KOODF2 LIB_KOMAIN)
 calligra_define_product(FILTER_WORDPERFECT_TO_ODT "Word Perfect to ODT filter"  REQUIRES LIB_KOMAIN)
 calligra_define_product(FILTER_WORKS_TO_ODT "MS Works to ODT filter"  REQUIRES LIB_KOMAIN)
 calligra_define_product(FILTER_APPLIXWORD_TO_ODT "Applixword to ODT filter"  REQUIRES LIB_KOMAIN)
 calligra_define_product(FILTER_ASCII_TO_WORDS "Words ASCII import filter"  REQUIRES PART_WORDS LIB_KOODF2 LIB_KOMAIN)
-calligra_define_product(FILTER_ODT_TO_ASCII "ODT to ASCII filter"  REQUIRES LIB_KOODFREADER LIB_KOMAIN)
+calligra_define_product(FILTER_ODT_TO_ASCII "ODT to ASCII filter" REQUIRES LIB_KOODFREADER LIB_KOMAIN)
 calligra_define_product(FILTER_RTF_TO_ODT "RTF to ODT filter"  REQUIRES LIB_KOMAIN)
-calligra_define_product(FILTER_ODT_TO_MOBI "Mobi export filter"  REQUIRES LIB_KOMAIN)
-calligra_define_product(FILTER_ODT_TO_EPUB2 "ODT Epub2 export filter"  REQUIRES LIB_KOVECTORIMAGE LIB_KOMAIN)
-calligra_define_product(FILTER_ODT_TO_HTML "ODT HTML export filter"  REQUIRES LIB_KOVECTORIMAGE LIB_KOMAIN)
-calligra_define_product(FILTER_ODT_TO_WIKI "ODT Wiki export filter"  REQUIRES LIB_KOODFREADER LIB_KOODF2 LIB_KOMAIN)
-
-# Plan filters
-calligra_define_product(FILTER_MPXJ_IMPORT "MS Project import filter"  REQUIRES APP_PLAN)
+calligra_define_product(FILTER_ODT_TO_MOBI "Mobi export filter" REQUIRES LIB_KOMAIN)
+calligra_define_product(FILTER_ODT_TO_EPUB2 "ODT Epub2 export filter" REQUIRES LIB_KOVECTORIMAGE LIB_KOMAIN)
+calligra_define_product(FILTER_ODT_TO_HTML "ODT HTML export filter" REQUIRES LIB_KOVECTORIMAGE LIB_KOMAIN)
+calligra_define_product(FILTER_ODT_TO_WIKI "ODT Wiki export filter" REQUIRES LIB_KOODFREADER LIB_KOODF2 LIB_KOMAIN)
 
 # Karbon filters
 calligra_define_product(FILTER_EPS_TO_SVG_AI "EPS to SVG/AI filter"  REQUIRES LIB_KOMAIN)
@@ -195,25 +187,27 @@ calligra_define_product(FILTER_WPG_TO_SVG "WPG to SVG filter"  REQUIRES LIB_KOMA
 calligra_define_product(FILTER_KARBON_TO_IMAGE "Karbon image export filter"  REQUIRES APP_KARBON)
 calligra_define_product(FILTER_KARBON_TO_SVG "Karbon SVG export filter"  REQUIRES APP_KARBON)
 calligra_define_product(FILTER_SVG_TO_KARBON "Karbon SVG import filter"  REQUIRES APP_KARBON)
-calligra_define_product(FILTER_KARBON_TO_WMF "Karbon WMF export filter"  REQUIRES APP_KARBON)
+calligra_define_product(FILTER_KARBON_TO_WMF "Karbon WMF export filter" REQUIRES APP_KARBON)
 calligra_define_product(FILTER_WMF_TO_SVG "WMF to SVG filter"  REQUIRES LIB_KOVECTORIMAGE LIB_KOMAIN)
 calligra_define_product(FILTER_KARBON1X_TO_KARBON "Karbon 1.x import filter"  REQUIRES APP_KARBON)
 
 # meta apps
-calligra_define_product(APP_ACTIVE "Calligra Active app"  REQUIRES PART_SHEETS PART_STAGE PART_WORDS)
 calligra_define_product(APP_CALLIGRA "General Calligra app starter"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
 
 # more extras
 calligra_define_product(OKULAR_GENERATOR_PPT "Plugin for Okular extended with support for PPT"  REQUIRES OKULAR_GENERATOR_ODP FILTER_PPT_TO_ODP)
 calligra_define_product(OKULAR_GENERATOR_PPTX "Plugin for Okular extended with support for PPTX"  REQUIRES OKULAR_GENERATOR_ODP FILTER_PPTX_TO_ODP)
-calligra_define_product(OKULAR_GENERATOR_DOC "Plugin for Okular extended with support for DOC" REQUIRES OKULAR_GENERATOR_ODT FILTER_DOC_TO_ODT)
-calligra_define_product(OKULAR_GENERATOR_DOCX "Plugin for Okular extended with support for DOCX" REQUIRES OKULAR_GENERATOR_ODT FILTER_DOCX_TO_ODT)
-calligra_define_product(OKULAR_GENERATOR_WORDPERFECT "Plugin for Okular extended with support for WORDPERFECT" REQUIRES OKULAR_GENERATOR_ODT FILTER_WORDPERFECT_TO_ODT)
+calligra_define_product(OKULAR_GENERATOR_DOC "Plugin for Okular extended with support for DOC"  REQUIRES OKULAR_GENERATOR_ODT FILTER_DOC_TO_ODT)
+calligra_define_product(OKULAR_GENERATOR_DOCX "Plugin for Okular extended with support for DOCX"  REQUIRES OKULAR_GENERATOR_ODT FILTER_DOCX_TO_ODT)
+calligra_define_product(OKULAR_GENERATOR_WORDPERFECT "Plugin for Okular extended with support for WORDPERFECT"  REQUIRES OKULAR_GENERATOR_ODT FILTER_WORDPERFECT_TO_ODT)
 
 # developer utils
+calligra_define_product(APP_SLIDECOMPARE "slidecompare"  REQUIRES LIB_CALLIGRA LIB_KOMAIN FILTER_PPT_TO_ODP)
 calligra_define_product(APP_DEVTOOLS "Tools for developers")
-calligra_define_product(APP_CSTESTER "cstester"  REQUIRES PART_SHEETS PART_STAGE PART_WORDS)
+calligra_define_product(APP_CSTESTER "cstester" REQUIRES PART_SHEETS PART_STAGE PART_WORDS)
 
+# development
+calligra_define_product(DEVEL_HEADERS "Headers of libraries"  UNPORTED)
 
 #############################################
 ####      Product set definitions        ####
@@ -297,10 +291,6 @@ calligra_define_productset(FILTERS_WORDS "All Words filters"
         FILTERS_WORDS_IMPORT
         FILTERS_WORDS_EXPORT
 )
-calligra_define_productset(FILTERS_PLAN "All Plan filters"
-    OPTIONAL
-        FILTER_MPXJ_IMPORT
-)
 calligra_define_productset(FILTERS_KARBON_IMPORT "All Karbon import filters"
     OPTIONAL
         FILTER_EPS_TO_SVG_AI
@@ -333,54 +323,6 @@ calligra_define_productset(FILEMANAGER "Extensions for the filemanager"
 )
 
 # apps
-calligra_define_productset(ACTIVE "Full Calligra Active"
-    REQUIRES
-        APP_ACTIVE
-    OPTIONAL
-        # extras
-        FILEMANAGER_PROPERTIES
-        FILEMANAGER_THUMBNAIL
-        # plugins
-        PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_CHARTSHAPE
-        PLUGIN_DEFAULTTOOLS
-        PLUGIN_FORMULASHAPE
-        PLUGIN_PATHSHAPES
-        PLUGIN_PICTURESHAPE
-        PLUGIN_PLUGINSHAPE
-        PLUGIN_TEXTEDITING
-        PLUGIN_TEXTSHAPE
-        PLUGIN_VARIABLES
-        PLUGIN_VECTORSHAPE
-        PLUGIN_VIDEOSHAPE
-        # filters
-        FILTERS_SHEETS_IMPORT
-        FILTERS_STAGE_IMPORT
-        FILTERS_WORDS_IMPORT
-)
-calligra_define_productset(AUTHOR "Full Author (for Desktop)"
-    REQUIRES
-        APP_AUTHOR
-    OPTIONAL
-        # extras
-        FILEMANAGER
-        # plugins
-        PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_CHARTSHAPE
-        PLUGIN_DEFAULTTOOLS
-        PLUGIN_DOCKERS
-        PLUGIN_FORMULASHAPE
-        PLUGIN_PATHSHAPES
-        PLUGIN_PICTURESHAPE
-        PLUGIN_PLUGINSHAPE
-        PLUGIN_TEXTEDITING
-        PLUGIN_TEXTSHAPE
-        PLUGIN_SEMANTICITEMS
-        PLUGIN_VARIABLES
-        PLUGIN_VECTORSHAPE
-        # filters
-        FILTERS_WORDS
-)
 calligra_define_productset(BRAINDUMP "Full Braindump (for Desktop)"
     REQUIRES
         APP_BRAINDUMP
@@ -427,6 +369,9 @@ calligra_define_productset(FLOW "Full Flow (for Desktop)"
 calligra_define_productset(KARBON "Full Karbon (for Desktop)"
     REQUIRES
         APP_KARBON
+        PLUGIN_KARBONPLUGINS
+        PLUGIN_STENCILSDOCKER
+        PLUGIN_SHAPEFILTEREFFECTS
     OPTIONAL
         # extras
         FILEMANAGER
@@ -446,39 +391,11 @@ calligra_define_productset(KARBON "Full Karbon (for Desktop)"
         # filters
         FILTERS_KARBON
 )
-calligra_define_productset(KEXI "Full Kexi (for Desktop)"
-    REQUIRES
-        APP_KEXI
-    OPTIONAL
-        FEATURE_SCRIPTING
-        PLUGIN_KEXI_SPREADSHEETMIGRATION
-        PLUGIN_REPORTING
-)
-calligra_define_productset(KRITA "Full Krita"
-    REQUIRES
-        APP_KRITA
-    OPTIONAL
-        # extras
-        FILEMANAGER_PROPERTIES
-        FILEMANAGER_QUICKPRINT
-        # plugins
-        PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_COLORENGINES
-        PLUGIN_DEFAULTTOOLS
-        PLUGIN_DOCKERS
-        PLUGIN_PATHSHAPES
-        PLUGIN_PICTURESHAPE
-        PLUGIN_TEXTEDITING
-        PLUGIN_TEXTSHAPE
-        PLUGIN_SPACENAVIGATOR
-        PLUGIN_VECTORSHAPE
-)
 calligra_define_productset(PLAN "Full Plan (for Desktop)"
     REQUIRES
         APP_PLAN
     OPTIONAL
         FEATURE_SCRIPTING
-        FILTERS_PLAN
 )
 calligra_define_productset(SHEETS "Full Sheets (for Desktop)"
     REQUIRES

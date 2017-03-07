@@ -21,8 +21,6 @@ Copyright 2011 Paul Mendez <paulestebanms@gmail.com>
 #ifndef KOCONTEXTBARBUTTON_H
 #define KOCONTEXTBARBUTTON_H
 
-// KDE
-
 // Qt
 #include <QToolButton>
 #include <QTimeLine>

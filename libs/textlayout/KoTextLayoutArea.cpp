@@ -37,6 +37,7 @@
 #include "KoTextDocumentLayout.h"
 #include "FrameIterator.h"
 #include "KoPointedAt.h"
+#include "KoCharAreaInfo.h"
 
 #include <KoTextDocument.h>
 #include <KoParagraphStyle.h>
@@ -52,7 +53,7 @@
 #include <KoTextSoftPageBreak.h>
 #include <KoInlineTextObjectManager.h>
 
-#include <kdebug.h>
+#include <TextLayoutDebug.h>
 
 #include <QTextFrame>
 #include <QTextTable>
@@ -114,7 +115,6 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
         QTextFrame *subFrame = it.currentFrame();
-        QTextBlockFormat format = block.blockFormat();
 
         if (table) {
             if (tableAreaIndex >= d->tableAreas.size()) {
@@ -166,7 +166,6 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
             if (block == d->startOfArea->it.currentBlock() && line.textStart() < d->startOfArea->lineTextStart) {
                 continue; // this line is part of a previous layoutArea
             }
-            QRectF lineRect = line.naturalTextRect();
             if (point.y() > line.y() + line.height()) {
                 pointedAt.position = block.position() + line.textStart() + line.textLength();
                 if (block == d->endOfArea->it.currentBlock() && line.textStart() + line.textLength() >= d->endOfArea->lineTextStart) {
@@ -178,8 +177,9 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
             if (accuracy == Qt::ExactHit && point.y() < line.y()) { // between lines
                 return KoPointedAt();
             }
+            const QRectF lineRect = line.naturalTextRect();
             if (accuracy == Qt::ExactHit && // left or right of line
-                    (point.x() < line.naturalTextRect().left() || point.x() > line.naturalTextRect().right())) {
+                    (point.x() < lineRect.left() || point.x() > lineRect.right())) {
                 return KoPointedAt();
             }
             if (point.x() > lineRect.x() + lineRect.width() && layout->textOption().textDirection() == Qt::RightToLeft) {
@@ -221,6 +221,94 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
     return pointedAt;
 }
 
+
+QVector<KoCharAreaInfo> KoTextLayoutArea::generateCharAreaInfos() const
+{
+    QVector<KoCharAreaInfo> result;
+    if (d->startOfArea == 0 || d->endOfArea == 0) { // We have not been completely layouted yet
+        debugTextLayout << "called when not completely layouted yet";
+        return result;
+    }
+
+    QTextFrame::iterator it = d->startOfArea->it;
+    QTextFrame::iterator stop = d->endOfArea->it;
+
+    int tableAreaIndex = 0;
+    int tocIndex = 0;
+    for (; it != stop && !it.atEnd(); ++it) {
+       QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
+       if (table) {
+            if (tableAreaIndex >= d->tableAreas.size()) {
+                continue;
+            }
+            result.append(d->tableAreas[tableAreaIndex]->generateCharAreaInfos());
+            ++tableAreaIndex;
+            continue;
+        }
+
+        QTextFrame *subFrame = it.currentFrame();
+        if (subFrame) {
+            if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
+                result.append(d->endNotesArea->generateCharAreaInfos());
+            }
+            continue;
+        }
+
+        QTextBlock block = it.currentBlock();
+        if (!block.isValid()) {
+            continue;
+        }
+
+        if (block.blockFormat().hasProperty(KoParagraphStyle::GeneratedDocument)) {
+            result.append(d->generatedDocAreas[tocIndex]->generateCharAreaInfos());
+            ++tocIndex;
+            continue;
+        }
+
+        // TODO: also include header/paragraph numbering/bullet points
+        QTextLayout *layout = block.layout();
+
+        for (int i = 0; i < layout->lineCount(); ++i) {
+            QTextLine line = layout->lineAt(i);
+            if (block == d->startOfArea->it.currentBlock() && line.textStart() < d->startOfArea->lineTextStart) {
+                continue; // this line is part of a previous layoutArea
+            }
+            if (block == d->endOfArea->it.currentBlock() && line.textStart() + line.textLength() >= d->endOfArea->lineTextStart) {
+                break; // this and following lines are part of a next layoutArea
+            }
+            qreal xLeading;
+            qreal xTrailing;
+            for (int j = line.textStart(); j < line.textStart() + line.textLength(); ++j) {
+                // TODO: support RTL
+                xLeading = line.cursorToX(j, QTextLine::Leading);
+                xTrailing = line.cursorToX(j, QTextLine::Trailing);
+                QRectF rect(xLeading, line.y(), xTrailing-xLeading, line.height()); // TODO: at least height needs more work
+                result.append(KoCharAreaInfo(rect, block.text()[j]));
+            }
+
+            // TODO: perhaps only at end of paragraph (last qtextline) add linebreak, for in-paragraph linebreak
+            // use real whitespace(s) found in original text (or see if forced linebreak)
+            QRectF rect(xTrailing, line.y(), 1, line.height()); // TODO: better dummy width needed, with reasoning
+            result.append(KoCharAreaInfo(rect, QLatin1Char('\n')));
+        }
+    }
+
+    qreal footNoteYOffset = bottom() - d->footNotesHeight;
+    foreach(KoTextLayoutNoteArea *footerArea, d->footNoteAreas) {
+        QVector<KoCharAreaInfo> footNoteCharAreaInfos = footerArea->generateCharAreaInfos();
+        QMutableVectorIterator<KoCharAreaInfo> it(footNoteCharAreaInfos);
+        while (it.hasNext()) {
+            KoCharAreaInfo &info = it.next();
+            info.rect.translate(0, footNoteYOffset);
+        }
+        result.append(footNoteCharAreaInfos);
+        footNoteYOffset += footerArea->bottom() - footerArea->top();
+    }
+
+    return result;
+}
+
+
 QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
 {
     QRectF retval(-5E6, top(), 105E6, 0);
@@ -260,7 +348,6 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
         QTextFrame *subFrame = it.currentFrame();
-        QTextBlockFormat format = block.blockFormat();
 
         if (table) {
             if (tableAreaIndex >= d->tableAreas.size()) {
@@ -416,7 +503,11 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     d->blockRects.clear();
     delete d->endNotesArea;
     d->endNotesArea=0;
-    if (d->endOfArea) {
+    if (d->copyEndOfArea && !d->copyEndOfArea->isValid()) {
+        delete d->copyEndOfArea;
+        d->copyEndOfArea = 0;
+    }
+    if (d->endOfArea && d->endOfArea->isValid()) {
         delete d->copyEndOfArea;
         d->copyEndOfArea = new FrameIterator(d->endOfArea);
     }
@@ -651,7 +742,7 @@ QTextLine KoTextLayoutArea::Private::restartLayout(QTextBlock &block, int lineTe
     QTextLayout *layout = block.layout();
     KoTextBlockData blockData(block);
     QPointF stashedCounterPosition = blockData.counterPosition();
-    QList<LineKeeper> stashedLines;
+    QVector<LineKeeper> stashedLines;
     QTextLine line;
     for(int i = 0; i < layout->lineCount(); i++) {
         QTextLine l = layout->lineAt(i);
@@ -671,7 +762,7 @@ QTextLine KoTextLayoutArea::Private::restartLayout(QTextBlock &block, int lineTe
     return recreatePartialLayout(block, stashedLines, stashedCounterPosition, line);
 }
 
-void KoTextLayoutArea::Private::stashRemainingLayout(QTextBlock &block, int lineTextStartOfFirstKeep, QList<LineKeeper> &stashedLines, QPointF &stashedCounterPosition)
+void KoTextLayoutArea::Private::stashRemainingLayout(QTextBlock &block, int lineTextStartOfFirstKeep, QVector<LineKeeper> &stashedLines, QPointF &stashedCounterPosition)
 {
     QTextLayout *layout = block.layout();
     KoTextBlockData blockData(block);
@@ -690,7 +781,7 @@ void KoTextLayoutArea::Private::stashRemainingLayout(QTextBlock &block, int line
     }
 }
 
-QTextLine KoTextLayoutArea::Private::recreatePartialLayout(QTextBlock &block, QList<LineKeeper> stashedLines, QPointF &stashedCounterPosition, QTextLine &line)
+QTextLine KoTextLayoutArea::Private::recreatePartialLayout(QTextBlock &block, const QVector<LineKeeper> &stashedLines, QPointF &stashedCounterPosition, QTextLine &line)
 {
     QTextLayout *layout = block.layout();
     KoTextBlockData blockData(block);
@@ -925,7 +1016,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                         break;
 
                     const qreal adjustment = diff * (f.pointSizeF() / rect.height());
-                    // kDebug() << "adjusting with" << adjustment;
+                    // warnTextLayout << "adjusting with" << adjustment;
                     f.setPointSizeF(f.pointSizeF() + adjustment);
                 }
 
@@ -998,7 +1089,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     //========
     // Tabs
     //========
-    QList<KoText::Tab> tabs = pStyle.tabPositions();
+    const QVector<KoText::Tab> tabs = pStyle.tabPositions();
 
     // Handle tabs relative to startMargin
     qreal tabOffset = -d->indent;
@@ -1142,7 +1233,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     // ==============
     // Possibly store the old layout of lines in case we end up splitting the paragraph at the same position
     // ==============
-    QList<LineKeeper> stashedLines;
+    QVector<LineKeeper> stashedLines;
     QPointF stashedCounterPosition;
     if (lastOfPreviousRun) {
         // we have been layouted before, and the block ended on the following page so better

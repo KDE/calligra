@@ -35,31 +35,22 @@
 #include "KarbonDocument.h"
 #include "KarbonAboutData.h"
 
-#include <kaboutdata.h>
-#include <kiconloader.h>
-#include <kcomponentdata.h>
-#include <klocale.h>
-#include <kstandarddirs.h>
-
-#include <kdebug.h>
-
+#include <KoComponentData.h>
 #include <KoPluginLoader.h>
 
-KComponentData* KarbonFactory::s_instance = 0L;
-KAboutData* KarbonFactory::s_aboutData = 0L;
+#include <kiconloader.h>
 
-KarbonFactory::KarbonFactory(QObject* parent)
-        : KPluginFactory(*aboutData(), parent)
+
+KoComponentData* KarbonFactory::s_global = 0;
+
+KarbonFactory::KarbonFactory()
+    : KPluginFactory()
 {
-    componentData();
+    (void)global();
 }
 
 KarbonFactory::~KarbonFactory()
 {
-    delete s_instance;
-    s_instance = 0L;
-    delete s_aboutData;
-    s_aboutData = 0L;
 }
 
 QObject* KarbonFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args, const QString& keyword)
@@ -73,28 +64,25 @@ QObject* KarbonFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/,
     return part;
 }
 
-KAboutData * KarbonFactory::aboutData()
+const KSharedConfig::Ptr& KarbonFactory::karbonConfig()
 {
-    if (!s_aboutData)
-        s_aboutData = newKarbonAboutData();
-    return s_aboutData;
+    return global().config();
 }
 
-const KComponentData &KarbonFactory::componentData()
+const KoComponentData &KarbonFactory::global()
 {
-    if (!s_instance) {
-        s_instance = new KComponentData(aboutData());
+    if (!s_global) {
+        KAboutData *aboutData = newKarbonAboutData();
+        s_global = new KoComponentData(*aboutData);
+        delete aboutData;
+
         // Add any application-specific resource directories here
 
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");
 
         // Load Karbon specific dockers.
-        KoPluginLoader::instance()->load(QString::fromLatin1("Karbon/Dock"));
+        KoPluginLoader::load(QStringLiteral("karbon/dockers"));
     }
-
-    return *s_instance;
+    return *s_global;
 }
-
-#include "KarbonFactory.moc"
-

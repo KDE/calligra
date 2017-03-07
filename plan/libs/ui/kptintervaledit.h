@@ -25,7 +25,7 @@
 #include "ui_kptintervaleditbase.h"
 #include "kptcalendar.h"
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 namespace KPlato
 {
@@ -67,7 +67,7 @@ public:
 
 };
 
-class KPLATOUI_EXPORT IntervalEditDialog : public KDialog
+class KPLATOUI_EXPORT IntervalEditDialog : public KoDialog
 {
     Q_OBJECT
 public:

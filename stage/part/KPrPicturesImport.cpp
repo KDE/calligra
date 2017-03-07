@@ -27,13 +27,19 @@
 #include <KoPAPage.h>
 #include <KoPAMasterPage.h>
 #include <KoPAPageInsertCommand.h>
+
 #include "KPrDocument.h"
 #include "KPrView.h"
-#include <kdebug.h>
+#include "StageDebug.h"
+
 #include <kio/job.h>
-#include <kfiledialog.h>
 #include <kundo2command.h>
 #include <KoDocumentResourceManager.h>
+
+#include <QFileDialog>
+#include <QUrl>
+#include <QImageReader>
+
 
 KPrPicturesImport::KPrPicturesImport()
 {
@@ -44,7 +50,19 @@ void KPrPicturesImport::import(KPrView *view)
     m_factory = KoShapeRegistry::instance()->value("PictureShape");
     Q_ASSERT(m_factory);
     if (m_factory) {
-        m_urls = KFileDialog::getOpenUrls(KUrl(), "image/png image/jpeg image/gif");
+        // TODO: think about using KoFileDialog everywhere, after extending it to support remote urls
+        QFileDialog *dialog = new QFileDialog();
+        QStringList imageMimeTypes;
+        foreach(const QByteArray &mimeType, QImageReader::supportedMimeTypes()) {
+            imageMimeTypes << QLatin1String(mimeType);
+        }
+        dialog->setMimeTypeFilters(imageMimeTypes);
+        dialog->setFileMode(QFileDialog::ExistingFiles);
+        dialog->setAcceptMode(QFileDialog::AcceptOpen);
+        if (dialog->exec() != QFileDialog::Accepted) {
+            return;
+        }
+        m_urls = dialog->selectedUrls();
 
         // TODO there should be a progress bar
         // instead of the progress bar opening for each loaded picture
@@ -59,7 +77,7 @@ void KPrPicturesImport::import(KPrView *view)
         }
     }
     else {
-        kWarning(33001) << "picture shape factory not found";
+        warnStage << "picture shape factory not found";
     }
 }
 
@@ -71,7 +89,7 @@ void KPrPicturesImport::import()
         // TODO activate first added page doUpdateActivePage(page);
     }
     else {
-        KUrl url(m_urls.takeAt(0));
+        QUrl url(m_urls.takeAt(0));
         // todo calculate the correct size so that the image is centered to
         KIO::StoredTransferJob *job(KIO::storedGet(url, KIO::NoReload, 0));
         connect(job, SIGNAL(result(KJob*)), this, SLOT(pictureImported(KJob*)));
@@ -117,14 +135,12 @@ void KPrPicturesImport::pictureImported(KJob *job)
             }
         }
         else {
-            kWarning(33001) << "imageData not valid";
+            warnStage << "imageData not valid";
             delete shape;
         }
     }
     else {
-        kWarning(33001) << "shape not created";
+        warnStage << "shape not created";
     }
     import();
 }
-
-#include "KPrPicturesImport.moc"

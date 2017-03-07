@@ -16,11 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 1.1
+import QtQuick 2.0
 import "components"
 import "panels"
 import org.calligra 1.0
-import org.calligra.CalligraComponents 0.1 as Calligra
+import org.kde.calligra 1.0 as Calligra
 
 Page {
     id: base;
@@ -136,7 +136,7 @@ Page {
                 anchors.fill: parent;
                 onClicked: {
                     closeToolbarMenus();
-                    if(viewLoader.item.canvas.document.isModified()) {
+                    if(viewLoader.item.canvas.document.document.isModified()) {
                         saveBeforeExitDialog.show();
                     }
                     else {
@@ -404,9 +404,9 @@ Page {
                         mainWindow.desktopKoView.startPresentationFromBeginning();
                     }
                 }
-                Calligra.PresentationModel {
+                Calligra.ContentsModel {
                     id: presentationModel
-                    canvas: viewLoader.item ? viewLoader.item.canvas : null;
+                    document: viewLoader.item ? viewLoader.item.document : null;
                     thumbnailSize: Qt.size(base.width, base.height);
                 }
                 Component { id: presentationDJMode; PresentationDJMode { }}//canvas: viewLoader.item ? viewLoader.item.canvas : null; } }

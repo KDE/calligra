@@ -25,7 +25,9 @@
 #define XLSXXMLCOMMENTSREADER_H
 
 #include "XlsxXmlCommonReader.h"
-#include <MsooXmlThemesReader.h>
+#include <MsooXmlTheme.h>
+
+#include <kdebug.h>
 
 class XlsxComments;
 class XlsxComment

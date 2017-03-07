@@ -32,7 +32,7 @@ public:
     virtual bool loadOdf(const KoXmlElement& element, KoShapeLoadingContext& context);
     virtual void paint(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext);
 
-    void setInitials(QString initials);
+    void setInitials(const QString &initials);
     QString initials();
 
     bool isActive() const;

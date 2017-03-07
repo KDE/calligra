@@ -8,7 +8,7 @@ if (WIN32)
     set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
 endif ()
 
-include_directories( ${PIGMENT_INCLUDES} ${QT_INCLUDES} ${Boost_INCLUDE_DIR})
+include_directories( ${PIGMENT_INCLUDES}  ${Boost_INCLUDE_DIR})
 
 set(FILE_OPENEXR_SOURCES)
 set(LINK_OPENEXR_LIB)
@@ -23,16 +23,22 @@ set(LINK_VC_LIB)
 if(HAVE_VC)
     include_directories(${Vc_INCLUDE_DIR})
     set(LINK_VC_LIB ${Vc_LIBRARIES})
+    kde_enable_exceptions()
     ko_compile_for_all_implementations_no_scalar(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp)
 
     message("Following objects are generated from the per-arch lib")
     message(${__per_arch_factory_objs})
+    # silence warnings for using older Vc API for now, where "the tuple" should be built "with Vc::tie"
+    if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+        add_definitions(-Wno-deprecated-declarations)
+    endif ()
 endif()
 
 add_subdirectory(tests)
 add_subdirectory(benchmarks)
 
 set(pigmentcms_SRCS
+    DebugPigment.cpp
     KoBasicHistogramProducers.cpp
     KoColor.cpp
     KoColorDisplayRendererInterface.cpp
@@ -80,8 +86,8 @@ set(pigmentcms_SRCS
 )
 
 
-set(PIGMENT_INSTALL_FILES 
-        pigment_export.h
+set(PIGMENT_INSTALL_FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/pigment_export.h
         DebugPigment.h
         KoBasicHistogramProducers.h
         KoChannelInfo.h
@@ -125,20 +131,26 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
 endif()
 
-kde4_add_library(pigmentcms SHARED ${pigmentcms_SRCS})
-
-target_link_libraries(
-    pigmentcms
-    koplugin
-    ${EXTRA_LIBRARIES}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QTXML_LIBRARY}
-    ${WIN32_PLATFORM_NET_LIBS}
-    )
-
-target_link_libraries(
-    pigmentcms LINK_INTERFACE_LIBRARIES koplugin ${QT_QTXML_LIBRARY} ${QT_QTGUI_LIBRARY} ${EXTRA_LIBRARIES}
+add_library(pigmentcms SHARED ${pigmentcms_SRCS})
+generate_export_header(pigmentcms
+    BASE_NAME pigment
+    EXPORT_MACRO_NAME PIGMENTCMS_EXPORT
 )
+
+target_link_libraries(pigmentcms
+    PUBLIC
+        KF5::I18n
+        Qt5::Xml
+        Qt5::Gui
+        ${EXTRA_LIBRARIES}
+    PRIVATE
+        koplugin
+        ${WIN32_PLATFORM_NET_LIBS}
+)
+
+if (HAVE_VC AND NOT PACKAGERS_BUILD)
+    set_property(TARGET pigmentcms APPEND PROPERTY COMPILE_OPTIONS "${Vc_ARCHITECTURE_FLAGS}")
+endif()
 
 set_target_properties(pigmentcms PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -146,7 +158,10 @@ set_target_properties(pigmentcms PROPERTIES
 
 install(TARGETS pigmentcms  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install( FILES pigment.desktop pigmentextension.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+# TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
+# pigment.desktop pigmentextension.desktop
 
+if (SHOULD_BUILD_DEVEL_HEADERS)
 install( FILES ${PIGMENT_INSTALL_FILES}
          DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
+endif()

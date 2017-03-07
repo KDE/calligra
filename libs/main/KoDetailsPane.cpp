@@ -22,10 +22,6 @@
 #include <QStandardItemModel>
 #include <QKeyEvent>
 
-#include <kcomponentdata.h>
-#include <kglobalsettings.h>
-
-
 ////////////////////////////////////
 // class KoDetailsPane
 ///////////////////////////////////
@@ -33,22 +29,20 @@
 class KoDetailsPanePrivate
 {
 public:
-    KoDetailsPanePrivate(const KComponentData &componentData)
-            : m_componentData(componentData) {
+    KoDetailsPanePrivate() {
         m_model = new QStandardItemModel;
     }
     ~KoDetailsPanePrivate() {
         delete m_model;
     }
 
-    KComponentData m_componentData;
     QStandardItemModel* m_model;
 };
 
-KoDetailsPane::KoDetailsPane(QWidget* parent, const KComponentData &_componentData, const QString& header)
+KoDetailsPane::KoDetailsPane(QWidget* parent, const QString& header)
         : QWidget(parent),
         Ui_KoDetailsPaneBase(),
-        d(new KoDetailsPanePrivate(_componentData))
+        d(new KoDetailsPanePrivate)
 {
     d->m_model->setHorizontalHeaderItem(0, new QStandardItem(header));
 
@@ -62,23 +56,16 @@ KoDetailsPane::KoDetailsPane(QWidget* parent, const KComponentData &_componentDa
 
     changePalette();
 
-    connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SLOT(changePalette()));
-
-    connect(m_documentList->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
-            this, SLOT(selectionChanged(const QModelIndex&)));
-    connect(m_documentList, SIGNAL(doubleClicked(const QModelIndex&)),
-            this, SLOT(openFile(const QModelIndex&)));
+    connect(m_documentList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            this, SLOT(selectionChanged(QModelIndex)));
+    connect(m_documentList, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(openFile(QModelIndex)));
     connect(m_openButton, SIGNAL(clicked()), this, SLOT(openFile()));
 }
 
 KoDetailsPane::~KoDetailsPane()
 {
     delete d;
-}
-
-KComponentData KoDetailsPane::componentData() const
-{
-    return d->m_componentData;
 }
 
 bool KoDetailsPane::eventFilter(QObject* watched, QEvent* e)
@@ -132,5 +119,3 @@ QStandardItemModel* KoDetailsPane::model() const
 {
     return d->m_model;
 }
-
-#include <KoDetailsPane.moc>

@@ -33,7 +33,7 @@ public:
     explicit CSThumbProviderStage(KoPADocument *doc);
     virtual ~CSThumbProviderStage();
 
-    virtual QList<QImage> createThumbnails(const QSize &thumbSize);
+    virtual QVector<QImage> createThumbnails(const QSize &thumbSize);
 
 private:
     KoPADocument *m_doc;

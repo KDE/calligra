@@ -1,0 +1,59 @@
+Primary goal: Unify handling of charts in Calligra: filters and shape
+Later goal:   Simplify the move to the new KdCharts and perhaps other backends
+
+
+Part I: Move the charts to libodf2
+
+Preparations
+ * Move to better places and do some cleanups				Done
+    + NumberFormatParser --> libmso					done
+    + Charting -> KoChart,  --> libodf2					done
+ * Change the namespace to KoChart					Done
+
+Refactoring
+ * Separate the definition of DrawingMLTheme from the ThemesReader.	Done
+    + Move the data definitions into its own .h file. 			done
+    + Only include the Theme definitions where the reader is not needed done
+ * Make ChartExport into a base class and make inherited classes in:	Done
+    + Move baseclass to libodf2    	       		 	 	done
+    + subclass in sheets/xlsx	   	  - using the DrawingMLTheme	done
+    + subclass in sheets/excel/sidewinder - using the 2003palette	LATER(*)
+
+Test
+ * Convert all the test documents and check that the output is the same ----
+   as before.
+    + Download the test documents (checkout the repo)			....
+    + Create a script that does the conversion				....
+    + Create a script that does the comparison				....
+
+
+(*) The palette is far too deeply ingrained in all of the chart writer to be
+    easily separated.  And perhaps this is something we could use in the chart
+    shape itself? We have wanted to provide support for chart themes for some
+    time now.
+
+
+Milestone 1: separating useful parts into a library
+----------------------------------------------------------------
+
+Part II: Enhance the chart storage and use it in the chart shape
+
+Enhancements of KoChart::Chart and the subclasses
+ * Separate into separate files						----
+ * Also read ODF (get from the ChartShape)				----
+ * ...
+
+Start using KoChart in ChartShape
+ * Create a backend API and move KDChart into a backend subdirectory	----
+ * Use the storage classes  	 	      				----
+
+
+Milestone 2: Share common definitions and some data classes between all usages
+	     of charts.
+----------------------------------------------------------------
+
+
+Other stuff to do, but not part of this plan:
+
+ * Move XlsxChartReader to libmsooxml. (it's used in docx and pptx)
+ * Move XlsxChartExport to libmsooxml. (it's used in docx and pptx)

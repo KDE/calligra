@@ -23,7 +23,7 @@
 #include "ArtisticTextToolSelection.h"
 #include "ArtisticTextShape.h"
 
-#include <kaction.h>
+#include <QAction>
 
 ArtisticTextShapeConfigWidget::ArtisticTextShapeConfigWidget(ArtisticTextTool *textTool)
     : m_textTool(textTool)
@@ -41,7 +41,7 @@ ArtisticTextShapeConfigWidget::ArtisticTextShapeConfigWidget(ArtisticTextTool *t
     widget.anchorEnd->setDefaultAction(textTool->action("artistictext_anchor_end"));
     widget.fontSize->setRange( 2, 1000 );
 
-    connect(widget.fontFamily, SIGNAL(currentFontChanged(const QFont&)), this, SIGNAL(fontFamilyChanged(const QFont&)));
+    connect(widget.fontFamily, SIGNAL(currentFontChanged(QFont)), this, SIGNAL(fontFamilyChanged(QFont)));
     connect(widget.fontSize, SIGNAL(valueChanged(int)), this, SIGNAL(fontSizeChanged(int)));
 }
 

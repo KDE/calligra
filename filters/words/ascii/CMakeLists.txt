@@ -6,14 +6,15 @@ include_directories(
 
 
 set(ascii2words_PART_SRCS
+    AsciiImportDebug.cpp
     AsciiImport.cpp
     ImportDialog.cc
 )
-kde4_add_ui_files(ascii2words_PART_SRCS ImportDialogUI.ui )
-kde4_add_plugin(calligra_filter_ascii2words ${ascii2words_PART_SRCS})
-target_link_libraries(calligra_filter_ascii2words komain kotextlayout wordsprivate)
-install(TARGETS calligra_filter_ascii2words DESTINATION ${PLUGIN_INSTALL_DIR})
-install( FILES calligra_filter_ascii2words.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+ki18n_wrap_ui(ascii2words_PART_SRCS ImportDialogUI.ui )
+add_library(calligra_filter_ascii2words MODULE ${ascii2words_PART_SRCS})
+calligra_filter_desktop_to_json(calligra_filter_ascii2words calligra_filter_ascii2words.desktop)
+target_link_libraries(calligra_filter_ascii2words komain kotextlayout wordsprivate KF5::Codecs)
+install(TARGETS calligra_filter_ascii2words DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 endif()
 
@@ -26,21 +27,17 @@ include_directories(
 )
 
 set(odt2ascii_PART_SRCS
+    AsciiExportDebug.cpp
     AsciiExport.cpp
     OdtReaderAsciiBackend.cpp
     OdfReaderAsciiContext.cpp
 )
-kde4_add_plugin(calligra_filter_odt2ascii ${odt2ascii_PART_SRCS})
+add_library(calligra_filter_odt2ascii MODULE ${odt2ascii_PART_SRCS})
 target_link_libraries(calligra_filter_odt2ascii koodfreader komain koodf koodf2)
-install(TARGETS calligra_filter_odt2ascii DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_odt2ascii DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
-install( FILES calligra_filter_odt2ascii.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+calligra_filter_desktop_to_json(calligra_filter_odt2ascii calligra_filter_odt2ascii.desktop)
 
-
-install( PROGRAMS  calligrawords_ascii.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( PROGRAMS  org.kde.calligrawords_ascii.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 endif()
-
-
-
-

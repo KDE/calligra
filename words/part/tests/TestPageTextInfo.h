@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWPAGETEXTINFO_H
-#define KWPAGETEXTINFO_H
+#ifndef TESTPAGETEXTINFO_H
+#define TESTPAGETEXTINFO_H
 
 #include <QObject>
 #include <QtTest>

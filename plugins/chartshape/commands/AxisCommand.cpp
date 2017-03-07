@@ -19,15 +19,15 @@
 
 #include "AxisCommand.h"
 
-// KDE
-#include <kdebug.h>
+// KF5
 #include <klocalizedstring.h>
 
-// KChart
+// KoChart
 #include "Axis.h"
+#include "ChartDebug.h"
 
+using namespace KoChart;
 using namespace KChart;
-using namespace KDChart;
 
 
 AxisCommand::AxisCommand(Axis* axis, ChartShape* chart)

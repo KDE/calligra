@@ -20,8 +20,6 @@
 #ifndef KPLATORCPSPLUGIN_H
 #define KPLATORCPSPLUGIN_H
 
-#include "kplatorcps_export.h"
-
 #include "kptschedulerplugin.h"
 
 #include <QVariantList>

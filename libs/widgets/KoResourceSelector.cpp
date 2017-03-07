@@ -29,7 +29,7 @@
 #include <QMouseEvent>
 #include <QStyledItemDelegate>
 
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 class KoResourceSelector::Private
 {
@@ -211,5 +211,3 @@ void KoResourceSelector::resourceRemoved(KoResource*)
 {
     d->updateIndex(this);
 }
-
-#include <KoResourceSelector.moc>

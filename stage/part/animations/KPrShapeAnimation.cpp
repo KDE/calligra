@@ -119,16 +119,6 @@ void KPrShapeAnimation::init(KPrAnimationCache *animationCache, int step)
     }
 }
 
-bool KPrShapeAnimation::visibilityChange()
-{
-    return true;
-}
-
-bool KPrShapeAnimation::visible()
-{
-    return true;
-}
-
 QPair<int, int> KPrShapeAnimation::timeRange() const
 {
     const int INVALID_START = 99999;
@@ -216,12 +206,12 @@ void KPrShapeAnimation::setPresetClass(KPrShapeAnimation::PresetClass presetClas
     m_class = presetClass;
 }
 
-void KPrShapeAnimation::setId(QString id)
+void KPrShapeAnimation::setId(const QString &id)
 {
     m_id = id;
 }
 
-void KPrShapeAnimation::setPresetSubType(QString subType)
+void KPrShapeAnimation::setPresetSubType(const QString &subType)
 {
     m_presetSubType = subType;
 }

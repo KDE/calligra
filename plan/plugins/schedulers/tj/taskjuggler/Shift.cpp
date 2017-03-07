@@ -3,6 +3,7 @@
  *
  * Copyright (c) 2001, 2002, 2003, 2004 by Chris Schlaeger <cs@kde.org>
  * Copyright (c) 2011 by Dag Andersen <danders@get2net.dk>
+ * Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of version 2 of the GNU General Public License as
@@ -13,6 +14,7 @@
 
 #include "Shift.h"
 #include "Project.h"
+#include "debug.h"
 
 namespace TJ
 {
@@ -94,6 +96,21 @@ Shift::getSubListIterator() const
 bool
 Shift::isOnShift(const Interval& iv) const
 {
+    // Hacky way to enable handling working hours specified in timezone different from local time
+    if (!workingIntervals.isEmpty()) {
+        if (iv.getStart() >= workingIntervals.last().getEnd()) {
+            return false;
+        }
+        Q_FOREACH(const Interval &i, workingIntervals) {
+            if (iv.getEnd() <= i.getStart()) {
+                return false;
+            }
+            if (iv.overlaps(i)) {
+                return true;
+            }
+        }
+        return false;
+    }
     int dow = dayOfWeek(iv.getStart(), false);
     int ivStart = secondsOfDay(iv.getStart());
     int ivEnd = secondsOfDay(iv.getEnd());
@@ -109,6 +126,12 @@ bool
 Shift::isVacationDay(time_t day) const
 {
     return workingHours[dayOfWeek(day, false)]->isEmpty();
+}
+
+void
+Shift::addWorkingInterval(const Interval &interval)
+{
+    workingIntervals.append(interval);
 }
 
 } // namespace TJ

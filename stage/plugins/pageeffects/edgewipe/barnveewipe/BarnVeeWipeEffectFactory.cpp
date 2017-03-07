@@ -18,7 +18,8 @@
  */
 
 #include "BarnVeeWipeEffectFactory.h"
-#include <klocale.h>
+
+#include <klocalizedstring.h>
 
 #include "BarnVeeWipeStrategy.h"
 

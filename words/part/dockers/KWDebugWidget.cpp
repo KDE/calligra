@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
+ * Copyright (C) 2014-2015 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,14 +18,20 @@
  */
 
 #include "KWDebugWidget.h"
+#include <frames/KWTextFrameSet.h>
+#include <KWView.h>
 #include <KoTextEditor.h>
 #include <KoParagraphStyle.h>
 #include <KoSection.h>
 #include <KoSectionEnd.h>
+#include <KoTextDocument.h>
+#include <KoElementReference.h>
+#include <KoShapeController.h>
 #include <KoSectionUtils.h>
 
 #include <QHBoxLayout>
 #include <QTimer>
+#include <QString>
 
 KWDebugWidget::KWDebugWidget(QWidget *parent)
     : QWidget(parent)
@@ -45,12 +51,22 @@ void KWDebugWidget::initUi()
 {
     m_label = new QLabel(this);
     m_label->setText("Some debug info will be here."); // No i18n as it's for debug only.
+
+    m_buttonSet = new QPushButton(this);
+    m_buttonSet->setText("Set"); // No i18n as it's for debug only.
+    connect(m_buttonSet, SIGNAL(clicked(bool)), this, SLOT(doSetMagic()));
+
+    m_buttonGet = new QPushButton(this);
+    m_buttonGet->setText("Get"); // No i18n as it's for debug only.
+    connect(m_buttonGet, SIGNAL(clicked(bool)), this, SLOT(doGetMagic()));
 }
 
 void KWDebugWidget::initLayout()
 {
-    QHBoxLayout *mainBox = new QHBoxLayout(this);
+    QVBoxLayout *mainBox = new QVBoxLayout(this);
     mainBox->addWidget(m_label);
+    mainBox->addWidget(m_buttonSet);
+    mainBox->addWidget(m_buttonGet);
 
     setLayout(mainBox);
 }
@@ -77,7 +93,8 @@ void KWDebugWidget::updateData()
 
     QString willShow = "This sections starts here :";
     foreach (const KoSection *sec, KoSectionUtils::sectionStartings(fmt)) {
-        willShow += " \"" + sec->name() + "\"";
+        QPair<int, int> bnds = sec->bounds();
+        willShow += " \"" + sec->name() + "\"(" + QString::number(bnds.first) + "; " + QString::number(bnds.second) + ")";
     }
     willShow.append("\n");
 
@@ -102,4 +119,14 @@ void KWDebugWidget::setCanvas(KWCanvas* canvas)
 
 void KWDebugWidget::unsetCanvas()
 {
+}
+
+void KWDebugWidget::doSetMagic()
+{
+    updateData();
+}
+
+void KWDebugWidget::doGetMagic()
+{
+    m_canvas->view()->setShowSectionBounds(true);
 }

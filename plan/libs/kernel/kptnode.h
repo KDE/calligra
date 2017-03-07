@@ -459,9 +459,9 @@ public:
     /// Returns the level this node is in the hierarchy. Top node is level 0.
     virtual int level() const;
     /// Generate WBS Code
-    virtual QString generateWBSCode( QList<int> &indexes ) const;
+    virtual QString generateWBSCode( QList<int> &indexes, bool sortable = false ) const;
     /// Returns the Work Breakdown Structure Code
-    QString wbsCode() const;
+    QString wbsCode(bool sortable = false) const;
     
     double startupCost() const { return m_startupCost; }
     void setStartupCost(double cost);
@@ -528,6 +528,8 @@ public:
     virtual void emitDocumentRemoved( Node *node, Document *doc, int idx );
     virtual void emitDocumentChanged( Node *node, Document *doc, int idx );
     
+    void blockChanged(bool on = true);
+
 public:
     // These shouldn't be available to other than those who inherits
     /// Calculate the critical path
@@ -673,7 +675,8 @@ protected:
     ResourceRequestCollection m_requests;
 
 private:
-    void init();        
+    void init();
+    bool m_blockChanged;
 };
 
 ////////////////////////////////   Estimate   ////////////////////////////////

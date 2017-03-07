@@ -21,14 +21,14 @@
 #include "KoPencilTool.h"
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KoPencilToolFactory::KoPencilToolFactory()
         : KoToolFactoryBase("KoPencilTool")
 {
     setToolTip(i18n("Freehand path"));
-    setToolType("karbon, krita");
-    setIconName(koIconNameCStr("draw-freehand"));
+    setToolType("karbon");
+    setIconName(koIconName("draw-freehand"));
     setPriority(3);
     setActivationShapeId("flake/edit");
 }

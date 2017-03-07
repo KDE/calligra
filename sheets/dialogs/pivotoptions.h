@@ -21,7 +21,7 @@
 #ifndef PIVOTOPTIONS_H
 #define PIVOTOPTIONS_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include<QListWidgetItem>
 #include<QObject>
@@ -33,7 +33,7 @@ namespace Calligra{
  * Dialog to create PivotOptions.
  */
 class Selection;
-class PivotOptions : public KDialog
+class PivotOptions : public KoDialog
    {
    Q_OBJECT
 

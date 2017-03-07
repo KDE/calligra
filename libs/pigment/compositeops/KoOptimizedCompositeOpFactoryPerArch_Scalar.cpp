@@ -42,6 +42,14 @@ KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32>::create<Vc::S
 
 template<>
 template<>
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken128>::ReturnType
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken128>::create<Vc::ScalarImpl>(ParamType param)
+{
+    return new KoCompositeOpAlphaDarken<KoRgbF32Traits>(param);
+}
+
+template<>
+template<>
 KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver128>::ReturnType
 KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver128>::create<Vc::ScalarImpl>(ParamType param)
 {
@@ -52,5 +60,5 @@ template<>
 KoReportCurrentArch::ReturnType
 KoReportCurrentArch::create<Vc::ScalarImpl>(ParamType)
 {
-    qDebug() << "Legacy integer arithmetics implementation";
+    dbgPigment << "Legacy integer arithmetics implementation";
 }

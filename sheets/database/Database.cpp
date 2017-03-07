@@ -29,6 +29,7 @@
 #include "FilterPopup.h"
 #include "Map.h"
 #include "Region.h"
+#include "odf/SheetsOdf.h"
 
 using namespace Calligra::Sheets;
 
@@ -230,7 +231,7 @@ bool Database::loadOdf(const KoXmlElement& element, const Map* map)
     if (element.hasAttributeNS(KoXmlNS::table, "target-range-address")) {
         const QString address = element.attributeNS(KoXmlNS::table, "target-range-address", QString());
         // only absolute addresses allowed; no fallback sheet needed
-        d->targetRangeAddress = Region(Region::loadOdf(address), map);
+        d->targetRangeAddress = Region(Odf::loadRegion(address), map);
         if (!d->targetRangeAddress.isValid())
             return false;
     }
@@ -287,7 +288,7 @@ void Database::saveOdf(KoXmlWriter& xmlWriter) const
         xmlWriter.addAttribute("table:contains-header", "false");
     if (d->displayFilterButtons)
         xmlWriter.addAttribute("table:display-filter-buttons", "true");
-    xmlWriter.addAttribute("table:target-range-address", d->targetRangeAddress.saveOdf());
+    xmlWriter.addAttribute("table:target-range-address", Odf::saveRegion(d->targetRangeAddress.name()));
     if (d->refreshDelay)
         xmlWriter.addAttribute("table:refresh-delay", d->refreshDelay);
     // TODO

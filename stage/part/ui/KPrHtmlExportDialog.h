@@ -26,8 +26,11 @@
 #include <QWebPage>
 
 #include <KoPAPageBase.h>
+#include <KoDialog.h>
 
-class KPrHtmlExportDialog  : public KDialog
+class QUrl;
+
+class KPrHtmlExportDialog  : public KoDialog
 {
     Q_OBJECT
 public:
@@ -35,7 +38,7 @@ public:
 
     QList<KoPAPageBase*> checkedSlides();
     QStringList slidesNames();
-    KUrl templateUrl();
+    QUrl templateUrl();
     QString title();
     QString author();
     bool openBrowser();

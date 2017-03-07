@@ -104,7 +104,3 @@ QList<QPointer<QWidget> > KWPageTool::createOptionWidgets()
 
     return widgets;
 }
-
-#include "KWPageTool.moc"
-
-

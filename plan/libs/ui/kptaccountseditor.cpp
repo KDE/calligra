@@ -38,9 +38,9 @@
 #include <QVBoxLayout>
 #include <QContextMenuEvent>
 #include <QMenu>
+#include <QAction>
 
-#include <kaction.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kactioncollection.h>
 
 
@@ -53,10 +53,7 @@ AccountseditorConfigDialog::AccountseditorConfigDialog( ViewBase *view, AccountT
     m_view( view ),
     m_treeview( treeview )
 {
-    setCaption( i18n("Settings") );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
+    setWindowTitle( i18n("Settings") );
 
     QTabWidget *tab = new QTabWidget();
 
@@ -72,12 +69,12 @@ AccountseditorConfigDialog::AccountseditorConfigDialog( ViewBase *view, AccountT
     KPageWidgetItem *page = addPage( tab, i18n( "Printing" ) );
     page->setHeader( i18n( "Printing Options" ) );
 
-    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect( this, SIGNAL(accepted()), this, SLOT(slotOk()));
 }
 
 void AccountseditorConfigDialog::slotOk()
 {
-    kDebug(planDbg());
+    debugPlan;
     m_view->setPageLayout( m_pagelayout->pageLayout() );
     m_view->setPrintingOptions( m_headerfooter->options() );
 }
@@ -101,20 +98,20 @@ AccountTreeView::AccountTreeView( QWidget *parent )
 
 void AccountTreeView::headerContextMenuRequested( const QPoint &pos )
 {
-    kDebug(planDbg())<<header()->logicalIndexAt(pos)<<" at"<<pos;
+    debugPlan<<header()->logicalIndexAt(pos)<<" at"<<pos;
 }
 
 void AccountTreeView::contextMenuEvent ( QContextMenuEvent *event )
 {
-    kDebug(planDbg());
+    debugPlan;
     emit contextMenuRequested( indexAt(event->pos()), event->globalPos() );
 }
 
 void AccountTreeView::selectionChanged( const QItemSelection &sel, const QItemSelection &desel )
 {
-    kDebug(planDbg())<<sel.indexes().count();
+    debugPlan<<sel.indexes().count();
     foreach( const QModelIndex &i, selectionModel()->selectedIndexes() ) {
-        kDebug(planDbg())<<i.row()<<","<<i.column();
+        debugPlan<<i.row()<<","<<i.column();
     }
     QTreeView::selectionChanged( sel, desel );
     emit selectionChanged( selectionModel()->selectedIndexes() );
@@ -122,7 +119,7 @@ void AccountTreeView::selectionChanged( const QItemSelection &sel, const QItemSe
 
 void AccountTreeView::currentChanged( const QModelIndex & current, const QModelIndex & previous )
 {
-    kDebug(planDbg());
+    debugPlan;
     QTreeView::currentChanged( current, previous );
     emit currentChanged( current );
     // possible bug in qt: in QAbstractItemView::SingleSelection you can select multiple items/rows
@@ -194,7 +191,7 @@ void AccountsEditor::draw()
 
 void AccountsEditor::setGuiActive( bool activate )
 {
-    kDebug(planDbg())<<activate;
+    debugPlan<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
     if ( activate ) {
@@ -207,13 +204,13 @@ void AccountsEditor::setGuiActive( bool activate )
 
 void AccountsEditor::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
-    kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
+    debugPlan<<index.row()<<","<<index.column()<<":"<<pos;
     slotHeaderContextMenuRequested( pos );
 }
 
 void AccountsEditor::slotHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug(planDbg());
+    debugPlan;
     QList<QAction*> lst = contextActionList();
     if ( ! lst.isEmpty() ) {
         QMenu::exec( lst, pos,  lst.first() );
@@ -227,13 +224,13 @@ Account *AccountsEditor::currentAccount() const
 
 void AccountsEditor::slotCurrentChanged(  const QModelIndex &curr )
 {
-    kDebug(planDbg())<<curr.row()<<","<<curr.column();
+    debugPlan<<curr.row()<<","<<curr.column();
     //slotEnableActions( curr.isValid() );
 }
 
 void AccountsEditor::slotSelectionChanged( const QModelIndexList& list)
 {
-    kDebug(planDbg())<<list.count();
+    debugPlan<<list.count();
     updateActionsEnabled( true );
 }
 
@@ -258,21 +255,21 @@ void AccountsEditor::setupGui()
 {
     QString name = "accountseditor_edit_list";
     
-    actionAddAccount  = new KAction(koIcon("document-new"), i18n("Add Account"), this);
+    actionAddAccount  = new QAction(koIcon("document-new"), i18n("Add Account"), this);
     actionCollection()->addAction("add_account", actionAddAccount );
-    actionAddAccount->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
+    actionCollection()->setDefaultShortcut(actionAddAccount, Qt::CTRL + Qt::Key_I);
     connect( actionAddAccount, SIGNAL(triggered(bool)), SLOT(slotAddAccount()) );
     addAction( name, actionAddAccount );
 
-    actionAddSubAccount  = new KAction(koIcon("document-new"), i18n("Add Subaccount"), this);
+    actionAddSubAccount  = new QAction(koIcon("document-new"), i18n("Add Subaccount"), this);
     actionCollection()->addAction("add_subaccount", actionAddSubAccount );
-    actionAddSubAccount->setShortcut( KShortcut( Qt::SHIFT + Qt::CTRL + Qt::Key_I ) );
+    actionCollection()->setDefaultShortcut(actionAddSubAccount, Qt::SHIFT + Qt::CTRL + Qt::Key_I);
     connect( actionAddSubAccount, SIGNAL(triggered(bool)), SLOT(slotAddSubAccount()) );
     addAction( name, actionAddSubAccount );
 
-    actionDeleteSelection  = new KAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
+    actionDeleteSelection  = new QAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
     actionCollection()->addAction("delete_selection", actionDeleteSelection );
-    actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
+    actionCollection()->setDefaultShortcut(actionDeleteSelection, Qt::Key_Delete);
     connect( actionDeleteSelection, SIGNAL(triggered(bool)), SLOT(slotDeleteSelection()) );
     addAction( name, actionDeleteSelection );
 
@@ -281,7 +278,7 @@ void AccountsEditor::setupGui()
 
 void AccountsEditor::slotOptions()
 {
-    kDebug(planDbg());
+    debugPlan;
     AccountseditorConfigDialog *dlg = new AccountseditorConfigDialog( this, m_view, this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
@@ -291,7 +288,7 @@ void AccountsEditor::slotOptions()
 
 void AccountsEditor::slotAddAccount()
 {
-    kDebug(planDbg());
+    debugPlan;
     int row = -1;
     Account *parent = m_view->selectedAccount(); // sibling
     if ( parent ) {
@@ -306,7 +303,7 @@ void AccountsEditor::slotAddAccount()
 
 void AccountsEditor::slotAddSubAccount()
 {
-    kDebug(planDbg());
+    debugPlan;
     insertAccount( new Account(), m_view->selectedAccount(), -1 );
 }
 
@@ -316,8 +313,8 @@ void AccountsEditor::insertAccount( Account *account, Account *parent, int row )
     QModelIndex i = m_view->model()->insertAccount( account, parent, row );
     if ( i.isValid() ) {
         QModelIndex p = m_view->model()->parent( i );
-        if (parent) kDebug(planDbg())<<" parent="<<parent->name()<<":"<<p.row()<<","<<p.column();
-        kDebug(planDbg())<<i.row()<<","<<i.column();
+        if (parent) debugPlan<<" parent="<<parent->name()<<":"<<p.row()<<","<<p.column();
+        debugPlan<<i.row()<<","<<i.column();
         if ( p.isValid() ) {
             m_view->setExpanded( p, true );
         }
@@ -329,13 +326,13 @@ void AccountsEditor::insertAccount( Account *account, Account *parent, int row )
 
 void AccountsEditor::slotDeleteSelection()
 {
-    kDebug(planDbg());
+    debugPlan;
     m_view->model()->removeAccounts( m_view->selectedAccounts() );
 }
 
 void AccountsEditor::slotAccountsOk()
 {
-     kDebug(planDbg())<<"Account Editor : slotAccountsOk";
+     debugPlan<<"Account Editor : slotAccountsOk";
      //QModelList
      
 
@@ -349,5 +346,3 @@ KoPrintJob *AccountsEditor::createPrintJob()
 }
 
 } // namespace KPlato
-
-#include "kptaccountseditor.moc"

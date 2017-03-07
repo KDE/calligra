@@ -29,8 +29,8 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <WidgetsDebug.h>
+#include <klocalizedstring.h>
 
 #include <QPainter>
 #include <QWidgetAction>
@@ -71,7 +71,7 @@ public:
 };
 
 KoColorPopupAction::KoColorPopupAction(QObject *parent)
-    : KAction(parent),
+    : QAction(parent),
     d(new KoColorPopupActionPrivate())
 {
     d->menu = new QMenu();
@@ -103,10 +103,10 @@ KoColorPopupAction::KoColorPopupAction(QObject *parent)
 
     connect(this, SIGNAL(triggered()), this, SLOT(emitColorChanged()));
 
-    connect(d->colorSetWidget, SIGNAL(colorChanged(const KoColor &, bool)), this, SLOT(colorWasSelected(const KoColor &, bool)));
+    connect(d->colorSetWidget, SIGNAL(colorChanged(KoColor,bool)), this, SLOT(colorWasSelected(KoColor,bool)));
 
-    connect( d->colorChooser, SIGNAL( colorChanged( const QColor &) ),
-             this, SLOT( colorWasEdited( const QColor &) ) );
+    connect( d->colorChooser, SIGNAL(colorChanged(KoColor)),
+             this, SLOT(colorWasEdited(KoColor)) );
     connect( d->opacitySlider, SIGNAL(valueChanged(int)),
              this, SLOT(opacityWasChanged(int)));
 }
@@ -118,7 +118,7 @@ KoColorPopupAction::~KoColorPopupAction()
 
 void KoColorPopupAction::setCurrentColor( const KoColor &color )
 {
-    d->colorChooser->setRealColor( color );
+    d->colorChooser->setColor( color );
 
     KoColor minColor( color );
     d->currentColor = minColor;
@@ -138,7 +138,7 @@ void KoColorPopupAction::setCurrentColor( const QColor &_color )
 {
 #ifndef NDEBUG
     if (!_color.isValid()) {
-        kWarning(30004) << "Invalid color given, defaulting to black";
+        warnWidgets << "Invalid color given, defaulting to black";
     }
 #endif
     const QColor color(_color.isValid() ? _color : QColor(0,0,0,255));
@@ -208,9 +208,9 @@ void KoColorPopupAction::colorWasSelected(const KoColor &color, bool final)
     updateIcon();
 }
 
-void KoColorPopupAction::colorWasEdited( const QColor &color )
+void KoColorPopupAction::colorWasEdited( const KoColor &color )
 {
-    d->currentColor = KoColor( color, KoColorSpaceRegistry::instance()->rgb8() );
+    d->currentColor = color;
     quint8 opacity = d->opacitySlider->value();
     d->currentColor.setOpacity( opacity );
 
@@ -244,5 +244,3 @@ void KoColorPopupAction::slotTriggered(bool)
         d->firstTime = false;
     }
 }
-
-#include <KoColorPopupAction.moc>

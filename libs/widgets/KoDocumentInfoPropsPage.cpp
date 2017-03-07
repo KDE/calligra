@@ -20,19 +20,21 @@
 
 #include "KoDocumentInfoPropsPage.h"
 
+#include <QIcon>
+
 #include "KoOdfReadStore.h"
 #include "KoStore.h"
 #include "KoDocumentInfo.h"
 #include "KoDocumentInfoDlg.h"
-
-#include <kdebug.h>
+#include <QUrl>
+#include <WidgetsDebug.h>
 
 class KoDocumentInfoPropsPage::KoDocumentInfoPropsPagePrivate
 {
 public:
     KoDocumentInfo *m_info;
     KoDocumentInfoDlg *m_dlg;
-    KUrl m_url;
+    QUrl m_url;
     KoStore *m_src;
     KoStore *m_dst;
 };
@@ -98,5 +100,3 @@ void KoDocumentInfoPropsPage::applyChanges()
 {
     // Unused in Calligra
 }
-
-#include <KoDocumentInfoPropsPage.moc>

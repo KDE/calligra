@@ -31,13 +31,13 @@
 #include <QTreeWidgetItem>
 #include <QStyledItemDelegate>
 #include <QLinearGradient>
-#include <QDesktopServices>
 #include <QDragEnterEvent>
 #include <QDropEvent>
+#include <QMimeData>
+#include <QUrl>
 
-#include <klocale.h>
-#include <kcomponentdata.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
+#include <MainDebug.h>
 
 #include <KoFileDialog.h>
 #include <KoIcon.h>
@@ -50,7 +50,8 @@
 #include "ui_KoOpenPaneBase.h"
 
 #include <limits.h>
-#include <kconfiggroup.h>
+#include <KSharedConfig>
+#include <KConfigGroup>
 
 class KoSectionListItem : public QTreeWidgetItem
 {
@@ -120,17 +121,15 @@ public:
         m_templatesSeparator = 0;
     }
 
-    KComponentData m_componentData;
     int m_freeCustomWidgetIndex;
     KoSectionListItem* m_customWidgetsSeparator;
     KoSectionListItem* m_templatesSeparator;
 };
 
-KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, const QStringList& mimeFilter, const QString& templatesResourcePath)
+KoOpenPane::KoOpenPane(QWidget *parent, const QStringList& mimeFilter, const QString& templatesResourcePath)
         : QWidget(parent)
         , d(new KoOpenPanePrivate)
 {
-    d->m_componentData = componentData;
     d->setupUi(this);
 
     m_mimeFilter = mimeFilter;
@@ -144,9 +143,9 @@ KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, con
 
     connect(d->m_sectionList, SIGNAL(itemSelectionChanged()),
             this, SLOT(updateSelectedWidget()));
-    connect(d->m_sectionList, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
+    connect(d->m_sectionList, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
             this, SLOT(itemClicked(QTreeWidgetItem*)));
-    connect(d->m_sectionList, SIGNAL(itemActivated(QTreeWidgetItem*, int)),
+    connect(d->m_sectionList, SIGNAL(itemActivated(QTreeWidgetItem*,int)),
             this, SLOT(itemClicked(QTreeWidgetItem*)));
 
     initRecentDocs();
@@ -166,14 +165,14 @@ KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, con
     QList<int> sizes;
 
     // Set the sizes of the details pane splitters
-    KConfigGroup cfgGrp(d->m_componentData.config(), "TemplateChooserDialog");
+    KConfigGroup cfgGrp(KSharedConfig::openConfig(), "TemplateChooserDialog");
     sizes = cfgGrp.readEntry("DetailsPaneSplitterSizes", sizes);
 
     if (!sizes.isEmpty())
         emit splitterResized(0, sizes);
 
-    connect(this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)),
-            this, SLOT(saveSplitterSizes(KoDetailsPane*, const QList<int>&)));
+    connect(this, SIGNAL(splitterResized(KoDetailsPane*,QList<int>)),
+            this, SLOT(saveSplitterSizes(KoDetailsPane*,QList<int>)));
 
     setAcceptDrops(true);
 }
@@ -186,7 +185,7 @@ KoOpenPane::~KoOpenPane()
 
         if (item) {
             if (!qobject_cast<KoDetailsPane*>(d->m_widgetStack->widget(item->widgetIndex()))) {
-                KConfigGroup cfgGrp(d->m_componentData.config(), "TemplateChooserDialog");
+                KConfigGroup cfgGrp(KSharedConfig::openConfig(), "TemplateChooserDialog");
                 cfgGrp.writeEntry("LastReturnType", item->text(0));
             }
         }
@@ -199,27 +198,27 @@ void KoOpenPane::openFileDialog()
 {
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Open Existing Document"));
-    dialog.setDefaultDir(qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon")
-                          ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
-                          : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+    dialog.setDefaultDir(qApp->applicationName().contains("karbon")
+                          ? QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)
+                          : QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     dialog.setMimeTypeFilters(m_mimeFilter);
     dialog.setHideNameFilterDetailsOption();
-    KUrl url = dialog.url();
+    QUrl url = QUrl::fromUserInput(dialog.filename());
     emit openExistingFile(url);
 }
 
 void KoOpenPane::initRecentDocs()
 {
     QString header = i18n("Recent Documents");
-    KoRecentDocumentsPane* recentDocPane = new KoRecentDocumentsPane(this, d->m_componentData, header);
-    connect(recentDocPane, SIGNAL(openUrl(const KUrl&)), this, SIGNAL(openExistingFile(const KUrl&)));
+    KoRecentDocumentsPane* recentDocPane = new KoRecentDocumentsPane(this, header);
+    connect(recentDocPane, SIGNAL(openUrl(QUrl)), this, SIGNAL(openExistingFile(QUrl)));
     QTreeWidgetItem* item = addPane(header, koIconName("document-open"), recentDocPane, 0);
-    connect(recentDocPane, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)),
-            this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)));
-    connect(this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)),
-            recentDocPane, SLOT(resizeSplitter(KoDetailsPane*, const QList<int>&)));
+    connect(recentDocPane, SIGNAL(splitterResized(KoDetailsPane*,QList<int>)),
+            this, SIGNAL(splitterResized(KoDetailsPane*,QList<int>)));
+    connect(this, SIGNAL(splitterResized(KoDetailsPane*,QList<int>)),
+            recentDocPane, SLOT(resizeSplitter(KoDetailsPane*,QList<int>)));
 
-    if (d->m_componentData.config()->hasGroup("RecentFiles")) {
+    if (KSharedConfig::openConfig()->hasGroup("RecentFiles")) {
         d->m_sectionList->setCurrentItem(item, 0, QItemSelectionModel::ClearAndSelect);
     }
 }
@@ -231,7 +230,7 @@ void KoOpenPane::initTemplates(const QString& templatesResourcePath)
     const int templateOffset = 1000;
 
     if (!templatesResourcePath.isEmpty()) {
-        KoTemplateTree templateTree(templatesResourcePath, d->m_componentData, true);
+        KoTemplateTree templateTree(templatesResourcePath, true);
 
         foreach (KoTemplateGroup *group, templateTree.groups()) {
             if (group->isHidden()) {
@@ -242,17 +241,17 @@ void KoOpenPane::initTemplates(const QString& templatesResourcePath)
                 d->m_templatesSeparator = new KoSectionListItem(d->m_sectionList, "", 999);
             }
 
-            KoTemplatesPane* pane = new KoTemplatesPane(this, d->m_componentData, group->name(),
+            KoTemplatesPane* pane = new KoTemplatesPane(this, group->name(),
                     group, templateTree.defaultTemplate());
-            connect(pane, SIGNAL(openUrl(const KUrl&)), this, SIGNAL(openTemplate(const KUrl&)));
-            connect(pane, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)),
-                    this, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)));
-            connect(this, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)),
-                    pane, SLOT(changeAlwaysUseTemplate(KoTemplatesPane*, const QString&)));
-            connect(pane, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)),
-                    this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)));
-            connect(this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)),
-                    pane, SLOT(resizeSplitter(KoDetailsPane*, const QList<int>&)));
+            connect(pane, SIGNAL(openUrl(QUrl)), this, SIGNAL(openTemplate(QUrl)));
+            connect(pane, SIGNAL(alwaysUseChanged(KoTemplatesPane*,QString)),
+                    this, SIGNAL(alwaysUseChanged(KoTemplatesPane*,QString)));
+            connect(this, SIGNAL(alwaysUseChanged(KoTemplatesPane*,QString)),
+                    pane, SLOT(changeAlwaysUseTemplate(KoTemplatesPane*,QString)));
+            connect(pane, SIGNAL(splitterResized(KoDetailsPane*,QList<int>)),
+                    this, SIGNAL(splitterResized(KoDetailsPane*,QList<int>)));
+            connect(this, SIGNAL(splitterResized(KoDetailsPane*,QList<int>)),
+                    pane, SLOT(resizeSplitter(KoDetailsPane*,QList<int>)));
             QTreeWidgetItem* item = addPane(group->name(), group->templates().first()->loadPicture(),
                                            pane, group->sortingWeight() + templateOffset);
 
@@ -272,7 +271,7 @@ void KoOpenPane::initTemplates(const QString& templatesResourcePath)
         firstItem = d->m_sectionList->topLevelItem(0);
     }
 
-    KConfigGroup cfgGrp(d->m_componentData.config(), "TemplateChooserDialog");
+    KConfigGroup cfgGrp(KSharedConfig::openConfig(), "TemplateChooserDialog");
 
     if (selectItem && (cfgGrp.readEntry("LastReturnType") == "Template")) {
         d->m_sectionList->setCurrentItem(selectItem, 0, QItemSelectionModel::ClearAndSelect);
@@ -314,7 +313,7 @@ void KoOpenPane::addCustomDocumentWidget(QWidget *widget, const QString& title, 
 
     QTreeWidgetItem* item = addPane(realtitle, icon, widget, d->m_freeCustomWidgetIndex);
     ++d->m_freeCustomWidgetIndex;
-    KConfigGroup cfgGrp(d->m_componentData.config(), "TemplateChooserDialog");
+    KConfigGroup cfgGrp(KSharedConfig::openConfig(), "TemplateChooserDialog");
 
     QString lastActiveItem = cfgGrp.readEntry("LastReturnType");
     bool showCustomItemByDefault = cfgGrp.readEntry("ShowCustomDocumentWidgetByDefault", false);
@@ -333,7 +332,7 @@ QTreeWidgetItem* KoOpenPane::addPane(const QString &title, const QString &iconNa
 
     int id = d->m_widgetStack->addWidget(widget);
     KoSectionListItem* listItem = new KoSectionListItem(d->m_sectionList, title, sortWeight, id);
-    listItem->setIcon(0, KIcon(iconName));
+    listItem->setIcon(0, QIcon::fromTheme(iconName));
 
     return listItem;
 }
@@ -378,7 +377,7 @@ void KoOpenPane::updateSelectedWidget()
 void KoOpenPane::saveSplitterSizes(KoDetailsPane* sender, const QList<int>& sizes)
 {
     Q_UNUSED(sender);
-    KConfigGroup cfgGrp(d->m_componentData.config(), "TemplateChooserDialog");
+    KConfigGroup cfgGrp(KSharedConfig::openConfig(), "TemplateChooserDialog");
     cfgGrp.writeEntry("DetailsPaneSplitterSizes", sizes);
 }
 
@@ -390,5 +389,3 @@ void KoOpenPane::itemClicked(QTreeWidgetItem* item)
         d->m_widgetStack->widget(selectedItem->widgetIndex())->setFocus();
     }
 }
-
-#include <KoOpenPane.moc>

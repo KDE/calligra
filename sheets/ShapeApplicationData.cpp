@@ -19,6 +19,8 @@
 
 #include "ShapeApplicationData.h"
 
+#include <Qt> // Q_DECL_HIDDEN
+
 using namespace Calligra::Sheets;
 
 class  ShapeApplicationData::Private

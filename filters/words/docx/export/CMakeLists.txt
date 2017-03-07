@@ -6,6 +6,7 @@ include_directories(
 )
 
 set(Odt2Docx_PART_SRCS
+    DocxExportDebug.cpp
     DocxExport.cpp
     DocxStyleWriter.cpp
     DocxStyleHelper.cpp
@@ -19,10 +20,13 @@ set(Odt2Docx_PART_SRCS
     OpcRelSet.cpp
     OpcRelSetManager.cpp
 )
-kde4_add_plugin(calligra_filter_odt2docx ${Odt2Docx_PART_SRCS})
+add_library(calligra_filter_odt2docx MODULE ${Odt2Docx_PART_SRCS})
 target_link_libraries(calligra_filter_odt2docx koodfreader komain koodf koodf2)
-install(TARGETS calligra_filter_odt2docx DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_odt2docx DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
-install(FILES calligra_filter_odt2docx.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+#install(FILES calligra_filter_odt2docx.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+calligra_filter_desktop_to_json(calligra_filter_odt2docx calligra_filter_odt2docx.desktop)
+
+install( PROGRAMS  calligra_filter_odt2docx.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 endif()

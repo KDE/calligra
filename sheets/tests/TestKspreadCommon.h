@@ -17,11 +17,11 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "qtest_kde.h"
-
 #include <Formula.h>
 #include <FunctionModuleRegistry.h>
 #include <Value.h>
+
+#include <QTest>
 
 #include <float.h> // DBL_EPSILON
 #include <math.h>

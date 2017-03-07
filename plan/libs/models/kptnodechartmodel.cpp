@@ -18,19 +18,21 @@
  */
 
 #include "kptnodechartmodel.h"
+
+#include "kptlocale.h"
 #include "kptnode.h"
 #include "kptproject.h"
 #include "kptschedule.h"
 #include "kptresource.h"
 #include "kptdebug.h"
 
-#include <kglobal.h>
+#include <KLocalizedString>
 
 #include <QVariant>
 #include <QPen>
 
-#include "KDChartGlobal"
-#include "KDChartPalette"
+#include <KChartGlobal>
+#include <KChartPalette>
 
 
 namespace KPlato
@@ -66,7 +68,7 @@ int ChartItemModel::rowCount( const QModelIndex &/*parent */) const
 QModelIndex ChartItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
     if ( m_project == 0 || row < 0 || column < 0 ) {
-        //kDebug(planDbg())<<"No project"<<m_project<<" or illegal row, column"<<row<<column;
+        //debugPlan<<"No project"<<m_project<<" or illegal row, column"<<row<<column;
         return QModelIndex();
     }
     if ( parent.isValid() ) {
@@ -154,22 +156,32 @@ QVariant ChartItemModel::data( const QModelIndex &index, int role ) const
         if ( ! m_localizeValues ) {
             return data( index, Qt::EditRole );
         } else {
-            KLocale *l = project() ? project()->locale() : KGlobal::locale();
+            QLocale locale;
+            // TODO: temporary workaround while KLocale/money logic still used
+            Locale *planLocale;
+            Locale *tmpPlanLocale = 0;
+            if (project()) {
+                planLocale = project()->locale();
+            } else {
+                tmpPlanLocale = new Locale();
+                planLocale = tmpPlanLocale;
+            }
             switch ( index.column() ) {
-            case BCWSCost: result = l->formatMoney( bcwsCost( index.row() ), 0 ); break;
-            case BCWPCost: result = l->formatMoney( bcwpCost( index.row() ), 0 ); break;
-            case ACWPCost: result = l->formatMoney( acwpCost( index.row() ), 0 ); break;
-            case BCWSEffort: result = l->formatNumber( bcwsEffort( index.row() ), 0 ); break;
-            case BCWPEffort: result = l->formatNumber( bcwpEffort( index.row() ), 0 ); break;
-            case ACWPEffort: result = l->formatNumber( acwpEffort( index.row() ), 0 ); break;
-            case SPICost: result = l->formatNumber( spiCost( index.row() ), 2 ); break;
-            case CPICost: result = l->formatNumber( cpiCost( index.row() ), 2 ); break;
-            case SPIEffort: result = l->formatNumber( spiEffort( index.row() ), 2 ); break;
-            case CPIEffort: result = l->formatNumber( cpiEffort( index.row() ), 2 ); break;
+            case BCWSCost: result = planLocale->formatMoney( bcwsCost( index.row() ), QString(), 0 ); break;
+            case BCWPCost: result = planLocale->formatMoney( bcwpCost( index.row() ), QString(), 0 ); break;
+            case ACWPCost: result = planLocale->formatMoney( acwpCost( index.row() ), QString(), 0 ); break;
+            case BCWSEffort: result = locale.toString( bcwsEffort( index.row() ), 'f', 0 ); break;
+            case BCWPEffort: result = locale.toString( bcwpEffort( index.row() ), 'f', 0 ); break;
+            case ACWPEffort: result = locale.toString( acwpEffort( index.row() ), 'f', 0 ); break;
+            case SPICost: result = locale.toString( spiCost( index.row() ), 'f', 2 ); break;
+            case CPICost: result = locale.toString( cpiCost( index.row() ), 'f', 2 ); break;
+            case SPIEffort: result = locale.toString( spiEffort( index.row() ), 'f', 2 ); break;
+            case CPIEffort: result = locale.toString( cpiEffort( index.row() ), 'f', 2 ); break;
             default: break;
             }
+            delete tmpPlanLocale;
         }
-        //kDebug(planDbg())<<index<<role<<result;
+        //debugPlan<<index<<role<<result;
         return result;
     } else if ( role == Qt::EditRole ) {
         switch ( index.column() ) {
@@ -185,7 +197,7 @@ QVariant ChartItemModel::data( const QModelIndex &index, int role ) const
         case CPIEffort: result = cpiEffort( index.row() ); break;
         default: break;
         }
-        //kDebug(planDbg())<<index<<role<<result;
+        //debugPlan<<index<<role<<result;
         return result;
     } else if ( role == Qt::ForegroundRole ) {
         double v = 0.0;
@@ -200,18 +212,17 @@ QVariant ChartItemModel::data( const QModelIndex &index, int role ) const
             result = QBrush( Qt::red );
         }
         return result;
-    }  else if ( role == KDChart::DatasetBrushRole ) {
+    }  else if ( role == KChart::DatasetBrushRole ) {
         return headerData( index.column(), Qt::Horizontal, role );
-    }  else if ( role == KDChart::DatasetPenRole ) {
+    }  else if ( role == KChart::DatasetPenRole ) {
         return headerData( index.column(), Qt::Horizontal, role );
     }
-    //kDebug(planDbg())<<index<<role<<result;
+    //debugPlan<<index<<role<<result;
     return result;
 }
 
 QVariant ChartItemModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
-    KLocale *locale = project() ? project()->locale() : KGlobal::locale();
     QVariant result;
     if ( role == Qt::DisplayRole ) {
         if ( orientation == Qt::Horizontal ) {
@@ -234,20 +245,20 @@ QVariant ChartItemModel::headerData( int section, Qt::Orientation orientation, i
     } else if ( role == Qt::ToolTipRole ) {
         if ( orientation == Qt::Horizontal ) {
             switch ( section ) {
-                case BCWSCost: return i18nc( "@info:tooltip", "Cost based Budgeted Cost of Work Scheduled" );
-                case BCWPCost: return i18nc( "@info:tooltip", "Cost based Budgeted Cost of Work Performed" );
-                case ACWPCost: return i18nc( "@info:tooltip", "Cost based Actual Cost of Work Performed" );
-                case BCWSEffort: return i18nc( "@info:tooltip", "Effort based Budgeted Cost of Work Scheduled" );
-                case BCWPEffort: return i18nc( "@info:tooltip", "Effort based Budgeted Cost of Work Performed" );
-                case ACWPEffort: return i18nc( "@info:tooltip", "Effort based Actual Cost of Work Performed" );
-                case SPICost: return i18nc( "@info:tooltip", "Cost based Schedule Performance Index (BCWP/BCWS)" );
-                case CPICost: return i18nc( "@info:tooltip", "Cost based Cost Performance Index (BCWP/ACWS)" );
-                case SPIEffort: return i18nc( "@info:tooltip", "Effort based Schedule Performance Index (BCWP/BCWS)" );
-                case CPIEffort: return i18nc( "@info:tooltip", "Effort based Cost Performance Index (BCWP/ACWS)" );
+                case BCWSCost: return xi18nc( "@info:tooltip", "Cost based Budgeted Cost of Work Scheduled" );
+                case BCWPCost: return xi18nc( "@info:tooltip", "Cost based Budgeted Cost of Work Performed" );
+                case ACWPCost: return xi18nc( "@info:tooltip", "Cost based Actual Cost of Work Performed" );
+                case BCWSEffort: return xi18nc( "@info:tooltip", "Effort based Budgeted Cost of Work Scheduled" );
+                case BCWPEffort: return xi18nc( "@info:tooltip", "Effort based Budgeted Cost of Work Performed" );
+                case ACWPEffort: return xi18nc( "@info:tooltip", "Effort based Actual Cost of Work Performed" );
+                case SPICost: return xi18nc( "@info:tooltip", "Cost based Schedule Performance Index (BCWP/BCWS)" );
+                case CPICost: return xi18nc( "@info:tooltip", "Cost based Cost Performance Index (BCWP/ACWS)" );
+                case SPIEffort: return xi18nc( "@info:tooltip", "Effort based Schedule Performance Index (BCWP/BCWS)" );
+                case CPIEffort: return xi18nc( "@info:tooltip", "Effort based Cost Performance Index (BCWP/ACWS)" );
                 default: return QVariant();
             }
         } else {
-            return locale->formatDate( startDate().addDays( section ) );
+            return QLocale().toString( startDate().addDays( section ), QLocale::ShortFormat );
         }
     } else if ( role == Qt::EditRole ) {
         if ( orientation == Qt::Horizontal ) {
@@ -275,15 +286,15 @@ QVariant ChartItemModel::headerData( int section, Qt::Orientation orientation, i
             }
         }
 #endif
-    }  else if ( role == KDChart::DatasetBrushRole ) {
+    }  else if ( role == KChart::DatasetBrushRole ) {
         if ( orientation == Qt::Horizontal ) {
-            return KDChart::Palette::defaultPalette().getBrush( section );
+            return KChart::Palette::defaultPalette().getBrush( section );
         }
-    }  else if ( role == KDChart::DatasetPenRole ) {
+    }  else if ( role == KChart::DatasetPenRole ) {
         QPen p;
-        p.setBrush( headerData( section, orientation, KDChart::DatasetBrushRole ).value<QBrush>() );
+        p.setBrush( headerData( section, orientation, KChart::DatasetBrushRole ).value<QBrush>() );
         result = p;
-        //kDebug(planDbg())<<section<<"DatasetPenRole"<<result;
+        //debugPlan<<section<<"DatasetPenRole"<<result;
         return result;
     }
     return ItemModelBase::headerData(section, orientation, role);
@@ -294,6 +305,7 @@ void ChartItemModel::setProject( Project *project )
     m_bcws.clear();
     m_acwp.clear();
     if ( m_project ) {
+        disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         disconnect( m_project, SIGNAL(projectCalculated(ScheduleManager*)), this, SLOT(setScheduleManager(ScheduleManager*)) );
         disconnect( m_project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotNodeRemoved(Node*)) );
         disconnect( m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );
@@ -302,6 +314,7 @@ void ChartItemModel::setProject( Project *project )
     }
     m_project = project;
     if ( m_project ) {
+        connect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         connect( m_project, SIGNAL(projectCalculated(ScheduleManager*)), this, SLOT(setScheduleManager(ScheduleManager*)) );
         connect( m_project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotNodeRemoved(Node*)) );
         connect( m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );
@@ -320,7 +333,7 @@ void ChartItemModel::setScheduleManager( ScheduleManager *sm )
 
 void ChartItemModel::setNodes( const QList<Node*> &nodes )
 {
-    kDebug(planDbg())<<nodes;
+    debugPlan<<nodes;
     m_nodes = nodes;
     calculate();
     reset();
@@ -352,7 +365,7 @@ void ChartItemModel::slotNodeRemoved( Node *node )
 
 void ChartItemModel::slotNodeChanged( Node *node )
 {
-    //kDebug(planDbg())<<this<<node;
+    //debugPlan<<this<<node;
     if ( m_nodes.contains( node ) ) {
         calculate();
         reset();
@@ -397,7 +410,7 @@ QDate ChartItemModel::endDate() const
 
 void ChartItemModel::calculate()
 {
-    //kDebug(planDbg())<<m_project<<m_manager<<m_nodes;
+    //debugPlan<<m_project<<m_manager<<m_nodes;
     m_bcws.clear();
     m_acwp.clear();
     if ( m_manager ) {
@@ -417,8 +430,8 @@ void ChartItemModel::calculate()
             }
         }
     }
-    //kDebug(planDbg())<<"bcwp"<<m_bcws;
-    //kDebug(planDbg())<<"acwp"<<m_acwp;
+    //debugPlan<<"bcwp"<<m_bcws;
+    //debugPlan<<"acwp"<<m_acwp;
 }
 
 void ChartItemModel::setLocalizeValues( bool on )
@@ -465,34 +478,34 @@ QVariant PerformanceDataCurrentDateModel::headerData( int section, Qt::Orientati
     if ( role == Qt::DisplayRole ) {
         if ( o == Qt::Horizontal ) {
             switch ( section ) {
-            case 0: return i18nc( "@title:column Budgeted Cost of Work Scheduled", "BCWS" );
-            case 1: return i18nc( "@title:column Budgeted Cost of Work Performed", "BCWP" );
-            case 2: return i18nc( "@title:column Actual Cost of Work Performed", "ACWP" );
-            case 3: return i18nc( "@title:column Schedule Performance Index", "SPI" );
-            case 4: return i18nc( "@title:column Cost Performance Index", "CPI" );
+            case 0: return xi18nc( "@title:column Budgeted Cost of Work Scheduled", "BCWS" );
+            case 1: return xi18nc( "@title:column Budgeted Cost of Work Performed", "BCWP" );
+            case 2: return xi18nc( "@title:column Actual Cost of Work Performed", "ACWP" );
+            case 3: return xi18nc( "@title:column Schedule Performance Index", "SPI" );
+            case 4: return xi18nc( "@title:column Cost Performance Index", "CPI" );
             default: break;
             }
         } else {
             switch ( section ) {
-            case 0: return i18nc( "@title:column", "Cost:" );
-            case 1: return i18nc( "@title:column", "Effort:" );
+            case 0: return xi18nc( "@title:column", "Cost:" );
+            case 1: return xi18nc( "@title:column", "Effort:" );
             default: break;
             }
         }
     } else if ( role == Qt::ToolTipRole ) {
         if ( o == Qt::Horizontal ) {
             switch ( section ) {
-            case 0: return i18nc( "@info:tooltip", "Budgeted Cost of Work Scheduled" );
-            case 1: return i18nc( "@info:tooltip", "Budgeted Cost of Work Performed" );
-            case 2: return i18nc( "@info:tooltip", "Actual Cost of Work Performed" );
-            case 3: return i18nc( "@info:tooltip", "Schedule Performance Index" );
-            case 4: return i18nc( "@info:tooltip", "Cost Performance Index" );
+            case 0: return xi18nc( "@info:tooltip", "Budgeted Cost of Work Scheduled" );
+            case 1: return xi18nc( "@info:tooltip", "Budgeted Cost of Work Performed" );
+            case 2: return xi18nc( "@info:tooltip", "Actual Cost of Work Performed" );
+            case 3: return xi18nc( "@info:tooltip", "Schedule Performance Index" );
+            case 4: return xi18nc( "@info:tooltip", "Cost Performance Index" );
             default: break;
             }
         } else {
             switch ( section ) {
-            case 0: return i18nc( "@info:tooltip", "Performance indicators based on cost" );
-            case 1: return i18nc( "@info:tooltip", "Performance indicators based on effort" );
+            case 0: return xi18nc( "@info:tooltip", "Performance indicators based on cost" );
+            case 1: return xi18nc( "@info:tooltip", "Performance indicators based on effort" );
             default: break;
             }
         }
@@ -525,5 +538,3 @@ QModelIndex PerformanceDataCurrentDateModel::mapIndex( const QModelIndex &idx ) 
 }
 
 } //namespace KPlato
-
-#include "kptnodechartmodel.moc"

@@ -19,8 +19,11 @@
 #ifndef WVLOG_H
 #define WVLOG_H
 
-#include <kdebug.h>
+#include <QDebug>
+#include <QLoggingCategory>
 
-#define wvlog kDebug()
+extern const QLoggingCategory &WV_LOG();
+
+#define wvlog qCDebug(WV_LOG)
 
 #endif // WVLOG_H

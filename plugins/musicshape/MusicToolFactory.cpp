@@ -23,14 +23,14 @@
 #include "MusicTool.h"
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 
 MusicToolFactory::MusicToolFactory()
     : KoToolFactoryBase("MusicToolFactoryId")
 {
     setToolTip( i18n( "Music editing, parts" ) );
-    setIconName(koIconNameCStr("musicshape"));
+    setIconName(koIconName("musicshape"));
     setToolType( dynamicToolType() );
     setPriority( 2 );
     setActivationShapeId( MusicShapeId );

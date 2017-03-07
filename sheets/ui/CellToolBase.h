@@ -32,7 +32,7 @@
 #include <KoInteractionTool.h>
 
 #include <sheets/Cell.h>
-#include <sheets/calligra_sheets_export.h>
+#include "sheets_common_export.h"
 #include "Selection.h"
 
 class KoColor;
@@ -86,7 +86,7 @@ public:
 
     virtual void deleteSelection();
 
-    virtual bool createEditor(bool clear = true, bool focus = true);
+    virtual bool createEditor(bool clear = true, bool focus = true, bool captureArrows = false);
     virtual CellEditorBase* editor() const;
 
     /**

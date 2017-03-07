@@ -18,14 +18,19 @@
  */
 
 #include "KPrAttributeHeight.h"
+
 #include "../KPrAnimationCache.h"
-#include "KoShape.h"
 #include "KPrShapeAnimations.h"
+#include "StageDebug.h"
+
+#include "KoShape.h"
 #include "KoTextShapeData.h"
+
 #include <QTextDocument>
 #include <QTextBlock>
 #include <QTextLayout>
-#include "kdebug.h"
+
+
 KPrAttributeHeight::KPrAttributeHeight() : KPrAnimationAttribute("height")
 {
 }

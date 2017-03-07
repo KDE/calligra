@@ -22,21 +22,20 @@
 #include "part.h"
 #include "aboutdata.h"
 
-#include <kcomponentdata.h>
+#include <KoResourcePaths.h>
+#include <KoComponentData.h>
+
 #include <kiconloader.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kstandarddirs.h>
 
 
 namespace KPlatoWork
 {
 
-KComponentData* Factory::s_global = 0L;
+KoComponentData* Factory::s_global = 0L;
 KAboutData* Factory::s_aboutData = 0L;
 
-Factory::Factory( QObject* parent )
-    : KPluginFactory( *aboutData(), parent )
+Factory::Factory()
+    : KPluginFactory()
 {
     global();
 }
@@ -66,15 +65,15 @@ KAboutData* Factory::aboutData()
     return s_aboutData;
 }
 
-const KComponentData &Factory::global()
+const KoComponentData &Factory::global()
 {
     if ( !s_global )
     {
-        s_global = new KComponentData( aboutData() );
+        s_global = new KoComponentData( *aboutData() );
 
         // Add any application-specific resource directories here
-        s_global->dirs()->addResourceType("planwork_template", "data", "planwork/templates/");
-        s_global->dirs()->addResourceType("projects", "data", "planwork/projects/");
+        KoResourcePaths::addResourceType("planwork_template", "data", "calligraplanwork/templates/");
+        KoResourcePaths::addResourceType("projects", "data", "calligraplanwork/projects/");
 
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");
@@ -84,5 +83,3 @@ const KComponentData &Factory::global()
 }
 
 } // KPlatoWork namespace
-
-#include "factory.moc"

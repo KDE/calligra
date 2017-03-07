@@ -37,8 +37,6 @@
 #include <QList>
 #include <QDockWidget>
 
-class KAction;
-
 class QMetaEnum;
 class QAbstractItemModel;
 
@@ -175,7 +173,7 @@ public Q_SLOTS:
 protected:
     virtual void paint( QPainter &p, const PrintingOptions::Data &options, const QRect &rect,  int pageNumber, const Project &project );
     int headerFooterHeight( const PrintingOptions::Data &options ) const;
-    void drawBottomRect( QPainter &p, const QRect &r );
+    void drawRect( QPainter &p, const QRect &r, Qt::Edges edges = Qt::LeftEdge | Qt::RightEdge | Qt::BottomEdge );
 
 
 protected:
@@ -214,7 +212,7 @@ protected:
     QList<QAction*> m_contextActionList;
     
     // View options context menu
-    KAction *actionOptions;
+    QAction *actionOptions;
 };
 
 /** 
@@ -564,7 +562,7 @@ public:
     
     void setViewSplitMode( bool split );
     bool isViewSplit() const { return m_mode; }
-    KAction *actionSplitView() const { return m_actionSplitView; }
+    QAction *actionSplitView() const { return m_actionSplitView; }
     
     void setRootIsDecorated ( bool show );
 
@@ -634,7 +632,7 @@ protected:
     bool m_readWrite;
     bool m_mode;
     
-    KAction *m_actionSplitView;
+    QAction *m_actionSplitView;
 
 };
 

@@ -22,8 +22,8 @@
 // Own
 #include "ChangeSomethingCommand.h"
 
-// KDE
-#include <klocale.h>
+// KF5
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 // Calligra

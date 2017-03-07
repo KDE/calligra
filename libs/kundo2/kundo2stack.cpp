@@ -58,7 +58,7 @@
 ****************************************************************************/
 
 #include <QDebug>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 #include "kundo2stack.h"
@@ -267,7 +267,7 @@ void KUndo2Command::undo()
 
 QString KUndo2Command::actionText() const
 {
-    if(d->actionText!=NULL)
+    if(d->actionText!=0)
         return d->actionText;
     else
         return QString();
@@ -632,7 +632,7 @@ KUndo2QStack::KUndo2QStack(QObject *parent)
     Destroys the undo stack, deleting any commands that are on it. If the
     stack is in a KUndo2Group, the stack is automatically removed from the group.
 
-    \sa KUndo2QStack()The number of last strokes which Krita should store separately
+    \sa KUndo2QStack()
 */
 
 KUndo2QStack::~KUndo2QStack()
@@ -690,9 +690,10 @@ void KUndo2QStack::clear()
     If \a cmd's id is not -1, and if the id is the same as that of the
     most recently executed command, KUndo2QStack will attempt to merge the two
     commands by calling KUndo2Command::mergeWith() on the most recently executed
-    command. If KUndo2Command::mergeWith() returns true, \a cmd is deleted.
+    command. If KUndo2Command::mergeWith() returns true, \a cmd is deleted and false
+    is returned.
 
-    In all other cases \a cmd is simply pushed on the stack.
+    In all other cases \a cmd is simply pushed on the stack and true is returned.
 
     If commands were undone before \a cmd was pushed, the current command and
     all commands above it are deleted. Hence \a cmd always ends up being the
@@ -706,7 +707,7 @@ void KUndo2QStack::clear()
     \sa KUndo2Command::id() KUndo2Command::mergeWith()
 */
 
-void KUndo2QStack::push(KUndo2Command *cmd)
+bool KUndo2QStack::push(KUndo2Command *cmd)
 {
     cmd->redoMergedCommands();
     cmd->setEndTime();
@@ -805,6 +806,7 @@ void KUndo2QStack::push(KUndo2Command *cmd)
     }   
     if (try_merge && cur->mergeWith(cmd)) {
         delete cmd;
+        cmd = 0;
         if (!macro) {
             emit indexChanged(m_index);
             emit canUndoChanged(canUndo());
@@ -824,6 +826,7 @@ void KUndo2QStack::push(KUndo2Command *cmd)
             setIndex(m_index + 1, false);
         }
     }
+    return cmd;
 }
 
 /*!
@@ -1038,7 +1041,7 @@ QString KUndo2QStack::undoText() const
 {
     if (!m_macro_stack.isEmpty())
         return QString();
-    if (m_index > 0 && m_command_list.at(m_index-1)!=NULL)
+    if (m_index > 0 && m_command_list.at(m_index-1)!=0)
 
         return m_command_list.at(m_index - 1)->actionText();
     return QString();

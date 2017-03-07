@@ -1,5 +1,7 @@
 project( textPlugin)
 
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_text\")
+
 # only build the textdocument inspector in non-release builds
 if(NOT RELEASE_BUILD)
     set(BUILD_TEXTDOCUMENT_INSPECTOR TRUE)
@@ -105,10 +107,12 @@ set ( textshape_SRCS
     dialogs/TableOfContentsTemplate.cpp
     dialogs/BibliographyTemplate.cpp
     dialogs/BibliographyPreview.cpp
+    dialogs/ListLevelWidget.cpp
     dialogs/ListLevelChooser.cpp
     dialogs/SimpleAnnotationWidget.cpp
     dialogs/ManageBookmarkDialog.cpp
     dialogs/SectionFormatDialog.cpp
+    dialogs/SectionsSplitDialog.cpp
 
     commands/ChangeListLevelCommand.cpp
     commands/ShowChangesCommand.cpp
@@ -123,12 +127,11 @@ if(BUILD_TEXTDOCUMENT_INSPECTOR)
         TextDocumentStructureModel.cpp
         TextDocumentInspectionDocker.cpp
         TextDocumentInspectionDockerFactory.cpp
-        TextDocumentInspectionPlugin.cpp
     )
 endif()
 
 
-kde4_add_ui_files(textshape_SRCS
+ki18n_wrap_ui(textshape_SRCS
     dialogs/SimpleCharacterWidget.ui
     dialogs/SimpleParagraphWidget.ui
     dialogs/SimpleTableWidget.ui
@@ -159,6 +162,7 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/SimpleAnnotationWidget.ui
 
 
+    dialogs/ListLevelWidget.ui
     dialogs/FontDecorations.ui
     dialogs/LanguageTab.ui
     dialogs/ChangeConfigureDialog.ui
@@ -167,28 +171,19 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/LinkInsertionDialog.ui
     dialogs/ManageBookmark.ui
     dialogs/SectionFormatDialog.ui
+    dialogs/SectionsSplitDialog.ui
 
 )
 
-kde4_add_plugin(calligra_shape_text ${textshape_SRCS})
+add_library(calligra_shape_text MODULE ${textshape_SRCS})
 
-target_link_libraries(calligra_shape_text kotext kotextlayout kowidgets
-${KDE4_KFILE_LIBS} ${KDE4_KIO_LIBS})
+calligra_shape_desktop_to_json(calligra_shape_text calligra_shape_text.desktop)
+
+target_link_libraries(calligra_shape_text kotext kotextlayout kowidgets KF5::KIOCore KF5::KIOFileWidgets KF5::KIOWidgets KF5::ItemViews KF5::WidgetsAddons
+)
+
 if( SHOULD_BUILD_FEATURE_RDF )
     target_link_libraries(calligra_shape_text ${SOPRANO_LIBRARIES})
 endif()
 
-
-install(TARGETS calligra_shape_text DESTINATION ${PLUGIN_INSTALL_DIR})
-
-########### install files ###############
-
-install( FILES calligra_shape_text.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-#kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
-
-if(BUILD_TEXTDOCUMENT_INSPECTOR)
-    # workaround: to avoid translations the real desktop file is only generated
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/calligra_docker_textdocumentinspection.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/calligra_docker_textdocumentinspection.desktop)
-
-    install( FILES ${CMAKE_CURRENT_BINARY_DIR}/calligra_docker_textdocumentinspection.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-endif()
+install(TARGETS calligra_shape_text DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)

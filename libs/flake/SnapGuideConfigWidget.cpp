@@ -27,11 +27,11 @@ SnapGuideConfigWidget::SnapGuideConfigWidget(KoSnapGuide * snapGuide, QWidget * 
 {
     widget.setupUi(this);
 
-    widget.orthogonalSnapGuide->setIcon(koIcon("snap-orto"));
+    widget.orthogonalSnapGuide->setIcon(koIcon("snap-orthogonal"));
     widget.nodeSnapGuide->setIcon(koIcon("snap-node"));
     widget.extensionSnapGuide->setIcon(koIcon("snap-extension"));
     widget.intersectionSnapGuide->setIcon(koIcon("snap-intersection"));
-    widget.boundingBoxSnapGuide->setIcon(koIcon("snap-boundingbox"));
+    widget.boundingBoxSnapGuide->setIcon(koIcon("snap-bounding-box"));
     widget.lineGuideSnapGuide->setIcon(koIcon("snap-guideline"));
 
     updateControls();
@@ -108,5 +108,3 @@ void SnapGuideConfigWidget::showEvent(QShowEvent * event)
     Q_UNUSED(event);
     updateControls();
 }
-
-#include <SnapGuideConfigWidget.moc>

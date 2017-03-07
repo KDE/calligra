@@ -22,7 +22,7 @@
 #include "KoCreatePathTool.h"
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 KoCreatePathToolFactory::KoCreatePathToolFactory()
         : KoToolFactoryBase(KoCreatePathTool_ID)
@@ -30,7 +30,7 @@ KoCreatePathToolFactory::KoCreatePathToolFactory()
     setToolTip(i18n("Draw path"));
     setToolType(mainToolType());
     setPriority(2);
-    setIconName(koIconNameCStr("createpath"));
+    setIconName(koIconName("createpath"));
     setActivationShapeId("flake/edit");
 }
 

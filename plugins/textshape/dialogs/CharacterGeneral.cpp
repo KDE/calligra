@@ -34,7 +34,7 @@
 #include <KoStyleManager.h>
 #include <KoCharacterStyle.h>
 
-#include "kdebug.h"
+#include <QDebug>
 
 CharacterGeneral::CharacterGeneral(QWidget *parent)
         : QWidget(parent)
@@ -63,7 +63,7 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
     widget.inheritStyle->setStylesModel(m_characterInheritedStyleModel);
     widget.inheritStyle->setEnabled(false);
 
-    m_characterHighlighting = new CharacterHighlighting(true, this);
+    m_characterHighlighting = new CharacterHighlighting(this);
     connect(m_characterHighlighting, SIGNAL(charStyleChanged()), this, SIGNAL(styleChanged()));
     connect(m_characterHighlighting, SIGNAL(charStyleChanged()), this, SLOT(setPreviewCharacterStyle()));
 
@@ -73,19 +73,19 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
 
     m_languageTab->setVisible(false);
 
-    connect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
+    connect(widget.name, SIGNAL(textChanged(QString)), this, SIGNAL(nameChanged(QString)));
 }
 
 void CharacterGeneral::hideStyleName(bool hide)
 {
     if (hide) {
-        disconnect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
+        disconnect(widget.name, SIGNAL(textChanged(QString)), this, SIGNAL(nameChanged(QString)));
         widget.tabs->removeTab(0);
         m_nameHidden = true;
     }
 }
 
-void CharacterGeneral::setStyle(KoCharacterStyle *style)
+void CharacterGeneral::setStyle(KoCharacterStyle *style, bool directFormattingMode)
 {
     m_style = style;
     if (m_style == 0)
@@ -95,7 +95,7 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style)
     if (!m_nameHidden)
         widget.name->setText(style->name());
 
-    m_characterHighlighting->setDisplay(style);
+    m_characterHighlighting->setDisplay(style, directFormattingMode);
     //m_languageTab->setDisplay(style);
 
     widget.preview->setCharacterStyle(style);
@@ -103,7 +103,7 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style)
     if (m_styleManager) {
         KoCharacterStyle *parentStyle = style->parentStyle();
         if (parentStyle) {
-            widget.inheritStyle->setCurrentIndex(m_characterInheritedStyleModel->indexOf(*parentStyle).row());
+            widget.inheritStyle->setCurrentIndex(m_characterInheritedStyleModel->indexOf(parentStyle).row());
         }
     }
 
@@ -173,7 +173,7 @@ void CharacterGeneral::updateNextStyleCombo(KoParagraphStyle *style)
     if (!style)
         return;
 
-    widget.nextStyle->setCurrentIndex(m_paragraphStyleModel->indexOf(*style).row());
+    widget.nextStyle->setCurrentIndex(m_paragraphStyleModel->indexOf(style).row());
     m_paragraphStyleModel->setCurrentParagraphStyle(style->styleId());
 }
 
@@ -198,5 +198,3 @@ KoCharacterStyle *CharacterGeneral::style() const
 {
     return m_style;
 }
-
-#include <CharacterGeneral.moc>

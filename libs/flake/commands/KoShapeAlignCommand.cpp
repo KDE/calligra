@@ -23,8 +23,8 @@
 #include "KoShapeGroup.h"
 #include "commands/KoShapeMoveCommand.h"
 
-#include <klocale.h>
-// #include <kdebug.h>
+#include <klocalizedstring.h>
+// #include <FlakeDebug.h>
 
 class KoShapeAlignCommand::Private
 {
@@ -40,18 +40,21 @@ KoShapeAlignCommand::KoShapeAlignCommand(const QList<KoShape*> &shapes, Align al
         : KUndo2Command(parent),
         d(new Private())
 {
-    QList<QPointF> previousPositions;
-    QList<QPointF> newPositions;
+    QVector<QPointF> previousPositions;
+    QVector<QPointF> newPositions;
     QPointF position;
     QPointF delta;
     QRectF bRect;
+    const int shapesCount = shapes.count();
+    previousPositions.reserve(shapesCount);
+    newPositions.reserve(shapesCount);
     foreach(KoShape *shape, shapes) {
 //   if (dynamic_cast<KoShapeGroup*> (shape))
-//       kDebug(30006) <<"Found Group";
+//       debugFlake <<"Found Group";
 //   else if (dynamic_cast<KoShapeContainer*> (shape))
-//       kDebug(30006) <<"Found Container";
+//       debugFlake <<"Found Container";
 //   else
-//       kDebug(30006) <<"Found shape";
+//       debugFlake <<"Found shape";
         position = shape->position();
         previousPositions  << position;
         bRect = shape->boundingRect();
@@ -76,7 +79,7 @@ KoShapeAlignCommand::KoShapeAlignCommand(const QList<KoShape*> &shapes, Align al
             break;
         };
         newPositions  << position + delta;
-//kDebug(30006) <<"-> moving" <<  position.x() <<"," << position.y() <<" to" <<
+//debugFlake <<"-> moving" <<  position.x() <<"," << position.y() <<" to" <<
 //        (position + delta).x() << ", " << (position+delta).y() << endl;
     }
     d->command = new KoShapeMoveCommand(shapes, previousPositions, newPositions);

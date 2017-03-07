@@ -29,11 +29,10 @@
 #include <QFontDatabase>
 #include <QApplication>
 #include <QWidget>
-#include <QDeclarativeComponent>
+#include <QQmlComponent>
+#include <QUrl>
+#include <QStandardPaths>
 
-#include <kglobal.h>
-#include <kstandarddirs.h>
-#include <kurl.h>
 #include <KIconLoader>
 
 #include "QmlGlobalEngine.h"
@@ -105,7 +104,9 @@ void Theme::setId(const QString& newValue)
 {
     if(newValue != d->id) {
         d->id = newValue;
-        d->basePath = KUrl(KGlobal::dirs()->findResource("data", QString("calligragemini/themes/%1/theme.qml").arg(d->id))).directory();
+        const QString qmlFileSubPath = QStringLiteral("calligragemini/themes/") + d->id + QStringLiteral("/theme.qml");
+        const QString qmlFileFullPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, qmlFileSubPath);
+        d->basePath = QFileInfo(qmlFileFullPath).dir().absolutePath();
         emit idChanged();
     }
 }
@@ -369,10 +370,11 @@ Theme* Theme::load(const QString& id, QObject* parent)
     appdir.cdUp();
     qml = QString("%1/share/apps/calligragemini/themes/%2/theme.qml").arg(appdir.canonicalPath(), id);
 #else
-    qml = KGlobal::dirs()->findResource("data", QString("calligragemini/themes/%1/theme.qml").arg(id));
+    const QString qmlFileSubPath = QStringLiteral("calligragemini/themes/") + id + QStringLiteral("/theme.qml");
+    qml = QStandardPaths::locate(QStandardPaths::GenericDataLocation, qmlFileSubPath);
 #endif
 
-    QDeclarativeComponent themeComponent(QmlGlobalEngine::instance()->engine(), parent);
+    QQmlComponent themeComponent(QmlGlobalEngine::instance()->engine(), parent);
     themeComponent.loadUrl(QUrl::fromLocalFile(qml));
 
     if(themeComponent.isError()) {
@@ -419,7 +421,7 @@ void Theme::Private::rebuildFontCache()
 {
     fontMap.clear();
     QFontDatabase db;
-    for(QVariantMap::iterator itr = fonts.begin(); itr != fonts.end(); ++itr)
+    for(QVariantMap::ConstIterator itr = fonts.constBegin(); itr != fonts.constEnd(); ++itr)
     {
         QVariantMap map = itr->toMap();
         if(map.isEmpty())
@@ -450,5 +452,3 @@ void Theme::Private::rebuildFontCache()
         fontMap.insert(itr.key(), font);
     }
 }
-
-#include "Theme.moc"

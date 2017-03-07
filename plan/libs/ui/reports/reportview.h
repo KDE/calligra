@@ -31,7 +31,9 @@
 
 #include "ui_reportnavigator.h"
 
-#include <KoReportRendererBase.h>
+#include <KReportRendererBase>
+
+#include <KoDialog.h>
 
 #include <QDomDocument>
 
@@ -39,17 +41,14 @@ class KoDocument;
 class KoShape;
 struct KoPageLayout;
 
-class KoReportPage;
-class KoReportPreRenderer;
+class KReportPage;
+class KReportPreRenderer;
 class ORODocument;
-class KoReportDesigner;
-class KoReportRendererBase;
+class KReportDesigner;
+class KReportRendererBase;
 
-namespace KoProperty
-{
-    class EditorView;
-    class Set;
-}
+class KPropertyEditorView;
+class KPropertySet;
 
 class QGraphicsView;
 class QGraphicsScene;
@@ -70,7 +69,6 @@ class ReportDesigner;
 class ReportData;
 class ReportSourceEditor;
 class ReportNavigator;
-class ReportDesignPanel;
 class GroupSectionEditor;
 
 class ReportPrintingDialog : public KoPrintingDialog
@@ -94,8 +92,8 @@ public Q_SLOTS:
 
 protected:
     ORODocument *m_reportDocument;
-    KoReportRendererContext m_context;
-    KoReportRendererBase *m_renderer;
+    KReportRendererContext m_context;
+    KReportRendererBase *m_renderer;
 };
 
 //-------------------
@@ -125,6 +123,8 @@ public:
 public Q_SLOTS:
     void setGuiActive( bool active );
     void setScheduleManager( ScheduleManager *sm );
+
+    virtual void slotRefreshView(); // refresh display
 
 private Q_SLOTS:
     void slotEditReport();
@@ -170,7 +170,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     /// refresh display
-    void slotRefreshView();
+    virtual void slotRefreshView();
 
 protected:
     void setupGui();
@@ -181,24 +181,22 @@ private Q_SLOTS:
     void firstPage();
     void lastPage();
 
-    void slotExport();
-    void slotExportFinished( int result );
+    void exportAsTextDocument();
+    void exportAsSpreadsheet();
+    void exportAsWebPage();
 
 private:
     ReportData *createReportData( const QDomElement &connection );
     ReportData *createReportData( const QString &type );
-    void exportToOdtTable( KoReportRendererContext &context );
-    void exportToOdtFrames( KoReportRendererContext &context );
-    void exportToOds( KoReportRendererContext &context );
-    void exportToHtml( KoReportRendererContext &context );
-    void exportToXHtml( KoReportRendererContext &context );
+    QUrl getExportFileName(const QString &mimetype);
 
 private:
-    KoReportPreRenderer *m_preRenderer;
-    KoReportRendererFactory m_factory;
+    KReportPreRenderer *m_preRenderer;
+    KReportRendererFactory m_factory;
+    ORODocument *m_reportDocument;
     QGraphicsView *m_reportView;
     QGraphicsScene *m_reportScene;
-    KoReportPage *m_reportPage;
+    KReportPage *m_reportPage;
     ReportNavigator *m_pageSelector;
     int m_currentPage;
     int m_pageCount;
@@ -220,37 +218,6 @@ public Q_SLOTS:
 protected Q_SLOTS:
     void slotMaxChanged( int );
     void setButtonsEnabled();
-};
-
-class KPLATOUI_EXPORT ReportDesignDialog : public KDialog
-{
-    Q_OBJECT
-public:
-    explicit ReportDesignDialog( QWidget *parent = 0 );
-    
-    ReportDesignDialog( const QDomElement &element, const QList<ReportData*> &models, QWidget *parent = 0 );
-
-    QDomDocument document() const;
-
-Q_SIGNALS:
-    void createReportView( ReportDesignDialog *dlg );
-    void modifyReportDefinition( KUndo2Command *cmd );
-
-public Q_SLOTS:
-    void slotViewCreated( ViewBase *view );
-
-protected Q_SLOTS:
-    void slotSaveToFile();
-    void slotSaveToView();
-    virtual void slotButtonClicked(int button);
-    void closeEvent ( QCloseEvent * e );
-
-protected:
-    void saveToView();
-
-private:
-    ReportDesignPanel *m_panel;
-    ReportView *m_view;
 };
 
 //-------------------
@@ -286,6 +253,7 @@ public:
 
 public Q_SLOTS:
     void setReportData( const QString &tag );
+    void slotSaveReportDefinition();
 
 Q_SIGNALS:
     void viewReport();
@@ -296,6 +264,19 @@ Q_SIGNALS:
     void copyActivated();
     void pasteActivated();
     void deleteActivated();
+
+    void reportheaderShown(bool);
+    void reportfooterShown(bool);
+    void headerFirstpageShown(bool);
+    void headerLastpageShown(bool);
+    void headerOddpagesShown(bool);
+    void headerEvenpagesShown(bool);
+    void headerAllpagesShown(bool);
+    void footerFirstpageShown(bool);
+    void footerLastpageShown(bool);
+    void footerOddpagesShown(bool);
+    void footerEvenpagesShown(bool);
+    void footerAllpagesShown(bool);
 
 protected:
     void setupGui();
@@ -313,9 +294,9 @@ protected Q_SLOTS:
 
 private:
     QScrollArea *m_scrollarea;
-    KoReportDesigner *m_designer;
+    KReportDesigner *m_designer;
     ReportSourceEditor *m_sourceeditor;
-    KoProperty::EditorView *m_propertyeditor;
+    KPropertyEditorView *m_propertyeditor;
     QList<ReportData*> m_reportdatamodels;
     GroupSectionEditor *m_groupsectioneditor;
     QDomDocument m_original;

@@ -43,7 +43,9 @@ bool RC4Decryption::checkPassword(const QString& password)
 
     QByteArray h0 = md5sum(unicodePassword);
     QByteArray trunc = h0.left(5);
-    QByteArray interm = (trunc + m_salt).repeated(16);
+    QByteArray ba = trunc + m_salt;
+    ba = ba.repeated(16);
+    QByteArray interm = ba;
     QByteArray h1 = md5sum(interm);
     m_passwordHash = h1;
 

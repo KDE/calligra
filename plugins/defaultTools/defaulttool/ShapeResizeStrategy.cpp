@@ -21,6 +21,9 @@
 #include "ShapeResizeStrategy.h"
 #include "SelectionDecorator.h"
 
+#include "ChartResizeStrategy.h"
+#include <KoChartInterface.h>
+
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
@@ -30,9 +33,11 @@
 #include <KoToolBase.h>
 #include <KoSelection.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <limits>
 #include <math.h>
+
+#include <QDebug>
 
 ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool,
         const QPointF &clicked, KoFlake::SelectionHandle direction )
@@ -95,7 +100,20 @@ ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool,
     }
 
     tool->setStatusText( i18n("Press CTRL to resize from center.") );
+
+    // Handle possible chart shapes
+    for (KoShape *s : m_selectedShapes) {
+        if (s->shapeId() == ChartShapeId) {
+            m_chartShapes.insert(s, new ChartResizeStrategy(s));
+        }
+    }
 }
+
+ShapeResizeStrategy::~ShapeResizeStrategy()
+{
+    qDeleteAll(m_chartShapes);
+}
+
 
 void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
@@ -246,7 +264,10 @@ void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zo
 
         // calculate the new size of the shape, using the effective scale values
         QSizeF size( scaleX * m_startSizes[i].width(), scaleY * m_startSizes[i].height() );
-
+        // If a chart shape, handle its children
+        if (m_chartShapes.contains(shape)) {
+            m_chartShapes[shape]->setSize(m_startSizes[i], scaleX, scaleY);
+        }
         // apply the transformation
         shape->setSize( size );
         // apply the rest of the transformation without the resizing part
@@ -268,17 +289,26 @@ void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zo
 KUndo2Command* ShapeResizeStrategy::createCommand()
 {
     tool()->canvas()->snapGuide()->reset();
-    QList<QSizeF> newSizes;
-    QList<QTransform> transformations;
+    QVector<QSizeF> newSizes;
+    QVector<QTransform> transformations;
     const int shapeCount = m_selectedShapes.count();
+
+    newSizes.reserve(shapeCount);
+    transformations.reserve(shapeCount);
     for ( int i = 0; i < shapeCount; ++i )
     {
         newSizes << m_selectedShapes[i]->size();
         transformations << m_selectedShapes[i]->transformation();
     }
+
     KUndo2Command * cmd = new KUndo2Command(kundo2_i18n("Resize"));
     new KoShapeSizeCommand(m_selectedShapes, m_startSizes, newSizes, cmd );
     new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, transformations, cmd );
+    for (KoShape *s : m_selectedShapes) {
+        if (m_chartShapes.contains(s)) {
+            m_chartShapes[s]->createCommand(cmd);
+        }
+    }
     return cmd;
 }
 

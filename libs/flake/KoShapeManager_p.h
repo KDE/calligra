@@ -45,7 +45,7 @@
 
 #include <QPainter>
 #include <QTimer>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 class KoShapeManager::Private
 {

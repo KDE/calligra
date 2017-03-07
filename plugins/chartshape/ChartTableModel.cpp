@@ -30,9 +30,6 @@
 #include <QDomNode>
 #include <QDomDocument>
 
-// KDE
-#include <kdebug.h>
-
 // Calligra
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -41,12 +38,13 @@
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 
-// KChart
+// KoChart
 #include "CellRegion.h"
 #include "OdfLoadingHelper.h"
+#include "ChartDebug.h"
 
 
-namespace KChart {
+namespace KoChart {
 
 ChartTableModel::ChartTableModel(QObject *parent /* = 0 */)
     : QStandardItemModel(parent)

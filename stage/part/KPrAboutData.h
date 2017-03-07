@@ -20,42 +20,54 @@
 #ifndef KPRABOUTDATA_H
 #define KPRABOUTDATA_H
 
-#include <kaboutdata.h>
-#include <klocale.h>
+#include <KAboutData>
+#include <klocalizedstring.h>
+#include <kcoreaddons_version.h>
+
 #include <calligraversion.h>
 
-static const char description[] = I18N_NOOP("Calligra Presentation Tool");
-static const char version[] = CALLIGRA_VERSION_STRING;
 
 KAboutData * newKPresenterAboutData()
 {
-    KAboutData * aboutData=new KAboutData( "stage", 0, ki18nc("application name", "Stage"),
-                                           version, ki18n(description), KAboutData::License_LGPL,
-                                           ki18n("© 1998-%1, The Stage Team").subs(CALLIGRA_YEAR),
-                                           KLocalizedString(),
-                                           "http://www.calligra.org/stage/");
+    KAboutData *aboutData = new KAboutData(
+        QStringLiteral("calligrastage"),
+        i18nc("application name", "Calligra Stage"),
+        QStringLiteral(CALLIGRA_VERSION_STRING),
+        i18n("Presentation Tool")
+        + QLatin1String("\n\n")
+        + i18n("Unmaintained at the time of release of this version. The Calligra community welcomes interested persons to take over maintainership."),
+        KAboutLicense::LGPL,
+        i18n("Copyright 1998-%1, The Stage Team", QStringLiteral(CALLIGRA_YEAR)),
+        QString(),
+        QStringLiteral("https://www.calligra.org/stage/"));
     aboutData->setProductName("calligrastage"); // for bugs.kde.org
-    aboutData->setProgramIconName(QLatin1String("calligrastage"));
-    aboutData->addAuthor(ki18n("Thorsten Zachmann"), ki18n("Maintainer"), "zachmann@kde.org");
-    aboutData->addAuthor(ki18n("Laurent Montel"), ki18n("Former maintainer"), "montel@kde.org");
-    aboutData->addAuthor(ki18n("Reginald Stadlbauer"),ki18n("Original author"), "reggie@kde.org");
-    aboutData->addAuthor(ki18n("Werner Trobin"), KLocalizedString(), "trobin@kde.org");
-    aboutData->addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");
-    aboutData->addAuthor(ki18n("Toshitaka Fujioka"), KLocalizedString(), "fujioka@kde.org");
-    aboutData->addAuthor(ki18n("Lukáš Tinkl"), KLocalizedString(), "lukas@kde.org");
-    aboutData->addAuthor(ki18n("Ariya Hidayat"), KLocalizedString(), "ariya@kde.org");
-    aboutData->addAuthor(ki18n("Percy Leonhardt"), KLocalizedString(), "percy@eris23.de");
-    aboutData->addAuthor(ki18n("Thomas Zander"));
-    aboutData->addAuthor(ki18n("Peter Simonsson"), KLocalizedString(), "peter.simonsson@gmail.com");
-    aboutData->addAuthor(ki18n("Boudewijn Rempt "), KLocalizedString(), "boud@valdyas.org");
-    aboutData->addAuthor(ki18n("Carlos Licea "), KLocalizedString(), "carlos.licea@kdemail.net");
-    aboutData->addAuthor(ki18n("C. Boemann "), KLocalizedString(), "cbo@boemann.dk");
-    aboutData->addAuthor(ki18n("Fredy Yanardi "), KLocalizedString(), "fyanardi@gmail.com");
-    aboutData->addAuthor(ki18n("Jan Hambrecht "), KLocalizedString(), "jaham@gmx.net");
-    aboutData->addAuthor(ki18n("Marijn Kruisselbrink "), KLocalizedString(), "mkruisselbrink@kde.org");
-    aboutData->addAuthor(ki18n("Martin Pfeiffer "), KLocalizedString(), "hubipete@gmx.net");
-    aboutData->addAuthor(ki18n("Sven Langkamp "), KLocalizedString(), "sven.langkamp@gmail.com");
-    aboutData->addAuthor(ki18n("Timothée Lacroix "), KLocalizedString(), "dakeyras.khan@gmail.com");
+    aboutData->setOrganizationDomain("kde.org");
+#if KCOREADDONS_VERSION >= 0x051600
+    aboutData->setDesktopFileName(QStringLiteral("org.kde.calligrastage"));
+#endif
+    aboutData->addAuthor(i18n("Thorsten Zachmann"), i18n("Former maintainer"), "zachmann@kde.org");
+    aboutData->addAuthor(i18n("Laurent Montel"), i18n("Former maintainer"), "montel@kde.org");
+    aboutData->addAuthor(i18n("Reginald Stadlbauer"),i18n("Original author"), "reggie@kde.org");
+    aboutData->addAuthor(i18n("Werner Trobin"), QString(), "trobin@kde.org");
+    aboutData->addAuthor(i18n("David Faure"), QString(), "faure@kde.org");
+    aboutData->addAuthor(i18n("Toshitaka Fujioka"), QString(), "fujioka@kde.org");
+    aboutData->addAuthor(i18n("Lukáš Tinkl"), QString(), "lukas@kde.org");
+    aboutData->addAuthor(i18n("Ariya Hidayat"), QString(), "ariya@kde.org");
+    aboutData->addAuthor(i18n("Percy Leonhardt"), QString(), "percy@eris23.de");
+    aboutData->addAuthor(i18n("Thomas Zander"));
+    aboutData->addAuthor(i18n("Peter Simonsson"), QString(), "peter.simonsson@gmail.com");
+    aboutData->addAuthor(i18n("Boudewijn Rempt "), QString(), "boud@valdyas.org");
+    aboutData->addAuthor(i18n("Carlos Licea "), QString(), "carlos.licea@kdemail.net");
+    aboutData->addAuthor(i18n("C. Boemann "), QString(), "cbo@boemann.dk");
+    aboutData->addAuthor(i18n("Fredy Yanardi "), QString(), "fyanardi@gmail.com");
+    aboutData->addAuthor(i18n("Jan Hambrecht "), QString(), "jaham@gmx.net");
+    aboutData->addAuthor(i18n("Marijn Kruisselbrink "), QString(), "mkruisselbrink@kde.org");
+    aboutData->addAuthor(i18n("Martin Pfeiffer "), QString(), "hubipete@gmx.net");
+    aboutData->addAuthor(i18n("Sven Langkamp "), QString(), "sven.langkamp@gmail.com");
+    aboutData->addAuthor(i18n("Timothée Lacroix "), QString(), "dakeyras.khan@gmail.com");
+    // standard ki18n translator strings
+    aboutData->setTranslator(i18nc("NAME OF TRANSLATORS", "Your names"),
+                             i18nc("EMAIL OF TRANSLATORS", "Your emails"));
 
     return aboutData;
 }

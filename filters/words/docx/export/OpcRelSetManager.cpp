@@ -25,9 +25,6 @@
 #include <QHash>
 #include <QString>
 
-// KDE
-#include <kdebug.h>
-
 // odf lib
 #include "KoStore.h"
 #include <KoXmlStreamReader.h>
@@ -38,6 +35,7 @@
 
 // This filter
 #include "OpcRelSet.h"
+#include "DocxExportDebug.h"
 
 
 // ================================================================

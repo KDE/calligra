@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
   Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
   Copyright (C) 2011, 2012 Dag Andersen <danders@get2net.dk>
-
+  Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
+  
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
   License as published by the Free Software Foundation; either
@@ -20,6 +21,7 @@
 
 #include "kptresourcemodel.h"
 
+#include "kptlocale.h"
 #include "kptcommonstrings.h"
 #include "kptcommand.h"
 #include "kptitemmodelbase.h"
@@ -35,17 +37,16 @@
 #include <KoIcon.h>
 
 #include <QMimeData>
+#include <QMimeDatabase>
 #include <QStringList>
+#include <QLocale>
 
-#include <kglobal.h>
-#include <klocale.h>
-#include <kio/netaccess.h>
-#include <kmimetype.h>
-#include <kio/job.h>
+#include <KIO/TransferJob>
+#include <KIO/StatJob>
 
-#ifdef PLAN_KDEPIMLIBS_FOUND
-#include <kabc/addressee.h>
-#include <kabc/vcardconverter.h>
+#ifdef PLAN_KCONTACTS_FOUND
+#include <KContacts/Addressee>
+#include <KContacts/VCardConverter>
 #endif
 
 
@@ -81,14 +82,14 @@ int ResourceModel::propertyCount() const
 
 QVariant ResourceModel::name( const Resource *res, int role ) const
 {
-    //kDebug(planDbg())<<res->name()<<","<<role;
+    //debugPlan<<res->name()<<","<<role;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
             return res->name();
         case Qt::ToolTipRole:
             if ( res->autoAllocate() ) {
-                return i18nc( "@info:tooltip", "%1:<nl/>This resource will be automatically allocated to new tasks", res->name() );
+                return xi18nc( "@info:tooltip", "%1:<nl/>This resource will be automatically allocated to new tasks", res->name() );
             }
             return res->name();
         case Qt::StatusTipRole:
@@ -109,7 +110,7 @@ QVariant ResourceModel::name( const Resource *res, int role ) const
 
 QVariant ResourceModel::name( const  ResourceGroup *res, int role ) const
 {
-    //kDebug(planDbg())<<res->name()<<","<<role;
+    //debugPlan<<res->name()<<","<<role;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
@@ -220,9 +221,9 @@ QVariant ResourceModel::calendar( const Resource *res, int role ) const
         }
         case Qt::ToolTipRole: {
             if ( res->type() == Resource::Type_Team ) {
-                return i18nc( "@info:tooltip", "A team resource does not have a calendar" );
+                return xi18nc( "@info:tooltip", "A team resource does not have a calendar" );
             }
-            QString s = i18nc( "@info:tooltip", "No calendar" );
+            QString s = xi18nc( "@info:tooltip", "No calendar" );
             Calendar *cal = res->calendar( true ); // don't check for default calendar
             if ( cal ) {
                 s = cal->name();
@@ -230,7 +231,7 @@ QVariant ResourceModel::calendar( const Resource *res, int role ) const
                 // Do we get a default calendar
                 cal = res->calendar();
                 if ( cal ) {
-                    s = i18nc( "@info:tooltip 1=calendar name", "Using default calendar: %1", cal->name() );
+                    s = xi18nc( "@info:tooltip 1=calendar name", "Using default calendar: %1", cal->name() );
                 }
             }
             return s;
@@ -277,16 +278,16 @@ QVariant ResourceModel::availableFrom( const Resource *res, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return KGlobal::locale()->formatDateTime( res->availableFrom() );
+            return QLocale().toString( res->availableFrom(), QLocale::ShortFormat );
         case Qt::EditRole:
             return res->availableFrom();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::ToolTipRole: {
             if ( res->availableFrom().isValid() ) {
-                return i18nc( "infor:tooltip", "Available from: %1", KGlobal::locale()->formatDateTime( res->availableFrom(), KLocale::LongDate, KLocale::TimeZone ) );
+                return xi18nc( "infor:tooltip", "Available from: %1", QLocale().toString( res->availableFrom(), QLocale::LongFormat ) );
             }
-            return i18nc( "infor:tooltip", "Available from project target start time: %1", KGlobal::locale()->formatDateTime( m_project->constraintStartTime(), KLocale::LongDate, KLocale::TimeZone ) );
+            return xi18nc( "infor:tooltip", "Available from project target start time: %1", QLocale().toString( m_project->constraintStartTime(), QLocale::LongFormat ) );
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -299,16 +300,16 @@ QVariant ResourceModel::availableUntil( const Resource *res, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return KGlobal::locale()->formatDateTime( res->availableUntil() );
+            return QLocale().toString( res->availableUntil(), QLocale::ShortFormat );
         case Qt::EditRole:
             return res->availableUntil();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::ToolTipRole: {
             if ( res->availableUntil().isValid() ) {
-                return i18nc( "infor:tooltip", "Available until: %1", KGlobal::locale()->formatDateTime( res->availableUntil(), KLocale::LongDate, KLocale::TimeZone ) );
+                return xi18nc( "infor:tooltip", "Available until: %1", QLocale().toString( res->availableUntil(), QLocale::LongFormat ) );
             }
-            return i18nc( "infor:tooltip", "Available from project target finish time: %1", KGlobal::locale()->formatDateTime( m_project->constraintEndTime(), KLocale::LongDate, KLocale::TimeZone ) );
+            return xi18nc( "infor:tooltip", "Available from project target finish time: %1", QLocale().toString( m_project->constraintEndTime(), QLocale::LongFormat ) );
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -404,7 +405,7 @@ QVariant ResourceModel::data( const Resource *resource, int property, int role )
         case ResourceOvertimeRate: result = overtimeRate( resource, role ); break;
         case ResourceAccount: result = account( resource, role ); break;
         default:
-            kDebug(planDbg())<<"data: invalid display value: property="<<property;
+            debugPlan<<"data: invalid display value: property="<<property;
             break;
     }
     return result;
@@ -427,7 +428,7 @@ QVariant ResourceModel::data( const ResourceGroup *group, int property, int role
                 if ( property < propertyCount() ) {
                     result = QString();
                 } else {
-                    kDebug(planDbg())<<"data: invalid display value column"<<property;
+                    debugPlan<<"data: invalid display value column"<<property;
                     return QVariant();
                 }
             }
@@ -509,7 +510,7 @@ ResourceItemModel::~ResourceItemModel()
 
 void ResourceItemModel::slotResourceToBeInserted( const ResourceGroup *group, int row )
 {
-    //kDebug(planDbg())<<group->name()<<","<<row;
+    //debugPlan<<group->name()<<","<<row;
     Q_ASSERT( m_group == 0 );
     m_group = const_cast<ResourceGroup*>(group);
     beginInsertRows( index( group ), row, row );
@@ -517,7 +518,7 @@ void ResourceItemModel::slotResourceToBeInserted( const ResourceGroup *group, in
 
 void ResourceItemModel::slotResourceInserted( const Resource *resource )
 {
-    //kDebug(planDbg())<<resource->name();
+    //debugPlan<<resource->name();
     Q_ASSERT( resource->parentGroup() == m_group );
 #ifdef NDEBUG
     Q_UNUSED(resource)
@@ -529,7 +530,7 @@ void ResourceItemModel::slotResourceInserted( const Resource *resource )
 
 void ResourceItemModel::slotResourceToBeRemoved( const Resource *resource )
 {
-    //kDebug(planDbg())<<resource->name();
+    //debugPlan<<resource->name();
     Q_ASSERT( m_resource == 0 );
 #ifdef NDEBUG
     Q_UNUSED(resource)
@@ -541,7 +542,7 @@ void ResourceItemModel::slotResourceToBeRemoved( const Resource *resource )
 
 void ResourceItemModel::slotResourceRemoved( const Resource *resource )
 {
-    //kDebug(planDbg())<<resource->name();
+    //debugPlan<<resource->name();
     Q_ASSERT( resource == m_resource );
 #ifdef NDEBUG
     Q_UNUSED(resource)
@@ -552,7 +553,7 @@ void ResourceItemModel::slotResourceRemoved( const Resource *resource )
 
 void ResourceItemModel::slotResourceGroupToBeInserted( const ResourceGroup *group, int row )
 {
-    //kDebug(planDbg())<<group->name();
+    //debugPlan<<group->name();
     Q_ASSERT( m_group == 0 );
     m_group = const_cast<ResourceGroup*>(group);
     beginInsertRows( QModelIndex(), row, row );
@@ -560,7 +561,7 @@ void ResourceItemModel::slotResourceGroupToBeInserted( const ResourceGroup *grou
 
 void ResourceItemModel::slotResourceGroupInserted( const ResourceGroup *group )
 {
-    //kDebug(planDbg())<<group->name();
+    //debugPlan<<group->name();
     Q_ASSERT( group == m_group );
 #ifdef NDEBUG
     Q_UNUSED(group)
@@ -571,7 +572,7 @@ void ResourceItemModel::slotResourceGroupInserted( const ResourceGroup *group )
 
 void ResourceItemModel::slotResourceGroupToBeRemoved( const ResourceGroup *group )
 {
-    //kDebug(planDbg())<<group->name();
+    //debugPlan<<group->name();
     Q_ASSERT( m_group == 0 );
     m_group = const_cast<ResourceGroup*>(group);
     int row = index( group ).row();
@@ -580,7 +581,7 @@ void ResourceItemModel::slotResourceGroupToBeRemoved( const ResourceGroup *group
 
 void ResourceItemModel::slotResourceGroupRemoved( const ResourceGroup *group )
 {
-    //kDebug(planDbg())<<group->name();
+    //debugPlan<<group->name();
     Q_ASSERT( group == m_group );
 #ifdef NDEBUG
     Q_UNUSED(group)
@@ -599,6 +600,7 @@ void ResourceItemModel::slotLayoutChanged()
 void ResourceItemModel::setProject( Project *project )
 {
     if ( m_project ) {
+        disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         disconnect( m_project, SIGNAL(localeChanged()), this, SLOT(slotLayoutChanged()) );
         disconnect( m_project, SIGNAL(resourceChanged(Resource*)), this, SLOT(slotResourceChanged(Resource*)) );
         disconnect( m_project, SIGNAL(resourceGroupChanged(ResourceGroup*)), this, SLOT(slotResourceGroupChanged(ResourceGroup*)) );
@@ -623,6 +625,7 @@ void ResourceItemModel::setProject( Project *project )
     }
     m_project = project;
     if ( m_project ) {
+        connect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         connect( m_project, SIGNAL(localeChanged()), this, SLOT(slotLayoutChanged()) );
         connect( m_project, SIGNAL(resourceChanged(Resource*)), this, SLOT(slotResourceChanged(Resource*)) );
         connect( m_project, SIGNAL(resourceGroupChanged(ResourceGroup*)), this, SLOT(slotResourceGroupChanged(ResourceGroup*)) );
@@ -653,11 +656,11 @@ Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
 {
     Qt::ItemFlags flags = ItemModelBase::flags( index );
     if ( !m_readWrite ) {
-        //kDebug(planDbg())<<"read only"<<flags;
+        //debugPlan<<"read only"<<flags;
         return flags &= ~Qt::ItemIsEditable;
     }
     if ( !index.isValid() ) {
-        //kDebug(planDbg())<<"invalid"<<flags;
+        //debugPlan<<"invalid"<<flags;
         return flags;
     }
     Resource *r = qobject_cast<Resource*>( object ( index ) );
@@ -690,7 +693,7 @@ Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
             default:
                 flags |= Qt::ItemIsEditable;
         }
-        //kDebug(planDbg())<<"resource"<<flags;
+        //debugPlan<<"resource"<<flags;
     } else if ( qobject_cast<ResourceGroup*>( object( index ) ) ) {
         flags |= Qt::ItemIsDropEnabled;
         switch ( index.column() ) {
@@ -698,7 +701,7 @@ Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
             case ResourceModel::ResourceType: flags |= Qt::ItemIsEditable; break;
             default: flags &= ~Qt::ItemIsEditable;
         }
-        //kDebug(planDbg())<<"group"<<flags;
+        //debugPlan<<"group"<<flags;
     }
     return flags;
 }
@@ -709,9 +712,9 @@ QModelIndex ResourceItemModel::parent( const QModelIndex &index ) const
     if ( !index.isValid() || m_project == 0 ) {
         return QModelIndex();
     }
-    //kDebug(planDbg())<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
+    //debugPlan<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
 
-    Resource *r = qobject_cast<Resource*>( object( index ) );
+    Resource *r = resource( index );
     if ( r && r->parentGroup() ) {
         // only resources have parent
         int row = m_project->indexOf(  r->parentGroup() );
@@ -732,8 +735,7 @@ QModelIndex ResourceItemModel::index( int row, int column, const QModelIndex &pa
         }
         return QModelIndex();
     }
-    QObject *p = object( parent );
-    ResourceGroup *g = qobject_cast<ResourceGroup*>( p );
+    ResourceGroup *g = group( parent );
     if ( g ) {
         if ( row < g->numResources() ) {
             return createIndex( row, column, g->resourceAt( row ) );
@@ -782,8 +784,7 @@ int ResourceItemModel::rowCount( const QModelIndex &parent ) const
     if ( ! parent.isValid() ) {
         return m_project->numResourceGroups();
     }
-    QObject *p = object( parent );
-    ResourceGroup *g = qobject_cast<ResourceGroup*>( p );
+    ResourceGroup *g = group( parent );
     if ( g ) {
         return g->numResources();
     }
@@ -792,7 +793,7 @@ int ResourceItemModel::rowCount( const QModelIndex &parent ) const
 
 QVariant ResourceItemModel::name( const  ResourceGroup *res, int role ) const
 {
-    //kDebug(planDbg())<<res->name()<<","<<role;
+    //debugPlan<<res->name()<<","<<role;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
@@ -1148,6 +1149,9 @@ QObject *ResourceItemModel::object( const QModelIndex &index ) const
 {
     QObject *o = 0;
     if ( index.isValid() ) {
+        Q_ASSERT( m_project );
+        //debugPlan<<(void*)index.internalPointer()<<m_project->resourceGroups()<<m_project->resourceList();
+        Q_ASSERT(m_project->resourceGroups().contains(static_cast<ResourceGroup*>(index.internalPointer())) || m_project->resourceList().contains(static_cast<Resource*>(index.internalPointer())));
         o = static_cast<QObject*>( index.internalPointer() );
         Q_ASSERT( o );
     }
@@ -1201,7 +1205,7 @@ bool ResourceItemModel::dropAllowed( const QModelIndex &index, int dropIndicator
 {
     Q_UNUSED(data);
 
-    //kDebug(planDbg())<<index<<data;
+    //debugPlan<<index<<data;
     // TODO: if internal, don't allow dropping on my own parent
     switch ( dropIndicatorPosition ) {
         case ItemModelBase::OnItem:
@@ -1233,8 +1237,8 @@ void ResourceItemModel::slotDataArrived( KIO::Job *job, const QByteArray &data  
 void ResourceItemModel::slotJobFinished( KJob *job )
 {
     if ( job->error() || ! m_dropDataMap.contains( job ) ) {
-        kDebug(planDbg())<<(job->error() ? "Job error":"Error: no such job");
-    } else if ( KMimeType::findByContent( m_dropDataMap[ job ].data )->is( "text/x-vcard" ) ) {
+        debugPlan<<(job->error() ? "Job error":"Error: no such job");
+    } else if ( QMimeDatabase().mimeTypeForData( m_dropDataMap[ job ].data ).inherits(QStringLiteral("text/x-vcard") ) ) {
         ResourceGroup *g = 0;
         if ( m_dropDataMap[ job ].parent.isValid() ) {
             g = qobject_cast<ResourceGroup*>( object( m_dropDataMap[ job ].parent ) );
@@ -1242,7 +1246,7 @@ void ResourceItemModel::slotJobFinished( KJob *job )
             g = qobject_cast<ResourceGroup*>( object( index( m_dropDataMap[ job ].row, m_dropDataMap[ job ].column, m_dropDataMap[ job ].parent ) ) );
         }
         if ( g == 0 ) {
-            kDebug(planDbg())<<"No group"<<m_dropDataMap[ job ].row<<m_dropDataMap[ job ].column<<m_dropDataMap[ job ].parent;
+            debugPlan<<"No group"<<m_dropDataMap[ job ].row<<m_dropDataMap[ job ].column<<m_dropDataMap[ job ].parent;
         } else {
             createResources( g, m_dropDataMap[ job ].data );
         }
@@ -1256,11 +1260,11 @@ void ResourceItemModel::slotJobFinished( KJob *job )
 
 bool ResourceItemModel::createResources( ResourceGroup *group, const QByteArray &data )
 {
-#ifdef PLAN_KDEPIMLIBS_FOUND
-    KABC::VCardConverter vc;
-    KABC::Addressee::List lst = vc.parseVCards( data );
+#ifdef PLAN_KCONTACTS_FOUND
+    KContacts::VCardConverter vc;
+    KContacts::Addressee::List lst = vc.parseVCards( data );
     MacroCommand *m = new MacroCommand( kundo2_i18np( "Add resource from address book", "Add %1 resources from address book", lst.count() ) );
-    foreach( const KABC::Addressee &a, lst ) {
+    foreach( const KContacts::Addressee &a, lst ) {
         Resource *r = new Resource();
         QString uid = a.uid();
         if ( ! m_project->findResource( uid ) ) {
@@ -1277,13 +1281,15 @@ bool ResourceItemModel::createResources( ResourceGroup *group, const QByteArray 
     emit executeCommand( m );
     return true;
 #else
+    Q_UNUSED(group);
+    Q_UNUSED(data);
     return false;
 #endif
 }
 
 bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
 {
-    kDebug(planDbg())<<row<<column<<parent;
+    debugPlan<<row<<column<<parent;
     if (action == Qt::IgnoreAction) {
         return true;
     }
@@ -1297,12 +1303,12 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         g = qobject_cast<ResourceGroup*>( object( index( row, column, parent ) ) );
     }
     if ( g == 0 ) {
-        kDebug(planDbg())<<"No group"<<row<<column<<parent;
+        debugPlan<<"No group"<<row<<column<<parent;
         return false;
     }
-    kDebug(planDbg())<<data->formats()<<g->name();
+    debugPlan<<data->formats()<<g->name();
     if ( data->hasFormat( "application/x-vnd.kde.plan.resourceitemmodel.internal" ) ) {
-        kDebug(planDbg())<<action<<Qt::MoveAction;
+        debugPlan<<action<<Qt::MoveAction;
         if ( action == Qt::MoveAction ) {
             MacroCommand *m = 0;
             QByteArray encodedData = data->data( "application/x-vnd.kde.plan.resourceitemmodel.internal" );
@@ -1353,16 +1359,26 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         return createResources( g, data->data( f ) );
     }
     if ( data->hasFormat( "text/uri-list" ) ) {
-        const KUrl::List urls = KUrl::List::fromMimeData( data );
+        const QList<QUrl> urls = data->urls();
         if ( urls.isEmpty() ) {
             return false;
         }
         bool result = false;
-        foreach ( const KUrl &url, urls ) {
-            if ( url.protocol() != "akonadi" || ! KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, 0 ) ) {
-                kDebug(planDbg())<<url<<"is not 'akonadi' or does not exist";
+        foreach ( const QUrl &url, urls ) {
+            if ( url.scheme() != "akonadi" ) {
+                debugPlan<<url<<"is not 'akonadi'";
                 continue;
             }
+            // TODO: KIO::get will find out about this as well, no?
+            KIO::StatJob* statJob = KIO::stat( url );
+            statJob->setSide(  KIO::StatJob::SourceSide );
+
+            const bool isUrlReadable = statJob->exec();
+            if (! isUrlReadable ) {
+                debugPlan<<url<<"does not exist";
+                continue;
+            }
+
             KIO::TransferJob *job = KIO::get( url, KIO::NoReload, KIO::HideProgressInfo );
             bool res = connect(job, SIGNAL(data(KIO::Job*,QByteArray)), this, SLOT(slotDataArrived(KIO::Job*,QByteArray)));
             Q_ASSERT( res );
@@ -1394,7 +1410,7 @@ QList<Resource*> ResourceItemModel::resourceList( QDataStream &stream )
             lst << r;
         }
     }
-    kDebug(planDbg())<<lst;
+    debugPlan<<lst;
     return lst;
 }
 
@@ -1406,7 +1422,7 @@ QMimeData *ResourceItemModel::mimeData( const QModelIndexList & indexes ) const
     QList<int> rows;
     foreach (const QModelIndex &index, indexes) {
         if ( index.isValid() && !rows.contains( index.row() ) ) {
-            //kDebug(planDbg())<<index.row();
+            //debugPlan<<index.row();
             Resource *r = ::qobject_cast<Resource*>( object( index ) );
             if ( r ) {
                 rows << index.row();
@@ -1427,7 +1443,7 @@ QMimeData *ResourceItemModel::mimeData( const QModelIndexList & indexes ) const
 
 QModelIndex ResourceItemModel::insertGroup( ResourceGroup *g )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     emit executeCommand( new AddResourceGroupCmd( m_project, g, kundo2_i18n( "Add resource group" ) ) );
     int row = m_project->resourceGroups().indexOf( g );
     if ( row != -1 ) {
@@ -1438,7 +1454,7 @@ QModelIndex ResourceItemModel::insertGroup( ResourceGroup *g )
 
 QModelIndex ResourceItemModel::insertResource( ResourceGroup *g, Resource *r, Resource * /*after*/ )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     emit executeCommand( new AddResourceCmd( g, r, kundo2_i18n( "Add resource" ) ) );
     int row = g->indexOf( r );
     if ( row != -1 ) {
@@ -1533,7 +1549,7 @@ Project *AllocatedResourceItemModel::project() const
 
 void AllocatedResourceItemModel::setProject( Project *project )
 {
-    kDebug(planDbg())<<this->project()<<"="<<project;
+    debugPlan<<this->project()<<"="<<project;
     Project *p =this->project();
     if ( p ) {
         disconnect(p, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)));
@@ -1542,7 +1558,7 @@ void AllocatedResourceItemModel::setProject( Project *project )
     if ( project ) {
         connect(project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)));
     }
-    kDebug(planDbg())<<rowCount()<<":"<<sourceModel()->rowCount();
+    debugPlan<<rowCount()<<":"<<sourceModel()->rowCount();
 }
 
 void AllocatedResourceItemModel::reset()
@@ -1554,7 +1570,7 @@ void AllocatedResourceItemModel::reset()
 
 void AllocatedResourceItemModel::slotNodeChanged( Node *n )
 {
-    kDebug(planDbg())<<(n==m_task)<<n<<n->name();
+    debugPlan<<(n==m_task)<<n<<n->name();
     if ( n != m_task ) {
         return;
     }
@@ -1568,10 +1584,10 @@ Task *AllocatedResourceItemModel::task() const
 
 void AllocatedResourceItemModel::setTask( Task *task )
 {
-    kDebug(planDbg())<<m_task<<"="<<task<<(task?task->name():"");
+    debugPlan<<m_task<<"="<<task<<(task?task->name():"");
     m_task = task;
     reset();
-    kDebug(planDbg())<<rowCount()<<":"<<sourceModel()->rowCount();
+    debugPlan<<rowCount()<<":"<<sourceModel()->rowCount();
 }
 
 QObject* AllocatedResourceItemModel::object(const QModelIndex& idx) const
@@ -1600,7 +1616,7 @@ QVariant AllocatedResourceItemModel::headerData(int section, Qt::Orientation ori
 {
     if ( section == 1 ) {
         if ( orientation == Qt::Horizontal && role == Qt::DisplayRole ) {
-            return i18nc( "@title:column", "Allocation" );
+            return xi18nc( "@title:column", "Allocation" );
         }
         return QVariant();
     }
@@ -1622,9 +1638,9 @@ QVariant AllocatedResourceItemModel::allocation( const Resource *res, int role )
         }
         case Qt::ToolTipRole: {
             if ( rr->units() == 0 ) {
-                return i18nc( "@info:tooltip", "Not allocated" );
+                return xi18nc( "@info:tooltip", "Not allocated" );
             }
-            return i18nc( "@info:tooltip", "%1 allocated out of %2 available", gr->count(), res->parentGroup()->numResources() );
+            return xi18nc( "@info:tooltip", "%1 allocated out of %2 available", gr->count(), res->parentGroup()->numResources() );
         }
         default:
             break;
@@ -1643,19 +1659,19 @@ QVariant AllocatedResourceItemModel::allocation( const ResourceGroup *res, int r
         case Qt::EditRole:
             return QString( "%1 (%2)" ).arg( gr->units() ).arg( gr->count() );
         case Qt::ToolTipRole: {
-            QString s1 = i18ncp( "@info:tooltip",
+            QString s1 = xi18ncp( "@info:tooltip",
                                  "%1 resource requested for dynamic allocation",
                                  "%1 resources requested for dynamic allocation",
                                  gr->units() );
-            QString s2 = i18ncp( "@info:tooltip",
+            QString s2 = xi18ncp( "@info:tooltip",
                                  "%1 resource allocated",
                                  "%1 resources allocated",
                                  gr->count() );
 
-            return i18nc( "@info:tooltip", "%1<nl/>%2", s1, s2 );
+            return xi18nc( "@info:tooltip", "%1<nl/>%2", s1, s2 );
         }
         case Qt::WhatsThisRole: {
-            return i18nc( "@info:whatsthis",
+            return xi18nc( "@info:whatsthis",
                           "<title>Group allocations</title>"
                           "<para>You can allocate a number of resources from a group and let"
                           " the scheduler select from the available resources at the time of scheduling.</para>"
@@ -1719,10 +1735,8 @@ bool AllocatedResourceItemModel::filterAcceptsRow( int source_row, const QModelI
         ResourceGroupRequest *gr = req.find( g );
         result = (bool) gr && ( gr->units() > 0 || gr->count() > 0 );
     }
-    kDebug(planDbg())<<result<<":"<<source_parent<<idx;
+    debugPlan<<result<<":"<<source_parent<<idx;
     return result;
 }
 
 } // namespace KPlato
-
-#include "kptresourcemodel.moc"

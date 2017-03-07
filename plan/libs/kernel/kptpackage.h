@@ -24,8 +24,7 @@
 
 #include "kpttask.h"
 
-#include <kurl.h>
-
+#include <QUrl>
 #include <QString>
 
 namespace KPlato {
@@ -37,9 +36,9 @@ class KPLATOKERNEL_EXPORT Package
 {
 public:
     Package();
-    KUrl url;
+    QUrl url;
     Project *project;
-    KDateTime timeTag;
+    QDateTime timeTag;
     QString ownerId;
     QString ownerName;
 
@@ -47,7 +46,7 @@ public:
 
     Task *task;
     Task *toTask;
-    QMap<QString, KUrl> documents;
+    QMap<QString, QUrl> documents;
 };
 
 }

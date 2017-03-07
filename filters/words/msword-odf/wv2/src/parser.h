@@ -148,7 +148,7 @@ public:
      * @param index into plcfTxbxTxt
      * @param processing a header/footer
      */
-    virtual void parseTextBox(uint index, bool stylesxml) = 0;
+    virtual void parseTextBox(unsigned int index, bool stylesxml) = 0;
 
     /**
      * The inline replacement handler is used to replace certain characters on the fly.

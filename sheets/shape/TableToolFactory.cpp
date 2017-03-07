@@ -20,7 +20,7 @@
 // Local
 #include "TableToolFactory.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <KoIcon.h>
 #include "TableShape.h"
@@ -32,7 +32,7 @@ TableToolFactory::TableToolFactory()
     : KoToolFactoryBase("TableToolFactoryId")
 {
     setToolTip(i18n("Table editing"));
-    setIconName(koIconNameCStr("spreadsheetshape"));
+    setIconName(koIconName("spreadsheetshape"));
     setToolType(dynamicToolType());
     setPriority(1);
     setActivationShapeId(TableShapeId);

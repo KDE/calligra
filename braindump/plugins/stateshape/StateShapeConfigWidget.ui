@@ -19,7 +19,7 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="KComboBox" name="stateComboBox">
+    <widget class="QComboBox" name="stateComboBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>

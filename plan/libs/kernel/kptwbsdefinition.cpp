@@ -19,10 +19,11 @@
 
 #include "kptwbsdefinition.h"
 
-#include <klocale.h>
-#include <kdebug.h>
+#include "kptdebug.h"
 
 #include <KoXmlReader.h>
+
+#include <KLocalizedString>
 
 #include <QStringList>
 
@@ -154,7 +155,7 @@ QString WBSDefinition::toRoman( int n, bool upper ) const
     static const QString RNThousands[] = {"", "m", "mm", "mmm"};
 
     if (n < 0) { // should never happen, but better not crash if it does
-        kWarning() << "intToRoman called with negative number: n=" << n;
+        warnPlan << "intToRoman called with negative number: n=" << n;
         return QString::number(n);
     }
 
@@ -223,7 +224,7 @@ bool WBSDefinition::loadXML(KoXmlElement &element, XMLLoaderObject & ) {
                 int lvl = el.attribute( "level", "-1" ).toInt();
                 if ( lvl >= 0 ) {
                     setLevelsDef( lvl, d );
-                } else kError()<<"Invalid levels definition";
+                } else errorPlan<<"Invalid levels definition";
             }
         }
     }
@@ -236,7 +237,7 @@ void WBSDefinition::saveXML(QDomElement &element)  const {
 
     me.setAttribute( "project-code", m_projectCode );
     me.setAttribute( "project-separator", m_projectSeparator );
-    me.setAttribute( "levels-enabled", m_levelsEnabled );
+    me.setAttribute( "levels-enabled", QString::number(m_levelsEnabled) );
     if ( ! m_levelsDef.isEmpty() ) {
         QDomElement ld = element.ownerDocument().createElement("levels");
         me.appendChild(ld);
@@ -244,7 +245,7 @@ void WBSDefinition::saveXML(QDomElement &element)  const {
         for (it = m_levelsDef.constBegin(); it != m_levelsDef.constEnd(); ++it) {
             QDomElement l = element.ownerDocument().createElement("level");
             ld.appendChild(l);
-            l.setAttribute( "level", it.key() );
+            l.setAttribute( "level", QString::number(it.key()) );
             l.setAttribute( "code", it.value().code );
             l.setAttribute( "separator", it.value().separator );
         }

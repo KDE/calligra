@@ -1,15 +1,15 @@
-add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30526)
-
 include_directories(
     ${KOODF2_INCLUDES}
     ${CMAKE_SOURCE_DIR}/filters/libmsooxml
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx # for Charting
+    ${CMAKE_SOURCE_DIR}/filters/libmso # For NumberFormatParser
+    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx # for the XlsxChartReader
     ${KOMAIN_INCLUDES}
 )
 
 ########### next target ###############
 
 set(docx2odt_PART_SRCS
+    DocxDebug.cpp
     DocxXmlStylesReader.cpp
     DocxXmlFontTableReader.cpp
     DocxXmlCommentsReader.cpp
@@ -21,22 +21,24 @@ set(docx2odt_PART_SRCS
     DocxXmlEndnoteReader.cpp
     DocxXmlSettingsReader.cpp
     DocxImport.cpp
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/ChartExport.cpp
+    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxChartOdfWriter.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libodf2/chart/KoOdfChartWriter.cpp
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxXmlChartReader.cpp
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/NumberFormatParser.cpp
 )
 
-kde4_add_plugin(calligra_filter_docx2odt ${docx2odt_PART_SRCS})
+add_library(calligra_filter_docx2odt MODULE ${docx2odt_PART_SRCS})
+calligra_filter_desktop_to_json(calligra_filter_docx2odt calligra_filter_docx2odt.desktop)
 
 target_link_libraries(
     calligra_filter_docx2odt
     komsooxml
+    mso
     koodf2
     koodf
     komain
 )
 
-install(TARGETS calligra_filter_docx2odt DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_docx2odt DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 
 ########### next target ###############
@@ -45,7 +47,7 @@ if(FALSE) # not implemented yet
 
 set(docxexport_PART_SRCS DocxExport.cpp ExportFilter.cpp ${libcommon_SRCS} )
 
-kde4_add_plugin(docxexport ${docxexport_PART_SRCS})
+add_library(docxexport MODULE ${docxexport_PART_SRCS})
 
 
 
@@ -56,7 +58,7 @@ target_link_libraries(
     koodf
 )
 
-install(TARGETS docxexport DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS docxexport DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 endif()
 
@@ -64,16 +66,21 @@ endif()
 
 ########### install files ###############
 
-install( FILES
-  calligra_filter_docx2odt.desktop
-  DESTINATION ${SERVICES_INSTALL_DIR}/calligra
-)
-
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES words_docx_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 endif()
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_DOCX)
-    install( FILES libokularGenerator_docx_calligra.desktop okularDocx_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+    kcoreaddons_add_plugin(okularGenerator_docx_calligra
+        JSON libokularGenerator_docx.json
+        INSTALL_NAMESPACE "okular/generators"
+        SOURCES OkularDocxGeneratorPlugin.cpp
+    )
+
+    target_link_libraries( okularGenerator_docx_calligra
+        kookularGenerator_odt
+    )
+
+    install( FILES okularDocx_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
     install( PROGRAMS okularApplication_docx_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 endif()

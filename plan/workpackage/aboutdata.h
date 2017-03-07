@@ -21,8 +21,10 @@
 #ifndef KPLATOWORK_ABOUTDATA
 #define KPLATOWORK_ABOUTDATA
 
-#include <kaboutdata.h>
-#include <klocale.h>
+#include <KAboutData>
+#include <KLocalizedString>
+#include <kcoreaddons_version.h>
+
 #include <calligraversion.h>
 
 namespace KPlatoWork
@@ -33,17 +35,25 @@ static const char PLANWORK_VERSION[] = CALLIGRA_VERSION_STRING;
 
 KAboutData * newAboutData()
 {
-    KAboutData * aboutData=new KAboutData( "planwork", 0, ki18nc("application name", "Plan WorkPackage Handler"),
-                                           PLANWORK_VERSION, ki18n(PLANWORK_DESCRIPTION),
-                                           KAboutData::License_GPL,
-                                           ki18n("© 1998-%1, The Plan Team").subs(CALLIGRA_YEAR),
-                                           KLocalizedString(),
-                                           "http://www.calligra.org/plan/" );
+    KAboutData * aboutData = new KAboutData(
+        QStringLiteral("calligraplanwork"),
+        i18nc("application name", "Plan WorkPackage Handler"),
+        QStringLiteral(CALLIGRA_VERSION_STRING),
+        i18n("PlanWork - Work Package handler for the Plan Project Planning Tool"),
+        KAboutLicense::GPL,
+        i18n("Copyright 1998-%1, The Plan Team", QStringLiteral(CALLIGRA_YEAR)),
+        QString(),
+        QStringLiteral("https://www.calligra.org/plan/"));
 
-    aboutData->addAuthor(ki18n("Dag Andersen"), KLocalizedString(), "danders@get2net.dk");
+    aboutData->addAuthor(i18n("Dag Andersen"), QString(), QStringLiteral("danders@get2net.dk"));
+    // standard ki18n translator strings
+    aboutData->setTranslator(i18nc("NAME OF TRANSLATORS", "Your names"),
+                             i18nc("EMAIL OF TRANSLATORS", "Your emails"));
 
-    aboutData->setProductName( "calligra-plan/work" );
-    aboutData->setProgramIconName( "calligraplanwork" );
+    aboutData->setProductName( "calligraplan/work" );
+#if KCOREADDONS_VERSION >= 0x051600
+    aboutData->setDesktopFileName(QStringLiteral("org.kde.calligraplanworks"));
+#endif
 
     return aboutData;
 }

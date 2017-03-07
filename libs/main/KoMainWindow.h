@@ -34,13 +34,14 @@ class KoView;
 class KoPrintJob;
 class KoDockFactoryBase;
 class KRecentFilesAction;
+class KoComponentData;
 class QDockWidget;
 
 struct KoPageLayout;
 
 // Calligra class but not in main module
 class KoDockerManager;
-class KUrl;
+class QUrl;
 
 /**
  * @brief Main window for a Calligra application
@@ -61,7 +62,7 @@ public:
      *
      *  Initializes a Calligra main window (with its basic GUI etc.).
      */
-    explicit KoMainWindow(const QByteArray &nativeMimeType, const KComponentData &instance);
+    explicit KoMainWindow(const QByteArray &nativeMimeType, const KoComponentData &instance);
 
     /**
      *  Destructor.
@@ -90,6 +91,9 @@ public:
      */
     void updateCaption();
 
+    KoComponentData componentData() const;
+    void setComponentData(const KoComponentData &componentData);
+
     /**
      *  Retrieves the document that is displayed in the mainwindow.
      */
@@ -115,7 +119,7 @@ public:
     /**
      * The document opened a URL -> store into recent documents list.
      */
-    void addRecentURL(const KUrl& url);
+    void addRecentURL(const QUrl &url);
 
     /**
      * Load the desired document and show it.
@@ -123,14 +127,14 @@ public:
      *
      * @return TRUE on success.
      */
-    bool openDocument(const KUrl & url);
+    bool openDocument(const QUrl &url);
 
     /**
      * Load the URL into this document (and make it root doc after loading)
      *
      * Special method for KoApplication::start, don't use.
      */
-    bool openDocument(KoPart *newPart, const KUrl & url);
+    bool openDocument(KoPart *newPart, const QUrl &url);
 
     /**
      * Reloads the recent documents list.
@@ -223,7 +227,7 @@ public Q_SLOTS:
      *  If the current document is empty, the opened document replaces it.
      *  If not a new mainwindow will be opened for showing the opened file.
      */
-    void slotFileOpenRecent(const KUrl &);
+    void slotFileOpenRecent(const QUrl &);
 
     /**
      *  Saves the current document with the current name.
@@ -242,7 +246,7 @@ public Q_SLOTS:
     void slotFilePrintPreview();
 
     KoPrintJob* exportToPdf(const QString &pdfFileName = QString());
-    KoPrintJob* exportToPdf(KoPageLayout pageLayout, QString pdfFileName = QString());
+    KoPrintJob* exportToPdf(const KoPageLayout &pageLayout, const QString &pdfFileName = QString());
 
     /**
      * Show a dialog with author and document information.
@@ -368,7 +372,7 @@ private:
      */
     bool queryClose();
 
-    bool openDocumentInternal(const KUrl &url, KoPart *newpart = 0, KoDocument *newdoc = 0);
+    bool openDocumentInternal(const QUrl &url, KoPart *newpart = 0, KoDocument *newdoc = 0);
 
     /**
      * Returns whether or not the current slotFileSave[As]() or saveDocument()

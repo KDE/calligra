@@ -30,7 +30,7 @@
 #ifndef CALLIGRA_SHEETS_FORMAT
 #define CALLIGRA_SHEETS_FORMAT
 
-#include "calligra_sheets_export.h"
+#include "sheets_odf_export.h"
 
 namespace Calligra
 {

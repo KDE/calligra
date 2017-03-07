@@ -28,11 +28,10 @@
 #include <QTextDocument>
 #include <QTextCursor>
 
-#include <kdebug.h>
 #include <kpluginfactory.h>
 #include <kencodingprober.h>
 
-#include <calligraversion.h>
+#include <CalligraVersionWrapper.h>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 #include <KoStore.h>
@@ -51,6 +50,7 @@
 #include <KoUpdater.h>
 #include <KoTextDocumentLayout.h>
 
+#include "AsciiImportDebug.h"
 #include "ImportDialog.h"
 
 #include <KWDocument.h>
@@ -62,8 +62,8 @@
 // is slower then using the Calligra Words API direct.
 //#define OUTPUT_AS_ODT_FILE
 
-K_PLUGIN_FACTORY(AsciiImportFactory, registerPlugin<AsciiImport>();)
-K_EXPORT_PLUGIN(AsciiImportFactory("wordsasciiimportng", "calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(AsciiImportFactory, "calligra_filter_ascii2words.json",
+                           registerPlugin<AsciiImport>();)
 
 bool checkEncoding(QTextCodec *codec, QByteArray &data)
 {
@@ -95,7 +95,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
 
     QFile in(m_chain->inputFile());
     if (!in.open(QIODevice::ReadOnly)) {
-        kError(30502) << "Unable to open input file!" << endl;
+        errorAsciiImport << "Unable to open input file!" << endl;
         in.close();
         return KoFilter::FileNotFound;
     }
@@ -124,7 +124,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
     if (!checkEncoding(codec, data)) {
         KEncodingProber prober(KEncodingProber::Universal);
         prober.feed(data);
-        kDebug(30502) << "guessed" << prober.encoding() << prober.confidence();
+        debugAsciiImport << "guessed" << prober.encoding() << prober.confidence();
         if (prober.confidence() > 0.5)
             codec = QTextCodec::codecForName(prober.encoding());
         if (!codec || !checkEncoding(codec, data )) {
@@ -143,17 +143,17 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
         paragraphStrategy = dialog->getParagraphStrategy();
     }
     if (!codec) return KoFilter::StupidError;
-    kDebug(30502) << "Charset used:" << codec->name();
+    debugAsciiImport << "Charset used:" << codec->name();
 
 #ifdef OUTPUT_AS_ODT_FILE
     KoStore *store = KoStore::createStore(m_chain->outputFile(), KoStore::Write, to, KoStore::Zip);
     if (!store || store->bad()) {
-        kWarning(30502) << "Unable to open output file!";
+        warnAsciiImport << "Unable to open output file!";
         delete store;
         return KoFilter::FileNotFound;
     }
     
-    kDebug(30502) << "created store.";
+    debugAsciiImport << "created store.";
     KoOdfWriteStore odfStore(store);
     odfStore.manifestWriter(to);
 
@@ -314,7 +314,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
         KoXmlWriter* xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-meta");
         xmlWriter->startElement("office:meta");
         xmlWriter->startElement("meta:generator");
-        xmlWriter->addTextNode(QString("Calligra %1").arg(CALLIGRA_VERSION_STRING));
+        xmlWriter->addTextNode(QString("Calligra %1").arg(CalligraVersionWrapper::versionString()));
         xmlWriter->endElement();
         xmlWriter->startElement("meta:creation-date");
         xmlWriter->addTextNode(QDateTime::currentDateTime().toString(Qt::ISODate));
@@ -327,7 +327,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
             odfStore.manifestWriter()->addManifestEntry("meta.xml", "text/xml" );
     }
     if (!odfStore.closeManifestWriter()) {
-        kWarning() << "Error while trying to write 'META-INF/manifest.xml'. Partition full?";
+        warnAsciiImport << "Error while trying to write 'META-INF/manifest.xml'. Partition full?";
         delete store;
         return KoFilter::CreationError;
     }
@@ -340,3 +340,5 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
 
     return KoFilter::OK;
 }
+
+#include "AsciiImport.moc"

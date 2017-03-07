@@ -19,7 +19,7 @@
 
 #include "ReadOnlyTableModel.h"
 
-// KSpread
+// Sheets
 #include "Cell.h"
 #include "kspread_limits.h"
 #include "Map.h"
@@ -68,7 +68,7 @@ int ReadOnlyTableModel::rowCount(const QModelIndex& parent) const
 
 QVariant ReadOnlyTableModel::data(const QModelIndex& index, int role) const
 {
-    // NOTE Model indices start from 0, while KSpread column/row indices start from 1.
+    // NOTE Model indices start from 0, while Calligra Sheets column/row indices start from 1.
     const Cell cell = Cell(d->sheet, index.column() + 1, index.row() + 1).masterCell();
     const Style style = cell.effectiveStyle();
     if (role == Qt::DisplayRole) {
@@ -110,7 +110,7 @@ QVariant ReadOnlyTableModel::data(const QModelIndex& index, int role) const
 
 QVariant ReadOnlyTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    // NOTE Model indices start from 0, while KSpread column/row indices start from 1.
+    // NOTE Model indices start from 0, while Calligra Sheets column/row indices start from 1.
     if (role == Qt::DisplayRole) {
         if (orientation == Qt::Horizontal) {
             return Cell::columnName(section + 1);

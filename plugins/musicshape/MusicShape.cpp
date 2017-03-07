@@ -26,7 +26,7 @@
 #include <QByteArray>
 #include <QSvgGenerator>
 
-#include <kdebug.h>
+#include "MusicDebug.h"
 #include <klocalizedstring.h>
 
 #include <KoViewConverter.h>
@@ -67,7 +67,7 @@ MusicShape::MusicShape()
     m_successor(0),
     m_predecessor(0)
 {
-/*    kDebug() << "firstShape:" << firstShape << "this:" << this;
+/*    debugMusic << "firstShape:" << firstShape << "this:" << this;
 
     if (firstShape) {
         firstShape->m_successor = this;
@@ -97,7 +97,7 @@ MusicShape::MusicShape()
 
 MusicShape::~MusicShape()
 {
-    //kDebug() << "destroying" << this;
+    //debugMusic << "destroying" << this;
     if (!m_predecessor && !m_successor) {
         delete m_sheet;
     }
@@ -219,7 +219,7 @@ bool MusicShape::loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadi
 {
     KoXmlElement score = KoXml::namedItemNS(element, "http://www.calligra.org/music", "score-partwise");
     if (score.isNull()) {
-        kWarning() << "no music:score-partwise element as first child";
+        warnMusic << "no music:score-partwise element as first child";
         return false;
     }
     Sheet* sheet = MusicXmlReader().loadSheet(score);

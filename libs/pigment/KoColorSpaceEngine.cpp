@@ -18,10 +18,13 @@
  */
 
 #include <KoColorSpaceEngine.h>
-#include <kglobal.h>
+#include <QGlobalStatic>
 #include <QString>
 
-struct KoColorSpaceEngine::Private {
+
+Q_GLOBAL_STATIC(KoColorSpaceEngineRegistry, s_instance);
+
+struct Q_DECL_HIDDEN KoColorSpaceEngine::Private {
     QString id;
     QString name;
 };
@@ -60,6 +63,5 @@ KoColorSpaceEngineRegistry::~KoColorSpaceEngineRegistry()
 
 KoColorSpaceEngineRegistry* KoColorSpaceEngineRegistry::instance()
 {
-    K_GLOBAL_STATIC(KoColorSpaceEngineRegistry, s_instance);
     return s_instance;
 }

@@ -39,7 +39,7 @@ class ParagraphBulletsNumbers : public QWidget
 public:
     explicit ParagraphBulletsNumbers(QWidget *parent);
 
-    void setDisplay(KoParagraphStyle *style, int level = 0);
+    void setDisplay(KoParagraphStyle *style, int level, bool directFormattingMode);
 
     void save(KoParagraphStyle *style);
 
@@ -64,7 +64,7 @@ private Q_SLOTS:
 private:
     Ui::ParagraphBulletsNumbers widget;
 
-    QHash<int, KoListStyle::Style> m_mapping;
+    QHash<int, KoListStyle::LabelType> m_mapping;
     int m_previousLevel;
     int m_blankCharIndex;
     bool m_alignmentMode;

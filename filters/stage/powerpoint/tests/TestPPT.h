@@ -19,7 +19,7 @@
 #ifndef TESTPPT_H
 #define TESTPPT_H
 
-#include <QtTest>
+#include <QObject>
 
 class TestPPT : public QObject
 {

@@ -19,12 +19,12 @@
 
 #include "ChapterVariableFactory.h"
 #include "ChapterVariable.h"
+#include "VariablesDebug.h"
 
 #include <KoProperties.h>
 #include <KoXmlNS.h>
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
 
 ChapterVariableFactory::ChapterVariableFactory()
     : KoInlineObjectFactoryBase("chapter", TextVariable)

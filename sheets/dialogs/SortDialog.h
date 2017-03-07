@@ -28,7 +28,7 @@
 #ifndef CALLIGRA_SHEETS_SORT_DIALOG
 #define CALLIGRA_SHEETS_SORT_DIALOG
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class QTableWidgetItem;
 
@@ -42,7 +42,7 @@ class Selection;
  * \ingroup UI
  * Dialog to set options for the sort cell values command.
  */
-class SortDialog : public KDialog
+class SortDialog : public KoDialog
 {
     Q_OBJECT
 public:

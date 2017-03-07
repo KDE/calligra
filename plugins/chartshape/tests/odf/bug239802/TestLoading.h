@@ -20,13 +20,13 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KCHART_TESTLOADING_H_DEFAULT_OOO_CHART
-#define KCHART_TESTLOADING_H_DEFAULT_OOO_CHART
+#ifndef KCHART_TESTLOADING_H_BUG239802
+#define KCHART_TESTLOADING_H_BUG239802
 
 // Base
 #include "../TestLoadingBase.h"
 
-namespace KChart {
+namespace KoChart {
 
 class TestLoading : public TestLoadingBase
 {
@@ -41,6 +41,6 @@ private Q_SLOTS:
     void testLegend();
 };
 
-} // namespace KChart
+} // namespace KoChart
 
-#endif // KCHART_TESTLOADING_H_DEFAULT_OOO_CHART
+#endif // KCHART_TESTLOADING_H_BUG239802

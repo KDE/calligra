@@ -189,5 +189,3 @@ void CQTextDocumentNotesModel::addEntry(const QString& text, const QString& imag
     dataChanged(index(position - colorCount), index(position - 1));
     emit countChanged();
 }
-
-#include "CQTextDocumentNotesModel.moc"

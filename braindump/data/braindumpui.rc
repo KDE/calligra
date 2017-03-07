@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="braindump" version="1">
+<kpartgui name="braindump" version="1" translationDomain="braindump">
     <MenuBar>
         <Menu name="edit" >
         </Menu>

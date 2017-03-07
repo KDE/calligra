@@ -25,14 +25,16 @@
 #include "KoLocationSemanticItemFactory.h"
 // rdf
 #include <KoRdfSemanticItemRegistry.h>
-// KDE
+// KF5
 #include <kpluginfactory.h>
 
-K_PLUGIN_FACTORY(PluginFactory, registerPlugin<KoLocationSemanticItemPlugin>();)
-K_EXPORT_PLUGIN(PluginFactory("calligra_semanticitem_location"))
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_semanticitem_location.json",
+                           registerPlugin<KoLocationSemanticItemPlugin>();)
 
 KoLocationSemanticItemPlugin::KoLocationSemanticItemPlugin(QObject *parent, const QVariantList &/*args */)
   : QObject(parent)
 {
     KoRdfSemanticItemRegistry::instance()->add(new KoLocationSemanticItemFactory());
 }
+
+#include "KoLocationSemanticItemPlugin.moc" // prevents vtable error

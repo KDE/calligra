@@ -233,7 +233,7 @@ public:
     QMap<QString, KoDataCenterBase*> dataCenterMap() const;
 
     /// Sets the data centers to be used by this document
-    void useExternalDataCenterMap(QMap<QString, KoDataCenterBase*> dataCenters);
+    void useExternalDataCenterMap(const QMap<QString, KoDataCenterBase*> &dataCenters);
 
     void addToDataCenterMap(const QString &key, KoDataCenterBase* dataCenter);
 

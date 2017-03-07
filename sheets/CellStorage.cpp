@@ -29,13 +29,10 @@
 #include <QWriteLocker>
 #endif
 
-// KDE
-#include <klocale.h>
-
 // Calligra
 #include <KoXmlWriter.h>
 
-// KSpread
+// Sheets
 #include "BindingStorage.h"
 #include "ConditionsStorage.h"
 #include "Damages.h"
@@ -1751,5 +1748,3 @@ void CellStorage::setRowsRepeated(int row, int count)
 #endif
     d->rowRepeatStorage->setRowRepeat(row, count);
 }
-
-#include "CellStorage.moc"

@@ -40,8 +40,8 @@
 #include <QHBoxLayout>
 #include <QSizePolicy>
 
-// KDE
-#include <klocale.h>
+// KF5
+#include <klocalizedstring.h>
 
 // Calligra
 #include <KoIcon.h>
@@ -231,7 +231,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
 
     QToolButton *capNJoinButton = new QToolButton(this);
     capNJoinButton->setMinimumHeight(25);
-    d->capNJoinMenu = new CapNJoinMenu();
+    d->capNJoinMenu = new CapNJoinMenu(this);
     capNJoinButton->setMenu(d->capNJoinMenu);
     capNJoinButton->setText("...");
     capNJoinButton->setPopupMode(QToolButton::InstantPopup);
@@ -262,7 +262,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     // Make the signals visible on the outside of this widget.
     connect(d->lineStyle,  SIGNAL(currentIndexChanged(int)), this, SLOT(applyChanges()));
     connect(d->lineWidth,  SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyChanges()));
-    connect(d->colorAction, SIGNAL(colorChanged(const KoColor &)), this, SLOT(applyChanges()));
+    connect(d->colorAction, SIGNAL(colorChanged(KoColor)), this, SLOT(applyChanges()));
     connect(d->capNJoinMenu->capGroup,   SIGNAL(buttonClicked(int)),       this, SLOT(applyChanges()));
     connect(d->capNJoinMenu->joinGroup,  SIGNAL(buttonClicked(int)),       this, SLOT(applyChanges()));
     connect(d->capNJoinMenu->miterLimit, SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyChanges()));
@@ -479,9 +479,9 @@ void KoStrokeConfigWidget::applyMarkerChanges(KoMarkerData::MarkerPosition posit
         return;
     }
 
-    QList<KoShape*> shapeList = selection->selectedShapes();
+    const QList<KoShape*> shapeList = selection->selectedShapes();
     QList<KoPathShape*> pathShapeList;
-    for (QList<KoShape*>::iterator itShape = shapeList.begin(); itShape != shapeList.end(); ++itShape) {
+    for (QList<KoShape*>::ConstIterator itShape = shapeList.begin(); itShape != shapeList.end(); ++itShape) {
         KoPathShape* pathShape = dynamic_cast<KoPathShape*>(*itShape);
         if (pathShape) {
             pathShapeList << pathShape;
@@ -535,19 +535,20 @@ void KoStrokeConfigWidget::setCanvas( KoCanvasBase *canvas )
                 this, SLOT(selectionChanged()));
         connect(canvas->shapeManager(), SIGNAL(selectionContentChanged()),
                 this, SLOT(selectionChanged()));
-        connect(canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-                this, SLOT(canvasResourceChanged(int, const QVariant &)));
+        connect(canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+                this, SLOT(canvasResourceChanged(int,QVariant)));
         setUnit(canvas->unit());
+
+        KoDocumentResourceManager *resourceManager = canvas->shapeController()->resourceManager();
+        if (resourceManager) {
+            KoMarkerCollection *collection = resourceManager->resource(KoDocumentResourceManager::MarkerCollection).value<KoMarkerCollection*>();
+            if (collection) {
+                updateMarkers(collection->markers());
+            }
+        }
     }
 
     d->canvas = canvas;
-    KoDocumentResourceManager *resourceManager = canvas->shapeController()->resourceManager();
-    if (resourceManager) {
-        KoMarkerCollection *collection = resourceManager->resource(KoDocumentResourceManager::MarkerCollection).value<KoMarkerCollection*>();
-        if (collection) {
-            updateMarkers(collection->markers());
-        }
-    }
 }
 
 void KoStrokeConfigWidget::canvasResourceChanged(int key, const QVariant &value)
@@ -558,5 +559,3 @@ void KoStrokeConfigWidget::canvasResourceChanged(int key, const QVariant &value)
         break;
     }
 }
-
-#include <KoStrokeConfigWidget.moc>

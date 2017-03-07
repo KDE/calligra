@@ -20,13 +20,13 @@
 #ifndef KSPREADAPPLICATIONSETTINGS
 #define KSPREADAPPLICATIONSETTINGS
 
-#include <kglobalsettings.h>
+#include <KCompletion>
 
 #include <QColor>
 #include <QObject>
 
 #include "Global.h"
-#include "calligra_sheets_export.h"
+#include "sheets_odf_export.h"
 
 namespace Calligra
 {
@@ -149,13 +149,13 @@ public:
     /**
      * @return completion mode
      */
-    KGlobalSettings::Completion completionMode() const;
+    KCompletion::CompletionMode completionMode() const;
 
     /**
      * Sets the completion mode.
      * @param mode the mode to be set
      */
-    void setCompletionMode(KGlobalSettings::Completion mode);
+    void setCompletionMode(KCompletion::CompletionMode mode);
 
     Calligra::Sheets::MoveTo moveToValue() const;
     void setMoveToValue(Calligra::Sheets::MoveTo moveTo);
@@ -168,9 +168,6 @@ public:
 
     QColor pageOutlineColor() const;
     void changePageOutlineColor(const QColor& color);
-
-    void setCaptureAllArrowKeys(bool capture);
-    bool captureAllArrowKeys() const;
 
 private:
     class Private;

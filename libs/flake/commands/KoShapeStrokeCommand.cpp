@@ -24,7 +24,7 @@
 #include "KoShape.h"
 #include "KoShapeStrokeModel.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class KoShapeStrokeCommand::Private
 {
@@ -110,7 +110,7 @@ KoShapeStrokeCommand::~KoShapeStrokeCommand()
 void KoShapeStrokeCommand::redo()
 {
     KUndo2Command::redo();
-    QList<KoShapeStrokeModel*>::iterator strokeIt = d->newStrokes.begin();
+    QList<KoShapeStrokeModel*>::ConstIterator strokeIt = d->newStrokes.constBegin();
     foreach(KoShape *shape, d->shapes) {
         shape->update();
         shape->setStroke(*strokeIt);
@@ -122,7 +122,7 @@ void KoShapeStrokeCommand::redo()
 void KoShapeStrokeCommand::undo()
 {
     KUndo2Command::undo();
-    QList<KoShapeStrokeModel*>::iterator strokeIt = d->oldStrokes.begin();
+    QList<KoShapeStrokeModel*>::ConstIterator strokeIt = d->oldStrokes.constBegin();
     foreach(KoShape *shape, d->shapes) {
         shape->update();
         shape->setStroke(*strokeIt);

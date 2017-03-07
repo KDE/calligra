@@ -71,7 +71,7 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="KDChart::Chart" name="ui_chart" native="true">
+           <widget class="KChart::Chart" name="ui_chart" native="true">
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -101,9 +101,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KDChart::Chart</class>
+   <class>KChart::Chart</class>
    <extends>QWidget</extends>
-   <header>KDChartChart</header>
+   <header>KChartChart</header>
    <container>1</container>
   </customwidget>
   <customwidget>

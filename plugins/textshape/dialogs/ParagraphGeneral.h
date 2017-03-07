@@ -43,7 +43,7 @@ class ParagraphGeneral : public CharacterGeneral
 public:
     explicit ParagraphGeneral(QWidget *parent = 0);
 
-    void setStyle(KoParagraphStyle *style, int level = 0);
+    void setStyle(KoParagraphStyle *style, int level, bool directFormattingMode);
     void setUnit(const KoUnit &unit);
 
     void switchToGeneralTab();

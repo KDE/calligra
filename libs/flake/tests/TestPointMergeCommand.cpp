@@ -22,7 +22,9 @@
 #include "KoPathShape.h"
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
-#include <kdebug.h>
+
+#include <QTest>
+#include <FlakeDebug.h>
 
 void TestPointMergeCommand::closeSingleLinePath()
 {
@@ -245,4 +247,3 @@ void TestPointMergeCommand::connectCurveSubpaths()
 }
 
 QTEST_MAIN(TestPointMergeCommand)
-#include <TestPointMergeCommand.moc>

@@ -23,7 +23,7 @@
 #include <KoCanvasBase.h>
 #include <KoToolProxy.h>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <QAction>
 
 KoPasteController::KoPasteController(KoCanvasBase *canvas, QAction *pasteAction)
@@ -39,4 +39,5 @@ KoPasteController::~KoPasteController()
     delete d;
 }
 
-#include <KoPasteController.moc>
+//have to include this because of Q_PRIVATE_SLOT
+#include "moc_KoPasteController.cpp"

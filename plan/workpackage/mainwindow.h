@@ -25,13 +25,10 @@
 
 #include "kplatowork_export.h"
 
-#include <KoApplication.h>
-
 #include <QMap>
 #include <QToolButton>
 #include <QLabel>
 
-#include <KoDocumentEntry.h>
 #include <kparts/mainwindow.h>
 
 namespace KParts {
@@ -42,8 +39,6 @@ namespace KPlatoWork {
 namespace KPlato {
     class Document;
 }
-
-class KoDocumentEntry;
 
 
 /////// class KPlatoWork_MainWindow ////////
@@ -57,7 +52,7 @@ public:
     virtual ~KPlatoWork_MainWindow();
 
     KPlatoWork::Part *rootDocument() const { return m_part; }
-    bool openDocument(const KUrl & url);
+    bool openDocument(const QUrl & url);
 
     virtual QString configFile() const;
 

@@ -21,7 +21,7 @@
 
 #include "KoPathPointMoveCommand.h"
 #include "KoPathPoint.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class KoPathPointMoveCommandPrivate
 {
@@ -49,7 +49,7 @@ KoPathPointMoveCommand::KoPathPointMoveCommand(const QList<KoPathPointData> &poi
     }
 }
 
-KoPathPointMoveCommand::KoPathPointMoveCommand(const QList<KoPathPointData> &pointData, const QList<QPointF> &offsets, KUndo2Command *parent)
+KoPathPointMoveCommand::KoPathPointMoveCommand(const QList<KoPathPointData> &pointData, const QVector<QPointF> &offsets, KUndo2Command *parent)
     : KUndo2Command(parent),
     d(new KoPathPointMoveCommandPrivate())
 {
@@ -99,8 +99,8 @@ void KoPathPointMoveCommandPrivate::applyOffset(qreal factor)
         path->update();
     }
 
-    QMap<KoPathPointData, QPointF>::iterator it(points.begin());
-    for (; it != points.end(); ++it) {
+    QMap<KoPathPointData, QPointF>::ConstIterator it(points.constBegin());
+    for (; it != points.constEnd(); ++it) {
         KoPathShape *path = it.key().pathShape;
         // transform offset from document to shape coordinate system
         QPointF shapeOffset = path->documentToShape(factor*it.value()) - path->documentToShape(QPointF());

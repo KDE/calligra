@@ -26,15 +26,13 @@
 #include <QFileInfo>
 #include <QStringList>
 #include <QDir>
-
-#include <kglobal.h>
-#include <kstandarddirs.h>
-#include <kcomponentdata.h>
+#include <QStandardPaths>
+#include <QGlobalStatic>
 
 #include "KoSegmentGradient.h"
 #include "KoStopGradient.h"
 #include "KoColorSpaceRegistry.h"
-
+#include "KoResourcePaths.h"
 #include <iostream>
 using namespace std;
 
@@ -148,7 +146,7 @@ void KoResourceLoaderThread::barrier()
 }
 
 
-struct KoResourceServerProvider::Private
+struct Q_DECL_HIDDEN KoResourceServerProvider::Private
 {
     KoResourceServer<KoPattern>* patternServer;
     KoResourceServer<KoAbstractGradient>* gradientServer;
@@ -161,21 +159,18 @@ struct KoResourceServerProvider::Private
 
 KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 {
-    KGlobal::mainComponent().dirs()->addResourceType("ko_patterns", "data", "krita/patterns/", true);
-    KGlobal::mainComponent().dirs()->addResourceDir("ko_patterns", "/usr/share/create/patterns/gimp");
-    KGlobal::mainComponent().dirs()->addResourceDir("ko_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
+    KoResourcePaths::addResourceDir("ko_patterns", "/usr/share/create/patterns/gimp");
+    KoResourcePaths::addResourceDir("ko_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
 
-    KGlobal::mainComponent().dirs()->addResourceType("ko_gradients", "data", "karbon/gradients/");
-    KGlobal::mainComponent().dirs()->addResourceType("ko_gradients", "data", "krita/gradients/", true);
-    KGlobal::mainComponent().dirs()->addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
-    KGlobal::mainComponent().dirs()->addResourceDir("ko_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
+    KoResourcePaths::addResourceType("ko_gradients", "data", "karbon/gradients/");
+    KoResourcePaths::addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
+    KoResourcePaths::addResourceDir("ko_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
 
-    KGlobal::mainComponent().dirs()->addResourceType("ko_palettes", "data", "calligra/palettes/");
-    KGlobal::mainComponent().dirs()->addResourceType("ko_palettes", "data", "karbon/palettes/");
-    KGlobal::mainComponent().dirs()->addResourceType("ko_palettes", "data", "krita/palettes/", true);
+    KoResourcePaths::addResourceType("ko_palettes", "data", "calligra/palettes/");
+    KoResourcePaths::addResourceType("ko_palettes", "data", "karbon/palettes/");
 
-    KGlobal::mainComponent().dirs()->addResourceDir("ko_palettes", "/usr/share/create/swatches");
-    KGlobal::mainComponent().dirs()->addResourceDir("ko_palettes", QDir::homePath() + QString("/.create/swatches"));
+    KoResourcePaths::addResourceDir("ko_palettes", "/usr/share/create/swatches");
+    KoResourcePaths::addResourceDir("ko_palettes", QDir::homePath() + QString("/.create/swatches"));
 
     d->patternServer = new KoResourceServerSimpleConstruction<KoPattern>("ko_patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp" );
     if (!QFileInfo(d->patternServer->saveLocation()).exists()) {
@@ -224,9 +219,10 @@ KoResourceServerProvider::~KoResourceServerProvider()
     delete d;
 }
 
+Q_GLOBAL_STATIC(KoResourceServerProvider, s_instance);
+
 KoResourceServerProvider* KoResourceServerProvider::instance()
 {
-    K_GLOBAL_STATIC(KoResourceServerProvider, s_instance);
     return s_instance;
 }
 

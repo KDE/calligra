@@ -22,14 +22,13 @@
 #ifndef SCRIPTING_MODULE_H
 #define SCRIPTING_MODULE_H
 
-#include "kplatoscripting_export.h"
-
 #include <QString>
 #include <QStringList>
 #include <QObject>
 
 #include <KoScriptingModule.h>
 
+#include "kplatoscripting_export.h"
 #include <kptmaindocument.h>
 
 class QWidget;
@@ -55,7 +54,7 @@ namespace Scripting {
     * print Plan.project().name()
     * \endcode
     */
-    class KPLATOSCRIPTING_EXPORT Module : public KoScriptingModule
+    class KPLATOSCRIPTING_TEST_EXPORT Module : public KoScriptingModule
     {
             Q_OBJECT
         public:

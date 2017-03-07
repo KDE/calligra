@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003-2007 Dag Andersen <danders@get2net.dk>
-
+   Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -19,10 +20,12 @@
 #ifndef KPTDATETIME_H
 #define KPTDATETIME_H
 
-#include <kdatetime.h>
-
 #include "kplatokernel_export.h"
 #include "kptduration.h"
+
+#include <QDateTime>
+#include <QTimeZone>
+#include <QDebug>
 
 /// The main namespace.
 namespace KPlato
@@ -32,7 +35,7 @@ class Duration;
 
 /**
  * DateTime is a QDateTime which knows about Duration
- * Note that in Plan all datetimes are often in the time zone specified
+ * Note that in Plan all datetimes shall be in the time zone specified
  * in the project.
  * Exception to this is the calendar related dates and times which has
  * their own time zone specification.
@@ -44,16 +47,21 @@ public:
     DateTime();
     /// Constructs a datetime with the given date, a valid time(00:00:00.000), and sets the timeSpec() to Qt::LocalTime.
     explicit DateTime( const QDate & );
-    ///Constructs a datetime with the given date and time, using the time specification defined by @p spec.
+    ///Constructs a datetime with the given date and time, and sets the timeSpec() to Qt::LocalTime.
     /// If date is valid and time is not, the time will be set to midnight.
-    DateTime( const QDate &, const QTime &, Qt::TimeSpec spec = Qt::LocalTime );
-    /// Constructs a copy of the @p other datetime.
+    DateTime( const QDate &, const QTime &);
+    ///Constructs a datetime with the given date and time in the given timezone.
+    /// If @p timeZone is not valid, local time is used.
+    /// If @p date is valid and @p time is not, the time will be set to midnight.
+    DateTime( const QDate &, const QTime &, const QTimeZone &timeZone);
+    /// Constructs a copy of the @p other QDateTime
     DateTime( const QDateTime &other );
+    /// Constructs a copy of the @p other DateTime.
+    DateTime( const DateTime &other );
+    /// Constructs a datetime from @p dt, reinterpreting it to be from timezone @p timeZone.
+    /// dt must be of timespec LocalTime.
+    DateTime( const QDateTime &dt, const QTimeZone &timeZone );
 
-    /// Constructs a datetime from @p dt with timespec @p spec
-    DateTime( const QDateTime &dt, const KDateTime::Spec &spec );
-    /// Constructs a copy of the @p dt KDateTime.
-    DateTime( const KDateTime &dt );
     /**
      * Adds the duration @p duration to the datetime
      */
@@ -76,9 +84,11 @@ public:
     DateTime &operator-=(const Duration &duration);
 
     /**
-     * Parse a datetime string and return a DateTime.
+     * Parse a datetime string @p dts and return the DateTime in the given @p timeZone.
+     * The string @p dts should be in Qt::ISODate format and contain no time zone information.
      */
-    static DateTime fromString(const QString dts, const KDateTime::Spec &spec=KDateTime::LocalZone);
+    static DateTime fromString(const QString &dts, const QTimeZone &timeZone = QTimeZone::systemTimeZone());
+
 private:
 
     Duration duration(const DateTime &dt) const;
@@ -87,6 +97,9 @@ private:
 
 };
 
+
 }  //KPlato namespace
+
+KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::DateTime &dt );
 
 #endif

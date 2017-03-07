@@ -24,17 +24,18 @@
 #include "reports/reportview.h"
 #include <kptdebug.h>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
+#include <QTextEdit>
 
 namespace KPlato
 {
 
 ViewListDialog::ViewListDialog( View *view, ViewListWidget &viewlist, QWidget *parent )
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     setCaption( i18nc( "@title:window", "Add View") );
-    setButtons( KDialog::Ok | KDialog::Cancel );
+    setButtons( KoDialog::Ok | KoDialog::Cancel );
     setDefaultButton( Ok );
 
     m_panel = new AddViewPanel( view, viewlist, this );
@@ -131,6 +132,13 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
     connect( widget.insertAfter, SIGNAL(currentIndexChanged(int)), SLOT(changed()) );
     connect( widget.viewtype, SIGNAL(currentIndexChanged(int)), SLOT(viewtypeChanged(int)) );
     connect( widget.category, SIGNAL(editTextChanged(QString)), SLOT(categoryChanged()) );
+
+    QString categoryWhatsThis = xi18nc("@info:whatsthis",
+                                       "<title>The category of the view</title><nl/>"
+                                       "The view is placed under this category in the view selector.<nl/>"
+                                       "You can edit the category name to create a new category.");
+    widget.categoryLabel->setWhatsThis(categoryWhatsThis);
+    widget.category->setWhatsThis(categoryWhatsThis);
 }
 
 void AddViewPanel::viewnameChanged( const QString &text )
@@ -157,21 +165,23 @@ void AddViewPanel::viewtypeChanged( int idx )
         m_viewtipChanged = false;
     }
     if ( ! m_viewtipChanged ) {
-        widget.tooltip->setText( vi.tip );
+        QTextEdit e;
+        e.setText(vi.tip);
+        widget.tooltip->setText(e.toPlainText());
         m_viewtipChanged = false;
     }
 }
 
 void AddViewPanel::categoryChanged()
 {
-    kDebug(planDbg())<<widget.category->currentText();
+    debugPlan<<widget.category->currentText();
     fillAfter( m_categories.value( widget.category->currentText() ) );
     changed();
 }
 
 void AddViewPanel::fillAfter( ViewListItem *cat )
 {
-    kDebug(planDbg())<<cat;
+    debugPlan<<cat;
     widget.insertAfter->clear();
     if ( cat ) {
         widget.insertAfter->addItem( i18n( "Top" ) );
@@ -258,7 +268,7 @@ bool AddViewPanel::ok()
             v = m_view->createReportView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
         default:
-            kError()<<"Unknown view type!";
+            errorPlan<<"Unknown view type!";
             break;
     }
     emit viewCreated( v );
@@ -273,10 +283,10 @@ void AddViewPanel::changed()
 
 //------------------------
 ViewListEditViewDialog::ViewListEditViewDialog( ViewListWidget &viewlist, ViewListItem *item, QWidget *parent )
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     setCaption( i18nc( "@title:window", "Configure View" ) );
-    setButtons( KDialog::Ok | KDialog::Cancel );
+    setButtons( KoDialog::Ok | KoDialog::Cancel );
     setDefaultButton( Ok );
 
     m_panel = new EditViewPanel( viewlist, item, this );
@@ -310,7 +320,9 @@ EditViewPanel::EditViewPanel( ViewListWidget &viewlist, ViewListItem *item, QWid
     widget.setupUi( this );
 
     widget.viewname->setText( item->text( 0 ) );
-    widget.tooltip->setText( item->toolTip( 0 ) );
+    QTextEdit e;
+    e.setText(item->toolTip(0));
+    widget.tooltip->setText(e.toPlainText());
 
     foreach ( ViewListItem *item, m_viewlist.categories() ) {
         m_categories.insert( item->text( 0 ), item );
@@ -326,6 +338,14 @@ EditViewPanel::EditViewPanel( ViewListWidget &viewlist, ViewListItem *item, QWid
     connect( widget.tooltip, SIGNAL(textChanged(QString)), SLOT(changed()) );
     connect( widget.insertAfter, SIGNAL(currentIndexChanged(int)), SLOT(changed()) );
     connect( widget.category, SIGNAL(editTextChanged(QString)), SLOT(categoryChanged()) );
+
+    QString categoryWhatsThis = xi18nc("@info:whatsthis",
+                                       "<title>The category of the view</title><nl/>"
+                                       "The view is placed under this category in the view selector.<nl/>"
+                                       "Selecting a different category will move the view to the new category.<nl/>"
+                                       "You can edit the category name to create a new category.");
+    widget.categoryLabel->setWhatsThis(categoryWhatsThis);
+    widget.category->setWhatsThis(categoryWhatsThis);
 }
 
 bool EditViewPanel::ok()
@@ -336,7 +356,7 @@ bool EditViewPanel::ok()
 
     ViewListItem *cat = m_viewlist.addCategory( c, n );
     if ( cat == 0 ) {
-        kWarning()<<"No category";
+        warnPlan<<"No category";
         return false;
     }
     if ( widget.viewname->text() != m_item->text( 0 ) ) {
@@ -360,14 +380,14 @@ void EditViewPanel::changed()
 
 void EditViewPanel::categoryChanged()
 {
-    kDebug(planDbg())<<widget.category->currentText();
+    debugPlan<<widget.category->currentText();
     fillAfter( m_categories.value( widget.category->currentText() ) );
     changed();
 }
 
 void EditViewPanel::fillAfter( ViewListItem *cat )
 {
-    kDebug(planDbg())<<cat;
+    debugPlan<<cat;
     widget.insertAfter->clear();
     if ( cat ) {
         widget.insertAfter->addItem( i18n( "Top" ) );
@@ -387,10 +407,10 @@ void EditViewPanel::fillAfter( ViewListItem *cat )
 
 //------------------------
 ViewListEditCategoryDialog::ViewListEditCategoryDialog( ViewListWidget &viewlist, ViewListItem *item, QWidget *parent )
-    : KDialog(parent)
+    : KoDialog(parent)
 {
     setCaption( i18nc( "@title:window", "Configure Category" ) );
-    setButtons( KDialog::Ok | KDialog::Cancel );
+    setButtons( KoDialog::Ok | KoDialog::Cancel );
     setDefaultButton( Ok );
 
     m_panel = new EditCategoryPanel( viewlist, item, this );
@@ -424,7 +444,9 @@ EditCategoryPanel::EditCategoryPanel( ViewListWidget &viewlist, ViewListItem *it
     widget.setupUi( this );
 
     widget.viewname->setText( item->text( 0 ) );
-    widget.tooltip->setText( item->toolTip( 0 ) );
+    QTextEdit e;
+    e.setText(item->toolTip(0));
+    widget.tooltip->setText(e.toPlainText());
 
     fillAfter();
 
@@ -457,7 +479,7 @@ void EditCategoryPanel::changed()
 
 void EditCategoryPanel::fillAfter()
 {
-    kDebug(planDbg());
+    debugPlan;
     widget.insertAfter->clear();
     widget.insertAfter->addItem( i18n( "Top" ) );
     int idx = 0;
@@ -474,14 +496,14 @@ void EditCategoryPanel::fillAfter()
 }
 
 //------ Reports
-ViewListReportsDialog::ViewListReportsDialog( View *view, ViewListWidget &viewlist, QWidget *parent )
-    : KDialog(parent)
+ViewListReportsDialog::ViewListReportsDialog( View *view, ViewListWidget &viewlist, const QDomDocument &doc, QWidget *parent )
+    : KoDialog(parent)
 {
     setCaption( i18nc( "@title:window", "Add Report" ) );
-    setButtons( KDialog::Ok | KDialog::Cancel );
+    setButtons( KoDialog::Ok | KoDialog::Cancel );
     setDefaultButton( Ok );
 
-    m_panel = new AddReportsViewPanel( view, viewlist, this );
+    m_panel = new AddReportsViewPanel( view, viewlist, doc, this );
 
     setMainWidget( m_panel );
 
@@ -506,12 +528,13 @@ void ViewListReportsDialog::slotOk() {
 }
 
 //------------------------
-AddReportsViewPanel::AddReportsViewPanel( View *view, ViewListWidget &viewlist, QWidget *parent )
+AddReportsViewPanel::AddReportsViewPanel( View *view, ViewListWidget &viewlist, const QDomDocument &doc, QWidget *parent )
     : QWidget( parent ),
       m_view( view ),
       m_viewlist( viewlist ),
       m_viewnameChanged( false ),
-      m_viewtipChanged( false )
+      m_viewtipChanged( false ),
+      m_data(doc)
 {
     widget.setupUi( this );
 
@@ -566,21 +589,23 @@ void AddReportsViewPanel::viewtypeChanged( int idx )
         m_viewtipChanged = false;
     }
     if ( ! m_viewtipChanged ) {
-        widget.tooltip->setText( vi.tip );
+        QTextEdit e;
+        e.setText(vi.tip);
+        widget.tooltip->setText(e.toPlainText());
         m_viewtipChanged = false;
     }
 }
 
 void AddReportsViewPanel::categoryChanged()
 {
-    kDebug(planDbg())<<widget.category->currentText();
+    debugPlan<<widget.category->currentText();
     fillAfter( m_categories.value( widget.category->currentText() ) );
     changed();
 }
 
 void AddReportsViewPanel::fillAfter( ViewListItem *cat )
 {
-    kDebug(planDbg())<<cat;
+    debugPlan<<cat;
     widget.insertAfter->clear();
     if ( cat ) {
         widget.insertAfter->addItem( i18n( "Top" ) );
@@ -614,9 +639,10 @@ bool AddReportsViewPanel::ok()
     switch ( viewtype ) {
         case 0: { // Report view
             v = m_view->createReportView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
+            static_cast<ReportView*>(v)->loadXML(m_data);
             break; }
         default:
-            kError()<<"Unknown view type!";
+            errorPlan<<"Unknown view type!";
             break;
     }
     emit viewCreated( v );
@@ -632,5 +658,3 @@ void AddReportsViewPanel::changed()
 
 
 }  //KPlato namespace
-
-#include "kptviewlistdialog.moc"

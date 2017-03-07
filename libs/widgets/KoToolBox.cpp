@@ -34,10 +34,10 @@
 #include <QMenu>
 #include <QAction>
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
+#include <WidgetsDebug.h>
 #include <kconfiggroup.h>
-#include <kglobal.h>
+#include <ksharedconfig.h>
 
 #include <KoCanvasController.h>
 #include <KoShapeLayer.h>
@@ -108,8 +108,8 @@ KoToolBox::KoToolBox()
     // Update visibility of buttons
     setButtonsVisible(QList<QString>());
 
-    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*, int)),
-            this, SLOT(setActiveTool(KoCanvasController*, int)));
+    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
+            this, SLOT(setActiveTool(KoCanvasController*,int)));
     connect(KoToolManager::instance(), SIGNAL(currentLayerChanged(const KoCanvasController*,const KoShapeLayer*)),
             this, SLOT(setCurrentLayer(const KoCanvasController*,const KoShapeLayer*)));
     connect(KoToolManager::instance(), SIGNAL(toolCodesSelected(QList<QString>)), this, SLOT(setButtonsVisible(QList<QString>)));
@@ -132,7 +132,7 @@ void KoToolBox::addButton(KoToolAction *toolAction)
     d->buttons << button;
 
     int toolbuttonSize = buttonSize(qApp->desktop()->screenNumber(this));
-    KConfigGroup cfg = KGlobal::config()->group("KoToolBox");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoToolBox");
     int iconSize = cfg.readEntry("iconSize", toolbuttonSize);
     button->setIconSize(QSize(iconSize, iconSize));
     foreach (Section *section, d->sections.values())  {
@@ -166,12 +166,14 @@ void KoToolBox::addButton(KoToolAction *toolAction)
 void KoToolBox::setActiveTool(KoCanvasController *canvas, int id)
 {
     Q_UNUSED(canvas);
+
     QAbstractButton *button = d->buttonGroup->button(id);
     if (button) {
         button->setChecked(true);
+        (qobject_cast<KoToolBoxButton*>(button))->setHighlightColor();
     }
     else {
-        kWarning(30004) << "KoToolBox::setActiveTool(" << id << "): no such button found";
+        warnWidgets << "KoToolBox::setActiveTool(" << id << "): no such button found";
     }
 }
 
@@ -300,7 +302,7 @@ void KoToolBox::slotContextIconSize()
     if (action && d->contextIconSizes.contains(action)) {
         const int iconSize = d->contextIconSizes.value(action);
 
-        KConfigGroup cfg = KGlobal::config()->group("KoToolBox");
+        KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoToolBox");
         cfg.writeEntry("iconSize", iconSize);
 
         foreach(QToolButton *button, d->buttons) {
@@ -340,7 +342,7 @@ void KoToolBox::contextMenuEvent(QContextMenuEvent *event)
             action->setCheckable(true);
         }
     }
-    KConfigGroup cfg = KGlobal::config()->group("KoToolBox");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoToolBox");
     toolbuttonSize = cfg.readEntry("iconSize", toolbuttonSize);
 
     QMapIterator< QAction*, int > it = d->contextIconSizes;

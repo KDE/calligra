@@ -24,10 +24,11 @@
 
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
-#include <kdebug.h>
+#include <OdfDebug.h>
 #include <QBuffer>
 #include <QRegExp>
 
+#include <QTest>
 
 #define TEST_BEGIN(publicId,systemId) \
     { \
@@ -53,7 +54,7 @@
 
 void TestKoGenStyles::testLookup()
 {
-    kDebug() ;
+    debugOdf ;
     KoGenStyles coll;
 
     QMap<QString, QString> map1;
@@ -88,7 +89,7 @@ void TestKoGenStyles::testLookup()
     first.addChildElement("test", childContents2, KoGenStyle::TextType);
 
     QString firstName = coll.insert(first);
-    kDebug() << "The first style got assigned the name" << firstName;
+    debugOdf << "The first style got assigned the name" << firstName;
     QVERIFY(!firstName.isEmpty());
     QCOMPARE(first.type(), KoGenStyle::ParagraphAutoStyle);
 
@@ -102,7 +103,7 @@ void TestKoGenStyles::testLookup()
     second.addChildElement("test", childContents2, KoGenStyle::TextType);
 
     QString secondName = coll.insert(second);
-    kDebug() << "The second style got assigned the name" << secondName;
+    debugOdf << "The second style got assigned the name" << secondName;
 
     QCOMPARE(firstName, secondName);   // check that sharing works
     QCOMPARE(first, second);   // check that operator== works :)
@@ -120,7 +121,7 @@ void TestKoGenStyles::testLookup()
     QCOMPARE(third.parentName(), secondName);
 
     QString thirdName = coll.insert(third, "P");
-    kDebug() << "The third style got assigned the name" << thirdName;
+    debugOdf << "The third style got assigned the name" << thirdName;
     QVERIFY(thirdName != firstName);
     QVERIFY(!thirdName.isEmpty());
 
@@ -128,7 +129,7 @@ void TestKoGenStyles::testLookup()
     user.addProperty("style:margin-left", "1.249cm");
 
     QString userStyleName = coll.insert(user, "User", KoGenStyles::DontAddNumberToName);
-    kDebug() << "The user style got assigned the name" << userStyleName;
+    debugOdf << "The user style got assigned the name" << userStyleName;
     QCOMPARE(userStyleName, QString("User"));
 
     KoGenStyle sameAsParent(KoGenStyle::ParagraphAutoStyle, "paragraph", secondName);   // inherited style
@@ -140,7 +141,7 @@ void TestKoGenStyles::testLookup()
     sameAsParent.addChildElement("test", childContents);
     sameAsParent.addChildElement("test", childContents2, KoGenStyle::TextType);
     QString sapName = coll.insert(sameAsParent, "foobar");
-    kDebug() << "The 'same as parent' style got assigned the name" << sapName;
+    debugOdf << "The 'same as parent' style got assigned the name" << sapName;
 
     QCOMPARE(sapName, secondName);
     QCOMPARE(coll.styles().count(), 3);
@@ -213,7 +214,7 @@ void TestKoGenStyles::testLookupFlags()
 
 void TestKoGenStyles::testWriteStyle()
 {
-    kDebug();
+    debugOdf;
     KoGenStyles coll;
 
     QBuffer buffer;
@@ -255,7 +256,7 @@ void TestKoGenStyles::testWriteStyle()
 
 void TestKoGenStyles::testDefaultStyle()
 {
-    kDebug() ;
+    debugOdf ;
     /* Create a default style,
      * and then an auto style with exactly the same attributes
      * -> the insert gives the default style.
@@ -287,10 +288,10 @@ void TestKoGenStyles::testDefaultStyle()
     defaultStyle.writeStyle(&writer, coll, "style:default-style", defaultStyleName, "style:paragraph-properties");
     TEST_END_QTTEST("<r>\n <style:default-style style:family=\"paragraph\" style:master-page-name=\"Standard\">\n  <style:paragraph-properties myfont=\"isBold\"/>\n </style:default-style>\n</r>\n");
 
-    // The kspread case: not writing out all properties, only if they differ
+    // The Calligra Sheets case: not writing out all properties, only if they differ
     // from the default style.
     // KoGenStyles doesn't fetch info from the parent style when testing
-    // for equality, so KSpread uses isEmpty() to check for equality-to-parent.
+    // for equality, so Calligra Sheets uses isEmpty() to check for equality-to-parent.
     KoGenStyle dataStyle(KoGenStyle::ParagraphStyle, "paragraph", defaultStyleName);
     QVERIFY(dataStyle.isEmpty());
     // and then it doesn't look up the auto style, but rather uses the parent style directly.
@@ -298,7 +299,7 @@ void TestKoGenStyles::testDefaultStyle()
 
 void TestKoGenStyles:: testUserStyles()
 {
-    kDebug() ;
+    debugOdf ;
     /* Two user styles with exactly the same attributes+properties will not get merged, since
      * they don't have exactly the same attributes after all: the display-name obviously differs :)
      */
@@ -309,7 +310,7 @@ void TestKoGenStyles:: testUserStyles()
     user1.addProperty("myfont", "isBold");
 
     QString user1StyleName = coll.insert(user1, "User1", KoGenStyles::DontAddNumberToName);
-    kDebug() << "The user style got assigned the name" << user1StyleName;
+    debugOdf << "The user style got assigned the name" << user1StyleName;
     QCOMPARE(user1StyleName, QString("User1"));
 
     KoGenStyle user2(KoGenStyle::ParagraphStyle, "paragraph");
@@ -317,7 +318,7 @@ void TestKoGenStyles:: testUserStyles()
     user2.addProperty("myfont", "isBold");
 
     QString user2StyleName = coll.insert(user2, "User2", KoGenStyles::DontAddNumberToName);
-    kDebug() << "The user style got assigned the name" << user2StyleName;
+    debugOdf << "The user style got assigned the name" << user2StyleName;
     QCOMPARE(user2StyleName, QString("User2"));
 
     // And now, what if the data uses that style?
@@ -327,7 +328,7 @@ void TestKoGenStyles:: testUserStyles()
     dataStyle.addProperty("myfont", "isBold");
 
     QString dataStyleName = coll.insert(dataStyle, "DataStyle");
-    kDebug() << "The auto style got assigned the name" << dataStyleName;
+    debugOdf << "The auto style got assigned the name" << dataStyleName;
     QCOMPARE(dataStyleName, QString("User2"));     // it found the parent as equal
 
     // Let's do the opposite test, just to make sure
@@ -335,7 +336,7 @@ void TestKoGenStyles:: testUserStyles()
     dataStyle2.addProperty("myfont", "isNotBold");
 
     QString dataStyle2Name = coll.insert(dataStyle2, "DataStyle");
-    kDebug() << "The different auto style got assigned the name" << dataStyle2Name;
+    debugOdf << "The different auto style got assigned the name" << dataStyle2Name;
     QCOMPARE(dataStyle2Name, QString("DataStyle1"));
 
     QCOMPARE(coll.styles().count(), 3);
@@ -353,7 +354,7 @@ void TestKoGenStyles:: testUserStyles()
 
 void TestKoGenStyles::testStylesDotXml()
 {
-    kDebug() ;
+    debugOdf ;
     KoGenStyles coll;
 
     // Check that an autostyle-in-style.xml and an autostyle-in-content.xml
@@ -365,14 +366,13 @@ void TestKoGenStyles::testStylesDotXml()
     QString headerStyleName = coll.insert(headerStyle, "P");
     QCOMPARE(headerStyleName, QString("P1"));
 
-    //kDebug() << coll;
+    //debugOdf << coll;
 
     KoGenStyle first(KoGenStyle::ParagraphAutoStyle, "paragraph");
     first.addAttribute("style:master-page-name", "Standard");
     QString firstName = coll.insert(first, "P");
-    kDebug() << "The auto style got assigned the name" << firstName;
+    debugOdf << "The auto style got assigned the name" << firstName;
     QCOMPARE(firstName, QString("P2"));     // anything but not P1.
 }
 
 QTEST_MAIN(TestKoGenStyles)
-#include <TestKoGenStyles.moc>

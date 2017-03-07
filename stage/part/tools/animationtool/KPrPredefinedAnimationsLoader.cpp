@@ -25,6 +25,7 @@
 #include "animations/KPrShapeAnimation.h"
 #include "animations/KPrAnimationFactory.h"
 #include "KPrFactory.h"
+#include "StageDebug.h"
 
 //Qt Headers
 #include <QListWidget>
@@ -33,15 +34,14 @@
 #include <QPainter>
 #include <QImage>
 #include <QFont>
+#include <QStandardPaths>
 
-//KDE Headers
-#include <klocale.h>
+//KF5 Headers
+#include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <KoIcon.h>
-#include <kstandarddirs.h>
-#include <kdebug.h>
 
 //Calligra Headers
+#include <KoIcon.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfReadStore.h>
@@ -83,7 +83,7 @@ KPrCollectionItemModel *KPrPredefinedAnimationsLoader::modelById(const QString &
        return m_modelMap[id];
     }
     else {
-        kWarning(31000) << "Didn't find a model with id ==" << id;
+        warnStageAnimation << "Didn't find a model with id ==" << id;
     }
     return 0;
 }
@@ -104,15 +104,15 @@ void KPrPredefinedAnimationsLoader::loadDefaultAnimations()
     m_isInitialized = true;
 
     // Initialize animation class lists
-    QList<KPrCollectionItem> entranceList;
-    QList<KPrCollectionItem> emphasisList;
-    QList<KPrCollectionItem> exitList;
-    QList<KPrCollectionItem> customList;
-    QList<KPrCollectionItem> motion_PathList;
-    QList<KPrCollectionItem> ole_ActionList;
-    QList<KPrCollectionItem> media_CallList;
+    QVector<KPrCollectionItem> entranceList;
+    QVector<KPrCollectionItem> emphasisList;
+    QVector<KPrCollectionItem> exitList;
+    QVector<KPrCollectionItem> customList;
+    QVector<KPrCollectionItem> motion_PathList;
+    QVector<KPrCollectionItem> ole_ActionList;
+    QVector<KPrCollectionItem> media_CallList;
 
-    QMap<QString, QList<KPrCollectionItem> > subModelList;
+    QMap<QString, QVector<KPrCollectionItem> > subModelList;
     int row = -1;
     foreach(KPrShapeAnimation *animation, m_animations) {
         row++;
@@ -121,8 +121,7 @@ void KPrPredefinedAnimationsLoader::loadDefaultAnimations()
         // Check if this animation has sub types (and add them to the sub model list)
         if (!animation->presetSubType().isEmpty()) {
             if (!subModelList.contains(animId)) {
-                QList<KPrCollectionItem> tempList = QList<KPrCollectionItem>();
-                subModelList.insert(animId, tempList);
+                subModelList.insert(animId, QVector<KPrCollectionItem>());
                 isSubItem = false;
             }
             KPrCollectionItem subItem;
@@ -212,7 +211,7 @@ void KPrPredefinedAnimationsLoader::loadDefaultAnimations()
 
     // Create models for subtypes and populate them using sub model list
     if (!subModelList.isEmpty()) {
-        QMap<QString, QList<KPrCollectionItem> >::const_iterator i;
+        QMap<QString, QVector<KPrCollectionItem> >::const_iterator i;
         for (i = subModelList.constBegin(); i != subModelList.constEnd(); ++i) {
             model = new KPrCollectionItemModel(this);
             model->setAnimationClassList(i.value());
@@ -229,8 +228,7 @@ void KPrPredefinedAnimationsLoader::readDefaultAnimations()
     KoShapeLoadingContext shapeContext(context, 0);
     KoXmlDocument doc;
 
-    const KStandardDirs* dirs = KGlobal::activeComponent().dirs();
-    const QString filePath = dirs->findResource("data", "stage/animations/animations.xml");
+    const QString filePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligrastage/animations/animations.xml");
     if (!filePath.isEmpty()) {
         QFile file(filePath);
         QString errorMessage;
@@ -255,15 +253,15 @@ void KPrPredefinedAnimationsLoader::readDefaultAnimations()
             }
         }
         else {
-            kWarning(30006) << "reading of" << filePath << "failed:" << errorMessage;
+            warnStageAnimation << "reading of" << filePath << "failed:" << errorMessage;
         }
     }
     else {
-        kDebug(30006) << "animations.xml not found";
+        debugStageAnimation << "animations.xml not found";
     }
 }
 
-QString KPrPredefinedAnimationsLoader::animationName(const QString id) const
+QString KPrPredefinedAnimationsLoader::animationName(const QString &id) const
 {
     QStringList descriptionList = id.split(QLatin1Char('-'));
     if (descriptionList.count() > 2) {
@@ -276,7 +274,7 @@ QString KPrPredefinedAnimationsLoader::animationName(const QString id) const
     return QString();
 }
 
-QIcon KPrPredefinedAnimationsLoader::loadAnimationIcon(const QString id)
+QIcon KPrPredefinedAnimationsLoader::loadAnimationIcon(const QString &id)
 {
     // Animation icon names examples: zoom_animation, spiral_in_animation
     // If an specific animation icon does not exist then return a generic
@@ -287,13 +285,13 @@ QIcon KPrPredefinedAnimationsLoader::loadAnimationIcon(const QString id)
         name.replace(QLatin1Char(' '), QLatin1Char('_'));
         QString path = KIconLoader::global()->iconPath(name, KIconLoader::Toolbar, true);
         if (!path.isNull()) {
-            return KIcon(name);
+            return QIcon::fromTheme(name);
         }
     }
     return koIcon("unrecognized_animation");
 }
 
-QIcon KPrPredefinedAnimationsLoader::loadSubTypeIcon(const QString mainId, const QString subTypeId)
+QIcon KPrPredefinedAnimationsLoader::loadSubTypeIcon(const QString &mainId, const QString &subTypeId)
 {
     Q_UNUSED(mainId);
     QIcon icon;
@@ -305,7 +303,7 @@ QIcon KPrPredefinedAnimationsLoader::loadSubTypeIcon(const QString mainId, const
     name.append("_animations");
     QString path = KIconLoader::global()->iconPath(name, KIconLoader::Toolbar, true);
     if (!path.isNull()) {
-        icon = KIcon(name);
+        icon = QIcon::fromTheme(name);
     }
     else {
         // If an specific animation icon does not exist then return a generic
@@ -422,7 +420,7 @@ bool KPrPredefinedAnimationsLoader::addCollection(const QString &id, const QStri
     QIcon icon;
     QString path = KIconLoader::global()->iconPath(iconName, KIconLoader::Toolbar, true);
     if (!path.isNull()) {
-        icon = KIcon(iconName);
+        icon = QIcon::fromTheme(iconName);
     }
     else {
         icon = koIcon("unrecognized_animation");

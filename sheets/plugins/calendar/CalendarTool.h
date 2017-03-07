@@ -46,7 +46,7 @@ public Q_SLOTS:
     void insertCalendar(const QDate &start, const QDate &end);
 
 private:
-    virtual QWidget* createOptionWidget();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
     void setText(Sheet* sheet, int row, int column, const QString& text, bool asString = false);
 
 private:

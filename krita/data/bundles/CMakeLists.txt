@@ -1,3 +1,0 @@
-install( FILES
-README
-DESTINATION  ${DATA_INSTALL_DIR}/krita/bundles)

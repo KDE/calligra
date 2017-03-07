@@ -18,11 +18,16 @@
  */
 
 #include "KoFilterEffectRegistry.h"
+
+#include <QGlobalStatic>
+
 #include "KoFilterEffect.h"
 #include <KoPluginLoader.h>
-#include <kglobal.h>
-#include <kdebug.h>
+
+#include <FlakeDebug.h>
 #include <KoXmlReader.h>
+
+Q_GLOBAL_STATIC(KoFilterEffectRegistry, s_instance)
 
 KoFilterEffectRegistry::KoFilterEffectRegistry()
   : d(0)
@@ -34,9 +39,7 @@ void KoFilterEffectRegistry::init()
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "FilterEffectPlugins";
     config.blacklist = "FilterEffectPluginsDisabled";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/FilterEffect"),
-                                     QString::fromLatin1("[X-Flake-PluginVersion] == 28"),
-                                     config);
+    KoPluginLoader::load(QStringLiteral("calligra/shapefiltereffects"), config);
 }
 
 
@@ -48,7 +51,6 @@ KoFilterEffectRegistry::~KoFilterEffectRegistry()
 
 KoFilterEffectRegistry* KoFilterEffectRegistry::instance()
 {
-    K_GLOBAL_STATIC(KoFilterEffectRegistry, s_instance)
     if (!s_instance.exists()) {
         s_instance->init();
     }

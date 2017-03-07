@@ -27,7 +27,7 @@
 #include <QVBoxLayout>
 #include <QPen>
 
-// KSpread
+// Sheets
 #include "Cell.h"
 #include "DependencyManager.h"
 #include "Map.h"
@@ -181,9 +181,8 @@ Inspector::Inspector(const Cell& cell)
         , d(new Private)
 {
     setFaceType(Tabbed);
-    setCaption("Inspector");
-    setButtons(Close);
-    setDefaultButton(Close);
+    setWindowTitle("Inspector");
+    setStandardButtons(QDialogButtonBox::Close);
 
     d->cell = cell;
     d->style = cell.style();
@@ -229,7 +228,3 @@ Inspector::~Inspector()
 {
     delete d;
 }
-
-#include "inspector.moc"
-
-

@@ -21,8 +21,8 @@
 
 #include "KoShapePaste.h"
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <FlakeDebug.h>
+#include <klocalizedstring.h>
 
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
@@ -91,7 +91,7 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
     // create the shape from the clipboard
     KoXmlElement element;
     forEachElement(element, body) {
-        kDebug(30006) << "loading shape" << element.localName();
+        debugFlake << "loading shape" << element.localName();
 
         KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(element, context);
         if (shape) {

@@ -24,13 +24,13 @@
 #include <KoColorBackground.h>
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 ArtisticTextShapeFactory::ArtisticTextShapeFactory()
     : KoShapeFactoryBase(ArtisticTextShapeID, i18n("ArtisticTextShape"))
 {
     setToolTip(i18n("A shape which shows a single text line"));
-    setIconName(koIconNameCStrNeeded("currently falls back to x-shape-text","x-shape-text-artistic"));
+    setIconName(koIconNameNeeded("currently falls back to x-shape-text","x-shape-text-artistic"));
     setLoadingPriority( 5 );
     setXmlElementNames(KoXmlNS::svg, QStringList("text"));
 }

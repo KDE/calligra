@@ -36,6 +36,8 @@
 
 #include <MsooXmlReader_p.h>
 
+#include <kdebug.h>
+
 class XlsxXmlCommonReader::Private
 {
 public:

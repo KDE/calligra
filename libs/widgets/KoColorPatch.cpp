@@ -60,9 +60,7 @@ void KoColorPatch::paintEvent(QPaintEvent *pe)
 
     QFrame::paintEvent(pe);
     QPainter painter( this );
-    painter.setPen(qc);
+    painter.setPen(QPen(qc, 0));
     painter.setBrush(QBrush(qc));
     painter.drawRect(contentsRect());
 }
-
-#include <KoColorPatch.moc>

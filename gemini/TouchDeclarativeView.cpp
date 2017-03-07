@@ -18,54 +18,49 @@
 #include "TouchDeclarativeView.h"
 
 #include <QWidget>
-#include <QGLWidget>
-#include <QGLFramebufferObject>
+#include <QSurfaceFormat>
 #include <QResizeEvent>
 #include <QApplication>
-#include <QGraphicsItem>
+#include <QQuickItem>
 
 #include <gemini/ViewModeSwitchEvent.h>
 
-TouchDeclarativeView::TouchDeclarativeView(QWidget *parent)
-    : QDeclarativeView(parent)
+TouchDeclarativeView::TouchDeclarativeView(QWindow *parent)
+    : QQuickView(parent)
     , m_drawCanvas(false)
     , m_canvasWidget(0)
     , m_GLInitialized(false)
-    , m_sketchView(0)
 {
-    setCacheMode(QGraphicsView::CacheNone);
-    setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+//     setCacheMode(QQuickView::CacheNone);
+//     setViewportUpdateMode(QQuickView::FullViewportUpdate);
 
-    setViewport(new QGLWidget(this));
-
-    setAttribute(Qt::WA_AcceptTouchEvents);
-    setAttribute(Qt::WA_OpaquePaintEvent);
-    setAttribute(Qt::WA_NoSystemBackground);
-    viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
-    viewport()->setAttribute(Qt::WA_NoSystemBackground);
-    viewport()->installEventFilter(this);
+//     setFlag(Qt::WA_AcceptTouchEvents);
+//     setAttribute(Qt::WA_OpaquePaintEvent);
+//     setAttribute(Qt::WA_NoSystemBackground);
+//     viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
+//     viewport()->setAttribute(Qt::WA_NoSystemBackground);
+//     installEventFilter(this);
 }
 
-TouchDeclarativeView::TouchDeclarativeView(const QUrl &url, QWidget *parent)
-    : QDeclarativeView(url, parent)
+TouchDeclarativeView::TouchDeclarativeView(const QUrl &url, QWindow *parent)
+    : QQuickView(url, parent)
     , m_drawCanvas(false)
     , m_canvasWidget(0)
     , m_GLInitialized(false)
-    , m_sketchView(0)
 {
-    setCacheMode(QGraphicsView::CacheNone);
-    setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+//     setCacheMode(QQuickView::CacheNone);
+//     setViewportUpdateMode(QQuickView::FullViewportUpdate);
 
-    QGLFormat format;
-    format.setSampleBuffers(true);
-    setViewport(new QGLWidget(format, this));
+//     QSurfaceFormat format;
+//     format.setSampleBuffers(true);
+//     setFormat(format);
 
-    setAttribute(Qt::WA_AcceptTouchEvents);
-    setAttribute(Qt::WA_OpaquePaintEvent);
-    setAttribute(Qt::WA_NoSystemBackground);
-    viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
-    viewport()->setAttribute(Qt::WA_NoSystemBackground);
-    viewport()->installEventFilter(this);
+//     setAttribute(Qt::WA_AcceptTouchEvents);
+//     setAttribute(Qt::WA_OpaquePaintEvent);
+//     setAttribute(Qt::WA_NoSystemBackground);
+//     viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
+//     viewport()->setAttribute(Qt::WA_NoSystemBackground);
+//     installEventFilter(this);
 }
 
 TouchDeclarativeView::~TouchDeclarativeView()
@@ -103,98 +98,99 @@ void TouchDeclarativeView::setDrawCanvas(bool drawCanvas)
     }
 }
 
-void TouchDeclarativeView::drawBackground(QPainter *painter, const QRectF &rect)
-{
+// void TouchDeclarativeView::drawBackground(QPainter *painter, const QRectF &rect)
+// {
+// 
+//     if (painter->paintEngine()->type() != QPaintEngine::OpenGL2) {
+//         qWarning("OpenGLScene: drawBackground needs a "
+//                  "QGLWidget to be set as viewport on the "
+//                  "graphics view");
+//         return;
+//     }
+// 
+//     if (m_drawCanvas && m_canvasWidget) {
+//         if (!m_GLInitialized) {
+//             //m_canvasWidget->initializeCheckerShader();
+//             //m_canvasWidget->initializeDisplayShader();
+//             m_GLInitialized = true;
+//         }
+//         //m_canvasWidget->renderCanvasGL();
+//         //m_canvasWidget->renderDecorations(painter);
+//     }
+//     else {
+//         QQuickView::drawBackground(painter, rect);
+//     }
+// 
+// }
 
-    if (painter->paintEngine()->type() != QPaintEngine::OpenGL2) {
-        qWarning("OpenGLScene: drawBackground needs a "
-                 "QGLWidget to be set as viewport on the "
-                 "graphics view");
-        return;
-    }
 
-    if (m_drawCanvas && m_canvasWidget) {
-        if (!m_GLInitialized) {
-            //m_canvasWidget->initializeCheckerShader();
-            //m_canvasWidget->initializeDisplayShader();
-            m_GLInitialized = true;
-        }
-        //m_canvasWidget->renderCanvasGL();
-        //m_canvasWidget->renderDecorations(painter);
-    }
-    else {
-        QDeclarativeView::drawBackground(painter, rect);
-    }
-
-}
-
-
-void TouchDeclarativeView::resizeEvent(QResizeEvent *event)
-{
-    if (m_canvasWidget) {
-        //m_canvasWidget->coordinatesConverter()->setCanvasWidgetSize(event->size());
-    }
-
-    QDeclarativeView::resizeEvent(event);
-}
-
-bool TouchDeclarativeView::event( QEvent* event )
-{
-    switch(static_cast<int>(event->type())) {
-        case QEvent::TabletPress:
-        case QEvent::TabletMove:
-        case QEvent::TabletRelease:
-            break;
-        case ViewModeSwitchEvent::AboutToSwitchViewModeEvent:
-        case ViewModeSwitchEvent::SwitchedToTouchModeEvent: {
-            // If we don't have a canvas widget yet, we don't really have anywhere to send those events
-            // so... let's just not
-            //if (m_canvasWidget.data())
-            {
-                //QGraphicsScene is silly and will not forward unknown events to its items, so emulate that
-                //functionality.
-                QList<QGraphicsItem*> items = scene()->items();
-                Q_FOREACH(QGraphicsItem* item, items) {
-//                    if (item == m_sketchView || qobject_cast<TouchView*>((item))) {
-//                        if (item != m_sketchView)
-//                            m_sketchView = item;
-                        scene()->sendEvent(item, event);
-//                        break;
-//                    }
-                }
-            }
-            break;
-        }
-        default:
-            break;
-    }
-    return QGraphicsView::event( event );
-}
-
-bool TouchDeclarativeView::eventFilter(QObject* watched, QEvent* e)
-{
-    switch(static_cast<int>(e->type())) {
-//         case KisTabletEvent::TabletMoveEx:
-//         case KisTabletEvent::TabletPressEx:
-//         case KisTabletEvent::TabletReleaseEx: {
-//             if (m_canvasWidget.data())
-//             {
+// void TouchDeclarativeView::resizeEvent(QResizeEvent *event)
+// {
+//     if (m_canvasWidget) {
+//         //m_canvasWidget->coordinatesConverter()->setCanvasWidgetSize(event->size());
+//     }
+// 
+//     QQuickView::resizeEvent(event);
+// }
+// 
+// bool TouchDeclarativeView::event( QEvent* event )
+// {
+//     switch(static_cast<int>(event->type())) {
+//         case QEvent::TabletPress:
+//         case QEvent::TabletMove:
+//         case QEvent::TabletRelease:
+//             break;
+//         case ViewModeSwitchEvent::AboutToSwitchViewModeEvent:
+//         case ViewModeSwitchEvent::SwitchedToTouchModeEvent: {
+//             // If we don't have a canvas widget yet, we don't really have anywhere to send those events
+//             // so... let's just not
+//             //if (m_canvasWidget.data())
+// //             {
 //                 //QGraphicsScene is silly and will not forward unknown events to its items, so emulate that
-//                 //functionality.s
-//                 KisTabletEvent* ev = static_cast<KisTabletEvent*>(e);
-//                 QList<QGraphicsItem*> items = scene()->items(ev->pos());
-//                 Q_FOREACH(QGraphicsItem* item, items)
-//                 {
-//                     if(scene()->sendEvent(item, e))
-//                         return true;
-//                 }
-//             }
+//                 //functionality.
+// //                 QList<QGraphicsItem*> items = scene()->items();
+// //                 Q_FOREACH(QGraphicsItem* item, items) {
+// //                    if (item == m_sketchView || qobject_cast<TouchView*>((item))) {
+// //                        if (item != m_sketchView)
+// //                            m_sketchView = item;
+// //                         scene()->sendEvent(item, event);
+// //                        break;
+// //                    }
+// //                 }
+// //             }
+//             sendEvent(contentItem(), event);
 //             break;
 //         }
-        default:
-            break;
-    }
-
-
-    return QDeclarativeView::eventFilter(watched, e);
-}
+//         default:
+//             break;
+//     }
+//     return QQuickView::event( event );
+// }
+// 
+// bool TouchDeclarativeView::eventFilter(QObject* watched, QEvent* e)
+// {
+//     switch(static_cast<int>(e->type())) {
+// //         case KisTabletEvent::TabletMoveEx:
+// //         case KisTabletEvent::TabletPressEx:
+// //         case KisTabletEvent::TabletReleaseEx: {
+// //             if (m_canvasWidget.data())
+// //             {
+// //                 //QGraphicsScene is silly and will not forward unknown events to its items, so emulate that
+// //                 //functionality.s
+// //                 KisTabletEvent* ev = static_cast<KisTabletEvent*>(e);
+// //                 QList<QGraphicsItem*> items = scene()->items(ev->pos());
+// //                 Q_FOREACH(QGraphicsItem* item, items)
+// //                 {
+// //                     if(scene()->sendEvent(item, e))
+// //                         return true;
+// //                 }
+// //             }
+// //             break;
+// //         }
+//         default:
+//             break;
+//     }
+// 
+// 
+//     return QQuickView::eventFilter(watched, e);
+// }

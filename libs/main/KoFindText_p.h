@@ -31,7 +31,7 @@
 #include <QStyle>
 #include <QAbstractTextDocumentLayout>
 
-#include <kdebug.h>
+#include <MainDebug.h>
 #include <klocalizedstring.h>
 
 #include <KoText.h>

@@ -47,7 +47,7 @@
 #include <KoClipPath.h>
 #include <KoXmlNS.h>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #include <QColor>
 
@@ -294,8 +294,8 @@ bool SvgParser::parseGradient(const KoXmlElement &e, const KoXmlElement &referen
     } else {
         // try style attr
         QString style = b.attribute("style").simplified();
-        QStringList substyles = style.split(';', QString::SkipEmptyParts);
-        for (QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it) {
+        const QStringList substyles = style.split(';', QString::SkipEmptyParts);
+        for (QStringList::ConstIterator it = substyles.begin(); it != substyles.end(); ++it) {
             QStringList substyle = it->split(':');
             QString command = substyle[0].trimmed();
             QString params  = substyle[1].trimmed();
@@ -338,6 +338,22 @@ bool SvgParser::parseGradient(const KoXmlElement &e, const KoXmlElement &referen
             g->setFocalPoint(QPointF(SvgUtil::fromUserSpace(b.attribute("fx").toDouble()),
                                      SvgUtil::fromUserSpace(b.attribute("fy").toDouble())));
             g->setRadius(SvgUtil::fromUserSpace(b.attribute("r").toDouble()));
+        }
+        // preserve color stops
+        if (gradhelper.gradient())
+            g->setStops(gradhelper.gradient()->stops());
+        gradhelper.setGradient(g);
+    } else if (b.tagName() == "conicalGradient") {
+        QConicalGradient *g = new QConicalGradient();
+        if (gradhelper.gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
+            g->setCoordinateMode(QGradient::ObjectBoundingMode);
+            g->setCenter(QPointF(SvgUtil::fromPercentage(b.attribute("cx", "50%")),
+                                 SvgUtil::fromPercentage(b.attribute("cy", "50%"))));
+            g->setAngle(SvgUtil::fromPercentage(b.attribute("a", "50%")));
+        } else {
+            g->setCenter(QPointF(SvgUtil::fromUserSpace(b.attribute("cx").toDouble()),
+                                 SvgUtil::fromUserSpace(b.attribute("cy").toDouble())));
+            g->setAngle(SvgUtil::fromUserSpace(b.attribute("a").toDouble()));
         }
         // preserve color stops
         if (gradhelper.gradient())
@@ -738,7 +754,7 @@ void SvgParser::applyFilter(KoShape *shape)
         KoXmlElement primitive = n.toElement();
         KoFilterEffect *filterEffect = registry->createFilterEffectFromXml(primitive, context);
         if (!filterEffect) {
-            kWarning(30514) << "filter effect" << primitive.tagName() << "is not implemented yet";
+            debugFlake << "filter effect" << primitive.tagName() << "is not implemented yet";
             continue;
         }
 
@@ -829,10 +845,10 @@ void SvgParser::applyClipping(KoShape *shape)
     if (! clipPath)
         return;
 
-    kDebug(30514) << "applying clip path" << gc->clipPathId << "clip rule" << gc->clipRule;
+    debugFlake << "applying clip path" << gc->clipPathId << "clip rule" << gc->clipRule;
 
     const bool boundingBoxUnits = clipPath->clipPathUnits() == SvgClipPathHelper::ObjectBoundingBox;
-    kDebug(30514) << "using" << (boundingBoxUnits ? "boundingBoxUnits" : "userSpaceOnUse");
+    debugFlake << "using" << (boundingBoxUnits ? "boundingBoxUnits" : "userSpaceOnUse");
 
     QTransform shapeMatrix = shape->absoluteTransformation(0);
     // TODO:
@@ -875,7 +891,7 @@ void SvgParser::applyClipping(KoShape *shape)
             delete clipShape;
         }
         if (path) {
-            kDebug(30514) << "using shape" << path->name() << "as clip path";
+            debugFlake << "using shape" << path->name() << "as clip path";
             pathShapes.append(path);
             if (boundingBoxUnits)
                 path->applyAbsoluteTransformation(shapeMatrix);
@@ -1171,8 +1187,8 @@ KoShape * SvgParser::createPath(const KoXmlElement &element)
             points.replace(',', ' ');
             points.remove('\r');
             points.remove('\n');
-            QStringList pointList = points.split(' ', QString::SkipEmptyParts);
-            for (QStringList::Iterator it = pointList.begin(); it != pointList.end(); ++it) {
+            const QStringList pointList = points.split(' ', QString::SkipEmptyParts);
+            for (QStringList::ConstIterator it = pointList.begin(); it != pointList.end(); ++it) {
                 QPointF point;
                 point.setX(SvgUtil::fromUserSpace((*it).toDouble()));
                 ++it;
@@ -1285,13 +1301,13 @@ KoShape * SvgParser::createShape(const QString &shapeID)
 {
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->get(shapeID);
     if (!factory) {
-        kWarning(30514) << "Could not find factory for shape id" << shapeID;
+        debugFlake << "Could not find factory for shape id" << shapeID;
         return 0;
     }
 
     KoShape *shape = factory->createDefaultShape(m_documentResourceManager);
     if (!shape) {
-        kWarning(30514) << "Could not create Default shape for shape id" << shapeID;
+        debugFlake << "Could not create Default shape for shape id" << shapeID;
         return 0;
     }
     if (shape->shapeId().isEmpty())

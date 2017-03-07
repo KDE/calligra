@@ -21,7 +21,7 @@
 #include "ChangeTracker.h"
 #include "TextTool.h"
 
-#include <kdebug.h>
+#include <QDebug>
 
 ChangeTracker::ChangeTracker(TextTool *parent)
         : QObject(parent),
@@ -36,17 +36,17 @@ void ChangeTracker::setDocument(QTextDocument * document)
 {
     m_reverseUndo = false;
     if (m_document)
-        disconnect(m_document, SIGNAL(contentsChange(int, int, int)), this, SLOT(contentsChange(int, int, int)));
+        disconnect(m_document, SIGNAL(contentsChange(int,int,int)), this, SLOT(contentsChange(int,int,int)));
     m_document = document;
     if (m_document)
-        connect(m_document, SIGNAL(contentsChange(int, int, int)), this, SLOT(contentsChange(int, int, int)));
+        connect(m_document, SIGNAL(contentsChange(int,int,int)), this, SLOT(contentsChange(int,int,int)));
 }
 
 int ChangeTracker::getChangeId(QString title, int existingChangeId)
 {
     Q_UNUSED(title);
     Q_UNUSED(existingChangeId);
-    kDebug(32500) << "ChangeTracker::changeId :" << m_changeId;
+    qDebug() << "ChangeTracker::changeId :" << m_changeId;
     return m_changeId++;
 }
 
@@ -58,7 +58,7 @@ void ChangeTracker::contentsChange(int from, int charsRemoves, int charsAdded)
 /*
     if (! m_enableSignals) return;
     m_enableSignals = false;
-    kDebug(32500) << "ChangeTracker::contentsChange" << from << "," << charsRemoves << "," << charsAdded;
+    qDebug() << "ChangeTracker::contentsChange" << from << "," << charsRemoves << "," << charsAdded;
 
     if (charsRemoves == 0 && charsAdded == 0) {
         // I think we can quietly ignore this.
@@ -66,7 +66,7 @@ void ChangeTracker::contentsChange(int from, int charsRemoves, int charsAdded)
         QTextCursor cursor(m_document);
         cursor.setPosition(from);
         cursor.setPosition(from + charsAdded, QTextCursor::KeepAnchor);
-        kDebug(32500) << "   added text:" << cursor.selectedText();
+        qDebug() << "   added text:" << cursor.selectedText();
     } else {
         bool prev = m_tool->m_allowAddUndoCommand;
         m_tool->m_allowAddUndoCommand = false;
@@ -81,8 +81,8 @@ void ChangeTracker::contentsChange(int from, int charsRemoves, int charsAdded)
         cursor.setPosition(from);
         cursor.setPosition(from + charsAdded, QTextCursor::KeepAnchor);
 
-        kDebug(32500) << "   - " << previousText;
-        kDebug(32500) << "   + " << cursor.selectedText();
+        qDebug() << "   - " << previousText;
+        qDebug() << "   + " << cursor.selectedText();
     }
 
     m_enableSignals = true;
@@ -94,5 +94,3 @@ void ChangeTracker::notifyForUndo()
 {
     m_reverseUndo = true;
 }
-
-#include <ChangeTracker.moc>

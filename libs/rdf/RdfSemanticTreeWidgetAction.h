@@ -21,13 +21,13 @@
 #define __rdf_RdfSemanticTreeWidgetAction_h__
 
 #include "kordf_export.h"
-// KDE
-#include <kaction.h>
+// Qt
+#include <QAction>
 
 class KoCanvasBase;
 
 
-class KORDF_EXPORT RdfSemanticTreeWidgetAction : public KAction
+class KORDF_EXPORT RdfSemanticTreeWidgetAction : public QAction
 {
     Q_OBJECT
 

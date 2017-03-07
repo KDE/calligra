@@ -23,7 +23,7 @@
 #include "SelectionDecorator.h"
 #include "SelectionTransformCommand.h"
 
-#include <KoInteractionTool.h>
+#include <KoToolBase.h>
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoShapeManager.h>
@@ -35,8 +35,8 @@
 #include <QPointF>
 
 #include <math.h>
-#include <kdebug.h>
-#include <klocale.h>
+#include <QDebug>
+#include <klocalizedstring.h>
 
 ShapeShearStrategy::ShapeShearStrategy( KoToolBase *tool, const QPointF &clicked, KoFlake::SelectionHandle direction )
 : KoInteractionStrategy(tool)
@@ -111,7 +111,7 @@ ShapeShearStrategy::ShapeShearStrategy( KoToolBase *tool, const QPointF &clicked
     qreal currentAngle = atan2( edge.y(), edge.x() ) / M_PI * 180;
     m_initialSelectionAngle = currentAngle - angle;
 
-    kDebug(30006) <<" PREsol.x=" << m_solidPoint.x() <<" sol.y=" << m_solidPoint.y();
+    qDebug() <<" PREsol.x=" << m_solidPoint.x() <<" sol.y=" << m_solidPoint.y();
     m_solidPoint = tool->canvas()->shapeManager()->selection()->absoluteTransformation(0).map( m_solidPoint );
 
     // use crossproduct of top edge and left edge of selection bounding rect
@@ -173,7 +173,8 @@ void ShapeShearStrategy::paint( QPainter &painter, const KoViewConverter &conver
 }
 
 KUndo2Command* ShapeShearStrategy::createCommand() {
-    QList<QTransform> newTransforms;
+    QVector<QTransform> newTransforms;
+    newTransforms.reserve(m_selectedShapes.count());
     foreach( KoShape* shape, m_selectedShapes )
         newTransforms << shape->transformation();
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, newTransforms );

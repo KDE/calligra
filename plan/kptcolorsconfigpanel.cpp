@@ -18,9 +18,7 @@
 */
 
 #include "kptcolorsconfigpanel.h"
-#include "plansettings.h"
-
-#include <kdebug.h>
+#include "calligraplansettings.h"
 
 namespace KPlato
 {
@@ -36,5 +34,3 @@ ColorsConfigPanel::ColorsConfigPanel(QWidget *p )
 }
 
 }  //KPlato namespace
-
-#include "kptcolorsconfigpanel.moc"

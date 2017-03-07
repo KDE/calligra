@@ -20,8 +20,8 @@
 #include "StateToolWidget.h"
 
 #include <QItemDelegate>
-#include <kundo2command.h>
 
+#include <kundo2command.h>
 #include <kcategorizedsortfilterproxymodel.h>
 
 #include <KoCanvasBase.h>
@@ -31,8 +31,8 @@
 #include <State.h>
 #include <StateCategory.h>
 #include <StatesRegistry.h>
-
 #include <StateShape.h>
+
 #include "StateTool.h"
 #include "StatesModel.h"
 #include "StateShapeChangeStateCommand.h"

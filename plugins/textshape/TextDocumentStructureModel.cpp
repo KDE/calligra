@@ -1,6 +1,6 @@
 /* This file is part of the Calligra project, made within the KDE community.
  *
- * Copyright (C) 2013 Friedrich W. H. Kossebau <friedrich@kogmbh.com>
+ * Copyright (C) 2013,2016 Friedrich W. H. Kossebau <friedrich@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,14 +20,23 @@
 
 #include <TextDocumentStructureModel.h>
 
-// KDE
-#include <kdebug.h>
 // Qt
+#include <QDebug>
 #include <QTextDocument>
 #include <QTextFrame>
 #include <QTextBlock>
 #include <QTextCursor>
+#include <QTextLayout>
 
+
+NodeData NodeData::fromLine(int blockNumber, int lineNumber)
+{
+    NodeData nodeData;
+    nodeData.type = Line;
+    nodeData.blockNumber = blockNumber;
+    nodeData.lineNumber = lineNumber;
+    return nodeData;
+}
 
 NodeData NodeData::fromBlock(int blockNumber)
 {
@@ -66,7 +75,7 @@ int TextDocumentStructureModel::columnCount(const QModelIndex &index) const
 
 int TextDocumentStructureModel::rowCount(const QModelIndex &index) const
 {
-    kDebug(32500) << "-------------------------- index:"<<index<<m_textDocument;
+    qDebug() << "-------------------------- index:"<<index<<m_textDocument;
     if (! m_textDocument) {
         return 0;
     }
@@ -76,7 +85,7 @@ int TextDocumentStructureModel::rowCount(const QModelIndex &index) const
         return 1;
     }
 
-    Q_ASSERT(index.internalId() < m_nodeDataTable.count());
+    Q_ASSERT(index.internalId() < uint(m_nodeDataTable.count()));
 
     const NodeData &nodeData = m_nodeDataTable.at(index.internalId());
 
@@ -91,7 +100,15 @@ int TextDocumentStructureModel::rowCount(const QModelIndex &index) const
         return count;
     }
 
-    // should be a block then, no childs for now
+    if (nodeData.type == NodeData::Block) {
+        QTextBlock block = m_textDocument->findBlockByNumber(nodeData.blockNumber);
+        QTextLayout* textLayout = block.layout();
+        if (textLayout) {
+            return textLayout->lineCount();
+        }
+    }
+
+    // anything else no childs for now
     return 0;
 }
 
@@ -101,19 +118,33 @@ QVariant TextDocumentStructureModel::data(const QModelIndex &index, int role) co
         return QVariant();
     }
 
-    Q_ASSERT(index.internalId() < m_nodeDataTable.count());
+    Q_ASSERT(index.internalId() < uint(m_nodeDataTable.count()));
 
     const NodeData &nodeData = m_nodeDataTable.at(index.internalId());
 
     switch (role) {
         case Qt::DisplayRole:
         {
-            if (nodeData.type == NodeData::Frame) {
-                QTextFrame* frame = nodeData.frame;
-                return QLatin1String(frame->metaObject()->className());
+            switch (nodeData.type) {
+                case NodeData::Frame: {
+                    QTextFrame* frame = nodeData.frame;
+                    return QLatin1String(frame->metaObject()->className());
+                    break;
+                }
+                case NodeData::Block:
+                    return QStringLiteral("Block");
+                    break;
+                case NodeData::Line: {
+                    QTextBlock block = m_textDocument->findBlockByNumber(nodeData.blockNumber);
+                    QTextLayout *layout = block.layout();
+                    if (layout) {
+                        QTextLine line = layout->lineAt(nodeData.lineNumber);
+                        return block.text().mid(line.textStart(), line.textLength());
+                    }
+                    break;
+                }
             }
-            // else should be a block
-            return QLatin1String("Block");
+            break;
         }
     }
 
@@ -122,14 +153,29 @@ QVariant TextDocumentStructureModel::data(const QModelIndex &index, int role) co
 
 QModelIndex TextDocumentStructureModel::parent(const QModelIndex &index) const
 {
-    kDebug(32500) << "-------------------------- index:"<<index<<m_textDocument;
+    qDebug() << "-------------------------- index:"<<index<<m_textDocument;
     if (! m_textDocument || ! index.isValid()) {
         return QModelIndex();
     }
 
-    Q_ASSERT(index.internalId() < m_nodeDataTable.count());
+    Q_ASSERT(index.internalId() < uint(m_nodeDataTable.count()));
 
     const NodeData &nodeData = m_nodeDataTable.at(index.internalId());
+
+    if (nodeData.type == NodeData::Line) {
+        QTextBlock block = m_textDocument->findBlockByNumber(nodeData.blockNumber);
+        // QTextBlock's API has no option to query the parentframe, so get it via a cursor
+        QTextCursor cursor(block);
+        QTextFrame* parentFrame = cursor.currentFrame();
+        int row = 0;
+        for (QTextFrame::iterator iterator = parentFrame->begin(); !iterator.atEnd(); ++iterator) {
+            if (iterator.currentFrame() == parentFrame) {
+                break;
+            }
+            ++row;
+        }
+        return createIndex(row, 0, blockIndex(block));
+    }
 
     QTextFrame* parentFrame;
     if (nodeData.type == NodeData::Frame) {
@@ -150,7 +196,7 @@ QModelIndex TextDocumentStructureModel::parent(const QModelIndex &index) const
     // parent is root frame?
     if (! grandParentFrame) {
         Q_ASSERT(parentFrame == m_textDocument->rootFrame());
-        return createIndex(0, 0, 0);
+        return createIndex(0, 0, static_cast<quintptr>(0));
     }
 
     // find position of parentFrame
@@ -169,39 +215,49 @@ QModelIndex TextDocumentStructureModel::parent(const QModelIndex &index) const
 
 QModelIndex TextDocumentStructureModel::index(int row, int column, const QModelIndex &parentIndex) const
 {
-    kDebug(32500) << "-------------------------- row:" << row << "column:"<<column << "index:"<<parentIndex<<m_textDocument;
+    qDebug() << "-------------------------- row:" << row << "column:"<<column << "index:"<<parentIndex<<m_textDocument;
     if (! m_textDocument) {
         return QModelIndex();
     }
 
     if (! parentIndex.isValid()) {
-        return createIndex(row, column, 0);
+        return createIndex(row, column, static_cast<quintptr>(0));
     }
 
-    Q_ASSERT(parentIndex.internalId() < m_nodeDataTable.count());
+    Q_ASSERT(parentIndex.internalId() < uint(m_nodeDataTable.count()));
 
-    const NodeData &nodeData = m_nodeDataTable.at(parentIndex.internalId());
-    // can be only frame for now
-    Q_ASSERT(nodeData.type == NodeData::Frame);
+    const NodeData &parentNodeData = m_nodeDataTable.at(parentIndex.internalId());
 
-    QTextFrame* parentFrame = nodeData.frame;
     int index = -1;
-    int count = 0;
-    for (QTextFrame::iterator iterator = parentFrame->begin(); !iterator.atEnd(); ++iterator) {
-        if (count == row) {
-            QTextFrame *frame = iterator.currentFrame();
-            if (frame) {
-                index = frameIndex(frame);
-                break;
-            } else {
-                QTextBlock block = iterator.currentBlock();
-                if (block.isValid()) {
-                    index = blockIndex(block);
+
+    if (parentNodeData.type == NodeData::Frame) {
+        QTextFrame* parentFrame = parentNodeData.frame;
+        int count = 0;
+        for (QTextFrame::iterator iterator = parentFrame->begin(); !iterator.atEnd(); ++iterator) {
+            if (count == row) {
+                QTextFrame *frame = iterator.currentFrame();
+                if (frame) {
+                    index = frameIndex(frame);
                     break;
+                } else {
+                    QTextBlock block = iterator.currentBlock();
+                    if (block.isValid()) {
+                        index = blockIndex(block);
+                        break;
+                    }
                 }
             }
+            ++count;
         }
-        ++count;
+    } else {
+        // can be only block otherwise for now
+        Q_ASSERT(parentNodeData.type == NodeData::Block);
+        QTextBlock block = m_textDocument->findBlockByNumber(parentNodeData.blockNumber);
+        QTextLayout *layout = block.layout();
+        if (layout) {
+            QTextLine line = layout->lineAt(row);
+            index = lineIndex(block, line);
+        }
     }
 
     Q_ASSERT(index != -1);
@@ -210,7 +266,7 @@ QModelIndex TextDocumentStructureModel::index(int row, int column, const QModelI
 
 bool TextDocumentStructureModel::hasChildren(const QModelIndex &parentIndex) const
 {
-    kDebug(32500) << "-------------------------- parentIndex:"<<parentIndex<<m_textDocument;
+    qDebug() << "-------------------------- parentIndex:"<<parentIndex<<m_textDocument;
     if (! m_textDocument) {
         return false;
     }
@@ -219,14 +275,20 @@ bool TextDocumentStructureModel::hasChildren(const QModelIndex &parentIndex) con
         return true;
     }
 
-    Q_ASSERT(parentIndex.internalId() < m_nodeDataTable.count());
+    Q_ASSERT(parentIndex.internalId() < uint(m_nodeDataTable.count()));
 
     const NodeData &nodeData = m_nodeDataTable.at(parentIndex.internalId());
 
     if (nodeData.type == NodeData::Frame) {
         return (! nodeData.frame->begin().atEnd());
     }
-    // no children with a block
+
+    if (nodeData.type == NodeData::Block) {
+        QTextBlock block = m_textDocument->findBlockByNumber(nodeData.blockNumber);
+        QTextLayout* textLayout = block.layout();
+        return (textLayout && textLayout->lineCount() > 0);
+    }
+
     return false;
 }
 
@@ -246,18 +308,40 @@ void TextDocumentStructureModel::setTextDocument(QTextDocument* textDocument)
     reset();
 }
 
+int TextDocumentStructureModel::lineIndex(const QTextBlock &block, const QTextLine &line) const
+{
+    int index;
+
+    const int blockNumber = block.blockNumber();
+    QHash<int, BlockData>::Iterator blockIt = m_blockNumberTable.find(blockNumber);
+    Q_ASSERT(blockIt != m_blockNumberTable.end());
+
+    const int lineNumber = line.lineNumber();
+    QHash<int, int> &lineNumberTable = blockIt.value().lineNumberTable;
+    QHash<int, int>::ConstIterator it = lineNumberTable.constFind(lineNumber);
+    if (it == lineNumberTable.constEnd()) {
+        index = m_nodeDataTable.count();
+        lineNumberTable.insert(lineNumber, index);
+        m_nodeDataTable.append(NodeData::fromLine(blockNumber, lineNumber));
+    } else {
+        index = it.value();
+    }
+
+    return index;
+}
+
 int TextDocumentStructureModel::blockIndex(const QTextBlock &block) const
 {
     int index;
 
     const int blockNumber = block.blockNumber();
-    QHash<int, int>::ConstIterator it = m_blockNumberTable.constFind(blockNumber);
+    QHash<int, BlockData>::ConstIterator it = m_blockNumberTable.constFind(blockNumber);
     if (it == m_blockNumberTable.constEnd()) {
         index = m_nodeDataTable.count();
-        m_blockNumberTable.insert(blockNumber, index);
+        m_blockNumberTable.insert(blockNumber, BlockData(index));
         m_nodeDataTable.append(NodeData::fromBlock(blockNumber));
     } else {
-        index = it.value();
+        index = it.value().nodeIndex;
     }
 
     return index;
@@ -286,7 +370,7 @@ void TextDocumentStructureModel::onContentsChanged()
 
 void TextDocumentStructureModel::onModelReset()
 {
-    kDebug(32500) << "-------------------------- "<<m_textDocument;
+    qDebug() << "-------------------------- "<<m_textDocument;
     m_nodeDataTable.clear();
     m_blockNumberTable.clear();
     m_frameTable.clear();

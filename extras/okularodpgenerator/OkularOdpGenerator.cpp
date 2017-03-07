@@ -23,8 +23,8 @@
 #include <QDebug>
 #include <QImage>
 #include <QPainter>
-
-#include <calligraversion.h>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include <KoDocumentEntry.h>
 #include <KoPart.h>
@@ -33,29 +33,10 @@
 #include <KoDocumentInfo.h>
 #include <KoGlobal.h>
 
-#include <kaboutdata.h>
-#include <kpluginfactory.h>
-#include <kmimetype.h>
-
 #include <okular/core/page.h>
 
-static KAboutData createAboutData()
-{
-    KAboutData aboutData(
-         "okular_odp",
-         "okularGenerator_odp",
-         ki18n( "ODP Backend" ),
-         CALLIGRA_VERSION_STRING,
-         ki18n( "ODP file renderer" ),
-         KAboutData::License_GPL,
-         ki18n( "© 2010 Sven Langkamp" )
-    );
+#include <KLocalizedString>
 
-    // fill the about data
-    return aboutData;
-}
-
-OKULAR_EXPORT_PLUGIN(OkularOdpGenerator, createAboutData())
 
 OkularOdpGenerator::OkularOdpGenerator( QObject *parent, const QVariantList &args )
     : Okular::Generator( parent, args )
@@ -69,10 +50,7 @@ OkularOdpGenerator::~OkularOdpGenerator()
 
 bool OkularOdpGenerator::loadDocument( const QString &fileName, QVector<Okular::Page*> &pages )
 {
-    KComponentData cd("OkularOdpGenerator", QByteArray(),
-                      KComponentData::SkipMainComponentRegistration);
-
-    const QString mimetype = KMimeType::findByPath(fileName)->name();
+    const QString mimetype = QMimeDatabase().mimeTypeForFile(fileName).name();
 
     QString error;
     KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimetype);
@@ -85,8 +63,7 @@ bool OkularOdpGenerator::loadDocument( const QString &fileName, QVector<Okular::
 
     KoPADocument* doc = qobject_cast<KoPADocument*>(part->document());
     m_doc = doc;
-    KUrl url;
-    url.setPath(fileName);
+    const QUrl url = QUrl::fromLocalFile(fileName);
     doc->setCheckAutoSaveFile(false);
     doc->setAutoErrorHandlingEnabled(false); // show error dialogs
     if (!doc->openUrl(url)) {
@@ -120,14 +97,14 @@ bool OkularOdpGenerator::loadDocument( const QString &fileName, QVector<Okular::
     const QString creationDate = documentInfo->aboutInfo("creation-date");
     if (!creationDate.isEmpty()) {
         QDateTime t = QDateTime::fromString(creationDate, Qt::ISODate);
-        m_documentInfo.set( Okular::DocumentInfo::CreationDate, KGlobal::locale()->formatDateTime(t) );
+        m_documentInfo.set( Okular::DocumentInfo::CreationDate, QLocale().toString(t, QLocale::ShortFormat) );
     }
     m_documentInfo.set( Okular::DocumentInfo::Creator,  documentInfo->aboutInfo("initial-creator") );
 
     const QString modificationDate = documentInfo->aboutInfo("date");
     if (!modificationDate.isEmpty()) {
         QDateTime t = QDateTime::fromString(modificationDate, Qt::ISODate);
-        m_documentInfo.set( Okular::DocumentInfo::ModificationDate, KGlobal::locale()->formatDateTime(t) );
+        m_documentInfo.set( Okular::DocumentInfo::ModificationDate, QLocale().toString(t, QLocale::ShortFormat) );
     }
     m_documentInfo.set( Okular::DocumentInfo::Author, documentInfo->aboutInfo("creator") );
 
@@ -161,27 +138,14 @@ void OkularOdpGenerator::generatePixmap( Okular::PixmapRequest *request )
         pix = new QPixmap(page->thumbnail(QSize(request->width(), request->height())));
     }
 
-// API change
-#if OKULAR_IS_VERSION(0, 16, 60)
    request->page()->setPixmap( request->observer(), pix );
-#else
-   request->page()->setPixmap( request->id(), pix );
-#endif
-
 
     signalPixmapRequestDone( request );
 }
 
-#if OKULAR_IS_VERSION(0, 20, 60)
 Okular::DocumentInfo OkularOdpGenerator::generateDocumentInfo( const QSet<Okular::DocumentInfo::Key> &keys ) const
 {
     Q_UNUSED(keys);
 
     return m_documentInfo;
 }
-#else
-const Okular::DocumentInfo* OkularOdpGenerator::generateDocumentInfo()
-{
-    return &m_documentInfo;
-}
-#endif

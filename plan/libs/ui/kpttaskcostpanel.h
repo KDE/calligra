@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2005-2007 Dag Andersen <danders@get2net.dk>
-
+   Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -24,11 +25,10 @@
 
 #include "ui_kpttaskcostpanelbase.h"
 
-class KLocale;
-
 namespace KPlato
 {
 
+class Locale;
 class TaskCostPanel;
 class Account;
 class Accounts;
@@ -51,6 +51,7 @@ class TaskCostPanel : public TaskCostPanelImpl {
     Q_OBJECT
 public:
     TaskCostPanel(Task &task, Accounts &accounts, QWidget *parent=0, const char *name=0);
+    ~TaskCostPanel();
 
     MacroCommand *buildCommand();
 
@@ -68,7 +69,8 @@ private:
     Account *m_oldrunning;
     Account *m_oldstartup;
     Account *m_oldshutdown;
-    const KLocale *m_locale;
+    const Locale *m_locale;
+    bool m_localeIsOwn;
 };
 
 } //KPlato namespace

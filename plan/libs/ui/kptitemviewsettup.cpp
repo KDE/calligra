@@ -25,8 +25,8 @@
 
 #include "KoPageLayoutWidget.h"
 
+#include <QPushButton>
 
-#include <kpushbutton.h>
 
 namespace KPlato
 {
@@ -61,7 +61,7 @@ ItemViewSettup::ItemViewSettup( TreeViewBase *view, bool includeColumn0, QWidget
 
     QMap<int, Item*> map;
     int c = includeColumn0 ? 0 : 1;
-    kDebug(planDbg())<<includeColumn0<<c;
+    debugPlan<<includeColumn0<<c;
     for ( ; c < model->columnCount(); ++c ) {
         Item *item = new Item( c, model->headerData( c, Qt::Horizontal ).toString() );
         item->setToolTip( model->headerData( c, Qt::Horizontal, Qt::ToolTipRole ).toString() );
@@ -91,7 +91,7 @@ void ItemViewSettup::slotChanged()
 
 void ItemViewSettup::slotOk()
 {
-    kDebug(planDbg());
+    debugPlan;
     QListWidget *lst = selector->availableListWidget();
     for ( int r = 0; r < lst->count(); ++r ) {
         int c = static_cast<Item*>( lst->item( r ) )->column();
@@ -108,7 +108,7 @@ void ItemViewSettup::slotOk()
 
 void ItemViewSettup::setDefault()
 {
-    kDebug(planDbg());
+    debugPlan;
     selector->availableListWidget()->clear();
     selector->selectedListWidget()->clear();
     QAbstractItemModel *model = m_view->model();
@@ -137,27 +137,26 @@ ItemViewSettupDialog::ItemViewSettupDialog( ViewBase *view, TreeViewBase *treevi
     m_pagelayout( 0 ),
     m_headerfooter( 0 )
 {
-    setCaption( i18n("View Settings") );
-    setButtons( Ok|Cancel|Default );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
+    setWindowTitle( i18n("View Settings") );
+    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
+    button(QDialogButtonBox::Ok)->setDefault(true);
 
-    button( Default )->setEnabled( ! treeview->defaultColumns().isEmpty() );
-    
+    button( QDialogButtonBox::RestoreDefaults )->setEnabled( ! treeview->defaultColumns().isEmpty() );
+
     m_panel = new ItemViewSettup( treeview, includeColumn0 );
     KPageWidgetItem *page = new KPageWidgetItem( m_panel, i18n( "Tree View" ) );
     page->setHeader( i18n( "Tree View Column Configuration" ) );
     addPage( page );
     m_pageList.append( page );
-    
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
-    connect(this, SIGNAL(okClicked()), m_panel, SLOT(slotOk()));
-    connect(this, SIGNAL(defaultClicked()), m_panel, SLOT(setDefault()));
+
+    connect(this, SIGNAL(accepted()), this, SLOT(slotOk()));
+    connect(this, SIGNAL(accepted()), m_panel, SLOT(slotOk()));
+    connect(button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), m_panel, SLOT(setDefault()));
 }
 
 void ItemViewSettupDialog::slotOk()
 {
-    kDebug(planDbg())<<m_view<<m_pagelayout<<m_headerfooter;
+    debugPlan<<m_view<<m_pagelayout<<m_headerfooter;
     if ( ! m_view ) {
         return;
     }
@@ -209,13 +208,12 @@ SplitItemViewSettupDialog::SplitItemViewSettupDialog( ViewBase *view, DoubleTree
     m_pagelayout( 0 ),
     m_headerfooter( 0 )
 {
-    setCaption( i18n("View Settings") );
-    setButtons( Ok|Cancel|Default );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
+    setWindowTitle( i18n("View Settings") );
+    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
+    button(QDialogButtonBox::Ok)->setDefault(true);
 
     bool nodef = treeview->masterView()->defaultColumns().isEmpty() || treeview->slaveView()->defaultColumns().isEmpty();
-    button( Default )->setEnabled( ! nodef );
+    button( QDialogButtonBox::Ok )->setEnabled( ! nodef );
 
     m_page1 = new ItemViewSettup( treeview->masterView(), true );
     KPageWidgetItem *page = new KPageWidgetItem( m_page1, i18n( "Main View" ) );
@@ -232,16 +230,16 @@ SplitItemViewSettupDialog::SplitItemViewSettupDialog( ViewBase *view, DoubleTree
     //connect( m_page1, SIGNAL(enableButtonOk(bool)), this, SLOT(enableButtonOk(bool)) );
     //connect( m_page2, SIGNAL(enableButtonOk(bool)), this, SLOT(enableButtonOk(bool)) );
 
-    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()) );
-    connect( this, SIGNAL(okClicked()), m_page1, SLOT(slotOk()) );
-    connect( this, SIGNAL(okClicked()), m_page2, SLOT(slotOk()) );
-    connect( this, SIGNAL(defaultClicked()), m_page1, SLOT(setDefault()) );
-    connect( this, SIGNAL(defaultClicked()), m_page2, SLOT(setDefault()) );
+    connect( this, SIGNAL(accepted()), this, SLOT(slotOk()) );
+    connect( this, SIGNAL(accepted()), m_page1, SLOT(slotOk()) );
+    connect( this, SIGNAL(accepted()), m_page2, SLOT(slotOk()) );
+    connect( button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), m_page1, SLOT(setDefault()) );
+    connect( button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), m_page2, SLOT(setDefault()) );
 }
 
 void SplitItemViewSettupDialog::slotOk()
 {
-    kDebug(planDbg());
+    debugPlan;
     if ( ! m_view ) {
         return;
     }
@@ -284,5 +282,3 @@ void SplitItemViewSettupDialog::addPrintingOptions()
 }
 
 } //namespace KPlato
-
-#include "kptitemviewsettup.moc"

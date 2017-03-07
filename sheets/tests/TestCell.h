@@ -21,9 +21,10 @@
 #ifndef CALLIGRA_SHEETS_CELL_TEST
 #define CALLIGRA_SHEETS_CELL_TEST
 
-#include <QtTest>
+#include <QObject>
 
 class KoXmlDocument;
+class QString;
 
 namespace Calligra
 {

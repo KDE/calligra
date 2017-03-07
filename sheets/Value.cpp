@@ -22,9 +22,9 @@
 #include "CalculationSettings.h"
 #include "CellStorage.h"
 #include "ValueStorage.h"
+#include "SheetsDebug.h"
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <QString>
 #include <QTextStream>
@@ -234,7 +234,7 @@ bool Value::operator==(const Value& o) const
     case Error:   return (!d->ps && !o.d->ps) || ((d->ps && o.d->ps) && (*o.d->ps == *d->ps));
     default: break;
     }
-    kWarning() << "Unhandled type in Value::operator==: " << d->type;
+    warnSheets << "Unhandled type in Value::operator==: " << d->type;
     return false;
 }
 
@@ -335,10 +335,9 @@ Value::Value(const QDateTime& dt, const CalculationSettings* settings)
 }
 
 // create a floating-point value from time
-Value::Value(const QTime& time, const CalculationSettings* settings)
+Value::Value(const QTime& time)
         : d(Private::null())
 {
-    Q_UNUSED(settings);
     const QTime refTime(0, 0);    // reference time is midnight
 
     d->type = Float;
@@ -514,7 +513,7 @@ QDateTime Value::asDateTime(const CalculationSettings* settings) const
     QDateTime datetime(settings->referenceDate(), QTime(), Qt::UTC);
 
     const int days = asInteger();
-    const int msecs = qRound((numToDouble(asFloat() - double(days))) * 86400000.0);      // 24*60*60*1000
+    const int msecs = ::round((numToDouble(asFloat() - double(days))) * 86400000.0);      // 24*60*60*1000
     datetime = datetime.addDays(days);
     datetime = datetime.addMSecs(msecs);
 
@@ -533,13 +532,12 @@ QDate Value::asDate(const CalculationSettings* settings) const
 }
 
 // get the value as time
-QTime Value::asTime(const CalculationSettings* settings) const
+QTime Value::asTime() const
 {
-    Q_UNUSED(settings);
-    QTime dt;
+    QTime dt(0, 0, 0, 0);
 
     const int days = asInteger();
-    const int msecs = qRound(numToDouble(asFloat() - double(days)) * 86400000.0);      // 24*60*60*1000
+    const int msecs = ::round(numToDouble(asFloat() - double(days)) * 86400000.0);      // 24*60*60*1000
     dt = dt.addMSecs(msecs);
 
     return dt;
@@ -916,7 +914,8 @@ QTextStream& operator<<(QTextStream& ts, Value value)
     case Value::Boolean:
         ts << ": ";
         if (value.asBoolean()) ts << "TRUE";
-        else ts << "FALSE"; break;
+        else ts << "FALSE";
+        break;
 
     case Value::Integer:
         ts << ": " << value.asInteger(); break;
@@ -996,7 +995,7 @@ uint qHash(const Value& value)
 } // namespace Calligra
 
 /***************************************************************************
-  kDebug support
+  QDebug support
 ****************************************************************************/
 
 QDebug operator<<(QDebug str, const Calligra::Sheets::Value& v)

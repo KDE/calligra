@@ -19,7 +19,6 @@
 
 #include "KoRdfCalendarEvent.h"
 #include "KoDocumentRdf.h"
-#include "KoRdfSemanticItem_p.h"
 #include "KoTextRdfCore.h"
 #include "KoRdfCalendarEventTreeWidgetItem.h"
 #include <QUuid>
@@ -28,6 +27,7 @@
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include "ksystemtimezone.h"
+#include <kglobal.h>
 
 #ifdef KDEPIMLIBS_FOUND
 #include <akonadi/collectiondialog.h>
@@ -41,8 +41,8 @@
 
 using namespace Soprano;
 
-KoRdfCalendarEvent::KoRdfCalendarEvent(QObject *parent, const KoDocumentRdf *m_rdf)
-    : KoRdfSemanticItem(m_rdf, parent)
+KoRdfCalendarEvent::KoRdfCalendarEvent(QObject *parent, const KoDocumentRdf *rdf)
+    : KoRdfSemanticItem(parent, rdf)
 {
     m_startTimespec = KSystemTimeZones::local();
     m_endTimespec = KSystemTimeZones::local();
@@ -79,7 +79,7 @@ static KDateTime VEventDateTimeToKDateTime(const QString &s, KDateTime::Spec &tz
     tz = KSystemTimeZones::local();
     kDebug(30015) << "date string:" << s << "\n"
         << " is valid:" << ret.isValid() << "\n"
-        << " parsed:" << ret << "\n"
+        << " parsed:" << ret.toString() << "\n"
         << " time.tz.offset:" << ret.timeZone().currentOffset()
         << " tz.offset:" << tz.timeZone().currentOffset();
     return ret;
@@ -116,7 +116,7 @@ static KTimeZone toKTimeZone(Soprano::Node n)
 }
 
 KoRdfCalendarEvent::KoRdfCalendarEvent(QObject *parent, const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it)
-    : KoRdfSemanticItem(rdf, it, parent)
+    : KoRdfSemanticItem(parent, rdf, it)
 {
     m_location = KoTextRdfCore::optionalBindingAsString(it, "location");
     m_summary = KoTextRdfCore::optionalBindingAsString(it, "summary");
@@ -132,8 +132,8 @@ KoRdfCalendarEvent::KoRdfCalendarEvent(QObject *parent, const KoDocumentRdf *rdf
                    m_startTimespec);
     m_dtend = VEventDateTimeToKDateTime(it.binding("dtend").toString(),
                                            m_endTimespec);
-    kDebug(30015) << "KoRdfCalendarEvent() start:" << m_dtstart
-        << " end:" << m_dtend;
+    kDebug(30015) << "KoRdfCalendarEvent() start:" << m_dtstart.toString()
+        << " end:" << m_dtend.toString();
     kDebug(30015) << "KoRdfCalendarEvent() long:" << KoTextRdfCore::optionalBindingAsString(it, "long")
         << " lat:" << KoTextRdfCore::optionalBindingAsString(it, "lat");
     kDebug(30015) << "KoRdfCalendarEvent() context-direct:" << it.binding("graph").toString();
@@ -217,8 +217,8 @@ void KoRdfCalendarEvent::updateFromEditorData()
     KDateTime dtend(editWidget.endDate->date(),   editWidget.endTime->time(),   m_endTimespec);
     kDebug(30015) << "m_startTimespec.offset:" << m_startTimespec.timeZone().currentOffset();
     kDebug(30015) << "date:" << editWidget.startDate->date();
-    kDebug(30015) << "time:" << editWidget.startTime->time();
-    kDebug(30015) << "dtstart:" << dtstart;
+    kDebug(30015) << "time:" << editWidget.startTime->time().toString();
+    kDebug(30015) << "dtstart:" << dtstart.toString();
     kDebug(30015) << "qdtstart:" << dtstart.dateTime();
     LiteralValue lv(dtstart.dateTime());
     Node n = Node::createLiteralNode(lv);
@@ -233,7 +233,7 @@ void KoRdfCalendarEvent::updateFromEditorData()
 KoRdfSemanticTreeWidgetItem *KoRdfCalendarEvent::createQTreeWidgetItem(QTreeWidgetItem* parent)
 {
     KoRdfCalendarEventTreeWidgetItem *item  =
-        new KoRdfCalendarEventTreeWidgetItem(parent, hKoRdfSemanticItem(this));
+        new KoRdfCalendarEventTreeWidgetItem(parent, hKoRdfCalendarEvent(this));
     return item;
 }
 
@@ -403,7 +403,7 @@ void KoRdfCalendarEvent::saveToKCal()
     item.setMimeType(event->mimeType());
 
     Akonadi::ItemCreateJob *itemCreateJob = new Akonadi::ItemCreateJob(item, collection);
-    connect(itemCreateJob, SIGNAL(result(KJob*) ), SLOT(onCreateJobFinished(KJob*)));
+    connect(itemCreateJob, SIGNAL(result(KJob*)), SLOT(onCreateJobFinished(KJob*)));
 #endif
 }
 

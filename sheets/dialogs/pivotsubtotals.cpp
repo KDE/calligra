@@ -34,7 +34,7 @@ public:
 
 
 PivotSubTotals::PivotSubTotals(QWidget* parent,Selection* selection):
-    KDialog(parent),
+    KoDialog(parent),
     d(new Private)
     {
   
@@ -51,7 +51,7 @@ public:
     explicit PivotOptions(QWidget* parent, Selection* selection);
     ~PivotOptions();
     QString returnFunction();
-public slots:
+public Q_SLOTS:
     void on_Ok_clicked();
 private:
     
@@ -87,4 +87,3 @@ PivotSubTotals::~PivotSubTotals()
 {
     delete d;
 }
-#include "PivotSubTotals.moc"

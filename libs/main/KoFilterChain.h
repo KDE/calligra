@@ -30,7 +30,7 @@ Boston, MA 02110-1301, USA.
 #include "komain_export.h"
 #include "KoFilterChainLinkList.h"
 
-class KTemporaryFile;
+class QTemporaryFile;
 class KoFilterManager;
 class KoDocument;
 
@@ -52,7 +52,7 @@ namespace CalligraFilter
  * @author Werner Trobin <trobin@kde.org>
  * @todo the class has no constructor and therefore cannot initialize its private class
  */
-class KOMAIN_EXPORT KoFilterChain : public KShared
+class KOMAIN_EXPORT KoFilterChain : public QSharedData
 {
     // Only Calligra::Graph is allowed to construct instances and
     // add chain links.
@@ -60,7 +60,7 @@ class KOMAIN_EXPORT KoFilterChain : public KShared
     friend class KoFilterManager;
 
 public:
-    typedef KSharedPtr<KoFilterChain> Ptr;
+    typedef QExplicitlySharedDataPointer<KoFilterChain> Ptr;
 
     virtual ~KoFilterChain();
 
@@ -158,7 +158,7 @@ private:
     void manageIO();
     void finalizeIO();
 
-    bool createTempFile(KTemporaryFile** tempFile, bool autoDelete = true);
+    bool createTempFile(QTemporaryFile** tempFile, bool autoDelete = true);
 
     void inputFileHelper(KoDocument* document, const QString& alternativeFile);
     void outputFileHelper(bool autoDelete);
@@ -198,8 +198,8 @@ private:
     KoDocument* m_inputDocument;      // ...or even documents?
     KoDocument* m_outputDocument;
 
-    KTemporaryFile* m_inputTempFile;
-    KTemporaryFile* m_outputTempFile;
+    QTemporaryFile* m_inputTempFile;
+    QTemporaryFile* m_outputTempFile;
 
     // These two flags keep track of the input/output the
     // filter (=user) asked for

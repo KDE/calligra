@@ -162,5 +162,3 @@ void GitLogModel::refreshLog()
     }
     endResetModel();
 }
-
-#include "gitlogmodel.moc"

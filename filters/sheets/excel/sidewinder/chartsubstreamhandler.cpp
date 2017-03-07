@@ -27,7 +27,7 @@
 #include <QRegExp>
 #include <QDebug>
 
-#include <XlsxUtils.h>
+#include <XlsUtils.h>  // splitCellRange() et al.
 
 #include <sstream>
 
@@ -36,7 +36,7 @@ namespace Swinder {
 class BRAIRecord : public Record
 {
 public:
-    Charting::Value* m_value;
+    KoChart::Value* m_value;
 
     static const unsigned int id;
     unsigned int rtti() const { return this->id; }
@@ -59,8 +59,8 @@ public:
             return;
         }
 
-        Charting::Value::DataId dataId = (Charting::Value::DataId) readU8(data);
-        Charting::Value::DataType type = (Charting::Value::DataType) readU8(data + 1);
+        KoChart::Value::DataId dataId = (KoChart::Value::DataId) readU8(data);
+        KoChart::Value::DataType type = (KoChart::Value::DataType) readU8(data + 1);
         bool isUnlinkedFormat = readU16(data + 2) & 0x01;
         unsigned numberFormat = readU16(data + 4);
 
@@ -74,7 +74,7 @@ public:
         }
 
         delete m_value;
-        m_value = new Charting::Value(dataId, type, formula, isUnlinkedFormat, numberFormat);
+        m_value = new KoChart::Value(dataId, type, formula, isUnlinkedFormat, numberFormat);
     }
 
 private:
@@ -139,13 +139,13 @@ public:
     InternalDataCache(ChartSubStreamHandler *chartSubStreamHandler, unsigned index) : m_chartSubStreamHandler(chartSubStreamHandler), m_siIndex(index) {}
     ~InternalDataCache() {
         QString cellRegion = m_cellRegion.isNull() ? QString() : Swinder::encodeAddress("local", m_cellRegion);
-        bool isBubble = dynamic_cast<Charting::BubbleImpl*>(m_chartSubStreamHandler->m_chart->m_impl);
-        bool isScatter = dynamic_cast<Charting::ScatterImpl*>(m_chartSubStreamHandler->m_chart->m_impl);
-        foreach(Charting::Series *series, m_chartSubStreamHandler->m_chart->m_series) {
+        bool isBubble = dynamic_cast<KoChart::BubbleImpl*>(m_chartSubStreamHandler->m_chart->m_impl);
+        bool isScatter = dynamic_cast<KoChart::ScatterImpl*>(m_chartSubStreamHandler->m_chart->m_impl);
+        foreach(KoChart::Series *series, m_chartSubStreamHandler->m_chart->m_series) {
             switch (m_siIndex) {
                 case 0x0001: { // Series values or vertical values (for scatter or bubble chart groups)
                     if (isBubble || isScatter) {
-                        bool change = !series->m_datasetValue.contains(Charting::Value::VerticalValues) || (series->m_datasetValue[Charting::Value::VerticalValues]->m_type == Charting::Value::TextOrValue && series->m_datasetValue[Charting::Value::VerticalValues]->m_formula.isEmpty());
+                        bool change = !series->m_datasetValue.contains(KoChart::Value::VerticalValues) || (series->m_datasetValue[KoChart::Value::VerticalValues]->m_type == KoChart::Value::TextOrValue && series->m_datasetValue[KoChart::Value::VerticalValues]->m_formula.isEmpty());
                         if (change) {
                             if (isBubble) {
                                 QString y = series->m_domainValuesCellRangeAddress.isEmpty() ? QString() : series->m_domainValuesCellRangeAddress[0];
@@ -162,7 +162,7 @@ public:
                 } break;
                 case 0x0002: { // Category labels or horizontal values (for scatter or bubble chart groups)
                     if (isBubble || isScatter) {
-                        bool change = !series->m_datasetValue.contains(Charting::Value::HorizontalValues) || (series->m_datasetValue[Charting::Value::HorizontalValues]->m_type == Charting::Value::TextOrValue && series->m_datasetValue[Charting::Value::HorizontalValues]->m_formula.isEmpty());
+                        bool change = !series->m_datasetValue.contains(KoChart::Value::HorizontalValues) || (series->m_datasetValue[KoChart::Value::HorizontalValues]->m_type == KoChart::Value::TextOrValue && series->m_datasetValue[KoChart::Value::HorizontalValues]->m_formula.isEmpty());
                         if (change) {
                             if (isBubble) {
                                 QString x = series->m_domainValuesCellRangeAddress.count() < 2 ? QString() : series->m_domainValuesCellRangeAddress[1];
@@ -286,7 +286,7 @@ ChartSubStreamHandler::~ChartSubStreamHandler()
         if (m_chart->m_title.isEmpty() && m_chart->m_series.count() == 1) {
             // Else we are using the same logic that is used in the 2007 filter and fetch the title
             // from the series collection of TextRecord's.
-            Charting::Series* series = m_chart->m_series.first();
+            KoChart::Series* series = m_chart->m_series.first();
             if (!series->m_texts.isEmpty() )
                 m_chart->m_title = series->m_texts.first()->m_text;
         }
@@ -555,7 +555,7 @@ void ChartSubStreamHandler::handleEnd(EndRecord *)
     m_currentObj = m_stack.pop();
     if (!m_seriesStack.isEmpty())
         m_currentSeries = m_seriesStack.pop();
-    else if (Charting::Series* series = dynamic_cast<Charting::Series*>(m_currentObj))
+    else if (KoChart::Series* series = dynamic_cast<KoChart::Series*>(m_currentObj))
         m_currentSeries = series;
 }
 
@@ -563,7 +563,7 @@ void ChartSubStreamHandler::handleFrame(FrameRecord *record)
 {
     if (!record) return;
     DEBUG << "autoPosition=" << record->isAutoPosition() << " autoSize=" << record->isAutoSize() << std::endl;
-    if ( dynamic_cast< Charting::Chart* > ( m_currentObj ) ) {
+    if ( dynamic_cast< KoChart::Chart* > ( m_currentObj ) ) {
         if (record->isAutoPosition()) {
             m_chart->m_x1 = -1;
             m_chart->m_y1 = -1;
@@ -573,7 +573,7 @@ void ChartSubStreamHandler::handleFrame(FrameRecord *record)
             m_chart->m_y2 = -1;
         }
     }
-    else if ( dynamic_cast< Charting::PlotArea* > ( m_currentObj ) ) {
+    else if ( dynamic_cast< KoChart::PlotArea* > ( m_currentObj ) ) {
     }
 }
 
@@ -583,7 +583,7 @@ void ChartSubStreamHandler::handleSeries(SeriesRecord *record)
     if (!record) return;
     DEBUG << "dataTypeX=" << record->dataTypeX() << " dataTypeY=" << record->dataTypeY() << " countXValues=" << record->countXValues() << " countYValues=" << record->countYValues() << " bubbleSizeDataType=" << record->bubbleSizeDataType() << " countBubbleSizeValues=" << record->countBubbleSizeValues() << std::endl;
     
-    m_currentSeries = new Charting::Series;
+    m_currentSeries = new KoChart::Series;
     m_currentSeries->m_dataTypeX = record->dataTypeX();
     m_currentSeries->m_countXValues = record->countXValues();
     m_currentSeries->m_countYValues = record->countYValues();
@@ -608,7 +608,7 @@ void ChartSubStreamHandler::handleNumber(NumberRecord *record)
     // The formatting of the value doesn't really matter or does it? Well, maybe for data-value-label's that should be displayed as formatted?
     //m_xfTable[record->xfIndex()]
 
-    Charting::Cell *cell = m_chart->m_internalTable.cell(record->column() + 1, record->row() + 1, true);
+    KoChart::Cell *cell = m_chart->m_internalTable.cell(record->column() + 1, record->row() + 1, true);
     cell->m_value = QString::number(record->number(), 'f');
     cell->m_valueType = "float";
 
@@ -629,12 +629,12 @@ void ChartSubStreamHandler::handleBRAI(BRAIRecord *record)
         //
         // FIXME: Handle VerticalValues and BubbleSizeValues
         if (!record->m_value->m_formula.isEmpty()) {
-            if (record->m_value->m_type == Charting::Value::TextOrValue
-                || record->m_value->m_type == Charting::Value::CellRange)
+            if (record->m_value->m_type == KoChart::Value::TextOrValue
+                || record->m_value->m_type == KoChart::Value::CellRange)
             {
-                if (record->m_value->m_dataId == Charting::Value::HorizontalValues) {
+                if (record->m_value->m_dataId == KoChart::Value::HorizontalValues) {
                     m_currentSeries->m_valuesCellRangeAddress = record->m_value->m_formula;
-                } else if (record->m_value->m_dataId == Charting::Value::VerticalValues) {
+                } else if (record->m_value->m_dataId == KoChart::Value::VerticalValues) {
                     m_chart->m_verticalCellRangeAddress = record->m_value->m_formula;
                 }
                 
@@ -669,11 +669,11 @@ void ChartSubStreamHandler::handleDataFormat(DataFormatRecord *record)
     if ( record->xi() == 0xFFFF ) { // applies to series
         m_currentObj = m_currentSeries;
     } else { // applies to data-point
-        Charting::DataPoint *dataPoint = 0;
+        KoChart::DataPoint *dataPoint = 0;
         if (record->xi() > uint(m_currentSeries->m_dataPoints.count())) {
             DEBUG << "Invalid data-point index=" << record->yi() << std::endl;
         } else if (record->xi() == uint(m_currentSeries->m_dataPoints.count())) {
-            dataPoint = new Charting::DataPoint();
+            dataPoint = new KoChart::DataPoint();
             m_currentSeries->m_dataPoints << dataPoint;
         } else {
             dataPoint = m_currentSeries->m_dataPoints[record->xi()];
@@ -702,34 +702,34 @@ void ChartSubStreamHandler::handleLineFormat(LineFormatRecord *record)
 {    
     if (!record) return;
     DEBUG << "lns=" << record->lns() << " we=" << record->we() << " fAxisOn=" << record->isFAxisOn() << std::endl;
-    if (Charting::Axis* axis = dynamic_cast<Charting::Axis*>(m_currentObj)) {
-        Charting::LineFormat format(Charting::LineFormat::Style(record->lns()), Charting::LineFormat::Tickness(record->we()));
+    if (KoChart::Axis* axis = dynamic_cast<KoChart::Axis*>(m_currentObj)) {
+        KoChart::LineFormat format(KoChart::LineFormat::Style(record->lns()), KoChart::LineFormat::Thickness(record->we()));
         switch(m_axisId) {
             case 0x0000: // The axis line itself
                 axis->m_format = format;
                 break;
             case 0x0001: // The major gridlines along the axis
-                axis->m_majorGridlines = Charting::Axis::Gridline(format);
+                axis->m_majorGridlines = KoChart::Axis::Gridline(format);
                 break;
             case 0x0002: // The minor gridlines along the axis
-                axis->m_minorGridlines = Charting::Axis::Gridline(format);
+                axis->m_minorGridlines = KoChart::Axis::Gridline(format);
                 break;
             case 0x0003: // The walls or floor of a 3-D chart
                 //TODO
                 break;
         }
         m_axisId = -1;
-    } else if ( dynamic_cast< Charting::Legend* > ( m_currentObj ) ) {
+    } else if ( dynamic_cast< KoChart::Legend* > ( m_currentObj ) ) {
         if ( record->lns() == 0x0005 )
             m_chart->m_showLines = false;
         else if ( record->lns() == 0x0000 )
             m_chart->m_showLines = true;
-//     } else if ( dynamic_cast< Charting::Text* > ( m_currentObj ) ) {
+//     } else if ( dynamic_cast< KoChart::Text* > ( m_currentObj ) ) {
 //         return;
-    } else if ( Charting::Series* series = dynamic_cast< Charting::Series* > ( m_currentObj/*m_currentSeries*/ ) ) {
+    } else if ( KoChart::Series* series = dynamic_cast< KoChart::Series* > ( m_currentObj/*m_currentSeries*/ ) ) {
         //Q_ASSERT( false );
         if ( !series->spPr )
-            series->spPr = new Charting::ShapeProperties;
+            series->spPr = new KoChart::ShapeProperties;
         m_chart->m_showLines = false;
         const int index = m_chart->m_series.indexOf( series );
         const QColor color = record->isFAuto() ? globals()->workbook()->colorTable().at( 24 + index ) : QColor( record->red(), record->green(), record->blue() );
@@ -737,35 +737,35 @@ void ChartSubStreamHandler::handleLineFormat(LineFormatRecord *record)
         switch ( record->lns() )
         {
             case( 0x0000 ):
-                series->spPr->lineFill.setType( Charting::Fill::Solid );
+                series->spPr->lineFill.setType( KoChart::Fill::Solid );
                 break;
             case( 0x0005 ):
             {
-                series->spPr->lineFill.setType( Charting::Fill::None );
-//                 Charting::ScatterImpl* impl = dynamic_cast< Charting::ScatterImpl* >( m_chart->m_impl );
+                series->spPr->lineFill.setType( KoChart::Fill::None );
+//                 KoChart::ScatterImpl* impl = dynamic_cast< KoChart::ScatterImpl* >( m_chart->m_impl );
 //                 if ( impl )
 //                 {
-//                     if ( impl->style == Charting::ScatterImpl::Marker || impl->style == Charting::ScatterImpl::LineMarker )
-//                         impl->style = Charting::ScatterImpl::Marker;
+//                     if ( impl->style == KoChart::ScatterImpl::Marker || impl->style == KoChart::ScatterImpl::LineMarker )
+//                         impl->style = KoChart::ScatterImpl::Marker;
 //                     else
-//                         impl->style = Charting::ScatterImpl::None;
+//                         impl->style = KoChart::ScatterImpl::None;
 //                 }
             }
                 break;
             default:
-                series->spPr->lineFill.setType( Charting::Fill::None );
+                series->spPr->lineFill.setType( KoChart::Fill::None );
         }
-        //series->spPr->lineFill.type = Charting::Fill::Solid;
+        //series->spPr->lineFill.type = KoChart::Fill::Solid;
     }
-    else if ( dynamic_cast< Charting::ChartImpl* > ( m_currentObj ) ) {
+    else if ( dynamic_cast< KoChart::ChartImpl* > ( m_currentObj ) ) {
         Q_ASSERT( false );
     }
-    else if ( dynamic_cast< Charting::Chart* > ( m_currentObj ) ) {
+    else if ( dynamic_cast< KoChart::Chart* > ( m_currentObj ) ) {
         DEBUG << "color=" << QColor( record->red(), record->green(), record->blue() ).name() << "automatic=" << record->isFAuto() << std::endl;
         //m_chart->m_showLines = record->isFAuto();
-        Q_ASSERT( !dynamic_cast< Charting::Series* > ( m_currentSeries ) );
+        Q_ASSERT( !dynamic_cast< KoChart::Series* > ( m_currentSeries ) );
     }
-    else if ( Charting::DataPoint *dataPoint = dynamic_cast< Charting::DataPoint* > ( m_currentObj ) ) {
+    else if ( KoChart::DataPoint *dataPoint = dynamic_cast< KoChart::DataPoint* > ( m_currentObj ) ) {
         Q_UNUSED( dataPoint );
     }
 }
@@ -781,11 +781,11 @@ void ChartSubStreamHandler::handleAreaFormat(AreaFormatRecord *record)
     QColor foreground, background;
     if ( record->isFAuto() ) {
         int index = 0;
-        if ( Charting::Series* series = dynamic_cast< Charting::Series* > ( m_currentObj ) ) {
+        if ( KoChart::Series* series = dynamic_cast< KoChart::Series* > ( m_currentObj ) ) {
             index = m_chart->m_series.indexOf( series ) % 8;
             Q_ASSERT(index >= 0);
             foreground = globals()->workbook()->colorTable().at( 16 + index );
-        } else if ( Charting::DataPoint *dataPoint = dynamic_cast< Charting::DataPoint* > ( m_currentObj ) ) {
+        } else if ( KoChart::DataPoint *dataPoint = dynamic_cast< KoChart::DataPoint* > ( m_currentObj ) ) {
             index = m_currentSeries->m_dataPoints.indexOf( dataPoint ) % 8;
             Q_ASSERT(index >= 0);
             foreground = globals()->workbook()->colorTable().at( 16 + index );
@@ -807,16 +807,16 @@ void ChartSubStreamHandler::handleAreaFormat(AreaFormatRecord *record)
 
     DEBUG << "foreground=" << foreground.name() << " background=" << background.name() << " fillStyle=" << record->fls() << " fAuto=" << record->isFAuto() << std::endl;
 
-    m_currentObj->m_areaFormat = new Charting::AreaFormat(foreground, background, fill);
+    m_currentObj->m_areaFormat = new KoChart::AreaFormat(foreground, background, fill);
 
-    if ( Charting::Series* series = dynamic_cast< Charting::Series* > ( m_currentObj ) ) {
+    if ( KoChart::Series* series = dynamic_cast< KoChart::Series* > ( m_currentObj ) ) {
         if ( !series->spPr )
-            series->spPr = new Charting::ShapeProperties;
+            series->spPr = new KoChart::ShapeProperties;
         series->spPr->areaFill.setColor( foreground );
     }
-    //else if ( Charting::PlotArea* plotArea = dynamic_cast< Charting::PlotArea* > ( m_currentObj ) ) {
+    //else if ( KoChart::PlotArea* plotArea = dynamic_cast< KoChart::PlotArea* > ( m_currentObj ) ) {
     //}
-    //else if ( Charting::DataPoint *dataPoint = dynamic_cast< Charting::DataPoint* > ( m_currentObj ) ) {
+    //else if ( KoChart::DataPoint *dataPoint = dynamic_cast< KoChart::DataPoint* > ( m_currentObj ) ) {
     //}
 }
 
@@ -825,92 +825,92 @@ void ChartSubStreamHandler::handlePieFormat(PieFormatRecord *record)
     if (!record) return;
     if (!m_currentSeries) return;
     DEBUG << "pcExplode=" << record->pcExplode() << std::endl;
-    m_currentSeries->m_datasetFormat << new Charting::PieFormat(record->pcExplode());
+    m_currentSeries->m_datasetFormat << new KoChart::PieFormat(record->pcExplode());
 }
 
 void ChartSubStreamHandler::handleMarkerFormat(MarkerFormatRecord *record)
 {
     if (!record) return;
     DEBUG << "fAuto=" << record->fAuto() << " imk=" << record->imk() << std::endl;
-    const bool legend = dynamic_cast< Charting::Legend* >( m_currentObj );
+    const bool legend = dynamic_cast< KoChart::Legend* >( m_currentObj );
     if ( m_disableAutoMarker && legend )
         return;
-    m_chart->m_markerType = Charting::NoMarker;
+    m_chart->m_markerType = KoChart::NoMarker;
 
-    if ( Charting::DataPoint *dataPoint = dynamic_cast<Charting::DataPoint*>(m_currentObj) ) {
+    if ( KoChart::DataPoint *dataPoint = dynamic_cast<KoChart::DataPoint*>(m_currentObj) ) {
         Q_UNUSED(dataPoint);
     }
-    else if ( Charting::Series *series = dynamic_cast<Charting::Series*>(m_currentObj) ) {
+    else if ( KoChart::Series *series = dynamic_cast<KoChart::Series*>(m_currentObj) ) {
         if ( !series->spPr )
-            series->spPr = new Charting::ShapeProperties;
+            series->spPr = new KoChart::ShapeProperties;
         const int index = m_chart->m_series.indexOf( series ) % 8;
         if ( record->fAuto() ) {
             if ( !m_disableAutoMarker )
-                m_chart->m_markerType = Charting::AutoMarker;
+                m_chart->m_markerType = KoChart::AutoMarker;
             if ( !series->spPr->areaFill.valid )
                 series->spPr->areaFill.setColor( globals()->workbook()->colorTable().at( 24 + index ) );
             switch ( index ) {
                 case( 0x0000 ):
-                    series->m_markerType = Charting::SquareMarker;
+                    series->m_markerType = KoChart::SquareMarker;
                     break;
                 case( 0x0001 ):
-                    series->m_markerType = Charting::DiamondMarker;
+                    series->m_markerType = KoChart::DiamondMarker;
                     break;
                 case( 0x0002 ):
-                    series->m_markerType = Charting::SymbolXMarker;
+                    series->m_markerType = KoChart::SymbolXMarker;
                     break;
                 case( 0x0003 ):
-                    series->m_markerType = Charting::SquareMarker;
+                    series->m_markerType = KoChart::SquareMarker;
                     break;
                 case( 0x0004 ):
-                    series->m_markerType = Charting::DashMarker;
+                    series->m_markerType = KoChart::DashMarker;
                     break;
                 case( 0x0005 ):
-                    series->m_markerType = Charting::DashMarker;
+                    series->m_markerType = KoChart::DashMarker;
                     break;
                 case( 0x0006 ):
-                    series->m_markerType = Charting::CircleMarker;
+                    series->m_markerType = KoChart::CircleMarker;
                     break;
                 case( 0x0007 ):
-                    series->m_markerType = Charting::PlusMarker;
+                    series->m_markerType = KoChart::PlusMarker;
                     break;
                 default:
-                    series->m_markerType = Charting::SquareMarker;
+                    series->m_markerType = KoChart::SquareMarker;
                     break;
             }
         } else {
             if ( series ) {
                 switch ( record->imk() ) {
                     case( 0x0000 ):
-                        series->m_markerType = Charting::NoMarker;
+                        series->m_markerType = KoChart::NoMarker;
                         m_disableAutoMarker = true;
                         break;
                     case( 0x0001 ):
-                        series->m_markerType = Charting::SquareMarker;
+                        series->m_markerType = KoChart::SquareMarker;
                         break;
                     case( 0x0002 ):
-                        series->m_markerType = Charting::DiamondMarker;
+                        series->m_markerType = KoChart::DiamondMarker;
                         break;
                     case( 0x0003 ):
-                        series->m_markerType = Charting::SymbolXMarker;
+                        series->m_markerType = KoChart::SymbolXMarker;
                         break;
                     case( 0x0004 ):
-                        series->m_markerType = Charting::SquareMarker;
+                        series->m_markerType = KoChart::SquareMarker;
                         break;
                     case( 0x0005 ):
-                        series->m_markerType = Charting::DashMarker;
+                        series->m_markerType = KoChart::DashMarker;
                         break;
                     case( 0x0006 ):
-                        series->m_markerType = Charting::DashMarker;
+                        series->m_markerType = KoChart::DashMarker;
                         break;
                     case( 0x0007 ):
-                        series->m_markerType = Charting::CircleMarker;
+                        series->m_markerType = KoChart::CircleMarker;
                         break;
                     case( 0x0008 ):
-                        series->m_markerType = Charting::PlusMarker;
+                        series->m_markerType = KoChart::PlusMarker;
                         break;
                     default:
-                        series->m_markerType = Charting::SquareMarker;
+                        series->m_markerType = KoChart::SquareMarker;
                         break;
                 }
                 if ( !series->spPr->areaFill.valid )
@@ -979,7 +979,7 @@ void ChartSubStreamHandler::handleText(TextRecord *record)
           << " fShowKey=" << record->isFShowKey()
           << " fShowValue=" << record->isFShowValue() << std::endl;
 
-    m_currentObj = new Charting::Text;
+    m_currentObj = new KoChart::Text;
     if (m_defaultTextId >= 0) {  
         //m_defaultObjects[m_currentObj] = m_defaultTextId;
         m_defaultTextId = -1;
@@ -990,15 +990,15 @@ void ChartSubStreamHandler::handleSeriesText(SeriesTextRecord* record)
 {
     if (!record || !m_currentSeries) return;
     DEBUG << "text=" << record->text() << std::endl;
-    if (Charting::Text *t = dynamic_cast<Charting::Text*>(m_currentObj)) {
+    if (KoChart::Text *t = dynamic_cast<KoChart::Text*>(m_currentObj)) {
         t->m_text = record->text();
-    } else if (Charting::Legend *l = dynamic_cast<Charting::Legend*>(m_currentObj)) {
+    } else if (KoChart::Legend *l = dynamic_cast<KoChart::Legend*>(m_currentObj)) {
         //TODO
         Q_UNUSED(l);
-    } else if (Charting::Series* series = dynamic_cast<Charting::Series*>(m_currentObj)) {
-        series->m_texts << new Charting::Text(record->text());
+    } else if (KoChart::Series* series = dynamic_cast<KoChart::Series*>(m_currentObj)) {
+        series->m_texts << new KoChart::Text(record->text());
     } else {
-        //m_currentSeries->m_texts << new Charting::Text(string(record->text()));
+        //m_currentSeries->m_texts << new KoChart::Text(string(record->text()));
     }
 }
 
@@ -1035,7 +1035,7 @@ void ChartSubStreamHandler::handleLegend(LegendRecord *record)
 {
     if (!record) return;
     DEBUG << "fAutoPosition=" << record->isFAutoPosition() << " fAutoPosX=" << record->isFAutoPosX() << " fAutoPosY=" << record->isFAutoPosY() << " fVert=" << record->isFVert() << " fWasDataTable=" << record->isFWasDataTable() << std::endl;
-    m_currentObj = m_chart->m_legend = new Charting::Legend();
+    m_currentObj = m_chart->m_legend = new KoChart::Legend();
 }
 
 // specifies the number of axis groups on the chart.
@@ -1066,9 +1066,9 @@ void ChartSubStreamHandler::handlePie(PieRecord *record)
     if (!record || m_chart->m_impl) return;
     DEBUG << "anStart=" << record->anStart() << " pcDonut=" << record->pcDonut() << std::endl;
     if (record->pcDonut() > 0)
-        m_chart->m_impl = new Charting::RingImpl(record->anStart(), record->pcDonut());
+        m_chart->m_impl = new KoChart::RingImpl(record->anStart(), record->pcDonut());
     else
-        m_chart->m_impl = new Charting::PieImpl(record->anStart());
+        m_chart->m_impl = new KoChart::PieImpl(record->anStart());
 }
 
 // specifies that the chartgroup is a bar chart
@@ -1076,7 +1076,7 @@ void ChartSubStreamHandler::handleBar(BarRecord *record)
 {
     if (!record || m_chart->m_impl) return;
     DEBUG << "pcOverlap=" << record->pcOverlap() << " pcGap=" << record->pcGap() << " fTranspose=" << record->isFTranspose() << " fStacked=" << record->isFStacked() << " f100=" << record->isF100() << std::endl;
-    m_chart->m_impl = new Charting::BarImpl();
+    m_chart->m_impl = new KoChart::BarImpl();
     m_chart->m_transpose = record->isFTranspose();
     m_chart->m_stacked = record->isFStacked();
     m_chart->m_f100 = record->isF100();
@@ -1087,7 +1087,7 @@ void ChartSubStreamHandler::handleArea(AreaRecord* record)
 {
     if (!record || m_chart->m_impl) return;
     DEBUG << std::endl;
-    m_chart->m_impl = new Charting::AreaImpl();
+    m_chart->m_impl = new KoChart::AreaImpl();
     m_chart->m_stacked = record->isFStacked();
     m_chart->m_f100 = record->isF100();
 }
@@ -1097,15 +1097,15 @@ void ChartSubStreamHandler::handleLine(LineRecord* record)
 {
     if (!record || m_chart->m_impl) return;
     DEBUG << std::endl;
-    m_chart->m_impl = new Charting::LineImpl();
+    m_chart->m_impl = new KoChart::LineImpl();
     m_chart->m_stacked = record->isFStacked();
     m_chart->m_f100 = record->isF100();
     if ( !m_disableAutoMarker )
-        m_chart->m_markerType = Charting::AutoMarker;
-//     Q_FOREACH( const Charting::Series* const series, m_chart->m_series )
+        m_chart->m_markerType = KoChart::AutoMarker;
+//     Q_FOREACH( const KoChart::Series* const series, m_chart->m_series )
 //     {
-//         if ( series->m_markerType == Charting::Series::None )
-//             m_chart->m_markerType = Charting::NoMarker;
+//         if ( series->m_markerType == KoChart::Series::None )
+//             m_chart->m_markerType = KoChart::NoMarker;
 //     }
 }
 
@@ -1115,9 +1115,9 @@ void ChartSubStreamHandler::handleScatter(ScatterRecord* record)
     if (!record || m_chart->m_impl) return;
     DEBUG << std::endl;
     if (record->isFBubbles())
-        m_chart->m_impl = new Charting::BubbleImpl(Charting::BubbleImpl::SizeType(record->wBubbleSize()), record->pcBubbleSizeRatio(), record->isFShowNegBubbles());
+        m_chart->m_impl = new KoChart::BubbleImpl(KoChart::BubbleImpl::SizeType(record->wBubbleSize()), record->pcBubbleSizeRatio(), record->isFShowNegBubbles());
     else
-        m_chart->m_impl = new Charting::ScatterImpl();
+        m_chart->m_impl = new KoChart::ScatterImpl();
 
     // For scatter charts, one <chart:domain> element shall exist. Its table:cell-range-address
     // attribute references the x coordinate values for the scatter chart.
@@ -1125,18 +1125,18 @@ void ChartSubStreamHandler::handleScatter(ScatterRecord* record)
     // given by the first <chart:domain> element. The values for the x-coordinates are given by the
     // second <chart:domain> element.
     QString x, y;
-    if (m_currentSeries->m_datasetValue.contains(Charting::Value::VerticalValues))
-        x = m_currentSeries->m_datasetValue[Charting::Value::VerticalValues]->m_formula;
-    if (m_currentSeries->m_datasetValue.contains(Charting::Value::HorizontalValues))
-        y = m_currentSeries->m_datasetValue[Charting::Value::HorizontalValues]->m_formula;
-    foreach(Charting::Series *series, m_chart->m_series) {
+    if (m_currentSeries->m_datasetValue.contains(KoChart::Value::VerticalValues))
+        x = m_currentSeries->m_datasetValue[KoChart::Value::VerticalValues]->m_formula;
+    if (m_currentSeries->m_datasetValue.contains(KoChart::Value::HorizontalValues))
+        y = m_currentSeries->m_datasetValue[KoChart::Value::HorizontalValues]->m_formula;
+    foreach(KoChart::Series *series, m_chart->m_series) {
         Q_ASSERT(series->m_domainValuesCellRangeAddress.isEmpty()); // what should we do if that happens?
         if (!series->m_domainValuesCellRangeAddress.isEmpty())
             continue;
         if (record->isFBubbles()) {
             series->m_domainValuesCellRangeAddress << y << x;
-            if (series->m_datasetValue.contains(Charting::Value::BubbleSizeValues))
-                series->m_valuesCellRangeAddress = series->m_datasetValue[Charting::Value::BubbleSizeValues]->m_formula;
+            if (series->m_datasetValue.contains(KoChart::Value::BubbleSizeValues))
+                series->m_valuesCellRangeAddress = series->m_datasetValue[KoChart::Value::BubbleSizeValues]->m_formula;
             //m_chart->m_verticalCellRangeAddress = series->m_valuesCellRangeAddress;
         } else {
             series->m_domainValuesCellRangeAddress << x;
@@ -1144,11 +1144,11 @@ void ChartSubStreamHandler::handleScatter(ScatterRecord* record)
     }
 
     if ( !m_disableAutoMarker ) {
-        m_chart->m_markerType = Charting::AutoMarker;
+        m_chart->m_markerType = KoChart::AutoMarker;
     }
-    // Charting::ScatterImpl* impl = dynamic_cast< Charting::ScatterImpl* >( m_chart->m_impl );
+    // KoChart::ScatterImpl* impl = dynamic_cast< KoChart::ScatterImpl* >( m_chart->m_impl );
     // if ( impl )
-    //     impl->style = Charting::ScatterImpl::Marker;
+    //     impl->style = KoChart::ScatterImpl::Marker;
 }
 
 // specifies that the chartgroup is a radar chart
@@ -1156,8 +1156,8 @@ void ChartSubStreamHandler::handleRadar(RadarRecord *record)
 {
     if (!record || m_chart->m_impl) return;
     DEBUG << std::endl;
-    m_chart->m_impl = new Charting::RadarImpl(false);
-    m_chart->m_markerType = Charting::AutoMarker;
+    m_chart->m_impl = new KoChart::RadarImpl(false);
+    m_chart->m_markerType = KoChart::AutoMarker;
 }
 
 // specifies that the chartgroup is a filled radar chart
@@ -1165,7 +1165,7 @@ void ChartSubStreamHandler::handleRadarArea(RadarAreaRecord *record)
 {
     if (!record || m_chart->m_impl) return;
     DEBUG << std::endl;
-    m_chart->m_impl = new Charting::RadarImpl(true);
+    m_chart->m_impl = new KoChart::RadarImpl(true);
 }
 
 // specifies that the chartgroup is a surface chart
@@ -1173,14 +1173,14 @@ void ChartSubStreamHandler::handleSurf(SurfRecord *record)
 {
     if (!record || m_chart->m_impl) return;
     DEBUG << std::endl;
-    m_chart->m_impl = new Charting::SurfaceImpl(record->isFFillSurface());
+    m_chart->m_impl = new KoChart::SurfaceImpl(record->isFFillSurface());
 }
 
 void ChartSubStreamHandler::handleAxis(AxisRecord* record)
 {
     if (!record) return;
     DEBUG << "wType=" << record->wType() << std::endl;
-    Charting::Axis* axis = new Charting::Axis(Charting::Axis::Type(record->wType()));
+    KoChart::Axis* axis = new KoChart::Axis(KoChart::Axis::Type(record->wType()));
     m_chart->m_axes << axis;
     m_currentObj = axis;
 }
@@ -1255,7 +1255,7 @@ void ChartSubStreamHandler::handleObjectLink(ObjectLinkRecord *record)
     if (!record) return;
     DEBUG << "wLinkObj=" << record->wLinkObj() << " wLinkVar1=" << record->wLinkVar1() << " wLinkVar2=" << record->wLinkVar2() << std::endl;
 
-    Charting::Text *t = dynamic_cast<Charting::Text*>(m_currentObj);
+    KoChart::Text *t = dynamic_cast<KoChart::Text*>(m_currentObj);
     if (!t) return;         // if the current object is not text, just do nothing
 //    Q_ASSERT(t);          // if the current object is not text, terminate
 
@@ -1271,7 +1271,7 @@ void ChartSubStreamHandler::handleObjectLink(ObjectLinkRecord *record)
             break;
         case ObjectLinkRecord::SeriesOrDatapoints: {
             if ((int)record->wLinkVar1() >= m_chart->m_series.count()) return;
-            //Charting::Series* series = m_chart->m_series[ record->wLinkVar1() ];
+            //KoChart::Series* series = m_chart->m_series[ record->wLinkVar1() ];
             if (record->wLinkVar2() == 0xFFFF) {
                 //TODO series->texts << t;
             } else {
@@ -1289,14 +1289,14 @@ void ChartSubStreamHandler::handlePlotArea(PlotAreaRecord *record)
 {
     if (!record) return;
     DEBUG << std::endl;
-    m_currentObj = m_chart->m_plotArea = new Charting::PlotArea();
+    m_currentObj = m_chart->m_plotArea = new KoChart::PlotArea();
 }
 
 void ChartSubStreamHandler::handleValueRange(ValueRangeRecord *record)
 {
     if (!record) return;
     DEBUG << "fAutoMin=" << record->isFAutoMin() << " fAutoMax=" << record->isFAutoMax() << " fAutoMajor=" << record->isFAutoMajor() << " fAutoMinor=" << record->isFAutoMinor() << " fAutoCross=" << record->isFAutoCross() << " fLog=" << record->isFLog() << " fReversed=" << record->isFReversed() << " fMaxCross=" << record->isFMaxCross() << std::endl;
-    if ( Charting::Axis *axis = dynamic_cast< Charting::Axis* > ( m_currentObj ) ) {
+    if ( KoChart::Axis *axis = dynamic_cast< KoChart::Axis* > ( m_currentObj ) ) {
         axis->m_reversed = record->isFReversed();
         axis->m_logarithmic = record->isFLog();
         axis->m_autoMinimum = record->isFAutoMin();
@@ -1339,10 +1339,10 @@ void ChartSubStreamHandler::handleCrtLine(CrtLineRecord *record)
             //TODO
             break;
         case 0x0001: // High-Low lines around the data points of line and stock chart groups.
-            if (Charting::LineImpl* line = dynamic_cast<Charting::LineImpl*>(m_chart->m_impl)) {
+            if (KoChart::LineImpl* line = dynamic_cast<KoChart::LineImpl*>(m_chart->m_impl)) {
                 // It seems that a stockchart is always a linechart with a CrtLine record that defines High-Low lines.
                 delete line;
-                m_chart->m_impl = new Charting::StockImpl();
+                m_chart->m_impl = new KoChart::StockImpl();
             }
             break;
         case 0x0002: // Series lines connecting data points of stacked column and bar chart groups, and the primary pie to the secondary bar/pie of bar of pie and pie of pie chart groups.

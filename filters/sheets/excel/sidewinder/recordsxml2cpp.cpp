@@ -23,12 +23,12 @@
 #include <QFile>
 #include <QTextStream>
 
-static inline QString ucFirst(QString s)
+static inline QString ucFirst(const QString &s)
 {
     return s[0].toUpper() + s.mid(1);
 }
 
-static inline QString lcFirst(QString s)
+static inline QString lcFirst(const QString &s)
 {
     return s[0].toLower() + s.mid(1);
 }
@@ -44,7 +44,7 @@ struct Field {
     QString defaultValue;
     QString lengthFor;
 
-    Field(QString name = QString(), QString type = QString()) : name(name), type(type), isArray(false), isArrayLength(false), isStringLength(false), isEnum(false) {}
+    Field(const QString &name = QString(), const QString &type = QString()) : name(name), type(type), isArray(false), isArrayLength(false), isStringLength(false), isEnum(false) {}
 
     QString getterName() const {
         if (type == "bool" && !(name.startsWith("has") || name.startsWith("is"))) {
@@ -59,7 +59,7 @@ struct Field {
     }
 };
 
-static QString getFieldType(QString xmlType, unsigned bits, QString otherType, const QMap<QString, QString>& extraTypes)
+static QString getFieldType(const QString &xmlType, unsigned bits, const QString &otherType, const QMap<QString, QString>& extraTypes)
 {
     Q_UNUSED(bits);
     Q_UNUSED(otherType);
@@ -249,7 +249,7 @@ void processRecordForHeader(QDomElement e, QTextStream& out)
     out << "private:\n    class Private;\n    Private * const d;\n};\n\n";
 }
 
-static void invalidFound(QString indent, QTextStream& out, QString currentOptional)
+static void invalidFound(const QString &indent, QTextStream& out, const QString &currentOptional)
 {
     if (currentOptional.isEmpty()) {
         out << indent << "setIsValid(false);\n";
@@ -260,7 +260,7 @@ static void invalidFound(QString indent, QTextStream& out, QString currentOption
     }
 }
 
-static void sizeCheck(QString indent, QTextStream& out, QDomElement firstField, unsigned offset, bool dynamicOffset, QString currentOptional)
+static void sizeCheck(const QString &indent, QTextStream& out, QDomElement firstField, unsigned offset, bool dynamicOffset, const QString &currentOptional)
 {
     // find size of all fields until first unsized field or first if/array
     unsigned size = 0;
@@ -288,7 +288,7 @@ static void sizeCheck(QString indent, QTextStream& out, QDomElement firstField, 
     }
 }
 
-static void processFieldElement(QString indent, QTextStream& out, QDomElement field, unsigned& offset, bool& dynamicOffset, QMap<QString, Field>& fieldsMap, QString setterArgs = QString(), QString currentOptional = QString())
+static void processFieldElement(const QString &indent, QTextStream& out, QDomElement field, unsigned& offset, bool& dynamicOffset, QMap<QString, Field>& fieldsMap, const QString &setterArgs = QString(), const QString &currentOptional = QString())
 {
     if (field.tagName() == "fail") {
         invalidFound(indent, out, currentOptional);
@@ -564,7 +564,7 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
     }
 }
 
-static void processFieldElementForWrite(QString indent, QTextStream& out, QDomElement field, const QMap<QString, Field>& fieldsMap, QString getterArgs = QString())
+static void processFieldElementForWrite(const QString &indent, QTextStream& out, QDomElement field, const QMap<QString, Field>& fieldsMap, const QString &getterArgs = QString())
 {
     if (field.tagName() == "field") {
         QString name = field.attribute("name");
@@ -650,7 +650,7 @@ static void processFieldElementForWrite(QString indent, QTextStream& out, QDomEl
     }
 }
 
-static void processFieldElementForDump(QString indent, QTextStream& out, QDomElement field, const QMap<QString, Field>& fieldsMap, QString getterArgs = QString())
+static void processFieldElementForDump(const QString &indent, QTextStream& out, QDomElement field, const QMap<QString, Field>& fieldsMap, const QString &getterArgs = QString())
 {
     if (field.tagName() == "field") {
         QString name = field.attribute("name");
@@ -714,7 +714,7 @@ static void processFieldElementForDump(QString indent, QTextStream& out, QDomEle
     }
 }
 
-void processEnumsForImplementation(QDomNodeList fieldList, QString className, QTextStream& out)
+void processEnumsForImplementation(QDomNodeList fieldList, const QString &className, QTextStream& out)
 {
     for (int i = 0; i < fieldList.size(); i++) {
         QDomElement f = fieldList.at(i).toElement();

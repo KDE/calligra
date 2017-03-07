@@ -827,24 +827,26 @@
 
     <Function>
         <Name>CEIL</Name>
-        <Type>Float</Type>
+        <Type>Integer</Type>
         <Parameter>
             <Comment>A floating point value</Comment>
             <Type>Float</Type>
         </Parameter>
         <Help>
-            <Text>The CEIL() function rounds x up to the nearest integer, returning that value as a double.</Text>
+            <Text>The CEIL() function rounds x up to the nearest integer which is greater than the input, returning that value as a double.</Text>
             <Syntax>CEIL(x)</Syntax>
             <Example>CEIL(12.5) equals 13</Example>
             <Example>CEIL(-12.5) equals -12</Example>
             <Related>CEILING</Related>
             <Related>FLOOR</Related>
+	    <Related>ROUND</Related>
+	    <Related>ROUNDUP</Related>
         </Help>
     </Function>
 
     <Function>
         <Name>CEILING</Name>
-        <Type>Float</Type>
+        <Type>Integer</Type>
         <Parameter>
             <Comment>A floating point value</Comment>
             <Type>Float</Type>
@@ -858,7 +860,7 @@
             <Type>Float</Type>
         </Parameter>
         <Help>
-            <Text>The CEILING() function rounds x up (away from zero) to the nearest multiple of Significance. The default value for Significance is 1 (or -1 if the value is negative), which means rounding up to the nearest integer. If the Mode parameter is non-zero, the function rounds away from zero, instead of up towards the positive infinity.</Text>
+            <Text>The CEILING() function rounds x up (away from zero) to the nearest multiple of Significance which is greater than the input. The default value for Significance is 1 (or -1 if the value is negative), which means rounding up to the nearest integer. If the Mode parameter is non-zero, the function rounds away from zero, instead of up towards the positive infinity.</Text>
             <Syntax>CEILING(x)</Syntax>
             <Example>CEILING(12.5) equals 13</Example>
             <Example>CEILING(6.43; 4) equals 8</Example>
@@ -866,12 +868,14 @@
             <Example>CEILING(-6.43; -4; 0) equals -4</Example>
             <Related>CEIL</Related>
             <Related>FLOOR</Related>
+	    <Related>ROUND</Related>
+	    <Related>ROUNDUP</Related>
         </Help>
     </Function>
 
     <Function>
         <Name>FLOOR</Name>
-        <Type>Float</Type>
+        <Type>Integer</Type>
         <Parameter>
             <Comment>A floating point value</Comment>
             <Type>Float</Type>
@@ -887,7 +891,7 @@
         <Help>
             <Text>Round a number x down to the nearest multiple of the second parameter, Significance.</Text>
             <!--FIXME remove wordwrap, leads to strange looking translation messages-->
-            <Text>The FLOOR() function rounds x down (towards zero) to the nearest multiple of Significance.
+            <Text>The FLOOR() function rounds x down (towards zero) to the nearest multiple of Significance which is smaller than the input.
                 The default value for Significance is 1, if x is positive. It is -1, if the value is negative,
                 which means rounding up to the nearest integer.
                 If mode is given and not equal to zero, the amount of x is rounded toward zero to a multiple
@@ -900,6 +904,8 @@
                     <Example>FLOOR(5; 2.2) equals 4.4</Example>
                     <Related>CEIL</Related>
                     <Related>CEILING</Related>
+		    <Related>ROUND</Related>
+		    <Related>ROUNDDOWN</Related>
                 </Help>
             </Function>
 
@@ -1230,6 +1236,7 @@
                 </Parameter>
                 <Help>
                     <Text>Function MMULT multiplies two matrices. Number of columns of the first matrix must be the same as row count of the second one. The result is a matrix.</Text>
+                    <Text>Since the result is an array, you need to use Ctrl+Alt+Enter (instead of just Enter) to display the array elements in separate cells.</Text>
                     <Syntax>MMULT(matrix1;matrix2)</Syntax>
                     <Example>MMULT(A1:C3)</Example>
                     <Related>MDETERM</Related>
@@ -1247,6 +1254,7 @@
                     <Text>Calculates the inverse of the matrix.</Text>
                     <Text>The matrix multiplied with its inverse results in the unity matrix of the same dimension.</Text>
                     <Text>Invertible matrices have a non-zero determinant.</Text>
+                    <Text>Since the result is an array, you need to use Ctrl+Alt+Enter (instead of just Enter) to display the array elements in separate cells.</Text>
                     <Syntax>MINVERSE(matrix)</Syntax>
                     <Example>MINVERSE(A1:C3)</Example>
                     <Related>MDETERM</Related>
@@ -1263,6 +1271,7 @@
                 </Parameter>
                 <Help>
                     <Text>Creates the unity matrix of the given dimension.</Text>
+                    <Text>Since the result is an array, you need to use Ctrl+Alt+Enter (instead of just Enter) to display the array elements in separate cells.</Text>
                     <Syntax>MUNIT(dimension)</Syntax>
                     <Example>MUNIT(3) creates a 3x3 unity matrix</Example>
                     <Related>MINVERSE</Related>
@@ -1277,6 +1286,8 @@
                     <Type range="true">Float</Type>
                 </Parameter>
                 <Help>
+                    <Text>Returns the transpose of a matrix, i.e. rows and columns of the matrix are exchanged.</Text>
+                    <Text>Since the result is an array, you need to use Ctrl+Alt+Enter (instead of just Enter) to display the array elements in separate cells.</Text>
                     <Text>Returns the transpose of a matrix, i.e. rows and columns of the matrix are exchanged.</Text>
                     <Syntax>TRANSPOSE(matrix)</Syntax>
                     <Example>TRANSPOSE(A1:C3)</Example>

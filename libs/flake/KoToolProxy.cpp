@@ -34,16 +34,16 @@
 #include "KoShapeRegistry.h"
 #include "KoShapeController.h"
 #include "KoOdf.h"
+#include "FlakeDebug.h"
 
 #include <kundo2command.h>
 #include <KoProperties.h>
+#include <KoNetAccess.h>
 
-#include <kdebug.h>
-#include <klocale.h>
-#include <kurl.h>
-#include <kio/netaccess.h>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 
+#include <QUrl>
 #include <QTimer>
 #include <QApplication>
 #include <QTouchEvent>
@@ -165,17 +165,17 @@ KoCanvasBase* KoToolProxy::canvas() const
     return d->controller->canvas();
 }
 
-#include <KDebug>
-
 void KoToolProxy::touchEvent(QTouchEvent *event)
 {
     QPointF point;
-    QList<KoTouchPoint> touchPoints;
+    QVector<KoTouchPoint> touchPoints;
 
+    bool isPrimary = true;
     foreach(QTouchEvent::TouchPoint p, event->touchPoints()) {
         QPointF docPoint = widgetToDocument(p.screenPos());
-        if (p.isPrimary()) {
+        if (isPrimary) {
             point = docPoint;
+            isPrimary = false;
         }
         KoTouchPoint touchPoint;
         touchPoint.touchPoint = p;
@@ -229,13 +229,13 @@ void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
     // don't process tablet events for stylus middle and right mouse button
     // they will be re-send as mouse events with the correct button. there is no possibility to get the button from the QTabletEvent.
     if(qFuzzyIsNull(event->pressure()) && d->tabletPressed==false && event->type()!=QEvent::TabletMove) {
-        //kDebug()<<"don't accept tablet event: "<< point;
+        //debugFlake<<"don't accept tablet event: "<< point;
         return;
     }
     else {
         // Accept the tablet events as they are useless to parent widgets and they will
         // get re-send as mouseevents if we don't accept them.
-        //kDebug()<<"accept tablet event: "<< point;
+        //debugFlake<<"accept tablet event: "<< point;
         event->accept();
     }
 
@@ -289,12 +289,13 @@ void KoToolProxy::mousePressEvent(KoPointerEvent *ev)
         d->multiClickGlobalPoint = globalPoint;
     }
 
-    if (d->multiClickCount && d->multiClickTimeStamp.elapsed() < QApplication::doubleClickInterval()) {
+    if (d->multiClickCount && d->multiClickTimeStamp.elapsed() < QApplication::doubleClickInterval() && d->multiClickButton == ev->button()) {
         // One more multiclick;
         d->multiClickCount++;
     } else {
         d->multiClickTimeStamp.start();
         d->multiClickCount = 1;
+        d->multiClickButton = ev->button();
     }
 
     if (d->activeTool) {
@@ -577,9 +578,9 @@ void KoToolProxyPrivate::setCanvasController(KoCanvasController *c)
     controller = c;
 }
 
-QHash<QString, KAction*> KoToolProxy::actions() const
+QHash<QString, QAction *> KoToolProxy::actions() const
 {
-    return d->activeTool ? d->activeTool->actions() : QHash<QString, KAction*>();
+    return d->activeTool ? d->activeTool->actions() : QHash<QString, QAction *>();
 }
 
 bool KoToolProxy::hasSelection() const
@@ -628,7 +629,7 @@ bool KoToolProxy::paste()
     if (!success) {
         const QMimeData *data = QApplication::clipboard()->mimeData();
 
-        QList<QImage> imageList;
+        QVector<QImage> imageList;
 
         QImage image = QApplication::clipboard()->image();
 
@@ -638,11 +639,10 @@ bool KoToolProxy::paste()
             QList<QUrl> urls = QApplication::clipboard()->mimeData()->urls();
             foreach (const QUrl &url, urls) {
                 QImage image;
-                KUrl kurl(url);
                 // make sure we download the files before inserting them
-                if (!kurl.isLocalFile()) {
+                if (!url.isLocalFile()) {
                     QString tmpFile;
-                    if( KIO::NetAccess::download(kurl, tmpFile, canvas->canvasWidget())) {
+                    if (KIO::NetAccess::download(url, tmpFile, canvas->canvasWidget())) {
                         image.load(tmpFile);
                         KIO::NetAccess::removeTempFile(tmpFile);
                     } else {
@@ -650,7 +650,7 @@ bool KoToolProxy::paste()
                     }
                 }
                 else {
-                    image.load(kurl.toLocalFile());
+                    image.load(url.toLocalFile());
                 }
                 if (!image.isNull()) {
                     imageList << image;
@@ -742,4 +742,5 @@ KoToolProxyPrivate *KoToolProxy::priv()
     return d;
 }
 
-#include <KoToolProxy.moc>
+//have to include this because of Q_PRIVATE_SLOT
+#include "moc_KoToolProxy.cpp"

@@ -20,10 +20,11 @@
  */
 
 #include "KPrSoundData.h"
-#include "KPrSoundCollection.h"
 
-#include <ktemporaryfile.h>
-#include <kdebug.h>
+#include "KPrSoundCollection.h"
+#include "StageDebug.h"
+
+#include <QTemporaryFile>
 #include <QIODevice>
 
 // make it a QSharedData
@@ -46,7 +47,7 @@ public:
     int refCount;
     QString storeHref;
     KPrSoundCollection *collection;
-    KTemporaryFile *tempFile;
+    QTemporaryFile *tempFile;
     bool taggedForSaving;
 };
 
@@ -108,13 +109,13 @@ bool KPrSoundData::saveToFile(QIODevice *device)
         if(bytes == 0)
             break;
         else if(bytes == -1) {
-            kWarning() << "Failed to read data from the tmpfile";
+            warnStage << "Failed to read data from the tmpfile";
             failed = true;
         }
         while(! failed && bytes > 0) {
             qint64 written = device->write(data, bytes);
             if(written < 0) {// error!
-                kWarning() << "Failed to copy the sound from the temp file";
+                warnStage << "Failed to copy the sound from the temp file";
                 failed = true;
             }
             bytes -= written;
@@ -150,7 +151,7 @@ bool KPrSoundData::loadFromFile(QIODevice *device) {
     delete d->tempFile;
     d->tempFile = 0;
 
-    d->tempFile = new KTemporaryFile();
+    d->tempFile = new QTemporaryFile();
     if(! d->tempFile->open())
         return false;
     char * data = new char[32 * 1024];
@@ -161,13 +162,13 @@ bool KPrSoundData::loadFromFile(QIODevice *device) {
         if(bytes == 0)
             break;
         else if(bytes == -1) {
-            kWarning() << "Failed to read sound data";
+            warnStage << "Failed to read sound data";
             failed = true;
         }
         while(! failed && bytes > 0) {
             qint64 written = d->tempFile->write(data, bytes);
             if(written < 0) {// error!
-                kWarning() << "Failed to copy the sound to temp";
+                warnStage << "Failed to copy the sound to temp";
                 failed = true;
             }
             bytes -= written;

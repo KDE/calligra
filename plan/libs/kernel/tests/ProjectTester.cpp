@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
-
+   Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -26,44 +27,24 @@
 #include "kpttask.h"
 #include "kptschedule.h"
 
-
-#include <qtest_kde.h>
-#include <kdebug.h>
-#include <kconfiggroup.h>
+#include <QTest>
 
 #include "debug.cpp"
+
 
 namespace KPlato
 {
 
 void ProjectTester::initTestCase()
 {
-    QVERIFY( m_tmp.exists() );
-
-    QFile f;
-    f.setFileName( m_tmp.name() + QLatin1String( "zone.tab" ) );
-    f.open(QIODevice::WriteOnly);
-    QTextStream fStream(&f);
-    fStream << "DE  +5230+01322 Europe/Berlin\n";
-    f.close();
-    QDir dir(m_tmp.name());
-    QVERIFY(dir.mkdir("Europe"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Berlin"), m_tmp.name() + QLatin1String("Europe/Berlin"));
-
-    // NOTE: QTEST_KDEMAIN_CORE puts the config file in QDir::homePath() + "/.kde-unit-test"
-    //       and hence, this is common to all unit tests
-    KConfig config("ktimezonedrc");
-    KConfigGroup group(&config, "TimeZones");
-    group.writeEntry("ZoneinfoDir", m_tmp.name());
-    group.writeEntry("Zonetab", QString(m_tmp.name() + QString::fromLatin1("zone.tab")));
-    group.writeEntry("LocalZone", QString::fromLatin1("Europe/Berlin"));
-    config.sync();
-
+    tz = "TZ=Europe/Copenhagen";
+    putenv(tz.data());
+    
     m_project = new Project();
     m_project->setId( m_project->uniqueNodeId() );
     m_project->registerNodeId( m_project );
-    m_project->setConstraintStartTime( DateTime::fromString( "2012-02-01T00:00", KDateTime::LocalZone ) );
-    m_project->setConstraintEndTime( DateTime::fromString( "2013-02-01T00:00", KDateTime::LocalZone ) );
+    m_project->setConstraintStartTime( QDateTime::fromString( "2012-02-01T00:00", Qt::ISODate ) );
+    m_project->setConstraintEndTime( QDateTime::fromString( "2013-02-01T00:00", Qt::ISODate ) );
     // standard worktime defines 8 hour day as default
     QVERIFY( m_project->standardWorktime() );
     QCOMPARE( m_project->standardWorktime()->day(), 8.0 );
@@ -188,7 +169,7 @@ void ProjectTester::schedule()
     m_project->addResourceGroup( g );
     Resource *r = new Resource();
     r->setName( "R1" );
-    r->setAvailableFrom( QDateTime( yesterday, QTime() ) );
+    r->setAvailableFrom( QDateTime( yesterday, QTime(), Qt::LocalTime ) );
     r->setCalendar( m_calendar );
     m_project->addResource( g, r );
 
@@ -207,7 +188,7 @@ void ProjectTester::schedule()
     m_project->calculate( *sm );
 
      Debug::print( m_project, t, s );
-     Debug::printSchedulingLog( *sm, s );
+//      Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
@@ -228,7 +209,7 @@ void ProjectTester::schedule()
     m_project->calculate( *sm );
 
     Debug::print( m_project, t, s );
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
@@ -250,7 +231,7 @@ void ProjectTester::schedule()
     m_project->calculate( *sm );
 
     Debug::print( m_project, s, true );
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
@@ -272,7 +253,7 @@ void ProjectTester::schedule()
     m_project->calculate( *sm );
 
     Debug::print( m_project, s, true );
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
@@ -294,7 +275,7 @@ void ProjectTester::schedule()
     m_project->calculate( *sm );
 
     Debug::print( m_project, s, true );
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
@@ -326,7 +307,7 @@ void ProjectTester::schedule()
     m_project->calculate( *sm );
 
     Debug::print( m_project, s, true );
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( t->startTime(), DateTime( today, t1 ) );
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
@@ -342,8 +323,8 @@ void ProjectTester::schedule()
 
     s = "Calculate forward, Task: ASAP, Resource available tomorrow --------";
     qDebug()<<endl<<"Testing:"<<s;
-    r->setAvailableFrom( QDateTime( tomorrow, QTime() ) );
-    qDebug()<<"Tomorrow:"<<QDateTime( tomorrow, QTime() )<<r->availableFrom();
+    r->setAvailableFrom( QDateTime( tomorrow, QTime(), Qt::LocalTime ) );
+    qDebug()<<"Tomorrow:"<<QDateTime( tomorrow, QTime(), Qt::LocalTime )<<r->availableFrom();
     r->setUnits( 100 );
     rr->setUnits( 100 );
     sm = m_project->createScheduleManager( "Test Plan" );
@@ -367,14 +348,14 @@ void ProjectTester::schedule()
     qDebug()<<endl<<"Testing:"<<s;
     m_project->setConstraintStartTime( DateTime( today, QTime(0,0,0) ) );
     t->setConstraint( Node::ALAP );
-    r->setAvailableFrom( QDateTime( yesterday, QTime() ) );
+    r->setAvailableFrom( QDateTime( yesterday, QTime(), Qt::LocalTime ) );
     sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
     sm->createSchedules();
     m_project->calculate( *sm );
 
     Debug::print( m_project, s, true );
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
@@ -387,7 +368,7 @@ void ProjectTester::schedule()
 
     s = "Calculate forward, Task: MustStartOn -----------------------------------";
     qDebug()<<endl<<"Testing:"<<s;
-    r->setAvailableFrom( QDateTime( yesterday, QTime() ) );
+    r->setAvailableFrom( QDateTime( yesterday, QTime(), Qt::LocalTime ) );
     t->setConstraint( Node::MustStartOn );
     t->setConstraintStartTime( DateTime( nextweek, t1 ) );
     sm = m_project->createScheduleManager( "Test Plan" );
@@ -410,7 +391,7 @@ void ProjectTester::schedule()
     m_project->calculate( *sm );
 
     Debug::print( m_project, t, s );
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
     
     QCOMPARE( t->startTime(), DateTime( t->constraintStartTime().date(), t1 ) );
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
@@ -446,7 +427,7 @@ void ProjectTester::schedule()
     m_project->calculate( *sm );
 
     Debug::print( m_project, t, s );
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
     QCOMPARE( t->endTime(), t->constraintEndTime() );
     QCOMPARE( t->startTime(), t->endTime() - Duration( 0, 8, 0 ) );
     QVERIFY( t->schedulingError() == false );
@@ -464,7 +445,7 @@ void ProjectTester::schedule()
     m_project->calculate( *sm );
 
     Debug::print( m_project, s, true );
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( t->startTime(), DateTime( tomorrow, t1 ));
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 )  );
@@ -484,7 +465,7 @@ void ProjectTester::schedule()
 
     Debug::print( m_project, t, s );
     Debug::print( m_project->resourceList().first(), s );
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
 
     QVERIFY( t->lateStart() >=  t->constraintStartTime() );
     QCOMPARE( t->earlyFinish(), t->endTime() );
@@ -507,7 +488,7 @@ void ProjectTester::schedule()
     sm->createSchedules();
     m_project->calculate( *sm );
 
-    QCOMPARE( t->earlyStart(), m_project->startTime() );
+    QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
     QVERIFY( t->startTime() >= t->earlyStart() );
     QVERIFY( t->startTime() <= t->lateStart() );
     QVERIFY( t->startTime() >= m_project->startTime() );
@@ -897,7 +878,7 @@ void ProjectTester::schedule()
 
     Debug::print( m_project, t, s );
     Debug::print( m_project, tsk2, s );
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->constraintStartTime() ) );
     QCOMPARE( t->lateStart(), tsk2->startTime() );
@@ -1422,7 +1403,7 @@ void ProjectTester::scheduleWithExternalAppointments()
 
     Debug::print( r, s );
     Debug::print( &project, s, true );
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( t->startTime(), targetstart + Duration( 1, 0, 0 ) );
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
@@ -2567,7 +2548,7 @@ void ProjectTester::resourceConflictMustStartOn()
     p.calculate( *sm );
 
     Debug::print( &p, s, true );
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( task1->startTime(), task1->mustStartOn() );
     QCOMPARE( task2->startTime(), et - Duration( 0, 16, 0 ) );
@@ -2577,7 +2558,7 @@ void ProjectTester::resourceConflictMustStartOn()
     p.calculate( *sm );
 
     Debug::print( &p, s, true );
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( task1->startTime(), task1->mustStartOn() );
     QCOMPARE( task2->startTime(), et - Duration( 0, 16, 0 ) );
@@ -2587,7 +2568,7 @@ void ProjectTester::resourceConflictMustStartOn()
     p.calculate( *sm );
 
     Debug::print( &p, s, true );
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( task1->startTime(), task1->mustStartOn() );
     QCOMPARE( task2->startTime(), et - Duration( 0, 16, 0 ) );
@@ -2805,7 +2786,7 @@ void ProjectTester::fixedInterval()
     p.setName( "P1" );
     p.setId( p.uniqueNodeId() );
     p.registerNodeId( &p );
-    DateTime st = DateTime::fromString( "2010-10-20T08:00", KDateTime::LocalZone );
+    DateTime st = QDateTime::fromString( "2010-10-20T08:00", Qt::ISODate );
     p.setConstraintStartTime( st );
     p.setConstraintEndTime( st.addDays( 5 ) );
 
@@ -2855,7 +2836,7 @@ void ProjectTester::fixedInterval()
     p.calculate( *sm );
 
     Debug::print( &p, s, true );
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( task1->startTime(), task1->constraintStartTime() );
     QCOMPARE( task1->endTime(), task1->constraintEndTime() );
@@ -2867,7 +2848,7 @@ void ProjectTester::estimateDuration()
     p.setName( "P1" );
     p.setId( p.uniqueNodeId() );
     p.registerNodeId( &p );
-    DateTime st = QDateTime::fromString( "2010-10-20 08:00" );
+    DateTime st = QDateTime::fromString( "2010-10-20 08:00", Qt::TextDate );
     p.setConstraintStartTime( st );
     p.setConstraintEndTime( st.addDays( 5 ) );
 
@@ -2930,7 +2911,7 @@ void ProjectTester::startStart()
     p.setName( "P1" );
     p.setId( p.uniqueNodeId() );
     p.registerNodeId( &p );
-    DateTime st = QDateTime::fromString( "2010-10-20 00:00:00", Qt::ISODate );
+    DateTime st = QDateTime::fromString( "2010-10-20T00:00:00", Qt::ISODate );
     p.setConstraintStartTime( st );
     p.setConstraintEndTime( st.addDays( 5 ) );
 
@@ -2999,7 +2980,7 @@ void ProjectTester::startStart()
     sm->setSchedulingDirection( true );
     p.calculate( *sm  );
 
-    Debug::printSchedulingLog(*sm, s);
+//     Debug::printSchedulingLog(*sm, s);
     Debug::print( &p, s, true );
 
     qDebug()<<"predeccessors:"<<task2->dependParentNodes();
@@ -3156,8 +3137,114 @@ void ProjectTester::startStart()
     QVERIFY( task2->startTime() >= task1->startTime() + task1->dependChildNodes().at( 0 )->lag() );
 }
 
+void ProjectTester::scheduleTimeZone()
+{
+    QByteArray tz( "TZ=Europe/Copenhagen" );
+    putenv( tz.data() );
+    qDebug()<<"Local timezone: "<<QTimeZone::systemTimeZone();
+    
+    Calendar cal("LocalTime/Copenhagen");
+    QCOMPARE( cal.timeZone(),  QTimeZone::systemTimeZone() );
+    
+
+    Project project;
+    project.setName( "P1" );
+    project.setId( project.uniqueNodeId() );
+    project.registerNodeId( &project );
+    project.setConstraintStartTime( QDateTime::fromString( "2016-07-04T00:00", Qt::ISODate ) );
+    project.setConstraintEndTime( QDateTime::fromString( "2016-07-10T00:00", Qt::ISODate ) );
+    // standard worktime defines 8 hour day as default
+    QVERIFY( project.standardWorktime() );
+    QCOMPARE( project.standardWorktime()->day(), 8.0 );
+    
+    Calendar *calendar = new Calendar();
+    calendar->setName( "LocalTime, Copenhagen" );
+    calendar->setDefault( true );
+    QCOMPARE( calendar->timeZone(),  QTimeZone::systemTimeZone() );
+
+    QTime time1( 9, 0, 0 );
+    QTime time2 ( 17, 0, 0 );
+    int length = time1.msecsTo( time2 );
+    for ( int i=1; i <= 7; ++i ) {
+        CalendarDay *d = calendar->weekday( i );
+        d->setState( CalendarDay::Working );
+        d->addInterval( time1, length );
+    }
+    project.addCalendar( calendar );
+
+    Calendar *cal2 = new Calendar();
+    cal2->setName("Helsinki");
+    cal2->setTimeZone( QTimeZone( "Europe/Helsinki" ) );
+    QVERIFY( cal2->timeZone().isValid() );
+   
+    for ( int i=1; i <= 7; ++i ) {
+        CalendarDay *d = cal2->weekday( i );
+        d->setState( CalendarDay::Working );
+        d->addInterval( time1, length );
+    }
+    project.addCalendar( cal2 );
+    
+    QDate today = project.constraintStartTime().date();
+    
+    Task *t = project.createTask();
+    t->setName( "T1" );
+    project.addTask( t, &project );
+    t->estimate()->setUnit( Duration::Unit_d );
+    t->estimate()->setExpectedEstimate( 1.0 );
+    t->estimate()->setType( Estimate::Type_Effort );
+    
+    Task *t2 = project.createTask();
+    t2->setName( "T2" );
+    project.addTask( t2, &project );
+    t2->estimate()->setUnit( Duration::Unit_d );
+    t2->estimate()->setExpectedEstimate( 1.0 );
+    t2->estimate()->setType( Estimate::Type_Effort );
+    
+    ResourceGroup *g = new ResourceGroup();
+    g->setName( "G1" );
+    project.addResourceGroup( g );
+    Resource *r = new Resource();
+    r->setName( "R1" );
+    r->setCalendar( calendar );
+    project.addResource( g, r );
+
+    Resource *r2 = new Resource();
+    r2->setName( "R2" );
+    r2->setCalendar( cal2 );
+    project.addResource( g, r2 );
+    
+    ResourceGroupRequest *gr = new ResourceGroupRequest( g );
+    t->addRequest( gr );
+    ResourceRequest *rr = new ResourceRequest( r, 100 );
+    gr->addResourceRequest( rr );
+
+    ResourceGroupRequest *gr2 = new ResourceGroupRequest( g );
+    t2->addRequest( gr2 );
+    ResourceRequest *rr2 = new ResourceRequest( r2, 100 );
+    gr2->addResourceRequest( rr2 );
+    
+    QString s = "Calculate forward, Task: ASAP -----------------------------------";
+    qDebug()<<endl<<"Testing:"<<s;
+    ScheduleManager *sm = project.createScheduleManager( "Test Plan" );
+    project.addScheduleManager( sm );
+    sm->createSchedules();
+    project.calculate( *sm );
+    
+    Debug::print( &project, t, s );
+//     Debug::printSchedulingLog( *sm, s );
+    
+    QCOMPARE( t->startTime(), DateTime( today, time1 ) );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+    QCOMPARE( t->plannedEffort().toHours(), 8.0 );
+    QVERIFY( t->schedulingError() == false );
+
+    QCOMPARE( t2->startTime(), DateTime( today, time1.addSecs(-3600) ) );
+    QCOMPARE( t2->endTime(), t2->startTime() + Duration( 0, 8, 0 ) );
+    QCOMPARE( t2->plannedEffort().toHours(), 8.0 );
+    QVERIFY( t2->schedulingError() == false );
+    
+}
+
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::ProjectTester )
-
-#include "ProjectTester.moc"
+QTEST_GUILESS_MAIN( KPlato::ProjectTester )

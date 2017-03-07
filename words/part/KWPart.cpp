@@ -33,16 +33,22 @@
 #include <KoInteractionTool.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeManager.h>
-#include <KoDocumentInfoDlg.h>
+#include <KoComponentData.h>
 
 #include <kmessagebox.h>
 
 KWPart::KWPart(QObject *parent)
-    : KoPart(parent)
+    : KoPart(KWFactory::componentData(), parent)
     , m_document(0)
 {
-    setTemplatesResourcePath(QLatin1String("words/templates/"));
-    setComponentData(KWFactory::componentData());
+    setTemplatesResourcePath(QLatin1String("calligrawords/templates/"));
+}
+
+KWPart::KWPart(const KoComponentData &componentData, QObject *parent)
+    : KoPart(componentData, parent)
+    , m_document(0)
+{
+    setTemplatesResourcePath(QLatin1String("calligrawords/templates/"));
 }
 
 KWPart::~KWPart()
@@ -69,9 +75,9 @@ KoView *KWPart::createViewInstance(KoDocument *document, QWidget *parent)
 
 void KWPart::setupViewInstance(KoDocument *document, KWView *view)
 {
-    connect(document, SIGNAL(shapeAdded(KoShape *, KoShapeManager::Repaint)), view->canvasBase()->shapeManager(), SLOT(addShape(KoShape *, KoShapeManager::Repaint)));
-    connect(document, SIGNAL(shapeRemoved(KoShape *)), view->canvasBase()->shapeManager(), SLOT(remove(KoShape *)));
-    connect(document, SIGNAL(resourceChanged(int, const QVariant &)), view->canvasBase()->resourceManager(), SLOT(setResource(int, const QVariant &)));
+    connect(document, SIGNAL(shapeAdded(KoShape*,KoShapeManager::Repaint)), view->canvasBase()->shapeManager(), SLOT(addShape(KoShape*,KoShapeManager::Repaint)));
+    connect(document, SIGNAL(shapeRemoved(KoShape*)), view->canvasBase()->shapeManager(), SLOT(remove(KoShape*)));
+    connect(document, SIGNAL(resourceChanged(int,QVariant)), view->canvasBase()->resourceManager(), SLOT(setResource(int,QVariant)));
 
     bool switchToolCalled = false;
     foreach (KWFrameSet *fs, qobject_cast<KWDocument*>(document)->frameSets()) {

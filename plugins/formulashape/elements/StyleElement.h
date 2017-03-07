@@ -21,7 +21,7 @@
 #define STYLEELEMENT_H
 
 #include "RowElement.h"
-#include "kformula_export.h"
+#include "koformula_export.h"
 
 /**
  * @short The implementation of the MathML mstyle element

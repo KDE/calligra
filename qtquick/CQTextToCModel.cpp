@@ -211,6 +211,3 @@ void CQTextToCModel::setCanvas(QObject* newCanvas)
     emit canvasChanged();
     endResetModel();
 }
-
-
-#include "CQTextToCModel.moc"

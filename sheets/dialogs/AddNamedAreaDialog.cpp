@@ -41,7 +41,7 @@
 using namespace Calligra::Sheets;
 
 AddNamedAreaDialog::AddNamedAreaDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
         , m_selection(selection)
 {
     setButtons(Ok | Cancel);
@@ -102,5 +102,3 @@ void AddNamedAreaDialog::slotOk()
     command->add(region);
     command->execute(m_selection->canvas());
 }
-
-#include "AddNamedAreaDialog.moc"

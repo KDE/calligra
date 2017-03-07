@@ -1,5 +1,10 @@
 project(calligragemini)
 
+# TEMPORARY: for  Qt5/KF5 build porting phase deprecation warnings are only annoying noise
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    add_definitions(-Wno-deprecated -Wno-deprecated-declarations)
+endif ()
+
 if (WIN32)
     option(ENABLE_GEMINI_STARTUP_MAGIC "Enable Gemini's windows startup magic" ON)
 
@@ -8,15 +13,11 @@ if (WIN32)
     endif ()
 endif ()
 
-add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
-
 include_directories(${KOMAIN_INCLUDES}
                     ${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/..
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../part
-                    #${CMAKE_CURRENT_SOURCE_DIR}/models
                     ${CMAKE_CURRENT_BINARY_DIR}
-                    ${CMAKE_SOURCE_DIR}/libs/kopageapp
+                    ${CMAKE_SOURCE_DIR}/libs/pageapp
                     ${CMAKE_SOURCE_DIR}/stage
                     ${CMAKE_SOURCE_DIR}/stage/part
                     ${CMAKE_SOURCE_DIR}/words
@@ -34,7 +35,7 @@ set(calligragemini_SRCS
     RecentFileManager.cpp
     Settings.cpp
     SimpleTouchArea.cpp
-    TouchDeclarativeView.cpp
+#     TouchDeclarativeView.cpp
     PropertyContainer.cpp
     Theme.cpp
     ToolManager.cpp
@@ -56,32 +57,30 @@ set(thumbnailhelper_SRCS
 if (WIN32)
     set(calligragemini_SRCS ${calligragemini_SRCS} calligrageminiwin.rc)
 else ()
-    kde4_add_app_icon(calligragemini_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-calligragemini.png")
+    file(GLOB ICONS_SRCS "pics/*-apps-calligragemini.png")
+    ecm_add_app_icon(calligragemini_SRCS ICONS ${ICONS_SRCS})
 endif ()
 
 # Thumbnail helper application
 # =============================================================================
 
-kde4_add_executable(calligrageminithumbnailhelper ${thumbnailhelper_SRCS})
+add_executable(calligrageminithumbnailhelper ${thumbnailhelper_SRCS})
 target_link_libraries(calligrageminithumbnailhelper
-    ${QT_QTGUI_LIBRARIES}
-    ${QT_QTCORE_LIBRARIES}
-    ${QT_LIBRARIES}
     komain
+    KF5::Crash # needed to explicitely disable drkonqi if any plugin links to kdelibs4support
 )
 
 # Calligra Gemini application
 # =============================================================================
 
-kde4_add_executable(calligragemini ${calligragemini_SRCS})
+add_executable(calligragemini ${calligragemini_SRCS})
 
 target_link_libraries(calligragemini
-    ${QT_QTDECLARATIVE_LIBRARY}
-    ${QT_QTGUI_LIBRARIES}
-    ${QT_QTCORE_LIBRARIES}
-    ${QT_QTOPENGL_LIBRARIES}
-    ${QT_LIBRARIES}
-    ${GLEW_LIBRARIES}
+    Qt5::Quick
+    Qt5::Qml
+    Qt5::Gui
+    Qt5::Core
+    KF5::IconThemes
     komain
     wordsprivate
     calligrastageprivate

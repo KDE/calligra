@@ -37,7 +37,7 @@
 #include <KoUnit.h>
 #include <KoUnitDoubleSpinBox.h>
 
-// KSpread
+// Sheets
 #include <Global.h>
 #include <Localization.h>
 #include "Map.h"
@@ -52,7 +52,7 @@
 using namespace Calligra::Sheets;
 
 ResizeRow::ResizeRow(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Resize Row"));
     setModal(true);
@@ -109,7 +109,7 @@ void ResizeRow::slotDefault()
 }
 
 ResizeColumn::ResizeColumn(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Resize Column"));
     setModal(true);
@@ -166,6 +166,3 @@ void ResizeColumn::slotDefault()
     double points = sheet->map()->defaultColumnFormat()->width();
     m_pWidth->setValue(m_selection->canvas()->unit().toUserValue(points));
 }
-
-
-#include "Resize2Dialog.moc"

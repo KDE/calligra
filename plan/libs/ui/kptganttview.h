@@ -31,8 +31,9 @@
 #include "ui_kptganttprintingoptions.h"
 #include "ui_kptganttchartdisplayoptions.h"
 
-#include <kdganttglobal.h>
-#include <kdganttview.h>
+#include <KGanttGlobal>
+#include <KGanttView>
+#include <KGanttDateTimeGrid>
 
 class KoDocument;
 
@@ -41,7 +42,7 @@ class QSplitter;
 
 class KoPrintJob;
 
-namespace KDGantt
+namespace KGantt
 {
     class TreeViewRowController;
 }
@@ -57,7 +58,7 @@ class Task;
 class Project;
 class Relation;
 class ScheduleManager;
-class MyKDGanttView;
+class MyKGanttView;
 class GanttPrintingOptions;
 class GanttViewBase;
 class NodeGanttViewBase;
@@ -134,7 +135,7 @@ class GanttPrintingDialog : public PrintingDialog
 public:
     GanttPrintingDialog( ViewBase *view, GanttViewBase *gantt );
 
-//     void startPrinting( RemovePolicy removePolicy );
+    void startPrinting( RemovePolicy removePolicy );
     QList<QWidget*> createOptionWidgets() const;
     void printPage( int page, QPainter &painter );
 
@@ -151,6 +152,7 @@ protected:
     int m_vertPages;
     double m_headerHeight;
     GanttPrintingOptionsWidget *m_options;
+    QImage m_image;
 };
 
 class KPLATOUI_EXPORT GanttTreeView : public TreeViewBase
@@ -161,7 +163,27 @@ public:
 
 };
 
-class KPLATOUI_EXPORT GanttViewBase : public KDGantt::View
+class GanttZoomWidget : public QSlider {
+    Q_OBJECT
+public:
+    explicit GanttZoomWidget( QWidget *parent );
+
+    void setGrid( KGantt::DateTimeGrid *grid );
+
+    void setEnableHideOnLeave( bool hide );
+
+protected:
+    void leaveEvent( QEvent *event );
+
+private Q_SLOTS:
+    void sliderValueChanged( int value );
+
+private:
+    bool m_hide;
+    KGantt::DateTimeGrid *m_grid;
+};
+
+class KPLATOUI_EXPORT GanttViewBase : public KGantt::View
 {
     Q_OBJECT
 public:
@@ -177,8 +199,13 @@ public Q_SLOTS:
     void setPrintingOptions( const GanttPrintingOptions &opt ) { m_printOptions = opt; }
 
 protected:
+    bool eventFilter(QObject *obj, QEvent *event);
+
     friend class GanttPrintingDialog;
     GanttPrintingOptions m_printOptions;
+
+private:
+    GanttZoomWidget *m_zoomwidget;
 };
 
 class NodeGanttViewBase : public GanttViewBase 
@@ -203,14 +230,14 @@ protected:
     Project *m_project;
     GanttItemDelegate *m_ganttdelegate;
     NodeItemModel m_defaultModel;
-    KDGantt::TreeViewRowController *m_rowController;
+    KGantt::TreeViewRowController *m_rowController;
 };
 
-class KPLATOUI_EXPORT MyKDGanttView : public NodeGanttViewBase
+class KPLATOUI_EXPORT MyKGanttView : public NodeGanttViewBase
 {
     Q_OBJECT
 public:
-    explicit MyKDGanttView(QWidget *parent);
+    explicit MyKGanttView(QWidget *parent);
 
     GanttItemModel *model() const;
     void setProject( Project *project );
@@ -289,10 +316,10 @@ private:
     bool m_readWrite;
     int m_defaultFontSize;
     QSplitter *m_splitter;
-    MyKDGanttView *m_gantt;
+    MyKGanttView *m_gantt;
     Project *m_project;
 
-    KAction *actionShowProject;
+    QAction *actionShowProject;
 };
 
 class MilestoneGanttViewSettingsDialog : public ItemViewSettupDialog
@@ -310,11 +337,11 @@ private:
 };
 
 
-class KPLATOUI_EXPORT MilestoneKDGanttView : public NodeGanttViewBase
+class KPLATOUI_EXPORT MilestoneKGanttView : public NodeGanttViewBase
 {
     Q_OBJECT
 public:
-    explicit MilestoneKDGanttView(QWidget *parent);
+    explicit MilestoneKGanttView(QWidget *parent);
 
     MilestoneItemModel *model() const;
     void setProject( Project *project );
@@ -376,7 +403,7 @@ private:
     bool m_readWrite;
     int m_defaultFontSize;
     QSplitter *m_splitter;
-    MilestoneKDGanttView *m_gantt;
+    MilestoneKGanttView *m_gantt;
     bool m_showTaskName;
     bool m_showProgress;
     bool m_showPositiveFloat;
@@ -390,7 +417,15 @@ class ResourceAppointmentsGanttViewSettingsDialog : public ItemViewSettupDialog
 {
     Q_OBJECT
 public:
-    ResourceAppointmentsGanttViewSettingsDialog( ViewBase *view, GanttTreeView *treeview );
+    ResourceAppointmentsGanttViewSettingsDialog(GanttViewBase *gantt, ViewBase *view);
+
+public Q_SLOTS:
+    void slotOk();
+
+private:
+    GanttViewBase *m_gantt;
+    GanttPrintingOptionsWidget *m_printingoptions;
+
 };
 
 class KPLATOUI_EXPORT ResourceAppointmentsGanttView : public ViewBase
@@ -431,7 +466,7 @@ private:
     GanttViewBase *m_gantt;
     Project *m_project;
     ResourceAppointmentsGanttModel *m_model;
-    KDGantt::TreeViewRowController *m_rowController;
+    KGantt::TreeViewRowController *m_rowController;
 
 };
 

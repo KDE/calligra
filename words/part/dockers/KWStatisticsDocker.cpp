@@ -22,11 +22,10 @@
 
 #include "KWStatisticsDocker.h"
 
-#include <QDebug>
-#include <klocale.h>
-#include <kdebug.h>
 #include <KoCanvasResourceManager.h>
 #include "KWCanvas.h"
+
+#include <klocalizedstring.h>
 
 KWStatisticsDocker::KWStatisticsDocker()
 {

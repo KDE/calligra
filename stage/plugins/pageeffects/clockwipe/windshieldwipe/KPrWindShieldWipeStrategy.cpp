@@ -27,7 +27,6 @@
 
 #include "KPrClockWipeSubpathHelper.h"
 
-#include <kdebug.h>
 
 KPrWindShieldWipeStrategy::KPrWindShieldWipeStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse )
     : KPrSweepWipeStrategy( subType, smilType, smilSubType, reverse )

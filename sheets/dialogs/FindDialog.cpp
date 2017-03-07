@@ -26,7 +26,7 @@
 #include <QVBoxLayout>
 
 #include <kcombobox.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 using namespace Calligra::Sheets;
 
@@ -163,6 +163,3 @@ bool SearchDlg::searchInAllSheet() const
 {
     return m_findOptions->searchInAllSheet();
 }
-
-
-#include "FindDialog.moc"

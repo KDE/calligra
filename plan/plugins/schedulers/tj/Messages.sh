@@ -1,6 +1,13 @@
 #! /bin/sh
-source ../../../../calligra_xgettext.sh
+# Messages.sh files must have one instance of the line with:
+# 'potfilename=<potfile>.pot'
+# potfilename= must be at the start of the line and without spaces.
+# It must refer to one pot file only.
+# Release scripts rely on this.
+potfilename=calligraplan_scheduler_tj.pot
+
+source ../../../../kundo2_aware_xgettext.sh
 
 $EXTRACTRC *.ui *.kcfg >> rc.cpp
-calligra_xgettext plantjplugin.pot *.cpp
+kundo2_aware_xgettext $potfilename *.cpp
 rm -f rc.cpp

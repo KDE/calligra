@@ -711,7 +711,7 @@ void WorksheetSubStreamHandler::handleTopMargin(TopMarginRecord* record)
 }
 
 static QString trimTrailingZero(const QString& s) {
-    if (!s.isEmpty() && s[s.length()-1] == '\0') {
+    if (!s.isEmpty() && s[s.length()-1].unicode() == '\0') {
         return s.left(s.length()-1);
     } else {
         return s;

@@ -97,13 +97,14 @@ Value ValueParser::tryParseBool(const QString& str, bool *ok) const
     if (ok) *ok = false;
 
     const QString& lowerStr = str.toLower();
+    const QStringList localeCodes(m_settings->locale()->country());
 
     if ((lowerStr == "true") ||
-            (lowerStr == ki18n("true").toString(m_settings->locale()).toLower())) {
+            (lowerStr == ki18n("true").toString(localeCodes).toLower())) {
         val = Value(true);
         if (ok) *ok = true;
     } else if ((lowerStr == "false") ||
-               (lowerStr == ki18n("false").toString(m_settings->locale()).toLower())) {
+               (lowerStr == ki18n("false").toString(localeCodes).toLower())) {
         val = Value(false);
         if (ok) *ok = true;
     }
@@ -152,7 +153,7 @@ Value ValueParser::readNumber(const QString& _str, bool *ok) const
             major = QString("%1").arg(major.toInt() + (int)wholePart);
         }
         minor = QString::number(minorVal, 'f').remove(0, 2);     // chop off the "0." part
-        // kDebug() <<"fraction:" << major <<"." << minor;
+        // debugSheets <<"fraction:" << major <<"." << minor;
     } else {
         major = str;
         isInt = (EPos == -1); // only, if no exponential part was found
@@ -226,7 +227,7 @@ Value ValueParser::tryParseNumber(const QString& str, bool *ok) const
     if (str.endsWith('%')) {   // percentage
         const Number val = readNumber(str.left(str.length() - 1).trimmed(), ok).asFloat();
         if (*ok) {
-            //kDebug(36001) <<"ValueParser::tryParseNumber '" << str <<
+            //debugSheets <<"ValueParser::tryParseNumber '" << str <<
             //    "' successfully parsed as percentage: " << val << '%' << endl;
             value = Value(val / 100.0);
             value.setFormat(Value::fmt_Percent);
@@ -286,7 +287,7 @@ Value ValueParser::tryParseDate(const QString& str, bool *ok) const
                 for (; yearPos > 0 && fmt[yearPos-1] != '%'; --yearPos)
                     fmt.remove(yearPos, 1);
             }
-            //kDebug(36001) <<"Cell::tryParseDate short format w/o date:" << fmt;
+            //debugSheets <<"Cell::tryParseDate short format w/o date:" << fmt;
             tmpDate = m_settings->locale()->readDate(str, fmt, &valid);
         }
     }
@@ -344,8 +345,9 @@ Value ValueParser::tryParseTime(const QString& str, bool *ok) const
         tmpTime = readTime(str, false, &valid);
 
     if (!valid) {
-        const QString stringPm = ki18n("pm").toString(m_settings->locale());
-        const QString stringAm = ki18n("am").toString(m_settings->locale());
+        const QStringList localeCodes(m_settings->locale()->country());
+        const QString stringPm = ki18n("pm").toString(localeCodes);
+        const QString stringAm = ki18n("am").toString(localeCodes);
         int pos = 0;
         if ((pos = str.indexOf(stringPm, 0, Qt::CaseInsensitive)) != -1) {
             // cut off 'PM'
@@ -426,13 +428,14 @@ QDateTime ValueParser::readTime(const QString& intstr, bool withSeconds, bool* o
         c = format.at(formatpos++);
         switch (c.toLatin1()) {
         case 'p': {
-            QString s(ki18n("pm").toString(m_settings->locale()).toLower());
+            const QStringList localeCodes(m_settings->locale()->country());
+            QString s(ki18n("pm").toString(localeCodes).toLower());
             int len = s.length();
             if (str.mid(strpos, len) == s) {
                 pm = true;
                 strpos += len;
             } else {
-                s = ki18n("am").toString(m_settings->locale()).toLower();
+                s = ki18n("am").toString(localeCodes).toLower();
                 len = s.length();
                 if (str.mid(strpos, len) == s) {
                     pm = false;

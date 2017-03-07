@@ -19,12 +19,14 @@
  */
 
 #include "KPrAnimationToolFactory.h"
+
 #include "KPrAnimationTool.h"
 #include "KPrView.h"
+#include "StageDebug.h"
+
 #include <KoIcon.h>
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
 
 KPrAnimationToolFactory::KPrAnimationToolFactory()
     : KoToolFactoryBase("Animation Tool")
@@ -32,7 +34,7 @@ KPrAnimationToolFactory::KPrAnimationToolFactory()
     setToolTip(i18n("Animation"));
     setToolType("calligrastage");
     setPriority(40);
-    setIconName(koIconNameCStr("animation-stage"));
+    setIconName(koIconName("animation-stage"));
     setActivationShapeId("flake/edit");
 }
 

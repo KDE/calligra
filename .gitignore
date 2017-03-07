@@ -22,10 +22,9 @@ CMakeLists.txt.user*
 *.kate-swap
 *.diff
 *.patch
+.idea
 GTAGS
 GPATH
 GRTAGS
 GSYMS
 BROWSE
-
-

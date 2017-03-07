@@ -24,15 +24,17 @@
 #include <QDockWidget>
 #include <QLayout>
 #include <QTabBar>
+#include <QDebug>
+#include <QFontDatabase>
 
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kconfiggroup.h>
-#include <kglobal.h>
-#include <kglobalsettings.h>
-#include <klocale.h>
 #include <kstandardaction.h>
+#include <ksharedconfig.h>
+#include <klocalizedstring.h>
 
+#include <KoDockRegistry.h>
 #include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
 
@@ -41,15 +43,11 @@
 #include "Canvas.h"
 #include "import/DockerManager.h"
 #include <kxmlguifactory.h>
-#include <kdebug.h>
 
 #include "StatusBarItem.h"
 
-MainWindow::MainWindow(RootSection* document, const KComponentData &componentData) : m_doc(document), m_activeView(0), m_dockerManager(0)
+MainWindow::MainWindow(RootSection* document) : m_doc(document), m_activeView(0), m_dockerManager(0)
 {
-    Q_ASSERT(componentData.isValid());
-    KGlobal::setActiveComponent(componentData);
-
     // then, setup our actions
     setupActions();
 
@@ -69,8 +67,7 @@ MainWindow::MainWindow(RootSection* document, const KComponentData &componentDat
 
     activateView(view);
 
-    // Position and show toolbars according to user's preference
-    setAutoSaveSettings(componentData.componentName());
+    setAutoSaveSettings(qApp->applicationName());
 
     const int scnum = QApplication::desktop()->screenNumber(parentWidget());
     QRect desk = QApplication::desktop()->screenGeometry(scnum);
@@ -79,9 +76,9 @@ MainWindow::MainWindow(RootSection* document, const KComponentData &componentDat
     if(QApplication::desktop()->isVirtualDesktop())
         desk = QApplication::desktop()->screenGeometry(QApplication::desktop()->screen());
 
-    KConfigGroup config(KGlobal::config(), componentData.componentName());
+    KConfigGroup config(KSharedConfig::openConfig(), qApp->applicationName());
     const QSize size(config.readEntry(QString::fromLatin1("Width %1").arg(desk.width()), 0),
-                     config.readEntry(QString::fromLatin1("Height %1").arg(desk.height()), 0));
+                         config.readEntry(QString::fromLatin1("Height %1").arg(desk.height()), 0));
     resize(size);
 
     foreach(QDockWidget * wdg, m_dockWidgets) {
@@ -89,6 +86,7 @@ MainWindow::MainWindow(RootSection* document, const KComponentData &componentDat
             wdg->setVisible(true);
         }
     }
+
     forceDockTabFonts();
 }
 
@@ -96,6 +94,21 @@ MainWindow::~MainWindow()
 {
     // The view need to be deleted before the dockermanager
     delete view;
+}
+
+void MainWindow::closeEvent(QCloseEvent *e)
+{
+    Q_UNUSED(e);
+    const int scnum = QApplication::desktop()->screenNumber(parentWidget());
+    QRect desk = QApplication::desktop()->screenGeometry(scnum);
+
+    if(QApplication::desktop()->isVirtualDesktop()) {
+        desk = QApplication::desktop()->screenGeometry(QApplication::desktop()->screen());
+    }
+
+    KConfigGroup config(KSharedConfig::openConfig(), qApp->applicationName());
+    config.writeEntry(QString::fromLatin1("Width %1").arg(desk.width()), width());
+    config.writeEntry(QString::fromLatin1("Height %1").arg(desk.height()), height());
 }
 
 void MainWindow::setupActions()
@@ -157,16 +170,6 @@ QDockWidget* MainWindow::createDockWidget(KoDockFactoryBase* factory)
         dockWidget = m_dockWidgetMap[ factory->id()];
     }
 
-    KConfigGroup group(KGlobal::config(), "GUI");
-    QFont dockWidgetFont  = KGlobalSettings::generalFont();
-    qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
-    pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
-    dockWidgetFont.setPointSizeF(pointSize);
-#ifdef Q_WS_MAC
-    dockWidget->setAttribute(Qt::WA_MacSmallSize, true);
-#endif
-    dockWidget->setFont(dockWidgetFont);
-
     connect(dockWidget, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(forceDockTabFonts()));
 
     return dockWidget;
@@ -177,10 +180,7 @@ void MainWindow::forceDockTabFonts()
     QObjectList chis = children();
     for(int i = 0; i < chis.size(); ++i) {
         if(chis.at(i)->inherits("QTabBar")) {
-            QFont dockWidgetFont  = KGlobalSettings::generalFont();
-            qreal pointSize = KGlobalSettings::smallestReadableFont().pointSizeF();
-            dockWidgetFont.setPointSizeF(pointSize);
-            ((QTabBar *)chis.at(i))->setFont(dockWidgetFont);
+            ((QTabBar *)chis.at(i))->setFont(KoDockRegistry::dockFont());
         }
     }
 }
@@ -237,7 +237,7 @@ void MainWindow::removeStatusBarItem(QWidget* _widget)
             }
         }
     }
-    kWarning() << "Widget " << _widget << " not found in the status bar";
+    qWarning() << "Widget " << _widget << " not found in the status bar";
 }
 
 QList<KoCanvasObserverBase*> MainWindow::canvasObservers() const

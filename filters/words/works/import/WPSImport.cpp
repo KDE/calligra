@@ -91,9 +91,12 @@ public:
     bool isSupportedFormat(librevenge::RVNGInputStream &input)
     {
         WPSKind kind = WPS_TEXT;
-        WPSConfidence confidence = WPSDocument::isFileFormatSupported(&input, kind);
+        WPSCreator creator = WPS_MSWORKS;
+        bool needCharSetEncoding = false;
+        WPSConfidence confidence = WPSDocument::isFileFormatSupported(&input, kind, creator, needCharSetEncoding);
         if (confidence == WPS_CONFIDENCE_NONE || kind != WPS_TEXT)
             return false;
+        // TODO: handle needCharSetEncoding, for now falling to Western Europe encoding used as default
         return true;
     }
 
@@ -108,8 +111,7 @@ private:
     }
 };
 
-K_PLUGIN_FACTORY(WPSImportFactory, registerPlugin<WPSImport>();)
-K_EXPORT_PLUGIN(WPSImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(WPSImportFactory, "calligra_filter_wps2odt.json", registerPlugin<WPSImport>();)
 
 WPSImport::WPSImport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
@@ -136,7 +138,7 @@ KoFilter::ConversionStatus WPSImport::convert(const QByteArray& from, const QByt
         return KoFilter::ParsingError;
     }
 
-    if (!helper.convertDocument(input, outputFile.constData()))
+    if (!helper.convertDocument(input, false))
     {
         fprintf(stderr, "ERROR : Couldn't convert the document\n");
         return KoFilter::ParsingError;
@@ -145,3 +147,4 @@ KoFilter::ConversionStatus WPSImport::convert(const QByteArray& from, const QByt
     return KoFilter::OK;
 }
 
+#include "WPSImport.moc"

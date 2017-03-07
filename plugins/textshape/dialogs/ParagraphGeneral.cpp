@@ -76,7 +76,7 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
 
     widget.preview->setText(QString("Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
 
-    connect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
+    connect(widget.name, SIGNAL(textChanged(QString)), this, SIGNAL(nameChanged(QString)));
     connect(widget.nextStyle, SIGNAL(currentIndexChanged(int)), this, SIGNAL(styleChanged()));
 
     connect(this, SIGNAL(styleChanged()), this, SLOT(setPreviewParagraphStyle()));
@@ -85,7 +85,7 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
 void ParagraphGeneral::hideStyleName(bool hide)
 {
     if (hide) {
-        disconnect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
+        disconnect(widget.name, SIGNAL(textChanged(QString)), this, SIGNAL(nameChanged(QString)));
         widget.tabs->removeTab(0);
         m_nameHidden = true;
     }
@@ -98,13 +98,13 @@ void ParagraphGeneral::selectName()
     widget.name->setFocus(Qt::OtherFocusReason);
 }
 
-void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level)
+void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level, bool directFormattingMode)
 {
     m_style = style;
     if (m_style == 0)
         return;
 
-    CharacterGeneral::setStyle(style);
+    CharacterGeneral::setStyle(style, directFormattingMode);
 
     blockSignals(true);
 
@@ -132,16 +132,16 @@ void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level)
         CharacterGeneral::updateNextStyleCombo(m_styleManager->paragraphStyle(style->nextStyle()));
         KoParagraphStyle *parentStyle = style->parentStyle();
         if (parentStyle) {
-            widget.inheritStyle->setCurrentIndex(m_paragraphInheritedStyleModel->indexOf(*parentStyle).row());
+            widget.inheritStyle->setCurrentIndex(m_paragraphInheritedStyleModel->indexOf(parentStyle).row());
             //m_paragraphInheritedStyleModel->setCurrentParagraphStyle(parentStyle->styleId());
         }
     }
 
-    m_paragraphIndentSpacing->setDisplay(style);
-    m_paragraphLayout->setDisplay(style);
-    m_paragraphBulletsNumbers->setDisplay(style, level);
-    m_paragraphDecorations->setDisplay(style);
-    m_paragraphDropCaps->setDisplay(style);
+    m_paragraphIndentSpacing->setDisplay(style, directFormattingMode);
+    m_paragraphLayout->setDisplay(style, directFormattingMode);
+    m_paragraphBulletsNumbers->setDisplay(style, level, directFormattingMode);
+    m_paragraphDecorations->setDisplay(style, directFormattingMode);
+    m_paragraphDropCaps->setDisplay(style, directFormattingMode);
 
     widget.preview->setParagraphStyle(style);
 
@@ -223,5 +223,3 @@ KoParagraphStyle *ParagraphGeneral::style() const
 {
     return m_style;
 }
-
-#include <ParagraphGeneral.moc>

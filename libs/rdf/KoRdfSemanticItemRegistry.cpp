@@ -23,8 +23,8 @@
 
 #include <KoPluginLoader.h>
 
-#include <kdebug.h>
-#include <kglobal.h>
+#include <KDebug>
+#include <KGlobal>
 
 class KoRdfSemanticItemRegistry::Private
 {
@@ -32,7 +32,6 @@ public:
     ~Private();
     void init();
 };
-
 
 KoRdfSemanticItemRegistry::Private::~Private()
 {
@@ -44,8 +43,7 @@ void KoRdfSemanticItemRegistry::Private::init()
     config.whiteList = "SemanticItemPlugins";
     config.blacklist = "SemanticItemPluginsDisabled";
     config.group = "calligra";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/SemanticItem"),
-                                     QString::fromLatin1("[X-Calligra-PluginVersion] == 28"), config);
+    KoPluginLoader::load(QStringLiteral("calligra/semanticitems"), config);
 }
 
 KoRdfSemanticItemRegistry* KoRdfSemanticItemRegistry::instance()
@@ -69,16 +67,16 @@ QString KoRdfSemanticItemRegistry::classDisplayName(const QString& className) co
 }
 
 
-hKoRdfSemanticItem KoRdfSemanticItemRegistry::createSemanticItem(const QString &semanticClass, const KoDocumentRdf *docRdf, QObject *parent) const
+hKoRdfBasicSemanticItem KoRdfSemanticItemRegistry::createSemanticItem(const QString &semanticClass, const KoDocumentRdf *docRdf, QObject *parent) const
 {
     KoRdfSemanticItemFactoryBase *factory = value(semanticClass);
     if (factory) {
         return factory->createSemanticItem(docRdf, parent);
     }
-    return hKoRdfSemanticItem(0);
+    return hKoRdfBasicSemanticItem(0);
 }
 
-hKoRdfSemanticItem KoRdfSemanticItemRegistry::createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *docRdf, QObject *parent) const
+hKoRdfBasicSemanticItem KoRdfSemanticItemRegistry::createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *docRdf, QObject *parent) const
 {
     foreach (const QString &key, keys()) {
         KoRdfSemanticItemFactoryBase *factory = value(key);
@@ -86,7 +84,7 @@ hKoRdfSemanticItem KoRdfSemanticItemRegistry::createSemanticItemFromMimeData(con
             return factory->createSemanticItemFromMimeData(mimeData, host, docRdf, parent);
         }
     }
-    return hKoRdfSemanticItem(0);
+    return hKoRdfBasicSemanticItem(0);
 }
 
 bool KoRdfSemanticItemRegistry::canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const
@@ -100,7 +98,7 @@ bool KoRdfSemanticItemRegistry::canCreateSemanticItemFromMimeData(const QMimeDat
     return false;
 }
 
-void KoRdfSemanticItemRegistry::updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *docRdf, const QString &className, QSharedPointer<Soprano::Model> m) const
+void KoRdfSemanticItemRegistry::updateSemanticItems(QList<hKoRdfBasicSemanticItem> &semanticItems, const KoDocumentRdf *docRdf, const QString &className, QSharedPointer<Soprano::Model> m) const
 {
     KoRdfSemanticItemFactoryBase *factory = value(className);
     if (factory) {
@@ -116,4 +114,9 @@ KoRdfSemanticItemRegistry::~KoRdfSemanticItemRegistry()
 KoRdfSemanticItemRegistry::KoRdfSemanticItemRegistry()
   : d(new Private())
 {
+}
+
+bool KoRdfSemanticItemRegistry::isBasic(const QString &className)
+{
+    return value(className)->isBasic();
 }

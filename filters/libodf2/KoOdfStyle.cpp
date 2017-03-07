@@ -25,9 +25,6 @@
 // Qt
 #include <QString>
 
-// KDE
-#include <kdebug.h>
-
 // Odflib
 #include "KoXmlStreamReader.h"
 #include "KoXmlWriter.h"
@@ -35,6 +32,8 @@
 #include "KoOdfTextProperties.h"
 #include "KoOdfParagraphProperties.h"
 #include "KoOdfGraphicProperties.h"
+
+#include "Odf2Debug.h"
 
 // ================================================================
 //                         class KoOdfStyle
@@ -136,7 +135,7 @@ bool KoOdfStyle::readOdf(KoXmlStreamReader &reader)
     setFamily(attrs.value("style:family").toString());
     setParent(attrs.value("style:parent-style-name").toString());
 
-    kDebug() << "Style:" << name() << family() << parent() << displayName();
+    debugOdf2 << "Style:" << name() << family() << parent() << displayName();
 
     // Load child elements: property sets and other children.
     while (reader.readNextStartElement()) {

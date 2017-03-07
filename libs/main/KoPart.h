@@ -24,9 +24,7 @@
 #define KOPART_H
 
 #include <QList>
-
-#include <kcomponentdata.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include "komain_export.h"
 
@@ -34,9 +32,10 @@
 
 class KoDocument;
 class KoView;
-class KoView;
+class KoComponentData;
 class KoOpenPane;
 class QGraphicsItem;
+
 
 /**
  * Override this class in your application. It's the main entry point that
@@ -56,10 +55,11 @@ public:
     /**
      * Constructor.
      *
+     * @param componentData data about the component
      * @param parent may be another KoDocument, or anything else.
      *        Usually passed by KPluginFactory::create.
      */
-    explicit KoPart(QObject *parent);
+    explicit KoPart(const KoComponentData &componentData, QObject *parent);
 
     /**
      *  Destructor.
@@ -70,10 +70,10 @@ public:
     virtual ~KoPart();
 
     /**
-     * @return The componentData ( KComponentData ) for this GUI client. You set the componentdata
+     * @return The componentData ( KoComponentData ) for this GUI client. You set the componentdata
      * in your subclass: setComponentData(AppFactory::componentData()); in the constructor
      */
-    KComponentData componentData() const;
+    KoComponentData componentData() const;
 
     /**
      * @param document the document this part manages
@@ -116,7 +116,7 @@ public:
      */
     int mainwindowCount() const;
 
-    void addRecentURLToAllMainWindows(const KUrl &url);
+    void addRecentURLToAllMainWindows(const QUrl &url);
 
     KoMainWindow *currentMainwindow() const;
 
@@ -126,7 +126,7 @@ public Q_SLOTS:
      * This slot loads an existing file and deletes the start up widget.
      * @param url the file to load
      */
-    virtual void openExistingFile(const KUrl& url);
+    virtual void openExistingFile(const QUrl &url);
 
 protected Q_SLOTS:
 
@@ -134,7 +134,7 @@ protected Q_SLOTS:
      * This slot loads a template and deletes the start up widget.
      * @param url the template to load
      */
-    virtual void openTemplate(const KUrl& url);
+    virtual void openTemplate(const QUrl &url);
 
 private Q_SLOTS:
 
@@ -240,10 +240,9 @@ protected:
     /**
      * Creates the open widget showed at application start up.
      * @param parent the parent widget
-     * @param instance the KComponentData to be used for KConfig data
      * @param templateType the template-type (group) that should be selected on creation.
      */
-    KoOpenPane *createOpenPane(QWidget *parent, const KComponentData &instance,
+    KoOpenPane *createOpenPane(QWidget *parent,
                                const QString& templatesResourcePath = QString());
 
     virtual KoView *createViewInstance(KoDocument *document, QWidget *parent) = 0;
@@ -254,11 +253,6 @@ protected:
      */
     virtual QGraphicsItem *createCanvasItem(KoDocument *document);
 
-protected:
-
-    /// Call in the constructor of the subclass: setComponentData(AppFactory::componentData());
-    virtual void setComponentData(const KComponentData &componentData);
-
 private:
 
     Q_DISABLE_COPY(KoPart)
@@ -266,18 +260,6 @@ private:
     class Private;
     Private *const d;
 
-};
-
-class MockPart : public KoPart
-{
-public:
-    MockPart()
-    : KoPart( 0 )
-    {}
-    KoView *createViewInstance(KoDocument* document, QWidget* parent) { Q_UNUSED(document); Q_UNUSED(parent); return 0; }
-    virtual KoMainWindow *createMainWindow() { return 0; }
-protected:
-    virtual QGraphicsItem *createCanvasItem(KoDocument* document) { Q_UNUSED(document); return 0; }
 };
 
 #endif

@@ -20,8 +20,8 @@
 #include "SimpleInsertWidget.h"
 #include "TextTool.h"
 
-#include <kaction.h>
-#include <kdebug.h>
+#include <QAction>
+#include <QDebug>
 
 #include <QWidget>
 
@@ -38,20 +38,20 @@ SimpleInsertWidget::SimpleInsertWidget(TextTool *tool, QWidget *parent)
     widget.insertSection->setDefaultAction(tool->action("insert_section"));
     widget.configureSection->setDefaultAction(tool->action("configure_section"));
     widget.insertPageBreak->setDefaultAction(tool->action("insert_framebreak"));
+    widget.splitSections->setDefaultAction(tool->action("split_sections"));
 
     connect(widget.insertVariable, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.insertSpecialChar, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.insertPageBreak, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.insertSection, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.configureSection, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.splitSections, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
 
-    connect(widget.quickTable, SIGNAL(create(int, int)), this, SIGNAL(insertTableQuick(int, int)));
-    connect(widget.quickTable, SIGNAL(create(int, int)), this, SIGNAL(doneWithFocus()));
+    connect(widget.quickTable, SIGNAL(create(int,int)), this, SIGNAL(insertTableQuick(int,int)));
+    connect(widget.quickTable, SIGNAL(create(int,int)), this, SIGNAL(doneWithFocus()));
 }
 
 void SimpleInsertWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
 }
-
-#include <SimpleInsertWidget.moc>

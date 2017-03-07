@@ -56,8 +56,8 @@
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsSceneWheelEvent>
 
-// KDE
-#include <klocale.h>
+// KF5
+#include <KLocalizedString>
 
 // Calligra
 #include <KoCanvasController.h>
@@ -66,7 +66,7 @@
 #include <KoPointerEvent.h>
 #include <KoUnit.h>
 
-// KSpread
+// Sheets
 #include "CanvasItem.h"
 #include "Cell.h"
 #include "Doc.h"
@@ -474,5 +474,3 @@ void SelectAllButtonItem::toolChanged(const QString& toolId)
 {
     doToolChanged(toolId);
 }
-
-#include "HeaderItems.moc"

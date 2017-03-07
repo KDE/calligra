@@ -37,9 +37,10 @@ class QMenu;
 class QPrintDialog;
 class QStackedWidget;
 class QSplitter;
+class QUrl;
 class KUndo2Command;
+class QAction;
 
-class KAction;
 class KToggleAction;
 class QLabel;
 class KConfigSkeleton;
@@ -154,7 +155,7 @@ public:
     virtual void saveContext( QDomElement &context ) const;
 
     /// Load the workpackage from @p url into @p project. Return true if successful, else false.
-    bool loadWorkPackage( Project &project, const KUrl &url );
+    bool loadWorkPackage( Project &project, const QUrl &url );
 
     QWidget *canvas() const;
 
@@ -242,6 +243,8 @@ public Q_SLOTS:
     void addViewListItem( const ViewListItem *item, const ViewListItem *parent, int index );
     void removeViewListItem( const ViewListItem *item );
 
+    void slotOpenReportFile();
+
 protected Q_SLOTS:
     void slotGuiActivated( ViewBase *view, bool );
     void slotViewActivated( ViewListItem*, ViewListItem* );
@@ -286,17 +289,16 @@ protected Q_SLOTS:
     void slotMailWorkpackage( Node *node, Resource *resource = 0 );
     void slotMailWorkpackages( const QList<Node*> &nodes, Resource *resource = 0 );
 
-    void slotOpenUrlRequest( HtmlView *v, const KUrl &url );
+    void slotOpenUrlRequest( HtmlView *v, const QUrl &url );
 
     void slotProjectCalculated( ScheduleManager *sm );
 
     void slotUpdateViewInfo( ViewListItem *itm );
 
-    void slotOpenReportFile();
-    void slotModifyReportDefinition( KUndo2Command *cmd );
+    void createReportView(const QDomDocument &doc);
 
-    void saveTaskModule( const KUrl &url, Project *project );
-    void removeTaskModule( const KUrl &url );
+    void saveTaskModule( const QUrl &url, Project *project );
+    void removeTaskModule( const QUrl &url );
 
 protected:
     virtual void guiActivateEvent( bool activated );
@@ -320,8 +322,6 @@ private Q_SLOTS:
     void slotActionDestroyed( QObject *o );
     void slotViewListItemRemoved( ViewListItem *item );
     void slotViewListItemInserted( ViewListItem *item, ViewListItem *parent, int index );
-
-    void slotCreateReportView( ReportDesignDialog *dlg );
 
     void slotProjectEditFinished( int result );
     void slotTaskEditFinished( int result );
@@ -404,38 +404,38 @@ private:
 
     // ------ Insert
     // ------ Project
-    KAction *actionEditMainProject;
+    QAction *actionEditMainProject;
 
     // ------ Tools
-    KAction *actionEditStandardWorktime;
-    KAction *actionDefineWBS;
-    KAction *actionInsertFile;
-    KAction *actionCurrencyConfig;
+    QAction *actionEditStandardWorktime;
+    QAction *actionDefineWBS;
+    QAction *actionInsertFile;
+    QAction *actionCurrencyConfig;
 
-    KAction *actionOpenReportFile;
+    QAction *actionOpenReportFile;
 
     // ------ Settings
-    KAction *actionConfigure;
+    QAction *actionConfigure;
 
     // ------ Help
-    KAction *actionIntroduction;
+    QAction *actionIntroduction;
 
     // ------ Popup
-    KAction *actionOpenNode;
-    KAction *actionTaskProgress;
-    KAction *actionTaskDescription;
-    KAction *actionDeleteTask;
-    KAction *actionIndentTask;
-    KAction *actionUnindentTask;
-    KAction *actionMoveTaskUp;
-    KAction *actionMoveTaskDown;
+    QAction *actionOpenNode;
+    QAction *actionTaskProgress;
+    QAction *actionTaskDescription;
+    QAction *actionDeleteTask;
+    QAction *actionIndentTask;
+    QAction *actionUnindentTask;
+    QAction *actionMoveTaskUp;
+    QAction *actionMoveTaskDown;
 
-    KAction *actionEditResource;
-    KAction *actionEditRelation;
-    KAction *actionDeleteRelation;
+    QAction *actionEditResource;
+    QAction *actionEditRelation;
+    QAction *actionDeleteRelation;
 
     //Test
-    KAction *actNoInformation;
+    QAction *actNoInformation;
 
     QMap<ViewListItem*, QAction*> m_reportActionMap;
 

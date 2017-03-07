@@ -18,9 +18,10 @@
 */
 
 #include "FormulaRenderer.h"
+
 #include "AttributeManager.h"
 #include "BasicElement.h"
-#include <kdebug.h>
+#include "FormulaDebug.h"
 
 FormulaRenderer::FormulaRenderer()
 {

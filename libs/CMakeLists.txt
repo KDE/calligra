@@ -1,11 +1,16 @@
+add_definitions(
+  -DTRANSLATION_DOMAIN=\"calligra\"
+)
+
 if (SHOULD_BUILD_LIB_CALLIGRA)
     add_subdirectory( version )
-    add_subdirectory( koplugin )
+    add_subdirectory( plugin )
     add_subdirectory( widgetutils )
     add_subdirectory( widgets )
+    add_subdirectory( store )
     add_subdirectory( odf )
     add_subdirectory( textlayout )
-    add_subdirectory( kotext )
+    add_subdirectory( text )
     add_subdirectory( flake )
     add_subdirectory( basicflakes )
     add_subdirectory( pigment )
@@ -17,7 +22,7 @@ if (SHOULD_BUILD_LIB_KOMAIN)
 endif ()
 
 if (SHOULD_BUILD_FEATURE_SCRIPTING)
-    add_subdirectory( kokross )
+    add_subdirectory( kross )
 endif ()
 
 if (SHOULD_BUILD_LIB_KOVECTORIMAGE)
@@ -25,20 +30,7 @@ if (SHOULD_BUILD_LIB_KOVECTORIMAGE)
 endif ()
 
 if (SHOULD_BUILD_LIB_KOPAGEAPP)
-    add_subdirectory( kopageapp )
-endif ()
-
-if(SHOULD_BUILD_LIB_KOPROPERTY)
-    add_subdirectory( koproperty ) # TODO move to independent place like kdesupport
-endif()
-
-if (SHOULD_BUILD_LIB_CALLIGRADB)
-    add_subdirectory( db ) # used by Kexi and Word's Biblio; TODO: remove when Predicate lib arrives
-endif ()
-
-# only build koreport if possible
-if (SHOULD_BUILD_LIB_KOREPORT)
-    add_subdirectory( koreport )
+    add_subdirectory( pageapp )
 endif ()
 
 if (SHOULD_BUILD_FEATURE_RDF)

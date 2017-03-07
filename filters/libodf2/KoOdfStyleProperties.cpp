@@ -22,13 +22,11 @@
 // Own
 #include "KoOdfStyleProperties.h"
 
-// KDE
-#include <kdebug.h>
-
 // odflib
 #include <KoXmlStreamReader.h>
 #include <KoXmlWriter.h>
 
+#include "Odf2Debug.h"
 
 // ----------------------------------------------------------------
 //                         private class
@@ -60,7 +58,7 @@ KoOdfStyleProperties::~KoOdfStyleProperties()
 
 QString KoOdfStyleProperties::attribute(const QString &property) const
 {
-    kDebug() << d->attributes;
+    debugOdf2 << d->attributes;
     return d->attributes.value(property, QString());
 }
 
@@ -108,7 +106,7 @@ bool KoOdfStyleProperties::readAttributes(KoXmlStreamReader &reader)
 {
     copyAttributes(reader, d->attributes);
 
-    //kDebug() << "read attributes: " << d->attributes;
+    //debugOdf2 << "read attributes: " << d->attributes;
 
     return true;
 }

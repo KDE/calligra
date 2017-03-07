@@ -26,9 +26,8 @@
 #include <QBuffer>
 #include <QImage>
 
-// KDE
-#include <klocale.h>
-#include <kdebug.h>
+// KF5
+#include <klocalizedstring.h>
 
 // Calligra
 #include <KoXmlNS.h>
@@ -42,6 +41,7 @@
 // 3D Shape
 #include "SceneObject.h"
 //#include "ThreedShapeConfigWidget.h"
+#include "ThreedDebug.h"
 
 
 ThreedShapeFactory::ThreedShapeFactory()
@@ -49,7 +49,7 @@ ThreedShapeFactory::ThreedShapeFactory()
 {
     setToolTip(i18n("Shape that displays a simple 3D scene."));
     //KIconLoader::global()->addAppDir("kchart");
-    setIconName(koIconNameCStr("x-shape-3d"));
+    setIconName(koIconName("x-shape-3d"));
     setLoadingPriority(1);
 
     // Tell the shape loader which tag we can store
@@ -73,7 +73,7 @@ KoShape *ThreedShapeFactory::createDefaultShape(KoDocumentResourceManager *docum
 {
     Q_UNUSED(documentResources);
 
-    kDebug(31000) << "Creating a 3d shape";
+    debugThreed << "Creating a 3d shape";
 
     SceneObject *defaultShape = new SceneObject(0, true);
     defaultShape->setShapeId(THREEDSHAPEID);

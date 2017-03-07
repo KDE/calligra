@@ -21,13 +21,11 @@
 #include "KoDocumentSectionDelegate.h"
 #include "KoDocumentSectionModel.h"
 
-#include <kglobal.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kiconloader.h>
 #include <ksharedconfig.h>
 
-#include <QtDebug>
 #include <QContextMenuEvent>
 #include <QHeaderView>
 #include <QHelpEvent>
@@ -39,7 +37,7 @@
 #include <QPainter>
 #include <QScrollBar>
 
-#ifdef Q_WS_X11
+#ifdef HAVE_X11
 #define DRAG_WHILE_DRAG_WORKAROUND
 #endif
 
@@ -62,7 +60,7 @@ public:
         , isDragging(false)
 #endif
     {
-        KSharedConfigPtr config = KGlobal::config();
+        KSharedConfigPtr config =  KSharedConfig::openConfig();
         KConfigGroup group = config->group("DocumentSectionView");
         mode = (DisplayMode) group.readEntry("DocumentSectionViewMode", (int)DetailedMode);
     }
@@ -102,7 +100,7 @@ void KoDocumentSectionView::setDisplayMode(DisplayMode mode)
 {
     if (d->mode != mode) {
         d->mode = mode;
-        KSharedConfigPtr config = KGlobal::config();
+        KSharedConfigPtr config =  KSharedConfig::openConfig();
         KConfigGroup group = config->group("DocumentSectionView");
         group.writeEntry("DocumentSectionViewMode", (int)mode);
         scheduleDelayedItemsLayout();
@@ -120,8 +118,8 @@ void KoDocumentSectionView::addPropertyActions(QMenu *menu, const QModelIndex &i
     for (int i = 0, n = list.count(); i < n; ++i) {
         if (list.at(i).isMutable) {
             PropertyAction *a = new PropertyAction(i, list.at(i), index, menu);
-            connect(a, SIGNAL(toggled(bool, const QPersistentModelIndex&, int)),
-                    this, SLOT(slotActionToggled(bool, const QPersistentModelIndex&, int)));
+            connect(a, SIGNAL(toggled(bool,QPersistentModelIndex,int)),
+                    this, SLOT(slotActionToggled(bool,QPersistentModelIndex,int)));
             menu->addAction(a);
         }
     }
@@ -220,8 +218,9 @@ void KoDocumentSectionView::currentChanged(const QModelIndex &current, const QMo
     }
 }
 
-void KoDocumentSectionView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+void KoDocumentSectionView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
 {
+    Q_UNUSED(roles);
     QTreeView::dataChanged(topLeft, bottomRight);
     for (int x = topLeft.row(); x <= bottomRight.row(); ++x) {
         for (int y = topLeft.column(); y <= bottomRight.column(); ++y) {
@@ -444,6 +443,3 @@ void KoDocumentSectionView::setDraggingFlag(bool flag)
 {
     m_draggingFlag = flag;
 }
-
-#include <KoDocumentSectionPropertyAction_p.moc>
-#include <KoDocumentSectionView.moc>

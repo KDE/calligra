@@ -309,6 +309,7 @@ protected Q_SLOTS:
     virtual void slotLayoutToBeChanged();
     virtual void slotLayoutChanged();
 
+    void projectDeleted();
 protected:
     Project *m_project;
     ScheduleManager *m_manager;

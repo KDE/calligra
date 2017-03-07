@@ -25,11 +25,7 @@
 #include "ToolDocker.h"
 
 #include <KoDockWidgetTitleBar.h>
-
 #include <KoIcon.h>
-
-#include <klocale.h>
-#include <kdebug.h>
 
 #include <QPointer>
 #include <QGridLayout>
@@ -49,10 +45,10 @@ public:
         : q(dock)
         , tabbed(false)
         , hasTitle(false)
-        , lockIcon(koIconName("object-locked"))
-        , unlockIcon(koIconName("object-unlocked"))
-        , tabIcon(koIconName("tab-new"))
-        , unTabIcon(koIconName("tab-close"))
+        , lockIcon(koIcon("object-locked"))
+        , unlockIcon(koIcon("object-unlocked"))
+        , tabIcon(koIcon("tab-new"))
+        , unTabIcon(koIcon("tab-close"))
     {
     }
 
@@ -66,10 +62,10 @@ public:
     Qt::DockWidgetArea dockingArea;
     bool tabbed :1;
     bool hasTitle :1;
-    KIcon lockIcon;
-    KIcon unlockIcon;
-    KIcon tabIcon;
-    KIcon unTabIcon;
+    QIcon lockIcon;
+    QIcon unlockIcon;
+    QIcon tabIcon;
+    QIcon unTabIcon;
     QToolButton *lockButton;
     QToolButton *tabButton;
 

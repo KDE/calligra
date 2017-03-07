@@ -13,14 +13,15 @@ set(dropbox_plugin_SRCS
     controller.cc
     dropboxplugin.cpp)
 
-automoc4_add_library(calligrageminidropboxplugin MODULE ${dropbox_plugin_SRCS} ${dropbox_lib_SRCS})
+add_library(calligrageminidropboxplugin SHARED ${dropbox_plugin_SRCS} ${dropbox_lib_SRCS})
 
 target_link_libraries(calligrageminidropboxplugin
-    ${QT_QTDECLARATIVE_LIBRARY}
-    ${QT_QTGUI_LIBRARIES}
-    ${QT_QTCORE_LIBRARIES}
-    ${QT_QTNETWORK_LIBRARIES}
+    Qt5::Core
+    Qt5::Gui
+    Qt5::Widgets
+    Qt5::Qml
+    Qt5::Quick
 )
 
-install(TARGETS calligrageminidropboxplugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/Calligra/Gemini/Dropbox)
-install(FILES   qmldir                      DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/Calligra/Gemini/Dropbox)
+install(TARGETS calligrageminidropboxplugin DESTINATION ${QML_INSTALL_DIR}/Calligra/Gemini/Dropbox)
+install(FILES   qmldir                      DESTINATION ${QML_INSTALL_DIR}/Calligra/Gemini/Dropbox)

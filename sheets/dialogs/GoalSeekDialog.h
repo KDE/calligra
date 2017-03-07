@@ -26,7 +26,7 @@
 #ifndef CALLIGRA_SHEETS_GOALSEEK_DIALOG
 #define CALLIGRA_SHEETS_GOALSEEK_DIALOG
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class QCloseEvent;
 
@@ -40,7 +40,7 @@ class Selection;
  * \ingroup UI
  * Dialog to seek a specific value for a set of parameter values.
  */
-class GoalSeekDialog : public KDialog
+class GoalSeekDialog : public KoDialog
 {
     Q_OBJECT
 
@@ -55,7 +55,7 @@ protected Q_SLOTS:
     void textChanged();
 
 protected Q_SLOTS: // reimplementations
-    // KDialog interface
+    // KoDialog interface
     virtual void accept();
     virtual void reject();
 

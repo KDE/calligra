@@ -22,10 +22,12 @@
 #include "CellTool.h"
 #include "CellToolFactory.h"
 
+#include <KSharedConfig>
+#include <KConfigGroup>
+#include <KPluginFactory>
 #include <kglobal.h>
-#include <kplugininfo.h>
-#include <kservicetypetrader.h>
 
+#include <KoPluginLoader.h>
 #include <KoToolRegistry.h>
 
 using namespace Calligra::Sheets;
@@ -59,40 +61,58 @@ ToolRegistry* ToolRegistry::instance()
 
 void ToolRegistry::loadTools()
 {
-    const QString serviceType = QLatin1String("CalligraSheets/Plugin");
-    const QString query = QLatin1String("([X-CalligraSheets-InterfaceVersion] == 0) and "
-                                        "([X-KDE-PluginInfo-Category] == 'Tool')");
-    const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
-    const KConfigGroup moduleGroup = KGlobal::config()->group("Plugins");
-    const KPluginInfo::List pluginInfos = KPluginInfo::fromServices(offers, moduleGroup);
-    foreach(KPluginInfo pluginInfo, pluginInfos) {
-        KPluginFactory *factory = KPluginLoader(*pluginInfo.service()).factory();
+    const QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("calligrasheets/tools"));
+    debugSheetsFormula << offers.count() << "tools found.";
+
+    const KConfigGroup pluginsConfigGroup = KSharedConfig::openConfig()->group("Plugins");
+    foreach (QPluginLoader *loader, offers) {
+        QJsonObject metaData = loader->metaData().value("MetaData").toObject();
+        int version = metaData.value("X-CalligraSheets-InterfaceVersion").toInt();
+        if (version != 0) {
+            debugSheetsFormula << "Skipping" << loader->fileName() << ", because interface version is" << version;
+            continue;
+        }
+        QJsonObject pluginData = metaData.value("KPlugin").toObject();
+        QString category = pluginData.value("Category").toString();
+        if (category != "Tool") {
+            debugSheetsFormula << "Skipping" << loader->fileName() << ", because category is " << category;
+            continue;
+        }
+
+        KPluginFactory* factory = qobject_cast<KPluginFactory *>(loader->instance());
         if (!factory) {
-            kDebug(36002) << "Unable to create plugin factory for" << pluginInfo.name();
+            debugSheetsFormula << "Unable to create plugin factory for" << loader->fileName();
             continue;
         }
-        CellToolFactory* toolFactory = new CellToolFactory("KSpreadCellToolId");
+        QObject *object = factory->create<QObject>(this, QVariantList());
+        CellToolFactory *toolFactory = dynamic_cast<CellToolFactory*>(object);
         if (!toolFactory) {
-            kDebug(36002) << "Unable to create tool factory for" << pluginInfo.name();
+            debugSheetsFormula << "Unable to create tool factory for" << loader->fileName();
             continue;
         }
-        pluginInfo.load(); // load activation state
-        if (pluginInfo.isPluginEnabled()) {
+        const QString pluginConfigEnableKey = pluginData.value("Id").toString() + QLatin1String("Enabled");
+        const bool isPluginEnabled = pluginsConfigGroup.hasKey(pluginConfigEnableKey) ?
+            pluginsConfigGroup.readEntry(pluginConfigEnableKey, true) :
+            pluginData.value("EnabledByDefault").toBool(true);
+
+        if (isPluginEnabled) {
             // Tool already registered?
             if (KoToolRegistry::instance()->contains(toolFactory->id())) {
                 continue;
             }
-            toolFactory->setIconName(pluginInfo.service()->icon());
+
+            toolFactory->setIconName(pluginData.value("Icon").toString());
             toolFactory->setPriority(10);
-            toolFactory->setToolTip(pluginInfo.service()->comment());
+            toolFactory->setToolTip(pluginData.value("Description").toString());
             KoToolRegistry::instance()->add(toolFactory);
         } else {
-            // Tool not registered?
-            if (!KoToolRegistry::instance()->contains(toolFactory->id())) {
-                continue;
-            }
-            delete KoToolRegistry::instance()->value(toolFactory->id());
-            KoToolRegistry::instance()->remove(toolFactory->id());
+           // Tool not registered?
+           if (!KoToolRegistry::instance()->contains(toolFactory->id())) {
+               continue;
+           }
+           delete KoToolRegistry::instance()->value(toolFactory->id());
+           KoToolRegistry::instance()->remove(toolFactory->id());
         }
     }
+    qDeleteAll(offers);
 }

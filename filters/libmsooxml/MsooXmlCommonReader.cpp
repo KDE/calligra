@@ -80,7 +80,7 @@ void MsooXmlCommonReader::setupParagraphStyle()
     }
     body->addAttribute("text:style-name", currentParagraphStyleName);
     m_paragraphStyleNameWritten = true;
-//kDebug() << "currentParagraphStyleName:" << currentParagraphStyleName;
+//debugMsooXml << "currentParagraphStyleName:" << currentParagraphStyleName;
 }
 
 class MediaTypeMap : public QMap<QByteArray, QByteArray>
@@ -123,6 +123,8 @@ void MsooXmlCommonReader::popCurrentDrawStyle()
     m_drawStyleStack.removeLast();
 }
 
+Q_GLOBAL_STATIC(MediaTypeMap, g_mediaTypes)
+
 void MsooXmlCommonReader::addManifestEntryForFile(const QString& path)
 {
     if (path.isEmpty())
@@ -134,7 +136,6 @@ void MsooXmlCommonReader::addManifestEntryForFile(const QString& path)
     }
     const int lastDot = path.lastIndexOf(QLatin1Char('.'));
     const QByteArray ext(path.mid(lastDot + 1).toLatin1().toLower());
-    K_GLOBAL_STATIC(MediaTypeMap, g_mediaTypes)
     manifest->addManifestEntry(path, g_mediaTypes->value(ext));
 }
 

@@ -27,8 +27,6 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
-#include <klocale.h>
-
 using namespace Calligra::Sheets;
 
 // prototypes
@@ -47,7 +45,7 @@ Value func_dvarp(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_getpivotdata(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("database", DatabaseModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreaddatabasemodule.json", DatabaseModule)
 
 
 DatabaseModule::DatabaseModule(QObject* parent, const QVariantList&)
@@ -558,4 +556,4 @@ Value func_getpivotdata(valVector args, ValueCalc *calc, FuncExtra *)
     return database.element(fieldIndex, row);
 }
 
-#include "DatabaseModule.moc"
+#include "database.moc"

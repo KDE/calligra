@@ -18,8 +18,6 @@
 */
 #include "TestUtil.h"
 
-#include <klocale.h>
-
 #include "TestKspreadCommon.h"
 #include <Util.h>
 
@@ -47,5 +45,3 @@ void TestUtil::testDecodeFormula()
 }
 
 QTEST_MAIN(TestUtil)
-
-#include "TestUtil.moc"

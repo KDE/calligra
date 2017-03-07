@@ -20,11 +20,11 @@
 // Local
 #include "Factory.h"
 
-#include <kdebug.h>
-#include <kcomponentdata.h>
-#include <kstandarddirs.h>
+#include "SheetsDebug.h"
 
 #include <KoDockRegistry.h>
+#include <KoComponentData.h>
+#include <KoResourcePaths.h>
 
 #include "AboutData.h"
 #include "Doc.h"
@@ -33,21 +33,21 @@
 
 using namespace Calligra::Sheets;
 
-KComponentData* Factory::s_global = 0;
+KoComponentData* Factory::s_global = 0;
 KAboutData* Factory::s_aboutData = 0;
 
-Factory::Factory(QObject* parent)
-        : KPluginFactory(*aboutData(), parent)
+Factory::Factory()
+    : KPluginFactory()
 {
-    //kDebug(36001) <<"Factory::Factory()";
+    //debugSheets <<"Factory::Factory()";
     // Create our instance, so that it becomes KGlobal::instance if the
-    // main app is KSpread.
+    // main app is Calligra Sheets.
     (void)global();
 }
 
 Factory::~Factory()
 {
-    //kDebug(36001) <<"Factory::~Factory()";
+    //debugSheets <<"Factory::~Factory()";
     delete s_aboutData;
     s_aboutData = 0;
     delete s_global;
@@ -71,18 +71,15 @@ KAboutData* Factory::aboutData()
     return s_aboutData;
 }
 
-const KComponentData &Factory::global()
+const KoComponentData &Factory::global()
 {
     if (!s_global) {
-        s_global = new KComponentData(aboutData());
+        s_global = new KoComponentData(*aboutData());
 
-        s_global->dirs()->addResourceType("functions", "data", "sheets/functions/");
-        s_global->dirs()->addResourceType("sheet-styles", "data", "sheets/sheetstyles/");
+        KoResourcePaths::addResourceType("sheet-styles", "data", "calligrasheets/sheetstyles/");
 
         KoDockRegistry *dockRegistry = KoDockRegistry::instance();
         dockRegistry->add(new CellEditorDockerFactory);
     }
     return *s_global;
 }
-
-#include "Factory.moc"

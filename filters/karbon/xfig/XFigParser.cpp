@@ -30,7 +30,7 @@
 #include <QFont>
 #include <QScopedPointer>
 
-#include <kdebug.h>
+#include <QDebug>
 
 
 enum XFig3_2TextFlag {
@@ -447,7 +447,7 @@ XFigParser::XFigParser( QIODevice* device )
             }
         } else {
             // should not occur
-            kDebug() << "unknown object type:" << objectCode;
+            qWarning() << "unknown object type:" << objectCode;
         }
     }
 
@@ -468,7 +468,7 @@ XFigParser::parseHeader()
     const QString versionString = m_XFigStreamLineReader.line();
     if (! versionString.startsWith(QLatin1String("#FIG 3.")) ||
         (versionString.length() < 8)) {
-        kDebug() << "ERROR: no xfig file or wrong header";
+        qWarning() << "ERROR: no xfig file or wrong header";
         return false;
     }
 
@@ -478,7 +478,7 @@ XFigParser::parseHeader()
     } else if (minorVersion == QLatin1Char('1')) {
         m_XFigVersion = 310;
     } else {
-        kDebug() << "ERROR: unsupported xfig version";
+        qWarning() << "ERROR: unsupported xfig version";
         return false;
     }
 
@@ -494,9 +494,9 @@ XFigParser::parseHeader()
                 (orientationString == QLatin1String("Landscape")) ? XFigPageLandscape :
                 (orientationString == QLatin1String("Portrait")) ?  XFigPagePortrait :
                                                                     XFigPageOrientationUnknown;
-qDebug()<<"orientation:"<<orientationString<<pageOrientation;
+// qDebug()<<"orientation:"<<orientationString<<pageOrientation;
             if (pageOrientation == XFigPageOrientationUnknown)
-                kDebug() << "ERROR: invalid orientation";
+                qWarning() << "ERROR: invalid orientation";
 
             m_Document->setPageOrientation( pageOrientation );
         } else {
@@ -515,9 +515,9 @@ qDebug()<<"orientation:"<<orientationString<<pageOrientation;
                 (unitTypeString == QLatin1String("Metric")) ? XFigUnitMetric :
                 (unitTypeString == QLatin1String("Inches")) ? XFigUnitInches :
                                                             XFigUnitTypeUnknown;
-    qDebug() << "unittype:"<<unitTypeString<<unitType;
+//     qDebug() << "unittype:"<<unitTypeString<<unitType;
             if (unitType == XFigUnitTypeUnknown)
-                kDebug() << "ERROR: invalid units";
+                qWarning() << "ERROR: invalid units";
 
             m_Document->setUnitType( unitType );
         } else {
@@ -528,7 +528,7 @@ qDebug()<<"orientation:"<<orientationString<<pageOrientation;
             if (m_XFigStreamLineReader.readNextLine()) {
                 const QString pageSizeString = m_XFigStreamLineReader.line().trimmed();
                 const XFigPageSizeType pageSizeType = ::pageSizeType(pageSizeString);
-qDebug() << "pagesize:"<<pageSizeString<<pageSizeType;
+// qDebug() << "pagesize:"<<pageSizeString<<pageSizeType;
                 m_Document->setPageSizeType(pageSizeType);
             } else {
                 break;
@@ -538,7 +538,9 @@ qDebug() << "pagesize:"<<pageSizeString<<pageSizeType;
             if (m_XFigStreamLineReader.readNextLine()) {
                 const QString magnificationString = m_XFigStreamLineReader.line();
                 const float magnification = magnificationString.toFloat();
-qDebug() << "magnification:"<<magnificationString<<magnification;
+                // TODO
+                Q_UNUSED(magnification);
+// qDebug() << "magnification:"<<magnificationString<<magnification;
             } else {
                 break;
             }
@@ -558,7 +560,9 @@ qDebug() << "magnification:"<<magnificationString<<magnification;
             if (m_XFigStreamLineReader.readNextLine()) {
                 const QString transparentColorString = m_XFigStreamLineReader.line();
                 const int transparentColor = transparentColorString.toInt();
-qDebug() << "transparentColor:"<<transparentColorString<<transparentColor;
+                // TODO
+                Q_UNUSED(transparentColor);
+// qDebug() << "transparentColor:"<<transparentColorString<<transparentColor;
             } else {
                 break;
             }
@@ -580,7 +584,7 @@ qDebug() << "transparentColor:"<<transparentColorString<<transparentColor;
             m_Document->setResolution(resolution);
             m_Document->setComment(m_XFigStreamLineReader.comment());
 
-    qDebug() << "resolution+coordinateSystemType:"<<resolution<<coordinateSystemType;
+//     qDebug() << "resolution+coordinateSystemType:"<<resolution<<coordinateSystemType;
         } else {
             break;
         }
@@ -627,7 +631,7 @@ void XFigParser::parseColorObject()
     QTextStream textStream(&line, QIODevice::ReadOnly);
     textStream >> colorNumber;
     if ((colorNumber < 32) || (543 < colorNumber)) {
-        kDebug() << "bad colorNumber:" << colorNumber;
+        qWarning() << "bad colorNumber:" << colorNumber;
         return;
     }
 
@@ -643,7 +647,7 @@ void XFigParser::parseColorObject()
 XFigAbstractObject*
 XFigParser::parseArc()
 {
-qDebug()<<"arc";
+// qDebug()<<"arc";
 
     QScopedPointer<XFigArcObject> arcObject(new XFigArcObject);
 
@@ -707,7 +711,7 @@ qDebug()<<"arc";
 XFigAbstractObject*
 XFigParser::parseEllipse()
 {
-qDebug()<<"ellipse";
+// qDebug()<<"ellipse";
 
     QScopedPointer<XFigEllipseObject> ellipseObject(new XFigEllipseObject);
 
@@ -754,7 +758,7 @@ qDebug()<<"ellipse";
 XFigAbstractObject*
 XFigParser::parsePolyline()
 {
-qDebug()<<"polyline";
+// qDebug()<<"polyline";
 
     QScopedPointer<XFigAbstractPolylineObject> abstractPolylineObject(0);
 
@@ -771,8 +775,8 @@ qDebug()<<"polyline";
         >> depth >> pen_style >> area_fill >> style_val >> join_style
         >> cap_style >> radius >> forward_arrow >> backward_arrow
         >> npoints;
-qDebug() << sub_type << line_style << thickness << pen_color << fill_color << depth << pen_style
-         << area_fill << style_val << join_style << cap_style << radius << forward_arrow << backward_arrow << npoints;
+// qDebug() << sub_type << line_style << thickness << pen_color << fill_color << depth << pen_style
+//          << area_fill << style_val << join_style << cap_style << radius << forward_arrow << backward_arrow << npoints;
 
     // ignore line with useless point number
     if (npoints < 1) {
@@ -846,7 +850,7 @@ qDebug() << sub_type << line_style << thickness << pen_color << fill_color << de
     // check box:
     if ((abstractPolylineObject->typeId()==XFigAbstractObject::BoxId) &&
         (points.count()!=5)) {
-        kDebug() << "box object does not have 5 points, but points:" << points.count();
+        qWarning() << "box object does not have 5 points, but points:" << points.count();
         return 0;
     }
     abstractPolylineObject->setPoints(points);
@@ -869,7 +873,7 @@ qDebug() << sub_type << line_style << thickness << pen_color << fill_color << de
 XFigAbstractObject*
 XFigParser::parseSpline()
 {
-qDebug()<<"spline";
+// qDebug()<<"spline";
 
     qint32 sub_type, line_style, thickness, pen_color, fill_color, depth,
            pen_style, area_fill, cap_style, forward_arrow, backward_arrow, npoints;
@@ -882,8 +886,8 @@ qDebug()<<"spline";
         >> sub_type >> line_style >> thickness >> pen_color >> fill_color
         >>  depth >> pen_style >> area_fill >> style_val >> cap_style
         >> forward_arrow >> backward_arrow >> npoints;
-qDebug() << sub_type << line_style << thickness << pen_color << fill_color << depth << pen_style
-         << area_fill << style_val << cap_style << forward_arrow << backward_arrow << npoints;
+// qDebug() << sub_type << line_style << thickness << pen_color << fill_color << depth << pen_style
+//          << area_fill << style_val << cap_style << forward_arrow << backward_arrow << npoints;
 
     // ignore line with useless point number
     if (npoints < 1) {
@@ -959,7 +963,7 @@ qDebug() << sub_type << line_style << thickness << pen_color << fill_color << de
 XFigAbstractObject*
 XFigParser::parseText()
 {
-qDebug()<<"text";
+// qDebug()<<"text";
 
     QScopedPointer<XFigTextObject> textObject(new XFigTextObject);
 
@@ -1070,7 +1074,7 @@ qDebug()<<"text";
 XFigAbstractObject*
 XFigParser::parseCompoundObject()
 {
-qDebug()<<"compound";
+// qDebug()<<"compound";
 
     QScopedPointer<XFigCompoundObject> compoundObject(new XFigCompoundObject);
 
@@ -1111,10 +1115,10 @@ qDebug()<<"compound";
             }
         } else {
             // should not occur
-            kDebug() << "unknown object type:" << objectCode;
+            qWarning() << "unknown object type:" << objectCode;
         }
     }
-qDebug()<<"compound end";
+// qDebug()<<"compound end";
 
     return compoundObject.take();
 }

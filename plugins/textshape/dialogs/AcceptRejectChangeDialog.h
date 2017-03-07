@@ -20,7 +20,6 @@
 #ifndef __ACCEPT_REJECT_CHANGE_DIALOG_H__
 #define __ACCEPT_REJECT_CHANGE_DIALOG_H__
 
-#include <QtGui>
 #include <ui_AcceptRejectChangeDialog.h>
 
 class KoChangeTracker;

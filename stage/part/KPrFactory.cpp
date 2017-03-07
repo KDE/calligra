@@ -23,29 +23,26 @@
 #include "KPrAboutData.h"
 #include "KPrPart.h"
 
-#include <kcomponentdata.h>
-
+#include <KoComponentData.h>
 #include <KoPluginLoader.h>
 
-KComponentData* KPrFactory::s_instance = 0;
+KoComponentData* KPrFactory::s_instance = 0;
 KAboutData* KPrFactory::s_aboutData = 0;
 
 static int factoryCount = 0;
 
-KPrFactory::KPrFactory( QObject* parent, const char* /*name*/ )
-    : KPluginFactory( *aboutData(), parent )
+KPrFactory::KPrFactory()
+    : KPluginFactory()
 {
     (void)componentData();
 
     if (factoryCount == 0) {
 
         // Load the KoPA-specific tools
-        KoPluginLoader::instance()->load(QLatin1String("CalligraPageApp/Tool"),
-                                         QLatin1String("[X-KoPageApp-Version] == 28"));
+        KoPluginLoader::load(QStringLiteral("calligra/pageapptools"));
 
         // Load the Stage-specific tools
-        KoPluginLoader::instance()->load(QLatin1String("CalligraStage/Tool"),
-                                         QLatin1String("[X-KPresenter-Version] == 28"));
+        KoPluginLoader::load(QStringLiteral("calligrastage/tools"));
     }
     factoryCount++;
 }
@@ -65,7 +62,7 @@ QObject* KPrFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, Q
     Q_UNUSED( keyword );
     KPrPart *part = new KPrPart(parent);
     KPrDocument *doc = new KPrDocument(part);
-    doc->setDefaultStylesResourcePath(QLatin1String("stage/styles/"));
+    doc->setDefaultStylesResourcePath(QLatin1String("calligrastage/styles/"));
     part->setDocument(doc);
     return part;
 }
@@ -78,13 +75,11 @@ KAboutData* KPrFactory::aboutData()
     return s_aboutData;
 }
 
-const KComponentData &KPrFactory::componentData()
+const KoComponentData &KPrFactory::componentData()
 {
     if ( !s_instance )
     {
-        s_instance = new KComponentData(aboutData());
+        s_instance = new KoComponentData(*aboutData());
     }
     return *s_instance;
 }
-
-#include "KPrFactory.moc"

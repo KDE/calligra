@@ -29,13 +29,11 @@
 #include "kptnode.h"
 #include "kptganttitemdelegate.h"
 
-#include "kdganttglobal.h"
+#include <KGanttGlobal>
 
 #include <QGraphicsView>
 #include <QGraphicsItem>
 #include <QTimer>
-
-#include <klocale.h>
 
 #include <kpagedialog.h>
 
@@ -43,7 +41,6 @@ class KoPageLayoutWidget;
 
 class QModelIndex;
 
-class KAction;
 
 namespace KPlato
 {
@@ -278,7 +275,7 @@ private:
     GanttItemDelegate m_delegate;
     bool m_editable;
     int m_nodetype;
-    KDGantt::ItemType m_itemtype;
+    KGantt::ItemType m_itemtype;
 };
 
 //-----------------------
@@ -566,7 +563,7 @@ private Q_SLOTS:
     void slotDeleteTask();
 
 private:
-    void edit( QModelIndex index );
+    void edit( const QModelIndex &index );
 
 private:
     DependencyView *m_view;
@@ -576,11 +573,11 @@ private:
 
     KActionMenu *menuAddTask;
     KActionMenu *menuAddSubTask;
-    KAction *actionAddTask;
-    KAction *actionAddMilestone;
-    KAction *actionAddSubtask;
-    KAction *actionAddSubMilestone;
-    KAction *actionDeleteTask;
+    QAction *actionAddTask;
+    QAction *actionAddMilestone;
+    QAction *actionAddSubtask;
+    QAction *actionAddSubMilestone;
+    QAction *actionDeleteTask;
 };
 
 

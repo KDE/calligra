@@ -23,12 +23,19 @@
  *
  */
 
+// Own
 #include "XlsxXmlChartReader.h"
 
+// libodf2
 #include "Charting.h"
-#include "ChartExport.h"
-#include "XlsxUtils.h"
+
+// libmso
+#include "XlsUtils.h"
 #include "NumberFormatParser.h"
+
+// The Xlsx import filter
+#include "XlsxChartOdfWriter.h"
+
 
 #define MSOOXML_CURRENT_NS "c"
 #define MSOOXML_CURRENT_CLASS XlsxXmlChartReader
@@ -37,6 +44,8 @@
 #include <MsooXmlReader_p.h>
 #include <MsooXmlUtils.h>
 
+// QT5TODO: shared debug definition for all filters using this source file
+#include <QDebug>
 #include <QFontMetricsF>
 #include <QDateTime>
 
@@ -369,18 +378,19 @@ QString columnName(uint column)
 
 
 
-XlsxXmlChartReaderContext::XlsxXmlChartReaderContext(KoStore* _storeout, ChartExport* _chartExport)
+XlsxXmlChartReaderContext::XlsxXmlChartReaderContext(KoStore* _storeout,
+						     XlsxChartOdfWriter* _chartWriter)
     : MSOOXML::MsooXmlReaderContext()
     , m_storeout(_storeout)
-    , m_chart(_chartExport->chart())
-    , m_chartExport(_chartExport)
+    , m_chart(_chartWriter->chart())
+    , m_chartWriter(_chartWriter)
 {
 }
 
 XlsxXmlChartReaderContext::~XlsxXmlChartReaderContext()
 {
     delete m_chart;
-    delete m_chartExport;
+    delete m_chartWriter;
 }
 
 XlsxXmlChartReader::XlsxXmlChartReader(KoOdfWriters *writers)
@@ -466,26 +476,26 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
     // static is fine here cause we only need to take care that that number is unique in the
     // exported ODS file and do not take if the number is continuous or whatever.
     static int chartNumber = 0;
-    m_context->m_chartExport->m_href = QString("Chart%1").arg(++chartNumber);
+    m_context->m_chartWriter->m_href = QString("Chart%1").arg(++chartNumber);
 
-    Charting::Chart* c = m_context->m_chart;
+    KoChart::Chart* c = m_context->m_chart;
     if (!c->m_cellRangeAddress.isNull() ) {
-        m_context->m_chartExport->m_cellRangeAddress.clear();
+        m_context->m_chartWriter->m_cellRangeAddress.clear();
         if (!c->m_sheetName.isEmpty())
-            m_context->m_chartExport->m_cellRangeAddress += c->m_sheetName + '.';
-        m_context->m_chartExport->m_cellRangeAddress += columnName(c->m_cellRangeAddress.left()) + QString::number(c->m_cellRangeAddress.top()) + ":" +
+            m_context->m_chartWriter->m_cellRangeAddress += c->m_sheetName + '.';
+        m_context->m_chartWriter->m_cellRangeAddress += columnName(c->m_cellRangeAddress.left()) + QString::number(c->m_cellRangeAddress.top()) + ":" +
                                                         columnName(c->m_cellRangeAddress.right()) + QString::number(c->m_cellRangeAddress.bottom());
     }
 
     if (m_currentSeries) {
-        m_context->m_chartExport->m_notifyOnUpdateOfRanges = m_currentSeries->m_valuesCellRangeAddress; //m_cellRangeAddress
+        m_context->m_chartWriter->m_notifyOnUpdateOfRanges = m_currentSeries->m_valuesCellRangeAddress; //m_cellRangeAddress
     }
 
     // the index will by written by the XlsxXmlWorksheetReader
-    //m_context->m_chartExport->saveIndex(body);
+    //m_context->m_chartWriter->saveIndex(body);
 
     // write the embedded object file
-    m_context->m_chartExport->saveContent(m_context->m_storeout, manifest);
+    m_context->m_chartWriter->saveContent(m_context->m_storeout, manifest);
 
     m_context = 0;
     return KoFilter::OK;
@@ -584,14 +594,14 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_valAx()
     // This sounds hacky (and it certainly is) but that's how OO.org does it too.
     bool xAxisAlreadyDefined = !m_context->m_chart->m_verticalCellRangeAddress.isEmpty();
     if (!xAxisAlreadyDefined) {
-        foreach(Charting::Axis* axis, m_context->m_chart->m_axes) {
-            if (axis->m_type == Charting::Axis::HorizontalValueAxis) {
+        foreach(KoChart::Axis* axis, m_context->m_chart->m_axes) {
+            if (axis->m_type == KoChart::Axis::HorizontalValueAxis) {
                 xAxisAlreadyDefined = true;
                 break;
             }
         }
     }
-    Charting::Axis* axis = new Charting::Axis( xAxisAlreadyDefined ? Charting::Axis::VerticalValueAxis : Charting::Axis::HorizontalValueAxis );
+    KoChart::Axis* axis = new KoChart::Axis( xAxisAlreadyDefined ? KoChart::Axis::VerticalValueAxis : KoChart::Axis::HorizontalValueAxis );
 
     m_context->m_chart->m_axes.push_back( axis );
     while (!atEnd()) {
@@ -602,14 +612,14 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_valAx()
 //                   const QXmlStreamAttributes attrs(attributes());
 //                   TRY_READ_ATTR_WITHOUT_NS(val)
 //                   if ( val == QLatin1String( "b" ) ){
-//                       axis->m_type = Charting::Axis::HorizontalValueAxis;
+//                       axis->m_type = KoChart::Axis::HorizontalValueAxis;
 //                   }
 //                   else if ( val == QLatin1String( "l" ) ){
 //                   }
 //             }
             }
             else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(majorGridlines) ) ) {
-                axis->m_majorGridlines = Charting::Axis::Gridline( Charting::LineFormat( Charting::LineFormat::Solid ) );
+                axis->m_majorGridlines = KoChart::Axis::Gridline( KoChart::LineFormat( KoChart::LineFormat::Solid ) );
             }
             else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(numFmt) ) ) {
                 const QXmlStreamAttributes attrs(attributes());
@@ -628,7 +638,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_catAx()
     READ_PROLOGUE
     // category-axis or date-axis are always x-axis. They are only defined for the case the
     // x-axis itself defines a category. If not then the x-axis will be defined via read_valAx.
-    Charting::Axis* axis = new Charting::Axis( Charting::Axis::HorizontalValueAxis );
+    KoChart::Axis* axis = new KoChart::Axis( KoChart::Axis::HorizontalValueAxis );
     m_context->m_chart->m_axes.push_back( axis );
     while (!atEnd()) {
         readNext();
@@ -643,7 +653,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_catAx()
 //                   }
             }
             else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(majorGridlines) ) ) {
-                  axis->m_majorGridlines = Charting::Axis::Gridline( Charting::LineFormat( Charting::LineFormat::Solid ) );
+                  axis->m_majorGridlines = KoChart::Axis::Gridline( KoChart::LineFormat( KoChart::LineFormat::Solid ) );
             }
             ELSE_TRY_READ_IF(scaling)
         }
@@ -657,7 +667,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_scaling()
 {
     READ_PROLOGUE
     Q_ASSERT(!m_context->m_chart->m_axes.isEmpty());
-    Charting::Axis* axis = m_context->m_chart->m_axes.last();
+    KoChart::Axis* axis = m_context->m_chart->m_axes.last();
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
@@ -724,7 +734,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_plotArea()
 {
     m_areaContext = PlotArea;
     if (!m_context->m_chart->m_plotArea) {
-        m_context->m_chart->m_plotArea = new Charting::PlotArea();
+        m_context->m_chart->m_plotArea = new KoChart::PlotArea();
     }
     READ_PROLOGUE
     while (!atEnd()) {
@@ -942,12 +952,12 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_chartText_Tx()
                     state = isStartElement() ? InRichText : Start;
                 break;
             case InStrRef: // plaintext within a series
-//                if (isStartElement() && !m_currentSeriesData->m_datasetValue.contains(Charting::Value::SeriesLegendOrTrendlineName)) {
+//                if (isStartElement() && !m_currentSeriesData->m_datasetValue.contains(KoChart::Value::SeriesLegendOrTrendlineName)) {
 //                    if (qualifiedName() == QLatin1String(QUALIFIED_NAME(f))) {
-//                        Charting::Value* v = new Charting::Value(Charting::Value::SeriesLegendOrTrendlineName, Charting::Value::CellRange, readElementText());
+//                        KoChart::Value* v = new KoChart::Value(KoChart::Value::SeriesLegendOrTrendlineName, KoChart::Value::CellRange, readElementText());
 //                        m_currentSeriesData->m_datasetValue[v->m_dataId] = v;
 //                    } else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(v))) {
-//                        Charting::Value* v = new Charting::Value(Charting::Value::SeriesLegendOrTrendlineName, Charting::Value::TextOrValue, readElementText());
+//                        KoChart::Value* v = new KoChart::Value(KoChart::Value::SeriesLegendOrTrendlineName, KoChart::Value::TextOrValue, readElementText());
 //                        m_currentSeriesData->m_datasetValue[v->m_dataId] = v;
 //                    }
 //                }
@@ -982,7 +992,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_chartText_Tx()
                     BREAK_IF_END_OF(rich)
                 }
                 if(!result.isEmpty())
-                    m_context->m_chart->m_texts << new Charting::Text(result);
+                    m_context->m_chart->m_texts << new KoChart::Text(result);
                 state = Start;
                 break;
         }
@@ -1089,7 +1099,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_legend()
 {
     READ_PROLOGUE
     if (!m_context->m_chart->m_legend) {
-        m_context->m_chart->m_legend = new Charting::Legend();
+        m_context->m_chart->m_legend = new KoChart::Legend();
     }
     while (!atEnd()) {
         readNext();
@@ -1267,8 +1277,8 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
     int level = 0;
     bool readingGradient = false;
     bool readingGradientStop = false;
-    Charting::Gradient* gradient = NULL;
-    Charting::Gradient::GradientStop currentStop;
+    KoChart::Gradient* gradient = nullptr;
+    KoChart::Gradient::GradientStop currentStop;
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
@@ -1281,7 +1291,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
             if (level == 1)
                 state = isStartElement() ? InFill : Start;
         } else if (qualifiedName() == "a:noFill") {
-            m_currentShapeProperties->lineFill.setType( Charting::Fill::None );
+            m_currentShapeProperties->lineFill.setType( KoChart::Fill::None );
             if (level == 1)
                 state = isStartElement() ? NoFill : Start;
         } else if ((state == NoFill || state == InFill) && qualifiedName() == "a:srgbClr") {
@@ -1292,7 +1302,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
                     if ( readingGradientStop ) {
                         currentStop.knownColorValue = QColor( val );
                     } else {
-                        Charting::AreaFormat *areaFormat = new Charting::AreaFormat(QColor(val), QColor(), state == InFill);
+                        KoChart::AreaFormat *areaFormat = new KoChart::AreaFormat(QColor(val), QColor(), state == InFill);
                         if ( m_areaContext == ChartArea )
                             m_context->m_chart->m_areaFormat = areaFormat;
                         else
@@ -1309,7 +1319,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
                     if ( readingGradientStop ) {
                         currentStop.knownColorValue = QColor( val );
                     } else {
-                        Charting::AreaFormat *areaFormat = new Charting::AreaFormat(QColor(val), QColor(), state == InFill);
+                        KoChart::AreaFormat *areaFormat = new KoChart::AreaFormat(QColor(val), QColor(), state == InFill);
                         if ( m_areaContext == ChartArea ) {
                             m_context->m_chart->m_areaFormat = areaFormat;
                         } else {
@@ -1337,7 +1347,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
         } else if ( qualifiedName() == "a:gsLst" ) {
             if ( isStartElement() ) {
                 readingGradient = true;
-                gradient =  new Charting::Gradient;
+                gradient =  new KoChart::Gradient;
             } else if ( isEndElement() ) {
                 readingGradient = false;
                 switch ( m_areaContext ) {
@@ -1348,7 +1358,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
                       m_context->m_chart->m_fillGradient = gradient;
                       break;
                 }
-                gradient = NULL;
+                gradient = nullptr;
             }
         } else if ( qualifiedName() == "a:gs" && readingGradient ) {
             if ( isStartElement() ) {
@@ -1388,7 +1398,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
             if ( !ang.isEmpty() )
                 gradient->angle = ang.toDouble() / 60000.0;
         } else if ( qualifiedName() == "a:noFill" ) {
-            m_currentShapeProperties->lineFill.setType( Charting::Fill::None );
+            m_currentShapeProperties->lineFill.setType( KoChart::Fill::None );
         }
     }
     READ_EPILOGUE
@@ -1412,7 +1422,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_pieChart()
 {
     if(!m_context->m_chart->m_impl) {
-        m_context->m_chart->m_impl = new Charting::PieImpl();
+        m_context->m_chart->m_impl = new KoChart::PieImpl();
     }
 
     while (!atEnd()) {
@@ -1449,7 +1459,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_pieChart()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_pie3DChart()
 {
     if(!m_context->m_chart->m_impl) {
-        m_context->m_chart->m_impl = new Charting::PieImpl();
+        m_context->m_chart->m_impl = new KoChart::PieImpl();
         m_context->m_chart->m_is3d = true;
     }
 
@@ -1504,7 +1514,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_ofPieChart()
     // charts nor does ODF. So, we do the same OO.org is doing and just translate
     // it to pie-chart what is better then nothing.
     if(!m_context->m_chart->m_impl) {
-        m_context->m_chart->m_impl = new Charting::PieImpl();
+        m_context->m_chart->m_impl = new KoChart::PieImpl();
     }
     while (!atEnd()) {
         readNext();
@@ -1539,7 +1549,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_ofPieChart()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_doughnutChart()
 {
     if(!m_context->m_chart->m_impl) {
-        m_context->m_chart->m_impl = new Charting::RingImpl();
+        m_context->m_chart->m_impl = new KoChart::RingImpl();
     }
 
     while (!atEnd()) {
@@ -1579,7 +1589,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_doughnutChart()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_areaChart()
 {
     if(!m_context->m_chart->m_impl) {
-        m_context->m_chart->m_impl = new Charting::AreaImpl();
+        m_context->m_chart->m_impl = new KoChart::AreaImpl();
     }
 
     while (!atEnd()) {
@@ -1620,7 +1630,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_areaChart()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_area3DChart()
 {
     if(!m_context->m_chart->m_impl) {
-        m_context->m_chart->m_impl = new Charting::AreaImpl();
+        m_context->m_chart->m_impl = new KoChart::AreaImpl();
         m_context->m_chart->m_is3d = true;
     }
 
@@ -1664,7 +1674,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_area3DChart()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_barChart()
 {
     if(!m_context->m_chart->m_impl) {
-        m_context->m_chart->m_impl = new Charting::BarImpl();
+        m_context->m_chart->m_impl = new KoChart::BarImpl();
     }
 
     while (!atEnd()) {
@@ -1708,7 +1718,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_barChart()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_bar3DChart()
 {
     if(!m_context->m_chart->m_impl) {
-        m_context->m_chart->m_impl = new Charting::BarImpl();
+        m_context->m_chart->m_impl = new KoChart::BarImpl();
         m_context->m_chart->m_is3d = true;
     }
 
@@ -1754,7 +1764,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_bar3DChart()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_lineChart()
 {
     if(!m_context->m_chart->m_impl) {
-        m_context->m_chart->m_impl = new Charting::LineImpl();
+        m_context->m_chart->m_impl = new KoChart::LineImpl();
     }
 
     while (!atEnd()) {
@@ -1796,7 +1806,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_lineChart()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_line3DChart()
 {
     if(!m_context->m_chart->m_impl) {
-        m_context->m_chart->m_impl = new Charting::LineImpl();
+        m_context->m_chart->m_impl = new KoChart::LineImpl();
         m_context->m_chart->m_is3d = true;
     }
 
@@ -1835,9 +1845,9 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_line3DChart()
 */
 KoFilter::ConversionStatus XlsxXmlChartReader::read_scatterChart()
 {
-    Charting::ScatterImpl* impl = dynamic_cast<Charting::ScatterImpl*>(m_context->m_chart->m_impl);
+    KoChart::ScatterImpl* impl = dynamic_cast<KoChart::ScatterImpl*>(m_context->m_chart->m_impl);
     if (!impl) {
-        m_context->m_chart->m_impl = impl = new Charting::ScatterImpl();
+        m_context->m_chart->m_impl = impl = new KoChart::ScatterImpl();
     }
 
     while (!atEnd()) {
@@ -1852,17 +1862,17 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_scatterChart()
                 const QXmlStreamAttributes attrs(attributes());
                 TRY_READ_ATTR_WITHOUT_NS(val);
                 if ( val == "none" )
-                    impl->style = Charting::ScatterImpl::None;
+                    impl->style = KoChart::ScatterImpl::None;
                 else if ( val == "line" )
-                    impl->style = Charting::ScatterImpl::Line;
+                    impl->style = KoChart::ScatterImpl::Line;
                 else if ( val == "lineMarker" )
-                    impl->style = Charting::ScatterImpl::LineMarker;
+                    impl->style = KoChart::ScatterImpl::LineMarker;
                 else if ( val == "marker" )
-                    impl->style = Charting::ScatterImpl::Marker;
+                    impl->style = KoChart::ScatterImpl::Marker;
                 else if ( val == "smooth" )
-                    impl->style = Charting::ScatterImpl::Smooth;
+                    impl->style = KoChart::ScatterImpl::Smooth;
                 else if ( val == "smoothMarker" )
-                    impl->style = Charting::ScatterImpl::SmoothMarker;
+                    impl->style = KoChart::ScatterImpl::SmoothMarker;
             }
         }
     }
@@ -1891,9 +1901,9 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_scatterChart()
 */
 KoFilter::ConversionStatus XlsxXmlChartReader::read_radarChart()
 {
-    Charting::RadarImpl* impl = dynamic_cast<Charting::RadarImpl*>(m_context->m_chart->m_impl);
+    KoChart::RadarImpl* impl = dynamic_cast<KoChart::RadarImpl*>(m_context->m_chart->m_impl);
     if (!impl) {
-        m_context->m_chart->m_impl = impl = new Charting::RadarImpl(false);
+        m_context->m_chart->m_impl = impl = new KoChart::RadarImpl(false);
     }
 
     while (!atEnd()) {
@@ -1936,7 +1946,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_radarChart()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_surfaceChart()
 {
     if(!m_context->m_chart->m_impl) {
-        m_context->m_chart->m_impl = new Charting::SurfaceImpl();
+        m_context->m_chart->m_impl = new KoChart::SurfaceImpl();
     }
 
     while (!atEnd()) {
@@ -1973,7 +1983,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_surfaceChart()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_surface3DChart()
 {
     if(!m_context->m_chart->m_impl) {
-        m_context->m_chart->m_impl = new Charting::SurfaceImpl();
+        m_context->m_chart->m_impl = new KoChart::SurfaceImpl();
         m_context->m_chart->m_is3d = true;
     }
 
@@ -2015,7 +2025,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_surface3DChart()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_bubbleChart()
 {
     if(!m_context->m_chart->m_impl) {
-        m_context->m_chart->m_impl = new Charting::BubbleImpl();
+        m_context->m_chart->m_impl = new KoChart::BubbleImpl();
         m_context->m_chart->m_is3d = true;
     }
 
@@ -2065,7 +2075,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_bubbleChart()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_stockChart()
 {
     if(!m_context->m_chart->m_impl) {
-        m_context->m_chart->m_impl = new Charting::StockImpl();
+        m_context->m_chart->m_impl = new KoChart::StockImpl();
     }
 
     while (!atEnd()) {
@@ -2113,7 +2123,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_pieChart_Ser()
 {
     READ_PROLOGUE2(pieChart_Ser)
 
-    m_currentSeries  = new Charting::Series();
+    m_currentSeries  = new KoChart::Series();
     m_context->m_chart->m_series << m_currentSeries;
 
     PieSeries * tempPieSeriesData = new PieSeries();
@@ -2156,9 +2166,9 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_pieChart_Ser()
 
     // set explosion
     if (tempPieSeriesData->m_explosion != 0) {
-        if(Charting::PieImpl* pie = dynamic_cast<Charting::PieImpl*>(m_context->m_chart->m_impl)) {
+        if(KoChart::PieImpl* pie = dynamic_cast<KoChart::PieImpl*>(m_context->m_chart->m_impl)) {
             Q_UNUSED(pie);
-            m_currentSeries->m_datasetFormat << new Charting::PieFormat(tempPieSeriesData->m_explosion);
+            m_currentSeries->m_datasetFormat << new KoChart::PieFormat(tempPieSeriesData->m_explosion);
         }
     }
 
@@ -2195,7 +2205,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_bubbleChart_Ser()
 {
     READ_PROLOGUE2(bubbleChart_Ser)
 
-    m_currentSeries  = new Charting::Series();
+    m_currentSeries  = new KoChart::Series();
     m_context->m_chart->m_series << m_currentSeries;
 
     BubbleSeries * tempBubbleSeriesData = new BubbleSeries();
@@ -2279,7 +2289,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_scatterChart_Ser()
 {
     READ_PROLOGUE2(scatterChart_Ser)
 
-    m_currentSeries  = new Charting::Series();
+    m_currentSeries  = new KoChart::Series();
     m_context->m_chart->m_series << m_currentSeries;
 
     ScatterSeries * tempScatterSeriesData = new ScatterSeries();
@@ -2297,7 +2307,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_scatterChart_Ser()
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(spPr) )
             {
-                m_currentSeries->spPr = new Charting::ShapeProperties;
+                m_currentSeries->spPr = new KoChart::ShapeProperties;
                 m_currentShapeProperties  = m_currentSeries->spPr;
             }
             ELSE_TRY_READ_IF(order)
@@ -2365,7 +2375,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_barChart_Ser()
 {
     READ_PROLOGUE2(barChart_Ser)
 
-    m_currentSeries  = new Charting::Series();
+    m_currentSeries  = new KoChart::Series();
     m_context->m_chart->m_series << m_currentSeries;
 
     BarSeries * tempBarSeriesData = new BarSeries();
@@ -2434,7 +2444,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_areaChart_Ser()
 {
     READ_PROLOGUE2(areaChart_Ser)
 
-    m_currentSeries  = new Charting::Series();
+    m_currentSeries  = new KoChart::Series();
     m_context->m_chart->m_series << m_currentSeries;
 
     AreaSeries * tempAreaSeriesData = new AreaSeries();
@@ -2500,7 +2510,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_radarChart_Ser()
 {
     READ_PROLOGUE2(radarChart_Ser)
 
-    m_currentSeries  = new Charting::Series();
+    m_currentSeries  = new KoChart::Series();
     m_context->m_chart->m_series << m_currentSeries;
 
     RadarSeries * tempRadarSeriesData = new RadarSeries();
@@ -2571,7 +2581,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_lineChart_Ser()
 {
     READ_PROLOGUE2(lineChart_Ser)
 
-    m_currentSeries  = new Charting::Series();
+    m_currentSeries  = new KoChart::Series();
     m_context->m_chart->m_series << m_currentSeries;
 
     LineSeries * tempLineSeriesData = new LineSeries();
@@ -2615,28 +2625,28 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_lineChart_Ser()
     READ_EPILOGUE
 }
 
-Charting::MarkerType markerType(const QString &_val)
+KoChart::MarkerType markerType(const QString &_val)
 {
     const QString val = _val.toLower();
     if ( val == "star" )
-        return Charting::StarMarker;
+        return KoChart::StarMarker;
     if ( val == "dash" )
-        return Charting::DashMarker;
+        return KoChart::DashMarker;
     if ( val == "dot" )
-        return Charting::DotMarker;
+        return KoChart::DotMarker;
     if ( val == "plus" )
-        return Charting::PlusMarker;
+        return KoChart::PlusMarker;
     if ( val == "circle" )
-        return Charting::CircleMarker;
+        return KoChart::CircleMarker;
     if ( val == "x" )
-        return Charting::SymbolXMarker;
+        return KoChart::SymbolXMarker;
     if ( val == "triangle" )
-        return Charting::TriangleMarker;
+        return KoChart::TriangleMarker;
     if ( val == "squre" )
-        return Charting::SquareMarker;
+        return KoChart::SquareMarker;
     if ( val == "diamond" )
-        return Charting::DiamondMarker;
-    return Charting::NoMarker;
+        return KoChart::DiamondMarker;
+    return KoChart::NoMarker;
 }
 
 #undef CURRENT_EL
@@ -2664,7 +2674,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_marker()
 
     if (!gotSymbol)
         if (MSOOXML::Utils::convertBooleanAttr(val, true))
-            m_context->m_chart->m_markerType = Charting::AutoMarker;
+            m_context->m_chart->m_markerType = KoChart::AutoMarker;
 
     READ_EPILOGUE
     return KoFilter::OK;
@@ -2696,7 +2706,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_serMarker()
 
     if (!gotSymbol)
         if (MSOOXML::Utils::convertBooleanAttr(val, true))
-            m_currentSeries->m_markerType = Charting::AutoMarker;
+            m_currentSeries->m_markerType = KoChart::AutoMarker;
 
     READ_EPILOGUE
 }
@@ -2725,7 +2735,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_surfaceChart_Ser()
 {
     READ_PROLOGUE2(surfaceChart_Ser)
 
-    m_currentSeries  = new Charting::Series();
+    m_currentSeries  = new KoChart::Series();
     m_context->m_chart->m_series << m_currentSeries;
 
     SurfaceSeries * tempSurfaceSeriesData = new SurfaceSeries();
@@ -2832,7 +2842,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_grouping()
 */
 KoFilter::ConversionStatus XlsxXmlChartReader::read_firstSliceAng()
 {
-    if(Charting::PieImpl* pie = dynamic_cast<Charting::PieImpl*>(m_context->m_chart->m_impl)) {
+    if(KoChart::PieImpl* pie = dynamic_cast<KoChart::PieImpl*>(m_context->m_chart->m_impl)) {
         const QXmlStreamAttributes attrs(attributes());
         QString val(attrs.value("val").toString());
         pie->m_anStart = val.toInt(); // default value is zero
@@ -2857,7 +2867,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_firstSliceAng()
 */
 KoFilter::ConversionStatus XlsxXmlChartReader::read_holeSize()
 {
-    if(Charting::RingImpl* ring = dynamic_cast<Charting::RingImpl*>(m_context->m_chart->m_impl)) {
+    if(KoChart::RingImpl* ring = dynamic_cast<KoChart::RingImpl*>(m_context->m_chart->m_impl)) {
         const QXmlStreamAttributes attrs(attributes());
         QString val(attrs.value("val").toString());
         ring->m_pcDonut = val.toInt(); // default value is zero
@@ -2916,7 +2926,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_bubbleScale()
     const QXmlStreamAttributes attrs(attributes());
     QString val(attrs.value("val").toString());
 
-    if(Charting::BubbleImpl* bubble = dynamic_cast<Charting::BubbleImpl*>(m_context->m_chart->m_impl)) {
+    if(KoChart::BubbleImpl* bubble = dynamic_cast<KoChart::BubbleImpl*>(m_context->m_chart->m_impl)) {
         bool ok;
         const int i = val.toInt(&ok);
         if(ok)
@@ -3359,7 +3369,7 @@ QString XlsxXmlChartReader::AlocateAndWriteIntoInternalTable(QVector< QString > 
 
     //create range where to place the data
     QString range("local");
-    Charting::InternalTable *internalTable = &m_context->m_chart->m_internalTable;
+    KoChart::InternalTable *internalTable = &m_context->m_chart->m_internalTable;
 
     range += "!$" + columnName(internalTable->maxColumn()+1) +"$" + "1" + ":$" + columnName(internalTable->maxColumn()+1) +
              "$" + QString::number(buffer.size());
@@ -3388,7 +3398,7 @@ QString convertToFormat( KoGenStyle::Type formatType )
         case KoGenStyle::NumericScientificStyle:
             return "float";
         default:
-            kWarning() << "Unhandled format-type=" << formatType;
+            qWarning() << "Unhandled format-type=" << formatType;
             break;
     }
     return "string";
@@ -3421,7 +3431,7 @@ QString convertToFormat( KoGenStyle::Type formatType, const QString& formatStrin
         case KoGenStyle::NumericTextStyle:
             return value;
         default:
-            kWarning() << "Unhandled format-type=" << formatType;
+            qWarning() << "Unhandled format-type=" << formatType;
             break;
     }
     return value;
@@ -3462,13 +3472,13 @@ void XlsxXmlChartReader::WriteIntoInternalTable(QString &range, QVector< QString
 //
 //    kDebug()<<"buffer.size() " << buffer.size();
 
-    Charting::InternalTable *internalTable = &m_context->m_chart->m_internalTable;
+    KoChart::InternalTable *internalTable = &m_context->m_chart->m_internalTable;
     if (startColumn < endColumn) {
         if ((endColumn - startColumn +1) == buffer.size()) {
 
             int bufferIndex = 0;
             for(int i = startColumn; i <=endColumn; i++,bufferIndex++) {
-                Charting::Cell *cell = internalTable->cell(i,startRow,true);
+                KoChart::Cell *cell = internalTable->cell(i,startRow,true);
                 cell->m_valueType = convertToFormat( formatType );
                 cell->m_value = convertToFormat( formatType, formatString, buffer[bufferIndex] );
 //                kDebug()<<"m_value " << format;
@@ -3482,7 +3492,7 @@ void XlsxXmlChartReader::WriteIntoInternalTable(QString &range, QVector< QString
 
             int bufferIndex = 0;
             for(int i = startRow; i <=endRow; i++,bufferIndex++) {
-                Charting::Cell *cell = internalTable->cell(startColumn,i,true);
+                KoChart::Cell *cell = internalTable->cell(startColumn,i,true);
                 cell->m_valueType = convertToFormat( formatType );
                 cell->m_value = convertToFormat( formatType, formatString, buffer[bufferIndex] );
 //                kDebug()<<"m_value " << format;
@@ -3493,7 +3503,7 @@ void XlsxXmlChartReader::WriteIntoInternalTable(QString &range, QVector< QString
         }
     } else {
         if (buffer.size() != 0) {
-            Charting::Cell *cell = internalTable->cell(startColumn,startRow,true);
+            KoChart::Cell *cell = internalTable->cell(startColumn,startRow,true);
             cell->m_valueType = convertToFormat( formatType );
             cell->m_value = convertToFormat( formatType, formatString, buffer[ 0 ] );
 //            kDebug()<<"m_value " << format;

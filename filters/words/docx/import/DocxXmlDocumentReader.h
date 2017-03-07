@@ -29,7 +29,6 @@
 
 #include <MsooXmlCommonReader.h>
 #include <MsooXmlThemesReader.h>
-
 #include <MsooXmlDrawingTableStyle.h>
 
 #include <KoXmlWriter.h>

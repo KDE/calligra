@@ -22,12 +22,14 @@
 #include "gitcontroller.h"
 #include "documentlistmodel.h"
 
+#include <KoIcon.h>
+
 #include <kpassworddialog.h>
 #include <kmessagebox.h>
-#include <kinputdialog.h>
 #include <kuser.h>
 #include <kemailsettings.h>
 
+#include <QInputDialog>
 #include <QDebug>
 #include <QDir>
 #include <QTimer>
@@ -413,8 +415,10 @@ public:
             bool ok;
             KUser user(KUser::UseRealUserID);
             QString systemName = user.property(KUser::FullName).toString();
-            QString newName = KInputDialog::getText("Enter Name",
-                                                    "There is no name set for Git on this system (this is used when committing). Please enter one below and press OK.",
+            QString newName = QInputDialog::getText(0,
+                                                    i18n("Enter Name"),
+                                                    i18n("There is no name set for Git on this system (this is used when committing). Please enter one below and press OK."),
+                                                    QLineEdit::Normal,
                                                     systemName,
                                                     &ok);
             if(!ok) {
@@ -427,10 +431,12 @@ public:
             bool ok;
             KEMailSettings eMailSettings;
             QString emailAddress = eMailSettings.getSetting(KEMailSettings::EmailAddress);
-            QString newEmail = KInputDialog::getText("Enter Email",
-                                                    "There is no email address set for Git on this system (this is used when committing). Please enter one below and press OK.",
-                                                    emailAddress,
-                                                    &ok);
+            QString newEmail = QInputDialog::getText(0,
+                                                     i18n("Enter Email"),
+                                                     i18n("There is no email address set for Git on this system (this is used when committing). Please enter one below and press OK."),
+                                                     QLineEdit::Normal,
+                                                     emailAddress,
+                                                     &ok);
             if(!ok) {
                 return false;
             }
@@ -553,7 +559,7 @@ void GitController::setUserForRemote(QString newUser)
 QAction* GitController::commitAndPushCurrentFileAction()
 {
     if(!d->commitAndPushAction) {
-        d->commitAndPushAction = new QAction(QIcon::fromTheme("folder-remote"), "Update Git Copy", this);
+        d->commitAndPushAction = new QAction(koIcon("folder-remote"), "Update Git Copy", this);
         connect(d->commitAndPushAction, SIGNAL(triggered(bool)), SLOT(commitAndPushCurrentFile()));
     }
     return d->commitAndPushAction;
@@ -575,10 +581,11 @@ void GitController::commitAndPushCurrentFile()
     if(d->currentFile.startsWith(d->cloneDir)) {
         // ask commit message and checkbox for push (default on, remember?)
         bool ok = false;
-        QString message = KInputDialog::getMultiLineText("Describe changes",
-                                                            "Please enter a description of your changes (also known as a commit message).",
-                                                            "Commit message",
-                                                            &ok, 0);
+        QString message = QInputDialog::getMultiLineText(0,
+                                                         i18n("Describe changes"),
+                                                         i18n("Please enter a description of your changes (also known as a commit message)."),
+                                                         i18n("Commit message"),
+                                                         &ok);
         // if user pressed cancel, cancel out now...
         // we explicitly leave the action enabled here because we want the user to be able to
         // regret their cancellation and commit anyway
@@ -629,5 +636,3 @@ void GitController::pull()
     d->opThread->setAutoDelete(true);
     QThreadPool::globalInstance()->start(d->opThread);
 }
-
-#include "gitcontroller.moc"

@@ -22,7 +22,7 @@
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
 #include "KoPathShape.h"
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <QPointF>
 
 class KoPathPointMergeCommand::Private

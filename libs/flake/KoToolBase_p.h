@@ -34,7 +34,7 @@
 #include <string.h> // for the qt version check
 
 class QWidget;
-class KAction;
+class QAction;
 class KoToolBase;
 class KoCanvasBase;
 
@@ -66,24 +66,24 @@ public:
             KoCanvasResourceManager * crp = canvas->resourceManager();
             Q_ASSERT_X(crp, "KoToolBase::KoToolBase", "No Canvas KoResourceManager");
             if (crp)
-                q->connect(crp, SIGNAL(canvasResourceChanged(int, const QVariant &)),
-                        SLOT(canvasResourceChanged(int, const QVariant &)));
+                q->connect(crp, SIGNAL(canvasResourceChanged(int,QVariant)),
+                        SLOT(canvasResourceChanged(int,QVariant)));
 
             // can be 0 in the case of Calligra Sheets
             KoDocumentResourceManager *scrm = canvas->shapeController()->resourceManager();
             if (scrm) {
-                q->connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
-                        SLOT(documentResourceChanged(int, const QVariant &)));
+                q->connect(scrm, SIGNAL(resourceChanged(int,QVariant)),
+                        SLOT(documentResourceChanged(int,QVariant)));
             }
         }
     }
 
     QList<QPointer<QWidget> > optionWidgets; ///< the optionwidgets associated with this tool
     QCursor currentCursor;
-    QHash<QString, KAction*> actionCollection;
+    QHash<QString, QAction *> actionCollection;
     QString toolId;
     QList<QAction*> popupActionList;
-    QSet<KAction*> readOnlyActions;
+    QSet<QAction *> readOnlyActions;
     KoToolBase *q;
     KoCanvasBase *canvas; ///< the canvas interface this tool will work for.
     bool isInTextMode;

@@ -21,16 +21,16 @@
 
 #include <QDesktopWidget>
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
 
+#include "StageDebug.h"
 #include "KPrDocument.h"
 #include "KPrView.h"
 #include "KPrCustomSlideShows.h"
 #include "KPrViewModeSlidesSorter.h"
 
 KPrConfigureSlideShowDialog::KPrConfigureSlideShowDialog( KPrDocument *document, KPrView *parent )
-    : KDialog( parent )
+    : KoDialog( parent )
     , m_document( document )
     , m_view(parent)
 {
@@ -75,6 +75,3 @@ void KPrConfigureSlideShowDialog::editCustomSlideShow()
     m_view->showSlidesSorter();
     accept();
 }
-
-#include "KPrConfigureSlideShowDialog.moc"
-

@@ -29,8 +29,17 @@
 
 #include <QModelIndex>
 
-#include <qtest_kde.h>
-#include <kdebug.h>
+#include <QTest>
+
+namespace QTest
+{
+    template<>
+            char *toString(const KPlato::DateTime &dt)
+    {
+        return toString( dt.toString() );
+    }
+}
+
 
 namespace KPlato
 {
@@ -351,6 +360,4 @@ void ResourceModelTester::externalOverbook()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::ResourceModelTester )
-
-#include "ResourceModelTester.moc"
+QTEST_GUILESS_MAIN( KPlato::ResourceModelTester )

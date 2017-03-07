@@ -20,9 +20,7 @@
 #include <string>
 #include <stdlib.h>
 
-#include <kglobal.h>
-#include <klocale.h>
-
+#include <QLocale>
 #include <QMap>
 
 #include "TjMessageHandler.h"
@@ -906,11 +904,7 @@ date2time(const QString& date)
 QString
 formatTime(time_t t)
 {
-    KLocale *l = KGlobal::locale();
-    if ( l ) {
-        return l->formatDateTime( QDateTime::fromTime_t(t) );
-    }
-    return QDateTime::fromTime_t(t).toString();
+    return QLocale().toString(QDateTime::fromTime_t(t), QLocale::ShortFormat);
 }
 
 QDate

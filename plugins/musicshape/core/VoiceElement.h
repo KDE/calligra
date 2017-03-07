@@ -44,7 +44,7 @@ public:
     virtual ~VoiceElement();
 
     /**
-     * Returns the staff this music element should be displayed on. It can also be NULL, for example if the element
+     * Returns the staff this music element should be displayed on. It can also be nullptr, for example if the element
      * should not be visible.
      */
     Staff* staff() const;

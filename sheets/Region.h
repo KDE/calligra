@@ -27,9 +27,8 @@
 #include <QSharedDataPointer>
 #include <QString>
 
-#include <kdebug.h>
-
-#include "calligra_sheets_export.h"
+#include "SheetsDebug.h"
+#include "sheets_odf_export.h"
 
 inline uint qHash(const QPoint& point)
 {
@@ -337,12 +336,6 @@ public:
 
     static bool isValid(const QPoint& point);
     static bool isValid(const QRect& rect);
-
-    static QString loadOdf(const QString& expression);
-    static void loadOdf(const QChar *&data, const QChar *&end, QChar *&out);
-    static QString saveOdf(const QString& expression);
-
-    QString saveOdf() const;
 
 protected:
     /**
@@ -659,7 +652,7 @@ Q_DECLARE_TYPEINFO(Calligra::Sheets::Region, Q_MOVABLE_TYPE);
 
 
 /***************************************************************************
-  kDebug support
+  QDebug support
 ****************************************************************************/
 
 inline QDebug operator<<(QDebug str, const Calligra::Sheets::Region& r)

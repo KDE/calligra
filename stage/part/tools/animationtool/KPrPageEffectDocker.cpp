@@ -29,7 +29,8 @@
 #include <QEvent>
 #include <QPainter>
 #include <QTimer>
-#include <klocale.h>
+
+#include <klocalizedstring.h>
 
 #include <KoPACanvas.h>
 #include <KoPADocument.h>
@@ -297,5 +298,3 @@ void KPrPageEffectDocker::cleanup( QObject* object )
 
     m_view = 0;
 }
-
-#include "KPrPageEffectDocker.moc"

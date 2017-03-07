@@ -1,4 +1,4 @@
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QBuffer>
 #include <QFile>
@@ -9,13 +9,11 @@
 
 #include <KoXmlReader.h>
 
-#include <QtXml>
-
 
 class TestXmlReaderWithoutSpaces : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testNode();
     void testElement();
     void testAttributes();
@@ -610,7 +608,6 @@ void TestXmlReaderWithoutSpaces::testDocument()
     xmlstream << "<calligra>";
     xmlstream   << "<words/>\n";
     xmlstream   << "<stage/>\n";
-    xmlstream   << "<krita/>\n";
     xmlstream << "</calligra>";
     xmldevice.close();
 
@@ -1243,7 +1240,7 @@ void TestXmlReaderWithoutSpaces::testRootError()
     KoXmlDocument doc(false);
     QCOMPARE(doc.setContent(&xmldevice, &errorMsg, &errorLine, &errorColumn), false);
     QCOMPARE(errorMsg.isEmpty(), false);
-    QCOMPARE(errorMsg, QString("Extra content at end of document."));
+    QCOMPARE(errorMsg, QCoreApplication::translate("QXmlStream", "Extra content at end of document."));
     QCOMPARE(errorLine, 1);
     QCOMPARE(errorColumn, 21);
 }
@@ -1263,7 +1260,7 @@ void TestXmlReaderWithoutSpaces::testMismatchedTag()
     KoXmlDocument doc(false);
     QCOMPARE(doc.setContent(&xmldevice, &errorMsg, &errorLine, &errorColumn), false);
     QCOMPARE(errorMsg.isEmpty(), false);
-    QCOMPARE(errorMsg, QString("Opening and ending tag mismatch."));
+    QCOMPARE(errorMsg, QCoreApplication::translate("QXmlStream", "Opening and ending tag mismatch."));
     QCOMPARE(errorLine, 1);
     QCOMPARE(errorColumn, 11);
 }
@@ -2691,6 +2688,6 @@ void TestXmlReaderWithoutSpaces::testExternalOpenDocumentSpreadsheet(const QStri
     xmlfile.remove();
 }
 
-QTEST_MAIN(TestXmlReaderWithoutSpaces)
+QTEST_GUILESS_MAIN(TestXmlReaderWithoutSpaces)
 #include <TestXmlReaderWithoutSpaces.moc>
 

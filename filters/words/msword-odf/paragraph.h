@@ -51,7 +51,7 @@ public:
      */
     QString writeToFile(KoXmlWriter* writer, bool openNewTextBox, QChar* tabLeader=0);
 
-    void addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, QString fontName,
+    void addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString &fontName,
                       const wvWare::StyleSheet& styles, bool addCompleteElement=false);
 
     /**
@@ -115,7 +115,7 @@ public:
 
     DropCapStatus dropCapStatus() const;
     void getDropCapData(QString *string, int *type, int *lines, qreal *distance, QString *style) const;
-    void addDropCap(QString &string, int type, int lines, qreal distance, QString style);
+    void addDropCap(QString &string, int type, int lines, qreal distance, const QString &style);
 
     /**
      * @return true in case the current paragraph contains a field of type in

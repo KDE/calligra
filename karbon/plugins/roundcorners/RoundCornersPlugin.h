@@ -27,7 +27,7 @@
 #define ROUNDCORNERSPLUGIN_H
 
 #include <kxmlguiclient.h>
-#include <kdialog.h>
+#include <QDialog>
 #include <QVariantList>
 
 class RoundCornersDlg;
@@ -49,7 +49,7 @@ private:
 class KoUnitDoubleSpinBox;
 class KoUnit;
 
-class RoundCornersDlg : public KDialog
+class RoundCornersDlg : public QDialog
 {
     Q_OBJECT
 

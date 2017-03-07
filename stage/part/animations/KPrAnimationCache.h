@@ -44,7 +44,7 @@ class KPrAnimationCache
 public:
     KPrAnimationCache();
 
-    virtual ~KPrAnimationCache();
+    ~KPrAnimationCache();
 
     /**
      * Tells if a value has ever been set
@@ -56,7 +56,7 @@ public:
      * @param id The id of the value we are asking if is set
      * @return true if the value is already set.
      */
-    bool hasValue(KoShape *shape, const QString &id);
+    bool hasValue(KoShape *shape, const QString &id) const;
 
     /**
      * Tells if a value has ever been set
@@ -68,7 +68,9 @@ public:
      * @param id The id of the value we are asking if is set
      * @return true if the value is already set.
      */
-    bool hasValue(int step, QTextBlockUserData *textBlockUserData, const QString &id);
+    bool hasValue(int step, QTextBlockUserData *textBlockUserData, const QString &id) const;
+
+    bool hasValue(int step, KoShape *shape, const QString &id) const;
 
     /**
      * Sets a value, either initially or updating it
@@ -103,7 +105,7 @@ public:
      * @param id The id of the value we are asking if is set
      * @return the value as a QVariant
      */
-    QVariant value(KoShape *shape, const QString &id, const QVariant &defaultValue);
+    QVariant value(KoShape *shape, const QString &id, const QVariant &defaultValue) const;
 
     /**
      * The value
@@ -114,7 +116,9 @@ public:
      * @param id The id of the value we are asking if is set
      * @return the value as a QVariant
      */
-    QVariant value(QTextBlockUserData *textBlockUserData, const QString &id, const QVariant &defaultValue);
+    QVariant value(QTextBlockUserData *textBlockUserData, const QString &id, const QVariant &defaultValue) const;
+
+    QVariant value(int step, KoShape *shape, const QString &id) const;
 
     // 1. Init cache with values that take effect even before the animation is started
     //    This information should be kept in the first stack entry
@@ -155,14 +159,10 @@ public:
     void startStep(int step);
     void endStep(int step);
     void next();
-    QVariant value(int step, KoShape *shape, const QString &id, const QVariant &defaultValue);
-    QVariant value(int step, KoShape *shape, const QString &id);
-
-    virtual bool hasValue(int step, KoShape *shape, const QString &id);
 
     // ending and animation will just activate the values of the step
     QSizeF pageSize() const;
-    void setPageSize(const QSizeF size);
+    void setPageSize(const QSizeF &size);
     qreal zoom() const;
     void setZoom(const qreal zoom);
     void clear();

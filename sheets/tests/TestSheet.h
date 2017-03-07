@@ -19,7 +19,7 @@
 #ifndef CALLIGRA_SHEETS_SHEET_TEST
 #define CALLIGRA_SHEETS_SHEET_TEST
 
-#include <QtTest>
+#include <QObject>
 
 namespace Calligra
 {
@@ -44,7 +44,7 @@ private Q_SLOTS:
     void testDocumentToCellCoordinates_data();
     void testDocumentToCellCoordinates();
 
-    void testCompareRows();
+//    void testCompareRows();
 
 private:
     Sheet* m_sheet;

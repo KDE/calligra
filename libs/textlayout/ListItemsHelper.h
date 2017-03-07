@@ -33,24 +33,16 @@ namespace Lists
 {
 enum Capitalisation { Lowercase, Uppercase };
 struct ListStyleItem {
-    ListStyleItem(const QString &name_, KoListStyle::Style style_) {
+    ListStyleItem(const QString &name_, KoListStyle::LabelType labelType_, const QString &suffix_ = QString()) {
         name = name_;
-        style = style_;
+        labelType = labelType_;
+        suffix = suffix_;
     }
-    KoListStyle::Style style;
+    KoListStyle::LabelType labelType;
     QString name;
+    QString suffix;
 };
 
-KOTEXTLAYOUT_EXPORT QString intToRoman(int n);
-KOTEXTLAYOUT_EXPORT QString intToAlpha(int n, Capitalisation caps, bool letterSynchronization);
-KOTEXTLAYOUT_EXPORT QString intToScript(int n, KoListStyle::Style type);
-KOTEXTLAYOUT_EXPORT QString intToScriptList(int n, KoListStyle::Style type);
-KOTEXTLAYOUT_EXPORT QString intToNumberingStyle(int index, KoListStyle::Style listStyle, bool letterSynchronizations);
-
-/// return international list items (bullets/arabic/roman)
-KOTEXTLAYOUT_EXPORT QList<ListStyleItem> genericListStyleItems();
-/// return non-latin list items (bullets/arabic/roman)
-KOTEXTLAYOUT_EXPORT QList<ListStyleItem> otherListStyleItems(); // we may want to split this method up into different world regions.
 }
 
 /// \internal helper class for calculating text-lists prefixes and indents

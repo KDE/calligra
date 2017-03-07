@@ -24,7 +24,7 @@
 #define FLATTENPATHPLUGIN_H
 
 #include <kxmlguiclient.h>
-#include <kdialog.h>
+#include <QDialog>
 
 class FlattenDlg;
 
@@ -42,9 +42,9 @@ private:
     FlattenDlg *m_flattenPathDlg;
 };
 
-class KDoubleNumInput;
+class QDoubleSpinBox;
 
-class FlattenDlg : public KDialog
+class FlattenDlg : public QDialog
 {
     Q_OBJECT
 
@@ -55,7 +55,7 @@ public:
     void setFlatness(qreal value);
 
 private:
-    KDoubleNumInput* m_flatness;
+    QDoubleSpinBox* m_flatness;
 };
 
 #endif

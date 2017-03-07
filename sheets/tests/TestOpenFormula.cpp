@@ -23,13 +23,14 @@
 
 #include <klocale.h>
 
-#include "qtest_kde.h"
+#include <QTest>
 
 #include <Formula.h>
 #include <FunctionModuleRegistry.h>
 #include <Region.h>
 #include <Util.h>
 #include <Value.h>
+#include <odf/SheetsOdf.h>
 
 using namespace Calligra::Sheets;
 
@@ -200,28 +201,26 @@ void TestOpenFormula::testFormulaConversion()
 
 void TestOpenFormula::testReferenceLoading()
 {
-    QCOMPARE(Region::loadOdf(".A1"),                         QString("A1"));
-    QCOMPARE(Region::loadOdf(".A1:.A4"),                     QString("A1:A4"));
-    QCOMPARE(Region::loadOdf(".A$1:.$A4"),                   QString("A$1:$A4"));
-    QCOMPARE(Region::loadOdf("Sheet2.A1"),                   QString("Sheet2!A1"));
-    QCOMPARE(Region::loadOdf("'Sheet 2'.A1"),                QString("'Sheet 2'!A1"));
-    QCOMPARE(Region::loadOdf("Sheet2.A1:Sheet2.B4"),         QString("Sheet2!A1:B4"));
-    QCOMPARE(Region::loadOdf("'Sheet 2'.A1:'Sheet 2'.B4"),   QString("'Sheet 2'!A1:B4"));
-    QCOMPARE(Region::loadOdf("$Sheet2.A1:$Sheet2.B4"),       QString("Sheet2!A1:B4"));
-    QCOMPARE(Region::loadOdf("$'Sheet 2'.A1:$'Sheet 2'.B4"), QString("'Sheet 2'!A1:B4"));
+    QCOMPARE(Odf::loadRegion(".A1"),                         QString("A1"));
+    QCOMPARE(Odf::loadRegion(".A1:.A4"),                     QString("A1:A4"));
+    QCOMPARE(Odf::loadRegion(".A$1:.$A4"),                   QString("A$1:$A4"));
+    QCOMPARE(Odf::loadRegion("Sheet2.A1"),                   QString("Sheet2!A1"));
+    QCOMPARE(Odf::loadRegion("'Sheet 2'.A1"),                QString("'Sheet 2'!A1"));
+    QCOMPARE(Odf::loadRegion("Sheet2.A1:Sheet2.B4"),         QString("Sheet2!A1:B4"));
+    QCOMPARE(Odf::loadRegion("'Sheet 2'.A1:'Sheet 2'.B4"),   QString("'Sheet 2'!A1:B4"));
+    QCOMPARE(Odf::loadRegion("$Sheet2.A1:$Sheet2.B4"),       QString("Sheet2!A1:B4"));
+    QCOMPARE(Odf::loadRegion("$'Sheet 2'.A1:$'Sheet 2'.B4"), QString("'Sheet 2'!A1:B4"));
 }
 
 void TestOpenFormula::testReferenceSaving()
 {
-    QCOMPARE(Region::saveOdf("A1"),              QString(".A1"));
-    QCOMPARE(Region::saveOdf("A1:A4"),           QString(".A1:.A4"));
-    QCOMPARE(Region::saveOdf("A$1:$A4"),         QString(".A$1:.$A4"));
-    QCOMPARE(Region::saveOdf("Sheet2!A1"),       QString("Sheet2.A1"));
-    QCOMPARE(Region::saveOdf("'Sheet 2'!A1"),    QString("'Sheet 2'.A1"));
-    QCOMPARE(Region::saveOdf("Sheet2!A1:B4"),    QString("Sheet2.A1:Sheet2.B4"));
-    QCOMPARE(Region::saveOdf("'Sheet 2'!A1:B4"), QString("'Sheet 2'.A1:'Sheet 2'.B4"));
+    QCOMPARE(Odf::saveRegion("A1"),              QString(".A1"));
+    QCOMPARE(Odf::saveRegion("A1:A4"),           QString(".A1:.A4"));
+    QCOMPARE(Odf::saveRegion("A$1:$A4"),         QString(".A$1:.$A4"));
+    QCOMPARE(Odf::saveRegion("Sheet2!A1"),       QString("Sheet2.A1"));
+    QCOMPARE(Odf::saveRegion("'Sheet 2'!A1"),    QString("'Sheet 2'.A1"));
+    QCOMPARE(Odf::saveRegion("Sheet2!A1:B4"),    QString("Sheet2.A1:Sheet2.B4"));
+    QCOMPARE(Odf::saveRegion("'Sheet 2'!A1:B4"), QString("'Sheet 2'.A1:'Sheet 2'.B4"));
 }
 
-QTEST_KDEMAIN(TestOpenFormula, GUI)
-
-#include "TestOpenFormula.moc"
+QTEST_MAIN(TestOpenFormula)

@@ -20,10 +20,10 @@
 
 #include "KoFormulaShape.h"
 
-#include <kdebug.h>
+#include <QUrl>
+
 #include <kmessagebox.h>
 #include <kguiitem.h>
-#include <kurl.h>
 
 #include <KoStore.h>
 #include <KoShapeSavingContext.h>
@@ -34,6 +34,7 @@
 #include <KoXmlNS.h>
 #include <KoDocumentResourceManager.h>
 
+#include "FormulaDebug.h"
 #include "FormulaDocument.h"
 #include "FormulaData.h"
 #include "FormulaElement.h"
@@ -94,7 +95,7 @@ FormulaRenderer* KoFormulaShape::formulaRenderer() const
 
 bool KoFormulaShape::loadOdf( const KoXmlElement& element, KoShapeLoadingContext &context )
 {
-    kDebug() <<"Loading ODF in Formula";
+    debugFormula <<"Loading ODF in Formula";
     loadOdfAttributes(element, context, OdfAllAttributes);
     return loadOdfFrame(element, context);
 }
@@ -115,7 +116,7 @@ bool KoFormulaShape::loadOdfFrameElement(const KoXmlElement &element,
     // It's not a frame:object, so it must be inline.
     const KoXmlElement& topLevelElement = KoXml::namedItemNS(element, KoXmlNS::math, "math");
     if (topLevelElement.isNull()) {
-        kWarning() << "no math element as first child";
+        warnFormula << "no math element as first child";
         return false;
     }
 
@@ -136,7 +137,7 @@ bool KoFormulaShape::loadEmbeddedDocument( KoStore *store,
                                            const KoOdfLoadingContext &odfLoadingContext)
 {
     if ( !objectElement.hasAttributeNS( KoXmlNS::xlink, "href" ) ) {
-        kError() << "Object element has no valid xlink:href attribute";
+        errorFormula << "Object element has no valid xlink:href attribute";
         return false;
     }
 
@@ -155,7 +156,7 @@ bool KoFormulaShape::loadEmbeddedDocument( KoStore *store,
 #define INTERNAL_PROTOCOL "intern"
 #define STORE_PROTOCOL "tar"
 
-    if (KUrl::isRelativeUrl( url )) {
+    if (QUrl::fromUserInput(url).isRelative()) {
         if ( url.startsWith( "./" ) )
             tmpURL = QString( INTERNAL_PROTOCOL ) + ":/" + url.mid( 2 );
         else
@@ -169,42 +170,42 @@ bool KoFormulaShape::loadEmbeddedDocument( KoStore *store,
         path = store->currentPath();
         if ( !path.isEmpty() && !path.endsWith( '/' ) )
             path += '/';
-        QString relPath = KUrl( tmpURL ).path();
+        QString relPath = QUrl::fromUserInput(tmpURL).path();
         path += relPath.mid( 1 ); // remove leading '/'
     }
     if ( !path.endsWith( '/' ) )
         path += '/';
 
     const QString mimeType = odfLoadingContext.mimeTypeForPath( path );
-    //kDebug(35001) << "path for manifest file=" << path << "mimeType=" << mimeType;
+    //debugFormula << "path for manifest file=" << path << "mimeType=" << mimeType;
     if ( mimeType.isEmpty() ) {
-        //kDebug(35001) << "Manifest doesn't have media-type for" << path;
+        //debugFormula << "Manifest doesn't have media-type for" << path;
         return false;
     }
 
     const bool isOdf = mimeType.startsWith( "application/vnd.oasis.opendocument" );
     if ( !isOdf ) {
         tmpURL += "/maindoc.xml";
-        //kDebug(35001) << "tmpURL adjusted to" << tmpURL;
+        //debugFormula << "tmpURL adjusted to" << tmpURL;
     }
 
-    //kDebug(35001) << "tmpURL=" << tmpURL;
+    //debugFormula << "tmpURL=" << tmpURL;
 
     bool res = true;
     if ( tmpURL.startsWith( STORE_PROTOCOL )
          || tmpURL.startsWith( INTERNAL_PROTOCOL )
-         || KUrl::isRelativeUrl( tmpURL ) )
+         || QUrl::fromUserInput(tmpURL).isRelative() )
     {
         if ( isOdf ) {
             store->pushDirectory();
             Q_ASSERT( tmpURL.startsWith( INTERNAL_PROTOCOL ) );
-            QString relPath = KUrl( tmpURL ).path().mid( 1 );
+            QString relPath = QUrl::fromUserInput(tmpURL).path().mid( 1 );
             store->enterDirectory( relPath );
             res = m_document->loadOasisFromStore( store );
             store->popDirectory();
         } else {
             if ( tmpURL.startsWith( INTERNAL_PROTOCOL ) )
-                tmpURL = KUrl( tmpURL ).path().mid( 1 );
+                tmpURL = QUrl::fromUserInput(tmpURL).path().mid( 1 );
             res = m_document->loadFromStore( store, tmpURL );
         }
         m_document->setStoreInternal( true );
@@ -212,7 +213,7 @@ bool KoFormulaShape::loadEmbeddedDocument( KoStore *store,
     else {
         // Reference to an external document. Hmmm...
         m_document->setStoreInternal( false );
-        KUrl url( tmpURL );
+        QUrl url = QUrl::fromUserInput(tmpURL);
         if ( !url.isLocalFile() ) {
             //QApplication::restoreOverrideCursor();
 
@@ -248,12 +249,12 @@ bool KoFormulaShape::loadOdfEmbedded( const KoXmlElement &topLevelElement,
                                       KoShapeLoadingContext &context )
 {
     Q_UNUSED(context);
-    kDebug(31000) << topLevelElement.nodeName();
+    debugFormula << topLevelElement.nodeName();
 
 #if 0
     const KoXmlElement &topLevelElement = KoXml::namedItemNS(element, "http://www.w3.org/1998/Math/MathML", "math");
     if (topLevelElement.isNull()) {
-        kWarning() << "no math element as first child";
+        warnFormula << "no math element as first child";
         return false;
     }
 #endif
@@ -272,7 +273,7 @@ void KoFormulaShape::saveOdf( KoShapeSavingContext& context ) const
 {
     // FIXME: Add saving of embedded document if m_isInline is false;
 
-    kDebug() <<"Saving ODF in Formula";
+    debugFormula << "Saving ODF in Formula";
     KoXmlWriter& writer = context.xmlWriter();
     writer.startElement("draw:frame");
     saveOdfAttributes(context, OdfAllAttributes);

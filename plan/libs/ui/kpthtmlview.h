@@ -28,7 +28,7 @@
 
 class KoDocument;
 
-class KUrl;
+class QUrl;
 class QPoint;
 
 
@@ -42,7 +42,7 @@ class KPLATOUI_EXPORT HtmlView : public ViewBase
 public:
     HtmlView(KoPart *part, KoDocument *doc, QWidget *parent);
 
-    bool openHtml( const KUrl &url );
+    bool openHtml( const QUrl &url );
 
     void setupGui();
 
@@ -54,13 +54,13 @@ public:
     const KHTMLPart &htmlPart() const { return *m_htmlPart; }
 
 Q_SIGNALS:
-    void openUrlRequest( HtmlView*, const KUrl& );
+    void openUrlRequest( HtmlView*, const QUrl& );
 
 public Q_SLOTS:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 
-    void slotOpenUrlRequest(const KUrl &url, const KParts::OpenUrlArguments &arguments=KParts::OpenUrlArguments(), const KParts::BrowserArguments &browserArguments=KParts::BrowserArguments());
+    void slotOpenUrlRequest(const QUrl &url, const KParts::OpenUrlArguments &arguments=KParts::OpenUrlArguments(), const KParts::BrowserArguments &browserArguments=KParts::BrowserArguments());
 
 protected:
     void updateActionsEnabled(  bool on = true );

@@ -23,7 +23,7 @@
 #ifndef CALLIGRA_SHEETS_PASTE_INSERT_DIALOG
 #define CALLIGRA_SHEETS_PASTE_INSERT_DIALOG
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class QRadioButton;
 
@@ -37,7 +37,7 @@ class Selection;
  * \ingroup UI
  * Dialog to select the direction for the paste with insertion action.
  */
-class PasteInsertDialog : public KDialog
+class PasteInsertDialog : public KoDialog
 {
     Q_OBJECT
 public:

@@ -24,8 +24,6 @@
 #include "kptcalendar.h"
 #include "kptresourceallocationeditor.h"
 
-#include <kdebug.h>
-#include <klocale.h>
 #include <kptcommand.h>
 
 #include <QHeaderView>
@@ -129,5 +127,3 @@ MacroCommand *RequestResourcesPanel::buildCommand()
 }
 
 }  //KPlato namespace
-
-#include "kptrequestresourcespanel.moc"

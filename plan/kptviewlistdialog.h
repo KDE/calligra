@@ -24,9 +24,10 @@
 #include "ui_kptviewlisteditview.h"
 #include "ui_kptviewlisteditcategory.h"
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 #include <QWidget>
+#include <QDomDocument>
 
 
 namespace KPlato
@@ -41,7 +42,7 @@ class EditCategoryPanel;
 class ViewBase;
 class AddReportsViewPanel;
 
-class ViewListDialog : public KDialog
+class ViewListDialog : public KoDialog
 {
     Q_OBJECT
 public:
@@ -91,7 +92,7 @@ private:
     bool m_viewtipChanged;
 };
 
-class ViewListEditViewDialog : public KDialog
+class ViewListEditViewDialog : public KoDialog
 {
     Q_OBJECT
 public:
@@ -130,7 +131,7 @@ private:
     QMap<QString, ViewListItem*> m_categories;
 };
 
-class ViewListEditCategoryDialog : public KDialog
+class ViewListEditCategoryDialog : public KoDialog
 {
     Q_OBJECT
 public:
@@ -168,11 +169,11 @@ private:
 };
 
 //-------- Reports
-class ViewListReportsDialog : public KDialog
+class ViewListReportsDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    ViewListReportsDialog( View *view, ViewListWidget &viewlist, QWidget *parent=0 );
+    ViewListReportsDialog( View *view, ViewListWidget &viewlist, const QDomDocument &doc, QWidget *parent=0 );
 
 protected Q_SLOTS:
     void slotOk();
@@ -190,7 +191,7 @@ class AddReportsViewPanel : public QWidget
 {
     Q_OBJECT
 public:
-    AddReportsViewPanel( View *view, ViewListWidget &viewlist, QWidget *parent );
+    AddReportsViewPanel( View *view, ViewListWidget &viewlist, const QDomDocument &doc, QWidget *parent );
 
     bool ok();
 
@@ -216,6 +217,7 @@ private:
     QStringList m_viewtypes;
     bool m_viewnameChanged;
     bool m_viewtipChanged;
+    QDomDocument m_data;
 };
 
 

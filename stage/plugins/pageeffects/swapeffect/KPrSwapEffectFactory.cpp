@@ -19,7 +19,7 @@
 
 #include "KPrSwapEffectFactory.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KPrSwapEffectHorizontalStrategy.h"
 

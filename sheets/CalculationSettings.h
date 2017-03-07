@@ -30,15 +30,11 @@
 #ifndef CALLIGRA_SHEETS_CALCULATION_SETTINGS
 #define CALLIGRA_SHEETS_CALCULATION_SETTINGS
 
-#include "calligra_sheets_export.h"
-
-#include <KoXmlReader.h>
+#include "sheets_odf_export.h"
 
 #include <QDate>
 
 class KLocale;
-
-class KoXmlWriter;
 
 namespace Calligra
 {
@@ -61,16 +57,6 @@ public:
      * Destructor.
      */
     ~CalculationSettings();
-
-    /**
-     * \ingroup OpenDocument
-     */
-    void loadOdf(const KoXmlElement& body);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    bool saveOdf(KoXmlWriter &settingsWriter) const;
 
     /**
      * A document could use a different localization as the KDE default.

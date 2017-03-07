@@ -20,14 +20,12 @@
 #include "DocumentListModel.h"
 
 #include <QDebug>
-#include <QDesktopServices>
 #include <QDirIterator>
 #include <QRunnable>
 #include <QThreadPool>
 #include <QTimer>
+#include <QLocale>
 
-#include <KGlobal>
-#include <KLocale>
 #include <KSharedConfig>
 #include <KConfigGroup>
 
@@ -60,7 +58,7 @@ void SearchThread::run()
 // Keeping this code around, in case Tracker later blows up horribly and we
 // have to rapidly reenable the filesystem only support
     // Get documents from the device storage's document directory...
-    QString documentsDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
+    QString documentsDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     QStringList nameFilters;
     for (QHash<QString, DocumentListModel::DocumentType>::const_iterator it = m_docTypes.constBegin(); it != m_docTypes.constEnd(); ++it)
         nameFilters.append("*." + it.key());
@@ -84,7 +82,10 @@ void SearchThread::run()
 }
 
 DocumentListModel::DocumentListModel(QObject *parent)
-    : QAbstractListModel(parent), m_groupBy(GroupByName)
+    : QAbstractListModel(parent)
+    , m_searchThread(0)
+    , m_groupBy(GroupByName)
+    , m_filter(UnknownType)
 {
     qRegisterMetaType<DocumentInfo>();
 
@@ -198,12 +199,8 @@ QVariant DocumentListModel::data(const QModelIndex &index, int role) const
 
 QString DocumentListModel::prettyTime(QDateTime theTime)
 {
-    if( theTime.date().day() == QDateTime::currentDateTime().date().day() )
-        return KGlobal::locale()->formatDateTime( theTime, KLocale::FancyShortDate );
-    else if( theTime.daysTo( QDateTime::currentDateTime() ) < 7 )
-        return KGlobal::locale()->formatDate( theTime.date(), KLocale::FancyShortDate );
-    else
-        return KGlobal::locale()->formatDate( theTime.date(), KLocale::ShortDate );
+    // QT5TODO: used to be KLocale::FancyShortDate, but no such thing with QLocale (also static anyway)
+    return QLocale().toString(theTime, QLocale::ShortFormat);
 }
 
 QVariant DocumentListModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -259,7 +256,7 @@ DocumentListModel::DocumentType DocumentListModel::filter()
 
 QString DocumentListModel::documentsFolder() const
 {
-    return QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
+    return QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
 }
 
 void DocumentListModel::setFilter(DocumentListModel::DocumentType newFilter)

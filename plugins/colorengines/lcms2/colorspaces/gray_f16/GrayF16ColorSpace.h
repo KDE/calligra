@@ -18,42 +18,51 @@
 #ifndef COLORSPACE_GRAYSCALE_F16_H_
 #define COLORSPACE_GRAYSCALE_F16_H_
 
-#include <klocale.h>
-#include <KoColorSpaceTraits.h>
+#include <klocalizedstring.h>
 #include <KoColorModelStandardIds.h>
 #include "LcmsColorSpace.h"
 
 #define TYPE_GRAYA_HALF_FLT         (FLOAT_SH(1)|COLORSPACE_SH(PT_GRAY)|EXTRA_SH(1)|CHANNELS_SH(1)|BYTES_SH(2))
+
+struct KoGrayF16Traits;
 
 class GrayF16ColorSpace : public LcmsColorSpace<KoGrayF16Traits>
 {
 public:
     GrayF16ColorSpace(const QString &name, KoColorProfile *p);
 
-    virtual bool willDegrade(ColorSpaceIndependence) const {
+    virtual bool willDegrade(ColorSpaceIndependence) const
+    {
         return false;
     }
 
-    virtual KoID colorModelId() const {
+    virtual KoID colorModelId() const
+    {
         return GrayAColorModelID;
     }
 
-    virtual KoID colorDepthId() const {
+    virtual KoID colorDepthId() const
+    {
         return Float16BitsColorDepthID;
     }
 
-    virtual KoColorSpace* clone() const;
+    virtual KoColorSpace *clone() const;
 
-    virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
+    virtual void colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const;
 
     virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
+    
+    virtual void toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const;
+    virtual QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const;
+    virtual void toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const;
+    virtual QVector <double> fromYUV(qreal *y, qreal *u, qreal *v) const;
 
     static QString colorSpaceId()
     {
         return "GRAYAF16";
     }
 
-    virtual bool hasHighDynamicRange() const 
+    virtual bool hasHighDynamicRange() const
     {
         return true;
     }
@@ -67,35 +76,43 @@ public:
     {
     }
 
-    virtual QString id() const {
+    virtual QString id() const
+    {
         return GrayF16ColorSpace::colorSpaceId();
     }
 
-    virtual QString name() const {
+    virtual QString name() const
+    {
         return i18n("Grayscale/Alpha (16-bit float/channel)");
     }
 
-    virtual KoID colorModelId() const {
+    virtual KoID colorModelId() const
+    {
         return GrayAColorModelID;
     }
 
-    virtual KoID colorDepthId() const {
+    virtual KoID colorDepthId() const
+    {
         return Float16BitsColorDepthID;
     }
 
-    virtual int referenceDepth() const {
+    virtual int referenceDepth() const
+    {
         return 16;
     }
 
-    virtual bool userVisible() const {
+    virtual bool userVisible() const
+    {
         return true;
     }
 
-    virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const {
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const
+    {
         return new GrayF16ColorSpace(name(), p->clone());
     }
 
-    virtual QString defaultProfile() const {
+    virtual QString defaultProfile() const
+    {
         return "gray built-in";
     }
 

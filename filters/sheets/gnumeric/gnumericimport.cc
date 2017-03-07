@@ -30,7 +30,7 @@
 #include <QPen>
 #include <QDomDocument>
 
-#include <kfilterdev.h>
+#include <KCompressionDevice>
 #include <kdebug.h>
 #include <kpluginfactory.h>
 
@@ -100,7 +100,7 @@ static char const * const cell_date_format [] = {
     "yyyy-mmm-dd",  /* 29 Cell::Format::Date15*/
     "yy",   /* 30 Cell::Format::Date24*/
     "yyyy",   /* 31 Cell::Format::Date23*/
-    NULL
+    nullptr
 };
 
 // copied from gnumeric: src/formats.c:
@@ -116,7 +116,7 @@ static char const * const cell_time_format [] = {
     "[h]:mm",
     "[mm]:ss",
     "[ss]",
-    NULL
+    nullptr
 };
 
 namespace gnumeric_import_LNS
@@ -136,7 +136,7 @@ void GNUMERICFilter::dateInit()
 
 uint GNUMERICFilter::GnumericDate::greg2jul(int y, int m, int d)
 {
-    return QDate::gregorianToJulian(y, m, d);
+    return QDate(y, m, d).toJulianDay();
 }
 
 void GNUMERICFilter::GnumericDate::jul2greg(double num, int & y, int & m, int & d)
@@ -149,7 +149,7 @@ void GNUMERICFilter::GnumericDate::jul2greg(double num, int & y, int & m, int & 
 
     kDebug(30521) << "***** Num:" << num << ", i:" << i;
 
-    QDate::julianToGregorian(i + g_dateOrigin, y, m, d);
+    QDate::fromJulianDay(i + g_dateOrigin).getDate(&y, &m, &d);
     kDebug(30521) << "y:" << y << ", m:" << m << ", d:" << d;
 }
 
@@ -172,8 +172,8 @@ QTime GNUMERICFilter::GnumericDate::getTime(double num)
     return time;
 }
 
-K_PLUGIN_FACTORY(GNUMERICFilterFactory, registerPlugin<GNUMERICFilter>();)
-K_EXPORT_PLUGIN(GNUMERICFilterFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(GNUMERICFilterFactory, "calligra_filter_gnumeric2sheets.json",
+                           registerPlugin<GNUMERICFilter>();)
 
 GNUMERICFilter::GNUMERICFilter(QObject* parent, const QVariantList &)
         : KoFilter(parent)
@@ -181,7 +181,7 @@ GNUMERICFilter::GNUMERICFilter(QObject* parent, const QVariantList &)
 }
 
 /* This converts GNUmeric's color string "0:0:0" to a QColor. */
-void  convert_string_to_qcolor(QString color_string, QColor * color)
+void  convert_string_to_qcolor(const QString &color_string, QColor * color)
 {
     int red, green, blue, first_col_pos, second_col_pos;
 
@@ -275,7 +275,7 @@ void set_document_attributes(Doc * ksdoc, QDomElement * docElem)
         } else if (gmr_name.toElement().text() == "WorkbookView::show_notebook_tabs") {
             ksdoc->map()->settings()->setShowTabBar(gmr_value.toElement().text().toLower() == "true" ? true : false);
         } else if (gmr_name.toElement().text() == "WorkbookView::do_auto_completion") {
-            ksdoc->map()->settings()->setCompletionMode(KGlobalSettings::CompletionAuto);
+            ksdoc->map()->settings()->setCompletionMode(KCompletion::CompletionAuto);
         } else if (gmr_name.toElement().text() == "WorkbookView::is_protected") {
             //TODO protect document ???
             //ksdoc->map()->isProtected()
@@ -409,7 +409,7 @@ void setSelectionInfo(QDomNode * sheet, Sheet * /* table */)
     QDomNode selections =  sheet->namedItem("Selections");
     QDomNode selection = selections.namedItem("Selection");
 
-    /* Kspread does not support multiple selections.. */
+    /* Calligra Sheets does not support multiple selections.. */
     /* This code will set the selection to the last one GNUmeric's multiple
        selections. */
     while (!selection.isNull()) {
@@ -733,7 +733,7 @@ bool GNUMERICFilter::setType(const Cell& kspread_cell,
 
                 time = GnumericDate::getTime(content);
             } else
-                time = kspread_cell.value().asTime(kspread_cell.sheet()->map()->calculationSettings());
+                time = kspread_cell.value().asTime();
 
             Format::Type type;
             switch (i) {
@@ -749,7 +749,7 @@ bool GNUMERICFilter::setType(const Cell& kspread_cell,
 
             kDebug(30521) << "i:" << i << ", Type:" << type;
             Cell cell(kspread_cell);
-            cell.setValue(Value(time, kspread_cell.sheet()->map()->calculationSettings()));
+            cell.setValue(Value(time));
             Style style;
             style.setFormatType(type);
             cell.setStyle(style);
@@ -1081,7 +1081,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
 
                     QDomElement style_element = gnumericStyle.toElement(); // try to convert the node to an element.
 
-                    kDebug(30521) << "Style valid for kspread";
+                    kDebug(30521) << "Style valid for Calligra Sheets";
                     kspread_cell = Cell(table, column, row);
 
                     if (style_element.hasAttribute("Fore")) {
@@ -1203,7 +1203,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                         QString halign_string = style_element.attribute("HAlign");
 
                         if (halign_string == "1") {
-                            /* General: No equivalent in Kspread. */
+                            /* General: No equivalent in Calligra Sheets. */
                         } else if (halign_string == "2") {
                             style.setHAlign(Style::Left);
                         } else if (halign_string == "4") {
@@ -1211,9 +1211,9 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                         } else if (halign_string == "8") {
                             style.setHAlign(Style::Center);
                         } else if (halign_string == "16") {
-                            /* Fill: No equivalent in Kspread. */
+                            /* Fill: No equivalent in Calligra Sheets. */
                         } else if (halign_string == "32") {
-                            /* Justify: No equivalent in Kspread */
+                            /* Justify: No equivalent in Calligra Sheets */
                         } else if (halign_string == "64") {
                             /* Centered across selection*/
                         }
@@ -1224,14 +1224,14 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                         QString valign_string = style_element.attribute("VAlign");
 
                         if (valign_string == "1") {
-                            /* General: No equivalent in Kspread. */
+                            /* General: No equivalent in Calligra Sheets. */
                             style.setVAlign(Style::Top);
                         } else if (valign_string == "2") {
                             style.setVAlign(Style::Bottom);
                         } else if (valign_string == "4") {
                             style.setVAlign(Style::Middle);
                         } else if (valign_string == "8") {
-                            /* Justify: No equivalent in Kspread */
+                            /* Justify: No equivalent in Calligra Sheets */
                         }
                     }
 
@@ -1703,7 +1703,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
     }
 
 
-    QIODevice* in = KFilterDev::deviceForFile(m_chain->inputFile(), "application/x-gzip");
+    QIODevice* in = new KCompressionDevice(m_chain->inputFile(), KCompressionDevice::GZip);
 
     if (!in) {
         kError(30521) << "Cannot create device for uncompressing! Aborting!" << endl;
@@ -1993,7 +1993,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
         //not for cell, so gnumeric define a style as : col start=0 col end=255
         //rowstart=0 rowend=255 => we create 255*255 cells
         //and gnumeric stocke all area and not just modify area
-        //=> not good for kspread.
+        //=> not good for Calligra Sheets.
         // Norbert: activated again, only cells with texts get modified, nothing else created
         setStyleInfo(&sheet, table);
 

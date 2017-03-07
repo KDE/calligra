@@ -93,7 +93,7 @@ public:
      * If reuse is true, this function returns the already created stream
      * (if any). Otherwise it will create the stream.
      *
-     * When errors occur, this function returns NULL.
+     * When errors occur, this function returns nullptr.
      *
      * You do not need to delete the created stream, it will be handled
      * automatically.

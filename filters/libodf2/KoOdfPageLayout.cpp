@@ -25,9 +25,6 @@
 // Qt
 #include <QString>
 
-// KDE
-#include <kdebug.h>
-
 // Odflib
 #include "KoXmlStreamReader.h"
 #include "KoXmlWriter.h"
@@ -35,6 +32,7 @@
 #include "KoOdfPageLayoutProperties.h"
 #include "KoOdfHeaderFooterProperties.h"
 
+#include "Odf2Debug.h"
 
 // ================================================================
 //                         class KoOdfPageLayout
@@ -132,7 +130,7 @@ bool KoOdfPageLayout::readOdf(KoXmlStreamReader &reader)
     setDisplayName(attrs.value("style:display-name").toString());
     setPageUsage(attrs.value("style:page-usage").toString());
 
-    kDebug() << "PageLayout:" << name() << displayName() << pageUsage();
+    debugOdf2 << "PageLayout:" << name() << displayName() << pageUsage();
 
     // Load child elements: property sets and other children.
     while (reader.readNextStartElement()) {

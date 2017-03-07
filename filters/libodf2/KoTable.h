@@ -82,7 +82,7 @@ public:
     void setProtected(bool isProtected);
     bool isPprotected() const;
 
-    void setProtectionKey(QString password, QString protectionAlgorithmUri = "http://www.w3.org/2000/09/xmldsig#sha1");
+    void setProtectionKey(const QString &password, const QString &protectionAlgorithmUri = QLatin1String("http://www.w3.org/2000/09/xmldsig#sha1"));
     QString protectionKey() const;
     QString protectionalgorithm() const;
 

@@ -21,16 +21,16 @@
 #include "KoShapeSizeCommand.h"
 
 #include <KoShape.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class KoShapeSizeCommand::Private
 {
 public:
     QList<KoShape*> shapes;
-    QList<QSizeF> previousSizes, newSizes;
+    QVector<QSizeF> previousSizes, newSizes;
 };
 
-KoShapeSizeCommand::KoShapeSizeCommand(const QList<KoShape*> &shapes, const QList<QSizeF> &previousSizes, const QList<QSizeF> &newSizes, KUndo2Command *parent)
+KoShapeSizeCommand::KoShapeSizeCommand(const QList<KoShape*> &shapes, const QVector<QSizeF> &previousSizes, const QVector<QSizeF> &newSizes, KUndo2Command *parent)
         : KUndo2Command(parent),
         d(new Private())
 {

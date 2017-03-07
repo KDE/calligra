@@ -18,12 +18,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QDebug>
-
-#include <kaction.h>
-
 #include "KoToolBase.h"
 #include "KoToolBase_p.h"
+
 #include "KoCanvasBase.h"
 #include "KoPointerEvent.h"
 #include "KoDocumentResourceManager.h"
@@ -33,8 +30,10 @@
 #include "KoShapeBasedDocumentBase.h"
 #include "KoToolSelection.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kactioncollection.h>
+
+#include <QAction>
 #include <QWidget>
 #include <QFile>
 #include <QDomDocument>
@@ -69,7 +68,7 @@ KoToolBase::~KoToolBase()
 //        doc.appendChild(e);
 
 //        foreach(QAction *ac, d->actionCollection.values()) {
-//            KAction *action = qobject_cast<KAction*>(ac);
+//            QAction *action = qobject_cast<QAction*>(ac);
 //            if (action) {
 //                QDomElement a = doc.createElement("Action");
 //                a.setAttribute("name", action->objectName());
@@ -78,8 +77,8 @@ KoToolBase::~KoToolBase()
 //                a.setAttribute("whatsThis" , action->whatsThis());
 //                a.setAttribute("toolTip" , action->toolTip());
 //                a.setAttribute("iconText" , action->iconText());
-//                a.setAttribute("shortcut" , action->shortcut(KAction::ActiveShortcut).toString());
-//                a.setAttribute("defaultShortcut" , action->shortcut(KAction::DefaultShortcut).toString());
+//                a.setAttribute("shortcut" , action->shortcut(QAction::ActiveShortcut).toString());
+//                a.setAttribute("defaultShortcut" , action->shortcut(QAction::DefaultShortcut).toString());
 //                a.setAttribute("isCheckable" , QString((action->isChecked() ? "true" : "false")));
 //                a.setAttribute("statusTip", action->statusTip());
 //                e.appendChild(a);
@@ -98,6 +97,7 @@ KoToolBase::~KoToolBase()
 //    else {
 //        qDebug() << "Tool" << toolId() << "has no actions";
 //    }
+    qDeleteAll(d_ptr->optionWidgets);
     delete d_ptr;
 }
 
@@ -107,8 +107,8 @@ void KoToolBase::updateShapeController(KoShapeBasedDocumentBase *shapeController
     if (shapeController) {
         KoDocumentResourceManager *scrm = shapeController->resourceManager();
         if (scrm) {
-            connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
-                    this, SLOT(documentResourceChanged(int, const QVariant &)));
+            connect(scrm, SIGNAL(resourceChanged(int,QVariant)),
+                    this, SLOT(documentResourceChanged(int,QVariant)));
         }
     }
 }
@@ -230,7 +230,7 @@ QList<QPointer<QWidget> > KoToolBase::optionWidgets()
     return d->optionWidgets;
 }
 
-void KoToolBase::addAction(const QString &name, KAction *action)
+void KoToolBase::addAction(const QString &name, QAction *action)
 {
     Q_D(KoToolBase);
     if (action->objectName().isEmpty()) {
@@ -239,13 +239,13 @@ void KoToolBase::addAction(const QString &name, KAction *action)
     d->actionCollection.insert(name, action);
 }
 
-QHash<QString, KAction*> KoToolBase::actions() const
+QHash<QString, QAction *> KoToolBase::actions() const
 {
     Q_D(const KoToolBase);
     return d->actionCollection;
 }
 
-KAction *KoToolBase::action(const QString &name) const
+QAction *KoToolBase::action(const QString &name) const
 {
     Q_D(const KoToolBase);
     return d->actionCollection.value(name);
@@ -418,5 +418,3 @@ bool KoToolBase::isInTextMode() const
     Q_D(const KoToolBase);
     return d->isInTextMode;
 }
-
-#include <KoToolBase.moc>

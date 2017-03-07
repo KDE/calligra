@@ -18,8 +18,6 @@
 */
 #include "TestFormula.h"
 
-#include <klocale.h>
-
 #include "TestKspreadCommon.h"
 
 using namespace Calligra::Sheets;
@@ -35,6 +33,7 @@ static char encodeTokenType(const Token& token)
     case Token::Cell:       result = 'c'; break;
     case Token::Range:      result = 'r'; break;
     case Token::Identifier: result = 'x'; break;
+    case Token::String:     result = 's'; break;
     default: break;
     }
     return result;
@@ -185,6 +184,8 @@ void TestFormula::testTokenizer()
     CHECK_TOKENIZE("IF(A1;A2;)", "xococoo");
     CHECK_TOKENIZE("OFFSET(Sheet2'!B7;0;0)", "");
 
+    // " escape
+    CHECK_TOKENIZE("CONCATENATE(\"\"\"\")", "xoso");
     // function cascade
     CHECK_TOKENIZE("SUM(ABS(-1);ABS(-1))", "xoxooiooxooioo");
 }
@@ -368,6 +369,4 @@ void TestFormula::testInlineArrays()
 #endif
 }
 
-QTEST_KDEMAIN(TestFormula, GUI)
-
-#include "TestFormula.moc"
+QTEST_MAIN(TestFormula)

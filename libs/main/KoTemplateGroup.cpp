@@ -83,7 +83,7 @@ bool KoTemplateGroup::add(KoTemplate *t, bool force, bool touch)
 KoTemplate *KoTemplateGroup::find(const QString &name) const
 {
     QList<KoTemplate*>::const_iterator it = m_templates.begin();
-    KoTemplate* ret = NULL;
+    KoTemplate* ret = nullptr;
 
     while (it != m_templates.end()) {
         if ((*it)->name() == name) {

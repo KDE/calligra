@@ -31,7 +31,7 @@
 #include <QApplication>
 #include <QAbstractTextDocumentLayout>
 
-#include <kdebug.h>
+#include <MainDebug.h>
 #include <klocalizedstring.h>
 
 #include <KoText.h>
@@ -83,7 +83,7 @@ void KoFindText::findImplementation(const QString &pattern, QList<KoFindMatch> &
     bool findInSelection = false;
 
     if(d->documents.size() == 0) {
-        kWarning() << "No document available for searching!";
+        qWarning() << "No document available for searching!";
         return;
     }
 
@@ -91,9 +91,7 @@ void KoFindText::findImplementation(const QString &pattern, QList<KoFindMatch> &
     QList<KoFindMatch> matchBefore;
     foreach(QTextDocument* document, d->documents) {
         QTextCursor cursor = document->find(pattern, start, flags);
-        #if QT_VERSION >= 0x040700
         cursor.setKeepPositionOnInsert(true);
-        #endif
 
         QVector<QAbstractTextDocumentLayout::Selection> selections;
         while(!cursor.isNull()) {
@@ -121,9 +119,7 @@ void KoFindText::findImplementation(const QString &pattern, QList<KoFindMatch> &
             }
 
             cursor = document->find(pattern, cursor, flags);
-            #if QT_VERSION >= 0x040700
             cursor.setKeepPositionOnInsert(true);
-            #endif
         }
         if (before && document == d->currentCursor.document()) {
             before = false;
@@ -147,9 +143,7 @@ void KoFindText::replaceImplementation(const KoFindMatch &match, const QVariant 
     }
 
     QTextCursor cursor = match.location().value<QTextCursor>();
-    #if QT_VERSION >= 0x040700
     cursor.setKeepPositionOnInsert(true);
-    #endif
 
     //Search for the selection matching this match.
     QVector<QAbstractTextDocumentLayout::Selection> selections = d->selections.value(match.container().value<QTextDocument*>());
@@ -248,8 +242,8 @@ void KoFindText::findTextInShapes(const QList<KoShape*> &shapes, QList<QTextDocu
 
 void KoFindText::Private::updateSelections()
 {
-    QHash< QTextDocument*, QVector<QAbstractTextDocumentLayout::Selection> >::iterator itr;
-    for(itr = selections.begin(); itr != selections.end(); ++itr) {
+    QHash< QTextDocument*, QVector<QAbstractTextDocumentLayout::Selection> >::ConstIterator itr;
+    for(itr = selections.constBegin(); itr != selections.constEnd(); ++itr) {
         KoTextDocument doc(itr.key());
         doc.setSelections(itr.value());
     }
@@ -332,4 +326,5 @@ void KoFindText::setFormat(FormatType formatType, const QTextCharFormat &format)
     }
 }
 
-#include "KoFindText.moc"
+// have to include this because of Q_PRIVATE_SLOT
+#include "moc_KoFindText.cpp"

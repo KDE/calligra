@@ -26,9 +26,8 @@
 #include <QApplication>
 #include <QGroupBox>
 #include <QVBoxLayout>
-#include <klocale.h>
+#include <KLocalizedString>
 
-#include <kdebug.h>
 #include <QRadioButton>
 #include <QCheckBox>
 
@@ -40,7 +39,7 @@
 using namespace Calligra::Sheets;
 
 PasteInsertDialog::PasteInsertDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Paste Inserting Cells"));
     setObjectName(QLatin1String("PasteInsertDialog"));
@@ -78,5 +77,3 @@ void PasteInsertDialog::slotOk()
     m_selection->activeSheet()->map()->addCommand(command);
     accept();
 }
-
-#include "PasteInsertDialog.moc"

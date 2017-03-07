@@ -21,8 +21,9 @@
 #define KORGBF16COLORSPACE_H_
 
 #include "LcmsColorSpace.h"
-#include "KoColorSpaceTraits.h"
 #include "KoColorModelStandardIds.h"
+
+struct KoRgbF16Traits;
 
 class RgbF16ColorSpace : public LcmsColorSpace<KoRgbF16Traits>
 {
@@ -31,26 +32,33 @@ public:
 
     virtual bool willDegrade(ColorSpaceIndependence independence) const;
 
-    virtual KoID colorModelId() const {
+    virtual KoID colorModelId() const
+    {
         return RGBAColorModelID;
     }
 
-    virtual KoID colorDepthId() const {
+    virtual KoID colorDepthId() const
+    {
         return Float16BitsColorDepthID;
     }
 
-    virtual KoColorSpace* clone() const;
+    virtual KoColorSpace *clone() const;
 
-    virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
+    virtual void colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const;
 
     virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
+    virtual void toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const;
+    virtual QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const;
+    virtual void toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const;
+    virtual QVector <double> fromYUV(qreal *y, qreal *u, qreal *v) const;
 
     static QString colorSpaceId()
     {
         return QString("RGBAF16");
     }
 
-    virtual bool hasHighDynamicRange() const {
+    virtual bool hasHighDynamicRange() const
+    {
         return true;
     }
 };
@@ -63,35 +71,43 @@ public:
     {
     }
 
-    virtual QString id() const {
+    virtual QString id() const
+    {
         return RgbF16ColorSpace::colorSpaceId();
     }
 
-    virtual QString name() const {
+    virtual QString name() const
+    {
         return i18n("RGBA (16-bit floating/channel)");
     }
 
-    virtual bool userVisible() const {
+    virtual bool userVisible() const
+    {
         return true;
     }
 
-    virtual KoID colorModelId() const {
+    virtual KoID colorModelId() const
+    {
         return RGBAColorModelID;
     }
 
-    virtual KoID colorDepthId() const {
+    virtual KoID colorDepthId() const
+    {
         return Float16BitsColorDepthID;
     }
 
-    virtual int referenceDepth() const {
+    virtual int referenceDepth() const
+    {
         return 16;
     }
 
-    virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const {
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const
+    {
         return new RgbF16ColorSpace(name(), p->clone());
     }
 
-    virtual QString defaultProfile() const {
+    virtual QString defaultProfile() const
+    {
         return "sRGB-elle-V2-g10.icc";
     }
 
@@ -100,8 +116,6 @@ public:
         return true;
     }
 
-
 };
-
 
 #endif

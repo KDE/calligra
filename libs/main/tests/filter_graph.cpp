@@ -20,16 +20,16 @@
 #include <QFile>
 #include <QByteArray>
 #include <QList>
+#include <QPluginLoader>
+
 #include "KoDocumentEntry.h"
 #include "KoFilterEntry.h"
 #include "KoFilterManager.h"
-#include "kcomponentdata.h"
-#include <kdebug.h>
+
+#include <MainDebug.h>
 
 int main(int /*argc*/, char ** /*argv*/)
 {
-    KComponentData componentData("filter_graph");    // we need an instance when using the trader
-
     QByteArray output = "digraph filters {\n";
 
     // The following code is shamelessly copied over from Calligra::Graph::buildGraph
@@ -45,8 +45,9 @@ int main(int /*argc*/, char ** /*argv*/)
 
     while (partIt != partEnd) {
         //kDebug() << ( *partIt ).service()->desktopEntryName();
-        QStringList nativeMimeTypes = (*partIt).service()->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList();
-        nativeMimeTypes += (*partIt).service()->property("X-KDE-NativeMimeType", QVariant::String).toString();
+        QJsonObject metaData = (*partIt).metaData();
+        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+        nativeMimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; it != end; ++it) {
@@ -68,10 +69,10 @@ int main(int /*argc*/, char ** /*argv*/)
     QList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
 
     for (; it != end; ++it) {
-        kDebug() << "import" << (*it)->import << " export" << (*it)->export_;
+        qDebug() << "import" << (*it)->import << " export" << (*it)->export_;
         // First add the "starting points"
-        QStringList::ConstIterator importIt = (*it)->import.begin();
-        QStringList::ConstIterator importEnd = (*it)->import.end();
+        QStringList::ConstIterator importIt = (*it)->import.constBegin();
+        QStringList::ConstIterator importEnd = (*it)->import.constEnd();
         for (; importIt != importEnd; ++importIt) {
             // already there?
             if (! vertices.contains(*importIt)) {
@@ -82,8 +83,8 @@ int main(int /*argc*/, char ** /*argv*/)
             }
         }
 
-        QStringList::ConstIterator exportIt = (*it)->export_.begin();
-        QStringList::ConstIterator exportEnd = (*it)->export_.end();
+        QStringList::ConstIterator exportIt = (*it)->export_.constBegin();
+        QStringList::ConstIterator exportEnd = (*it)->export_.constEnd();
 
         for (; exportIt != exportEnd; ++exportIt) {
             // First make sure the export vertex is in place
@@ -94,7 +95,7 @@ int main(int /*argc*/, char ** /*argv*/)
                 vertices.append(*exportIt);
             }
             // Then create the appropriate edges
-            importIt = (*it)->import.begin();
+            importIt = (*it)->import.constBegin();
             for (; importIt != importEnd; ++importIt) {
                 output += "    \"";
                 output += (*importIt).toLatin1();

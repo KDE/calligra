@@ -36,9 +36,7 @@
 #include <KoToolProxy.h>
 #include <KoGridData.h>
 
-// KDE + Qt includes
-#include <kdebug.h>
-#include <kstatusbar.h>
+// Qt includes
 #include <QBrush>
 #include <QPainter>
 #include <QPainterPath>

@@ -1,5 +1,5 @@
 
-include_directories (${KDE4_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${KOTEXT_INCLUDES} ${KOMAIN_INCLUDES} )
+include_directories ( ${CMAKE_CURRENT_BINARY_DIR} ${KOTEXT_INCLUDES} ${KOMAIN_INCLUDES} )
 
 ### braindump ###
 set(braindump_SRCS
@@ -37,15 +37,16 @@ set(braindump_SRCS
   import/ToolDocker.cpp
 )
 
-kde4_add_ui_files(braindump_SRCS
+ki18n_wrap_ui(braindump_SRCS
   forms/wdgsectionsbox.ui
     forms/wdgsectionproperties.ui
 )
 
-kde4_add_app_icon( braindump_SRCS "../data/icons/hi*-app-braindump.png" )
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/*-apps-braindump.png")
+ecm_add_app_icon( braindump_SRCS ICONS ${ICONS_SRCS})
 
-kde4_add_executable(braindump ${braindump_SRCS})
+add_executable(braindump ${braindump_SRCS})
 
-target_link_libraries(braindump ${KDE4_KDEUI_LIBS}  ${KDE4_KIO_LIBS} flake kotext kowidgets braindumpcore komain)
+target_link_libraries(braindump braindumpcore komain kowidgets kotext flake koplugin KF5::IconThemes)
 
 install(TARGETS braindump ${INSTALL_TARGETS_DEFAULT_ARGS})

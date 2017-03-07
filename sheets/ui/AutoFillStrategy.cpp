@@ -34,7 +34,7 @@ public:
 };
 
 AutoFillStrategy::AutoFillStrategy(CellToolBase *cellTool,
-                                   const QPointF documentPos, Qt::KeyboardModifiers modifiers)
+                                   const QPointF &documentPos, Qt::KeyboardModifiers modifiers)
         : AbstractSelectionStrategy(cellTool, documentPos, modifiers)
         , d(new Private)
 {

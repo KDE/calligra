@@ -26,13 +26,13 @@
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>
 #include <KoShapeLayer.h>
-#include <KoInteractionTool.h>
 
-#include <kdebug.h>
-#include <kglobalsettings.h>
 #include <kconfiggroup.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kselectaction.h>
+#include <ksharedconfig.h>
+
+#include <QIcon>
 
 #include <QMap>
 #include <QList>
@@ -49,6 +49,9 @@
 #include <QTextLayout>
 #include <QMenu>
 #include <QScrollBar>
+#include <QFontDatabase>
+
+#include <WidgetsDebug.h>
 
 class KoModeBox::Private
 {
@@ -118,7 +121,7 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
 {
     applicationName = appName;
 
-    KConfigGroup cfg = KGlobal::config()->group("calligra");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("calligra");
     d->iconMode = (IconMode)cfg.readEntry("ModeBoxIconMode", (int)IconAndText);
     d->verticalTabsSide = (VerticalTabsSide)cfg.readEntry("ModeBoxVerticalTabsSide", (int)TopSide);
     d->horizontalTabsSide = (HorizontalTabsSide)cfg.readEntry("ModeBoxHorizontalTabsSide", (int)LeftSide);
@@ -161,17 +164,17 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
     connect(d->tabBar, SIGNAL(currentChanged(int)), this, SLOT(toolSelected(int)));
     connect(d->tabBar, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotContextMenuRequested(QPoint)));
 
-    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController *, int)),
-            this, SLOT(setActiveTool(KoCanvasController *, int)));
-    connect(KoToolManager::instance(), SIGNAL(currentLayerChanged(const KoCanvasController *,const KoShapeLayer*)),
-            this, SLOT(setCurrentLayer(const KoCanvasController *,const KoShapeLayer *)));
+    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
+            this, SLOT(setActiveTool(KoCanvasController*,int)));
+    connect(KoToolManager::instance(), SIGNAL(currentLayerChanged(const KoCanvasController*,const KoShapeLayer*)),
+            this, SLOT(setCurrentLayer(const KoCanvasController*,const KoShapeLayer*)));
     connect(KoToolManager::instance(), SIGNAL(toolCodesSelected(QList<QString>)), this, SLOT(updateShownTools(QList<QString>)));
     connect(KoToolManager::instance(),
             SIGNAL(addedTool(KoToolAction*,KoCanvasController*)),
             this, SLOT(toolAdded(KoToolAction*,KoCanvasController*)));
 
-    connect(canvas, SIGNAL(toolOptionWidgetsChanged(const QList<QPointer<QWidget> > &)),
-         this, SLOT(setOptionWidgets(const QList<QPointer<QWidget> > &)));
+    connect(canvas, SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget>>)),
+         this, SLOT(setOptionWidgets(QList<QPointer<QWidget>>)));
 }
 
 KoModeBox::~KoModeBox()
@@ -257,8 +260,8 @@ void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
 QIcon KoModeBox::createTextIcon(KoToolAction *toolAction) const
 {
     QSize iconSize = d->tabBar->iconSize();
-    QFont smallFont  = KGlobalSettings::generalFont();
-    qreal pointSize = KGlobalSettings::smallestReadableFont().pointSizeF();
+    QFont smallFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
+    qreal pointSize = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF();
     smallFont.setPointSizeF(pointSize);
     // This must be a QImage, as drawing to a QPixmap outside the
     // UI thread will cause sporadic crashes.
@@ -275,7 +278,7 @@ QIcon KoModeBox::createTextIcon(KoToolAction *toolAction) const
         }
     }
 
-    KIcon(toolAction->iconName()).paint(&p, 0, 0, iconSize.height(), 22);
+    QIcon::fromTheme(toolAction->iconName()).paint(&p, 0, 0, iconSize.height(), 22);
 
     QTextLayout textLayout(toolAction->iconText(), smallFont, p.device());
     QTextOption option;
@@ -336,7 +339,7 @@ QIcon KoModeBox::createSimpleIcon(KoToolAction *toolAction) const
         }
     }
 
-    KIcon(toolAction->iconName()).paint(&p, 0, 0, iconSize.height(), iconSize.width());
+    QIcon::fromTheme(toolAction->iconName()).paint(&p, 0, 0, iconSize.height(), iconSize.width());
 
     return QIcon(QPixmap::fromImage(pm));
 }
@@ -556,16 +559,16 @@ void KoModeBox::setCanvas(KoCanvasBase *canvas)
 
     if (d->canvas) {
         ccwidget = dynamic_cast<KoCanvasControllerWidget *>(d->canvas->canvasController());
-        disconnect(ccwidget, SIGNAL(toolOptionWidgetsChanged(const QList<QPointer<QWidget> > &)),
-                    this, SLOT(setOptionWidgets(const QList<QPointer<QWidget> > &)));
+        disconnect(ccwidget, SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget>>)),
+                    this, SLOT(setOptionWidgets(QList<QPointer<QWidget>>)));
     }
 
     d->canvas = canvas;
 
     ccwidget = dynamic_cast<KoCanvasControllerWidget *>(d->canvas->canvasController());
     connect(
-        ccwidget, SIGNAL(toolOptionWidgetsChanged(const QList<QPointer<QWidget> > &)),
-         this, SLOT(setOptionWidgets(const QList<QPointer<QWidget> > &)));
+        ccwidget, SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget>>)),
+         this, SLOT(setOptionWidgets(QList<QPointer<QWidget>>)));
 }
 
 void KoModeBox::unsetCanvas()
@@ -631,7 +634,7 @@ void KoModeBox::switchIconMode(int mode)
     }
     updateShownTools(QList<QString>());
 
-    KConfigGroup cfg = KGlobal::config()->group("calligra");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("calligra");
     cfg.writeEntry("ModeBoxIconMode", (int)d->iconMode);
 
 }
@@ -650,7 +653,7 @@ void KoModeBox::switchTabsSide(int side)
             d->layout->addWidget(d->tabBar, 2, 0);
         }
 
-        KConfigGroup cfg = KGlobal::config()->group("calligra");
+        KConfigGroup cfg =  KSharedConfig::openConfig()->group("calligra");
         cfg.writeEntry("ModeBoxVerticalTabsSide", (int)d->verticalTabsSide);
     } else {
         d->horizontalTabsSide = static_cast<HorizontalTabsSide>(side);
@@ -664,7 +667,7 @@ void KoModeBox::switchTabsSide(int side)
             d->layout->addWidget(d->tabBar, 0, 2);
         }
 
-        KConfigGroup cfg = KGlobal::config()->group("calligra");
+        KConfigGroup cfg =  KSharedConfig::openConfig()->group("calligra");
         cfg.writeEntry("ModeBoxHorizontalTabsSide", (int)d->horizontalTabsSide);
     }
     updateShownTools(QList<QString>());

@@ -164,9 +164,6 @@
    </item>
   </layout>
  </widget>
-  <includes>
-  <include location="local" >kdatewidget.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

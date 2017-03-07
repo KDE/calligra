@@ -26,10 +26,9 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-#include <kpushbutton.h>
 #include <kcombobox.h>
-#include <kdebug.h>
-#include <klocale.h>
+#include "SheetsDebug.h"
+#include <KLocalizedString>
 
 #include "Cell.h"
 #include "LayoutDialog.h"
@@ -43,7 +42,7 @@
 using namespace Calligra::Sheets;
 
 StyleManagerDialog::StyleManagerDialog(QWidget* parent, Selection* selection, StyleManager* manager)
-        : KDialog(parent)
+        : KoDialog(parent)
         , m_selection(selection)
         , m_styleManager(manager)
 {
@@ -73,11 +72,11 @@ StyleManagerDialog::StyleManagerDialog(QWidget* parent, Selection* selection, St
     // list buttons
     QVBoxLayout *listButtonLayout = new QVBoxLayout();
 
-    m_newButton = new KPushButton(i18n("&New..."), this);
+    m_newButton = new QPushButton(i18n("&New..."), this);
     listButtonLayout->addWidget(m_newButton);
-    m_modifyButton = new KPushButton(i18n("&Modify..."), this);
+    m_modifyButton = new QPushButton(i18n("&Modify..."), this);
     listButtonLayout->addWidget(m_modifyButton);
-    m_deleteButton = new KPushButton(i18n("&Delete..."), this);
+    m_deleteButton = new QPushButton(i18n("&Delete..."), this);
     listButtonLayout->addWidget(m_deleteButton);
     listButtonLayout->addStretch(1);
 
@@ -156,8 +155,8 @@ void StyleManagerDialog::slotDisplayMode(int mode)
     if (mode != 1) // NOT "Custom Styles"
         new QTreeWidgetItem(m_styleList, QStringList(i18n("Default")));
 
-    CustomStyles::iterator iter = m_styleManager->m_styles.begin();
-    CustomStyles::iterator end  = m_styleManager->m_styles.end();
+    CustomStyles::ConstIterator iter = m_styleManager->m_styles.constBegin();
+    CustomStyles::ConstIterator end  = m_styleManager->m_styles.constEnd();
 
     while (iter != end) {
         CustomStyle* styleData = iter.value();
@@ -178,7 +177,7 @@ void StyleManagerDialog::slotDisplayMode(int mode)
 
 void StyleManagerDialog::slotOk()
 {
-    kDebug() ;
+    debugSheets ;
     QTreeWidgetItem* item = m_styleList->currentItem();
 
     if (!item) {
@@ -308,5 +307,3 @@ void StyleManagerDialog::selectionChanged(QTreeWidgetItem* item)
 
     m_deleteButton->setEnabled(style->type() != Style::BUILTIN);
 }
-
-#include "StyleManagerDialog.moc"

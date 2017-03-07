@@ -24,8 +24,6 @@
 #include <QPainter>
 #include <QPainterPath>
 
-#include <kdebug.h>
-
 #include "KPrClockWipeSubpathHelper.h"
 
 KPrSideFanWipeStrategy::KPrSideFanWipeStrategy(int positionAngle, int fanCount, int subType, const char * smilType, const char *smilSubType, bool reverse )

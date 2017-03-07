@@ -28,14 +28,14 @@
 #include <KoOdf.h>
 #include <KoStore.h>
 #include <KoFilterChain.h>
-// KDE
+// KF5
 #include <kpluginfactory.h>
 // Qt
 #include <QFile>
 
 
-K_PLUGIN_FACTORY(CdrImportFactory, registerPlugin<XFigImportFilter>();)
-K_EXPORT_PLUGIN(CdrImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(XFigImportFactory, "calligra_filter_xfig2odg.json",
+                           registerPlugin<XFigImportFilter>();)
 
 
 XFigImportFilter::XFigImportFilter( QObject* parent, const QVariantList& )
@@ -83,3 +83,5 @@ XFigImportFilter::convert( const QByteArray& from, const QByteArray& to )
 
     return isWritten ? KoFilter::OK : KoFilter::CreationError;
 }
+
+#include "XFigImportFilter.moc"

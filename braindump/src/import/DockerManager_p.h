@@ -21,19 +21,16 @@
 #ifndef DockerManager_p_h
 #define DockerManager_p_h
 
-#include "DockerManager.h"
-#include "KoDockFactoryBase.h"
-
-#include <klocale.h>
-#include <kdebug.h>
-#include <ktoolbar.h>
-
-#include "ToolDocker.h"
-
-#include "MainWindow.h"
-
 #include <QList>
 #include <QGridLayout>
+
+#include <ktoolbar.h>
+#include <KLocalizedString>
+
+#include "DockerManager.h"
+#include "KoDockFactoryBase.h"
+#include "ToolDocker.h"
+#include "MainWindow.h"
 
 class ToolDockerFactory : public KoDockFactoryBase
 {

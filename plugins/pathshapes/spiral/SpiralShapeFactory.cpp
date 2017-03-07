@@ -24,14 +24,14 @@
 #include <KoShapeLoadingContext.h>
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 
 SpiralShapeFactory::SpiralShapeFactory()
 : KoShapeFactoryBase(SpiralShapeId, i18n("Spiral"))
 {
     setToolTip(i18n("A spiral shape"));
-    setIconName(koIconNameCStr("spiral-shape"));
+    setIconName(koIconName("spiral-shape"));
     setFamily("geometric");
     setLoadingPriority(1);
 }

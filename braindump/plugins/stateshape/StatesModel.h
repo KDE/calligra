@@ -21,7 +21,6 @@
 #define _STATESMODEL_H_
 
 #include <QAbstractListModel>
-
 #include <QImage>
 
 class State;
@@ -30,7 +29,7 @@ class StatesModel : public QAbstractListModel
 {
 public:
     enum Role {
-        SortRole = 0xF14eb9a0
+        SortRole = 0x514eb9a0
     };
 public:
     StatesModel();
@@ -40,7 +39,7 @@ public:
     QModelIndex indexFor(const QString& catId, const QString& stateId) const;
 private:
     QList<const State*> m_states;
-    QList<QImage> m_icons;
+    QVector<QImage> m_icons;
 };
 
 #endif

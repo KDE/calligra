@@ -19,30 +19,31 @@
 #include "MobiFile.h"
 
 #include "MobiHeaderGenerator.h"
+#include "MobiExportDebug.h"
 
 #include <QFile>
-#include <kdebug.h>
+#include <QDataStream>
 
 MobiFile::MobiFile()
 {
 }
 
-void MobiFile::addContentRawText(QByteArray content)
+void MobiFile::addContentRawText(const QByteArray &content)
 {
     m_textContent = content;
 }
 
-void MobiFile:: addContentImage(int id, QByteArray content)
+void MobiFile:: addContentImage(int id, const QByteArray &content)
 {
     m_imageContent.insert(id, content);
 }
 
 
-KoFilter::ConversionStatus MobiFile::writeMobiFile(QString outputFile, MobiHeaderGenerator &headerGenerator)
+KoFilter::ConversionStatus MobiFile::writeMobiFile(const QString &outputFile, MobiHeaderGenerator &headerGenerator)
 {
     QFile mobi(outputFile);
     if (!mobi.open(QIODevice::WriteOnly)) {
-        kDebug(31000) << "Can not create the file";
+        debugMobi << "Can not create the file";
         return KoFilter::CreationError;
     }
 

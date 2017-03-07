@@ -39,14 +39,14 @@
 
 #include <KoIcon.h>
 
-#include <kdebug.h>
-#include <klocale.h>
+#include "MusicDebug.h"
+#include <klocalizedstring.h>
 
 #include <QKeyEvent>
 
 using namespace MusicCore;
 
-static KIcon getIcon(Duration duration, bool isRest)
+static QIcon getIcon(Duration duration, bool isRest)
 {
     const char *const id =
         (duration == BreveNote) ? (isRest?koIconNameCStr("music-rest-breve"):koIconNameCStr("music-note-breve")) :
@@ -60,7 +60,7 @@ static KIcon getIcon(Duration duration, bool isRest)
         (duration == HundredTwentyEighthNote) ? (isRest?koIconNameCStr("music-rest-128th"):koIconNameCStr("music-note-128th")) :
         0;
 
-    return KIcon(QLatin1String(id));
+    return QIcon::fromTheme(QLatin1String(id));
 }
 
 static QString getText(Duration duration, bool isRest)
@@ -132,7 +132,7 @@ void NoteEntryAction::mousePress(Staff* staff, int bar, const QPointF& pos)
         }
     }
     
-    Chord* join = NULL;
+    Chord* join = nullptr;
     if (before > 0) join = dynamic_cast<Chord*>(vb->element(before-1));
     if (join && join->x() + join->width() >= pos.x()) {
         if (clef && !m_isRest) {

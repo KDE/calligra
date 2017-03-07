@@ -25,11 +25,11 @@
 #include <QRect>
 #include <QPoint>
 #include <QSize>
-#include <QDebug>
 #include <QString>
 #include <QVariant>
+#include <QTest>
 
-// KChart
+// KoChart
 #include "DataSet.h"
 #include "CellRegion.h"
 
@@ -42,7 +42,7 @@ namespace QTest {
     }
 }
 
-using namespace KChart;
+using namespace KoChart;
 
 TestDataSet::TestDataSet()
     : m_source()

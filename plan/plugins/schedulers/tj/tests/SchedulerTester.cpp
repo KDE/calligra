@@ -29,13 +29,7 @@
 #include "kptschedule.h"
 #include "kptxmlloaderobject.h"
 
-#include <cstdlib>
-#include <QDir>
-#include <klocale.h>
-#include <kconfiggroup.h>
-
-#include <qtest_kde.h>
-#include <kdebug.h>
+#include <QTest>
 
 #include "tests/DateTimeTester.h"
 
@@ -52,88 +46,9 @@ QStringList SchedulerTester::data()
             ;
 }
 
-void SchedulerTester::initTimezone()
-{
-    QString kdehome = qgetenv("KDEHOME");
-    QDir d(kdehome);
-    d.mkpath("tjtest");
-    d.cd("tjtest");
-
-    QString dataDir = d.path();
-    qDebug()<<dataDir;
-    QFile f;
-    f.setFileName(dataDir + QLatin1String( "/zone.tab" ) );
-    f.open(QIODevice::WriteOnly);
-    QTextStream fStream(&f);
-    fStream << "DE  +5230+01322 Europe/Berlin\n"
-               "EG  +3003+03115 Africa/Cairo\n"
-               "FR  +4852+00220 Europe/Paris\n"
-               "GB  +512830-0001845 Europe/London   Great Britain\n"
-               "US  +340308-1181434 America/Los_Angeles Pacific Time\n";
-    f.close();
-    QVERIFY(QFile::exists( dataDir + QLatin1String("/zone.tab")));
-    QDir dir(dataDir);
-    QVERIFY(dir.mkdir("Africa"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("zoneinfo/Cairo"), dataDir + QLatin1String("/Africa/Cairo"));
-    QVERIFY(QFile::exists( dataDir + QLatin1String("/Africa/Cairo")));
-    QVERIFY(dir.mkdir("America"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("zoneinfo/Los_Angeles"), dataDir + QLatin1String("/America/Los_Angeles"));
-    QVERIFY(QFile::exists( dataDir + QLatin1String("/America/Los_Angeles")));
-    QVERIFY(dir.mkdir("Europe"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("zoneinfo/Berlin"), dataDir + QLatin1String("/Europe/Berlin"));
-    QVERIFY(QFile::exists( dataDir + QLatin1String("/Europe/Berlin")));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("zoneinfo/London"),dataDir + QLatin1String("/Europe/London"));
-    QVERIFY(QFile::exists( dataDir + QLatin1String("/Europe/London")));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("zoneinfo/Paris"), dataDir + QLatin1String("/Europe/Paris"));
-    QVERIFY(QFile::exists( dataDir + QLatin1String("/Europe/Paris")));
-
-    // NOTE: QTEST_KDEMAIN_CORE puts the config file in QDir::homePath() + "/.kde-unit-test"
-    //       and hence, this is common to all unit tests
-    KConfig config("ktimezonedrc");
-    KConfigGroup group(&config, "TimeZones");
-    group.writeEntry("ZoneinfoDir", dataDir);
-    group.writeEntry("Zonetab", QString(dataDir + QString::fromLatin1("/zone.tab")));
-    group.writeEntry("LocalZone", QString::fromLatin1("Europe/Berlin"));
-    config.sync();
-}
-
-void SchedulerTester::cleanupTimezone()
-{
-    QString kdehome = qgetenv("KDEHOME");
-    removeDir( kdehome + "/tjtest/Africa" );
-    removeDir( kdehome + "/tjtest/America" );
-    removeDir( kdehome + "/tjtest/Europe" );
-    removeDir( kdehome + "/tjtest" );
-    removeDir( kdehome + "/share/config" );
-    QDir().rmpath(kdehome +"/share/tjtest");
-}
-
-void SchedulerTester::removeDir(const QString &dir)
-{
-    QDir local(dir);
-    foreach(const QString &file, local.entryList(QDir::Files))
-        if(!local.remove(file))
-            qWarning("%s: removing failed", qPrintable( file ));
-        QCOMPARE((int)local.entryList(QDir::Files).count(), 0);
-    local.cdUp();
-    QString subd = dir;
-    subd.remove(QRegExp("^.*/"));
-    local.rmpath(subd);
-}
-
-void SchedulerTester::initTestCase()
-{
-    initTimezone();
-}
-
-void SchedulerTester::cleanupTestCase()
-{
-    cleanupTimezone();
-}
-
 void SchedulerTester::test()
 {
-    QString dir = QString::fromLatin1( KDESRCDIR ) + "data/";
+    QString dir = QFINDTESTDATA("data/");
     foreach ( const QString &fname, data() ) {
         qDebug()<<"Testing file:"<<fname;
         QFile file( dir + fname );
@@ -163,6 +78,8 @@ void SchedulerTester::testProject( const QString &fname, const KoXmlDocument &do
         QVERIFY2( pel.isNull(), s.toLatin1() );        
     }
     Project project;
+    project.setTimeZone( QTimeZone( "UTC" ) );
+
     XMLLoaderObject status;
     status.setProject( &project );
     status.setVersion( doc.documentElement().attribute( "version", PLAN_FILE_SYNTAX_VERSION ) );
@@ -186,13 +103,16 @@ void SchedulerTester::testProject( const QString &fname, const KoXmlDocument &do
     project.addScheduleManager( sm );
 
     PlanTJPlugin tj( 0, QVariantList() );
+qDebug() << "+++++++++++++++++++++++++++calculate-start";
     tj.calculate( project, sm, true/*nothread*/ );
+qDebug() << "+++++++++++++++++++++++++++calculate-end";
     
     s = QString( "%1: Scheduling failed" ).arg( fname );
     QVERIFY2( sm->calculationResult() == ScheduleManager::CalculationDone, s.toLatin1() );
 
     long id1 = manager->scheduleId();
     long id2 = sm->scheduleId();
+    qDebug()<<project.startTime( id1 )<<project.startTime( id2 )<<project.timeZone();
     s = QString( "%1: Compare project schedules:\n Expected: %2\n   Result: %3" )
             .arg( fname )
             .arg( project.startTime( id1 ).toString( Qt::ISODate ) )
@@ -213,7 +133,4 @@ void SchedulerTester::compare( const QString &fname, Node *n, long id1, long id2
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::SchedulerTester )
-
-#include "SchedulerTester.moc"
-
+QTEST_GUILESS_MAIN( KPlato::SchedulerTester )

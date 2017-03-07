@@ -294,5 +294,3 @@ void DocumentModel::changeSectionName(Section* _section, const QString& _name)
     QModelIndex idx = index(_section);
     emit(dataChanged(idx, idx));
 }
-
-#include "DocumentModel.moc"

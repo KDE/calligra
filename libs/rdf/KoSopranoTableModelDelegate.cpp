@@ -24,8 +24,8 @@
 #include "KoDocumentRdf.h"
 // main
 #include <KoDocument.h>
-// KDE
-#include <klocale.h>
+// KF5
+#include <klocalizedstring.h>
 // Qt
 #include <QComboBox>
 

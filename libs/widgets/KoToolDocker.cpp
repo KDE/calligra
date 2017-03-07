@@ -25,12 +25,11 @@
 #include <KoDockWidgetTitleBar.h>
 #include <KoIcon.h>
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <kicon.h>
+#include <klocalizedstring.h>
 #include <kconfiggroup.h>
-#include <kglobal.h>
+#include <ksharedconfig.h>
 
+#include <QIcon>
 #include <QApplication>
 #include <QPointer>
 #include <QGridLayout>
@@ -43,14 +42,15 @@
 #include <QToolButton>
 #include <QTabWidget>
 
+#include <WidgetsDebug.h>
 
 class KoToolDocker::Private {
 public:
     Private(KoToolDocker *dock)
         : q(dock)
         , tabbed(false)
-        , tabIcon(koIconName("tab-new"))
-        , unTabIcon(koIconName("tab-close"))
+        , tabIcon(koIcon("tab-new"))
+        , unTabIcon(koIcon("tab-close"))
     {
     }
 
@@ -63,8 +63,8 @@ public:
     KoToolDocker *q;
     Qt::DockWidgetArea dockingArea;
     bool tabbed;
-    KIcon tabIcon;
-    KIcon unTabIcon;
+    QIcon tabIcon;
+    QIcon unTabIcon;
     QToolButton *tabButton;
 
 
@@ -160,7 +160,7 @@ public:
                         currentAuxWidgets.insert(s);
                     }
                 }
-                if (specialCount == currentWidgetList.count() || qApp->applicationName().contains("krita")) {
+                if (specialCount == currentWidgetList.count()) {
                     housekeeperLayout->setRowStretch(cnt, 10000);
                 }
                 break;
@@ -196,14 +196,14 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     : QDockWidget(i18n("Tool Options"), parent),
       d(new Private(this))
 {
-    KConfigGroup cfg = KGlobal::config()->group("DockWidget sharedtooldocker");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("DockWidget sharedtooldocker");
     d->tabbed = cfg.readEntry("TabbedMode", false);
 
     toggleViewAction()->setVisible(false); //should always be visible, so hide option in menu
     setFeatures(DockWidgetMovable|DockWidgetFloatable);
     setTitleBarWidget(new KoDockWidgetTitleBar(this));
 
-    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea )), this, SLOT(locationChanged(Qt::DockWidgetArea)));
+    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(locationChanged(Qt::DockWidgetArea)));
 
     d->housekeeperWidget = new QWidget();
     d->housekeeperLayout = new QGridLayout();
@@ -233,7 +233,7 @@ KoToolDocker::KoToolDocker(QWidget *parent)
 
 KoToolDocker::~KoToolDocker()
 {
-    KConfigGroup cfg = KGlobal::config()->group("DockWidget sharedtooldocker");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("DockWidget sharedtooldocker");
     cfg.writeEntry("TabbedMode", d->tabbed);
     cfg.sync();
 
@@ -277,4 +277,5 @@ void KoToolDocker::unsetCanvas()
     setEnabled(false);
 }
 
-#include <KoToolDocker.moc>
+//have to include this because of Q_PRIVATE_SLOT
+#include <moc_KoToolDocker.cpp>

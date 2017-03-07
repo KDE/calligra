@@ -42,9 +42,9 @@ KPrPresentationToolWidget::KPrPresentationToolWidget( QWidget *parent )
     m_uiWidget.blackButton->setIconSize( size );
     // Set the buttons Icon
     // TODO add tooltip
-    m_uiWidget.penButton->setIcon(koIcon("pen") );
-    m_uiWidget.highLightButton->setIcon(koIcon("highlight"));
-    m_uiWidget.blackButton->setIcon(koIcon("black"));
+    m_uiWidget.penButton->setIcon(koIcon("draw-freehand") );
+    m_uiWidget.highLightButton->setIcon(koIcon("highlight-pointer-spot"));
+    m_uiWidget.blackButton->setIcon(koIcon("pause-to-black-screen"));
 }
 
 void KPrPresentationToolWidget::paintEvent( QPaintEvent *event )
@@ -58,5 +58,3 @@ Ui::KPrPresentationTool KPrPresentationToolWidget::presentationToolUi()
 {
     return m_uiWidget;
 }
-
-#include "KPrPresentationToolWidget.moc"

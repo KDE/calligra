@@ -10,6 +10,7 @@ include_directories(${KOODF_INCLUDES}
 
 set(kplatokernel_LIB_SRCS
     kptglobal.cpp
+    kptlocale.cpp
     kpteffortcostmap.cpp
     kptdocuments.cpp
     kptaccount.cpp
@@ -35,12 +36,20 @@ set(kplatokernel_LIB_SRCS
     KPlatoXmlLoaderBase.cpp
 )
 
-kde4_add_library(kplatokernel SHARED ${kplatokernel_LIB_SRCS})
+add_library(kplatokernel SHARED ${kplatokernel_LIB_SRCS})
+generate_export_header(kplatokernel)
 
-target_link_libraries(kplatokernel koodf kowidgetutils kundo2 ${KDE4_KFILE_LIBS} ${QT_QTGUI_LIBRARY})
+target_link_libraries(kplatokernel
+    PUBLIC
+        koodf
+        kowidgetutils
+        kundo2
+        KF5::KIOWidgets
+)
 
 set_target_properties(kplatokernel PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
 install(TARGETS kplatokernel ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install(FILES plan_schedulerplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
+# TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
+# plan_schedulerplugin.desktop

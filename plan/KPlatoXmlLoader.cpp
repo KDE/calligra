@@ -26,9 +26,10 @@
 
 #include "KoXmlReader.h"
 
+#include <KLocalizedString>
+
 #include <kmessagebox.h>
-#include <ktimezone.h>
-#include <kdebug.h>
+
 
 extern int kplatoXmlDebugArea();
 
@@ -59,11 +60,11 @@ QString KPlatoXmlLoader::timeTag() const
 
 bool KPlatoXmlLoader::load( const KoXmlElement& plan )
 {
-    kDebug(kplatoXmlDebugArea())<<"plan";
+    debugPlanXml<<"plan";
     QString syntaxVersion = plan.attribute( "version" );
     m_loader.setVersion( syntaxVersion );
     if ( syntaxVersion.isEmpty() ) {
-        int ret = KMessageBox::warningContinueCancel(
+        KMessageBox::ButtonCode ret = KMessageBox::warningContinueCancel(
                       0, i18n( "This document has no syntax version.\n"
                                "Opening it in Plan may lose information." ),
                       i18n( "File-Format Error" ), KGuiItem( i18n( "Continue" ) ) );
@@ -74,7 +75,7 @@ bool KPlatoXmlLoader::load( const KoXmlElement& plan )
         // set to max version and hope for the best
         m_loader.setVersion( KPLATO_MAX_FILE_SYNTAX_VERSION );
     } else if ( syntaxVersion > KPLATO_MAX_FILE_SYNTAX_VERSION ) {
-        int ret = KMessageBox::warningContinueCancel(
+        KMessageBox::ButtonCode ret = KMessageBox::warningContinueCancel(
                       0, i18n( "This document was created with a newer version of KPlato than Plan can load.\n"
                                "Syntax version: %1\n"
                                "Opening it in this version of Plan may lose some information.", syntaxVersion ),
@@ -102,7 +103,7 @@ bool KPlatoXmlLoader::load( const KoXmlElement& plan )
                 }
             } else {
                 m_loader.addMsg( XMLLoaderObject::Errors, "Loading of project failed" );
-                kError()<<"Loading of project failed";
+                errorPlanXml <<"Loading of project failed";
                 //TODO add some ui here
             }
         }
@@ -114,10 +115,10 @@ bool KPlatoXmlLoader::load( const KoXmlElement& plan )
 
 bool KPlatoXmlLoader::loadWorkpackage( const KoXmlElement& plan )
 {
-    kDebug(kplatoXmlDebugArea());
+    debugPlanXml;
     bool ok = false;
     if ( m_loader.workVersion() > KPLATOWORK_MAX_FILE_SYNTAX_VERSION ) {
-        int ret = KMessageBox::warningContinueCancel(
+        KMessageBox::ButtonCode ret = KMessageBox::warningContinueCancel(
                 0, i18n( "This document was created with a newer version of KPlatoWork (syntax version: %1)\n"
                 "Opening it in this version of PlanWork will lose some information.", m_loader.workVersion() ),
                 i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );
@@ -169,5 +170,3 @@ bool KPlatoXmlLoader::loadWorkpackage( const KoXmlElement& plan )
 }
 
 } // namespace KPlato
-
-#include "KPlatoXmlLoader.moc"

@@ -22,15 +22,14 @@
 #include "kptwbsdefinition.h"
 #include <kptcommand.h>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
-#include <kdebug.h>
 
 namespace KPlato
 {
 
 WBSDefinitionDialog::WBSDefinitionDialog(Project &project, WBSDefinition &def, QWidget *p)
-    : KDialog(p)
+    : KoDialog(p)
 {
     setCaption( i18n("WBS Definition") );
     setButtons( Ok|Cancel );
@@ -57,5 +56,3 @@ void WBSDefinitionDialog::slotOk() {
 
 
 }  //KPlato namespace
-
-#include "kptwbsdefinitiondialog.moc"

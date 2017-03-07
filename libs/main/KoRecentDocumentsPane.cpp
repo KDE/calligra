@@ -22,13 +22,17 @@
 
 #include <QFile>
 #include <QStandardItemModel>
+#include <QUrl>
 
-#include <kdeversion.h>
-#include <kcomponentdata.h>
+#include <KSharedConfig>
+#include <KConfigGroup>
 #include <kfileitem.h>
 #include <kio/previewjob.h>
 
 #include <KoIcon.h>
+
+
+static const int MAX_RECENTFILES_ENTRIES = 10;
 
 
 enum KoRecentDocumentRoles {
@@ -72,48 +76,60 @@ public:
 };
 
 
-KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentData &_componentData,
-        const QString& header)
-        : KoDetailsPane(parent, _componentData, header)
+KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const QString& header)
+        : KoDetailsPane(parent, header)
         , d(new KoRecentDocumentsPanePrivate)
 {
     setFocusProxy(m_documentList);
-    KGuiItem openGItem(i18n("Open This Document"), koIconName("document-open"));
-    m_openButton->setGuiItem(openGItem);
+    m_openButton->setText(i18n("Open This Document"));
+    m_openButton->setIcon(koIcon("document-open"));
+
     m_alwaysUseCheckBox->hide();
 
     model()->setSortRole(0); // Disable sorting
 
-    KConfigGroup config(componentData().config(), "RecentFiles");
+    // load list of recent files from config
+    KConfigGroup config(KSharedConfig::openConfig(), "RecentFiles");
 
-    int i = 1;
-    QString path;
+    QString fileKey;
+    QString fileValue;
+    QUrl url;
+    QString nameValue;
     KFileItemList fileList;
     QStandardItem* rootItem = model()->invisibleRootItem();
 
-    do {
-        path = config.readPathEntry(QString("File%1").arg(i), QString());
+    for (int i = 1; i <= MAX_RECENTFILES_ENTRIES; ++i) {
+        fileValue = config.readPathEntry(QString("File%1").arg(i), QString());
 
-        if (!path.isEmpty()) {
-            QString name = config.readPathEntry(QString("Name%1").arg(i), QString());
-
-            KUrl url(path);
-
-            if (name.isEmpty())
-                name = url.fileName();
-
-            if (!url.isLocalFile() || QFile::exists(url.toLocalFile())) {
-                KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, url);
-                fileList.prepend(fileItem);
-                const QIcon icon = KIcon(fileItem.iconName());
-                KoFileListItem* item = new KoFileListItem(icon, name, fileItem);
-                item->setEditable(false);
-                rootItem->insertRow(0, item);
-            }
+        // ignore empty entries
+        if (fileValue.isEmpty()) {
+            continue;
         }
 
-        i++;
-    } while (!path.isEmpty() || i <= 10);
+        url = QUrl::fromUserInput(fileValue);
+
+        // ignore entries for files known to no longer exist
+        if (url.isLocalFile() && !QFile::exists(url.toLocalFile())) {
+            continue;
+        }
+        // ignore duplicated entries
+        if (!fileList.findByUrl(url).isNull()) {
+            continue;
+        }
+
+        nameValue = config.readPathEntry(QString("Name%1").arg(i), QString());
+        // handle name entries with empty strings
+        if (nameValue.isEmpty()) {
+            nameValue = url.fileName();
+        }
+
+        KFileItem fileItem(url);
+        fileList.prepend(fileItem);
+        const QIcon icon = QIcon::fromTheme(fileItem.iconName());
+        KoFileListItem* item = new KoFileListItem(icon, nameValue, fileItem);
+        item->setEditable(false);
+        rootItem->insertRow(0, item);
+    }
 
 
     //Select the first file
@@ -121,12 +137,8 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
     m_documentList->selectionModel()->select(firstIndex, QItemSelectionModel::Select);
     m_documentList->selectionModel()->setCurrentIndex(firstIndex, QItemSelectionModel::Select);
 
-#if KDE_IS_VERSION(4,6,80)
     QStringList availablePlugins = KIO::PreviewJob::availablePlugins();
     KIO::PreviewJob *previewJob = KIO::filePreview(fileList, QSize(IconExtent, IconExtent), &availablePlugins);
-#else
-    KIO::PreviewJob *previewJob = KIO::filePreview(fileList, IconExtent, IconExtent, 0);
-#endif
 
     d->m_previewJobs.append(previewJob);
     connect(previewJob, SIGNAL(result(KJob*)), SLOT(previewResult(KJob*)));
@@ -152,12 +164,8 @@ void KoRecentDocumentsPane::selectionChanged(const QModelIndex& index)
         if (preview.isNull()) {
             // need to fetch preview
             const KFileItemList fileList = KFileItemList() << fileItem;
-#if KDE_IS_VERSION(4,6,80)
             QStringList availablePlugins = KIO::PreviewJob::availablePlugins();
             KIO::PreviewJob *previewJob = KIO::filePreview(fileList, QSize(PreviewExtent, PreviewExtent), &availablePlugins);
-#else
-            KIO::PreviewJob *previewJob = KIO::filePreview(fileList, PreviewExtent, PreviewExtent, 0);
-#endif
 
             d->m_previewJobs.append(previewJob);
             connect(previewJob, SIGNAL(result(KJob*)), SLOT(previewResult(KJob*)));
@@ -173,7 +181,8 @@ void KoRecentDocumentsPane::selectionChanged(const QModelIndex& index)
         m_previewLabel->setPixmap(preview);
 
         if (!fileItem.isNull()) {
-            QString details = QString("<center>%1<br>").arg(fileItem.url().path()) +
+            // TODO: think about not displaying Modified/Accessed if not available
+            QString details = QString("<center>%1<br>").arg(fileItem.url().toDisplayString(QUrl::PreferLocalFile)) +
                 "<table border=\"0\">" +
                 i18nc("File modification date and time. %1 is date time",
                       "<tr><td><b>Modified:</b></td><td>%1</td></tr>",
@@ -203,7 +212,7 @@ void KoRecentDocumentsPane::openFile(const QModelIndex& index)
 {
     if (!index.isValid()) return;
 
-    KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
+    KConfigGroup cfgGrp(KSharedConfig::openConfig(), "TemplateChooserDialog");
     cfgGrp.writeEntry("LastReturnType", "File");
 
     KoFileListItem* item = static_cast<KoFileListItem*>(model()->itemFromIndex(index));
@@ -263,5 +272,3 @@ void KoRecentDocumentsPane::updateIcon(const KFileItem& fileItem, const QPixmap&
         }
     }
 }
-
-#include <KoRecentDocumentsPane.moc>

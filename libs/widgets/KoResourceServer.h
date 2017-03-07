@@ -31,9 +31,6 @@
 #include <QList>
 #include <QFileInfo>
 #include <QDir>
-#include <kglobal.h>
-#include <kstandarddirs.h>
-#include <kcomponentdata.h>
 
 #include <QTemporaryFile>
 #include <QDomDocument>
@@ -41,10 +38,10 @@
 #include "KoResourceServerPolicies.h"
 #include "KoResourceServerObserver.h"
 #include "KoResourceTagStore.h"
+#include "KoResourcePaths.h"
 
 #include "kowidgets_export.h"
-
-#include <kdebug.h>
+#include "WidgetsDebug.h"
 
 class KoResource;
 
@@ -56,7 +53,7 @@ class KOWIDGETS_EXPORT KoResourceServerBase {
 public:
     /**
     * Constructs a KoResourceServerBase
-    * @param resource type, has to be the same as used by KStandardDirs
+    * @param resource type, has to be the same as used by KoResourcePaths
     * @param extensions the file extensions separate by ':', e.g. "*.kgr:*.svg:*.ggr"
     */
     KoResourceServerBase(const QString& type, const QString& extensions)
@@ -85,7 +82,7 @@ public:
         QStringList fileNames;
 
         foreach (const QString &extension, extensionList) {
-            fileNames += KGlobal::mainComponent().dirs()->findAllResources(type().toLatin1(), extension, KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
+            fileNames += KoResourcePaths::findAllResources(type().toLatin1(), extension, KoResourcePaths::Recursive | KoResourcePaths::NoDuplicates);
 
         }
         return fileNames;
@@ -137,7 +134,7 @@ public:
     KoResourceServer(const QString& type, const QString& extensions)
         : KoResourceServerBase(type, extensions)
     {
-        m_blackListFile = KStandardDirs::locateLocal("data", "krita/" + type + ".blacklist");
+        m_blackListFile = KoResourcePaths::locateLocal("data", "krita/" + type + ".blacklist");
         m_blackListFileNames = readBlackListFile();
         m_tagStore = new KoResourceTagStore(this);
         m_tagStore->loadTags();
@@ -215,7 +212,7 @@ public:
                         notifyResourceAdded(resource);
                     }
                     else {
-                        kWarning() << "Loading resource " << front << "failed";
+                        warnWidgets << "Loading resource " << front << "failed";
                         Policy::deleteResource(resource);
                     }
                 }
@@ -229,14 +226,14 @@ public:
             observer->syncTaggedResourceView();
         }
 
-        kDebug(30009) << "done loading  resources for type " << type();
+        debugWidgets << "done loading  resources for type " << type();
     }
 
 
     /// Adds an already loaded resource to the server
     bool addResource(PointerType resource, bool save = true, bool infront = false) {
         if (!resource->valid()) {
-            kWarning(30009) << "Tried to add an invalid resource!";
+            warnWidgets << "Tried to add an invalid resource!";
             return false;
         }
 
@@ -250,16 +247,16 @@ public:
 
             if (fileInfo.exists()) {
                 QString filename = fileInfo.path() + "/" + fileInfo.baseName() + "XXXXXX" + "." + fileInfo.suffix();
-                kDebug() << "fileName is " << filename;
+                debugWidgets << "fileName is " << filename;
                 QTemporaryFile file(filename);
                 if (file.open()) {
-                    kDebug() << "now " << file.fileName();
+                    debugWidgets << "now " << file.fileName();
                     resource->setFilename(file.fileName());
                 }
             }
 
             if (!resource->save()) {
-                kWarning(30009) << "Could not save resource!";
+                warnWidgets << "Could not save resource!";
                 return false;
             }
         }
@@ -295,7 +292,7 @@ public:
             writeBlackListFile();
             }
             else{
-                kWarning(30009)<<"Doesn't contain filename";
+                warnWidgets<<"Doesn't contain filename";
                 return false;
             }
         
@@ -351,7 +348,7 @@ public:
 
     /// Returns path where to save user defined and imported resources to
     virtual QString saveLocation() {
-        return KGlobal::mainComponent().dirs()->saveLocation(type().toLatin1());
+        return KoResourcePaths::saveLocation(type().toLatin1());
     }
 
     /**
@@ -371,7 +368,7 @@ public:
         PointerType resource = createResource( filename );
         resource->load();
         if (!resource->valid()) {
-            kWarning(30009) << "Import failed! Resource is not valid";
+            warnWidgets << "Import failed! Resource is not valid";
             Policy::deleteResource(resource);
 
             return false;
@@ -408,7 +405,7 @@ public:
 
         PointerType resource = resourceByFilename(fi.fileName());
         if (!resource) {
-            kWarning(30009) << "Resource file do not exist ";
+            warnWidgets << "Resource file do not exist ";
             return;
         }
 
@@ -616,13 +613,13 @@ protected:
 
         QDomDocument doc;
         if (!doc.setContent(&f)) {
-            kWarning() << "The file could not be parsed.";
+            warnWidgets << "The file could not be parsed.";
             return filenameList;
         }
 
         QDomElement root = doc.documentElement();
         if (root.tagName() != "resourceFilesList") {
-            kWarning() << "The file doesn't seem to be of interest.";
+            warnWidgets << "The file doesn't seem to be of interest.";
             return filenameList;
         }
 
@@ -642,10 +639,10 @@ protected:
     /// write the blacklist file entries to an xml file
     void writeBlackListFile()
     {
+        QDir().mkpath(QFileInfo(m_blackListFile).path());
         QFile f(m_blackListFile);
-
         if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            kWarning() << "Cannot write meta information to '" << m_blackListFile << "'." << endl;
+            warnWidgets << "Cannot write meta information to '" << m_blackListFile << "'." << endl;
             return;
         }
 

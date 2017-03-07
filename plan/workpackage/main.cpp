@@ -19,29 +19,36 @@
 
 
 #include "kplatowork_export.h"
-#include "aboutdata.h"
-#include "application.h"
 
-#include <kcmdlineargs.h>
-#include <kdebug.h>
+#include "commandlineparser.h"
 
-#include <QFile>
+#include <KDBusService>
 
+#include <QApplication>
+#include <QDir>
 
-extern "C" KDE_EXPORT int kdemain( int argc, char **argv ) {
-    KCmdLineArgs::init( argc, argv, KPlatoWork::newAboutData());
-    KCmdLineOptions options;
-    options.add("+[file]", ki18n("File to open"));
-    KCmdLineArgs::addCmdLineOptions( options );
+#include <Calligra2Migration.h>
 
-    if (!KUniqueApplication::start()) {
-       fprintf(stderr, "PlanWork is already running!\n");
-       return 0;
-    }
+extern "C" KPLATOWORK_EXPORT int kdemain( int argc, char **argv )
+{
+    QApplication app(argc, argv);
+#ifdef Q_OS_MACOS
+        // app.applicationName() will return "Plan Work" because of the nice name
+        // set in the Info.plist. DBus doesn't like the resulting space in the 
+        // service name, so reset the application name:
+        app.setApplicationName("calligraplanwork");
+#endif
+    KDBusService service(KDBusService::Unique);
+    // we come here only once...
 
-    KPlatoWork_Application app;
-    fprintf(stderr, "app created\n");
+    // Migrate data from kde4 to kf5 locations
+    Calligra2Migration m("calligraplanwork", "planwork");
+    m.setConfigFiles(QStringList() << QStringLiteral("planworkrc"));
+    m.setUiFiles(QStringList() << QStringLiteral("planwork.rc") << QStringLiteral("planwork_readonly.rc") << QStringLiteral("planworkui.rc"));
+    m.migrate();
 
-    app.exec();
-    return 0;
+    CommandLineParser cmd;
+    QObject::connect(&service, &KDBusService::activateRequested, &cmd, &CommandLineParser::handleActivateRequest);
+    cmd.handleCommandLine(QDir::current());
+    return app.exec();
 }

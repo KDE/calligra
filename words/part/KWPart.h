@@ -35,6 +35,8 @@ class WORDS_EXPORT KWPart : public KoPart
 
 public:
     explicit KWPart(QObject *parent);
+    // TODO: not nice, just added to allow CAuPart pass its own componentData
+    explicit KWPart(const KoComponentData &componentData, QObject *parent);
 
     virtual ~KWPart();
 

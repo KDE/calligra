@@ -27,23 +27,23 @@
 // Calligra
 #include <KoShapeConfigWidgetBase.h>
 
-// KDChart
-
 // KChart
+
+// KoChart
 #include "ChartShape.h"
 #include "ui_ChartConfigWidget.h"
 
 
 class KoShape;
-class KAction;
+class QAction;
 
-namespace KDChart
+namespace KChart
 {
     class Position;
     class CartesianAxis;
 }
 
-namespace KChart
+namespace KoChart
 {
 class ChartShape;
 
@@ -60,7 +60,7 @@ public:
 
     void open(KoShape* shape);
     void save();
-    KAction* createAction();
+    QAction * createAction();
 
     /// reimplemented 
     virtual bool showOnShapeCreate() { return true; }
@@ -195,7 +195,7 @@ private:
     Private * const d;
 };
 
-}  // namespace KChart
+}  // namespace KoChart
 
 
 #endif // KCHART_CHART_TYPE_CONFIG_WIDGET

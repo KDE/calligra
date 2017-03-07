@@ -21,13 +21,16 @@
 */
 
 #include "TableElement.h"
+
 #include "AttributeManager.h"
 #include "TableRowElement.h"
 #include "FormulaCursor.h"
+#include "FormulaDebug.h"
+
 #include <KoXmlReader.h>
+
 #include <QPainter>
 #include <QList>
-#include <kdebug.h>
 
 TableElement::TableElement( BasicElement* parent ) : BasicElement( parent )
 {
@@ -47,7 +50,7 @@ void TableElement::paint( QPainter& painter, AttributeManager* am )
     painter.save();
     QList<qreal> frameSpacing = am->doubleListOf( "framespacing", this );
     QList<qreal> rowSpacing = am->doubleListOf( "rowspacing", this );
-    kDebug()<<frameSpacing;
+    debugFormula << frameSpacing;
     painter.setPen(QPen(Qt::NoPen));//debugging 
     painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
     // draw rowlines

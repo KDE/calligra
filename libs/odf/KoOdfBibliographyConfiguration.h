@@ -28,6 +28,7 @@
 
 class KoXmlWriter;
 
+// TODO: add namespacing prefix
 typedef QPair<QString, Qt::SortOrder> SortKeyPair;
 
 /**
@@ -101,8 +102,8 @@ public:
      * Sort Keys
      * The text:sort-key attribute specifies sort key for bibliography entry
      */
-    QList<SortKeyPair> sortKeys() const;
-    void setSortKeys(const QList<SortKeyPair> &sortKeys);
+    QVector<SortKeyPair> sortKeys() const;
+    void setSortKeys(const QVector<SortKeyPair> &sortKeys);
 
 private:
 

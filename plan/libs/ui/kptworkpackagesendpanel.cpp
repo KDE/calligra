@@ -26,8 +26,7 @@
 
 #include <KoIcon.h>
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <KLocalizedString>
 
 #include <QPushButton>
 #include <QLineEdit>
@@ -72,5 +71,3 @@ void WorkPackageSendPanel::slotSendClicked()
 
 
 }  //KPlato namespace
-
-#include "kptworkpackagesendpanel.moc"

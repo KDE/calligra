@@ -24,7 +24,7 @@
 #define SPACEELEMENT_H
 
 #include "BasicElement.h"
-#include "kformula_export.h"
+#include "koformula_export.h"
 
 /** Enum encoding all states of mspace's linebreak attribute */
 enum LineBreak {

@@ -21,7 +21,7 @@
 
 #include "TestLoadAndSave.h"
 
-#include <QtTest>
+#include <QTest>
 #include <QBuffer>
 #include <QDebug>
 
@@ -1338,11 +1338,10 @@ void TestLoadAndSave::actionElement_data()
             "<maction actiontype=\"statusline\"/>" );
     addRow( "<maction actiontype=\"tooltip\"><mrow></mrow><mrow></mrow></maction>",
             "<maction actiontype=\"tooltip\"/>" );
-    // This is expected to fail since we are only comparing attributes in a certain order.
-    // In reality it works, but we have to improve the test.
-    addRow( "<maction actiontype=\"highlight\" my:color=\"red\" my:background=\"yellow\"><mrow></mrow></maction>",
-            "<maction actiontype=\"highlight\" my:color=\"red\" my:background=\"yellow\"/>",
-            true );
+    // This is prone to fail since we are only comparing attributes in a certain order.
+    // TODO: improve the test to compare the strings normalized
+    addRow( "<maction actiontype=\"highlight\" my:background=\"yellow\" my:color=\"red\"><mrow></mrow></maction>",
+            "<maction actiontype=\"highlight\" my:background=\"yellow\" my:color=\"red\"/>" );
 }
 
 void TestLoadAndSave::identifierElement()
@@ -1527,4 +1526,3 @@ void TestLoadAndSave::actionElement()
 }
 
 QTEST_MAIN(TestLoadAndSave)
-#include "TestLoadAndSave.moc"

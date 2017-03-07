@@ -24,9 +24,9 @@
 #include <QString>
 #include <QRect>
 
-#include "calligra_sheets_export.h"
 #include <KoXmlReader.h>
 
+#include "sheets_odf_export.h"
 #include "Global.h"
 #include "Value.h"
 
@@ -97,7 +97,7 @@ int         penCompare(QPen const & pen1, QPen const & pen2);
 
 /**
  * \ingroup NativeFormat
- * This namespace collects methods related to KSpread's old native file format
+ * This namespace collects methods related to old KSpread file format
  * encoding/decoding.
  */
 namespace NativeFormat
@@ -132,24 +132,10 @@ namespace Odf
 {
 /**
  * \ingroup OpenDocument
- * Creates OpenDocument pen attributes of the QPen \p pen .
- * \return the OpenDocument pen attributes
- */
-QString encodePen(const QPen& pen);
-
-/**
- * \ingroup OpenDocument
- * Creates a QPen of OpenDocument pen attributes \p str .
- * \return the created QPen
- */
-QPen decodePen(const QString &str);
-
-/**
- * \ingroup OpenDocument
  * Converts an OpenDocument representation of a formula to a localized formula.
  * @param expr The expression to convert from OpenDocument format.
  * @param locale The locale to which the expression should be converted.
- * \note Use Region::loadOdf() for plain cell references.
+ * \note Use Odf::loadRegion() for plain cell references.
  */
 // TODO check visibility
 CALLIGRA_SHEETS_ODF_EXPORT QString decodeFormula(const QString& expression_, const KLocale *locale = 0, const QString &namespacePrefix = QString());

@@ -1,5 +1,8 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_music\")
+
 include_directories(
     ${FLAKE_INCLUDES}
+    ${kOWIDGETS_INCLUDES}
 )
 
 add_subdirectory( fonts )
@@ -32,6 +35,7 @@ set( musiccore_SRCS
 )
 
 set (musicshape_LIB_SRCS
+    MusicDebug.cpp
     MusicShape.cpp
     MusicShapeFactory.cpp
     MusicTool.cpp
@@ -84,19 +88,15 @@ set (musicshape_LIB_SRCS
     ${musiccore_SRCS}
 )
 
-kde4_add_ui_files(musicshape_LIB_SRCS
+ki18n_wrap_ui(musicshape_LIB_SRCS
     dialogs/PartsWidget.ui
     dialogs/PartDetailsDialog.ui
     dialogs/SimpleEntryWidget.ui
     dialogs/KeySignatureDialog.ui
 )
 
-kde4_add_plugin(calligra_shape_music ${musicshape_LIB_SRCS})
+add_library(calligra_shape_music MODULE ${musicshape_LIB_SRCS})
+calligra_shape_desktop_to_json(calligra_shape_music calligra_shape_music.desktop)
 
-target_link_libraries(calligra_shape_music flake ${KDE4_KFILE_LIBS})
-install(TARGETS calligra_shape_music DESTINATION ${PLUGIN_INSTALL_DIR})
-
-########### install files ###############
-
-install( FILES calligra_shape_music.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
+target_link_libraries(calligra_shape_music flake kowidgets KF5::I18n Qt5::Svg)
+install(TARGETS calligra_shape_music DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)

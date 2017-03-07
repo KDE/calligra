@@ -36,8 +36,6 @@
 #include <QString>
 #include <QList>
 
-#include <kdebug.h>
-
 
 /// The main namespace.
 namespace KPlato
@@ -179,6 +177,8 @@ public:
     DateTime startTime( long id ) const;
     DateTime endTime( long id ) const;
 
+    void blockChanged(bool on = true);
+
 #ifndef NDEBUG
 
     void printDebug( const QString& ident );
@@ -201,7 +201,7 @@ private:
     Type m_type;
 
     QList<ResourceGroupRequest*> m_requests;
-
+    bool m_blockChanged;
 };
 
 /**
@@ -253,13 +253,9 @@ public:
     ResourceGroup *parentGroup() const { return m_parent; }
 
     /// Set the time from when the resource is available to this project
-    void setAvailableFrom( const QDateTime &af ) { m_availableFrom = af; changed();}
-    /// Set the time from when the resource is available to this project
     void setAvailableFrom( const DateTime &af ) { m_availableFrom = af; changed(); }
     /// Return the time when the resource is available to this project
     const DateTime &availableFrom() const { return m_availableFrom;}
-    /// Set the time when the resource is no longer available to this project
-    void setAvailableUntil( const QDateTime &au ) { m_availableUntil = au; changed(); }
     /// Set the time when the resource is no longer available to this project
     void setAvailableUntil( const DateTime &au ) { m_availableUntil = au; changed(); }
     /// Return the time when the resource is no longer available to this project.
@@ -314,8 +310,8 @@ public:
 
     Project *project() const { return m_project; }
     /// Return the resources timespec. Defaults to local.
-    KDateTime::Spec timeSpec() const;
-    
+    QTimeZone timeZone() const;
+
     /**
      * Get the calendar for this resource.
      * Working resources may have a default calendar if the a calendar is marked as default,
@@ -498,6 +494,8 @@ public:
     /// Set the @p account
     void setAccount( Account *account );
 
+    void blockChanged(bool on = true);
+
     // for xml loading code
     
     class WorkInfoCache
@@ -570,6 +568,7 @@ private:
 
     // return this if resource has no calendar and is a material resource
     Calendar m_materialCalendar;
+    bool m_blockChanged;
 
 #ifndef NDEBUG
 public:

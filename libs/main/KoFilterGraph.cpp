@@ -22,14 +22,16 @@ Boston, MA 02110-1301, USA.
 #include "KoDocumentEntry.h"
 #include "KoFilterEntry.h"
 #include "KoDocument.h"
+#include <KoConfig.h> // CALLIGRA_OLD_PLUGIN_METADATA
 
 #include "PriorityQueue_p.h"
 #include "KoFilterEdge.h"
 #include "KoFilterChainLink.h"
 #include "KoFilterVertex.h"
 
+#include <QPluginLoader>
 #include <QMetaMethod>
-#include <kdebug.h>
+#include <MainDebug.h>
 
 #include <limits.h> // UINT_MAX
 
@@ -100,12 +102,12 @@ KoFilterChain::Ptr Graph::chain(const KoFilterManager* manager, QByteArray& to) 
 void Graph::dump() const
 {
 #ifndef NDEBUG
-    kDebug(30500) << "+++++++++ Graph::dump +++++++++";
-    kDebug(30500) << "From:" << m_from;
+    debugFilter << "+++++++++ Graph::dump +++++++++";
+    debugFilter << "From:" << m_from;
     foreach(Vertex *vertex, m_vertices) {
         vertex->dump("   ");
     }
-    kDebug(30500) << "+++++++++ Graph::dump (done) +++++++++";
+    debugFilter << "+++++++++ Graph::dump (done) +++++++++";
 #endif
 }
 
@@ -118,8 +120,13 @@ void Graph::buildGraph()
 
     foreach(const KoDocumentEntry& part, parts) {
 
-        QStringList nativeMimeTypes = part.service()->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList();
-        nativeMimeTypes += part.service()->property("X-KDE-NativeMimeType", QVariant::String).toString();
+        QJsonObject metaData = part.metaData();
+#ifdef CALLIGRA_OLD_PLUGIN_METADATA
+        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+#else
+        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
+#endif
+        nativeMimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
 
         foreach(const QString& nativeMimeType, nativeMimeTypes) {
             const QByteArray key = nativeMimeType.toLatin1();
@@ -159,7 +166,7 @@ void Graph::buildGraph()
                 }
             }
         } else
-            kDebug(30500) << "Filter:" << filter->service()->name() << " doesn't apply.";
+            debugFilter << "Filter:" << filter->fileName() << " doesn't apply.";
     }
 }
 
@@ -205,8 +212,13 @@ QByteArray Graph::findCalligraPart() const
 
     // Be sure that v gets initialized correctly
     while (!v && partIt != partEnd) {
-        QStringList nativeMimeTypes = (*partIt).service()->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList();
-        nativeMimeTypes += (*partIt).service()->property("X-KDE-NativeMimeType", QVariant::String).toString();
+        QJsonObject metaData = (*partIt).metaData();
+#ifdef CALLIGRA_OLD_PLUGIN_METADATA
+        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+#else
+        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
+#endif
+        nativeMimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; !v && it != end; ++it)
@@ -219,8 +231,13 @@ QByteArray Graph::findCalligraPart() const
 
     // Now we try to find the "cheapest" Calligra vertex
     while (partIt != partEnd) {
-        QStringList nativeMimeTypes = (*partIt).service()->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList();
-        nativeMimeTypes += (*partIt).service()->property("X-KDE-NativeMimeType", QVariant::String).toString();
+        QJsonObject metaData = (*partIt).metaData();
+#ifdef CALLIGRA_OLD_PLUGIN_METADATA
+        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+#else
+        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
+#endif
+        nativeMimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; !v && it != end; ++it) {

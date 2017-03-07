@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
   Copyright (C) 2007, 2012 Dag Andersen danders@get2net>
-
+  Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
+  
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
   License as published by the Free Software Foundation; either
@@ -37,10 +38,9 @@
 
 #include <QObject>
 #include <QStringList>
+#include <QLocale>
 
-
-#include <kglobal.h>
-#include <klocale.h>
+#include <KFormat>
 
 
 namespace KPlato
@@ -82,7 +82,7 @@ ScheduleItemModel::~ScheduleItemModel()
 
 void ScheduleItemModel::slotScheduleManagerToBeInserted( const ScheduleManager *parent, int row )
 {
-    //kDebug(planDbg())<<parent<<row;
+    //debugPlan<<parent<<row;
     if ( m_flat ) {
         return; // handle in *Inserted();
     }
@@ -93,7 +93,7 @@ void ScheduleItemModel::slotScheduleManagerToBeInserted( const ScheduleManager *
 
 void ScheduleItemModel::slotScheduleManagerInserted( const ScheduleManager *manager )
 {
-    //kDebug(planDbg())<<manager->name();
+    //debugPlan<<manager->name();
     if ( m_flat ) {
         int row = m_project->allScheduleManagers().indexOf( const_cast<ScheduleManager*>( manager ) );
         Q_ASSERT( row >= 0 );
@@ -111,7 +111,7 @@ void ScheduleItemModel::slotScheduleManagerInserted( const ScheduleManager *mana
 
 void ScheduleItemModel::slotScheduleManagerToBeRemoved( const ScheduleManager *manager )
 {
-    //kDebug(planDbg())<<manager->name();
+    //debugPlan<<manager->name();
     if ( m_flat ) {
         int row = m_managerlist.indexOf( const_cast<ScheduleManager*>( manager ) );
         beginRemoveRows( QModelIndex(), row, row );
@@ -128,7 +128,7 @@ void ScheduleItemModel::slotScheduleManagerToBeRemoved( const ScheduleManager *m
 
 void ScheduleItemModel::slotScheduleManagerRemoved( const ScheduleManager *manager )
 {
-    //kDebug(planDbg())<<manager->name();
+    //debugPlan<<manager->name();
     if ( m_flat ) {
         endRemoveRows();
         return;
@@ -140,13 +140,13 @@ void ScheduleItemModel::slotScheduleManagerRemoved( const ScheduleManager *manag
 
 void ScheduleItemModel::slotScheduleManagerToBeMoved( const ScheduleManager *manager )
 {
-    //kDebug(planDbg())<<this<<manager->name()<<"from"<<(manager->parentManager()?manager->parentManager()->name():"project");
+    //debugPlan<<this<<manager->name()<<"from"<<(manager->parentManager()?manager->parentManager()->name():"project");
     slotScheduleManagerToBeRemoved( manager );
 }
 
 void ScheduleItemModel::slotScheduleManagerMoved( const ScheduleManager *manager, int index )
 {
-    //kDebug(planDbg())<<this<<manager->name()<<"to"<<manager->parentManager()<<index;
+    //debugPlan<<this<<manager->name()<<"to"<<manager->parentManager()<<index;
     slotScheduleManagerRemoved( manager );
     slotScheduleManagerToBeInserted( manager->parentManager(), index );
     slotScheduleManagerInserted( manager );
@@ -171,6 +171,8 @@ void ScheduleItemModel::slotScheduleRemoved( const MainSchedule * )
 void ScheduleItemModel::setProject( Project *project )
 {
     if ( m_project ) {
+        disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
+
         disconnect( m_project, SIGNAL(scheduleManagerChanged(ScheduleManager*)), this, SLOT(slotManagerChanged(ScheduleManager*)) );
 
         disconnect( m_project, SIGNAL(scheduleManagerToBeAdded(const ScheduleManager*,int)), this, SLOT(slotScheduleManagerToBeInserted(const ScheduleManager*,int)) );
@@ -197,6 +199,8 @@ void ScheduleItemModel::setProject( Project *project )
     }
     m_project = project;
     if ( m_project ) {
+        connect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
+
         connect( m_project, SIGNAL(scheduleManagerChanged(ScheduleManager*)), this, SLOT(slotManagerChanged(ScheduleManager*)) );
 
         connect( m_project, SIGNAL(scheduleManagerToBeAdded(const ScheduleManager*,int)), this, SLOT(slotScheduleManagerToBeInserted(const ScheduleManager*,int)) );
@@ -234,7 +238,7 @@ void ScheduleItemModel::slotManagerChanged( ScheduleManager *sch )
     }
 
     int r = sch->parentManager() ? sch->parentManager()->indexOf( sch ) : m_project->indexOf( sch );
-    //kDebug(planDbg())<<sch<<":"<<r;
+    //debugPlan<<sch<<":"<<r;
     emit dataChanged( createIndex( r, 0, sch ), createIndex( r, columnCount() - 1, sch ) );
 }
 
@@ -252,9 +256,16 @@ Qt::ItemFlags ScheduleItemModel::flags( const QModelIndex &index ) const
     if ( !m_readWrite  ) {
         return flags &= ~Qt::ItemIsEditable;
     }
-    flags &= ~Qt::ItemIsEditable;
     ScheduleManager *sm = manager( index );
-    int capabilities = sm->schedulerPlugin()->capabilities();
+    if ( sm == 0 ) {
+        return flags;
+    }
+    SchedulerPlugin *pl = sm->schedulerPlugin();
+    if ( pl == 0 ) {
+        return flags;
+    }
+    int capabilities = pl->capabilities();
+    flags &= ~Qt::ItemIsEditable;
     if ( sm && ! sm->isBaselined() ) {
         switch ( index.column() ) {
             case ScheduleModel::ScheduleState: break;
@@ -293,7 +304,7 @@ QModelIndex ScheduleItemModel::parent( const QModelIndex &inx ) const
     if ( !inx.isValid() || m_project == 0 || m_flat ) {
         return QModelIndex();
     }
-    //kDebug(planDbg())<<inx.internalPointer()<<":"<<inx.row()<<","<<inx.column();
+    //debugPlan<<inx.internalPointer()<<":"<<inx.row()<<","<<inx.column();
     ScheduleManager *sm = manager( inx );
     if ( sm == 0 ) {
         return QModelIndex();
@@ -303,9 +314,9 @@ QModelIndex ScheduleItemModel::parent( const QModelIndex &inx ) const
 
 QModelIndex ScheduleItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
-    //kDebug(planDbg())<<m_project<<":"<<row<<","<<column;
+    //debugPlan<<m_project<<":"<<row<<","<<column;
     if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 || row >= rowCount( parent ) ) {
-        //kDebug(planDbg())<<row<<","<<column<<" out of bounce";
+        //debugPlan<<row<<","<<column<<" out of bounce";
         return QModelIndex();
     }
     if ( m_flat ) {
@@ -351,7 +362,7 @@ int ScheduleItemModel::rowCount( const QModelIndex &parent ) const
     }
     ScheduleManager *sm = manager( parent );
     if ( sm ) {
-        //kDebug(planDbg())<<sm->name()<<","<<sm->children().count();
+        //debugPlan<<sm->name()<<","<<sm->children().count();
         return sm->children().count();
     }
     return 0;
@@ -452,7 +463,11 @@ QVariant ScheduleItemModel::allowOverbooking( const QModelIndex &index, int role
     if ( sm == 0 ) {
         return QVariant();
     }
-    int capabilities = sm->schedulerPlugin()->capabilities();
+    SchedulerPlugin *pl = sm->schedulerPlugin();
+    if ( pl == 0 ) {
+        return QVariant();
+    }
+    int capabilities = pl->capabilities();
     switch ( role ) {
         case Qt::EditRole:
             return sm->allowOverbooking();
@@ -474,22 +489,22 @@ QVariant ScheduleItemModel::allowOverbooking( const QModelIndex &index, int role
                  capabilities & SchedulerPlugin::AvoidOverbooking )
             {
                 return sm->allowOverbooking()
-                            ? i18nc( "@info:tooltip", "Allow overbooking resources" )
-                            : i18nc( "@info:tooltip", "Avoid overbooking resources" );
+                            ? xi18nc( "@info:tooltip", "Allow overbooking resources" )
+                            : xi18nc( "@info:tooltip", "Avoid overbooking resources" );
             }
             if ( capabilities & SchedulerPlugin::AllowOverbooking ) {
                 return sm->allowOverbooking()
-                            ? i18nc( "@info:tooltip", "Allow overbooking of resources" )
-                            : i18nc( "@info:tooltip 1=scheduler name", "%1 always allows overbooking of resources", sm->schedulerPlugin()->name() );
+                            ? xi18nc( "@info:tooltip", "Allow overbooking of resources" )
+                            : xi18nc( "@info:tooltip 1=scheduler name", "%1 always allows overbooking of resources", pl->name() );
             }
             if ( capabilities & SchedulerPlugin::AvoidOverbooking ) {
                 return sm->allowOverbooking()
-                            ? i18nc( "@info:tooltip 1=scheduler name", "%1 always avoids overbooking of resources", sm->schedulerPlugin()->name() )
-                            : i18nc( "@info:tooltip", "Avoid overbooking resources" );
+                            ? xi18nc( "@info:tooltip 1=scheduler name", "%1 always avoids overbooking of resources", pl->name() )
+                            : xi18nc( "@info:tooltip", "Avoid overbooking resources" );
             }
             break;
         case Role::EnumList:
-            return QStringList() << i18nc( "@label:listbox", "Avoid" ) << i18nc( "@label:listbox", "Allow" );
+            return QStringList() << xi18nc( "@label:listbox", "Avoid" ) << xi18nc( "@label:listbox", "Allow" );
         case Role::EnumListValue:
             return sm->allowOverbooking() ? 1 : 0;
         case Qt::TextAlignmentRole:
@@ -529,10 +544,10 @@ QVariant ScheduleItemModel::usePert( const QModelIndex &index, int role ) const
             return sm->usePert() ? i18n( "PERT" ) : i18n( "None" );
         case Qt::ToolTipRole:
             return sm->usePert()
-                        ? i18nc( "@info:tooltip", "Use PERT distribution to calculate expected estimate for the tasks" )
-                        : i18nc( "@info:tooltip", "Use the tasks expected estimate directly" );
+                        ? xi18nc( "@info:tooltip", "Use PERT distribution to calculate expected estimate for the tasks" )
+                        : xi18nc( "@info:tooltip", "Use the tasks expected estimate directly" );
         case Role::EnumList:
-            return QStringList() << i18nc( "@label:listbox", "None" ) << i18nc( "@label:listbox", "PERT" );
+            return QStringList() << xi18nc( "@label:listbox", "None" ) << xi18nc( "@label:listbox", "PERT" );
         case Role::EnumListValue:
             return sm->usePert() ? 1 : 0;
         case Qt::TextAlignmentRole:
@@ -571,7 +586,7 @@ QVariant ScheduleItemModel::projectStart( const QModelIndex &index, int role ) c
     switch ( role ) {
         case Qt::DisplayRole:
             if ( sm->isScheduled() ) {
-                return KGlobal::locale()->formatDateTime( sm->expected()->start() );
+                return QLocale().toString( sm->expected()->start(), QLocale::ShortFormat );
             }
             break;
         case Qt::EditRole:
@@ -581,9 +596,9 @@ QVariant ScheduleItemModel::projectStart( const QModelIndex &index, int role ) c
             break;
         case Qt::ToolTipRole:
             if ( sm->isScheduled() ) {
-                return i18nc( "@info:tooltip", "Planned start: %1<nl/>Target start: %2", KGlobal::locale()->formatDateTime( sm->expected()->start() ), KGlobal::locale()->formatDateTime( m_project->constraintStartTime() ) );
+                return xi18nc( "@info:tooltip", "Planned start: %1<nl/>Target start: %2", QLocale().toString( sm->expected()->start(), QLocale::ShortFormat ), QLocale().toString( m_project->constraintStartTime(), QLocale::ShortFormat ) );
             } else {
-                return i18nc( "@info:tooltip", "Target start: %1", KGlobal::locale()->formatDateTime( m_project->constraintStartTime() ) );
+                return xi18nc( "@info:tooltip", "Target start: %1", QLocale().toString( m_project->constraintStartTime(), QLocale::ShortFormat ) );
             }
             break;
         case Qt::TextAlignmentRole:
@@ -607,7 +622,7 @@ QVariant ScheduleItemModel::projectEnd( const QModelIndex &index, int role ) con
     switch ( role ) {
         case Qt::DisplayRole:
             if ( sm->isScheduled() ) {
-                return KGlobal::locale()->formatDateTime( sm->expected()->end() );
+                return QLocale().toString( sm->expected()->end(), QLocale::ShortFormat );
             }
             break;
         case Qt::EditRole:
@@ -617,9 +632,9 @@ QVariant ScheduleItemModel::projectEnd( const QModelIndex &index, int role ) con
             break;
         case Qt::ToolTipRole:
             if ( sm->isScheduled() ) {
-                return i18nc( "@info:tooltip", "Planned finish: %1<nl/>Target finish: %2", KGlobal::locale()->formatDateTime( sm->expected()->end() ), KGlobal::locale()->formatDateTime( m_project->constraintEndTime() ) );
+                return xi18nc( "@info:tooltip", "Planned finish: %1<nl/>Target finish: %2", QLocale().toString( sm->expected()->end(), QLocale::ShortFormat ), QLocale().toString( m_project->constraintEndTime(), QLocale::ShortFormat ) );
             } else {
-                return i18nc( "@info:tooltip", "Target finish: %1", KGlobal::locale()->formatDateTime( m_project->constraintEndTime() ) );
+                return xi18nc( "@info:tooltip", "Target finish: %1", QLocale().toString( m_project->constraintEndTime(), QLocale::ShortFormat ) );
             }
             break;
         case Qt::TextAlignmentRole:
@@ -637,7 +652,11 @@ QVariant ScheduleItemModel::schedulingDirection( const QModelIndex &index, int r
     if ( sm == 0 ) {
         return QVariant();
     }
-    int capabilities = sm->schedulerPlugin()->capabilities();
+    SchedulerPlugin *pl = sm->schedulerPlugin();
+    if ( pl == 0 ) {
+        return QVariant();
+    }
+    int capabilities = pl->capabilities();
     switch ( role ) {
         case Qt::EditRole:
             return sm->schedulingDirection();
@@ -659,22 +678,22 @@ QVariant ScheduleItemModel::schedulingDirection( const QModelIndex &index, int r
                  capabilities & SchedulerPlugin::ScheduleBackward )
             {
                 return sm->schedulingDirection()
-                            ? i18nc( "@info:tooltip", "Schedule project from target end time" )
-                            : i18nc( "@info:tooltip", "Schedule project from target start time" );
+                            ? xi18nc( "@info:tooltip", "Schedule project from target end time" )
+                            : xi18nc( "@info:tooltip", "Schedule project from target start time" );
             }
             if ( capabilities & SchedulerPlugin::ScheduleForward ) {
                 return sm->schedulingDirection()
-                            ? i18nc( "@info:tooltip 1=scheduler name", "%1 always schedules from target start time", sm->schedulerPlugin()->name() )
-                            : i18nc( "@info:tooltip", "Schedule project from target start time" );
+                            ? xi18nc( "@info:tooltip 1=scheduler name", "%1 always schedules from target start time", pl->name() )
+                            : xi18nc( "@info:tooltip", "Schedule project from target start time" );
             }
             if ( capabilities & SchedulerPlugin::ScheduleBackward ) {
                 return sm->schedulingDirection()
-                            ? i18nc( "@info:tooltip", "Schedule project from target end time" )
-                            : i18nc( "@info:tooltip 1=scheduler name", "%1 always schedules from target end time", sm->schedulerPlugin()->name() );
+                            ? xi18nc( "@info:tooltip", "Schedule project from target end time" )
+                            : xi18nc( "@info:tooltip 1=scheduler name", "%1 always schedules from target end time", pl->name() );
             }
             break;
         case Role::EnumList:
-            return QStringList() << i18nc( "@label:listbox", "Forward" ) << i18nc( "@label:listbox", "Backwards" );
+            return QStringList() << xi18nc( "@label:listbox", "Forward" ) << xi18nc( "@label:listbox", "Backwards" );
         case Role::EnumListValue:
             return sm->schedulingDirection() ? 1 : 0;
         case Qt::TextAlignmentRole:
@@ -708,24 +727,26 @@ QVariant ScheduleItemModel::scheduler( const QModelIndex &index, int role ) cons
         return QVariant();
     }
     SchedulerPlugin *pl = sm->schedulerPlugin();
-    switch ( role ) {
-        case Qt::EditRole:
-            return sm->schedulerPluginId();
-        case Qt::DisplayRole:
-            return pl ? pl->name() : i18n( "Unknown" );
-        case Qt::ToolTipRole:
-            return pl ? pl->comment() : QString();
-        case Role::EnumList:
-            return sm->schedulerPluginNames();
-        case Role::EnumListValue:
-            return sm->schedulerPluginIndex();
-        case Qt::TextAlignmentRole:
-            return Qt::AlignCenter;
-        case Qt::StatusTipRole:
-            return QVariant();
-        case Qt::WhatsThisRole: {
-            QString s = pl->description();
-            return s.isEmpty() ? QVariant() : QVariant( s );
+    if ( pl ) {
+        switch ( role ) {
+            case Qt::EditRole:
+                return sm->schedulerPluginId();
+            case Qt::DisplayRole:
+                return pl ? pl->name() : i18n( "Unknown" );
+            case Qt::ToolTipRole:
+                return pl ? pl->comment() : QString();
+            case Role::EnumList:
+                return sm->schedulerPluginNames();
+            case Role::EnumListValue:
+                return sm->schedulerPluginIndex();
+            case Qt::TextAlignmentRole:
+                return Qt::AlignCenter;
+            case Qt::StatusTipRole:
+                return QVariant();
+            case Qt::WhatsThisRole: {
+                QString s = pl->description();
+                return s.isEmpty() ? QVariant() : QVariant( s );
+            }
         }
     }
     return QVariant();
@@ -784,16 +805,16 @@ QVariant ScheduleItemModel::granularity(const QModelIndex &index, int role) cons
             }
             int idx = sm->granularity();
             qulonglong g = idx < lst.count() ? lst[ idx ] : lst.last();
-            return KGlobal::locale()->formatDuration( g );
+            return KFormat().formatDuration( g );
         }
         case Qt::ToolTipRole: {
             QList<long unsigned int> lst = sm->supportedGranularities();
             if ( lst.isEmpty() ) {
-                return i18nc( "@info:tooltip", "Scheduling granularity not supported" );
+                return xi18nc( "@info:tooltip", "Scheduling granularity not supported" );
             }
             int idx = sm->granularity();
             qulonglong g = idx < lst.count() ? lst[ idx ] : lst.last();
-            return i18nc( "@info:tooltip", "Selected scheduling granularity: %1", KGlobal::locale()->formatDuration( g ) );
+            return xi18nc( "@info:tooltip", "Selected scheduling granularity: %1", KFormat().formatDuration( g ) );
         }
         case Qt::TextAlignmentRole:
             return Qt::AlignRight;
@@ -802,8 +823,9 @@ QVariant ScheduleItemModel::granularity(const QModelIndex &index, int role) cons
             return QVariant();
         case Role::EnumList: {
             QStringList sl;
+            KFormat format;
             foreach ( long unsigned int v, sm->supportedGranularities() ) {
-                sl << KGlobal::locale()->formatDuration( v );
+                sl << format.formatDuration( v );
             }
             return sl;
         }
@@ -827,7 +849,7 @@ bool ScheduleItemModel::setGranularity( const QModelIndex &index, const QVariant
 
 QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
 {
-    //kDebug(planDbg())<<index.row()<<","<<index.column();
+    //debugPlan<<index.row()<<","<<index.column();
     QVariant result;
     if ( role == Qt::TextAlignmentRole ) {
         return headerData( index.column(), Qt::Horizontal, role );
@@ -844,7 +866,7 @@ QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
         case ScheduleModel::ScheduleGranularity: result = granularity( index, role ); break;
         case ScheduleModel::ScheduleScheduled: result = isScheduled( index, role ); break;
         default:
-            kDebug(planDbg())<<"data: invalid display value column"<<index.column();
+            debugPlan<<"data: invalid display value column"<<index.column();
             return QVariant();
     }
     if ( result.isValid() ) {
@@ -898,7 +920,7 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
                 case ScheduleModel::SchedulePlannedStart: return i18n( "Planned Start" );
                 case ScheduleModel::SchedulePlannedFinish: return i18n( "Planned Finish" );
                 case ScheduleModel::ScheduleScheduler: return i18n( "Scheduler" );
-                case ScheduleModel::ScheduleGranularity: return i18nc( "title:column", "Granularity" );
+                case ScheduleModel::ScheduleGranularity: return xi18nc( "title:column", "Granularity" );
                 case ScheduleModel::ScheduleScheduled: return i18n( "Scheduled" );
                 default: return QVariant();
             }
@@ -1022,7 +1044,7 @@ void ScheduleLogItemModel::slotScheduleManagerToBeRemoved( const ScheduleManager
 
 void ScheduleLogItemModel::slotScheduleManagerRemoved( const ScheduleManager *manager )
 {
-    kDebug(planDbg())<<manager->name();
+    debugPlan<<manager->name();
 }
 
 void ScheduleLogItemModel::slotScheduleToBeInserted( const ScheduleManager *manager, int row )
@@ -1036,7 +1058,7 @@ void ScheduleLogItemModel::slotScheduleToBeInserted( const ScheduleManager *mana
 //FIXME remove const on MainSchedule
 void ScheduleLogItemModel::slotScheduleInserted( const MainSchedule *sch )
 {
-    kDebug(planDbg())<<m_schedule<<sch;
+    debugPlan<<m_schedule<<sch;
     if ( m_manager && m_manager == sch->manager() && sch == m_manager->expected() ) {
         m_schedule = const_cast<MainSchedule*>( sch );
         refresh();
@@ -1045,7 +1067,7 @@ void ScheduleLogItemModel::slotScheduleInserted( const MainSchedule *sch )
 
 void ScheduleLogItemModel::slotScheduleToBeRemoved( const MainSchedule *sch )
 {
-    kDebug(planDbg())<<m_schedule<<sch;
+    debugPlan<<m_schedule<<sch;
     if ( m_schedule == sch ) {
         m_schedule = 0;
         clear();
@@ -1054,13 +1076,20 @@ void ScheduleLogItemModel::slotScheduleToBeRemoved( const MainSchedule *sch )
 
 void ScheduleLogItemModel::slotScheduleRemoved( const MainSchedule *sch )
 {
-    kDebug(planDbg())<<m_schedule<<sch;
+    debugPlan<<m_schedule<<sch;
+}
+
+void ScheduleLogItemModel::projectDeleted()
+{
+    setProject(0);
 }
 
 void ScheduleLogItemModel::setProject( Project *project )
 {
-    kDebug(planDbg())<<m_project<<"->"<<project;
+    debugPlan<<m_project<<"->"<<project;
     if ( m_project ) {
+        disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
+
         disconnect( m_project, SIGNAL(scheduleManagerChanged(ScheduleManager*)), this, SLOT(slotManagerChanged(ScheduleManager*)) );
 
         disconnect( m_project, SIGNAL(scheduleManagerToBeRemoved(const ScheduleManager*)), this, SLOT(slotScheduleManagerToBeRemoved(const ScheduleManager*)) );
@@ -1079,6 +1108,8 @@ void ScheduleLogItemModel::setProject( Project *project )
     }
     m_project = project;
     if ( m_project ) {
+        connect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
+
         connect( m_project, SIGNAL(scheduleManagerChanged(ScheduleManager*)), this, SLOT(slotManagerChanged(ScheduleManager*)) );
 
         connect( m_project, SIGNAL(scheduleManagerToBeRemoved(const ScheduleManager*)), this, SLOT(slotScheduleManagerToBeRemoved(const ScheduleManager*)) );
@@ -1099,7 +1130,7 @@ void ScheduleLogItemModel::setProject( Project *project )
 
 void ScheduleLogItemModel::setManager( ScheduleManager *manager )
 {
-    kDebug(planDbg())<<m_manager<<"->"<<manager;
+    debugPlan<<m_manager<<"->"<<manager;
     if ( manager != m_manager ) {
         if ( m_manager ) {
             disconnect( m_manager, SIGNAL(logInserted(MainSchedule*,int,int)), this, SLOT(slotLogInserted(MainSchedule*,int,int)));
@@ -1125,7 +1156,7 @@ void ScheduleLogItemModel::slotLogInserted( MainSchedule *s, int firstrow, int l
 //FIXME: This only add logs (insert is not used atm)
 void ScheduleLogItemModel::addLogEntry( const Schedule::Log &log, int /*row*/ )
 {
-//     kDebug(planDbg())<<log;
+//     debugPlan<<log;
     QList<QStandardItem*> lst;
     if ( log.resource ) {
         lst.append( new QStandardItem( log.resource->name() ) );
@@ -1147,22 +1178,22 @@ void ScheduleLogItemModel::addLogEntry( const Schedule::Log &log, int /*row*/ )
             }
             switch ( log.severity ) {
             case Schedule::Log::Type_Debug:
-                itm->setData( Qt::darkYellow, Qt::ForegroundRole );
+                itm->setData( QColor(Qt::darkYellow), Qt::ForegroundRole );
                 break;
             case Schedule::Log::Type_Info:
                 break;
             case Schedule::Log::Type_Warning:
-                itm->setData( Qt::blue, Qt::ForegroundRole );
+                itm->setData( QColor(Qt::blue), Qt::ForegroundRole );
                 break;
             case Schedule::Log::Type_Error:
-                itm->setData( Qt::red, Qt::ForegroundRole );
+                itm->setData( QColor(Qt::red), Qt::ForegroundRole );
                 break;
             default:
                 break;
         }
     }
     appendRow( lst );
-//     kDebug(planDbg())<<"added:"<<row<<rowCount()<<columnCount();
+//     debugPlan<<"added:"<<row<<rowCount()<<columnCount();
 }
 
 void ScheduleLogItemModel::refresh()
@@ -1173,10 +1204,10 @@ void ScheduleLogItemModel::refresh()
     setHorizontalHeaderLabels( lst );
 
     if ( m_schedule == 0 ) {
-        kDebug(planDbg())<<"No main schedule";
+        debugPlan<<"No main schedule";
         return;
     }
-//     kDebug(planDbg())<<m_schedule<<m_schedule->logs().count();
+//     debugPlan<<m_schedule<<m_schedule->logs().count();
     int i = 1;
     foreach ( const Schedule::Log &l, m_schedule->logs() ) {
         addLogEntry( l, i++ );
@@ -1191,7 +1222,7 @@ QString ScheduleLogItemModel::identity( const QModelIndex &idx ) const
 
 void ScheduleLogItemModel::slotManagerChanged( ScheduleManager *manager )
 {
-    kDebug(planDbg())<<m_manager<<manager;
+    debugPlan<<m_manager<<manager;
     if ( m_manager == manager ) {
         //TODO
 //        refresh();
@@ -1201,7 +1232,7 @@ void ScheduleLogItemModel::slotManagerChanged( ScheduleManager *manager )
 
 void ScheduleLogItemModel::slotScheduleChanged( MainSchedule *sch )
 {
-    kDebug(planDbg())<<m_schedule<<sch;
+    debugPlan<<m_schedule<<sch;
     if ( m_schedule == sch ) {
         refresh();
     }
@@ -1215,5 +1246,3 @@ Qt::ItemFlags ScheduleLogItemModel::flags( const QModelIndex &index ) const
 }
 
 } // namespace KPlato
-
-#include "kptschedulemodel.moc"

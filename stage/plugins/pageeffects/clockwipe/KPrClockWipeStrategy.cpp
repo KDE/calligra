@@ -24,7 +24,6 @@
 #include <QPainter>
 #include <QPainterPath>
 
-#include <kdebug.h>
 
 #include "KPrClockWipeSubpathHelper.h"
 

@@ -32,14 +32,14 @@
 #include <KoSelection.h>
 #include <KoToolManager.h>
 #include <KoInteractionTool.h>
+#include <KoComponentData.h>
 
 using namespace Calligra::Sheets;
 
 Part::Part(QObject *parent)
-    : KoPart(parent)
+    : KoPart(Factory::global(), parent)
 {
-    setTemplatesResourcePath(QLatin1String("sheets/templates/"));
-    setComponentData(Factory::global());
+    setTemplatesResourcePath(QLatin1String("calligrasheets/templates/"));
 }
 
 Part::~Part()
@@ -77,7 +77,7 @@ KoMainWindow *Part::createMainWindow()
     return new KoMainWindow(SHEETS_MIME_TYPE, componentData());
 }
 
-void Part::openTemplate(const KUrl& url)
+void Part::openTemplate(const QUrl& url)
 {
     m_document->map()->loadingInfo()->setLoadTemplate(true);
     KoPart::openTemplate(url);

@@ -18,60 +18,42 @@
 */
 
 #include "kptaboutdata.h"
-
-#include "about/hi256-app-calligraplan.xpm"
-#include <ksplashscreen.h>
-#include <QHideEvent>
-
-#include <KoApplication.h>
-#include <kcmdlineargs.h>
-
 #include "kptmaindocument.h"
 
-#ifdef MAINTANER_WANTED_SPLASH
-class KoSplashScreen : public KSplashScreen
+#include <KoApplication.h>
+#include <Calligra2Migration.h>
+
+#include <QLoggingCategory>
+
+extern "C" KPLATO_EXPORT int kdemain( int argc, char **argv )
 {
-public:
-    explicit KoSplashScreen(const QPixmap& pixmap) : KSplashScreen(pixmap) {}
+    /**
+     * Disable debug output by default, only log warnings.
+     * Debug logs can be controlled by the environment variable QT_LOGGING_RULES.
+     *
+     * For example, to get full debug output, run the following:
+     * QT_LOGGING_RULES="calligra.*=true" calligraplan
+     *
+     * See: http://doc.qt.io/qt-5/qloggingcategory.html
+     */
+    QLoggingCategory::setFilterRules("calligra.*.debug=false\n"
+                                     "calligra.*.warning=true");
+    
+    KAboutData* aboutData = KPlato::newAboutData();
 
-    void hideEvent(QHideEvent *event)
-    {
-        event->accept();
-        deleteLater();
-    }
-};
-#endif
+    KoApplication app(PLAN_MIME_TYPE, QStringLiteral("calligraplan"), *aboutData, argc, argv);
 
+    delete aboutData;
 
-extern "C" KDE_EXPORT int kdemain( int argc, char **argv ) {
-    KAboutData * aboutData=KPlato::newAboutData();
-
-    KCmdLineArgs::init( argc, argv, aboutData);
-    KCmdLineOptions options;
-    options.add("+[file]", ki18n("File to open"));
-    KCmdLineArgs::addCmdLineOptions( options );
-
-    KoApplication app(PLAN_MIME_TYPE);
-
-#ifdef MAINTANER_WANTED_SPLASH
-    // After creating the KApplication then create the pixmap from an xpm: we cannot get the
-    // location of our datadir before we've started our components,
-    // so use an xpm.
-    QSplashScreen *splashScreen = new KoSplashScreen(QPixmap(splash_screen_xpm));
-    splashScreen->show();
-    splashScreen->showMessage("<p style=\"color:black\">"
-    "<b>Calligra Plan is unmaintained!</b><br><br>"
-    "The Calligra community welcomes someone to take over.<br><br>"
-    "See community.kde.org/Calligra</p>");
-#endif
-
-    // This is disabled for now so the crude test below will run
-    if (!app.start())
+    // Migrate data from kde4 to kf5 locations
+    Calligra2Migration m("calligraplan", "plan");
+    m.setConfigFiles(QStringList() << QStringLiteral("planrc"));
+    m.setUiFiles(QStringList() << QStringLiteral("plan.rc") << QStringLiteral("plan_readonly.rc"));
+    m.migrate();
+    
+    if (!app.start()) {
 	return 1;
+    }
 
-    app.exec();
-
-    delete (aboutData);
-
-    return 0;
+    return app.exec();
 }

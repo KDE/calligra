@@ -26,13 +26,14 @@
 #include <QTextCodec>
 #include <QTextStream>
 #include <QByteArray>
+#include <QUrl>
 
 #include <kdebug.h>
 #include <kpluginfactory.h>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 #include <KoDocumentInfo.h>
-#include <calligraversion.h>
+#include <CalligraVersionWrapper.h>
 
 #include <sheets/CellStorage.h>
 #include <sheets/Map.h>
@@ -42,8 +43,8 @@
 
 using namespace Calligra::Sheets;
 
-K_PLUGIN_FACTORY(HTMLExportFactory, registerPlugin<HTMLExport>();)
-K_EXPORT_PLUGIN(HTMLExportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(HTMLExportFactory, "calligra_filter_sheets2html.json",
+                           registerPlugin<HTMLExport>();)
 
 const QString html_table_tag = "table";
 const QString html_table_options = QString(" border=\"%1\" cellspacing=\"%2\"");
@@ -184,8 +185,8 @@ void HTMLExport::openPage(Sheet *sheet, KoDocument *document, QString &str)
           "<meta http-equiv=\"Content-Type\" " +
           QString("content=\"text/html; charset=%1\">\n").arg(QString(m_dialog->encoding()->name())) +
           "<meta name=\"Generator\" "
-          "content=\"KSpread HTML Export Filter Version = "
-          CALLIGRA_VERSION_STRING
+          "content=\"KSpread HTML Export Filter Version = " +
+          CalligraVersionWrapper::versionString() +
           "\">\n";
 
     // Insert stylesheet

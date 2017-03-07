@@ -30,11 +30,11 @@
 // main
 #include <KoDocument.h>
 #include <KoIcon.h>
-// KDE
+// KF5
 #include <kdebug.h>
 #include <kmenu.h>
 #include <kmessagebox.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 // Qt
 #include <QComboBox>
 #include <QPointer>
@@ -58,7 +58,7 @@ public:
         ColValue = 1,
         ColSize
     };
-    KoRdfPrefixMappingTreeWidgetItem(KoRdfPrefixMapping *mapping, QString key, int type = Type)
+    KoRdfPrefixMappingTreeWidgetItem(KoRdfPrefixMapping *mapping, const QString &key, int type = Type)
         : QTreeWidgetItem(type)
         , m_mapping(mapping)
         , m_key(key) {
@@ -243,6 +243,10 @@ KoDocumentRdfEditWidget::KoDocumentRdfEditWidget( KoDocumentRdf *docRdf)
     QGridLayout *styleSheetsGridLayout = d->m_ui->m_styleSheetsGridLayout;
     int row = 0;
     foreach (const QString &semanticItemName, KoRdfSemanticItemRegistry::instance()->classNames()) {
+        if (KoRdfSemanticItemRegistry::instance()->isBasic(semanticItemName)) {
+            continue;
+        }
+
         QLabel *semanticItemLabel =
             new QLabel(KoRdfSemanticItemRegistry::instance()->classDisplayName(semanticItemName));
         styleSheetsGridLayout->addWidget(semanticItemLabel, row, 0, Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
@@ -256,7 +260,8 @@ KoDocumentRdfEditWidget::KoDocumentRdfEditWidget( KoDocumentRdf *docRdf)
         styleSheetsGridLayout->addWidget(setStylesheetButton, row, 2);
         connect(setStylesheetButton, SIGNAL(clicked()), SLOT(onDefaultSheetButtonClicked()));
 
-        hKoRdfSemanticItem templateItem = docRdf->createSemanticItem(semanticItemName, this);
+	hKoRdfSemanticItem templateItem(static_cast<KoRdfSemanticItem *>(
+	    docRdf->createSemanticItem(semanticItemName, this).data()));
         d->buildComboBox(defaultStylesheetComboBox, templateItem);
 
         ++row;
@@ -276,12 +281,12 @@ KoDocumentRdfEditWidget::KoDocumentRdfEditWidget( KoDocumentRdf *docRdf)
     connect(d->m_ui->newNamespaceButton, SIGNAL(clicked()), this, SLOT(addNamespace()));
     connect(d->m_ui->deleteNamespaceButton, SIGNAL(clicked()), this, SLOT(deleteNamespace()));
     d->m_ui->m_semanticView->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(d->m_ui->m_semanticView, SIGNAL(customContextMenuRequested(const QPoint &)),
-            this, SLOT(showSemanticViewContextMenu(const QPoint &)));
+    connect(d->m_ui->m_semanticView, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(showSemanticViewContextMenu(QPoint)));
     connect(d->m_ui->m_sparqlExecute, SIGNAL(clicked()), this, SLOT(sparqlExecute()));
 
-    connect(docRdf, SIGNAL(semanticObjectUpdated(hKoRdfSemanticItem)),
-            this, SLOT(semanticObjectUpdated(hKoRdfSemanticItem)));
+    connect(docRdf, SIGNAL(semanticObjectUpdated(hKoRdfBasicSemanticItem)),
+            this, SLOT(semanticObjectUpdated(hKoRdfBasicSemanticItem)));
 }
 
 KoDocumentRdfEditWidget::~KoDocumentRdfEditWidget()
@@ -338,7 +343,8 @@ void KoDocumentRdfEditWidget::apply()
     for( ; it != end; ++it) {
         const QString &semanticClass = it.key();
         QComboBox *comboBox = it.value();
-        hKoRdfSemanticItem si = rdf->createSemanticItem(semanticClass);
+	hKoRdfSemanticItem si(static_cast<KoRdfSemanticItem *>(
+	    rdf->createSemanticItem(semanticClass).data()));
         si->defaultStylesheet(stylesheetFromComboBox(comboBox));
     }
 }
@@ -353,7 +359,7 @@ QString KoDocumentRdfEditWidget::iconName() const
     return koIconName("text-rdf");
 }
 
-void KoDocumentRdfEditWidget::semanticObjectUpdated(hKoRdfSemanticItem item)
+void KoDocumentRdfEditWidget::semanticObjectUpdated(hKoRdfBasicSemanticItem item)
 {
     Q_UNUSED(item);
     kDebug(30015) << "updating the sem item list view";
@@ -363,14 +369,14 @@ void KoDocumentRdfEditWidget::semanticObjectUpdated(hKoRdfSemanticItem item)
 void KoDocumentRdfEditWidget::showSemanticViewContextMenu(const QPoint &position)
 {
     QPointer<KMenu> menu = new KMenu(0);
-    QList<KAction*> actions;
+    QList<QAction*> actions;
     if (QTreeWidgetItem *baseitem = d->m_ui->m_semanticView->itemAt(position)) {
         if (KoRdfSemanticTreeWidgetItem *item = dynamic_cast<KoRdfSemanticTreeWidgetItem*>(baseitem)) {
             actions = item->actions(menu);
         }
     }
     if (actions.count() > 0) {
-        foreach (KAction *a, actions) {
+        foreach (QAction *a, actions) {
             menu->addAction(a);
         }
         menu->exec(d->m_ui->m_semanticView->mapToGlobal(position));
@@ -490,7 +496,6 @@ hKoSemanticStylesheet KoDocumentRdfEditWidget::stylesheetFromComboBox(QComboBox 
     return ret;
 }
 
-
 void KoDocumentRdfEditWidget::applyStylesheetFromComboBox(QComboBox *comboBox) const
 {
     KoDocumentRdf *rdf = d->m_rdf;
@@ -499,12 +504,14 @@ void KoDocumentRdfEditWidget::applyStylesheetFromComboBox(QComboBox *comboBox) c
     kDebug(30015) << "changing default stylesheet to:" << stylesheetName;
     hKoSemanticStylesheet ss = stylesheetFromComboBox(comboBox);
     const QString semanticItemClass = comboBox->property(SemanticItemClassId).toString();
-    if (hKoRdfSemanticItem si = rdf->createSemanticItem(semanticItemClass)) {
+    hKoRdfSemanticItem si(static_cast<KoRdfSemanticItem *>(
+	rdf->createSemanticItem(semanticItemClass).data()));
+    if (si) {
         si->defaultStylesheet(ss);
     }
 
     QMap<int, KoDocumentRdf::reflowItem> reflowCol;
-    const QList<hKoRdfSemanticItem> semanticItems = rdf->semanticItems(semanticItemClass);
+    const QList<hKoRdfSemanticItem> semanticItems = KoRdfSemanticItem::fromList(rdf->semanticItems(semanticItemClass));
     foreach (hKoRdfSemanticItem semanticItem, semanticItems) {
         rdf->insertReflow(reflowCol, semanticItem, ss);
     }

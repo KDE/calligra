@@ -21,8 +21,6 @@
 #include "TableTool.h"
 #include "SheetsEditor.h"
 
-#include <KoIcon.h>
-
 #include <QApplication>
 #include <QGridLayout>
 #include <QLabel>
@@ -30,18 +28,20 @@
 #include <QSpinBox>
 #include <QToolBar>
 #include <QPushButton>
+#include <QUrl>
+#include <QMimeDatabase>
+#include <QFileDialog>
 
 #include <kcombobox.h>
-#include <kdebug.h>
-#include <klocale.h>
-#include <kaction.h>
-#include <kfiledialog.h>
+#include <KLocalizedString>
 #include <kpagedialog.h>
 
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoSelection.h>
+#include <KoIcon.h>
 
+#include "SheetsDebug.h"
 #include "AutoFillStrategy.h"
 #include "Cell.h"
 #include "calligra_sheets_limits.h"
@@ -76,12 +76,12 @@ TableTool::TableTool(KoCanvasBase* canvas)
     d->selection = new Selection(canvas);
     d->tableShape = 0;
 
-    KAction* importAction = new KAction(koIcon("document-import"), i18n("Import OpenDocument Spreadsheet File"), this);
+    QAction* importAction = new QAction(koIcon("document-import"), i18n("Import OpenDocument Spreadsheet File"), this);
     importAction->setIconText(i18n("Import"));
     addAction("import", importAction);
     connect(importAction, SIGNAL(triggered()), this, SLOT(importDocument()));
 
-    KAction* exportAction = new KAction(koIcon("document-export"), i18n("Export OpenDocument Spreadsheet File"), this);
+    QAction* exportAction = new QAction(koIcon("document-export"), i18n("Export OpenDocument Spreadsheet File"), this);
     exportAction->setIconText(i18n("Export"));
     addAction("export", exportAction);
     connect(exportAction, SIGNAL(triggered()), this, SLOT(exportDocument()));
@@ -95,7 +95,10 @@ TableTool::~TableTool()
 
 void TableTool::importDocument()
 {
-    QString file = KFileDialog::getOpenFileName(KUrl(), "application/vnd.oasis.opendocument.spreadsheet", 0, "Import");
+    const QString filterString =
+        QMimeDatabase().mimeTypeForName("application/vnd.oasis.opendocument.spreadsheet").filterString();
+    // TODO: i18n for title
+    QString file = QFileDialog::getOpenFileName(0, "Import", QString(), filterString);
     if (file.isEmpty())
         return;
 #if 0 // FIXME Stefan: Port!
@@ -115,7 +118,10 @@ void TableTool::importDocument()
 
 void TableTool::exportDocument()
 {
-    QString file = KFileDialog::getSaveFileName(KUrl(), "application/vnd.oasis.opendocument.spreadsheet", 0, "Export");
+    const QString filterString =
+        QMimeDatabase().mimeTypeForName("application/vnd.oasis.opendocument.spreadsheet").filterString();
+    // TODO: i18n for title
+    QString file = QFileDialog::getSaveFileName(0, "Export", QString(), filterString);
     if (file.isEmpty())
         return;
 #if 0 // FIXME Stefan: Port!
@@ -143,7 +149,7 @@ void TableTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sh
             break;
     }
     if (!d->tableShape) {
-        kWarning() << "No table shape found in selection.";
+        warnSheets << "No table shape found in selection.";
         emit done();
         return;
     }
@@ -227,11 +233,11 @@ void TableTool::sheetActivated(const QString& sheetName)
 void TableTool::sheetsBtnClicked()
 {
     QPointer<KPageDialog> dialog = new KPageDialog();
-    dialog->setCaption(i18n("Sheets"));
-    dialog->setButtons(KDialog::Ok);
+    dialog->setWindowTitle(i18n("Sheets"));
+    dialog->setStandardButtons(QDialogButtonBox::Ok);
     dialog->setFaceType(KPageDialog::Plain);
     SheetsEditor* editor = new SheetsEditor(d->tableShape);
-    dialog->setMainWidget(editor);
+    dialog->layout()->addWidget(editor);
     dialog->exec();
     updateSheetsList();
     delete dialog;
@@ -311,5 +317,3 @@ QList<QPointer<QWidget> > TableTool::createOptionWidgets()
     ow.append(optionWidget);
     return ow;
 }
-
-#include "TableTool.moc"

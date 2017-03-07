@@ -23,8 +23,8 @@
 #include <KoInlineNote.h>
 #include <KoIcon.h>
 
-#include <kaction.h>
-#include <kdebug.h>
+#include <QAction>
+#include <QDebug>
 
 #include <QWidget>
 
@@ -47,5 +47,3 @@ SimpleFootEndNotesWidget::SimpleFootEndNotesWidget(TextTool *tool ,QWidget *pare
     connect(widget.addFootnote, SIGNAL(doneWithFocus()), this, SIGNAL(doneWithFocus()));
     connect(widget.addEndnote, SIGNAL(doneWithFocus()), this, SIGNAL(doneWithFocus()));
 }
-
-#include <SimpleFootEndNotesWidget.moc>

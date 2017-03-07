@@ -1,5 +1,5 @@
-#ifndef TESTBASICLAYOUT_H
-#define TESTBASICLAYOUT_H
+#ifndef TESTFRAMELAYOUT_H
+#define TESTFRAMELAYOUT_H
 
 #include <QObject>
 #include <QtTest>

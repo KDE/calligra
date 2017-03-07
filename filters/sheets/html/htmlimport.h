@@ -25,7 +25,7 @@
 #include <QObject>
 #include <KoFilter.h>
 #include <QDir>
-#include <kurl.h>
+#include <QUrl>
 #include <QByteArray>
 #include <QStack>
 #include <QVariantList>
@@ -58,7 +58,7 @@ Q_SIGNALS:
     void completed();
 
 private:
-    KoFilter::ConversionStatus loadUrl(const KUrl &url);
+    KoFilter::ConversionStatus loadUrl(const QUrl &url);
     void parseNode(DOM::Node n);
     bool parseTag(DOM::Element e);
     bool createStyle();

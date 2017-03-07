@@ -25,7 +25,6 @@
 
 #include <KoPACanvasItem.h>
 #include <KoCanvasBase.h>
-#include <KoInteractionTool.h>
 #include <KoShapeRegistry.h>
 
 #include <kmessagebox.h>

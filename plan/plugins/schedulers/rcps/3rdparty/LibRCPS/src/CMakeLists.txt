@@ -20,16 +20,12 @@ set(librcps_LIB_SRCS
     slist.c
 )
 
-if (CMAKE_C_COMPILER_ID STREQUAL "SunPro")
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -xc99")
-else()
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
-endif()
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
 
 if(WIN32)
-    kde4_add_library(rcps_plan STATIC ${librcps_LIB_SRCS})
+    add_library(rcps_plan STATIC ${librcps_LIB_SRCS})
 else()
-    kde4_add_library(rcps_plan SHARED ${librcps_LIB_SRCS})
+    add_library(rcps_plan SHARED ${librcps_LIB_SRCS})
 endif()
 
 target_link_libraries(

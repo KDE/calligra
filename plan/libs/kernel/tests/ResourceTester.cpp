@@ -27,7 +27,7 @@
 #include <kptmap.h>
 
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kptglobal.h"
 #include "kptxmlloaderobject.h"
@@ -49,7 +49,7 @@ void ResourceTester::testAvailable()
     QVERIFY( ! r.availableUntil().isValid() );
     
     QDateTime qt = QDateTime::currentDateTime();
-    DateTime dt = KDateTime( qt );
+    DateTime dt = DateTime( qt );
     qDebug()<<"dt"<<dt;
     
     r.setAvailableFrom( qt );
@@ -604,6 +604,4 @@ void ResourceTester::required()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::ResourceTester )
-
-#include "ResourceTester.moc"
+QTEST_GUILESS_MAIN( KPlato::ResourceTester )

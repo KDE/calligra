@@ -41,8 +41,8 @@
 
 using namespace KPlato;
 
-K_PLUGIN_FACTORY(KPlatoImportFactory, registerPlugin<KPlatoImport>();)
-K_EXPORT_PLUGIN(KPlatoImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(KPlatoImportFactory, "plan_kplato_import.json",
+                           registerPlugin<KPlatoImport>();)
 
 KPlatoImport::KPlatoImport(QObject* parent, const QVariantList &)
     : KoFilter(parent)
@@ -51,7 +51,7 @@ KPlatoImport::KPlatoImport(QObject* parent, const QVariantList &)
 
 KoFilter::ConversionStatus KPlatoImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    kDebug(planDbg()) << from << to;
+    debugPlan << from << to;
     if ( ( from != "application/x-vnd.kde.kplato" ) || ( to != "application/x-vnd.kde.plan" ) ) {
         return KoFilter::NotImplemented;
     }
@@ -62,13 +62,13 @@ KoFilter::ConversionStatus KPlatoImport::convert(const QByteArray& from, const Q
     }
     if (batch) {
         //TODO
-        kDebug(planDbg()) << "batch";
+        debugPlan << "batch";
     } else {
-        //kDebug(planDbg())<<"online";
+        //debugPlan<<"online";
         part = m_chain->outputDocument();
     }
     if (part == 0) {
-        kError() << "Cannot open document";
+        errorPlan << "Cannot open document";
         return KoFilter::InternalError;
     }
     if ( ! part->loadNativeFormat( m_chain->inputFile() ) ) {

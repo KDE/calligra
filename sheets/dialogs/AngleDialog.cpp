@@ -24,12 +24,12 @@
 // Local
 #include "AngleDialog.h"
 
+#include <QLabel>
 #include <QPushButton>
+#include <QSpinBox>
 #include <QVBoxLayout>
 
-#include <kdebug.h>
-#include <klocale.h>
-#include <knuminput.h>
+#include <KLocalizedString>
 
 #include <KoCanvasBase.h>
 
@@ -43,7 +43,7 @@
 using namespace Calligra::Sheets;
 
 AngleDialog::AngleDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Change Angle"));
     setModal(true);
@@ -56,9 +56,12 @@ AngleDialog::AngleDialog(QWidget* parent, Selection* selection)
 
     QVBoxLayout *lay = new QVBoxLayout(page);
     lay->setMargin(0);
-    m_pAngle = new KIntNumInput(page);
-    m_pAngle->setRange(-90, 90, 1);
-    m_pAngle->setLabel(i18n("Angle:"));
+    QLabel *label = new QLabel(i18n("Angle:"), page);
+    lay->addWidget(label);
+
+    m_pAngle = new QSpinBox(page);
+    m_pAngle->setRange(-90, 90);
+    m_pAngle->setSingleStep(1);
     m_pAngle->setSuffix(" ");
     lay->addWidget(m_pAngle);
 
@@ -97,6 +100,3 @@ void AngleDialog::slotDefault()
 {
     m_pAngle->setValue(0);
 }
-
-
-#include "AngleDialog.moc"

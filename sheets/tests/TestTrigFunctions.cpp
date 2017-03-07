@@ -658,7 +658,4 @@ void TestTrigFunctions::testSECH()
     CHECK_EVAL("SECH(1)", 0.6480542736638853996);
 }
 
-QTEST_KDEMAIN(TestTrigFunctions, GUI)
-
-
-#include "TestTrigFunctions.moc"
+QTEST_MAIN(TestTrigFunctions)

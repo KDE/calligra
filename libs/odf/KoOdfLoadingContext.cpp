@@ -21,10 +21,7 @@
 // Own
 #include "KoOdfLoadingContext.h"
 
-// KDE
-#include <kstandarddirs.h>
-#include <kdebug.h>
-#include <kmimetype.h>
+#include "OdfDebug.h"
 
 // Calligra
 #include <KoOdfReadStore.h>
@@ -35,6 +32,10 @@
 #include <KoOdfManifestEntry.h>
 #include "KoStyleStack.h"
 
+// Qt
+#include <QStandardPaths>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 
 class KoOdfLoadingContext::Private
@@ -80,7 +81,9 @@ KoOdfLoadingContext::KoOdfLoadingContext(KoOdfStylesReader &stylesReader, KoStor
 
     if (!defaultStylesResourcePath.isEmpty()) {
         Q_ASSERT(defaultStylesResourcePath.endsWith(QLatin1Char('/')));
-        QString fileName( KStandardDirs::locate( "data", defaultStylesResourcePath + "defaultstyles.xml" ) );
+        const QString fileName =
+            QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                   defaultStylesResourcePath + "defaultstyles.xml");
         if ( ! fileName.isEmpty() ) {
             QFile file( fileName );
             QString errorMessage;
@@ -88,16 +91,16 @@ KoOdfLoadingContext::KoOdfLoadingContext(KoOdfStylesReader &stylesReader, KoStor
                 d->defaultStylesReader.createStyleMap( d->doc, true );
             }
             else {
-                kWarning(30010) << "reading of defaultstyles.xml failed:" << errorMessage;
+                warnOdf << "reading of defaultstyles.xml failed:" << errorMessage;
             }
         }
         else {
-            kWarning(30010) << "defaultstyles.xml not found";
+            warnOdf << "defaultstyles.xml not found";
         }
     }
 
     if (!parseManifest(d->manifestDoc)) {
-        kDebug(30010) << "could not parse manifest document";
+        debugOdf << "could not parse manifest document";
     }
 }
 
@@ -111,7 +114,7 @@ void KoOdfLoadingContext::setManifestFile(const QString& fileName) {
     QString dummy;
     (void)oasisStore.loadAndParse(fileName, d->manifestDoc, dummy);
     if (!parseManifest(d->manifestDoc)) {
-        kDebug(30010) << "could not parse manifest document";
+        debugOdf << "could not parse manifest document";
     }
 }
 
@@ -125,7 +128,7 @@ void KoOdfLoadingContext::fillStyleStack(const KoXmlElement& object, const QStri
         if (style)
             addStyles(style, family, d->useStylesAutoStyles);
         else
-            kWarning(32500) << "style" << styleName << "not found in" << (d->useStylesAutoStyles ? "styles.xml" : "content.xml");
+            warnOdf << "style" << styleName << "not found in" << (d->useStylesAutoStyles ? "styles.xml" : "content.xml");
     }
 }
 
@@ -142,7 +145,7 @@ void KoOdfLoadingContext::addStyles(const KoXmlElement* style, const QString &fa
         if (parentStyle)
             addStyles(parentStyle, family, usingStylesAutoStyles);
         else {
-            kWarning(32500) << "Parent style not found: " << family << parentStyleName << usingStylesAutoStyles;
+            warnOdf << "Parent style not found: " << family << parentStyleName << usingStylesAutoStyles;
             //we are handling a non compliant odf file. let's at the very least load the application default, and the eventual odf default
             if (!family.isEmpty()) {
                 const KoXmlElement* def = d->stylesReader.defaultStyle(family);
@@ -158,7 +161,7 @@ void KoOdfLoadingContext::addStyles(const KoXmlElement* style, const QString &fa
         }
     }
 
-    //kDebug(32500) <<"pushing style" << style->attributeNS( KoXmlNS::style,"name", QString() );
+    //debugOdf <<"pushing style" << style->attributeNS( KoXmlNS::style,"name", QString() );
     d->styleStack.push(*style);
 }
 
@@ -185,16 +188,18 @@ void KoOdfLoadingContext::parseGenerator() const
             KoXmlElement generator = KoXml::namedItemNS(office, KoXmlNS::meta, "generator");
             if (!generator.isNull()) {
                 d->generator = generator.text();
-                if (d->generator.startsWith("Calligra")) {
+                if (d->generator.startsWith(QLatin1String("Calligra"))) {
                     d->generatorType = Calligra;
                 }
                 // NeoOffice is a port of OpenOffice to Mac OS X
-                else if (d->generator.startsWith("OpenOffice.org") || d->generator.startsWith("NeoOffice") ||
-                         d->generator.startsWith("LibreOffice") || d->generator.startsWith("StarOffice") ||
-                         d->generator.startsWith("Lotus Symphony")) {
+                else if (d->generator.startsWith(QLatin1String("OpenOffice.org")) ||
+                         d->generator.startsWith(QLatin1String("NeoOffice")) ||
+                         d->generator.startsWith(QLatin1String("LibreOffice")) ||
+                         d->generator.startsWith(QLatin1String("StarOffice")) ||
+                         d->generator.startsWith(QLatin1String("Lotus Symphony"))) {
                     d->generatorType = OpenOffice;
                 }
-                else if (d->generator.startsWith("MicrosoftOffice")) {
+                else if (d->generator.startsWith(QLatin1String("MicrosoftOffice"))) {
                     d->generatorType = MicrosoftOffice;
                 }
             }
@@ -256,13 +261,13 @@ bool KoOdfLoadingContext::useStylesAutoStyles() const
 
 QString KoOdfLoadingContext::mimeTypeForPath(const QString& path, bool guess) const
 {
-    QHash<QString, KoOdfManifestEntry *>::iterator it(d->manifestEntries.find(path));
-    if (it == d->manifestEntries.end()) {
+    QHash<QString, KoOdfManifestEntry *>::ConstIterator it(d->manifestEntries.constFind(path));
+    if (it == d->manifestEntries.constEnd()) {
         // try to find it with an added / at the end
         QString dirPath = path + '/';
-        it = d->manifestEntries.find(dirPath);
+        it = d->manifestEntries.constFind(dirPath);
     }
-    if (it != d->manifestEntries.end()) {
+    if (it != d->manifestEntries.constEnd()) {
         QString mimeType = it.value()->mediaType();
 
         // figure out mimetype by content if it is not provided
@@ -272,8 +277,9 @@ QString KoOdfLoadingContext::mimeTypeForPath(const QString& path, bool guess) co
                 KoStoreDevice device(d->store);
                 QByteArray data = device.read(16384);
                 d->store->close();
-                KMimeType::Ptr mtp = KMimeType::findByContent(data);
-                mimeType = mtp->name();
+                QMimeDatabase db;
+                QMimeType mtp = db.mimeTypeForData(data);
+                mimeType = mtp.name();
                 if (!mimeType.isEmpty()) {
                     it.value()->setMediaType(mimeType);
                 }
@@ -296,27 +302,27 @@ bool KoOdfLoadingContext::parseManifest(const KoXmlDocument &manifestDocument)
 {
     // First find the manifest:manifest node.
     KoXmlNode  n = manifestDocument.firstChild();
-    kDebug(30006) << "Searching for manifest:manifest " << n.toElement().nodeName();
+    debugOdf << "Searching for manifest:manifest " << n.toElement().nodeName();
     for (; !n.isNull(); n = n.nextSibling()) {
         if (!n.isElement()) {
-            kDebug(30006) << "NOT element";
+            debugOdf << "NOT element";
             continue;
         } else {
-            kDebug(30006) << "element";
+            debugOdf << "element";
         }
 
-        kDebug(30006) << "name:" << n.toElement().localName()
+        debugOdf << "name:" << n.toElement().localName()
                       << "namespace:" << n.toElement().namespaceURI();
 
         if (n.toElement().localName() == "manifest"
             && n.toElement().namespaceURI() == KoXmlNS::manifest)
         {
-            kDebug(30006) << "found manifest:manifest";
+            debugOdf << "found manifest:manifest";
             break;
         }
     }
     if (n.isNull()) {
-        kDebug(30006) << "Could not find manifest:manifest";
+        debugOdf << "Could not find manifest:manifest";
         return false;
     }
 

@@ -23,21 +23,18 @@
 #include "TableEditorDialog.h"
 
 // Qt
-#include <QDebug>
 #include <QAbstractItemModel>
-
-// KDE
-#include <kdebug.h>
 
 // Calligra
 #include <KoIcon.h>
 
-// KChart
+// KoChart
 #include "ChartProxyModel.h"
 #include "ChartTableView.h"
+#include "ChartDebug.h"
 
 
-using namespace KChart;
+using namespace KoChart;
 
 TableEditorDialog::TableEditorDialog()
     : QDialog( 0 )
@@ -59,10 +56,10 @@ void TableEditorDialog::init()
 {
     tableViewContainer->addWidget( m_tableView );
 
-    const KIcon insertRowIcon(koIconName("edit-table-insert-row-above"));
-    const KIcon deleteRowIcon(koIconName("edit-table-delete-row"));
-    const KIcon insertColIcon(koIconName("edit-table-insert-column-left"));
-    const KIcon deleteColIcon(koIconName("edit-table-delete-column"));
+    const QIcon insertRowIcon = koIcon("edit-table-insert-row-above");
+    const QIcon deleteRowIcon = koIcon("edit-table-delete-row");
+    const QIcon insertColIcon = koIcon("edit-table-insert-column-left");
+    const QIcon deleteColIcon = koIcon("edit-table-delete-column");
 
     // Create actions.
     m_insertRowsAction    = new QAction( insertRowIcon, i18n( "Insert Rows" ), m_tableView );
@@ -154,7 +151,7 @@ void TableEditorDialog::slotUpdateDialog()
         dataSetsInColumns->setChecked( true );
         break;
     default:
-        kWarning(35001) << "Unrecognized value for data direction: " << m_proxyModel->dataDirection();
+        warnChart << "Unrecognized value for data direction: " << m_proxyModel->dataDirection();
     }
 }
 

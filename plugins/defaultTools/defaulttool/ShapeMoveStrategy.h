@@ -26,6 +26,7 @@
 
 #include <QPointF>
 #include <QList>
+#include <QVector>
 
 class KoCanvasBase;
 class KoToolBase;
@@ -53,11 +54,12 @@ public:
     virtual void handleCustomEvent( KoPointerEvent * event );
 private:
     void moveSelection();
-    QList<QPointF> m_previousPositions;
-    QList<QPointF> m_newPositions;
+    QVector<QPointF> m_previousPositions;
+    QVector<QPointF> m_newPositions;
     QPointF m_start, m_diff, m_initialSelectionPosition, m_initialOffset;
     QList<KoShape*> m_selectedShapes;
     KoCanvasBase *m_canvas;
+    bool m_firstMove;
 };
 
 #endif

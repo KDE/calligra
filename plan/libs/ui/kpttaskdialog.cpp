@@ -29,10 +29,9 @@
 #include "kpttask.h"
 #include "kptproject.h"
 
-#include <klocale.h>
+#include <KoVBox.h>
 
-#include <kvbox.h>
-#include <kdebug.h>
+#include <KLocalizedString>
 
 namespace KPlato
 {
@@ -42,41 +41,39 @@ TaskDialog::TaskDialog( Project &project, Task &task, Accounts &accounts, QWidge
     m_project( project ),
     m_node( &task )
 {
-    setCaption( i18n("Task Settings") );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
+    setWindowTitle( i18n("Task Settings") );
     setFaceType( KPageDialog::Tabbed );
-    showButtonSeparator( true );
-    KVBox *page;
+
+    KoVBox *page;
 
     // Create all the tabs.
-    page =  new KVBox();
+    page =  new KoVBox();
     addPage(page, i18n("&General"));
     m_generalTab = new TaskGeneralPanel(project, task, page);
 
-    page =  new KVBox();
+    page =  new KoVBox();
     addPage(page, i18n("&Resources"));
     m_resourcesTab = new RequestResourcesPanel(page, project, task);
 
-    page =  new KVBox();
+    page =  new KoVBox();
     addPage(page, i18n("&Documents"));
     m_documentsTab = new DocumentsPanel( task, page );
 
-    page =  new KVBox();
+    page =  new KoVBox();
     addPage(page, i18n("&Cost"));
     m_costTab = new TaskCostPanel(task, accounts, page);
 
-    page =  new KVBox();
+    page =  new KoVBox();
     addPage(page, i18n("D&escription"));
     m_descriptionTab = new TaskDescriptionPanel(task, page);
     m_descriptionTab->namefield->hide();
     m_descriptionTab->namelabel->hide();
 
-    enableButtonOk(false);
+    setButtonOkEnabled(false);
 
     connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)), SLOT(slotCurrentChanged(KPageWidgetItem*,KPageWidgetItem*)));
 
-    connect(m_generalTab, SIGNAL(obligatedFieldsFilled(bool)), this, SLOT(enableButtonOk(bool)));
+    connect(m_generalTab, SIGNAL(obligatedFieldsFilled(bool)), this, SLOT(setButtonOkEnabled(bool)));
     connect(m_resourcesTab, SIGNAL(changed()), m_generalTab, SLOT(checkAllFieldsFilled()));
     connect(m_documentsTab, SIGNAL(changed()), m_generalTab, SLOT(checkAllFieldsFilled()));
     connect(m_costTab, SIGNAL(changed()), m_generalTab, SLOT(checkAllFieldsFilled()));
@@ -85,9 +82,13 @@ TaskDialog::TaskDialog( Project &project, Task &task, Accounts &accounts, QWidge
     connect(&project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotTaskRemoved(Node*)));
 }
 
+void TaskDialog::setButtonOkEnabled(bool enabled) {
+    buttonBox()->button(QDialogButtonBox::Ok)->setEnabled(enabled);
+}
+
 void TaskDialog::slotCurrentChanged( KPageWidgetItem *current, KPageWidgetItem */*prev*/ )
 {
-    //kDebug(planDbg())<<current->widget()<<m_descriptionTab->parent();
+    //debugPlan<<current->widget()<<m_descriptionTab->parent();
     // HACK: KPageDialog grabs focus when a tab is clicked.
     // KRichTextWidget still flashes the caret so the user thinks it has the focus.
     // For now, just give the KRichTextWidget focus.
@@ -138,18 +139,14 @@ MacroCommand *TaskDialog::buildCommand() {
     return m;
 }
 
-void TaskDialog::slotButtonClicked(int button) {
-    if (button == KDialog::Ok) {
-        if (!m_generalTab->ok())
-            return;
-        if (!m_resourcesTab->ok())
-            return;
-        if (!m_descriptionTab->ok())
-            return;
-        accept();
-    } else {
-        KDialog::slotButtonClicked(button);
-    }
+void TaskDialog::accept() {
+    if (!m_generalTab->ok())
+        return;
+    if (!m_resourcesTab->ok())
+        return;
+    if (!m_descriptionTab->ok())
+        return;
+    KPageDialog::accept();
 }
 
 //---------------------------
@@ -227,5 +224,3 @@ MacroCommand *SubTaskAddDialog::buildCommand()
 }
 
 }  //KPlato namespace
-
-#include "kpttaskdialog.moc"

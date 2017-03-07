@@ -2,6 +2,7 @@
 * KPlato Report Plugin
 * Copyright (C) 2007-2009 by Adam Pigg (adam@piggz.co.uk)
 * Copyright (C) 2010 by Dag Andersen <danders@get2net.dk>
+* Copyright (C) 2016 by Dag Andersen <danders@get2net.dk>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -23,9 +24,10 @@
 
 #include "kplatoui_export.h"
 
-#include <KoReportData.h>
+#include <KReportData>
 
 #include "kptitemmodelbase.h"
+#include "kptnodeitemmodel.h"
 #include "kptnodechartmodel.h"
 #include "kptproject.h"
 
@@ -47,7 +49,7 @@ namespace Report
     KPLATOUI_EXPORT ReportData *findReportData( const QList<ReportData*> &lst, const QString &type );
 }
 
-class KPLATOUI_EXPORT ReportData : public QObject, public KoReportData
+class KPLATOUI_EXPORT ReportData : public QObject, public KReportData
 {
     Q_OBJECT
 public:
@@ -117,7 +119,7 @@ public:
     //!Allow a driver to create a new instance with a new data source
     //!source is a driver specific identifier
     //!Owner of the returned pointer is the caller
-    virtual KoReportData* data(const QString &source);
+    virtual KReportData* data(const QString &source);
 
     void setModel( QAbstractItemModel *model );
     QAbstractItemModel *model() const;
@@ -135,7 +137,7 @@ public:
 
 public Q_SLOTS:
     virtual void setProject( Project *project );
-    void setScheduleManager( ScheduleManager *sm );
+    virtual void setScheduleManager( ScheduleManager *sm );
 
 Q_SIGNALS:
     void scheduleManagerChanged( ScheduleManager *sm );
@@ -144,6 +146,7 @@ Q_SIGNALS:
 protected:
     /// Re-implement this to create data models
     virtual void createModels() {}
+    ReportData *getReportData(const QString &tag) const;
 
 protected:
     QSortFilterProxyModel m_model;
@@ -160,6 +163,7 @@ protected:
     bool m_maindatasource;
     bool m_subdatasource;
     QList<ReportData*> m_subdatasources;
+    mutable QMap<QString, ReportData*> m_datasources;
 };
 
 class KPLATOUI_EXPORT TaskReportData : public ReportData
@@ -259,7 +263,7 @@ public:
     //!Return the list of field names, used for legends in a chart
     virtual QStringList fieldNames() const;
 
-    void addExpression( const QString &field, const QVariant &value, int relation = '=' );
+    void addExpression( const QString &field, const QVariant &value, char relation = '=' );
 
     bool cbs;
 
@@ -328,6 +332,49 @@ protected:
     void createModels();
 };
 
+class KPLATOUI_EXPORT ProjectReportData : public ReportData
+{
+    Q_OBJECT
+public:
+    explicit ProjectReportData( QObject *parent = 0 );
+    ProjectReportData( const ProjectReportData &other );
+
+    ReportData *clone() const;
+
+    //!Move to the next record
+    virtual bool moveNext();
+
+    //!Move to the first record
+    virtual bool moveFirst();
+
+    //!Move to the last record
+    virtual bool moveLast();
+
+    //! return number of records
+    qint64 recordCount() const;
+
+    QStringList fieldNames() const;
+    QStringList fieldKeys() const;
+
+    using ReportData::value;
+    //!Return the value of the field for the given column
+    virtual QVariant value(int column) const;
+    //!Return the value of the field for the given name for the current record
+    virtual QVariant value(const QString &field) const;
+
+public Q_SLOTS:
+    virtual void setProject( Project *project );
+    virtual void setScheduleManager( ScheduleManager *sm );
+
+protected:
+    void createModels();
+
+private:
+    NodeModel m_data;
+    QMap<int, QString> m_keys;
+    QMap<int, QString> m_names;
+
+};
 
 } //namespace KPlato
 

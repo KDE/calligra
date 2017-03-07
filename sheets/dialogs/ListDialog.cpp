@@ -27,9 +27,7 @@
 #include <QListWidget>
 #include <QPushButton>
 
-#include <kcomponentdata.h>
-#include <kconfig.h>
-#include <kdebug.h>
+#include <KSharedConfig>
 #include <kmessagebox.h>
 #include <ktextedit.h>
 
@@ -57,7 +55,7 @@ public:
 static const int numBuiltinLists = 4;
 
 ListDialog::ListDialog(QWidget* parent)
-        : KDialog(parent)
+        : KoDialog(parent)
         , d(new Private)
 {
     setCaption(i18n("Custom Lists"));
@@ -189,7 +187,7 @@ void ListDialog::init()
         i18n("Sun");
     lst.append(sday);
 
-    d->config = KGlobal::activeComponent().config();
+    d->config = KSharedConfig::openConfig();
     const QStringList other = d->config->group("Parameters").readEntry("Other list", QStringList());
     QString tmp;
     for (QStringList::ConstIterator it = other.begin(); it != other.end(); ++it) {
@@ -328,5 +326,3 @@ void ListDialog::slotCopy()
         d->list->addItem(d->list->currentItem()->text());
     }
 }
-
-#include "ListDialog.moc"

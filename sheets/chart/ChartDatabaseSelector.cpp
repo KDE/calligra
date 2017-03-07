@@ -35,6 +35,7 @@
 #include "Sheet.h"
 #include "DocBase.h"
 #include "SheetAccessModel.h"
+#include "odf/SheetsOdf.h"
 
 using namespace Calligra::Sheets;
 
@@ -81,15 +82,10 @@ void ChartDatabaseSelector::save()
         return;
 
     d->shape->setSheetAccessModel(sheet->doc()->sheetAccessModel());
-    d->shape->reset(selectedRegion.saveOdf(),
+    d->shape->reset(Odf::saveRegion(selectedRegion.name()),
                     d->widget.m_firstRowAsLabel->isChecked(),
                     d->widget.m_firstColumnAsLabel->isChecked(),
                     d->widget.m_dataInRows->isChecked() ? Qt::Horizontal : Qt::Vertical);
-}
-
-KAction* ChartDatabaseSelector::createAction()
-{
-    return 0;
 }
 
 void ChartDatabaseSelector::showEvent(QShowEvent* event)
@@ -99,6 +95,3 @@ void ChartDatabaseSelector::showEvent(QShowEvent* event)
     d->selection = static_cast<Selection*>(m_resourceManager->resource(CanvasResource::Selection).value<void*>());
     d->widget.m_cellRegion->setText(d->selection->Region::name());
 }
-
-
-#include "ChartDatabaseSelector.moc"

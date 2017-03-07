@@ -38,7 +38,7 @@
 #include <QToolButton>
 #include <QWidget>
 #include <QWheelEvent>
-#include <kglobalsettings.h>
+#include <QFontDatabase>
 
 // TODO
 // improvement possibilities
@@ -236,6 +236,7 @@ void TabBarPrivate::layoutTabs()
                 break;
             }
     }
+    tabbar->updateGeometry();
 }
 
 int TabBarPrivate::tabAt(const QPoint& pos)
@@ -279,7 +280,7 @@ void TabBarPrivate::drawTab(QPainter& painter, QRect& rect, const QString& text,
     painter.drawPolygon(polygon);
 
     // draw the lines
-    painter.setPen(tabbar->palette().color(QPalette::Dark));
+    painter.setPen(QPen(tabbar->palette().color(QPalette::Dark), 0));
     painter.setRenderHint(QPainter::Antialiasing);
     if (!active) {
         const bool reverseLayout = tabbar->isRightToLeft();
@@ -319,22 +320,22 @@ void TabBarPrivate::layoutButtons()
 
     if (tabbar->isLeftToRight()) {
         scrollFirstButton->setGeometry(0, 0, bw, bw);
-        scrollFirstButton->setIcon(QIcon(arrow_leftmost_xpm));
+        scrollFirstButton->setIcon(QIcon(QPixmap(arrow_leftmost_xpm)));
         scrollBackButton->setGeometry(bw, 0, bw, bw);
-        scrollBackButton->setIcon(QIcon(arrow_left_xpm));
+        scrollBackButton->setIcon(QIcon(QPixmap(arrow_left_xpm)));
         scrollForwardButton->setGeometry(bw*2, 0, bw, bw);
-        scrollForwardButton->setIcon(QIcon(arrow_right_xpm));
+        scrollForwardButton->setIcon(QIcon(QPixmap(arrow_right_xpm)));
         scrollLastButton->setGeometry(bw*3, 0, bw, bw);
-        scrollLastButton->setIcon(QIcon(arrow_rightmost_xpm));
+        scrollLastButton->setIcon(QIcon(QPixmap(arrow_rightmost_xpm)));
     } else {
         scrollFirstButton->setGeometry(w - bw, 0, bw, bw);
-        scrollFirstButton->setIcon(QIcon(arrow_rightmost_xpm));
+        scrollFirstButton->setIcon(QIcon(QPixmap(arrow_rightmost_xpm)));
         scrollBackButton->setGeometry(w - 2*bw, 0, bw, bw);
-        scrollBackButton->setIcon(QIcon(arrow_right_xpm));
+        scrollBackButton->setIcon(QIcon(QPixmap(arrow_right_xpm)));
         scrollForwardButton->setGeometry(w - 3*bw, 0, bw, bw);
-        scrollForwardButton->setIcon(QIcon(arrow_left_xpm));
+        scrollForwardButton->setIcon(QIcon(QPixmap(arrow_left_xpm)));
         scrollLastButton->setGeometry(w - 4*bw, 0, bw, bw);
-        scrollLastButton->setIcon(QIcon(arrow_leftmost_xpm));
+        scrollLastButton->setIcon(QIcon(QPixmap(arrow_leftmost_xpm)));
     }
 }
 
@@ -348,7 +349,7 @@ void TabBarPrivate::updateButtons()
 
 QFont TabBarPrivate::font(bool selected)
 {
-    QFont f = KGlobalSettings::menuFont();
+    QFont f = QFontDatabase::systemFont(QFontDatabase::TitleFont);
     if (selected) f.setBold(true);
     return f;
 }
@@ -367,6 +368,7 @@ TabBar::TabBar(QWidget* parent, const char* /*name*/)
     d->wheelDelta = 0;
     d->autoScroll = false;
     d->offset = 64;
+    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
     // initialize the scroll buttons
     d->scrollFirstButton = new QToolButton(this);
@@ -687,7 +689,11 @@ void TabBar::resizeEvent(QResizeEvent*)
 
 QSize TabBar::sizeHint() const
 {
-    return QSize(40, style()->pixelMetric(QStyle::PM_ScrollBarExtent));
+    int h = style()->pixelMetric(QStyle::PM_ScrollBarExtent);
+    int w = 5 * h;  // we have 4 buttons, the 5 is to give some free space too
+    if (d->tabRects.size()) w += d->tabRects[d->tabRects.size() - 1].right();
+
+    return QSize(w, h);
 }
 
 void TabBar::renameTab(const QString& old_name, const QString& new_name)
@@ -855,6 +861,3 @@ void TabBar::wheelEvent(QWheelEvent * e)
 
 } // namespace Sheets
 } // namespace Calligra
-
-#include "TabBar.moc"
-

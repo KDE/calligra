@@ -32,12 +32,12 @@
 namespace MSOOXML
 {
 
-//! @return maximum number of spreadsheet columns per worksheet. Currently set to 32767, which is KSpread maximum.
+//! @return maximum number of spreadsheet columns per worksheet. Currently set to 32767, which is Calligra Sheets maximum.
 //! See http://en.wikipedia.org/wiki/OpenOffice.org_Calc#Specifications
-KOMSOOXML_EXPORT uint maximumSpreadsheetColumns();
+KOMSOOXML_EXPORT unsigned int maximumSpreadsheetColumns();
 
-//! @return maximum number of spreadsheet rows per worksheet. Currently set to 32767, which is KSpread maximum.
-KOMSOOXML_EXPORT uint maximumSpreadsheetRows();
+//! @return maximum number of spreadsheet rows per worksheet. Currently set to 32767, which is Calligra Sheets maximum.
+KOMSOOXML_EXPORT unsigned int maximumSpreadsheetRows();
 
 } // MSOOXML namespace
 

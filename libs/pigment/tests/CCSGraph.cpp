@@ -20,72 +20,66 @@
 #include <QFile>
 #include <QProcess>
 #include <QTemporaryFile>
+#include <QCoreApplication>
 
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
-#include <kapplication.h>
-#include <kdebug.h>
-
+#include <DebugPigment.h>
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColorConversionSystem.h"
 
 #include <iostream>
+#include <QCommandLineParser>
+#include <QCommandLineOption>
 
 int main(int argc, char** argv)
 {
-    KAboutData aboutData("CCSGraph",
-                         0,
-                         ki18n("CCSGraph"),
-                         "1.0",
-                         ki18n("Output the graph of color conversion of pigment's Color Conversion"),
-                         KAboutData::License_LGPL,
-                         ki18n("(c) 2007 Cyrille Berger"),
-                         KLocalizedString(),
-                         "www.calligra.org",
-                         "submit@bugs.kde.org");
-    KCmdLineArgs::init(argc, argv, &aboutData);
+
+    QCoreApplication app(argc, argv);
+
+    QCommandLineParser parser;
+
+    parser.addVersionOption();
+    parser.addHelpOption();
     // Initialize the list of options
-    KCmdLineOptions options;
-    options.add("graphs", ki18n("return the list of available graphs"));
-    options.add("graph <type>", ki18n("specify the type of graph (see --graphs to get the full list, the default is full)"), "full");
-    options.add("src-key <key>", ki18n("specify the key of the source color space"), "");
-    options.add("dst-key <key>", ki18n("specify the key of the destination color space"), "");
-    options.add("output <type>", ki18n("specify the output (can be ps or dot, the default is ps)"), "ps");
-    options.add("+outputfile", ki18n("name of the output file"));
-    KCmdLineArgs::addCmdLineOptions(options);
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    if (args->isSet("graphs")) {
-        // Don't change those lines to use qDebug derivatives, they need to be outputed
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("graphs"), i18n("return the list of available graphs")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("graph"), i18n("specify the type of graph (see --graphs to get the full list, the default is full)"), QLatin1String("type"), QLatin1String("full")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("key"), i18n("specify the key of the source color space"), QLatin1String("key"), QLatin1String("")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("key"), i18n("specify the key of the destination color space"), QLatin1String("key"), QLatin1String("")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("output"), i18n("specify the output (can be ps or dot, the default is ps)"), QLatin1String("type"), QLatin1String("ps")));
+    parser.addPositionalArgument(QLatin1String("outputfile"), i18n("name of the output file"));
+    parser.process(app); // PORTING SCRIPT: move this to after any parser.addOption
+
+    if (parser.isSet("graphs")) {
+        // Don't change those lines to use dbgPigment derivatives, they need to be outputed
         // to stdout not stderr.
         std::cout << "full : show all the connection on the graph" << std::endl;
         std::cout << "bestpath : show the best path for a given transformation" << std::endl;
         exit(EXIT_SUCCESS);
     }
-    QString graphType = args->getOption("graph");
-    QString outputType = args->getOption("output");
-    if (args->count() != 1) {
-        kError() << "No output file name specified";
-        args->usage();
+    QString graphType = parser.value("graph");
+    QString outputType = parser.value("output");
+    if (parser.positionalArguments().count() != 1) {
+        errorPigment << "No output file name specified";
+        parser.showHelp();
         exit(EXIT_FAILURE);
     }
-    QString outputFileName = args->arg(0);
+    QString outputFileName = parser.positionalArguments()[0];
     // Generate the graph
-    KApplication app;
+
     QString dot;
     if (graphType == "full") {
         dot = KoColorSpaceRegistry::instance()->colorConversionSystem()->toDot();
     } else if (graphType == "bestpath") {
-        QString srcKey = args->getOption("src-key");
-        QString dstKey = args->getOption("dst-key");
+        QString srcKey = parser.value("src-key");
+        QString dstKey = parser.value("dst-key");
         if (srcKey.isEmpty() || dstKey.isEmpty()) {
-            kError() << "src-key and dst-key must be specified for the graph bestpath";
+            errorPigment << "src-key and dst-key must be specified for the graph bestpath";
             exit(EXIT_FAILURE);
         } else {
             dot = KoColorSpaceRegistry::instance()->colorConversionSystem()->bestPathToDot(srcKey, dstKey);
         }
     } else {
-        kError() << "Unknow graph type : " << graphType.toLatin1();
+        errorPigment << "Unknow graph type : " << graphType.toLatin1();
         exit(EXIT_FAILURE);
     }
 
@@ -106,10 +100,10 @@ int main(int argc, char** argv)
         file.close();
 
         if (QProcess::execute(cmd) != 0) {
-            kError() << "An error has occurred when executing : '" << cmd << "' the most likely cause is that 'dot' command is missing, and that you should install graphviz (from http://www.graphiz.org)";
+            errorPigment << "An error has occurred when executing : '" << cmd << "' the most likely cause is that 'dot' command is missing, and that you should install graphviz (from http://www.graphiz.org)";
         }
     } else {
-        kError() << "Unknow output type : " << outputType;
+        errorPigment << "Unknow output type : " << outputType;
         exit(EXIT_FAILURE);
     }
 }

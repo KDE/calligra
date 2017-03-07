@@ -1,5 +1,5 @@
-KSpread column/row limits
-=========================
+Calligra Sheets column/row limits
+=================================
 
 Restrictions by sizeof(int); i <= 2^31-1:
 -----------------------------------------

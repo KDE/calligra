@@ -26,26 +26,24 @@
 
 #include "kptproject.h"
 #include "kptschedule.h"
+#include <kptschedulerplugin.h>
 
 #include <librcps.h>
 
+#include <KLocalizedString>
 
 #include <QApplication>
-#include <kptschedulerplugin.h>
 
-
-KPLATO_SCHEDULERPLUGIN_EXPORT(KPlatoRCPSPlugin)
+#ifndef PLAN_NOPLUGIN
+KPLATO_SCHEDULERPLUGIN_EXPORT(KPlatoRCPSPlugin, "planrcpsscheduler.json")
+#endif
 
 using namespace KPlato;
 
 KPlatoRCPSPlugin::KPlatoRCPSPlugin( QObject * parent, const QVariantList & )
     : KPlato::SchedulerPlugin(parent)
 {
-    kDebug(planDbg())<<rcps_version();
-    KLocale *locale = KGlobal::locale();
-    if ( locale ) {
-        locale->insertCatalog( "planrcpsplugin" );
-    }
+    debugPlan<<rcps_version();
     m_granularities << (long unsigned int) 1 * 60 * 1000
                     << (long unsigned int) 15 * 60 * 1000
                     << (long unsigned int) 30 * 60 * 1000
@@ -58,7 +56,7 @@ KPlatoRCPSPlugin::~KPlatoRCPSPlugin()
 
 QString KPlatoRCPSPlugin::description() const
 {
-    return i18nc( "@info:whatsthis", "<title>RCPS Scheduler</title>"
+    return xi18nc( "@info:whatsthis", "<title>RCPS Scheduler</title>"
                     "<para>The Resource Constrained Project Scheduler (RCPS) focuses on scheduling"
                     " the project to avoid overbooking resources."
                     " It still respects task dependencies and also tries to fullfill time constraints."
@@ -132,7 +130,7 @@ void KPlatoRCPSPlugin::stopCalculation( SchedulerThread *sch )
 
 void KPlatoRCPSPlugin::slotStarted( SchedulerThread */*job*/ )
 {
-//    kDebug(planDbg())<<"KPlatoRCPSPlugin::slotStarted:";
+//    debugPlan<<"KPlatoRCPSPlugin::slotStarted:";
 }
 
 void KPlatoRCPSPlugin::slotFinished( SchedulerThread *j )
@@ -140,7 +138,7 @@ void KPlatoRCPSPlugin::slotFinished( SchedulerThread *j )
     KPlatoRCPSScheduler *job = static_cast<KPlatoRCPSScheduler*>( j );
     Project *mp = job->mainProject();
     ScheduleManager *sm = job->mainManager();
-    //kDebug(planDbg())<<"KPlatoRCPSPlugin::slotFinished:"<<mp<<sm<<job->isStopped();
+    //debugPlan<<"KPlatoRCPSPlugin::slotFinished:"<<mp<<sm<<job->isStopped();
     if ( job->isStopped() ) {
         sm->setCalculationResult( ScheduleManager::CalculationCanceled );
     } else {

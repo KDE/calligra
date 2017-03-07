@@ -21,19 +21,21 @@
 
 #include "KPrPlaceholderPictureStrategy.h"
 #include "KPrPlaceholderTextStrategy.h"
+#include "StageDebug.h"
 
 #include <QPainter>
 #include <QPen>
 #include <QTextOption>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
+
 #include <KoShape.h>
 #include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoXmlWriter.h>
-#include <kdebug.h>
+
 
 static const class PlaceholderData {
     public:
@@ -90,7 +92,7 @@ KPrPlaceholderStrategy * KPrPlaceholderStrategy::create( const QString & present
             strategy = new KPrPlaceholderStrategy( presentationClass );
         }
         else {
-            kWarning(33001) << "Unsupported placeholder strategy:" << presentationClass;
+            warnStage << "Unsupported placeholder strategy:" << presentationClass;
         }
     }
     return strategy;
@@ -135,7 +137,7 @@ void KPrPlaceholderStrategy::paint( QPainter & painter, const KoViewConverter &c
     options.setWrapMode( QTextOption::WordWrap );
     painter.drawText( rect, text(), options );
 
-    QPen pen( Qt::gray );
+    QPen pen(Qt::gray, 0);
     //pen.setStyle( Qt::DashLine ); // endless loop
     //pen.setStyle( Qt::DotLine ); // endless loop
     //pen.setStyle( Qt::DashDotLine ); // endless loop

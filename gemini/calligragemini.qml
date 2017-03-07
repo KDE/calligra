@@ -16,15 +16,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 1.1
+import QtQuick 2.0
+import QtQuick.Controls 1.3
 import "qml"
 import "qml/components"
-import org.calligra.CalligraComponents 0.1 as Calligra
+import org.kde.calligra 1.0 as Calligra
 
 Item {
     id: base;
-    width: 1280;
-    height: 768;
+//     width: 1280;
+//     height: 768;
     onWidthChanged: Constants.setGridWidth( width / Constants.GridColumns );
     onHeightChanged: Constants.setGridHeight( height / Constants.GridRows );
     property QtObject window: mainWindow;
@@ -35,11 +36,11 @@ Item {
         RecentFileManager.addRecent(fileName);
         mainWindow.setAlternativeSaveAction(alternativeSaveAction);
     }
-    PageStack {
+    StackView {
         id: mainPageStack;
         anchors.fill: parent;
-        onCurrentPageChanged: window.currentTouchPage = (currentPage.pageName !== undefined) ? currentPage.pageName : currentPage.toString();
-        initialPage: welcomePage;
+        onCurrentItemChanged: currentItem !== null ? window.currentTouchPage = (currentItem.pageName !== undefined) ? currentItem.pageName : currentItem.toString() : "";
+        initialItem: welcomePage;
     }
     Component { id: welcomePage; WelcomePage { } }
     Component { id: mainPage; MainPage { } }

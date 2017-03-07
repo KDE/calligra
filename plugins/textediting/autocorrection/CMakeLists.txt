@@ -1,24 +1,28 @@
 project(autocorrection)
 
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_textediting_autocorrect\")
+
 add_subdirectory( data )
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOTEXT_INCLUDES} ${KOWIDGETS_INCLUDES} )
+include_directories(   ${KOTEXT_INCLUDES} ${KOWIDGETS_INCLUDES} )
 
 set(autocorrect_SRCS
+    AutocorrectDebug.cpp
     AutocorrectPlugin.cpp
     Autocorrect.cpp
     AutocorrectFactory.cpp
     AutocorrectConfigDialog.cpp
 )
 
-kde4_add_ui_files( autocorrect_SRCS
+ki18n_wrap_ui( autocorrect_SRCS
     AutocorrectConfig.ui
 )
 
-kde4_add_plugin(calligra_textediting_autocorrect ${autocorrect_SRCS})
+add_library(calligra_textediting_autocorrect MODULE ${autocorrect_SRCS})
+calligra_texteditingplugin_desktop_to_json(calligra_textediting_autocorrect calligra_textediting_autocorrect.desktop)
 
-target_link_libraries(calligra_textediting_autocorrect kowidgets)
+target_link_libraries(calligra_textediting_autocorrect
+    kowidgets
+)
 
-install(TARGETS calligra_textediting_autocorrect DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install( FILES calligra_textediting_autocorrect.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
+install(TARGETS calligra_textediting_autocorrect DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/textediting)

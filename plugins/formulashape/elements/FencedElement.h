@@ -25,7 +25,7 @@
 #define FENCEDELEMENT_H
 
 #include "RowElement.h"
-#include "kformula_export.h"
+#include "koformula_export.h"
 #include <QPainterPath>
 
 /**

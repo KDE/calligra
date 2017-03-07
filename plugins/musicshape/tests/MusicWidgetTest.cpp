@@ -19,6 +19,7 @@
 #include <QApplication>
 #include <QFontDatabase>
 #include <QDebug>
+#include <QTest>
 #include "MusicWidget.h"
 #include "../core/Sheet.h"
 #include "../core/Bar.h"
@@ -32,7 +33,7 @@ int main(int argc, char** argv)
     QApplication app(argc, argv);
 
     // Load the font that is used by the music widget
-    QString fontFile = KDESRCDIR "/../fonts/Emmentaler-14.ttf";
+    QString fontFile = QFINDTESTDATA("../fonts/Emmentaler-14.ttf");
     if (QFontDatabase::addApplicationFont(fontFile) == -1) {
         qWarning() << "Could not load emmentaler font";
     }

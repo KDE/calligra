@@ -40,15 +40,14 @@
 #include <QList>
 #include <QHash>
 #include <QPointer>
-
-#include <klocale.h>
-#include <ktimezone.h>
+#include <QTimeZone>
 
 
 /// The main namespace.
 namespace KPlato
 {
 
+class Locale;
 class Schedule;
 class StandardWorktime;
 class ScheduleManager;
@@ -375,7 +374,7 @@ public:
     /// Set WBS Definition to @p def
     void setWbsDefinition( const WBSDefinition &def );
     /// Generate WBS Code
-    virtual QString generateWBSCode( QList<int> &indexes ) const;
+    virtual QString generateWBSCode( QList<int> &indexes, bool sortable = false ) const;
     
     Accounts &accounts() { return m_accounts; }
     const Accounts &accounts() const { return m_accounts; }
@@ -428,12 +427,10 @@ public:
     void sendScheduleRemoved( const MainSchedule *sch );
     void sendScheduleToBeRemoved( const MainSchedule *sch );
 
-    /// Return the time spec used in this project
-    const KDateTime::Spec &timeSpec() const { return m_spec; }
     /// Return the time zone used in this project
-    KTimeZone timeZone() const { return m_spec.timeZone(); }
+    QTimeZone timeZone() const { return m_timeZone; }
     /// Set the time zone to be used in this project
-    void setTimeZone( const KTimeZone &tz ) { m_spec = KDateTime::Spec( tz ); }
+    void setTimeZone( const QTimeZone &tz ) { m_timeZone = tz; }
     
     /**
      * Add a relation between the nodes specified in the relation rel.
@@ -481,9 +478,9 @@ public:
     const Task &taskDefaults() const { return config().taskDefaults(); }
 
     /// Return locale. (Used for currency, everything else is from KGlobal::locale)
-    KLocale *locale() { return const_cast<ConfigBase&>(config()).locale(); }
+    Locale *locale() { return const_cast<ConfigBase&>(config()).locale(); }
     /// Return locale. (Used for currency, everything else is from KGlobal::locale)
-    const KLocale *locale() const { return config().locale(); }
+    const Locale *locale() const { return config().locale(); }
     /// Signal that locale data has changed
     void emitLocaleChanged();
     
@@ -519,6 +516,8 @@ public Q_SLOTS:
     void setMaxProgress( int max, ScheduleManager *sm = 0 );
 
 Q_SIGNALS:
+    /// Emitted when the project is about to be deleted (The destroyed signal is disabled)
+    void aboutToBeDeleted();
     /// Emitted when anything in the project is changed (use with care)
     void projectChanged();
     /// Emitted when the WBS code definition has changed. This may change all nodes.
@@ -675,8 +674,8 @@ private:
     QMap<QString, ScheduleManager*> m_managerIdMap;
 
     QList<ScheduleManager*> m_managers;
-    KDateTime::Spec m_spec;
-    
+    QTimeZone m_timeZone;
+
     WBSDefinition m_wbsDefinition;
     
     ConfigBase emptyConfig;

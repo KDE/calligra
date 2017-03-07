@@ -8,11 +8,9 @@
 
 #include <KoTextShapeData.h>
 #include <MockShapes.h>
-#include <kcomponentdata.h>
 
 TestTextFrameSorting::TestTextFrameSorting()
 {
-    new KComponentData("TestTextFrameSorting");
 }
 
 void TestTextFrameSorting::testSimpleSorting()
@@ -204,5 +202,3 @@ KWFrame * TestTextFrameSorting::createCopyFrame(const QPointF &position, KoShape
 
 
 QTEST_KDEMAIN(TestTextFrameSorting, GUI)
-
-#include <TestTextFrameSorting.moc>

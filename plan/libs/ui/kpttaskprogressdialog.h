@@ -22,7 +22,7 @@
 
 #include "kplatoui_export.h"
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 
 namespace KPlato
@@ -35,7 +35,7 @@ class StandardWorktime;
 class ScheduleManager;
 class MacroCommand;
 
-class KPLATOUI_EXPORT TaskProgressDialog : public KDialog {
+class KPLATOUI_EXPORT TaskProgressDialog : public KoDialog {
     Q_OBJECT
 public:
     TaskProgressDialog(Task &task, ScheduleManager *sm, StandardWorktime *workTime, QWidget *parent=0);

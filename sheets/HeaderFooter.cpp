@@ -25,17 +25,17 @@
 #include "part/Doc.h" // FIXME detach from part
 #include "Sheet.h"
 #include "SheetPrint.h"
-
-#include <kdebug.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kurl.h>
+#include "SheetsDebug.h"
 
 #include <KoDocumentInfo.h>
+
+#include <KLocalizedString>
+#include <kmessagebox.h>
 
 #include <QDate>
 #include <QPainter>
 #include <QTime>
+#include <QUrl>
 
 #include <pwd.h>
 #include <unistd.h>
@@ -150,7 +150,7 @@ QString HeaderFooter::completeHeading(const QString &_data, int _page, const QSt
     QString organization;
     QString tmp;
     if (!info)
-        kWarning() << "Author information not found in Document Info !";
+        warnSheets << "Author information not found in Document Info !";
     else {
         full_name = info->authorInfo("creator");
         email_addr = info->authorInfo("email");

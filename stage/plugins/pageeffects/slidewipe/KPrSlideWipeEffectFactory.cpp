@@ -19,7 +19,7 @@
 
 #include "KPrSlideWipeEffectFactory.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KPrSlideWipeFromBottomStrategy.h"
 #include "KPrSlideWipeFromLeftStrategy.h"

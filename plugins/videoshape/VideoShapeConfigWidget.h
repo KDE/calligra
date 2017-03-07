@@ -21,8 +21,9 @@
 #define VIDEOSHAPECONFIGWIDGET_H
 
 #include <KoShapeConfigWidgetBase.h>
-#include <kurl.h>
+
 #include <QWidget>
+#include <QUrl>
 
 class VideoShape;
 class SelectVideoWidget;

@@ -36,9 +36,9 @@
 #include <dialogs/SimpleSpellCheckingWidget.h>
 #include <dialogs/SimpleAnnotationWidget.h>
 
-#include <kdebug.h>
-#include <klocale.h>
-#include <kaction.h>
+#include <QDebug>
+#include <klocalizedstring.h>
+#include <QAction>
 #include <kuser.h>
 
 #include <QDate>
@@ -51,7 +51,8 @@ ReviewTool::ReviewTool(KoCanvasBase* canvas): TextTool(canvas),
     m_textEditor(0),
     m_textShapeData(0),
     m_canvas(canvas),
-    m_textShape(0)
+    m_textShape(0),
+    m_currentAnnotationShape(0)
 {
     createActions();
 }
@@ -62,7 +63,7 @@ ReviewTool::~ReviewTool()
 
 void ReviewTool::createActions()
 {
-    m_removeAnnotationAction = new KAction(i18n("Remove Comment"), this);
+    m_removeAnnotationAction = new QAction(i18n("Remove Comment"), this);
     m_removeAnnotationAction->setToolTip(i18n("Remove Comment"));
     addAction("remove_annotation", m_removeAnnotationAction);
     connect(m_removeAnnotationAction, SIGNAL(triggered()), this, SLOT(removeAnnotation()));

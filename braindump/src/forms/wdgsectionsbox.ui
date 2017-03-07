@@ -14,7 +14,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="KLineEdit" name="searchLine"/>
+      <widget class="QLineEdit" name="searchLine"/>
      </item>
      <item>
       <widget class="QToolButton" name="bnViewMode"/>

@@ -28,9 +28,9 @@
 
 #include <KoCanvasBase.h>
 
+#include <KLocalizedString>
 #include <kcalendarsystem.h>
 #include <kmessagebox.h>
-#include <kdeversion.h>
 
 using namespace Calligra::Sheets;
 
@@ -46,7 +46,7 @@ CalendarTool::CalendarTool(KoCanvasBase* canvas)
 {
     setObjectName(QLatin1String("CalendarTool"));
     /*
-        KAction* importAction = new KAction(koIcon("document-import"), i18n("Import OpenDocument Spreadsheet File"), this);
+        QAction* importAction = new QAction(koIcon("document-import"), i18n("Import OpenDocument Spreadsheet File"), this);
         importAction->setIconText(i18n("Import"));
         addAction("import", importAction);
         connect(importAction, SIGNAL(triggered()), this, SLOT(importDocument()));*/
@@ -118,8 +118,8 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
     int col = marker.x();
     int colstart = col; //this is where we get back after each week
     setText(sheet, row, colstart, i18n("Calendar from %1 to %2",
-                                       KGlobal::locale()->formatDate(start),
-                                       KGlobal::locale()->formatDate(end)));
+                                       KLocale::global()->formatDate(start),
+                                       KLocale::global()->formatDate(end)));
 
     QDate current(start);
 //   QDate previous(current);
@@ -148,14 +148,14 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
         }
 
         if (yearheader) {
-            kDebug() << "inserting year" + QString::number(current.year());
+            debugSheets << "inserting year" + QString::number(current.year());
             setText(sheet, row, colstart + 6, cs->formatDate(current, KLocale::Year, KLocale::LongNumber));
 
             row += 2;
             yearheader = false;
         }
         if (monthheader) {
-            kDebug() << "inserting month" + QString::number(current.month());
+            debugSheets << "inserting month" + QString::number(current.month());
             setText(sheet, row, colstart + 6, cs->monthName(current, KCalendarSystem::LongName));
             row += 2;
             //we always have the week number in the first column
@@ -167,12 +167,7 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
             monthheader = false;
         }
         if (weekheader) {
-            setText(sheet, row, colstart,
-#if KDE_IS_VERSION(4,7,0)
-                    QString::number(cs->week(current)));
-#else
-                    QString::number(cs->weekNumber(current)));
-#endif
+            setText(sheet, row, colstart, QString::number(cs->week(current)));
             col++;
             weekheader = false;
 
@@ -190,19 +185,21 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
         col += 2;
     }
     sheet->doc()->endMacro();
-    kDebug() << "inserting calendar completed";
+    debugSheets << "inserting calendar completed";
 }
 
-QWidget* CalendarTool::createOptionWidget()
+QList<QPointer<QWidget> > CalendarTool::createOptionWidgets()
 {
     // Create the main cell tool widget. It is not visible, but the CellTool makes heavy use
     // of it, and it refuses to work correctly if it does not exist
-    CellTool::createOptionWidget();
+    CellTool::createOptionWidgets();
 
     CalendarToolWidget* widget =  new CalendarToolWidget(canvas()->canvasWidget());
     connect(widget, SIGNAL(insertCalendar(QDate,QDate)),
             this, SLOT(insertCalendar(QDate,QDate)));
-    return widget;
+    QList<QPointer<QWidget> > ow;
+    ow.append(widget);
+    return ow;
 }
 
 void CalendarTool::setText(Sheet* sheet, int _row, int _column, const QString& _text, bool asString)
@@ -215,5 +212,3 @@ void CalendarTool::setText(Sheet* sheet, int _row, int _column, const QString& _
         cell.parseUserInput(_text);
     }
 }
-
-#include "CalendarTool.moc"

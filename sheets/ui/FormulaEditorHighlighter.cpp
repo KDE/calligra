@@ -19,15 +19,10 @@
 
 #include "FormulaEditorHighlighter.h"
 
-// KSpread
+// Sheets
 #include "Formula.h"
 #include "Selection.h"
 #include "Sheet.h"
-
-// Calligra
-
-// KDE
-#include <kdebug.h>
 
 // Qt
 #include <QApplication>

@@ -23,15 +23,13 @@
 #include "kptcommand.h"
 #include "kpttaskdescriptiondialog.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #ifdef PLAN_KDEPIMLIBS_FOUND
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>
 #include <akonadi/contact/emailaddressselection.h>
 #endif
-
-#include <kdebug.h>
 
 namespace KPlato
 {
@@ -82,7 +80,7 @@ void SummaryTaskGeneralPanel::setStartValues(Task &task) {
 }
 
 void SummaryTaskGeneralPanel::slotObligatedFieldsFilled() {
-    emit obligatedFieldsFilled(!namefield->text().isEmpty());
+    emit obligatedFieldsFilled(true); // never block save
 }
 
 MacroCommand *SummaryTaskGeneralPanel::buildCommand() {
@@ -149,5 +147,3 @@ void SummaryTaskGeneralPanel::slotChooseResponsible()
 
 
 }  //KPlato namespace
-
-#include "kptsummarytaskgeneralpanel.moc"

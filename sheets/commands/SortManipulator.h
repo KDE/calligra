@@ -58,7 +58,7 @@ public:
         m_usecustomlist = v;
     }
     /** set a custom list that will be used */
-    void setCustomList(QStringList l) {
+    void setCustomList(const QStringList &l) {
         m_customlist = l;
     }
 

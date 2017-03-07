@@ -54,8 +54,8 @@
 #include <QToolTip>
 #include <QScrollBar>
 
-// KDE
-#include <klocale.h>
+// KF5
+#include <KLocalizedString>
 
 // Calligra
 #include <KoCanvasController.h>
@@ -64,7 +64,7 @@
 #include <KoPointerEvent.h>
 #include <KoUnit.h>
 
-// KSpread
+// Sheets
 #include "Canvas.h"
 #include "Cell.h"
 #include "Doc.h"
@@ -451,5 +451,3 @@ void SelectAllButtonWidget::toolChanged(const QString& toolId)
 {
     doToolChanged(toolId);
 }
-
-#include "HeaderWidgets.moc"

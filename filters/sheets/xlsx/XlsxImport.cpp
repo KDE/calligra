@@ -33,6 +33,7 @@
 #include <MsooXmlSchemas.h>
 #include <MsooXmlContentTypes.h>
 #include <MsooXmlRelationships.h>
+#include "MsooXmlThemesReader.h"
 
 #include <memory>
 
@@ -53,8 +54,7 @@
 #include <KoPageLayout.h>
 #include <KoXmlWriter.h>
 
-K_PLUGIN_FACTORY(XlsxImportFactory, registerPlugin<XlsxImport>();)
-K_EXPORT_PLUGIN(XlsxImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(XlsxImportFactory, "calligra_filter_xlsx2ods.json", registerPlugin<XlsxImport>();)
 
 enum XlsxDocumentType {
     XlsxDocument,

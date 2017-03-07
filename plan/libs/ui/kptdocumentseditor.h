@@ -113,10 +113,10 @@ private Q_SLOTS:
 private:
     DocumentTreeView *m_view;
 
-    KAction *actionEditDocument;
-    KAction *actionViewDocument;
-    KAction *actionAddDocument;
-    KAction *actionDeleteSelection;
+    QAction *actionEditDocument;
+    QAction *actionViewDocument;
+    QAction *actionAddDocument;
+    QAction *actionDeleteSelection;
 
 };
 

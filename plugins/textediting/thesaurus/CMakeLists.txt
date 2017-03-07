@@ -1,27 +1,29 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_textediting_thesaurus\")
 
-
-
-include_directories( ${KDE4_INCLUDES} ${KOTEXT_INCLUDES} )
+include_directories( ${KOWIDGETS_INCLUDES} ${KOTEXT_INCLUDES} )
 
 ########### next target ###############
 
 set(thesaurustool_SRCS
+    ThesaurusDebug.cpp
     Thesaurus.cpp
     ThesaurusPlugin.cpp
     ThesaurusFactory.cpp
 )
 
 
-kde4_add_plugin(calligra_textediting_thesaurus ${thesaurustool_SRCS})
+add_library(calligra_textediting_thesaurus MODULE ${thesaurustool_SRCS})
+calligra_texteditingplugin_desktop_to_json(calligra_textediting_thesaurus calligra_textediting_thesaurus.desktop)
 
-target_link_libraries(calligra_textediting_thesaurus kotext ${KDE4_KFILE_LIBS}
-${KDE4_KIO_LIBS})
+target_link_libraries(calligra_textediting_thesaurus
+    kotext
+    kowidgets
+)
 
-install(TARGETS calligra_textediting_thesaurus  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_textediting_thesaurus  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/textediting)
 
 
 ########### install files ###############
 
-install( FILES  calligra_textediting_thesaurus.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES  thesaurus.txt  DESTINATION ${DATA_INSTALL_DIR}/calligra/thesaurus)
 

@@ -28,6 +28,7 @@
 
 #include <QtGlobal>
 #include <QColor>
+#include <QVector>
 
 class KoGenStyle;
 class KoXmlElement;
@@ -93,7 +94,7 @@ struct KoColumns {
     unsigned int separatorHeight;
 
     /** data about the individual columns if there  */
-    QList<ColumnDatum> columnData;
+    QVector<ColumnDatum> columnData;
 
     /**
      * Construct a columns with the default column count 1,
@@ -132,6 +133,8 @@ struct KoColumns {
     KOODF_EXPORT static KoColumns::SeparatorStyle parseSeparatorStyle(const QString &value);
     KOODF_EXPORT static int parseRelativeWidth(const QString &value);
 };
+
+Q_DECLARE_TYPEINFO(KoColumns::ColumnDatum, Q_MOVABLE_TYPE);
 
 #endif /* KOCOLUMNS_H */
 

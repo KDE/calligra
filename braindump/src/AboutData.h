@@ -20,20 +20,27 @@
 #ifndef BRAINDUMPABOUTDATA_H
 #define BRAINDUMPABOUTDATA_H
 
-#include <kaboutdata.h>
-#include <klocale.h>
+#include <KAboutData>
+#include <KLocalizedString>
+#include <kcoreaddons_version.h>
 
-static const char BRAINDUMP_DESCRIPTION[] = I18N_NOOP("Braindump: directly from your brain to the computer.");
-static const char BRAINDUMP_VERSION[] = "0.10.9";
+#define BRAINDUMP_VERSION "0.10.9"
 
-inline KAboutData* newBrainDumpAboutData()
+inline KAboutData newBrainDumpAboutData()
 {
-    KAboutData* aboutData = new KAboutData("braindump", 0, ki18n("Braindump"),
-                                           BRAINDUMP_VERSION, ki18n(BRAINDUMP_DESCRIPTION), KAboutData::License_LGPL,
-                                           ki18n("(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"), KLocalizedString(),
-                                           "");
-    aboutData->addAuthor(ki18n("Cyrille Berger"), ki18n("Maintainer"), "cberger@cberger.net");
-
+    KAboutData aboutData(QStringLiteral("braindump"), i18n("Braindump"), QStringLiteral(BRAINDUMP_VERSION),
+                         i18n("Braindump: directly from your brain to the computer.")
+                         + QLatin1String("\n\n")
+                         + i18n("Unmaintained at the time of release of this version. The Calligra community welcomes interested persons to take over maintainership."),
+                         KAboutLicense::LGPL, i18n("(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"));
+#if KCOREADDONS_VERSION >= 0x051600
+    aboutData.setDesktopFileName(QStringLiteral("org.kde.braindump"));
+#endif
+    aboutData.addAuthor(i18n("Somsubhra Bairi"), i18n("Former maintainer"), QStringLiteral("somsubhra.bairi@gmail.com"), QStringLiteral("https://www.somsubhra.com"));
+    aboutData.addAuthor(i18n("Cyrille Berger"), i18n("Former maintainer"), QStringLiteral("cberger@cberger.net"));
+    // standard ki18n translator strings
+    aboutData.setTranslator(i18nc("NAME OF TRANSLATORS", "Your names"),
+                            i18nc("EMAIL OF TRANSLATORS", "Your emails"));
     return aboutData;
 }
 

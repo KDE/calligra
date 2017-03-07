@@ -21,7 +21,6 @@
 
 #include <QWidget>
 #include <QPainter>
-#include <kdebug.h>
 
 KPrIrisWipeEffectStrategyBase::KPrIrisWipeEffectStrategyBase( QPainterPath shape, int subType, const char * smilType, const char *smilSubType, bool reverse )
 : KPrPageEffectStrategy( subType, smilType, smilSubType, reverse )

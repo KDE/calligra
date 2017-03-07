@@ -22,17 +22,16 @@
 #include "KPrAnimationsTimeLineView.h"
 #include "KPrShapeAnimations.h"
 
-//QT Headers
+#include <klocalizedstring.h>
+
+//Qt Headers
 #include <QPainter>
 #include <QScrollArea>
 #include <QEvent>
 #include <QResizeEvent>
 #include <QScrollBar>
-#include <QDebug>
 #include <QStyle>
 #include <QStyleOptionHeader>
-
-#include <klocale.h>
 
 //Default height of the header
 const int HEADER_HEIGHT = 20;
@@ -102,7 +101,7 @@ void KPrTimeLineHeader::paintTimeScale(QPainter *painter, const QRect &rect)
 {
     // set a marging
     const int Padding = 3;
-    painter->setPen(palette().windowText().color());
+    painter->setPen(QPen(palette().windowText().color(), 0));
     painter->setFont(QFont("", 8));
     // calculate size of scale steps
     int totalWidth = m_mainView->widthOfColumn(KPrShapeAnimations::StartTime);

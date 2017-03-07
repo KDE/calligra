@@ -21,16 +21,12 @@ Office productivity:
 
 Graphics:
 - Karbon     -  Vector graphics 
-- Krita      -  Digital painting for artists
-
-More information about Krita can be found at http://www.krita.org
 
 Management:
 - Plan       -  Project planning
-- Kexi       -  Visual database applications creator
 
 Advanced plugins:
-- KChart     -  Graphic data visualization
+- Chart     -  Graphic data visualization
 - KFormula   -  Mathematical formulas
 
 The applications not yet part of the official release, but will
@@ -63,20 +59,13 @@ Contact info
 ------------
 
 Developer and User mailing list: mailto:calligra-devel@kde.org
-Kexi User mailing list:          mailto:kexi@kde.org
-Kexi Developer mailing list:     mailto:kexi-devel@kde.org
-Krita mailing list:              mailto:kimageshop@kde.org
 
 Subscribing and list information: http://www.kde.org/mailinglists
 Archives: http://lists.kde.org
 
 IRC channel for developers:  #calligra on irc.freenode.org
-IRC channel for Kexi:        #kexi on irc.freenode.org
-IRC channel for Krita:       #krita on irc.freenode.org
 
 Calligra Suite forums:       http://forum.kde.org/calligra
-Kexi forums:                 http://forum.kde.org/kexi
-Krita forums:                http://forum.kde.org/krita
 
 If you have questions about this README file or about Calligra Suite in general,
 please mail to the Calligra Suite mailing list: mailto:calligra-devel@kde.org

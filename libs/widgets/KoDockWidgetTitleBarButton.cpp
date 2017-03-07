@@ -20,7 +20,7 @@
 
 #include "KoDockWidgetTitleBarButton.h"
 
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 #include <QAbstractButton>
 #include <QAction>
@@ -55,7 +55,7 @@ QSize KoDockWidgetTitleBarButton::sizeHint() const
 
     const int margin = style()->pixelMetric(QStyle::PM_DockWidgetTitleBarButtonMargin, 0, this);
     if (icon().isNull()) {
-        return QSize(18, 18);
+        return QSize(18, 18); // TODO: was QSize(margin, margin), hardcoded values seem bad
     }
 
     int iconSize = style()->pixelMetric(QStyle::PM_SmallIconSize, 0, this);
@@ -112,5 +112,3 @@ void KoDockWidgetTitleBarButton::paintEvent(QPaintEvent *)
     opt.iconSize = QSize(size, size);
     style()->drawComplexControl(QStyle::CC_ToolButton, &opt, &p, this);
 }
-
-#include <KoDockWidgetTitleBarButton.moc>

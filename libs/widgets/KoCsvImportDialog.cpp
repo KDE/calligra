@@ -27,12 +27,13 @@
 #include <QTableWidget>
 #include <QTableWidgetSelectionRange>
 
-// KDE
+// KF5
 #include <kcharsets.h>
 #include <kconfig.h>
-#include <kdebug.h>
-#include <klocale.h>
+#include <WidgetsDebug.h>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
+#include <ksharedconfig.h>
 
 #include "ui_KoCsvImportDialog.h"
 
@@ -57,6 +58,7 @@ public:
     int         endCol;
     QChar       textQuote;
     QString     delimiter;
+    QString     commentSymbol;
     bool        ignoreDuplicates;
     QByteArray  data;
     QTextCodec* codec;
@@ -74,7 +76,7 @@ public:
 };
 
 KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
-    : KDialog(parent)
+    : KoDialog(parent)
     , d(new Private(this))
 {
     d->dialog = new KoCsvImportWidget(this);
@@ -86,16 +88,17 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
     d->endCol = -1;
     d->textQuote = QChar('"');
     d->delimiter = QString(',');
+    d->commentSymbol = QString('#');
     d->ignoreDuplicates = false;
     d->codec = QTextCodec::codecForName("UTF-8");
 
-    setButtons( KDialog::Ok|KDialog::Cancel );
+    setButtons( KoDialog::Ok|KoDialog::Cancel );
     setCaption( i18n( "Import Data" ) );
 
     QStringList encodings;
     encodings << i18nc( "Descriptive encoding name", "Recommended ( %1 )" ,"UTF-8" );
     encodings << i18nc( "Descriptive encoding name", "Locale ( %1 )" ,QString(QTextCodec::codecForLocale()->name() ));
-    encodings += KGlobal::charsets()->descriptiveEncodingNames();
+    encodings += KCharsets::charsets()->descriptiveEncodingNames();
     // Add a few non-standard encodings, which might be useful for text files
     const QString description(i18nc("Descriptive encoding name","Other ( %1 )"));
     encodings << description.arg("Apple Roman"); // Apple
@@ -123,24 +126,24 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
     buttonGroup->addButton(d->dialog->m_radioTab, 3);
     buttonGroup->addButton(d->dialog->m_radioOther, 4);
 
-    connect(d->dialog->m_formatComboBox, SIGNAL(activated( const QString& )),
-            this, SLOT(formatChanged( const QString& )));
+    connect(d->dialog->m_formatComboBox, SIGNAL(activated(QString)),
+            this, SLOT(formatChanged(QString)));
     connect(buttonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(delimiterClicked(int)));
     connect(d->dialog->m_delimiterEdit, SIGNAL(returnPressed()),
             this, SLOT(returnPressed()));
-    connect(d->dialog->m_delimiterEdit, SIGNAL(textChanged ( const QString & )),
-            this, SLOT(genericDelimiterChanged( const QString & ) ));
-    connect(d->dialog->m_comboQuote, SIGNAL(activated(const QString &)),
-            this, SLOT(textquoteSelected(const QString &)));
-    connect(d->dialog->m_sheet, SIGNAL(currentCellChanged(int, int, int, int)),
-            this, SLOT(currentCellChanged(int, int)));
+    connect(d->dialog->m_delimiterEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(genericDelimiterChanged(QString)));
+    connect(d->dialog->m_comboQuote, SIGNAL(activated(QString)),
+            this, SLOT(textquoteSelected(QString)));
+    connect(d->dialog->m_sheet, SIGNAL(currentCellChanged(int,int,int,int)),
+            this, SLOT(currentCellChanged(int,int)));
     connect(d->dialog->m_ignoreDuplicates, SIGNAL(stateChanged(int)),
             this, SLOT(ignoreDuplicatesChanged(int)));
     connect(d->dialog->m_updateButton, SIGNAL(clicked()),
             this, SLOT(updateClicked()));
-    connect(d->dialog->comboBoxEncoding, SIGNAL(textChanged ( const QString & )),
-            this, SLOT(encodingChanged ( const QString & ) ));
+    connect(d->dialog->comboBoxEncoding, SIGNAL(textChanged(QString)),
+            this, SLOT(encodingChanged(QString)));
 }
 
 
@@ -277,7 +280,7 @@ void KoCsvImportDialog::setDelimiter(const QString& delimit)
 
 void KoCsvImportDialog::Private::loadSettings()
 {
-    KConfigGroup configGroup = KGlobal::config()->group("CSVDialog Settings");
+    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("CSVDialog Settings");
     textQuote = configGroup.readEntry("textQuote", "\"")[0];
     delimiter = configGroup.readEntry("delimiter", ",");
     ignoreDuplicates = configGroup.readEntry("ignoreDups", false);
@@ -295,7 +298,7 @@ void KoCsvImportDialog::Private::loadSettings()
 
 void KoCsvImportDialog::Private::saveSettings()
 {
-    KConfigGroup configGroup = KGlobal::config()->group("CSVDialog Settings");
+    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("CSVDialog Settings");
     configGroup.writeEntry("textQuote", QString(textQuote));
     configGroup.writeEntry("delimiter", delimiter);
     configGroup.writeEntry("ignoreDups", ignoreDuplicates);
@@ -315,17 +318,13 @@ void KoCsvImportDialog::Private::fillTable()
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    for (row = 0; row < dialog->m_sheet->rowCount(); ++row) {
-        for (column = 0; column < dialog->m_sheet->columnCount(); ++column) {
-            if(QTableWidgetItem* item = dialog->m_sheet->item(row, column))
-                item->setText("");
-        }
-    }
+    dialog->m_sheet->setRowCount(0);
+    dialog->m_sheet->setColumnCount(0);
 
     int maxColumn = 1;
     row = column = 1;
     QTextStream inputStream(data, QIODevice::ReadOnly);
-    kDebug(30501) <<"Encoding:" << codec->name();
+    debugWidgets <<"Encoding:" << codec->name();
     inputStream.setCodec( codec );
 
     int delimiterIndex = 0;
@@ -499,6 +498,7 @@ void KoCsvImportDialog::Private::fillTable()
                 state = InQuotedField;
                 break;
             }
+            state = InNormalField;
          case InNormalField :
             if (x == '\n')
             {
@@ -544,6 +544,7 @@ void KoCsvImportDialog::Private::fillTable()
       ++row;
       field.clear();
     }
+    if (row) row--;  // row is higher by 1, so reduce it
 
     columnsAdjusted = true;
     adjustRows( row - startRow );
@@ -685,7 +686,7 @@ void KoCsvImportDialog::delimiterClicked(int id)
     else if (id == group->id(d->dialog->m_radioSemicolon))
         d->delimiter = ';';
 
-    kDebug(30501) << "Delimiter" << d->delimiter << "selected.";
+    debugWidgets << "Delimiter" << d->delimiter << "selected.";
     d->fillTable();
 }
 
@@ -742,8 +743,8 @@ void KoCsvImportDialog::ignoreDuplicatesChanged(int)
 
 QTextCodec* KoCsvImportDialog::Private::updateCodec() const
 {
-    const QString strCodec( KGlobal::charsets()->encodingForName( dialog->comboBoxEncoding->currentText() ) );
-    kDebug(30501) <<"Encoding:" << strCodec;
+    const QString strCodec( KCharsets::charsets()->encodingForName( dialog->comboBoxEncoding->currentText() ) );
+    debugWidgets <<"Encoding:" << strCodec;
 
     bool ok = false;
     QTextCodec* codec = QTextCodec::codecForName( strCodec.toUtf8() );
@@ -755,14 +756,14 @@ QTextCodec* KoCsvImportDialog::Private::updateCodec() const
     }
     else
     {
-        codec = KGlobal::charsets()->codecForName( strCodec, ok );
+        codec = KCharsets::charsets()->codecForName( strCodec, ok );
     }
 
     // Still nothing?
     if ( !codec || !ok )
     {
         // Default: UTF-8
-        kWarning(30502) << "Cannot find encoding:" << strCodec;
+        warnWidgets << "Cannot find encoding:" << strCodec;
         // ### TODO: what parent to use?
         KMessageBox::error( 0, i18n("Cannot find encoding: %1", strCodec ) );
         return 0;
@@ -781,5 +782,3 @@ void KoCsvImportDialog::encodingChanged(const QString &)
         d->fillTable();
     }
 }
-
-#include <KoCsvImportDialog.moc>

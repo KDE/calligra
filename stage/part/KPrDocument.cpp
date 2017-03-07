@@ -44,11 +44,12 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kglobal.h>
-#include <kstandarddirs.h>
+#include <KSharedConfig>
 
 #include <QTimer>
 #include <QCoreApplication>
+#include <QGlobalStatic>
+#include <QStandardPaths>
 
 class InitOnce
 {
@@ -62,6 +63,8 @@ public:
     }
 };
 
+Q_GLOBAL_STATIC( InitOnce, s_initOnce );
+
 KPrDocument::KPrDocument(KoPart *part)
 : KoPADocument(part)
 , m_customSlideShows(new KPrCustomSlideShows())
@@ -69,7 +72,7 @@ KPrDocument::KPrDocument(KoPart *part)
 , m_presenterViewEnabled( false )
 , m_declarations( new KPrDeclarations() )
 {
-    K_GLOBAL_STATIC( InitOnce, s_initOnce );
+    // TODO: revisit if this is the place where that initialization should happen
     InitOnce * initOnce = s_initOnce;
     // have this is as otherwise we get a warning from the compiler
     // the variable is used and the way it is done is to only call it once
@@ -259,7 +262,7 @@ void KPrDocument::removePages(QList<KoPAPageBase *> &pages)
 
 void KPrDocument::loadKPrConfig()
 {
-    KSharedConfigPtr config = KGlobal::mainComponent().config();
+    KSharedConfigPtr config = KSharedConfig::openConfig();
 
     if ( config->hasGroup( "SlideShow" ) ) {
         KConfigGroup configGroup = config->group( "SlideShow" );
@@ -270,7 +273,7 @@ void KPrDocument::loadKPrConfig()
 
 void KPrDocument::saveKPrConfig()
 {
-    KSharedConfigPtr config = KGlobal::mainComponent().config();
+    KSharedConfigPtr config = KSharedConfig::openConfig();
     KConfigGroup configGroup = config->group( "SlideShow" );
 
     configGroup.writeEntry( "PresentationMonitor", m_presentationMonitor );
@@ -284,7 +287,7 @@ KoPageApp::PageType KPrDocument::pageType() const
 
 void KPrDocument::initEmpty()
 {
-    QString fileName(KStandardDirs::locate( "data", "stage/templates/Screen/.source/emptyLandscape.otp"));
+    QString fileName(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("calligrastage/templates/Screen/.source/emptyLandscape.otp")));
     setModified( true );
     bool ok = loadNativeFormat( fileName );
     if ( !ok ) {
@@ -367,6 +370,3 @@ KPrDeclarations * KPrDocument::declarations() const
 {
     return m_declarations;
 }
-
-#include "KPrDocument.moc"
-

@@ -23,13 +23,12 @@
 #include "kptmaindocument.h"
 #include "kptfactory.h"
 
-#include <kglobal.h>
+#include <KoComponentData.h>
 
 Part::Part(QObject *parent)
-    : KoPart(parent)
+    : KoPart(Factory::global(), parent)
 {
-    setTemplatesResourcePath(QLatin1String("plan/templates/"));
-    setComponentData( Factory::global()); // Do not load plugins now (the view will load them)
+    setTemplatesResourcePath(QLatin1String("calligraplan/templates/"));
 }
 
 Part::~Part()
@@ -63,7 +62,7 @@ KoMainWindow *Part::createMainWindow()
     return new KoMainWindow(PLAN_MIME_TYPE, componentData());
 }
 
-void Part::openTemplate(const KUrl &url)
+void Part::openTemplate(const QUrl &url)
 {
     m_document->setLoadingTemplate(true);
     KoPart::openTemplate(url);

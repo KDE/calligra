@@ -37,9 +37,10 @@
 // Qt
 #include <QExplicitlySharedDataPointer>
 
-// KSpread
+// Sheets
 #include "Global.h"
 #include "Style.h"
+#include "sheets_common_export.h"
 
 class QFontMetricsF;
 class QRectF;

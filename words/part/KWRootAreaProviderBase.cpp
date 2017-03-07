@@ -35,8 +35,6 @@
 #include <KoTextLayoutObstruction.h>
 #include <KoShapeAnchor.h>
 
-#include <kdebug.h>
-
 
 KWRootAreaProviderBase::KWRootAreaProviderBase(KWTextFrameSet *textFrameSet)
     : KoTextLayoutRootAreaProvider()

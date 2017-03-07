@@ -27,7 +27,7 @@
 #include "KoRdfSemanticTreeWidgetItem.h"
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kpagedialog.h>
 
 #include <QVBoxLayout>
@@ -61,13 +61,12 @@ void InsertSemanticObjectReferenceAction::activated()
     lay->addWidget(tree);
 
     KPageDialog dialog(m_canvas->canvasWidget());
-    dialog.setCaption(i18n("%1 Options", text())); // TODO add comment (i18nc)
+    dialog.setWindowTitle(i18n("%1 Options", text())); // TODO add comment (i18nc)
     dialog.addPage(widget, QString());
 
     if (dialog.exec() == KPageDialog::Accepted && tree->currentItem()) {
         QTreeWidgetItem *item = tree->currentItem();
         if (KoRdfSemanticTreeWidgetItem *ditem = dynamic_cast<KoRdfSemanticTreeWidgetItem*>(item)) {
-
             kDebug(30015) << "InsertSemanticObjectReferenceAction::activated... item:" << item;
             ditem->insert(m_canvas);
         }

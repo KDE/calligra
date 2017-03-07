@@ -177,7 +177,7 @@ void RecalcManager::regionChanged(const Region& region)
     if (d->active || region.isEmpty())
         return;
     d->active = true;
-    kDebug(36002) << "RecalcManager::regionChanged" << region.name();
+    debugSheetsFormula << "RecalcManager::regionChanged" << region.name();
     ElapsedTime et("Overall region recalculation", ElapsedTime::PrintOnlyTime);
     d->cellsToCalculate(region);
     recalc();
@@ -230,7 +230,7 @@ void RecalcManager::removeSheet(Sheet *sheet)
 
 void RecalcManager::recalc(KoUpdater *updater)
 {
-    kDebug(36002) << "Recalculating" << d->cells.count() << " cell(s)..";
+    debugSheetsFormula << "Recalculating" << d->cells.count() << " cell(s)..";
     ElapsedTime et("Recalculating cells", ElapsedTime::PrintOnlyTime);
 
     if (updater)
@@ -282,6 +282,6 @@ void RecalcManager::dump() const
         Cell cell = it.value();
         QString cellName = cell.name();
         while (cellName.count() < 4) cellName.prepend(' ');
-        kDebug(36002) << "depth(" << cellName << " ) =" << it.key();
+        debugSheetsFormula << "depth(" << cellName << " ) =" << it.key();
     }
 }

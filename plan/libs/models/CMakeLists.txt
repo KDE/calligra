@@ -6,11 +6,11 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs/widgetutils
     ${KOODF_INCLUDES}
     ${KUNDO2_INCLUDES}
-    ${KDGANTT_INCLUDES}
-    ${KDCHART_INCLUDES}
-    ${KDE4_INCLUDES}
-    ${KDEPIMLIBS_INCLUDE_DIR}
 )
+
+if (KF5Contacts_FOUND)
+    add_definitions(-DPLAN_KCONTACTS_FOUND)
+endif ()
 
 ########### KPlato data models library ###############
 
@@ -43,10 +43,24 @@ set(kplatomodels_LIB_SRCS
     kpttaskcompletedelegate.cpp
 )
 
-kde4_add_library(kplatomodels SHARED ${kplatomodels_LIB_SRCS})
+add_library(kplatomodels SHARED ${kplatomodels_LIB_SRCS})
+generate_export_header(kplatomodels)
 
-target_link_libraries(kplatomodels kplatokernel koodf ${KDCHART_LIBS} calligrakdgantt ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KABC_LIBS})
-target_link_libraries(kplatomodels kundo2)
+target_link_libraries(kplatomodels
+    PUBLIC
+        kplatokernel
+        koodf
+        kundo2
+        KChart
+        KF5::KIOWidgets
+    PRIVATE
+        KGantt
+        KF5::Notifications
+        KF5::TextWidgets
+)
+if(KF5Contacts_FOUND)
+    target_link_libraries(kplatomodels  PRIVATE KF5::Contacts)
+endif()
 
 set_target_properties(kplatomodels PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 

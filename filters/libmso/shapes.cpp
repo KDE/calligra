@@ -34,8 +34,7 @@
 #include "generated/leinputstream.h"
 #include "writeodf/writeodfdraw.h"
 
-#include <kdebug.h>
-
+#include <QDebug>
 #include <QTransform>
 #include <QBuffer>
 #include <QUrl>
@@ -436,7 +435,7 @@ void ODrawToOdf::processNotPrimitive(const MSO::OfficeArtSpContainer& o, Writer&
 void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out)
 {
     if (!client) {
-        kWarning() << "Warning: There's no Client!";
+        qWarning() << "Warning: There's no Client!";
         return;
     }
 
@@ -957,7 +956,7 @@ void ODrawToOdf::processText(const MSO::OfficeArtSpContainer& o,
                              Writer& out)
 {
     if (!client) {
-        kWarning() << "Warning: There's no Client!";
+        qWarning() << "Warning: There's no Client!";
         return;
     }
 

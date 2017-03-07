@@ -67,7 +67,8 @@
 #include <kio/job.h>
 #include <kio/jobclasses.h>
 #include <kurl.h>
-#include <kcomponentdata.h>
+
+#include "MockPart.h"
 
 using namespace Soprano;
 #define RDEBUG if (0) qDebug()
@@ -139,7 +140,7 @@ void TestRdf::basicload()
     foreach (Soprano::Statement s, allStatements) {
         // RDEBUG << "HAVE:" << s;
         QVERIFY (s.object().toString() == "CDC474D4-1393-11D7-9A2C-000393914268");
-        QVERIFY (s.context().toString() == rdf->rdfPathContextPrefix() + "geo1.rdf");
+        QVERIFY (s.context().toString() == rdf->RDF_PATH_CONTEXT_PREFIX + "geo1.rdf");
     }
 
 }
@@ -406,7 +407,7 @@ void TestRdf::addAndSave()
     QVERIFY(m);
     QCOMPARE (234, m->statementCount());
 
-    Node explicitContext = Node(QUrl(rdf->rdfPathContextPrefix() + "explicit.rdf"));
+    Node explicitContext = Node(QUrl(rdf->RDF_PATH_CONTEXT_PREFIX + "explicit.rdf"));
     m->addStatement(Node::createResourceNode(QUrl("uri:test1")),
                     Node::createResourceNode(QUrl("uri:test2")),
                     Node::createResourceNode(QUrl("uri:test3")),
@@ -876,7 +877,7 @@ void TestRdf::testRoundtrip()
 
         Soprano::Statement st(
                     location->linkingSubject(), // subject
-                    Soprano::Node::createResourceNode(QUrl("http://docs.oasis-open.org/opendocument/meta/package/common#idref")), // predicate
+                    Soprano::Node::createResourceNode(QUrl("http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref")), // predicate
                     Soprano::Node::createLiteralNode(newId), // object
                     rdfDoc->manifestRdfNode()); // manifest datastore
 
@@ -985,4 +986,3 @@ void TestRdf::testRoundtrip()
 }
 
 QTEST_KDEMAIN(TestRdf, GUI)
-#include <TestRdf.moc>

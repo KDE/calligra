@@ -29,6 +29,7 @@ class KoTextBlockData;
 class KoInlineNote;
 class KoPointedAt;
 class KoParagraphStyle;
+class KoCharAreaInfo;
 
 class FrameIterator;
 
@@ -67,8 +68,8 @@ public:
      * is related to tables (and paragraphs) split over more than one page,
      * in which case these methods just don't give correct or enough information.
      */
-    KDE_DEPRECATED QTextFrame::iterator startTextFrameIterator() const;
-    KDE_DEPRECATED QTextFrame::iterator endTextFrameIterator() const;
+    Q_DECL_DEPRECATED QTextFrame::iterator startTextFrameIterator() const;
+    Q_DECL_DEPRECATED QTextFrame::iterator endTextFrameIterator() const;
 
     /// Layouts as much as we can
     bool layout(FrameIterator *cursor);
@@ -171,6 +172,19 @@ public:
     QRectF selectionBoundingBox(QTextCursor &cursor) const;
 
     static const int MaximumTabPos = 10000;
+
+    /**
+     * Returns a list of all the characters of the text rendered in this area
+     * and the rectangles they cover from the point of view of text selection markup.
+     * The rectangles are given in the coordinates the KoTextLayoutArea uses.
+     * The list is generated on each call and not cached, so only call when needed.
+     *
+     * This method is specific to the needs of the plugins for Okular and should not
+     * be interesting to other API consumers.
+     *
+     * Returns an empty list if layouting was not yet completed.
+     */
+    QVector<KoCharAreaInfo> generateCharAreaInfos() const;
 
 protected:
     void setBottom(qreal bottom);

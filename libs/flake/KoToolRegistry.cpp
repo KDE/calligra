@@ -19,8 +19,8 @@
  */
 
 #include "KoToolRegistry.h"
-#include <kglobal.h>
-#include <kdebug.h>
+
+#include <FlakeDebug.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 
@@ -32,8 +32,11 @@
 #include "tools/KoPanTool.h"
 #include "tools/KoPanToolFactory.h"
 #include "KoToolManager.h"
-
 #include <KoPluginLoader.h>
+
+#include <QGlobalStatic>
+
+Q_GLOBAL_STATIC(KoToolRegistry, s_instance)
 
 KoToolRegistry::KoToolRegistry()
   : d(0)
@@ -46,9 +49,7 @@ void KoToolRegistry::init()
     config.group = "calligra";
     config.whiteList = "ToolPlugins";
     config.blacklist = "ToolPluginsDisabled";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Tool"),
-                                     QString::fromLatin1("[X-Flake-PluginVersion] == 28"),
-                                     config);
+    KoPluginLoader::load(QStringLiteral("calligra/tools"), config);
 
     // register generic tools
     add(new KoCreateShapesToolFactory());
@@ -56,9 +57,10 @@ void KoToolRegistry::init()
     add(new KoZoomToolFactory());
     add(new KoPanToolFactory());
 
-    KConfigGroup cfg = KGlobal::config()->group("calligra");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("calligra");
     QStringList toolsBlacklist = cfg.readEntry("ToolsBlacklist", QStringList());
     foreach (const QString& toolID, toolsBlacklist) {
+        delete value(toolID);
         remove(toolID);
     }
 }
@@ -71,7 +73,6 @@ KoToolRegistry::~KoToolRegistry()
 
 KoToolRegistry* KoToolRegistry::instance()
 {
-    K_GLOBAL_STATIC(KoToolRegistry, s_instance)
     if (!s_instance.exists()) {
         s_instance->init();
     }

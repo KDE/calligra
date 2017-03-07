@@ -23,10 +23,9 @@
 
 #include <QDate>
 #include <QHeaderView>
+#include <QLocale>
 
-#include <kglobal.h>
-#include <klocale.h>
-#include <kcalendarsystem.h>
+#include <KLocalizedString>
 
 #include "kptproject.h"
 #include "kpttask.h"
@@ -43,8 +42,9 @@ UsedEffortItemModel::UsedEffortItemModel ( QWidget *parent )
     m_readonly( false )
 {
     m_headers << i18n( "Resource" );
+    QLocale locale;
     for ( int i = 1; i <= 7; ++i ) {
-        m_headers << KGlobal::locale()->calendar()->weekDayName( i, KCalendarSystem::ShortDayName );
+        m_headers << locale.dayName( i, QLocale::ShortFormat );
     }
     m_headers << i18n( "This Week" );
 }
@@ -77,7 +77,7 @@ QVariant UsedEffortItemModel::data ( const QModelIndex &index, int role ) const
         case Qt::DisplayRole: {
             if ( index.column() == 0 ) {
                 const Resource *r = resource( index );
-                //kDebug(planDbg())<<index.row()<<","<<index.column()<<""<<r;
+                //debugPlan<<index.row()<<","<<index.column()<<""<<r;
                 if ( r ) {
                     return r->name();
                 }
@@ -89,17 +89,17 @@ QVariant UsedEffortItemModel::data ( const QModelIndex &index, int role ) const
             }
             if ( index.column() == 8 ) {
                 // Total
-                //kDebug(planDbg())<<index.row()<<","<<index.column()<<" total"<<endl;
+                //debugPlan<<index.row()<<","<<index.column()<<" total"<<endl;
                 double res = 0.0;
                 foreach ( const QDate &d, m_dates ) {
                     Completion::UsedEffort::ActualEffort e = ue->effort( d );
                     res += e.normalEffort().toDouble( Duration::Unit_h );
                 }
-                return KGlobal::locale()->formatNumber( res, 1 );
+                return QLocale().toString(res, 'f',  1 );
             }
             Completion::UsedEffort::ActualEffort e = ue->effort( m_dates.value( index.column() - 1 ) );
             double res = e.normalEffort().toDouble( Duration::Unit_h );
-            return KGlobal::locale()->formatNumber( res, 1 );
+            return QLocale().toString(res, 'f',  1 );
         }
         case Qt::EditRole: {
             if ( index.column() == 8 ) {
@@ -107,7 +107,7 @@ QVariant UsedEffortItemModel::data ( const QModelIndex &index, int role ) const
             }
             if ( index.column() == 0 ) {
                 const Resource *r = resource( index );
-                //kDebug(planDbg())<<index.row()<<","<<index.column()<<" "<<r<<endl;
+                //debugPlan<<index.row()<<","<<index.column()<<" "<<r<<endl;
                 if ( r ) {
                     return r->name();
                 }
@@ -118,7 +118,7 @@ QVariant UsedEffortItemModel::data ( const QModelIndex &index, int role ) const
                 }
                 Completion::UsedEffort::ActualEffort e = ue->effort( m_dates.value( index.column() - 1 ) );
                 double res = e.normalEffort().toDouble( Duration::Unit_h );
-                return KGlobal::locale()->formatNumber( res, 1 );
+                return QLocale().toString(res, 'f',  1 );
             }
             break;
         }
@@ -142,7 +142,7 @@ QVariant UsedEffortItemModel::data ( const QModelIndex &index, int role ) const
 
 bool UsedEffortItemModel::setData ( const QModelIndex &idx, const QVariant &value, int role )
 {
-    kDebug(planDbg());
+    debugPlan;
     switch ( role ) {
         case Qt::EditRole: {
             if ( idx.column() == 8 ) {
@@ -183,13 +183,13 @@ bool UsedEffortItemModel::setData ( const QModelIndex &idx, const QVariant &valu
 
 bool UsedEffortItemModel::submit()
 {
-    kDebug(planDbg());
+    debugPlan;
     return QAbstractItemModel::submit();
 }
 
 void UsedEffortItemModel::revert()
 {
-    kDebug(planDbg());
+    debugPlan;
     QList<const Resource*> lst = m_resourcelist;
     foreach ( const Resource *r, lst ) {
         if ( ! m_completion->usedEffortMap().contains( r ) ) {
@@ -216,7 +216,7 @@ QVariant UsedEffortItemModel::headerData ( int section, Qt::Orientation orientat
             return m_headers.at( section );
         case Qt::ToolTipRole: {
             if ( section >= 1 && section <= 7 ) {
-                return KGlobal::locale()->formatDate( m_dates.at( section - 1 ) );
+                return QLocale().toString(m_dates.at( section - 1 ), QLocale::ShortFormat);
             }
             if ( section == 8 ) {
                 return i18n( "Total effort this week" );
@@ -504,7 +504,7 @@ QVariant CompletionEntryItemModel::actualEffort ( int row, int role ) const
             } else {
                 v = e->totalPerformed;
             }
-            //kDebug(planDbg())<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+            //debugPlan<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
             return v.format();
         }
         case Qt::EditRole:
@@ -544,7 +544,7 @@ QVariant CompletionEntryItemModel::plannedEffort ( int /*row*/, int role ) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
             Duration v = m_node->plannedEffort( id(), ECCT_EffortWork );
-            //kDebug(planDbg())<<m_node->name()<<": "<<v<<" "<<unit;
+            //debugPlan<<m_node->name()<<": "<<v<<" "<<unit;
             return v.format();
         }
         case Qt::EditRole:
@@ -602,14 +602,14 @@ QList<qint64> CompletionEntryItemModel::scales() const
     if ( lst.isEmpty() ) {
         lst = Estimate::defaultScales();
     }
-    //kDebug(planDbg())<<lst;
+    //debugPlan<<lst;
     return lst;
 
 }
 
 bool CompletionEntryItemModel::setData ( const QModelIndex &idx, const QVariant &value, int role )
 {
-    //kDebug(planDbg());
+    //debugPlan;
     switch ( role ) {
         case Qt::EditRole: {
             if ( idx.column() == Property_Date ) {
@@ -672,13 +672,13 @@ bool CompletionEntryItemModel::setData ( const QModelIndex &idx, const QVariant 
 
 bool CompletionEntryItemModel::submit()
 {
-    kDebug(planDbg())<<endl;
+    debugPlan<<endl;
     return QAbstractItemModel::submit();
 }
 
 void CompletionEntryItemModel::revert()
 {
-    kDebug(planDbg())<<endl;
+    debugPlan<<endl;
     refresh();
 }
 
@@ -735,7 +735,7 @@ void CompletionEntryItemModel::refresh()
             m_flags[ Property_UsedEffort ] = Qt::ItemIsEditable;
         }
     }
-    kDebug(planDbg())<<m_datelist<<endl;
+    debugPlan<<m_datelist<<endl;
     reset();
 }
 
@@ -762,7 +762,7 @@ void CompletionEntryItemModel::removeEntry( const QDate& date )
 
 void CompletionEntryItemModel::removeRow( int row )
 {
-    kDebug(planDbg())<<row;
+    debugPlan<<row;
     if ( row < 0 && row >= rowCount() ) {
         return;
     }
@@ -770,7 +770,7 @@ void CompletionEntryItemModel::removeRow( int row )
     beginRemoveRows( QModelIndex(), row, row );
     m_datelist.removeAt( row );
     endRemoveRows();
-    kDebug(planDbg())<<date<<" removed row"<<row;
+    debugPlan<<date<<" removed row"<<row;
     m_completion->takeEntry( date );
     emit rowRemoved( date );
     emit changed();
@@ -778,7 +778,7 @@ void CompletionEntryItemModel::removeRow( int row )
 
 void CompletionEntryItemModel::addEntry( const QDate& date )
 {
-    kDebug(planDbg())<<date<<endl;
+    debugPlan<<date<<endl;
     Completion::Entry *e = new Completion::Entry();
     if ( m_completion->entries().isEmpty() ) {
         if ( m_node ) {
@@ -795,7 +795,7 @@ void CompletionEntryItemModel::addEntry( const QDate& date )
     if ( i != -1 ) {
         emit rowInserted( date );
         emit dataChanged( createIndex( i, 1 ), createIndex( i, rowCount() - 1 ) );
-    } else  kError()<<"Failed to find added entry: "<<date<<endl;
+    } else  errorPlan<<"Failed to find added entry: "<<date<<endl;
 }
 
 
@@ -838,7 +838,7 @@ void CompletionEntryEditor::setCompletion( Completion *completion )
 
 void CompletionEntryEditor::addEntry()
 {
-    kDebug(planDbg())<<endl;
+    debugPlan<<endl;
     QModelIndex i = model()->addRow();
     if ( i.isValid() ) {
         model()->setFlags( i.column(), Qt::ItemIsEditable );
@@ -852,16 +852,16 @@ void CompletionEntryEditor::addEntry()
 
 void CompletionEntryEditor::removeEntry()
 {
-    //kDebug(planDbg());
+    //debugPlan;
     QModelIndexList lst = selectedIndexes();
-    kDebug(planDbg())<<lst;
+    debugPlan<<lst;
     QMap<int, int> rows;
     while ( ! lst.isEmpty() ) {
         QModelIndex idx = lst.takeFirst();
         rows[ idx.row() ] = 0;
     }
     QList<int> r = rows.uniqueKeys();
-    kDebug(planDbg())<<rows<<r;
+    debugPlan<<rows<<r;
     for ( int i = r.count() - 1; i >= 0; --i ) {
         model()->removeRow( r.at( i ) );
     }
@@ -869,5 +869,3 @@ void CompletionEntryEditor::removeEntry()
 
 
 }  //KPlato namespace
-
-#include "kptusedefforteditor.moc"

@@ -42,8 +42,6 @@ KPresenterSlideLoader::open(const QString& path)
 {
     close();
 
-    KComponentData cd("KPresenterSlideLoader", QByteArray(),
-                      KComponentData::SkipMainComponentRegistration);
     KPluginFactory *factory = KPluginLoader("calligrastagepart", cd).factory();
     if (!factory) {
         qDebug() << "could not load calligrastagepart";

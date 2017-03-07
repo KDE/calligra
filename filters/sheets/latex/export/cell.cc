@@ -21,10 +21,10 @@
 
 #include "cell.h"
 
-#include <kdebug.h>  /* for kDebug stream */
-
+#include "LatexDebug.h"
 #include "table.h"
 #include "column.h"
+
 #include <QTextStream>
 
 /*******************************************/
@@ -50,7 +50,7 @@ void Cell::analyze(const QDomNode node)
 {
     _row = getAttr(node, "row").toLong();
     _col = getAttr(node, "column").toLong();
-    kDebug(30522) << getRow() << "-" << getCol();
+    debugLatex << getRow() << "-" << getCol();
     Format::analyze(getChild(node, "format"));
     analyzeText(node);
 }
@@ -59,7 +59,7 @@ void Cell::analyzeText(const QDomNode node)
 {
     setTextDataType(getAttr(getChild(node, "text"), "dataType"));
     setText(getAttr(getChild(node, "text"), "outStr"));
-    kDebug(30522) << "text(" << getTextDataType() << "):" << getText();
+    debugLatex << "text(" << getTextDataType() << "):" << getText();
 }
 
 /*******************************************/
@@ -72,7 +72,7 @@ void Cell::generate(QTextStream& out, Table* table)
     else*/
     if (getMultirow() > 0)
         out << "\\multirow{" << getMultirow() << "}{";
-    kDebug(30522) << "Generate cell...";
+    debugLatex << "Generate cell...";
 
     out << "\\multicolumn{1}{";
     Format::generate(out, table->searchColumn(_col));
@@ -91,7 +91,7 @@ void Cell::generate(QTextStream& out, Table* table)
         out << "}" << endl;
 
     /*Element* elt = 0;
-    kDebug(30522) <<"GENERATION OF A TABLE" << count();
+    debugLatex <<"GENERATION OF A TABLE" << count();
     out << endl << "\\begin{tabular}";
     generateCellHeader(out);
     out << endl;
@@ -129,6 +129,6 @@ void Cell::generate(QTextStream& out, Table* table)
     generateBottomLineBorder(out, row - 1);
     out << "\\end{tabular}" << endl << endl;
     unindent();*/
-    kDebug(30522) << "END OF GENERATION OF A CELL";
+    debugLatex << "END OF GENERATION OF A CELL";
 }
 

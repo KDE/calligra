@@ -26,10 +26,10 @@
 #ifndef CALLIGRA_SHEETS_SERIES_DIALOG
 #define CALLIGRA_SHEETS_SERIES_DIALOG
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class QRadioButton;
-class KDoubleNumInput;
+class QDoubleSpinBox;
 
 namespace Calligra
 {
@@ -42,7 +42,7 @@ class Sheet;
  * \ingroup UI
  * Dialog to insert a value series.
  */
-class SeriesDialog : public KDialog
+class SeriesDialog : public KoDialog
 {
     Q_OBJECT
 public:
@@ -56,9 +56,9 @@ public Q_SLOTS:
 
 protected:
     Selection* m_selection;
-    KDoubleNumInput *start;
-    KDoubleNumInput *end;
-    KDoubleNumInput *step;
+    QDoubleSpinBox* start;
+    QDoubleSpinBox* end;
+    QDoubleSpinBox* step;
 
     QRadioButton* column;
     QRadioButton* row;

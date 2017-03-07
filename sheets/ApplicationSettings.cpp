@@ -26,7 +26,7 @@ class  ApplicationSettings::Private
 public:
     QColor gridColor;
     QColor pageOutlineColor;
-    KGlobalSettings::Completion completionMode;
+    KCompletion::CompletionMode completionMode;
     Calligra::Sheets::MoveTo moveTo;
     MethodOfCalc calcMethod;
     double indentValue;
@@ -36,7 +36,6 @@ public:
     bool rowHeader              : 1;
     bool showStatusBar          : 1;
     bool showTabBar             : 1;
-    bool captureAllArrowKeys    : 1;
 };
 
 ApplicationSettings::ApplicationSettings()
@@ -44,7 +43,7 @@ ApplicationSettings::ApplicationSettings()
 {
     d->gridColor = Qt::lightGray;
     d->pageOutlineColor = Qt::red;
-    d->completionMode = KGlobalSettings::CompletionAuto;
+    d->completionMode = KCompletion::CompletionAuto;
     d->moveTo = Bottom;
     d->calcMethod = SumOfNumber;
     d->indentValue = 10.0;
@@ -54,7 +53,6 @@ ApplicationSettings::ApplicationSettings()
     d->rowHeader = true;
     d->showStatusBar = true;
     d->showTabBar = true;
-    d->captureAllArrowKeys = true;
 }
 
 ApplicationSettings::~ApplicationSettings()
@@ -90,7 +88,7 @@ bool ApplicationSettings::showHorizontalScrollBar()const
     return d->horizontalScrollBar;
 }
 
-KGlobalSettings::Completion ApplicationSettings::completionMode() const
+KCompletion::CompletionMode ApplicationSettings::completionMode() const
 {
     return d->completionMode;
 }
@@ -125,7 +123,7 @@ QColor ApplicationSettings::gridColor() const
     return d->gridColor;
 }
 
-void ApplicationSettings::setCompletionMode(KGlobalSettings::Completion complMode)
+void ApplicationSettings::setCompletionMode(KCompletion::CompletionMode complMode)
 {
     d->completionMode = complMode;
 }
@@ -190,12 +188,3 @@ void ApplicationSettings::changePageOutlineColor(const QColor& color)
     d->pageOutlineColor = color;
 }
 
-void ApplicationSettings::setCaptureAllArrowKeys(bool capture)
-{
-    d->captureAllArrowKeys = capture;
-}
-
-bool ApplicationSettings::captureAllArrowKeys() const
-{
-    return d->captureAllArrowKeys;
-}

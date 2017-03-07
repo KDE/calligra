@@ -21,7 +21,7 @@
 #define FIXEDELEMENT_H
 
 #include "BasicElement.h"
-#include "kformula_export.h"
+#include "koformula_export.h"
 #include <KoXmlReader.h>
 
 

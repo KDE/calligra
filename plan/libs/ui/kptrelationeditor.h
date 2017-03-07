@@ -111,7 +111,7 @@ private Q_SLOTS:
     void slotHeaderContextMenuRequested( const QPoint& );
     
 private:
-    void edit( QModelIndex index );
+    void edit( const QModelIndex &index );
 
 private:
     RelationTreeView *m_view;

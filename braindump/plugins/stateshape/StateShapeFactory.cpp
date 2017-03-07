@@ -19,19 +19,19 @@
 
 #include "StateShapeFactory.h"
 
-#include "StateShape.h"
+#include <KLocalizedString>
+
 #include <KoProperties.h>
-
 #include <KoIcon.h>
-#include <klocale.h>
 
+#include "StateShape.h"
 
 StateShapeFactory::StateShapeFactory()
     : KoShapeFactoryBase(STATESHAPEID,
                          i18n("State Shape"))
 {
     setToolTip(i18n("A state shape"));
-    setIconName(koIconNameCStr("stateshape"));
+    setIconName(koIconName("stateshape"));
     setXmlElementNames("http://kde.org/braindump", QStringList("state"));
 }
 

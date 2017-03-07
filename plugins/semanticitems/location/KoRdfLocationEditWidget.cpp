@@ -25,7 +25,7 @@
 #include <marble/LatLonEdit.h>
 #include <marble/MarbleWidget.h>
 #endif
-// KDE
+// KF5
 #include <kdebug.h>
 
 

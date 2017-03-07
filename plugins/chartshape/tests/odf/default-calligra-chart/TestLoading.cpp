@@ -21,16 +21,13 @@
 // Own
 #include "TestLoading.h"
 
-// KDE
-#include <qtest_kde.h>
-
-// KChart
+// KoChart
 #include "ChartShape.h"
 #include "PlotArea.h"
 #include "Axis.h"
 #include "Legend.h"
 
-using namespace KChart;
+using namespace KoChart;
 
 TestLoading::TestLoading()
     : TestLoadingBase()
@@ -93,5 +90,4 @@ void TestLoading::testAxes()
     testAxisTitle( m_chart->plotArea()->yAxis(), "Growth in %" );
 }
 
-QTEST_KDEMAIN( TestLoading, GUI )
-
+QTEST_MAIN( TestLoading )

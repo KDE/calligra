@@ -25,7 +25,8 @@
 #include <QComboBox>
 #include <QLabel>
 #include <QEvent>
-#include <klocale.h>
+
+#include <klocalizedstring.h>
 
 #include <KoPACanvas.h>
 #include <KPrDocument.h>
@@ -36,6 +37,7 @@
 #include <KoEventAction.h>
 #include <KoEventActionFactoryBase.h>
 #include <KoEventActionRegistry.h>
+
 #include <KPrEventActionWidget.h>
 #include "KPrSoundData.h"
 #include <KPresenter.h>
@@ -43,8 +45,7 @@
 #include "KPrView.h"
 #include "KPrPage.h"
 #include "KPrEventActionData.h"
-
-#include <kdebug.h>
+#include "StageDebug.h"
 
 KPrClickActionDocker::KPrClickActionDocker( QWidget* parent, Qt::WindowFlags flags )
 : QWidget( parent, flags )
@@ -143,5 +144,3 @@ void KPrClickActionDocker::addCommand( KUndo2Command * command )
         m_view->kopaCanvas()->addCommand( command );
     }
 }
-
-#include "KPrClickActionDocker.moc"

@@ -25,14 +25,16 @@
 #include "KoEventSemanticItemFactory.h"
 // rdf
 #include <KoRdfSemanticItemRegistry.h>
-// KDE
+// KF5
 #include <kpluginfactory.h>
 
-K_PLUGIN_FACTORY(PluginFactory, registerPlugin<KoEventSemanticItemPlugin>();)
-K_EXPORT_PLUGIN(PluginFactory("calligra_semanticitem_event"))
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_semanticitem_event.json",
+                           registerPlugin<KoEventSemanticItemPlugin>();)
 
 KoEventSemanticItemPlugin::KoEventSemanticItemPlugin(QObject *parent, const QVariantList &/*args */)
   : QObject(parent)
 {
     KoRdfSemanticItemRegistry::instance()->add(new KoEventSemanticItemFactory());
 }
+
+#include "KoEventSemanticItemPlugin.moc" // prevents vtable error

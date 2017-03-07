@@ -23,9 +23,6 @@
 
 // Qt
 
-// KDE
-#include <kdebug.h>
-
 // Calligra
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
@@ -36,6 +33,7 @@
 
 // Shape
 #include "utils.h"
+#include "ThreedDebug.h"
 
 
 //#define OdfObjectAttributes (OdfAllAttributes & ~(OdfGeometry | OdfTransformation))

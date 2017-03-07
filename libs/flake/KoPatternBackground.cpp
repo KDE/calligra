@@ -32,7 +32,7 @@
 #include <KoUnit.h>
 #include <KoViewConverter.h>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #include <QBrush>
 #include <QPainter>
@@ -140,6 +140,7 @@ KoPatternBackground::KoPatternBackground(KoImageCollection * imageCollection)
 
 KoPatternBackground::~KoPatternBackground()
 {
+    Q_D(KoPatternBackground);
 }
 
 void KoPatternBackground::setTransform(const QTransform &matrix)

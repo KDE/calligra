@@ -22,7 +22,7 @@
 
 #include "InformationModule.h"
 
-#include <calligraversion.h>
+#include <CalligraVersionWrapper.h>
 #ifdef Q_OS_WIN
 #include <windows.h>
 #else
@@ -30,9 +30,9 @@
 #endif
 
 #include <QDir>
-#include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
+#include "SheetsDebug.h"
 #include "CalculationSettings.h"
 #include "Function.h"
 #include "FunctionModuleRegistry.h"
@@ -75,7 +75,7 @@ Value func_na(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_type(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_version(valVector args, ValueCalc *calc, FuncExtra *);
 
-CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("information", InformationModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadinformationmodule.json", InformationModule)
 
 
 InformationModule::InformationModule(QObject* parent, const QVariantList&)
@@ -179,7 +179,7 @@ Value func_errortype(valVector args, ValueCalc *, FuncExtra *)
         return Value(103);
     } else {
         // something I didn't think of...
-        kDebug() << "Unexpected error type";
+        debugSheets << "Unexpected error type";
         return Value(0);
     }
 }
@@ -192,7 +192,7 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
         return Value(QDir::currentPath());
 
     if (type == "release")
-        return Value(QString(CALLIGRA_VERSION_STRING));
+        return Value(CalligraVersionWrapper::versionString());
 
     if (type == "numfile") {
         KoApplication *app = qobject_cast<KoApplication*>(qApp);
@@ -431,4 +431,4 @@ Value func_na(valVector, ValueCalc *, FuncExtra *)
     return Value::errorNA();
 }
 
-#include "InformationModule.moc"
+#include "information.moc"

@@ -20,14 +20,14 @@
 #ifndef KPRCONFIGURESLIDESHOWDIALOG_H
 #define KPRCONFIGURESLIDESHOWDIALOG_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 class KPrView;
 
 #include "ui_KPrConfigureSlideShow.h"
 
 class KPrDocument;
 
-class KPrConfigureSlideShowDialog : public KDialog
+class KPrConfigureSlideShowDialog : public KoDialog
 {
     Q_OBJECT
 

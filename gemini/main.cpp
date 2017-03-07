@@ -18,76 +18,64 @@
  */
 
 #include <QApplication>
+#include <QCommandLineParser>
 #include <QFontDatabase>
 #include <QFile>
 #include <QStringList>
 #include <QString>
-#include <QDesktopServices>
 #include <QProcessEnvironment>
 #include <QDir>
 #include <QMessageBox>
 #include <QSplashScreen>
 #include <QDebug>
 
-#include <kapplication.h>
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
-#include <kcomponentdata.h>
-#include <kstandarddirs.h>
-#include <kglobal.h>
-#include <kiconloader.h>
+#include <KIconLoader>
+#include <KLocalizedString>
+#include <KAboutData>
 
 #include "MainWindow.h"
 
 //#include "sketch/SketchInputContext.h"
 
 #include <calligraversion.h>
-#include <calligragitversion.h>
 
 int main( int argc, char** argv )
 {
-    QString calligraVersion(CALLIGRA_VERSION_STRING);
-    QString version;
+    KAboutData aboutData(QStringLiteral("calligragemini"),
+                         i18n("Calligra Gemini"),
+                         QStringLiteral(CALLIGRA_VERSION_STRING),
+                         i18n("Calligra Gemini: Writing and Presenting at Home and on the Go"),
+                         KAboutLicense::GPL,
+                         i18n("(c) 1999-%1 The Calligra team and KO GmbH.\n", QStringLiteral(CALLIGRA_YEAR)),
+                         QString(),
+                         QStringLiteral("https://www.calligra.org"),
+                         QStringLiteral("submit@bugs.kde.org"));
 
-#ifdef CALLIGRA_GIT_SHA1_STRING
-    QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
-    version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
-#else
-    version = calligraVersion;
+#if defined HAVE_X11
+    QApplication::setAttribute(Qt::AA_X11InitThreads);
 #endif
 
+    QApplication app(argc, argv);
+    KAboutData::setApplicationData(aboutData);
 
-    KAboutData aboutData("calligragemini",
-                         "calligrawords",
-                         ki18n("Calligra Gemini"),
-                         version.toLatin1(),
-                         ki18n("Calligra Gemini: Writing and Presenting at Home and on the Go"),
-                         KAboutData::License_GPL,
-                         ki18n("(c) 1999-%1 The Calligra team and KO GmbH.\n").subs(CALLIGRA_YEAR),
-                         KLocalizedString(),
-                         "http://www.calligra.org",
-                         "submit@bugs.kde.org");
+    QCommandLineParser parser;
+    aboutData.setupCommandLine(&parser);
+    parser.addHelpOption();
+    parser.addVersionOption();
 
-    KCmdLineArgs::init (argc, argv, &aboutData);
+    parser.addPositionalArgument(QStringLiteral("[file(s)]"), i18n("Document to open"));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("vkb"), i18n("Use the virtual keyboard")));
 
-    KCmdLineOptions options;
-    options.add( "+[files]", ki18n( "Document to open" ) );
-    options.add( "vkb", ki18n( "Use the virtual keyboard" ) );
-    KCmdLineArgs::addCmdLineOptions( options );
+    parser.process(app);
+    aboutData.processCommandLine(&parser);
 
-    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
     QStringList fileNames;
-    if (args->count() > 0) {
-        for (int i = 0; i < args->count(); ++i) {
-            QString fileName = args->arg(i);
-            if (QFile::exists(fileName)) {
-                fileNames << fileName;
-            }
+    foreach(const QString &fileName, parser.positionalArguments()) {
+        if (QFile::exists(fileName)) {
+            fileNames << fileName;
         }
     }
 
-    KApplication app;
-    app.setApplicationName("calligragemini");
     KIconLoader::global()->addAppDir("calligrawords");
     KIconLoader::global()->addAppDir("words");
     KIconLoader::global()->addAppDir("calligrastage");
@@ -99,12 +87,6 @@ int main( int argc, char** argv )
 
     QString envStringSet;
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    // If there's no kdehome, set it and restart the process.
-    //QMessageBox::information(0, "calligra gemini", "KDEHOME: " + env.value("KDEHOME"));
-    if (!env.contains("KDEHOME") ) {
-        _putenv_s("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::DataLocation).toLocal8Bit());
-        envStringSet.append("KDEHOME ");
-    }
     if (!env.contains("KDESYCOCA")) {
         _putenv_s("KDESYCOCA", QString(appdir.absolutePath() + "/sycoca").toLocal8Bit());
         envStringSet.append("KDESYCOCA ");
@@ -112,14 +94,6 @@ int main( int argc, char** argv )
     if (!env.contains("XDG_DATA_DIRS")) {
         _putenv_s("XDG_DATA_DIRS", QString(appdir.absolutePath() + "/share").toLocal8Bit());
         envStringSet.append("XDG_DATA_DIRS ");
-    }
-    if (!env.contains("KDEDIR")) {
-        _putenv_s("KDEDIR", appdir.absolutePath().toLocal8Bit());
-        envStringSet.append("KDEDIR ");
-    }
-    if (!env.contains("KDEDIRS")) {
-        _putenv_s("KDEDIRS", appdir.absolutePath().toLocal8Bit());
-        envStringSet.append("KDEDIRS");
     }
     _putenv_s("PATH", QString(appdir.absolutePath() + "/bin" + ";"
               + appdir.absolutePath() + "/lib" + ";"
@@ -159,13 +133,9 @@ int main( int argc, char** argv )
 //     splash.showMessage(".");
     app.processEvents();
 
-#if defined Q_WS_X11 && QT_VERSION >= 0x040800
-    QApplication::setAttribute(Qt::AA_X11InitThreads);
-#endif
-
     MainWindow window(fileNames);
 
-    if (args->isSet("vkb")) {
+    if (parser.isSet("vkb")) {
 //        app.setInputContext(new SketchInputContext(&app));
     }
 

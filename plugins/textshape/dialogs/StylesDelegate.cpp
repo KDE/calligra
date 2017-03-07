@@ -35,9 +35,9 @@
 #include <QScrollBar>
 #include <QStyle>
 #include <QStyleOptionButton>
-#include <QStyleOptionViewItemV4>
+#include <QStyleOptionViewItem>
 
-#include <kdebug.h>
+#include <QDebug>
 
 
 StylesDelegate::StylesDelegate()
@@ -53,7 +53,7 @@ StylesDelegate::StylesDelegate()
 void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optionV1,
                             const QModelIndex &index) const
 {
-    QStyleOptionViewItemV4 option = optionV1;
+    QStyleOptionViewItem option = optionV1;
     initStyleOption(&option, index);
     if (!index.data(AbstractStylesModel::isTitleRole).toBool()) {
         QStyledItemDelegate::paint(painter, option, index);
@@ -116,7 +116,7 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
         //BEGIN: top left corner
         {
             painter->save();
-            painter->setPen(outlineColor);
+            painter->setPen(QPen(outlineColor, 0));
             const QPointF topLeft(optRect.topLeft());
             QRectF arc(topLeft, QSizeF(4, 4));
             arc.translate(0.5, 0.5);
@@ -148,7 +148,7 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
         //BEGIN: top right corner
         {
             painter->save();
-            painter->setPen(outlineColor);
+            painter->setPen(QPen(outlineColor, 0));
             QPointF topRight(optRect.topRight());
             topRight.rx() -= 4;
             QRectF arc(topRight, QSizeF(4, 4));
@@ -197,7 +197,7 @@ QSize StylesDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelI
 bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &optionV1, const QModelIndex &index)
 {
     Q_UNUSED(model);
-    QStyleOptionViewItemV4 option = optionV1;
+    QStyleOptionViewItem option = optionV1;
     initStyleOption(&option, index);
 
     //the following is needed to find out if the view has vertical scrollbars. If not just paint and do not attempt to draw the control buttons.

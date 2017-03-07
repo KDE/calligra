@@ -18,21 +18,23 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 #include "KoDockerManager.h"
 #include "KoDockerManager_p.h"
 #include "KoDockFactoryBase.h"
 
-#include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
-#include <kglobalsettings.h>
+#include <MainDebug.h>
 
 #include "KoToolDocker.h"
+#include "KoDockRegistry.h"
 
 #include "KoView.h"
 #include "KoMainWindow.h"
+
+#include <QFontDatabase>
 
 class ToolDockerFactory : public KoDockFactoryBase
 {
@@ -73,12 +75,7 @@ KoDockerManager::~KoDockerManager()
 void KoDockerManager::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
 {
     d->toolOptionsDocker->setOptionWidgets(optionWidgetList);
-
-    KConfigGroup group(KGlobal::config(), "GUI");
-    QFont dockWidgetFont  = KGlobalSettings::generalFont();
-    qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
-    pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
-    dockWidgetFont.setPointSizeF(pointSize);
+    QFont dockWidgetFont = KoDockRegistry::dockFont();
 
     foreach(QWidget *w, optionWidgetList) {
 #ifdef Q_OS_MAC
@@ -107,4 +104,5 @@ void KoDockerManager::resetToolDockerWidgets()
     d->toolOptionsDocker->resetWidgets();
 }
 
-#include <KoDockerManager.moc>
+// have to include this because of Q_PRIVATE_SLOT
+#include <moc_KoDockerManager.cpp>

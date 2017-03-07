@@ -34,7 +34,7 @@
 #include "KoCanvasSupervisor.h"
 #include "KoToolManager_p.h"
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QScrollBar>
@@ -44,10 +44,6 @@
 #include <QPointer>
 
 #include <KoConfig.h>
-
-#ifdef HAVE_OPENGL
-#include <QGLWidget>
-#endif
 
 #include <math.h>
 
@@ -64,23 +60,12 @@ void KoCanvasControllerWidget::Private::setDocumentOffset()
     QWidget *canvasWidget = canvas->canvasWidget();
 
     if (canvasWidget) {
-        bool isCanvasOpenGL = false;
         QWidget *canvasWidget = canvas->canvasWidget();
-        if (canvasWidget) {
-#ifdef HAVE_OPENGL
-            if (qobject_cast<QGLWidget*>(canvasWidget) != 0) {
-                isCanvasOpenGL = true;
-            }
-#endif
-        }
-
-        if (!isCanvasOpenGL) {
-            QPoint diff = q->documentOffset() - pt;
-            if (q->canvasMode() == Spreadsheet && canvasWidget->layoutDirection() == Qt::RightToLeft) {
-                canvasWidget->scroll(-diff.x(), diff.y());
-            } else {
-                canvasWidget->scroll(diff.x(), diff.y());
-            }
+        QPoint diff = q->documentOffset() - pt;
+        if (q->canvasMode() == Spreadsheet && canvasWidget->layoutDirection() == Qt::RightToLeft) {
+            canvasWidget->scroll(-diff.x(), diff.y());
+        } else {
+            canvasWidget->scroll(diff.x(), diff.y());
         }
     }
 
@@ -215,7 +200,7 @@ KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCol
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateCanvasOffsetX()));
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateCanvasOffsetY()));
     connect(d->viewportWidget, SIGNAL(sizeChanged()), this, SLOT(updateCanvasOffsetX()));
-    connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), d->viewportWidget, SLOT(documentOffsetMoved(const QPoint&)));
+    connect(proxyObject, SIGNAL(moveDocumentOffset(QPoint)), d->viewportWidget, SLOT(documentOffsetMoved(QPoint)));
 }
 
 KoCanvasControllerWidget::~KoCanvasControllerWidget()
@@ -620,4 +605,5 @@ KoCanvasControllerWidget::Private *KoCanvasControllerWidget::priv()
     return d;
 }
 
-#include <KoCanvasControllerWidget.moc>
+//have to include this because of Q_PRIVATE_SLOT
+#include "moc_KoCanvasControllerWidget.cpp"

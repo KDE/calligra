@@ -1,8 +1,7 @@
-add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30528)
-
 include_directories(
     ${KOODF2_INCLUDES}
     ${CMAKE_SOURCE_DIR}/filters/libmsooxml
+    ${CMAKE_SOURCE_DIR}/filters/libmso
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx
     ${KOMAIN_INCLUDES}
 )
@@ -10,40 +9,48 @@ include_directories(
 ########### next target ###############
 
 set(pptx2odp_PART_SRCS
+    PptxDebug.cpp
     PptxImport.cpp
     PptxXmlDocumentReader.cpp
     PptxXmlSlideReader.cpp
     PptxXmlCommentsReader.cpp
     PptxXmlCommentAuthorsReader.cpp
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/ChartExport.cpp
+    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxChartOdfWriter.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libodf2/chart/KoOdfChartWriter.cpp
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxXmlChartReader.cpp
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/NumberFormatParser.cpp
 )
 
-kde4_add_plugin(calligra_filter_pptx2odp ${pptx2odp_PART_SRCS})
+add_library(calligra_filter_pptx2odp MODULE ${pptx2odp_PART_SRCS})
+calligra_filter_desktop_to_json(calligra_filter_pptx2odp calligra_filter_pptx2odp.desktop)
 
 target_link_libraries(
     calligra_filter_pptx2odp
     komsooxml
+    mso
     koodf2
     koodf
     komain
 )
 
-install(TARGETS calligra_filter_pptx2odp DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_pptx2odp DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 ########### install files ###############
-
-install( FILES
-  calligra_filter_pptx2odp.desktop
-  DESTINATION ${SERVICES_INSTALL_DIR}/calligra
-)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES stage_pptx_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 endif()
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_PPTX)
-    install( FILES libokularGenerator_pptx_calligra.desktop okularPptx_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+    kcoreaddons_add_plugin(okularGenerator_pptx_calligra
+        JSON libokularGenerator_pptx.json
+        INSTALL_NAMESPACE "okular/generators"
+        SOURCES OkularPptxGeneratorPlugin.cpp
+    )
+
+    target_link_libraries( okularGenerator_pptx_calligra
+        kookularGenerator_odp
+    )
+
+    install( FILES okularPptx_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
     install( PROGRAMS okularApplication_pptx_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 endif()

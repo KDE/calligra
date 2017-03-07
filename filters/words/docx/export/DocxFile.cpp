@@ -28,9 +28,6 @@
 #include <QByteArray>
 #include <QList>
 
-// KDE
-#include <kdebug.h>
-
 // Calligra
 #include <KoXmlWriter.h>
 #include <KoStore.h>
@@ -39,6 +36,7 @@
 // This filter
 #include "OpcContentTypes.h"
 #include "OdfReaderDocxContext.h"
+#include "DocxExportDebug.h"
 
 
 // ================================================================
@@ -66,7 +64,7 @@ KoFilter::ConversionStatus DocxFile::writeDocx(const QString &fileName,
     KoStore *docxStore = KoStore::createStore(fileName, KoStore::Write,
                                               appIdentification, KoStore::Auto, false);
     if (!docxStore || docxStore->bad()) {
-        kWarning(30003) << "Unable to create output file!";
+        warnDocx << "Unable to create output file!";
         delete docxStore;
         return KoFilter::FileNotFound;
     }
@@ -117,7 +115,7 @@ KoFilter::ConversionStatus DocxFile::writeTopLevelRels(KoStore *docxStore)
 {
     // We can hardcode this one.
     if (!docxStore->open("_rels/.rels")) {
-        kDebug(30503) << "Can not to open _rels/.rels.";
+        debugDocx << "Can not to open _rels/.rels.";
         return KoFilter::CreationError;
     }
 
@@ -160,7 +158,7 @@ KoFilter::ConversionStatus DocxFile::writeDocumentRels(KoStore *docxStore)
 {
     // We can hardcode this for now but should not be int he future.
     if (!docxStore->open("word/_rels/document.xml.rels")) {
-        kDebug(30503) << "Can not to open word/_rels/document.xml.rels.";
+        debugDocx << "Can not to open word/_rels/document.xml.rels.";
         return KoFilter::CreationError;
     }
 

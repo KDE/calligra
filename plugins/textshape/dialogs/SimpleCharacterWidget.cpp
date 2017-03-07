@@ -27,7 +27,7 @@
 #include "StylesDelegate.h"
 #include <KoStyleThumbnailer.h>
 
-#include <kaction.h>
+#include <QAction>
 #include <kselectaction.h>
 #include <KoTextBlockData.h>
 #include <KoCharacterStyle.h>
@@ -37,7 +37,7 @@
 #include <KoZoomHandler.h>
 #include <KoStyleManager.h>
 
-#include <kdebug.h>
+#include <QDebug>
 
 #include <QTextLayout>
 #include <QComboBox>
@@ -75,13 +75,15 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     connect(widget.superscript, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.subscript, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
 
-    QComboBox *family = qobject_cast<QComboBox*> (tool->action("format_fontfamily")->requestWidget(this));
+    QWidgetAction *fontFamilyAction = qobject_cast<QWidgetAction *>(tool->action("format_fontfamily"));
+    QComboBox *family = fontFamilyAction ? qobject_cast<QComboBox*> (fontFamilyAction->requestWidget(this)) : 0;
     if (family) { // kdelibs 4.1 didn't return anything here.
         widget.fontsFrame->addWidget(family,0,0);
         connect(family, SIGNAL(activated(int)), this, SIGNAL(doneWithFocus()));
         connect(family, SIGNAL(activated(int)), this, SLOT(fontFamilyActivated(int)));
     }
-    QComboBox *size = qobject_cast<QComboBox*> (tool->action("format_fontsize")->requestWidget(this));
+    QWidgetAction *fontSizeAction = qobject_cast<QWidgetAction *>(tool->action("format_fontsize"));
+    QComboBox *size = fontSizeAction ? qobject_cast<QComboBox*> (fontSizeAction->requestWidget(this)) : 0;
     if (size) { // kdelibs 4.1 didn't return anything here.
         widget.fontsFrame->addWidget(size,0,1);
         connect(size, SIGNAL(activated(int)), this, SIGNAL(doneWithFocus()));
@@ -167,7 +169,7 @@ void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format, cons
         }
         disconnect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
          //TODO, this is very brittle index 1 is because index 0 is the title. The proper solution to that would be for the "None" style to have a styleId which does not get applied on the text, but can be used in the ui
-        widget.characterStyleCombo->setCurrentIndex((useParagraphStyle)?1:m_sortedStylesModel->indexOf(*style).row());
+        widget.characterStyleCombo->setCurrentIndex((useParagraphStyle) ? 1 : m_sortedStylesModel->indexOf(style).row());
         widget.characterStyleCombo->setStyleIsOriginal(unchanged);
         widget.characterStyleCombo->slotUpdatePreview();
         connect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
@@ -259,5 +261,3 @@ void SimpleCharacterWidget::slotCharacterStyleApplied(const KoCharacterStyle *st
 {
     m_sortedStylesModel->styleApplied(style);
 }
-
-#include <SimpleCharacterWidget.moc>

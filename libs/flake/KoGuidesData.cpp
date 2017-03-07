@@ -50,7 +50,7 @@ public:
             } else if (text[pos] == 'V') {
                 //vertical element
                 str = text.mid(pos + 1, (newPos - pos));
-                //kDebug(30518)<<" vertical  :"<< str;
+                //debugFlake<<" vertical  :"<< str;
                 qreal posX = str.toDouble() / 100.0;
                 vertGuideLines.append(MM_TO_POINT(posX));
 
@@ -128,7 +128,7 @@ void KoGuidesData::paintGuides(QPainter &painter, const KoViewConverter &convert
     if (! showGuideLines())
         return;
 
-    painter.setPen(d->guidesColor);
+    painter.setPen(QPen(d->guidesColor, 0));
     foreach(qreal guide, d->horzGuideLines) {
         if (guide < area.top() || guide > area.bottom())
             continue;

@@ -22,14 +22,14 @@
 #include "ConnectionTool.h"
 
 #include <KoIcon.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
+#include <QDebug>
 
 ConnectionToolFactory::ConnectionToolFactory()
     : KoToolFactoryBase(ConnectionTool_ID)
 {
     setToolTip(i18n("Connect shapes"));
-    setIconName(koIconNameCStr("x-shape-connection"));
+    setIconName(koIconName("x-shape-connection"));
     setToolType(mainToolType());
     setPriority(1);
     setActivationShapeId("flake/always");

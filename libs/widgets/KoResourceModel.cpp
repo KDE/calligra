@@ -20,8 +20,9 @@
 
 #include "KoResourceModel.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 #include <KoResourceServerAdapter.h>
 #include <math.h>
@@ -50,7 +51,7 @@ KoResourceModel::KoResourceModel(QSharedPointer<KoAbstractResourceServerAdapter>
 KoResourceModel::~KoResourceModel()
 {
     if (!m_currentTag.isEmpty()) {
-        KConfigGroup group = KGlobal::config()->group("SelectedTags");
+        KConfigGroup group =  KSharedConfig::openConfig()->group("SelectedTags");
         group.writeEntry(serverType(), m_currentTag);
     }
 
@@ -317,5 +318,3 @@ QList< KoResource* > KoResourceModel::serverResources() const
 {
     return m_resourceAdapter->serverResources();
 }
-
-#include <KoResourceModel.moc>

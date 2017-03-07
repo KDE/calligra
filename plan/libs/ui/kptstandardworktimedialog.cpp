@@ -25,8 +25,7 @@
 #include "kptdebug.h"
 
 #include <QTreeWidgetItem>
-
-#include <klocale.h>
+#include <QLocale>
 
 
 namespace KPlato
@@ -46,7 +45,7 @@ public:
         if (day->state() == CalendarDay::NonWorking) {
             setHours();
         } else {
-            setText(1, KGlobal::locale()->formatNumber(day->duration().toDouble(Duration::Unit_h)));
+            setText(1, QLocale().toString(day->duration().toDouble(Duration::Unit_h), 'f', 2));
         }
     }
     ~WeekdayListItem() {
@@ -58,7 +57,7 @@ public:
     }
     void setIntervals(QList<TimeInterval*> intervals) {
         day->setIntervals(intervals);
-        setText(1, KGlobal::locale()->formatNumber(day->duration().toDouble(Duration::Unit_h)));
+        setText(1, QLocale().toString(day->duration().toDouble(Duration::Unit_h), 'f', 2));
     }
     void setState(int st) {
         day->setState(st+1);
@@ -80,14 +79,14 @@ public:
 };
 
 StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent)
-    : KDialog(parent),
+    : KoDialog(parent),
       project(p)
 {
     setCaption( i18n("Estimate Conversions") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
-    //kDebug(planDbg())<<&p;
+    //debugPlan<<&p;
     m_original = p.standardWorktime();
     dia = new StandardWorktimeDialogImpl(m_original, this);
 
@@ -100,7 +99,7 @@ StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent)
 }
 
 MacroCommand *StandardWorktimeDialog::buildCommand() {
-    //kDebug(planDbg());
+    //debugPlan;
     KUndo2MagicString n = kundo2_i18n("Modify Estimate Conversions");
     MacroCommand *cmd = 0;
     if (m_original->year() != dia->inYear()) {
@@ -141,7 +140,7 @@ StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QW
     m_week = m_std->week();
     m_day = m_std->day();
 
-    kDebug(planDbg())<<"y="<<m_year<<" m="<<m_month<<" w="<<m_week<<" d="<<m_day;
+    debugPlan<<"y="<<m_year<<" m="<<m_month<<" w="<<m_week<<" d="<<m_day;
     year->setValue(m_year);
     month->setValue(m_month);
     week->setValue(m_week);
@@ -164,7 +163,7 @@ void StandardWorktimeDialogImpl::slotCheckAllFieldsFilled() {
 }
 
 void StandardWorktimeDialogImpl::slotYearChanged(double value) {
-    //kDebug(planDbg())<<value;
+    //debugPlan<<value;
     m_year = value;
     if (month->value() > value)
         month->setValue(value);
@@ -198,6 +197,3 @@ void StandardWorktimeDialogImpl::slotDayChanged(double value) {
 
 
 }  //KPlato namespace
-
-
-#include "kptstandardworktimedialog.moc"

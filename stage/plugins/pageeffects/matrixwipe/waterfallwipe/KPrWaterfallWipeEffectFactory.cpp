@@ -19,7 +19,7 @@
 
 #include "KPrWaterfallWipeEffectFactory.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "KPrWaterfallWipeTopLeftStrategy.h"
 #include "KPrWaterfallWipeTopRightStrategy.h"

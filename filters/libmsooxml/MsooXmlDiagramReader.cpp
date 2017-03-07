@@ -64,7 +64,7 @@ void MsooXmlDiagramReaderContext::saveIndex(KoXmlWriter* xmlWriter, const QRect 
     m_context->m_rootLayout->m_values["t"] = rect.y();
     m_context->m_rootLayout->m_values["w"] = rect.width();
     m_context->m_rootLayout->m_values["h"] = rect.height();
-	kDebug() << "drawingRect" << rect;
+	debugMsooXml << "drawingRect" << rect;
 
     // Do the (re-)layout.
     m_context->m_rootLayout->layoutAtom(m_context);    
@@ -173,7 +173,7 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
             }
         }
         if (!m_context->m_context->m_rootPoint) {
-            kWarning() << "Data-definition doesn't specify a root-node";
+            warnMsooXml << "Data-definition doesn't specify a root-node";
             return KoFilter::WrongFormat;
         }
         Q_ASSERT(rootList.children().contains(m_context->m_context->m_rootPoint));
@@ -209,7 +209,7 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
             }
         }
         if (!m_context->m_context->m_rootPoint) {
-            kWarning() << "Layout-definition doesn't specify a root-point";
+            warnMsooXml << "Layout-definition doesn't specify a root-point";
             return KoFilter::WrongFormat;
         }
 

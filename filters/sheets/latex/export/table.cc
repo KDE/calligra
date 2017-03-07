@@ -21,9 +21,10 @@
 
 #include "table.h"
 
-#include <kdebug.h>  /* for kDebug stream */
 #include <QBitArray>
 #include <QTextStream>
+
+#include "LatexDebug.h"
 #include "cell.h"
 #include "column.h"
 #include "row.h"
@@ -56,7 +57,7 @@ void Table::setMaxRow(int row)
 
 void Table::analyze(const QDomNode node)
 {
-    kDebug(30522) << "New table";
+    debugLatex << "New table";
     if (getAttr(node, "columnnumber") == "1")
         setColumnNumber();
     if (getAttr(node, "borders") == "1")
@@ -89,24 +90,24 @@ void Table::analyze(const QDomNode node)
     for (int index = 0; index < max; index++) {
         QString name = getChildName(node, index);
         if (name == "cell") {
-            kDebug(30522) << "----- cell -----";
+            debugLatex << "----- cell -----";
             Cell* cell = new Cell();
             cell->analyze(getChild(node, index));
             _cells.append(cell);
             setMaxColumn(cell->getCol());
             setMaxRow(cell->getRow());
         } else if (name == "column") {
-            kDebug(30522) << "----- column -----";
+            debugLatex << "----- column -----";
             Column* column = new Column();
             column->analyze(getChild(node, index));
             _columns.append(column);
         } else if (name == "row") {
-            kDebug(30522) << "----- row -----";
+            debugLatex << "----- row -----";
             Row* row = new Row();
             row->analyze(getChild(node, index));
             _rows.append(row);
         } else
-            kDebug(30522) << "name :" << name;
+            debugLatex << "name :" << name;
     }
 }
 
@@ -125,13 +126,13 @@ void Table::analyzePaper(const QDomNode node)
 
 Cell* Table::searchCell(int col, int row)
 {
-    kDebug(30522) << "search in list of" << _cells.count() << " cells";
+    debugLatex << "search in list of" << _cells.count() << " cells";
     foreach(Cell* cell, _cells) {
-        kDebug(30522) << "cell:" << cell->getRow() << "-" << cell->getCol();
+        debugLatex << "cell:" << cell->getRow() << "-" << cell->getCol();
         if (cell->getCol() == col && cell->getRow() == row)
             return cell;
     }
-    return NULL;
+    return nullptr;
 }
 
 Column* Table::searchColumn(int col)
@@ -140,7 +141,7 @@ Column* Table::searchColumn(int col)
         if (column->getCol() == col)
             return column;
     }
-    return NULL;
+    return nullptr;
 }
 
 Row* Table::searchRow(int rowNumber)
@@ -150,7 +151,7 @@ Row* Table::searchRow(int rowNumber)
         if (row->getRow() == rowNumber)
             return row;
     }
-    return NULL;
+    return nullptr;
 }
 
 /*******************************************/
@@ -158,7 +159,7 @@ Row* Table::searchRow(int rowNumber)
 /*******************************************/
 void Table::generate(QTextStream& out)
 {
-    kDebug(30522) << "GENERATION OF A TABLE" << getMaxRow() << " -" << getMaxColumn()
+    debugLatex << "GENERATION OF A TABLE" << getMaxRow() << " -" << getMaxColumn()
     << endl;
     out << endl << "%% " << getName() << endl;
     if (getOrientation() == "Portrait") {
@@ -175,7 +176,7 @@ void Table::generate(QTextStream& out)
     while (rowNumber <= getMaxRow()) {
         generateTopLineBorder(out, rowNumber);
         Row* row = searchRow(rowNumber);
-        if (row != NULL)
+        if (row != nullptr)
             row->generate(out);
 
         for (int col = 1; col <= getMaxColumn(); col++) {
@@ -199,7 +200,7 @@ void Table::generate(QTextStream& out)
         unindent();
     }
     /*Element* elt = 0;
-    kDebug(30522) <<"GENERATION OF A TABLE" << count();
+    debugLatex <<"GENERATION OF A TABLE" << count();
     out << endl << "\\begin{tabular}";
     generateTableHeader(out);
     out << endl;
@@ -237,7 +238,7 @@ void Table::generate(QTextStream& out)
     generateBottomLineBorder(out, row - 1);
     out << "\\end{tabular}" << endl << endl;
     unindent();*/
-    kDebug(30522) << "END OF GENERATION OF A TABLE";
+    debugLatex << "END OF GENERATION OF A TABLE";
 }
 
 /*******************************************/
@@ -251,10 +252,10 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
     bool fullLine = true;
     for (int index = 1; index <= getMaxColumn(); index++) {
         /* Search the cell in the list */
-        kDebug(30522) << "search" << row << "," << index;
+        debugLatex << "search" << row << "," << index;
         cell = searchCell(index, row);
 
-        if (cell == NULL) {
+        if (cell == nullptr) {
             cell = new Cell(row, index);
             _cells.append(cell);
         }
@@ -288,7 +289,7 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
 
     /*Row * row;
     row = searchRow(row);
-    if(row != NULL)
+    if(row != nullptr)
      row->generate(out);*/
 }
 
@@ -305,7 +306,7 @@ void Table::generateBottomLineBorder(QTextStream& out, int row)
         /* Search the cell in the list */
         cell = searchCell(index, row);
 
-        if (cell == NULL) {
+        if (cell == nullptr) {
             cell = new Cell(row, index);
             _cells.append(cell);
         }
@@ -343,16 +344,16 @@ void Table::generateBottomLineBorder(QTextStream& out, int row)
 /*******************************************/
 void Table::generateCell(QTextStream& out, int row, int col)
 {
-    kDebug(30522) << "GENERATE CELL :" << row << "," << col;
+    debugLatex << "GENERATE CELL :" << row << "," << col;
 
     /* Search the cell in the list */
     Cell *cell = searchCell(col, row);
-    if (cell != NULL) {
-        kDebug(30522) << "generate cell with text:" << cell->getText();
+    if (cell != nullptr) {
+        debugLatex << "generate cell with text:" << cell->getText();
         cell->generate(out, this);
     }
 
-    kDebug(30522) << "END OF A CELL";
+    debugLatex << "END OF A CELL";
 }
 
 /*******************************************/
@@ -366,7 +367,7 @@ void Table::generateTableHeader(QTextStream& out)
 
     for (int col = 1; col <= getMaxColumn(); col++) {
         column = searchColumn(col);
-        if (column != NULL)
+        if (column != nullptr)
             column->generate(out);
         else {
             out << "m{20pt}";

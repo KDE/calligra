@@ -27,8 +27,7 @@
 #include <QStringList>
 #include <QBuffer>
 
-// KDE
-#include <kdebug.h>
+// KF5
 #include <klocalizedstring.h>
 
 // Calligra
@@ -39,8 +38,7 @@
 
 // EPUB filter
 #include "FileCollector.h"
-
-
+#include "MobiExportDebug.h"
 
 
 // ================================================================
@@ -109,9 +107,9 @@ OdtMobiHtmlConverter::convertContent(KoStore *odfStore,
     }
 
 #if 0 // Debug
-    kDebug(30503) << "======== >> Styles";
+    debugMobi << "======== >> Styles";
     foreach(const QString &name, m_styles.keys()) {
-        kDebug(30503) << "==" << name << ":\t"
+        debugMobi << "==" << name << ":\t"
                       << m_styles.value(name)->parent
                       << m_styles.value(name)->family
                       << m_styles.value(name)->isDefaultStyle
@@ -119,7 +117,7 @@ OdtMobiHtmlConverter::convertContent(KoStore *odfStore,
                       << m_styles.value(name)->attributes
             ;
     }
-    kDebug(30503) << "======== << Styles";
+    debugMobi << "======== << Styles";
 #endif
 
     // Propagate style inheritance.
@@ -128,8 +126,8 @@ OdtMobiHtmlConverter::convertContent(KoStore *odfStore,
 #if 0
      //2. Create CSS contents and store it in the file collector.
         status = createCSS(m_styles, m_cssContent);
-        //kDebug(30503) << "Styles:" << m_styles;
-        //kDebug(30503) << "CSS:" << m_cssContent;
+        //debugMobi << "Styles:" << m_styles;
+        //debugMobi << "CSS:" << m_cssContent;
         if (status != KoFilter::OK) {
             delete odfStore;
             return status;
@@ -145,7 +143,7 @@ OdtMobiHtmlConverter::convertContent(KoStore *odfStore,
     // Parse body from content.xml
 
     if (!odfStore->open("content.xml")) {
-        kDebug(30503) << "Can not open content.xml .";
+        debugMobi << "Can not open content.xml .";
         return KoFilter::FileNotFound;
     }
 
@@ -154,7 +152,7 @@ OdtMobiHtmlConverter::convertContent(KoStore *odfStore,
     int errorLine;
     int errorColumn;
     if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug(30503) << "Error occurred while parsing content.xml "
+        debugMobi << "Error occurred while parsing content.xml "
                       << errorMsg << " in Line: " << errorLine
                       << " Column: " << errorColumn;
         odfStore->close();
@@ -206,7 +204,7 @@ OdtMobiHtmlConverter::convertContent(KoStore *odfStore,
             if (m_options->doBreakIntoChapters
                     && (hasOutlineLevel1 || (style && style->shouldBreakChapter)))
             {
-                //kDebug(30503) << "Found paragraph which breaks into new chapter";
+                //debugMobi << "Found paragraph which breaks into new chapter";
 
                 // Write out any footnotes
                 if (!m_footNotes.isEmpty()) {
@@ -972,14 +970,14 @@ KoFilter::ConversionStatus OdtMobiHtmlConverter::collectStyles(KoStore *odfStore
     // Get style info from content.xml.
 
     // Try to open content.xml. Return if it failed.
-    //kDebug(30503) << "parse content.xml styles";
+    //debugMobi << "parse content.xml styles";
     if (!odfStore->open("content.xml")) {
-        kError(30503) << "Unable to open input file! content.xml" << endl;
+        errorMobi << "Unable to open input file! content.xml" << endl;
         return KoFilter::FileNotFound;
     }
 
     if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug() << "Error occurred while parsing styles.xml "
+        debugMobi << "Error occurred while parsing styles.xml "
                  << errorMsg << " in Line: " << errorLine
                  << " Column: " << errorColumn;
         odfStore->close();
@@ -1000,11 +998,11 @@ KoFilter::ConversionStatus OdtMobiHtmlConverter::collectStyles(KoStore *odfStore
 
     // Try to open and set styles.xml as a KoXmlDocument. Return if it failed.
     if (!odfStore->open("styles.xml")) {
-        kError(30503) << "Unable to open input file! style.xml" << endl;
+        errorMobi << "Unable to open input file! style.xml" << endl;
         return KoFilter::FileNotFound;
     }
     if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug() << "Error occurred while parsing styles.xml "
+        debugMobi << "Error occurred while parsing styles.xml "
                  << errorMsg << " in Line: " << errorLine
                  << " Column: " << errorColumn;
         odfStore->close();
@@ -1083,7 +1081,7 @@ void OdtMobiHtmlConverter::collectStyleSet(KoXmlNode &stylesNode, QHash<QString,
 #if 0 // Disable - use outline-level = 1 instead.
             // Check for fo:break-before
             if (propertiesElement.attribute("break-before") == "page") {
-                //kDebug(30503) << "Found break-before=page in style" << styleName;
+                //debugMobi << "Found break-before=page in style" << styleName;
                 styleInfo->shouldBreakChapter = true;
             }
 #endif
@@ -1094,7 +1092,7 @@ void OdtMobiHtmlConverter::collectStyleSet(KoXmlNode &stylesNode, QHash<QString,
         }
 
 #if 0 // debug
-        kDebug(30503) << "==" << styleName << ":\t"
+        debugMobi << "==" << styleName << ":\t"
                       << styleInfo->parent
                       << styleInfo->family
                       << styleInfo->isDefaultStyle
@@ -1178,7 +1176,7 @@ void OdtMobiHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElemen
     // Image align
     attribute = propertiesElement.attribute("horizontal-pos");
     if (!attribute.isEmpty()) {
-        //kDebug(30503) << "horisontal pos attribute" << attribute;
+        //debugMobi << "horisontal pos attribute" << attribute;
         if (attribute == "right" || attribute == "from-left") {
             styleInfo->attributes.insert("float", "right");
             styleInfo->attributes.insert("margin", "5px 0 5px 15px");
@@ -1427,7 +1425,7 @@ void OdtMobiHtmlConverter::closeFontOptionsElement(KoXmlWriter *htmlWriter)
 void OdtMobiHtmlConverter::generateMobiInternalLinks()
 {
     if (m_linksInfo.isEmpty()) {
-        kDebug(30503) << "### There is no internal links. ###";
+        debugMobi << "### There is no internal links. ###";
         return;
     }
 

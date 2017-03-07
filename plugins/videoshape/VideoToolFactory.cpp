@@ -23,13 +23,13 @@
 #include "VideoTool.h"
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 VideoToolFactory::VideoToolFactory()
     :KoToolFactoryBase("VideoToolFactoryId")
 {
     setToolTip(i18n("Video handling"));
-    setIconName(koIconNameCStr("video-x-generic"));
+    setIconName(koIconName("video-x-generic"));
     setToolType(dynamicToolType());
     setPriority(1);
     setActivationShapeId(VIDEOSHAPEID);

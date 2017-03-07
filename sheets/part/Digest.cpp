@@ -1,6 +1,6 @@
 /*************************************************************************
  * This implementation has been taken from the OpenOffice 1.0 and modified
- * to use KSpread data types.
+ * to use Calligra Sheets data types.
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
@@ -44,7 +44,7 @@
 
 #include <KoConfig.h> // WORDS_BIGENDIAN
 
-#include <kdebug.h>
+#include "SheetsDebug.h"
 
 typedef quint8 sal_uInt8;
 typedef quint16 sal_uInt16;

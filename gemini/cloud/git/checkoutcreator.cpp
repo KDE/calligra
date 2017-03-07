@@ -24,10 +24,10 @@
 #include <kfiledialog.h>
 #include <kpassworddialog.h>
 #include <kmessagebox.h>
-#include <kinputdialog.h>
 #include <kuser.h>
 #include <kemailsettings.h>
 
+#include <QInputDialog>
 #include <QDir>
 #include <QFileDialog>
 #include <QDebug>
@@ -82,8 +82,10 @@ public:
             bool ok;
             KUser user(KUser::UseRealUserID);
             QString systemName = user.property(KUser::FullName).toString();
-            QString newName = KInputDialog::getText("Enter Name",
-                                                    "There is no name set for Git on this system (this is used when committing). Please enter one below and press OK.",
+            QString newName = QInputDialog::getText(0,
+                                                    i18n("Enter Name"),
+                                                    i18n("There is no name set for Git on this system (this is used when committing). Please enter one below and press OK."),
+                                                    QLineEdit::Normal,
                                                     systemName,
                                                     &ok);
             if(!ok) {
@@ -96,10 +98,12 @@ public:
             bool ok;
             KEMailSettings eMailSettings;
             QString emailAddress = eMailSettings.getSetting(KEMailSettings::EmailAddress);
-            QString newEmail = KInputDialog::getText("Enter Email",
-                                                    "There is no email address set for Git on this system (this is used when committing). Please enter one below and press OK.",
-                                                    emailAddress,
-                                                    &ok);
+            QString newEmail = QInputDialog::getText(0,
+                                                     i18n("Enter Email"),
+                                                     i18n("There is no email address set for Git on this system (this is used when committing). Please enter one below and press OK."),
+                                                     QLineEdit::Normal,
+                                                     emailAddress,
+                                                     &ok);
             if(!ok) {
                 return false;
             }
@@ -132,9 +136,9 @@ CheckoutCreator::~CheckoutCreator()
 
 QString CheckoutCreator::getFile(QString caption, QString filter, QString extraSubDir) const
 {
-    KUrl searchDir;
+    QUrl searchDir;
     if(QDir::home().exists(extraSubDir))
-        searchDir = KUrl(QDir::homePath().append(QDir::separator()).append(extraSubDir));
+        searchDir = QUrl(QDir::homePath().append(QDir::separator()).append(extraSubDir));
     QString url = KFileDialog::getOpenFileName(searchDir, filter, 0, caption);
     return url;
 }
@@ -205,6 +209,3 @@ QString CheckoutCreator::createClone(QString userVisibleName, QString url, QStri
 
     return checkoutLocation;
 }
-
-#include "checkoutcreator.moc"
-

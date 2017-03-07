@@ -25,9 +25,7 @@
 
 #include "workpackage.h"
 
-#include <kdialog.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <KoDialog.h>
 
 class KUndo2Command;
 
@@ -36,7 +34,7 @@ namespace KPlatoWork
 
 class PackageSettingsPanel;
 
-class KPLATOWORK_EXPORT PackageSettingsDialog : public KDialog
+class KPLATOWORK_EXPORT PackageSettingsDialog : public KoDialog
 {
     Q_OBJECT
 public:

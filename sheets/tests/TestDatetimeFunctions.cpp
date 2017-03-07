@@ -236,7 +236,7 @@ void TestDatetimeFunctions::testWEEKSINYEAR()
     CHECK_EVAL("WEEKSINYEAR(1995)", Value(52));
     CHECK_EVAL("WEEKSINYEAR(2009)", Value(53));
     CHECK_EVAL("WEEKSINYEAR(2010)", Value(52));
-    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETWEEKSINYEAR(1992)", Value(52));
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETWEEKSINYEAR(1992)", Value(53));
 }
 
 void TestDatetimeFunctions::testWORKDAY()
@@ -560,6 +560,4 @@ void TestDatetimeFunctions::testWEEKS()
     CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETDIFFWEEKS(\"2002-02-18\"; \"2002-02-26\"; 0)", Value(1));
 }
 
-QTEST_KDEMAIN(TestDatetimeFunctions, GUI)
-
-#include "TestDatetimeFunctions.moc"
+QTEST_MAIN(TestDatetimeFunctions)

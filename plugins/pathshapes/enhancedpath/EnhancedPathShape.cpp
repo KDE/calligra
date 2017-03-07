@@ -58,7 +58,7 @@ void EnhancedPathShape::reset()
     m_commands.clear();
     qDeleteAll(m_enhancedHandles);
     m_enhancedHandles.clear();
-    setHandles(QList<QPointF>());
+    setHandles(QVector<QPointF>());
     qDeleteAll(m_formulae);
     m_formulae.clear();
     qDeleteAll(m_parameters);
@@ -115,7 +115,8 @@ void EnhancedPathShape::updatePath(const QSizeF & size)
         }
 
         const int handleCount = m_enhancedHandles.count();
-        QList<QPointF> handles;
+        QVector<QPointF> handles;
+        handles.reserve(handleCount);
         for (int i = 0; i < handleCount; ++i)
             handles.append(matrix.map(m_enhancedHandles[i]->position()));
         setHandles(handles);
@@ -157,7 +158,8 @@ QPointF EnhancedPathShape::shapeToViewbox(const QPointF &point) const
 void EnhancedPathShape::evaluateHandles()
 {
     const int handleCount = m_enhancedHandles.count();
-    QList<QPointF> handles;
+    QVector<QPointF> handles;
+    handles.reserve(handleCount);
     for (int i = 0; i < handleCount; ++i)
         handles.append(m_enhancedHandles[i]->position());
     setHandles(handles);

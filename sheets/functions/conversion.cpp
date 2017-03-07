@@ -27,8 +27,6 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
-#include <klocale.h>
-
 #include <QByteArray>
 
 using namespace Calligra::Sheets;
@@ -49,7 +47,7 @@ Value func_booltoint(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ToString(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("conversion", ConversionModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadconversionmodule.json", ConversionModule)
 
 
 ConversionModule::ConversionModule(QObject* parent, const QVariantList&)
@@ -283,4 +281,4 @@ Value func_ToString(valVector args, ValueCalc *calc, FuncExtra *)
     return calc->conv()->asString(args[0]);
 }
 
-#include "ConversionModule.moc"
+#include "conversion.moc"

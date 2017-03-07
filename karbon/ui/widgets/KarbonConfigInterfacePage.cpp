@@ -29,14 +29,12 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <KoConfigDocumentPage.h>
 #include <KoConfigMiscPage.h>
 
-#include <klocale.h>
-#include <kcomponentdata.h>
+#include <klocalizedstring.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <knuminput.h>
 #include <kcolorbutton.h>
 
-#include <QLabel>
+#include <QSpinBox>
 #include <QCheckBox>
 #include <QGroupBox>
 #include <QFormLayout>
@@ -46,7 +44,7 @@ KarbonConfigInterfacePage::KarbonConfigInterfacePage(KarbonView* view, char* nam
     setObjectName(name);
 
     m_view = view;
-    m_config = KarbonFactory::componentData().config();
+    m_config = KarbonFactory::karbonConfig();
 
     m_oldRecentFiles = 10;
     m_oldDockerFontSize = 8;
@@ -72,13 +70,15 @@ KarbonConfigInterfacePage::KarbonConfigInterfacePage(KarbonView* view, char* nam
     m_showStatusBar->setChecked(oldShowStatusBar);
     interfaceLayout->addRow(i18n("Show status bar:"), m_showStatusBar);
 
-    m_recentFiles = new KIntNumInput(tmpQGroupBox);
-    m_recentFiles->setRange(1, 20, 1);
+    m_recentFiles = new QSpinBox(tmpQGroupBox);
+    m_recentFiles->setRange(1, 20);
+    m_recentFiles->setSingleStep(1);
     m_recentFiles->setValue(m_oldRecentFiles);
     interfaceLayout->addRow(i18n("Number of recent files:"), m_recentFiles);
 
-    m_dockerFontSize = new KIntNumInput(tmpQGroupBox);
-    m_dockerFontSize->setRange(5, 20, 1);
+    m_dockerFontSize = new QSpinBox(tmpQGroupBox);
+    m_dockerFontSize->setRange(5, 20);
+    m_dockerFontSize->setSingleStep(1);
     m_dockerFontSize->setValue(m_oldDockerFontSize);
     interfaceLayout->addRow(i18n("Palette font size:"), m_dockerFontSize);
 
@@ -135,4 +135,3 @@ void KarbonConfigInterfacePage::slotDefault()
     m_showStatusBar->setChecked(true);
 }
 
-#include "KarbonConfigInterfacePage.moc"

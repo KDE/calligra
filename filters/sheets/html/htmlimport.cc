@@ -19,8 +19,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <htmlimport.h>
-#include <htmlimport.moc>
+#include "htmlimport.h"
+
+#include "HtmlImportDebug.h"
 //#include <exportdialog.h>
 
 #include <QFile>
@@ -29,7 +30,6 @@
 #include <QTextStream>
 #include <QByteArray>
 #include <QEventLoop>
-#include <kdebug.h>
 #include <kpluginfactory.h>
 #include <KoFilterChain.h>
 #include <KoXmlWriter.h>
@@ -49,8 +49,8 @@
 
 //using namespace Calligra::Sheets;
 
-K_PLUGIN_FACTORY(HTMLImportFactory, registerPlugin<HTMLImport>();)
-K_EXPORT_PLUGIN(HTMLImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(HTMLImportFactory, "calligra_filter_html2ods.json",
+                           registerPlugin<HTMLImport>();)
 
 HTMLImport::HTMLImport(QObject* parent, const QVariantList&)
     : KoFilter(parent)
@@ -64,13 +64,13 @@ HTMLImport::~HTMLImport()
 KoFilter::ConversionStatus HTMLImport::convert(const QByteArray& from, const QByteArray& to)
 {
     if (to != "application/vnd.oasis.opendocument.spreadsheet" || from != "text/html") {
-        kWarning(30501) << "Invalid mimetypes " << to << " " << from;
+        warnHtml << "Invalid mimetypes " << to << " " << from;
         return KoFilter::NotImplemented;
     }
 
     QString inputFile = m_chain->inputFile();
     QString outputFile = m_chain->outputFile();
-    kDebug()<<"inputFile="<<inputFile<<"outputFile="<<outputFile;
+    debugHtml<<"inputFile="<<inputFile<<"outputFile="<<outputFile;
 
     // check if the inout file exists
     m_inputDir = QFileInfo(m_chain->inputFile()).dir();
@@ -92,9 +92,9 @@ KoFilter::ConversionStatus HTMLImport::convert(const QByteArray& from, const QBy
     m_store->contentWriter(); // we need to create the instance even if the contentWriter is not used
 
     bodyWriter->startElement("office:body");
-    KoFilter::ConversionStatus result = loadUrl(m_chain->inputFile());
+    KoFilter::ConversionStatus result = loadUrl(QUrl::fromLocalFile(m_chain->inputFile()));
     if(result != KoFilter::OK)
-        kWarning() << "Failed to load url=" << m_chain->inputFile();
+        warnHtml << "Failed to load url=" << m_chain->inputFile();
     bodyWriter->endElement(); // office:body
 
     if(m_store->closeContentWriter())
@@ -173,9 +173,9 @@ bool HTMLImport::createMeta()
     return m_store->store()->close();
 }
 
-KoFilter::ConversionStatus HTMLImport::loadUrl(const KUrl &url)
+KoFilter::ConversionStatus HTMLImport::loadUrl(const QUrl &url)
 {
-    kDebug() << url;
+    debugHtml << url;
 
     KoXmlWriter* bodyWriter = m_store->bodyWriter();
     //KoXmlWriter* contentWriter = m_store->contentWriter();
@@ -192,8 +192,8 @@ KoFilter::ConversionStatus HTMLImport::loadUrl(const KUrl &url)
 
         QEventLoop loop;
         connect(&html, SIGNAL(completed()), &loop, SLOT(quit()));
-        QMetaObject::invokeMethod(&html,"openUrl", Qt::QueuedConnection, Q_ARG(KUrl,url));
-        //if (!html.openUrl(url)) { kWarning(30503) << "Failed loadUrl" << url; return KoFilter::StupidError; }
+        QMetaObject::invokeMethod(&html,"openUrl", Qt::QueuedConnection, Q_ARG(QUrl,url));
+        //if (!html.openUrl(url)) { warnHtml << "Failed loadUrl" << url; return KoFilter::StupidError; }
         loop.exec(QEventLoop::ExcludeUserInputEvents);
 
         // body
@@ -226,7 +226,7 @@ KoFilter::ConversionStatus HTMLImport::loadUrl(const KUrl &url)
     if(!sheets.isEmpty()) {
         m_states.push(InFrameset);
         foreach(const QString &src, sheets) {
-            KUrl u(QFileInfo(m_inputDir, src).absoluteFilePath());
+            const QUrl u = QUrl::fromLocalFile(QFileInfo(m_inputDir, src).absoluteFilePath());
             loadUrl(u);
         }
         m_states.pop();
@@ -246,7 +246,7 @@ void HTMLImport::parseNode(DOM::Node node)
         if(!m_states.isEmpty() && m_states.top() == InCell) {
             const QString s = t.data().string().trimmed();
             if(!s.isEmpty()) {
-                //kDebug()<<"TEXT tagname=" << node.nodeName() << "TEXT="<<t.data().string();
+                //debugHtml<<"TEXT tagname=" << node.nodeName() << "TEXT="<<t.data().string();
                 bodyWriter->addAttribute("office:value-type", "string");
                 bodyWriter->addAttribute("office:string-value", s);
             }
@@ -277,7 +277,7 @@ void HTMLImport::parseNode(DOM::Node node)
         m_states.push(InNone);
     }
 
-    //kDebug()<<"...START nodeName="<<node.nodeName();
+    //debugHtml<<"...START nodeName="<<node.nodeName();
 
     DOM::Element e = node;
     bool go_recursive = true;
@@ -296,7 +296,7 @@ void HTMLImport::parseNode(DOM::Node node)
         bodyWriter->endElement();
     }
 
-    //kDebug()<<"...END nodeName="<<node.nodeName();
+    //debugHtml<<"...END nodeName="<<node.nodeName();
 }
 
 bool HTMLImport::parseTag(DOM::Element element)
@@ -310,3 +310,5 @@ bool HTMLImport::parseTag(DOM::Element element)
 
     return true;
 }
+
+#include <htmlimport.moc>

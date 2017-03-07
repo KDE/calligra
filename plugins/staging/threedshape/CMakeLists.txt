@@ -1,8 +1,11 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_threed\")
+
 include_directories( ${FLAKE_INCLUDES} )
 
 ########### Flake Plugin library ###############
 
 set (threedshape_LIB_SRCS
+    ThreedDebug.cpp
     ThreedShapePlugin.cpp
     ThreedShapeFactory.cpp
     #ThreedToolFactory.cpp
@@ -15,12 +18,8 @@ set (threedshape_LIB_SRCS
     utils.cpp
 )
 
-kde4_add_plugin(calligra_shape_threed ${threedshape_LIB_SRCS})
+add_library(calligra_shape_threed MODULE ${threedshape_LIB_SRCS})
+calligra_shape_desktop_to_json(calligra_shape_threed calligra_shape_threed.desktop)
 
-target_link_libraries(calligra_shape_threed flake    ${KDE4_KFILE_LIBRARY})
-install(TARGETS calligra_shape_threed DESTINATION ${PLUGIN_INSTALL_DIR})
-
-########### install files ###############
-
-install( FILES calligra_shape_threed.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
+target_link_libraries(calligra_shape_threed flake)
+install(TARGETS calligra_shape_threed DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)

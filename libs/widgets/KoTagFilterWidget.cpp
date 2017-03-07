@@ -30,7 +30,7 @@
 #include <QGridLayout>
 
 #include <klineedit.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <KoIcon.h>
 
@@ -77,8 +77,8 @@ KoTagFilterWidget::KoTagFilterWidget(QWidget* parent): QWidget(parent)
 
 
     d->tagSearchLineEdit = new KLineEdit(this);
-    d->tagSearchLineEdit->setClearButtonShown(true);
-    d->tagSearchLineEdit->setClickMessage(i18n("Enter resource filters here"));
+    d->tagSearchLineEdit->setClearButtonEnabled(true);
+    d->tagSearchLineEdit->setPlaceholderText(i18n("Enter resource filters here"));
     d->tagSearchLineEdit->setToolTip(d->tagSearchBarTooltip_saving_disabled);
     d->tagSearchLineEdit->setEnabled(true);
 

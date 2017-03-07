@@ -18,7 +18,8 @@
  */
 
 #include "BoxWipeEffectFactory.h"
-#include <klocale.h>
+
+#include <klocalizedstring.h>
 
 #include "BoxWipeStrategy.h"
 

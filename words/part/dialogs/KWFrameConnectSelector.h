@@ -50,6 +50,7 @@ public:
     }
 
 private Q_SLOTS:
+    void existingRadioClicked(bool on);
     void frameSetSelected();
     void nameChanged(const QString &text);
 

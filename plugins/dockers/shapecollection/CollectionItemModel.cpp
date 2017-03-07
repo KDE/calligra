@@ -21,7 +21,7 @@
 #include <KoProperties.h>
 #include <KoShapeFactoryBase.h>
 
-#include <kdebug.h>
+#include <QDebug>
 
 #include <QMimeData>
 
@@ -121,5 +121,3 @@ const KoProperties* CollectionItemModel::properties(const QModelIndex& index) co
 
     return m_shapeTemplateList[index.row()].properties;
 }
-
-#include <CollectionItemModel.moc>

@@ -1,7 +1,5 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/karbon
-                     ${CMAKE_SOURCE_DIR}/karbon/core
-                     ${KDE4_INCLUDES} )
+include_directories( ${CMAKE_SOURCE_DIR}/karbon )
 
 
 if(SHOULD_BUILD_FILTER_KARBON_TO_SVG)
@@ -10,13 +8,12 @@ set(karbon2svg_PART_SRCS
     SvgExport.cpp
 )
 
-kde4_add_plugin(calligra_filter_karbon2svg ${karbon2svg_PART_SRCS})
+add_library(calligra_filter_karbon2svg MODULE ${karbon2svg_PART_SRCS})
+calligra_filter_desktop_to_json(calligra_filter_karbon2svg calligra_filter_karbon2svg.desktop)
 
 target_link_libraries(calligra_filter_karbon2svg karbonui)
 
-install(TARGETS calligra_filter_karbon2svg DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install( FILES  calligra_filter_karbon2svg.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install(TARGETS calligra_filter_karbon2svg DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 endif()
 
@@ -28,12 +25,11 @@ set(svg2karbon_PART_SRCS
     SvgImport.cpp
 )
 
-kde4_add_plugin(calligra_filter_svg2karbon ${svg2karbon_PART_SRCS})
+add_library(calligra_filter_svg2karbon MODULE ${svg2karbon_PART_SRCS})
+calligra_filter_desktop_to_json(calligra_filter_svg2karbon calligra_filter_svg2karbon.desktop)
 
-target_link_libraries(calligra_filter_svg2karbon karbonui)
+target_link_libraries(calligra_filter_svg2karbon karbonui KF5::Archive)
 
-install(TARGETS calligra_filter_svg2karbon  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install( FILES  calligra_filter_svg2karbon.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install(TARGETS calligra_filter_svg2karbon  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
 endif()

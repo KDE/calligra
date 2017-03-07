@@ -18,8 +18,6 @@
 #include <KoColorBackground.h>
 #include <QTextCursor>
 
-#include <kcomponentdata.h>
-
 class Helper
 {
 public:
@@ -42,7 +40,6 @@ public:
 
 TestFrameLayout::TestFrameLayout()
 {
-    new KComponentData("TestFrameLayout");
 }
 
 void TestFrameLayout::testGetOrCreateFrameSet()
@@ -760,5 +757,3 @@ KWFrame *TestFrameLayout::createCopyFrame(const QPointF &position, KoShape *orig
 }
 
 QTEST_KDEMAIN(TestFrameLayout, GUI)
-
-#include <TestFrameLayout.moc>

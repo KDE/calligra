@@ -22,13 +22,13 @@
 #define APPLIXWORDIMPORT_H
 
 #include <QString>
+#include <QColor>
 #include <QVariantList>
 #include <QFile>
 #include <QObject>
 #include <QTextStream>
 #include <KoFilter.h>
 #include <KoStore.h>
-#include <calligraversion.h>
 
 class KoOdfWriteStore;
 class QByteArray;

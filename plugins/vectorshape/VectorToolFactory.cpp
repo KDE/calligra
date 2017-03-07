@@ -24,14 +24,14 @@
 #include "VectorTool.h"
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 
 VectorToolFactory::VectorToolFactory()
     : KoToolFactoryBase("VectorToolFactoryId")
 {
     setToolTip(i18n("Vector Image (EMF/WMF/SVM/SVG) tool"));
-    setIconName(koIconNameCStrNeededWithSubs("a generic vector image icon", "x-shape-vectorimage", "application-x-wmf"));
+    setIconName(koIconNameNeededWithSubs("a generic vector image icon", "x-shape-vectorimage", "application-x-wmf"));
     setToolType( dynamicToolType() );
     setPriority( 1 );
     setActivationShapeId( VectorShape_SHAPEID );

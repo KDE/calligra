@@ -29,10 +29,10 @@
 #include <QList>
 #include <QSharedPointer>
 #include <QSignalMapper>
+#include <QCollator>
 
-#include <kstringhandler.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
+#include <QDebug>
 
 StylesModel::StylesModel(KoStyleManager *manager, AbstractStylesModel::Type modelType, QObject *parent)
     : AbstractStylesModel(parent),
@@ -177,10 +177,10 @@ void StylesModel::setProvideStyleNone(bool provide)
     }
 }
 
-QModelIndex StylesModel::indexOf(const KoCharacterStyle &style) const
+QModelIndex StylesModel::indexOf(const KoCharacterStyle *style) const
 {
-    if (&style) {
-        return createIndex(m_styleList.indexOf(style.styleId()), 0, style.styleId());
+    if (style) {
+        return createIndex(m_styleList.indexOf(style->styleId()), 0, style->styleId());
     }
     else {
         return QModelIndex();
@@ -204,7 +204,7 @@ QImage StylesModel::stylePreview(int row, const QSize &size)
     }
     else {
         KoCharacterStyle *usedStyle = 0;
-        if (index(row).internalId() == NoneStyleId) {
+        if (index(row).internalId() == (quintptr)NoneStyleId) {
             usedStyle = static_cast<KoCharacterStyle*>(m_currentParagraphStyle);
             if (!usedStyle) {
                 usedStyle = m_defaultCharacterStyle;
@@ -304,6 +304,7 @@ void StylesModel::setStyleThumbnailer(KoStyleThumbnailer *thumbnailer)
 void StylesModel::addParagraphStyle(KoParagraphStyle *style)
 {
     Q_ASSERT(style);
+    QCollator collator;
     QList<int>::iterator begin = m_styleList.begin();
     int index = 0;
     for ( ; begin != m_styleList.end(); ++begin) {
@@ -312,7 +313,7 @@ void StylesModel::addParagraphStyle(KoParagraphStyle *style)
             s = m_draftParStyleList[*begin];
         // s should be found as the manager and the m_styleList should be in sync
         Q_ASSERT(s);
-        if (KStringHandler::naturalCompare(style->name(),s->name()) < 0) {
+        if (collator.compare(style->name(),s->name()) < 0) {
             break;
         }
         ++index;
@@ -320,7 +321,7 @@ void StylesModel::addParagraphStyle(KoParagraphStyle *style)
     beginInsertRows(QModelIndex(), index, index);
     m_styleList.insert(begin, style->styleId());
     m_styleMapper->setMapping(style, style->styleId());
-    connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+    connect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
     endInsertRows();
 }
 
@@ -328,7 +329,7 @@ bool sortParagraphStyleByName(KoParagraphStyle *style1, KoParagraphStyle *style2
 {
     Q_ASSERT(style1);
     Q_ASSERT(style2);
-    return KStringHandler::naturalCompare(style1->name(), style2->name()) < 0;
+    return QCollator().compare(style1->name(), style2->name()) < 0;
 }
 
 void StylesModel::updateParagraphStyles()
@@ -345,7 +346,7 @@ void StylesModel::updateParagraphStyles()
         if (style != m_styleManager->defaultParagraphStyle()) { //The default character style is not user selectable. It only provides individual property defaults and is not a style per say.
             m_styleList.append(style->styleId());
             m_styleMapper->setMapping(style, style->styleId());
-            connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+            connect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
         }
     }
 
@@ -357,20 +358,21 @@ void StylesModel::addCharacterStyle(KoCharacterStyle *style)
 {
     Q_ASSERT(style);
     // find the place where we need to insert the style
-    QList<int>::iterator begin = m_styleList.begin();
+    QCollator collator;
+    QList<int>::ConstIterator begin = m_styleList.constBegin();
     int index = 0;
     // the None style should also be the first one so only start after it
-    if (begin != m_styleList.end() && *begin == NoneStyleId) {
+    if (begin != m_styleList.constEnd() && *begin == NoneStyleId) {
         ++begin;
         ++index;
     }
-    for ( ; begin != m_styleList.end(); ++begin) {
+    for ( ; begin != m_styleList.constEnd(); ++begin) {
         KoCharacterStyle *s = m_styleManager->characterStyle(*begin);
         if (!s && m_draftCharStyleList.contains(*begin))
             s = m_draftCharStyleList[*begin];
         // s should be found as the manager and the m_styleList should be in sync
         Q_ASSERT(s);
-        if (KStringHandler::naturalCompare(style->name(),s->name()) < 0) {
+        if (collator.compare(style->name(),s->name()) < 0) {
             break;
         }
         ++index;
@@ -379,14 +381,14 @@ void StylesModel::addCharacterStyle(KoCharacterStyle *style)
     m_styleList.insert(index, style->styleId());
     endInsertRows();
     m_styleMapper->setMapping(style, style->styleId());
-    connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+    connect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
 }
 
 bool sortCharacterStyleByName(KoCharacterStyle *style1, KoCharacterStyle *style2)
 {
     Q_ASSERT(style1);
     Q_ASSERT(style2);
-    return KStringHandler::naturalCompare(style1->name(), style2->name()) < 0;
+    return QCollator().compare(style1->name(), style2->name()) < 0;
 }
 
 void StylesModel::updateCharacterStyles()
@@ -407,7 +409,7 @@ void StylesModel::updateCharacterStyles()
         if (style != m_styleManager->defaultCharacterStyle()) { //The default character style is not user selectable. It only provides individual property defaults and is not a style per say.
             m_styleList.append(style->styleId());
             m_styleMapper->setMapping(style, style->styleId());
-            connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+            connect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
         }
     }
 
@@ -420,7 +422,7 @@ void StylesModel::removeParagraphStyle(KoParagraphStyle *style)
     int row = m_styleList.indexOf(style->styleId());
     beginRemoveRows(QModelIndex(), row, row);
     m_styleMapper->removeMappings(style);
-    disconnect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+    disconnect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
     m_styleList.removeAt(row);
     endRemoveRows();
 }
@@ -431,7 +433,7 @@ void StylesModel::removeCharacterStyle(KoCharacterStyle *style)
     int row = m_styleList.indexOf(style->styleId());
     beginRemoveRows(QModelIndex(), row, row);
     m_styleMapper->removeMappings(style);
-    disconnect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+    disconnect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
     m_styleList.removeAt(row);
     endRemoveRows();
 }
@@ -439,6 +441,7 @@ void StylesModel::removeCharacterStyle(KoCharacterStyle *style)
 void StylesModel::updateName(int styleId)
 {
     // updating the name of a style can mean that the style needs to be moved inside the list to keep the sort order.
+    QCollator collator;
     int oldIndex = m_styleList.indexOf(styleId);
     if (oldIndex >= 0) {
         int newIndex = 0;
@@ -449,8 +452,8 @@ void StylesModel::updateName(int styleId)
             if (paragStyle) {
                 m_styleThumbnailer->removeFromCache(paragStyle);
 
-                QList<int>::iterator begin = m_styleList.begin();
-                for ( ; begin != m_styleList.end(); ++begin) {
+                QList<int>::ConstIterator begin = m_styleList.constBegin();
+                for ( ; begin != m_styleList.constEnd(); ++begin) {
                     // don't test again the same style
                     if (*begin == styleId) {
                         continue;
@@ -460,7 +463,7 @@ void StylesModel::updateName(int styleId)
                         s = m_draftParStyleList[*begin];
                     // s should be found as the manager and the m_styleList should be in sync
                     Q_ASSERT(s);
-                    if (KStringHandler::naturalCompare(paragStyle->name(), s->name()) < 0) {
+                    if (collator.compare(paragStyle->name(), s->name()) < 0) {
                         break;
                     }
                     ++newIndex;
@@ -482,12 +485,12 @@ void StylesModel::updateName(int styleId)
             if (characterStyle) {
                 m_styleThumbnailer->removeFromCache(characterStyle);
 
-                QList<int>::iterator begin = m_styleList.begin();
-                if (begin != m_styleList.end() && *begin == NoneStyleId) {
+                QList<int>::ConstIterator begin = m_styleList.constBegin();
+                if (begin != m_styleList.constEnd() && *begin == NoneStyleId) {
                     ++begin;
                     ++newIndex;
                 }
-                for ( ; begin != m_styleList.end(); ++begin) {
+                for ( ; begin != m_styleList.constEnd(); ++begin) {
                     // don't test again the same style
                     if (*begin == styleId) {
                         continue;
@@ -497,7 +500,7 @@ void StylesModel::updateName(int styleId)
                         s = m_draftCharStyleList[*begin];
                     // s should be found as the manager and the m_styleList should be in sync
                     Q_ASSERT(s);
-                    if (KStringHandler::naturalCompare(characterStyle->name(), s->name()) < 0) {
+                    if (collator.compare(characterStyle->name(), s->name()) < 0) {
                         break;
                     }
                     ++newIndex;

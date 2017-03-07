@@ -20,8 +20,7 @@
 #ifndef KPlato_TaskJuggler_h
 #define KPlato_TaskJuggler_h
 
-#include <QtTest>
-#include <ktempdir.h>
+#include <QObject>
 
 namespace TJ {
     class Project;
@@ -51,11 +50,6 @@ private Q_SLOTS:
     void units();
 
 private:
-    void initTimezone();
-    void cleanupTimezone();
-
-private:
-    KTempDir m_tmp;
     TJ::Project *project;
 };
 

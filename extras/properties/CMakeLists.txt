@@ -4,10 +4,10 @@ include_directories(
 
 set(calligradocinfopropspage_PART_SRCS KoDocInfoPropsFactory.cpp)
 
-kde4_add_plugin(calligradocinfopropspage ${calligradocinfopropspage_PART_SRCS})
+add_library(calligradocinfopropspage MODULE ${calligradocinfopropspage_PART_SRCS})
 
-target_link_libraries(calligradocinfopropspage ${KDE4_KFILE_LIBS} ${KDE4_KIO_LIBS} kowidgets)
+target_link_libraries(calligradocinfopropspage  KF5::KIOWidgets kowidgets)
 
 install(TARGETS calligradocinfopropspage DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install(FILES calligradocinfopropspage.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install(FILES calligradocinfopropspage.desktop DESTINATION ${SERVICES_INSTALL_DIR})

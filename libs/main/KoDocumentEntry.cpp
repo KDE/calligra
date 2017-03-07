@@ -23,22 +23,25 @@
 #include "KoPart.h"
 #include "KoDocument.h"
 #include "KoFilter.h"
+#include <MainDebug.h>
+
+#include <KoPluginLoader.h>
+#include <KoConfig.h> // CALLIGRA_OLD_PLUGIN_METADATA
 
 #include <kservicetype.h>
-#include <kdebug.h>
-#include <KoServiceLocator.h>
-#include <QFile>
-#include <QApplication>
+#include <kpluginfactory.h>
+
+#include <QCoreApplication>
 
 #include <limits.h> // UINT_MAX
 
 KoDocumentEntry::KoDocumentEntry()
-        : m_service(0)
+        : m_loader(0)
 {
 }
 
-KoDocumentEntry::KoDocumentEntry(const KService::Ptr& service)
-        : m_service(service)
+KoDocumentEntry::KoDocumentEntry(QPluginLoader *loader)
+        : m_loader(loader)
 {
 }
 
@@ -47,29 +50,43 @@ KoDocumentEntry::~KoDocumentEntry()
 }
 
 
-KService::Ptr KoDocumentEntry::service() const {
-    return m_service;
+QJsonObject KoDocumentEntry::metaData() const
+{
+    return m_loader ? m_loader->metaData().value("MetaData").toObject() : QJsonObject();
+}
+
+QString KoDocumentEntry::fileName() const
+{
+    return m_loader ? m_loader->fileName() : QString();
 }
 
 /**
  * @return TRUE if the service pointer is null
  */
 bool KoDocumentEntry::isEmpty() const {
-    return m_service.isNull();
+    return (m_loader == 0);
 }
 
 /**
  * @return name of the associated service
  */
 QString KoDocumentEntry::name() const {
-    return m_service->name();
+    QJsonObject json = metaData();
+    json = json.value("KPlugin").toObject();
+    return json.value("Name").toString();
 }
 
 /**
  *  Mimetypes (and other service types) which this document can handle.
  */
 QStringList KoDocumentEntry::mimeTypes() const {
-    return m_service->serviceTypes();
+    QJsonObject json = metaData();
+#ifdef CALLIGRA_OLD_PLUGIN_METADATA
+    return json.value("MimeType").toString().split(';', QString::SkipEmptyParts);
+#else
+    QJsonObject pluginData = json.value("KPlugin").toObject();
+    return pluginData.value("MimeTypes").toVariant().toStringList();
+#endif
 }
 
 /**
@@ -81,13 +98,17 @@ bool KoDocumentEntry::supportsMimeType(const QString & _mimetype) const {
 
 KoPart *KoDocumentEntry::createKoPart(QString* errorMsg) const
 {
-    QString error;
-    KoPart* part = m_service->createInstance<KoPart>(0, QVariantList(), &error);
+    if (!m_loader) {
+        return 0;
+    }
+
+    QObject *obj = m_loader->instance();
+    KPluginFactory *factory = qobject_cast<KPluginFactory *>(obj);
+    KoPart *part = factory->create<KoPart>(0, QVariantList());
 
     if (!part) {
-        kWarning(30003) << error;
         if (errorMsg)
-            *errorMsg = error;
+            *errorMsg = m_loader->errorString();
         return 0;
     }
 
@@ -99,19 +120,19 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
     QList<KoDocumentEntry> vec = query(mimetype);
 
     if (vec.isEmpty()) {
-        kWarning(30003) << "Got no results with " << mimetype;
+        warnMain << "Got no results with " << mimetype;
         // Fallback to the old way (which was probably wrong, but better be safe)
         vec = query(mimetype);
 
         if (vec.isEmpty()) {
             // Still no match. Either the mimetype itself is unknown, or we have no service for it.
             // Help the user debugging stuff by providing some more diagnostics
-            if (KServiceType::serviceType(mimetype).isNull()) {
-                kError(30003) << "Unknown Calligra MimeType " << mimetype << "." << endl;
-                kError(30003) << "Check your installation (for instance, run 'kde4-config --path mime' and check the result)." << endl;
+            if (!KServiceType::serviceType(mimetype)) {
+                errorMain << "Unknown Calligra MimeType " << mimetype << "." << endl;
+                errorMain << "Check your installation (for instance, run 'kde4-config --path mime' and check the result)." << endl;
             } else {
-                kError(30003) << "Found no Calligra part able to handle " << mimetype << "!" << endl;
-                kError(30003) << "Check your installation (does the desktop file have X-KDE-NativeMimeType and Calligra/Part, did you install Calligra in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
+                errorMain << "Found no Calligra part able to handle " << mimetype << "!" << endl;
+                errorMain << "Check your installation (does the desktop file have X-KDE-NativeMimeType and Calligra/Part, did you install Calligra in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
             }
             return KoDocumentEntry();
         }
@@ -131,37 +152,16 @@ QList<KoDocumentEntry> KoDocumentEntry::query(const QString & mimetype)
     QList<KoDocumentEntry> lst;
 
     // Query the trader
-    const KService::List offers = KoServiceLocator::instance()->entries("Calligra/Part");
+    const QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("calligra/parts"), mimetype);
 
-    foreach(KService::Ptr offer, offers) {
-
-        QStringList nativeMimeTypes = offer->property("X-KDE-NativeMimeType", QVariant::StringList).toStringList();
-        QStringList extraNativeMimeTypes = offer->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList();
-        QStringList serviceTypes = offer->property("ServiceTypes", QVariant::StringList).toStringList();
-
-        if (nativeMimeTypes.contains(mimetype) || extraNativeMimeTypes.contains(mimetype) || serviceTypes.contains(mimetype)) {
-
-            if (offer->noDisplay())
-                continue;
-            KoDocumentEntry d(offer);
-            // Append converted offer
-            lst.append(d);
-
-            // And if it's the part that belongs to the current application it's our own, so break off
-            if (offer->desktopEntryName() == (qAppName().replace("calligra","") + "part")) {
-                lst.clear();
-                lst.append(d);
-                break;
-            }
-
-            // Next service
-        }
+    foreach(QPluginLoader *pluginLoader, offers) {
+        lst.append(KoDocumentEntry(pluginLoader));
     }
 
     if (lst.count() > 1 && !mimetype.isEmpty()) {
-        kWarning(30003) << "KoDocumentEntry::query " << mimetype << " got " << lst.count() << " offers!";
+        warnMain << "KoDocumentEntry::query " << mimetype << " got " << lst.count() << " offers!";
         foreach(const KoDocumentEntry &entry, lst) {
-            qDebug() << entry.name();
+            warnMain << entry.name();
         }
     }
 

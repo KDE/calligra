@@ -23,14 +23,10 @@
 
 #include <KoShape.h>
 #include <KoSelection.h>
-#include <kstandarddirs.h>
-#include <kglobal.h>
+
+#include <QStandardPaths>
 
 #define HANDLE_DISTANCE 10
-
-#if 0
-K_GLOBAL_STATIC(QImage, s_rotateCursor)
-#endif
 
 KoFlake::Position SelectionDecorator::m_hotPosition = KoFlake::TopLeftCorner;
 
@@ -44,7 +40,7 @@ SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
 {
 #if 0
     if(s_rotateCursor == 0) {
-        s_rotateCursor->load(KStandardDirs::locate("data", "calligra/icons/cursor_rotate.png"));
+        s_rotateCursor->load(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligra/cursors/cursor_rotate.png"));
     }
 #endif
 }
@@ -97,7 +93,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
 
     if (m_selection->count() > 1) {
         // more than one shape selected, so we need to draw the selection bounding rect
-        painter.setPen( Qt::blue );
+        painter.setPen(QPen(Qt::blue, 0));
         // apply the selection transformation on top of the old painter transformation
         painter.setWorldTransform(m_selection->absoluteTransformation(&converter) * painterMatrix);
         // apply the zoom factor

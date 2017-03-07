@@ -10,13 +10,12 @@ else()
    message(STATUS "Karbon detected that you use a 64 bit processor. Added -fPIC to the CXX_FLAGS.")
 endif()
 
+add_definitions(-DTRANSLATION_DOMAIN=\"karbon\")
+
 include_directories(
-    ${QT_INCLUDES}
-    ${KDE4_INCLUDE_DIR}
     ${FLAKE_INCLUDES}
     ${KOTEXT_INCLUDES}
     ${KOMAIN_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/libs/widgets/resources
     ${CMAKE_SOURCE_DIR}/karbon/ui
     ${CMAKE_SOURCE_DIR}/karbon/common
     ${CMAKE_SOURCE_DIR}/karbon/common/commands
@@ -25,19 +24,20 @@ include_directories(
 add_subdirectory( common )
 add_subdirectory( ui )
 add_subdirectory( plugins )
+add_subdirectory( stencils )
 add_subdirectory( data )
-add_subdirectory( pics )
 add_subdirectory( templates )
 
 ########### next target ###############
 
 set(karbonpart_PART_SRCS KarbonFactoryInit.cpp )
 
-kde4_add_plugin(karbonpart ${karbonpart_PART_SRCS})
+add_library(karbonpart MODULE ${karbonpart_PART_SRCS})
+calligra_part_desktop_to_json(karbonpart "${CMAKE_CURRENT_SOURCE_DIR}/data/karbonpart.desktop")
 
 target_link_libraries(karbonpart karbonui)
 
-install(TARGETS karbonpart  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS karbonpart  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)
 
 ########### next target ###############
 
@@ -47,15 +47,25 @@ endif()
 
 set(karbon_KDEINIT_SRCS main.cpp )
 
-kde4_add_app_icon( karbon_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakarbon.png" )
-kde4_add_kdeinit_executable( karbon ${karbon_KDEINIT_SRCS})
+file(GLOB karbon_icons "${CMAKE_CURRENT_SOURCE_DIR}/pics/action/*-actions-*.png")
+ecm_install_icons(ICONS ${karbon_icons} DESTINATION ${DATA_INSTALL_DIR}/karbon/icons)
+
+file(GLOB karbon_app_icons "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/*-apps-calligrakarbon.png")
+ecm_add_app_icon(karbon_KDEINIT_SRCS ICONS ${karbon_app_icons})
+ecm_install_icons(ICONS
+    ${karbon_app_icons}
+    "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/sc-apps-calligrakarbon.svgz"
+    DESTINATION ${ICON_INSTALL_DIR}
+)
+
+kf5_add_kdeinit_executable( karbon ${karbon_KDEINIT_SRCS})
 
 if (APPLE)
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.karbon")
-   set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Karbon 2")
+   set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Karbon")
    install( FILES ${CMAKE_CURRENT_BINARY_DIR}/karbon_KDEINIT_SRCS.icns DESTINATION ${BUNDLE_INSTALL_DIR}/karbon.app/Contents/Resources)
-endif ()
+endif()
 
 target_link_libraries(kdeinit_karbon karbonui)
 

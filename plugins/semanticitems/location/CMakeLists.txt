@@ -1,3 +1,9 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_semanticitem_location\")
+
+if(Marble_FOUND)
+    add_definitions( -DCAN_USE_MARBLE )
+endif()
+
 include_directories(
     ${KORDF_INCLUDES}
 )
@@ -9,28 +15,25 @@ set(calligra_semanticitem_location_LIB_SRCS
     KoRdfLocationTreeWidgetItem.cpp
 )
 
-if(MARBLE_FOUND)
-    kde4_add_ui_files( calligra_semanticitem_location_LIB_SRCS
+if(Marble_FOUND)
+    ki18n_wrap_ui( calligra_semanticitem_location_LIB_SRCS
         KoRdfLocationEditWidgetMarble.ui
         KoRdfLocationViewWidgetMarble.ui
     )
 else()
-    kde4_add_ui_files( calligra_semanticitem_location_LIB_SRCS
+    ki18n_wrap_ui( calligra_semanticitem_location_LIB_SRCS
         KoRdfLocationEditWidget.ui
         KoRdfLocationViewWidget.ui
     )
 endif()
 
-kde4_add_plugin(calligra_semanticitem_location ${calligra_semanticitem_location_LIB_SRCS})
+add_library(calligra_semanticitem_location MODULE ${calligra_semanticitem_location_LIB_SRCS})
 
-if( MARBLE_FOUND )
-include_directories(${MARBLE_INCLUDE_DIR})
-target_link_libraries(calligra_semanticitem_location ${MARBLE_LIBRARIES})
-target_link_libraries(calligra_semanticitem_location LINK_INTERFACE_LIBRARIES  ${MARBLE_LIBRARIES})
+if( Marble_FOUND )
+    target_link_libraries(calligra_semanticitem_location Marble)
 endif()
 
-target_link_libraries(calligra_semanticitem_location ${KDE4_KFILE_LIBS} ${KDE4_KDECORE_LIBS} ${KORDF_LIBS})
+target_link_libraries(calligra_semanticitem_location   ${KORDF_LIBS} KF5::I18n KF5::KDELibs4Support)
+calligra_semanticitem_desktop_to_json(calligra_semanticitem_location calligra_semanticitem_location.desktop)
 
-
-install(TARGETS calligra_semanticitem_location  DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES   calligra_semanticitem_location.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install(TARGETS calligra_semanticitem_location  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/semanticitems)

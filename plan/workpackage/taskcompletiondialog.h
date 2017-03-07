@@ -27,9 +27,7 @@
 
 #include "kptusedefforteditor.h"
 
-#include <kdialog.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <KoDialog.h>
 
 #include <QWidget>
 
@@ -44,7 +42,7 @@ namespace KPlatoWork
 
 class TaskCompletionPanel;
 
-class KPLATOWORK_EXPORT TaskCompletionDialog : public KDialog
+class KPLATOWORK_EXPORT TaskCompletionDialog : public KoDialog
 {
     Q_OBJECT
 public:

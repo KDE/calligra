@@ -26,8 +26,7 @@
 
 #include <QFile>
 
-// KDE
-#include <kdebug.h>
+// KF5
 #include <kpluginfactory.h>
 
 // Calligra
@@ -42,10 +41,14 @@
 // This filter
 #include "OdtReaderAsciiBackend.h"
 #include "OdfReaderAsciiContext.h"
+#include "AsciiExportDebug.h"
 
 
-K_PLUGIN_FACTORY(AsciiExportFactory, registerPlugin<AsciiExport>();)
-K_EXPORT_PLUGIN(AsciiExportFactory("wordsasciiexportng", "calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(AsciiExportFactory, "calligra_filter_odt2ascii.json",
+			   registerPlugin<AsciiExport>();)
+
+// Needed to instantiate the plugin factory.
+#include "AsciiExport.moc"
 
 
 AsciiExport::AsciiExport(QObject *parent, const QVariantList &)
@@ -69,7 +72,7 @@ KoFilter::ConversionStatus AsciiExport::convert(const QByteArray& from, const QB
                                              "", KoStore::Auto);
 
     if (!odfStore->open("mimetype")) {
-        kError(30503) << "Unable to open input file!" << endl;
+        errorAsciiExport << "Unable to open input file!" << endl;
         delete odfStore;
         return KoFilter::FileNotFound;
     }
@@ -78,7 +81,7 @@ KoFilter::ConversionStatus AsciiExport::convert(const QByteArray& from, const QB
     // Create output file.
     QFile outfile(m_chain->outputFile());
     if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text )) {
-        kError(30501) << "Unable to open output file!" << endl;
+        errorAsciiExport << "Unable to open output file!" << endl;
         outfile.close();
         return KoFilter::FileNotFound;
     }

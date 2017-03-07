@@ -28,7 +28,7 @@
 #include <QVector>
 #include <QPoint>
 
-#include "calligra_sheets_export.h"
+#include "sheets_odf_export.h"
 #include "Cell.h"
 #include "Value.h"
 

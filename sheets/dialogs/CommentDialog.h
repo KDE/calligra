@@ -24,7 +24,7 @@
 #ifndef CALLIGRA_SHEETS_COMMENT_DIALOG
 #define CALLIGRA_SHEETS_COMMENT_DIALOG
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class KTextEdit;
 
@@ -38,7 +38,7 @@ class Selection;
  * \ingroup UI
  * Dialog to add a comment.
  */
-class CommentDialog : public KDialog
+class CommentDialog : public KoDialog
 {
     Q_OBJECT
 public:

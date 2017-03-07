@@ -21,7 +21,6 @@
 
 #include <QWidget>
 #include <QPainter>
-#include <kdebug.h>
 
 static const int squaresPerRow = 15;
 static const int squaresPerCol = 11;
@@ -49,8 +48,9 @@ void KPrMatrixWipeStrategy::setup( const KPrPageEffect::Data &data, QTimeLine &t
     timeLine.setFrameRange( 0, (m_smooth ? framesPerSquare : 1) * maxIndex(m_squaresPerRow, m_squaresPerCol) );
 }
 
-static inline int floor(double d) { return (int) (d + 1e-5); }
-static inline int ceil(double d) { return (int) (d + 1 - 1e-5); }
+// TODO: check if these can be replaced by math function 1:1, named floor and ceil before
+static inline int intFloor(double d) { return (int) (d + 1e-5); }
+static inline int intCeil(double d) { return (int) (d + 1 - 1e-5); }
 
 static QRect tileRect(KPrMatrixWipeStrategy::Direction direction, int step, const QRect& base) {
     switch (direction) {
@@ -76,8 +76,8 @@ void KPrMatrixWipeStrategy::paintStep( QPainter &p, int currPos, const KPrPageEf
 
     for (int i = 0; i < m_squaresPerRow; ++i) {
         for (int j = 0; j < m_squaresPerCol; ++j) {
-            QRect rect(floor(qreal(width) / m_squaresPerRow * i), floor(qreal(height) / m_squaresPerCol * j),
-                ceil(qreal(width) / m_squaresPerRow), ceil(qreal(height) / m_squaresPerCol));
+            QRect rect(intFloor(qreal(width) / m_squaresPerRow * i), intFloor(qreal(height) / m_squaresPerCol * j),
+                intCeil(qreal(width) / m_squaresPerRow), intCeil(qreal(height) / m_squaresPerCol));
             int square = squareIndex(i, j, m_squaresPerRow, m_squaresPerCol);
             if (square <= curSquare) {
                 if (square == curSquare && m_smooth) {
@@ -110,8 +110,8 @@ void KPrMatrixWipeStrategy::next( const KPrPageEffect::Data &data )
 
     for (int i = 0; i < m_squaresPerRow; ++i) {
         for (int j = 0; j < m_squaresPerCol; ++j) {
-            QRect rect(floor(qreal(width) / m_squaresPerRow * i), floor(qreal(height) / m_squaresPerCol * j),
-                ceil(qreal(width) / m_squaresPerRow), ceil(qreal(height) / m_squaresPerCol));
+            QRect rect(intFloor(qreal(width) / m_squaresPerRow * i), intFloor(qreal(height) / m_squaresPerCol * j),
+                intCeil(qreal(width) / m_squaresPerRow), intCeil(qreal(height) / m_squaresPerCol));
             int square = squareIndex(i, j, m_squaresPerRow, m_squaresPerCol);
             if (square <= curSquare && square >= lastSquare) {
                 data.m_widget->update(rect);

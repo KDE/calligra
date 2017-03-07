@@ -28,21 +28,19 @@
 #include "ui/Selection.h"
 #include "Sheet.h"
 #include "Util.h"
+#include "SheetsDebug.h"
 
 #include "commands/DataManipulators.h"
 
 #include <KoCanvasBase.h>
 
 #include <kcombobox.h>
-#include <kdebug.h>
-#include <kdialog.h>
 #include <klineedit.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
-#include <knumvalidator.h>
-#include <kpushbutton.h>
 #include <ktextedit.h>
 
+#include <QIntValidator>
 #include <QCheckBox>
 #include <QFrame>
 #include <QGridLayout>
@@ -56,7 +54,6 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QVariant>
-#include <QWidget>
 #include <QListWidget>
 #include <QTreeWidget>
 
@@ -113,7 +110,7 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     databaseFrameLayout->addWidget(m_password, 5, 1);
 
     m_port = new KLineEdit(databaseFrame);
-    m_port->setValidator(new KIntValidator(m_port));
+    m_port->setValidator(new QIntValidator(m_port));
     databaseFrameLayout->addWidget(m_port, 3, 1);
 
     QLabel * dbName = new QLabel(databaseFrame);
@@ -155,7 +152,7 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     //  m_databaseList = new KComboBox( tablesFrame );
     //  Layout21->addWidget( m_databaseList );
 
-    //  m_connectButton = new KPushButton( tablesFrame, "m_connectButton" );
+    //  m_connectButton = new QPushButton( tablesFrame, "m_connectButton" );
     //  m_connectButton->setText( i18n( "&Connect" ) );
     //  Layout21->addWidget( m_connectButton );
 
@@ -343,8 +340,6 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     m_result = new KPageWidgetItem(resultFrame, i18n("Result"));
     addPage(m_result);
 
-    enableButton(KDialog::User1, false);   // Finish
-
     // signals and slots connections
     connect(m_orBox, SIGNAL(clicked()), this, SLOT(orBox_clicked()));
     connect(m_andBox, SIGNAL(clicked()), this, SLOT(andBox_clicked()));
@@ -360,7 +355,6 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     QStringList str = QSqlDatabase::drivers();
     m_driver->insertItems(0, QSqlDatabase::drivers());
 
-    showButton(KDialog::Help, false);
     setValid(m_database, false);
     setValid(m_table, false);
     setValid(m_columns, false);
@@ -991,7 +985,7 @@ void DatabaseDialog::startingRegion_clicked()
 
 void DatabaseDialog::connectButton_clicked()
 {
-    qWarning("DatabaseDialog::connectButton_clicked(): Not implemented yet!");
+    warnSheets << "DatabaseDialog::connectButton_clicked(): Not implemented yet!";
 }
 
 void DatabaseDialog::databaseNameChanged(const QString & s)
@@ -1034,10 +1028,7 @@ void DatabaseDialog::tableViewClicked(QListWidgetItem *)
 //     QCheckListItem * i = (QCheckListItem *) item;
 //     i->setChecked( !i->isChecked() );
 //   }
-//   kDebug() <<"clicked";
+//   debugSheets <<"clicked";
 }
-
-
-#include "DatabaseDialog.moc"
 
 #endif // QT_NO_SQL

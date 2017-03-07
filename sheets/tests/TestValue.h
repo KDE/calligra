@@ -20,8 +20,7 @@
 #ifndef CALLIGRA_SHEETS_TEST_VALUE
 #define CALLIGRA_SHEETS_TEST_VALUE
 
-#include <QtGui>
-#include <QtTest>
+#include <QObject>
 
 namespace Calligra
 {

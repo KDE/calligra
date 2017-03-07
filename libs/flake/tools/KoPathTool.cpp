@@ -52,9 +52,9 @@
 
 #include <KoIcon.h>
 
-#include <kaction.h>
-#include <kdebug.h>
-#include <klocale.h>
+#include <QAction>
+#include <FlakeDebug.h>
+#include <klocalizedstring.h>
 #include <QPainter>
 #include <QBitmap>
 #include <QTabWidget>
@@ -106,67 +106,67 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
 {
     QActionGroup *points = new QActionGroup(this);
     // m_pointTypeGroup->setExclusive(true);
-    m_actionPathPointCorner = new KAction(koIcon("pathpoint-corner"), i18n("Corner point"), this);
+    m_actionPathPointCorner = new QAction(koIcon("node-type-cusp"), i18n("Corner point"), this);
     addAction("pathpoint-corner", m_actionPathPointCorner);
     m_actionPathPointCorner->setData(KoPathPointTypeCommand::Corner);
     points->addAction(m_actionPathPointCorner);
 
-    m_actionPathPointSmooth = new KAction(koIcon("pathpoint-smooth"), i18n("Smooth point"), this);
+    m_actionPathPointSmooth = new QAction(koIcon("node-type-smooth"), i18n("Smooth point"), this);
     addAction("pathpoint-smooth", m_actionPathPointSmooth);
     m_actionPathPointSmooth->setData(KoPathPointTypeCommand::Smooth);
     points->addAction(m_actionPathPointSmooth);
 
-    m_actionPathPointSymmetric = new KAction(koIcon("pathpoint-symmetric"), i18n("Symmetric Point"), this);
+    m_actionPathPointSymmetric = new QAction(koIcon("node-type-symmetric"), i18n("Symmetric Point"), this);
     addAction("pathpoint-symmetric", m_actionPathPointSymmetric);
     m_actionPathPointSymmetric->setData(KoPathPointTypeCommand::Symmetric);
     points->addAction(m_actionPathPointSymmetric);
 
-    m_actionCurvePoint = new KAction(koIcon("pathpoint-curve"), i18n("Make curve point"), this);
+    m_actionCurvePoint = new QAction(koIcon("format-node-curve"), i18n("Make curve point"), this);
     addAction("pathpoint-curve", m_actionCurvePoint);
     connect(m_actionCurvePoint, SIGNAL(triggered()), this, SLOT(pointToCurve()));
 
-    m_actionLinePoint = new KAction(koIcon("pathpoint-line"), i18n("Make line point"), this);
+    m_actionLinePoint = new QAction(koIcon("format-node-line"), i18n("Make line point"), this);
     addAction("pathpoint-line", m_actionLinePoint);
     connect(m_actionLinePoint, SIGNAL(triggered()), this, SLOT(pointToLine()));
 
-    m_actionLineSegment = new KAction(koIcon("pathsegment-line"), i18n("Segment to Line"), this);
+    m_actionLineSegment = new QAction(koIcon("format-segment-line"), i18n("Segment to Line"), this);
     m_actionLineSegment->setShortcut(Qt::Key_F);
     addAction("pathsegment-line", m_actionLineSegment);
     connect(m_actionLineSegment, SIGNAL(triggered()), this, SLOT(segmentToLine()));
 
-    m_actionCurveSegment = new KAction(koIcon("pathsegment-curve"), i18n("Segment to Curve"), this);
+    m_actionCurveSegment = new QAction(koIcon("format-segment-curve"), i18n("Segment to Curve"), this);
     m_actionCurveSegment->setShortcut(Qt::Key_C);
     addAction("pathsegment-curve", m_actionCurveSegment);
     connect(m_actionCurveSegment, SIGNAL(triggered()), this, SLOT(segmentToCurve()));
 
-    m_actionAddPoint = new KAction(koIcon("pathpoint-insert"), i18n("Insert point"), this);
+    m_actionAddPoint = new QAction(koIcon("format-insert-node"), i18n("Insert point"), this);
     addAction("pathpoint-insert", m_actionAddPoint);
     m_actionAddPoint->setShortcut(Qt::Key_Insert);
     connect(m_actionAddPoint, SIGNAL(triggered()), this, SLOT(insertPoints()));
 
-    m_actionRemovePoint = new KAction(koIcon("pathpoint-remove"), i18n("Remove point"), this);
+    m_actionRemovePoint = new QAction(koIcon("format-remove-node"), i18n("Remove point"), this);
     m_actionRemovePoint->setShortcut(Qt::Key_Backspace);
     addAction("pathpoint-remove", m_actionRemovePoint);
     connect(m_actionRemovePoint, SIGNAL(triggered()), this, SLOT(removePoints()));
 
-    m_actionBreakPoint = new KAction(koIcon("path-break-point"), i18n("Break at point"), this);
+    m_actionBreakPoint = new QAction(koIcon("format-break-node"), i18n("Break at point"), this);
     addAction("path-break-point", m_actionBreakPoint);
     connect(m_actionBreakPoint, SIGNAL(triggered()), this, SLOT(breakAtPoint()));
 
-    m_actionBreakSegment = new KAction(koIcon("path-break-segment"), i18n("Break at segment"), this);
+    m_actionBreakSegment = new QAction(koIcon("format-disconnect-node"), i18n("Break at segment"), this);
     addAction("path-break-segment", m_actionBreakSegment);
     connect(m_actionBreakSegment, SIGNAL(triggered()), this, SLOT(breakAtSegment()));
 
-    m_actionJoinSegment = new KAction(koIcon("pathpoint-join"), i18n("Join with segment"), this);
+    m_actionJoinSegment = new QAction(koIcon("format-connect-node"), i18n("Join with segment"), this);
     m_actionJoinSegment->setShortcut(Qt::Key_J);
     addAction("pathpoint-join", m_actionJoinSegment);
     connect(m_actionJoinSegment, SIGNAL(triggered()), this, SLOT(joinPoints()));
 
-    m_actionMergePoints = new KAction(koIcon("pathpoint-merge"), i18n("Merge points"), this);
+    m_actionMergePoints = new QAction(koIcon("format-join-node"), i18n("Merge points"), this);
     addAction("pathpoint-merge", m_actionMergePoints);
     connect(m_actionMergePoints, SIGNAL(triggered()), this, SLOT(mergePoints()));
 
-    m_actionConvertToPath = new KAction(koIcon("convert-to-path"), i18n("To Path"), this);
+    m_actionConvertToPath = new QAction(koIcon("format-convert-to-path"), i18n("To Path"), this);
     m_actionConvertToPath->setShortcut(Qt::Key_P);
     addAction("convert-to-path", m_actionConvertToPath);
     connect(m_actionConvertToPath, SIGNAL(triggered()), this, SLOT(convertToPath()));
@@ -423,7 +423,7 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
     painter.setRenderHint(QPainter::Antialiasing, true);
     // use different colors so that it is also visible on a background of the same color
     painter.setBrush(Qt::white);   //TODO make configurable
-    painter.setPen(Qt::blue);
+    painter.setPen(QPen(Qt::blue, 0));
 
     foreach(KoPathShape *shape, m_pointSelection.selectedShapes()) {
         painter.save();
@@ -446,12 +446,12 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
     }
 
     painter.setBrush(Qt::green);   // TODO make color configurable
-    painter.setPen(Qt::blue);
+    painter.setPen(QPen(Qt::blue, 0));
 
     m_pointSelection.paint(painter, converter);
 
     painter.setBrush(Qt::red);   // TODO make color configurable
-    painter.setPen(Qt::blue);
+    painter.setPen(QPen(Qt::blue, 0));
 
     if (m_activeHandle) {
         if (m_activeHandle->check(m_pointSelection.selectedShapes())) {
@@ -951,7 +951,7 @@ void KoPathTool::pointSelectionChanged()
 void KoPathTool::repaint(const QRectF &repaintRect)
 {
     Q_D(KoToolBase);
-    //kDebug(30006) <<"KoPathTool::repaint(" << repaintRect <<")" << m_handleRadius;
+    //debugFlake <<"KoPathTool::repaint(" << repaintRect <<")" << m_handleRadius;
     // widen border to take antialiasing into account
     qreal radius = m_handleRadius + 1;
     d->canvas->updateCanvas(repaintRect.adjusted(-radius, -radius, radius, radius));
@@ -966,5 +966,3 @@ KoToolSelection * KoPathTool::selection()
 {
     return &m_pointSelection;
 }
-
-#include <KoPathTool.moc>

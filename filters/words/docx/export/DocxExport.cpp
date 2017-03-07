@@ -26,8 +26,7 @@
 
 #include <QFile>
 
-// KDE
-#include <kdebug.h>
+// KF5
 #include <kpluginfactory.h>
 
 // Calligra
@@ -44,10 +43,14 @@
 #include "OdfReaderDocxContext.h"
 #include "OdtReaderDocxBackend.h"
 #include "OdfTextReaderDocxBackend.h"
+#include "DocxExportDebug.h"
 
 
-K_PLUGIN_FACTORY(DocxExportFactory, registerPlugin<DocxExport>();)
-K_EXPORT_PLUGIN(DocxExportFactory("wordsdocxexportng", "calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(DocxExportFactory, "calligra_filter_odt2docx.json",
+			   registerPlugin<DocxExport>();)
+
+// Needed to instantiate the plugin factory.
+#include "DocxExport.moc"
 
 
 DocxExport::DocxExport(QObject *parent, const QVariantList &)
@@ -71,7 +74,7 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QBy
     KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read,
                                              "", KoStore::Auto);
     if (!odfStore->open("mimetype")) {
-        kError(30503) << "Unable to open input file!" << endl;
+        errorDocx << "Unable to open input file!" << endl;
         delete odfStore;
         return KoFilter::FileNotFound;
     }

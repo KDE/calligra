@@ -50,7 +50,7 @@ DateTimeFormat::~DateTimeFormat()
 {
 }
 
-void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool longmonth, bool textualmonth, bool longyear, QString separator)
+void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool longmonth, bool textualmonth, bool longyear, const QString &separator)
 {
     QBuffer buffer;
 
@@ -103,7 +103,7 @@ void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool long
 }
 
 
-void DateTimeFormat::addTimeStyle(KoGenStyles& styles, bool hr12Format, bool second, QString separator)
+void DateTimeFormat::addTimeStyle(KoGenStyles& styles, bool hr12Format, bool second, const QString &separator)
 {
     QBuffer buffer;
 
@@ -191,7 +191,7 @@ void DateTimeFormat::addDateTimeAutoStyles(KoGenStyles& styles,
     }
 }
 
-void DateTimeFormat::addMasterDateTimeSection(KoXmlWriter& xmlWriter, QString tStyle)
+void DateTimeFormat::addMasterDateTimeSection(KoXmlWriter& xmlWriter, const QString &tStyle)
 {
     QDateTime dt = QDateTime::currentDateTime();
     QString format, result;

@@ -24,7 +24,7 @@
 #ifndef XLSXXMLCOMMONREADER_H
 #define XLSXXMLCOMMONREADER_H
 
-#include <MsooXmlThemesReader.h>
+#include <MsooXmlTheme.h>
 #include <MsooXmlReader.h>
 #include <KoGenStyle.h>
 

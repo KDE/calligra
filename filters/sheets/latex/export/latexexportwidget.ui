@@ -140,7 +140,7 @@
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="KIntNumInput" name="defaultFontSize">
+            <widget class="QSpinBox" name="defaultFontSize">
              <property name="value">
               <number>12</number>
              </property>
@@ -247,7 +247,7 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0,1">
             <item>
-             <widget class="KListWidget" name="languagesList">
+             <widget class="QListWidget" name="languagesList">
               <property name="sortingEnabled">
                <bool>true</bool>
               </property>
@@ -272,7 +272,7 @@
              </layout>
             </item>
             <item>
-             <widget class="KListWidget" name="langUsedList">
+             <widget class="QListWidget" name="langUsedList">
               <property name="sortingEnabled">
                <bool>true</bool>
               </property>
@@ -390,19 +390,9 @@
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>KListWidget</class>
-   <extends>QListWidget</extends>
-   <header>klistwidget.h</header>
-  </customwidget>
-  <customwidget>
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
    <header>kurlrequester.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KIntNumInput</class>
-   <extends>QWidget</extends>
-   <header>knuminput.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

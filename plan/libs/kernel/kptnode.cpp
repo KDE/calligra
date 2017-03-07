@@ -29,9 +29,9 @@
 
 #include <KoXmlReader.h>
 
-#include <QListIterator>
+#include <KLocalizedString>
 
-#include <klocale.h>
+#include <QListIterator>
 
 
 namespace KPlato
@@ -40,9 +40,10 @@ namespace KPlato
 Node::Node(Node *parent) 
     : QObject( 0 ), // We don't use qobjects parent
       m_nodes(), m_dependChildNodes(), m_dependParentNodes(),
-      m_estimate( 0 )
+      m_estimate( 0 ),
+      m_blockChanged(false)
 {
-    //kDebug(planDbg())<<"("<<this<<")";
+    //debugPlan<<"("<<this<<")";
     m_parent = parent;
     init();
     m_id.clear(); // Not mapped
@@ -53,9 +54,10 @@ Node::Node(const Node &node, Node *parent)
       m_nodes(), 
       m_dependChildNodes(), 
       m_dependParentNodes(),
-      m_estimate( 0 )
+      m_estimate( 0 ),
+      m_blockChanged(false)
 {
-    //kDebug(planDbg())<<"("<<this<<")";
+    //debugPlan<<"("<<this<<")";
     m_parent = parent;
     init();
     m_name = node.name();
@@ -76,7 +78,7 @@ Node::Node(const Node &node, Node *parent)
 }
 
 Node::~Node() {
-    //kDebug(planDbg())<<"("<<this<<")"<<m_name;
+    //debugPlan<<"("<<this<<")"<<m_name;
     delete m_estimate;
     while (!m_nodes.isEmpty())
         delete m_nodes.takeFirst();
@@ -188,7 +190,7 @@ const Node *Node::projectNode() const {
 }
 
 void Node::takeChildNode( Node *node) {
-    //kDebug(planDbg())<<"find="<<m_nodes.indexOf(node);
+    //debugPlan<<"find="<<m_nodes.indexOf(node);
     int t = type();
     int i = m_nodes.indexOf(node);
     if ( i != -1 ) {
@@ -204,7 +206,7 @@ void Node::takeChildNode( int number ) {
     int t = type();
     if (number >= 0 && number < m_nodes.size()) {
         Node *n = m_nodes.takeAt(number);
-        //kDebug(planDbg())<<(n?n->id():"null")<<" :"<<(n?n->name():"");
+        //debugPlan<<(n?n->id():"null")<<" :"<<(n?n->name():"");
         if (n) {
             n->setParentNode( 0 );
         }
@@ -263,7 +265,7 @@ bool Node::isChildOf( const Node* node ) const
 
 Node* Node::childNode(int number)
 {
-    //kDebug(planDbg())<<number;
+    //debugPlan<<number;
     return m_nodes.value( number );
 }
 
@@ -318,7 +320,7 @@ bool Node::addDependChildNode( Relation *relation) {
 void Node::takeDependChildNode( Relation *rel ) {
     int i = m_dependChildNodes.indexOf(rel);
     if ( i != -1 ) {
-        //kDebug(planDbg())<<m_name<<": ("<<rel<<")";
+        //debugPlan<<m_name<<": ("<<rel<<")";
         m_dependChildNodes.removeAt(i);
     }
 }
@@ -353,7 +355,7 @@ bool Node::addDependParentNode( Relation *relation) {
 void Node::takeDependParentNode( Relation *rel ) {
     int i = m_dependParentNodes.indexOf(rel);
     if ( i != -1 ) {
-        //kDebug(planDbg())<<m_name<<": ("<<rel<<")";
+        //debugPlan<<m_name<<": ("<<rel<<")";
         m_dependParentNodes.removeAt(i);
     }
 }
@@ -401,7 +403,7 @@ Relation *Node::findRelation( const Node *node ) const
 
 bool Node::isDependChildOf( const Node *node ) const
 {
-    //kDebug(planDbg())<<" '"<<m_name<<"' checking against '"<<node->name()<<"'";
+    //debugPlan<<" '"<<m_name<<"' checking against '"<<node->name()<<"'";
     for (int i=0; i<numDependParentNodes(); i++) {
         Relation *rel = getDependParentNode(i);
         if (rel->parent() == node)
@@ -434,7 +436,7 @@ bool Node::canMoveTo( const Node *newParent ) const
         return false;
     }
     if ( isDependChildOf( newParent ) || newParent->isDependChildOf( this ) ) {
-        kDebug(planDbg())<<"Can't move, node is dependent on new parent";
+        debugPlan<<"Can't move, node is dependent on new parent";
         return false;
     }
     foreach ( Node *n, m_nodes ) {
@@ -749,7 +751,7 @@ void Node::propagateEarliestStart(DateTime &time) {
                 break;
         }
     }
-    //kDebug(planDbg())<<m_name<<":"<<m_currentSchedule->earlyStart;
+    //debugPlan<<m_name<<":"<<m_currentSchedule->earlyStart;
     QListIterator<Node*> it = m_nodes;
     while (it.hasNext()) {
         it.next()->propagateEarliestStart(time);
@@ -788,7 +790,7 @@ void Node::propagateLatestFinish(DateTime &time) {
                 break;
         }
     }
-    //kDebug(planDbg())<<m_name<<":"<<m_currentSchedule->lateFinish;
+    //debugPlan<<m_name<<":"<<m_currentSchedule->lateFinish;
     QListIterator<Node*> it = m_nodes;
     while (it.hasNext()) {
         it.next()->propagateLatestFinish(time);
@@ -844,14 +846,14 @@ void Node::resetVisited() {
 }
 
 Node *Node::siblingBefore() {
-    //kDebug(planDbg());
+    //debugPlan;
     if (parentNode())
         return parentNode()->childBefore(this);
     return 0;
 }
 
 Node *Node::childBefore(Node *node) {
-    //kDebug(planDbg());
+    //debugPlan;
     int index = m_nodes.indexOf(node);
     if (index > 0){
         return m_nodes.at(index-1);
@@ -860,7 +862,7 @@ Node *Node::childBefore(Node *node) {
 }
 
 Node *Node::siblingAfter() {
-    //kDebug(planDbg());
+    //debugPlan;
     if (parentNode())
         return parentNode()->childAfter(this);
     return 0;
@@ -868,7 +870,7 @@ Node *Node::siblingAfter() {
 
 Node *Node::childAfter(Node *node)
 {
-    //kDebug(planDbg());
+    //debugPlan;
     Q_ASSERT( m_nodes.contains( node ) );
     int index = m_nodes.indexOf(node);
     if (index < m_nodes.count()-1) {
@@ -922,7 +924,7 @@ bool Node::isStartNode() const {
 }
 
 void Node::setId(const QString& id) {
-    //kDebug(planDbg())<<id;
+    //debugPlan<<id;
     m_id = id;
 }
 
@@ -941,7 +943,7 @@ void Node::setEndTime(const DateTime &endTime, long id )
 }
 
 void Node::saveAppointments(QDomElement &element, long id) const {
-    //kDebug(planDbg())<<m_name<<" id="<<id;
+    //debugPlan<<m_name<<" id="<<id;
     QListIterator<Node*> it(m_nodes);
     while (it.hasNext()) {
         it.next()->saveAppointments(element, id);
@@ -987,7 +989,7 @@ bool Node::addAppointment(Appointment *appointment, Schedule &main) {
         s = createSchedule(&main);
     }
     appointment->setNode(s);
-    //kDebug(planDbg())<<this<<":"<<appointment<<","<<s<<","<<s->id()<<","<<main.id();
+    //debugPlan<<this<<":"<<appointment<<","<<s<<","<<s->id()<<","<<main.id();
     return s->add(appointment);
 }
 
@@ -1021,14 +1023,14 @@ void Node::addSchedule(Schedule *schedule) {
 }
 
 Schedule *Node::createSchedule(const QString& name, Schedule::Type type, long id) {
-    //kDebug(planDbg())<<name<<" type="<<type<<" id="<<(int)id;
+    //debugPlan<<name<<" type="<<type<<" id="<<(int)id;
     NodeSchedule *sch = new NodeSchedule(this, name, type, id);
     addSchedule(sch);
     return sch;
 }
 
 Schedule *Node::createSchedule(Schedule *parent) {
-    //kDebug(planDbg())<<name<<" type="<<type<<" id="<<(int)id;
+    //debugPlan<<name<<" type="<<type<<" id="<<(int)id;
     NodeSchedule *sch = new NodeSchedule(parent, this);
     addSchedule(sch);
     return sch;
@@ -1088,7 +1090,7 @@ Schedule *Node::findSchedule(const QString &name) {
 
 
 Schedule *Node::findSchedule(const Schedule::Type type) {
-    //kDebug(planDbg())<<m_name<<" find type="<<type<<" nr="<<m_schedules.count();
+    //debugPlan<<m_name<<" find type="<<type<<" nr="<<m_schedules.count();
     QHash<long, Schedule*> hash;
     foreach (Schedule *sch, hash) {
         if (!sch->isDeleted() && sch->type() == type) {
@@ -1101,7 +1103,7 @@ Schedule *Node::findSchedule(const Schedule::Type type) {
 void Node::setScheduleDeleted(long id, bool on) {
     Schedule *ns = findSchedule(id);
     if (ns == 0) {
-        kError()<<m_name<<" Could not find schedule with id="<<id;
+        errorPlan<<m_name<<" Could not find schedule with id="<<id;
     } else {
         ns->setDeleted(on);
     }
@@ -1121,7 +1123,7 @@ void Node::setParentSchedule(Schedule *sch) {
 bool Node::calcCriticalPath(bool fromEnd) {
     if (m_currentSchedule == 0)
         return false;
-    //kDebug(planDbg())<<m_name;
+    //debugPlan<<m_name;
     if (!isCritical()) {
         return false;
     }
@@ -1154,8 +1156,8 @@ int Node::level() const {
     return n ? n->level() + 1 : 0;
 }
 
-QString Node::generateWBSCode( QList<int> &indexes ) const {
-    //kDebug(planDbg())<<m_name<<indexes;
+QString Node::generateWBSCode( QList<int> &indexes, bool sortable ) const {
+    //debugPlan<<m_name<<indexes;
     if ( m_parent == 0 ) {
         return QString();
     }
@@ -1163,10 +1165,10 @@ QString Node::generateWBSCode( QList<int> &indexes ) const {
     return m_parent->generateWBSCode( indexes );
 }
 
-QString Node::wbsCode() const {
-    //kDebug(planDbg())<<m_name;
+QString Node::wbsCode(bool sortable) const {
+    //debugPlan<<m_name;
     QList<int> indexes;
-    return generateWBSCode( indexes );
+    return generateWBSCode( indexes, sortable );
 }
 
 bool Node::isScheduled( long id ) const
@@ -1180,7 +1182,7 @@ void Node::setCurrentSchedule(long id) {
     while (it.hasNext()) {
         it.next()->setCurrentSchedule(id);
     }
-    //kDebug(planDbg())<<m_name<<" id:"<<id<<"="<<m_currentSchedule;
+    //debugPlan<<m_name<<" id:"<<id<<"="<<m_currentSchedule;
 }
 
 void Node::setStartupCost(double cost)
@@ -1191,7 +1193,7 @@ void Node::setStartupCost(double cost)
 
 void Node::setStartupAccount(Account *acc)
 {
-    //kDebug(planDbg())<<m_name<<"="<<acc;
+    //debugPlan<<m_name<<"="<<acc;
     if ( m_startupAccount ) {
         m_startupAccount->removeStartup( *this );
     }
@@ -1207,7 +1209,7 @@ void Node::setShutdownCost(double cost)
 
 void Node::setShutdownAccount(Account *acc)
 {
-    //kDebug(planDbg())<<m_name<<"="<<acc;
+    //debugPlan<<m_name<<"="<<acc;
     if ( m_shutdownAccount ) {
         m_shutdownAccount->removeShutdown( *this );
     }
@@ -1217,7 +1219,7 @@ void Node::setShutdownAccount(Account *acc)
 
 void Node::setRunningAccount(Account *acc)
 {
-    //kDebug(planDbg())<<m_name<<"="<<acc;
+    //debugPlan<<m_name<<"="<<acc;
     if ( m_runningAccount ) {
         m_runningAccount->removeRunning( *this );
     }
@@ -1225,7 +1227,15 @@ void Node::setRunningAccount(Account *acc)
     changed();
 }
 
+void Node::blockChanged(bool on)
+{
+    m_blockChanged = on;
+}
+
 void Node::changed(Node *node, int property) {
+    if (m_blockChanged) {
+        return;
+    }
     switch ( property) {
         case Type:
         case StartupCost:
@@ -1363,7 +1373,7 @@ EffortCost Node::acwp( const QDate &date, long id ) const
 
 void Node::slotStandardWorktimeChanged( StandardWorktime* )
 {
-    //kDebug(planDbg())<<m_estimate;
+    //debugPlan<<m_estimate;
     if ( m_estimate ) {
         m_estimate->m_expectedCached = false;
         m_estimate->m_optimisticCached = false;
@@ -1573,9 +1583,9 @@ bool Estimate::load(KoXmlElement &element, XMLLoaderObject &status) {
 void Estimate::save(QDomElement &element) const {
     QDomElement me = element.ownerDocument().createElement("estimate");
     element.appendChild(me);
-    me.setAttribute("expected", m_expectedEstimate);
-    me.setAttribute("optimistic", m_optimisticEstimate);
-    me.setAttribute("pessimistic", m_pessimisticEstimate);
+    me.setAttribute("expected", QString::number(m_expectedEstimate));
+    me.setAttribute("optimistic", QString::number(m_optimisticEstimate));
+    me.setAttribute("pessimistic", QString::number(m_pessimisticEstimate));
     me.setAttribute("type", typeToString());
     if ( m_calendar ) {
         me.setAttribute("calendar-id", m_calendar->id() );
@@ -1765,7 +1775,7 @@ Duration Estimate::expectedValue() const
 
 double Estimate::scale( const Duration &value, Duration::Unit unit, const QList<qint64> &scales )
 {
-    //kDebug(planDbg())<<value.toDouble( unit )<<","<<unit<<scales;
+    //debugPlan<<value.toDouble( unit )<<","<<unit<<scales;
     QList<qint64> lst = scales;
     switch ( lst.count() ) {
         case Duration::Unit_Y:
@@ -1789,13 +1799,13 @@ double Estimate::scale( const Duration &value, Duration::Unit unit, const QList<
     }
     double v = ( double )( value.milliseconds() );
     v /= lst[ unit ];
-    //kDebug(planDbg())<<value.toString()<<","<<unit<<"="<<v;
+    //debugPlan<<value.toString()<<","<<unit<<"="<<v;
     return v;
 }
 
 Duration Estimate::scale( double value, Duration::Unit unit, const QList<qint64> &scales )
 {
-    //kDebug(planDbg())<<value<<","<<unit<<scales;
+    //debugPlan<<value<<","<<unit<<scales;
     QList<qint64> lst = scales;
     switch ( lst.count() ) {
         case Duration::Unit_Y:
@@ -1818,7 +1828,7 @@ Duration Estimate::scale( double value, Duration::Unit unit, const QList<qint64>
             break;
     }
     qint64 v = ( qint64 )( value * lst[ unit ] );
-    //kDebug(planDbg())<<value<<","<<unit<<"="<<v;
+    //debugPlan<<value<<","<<unit<<"="<<v;
     return Duration( v, Duration::Unit_ms );
 }
 
@@ -1856,5 +1866,3 @@ QList<qint64> Estimate::scales() const
 
 
 }  //KPlato namespace
-
-#include "kptnode.moc"

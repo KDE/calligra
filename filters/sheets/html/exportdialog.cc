@@ -26,16 +26,17 @@
 #include <QSpinBox>
 #include <QTextCodec>
 #include <QApplication>
+#include <QUrl>
 
 #include <kglobal.h>
 #include <klocale.h>
 
 ExportDialog::ExportDialog(QWidget *parent)
-        : KDialog(parent), m_mainwidget(new ExportWidget(this))
+        : KoDialog(parent), m_mainwidget(new ExportWidget(this))
 {
     setCaption(i18n("Export Sheet to HTML"));
     setButtons(Ok | Cancel);
-    setDefaultButton(KDialog::Cancel);
+    setDefaultButton(Cancel);
     QApplication::restoreOverrideCursor();
 
     connect(m_mainwidget->mCustomButton, SIGNAL(toggled(bool)),
@@ -86,13 +87,13 @@ bool ExportDialog::separateFiles() const
     return m_mainwidget->mSeparateFiles->isChecked();
 }
 
-KUrl ExportDialog::customStyleURL() const
+QUrl ExportDialog::customStyleURL() const
 {
-    KUrl url = m_mainwidget->mCustomURL->url();
+    QUrl url = m_mainwidget->mCustomURL->url();
     if (m_mainwidget->mCustomButton->isChecked() && url.isValid())
         return url;
 
-    return KUrl();
+    return QUrl();
 }
 
 void ExportDialog::setSheets(const QStringList &list)
@@ -118,5 +119,3 @@ int ExportDialog::pixelsBetweenCells() const
 {
     return m_mainwidget->mPixelsBetweenCells->value();
 }
-
-#include <exportdialog.moc>

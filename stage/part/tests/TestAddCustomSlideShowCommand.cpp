@@ -26,7 +26,8 @@
 #include "commands/KPrAddCustomSlideShowCommand.h"
 #include "KPrCustomSlideShows.h"
 #include "KPrCustomSlideShowsModel.h"
-#include <qtest_kde.h>
+
+#include <QTest>
 
 void TestAddCustomSlideShowCommand::addCustomSlideShow()
 {
@@ -57,5 +58,4 @@ void TestAddCustomSlideShowCommand::addCustomSlideShow()
     QCOMPARE(doc.customSlideShows()->names().count(), 0);
 }
 
-QTEST_KDEMAIN(TestAddCustomSlideShowCommand, GUI)
-#include "TestAddCustomSlideShowCommand.moc"
+QTEST_MAIN(TestAddCustomSlideShowCommand)

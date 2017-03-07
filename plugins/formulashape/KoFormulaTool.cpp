@@ -19,24 +19,28 @@
  */
 
 #include "KoFormulaTool.h"
+
 #include "KoFormulaShape.h"
 #include "FormulaToolWidget.h"
 #include "BasicElement.h"
 #include "FormulaEditor.h"
+#include "FormulaDebug.h"
+
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoSelection.h>
 #include <KoShapeController.h>
 #include <KoIcon.h>
-#include <klocale.h>
-#include <QKeyEvent>
-#include <kaction.h>
-#include <QPainter>
-#include <kdebug.h>
 
+#include <klocalizedstring.h>
+
+#include <QKeyEvent>
+#include <QAction>
+#include <QPainter>
 #include <QFile>
 #include <QSignalMapper>
-#include <kfiledialog.h>
+#include <QFileDialog>
+
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
@@ -97,7 +101,7 @@ void KoFormulaTool::activate(ToolActivation toolActivation, const QSet<KoShape*>
             m_cursorList.removeAll(editor);
             if (formulaData->formulaElement()->hasDescendant(editor->cursor().currentElement())) {
                 if (editor->cursor().isAccepted()) {
-                    kDebug()<<"Found old cursor";
+                    debugFormula << "Found old cursor";
                     m_formulaEditor=editor;
                     break;
                 }
@@ -121,7 +125,7 @@ void KoFormulaTool::deactivate()
     disconnect(m_signalMapper,0,this,0);
     if (canvas()) {
         m_cursorList.append(m_formulaEditor);
-        kDebug()<<"Appending cursor";
+        debugFormula << "Appending cursor";
     }
     if (m_cursorList.count() > 20) { // don't let it grow indefinitely
         //TODO: is this save?
@@ -135,10 +139,10 @@ void KoFormulaTool::deactivate()
 void KoFormulaTool::updateCursor(FormulaCommand* command, bool undo)
 {
     if (command!=0) {
-        kDebug()<<"Going to change cursor";
+        debugFormula << "Going to change cursor";
         command->changeCursor(m_formulaEditor->cursor(),undo);
     } else {
-        kDebug()<<"Going to reset cursor";
+        debugFormula << "Going to reset cursor";
         resetFormulaEditor();
     }
     repaintCursor();
@@ -208,7 +212,7 @@ void KoFormulaTool::mouseMoveEvent( KoPointerEvent *event )
     }
     // Check if the event is valid means inside the shape
     if( !m_formulaShape->boundingRect().contains( event->point ) )
-        kDebug() << "Getting most probably invalid mouseMoveEvent";
+        debugFormula << "Getting most probably invalid mouseMoveEvent";
     
     // transform the global coordinates into shape coordinates
     QPointF p = m_formulaShape->absoluteTransformation(0).inverted().map( event->point );
@@ -363,13 +367,13 @@ void KoFormulaTool::resetFormulaEditor() {
 
 void KoFormulaTool::loadFormula()
 {
-    // get an url
-    KUrl url = KFileDialog::getOpenUrl();
-    if( url.isEmpty() || !shape() )
+    // get an filepath
+    const QString fileName = QFileDialog::getOpenFileName();
+    if( fileName.isEmpty() || !shape() )
         return;
 
-    // open the file the url points to
-    QFile file( url.path() );
+    // open the file the filepath points to
+    QFile file( fileName );
     if( !file.open( QIODevice::ReadOnly | QIODevice::Text ) )
         return;
 
@@ -388,11 +392,11 @@ void KoFormulaTool::loadFormula()
 
 void KoFormulaTool::saveFormula()
 {
-    KUrl url = KFileDialog::getSaveUrl();
-    if( url.isEmpty() || !shape() )
+    const QString filePath = QFileDialog::getSaveFileName();
+    if( filePath.isEmpty() || !shape() )
         return;
 
-    QFile file( url.path() );
+    QFile file( filePath );
     KoXmlWriter writer( &file );
     KoGenStyles styles;
     KoEmbeddedDocumentSaver embeddedSaver;
@@ -438,33 +442,33 @@ void KoFormulaTool::setupActions()
                       "<munderover><mrow><mrow/></mrow><mrow/><mrow/></munderover>", koIconNameCStr("gsubup"));
 
     //only for debugging
-    KAction* action;
-    action = new KAction( "Debug - writeElementTree" , this );
+    QAction * action;
+    action = new QAction( "Debug - writeElementTree" , this );
     addAction( "write_elementTree", action );
 
     QList<QVariant> list;
-    action = new KAction( i18n( "Insert row" ), this );
+    action = new QAction( i18n( "Insert row" ), this );
     list<<true<<true;
     action->setData( list);
     list.clear();
     addAction( "insert_row", action );
     action->setIcon(koIcon("insrow"));
 
-    action = new KAction( i18n( "Insert column" ), this );
+    action = new QAction( i18n( "Insert column" ), this );
     list<<false<<true;
     action->setData( list);
     list.clear();
     addAction( "insert_column", action );
     action->setIcon(koIcon("inscol"));
 
-    action = new KAction( i18n( "Remove row" ), this );
+    action = new QAction( i18n( "Remove row" ), this );
     list<<true<<false;
     action->setData( list);
     list.clear();
     addAction( "remove_row", action );
     action->setIcon(koIcon("remrow"));
 
-    action = new KAction( i18n( "Remove column" ), this );
+    action = new QAction( i18n( "Remove column" ), this );
     list<<false<<false;
     action->setData( list);
     list.clear();
@@ -477,11 +481,11 @@ void KoFormulaTool::setupActions()
 void KoFormulaTool::addTemplateAction(const QString &caption, const QString &name, const QString &data,
                                       const char *iconName)
 {
-    KAction* action;
-    action = new KAction( caption, this );
+    QAction * action;
+    action = new QAction( caption, this );
     m_signalMapper->setMapping(action, data);
     addAction( name , action );
-    action->setIcon(KIcon(QLatin1String(iconName)));
+    action->setIcon(QIcon::fromTheme(QLatin1String(iconName)));
     connect( action, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
 }
 
@@ -500,7 +504,7 @@ bool KoFormulaTool::paste()
 {
     const QMimeData* data=QApplication::clipboard()->mimeData();
     if (data->hasFormat("text/plain")) {
-        kDebug()<< data->text();
+        debugFormula << data->text();
         FormulaCommand* command=m_formulaEditor->insertText(data->text());
         if (command!=0) {
             canvas()->addCommand(new FormulaCommandUpdate(m_formulaShape,command));

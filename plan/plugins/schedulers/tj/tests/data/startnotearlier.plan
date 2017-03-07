@@ -1,79 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plan>
-<plan version="0.6.6" mime="application/x-vnd.kde.plan" editor="Plan">
- <project scheduling="MustStartOn" description="Test of StartNotEarlier constraint." end-time="2011-09-22T00:00:00" timezone="UTC" leader="Manager" id="2011-09-16T14:17:24 NbPhi3FQx0" name="P1" start-time="2011-09-19T00:00:00">
-  <wbs-definition levels-enabled="0" project-code="" project-separator="">
-   <default separator="." code="Number"/>
+<plan editor="Plan" mime="application/x-vnd.kde.plan" version="0.6.6">
+ <project timezone="UTC" end-time="2011-09-22T00:00:00" leader="Manager" description="Test of StartNotEarlier constraint." scheduling="MustStartOn" name="P1" start-time="2011-09-19T00:00:00" id="2011-09-16T14:17:24 NbPhi3FQx0">
+  <wbs-definition project-code="" project-separator="" levels-enabled="0">
+   <default code="Number" separator="."/>
   </wbs-definition>
-  <locale positive-prefix-currency-symbol="0" negative-prefix-currency-symbol="0" positive-monetary-sign-position="1" currency-symbol="kr" currency-digits="2" negative-monetary-sign-position="1"/>
+  <locale positive-prefix-currency-symbol="0" currency-digits="2" currency-symbol="kr" positive-monetary-sign-position="1" negative-prefix-currency-symbol="0" negative-monetary-sign-position="1"/>
   <accounts/>
-  <calendar default="1" timezone="UTC" id="2011-09-16T14:17:24 8tV0gIfhTk" name="Base">
-   <weekday day="0" state="2">
-    <interval length="28800000" start="08:00:00"/>
+  <calendar timezone="UTC" name="Base" default="1" id="2011-09-16T14:17:24 8tV0gIfhTk">
+   <weekday state="2" day="0">
+    <interval start="04:00:00" length="28800000"/>
    </weekday>
-   <weekday day="1" state="2">
-    <interval length="28800000" start="08:00:00"/>
+   <weekday state="2" day="1">
+    <interval start="04:00:00" length="28800000"/>
    </weekday>
-   <weekday day="2" state="2">
-    <interval length="28800000" start="08:00:00"/>
+   <weekday state="2" day="2">
+    <interval start="04:00:00" length="28800000"/>
    </weekday>
-   <weekday day="3" state="2">
-    <interval length="28800000" start="08:00:00"/>
+   <weekday state="2" day="3">
+    <interval start="04:00:00" length="28800000"/>
    </weekday>
-   <weekday day="4" state="2">
-    <interval length="28800000" start="08:00:00"/>
+   <weekday state="2" day="4">
+    <interval start="04:00:00" length="28800000"/>
    </weekday>
-   <weekday day="5" state="1"/>
-   <weekday day="6" state="1"/>
-   <cache version="4"/>
+   <weekday state="1" day="5"/>
+   <weekday state="1" day="6"/>
+   <cache version="29"/>
   </calendar>
-  <standard-worktime week="40h0m" day="8h0m" month="176h0m" year="1760h0m"/>
-  <resource-group type="Work" id="2012-12-05T10:22:23 sc8ivQrhtl" name="Resources">
-   <resource normal-rate="100,00 kr" auto-allocate="0" overtime-rate="0,00 kr" email="" units="100" initials="" type="Work" id="2012-12-05T10:22:23 z7JdPDfKNX" name="R1">
-    <work-intervals-cache version="2" end="2011-09-19T20:00:00" effort="0 00:00:00.0" start="2011-09-19T10:00:00">
+  <standard-worktime year="1760h0m" week="40h0m" month="176h0m" day="8h0m"/>
+  <resource-group type="Work" name="Resources" id="2012-12-05T10:22:23 sc8ivQrhtl">
+   <resource initials="" normal-rate="100,00 kr" email="" type="Work" overtime-rate="0,00 kr" auto-allocate="0" units="100" name="R1" id="2012-12-05T10:22:23 z7JdPDfKNX">
+    <work-intervals-cache start="2011-09-20T08:00:00" effort="0 00:00:00.0" end="2011-09-21T08:00:00" version="29">
      <intervals>
-      <interval end="2011-09-19T18:00:00" load="100" start="2011-09-19T10:00:00"/>
      </intervals>
     </work-intervals-cache>
    </resource>
   </resource-group>
-  <task wbs="1" scheduling="StartNotEarlier" constraint-endtime="2011-09-16T16:17:30" description="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Ubuntu'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;/p>&lt;/body>&lt;/html>" startup-cost="0" shutdown-cost="0" constraint-starttime="2011-09-20T08:00:00" leader="" id="2011-09-16T14:17:30 Pv7e7PHzyZ" name="T1">
-   <estimate risk="None" expected="8" optimistic="2" pessimistic="16" unit="h" type="Duration"/>
-   <workpackage owner="" owner-id=""/>
-   <progress entrymode="EnterCompleted" finishTime="" started="0" finished="0" startTime=""/>
+  <task leader="" constraint-starttime="2011-09-20T08:00:00" constraint-endtime="2011-09-16T16:17:30" description="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Ubuntu'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;/p>&lt;/body>&lt;/html>" wbs="1" startup-cost="0" scheduling="StartNotEarlier" name="T1" shutdown-cost="0" id="2011-09-16T14:17:30 Pv7e7PHzyZ">
+   <estimate unit="h" expected="8" optimistic="2" pessimistic="16" type="Duration" risk="None"/>
+   <workpackage owner-id="" owner=""/>
+   <progress finished="0" finishTime="" started="0" entrymode="EnterCompleted" startTime=""/>
    <schedules>
-    <schedule duration="0 08:00:00.0" in-critical-path="0" resource-overbooked="0" scheduling-conflict="0" end="2011-09-20T16:00:00" free-float="0 00:00:00.0" resource-not-available="0" type="Expected" scheduling-error="0" id="1" name="Schedule: Plan" start="2011-09-20T08:00:00" not-scheduled="0" negative-float="0 00:00:00.0" resource-error="0" positive-float="0 18:00:00.0"/>
+    <schedule scheduling-conflict="0" free-float="0 00:00:00.0" resource-error="0" start="2011-09-20T08:00:00" in-critical-path="0" resource-overbooked="0" negative-float="0 00:00:00.0" not-scheduled="0" end="2011-09-20T16:00:00" scheduling-error="0" type="Expected" duration="0 08:00:00.0" earlystart="2011-09-20T08:00:00" id="6" name="Schedule: Plan" resource-not-available="0" latefinish="2011-09-21T08:00:00" earlyfinish="2011-09-20T16:00:00" latestart="2011-09-21T00:00:00" positive-float="0 16:00:00.0"/>
    </schedules>
   </task>
-  <task wbs="2" scheduling="StartNotEarlier" constraint-endtime="2012-12-05T10:22:11" description="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Ubuntu'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;br />&lt;/p>&lt;/body>&lt;/html>" startup-cost="0" shutdown-cost="0" constraint-starttime="2011-09-20T08:00:00" leader="" id="2012-12-05T10:22:11 6yZmD5LJu8" name="T2">
-   <estimate risk="None" expected="8" optimistic="2" pessimistic="16" unit="h" type="Effort"/>
-   <workpackage owner="" owner-id=""/>
-   <progress entrymode="EnterCompleted" finishTime="" started="0" finished="0" startTime=""/>
+  <task leader="" constraint-starttime="2011-09-20T08:00:00" constraint-endtime="2012-12-05T10:22:11" description="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Ubuntu'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;br />&lt;/p>&lt;/body>&lt;/html>" wbs="2" startup-cost="0" scheduling="StartNotEarlier" name="T2" shutdown-cost="0" id="2012-12-05T10:22:11 6yZmD5LJu8">
+   <estimate unit="h" expected="8" optimistic="2" pessimistic="16" type="Effort" risk="None"/>
+   <workpackage owner-id="" owner=""/>
+   <progress finished="0" finishTime="" started="0" entrymode="EnterCompleted" startTime=""/>
    <schedules>
-    <schedule duration="0 08:00:00.0" in-critical-path="0" resource-overbooked="0" scheduling-conflict="0" end="2011-09-20T18:00:00" free-float="0 00:00:00.0" resource-not-available="0" type="Expected" scheduling-error="0" id="1" name="Schedule: Plan" start="2011-09-20T10:00:00" not-scheduled="0" negative-float="0 00:00:00.0" resource-error="0" positive-float="0 16:00:00.0"/>
+    <schedule scheduling-conflict="0" free-float="0 00:00:00.0" resource-error="0" start="2011-09-20T08:00:00" in-critical-path="0" resource-overbooked="0" negative-float="0 00:00:00.0" not-scheduled="0" end="2011-09-21T08:00:00" scheduling-error="0" type="Expected" duration="0 22:40:00.0" earlystart="2011-09-20T08:00:00" id="6" name="Schedule: Plan" resource-not-available="0" latefinish="2011-09-21T08:00:00" earlyfinish="2011-09-21T06:40:00" latestart="2011-09-21T04:00:00" positive-float="0 01:20:00.0"/>
    </schedules>
    <resourcegroup-request units="0" group-id="2012-12-05T10:22:23 sc8ivQrhtl">
     <resource-request resource-id="2012-12-05T10:22:23 z7JdPDfKNX" units="100"/>
    </resourcegroup-request>
   </task>
-  <task wbs="3" scheduling="StartNotEarlier" constraint-endtime="2012-12-05T10:23:53" description="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Ubuntu'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;br />&lt;/p>&lt;/body>&lt;/html>" startup-cost="0" shutdown-cost="0" constraint-starttime="2011-09-20T08:00:00" leader="" id="2012-12-05T10:23:53 Ar6yZmD5LJ" name="T3">
-   <estimate risk="None" expected="8" optimistic="2" pessimistic="16" unit="h" calendar-id="2011-09-16T14:17:24 8tV0gIfhTk" type="Duration"/>
-   <workpackage owner="" owner-id=""/>
-   <progress entrymode="EnterCompleted" finishTime="" started="0" finished="0" startTime=""/>
+  <task leader="" constraint-starttime="2011-09-20T08:00:00" constraint-endtime="2012-12-05T10:23:53" description="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;>&#xa;&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;style type=&quot;text/css&quot;>&#xa;p, li { white-space: pre-wrap; }&#xa;&lt;/style>&lt;/head>&lt;body style=&quot; font-family:'Ubuntu'; font-size:9pt; font-weight:400; font-style:normal;&quot;>&#xa;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;br />&lt;/p>&lt;/body>&lt;/html>" wbs="3" startup-cost="0" scheduling="StartNotEarlier" name="T3" shutdown-cost="0" id="2012-12-05T10:23:53 Ar6yZmD5LJ">
+   <estimate unit="h" expected="8" optimistic="2" pessimistic="16" type="Duration" calendar-id="2011-09-16T14:17:24 8tV0gIfhTk" risk="None"/>
+   <workpackage owner-id="" owner=""/>
+   <progress finished="0" finishTime="" started="0" entrymode="EnterCompleted" startTime=""/>
    <schedules>
-    <schedule duration="1 00:00:00.0" in-critical-path="1" resource-overbooked="0" scheduling-conflict="0" end="2011-09-20T18:00:00" free-float="0 00:00:00.0" resource-not-available="0" type="Expected" scheduling-error="0" id="1" name="Schedule: Plan" start="2011-09-20T10:00:00" not-scheduled="0" negative-float="0 00:00:00.0" resource-error="0" positive-float="0 00:00:00.0"/>
+    <schedule scheduling-conflict="0" free-float="0 00:00:00.0" resource-error="0" start="2011-09-20T08:00:00" in-critical-path="1" resource-overbooked="0" negative-float="0 00:00:00.0" not-scheduled="0" end="2011-09-21T08:00:00" scheduling-error="0" type="Expected" duration="1 00:00:00.0" earlystart="2011-09-20T08:00:00" id="6" name="Schedule: Plan" resource-not-available="0" latefinish="2011-09-21T08:00:00" earlyfinish="2011-09-21T08:00:00" latestart="2011-09-20T08:00:00" positive-float="0 00:00:00.0"/>
    </schedules>
   </task>
   <schedules>
-   <plan scheduling-direction="0" granularity="0" recalculate-from="" check-external-appointments="1" distribution="0" baselined="0" recalculate="0" id="iDAzc4LXd5" overbooking="0" name="Plan" scheduler-plugin-id="plantjscheduler">
-    <schedule duration="0 00:00:00.0" scheduling-conflict="0" end="2011-09-21T10:00:00" type="Expected" scheduling-error="0" id="1" name="Schedule: Plan" start="2011-09-20T08:00:00" not-scheduled="0">
+   <plan granularity="3" distribution="0" recalculate="0" scheduling-direction="0" scheduler-plugin-id="Built-in" recalculate-from="" baselined="0" name="Plan" check-external-appointments="1" overbooking="0" id="iDAzc4LXd5">
+    <schedule duration="2 08:00:00.0" scheduling-conflict="0" scheduling-error="0" type="Expected" not-scheduled="0" start="2011-09-20T08:00:00" name="Schedule: Plan" end="2011-09-21T08:00:00" id="6">
      <criticalpath-list>
       <criticalpath>
        <node id="2012-12-05T10:23:53 Ar6yZmD5LJ"/>
       </criticalpath>
      </criticalpath-list>
-     <appointment task-id="2012-12-05T10:22:11 6yZmD5LJu8" resource-id="2012-12-05T10:22:23 z7JdPDfKNX">
-      <interval end="2011-09-20T18:00:00" load="100" start="2011-09-20T10:00:00"/>
+     <appointment resource-id="2012-12-05T10:22:23 z7JdPDfKNX" task-id="2012-12-05T10:22:11 6yZmD5LJu8">
+      <interval load="100" start="2011-09-20T08:00:00" end="2011-09-20T12:00:00"/>
+      <interval load="100" start="2011-09-21T04:00:00" end="2011-09-21T08:00:00"/>
      </appointment>
     </schedule>
    </plan>

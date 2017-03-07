@@ -20,13 +20,14 @@
 
 #include "InfoVariable.h"
 
+#include "VariablesDebug.h"
+
 #include <KoProperties.h>
-#include <kdebug.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 
-#include <kglobal.h>
+#include <QGlobalStatic>
 
 static const struct {
     KoInlineObject::Property property;
@@ -71,12 +72,13 @@ void InfoVariable::propertyChanged(Property property, const QVariant &value)
     }
 }
 
+typedef QMap<KoInlineObject::Property, const char*> SaveMap;
+
+Q_GLOBAL_STATIC(SaveMap, s_saveInfo)
+
 void InfoVariable::saveOdf(KoShapeSavingContext & context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
-
-    typedef QMap<KoInlineObject::Property, const char*> SaveMap;
-    K_GLOBAL_STATIC(SaveMap, s_saveInfo)
 
     if (!s_saveInfo.exists() ) {
         for (unsigned int i = 0; i < numPropertyData; ++i) {
@@ -91,11 +93,12 @@ void InfoVariable::saveOdf(KoShapeSavingContext & context)
     }
 }
 
+typedef QMap<QString, KoInlineObject::Property> LoadMap;
+
+Q_GLOBAL_STATIC(LoadMap, s_loadInfo)
+
 bool InfoVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & /*context*/)
 {
-    typedef QMap<QString, KoInlineObject::Property> LoadMap;
-    K_GLOBAL_STATIC(LoadMap, s_loadInfo)
-
     if (!s_loadInfo.exists() ) {
         for (unsigned int i = 0; i < numPropertyData; ++i) {
             s_loadInfo->insert(propertyData[i].tag, propertyData[i].property);

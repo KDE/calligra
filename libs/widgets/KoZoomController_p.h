@@ -25,8 +25,8 @@
 
 #include <KoZoomController.h>
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
+#include <WidgetsDebug.h>
 
 #include <KoZoomHandler.h>
 #include <KoCanvasBase.h>

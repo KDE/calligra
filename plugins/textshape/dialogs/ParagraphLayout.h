@@ -32,7 +32,7 @@ class ParagraphLayout : public QWidget
 public:
     explicit ParagraphLayout(QWidget *parent);
 
-    void setDisplay(KoParagraphStyle *style);
+    void setDisplay(KoParagraphStyle *style, bool directFormattingMode);
 
     void save(KoParagraphStyle *style);
 

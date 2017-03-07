@@ -4,9 +4,7 @@ set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories( ../colorspaces/cmyk_u16
     ../colorspaces/cmyk_u8
     ../colorspaces/gray_u16
-    ../colorspaces/gray_u16_no_alpha
     ../colorspaces/gray_u8
-    ../colorspaces/gray_u8_no_alpha
     ../colorspaces/lab_u16
     ../colorspaces/rgb_u16
     ../colorspaces/rgb_u8
@@ -25,29 +23,33 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
 endif()
 
-########### next target ###############
-
-set(TestKoLcmsColorProfile_test_SRCS TestKoLcmsColorProfile.cpp )
-
-kde4_add_unit_test(TestKoLcmsColorProfile TESTNAME libs-pigment-TestKoLcmsColorProfile  ${TestKoLcmsColorProfile_test_SRCS})
-
-target_link_libraries(TestKoLcmsColorProfile  ${KDE4_KDEUI_LIBS} pigmentcms ${QT_QTTEST_LIBRARY}  ${LCMS2_LIBRARIES} kolcmsengine )
-
-########### next target ###############
-
-set(TestKoColorSpaceRegistry_test_SRCS TestKoColorSpaceRegistry.cpp )
-
-kde4_add_unit_test(TestKoColorSpaceRegistry TESTNAME libs-pigment-TestKoColorSpaceRegistry  ${TestKoColorSpaceRegistry_test_SRCS})
-
-target_link_libraries(TestKoColorSpaceRegistry  ${KDE4_KDEUI_LIBS} pigmentcms ${LCMS2_LIBRARIES} ${QT_QTTEST_LIBRARY})
+# call: colorengine_lcms_add_unit_test(<test-name> <sources> LINK_LIBRARIES <library> [<library> [...]] [GUI])
+macro(COLORENGINE_LCMS_ADD_UNIT_TEST _TEST_NAME)
+    ecm_add_test( ${ARGN}
+        TEST_NAME "${_TEST_NAME}"
+        NAME_PREFIX "colorengine-lcms-"
+    )
+endmacro()
 
 ########### next target ###############
 
-#set(TestKoCompositeOps_test_SRCS TestKoCompositeOps.cpp )
+colorengine_lcms_add_unit_test(TestKoLcmsColorProfile
+    TestKoLcmsColorProfile.cpp
+    LINK_LIBRARIES kowidgets pigmentcms KF5::I18n ${LCMS2_LIBRARIES} Qt5::Test
+)
 
-#kde4_add_unit_test(TestKoCompositeOps TESTNAME libs-pigment-TestKoCompositeOps ${TestKoCompositeOps_test_SRCS})
+########### next target ###############
 
-#target_link_libraries(TestKoCompositeOps  ${KDE4_KDEUI_LIBS} pigmentcms ${QT_QTTEST_LIBRARY})
+colorengine_lcms_add_unit_test(TestKoColorSpaceRegistry
+    TestKoColorSpaceRegistry.cpp
+    LINK_LIBRARIES kowidgets pigmentcms KF5::I18n ${LCMS2_LIBRARIES} Qt5::Test
+)
 
+########### next target ###############
+
+# colorengine_lcms_add_unit_test(TestKoCompositeOps
+#     TestKoCompositeOps.cpp
+#     LINK_LIBRARIES kowidgets pigmentcms Qt5::Test
+# )
 
 

@@ -25,22 +25,22 @@
 #include "stage_export.h"
 
 class KAboutData;
+class KoComponentData;
 
 class STAGE_EXPORT KPrFactory : public KPluginFactory
 {
     Q_OBJECT
 public:
-    explicit KPrFactory( QObject* parent = 0, const char* name = 0 );
+    explicit KPrFactory();
     ~KPrFactory();
 
     virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
-    static const KComponentData &componentData();
+    static const KoComponentData &componentData();
 
-    // _Creates_ a KAboutData but doesn't keep ownership
     static KAboutData* aboutData();
 
 private:
-    static KComponentData* s_instance;
+    static KoComponentData* s_instance;
     static KAboutData* s_aboutData;
 };
 

@@ -20,24 +20,6 @@
 #include "writer.h"
 
 #include "KoGenStyles.h"
-#include <QRegExp>
-
-namespace
-{
-QString format(double v)
-{
-    static const QString f("%1");
-    static const QString e("");
-    static const QRegExp r("\\.?0+$");
-    return f.arg(v, 0, 'f').replace(r, e);
-}
-
-QString mm(double v)
-{
-    static const QString mm("mm");
-    return format(v) + mm;
-}
-}//namespace
 
 Writer::Writer(KoXmlWriter& xmlWriter, KoGenStyles& kostyles,
                bool stylesxml_)

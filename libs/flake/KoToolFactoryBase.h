@@ -27,7 +27,7 @@
 
 class KoCanvasBase;
 class KoToolBase;
-class KShortcut;
+class QKeySequence;
 
 /**
  * A factory for KoToolBase objects.
@@ -47,8 +47,7 @@ public:
     ~MyToolFactory() {}
     KoToolBase *createTool(KoCanvasBase *canvas);
 };
-K_PLUGIN_FACTORY(MyToolFactoryFactory, registerPlugin<MyToolFactory>();)
-K_EXPORT_PLUGIN(MyToolFactoryFactory("MyTool"))
+K_PLUGIN_FACTORY_WITH_JSON((MyToolFactoryFactory, "mytool.json", registerPlugin<MyToolFactory>();)
 </pre>
 
  */
@@ -152,7 +151,7 @@ public:
      *
      * @return the shortcut
      */
-    KShortcut shortcut() const;
+    QKeySequence shortcut() const;
 
     /**
      * Returns the main toolType
@@ -194,7 +193,7 @@ public:
     /**
      * Set the default shortcut for activation of this tool.
      */
-    void setShortcut(const KShortcut & shortcut);
+    void setShortcut(const QKeySequence & shortcut);
 
 protected:
     /**
@@ -209,10 +208,8 @@ protected:
     void setToolType(const QString &toolType);
     /**
      * Set an icon to be used in the toolBox.
-     * @param iconName the basename (without extension) of the icon
-     * @see KIconLoader
+     * @param iconName the name of the icon per icon theme spec
      */
-    void setIconName(const char *iconName);
     void setIconName(const QString &iconName);
     /**
      * Set the priority of this tool, as it is shown in the toolBox; lower number means

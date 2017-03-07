@@ -20,7 +20,7 @@
 #ifndef GLYPHELEMENT_H
 #define GLYPHELEMENT_H
 
-#include "kformula_export.h"
+#include "koformula_export.h"
 #include "TokenElement.h"
 #include <QPainterPath>
 

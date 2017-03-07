@@ -57,11 +57,11 @@ KPrPageLayouts::~KPrPageLayouts()
     }
 }
 
-bool KPrPageLayouts::saveOdf( KoPASavingContext & context )
+bool KPrPageLayouts::saveOdf( KoPASavingContext & context ) const
 {
     KPrPageLayoutSharedSavingData * sharedData = new KPrPageLayoutSharedSavingData();
 
-    QMap<KPrPageLayoutWrapper, KPrPageLayout *>::iterator it( m_pageLayouts.begin() );
+    QMap<KPrPageLayoutWrapper, KPrPageLayout *>::ConstIterator it( m_pageLayouts.begin() );
     for ( ; it != m_pageLayouts.end(); ++it ) {
         QString style = it.value()->saveOdf( context );
         sharedData->addPageLayoutStyle( it.value(), style );
@@ -148,8 +148,8 @@ KPrPageLayout * KPrPageLayouts::pageLayout( const QString & name, KoPALoadingCon
 {
     KPrPageLayout * pageLayout = 0;
 
-    QHash<QString, KoXmlElement*> layouts = loadingContext.odfLoadingContext().stylesReader().presentationPageLayouts();
-    QHash<QString, KoXmlElement*>::iterator it( layouts.find( name ) );
+    const QHash<QString, KoXmlElement*> layouts = loadingContext.odfLoadingContext().stylesReader().presentationPageLayouts();
+    QHash<QString, KoXmlElement*>::ConstIterator it( layouts.find( name ) );
 
     if ( it != layouts.end() ) {
         pageLayout = new KPrPageLayout();

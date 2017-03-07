@@ -54,7 +54,7 @@ class KoPrintingDialogPrivate;
  * this class and make sure that after the preparePage returns a simple paint can be called on the shapeManager
  * with the painter().
  *
- * XXX: preparePage(int) is no longer pure virtual! Only KSpread reimplements it -- what should be changed
+ * XXX: preparePage(int) is no longer pure virtual! Only Calligra Sheets reimplements it -- what should be changed
  *      to the docs? (BSAR)
  *
  * This typically means that the preparePage() makes sure the shapeManager is updated and the correct cliprect

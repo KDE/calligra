@@ -27,15 +27,18 @@
 #include "DocxXmlHeaderReader.h"
 #include "DocxXmlFooterReader.h"
 #include "DocxImport.h"
+#include "DocxDebug.h"
+
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
 #include <MsooXmlRelationships.h>
 #include <MsooXmlUnits.h>
+
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoOdfGraphicStyles.h>
 #include <Charting.h>
-#include <ChartExport.h>
+#include <KoOdfChartWriter.h>
 #include <XlsxXmlChartReader.h>
 
 #include <MsooXmlTableStyle.h>
@@ -170,7 +173,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
     Q_ASSERT(m_context);
 
     m_createSectionStyle = true;
-    kDebug() << "=============================";
+    debugDocx << "=============================";
     readNext();
     if (!isStartDocument()) {
         return KoFilter::WrongFormat;
@@ -178,7 +181,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
 
     //w:document
     readNext();
-    kDebug() << *this << namespaceUri();
+    debugDocx << *this << namespaceUri();
 
     if (!expectEl("w:document")) {
         return KoFilter::WrongFormat;
@@ -189,12 +192,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
     /*
         const QXmlStreamAttributes attrs( attributes() );
         for (int i=0; i<attrs.count(); i++) {
-            kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
+            debugDocx << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
         }*/
 
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
     for (int i = 0; i < namespaces.count(); i++) {
-        kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
+        debugDocx << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
@@ -206,7 +209,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugDocx << *this;
         BREAK_IF_END_OF(document)
         if (isStartElement()) {
             TRY_READ_IF(body)
@@ -219,7 +222,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
     if (!expectElEnd("w:document")) {
         return KoFilter::WrongFormat;
     }
-    kDebug() << "===========finished============";
+    debugDocx << "===========finished============";
     return KoFilter::OK;
 }
 
@@ -271,14 +274,14 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
     READ_PROLOGUE
 /*    QXmlStreamNamespaceDeclarations namespaces = namespaceDeclarations();
     for (int i = 0; i < namespaces.count(); i++) {
-        kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
+        debugDocx << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }*/
 
     int counter = 0;
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugDocx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (counter == 40) {
@@ -510,7 +513,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_textDirection()
     if (!val.isEmpty() && val.size() == 4) {
         const QString left = val.left(2).toLower();
         const QString right = val.right(2).toLower();
-        m_currentPageStyle.addProperty("style:writing-mode", left + "-" + right);
+        m_currentPageStyle.addProperty("style:writing-mode", left + '-' + right);
     }
 
     readNext();
@@ -1392,9 +1395,9 @@ void DocxXmlDocumentReader::createBorderStyle(const QString& size, const QString
 
     QString border;
     if (!size.isEmpty())
-        border += MSOOXML::Utils::ST_EighthPointMeasure_to_ODF(size) + " ";
+        border += MSOOXML::Utils::ST_EighthPointMeasure_to_ODF(size) + ' ';
 
-    border.append(odfLineStyle + " ");
+    border.append(odfLineStyle + ' ');
 
     if (!color.isEmpty()) {
         if (color == "auto") {
@@ -1741,26 +1744,26 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
         if (m_complexCharStatus == InstrAllowed) {
             QString instruction = text().toString().trimmed();
 
-            if (instruction.startsWith("HYPERLINK")) {
+            if (instruction.startsWith(QLatin1String("HYPERLINK"))) {
                 // Removes hyperlink, spaces and extra " chars
                 instruction.remove(0, 11);
                 instruction.truncate(instruction.size() - 1);
                 m_complexCharType = HyperlinkComplexFieldCharType;
                 m_complexCharValue = instruction;
             }
-            else if (instruction.startsWith("PAGEREF")) {
+            else if (instruction.startsWith(QLatin1String("PAGEREF"))) {
                 instruction.remove(0, 8); // removes PAGEREF
                 m_complexCharType = ReferenceComplexFieldCharType;
                 m_complexCharValue = instruction.left(instruction.indexOf(' '));
             }
-            else if (instruction.startsWith("GOTOBUTTON")) {
+            else if (instruction.startsWith(QLatin1String("GOTOBUTTON"))) {
                 instruction.remove(0, 12); // removes GOTOBUTTON
                 m_complexCharType = InternalHyperlinkComplexFieldCharType;
                 m_complexCharValue = instruction;
             }
-            else if (instruction.startsWith("MACROBUTTON")) {
+            else if (instruction.startsWith(QLatin1String("MACROBUTTON"))) {
                 m_complexCharType = MacroButtonFieldCharType;
-                m_complexCharValue = "[";
+                m_complexCharValue = '[';
             }
             else {
                 m_complexCharValue = instruction;
@@ -1929,7 +1932,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_del()
     }
 
     if (m_changeTrackingState.isEmpty()) {
-        kWarning() << "Error: ChangeTrackingState stack is corrupt!";
+        warnDocx << "Error: ChangeTrackingState stack is corrupt!";
     } else {
         m_changeTrackingState.pop();
     }
@@ -2057,7 +2060,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_ins()
     }
 
     if (m_changeTrackingState.isEmpty()) {
-        kWarning() << "Error: ChangeTrackingState stack is corrupt!";
+        warnDocx << "Error: ChangeTrackingState stack is corrupt!";
     } else {
         m_changeTrackingState.pop();
     }
@@ -2226,7 +2229,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     bool oldWasCaption = m_wasCaption;
     m_wasCaption = false;
     if (oldWasCaption) {
-        kDebug() << "SKIP!";
+        debugDocx << "SKIP!";
     } else {
         body = textPBuf.setWriter(body);
         m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
@@ -2262,7 +2265,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugDocx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             //ELSE_TRY_READ_IF(commentRangeEnd)
@@ -2543,7 +2546,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                         body->endElement(); //text:list
                     }
                 }
-                kDebug() << "/text:p";
+                debugDocx << "/text:p";
             }
         }
     }
@@ -2744,7 +2747,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugDocx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(rPr)
@@ -2820,7 +2823,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
             }
             else {
                 int spacePosition = m_complexCharValue.indexOf(' ');
-                QString textValue = "#";
+                QString textValue(QLatin1Char('#'));
                 textValue.append(m_complexCharValue.left(spacePosition));
                 m_complexCharValue.remove(0, textValue.length());
                 body->addAttribute("xlink:href", QUrl(textValue).toEncoded());
@@ -2964,7 +2967,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugDocx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(b)
@@ -3072,7 +3075,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugDocx << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (name() == "rPr") {
@@ -3321,7 +3324,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_numPr()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        debugDocx << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(numId)
@@ -3506,11 +3509,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
         body->addAttribute("draw:layer", "layout");
 
         if (m_hasPosOffsetH) {
-            kDebug() << "m_posOffsetH" << m_posOffsetH;
+            debugDocx << "m_posOffsetH" << m_posOffsetH;
             m_svgX += m_posOffsetH;
         }
         if (m_hasPosOffsetV) {
-            kDebug() << "m_posOffsetV" << m_posOffsetV;
+            debugDocx << "m_posOffsetV" << m_posOffsetV;
             m_svgY += m_posOffsetV;
         }
 
@@ -4052,7 +4055,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_shd(shdCaller caller)
     READ_ATTR(val)
     val = val.toLower();
     TRY_READ_ATTR(color)
-//kDebug() << m_callsNames;
+//debugDocx << m_callsNames;
     if (!color.isEmpty() && color != MsooXmlReader::constAuto) {
         QColor clr(MSOOXML::Utils::ST_HexColorRGB_to_QColor(color));
         if (caller == shd_rPr && clr.isValid() && val == "solid") {
@@ -4117,10 +4120,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rFonts()
         TRY_READ_ATTR(asciiTheme)
         if (!asciiTheme.isEmpty()) {
             QString font = asciiTheme;
-            if (font.startsWith("major")) {
+            if (font.startsWith(QLatin1String("major"))) {
                 font = m_context->themes->fontScheme.majorFonts.latinTypeface;
             }
-            else if (font.startsWith("minor")) {
+            else if (font.startsWith(QLatin1String("minor"))) {
                font = m_context->themes->fontScheme.minorFonts.latinTypeface;
             }
             m_currentTextStyle.addProperty("style:font-name", font);
@@ -4803,7 +4806,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tabs()
     elementWriter.endElement(); // style-tab-stops
 
     QString tabStops = QString::fromUtf8(tabs.buffer(), tabs.buffer().size());
-    kDebug() << tabStops;
+    debugDocx << tabStops;
     m_currentParagraphStyle.addChildElement("style:tab-stops", tabStops);
 
     READ_EPILOGUE
@@ -4870,7 +4873,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tab()
             body->addAttribute("style:type", "right");
         }
         else if (val == "bar" || val == "num") {
-            kDebug() << "Unhandled tab justification code:" << val;
+            debugDocx << "Unhandled tab justification code:" << val;
         }
     }
 
@@ -5295,7 +5298,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_lang()
             m_currentTextStyle.addProperty("style:language-complex", language, KoGenStyle::TextType);
             m_currentTextStyle.addProperty("style:country-complex", country, KoGenStyle::TextType);
         } else {
-            kWarning() << "invalid value of \"bidi\" attribute:" << bidi << " - skipping";
+            warnDocx << "invalid value of \"bidi\" attribute:" << bidi << " - skipping";
         }
     }
     TRY_READ_ATTR(val)
@@ -5303,7 +5306,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_lang()
         m_currentTextStyle.addProperty("fo:language", language, KoGenStyle::TextType);
         m_currentTextStyle.addProperty("fo:country", country, KoGenStyle::TextType);
     } else {
-        kWarning() << "invalid value of \"val\" attribute:" << val << " - skipping";
+        warnDocx << "invalid value of \"val\" attribute:" << val << " - skipping";
     }
 
     TRY_READ_ATTR(eastAsia)
@@ -5312,10 +5315,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_lang()
             m_currentTextStyle.addProperty("style:language-asian", language, KoGenStyle::TextType);
             m_currentTextStyle.addProperty("style:country-asian", country, KoGenStyle::TextType);
         } else {
-            kWarning() << "invalid value of \"eastAsia\" attribute:" << eastAsia << " - skipping";
+            warnDocx << "invalid value of \"eastAsia\" attribute:" << eastAsia << " - skipping";
         }
     }
-    kDebug() << "bidi:" << bidi << "val:" << val << "eastAsia:" << eastAsia;
+    debugDocx << "bidi:" << bidi << "val:" << val << "eastAsia:" << eastAsia;
 
     readNext();
     READ_EPILOGUE
@@ -5489,13 +5492,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 
                 //debug border information
 #ifdef DOCXXML_DEBUG_TABLES
-		kDebug() << "==> [tblBorders] information: <====================";
-		kDebug() << "top:" << m_currentDefaultCellStyle->top.style;
-		kDebug() << "bottom:" << m_currentDefaultCellStyle->bottom.style;
-		kDebug() << "left:" << m_currentDefaultCellStyle->left.style;
-		kDebug() << "right:" << m_currentDefaultCellStyle->right.style;
-		kDebug() << "insideH:" << m_currentDefaultCellStyle->insideH.style;
-		kDebug() << "insideV:" << m_currentDefaultCellStyle->insideV.style;
+		debugDocx << "==> [tblBorders] information: <====================";
+		debugDocx << "top:" << m_currentDefaultCellStyle->top.style;
+		debugDocx << "bottom:" << m_currentDefaultCellStyle->bottom.style;
+		debugDocx << "left:" << m_currentDefaultCellStyle->left.style;
+		debugDocx << "right:" << m_currentDefaultCellStyle->right.style;
+		debugDocx << "insideH:" << m_currentDefaultCellStyle->insideH.style;
+		debugDocx << "insideV:" << m_currentDefaultCellStyle->insideV.style;
 #endif
             }
             ELSE_TRY_READ_IF(tblGrid)
@@ -5539,7 +5542,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     defineTableStyles();
 
 #ifdef DOCXXML_DEBUG_TABLES
-    kDebug() << "----------------------------------------";
+    debugDocx << "----------------------------------------";
 #endif
 
     m_table->saveOdf(*body, *mainStyles);
@@ -5583,11 +5586,11 @@ void DocxXmlDocumentReader::defineTableStyles()
 
     for(int row = 0; row < rowCount; ++row ) {
 #ifdef DOCXXML_DEBUG_TABLES
-        kDebug() << "----- [ROW" << row +1 << "] ----------";
+        debugDocx << "----- [ROW" << row +1 << "] ----------";
 #endif
         for(int column = 0; column < columnCount; ++column ) {
 #ifdef DOCXXML_DEBUG_TABLES
-            kDebug() << "----- [COLUMN" << column +1 << "] ----------";
+            debugDocx << "----- [COLUMN" << column +1 << "] ----------";
 #endif
             spans.first = m_table->cellAt(row, column)->rowSpan();
             spans.second = m_table->cellAt(row, column)->columnSpan();
@@ -5598,10 +5601,10 @@ void DocxXmlDocumentReader::defineTableStyles()
             m_table->cellAt(row, column)->setStyle(style);
 #ifdef DOCXXML_DEBUG_TABLES
             style = m_table->cellAt(row, column)->style();
-            kDebug() << "[check] top:" << style->borders()->topBorderData().style;
-            kDebug() << "[check] bottom:" << style->borders()->bottomBorderData().style;
-            kDebug() << "[check] left:" << style->borders()->leftBorderData().style;
-            kDebug() << "[check] right:" << style->borders()->rightBorderData().style;
+            debugDocx << "[check] top:" << style->borders()->topBorderData().style;
+            debugDocx << "[check] bottom:" << style->borders()->bottomBorderData().style;
+            debugDocx << "[check] left:" << style->borders()->leftBorderData().style;
+            debugDocx << "[check] right:" << style->borders()->rightBorderData().style;
 #endif
         }
     }
@@ -5697,12 +5700,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblPrEx()
                 m_currentLocalTableStyles->setLocalStyle(m_currentTableStyleProperties,
                     m_currentTableRowNumber, -1);
 #ifdef DOCXXML_DEBUG_TABLES
-		kDebug() << "====> [Row" << m_currentTableRowNumber << " Column (-1)" <<
+		debugDocx << "====> [Row" << m_currentTableRowNumber << " Column (-1)" <<
                             "] Border information:";
-		kDebug() << "top:" << m_currentTableStyleProperties->top.style;
-		kDebug() << "bottom:" << m_currentTableStyleProperties->bottom.style;
-		kDebug() << "left:" << m_currentTableStyleProperties->left.style;
-		kDebug() << "right:" << m_currentTableStyleProperties->right.style;
+		debugDocx << "top:" << m_currentTableStyleProperties->top.style;
+		debugDocx << "bottom:" << m_currentTableStyleProperties->bottom.style;
+		debugDocx << "left:" << m_currentTableStyleProperties->left.style;
+		debugDocx << "right:" << m_currentTableStyleProperties->right.style;
 #endif
                 m_currentTableStyleProperties = 0;
 
@@ -6115,12 +6118,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
                     m_currentTableRowNumber, m_currentTableColumnNumber);
 
 #ifdef DOCXXML_DEBUG_TABLES
-		kDebug() << "====> [Row" << m_currentTableRowNumber << " Column" <<
+		debugDocx << "====> [Row" << m_currentTableRowNumber << " Column" <<
                             m_currentTableColumnNumber << "] Border information:";
-		kDebug() << "top:" << m_currentTableStyleProperties->top.style;
-		kDebug() << "bottom:" << m_currentTableStyleProperties->bottom.style;
-		kDebug() << "left:" << m_currentTableStyleProperties->left.style;
-		kDebug() << "right:" << m_currentTableStyleProperties->right.style;
+		debugDocx << "top:" << m_currentTableStyleProperties->top.style;
+		debugDocx << "bottom:" << m_currentTableStyleProperties->bottom.style;
+		debugDocx << "left:" << m_currentTableStyleProperties->left.style;
+		debugDocx << "right:" << m_currentTableStyleProperties->right.style;
 #endif
                 m_currentTableStyleProperties = 0;
             }
@@ -6441,7 +6444,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_control()
     /*
     TRY_READ_ATTR_WITH_NS(r, id)
     const QString oleName(m_context->relationships->target(m_context->path, m_context->file, r_id));
-    kDebug() << "oleName:" << oleName;
+    debugDocx << "oleName:" << oleName;
     */
 
     // Replacement image
@@ -6486,7 +6489,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
 
     TRY_READ_ATTR_WITH_NS(r, id)
     const QString oleName(m_context->relationships->target(m_context->path, m_context->file, r_id));
-    kDebug() << "oleName:" << oleName;
+    debugDocx << "oleName:" << oleName;
 
     QString destinationName = oleName.mid(oleName.lastIndexOf('/') + 1);
     KoFilter::ConversionStatus stat = m_context->import->copyFile(oleName, destinationName, false);
@@ -7283,7 +7286,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_t_m()
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        kDebug() << *this;
+        debugDocx << *this;
         if (isCharacters()) {
             body->addTextSpan(text().toString());
         }
@@ -7356,7 +7359,7 @@ void DocxXmlDocumentReader::saveState()
 void DocxXmlDocumentReader::restoreState()
 {
     if (m_statesBkp.isEmpty()) {
-        kWarning() << "Error: DocumentReaderState stack is corrupt!";
+        warnDocx << "Error: DocumentReaderState stack is corrupt!";
         return;
     }
     DocumentReaderState s = m_statesBkp.pop();

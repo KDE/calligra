@@ -21,6 +21,8 @@
 #define KOSNAPDATA_H
 
 #include <KoPathSegment.h>
+#include <flake_export.h>
+#include <QVector>
 
 /**
  * This class is used to provide additional data to the snap guide.
@@ -33,17 +35,17 @@
  * So the shape can put that data in form of points or segments into
  * that class which the snap guide can retrieve and use accordingly.
  */
-class FLAKE_TEST_EXPORT KoSnapData
+class FLAKE_EXPORT KoSnapData
 {
 public:
     KoSnapData();
     ~KoSnapData();
 
     /// Returns list of points to snap to
-    QList<QPointF> snapPoints() const;
+    QVector<QPointF> snapPoints() const;
 
     /// Sets list of points to snap to
-    void setSnapPoints(const QList<QPointF> &snapPoints);
+    void setSnapPoints(const QVector<QPointF> &snapPoints);
 
     /// Returns list of segments to snap to
     QList<KoPathSegment> snapSegments() const;
@@ -52,7 +54,7 @@ public:
     void setSnapSegments(const QList<KoPathSegment> &snapSegments);
 
 private:
-    QList<QPointF> m_points;
+    QVector<QPointF> m_points;
     QList<KoPathSegment> m_segments;
 };
 

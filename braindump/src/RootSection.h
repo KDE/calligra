@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include <QMap>
+
 #include "SectionGroup.h"
 
 class KActionCollection;

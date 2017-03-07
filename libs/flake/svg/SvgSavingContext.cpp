@@ -26,15 +26,16 @@
 #include <KoShapeLayer.h>
 #include <KoImageData.h>
 
-#include <kmimetype.h>
-#include <ktemporaryfile.h>
-#include <KIO/NetAccess>
-#include <KIO/CopyJob>
+#include <QTemporaryFile>
 
+#include <QImage>
+#include <QTransform>
 #include <QBuffer>
 #include <QHash>
 #include <QFile>
 #include <QFileInfo>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 class SvgSavingContext::Private
 {
@@ -155,20 +156,22 @@ QString SvgSavingContext::createFileName(const QString &extension)
     if (!file)
         return QString();
 
-    // get url of destination directory
-    KUrl url(file->fileName());
-    QString dstBaseFilename = QFileInfo(url.fileName()).baseName();
-    url.setDirectory(url.directory());
+    QFileInfo fi(file->fileName());
+    QString path = fi.absolutePath();
+    QString dstBaseFilename = fi.baseName();
+
     // create a filename for the image file at the destination directory
     QString fname = dstBaseFilename + '_' + createUID("file");
-    url.setFileName(fname + extension);
+
     // check if file exists already
     int i = 0;
+    QString counter;
     // change filename as long as the filename already exists
-    while (KIO::NetAccess::exists(url, KIO::NetAccess::DestinationSide, 0))
-        url.setFileName(fname + QString("_%1").arg(++i) + extension);
+    while (QFile(path + fname + counter + extension).exists()) {
+        counter = QString("_%1").arg(++i);
+    }
 
-    return url.fileName();
+    return fname + counter + extension;
 }
 
 QString SvgSavingContext::saveImage(const QImage &image)
@@ -178,31 +181,34 @@ QString SvgSavingContext::saveImage(const QImage &image)
         QBuffer buffer(&ba);
         buffer.open(QIODevice::WriteOnly);
         if (image.save(&buffer, "PNG")) {
-            const QString mimeType(KMimeType::findByContent(ba)->name());
+            QMimeDatabase db;
+            const QString mimeType(db.mimeTypeForData(ba).name());
             const QString header("data:" + mimeType + ";base64,");
             return header + ba.toBase64();
         }
     } else {
         // write to a temp file first
-        KTemporaryFile imgFile;
+        QTemporaryFile imgFile;
         if (image.save(&imgFile, "PNG")) {
             // tz: TODO the new version of KoImageData has the extension save inside maybe that can be used
             // get the mime type from the temp file content
-            KMimeType::Ptr mimeType = KMimeType::findByFileContent(imgFile.fileName());
+            QMimeDatabase db;
+            QMimeType mimeType = db.mimeTypeForFile(imgFile.fileName());
             // get extension from mimetype
             QString ext;
-            QStringList patterns = mimeType->patterns();
+            QStringList patterns = mimeType.globPatterns();
             if (patterns.count())
                 ext = patterns.first().mid(1);
 
             QString dstFilename = createFileName(ext);
 
-            // move the temp file to the destination directory
-            KIO::Job * job = KIO::move(KUrl(imgFile.fileName()), KUrl(dstFilename));
-            if (job && KIO::NetAccess::synchronousRun(job, 0))
+            if (QFile::copy(imgFile.fileName(), dstFilename)) {
                 return dstFilename;
-            else
-                KIO::NetAccess::removeTempFile(imgFile.fileName());
+            }
+            else {
+                QFile f(imgFile.fileName());
+                f.remove();
+            }
         }
     }
 
@@ -216,31 +222,35 @@ QString SvgSavingContext::saveImage(KoImageData *image)
         QBuffer buffer(&ba);
         buffer.open(QIODevice::WriteOnly);
         if (image->saveData(buffer)) {
-            const QString mimeType(KMimeType::findByContent(ba)->name());
+            QMimeDatabase db;
+            const QString mimeType(db.mimeTypeForData(ba).name());
             const QString header("data:" + mimeType + ";base64,");
             return header + ba.toBase64();
         }
     } else {
         // write to a temp file first
-        KTemporaryFile imgFile;
+        QTemporaryFile imgFile;
         if (image->saveData(imgFile)) {
             // tz: TODO the new version of KoImageData has the extension save inside maybe that can be used
             // get the mime type from the temp file content
-            KMimeType::Ptr mimeType = KMimeType::findByFileContent(imgFile.fileName());
+            QMimeDatabase db;
+            QMimeType mimeType = db.mimeTypeForFile(imgFile.fileName());
             // get extension from mimetype
             QString ext;
-            QStringList patterns = mimeType->patterns();
+            QStringList patterns = mimeType.globPatterns();
             if (patterns.count())
                 ext = patterns.first().mid(1);
 
             QString dstFilename = createFileName(ext);
 
             // move the temp file to the destination directory
-            KIO::Job * job = KIO::move(KUrl(imgFile.fileName()), KUrl(dstFilename));
-            if (job && KIO::NetAccess::synchronousRun(job, 0))
+            if (QFile::copy(imgFile.fileName(), dstFilename)) {
                 return dstFilename;
-            else
-                KIO::NetAccess::removeTempFile(imgFile.fileName());
+            }
+            else {
+                QFile f(imgFile.fileName());
+                f.remove();
+            }
         }
     }
     return QString();

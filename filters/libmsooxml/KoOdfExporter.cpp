@@ -24,7 +24,7 @@
 #include <QBuffer>
 #include <QByteArray>
 
-#include <kdebug.h>
+#include "MsooXmlDebug.h"
 
 #include <KoOdfWriteStore.h>
 #include <KoStoreDevice.h>
@@ -66,25 +66,25 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
 {
     // check for proper conversion
     if (!acceptsSourceMimeType(from)) {
-        kWarning(30003) << "Invalid source mimetype" << from;
+        warnMsooXml << "Invalid source mimetype" << from;
         return KoFilter::NotImplemented;
     }
     if (!acceptsDestinationMimeType(to)) {
-        kWarning(30003) << "Invalid destination mimetype" << to;
+        warnMsooXml << "Invalid destination mimetype" << to;
         return KoFilter::NotImplemented;
     }
 
     //create output files
     KoStore *outputStore = KoStore::createStore(m_chain->outputFile(), KoStore::Write, to, KoStore::Zip);
     if (!outputStore || outputStore->bad()) {
-        kWarning(30003) << "Unable to open output file!";
+        warnMsooXml << "Unable to open output file!";
         delete outputStore;
         return KoFilter::FileNotFound;
     }
-    kDebug(30003) << "created outputStore.";
+    debugMsooXml << "created outputStore.";
     KoOdfWriteStore oasisStore(outputStore);
 
-    kDebug(30003) << "created oasisStore.";
+    debugMsooXml << "created oasisStore.";
 
     // KoGenStyles for writing styles while we're parsing
     KoGenStyles mainStyles;
@@ -130,7 +130,7 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
     //now create real content/body writers & dump the information there
     KoXmlWriter* realContentWriter = oasisStore.contentWriter();
     if (!realContentWriter) {
-        kWarning(30003) << "Error creating the content writer.";
+        warnMsooXml << "Error creating the content writer.";
         delete outputStore;
         return KoFilter::CreationError;
     }
@@ -138,7 +138,7 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
 
     KoXmlWriter* realBodyWriter = oasisStore.bodyWriter();
     if (!realBodyWriter) {
-        kWarning(30003) << "Error creating the body writer.";
+        warnMsooXml << "Error creating the body writer.";
         delete outputStore;
         return KoFilter::CreationError;
     }
@@ -146,12 +146,12 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
 
     //now close content & body writers
     if (!oasisStore.closeContentWriter()) {
-        kWarning(30003) << "Error closing content.";
+        warnMsooXml << "Error closing content.";
         delete outputStore;
         return KoFilter::CreationError;
     }
 
-    kDebug(30003) << "closed content & body writers.";
+    debugMsooXml << "closed content & body writers.";
 
     //create the manifest file
     KoXmlWriter* realManifestWriter = oasisStore.manifestWriter(to);
@@ -160,7 +160,7 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
     realManifestWriter->addManifestEntry("content.xml", "text/xml");
     realManifestWriter->addCompleteElement(&manifestBuf);
 
-    kDebug(30003) << "created manifest and styles.xml";
+    debugMsooXml << "created manifest and styles.xml";
 
     // create settings.xml, apparently it is used to note calligra that msoffice files should
     // have different behavior with some things

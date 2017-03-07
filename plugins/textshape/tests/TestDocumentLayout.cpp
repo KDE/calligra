@@ -29,8 +29,7 @@
 
 #include <QtGui>
 
-#include <kdebug.h>
-#include <kcomponentdata.h>
+#include <QDebug>
 
 #define FRAME_SPACING 10.0
 
@@ -951,5 +950,3 @@ void TestDocumentLayout::testShapePosition2()
 }
 
 QTEST_KDEMAIN(TestDocumentLayout, GUI)
-
-#include <TestDocumentLayout.moc>

@@ -23,6 +23,7 @@
 
 #include "PictureShape.h"
 #include "PictureShapeConfigWidget.h"
+#include "PictureDebug.h"
 
 #include <QByteArray>
 #include <QBuffer>
@@ -37,14 +38,13 @@
 #include <KoImageData.h>
 #include <KoProperties.h>
 #include <KoIcon.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
 
 PictureShapeFactory::PictureShapeFactory()
     : KoShapeFactoryBase(PICTURESHAPEID, i18n("Image"))
 {
     setToolTip(i18n("Image shape that can display jpg, png etc."));
-    setIconName(koIconNameCStr("x-shape-image"));
+    setIconName(koIconName("x-shape-image"));
     setLoadingPriority(1);
 
     QList<QPair<QString, QStringList> > elementNamesList;

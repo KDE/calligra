@@ -2,18 +2,14 @@ project(stagepart)
 
 include_directories( ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${Boost_INCLUDE_DIR})
 
-if(KDE4_BUILD_TESTS)
-    # only with this definition will the STAGE_TEST_EXPORT macro do something
-    add_definitions(-DCOMPILING_TESTS)
-endif()
-
-if (!WIN32) ## Disable tests in Windows whilst they break builds
-	add_subdirectory(tests)
+if (NOT WIN32) ## Disable tests in Windows whilst they break builds
+    add_subdirectory(tests)
 endif()
 add_subdirectory(tools)
 
 ### calligrastageprivate ###
 set( calligrastageprivate_LIB_SRCS
+     StageDebug.cpp
      KPrFactory.cpp
      KPrDocument.cpp
      KPrDeclarations.cpp
@@ -137,7 +133,7 @@ set( calligrastageprivate_LIB_SRCS
      tools/KPrPlaceholderToolFactory.cpp
    )
 
-if(QT_QTDBUS_FOUND)
+if(Qt5DBus_FOUND)
 set( calligrastageprivate_LIB_SRCS
      ${calligrastageprivate_LIB_SRCS}
      KPrViewAdaptor.cpp
@@ -145,17 +141,34 @@ set( calligrastageprivate_LIB_SRCS
    )
 endif()
 
-kde4_add_ui_files(calligrastageprivate_LIB_SRCS
+ki18n_wrap_ui(calligrastageprivate_LIB_SRCS
      ui/KPrConfigureSlideShow.ui
      ui/KPrConfigurePresenterView.ui
      ui/KPrPresentationTool.ui
      ui/KPrHtmlExport.ui
    )
 
-kde4_add_library(calligrastageprivate SHARED ${calligrastageprivate_LIB_SRCS})
+add_library(calligrastageprivate SHARED ${calligrastageprivate_LIB_SRCS})
+generate_export_header(calligrastageprivate
+    BASE_NAME stage
+    EXPORT_FILE_NAME stage_generated_export.h
+)
 
-target_link_libraries(calligrastageprivate kopageapp kowidgets kotextlayout ${KDE4_KFILE_LIBS} ${KDE4_PHONON_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${QT_QTWEBKIT_LIBRARY})
-target_link_libraries(calligrastageprivate LINK_INTERFACE_LIBRARIES kopageapp)
+target_link_libraries(calligrastageprivate
+    PUBLIC
+        kopageapp
+    PRIVATE
+        kowidgets
+        kotextlayout
+        koplugin
+        KF5::Archive
+        KF5::IconThemes
+        Qt5::Svg
+        Qt5::WebKitWidgets
+)
+if(HAVE_OPENGL)
+    target_link_libraries(calligrastageprivate PRIVATE Qt5::OpenGL)
+endif()
 
 set_target_properties(calligrastageprivate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS calligrastageprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
@@ -163,28 +176,27 @@ install(TARGETS calligrastageprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 ### calligrastagepart ###
 set(calligrastagepart_PART_SRCS KPrFactoryInit.cpp )
 
-kde4_add_plugin(calligrastagepart ${calligrastagepart_PART_SRCS})
+add_library(calligrastagepart MODULE ${calligrastagepart_PART_SRCS})
 
-
+calligra_part_desktop_to_json(calligrastagepart stagepart.desktop)
 
 target_link_libraries(calligrastagepart calligrastageprivate )
 
-install(TARGETS calligrastagepart DESTINATION ${PLUGIN_INSTALL_DIR})
-
-### desktop files ###
-install( FILES stagepart.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install(TARGETS calligrastagepart DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)
 
 ### GUI files ###
-install( FILES stage.rc stage_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/stage)
+install( FILES calligrastage.rc calligrastage_readonly.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/calligrastage)
 
-install( FILES stagerc DESTINATION ${CONFIG_INSTALL_DIR} )
+install( FILES calligrastagerc DESTINATION ${CONFIG_INSTALL_DIR} )
 
 ### Predefined Animations ###
 install(FILES
         animations/animations.xml
-        DESTINATION ${DATA_INSTALL_DIR}/stage/animations)
+        DESTINATION ${DATA_INSTALL_DIR}/calligrastage/animations)
 
 ### Include files ###
+if (SHOULD_BUILD_DEVEL_HEADERS)
+
 install( FILES
         stage_export.h
         KPrAnimationDirector.h
@@ -198,14 +210,18 @@ install( FILES
         KPrShapeAnimations.h
         KPrView.h
         KPrViewModePresentation.h
-        DESTINATION ${INCLUDE_INSTALL_DIR}/stage/part)
+        DESTINATION ${INCLUDE_INSTALL_DIR}/calligrastage/part
+        COMPONENT Devel)
 
 install( FILES 
          animations/KPrAnimationData.h
          animations/KPrAnimationStep.h
          animations/KPrShapeAnimation.h
-         DESTINATION ${INCLUDE_INSTALL_DIR}/stage/part/animations)
+         DESTINATION ${INCLUDE_INSTALL_DIR}/calligrastage/part/animations
+         COMPONENT Devel)
 
 install( FILES
          pagelayout/KPrPlaceholders.h
-         DESTINATION ${INCLUDE_INSTALL_DIR}/stage/part/pagelayout)
+         DESTINATION ${INCLUDE_INSTALL_DIR}/calligrastage/part/pagelayout
+         COMPONENT Devel)
+endif()

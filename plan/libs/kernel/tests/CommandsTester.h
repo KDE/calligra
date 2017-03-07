@@ -20,7 +20,6 @@
 #ifndef COMMANDSTESTER_H
 #define COMMANDSTESTER_H
 
-#include <QtTest>
 #include <QObject>
 
 namespace KPlato {

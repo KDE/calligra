@@ -27,8 +27,6 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
-#include <klocale.h>
-
 using namespace Calligra::Sheets;
 
 // prototypes (sorted alphabetically)
@@ -39,7 +37,7 @@ Value func_bitlshift(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bitrshift(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("bitops", BitOpsModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadbitopsmodule.json", BitOpsModule)
 
 
 BitOpsModule::BitOpsModule(QObject* parent, const QVariantList&)
@@ -120,4 +118,4 @@ Value func_bitrshift(valVector args, ValueCalc *, FuncExtra *)
         return Value(static_cast<qint64>(x << (-1 * numshift)));
 }
 
-#include "BitOpsModule.moc"
+#include "bitops.moc"

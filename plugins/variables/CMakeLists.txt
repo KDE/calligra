@@ -1,13 +1,16 @@
 project(textvariables)
 
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_textinlineobject_variables\")
+
 include_directories(
-    ${KDE4_INCLUDE_DIR}
-    ${QT_INCLUDES}
+    
+    
     ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
 )
 
 set(textvariables_SRCS
+    VariablesDebug.cpp
     VariablesPlugin.cpp
     UserVariable.cpp
     UserVariableFactory.cpp
@@ -24,14 +27,16 @@ set(textvariables_SRCS
 )
 
 
-kde4_add_ui_files( textvariables_SRCS
+ki18n_wrap_ui( textvariables_SRCS
     FixedDateFormat.ui
 )
 
-kde4_add_plugin(calligra_textinlineobject_variables ${textvariables_SRCS})
+add_library(calligra_textinlineobject_variables MODULE ${textvariables_SRCS})
+calligra_textinlineobject_desktop_to_json(calligra_textinlineobject_variables calligra_textinlineobject_variables.desktop)
 
-target_link_libraries(calligra_textinlineobject_variables kotext kotextlayout)
+target_link_libraries(calligra_textinlineobject_variables
+    kotext
+    kotextlayout
+)
 
-install(TARGETS calligra_textinlineobject_variables DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install( FILES calligra_textinlineobject_variables.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
+install(TARGETS calligra_textinlineobject_variables DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/textinlineobjects)

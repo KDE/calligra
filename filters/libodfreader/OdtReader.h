@@ -30,6 +30,8 @@
 
 // this library
 #include "koodfreader_export.h"
+#include "OdfReader.h"
+#include "OdfReaderInternals.h"
 
 
 
@@ -60,38 +62,18 @@ class OdfTextReader;
  * processing such as internal links, lists of embedded data such as
  * pictures.
  */
-class KOODFREADER_EXPORT OdtReader
+class KOODFREADER_EXPORT OdtReader : public OdfReader
 {
  public:
     OdtReader();
     ~OdtReader();
 
-    void setTextReader(OdfTextReader *textReader);
-
-    bool analyzeContent(OdfReaderContext *context);
-
-    bool readContent(OdtReaderBackend *backend, OdfReaderContext *context);
-
  protected:
-    // All readElement*() are named after the full qualifiedName of
-    // the element in ODF that they handle.
-
     // ODT document level functions
-    void readElementOfficeBody(KoXmlStreamReader &reader);
-    void readElementOfficeText(KoXmlStreamReader &reader);
-
-    // ----------------------------------------------------------------
-    // Other functions
-
-    void readUnknownElement(KoXmlStreamReader &reader);
-
+    DECLARE_READER_FUNCTION(OfficeText);
 
  private:
-    OdtReaderBackend  *m_backend;
-    OdfReaderContext  *m_context;
-
-    // Helper readers
-    OdfTextReader     *m_textReader;
+    // Not much here. Most are already in OdfReader.
 };
 
 #endif // ODTREADER_H

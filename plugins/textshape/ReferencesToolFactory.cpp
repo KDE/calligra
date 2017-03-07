@@ -24,14 +24,14 @@
 #include <KoCanvasBase.h>
 #include <KoIcon.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 ReferencesToolFactory::ReferencesToolFactory()
         : KoToolFactoryBase("ReferencesToolFactory_ID")
 {
     setToolTip(i18n("References"));
     setToolType("calligrawords,calligraauthor");
-    setIconName(koIconNameCStr("tool_references"));
+    setIconName(koIconName("tool_references"));
     setPriority(20);
     setActivationShapeId(TextShape_SHAPEID);
 }

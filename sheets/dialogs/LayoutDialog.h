@@ -49,7 +49,7 @@
 #include "ui_ProtectionWidget.h"
 
 class KoUnitDoubleSpinBox;
-class KIntNumInput;
+class QSpinBox;
 class QPixmap;
 class QRadioButton;
 class QPushButton;
@@ -61,6 +61,7 @@ class QListWidget;
 class QCheckBox;
 class KColorButton;
 class KComboBox;
+class KLocale;
 
 namespace Calligra
 {
@@ -247,7 +248,7 @@ public Q_SLOTS:
     void currencyChanged(const QString &);
 protected:
     KLineEdit* postfix;
-    KIntNumInput* precision;
+    QSpinBox* precision;
     KLineEdit* prefix;
     KComboBox *format;
     KComboBox *currency;
@@ -595,6 +596,7 @@ public:
 
     KLocale * locale() const;
 
+    void setOkButtonEnabled(bool enabled);
 
     struct CellBorderFormat {
         int width;

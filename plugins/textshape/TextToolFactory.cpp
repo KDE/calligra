@@ -23,14 +23,14 @@
 #include "AnnotationTextShape.h"
 
 #include <KoIcon.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 TextToolFactory::TextToolFactory()
         : KoToolFactoryBase("TextToolFactory_ID")
 {
     setToolTip(i18n("Text editing"));
     setToolType(dynamicToolType()+",calligrawords,calligraauthor");
-    setIconName(koIconNameCStr("tool-text"));
+    setIconName(koIconName("tool-text"));
     setPriority(1);
     setActivationShapeId(TextShape_SHAPEID "," AnnotationShape_SHAPEID);
 }

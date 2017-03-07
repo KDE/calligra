@@ -30,16 +30,16 @@
 #include <KoOdfLoadingContext.h>
 #include <KoProperties.h>
 #include <KoStyleStack.h>
+#include <KoPluginLoader.h>
 
-#include <kservice.h>
-#include <KoServiceLocator.h>
-
+#include <KPluginFactory>
+#include <QPluginLoader>
 #include <QMutexLocker>
 #include <QMutex>
 
 
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 class KoShapeFactoryBase::Private
 {
@@ -129,9 +129,9 @@ void KoShapeFactoryBase::setToolTip(const QString & tooltip)
     d->tooltip = tooltip;
 }
 
-void KoShapeFactoryBase::setIconName(const char *iconName)
+void KoShapeFactoryBase::setIconName(const QString &iconName)
 {
-    d->iconName = QLatin1String(iconName);
+    d->iconName = iconName;
 }
 
 void KoShapeFactoryBase::setFamily(const QString & family)
@@ -188,7 +188,7 @@ void KoShapeFactoryBase::setHidden(bool hidden)
 void KoShapeFactoryBase::newDocumentResourceManager(KoDocumentResourceManager *manager) const
 {
     d->resourceManagers.append(manager);
-    connect(manager, SIGNAL(destroyed(QObject *)), this, SLOT(pruneDocumentResourceManager(QObject*)));
+    connect(manager, SIGNAL(destroyed(QObject*)), this, SLOT(pruneDocumentResourceManager(QObject*)));
 }
 
 QList<KoDocumentResourceManager *> KoShapeFactoryBase::documentResourceManagers() const
@@ -247,13 +247,17 @@ void KoShapeFactoryBase::getDeferredPlugin()
     QMutexLocker(&d->pluginLoadingMutex);
     if (d->deferredFactory) return;
 
-    const KService::List offers = KoServiceLocator::instance()->entries("Calligra/Deferred");
-    Q_ASSERT(offers.size() > 0);
+    const QList<KPluginFactory *> pluginFactories =
+        KoPluginLoader::instantiatePluginFactories(QStringLiteral("calligra/deferred"));
+    Q_ASSERT(pluginFactories.size() > 0);
+    foreach (KPluginFactory* factory, pluginFactories) {
+        KoDeferredShapeFactoryBase *plugin = factory->create<KoDeferredShapeFactoryBase>(this, QVariantList());
 
-    foreach(KSharedPtr<KService> service, offers) {
-        KoDeferredShapeFactoryBase *plugin = service->createInstance<KoDeferredShapeFactoryBase>(this);
         if (plugin && plugin->deferredPluginName() == d->deferredPluginName) {
             d->deferredFactory = plugin;
+        } else {
+            // not our/valid plugin, so delete the created object
+            plugin->deleteLater();
         }
     }
 

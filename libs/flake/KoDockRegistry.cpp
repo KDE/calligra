@@ -19,9 +19,16 @@
 
 #include "KoDockRegistry.h"
 
+#include <QGlobalStatic>
+#include <QFontDatabase>
+#include <QDebug>
+
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
+
 #include "KoPluginLoader.h"
 
-#include <kglobal.h>
+Q_GLOBAL_STATIC(KoDockRegistry, s_instance)
 
 KoDockRegistry::KoDockRegistry()
   : d(0)
@@ -34,9 +41,7 @@ void KoDockRegistry::init()
     config.whiteList = "DockerPlugins";
     config.blacklist = "DockerPluginsDisabled";
     config.group = "calligra";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Dock"),
-                                     QString::fromLatin1("[X-Flake-PluginVersion] == 28"),
-                                     config);
+    KoPluginLoader::load(QStringLiteral("calligra/dockers"), config);
 }
 
 KoDockRegistry::~KoDockRegistry()
@@ -47,9 +52,31 @@ KoDockRegistry::~KoDockRegistry()
 
 KoDockRegistry* KoDockRegistry::instance()
 {
-    K_GLOBAL_STATIC(KoDockRegistry, s_instance)
+
     if (!s_instance.exists()) {
         s_instance->init();
     }
     return s_instance;
+}
+
+QFont KoDockRegistry::dockFont()
+{
+    KConfigGroup group( KSharedConfig::openConfig(), "GUI");
+    QFont dockWidgetFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
+    QFont smallFont = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
+
+    int pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize());
+
+    // Not set by the user
+    if (pointSize == dockWidgetFont.pointSize()) {
+        // and there is no setting for the smallest readable font, calculate something small
+        if (smallFont.pointSize() >= pointSize) {
+            smallFont.setPointSizeF(pointSize * 0.9);
+        }
+    }
+    else {
+        // paletteFontSize was set, use that
+        smallFont.setPointSize(pointSize);
+    }
+    return smallFont;
 }

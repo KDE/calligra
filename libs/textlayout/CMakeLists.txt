@@ -28,18 +28,24 @@ set(textlayout_LIB_SRCS
     DummyDocumentLayout.cpp
     IndexGeneratorManager.cpp
     KoStyleThumbnailer.cpp
+    TextLayoutDebug.cpp
 )
 
 
-kde4_add_library(kotextlayout SHARED ${textlayout_LIB_SRCS})
+add_library(kotextlayout SHARED ${textlayout_LIB_SRCS})
+generate_export_header(kotextlayout BASE_NAME kotextlayout)
 
-target_link_libraries(kotextlayout kotext)
-target_link_libraries(kotextlayout LINK_INTERFACE_LIBRARIES kotext)
+target_link_libraries(kotextlayout
+    PUBLIC
+        kotext
+)
 
 set_target_properties(kotextlayout PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS kotextlayout  ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+if (SHOULD_BUILD_DEVEL_HEADERS)
 
 install(
     FILES
@@ -49,7 +55,8 @@ install(
     KoTextShapeData.h
     KoPointedAt.h
     KoStyleThumbnailer.h
-    kotextlayout_export.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
 )
+
+endif()

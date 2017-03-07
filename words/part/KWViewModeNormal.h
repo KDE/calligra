@@ -63,7 +63,7 @@ public:
     virtual const QString type() const {
         return KWViewModeNormal::viewMode();
     }
-    virtual QList<ViewMap> mapExposedRects(const QRectF &clipRect, KoViewConverter *viewConverter) const;
+    virtual QVector<ViewMap> mapExposedRects(const QRectF &clipRect, KoViewConverter *viewConverter) const;
 
 protected:
     void updatePageCache();

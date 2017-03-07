@@ -31,9 +31,8 @@
 
 #include <QString>
 #include <QList>
+#include <QMultiMap>
 #include <QSharedData>
-
-#include <kdebug.h>
 
 class QDomElement;
 
@@ -49,6 +48,7 @@ class EffortCostMap;
 class Schedule;
 class XMLLoaderObject;
 class DateTimeInterval;
+class TimeInterval;
 
 class AppointmentIntervalData : public QSharedData
 {
@@ -69,6 +69,7 @@ public:
     AppointmentInterval();
     AppointmentInterval(const AppointmentInterval &AppointmentInterval);
     AppointmentInterval(const DateTime &start, const DateTime &end, double load=100);
+    AppointmentInterval( const QDate &date, const TimeInterval &timeInterval, double load=100 );
     ~AppointmentInterval();
     
     Duration effort() const;

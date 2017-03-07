@@ -30,7 +30,6 @@
 #include "ValueConverter.h"
 
 #include <kcalendarsystem.h>
-#include <klocale.h>
 
 using namespace Calligra::Sheets;
 
@@ -78,7 +77,7 @@ Value func_yearFrac(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_years(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("datetime", DateTimeModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreaddatetimemodule.json", DateTimeModule)
 
 
 DateTimeModule::DateTimeModule(QObject* parent, const QVariantList&)
@@ -347,7 +346,7 @@ Value func_hour(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() == 1) {
         Value v = calc->conv()->asTime(args[0]);
         if (v.isError()) return v;
-        time = v.asTime(calc->settings());
+        time = v.asTime();
     } else
         time = QTime::currentTime();
     return Value(time.hour());
@@ -360,7 +359,7 @@ Value func_minute(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() == 1) {
         Value v = calc->conv()->asTime(args[0]);
         if (v.isError()) return v;
-        time = v.asTime(calc->settings());
+        time = v.asTime();
     } else
         time = QTime::currentTime();
     return Value(time.minute());
@@ -373,7 +372,7 @@ Value func_second(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() == 1) {
         Value v = calc->conv()->asTime(args[0]);
         if (v.isError()) return v;
-        time = v.asTime(calc->settings());
+        time = v.asTime();
     } else
         time = QTime::currentTime();
     return Value(time.second() + qRound(time.msec() * 0.001));
@@ -546,7 +545,7 @@ Value func_date(valVector args, ValueCalc *calc, FuncExtra *)
         tmpDate = tmpDate.addMonths(m - 1);
         tmpDate = tmpDate.addDays(d - 1);
 
-        //kDebug(36002) <<"func_date:: date =" << tmpDate;
+        //debugSheetsFormula <<"func_date:: date =" << tmpDate;
         return Value(tmpDate, calc->settings());
     }
 }
@@ -581,12 +580,12 @@ Value func_time(valVector args, ValueCalc *calc, FuncExtra *)
     int m = calc->conv()->asInteger(args[1]).asInteger();
     int s = calc->conv()->asInteger(args[2]).asInteger();
 
-    QTime res;
+    QTime res(0, 0);
     res = res.addSecs(60 * 60 * h);
     res = res.addSecs(60 * m);
     res = res.addSecs(s);
 
-    return Value(res, calc->settings());
+    return Value(res);
 }
 
 // Function: CURRENTDATE
@@ -598,7 +597,7 @@ Value func_currentDate(valVector, ValueCalc * calc, FuncExtra *)
 // Function: CURRENTTIME
 Value func_currentTime(valVector, ValueCalc * calc, FuncExtra *)
 {
-    return Value(QTime::currentTime(), calc->settings());
+    return Value(QTime::currentTime());
 }
 
 // Function: CURRENTDATETIME
@@ -776,7 +775,7 @@ Value func_weekNum(valVector args, ValueCalc *calc, FuncExtra *)
     if (date1.dayOfWeek() == 7 && method == 1)
         res--;
 
-    //kDebug(36002) <<"weeknum = [startday(" << startday <<") + base(7) + New Year(" << date1.dayOfWeek() <<") + days(" << days <<")] / 7 =" << res;
+    //debugSheetsFormula <<"weeknum = [startday(" << startday <<") + base(7) + New Year(" << date1.dayOfWeek() <<") + days(" << days <<")] / 7 =" << res;
 
     return Value(res);
 }
@@ -1141,4 +1140,4 @@ Value func_date2unix(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(static_cast<int>(datetime.toTime_t()));
 }
 
-#include "DateTimeModule.moc"
+#include "datetime.moc"

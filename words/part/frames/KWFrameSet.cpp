@@ -24,13 +24,13 @@
 #include "KWFrame.h"
 #include "KWCopyShape.h"
 
-#include <kdebug.h>
+#include <WordsDebug.h>
 
 KWFrameSet::KWFrameSet(Words::FrameSetType type)
     : QObject(),
     m_type(type)
 {
-    kDebug(32001) << "type=" << m_type;
+    debugWords << "type=" << m_type;
 }
 
 KWFrameSet::~KWFrameSet()
@@ -47,7 +47,7 @@ KWFrameSet::~KWFrameSet()
 
 void KWFrameSet::addShape(KoShape *shape)
 {
-    kDebug(32001) << "shape=" << shape << "frameSet=" << this;
+    debugWords << "shape=" << shape << "frameSet=" << this;
     Q_ASSERT(!m_shapes.contains(shape));
     m_shapes.append(shape); // this one first, so we don't enter the addFrame twice.
     setupShape(shape);

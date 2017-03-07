@@ -57,7 +57,9 @@ public:
     virtual MacroCommand *buildCommand();
 
 protected Q_SLOTS:
-    void slotButtonClicked(int button);
+    void accept();
+    void setButtonOkEnabled(bool enabled);
+
     void slotTaskRemoved( Node *node );
     void slotCurrentChanged( KPageWidgetItem*, KPageWidgetItem* );
 

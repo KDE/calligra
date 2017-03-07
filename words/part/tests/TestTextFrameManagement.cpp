@@ -6,11 +6,9 @@
 
 #include <KoTextShapeData.h>
 #include <MockShapes.h>
-#include <kcomponentdata.h>
 
 TestTextFrameManagement::TestTextFrameManagement()
 {
-    new KComponentData("TestTextFrameManagement");
 }
 
 void TestTextFrameManagement::testFrameRemoval()
@@ -54,5 +52,3 @@ KWTextFrame * TestTextFrameManagement::createFrame(const QPointF &position, KWTe
 
 
 QTEST_KDEMAIN(TestTextFrameManagement, GUI)
-
-#include <TestTextFrameManagement.moc>

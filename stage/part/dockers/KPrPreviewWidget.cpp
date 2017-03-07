@@ -25,11 +25,11 @@
 #include <KoShapeContainer.h>
 #include <KoZoomHandler.h>
 
+#include "StageDebug.h"
 #include "KPrPage.h"
 #include "pageeffects/KPrPageEffect.h"
 #include "pageeffects/KPrPageEffectRunner.h"
 
-#include <kdebug.h>
 
 KPrPreviewWidget::KPrPreviewWidget( QWidget* parent )
 : QWidget( parent ), m_pageEffect(0), m_pageEffectRunner(0), m_page(0)
@@ -57,6 +57,7 @@ void KPrPreviewWidget::paintEvent( QPaintEvent *event )
     }
 
     QPen pen(Qt::SolidLine);
+    pen.setWidth(0);
     pen.setColor(palette().color(QPalette::Mid));
     p.setPen(pen);
     QRect framerect = rect();
@@ -144,5 +145,3 @@ void KPrPreviewWidget::mousePressEvent( QMouseEvent* event )
     event->accept();
     runPreview();
 }
-
-#include "KPrPreviewWidget.moc"

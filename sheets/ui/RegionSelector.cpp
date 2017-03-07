@@ -19,17 +19,17 @@
 
 #include "RegionSelector.h"
 
-// KSpread
+// Sheets
 #include "FormulaEditorHighlighter.h"
 #include "Selection.h"
+#include "SheetsDebug.h"
 
 // Calligra
 #include <KoIcon.h>
+#include <KoDialog.h>
 
-// KDE
-#include <kdebug.h>
-#include <kdialog.h>
-#include <klocale.h>
+// KF5
+#include <KLocalizedString>
 #include <ktextedit.h>
 
 // Qt
@@ -44,7 +44,7 @@ class  RegionSelector::Private
 public:
     Selection* selection;
     QDialog* parentDialog;
-    KDialog* dialog;
+    KoDialog* dialog;
     KTextEdit* textEdit;
     QToolButton* button;
     FormulaEditorHighlighter* highlighter;
@@ -145,12 +145,12 @@ bool RegionSelector::eventFilter(QObject* object, QEvent* event)
 void RegionSelector::switchDisplayMode(bool state)
 {
     Q_UNUSED(state)
-    kDebug() ;
+    debugSheets ;
 
     if (d->displayMode == Widget) {
         d->displayMode = Dialog;
 
-        d->dialog = new KDialog(d->parentDialog->parentWidget(), Qt::Tool);
+        d->dialog = new KoDialog(d->parentDialog->parentWidget(), Qt::Tool);
         d->dialog->resize(d->parentDialog->width(), 20);
         d->dialog->move(d->parentDialog->pos());
         d->dialog->setButtons(0);
@@ -197,5 +197,3 @@ void RegionSelector::choiceChanged()
         d->textEdit->setPlainText(area);
     }
 }
-
-#include "RegionSelector.moc"

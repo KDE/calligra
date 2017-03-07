@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
-
+   Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -20,20 +21,10 @@
 #ifndef KPlato_ProjectTester_h
 #define KPlato_ProjectTester_h
 
-#include <QtTest>
+#include <QObject>
 
 #include "kptproject.h"
 #include "kptdatetime.h"
-#include <ktempdir.h>
-
-namespace QTest
-{
-    template<>
-            char *toString(const KPlato::DateTime &dt)
-    {
-        return toString( dt.toString() );
-    }
-}
 
 namespace KPlato
 {
@@ -81,11 +72,13 @@ private Q_SLOTS:
 
     void startStart();
 
+    void scheduleTimeZone();
+    
 private:
     Project *m_project;
     Calendar *m_calendar;
     Task *m_task;
-    KTempDir m_tmp;
+    QByteArray tz;
 };
 
 } //namespace KPlato

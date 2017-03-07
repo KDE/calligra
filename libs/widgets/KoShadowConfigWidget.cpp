@@ -34,14 +34,14 @@
 #include <MctStaticData.h>
 #include <MctChangeEntities.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QCheckBox>
 
 #include <math.h>
 #include <KoDocument.h>
 
-class KoShadowConfigWidget::Private
+class Q_DECL_HIDDEN KoShadowConfigWidget::Private
 {
 public:
     Private()
@@ -74,7 +74,7 @@ KoShadowConfigWidget::KoShadowConfigWidget(QWidget *parent)
 
     connect(d->widget.shadowVisible, SIGNAL(toggled(bool)), this, SLOT(applyChanges()));
     connect(d->widget.shadowVisible, SIGNAL(toggled(bool)), this, SLOT(visibilityChanged()));
-    connect(d->actionShadowColor, SIGNAL(colorChanged(const KoColor&)), this, SLOT(applyChanges()));
+    connect(d->actionShadowColor, SIGNAL(colorChanged(KoColor)), this, SLOT(applyChanges()));
     connect(d->widget.shadowAngle, SIGNAL(valueChanged(int)), this, SLOT(applyChanges()));
     connect(d->widget.shadowOffset, SIGNAL(valueChangedPt(qreal)), this, SLOT(applyChanges()));
     connect(d->widget.shadowBlur, SIGNAL(valueChangedPt(qreal)), this, SLOT(applyChanges()));
@@ -221,8 +221,8 @@ void KoShadowConfigWidget::setCanvas(KoCanvasBase *canvas)
 
     setUnit(canvas->unit());
 
-    connect( d->canvas->resourceManager(), SIGNAL( canvasResourceChanged( int, const QVariant& ) ),
-             this, SLOT( resourceChanged( int, const QVariant& ) ) );
+    connect( d->canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+             this, SLOT(resourceChanged(int,QVariant)) );
 }
 
 void KoShadowConfigWidget::setUnit(const KoUnit &unit)
@@ -241,5 +241,3 @@ void KoShadowConfigWidget::resourceChanged( int key, const QVariant & res )
         setUnit(res.value<KoUnit>());
     }
 }
-
-#include <KoShadowConfigWidget.moc>

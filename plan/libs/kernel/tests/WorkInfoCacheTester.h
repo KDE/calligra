@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2012 Dag Andersen <danders@get2net.dk>
-
+   Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -20,7 +21,7 @@
 #ifndef KPlato_WorkInfoCacheTester_h
 #define KPlato_WorkInfoCacheTester_h
 
-#include <QtTest>
+#include <QObject>
 
 namespace KPlato
 {
@@ -29,18 +30,13 @@ class WorkInfoCacheTester : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void initTestCase();
-    void cleanupTestCase();
-
     void basics();
     void addAfter();
     void addBefore();
     void addMiddle();
     void fullDay();
     void timeZone();
-
-private:
-    void removeDir(const QString &dir);
+    void doubleTimeZones();
 };
 
 } //namespace KPlato

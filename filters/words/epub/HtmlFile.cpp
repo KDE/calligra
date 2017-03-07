@@ -28,12 +28,10 @@
 #include <QByteArray>
 #include <QList>
 
-// KDE
-#include <kdebug.h>
-
 // Calligra
 #include <KoStore.h>
 
+#include "HtmlExportDebug.h"
 
 // ================================================================
 //                         class HtmlFile
@@ -52,7 +50,7 @@ KoFilter::ConversionStatus HtmlFile::writeHtml(const QString &fileName)
     // Create the store and check if everything went well.
     KoStore *htmlStore = KoStore::createStore(fileName, KoStore::Write, "", KoStore::Directory);
     if (!htmlStore || htmlStore->bad()) {
-        kWarning(30003) << "Unable to create output file!";
+        warnHtml << "Unable to create output file!";
         delete htmlStore;
         return KoFilter::FileNotFound;
     }

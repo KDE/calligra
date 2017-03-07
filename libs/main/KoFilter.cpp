@@ -21,8 +21,8 @@ Boston, MA 02110-1301, USA.
 #include "KoFilter.h"
 
 #include <QFile>
-#include <kurl.h>
-#include <kdebug.h>
+#include <QUrl>
+#include <MainDebug.h>
 #include <QStack>
 #include "KoFilterManager.h"
 #include "KoUpdater.h"
@@ -62,5 +62,3 @@ void KoFilter::slotProgress(int value)
         d->updater->setValue(value);
     }
 }
-
-#include <KoFilter.moc>

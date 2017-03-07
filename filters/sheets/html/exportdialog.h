@@ -20,7 +20,8 @@
 #ifndef EXPORTDIALOG_H
 #define EXPORTDIALOG_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
+class QUrl;
 
 #include <ui_exportwidget.h>
 
@@ -33,7 +34,7 @@ public:
 };
 
 
-class ExportDialog : public KDialog
+class ExportDialog : public KoDialog
 {
     Q_OBJECT
 public:
@@ -50,9 +51,9 @@ public:
 
     /**
       Returns a valid URL if the custom button was selected.
-      Else, it will return KUrl().
+      Else, it will return QUrl().
     */
-    KUrl customStyleURL() const;
+    QUrl customStyleURL() const;
 
     /**
       Returns true if borders should be shown, false if borders

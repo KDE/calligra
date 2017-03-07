@@ -22,13 +22,13 @@
 // built-in text functions
 #include "TextModule.h"
 
-// please keep it in alphabetical order
-#include <QRegExp>
-#include <kglobal.h>
-#include <klocale.h>
-#include <kdebug.h>
 #include <math.h>
 
+#include <QRegExp>
+
+#include <klocale.h>
+
+#include "SheetsDebug.h"
 #include "CalculationSettings.h"
 #include "Function.h"
 #include "FunctionModuleRegistry.h"
@@ -79,7 +79,7 @@ Value func_value(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bahttext(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("text", TextModule)
+CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadtextmodule.json", TextModule)
 
 
 TextModule::TextModule(QObject* parent, const QVariantList&)
@@ -463,7 +463,7 @@ Value func_numbervalue(valVector args, ValueCalc *calc, FuncExtra *)
     else if (decimalPoint == ",")
         thousandsSeparator = '.';
 
-    KLocale l(*KGlobal::locale());
+    KLocale l(*KLocale::global());
     l.setDecimalSymbol(decimalPoint);
     l.setThousandsSeparator(thousandsSeparator);
     l.setPositiveSign("+");
@@ -808,7 +808,7 @@ void lclAppendDigit(QString& rText, qint32 nDigit)
     case 7: rText += QString::fromUtf8(UTF8_TH_7); break;
     case 8: rText += QString::fromUtf8(UTF8_TH_8); break;
     case 9: rText += QString::fromUtf8(UTF8_TH_9); break;
-    default: kDebug() << "lclAppendDigit - illegal digit"; break;
+    default: debugSheets << "lclAppendDigit - illegal digit"; break;
     }
 }
 
@@ -825,7 +825,7 @@ void lclAppendPow10(QString& rText, qint32 nDigit, qint32 nPow10)
     case 3: rText += QString::fromUtf8(UTF8_TH_1E3); break;
     case 4: rText += QString::fromUtf8(UTF8_TH_1E4); break;
     case 5: rText += QString::fromUtf8(UTF8_TH_1E5); break;
-    default: kDebug() << "lclAppendPow10 - illegal power"; break;
+    default: debugSheets << "lclAppendPow10 - illegal power"; break;
     }
 }
 
@@ -918,4 +918,4 @@ Value func_bahttext(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(aText);
 }
 
-#include "TextModule.moc"
+#include "text.moc"

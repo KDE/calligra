@@ -24,17 +24,15 @@
 #include <QResizeEvent>
 #include <QToolButton>
 
-// KDE
-#include <kaction.h>
-#include <klocale.h>
-
-#include <kdebug.h>
+// KF5
+#include <KLocalizedString>
 
 // Calligra
 #include <KoToolProxy.h>
 #include <KoToolManager.h>
 
 // Calligra Sheets
+#include "SheetsDebug.h"
 #include "CellToolBase.h"
 #include "ExternalEditor.h"
 #include "LocationComboBox.h"
@@ -119,7 +117,7 @@ void CellEditorDocker::setCanvas(KoCanvasBase *canvas)
 void CellEditorDocker::unsetCanvas()
 {
     if (d->canvasResetBugWorkaround) return;
-    kDebug() << "unsetting canvas";
+    debugSheets << "unsetting canvas";
     if (d->toolProxy) {
         disconnect(d->toolProxy, SIGNAL(toolChanged(QString)), this, SLOT(toolChanged(QString)));
     }
@@ -165,7 +163,7 @@ void CellEditorDocker::resizeEvent(QResizeEvent *event)
 
 void CellEditorDocker::toolChanged(const QString &toolId)
 {
-    kDebug() << "tool changed to" << toolId;
+    debugSheets << "tool changed to" << toolId;
 
     const bool isCellTool = toolId == QLatin1String("KSpreadCellToolId");
     setEnabled(isCellTool);
@@ -177,7 +175,7 @@ void CellEditorDocker::toolChanged(const QString &toolId)
         d->editor->setCellTool(d->cellTool);
         d->cellTool->setExternalEditor(d->editor);
         d->formulaButton->setDefaultAction(d->cellTool->action("insertFormula"));
-        kDebug() << tool << d->cellTool;
+        debugSheets << tool << d->cellTool;
     }
 }
 

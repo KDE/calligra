@@ -192,10 +192,10 @@ protected:
     /// reimplemented
     virtual void removePages(QList<KoPAPageBase*> &pages);
 
-    /// load configuration specific to KPresenter
+    /// load configuration specific to Stage
     void loadKPrConfig();
 
-    /// save configuration specific to KPresenter
+    /// save configuration specific to Stage
     void saveKPrConfig();
 
     /**
@@ -209,7 +209,7 @@ private:
     int m_presentationMonitor;
     bool m_presenterViewEnabled;
     QString m_activeCustomSlideShow;
-    /// Message shown before KPresenter quits with an error if something is wrong
+    /// Message shown before Stage quits with an error if something is wrong
     KPrDeclarations *m_declarations;
 };
 

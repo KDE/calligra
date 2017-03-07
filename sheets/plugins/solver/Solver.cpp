@@ -20,12 +20,12 @@
 // Local
 #include "Solver.h"
 
-#include <kdebug.h>
+#include <QStandardPaths>
+
 #include <kpluginfactory.h>
 #include <ktextedit.h>
-#include <kaction.h>
-#include <kstandarddirs.h>
 #include <kactioncollection.h>
+
 #include <Formula.h>
 #include <Cell.h>
 #include <part/Doc.h>
@@ -39,8 +39,8 @@
 using namespace Calligra::Sheets::Plugins;
 
 // make the plugin available
-K_PLUGIN_FACTORY(SolverFactory, registerPlugin<Calligra::Sheets::Plugins::Solver>();)
-K_EXPORT_PLUGIN(SolverFactory("sheetssolver"))
+K_PLUGIN_FACTORY_WITH_JSON(SolverFactory, "sheetssolver.json",
+                           registerPlugin<Calligra::Sheets::Plugins::Solver>();)
 
 Calligra::Sheets::View* s_view = 0;
 Calligra::Sheets::Formula* s_formula = 0;
@@ -59,12 +59,12 @@ Solver::Solver(QObject* parent, const QVariantList& args)
 {
     Q_UNUSED(args)
 
-    setXMLFile(KStandardDirs::locate("data", "sheets/viewplugins/solver.rc"), true);
+    setXMLFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligrasheets/viewplugins/solver.rc"), true);
 
     d->dialog = 0;
     d->view = qobject_cast<View*>(parent);
     if (!d->view) {
-        kError() << "Solver: Parent object is not a Calligra::Sheets::View! Quitting." << endl;
+        errorSheets << "Solver: Parent object is not a Calligra::Sheets::View! Quitting." << endl;
         return;
     }
 
@@ -106,7 +106,7 @@ void Solver::optimize()
     if (!formulaCell.isFormula())
         return;
 
-    kDebug() << formulaCell.userInput();
+    debugSheets << formulaCell.userInput();
     s_formula = new Formula(sheet);
     if (d->dialog->minimizeButton->isChecked()) {
         s_formula->setExpression(formulaCell.userInput());
@@ -172,7 +172,7 @@ void Solver::optimize()
         status = gsl_multimin_test_size(size, epsilon);
 
         if (status == GSL_SUCCESS) {
-            kDebug() << "converged to minimum after" << iteration << " iteration(s) at";
+            debugSheets << "converged to minimum after" << iteration << " iteration(s) at";
         }
 
         for (int i = 0; i < dimension; ++i) {

@@ -54,14 +54,14 @@ public:
      * @param s the input string containing the percentage
      * @return the percentage number normalized to 0..100
      */
-    static double toPercentage(QString s);
+    static double toPercentage(const QString &s);
 
     /**
      * Parses the given string containing a percentage number.
      * @param s the input string containing the percentage
      * @return the percentage number normalized to 0..1
      */
-    static double fromPercentage(QString s);
+    static double fromPercentage(const QString &s);
 
     /**
      * Converts position from objectBoundingBox units to userSpace units.

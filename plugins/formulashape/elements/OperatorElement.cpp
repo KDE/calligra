@@ -18,9 +18,11 @@
 */
 
 #include "OperatorElement.h"
+
 #include "RowElement.h"
 #include "AttributeManager.h"
-#include "kdebug.h"
+#include "FormulaDebug.h"
+
 #include <QFontMetricsF>
 
 OperatorElement::OperatorElement( BasicElement* parent ) : TokenElement( parent )

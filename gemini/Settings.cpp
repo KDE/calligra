@@ -19,17 +19,17 @@
 
 #include "Settings.h"
 #include "DocumentListModel.h"
-#include <QApplication>
 
-#include <kglobal.h>
-#include <ksharedconfig.h>
+#include <QApplication>
+#include <QUrl>
+#include <QMimeType>
+
+#include <KSharedConfig>
 #include <kconfiggroup.h>
-#include <kstandarddirs.h>
-#include <KMimeType>
 
 #include "Theme.h"
 #include "PropertyContainer.h"
-#include <qtquick/CQTextDocumentCanvas.h>
+// #include <qtquick/CQTextDocumentCanvas.h>
 #include <KoDocumentEntry.h>
 #include <part/KWDocument.h>
 #include <stage/part/KPrDocument.h>
@@ -42,14 +42,14 @@ public:
     QString currentFile;
     QString currentFileClass;
     bool temporaryFile;
-    QDeclarativeItem *focusItem;
+    QQuickItem *focusItem;
     Theme* theme;
 };
 
 Settings::Settings( QObject* parent )
     : QObject( parent ), d( new Private )
 {
-    QString theme = KGlobal::config()->group("General").readEntry<QString>("theme", "default");
+    QString theme = KSharedConfig::openConfig()->group("General").readEntry<QString>("theme", "default");
     d->theme = Theme::load(theme, this);
     connect(d->theme, SIGNAL(fontCacheRebuilt()), SIGNAL(themeChanged()));
 }
@@ -78,19 +78,20 @@ void Settings::setCurrentFile(const QString& fileName)
         emit currentFileChanged();
     }
     else if (fileName != d->currentFile) {
-        KUrl url(fileName);
+        QUrl url(fileName);
         if(url.scheme() == "newfile") {
             d->currentFileClass = url.queryItemValue("mimetype");
         }
         else {
-            KMimeType::Ptr mimeType = KMimeType::findByUrl(fileName);
-            KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimeType->name());
+            QMimeDatabase db;
+            QMimeType mimeType = db.mimeTypeForUrl(url);
+            KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimeType.name());
             if(documentEntry.supportsMimeType(WORDS_MIME_TYPE)) {
                 d->currentFileClass = WORDS_MIME_TYPE;
             } else if(documentEntry.supportsMimeType(STAGE_MIME_TYPE)) {
                 d->currentFileClass = STAGE_MIME_TYPE;
             } else {
-                d->currentFileClass = QString("Unsupported document! Reported mimetype is %1").arg(mimeType->name());
+                d->currentFileClass = QString("Unsupported document! Reported mimetype is %1").arg(mimeType.name());
             }
         }
         d->currentFile = fileName;
@@ -111,12 +112,12 @@ void Settings::setTemporaryFile(bool temp)
     }
 }
 
-QDeclarativeItem* Settings::focusItem()
+QQuickItem* Settings::focusItem()
 {
     return d->focusItem;
 }
 
-void Settings::setFocusItem(QDeclarativeItem* item)
+void Settings::setFocusItem(QQuickItem* item)
 {
     if (item != d->focusItem) {
         d->focusItem = item;
@@ -146,7 +147,7 @@ void Settings::setThemeID(const QString& id)
         }
 
         d->theme = Theme::load(id, this);
-        KGlobal::config()->group("General").writeEntry<QString>("theme", id);
+        KSharedConfig::openConfig()->group("General").writeEntry<QString>("theme", id);
 
         emit themeChanged();
     }
@@ -190,5 +191,3 @@ int Settings::mimeTypeToDocumentClass(QString mimeType) const
 //     }
     return documentClass;
 }
-
-#include "Settings.moc"

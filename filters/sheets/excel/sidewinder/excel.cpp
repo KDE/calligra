@@ -2006,7 +2006,7 @@ QString BkHimRecord::imagePath() const
     return d->imagePath;
 }
 
-void BkHimRecord::setImagePath(QString imagePath )
+void BkHimRecord::setImagePath(const QString &imagePath )
 {
     d->imagePath = imagePath;
 }

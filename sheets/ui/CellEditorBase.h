@@ -20,7 +20,7 @@
 #ifndef CALLIGRA_SHEETS_CELLEDITORBASE_H
 #define CALLIGRA_SHEETS_CELLEDITORBASE_H
 
-#include <sheets/calligra_sheets_export.h>
+#include "sheets_common_export.h"
 
 class QFont;
 class KoViewConverter;
@@ -48,6 +48,8 @@ public:
     virtual void copy() = 0;
     virtual void paste() = 0;
     virtual void setActiveSubRegion(int index) = 0;
+    virtual bool captureArrowKeys() const = 0;
+    virtual void setCaptureArrowKeys(bool capture) = 0;
 };
 
 } // namespace Sheets

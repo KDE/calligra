@@ -20,10 +20,9 @@
 
 #include "KWRdfDockerTree.h"
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <kmimetype.h>
+#include <WordsDebug.h>
 
+#include <QMimeDatabase>
 #include <QDrag>
 #include <QDragEnterEvent>
 #include <QDragMoveEvent>
@@ -102,7 +101,8 @@ bool KWRdfDockerTree::dropMimeData(QTreeWidgetItem *parent, int index,
             f.open(QIODevice::ReadOnly);
             const QByteArray ba = f.readAll();
             // Try to work out what ba contains....
-            const QString mt =  KMimeType::findByContent(ba)->name();
+            // TODO: rather pass QFile here instead of loading ourselves
+            const QString mt =  QMimeDatabase().mimeTypeForData(ba).name();
             QMimeData linkedData;
             linkedData.setData(mt, ba);
             //kDebug(30015) << "MIME Type:" << mt;

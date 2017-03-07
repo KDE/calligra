@@ -25,8 +25,8 @@
 #include <QImage>
 #include <QPainter>
 #include <QTextDocument>
-
-#include <calligraversion.h>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include <KoDocumentEntry.h>
 #include <KoPart.h>
@@ -39,34 +39,16 @@
 #include <KoGlobal.h>
 #include <KoParagraphStyle.h>
 #include <KoTextLayoutRootArea.h>
-
-#include <kaboutdata.h>
-#include <kmimetype.h>
+#include <KoCharAreaInfo.h>
 
 #include <okular/core/page.h>
 
-static KAboutData createAboutData()
-{
-    KAboutData aboutData(
-         "okular_odt",
-         "okularGenerator_odt",
-         ki18n( "ODT/OTT Backend" ),
-         CALLIGRA_VERSION_STRING,
-         ki18n( "ODT/OTT file renderer" ),
-         KAboutData::License_GPL,
-         ki18n( "© 2012 Sven Langkamp" )
-    );
-
-    // fill the about data
-    return aboutData;
-}
-
-OKULAR_EXPORT_PLUGIN(OkularOdtGenerator, createAboutData())
 
 OkularOdtGenerator::OkularOdtGenerator( QObject *parent, const QVariantList &args )
     : Okular::Generator( parent, args )
 {
     m_doc = 0;
+    setFeature( TextExtraction );
 }
 
 OkularOdtGenerator::~OkularOdtGenerator()
@@ -102,10 +84,7 @@ static Okular::DocumentViewport calculateViewport( const QTextBlock &block,
 
 bool OkularOdtGenerator::loadDocument( const QString &fileName, QVector<Okular::Page*> &pages )
 {
-    KComponentData cd("OkularOdtGenerator", QByteArray(),
-                      KComponentData::SkipMainComponentRegistration);
-
-    const QString mimetype = KMimeType::findByPath(fileName)->name();
+    const QString mimetype = QMimeDatabase().mimeTypeForFile(fileName).name();
 
     QString error;
     KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimetype);
@@ -117,8 +96,7 @@ bool OkularOdtGenerator::loadDocument( const QString &fileName, QVector<Okular::
     }
 
     m_doc = static_cast<KWDocument*>(part->document());
-    KUrl url;
-    url.setPath(fileName);
+    const QUrl url = QUrl::fromLocalFile(fileName);
     m_doc->setCheckAutoSaveFile(false);
     m_doc->setAutoErrorHandlingEnabled(false); // show error dialogs
     if (!m_doc->openUrl(url)) {
@@ -155,14 +133,14 @@ bool OkularOdtGenerator::loadDocument( const QString &fileName, QVector<Okular::
     const QString creationDate = documentInfo->aboutInfo("creation-date");
     if (!creationDate.isEmpty()) {
         QDateTime t = QDateTime::fromString(creationDate, Qt::ISODate);
-        m_documentInfo.set( Okular::DocumentInfo::CreationDate, KGlobal::locale()->formatDateTime(t) );
+        m_documentInfo.set( Okular::DocumentInfo::CreationDate, QLocale().toString(t, QLocale::ShortFormat) );
     }
     m_documentInfo.set( Okular::DocumentInfo::Creator,  documentInfo->aboutInfo("initial-creator") );
 
     const QString modificationDate = documentInfo->aboutInfo("date");
     if (!modificationDate.isEmpty()) {
         QDateTime t = QDateTime::fromString(modificationDate, Qt::ISODate);
-        m_documentInfo.set( Okular::DocumentInfo::ModificationDate, KGlobal::locale()->formatDateTime(t) );
+        m_documentInfo.set( Okular::DocumentInfo::ModificationDate, QLocale().toString(t, QLocale::ShortFormat) );
     }
     m_documentInfo.set( Okular::DocumentInfo::Author, documentInfo->aboutInfo("creator") );
 
@@ -255,32 +233,72 @@ void OkularOdtGenerator::generatePixmap( Okular::PixmapRequest *request )
         pix->convertFromImage(page.thumbnail(rSize, shapeManager, true));
     }
 
-// API change
-#if OKULAR_IS_VERSION(0, 16, 60)
     request->page()->setPixmap( request->observer(), pix );
-#else
-    request->page()->setPixmap( request->id(), pix );
-#endif
 
     signalPixmapRequestDone( request );
 }
 
-#if OKULAR_IS_VERSION(0, 20, 60)
+bool OkularOdtGenerator::canGenerateTextPage() const
+{
+    return true;
+}
+
+Okular::TextPage* OkularOdtGenerator::textPage( Okular::Page *page )
+{
+    QTextDocument* textDocument = m_doc->mainFrameSet()->document();
+    KoTextDocumentLayout* textDocumentLayout = static_cast<KoTextDocumentLayout *>(textDocument->documentLayout());
+
+    KoTextLayoutRootArea *rootArea = 0;
+    foreach(KoTextLayoutRootArea *area, textDocumentLayout->rootAreas()) {
+        if (area->page()->pageNumber() == page->number()+1) {
+            rootArea = area;
+            break;
+        }
+    }
+
+    if (!rootArea) {
+        return 0;
+    }
+
+    const QVector<KoCharAreaInfo> charAreaInfos = rootArea->generateCharAreaInfos();
+
+    // TODO: text from master pages (headers/footers), text in floating shapes
+    if (charAreaInfos.isEmpty()) {
+        return 0;
+    }
+
+    KWPage* wpage = static_cast<KWPage *>(rootArea->page());
+    KoShape *shape = rootArea->associatedShape();
+
+    const QPointF offset = shape->absolutePosition(KoFlake::TopLeftCorner)
+                           + QPointF(static_cast<qreal>(0.0), -(wpage->offsetInDocument()))
+                           - rootArea->referenceRect().topLeft();
+
+    const double pageHeight = wpage->height();
+    const double pageWidth = wpage->width();
+
+    Okular::TextPage *textPage = new Okular::TextPage;
+    foreach(const KoCharAreaInfo &charAreaInfo, charAreaInfos) {
+        const QRectF rect = charAreaInfo.rect.translated(offset);
+        const double left = static_cast<double>(rect.left()) / pageWidth;
+        const double top = static_cast<double>(rect.top()) / pageHeight;
+        const double right = static_cast<double>(rect.right()) / pageWidth;
+        const double bottom = static_cast<double>(rect.bottom()) / pageHeight;
+        textPage->append( charAreaInfo.character,
+                          new Okular::NormalizedRect( left, top, right, bottom ) );
+    }
+    return textPage;
+}
+
+
 Okular::DocumentInfo OkularOdtGenerator::generateDocumentInfo( const QSet<Okular::DocumentInfo::Key> &keys ) const
 {
     Q_UNUSED(keys);
 
     return m_documentInfo;
 }
-#else
-const Okular::DocumentInfo* OkularOdtGenerator::generateDocumentInfo()
-{
-    return &m_documentInfo;
-}
-#endif
 
 const Okular::DocumentSynopsis* OkularOdtGenerator::generateDocumentSynopsis()
 {
     return m_documentSynopsis.hasChildNodes() ? &m_documentSynopsis : 0;
 }
-

@@ -23,7 +23,7 @@
 #include <kpluginfactory.h>
 #include "words_export.h"
 
-class KAboutData;
+class KoComponentData;
 
 /**
  * Factory for the Words application.
@@ -35,23 +35,17 @@ class WORDS_EXPORT KWFactory : public KPluginFactory
 public:
     /**
      * Constructor
-     * @param parent the parent QObject
      */
-    explicit KWFactory(QObject *parent = 0);
+    explicit KWFactory();
     ~KWFactory();
 
     /// overwritten method from superclass
     virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
 
-    /// Return an instance
-    static const KComponentData &componentData();
-
-    /// Creates a new KAboutData instance
-    static KAboutData *aboutData();
+    static const KoComponentData &componentData();
 
 private:
-    static KComponentData *s_instance;
-    static KAboutData *s_aboutData;
+    static KoComponentData *s_componentData;
 };
 
 #endif

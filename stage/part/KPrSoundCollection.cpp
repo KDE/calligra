@@ -16,15 +16,18 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 #include "KPrSoundCollection.h"
+
 #include "KPrSoundData.h"
+#include "StageDebug.h"
 
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
 
+#include <QMimeDatabase>
 #include <QList>
-#include <kdebug.h>
-#include <kmimetype.h>
+
 
 class  KPrSoundCollection::Private
 {
@@ -55,11 +58,12 @@ void KPrSoundCollection::removeSound(KPrSoundData *image) {
     }
 }
 
-KPrSoundData *KPrSoundCollection::findSound(QString title)
+KPrSoundData *KPrSoundCollection::findSound(const QString &title)
 {
-    for (int i = 0; i < d->sounds.size(); ++i) {
-        if (d->sounds.at(i)->title() == title)
-            return d->sounds[i];
+    foreach(KPrSoundData* sound, d->sounds) {
+        if (sound->title() == title) {
+            return sound;
+        }
     }
     return 0;
 }
@@ -67,9 +71,10 @@ KPrSoundData *KPrSoundCollection::findSound(QString title)
 QStringList KPrSoundCollection::titles()
 {
     QStringList list;
+    list.reserve(d->sounds.size());
 
-    for (int i = 0; i < d->sounds.size(); ++i) {
-        list << d->sounds.at(i)->title();
+    foreach(KPrSoundData* sound, d->sounds) {
+        list << sound->title();
     }
     return list;
 }
@@ -102,7 +107,8 @@ bool KPrSoundCollection::completeSaving(KoStore *store, KoXmlWriter * manifestWr
             store->close();
             if(! ok)
                 return false;
-            const QString mimetype( KMimeType::findByPath( sound->storeHref(), 0 ,true )->name() );
+            // TODO: can't we get the mimetype from elsewhere? e.g. already when loading? or from data?
+            const QString mimetype( QMimeDatabase().mimeTypesForFileName(sound->storeHref()).first().name() );
             manifestWriter->addManifestEntry( sound->storeHref(), mimetype );
         }
     }

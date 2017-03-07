@@ -20,7 +20,7 @@
 
 #include "TestKspreadCommon.h"
 
-#include <KoPart.h>
+#include <MockPart.h>
 #include <part/Doc.h>
 #include <Map.h>
 #include <Sheet.h>
@@ -225,6 +225,4 @@ void TestLogicFunctions::testXOR()
     //CHECK_EVAL("XOR(TRUE();\"a\")", Value::errorVALUE());
 }
 
-QTEST_KDEMAIN(TestLogicFunctions, GUI)
-
-#include "TestLogicFunctions.moc"
+QTEST_MAIN(TestLogicFunctions)

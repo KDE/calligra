@@ -21,9 +21,8 @@
 #define INTERVALITEM_H
 
 #include <QTreeWidgetItem>
+#include <QLocale>
 
-#include <klocale.h>
-#include <kglobal.h>
 
 namespace KPlato
 {
@@ -48,8 +47,9 @@ public:
     {
         m_start = time;
         m_length = length;
-        setText( 0, KGlobal::locale()->formatTime( time ) );
-        setText( 1, KGlobal::locale()->formatNumber( length ) );
+        QLocale locale;
+        setText( 0, locale.toString(time, QLocale::ShortFormat) );
+        setText( 1, locale.toString(length, 'f', 2) );
     }
 
 private:

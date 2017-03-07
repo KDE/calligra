@@ -27,8 +27,7 @@
 #include <QStringList>
 #include <QSet>
 
-// KDE
-#include <kdebug.h>
+#include "Odf2Debug.h"
 
 
 // ================================================================
@@ -185,7 +184,7 @@ void KoXmlStreamReader::Private::checkSoundness()
         }
     }
 
-    //kDebug() << "namespaces to fix:" << namespacesToFix;
+    //debugOdf2 << "namespaces to fix:" << namespacesToFix;
 
     // Finally, if necessary, create unique prefixes for namespaces
     // that are found to use one of the expected prefixes.  It doesn't
@@ -204,8 +203,8 @@ void KoXmlStreamReader::Private::checkSoundness()
         prefixes.insert(ns, pfx);
     }
 
-    //kDebug() << "Document soundness:" << isSound;
-    //kDebug() << "prefixes:" << prefixes;
+    //debugOdf2 << "Document soundness:" << isSound;
+    //debugOdf2 << "prefixes:" << prefixes;
 
     isChecked = true;
 }
@@ -449,13 +448,7 @@ void KoXmlStreamAttribute::Private::generateQName()
     qName = reader->d->prefixes.value(qAttr->namespaceUri().toString());
     prefixLen = qName.size();
 
-#if QT_VERSION >= 0x040800
     qName += QLatin1Char(':') + qAttr->name();
-#else
-    // no operator+(QChar, QStringRef), so just doing two steps
-    qName += ':';
-    qName += qAttr->name();
-#endif
 }
 
 
@@ -466,20 +459,20 @@ void KoXmlStreamAttribute::Private::generateQName()
 KoXmlStreamAttribute::KoXmlStreamAttribute()
     : d(new KoXmlStreamAttribute::Private(0, 0))
 {
-    //kDebug() << "default constructor called";
+    //debugOdf2 << "default constructor called";
 }
 
 KoXmlStreamAttribute::KoXmlStreamAttribute(const QXmlStreamAttribute *attr,
                                            const KoXmlStreamReader *reader)
     : d(new KoXmlStreamAttribute::Private(attr, reader))
 {
-    //kDebug() << "normal constructor called";
+    //debugOdf2 << "normal constructor called";
 }
 
 KoXmlStreamAttribute::KoXmlStreamAttribute(const KoXmlStreamAttribute &other)
     : d(new KoXmlStreamAttribute::Private(*other.d))
 {
-    //kDebug() << "copy constructor called";
+    //debugOdf2 << "copy constructor called";
 }
 
 KoXmlStreamAttribute::~KoXmlStreamAttribute()

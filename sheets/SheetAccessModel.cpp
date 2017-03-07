@@ -118,7 +118,7 @@ void SheetAccessModel::handleDamages(const QList<Damage*>& damages)
 
         if (damage->type() == Damage::Sheet) {
             SheetDamage* sheetDamage = static_cast<SheetDamage*>(damage);
-            kDebug(36007) << "Processing\t" << *sheetDamage;
+            debugSheetsDamage << "Processing\t" << *sheetDamage;
 
             if (sheetDamage->changes() & SheetDamage::Name) {
                 Sheet *sheet = sheetDamage->sheet();

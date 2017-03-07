@@ -18,8 +18,7 @@
  */
 #include "KoFormulaShapeFactory.h"
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
 
 #include <KoIcon.h>
 #include <KoShapeFactoryBase.h>
@@ -27,6 +26,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
 
+#include "FormulaDebug.h"
 #include "KoFormulaShape.h"
 
 
@@ -34,7 +34,7 @@ KoFormulaShapeFactory::KoFormulaShapeFactory()
     : KoShapeFactoryBase(KoFormulaShapeId, i18n( "Formula" ) )
 {
     setToolTip(i18n( "A formula"));
-    setIconName(koIconNameCStr("x-shape-formula"));
+    setIconName(koIconName("x-shape-formula"));
 
     // The following lines let the formula shape load both embedded and
     // inline formulas.

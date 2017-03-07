@@ -28,10 +28,10 @@
 #include <QVBoxLayout>
 #include <QListWidget>
 
-// KDE
-#include <klocale.h>
+// KF5
+#include <KLocalizedString>
 
-// KSpread
+// Sheets
 #include "calligra_sheets_limits.h"
 #include "Region.h"
 #include "RowColumnFormat.h"
@@ -45,7 +45,7 @@
 using namespace Calligra::Sheets;
 
 ShowColRow::ShowColRow(QWidget* parent, Selection* selection, Type _type)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setModal(true);
     setButtons(Ok | Cancel);
@@ -82,8 +82,7 @@ ShowColRow::ShowColRow(QWidget* parent, Selection* selection, Type _type)
                 listInt.append(col->column());
         }
         qSort(listInt);
-        QList<int>::Iterator it;
-        for (it = listInt.begin(); it != listInt.end(); ++it) {
+        for (QList<int>::ConstIterator it = listInt.constBegin(); it != listInt.constEnd(); ++it) {
             if (!showColNumber)
                 listCol += i18n("Column: %1", Cell::columnName(*it));
             else
@@ -101,8 +100,7 @@ ShowColRow::ShowColRow(QWidget* parent, Selection* selection, Type _type)
             }
             row = lastRow+1;
         }
-        QList<int>::Iterator it;
-        for (it = listInt.begin(); it != listInt.end(); ++it)
+        for (QList<int>::ConstIterator it = listInt.constBegin(); it != listInt.constEnd(); ++it)
             listRow += i18n("Row: %1", text.setNum(*it));
 
         list->addItems(listRow);
@@ -152,5 +150,3 @@ void ShowColRow::slotOk()
 
     accept();
 }
-
-#include "ShowColRowDialog.moc"

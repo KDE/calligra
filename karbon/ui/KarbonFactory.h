@@ -29,27 +29,27 @@
 #define __KARBON_FACTORY_H__
 
 #include <kpluginfactory.h>
+#include <KSharedConfig>
+
 #include <karbonui_export.h>
 
-class KAboutData;
-class KComponentData;
+class KoComponentData;
 
 class KARBONUI_EXPORT KarbonFactory : public KPluginFactory
 {
     Q_OBJECT
 
 public:
-    explicit KarbonFactory(QObject* parent = 0);
+    explicit KarbonFactory();
     ~KarbonFactory();
 
     virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
 
-    static const KComponentData &componentData();
-    static KAboutData* aboutData();
+    static const KSharedConfig::Ptr &karbonConfig();
+    static const KoComponentData &global();
 
 private:
-    static KComponentData* s_instance;
-    static KAboutData* s_aboutData;
+    static KoComponentData* s_global;
 };
 
 #endif

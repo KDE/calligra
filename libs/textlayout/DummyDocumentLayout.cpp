@@ -24,7 +24,7 @@
 
 #include <QTextBlock>
 
-#include <kdebug.h>
+#include <TextLayoutDebug.h>
 
 // ------------------- DummyDocumentLayout --------------------
 DummyDocumentLayout::DummyDocumentLayout(QTextDocument *doc)
@@ -97,5 +97,3 @@ void DummyDocumentLayout::resizeInlineObject(QTextInlineObject , int , const QTe
 {
 }
 */
-
-#include <DummyDocumentLayout.moc>

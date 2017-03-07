@@ -53,7 +53,7 @@ public Q_SLOTS: // METHODS
      * Draw on presentation.
      * @color can take the color values as a string. Eg: red, green, black.
      */
-    void startDrawPresentation(int pointx, int pointy, int penSize, QString color);
+    void startDrawPresentation(int pointx, int pointy, int penSize, const QString &color);
 
     /**
      * Start drawing on presentation tool.

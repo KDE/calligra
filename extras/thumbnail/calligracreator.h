@@ -21,8 +21,8 @@
 #ifndef _CALLIGRACREATOR_H_
 #define _CALLIGRACREATOR_H_
 
-// KDE
-#include <kio/thumbcreator.h>
+// KF5
+#include <KIO/ThumbCreator>
 // Qt
 #include <QEventLoop>
 

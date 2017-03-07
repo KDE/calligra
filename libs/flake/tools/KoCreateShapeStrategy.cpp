@@ -35,7 +35,7 @@
 
 #include <QPainter>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 KoCreateShapeStrategy::KoCreateShapeStrategy(KoCreateShapesTool *tool, const QPointF &clicked)
         : KoShapeRubberSelectStrategy(tool, clicked, tool->canvas()->snapToGrid())
@@ -72,7 +72,7 @@ KUndo2Command* KoCreateShapeStrategy::createCommand()
     KoCreateShapesTool *parent = static_cast<KoCreateShapesTool*>(d_ptr->tool);
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(parent->shapeId());
     if (! factory) {
-        kWarning(30006) << "Application requested a shape that is not registered" << parent->shapeId();
+        warnFlake << "Application requested a shape that is not registered" << parent->shapeId();
         return 0;
     }
 

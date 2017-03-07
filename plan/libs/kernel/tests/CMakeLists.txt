@@ -6,113 +6,58 @@ include_directories(
     ${KUNDO2_INCLUDES}
 )
 
+# call: plankernel_add_unit_test(<test-name> <sources> LINK_LIBRARIES <library> [<library> [...]] [GUI])
+macro(PLANKERNEL_ADD_UNIT_TEST _TEST_NAME)
+    ecm_add_test( ${ARGN}
+        TEST_NAME "${_TEST_NAME}"
+        NAME_PREFIX "plan-kernel-"
+    )
+endmacro()
+
 ########### next target ###############
 
-set(DateTimeTester_SRCS DateTimeTester.cpp )
- 
- 
-kde4_add_unit_test(DateTimeTester TESTNAME Plan-DateTimeTester  ${DateTimeTester_SRCS})
- 
-target_link_libraries(DateTimeTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTTEST_LIBRARY})
- 
+plankernel_add_unit_test(DateTimeTester DateTimeTester.cpp  LINK_LIBRARIES kplatokernel Qt5::Test)
 
 ########## next target ###############
 
-set(DurationTester_SRCS DurationTester.cpp )
- 
- 
-kde4_add_unit_test(DurationTester TESTNAME Plan-DurationTester  ${DurationTester_SRCS})
- 
-target_link_libraries(DurationTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTTEST_LIBRARY})
- 
+plankernel_add_unit_test(DurationTester DurationTester.cpp  LINK_LIBRARIES kplatokernel Qt5::Test)
+
 ########## next target ###############
 
-set(AppointmentIntervalTester_SRCS AppointmentIntervalTester.cpp )
- 
+plankernel_add_unit_test(AppointmentIntervalTester AppointmentIntervalTester.cpp  LINK_LIBRARIES kplatokernel Qt5::Test)
 
-kde4_add_unit_test(AppointmentIntervalTester TESTNAME Plan-AppointmentIntervalTester ${AppointmentIntervalTester_SRCS})
- 
-target_link_libraries(AppointmentIntervalTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTTEST_LIBRARY})
- 
 ########## next target ###############
 
-set(EstimateTester_SRCS EstimateTester.cpp )
- 
- 
-kde4_add_unit_test(EstimateTester TESTNAME Plan-EstimateTester  ${EstimateTester_SRCS})
- 
-target_link_libraries(EstimateTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTTEST_LIBRARY})
- 
+plankernel_add_unit_test(EstimateTester EstimateTester.cpp  LINK_LIBRARIES kplatokernel Qt5::Test)
 
 ########### next target ###############
 
-set(CalendarTester_SRCS CalendarTester.cpp )
- 
- 
-kde4_add_unit_test(CalendarTester TESTNAME Plan-CalendarTester  ${CalendarTester_SRCS})
- 
-target_link_libraries(CalendarTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTTEST_LIBRARY})
- 
+plankernel_add_unit_test(CalendarTester CalendarTester.cpp  LINK_LIBRARIES kplatokernel Qt5::Test)
+
 ########## next target ###############
 
-set(ResourceTester_SRCS ResourceTester.cpp )
- 
-
-kde4_add_unit_test(ResourceTester TESTNAME Plan-ResourceTester ${ResourceTester_SRCS})
- 
-target_link_libraries(ResourceTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
-target_link_libraries(ResourceTester kundo2 koodf)
+plankernel_add_unit_test(ResourceTester ResourceTester.cpp  LINK_LIBRARIES kplatokernel kundo2 koodf Qt5::Test)
 
 ########### next target ###############
 
-set(ScheduleTester_SRCS ScheduleTester.cpp )
- 
- 
-kde4_add_unit_test(ScheduleTester TESTNAME Plan-ScheduleTester  ${ScheduleTester_SRCS})
- 
-target_link_libraries(ScheduleTester  ${KDE4_KDECORE_LIBS} kplatokernel ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
- 
+plankernel_add_unit_test(ScheduleTester ScheduleTester.cpp  LINK_LIBRARIES kplatokernel Qt5::Test)
 
 ########### next target ###############
 
-set(ProjectTester_SRCS ProjectTester.cpp )
- 
- 
-kde4_add_unit_test(ProjectTester TESTNAME Plan-ProjectTester  ${ProjectTester_SRCS})
- 
-target_link_libraries(ProjectTester  ${KDE4_KDECORE_LIBS} planprivate kplatokernel kundo2 ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
- 
+plankernel_add_unit_test(ProjectTester ProjectTester.cpp  LINK_LIBRARIES planprivate kplatokernel Qt5::Test)
 
 ########### next target ###############
 
-set(AccountTester_SRCS AccountsTester.cpp )
- 
- 
-kde4_add_unit_test(AccountsTester TESTNAME Plan-AccountsTester  ${AccountTester_SRCS})
- 
-target_link_libraries(AccountsTester  ${KDE4_KDECORE_LIBS} planprivate kplatokernel ${QT_QTTEST_LIBRARY})
- 
+plankernel_add_unit_test(AccountsTester AccountsTester.cpp  LINK_LIBRARIES planprivate kplatokernel Qt5::Test)
 
 ########### next target ###############
 
-set(PerformanceTester_SRCS PerformanceTester.cpp )
- 
-kde4_add_unit_test(PerformanceTester TESTNAME Plan-PerformanceTester  ${PerformanceTester_SRCS})
- 
-target_link_libraries(PerformanceTester  ${KDE4_KDECORE_LIBS} planprivate kplatokernel kundo2 ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
+plankernel_add_unit_test(PerformanceTester PerformanceTester.cpp  LINK_LIBRARIES planprivate kplatokernel Qt5::Test)
 
 ########### next target ###############
 
-set(CommandsTester_SRCS CommandsTester.cpp )
-
-kde4_add_unit_test(CommandsTester TESTNAME Plan-CommandsTester  ${CommandsTester_SRCS})
-
-target_link_libraries(CommandsTester  ${KDE4_KDECORE_LIBS} planprivate kplatokernel kundo2 ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
+plankernel_add_unit_test(CommandsTester CommandsTester.cpp  LINK_LIBRARIES planprivate kplatokernel kundo2 Qt5::Test)
 
 ########### next target ###############
 
-set(WorkInfoCacheTester_SRCS WorkInfoCacheTester.cpp )
-
-kde4_add_unit_test(WorkInfoCacheTester TESTNAME Plan-WorkInfoCacheTester  ${WorkInfoCacheTester_SRCS})
-
-target_link_libraries(WorkInfoCacheTester  ${KDE4_KDECORE_LIBS} planprivate kplatokernel ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
+plankernel_add_unit_test(WorkInfoCacheTester WorkInfoCacheTester.cpp  LINK_LIBRARIES planprivate kplatokernel Qt5::Test)

@@ -1,13 +1,9 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_video\")
+
 include_directories(
     ${FLAKE_INCLUDES}
-    ${PHONON_INCLUDES}
+    ${KOWIDGETS_INCLUDES}
 )
-
-# The next line is a workaround for a issue wherein FindPhononInternal.cmake would change the value of CMAKE_AUTOMOC
-# and cause build error "CMake Error: Attempt to add a custom rule to output ...."
-set(CMAKE_AUTOMOC_TEMP ${CMAKE_AUTOMOC})
-find_package(Phonon NO_MODULE)
-set(CMAKE_AUTOMOC ${CMAKE_AUTOMOC_TEMP})
 
 if(PHONON_FOUND_EXPERIMENTAL)
    set(SHOULD_BUILD_THUMBNAIL TRUE)
@@ -20,6 +16,7 @@ endif()
 ########### Flake Plugin library ###############
 
 set (videoshape_LIB_SRCS
+    VideoDebug.cpp
     VideoData.cpp
     VideoCollection.cpp
     VideoShape.cpp
@@ -38,17 +35,18 @@ if(SHOULD_BUILD_THUMBNAIL)
     set(videoshape_LIB_SRCS ${videoshape_LIB_SRCS} VideoThumbnailer.cpp)
 endif()
 
-kde4_add_ui_files(videoshape_LIB_SRCS forms/VideoToolWidget.ui)
-kde4_add_plugin(calligra_shape_video ${videoshape_LIB_SRCS})
+ki18n_wrap_ui(videoshape_LIB_SRCS forms/VideoToolWidget.ui)
+add_library(calligra_shape_video MODULE ${videoshape_LIB_SRCS})
+calligra_shape_desktop_to_json(calligra_shape_video calligra_shape_video.desktop)
 
-target_link_libraries(calligra_shape_video flake
-    ${KDE4_KFILE_LIBRARY}
-    ${PHONON_LIBS}
+target_link_libraries(calligra_shape_video
+    flake
+    kowidgets
+    KF5::KIOFileWidgets
+    Phonon::phonon4qt5
 )
+if(PHONON_FOUND_EXPERIMENTAL)
+    target_link_libraries(calligra_shape_video Phonon::phonon4qt5experimental)
+endif()
 
-install(TARGETS calligra_shape_video DESTINATION ${PLUGIN_INSTALL_DIR})
-
-########### install files ###############
-
-install( FILES calligra_shape_video.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
+install(TARGETS calligra_shape_video DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)

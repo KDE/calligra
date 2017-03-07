@@ -16,7 +16,6 @@
 #include "kplatotj_export.h"
 
 #include <QList>
-#include <kdebug.h>
 
 #include "CoreAttributes.h"
 

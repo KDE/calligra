@@ -20,6 +20,7 @@
 #include <kcmdlineargs.h>
 
 #include <KoApplication.h>
+#include <Calligra2Migration.h>
 #include <memory>
 
 #include "FlowAboutData.h"
@@ -35,6 +36,12 @@ extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
   KCmdLineArgs::addCmdLineOptions( options );
 
   KoApplication app(FLOW_MIME_TYPE);
+
+  // Migrate data from kde4 to kf5 locations
+  Calligra2Migration m("flow");
+  m.setConfigFiles(QStringList() << QStringLiteral("flowrc"));
+  m.setUiFiles(QStringList() << QStringLiteral("flow.rc"));
+  m.migrate();
 
   if (!app.start())
       return 1;

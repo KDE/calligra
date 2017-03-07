@@ -38,7 +38,7 @@ public:
     bool parametric;
 
     /// the handles that the user can grab and change
-    QList<QPointF> handles;
+    QVector<QPointF> handles;
 };
 
 #endif

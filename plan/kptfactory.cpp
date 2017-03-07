@@ -21,20 +21,22 @@
 #include "kptmaindocument.h"
 #include "kptpart.h"
 #include "kptaboutdata.h"
-#include <kcomponentdata.h>
+
+#include <KoResourcePaths.h>
+#include <KoDockRegistry.h>
+#include <KoComponentData.h>
+
 #include <kiconloader.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kstandarddirs.h>
+
 
 namespace KPlato
 {
 
-KComponentData* Factory::s_global = 0L;
+KoComponentData* Factory::s_global = 0L;
 KAboutData* Factory::s_aboutData = 0L;
 
-Factory::Factory( QObject* parent )
-    : KPluginFactory( *aboutData(), parent )
+Factory::Factory()
+    : KPluginFactory()
 {
     global();
 }
@@ -67,21 +69,23 @@ KAboutData* Factory::aboutData()
     return s_aboutData;
 }
 
-const KComponentData &Factory::global()
+const KoComponentData &Factory::global()
 {
     if ( !s_global )
     {
-        s_global = new KComponentData( aboutData() );
+        debugPlan;
+        s_global = new KoComponentData( *aboutData() );
 
         // Add any application-specific resource directories here
-        s_global->dirs()->addResourceType("plan_taskmodules", "data", "plan/taskmodules/");
+        KoResourcePaths::addResourceType("calligraplan_taskmodules", "data", "calligraplan/taskmodules/");
 
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");
+
+        KoDockRegistry *dockRegistry = KoDockRegistry::instance();
+        dockRegistry->remove("StencilBox"); //don't want this in plan
     }
     return *s_global;
 }
 
 } // KPlato namespace
-
-#include "kptfactory.moc"

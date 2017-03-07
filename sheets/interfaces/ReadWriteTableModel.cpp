@@ -19,7 +19,7 @@
 
 #include "ReadWriteTableModel.h"
 
-// KSpread
+// Sheets
 #include "Cell.h"
 #include "Sheet.h"
 
@@ -54,7 +54,7 @@ Qt::ItemFlags ReadWriteTableModel::flags(const QModelIndex& index) const
 
 bool ReadWriteTableModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-    // NOTE Model indices start from 0, while KSpread column/row indices start from 1.
+    // NOTE Model indices start from 0, while Calligra Sheets column/row indices start from 1.
     Cell cell = Cell(sheet(), index.column() + 1, index.row() + 1).masterCell();
     if (role == Qt::EditRole) {
         cell.parseUserInput(value.toString());

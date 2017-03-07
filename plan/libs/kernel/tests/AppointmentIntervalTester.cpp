@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2008 Dag Andersen <danders@get2net.dk>
-
+   Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -21,8 +22,7 @@
 #include <kptdatetime.h>
 #include <kptduration.h>
 
-#include <qtest_kde.h>
-#include <kdebug.h>
+#include <QTest>
 
 #include <QMultiMap>
 
@@ -864,6 +864,4 @@ void AppointmentIntervalTester::subtractListMidnight()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::AppointmentIntervalTester )
-
-#include "AppointmentIntervalTester.moc"
+QTEST_GUILESS_MAIN( KPlato::AppointmentIntervalTester )

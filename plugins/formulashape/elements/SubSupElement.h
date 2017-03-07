@@ -22,7 +22,7 @@
 #define SUBSUPELEMENT_H
 
 #include "FixedElement.h"
-#include "kformula_export.h"
+#include "koformula_export.h"
 
 /**
  * @short Implementation of the msub, msup, msubsup elements

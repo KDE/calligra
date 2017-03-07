@@ -22,8 +22,8 @@
 #define CALLIGRA_RTREE_DEBUG
 
 #include <QMainWindow>
-#include <QtGui>
 #include <QLinkedList>
+#include <QFile>
 
 #include "KoRTree.h"
 #include "Tool.h"

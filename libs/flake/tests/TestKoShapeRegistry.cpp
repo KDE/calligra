@@ -17,14 +17,13 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "TestKoShapeRegistry.h"
-#include <qtest_kde.h>
+#include <QTest>
 #include <QBuffer>
 #include <QFile>
 #include <QDateTime>
 #include <QProcess>
 #include <QString>
 #include <QTextStream>
-#include <QtXml>
 
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
@@ -36,7 +35,7 @@
 
 #include <KoXmlReader.h>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 void TestKoShapeRegistry::testGetKoShapeRegistryInstance()
 {
@@ -137,5 +136,4 @@ void TestKoShapeRegistry::testCreateFramedShapes()
     QVERIFY(shape->shapeId() == KoPathShapeId);
 }
 
-QTEST_KDEMAIN(TestKoShapeRegistry, GUI)
-#include <TestKoShapeRegistry.moc>
+QTEST_MAIN(TestKoShapeRegistry)

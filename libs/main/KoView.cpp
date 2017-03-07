@@ -44,16 +44,15 @@
 #include <KoIcon.h>
 
 #include <kactioncollection.h>
-#include <klocale.h>
-#include <kstatusbar.h>
-#include <kdebug.h>
-#include <kurl.h>
+#include <klocalizedstring.h>
+#include <MainDebug.h>
 #include <kmessagebox.h>
-#include <kio/netaccess.h>
+#include <KoNetAccess.h>
 #include <kselectaction.h>
 #include <kconfiggroup.h>
-#include <kdeprintdialog.h>
+#include <KSharedConfig>
 
+#include <QStatusBar>
 #include <QDockWidget>
 #include <QApplication>
 #include <QList>
@@ -120,7 +119,7 @@ public:
             return m_widget;
         }
 
-        void ensureItemShown(KStatusBar * sb) {
+        void ensureItemShown(QStatusBar * sb) {
             Q_ASSERT(m_widget);
             if (!m_connected) {
                 if (m_permanent)
@@ -134,7 +133,7 @@ public:
                 m_connected = true;
             }
         }
-        void ensureItemHidden(KStatusBar * sb) {
+        void ensureItemHidden(QStatusBar * sb) {
             if (m_connected) {
                 m_hidden = m_widget->isHidden();
                 sb->removeWidget(m_widget);
@@ -176,10 +175,10 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
 
     setupGlobalActions();
 
-    KStatusBar * sb = statusBar();
+    QStatusBar * sb = statusBar();
     if (sb) { // No statusbar in e.g. konqueror
-        connect(d->document, SIGNAL(statusBarMessage(const QString&)),
-                this, SLOT(slotActionStatusText(const QString&)));
+        connect(d->document, SIGNAL(statusBarMessage(QString)),
+                this, SLOT(slotActionStatusText(QString)));
         connect(d->document, SIGNAL(clearStatusBarMessage()),
                 this, SLOT(slotClearStatusText()));
     }
@@ -227,7 +226,7 @@ void KoView::dragEnterEvent(QDragEnterEvent *event)
 void KoView::dropEvent(QDropEvent *event)
 {
     // we can drop a list of urls from, for instance dolphin
-    QList<QImage> images;
+    QVector<QImage> images;
 
     if (event->mimeData()->hasImage()) {
         QImage image = event->mimeData()->imageData().value<QImage>();
@@ -241,7 +240,7 @@ void KoView::dropEvent(QDropEvent *event)
         QList<QUrl> urls = event->mimeData()->urls();
         foreach (const QUrl &url, urls) {
             QImage image;
-            KUrl kurl(url);
+            QUrl kurl(url);
             // make sure we download the files before inserting them
             if (!kurl.isLocalFile()) {
                 QString tmpFile;
@@ -267,7 +266,7 @@ void KoView::dropEvent(QDropEvent *event)
 }
 
 
-void KoView::addImages(const QList<QImage> &, const QPoint &)
+void KoView::addImages(const QVector<QImage> &, const QPoint &)
 {
     // override in your application
 }
@@ -285,7 +284,7 @@ void KoView::setDocumentDeleted()
 void KoView::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
 {
     KoViewPrivate::StatusBarItem item(widget, stretch, permanent);
-    KStatusBar * sb = statusBar();
+    QStatusBar * sb = statusBar();
     if (sb) {
         item.ensureItemShown(sb);
     }
@@ -294,7 +293,7 @@ void KoView::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
 
 void KoView::removeStatusBarItem(QWidget *widget)
 {
-    KStatusBar *sb = statusBar();
+    QStatusBar *sb = statusBar();
 
     int itemCount = d->statusBarItems.count();
     for (int i = itemCount-1; i >= 0; --i) {
@@ -311,7 +310,7 @@ void KoView::removeStatusBarItem(QWidget *widget)
 
 KoPrintJob * KoView::createPrintJob()
 {
-    kWarning(30003) << "Printing not implemented in this application";
+    warnMain << "Printing not implemented in this application";
     return 0;
 }
 
@@ -327,8 +326,8 @@ KoPageLayout KoView::pageLayout() const
 
 QPrintDialog *KoView::createPrintDialog(KoPrintJob *printJob, QWidget *parent)
 {
-    QPrintDialog *printDialog = KdePrint::createPrintDialog(&printJob->printer(),
-                                printJob->createOptionWidgets(), parent);
+    QPrintDialog *printDialog = new QPrintDialog(&printJob->printer(), parent);
+    printDialog->setOptionTabs(printJob->createOptionWidgets());
     printDialog->setMinMax(printJob->printer().fromPage(), printJob->printer().toPage());
     printDialog->setEnabledOptions(printJob->printDialogOptions());
     return printDialog;
@@ -336,11 +335,13 @@ QPrintDialog *KoView::createPrintDialog(KoPrintJob *printJob, QWidget *parent)
 
 void KoView::setupGlobalActions()
 {
-    actionCollection()->addAction("edit_undo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::UNDO));
-    actionCollection()->addAction("edit_redo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::RED0));
+    QAction *undo = actionCollection()->addAction("edit_undo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::UNDO));
+    QAction *redo = actionCollection()->addAction("edit_redo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::RED0));
 
+    actionCollection()->setDefaultShortcut(undo, QKeySequence::Undo);
+    actionCollection()->setDefaultShortcut(redo, QKeySequence::Redo);
     d->actionAuthor  = new KSelectAction(koIcon("user-identity"), i18n("Active Author Profile"), this);
-    connect(d->actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));
+    connect(d->actionAuthor, SIGNAL(triggered(QString)), this, SLOT(changeAuthorProfile(QString)));
     actionCollection()->addAction("settings_active_author", d->actionAuthor);
 
     slotUpdateAuthorProfileActions();
@@ -348,7 +349,7 @@ void KoView::setupGlobalActions()
 
 void KoView::changeAuthorProfile(const QString &profileName)
 {
-    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    KConfigGroup appAuthorGroup( KSharedConfig::openConfig(), "Author");
     if (profileName.isEmpty()) {
         appAuthorGroup.writeEntry("active-profile", "");
     } else if (profileName == i18nc("choice for author profile", "Anonymous")) {
@@ -377,7 +378,7 @@ KoMainWindow * KoView::mainWindow() const
     return mw;
 }
 
-KStatusBar * KoView::statusBar() const
+QStatusBar * KoView::statusBar() const
 {
     KoMainWindow *mw = mainWindow();
     return mw ? mw->statusBar() : 0;
@@ -385,14 +386,14 @@ KStatusBar * KoView::statusBar() const
 
 void KoView::slotActionStatusText(const QString &text)
 {
-    KStatusBar *sb = statusBar();
+    QStatusBar *sb = statusBar();
     if (sb)
         sb->showMessage(text);
 }
 
 void KoView::slotClearStatusText()
 {
-    KStatusBar *sb = statusBar();
+    QStatusBar *sb = statusBar();
     if (sb)
         sb->clearMessage();
 }
@@ -413,7 +414,7 @@ void KoView::slotUpdateAuthorProfileActions()
         d->actionAuthor->addAction(profile);
     }
 
-    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    KConfigGroup appAuthorGroup( KSharedConfig::openConfig(), "Author");
     QString profileName = appAuthorGroup.readEntry("active-profile", "");
     if (profileName == "anonymous") {
         d->actionAuthor->setCurrentItem(1);
@@ -434,7 +435,3 @@ void KoView::guiActivateEvent(bool activated)
 {
     Q_UNUSED(activated);
 }
-
-
-#include <KoView_p.moc>
-#include <KoView.moc>

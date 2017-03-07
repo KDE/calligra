@@ -28,7 +28,7 @@
 #include "XlsxXmlChartReader.h"
 #include "XlsxImport.h"
 #include "Charting.h"
-#include "ChartExport.h"
+#include "XlsxChartOdfWriter.h"
 
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
@@ -95,7 +95,7 @@ void XlsxDrawingObject::save(KoXmlWriter* xmlWriter)
             // nothing to do for us
         } break;
         case Chart: {
-            m_chart->m_chartExport->saveIndex(xmlWriter);
+            m_chart->m_chartWriter->saveIndex(xmlWriter);
         } break;
         case Diagram: {
             xmlWriter->startElement("draw:g");
@@ -303,7 +303,6 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_anchor(const QString& refe
         if (isEndElement() && name() == reference) {
             break;
         }
-        kDebug() << *this;
         if (isStartElement()) {
             // twoCellAnchor does define the 'from' and 'to' elements which do define the anchor-points
             TRY_READ_IF(from)

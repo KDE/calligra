@@ -23,7 +23,7 @@
 #ifndef CALLIGRA_SHEETS_SUBTOTAL_DIALOG
 #define CALLIGRA_SHEETS_SUBTOTAL_DIALOG
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 namespace Calligra
 {
@@ -35,7 +35,7 @@ class Selection;
  * \ingroup UI
  * Dialog to add subtotals.
  */
-class SubtotalDialog : public KDialog
+class SubtotalDialog : public KoDialog
 {
     Q_OBJECT
 

@@ -10,5 +10,5 @@ install(FILES
     progress-50.svg
     progress-75.svg
     progress-100.svg
-    DESTINATION ${DATA_INSTALL_DIR}/stateshape/states)
+    DESTINATION ${DATA_INSTALL_DIR}/calligra_shape_state/states)
 

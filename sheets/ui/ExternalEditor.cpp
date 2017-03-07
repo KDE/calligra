@@ -19,23 +19,20 @@
 
 #include "ExternalEditor.h"
 
-// KSpread
+// Sheets
 #include "CellEditor.h"
 #include "CellToolBase.h"
 #include "FormulaEditorHighlighter.h"
 #include "Map.h"
 #include "Sheet.h"
+#include "SheetsDebug.h"
 
 // Calligra
 #include <KoIcon.h>
 
-// KDE
-#include <kaction.h>
-#include <kdebug.h>
-#include <kglobalsettings.h>
-
 // Qt
 #include <QApplication>
+#include <QFontDatabase>
 #include <QFocusEvent>
 #include <QKeyEvent>
 
@@ -47,8 +44,8 @@ public:
     CellToolBase* cellTool;
     FormulaEditorHighlighter* highlighter;
     bool isArray;
-    KAction* applyAction;
-    KAction* cancelAction;
+    QAction* applyAction;
+    QAction* cancelAction;
 };
 
 ExternalEditor::ExternalEditor(QWidget *parent)
@@ -59,7 +56,7 @@ ExternalEditor::ExternalEditor(QWidget *parent)
     d->highlighter = 0;
     d->isArray = false;
 
-    setCurrentFont(KGlobalSettings::generalFont());
+    setCurrentFont(QFontDatabase::systemFont(QFontDatabase::GeneralFont));
 
     // Try to immitate KLineEdit regarding the margins and size.
     document()->setDocumentMargin(1);
@@ -69,12 +66,12 @@ ExternalEditor::ExternalEditor(QWidget *parent)
     connect(this, SIGNAL(cursorPositionChanged()),
             this, SLOT(slotCursorPositionChanged()));
 
-    d->applyAction = new KAction(koIcon("dialog-ok"), i18n("Apply"), this);
+    d->applyAction = new QAction(koIcon("dialog-ok"), i18n("Apply"), this);
     d->applyAction->setToolTip(i18n("Apply changes"));
     d->applyAction->setEnabled(false);
     connect(d->applyAction, SIGNAL(triggered()), SLOT(applyChanges()));
 
-    d->cancelAction = new KAction(koIcon("dialog-cancel"), i18n("Cancel"), this);
+    d->cancelAction = new QAction(koIcon("dialog-cancel"), i18n("Cancel"), this);
     d->cancelAction->setToolTip(i18n("Discard changes"));
     d->cancelAction->setEnabled(false);
     connect(d->cancelAction, SIGNAL(triggered()), SLOT(discardChanges()));
@@ -129,6 +126,18 @@ void ExternalEditor::setText(const QString &text)
     blockSignals(false);
 }
 
+int ExternalEditor::cursorPosition() const
+{
+    return textCursor().position();
+}
+
+void ExternalEditor::setCursorPosition(int pos)
+{
+    QTextCursor textCursor(this->textCursor());
+    textCursor.setPosition(pos);
+    setTextCursor(textCursor);
+}
+
 void ExternalEditor::keyPressEvent(QKeyEvent *event)
 {
     Q_ASSERT(d->cellTool);
@@ -138,7 +147,7 @@ void ExternalEditor::keyPressEvent(QKeyEvent *event)
 
     // Create the embedded editor, if necessary.
     if (!d->cellTool->editor()) {
-        d->cellTool->createEditor(false /* keep content */, false /* no focus */);
+        d->cellTool->createEditor(false /* keep content */, false /* no focus */, true /*capture arrows */);
     }
 
     // the Enter and Esc key are handled by the embedded editor
@@ -158,13 +167,13 @@ void ExternalEditor::focusInEvent(QFocusEvent* event)
     Q_ASSERT(d->cellTool);
     // If the focussing is user induced.
     if (event->reason() != Qt::OtherFocusReason) {
-        kDebug() << "induced by user";
+        debugSheets << "induced by user";
         d->cellTool->setLastEditorWithFocus(CellToolBase::ExternalEditor);
     }
     // when the external editor gets focus, create also the internal editor
     // this in turn means that ranges will be instantly highlighted right
     if (!d->cellTool->editor())
-        d->cellTool->createEditor(false /* keep content */, false /* no focus */);
+        d->cellTool->createEditor(false /* keep content */, false /* no focus */, true /*capture arrows */);
     KTextEdit::focusInEvent(event);
 }
 
@@ -206,5 +215,3 @@ QAction* ExternalEditor::cancelAction() const
 {
     return d->cancelAction;
 }
-
-#include "ExternalEditor.moc"

@@ -18,15 +18,15 @@
  */
 
 #include "Changecase.h"
+#include "ChangecaseDebug.h"
 
 #include <QTextBlock>
 #include <QTextDocument>
 #include <QRadioButton>
 #include <QVBoxLayout>
 
-#include <kdialog.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <KoDialog.h>
+#include <klocalizedstring.h>
 
 Changecase::Changecase()
 {
@@ -60,9 +60,9 @@ void Changecase::checkSection(QTextDocument *document, int startPosition, int en
     m_startPosition = startPosition;
     m_endPosition = endPosition;
 
-    KDialog *dialog = new KDialog();
+    KoDialog *dialog = new KoDialog();
     dialog->setCaption(i18n("Change case"));
-    dialog->setButtons(KDialog::Ok | KDialog::Cancel);
+    dialog->setButtons(KoDialog::Ok | KoDialog::Cancel);
 
     QWidget *widget = new QWidget(dialog);
 
@@ -114,12 +114,12 @@ void Changecase::sentenceCase()
     // TODO
     // * Exception?
     while (true) {
-        QString text = block.text();
+        const QString text = block.text();
         int prevLetterIndex = -1;
         QChar currentWord;
         pos = block.position() + block.length() - 1;
 
-        QString::Iterator iter = text.end();
+        QString::ConstIterator iter = text.end();
 
         if (text.isEmpty()) { // empty block, go to next block
             if (!(block.isValid() && block.position() + block.length() < m_endPosition))
@@ -145,7 +145,7 @@ void Changecase::sentenceCase()
             // found end of sentence, go back to last found letter (indicating start of a word)
             if (iter != text.begin() && (*iter == QChar('.') || *iter == QChar('!') || *iter == QChar('?'))) {
                 if (prevLetterIndex >= m_startPosition && prevLetterIndex <= m_endPosition && currentWord.isLower()) {
-                    // kDebug() <<"Found end of sentence" << *iter <<" :" << currentWord;
+                    // debugChangecase <<"Found end of sentence" << *iter <<" :" << currentWord;
                     m_cursor.setPosition(prevLetterIndex);
                     m_cursor.deleteChar();
                     m_cursor.insertText(currentWord.toUpper());
@@ -345,5 +345,3 @@ void Changecase::toggleCase()
         pos = block.position();
     }
 }
-
-#include <Changecase.moc>

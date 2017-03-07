@@ -3,6 +3,7 @@
  *
  * Copyright (c) 1999-2003 Hans Petter Bieker <bieker@kde.org>
  * Copyright (c) 2007 Dag Andersen <danders@get2net.dk>
+ * Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
  *
  * Requires the Qt widget libraries, available at no cost at
  * http://www.troll.no/
@@ -29,23 +30,21 @@
 
 #include "ui_localemon.h"
 
-class KLocale;
-
 namespace KPlato
 {
 
 class MacroCommand;
+class Locale;
 
 class KPLATOUI_EXPORT LocaleConfigMoney : public QWidget, Ui::LocaleConfigMoney
 {
   Q_OBJECT
 
 public:
-  LocaleConfigMoney(KLocale *locale, QWidget *parent);
+  LocaleConfigMoney(Locale *locale, QWidget *parent);
   virtual ~LocaleConfigMoney();
 
-  void save();
-
+  /// Save all changes
   MacroCommand *buildCommand();
 
 public Q_SLOTS:
@@ -74,7 +73,7 @@ private Q_SLOTS:
 //  void slotMonDigSetChanged(int i);
 
 private:
-  KLocale *m_locale;
+  Locale *m_locale;
 };
 
 } // namespace KPlato

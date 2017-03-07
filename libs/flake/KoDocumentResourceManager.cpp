@@ -23,7 +23,7 @@
 
 #include <QVariant>
 #include <kundo2stack.h>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #include "KoShape.h"
 #include "KoShapeController.h"
@@ -221,5 +221,3 @@ void KoDocumentResourceManager::setShapeController(KoShapeController *shapeContr
     variant.setValue<KoShapeController *>(shapeController);
     setResource(ShapeController, variant);
 }
-
-#include <KoDocumentResourceManager.moc>

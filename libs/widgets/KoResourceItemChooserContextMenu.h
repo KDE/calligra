@@ -24,19 +24,20 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QLabel>
-class KoResource;
 
 class KLineEdit;
+class KoResource;
+
 
 class ContextMenuExistingTagAction : public QAction
 {
     Q_OBJECT
 public:
-    explicit ContextMenuExistingTagAction( KoResource * resource, QString tag, QObject* parent = 0);
+    explicit ContextMenuExistingTagAction( KoResource * resource, const QString &tag, QObject* parent = 0);
     ~ContextMenuExistingTagAction();
 
 Q_SIGNALS:
-    void triggered(KoResource * resource, QString tag);
+    void triggered(KoResource * resource, const QString &tag);
 
 protected Q_SLOTS:
     void onTriggered();
@@ -56,10 +57,10 @@ class KoLineEditAction : public QWidgetAction
 public:
     explicit KoLineEditAction(QObject* parent);
     virtual ~KoLineEditAction();
-    void setIcon(QIcon icon);
+    void setIcon(const QIcon &icon);
     void closeParentOnTrigger(bool closeParent);
     bool closeParentOnTrigger();
-    void setClickMessage(const QString& clickMessage);
+    void setPlaceholderText(const QString& clickMessage);
     void setText(const QString& text);
     void setVisible(bool showAction);
 

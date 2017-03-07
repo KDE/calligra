@@ -26,12 +26,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <kdebug.h>
-#include <klocale.h>
-
 #include <KoXmlNS.h>
 #include <KoUnit.h>
 
+#include "SheetsDebug.h"
 #include "CellStorage.h"
 #include "Global.h"
 #include "Map.h"
@@ -145,14 +143,14 @@ QDomElement RowFormat::save(QDomDocument& doc, int yshift) const
 {
     Q_ASSERT(d->sheet);
     QDomElement row = doc.createElement("row");
-    row.setAttribute("height", d->height);
-    row.setAttribute("row", d->row - yshift);
+    row.setAttribute("height", QString::number(d->height));
+    row.setAttribute("row", QString::number(d->row - yshift));
     if (d->hide)
-        row.setAttribute("hide", (int) d->hide);
+        row.setAttribute("hide", QString::number((int) d->hide));
 
     const Style style = d->sheet->cellStorage()->style(QRect(1, d->row, KS_colMax, 1));
     if (!style.isEmpty()) {
-        kDebug(36003) << "saving cell style of row" << d->row;
+        debugSheetsODF << "saving cell style of row" << d->row;
         QDomElement format;
         style.saveXML(doc, format, d->sheet->map()->styleManager());
         row.appendChild(format);
@@ -181,11 +179,11 @@ bool RowFormat::load(const KoXmlElement & row, int yshift, Paste::Mode mode)
 
     // Validation
     if (d->height < 0) {
-        kDebug(36001) << "Value height=" << d->height << " out of range";
+        debugSheets << "Value height=" << d->height << " out of range";
         return false;
     }
     if (d->row < 1 || d->row > KS_rowMax) {
-        kDebug(36001) << "Value row=" << d->row << " out of range";
+        debugSheets << "Value row=" << d->row << " out of range";
         return false;
     }
 
@@ -394,15 +392,15 @@ QDomElement ColumnFormat::save(QDomDocument& doc, int xshift) const
 {
     Q_ASSERT(d->sheet);
     QDomElement col(doc.createElement("column"));
-    col.setAttribute("width", d->width);
-    col.setAttribute("column", d->column - xshift);
+    col.setAttribute("width", QString::number(d->width));
+    col.setAttribute("column", QString::number(d->column - xshift));
 
     if (d->hide)
-        col.setAttribute("hide", (int) d->hide);
+        col.setAttribute("hide", QString::number((int) d->hide));
 
     const Style style = d->sheet->cellStorage()->style(QRect(d->column, 1, 1, KS_rowMax));
     if (!style.isEmpty()) {
-        kDebug(36003) << "saving cell style of column" << d->column;
+        debugSheetsODF << "saving cell style of column" << d->column;
         QDomElement format(doc.createElement("format"));
         style.saveXML(doc, format, d->sheet->map()->styleManager());
         col.appendChild(format);
@@ -432,11 +430,11 @@ bool ColumnFormat::load(const KoXmlElement & col, int xshift, Paste::Mode mode)
 
     // Validation
     if (d->width < 0) {
-        kDebug(36001) << "Value width=" << d->width << " out of range";
+        debugSheets << "Value width=" << d->width << " out of range";
         return false;
     }
     if (d->column < 1 || d->column > KS_colMax) {
-        kDebug(36001) << "Value col=" << d->column << " out of range";
+        debugSheets << "Value col=" << d->column << " out of range";
         return false;
     }
     if (col.hasAttribute("hide")) {

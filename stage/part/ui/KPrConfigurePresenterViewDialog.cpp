@@ -21,13 +21,13 @@
 
 #include <QDesktopWidget>
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <klocalizedstring.h>
 
+#include "StageDebug.h"
 #include "KPrDocument.h"
 
 KPrConfigurePresenterViewDialog::KPrConfigurePresenterViewDialog( KPrDocument *document, QWidget *parent )
-    : KDialog( parent )
+    : KoDialog( parent )
     , m_document( document )
 {
     QWidget *widget = new QWidget( this );
@@ -67,6 +67,3 @@ bool KPrConfigurePresenterViewDialog::presenterViewEnabled()
 {
     return ( ui.presenterViewCheckBox->checkState() == Qt::Checked );
 }
-
-#include "KPrConfigurePresenterViewDialog.moc"
-

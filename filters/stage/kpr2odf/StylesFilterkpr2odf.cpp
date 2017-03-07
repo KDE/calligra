@@ -22,7 +22,6 @@
 #include <QTime>
 #include <QColor>
 
-#include <kdebug.h>
 const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
 {
     KoGenStyle style(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
@@ -788,7 +787,7 @@ const QString Filterkpr2odf::createStrokeDashStyle(int strokeStyle)
     return m_styles.insert(style, "stroke");
 }
 
-const QString Filterkpr2odf::createHatchStyle(int brushStyle, QString fillColor)
+const QString Filterkpr2odf::createHatchStyle(int brushStyle, const QString &fillColor)
 {
     KoGenStyle style(KoGenStyle::HatchStyle);
 

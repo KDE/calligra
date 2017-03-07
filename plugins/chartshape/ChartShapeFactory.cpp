@@ -24,10 +24,10 @@
 #include <QStringList>
 #include <QStandardItemModel>
 
-// KDE
+// KF5
 #include <kiconloader.h>
 #include <kpluginfactory.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 // Calligra
 #include <KoIcon.h>
@@ -48,10 +48,10 @@
 #include "TableSource.h"
 
 
-using namespace KChart;
+using namespace KoChart;
 
-K_PLUGIN_FACTORY(ChartShapePluginFactory, registerPlugin<ChartShapePlugin>();)
-K_EXPORT_PLUGIN(ChartShapePluginFactory("calligra_shape_chart"))
+K_PLUGIN_FACTORY_WITH_JSON(ChartShapePluginFactory, "calligra_shape_chart.json",
+                           registerPlugin<ChartShapePlugin>();)
 
 ChartShapePlugin::ChartShapePlugin(QObject * parent, const QVariantList&)
     : QObject(parent)
@@ -71,7 +71,7 @@ ChartShapeFactory::ChartShapeFactory()
     setToolTip(i18n("Business charts"));
 
     KIconLoader::global()->addAppDir("kchart");
-    setIconName(koIconNameCStr("kchart"));
+    setIconName(koIconNameNeededWithSubs("", "x-shape-chart", "office-chart-bar"));
 
     // Default 'app specific' config pages i.e. unless an app defines
     // other config pages, these are used.

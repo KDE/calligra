@@ -28,12 +28,10 @@
 #include <QByteArray>
 #include <QList>
 
-// KDE
-#include <kdebug.h>
-
 // Calligra
 #include <KoStore.h>
 
+#include "SharedExportDebug.h"
 
 // ================================================================
 //                     class FileCollectorPrivate
@@ -43,7 +41,7 @@
 
 struct FileInfo
 {
-    FileInfo(QString id, QString fileName, QByteArray mimetype, QByteArray fileContents, QString label)
+    FileInfo(const QString &id, const QString &fileName, const QByteArray &mimetype, const QByteArray &fileContents, const QString &label)
         : m_id(id), m_fileName(fileName), m_mimetype(mimetype), m_fileContents(fileContents), m_label(label)
     {}
 
@@ -96,7 +94,7 @@ FileCollector::~FileCollector()
 }
 
 
-void FileCollector::setFilePrefix(QString prefix)
+void FileCollector::setFilePrefix(const QString &prefix)
 {
     d->filePrefix = prefix;
 }
@@ -116,7 +114,7 @@ QString FileCollector::fileSuffix() const
     return d->fileSuffix;
 }
 
-void FileCollector::setPathPrefix(QString prefix)
+void FileCollector::setPathPrefix(const QString &prefix)
 {
     d->pathPrefix = prefix;
 }
@@ -129,14 +127,14 @@ QString FileCollector::pathPrefix() const
 
 // ----------------------------------------------------------------
 
-void FileCollector::addContentFile(QString id, QString fileName,
-                                   QByteArray mimetype, QByteArray fileContents)
+void FileCollector::addContentFile(const QString &id, const QString &fileName,
+                                   const QByteArray &mimetype, const QByteArray &fileContents)
 {
     addContentFile(id, fileName, mimetype, fileContents, "");
 }
 
-void FileCollector::addContentFile(QString id, QString fileName,
-                                   QByteArray mimetype, QByteArray fileContents, QString label)
+void FileCollector::addContentFile(const QString &id, const QString &fileName,
+                                   const QByteArray &mimetype, const QByteArray &fileContents, const QString &label)
 {
     FileInfo *newFile = new FileInfo(id, fileName, mimetype, fileContents, label);
     d->m_files.append(newFile);
@@ -152,7 +150,7 @@ KoFilter::ConversionStatus FileCollector::writeFiles(KoStore *store)
     // Write contents of added files.
     foreach(FileInfo *file, d->m_files) {
         if (!store->open(file->m_fileName)) {
-            kDebug(30503) << "Can not create" << file->m_fileName;
+            debugSharedExport << "Can not create" << file->m_fileName;
             return KoFilter::CreationError;
         }
         store->write(file->m_fileContents);

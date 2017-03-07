@@ -23,7 +23,7 @@
 #ifndef FORMULACURSOR_H
 #define FORMULACURSOR_H
 
-#include "kformula_export.h"
+#include "koformula_export.h"
 #include <QString>
 #include <QPair>
 #include "FormulaData.h"

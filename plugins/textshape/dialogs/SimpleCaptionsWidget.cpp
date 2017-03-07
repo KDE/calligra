@@ -19,8 +19,8 @@
 #include "SimpleCaptionsWidget.h"
 #include "TextTool.h"
 
-#include <kaction.h>
-#include <kdebug.h>
+#include <QAction>
+#include <QDebug>
 
 #include <QWidget>
 
@@ -38,5 +38,3 @@ void SimpleCaptionsWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
 }
-
-#include <SimpleCaptionsWidget.moc>

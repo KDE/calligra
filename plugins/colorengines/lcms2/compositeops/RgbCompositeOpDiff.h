@@ -19,9 +19,7 @@
 #ifndef RGBCOMPOSITEOPDIFF_H
 #define RGBCOMPOSITEOPDIFF_H
 
-#include "KoColorSpaceMaths.h"
 #include <KoCompositeOpAlphaBase.h>
-
 
 #define AbsoluteValue(x)  ((x) < 0 ? -(x) : (x))
 
@@ -33,19 +31,22 @@ class RgbCompositeOpDiff : public KoCompositeOpAlphaBase<_CSTraits, RgbComposite
 
 public:
 
-    RgbCompositeOpDiff(KoColorSpace * cs)
-            : KoCompositeOpAlphaBase<_CSTraits, RgbCompositeOpDiff<_CSTraits>, true >(cs, COMPOSITE_DIFF, i18n("Diff"), KoCompositeOp::categoryMisc()) {
+    RgbCompositeOpDiff(KoColorSpace *cs)
+        : KoCompositeOpAlphaBase<_CSTraits, RgbCompositeOpDiff<_CSTraits>, true >(cs, COMPOSITE_DIFF, i18n("Diff"), KoCompositeOp::categoryMisc())
+    {
     }
-    
-    inline static channels_type selectAlpha(channels_type srcAlpha, channels_type dstAlpha) {
+
+    inline static channels_type selectAlpha(channels_type srcAlpha, channels_type dstAlpha)
+    {
         return qMin(srcAlpha, dstAlpha);
     }
 
     inline static void composeColorChannels(channels_type srcBlend,
-                                            const channels_type* src,
-                                            channels_type* dst,
+                                            const channels_type *src,
+                                            channels_type *dst,
                                             bool allChannelFlags,
-                                            const QBitArray & channelFlags) {
+                                            const QBitArray &channelFlags)
+    {
         for (uint i = 0; i < _CSTraits::channels_nb; i++) {
             if ((int)i != _CSTraits::alpha_pos  && (allChannelFlags || channelFlags.testBit(i))) {
 

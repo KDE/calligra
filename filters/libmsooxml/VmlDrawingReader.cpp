@@ -90,7 +90,7 @@ KoFilter::ConversionStatus VmlDrawingReader::read(MSOOXML::MsooXmlReaderContext*
     }
     readNext();
 
-    kDebug() << *this << namespaceUri();
+    debugMsooXml << *this << namespaceUri();
     if (!expectEl(QList<QByteArray>() << "xml")) {
         return KoFilter::WrongFormat;
     }
@@ -102,7 +102,7 @@ KoFilter::ConversionStatus VmlDrawingReader::read(MSOOXML::MsooXmlReaderContext*
     if (!expectElEnd(qn)) {
         return KoFilter::WrongFormat;
     }
-    kDebug() << "===========finished============";
+    debugMsooXml << "===========finished============";
 
     return KoFilter::OK;
 }

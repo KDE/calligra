@@ -22,9 +22,6 @@
 
 #include "ConnectionTool.h"
 
-#include <QPointF>
-#include <QKeyEvent>
-#include <QPainter>
 
 #include "AddConnectionPointCommand.h"
 #include "RemoveConnectionPointCommand.h"
@@ -52,12 +49,16 @@
 #include <KoStrokeConfigWidget.h>
 
 #include <KoIcon.h>
-
-#include <kaction.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kstandarddirs.h>
 #include <kundo2command.h>
+
+#include <klocalizedstring.h>
+
+#include <QAction>
+#include <QDebug>
+#include <QStandardPaths>
+#include <QPointF>
+#include <QKeyEvent>
+#include <QPainter>
 
 
 ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
@@ -71,54 +72,54 @@ ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     , m_resetPaint(true)
 {
     QPixmap connectPixmap;
-    connectPixmap.load(KStandardDirs::locate("data", "calligra/icons/cursor_connect.png"));
+    connectPixmap.load(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligra/cursors/cursor_connect.png"));
     m_connectCursor = QCursor(connectPixmap, 4, 1);
 
-    m_editConnectionPoint = new KAction(i18n("Edit connection points"), this);
+    m_editConnectionPoint = new QAction(i18n("Edit connection points"), this);
     m_editConnectionPoint->setCheckable(true);
     addAction("toggle-edit-mode", m_editConnectionPoint);
 
-    m_alignPercent = new KAction(QString("%"), this);
+    m_alignPercent = new QAction(QString("%"), this);
     m_alignPercent->setCheckable(true);
     addAction("align-relative", m_alignPercent);
-    m_alignLeft = new KAction(koIcon("align-horizontal-left"), i18n("Align to left edge"), this);
+    m_alignLeft = new QAction(koIcon("align-horizontal-left"), i18n("Align to left edge"), this);
     m_alignLeft->setCheckable(true);
     addAction("align-left", m_alignLeft);
-    m_alignCenterH = new KAction(koIcon("align-horizontal-center"), i18n("Align to horizontal center"), this);
+    m_alignCenterH = new QAction(koIcon("align-horizontal-center"), i18n("Align to horizontal center"), this);
     m_alignCenterH->setCheckable(true);
     addAction("align-centerh", m_alignCenterH);
-    m_alignRight = new KAction(koIcon("align-horizontal-right"), i18n("Align to right edge"), this);
+    m_alignRight = new QAction(koIcon("align-horizontal-right"), i18n("Align to right edge"), this);
     m_alignRight->setCheckable(true);
     addAction("align-right", m_alignRight);
-    m_alignTop = new KAction(koIcon("align-vertical-top"), i18n("Align to top edge"), this);
+    m_alignTop = new QAction(koIcon("align-vertical-top"), i18n("Align to top edge"), this);
     m_alignTop->setCheckable(true);
     addAction("align-top", m_alignTop);
-    m_alignCenterV = new KAction(koIcon("align-vertical-center"), i18n("Align to vertical center"), this);
+    m_alignCenterV = new QAction(koIcon("align-vertical-center"), i18n("Align to vertical center"), this);
     m_alignCenterV->setCheckable(true);
     addAction("align-centerv", m_alignCenterV);
-    m_alignBottom = new KAction(koIcon("align-vertical-bottom"), i18n("Align to bottom edge"), this);
+    m_alignBottom = new QAction(koIcon("align-vertical-bottom"), i18n("Align to bottom edge"), this);
     m_alignBottom->setCheckable(true);
     addAction("align-bottom", m_alignBottom);
 
-    m_escapeAll = new KAction(koIcon("escape-direction-all"), i18n("Escape in all directions"), this);
+    m_escapeAll = new QAction(koIcon("escape-direction-all"), i18n("Escape in all directions"), this);
     m_escapeAll->setCheckable(true);
     addAction("escape-all", m_escapeAll);
-    m_escapeHorizontal = new KAction(koIcon("escape-direction-horizontal"), i18n("Escape in horizontal directions"), this);
+    m_escapeHorizontal = new QAction(koIcon("escape-direction-horizontal"), i18n("Escape in horizontal directions"), this);
     m_escapeHorizontal->setCheckable(true);
     addAction("escape-horizontal", m_escapeHorizontal);
-    m_escapeVertical = new KAction(koIcon("escape-direction-vertical"), i18n("Escape in vertical directions"), this);
+    m_escapeVertical = new QAction(koIcon("escape-direction-vertical"), i18n("Escape in vertical directions"), this);
     m_escapeVertical->setCheckable(true);
     addAction("escape-vertical", m_escapeVertical);
-    m_escapeLeft = new KAction(koIcon("escape-direction-left"), i18n("Escape in left direction"), this);
+    m_escapeLeft = new QAction(koIcon("escape-direction-left"), i18n("Escape in left direction"), this);
     m_escapeLeft->setCheckable(true);
     addAction("escape-left", m_escapeLeft);
-    m_escapeRight = new KAction(koIcon("escape-direction-right"), i18n("Escape in right direction"), this);
+    m_escapeRight = new QAction(koIcon("escape-direction-right"), i18n("Escape in right direction"), this);
     m_escapeRight->setCheckable(true);
     addAction("escape-right", m_escapeRight);
-    m_escapeUp = new KAction(koIcon("escape-direction-up"), i18n("Escape in up direction"), this);
+    m_escapeUp = new QAction(koIcon("escape-direction-up"), i18n("Escape in up direction"), this);
     m_escapeUp->setCheckable(true);
     addAction("escape-up", m_escapeUp);
-    m_escapeDown = new KAction(koIcon("escape-direction-down"), i18n("Escape in down direction"), this);
+    m_escapeDown = new QAction(koIcon("escape-direction-down"), i18n("Escape in down direction"), this);
     m_escapeDown->setCheckable(true);
     addAction("escape-down", m_escapeDown);
 
@@ -185,7 +186,7 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
             if (shape->shapeId() == TextShape_SHAPEID && dynamic_cast<KoTosContainer*>(shape->parent())) continue;
 
             painter.save();
-            painter.setPen(Qt::black);
+            painter.setPen(QPen(Qt::black, 0));
             QTransform transform = shape->absoluteTransformation(0);
             KoShape::applyConversion(painter, converter);
             // Draw all the connection points of the shape
@@ -212,7 +213,7 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
             int handleCount = connectionShape->handleCount();
             for(int i = 0; i < handleCount; ++i) {
                 painter.save();
-                painter.setPen(Qt::blue);
+                painter.setPen(QPen(Qt::blue, 0));
                 painter.setBrush(i == m_activeHandle ? Qt::red : Qt::white);
                 painter.setTransform(connectionShape->absoluteTransformation(&converter) * painter.transform());
                 connectionShape->paintHandle(painter, converter, i, radius);
@@ -340,7 +341,10 @@ void ConnectionTool::mousePressEvent(KoPointerEvent * event)
                 setEditMode(EditConnection, hitShape, hitHandle);
                 if (hitHandle >= 0) {
                     // start editing connection shape
-                    m_currentStrategy = new KoPathConnectionPointStrategy(this, dynamic_cast<KoConnectionShape*>(m_currentShape), m_activeHandle);
+                    KoConnectionShape *shape = dynamic_cast<KoConnectionShape*>(m_currentShape);
+                    if (shape) {
+                        m_currentStrategy = new KoPathConnectionPointStrategy(this, shape, m_activeHandle);
+                    }
                 }
             }
         } else {

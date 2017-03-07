@@ -22,13 +22,13 @@
 #ifndef CALLIGRA_SHEETS_STYLE_MANAGER_DIALOG
 #define CALLIGRA_SHEETS_STYLE_MANAGER_DIALOG
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
+class QPushButton;
 class QTreeWidget;
 class QTreeWidgetItem;
 
 class KComboBox;
-class KPushButton;
 
 namespace Calligra
 {
@@ -41,7 +41,7 @@ class StyleManager;
  * \ingroup UI
  * Dialog to manage names cell styles.
  */
-class StyleManagerDialog : public KDialog
+class StyleManagerDialog : public KoDialog
 {
     Q_OBJECT
 
@@ -65,9 +65,9 @@ private:
     StyleManager*   m_styleManager;
     QTreeWidget*    m_styleList;
     KComboBox*      m_displayBox;
-    KPushButton*    m_newButton;
-    KPushButton*    m_modifyButton;
-    KPushButton*    m_deleteButton;
+    QPushButton*    m_newButton;
+    QPushButton*    m_modifyButton;
+    QPushButton*    m_deleteButton;
 };
 
 } // namespace Sheets

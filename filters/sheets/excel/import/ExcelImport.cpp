@@ -22,7 +22,6 @@
 */
 
 #include "ExcelImport.h"
-#include <ExcelImport.moc>
 
 #include <QString>
 #include <QDate>
@@ -34,11 +33,11 @@
 #include <kdebug.h>
 #include <KoFilterChain.h>
 #include <kpluginfactory.h>
+#include <klocale.h>
 
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoGenStyle.h>
-#include <KoOdfNumberStyles.h>
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeRegistry.h>
@@ -51,7 +50,7 @@
 #include <DocBase.h>
 #include <sheets/Sheet.h>
 #include <sheets/Condition.h>
-#include <OdfLoadingContext.h>
+#include <sheets/odf/OdfLoadingContext.h>
 #include <CalculationSettings.h>
 #include <CellStorage.h>
 #include <HeaderFooter.h>
@@ -68,9 +67,10 @@
 #include <ValueConverter.h>
 #include <ShapeApplicationData.h>
 #include <Util.h>
+#include <odf/SheetsOdf.h>
 
 #include <Charting.h>
-#include <ChartExport.h>
+#include <KoOdfChartWriter.h>
 #include <NumberFormatParser.h>
 
 #include <iostream>
@@ -85,8 +85,7 @@
 // using m_chain.outputDocument() to write the spreadsheet to.
 //#define OUTPUT_AS_ODS_FILE
 
-K_PLUGIN_FACTORY(ExcelImportFactory, registerPlugin<ExcelImport>();)
-K_EXPORT_PLUGIN(ExcelImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(ExcelImportFactory, "calligra_filter_xls2ods.json", registerPlugin<ExcelImport>();)
 
 static const qreal SIDEWINDERPROGRESS = 40.0;
 static const qreal ODFPROGRESS = 40.0;
@@ -164,7 +163,7 @@ public:
     QHash<int, QRegion> columnStyles;
     QList<QPair<QRegion, Calligra::Sheets::Conditions> > cellConditions;
 
-    QList<ChartExport*> charts;
+    QList<KoOdfChartWriter*> charts;
     void processCharts(KoXmlWriter* manifestWriter);
 
     void addManifestEntries(KoXmlWriter* ManifestWriter);
@@ -285,7 +284,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
         if(range.startsWith(QLatin1Char('[')) && range.endsWith(QLatin1Char(']'))) {
             range.remove(0, 1).chop(1);
         }
-        Calligra::Sheets::Region region(Calligra::Sheets::Region::loadOdf(range), d->outputDoc->map());
+        Calligra::Sheets::Region region(Calligra::Sheets::Odf::loadRegion(range), d->outputDoc->map());
         if (!region.isValid() || !region.lastSheet()) {
             kDebug() << "invalid area" << range;
             continue;
@@ -488,7 +487,7 @@ void ExcelImport::Private::processEmbeddedObjects(const KoXmlElement& rootElemen
             if (cellElement.localName() == "shapes") {
                 KoXmlElement element;
                 forEachElement(element, cellElement) {
-                    sheet->loadOdfObject(element, shapeContext);
+                    Calligra::Sheets::Odf::loadSheetObject(sheet, element, shapeContext);
                 }
             } else {
                 Q_ASSERT(cellElement.localName() == "table-cell");
@@ -498,7 +497,7 @@ void ExcelImport::Private::processEmbeddedObjects(const KoXmlElement& rootElemen
 
                 KoXmlElement element;
                 forEachElement(element, cellElement) {
-                    cell.loadOdfObject(element, shapeContext);
+                    Calligra::Sheets::Odf::loadObject(&cell, element, shapeContext);
                 }
             }
             ++currentCell;
@@ -920,7 +919,7 @@ void ExcelImport::Private::processCell(Cell* ic, Calligra::Sheets::Cell oc)
             }
         } else if (Calligra::Sheets::Format::isTime(styleList[styleId].formatType())) {
             QTime time = convertTime(value.asFloat());
-            oc.setValue(Calligra::Sheets::Value(time, outputDoc->map()->calculationSettings()));
+            oc.setValue(Calligra::Sheets::Value(time));
             KLocale* locale = outputDoc->map()->calculationSettings()->locale();
             if (!isFormula)
                 oc.setRawUserInput(locale->formatTime(time, true));
@@ -985,8 +984,8 @@ void ExcelImport::Private::processCell(Cell* ic, Calligra::Sheets::Cell oc)
         oc.setComment(note);
 
     cellStyles[styleId] += QRect(oc.column(), oc.row(), 1, 1);
-    QHash<QString, Calligra::Sheets::Conditions>::iterator conds = dataStyleConditions.find(ic->format().valueFormat());
-    if (conds != dataStyleConditions.end()) {
+    QHash<QString, Calligra::Sheets::Conditions>::ConstIterator conds = dataStyleConditions.constFind(ic->format().valueFormat());
+    if (conds != dataStyleConditions.constEnd()) {
         cellConditions.append(qMakePair(QRegion(oc.column(), oc.row(), 1, 1), conds.value()));
     }
 
@@ -1012,7 +1011,7 @@ void ExcelImport::Private::processCellObjects(Cell* ic, Calligra::Sheets::Cell o
             hasObjects = true;
         }
 
-        ChartExport *c = new ChartExport(chart->m_chart);
+        KoOdfChartWriter *c = new KoOdfChartWriter(chart->m_chart);
         c->setSheetReplacement( false );
         c->m_href = QString("Chart%1").arg(this->charts.count()+1);
         c->m_endCellAddress = Swinder::encodeAddress(sheet->name(), chart->m_colR, chart->m_rwB);
@@ -1068,7 +1067,7 @@ void ExcelImport::Private::processCellObjects(Cell* ic, Calligra::Sheets::Cell o
 
 void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
 {
-    foreach(ChartExport *c, this->charts) {
+    foreach(KoOdfChartWriter *c, this->charts) {
         c->set2003ColorPalette( workbook->colorTable() );
         c->saveContent(this->storeout, manifestWriter);
     }
@@ -1427,7 +1426,7 @@ void ExcelImport::Private::processNumberFormats()
             Calligra::Sheets::Style& style = dataStyleCache[f->valueFormat()];
             if (style.isEmpty()) {
                 Calligra::Sheets::Conditions conditions;
-                style.loadOdfDataStyle(odfStyles, styleName, conditions, outputDoc->map()->styleManager(), outputDoc->map()->parser());
+                Calligra::Sheets::Odf::loadDataStyle(&style, odfStyles, styleName, conditions, outputDoc->map()->styleManager(), outputDoc->map()->parser());
 
                 if (!conditions.isEmpty())
                     dataStyleConditions[f->valueFormat()] = conditions;
@@ -1440,3 +1439,5 @@ void ExcelImport::slotSigProgress(int progress)
 {
     emit sigProgress(int(SIDEWINDERPROGRESS/100.0 * progress + 0.5));
 }
+
+#include "ExcelImport.moc"

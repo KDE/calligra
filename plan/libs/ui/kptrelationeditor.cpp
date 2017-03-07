@@ -33,9 +33,7 @@
 #include <QModelIndex>
 #include <QVBoxLayout>
 #include <QMenu>
-
-#include <kaction.h>
-#include <klocale.h>
+#include <QAction>
 
 
 namespace KPlato
@@ -68,13 +66,13 @@ void RelationTreeView::slotCurrentChanged(const QModelIndex &curr, const QModelI
 RelationEditor::RelationEditor(KoPart *part, KoDocument *doc, QWidget *parent)
     : ViewBase(part, doc, parent)
 {
-    kDebug(planDbg())<<"----------------- Create RelationEditor ----------------------";
+    debugPlan<<"----------------- Create RelationEditor ----------------------";
 
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new RelationTreeView( this );
     l->addWidget( m_view );
-    //kDebug(planDbg())<<m_view->actionSplitView();
+    //debugPlan<<m_view->actionSplitView();
     setupGui();
 
     connect( m_view, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(slotCurrentChanged(QModelIndex,QModelIndex)) );
@@ -108,19 +106,19 @@ void RelationEditor::setGuiActive( bool /*activate */)
 
 void RelationEditor::slotCurrentChanged(  const QModelIndex &/*curr*/, const QModelIndex & )
 {
-    //kDebug(planDbg())<<curr.row()<<","<<curr.column();
+    //debugPlan<<curr.row()<<","<<curr.column();
     slotEnableActions();
 }
 
 void RelationEditor::slotSelectionChanged( const QModelIndexList& /*list*/)
 {
-    //kDebug(planDbg())<<list.count();
+    //debugPlan<<list.count();
     slotEnableActions();
 }
 
 Relation *RelationEditor::currentRelation() const
 {
-    //kDebug(planDbg());
+    //debugPlan;
     return m_view->currentRelation();
 }
 
@@ -137,7 +135,7 @@ void RelationEditor::slotContextMenuRequested( const QModelIndex& index, const Q
 
 void RelationEditor::slotHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug(planDbg());
+    debugPlan;
     QList<QAction*> lst = contextActionList();
     if ( ! lst.isEmpty() ) {
         QMenu::exec( lst, pos,  lst.first() );
@@ -164,14 +162,14 @@ void RelationEditor::setupGui()
 
 void RelationEditor::slotSplitView()
 {
-    //kDebug(planDbg());
+    //debugPlan;
     m_view->setViewSplitMode( ! m_view->isViewSplit() );
 }
 
 
 void RelationEditor::slotOptions()
 {
-    kDebug(planDbg());
+    debugPlan;
     bool col0 = false;
     TreeViewBase *v = m_view->slaveView();
     if ( v->isHidden() ) {
@@ -187,13 +185,13 @@ void RelationEditor::slotOptions()
 
 void RelationEditor::slotAddRelation()
 {
-    kDebug(planDbg());
+    debugPlan;
 }
 
-void RelationEditor::edit( QModelIndex i )
+void RelationEditor::edit( const QModelIndex &i )
 {
     if ( i.isValid() ) {
-        QModelIndex p = m_view->model()->parent( i );
+//        QModelIndex p = m_view->model()->parent( i );
 //        m_view->setExpanded( p );
         m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
         m_view->edit( i );
@@ -207,7 +205,7 @@ void RelationEditor::slotDeleteRelation( Relation *r)
 
 bool RelationEditor::loadContext( const KoXmlElement &context )
 {
-    kDebug(planDbg());
+    debugPlan;
     ViewBase::loadContext( context );
     return m_view->loadContext( m_view->model()->columnMap(), context );
 }
@@ -224,5 +222,3 @@ KoPrintJob *RelationEditor::createPrintJob()
 }
 
 } // namespace KPlato
-
-#include "kptrelationeditor.moc"

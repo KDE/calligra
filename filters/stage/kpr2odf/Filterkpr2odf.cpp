@@ -33,10 +33,11 @@
 #include <QTime>
 #include <QtAlgorithms>
 #include <QMatrix>
+#include <QDebug>
+#include <QLoggingCategory>
 
-//KDE includes
+//KF5 includes
 #include <kpluginfactory.h>
-#include <kdebug.h>
 
 //Calligra includes
 #include <KoStore.h>
@@ -55,8 +56,18 @@ using std::cos;
 #define M_PI 3.14159265358979323846
 #endif
 
-K_PLUGIN_FACTORY(Filterkpr2odfFactory, registerPlugin<Filterkpr2odf>();)
-K_EXPORT_PLUGIN(Filterkpr2odfFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(Filterkpr2odfFactory, "calligra_filter_kpr2odp.json", registerPlugin<Filterkpr2odf>();)
+
+
+const QLoggingCategory &KPRIMPORT_LOG()
+{
+    static const QLoggingCategory category("calligra.filter.kpr2odp");
+    return category;
+}
+
+#define debugKpr qCDebug(KPRIMPORT_LOG)
+#define warnKpr qCWarning(KPRIMPORT_LOG)
+#define errorKpr qCCritical(KPRIMPORT_LOG)
 
 Filterkpr2odf::Filterkpr2odf(QObject *parent, const QVariantList&)
         : KoFilter(parent)
@@ -452,7 +463,7 @@ void Filterkpr2odf::convertObjects(KoXmlWriter* content, const KoXmlNode& object
             exportAnimation(objectElement, content->indentLevel());
             break;
         default:
-            kWarning() << "Unexpected object found in page " << m_currentPage;
+            warnKpr << "Unexpected object found in page " << m_currentPage;
             break;
         }//switch objectElement
 

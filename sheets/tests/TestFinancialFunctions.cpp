@@ -21,6 +21,8 @@
 
 #include "TestKspreadCommon.h"
 
+#include <QTest>
+
 void TestFinancialFunctions::initTestCase()
 {
     FunctionModuleRegistry::instance()->loadFunctionModules();
@@ -50,9 +52,9 @@ static Value TestDouble(const QString& formula, const Value& v2, int accuracy)
     bool res = fabs(v2.asFloat() - result.asFloat()) < epsilon;
 
     if (!res)
-        kDebug(36002) << "check failed -->" << "Epsilon =" << epsilon << "" << (double)v2.asFloat() << " to" << (double)result.asFloat() << "  diff =" << (double)(v2.asFloat() - result.asFloat());
+        qDebug() << "check failed -->" << "Epsilon =" << epsilon << "" << (double)v2.asFloat() << " to" << (double)result.asFloat() << "  diff =" << (double)(v2.asFloat() - result.asFloat());
 //   else
-//     kDebug(36002)<<"check -->" <<"  diff =" << v2.asFloat()-result.asFloat();
+//     qDebug()<<"check -->" <<"  diff =" << v2.asFloat()-result.asFloat();
     if (res)
         return v2;
     else
@@ -93,7 +95,7 @@ void TestFinancialFunctions::testACCRINT()
 // ACCRINTM
 void TestFinancialFunctions::testACCRINTM()
 {
-    // kspread
+    // Calligra Sheets
     CHECK_EVAL_SHORT("ACCRINTM( \"2001-04-01\"; \"2001-06-15\"; 0.1; 1000; 3 )", Value(20.5479454));
     CHECK_EVAL_SHORT("ACCRINTM( \"2004-02-01\"; \"2004-05-01\"; 0.1; 1000; 0 )", Value(24.722222));      // leap year, US (NASD) 30/360
     CHECK_EVAL_SHORT("ACCRINTM( \"2004-02-01\"; \"2004-05-01\"; 0.1; 1000; 1 )", Value(24.590164));      // leap year, actual/actual
@@ -115,7 +117,7 @@ void TestFinancialFunctions::testAMORDEGRC()
     CHECK_EVAL("AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 2; 0.15; 1 )" , Value(7336));      //
     CHECK_EVAL("AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 3; 0.15; 1 )" , Value(4585));      //
     CHECK_EVAL("AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 4; 0.15; 1 )" , Value(2866));      //
-//   CHECK_EVAL_SHORT( "AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 5; 0.15; 1 )" , Value(  2388 ) ); // TODO check KSpread -> 1791
+//   CHECK_EVAL_SHORT( "AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 5; 0.15; 1 )" , Value(  2388 ) ); // TODO check Calligra Sheets -> 1791
 
     // odf tests
     CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 1 )"  , Value(228));     // the first period (10 years life time)
@@ -144,14 +146,14 @@ void TestFinancialFunctions::testAMORLINC()
 // COMPOUND
 void TestFinancialFunctions::testCOMPOUND()
 {
-    // kspread
+    // Calligra Sheets
     CHECK_EVAL_SHORT("COMPOUND(5000;0.12;4;5)", Value(9030.556173));
 }
 
 // CONTINUOUS
 void TestFinancialFunctions::testCONTINUOUS()
 {
-    // kspread
+    // Calligra Sheets
     CHECK_EVAL_SHORT("CONTINUOUS(1000;0.1;1)", Value(1105.17091808));
 }
 
@@ -454,7 +456,7 @@ void TestFinancialFunctions::testDOLLARFR()
 // DURATION
 void TestFinancialFunctions::testDURATION()
 {
-    // kspread
+    // Calligra Sheets
     CHECK_EVAL("DURATION( 0.1; 1000; 2000 )" , Value(7.2725408973));     //
     // alternate function name
     CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETDURATION( 0.1; 1000; 2000 )" , Value(7.2725408973));
@@ -469,7 +471,7 @@ void TestFinancialFunctions::testDURATION_ADD()
 // EFFECT
 void TestFinancialFunctions::testEFFECT()
 {
-    // kspread
+    // Calligra Sheets
     CHECK_EVAL_SHORT("EFFECT(0.08;12)", Value(0.083));
     // alternate function name
     CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETEFFECT(0.08;12)", Value(0.083));
@@ -922,7 +924,7 @@ void TestFinancialFunctions::testODDLYIELD()
 // PDURATION
 void TestFinancialFunctions::testPDURATION()
 {
-    // is DURATION in kspread
+    // is DURATION in Calligra Sheets
     CHECK_EVAL_SHORT("PDURATION( 0.1; 10; 100 )" , Value(24.158858));      // simple use case
     CHECK_EVAL_SHORT("PDURATION( 0.1; 100; 10 )" , Value(-24.158858));     // curentValue > desiredValue
     CHECK_EVAL_SHORT("PDURATION(   0; 10;  11 )" , Value::errorVALUE());   // rate > 0
@@ -984,7 +986,7 @@ void TestFinancialFunctions::testPV()
 // PV_ANNUITY
 void TestFinancialFunctions::testPV_ANNUITY()
 {
-    // kspread
+    // Calligra Sheets
     CHECK_EVAL_SHORT("PV_ANNUITY(1000;0.05;5)", Value(4329.47667063));
 }
 
@@ -1188,7 +1190,4 @@ void TestFinancialFunctions::testZEROCOUPON()
     CHECK_EVAL("ZERO_COUPON(1000;.25;1)",     Value(800));
 }
 
-
-QTEST_KDEMAIN(TestFinancialFunctions, GUI)
-
-#include "TestFinancialFunctions.moc"
+QTEST_MAIN(TestFinancialFunctions)

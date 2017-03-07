@@ -24,7 +24,7 @@
 #define TEXTELEMENT_H
 
 #include "TokenElement.h"
-#include "kformula_export.h"
+#include "koformula_export.h"
 
 /**
  * @short Implementation of the MathML

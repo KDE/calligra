@@ -37,14 +37,13 @@
 #include <QPushButton>
 #include <QListWidget>
 
-//KDE Includes
-#include <kdebug.h>
-#include <kdialog.h>
+// KF5
 #include <kmessagebox.h>
 
 #include <KoIcon.h>
 
-//KSpread Includes
+// Sheets
+#include "SheetsDebug.h"
 #include <Global.h>
 #include "calligra_sheets_limits.h"
 #include <Localization.h>
@@ -77,7 +76,7 @@ public:
 
 
 ConsolidateDialog::ConsolidateDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+        : KoDialog(parent)
         , d(new Private)
 {
     d->selection = selection;
@@ -455,7 +454,7 @@ void ConsolidateDialog::accept()
     // execute the cumulating parent command
     map->addCommand(command);
 
-    KDialog::accept();
+    KoDialog::accept();
 }
 
 void ConsolidateDialog::slotAdd()
@@ -512,7 +511,7 @@ void ConsolidateDialog::Private::setContent(Sheet *sheet, int row, int column,
         Formula formula(sheet);
         formula.setExpression(text);
         if (!formula.isValid()) {
-            kDebug() << "Invalid formula:" << text;
+            debugSheets << "Invalid formula:" << text;
             return; // Quit before creating/adding the sub-command.
         }
         value = formula.eval();
@@ -527,5 +526,3 @@ void ConsolidateDialog::Private::setContent(Sheet *sheet, int row, int column,
     command->add(QPoint(column, row));
     // executed by the parent command
 }
-
-#include "ConsolidateDialog.moc"

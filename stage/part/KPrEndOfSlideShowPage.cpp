@@ -19,19 +19,20 @@
 
 #include "KPrEndOfSlideShowPage.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
+
 #include <KoShapeLayer.h>
 #include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>
 #include <KoColorBackground.h>
 #include <KoTextShapeData.h>
+
 #include <QTextCursor>
 #include <QTextDocument>
 
 #include "KPrDocument.h"
 #include "KPrMasterPage.h"
-
-#include <kdebug.h>
+#include "StageDebug.h"
 
 KPrEndOfSlideShowPage::KPrEndOfSlideShowPage( const QRectF & screenRect, KPrDocument * document )
 : KPrPage(new KPrMasterPage(document), document)

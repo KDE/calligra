@@ -25,7 +25,6 @@
 #include <QPainter>
 #include <QDesktopWidget>
 
-#include <kdebug.h>
 #include <kcursor.h>
 
 #include <KoPointerEvent.h>
@@ -35,8 +34,9 @@
 #include <KoPADocument.h>
 #include <KoPAViewBase.h>
 #include <KoZoomHandler.h>
-#include <KPrView.h>
 
+#include "StageDebug.h"
+#include <KPrView.h>
 #include "KPrDocument.h"
 #include "KPrPresenterViewWidget.h"
 #include "KPrEndOfSlideShowPage.h"
@@ -213,7 +213,7 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
                     m_presenterViewCanvas, pages, m_view->activePage() );
         }
         else {
-            kWarning() << "Presenter View is enabled but only found one monitor";
+            warnStage << "Presenter View is enabled but only found one monitor";
             document->setPresenterViewEnabled( false );
         }
     }

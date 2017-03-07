@@ -310,8 +310,8 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
     //              d->visibleRect are traversed. This may appear suboptimal at the first look, but
     //              ensures that the borders are not erased by the background of adjacent cells.
 
-// kDebug() << "paintRect:" << paintRect;
-// kDebug() << "topLeft:" << topLeft;
+// debugSheets << "paintRect:" << paintRect;
+// debugSheets << "topLeft:" << topLeft;
 
     QRegion clipRect(painter.clipRegion());
     // 0. Paint the sheet background
@@ -357,7 +357,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
     const bool rightToLeft = sheet()->layoutDirection() == Qt::RightToLeft;
     const QPointF startCoordinate(rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y());
     QPointF coordinate(startCoordinate);
-// kDebug() << "start coordinate:" << coordinate;
+// debugSheets << "start coordinate:" << coordinate;
     QSet<Cell> processedMergedCells;
     QSet<Cell> processedObscuredCells;
     QList<CellPaintData> cached_cells;
@@ -366,7 +366,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
             continue;
         if (rightToLeft)
             coordinate.setX(coordinate.x() - d->sheet->columnFormat(col)->width());
-// kDebug() <<"coordinate:" << coordinate;
+// debugSheets <<"coordinate:" << coordinate;
         for (int row = visRect.top(); row <= visRect.bottom(); ++row) {
             int lastHiddenRow;
             if (d->sheet->rowFormats()->isHiddenOrFiltered(row, &lastHiddenRow)) {
@@ -395,7 +395,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
     }
 
     // 2. Paint the cell content including markers (formula, comment, ...)
-    for (QList<CellPaintData>::iterator it(cached_cells.begin()); it != cached_cells.end(); ++it) {
+    for (QList<CellPaintData>::ConstIterator it(cached_cells.constBegin()); it != cached_cells.constEnd(); ++it) {
         it->cellView.paintCellContents(paintRect, painter, clipRect, it->coordinate, it->cell, this);
     }
 
@@ -488,8 +488,8 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
     if (hasHighlightedCells()) {
         QPointF active = activeHighlight();
         QPainterPath p;
-        CellPaintData* activeData = 0;
-        for (QList<CellPaintData>::iterator it(cached_cells.begin()); it != cached_cells.end(); ++it) {
+        const CellPaintData* activeData = 0;
+        for (QList<CellPaintData>::ConstIterator it(cached_cells.constBegin()); it != cached_cells.constEnd(); ++it) {
             if (isHighlighted(it->cell.cellPosition())) {
                 p.addRect(it->coordinate.x(), it->coordinate.y(), it->cellView.cellWidth(), it->cellView.cellHeight());
                 if (it->cell.cellPosition() == active) {
@@ -512,7 +512,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
 
         if (activeData && d->activeHighlightColor.isValid()) {
             painter.setBrush(QBrush(d->activeHighlightColor));
-            painter.setPen(QPen(Qt::black));
+            painter.setPen(QPen(Qt::black, 0));
             painter.drawRect(QRectF(activeData->coordinate.x(), activeData->coordinate.y(), activeData->cellView.cellWidth(), activeData->cellView.cellHeight()));
         }
     }
@@ -768,5 +768,3 @@ void SheetView::setActiveHighlightColor(const QColor &color)
         invalidate();
     }
 }
-
-#include "SheetView.moc"

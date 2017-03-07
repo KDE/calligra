@@ -24,7 +24,7 @@
 #include "KoShape.h"
 #include <QMap>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class KoShapeDistributeCommand::Private
 {
@@ -83,8 +83,8 @@ KoShapeDistributeCommand::KoShapeDistributeCommand(const QList<KoShape*> &shapes
     qreal space = d->getAvailableSpace(first, last, extent, boundingRect);
     qreal pos = 0.0, step = space / qreal(shapes.count() - 1);
 
-    QList<QPointF> previousPositions;
-    QList<QPointF> newPositions;
+    QVector<QPointF> previousPositions;
+    QVector<QPointF> newPositions;
     QPointF position;
     QPointF delta;
     QMapIterator<qreal, KoShape*> it(sortedPos);

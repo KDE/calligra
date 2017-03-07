@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright (C) 2013 Inge Wallin            <inge@lysator.liu.se>
+   Copyright (C) 2013-2014 Inge Wallin       <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,6 +28,8 @@
 // this library
 #include "koodfreader_export.h"
 #include "OdtReader.h"
+#include "OdfReaderBackend.h"
+#include "OdfReaderInternals.h"
 
 
 class OdfReaderContext;
@@ -63,7 +65,7 @@ class OdfReaderContext;
  * inherit this class and only reimplement those functions that are
  * actually needed.
  */
-class KOODFREADER_EXPORT OdtReaderBackend
+class KOODFREADER_EXPORT OdtReaderBackend : public OdfReaderBackend
 {
  public:
     explicit OdtReaderBackend();
@@ -72,9 +74,7 @@ class KOODFREADER_EXPORT OdtReaderBackend
     // ----------------------------------------------------------------
     // ODT document level functions
 
-    virtual void elementOfficeDocumentcontent(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context);
+    DECLARE_BACKEND_FUNCTION(OfficeText);
 
  private:
     class Private;

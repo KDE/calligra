@@ -22,14 +22,7 @@
 #define KOICON_H
 
 // Qt
-
-#include <QApplication>
-#include <QPalette>
-#include <QColor>
-
-// KDE
-#include <kicon.h>
-#include <kiconloader.h>
+#include <QIcon>
 
 /**
  * Macros to support collecting the icons in use.
@@ -39,63 +32,30 @@
  * still considered in the extraction.
  *
  * The naming pattern of the macros is like this:
- * * koIcon* returns a KIcon object
+ * * koIcon* returns a QIcon object
  * * koIconName* returns a QLatin1String (aligned with usual API where "iconName" property is of type QString)
  * * koIconNameCStr* returns a const char*
  */
 
 /// Use these macros for icons without any issues
-#define koIcon(name) (KIcon(QLatin1String(name)))
-#define koIconName(name) (QLatin1String(name))
+#define koIcon(name) (QIcon::fromTheme(QStringLiteral(name)))
+#define koIconName(name) (QStringLiteral(name))
 #define koIconNameCStr(name) (name)
-#define koSmallIcon(name) (SmallIcon(QLatin1String(name)))
-#define koDesktopIcon(name) (DesktopIcon(QLatin1String(name)))
+/// Use these definitions in files where needed:
+// #define koSmallIcon(name) (SmallIcon(QStringLiteral(name)))
+// #define koDesktopIcon(name) (DesktopIcon(QStringLiteral(name)))
+// Also #include <kiconloader.h>
 
 /// Use these macros if there is a proper icon missing
-#define koIconNeeded(comment, neededName) (KIcon(QLatin1String(neededName)))
-#define koIconNeededWithSubs(comment, neededName, substituteName) (KIcon(QLatin1String(substituteName)))
-#define koIconNameNeeded(comment, neededName) (QLatin1String(neededName))
-#define koIconNameNeededWithSubs(comment, neededName, substituteName) (QLatin1String(substituteName))
+#define koIconNeeded(comment, neededName) (QIcon::fromTheme(QStringLiteral(neededName)))
+#define koIconNeededWithSubs(comment, neededName, substituteName) (QIcon::fromTheme(QStringLiteral(substituteName)))
+#define koIconNameNeeded(comment, neededName) (QStringLiteral(neededName))
+#define koIconNameNeededWithSubs(comment, neededName, substituteName) (QStringLiteral(substituteName))
 #define koIconNameCStrNeeded(comment, neededName) (neededName)
 #define koIconNameCStrNeededWithSubs(comment, neededName, substituteName) (substituteName)
 
 /// Use these macros if the UI is okay without any icon, but would be better with one.
-#define koIconWanted(comment, wantedName) (KIcon())
+#define koIconWanted(comment, wantedName) (QIcon())
 #define koIconNameWanted(comment, wantedName) (QString())
-
-/// Use this function to load an icon that fits the current color theme
-inline KIcon themedIcon(const QString &name, bool fast = false) {
-    Q_UNUSED(fast);
-    static bool firstUse = true;
-    if (firstUse) {
-        // workaround for some kde-related crash
-        bool _unused = KIconLoader::global()->iconPath(name, KIconLoader::NoGroup, true).isEmpty();
-        Q_UNUSED(_unused);
-        firstUse = false;
-    }
-
-    QString realName;
-
-    // try load themed icon
-    QColor background = qApp->palette().background().color();
-    bool useDarkIcons = background.value() > 100;
-    const char * const prefix = useDarkIcons ? "dark_" : "light_";
-
-    realName = QLatin1String(prefix) + name;
-
-    bool absent = KIconLoader::global()->iconPath(realName, KIconLoader::User, true).isEmpty();
-    if (absent) {
-        realName = name;
-    }
-
-    KIcon icon(realName);
-
-    // fallback
-    if (icon.isNull()) {
-        icon = KIcon(name);
-    }
-
-    return icon;
-}
 
 #endif

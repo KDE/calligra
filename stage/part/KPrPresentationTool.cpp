@@ -29,7 +29,6 @@
 #include <QPainter>
 #include <QKeyEvent>
 #include <QAbstractTextDocumentLayout>
-#include <QCursor>
 #include <QDesktopServices>
 #include <QUrl>
 #include <QDBusConnection>
@@ -320,7 +319,7 @@ bool KPrPresentationTool::checkHyperlink(KoPointerEvent *event, KoShape *shape, 
     return false;
 }
 
-void KPrPresentationTool::runHyperlink(QString hyperLink)
+void KPrPresentationTool::runHyperlink(const QString &hyperLink)
 {
     QUrl url = QUrl::fromUserInput(hyperLink);
 
@@ -342,5 +341,3 @@ void KPrPresentationTool::normalPresentation()
 {
    switchStrategy( new KPrPresentationStrategy( this ) );
 }
-
-#include "KPrPresentationTool.moc"

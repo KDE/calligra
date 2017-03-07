@@ -1,6 +1,4 @@
 
-include_directories( ${QT_QTGUI_INCLUDE_DIR} ${QT_QTCORE_INCLUDE_DIR} ${QT_INCLUDE_DIR} )
-
 set( musicwidgettest_SRCS
     MusicWidget.cpp
     MusicWidgetTest.cpp
@@ -27,5 +25,6 @@ set( musicwidgettest_SRCS
     ../MusicStyle.cpp
 )
 
-kde4_add_executable(musicwidgettest TEST ${musicwidgettest_SRCS})
-target_link_libraries(musicwidgettest ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY})
+add_executable(musicwidgettest ${musicwidgettest_SRCS})
+ecm_mark_as_test(musicwidgettest)
+target_link_libraries(musicwidgettest Qt5::Widgets Qt5::Test Qt5::Core)

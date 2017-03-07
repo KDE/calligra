@@ -127,5 +127,3 @@ QVariant Scripting::Node::acwpPrDay( const QVariant &schedule ) const
     }
     return map;
 }
-
-#include "Node.moc"

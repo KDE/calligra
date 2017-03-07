@@ -27,7 +27,7 @@
 #include <KoTableOfContentsGeneratorInfo.h>
 
 #include <QTextDocument>
-#include <kdebug.h>
+#include <TextLayoutDebug.h>
 
 IndexGeneratorManager::IndexGeneratorManager(QTextDocument *document)
     : QObject(document)
@@ -177,6 +177,3 @@ void IndexGeneratorManager::layoutDone()
             break;
     }
 }
-
-
-#include <IndexGeneratorManager.moc>

@@ -1,0 +1,71 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "sven.langkamp@gmail.com", 
+                "Name": "Sven Langkamp", 
+                "Name[x-test]": "xxSven Langkampxx"
+            }, 
+            {
+                "Email": "kossebau@kde.org", 
+                "Name": "Friedrich W. H. Kossebau", 
+                "Name[x-test]": "xxFriedrich W. H. Kossebauxx"
+            }
+        ], 
+        "Copyright": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
+        "Copyright[fi]": "Copyright 2010–2016 Sven Langkamp, Friedrich W. H. Kossebau", 
+        "Copyright[gl]": "© 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau", 
+        "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2010–2016", 
+        "Copyright[x-test]": "xxCopyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebauxx", 
+        "Description": "PPTX file renderer", 
+        "Description[ca@valencia]": "Representació de fitxers PPTX", 
+        "Description[ca]": "Representació de fitxers PPTX", 
+        "Description[cs]": "Vykreslovač souborů PPTX", 
+        "Description[de]": "Renderer für PPTX-Dateien", 
+        "Description[es]": "Motor de visualización para archivos PPTX", 
+        "Description[fi]": "PPTX-tiedostohahmonnin", 
+        "Description[fr]": "Rendu de fichiers PPTX", 
+        "Description[gl]": "Renderizador de ficheiros PPTX", 
+        "Description[it]": "Presentatore file PPTX", 
+        "Description[nl]": "PPTX-bestandsweergave", 
+        "Description[pl]": "Wyświetlanie pliku PPTX", 
+        "Description[pt]": "Visualizador de ficheiros PPTX", 
+        "Description[pt_BR]": "Renderização de arquivos PPTX", 
+        "Description[sk]": "Zobrazovač súborov PPTX", 
+        "Description[sv]": "PPTX-filåtergivning", 
+        "Description[uk]": "Засіб показу вмісту файлів PPTX", 
+        "Description[x-test]": "xxPPTX file rendererxx", 
+        "Description[zh_CN]": "PPTX 文件渲染器", 
+        "Id": "okularGenerator_pptx_calligra", 
+        "License": "GPL", 
+        "MimeTypes": [
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation", 
+            "application/vnd.openxmlformats-officedocument.presentationml.template"
+        ], 
+        "Name": "PPTX Backend", 
+        "Name[ca@valencia]": "Dorsal pels PPTX", 
+        "Name[ca]": "Dorsal pels PPTX", 
+        "Name[cs]": "Podpůrná vrstva PPTX", 
+        "Name[de]": "PPTX-Backend", 
+        "Name[es]": "Motor PPTX", 
+        "Name[fi]": "PPTX-taustaosa", 
+        "Name[fr]": "Moteur PPTX", 
+        "Name[gl]": "Infraestrutura de PPTX", 
+        "Name[it]": "Motore PPTX", 
+        "Name[nl]": "PPTX-backend", 
+        "Name[pl]": "Silnik PPTX", 
+        "Name[pt]": "Infra-Estrutura para PPTX", 
+        "Name[pt_BR]": "Infraestrutura PPTX", 
+        "Name[sv]": "PPTX-gränssnitt", 
+        "Name[uk]": "Модуль обробки PPTX", 
+        "Name[x-test]": "xxPPTX Backendxx", 
+        "Name[zh_CN]": "PPTX 后端", 
+        "ServiceTypes": [
+            "okular/Generator"
+        ], 
+        "Version": "2.99.5"
+    }, 
+    "X-KDE-Priority": 1, 
+    "X-KDE-okularAPIVersion": 1, 
+    "X-KDE-okularHasInternalSettings": false
+}

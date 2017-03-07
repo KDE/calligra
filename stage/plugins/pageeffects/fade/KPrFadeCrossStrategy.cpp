@@ -26,7 +26,6 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsView>
 
-#include <kdebug.h>
 
 KPrFadeCrossStrategy::KPrFadeCrossStrategy()
 : KPrPageEffectStrategy(KPrFadeEffectFactory::CrossFade, "fade", "crossfade", false, true)

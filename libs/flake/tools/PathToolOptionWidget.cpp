@@ -19,7 +19,7 @@
 
 #include "PathToolOptionWidget.h"
 #include "KoPathTool.h"
-#include <kaction.h>
+#include <QAction>
 
 PathToolOptionWidget::PathToolOptionWidget(KoPathTool *tool, QWidget *parent)
     : QWidget(parent)
@@ -54,5 +54,3 @@ void PathToolOptionWidget::setSelectionType(int type)
     else
         widget.stackedWidget->setCurrentIndex(1);
 }
-
-#include <PathToolOptionWidget.moc>

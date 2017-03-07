@@ -49,6 +49,8 @@ public:
     QStringList availableTags() const;
     QString currentTag();
     void contextMenuRequested(KoResource* currentResource, QPoint pos);
+    void allowTagModification( bool set );
+    bool allowTagModification();
     KoTagFilterWidget* tagFilterWidget();
     KoTagChooserWidget* tagChooserWidget();
 private Q_SLOTS:

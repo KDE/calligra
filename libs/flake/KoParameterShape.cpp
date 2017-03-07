@@ -22,7 +22,7 @@
 #include "KoParameterShape_p.h"
 
 #include <QPainter>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 KoParameterShape::KoParameterShape()
     : KoPathShape(*(new KoParameterShapePrivate(this)))
@@ -42,7 +42,7 @@ void KoParameterShape::moveHandle(int handleId, const QPointF & point, Qt::Keybo
 {
     Q_D(KoParameterShape);
     if (handleId >= d->handles.size()) {
-        kWarning(30006) << "handleId out of bounds";
+        warnFlake << "handleId out of bounds";
         return;
     }
 
@@ -89,7 +89,7 @@ void KoParameterShape::paintHandles(QPainter & painter, const KoViewConverter & 
     QPolygonF poly(d->handleRect(QPointF(0, 0), handleRadius));
     poly = matrix.map(poly);
 
-    QList<QPointF>::const_iterator it(d->handles.constBegin());
+    QVector<QPointF>::const_iterator it(d->handles.constBegin());
     for (; it != d->handles.constEnd(); ++it) {
         QPointF moveVector = worldMatrix.map(*it);
         poly.translate(moveVector.x(), moveVector.y());
@@ -153,13 +153,13 @@ void KoParameterShape::setParametricShape(bool parametric)
     update();
 }
 
-QList<QPointF> KoParameterShape::handles() const
+QVector<QPointF> KoParameterShape::handles() const
 {
     Q_D(const KoParameterShape);
     return d->handles;
 }
 
-void KoParameterShape::setHandles(const QList<QPointF> &handles)
+void KoParameterShape::setHandles(const QVector<QPointF> &handles)
 {
     Q_D(KoParameterShape);
     d->handles = handles;

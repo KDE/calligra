@@ -33,10 +33,12 @@
 #include <KoSharedSavingData.h>
 #include <KoElementReference.h>
 
-#include <kmimetype.h>
-#include <kdebug.h>
+
+#include <FlakeDebug.h>
 #include <QUuid>
 #include <QImage>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 class KoShapeSavingContextPrivate {
 public:
@@ -280,27 +282,28 @@ bool KoShapeSavingContext::saveDataCenter(KoStore *store, KoXmlWriter* manifestW
     bool ok = true;
     foreach(KoDataCenterBase *dataCenter, d->dataCenters) {
         ok = ok && dataCenter->completeSaving(store, manifestWriter, this);
-        //kDebug() << "ok" << ok;
+        //debugFlake << "ok" << ok;
     }
 
     // Save images
-    for (QMap<QString, QImage>::iterator it(d->images.begin()); it != d->images.end(); ++it) {
+    for (QMap<QString, QImage>::ConstIterator it(d->images.constBegin()); it != d->images.constEnd(); ++it) {
         if (store->open(it.key())) {
             KoStoreDevice device(store);
             ok = ok && it.value().save(&device, "PNG");
             store->close();
             // TODO error handling
             if (ok) {
-                const QString mimetype(KMimeType::findByPath(it.key(), 0 , true)->name());
+                QMimeDatabase db;
+                const QString mimetype(db.mimeTypeForFile(it.key(), QMimeDatabase::MatchExtension).name());
                 manifestWriter->addManifestEntry(it.key(), mimetype);
             }
             else {
-                kWarning(30006) << "saving image failed";
+                warnFlake << "saving image failed";
             }
         }
         else {
             ok = false;
-            kWarning(30006) << "saving image failed: open store failed";
+            warnFlake << "saving image failed: open store failed";
         }
     }
     return ok;
@@ -313,7 +316,7 @@ void KoShapeSavingContext::addSharedData(const QString &id, KoSharedSavingData *
     if (it == d->sharedData.end()) {
         d->sharedData.insert(id, data);
     } else {
-        kWarning(30006) << "The id" << id << "is already registered. Data not inserted";
+        warnFlake << "The id" << id << "is already registered. Data not inserted";
         Q_ASSERT(it == d->sharedData.end());
     }
 }

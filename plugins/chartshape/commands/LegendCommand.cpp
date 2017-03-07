@@ -19,18 +19,18 @@
 
 #include "LegendCommand.h"
 
-// KDE
-#include <kdebug.h>
+// KF5
 #include <klocalizedstring.h>
 
-// KChart
+// KoChart
 #include "Legend.h"
+#include "ChartDebug.h"
 
+using namespace KoChart;
 using namespace KChart;
-using namespace KDChart;
 
 
-LegendCommand::LegendCommand(KChart::Legend* legend)
+LegendCommand::LegendCommand(KoChart::Legend* legend)
     : m_legend(legend)
 {
     m_newFont = legend->font();

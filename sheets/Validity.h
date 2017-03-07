@@ -42,10 +42,8 @@
 #include <QTime>
 #include <QVariant>
 
-// Calligra
-#include "calligra_sheets_export.h"
-
-// KSpread
+// Sheets
+#include "sheets_odf_export.h"
 #include "Condition.h"
 
 #include "KoXmlReaderForward.h"
@@ -54,7 +52,6 @@ namespace Calligra
 {
 namespace Sheets
 {
-class OdfLoadingContext;
 class ValueConverter;
 class ValueParser;
 
@@ -127,13 +124,6 @@ public:
      */
     QDomElement saveXML(QDomDocument& doc, const ValueConverter *converter) const;
 
-    /**
-     * \ingroup OpenDocument
-     * Loads validity checks.
-     */
-    void loadOdfValidation(Cell* const cell, const QString& validationName,
-                           OdfLoadingContext& tableContext);
-
     Action action() const;
     bool allowEmptyCell() const;
     Conditional::Type condition() const;
@@ -181,18 +171,6 @@ public:
     static QHash<QString, KoXmlElement> preloadValidities(const KoXmlElement& body);
 
 private:
-    /**
-     * \ingroup OpenDocument
-     * Helper method for loadOdfValidation().
-     */
-    void loadOdfValidationCondition(QString &valExpression, const ValueParser *parser);
-
-    /**
-     * \ingroup OpenDocument
-     * Helper method for loadOdfValidation().
-     */
-    void loadOdfValidationValue(const QStringList &listVal, const ValueParser *parser);
-
     class Private;
     QSharedDataPointer<Private> d;
 };

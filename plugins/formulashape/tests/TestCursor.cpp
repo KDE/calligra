@@ -19,7 +19,7 @@
 
 #include "TestCursor.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "FormulaCursor.h"
 #include "FormulaData.h"
 #include <KoDocument.h>
@@ -30,7 +30,6 @@
 #include <KoSelection.h>
 #include <KoCanvasBase.h>
 #include <KoUnit.h>
-#include <kdebug.h>
 #include <FormulaEditor.h>
 
 class MockCanvas : public KoCanvasBase
@@ -81,7 +80,7 @@ public:
 void TestCursor::moveCursor()
 {
     MockCanvas* canvas=new MockCanvas();
-    KoFormulaShape* shape = new KoFormulaShape(NULL); // FIXME: Do we need a real resourceManager here?
+    KoFormulaShape* shape = new KoFormulaShape(nullptr); // FIXME: Do we need a real resourceManager here?
     canvas->shapeManager()->addShape(shape);
     canvas->shapeManager()->selection()->select(shape);
     QCOMPARE(canvas->shapeManager()->selection()->count(),1);
@@ -116,5 +115,4 @@ void TestCursor::moveCursor()
 }
 
 
-QTEST_KDEMAIN(TestCursor,GUI)
-#include "TestCursor.moc"
+QTEST_MAIN(TestCursor)

@@ -19,7 +19,7 @@
 
 #include "TestSelection.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "part/Canvas.h"
 #include "Map.h"
@@ -460,6 +460,4 @@ void TestSelection::splitting()
     QCOMPARE(selection.name(), QString("A1:D5;B2"));
 }
 
-QTEST_KDEMAIN(TestSelection, GUI)
-
-#include "TestSelection.moc"
+QTEST_MAIN(TestSelection)

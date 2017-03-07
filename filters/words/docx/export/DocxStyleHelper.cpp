@@ -21,10 +21,8 @@
 // Own
 #include "DocxStyleHelper.h"
 
+#include "DocxExportDebug.h"
 #include "UnitConversions.h"
-
-// KDE
-#include "kdebug.h"
 
 // Calligra
 #include <KoXmlWriter.h>
@@ -69,12 +67,12 @@ static qreal getHalfPoints(const QString &fontSize, qreal defaultSize)
     }
     else {
         // Other units not implemented yet?
-        kWarning() << "Unit not implemented yet:" << unit;
+        warnDocx << "Unit not implemented yet:" << unit;
         ok1 = false;
     }
 
     if (!ok1 || !ok2 || sizeInHalfPoints == -1.0) {
-        kWarning() << "Error in fontsize";
+        warnDocx << "Error in fontsize";
         sizeInHalfPoints = defaultSize; // Use as default
     }
     return sizeInHalfPoints;

@@ -23,6 +23,7 @@
 #include "KoPathShape.h"
 #include "KoUnit.h"
 #include <QSignalSpy>
+#include <QTest>
 
 void TestResourceManager::koShapeResource()
 {
@@ -37,7 +38,7 @@ void TestResourceManager::koShapeResource()
 void TestResourceManager::testUnitChanged()
 {
     KoCanvasResourceManager rm(0);
-    QSignalSpy spy(&rm, SIGNAL(canvasResourceChanged(int, const QVariant &)));
+    QSignalSpy spy(&rm, SIGNAL(canvasResourceChanged(int,QVariant)));
 
     KoUnit a;
     rm.setResource(KoCanvasResourceManager::Unit, a);
@@ -49,4 +50,3 @@ void TestResourceManager::testUnitChanged()
 }
 
 QTEST_MAIN(TestResourceManager)
-#include <TestResourceManager.moc>

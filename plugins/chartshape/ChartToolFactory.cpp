@@ -21,19 +21,19 @@
 // Own
 #include "ChartToolFactory.h"
 
-// KChart
+// KoChart
 #include "ChartTool.h"
 #include "ChartShape.h"
 
 // Calligra
 #include <KoIcon.h>
 
-// KDE
-#include <klocale.h>
+// KF5
+#include <klocalizedstring.h>
 
 
 
-using namespace KChart;
+using namespace KoChart;
 
 
 ChartToolFactory::ChartToolFactory()
@@ -41,7 +41,7 @@ ChartToolFactory::ChartToolFactory()
 {
     setToolTip (i18n("Chart editing"));
     setToolType (dynamicToolType());
-    setIconName(koIconNameCStr("kchart"));
+    setIconName(koIconNameNeededWithSubs("enables editing of a given chart of any type", "edit-chart", "office-chart-bar"));
     setPriority (1);
     setActivationShapeId (ChartShapeId);
 }

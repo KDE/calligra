@@ -1,8 +1,10 @@
-#include <QSharedData>
+#include "TestRTree.h"
 
 #include "RTree.h"
 
-#include "TestRTree.h"
+#include <QTest>
+#include <QSharedData>
+
 
 using namespace Calligra::Sheets;
 
@@ -332,5 +334,5 @@ void TestRTree::testPrimitive()
     QCOMPARE(pairs.first().first.toRect(), QRect(2, 5, 1, 2));
     QCOMPARE(pairs.first().second, true);
 }
+
 QTEST_MAIN(TestRTree)
-#include "TestRTree.moc"

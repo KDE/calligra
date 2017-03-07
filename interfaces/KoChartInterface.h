@@ -45,7 +45,7 @@ public:
      * Sets the SheetAccessModel to be used by this chart. Use this method if
      * you want to embed the ChartShape into a spreadsheet.
      *
-     * See kspread/SheetAccessModel.h for details.
+     * See sheets/SheetAccessModel.h for details.
      */
     virtual void setSheetAccessModel(QAbstractItemModel* model) = 0;
 

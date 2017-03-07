@@ -23,15 +23,16 @@
 #include "SpellCheck.h"
 #include "BgSpellCheck.h"
 #include "SpellCheckMenu.h"
+#include "SpellCheckDebug.h"
 
 #include <KoCharacterStyle.h>
 #include <KoTextBlockData.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootAreaProvider.h>
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <kaction.h>
+#include <KSharedConfig>
+#include <klocalizedstring.h>
+#include <kconfiggroup.h>
 #include <ktoggleaction.h>
 #include <sonnet/configdialog.h>
 
@@ -40,6 +41,7 @@
 #include <QTimer>
 #include <QApplication>
 #include <QTextCharFormat>
+#include <QAction>
 
 SpellCheck::SpellCheck()
     : m_document(0)
@@ -52,25 +54,25 @@ SpellCheck::SpellCheck()
     , m_simpleEdit(false)
 {
     /* setup actions for this plugin */
-    KAction *configureAction = new KAction(i18n("Configure &Spell Checking..."), this);
+    QAction *configureAction = new QAction(i18n("Configure &Spell Checking..."), this);
     connect(configureAction, SIGNAL(triggered()), this, SLOT(configureSpellCheck()));
     addAction("tool_configure_spellcheck", configureAction);
 
     KToggleAction *spellCheck = new KToggleAction(i18n("Auto Spell Check"), this);
     addAction("tool_auto_spellcheck", spellCheck);
 
-    KConfigGroup spellConfig = KGlobal::config()->group("Spelling");
+    KConfigGroup spellConfig =  KSharedConfig::openConfig()->group("Spelling");
     m_enableSpellCheck = spellConfig.readEntry("autoSpellCheck", m_enableSpellCheck);
     spellCheck->setChecked(m_enableSpellCheck);
     m_speller = Sonnet::Speller(spellConfig.readEntry("defaultLanguage", "en_US"));
     m_bgSpellCheck = new BgSpellCheck(m_speller, this);
 
     m_spellCheckMenu = new SpellCheckMenu(m_speller, this);
-    QPair<QString, KAction*> pair = m_spellCheckMenu->menuAction();
+    QPair<QString, QAction*> pair = m_spellCheckMenu->menuAction();
     addAction(pair.first, pair.second);
 
-    connect(m_bgSpellCheck, SIGNAL(misspelledWord(const QString &,int,bool)),
-            this, SLOT(highlightMisspelled(const QString &,int,bool)));
+    connect(m_bgSpellCheck, SIGNAL(misspelledWord(QString,int,bool)),
+            this, SLOT(highlightMisspelled(QString,int,bool)));
     connect(m_bgSpellCheck, SIGNAL(done()), this, SLOT(finishedRun()));
     connect(spellCheck, SIGNAL(toggled(bool)), this, SLOT(setBackgroundSpellChecking(bool)));
 }
@@ -159,7 +161,7 @@ void SpellCheck::setBackgroundSpellChecking(bool on)
 {
     if (m_enableSpellCheck == on)
         return;
-    KConfigGroup spellConfig = KGlobal::config()->group("Spelling");
+    KConfigGroup spellConfig =  KSharedConfig::openConfig()->group("Spelling");
     m_enableSpellCheck = on;
     spellConfig.writeEntry("autoSpellCheck", m_enableSpellCheck);
     if (m_document) {
@@ -294,8 +296,8 @@ void SpellCheck::runQueue()
 
 void SpellCheck::configureSpellCheck()
 {
-    Sonnet::ConfigDialog *dialog = new Sonnet::ConfigDialog(KGlobal::config().data(), 0);
-    connect (dialog, SIGNAL(languageChanged(const QString&)), this, SLOT(setDefaultLanguage(const QString&)));
+    Sonnet::ConfigDialog *dialog = new Sonnet::ConfigDialog(0);
+    connect (dialog, SIGNAL(languageChanged(QString)), this, SLOT(setDefaultLanguage(QString)));
     dialog->exec();
     delete dialog;
 }
@@ -355,5 +357,3 @@ void SpellCheck::replaceWordBySuggestion(const QString &word, int startPosition,
     cursor.removeSelectedText();
     cursor.insertText(word);
 }
-
-#include <SpellCheck.moc>

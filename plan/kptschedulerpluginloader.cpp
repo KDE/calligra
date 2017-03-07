@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
   Copyright (C) 2009, 2012 Dag Andersen <danders@get2net.dk>
-
+  Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
+  
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
   License as published by the Free Software Foundation; either
@@ -23,8 +24,10 @@
 #include "kptschedulerplugin.h"
 #include "kptdebug.h"
 
-#include <kservicetypetrader.h>
-#include <kdebug.h>
+#include <KoPluginLoader.h>
+
+#include <QPluginLoader>
+#include <QLocale>
 
 
 namespace KPlato
@@ -38,37 +41,68 @@ SchedulerPluginLoader::SchedulerPluginLoader(QObject * parent)
 SchedulerPluginLoader::~SchedulerPluginLoader()
 {
 }
- 
+
+static
+QJsonValue readLocalValue(const QJsonObject &json, const QString &key)
+{
+    // start with language_country
+    const QString localeName = QLocale().name();
+
+    QString localKey = key + QLatin1Char('[') + localeName + QLatin1Char(']');
+    QJsonObject::ConstIterator it = json.constFind(localKey);
+    if (it != json.constEnd()) {
+        return it.value();
+    }
+
+    // drop _country
+    const int separatorIndex = localeName.indexOf(QLatin1Char('_'));
+    if (separatorIndex != -1) {
+        const int localKeySeparatorIndex = key.length() + 1 + separatorIndex;
+        localKey[localKeySeparatorIndex] = QLatin1Char(']');
+        localKey.truncate(localKeySeparatorIndex + 1);
+       it = json.constFind(localKey);
+        if (it != json.constEnd()) {
+            return it.value();
+        }
+    }
+
+    // default to unlocalized value
+    return json.value(key);
+}
+
+
 void SchedulerPluginLoader::loadAllPlugins()
 {
-    kDebug(planDbg()) << "Load all plugins";
-    KService::List offers = KServiceTypeTrader::self()->query("Plan/SchedulerPlugin");
- 
-    KService::List::const_iterator iter;
-    for(iter = offers.constBegin(); iter < offers.constEnd(); ++iter)
-    {
-        QString error;
-        KService::Ptr service = *iter;
- 
-        KPluginFactory *factory = KPluginLoader(service->library()).factory();
+    debugPlan << "Load all plugins";
+    const QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("calligraplan/schedulers"));
+
+    foreach(QPluginLoader *pluginLoader, offers) {
+        KPluginFactory *factory = qobject_cast<KPluginFactory*>(pluginLoader->instance());
  
         if (!factory)
         {
-            kError() << "KPluginFactory could not load the plugin:" << service->library();
+            errorPlan << "KPluginFactory could not load the plugin:" << pluginLoader->fileName();
             continue;
         }
  
         SchedulerPlugin *plugin = factory->create<SchedulerPlugin>(this);
  
         if (plugin) {
-            kDebug(planDbg()) << "Load plugin:" << service->name()<<", "<<service->comment();
-            plugin->setName( service->name() );
-            plugin->setComment( service->comment() );
-            emit pluginLoaded( service->library(), plugin);
+            QJsonObject json = pluginLoader->metaData().value("MetaData").toObject();
+            json = json.value("KPlugin").toObject();
+            const QString key = json.value(QLatin1String("Name")).toString(); // use unlocalized name as plugin identifier
+            const QString name = readLocalValue(json, QLatin1String("Name")).toString();
+            const QString comment = readLocalValue(json, QLatin1String("Description")).toString();
+
+            debugPlan << "Load plugin:" << key << name << ", " << comment;
+            plugin->setName( name );
+            plugin->setComment( comment );
+            emit pluginLoaded( key, plugin);
         } else {
-           kDebug(planDbg()) << error;
+           debugPlan << "KPluginFactory could not create SchedulerPlugin:" << pluginLoader->fileName();
         }
     }
+    qDeleteAll(offers);
 }
 
 } //namespace KPlato

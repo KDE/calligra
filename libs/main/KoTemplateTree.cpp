@@ -21,23 +21,22 @@
 
 #include <QDir>
 #include <QPrinter>
+#include <QUrl>
 
 #include <kdesktopfile.h>
 #include <kconfig.h>
-#include <kdebug.h>
-
-#include <kstandarddirs.h>
-#include <kio/netaccess.h>
-#include <klocale.h>
+#include <MainDebug.h>
+#include <klocalizedstring.h>
 #include <kconfiggroup.h>
 
+#include <KoNetAccess.h>
+#include <KoResourcePaths.h>
 #include <KoTemplate.h>
 #include <KoTemplateGroup.h>
 #include <KoTemplates.h>
 
-KoTemplateTree::KoTemplateTree(const QString &templatesResourcePath,
-                               const KComponentData &componentData, bool readTree) :
-        m_templatesResourcePath(templatesResourcePath), m_componentData(componentData), m_defaultGroup(0),
+KoTemplateTree::KoTemplateTree(const QString &templatesResourcePath, bool readTree) :
+        m_templatesResourcePath(templatesResourcePath), m_defaultGroup(0),
         m_defaultTemplate(0)
 {
     if (readTree)
@@ -58,15 +57,16 @@ void KoTemplateTree::readTemplateTree()
 
 void KoTemplateTree::writeTemplateTree()
 {
-    QString localDir = m_componentData.dirs()->saveLocation("data", m_templatesResourcePath);
+
+    const QString localDir = KoResourcePaths::saveLocation("data", m_templatesResourcePath);
 
     foreach (KoTemplateGroup *group, m_groups) {
         //kDebug( 30003 ) <<"---------------------------------";
         //kDebug( 30003 ) <<"group:" << group->name();
 
         bool touched = false;
-        QList<KoTemplate*> templates = group->templates();
-        QList<KoTemplate*>::iterator it = templates.begin();
+        const QList<KoTemplate*> templates = group->templates();
+        QList<KoTemplate*>::ConstIterator it = templates.begin();
         for (; it != templates.end() && !touched && !group->touched(); ++it)
             touched = (*it)->touched();
 
@@ -74,16 +74,16 @@ void KoTemplateTree::writeTemplateTree()
             //kDebug( 30003 ) <<"touched";
             if (!group->isHidden()) {
                 //kDebug( 30003 ) <<"not hidden";
-                KStandardDirs::makeDir(localDir + group->name()); // create the local group dir
+                QDir().mkpath(localDir + group->name()); // create the local group dir
             } else {
                 //kDebug( 30003 ) <<"hidden";
                 if (group->dirs().count() == 1 && group->dirs().contains(localDir)) {
                     //kDebug( 30003 ) <<"local only";
-                    KIO::NetAccess::del(group->dirs().first(), 0);
+                    KIO::NetAccess::del(QUrl::fromLocalFile(group->dirs().first()), 0);
                     //kDebug( 30003 ) <<"removing:" << group->dirs().first();
                 } else {
                     //kDebug( 30003 ) <<"global";
-                    KStandardDirs::makeDir(localDir + group->name());
+                    QDir().mkpath(localDir + group->name());
                 }
             }
         }
@@ -106,19 +106,19 @@ void KoTemplateTree::add(KoTemplateGroup *g)
 {
 
     KoTemplateGroup *group = find(g->name());
-    if (group == NULL)
+    if (group == nullptr)
         m_groups.append(g);
     else {
         group->addDir(g->dirs().first()); // "...there can be only one..." (Queen)
         delete g;
-        g = NULL;
+        g = nullptr;
     }
 }
 
 KoTemplateGroup *KoTemplateTree::find(const QString &name) const
 {
     QList<KoTemplateGroup*>::const_iterator it = m_groups.begin();
-    KoTemplateGroup* ret = NULL;
+    KoTemplateGroup* ret = nullptr;
 
     while (it != m_groups.end()) {
         if ((*it)->name() == name) {
@@ -135,7 +135,7 @@ KoTemplateGroup *KoTemplateTree::find(const QString &name) const
 void KoTemplateTree::readGroups()
 {
 
-    QStringList dirs = m_componentData.dirs()->findDirs("data", m_templatesResourcePath);
+    const QStringList dirs = KoResourcePaths::findDirs("data", m_templatesResourcePath);
     foreach(const QString & dirName, dirs) {
         //kDebug( 30003 ) <<"dir:" << *it;
         QDir dir(dirName);
@@ -166,11 +166,6 @@ void KoTemplateTree::readGroups()
 
 void KoTemplateTree::readTemplates()
 {
-//     QString dontShow = "imperial";
-// 
-//     if (KGlobal::locale()->pageSize() == QPrinter::Letter) {
-//         dontShow = "metric";
-//     }
     QString dontShow = "hide nothing at all - show all the templates, please, and let the user make the choice";
 
     foreach (KoTemplateGroup* group, m_groups) {
@@ -285,7 +280,7 @@ void KoTemplateTree::writeTemplate(KoTemplate *t, KoTemplateGroup *group,
     if (t->isHidden() && QFile::exists(fileName))
         return;
     QString fill;
-    while (KIO::NetAccess::exists(fileName, KIO::NetAccess::SourceSide, 0)) {
+    while (QFile(fileName).exists()) {
         fill += '_';
         fileName = path + fill + name + ".desktop";
     }

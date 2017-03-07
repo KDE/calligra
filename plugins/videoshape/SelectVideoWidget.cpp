@@ -20,19 +20,19 @@
 
 #include "SelectVideoWidget.h"
 
-#include <klocale.h>
-
+#include <klocalizedstring.h>
 #include <kfilewidget.h>
-#include <Phonon/BackendCapabilities>
+#include <phonon/BackendCapabilities>
 
 #include <QVBoxLayout>
 #include <QCheckBox>
+#include <QUrl>
 
 SelectVideoWidget::SelectVideoWidget(QWidget *parent)
     : QWidget(parent)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
-    m_fileWidget = new KFileWidget(KUrl("kfiledialog:///OpenVideoDialog"), this);
+    m_fileWidget = new KFileWidget(QUrl(/*QT5TODO:"kfiledialog:///OpenVideoDialog"*/), this);
     m_fileWidget->setOperationMode(KFileWidget::Opening);
     m_fileWidget->setMimeFilter(Phonon::BackendCapabilities::availableMimeTypes());
     layout->addWidget(m_fileWidget);
@@ -59,7 +59,7 @@ void SelectVideoWidget::cancel()
 }
 
 
-KUrl SelectVideoWidget::selectedUrl() const
+QUrl SelectVideoWidget::selectedUrl() const
 {
     return m_fileWidget->selectedUrl();
 }

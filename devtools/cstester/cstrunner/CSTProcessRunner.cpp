@@ -33,7 +33,10 @@ CSTProcessRunner::CSTProcessRunner(const QString &documentDir, const QString &re
 {
     if (!QDir::current().exists(resultDir)) {
         qWarning() << "Creating result directory " << resultDir;
-        QDir::current().mkdir(resultDir);
+        if (!QDir::current().mkpath(resultDir)) {
+            qCritical() << "Could not create result directory " << resultDir;
+            ::exit(-1);
+        }
         // if the dir was not there we can't pickup
         pickup = false;
     }
@@ -105,6 +108,9 @@ void CSTProcessRunner::processFinished(int exitCode, QProcess::ExitStatus exitSt
             }
         }
         else {
+            if (exitCode != 0) {
+                qWarning() << "cstmd5gen.sh failed";
+            }
 //             qDebug() << "md5 done";
             startCstester(process);
         }
@@ -136,7 +142,7 @@ void CSTProcessRunner::startCstester(QProcess *process)
         QString document = m_documents.takeFirst();
         //qDebug() << "start:" << process << document << m_resultDir;
         QStringList arguments;
-        arguments << "--graphicssystem" << "raster" << "--outdir" << m_resultDir << "--create" << document;
+        arguments << "--outdir" << m_resultDir << "--create" << document;
         m_processes[process] = document;
         process->start(PROGRAM, arguments, QIODevice::NotOpen);
     }
@@ -144,7 +150,8 @@ void CSTProcessRunner::startCstester(QProcess *process)
 
 void CSTProcessRunner::startMd5(QProcess *process, const QString &document)
 {
-    QString dir = m_resultDir + '/' + document + ".check";
+    QFileInfo file(document);
+    QString dir = m_resultDir + '/' + file.fileName() + ".check";
     QStringList arguments;
     arguments << dir;
     process->start("cstmd5gen.sh", arguments, QIODevice::NotOpen);

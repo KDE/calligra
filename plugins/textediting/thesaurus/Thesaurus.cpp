@@ -43,7 +43,11 @@ NOT TODO:
 
 #include "Thesaurus.h"
 
+#include "ThesaurusDebug.h"
+
 #include <KoIcon.h>
+#include <KoResourcePaths.h>
+#include <KoDialog.h>
 
 #include <QToolButton>
 #include <QByteArray>
@@ -53,23 +57,21 @@ NOT TODO:
 #include <QVBoxLayout>
 #include <QListWidget>
 #include <QGroupBox>
+#include <QTextBrowser>
+#include <QLineEdit>
+#include <QUrl>
+#include <QFileDialog>
+#include <QPushButton>
+#include <QTabWidget>
 
-#include <ktabwidget.h>
-#include <kglobal.h>
+#include <KSharedConfig>
 #include <kprocess.h>
-#include <kstandarddirs.h>
 #include <kmessagebox.h>
-#include <kdialog.h>
-#include <kfiledialog.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <khistorycombobox.h>
-#include <kpushbutton.h>
-#include <klineedit.h>
-#include <kdebug.h>
 #include <krun.h>
 #include <kcombobox.h>
-#include <ktextbrowser.h>
-#include <kurl.h>
+#include <kstandardguiitem.h>
 
 Thesaurus::Thesaurus()
 {
@@ -77,16 +79,16 @@ Thesaurus::Thesaurus()
     m_thesProc = new KProcess;
     m_wnProc = new KProcess;
 
-    m_dialog = new KDialog(0);
-    m_dialog->setButtons(KDialog::Help | KDialog::Ok | KDialog::Cancel);
-    m_dialog->setDefaultButton(KDialog::Ok);
+    m_dialog = new KoDialog(0);
+    m_dialog->setButtons(KoDialog::Help | KoDialog::Ok | KoDialog::Cancel);
+    m_dialog->setDefaultButton(KoDialog::Ok);
     m_dialog->setHelp(QString(), "thesaurus");
     m_dialog->resize(600, 400);
 
-    KConfigGroup cfg = KGlobal::config()->group("");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("");
     m_dataFile = cfg.readEntry("datafile");
     if (m_dataFile.isEmpty())
-        m_dataFile = KGlobal::dirs()->findResource("data", "calligra/thesaurus/thesaurus.txt");
+        m_dataFile = KoResourcePaths::findResource("data", "calligra/thesaurus/thesaurus.txt");
     setCaption();
 
     m_noMatch = i18n("(No match)");
@@ -102,7 +104,7 @@ Thesaurus::Thesaurus()
     QLabel editLabel(i18n("&Search for:"), page);
     editLabel.setBuddy(m_edit);
 
-    m_search = new KPushButton(i18n("S&earch"), page);
+    m_search = new QPushButton(i18n("S&earch"), page);
     connect(m_search, SIGNAL(clicked()), this, SLOT(slotFindTerm()));
     row1->addWidget(&editLabel, 0);
     row1->addWidget(m_edit, 1);
@@ -116,14 +118,14 @@ Thesaurus::Thesaurus()
     m_forward->setToolTip(i18nc("@action:button Go forward to the next word in history", "Forward"));
     row1->addWidget(m_forward, 0);
 
-    KPushButton *lang = new KPushButton(i18n("Change Language..."), page);
+    QPushButton *lang = new QPushButton(i18n("Change Language..."), page);
     connect(lang, SIGNAL(clicked()), this, SLOT(slotChangeLanguage()));
     row1->addWidget(lang, 0);
 
     connect(m_back, SIGNAL(clicked()), this, SLOT(slotBack()));
     connect(m_forward, SIGNAL(clicked()), this, SLOT(slotForward()));
 
-    m_tabWidget = new KTabWidget(page);
+    m_tabWidget = new QTabWidget(page);
     topLayout->addWidget(m_tabWidget);
 
     //
@@ -157,21 +159,21 @@ Thesaurus::Thesaurus()
 
     // single click -- keep display unambiguous by removing other selections:
 
-    connect(m_synListWidget, SIGNAL(itemClicked(QListWidgetItem *)),
-            this, SLOT(slotSetReplaceTermSyn(QListWidgetItem *)));
-    connect(m_hyperListWidget, SIGNAL(itemClicked(QListWidgetItem *)),
-            this, SLOT(slotSetReplaceTermHyper(QListWidgetItem *)));
-    connect(m_hypoListWidget, SIGNAL(itemClicked(QListWidgetItem *)),
-            this, SLOT(slotSetReplaceTermHypo(QListWidgetItem *)));
+    connect(m_synListWidget, SIGNAL(itemClicked(QListWidgetItem*)),
+            this, SLOT(slotSetReplaceTermSyn(QListWidgetItem*)));
+    connect(m_hyperListWidget, SIGNAL(itemClicked(QListWidgetItem*)),
+            this, SLOT(slotSetReplaceTermHyper(QListWidgetItem*)));
+    connect(m_hypoListWidget, SIGNAL(itemClicked(QListWidgetItem*)),
+            this, SLOT(slotSetReplaceTermHypo(QListWidgetItem*)));
 
     // double click -- set the double clicked item as the new search term
 
-    connect(m_synListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
-            this, SLOT(slotFindTermFromList(QListWidgetItem *)));
-    connect(m_hyperListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
-            this, SLOT(slotFindTermFromList(QListWidgetItem *)));
-    connect(m_hypoListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
-            this, SLOT(slotFindTermFromList(QListWidgetItem *)));
+    connect(m_synListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
+            this, SLOT(slotFindTermFromList(QListWidgetItem*)));
+    connect(m_hyperListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
+            this, SLOT(slotFindTermFromList(QListWidgetItem*)));
+    connect(m_hypoListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
+            this, SLOT(slotFindTermFromList(QListWidgetItem*)));
 
     //
     // WordNet Tab
@@ -187,9 +189,9 @@ Thesaurus::Thesaurus()
     wnLayout->addWidget(m_wnComboBox);
     connect(m_wnComboBox, SIGNAL(activated(int)), this, SLOT(slotFindTerm()));
 
-    m_resultTextBrowser = new KTextBrowser(wnWidget);
+    m_resultTextBrowser = new QTextBrowser(wnWidget);
     m_resultTextBrowser->setReadOnly(true);
-    connect(m_resultTextBrowser, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(slotFindTermFromUrl(const QUrl &)));
+    connect(m_resultTextBrowser, SIGNAL(anchorClicked(QUrl)), this, SLOT(slotFindTermFromUrl(QUrl)));
     wnLayout->addWidget(m_resultTextBrowser);
 
     // Connect for the history box
@@ -199,7 +201,7 @@ Thesaurus::Thesaurus()
 
     QHBoxLayout *row2 = new QHBoxLayout( /*m_top_layout*/ );
     topLayout->addLayout(row2);
-    m_replaceLineEdit = new KLineEdit(page);
+    m_replaceLineEdit = new QLineEdit(page);
     m_replaceLabel = new QLabel(i18n("&Replace with:"), page);
     m_replaceLabel->setBuddy(m_replaceLineEdit);
     row2->addWidget(m_replaceLabel, 0);
@@ -215,7 +217,7 @@ Thesaurus::Thesaurus()
 
 Thesaurus::~Thesaurus()
 {
-    KConfigGroup cfg = KGlobal::config()->group("");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("");
     cfg.writeEntry("datafile", m_dataFile);
     // FIXME?: this hopefully fixes the problem of a wrong cursor
     // and a crash (when closing e.g. konqueror) when the thesaurus dialog
@@ -250,9 +252,8 @@ void Thesaurus::checkSection(QTextDocument *document, int startPosition, int end
         m_standAlone = true;
         if (document)
             m_word = document->toPlainText();
-        m_dialog->showButton(KDialog::Ok, false);
-        m_dialog->setButtonGuiItem(KDialog::Cancel,
-                KGuiItem(i18nc("@action:button Close thesaurus dialog", "&Close"), koIconName("dialog-cancel")));
+        m_dialog->showButton(KoDialog::Ok, false);
+        m_dialog->setButtonGuiItem(KoDialog::Cancel, KStandardGuiItem::close());
         m_replaceLineEdit->setEnabled(false);
         m_replaceLabel->setEnabled(false);
     }
@@ -263,7 +264,7 @@ void Thesaurus::checkSection(QTextDocument *document, int startPosition, int end
         m_word = cursor.selectedText();
         m_document = document;
         m_startPosition = startPosition;
-        m_dialog->setButtonGuiItem(KDialog::Ok,
+        m_dialog->setButtonGuiItem(KoDialog::Ok,
                 KGuiItem(i18n("&Replace"), koIconName("dialog-ok")));
         slotFindTerm(m_word.trimmed());
         m_replaceLineEdit->setText(m_word.trimmed());
@@ -287,14 +288,14 @@ void Thesaurus::process()
 void Thesaurus::dialogClosed()
 {
     if (!m_standAlone) return;
-    KConfigGroup cfg = KGlobal::config()->group("");
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("");
     cfg.writeEntry("datafile", m_dataFile);
 }
 
 void Thesaurus::slotChangeLanguage()
 {
-    QString filename = KFileDialog::getOpenFileName(
-            KGlobal::dirs()->findResource("data", "calligra/thesaurus/thesaurus.txt"));
+    QString filename = QFileDialog::getOpenFileName(0, QString(),
+            KoResourcePaths::findResource("data", "calligra/thesaurus/thesaurus.txt"));
     if (!filename.isNull()) {
         m_dataFile = filename;
         setCaption();
@@ -303,9 +304,8 @@ void Thesaurus::slotChangeLanguage()
 
 void Thesaurus::setCaption()
 {
-    KUrl url = KUrl();
-    url.setPath(m_dataFile);
-    m_dialog->setCaption(i18n("Related Words - %1" , url.fileName() ) );
+    QFileInfo info(m_dataFile);
+    m_dialog->setCaption(i18n("Related Words - %1" , info.fileName() ) );
 }
 
 // Enable or disable back and forward button
@@ -398,8 +398,8 @@ void Thesaurus::slotFindTermFromUrl(const QUrl &url)
 void Thesaurus::slotFindTerm(const QString &term, bool addToHistory)
 {
     // slotSetReplaceTerm(term);
-    if (term.startsWith("http://")) {
-        (void) new KRun(KUrl(term),0L);
+    if (term.startsWith(QLatin1String("http://"))) {
+        (void) new KRun(QUrl::fromUserInput(term),0L);
     }
     else {
         if (addToHistory && m_edit->itemText(0) != term) {
@@ -447,31 +447,28 @@ void Thesaurus::findTermThesaurus(const QString &searchTerm)
     }
     QByteArray byteArray = m_thesProc->readAllStandardOutput();
     QString stdoutString(byteArray);
-    QStringList lines = stdoutString.split(QChar('\n'));
+    const QStringList lines = stdoutString.split(QChar('\n'));
 
-    for (QStringList::Iterator it = lines.begin(); it != lines.end(); ++it) {
-        QString line = (*it);
-        if (line.startsWith("  ")) {  // ignore license (two spaces)
+    foreach(const QString& line, lines) {
+        if (line.startsWith(QLatin1String("  "))) {  // ignore license (two spaces)
             continue;
         }
 
         int sep_pos = line.indexOf('#');
         QString synPart = line.left(sep_pos);
         QString hyperPart = line.right(line.length() - sep_pos - 1);
-        QStringList synTmp = synPart.split(QChar(';'));
-        QStringList hyperTmp = hyperPart.split(QChar(';'));
+        const QStringList synTmp = synPart.split(QChar(';'));
+        const QStringList hyperTmp = hyperPart.split(QChar(';'));
 
         if (synTmp.filter(searchTerm, Qt::CaseInsensitive).size() > 0) {
             // match on the left side of the '#' -- synonyms
-            for (QStringList::Iterator it2 = synTmp.begin(); it2 != synTmp.end(); ++it2) {
+            foreach(const QString& term, synTmp) {
                 // add if it's not the searchTerm itself and if it's not yet in the list
-                QString term = (*it2);
                 if (term.toLower() != searchTerm.toLower() && syn.contains(term) == 0 && !term.isEmpty()) {
                     syn.append(term);
                 }
             }
-            for (QStringList::Iterator it2 = hyperTmp.begin(); it2 != hyperTmp.end(); ++it2) {
-                QString term = (*it2);
+            foreach(const QString& term, hyperTmp) {
                 if (term.toLower() != searchTerm.toLower() && hyper.contains(term) == 0 && !term.isEmpty()) {
                     hyper.append(term);
                 }
@@ -479,8 +476,7 @@ void Thesaurus::findTermThesaurus(const QString &searchTerm)
         }
         if (hyperTmp.filter(searchTerm, Qt::CaseInsensitive).size() > 0) {
             // match on the right side of the '#' -- hypernyms
-            for (QStringList::Iterator it2 = synTmp.begin(); it2 != synTmp.end(); ++it2) {
-                QString term = (*it2);
+            foreach(const QString& term, synTmp) {
                 if (term.toLower() != searchTerm && hypo.contains(term) == 0 && !term.isEmpty()) {
                     hypo.append(term);
                 }
@@ -631,7 +627,7 @@ void Thesaurus::findTermWordnet(const QString &term)
 
     if (m_wnProc->state() == QProcess::Running) {
         // should never happen
-        kDebug(31000) <<"Warning: findTerm(): process is already running?!";
+        debugThesaurus <<"Warning: findTerm(): process is already running?!";
         return;
     }
 
@@ -653,13 +649,13 @@ void Thesaurus::findTermWordnet(const QString &term)
     }
     else {
         // render in a table, each line one row:
-        QStringList lines = stdoutString.split(QChar('\n'), QString::SkipEmptyParts);
+        const QStringList lines = stdoutString.split(QChar('\n'), QString::SkipEmptyParts);
         QString result = "<qt><table>\n";
         // TODO in Qt > 3.01: try without the following line (it's necessary to ensure the
         // first column is really always quite small):
         result += "<tr><td width=\"10%\"></td><td width=\"90%\"></td></tr>\n";
         uint ct = 0;
-        for (QStringList::Iterator it = lines.begin(); it != lines.end(); ++it) {
+        for (QStringList::ConstIterator it = lines.begin(); it != lines.end(); ++it) {
             QString l = (*it);
             // Remove some lines:
             QRegExp re("^\\d+( of \\d+)? senses? of \\w+");
@@ -689,7 +685,7 @@ void Thesaurus::findTermWordnet(const QString &term)
         }
         result += "\n</table></qt>\n";
         m_resultTextBrowser->setHtml(result);
-        //kDebug() << result;
+        //debugThesaurus << result;
     }
 }
 
@@ -734,8 +730,8 @@ QString Thesaurus::formatLine(const QString &line) const
     if (re.indexIn(l) != -1) {
         l = re.cap(1);
         l += re.cap(2);
-        QStringList links = re.cap(3).split(QChar(';'), QString::SkipEmptyParts);
-        for (QStringList::Iterator it = links.begin(); it != links.end(); ++it) {
+        const QStringList links = re.cap(3).split(QChar(';'), QString::SkipEmptyParts);
+        for (QStringList::ConstIterator it = links.begin(); it != links.end(); ++it) {
             QString link = (*it);
             if (it != links.begin()) {
                 l += ", ";
@@ -754,8 +750,8 @@ QString Thesaurus::formatLine(const QString &line) const
         QString line_end = l.mid(dash_pos+2, l.length()-dash_pos);
         l = re.cap(1);
         l += re.cap(2) + ' ';
-        QStringList links = re.cap(3).split(QChar(','), QString::SkipEmptyParts);
-        for (QStringList::Iterator it = links.begin(); it != links.end(); ++it) {
+        const QStringList links = re.cap(3).split(QChar(','), QString::SkipEmptyParts);
+        for (QStringList::ConstIterator it = links.begin(); it != links.end(); ++it) {
             QString link = (*it);
             if (it != links.begin()) {
                 l += ", ";
@@ -771,5 +767,3 @@ QString Thesaurus::formatLine(const QString &line) const
 
     return l;
 }
-
-#include <Thesaurus.moc>

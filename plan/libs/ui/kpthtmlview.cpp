@@ -22,10 +22,9 @@
 #include <KoDocument.h>
 
 #include <QVBoxLayout>
+#include <QUrl>
 
-#include <klocale.h>
 #include <khtmlview.h>
-#include <kurl.h>
 
 #include "kptdebug.h"
 
@@ -49,16 +48,16 @@ HtmlView::HtmlView(KoPart *part, KoDocument *doc, QWidget *parent)
 
     KParts::BrowserExtension *ext = m_htmlPart->browserExtension();
     if ( ext ) {
-        connect( ext, SIGNAL(openUrlRequest(KUrl,KParts::OpenUrlArguments,KParts::BrowserArguments)), SLOT(slotOpenUrlRequest(KUrl,KParts::OpenUrlArguments,KParts::BrowserArguments)) );
+        connect( ext, SIGNAL(openUrlRequest(QUrl,KParts::OpenUrlArguments,KParts::BrowserArguments)), SLOT(slotOpenUrlRequest(QUrl,KParts::OpenUrlArguments,KParts::BrowserArguments)) );
     }
 }
 
-void HtmlView::slotOpenUrlRequest(const KUrl &url, const KParts::OpenUrlArguments &/*arguments*/, const KParts::BrowserArguments &/*browserArguments*/)
+void HtmlView::slotOpenUrlRequest(const QUrl &url, const KParts::OpenUrlArguments &/*arguments*/, const KParts::BrowserArguments &/*browserArguments*/)
 {
     emit openUrlRequest( this, url );
 }
 
-bool HtmlView::openHtml( const KUrl &url )
+bool HtmlView::openHtml( const QUrl &url )
 {
     return m_htmlPart->openUrl( url );
 }
@@ -69,12 +68,12 @@ void HtmlView::updateReadWrite( bool /*readwrite */)
 
 void HtmlView::setGuiActive( bool activate )
 {
-    kDebug(planDbg())<<activate;
+    debugPlan<<activate;
 }
 
 void HtmlView::slotContextMenuRequested( const QModelIndex &/*index*/, const QPoint& /*pos */)
 {
-    //kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
+    //debugPlan<<index.row()<<","<<index.column()<<":"<<pos;
 }
 
 void HtmlView::slotEnableActions( bool on )
@@ -98,5 +97,3 @@ KoPrintJob *HtmlView::createPrintJob()
 
 
 } // namespace KPlato
-
-#include "kpthtmlview.moc"

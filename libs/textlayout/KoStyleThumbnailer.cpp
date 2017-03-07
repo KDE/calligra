@@ -33,7 +33,7 @@
 
 #include <stdint.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QCache>
 #include <QFont>
@@ -44,7 +44,7 @@
 #include <QTextCursor>
 #include <QTextLength>
 
-#include <kdebug.h>
+#include <TextLayoutDebug.h>
 
 extern int qt_defaultDpiX();
 extern int qt_defaultDpiY();

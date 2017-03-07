@@ -20,12 +20,9 @@
 #ifndef KPTSCHEDULERPLUGIN_MACROS_H
 #define KPTSCHEDULERPLUGIN_MACROS_H
 
-#include <kdemacros.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
  
-#define KPLATO_SCHEDULERPLUGIN_EXPORT( c ) \
-  K_PLUGIN_FACTORY( SchedulerFactory, registerPlugin< c >(); ) \
-  K_EXPORT_PLUGIN( SchedulerFactory("c") )
-
+#define KPLATO_SCHEDULERPLUGIN_EXPORT( c, json ) \
+  K_PLUGIN_FACTORY_WITH_JSON( SchedulerFactory, json, registerPlugin< c >(); )
 #endif

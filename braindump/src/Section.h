@@ -22,6 +22,7 @@
 
 #include <QMetaType>
 #include <QString>
+
 #include "SectionGroup.h"
 
 class Layout;

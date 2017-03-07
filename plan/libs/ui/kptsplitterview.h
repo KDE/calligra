@@ -30,8 +30,7 @@
 class KoDocument;
 
 class QSplitter;
-
-class KTabWidget;
+class QTabWidget;
 
 /// The main namespace
 namespace KPlato
@@ -47,10 +46,10 @@ class Context;
 
 /**
  * SplitterView is a view with a vertical QSplitter that can contain
- * other ViewBase based views and/or KTabWidgets that can hold
+ * other ViewBase based views and/or QTabWidgets that can hold
  * ViewVase based views as well.
  * This splitter view is created by the main View, and subviews can then be
- * added with addView(). A KTabWidget is added with addTabWidget().
+ * added with addView(). A QTabWidget is added with addTabWidget().
  *
  * To have context info loaded, views added to this splitter must have a
  * unique objectName().
@@ -87,8 +86,8 @@ public:
     /// Gets context info from this view. Reimplement.
     virtual void getContext( Context &/*context*/ ) const {}
     
-    /// Add a KTabWidget to the splitter
-    KTabWidget *addTabWidget();
+    /// Add a QTabWidget to the splitter
+    QTabWidget *addTabWidget();
     /// Add the @p view to the splitter
     void addView( ViewBase *view );
     /// Add the @p view to the @p tab. Set the tabs label to @p label

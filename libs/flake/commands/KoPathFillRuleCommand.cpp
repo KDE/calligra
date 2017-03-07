@@ -20,7 +20,7 @@
 #include "KoPathFillRuleCommand.h"
 #include "KoPathShape.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 class KoPathFillRuleCommand::Private
 {
@@ -61,7 +61,7 @@ void KoPathFillRuleCommand::redo()
 void KoPathFillRuleCommand::undo()
 {
     KUndo2Command::undo();
-    QList<Qt::FillRule>::iterator ruleIt = d->oldFillRules.begin();
+    QList<Qt::FillRule>::ConstIterator ruleIt = d->oldFillRules.constBegin();
     foreach(KoPathShape *shape, d->shapes) {
         shape->setFillRule(*ruleIt);
         shape->update();

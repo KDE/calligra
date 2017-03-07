@@ -21,13 +21,10 @@
 // Own
 #include "TestLoading.h"
 
-// KDE
-#include <qtest_kde.h>
-
-// KChart
+// KoChart
 #include "ChartShape.h"
 
-using namespace KChart;
+using namespace KoChart;
 
 TestLoading::TestLoading()
     : TestLoadingBase()
@@ -54,5 +51,4 @@ void TestLoading::testLegend()
     // Your code goes here
 }
 
-QTEST_KDEMAIN(TestLoading, GUI)
-
+QTEST_MAIN(TestLoading)

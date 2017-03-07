@@ -25,31 +25,31 @@
 #include <KoXmlReader.h>
 #include <KoStore.h>
 
+#include <KLocalizedString>
 
 namespace KPlato
 {
     
 Document::Document()
     : m_type( Type_None ),
-    m_url( KUrl() ),
     m_sendAs( SendAs_None ),
     parent ( 0 )
 {
-    //kDebug(planDbg())<<this;
+    //debugPlan<<this;
 }
 
-Document::Document( const KUrl &url, Document::Type type, Document::SendAs sendAs )
+Document::Document( const QUrl &url, Document::Type type, Document::SendAs sendAs )
     : m_type( type ),
     m_sendAs( sendAs ),
     parent ( 0 )
 {
     setUrl( url );
-    //kDebug(planDbg())<<this;
+    //debugPlan<<this;
 }
 
 Document::~Document()
 {
-    //kDebug(planDbg())<<this;
+    //debugPlan<<this;
 }
 
 bool Document::operator==( const Document &doc ) const
@@ -71,9 +71,9 @@ bool Document::isValid() const
 QStringList Document::typeList( bool trans )
 {
     return QStringList()
-            << ( trans ? i18nc( "@item", "Unknown" ) : "Unknown" )
-            << ( trans ? i18nc( "@item The produced document", "Product" ) : "Product" )
-            << ( trans ? i18nc( "@item Document is used for refrence", "Reference" ) : "Reference" );
+            << ( trans ? xi18nc( "@item", "Unknown" ) : "Unknown" )
+            << ( trans ? xi18nc( "@item The produced document", "Product" ) : "Product" )
+            << ( trans ? xi18nc( "@item Document is used for refrence", "Reference" ) : "Reference" );
 }
 
 QString Document::typeToString( Document::Type type, bool trans )
@@ -84,9 +84,9 @@ QString Document::typeToString( Document::Type type, bool trans )
 QStringList Document::sendAsList( bool trans )
 {
     return QStringList()
-            << ( trans ? i18nc( "@item", "Unknown" ) : "Unknown" )
-            << ( trans ? i18nc( "@item Send a copy of the document", "Copy" ) : "Copy" )
-            << ( trans ? i18nc( "@item Send the reference (url) of the document", "Reference" ) : "Reference" );
+            << ( trans ? xi18nc( "@item", "Unknown" ) : "Unknown" )
+            << ( trans ? xi18nc( "@item Send a copy of the document", "Copy" ) : "Copy" )
+            << ( trans ? xi18nc( "@item Send the reference (url) of the document", "Reference" ) : "Reference" );
 }
 
 QString Document::sendAsToString( Document::SendAs snd, bool trans )
@@ -124,7 +124,7 @@ void Document::setSendAs( SendAs snd )
     }
 }
 
-void Document::setUrl( const KUrl &url )
+void Document::setUrl( const QUrl &url )
 {
     if ( m_url != url ) {
         m_url = url;
@@ -150,7 +150,7 @@ void Document::setStatus( const QString &sts )
 bool Document::load( KoXmlElement &element, XMLLoaderObject &status )
 {
     Q_UNUSED(status);
-    m_url = KUrl( element.attribute( "url" ) );
+    m_url = QUrl( element.attribute( "url" ) );
     m_name = element.attribute( "name", m_url.fileName() );
     m_type = ( Type )( element.attribute( "type" ).toInt() );
     m_status = element.attribute( "status" );
@@ -162,22 +162,22 @@ void Document::save(QDomElement &element) const
 {
     element.setAttribute("url", m_url.url() );
     element.setAttribute("name", m_name );
-    element.setAttribute("type", m_type );
+    element.setAttribute("type", QString::number(m_type) );
     element.setAttribute("status", m_status );
-    element.setAttribute("sendas", m_sendAs );
+    element.setAttribute("sendas", QString::number(m_sendAs) );
 }
 
 //----------------
 Documents::Documents()
     : node( 0 )
 {
-    //kDebug(planDbg())<<this;
+    //debugPlan<<this;
 }
 
 Documents::Documents( const Documents &docs )
     : node( 0 )
 {
-    //kDebug(planDbg())<<this;
+    //debugPlan<<this;
     foreach ( Document *doc, docs.documents() ) {
         m_docs.append( new Document( *doc ) );
     }
@@ -185,7 +185,7 @@ Documents::Documents( const Documents &docs )
 
 Documents::~Documents()
 {
-    //kDebug(planDbg())<<this;
+    //debugPlan<<this;
     deleteAll();
 }
 
@@ -220,7 +220,7 @@ void Documents::addDocument( Document *doc )
     }
 }
 
-void Documents::addDocument( const KUrl &url, Document::Type type )
+void Documents::addDocument( const QUrl &url, Document::Type type )
 {
     addDocument( new Document( url, type ) );
 }
@@ -260,7 +260,7 @@ Document *Documents::findDocument( const Document *doc ) const
     return findDocument( doc->url() );
 }
 
-Document *Documents::findDocument( const KUrl &url ) const
+Document *Documents::findDocument( const QUrl &url ) const
 {
     for ( int i = 0; i < m_docs.count(); ++i ) {
         if ( m_docs.at( i )->url() == url ) {
@@ -272,7 +272,7 @@ Document *Documents::findDocument( const KUrl &url ) const
 
 bool Documents::load( KoXmlElement &element, XMLLoaderObject &status )
 {
-    kDebug(planDbg());
+    debugPlan;
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
         if ( ! n.isElement() ) {
@@ -282,7 +282,7 @@ bool Documents::load( KoXmlElement &element, XMLLoaderObject &status )
         if (e.tagName() == "document") {
             Document *doc = new Document();
             if ( !doc->load( e, status ) ) {
-                kWarning()<<"Failed to load document";
+                warnPlan<<"Failed to load document";
                 status.addMsg( XMLLoaderObject::Errors, "Failed to load document" );
                 delete doc;
             } else {
@@ -316,7 +316,7 @@ void Documents::saveToStore( KoStore *store ) const
             if ( doc->url().isLocalFile() ) {
                 path = doc->url().toLocalFile();
             }
-            kDebug(planDbg())<<"Copy file to store: "<<path<<doc->url().fileName();
+            debugPlan<<"Copy file to store: "<<path<<doc->url().fileName();
             store->addLocalFile( path, doc->url().fileName() );
 
         }

@@ -49,15 +49,14 @@
 
 #include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>
-#include <KoInteractionTool.h>
+#include <KoComponentData.h>
 
 #include <kconfiggroup.h>
 
 KarbonPart::KarbonPart(QObject *parent)
-    : KoPart(parent)
+    : KoPart(KarbonFactory::global(), parent)
 {
     setTemplatesResourcePath(QLatin1String("karbon/templates/"));
-    setComponentData(KarbonFactory::componentData());
 }
 
 KarbonPart::~KarbonPart()
@@ -90,7 +89,7 @@ KoMainWindow *KarbonPart::createMainWindow()
     return new KoMainWindow(KARBON_MIME_TYPE, componentData());
 }
 
-void KarbonPart::openTemplate(const KUrl& url)
+void KarbonPart::openTemplate(const QUrl& url)
 {
     KoPart::openTemplate(url);
 
@@ -114,4 +113,3 @@ void KarbonPart::applyCanvasConfiguration(KarbonCanvas *canvas)
 }
 
 
-#include "KarbonPart.moc"

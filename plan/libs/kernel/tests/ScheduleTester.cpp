@@ -21,9 +21,24 @@
 #include "kptdatetime.h"
 #include "kptschedule.h"
 
+#include <QTest>
 
-#include <qtest_kde.h>
-#include <kdebug.h>
+namespace QTest
+{
+    template<>
+            char *toString(const KPlato::DateTime &dt)
+    {
+        return toString( dt.toString() );
+    }
+    template<>
+            char *toString(const KPlato::DateTimeInterval &dt)
+    {
+        if ( dt.first.isValid() && dt.second.isValid() )
+            return toString( dt.first.toString() + " - " + dt.second.toString() );
+
+        return toString( "invalid interval" );
+    }
+}
 
 namespace KPlato
 {
@@ -128,6 +143,4 @@ void ScheduleTester::busy()
 
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::ScheduleTester )
-
-#include "ScheduleTester.moc"
+QTEST_GUILESS_MAIN( KPlato::ScheduleTester )

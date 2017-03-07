@@ -21,6 +21,7 @@
 #include "KoProperties.h"
 
 #include <QDomDocument>
+#include <QDataStream>
 
 class KoProperties::Private
 {
@@ -70,7 +71,7 @@ void  KoProperties::load(const QDomElement &root)
                 const QString name = e.attribute("name");
                 const QString type = e.attribute("type");
                 const QString value = e.text();
-                QDataStream in(value.toLatin1());
+                QDataStream in(QByteArray::fromBase64(value.toLatin1()));
                 QVariant v;
                 in >> v;
                 d->properties[name] = v;
@@ -94,8 +95,8 @@ bool KoProperties::load(const QString & s)
 void KoProperties::save(QDomElement &root) const
 {
     QDomDocument doc = root.ownerDocument();
-    QMap<QString, QVariant>::Iterator it;
-    for (it = d->properties.begin(); it != d->properties.end(); ++it) {
+    QMap<QString, QVariant>::ConstIterator it;
+    for (it = d->properties.constBegin(); it != d->properties.constEnd(); ++it) {
         QDomElement e = doc.createElement("property");
         e.setAttribute("name", QString(it.key().toLatin1()));
         QVariant v = it.value();
@@ -104,7 +105,7 @@ void KoProperties::save(QDomElement &root) const
         QByteArray bytes;
         QDataStream out(&bytes, QIODevice::WriteOnly);
         out << v;
-        QDomText text = doc.createCDATASection(QString::fromLatin1(bytes, bytes.size()));
+        QDomText text = doc.createCDATASection(QString::fromLatin1(bytes.toBase64()));
         e.appendChild(text);
         root.appendChild(e);
     }

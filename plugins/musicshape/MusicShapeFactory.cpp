@@ -20,9 +20,9 @@
 #include <QFontDatabase>
 
 #include <kpluginfactory.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kstandarddirs.h>
+#include <klocalizedstring.h>
+#include "MusicDebug.h"
+#include <KoResourcePaths.h>
 #include <KoIcon.h>
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
@@ -34,8 +34,8 @@
 
 #include "MusicShapeFactory.h"
 
-K_PLUGIN_FACTORY(MusicShapePluginFactory, registerPlugin<MusicShapePlugin>();)
-K_EXPORT_PLUGIN(MusicShapePluginFactory( "calligra_shape_music" ))
+K_PLUGIN_FACTORY_WITH_JSON(MusicShapePluginFactory, "calligra_shape_music.json",
+                           registerPlugin<MusicShapePlugin>();)
 
 MusicShapePlugin::MusicShapePlugin( QObject *,  const QVariantList& )
 {
@@ -49,7 +49,7 @@ MusicShapeFactory::MusicShapeFactory()
     : KoShapeFactoryBase(MusicShapeId, i18n( "Music Shape" ) )
 {
     setToolTip( i18n( "A shape which provides a music editor" ) );
-    setIconName(koIconNameCStrNeededWithSubs("icon for the Music Shape","musicshape", "music-note-16th"));
+    setIconName(koIconNameNeededWithSubs("icon for the Music Shape","musicshape", "music-note-16th"));
     setXmlElementNames( "http://www.calligra.org/music", QStringList("shape") );
     setLoadingPriority( 1 );
 }
@@ -58,9 +58,9 @@ KoShape *MusicShapeFactory::createDefaultShape(KoDocumentResourceManager *) cons
 {
     static bool loadedFont = false;
     if (!loadedFont) {
-        QString fontFile = KStandardDirs::locate("data", "musicshape/fonts/Emmentaler-14.ttf");
+        QString fontFile = KoResourcePaths::locate("data", "calligra_shape_music/fonts/Emmentaler-14.ttf");
         if (QFontDatabase::addApplicationFont(fontFile) == -1) {
-            kWarning() << "Could not load emmentaler font";
+            warnMusic << "Could not load emmentaler font";
         }
         loadedFont = true;
     }
@@ -75,3 +75,5 @@ bool MusicShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &
     Q_UNUSED(context);
     return ( e.localName() == "shape" ) && ( e.namespaceURI() == "http://www.calligra.org/music" );
 }
+
+#include "MusicShapeFactory.moc"

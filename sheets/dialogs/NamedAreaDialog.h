@@ -27,14 +27,13 @@
 #ifndef CALLIGRA_SHEETS_NAMED_AREA_DIALOG
 #define CALLIGRA_SHEETS_NAMED_AREA_DIALOG
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 class KComboBox;
 class QLabel;
 class KLineEdit;
-class KPushButton;
-
-class KListWidget;
+class QPushButton;
+class QListWidget;
 
 namespace Calligra
 {
@@ -47,7 +46,7 @@ class Selection;
  * \ingroup UI
  * Dialog to manage named areas.
  */
-class NamedAreaDialog : public KDialog
+class NamedAreaDialog : public KoDialog
 {
     Q_OBJECT
 
@@ -64,11 +63,11 @@ public Q_SLOTS:
 
 private:
     Selection*      m_selection;
-    KListWidget*    m_list;
+    QListWidget*    m_list;
     QLabel*         m_rangeName;
-    KPushButton*    m_newButton;
-    KPushButton*    m_editButton;
-    KPushButton*    m_removeButton;
+    QPushButton*    m_newButton;
+    QPushButton*    m_editButton;
+    QPushButton*    m_removeButton;
 };
 
 
@@ -76,7 +75,7 @@ private:
  * \ingroup UI
  * Dialog to edit a named area.
  */
-class EditNamedAreaDialog : public KDialog
+class EditNamedAreaDialog : public KoDialog
 {
     Q_OBJECT
 

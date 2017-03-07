@@ -29,6 +29,7 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <kpluginfactory.h>
+#include <klocale.h>
 
 #include <KoCsvImportDialog.h>
 #include <KoFilterChain.h>
@@ -56,8 +57,7 @@ using namespace Calligra::Sheets;
  perl -e '$i=0;while($i<30000) { print rand().",".rand()."\n"; $i++ }' > file.csv
 */
 
-K_PLUGIN_FACTORY(CSVImportFactory, registerPlugin<CSVFilter>();)
-K_EXPORT_PLUGIN(CSVImportFactory("calligrafilters"))
+K_PLUGIN_FACTORY_WITH_JSON(CSVImportFactory, "calligra_filter_csv2sheets.json", registerPlugin<CSVFilter>();)
 
 CSVFilter::CSVFilter(QObject* parent, const QVariantList&) :
         KoFilter(parent)

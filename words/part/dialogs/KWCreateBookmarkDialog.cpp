@@ -19,16 +19,16 @@
 
 #include "KWCreateBookmarkDialog.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
-KWCreateBookmark::KWCreateBookmark(const QList<QString> &nameList, const QString &suggestedName, QWidget *parent)
+KWCreateBookmark::KWCreateBookmark(const QStringList &nameList, const QString &suggestedName, QWidget *parent)
         : QWidget(parent)
 {
     widget.setupUi(this);
     widget.bookmarkName->setCompleter(0);
     widget.bookmarkName->insertItems(0, nameList);
     widget.bookmarkName->setEditText(suggestedName);
-    connect(widget.bookmarkName, SIGNAL(editTextChanged(const QString &)), this, SIGNAL(bookmarkNameChanged(const QString &)));
+    connect(widget.bookmarkName, SIGNAL(editTextChanged(QString)), this, SIGNAL(bookmarkNameChanged(QString)));
 }
 
 QString KWCreateBookmark::bookmarkName()
@@ -36,8 +36,8 @@ QString KWCreateBookmark::bookmarkName()
     return widget.bookmarkName->currentText();
 }
 
-KWCreateBookmarkDialog::KWCreateBookmarkDialog(const QList<QString> &nameList, const QString &suggestedName, QWidget *parent)
-        : KDialog(parent),
+KWCreateBookmarkDialog::KWCreateBookmarkDialog(const QStringList &nameList, const QString &suggestedName, QWidget *parent)
+        : KoDialog(parent),
         m_nameList(nameList)
 {
     if (suggestedName.isEmpty() || m_nameList.contains(suggestedName)) {
@@ -52,7 +52,7 @@ KWCreateBookmarkDialog::KWCreateBookmarkDialog(const QList<QString> &nameList, c
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     showButtonSeparator(true);
-    connect(ui, SIGNAL(bookmarkNameChanged(const QString &)), this, SLOT(nameChanged(const QString &)));
+    connect(ui, SIGNAL(bookmarkNameChanged(QString)), this, SLOT(nameChanged(QString)));
 }
 
 QString KWCreateBookmarkDialog::newBookmarkName()
@@ -67,6 +67,3 @@ void KWCreateBookmarkDialog::nameChanged(const QString &bookmarkName)
     else
         enableButtonOk(false);
 }
-
-#include <KWCreateBookmarkDialog.moc>
-

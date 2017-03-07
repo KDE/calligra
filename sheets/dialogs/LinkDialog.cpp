@@ -33,13 +33,14 @@
 #include <KoIcon.h>
 
 #include <QLabel>
+#include <QUrl>
 #include <QVBoxLayout>
 
 #include <kcombobox.h>
 #include <kdesktopfile.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <krecentdocument.h>
 #include <kurlrequester.h>
 #include <kurlcompletion.h>
@@ -70,8 +71,7 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
         : KPageDialog(parent)
         , d(new Private)
 {
-    setCaption(i18n("Insert Link"));
-    setButtons(Ok | Cancel);
+    setWindowTitle(i18n("Insert Link"));
     setFaceType(List);
 
     // link for web or ftp
@@ -175,10 +175,9 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     connect(d->cellText, SIGNAL(textChanged(QString)), this,
             SLOT(setText(QString)));
 
-    showButtonSeparator(true);
     d->internetText->setFocus();
     resize(400, 300);
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(this, SIGNAL(accepted()), this, SLOT(slotOk()));
 }
 
 LinkDialog::~LinkDialog()
@@ -210,7 +209,7 @@ QString LinkDialog::link() const
         if (! subject.isEmpty())
             str.append(QString("?subject=%1").arg(QString(QUrl::toPercentEncoding(subject))));
     } else if (currentPage() == d->p3) {
-        KUrl url = d->fileLink->url();
+        QUrl url = d->fileLink->url();
         if (url.isValid()) {
             str = url.url();
         } else {
@@ -317,5 +316,3 @@ void LinkDialog::slotOk()
 
     accept();
 }
-
-#include "LinkDialog.moc"

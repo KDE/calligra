@@ -19,26 +19,27 @@
  */
 #include "Autocorrect.h"
 #include "AutocorrectConfigDialog.h"
+#include "AutocorrectDebug.h"
 
 #include <QTextBlock>
-#include <kaction.h>
+#include <QAction>
 #include <QFile>
 #include <QDomDocument>
+#include <QLocale>
 
-#include <klocale.h>
+#include <KConfig>
+#include <klocalizedstring.h>
 #include <kconfiggroup.h>
-#include <kcalendarsystem.h>
-#include <kstandarddirs.h>
-#include <kdebug.h>
+#include <KoResourcePaths.h>
 
 Autocorrect::Autocorrect()
 {
     /* setup actions for this plugin */
-    KAction *configureAction = new KAction(i18n("Configure &Autocorrection..."), this);
+    QAction *configureAction = new QAction(i18n("Configure &Autocorrection..."), this);
     connect(configureAction, SIGNAL(triggered(bool)), this, SLOT(configureAutocorrect()));
     addAction("configure_autocorrection", configureAction);
 
-    m_enabled = new KAction(i18n("Autocorrection"), this);
+    m_enabled = new QAction(i18n("Autocorrection"), this);
     m_enabled->setCheckable(true);
     m_enabled->setChecked(true);
     addAction("enable_autocorrection", m_enabled);
@@ -68,9 +69,9 @@ Autocorrect::Autocorrect()
 
     readConfig();
 
-    KLocale *locale = KGlobal::locale();
+    QLocale locale;
     for (int i = 1; i <=7; i++)
-        m_cacheNameOfDays.append(locale->calendar()->weekDayName(i).toLower());
+        m_cacheNameOfDays.append(locale.dayName(i).toLower()); // TODO: what about QLocale::standaloneDayName?
 }
 
 Autocorrect::~Autocorrect()
@@ -335,11 +336,11 @@ bool Autocorrect::autoFractions()
         return false;
     }
 
-    if (trimmed.startsWith("1/2"))
+    if (trimmed.startsWith(QLatin1String("1/2")))
         m_word.replace(0, 3, QString::fromUtf8("½"));
-    else if (trimmed.startsWith("1/4"))
+    else if (trimmed.startsWith(QLatin1String("1/4")))
         m_word.replace(0, 3, QString::fromUtf8("¼"));
-    else if (trimmed.startsWith("3/4"))
+    else if (trimmed.startsWith(QLatin1String("3/4")))
         m_word.replace(0, 3, QString::fromUtf8("¾"));
     else
         return false;
@@ -562,7 +563,7 @@ QString Autocorrect::autoDetectURL(const QString &_word) const
     QString word = _word;
     /* this method is ported from lib/kotext/KoAutoFormat.cpp KoAutoFormat::doAutoDetectUrl
      * from Calligra 1.x branch */
-    //kDebug() << "link:" << word;
+    //debugAutocorrect << "link:" << word;
 
     // we start by iterating through a list of schemes, and if no match is found,
     // we proceed to 3 special cases
@@ -667,7 +668,7 @@ QString Autocorrect::autoDetectURL(const QString &_word) const
         } else if (linkType == FTP) {
             word.prepend(QLatin1String("ftp://"));
         }
-        //kDebug() << "modified word:" << word;
+        //debugAutocorrect << "modified word:" << word;
         return word;
     }
 
@@ -733,8 +734,7 @@ void Autocorrect::readAutocorrectXmlEntries()
     //
     // in any case we load the custom-* files on top, just in case the user has edited them
     // These costum files is only the kde shared one, as that is where we save too
-    KLocale *locale = KGlobal::locale();
-    QString kdelang = locale->languageList().first();
+    QString kdelang = QLocale().uiLanguages().first();
     kdelang.remove(QRegExp("@.*"));
 
     QStringList folders;
@@ -743,13 +743,13 @@ void Autocorrect::readAutocorrectXmlEntries()
     Q_FOREACH(const QString& path, folders)
     {
         if (!m_autocorrectLang.isEmpty())
-            fname = KGlobal::dirs()->findResource("data", path + "autocorrect/" + m_autocorrectLang + ".xml");
+            fname = KoResourcePaths::findResource("data", path + "autocorrect/" + m_autocorrectLang + ".xml");
         if (m_autocorrectLang != "all_languages") {
             if (fname.isEmpty() && !kdelang.isEmpty())
-                fname = KGlobal::dirs()->findResource("data", path + "autocorrect/" + kdelang + ".xml");
+                fname = KoResourcePaths::findResource("data", path + "autocorrect/" + kdelang + ".xml");
             if (fname.isEmpty() && kdelang.contains('_')) {
                 kdelang.remove( QRegExp( "_.*" ) );
-                fname = KGlobal::dirs()->findResource("data", path + "autocorrect/" + kdelang + ".xml");
+                fname = KoResourcePaths::findResource("data", path + "autocorrect/" + kdelang + ".xml");
             }
         }
 
@@ -762,7 +762,7 @@ void Autocorrect::readAutocorrectXmlEntries()
     if (m_autocorrectLang.isEmpty())
         m_autocorrectLang = kdelang;
 
-    fname = KGlobal::dirs()->findResource("data", "autocorrect/custom-" + m_autocorrectLang + ".xml");
+    fname = KoResourcePaths::findResource("data", "autocorrect/custom-" + m_autocorrectLang + ".xml");
     if(!fname.isEmpty()) {
         readAutocorrectXmlEntry(fname, true);
     }
@@ -877,10 +877,10 @@ void Autocorrect::readAutocorrectXmlEntry(const QString &fname, bool onlyCustomi
 
 void Autocorrect::writeAutocorrectXmlEntry()
 {
-    const QString fname = KStandardDirs::locateLocal("data", "autocorrect/custom-" + m_autocorrectLang + ".xml");
+    const QString fname = KoResourcePaths::locateLocal("data", "autocorrect/custom-" + m_autocorrectLang + ".xml");
     QFile file(fname);
     if( !file.open( QIODevice::WriteOnly | QIODevice::Text ) ) {
-        qDebug()<<"We can't save in file :"<<fname;
+        debugAutocorrect << "We can't save in file :" << fname;
         return;
     }
     QDomDocument root(QLatin1String("autocorrection"));

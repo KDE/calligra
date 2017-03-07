@@ -20,7 +20,7 @@
 
 #include "KPrMiscShapeWipeEffectFactory.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "../KPrIrisWipeEffectStrategyBase.h"
 

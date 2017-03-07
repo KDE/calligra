@@ -21,10 +21,9 @@
 #ifndef CALLIGRA_SHEETS_DAMAGES
 #define CALLIGRA_SHEETS_DAMAGES
 
+#include "sheets_odf_export.h"
 
-#include "kdebug.h"
-
-#include "calligra_sheets_export.h"
+#include <QDebug>
 
 namespace Calligra
 {
@@ -209,7 +208,7 @@ private:
 
 
 /***************************************************************************
-  kDebug support
+  QDebug support
 ****************************************************************************/
 
 CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::Damage& d);

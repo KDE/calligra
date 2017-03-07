@@ -19,6 +19,12 @@
 
 #include "KPrPlaceholders.h"
 
+#include "KPrPageLayout.h"
+#include "KPrPlaceholder.h"
+#include "KPrPlaceholderShape.h"
+#include "commands/KPrPageLayoutCommand.h"
+#include "StageDebug.h"
+
 #include <KoShape.h>
 #include <KoShapeContainer.h>
 #include <KoShapeLayer.h>
@@ -28,18 +34,13 @@
 #include <KoShapeCreateCommand.h>
 #include <KoPADocument.h>
 #include <KoTextShapeData.h>
-#include "KPrPageLayout.h"
-#include "KPrPlaceholder.h"
-#include "KPrPlaceholderShape.h"
-#include "commands/KPrPageLayoutCommand.h"
-
-#include <QTextCursor>
-#include <QTextDocument>
 #include <KoStyleManager.h>
 #include <KoTextDocument.h>
 #include <KoParagraphStyle.h>
 
-#include <kdebug.h>
+#include <QTextCursor>
+#include <QTextDocument>
+
 
 KPrPlaceholders::KPrPlaceholders()
 :m_layout( 0 )
@@ -62,7 +63,7 @@ void KPrPlaceholders::setLayout( KPrPageLayout * layout, KoPADocument * document
     Q_ASSERT( !shapes.isEmpty() );
     KoShapeLayer * layer = dynamic_cast<KoShapeLayer*>( shapes[0] );
 
-    QMap<QString, QList<QRectF> > placeholders;
+    QMap<QString, QVector<QRectF> > placeholders;
     if ( layout ) {
         foreach ( KPrPlaceholder * placeholder, layout->placeholders() ) {
             placeholders[placeholder->presentationObject()].append( placeholder->rect( pageSize ) );
@@ -74,7 +75,7 @@ void KPrPlaceholders::setLayout( KPrPageLayout * layout, KoPADocument * document
     while ( it != m_placeholders.end() ) {
         Placeholders::iterator next( it );
         ++next;
-        QMap<QString, QList<QRectF> >::iterator itPlaceholder( placeholders.find( it->presentationClass ) );
+        QMap<QString, QVector<QRectF> >::iterator itPlaceholder( placeholders.find( it->presentationClass ) );
         // modify existing placeholders to get the position and size defined in the new layout
         if ( itPlaceholder != placeholders.end() && !itPlaceholder.value().isEmpty() ) {
             QRectF rect = itPlaceholder.value().takeFirst();
@@ -83,10 +84,10 @@ void KPrPlaceholders::setLayout( KPrPageLayout * layout, KoPADocument * document
             }
             // replace the shape as given by the layout
             QList<KoShape *> modifiedShape;
-            QList<QSizeF> oldSize;
-            QList<QSizeF> newSize;
-            QList<QPointF> oldPosition;
-            QList<QPointF> newPosition;
+            QVector<QSizeF> oldSize;
+            QVector<QSizeF> newSize;
+            QVector<QPointF> oldPosition;
+            QVector<QPointF> newPosition;
             modifiedShape.append( it->shape );
             oldSize.append( it->shape->size() );
             newSize.append( rect.size() );
@@ -109,10 +110,10 @@ void KPrPlaceholders::setLayout( KPrPageLayout * layout, KoPADocument * document
     }
 
     // add placeholder shapes for all available positions
-    QMap<QString, QList<QRectF> >::const_iterator itPlaceholder( placeholders.constBegin() );
+    QMap<QString, QVector<QRectF> >::const_iterator itPlaceholder( placeholders.constBegin() );
     for ( ; itPlaceholder != placeholders.constEnd(); ++itPlaceholder ) {
-        const QList<QRectF> & list( itPlaceholder.value() );
-        QList<QRectF>::const_iterator listIt( list.begin() );
+        const QVector<QRectF> & list( itPlaceholder.value() );
+        QVector<QRectF>::const_iterator listIt( list.begin() );
         for ( ; listIt != list.end(); ++listIt ) {
              KPrPlaceholderShape * shape = new KPrPlaceholderShape( itPlaceholder.key() );
              shape->initStrategy(document->resourceManager());
@@ -194,10 +195,10 @@ void KPrPlaceholders::add( const QList<KoShape *> & shapes )
 
 void KPrPlaceholders::debug() const
 {
-    kDebug(33001) << "size" << m_placeholders.size() << "init:" << m_initialized;
+    debugStage << "size" << m_placeholders.size() << "init:" << m_initialized;
     Placeholders::iterator it( m_placeholders.begin() );
     for ( ; it != m_placeholders.end(); ++it ) {
-        kDebug(33001) << "placeholder" << it->presentationClass << it->shape << it->shape->shapeId() << it->isPlaceholder;
+        debugStage << "placeholder" << it->presentationClass << it->shape << it->shape->shapeId() << it->isPlaceholder;
     }
 }
 
@@ -229,9 +230,9 @@ void KPrPlaceholders::applyStyle( KPrPlaceholderShape * shape, const QString & p
         data = styles.value( "outline", 0 );
     }
     KoTextShapeData * newData = qobject_cast<KoTextShapeData*>( shape->userData() );
-    kDebug(33001) << "data" << data << "newData:" << newData << shape->userData();
+    debugStage << "data" << data << "newData:" << newData << shape->userData();
     if ( data && newData ) {
-        kDebug(33001) << "apply";
+        debugStage << "apply";
         QTextCursor cursor( data->document() );
         QTextCursor newCursor( newData->document() );
         newCursor.select( QTextCursor::Document );

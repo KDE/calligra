@@ -21,9 +21,11 @@
 
 #include <QDomElement>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include "../compositeops/KoCompositeOps.h"
+#include <KoColorConversions.h>
+#include <kis_dom_utils.h>
 
 LabU16ColorSpace::LabU16ColorSpace(const QString &name, KoColorProfile *p)
     : LcmsColorSpace<KoLabU16Traits>(colorSpaceId(), name, TYPE_LABA_16, cmsSigLabData, p)
@@ -40,10 +42,11 @@ LabU16ColorSpace::LabU16ColorSpace(const QString &name, KoColorProfile *p)
 
 bool LabU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const
 {
-    if (independence == TO_RGBA8)
+    if (independence == TO_RGBA8) {
         return true;
-    else
+    } else {
         return false;
+    }
 }
 
 QString LabU16ColorSpace::normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const
@@ -67,27 +70,56 @@ QString LabU16ColorSpace::normalisedChannelValueText(const quint8 *pixel, quint3
     }
 }
 
-KoColorSpace* LabU16ColorSpace::clone() const
+KoColorSpace *LabU16ColorSpace::clone() const
 {
     return new LabU16ColorSpace(name(), profile()->clone());
 }
 
-void LabU16ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+void LabU16ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const
 {
-    const KoLabU16Traits::Pixel* p = reinterpret_cast<const KoLabU16Traits::Pixel*>(pixel);
+    const KoLabU16Traits::Pixel *p = reinterpret_cast<const KoLabU16Traits::Pixel *>(pixel);
     QDomElement labElt = doc.createElement("Lab");
-    labElt.setAttribute("L", KoColorSpaceMaths< KoLabU16Traits::channels_type, qreal>::scaleToA(p->L));
-    labElt.setAttribute("a", KoColorSpaceMaths< KoLabU16Traits::channels_type, qreal>::scaleToA(p->a));
-    labElt.setAttribute("b", KoColorSpaceMaths< KoLabU16Traits::channels_type, qreal>::scaleToA(p->b));
+    labElt.setAttribute("L", KisDomUtils::toString(KoColorSpaceMaths< KoLabU16Traits::channels_type, qreal>::scaleToA(p->L)));
+    labElt.setAttribute("a", KisDomUtils::toString(KoColorSpaceMaths< KoLabU16Traits::channels_type, qreal>::scaleToA(p->a)));
+    labElt.setAttribute("b", KisDomUtils::toString(KoColorSpaceMaths< KoLabU16Traits::channels_type, qreal>::scaleToA(p->b)));
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
 }
 
-void LabU16ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
+void LabU16ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
-    KoLabU16Traits::Pixel* p = reinterpret_cast<KoLabU16Traits::Pixel*>(pixel);
-    p->L = KoColorSpaceMaths< qreal, KoLabU16Traits::channels_type >::scaleToA(elt.attribute("L").toDouble());
-    p->a = KoColorSpaceMaths< qreal, KoLabU16Traits::channels_type >::scaleToA(elt.attribute("a").toDouble());
-    p->b = KoColorSpaceMaths< qreal, KoLabU16Traits::channels_type >::scaleToA(elt.attribute("b").toDouble());
+    KoLabU16Traits::Pixel *p = reinterpret_cast<KoLabU16Traits::Pixel *>(pixel);
+    p->L = KoColorSpaceMaths< qreal, KoLabU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("L")));
+    p->a = KoColorSpaceMaths< qreal, KoLabU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("a")));
+    p->b = KoColorSpaceMaths< qreal, KoLabU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("b")));
     p->alpha = KoColorSpaceMathsTraits<quint16>::max;
+}
+void LabU16ColorSpace::toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const
+{
+    LabToLCH(channelValues[0],channelValues[1],channelValues[2], luma, sat, hue);
+}
+
+QVector <double> LabU16ColorSpace::fromHSY(qreal *hue, qreal *sat, qreal *luma) const
+{
+    QVector <double> channelValues(4);
+    LCHToLab(*luma, *sat, *hue, &channelValues[0],&channelValues[1],&channelValues[2]);
+    channelValues[3]=1.0;
+    return channelValues;
+}
+
+void LabU16ColorSpace::toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const
+{
+    *y =channelValues[0];
+    *u=channelValues[1];
+    *v=channelValues[2];
+}
+
+QVector <double> LabU16ColorSpace::fromYUV(qreal *y, qreal *u, qreal *v) const
+{
+    QVector <double> channelValues(4);
+    channelValues[0]=*y;
+    channelValues[1]=*u;
+    channelValues[2]=*v;
+    channelValues[3]=1.0;
+    return channelValues;
 }

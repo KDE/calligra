@@ -21,7 +21,7 @@
 #ifndef CALLIGRA_SHEETS_FIND_H
 #define CALLIGRA_SHEETS_FIND_H
 
-#include "calligra_sheets_export.h"
+#include "sheets_common_export.h"
 #include "Cell.h"
 
 #include <KoFindBase.h>
@@ -87,8 +87,5 @@ private Q_SLOTS:
 
 } //namespace Sheets
 } //namespace Calligra
-
-Q_DECLARE_METATYPE(Calligra::Sheets::Cell)
-Q_DECLARE_METATYPE(Calligra::Sheets::Sheet*)
 
 #endif // CALLIGRA_SHEETS_FIND_H

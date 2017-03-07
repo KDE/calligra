@@ -19,10 +19,9 @@
 
 #include "kptcontext.h"
 #include "kptview.h"
+#include "kptdebug.h"
 
 #include <QDomDocument>
-
-#include <kdebug.h>
 
 namespace KPlato
 {
@@ -65,21 +64,21 @@ bool Context::load( const KoXmlDocument &document ) {
     KoXmlElement elm = m_document.documentElement();
     QString value = elm.attribute( "mime", QString() );
     if ( value.isEmpty() ) {
-        kError() << "No mime type specified!";
+        errorPlan << "No mime type specified!";
 //        setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
         return false;
     } else if ( value != "application/x-vnd.kde.plan" ) {
         if ( value == "application/x-vnd.kde.kplato" ) {
             // accept, since we forgot to change kplato to plan for so long...
         } else {
-            kError() << "Unknown mime type " << value;
+            errorPlan << "Unknown mime type " << value;
 //        setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.kplato, got %1", value ) );
             return false;
         }
     }
 /*    QString m_syntaxVersion = elm.attribute( "version", "0.0" );
     if ( m_syntaxVersion > "0.0" ) {
-        int ret = KMessageBox::warningContinueCancel(
+        KMessageBox::ButtonCode ret = KMessageBox::warningContinueCancel(
                       0, i18n( "This document was created with a newer version of Plan (syntax version: %1)\n"
                                "Opening it in this version of Plan will lose some information.", m_syntaxVersion ),
                       i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );
@@ -120,7 +119,7 @@ QDomDocument Context::save( const View *view ) const {
     QDomElement doc = document.createElement( "context" );
     doc.setAttribute( "editor", "Plan" );
     doc.setAttribute( "mime", "application/x-vnd.kde.plan" );
-    doc.setAttribute( "version", 0.0 );
+    doc.setAttribute( "version", QString::number(0.0) );
     document.appendChild( doc );
 
     QDomElement e = doc.ownerDocument().createElement("context");

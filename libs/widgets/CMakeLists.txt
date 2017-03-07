@@ -2,12 +2,18 @@ add_subdirectory( tests )
 add_subdirectory( pics )
 
 include_directories(${KOTEXT_INCLUDES} ${KOODF_INCLUDES} ${PIGMENT_INCLUDES})
-include_directories(${CMAKE_SOURCE_DIR}/libs/widgetutils ${CMAKE_SOURCE_DIR}/libs/main ${CMAKE_BINARY_DIR}/libs/kotext/mct)
+include_directories(${CMAKE_SOURCE_DIR}/libs/widgetutils)
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/libs/main ${CMAKE_BINARY_DIR}/libs/text/mct)
 if (LIBATTICA_FOUND)
     include_directories(${LIBATTICA_INCLUDE_DIR})
 endif ()
 
 set(kowidgets_LIB_SRCS
+    KoGradientEditWidget.cpp
+    KoResourcePaths.cpp
+    KoVBox.cpp
+    KoDialog.cpp
     KoGlobal.cpp
     KoZoomWidget.cpp
     KoTagToolButton.cpp
@@ -32,7 +38,6 @@ set(kowidgets_LIB_SRCS
     KoZoomMode.cpp
     KoDpi.cpp
     KoGlobal.cpp
-    KoFileDialog.cpp
     KoColorPatch.cpp
     KoColorPopupAction.cpp
     KoColorSetWidget.cpp
@@ -86,9 +91,12 @@ set(kowidgets_LIB_SRCS
 
     KoGlobal.cpp
     KoTableView.cpp
+
+    WidgetsDebug.cpp
+
 )
 
-kde4_add_ui_files( kowidgets_LIB_SRCS
+ki18n_wrap_ui( kowidgets_LIB_SRCS
     KoConfigAuthorPage.ui
     KoCsvImportDialog.ui
     koDocumentInfoAboutWidget.ui
@@ -99,21 +107,39 @@ kde4_add_ui_files( kowidgets_LIB_SRCS
 )
 
 
-kde4_add_library(kowidgets SHARED ${kowidgets_LIB_SRCS})
+add_library(kowidgets SHARED ${kowidgets_LIB_SRCS})
+generate_export_header(kowidgets BASE_NAME kowidgets)
 
-target_link_libraries(kowidgets kotext pigmentcms kowidgetutils ${KDE4_KIO_LIBS})
+target_link_libraries(kowidgets
+    PUBLIC
+        kotext
+        pigmentcms
+        kowidgetutils
+        KF5::KIOWidgets
+    PRIVATE
+        KF5::GuiAddons
+        KF5::WidgetsAddons
+        KF5::ConfigCore
+        KF5::Codecs
+        KF5::Completion
+        KF5::IconThemes
+)
 
 if(GHNS)
-    target_link_libraries(kowidgets ${KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kowidgets PRIVATE KF5::NewStuff)
 endif ()
 
-target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms kowidgetutils ${KDE4_KDEUI_LIBS})
+if(X11_FOUND)
+    target_link_libraries(kowidgets PRIVATE Qt5::X11Extras ${X11_LIBRARIES})
+endif()
 
 set_target_properties(kowidgets PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
 install(TARGETS kowidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+if (SHOULD_BUILD_DEVEL_HEADERS)
 
 install( FILES
     KoGlobal.h
@@ -123,7 +149,7 @@ install( FILES
     KoPageLayoutWidget.h
     KoPagePreviewWidget.h
     KoPositionSelector.h
-    kowidgets_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/kowidgets_export.h
     KoZoomAction.h
     KoZoomController.h
     KoZoomInput.h
@@ -131,7 +157,6 @@ install( FILES
     KoZoomHandler.h
     KoZoomMode.h
     KoGlobal.h
-    KoFileDialog.h
     KoColorPatch.h
     KoStrokeConfigWidget.h
     KoFillConfigWidget.h
@@ -161,13 +186,4 @@ install( FILES
     ${INCLUDE_INSTALL_DIR}/calligra
 COMPONENT Devel)
 
-set(filedialogtester_SRCS
-    KoFileDialogTester.cpp
-    main.cpp
-)
-kde4_add_ui_files(filedialogtester_SRCS
-    KoFileDialogTester.ui
-)
-
-kde4_add_executable(filedialogtester ${filedialogtester_SRCS})
-target_link_libraries(filedialogtester kowidgets)
+endif()

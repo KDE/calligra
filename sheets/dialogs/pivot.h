@@ -23,7 +23,7 @@
 #ifndef PIVOT_H
 #define PIVOT_H
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 namespace Calligra{
     namespace Sheets{
@@ -36,7 +36,7 @@ namespace Calligra{
     class Selection;
   
 
-    class Pivot : public KDialog
+    class Pivot : public KoDialog
     {
       Q_OBJECT
 

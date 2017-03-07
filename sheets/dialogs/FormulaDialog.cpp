@@ -28,7 +28,7 @@
 // Local
 #include "FormulaDialog.h"
 
-#include <ktabwidget.h>
+#include <QTabWidget>
 #include <QApplication>
 #include <QCloseEvent>
 #include <QGridLayout>
@@ -45,19 +45,18 @@
 #include "Map.h"
 #include "ui/Selection.h"
 #include "Sheet.h"
+#include "SheetsDebug.h"
 
 #include <KoIcon.h>
 
 #include <kcombobox.h>
-#include <kdebug.h>
-#include <ktextbrowser.h>
-#include <kglobalsettings.h>
+#include <klineedit.h>
 
-#include <knumvalidator.h>
+#include <QDoubleValidator>
 #include <QEvent>
+#include <QTextBrowser>
 #include <QLabel>
 #include <QPushButton>
-#include <klineedit.h>
 #include <QLayout>
 #include <QStringListModel>
 #include <QSortFilterProxyModel>
@@ -66,7 +65,7 @@
 using namespace Calligra::Sheets;
 
 FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBase* editor, const QString& formulaName)
-        : KDialog(parent)
+        : KoDialog(parent)
 {
     setCaption(i18n("Function"));
     setButtons(Ok | Cancel);
@@ -138,11 +137,11 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     result = new KLineEdit(page);
     grid1->addWidget(result, 4, 0, 1, -1);
 
-    m_tabwidget = new KTabWidget(page);
+    m_tabwidget = new QTabWidget(page);
     m_tabwidget->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     grid1->addWidget(m_tabwidget, 0, 1, 4, 1);
 
-    m_browser = new KTextBrowser(m_tabwidget, true);
+    m_browser = new QTextBrowser(m_tabwidget);
     m_browser->document()->setDefaultStyleSheet("h1 { font-size:x-large; } h2 { font-size:large; } h3 { font-size:medium; }");
     m_browser->setMinimumWidth(300);
 
@@ -225,8 +224,8 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     connect(m_selection, SIGNAL(changed(Region)),
             this, SLOT(slotSelectionChanged()));
 
-    connect(m_browser, SIGNAL(urlClick(QString)),
-            this, SLOT(slotShowFunction(QString)));
+    connect(m_browser, SIGNAL(anchorClicked(QUrl)),
+            this, SLOT(slotShowFunction(QUrl)));
 
     // Save the name of the active sheet.
     m_sheetName = m_selection->activeSheet()->sheetName();
@@ -252,7 +251,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
 
     // Was a function name passed along with the constructor ? Then activate it.
     if (!formulaName.isEmpty()) {
-        kDebug() << "formulaName=" << formulaName;
+        debugSheets << "formulaName=" << formulaName;
 #if 0
         QList<QListWidgetItem *> items = functions->findItems(formulaName, Qt::MatchFixedString);
         if (items.count() > 0) {
@@ -274,7 +273,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     }
 
     // Add auto completion.
-    searchFunct->setCompletionMode(KGlobalSettings::CompletionAuto);
+    searchFunct->setCompletionMode(KCompletion::CompletionAuto);
     searchFunct->setCompletionObject(&listFunct, true);
 
     if (functions->currentIndex().isValid())
@@ -290,13 +289,13 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
 
 FormulaDialog::~FormulaDialog()
 {
-    kDebug(36001) << "FormulaDialog::~FormulaDialog()";
+    debugSheets << "FormulaDialog::~FormulaDialog()";
 }
 
 void FormulaDialog::slotPressReturn()
 {
     //laurent 2001-07-07 desactivate this code
-    //because kspread crash.
+    //because Calligra Sheets crash.
     //TODO fix it
     /*
     if( !functions->currentText().isEmpty() )
@@ -537,7 +536,6 @@ static void showEntry(KLineEdit* edit, QLabel* label,
     label->setText(desc->param(param).helpText() + ':');
     label->show();
     ParameterType elementType = desc->param(param).type();
-    KDoubleValidator *validate = 0;
     switch (elementType) {
     case KSpread_String:
     case KSpread_Boolean:
@@ -546,9 +544,7 @@ static void showEntry(KLineEdit* edit, QLabel* label,
         edit->setValidator(0);
         break;
     case KSpread_Float:
-        validate = new KDoubleValidator(edit);
-        validate->setAcceptLocalizedNumbers(true);
-        edit->setValidator(validate);
+        edit->setValidator(new QDoubleValidator(edit));
         edit->setText("0");
         break;
     case KSpread_Int:
@@ -624,7 +620,7 @@ void FormulaDialog::slotDoubleClicked(QModelIndex item)
     }
 
     if (m_desc->params() > 5)
-        kDebug(36001) << "Error in param->nb_param";
+        debugSheets << "Error in param->nb_param";
     refresh_result = true;
 
     //
@@ -705,8 +701,10 @@ void FormulaDialog::slotSelected(const QString& afunction)
 }
 
 // from hyperlink in the "Related Function"
-void FormulaDialog::slotShowFunction(const QString& function)
+void FormulaDialog::slotShowFunction(const QUrl& functionUrl)
 {
+    const QString function = functionUrl.toString();
+
     FunctionDescription* desc =
         FunctionRepository::self()->functionInfo(function);
     if (!desc) return;
@@ -739,18 +737,15 @@ void FormulaDialog::slotSelectionChanged()
 
 void FormulaDialog::slotActivated(const QString& category)
 {
-    QStringList lst;
-    if (category == i18n("All"))
-        lst = FunctionRepository::self()->functionNames();
-    else
-        lst = FunctionRepository::self()->functionNames(category);
+    const QStringList lst = (category == i18n("All")) ?
+        FunctionRepository::self()->functionNames() : FunctionRepository::self()->functionNames(category);
 
-    kDebug(36001) << "category:" << category << " (" << lst.count() << "functions)";
+    debugSheets << "category:" << category << " (" << lst.count() << "functions)";
 
     functionsModel->setStringList(lst);
 
     QStringList upperList;
-    for (QStringList::Iterator it = lst.begin(); it != lst.end(); ++it)
+    for (QStringList::ConstIterator it = lst.begin(); it != lst.end(); ++it)
         upperList.append((*it).toUpper());
     listFunct.setItems(upperList);
 
@@ -764,5 +759,3 @@ void FormulaDialog::closeEvent(QCloseEvent * e)
     deleteLater();
     e->accept();
 }
-
-#include "FormulaDialog.moc"

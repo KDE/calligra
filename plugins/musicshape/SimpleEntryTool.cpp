@@ -16,17 +16,20 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
+#include "SimpleEntryTool.h"
+
 #include <QPainter>
 #include <QMenu>
 #include <QBuffer>
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
+#include <QInputDialog>
+#include <QAction>
+#include <QFileDialog>
+#include <QUrl>
 
-#include <kdebug.h>
-#include <klocale.h>
-#include <kfiledialog.h>
-#include <kinputdialog.h>
-#include <kaction.h>
+#include <klocalizedstring.h>
 
 #include <KoIcon.h>
 #include <KoCanvasBase.h>
@@ -39,9 +42,7 @@
 #include "MusicShape.h"
 #include "Renderer.h"
 #include "MusicCursor.h"
-
-#include "SimpleEntryTool.h"
-#include <SimpleEntryTool.moc>
+#include "MusicDebug.h"
 
 #include "dialogs/SimpleEntryWidget.h"
 
@@ -87,15 +88,15 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     QActionGroup* actionGroup = new QActionGroup(this);
     connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(activeActionChanged(QAction*)));
 
-    KAction* importAction = new KAction(koIcon("document-import"), i18n("Import"), this);
+    QAction * importAction = new QAction(koIcon("document-import"), i18n("Import"), this);
     addAction("import", importAction);
     connect(importAction, SIGNAL(triggered()), this, SLOT(importSheet()));
 
-    KAction* exportAction = new KAction(koIcon("document-export"), i18n("Export"), this);
+    QAction * exportAction = new QAction(koIcon("document-export"), i18n("Export"), this);
     addAction("export", exportAction);
     connect(exportAction, SIGNAL(triggered()), this, SLOT(exportSheet()));
 
-    KAction* addBars = new KAction(koIcon("list-add"), i18n("Add measures"), this);
+    QAction * addBars = new QAction(koIcon("list-add"), i18n("Add measures"), this);
     addAction("add_bars", addBars);
     connect(addBars, SIGNAL(triggered()), this, SLOT(addBars()));
 
@@ -235,7 +236,7 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     
     QList<QAction*> contextMenu;
 
-    KAction* clefAction = new KAction(i18n("Clef"), this);
+    QAction * clefAction = new QAction(i18n("Clef"), this);
     clefAction->setMenu(clefMenu);
     contextMenu.append(clefAction);
 
@@ -264,7 +265,7 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
     m_menus.append(tsMenu);
     
-    KAction* timeSigAction = new KAction(i18n("Time signature"), this);
+    QAction * timeSigAction = new QAction(i18n("Time signature"), this);
     timeSigAction->setMenu(tsMenu);
     contextMenu.append(timeSigAction);
 
@@ -294,11 +295,11 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
     m_menus.append(ksMenu);
     
-    KAction* keySigAction = new KAction(i18n("Key signature"), this);
+    QAction * keySigAction = new QAction(i18n("Key signature"), this);
     keySigAction->setMenu(ksMenu);
     contextMenu.append(keySigAction);
 
-    KAction* removeBarAction = new RemoveBarAction(this);
+    QAction * removeBarAction = new RemoveBarAction(this);
     connect(removeBarAction, SIGNAL(triggered()), this, SLOT(actionTriggered()));
     contextMenu.append(removeBarAction);
 
@@ -332,7 +333,7 @@ void SimpleEntryTool::activate(ToolActivation toolActivation, const QSet<KoShape
 
 void SimpleEntryTool::deactivate()
 {
-    //kDebug()<<"SimpleEntryTool::deactivate";
+    //debugMusic<<"SimpleEntryTool::deactivate";
     m_musicshape = 0;
     m_cursor = 0;
 }
@@ -434,18 +435,18 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
 
     p.setY(p.y() + sheet->staffSystem(m_musicshape->firstSystem())->top());
 
-    //kDebug() << "pos:" << p;
+    //debugMusic << "pos:" << p;
     // find closest staff system
     StaffSystem* system = 0;
     for (int i = m_musicshape->firstSystem(); i <= m_musicshape->lastSystem() && i < sheet->staffSystemCount(); i++) {
         StaffSystem* ss = sheet->staffSystem(i);
-        //kDebug() << "system" << i << "has top" << ss->top();
+        //debugMusic << "system" << i << "has top" << ss->top();
         if (ss->top() > p.y()) break;
         system = ss;
     }
 
     if(system == 0) {
-        //kDebug() << "no staff system found";
+        //debugMusic << "no staff system found";
         return;
     }
 
@@ -471,7 +472,7 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
     }
 
 //    int line = closestStaff->line(yrel - closestStaff->top());
-//    kDebug() << "line: " << line;
+//    debugMusic << "line: " << line;
 
     Part* part = closestStaff->part();
     for (int i = part->voiceCount(); i <= m_voice; i++) {
@@ -579,7 +580,7 @@ void SimpleEntryTool::mouseMoveEvent( KoPointerEvent* event )
         }
         
         //    int line = closestStaff->line(yrel - closestStaff->top());
-        //    kDebug() << "line: " << line;
+        //    debugMusic << "line: " << line;
         
         Part* part = closestStaff->part();
         for (int i = part->voiceCount(); i <= m_voice; i++) {
@@ -687,7 +688,12 @@ void SimpleEntryTool::voiceChanged(int voice)
 void SimpleEntryTool::addBars()
 {
     bool ok;
-    int barCount = KInputDialog::getInteger(i18n("Add measures"), i18n("Add how many measures?"), 1, 1, 1000, 1, &ok);
+    int barCount = QInputDialog::getInt(0, i18n("Add measures"),
+                                        i18n("Add how many measures?"),
+                                        1,
+                                        1,
+                                        1000,
+                                        1, &ok);
     if (!ok) return;
     addCommand(new AddBarsCommand(m_musicshape, barCount));
 }
@@ -711,7 +717,7 @@ int SimpleEntryTool::voice()
 
 void SimpleEntryTool::setSelection(int firstBar, int lastBar, Staff* startStaff, Staff* endStaff)
 {
-    //kDebug() << "firstBar:" << firstBar << "lastBar:" << lastBar;
+    //debugMusic << "firstBar:" << firstBar << "lastBar:" << lastBar;
     m_selectionStart = firstBar;
     m_selectionEnd = lastBar;
     m_selectionStaffStart = startStaff;
@@ -747,14 +753,14 @@ void SimpleEntryTool::setSelection(int firstBar, int lastBar, Staff* startStaff,
 
 void SimpleEntryTool::importSheet()
 {
-    QString file = KFileDialog::getOpenFileName(KUrl(), i18n("*xml|MusicXML files (*.xml)"), 0, i18nc("@title:window", "Import"));
+    QString file = QFileDialog::getOpenFileName(0, i18nc("@title:window", "Import"), QString(), i18n("MusicXML files (*.xml)"));
     if (file.isEmpty() || file.isNull()) return;
     QFile f(file);
     f.open(QIODevice::ReadOnly);
     KoXmlDocument doc;
     KoXml::setDocument(doc, &f, true);
     KoXmlElement e = doc.documentElement();
-    //kDebug() << e.localName() << e.nodeName();
+    //debugMusic << e.localName() << e.nodeName();
     Sheet* sheet = MusicXmlReader(0).loadSheet(doc.documentElement());
     if (sheet) {
         m_musicshape->setSheet(sheet, 0);
@@ -764,7 +770,7 @@ void SimpleEntryTool::importSheet()
 
 void SimpleEntryTool::exportSheet()
 {
-    QString file = KFileDialog::getSaveFileName(KUrl(), i18n("*xml|MusicXML files (*.xml)"), 0, i18nc("@title:window", "Export"));
+    QString file = QFileDialog::getSaveFileName(0, i18nc("@title:window", "Export"), QString(), i18n("MusicXML files (*.xml)"));
     if (file.isEmpty() || file.isNull()) return;
 
     QBuffer b;
@@ -777,7 +783,7 @@ void SimpleEntryTool::exportSheet()
 
     b.seek(0);
 
-    //kDebug() << b.data();
+    //debugMusic << b.data();
     QFile f(file);
     f.open(QIODevice::WriteOnly);
     QXmlStreamWriter w(&f);
@@ -785,8 +791,8 @@ void SimpleEntryTool::exportSheet()
     QXmlStreamReader xml(&b);
     while (!xml.atEnd()) {
         xml.readNext();
-        //kDebug() << xml.tokenType() << xml.tokenString();
-        //kDebug() << xml.error() << xml.errorString();
+        //debugMusic << xml.tokenType() << xml.tokenString();
+        //debugMusic << xml.error() << xml.errorString();
         if (xml.isCDATA()) {
             w.writeCDATA(xml.text().toString());
         } else if (xml.isCharacters()) {

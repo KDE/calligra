@@ -24,9 +24,13 @@
 #include "MsooXmlRelationships.h"
 #include "MsooXmlRelationshipsReader.h"
 #include "MsooXmlImport.h"
+
 #include <KoOdfExporter.h>
+
+#include <klocalizedstring.h>
+
 #include <QSet>
-#include <kdebug.h>
+#include "MsooXmlDebug.h"
 
 using namespace MSOOXML;
 
@@ -50,7 +54,7 @@ public:
 
 KoFilter::ConversionStatus MsooXmlRelationships::Private::loadRels(const QString& path, const QString& file)
 {
-    kDebug() << (path + '/' + file) << "...";
+    debugMsooXml << (path + '/' + file) << "...";
     loadedFiles.insert(path + '/' + file);
     MsooXmlRelationshipsReaderContext context(path, file, rels, targetsForTypes);
     MsooXmlRelationshipsReader reader(writers);
@@ -93,12 +97,13 @@ QString MsooXmlRelationships::target(const QString& path, const QString& file, c
     const QString result(d->rels.value(key));
     if (!result.isEmpty())
         return result;
-    if (d->loadedFiles.contains(path + '/' + file)) {
-        *d->errorMessage = i18n("Could not find target for id \"%1\" in file \"%2\"", id, path + "/" + file);
+    const QString filePath = path + QLatin1Char('/') + file;
+    if (d->loadedFiles.contains(filePath)) {
+        *d->errorMessage = i18n("Could not find target for id \"%1\" in file \"%2\"", id, filePath);
         return QString(); // cannot be found
     }
     if (d->loadRels(path, file) != KoFilter::OK) {
-        *d->errorMessage = i18n("Could not find relationships file \"%1\"", path + "/" + file);
+        *d->errorMessage = i18n("Could not find relationships file \"%1\"", filePath);
         return QString();
     }
     return d->rels.value(key);
@@ -106,18 +111,19 @@ QString MsooXmlRelationships::target(const QString& path, const QString& file, c
 
 QString MsooXmlRelationships::targetForType(const QString& path, const QString& file, const QString& relType)
 {
-    const QString key(MsooXmlRelationshipsReader::targetKey(path + "/" + file, relType));
-    //kDebug() << key;
+    const QString filePath = path + QLatin1Char('/') + file;
+    const QString key(MsooXmlRelationshipsReader::targetKey(filePath, relType));
+    //debugMsooXml << key;
     const QString target(d->targetsForTypes.value(key));
     if (!target.isEmpty())
         return target;
-    if (d->loadedFiles.contains(path + "/" + file)) {
+    if (d->loadedFiles.contains(filePath)) {
         *d->errorMessage = i18n("Could not find target for relationship \"%1\" in file \"%2\"",
-                                relType, path + "/" + file);
+                                relType, filePath);
         return QString(); // cannot be found
     }
     if (d->loadRels(path, file) != KoFilter::OK) {
-        *d->errorMessage = i18n("Could not find relationships file \"%1\"", path + "/" + file);
+        *d->errorMessage = i18n("Could not find relationships file \"%1\"", filePath);
         return QString();
     }
     return d->targetsForTypes.value(key);

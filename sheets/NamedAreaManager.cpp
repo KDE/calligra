@@ -30,14 +30,13 @@
 // Local
 #include "NamedAreaManager.h"
 
+#include <KoXmlReader.h>
+
 // Qt
+#include <QDomElement>
 #include <QHash>
 
-// Calligra
-#include <KoXmlNS.h>
-#include <KoXmlWriter.h>
-
-// KSpread
+// Sheets
 #include "CellStorage.h"
 #include "FormulaStorage.h"
 #include "LoadingInfo.h"
@@ -74,6 +73,11 @@ NamedAreaManager::NamedAreaManager(const Map* map)
 NamedAreaManager::~NamedAreaManager()
 {
     delete d;
+}
+
+const Map *NamedAreaManager::map() const
+{
+    return d->map;
 }
 
 void NamedAreaManager::insert(const Region& region, const QString& name)
@@ -174,69 +178,6 @@ void NamedAreaManager::updateAllNamedAreas()
     }
 }
 
-void NamedAreaManager::loadOdf(const KoXmlElement& body)
-{
-    KoXmlNode namedAreas = KoXml::namedItemNS(body, KoXmlNS::table, "named-expressions");
-    if (!namedAreas.isNull()) {
-        kDebug(36003) << "Loading named areas...";
-        KoXmlElement element;
-        forEachElement(element, namedAreas) {
-            if (element.namespaceURI() != KoXmlNS::table)
-                continue;
-            if (element.localName() == "named-range") {
-                if (!element.hasAttributeNS(KoXmlNS::table, "name"))
-                    continue;
-                if (!element.hasAttributeNS(KoXmlNS::table, "cell-range-address"))
-                    continue;
-
-                // TODO: what is: table:base-cell-address
-                const QString base = element.attributeNS(KoXmlNS::table, "base-cell-address", QString());
-
-                // Handle the case where the table:base-cell-address does contain the referenced sheetname
-                // while it's missing in the table:cell-range-address. See bug #194386 for an example.
-                Sheet* fallbackSheet = 0;
-                if (!base.isEmpty()) {
-                    Region region(Region::loadOdf(base), d->map);
-                    fallbackSheet = region.lastSheet();
-                }
-                
-                const QString name = element.attributeNS(KoXmlNS::table, "name", QString());
-                const QString range = element.attributeNS(KoXmlNS::table, "cell-range-address", QString());
-                kDebug(36003) << "Named area found, name:" << name << ", area:" << range;
-
-                Region region(Region::loadOdf(range), d->map, fallbackSheet);
-                if (!region.isValid() || !region.lastSheet()) {
-                    kDebug(36003) << "invalid area";
-                    continue;
-                }
-
-                insert(region, name);
-            } else if (element.localName() == "named-expression") {
-                kDebug(36003) << "Named expression found.";
-                // TODO
-            }
-        }
-    }
-}
-
-void NamedAreaManager::saveOdf(KoXmlWriter& xmlWriter) const
-{
-    if (d->namedAreas.isEmpty())
-        return;
-    Region region;
-    xmlWriter.startElement("table:named-expressions");
-    const QList<NamedArea> namedAreas = d->namedAreas.values();
-    for (int i = 0; i < namedAreas.count(); ++i) {
-        region = Region(namedAreas[i].range, namedAreas[i].sheet);
-        xmlWriter.startElement("table:named-range");
-        xmlWriter.addAttribute("table:name", namedAreas[i].name);
-        xmlWriter.addAttribute("table:base-cell-address", Region(1, 1, namedAreas[i].sheet).saveOdf());
-        xmlWriter.addAttribute("table:cell-range-address", region.saveOdf());
-        xmlWriter.endElement();
-    }
-    xmlWriter.endElement();
-}
-
 void NamedAreaManager::loadXML(const KoXmlElement& parent)
 {
     KoXmlElement element;
@@ -289,14 +230,12 @@ QDomElement NamedAreaManager::saveXML(QDomDocument& doc) const
         e.appendChild(refname);
 
         QDomElement rect = doc.createElement("rect");
-        rect.setAttribute("left-rect", (namedAreas[i].range).left());
-        rect.setAttribute("right-rect", (namedAreas[i].range).right());
-        rect.setAttribute("top-rect", (namedAreas[i].range).top());
-        rect.setAttribute("bottom-rect", (namedAreas[i].range).bottom());
+        rect.setAttribute("left-rect", QString::number((namedAreas[i].range).left()));
+        rect.setAttribute("right-rect", QString::number((namedAreas[i].range).right()));
+        rect.setAttribute("top-rect", QString::number((namedAreas[i].range).top()));
+        rect.setAttribute("bottom-rect", QString::number((namedAreas[i].range).bottom()));
         e.appendChild(rect);
         element.appendChild(e);
     }
     return element;
 }
-
-#include "NamedAreaManager.moc"

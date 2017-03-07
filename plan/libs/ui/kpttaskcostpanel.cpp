@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2005-2007 Dag Andersen <danders@get2net.dk>
    Copyright (C) 20011 Dag Andersen <danders@get2net.dk>
-
+   Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -19,14 +20,13 @@
 */
 
 #include "kpttaskcostpanel.h"
+
 #include "kptaccount.h"
 #include "kpttask.h"
 #include "kptcommand.h"
 #include "kptproject.h"
+#include "kptlocale.h"
 
-#include <klocale.h>
-
-#include <kdebug.h>
 
 namespace KPlato
 {
@@ -34,16 +34,17 @@ namespace KPlato
 TaskCostPanel::TaskCostPanel(Task &task, Accounts &accounts, QWidget *p, const char *n)
     : TaskCostPanelImpl(p, n),
       m_task(task),
-      m_accounts(accounts),
-      m_locale( 0 )
+      m_accounts(accounts)
 {
     const Project *project = qobject_cast<const Project*>( task.projectNode() );
     if ( project ) {
         m_locale = project->locale();
+        m_localeIsOwn = false;
+    } else {
+        m_locale = new Locale();
+        m_localeIsOwn = true;
     }
-    if ( m_locale == 0 ) {
-        m_locale = KGlobal::locale();
-    }
+
     m_accountList << i18n("None");
     m_accountList += accounts.costElements();
 
@@ -54,6 +55,14 @@ TaskCostPanel::TaskCostPanel(Task &task, Accounts &accounts, QWidget *p, const c
     }
     setStartValues(task);
 }
+
+TaskCostPanel::~TaskCostPanel()
+{
+    if (m_localeIsOwn) {
+        delete m_locale;
+    }
+}
+
 
 void TaskCostPanel::setStartValues(Task &task) {
     runningAccount->addItems(m_accountList);
@@ -161,5 +170,3 @@ void TaskCostPanelImpl::slotChanged() {
 }
 
 }  //KPlato namespace
-
-#include "kpttaskcostpanel.moc"

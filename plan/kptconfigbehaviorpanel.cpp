@@ -22,9 +22,6 @@
 #include "kptdatetime.h"
 #include "kptfactory.h"
 
-#include <klocale.h>
-#include <kdebug.h>
-
 namespace KPlato
 {
 
@@ -55,5 +52,3 @@ bool ConfigBehaviorPanel::apply() {
 
 
 }  //KPlato namespace
-
-#include "kptconfigbehaviorpanel.moc"

@@ -23,7 +23,6 @@
 
 #include "CQImageProvider.h"
 
-#include <KGlobal>
 
 const char CQImageProvider::identificationString[] = "cqimage";
 CQImageProvider *CQImageProvider::s_imageProvider = 0;

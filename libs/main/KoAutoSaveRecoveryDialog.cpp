@@ -22,7 +22,7 @@
 #include <KoStore.h>
 
 #include <kwidgetitemdelegate.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -38,7 +38,6 @@
 #include <QStyledItemDelegate>
 #include <QPainter>
 #include <QCheckBox>
-#include <QDebug>
 
 
 struct FileItem {
@@ -61,16 +60,13 @@ public:
     {
     }
 
-    QList<QWidget*> createItemWidgets() const
+    QList<QWidget*> createItemWidgets(const QModelIndex &index) const
     {
-        // a lump of coal and a piece of elastic will get you through the world
-        QModelIndex idx = property("goya:creatingWidgetForIndex").value<QModelIndex>();
-
         QWidget *page = new QWidget;
         QHBoxLayout *layout = new QHBoxLayout(page);
 
         QCheckBox *checkBox = new QCheckBox;
-        checkBox->setProperty("fileitem", idx.data());
+        checkBox->setProperty("fileitem", index.data());
 
         connect(checkBox, SIGNAL(toggled(bool)), m_parent, SLOT(toggleFileItem(bool)));
         QLabel *thumbnail = new QLabel;
@@ -112,7 +108,7 @@ public:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &/*index*/) const
     {
         //paint background for selected or hovered item
-        QStyleOptionViewItemV4 opt = option;
+        QStyleOptionViewItem opt = option;
         itemView()->style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &opt, painter, 0);
     }
 
@@ -178,7 +174,7 @@ public:
 };
 
 KoAutoSaveRecoveryDialog::KoAutoSaveRecoveryDialog(const QStringList &filenames, QWidget *parent) :
-    KDialog(parent)
+    KoDialog(parent)
 {
     setCaption(i18nc("@title:window", "Recover Files"));
     setMinimumSize(650, 500);

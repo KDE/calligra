@@ -26,7 +26,7 @@
 
 #include "kptcalendar.h"
 
-#include <kdialog.h>
+#include <KoDialog.h>
 
 
 namespace KPlato
@@ -67,7 +67,7 @@ private:
     double m_day;
 };
 
-class KPLATOUI_EXPORT StandardWorktimeDialog : public KDialog {
+class KPLATOUI_EXPORT StandardWorktimeDialog : public KoDialog {
     Q_OBJECT
 public:
     explicit StandardWorktimeDialog(Project &project, QWidget *parent=0);

@@ -20,14 +20,19 @@
 #ifndef OKULARODPGENERATOR_H
 #define OKULARODPGENERATOR_H
 
+#include "kookulargenerator_odp_export.h"
+
 #include <okular/core/generator.h>
 #include <okular/core/document.h>
 #include <okular/core/version.h>
 
 class KoPADocument;
 
-class OkularOdpGenerator : public Okular::Generator
+class KOOKULARGENERATOR_ODP_EXPORT OkularOdpGenerator : public Okular::Generator
 {
+    Q_OBJECT
+    Q_INTERFACES( Okular::Generator )
+
 public:
     OkularOdpGenerator( QObject *parent, const QVariantList &args );
     ~OkularOdpGenerator();
@@ -37,11 +42,7 @@ public:
     bool canGeneratePixmap() const;
     void generatePixmap( Okular::PixmapRequest *request );
 
-#if OKULAR_IS_VERSION(0, 20, 60)
     Okular::DocumentInfo generateDocumentInfo( const QSet<Okular::DocumentInfo::Key> &keys ) const;
-#else
-    const Okular::DocumentInfo* generateDocumentInfo();
-#endif
 
 protected:
     bool doCloseDocument();

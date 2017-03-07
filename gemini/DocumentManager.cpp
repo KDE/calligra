@@ -31,9 +31,7 @@
 #include <stage/part/KPrDocument.h>
 #include <part/KWDocument.h>
 
-#include <KMimeType>
-
-#include <qtquick/CQTextDocumentCanvas.h>
+#include <QMimeType>
 
 class DocumentManager::Private
 {
@@ -151,7 +149,7 @@ void DocumentManager::delayedNewDocument()
     {
         //d->document->newImage("Untitled", d->newDocWidth, d->newDocHeight, KoColorSpaceRegistry::instance()->rgb8());
         //d->document->image()->setResolution(d->newDocResolution, d->newDocResolution);
-        //d->document->setUrl(KUrl("Untitled.kra"));
+        //d->document->setUrl(QUrl("Untitled.kra"));
     }
     else
     {
@@ -179,7 +177,7 @@ void DocumentManager::delayedNewDocument()
         background.setAlphaF(d->newDocOptions.value("backgroundOpacity", 1.0f).toFloat());
         KoColor bg(background, profile);
 
-        d->document->setUrl(KUrl(QString("Untitled.").append(filetype)));
+        d->document->setUrl(QUrl(QString("Untitled.").append(filetype)));
     }
 
     d->temporaryFile = true;
@@ -198,8 +196,9 @@ void DocumentManager::openDocument(const QString& document, bool import)
 void DocumentManager::delayedOpenDocument()
 {
     d->document = 0;
-    KMimeType::Ptr mimeType = KMimeType::findByUrl(d->openDocumentFilename);
-    KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimeType->name());
+    QMimeDatabase db;
+    QMimeType mimeType = db.mimeTypeForUrl(QUrl::fromLocalFile(d->openDocumentFilename));
+    KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimeType.name());
     d->part = documentEntry.createKoPart();
     if (d->part) {
         d->document = d->part->document();
@@ -254,7 +253,7 @@ void DocumentManager::saveAs(const QString &filename, const QString &mimetype)
 
 void DocumentManager::delayedSaveAs()
 {
-    d->document->saveAs(d->saveAsFilename);
+    d->document->saveAs(QUrl::fromLocalFile(d->saveAsFilename));
     d->settingsManager->setCurrentFile(d->saveAsFilename);
     d->recentFileManager->addRecent(d->saveAsFilename);
     emit documentSaved();
@@ -262,7 +261,7 @@ void DocumentManager::delayedSaveAs()
 
 void DocumentManager::reload()
 {
-    KUrl url = d->document->url();
+    QUrl url = d->document->url();
     closeDocument();
     d->openDocumentFilename = url.toLocalFile();
     QTimer::singleShot(0, this, SLOT(delayedOpenDocument()));

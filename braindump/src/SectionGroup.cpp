@@ -17,9 +17,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <KLocalizedString>
+
 #include "SectionGroup.h"
 #include "Section.h"
-#include <klocalizedstring.h>
 #include "RootSection.h"
 
 int SectionGroup::s_count = 0;

@@ -21,13 +21,16 @@
 */
 
 #include "RowElement.h"
+
 #include "FormulaCursor.h"
+#include "FormulaDebug.h"
+
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
+
 #include <QPainter>
 
-#include <kdebug.h>
 
 RowElement::RowElement( BasicElement* parent ) : BasicElement( parent )
 {}
@@ -52,7 +55,7 @@ void RowElement::paintEditingHints ( QPainter& painter, AttributeManager* am )
         QBrush brush (Qt::NoBrush);
         brush.setColor( Qt::transparent);
         painter.setBrush(brush);
-        painter.setPen( Qt::blue);
+        painter.setPen(QPen(Qt::blue, 0));
         painter.drawRect( childrenBoundingRect() );
         painter.restore();
     }

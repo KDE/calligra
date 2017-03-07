@@ -25,6 +25,7 @@
 #include <kptviewbase.h>
 #include "kptsplitterview.h"
 #include "kptschedulemodel.h"
+#include "ui_kptscheduleeditor.h"
 
 #include <KoXmlReaderForward.h>
 
@@ -40,6 +41,7 @@ namespace KPlato
 
 class Project;
 class ScheduleManager;
+class SchedulingRange;
 
 class KPLATOUI_EXPORT ScheduleTreeView : public TreeViewBase
 {
@@ -130,13 +132,14 @@ private Q_SLOTS:
 
 private:
     ScheduleTreeView *m_view;
+    SchedulingRange *m_schedulingRange;
 
-    KAction *actionCalculateSchedule;
-    KAction *actionBaselineSchedule;
-    KAction *actionAddSchedule;
-    KAction *actionAddSubSchedule;
-    KAction *actionDeleteSelection;
-    KAction *actionMoveLeft;
+    QAction *actionCalculateSchedule;
+    QAction *actionBaselineSchedule;
+    QAction *actionAddSchedule;
+    QAction *actionAddSubSchedule;
+    QAction *actionDeleteSelection;
+    QAction *actionMoveLeft;
 };
 
 
@@ -265,6 +268,22 @@ private:
     ScheduleEditor *m_scheduleEditor;
 };
 
+class SchedulingRange : public QWidget, public Ui::SchedulingRange
+{
+    Q_OBJECT
+public:
+    SchedulingRange(KoDocument *doc, QWidget *parent = 0);
+ 
+public Q_SLOTS:
+    void setProject(Project *project);
+    void slotProjectChanged(Node*);
+    void slotStartChanged();
+    void slotEndChanged();
+
+protected:
+    KoDocument *m_doc;
+    Project *m_project;
+};
 
 }  //KPlato namespace
 

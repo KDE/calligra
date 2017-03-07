@@ -21,23 +21,23 @@
 #include "SheetPropertiesDialog.h"
 
 #include <kcombobox.h>
-#include <kdialog.h>
-#include <klocale.h>
-#include <kvbox.h>
+#include <KLocalizedString>
+
+#include <KoVBox.h>
 
 #include "Sheet.h"
 
 using namespace Calligra::Sheets;
 
 SheetPropertiesDialog::SheetPropertiesDialog(QWidget* parent):
-        KDialog(parent)
+        KoDialog(parent)
 {
     setCaption(i18n("Sheet Properties"));
     setObjectName(QLatin1String("sheetPropertiesDialog"));
     setModal(true);
     setButtons(Ok | Cancel | Default);
 
-    KVBox* mainWidget = new KVBox();//makeVBoxMainWidget();
+    KoVBox* mainWidget = new KoVBox();//makeVBoxMainWidget();
     setMainWidget(mainWidget);
     m_widget = new SheetPropertiesWidget(mainWidget);
     QWidget* spacer = new QWidget(mainWidget);
@@ -190,5 +190,3 @@ void SheetPropertiesDialog::setCapitalizeFirstLetter(bool b)
 {
     m_widget->capitalizeFirstLetterCheckBox->setChecked(b);
 }
-
-#include "SheetPropertiesDialog.moc"

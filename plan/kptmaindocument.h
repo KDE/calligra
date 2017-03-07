@@ -107,17 +107,17 @@ public:
 
     bool saveWorkPackageToStream( QIODevice * dev, const Node *node, long id, Resource *resource = 0 );
     bool saveWorkPackageFormat( const QString &file, const Node *node, long id, Resource *resource = 0 );
-    bool saveWorkPackageUrl( const KUrl & _url, const Node *node, long id, Resource *resource = 0  );
+    bool saveWorkPackageUrl( const QUrl & _url, const Node *node, long id, Resource *resource = 0  );
     void mergeWorkPackages();
     void mergeWorkPackage( const Package *package );
     void terminateWorkPackage( const Package *package );
 
     /// Load the workpackage from @p url into @p project. Return true if successful, else false.
-    bool loadWorkPackage( Project &project, const KUrl &url );
-    Package *loadWorkPackageXML( Project& project, QIODevice*, const KoXmlDocument& document, const KUrl& url );
-    QMap<KDateTime, Package*> workPackages() const { return m_workpackages; }
+    bool loadWorkPackage( Project &project, const QUrl &url );
+    Package *loadWorkPackageXML( Project& project, QIODevice*, const KoXmlDocument& document, const QUrl& url );
+    QMap<QDateTime, Package*> workPackages() const { return m_workpackages; }
 
-    void insertFile( const QString &filename, Node *parent, Node *after = 0 );
+    void insertFile( const QUrl &url, Node *parent, Node *after = 0 );
     bool insertProject( Project &project, Node *parent, Node *after );
 
     KPlatoAboutPage &aboutPage() { return m_aboutPage; }
@@ -165,7 +165,7 @@ protected:
 
     // used by insert file
     struct InsertFileInfo {
-        QString url;
+        QUrl url;
         Node *parent;
         Node *after;
     } m_insertFileInfo;
@@ -199,9 +199,9 @@ private:
     bool m_loadingTemplate;
 
     QMap<QString, SchedulerPlugin*> m_schedulerPlugins;
-    QMap<KDateTime, Package*> m_workpackages;
+    QMap<QDateTime, Package*> m_workpackages;
     QFileInfoList m_infoList;
-    QMap<KDateTime, Project*> m_mergedPackages;
+    QMap<QDateTime, Project*> m_mergedPackages;
 
     KPlatoAboutPage m_aboutPage;
 

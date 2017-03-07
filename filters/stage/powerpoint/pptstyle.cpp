@@ -19,7 +19,8 @@
 */
 
 #include "pptstyle.h"
-#include <QDebug>
+
+#include "PptDebug.h"
 
 using namespace MSO;
 
@@ -561,7 +562,7 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
             m_level = 4;
         }
     } else {
-        qDebug() << "TextPFRun MISSING!";
+        debugPpt << "TextPFRun MISSING!";
     }
 
     //check the main master/title master slide's TextMasterStyleAtom

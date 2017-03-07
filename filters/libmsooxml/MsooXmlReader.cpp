@@ -28,6 +28,8 @@
 #include <KoXmlWriter.h>
 #include <KoCharacterStyle.h>
 
+#include <klocalizedstring.h>
+
 QDebug operator<<(QDebug dbg, const QXmlStreamReader& reader)
 {
     dbg.nospace() << "QXmlStreamReader(";
@@ -148,7 +150,7 @@ void MsooXmlReader::raiseError(const QString & message)
         : i18n("%1 (%2, line %3, column %4)", message, m_fileName,
                QString::number(lineNumber()), QString::number(columnNumber()))
     );
-    kDebug() << errorString();
+    debugMsooXml << errorString();
 }
 
 // QXmlStreamReader::TokenType MsooXmlReader::readNext()
@@ -158,7 +160,7 @@ void MsooXmlReader::raiseError(const QString & message)
 //     } else {
 //         m_recentType = QXmlStreamReader::readNext();
 //     }
-//     //kDebug() << tokenName(m_recentType) << *this;
+//     //debugMsooXml << tokenName(m_recentType) << *this;
 //     return m_recentType;
 // }
 
@@ -194,7 +196,7 @@ void MsooXmlReader::raiseUnexpectedSecondOccurenceOfElError(const char* elementN
 
 bool MsooXmlReader::expectElName(const char* elementName)
 {
-    //kDebug() << elementName << "found:" << name();
+    //debugMsooXml << elementName << "found:" << name();
     if (!isStartElement() || name() != QLatin1String(elementName)) {
         raiseElNotFoundError(elementName);
         return false;
@@ -204,7 +206,7 @@ bool MsooXmlReader::expectElName(const char* elementName)
 
 bool MsooXmlReader::expectElNameEnd(const char* elementName)
 {
-    //kDebug() << elementName << "found:" << name();
+    //debugMsooXml << elementName << "found:" << name();
     if (!isEndElement() || name() != QLatin1String(elementName)) {
         raiseError(i18n("Expected closing of element \"%1\"", elementName));
         return false;
@@ -214,7 +216,7 @@ bool MsooXmlReader::expectElNameEnd(const char* elementName)
 
 bool MsooXmlReader::expectEl(const char* qualifiedElementName)
 {
-    //kDebug() << qualifiedElementName << "found:" << qualifiedName();
+    //debugMsooXml << qualifiedElementName << "found:" << qualifiedName();
     if (!isStartElement() || qualifiedName() != QLatin1String(qualifiedElementName)) {
         raiseElNotFoundError(qualifiedElementName);
         return false;
@@ -224,7 +226,7 @@ bool MsooXmlReader::expectEl(const char* qualifiedElementName)
 
 bool MsooXmlReader::expectEl(const QString& qualifiedElementName)
 {
-    //kDebug() << qualifiedElementName << "found:" << qualifiedName();
+    //debugMsooXml << qualifiedElementName << "found:" << qualifiedName();
     if (!isStartElement() || qualifiedName() != qualifiedElementName) {
         raiseElNotFoundError(qualifiedElementName.toLatin1());
         return false;
@@ -237,7 +239,7 @@ bool MsooXmlReader::expectEl(const QList<QByteArray>& qualifiedElementNames)
     if (isStartElement()) {
         foreach (const QByteArray& qualifiedElementName, qualifiedElementNames) {
             if (qualifiedName().toString() == qualifiedElementName) {
-                //kDebug() << qualifiedElementNames << "found:" << qualifiedName();
+                //debugMsooXml << qualifiedElementNames << "found:" << qualifiedName();
                 return true;
             }
         }
@@ -254,8 +256,8 @@ bool MsooXmlReader::expectEl(const QList<QByteArray>& qualifiedElementNames)
 
 bool MsooXmlReader::expectElEnd(const QString& qualifiedElementName)
 {
-    //kDebug() << qualifiedElementName << "found:" << qualifiedName();
-//    kDebug() << kBacktrace();
+    //debugMsooXml << qualifiedElementName << "found:" << qualifiedName();
+//    debugMsooXml << kBacktrace();
     if (!isEndElement() || qualifiedName() != qualifiedElementName) {
         raiseError(i18n("Expected closing of element \"%1\"", qualifiedElementName));
         return false;
@@ -270,8 +272,9 @@ bool MsooXmlReader::expectElEnd(const char* qualifiedElementName)
 
 bool MsooXmlReader::expectNS(const char* nsName)
 {
-    kDebug() << namespaceUri() << (namespaceUri().compare(nsName) == 0);
-    if (0 != namespaceUri().compare(nsName)) {
+    const QLatin1String nsNameString(nsName);
+    debugMsooXml << namespaceUri() << (namespaceUri().compare(nsNameString) == 0);
+    if (0 != namespaceUri().compare(nsNameString)) {
         raiseNSNotFoundError(nsName);
         return false;
     }
