@@ -640,6 +640,29 @@ QMap<KoShape*, QRectF> ChartLayout::calculateLayoutTop(KoShape *shape, KoShape *
             plotAreaRect.setTop(area.top());
             newlayout[plotArea] = plotAreaRect;
         }
+        // check legend alignment
+        if (m_layoutItems[shape]->itemType == LegendType) {
+            QRectF n = diagramArea(plotArea, plotAreaRect);
+            qreal xpos = itmRect.left();
+            switch (static_cast<Legend*>(shape)->alignment()) {
+                case Qt::AlignLeft:
+                    xpos = n.left();
+                    break;
+                case Qt::AlignCenter:
+                    xpos = n.left() + ((n.width() - itmRect.width()) * 0.5);
+                    break;
+                case Qt::AlignRight:
+                    xpos = n.right() - itmRect.width();
+                    break;
+                default:
+                    break;
+            }
+            if (xpos != itmRect.left()) {
+                itmRect.moveLeft(xpos);
+                newlayout[shape] = itmRect;
+                debugChartLayout<<"aligned:"<<dbg(shape)<<itmRect;
+            }
+        }
     }
     if (newlayout.contains(plotArea)) {
         // Move axis titles/legend relative plot area
@@ -657,33 +680,6 @@ QMap<KoShape*, QRectF> ChartLayout::calculateLayoutTop(KoShape *shape, KoShape *
                     r.moveTop(ypos);
                     newlayout[i.key()] = r;
                     debugChartLayout<<"moved:"<<dbg(i.key())<<r;
-                }
-            }
-            if (data->itemType == LegendType && (i.key() == shape || i.key()->isVisible())) {
-                // alignment
-                QRectF r(i.value());
-                if (newlayout.contains(i.key())) {
-                    r = newlayout[i.key()];
-                }
-                QRectF n = diagramArea(plotArea, newPARect);
-                qreal xpos = r.left();
-                switch (static_cast<Legend*>(shape)->alignment()) {
-                    case Qt::AlignLeft:
-                        xpos = n.left();
-                        break;
-                    case Qt::AlignCenter:
-                        xpos = n.left() + ((n.width() - r.width()) * 0.5);
-                        break;
-                    case Qt::AlignRight:
-                        xpos = n.right() - r.width();
-                        break;
-                    default:
-                        break;
-                }
-                if (xpos != r.left()) {
-                    r.moveLeft(xpos);
-                    newlayout[it.key()] = r;
-                    debugChartLayout<<"aligned:"<<dbg(it.key())<<r;
                 }
             }
         }
@@ -798,6 +794,29 @@ QMap<KoShape*, QRectF> ChartLayout::calculateLayoutBottom(KoShape *shape, KoShap
             plotAreaRect.setBottom(area.bottom());
             newlayout[plotArea] = plotAreaRect;
         }
+        // check legend alignment
+        if (m_layoutItems[shape]->itemType == LegendType) {
+            QRectF n = diagramArea(plotArea, plotAreaRect);
+            qreal xpos = itmRect.left();
+            switch (static_cast<Legend*>(shape)->alignment()) {
+                case Qt::AlignLeft:
+                    xpos = n.left();
+                    break;
+                case Qt::AlignCenter:
+                    xpos = n.left() + ((n.width() - itmRect.width()) * 0.5);
+                    break;
+                case Qt::AlignRight:
+                    xpos = n.right() - itmRect.width();
+                    break;
+                default:
+                    break;
+            }
+            if (xpos != itmRect.left()) {
+                itmRect.moveLeft(xpos);
+                newlayout[shape] = itmRect;
+                debugChartLayout<<"aligned:"<<dbg(shape)<<itmRect;
+            }
+        }
     }
     if (newlayout.contains(plotArea)) {
         // Move axis titles/legend relative plot area
@@ -814,33 +833,6 @@ QMap<KoShape*, QRectF> ChartLayout::calculateLayoutBottom(KoShape *shape, KoShap
                     r.moveTop(ypos);
                     newlayout[i.key()] = r;
                     debugChartLayout<<"moved:"<<dbg(i.key())<<r;
-                }
-            }
-            if (data->itemType == LegendType && (i.key() == shape || i.key()->isVisible())) {
-                // alignment
-                QRectF r(i.value());
-                if (newlayout.contains(i.key())) {
-                    r = newlayout[i.key()];
-                }
-                QRectF n = diagramArea(plotArea, newPARect);
-                qreal xpos = r.left();
-                switch (static_cast<Legend*>(shape)->alignment()) {
-                    case Qt::AlignLeft:
-                        xpos = n.left();
-                        break;
-                    case Qt::AlignCenter:
-                        xpos = n.left() + ((n.width() - r.width()) * 0.5);
-                        break;
-                    case Qt::AlignRight:
-                        xpos = n.right() - r.width();
-                        break;
-                    default:
-                        break;
-                }
-                if (xpos != r.left()) {
-                    r.moveLeft(xpos);
-                    newlayout[it.key()] = r;
-                    debugChartLayout<<"aligned:"<<dbg(it.key())<<r;
                 }
             }
         }
@@ -955,6 +947,29 @@ QMap<KoShape*, QRectF> ChartLayout::calculateLayoutStart(KoShape *shape, KoShape
             plotAreaRect.setLeft(area.right());
             newlayout[plotArea] = plotAreaRect;
         }
+        // check legend alignment
+        if (m_layoutItems[shape]->itemType == LegendType) {
+            QRectF n = diagramArea(plotArea, plotAreaRect);
+            qreal ypos = itmRect.top();
+            switch (static_cast<Legend*>(shape)->alignment()) {
+                case Qt::AlignLeft:
+                    ypos = n.top();
+                    break;
+                case Qt::AlignCenter:
+                    ypos = n.top() + ((n.height() - itmRect.height()) * 0.5);
+                    break;
+                case Qt::AlignRight:
+                    ypos = n.bottom() - itmRect.height();
+                    break;
+                default:
+                    break;
+            }
+            if (ypos != itmRect.top()) {
+                itmRect.moveTop(ypos);
+                newlayout[shape] = itmRect;
+                debugChartLayout<<"aligned:"<<dbg(shape)<<itmRect;
+            }
+        }
     }
     if (newlayout.contains(plotArea)) {
         // handle axis titles/legend
@@ -972,33 +987,6 @@ QMap<KoShape*, QRectF> ChartLayout::calculateLayoutStart(KoShape *shape, KoShape
                     r.moveLeft(xpos);
                     newlayout[it.key()] = r;
                     debugChartLayout<<"moved:"<<dbg(it.key())<<r;
-                }
-            }
-            if (data->itemType == LegendType && (it.key() == shape || it.key()->isVisible())) {
-                // alignment
-                QRectF r(it.value());
-                if (newlayout.contains(it.key())) {
-                    r = newlayout[it.key()];
-                }
-                QRectF n = diagramArea(plotArea, newPlotAreaRect);
-                qreal ypos = r.top();
-                switch (static_cast<Legend*>(shape)->alignment()) {
-                    case Qt::AlignLeft:
-                        ypos = n.top();
-                        break;
-                    case Qt::AlignCenter:
-                        ypos = n.top() + ((n.height() - r.height()) * 0.5);
-                        break;
-                    case Qt::AlignRight:
-                        ypos = n.bottom() - r.height();
-                        break;
-                    default:
-                        break;
-                }
-                if (ypos != r.top()) {
-                    r.moveTop(ypos);
-                    newlayout[it.key()] = r;
-                    debugChartLayout<<"aligned:"<<dbg(it.key())<<r;
                 }
             }
         }}
@@ -1120,6 +1108,30 @@ QMap<KoShape*, QRectF> ChartLayout::calculateLayoutEnd(KoShape *shape, KoShape *
             plotAreaRect.setRight(area.right());
             newlayout[plotArea] = plotAreaRect;
         }
+        // check legend alignment
+        if (m_layoutItems[shape]->itemType == LegendType) {
+            qDebug()<<"check alignment";
+            QRectF n = diagramArea(plotArea, plotAreaRect);
+            qreal ypos = itmRect.top();
+            switch (static_cast<Legend*>(shape)->alignment()) {
+                case Qt::AlignLeft:
+                    ypos = n.top();
+                    break;
+                case Qt::AlignCenter:
+                    ypos = n.top() + ((n.height() - itmRect.height()) * 0.5);
+                    break;
+                case Qt::AlignRight:
+                    ypos = n.bottom() - itmRect.height();
+                    break;
+                default:
+                    break;
+            }
+            if (ypos != itmRect.top()) {
+                itmRect.moveTop(ypos);
+                newlayout[shape] = itmRect;
+                debugChartLayout<<"aligned:"<<dbg(shape)<<itmRect;
+            }
+        }
     }
     if (newlayout.contains(plotArea)) {
         // handle axis titles/legend
@@ -1136,33 +1148,6 @@ QMap<KoShape*, QRectF> ChartLayout::calculateLayoutEnd(KoShape *shape, KoShape *
                     r.moveLeft(xpos);
                     newlayout[it.key()] = r;
                     debugChartLayout<<"moved:"<<dbg(it.key())<<r;
-                }
-            }
-            if (m_layoutItems[it.key()]->itemType == LegendType && (it.key() == shape || it.key()->isVisible())) {
-                // alignment
-                QRectF r(it.value());
-                if (newlayout.contains(it.key())) {
-                    r = newlayout[it.key()];
-                }
-                QRectF n = diagramArea(plotArea, newPlotAreaRect);
-                qreal ypos = r.top();
-                switch (static_cast<Legend*>(shape)->alignment()) {
-                    case Qt::AlignLeft:
-                        ypos = n.top();
-                        break;
-                    case Qt::AlignCenter:
-                        ypos = n.top() + ((n.height() - r.height()) * 0.5);
-                        break;
-                    case Qt::AlignRight:
-                        ypos = n.bottom() - r.height();
-                        break;
-                    default:
-                        break;
-                }
-                if (ypos != r.top()) {
-                    r.moveTop(ypos);
-                    newlayout[it.key()] = r;
-                    debugChartLayout<<"aligned:"<<dbg(it.key())<<r;
                 }
             }
         }}

@@ -458,14 +458,17 @@ void TestChartLayout::testLayoutEnd()
     QCOMPARE(itemRect(plotArea).right(), itemRect(legend).left() - layout->spacing().x());
     switch(legend->alignment()) {
         case Qt::AlignLeft:
-            QCOMPARE(itemRect(legend).top(), itemRect(plotArea).top());
+            QCOMPARE(itemRect(legend).top(), layout->diagramArea(plotArea).top());
             break;
         case Qt::AlignRight:
-            QCOMPARE(itemRect(legend).bottom(), itemRect(plotArea).bottom());
+            QCOMPARE(itemRect(legend).bottom(), layout->diagramArea(plotArea).bottom());
             break;
-        case Qt::AlignCenter:
-            // TODO
+        case Qt::AlignCenter: {
+            QRectF dr = layout->diagramArea(plotArea);
+            QRectF lr = itemRect(legend);
+            QCOMPARE(dr.top() + (0.5 * dr.height()), lr.top() + (0.5 *lr.height()));
             break;
+        }
         default:
             QCOMPARE(itemRect(legend), legendRect); // should not have moved
             break;
@@ -540,17 +543,17 @@ void TestChartLayout::testLayoutEnd()
     legend->setAlignment(Qt::AlignLeft);
     map = layout->calculateLayout(legend, true);
     updateItems(map);
-    QCOMPARE(itemRect(plotArea).top(), itemRect(legend).top());
-
-    legend->setAlignment(Qt::AlignCenter);
-    map = layout->calculateLayout(legend, true);
-    updateItems(map);
-    QCOMPARE(itemRect(plotArea).top() + (0.5 * itemRect(plotArea).height()), itemRect(legend).top() + (0.5 * itemRect(legend).height()));
+    QCOMPARE(itemRect(legend).top(), layout->diagramArea(plotArea).top());
 
     legend->setAlignment(Qt::AlignRight);
     map = layout->calculateLayout(legend, true);
     updateItems(map);
-    QCOMPARE(itemRect(plotArea).bottom(), itemRect(legend).bottom());
+    QCOMPARE(itemRect(legend).bottom(), layout->diagramArea(plotArea).bottom());
+
+    legend->setAlignment(Qt::AlignCenter);
+    map = layout->calculateLayout(legend, true);
+    updateItems(map);
+    QCOMPARE(itemRect(legend).top() + (0.5 * itemRect(legend).height()), layout->diagramArea(plotArea).top() + (0.5 * layout->diagramArea(plotArea).height()));
 }
 
 void TestChartLayout::testLayoutTopStart()
