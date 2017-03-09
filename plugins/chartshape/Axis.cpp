@@ -2134,6 +2134,11 @@ void Axis::setFontSize(qreal size)
     KChart::TextAttributes attributes = d->kdAxis->textAttributes();
     attributes.setFontSize(KChart::Measure(size, KChartEnums::MeasureCalculationModeAbsolute));
     d->kdAxis->setTextAttributes(attributes);
+
+    // Keep font in sync
+    QFont f = font();
+    f.setPointSizeF(size);
+    setFont(f);
 }
 
 bool Axis::isVisible() const
