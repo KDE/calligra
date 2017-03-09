@@ -434,6 +434,7 @@ qreal PlotArea::pieAngleOffset() const
     return d->pieAngleOffset;
 }
 
+// FIXME: this should add the axxis as a child (set axis->parent())
 bool PlotArea::addAxis(Axis *axis)
 {
     if (d->axes.contains(axis)) {
@@ -462,31 +463,35 @@ bool PlotArea::addAxis(Axis *axis)
 
 bool PlotArea::removeAxis(Axis *axis)
 {
+    bool removed = takeAxis(axis);
+    if (removed) {
+        // This also removes the axis' title, which is a shape as well
+        delete axis;
+    }
+    return removed;
+}
+
+// FIXME: this should remove the axis as a child (set axis->parent())
+bool PlotArea::takeAxis(Axis *axis)
+{
     if (!d->axes.contains(axis)) {
-        warnChart << "PlotArea::removeAxis(): Trying to remove non-added axis.";
+        warnChart << "PlotArea::takeAxis(): Trying to remove non-added axis.";
         return false;
     }
-
     if (!axis) {
-        warnChart << "PlotArea::removeAxis(): Pointer to axis is NULL!";
+        warnChart << "PlotArea::takeAxis(): Pointer to axis is NULL!";
         return false;
     }
-
-    if (axis->title())
+    if (axis->title()) {
         d->automaticallyHiddenAxisTitles.removeAll(axis->title());
-
-    d->axes.removeAll(axis);
-
-    if (axis->dimension() == XAxisDimension) {
-        foreach (Axis *_axis, d->axes)
-            _axis->deregisterKdAxis(axis->kdAxis());
     }
-
-    // This also removes the axis' title, which is a shape as well
-    delete axis;
-
+    d->axes.removeAll(axis);
+    if (axis->dimension() == XAxisDimension) {
+        foreach (Axis *_axis, d->axes) {
+            _axis->deregisterKdAxis(axis->kdAxis());
+        }
+    }
     requestRepaint();
-
     return true;
 }
 

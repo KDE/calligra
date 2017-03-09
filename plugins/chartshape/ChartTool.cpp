@@ -65,6 +65,7 @@
 #include "commands/AxisCommand.h"
 #include "commands/DatasetCommand.h"
 #include "commands/ChartTextShapeCommand.h"
+#include "commands/AddRemoveAxisCommand.h"
 #include "ChartDebug.h"
 
 
@@ -746,35 +747,19 @@ void ChartTool::addAxis(AxisDimension dimension, const QString& title)
 {
     Q_ASSERT(d->shape);
 
-    Axis *axis = new Axis(d->shape->plotArea(), dimension);
+    Axis *axis = new Axis(d->shape->plotArea(), dimension); // automatically adds axis to plot area
+    d->shape->plotArea()->takeAxis(axis); // so we remove it again, sigh
     axis->setTitleText(title);
-    d->shape->update();
-    // TODO: undo command
-    axis->title()->setVisible(false);
-    QMap<KoShape*, QRectF> map = d->shape->layout()->calculateLayout(axis->title(), true);
-    QMap<KoShape*, QRectF>::const_iterator it;
-    for (it = map.constBegin(); it != map.constEnd(); ++it) {
-        it.key()->setPosition(it.value().topLeft());
-        it.key()->setSize(it.value().size());
-    }
-    axis->title()->setVisible(true);
-    d->shape->update();
+    AddRemoveAxisCommand *command = new AddRemoveAxisCommand(axis, d->shape, true);
+    canvas()->addCommand(command);
 }
 
 void ChartTool::removeAxis(Axis *axis)
 {
     Q_ASSERT(d->shape);
-    // TODO: undo command
-    if (axis->title()->isVisible()) {
-        QMap<KoShape*, QRectF> map = d->shape->layout()->calculateLayout(axis->title(), false);
-        QMap<KoShape*, QRectF>::const_iterator it;
-        for (it = map.constBegin(); it != map.constEnd(); ++it) {
-            it.key()->setPosition(it.value().topLeft());
-            it.key()->setSize(it.value().size());
-        }
-    }
-    d->shape->plotArea()->removeAxis(axis);
-    d->shape->update();
+
+    AddRemoveAxisCommand *command = new AddRemoveAxisCommand(axis, d->shape, false);
+    canvas()->addCommand(command);
 }
 
 void ChartTool::setAxisTitle(Axis *axis, const QString& title)

@@ -57,6 +57,7 @@ set (chartshape_LIB_SRCS
     commands/AxisCommand.cpp
     commands/DatasetCommand.cpp
     commands/ChartTextShapeCommand.cpp
+    commands/AddRemoveAxisCommand.cpp
 )
 
 ki18n_wrap_ui(chartshape_LIB_SRCS

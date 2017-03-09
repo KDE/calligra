@@ -837,6 +837,8 @@ void Axis::Private::adjustAllDiagrams()
 // ================================================================
 //                             class Axis
 
+// FIXME: make it possible to create an axis without parent, and
+//        when it is removed, actually remove it from parent (signals and all)
 
 Axis::Axis(PlotArea *parent, AxisDimension dimension)
     : d(new Private(this, dimension))

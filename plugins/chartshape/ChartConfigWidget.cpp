@@ -1833,11 +1833,6 @@ void ChartConfigWidget::ui_removeAxisClicked()
     if (index < 0 || index >= d->axes.size())
         return;
 
-    if (KMessageBox::questionYesNo(this,
-                                   i18n("Are you sure you want to remove this axis? All settings specific to this axis will be lost."),
-                                   i18n("Axis Removal Confirmation")) != KMessageBox::Yes)
-        return;
-
     emit axisRemoved(d->axes[index]);
     update();
 
