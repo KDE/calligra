@@ -717,15 +717,20 @@ bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
             }
         }
         if (shapes.count() > 0) {
-            // FIXME: This crashes if you start to move shapes,
-            //        then select more shape(s) and move them within 5 secs.
             // use a timeout to make sure we don't reuse a command possibly deleted by the commandHistory
             if (m_lastUsedMoveCommand.msecsTo(QTime::currentTime()) > 5000)
                 m_moveCommand = 0;
+            if (m_moveCommand && shapes != m_lastUsedShapes) {
+                // We are not moving exactly the same shapes in the same order as last time,
+                // so we cannot reuse the command
+                m_moveCommand = 0;
+                m_lastUsedShapes.clear();
+            }
             if (m_moveCommand) { // alter previous instead of creating new one.
                 m_moveCommand->setNewPositions(newPos);
                 m_moveCommand->redo();
             } else {
+                m_lastUsedShapes = shapes;
                 m_moveCommand = new KoShapeMoveCommand(shapes, prevPos, newPos);
                 canvas()->addCommand(m_moveCommand);
             }

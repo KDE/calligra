@@ -165,6 +165,7 @@ private:
     QPointF m_lastPoint;
     KoShapeMoveCommand *m_moveCommand;
     QTime m_lastUsedMoveCommand;
+    QList<KoShape*> m_lastUsedShapes;
 
     // TODO alter these 3 arrays to be static const instead
     QCursor m_sizeCursors[8];
