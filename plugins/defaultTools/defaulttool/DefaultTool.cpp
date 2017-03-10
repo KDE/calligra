@@ -56,6 +56,8 @@
 #include <KoStrokeConfigWidget.h>
 #include <KoFillConfigWidget.h>
 #include <KoShadowConfigWidget.h>
+#include <KoShapeContainer.h>
+#include <KoShapeContainerModel.h>
 
 #include <KoIcon.h>
 
@@ -692,16 +694,31 @@ bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
         QVector<QPointF> newPos;
         QList<KoShape*> shapes;
         foreach(KoShape* shape, koSelection()->selectedShapes(KoFlake::TopLevelSelection)) {
-            if (shape->isGeometryProtected())
+            if (shape->isGeometryProtected()) {
                 continue;
-            shapes.append(shape);
-            QPointF p = shape->position();
-            prevPos.append(p);
-            p.setX(p.x() + x);
-            p.setY(p.y() + y);
-            newPos.append(p);
+            }
+            if (shape->parent()) {
+                QPointF proposed(x, y);
+                shape->parent()->model()->proposeMove(shape, proposed);
+                if (!proposed.isNull()) {
+                    shapes.append(shape);
+                    QPointF p = shape->position();
+                    prevPos.append(p);
+                    p += proposed;
+                    newPos.append(p);
+                }
+            } else {
+                shapes.append(shape);
+                QPointF p = shape->position();
+                prevPos.append(p);
+                p.setX(p.x() + x);
+                p.setY(p.y() + y);
+                newPos.append(p);
+            }
         }
         if (shapes.count() > 0) {
+            // FIXME: This crashes if you start to move shapes,
+            //        then select more shape(s) and move them within 5 secs.
             // use a timeout to make sure we don't reuse a command possibly deleted by the commandHistory
             if (m_lastUsedMoveCommand.msecsTo(QTime::currentTime()) > 5000)
                 m_moveCommand = 0;
