@@ -163,6 +163,22 @@ void ChartLayout::setAutoLayoutEnabled(bool on)
     m_autoLayoutEnabled = on;
 }
 
+void ChartLayout::proposeMove(KoShape *child, QPointF &move)
+{
+    QRectF current = itemRect(child);
+    QRectF newRect = current.adjusted(move.x(), move.y(), move.x(), move.y());
+    if (newRect.left() < 0.0) {
+        move.setX(-current.left());
+    } else if (newRect.right() > m_containerSize.width()) {
+        move.setX(m_containerSize.width() - current.right());
+    }
+    if (newRect.top() < 0.0) {
+        move.setY(-current.top());
+    } else if (newRect.bottom() > m_containerSize.height()) {
+        move.setY(m_containerSize.height() - current.bottom());
+    }
+}
+
 void ChartLayout::childChanged(KoShape *shape, KoShape::ChangeType type)
 {
     Q_UNUSED(shape);

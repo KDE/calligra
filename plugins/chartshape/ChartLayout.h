@@ -137,6 +137,8 @@ public:
      */
     void setPosition(const KoShape *shape, Position pos, int weight = 0);
 
+    void proposeMove(KoShape *child, QPointF &move);
+
     /**
      * Called whenever a property of a shape in this layout has changed.
      *
