@@ -73,7 +73,7 @@ QStringList Document::typeList( bool trans )
     return QStringList()
             << ( trans ? xi18nc( "@item", "Unknown" ) : "Unknown" )
             << ( trans ? xi18nc( "@item The produced document", "Product" ) : "Product" )
-            << ( trans ? xi18nc( "@item Document is used for refrence", "Reference" ) : "Reference" );
+            << ( trans ? xi18nc( "@item Document is used for reference", "Reference" ) : "Reference" );
 }
 
 QString Document::typeToString( Document::Type type, bool trans )

@@ -3087,7 +3087,7 @@ Task::computeCriticalness(int sc)
     {
         /* People think of milestones usually as something important. So let's
          * assume a milestone has the importance of a full working day. This
-         * is only done to raise the criticalness of pathes that contain
+         * is only done to raise the criticalness of paths that contain
          * milestones. */
         scenarios[sc].criticalness = 1.0;
     }

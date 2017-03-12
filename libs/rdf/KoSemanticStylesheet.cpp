@@ -111,7 +111,7 @@ void KoSemanticStylesheet::format(hKoRdfSemanticItem obj, KoTextEditor *editor, 
 {
     Q_ASSERT(obj);
     Q_ASSERT(editor);
-    kDebug(30015) << "formating obj:" << obj << " name:" << obj->name();
+    kDebug(30015) << "formatting obj:" << obj << " name:" << obj->name();
     kDebug(30015) << "xmlid:" << xmlid << " editor:" << editor << " sheet-name:" << name();
     const KoDocumentRdf *rdf = obj->documentRdf();
     Q_ASSERT(rdf);
@@ -138,7 +138,7 @@ void KoSemanticStylesheet::format(hKoRdfSemanticItem obj, KoTextEditor *editor, 
         editor->deleteChar(); // deletes the selection
     }
     editor->setPosition(startpos, QTextCursor::MoveAnchor);
-    kDebug(30015) << "formating start:" << startpos << " end:" << endpos;
+    kDebug(30015) << "formatting start:" << startpos << " end:" << endpos;
     kDebug(30015) << "semantic item oldText:" << oldText;
     QString data = templateString();
     QMap<QString, QString> m;

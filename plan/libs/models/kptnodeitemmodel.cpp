@@ -152,7 +152,7 @@ QVariant NodeModel::allocation( const Node *node, int role ) const
                     if ( it.value().isEmpty() ) {
                         sl << it.key();
                     } else {
-                        sl << xi18nc( "@info:tooltip 1=resource name, 2=list of requiered resources", "%1 (%2)", it.key(), it.value().join(", ") );
+                        sl << xi18nc( "@info:tooltip 1=resource name, 2=list of required resources", "%1 (%2)", it.key(), it.value().join(", ") );
                     }
                 }
                 if ( sl.count() == 1 ) {

@@ -1007,7 +1007,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
     status.setProgress( 10 );
 
     // Load the project children
-    // Do calendars first, they only refrence other calendars
+    // Do calendars first, they only reference other calendars
     //debugPlan<<"Calendars--->";
     n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {

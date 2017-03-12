@@ -128,7 +128,7 @@ class OdtMobiHtmlConverter
     void flattenStyle(const QString &styleName, QHash<QString, StyleInfo*> &styles,
                       QSet<QString> &doneStyles);
 
-    // Write boomarks position in its refrence.
+    // Write boomarks position in its reference.
     void generateMobiInternalLinks();
 
  private:
@@ -210,7 +210,7 @@ class OdtMobiHtmlConverter
     bool m_fontColorTag;
     //
 
-    // The format is QHash <refrence position in file, refrence id>
+    // The format is QHash <reference position in file, reference id>
     QMap <qint64, QString> m_refrencesList;
     // The format is QHash <bookmark poistion in file, bookmark id>
     QMap <QString, qint64> m_bookMarksList;

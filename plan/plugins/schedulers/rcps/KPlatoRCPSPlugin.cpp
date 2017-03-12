@@ -59,7 +59,7 @@ QString KPlatoRCPSPlugin::description() const
     return xi18nc( "@info:whatsthis", "<title>RCPS Scheduler</title>"
                     "<para>The Resource Constrained Project Scheduler (RCPS) focuses on scheduling"
                     " the project to avoid overbooking resources."
-                    " It still respects task dependencies and also tries to fullfill time constraints."
+                    " It still respects task dependencies and also tries to fulfill time constraints."
                     " However, time constraints can make it very difficult to find a good solution,"
                     " so it may be preferable to use a different scheduler in these cases.</para>"
                 );

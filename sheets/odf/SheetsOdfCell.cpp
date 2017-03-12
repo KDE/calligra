@@ -690,7 +690,7 @@ void Odf::loadCellText(Cell *cell, const KoXmlElement& parent, OdfLoadingContext
             ++lineCount;
             int textFragmentCount = 0;
 
-            // Our text could contain formating for value or result of formula or a mix of
+            // Our text could contain formatting for value or result of formula or a mix of
             // multiple text:span elements with text-nodes and line-break's.
             cellText += loadCellTextNodes(cell, textParagraphElement, &textFragmentCount, &lineCount, &hasRichText, &stripLeadingSpace);
 

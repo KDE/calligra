@@ -51,7 +51,7 @@ KoScriptManagerAddTypeWidget::KoScriptManagerAddTypeWidget(KoScriptManagerAddWiz
     setObjectName("ScriptManagerAddTypeWidget");
     QVBoxLayout *layout = new QVBoxLayout(this);
     setLayout(layout);
-    QLabel *label = new QLabel(i18n("<qt>This wizard will guide you through the proccess of adding a new resource to your scripts.</qt>"), this);
+    QLabel *label = new QLabel(i18n("<qt>This wizard will guide you through the process of adding a new resource to your scripts.</qt>"), this);
     label->setWordWrap(true);
     layout->addWidget(label);
     layout->addSpacing(10);

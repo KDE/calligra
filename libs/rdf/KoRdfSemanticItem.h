@@ -93,7 +93,7 @@ public:
     /**
      * Insert the SemanticItem into the document at the current cursor
      * position. The appearance of each semantic item is likely to be
-     * different depending on the user's current formating
+     * different depending on the user's current formatting
      * preferences. For example, a contact might show one or more of
      * the person's names and their phone number.
      *

@@ -76,7 +76,7 @@ KarbonBooleanCommand::~KarbonBooleanCommand()
 void KarbonBooleanCommand::redo()
 {
     if (! d->resultingPath) {
-        // transform input pathes to global coordinates
+        // transform input paths to global coordinates
         QPainterPath pa = d->pathA->absoluteTransformation(0).map(d->pathA->outline());
         QPainterPath pb = d->pathB->absoluteTransformation(0).map(d->pathB->outline());
         QPainterPath pr;
