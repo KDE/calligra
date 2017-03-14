@@ -95,7 +95,7 @@ double Locale::readMoney(const QString &numStr, bool *ok) const
     QLocale l;
     QString s = numStr;
     bool okk = false;
-    s.remove(m_currencySymbol);
+    s.remove(currencySymbol());
     double v = l.toDouble(s, &okk);
     if (ok) {
         *ok = okk;
