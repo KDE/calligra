@@ -30,6 +30,7 @@
   <name xml:lang="uk">Braindump</name>
   <name xml:lang="x-test">xxBraindumpxx</name>
   <name xml:lang="zh-CN">脑图</name>
+  <summary>Notes and ideas gathering</summary>
   <description>
     <p>
       Braindump is a tool to dump and organize the content of your brain (ideas, drawings, images, texts…) to your computer.
