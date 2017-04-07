@@ -21,7 +21,11 @@
 #include "kptviewlistdialog.h"
 #include "kptviewlist.h"
 #include "kptview.h"
+
+#ifdef PLAN_USE_KREPORTS
 #include "reports/reportview.h"
+#endif
+
 #include <kptdebug.h>
 
 #include <KLocalizedString>
@@ -89,8 +93,10 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
             << "ResourceAppointmentsGanttView"
             << "AccountsView"
             << "ProjectStatusView"
-            << "PerformanceStatusView"
-            << "ReportView";
+            << "PerformanceStatusView";
+#ifdef PLAN_USE_KREPORTS
+    m_viewtypes << "ReportView";
+#endif
     QStringList lst;
     lst << i18n( "Resource Editor" )
             << i18n( "Task Editor" )
@@ -108,9 +114,10 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
             << i18n( "Resource Assignments (Gantt)" )
             << i18n( "Cost Breakdown" )
             << i18n( "Project Performance Chart" )
-            << i18n( "Tasks Performance Chart" )
-            << i18n( "Report" );
-
+            << i18n( "Tasks Performance Chart" );
+#ifdef PLAN_USE_KREPORTS
+      lst << i18n( "Report" );
+#endif
     widget.viewtype->addItems( lst );
 
     foreach ( ViewListItem *item, m_viewlist.categories() ) {
@@ -264,9 +271,11 @@ bool AddViewPanel::ok()
         case 16: { // Task Performance Chart
             v = m_view->createPerformanceStatusView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
+#ifdef PLAN_USE_KREPORTS
         case 17: { // Report view
             v = m_view->createReportView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
+#endif
         default:
             errorPlan<<"Unknown view type!";
             break;
@@ -495,6 +504,7 @@ void EditCategoryPanel::fillAfter()
     widget.insertAfter->setCurrentIndex( idx );
 }
 
+#ifdef PLAN_USE_KREPORTS
 //------ Reports
 ViewListReportsDialog::ViewListReportsDialog( View *view, ViewListWidget &viewlist, const QDomDocument &doc, QWidget *parent )
     : KoDialog(parent)
@@ -654,7 +664,6 @@ void AddReportsViewPanel::changed()
     bool disable = widget.viewname->text().isEmpty() | widget.viewtype->currentText().isEmpty() | widget.category->currentText().isEmpty();
     emit enableButtonOk( ! disable );
 }
-
-
+#endif
 
 }  //KPlato namespace

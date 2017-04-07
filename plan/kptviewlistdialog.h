@@ -168,6 +168,7 @@ private:
     ViewListWidget &m_viewlist;
 };
 
+#ifdef PLAN_USE_KREPORTS
 //-------- Reports
 class ViewListReportsDialog : public KoDialog
 {
@@ -219,7 +220,7 @@ private:
     bool m_viewtipChanged;
     QDomDocument m_data;
 };
-
+#endif
 
 } //KPlato namespace
 

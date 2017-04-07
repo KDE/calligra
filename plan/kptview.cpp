@@ -102,12 +102,15 @@
 #include "kptcolorsconfigpanel.h"
 #include "kptinsertfiledlg.h"
 #include "kpthtmlview.h"
-#include "reports/reportview.h"
-#include "reports/reportdata.h"
 #include "about/aboutpage.h"
 #include "kptlocaleconfigmoneydialog.h"
 #include "kptflatproxymodel.h"
 #include "kpttaskstatusmodel.h"
+
+#ifdef PLAN_USE_KREPORT
+#include "reports/reportview.h"
+#include "reports/reportdata.h"
+#endif
 
 #include "kptviewlistdialog.h"
 #include "kptviewlistdocker.h"
@@ -586,6 +589,7 @@ void View::createViews()
 
         createTaskWorkPackageView( cat, "TaskWorkPackageView", QString(), TIP_USE_DEFAULT_TEXT );
 
+#ifdef PLAN_USE_KREPORT
         ct = "Reports";
         cat = m_viewlist->addCategory( ct, defaultCategoryInfo( ct ).name );
         // A little hack to get the user started...
@@ -595,6 +599,7 @@ void View::createViews()
             doc.setContent( standardTaskStatusReport() );
             rv->loadXML( doc );
         }
+#endif
     }
 }
 
@@ -639,7 +644,9 @@ ViewBase *View::createView( ViewListItem *cat, const QString &type, const QStrin
     } else if ( type == "PerformanceStatusView" ) {
         v = createPerformanceStatusView( cat, tag, name, tip, index );
     } else if ( type == "ReportView" ) {
+#ifdef PLAN_USE_KREPORT
         v = createReportView( cat, tag, name, tip, index );
+#endif
     } else  {
         warnPlan<<"Unknown viewtype: "<<type;
     }
@@ -1355,6 +1362,7 @@ ViewBase *View::createResourceAssignmentView( ViewListItem *cat, const QString &
 
 ViewBase *View::createReportView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
+#ifdef PLAN_USE_KREPORT
     ReportView *v = new ReportView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
 
@@ -1378,6 +1386,9 @@ ViewBase *View::createReportView( ViewListItem *cat, const QString &tag, const Q
     connect( v, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
     v->updateReadWrite( m_readWrite );
     return v;
+#else
+    return 0;
+#endif
 }
 
 Project& View::getProject() const
@@ -2672,22 +2683,27 @@ void View::addViewListItem( const ViewListItem *item, const ViewListItem *parent
 
 void View::createReportView(const QDomDocument &doc)
 {
+#ifdef PLAN_USE_KREPORT
     QPointer<ViewListReportsDialog> vd = new ViewListReportsDialog( this, *m_viewlist, doc, this );
     vd->exec(); // FIXME  make non-crash
     delete vd;
+#endif
 }
 
 void View::slotOpenReportFile()
 {
+#ifdef PLAN_USE_KREPORT
     QFileDialog *dlg = new QFileDialog(this);
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOpenReportFileFinished(int)));
     dlg->show();
     dlg->raise();
     dlg->activateWindow();
+#endif
 }
 
 void View::slotOpenReportFileFinished( int result )
 {
+#ifdef PLAN_USE_KREPORT
     QFileDialog *fdlg = qobject_cast<QFileDialog*>( sender() );
     if ( fdlg == 0 || result != QDialog::Accepted ) {
         return;
@@ -2704,13 +2720,16 @@ void View::slotOpenReportFileFinished( int result )
     QDomDocument doc;
     doc.setContent( &file );
     createReportView(doc);
+#endif
 }
 
 void View::slotReportDesignFinished( int /*result */)
 {
+#ifdef PLAN_USE_KREPORT
     if ( sender() ) {
         sender()->deleteLater();
     }
+#endif
 }
 
 void View::slotCreateView()
@@ -3025,7 +3044,9 @@ void View::removeTaskModule( const QUrl &url )
 
 QString View::standardTaskStatusReport() const
 {
-    QString s = QString::fromLatin1(
+    QString s;
+#ifdef PLAN_USE_KREPORT
+    s = QString::fromLatin1(
         "<planreportdefinition version=\"1.0\" mime=\"application/x-vnd.kde.plan.report.definition\" editor=\"Plan\" >"
         "<data-source select-from=\"taskstatus\" ></data-source>"
         "<report:content xmlns:report=\"http://kexi-project.org/report/2.0\" xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\" >"
@@ -3123,6 +3144,7 @@ QString View::standardTaskStatusReport() const
             i18nc( "Task name", "Name" ),
             i18nc( "Task completion", "Completion (%)" )
         );
+#endif
     return s;
 }
 
