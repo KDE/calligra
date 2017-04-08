@@ -22,7 +22,7 @@
 #include "kptviewlist.h"
 #include "kptview.h"
 
-#ifdef PLAN_USE_KREPORTS
+#ifdef PLAN_USE_KREPORT
 #include "reports/reportview.h"
 #endif
 
@@ -94,7 +94,7 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
             << "AccountsView"
             << "ProjectStatusView"
             << "PerformanceStatusView";
-#ifdef PLAN_USE_KREPORTS
+#ifdef PLAN_USE_KREPORT
     m_viewtypes << "ReportView";
 #endif
     QStringList lst;
@@ -115,7 +115,7 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
             << i18n( "Cost Breakdown" )
             << i18n( "Project Performance Chart" )
             << i18n( "Tasks Performance Chart" );
-#ifdef PLAN_USE_KREPORTS
+#ifdef PLAN_USE_KREPORT
       lst << i18n( "Report" );
 #endif
     widget.viewtype->addItems( lst );
@@ -271,7 +271,7 @@ bool AddViewPanel::ok()
         case 16: { // Task Performance Chart
             v = m_view->createPerformanceStatusView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
-#ifdef PLAN_USE_KREPORTS
+#ifdef PLAN_USE_KREPORT
         case 17: { // Report view
             v = m_view->createReportView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
@@ -504,7 +504,7 @@ void EditCategoryPanel::fillAfter()
     widget.insertAfter->setCurrentIndex( idx );
 }
 
-#ifdef PLAN_USE_KREPORTS
+#ifdef PLAN_USE_KREPORT
 //------ Reports
 ViewListReportsDialog::ViewListReportsDialog( View *view, ViewListWidget &viewlist, const QDomDocument &doc, QWidget *parent )
     : KoDialog(parent)

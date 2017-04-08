@@ -168,7 +168,7 @@ private:
     ViewListWidget &m_viewlist;
 };
 
-#ifdef PLAN_USE_KREPORTS
+#ifdef PLAN_USE_KREPORT
 //-------- Reports
 class ViewListReportsDialog : public KoDialog
 {
