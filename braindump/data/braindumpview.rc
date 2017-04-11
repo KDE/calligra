@@ -1,6 +1,6 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="braindump" version="1" translationDomain="braindump">
+<gui name="braindump" version="1" translationDomain="braindump">
     <MenuBar>
         <Menu name="edit">
             <Action name="edit_undo"/>
@@ -48,4 +48,4 @@
         <Action name="edit_paste"/>
         <Action name="edit_delete"/>
     </ToolBar>
-</kpartgui>
+</gui>

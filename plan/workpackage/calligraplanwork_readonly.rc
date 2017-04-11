@@ -1,6 +1,7 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KPlatoWork" version="0" translationDomain="calligraplanwork">
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
+<gui name="KPlatoWork" version="0" translationDomain="calligraplanwork">
 <MenuBar>
     <Menu name="view"><text>&amp;View</text>
     </Menu>
 </MenuBar>
-</kpartgui>
+</gui>

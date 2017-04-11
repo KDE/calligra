@@ -1,6 +1,5 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-
-<kpartgui name="stage" version="124" translationDomain="calligrastage">
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
+<gui name="stage" version="124" translationDomain="calligrastage">
     <MenuBar>
         <Menu name="file">
             <Action name="file_export_html" />
@@ -101,4 +100,4 @@
         <Separator/>
         <Action name="edit_delete"/>
     </Menu>
-</kpartgui>
+</gui>
