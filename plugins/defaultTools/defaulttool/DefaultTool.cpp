@@ -56,6 +56,8 @@
 #include <KoStrokeConfigWidget.h>
 #include <KoFillConfigWidget.h>
 #include <KoShadowConfigWidget.h>
+#include <KoShapeContainer.h>
+#include <KoShapeContainerModel.h>
 
 #include <KoIcon.h>
 
@@ -692,23 +694,43 @@ bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
         QVector<QPointF> newPos;
         QList<KoShape*> shapes;
         foreach(KoShape* shape, koSelection()->selectedShapes(KoFlake::TopLevelSelection)) {
-            if (shape->isGeometryProtected())
+            if (shape->isGeometryProtected()) {
                 continue;
-            shapes.append(shape);
-            QPointF p = shape->position();
-            prevPos.append(p);
-            p.setX(p.x() + x);
-            p.setY(p.y() + y);
-            newPos.append(p);
+            }
+            if (shape->parent()) {
+                QPointF proposed(x, y);
+                shape->parent()->model()->proposeMove(shape, proposed);
+                if (!proposed.isNull()) {
+                    shapes.append(shape);
+                    QPointF p = shape->position();
+                    prevPos.append(p);
+                    p += proposed;
+                    newPos.append(p);
+                }
+            } else {
+                shapes.append(shape);
+                QPointF p = shape->position();
+                prevPos.append(p);
+                p.setX(p.x() + x);
+                p.setY(p.y() + y);
+                newPos.append(p);
+            }
         }
         if (shapes.count() > 0) {
             // use a timeout to make sure we don't reuse a command possibly deleted by the commandHistory
             if (m_lastUsedMoveCommand.msecsTo(QTime::currentTime()) > 5000)
                 m_moveCommand = 0;
+            if (m_moveCommand && shapes != m_lastUsedShapes) {
+                // We are not moving exactly the same shapes in the same order as last time,
+                // so we cannot reuse the command
+                m_moveCommand = 0;
+                m_lastUsedShapes.clear();
+            }
             if (m_moveCommand) { // alter previous instead of creating new one.
                 m_moveCommand->setNewPositions(newPos);
                 m_moveCommand->redo();
             } else {
+                m_lastUsedShapes = shapes;
                 m_moveCommand = new KoShapeMoveCommand(shapes, prevPos, newPos);
                 canvas()->addCommand(m_moveCommand);
             }
@@ -815,7 +837,7 @@ void DefaultTool::deleteSelection()
 {
     QList<KoShape *> shapes;
     foreach (KoShape *s, canvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        if (s->isGeometryProtected())
+        if (!s->isDeletable() || s->isGeometryProtected())
             continue;
         shapes << s;
     }
@@ -940,6 +962,11 @@ void DefaultTool::activate(ToolActivation, const QSet<KoShape*> &)
     delete m_guideLine;
     m_guideLine = new GuideLine();
     updateActions();
+}
+
+void DefaultTool::deactivate()
+{
+    repaintDecorations();
 }
 
 void DefaultTool::selectionAlignHorizontalLeft()

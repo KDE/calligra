@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
 
+   Copyright 2017 Dag Andersen <danders@get2net.dk>
    Copyright 2007 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
@@ -21,6 +22,8 @@
 
 #ifndef KCHART_GLOBAL_H
 #define KCHART_GLOBAL_H
+
+#include <QDebug>
 
 namespace KoChart
 {
@@ -100,10 +103,17 @@ enum ErrorCategory {
     ConstantErrorCategory
 };
 
-enum LabelType {
-    TitleLabelType,
-    SubTitleLabelType,
-    FooterLabelType
+enum ItemType {
+    GenericItemType = 0,
+    TitleLabelType = 1,
+    SubTitleLabelType = 3,
+    FooterLabelType = 5,
+    PlotAreaType = 10,
+    LegendType = 11,
+    XAxisTitleType = 20,
+    YAxisTitleType = 21,
+    SecondaryXAxisTitleType = 22,
+    SecondaryYAxisTitleType = 23
 };
 
 enum OdfMarkerStyle { MarkerSquare         = 0,
@@ -128,5 +138,7 @@ enum OdfMarkerStyle { MarkerSquare         = 0,
                       NoMarker             = 19 };
 
 } // Namespace KoChart
+
+QDebug operator<<(QDebug dbg, KoChart::Position p);
 
 #endif

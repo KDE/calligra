@@ -81,7 +81,12 @@ public:
     QList<DataSet*> dataSets() const;
     int             dataSetCount() const;
     bool            addAxis(Axis *axis);
-    bool            removeAxis(Axis *axis);
+    /// Remove and delete the @p axis.
+    /// Also deletes the title
+    bool removeAxis(Axis *axis);
+    /// Remove the @p axis, but do not delete it.
+    /// The title is not touched.
+    bool takeAxis(Axis *axis);
 
     // TODO: Rename this into primaryXAxis()
     Axis *xAxis() const;

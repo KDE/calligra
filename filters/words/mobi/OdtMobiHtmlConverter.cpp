@@ -659,7 +659,7 @@ void OdtMobiHtmlConverter::handleTagA(KoXmlElement &nodeElement, KoXmlWriter *ht
     htmlWriter->startElement("a", m_doIndent);
     QString reference = nodeElement.attribute("href");
     //    QString chapter = m_linksInfo.value(reference);
-    QString mark = m_linksInfo.value(reference); // refrence without # at its beginning.
+    QString mark = m_linksInfo.value(reference); // reference without # at its beginning.
     if (!mark.isEmpty() /*&& !m_options->stylesInCssFile*/) {
 //        // This is internal link.
 //        reference.remove('|');
@@ -1429,7 +1429,7 @@ void OdtMobiHtmlConverter::generateMobiInternalLinks()
         return;
     }
 
-    // For each refrence that we add to file, should update bookmark position.
+    // For each reference that we add to file, should update bookmark position.
     foreach (qint64 refPosition, m_refrencesList.keys()) {
         foreach (const QString &id, m_bookMarksList.keys()) {
             if (m_bookMarksList.value(id) > refPosition) {

@@ -53,6 +53,7 @@
 // KoChart
 #include "Surface.h"
 #include "PlotArea.h"
+#include "ChartLayout.h"
 #include "Axis.h"
 #include "DataSet.h"
 #include "Legend.h"
@@ -64,6 +65,7 @@
 #include "commands/AxisCommand.h"
 #include "commands/DatasetCommand.h"
 #include "commands/ChartTextShapeCommand.h"
+#include "commands/AddRemoveAxisCommand.h"
 #include "ChartDebug.h"
 
 
@@ -262,7 +264,7 @@ void ChartTool::deactivate()
 QWidget *ChartTool::createOptionWidget()
 {
     ChartConfigWidget  *widget = new ChartConfigWidget();
-    
+
     connect(widget, SIGNAL(dataSetXDataRegionChanged(DataSet*,CellRegion)),
             this,   SLOT(setDataSetXDataRegion(DataSet*,CellRegion)));
     connect(widget, SIGNAL(dataSetYDataRegionChanged(DataSet*,CellRegion)),
@@ -745,17 +747,19 @@ void ChartTool::addAxis(AxisDimension dimension, const QString& title)
 {
     Q_ASSERT(d->shape);
 
-    Axis *axis = new Axis(d->shape->plotArea(), dimension);
+    Axis *axis = new Axis(d->shape->plotArea(), dimension); // automatically adds axis to plot area
+    d->shape->plotArea()->takeAxis(axis); // so we remove it again, sigh
     axis->setTitleText(title);
-    d->shape->update();
+    AddRemoveAxisCommand *command = new AddRemoveAxisCommand(axis, d->shape, true);
+    canvas()->addCommand(command);
 }
 
 void ChartTool::removeAxis(Axis *axis)
 {
     Q_ASSERT(d->shape);
 
-    d->shape->plotArea()->removeAxis(axis);
-    d->shape->update();
+    AddRemoveAxisCommand *command = new AddRemoveAxisCommand(axis, d->shape, false);
+    canvas()->addCommand(command);
 }
 
 void ChartTool::setAxisTitle(Axis *axis, const QString& title)
@@ -887,6 +891,11 @@ void ChartTool::setShowLegend(bool show)
     Q_ASSERT(d->shape);
 
     ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->legend(), d->shape, show);
+    if (show) {
+        command->setText(kundo2_i18n("Show Legend"));
+    } else {
+        command->setText(kundo2_i18n("Hide Legend"));
+    }
     canvas()->addCommand(command);
 
     d->shape->legend()->update();

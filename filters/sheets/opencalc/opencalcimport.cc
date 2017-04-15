@@ -368,7 +368,7 @@ bool OpenCalcImport::readCells(KoXmlElement & rowNode, Sheet  * table, int row, 
                     cell.setLink(link);
                 }
             } else
-                text = textP.text(); // our text, could contain formating for value or result of formula
+                text = textP.text(); // our text, could contain formatting for value or result of formula
         }
         KoXmlElement annotation = KoXml::namedItemNS(e, ooNS::office, "annotation");
         if (!annotation.isNull()) {

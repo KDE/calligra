@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
  * Copyright 2017 Dag Andersen <danders@get2net.dk>
- * Copyright 2012 Brijesh Patel <brijesh3105@gmail.com>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KCHART_CHART_TEXTSHAPE_COMMAND
-#define KCHART_CHART_TEXTSHAPE_COMMAND
+#ifndef KCHART_CHART_ADDREMOVEAXIS_COMMAND
+#define KCHART_CHART_ADDREMOVEAXIS_COMMAND
 
 // Qt
 #include <kundo2command.h>
@@ -30,35 +29,28 @@
 
 class KoShape;
 
-#if 0
-namespace KChart
-{
-class AbstractCoordinatePlane;
-class AbstractDiagram;
-class Chart;
-}
-#endif
-
 
 namespace KoChart
 {
 
 class ChartShape;
+class Axis;
+
 /**
  * Chart type replacement command.
  */
-class ChartTextShapeCommand : public KUndo2Command
+class AddRemoveAxisCommand : public KUndo2Command
 {
 public:
     /**
      * Constructor.
      */
-    ChartTextShapeCommand(KoShape* textShape, ChartShape* chart, bool isVisible, KUndo2Command *parent = 0);
+    AddRemoveAxisCommand(Axis *axis, ChartShape *chart, bool add, KUndo2Command *parent = 0);
 
     /**
      * Destructor.
      */
-    virtual ~ChartTextShapeCommand();
+    virtual ~AddRemoveAxisCommand();
 
     /**
      * Executes the actual operation.
@@ -71,15 +63,16 @@ public:
     virtual void undo();
 
 private:
-    void init();
+    void initAdd();
+    void initRemove();
 
 private:
-    KoShape *m_textShape;
+    Axis *m_axis;
     ChartShape *m_chart;
-    bool m_oldIsVisible;
-    bool m_newIsVisible;
+    bool m_add;
+    bool mine;
 };
 
 } // namespace KoChart
 
-#endif // KCHART_CHART_TEXTSHAPE_COMMAND
+#endif // KCHART_CHART_ADDREMOVEAXIS_COMMAND

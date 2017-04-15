@@ -1,5 +1,5 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Calligra" version="27" translationDomain="calligra">
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
+<gui name="Calligra" version="27" translationDomain="calligra">
 <MenuBar>
  <Menu name="file" noMerge="1"><text>&amp;File</text>
   <Action name="file_new" />
@@ -52,4 +52,4 @@
   <Action name="file_print_preview" />
   //-->
 </ToolBar>
-</kpartgui>
+</gui>

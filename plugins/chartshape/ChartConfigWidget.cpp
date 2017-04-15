@@ -529,8 +529,8 @@ ChartConfigWidget::ChartConfigWidget()
     d->ui.addAxis->setIcon(koIcon("list-add"));
     d->ui.removeAxis->setIcon(koIcon("list-remove"));
 
-    connect(d->ui.axisTitle, SIGNAL(textChanged(QString)),
-            this, SLOT(ui_axisTitleChanged(QString)));
+    connect(d->ui.axisTitle, SIGNAL(editingFinished()),
+            this, SLOT(ui_axisEditingFinished()));
     connect(d->ui.axisShowTitle, SIGNAL(toggled(bool)),
             this, SLOT(ui_axisShowTitleChanged(bool)));
     connect(d->ui.axisShowGridLines, SIGNAL(toggled(bool)),
@@ -1471,7 +1471,10 @@ void ChartConfigWidget::ui_axisSelectionChanged(int index)
     }
 
     // Don't let the user remove the last axis of a particular dimension
-    d->ui.removeAxis->setEnabled(numAxesOfSameDimension > 1);
+    //d->ui.removeAxis->setEnabled(numAxesOfSameDimension > 1);
+
+    // KChart do not support removing x- or y-axis
+    d->ui.removeAxis->setEnabled(index >= 2);
 
     d->ui.axisTitle->blockSignals(true);
     d->ui.axisTitle->setText(axis->titleText());
@@ -1751,19 +1754,21 @@ void ChartConfigWidget::ui_dataSetAxisSelectionChanged(int index)
     emit dataSetAxisChanged(dataSet, axis);
 }
 
-void ChartConfigWidget::ui_axisTitleChanged(const QString& title)
+void ChartConfigWidget::ui_axisEditingFinished()
 {
-    if (d->ui.axes->currentIndex() < 0 || d->ui.axes->currentIndex() >= d->axes.size())
+    if (d->ui.axes->currentIndex() < 0 || d->ui.axes->currentIndex() >= d->axes.size()) {
         return;
-
+    }
     const int index = d->ui.axes->currentIndex();
     Axis *axis = d->axes[index];
+    // Seems to get multiple editingFinished signals
+    if (axis->titleText() == d->ui.axisTitle->text()) {
+        return;
+    }
+    emit axisTitleChanged(axis, d->ui.axisTitle->text());
 
-    emit axisTitleChanged(axis, title);
-
+    // TODO: This should be triggered by the actual change to the title (so undo/redo works)
     QString nonEmptyTitle = nonEmptyAxisTitle(axis, index);
-
-    // TODO: This can surely be done better
     int dataSetAxisIndex = d->dataSetAxes.indexOf(axis);
     d->ui.dataSetAxes->setItemText(dataSetAxisIndex, nonEmptyTitle);
     d->ui.axes->setItemText(index, nonEmptyTitle);
@@ -1826,11 +1831,6 @@ void ChartConfigWidget::ui_removeAxisClicked()
     int index = d->ui.axes->currentIndex();
     // Check for valid index
     if (index < 0 || index >= d->axes.size())
-        return;
-
-    if (KMessageBox::questionYesNo(this,
-                                   i18n("Are you sure you want to remove this axis? All settings specific to this axis will be lost."),
-                                   i18n("Axis Removal Confirmation")) != KMessageBox::Yes)
         return;
 
     emit axisRemoved(d->axes[index]);

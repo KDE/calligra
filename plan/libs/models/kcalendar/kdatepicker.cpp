@@ -47,6 +47,20 @@
 namespace KPlato
 {
 
+static QDate parseDateString(const QString &text)
+{
+    QLocale::FormatType formats[] = { QLocale::LongFormat, QLocale::ShortFormat, QLocale::NarrowFormat };
+    QLocale locale;
+    QDate date;
+    for (int i = 0; i < 3; i++) {
+        date = locale.toDate(text, formats[i]);
+        if (date.isValid()) {
+            break;
+        }
+    }
+    return date;
+}
+
 class DatePickerValidator : public QValidator
 {
 public:
@@ -55,17 +69,7 @@ public:
 
     State validate(QString &text, int &) const Q_DECL_OVERRIDE
     {
-        QLocale::FormatType formats[] = { QLocale::LongFormat, QLocale::ShortFormat, QLocale::NarrowFormat };
-        QLocale locale;
-
-        for (int i = 0; i < 3; i++) {
-            QDate tmp = locale.toDate(text, formats[i]);
-            if (tmp.isValid()) {
-                return Acceptable;
-            }
-        }
-
-        return QValidator::Intermediate;
+        return parseDateString(text).isValid() ? QValidator::Acceptable : QValidator::Intermediate;
     }
 
 private:
@@ -553,7 +557,7 @@ KDateTable *KDatePicker::dateTable() const
 
 void KDatePicker::lineEnterPressed()
 {
-    QDate newDate = QDate::fromString(d->line->text(), QLocale().dateFormat());
+    QDate newDate = parseDateString(d->line->text());
 
     if (newDate.isValid()) {
         emit(dateEntered(newDate));

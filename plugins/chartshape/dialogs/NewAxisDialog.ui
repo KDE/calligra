@@ -43,7 +43,7 @@
         <item row="0" column="0">
          <widget class="QRadioButton" name="dimensionIsX">
           <property name="text">
-           <string/>
+           <string comment="Axis dimension">&amp;X</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -53,7 +53,7 @@
         <item row="0" column="1">
          <widget class="QRadioButton" name="dimensionIsY">
           <property name="text">
-           <string/>
+           <string comment="Axis dimension">&amp;Y</string>
           </property>
          </widget>
         </item>

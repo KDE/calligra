@@ -467,7 +467,7 @@ public:
     DateTime startTime( long id ) const;
     DateTime endTime( long id ) const;
 
-    /// Returns the list of requiered resources.
+    /// Returns the list of required resources.
     /// Note: This list is used as default for allocation dialog, not for scheduling.
     QList<Resource*> requiredResources() const;
     /// Set the list of the required resources's ids so they can be resolved when used
@@ -475,7 +475,7 @@ public:
     void setRequiredIds( const QStringList &lst );
     /// Add a resource id to the required ids list
     void addRequiredId( const QString &id );
-    /// Returns the list of requiered resource ids.
+    /// Returns the list of required resource ids.
     QStringList requiredIds() const { return m_requiredIds; }
 
     /// Return the list of team members.

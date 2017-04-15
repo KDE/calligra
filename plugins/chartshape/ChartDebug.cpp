@@ -1,4 +1,5 @@
 /*
+   Copyright (c) 2017 Dag Andersen <danders@get2net.dk>
    Copyright (c) 2015 Friedrich W. H. Kossebau <kossebau@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -22,5 +23,11 @@
 const QLoggingCategory &CHART_LOG()
 {
     static const QLoggingCategory category("calligra.plugin.chartshape");
+    return category;
+}
+
+const QLoggingCategory &CHARTLAYOUT_LOG()
+{
+    static const QLoggingCategory category("calligra.plugin.chartlayout");
     return category;
 }

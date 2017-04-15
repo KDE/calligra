@@ -14,11 +14,28 @@ include_directories(
 
 ########### KPlato private library ###############
 
+if (PLAN_BUILD_REPORTS)
+    message(STATUS "-- Building plan with reports capability")
+    add_subdirectory(reports/items)
+
+    set(planreports_LIB_SRC
+        reports/reportview.cpp
+        reports/reportdata.cpp
+        reports/reportsourceeditor.cpp
+        reports/reportscripts.cpp
+    )
+    set(planreports_ui_LIB_SRCS
+        reports/reportsourceeditor.ui
+        reports/reportnavigator.ui
+        reports/reportsectionswidget.ui
+        reports/reportgroupsectionswidget.ui
+        reports/reporttoolswidget.ui
+    )
+
+endif()
+
 set(kplatoui_LIB_SRCS
-    reports/reportview.cpp
-    reports/reportdata.cpp
-    reports/reportsourceeditor.cpp
-    reports/reportscripts.cpp
+    ${planreports_LIB_SRC}
 
     kptganttitemdelegate.cpp
 
@@ -76,12 +93,9 @@ set(kplatoui_LIB_SRCS
     locale/localemon.cpp
     kptlocaleconfigmoneydialog.cpp
 )
+
 ki18n_wrap_ui(kplatoui_LIB_SRCS
-    reports/reportsourceeditor.ui
-    reports/reportnavigator.ui
-    reports/reportsectionswidget.ui
-    reports/reportgroupsectionswidget.ui
-    reports/reporttoolswidget.ui
+    ${planreports_ui_LIB_SRCS}
 
     kptresourceappointmentsdisplayoptions.ui
     kptganttchartdisplayoptions.ui
@@ -146,7 +160,4 @@ endif()
 set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
 install(TARGETS kplatoui ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-
-add_subdirectory(reports/items)
 

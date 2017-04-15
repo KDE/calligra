@@ -94,7 +94,7 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
         project->setConstraintEndTime( DateTime::fromString( s, project->timeZone() ) );
     }
     // Load the project children
-    // Do calendars first, they only refrence other calendars
+    // Do calendars first, they only reference other calendars
     //debugPlanXml<<"Calendars--->";
     n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {

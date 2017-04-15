@@ -25,6 +25,7 @@
 // KoChart
 #include "Axis.h"
 #include "ChartDebug.h"
+#include "ChartTextShapeCommand.h"
 
 using namespace KoChart;
 using namespace KChart;
@@ -64,7 +65,6 @@ void AxisCommand::redo()
         return;
 
     // Actually do the work
-    m_axis->title()->setVisible(m_newShowTitle);
     m_axis->setTitleText(m_newTitleText);
     m_axis->setShowMajorGrid(m_newShowGridLines);
     m_axis->setShowMinorGrid(m_newShowGridLines);
@@ -75,6 +75,8 @@ void AxisCommand::redo()
     m_axis->setMinorInterval(m_newSubStepWidth);
     m_axis->setUseAutomaticMajorInterval(m_newUseAutomaticStepWidth);
     m_axis->setUseAutomaticMinorInterval(m_newUseAutomaticSubStepWidth);*/
+
+    KUndo2Command::redo();
     m_chart->update();
 }
 
@@ -84,7 +86,6 @@ void AxisCommand::undo()
             && m_oldUseLogarithmicScaling == m_newUseLogarithmicScaling && m_oldLabelsFont == m_newLabelsFont)
         return;
 
-    m_axis->title()->setVisible(m_oldShowTitle);
     m_axis->setTitleText(m_oldTitleText);
     m_axis->setShowMajorGrid(m_oldShowGridLines);
     m_axis->setShowMinorGrid(m_oldShowGridLines);
@@ -95,6 +96,8 @@ void AxisCommand::undo()
     m_axis->setMinorInterval(m_oldSubStepWidth);
     m_axis->setUseAutomaticMajorInterval(m_oldUseAutomaticStepWidth);
     m_axis->setUseAutomaticMinorInterval(m_oldUseAutomaticSubStepWidth);*/
+
+    KUndo2Command::undo();
     m_chart->update();
 }
 
@@ -107,10 +110,14 @@ void AxisCommand::setAxisShowTitle(bool show)
     } else {
         setText(kundo2_i18n("Hide Axis Title"));
     }
+    new ChartTextShapeCommand(m_axis->title(), m_chart, show, this);
 }
 
 void AxisCommand::setAxisTitle(const QString &title)
 {
+    // Note:
+    // As long as changing the title do not require a relayout of the chart,
+    // we do not need to use ChartTextShapeCommand
     m_newTitleText = title;
 
     setText(kundo2_i18n("Set Axis Title"));

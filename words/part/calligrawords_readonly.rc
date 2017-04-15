@@ -1,4 +1,5 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Calligra Words" version="4" translationDomain="calligrawords">
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
+<gui name="Calligra Words" version="4" translationDomain="calligrawords">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="file_statistics"/>
@@ -51,5 +52,5 @@
 </Menu>
 <Menu name="docstruct_popup">
 </Menu>
-</kpartgui>
+</gui>
 

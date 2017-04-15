@@ -803,10 +803,10 @@ Project::finishScenario(int sc)
     }
 #endif
     /* If the user has not set the minSlackRate to 0 we look for critical
-     * pathes. */
+     * paths. */
     if (getScenario(sc)->getMinSlackRate() > 0.0)
     {
-        setProgressInfo(QString("Computing critical pathes..."));
+        setProgressInfo(QString("Computing critical paths..."));
         /* The critical path detector needs to know the end of the last task.
          * So we have to find this out first. */
         time_t maxEnd = 0;

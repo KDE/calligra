@@ -70,7 +70,7 @@ public:
      /**
      * @since 4.4
      *
-     * Changes the number of decimal places used when formating money.
+     * Changes the number of decimal places used when formatting money.
      *
      * @param digits The default number of digits to use.
      */

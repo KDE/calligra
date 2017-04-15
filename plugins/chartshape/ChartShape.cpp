@@ -3,6 +3,7 @@
    Copyright 2007 Stefan Nikolaus     <stefan.nikolaus@kdemail.net>
    Copyright 2007-2010 Inge Wallin    <inge@lysator.liu.se>
    Copyright 2007-2008 Johannes Simon <johannes.simon@gmail.com>
+   Copyright 2017 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -87,6 +88,7 @@
 #include <KoOdfWorkaround.h>
 #include <KoTextDocument.h>
 #include <KoUnit.h>
+#include <KoShapePaintingContext.h>
 
 // KoChart
 #include "Axis.h"
@@ -168,7 +170,7 @@ QString saveOdfFont(KoGenStyles& mainStyles,
 
 
 void saveOdfLabel(KoShape *label, KoXmlWriter &bodyWriter,
-                  KoGenStyles &mainStyles, LabelType labelType)
+                  KoGenStyles &mainStyles, ItemType labelType)
 {
     // Don't save hidden labels, as that's the way of removing them
     // from a chart.
@@ -432,12 +434,14 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     d->plotArea->setZIndex(0);
     setClipped(d->plotArea, true);
     setInheritsTransform(d->plotArea, true);
+    d->plotArea->setDeletable(false);
 
     // Configure the legend.
     d->legend->setVisible(true);
     d->legend->setZIndex(1);
     setClipped(d->legend, true);
     setInheritsTransform(d->legend, true);
+    d->legend->setDeletable(false);
 
     // A few simple defaults (chart type and subtype in this case)
     setChartType(BarChartType);
@@ -486,6 +490,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     d->title->setZIndex(2);
     setClipped(d->title, true);
     setInheritsTransform(d->title, true);
+    d->title->setDeletable(false);
 
     // Create the Subtitle and add it to the shape.
     if (textShapeFactory)
@@ -513,6 +518,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     d->subTitle->setZIndex(3);
     setClipped(d->subTitle, true);
     setInheritsTransform(d->subTitle, true);
+    d->subTitle->setDeletable(false);
 
     // Create the Footer and add it to the shape.
     if (textShapeFactory)
@@ -540,6 +546,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     d->footer->setZIndex(4);
     setClipped(d->footer, true);
     setInheritsTransform(d->footer, true);
+    d->footer->setDeletable(false);
 
     // Set default contour (for how text run around is done around this shape)
     // to prevent a crash in LO
@@ -558,13 +565,18 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     KoShapeStroke *stroke = new KoShapeStroke(0, Qt::black);
     setStroke(stroke);
 
+    // set the default positioning, and do initial layout
     ChartLayout *l = layout();
-    l->setPosition(d->plotArea, CenterPosition);
-    l->setPosition(d->title,    TopPosition, 0);
-    l->setPosition(d->subTitle, TopPosition, 1);
-    l->setPosition(d->footer,   BottomPosition, 1);
-    l->setPosition(d->legend,   d->legend->legendPosition());
+    l->setPosition(d->plotArea, CenterPosition, PlotAreaType);
+    l->setPosition(d->title,    TopPosition, TitleLabelType);
+    l->setPosition(d->subTitle, TopPosition, SubTitleLabelType);
+    l->setPosition(d->footer,   BottomPosition, FooterLabelType);
+    l->setPosition(d->legend,   d->legend->legendPosition(), LegendType);
+    l->scheduleRelayout();
     l->layout();
+
+    // Let user/odf control positioning
+    l->setAutoLayoutEnabled(false);
 
     requestRepaint();
 }
@@ -775,9 +787,8 @@ void ChartShape::paintComponent(QPainter &painter,
     layout()->layout();
 
     // Paint the background
+    applyConversion(painter, converter);
     if (background()) {
-        applyConversion(painter, converter);
-
         // Calculate the clipping rect
         QRectF paintRect = QRectF(QPointF(0, 0), size());
         painter.setClipRect(paintRect, Qt::IntersectClip);
@@ -785,6 +796,18 @@ void ChartShape::paintComponent(QPainter &painter,
         QPainterPath p;
         p.addRect(paintRect);
         background()->paint(painter, converter, paintContext, p);
+    }
+    // Paint border if showTextShapeOutlines is set
+    // This means that it will be painted in words but not eg in sheets
+    if (paintContext.showTextShapeOutlines) {
+        if (qAbs(rotation()) > 1) {
+            painter.setRenderHint(QPainter::Antialiasing);
+        }
+        QPen pen(QColor(210, 210, 210), 0); // use cosmetic pen
+        QPointF onePixel = converter.viewToDocument(QPointF(1.0, 1.0));
+        QRectF rect(QPointF(0.0, 0.0), size() - QSizeF(onePixel.x(), onePixel.y()));
+        painter.setPen(pen);
+        painter.drawRect(rect);
     }
 }
 
@@ -935,7 +958,25 @@ bool ChartShape::loadOdf(const KoXmlElement &element,
     // Load common attributes of (frame) shapes.  If you change here,
     // don't forget to also change in saveOdf().
     loadOdfAttributes(element, context, OdfAllAttributes);
-    return loadOdfFrame(element, context);
+    bool r = loadOdfFrame(element, context);
+
+    if (d->legend->isVisible() && d->legend->alignment() != Qt::AlignJustify) {
+        // The legend is positioned into an area, not using the x,y coordinates,
+        // so we need to let ChartLayout ley it out accordingly
+        // This may move/resize other components, but maybe that is ok
+        d->legend->setVisible(false);
+        const QMap<KoShape*, QRectF> map = layout()->calculateLayout(d->legend, true);
+        qDebug()<<"loadOdf:"<<d->legend<<"legend:"<<d->legend->position()<<map;
+        QMap<KoShape*, QRectF>::const_iterator it;
+        for (it = map.constBegin(); it != map.constEnd(); ++it) {
+            it.key()->setPosition(it.value().topLeft());
+            it.key()->setSize(it.value().size());
+        }
+        d->legend->setVisible(true);
+        layout()->scheduleRelayout();
+    }
+
+    return r;
 }
 
 // Used to load the actual contents from the ODF frame that surrounds
@@ -1056,8 +1097,9 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
     if (!plotareaElem.isNull()) {
         d->plotArea->setChartType(chartType);
         d->plotArea->setChartSubType(chartSubType());
-        if (!d->plotArea->loadOdf(plotareaElem, context))
+        if (!d->plotArea->loadOdf(plotareaElem, context)) {
             return false;
+        }
 //         d->plotArea->setChartType(chartType);
 //         d->plotArea->setChartSubType(chartSubType());
     }

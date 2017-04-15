@@ -89,7 +89,10 @@ public:
     KoFlake::SelectionHandle handleAt(const QPointF &point, bool *innerHandleMeaning = 0);
 
 public Q_SLOTS:
+    /// Activate the tool and paint selection handles
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    /// Deactivate the tool and remove selection handles
+    virtual void deactivate();
 
 private Q_SLOTS:
     void selectionAlignHorizontalLeft();
@@ -162,6 +165,7 @@ private:
     QPointF m_lastPoint;
     KoShapeMoveCommand *m_moveCommand;
     QTime m_lastUsedMoveCommand;
+    QList<KoShape*> m_lastUsedShapes;
 
     // TODO alter these 3 arrays to be static const instead
     QCursor m_sizeCursors[8];

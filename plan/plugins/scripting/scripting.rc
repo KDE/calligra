@@ -1,5 +1,5 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KPlatoPluginScripting" library="krossmoduleplan" version="1" translationDomain="krossmoduleplan">
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
+<gui name="KPlatoPluginScripting" library="krossmoduleplan" version="1" translationDomain="krossmoduleplan">
 <MenuBar>
     <Menu name="tools"><text>&amp;Tools</text>
     <Separator/>
@@ -8,4 +8,4 @@
     <Action name="scriptmanager"/>
     </Menu>
 </MenuBar>
-</kpartgui>
+</gui>

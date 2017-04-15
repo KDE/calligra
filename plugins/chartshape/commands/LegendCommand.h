@@ -41,6 +41,7 @@ namespace KoChart
 {
 
 class Legend;
+class ChartShape;
 
 class LegendCommand : public KUndo2Command
 {
@@ -87,6 +88,7 @@ private:
     LegendExpansion m_newExpansion;
     bool m_oldShowFrame;
     bool m_newShowFrame;
+    ChartShape *m_chart;
 };
 
 } // namespace KoChart

@@ -25,10 +25,13 @@
 
 #include <QPointF>
 #include <QList>
+#include <QMap>
 #include <QTransform>
 
 class KoToolBase;
 class KoShape;
+
+class ChartResizeStrategy;
 
 /**
  * A strategy for the KoInteractionTool.
@@ -42,7 +45,7 @@ public:
      * Constructor
      */
     ShapeResizeStrategy(KoToolBase *tool, const QPointF &clicked, KoFlake::SelectionHandle direction);
-    virtual ~ShapeResizeStrategy() {}
+    virtual ~ShapeResizeStrategy();
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     KUndo2Command* createCommand();
@@ -64,6 +67,7 @@ private:
     QVector<QTransform> m_transformations;
     QPointF m_lastScale;
     QList<KoShape*> m_selectedShapes;
+    QMap<KoShape*, ChartResizeStrategy*> m_chartShapes;
 };
 
 #endif

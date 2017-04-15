@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
 <gui name="Calligra Sheets" version="42" translationDomain="calligrasheets">
 <MenuBar>
 <!-- <<<<<<<<<<<<<<<<<<<<<>>>>><   File Menu   >>>>>>>>>>>>>>>>>>>>>>>>>>>> -->

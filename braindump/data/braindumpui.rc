@@ -1,6 +1,6 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="braindump" version="1" translationDomain="braindump">
+<gui name="braindump" version="1" translationDomain="braindump">
     <MenuBar>
         <Menu name="edit" >
         </Menu>
@@ -15,4 +15,4 @@
             <DefineGroup name="dummyToKeepViewMenu"/>
         </Menu>
     </MenuBar>
-</kpartgui>
+</gui>
