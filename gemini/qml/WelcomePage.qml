@@ -19,26 +19,21 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.3
 import org.calligra 1.0
-import org.kde.kirigami 1.0 as Kirigami
+import org.kde.kirigami 2.1 as Kirigami
 import "welcomepages"
 
-Item {
+Kirigami.ApplicationItem {
     id: base;
     DocumentListModel { id: allDocumentsModel; }
     DocumentListModel { id: textDocumentsModel; filter: DocumentListModel.TextDocumentType; }
     DocumentListModel { id: presentationDocumentsModel; filter: DocumentListModel.PresentationType; }
     Component.onCompleted: {
         if(RecentFileManager.size() > 0) {
-            welcomeStack.replace(welcomePageRecent);
+            pageStack.replace(welcomePageRecent);
         }
     }
-    Kirigami.GlobalDrawer {
+    globalDrawer: Kirigami.GlobalDrawer {
         id: welcomeSidebar;
-        anchors {
-            top: parent.top;
-            left: parent.left;
-            bottom: parent.bottom;
-        }
         title: "Calligra Gemini"
         titleIcon: Settings.theme.iconActual("Calligra-MockIcon-1");
         actions: [
@@ -48,23 +43,23 @@ Item {
             Kirigami.Action  {
                 text: "Recent Documents"
                 iconName: "document-open-recent"
-                onTriggered: if(welcomeStack.currentItem.objectName != "welcomePageRecent") welcomeStack.replace(welcomePageRecent);
+                onTriggered: if(pageStack.currentItem.objectName != "welcomePageRecent") pageStack.replace(welcomePageRecent);
                 checkable: true;
-                checked: welcomeStack.currentItem !== null && welcomeStack.currentItem.objectName == "WelcomePageRecent";
+                checked: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageRecent";
             },
             Kirigami.Action  {
                 text: "Library"
                 iconName: "folder-documents"
-                onTriggered: if(welcomeStack.currentItem.objectName != "WelcomePageFilebrowser") welcomeStack.replace(welcomePageFilebrowser);
+                onTriggered: if(pageStack.currentItem.objectName != "WelcomePageFilebrowser") pageStack.replace(welcomePageFilebrowser);
                 checkable: true;
-                checked: welcomeStack.currentItem !== null && welcomeStack.currentItem.objectName == "WelcomePageFilebrowser";
+                checked: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageFilebrowser";
             },
             Kirigami.Action  {
                 text: "Cloud"
                 iconName: "folder-cloud"
-                onTriggered: if(welcomeStack.currentItem.objectName != "WelcomePageCloud") welcomeStack.replace(welcomePageCloud);
+                onTriggered: if(pageStack.currentItem.objectName != "WelcomePageCloud") pageStack.replace(welcomePageCloud);
                 checkable: true;
-                checked: welcomeStack.currentItem !== null && welcomeStack.currentItem.objectName == "WelcomePageCloud";
+                checked: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageCloud";
             },
             Kirigami.Action  {
                 text: "CREATE NEW"
@@ -72,31 +67,21 @@ Item {
             Kirigami.Action  {
                 text: "Document"
                 iconName: "x-office-document"
-                onTriggered: if(welcomeStack.currentItem.objectName != "WelcomePageWords") welcomeStack.replace(welcomePageWords);
+                onTriggered: if(pageStack.currentItem.objectName != "WelcomePageWords") pageStack.replace(welcomePageWords);
                 checkable: true;
-                checked: welcomeStack.currentItem !== null && welcomeStack.currentItem.objectName == "WelcomePageWords";
+                checked: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageWords";
             },
             Kirigami.Action  {
                 text: "Presentation"
                 iconName: "x-office-presentation"
-                onTriggered: if(welcomeStack.currentItem.objectName != "WelcomePageStage") welcomeStack.replace(welcomePageStage);
+                onTriggered: if(pageStack.currentItem.objectName != "WelcomePageStage") pageStack.replace(welcomePageStage);
                 checkable: true;
-                checked: welcomeStack.currentItem !== null && welcomeStack.currentItem.objectName == "WelcomePageStage";
+                checked: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageStage";
             }
         ]
     }
-    StackView {
-        id: welcomeStack;
-        clip: true;
-        anchors {
-            top: parent.top;
-            left: parent.left;
-            leftMargin: Kirigami.Units.largeSpacing + welcomeSidebar.contentItem.width;
-            right: parent.right;
-            bottom: parent.bottom;
-        }
-        initialItem: welcomePageFilebrowser;
-    }
+
+    pageStack.initialPage: welcomePageFilebrowser;
     Component { id: welcomePageFilebrowser; WelcomePageFilebrowser { } }
     Component { id: welcomePageRecent; WelcomePageRecent { } }
     Component { id: welcomePageStage; WelcomePageStage { } }

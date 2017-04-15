@@ -1,4 +1,3 @@
- 
 /* This file is part of the KDE project
  * Copyright (C) 2014 Dan Leinir Turthra Jensen <admin@leinir.dk>
  *

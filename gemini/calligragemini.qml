@@ -20,8 +20,6 @@ import QtQuick 2.0
 import QtQuick.Controls 1.3
 import "qml"
 import "qml/components"
-import org.kde.calligra 1.0 as Calligra
-import org.kde.kirigami 1.0 as Kirigami
 
 Item {
     id: base;

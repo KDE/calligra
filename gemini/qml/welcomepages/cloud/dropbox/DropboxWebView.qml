@@ -18,7 +18,7 @@
 
 import QtQuick 2.0
 import QtWebKit 3.0
-import org.kde.kirigami 1.0 as Kirigami
+import org.kde.kirigami 2.1 as Kirigami
 import QtQuick.Controls 1.4 as QtControls
 
 WebView {

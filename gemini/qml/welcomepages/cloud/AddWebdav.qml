@@ -19,7 +19,7 @@
 import QtQuick 2.0
 import org.calligra 1.0
 import QtQuick.Controls 1.4 as QtControls
-import org.kde.kirigami 1.0 as Kirigami
+import org.kde.kirigami 2.1 as Kirigami
 
 Rectangle {
     anchors.fill: parent;
