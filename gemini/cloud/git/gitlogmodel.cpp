@@ -157,7 +157,7 @@ void GitLogModel::refreshLog()
         entry->authorEmail = author->email;
 
         git_time_t time = git_commit_time(commit);
-        entry->time = QDateTime::fromMSecsSinceEpoch(time);
+        entry->time = QDateTime::fromMSecsSinceEpoch(time * 1000);
 
         entry->oid = QString::fromAscii(git_oid_tostr_s(git_commit_id(commit)));
         entry->message = QString::fromAscii(git_commit_message(commit));
