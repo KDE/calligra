@@ -21,13 +21,14 @@
 #define GEMINIMAINWINDOW_H
 
 #include <QMainWindow>
+#include "gemini_export.h"
 class QQuickView;
 
 /**
  * \short 
  * 
  */
-class GeminiMainWindow : public QMainWindow
+class GEMINI_EXPORT GeminiMainWindow : public QMainWindow
 {
     Q_OBJECT
     Q_PROPERTY(GeminiState currentState READ currentState NOTIFY currentStateChanged)
