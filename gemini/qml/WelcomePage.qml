@@ -44,21 +44,18 @@ Kirigami.ApplicationItem {
                 text: "Recent Documents"
                 iconName: "document-open-recent"
                 onTriggered: if(pageStack.currentItem.objectName != "welcomePageRecent") pageStack.replace(welcomePageRecent);
-                checkable: true;
                 checked: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageRecent";
             },
             Kirigami.Action  {
                 text: "Library"
                 iconName: "folder-documents"
                 onTriggered: if(pageStack.currentItem.objectName != "WelcomePageFilebrowser") pageStack.replace(welcomePageFilebrowser);
-                checkable: true;
                 checked: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageFilebrowser";
             },
             Kirigami.Action  {
                 text: "Cloud"
                 iconName: "folder-cloud"
                 onTriggered: if(pageStack.currentItem.objectName != "WelcomePageCloud") pageStack.replace(welcomePageCloud);
-                checkable: true;
                 checked: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageCloud";
             },
             Kirigami.Action  {
@@ -68,14 +65,12 @@ Kirigami.ApplicationItem {
                 text: "Document"
                 iconName: "x-office-document"
                 onTriggered: if(pageStack.currentItem.objectName != "WelcomePageWords") pageStack.replace(welcomePageWords);
-                checkable: true;
                 checked: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageWords";
             },
             Kirigami.Action  {
                 text: "Presentation"
                 iconName: "x-office-presentation"
                 onTriggered: if(pageStack.currentItem.objectName != "WelcomePageStage") pageStack.replace(welcomePageStage);
-                checkable: true;
                 checked: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageStage";
             }
         ]
