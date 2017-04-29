@@ -1,6 +1,30 @@
 [Desktop Entry]
 Type=Service
 Name=Stage Apple Keynote Import Filter
+Name[bs]=Uvodna faza Apple uvoznog filtera
+Name[ca]=Filtre d'importació de l'Apple Keynote per l'Stage
+Name[ca@valencia]=Filtre d'importació de l'Apple Keynote per l'Stage
+Name[cs]=Importní filtr Apple Keynote do Stage
+Name[da]=Apple Keynote-importfilter til Stage
+Name[de]=Stage-Importfilter für Apple Keynote
+Name[en_GB]=Stage Apple Keynote Import Filter
+Name[es]=Filtro de Stage de importación de Apple Keynote
+Name[et]=Stage'i Apple Keynote'i impordifilter
+Name[fi]=Stagen Apple Keynote -tuontisuodatin
+Name[fr]=Filtre d'importation Apple Keynote de Stage
+Name[gl]=Filtro para Krita de importación de ora
+Name[it]=Filtro di importazione Apple Keynote per Stage
+Name[ja]=Stage Apple Keynote インポートフィルタ
+Name[nb]=Apple Keynote importfilter for Stage
+Name[nl]=Importfilter van Apple-keynote voor Stage
+Name[pl]=Filtr importu formatu Apple Keynote do Sceny
+Name[pt]=Filtro de Importação de Apple Keynote para o Stage
+Name[pt_BR]=Filtro de importação de Apple Keynote para Stage
+Name[sk]=Importný filter Apple Keynote pre Stage
+Name[sv]=Stage Apple Keynote-importfilter
+Name[tr]=Stage Apple Keynote İçe Aktarma Filtresi
+Name[uk]=Фільтр імпорту Apple Keynote для Stage
+Name[x-test]=xxStage Apple Keynote Import Filterxx
 
 X-KDE-Export=application/vnd.oasis.opendocument.presentation
 X-KDE-Import=application/x-iwork-keynote-sffkey
