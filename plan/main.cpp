@@ -38,12 +38,8 @@ extern "C" KPLATO_EXPORT int kdemain( int argc, char **argv )
      */
     QLoggingCategory::setFilterRules("calligra.*.debug=false\n"
                                      "calligra.*.warning=true");
-    
-    KAboutData* aboutData = KPlato::newAboutData();
 
-    KoApplication app(PLAN_MIME_TYPE, QStringLiteral("calligraplan"), *aboutData, argc, argv);
-
-    delete aboutData;
+    KoApplication app(PLAN_MIME_TYPE, QStringLiteral("calligraplan"), KPlato::newAboutData, argc, argv);
 
     // Migrate data from kde4 to kf5 locations
     Calligra2Migration m("calligraplan", "plan");

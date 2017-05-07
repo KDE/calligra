@@ -39,11 +39,7 @@ extern "C" STAGE_EXPORT int kdemain( int argc, char **argv )
     QLoggingCategory::setFilterRules("calligra.*.debug=false\n"
                                      "calligra.*.warning=true");
 
-    KAboutData* aboutData = newKPresenterAboutData();
-
-    KoApplication app(STAGE_MIME_TYPE, QStringLiteral("calligrastage"), *aboutData, argc, argv);
-
-    delete aboutData;
+    KoApplication app(STAGE_MIME_TYPE, QStringLiteral("calligrastage"), newKPresenterAboutData, argc, argv);
 
     // Migrate data from kde4 to kf5 locations
     Calligra2Migration m("calligrastage", "stage");

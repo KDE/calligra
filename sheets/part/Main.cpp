@@ -43,14 +43,10 @@ extern "C" CALLIGRA_SHEETS_COMMON_EXPORT int kdemain(int argc, char **argv)
     QLoggingCategory::setFilterRules("calligra.*.debug=false\n"
                                      "calligra.*.warning=true");
 
-    KAboutData* aboutData = newAboutData();
-
     // QT5TODO: support custom options
 //     options.add("scriptfile <scriptfile>", ki18n("Execute the scriptfile after startup."));
 
-    KoApplication app(SHEETS_MIME_TYPE, QStringLiteral("calligrasheets"), *aboutData, argc, argv);
-
-    delete aboutData;
+    KoApplication app(SHEETS_MIME_TYPE, QStringLiteral("calligrasheets"), newAboutData, argc, argv);
 
     // Migrate data from kde4 to kf5 locations
     Calligra2Migration m("calligrasheets", "sheets");
