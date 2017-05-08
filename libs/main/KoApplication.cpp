@@ -130,14 +130,15 @@ public:
 
 KoApplication::KoApplication(const QByteArray &nativeMimeType,
                              const QString &windowIconName,
-                             const KAboutData &aboutData,
+                             AboutDataGenerator aboutDataGenerator,
                              int &argc, char **argv)
     : QApplication(argc, argv)
     , d(new KoApplicationPrivate())
 {
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
-    KAboutData::setApplicationData( aboutData );
+    QScopedPointer<KAboutData> aboutData(aboutDataGenerator());
+    KAboutData::setApplicationData(*aboutData);
 
     setWindowIcon(QIcon::fromTheme(windowIconName, windowIcon()));
 

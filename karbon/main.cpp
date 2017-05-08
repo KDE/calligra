@@ -66,11 +66,7 @@ extern "C" KARBONUI_EXPORT int kdemain( int argc, char* argv[] )
     QLoggingCategory::setFilterRules("calligra.*.debug=false\n"
                                      "calligra.*.warning=true");
 
-    KAboutData *aboutData = newKarbonAboutData();
-
-    KoApplication app(KARBON_MIME_TYPE, QStringLiteral("calligrakarbon"), *aboutData, argc, argv);
-
-    delete aboutData;
+    KoApplication app(KARBON_MIME_TYPE, QStringLiteral("calligrakarbon"), newKarbonAboutData, argc, argv);
 
     // Migrate data from kde4 to kf5 locations
     Calligra2Migration m("karbon");
