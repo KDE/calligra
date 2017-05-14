@@ -159,7 +159,7 @@ calligra_set_productset(${PRODUCTSET})
 ###########################
 ##########################
 
-find_package(ECM 1.7.0 REQUIRED NO_MODULE)
+find_package(ECM 5.19 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
 # ECM KDE macros (include first, to have their policies and settings effect all other macros)
@@ -781,7 +781,7 @@ set_package_properties(LibEtonyek PROPERTIES
 ##
 ## Test for qt-poppler
 ##
-macro_optional_find_package(Poppler)
+macro_optional_find_package(Poppler COMPONENTS Qt5)
 set_package_properties(Poppler PROPERTIES
     DESCRIPTION "A PDF rendering library"
     URL "http://poppler.freedesktop.org"

@@ -1,10 +1,5 @@
-if (POPPLER_FOUND)
+if (Poppler_Qt5_FOUND)
     add_definitions(-DHAS_POPPLER)
-
-include_directories(
-    
-    ${POPPLER_INCLUDE_DIR}
-)
 
 set(visualimagecompare_SRCS
     CSTCompareView.h
@@ -15,7 +10,7 @@ set(visualimagecompare_SRCS
 
 add_executable(visualimagecompare ${visualimagecompare_SRCS})
 
-target_link_libraries(visualimagecompare ${POPPLER_LIBRARY} Qt5::Core Qt5::Widgets)
+target_link_libraries(visualimagecompare Poppler::Qt5 Qt5::Core Qt5::Widgets)
 
 install(TARGETS visualimagecompare ${INSTALL_TARGETS_DEFAULT_ARGS})
 
