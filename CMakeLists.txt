@@ -187,7 +187,6 @@ include(ECMGenerateHeaders)
 include(MacroBoolTo01)
 include(MacroOptionalFindPackage)
 include(MacroEnsureVersion)
-include(MacroJPEG)
 include(MacroDesktopToJson)
 
 
