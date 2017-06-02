@@ -484,7 +484,7 @@ macro_optional_find_package(KReport 3.0 QUIET)
 set_package_properties(KReport PROPERTIES
     DESCRIPTION "A framework for the creation and generation of reports in multiple formats"
     URL "https://community.kde.org/KReport"
-    PURPOSE "Required by Plan"
+    PURPOSE "Required for KReports support in Plan"
     TYPE RECOMMENDED
 )
 
@@ -495,7 +495,7 @@ macro_optional_find_package(KPropertyWidgets 3.0 QUIET)
 set_package_properties(KPropertyWidgets PROPERTIES
     DESCRIPTION "A property editing framework with editor widget"
     URL "https://community.kde.org/KProperty"
-    PURPOSE "Required by Plan"
+    PURPOSE "Required for KReports support in Plan"
     TYPE RECOMMENDED
 )
 ##
@@ -1062,8 +1062,8 @@ calligra_drop_product_on_bad_condition( APP_BRAINDUMP
 calligra_drop_product_on_bad_condition( APP_PLAN
     KGantt_FOUND "KGantt devel not found"
     KChart_FOUND "KChart devel not found"
-    KReport_WithScripting_FOUND "KReport with scripting support not found"
-    KPropertyWidgets_FOUND "KPropertyWidgets not found"
+#     KReport_WithScripting_FOUND "KReport with scripting support not found"
+#     KPropertyWidgets_FOUND "KPropertyWidgets not found"
 )
 
 calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
