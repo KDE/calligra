@@ -166,11 +166,4 @@ set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION
 
 install(TARGETS kplatoui ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-# report templates
-# install( FILES
-#         reportsgenerator/ProjectPerformance.odt
-#         reportsgenerator/ProjectPerformanceCost.odt
-#         reportsgenerator/TaskStatus.odt
-#     DESTINATION ${DATA_INSTALL_DIR}/calligraplan/reports
-# )
-
+#
