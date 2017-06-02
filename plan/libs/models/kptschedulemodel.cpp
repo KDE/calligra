@@ -924,6 +924,21 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
                 case ScheduleModel::ScheduleScheduled: return i18n( "Scheduled" );
                 default: return QVariant();
             }
+        } else if (role == Qt::EditRole) {
+            switch ( section ) {
+                case ScheduleModel::ScheduleName: return "Name";
+                case ScheduleModel::ScheduleState: return "State";
+                case ScheduleModel::ScheduleDirection: return "Direction";
+                case ScheduleModel::ScheduleOverbooking: return "Overbooking";
+                case ScheduleModel::ScheduleDistribution: return "Distribution";
+                //                case ScheduleModel::ScheduleCalculate: return i18n( "Calculate" );
+                case ScheduleModel::SchedulePlannedStart: return "Planned Start";
+                case ScheduleModel::SchedulePlannedFinish: return "Planned Finish";
+                case ScheduleModel::ScheduleScheduler: return "Scheduler";
+                case ScheduleModel::ScheduleGranularity: return "Granularity";
+                case ScheduleModel::ScheduleScheduled: return "Scheduled";
+                default: return QVariant();
+            }
         } else if ( role == Qt::TextAlignmentRole ) {
             return QVariant();
         }

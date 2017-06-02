@@ -192,6 +192,7 @@ public:
     ViewBase *createResourceAssignmentView( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
     ViewBase *createChartView( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
     ViewBase *createReportView( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createReportsGeneratorView( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
 
     KoPrintJob * createPrintJob();
     QPrintDialog* createPrintDialog(KoPrintJob*, QWidget*);

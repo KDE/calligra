@@ -1,5 +1,5 @@
 <!DOCTYPE gui SYSTEM "kpartgui.dtd" >
-<gui name="Calligra Plan" version="25" translationDomain="calligraplan">
+<gui name="Calligra Plan" version="37" translationDomain="calligraplan">
     <MenuBar>
         <Menu name="file"><text>&amp;File</text>
             <Separator/>
@@ -31,6 +31,8 @@
             <ActionList name="calendareditor_calendar_list"/>
             <Separator/>
             <ActionList name="calendareditor_day_list"/>
+            <Separator/>
+            <ActionList name="workpackage_list"/>
         </Menu>
         <Menu name="view"><text>&amp;View</text>
             <Action name="view_newview"/>
@@ -85,9 +87,9 @@
         <Separator/>
         <ActionList name="workpackage_list"/>
         <Separator/>
-        <ActionList name="reportview_list"/>
+<!--        <ActionList name="reportview_list"/>
         <Separator/>
-        <ActionList name="reportdesigner_list"/>
+        <ActionList name="reportdesigner_list"/>-->
     </ToolBar>
     <Menu name="task_edit_popup">
         <Action name="node_properties"/>
@@ -170,4 +172,7 @@
         <Action name="edit_dependency"/>
         <Action name="delete_dependency"/>
     </Menu>
+    <Menu name="reportsgeneratorview_popup">
+    </Menu>
+    
 </gui>

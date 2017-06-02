@@ -15,6 +15,9 @@ endif ()
 ########### KPlato data models library ###############
 
 set(kplatomodels_LIB_SRCS
+    reportgenerator/ReportGenerator.cpp
+    reportgenerator/ReportGeneratorOdt.cpp
+
     kptcommonstrings.cpp
     kpttreecombobox.cpp
 

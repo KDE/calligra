@@ -37,6 +37,8 @@ endif()
 set(kplatoui_LIB_SRCS
     ${planreports_LIB_SRC}
 
+    reportsgenerator/ReportsGeneratorView.cpp
+
     kptganttitemdelegate.cpp
 
     kptworkpackagesendpanel.cpp
@@ -144,15 +146,18 @@ target_link_libraries(kplatoui
         komain
         kplatokernel
         kplatomodels
-        KReport
         KGantt
         KF5::KHtml
     PRIVATE
-        KPropertyWidgets
         KChart
         KF5::ItemViews
         KF5::IconThemes
+        KF5::Archive
 )
+if (PLAN_BUILD_REPORTS)
+    target_link_libraries(kplatoui PUBLIC KReport PRIVATE KPropertyWidgets)
+endif()
+
 if(KF5AkonadiContact_FOUND)
     target_link_libraries(kplatoui  PRIVATE KF5::AkonadiContact)
 endif()
@@ -160,4 +165,12 @@ endif()
 set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
 install(TARGETS kplatoui ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+# report templates
+# install( FILES
+#         reportsgenerator/ProjectPerformance.odt
+#         reportsgenerator/ProjectPerformanceCost.odt
+#         reportsgenerator/TaskStatus.odt
+#     DESTINATION ${DATA_INSTALL_DIR}/calligraplan/reports
+# )
 

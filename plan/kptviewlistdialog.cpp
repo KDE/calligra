@@ -93,7 +93,8 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
             << "ResourceAppointmentsGanttView"
             << "AccountsView"
             << "ProjectStatusView"
-            << "PerformanceStatusView";
+            << "PerformanceStatusView"
+            << "ReportsGeneratorView";
 #ifdef PLAN_USE_KREPORT
     m_viewtypes << "ReportView";
 #endif
@@ -114,7 +115,8 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
             << i18n( "Resource Assignments (Gantt)" )
             << i18n( "Cost Breakdown" )
             << i18n( "Project Performance Chart" )
-            << i18n( "Tasks Performance Chart" );
+            << i18n( "Tasks Performance Chart" )
+            << i18n("Reports generator");
 #ifdef PLAN_USE_KREPORT
       lst << i18n( "Report" );
 #endif
@@ -271,8 +273,11 @@ bool AddViewPanel::ok()
         case 16: { // Task Performance Chart
             v = m_view->createPerformanceStatusView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
+        case 17: { // Reports generator
+            v = m_view->createReportsGeneratorView(cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index);
+            break; }
 #ifdef PLAN_USE_KREPORT
-        case 17: { // Report view
+        case 18: { // Report view
             v = m_view->createReportView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
 #endif
