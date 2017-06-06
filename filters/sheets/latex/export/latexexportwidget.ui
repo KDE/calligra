@@ -64,7 +64,7 @@
                <string>The document will be able to be compiled alone</string>
               </property>
               <property name="whatsThis">
-               <string>The document will be generated as a full latex document since all the include will be generated before the \begin[document} and \end{document} commands.</string>
+               <string>The document will be generated as a full latex document since all the include will be generated before the \begin{document} and \end{document} commands.</string>
               </property>
               <property name="text">
                <string>Independent document</string>
