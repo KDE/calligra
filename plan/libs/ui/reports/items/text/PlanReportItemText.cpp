@@ -81,7 +81,7 @@ PlanReportItemText::PlanReportItemText(const QDomNode & element) : m_bottomPaddi
                 m_lineStyle->setValue(QPen(ls.penStyle()));
             }
         } else {
-            qDebug() << "while parsing field element encountered unknow element: " << n;
+            qDebug() << "while parsing field element encountered unknown element: " << n;
         }
     }
 

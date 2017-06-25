@@ -891,7 +891,7 @@ void PerformanceStatusBase::setupChart( ChartContents &cc )
     }
 
     foreach( AbstractCoordinatePlane *p, ui_chart->coordinatePlanes() ) {
-        debugPlan<<p<<"refrences:"<<p->referenceCoordinatePlane();
+        debugPlan<<p<<"references:"<<p->referenceCoordinatePlane();
         foreach ( AbstractDiagram *d, p->diagrams() ) {
             debugPlan<<p<<"diagram:"<<d;
         }
