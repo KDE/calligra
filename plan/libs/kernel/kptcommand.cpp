@@ -157,7 +157,6 @@ CalendarRemoveCmd::CalendarRemoveCmd( Project *project, Calendar *cal, const KUn
     foreach ( Resource *r, project->resourceList() ) {
         if ( r->calendar( true ) == cal ) {
             m_cmd->addCommand( new ModifyResourceCalendarCmd( r, 0 ) );
-            break;
         }
     }
     if ( project->defaultCalendar() == cal ) {
