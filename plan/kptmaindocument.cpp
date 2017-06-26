@@ -855,6 +855,12 @@ bool MainDocument::completeLoading( KoStore *store )
 
         //m_project->generateUniqueNodeIds();
     }
+    if (m_project->useSharedResources() && !m_project->sharedResourcesFile().isEmpty()) {
+        QUrl url = QUrl::fromLocalFile(m_project->sharedResourcesFile());
+        if (url.isValid()) {
+            insertResourcesFile(url);
+        }
+    }
     if ( store == 0 ) {
         // can happen if loading a template
         debugPlan<<"No store";
@@ -962,6 +968,34 @@ void MainDocument::insertFileCompleted()
     }
 }
 
+void MainDocument::insertResourcesFile(const QUrl &url)
+{
+    Part *part = new Part( this );
+    MainDocument *doc = new MainDocument( part );
+    part->setDocument( doc );
+    doc->disconnect(); // doc shall not handle feedback from openUrl()
+    doc->setAutoSave( 0 ); //disable
+    doc->m_insertFileInfo.url = url;
+    connect(doc, SIGNAL(completed()), SLOT(insertResourcesFileCompleted()));
+    connect(doc, SIGNAL(canceled(QString)), SLOT(insertFileCancelled(QString)));
+
+    doc->openUrl( url );
+}
+
+void MainDocument::insertResourcesFileCompleted()
+{
+    debugPlan<<sender();
+    MainDocument *doc = qobject_cast<MainDocument*>( sender() );
+    if (doc) {
+        Project &p = doc->getProject();
+        mergeResources(p);
+        m_project->setSharedResourcesLoaded(true);
+        doc->documentPart()->deleteLater(); // also deletes document
+    } else {
+        KMessageBox::error( 0, i18n("Internal error, failed to insert file.") );
+    }
+}
+
 void MainDocument::insertFileCancelled( const QString &error )
 {
     debugPlan<<sender()<<"error="<<error;
@@ -991,6 +1025,141 @@ bool MainDocument::insertProject( Project &project, Node *parent, Node *after )
     } else {
         addCommand( m );
     }
+    return true;
+}
+
+// check if calendar 'c' has children that will not be removed (normally 'Local' calendars)
+bool canRemoveCalendar(const Calendar *c, const QList<Calendar*> &lst)
+{
+    for (Calendar *cc : c->calendars()) {
+        if (!lst.contains(cc)) {
+            return false;
+        }
+        if (!canRemoveCalendar(cc, lst)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// sort parent calendars before children
+QList<Calendar*> sortedRemoveCalendars(Project &shared, const QList<Calendar*> &lst) {
+    QList<Calendar*> result;
+    for (Calendar *c : lst) {
+        if (!shared.calendar(c->id())) {
+            result << c;
+        }
+        result += sortedRemoveCalendars(shared, c->calendars());
+    }
+    return result;
+}
+
+bool MainDocument::mergeResources(Project &project)
+{
+    debugPlan<<&project;
+    // Just in case, remove stuff not related to resources
+    for (Node *n :  project.childNodeIterator()) {
+        delete n;
+    }
+    for (ScheduleManager *m :  project.allScheduleManagers()) {
+        delete m;
+    }
+    // Mark all resources / groups as shared
+    for (ResourceGroup *g : project.resourceGroups()) {
+        g->setShared(true);
+    }
+    for (Resource *r : project.resourceList()) {
+        r->setShared(true);
+    }
+    // Mark all calendars shared
+    for (Calendar *c : project.allCalendars()) {
+        c->setShared(true);
+    }
+    // check if any shared stuff has been removed
+    QList<ResourceGroup*> removedGroups;
+    QList<Resource*> removedResources;
+    QList<Calendar*> removedCalendars;
+    QStringList removed;
+    for (ResourceGroup *g : m_project->resourceGroups()) {
+        if (!project.findResourceGroup(g->id())) {
+            removedGroups << g;
+            removed << "Group: " + g->name();
+        }
+    }
+    for (Resource *r : m_project->resourceList()) {
+        if (!project.findResource(r->id())) {
+            removedResources << r;
+            removed << "Resource: " + r->name();
+        }
+    }
+    removedCalendars = sortedRemoveCalendars(project, m_project->calendars());
+    for (Calendar *c : removedCalendars) {
+        removed << "Calendar: " + c->name();
+    }
+    if (!removedCalendars.isEmpty() || !removedResources.isEmpty() || !removedGroups.isEmpty()) {
+        // TODO maybe show what has changed
+        if (QMessageBox::question(0, i18n("Shared resources removed"), i18n("Shall the removed shared resources be deleted?")) == QMessageBox::Yes) {
+            for (Resource *r : removedResources) {
+                RemoveResourceCmd cc(r->parentGroup(), r);
+                cc.execute();
+            }
+            for (ResourceGroup *g : removedGroups) {
+                if (g->resources().isEmpty()) {
+                    RemoveResourceGroupCmd cc(m_project, g);
+                    cc.execute();
+                }
+            }
+            while (!removedCalendars.isEmpty()) {
+                Calendar *c = removedCalendars.takeLast();
+                if (canRemoveCalendar(c, removedCalendars)) {
+                    CalendarRemoveCmd cc(m_project, c);
+                    cc.execute();
+                }
+            }
+        }
+    }
+    // update values of already existsing objects
+    for (ResourceGroup *g : project.resourceGroups()) {
+        ResourceGroup *group = m_project->findResourceGroup(g->id());
+        if (group) {
+            group->setName(g->name());
+            group->setType(g->type());
+        }
+    }
+    for (Resource *r : project.resourceList()) {
+        Resource *resource = m_project->findResource(r->id());
+        if (resource) {
+            resource->setName(r->name());
+            resource->setInitials(r->initials());
+            resource->setEmail(r->email());
+            resource->setType(r->type());
+            resource->setAutoAllocate(r->autoAllocate());
+            resource->setAvailableFrom(r->availableFrom());
+            resource->setAvailableUntil(r->availableUntil());
+            resource->setUnits(r->units());
+            resource->setNormalRate(r->normalRate());
+            resource->setOvertimeRate(r->overtimeRate());
+
+            QString id = r->calendar(true) ? r->calendar(true)->id() : QString();
+            resource->setCalendar(m_project->findCalendar(id));
+
+            id = r->account() ? r->account()->name() : QString();
+            resource->setAccount(m_project->accounts().findAccount(id));
+
+            resource->setRequiredIds(r->requiredIds());
+
+            resource->setTeamMemberIds(r->teamMemberIds());
+        }
+    }
+    for (Calendar *c : project.allCalendars()) {
+        Calendar *calendar = m_project->findCalendar(c->id());
+        if (calendar) {
+            *calendar = *c;
+        }
+    }
+    // insert new objects
+    InsertProjectCmd cmd(project, m_project, 0);
+    cmd.execute();
     return true;
 }
 

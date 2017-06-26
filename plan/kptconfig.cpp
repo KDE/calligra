@@ -23,6 +23,7 @@
 #include "calligraplansettings.h"
 #include "kptconfigskeleton.h"
 #include "kptfactory.h"
+#include "kptproject.h"
 #include "kptdebug.h"
 
 #include <QBrush>
@@ -50,6 +51,14 @@ void Config::saveSettings()
         return;
     }
     KPlatoSettings::self()->save();
+}
+
+void Config::setDefaultValues( Project &project )
+{
+    project.setLeader( KPlatoSettings::manager() );
+    project.setUseSharedResources( KPlatoSettings::useSharedResources() );
+    project.setSharedResourcesFile( KPlatoSettings::sharedResourcesFile() );
+    project.setDescription( KPlatoSettings::projectDescription() );
 }
 
 void Config::setDefaultValues( Task &task )

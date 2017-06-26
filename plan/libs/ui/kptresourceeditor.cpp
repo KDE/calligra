@@ -39,6 +39,7 @@
 #include <QVBoxLayout>
 #include <QDragMoveEvent>
 #include <QAction>
+#include <QMenu>
 
 #include <KLocalizedString>
 #include <kactioncollection.h>
@@ -194,7 +195,7 @@ void ResourceEditor::slotContextMenuRequested( const QModelIndex &index, const Q
             //name = "resourceeditor_group_popup";
         } else {
             Resource *r = qobject_cast<Resource*>( obj );
-            if ( r ) {
+            if ( r && !r->isShared() ) {
                 name = "resourceeditor_resource_popup";
             }
         }

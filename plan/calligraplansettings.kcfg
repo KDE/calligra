@@ -4,6 +4,21 @@
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
                           http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
   <kcfgfile/> <!-- name="planrc"/> Don't, Factory::componentData().config() is used -->
+  <group name="Project settings">
+      <entry name="Manager" type="String">
+          <label>Name of project manager</label>
+      </entry>
+      <entry name="UseSharedResources" type="Bool">
+          <label>Use shared resources</label>
+          <default>false</default>
+      </entry>
+      <entry name="SharedResourcesFile" type="String">
+          <label>File to contain shared resources</label>
+      </entry>
+      <entry name="ProjectDescription" type="String">
+          <label>Project description</label>
+      </entry>
+  </group>
   <group name="Task defaults">
     <entry name="Leader" type="String">
       <label>Name of task responsible</label>

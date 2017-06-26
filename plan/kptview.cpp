@@ -22,6 +22,7 @@
 #include "kptview.h"
 
 #include <kmessagebox.h>
+#include <KRecentFilesAction>
 
 #include "KoDocumentInfo.h"
 #include "KoMainWindow.h"
@@ -97,6 +98,7 @@
 #include "kpttaskstatusview.h"
 #include "kptsplitterview.h"
 #include "kptpertresult.h"
+#include "ConfigProjectPanel.h"
 #include "kpttaskdefaultpanel.h"
 #include "kptworkpackageconfigpanel.h"
 #include "kptcolorsconfigpanel.h"
@@ -209,6 +211,7 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
         m_trigged( false ),
         m_nextScheduleManager( 0 ),
         m_readWrite( false ),
+        m_defaultView(1),
         m_partpart (part)
 {
     //debugPlan;
@@ -259,7 +262,7 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Add sub views
-    createWelcomeView();
+    createIntroductionView();
 
     // The menu items
     // ------ File
@@ -398,7 +401,6 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
             object->deleteLater();
         }
     }
-
     //debugPlan<<" end";
 }
 
@@ -461,6 +463,8 @@ void View::initiateViews()
         connect(getPart(), SIGNAL(viewlistModified(bool)), docker, SLOT(updateWindowTitle(bool)));
     }
     connect( m_tab, SIGNAL(currentChanged(int)), this, SLOT(slotCurrentChanged(int)) );
+
+    slotSelectDefaultView();
 
     loadContext();
 
@@ -756,19 +760,29 @@ ViewInfo View::defaultCategoryInfo( const QString &type ) const
 
 void View::slotOpenUrlRequest( HtmlView *v, const QUrl &url )
 {
-    if ( url.url().startsWith( QLatin1String( "about:plan" ) ) ) {
-        getPart()->aboutPage().generatePage( v->htmlPart(), url );
-        return;
+    debugPlan<<url;
+    if ( url.scheme() == QLatin1String("about") ) {
+        if ( url.url() == QLatin1String("about:close") ) {
+            int view = m_visitedViews.count() < 2 ? qMin(m_defaultView, m_tab->count()-1) : m_visitedViews.at(m_visitedViews.count() - 2);
+            debugPlan<<"Prev:"<<view<<m_visitedViews;
+            m_tab->setCurrentIndex(view);
+            return;
+        }
+        if ( url.url().startsWith( QLatin1String( "about:plan" ) ) ) {
+            getPart()->aboutPage().generatePage( v->htmlPart(), url );
+            return;
+        }
     }
     if ( url.scheme() == QLatin1String("help") ) {
         KHelpClient::invokeHelp( "", url.fileName() );
         return;
     }
     // try to open the url
+    debugPlan<<url<<"is external, try to open";
     new KRun( url, mainWindow() );
 }
 
-ViewBase *View::createWelcomeView()
+ViewBase *View::createIntroductionView()
 {
     HtmlView *v = new HtmlView(getKoPart(), getPart(), m_tab );
     v->htmlPart().setJScriptEnabled(false);
@@ -872,6 +886,7 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString &tag, const Q
 {
     TaskEditor *taskeditor = new TaskEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( taskeditor );
+    m_defaultView = m_tab->count() - 1;
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, taskeditor, getPart(), "", index );
     ViewInfo vi = defaultViewInfo( "TaskEditor" );
@@ -1488,6 +1503,11 @@ void View::slotViewSelector( bool show )
     m_viewlist->setVisible( show );
 }
 
+void View::slotInsertResourcesFile(const QString &file)
+{
+    getPart()->insertResourcesFile(QUrl(file));
+}
+
 void View::slotInsertFile()
 {
     InsertFileDialog *dlg = new InsertFileDialog( getProject(), currentTask(), this );
@@ -1924,6 +1944,7 @@ void View::slotConfigure()
         return;
     }
     ConfigDialog *dialog = new ConfigDialog( this, "Plan Settings", KPlatoSettings::self() );
+    dialog->addPage(new ConfigProjectPanel(), i18n("Project Defaults"), koIconName("calligraplan") );
     dialog->addPage(new TaskDefaultPanel(), i18n("Task Defaults"), koIconName("view-task") );
     dialog->addPage(new ColorsConfigPanel(), i18n("Task Colors"), koIconName("fill-color") );
     dialog->addPage(new WorkPackageConfigPanel(), i18n("Work Package"), koIconName("calligraplanwork") );
@@ -1933,7 +1954,7 @@ void View::slotConfigure()
 
 void View::slotIntroduction()
 {
-    m_tab->setCurrentIndex( 0 );
+    m_tab->setCurrentIndex(0);
 }
 
 
@@ -2009,6 +2030,7 @@ void View::slotOpenNode( Node *node )
                 Project * project = static_cast<Project *>( node );
                 MainProjectDialog *dia = new MainProjectDialog( *project, this );
                 connect(dia, SIGNAL(finished(int)), SLOT(slotProjectEditFinished(int)));
+                connect(dia, SIGNAL(sigLoadSharedResources(const QString&)), this, SLOT(slotInsertResourcesFile(const QString&)));
                 dia->show();
                 dia->raise();
                 dia->activateWindow();
@@ -2842,10 +2864,16 @@ QPrintDialog *View::createPrintDialog( KoPrintJob *printJob, QWidget *parent )
     return dia;
 }
 
-void View::slotCurrentChanged( int )
+void View::slotCurrentChanged( int view )
 {
+    m_visitedViews << view;
     ViewListItem *item = m_viewlist->findItem( qobject_cast<ViewBase*>( m_tab->currentWidget() ) );
     m_viewlist->setCurrentItem( item );
+}
+
+void View::slotSelectDefaultView()
+{
+    m_tab->setCurrentIndex(qMin(m_defaultView, m_tab->count()-1));
 }
 
 void View::updateView( QWidget * )

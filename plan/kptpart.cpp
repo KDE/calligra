@@ -22,11 +22,24 @@
 #include "kptview.h"
 #include "kptmaindocument.h"
 #include "kptfactory.h"
+#include "welcome/WelcomeView.h"
+#include "kpthtmlview.h"
+#include <kptdebug.h>
 
 #include <KoComponentData.h>
+#include <KoOpenPane.h>
+
+#include <KRecentFilesAction>
+#include <KXMLGUIFactory>
+#include <KConfigGroup>
+#include <KHelpClient>
+#include <KRun>
+
+#include <QStackedWidget>
 
 Part::Part(QObject *parent)
     : KoPart(Factory::global(), parent)
+    , startUpWidget(0)
 {
     setTemplatesResourcePath(QLatin1String("calligraplan/templates/"));
 }
@@ -62,9 +75,104 @@ KoMainWindow *Part::createMainWindow()
     return new KoMainWindow(PLAN_MIME_TYPE, componentData());
 }
 
+void Part::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
+{
+    parent->factory()->container("mainToolBar", parent)->hide();
+
+    if (startUpWidget) {
+        startUpWidget->show();
+    } else {
+        createStarUpWidget(parent);
+        parent->setCentralWidget(startUpWidget);
+    }
+
+    parent->setPartToOpen(this);
+
+}
+
 void Part::openTemplate(const QUrl &url)
 {
     m_document->setLoadingTemplate(true);
     KoPart::openTemplate(url);
     m_document->setLoadingTemplate(false);
+}
+
+void Part::createStarUpWidget(KoMainWindow *parent)
+{
+    startUpWidget = new QStackedWidget(parent);
+
+    startUpWidget->addWidget(createWelcomeView(parent));
+    startUpWidget->addWidget(createIntroductionView());
+}
+
+void Part::deleteStartUpWidget()
+{
+    delete startUpWidget;
+    startUpWidget = 0;
+    mainWindows().first()->setRootDocument(document(), this);
+    KoPart::mainWindows().first()->factory()->container("mainToolBar", mainWindows().first())->show();
+}
+
+QWidget *Part::createWelcomeView(KoMainWindow *mw)
+{
+    MainDocument *doc = static_cast<MainDocument*>(document());
+
+    WelcomeView *v = new WelcomeView(this, doc, startUpWidget);
+    v->setProject(&(doc->getProject()));
+
+    KSharedConfigPtr configPtr = Factory::global().config();
+    KRecentFilesAction recent("x", 0);
+    recent.loadEntries(configPtr->group("RecentFiles"));
+    v->setRecentFiles(recent.items());
+
+    connect(v, SIGNAL(loadSharedResources(const QUrl&)), doc, SLOT(insertResourcesFile(const QUrl&)));
+    connect(v, SIGNAL(recentProject(const QUrl&)), mw, SLOT(slotFileOpenRecent(const QUrl&)));
+    connect(v, SIGNAL(showIntroduction()), this, SLOT(slotShowIntroduction()));
+    connect(v, SIGNAL(finished()), this, SLOT(deleteStartUpWidget()));
+
+    return v;
+}
+
+void Part::slotShowIntroduction()
+{
+    startUpWidget->setCurrentIndex(1);
+    slotOpenUrlRequest(static_cast<HtmlView*>(startUpWidget->currentWidget()), QUrl("about:plan/main"));
+}
+
+void Part::slotOpenUrlRequest( HtmlView *v, const QUrl &url )
+{
+    debugPlan<<url;
+    if ( url.scheme() == QLatin1String("about") ) {
+        if ( url.url() == QLatin1String("about:close") ) {
+            startUpWidget->setCurrentIndex(0);
+            return;
+        }
+        if ( url.url().startsWith( QLatin1String( "about:plan" ) ) ) {
+            MainDocument *doc = static_cast<MainDocument*>(document());
+            doc->aboutPage().generatePage( v->htmlPart(), url );
+            return;
+        }
+    }
+    if ( url.scheme() == QLatin1String("help") ) {
+        KHelpClient::invokeHelp( "", url.fileName() );
+        return;
+    }
+    // try to open the url
+    debugPlan<<url<<"is external, discard";
+    new KRun( url,  currentMainwindow() );
+}
+
+QWidget *Part::createIntroductionView()
+{
+    HtmlView *v = new HtmlView(this, document(), startUpWidget );
+    v->htmlPart().setJScriptEnabled(false);
+    v->htmlPart().setJavaEnabled(false);
+    v->htmlPart().setMetaRefreshEnabled(false);
+    v->htmlPart().setPluginsEnabled(false);
+
+    slotOpenUrlRequest( v, QUrl( "about:plan/main" ) );
+
+    connect( v, SIGNAL(openUrlRequest(HtmlView*,QUrl)), SLOT(slotOpenUrlRequest(HtmlView*,QUrl)) );
+
+    return v;
 }

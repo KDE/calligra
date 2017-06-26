@@ -34,6 +34,7 @@
 #include "kptschedule.h"
 #include "kpttaskdescriptiondialog.h"
 
+#include <QFileDialog>
 
 namespace KPlato
 {
@@ -58,10 +59,13 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent)
 
     namefield->setText(project.name());
     leaderfield->setText(project.leader());
-    m_description = new TaskDescriptionPanel( p, this );
+ //   useSharedResources->setEnabled(!project.isSharedResourcesLoaded());
+    useSharedResources->setChecked(project.useSharedResources());
+    resourcesFile->setText(project.sharedResourcesFile());
+
+    m_description = new TaskDescriptionPanel( p, tabWidget->widget(1) );
     m_description->namefield->hide();
     m_description->namelabel->hide();
-    layout()->addWidget( m_description );
 
     wbs->setText(project.wbsCode());
     if ( wbs->text().isEmpty() ) {
@@ -86,11 +90,20 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent)
     connect( startTime, SIGNAL(timeChanged(QTime)), this, SLOT(slotCheckAllFieldsFilled()) );
     connect( namefield, SIGNAL(textChanged(QString)), this, SLOT(slotCheckAllFieldsFilled()) );
     connect( leaderfield, SIGNAL(textChanged(QString)), this, SLOT(slotCheckAllFieldsFilled()) );
+    connect( useSharedResources, SIGNAL(toggled(bool)), this, SLOT(slotCheckAllFieldsFilled()) );
+    connect( resourcesFile, SIGNAL(textChanged(const QString&)), this, SLOT(slotCheckAllFieldsFilled()) );
     connect( chooseLeader, SIGNAL(clicked()), this, SLOT(slotChooseLeader()) );
+
+    connect(resourcesBrowseBtn, SIGNAL(clicked()), this, SLOT(openResourcesFile()));
+
+    slotCheckAllFieldsFilled();
 }
 
 
 bool MainProjectPanel::ok() {
+    if (useSharedResources->isChecked() && resourcesFile->text().isEmpty()) {
+        return false;
+    }
     return true;
 }
 
@@ -113,6 +126,14 @@ MacroCommand *MainProjectPanel::buildCommand() {
         if (!m) m = new MacroCommand(c);
         m->addCommand(new ProjectModifyEndTimeCmd(project, endDateTime()));
     }
+    if (project.useSharedResources() != useSharedResources->isChecked()) {
+        if (!m) m = new MacroCommand(c);
+        m->addCommand(new UseSharedResourcesCmd(&project, useSharedResources->isChecked()));
+    }
+    if (project.sharedResourcesFile() != resourcesFile->text()) {
+        if (!m) m = new MacroCommand(c);
+        m->addCommand(new SharedResourcesFileCmd( &project, resourcesFile->text()));
+    }
     MacroCommand *cmd = m_description->buildCommand();
     if ( cmd ) {
         if (!m) m = new MacroCommand(c);
@@ -124,7 +145,11 @@ MacroCommand *MainProjectPanel::buildCommand() {
 void MainProjectPanel::slotCheckAllFieldsFilled()
 {
     emit changed();
-    emit obligatedFieldsFilled(true); // never block save
+    bool state = !namefield->text().isEmpty();
+    if (!project.isSharedResourcesLoaded()) {
+        state = !useSharedResources->isChecked() || !resourcesFile->text().isEmpty();
+    }
+    emit obligatedFieldsFilled(state);
 }
 
 
@@ -192,5 +217,15 @@ QDateTime MainProjectPanel::endDateTime()
     return QDateTime(endDate->date(), endTime->time(), Qt::LocalTime);
 }
 
+void MainProjectPanel::openResourcesFile()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open Resources"), "", tr("Resources file (*.plan)"));
+    resourcesFile->setText(fileName);
+}
+
+bool MainProjectPanel::loadSharedResources() const
+{
+    return useSharedResources->isChecked();
+}
 
 }  //KPlato namespace

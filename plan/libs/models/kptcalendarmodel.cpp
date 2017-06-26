@@ -169,6 +169,13 @@ Qt::ItemFlags CalendarItemModel::flags( const QModelIndex &index ) const
     if ( !index.isValid() ) {
         return flags;
     }
+    Calendar *c = calendar(index);
+    if (!c || c->isShared()) {
+        if (index.column() == Name) {
+            flags |= Qt::ItemIsUserCheckable;
+        }
+        return flags;
+    }
     flags |= Qt::ItemIsDragEnabled;
     if ( calendar ( index ) ) {
         switch ( index.column() ) {
@@ -290,6 +297,26 @@ QVariant CalendarItemModel::name( const Calendar *a, int role ) const
     return QVariant();
 }
 
+QVariant CalendarItemModel::scope( const Calendar *a, int role ) const
+{
+    //debugPlan<<res->name()<<","<<role;
+    switch ( role ) {
+        case Qt::DisplayRole:
+            return a->isShared() ? i18n("Shared") : i18n("Local");
+        case Qt::EditRole:
+            return a->isShared() ? "Shared" : "Local";
+        case Qt::ToolTipRole:
+            if ( !a->isShared() ) {
+                return xi18nc( "@info:tooltip 1=calendar name", "%1 is a <emphasis>Local</emphasis> calendar", a->name() );
+            }
+            return xi18nc( "@info:tooltip 1=calendar name", "%1 is a <emphasis>Shared</emphasis> calendar", a->name() );
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
 bool CalendarItemModel::setName( Calendar *a, const QVariant &value, int role )
 {
     switch ( role ) {
@@ -383,6 +410,7 @@ QVariant CalendarItemModel::data( const QModelIndex &index, int role ) const
     }
     switch ( index.column() ) {
         case Name: result = name( a, role ); break;
+        case Scope: result = scope( a, role ); break;
         case TimeZone: result = timeZone( a, role ); break;
         default:
             debugPlan<<"data: invalid display value column"<<index.column();
@@ -403,6 +431,7 @@ bool CalendarItemModel::setData( const QModelIndex &index, const QVariant &value
     Calendar *a = calendar( index );
     switch (index.column()) {
         case Name: return setName( a, value, role );
+        case Scope: return false;
         case TimeZone: return setTimeZone( a, value, role );
         default:
             warnPlan<<"data: invalid display value column "<<index.column();
@@ -417,6 +446,7 @@ QVariant CalendarItemModel::headerData( int section, Qt::Orientation orientation
         if ( role == Qt::DisplayRole ) {
             switch ( section ) {
                 case Name: return xi18nc( "@title:column", "Name" );
+                case Scope: return xi18nc( "@title:column", "Scope" );
                 case TimeZone: return xi18nc( "@title:column", "Timezone" );
                 default: return QVariant();
             }
@@ -429,6 +459,7 @@ QVariant CalendarItemModel::headerData( int section, Qt::Orientation orientation
     if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
             case Name: return ToolTip::calendarName();
+            case Scope: return QVariant();
             case TimeZone: return ToolTip::calendarTimeZone();
             default: return QVariant();
         }

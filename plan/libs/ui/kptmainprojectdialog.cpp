@@ -49,9 +49,16 @@ MainProjectDialog::MainProjectDialog(Project &p, QWidget *parent, const char */*
 
 
 void MainProjectDialog::slotOk() {
-    if (!panel->ok())
+    if (!panel->ok()) {
         return;
-
+    }
+    if (panel->loadSharedResources()) {
+        QString file = panel->resourcesFile->text();
+        if (file.startsWith('/')) {
+            file.prepend("file:/");
+        }
+        emit sigLoadSharedResources(file);
+    }
     accept();
 }
 

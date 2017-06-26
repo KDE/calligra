@@ -37,6 +37,8 @@ endif()
 set(kplatoui_LIB_SRCS
     ${planreports_LIB_SRC}
 
+    welcome/WelcomeView.cpp
+
     reportsgenerator/ReportsGeneratorView.cpp
 
     kptganttitemdelegate.cpp
@@ -99,6 +101,8 @@ set(kplatoui_LIB_SRCS
 ki18n_wrap_ui(kplatoui_LIB_SRCS
     ${planreports_ui_LIB_SRCS}
 
+    welcome/WelcomeView.ui
+
     kptresourceappointmentsdisplayoptions.ui
     kptganttchartdisplayoptions.ui
 
@@ -153,6 +157,7 @@ target_link_libraries(kplatoui
         KF5::ItemViews
         KF5::IconThemes
         KF5::Archive
+        Qt5::Sql
 )
 if (PLAN_BUILD_REPORTS)
     target_link_libraries(kplatoui PUBLIC KReport PRIVATE KPropertyWidgets)

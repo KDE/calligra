@@ -88,6 +88,9 @@ QVariant ResourceModel::name( const Resource *res, int role ) const
         case Qt::EditRole:
             return res->name();
         case Qt::ToolTipRole:
+            if (res->isShared()) {
+                return xi18nc("@info:tooltip", "%1 is a <emphasis>Shared</emphasis> resource and can thus be shared with other projects", res->name());
+            }
             if ( res->autoAllocate() ) {
                 return xi18nc( "@info:tooltip", "%1:<nl/>This resource will be automatically allocated to new tasks", res->name() );
             }
@@ -114,9 +117,63 @@ QVariant ResourceModel::name( const  ResourceGroup *res, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
-        case Qt::ToolTipRole:
             return res->name();
+        case Qt::ToolTipRole:
+            if (!res->isShared()) {
+                return res->name();
+            }
+            return xi18nc("@info:tooltip", "%1 is a <emphasis>Shared</emphasis> resource group and can thus be shared with other projects", res->name());
             break;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant ResourceModel::scope( const Resource *res, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+            return res->isShared() ? i18n("Shared") : i18n("Local");
+        case Qt::ToolTipRole:
+            if (!res->isShared()) {
+                return xi18nc("@info:tooltip", "%1 is a <emphasis>Local</emphasis> resource and can only be be used in this project", res->name());
+            }
+            return xi18nc("@info:tooltip", "%1 is a <emphasis>Shared</emphasis> resource and can thus be shared with other projects", res->name());
+        case Qt::EditRole:
+            return res->isShared() ? "Shared" : "Local";
+        case Role::EnumList:
+            return QStringList() << i18n("Local") << i18n("Shared");
+        case Role::EnumListValue:
+            return res->isShared() ? 1 : 0;
+        case Qt::TextAlignmentRole:
+            return Qt::AlignCenter;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant ResourceModel::scope( const ResourceGroup *res, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+            return res->isShared() ? i18n("Shared") : i18n("Local");
+        case Qt::ToolTipRole:
+            if (!res->isShared()) {
+                return xi18nc("@info:tooltip", "%1 is a <emphasis>Local</emphasis> resource group and can only be be used in this project", res->name());
+            }
+            return xi18nc("@info:tooltip", "%1 is a <emphasis>Shared</emphasis> resource group and can thus be shared with other projects", res->name());
+        case Qt::EditRole:
+            return res->isShared() ? "Shared" : "Local";
+        case Role::EnumList:
+            return QStringList() << i18n("Local") << i18n("Shared");
+        case Role::EnumListValue:
+            return res->isShared() ? 1 : 0;
+        case Qt::TextAlignmentRole:
+            return Qt::AlignCenter;
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -394,6 +451,7 @@ QVariant ResourceModel::data( const Resource *resource, int property, int role )
     }
     switch ( property ) {
         case ResourceName: result = name( resource, role ); break;
+        case ResourceScope: result = scope( resource, role ); break;
         case ResourceType: result = type( resource, role ); break;
         case ResourceInitials: result = initials( resource, role ); break;
         case ResourceEmail: result = email( resource, role ); break;
@@ -422,6 +480,7 @@ QVariant ResourceModel::data( const ResourceGroup *group, int property, int role
     }
     switch ( property ) {
         case ResourceModel::ResourceName: result = name( group, role ); break;
+        case ResourceModel::ResourceScope: result = scope( group, role ); break;
         case ResourceModel::ResourceType: result = type( group, role ); break;
         default:
             if ( role == Qt::DisplayRole ) {
@@ -443,6 +502,7 @@ QVariant ResourceModel::headerData( int section, int role )
     if ( role == Qt::DisplayRole ) {
         switch ( section ) {
             case ResourceName: return i18n( "Name" );
+            case ResourceScope: return i18n( "Scope" );
             case ResourceType: return i18n( "Type" );
             case ResourceInitials: return i18n( "Initials" );
             case ResourceEmail: return i18n( "Email" );
@@ -458,6 +518,7 @@ QVariant ResourceModel::headerData( int section, int role )
     } else if ( role == Qt::TextAlignmentRole ) {
         switch (section) {
             case ResourceName:
+            case ResourceScope:
             case ResourceType:
             case ResourceInitials:
             case ResourceEmail:
@@ -479,6 +540,7 @@ QVariant ResourceModel::headerData( int section, int role )
     } else if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
             case ResourceName: return ToolTip::resourceName();
+            case ResourceScope: return ToolTip::resourceScope();
             case ResourceType: return ToolTip::resourceType();
             case ResourceInitials: return ToolTip::resourceInitials();
             case ResourceEmail: return ToolTip::resourceEMail();
@@ -665,10 +727,20 @@ Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
     }
     Resource *r = qobject_cast<Resource*>( object ( index ) );
     if ( r != 0 ) {
+        if (r->isShared()) {
+            flags &= ~Qt::ItemIsEditable;
+            if (index.column() == ResourceModel::ResourceName) {
+                flags |= Qt::ItemIsUserCheckable;
+            }
+            return flags;
+        }
         flags |= Qt::ItemIsDragEnabled;
         switch ( index.column() ) {
             case ResourceModel::ResourceName:
                 flags |= Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
+                break;
+            case ResourceModel::ResourceScope:
+                flags &= ~Qt::ItemIsEditable;
                 break;
             case ResourceModel::ResourceType:
                 if ( ! r->isBaselined() ) {
@@ -694,14 +766,21 @@ Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
                 flags |= Qt::ItemIsEditable;
         }
         //debugPlan<<"resource"<<flags;
-    } else if ( qobject_cast<ResourceGroup*>( object( index ) ) ) {
-        flags |= Qt::ItemIsDropEnabled;
-        switch ( index.column() ) {
-            case ResourceModel::ResourceName: flags |= Qt::ItemIsEditable; break;
-            case ResourceModel::ResourceType: flags |= Qt::ItemIsEditable; break;
-            default: flags &= ~Qt::ItemIsEditable;
+    } else {
+        ResourceGroup *g = qobject_cast<ResourceGroup*>( object( index ) );
+        if ( g ) {
+            if (g->isShared()) {
+                flags &= ~Qt::ItemIsEditable;
+                return flags;
+            }
+            flags |= Qt::ItemIsDropEnabled;
+            switch ( index.column() ) {
+                case ResourceModel::ResourceName: flags |= Qt::ItemIsEditable; break;
+                case ResourceModel::ResourceType: flags |= Qt::ItemIsEditable; break;
+                default: flags &= ~Qt::ItemIsEditable;
+            }
+            //debugPlan<<"group"<<flags;
         }
-        //debugPlan<<"group"<<flags;
     }
     return flags;
 }
@@ -1082,7 +1161,10 @@ bool ResourceItemModel::setData( const QModelIndex &index, const QVariant &value
     if ( ! index.isValid() ) {
         return ItemModelBase::setData( index, value, role );
     }
-    if ( ( flags( index ) &Qt::ItemIsEditable ) == 0 ||  ! ( role == Qt::EditRole || role == Qt::CheckStateRole ) ) {
+    if (role != Qt::EditRole && role != Qt::CheckStateRole) {
+        return false;
+    }
+    if ((flags( index ) & (Qt::ItemIsEditable | Qt::ItemIsUserCheckable)) == 0) {
         return false;
     }
     QObject *obj = object( index );
@@ -1090,6 +1172,7 @@ bool ResourceItemModel::setData( const QModelIndex &index, const QVariant &value
     if ( r ) {
         switch (index.column()) {
             case ResourceModel::ResourceName: return setName( r, value, role );
+            case ResourceModel::ResourceScope: return false; // Not editable
             case ResourceModel::ResourceType: return setType( r, value, role );
             case ResourceModel::ResourceInitials: return setInitials( r, value, role );
             case ResourceModel::ResourceEmail: return setEmail( r, value, role );
@@ -1109,6 +1192,7 @@ bool ResourceItemModel::setData( const QModelIndex &index, const QVariant &value
         if ( g ) {
             switch (index.column()) {
                 case ResourceModel::ResourceName: return setName( g, value, role );
+                case ResourceModel::ResourceScope: return false; // Not editable
                 case ResourceModel::ResourceType: return setType( g, value, role );
                 default:
                     qWarning("data: invalid display value column %d", index.column());
@@ -1611,6 +1695,7 @@ Qt::ItemFlags AllocatedResourceItemModel::flags( const QModelIndex & index ) con
     f &= ~Qt::ItemIsUserCheckable;
     return f;
 }
+
 
 QVariant AllocatedResourceItemModel::headerData(int section, Qt::Orientation orientation, int role) const
 {

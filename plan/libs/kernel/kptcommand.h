@@ -2,7 +2,7 @@
   Copyright (C) 2004-2007 Dag Andersen <danders@get2net.dk>
   Copyright (C) 2011 Dag Andersen <danders@get2net.dk>
   Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
   License as published by the Free Software Foundation; either
@@ -76,7 +76,7 @@ protected:
     void setSchScheduled();
     /// Set all schedules in the m_schedules map to scheduled state @p state
     void setSchScheduled( bool state );
-    /// Add a schedule to the m_schedules map along with its current scheduled state 
+    /// Add a schedule to the m_schedules map along with its current scheduled state
     void addSchScheduled( Schedule *sch );
 
     QMap<Schedule*, bool> m_schedules;
@@ -90,9 +90,9 @@ public:
         : KUndo2Command( name )
     {}
     ~MacroCommand();
-    
+
     void addCommand( KUndo2Command *cmd );
-    
+
     virtual void redo() { execute(); }
     virtual void undo() { unexecute(); }
 
@@ -100,7 +100,7 @@ public:
     virtual void unexecute();
 
     bool isEmpty() const { return cmds.isEmpty(); }
-    
+
 protected:
     QList<KUndo2Command*> cmds;
 };
@@ -297,7 +297,7 @@ class KPLATOKERNEL_EXPORT CalendarRemoveTimeIntervalCmd : public CalendarAddTime
 {
 public:
     CalendarRemoveTimeIntervalCmd( Calendar *calendar, CalendarDay *day, TimeInterval *value, const KUndo2MagicString& name = KUndo2MagicString() );
-    
+
     void execute();
     void unexecute();
 };
@@ -1227,7 +1227,7 @@ class KPLATOKERNEL_EXPORT ModifyCompletionPercentFinishedCmd : public NamedComma
 {
 public:
     ModifyCompletionPercentFinishedCmd( Completion &completion, const QDate &date, int value, const KUndo2MagicString& name = KUndo2MagicString() );
-    
+
     void execute();
     void unexecute();
 
@@ -1913,6 +1913,32 @@ public:
 private:
     Project *m_project;
     MacroCommand m_cmd;
+};
+
+class  KPLATOKERNEL_EXPORT SharedResourcesFileCmd : public NamedCommand
+{
+public:
+    explicit SharedResourcesFileCmd(Project *project, const QString &newValue, const KUndo2MagicString& name = KUndo2MagicString());
+    void execute();
+    void unexecute();
+
+private:
+    Project *m_project;
+    QString m_oldValue;
+    QString m_newValue;
+};
+
+class  KPLATOKERNEL_EXPORT UseSharedResourcesCmd : public NamedCommand
+{
+public:
+    explicit UseSharedResourcesCmd(Project *project, bool newValue, const KUndo2MagicString& name = KUndo2MagicString());
+    void execute();
+    void unexecute();
+
+private:
+    Project *m_project;
+    bool m_oldValue;
+    bool m_newValue;
 };
 
 }  //KPlato namespace

@@ -64,7 +64,7 @@ class KPlatoXmlLoaderBase;
  * A note on timezones:
  * To be able to handle resources working in diffierent timezones and
  * to facilitate data exchange with other applications like PIMs or
- * and groupware servers, the project has a timezone that is used for 
+ * and groupware servers, the project has a timezone that is used for
  * all datetimes in nodes and schedules.
  * By default the local timezone is used.
  *
@@ -119,11 +119,11 @@ public:
 
     virtual bool load( KoXmlElement &element, XMLLoaderObject &status );
     virtual void save( QDomElement &element ) const;
-    
+
     using Node::saveWorkPackageXML;
     /// Save a workpackage document containing @node with schedule identity @p id
     void saveWorkPackageXML( QDomElement &element, const Node *node, long id ) const;
-    
+
     /**
      * Add the node @p task to the project, after node @p position
      * If @p postition is zero or the project node, it will be added to this project.
@@ -176,22 +176,22 @@ public:
     int indexOf( ResourceGroup *resource ) const { return m_resourceGroups.indexOf( resource ); }
     ResourceGroup *resourceGroupAt( int pos ) const { return m_resourceGroups.value( pos ); }
     int numResourceGroups() const { return m_resourceGroups.count(); }
-    
+
     /// Returns the resourcegroup with identity id.
     ResourceGroup *group( const QString& id );
     /// Returns the resource group with the matching name, 0 if no match is found.
     ResourceGroup *groupByName( const QString& name ) const;
-    
+
     /**
      * Adds the resource to the project and resource group.
      * Always use this to add resources.
      */
     void addResource( ResourceGroup *group, Resource *resource, int index = -1 );
-    /** 
+    /**
      * Removes the resource from the project and resource group.
      * The resource is not deleted.
      * Always use this to remove resources.
-     */ 
+     */
     Resource *takeResource( ResourceGroup *group, Resource *resource );
     /// Move @p resource to the new @p group. Requests are removed.
     void moveResource( ResourceGroup *group, Resource *resource );
@@ -229,15 +229,15 @@ public:
      * @param date The cost is calculated from the start of the project upto including date.
      */
     virtual EffortCost actualCostTo(  long int id, const QDate &date ) const;
-    
+
     virtual EffortCostMap actualEffortCostPrDay( const QDate &start, const QDate &end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
 
     virtual EffortCostMap actualEffortCostPrDay( const Resource *resource, const QDate &start, const QDate &end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
 
     double effortPerformanceIndex( const QDate &date, long id ) const;
-    
+
     double schedulePerformanceIndex( const QDate &date, long id ) const;
-    
+
     /// Returns the effort planned to be used to reach the actual percent finished
     virtual Duration budgetedWorkPerformed( const QDate &date, long id = CURRENTSCHEDULE ) const;
     /// Returns the cost planned to be used to reach the actual percent finished
@@ -271,7 +271,7 @@ public:
     /**
      * Defines the length of days, weeks, months and years
      * and the standard working week.
-     * Used for estimation and calculation of effort, 
+     * Used for estimation and calculation of effort,
      * and presentation in gantt chart.
      */
     StandardWorktime *standardWorktime() { return m_standardWorktime; }
@@ -300,7 +300,7 @@ public:
     using Node::removeId;
     /// Remove the node with identity id from the registers
     virtual bool removeId( const QString &id );
-    
+
     /// Reserve @p id for the @p node
     virtual void reserveId( const QString &id, Node *node );
     /// Register @p node. The nodes id must be unique and non-empty.
@@ -375,7 +375,7 @@ public:
     void setWbsDefinition( const WBSDefinition &def );
     /// Generate WBS Code
     virtual QString generateWBSCode( QList<int> &indexes, bool sortable = false ) const;
-    
+
     Accounts &accounts() { return m_accounts; }
     const Accounts &accounts() const { return m_accounts; }
 
@@ -392,7 +392,7 @@ public:
     void addMainSchedule( MainSchedule *schedule );
     /// Set parent schedule for my children
     virtual void setParentSchedule( Schedule *sch );
-    
+
     /// Find the schedule manager that manages the Schedule with @p id
     ScheduleManager *scheduleManager( long id ) const;
     /// Find the schedule manager with @p id
@@ -416,10 +416,10 @@ public:
     QList<ScheduleManager*> allScheduleManagers() const;
     /// Return true if schedule with identity @p id is baselined
     bool isBaselined( long id = ANYSCHEDULED ) const;
-    
+
     void changed( ResourceGroup *group );
     void changed( Resource *resource );
-    
+
     void changed( ScheduleManager *sm );
     void changed( MainSchedule *sch );
     void sendScheduleAdded( const MainSchedule *sch );
@@ -431,7 +431,7 @@ public:
     QTimeZone timeZone() const { return m_timeZone; }
     /// Set the time zone to be used in this project
     void setTimeZone( const QTimeZone &tz ) { m_timeZone = tz; }
-    
+
     /**
      * Add a relation between the nodes specified in the relation rel.
      * Emits signals relationToBeAdded() before the relation is added,
@@ -447,7 +447,7 @@ public:
      * and relationRemoved() after it has been removed.
      */
     void takeRelation( Relation *rel );
-    
+
     /**
      * Modify the @p type of the @p relation.
      */
@@ -456,7 +456,7 @@ public:
      * Modify the @p lag of the @p relation.
      */
     void setRelationLag( Relation *relation, const Duration &lag );
-    
+
     void calcCriticalPathList( MainSchedule *cs );
     void calcCriticalPathList( MainSchedule *cs, Node *node );
     /**
@@ -467,10 +467,10 @@ public:
 
     /// Returns a flat list af all nodes
     QList<Node*> flatNodeList( Node *parent = 0 );
-    
+
     void generateUniqueNodeIds();
     void generateUniqueIds();
-    
+
     const ConfigBase &config() const { return m_config ? *m_config : emptyConfig; }
     /// Set configuration data
     void setConfig( ConfigBase *config ) { m_config = config; }
@@ -483,7 +483,7 @@ public:
     const Locale *locale() const { return config().locale(); }
     /// Signal that locale data has changed
     void emitLocaleChanged();
-    
+
     void setSchedulerPlugins( const QMap<QString, SchedulerPlugin*> &plugins );
     const QMap<QString, SchedulerPlugin*> &schedulerPlugins() const { return m_schedulerPlugins; }
 
@@ -506,6 +506,13 @@ public:
     void emitDocumentAdded( Node*, Document*, int index );
     void emitDocumentRemoved( Node*, Document*, int index );
     void emitDocumentChanged( Node*, Document*, int index );
+
+    bool useSharedResources() const;
+    void setUseSharedResources(bool on);
+    bool isSharedResourcesLoaded() const;
+    void setSharedResourcesLoaded(bool on);
+    void setSharedResourcesFile(const QString &file);
+    QString sharedResourcesFile() const;
 
 public Q_SLOTS:
     /// Sets m_progress to @p progress and emits signal sigProgress()
@@ -555,13 +562,13 @@ Q_SIGNALS:
     void documentRemoved( Node*, Document*, int index );
     /// This signal is emitted when a document is changed
     void documentChanged( Node*, Document*, int index );
-    
+
     void resourceGroupChanged( ResourceGroup *group );
     void resourceGroupAdded( const ResourceGroup *group );
     void resourceGroupToBeAdded( const ResourceGroup *group, int row );
     void resourceGroupRemoved( const ResourceGroup *group );
     void resourceGroupToBeRemoved( const ResourceGroup *group );
-    
+
     void resourceChanged( Resource *resource );
     void resourceAdded( const Resource *resource );
     void resourceToBeAdded( const ResourceGroup *group, int row );
@@ -583,7 +590,7 @@ Q_SIGNALS:
     void scheduleRemoved( const MainSchedule *sch );
 
 //    void currentViewScheduleIdChanged( long id );
-    
+
     void calendarChanged( Calendar *cal );
     void calendarToBeAdded( const Calendar *cal, int row );
     void calendarAdded( const Calendar *cal );
@@ -599,7 +606,7 @@ Q_SIGNALS:
      * Emitted when the standard worktime has been changed.
      */
     void standardWorktimeChanged( StandardWorktime* );
-    
+
     /// Emitted when the relation @p rel is about to be added.
     void relationToBeAdded( Relation *rel, int parentIndex, int childIndex );
     /// Emitted when the relation @p rel has been added.
@@ -626,7 +633,7 @@ protected:
     void calculate( Schedule *scedule, const DateTime &dt );
     /// Calculate current schedule from @p dt (Always calculates forward)
     void calculate( const DateTime &dt );
-    
+
     /// Calculate critical path
     virtual bool calcCriticalPath( bool fromEnd );
 
@@ -639,7 +646,7 @@ protected:
     friend class KPlatoXmlLoaderBase;
     using Node::changed;
     virtual void changed(Node *node, int property = -1);
-    
+
     Accounts m_accounts;
     QList<ResourceGroup*> m_resourceGroups;
 
@@ -647,7 +654,7 @@ protected:
     Calendar * m_defaultCalendar;
 
     StandardWorktime *m_standardWorktime;
-    
+
     DateTime calculateForward( int use );
     DateTime calculateBackward( int use );
     DateTime scheduleForward( const DateTime &earliest, int use );
@@ -677,7 +684,7 @@ private:
     QTimeZone m_timeZone;
 
     WBSDefinition m_wbsDefinition;
-    
+
     ConfigBase emptyConfig;
     QPointer<ConfigBase> m_config; // this one is not owned by me, don't delete
 
@@ -690,7 +697,10 @@ private:
     QList<Task*> m_hardConstraints;
     QList<Task*> m_softConstraints;
     QList<Task*> m_terminalNodes;
-    
+
+    bool m_useSharedResources;
+    bool m_sharedResourcesLoaded;
+    QString m_sharedResourcesFile;
 };
 
 

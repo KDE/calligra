@@ -47,12 +47,17 @@ public:
     
     bool ok();
 
+    bool loadSharedResources() const;
+
 public Q_SLOTS:
     virtual void slotCheckAllFieldsFilled();
     virtual void slotChooseLeader();
     virtual void slotStartDateClicked();
     virtual void slotEndDateClicked();
     virtual void enableDateTime();
+
+private Q_SLOTS:
+    void openResourcesFile();
 
 Q_SIGNALS:
     void obligatedFieldsFilled(bool);

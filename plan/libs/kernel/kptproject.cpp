@@ -50,7 +50,8 @@ Project::Project( Node *parent )
         m_accounts( *this ),
         m_defaultCalendar( 0 ),
         m_config( &emptyConfig ),
-        m_schedulerPlugins()
+        m_schedulerPlugins(),
+        m_sharedResourcesLoaded(false)
 {
     //debugPlan<<"("<<this<<")";
     init();
@@ -63,13 +64,16 @@ Project::Project( ConfigBase &config, Node *parent )
         m_config( &config ),
         m_schedulerPlugins()
 {
-    //debugPlan<<"("<<this<<")";
+    debugPlan<<"("<<this<<")";
     init();
 }
 
 void Project::init()
 {
-    m_refCount = 1; // always used by crateor
+    m_refCount = 1; // always used by createor
+
+    m_config->setDefaultValues(*this);
+
     m_constraint = Node::MustStartOn;
     m_standardWorktime = new StandardWorktime();
     m_timeZone = QTimeZone::systemTimeZone(); // local timezone as default
@@ -93,7 +97,7 @@ void Project::deref()
 
 Project::~Project()
 {
-    debugPlan;
+    debugPlan<<"("<<this<<")";
     disconnect();
     for(Node *n : nodeIdDict) {
         n->blockChanged();
@@ -111,7 +115,7 @@ Project::~Project()
         delete m_calendars.takeFirst();
     while ( !m_managers.isEmpty() )
         delete m_managers.takeFirst();
-    
+
     m_config = 0; //not mine, don't delete
 }
 
@@ -134,16 +138,25 @@ void Project::generateUniqueIds()
     generateUniqueNodeIds();
 
     foreach ( ResourceGroup *g, resourceGroupIdDict ) {
+        if (g->isShared()) {
+            continue;
+        }
         resourceGroupIdDict.remove( g->id() );
         g->setId( uniqueResourceGroupId() );
         resourceGroupIdDict[ g->id() ] = g;
     }
     foreach ( Resource *r, resourceIdDict ) {
+        if (r->isShared()) {
+            continue;
+        }
         resourceIdDict.remove( r->id() );
         r->setId( uniqueResourceId() );
         resourceIdDict[ r->id() ] = r;
     }
     foreach ( Calendar *c, calendarIdDict ) {
+        if (c->isShared()) {
+            continue;
+        }
         calendarIdDict.remove( c->id() );
         c->setId( uniqueCalendarId() );
         calendarIdDict[ c->id() ] = c;
@@ -947,6 +960,7 @@ void Project::initiateCalculationLists( MainSchedule &sch )
 bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
 {
     //debugPlan<<"--->";
+    m_useSharedResources = false; // default should off in case old project
     // load locale first
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -970,6 +984,9 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
                 country = static_cast<QLocale::Country>(e.attribute("country").toInt());
             }
             l->setCurrencyLocale(language, country);
+        } else if (e.tagName() == "shared-resources") {
+            m_useSharedResources = e.attribute("use", "0").toInt();
+            m_sharedResourcesFile = e.attribute("file");
         }
     }
     QList<Calendar*> cals;
@@ -986,7 +1003,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
         m_timeZone = tz;
     } else warnPlan<<"No timezone specified, using default (local)";
     status.setProjectTimeZone( m_timeZone );
-    
+
     // Allow for both numeric and text
     s = element.attribute( "scheduling", "0" );
     m_constraint = ( Node::ConstraintType ) s.toInt( &ok );
@@ -1258,13 +1275,13 @@ void Project::save( QDomElement &element ) const
     me.setAttribute( "id", m_id );
     me.setAttribute( "description", m_description );
     me.setAttribute( "timezone", m_timeZone.isValid() ? QString::fromLatin1(m_timeZone.id()) : QString() );
-    
+
     me.setAttribute( "scheduling", constraintToString() );
     me.setAttribute( "start-time", m_constraintStartTime.toString( Qt::ISODate ) );
     me.setAttribute( "end-time", m_constraintEndTime.toString( Qt::ISODate ) );
 
     m_wbsDefinition.saveXML( me );
-    
+
     QDomElement loc = me.ownerDocument().createElement( "locale" );
     me.appendChild( loc );
     const Locale *l = locale();
@@ -1274,6 +1291,11 @@ void Project::save( QDomElement &element ) const
     loc.setAttribute("currency-digits", l->monetaryDecimalPlaces());
     loc.setAttribute("language", l->currencyLanguage());
     loc.setAttribute("country", l->currencyCountry());
+
+    QDomElement share = me.ownerDocument().createElement( "shared-resources" );
+    me.appendChild(share);
+    share.setAttribute("use", m_useSharedResources);
+    share.setAttribute("file", m_sharedResourcesFile);
 
     m_accounts.save( me );
 
@@ -2837,5 +2859,34 @@ void Project::emitLocaleChanged()
     emit localeChanged();
 }
 
+bool Project::useSharedResources() const
+{
+    return m_useSharedResources;
+}
+
+void Project::setUseSharedResources(bool on)
+{
+    m_useSharedResources = on;
+}
+
+bool Project::isSharedResourcesLoaded() const
+{
+    return m_sharedResourcesLoaded;
+}
+
+void Project::setSharedResourcesLoaded(bool on)
+{
+    m_sharedResourcesLoaded = on;
+}
+
+void Project::setSharedResourcesFile(const QString &file)
+{
+    m_sharedResourcesFile = file;
+}
+
+QString Project::sharedResourcesFile() const
+{
+    return m_sharedResourcesFile;
+}
 
 }  //KPlato namespace

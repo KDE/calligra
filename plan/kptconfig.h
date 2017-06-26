@@ -36,6 +36,8 @@ public:
     void readConfig();
     void saveSettings();
 
+    virtual void setDefaultValues( Project &project );
+
     virtual void setDefaultValues( Task &task );
 
     virtual bool checkForWorkPackages() const;

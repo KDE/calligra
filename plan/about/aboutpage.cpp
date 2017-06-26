@@ -50,10 +50,14 @@ QString KPlatoAboutPage::main()
     if ( res.isEmpty() ) {
         return res;
     }
+    const char *const up_icon_id = koIconNameCStr("go-up");
+    const QString up_icon_path = iconloader->iconPath(up_icon_id, KIconLoader::Small);
+
     const char *const continue_icon_id =
         (QApplication::isRightToLeft() ? koIconNameCStr("go-previous") : koIconNameCStr("go-next"));
     const QString continue_icon_path = iconloader->iconPath(continue_icon_id, KIconLoader::Small);
 
+    QString icon_up =  "<img width='16' height='16' src=\"" + up_icon_path + "\">";
     QString icon_path = "<img width='16' height='16' src=\"" + continue_icon_path + "\">";
 
     res = res.arg( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kf5/infopage/kde_infopage.css" ) );
@@ -70,6 +74,7 @@ QString KPlatoAboutPage::main()
     .arg( icon_path ).arg( i18n( "A short introduction." ) )
     .arg( icon_path ).arg( i18n( "Tips on how to manipulate and inspect data." ) )
     .arg( icon_path ).arg( i18n( "A small tutorial to get you started." ) )
+    .arg( icon_up ).arg( i18n( "Close" ) )
     .arg( i18n(
         "<em>Note:</em> To view these pages when you are in other parts of Plan, choose the menu option <em>Help ->  Introduction to Plan</em>."
         ) )
@@ -85,9 +90,20 @@ QString KPlatoAboutPage::intro()
     if ( res.isEmpty() ) {
         return res;
     }
-    const char *const continue_icon_id =
-        (QApplication::isRightToLeft() ? koIconNameCStr("go-previous") : koIconNameCStr("go-next"));
-    const QString continue_icon_path = iconloader->iconPath(continue_icon_id, KIconLoader::Small);
+
+    const char *const up_icon_id = koIconNameCStr("go-up");
+    const QString up_icon_path = iconloader->iconPath(up_icon_id, KIconLoader::Small);
+    QString icon_up =  "<img width='16' height='16' src=\"" + up_icon_path + "\">";
+
+    const char *const prev_icon_id = koIconNameCStr("go-previous");
+    const QString prev_icon_path = iconloader->iconPath(prev_icon_id, KIconLoader::Small);
+
+    const char *const next_icon_id = koIconNameCStr("go-next");
+    const QString next_icon_path = iconloader->iconPath(next_icon_id, KIconLoader::Small);
+
+
+    const QString continue_icon_path = QApplication::isRightToLeft() ? prev_icon_path : next_icon_path;
+    const QString back_icon_path = QApplication::isRightToLeft() ? next_icon_path : prev_icon_path;
 
     res = res.arg( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kf5/infopage/kde_infopage.css" ) );
     if ( qApp->layoutDirection() == Qt::RightToLeft )
@@ -96,11 +112,13 @@ QString KPlatoAboutPage::intro()
         res = res.arg( "" );
 
     res = res.arg( i18n("Plan is a Project Planning and Management application.") )
-    .arg( i18n( 
+    .arg( i18n(
         "Plan is intended for managing moderately large projects with multiple resources. To enable you to model your project adequately, Plan offers different types of task dependencies and timing constraints. Usually you will define your tasks, estimate the effort needed to perform each task, allocate resources and then schedule the project according to the dependency network and resource availability."
         "<p>You can find more information in the <a href=\"help:plan\">documentation</a> "
         "or online at <a href=\"http://www.calligra.org/plan\">http://www.calligra.org/plan</a></p>"
         ) )
+    .arg( icon_up )
+    .arg( i18n( "Close" ) )
     .arg( "<img width='16' height='16' src=\"%1\">" ).arg( continue_icon_path )
     .arg( i18n( "Next: Tips" ) )
     ;
@@ -110,7 +128,6 @@ QString KPlatoAboutPage::intro()
 
 QString KPlatoAboutPage::tips()
 {
-    
     QString res = loadFile( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligraplan/about/tips.html" ));
     if ( res.isEmpty() ) {
         return res;
@@ -131,9 +148,21 @@ QString KPlatoAboutPage::tips()
         iconloader->iconPath(koIconNameCStr("view-fullscreen"), KIconLoader::Small);
     QString view_left_right_icon_path =
         iconloader->iconPath(koIconNameCStr("view-split-left-right"), KIconLoader::Small);
-    const char *const continue_icon_id =
-        (QApplication::isRightToLeft() ? koIconNameCStr("go-previous") : koIconNameCStr("go-next"));
-    const QString continue_icon_path = iconloader->iconPath(continue_icon_id, KIconLoader::Small);
+
+
+    const char *const up_icon_id = koIconNameCStr("go-up");
+    const QString up_icon_path = iconloader->iconPath(up_icon_id, KIconLoader::Small);
+    QString icon_up =  "<img width='16' height='16' src=\"" + up_icon_path + "\">";
+
+    const char *const prev_icon_id = koIconNameCStr("go-previous");
+    const QString prev_icon_path = iconloader->iconPath(prev_icon_id, KIconLoader::Small);
+
+    const char *const next_icon_id = koIconNameCStr("go-next");
+    const QString next_icon_path = iconloader->iconPath(next_icon_id, KIconLoader::Small);
+
+
+    const QString continue_icon_path = QApplication::isRightToLeft() ? prev_icon_path : next_icon_path;
+    const QString back_icon_path = QApplication::isRightToLeft() ? next_icon_path : prev_icon_path;
 
     res = res.arg( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kf5/infopage/kde_infopage.css" ) );
     if ( qApp->layoutDirection() == Qt::RightToLeft )
@@ -142,12 +171,14 @@ QString KPlatoAboutPage::tips()
         res = res.arg( "" );
 
     res = res.arg( i18n("Editing tips.") )
-    .arg( i18n( 
+    .arg( i18n(
         "<br/><b>To</b> edit project data, different views and editors can be selected in the View Selector docker."
         "<br/><b>The</b> views are generally used to inspect data after the project has been scheduled. No data will appear in the views if the project has not been scheduled. Scheduling is done in the Schedules editor."
         "<br/><b>You</b> can edit attributes in the various editors by selecting the item you want to edit (doubleclick or press F2), or open a dialog using the context menu."
         "</ul>"
         ) )
+    .arg( icon_up )
+    .arg( i18n( "Close" ) )
     .arg( "<img width='16' height='16' src=\"%1\">" ).arg( continue_icon_path )
     .arg( i18n( "Next: Create a simple project" ) )
     ;
@@ -155,15 +186,26 @@ QString KPlatoAboutPage::tips()
     return res;
 }
 
-QString KPlatoAboutPage::tutorial( const QString &header, const QString &text, const QString &nextpage, const QString &nexttext )
+QString KPlatoAboutPage::tutorial( const QString &header, const QString &text, const QString &nextpage, const QString &nexttext)
 {
     QString res = loadFile( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligraplan/about/tutorial.html" ));
     if ( res.isEmpty() ) {
         return res;
     }
+    KIconLoader *iconloader = KIconLoader::global();
 
-    const char *const nextIconName = QApplication::isRightToLeft() ? koIconNameCStr("go-previous") : koIconNameCStr("go-next");
-    const QString next_icon_path = KIconLoader::global()->iconPath(nextIconName, KIconLoader::Small );
+    const char *const up_icon_id = koIconNameCStr("go-up");
+    const QString up_icon_path = iconloader->iconPath(up_icon_id, KIconLoader::Small);
+    QString icon_up =  "<img width='16' height='16' src=\"" + up_icon_path + "\">";
+
+    const char *const prev_icon_id = koIconNameCStr("go-previous");
+    const QString prev_icon_path = iconloader->iconPath(prev_icon_id, KIconLoader::Small);
+
+    const char *const next_icon_id = koIconNameCStr("go-next");
+    const QString next_icon_path = iconloader->iconPath(next_icon_id, KIconLoader::Small);
+
+    const QString continue_icon_path = QApplication::isRightToLeft() ? prev_icon_path : next_icon_path;
+    const QString back_icon_path = QApplication::isRightToLeft() ? next_icon_path : prev_icon_path;
 
     res = res.arg( QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kf5/infopage/kde_infopage.css" ) );
     if ( qApp->layoutDirection() == Qt::RightToLeft )
@@ -173,8 +215,11 @@ QString KPlatoAboutPage::tutorial( const QString &header, const QString &text, c
 
     res = res.arg( header )
     .arg( text )
+    .arg( "about:close" )
+    .arg( icon_up )
+    .arg( i18n("Close") )
     .arg( "about:plan/" + nextpage )
-    .arg( "<img width='16' height='16' src=\"%1\">" ).arg( next_icon_path )
+    .arg( "<img width='16' height='16' src=\"%1\">" ).arg( continue_icon_path )
     .arg( nexttext )
     ;
 
@@ -240,6 +285,8 @@ void KPlatoAboutPage::generatePage( KHTMLPart &part, const QUrl &url)
     else if (url.url() == "about:plan/tips")
         html = tips();
     else if (url.url() == "about:plan/tutorial")
+        html = tutorial1();
+    else if (url.url() == "about:plan/tutorial1")
         html = tutorial1();
     else if (url.url() == "about:plan/tutorial2")
         html = tutorial2();

@@ -76,6 +76,7 @@ public:
 
     enum Properties {
         Name = 0,
+        Scope,
         TimeZone
     };
     const QMetaEnum columnMap() const;
@@ -119,6 +120,7 @@ protected Q_SLOTS:
 protected:
     QVariant name( const Calendar *calendar, int role ) const;
     bool setName( Calendar *calendar, const QVariant &value, int role );
+    QVariant scope( const Calendar *calendar, int role ) const;
     QVariant timeZone( const Calendar *calendar, int role ) const;
     bool setTimeZone( Calendar *calendar, const QVariant &value, int role );
     

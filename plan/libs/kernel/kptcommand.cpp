@@ -3628,4 +3628,40 @@ void ClearAllExternalAppointmentsCmd::unexecute()
     m_cmd.undo();
 }
 
+SharedResourcesFileCmd::SharedResourcesFileCmd(Project *project, const QString &newValue, const KUndo2MagicString& name)
+    : NamedCommand(name)
+    , m_project(project)
+    , m_oldValue(project->sharedResourcesFile())
+    , m_newValue(newValue)
+{
+}
+
+void SharedResourcesFileCmd::execute()
+{
+    m_project->setSharedResourcesFile(m_newValue);
+}
+
+void SharedResourcesFileCmd::unexecute()
+{
+    m_project->setSharedResourcesFile(m_oldValue);
+}
+
+UseSharedResourcesCmd::UseSharedResourcesCmd(Project *project, bool newValue, const KUndo2MagicString& name)
+    : NamedCommand(name)
+    , m_project(project)
+    , m_oldValue(project->useSharedResources())
+    , m_newValue(newValue)
+{
+}
+
+void UseSharedResourcesCmd::execute()
+{
+    m_project->setUseSharedResources(m_newValue);
+}
+
+void UseSharedResourcesCmd::unexecute()
+{
+    m_project->setUseSharedResources(m_oldValue);
+}
+
 }  //KPlato namespace

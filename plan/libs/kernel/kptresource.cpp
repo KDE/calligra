@@ -45,7 +45,8 @@ namespace KPlato
 
 ResourceGroup::ResourceGroup()
     : QObject( 0 ),
-    m_blockChanged(false)
+    m_blockChanged(false),
+    m_shared(false)
 {
     m_project = 0;
     m_type = Type_Work;
@@ -207,6 +208,7 @@ bool ResourceGroup::load(KoXmlElement &element, XMLLoaderObject &status ) {
     setId(element.attribute("id"));
     m_name = element.attribute("name");
     setType(element.attribute("type"));
+    m_shared = element.attribute("shared", "0").toInt();
 
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -237,6 +239,7 @@ void ResourceGroup::save(QDomElement &element)  const {
     me.setAttribute("id", m_id);
     me.setAttribute("name", m_name);
     me.setAttribute("type", typeToString());
+    me.setAttribute("shared", m_shared);
 
     foreach (Resource *r, m_resources) {
         r->save(me);
@@ -319,6 +322,15 @@ DateTime ResourceGroup::endTime( long id ) const
     return dt;
 }
 
+bool ResourceGroup::isShared() const
+{
+    return m_shared;
+}
+
+void ResourceGroup::setShared(bool on)
+{
+    m_shared = on;
+}
 
 Resource::Resource()
     : QObject( 0 ), // atm QObject is only for casting
@@ -326,7 +338,8 @@ Resource::Resource()
     m_parent( 0 ),
     m_autoAllocate( false ),
     m_currentSchedule( 0 ),
-    m_blockChanged(false)
+    m_blockChanged(false),
+    m_shared(false)
 {
     m_type = Type_Work;
     m_units = 100; // %
@@ -354,7 +367,8 @@ Resource::Resource(Resource *resource)
     : QObject( 0 ), // atm QObject is only for casting
     m_project( 0 ),
     m_parent( 0 ),
-    m_currentSchedule( 0 )
+    m_currentSchedule( 0 ),
+    m_shared(false)
 {
     //debugPlan<<"("<<this<<") from ("<<resource<<")";
     copy(resource); 
@@ -539,6 +553,7 @@ bool Resource::load(KoXmlElement &element, XMLLoaderObject &status) {
     m_email = element.attribute("email");
     m_autoAllocate = (bool)(element.attribute( "auto-allocate", "0" ).toInt());
     setType(element.attribute("type"));
+    m_shared = element.attribute("shared", "0").toInt();
     m_calendar = status.project().findCalendar(element.attribute("calendar-id"));
     m_units = element.attribute("units", "100").toInt();
     s = element.attribute("available-from");
@@ -645,6 +660,7 @@ void Resource::save(QDomElement &element) const {
     me.setAttribute("email", m_email);
     me.setAttribute("auto-allocate", m_autoAllocate );
     me.setAttribute("type", typeToString());
+    me.setAttribute("shared", m_shared);
     me.setAttribute("units", QString::number(m_units));
     if ( m_availableFrom.isValid() ) {
         me.setAttribute("available-from", m_availableFrom.toString( Qt::ISODate ));
@@ -1560,6 +1576,21 @@ void Resource::removeTeamMemberId( const QString &id )
     if ( m_teamMembers.contains( id ) ) {
         m_teamMembers.removeAt( m_teamMembers.indexOf( id ) );
     }
+}
+
+void Resource::setTeamMemberIds(const QStringList &ids)
+{
+    m_teamMembers = ids;
+}
+
+bool Resource::isShared() const
+{
+    return m_shared;
+}
+
+void Resource::setShared(bool on)
+{
+    m_shared = on;
 }
 
 QDebug operator<<( QDebug dbg, const KPlato::Resource::WorkInfoCache &c )

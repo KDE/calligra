@@ -662,7 +662,8 @@ Calendar::Calendar()
     : QObject( 0 ), // don't use parent
       m_parent(0),
       m_project(0),
-      m_default( false )
+      m_default( false ),
+      m_shared(false)
 {
     init();
 }
@@ -861,6 +862,8 @@ bool Calendar::load( KoXmlElement &element, XMLLoaderObject &status ) {
     if ( m_default ) {
         status.project().setDefaultCalendar( this );
     }
+    m_shared = element.attribute("shared", "0").toInt();
+
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
         if ( ! n.isElement() ) {
@@ -921,6 +924,8 @@ void Calendar::save(QDomElement &element) const {
         me.appendChild(e);
         d->save(e);
     }
+    me.setAttribute("shared", m_shared);
+
     saveCacheVersion( me );
 }
 
@@ -1457,6 +1462,16 @@ QList<CalendarDay*> Calendar::workingDays() const
         }
     }
     return lst;
+}
+
+bool Calendar::isShared() const
+{
+    return m_shared;
+}
+
+void Calendar::setShared(bool on)
+{
+    m_shared = on;
 }
 
 /////////////

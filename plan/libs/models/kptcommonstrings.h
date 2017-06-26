@@ -105,6 +105,7 @@ struct KPLATOMODELS_EXPORT ToolTip
     static QString nodePerformanceIndex();
 
     static QString resourceName();
+    static QString resourceScope();
     static QString resourceType();
     static QString resourceInitials();
     static QString resourceEMail();
