@@ -31,6 +31,7 @@
 #include "kptdebug.h"
 #include "kptresourcemodel.h"
 #include "kptresourceallocationmodel.h"
+#include "ResourceAllocationView.h"
 
 #include <KoXmlReader.h>
 #include <KoDocument.h>
@@ -374,56 +375,62 @@ void TaskEditor::setProject( Project *project )
 void TaskEditor::createDockers()
 {
     // Add dockers
-    DockWidget *ds = new DockWidget( this, "Allocations", xi18nc( "@title resource allocations", "Allocations" ) );
-    QTreeView *x = new QTreeView( ds );
-    AllocatedResourceItemModel *m1 = new AllocatedResourceItemModel( x );
-    x->setModel( m1 );
-    m1->setProject( project() );
-//     x->setHeaderHidden( true );
-    x->setSelectionBehavior( QAbstractItemView::SelectRows );
-    x->setSelectionMode( QAbstractItemView::ExtendedSelection );
-    x->expandAll();
-    x->resizeColumnToContents( 0 );
-    x->setDragDropMode( QAbstractItemView::DragOnly );
-    x->setDragEnabled ( true );
-    ds->setWidget( x );
-    connect(this, SIGNAL(projectChanged(Project*)), m1, SLOT(setProject(Project*)));
-    connect(this, SIGNAL(taskSelected(Task*)), m1, SLOT(setTask(Task*)));
-    connect(m1, SIGNAL(expandAll()), x, SLOT(expandAll()));
-    connect(m1, SIGNAL(resizeColumnToContents(int)), x, SLOT(resizeColumnToContents(int)));
-    addDocker( ds );
-
-    ds = new DockWidget( this, "Resources", xi18nc( "@title", "Resources" ) );
-    ds->setToolTip( xi18nc( "@info:tooltip",
-                          "Drag resources into the Task Editor"
-                          " and drop into the allocations- or responsible column" ) );
-    QTreeView *e = new QTreeView( ds );
-    ResourceItemModel *m = new ResourceItemModel( e );
-    e->setModel( m );
-    m->setProject( project() );
-    m->setReadWrite( isReadWrite() );
-    QList<int> show; show << ResourceModel::ResourceName;
-    for ( int i = m->columnCount() - 1; i >= 0; --i ) {
-        e->setColumnHidden( i, ! show.contains( i ) );
+    DockWidget *ds = 0;
+    {
+        ds = new DockWidget( this, "Allocations", xi18nc( "@title resource allocations", "Allocations" ) );
+        QTreeView *x = new QTreeView( ds );
+        AllocatedResourceItemModel *m1 = new AllocatedResourceItemModel( x );
+        x->setModel( m1 );
+        m1->setProject( project() );
+    //     x->setHeaderHidden( true );
+        x->setSelectionBehavior( QAbstractItemView::SelectRows );
+        x->setSelectionMode( QAbstractItemView::ExtendedSelection );
+        x->expandAll();
+        x->resizeColumnToContents( 0 );
+        x->setDragDropMode( QAbstractItemView::DragOnly );
+        x->setDragEnabled ( true );
+        ds->setWidget( x );
+        connect(this, SIGNAL(projectChanged(Project*)), m1, SLOT(setProject(Project*)));
+        connect(this, SIGNAL(taskSelected(Task*)), m1, SLOT(setTask(Task*)));
+        connect(m1, SIGNAL(expandAll()), x, SLOT(expandAll()));
+        connect(m1, SIGNAL(resizeColumnToContents(int)), x, SLOT(resizeColumnToContents(int)));
+        addDocker( ds );
     }
-    e->setHeaderHidden( true );
-    e->setSelectionBehavior( QAbstractItemView::SelectRows );
-    e->setSelectionMode( QAbstractItemView::ExtendedSelection );
-    e->expandAll();
-    e->resizeColumnToContents( ResourceModel::ResourceName );
-    e->setDragDropMode( QAbstractItemView::DragOnly );
-    e->setDragEnabled ( true );
-    ds->setWidget( e );
-    connect(this, SIGNAL(projectChanged(Project*)), m, SLOT(setProject(Project*)));
-    connect(this, SIGNAL(readWriteChanged(bool)), m, SLOT(setReadWrite(bool)));
-    connect(m, SIGNAL(executeCommand(KUndo2Command*)), part(), SLOT(addCommand(KUndo2Command*)));
-    addDocker( ds );
+
+    {
+        ds = new DockWidget( this, "Resources", xi18nc( "@title", "Resources" ) );
+        ds->setToolTip( xi18nc( "@info:tooltip",
+                            "Drag resources into the Task Editor"
+                            " and drop into the allocations- or responsible column" ) );
+        ResourceAllocationView *e = new ResourceAllocationView(part(), ds );
+        ResourceItemModel *m = new ResourceItemModel( e );
+        e->setModel( m );
+        m->setProject( project() );
+        m->setReadWrite( isReadWrite() );
+        QList<int> show; show << ResourceModel::ResourceName;
+        for ( int i = m->columnCount() - 1; i >= 0; --i ) {
+            e->setColumnHidden( i, ! show.contains( i ) );
+        }
+        e->setHeaderHidden( true );
+        e->setSelectionBehavior( QAbstractItemView::SelectRows );
+        e->setSelectionMode( QAbstractItemView::ExtendedSelection );
+        e->expandAll();
+        e->resizeColumnToContents( ResourceModel::ResourceName );
+        e->setDragDropMode( QAbstractItemView::DragOnly );
+        e->setDragEnabled ( true );
+        ds->setWidget( e );
+        connect(m_view->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), e, SLOT(setSelectedTasks(const QItemSelection&, const QItemSelection&)));
+        connect(this, SIGNAL(projectChanged(Project*)), m, SLOT(setProject(Project*)));
+        connect(this, SIGNAL(readWriteChanged(bool)), m, SLOT(setReadWrite(bool)));
+        connect(m, SIGNAL(executeCommand(KUndo2Command*)), part(), SLOT(addCommand(KUndo2Command*)));
+        addDocker( ds );
+    }
 
     {
         ds = new DockWidget( this, "Taskmodules", xi18nc( "@title", "Task Modules" ) );
         ds->setToolTip( xi18nc( "@info:tooltip", "Drag a task module into the <emphasis>Task Editor</emphasis> to add it to the project" ) );
         ds->setLocation( Qt::LeftDockWidgetArea );
-        e = new QTreeView( ds );
+        QTreeView *e = new QTreeView( ds );
         TaskModuleModel *m = new TaskModuleModel( e );
         e->setModel( m );
         e->setHeaderHidden( true );

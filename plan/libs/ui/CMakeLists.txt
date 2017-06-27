@@ -96,6 +96,8 @@ set(kplatoui_LIB_SRCS
 
     locale/localemon.cpp
     kptlocaleconfigmoneydialog.cpp
+
+    ResourceAllocationView.cpp
 )
 
 ki18n_wrap_ui(kplatoui_LIB_SRCS
