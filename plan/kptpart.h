@@ -24,6 +24,8 @@
 
 #include "kplato_export.h"
 
+#include <QPointer>
+
 class KoView;
 class QStackedWidget;
 
@@ -53,7 +55,7 @@ public:
     virtual void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
 
 protected Q_SLOTS:
-    void deleteStartUpWidget();
+    void finish();
     void slotShowIntroduction();
     void slotOpenUrlRequest( HtmlView *v, const QUrl &url );
 
@@ -65,8 +67,8 @@ protected:
 
 private:
     KPlato::MainDocument *m_document;
-
-    QStackedWidget *startUpWidget;
+    QPointer<QStackedWidget> startUpWidget;
+    bool m_toolbarVisible;
 };
 
 }  //KPlato namespace

@@ -77,7 +77,12 @@ KoMainWindow *Part::createMainWindow()
 
 void Part::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
 {
-    parent->factory()->container("mainToolBar", parent)->hide();
+    Q_UNUSED(alwaysShow);
+
+    m_toolbarVisible = parent->factory()->container("mainToolBar", parent)->isVisible();
+    if (m_toolbarVisible) {
+        parent->factory()->container("mainToolBar", parent)->hide();
+    }
 
     if (startUpWidget) {
         startUpWidget->show();
@@ -105,12 +110,12 @@ void Part::createStarUpWidget(KoMainWindow *parent)
     startUpWidget->addWidget(createIntroductionView());
 }
 
-void Part::deleteStartUpWidget()
+void Part::finish()
 {
-    delete startUpWidget;
-    startUpWidget = 0;
     mainWindows().first()->setRootDocument(document(), this);
-    KoPart::mainWindows().first()->factory()->container("mainToolBar", mainWindows().first())->show();
+    if (m_toolbarVisible) {
+        KoPart::mainWindows().first()->factory()->container("mainToolBar", mainWindows().first())->show();
+    }
 }
 
 QWidget *Part::createWelcomeView(KoMainWindow *mw)
@@ -128,7 +133,7 @@ QWidget *Part::createWelcomeView(KoMainWindow *mw)
     connect(v, SIGNAL(loadSharedResources(const QUrl&)), doc, SLOT(insertResourcesFile(const QUrl&)));
     connect(v, SIGNAL(recentProject(const QUrl&)), mw, SLOT(slotFileOpenRecent(const QUrl&)));
     connect(v, SIGNAL(showIntroduction()), this, SLOT(slotShowIntroduction()));
-    connect(v, SIGNAL(finished()), this, SLOT(deleteStartUpWidget()));
+    connect(v, SIGNAL(finished()), this, SLOT(finish()));
 
     return v;
 }
