@@ -23,6 +23,9 @@
 #include "kplatoui_export.h"
 #include "kptviewbase.h"
 #include "ui_WelcomeView.h"
+#include "kptmainprojectdialog.h"
+
+#include <QFileDialog>
 
 class KoDocument;
 
@@ -79,9 +82,14 @@ private Q_SLOTS:
     void slotOpenProject();
     void slotLoadSharedResources(const QString &file);
 
+    void slotProjectEditFinished(int result);
+    void slotOpenFileFinished(int result);
+
 private:
     Ui::WelcomeView widget;
     RecentFilesModel *m_model;
+    QPointer<MainProjectDialog> m_projectdialog;
+    QPointer<QFileDialog> m_filedialog;
 };
 
 }  //KPlato namespace

@@ -19,7 +19,6 @@
 
 #include "WelcomeView.h"
 
-#include "kptmainprojectdialog.h"
 #include "kptcommand.h"
 #include "kptdebug.h"
 
@@ -82,6 +81,8 @@ QVariant RecentFilesModel::data(const QModelIndex &idx, int role) const
 //-----------------------------------
 WelcomeView::WelcomeView(KoPart *part, KoDocument *doc, QWidget *parent)
     : ViewBase(part, doc, parent)
+    , m_projectdialog(0)
+    , m_filedialog(0)
 {
     widget.setupUi(this);
     widget.recentProjects->setBackgroundRole(QPalette::Midlight);
@@ -148,7 +149,7 @@ void WelcomeView::slotEnableActions(bool on)
     updateActionsEnabled(on);
 }
 
-void WelcomeView::updateActionsEnabled( bool /*on */)
+void WelcomeView::updateActionsEnabled(bool /*on */)
 {
 }
 
@@ -164,36 +165,68 @@ KoPrintJob *WelcomeView::createPrintJob()
 
 void WelcomeView::slotNewProject()
 {
+    if (m_filedialog) {
+        return;
+    }
     Project *p = project();
     if (p) {
-        MainProjectDialog dlg(*p);
-        connect(&dlg, SIGNAL(sigLoadSharedResources(const QString&)), this, SLOT(slotLoadSharedResources(const QString&)));
-        if (dlg.exec() == QDialog::Accepted) {
-            MacroCommand *m = dlg.buildCommand();
-            if (m) {
-                koDocument()->addCommand(m);
-            }
-            emit selectDefaultView();
-            emit finished();
+        if (!m_projectdialog) {
+            m_projectdialog =  new MainProjectDialog(*p, this);
+            connect(m_projectdialog, SIGNAL(finished(int)), SLOT(slotProjectEditFinished(int)));
+            connect(m_projectdialog, SIGNAL(sigLoadSharedResources(const QString&)), this, SLOT(slotLoadSharedResources(const QString&)));
         }
+        m_projectdialog->show();
+        m_projectdialog->raise();
+        m_projectdialog->activateWindow();
     }
+}
+
+void WelcomeView::slotProjectEditFinished(int result)
+{
+    MainProjectDialog *dia = qobject_cast<MainProjectDialog*>(sender());
+    if (dia == 0) {
+        return;
+    }
+    if (result == QDialog::Accepted) {
+        emit selectDefaultView();
+        emit finished();
+    }
+    dia->deleteLater();
 }
 
 void WelcomeView::slotOpenProject()
 {
+    if (m_projectdialog) {
+        return;
+    }
     Project *p = project();
     if (p) {
-        KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
-        dialog.setCaption(i18n("Open Document"));
-//         dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
-//         dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
-        dialog.setNameFilters(QStringList()<<"Plan files (*.plan)");
-        dialog.setHideNameFilterDetailsOption();
-        QUrl url = QUrl::fromUserInput(dialog.filename());
+        if (!m_filedialog) {
+            m_filedialog = new QFileDialog(this,i18n("Open Document"));
+            m_filedialog->setFileMode(QFileDialog::ExistingFile);
+            m_filedialog->setNameFilters(QStringList()<<"Plan files (*.plan)");
+            m_filedialog->setOption(QFileDialog::HideNameFilterDetails, true);
+            connect(m_filedialog, SIGNAL(finished(int)), this, SLOT(slotOpenFileFinished(int)));
+        }
+        m_filedialog->show();
+        m_filedialog->raise();
+        m_filedialog->activateWindow();
+    }
+}
+
+void WelcomeView::slotOpenFileFinished(int result)
+{
+    QFileDialog *dia = qobject_cast<QFileDialog*>(sender());
+    if (dia == 0) {
+        return;
+    }
+    if (result == QDialog::Accepted) {
+        QUrl url = dia->selectedUrls().value(0);
         if (!url.isEmpty() && mainWindow()->openDocument(url)) {
             emit finished();
         }
     }
+    dia->deleteLater();
 }
 
 void WelcomeView::slotLoadSharedResources(const QString &file)
