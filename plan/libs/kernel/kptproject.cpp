@@ -72,8 +72,6 @@ void Project::init()
 {
     m_refCount = 1; // always used by createor
 
-    m_config->setDefaultValues(*this);
-
     m_constraint = Node::MustStartOn;
     m_standardWorktime = new StandardWorktime();
     m_timeZone = QTimeZone::systemTimeZone(); // local timezone as default
@@ -83,6 +81,7 @@ void Project::init()
         m_constraintStartTime = DateTime( QDate::currentDate() );
         m_constraintEndTime = m_constraintStartTime.addYears( 2 );
     }
+    m_config->setDefaultValues(*this);
 }
 
 void Project::deref()

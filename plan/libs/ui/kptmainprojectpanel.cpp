@@ -96,7 +96,6 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent)
 
     connect(resourcesBrowseBtn, SIGNAL(clicked()), this, SLOT(openResourcesFile()));
 
-    slotCheckAllFieldsFilled();
 }
 
 

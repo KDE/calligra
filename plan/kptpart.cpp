@@ -133,6 +133,7 @@ QWidget *Part::createWelcomeView(KoMainWindow *mw)
     connect(v, SIGNAL(loadSharedResources(const QUrl&)), doc, SLOT(insertResourcesFile(const QUrl&)));
     connect(v, SIGNAL(recentProject(const QUrl&)), mw, SLOT(slotFileOpenRecent(const QUrl&)));
     connect(v, SIGNAL(showIntroduction()), this, SLOT(slotShowIntroduction()));
+    connect(v, SIGNAL(projectCreated()), doc, SLOT(slotProjectCreated()));
     connect(v, SIGNAL(finished()), this, SLOT(finish()));
 
     return v;

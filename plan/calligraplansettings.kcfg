@@ -4,7 +4,116 @@
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
                           http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
   <kcfgfile/> <!-- name="planrc"/> Don't, Factory::componentData().config() is used -->
-  <group name="Project settings">
+    <group name="Work and Vacation Settings">
+        <entry name="HoursPrYear" type="Double">
+            <label>Hours per year</label>
+            <default>1760</default>
+        </entry>
+        <entry name="HoursPrMonth" type="Double">
+            <label>Hours per month</label>
+            <default>176</default>
+        </entry>
+        <entry name="HoursPrWeek" type="Double">
+            <label>Hours per week</label>
+            <default>40</default>
+        </entry>
+        <entry name="HoursPrDay" type="Double">
+            <label>Hours per day</label>
+            <default>8</default>
+        </entry>
+        <entry name="Monday" type="Bool">
+            <label>Monday:</label>
+            <default>true</default>
+        </entry>
+        <entry name="MondayStart" type="String">
+            <label>Start of working day</label>
+            <default>08:00</default>
+        </entry>
+        <entry name="MondayEnd" type="String">
+            <label>End of working day</label>
+            <default>16:00</default>
+        </entry>
+
+        <entry name="Tuesday" type="Bool">
+            <label>Tuesday:</label>
+            <default>true</default>
+        </entry>
+        <entry name="TuesdayStart" type="String">
+            <label>Start of working day</label>
+            <default>08:00</default>
+        </entry>
+        <entry name="TuesdayEnd" type="String">
+            <label>End of working day</label>
+            <default>16:00</default>
+        </entry>
+
+        <entry name="Wednesday" type="Bool">
+            <label>Wednesday:</label>
+            <default>true</default>
+        </entry>
+        <entry name="WednesdayStart" type="String">
+            <label>Start of working day</label>
+            <default>08:00</default>
+        </entry>
+        <entry name="WednesdayEnd" type="String">
+            <label>End of working day</label>
+            <default>16:00</default>
+        </entry>
+
+        <entry name="Thursday" type="Bool">
+            <label>Thursday:</label>
+            <default>true</default>
+        </entry>
+        <entry name="ThursdayStart" type="String">
+            <label>Start of working day</label>
+            <default>08:00</default>
+        </entry>
+        <entry name="ThursdayEnd" type="String">
+            <label>End of working day</label>
+            <default>16:00</default>
+        </entry>
+
+        <entry name="Friday" type="Bool">
+            <label>Friday:</label>
+            <default>true</default>
+        </entry>
+        <entry name="FridayStart" type="String">
+            <label>Start of working day</label>
+            <default>08:00</default>
+        </entry>
+        <entry name="FridayEnd" type="String">
+            <label>End of working day</label>
+            <default>16:00</default>
+        </entry>
+
+        <entry name="Saturday" type="Bool">
+            <label>Saturday:</label>
+            <default>false</default>
+        </entry>
+        <entry name="SaturdayStart" type="String">
+            <label>Start of working day</label>
+            <default>08:00</default>
+        </entry>
+        <entry name="SaturdayEnd" type="String">
+            <label>End of working day</label>
+            <default>16:00</default>
+        </entry>
+
+        <entry name="Sunday" type="Bool">
+            <label>Sunday:</label>
+            <default>false</default>
+        </entry>
+        <entry name="SundayStart" type="String">
+            <label>Start of working day</label>
+            <default>08:00</default>
+        </entry>
+        <entry name="SundayEnd" type="String">
+            <label>End of working day</label>
+            <default>16:00</default>
+        </entry>
+
+    </group>
+    <group name="Project settings">
       <entry name="Manager" type="String">
           <label>Name of project manager</label>
       </entry>

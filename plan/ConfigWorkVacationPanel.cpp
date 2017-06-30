@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 - 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2017 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -14,46 +14,32 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPTMAINPROJECTDIALOG_H
-#define KPTMAINPROJECTDIALOG_H
+#include "ConfigWorkVacationPanel.h"
 
-#include "kplatoui_export.h"
+#include "calligraplansettings.h"
 
-#include <KoDialog.h>
 
+#include <kactioncollection.h>
+
+#include <QFileDialog>
 
 namespace KPlato
 {
 
-class Project;
-class MainProjectPanel;
-class MacroCommand;
+ConfigWorkVacationPanel::ConfigWorkVacationPanel( QWidget *parent )
+    : ConfigWorkVacationPanelImpl( parent )
+{
+}
 
+//-----------------------------
+ConfigWorkVacationPanelImpl::ConfigWorkVacationPanelImpl(QWidget *p )
+    : QWidget(p)
+{
+    setupUi(this);
+}
 
-class KPLATOUI_EXPORT MainProjectDialog : public KoDialog {
-    Q_OBJECT
-public:
-    explicit MainProjectDialog(Project &project, QWidget *parent=0, const char *name=0);
-
-    MacroCommand *buildCommand();
-
-    bool loadSharedResources();
-
-Q_SIGNALS:
-    void dialogFinished(int);
-    void sigLoadSharedResources(const QString &file);
-
-protected Q_SLOTS:
-    void slotOk();
-
-private:
-    Project &project;
-    MainProjectPanel *panel;
-};
 
 }  //KPlato namespace
-
-#endif // MAINPROJECTDIALOG_H

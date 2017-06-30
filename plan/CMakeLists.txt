@@ -59,6 +59,7 @@ set(planprivate_LIB_SRCS
     kptschedulesdocker.cpp
 
     kptconfig.cpp
+    ConfigWorkVacationPanel.cpp
     ConfigProjectPanel.cpp
     kpttaskdefaultpanel.cpp
     kptworkpackageconfigpanel.cpp
@@ -89,6 +90,7 @@ ki18n_wrap_ui(planprivate_LIB_SRCS
     kptviewlisteditview.ui
     kptviewlisteditcategory.ui
 
+    ConfigWorkVacationPanel.ui
     ConfigProjectPanel.ui
     kptconfigtaskpanelbase.ui
     kptworkpackageconfigpanel.ui

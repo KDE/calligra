@@ -66,7 +66,8 @@ Q_SIGNALS:
     void selectDefaultView();
     void loadSharedResources(const QUrl &url);
     void openExistingFile(const QUrl &url);
-    
+
+    void projectCreated();
     void finished();
 
 protected:

@@ -674,7 +674,8 @@ Calendar::Calendar(const QString& name, Calendar *parent)
       m_parent(parent),
       m_project(0),
       m_days(),
-      m_default( false )
+      m_default( false ),
+      m_shared(false)
 {
     init();
 }

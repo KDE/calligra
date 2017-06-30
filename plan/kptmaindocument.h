@@ -150,6 +150,7 @@ public Q_SLOTS:
     void setLoadingTemplate( bool );
 
     void insertResourcesFile(const QUrl &url);
+    void slotProjectCreated();
 
 Q_SIGNALS:
     void changed();

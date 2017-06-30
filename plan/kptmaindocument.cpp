@@ -1193,6 +1193,30 @@ void MainDocument::viewlistModified()
     setModified( true );  // Must always call to activate autosave
 }
 
+// called after user has created a new project in welcome view
+void MainDocument::slotProjectCreated()
+{
+    if (m_project->calendarCount() == 0) {
+        // create a calendar
+        Calendar *c = new Calendar(i18nc("Base calendar name", "Base"));
+        m_project->addCalendar(c);
+
+        CalendarDay vd(CalendarDay::NonWorking);
+
+        for (int i = Qt::Monday; i <= Qt::Sunday; ++i) {
+            if (m_config.isWorkingday(i)) {
+                CalendarDay wd(CalendarDay::Working);
+                TimeInterval ti(m_config.dayStartTime(i), m_config.dayLength(i));
+                wd.addInterval(ti);
+                c->setWeekday(i, wd);
+            } else {
+                c->setWeekday(i, vd);
+            }
+        }
+    }
+}
+
+// creates a "new" project from current project (new ids etc)
 void MainDocument::createNewProject()
 {
     setEmpty();

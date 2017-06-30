@@ -43,10 +43,9 @@ MainProjectDialog::MainProjectDialog(Project &p, QWidget *parent, const char */*
     enableButtonOk(false);
     resize( QSize(500, 410).expandedTo(minimumSizeHint()));
 
-    connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
+    connect(this, SIGNAL(accepted()), SLOT(slotOk()));
     connect(panel, SIGNAL(obligatedFieldsFilled(bool)), SLOT(enableButtonOk(bool)));
 }
-
 
 void MainProjectDialog::slotOk() {
     if (!panel->ok()) {
@@ -59,7 +58,7 @@ void MainProjectDialog::slotOk() {
         }
         emit sigLoadSharedResources(file);
     }
-    accept();
+    emit dialogFinished(QDialog::Accepted);
 }
 
 MacroCommand *MainProjectDialog::buildCommand() {

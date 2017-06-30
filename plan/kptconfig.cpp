@@ -53,12 +53,91 @@ void Config::saveSettings()
     KPlatoSettings::self()->save();
 }
 
+bool Config::isWorkingday(int day) const
+{
+    switch (day) {
+        case Qt::Monday: return KPlatoSettings::monday(); break;
+        case Qt::Tuesday: return KPlatoSettings::tuesday(); break;
+        case Qt::Wednesday: return KPlatoSettings::wednesday(); break;
+        case Qt::Thursday: return KPlatoSettings::thursday(); break;
+        case Qt::Friday: return KPlatoSettings::friday(); break;
+        case Qt::Saturday: return KPlatoSettings::saturday(); break;
+        case Qt::Sunday: return KPlatoSettings::sunday(); break;
+        default: break;
+    };
+    return false;
+}
+QTime Config::dayStartTime(int day) const
+{
+    switch (day) {
+        case Qt::Monday: return QTime::fromString(KPlatoSettings::mondayStart()); break;
+        case Qt::Tuesday: return QTime::fromString(KPlatoSettings::tuesdayStart()); break;
+        case Qt::Wednesday: return QTime::fromString(KPlatoSettings::wednesdayStart()); break;
+        case Qt::Thursday: return QTime::fromString(KPlatoSettings::thursdayStart()); break;
+        case Qt::Friday: return QTime::fromString(KPlatoSettings::fridayStart()); break;
+        case Qt::Saturday: return QTime::fromString(KPlatoSettings::saturdayStart()); break;
+        case Qt::Sunday: return QTime::fromString(KPlatoSettings::sundayStart()); break;
+        default: break;
+    };
+    return QTime();
+
+}
+
+int Config::dayLength(int day) const
+{
+    QTime start = dayStartTime(day);
+    QTime end;
+    int value = 0;
+    switch (day) {
+        case Qt::Monday:
+            end = QTime::fromString(KPlatoSettings::mondayEnd());
+            break;
+        case Qt::Tuesday:
+            end = QTime::fromString(KPlatoSettings::tuesdayEnd());
+            break;
+        case Qt::Wednesday:
+            end = QTime::fromString(KPlatoSettings::wednesdayEnd());
+            break;
+        case Qt::Thursday:
+            end = QTime::fromString(KPlatoSettings::thursdayEnd());
+            break;
+        case Qt::Friday:
+            end = QTime::fromString(KPlatoSettings::fridayEnd());
+            break;
+        case Qt::Saturday:
+            end = QTime::fromString(KPlatoSettings::saturdayEnd());
+            break;
+        case Qt::Sunday:
+            end = QTime::fromString(KPlatoSettings::sundayEnd());
+            break;
+        default: break;
+    };
+    value = start.msecsTo(end);
+    if (value < 0) {
+        value = (24*60*60*1000) + value;
+    } else if (value == 0 && start == QTime(0, 0)) {
+        value = 24*60*60*1000;
+    }
+    return value;
+
+}
+
+
 void Config::setDefaultValues( Project &project )
 {
     project.setLeader( KPlatoSettings::manager() );
     project.setUseSharedResources( KPlatoSettings::useSharedResources() );
     project.setSharedResourcesFile( KPlatoSettings::sharedResourcesFile() );
     project.setDescription( KPlatoSettings::projectDescription() );
+
+    StandardWorktime *v = project.standardWorktime();
+    Q_ASSERT(v);
+    if (v) {
+        v->setYear(KPlatoSettings::hoursPrYear());
+        v->setMonth(KPlatoSettings::hoursPrMonth());
+        v->setWeek(KPlatoSettings::hoursPrWeek());
+        v->setDay(KPlatoSettings::hoursPrDay());
+    }
 }
 
 void Config::setDefaultValues( Task &task )
@@ -66,7 +145,7 @@ void Config::setDefaultValues( Task &task )
     task.setLeader( KPlatoSettings::leader() );
     task.setDescription( KPlatoSettings::description() );
     task.setConstraint( (Node::ConstraintType) KPlatoSettings::constraintType() );
-    
+
     // avoid problems with start <= end & end >= start
     task.setConstraintStartTime( DateTime() );
     task.setConstraintEndTime( DateTime() );

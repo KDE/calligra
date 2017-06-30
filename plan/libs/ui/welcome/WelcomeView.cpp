@@ -172,7 +172,7 @@ void WelcomeView::slotNewProject()
     if (p) {
         if (!m_projectdialog) {
             m_projectdialog =  new MainProjectDialog(*p, this);
-            connect(m_projectdialog, SIGNAL(finished(int)), SLOT(slotProjectEditFinished(int)));
+            connect(m_projectdialog, SIGNAL(dialogFinished(int)), SLOT(slotProjectEditFinished(int)));
             connect(m_projectdialog, SIGNAL(sigLoadSharedResources(const QString&)), this, SLOT(slotLoadSharedResources(const QString&)));
         }
         m_projectdialog->show();
@@ -183,11 +183,18 @@ void WelcomeView::slotNewProject()
 
 void WelcomeView::slotProjectEditFinished(int result)
 {
+    qDebug()<<Q_FUNC_INFO;
     MainProjectDialog *dia = qobject_cast<MainProjectDialog*>(sender());
     if (dia == 0) {
         return;
     }
     if (result == QDialog::Accepted) {
+        MacroCommand *cmd = dia->buildCommand();
+        if (cmd) {
+            cmd->execute();
+            delete cmd;
+        }
+        emit projectCreated();
         emit selectDefaultView();
         emit finished();
     }

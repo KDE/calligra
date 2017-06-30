@@ -36,6 +36,10 @@ public:
     void readConfig();
     void saveSettings();
 
+    bool isWorkingday(int day) const;
+    QTime dayStartTime(int day) const;
+    int dayLength(int day) const;
+
     virtual void setDefaultValues( Project &project );
 
     virtual void setDefaultValues( Task &task );

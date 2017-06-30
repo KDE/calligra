@@ -99,6 +99,7 @@
 #include "kptsplitterview.h"
 #include "kptpertresult.h"
 #include "ConfigProjectPanel.h"
+#include "ConfigWorkVacationPanel.h"
 #include "kpttaskdefaultpanel.h"
 #include "kptworkpackageconfigpanel.h"
 #include "kptcolorsconfigpanel.h"
@@ -1945,6 +1946,7 @@ void View::slotConfigure()
     }
     ConfigDialog *dialog = new ConfigDialog( this, "Plan Settings", KPlatoSettings::self() );
     dialog->addPage(new ConfigProjectPanel(), i18n("Project Defaults"), koIconName("calligraplan") );
+    dialog->addPage(new ConfigWorkVacationPanel(), i18n("Work & Vacation"), koIconName("view-calendar") );
     dialog->addPage(new TaskDefaultPanel(), i18n("Task Defaults"), koIconName("view-task") );
     dialog->addPage(new ColorsConfigPanel(), i18n("Task Colors"), koIconName("fill-color") );
     dialog->addPage(new WorkPackageConfigPanel(), i18n("Work Package"), koIconName("calligraplanwork") );
