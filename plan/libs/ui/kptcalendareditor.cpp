@@ -327,7 +327,7 @@ void CalendarDayView::headerContextMenuRequested( const QPoint &/*pos*/ )
 void CalendarDayView::contextMenuEvent ( QContextMenuEvent *event )
 {
     //debugPlan;
-    if ( ! isReadWrite() || model()->calendar()->isShared() ) {
+    if ( !isReadWrite() || !model()->calendar() || model()->calendar()->isShared() ) {
         return;
     }
     QMenu menu;
@@ -499,7 +499,7 @@ void CalendarEditor::slotContextMenuDate( QMenu *menu, const QList<QDate> &dates
     if ( ! isReadWrite() ) {
         return;
     }
-    if (currentCalendar() && currentCalendar()->isShared()) {
+    if (!currentCalendar() || currentCalendar()->isShared()) {
         return;
     }
     if ( dates.isEmpty() ) {
@@ -518,7 +518,7 @@ void CalendarEditor::slotContextMenuDate( QMenu *menu, const QDate &date )
     if ( ! isReadWrite() || ! date.isValid() ) {
         return;
     }
-    if (currentCalendar() && currentCalendar()->isShared()) {
+    if (!currentCalendar() || currentCalendar()->isShared()) {
         return;
     }
     m_currentMenuDateList << date;
@@ -529,7 +529,7 @@ void CalendarEditor::slotContextMenuDate( QMenu *menu, const QDate &date )
 
 void CalendarEditor::slotContextMenuCalendar( const QModelIndex &/*index*/, const QPoint& pos )
 {
-    if ( ! isReadWrite() ) {
+    if ( ! isReadWrite() || !currentCalendar() ) {
         return;
     }
     //debugPlan<<index.row()<<","<<index.column()<<":"<<pos;
