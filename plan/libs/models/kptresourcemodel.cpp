@@ -138,7 +138,7 @@ QVariant ResourceModel::scope( const Resource *res, int role ) const
             return res->isShared() ? i18n("Shared") : i18n("Local");
         case Qt::ToolTipRole:
             if (!res->isShared()) {
-                return xi18nc("@info:tooltip", "%1 is a <emphasis>Local</emphasis> resource and can only be be used in this project", res->name());
+                return xi18nc("@info:tooltip", "%1 is a <emphasis>Local</emphasis> resource and can only be used in this project", res->name());
             }
             return xi18nc("@info:tooltip", "%1 is a <emphasis>Shared</emphasis> resource and can thus be shared with other projects", res->name());
         case Qt::EditRole:
@@ -163,7 +163,7 @@ QVariant ResourceModel::scope( const ResourceGroup *res, int role ) const
             return res->isShared() ? i18n("Shared") : i18n("Local");
         case Qt::ToolTipRole:
             if (!res->isShared()) {
-                return xi18nc("@info:tooltip", "%1 is a <emphasis>Local</emphasis> resource group and can only be be used in this project", res->name());
+                return xi18nc("@info:tooltip", "%1 is a <emphasis>Local</emphasis> resource group and can only be used in this project", res->name());
             }
             return xi18nc("@info:tooltip", "%1 is a <emphasis>Shared</emphasis> resource group and can thus be shared with other projects", res->name());
         case Qt::EditRole:
