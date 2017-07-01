@@ -19,7 +19,7 @@ Let us say Hours per day is 8. If you estimate that a task needs 3 days effort t
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Estaimate conversions</string>
+      <string>Estimate conversions</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
