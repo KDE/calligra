@@ -2031,7 +2031,7 @@ void View::slotOpenNode( Node *node )
         case Node::Type_Project: {
                 Project * project = static_cast<Project *>( node );
                 MainProjectDialog *dia = new MainProjectDialog( *project, this );
-                connect(dia, SIGNAL(finished(int)), SLOT(slotProjectEditFinished(int)));
+                connect(dia, SIGNAL(dialogFinished(int)), SLOT(slotProjectEditFinished(int)));
                 connect(dia, SIGNAL(sigLoadSharedResources(const QString&)), this, SLOT(slotInsertResourcesFile(const QString&)));
                 dia->show();
                 dia->raise();
