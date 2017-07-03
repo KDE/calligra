@@ -64,7 +64,7 @@ CalendarTreeView::CalendarTreeView( QWidget *parent )
     setSelectionMode( QAbstractItemView::SingleSelection );
     setSelectionModel( new QItemSelectionModel( model() ) );
 
-    setItemDelegateForColumn( 1, new EnumDelegate( this ) ); // timezone
+    setItemDelegateForColumn( CalendarItemModel::TimeZone, new EnumDelegate( this ) ); // timezone
 
     connect( header(), SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(headerContextMenuRequested(QPoint)) );
 }
