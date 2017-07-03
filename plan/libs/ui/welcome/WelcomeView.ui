@@ -6,173 +6,228 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>589</width>
-    <height>258</height>
+    <width>688</width>
+    <height>364</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
-   <item row="0" column="2">
-    <spacer name="horizontalSpacer_4">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="1">
-    <widget class="QPushButton" name="newProjectBtn">
-     <property name="text">
-      <string>New project</string>
-     </property>
-     <property name="icon">
-      <iconset theme="list-add">
-       <normaloff>.</normaloff>.</iconset>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="3">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+  <layout class="QHBoxLayout" name="horizontalLayout_4">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
-      <spacer name="horizontalSpacer_6">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>13</width>
+           <height>14</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="newProjectBtn">
+         <property name="whatsThis">
+          <string comment="@info:whartsthis">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Create a new project&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Creates a new project with default values defined in &lt;span style=&quot; font-style:italic;&quot;&gt;Settings.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Opens the &lt;span style=&quot; font-style:italic;&quot;&gt;project dialog &lt;/span&gt;so you can define project specific properties like Project Name and &lt;span style=&quot; font-style:italic;&quot;&gt;Target Start&lt;/span&gt; and &lt;span style=&quot; font-style:italic;&quot;&gt;End&lt;/span&gt; times.&lt;/p&gt;&lt;p&gt;You can change the default settings by selecting &lt;span style=&quot; font-style:italic;&quot;&gt;Settings-&amp;gt;Configure Plan&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>New project</string>
+         </property>
+         <property name="icon">
+          <iconset theme="list-add">
+           <normaloff>.</normaloff>.</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>13</width>
+           <height>17</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_2">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Vertical</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="openProjectBtn">
-       <property name="text">
-        <string>Open Project...</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
+         <width>20</width>
+         <height>40</height>
         </size>
        </property>
       </spacer>
      </item>
     </layout>
    </item>
-   <item row="0" column="5">
-    <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <spacer name="horizontalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="openProjectBtn">
+         <property name="whatsThis">
+          <string comment="@info:whatsthis">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Open Project&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Displays a file dialog enabling you to open an existing project.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Open Project...</string>
+         </property>
+         <property name="icon">
+          <iconset theme="document-open">
+           <normaloff>.</normaloff>.</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;Recent projects:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QTableView" name="recentProjects">
+       <property name="whatsThis">
+        <string comment="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt; &lt;ui version=&quot;4.0&quot;&gt;  &lt;widget name=&quot;__qt_fake_top_level&quot;&gt;   &lt;widget class=&quot;QPushButton&quot; name=&quot;openProjectBtn&quot;&gt;    &lt;property name=&quot;geometry&quot;&gt;     &lt;rect&gt;      &lt;x&gt;64&lt;/x&gt;      &lt;y&gt;1&lt;/y&gt;      &lt;width&gt;126&lt;/width&gt;      &lt;height&gt;34&lt;/height&gt;     &lt;/rect&gt;    &lt;/property&gt;    &lt;property name=&quot;whatsThis&quot;&gt;     &lt;string comment=&quot;@info:whatsthis&quot;&gt;&amp;lt;html&amp;gt;&amp;lt;head/&amp;gt;&amp;lt;body&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span style=&amp;quot; font-weight:600;&amp;quot;&amp;gt;Open Project&amp;lt;/span&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;Displays a file dialog enabling you to open an existing project.&amp;lt;/p&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&lt;/string&gt;    &lt;/property&gt;    &lt;property name=&quot;text&quot;&gt;     &lt;string&gt;Open Project...&lt;/string&gt;    &lt;/property&gt;    &lt;property name=&quot;icon&quot;&gt;     &lt;iconset theme=&quot;document-open&quot;&gt;      &lt;normaloff&gt;/mnt/src/kdesrc/calligra/calligra/plan/libs/ui/welcome&lt;/normaloff&gt;/mnt/src/kdesrc/calligra/calligra/plan/libs/ui/welcome&lt;/iconset&gt;    &lt;/property&gt;   &lt;/widget&gt;  &lt;/widget&gt;  &lt;resources/&gt; &lt;/ui&gt; ">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Recent Projects&lt;/span&gt;&lt;/p&gt;&lt;p&gt;A list of the 10 most recent project files opened.&lt;/p&gt;&lt;p&gt;This enables you to quickly open projects you have worked on recently.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
+       <property name="showGrid">
+        <bool>false</bool>
+       </property>
+       <property name="cornerButtonEnabled">
+        <bool>false</bool>
+       </property>
+       <attribute name="horizontalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="verticalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <spacer name="horizontalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="introductionBtn">
+         <property name="whatsThis">
+          <string comment="@info:whatsthis">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;A Short Introduction to Plan&lt;/span&gt;&lt;/p&gt;&lt;p&gt;These introductory pages gives you hints and tips on what you can use Plan for, and how to use it.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Introduction</string>
+         </property>
+         <property name="icon">
+          <iconset theme="help-hint">
+           <normaloff>.</normaloff>.</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
      <item>
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Introduction:</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; font-weight:600;&quot;&gt;Context help&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Many functions has help and hints that can be displayed with &lt;span style=&quot; font-style:italic;&quot;&gt;Whta's this&lt;/span&gt;.&lt;/p&gt;&lt;p&gt;Activate it by selecting &lt;span style=&quot; font-style:italic;&quot;&gt;Help-&amp;gt;What's this&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;Shift+F1&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignHCenter|Qt::AlignTop</set>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="introductionBtn">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset theme="help-hint">
-         <normaloff>.</normaloff>.</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_3">
+      <spacer name="verticalSpacer">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Vertical</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
-         <height>20</height>
+         <width>20</width>
+         <height>40</height>
         </size>
        </property>
       </spacer>
      </item>
     </layout>
-   </item>
-   <item row="1" column="3">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Recent projects:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="3">
-    <widget class="QTableView" name="recentProjects">
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-     <property name="showGrid">
-      <bool>false</bool>
-     </property>
-     <property name="cornerButtonEnabled">
-      <bool>false</bool>
-     </property>
-     <attribute name="horizontalHeaderVisible">
-      <bool>false</bool>
-     </attribute>
-     <attribute name="verticalHeaderVisible">
-      <bool>false</bool>
-     </attribute>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <spacer name="horizontalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="4">
-    <spacer name="horizontalSpacer_5">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>
