@@ -201,7 +201,7 @@
      <item>
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; font-weight:600;&quot;&gt;Context help&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Many functions has help and hints that can be displayed with &lt;span style=&quot; font-style:italic;&quot;&gt;Whta's this&lt;/span&gt;.&lt;/p&gt;&lt;p&gt;Activate it by selecting &lt;span style=&quot; font-style:italic;&quot;&gt;Help-&amp;gt;What's this&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;Shift+F1&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; font-weight:600;&quot;&gt;Context help&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Many functions has help and hints that can be displayed with &lt;span style=&quot; font-style:italic;&quot;&gt;What's this&lt;/span&gt;.&lt;/p&gt;&lt;p&gt;Activate it by selecting &lt;span style=&quot; font-style:italic;&quot;&gt;Help-&amp;gt;What's this&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;Shift+F1&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
