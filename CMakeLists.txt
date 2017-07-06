@@ -683,8 +683,6 @@ test_big_endian(CMAKE_WORDS_BIGENDIAN)
 ##
 macro_optional_find_package(SharedMimeInfo)
 set_package_properties(SharedMimeInfo PROPERTIES
-    DESCRIPTION "Shared Mime Info"
-    URL "http://freedesktop.org/wiki/Software/shared-mime-info"
     PURPOSE "Required to determine file types SVM or all of MSOOXML."
     TYPE RECOMMENDED
 )
