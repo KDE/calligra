@@ -57,6 +57,11 @@
 #include <kmessagebox.h>
 #include <KIO/CopyJob>
 
+#include <kundo2command.h>
+
+#ifdef HAVE_KHOLIDAYS
+#include <KHolidays/HolidayRegion>
+#endif
 
 namespace KPlato
 {
@@ -1196,24 +1201,59 @@ void MainDocument::viewlistModified()
 // called after user has created a new project in welcome view
 void MainDocument::slotProjectCreated()
 {
-    if (m_project->calendarCount() == 0) {
-        // create a calendar
-        Calendar *c = new Calendar(i18nc("Base calendar name", "Base"));
-        m_project->addCalendar(c);
+    Calendar *week = 0;
 
-        CalendarDay vd(CalendarDay::NonWorking);
+    if (KPlatoSettings::generateWeek()) {
+        bool always = KPlatoSettings::generateWeekChoice() == KPlatoSettings::EnumGenerateWeekChoice::Always;
+        bool ifnone = KPlatoSettings::generateWeekChoice() == KPlatoSettings::EnumGenerateWeekChoice::NoneExists;
+        if (always || (ifnone && m_project->calendarCount() == 0)) {
+            // create a calendar
+            week = new Calendar(i18nc("Base calendar name", "Base"));
+            m_project->addCalendar(week);
 
-        for (int i = Qt::Monday; i <= Qt::Sunday; ++i) {
-            if (m_config.isWorkingday(i)) {
-                CalendarDay wd(CalendarDay::Working);
-                TimeInterval ti(m_config.dayStartTime(i), m_config.dayLength(i));
-                wd.addInterval(ti);
-                c->setWeekday(i, wd);
-            } else {
-                c->setWeekday(i, vd);
+            CalendarDay vd(CalendarDay::NonWorking);
+
+            for (int i = Qt::Monday; i <= Qt::Sunday; ++i) {
+                if (m_config.isWorkingday(i)) {
+                    CalendarDay wd(CalendarDay::Working);
+                    TimeInterval ti(m_config.dayStartTime(i), m_config.dayLength(i));
+                    wd.addInterval(ti);
+                    week->setWeekday(i, wd);
+                } else {
+                    week->setWeekday(i, vd);
+                }
             }
         }
     }
+#ifdef HAVE_KHOLIDAYS
+    if (KPlatoSettings::generateHolidays()) {
+        bool inweek = week != 0 && KPlatoSettings::generateHolidaysChoice() == KPlatoSettings::EnumGenerateHolidaysChoice::InWeekCalendar;
+        bool subcalendar = week != 0 && KPlatoSettings::generateHolidaysChoice() == KPlatoSettings::EnumGenerateHolidaysChoice::AsSubCalendar;
+        bool separate = week == 0 || KPlatoSettings::generateHolidaysChoice() == KPlatoSettings::EnumGenerateHolidaysChoice::AsSeparateCalendar;
+
+        Calendar *c = 0;
+        if (inweek) {
+            c = week;
+            qDebug()<<Q_FUNC_INFO<<"in week";
+        } else if (subcalendar) {
+            c = new Calendar(i18n("Holidays"));
+            m_project->addCalendar(c, week);
+            qDebug()<<Q_FUNC_INFO<<"subcalendar";
+        } else if (separate) {
+            c = new Calendar(i18n("Holidays"));
+            m_project->addCalendar(c);
+            qDebug()<<Q_FUNC_INFO<<"separate";
+        } else {
+            Q_ASSERT(false); // something wrong
+        }
+        qDebug()<<Q_FUNC_INFO<<KPlatoSettings::region();
+        if (c == 0) {
+            warnPlan<<Q_FUNC_INFO<<"Failed to generate holidays. Bad option:"<<KPlatoSettings::generateHolidaysChoice();
+            return;
+        }
+        c->setHolidayRegion(KPlatoSettings::region());
+    }
+#endif
 }
 
 // creates a "new" project from current project (new ids etc)

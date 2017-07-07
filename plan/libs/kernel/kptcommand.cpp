@@ -295,6 +295,27 @@ void CalendarModifyTimeZoneCmd::unexecute()
     m_cmd->unexecute();
 }
 
+#ifdef HAVE_KHOLIDAYS
+CalendarModifyHolidayRegionCmd::CalendarModifyHolidayRegionCmd( Calendar *cal, const QString &value, const KUndo2MagicString& name )
+    : NamedCommand( name ),
+    m_cal( cal ),
+    m_newvalue( value )
+{
+    m_oldvalue = cal->holidayRegionCode();
+}
+CalendarModifyHolidayRegionCmd::~CalendarModifyHolidayRegionCmd()
+{
+}
+void CalendarModifyHolidayRegionCmd::execute()
+{
+    m_cal->setHolidayRegion( m_newvalue );
+}
+void CalendarModifyHolidayRegionCmd::unexecute()
+{
+    m_cal->setHolidayRegion( m_oldvalue );
+}
+#endif
+
 CalendarAddDayCmd::CalendarAddDayCmd( Calendar *cal, CalendarDay *newvalue, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_cal( cal ),

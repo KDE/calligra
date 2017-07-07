@@ -1,21 +1,22 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007, 2012 Dag Andersen <danders@get2net>
-
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Library General Public
-  License as published by the Free Software Foundation; either
-  version 2 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Library General Public License for more details.
-
-  You should have received a copy of the GNU Library General Public License
-  along with this library; see the file COPYING.LIB.  If not, write to
-  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-* Boston, MA 02110-1301, USA.
-*/
+ * Copyright (C) 2007, 2012 Dag Andersen <danders@get2net>
+ * Copyright (C) 2017 Dag Andersen <danders@get2net>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
 
 #include "kptcalendarmodel.h"
 
@@ -38,7 +39,9 @@
 #include <QTimeZone>
 
 #include <KFormat>
-
+#ifdef HAVE_KHOLIDAYS
+#include <KHolidays/HolidayRegion>
+#endif
 
 namespace KPlato
 {
@@ -189,6 +192,11 @@ Qt::ItemFlags CalendarItemModel::flags( const QModelIndex &index ) const
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
+#ifdef HAVE_KHOLIDAYS
+            case HolidayRegion:
+                flags |= Qt::ItemIsEditable;
+                break;
+#endif
             default:
                 flags |= Qt::ItemIsEditable;
                 break;
@@ -401,6 +409,76 @@ bool CalendarItemModel::setTimeZone( Calendar *a, const QVariant &value, int rol
     return false;
 }
 
+#ifdef HAVE_KHOLIDAYS
+QVariant CalendarItemModel::holidayRegion( const Calendar *a, int role ) const
+{
+    //debugPlan<<res->name()<<","<<role;
+    switch ( role ) {
+        case Qt::DisplayRole:
+            if (a->holidayRegionCode().isEmpty() || !a->holidayRegion()->isValid()) {
+                return i18n("None");
+            }
+            if (a->holidayRegionCode() == "Default") {
+                return i18n("Default");
+            }
+            return a->holidayRegion()->name();
+        case Qt::EditRole:
+            if (a->holidayRegionCode().isEmpty()) {
+                return "None";
+            }
+            return a->holidayRegionCode();
+        case Qt::ToolTipRole:
+            if (!a->holidayRegion()->isValid()) {
+                return xi18nc("@info:tooltip", "No holidays");
+            } else if (a->holidayRegionCode() == "Default") {
+                return xi18nc("@info:tooltip", "Default region");
+            }
+            return a->holidayRegion()->description();
+        case Role::EnumList: {
+            QStringList lst;
+            lst << i18n("None") << i18n("Default");
+            for (const QString &code : KHolidays::HolidayRegion::regionCodes()) {
+                lst << KHolidays::HolidayRegion::name(code);
+            }
+            return lst;
+        }
+        case Role::EnumListValue: {
+            if (!a->holidayRegion()->isValid()) {
+                return 0; // None
+            }
+            if (a->holidayRegionCode() == "Default") {
+                return 1;
+            }
+            return KHolidays::HolidayRegion::regionCodes().indexOf(a->holidayRegionCode());
+        }
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+bool CalendarItemModel::setHolidayRegion( Calendar *a, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole: {
+            QString code = "None";
+            if (value.toInt() == 1) {
+                code = "Default";
+            } else if (value.toInt() > 1) {
+                code = KHolidays::HolidayRegion::regionCodes().value(value.toInt() - 2);
+            }
+            if (a->holidayRegionCode() == code || (code == "None" && a->holidayRegionCode().isEmpty())) {
+                return false;
+            }
+            emit executeCommand(new CalendarModifyHolidayRegionCmd(a, code, kundo2_i18n("Modify calendar holiday region")));
+            return true;
+        }
+    }
+    return false;
+}
+#endif
+
 QVariant CalendarItemModel::data( const QModelIndex &index, int role ) const
 {
     QVariant result;
@@ -412,6 +490,9 @@ QVariant CalendarItemModel::data( const QModelIndex &index, int role ) const
         case Name: result = name( a, role ); break;
         case Scope: result = scope( a, role ); break;
         case TimeZone: result = timeZone( a, role ); break;
+#ifdef HAVE_KHOLIDAYS
+        case HolidayRegion: result = holidayRegion( a, role ); break;
+#endif
         default:
             debugPlan<<"data: invalid display value column"<<index.column();
             return QVariant();
@@ -433,6 +514,9 @@ bool CalendarItemModel::setData( const QModelIndex &index, const QVariant &value
         case Name: return setName( a, value, role );
         case Scope: return false;
         case TimeZone: return setTimeZone( a, value, role );
+#ifdef HAVE_KHOLIDAYS
+        case HolidayRegion: return setHolidayRegion( a, value, role );
+#endif
         default:
             warnPlan<<"data: invalid display value column "<<index.column();
             return false;
@@ -448,6 +532,9 @@ QVariant CalendarItemModel::headerData( int section, Qt::Orientation orientation
                 case Name: return xi18nc( "@title:column", "Name" );
                 case Scope: return xi18nc( "@title:column", "Scope" );
                 case TimeZone: return xi18nc( "@title:column", "Timezone" );
+#ifdef HAVE_KHOLIDAYS
+                case HolidayRegion: return xi18nc( "@title:column", "Holiday Region" );
+#endif
                 default: return QVariant();
             }
         } else if ( role == Qt::TextAlignmentRole ) {
@@ -461,6 +548,9 @@ QVariant CalendarItemModel::headerData( int section, Qt::Orientation orientation
             case Name: return ToolTip::calendarName();
             case Scope: return QVariant();
             case TimeZone: return ToolTip::calendarTimeZone();
+#ifdef HAVE_KHOLIDAYS
+            case HolidayRegion: return xi18nc("@info:tooltip", "The holiday region");
+#endif
             default: return QVariant();
         }
     }
@@ -1005,6 +1095,11 @@ QVariant DateTableDataModel::data( const Calendar &cal, const QDate &date, int r
         case Qt::DisplayRole: {
             CalendarDay *day = cal.findDay( date );
             if ( day == 0 || day->state() == CalendarDay::Undefined ) {
+#ifdef HAVE_KHOLIDAYS
+                if (cal.isHoliday(date)) {
+                    return i18nc( "NonWorking", "NW" );
+                }
+#endif
                 if ( cal.parentCal() ) {
                     return data( *( cal.parentCal() ), date, role );
                 }
@@ -1049,6 +1144,11 @@ QVariant DateTableDataModel::data( const QDate &date, int role, int dataType ) c
         }
         CalendarDay *day = m_calendar->findDay( date );
         if ( day == 0 || day->state() == CalendarDay::Undefined ) {
+#ifdef HAVE_KHOLIDAYS
+            if (m_calendar->isHoliday(date)) {
+                return xi18nc( "@info:tooltip", "Holiday" );
+            }
+#endif
             return xi18nc( "@info:tooltip", "Undefined" );
         }
         if ( day->state() == CalendarDay::NonWorking ) {

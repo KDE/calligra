@@ -33,6 +33,12 @@
 
 #include <KoXmlReaderForward.h>
 
+namespace KHolidays {
+    class HolidayRegion;
+}
+
+class KUndo2Command;
+
 class QDomElement;
 class QStringList;
 
@@ -507,6 +513,11 @@ public:
     /// Set calendar to be local if on = false, or shared if on = true
     void setShared(bool on);
 
+    bool isHoliday(const QDate &date) const;
+    KHolidays::HolidayRegion *holidayRegion() const;
+    void setHolidayRegion(const QString &code);
+    QString holidayRegionCode() const;
+
 Q_SIGNALS:
     void changed( Calendar* );
     void changed( CalendarDay* );
@@ -596,6 +607,11 @@ private:
     QTimeZone m_timeZone;
     bool m_default; // this is the default calendar, only used for save/load
     bool m_shared;
+
+#ifdef HAVE_KHOLIDAYS
+    KHolidays::HolidayRegion *m_region;
+    QString m_regionCode;
+#endif
 
     int m_cacheversion; // incremented every time a calendar is changed
     friend class Project;

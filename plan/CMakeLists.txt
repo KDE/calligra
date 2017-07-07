@@ -4,6 +4,10 @@ project(kplato)
 # set kplato debug area
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=42000 )
 
+if(KF5Holidays_FOUND)
+    add_definitions(-DHAVE_KHOLIDAYS)
+endif()
+
 if (KF5AkonadiContact_FOUND)
     # disable for now: there is a bug
     # it only works if you use kde contacts (of course) but many use other stuff, so gets dissapointed

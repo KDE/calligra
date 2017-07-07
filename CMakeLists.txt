@@ -236,6 +236,14 @@ set_package_properties(KF5KHtml PROPERTIES
 if(KF5Activities_FOUND)
     set(HAVE_KACTIVITIES TRUE)
 endif()
+
+find_package(KF5Holidays 5.3.3)
+set_package_properties(KF5Holidays PROPERTIES
+    DESCRIPTION "Library for generation of public holidays"
+    PURPOSE "Required by Plan"
+    TYPE RECOMMENDED
+)
+
 if(${KF5_VERSION} VERSION_LESS "5.16.0")
     set(CALLIGRA_OLD_PLUGIN_METADATA TRUE)
 endif()

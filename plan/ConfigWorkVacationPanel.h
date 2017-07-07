@@ -36,6 +36,11 @@ class ConfigWorkVacationPanelImpl : public QWidget, public Ui::ConfigWorkVacatio
 public:
     explicit ConfigWorkVacationPanelImpl(QWidget *parent);
 
+private Q_SLOTS:
+#ifdef HAVE_KHOLIDAYS
+    void slotRegionChanged(int idx);
+    void slotRegionCodeChanged(const QString &code);
+#endif
 };
 
 class KPLATO_EXPORT ConfigWorkVacationPanel : public ConfigWorkVacationPanelImpl

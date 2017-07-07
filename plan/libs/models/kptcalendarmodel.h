@@ -1,21 +1,22 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 Dag Andersen <danders@get2net>
-
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Library General Public
-  License as published by the Free Software Foundation; either
-  version 2 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Library General Public License for more details.
-
-  You should have received a copy of the GNU Library General Public License
-  along with this library; see the file COPYING.LIB.  If not, write to
-  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-* Boston, MA 02110-1301, USA.
-*/
+ * Copyright (C) 2007 Dag Andersen <danders@get2net>
+ * Copyright (C) 2017 Dag Andersen <danders@get2net>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
 
 #ifndef KPTCALENDARMODEL_H
 #define KPTCALENDARMODEL_H
@@ -78,6 +79,9 @@ public:
         Name = 0,
         Scope,
         TimeZone
+#ifdef HAVE_KHOLIDAYS
+        , HolidayRegion
+#endif
     };
     const QMetaEnum columnMap() const;
 
@@ -123,6 +127,10 @@ protected:
     QVariant scope( const Calendar *calendar, int role ) const;
     QVariant timeZone( const Calendar *calendar, int role ) const;
     bool setTimeZone( Calendar *calendar, const QVariant &value, int role );
+#ifdef HAVE_KHOLIDAYS
+    QVariant holidayRegion( const Calendar *calendar, int role ) const;
+    bool setHolidayRegion( Calendar *calendar, const QVariant &value, int role );
+#endif
     
     QList<Calendar*> calendarList( QDataStream &stream ) const;
 

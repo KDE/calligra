@@ -4,7 +4,7 @@
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
                           http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
   <kcfgfile/> <!-- name="planrc"/> Don't, Factory::componentData().config() is used -->
-    <group name="Work and Vacation Settings">
+    <group name="EstimateConversion">
         <entry name="HoursPrYear" type="Double">
             <label>Hours per year</label>
             <default>1760</default>
@@ -21,6 +21,49 @@
             <label>Hours per day</label>
             <default>8</default>
         </entry>
+    </group>
+    <group name="CalendarGeneration">
+        <entry name="GenerateWeek" type="Bool">
+            <label>Generate working week</label>
+            <default>true</default>
+        </entry>
+        <entry name="GenerateWeekChoice" type="Enum">
+            <label>Generate working week options</label>
+            <choices>
+                <choice name="Always">
+                    <label>Always"</label>
+                </choice>
+                <choice name="NoneExists">
+                    <label>If none exists</label>
+                </choice>
+                <default>NoneExists</default>
+            </choices>
+        </entry>
+        <entry name="GenerateHolidays" type="Bool">
+            <label>Generate holidays</label>
+            <default>true</default>
+        </entry>
+        <entry name="GenerateHolidaysChoice" type="Enum">
+            <label>Generate holiddays options</label>
+            <choices>
+                <choice name="InWeekCalendar">
+                    <label>In base calendar></label>
+                </choice>
+                <choice name="AsSubCalendar">
+                    <label>As sub-calendar</label>
+                </choice>
+                <choice name="AsSeparateCalendar">
+                    <label>As separate calendar</label>
+                </choice>
+                <default>InWeekCalendar</default>
+            </choices>
+        </entry>
+        <entry name="Region" type="String">
+            <label>Holiday region</label>
+            <default>Default</default>
+        </entry>
+    </group>
+    <group name="WorkingWeek">
         <entry name="Monday" type="Bool">
             <label>Monday:</label>
             <default>true</default>

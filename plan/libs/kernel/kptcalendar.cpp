@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 - 2007, 2012 Dag Andersen <danders@get2net.dk>
    Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2017 Dag Andersen <danders@get2net.dk>
    
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,14 +28,20 @@
 #include "kptproject.h"
 #include "kptschedule.h"
 #include "kptxmlloaderobject.h"
+#include "kptcommand.h"
 #include "kptdebug.h"
 
 #include <KoXmlReader.h>
 
 #include <KLocalizedString>
 
-#include <QTimeZone>
+#ifdef HAVE_KHOLIDAYS
+#include <KHolidays/HolidayRegion>
+#include <KHolidays/Holiday>
+#endif
 
+#include <QTimeZone>
+#include <QDate>
 
 namespace KPlato
 {
@@ -683,6 +690,9 @@ Calendar::Calendar(const QString& name, Calendar *parent)
 Calendar::~Calendar() {
     //debugPlan<<"deleting"<<m_name;
     removeId();
+#ifdef HAVE_KHOLIDAYS
+    delete m_region;
+#endif
     delete m_weekdays;
     while (!m_days.isEmpty())
         delete m_days.takeFirst();
@@ -699,7 +709,10 @@ const Calendar &Calendar::copy( const Calendar &calendar ) {
     m_timeZone = calendar.timeZone();
     // m_parent = calendar.parentCal(); 
     // m_id = calendar.id();
-    
+#ifdef HAVE_KHOLIDAYS
+    delete m_region;
+    m_region = new KHolidays::HolidayRegion(calendar.holidayRegion()->regionCode());
+#endif
     foreach (CalendarDay *d, calendar.days()) {
         m_days.append(new CalendarDay(d));
     }
@@ -709,6 +722,9 @@ const Calendar &Calendar::copy( const Calendar &calendar ) {
 }
 
 void Calendar::init() {
+#ifdef HAVE_KHOLIDAYS
+    m_region = new KHolidays::HolidayRegion();
+#endif
     m_weekdays = new CalendarWeekdays();
     m_timeZone = QTimeZone::systemTimeZone();
     m_cacheversion = 0;
@@ -865,6 +881,10 @@ bool Calendar::load( KoXmlElement &element, XMLLoaderObject &status ) {
     }
     m_shared = element.attribute("shared", "0").toInt();
 
+#ifdef HAVE_KHOLIDAYS
+    setHolidayRegion(element.attribute("holiday-region"));
+#endif
+
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
         if ( ! n.isElement() ) {
@@ -927,6 +947,10 @@ void Calendar::save(QDomElement &element) const {
     }
     me.setAttribute("shared", m_shared);
 
+#ifdef HAVE_KHOLIDAYS
+    me.setAttribute("holiday-region", m_regionCode);
+#endif
+
     saveCacheVersion( me );
 }
 
@@ -936,6 +960,11 @@ int Calendar::state(const QDate &date) const
     if ( day && day->state() != CalendarDay::Undefined ) {
         return day->state();
     }
+#ifdef HAVE_KHOLIDAYS
+    if (isHoliday(date)) {
+        return CalendarDay::NonWorking;
+    }
+#endif
     day = weekday( date.dayOfWeek() );
     if ( day && day->state() != CalendarDay::Undefined ) {
         return day->state();
@@ -1150,6 +1179,11 @@ Duration Calendar::effort(const QDate &date, const QTime &start, int length, Sch
             return Duration::zeroDuration;
         }
     }
+#ifdef HAVE_KHOLIDAYS
+    if (isHoliday(date)) {
+        return Duration::zeroDuration;
+    }
+#endif
     // check my own weekdays
     if (m_weekdays) {
         if (m_weekdays->state(date) == CalendarDay::Working) {
@@ -1220,6 +1254,11 @@ TimeInterval Calendar::firstInterval(const QDate &date, const QTime &startTime, 
     if (day) {
         return day->interval(startTime, length, m_timeZone, sch);
     }
+#ifdef HAVE_KHOLIDAYS
+    if (isHoliday(date)) {
+        return TimeInterval();
+    }
+#endif
     if (m_weekdays) {
         if (m_weekdays->state(date) == CalendarDay::Working) {
             //debugPlan<<"Check weekday";
@@ -1474,6 +1513,46 @@ void Calendar::setShared(bool on)
 {
     m_shared = on;
 }
+
+#ifdef HAVE_KHOLIDAYS
+bool Calendar::isHoliday(const QDate &date) const
+{
+    if (m_region->isValid()) {
+        KHolidays::Holiday::List lst = m_region->holidays(date);
+        if (!lst.isEmpty() && lst.first().dayType() != KHolidays::Holiday::Workday) {
+            return true;
+        }
+    }
+    return false;
+}
+
+KHolidays::HolidayRegion *Calendar::holidayRegion() const
+{
+    return m_region;
+}
+
+void Calendar::setHolidayRegion(const QString &code)
+{
+    delete m_region;
+    m_regionCode = code;
+    if (code == "Default") {
+        // TODO use timezone
+        m_region = new KHolidays::HolidayRegion(KHolidays::HolidayRegion::defaultRegionCode());
+    } else {
+        m_region = new KHolidays::HolidayRegion(code);
+    }
+    debugPlan<<code<<"->"<<m_regionCode<<m_region->isValid();
+    emit changed(static_cast<CalendarDay*>(0));
+    if (m_project) {
+        m_project->changed(this);
+    }
+}
+
+QString Calendar::holidayRegionCode() const
+{
+    return m_regionCode;
+}
+#endif
 
 /////////////
 StandardWorktime::StandardWorktime( Project *project )

@@ -202,6 +202,22 @@ private:
     MacroCommand *m_cmd;
 };
 
+#ifdef HAVE_KHOLIDAYS
+class KPLATOKERNEL_EXPORT CalendarModifyHolidayRegionCmd : public NamedCommand
+{
+public:
+    CalendarModifyHolidayRegionCmd( Calendar *cal, const QString &value, const KUndo2MagicString& name = KUndo2MagicString() );
+    ~CalendarModifyHolidayRegionCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Calendar *m_cal;
+    QString m_newvalue;
+    QString m_oldvalue;
+};
+#endif
+
 class KPLATOKERNEL_EXPORT CalendarAddDayCmd : public NamedCommand
 {
 public:
