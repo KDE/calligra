@@ -31,7 +31,7 @@
             <label>Generate working week options</label>
             <choices>
                 <choice name="Always">
-                    <label>Always"</label>
+                    <label>Always</label>
                 </choice>
                 <choice name="NoneExists">
                     <label>If none exists</label>
@@ -44,10 +44,10 @@
             <default>true</default>
         </entry>
         <entry name="GenerateHolidaysChoice" type="Enum">
-            <label>Generate holiddays options</label>
+            <label>Generate holidays options</label>
             <choices>
                 <choice name="InWeekCalendar">
-                    <label>In base calendar></label>
+                    <label>In base calendar</label>
                 </choice>
                 <choice name="AsSubCalendar">
                     <label>As sub-calendar</label>
