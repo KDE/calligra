@@ -46,6 +46,51 @@
 namespace KPlato
 {
 
+#ifdef HAVE_KHOLIDAYS
+// start qt-copy (with some changes)
+// Copyright (C) 2013 John Layt <jlayt@kde.org>
+struct TzTimeZone {
+    QString country;
+    QByteArray comment;
+};
+
+// Define as a type as Q_GLOBAL_STATIC doesn't like it
+typedef QHash<QByteArray, TzTimeZone> TzTimeZoneHash;
+
+// Parse zone.tab table, assume lists all installed zones, if not will need to read directories
+static TzTimeZoneHash loadTzTimeZones()
+{
+    QString path = QStringLiteral("/usr/share/zoneinfo/zone.tab");
+    if (!QFile::exists(path))
+        path = QStringLiteral("/usr/lib/zoneinfo/zone.tab");
+
+    QFile tzif(path);
+    if (!tzif.open(QIODevice::ReadOnly))
+        return TzTimeZoneHash();
+
+    TzTimeZoneHash zonesHash;
+    // TODO QTextStream inefficient, replace later
+    QTextStream ts(&tzif);
+    while (!ts.atEnd()) {
+        const QString line = ts.readLine();
+        // Comment lines are prefixed with a #
+        if (!line.isEmpty() && line.at(0) != '#') {
+            // Data rows are tab-separated columns Region, Coordinates, ID, Optional Comments
+            QStringList parts = line.split(QLatin1Char('\t'));
+            TzTimeZone zone;
+            zone.country = parts.at(0);
+            if (parts.size() > 3)
+                zone.comment = parts.at(3).toUtf8();
+            zonesHash.insert(parts.at(2).toUtf8(), zone);
+        }
+    }
+    return zonesHash;
+}
+// Hash of available system tz files as loaded by loadTzTimeZones()
+Q_GLOBAL_STATIC_WITH_ARGS(const TzTimeZoneHash, tzZones, (loadTzTimeZones()));
+// end qt-copy
+#endif
+
 QString CalendarDay::stateToString( int st, bool trans )
 {
     return
@@ -178,7 +223,7 @@ void CalendarDay::save(QDomElement &element) const {
     element.setAttribute("state", QString::number(m_state));
     if (m_timeIntervals.count() == 0)
         return;
-    
+
     foreach (TimeInterval *i, m_timeIntervals) {
         QDomElement me = element.ownerDocument().createElement("interval");
         element.appendChild(me);
@@ -804,6 +849,11 @@ void Calendar::setTimeZone( const QTimeZone &tz )
     }
     //debugPlan<<tz->name();
     m_timeZone = tz;
+#ifdef HAVE_KHOLIDAYS
+    if (m_regionCode == "Default") {
+        setHolidayRegion("Default");
+    }
+#endif
     if ( m_project ) {
         m_project->changed( this );
     }
@@ -1536,8 +1586,12 @@ void Calendar::setHolidayRegion(const QString &code)
     delete m_region;
     m_regionCode = code;
     if (code == "Default") {
-        // TODO use timezone
-        m_region = new KHolidays::HolidayRegion(KHolidays::HolidayRegion::defaultRegionCode());
+        QString country;
+        if (m_timeZone.isValid()) {
+            // TODO be more accurate when country has multiple timezones/regions
+            country = tzZones->value(m_timeZone.id()).country;
+        }
+        m_region = new KHolidays::HolidayRegion(KHolidays::HolidayRegion::defaultRegionCode(country));
     } else {
         m_region = new KHolidays::HolidayRegion(code);
     }

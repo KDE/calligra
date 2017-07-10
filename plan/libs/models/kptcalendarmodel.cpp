@@ -431,7 +431,7 @@ QVariant CalendarItemModel::holidayRegion( const Calendar *a, int role ) const
             if (!a->holidayRegion()->isValid()) {
                 return xi18nc("@info:tooltip", "No holidays");
             } else if (a->holidayRegionCode() == "Default") {
-                return xi18nc("@info:tooltip", "Default region");
+                return xi18nc("@info:tooltip", "Default region: <emphasis>%1</emphasis>", a->holidayRegion()->name());
             }
             return a->holidayRegion()->description();
         case Role::EnumList: {
