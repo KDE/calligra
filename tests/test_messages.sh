@@ -8,7 +8,7 @@ if test -z $1; then
 fi
 
 result=0
-messagefiles=`find $1 -name 'Messages.sh'`
+messagefiles=`find "$1" -name 'Messages.sh'`
 files=0
 errors=0
 for messagefile in $messagefiles; do

@@ -6,12 +6,12 @@
 # $4: podir
 
 # source the kundo2_aware_xgettext.sh script
-. $1
+. "$1"
 
 # setup environment variables for kundo2_aware_xgettext.sh
-XGETTEXT_PROGRAM=$2
-MSGCAT=$3
-podir=$4
+XGETTEXT_PROGRAM="$2"
+MSGCAT="$3"
+podir="$4"
 
 # get common parameters
 . parameters.sh
