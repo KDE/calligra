@@ -21,18 +21,18 @@ XGETTEXT="$XGETTEXT_PROGRAM $XGETTEXT_FLAGS"
 potfile="test_kundo2_i18n.pot"
 cppfile="test_kundo2_i18n.cpp"
 
-kundo2_aware_xgettext $potfile $cppfile
+kundo2_aware_xgettext "$potfile" "$cppfile"
 
 # check result
-if test ! -e $podir/$potfile; then
+if test ! -e "$podir/$potfile"; then
     echo "FAIL: pot file not created"
     exit 1
 fi
-if test 1 -ne `grep qtundo-format $podir/$potfile|wc -l`; then
+if test 1 -ne `grep qtundo-format "$podir/$potfile"|wc -l`; then
     echo "FAIL: there should be 1 qtundo-format strings"
     exit 2
 fi
-if test 3 -ne `grep "^msgid \"" $podir/$potfile|wc -l`; then
+if test 3 -ne `grep "^msgid \"" "$podir/$potfile"|wc -l`; then
     echo "FAIL: there should be 3 message strings strings"
     exit 3
 fi

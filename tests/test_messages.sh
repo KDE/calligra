@@ -12,10 +12,10 @@ messagefiles=`find "$1" -name 'Messages.sh'`
 files=0
 errors=0
 for messagefile in $messagefiles; do
-    echo "Testing: $messagefile"
+    echo "Testing: "$messagefile""
     files=$((files + 1))
-    echo `grep '^potfilename=' $messagefile`
-    count=`grep -c '^potfilename=' $messagefile`
+    echo `grep '^potfilename=' "$messagefile"`
+    count=`grep -c '^potfilename=' "$messagefile"`
     if [[ $count != 1 ]]; then
         errors=$((errors + 1))
         echo "FAIL Did not find 'potfilename=' correct number of times"
