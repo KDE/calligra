@@ -33,9 +33,11 @@
 
 #include <KoXmlReaderForward.h>
 
+#ifdef HAVE_KHOLIDAYS
 namespace KHolidays {
     class HolidayRegion;
 }
+#endif 
 
 class KUndo2Command;
 
@@ -513,10 +515,12 @@ public:
     /// Set calendar to be local if on = false, or shared if on = true
     void setShared(bool on);
 
+#ifdef HAVE_KHOLIDAYS
     bool isHoliday(const QDate &date) const;
     KHolidays::HolidayRegion *holidayRegion() const;
     void setHolidayRegion(const QString &code);
     QString holidayRegionCode() const;
+#endif
 
 Q_SIGNALS:
     void changed( Calendar* );
