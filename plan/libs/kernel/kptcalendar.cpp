@@ -1606,6 +1606,13 @@ QString Calendar::holidayRegionCode() const
 {
     return m_regionCode;
 }
+
+QStringList Calendar::holidayRegionCodes() const
+{
+    QStringList lst = KHolidays::HolidayRegion::regionCodes();
+    lst.removeDuplicates();
+    return lst;
+}
 #endif
 
 /////////////

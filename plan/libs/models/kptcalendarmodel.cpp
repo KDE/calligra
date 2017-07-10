@@ -437,7 +437,7 @@ QVariant CalendarItemModel::holidayRegion( const Calendar *a, int role ) const
         case Role::EnumList: {
             QStringList lst;
             lst << i18n("None") << i18n("Default");
-            for (const QString &code : KHolidays::HolidayRegion::regionCodes()) {
+            for (const QString &code : a->holidayRegionCodes()) {
                 lst << KHolidays::HolidayRegion::name(code);
             }
             return lst;
@@ -449,7 +449,7 @@ QVariant CalendarItemModel::holidayRegion( const Calendar *a, int role ) const
             if (a->holidayRegionCode() == "Default") {
                 return 1;
             }
-            return KHolidays::HolidayRegion::regionCodes().indexOf(a->holidayRegionCode());
+            return a->holidayRegionCodes().indexOf(a->holidayRegionCode()) + 2;
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -466,7 +466,7 @@ bool CalendarItemModel::setHolidayRegion( Calendar *a, const QVariant &value, in
             if (value.toInt() == 1) {
                 code = "Default";
             } else if (value.toInt() > 1) {
-                code = KHolidays::HolidayRegion::regionCodes().value(value.toInt() - 2);
+                code = a->holidayRegionCodes().value(value.toInt() - 2);
             }
             if (a->holidayRegionCode() == code || (code == "None" && a->holidayRegionCode().isEmpty())) {
                 return false;

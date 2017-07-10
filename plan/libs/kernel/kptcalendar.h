@@ -520,6 +520,7 @@ public:
     KHolidays::HolidayRegion *holidayRegion() const;
     void setHolidayRegion(const QString &code);
     QString holidayRegionCode() const;
+    QStringList holidayRegionCodes() const;
 #endif
 
 Q_SIGNALS:
