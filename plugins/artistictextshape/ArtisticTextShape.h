@@ -196,7 +196,6 @@ public:
 
 private:
     void updateSizeAndPosition( bool global = false );
-    void cacheGlyphOutlines();
     bool pathHasChanged() const;
     void createOutline();
 
@@ -221,7 +220,6 @@ private:
     QList<ArtisticTextRange> m_ranges;
     KoPostscriptPaintDevice m_paintDevice;
     KoPathShape * m_path; ///< the path shape we are attached to
-    QList<QPainterPath> m_charOutlines; ///< cached character oulines
     qreal m_startOffset; ///< the offset from the attached path start point
     QPointF m_outlineOrigin; ///< the top-left corner of the non-normalized text outline
     QPainterPath m_outline; ///< the actual text outline
@@ -231,6 +229,7 @@ private:
     QVector<QPointF> m_charPositions; ///< char positions in shape coordinates
     int m_textUpdateCounter;
     QFont m_defaultFont;
+    bool m_drawBoundaryLines;
 };
 
 #endif // ARTISTICTEXTSHAPE_H
