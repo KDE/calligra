@@ -727,7 +727,7 @@ void TaskEditor::setupGui()
     menuAddSubTask->addAction( actionAddSubMilestone );
 
     actionDeleteTask  = new QAction(koIcon("edit-delete"), xi18nc("@action", "Delete"), this);
-    actionDeleteTask->setShortcut( Qt::Key_Delete );
+    actionCollection()->setDefaultShortcut( actionDeleteTask, Qt::Key_Delete );
     actionCollection()->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL(triggered(bool)), SLOT(slotDeleteTask()) );
     addAction( name, actionDeleteTask );
@@ -1483,7 +1483,7 @@ void TaskWorkPackageView::setupGui()
 
     QString name = "workpackage_list";
     actionMailWorkpackage  = new QAction(koIcon("mail-send"), i18n("Send..."), this);
-    actionMailWorkpackage->setShortcut( Qt::CTRL + Qt::Key_M );
+    actionCollection()->setDefaultShortcut( actionMailWorkpackage, Qt::CTRL + Qt::Key_M );
     actionCollection()->addAction("send_workpackage", actionMailWorkpackage );
     connect( actionMailWorkpackage, SIGNAL(triggered(bool)), SLOT(slotMailWorkpackage()) );
     addAction( name, actionMailWorkpackage );
