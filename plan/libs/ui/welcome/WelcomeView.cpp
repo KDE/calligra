@@ -193,6 +193,7 @@ void WelcomeView::slotProjectEditFinished(int result)
         if (cmd) {
             cmd->execute();
             delete cmd;
+            koDocument()->setModified(true);
         }
         emit projectCreated();
         emit selectDefaultView();
