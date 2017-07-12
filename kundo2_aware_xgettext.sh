@@ -53,7 +53,7 @@ function kundo2_aware_xgettext_internal() {
     POT_PART_QUNDOFORMAT="`mktemp "$podir"/_qundoformat_XXXXXXXX.pot`"
     POT_MERGED="`mktemp "$podir"/_merged_XXXXXXXX.pot`"
 
-    $XGETTEXT ${CXG_EXTRA_ARGS} "${SRC_FILES}" -o "${POT_PART_NORMAL}" --force-po
+    $XGETTEXT ${CXG_EXTRA_ARGS} ${SRC_FILES} -o "${POT_PART_NORMAL}" --force-po
 
     XGETTEXT_FLAGS_KUNDO2="\
 --copyright-holder=This_file_is_part_of_KDE \
@@ -63,7 +63,7 @@ function kundo2_aware_xgettext_internal() {
 -kkundo2_i18n:1 -kkundo2_i18np:1,2 -kkundo2_i18nc:1c,2 -kkundo2_i18ncp:1c,2,3 \
 "
 
-    $XGETTEXT_PROGRAM ${XGETTEXT_FLAGS_KUNDO2} ${CXG_EXTRA_ARGS} "${SRC_FILES}" -o "${POT_PART_QUNDOFORMAT}"
+    $XGETTEXT_PROGRAM ${XGETTEXT_FLAGS_KUNDO2} ${CXG_EXTRA_ARGS} ${SRC_FILES} -o "${POT_PART_QUNDOFORMAT}"
 
     if [ $(cat "${POT_PART_NORMAL}" "${POT_PART_QUNDOFORMAT}" | grep -c \(qtundo-format\)) != 0 ]; then
         echo "ERROR: Context '(qtundo-format)' should not be added manually. Use kundo2_i18n*() calls instead." 1>&2
