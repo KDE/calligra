@@ -32,6 +32,7 @@
 
 class StoreDropTest : public QTextBrowser
 {
+Q_OBJECT
 public:
     StoreDropTest(QWidget* parent);
 protected:
@@ -168,3 +169,4 @@ QString StoreDropTest::loadTextFile(KoStore* store, const QString& fileName)
     txt += "\n";
     return txt;
 }
+#include "storedroptest.moc"
