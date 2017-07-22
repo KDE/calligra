@@ -38,6 +38,7 @@
 #include <kconfiggroup.h>
 
 #include <QLocale>
+#include <QPointer>
 #include <QTextLayout>
 #include <QTextDocument>
 #include <QTextBlock>
@@ -311,14 +312,16 @@ void KWStatisticsWidget::updateData()
     };
 
     foreach (KWFrameSet *fs, m_document->frameSets()) {
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
+        QPointer<KWTextFrameSet> tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs == 0) continue;
 
-        QTextDocument *doc = tfs->document();
+        QPointer<QTextDocument> doc = tfs->document();
         QTextBlock block = doc->begin();
         while (block.isValid()) {
             // Don't be so heavy on large documents...
             qApp->processEvents();
+            if(!tfs || !doc)
+                return;
             m_paragraphs += 1;
             m_charsWithSpace += block.text().length();
             m_charsWithoutSpace += block.text().length() - block.text().count(QRegExp("\\s"));
