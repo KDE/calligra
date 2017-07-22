@@ -40,6 +40,7 @@
 #include <QTextFrame>
 #include <QTextLayout>
 #include <QDebug>
+#include <QPointer>
 
 #include "ComponentsKoCanvasController.h"
 #include <libs/textlayout/KoTextShapeData.h>
@@ -52,9 +53,9 @@ public:
     Private() : part{nullptr}, document{nullptr}
     { }
 
-    KWPart* part;
-    KWDocument* document;
-    KWCanvasItem* canvas;
+    QPointer<KWPart> part;
+    QPointer<KWDocument> document;
+    QPointer<KWCanvasItem> canvas;
     QTimer indexChangedDelay;
 
     QList< QPair< QRectF, QUrl > > links;
