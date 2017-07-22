@@ -294,7 +294,7 @@ qreal percent(const KoXmlElement &element, const QString &ns, const QString &typ
 
 QBrush KoOdfGraphicStyles::loadOdfGradientStyleByName(const KoOdfStylesReader &stylesReader, const QString &styleName, const QSizeF &size)
 {
-    KoXmlElement* e = stylesReader.drawStyles("gradient")[styleName];
+    KoXmlElement* e = stylesReader.drawStyles("gradient").value(styleName);
     if (! e)
         return QBrush();
 
@@ -475,7 +475,7 @@ QBrush KoOdfGraphicStyles::loadOdfFillStyle(const KoStyleStack &styleStack, cons
         if (styleStack.hasProperty(KoXmlNS::draw, "opacity")) {
             QString opacity = styleStack.property(KoXmlNS::draw, "opacity");
             if (! opacity.isEmpty() && opacity.right(1) == "%") {
-                float percent = opacity.left(opacity.length() - 1).toFloat();
+                float percent = opacity.leftRef(opacity.length() - 1).toFloat();
                 QColor color = tmpBrush.color();
                 color.setAlphaF(percent / 100.0);
                 tmpBrush.setColor(color);
@@ -512,7 +512,7 @@ QBrush KoOdfGraphicStyles::loadOdfFillStyle(const KoStyleStack &styleStack, cons
 
         //type not defined by default
         //try to use style.
-        KoXmlElement* draw = stylesReader.drawStyles("hatch")[style];
+        KoXmlElement* draw = stylesReader.drawStyles("hatch").value(style);
         if (draw) {
             debugOdf << "We have a style";
             int angle = 0;
@@ -658,7 +658,7 @@ QPen KoOdfGraphicStyles::loadOdfStrokeStyle(const KoStyleStack &styleStack, cons
                 width = 1;
             }
 
-            KoXmlElement * dashElement = stylesReader.drawStyles("stroke-dash")[ dashStyleName ];
+            KoXmlElement * dashElement = stylesReader.drawStyles("stroke-dash").value(dashStyleName);
             if (dashElement) {
                 QVector<qreal> dashes;
                 if (dashElement->hasAttributeNS(KoXmlNS::draw, "dots1")) {

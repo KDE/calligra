@@ -128,12 +128,10 @@ bool KoBorder::operator==(const KoBorder &other) const
     if (d->data.size() != other.d->data.size())
         return false;
 
-    KoBorder::BorderSide key;
-
-    foreach (key, d->data.keys()) {
-        if (!other.d->data.contains(key))
+    for (auto i = d->data.constBegin(); i != d->data.constEnd(); ++i) {
+        if (!other.d->data.contains(i.key()))
             return false;
-        if (!(other.d->data[key] == d->data[key]))
+        if (!(other.d->data[i.key()] == i.value()))
             return false;
     }
 
@@ -1067,8 +1065,8 @@ void KoBorder::saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type) const
     QString rightBorderSpecialString = msoBorderStyleString(borderStyle(RightBorder));
     QString topBorderSpecialString = msoBorderStyleString(borderStyle(TopBorder));
     QString bottomBorderSpecialString = msoBorderStyleString(borderStyle(BottomBorder));
-    QString tlbrBorderSpecialString = msoBorderStyleString(borderStyle(TlbrBorder));
-    QString trblBorderSpecialString = msoBorderStyleString(borderStyle(BltrBorder));
+    //QString tlbrBorderSpecialString = msoBorderStyleString(borderStyle(TlbrBorder));
+    //QString trblBorderSpecialString = msoBorderStyleString(borderStyle(BltrBorder));
 
     // Check if we can save all borders in one fo:border attribute, or
     // if we have to use several different ones like fo:border-left, etc.

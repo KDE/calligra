@@ -28,7 +28,9 @@
 
 #define assert(cond, what) Q_ASSERT_X(cond, "", qPrintable(what))
 
-static const QString ns = "writeodf";
+static QString ns() {
+    return QStringLiteral("writeodf");
+}
 
 class RNGItem;
 //typedef QSharedPointer<RNGItem> RNGItemPtr;
@@ -688,7 +690,7 @@ void collect(const RNGItems& items, RNGItems& collected)
 /**
  * Count how often a particular item is used by other items or itself.
  */
-void countUsage(RNGItem& item, QMap<RNGItemPtr,int>& usageCount)
+void countUsage(RNGItem& item, QHash<RNGItemPtr,int>& usageCount)
 {
     foreach (const RNGItemPtr& i, item.allowedItems) {
         if (usageCount.contains(i)) {
@@ -706,7 +708,7 @@ void countUsage(RNGItem& item, QMap<RNGItemPtr,int>& usageCount)
  */
 int reduce(RNGItems& items)
 {
-    QMap<RNGItemPtr,int> usageCount;
+    QHash<RNGItemPtr,int> usageCount;
     foreach (const RNGItemPtr& item, items) {
         countUsage(*item, usageCount);
     }
@@ -880,6 +882,13 @@ bool hasElementOrAttribute(const RNGItemPtr& item)
     return hasElementOrAttribute(item, items);
 }
 
+static RNGItemList toVector(const RNGItems& list) {
+    RNGItemList l;
+    l.reserve(list.size());
+    std::copy(list.constBegin(), list.constEnd(), std::back_inserter(l));
+    return l;
+}
+
 /**
  * Find all the items that are used in this item but are not element or
  * attributes.
@@ -900,7 +909,7 @@ RNGItemList getBasesList(RNGItemPtr item)
         }
     }
     list.subtract(antilist);
-    RNGItemList l = list.toList().toVector();
+    RNGItemList l = toVector(list);
     qStableSort(l.begin(), l.end(), rngItemPtrLessThan);
     return l;
 }
@@ -911,7 +920,7 @@ RNGItemList getBasesList(RNGItemPtr item)
  */
 RNGItemList list(const RNGItems& items)
 {
-    RNGItemList list = items.toList().toVector();
+    RNGItemList list = toVector(items);
     qStableSort(list.begin(), list.end(), rngItemPtrLessThan);
     return list;
 }
@@ -1084,10 +1093,8 @@ void defineElement(QTextStream& out, const RNGItemPtr& item)
 {
     const RNGItemList bases = getBasesList(item);
     out << "class " << item->cppName << " : public OdfWriter";
-    RNGItemList::const_iterator i = bases.begin();
-    while (i != bases.end()) {
+    for (auto i = bases.begin(); i != bases.end(); ++i) {
         out << ", public " << (*i)->cppName;
-        ++i;
     }
     out << " {\n";
     out << "public:" << "\n";
@@ -1098,14 +1105,12 @@ void defineElement(QTextStream& out, const RNGItemPtr& item)
     out << "    " << item->cppName << "(OdfWriter* x" << r.args
         << ") :OdfWriter(x, \"" << item->name() << "\", "
         << (isMixed(item) ?"false" :"true") << ")";
-    i = bases.begin();
-    while (i != bases.end()) {
+    for (auto i = bases.begin(); i != bases.end(); ++i) {
         RequiredArgsList r;
         if (item->requiredItems.contains(*i)) {
             r = makeFullRequiredArgsList(*i);
         }
         out << ", " << (*i)->cppName << "(*static_cast<OdfWriter*>(this)" << r.vals << ")";
-        ++i;
     }
     out << " {\n";
     setRequiredAttributes(out, item);
@@ -1113,14 +1118,12 @@ void defineElement(QTextStream& out, const RNGItemPtr& item)
     out << "    " << item->cppName << "(KoXmlWriter* x" << r.args
         << ") :OdfWriter(x, \"" << item->name() << "\", "
         << (isMixed(item) ?"false" :"true") << ")";
-    i = bases.begin();
-    while (i != bases.end()) {
+    for (auto i = bases.begin(); i != bases.end(); ++i) {
         RequiredArgsList r;
         if (item->requiredItems.contains(*i)) {
             r = makeFullRequiredArgsList(*i);
         }
         out << ", " << (*i)->cppName << "(*static_cast<OdfWriter*>(this)" << r.vals << ")";
-        ++i;
     }
     out << " {\n";
     setRequiredAttributes(out, item);
@@ -1234,16 +1237,16 @@ void writeAdderDefinition(const RNGItemPtr& item, const RNGItemPtr& i, QTextStre
     QString name = makeCppName(i);
     RequiredArgsList r = makeFullRequiredArgsList(i);
     out << "inline ";
-    if (!ns.isEmpty()) {
-        out << ns << "::";
+    if (!ns().isEmpty()) {
+        out << ns() << "::";
     }
     out << i->cppName << "\n";
-    if (!ns.isEmpty()) {
-        out << ns << "::";
+    if (!ns().isEmpty()) {
+        out << ns() << "::";
     }
     out << item->cppName << "::add_" << name << "(";
     out << r.args << ") {\n";
-    out << "    return " << ns << "::" << i->cppName << "(";
+    out << "    return " << ns() << "::" << i->cppName << "(";
     if (item->isElement()) {
         out << "this";
     } else {
@@ -1334,7 +1337,7 @@ QTextStream& Files::getFile(const QString& tag1, const QString& tag2 = QString()
         *out << "#include \"writeodf" + prefix + ".h\"\n";
         *out << "#include \"writeodf" + prefix2 + ".h\"\n";
     } else {
-        *out << "namespace " << ns << " {\n";
+        *out << "namespace " << ns() << " {\n";
     }
     files[prefix][prefix2] = out;
     return *out;
@@ -1349,7 +1352,7 @@ void Files::closeNamespace()
     foreach (map& m, files) {
         map::ConstIterator i = m.begin();
         while (i != m.end()) {
-            if (!i.key().isNull() && !ns.isEmpty()) {
+            if (!i.key().isNull() && !ns().isEmpty()) {
                 *i.value() << "}\n";
             }
             ++i;
@@ -1407,7 +1410,7 @@ void convert(const QString& rngfile, const QString& outdir)
     resolveAttributeDataTypes(resolved);
     while (reduce(resolved)) {}
     //qDebug() << "reduce " << resolved.size();
-    RNGItemList list = resolved.toList().toVector();
+    RNGItemList list = toVector(resolved);
     //qDebug() << "filteredItems " << list.size();
     qStableSort(list.begin(), list.end(), rngItemPtrLessThan);
     makeCppNames(list);
