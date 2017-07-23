@@ -287,6 +287,7 @@ bool ViewController::event(QEvent* event)
                 syncObject->zoomLevel = zoom();
                 syncObject->activeToolId = KoToolManager::instance()->activeToolId();
                 syncObject->shapes = d->canvasController->canvas()->shapeManager()->shapes();
+                syncObject->currentSlide = d->view->document()->currentIndex();
                 syncObject->initialized = true;
             }
 
@@ -304,6 +305,7 @@ bool ViewController::event(QEvent* event)
                 setZoom(syncObject->zoomLevel);
 
                 qApp->processEvents();
+                d->view->document()->setCurrentIndex(syncObject->currentSlide);
                 emit d->canvasController->proxyObject->moveDocumentOffset(syncObject->documentOffset);
             }
 
