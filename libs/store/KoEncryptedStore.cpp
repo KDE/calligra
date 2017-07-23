@@ -549,7 +549,6 @@ bool KoEncryptedStore::openRead(const QString& name)
         }
 
         while (true) {
-            QByteArray pass;
             QCA::SecureArray password;
             bool keepPass = false;
             // I already have a password! Let's test it. If it's not good, we can dump it, anyway.
@@ -668,7 +667,7 @@ void KoEncryptedStore::savePasswordInKWallet()
             if (wallet->hasEntry(m_filename + "/opendocument")) {
                 wallet->removeEntry(m_filename + "/opendocument");
             }
-            wallet->writePassword(m_filename + "/opendocument", m_password.toByteArray().data());
+            wallet->writePassword(m_filename + "/opendocument", m_password.toByteArray().constData());
         }
         delete wallet;
     }

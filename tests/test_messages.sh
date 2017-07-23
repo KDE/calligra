@@ -2,20 +2,25 @@
 # test_messages:
 # $1: base directory
 
-if test -z $1; then
+if test -z "$1"; then
     echo "FAIL Called without base directory"
+    exit 1
+fi
+if ! test -d "$1"; then
+    echo "$1 is not a directory"
     exit 1
 fi
 
 result=0
-messagefiles=`find $1 -name 'Messages.sh'`
 files=0
 errors=0
-for messagefile in $messagefiles; do
-    echo "Testing: $messagefile"
+
+# handle whitespace and some other special characters in dir/file names
+while IFS= read -rd $'\0' file; do
     files=$((files + 1))
-    echo `grep '^potfilename=' $messagefile`
-    count=`grep -c '^potfilename=' $messagefile`
+    echo "Testing $files: $file"
+    echo `grep '^potfilename=' "$file"`
+    count=`grep -c '^potfilename=' "$file"`
     if [[ $count != 1 ]]; then
         errors=$((errors + 1))
         echo "FAIL Did not find 'potfilename=' correct number of times"
@@ -24,7 +29,8 @@ for messagefile in $messagefiles; do
         result=2;
     fi
     echo "----------------------------------------------------------"
-done
+done < <(find "$1" -name 'Messages.sh' -type f -print0 )
+
 echo
 echo "Found and tested $files messagefiles, detected $errors errors"
 echo

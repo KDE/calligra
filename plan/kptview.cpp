@@ -22,6 +22,7 @@
 #include "kptview.h"
 
 #include <kmessagebox.h>
+#include <KRecentFilesAction>
 
 #include "KoDocumentInfo.h"
 #include "KoMainWindow.h"
@@ -97,6 +98,8 @@
 #include "kpttaskstatusview.h"
 #include "kptsplitterview.h"
 #include "kptpertresult.h"
+#include "ConfigProjectPanel.h"
+#include "ConfigWorkVacationPanel.h"
 #include "kpttaskdefaultpanel.h"
 #include "kptworkpackageconfigpanel.h"
 #include "kptcolorsconfigpanel.h"
@@ -106,6 +109,8 @@
 #include "kptlocaleconfigmoneydialog.h"
 #include "kptflatproxymodel.h"
 #include "kpttaskstatusmodel.h"
+
+#include "reportsgenerator/ReportsGeneratorView.h"
 
 #ifdef PLAN_USE_KREPORT
 #include "reports/reportview.h"
@@ -207,6 +212,7 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
         m_trigged( false ),
         m_nextScheduleManager( 0 ),
         m_readWrite( false ),
+        m_defaultView(1),
         m_partpart (part)
 {
     //debugPlan;
@@ -257,7 +263,7 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Add sub views
-    createWelcomeView();
+    createIntroductionView();
 
     // The menu items
     // ------ File
@@ -396,7 +402,6 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
             object->deleteLater();
         }
     }
-
     //debugPlan<<" end";
 }
 
@@ -459,6 +464,8 @@ void View::initiateViews()
         connect(getPart(), SIGNAL(viewlistModified(bool)), docker, SLOT(updateWindowTitle(bool)));
     }
     connect( m_tab, SIGNAL(currentChanged(int)), this, SLOT(slotCurrentChanged(int)) );
+
+    slotSelectDefaultView();
 
     loadContext();
 
@@ -589,9 +596,12 @@ void View::createViews()
 
         createTaskWorkPackageView( cat, "TaskWorkPackageView", QString(), TIP_USE_DEFAULT_TEXT );
 
-#ifdef PLAN_USE_KREPORT
         ct = "Reports";
-        cat = m_viewlist->addCategory( ct, defaultCategoryInfo( ct ).name );
+        cat = m_viewlist->addCategory(ct, defaultCategoryInfo(ct).name);
+
+        createReportsGeneratorView(cat, "ReportsGeneratorView", i18n("Generate reports"), TIP_USE_DEFAULT_TEXT);
+
+#ifdef PLAN_USE_KREPORT
         // A little hack to get the user started...
         ReportView *rv = qobject_cast<ReportView*>( createReportView( cat, "ReportView", i18n( "Task Status Report" ), TIP_USE_DEFAULT_TEXT ) );
         if ( rv ) {
@@ -643,6 +653,8 @@ ViewBase *View::createView( ViewListItem *cat, const QString &type, const QStrin
         v = createAccountsView( cat, tag, name, tip, index );
     } else if ( type == "PerformanceStatusView" ) {
         v = createPerformanceStatusView( cat, tag, name, tip, index );
+    } else if ( type == "ReportsGeneratorView" ) {
+        v = createReportsGeneratorView(cat, tag, name, tip, index);
     } else if ( type == "ReportView" ) {
 #ifdef PLAN_USE_KREPORT
         v = createReportView( cat, tag, name, tip, index );
@@ -720,6 +732,9 @@ ViewInfo View::defaultViewInfo( const QString &type ) const
     } else if ( type == "PerformanceStatusView" ) {
         vi.name = i18n( "Tasks Performance Chart" );
         vi.tip = xi18nc( "@info:tooltip", "View tasks performance status information" );
+    } else if ( type == "ReportsGeneratorView" ) {
+        vi.name = i18n( "Reports Generator" );
+        vi.tip = xi18nc( "@info:tooltip", "Generate reports" );
     } else if ( type == "ReportView" ) {
         vi.name = i18n( "Report" );
         vi.tip = xi18nc( "@info:tooltip", "View report" );
@@ -746,19 +761,29 @@ ViewInfo View::defaultCategoryInfo( const QString &type ) const
 
 void View::slotOpenUrlRequest( HtmlView *v, const QUrl &url )
 {
-    if ( url.url().startsWith( QLatin1String( "about:plan" ) ) ) {
-        getPart()->aboutPage().generatePage( v->htmlPart(), url );
-        return;
+    debugPlan<<url;
+    if ( url.scheme() == QLatin1String("about") ) {
+        if ( url.url() == QLatin1String("about:close") ) {
+            int view = m_visitedViews.count() < 2 ? qMin(m_defaultView, m_tab->count()-1) : m_visitedViews.at(m_visitedViews.count() - 2);
+            debugPlan<<"Prev:"<<view<<m_visitedViews;
+            m_tab->setCurrentIndex(view);
+            return;
+        }
+        if ( url.url().startsWith( QLatin1String( "about:plan" ) ) ) {
+            getPart()->aboutPage().generatePage( v->htmlPart(), url );
+            return;
+        }
     }
     if ( url.scheme() == QLatin1String("help") ) {
         KHelpClient::invokeHelp( "", url.fileName() );
         return;
     }
     // try to open the url
+    debugPlan<<url<<"is external, try to open";
     new KRun( url, mainWindow() );
 }
 
-ViewBase *View::createWelcomeView()
+ViewBase *View::createIntroductionView()
 {
     HtmlView *v = new HtmlView(getKoPart(), getPart(), m_tab );
     v->htmlPart().setJScriptEnabled(false);
@@ -862,6 +887,7 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString &tag, const Q
 {
     TaskEditor *taskeditor = new TaskEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( taskeditor );
+    m_defaultView = m_tab->count() - 1;
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, taskeditor, getPart(), "", index );
     ViewInfo vi = defaultViewInfo( "TaskEditor" );
@@ -1360,6 +1386,35 @@ ViewBase *View::createResourceAssignmentView( ViewListItem *cat, const QString &
     return resourceAssignmentView;
 }
 
+ViewBase *View::createReportsGeneratorView(ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index)
+{
+    ReportsGeneratorView *v = new ReportsGeneratorView(getKoPart(), getPart(), m_tab );
+    m_tab->addWidget( v );
+
+    ViewListItem *i = m_viewlist->addView(cat, tag, name, v, getPart(), "", index);
+    ViewInfo vi = defaultViewInfo( "ReportsGeneratorView" );
+    if ( name.isEmpty() ) {
+        i->setText( 0, vi.name );
+    }
+    if ( tip == TIP_USE_DEFAULT_TEXT ) {
+        i->setToolTip( 0, vi.tip );
+    } else {
+        i->setToolTip( 0, tip );
+    }
+
+    v->setProject( &getProject() );
+
+    connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager*)), v, SLOT(setScheduleManager(ScheduleManager*)) );
+    connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager*)), v, SLOT(slotRefreshView()));
+    v->setScheduleManager( currentScheduleManager() );
+
+    connect( v, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
+    connect( v, SIGNAL(requestPopupMenu(QString,QPoint)), this, SLOT(slotPopupMenu(QString,QPoint)) );
+
+    v->updateReadWrite( m_readWrite );
+    return v;
+}
+
 ViewBase *View::createReportView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
 #ifdef PLAN_USE_KREPORT
@@ -1447,6 +1502,11 @@ void View::slotViewSelector( bool show )
 {
     //debugPlan;
     m_viewlist->setVisible( show );
+}
+
+void View::slotInsertResourcesFile(const QString &file)
+{
+    getPart()->insertResourcesFile(QUrl(file));
 }
 
 void View::slotInsertFile()
@@ -1885,6 +1945,8 @@ void View::slotConfigure()
         return;
     }
     ConfigDialog *dialog = new ConfigDialog( this, "Plan Settings", KPlatoSettings::self() );
+    dialog->addPage(new ConfigProjectPanel(), i18n("Project Defaults"), koIconName("calligraplan") );
+    dialog->addPage(new ConfigWorkVacationPanel(), i18n("Work & Vacation"), koIconName("view-calendar") );
     dialog->addPage(new TaskDefaultPanel(), i18n("Task Defaults"), koIconName("view-task") );
     dialog->addPage(new ColorsConfigPanel(), i18n("Task Colors"), koIconName("fill-color") );
     dialog->addPage(new WorkPackageConfigPanel(), i18n("Work Package"), koIconName("calligraplanwork") );
@@ -1894,7 +1956,7 @@ void View::slotConfigure()
 
 void View::slotIntroduction()
 {
-    m_tab->setCurrentIndex( 0 );
+    m_tab->setCurrentIndex(0);
 }
 
 
@@ -1969,7 +2031,8 @@ void View::slotOpenNode( Node *node )
         case Node::Type_Project: {
                 Project * project = static_cast<Project *>( node );
                 MainProjectDialog *dia = new MainProjectDialog( *project, this );
-                connect(dia, SIGNAL(finished(int)), SLOT(slotProjectEditFinished(int)));
+                connect(dia, SIGNAL(dialogFinished(int)), SLOT(slotProjectEditFinished(int)));
+                connect(dia, SIGNAL(sigLoadSharedResources(const QString&)), this, SLOT(slotInsertResourcesFile(const QString&)));
                 dia->show();
                 dia->raise();
                 dia->activateWindow();
@@ -2582,8 +2645,10 @@ void View::slotConnectNode()
 QMenu * View::popupMenu( const QString& name )
 {
     //debugPlan;
-    if ( factory() )
+    if ( factory() ) {
         return ( ( QMenu* ) factory() ->container( name, this ) );
+    }
+    debugPlan<<"No factory";
     return 0L;
 }
 
@@ -2612,9 +2677,9 @@ void View::slotGuiActivated( ViewBase *view, bool activate )
             m_dockers.append( ds );
             ds->activate( mainWindow() );
         }
-        debugPlan<<"Added dockers:"<<view<<m_dockers;
+        if (!m_dockers.isEmpty()) {debugPlan<<"Added dockers:"<<view<<m_dockers;}
     } else {
-        debugPlan<<"Remove dockers:"<<view<<m_dockers;
+        if (!m_dockers.isEmpty()) {debugPlan<<"Remove dockers:"<<view<<m_dockers;}
         while ( ! m_dockers.isEmpty() ) {
             m_dockers.takeLast()->deactivate( mainWindow() );
         }
@@ -2801,10 +2866,16 @@ QPrintDialog *View::createPrintDialog( KoPrintJob *printJob, QWidget *parent )
     return dia;
 }
 
-void View::slotCurrentChanged( int )
+void View::slotCurrentChanged( int view )
 {
+    m_visitedViews << view;
     ViewListItem *item = m_viewlist->findItem( qobject_cast<ViewBase*>( m_tab->currentWidget() ) );
     m_viewlist->setCurrentItem( item );
+}
+
+void View::slotSelectDefaultView()
+{
+    m_tab->setCurrentIndex(qMin(m_defaultView, m_tab->count()-1));
 }
 
 void View::updateView( QWidget * )
@@ -2844,7 +2915,7 @@ void View::slotPopupMenu( const QString& menuname, const QPoint & pos )
     if ( menu ) {
         //debugPlan<<menu<<":"<<menu->actions().count();
         ViewBase *v = qobject_cast<ViewBase*>( m_tab->currentWidget() );
-        debugPlan<<v<<menuname;
+        //debugPlan<<v<<menuname;
         QList<QAction*> lst;
         if ( v ) {
             lst = v->contextActionList();

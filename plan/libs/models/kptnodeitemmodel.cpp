@@ -32,8 +32,12 @@
 #include "kptdebug.h"
 
 #include <KoXmlReader.h>
-
-#include "KoStore.h"
+#include <KoXmlWriter.h>
+#include <KoOdf.h>
+#include <KoOdfWriteStore.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
+#include <KoXmlNS.h>
 #include <KoIcon.h>
 
 #include <QMimeData>
@@ -2360,6 +2364,98 @@ QVariant NodeModel::headerData( int section, int role )
             default: return QVariant();
         }
     }
+    if ( role == Qt::EditRole ) {
+        switch ( section ) {
+            case NodeName: return "Name";
+            case NodeType: return "Type";
+            case NodeResponsible: return "Responsible";
+            case NodeAllocation: return "Allocation";
+            case NodeEstimateType: return "Estimate Type";
+            case NodeEstimateCalendar: return "Calendar";
+            case NodeEstimate: return "Estimate";
+            case NodeOptimisticRatio: return "Optimistic"; // Ratio
+            case NodePessimisticRatio: return "Pessimistic"; // Ratio
+            case NodeRisk: return "Risk";
+            case NodeConstraint: return "Constraint";
+            case NodeConstraintStart: return "Constraint Start";
+            case NodeConstraintEnd: return "Constraint End";
+            case NodeRunningAccount: return "Running Account";
+            case NodeStartupAccount: return "Startup Account";
+            case NodeStartupCost: return "Startup Cost";
+            case NodeShutdownAccount: return "Shutdown Account";
+            case NodeShutdownCost: return "Shutdown Cost";
+            case NodeDescription: return "Description";
+
+            // Based on edited values
+            case NodeExpected: return "Expected";
+            case NodeVarianceEstimate: return "Variance (Est)";
+            case NodeOptimistic: return "Optimistic";
+            case NodePessimistic: return "Pessimistic";
+
+            // After scheduling
+            case NodeStartTime: return "Start Time";
+            case NodeEndTime: return "End Time";
+            case NodeEarlyStart: return "Early Start";
+            case NodeEarlyFinish: return "Early Finish";
+            case NodeLateStart: return "Late Start";
+            case NodeLateFinish: return "Late Finish";
+            case NodePositiveFloat: return "Positive Float";
+            case NodeFreeFloat: return "Free Float";
+            case NodeNegativeFloat: return "Negative Float";
+            case NodeStartFloat: return "Start Float";
+            case NodeFinishFloat: return "Finish Float";
+            case NodeAssignments: return "Assignments";
+
+            // Based on scheduled values
+            case NodeDuration: return "Duration";
+            case NodeVarianceDuration: return "Variance (Dur)";
+            case NodeOptimisticDuration: return "Optimistic (Dur)";
+            case NodePessimisticDuration: return "Pessimistic (Dur)";
+
+            // Completion
+            case NodeStatus: return "Status";
+            // xgettext: no-c-format
+            case NodeCompleted: return "% Completed";
+            case NodePlannedEffort: return "Planned Effort";
+            case NodeActualEffort: return "Actual Effort";
+            case NodeRemainingEffort: return "Remaining Effort";
+            case NodePlannedCost: return "Planned Cost";
+            case NodeActualCost: return "Actual Cost";
+            case NodeActualStart: return "Actual Start";
+            case NodeStarted: return "Started";
+            case NodeActualFinish: return "Actual Finish";
+            case NodeFinished: return "Finished";
+            case NodeStatusNote: return "Status Note";
+
+            // Scheduling errors
+            case NodeSchedulingStatus: return "Scheduling Status";
+            case NodeNotScheduled: return "Not Scheduled";
+            case NodeAssignmentMissing: return "Assignment Missing";
+            case NodeResourceOverbooked: return "Resource Overbooked";
+            case NodeResourceUnavailable: return "Resource Unavailable";
+            case NodeConstraintsError: return "Constraints Error";
+            case NodeEffortNotMet: return "Effort Not Met";
+            case NodeSchedulingError: return "Scheduling Error";
+
+            case NodeWBSCode: return "WBS Code";
+            case NodeLevel: return "Level";
+
+            // Performance
+            case NodeBCWS: return "BCWS";
+            case NodeBCWP: return "BCWP";
+            case NodeACWP: return "ACWP";
+            case NodePerformanceIndex: return "SPI";
+            case NodeCritical: return "Critical";
+            case NodeCriticalPath: return "Critical Path";
+
+            // Work package handling
+            case WPOwnerName: return "Owner";
+            case WPTransmitionStatus: return "Status";
+            case WPTransmitionTime: return "Time";
+
+            default: return QVariant();
+        }
+    }
     if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
             case NodeName: return ToolTip::nodeName();
@@ -3610,8 +3706,8 @@ bool NodeItemModel::setData( const QModelIndex &index, const QVariant &value, in
 QVariant NodeItemModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     if ( orientation == Qt::Horizontal ) {
-        if ( role == Qt::DisplayRole || role == Qt::TextAlignmentRole ) {
-            return m_nodemodel.headerData( section, role );
+        if  (role == Qt::DisplayRole || role == Qt::TextAlignmentRole || role == Qt::EditRole) {
+            return m_nodemodel.headerData(section, role);
         }
     }
     if ( role == Qt::ToolTipRole ) {
@@ -3695,6 +3791,7 @@ QMimeData *NodeItemModel::mimeData( const QModelIndexList & indexes ) const
         }
     }
     m->setData("application/x-vnd.kde.plan.nodeitemmodel.internal", encodedData);
+
     return m;
 }
 
@@ -4591,8 +4688,8 @@ bool MilestoneItemModel::setData( const QModelIndex &index, const QVariant &/*va
 QVariant MilestoneItemModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     if ( orientation == Qt::Horizontal ) {
-        if ( role == Qt::DisplayRole || role == Qt::TextAlignmentRole) {
-            return m_nodemodel.headerData( section, role );
+        if (role == Qt::DisplayRole || role == Qt::TextAlignmentRole || role == Qt::EditRole) {
+            return m_nodemodel.headerData(section, role);
         }
     }
     if ( role == Qt::ToolTipRole ) {

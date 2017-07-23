@@ -39,8 +39,10 @@ public:
         const_cast<ConfigBase*>( this )->setDefaultValues( *m_taskDefaults );
         return *m_taskDefaults;
     }
+
     void setTaskDefaults( Task * );
 
+    virtual void setDefaultValues( Project & ) {}
     virtual void setDefaultValues( Task & ) {}
     virtual QPair<int, int> durationUnitRange() const { return QPair<int, int>(); }
     virtual int minimumDurationUnit() const { return Duration::Unit_h; }

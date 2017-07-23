@@ -243,6 +243,8 @@ public:
     virtual void setProject( Project *project );
     /// Return the project
     virtual Project *project() const { return m_proj; }
+    /// Return the schedule manager
+    virtual ScheduleManager *scheduleManager() const { return m_schedulemanager; }
     /// Draw data from current part / project
     virtual void draw() {}
     /// Draw data from project.
@@ -588,6 +590,7 @@ public:
             m_rightview->sortByColumn( col, order );
         }
     }
+
 Q_SIGNALS:
     /// Context menu requested from the viewport, pointer over @p index at global position @p pos
     void contextMenuRequested( const QModelIndex &index, const QPoint& pos );
@@ -633,7 +636,6 @@ protected:
     bool m_mode;
     
     QAction *m_actionSplitView;
-
 };
 
 } // namespace KPlato

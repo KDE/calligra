@@ -159,7 +159,7 @@ calligra_set_productset(${PRODUCTSET})
 ###########################
 ##########################
 
-find_package(ECM 1.7.0 REQUIRED NO_MODULE)
+find_package(ECM 5.19 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
 # ECM KDE macros (include first, to have their policies and settings effect all other macros)
@@ -187,7 +187,6 @@ include(ECMGenerateHeaders)
 include(MacroBoolTo01)
 include(MacroOptionalFindPackage)
 include(MacroEnsureVersion)
-include(MacroJPEG)
 include(MacroDesktopToJson)
 
 
@@ -237,6 +236,14 @@ set_package_properties(KF5KHtml PROPERTIES
 if(KF5Activities_FOUND)
     set(HAVE_KACTIVITIES TRUE)
 endif()
+
+find_package(KF5Holidays 5.3.3)
+set_package_properties(KF5Holidays PROPERTIES
+    DESCRIPTION "Library for generation of public holidays"
+    PURPOSE "Required by Plan"
+    TYPE RECOMMENDED
+)
+
 if(${KF5_VERSION} VERSION_LESS "5.16.0")
     set(CALLIGRA_OLD_PLUGIN_METADATA TRUE)
 endif()
@@ -498,7 +505,7 @@ macro_optional_find_package(KReport 3.0 QUIET)
 set_package_properties(KReport PROPERTIES
     DESCRIPTION "A framework for the creation and generation of reports in multiple formats"
     URL "https://community.kde.org/KReport"
-    PURPOSE "Required by Plan"
+    PURPOSE "Required for KReports support in Plan"
     TYPE RECOMMENDED
 )
 
@@ -509,7 +516,7 @@ macro_optional_find_package(KPropertyWidgets 3.0 QUIET)
 set_package_properties(KPropertyWidgets PROPERTIES
     DESCRIPTION "A property editing framework with editor widget"
     URL "https://community.kde.org/KProperty"
-    PURPOSE "Required by Plan"
+    PURPOSE "Required for KReports support in Plan"
     TYPE RECOMMENDED
 )
 ##
@@ -697,8 +704,6 @@ test_big_endian(CMAKE_WORDS_BIGENDIAN)
 ##
 macro_optional_find_package(SharedMimeInfo)
 set_package_properties(SharedMimeInfo PROPERTIES
-    DESCRIPTION "Shared Mime Info"
-    URL "http://freedesktop.org/wiki/Software/shared-mime-info"
     PURPOSE "Required to determine file types SVM or all of MSOOXML."
     TYPE RECOMMENDED
 )
@@ -794,7 +799,7 @@ set_package_properties(LibEtonyek PROPERTIES
 ##
 ## Test for qt-poppler
 ##
-macro_optional_find_package(Poppler)
+macro_optional_find_package(Poppler COMPONENTS Qt5)
 set_package_properties(Poppler PROPERTIES
     DESCRIPTION "A PDF rendering library"
     URL "http://poppler.freedesktop.org"
@@ -1075,8 +1080,8 @@ calligra_drop_product_on_bad_condition( APP_BRAINDUMP
 calligra_drop_product_on_bad_condition( APP_PLAN
     KGantt_FOUND "KGantt devel not found"
     KChart_FOUND "KChart devel not found"
-    KReport_WithScripting_FOUND "KReport with scripting support not found"
-    KPropertyWidgets_FOUND "KPropertyWidgets not found"
+#     KReport_WithScripting_FOUND "KReport with scripting support not found"
+#     KPropertyWidgets_FOUND "KPropertyWidgets not found"
 )
 
 calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT

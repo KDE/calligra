@@ -1703,7 +1703,6 @@ void TestXmlReaderWithoutSpaces::testSimpleOpenDocumentSpreadsheet()
 
     QString officeNS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
     QString tableNS = "urn:oasis:names:tc:opendocument:xmlns:table:1.0";
-    QString textNS = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
 
     // <office:document-content>
     KoXmlElement contentElement;
@@ -2425,7 +2424,6 @@ void TestXmlReaderWithoutSpaces::testLargeOpenDocumentSpreadsheet()
     // namespaces that will be used
     QString officeNS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
     QString tableNS = "urn:oasis:names:tc:opendocument:xmlns:table:1.0";
-    QString textNS = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
 
     // <office:document-content>
     KoXmlElement contentElement;
@@ -2555,7 +2553,6 @@ void TestXmlReaderWithoutSpaces::testExternalOpenDocumentSpreadsheet(const QStri
     // namespaces that will be used
     QString officeNS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
     QString tableNS = "urn:oasis:names:tc:opendocument:xmlns:table:1.0";
-    QString textNS = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
 
     // <office:document-content>
     KoXmlElement contentElement;

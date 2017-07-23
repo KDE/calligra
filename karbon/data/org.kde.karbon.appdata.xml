@@ -77,6 +77,7 @@
     <p xml:lang="sv">Karbon är ett vektorritprogram med ett användargränssnitt som är lätt att använda, ytterst anpassningsbart och utökningsbart. Det gör Karbon till ett utmärkt program för användare som börjar utforska vektorgrafikvärlden samt för konstnärer som vill skapa hänförande vektorkonst.</p>
     <p xml:lang="uk">Karbon — програма для векторного малювання з простим, гнучким та придатним до розширення інтерфейсом користувача. Це робить Karbon чудовою програмою для користувачів, які починають знайомитися зі світом векторної графіки, а також для художників, які хочуть створити захопливі векторні твори.</p>
     <p xml:lang="x-test">xxKarbon is a vector drawing application with a user interface that is easy to use, highly customizable and extensible. That makes Karbon a great application for users starting to explore the world of vector graphics as well as for artists wanting to create breathtaking vector art.xx</p>
+    <p xml:lang="zh-CN">Karbon 是一个矢量绘图程序，具有易用，高度可定制和可扩展的用户界面。它是一个理想的工具，帮助用户探索矢量图形，帮助艺术家创作令人惊叹的矢量艺术作品。</p>
     <p>Features:</p>
     <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
@@ -126,6 +127,7 @@
       <li xml:lang="sv">Stöd för att läsa in ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="uk">Підтримка завантаження даних ODG, SVG, WPG, WMF, EPS/PS.</li>
       <li xml:lang="x-test">xxLoading support for ODG, SVG, WPG, WMF, EPS/PSxx</li>
+      <li xml:lang="zh-CN">加载支持 ODG，SVG，WPG，WMF，EPS/PS</li>
       <li>
         Writing support for ODG, SVG, PNG, PDF, WMF
       </li>
@@ -150,6 +152,7 @@
       <li xml:lang="sv">Stöd för att skriva ut ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="uk">Підтримка запису у форматах ODG, SVG, PNG, PDF, WMF.</li>
       <li xml:lang="x-test">xxWriting support for ODG, SVG, PNG, PDF, WMFxx</li>
+      <li xml:lang="zh-CN">写入支持 ODG，SVG，PNG，PDF，WMF</li>
       <li>
         Customizable user interface with freely placeable toolbars and dockers
       </li>
@@ -173,6 +176,7 @@
       <li xml:lang="sv">Anpassningsbart användargränssnitt med verktygsrader och paneler som kan placeras fritt</li>
       <li xml:lang="uk">Придатний до налаштовування інтерфейс користувача з довільним розташуванням панелей інструментів та бічних панелей.</li>
       <li xml:lang="x-test">xxCustomizable user interface with freely placeable toolbars and dockersxx</li>
+      <li xml:lang="zh-CN">可自定义用户界面，包含可自由放置的工具栏和停靠栏</li>
       <li>
         Layer docker for easy handling of complex documents including preview thumbnails, support for grouping shapes via
         drag and drop, controlling visibility of shapes or locking

@@ -24,12 +24,16 @@
 
 #include "kplato_export.h"
 
+#include <QPointer>
+
 class KoView;
+class QStackedWidget;
 
 /// The main namespace.
 namespace KPlato
 {
 class MainDocument;
+class HtmlView;
 
 class KPLATO_EXPORT Part : public KoPart
 {
@@ -47,10 +51,24 @@ public:
 
     /// reimplemented
     virtual KoMainWindow *createMainWindow();
+
+    virtual void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
+
+protected Q_SLOTS:
+    void finish();
+    void slotShowIntroduction();
+    void slotOpenUrlRequest( HtmlView *v, const QUrl &url );
+
 protected:
     virtual void openTemplate( const QUrl& url );
+    void createStarUpWidget(KoMainWindow *parent);
+    QWidget *createWelcomeView(KoMainWindow *parent);
+    QWidget *createIntroductionView();
 
+private:
     KPlato::MainDocument *m_document;
+    QPointer<QStackedWidget> startUpWidget;
+    bool m_toolbarVisible;
 };
 
 }  //KPlato namespace

@@ -155,7 +155,6 @@ void TestKoGenStyles::testLookup()
     headerStyle.addStyleMap(map1);
     headerStyle.addStyleMap(map2);
     headerStyle.setAutoStyleInStylesDotXml(true);
-    QString headerStyleName = coll.insert(headerStyle, "foobar");
 
     QCOMPARE(coll.styles().count(), 4);
     //QCOMPARE(coll.styles(KoGenStyle::ParagraphAutoStyle).count(), 2);

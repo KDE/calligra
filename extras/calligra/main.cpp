@@ -172,6 +172,7 @@ static int handleUrls(const QStringList& files)
 
 int main( int argc, char **argv )
 {
+    QApplication app(argc, argv);
     KLocalizedString::setApplicationDomain( "calligra-opener" );
 
     KAboutData aboutData("calligra", i18n("Calligra Opener"),
@@ -181,7 +182,6 @@ int main( int argc, char **argv )
                          i18n("Copyright 2010-%1 Calligra developers", QStringLiteral(CALLIGRA_YEAR)));
     aboutData.addAuthor(i18n("Jarosław Staniek"), QString(), "staniek@kde.org");
 
-    QApplication app(argc, argv);
     KAboutData::setApplicationData(aboutData);
 
     QCommandLineParser parser;

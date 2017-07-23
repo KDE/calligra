@@ -39,7 +39,13 @@ public:
     explicit MainProjectDialog(Project &project, QWidget *parent=0, const char *name=0);
 
     MacroCommand *buildCommand();
-    
+
+    bool loadSharedResources();
+
+Q_SIGNALS:
+    void dialogFinished(int);
+    void sigLoadSharedResources(const QString &file);
+
 protected Q_SLOTS:
     void slotOk();
 

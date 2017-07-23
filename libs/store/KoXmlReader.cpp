@@ -137,7 +137,7 @@ uint qHash(const KoQName& qname)
 
 // this simplistic hash is rather fast-and-furious. it works because
 // likely there is very few namespaced attributes per element
-static inline uint qHash(const KoXmlStringPair &p)
+static inline uint qHash(const KoXmlStringPair &p, uint /*seed*/ = 0)
 {
     return qHash(p.second[0].unicode()) ^ 0x1477;
 

@@ -25,6 +25,7 @@
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
+#include <kzip.h>
 
 #include <KoIcon.h>
 #include "calligraversion.h"
@@ -54,10 +55,9 @@
 #include <QContextMenuEvent>
 #include <QDragMoveEvent>
 
-
-
 namespace KPlato
 {
+
 
 DockWidget::DockWidget( ViewBase *v, const QString &identity,  const QString &title )
     : QDockWidget( v ),
@@ -1901,11 +1901,11 @@ void DoubleTreeViewBase::init()
 {
     setOrientation( Qt::Horizontal );
     setHandleWidth( 3 );
-    m_leftview = new TreeViewBase();
+    m_leftview = new TreeViewBase(this);
     m_leftview->setObjectName("Left view");
     addWidget( m_leftview );
     setStretchFactor( 0, 1 );
-    m_rightview = new TreeViewBase();
+    m_rightview = new TreeViewBase(this);
     m_rightview->setObjectName("Right view");
     addWidget( m_rightview );
     setStretchFactor( 1, 1 );
@@ -2334,5 +2334,6 @@ QModelIndex DoubleTreeViewBase::indexAt( const QPoint &pos ) const
     }
     return idx;
 }
+
 
 } // namespace KPlato

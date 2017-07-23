@@ -36,6 +36,8 @@ class QStringList;
 
 #define koApp KoApplication::koApplication()
 
+typedef KAboutData* (*AboutDataGenerator)();
+
 /**
  *  @brief Base class for all %Calligra apps
  *
@@ -59,11 +61,13 @@ public:
      *
      * @param nativeMimeType: the nativeMimeType of the Calligra application
      * @param windowIconName xdg-spec name of the icon to be set for windows
+     * @param aboutDataGenerator method to create the KAboutData for the app
      * @param argc number of commandline argument strings in @c argv
      * @param argv array of commandline argument strings
      */
     explicit KoApplication(const QByteArray &nativeMimeType,
-                           const QString &windowIconName, const KAboutData &aboutData,
+                           const QString &windowIconName,
+                           AboutDataGenerator aboutDataGenerator,
                            int &argc, char **argv);
 
     /**

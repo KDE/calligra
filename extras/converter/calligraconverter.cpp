@@ -151,6 +151,7 @@ QUrl urlFromFileArg(const QString &file)
 
 int main(int argc, char **argv)
 {
+    QApplication app(argc, argv);
     KLocalizedString::setApplicationDomain( "koconverter" );
 
     KAboutData aboutData("calligraconverter", i18n("CalligraConverter"),
@@ -162,7 +163,6 @@ int main(int argc, char **argv)
     aboutData.addAuthor(i18n("Nicolas Goutte"), QString(), "goutte@kde.org");
     aboutData.addAuthor(i18n("Dan Leinir Turthra Jensen"), QString(), "admin@leinir.dk");
 
-    QApplication app(argc, argv);
     KAboutData::setApplicationData(aboutData);
 
     QCommandLineParser parser;

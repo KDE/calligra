@@ -11,6 +11,7 @@
   <name xml:lang="cs">Plan</name>
   <name xml:lang="da">Plan</name>
   <name xml:lang="de">Plan</name>
+  <name xml:lang="el">Plan</name>
   <name xml:lang="en-GB">Plan</name>
   <name xml:lang="es">Plan</name>
   <name xml:lang="et">Plan</name>
@@ -34,6 +35,7 @@
   <summary xml:lang="ca-valencia">Gestió de projectes</summary>
   <summary xml:lang="cs">Správa projektů</summary>
   <summary xml:lang="de">Projektverwaltung</summary>
+  <summary xml:lang="el">Διαχείριση έργων</summary>
   <summary xml:lang="en-GB">Project Management</summary>
   <summary xml:lang="es">Gestor de proyectos</summary>
   <summary xml:lang="et">Projektihaldus</summary>
@@ -59,6 +61,7 @@
     <p xml:lang="ca">El Plan és una aplicació de gestió de projectes. Està pensat per gestionar projectes moderadament grans amb múltiples recursos.</p>
     <p xml:lang="ca-valencia">El Plan és una aplicació de gestió de projectes. Està pensat per gestionar projectes moderadament grans amb múltiples recursos.</p>
     <p xml:lang="de">Plan ist ein Programm zur Projektplanung und -verwaltung. Es ist für mittelgroße Projekte mit mehreren Ressourcen geeignet.</p>
+    <p xml:lang="el">Το Plan είναι μια εφαρμογή διαχείρισης έργων. Στοχεύει στη διαχείριση σχετικά μεγάλων έργων με πολλούς πόρους.</p>
     <p xml:lang="en-GB">Plan is a project management application. It is intended for managing moderately large projects with multiple resources.</p>
     <p xml:lang="es">Plan es una aplicación para gestionar proyectos. Está enfocada a la gestión de proyectos moderadamente grandes con varios recursos.</p>
     <p xml:lang="et">Plan on projektihalduse rakendus. See on mõeldud haldama mõõduka suurusega ja paljude ressurssidega projekte.</p>
@@ -81,6 +84,7 @@
     <p xml:lang="ca-valencia">Característiques:</p>
     <p xml:lang="cs">Vlastnosti:</p>
     <p xml:lang="de">Funktionen:</p>
+    <p xml:lang="el">Χαρακτηριστικά:</p>
     <p xml:lang="en-GB">Features:</p>
     <p xml:lang="es">Características:</p>
     <p xml:lang="et">Omadused:</p>
@@ -104,6 +108,7 @@
       <li xml:lang="ca">Vistes múltiples: Diagrames de Gant, vista de recursos, vista de comptes</li>
       <li xml:lang="ca-valencia">Vistes múltiples: Diagrames de Gant, vista de recursos, vista de comptes</li>
       <li xml:lang="de">Mehrere Ansichten: Gant-Diagramme, Ressourcen-Ansicht und Kontenansicht</li>
+      <li xml:lang="el">Πολλαπλές προβολές: διαγράμματα Gantt, προβολή πόρων, προβολή λογαριασμών</li>
       <li xml:lang="en-GB">Multiple views: Gant Charts, Resource View, Accounts View</li>
       <li xml:lang="es">Varias vistas: diagramas de Gant, Vista de recursos, vista de cuentas</li>
       <li xml:lang="et">Mitmed vaated: Gantti diagramm, ressursivaade, kontovaade</li>
@@ -125,6 +130,7 @@
       <li xml:lang="ca">Usa estructures estàndard: Estructura de descomposició de treballs (WBS), Estructura de descomposició de recursos (RBS), Estructura de descomposició de costos (CBS)</li>
       <li xml:lang="ca-valencia">Usa estructures estàndard: Estructura de descomposició de treballs (WBS), Estructura de descomposició de recursos (RBS), Estructura de descomposició de costos (CBS)</li>
       <li xml:lang="de">Verwendet Standardstrukturen: Projektstrukturplan (PSP), Ressourcenstrukturplan (RSP), Kostenstrukturplan (KSP)</li>
+      <li xml:lang="el">Χρησιμοποιεί πρότυπες δομές: Αναλυτική δομή εργασιών (Work breakdown structure, WBS), Αναλυτική δομή πόρων (Resource breakdown structure, RBS), Αναλυτική δομή κόστους (Cost breakdown structure, CBS)</li>
       <li xml:lang="en-GB">Uses standard structures: Work breakdown structure (WBS), Resource breakdown structure (RBS), Cost breakdown structure (CBS)</li>
       <li xml:lang="es">Utiliza estructuras estándar: estructura de desglose del trabajo (WBS), estructura de desglose de los recursos (RBS), estructura de desglose de los costes (CBS)</li>
       <li xml:lang="et">Standardstruktuuride kasutamine: tegevuse liigendamine (WBS), ressursside liigendamine (RBS), maksumuse liigendamine (CBS)</li>
@@ -145,6 +151,7 @@
       <li xml:lang="ca">Es pot configurar el nivell de detall en el diagrama de Gantt</li>
       <li xml:lang="ca-valencia">Es pot configurar el nivell de detall en el diagrama de Gantt</li>
       <li xml:lang="de">Einstellbare Detailstufen auf dem Gantt-Diagramm</li>
+      <li xml:lang="el">Διαμορφώσιμο επίπεδο λεπτομέρειας στο διάγραμμα Gantt</li>
       <li xml:lang="en-GB">Configurable level of detail on Gantt Chart</li>
       <li xml:lang="es">Nivel de detalles configurable en el diagrama de Gantt</li>
       <li xml:lang="et">Üksikasjalikkuse taseme seadistamine Gantti diagrammil</li>
@@ -166,6 +173,7 @@
       <li xml:lang="ca">Permet resums de tasques, tasques i fites</li>
       <li xml:lang="ca-valencia">Permet resums de tasques, tasques i fites</li>
       <li xml:lang="de">Unterstützt Aufgabenübersichten, Aufgaben und Meilensteine</li>
+      <li xml:lang="el">Υποστηρίζει περιλήψεις εργασιών, εργασίες και ορόσημα</li>
       <li xml:lang="en-GB">Supports Summarytasks, Tasks, and milestones</li>
       <li xml:lang="es">Permite el uso de tareas de resumen, tareas e hitos</li>
       <li xml:lang="et">Koondülesannete, ülesannete ja tähtaegade toetamine</li>
@@ -186,6 +194,7 @@
       <li xml:lang="ca">Es poden configurar restriccions de planificació</li>
       <li xml:lang="ca-valencia">Es poden configurar restriccions de planificació</li>
       <li xml:lang="de">Einstellbare Planungsvorgaben</li>
+      <li xml:lang="el">Διαμορφώσιμοι περιορισμοί χρονοπρογραμματισμού</li>
       <li xml:lang="en-GB">Configurable Scheduling Constraints</li>
       <li xml:lang="es">Restricciones de planificación configurables</li>
       <li xml:lang="et">Seadistatavad ajakava piirangud</li>

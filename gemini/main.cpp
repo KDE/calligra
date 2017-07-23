@@ -41,6 +41,12 @@
 
 int main( int argc, char** argv )
 {
+#if defined HAVE_X11
+    QApplication::setAttribute(Qt::AA_X11InitThreads);
+#endif
+
+    QApplication app(argc, argv);
+
     KAboutData aboutData(QStringLiteral("calligragemini"),
                          i18n("Calligra Gemini"),
                          QStringLiteral(CALLIGRA_VERSION_STRING),
@@ -51,12 +57,15 @@ int main( int argc, char** argv )
                          QStringLiteral("https://www.calligra.org"),
                          QStringLiteral("submit@bugs.kde.org"));
 
+<<<<<<< HEAD
 #if defined HAVE_X11
     QApplication::setAttribute(Qt::AA_X11InitThreads);
 #endif
 
     QApplication app(argc, argv);
     app.setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
+=======
+>>>>>>> master
     KAboutData::setApplicationData(aboutData);
 
     QCommandLineParser parser;

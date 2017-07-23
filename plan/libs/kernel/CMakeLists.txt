@@ -46,6 +46,9 @@ target_link_libraries(kplatokernel
         kundo2
         KF5::KIOWidgets
 )
+if(KF5Holidays_FOUND)
+    target_link_libraries(kplatokernel PUBLIC KF5::Holidays)
+endif()
 
 set_target_properties(kplatokernel PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 

@@ -110,6 +110,7 @@ namespace KPlato
     QString ToolTip::nodePerformanceIndex() { return i18n( "Schedule performance index (BCWP/BCWS)" ); }
 
     QString ToolTip::resourceName() { return xi18nc( "@info:tooltip", "The name of the resource or resource group" ); }
+    QString ToolTip::resourceScope() { return xi18nc( "@info:tooltip", "The scope of the resource or resource group" ); }
     QString ToolTip::resourceType() { return xi18nc( "@info:tooltip", "The type of the resource or resource group" ); }
     QString ToolTip::resourceInitials() { return xi18nc( "@info:tooltip", "The initials of the resource" ); }
     QString ToolTip::resourceEMail() { return xi18nc( "@info:tooltip", "The e-mail address of the resource" ); }

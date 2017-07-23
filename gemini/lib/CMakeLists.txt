@@ -1,3 +1,5 @@
+project(gemini)
+
 set(gemini_SRCS
     GeminiMainWindow.cpp
 )
@@ -10,6 +12,7 @@ target_link_libraries(gemini
     Qt5::Core
     Qt5::Widgets
 )
+
 set_target_properties(gemini PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )

@@ -157,7 +157,6 @@ CalendarRemoveCmd::CalendarRemoveCmd( Project *project, Calendar *cal, const KUn
     foreach ( Resource *r, project->resourceList() ) {
         if ( r->calendar( true ) == cal ) {
             m_cmd->addCommand( new ModifyResourceCalendarCmd( r, 0 ) );
-            break;
         }
     }
     if ( project->defaultCalendar() == cal ) {
@@ -295,6 +294,27 @@ void CalendarModifyTimeZoneCmd::unexecute()
     m_cal->setTimeZone( m_oldvalue );
     m_cmd->unexecute();
 }
+
+#ifdef HAVE_KHOLIDAYS
+CalendarModifyHolidayRegionCmd::CalendarModifyHolidayRegionCmd( Calendar *cal, const QString &value, const KUndo2MagicString& name )
+    : NamedCommand( name ),
+    m_cal( cal ),
+    m_newvalue( value )
+{
+    m_oldvalue = cal->holidayRegionCode();
+}
+CalendarModifyHolidayRegionCmd::~CalendarModifyHolidayRegionCmd()
+{
+}
+void CalendarModifyHolidayRegionCmd::execute()
+{
+    m_cal->setHolidayRegion( m_newvalue );
+}
+void CalendarModifyHolidayRegionCmd::unexecute()
+{
+    m_cal->setHolidayRegion( m_oldvalue );
+}
+#endif
 
 CalendarAddDayCmd::CalendarAddDayCmd( Calendar *cal, CalendarDay *newvalue, const KUndo2MagicString& name )
         : NamedCommand( name ),
@@ -3627,6 +3647,42 @@ void ClearAllExternalAppointmentsCmd::execute()
 void ClearAllExternalAppointmentsCmd::unexecute()
 {
     m_cmd.undo();
+}
+
+SharedResourcesFileCmd::SharedResourcesFileCmd(Project *project, const QString &newValue, const KUndo2MagicString& name)
+    : NamedCommand(name)
+    , m_project(project)
+    , m_oldValue(project->sharedResourcesFile())
+    , m_newValue(newValue)
+{
+}
+
+void SharedResourcesFileCmd::execute()
+{
+    m_project->setSharedResourcesFile(m_newValue);
+}
+
+void SharedResourcesFileCmd::unexecute()
+{
+    m_project->setSharedResourcesFile(m_oldValue);
+}
+
+UseSharedResourcesCmd::UseSharedResourcesCmd(Project *project, bool newValue, const KUndo2MagicString& name)
+    : NamedCommand(name)
+    , m_project(project)
+    , m_oldValue(project->useSharedResources())
+    , m_newValue(newValue)
+{
+}
+
+void UseSharedResourcesCmd::execute()
+{
+    m_project->setUseSharedResources(m_newValue);
+}
+
+void UseSharedResourcesCmd::unexecute()
+{
+    m_project->setUseSharedResources(m_oldValue);
 }
 
 }  //KPlato namespace

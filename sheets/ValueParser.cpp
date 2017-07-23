@@ -339,7 +339,7 @@ Value ValueParser::tryParseDate(const QString& str, bool *ok) const
 Value ValueParser::tryParseTime(const QString& str, bool *ok) const
 {
     bool valid = false;
-
+    qInfo()<<Q_FUNC_INFO<<str;
     QDateTime tmpTime = readTime(str, true, &valid);
     if (!valid)
         tmpTime = readTime(str, false, &valid);
@@ -508,12 +508,14 @@ QDateTime ValueParser::readTime(const QString& intstr, bool withSeconds, bool* o
     result = QDateTime(m_settings->referenceDate(), QTime(0, 0), Qt::UTC);
     msecs += (((hour * 60 + minute) * 60 + second) * 1000);
     result = result.addMSecs(negative ? -msecs : msecs);
+    qInfo()<<Q_FUNC_INFO<<intstr<<format<<'='<<result;
     return result;
 
 error:
     if (ok)
         *ok = false;
     // return invalid date if it didn't work
+    qInfo()<<Q_FUNC_INFO<<intstr<<format<<'='<<"failed";
     return QDateTime(m_settings->referenceDate(), QTime(-1, -1, -1), Qt::UTC);
 }
 

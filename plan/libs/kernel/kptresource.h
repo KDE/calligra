@@ -69,7 +69,7 @@ class DateTimeInterval;
  *  and friends based on the schedules we got from the PIM projects.
  *  (Thomas Zander mrt-2003 by suggestion of Shaheed)
  */
- 
+
 class KPLATOKERNEL_EXPORT ResourceGroup : public QObject
 {
     Q_OBJECT
@@ -95,7 +95,7 @@ public:
     static QStringList typeToStringList( bool trans = false );
 
     bool isScheduled() const;
-    
+
     /// Return true if any resource in this group is baselined
     bool isBaselined( long id = BASELINESCHEDULE ) const;
 
@@ -112,7 +112,7 @@ public:
     int indexOf( const Resource *resource ) const;
     Resource *resourceAt( int pos ) const { return m_resources.value( pos ); }
     int numResources() const { return m_resources.count(); }
-    
+
     Risk* getRisk( int );
 
     /** Manage the dependent resources.  This is a list of the resource
@@ -136,7 +136,7 @@ public:
 
     bool load( KoXmlElement &element, XMLLoaderObject &status );
     void save( QDomElement &element ) const;
-    
+
     /// Save workpackage document. Include only resources listed in @p lst
     void saveWorkPackageXML( QDomElement &element, const QList<Resource*> &lst ) const;
 
@@ -173,11 +173,17 @@ public:
     void setProject( Project *project );
 
     void copy( const ResourceGroup *group );
-    
+
     DateTime startTime( long id ) const;
     DateTime endTime( long id ) const;
 
     void blockChanged(bool on = true);
+
+    /// A resource can be local to this project, or
+    /// defined externally and shared with other projects
+    bool isShared() const;
+    /// Set resource to be shared if on = true, or local if on = false
+    void setShared(bool on);
 
 #ifndef NDEBUG
 
@@ -202,6 +208,7 @@ private:
 
     QList<ResourceGroupRequest*> m_requests;
     bool m_blockChanged;
+    bool m_shared;
 };
 
 /**
@@ -248,7 +255,7 @@ public:
     void setAutoAllocate( bool on );
 
     void copy( Resource *resource );
-    
+
     void setParentGroup( ResourceGroup *parent ) { m_parent = parent; }
     ResourceGroup *parentGroup() const { return m_parent; }
 
@@ -276,7 +283,7 @@ public:
     /// Return the appointment at @p index for schedule @p id
     Appointment *appointmentAt( int index, long id = -1 ) const { return appointments( id ).value( index ); }
     int indexOf( Appointment *a, long id = -1 ) const { return appointments( id ).indexOf( a ); }
-    
+
     /// Adds appointment to current schedule
     virtual bool addAppointment( Appointment *appointment );
     /// Adds appointment to schedule sch
@@ -406,7 +413,7 @@ public:
 
     Appointment appointmentIntervals( long id ) const;
     Appointment appointmentIntervals() const;
-    
+
     EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end, long id, EffortCostCalculationType = ECCT_All );
     Duration plannedEffort( const QDate &date, EffortCostCalculationType = ECCT_All ) const;
 
@@ -488,6 +495,8 @@ public:
     void addTeamMemberId( const QString &id );
     /// Remove resource @p id from the list of team members.
     void removeTeamMemberId( const QString &id );
+    /// Set the list of team members to @p ids
+    void setTeamMemberIds(const QStringList &ids);
 
     /// Return the account
     Account *account() const { return cost.account; }
@@ -496,8 +505,14 @@ public:
 
     void blockChanged(bool on = true);
 
+    /// A resource group can be local to this project, or
+    /// defined externally and shared with other projects
+    bool isShared() const;
+    /// Set resource group to be shared if on = true, or local if on = false
+    void setShared(bool on);
+
     // for xml loading code
-    
+
     class WorkInfoCache
     {
     public:
@@ -555,11 +570,11 @@ private:
         Account *account;
     }
     cost;
-    
+
     Calendar *m_calendar;
     QList<ResourceRequest*> m_requests;
     QStringList m_requiredIds;
-    
+
     QStringList m_teamMembers;
 
     Schedule *m_currentSchedule;
@@ -569,6 +584,7 @@ private:
     // return this if resource has no calendar and is a material resource
     Calendar m_materialCalendar;
     bool m_blockChanged;
+    bool m_shared;
 
 #ifndef NDEBUG
 public:
@@ -751,7 +767,7 @@ public:
     DateTime workTimeBefore(const DateTime &dt, Schedule *ns = 0);
 
     /**
-     * Makes appointments for task @param task to the 
+     * Makes appointments for task @param task to the
      * requested resources for the duration found in @ref duration().
      */
     void makeAppointments( Schedule *schedule );
@@ -766,7 +782,7 @@ public:
     Task *task() const;
 
     void changed();
-    
+
     /// Reset dynamic resource allocations
     void resetDynamicAllocations();
     /// Allocate dynamic requests. Do nothing if already allocated.
@@ -841,7 +857,7 @@ public:
     /// If @p resolveTeam is true, include the team members,
     /// if @p resolveTeam is false, include the team resource itself.
     QList<ResourceRequest*> resourceRequests( bool resolveTeam=true ) const;
-    
+
     //bool load(KoXmlElement &element, Project &project);
     void save( QDomElement &element ) const;
 
@@ -871,7 +887,7 @@ public:
     void setTask( Task *t ) { m_task = t; }
 
     void changed();
-    
+
     Duration effort( const QList<ResourceRequest*> &lst, const DateTime &time, const Duration &duration, Schedule *ns, bool backward ) const;
     int numDays(const QList<ResourceRequest*> &lst, const DateTime &time, bool backward) const;
     Duration duration(const QList<ResourceRequest*> &lst, const DateTime &time, const Duration &_effort, Schedule *ns, bool backward);

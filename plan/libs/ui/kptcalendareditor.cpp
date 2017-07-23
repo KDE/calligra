@@ -1,21 +1,22 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007, 2012 Dag Andersen <danders@get2net>
-
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Library General Public
-  License as published by the Free Software Foundation; either
-  version 2 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Library General Public License for more details.
-
-  You should have received a copy of the GNU Library General Public License
-  along with this library; see the file COPYING.LIB.  If not, write to
-  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-* Boston, MA 02110-1301, USA.
-*/
+ * Copyright (C) 2007, 2012 Dag Andersen <danders@get2net>
+ * Copyright (C) 2017 Dag Andersen <danders@get2net>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
 
 #include "kptcalendareditor.h"
 
@@ -64,8 +65,10 @@ CalendarTreeView::CalendarTreeView( QWidget *parent )
     setSelectionMode( QAbstractItemView::SingleSelection );
     setSelectionModel( new QItemSelectionModel( model() ) );
 
-    setItemDelegateForColumn( 1, new EnumDelegate( this ) ); // timezone
-
+    setItemDelegateForColumn( CalendarItemModel::TimeZone, new EnumDelegate( this ) ); // timezone
+#ifdef HAVE_KHOLIDAYS
+    setItemDelegateForColumn( CalendarItemModel::HolidayRegion, new EnumDelegate( this ) );
+#endif
     connect( header(), SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(headerContextMenuRequested(QPoint)) );
 }
 
@@ -327,7 +330,7 @@ void CalendarDayView::headerContextMenuRequested( const QPoint &/*pos*/ )
 void CalendarDayView::contextMenuEvent ( QContextMenuEvent *event )
 {
     //debugPlan;
-    if ( ! isReadWrite() ) {
+    if ( !isReadWrite() || !model()->calendar() || model()->calendar()->isShared() ) {
         return;
     }
     QMenu menu;
@@ -499,6 +502,9 @@ void CalendarEditor::slotContextMenuDate( QMenu *menu, const QList<QDate> &dates
     if ( ! isReadWrite() ) {
         return;
     }
+    if (!currentCalendar() || currentCalendar()->isShared()) {
+        return;
+    }
     if ( dates.isEmpty() ) {
         m_currentMenuDateList << m_datePicker->date();
     } else {
@@ -515,6 +521,9 @@ void CalendarEditor::slotContextMenuDate( QMenu *menu, const QDate &date )
     if ( ! isReadWrite() || ! date.isValid() ) {
         return;
     }
+    if (!currentCalendar() || currentCalendar()->isShared()) {
+        return;
+    }
     m_currentMenuDateList << date;
     menu->addAction( actionSetWork );
     menu->addAction( actionSetVacation );
@@ -523,7 +532,7 @@ void CalendarEditor::slotContextMenuDate( QMenu *menu, const QDate &date )
 
 void CalendarEditor::slotContextMenuCalendar( const QModelIndex &/*index*/, const QPoint& pos )
 {
-    if ( ! isReadWrite() ) {
+    if ( ! isReadWrite() || !currentCalendar() ) {
         return;
     }
     //debugPlan<<index.row()<<","<<index.column()<<":"<<pos;

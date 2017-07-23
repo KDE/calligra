@@ -37,6 +37,10 @@ endif()
 set(kplatoui_LIB_SRCS
     ${planreports_LIB_SRC}
 
+    welcome/WelcomeView.cpp
+
+    reportsgenerator/ReportsGeneratorView.cpp
+
     kptganttitemdelegate.cpp
 
     kptworkpackagesendpanel.cpp
@@ -92,10 +96,14 @@ set(kplatoui_LIB_SRCS
 
     locale/localemon.cpp
     kptlocaleconfigmoneydialog.cpp
+
+    ResourceAllocationView.cpp
 )
 
 ki18n_wrap_ui(kplatoui_LIB_SRCS
     ${planreports_ui_LIB_SRCS}
+
+    welcome/WelcomeView.ui
 
     kptresourceappointmentsdisplayoptions.ui
     kptganttchartdisplayoptions.ui
@@ -144,15 +152,19 @@ target_link_libraries(kplatoui
         komain
         kplatokernel
         kplatomodels
-        KReport
         KGantt
         KF5::KHtml
     PRIVATE
-        KPropertyWidgets
         KChart
         KF5::ItemViews
         KF5::IconThemes
+        KF5::Archive
+        Qt5::Sql
 )
+if (PLAN_BUILD_REPORTS)
+    target_link_libraries(kplatoui PUBLIC KReport PRIVATE KPropertyWidgets)
+endif()
+
 if(KF5AkonadiContact_FOUND)
     target_link_libraries(kplatoui  PRIVATE KF5::AkonadiContact)
 endif()
@@ -161,3 +173,4 @@ set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION
 
 install(TARGETS kplatoui ${INSTALL_TARGETS_DEFAULT_ARGS})
 
+#

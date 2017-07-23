@@ -29,7 +29,11 @@
 #include <QSortFilterProxyModel>
 
 class QUrl;
+class QMimeData;
 class KUndo2Command;
+class KoXmlWriter;
+class KoStore;
+class KoOdfWriteStore;
 
 namespace KPlato
 {

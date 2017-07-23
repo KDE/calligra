@@ -192,6 +192,7 @@ public:
     ViewBase *createResourceAssignmentView( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
     ViewBase *createChartView( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
     ViewBase *createReportView( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createReportsGeneratorView( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
 
     KoPrintJob * createPrintJob();
     QPrintDialog* createPrintDialog(KoPrintJob*, QWidget*);
@@ -282,7 +283,9 @@ protected Q_SLOTS:
     void slotDeleteResourceObjects( QObjectList );
 
     void slotCurrentChanged( int );
+    void slotSelectDefaultView();
 
+    void slotInsertResourcesFile(const QString&);
     void slotInsertFile();
 
     void slotWorkPackageLoaded();
@@ -316,7 +319,7 @@ protected:
 
     ViewBase *currentView() const;
 
-    ViewBase *createWelcomeView();
+    ViewBase *createIntroductionView();
 
 private Q_SLOTS:
     void slotActionDestroyed( QObject *o );
@@ -387,6 +390,8 @@ private:
     QList<KUndo2Command*> m_undocommands;
 
     bool m_readWrite;
+    int m_defaultView;
+    QList<int> m_visitedViews;
 
     QList<DockWidget*> m_dockers;
 

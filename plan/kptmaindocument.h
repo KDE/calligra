@@ -119,6 +119,7 @@ public:
 
     void insertFile( const QUrl &url, Node *parent, Node *after = 0 );
     bool insertProject( Project &project, Node *parent, Node *after );
+    bool mergeResources(Project &project);
 
     KPlatoAboutPage &aboutPage() { return m_aboutPage; }
 
@@ -147,6 +148,9 @@ public Q_SLOTS:
     void checkForWorkPackages( bool keep = false );
 
     void setLoadingTemplate( bool );
+
+    void insertResourcesFile(const QUrl &url);
+    void slotProjectCreated();
 
 Q_SIGNALS:
     void changed();
@@ -179,6 +183,7 @@ protected Q_SLOTS:
     void checkForWorkPackage();
 
     void insertFileCompleted();
+    void insertResourcesFileCompleted();
     void insertFileCancelled( const QString& );
 
     void workPackageMergeDialogFinished( int result );

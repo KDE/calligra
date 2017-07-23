@@ -578,7 +578,7 @@ bool TaskStatusItemModel::setData( const QModelIndex &index, const QVariant &val
 QVariant TaskStatusItemModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     if ( orientation == Qt::Horizontal ) {
-        if ( role == Qt::DisplayRole ) {
+        if (role == Qt::DisplayRole || role == Qt::EditRole) {
             return m_nodemodel.headerData( section, role );
         } else if ( role == Qt::TextAlignmentRole ) {
             return alignment( section );

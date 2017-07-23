@@ -39,11 +39,7 @@ extern "C" WORDS_EXPORT int kdemain(int argc, char **argv)
     QLoggingCategory::setFilterRules("calligra.*.debug=false\n"
                                      "calligra.*.warning=true");
 
-    KAboutData* aboutData = newWordsAboutData();
-
-    KoApplication app(WORDS_MIME_TYPE, QStringLiteral("calligrawords"), *aboutData, argc, argv);
-
-    delete aboutData;
+    KoApplication app(WORDS_MIME_TYPE, QStringLiteral("calligrawords"), newWordsAboutData, argc, argv);
 
     // Migrate data from kde4 to kf5 locations
     Calligra2Migration m("calligrawords", "words");

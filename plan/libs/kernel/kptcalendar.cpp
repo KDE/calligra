@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 - 2007, 2012 Dag Andersen <danders@get2net.dk>
    Copyright (C) 2016 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2017 Dag Andersen <danders@get2net.dk>
    
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,17 +28,68 @@
 #include "kptproject.h"
 #include "kptschedule.h"
 #include "kptxmlloaderobject.h"
+#include "kptcommand.h"
 #include "kptdebug.h"
 
 #include <KoXmlReader.h>
 
 #include <KLocalizedString>
 
-#include <QTimeZone>
+#ifdef HAVE_KHOLIDAYS
+#include <KHolidays/HolidayRegion>
+#include <KHolidays/Holiday>
+#endif
 
+#include <QTimeZone>
+#include <QDate>
 
 namespace KPlato
 {
+
+#ifdef HAVE_KHOLIDAYS
+// start qt-copy (with some changes)
+// Copyright (C) 2013 John Layt <jlayt@kde.org>
+struct TzTimeZone {
+    QString country;
+    QByteArray comment;
+};
+
+// Define as a type as Q_GLOBAL_STATIC doesn't like it
+typedef QHash<QByteArray, TzTimeZone> TzTimeZoneHash;
+
+// Parse zone.tab table, assume lists all installed zones, if not will need to read directories
+static TzTimeZoneHash loadTzTimeZones()
+{
+    QString path = QStringLiteral("/usr/share/zoneinfo/zone.tab");
+    if (!QFile::exists(path))
+        path = QStringLiteral("/usr/lib/zoneinfo/zone.tab");
+
+    QFile tzif(path);
+    if (!tzif.open(QIODevice::ReadOnly))
+        return TzTimeZoneHash();
+
+    TzTimeZoneHash zonesHash;
+    // TODO QTextStream inefficient, replace later
+    QTextStream ts(&tzif);
+    while (!ts.atEnd()) {
+        const QString line = ts.readLine();
+        // Comment lines are prefixed with a #
+        if (!line.isEmpty() && line.at(0) != '#') {
+            // Data rows are tab-separated columns Region, Coordinates, ID, Optional Comments
+            QStringList parts = line.split(QLatin1Char('\t'));
+            TzTimeZone zone;
+            zone.country = parts.at(0);
+            if (parts.size() > 3)
+                zone.comment = parts.at(3).toUtf8();
+            zonesHash.insert(parts.at(2).toUtf8(), zone);
+        }
+    }
+    return zonesHash;
+}
+// Hash of available system tz files as loaded by loadTzTimeZones()
+Q_GLOBAL_STATIC_WITH_ARGS(const TzTimeZoneHash, tzZones, (loadTzTimeZones()));
+// end qt-copy
+#endif
 
 QString CalendarDay::stateToString( int st, bool trans )
 {
@@ -171,7 +223,7 @@ void CalendarDay::save(QDomElement &element) const {
     element.setAttribute("state", QString::number(m_state));
     if (m_timeIntervals.count() == 0)
         return;
-    
+
     foreach (TimeInterval *i, m_timeIntervals) {
         QDomElement me = element.ownerDocument().createElement("interval");
         element.appendChild(me);
@@ -662,7 +714,8 @@ Calendar::Calendar()
     : QObject( 0 ), // don't use parent
       m_parent(0),
       m_project(0),
-      m_default( false )
+      m_default( false ),
+      m_shared(false)
 {
     init();
 }
@@ -673,7 +726,8 @@ Calendar::Calendar(const QString& name, Calendar *parent)
       m_parent(parent),
       m_project(0),
       m_days(),
-      m_default( false )
+      m_default( false ),
+      m_shared(false)
 {
     init();
 }
@@ -681,6 +735,9 @@ Calendar::Calendar(const QString& name, Calendar *parent)
 Calendar::~Calendar() {
     //debugPlan<<"deleting"<<m_name;
     removeId();
+#ifdef HAVE_KHOLIDAYS
+    delete m_region;
+#endif
     delete m_weekdays;
     while (!m_days.isEmpty())
         delete m_days.takeFirst();
@@ -697,7 +754,10 @@ const Calendar &Calendar::copy( const Calendar &calendar ) {
     m_timeZone = calendar.timeZone();
     // m_parent = calendar.parentCal(); 
     // m_id = calendar.id();
-    
+#ifdef HAVE_KHOLIDAYS
+    delete m_region;
+    m_region = new KHolidays::HolidayRegion(calendar.holidayRegion()->regionCode());
+#endif
     foreach (CalendarDay *d, calendar.days()) {
         m_days.append(new CalendarDay(d));
     }
@@ -707,6 +767,9 @@ const Calendar &Calendar::copy( const Calendar &calendar ) {
 }
 
 void Calendar::init() {
+#ifdef HAVE_KHOLIDAYS
+    m_region = new KHolidays::HolidayRegion();
+#endif
     m_weekdays = new CalendarWeekdays();
     m_timeZone = QTimeZone::systemTimeZone();
     m_cacheversion = 0;
@@ -786,6 +849,11 @@ void Calendar::setTimeZone( const QTimeZone &tz )
     }
     //debugPlan<<tz->name();
     m_timeZone = tz;
+#ifdef HAVE_KHOLIDAYS
+    if (m_regionCode == "Default") {
+        setHolidayRegion("Default");
+    }
+#endif
     if ( m_project ) {
         m_project->changed( this );
     }
@@ -861,6 +929,12 @@ bool Calendar::load( KoXmlElement &element, XMLLoaderObject &status ) {
     if ( m_default ) {
         status.project().setDefaultCalendar( this );
     }
+    m_shared = element.attribute("shared", "0").toInt();
+
+#ifdef HAVE_KHOLIDAYS
+    setHolidayRegion(element.attribute("holiday-region"));
+#endif
+
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
         if ( ! n.isElement() ) {
@@ -921,6 +995,12 @@ void Calendar::save(QDomElement &element) const {
         me.appendChild(e);
         d->save(e);
     }
+    me.setAttribute("shared", m_shared);
+
+#ifdef HAVE_KHOLIDAYS
+    me.setAttribute("holiday-region", m_regionCode);
+#endif
+
     saveCacheVersion( me );
 }
 
@@ -930,6 +1010,11 @@ int Calendar::state(const QDate &date) const
     if ( day && day->state() != CalendarDay::Undefined ) {
         return day->state();
     }
+#ifdef HAVE_KHOLIDAYS
+    if (isHoliday(date)) {
+        return CalendarDay::NonWorking;
+    }
+#endif
     day = weekday( date.dayOfWeek() );
     if ( day && day->state() != CalendarDay::Undefined ) {
         return day->state();
@@ -1144,6 +1229,11 @@ Duration Calendar::effort(const QDate &date, const QTime &start, int length, Sch
             return Duration::zeroDuration;
         }
     }
+#ifdef HAVE_KHOLIDAYS
+    if (isHoliday(date)) {
+        return Duration::zeroDuration;
+    }
+#endif
     // check my own weekdays
     if (m_weekdays) {
         if (m_weekdays->state(date) == CalendarDay::Working) {
@@ -1214,6 +1304,11 @@ TimeInterval Calendar::firstInterval(const QDate &date, const QTime &startTime, 
     if (day) {
         return day->interval(startTime, length, m_timeZone, sch);
     }
+#ifdef HAVE_KHOLIDAYS
+    if (isHoliday(date)) {
+        return TimeInterval();
+    }
+#endif
     if (m_weekdays) {
         if (m_weekdays->state(date) == CalendarDay::Working) {
             //debugPlan<<"Check weekday";
@@ -1458,6 +1553,67 @@ QList<CalendarDay*> Calendar::workingDays() const
     }
     return lst;
 }
+
+bool Calendar::isShared() const
+{
+    return m_shared;
+}
+
+void Calendar::setShared(bool on)
+{
+    m_shared = on;
+}
+
+#ifdef HAVE_KHOLIDAYS
+bool Calendar::isHoliday(const QDate &date) const
+{
+    if (m_region->isValid()) {
+        KHolidays::Holiday::List lst = m_region->holidays(date);
+        if (!lst.isEmpty() && lst.first().dayType() != KHolidays::Holiday::Workday) {
+            return true;
+        }
+    }
+    return false;
+}
+
+KHolidays::HolidayRegion *Calendar::holidayRegion() const
+{
+    return m_region;
+}
+
+void Calendar::setHolidayRegion(const QString &code)
+{
+    delete m_region;
+    m_regionCode = code;
+    if (code == "Default") {
+        QString country;
+        if (m_timeZone.isValid()) {
+            // TODO be more accurate when country has multiple timezones/regions
+            country = tzZones->value(m_timeZone.id()).country;
+        }
+        m_region = new KHolidays::HolidayRegion(KHolidays::HolidayRegion::defaultRegionCode(country));
+    } else {
+        m_region = new KHolidays::HolidayRegion(code);
+    }
+    debugPlan<<code<<"->"<<m_regionCode<<m_region->isValid();
+    emit changed(static_cast<CalendarDay*>(0));
+    if (m_project) {
+        m_project->changed(this);
+    }
+}
+
+QString Calendar::holidayRegionCode() const
+{
+    return m_regionCode;
+}
+
+QStringList Calendar::holidayRegionCodes() const
+{
+    QStringList lst = KHolidays::HolidayRegion::regionCodes();
+    lst.removeDuplicates();
+    return lst;
+}
+#endif
 
 /////////////
 StandardWorktime::StandardWorktime( Project *project )

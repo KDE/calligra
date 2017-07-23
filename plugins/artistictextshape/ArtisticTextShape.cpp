@@ -29,7 +29,6 @@
 #include <KoXmlReader.h>
 #include <KoPathShapeLoader.h>
 #include <KoShapeBackground.h>
-#include <KoPathShapeLoader.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <SvgSavingContext.h>
 #include <SvgLoadingContext.h>
@@ -51,9 +50,9 @@ ArtisticTextShape::ArtisticTextShape()
     : m_path(0), m_startOffset(0.0)
     , m_textAnchor( AnchorStart ), m_textUpdateCounter(0)
     , m_defaultFont("ComicSans", 20)
+    , m_drawBoundaryLines(false)
 {
     setShapeId( ArtisticTextShapeID );
-    cacheGlyphOutlines();
     updateSizeAndPosition();
 }
 
@@ -67,8 +66,12 @@ ArtisticTextShape::~ArtisticTextShape()
 void ArtisticTextShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     applyConversion( painter, converter );
-    if( background() )
-        background()->paint( painter, converter, paintContext, outline() );
+    if( background() ) {
+        if (!m_drawBoundaryLines) {
+            painter.setPen(Qt::NoPen);
+        }
+        background()->paint( painter, converter, paintContext, m_outline );
+    }
 }
 
 void ArtisticTextShape::saveOdf(KoShapeSavingContext &context) const
@@ -102,7 +105,7 @@ QSizeF ArtisticTextShape::size() const
     if( m_ranges.isEmpty() )
         return nullBoundBox().size();
     else
-        return outline().boundingRect().size();
+        return m_outline.boundingRect().size();
 }
 
 void ArtisticTextShape::setSize( const QSizeF &newSize )
@@ -227,6 +230,7 @@ void ArtisticTextShape::createOutline()
     m_outline = QPainterPath();
     m_charPositions.clear();
     m_charOffsets.clear();
+    m_drawBoundaryLines = false;
 
     // calculate character positions in baseline coordinates
     m_charPositions = calculateAbstractCharacterPositions();
@@ -235,6 +239,7 @@ void ArtisticTextShape::createOutline()
     int globalCharIndex = 0;
 
     if( isOnPath() ) {
+        m_drawBoundaryLines = true;
         // one more than the number of characters for offset after the last character
         m_charOffsets.insert(0, m_charPositions.size(), -1);
         // the current character position
@@ -256,7 +261,8 @@ void ArtisticTextShape::createOutline()
         qreal charOffset;
 
         foreach (const ArtisticTextRange &range, m_ranges) {
-            QFontMetricsF metrics(QFont(range.font(), &m_paintDevice));
+            const QFont rangeFont(range.font(), &m_paintDevice);
+            const QFontMetricsF metrics(rangeFont);
             const QString localText = range.text();
             const int localTextLength = localText.length();
 
@@ -304,17 +310,26 @@ void ArtisticTextShape::createOutline()
                 m.translate(pathPoint.x(), pathPoint.y());
                 m.rotate(360. - angle + rotation);
                 m.translate(0.0, charPos.y());
-                m_outline.addPath(m.map(m_charOutlines[globalCharIndex]));
+                QPainterPath charOutline;
+                charOutline.addText(QPointF(), rangeFont, localText[localCharIndex]);
+                m_outline.addPath(m.map(charOutline));
             }
         }
         // save offset and position after last character
         m_charOffsets[globalCharIndex] = m_baseline.percentAtLength(startCharOffset + m_charPositions[globalCharIndex].x());
         m_charPositions[globalCharIndex] = m_baseline.pointAtPercent(m_charOffsets[globalCharIndex]);
     } else {
-        qreal rotation = 0.0;
         foreach(const ArtisticTextRange &range, m_ranges) {
-            const QString textRange = range.text();
-            const int localTextLength = textRange.length();
+            const QString localText = range.text();
+            const int localTextLength = localText.length();
+            const QFont rangeFont(range.font(), &m_paintDevice);
+            if (!range.hasRotations()) {
+                m_outline.addText(QPointF(), rangeFont, localText);
+                m_outline = m_outline.simplified();
+                continue;
+            }
+            qreal rotation = 0.0;
+            m_drawBoundaryLines = true;
             for(int localCharIndex = 0; localCharIndex < localTextLength; ++localCharIndex, ++globalCharIndex) {
                 const QPointF &charPos = m_charPositions[globalCharIndex];
                 if (range.hasRotation(localCharIndex))
@@ -323,7 +338,9 @@ void ArtisticTextShape::createOutline()
                 QTransform m;
                 m.translate(charPos.x(), charPos.y());
                 m.rotate(rotation);
-                m_outline.addPath(m.map(m_charOutlines[globalCharIndex]));
+                QPainterPath charOutline;
+                charOutline.addText(QPointF(), rangeFont, localText[localCharIndex]);
+                m_outline.addPath(m.map(charOutline));
             }
         }
     }
@@ -901,22 +918,6 @@ void ArtisticTextShape::updateSizeAndPosition( bool global )
         m_charPositions[i] = normalizeMatrix.map(m_charPositions[i]);
 }
 
-void ArtisticTextShape::cacheGlyphOutlines()
-{
-    m_charOutlines.clear();
-
-    foreach(const ArtisticTextRange &range, m_ranges) {
-        const QString rangeText = range.text();
-        const QFont rangeFont(range.font(), &m_paintDevice);
-        const int textLength = rangeText.length();
-        for(int charIdx = 0; charIdx < textLength; ++charIdx) {
-            QPainterPath charOutline;
-            charOutline.addText(QPointF(), rangeFont, rangeText[charIdx]);
-            m_charOutlines.append(charOutline);
-        }
-    }
-}
-
 void ArtisticTextShape::shapeChanged(ChangeType type, KoShape *shape)
 {
     if( m_path && shape == m_path ) {
@@ -970,7 +971,6 @@ void ArtisticTextShape::finishTextUpdate()
     if(!m_textUpdateCounter)
         return;
 
-    cacheGlyphOutlines();
     updateSizeAndPosition();
     update();
     notifyChanged();
