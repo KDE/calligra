@@ -305,8 +305,12 @@ bool ViewController::event(QEvent* event)
                 setZoom(syncObject->zoomLevel);
 
                 qApp->processEvents();
-                d->view->document()->setCurrentIndex(syncObject->currentSlide);
-                emit d->canvasController->proxyObject->moveDocumentOffset(syncObject->documentOffset);
+                if(syncObject->documentOffset.isNull()) {
+                    d->view->document()->setCurrentIndex(syncObject->currentSlide);
+                }
+                else {
+                    emit d->canvasController->proxyObject->moveDocumentOffset(syncObject->documentOffset);
+                }
             }
 
             return true;
