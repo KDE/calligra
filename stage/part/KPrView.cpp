@@ -345,6 +345,7 @@ bool KPrView::event(QEvent* event)
         case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
             if (activePage()) {
+                syncObject->documentOffset = QPoint();
                 syncObject->currentSlide = kopaDocument()->pageIndex(activePage());
                 syncObject->shapes = shapeManager()->shapes();
                 syncObject->initialized = true;
