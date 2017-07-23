@@ -916,7 +916,7 @@ bool KWView::event(QEvent* event)
         case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
             if (m_canvas) {
-                syncObject->documentOffset = m_canvas->documentOffset();
+                syncObject->scrollBarValue = m_canvas->canvasController()->scrollBarValue();
                 syncObject->zoomLevel = zoomController()->zoomAction()->effectiveZoom();
                 syncObject->activeToolId = KoToolManager::instance()->activeToolId();
                 syncObject->shapes = m_canvas->shapeManager()->shapes();
@@ -936,7 +936,7 @@ bool KWView::event(QEvent* event)
                 zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
 
                 qApp->processEvents();
-                m_canvas->canvasController()->setScrollBarValue(syncObject->documentOffset);
+                m_canvas->canvasController()->setScrollBarValue(syncObject->scrollBarValue);
 
                 qApp->processEvents();
                 foreach(KoShape *shape, m_canvas->shapeManager()->shapesAt(currentPage().rect())) {

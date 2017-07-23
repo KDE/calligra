@@ -345,8 +345,7 @@ bool KPrView::event(QEvent* event)
         case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
             if (activePage()) {
-                syncObject->documentOffset = QPoint();
-                syncObject->currentSlide = kopaDocument()->pageIndex(activePage());
+                syncObject->currentIndex = kopaDocument()->pageIndex(activePage());
                 syncObject->shapes = shapeManager()->shapes();
                 syncObject->initialized = true;
             }
@@ -357,7 +356,7 @@ bool KPrView::event(QEvent* event)
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
             if (syncObject->initialized) {
                 shapeManager()->setShapes(syncObject->shapes);
-                doUpdateActivePage( kopaDocument()->pageByIndex(syncObject->currentSlide, false) );
+                doUpdateActivePage( kopaDocument()->pageByIndex(syncObject->currentIndex, false) );
                 KoToolManager::instance()->switchToolRequested("InteractionTool");
             }
 

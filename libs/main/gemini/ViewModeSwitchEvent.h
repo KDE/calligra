@@ -22,32 +22,25 @@
 
 #include <QEvent>
 #include <QPointF>
-#include <KoColor.h>
 #include <KoZoomMode.h>
 
 class KoShape;
-class KoAbstractGradient;
-class KoPattern;
 class KoGridData;
 struct ViewModeSynchronisationObject {
-    ViewModeSynchronisationObject() : initialized(false), gridData(0) { }
+    ViewModeSynchronisationObject()
+        : initialized(false)
+        , currentIndex(-1)
+        , scrollBarValue(QPoint())
+        , zoomLevel(0)
+        , gridData(0)
+        { }
 
     bool initialized;
 
-    int currentSlide;
-    QPoint documentOffset;
+    int currentIndex;
+    QPoint scrollBarValue;
     float zoomLevel;
-    float rotationAngle;
 
-    KoColor backgroundColor;
-    KoColor foregroundColor;
-    float exposure;
-    float gamma;
-    QString compositeOp;
-    KoPattern* pattern;
-    KoAbstractGradient* gradient;
-    float opacity;
-    bool globalAlphaLock;
     QString activeToolId;
 
     KoGridData* gridData;
