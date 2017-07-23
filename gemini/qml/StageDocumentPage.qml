@@ -36,8 +36,8 @@ Item {
                 baseLoadingDialog.visible = true;
             }
             else if(status == Calligra.DocumentStatus.Loaded) {
-                console.debug("doc and part: " + stageDocument.doc + " " + stageDocument.part);
-                mainWindow.setDocAndPart(stageDocument.doc, stageDocument.part);
+                console.debug("doc and part: " + stageDocument.document + " " + stageDocument.part);
+                mainWindow.setDocAndPart(stageDocument.document, stageDocument.part);
                 baseLoadingDialog.hideMe();
 //                 thumbnailSize = Qt.size(Settings.theme.adjustedPixel(280), Settings.theme.adjustedPixel(360));
             }
