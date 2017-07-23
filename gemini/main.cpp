@@ -57,15 +57,7 @@ int main( int argc, char** argv )
                          QStringLiteral("https://www.calligra.org"),
                          QStringLiteral("submit@bugs.kde.org"));
 
-<<<<<<< HEAD
-#if defined HAVE_X11
-    QApplication::setAttribute(Qt::AA_X11InitThreads);
-#endif
-
-    QApplication app(argc, argv);
     app.setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
-=======
->>>>>>> master
     KAboutData::setApplicationData(aboutData);
 
     QCommandLineParser parser;
