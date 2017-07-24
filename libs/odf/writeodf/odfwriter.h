@@ -58,8 +58,7 @@ protected:
             child = 0;
         }
     }
-    // in c++11, we would use a move constructor instead of a copy constructor
-    OdfWriter(const OdfWriter&o) :child(o.child), parent(o.parent), xml(o.xml) {
+    OdfWriter(const OdfWriter&& o) :child(o.child), parent(o.parent), xml(o.xml) {
         // disable o and make the parent refer to this new copy
         o.xml = 0;
         if (parent && parent->child == &o) {
