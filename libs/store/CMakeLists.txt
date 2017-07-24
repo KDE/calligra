@@ -12,6 +12,7 @@ set(kostore_LIB_SRCS
     KoEncryptionChecker.cpp
     KoLZF.cpp
     KoStore.cpp
+    KoStoreDevice.cpp
     KoTarStore.cpp
     KoXmlNS.cpp
     KoXmlReader.cpp
