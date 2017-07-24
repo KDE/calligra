@@ -53,4 +53,8 @@ koodf_add_unit_test(TestNumberStyle TestNumberStyle.cpp  LINK_LIBRARIES koodf Qt
 
 koodf_add_unit_test(TestKoElementReference TestKoElementReference.cpp  LINK_LIBRARIES koodf Qt5::Test)
 
+########### next target ###############
+
+koodf_add_unit_test(TestWriteStyleXml TestWriteStyleXml.cpp  LINK_LIBRARIES koodf Qt5::Test)
+
 ########### end ###############
