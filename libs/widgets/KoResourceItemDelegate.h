@@ -26,6 +26,7 @@
 /// The resource item delegate for rendering the resource preview
 class KoResourceItemDelegate : public QAbstractItemDelegate
 {
+Q_OBJECT
 public:
     explicit KoResourceItemDelegate(QObject *parent = 0);
     virtual ~KoResourceItemDelegate() {}

@@ -28,6 +28,7 @@ class KoShape;
 
 class KoConnectionShapeFactory : public KoShapeFactoryBase
 {
+Q_OBJECT
 public:
     KoConnectionShapeFactory();
     ~KoConnectionShapeFactory() {}

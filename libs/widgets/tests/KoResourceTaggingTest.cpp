@@ -49,7 +49,7 @@ void KoResourceTaggingTest::testTagging()
 {
     KoResourceServer<KoPattern>* patServer = KoResourceServerProvider::instance()->patternServer();
     KoResourceTagStore tagStore(patServer);
-    KoResource *res = patServer->resources().first();
+    KoResource *res = patServer->resources().constFirst();
     QVERIFY(res);
     QVERIFY(patServer->resourceByFilename(res->shortFilename()) == res);
 

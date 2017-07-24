@@ -30,6 +30,7 @@ class KoShape;
 /// Factory for path shapes.
 class FLAKE_EXPORT KoPathShapeFactory : public KoShapeFactoryBase
 {
+Q_OBJECT
 public:
     /// constructor
     explicit KoPathShapeFactory(const QStringList&);

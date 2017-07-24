@@ -69,7 +69,6 @@ void  KoProperties::load(const QDomElement &root)
         if (!e.isNull()) {
             if (e.tagName() == "property") {
                 const QString name = e.attribute("name");
-                const QString type = e.attribute("type");
                 const QString value = e.text();
                 QDataStream in(QByteArray::fromBase64(value.toLatin1()));
                 QVariant v;
@@ -195,8 +194,10 @@ bool KoProperties::operator==(const KoProperties &other) const
 {
     if (d->properties.count() != other.d->properties.count())
         return false;
-    foreach(const QString & key, d->properties.keys()) {
-        if (other.d->properties.value(key) != d->properties.value(key))
+    QMapIterator<QString, QVariant> i(d->properties);
+    while (i.hasNext()) {
+        i.next();
+        if (other.d->properties.value(i.key()) != i.value())
             return false;
     }
     return true;

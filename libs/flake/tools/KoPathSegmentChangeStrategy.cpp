@@ -82,7 +82,7 @@ void KoPathSegmentChangeStrategy::handleMouseMove(const QPointF &mouseLocation, 
                                                          m_segment.second()->point(),
                                                          m_segmentParam);
         if (ipol.isValid()) {
-            move1 = move2 = ipol.controlPoints()[1] - m_segment.controlPoints()[1];
+            move1 = move2 = ipol.controlPoints().at(1) - m_segment.controlPoints().at(1);
         }
     }
     else if (m_segment.degree() == 3) {

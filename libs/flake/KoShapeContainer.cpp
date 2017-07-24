@@ -97,7 +97,7 @@ void KoShapeContainer::removeAllShapes()
     if (d->model == 0)
         return;
     for(int i = d->model->shapes().count() - 1; i >= 0; --i) {
-        KoShape *shape = d->model->shapes()[i];
+        KoShape *shape = d->model->shapes().at(i);
         d->model->remove(shape);
         shape->setParent(0);
     }

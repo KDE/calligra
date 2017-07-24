@@ -73,7 +73,6 @@ void SvgStyleWriter::saveSvgFill(KoShape *shape, SvgSavingContext &context)
         context.shapeWriter().addAttribute("fill", "none");
     }
 
-    QBrush fill(Qt::NoBrush);
     QSharedPointer<KoColorBackground>  cbg = qSharedPointerDynamicCast<KoColorBackground>(shape->background());
     if (cbg) {
         context.shapeWriter().addAttribute("fill", cbg->color().name());

@@ -118,7 +118,7 @@ QPolygonF KoColorSpace::gamutXYY() const
         qreal max = 1.0;
         if ((colorModelId().id()=="CMYKA" || colorModelId().id()=="LABA") && colorDepthId().id()=="F32") {
             //boundaries for cmyka/laba have trouble getting the max values for Float, and are pretty awkward in general.
-            max = this->channels()[0]->getUIMax();
+            max = this->channels().at(0)->getUIMax();
             
         }
         int samples = 5;//amount of samples in our color space.
@@ -192,7 +192,7 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
         qreal max = 1.0;
         if ((colorModelId().id()=="CMYKA" || colorModelId().id()=="LABA") && colorDepthId().id()=="F32") {
             //boundaries for cmyka/laba have trouble getting the max values for Float, and are pretty awkward in general.
-            max = this->channels()[0]->getUIMax();
+            max = this->channels().at(0)->getUIMax();
         }
         QString name = KoColorSpaceRegistry::instance()->colorSpaceFactory("XYZAF16")->defaultProfile();
         const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "F16", name);

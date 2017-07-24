@@ -48,6 +48,7 @@ const QLoggingCategory &PLUGIN_LOG()
 
 class KoPluginLoaderImpl : public QObject
 {
+Q_OBJECT
 public:
     QStringList loadedDirectories;
 };
@@ -206,3 +207,4 @@ QList<QPluginLoader *> KoPluginLoader::pluginLoaders(const QString &directory, c
 
     return list;
 }
+#include "KoPluginLoader.moc"

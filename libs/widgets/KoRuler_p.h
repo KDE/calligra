@@ -23,6 +23,7 @@
 
 class RulerTabChooser : public QWidget
 {
+Q_OBJECT
 public:
     RulerTabChooser(QWidget *parent) : QWidget(parent), m_type(QTextOption::LeftTab), m_showTabs(false) {}
     virtual ~RulerTabChooser() {}

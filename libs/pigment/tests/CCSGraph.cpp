@@ -63,7 +63,7 @@ int main(int argc, char** argv)
         parser.showHelp();
         exit(EXIT_FAILURE);
     }
-    QString outputFileName = parser.positionalArguments()[0];
+    QString outputFileName = parser.positionalArguments().at(0);
     // Generate the graph
 
     QString dot;
@@ -96,7 +96,7 @@ int main(int argc, char** argv)
         }
         QTextStream out(&file);
         out << dot;
-        QString cmd = QString("dot -T%1 %2 -o %3").arg(outputType).arg(file.fileName()).arg(outputFileName);
+        QString cmd = QString("dot -T%1 %2 -o %3").arg(outputType, file.fileName(), outputFileName);
         file.close();
 
         if (QProcess::execute(cmd) != 0) {

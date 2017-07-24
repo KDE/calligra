@@ -207,7 +207,7 @@ void KoShapeManager::remove(KoShape *shape)
 
     // This signal is used in the annotation shape.
     // FIXME: Is this really what we want?  (and shouldn't it be called shapeDeleted()?)
-    shapeRemoved(shape);
+    emit shapeRemoved(shape);
 }
 
 void KoShapeManager::removeAdditional(KoShape *shape)

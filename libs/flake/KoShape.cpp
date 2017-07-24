@@ -1633,7 +1633,7 @@ QSharedPointer<KoShapeBackground> KoShape::loadOdfFill(KoShapeLoadingContext &co
     }
     else if (fill == "gradient") {
         QString styleName = KoShapePrivate::getStyleProperty("fill-gradient-name", context);
-        KoXmlElement *e = context.odfLoadingContext().stylesReader().drawStyles("gradient")[styleName];
+        KoXmlElement *e = context.odfLoadingContext().stylesReader().drawStyles("gradient").value(styleName);
         QString style;
         if (e) {
             style = e->attributeNS(KoXmlNS::draw, "style", QString());
@@ -1729,7 +1729,7 @@ KoShapeShadow *KoShapePrivate::loadOdfShadow(KoShapeLoadingContext &context) con
 
         QString opacity = styleStack.property(KoXmlNS::draw, "shadow-opacity");
         if (! opacity.isEmpty() && opacity.right(1) == "%")
-            shadowColor.setAlphaF(opacity.left(opacity.length() - 1).toFloat() / 100.0);
+            shadowColor.setAlphaF(opacity.leftRef(opacity.length() - 1).toFloat() / 100.0);
         shadow->setColor(shadowColor);
         shadow->setVisible(shadowStyle == "visible");
 
@@ -2171,7 +2171,7 @@ void KoShape::saveOdfClipContour(KoShapeSavingContext &context, const QSizeF &or
         // This will loose data as odf can only save one set of contour wheras
         // svg loading and at least karbon editing can produce more than one
         // TODO, FIXME see if we can save more than one clipshape to odf
-        d->clipPath->clipPathShapes().first()->saveContourOdf(context, originalSize);
+        d->clipPath->clipPathShapes().constFirst()->saveContourOdf(context, originalSize);
     }
 }
 

@@ -36,6 +36,7 @@
 
 class DummyInlineObject : public KoInlineObject
 {
+Q_OBJECT
 public:
 
     DummyInlineObject(bool propertyListener)

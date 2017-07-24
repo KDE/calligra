@@ -79,6 +79,7 @@ set(kowidgets_LIB_SRCS
     KoToolBox.cpp
     KoToolBoxDocker.cpp
     KoToolBoxFactory.cpp
+    KoToolBoxLayout_p.cpp
     KoToolDocker.cpp
     
     KoModeBox.cpp

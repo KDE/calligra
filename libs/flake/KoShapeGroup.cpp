@@ -180,7 +180,7 @@ bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
     loadOdfAttributes(element, context, OdfMandatories | OdfStyle | OdfAdditionalAttributes | OdfCommonChildElements);
 
     KoXmlElement child;
-    QMap<KoShapeLayer*, int> usedLayers;
+    QHash<KoShapeLayer*, int> usedLayers;
     forEachElement(child, element) {
         KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
         if (shape) {
@@ -194,7 +194,7 @@ bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
     KoShapeLayer *parent = 0;
     int maxUseCount = 0;
     // find most used layer and use this as parent for the group
-    for (QMap<KoShapeLayer*, int>::const_iterator it(usedLayers.constBegin()); it != usedLayers.constEnd(); ++it) {
+    for (QHash<KoShapeLayer*, int>::const_iterator it(usedLayers.constBegin()); it != usedLayers.constEnd(); ++it) {
         if (it.value() > maxUseCount) {
             maxUseCount = it.value();
             parent = it.key();

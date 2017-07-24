@@ -111,7 +111,7 @@ KoResourcePopupAction::~KoResourcePopupAction()
      * the only ones added are in KoResourcePopupAction constructor. */
     int i = 0;
     while(d->menu->actions().size() > 0) {
-        d->menu->removeAction(d->menu->actions()[i]);
+        d->menu->removeAction(d->menu->actions().at(i));
         ++i;
     }
 

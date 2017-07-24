@@ -39,6 +39,7 @@ class KoCreateShapesToolPrivate;
  */
 class FLAKE_EXPORT KoCreateShapesTool : public KoInteractionTool
 {
+Q_OBJECT
 public:
     /**
      * Create a new tool; typically not called by applications, only by the KoToolManager

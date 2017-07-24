@@ -43,7 +43,7 @@ KoBibliographyInfo::KoBibliographyInfo()
 
 KoBibliographyInfo::~KoBibliographyInfo()
 {
-    foreach (const BibliographyEntryTemplate &entryTemplate, m_entryTemplate.values()) {
+    foreach (const BibliographyEntryTemplate &entryTemplate, m_entryTemplate) {
         qDeleteAll(entryTemplate.indexEntries);
     }
     delete m_generator;
@@ -119,7 +119,7 @@ void KoBibliographyInfo::saveOdf(KoXmlWriter * writer) const
 
         m_indexTitleTemplate.saveOdf(writer);
 
-        foreach (const BibliographyEntryTemplate &entry, m_entryTemplate.values()) {
+        foreach (const BibliographyEntryTemplate &entry, m_entryTemplate) {
             entry.saveOdf(writer);
         }
 

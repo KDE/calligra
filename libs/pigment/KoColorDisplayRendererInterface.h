@@ -94,6 +94,7 @@ private:
  */
 class PIGMENTCMS_EXPORT KoDumbColorDisplayRenderer : public KoColorDisplayRendererInterface
 {
+Q_OBJECT
 public:
     QColor toQColor(const KoColor &c) const;
     KoColor approximateFromRenderedQColor(const QColor &c) const;

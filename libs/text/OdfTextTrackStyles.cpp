@@ -27,7 +27,7 @@
 #include "TextDebug.h"
 
 
-QMap<QObject *, OdfTextTrackStyles *> OdfTextTrackStyles::instances;
+QHash<QObject *, OdfTextTrackStyles *> OdfTextTrackStyles::instances;
 
 OdfTextTrackStyles *OdfTextTrackStyles::instance(KoStyleManager *manager)
 {

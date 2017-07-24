@@ -20,6 +20,8 @@
 #ifndef KOCOMPOSITEOPREGISTRY_H
 #define KOCOMPOSITEOPREGISTRY_H
 
+// clazy:excludeall=non-pod-global-static
+
 #include <QString>
 #include <QList>
 #include <QMultiMap>

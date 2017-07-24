@@ -28,6 +28,7 @@
 
 class NonClosingFindDialog : public KFindDialog
 {
+Q_OBJECT
 public:
     NonClosingFindDialog(QWidget *parent)
             : KFindDialog(parent) {}
@@ -70,3 +71,4 @@ bool KoFindStrategy::foundMatch(QTextCursor &cursor, FindDirection *findDirectio
     findDirection->select(cursor);
     return false;
 }
+#include "KoFindStrategy.moc"

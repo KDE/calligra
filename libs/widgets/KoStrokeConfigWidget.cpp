@@ -68,6 +68,7 @@
 
 class CapNJoinMenu : public QMenu
 {
+Q_OBJECT
 public:
     CapNJoinMenu(QWidget *parent = 0);
     virtual QSize sizeHint() const;
@@ -547,3 +548,4 @@ void KoStrokeConfigWidget::canvasResourceChanged(int key, const QVariant &value)
         break;
     }
 }
+#include "KoStrokeConfigWidget.moc"

@@ -55,6 +55,7 @@ public:
 };
 
 class RadioLayout : public QLayout {
+Q_OBJECT
 public:
     RadioLayout(QWidget *parent)
         : QLayout(parent)
@@ -231,3 +232,4 @@ void KoPositionSelector::paintEvent (QPaintEvent *) {
     painter.drawRect( QRect( d->topLeft->geometry().center(), d->bottomRight->geometry().center() ) );
     painter.end();
 }
+#include "KoPositionSelector.moc"

@@ -135,7 +135,7 @@ void KoToolBox::addButton(KoToolAction *toolAction)
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoToolBox");
     int iconSize = cfg.readEntry("iconSize", toolbuttonSize);
     button->setIconSize(QSize(iconSize, iconSize));
-    foreach (Section *section, d->sections.values())  {
+    foreach (Section *section, d->sections)  {
         section->setButtonSize(QSize(iconSize + BUTTON_MARGIN, iconSize + BUTTON_MARGIN));
     }
 
@@ -309,7 +309,7 @@ void KoToolBox::slotContextIconSize()
             button->setIconSize(QSize(iconSize, iconSize));
         }
 
-        foreach(Section *section, d->sections.values())  {
+        foreach(Section *section, d->sections)  {
             section->setButtonSize(QSize(iconSize + BUTTON_MARGIN, iconSize + BUTTON_MARGIN));
         }
 

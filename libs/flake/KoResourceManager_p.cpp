@@ -132,5 +132,4 @@ void KoResourceManager::clearResource(int key)
     if (! m_resources.contains(key))
         return;
     m_resources.remove(key);
-    QVariant empty;
 }

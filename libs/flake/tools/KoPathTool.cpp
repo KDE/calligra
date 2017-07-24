@@ -659,7 +659,7 @@ void KoPathTool::mouseReleaseEvent(KoPointerEvent *event)
         m_currentStrategy = 0;
 
         if (m_pointSelection.selectedShapes().count() == 1)
-            emit pathChanged(m_pointSelection.selectedShapes().first());
+            emit pathChanged(m_pointSelection.selectedShapes().constFirst());
         else
             emit pathChanged(0);
     }

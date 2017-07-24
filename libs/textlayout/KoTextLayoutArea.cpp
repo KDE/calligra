@@ -283,7 +283,7 @@ QVector<KoCharAreaInfo> KoTextLayoutArea::generateCharAreaInfos() const
                 xLeading = line.cursorToX(j, QTextLine::Leading);
                 xTrailing = line.cursorToX(j, QTextLine::Trailing);
                 QRectF rect(xLeading, line.y(), xTrailing-xLeading, line.height()); // TODO: at least height needs more work
-                result.append(KoCharAreaInfo(rect, block.text()[j]));
+                result.append(KoCharAreaInfo(rect, block.text().at(j)));
             }
 
             // TODO: perhaps only at end of paragraph (last qtextline) add linebreak, for in-paragraph linebreak
