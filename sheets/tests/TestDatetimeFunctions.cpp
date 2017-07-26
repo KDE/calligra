@@ -20,6 +20,8 @@
 
 #include "TestKspreadCommon.h"
 
+#include <KLocale>
+
 void TestDatetimeFunctions::initTestCase()
 {
     FunctionModuleRegistry::instance()->loadFunctionModules();
@@ -397,15 +399,27 @@ void TestDatetimeFunctions::testEOMONTH()
 
 void TestDatetimeFunctions::testHOUR()
 {
-    //
+    // Hacky way to test for 12h clock
+    KLocale locale;
+    bool twelveHourClock = locale.timeFormat().contains("%I");
+
     CHECK_EVAL("HOUR(5/24)",              Value(5));      // 5/24ths of a day is 5 hours, aka 5AM.
     CHECK_EVAL("HOUR(5/24-1/(24*60*60))", Value(4));      // A second before 5AM, it's 4AM.
-    CHECK_EVAL("HOUR(\"14:00\")",         Value(14));     // TimeParam accepts text
+    // TimeParam accepts text
     CHECK_EVAL("HOUR(\"9:00\")",          Value(9));
     CHECK_EVAL("HOUR(\"09:00\")",         Value(9));
-    CHECK_EVAL("HOUR(\"23:00\")",         Value(23));
     CHECK_EVAL("HOUR(\"11:00 PM\")",      Value(23));
     CHECK_EVAL("HOUR(\"11:00 AM\")",      Value(11));
+
+    // These are locale dependent
+    if (twelveHourClock) {
+        CHECK_FAIL("HOUR(\"14:00\")",         Value(14), "12h clock, hour must be <= 12");
+        CHECK_FAIL("HOUR(\"23:00\")",         Value(23), "12h clock, hour must be <= 12");
+    } else {
+        CHECK_EVAL("HOUR(\"14:00\")",         Value(14));
+        CHECK_EVAL("HOUR(\"23:00\")",         Value(23));
+    }
+
 }
 
 void TestDatetimeFunctions::testISOWEEKNUM()
@@ -509,9 +523,19 @@ void TestDatetimeFunctions::testTIME()
 
 void TestDatetimeFunctions::testTIMEVALUE()
 {
-    //
+    // Hacky way to test for 12h clock
+    KLocale locale;
+    bool twelveHourClock = locale.timeFormat().contains("%I");
+
     CHECK_EVAL("TIMEVALUE(\"06:05\")   =TIME(6;5;0)", Value(true));
-    CHECK_EVAL("TIMEVALUE(\"06:05:07\")=TIME(6;5;7)", Value(true));
+
+    // When 12h clock, AM/PM is mandatory
+    if (twelveHourClock) {
+        CHECK_FAIL("TIMEVALUE(\"06:05:07\")=TIME(6;5;7)", Value(true), "12h clock, AM/PM is mandatory");
+        CHECK_EVAL("TIMEVALUE(\"06:05:07 am\")=TIME(6;5;7)", Value(true));
+    } else {
+        CHECK_EVAL("TIMEVALUE(\"06:05:07\")=TIME(6;5;7)", Value(true));
+    }
 }
 
 void TestDatetimeFunctions::testTODAY()
