@@ -95,11 +95,11 @@ QString CalendarDay::stateToString( int st, bool trans )
 {
     return
         ( st == None ) ?
-            (trans ? i18n( "Undefined" ) : QLatin1String( "Undefined" )) :
+            (trans ? i18n( "Undefined" ) : QStringLiteral( "Undefined" )) :
         ( st == NonWorking ) ?
-            (trans ? i18n( "Non-working" ) : QLatin1String( "Non-working" )) :
+            (trans ? i18n( "Non-working" ) : QStringLiteral( "Non-working" )) :
         ( st == Working ) ?
-            (trans ?  i18n( "Working" ) : QLatin1String( "Working" )) :
+            (trans ?  i18n( "Working" ) : QStringLiteral( "Working" )) :
         QString();
 }
 
@@ -108,7 +108,7 @@ QStringList CalendarDay::stateList( bool trans )
     QStringList lst;
     return trans
         ? lst << i18n( "Undefined" ) << i18n( "Non-working" ) << i18n( "Working" )
-        : lst << QLatin1String("Undefined") << QLatin1String("Non-working") << QLatin1String("Working");
+        : lst << QStringLiteral("Undefined") << QStringLiteral("Non-working") << QStringLiteral("Working");
 }
 
 /////   CalendarDay   ////
@@ -130,7 +130,7 @@ CalendarDay::CalendarDay(int state)
     //debugPlan<<"("<<this<<")";
 }
 
-CalendarDay::CalendarDay(const QDate& date, int state)
+CalendarDay::CalendarDay(QDate date, int state)
     : m_date(date),
       m_state(state),
       m_calendar( 0 )
@@ -166,11 +166,11 @@ const CalendarDay &CalendarDay::copy(const CalendarDay &day) {
 bool CalendarDay::load( KoXmlElement &element, XMLLoaderObject &status ) {
     //debugPlan;
     bool ok=false;
-    m_state = QString(element.attribute("state", "-1")).toInt(&ok);
+    m_state = QString(element.attribute(QStringLiteral("state"), QStringLiteral("-1"))).toInt(&ok);
     if (m_state < 0)
         return false;
     //debugPlan<<" state="<<m_state;
-    QString s = element.attribute("date");
+    QString s = element.attribute(QStringLiteral("date"));
     if (!s.isEmpty()) {
         m_date = QDate::fromString(s, Qt::ISODate);
         if (!m_date.isValid())
@@ -183,17 +183,17 @@ bool CalendarDay::load( KoXmlElement &element, XMLLoaderObject &status ) {
             continue;
         }
         KoXmlElement e = n.toElement();
-        if (e.tagName() == "interval") {
+        if (e.tagName() == QLatin1String("interval")) {
             //debugPlan<<"Interval start="<<e.attribute("start")<<" end="<<e.attribute("end");
-            QString st = e.attribute("start");
+            QString st = e.attribute(QStringLiteral("start"));
             if (st.isEmpty() ) {
                 errorPlan<<"Empty interval";
                 continue;
             }
             QTime start = QTime::fromString(st);
             int length = 0;
-            if ( status.version() <= "0.6.1" ) {
-                QString en = e.attribute("end");
+            if ( status.version() <= QLatin1String("0.6.1") ) {
+                QString en = e.attribute(QStringLiteral("end"));
                 if ( en.isEmpty() ) {
                     errorPlan<<"Invalid interval end";
                     continue;
@@ -201,7 +201,7 @@ bool CalendarDay::load( KoXmlElement &element, XMLLoaderObject &status ) {
                 QTime end = QTime::fromString(en);
                 length = start.msecsTo( end );
             } else {
-                length = e.attribute("length", "0").toInt();
+                length = e.attribute(QStringLiteral("length"), QStringLiteral("0")).toInt();
             }
             if ( length <= 0 ) {
                 errorPlan<<"Invalid interval length";
@@ -218,17 +218,17 @@ void CalendarDay::save(QDomElement &element) const {
     if (m_state == None)
         return;
     if (m_date.isValid()) {
-        element.setAttribute("date", m_date.toString(Qt::ISODate));
+        element.setAttribute(QStringLiteral("date"), m_date.toString(Qt::ISODate));
     }
-    element.setAttribute("state", QString::number(m_state));
+    element.setAttribute(QStringLiteral("state"), QString::number(m_state));
     if (m_timeIntervals.count() == 0)
         return;
 
     foreach (TimeInterval *i, m_timeIntervals) {
-        QDomElement me = element.ownerDocument().createElement("interval");
+        QDomElement me = element.ownerDocument().createElement(QStringLiteral("interval"));
         element.appendChild(me);
-        me.setAttribute("length", QString::number(i->second));
-        me.setAttribute("start", i->first.toString());
+        me.setAttribute(QStringLiteral("length"), QString::number(i->second));
+        me.setAttribute(QStringLiteral("start"), i->first.toString());
     }
 }
 
@@ -296,12 +296,12 @@ bool CalendarDay::operator!=(const CalendarDay &day) const {
     return !operator==(day);
 }
 
-Duration CalendarDay::effort(const QTime &start, int length, const QTimeZone &timeZone, Schedule *sch) {
+Duration CalendarDay::effort(QTime start, int length, const QTimeZone &timeZone, Schedule *sch) {
 //     debugPlan<<start<<" -"<<length;
     return effort( m_date, start, length, timeZone, sch );
 }
 
-Duration CalendarDay::effort(const QDate &date, const QTime &start, int length, const QTimeZone &timeZone, Schedule *sch) {
+Duration CalendarDay::effort(QDate date, QTime start, int length, const QTimeZone &timeZone, Schedule *sch) {
 //     debugPlan<<date<<start<<length;
     if ( !date.isValid() ) {
         return Duration::zeroDuration;
@@ -362,12 +362,12 @@ Duration CalendarDay::workDuration() const
 }
 
 
-TimeInterval CalendarDay::interval(const QTime &start, int length, const QTimeZone &timeZone, Schedule *sch) const {
+TimeInterval CalendarDay::interval(QTime start, int length, const QTimeZone &timeZone, Schedule *sch) const {
     //debugPlan;
     return interval( m_date, start, length, timeZone, sch );
 }
 
-TimeInterval CalendarDay::interval(const QDate &date, const QTime &start, int length, const QTimeZone &timeZone, Schedule *sch) const
+TimeInterval CalendarDay::interval(QDate date, QTime start, int length, const QTimeZone &timeZone, Schedule *sch) const
 {
     //debugPlan<<"Inp:"<<date<<start<<"+"<<length<<"="<<QDateTime(date, start).addMSecs( length );
     Q_ASSERT( length > 0 );
@@ -429,12 +429,12 @@ bool CalendarDay::hasInterval() const
     return m_state == Working && m_timeIntervals.count() > 0;
 }
 
-bool CalendarDay::hasInterval(const QTime &start, int length, const QTimeZone &timeZone, Schedule *sch) const {
+bool CalendarDay::hasInterval(QTime start, int length, const QTimeZone &timeZone, Schedule *sch) const {
     //debugPlan<<(m_date.isValid()?m_date.toString(Qt::ISODate):"Weekday")<<""<<start.toString()<<" -"<<end.toString();
     return hasInterval( m_date, start, length, timeZone, sch );
 }
 
-bool CalendarDay::hasInterval(const QDate &date, const QTime &start, int length, const QTimeZone &timeZone, Schedule *sch) const
+bool CalendarDay::hasInterval(QDate date, QTime start, int length, const QTimeZone &timeZone, Schedule *sch) const
 {
     //debugPlan<<(m_date.isValid()?m_date.toString(Qt::ISODate):"Weekday")<<""<<start<<"->"<<length;
     return interval( date, start, length, timeZone, sch ).first.isValid();
@@ -534,7 +534,7 @@ const CalendarWeekdays &CalendarWeekdays::copy(const CalendarWeekdays &weekdays)
 bool CalendarWeekdays::load( KoXmlElement &element, XMLLoaderObject &status ) {
     //debugPlan;
     bool ok;
-    int dayNo = QString(element.attribute("day","-1")).toInt(&ok);
+    int dayNo = QString(element.attribute(QStringLiteral("day"),QStringLiteral("-1"))).toInt(&ok);
     if (dayNo < 0 || dayNo > 6) {
         errorPlan<<"Illegal weekday: "<<dayNo;
         return true; // we continue anyway
@@ -554,9 +554,9 @@ void CalendarWeekdays::save(QDomElement &element) const {
     QMapIterator<int, CalendarDay*> i( m_weekdays );
     while ( i.hasNext() ) {
         i.next();
-        QDomElement me = element.ownerDocument().createElement("weekday");
+        QDomElement me = element.ownerDocument().createElement(QStringLiteral("weekday"));
         element.appendChild(me);
-        me.setAttribute( "day", QString::number(i.key() - 1) ); // 0 (monday) .. 6 (sunday)
+        me.setAttribute( QStringLiteral("day"), QString::number(i.key() - 1) ); // 0 (monday) .. 6 (sunday)
         i.value()->save(me);
     }
 }
@@ -578,7 +578,7 @@ IntMap CalendarWeekdays::stateMap() const
     return days;
 }
 
-int CalendarWeekdays::state(const QDate &date) const {
+int CalendarWeekdays::state(QDate date) const {
     return state( date.dayOfWeek() );
 }
 
@@ -633,7 +633,7 @@ bool CalendarWeekdays::operator!=(const CalendarWeekdays *wd) const {
     return operator==( wd ) == false;
 }
 
-Duration CalendarWeekdays::effort(const QDate &date, const QTime &start, int length, const QTimeZone &timeZone, Schedule *sch) {
+Duration CalendarWeekdays::effort(QDate date, QTime start, int length, const QTimeZone &timeZone, Schedule *sch) {
 //     debugPlan<<"Day of week="<<date.dayOfWeek();
     Q_ASSERT( QTime(0,0,0).msecsTo( start ) + length <= 1000*60*60*24 );
     CalendarDay *day = weekday( date.dayOfWeek() );
@@ -643,7 +643,7 @@ Duration CalendarWeekdays::effort(const QDate &date, const QTime &start, int len
     return Duration::zeroDuration;
 }
 
-TimeInterval CalendarWeekdays::interval(const QDate &date, const QTime &start, int length, const QTimeZone &timeZone, Schedule *sch) const
+TimeInterval CalendarWeekdays::interval(QDate date, QTime start, int length, const QTimeZone &timeZone, Schedule *sch) const
 {
     //debugPlan;
     CalendarDay *day = weekday( date.dayOfWeek() );
@@ -653,7 +653,7 @@ TimeInterval CalendarWeekdays::interval(const QDate &date, const QTime &start, i
     return TimeInterval();
 }
 
-bool CalendarWeekdays::hasInterval(const QDate &date, const QTime &start, int length, const QTimeZone &timeZone, Schedule *sch) const
+bool CalendarWeekdays::hasInterval(QDate date, QTime start, int length, const QTimeZone &timeZone, Schedule *sch) const
 {
     //debugPlan<<date<<":"<<start<<"+"<<length;
     CalendarDay *day = weekday( date.dayOfWeek() );
@@ -680,7 +680,7 @@ CalendarDay *CalendarWeekdays::weekday( int day ) const {
 int CalendarWeekdays::dayOfWeek(const QString& name)
 {
     QStringList lst;
-    lst << "Monday" << "Tuesday" << "Wednesday" << "Thursday" << "Friday" << "Saturday" << "Sunday";
+    lst << QStringLiteral("Monday") << QStringLiteral("Tuesday") << QStringLiteral("Wednesday") << QStringLiteral("Thursday") << QStringLiteral("Friday") << QStringLiteral("Saturday") << QStringLiteral("Sunday");
     int idx = -1;
     if ( lst.contains( name ) ) {
         idx = lst.indexOf( name ) + 1;
@@ -850,8 +850,8 @@ void Calendar::setTimeZone( const QTimeZone &tz )
     //debugPlan<<tz->name();
     m_timeZone = tz;
 #ifdef HAVE_KHOLIDAYS
-    if (m_regionCode == "Default") {
-        setHolidayRegion("Default");
+    if (m_regionCode == QLatin1String("Default")) {
+        setHolidayRegion(QStringLiteral("Default"));
     }
 #endif
     if ( m_project ) {
@@ -902,37 +902,37 @@ int Calendar::indexOf( const Calendar *calendar ) const
 bool Calendar::loadCacheVersion( KoXmlElement &element, XMLLoaderObject &status )
 {
     Q_UNUSED(status);
-    m_cacheversion = element.attribute( "version", 0 ).toInt();
+    m_cacheversion = element.attribute( QStringLiteral("version"), 0 ).toInt();
     debugPlan<<m_name<<m_cacheversion;
     return true;
 }
 
 void Calendar::saveCacheVersion( QDomElement &element ) const
 {
-    QDomElement me = element.ownerDocument().createElement("cache");
+    QDomElement me = element.ownerDocument().createElement(QStringLiteral("cache"));
     element.appendChild(me);
-    me.setAttribute("version", QString::number(m_cacheversion));
+    me.setAttribute(QStringLiteral("version"), QString::number(m_cacheversion));
 }
 
 bool Calendar::load( KoXmlElement &element, XMLLoaderObject &status ) {
     //debugPlan<<element.text();
     //bool ok;
     m_blockversion = true;
-    setId(element.attribute("id"));
-    m_parentId = element.attribute("parent");
-    m_name = element.attribute("name","");
-    QTimeZone tz( element.attribute( "timezone" ).toLatin1() );
+    setId(element.attribute(QStringLiteral("id")));
+    m_parentId = element.attribute(QStringLiteral("parent"));
+    m_name = element.attribute(QStringLiteral("name"),QLatin1String(""));
+    QTimeZone tz( element.attribute( QStringLiteral("timezone") ).toLatin1() );
     if ( tz.isValid() ) {
         setTimeZone( tz );
     } else warnPlan<<"No timezone specified, use default (local)";
-    bool m_default = (bool)element.attribute("default","0").toInt();
+    bool m_default = (bool)element.attribute(QStringLiteral("default"),QStringLiteral("0")).toInt();
     if ( m_default ) {
         status.project().setDefaultCalendar( this );
     }
-    m_shared = element.attribute("shared", "0").toInt();
+    m_shared = element.attribute(QStringLiteral("shared"), QStringLiteral("0")).toInt();
 
 #ifdef HAVE_KHOLIDAYS
-    setHolidayRegion(element.attribute("holiday-region"));
+    setHolidayRegion(element.attribute(QStringLiteral("holiday-region")));
 #endif
 
     KoXmlNode n = element.firstChild();
@@ -941,11 +941,11 @@ bool Calendar::load( KoXmlElement &element, XMLLoaderObject &status ) {
             continue;
         }
         KoXmlElement e = n.toElement();
-        if (e.tagName() == "weekday") {
+        if (e.tagName() == QLatin1String("weekday")) {
             if ( !m_weekdays->load( e, status ) )
                 return false;
         }
-        if (e.tagName() == "day") {
+        if (e.tagName() == QLatin1String("day")) {
             CalendarDay *day = new CalendarDay();
             if ( day->load( e, status ) ) {
                 if (!day->date().isValid()) {
@@ -968,7 +968,7 @@ bool Calendar::load( KoXmlElement &element, XMLLoaderObject &status ) {
         }
     }
     // this must go last
-    KoXmlElement e = element.namedItem( "cache" ).toElement();
+    KoXmlElement e = element.namedItem( QStringLiteral("cache") ).toElement();
     if ( ! e.isNull() ) {
         loadCacheVersion( e, status );
     }
@@ -978,33 +978,33 @@ bool Calendar::load( KoXmlElement &element, XMLLoaderObject &status ) {
 
 void Calendar::save(QDomElement &element) const {
     //debugPlan<<m_name;
-    QDomElement me = element.ownerDocument().createElement("calendar");
+    QDomElement me = element.ownerDocument().createElement(QStringLiteral("calendar"));
     element.appendChild(me);
     if (m_parent) {
-        me.setAttribute("parent", m_parent->id());
+        me.setAttribute(QStringLiteral("parent"), m_parent->id());
     }
-    me.setAttribute("name", m_name);
-    me.setAttribute("id", m_id);
+    me.setAttribute(QStringLiteral("name"), m_name);
+    me.setAttribute(QStringLiteral("id"), m_id);
     if ( m_default ) {
-        me.setAttribute("default", QString::number(m_default));
+        me.setAttribute(QStringLiteral("default"), QString::number(m_default));
     }
-    me.setAttribute("timezone", m_timeZone.isValid() ? QString::fromLatin1(m_timeZone.id()) : QString());
+    me.setAttribute(QStringLiteral("timezone"), m_timeZone.isValid() ? QString::fromLatin1(m_timeZone.id()) : QString());
     m_weekdays->save(me);
     foreach (CalendarDay *d, m_days) {
-        QDomElement e = me.ownerDocument().createElement("day");
+        QDomElement e = me.ownerDocument().createElement(QStringLiteral("day"));
         me.appendChild(e);
         d->save(e);
     }
-    me.setAttribute("shared", m_shared);
+    me.setAttribute(QStringLiteral("shared"), m_shared);
 
 #ifdef HAVE_KHOLIDAYS
-    me.setAttribute("holiday-region", m_regionCode);
+    me.setAttribute(QStringLiteral("holiday-region"), m_regionCode);
 #endif
 
     saveCacheVersion( me );
 }
 
-int Calendar::state(const QDate &date) const
+int Calendar::state(QDate date) const
 {
     CalendarDay *day = findDay( date );
     if ( day && day->state() != CalendarDay::Undefined ) {
@@ -1022,7 +1022,7 @@ int Calendar::state(const QDate &date) const
     return m_parent ? m_parent->state( date ) : CalendarDay::Undefined;
 }
 
-CalendarDay *Calendar::findDay(const QDate &date, bool skipUndefined) const {
+CalendarDay *Calendar::findDay(QDate date, bool skipUndefined) const {
     //debugPlan<<date.toString();
     foreach (CalendarDay *d, m_days) {
         if (d->date() == date) {
@@ -1070,14 +1070,14 @@ void Calendar::setWorkInterval( TimeInterval *ti, const TimeInterval &value )
     incCacheVersion();
 }
 
-void Calendar::setDate( CalendarDay *day, const QDate &date )
+void Calendar::setDate( CalendarDay *day, QDate date )
 {
     day->setDate( date );
     emit changed( day );
     incCacheVersion();
 }
 
-CalendarDay *Calendar::day( const QDate &date ) const
+CalendarDay *Calendar::day( QDate date ) const
 {
     foreach ( CalendarDay *d, m_days ) {
         if ( d->date() == date ) {
@@ -1212,7 +1212,7 @@ AppointmentIntervalList Calendar::workIntervals( const DateTime &start, const Da
     return workIntervals( zonedStart, zonedEnd, load );
 }
 
-Duration Calendar::effort(const QDate &date, const QTime &start, int length, Schedule *sch) const {
+Duration Calendar::effort(QDate date, QTime start, int length, Schedule *sch) const {
 //     debugPlan<<m_name<<":"<<date<<""<<start<<"->"<<length;
     if (length <= 0) {
         return Duration::zeroDuration;
@@ -1298,7 +1298,7 @@ Duration Calendar::effort(const DateTime &start, const DateTime &end, Schedule *
 }
 
 
-TimeInterval Calendar::firstInterval(const QDate &date, const QTime &startTime, int length, Schedule *sch) const {
+TimeInterval Calendar::firstInterval(QDate date, QTime startTime, int length, Schedule *sch) const {
     //debugPlan;
     CalendarDay *day = findDay(date, true);
     if (day) {
@@ -1401,7 +1401,7 @@ DateTimeInterval Calendar::firstInterval(const DateTime &start, const DateTime &
 }
 
 
-bool Calendar::hasInterval(const QDate &date, const QTime &startTime, int length, Schedule *sch) const
+bool Calendar::hasInterval(QDate date, QTime startTime, int length, Schedule *sch) const
 {
     //debugPlan;
     return ! firstInterval( date, startTime, length, sch ).first.isNull();
@@ -1565,7 +1565,7 @@ void Calendar::setShared(bool on)
 }
 
 #ifdef HAVE_KHOLIDAYS
-bool Calendar::isHoliday(const QDate &date) const
+bool Calendar::isHoliday(QDate date) const
 {
     if (m_region->isValid()) {
         KHolidays::Holiday::List lst = m_region->holidays(date);
@@ -1585,7 +1585,7 @@ void Calendar::setHolidayRegion(const QString &code)
 {
     delete m_region;
     m_regionCode = code;
-    if (code == "Default") {
+    if (code == QLatin1String("Default")) {
         QString country;
         if (m_timeZone.isValid()) {
             // TODO be more accurate when country has multiple timezones/regions
@@ -1660,10 +1660,10 @@ QList<qint64> StandardWorktime::scales() const
 
 bool StandardWorktime::load( KoXmlElement &element, XMLLoaderObject &status ) {
     //debugPlan;
-    m_year = Duration::fromString(element.attribute("year"), Duration::Format_Hour); 
-    m_month = Duration::fromString(element.attribute("month"), Duration::Format_Hour); 
-    m_week = Duration::fromString(element.attribute("week"), Duration::Format_Hour); 
-    m_day = Duration::fromString(element.attribute("day"), Duration::Format_Hour); 
+    m_year = Duration::fromString(element.attribute(QStringLiteral("year")), Duration::Format_Hour); 
+    m_month = Duration::fromString(element.attribute(QStringLiteral("month")), Duration::Format_Hour); 
+    m_week = Duration::fromString(element.attribute(QStringLiteral("week")), Duration::Format_Hour); 
+    m_day = Duration::fromString(element.attribute(QStringLiteral("day")), Duration::Format_Hour); 
     
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -1671,9 +1671,9 @@ bool StandardWorktime::load( KoXmlElement &element, XMLLoaderObject &status ) {
             continue;
         }
         KoXmlElement e = n.toElement();
-        if (e.tagName() == "calendar") {
+        if (e.tagName() == QLatin1String("calendar")) {
             // pre 0.6 version stored base calendar in standard worktime
-            if ( status.version() >= "0.6" ) {
+            if ( status.version() >= QLatin1String("0.6") ) {
                 warnPlan<<"Old format, calendar in standard worktime";
                 warnPlan<<"Tries to load anyway";
             }
@@ -1695,12 +1695,12 @@ bool StandardWorktime::load( KoXmlElement &element, XMLLoaderObject &status ) {
 
 void StandardWorktime::save(QDomElement &element) const {
     //debugPlan;
-    QDomElement me = element.ownerDocument().createElement("standard-worktime");
+    QDomElement me = element.ownerDocument().createElement(QStringLiteral("standard-worktime"));
     element.appendChild(me);
-    me.setAttribute("year", m_year.toString(Duration::Format_Hour));
-    me.setAttribute("month", m_month.toString(Duration::Format_Hour));
-    me.setAttribute("week", m_week.toString(Duration::Format_Hour));
-    me.setAttribute("day", m_day.toString(Duration::Format_Hour));
+    me.setAttribute(QStringLiteral("year"), m_year.toString(Duration::Format_Hour));
+    me.setAttribute(QStringLiteral("month"), m_month.toString(Duration::Format_Hour));
+    me.setAttribute(QStringLiteral("week"), m_week.toString(Duration::Format_Hour));
+    me.setAttribute(QStringLiteral("day"), m_day.toString(Duration::Format_Hour));
     
 }
 
