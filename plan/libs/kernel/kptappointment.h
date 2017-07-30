@@ -69,12 +69,12 @@ public:
     AppointmentInterval();
     AppointmentInterval(const AppointmentInterval &AppointmentInterval);
     AppointmentInterval(const DateTime &start, const DateTime &end, double load=100);
-    AppointmentInterval( const QDate &date, const TimeInterval &timeInterval, double load=100 );
+    AppointmentInterval( QDate date, const TimeInterval &timeInterval, double load=100 );
     ~AppointmentInterval();
     
     Duration effort() const;
     Duration effort(const DateTime &start, const DateTime &end) const;
-    Duration effort(const QDate &time, bool upto) const;
+    Duration effort(QDate time, bool upto) const;
     
     bool loadXML(KoXmlElement &element, XMLLoaderObject &status);
     void saveXML(QDomElement &element) const;
@@ -197,7 +197,7 @@ public:
     
     void addInterval(const AppointmentInterval &a);
     void addInterval(const DateTime &start, const DateTime &end, double load=100);
-    void addInterval(const DateTime &start, const Duration &duration, double load=100);
+    void addInterval(const DateTime &start, KPlato::Duration duration, double load=100);
     void setIntervals(const AppointmentIntervalList &lst);
     
     const AppointmentIntervalList &intervals() const { return m_intervals; }
@@ -214,32 +214,32 @@ public:
      * Only dates with any planned effort is returned.
      * If start or end is not valid, startTime.date() respectivly endTime().date() is used.
      */
-    EffortCostMap plannedPrDay(const QDate& start, const QDate& end, EffortCostCalculationType type = ECCT_All) const;
+    EffortCostMap plannedPrDay(QDate start, QDate end, EffortCostCalculationType type = ECCT_All) const;
     
     /// Returns the planned effort from start to end
     Duration effort(const DateTime &start, const DateTime &end, EffortCostCalculationType type = ECCT_All) const;
     /// Returns the planned effort from start for the duration
-    Duration effort(const DateTime &start, const Duration &duration, EffortCostCalculationType type = ECCT_All) const;
+    Duration effort(const DateTime &start, KPlato::Duration duration, EffortCostCalculationType type = ECCT_All) const;
 
     /// Returns the total planned effort for @p resource on this appointment
     Duration plannedEffort( const Resource *resource, EffortCostCalculationType type = ECCT_All ) const;
     /// Returns the total planned effort for this appointment
     Duration plannedEffort(EffortCostCalculationType type = ECCT_All) const;
     /// Returns the planned effort on the date
-    Duration plannedEffort(const QDate &date, EffortCostCalculationType type = ECCT_All) const;
+    Duration plannedEffort(QDate date, EffortCostCalculationType type = ECCT_All) const;
     /// Returns the planned effort for @p resource on the @p date date
-    Duration plannedEffort( const Resource *resource, const QDate &date, EffortCostCalculationType type = ECCT_All ) const;
+    Duration plannedEffort( const Resource *resource, QDate date, EffortCostCalculationType type = ECCT_All ) const;
     /// Returns the planned effort upto and including date
-    Duration plannedEffortTo(const QDate &date, EffortCostCalculationType type = ECCT_All) const;
+    Duration plannedEffortTo(QDate date, EffortCostCalculationType type = ECCT_All) const;
     /// Returns the planned effort upto and including date
-    Duration plannedEffortTo( const Resource *resource, const QDate &date, EffortCostCalculationType type = ECCT_All ) const;
+    Duration plannedEffortTo( const Resource *resource, QDate date, EffortCostCalculationType type = ECCT_All ) const;
 
      /// Calculates the total planned cost for this appointment
     EffortCost plannedCost(EffortCostCalculationType type = ECCT_All) const;
     /// Calculates the planned cost on date
-    double plannedCost(const QDate &date, EffortCostCalculationType type = ECCT_All);
+    double plannedCost(QDate date, EffortCostCalculationType type = ECCT_All);
     /// Calculates the planned cost upto and including date
-    double plannedCostTo(const QDate &date, EffortCostCalculationType type = ECCT_All);
+    double plannedCostTo(QDate date, EffortCostCalculationType type = ECCT_All);
 
     Appointment &operator=(const Appointment &app);
     Appointment &operator+=(const Appointment &app);

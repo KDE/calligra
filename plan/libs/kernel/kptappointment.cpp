@@ -62,7 +62,7 @@ AppointmentInterval::AppointmentInterval( const DateTime &start, const DateTime 
 #endif
 }
 
-AppointmentInterval::AppointmentInterval( const QDate& date, const TimeInterval& timeInterval, double load )
+AppointmentInterval::AppointmentInterval( QDate date, const TimeInterval& timeInterval, double load )
     : d( new AppointmentIntervalData() )
 {
     Q_ASSERT( date.isValid() && timeInterval.isValid() );
@@ -135,7 +135,7 @@ Duration AppointmentInterval::effort(const DateTime &start, const DateTime &end)
     return (e - s) * d->load / 100;
 }
 
-Duration AppointmentInterval::effort(const QDate &time, bool upto) const {
+Duration AppointmentInterval::effort(QDate time, bool upto) const {
     DateTime t( time );
     //debugPlan<<time<<upto<<t<<d->start<<d->end;
     if (upto) {
@@ -158,16 +158,16 @@ Duration AppointmentInterval::effort(const QDate &time, bool upto) const {
 bool AppointmentInterval::loadXML(KoXmlElement &element, XMLLoaderObject &status) {
     //debugPlan;
     bool ok;
-    QString s = element.attribute("start");
+    QString s = element.attribute(QStringLiteral("start"));
     if (!s.isEmpty())
         d->start = DateTime::fromString(s, status.projectTimeZone());
-    s = element.attribute("end");
+    s = element.attribute(QStringLiteral("end"));
     if (!s.isEmpty())
         d->end = DateTime::fromString(s, status.projectTimeZone());
-    d->load = element.attribute("load", "100").toDouble(&ok);
+    d->load = element.attribute(QStringLiteral("load"), QStringLiteral("100")).toDouble(&ok);
     if (!ok) d->load = 100;
     if ( ! isValid() ) {
-        errorPlan<<"AppointmentInterval::loadXML: Invalid interval:"<<*this<<element.attribute("start")<<element.attribute("end");
+        errorPlan<<"AppointmentInterval::loadXML: Invalid interval:"<<*this<<element.attribute(QStringLiteral("start"))<<element.attribute(QStringLiteral("end"));
     } else {
         Q_ASSERT(d->start.timeZone() == d->end.timeZone());
     }
@@ -177,12 +177,12 @@ bool AppointmentInterval::loadXML(KoXmlElement &element, XMLLoaderObject &status
 void AppointmentInterval::saveXML(QDomElement &element) const
 {
     Q_ASSERT( isValid() );
-    QDomElement me = element.ownerDocument().createElement("interval");
+    QDomElement me = element.ownerDocument().createElement(QStringLiteral("interval"));
     element.appendChild(me);
 
-    me.setAttribute("start", d->start.toString( Qt::ISODate ));
-    me.setAttribute("end", d->end.toString( Qt::ISODate ));
-    me.setAttribute("load", QString::number(d->load));
+    me.setAttribute(QStringLiteral("start"), d->start.toString( Qt::ISODate ));
+    me.setAttribute(QStringLiteral("end"), d->end.toString( Qt::ISODate ));
+    me.setAttribute(QStringLiteral("load"), QString::number(d->load));
 }
 
 bool AppointmentInterval::isValid() const {
@@ -275,7 +275,7 @@ AppointmentInterval AppointmentInterval::interval( const DateTime &start, const 
 
 QString AppointmentInterval::toString() const
 {
-    return QString( "%1 - %2, %3%" ).arg( d->start.toString( Qt::ISODate ) ).arg( d->end.toString( Qt::ISODate ) ).arg( d->load );
+    return QStringLiteral( "%1 - %2, %3%" ).arg( d->start.toString( Qt::ISODate ) ).arg( d->end.toString( Qt::ISODate ) ).arg( d->load );
 }
 
 QDebug operator<<( QDebug dbg, const KPlato::AppointmentInterval &i )
@@ -575,7 +575,7 @@ bool AppointmentIntervalList::loadXML( KoXmlElement &element, XMLLoaderObject &s
 {
     KoXmlElement e;
     forEachElement(e, element) {
-        if (e.tagName() == "interval") {
+        if (e.tagName() == QLatin1String("interval")) {
             AppointmentInterval a;
             if (a.loadXML(e, status)) {
                 add(a);
@@ -682,7 +682,7 @@ void Appointment::addInterval(const DateTime &start, const DateTime &end, double
     addInterval(AppointmentInterval(start, end, load));
 }
 
-void Appointment::addInterval(const DateTime &start, const Duration &duration, double load) {
+void Appointment::addInterval(const DateTime &start, KPlato::Duration duration, double load) {
     DateTime e = start+duration;
     addInterval(start, e, load);
 }
@@ -718,14 +718,14 @@ bool Appointment::isBusy(const DateTime &/*start*/, const DateTime &/*end*/) {
 
 bool Appointment::loadXML(KoXmlElement &element, XMLLoaderObject &status, Schedule &sch) {
     //debugPlan<<project.name();
-    Node *node = status.project().findNode(element.attribute("task-id"));
+    Node *node = status.project().findNode(element.attribute(QStringLiteral("task-id")));
     if (node == 0) {
-        errorPlan<<"The referenced task does not exists: "<<element.attribute("task-id");
+        errorPlan<<"The referenced task does not exists: "<<element.attribute(QStringLiteral("task-id"));
         return false;
     }
-    Resource *res = status.project().resource(element.attribute("resource-id"));
+    Resource *res = status.project().resource(element.attribute(QStringLiteral("resource-id")));
     if (res == 0) {
-        errorPlan<<"The referenced resource does not exists: resource id="<<element.attribute("resource-id");
+        errorPlan<<"The referenced resource does not exists: resource id="<<element.attribute(QStringLiteral("resource-id"));
         return false;
     }
     if (!res->addAppointment(this, sch)) {
@@ -759,11 +759,11 @@ void Appointment::saveXML(QDomElement &element) const {
         return; // shouldn't happen
     }
     //debugPlan;
-    QDomElement me = element.ownerDocument().createElement("appointment");
+    QDomElement me = element.ownerDocument().createElement(QStringLiteral("appointment"));
     element.appendChild(me);
 
-    me.setAttribute("resource-id", m_resource->resource()->id());
-    me.setAttribute("task-id", m_node->node()->id());
+    me.setAttribute(QStringLiteral("resource-id"), m_resource->resource()->id());
+    me.setAttribute(QStringLiteral("task-id"), m_node->node()->id());
     //debugPlan<<m_resource->resource()->name()<<m_node->node()->name();
     m_intervals.saveXML( me );
 }
@@ -788,7 +788,7 @@ Duration Appointment::plannedEffort(EffortCostCalculationType type) const {
 }
 
 // Returns the planned effort on the date
-Duration Appointment::plannedEffort(const QDate &date, EffortCostCalculationType type) const {
+Duration Appointment::plannedEffort(QDate date, EffortCostCalculationType type) const {
     Duration d;
     if ( type == ECCT_All || m_resource == 0 || m_resource->resource()->type() == Resource::Type_Work ) {
         QMultiMap<QDate, AppointmentInterval>::const_iterator it = m_intervals.map().constFind( date );
@@ -800,7 +800,7 @@ Duration Appointment::plannedEffort(const QDate &date, EffortCostCalculationType
 }
 
 // Returns the planned effort on the date
-Duration Appointment::plannedEffort( const Resource *resource, const QDate &date, EffortCostCalculationType type ) const {
+Duration Appointment::plannedEffort( const Resource *resource, QDate date, EffortCostCalculationType type ) const {
     if ( resource != m_resource->resource() ) {
         return Duration::zeroDuration;
     }
@@ -808,7 +808,7 @@ Duration Appointment::plannedEffort( const Resource *resource, const QDate &date
 }
 
 // Returns the planned effort upto and including the date
-Duration Appointment::plannedEffortTo(const QDate& date, EffortCostCalculationType type) const {
+Duration Appointment::plannedEffortTo(QDate date, EffortCostCalculationType type) const {
     Duration d;
     QDate e(date.addDays(1));
     if ( type == ECCT_All || m_resource == 0 || m_resource->resource()->type() == Resource::Type_Work ) {
@@ -821,14 +821,14 @@ Duration Appointment::plannedEffortTo(const QDate& date, EffortCostCalculationTy
 }
 
 // Returns the planned effort upto and including the date
-Duration Appointment::plannedEffortTo( const Resource *resource, const QDate& date, EffortCostCalculationType type ) const {
+Duration Appointment::plannedEffortTo( const Resource *resource, QDate date, EffortCostCalculationType type ) const {
     if ( resource != m_resource->resource() ) {
         return Duration::zeroDuration;
     }
     return plannedEffortTo( date, type );
 }
 
-EffortCostMap Appointment::plannedPrDay(const QDate& pstart, const QDate& pend, EffortCostCalculationType type) const {
+EffortCostMap Appointment::plannedPrDay(QDate pstart, QDate pend, EffortCostCalculationType type) const {
     //debugPlan<<m_node->id()<<","<<m_resource->id();
     EffortCostMap ec;
     QDate start = pstart.isValid() ? pstart : startTime().date();
@@ -880,7 +880,7 @@ EffortCost Appointment::plannedCost(EffortCostCalculationType type) const {
 }
 
 //Calculates the planned cost on date
-double Appointment::plannedCost(const QDate &date, EffortCostCalculationType type) {
+double Appointment::plannedCost(QDate date, EffortCostCalculationType type) {
     if (m_resource && m_resource->resource()) {
         switch ( type ) {
             case ECCT_Work:
@@ -896,7 +896,7 @@ double Appointment::plannedCost(const QDate &date, EffortCostCalculationType typ
 }
 
 //Calculates the planned cost upto and including date
-double Appointment::plannedCostTo(const QDate &date, EffortCostCalculationType type) {
+double Appointment::plannedCostTo(QDate date, EffortCostCalculationType type) {
     if (m_resource && m_resource->resource()) {
         switch ( type ) {
             case ECCT_Work:
@@ -942,7 +942,7 @@ Duration Appointment::effort(const DateTime &start, const DateTime &end, EffortC
     return e;
 }
 // Returns the effort from start for the duration
-Duration Appointment::effort(const DateTime &start, const Duration &duration, EffortCostCalculationType type) const {
+Duration Appointment::effort(const DateTime &start, KPlato::Duration duration, EffortCostCalculationType type) const {
     Duration d;
     if ( type == ECCT_All || m_resource == 0 || m_resource->resource()->type() == Resource::Type_Work ) {
         foreach (const AppointmentInterval &i, m_intervals.map() ) {
