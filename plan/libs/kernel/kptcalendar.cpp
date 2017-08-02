@@ -672,7 +672,7 @@ bool CalendarWeekdays::hasInterval() const
 
 CalendarDay *CalendarWeekdays::weekday( int day ) const {
     Q_ASSERT( day >= 1 && day <= 7 );
-    Q_ASSERT( m_weekdays.keys().contains( day ) );
+    Q_ASSERT( m_weekdays.contains( day ) );
     return m_weekdays.value( day );
 }
 
@@ -1045,9 +1045,9 @@ void Calendar::setState( CalendarDay *day, CalendarDay::State state )
 
 void Calendar::addWorkInterval( CalendarDay *day, TimeInterval *ti )
 {
-    workIntervalToBeAdded( day, ti, day->numIntervals() );
+    emit workIntervalToBeAdded( day, ti, day->numIntervals() );
     day->addInterval( ti );
-    workIntervalAdded( day, ti );
+    emit workIntervalAdded( day, ti );
     incCacheVersion();
 }
 
@@ -1056,9 +1056,9 @@ void Calendar::takeWorkInterval( CalendarDay *day, TimeInterval *ti )
     if ( !day->hasInterval(ti) ) {
         return;
     }
-    workIntervalToBeRemoved( day, ti );
+    emit workIntervalToBeRemoved( day, ti );
     day->removeInterval( ti );
-    workIntervalRemoved( day, ti );
+    emit workIntervalRemoved( day, ti );
     incCacheVersion();
     return;
 }
