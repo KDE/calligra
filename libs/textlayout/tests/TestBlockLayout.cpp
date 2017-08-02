@@ -1018,6 +1018,8 @@ void TestBlockLayout::testDropCaps()
     QTextBlock secondblock = block.next();
     style.applyStyle(block);
 
+    qInfo()<<"Font:"<<style.font();
+
     m_layout->layout();
 
     // dummy version, caps is still false.
