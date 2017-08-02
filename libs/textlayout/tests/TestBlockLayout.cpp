@@ -1009,6 +1009,7 @@ void TestBlockLayout::testDropCaps()
     setupTest(QString("Lorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam\nsome more text")); // some not too long text so the dropcap will be bigger than the block
 
     KoParagraphStyle style;
+    style.setFontFamily("Sans Serif");
     style.setFontPointSize(12.0);
     style.setDropCaps(false);
     style.setDropCapsLength(1);
