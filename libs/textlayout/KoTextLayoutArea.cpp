@@ -831,7 +831,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     QTextBlock block(cursor->it.currentBlock());
     KoTextBlockData blockData(block);
     KoParagraphStyle pStyle(block.blockFormat(), block.charFormat());
-
+    qInfo()<<"layoutBlock:"<<block.text();
     int dropCapsAffectsNMoreLines = 0;
     qreal dropCapsPositionAdjust = 0.0;
     bool lastOfPreviousRun = (d->copyEndOfArea && d->copyEndOfArea->it.currentBlock() == block);
@@ -1382,6 +1382,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 if (!virginPage() && softBreakPos == 0) {
                     d->recreatePartialLayout(block, stashedLines, stashedCounterPosition, line);
                     layout->endLayout();
+                    qInfo()<<1<<"layoutBlock: softbreak at start of line";
                     return false;
                 }
             }
@@ -1397,6 +1398,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             if (!virginPage() && documentLayout()->anchoringSoftBreak() == block.position()) {
                 d->recreatePartialLayout(block, stashedLines, stashedCounterPosition, line);
                 layout->endLayout();
+                qInfo()<<2<<"layoutBlock: softbreak at start of line";
                 return false;
             }
         }
@@ -1414,6 +1416,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 d->recreatePartialLayout(block, stashedLines, stashedCounterPosition, line);
                 layout->endLayout();
                 clearPreregisteredFootNotes();
+                qInfo()<<1<<"layoutBlock: line does not fit in allowed space";
                 return false; //to indicate block was not done!
             }
             if (!virginPage() && pStyle.orphanThreshold() != 0
@@ -1423,6 +1426,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 d->recreatePartialLayout(block, stashedLines, stashedCounterPosition, line);
                 layout->endLayout();
                 clearPreregisteredFootNotes();
+                qInfo()<<2<<"layoutBlock: line does not fit in allowed space";
                 return false; //to indicate block was not done!
             }
             if (!virginPage() || anyLineAdded) {
@@ -1430,6 +1434,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 d->recreatePartialLayout(block, stashedLines, stashedCounterPosition, line);
                 layout->endLayout();
                 clearPreregisteredFootNotes();
+                qInfo()<<3<<"layoutBlock: line does not fit in allowed space";
                 return false; //to indicate block was not done!
             }
         }
