@@ -46,6 +46,8 @@ public:
 private Q_SLOTS:
     void initTestCase();
 
+    void testDropCaps();
+
     /// make sure empty paragraphs are initialized properly
     void testEmptyParag();
 
@@ -83,7 +85,6 @@ private Q_SLOTS:
     //void testParagOffset();
     void testParagraphBorders();
     void testParagraphMargins();
-    void testDropCaps();
 
 private:
     void setupTest(const QString &initText = QString());
