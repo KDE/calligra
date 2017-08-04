@@ -26,6 +26,7 @@
 /// Use this shape factory to load embedded svg files from odf
 class FLAKE_EXPORT SvgShapeFactory : public KoShapeFactoryBase
 {
+Q_OBJECT
 public:
     SvgShapeFactory();
     ~SvgShapeFactory();

@@ -140,7 +140,7 @@ KoPatternBackground::KoPatternBackground(KoImageCollection * imageCollection)
 
 KoPatternBackground::~KoPatternBackground()
 {
-    Q_D(KoPatternBackground);
+    //Q_D(KoPatternBackground);
 }
 
 void KoPatternBackground::setTransform(const QTransform &matrix)
@@ -373,7 +373,7 @@ bool KoPatternBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF &
 
     QString styleName = styleStack.property(KoXmlNS::draw, "fill-image-name");
 
-    KoXmlElement* e = context.stylesReader().drawStyles("fill-image")[styleName];
+    KoXmlElement* e = context.stylesReader().drawStyles("fill-image").value(styleName);
     if (! e)
         return false;
 

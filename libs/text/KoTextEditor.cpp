@@ -532,7 +532,7 @@ KoInlineObject *KoTextEditor::insertIndexMarker()
     QTextBlock block = d->caret.block();
     if (d->caret.position() >= block.position() + block.length() - 1)
         return 0; // can't insert one at end of text
-    if (block.text()[ d->caret.position() - block.position()].isSpace())
+    if (block.text().at( d->caret.position() - block.position()).isSpace())
         return 0; // can't insert one on a whitespace as that does not indicate a word.
 
     KoTextLocator *tl = new KoTextLocator();

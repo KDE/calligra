@@ -28,6 +28,7 @@
  */
 class KoNamedVariable : public KoVariable
 {
+Q_OBJECT
 public:
     /// return the name of this named variable
     QString name() const {

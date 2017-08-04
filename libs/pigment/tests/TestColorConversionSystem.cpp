@@ -56,8 +56,9 @@ void TestColorConversionSystem::testConnections_data()
 
     for (int i = 0; i < listModels.count(); ++i) {
         const ModelDepthProfile& srcCS = listModels[i];
-        for (const ModelDepthProfile& dstCS : listModels) {
-            QByteArray name = QString("Path: %1/%2 to %3/%4").arg(srcCS.model).arg(srcCS.depth).arg(dstCS.model).arg(dstCS.depth).toLocal8Bit();
+        for (int j = 0; j < listModels.size(); ++j) {
+            const ModelDepthProfile& dstCS = listModels.at(j);
+            QByteArray name = QString("Path: %1/%2 to %3/%4").arg(srcCS.model, srcCS.depth, dstCS.model, dstCS.depth).toLocal8Bit();
             QTest::newRow(name) << srcCS.model << srcCS.depth << srcCS.profile << dstCS.model << dstCS.depth << dstCS.profile << true;
         }
     }
@@ -88,8 +89,9 @@ void TestColorConversionSystem::testGoodConnections_data()
 
     for (int i = 0; i < listModels.count(); ++i) {
         const ModelDepthProfile& srcCS = listModels[i];
-        for (const ModelDepthProfile& dstCS : listModels) {
-            QByteArray name = QString("Path: %1/%2 to %3/%4").arg(srcCS.model).arg(srcCS.depth).arg(dstCS.model).arg(dstCS.depth).toLocal8Bit();
+        for (int j = 0; j < listModels.size(); ++j) {
+            const ModelDepthProfile& dstCS = listModels.at(j);
+            QByteArray name = QString("Path: %1/%2 to %3/%4").arg(srcCS.model, srcCS.depth, dstCS.model, dstCS.depth).toLocal8Bit();
             QTest::newRow(name) << srcCS.model << srcCS.depth << srcCS.profile << dstCS.model << dstCS.depth << dstCS.profile << true;
         }
     }

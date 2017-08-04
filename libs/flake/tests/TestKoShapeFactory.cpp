@@ -67,11 +67,11 @@ void TestKoShapeFactory::testCreateShape()
 void TestKoShapeFactory::testOdfElement()
 {
     KoShapeFactoryBase * factory = new KoPathShapeFactory(QStringList());
-    QVERIFY(factory->odfElements().front().second.contains("path"));
-    QVERIFY(factory->odfElements().front().second.contains("line"));
-    QVERIFY(factory->odfElements().front().second.contains("polyline"));
-    QVERIFY(factory->odfElements().front().second.contains("polygon"));
-    QVERIFY(factory->odfElements().front().first == KoXmlNS::draw);
+    QVERIFY(factory->odfElements().constFirst().second.contains("path"));
+    QVERIFY(factory->odfElements().constFirst().second.contains("line"));
+    QVERIFY(factory->odfElements().constFirst().second.contains("polyline"));
+    QVERIFY(factory->odfElements().constFirst().second.contains("polygon"));
+    QVERIFY(factory->odfElements().constFirst().first == KoXmlNS::draw);
 
     QBuffer xmldevice;
     xmldevice.open(QIODevice::WriteOnly);

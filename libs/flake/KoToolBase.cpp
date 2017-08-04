@@ -56,7 +56,7 @@ KoToolBase::KoToolBase(KoToolBasePrivate &dd)
 KoToolBase::~KoToolBase()
 {
 
-    Q_D(const KoToolBase);
+    //Q_D(const KoToolBase);
 
 // Enable this to easily generate action files for tools
 //    if (d->actionCollection.size() > 0) {

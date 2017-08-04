@@ -32,6 +32,7 @@ class KoCanvasController;
 /// \internal
 class KoZoomTool : public KoInteractionTool
 {
+Q_OBJECT
 public:
     /**
      * Create a new tool; typically not called by applications, only by the KoToolManager

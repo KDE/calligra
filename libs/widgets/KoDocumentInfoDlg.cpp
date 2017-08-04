@@ -51,6 +51,7 @@
 
 class KoPageWidgetItemAdapter : public KPageWidgetItem
 {
+Q_OBJECT
 public:
     KoPageWidgetItemAdapter(KoPageWidgetItem *item)
       : KPageWidgetItem(item->widget(), item->name())
@@ -468,3 +469,4 @@ void KoDocumentInfoDlg::addPageItem(KoPageWidgetItem *item)
     addPage(page);
     d->pages.append(page);
 }
+#include "KoDocumentInfoDlg.moc"

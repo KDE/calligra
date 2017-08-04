@@ -31,6 +31,7 @@
 
 class SectionLayout : public QLayout
 {
+Q_OBJECT
 public:
     explicit SectionLayout(QWidget *parent)
         : QLayout(parent), m_orientation(Qt::Vertical)
@@ -129,6 +130,7 @@ private:
 
 class Section : public QWidget
 {
+Q_OBJECT
 public:
     enum SeparatorFlag {
         SeparatorTop = 0x0001,/* SeparatorBottom = 0x0002, SeparatorRight = 0x0004,*/ SeparatorLeft = 0x0008
@@ -201,18 +203,14 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Section::Separators)
 
 class KoToolBoxLayout : public QLayout
 {
+Q_OBJECT
 public:
     explicit KoToolBoxLayout(QWidget *parent)
         : QLayout(parent), m_orientation(Qt::Vertical), m_currentHeight(0)
     {
         setSpacing(6);
     }
-
-    ~KoToolBoxLayout()
-    {
-        qDeleteAll( m_sections );
-        m_sections.clear();
-    }
+    ~KoToolBoxLayout();
 
     QSize sizeHint() const
     {

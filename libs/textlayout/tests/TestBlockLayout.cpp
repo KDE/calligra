@@ -182,7 +182,6 @@ void TestBlockLayout::testBasicLineSpacing2()
 void TestBlockLayout::testFixedLineSpacing()
 {
     setupTest(QString("Line1")+QChar(0x2028)+"Line2"+QChar(0x2028)+"Line3");
-    QTextCursor cursor(m_doc);
 
     KoParagraphStyle style;
     style.setFontPointSize(12.0);
@@ -219,7 +218,6 @@ void TestBlockLayout::testFixedLineSpacing()
 void TestBlockLayout::testPercentageLineSpacing()
 {
     setupTest(QString("Line1")+QChar(0x2028)+"Line2"+QChar(0x2028)+"Line3");
-    QTextCursor cursor(m_doc);
 
     KoParagraphStyle style;
     style.setFontPointSize(12.0);
@@ -252,7 +250,6 @@ void TestBlockLayout::testPercentageLineSpacing()
 void TestBlockLayout::testAdvancedLineSpacing()
 {
     setupTest("Line1\nLine2\nLine3\nLine4\nLine5\nLine6\nLine7");
-    QTextCursor cursor(m_doc);
 
     KoParagraphStyle style;
     style.setFontPointSize(12.0);
@@ -1021,6 +1018,9 @@ void TestBlockLayout::testDropCaps()
     QTextBlock secondblock = block.next();
     style.applyStyle(block);
 
+    qInfo()<<"Font:"<<style.font()<<"Text"<<block.text();
+    qInfo()<<"Dropcaps off";
+
     m_layout->layout();
 
     // dummy version, caps is still false.
@@ -1029,6 +1029,7 @@ void TestBlockLayout::testDropCaps()
     QTextLine line = blockLayout->lineAt(0);
     QVERIFY(line.textLength() > 3);
 
+    qInfo()<<"Dropcaps on";
     style.setDropCaps(true);
     style.applyStyle(block);
     m_layout->layout();
@@ -1060,6 +1061,7 @@ void TestBlockLayout::testDropCaps()
     QVERIFY(line.position().x() > 149.0); // can't get a tight-boundingrect here.
     QVERIFY(line.position().x() < 154.0); // can't get a tight-boundingrect here.
 
+    qInfo()<<"Dropcaps off";
     style.setDropCaps(false); // remove it
     style.applyStyle(block);
     m_layout->layout();

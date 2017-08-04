@@ -71,7 +71,7 @@ Duration::Duration(const qint64 value, Duration::Unit unit) {
     else errorPlan<<"Unknown unit: "<<unit;
 }
 
-void Duration::add(const Duration &delta) {
+void Duration::add(KPlato::Duration delta) {
     m_ms += delta.m_ms;
 }
 
@@ -85,7 +85,7 @@ void Duration::add(qint64 delta) {
     m_ms = tmp;
 }
 
-void Duration::subtract(const Duration &delta) {
+void Duration::subtract(KPlato::Duration delta) {
     if (m_ms < delta.m_ms) {
         debugPlan<<"Underflow"<<delta.toString()<<" from"<<this->toString();
         m_ms = 0;
@@ -128,7 +128,7 @@ Duration Duration::operator*(const Duration value) const {
     return dur;
 }
 
-double Duration::operator/(const Duration &d) const {
+double Duration::operator/(KPlato::Duration d) const {
     if (d == zeroDuration) {
         debugPlan<<"Divide by zero:"<<this->toString();
         return 0.0;
@@ -157,11 +157,11 @@ QString Duration::toString(Format format) const {
             hours = ms / (1000 * 60 * 60);
             ms -= (qint64)hours * (1000 * 60 * 60);
             minutes = ms / (1000 * 60);
-            result = QString("%1h%2m").arg(hours).arg(minutes);
+            result = QStringLiteral("%1h%2m").arg(hours).arg(minutes);
             break;
         case Format_Day:
             days = m_ms / (1000 * 60 * 60 * 24.0);
-            result = QString("%1d").arg(QString::number(days, 'f', 4));
+            result = QStringLiteral("%1d").arg(QString::number(days, 'f', 4));
             break;
         case Format_DayTime:
             ms = m_ms;
@@ -230,7 +230,7 @@ Duration Duration::fromString(const QString &s, Format format, bool *ok) {
     Duration tmp;
     switch (format) {
         case Format_Hour: {
-            matcher.setPattern("^(\\d*)h(\\d*)m$" );
+            matcher.setPattern(QStringLiteral("^(\\d*)h(\\d*)m$") );
             int pos = matcher.indexIn(s);
             if (pos > -1) {
                 tmp.addHours(matcher.cap(1).toUInt());
@@ -240,7 +240,7 @@ Duration Duration::fromString(const QString &s, Format format, bool *ok) {
             break;
         }
         case Format_DayTime: {
-            matcher.setPattern("^(\\d*) (\\d*):(\\d*):(\\d*)\\.(\\d*)$" );
+            matcher.setPattern(QStringLiteral("^(\\d*) (\\d*):(\\d*):(\\d*)\\.(\\d*)$") );
             int pos = matcher.indexIn(s);
             if (pos > -1) {
                 tmp.addDays(matcher.cap(1).toUInt());
@@ -272,14 +272,14 @@ Duration Duration::fromString(const QString &s, Format format, bool *ok) {
 QStringList Duration::unitList( bool trans )
 {
     QStringList lst;
-    lst << ( trans ? i18nc( "Year. Note: Letter(s) only!", "Y" ) : "Y" )
-        << ( trans ? i18nc( "Month. Note: Letter(s) only!", "M" ) : "M" )
-        << ( trans ? i18nc( "Week. Note: Letter(s) only!", "w" ) : "w" )
-        << ( trans ? i18nc( "Day. Note: Letter(s) only!", "d" ) : "d" )
-        << ( trans ? i18nc( "Hour. Note: Letter(s) only!", "h" ) : "h" )
-        << ( trans ? i18nc( "Minute. Note: Letter(s) only!", "m" ) : "m" )
-        << ( trans ? i18nc( "Second. Note: Letter(s) only!", "s" ) : "s" )
-        << ( trans ? i18nc( "Millisecond. Note: Letter(s) only!", "ms" ) : "ms" );
+    lst << ( trans ? i18nc( "Year. Note: Letter(s) only!", "Y" ) : QStringLiteral("Y") )
+        << ( trans ? i18nc( "Month. Note: Letter(s) only!", "M" ) : QStringLiteral("M") )
+        << ( trans ? i18nc( "Week. Note: Letter(s) only!", "w" ) : QStringLiteral("w") )
+        << ( trans ? i18nc( "Day. Note: Letter(s) only!", "d" ) : QStringLiteral("d") )
+        << ( trans ? i18nc( "Hour. Note: Letter(s) only!", "h" ) : QStringLiteral("h") )
+        << ( trans ? i18nc( "Minute. Note: Letter(s) only!", "m" ) : QStringLiteral("m") )
+        << ( trans ? i18nc( "Second. Note: Letter(s) only!", "s" ) : QStringLiteral("s") )
+        << ( trans ? i18nc( "Millisecond. Note: Letter(s) only!", "ms" ) : QStringLiteral("ms") );
     return lst;
 }
 

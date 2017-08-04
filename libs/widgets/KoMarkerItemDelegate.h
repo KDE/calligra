@@ -27,6 +27,7 @@
 
 class KoMarkerItemDelegate : public QAbstractItemDelegate
 {
+Q_OBJECT
 public:
     explicit KoMarkerItemDelegate(KoMarkerData::MarkerPosition position, QObject *parent = 0);
     virtual ~KoMarkerItemDelegate();

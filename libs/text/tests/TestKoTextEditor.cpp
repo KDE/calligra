@@ -378,9 +378,7 @@ void TestKoTextEditor::checkSectionModelLevel(TestDocument *doc)
             sectionStack.push(handle);
         }
 
-        foreach(KoSectionEnd *secEnd, secEndings) {
-            sectionStack.pop();
-        }
+        sectionStack.resize(sectionStack.size() - secEndings.size());
 
         curBlock = curBlock.next();
     }

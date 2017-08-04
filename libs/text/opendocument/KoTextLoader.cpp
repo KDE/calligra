@@ -719,7 +719,6 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
     KoXmlElement e;
     QList<KoXmlElement> childElementsList;
 
-    QString generatedXmlString;
     KoXmlDocument doc;
     QXmlStreamReader reader;
 
@@ -1268,7 +1267,6 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
     QVector<QRect> spanStore; //temporary list to store spans until the entire table have been created
     KoXmlElement tblTag;
     int headingRowCounter = 0;
-    QList<KoXmlElement> rowTags;
 
     forEachElement(tblTag, tableElem) {
         if (! tblTag.isNull()) {

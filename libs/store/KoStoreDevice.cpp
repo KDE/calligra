@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Rob Buis <buis@kde.org>
-   Copyright (C) 2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2000 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,27 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOPATHSHAPEFACTORY_H
-#define KOPATHSHAPEFACTORY_H
+#include "KoStoreDevice.h"
 
-#include "KoShapeFactoryBase.h"
-
-#include "KoXmlReader.h"
-
-class KoShape;
-
-/// Factory for path shapes.
-class FLAKE_EXPORT KoPathShapeFactory : public KoShapeFactoryBase
+KoStoreDevice::~KoStoreDevice()
 {
-Q_OBJECT
-public:
-    /// constructor
-    explicit KoPathShapeFactory(const QStringList&);
-    ~KoPathShapeFactory() {}
-    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
-    bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const;
-    /// reimplemented
-    virtual void newDocumentResourceManager(KoDocumentResourceManager *manager) const;
-};
-
-#endif
+}

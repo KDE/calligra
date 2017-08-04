@@ -287,5 +287,21 @@ void KoSliderCombo::setValue(qreal value)
     emit valueChanged(value, true);
 }
 
+KoSliderComboContainer::~KoSliderComboContainer() {}
+
+void KoSliderComboContainer::mousePressEvent(QMouseEvent *e)
+{
+    QStyleOptionComboBox opt;
+    opt.init(m_parent);
+    opt.subControls = QStyle::SC_All;
+    opt.activeSubControls = QStyle::SC_ComboBoxArrow;
+    QStyle::SubControl sc = style()->hitTestComplexControl(QStyle::CC_ComboBox, &opt,
+                                                           m_parent->mapFromGlobal(e->globalPos()),
+                                                           m_parent);
+    if (sc == QStyle::SC_ComboBoxArrow)
+        setAttribute(Qt::WA_NoMouseReplay);
+    QMenu::mousePressEvent(e);
+}
+
 //have to include this because of Q_PRIVATE_SLOT
 #include <moc_KoSliderCombo.cpp>

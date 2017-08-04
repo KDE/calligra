@@ -165,13 +165,16 @@ bool KoOdfGradientBackground::loadStyle(KoOdfLoadingContext& context, const QSiz
         if (styleStack.hasProperty(KoXmlNS::draw, "opacity")) {
             QString opacity = styleStack.property(KoXmlNS::draw, "opacity");
             if (! opacity.isEmpty() && opacity.right(1) == "%") {
-                d->opacity = qMin(opacity.left(opacity.length() - 1).toDouble(), 100.0) / 100;
+                d->opacity = qMin(opacity.leftRef(opacity.length() - 1).toDouble(), 100.0) / 100;
             }
         }
 
         QString styleName = styleStack.property(KoXmlNS::draw, "fill-gradient-name");
-        KoXmlElement * e = context.stylesReader().drawStyles("gradient")[styleName];
-        return loadOdf(*e);
+        auto gradient = context.stylesReader().drawStyles("gradient");
+        auto it = gradient.constFind(styleName);
+        if (it != gradient.constEnd() && it.value()) {
+            return loadOdf(*it.value());
+        }
     }
 
     return false;

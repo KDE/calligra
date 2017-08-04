@@ -778,7 +778,7 @@ bool KUndo2QStack::push(KUndo2Command *cmd)
                     KUndo2Command* lastCmdInCurrent = curr;
 
                     if (!lastcmd->mergeCommandsVector().isEmpty()) {
-                        if (qAbs(lastcmd->mergeCommandsVector().last()->time().msecsTo(lastCmdInCurrent->endTime())) < int(m_timeT2 * 1000) && lastcmd != lastCmdInCurrent && lastcmd != curr) {
+                        if (qAbs(lastcmd->mergeCommandsVector().constLast()->time().msecsTo(lastCmdInCurrent->endTime())) < int(m_timeT2 * 1000) && lastcmd != lastCmdInCurrent && lastcmd != curr) {
                             if(lastcmd->timedMergeWith(curr)){
                                 if (m_command_list.contains(curr)) {
                                     m_command_list.removeOne(curr);

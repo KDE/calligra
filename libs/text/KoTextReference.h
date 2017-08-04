@@ -33,6 +33,7 @@ class KoTextLocator;
  */
 class KoTextReference : public KoVariable
 {
+Q_OBJECT
 public:
     /**
      * Constructor; please don't use directly as the KoInlineTextObjectManager will supply an action

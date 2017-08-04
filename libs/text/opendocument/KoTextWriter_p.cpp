@@ -398,8 +398,8 @@ void KoTextWriter::Private::saveInlineRdf(KoTextInlineRdf* rdf, TagInformation* 
     xmlReader.setContent(rdfXmlData.data(), true);
     KoXmlElement mainElement = xmlReader.documentElement();
     foreach (const Attribute &attributeNameNS, mainElement.attributeFullNames()) {
-        QString attributeName = QString("%1:%2").arg(KoXmlNS::nsURI2NS(attributeNameNS.first))
-                                                .arg(attributeNameNS.second);
+        QString attributeName = QString("%1:%2").arg(KoXmlNS::nsURI2NS(attributeNameNS.first),
+                                                     attributeNameNS.second);
         if (attributeName.startsWith(':'))
             attributeName.prepend("xml");
         tagInfos->addAttribute(attributeName, mainElement.attribute(attributeNameNS.second));
@@ -530,7 +530,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
             KoInlineObject *inlineObject = textObjectManager ? textObjectManager->inlineTextObject(charFormat) : 0;
             // If we are in an inline object
             if (currentFragment.length() == 1 && inlineObject
-                    && currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter) {
+                    && currentFragment.text().at(0).unicode() == QChar::ObjectReplacementCharacter) {
                 bool saveInlineObject = true;
 
                 if (KoTextMeta* z = dynamic_cast<KoTextMeta*>(inlineObject)) {

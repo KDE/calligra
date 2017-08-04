@@ -1574,7 +1574,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
                 tab.leaderWeight = KoCharacterStyle::ThickLineWeight;
             else if (width.endsWith('%')) {
                 tab.leaderWeight = KoCharacterStyle::PercentLineWeight;
-                tab.leaderWidth = width.mid(0, width.length() - 1).toDouble();
+                tab.leaderWidth = width.midRef(0, width.length() - 1).toDouble();
             } else if (width[width.length()-1].isNumber()) {
                 tab.leaderWeight = KoCharacterStyle::PercentLineWeight;
                 tab.leaderWidth = 100 * width.toDouble();

@@ -658,7 +658,7 @@ static void parseOdfLineWidth(const QString &width, KoCharacterStyle::LineWeight
         lineWeight = KoCharacterStyle::ThickLineWeight;
     else if (width.endsWith('%')) {
         lineWeight = KoCharacterStyle::PercentLineWeight;
-        lineWidth = width.mid(0, width.length() - 1).toDouble();
+        lineWidth = width.midRef(0, width.length() - 1).toDouble();
     } else if (width[width.length()-1].isNumber()) {
         lineWeight = KoCharacterStyle::LengthLineWeight;
         lineWidth = width.toDouble();
@@ -1506,7 +1506,7 @@ void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         const QString fontSize(styleStack.property(KoXmlNS::fo, "font-size"));
         if (!fontSize.isEmpty()) {
             if (fontSize.endsWith('%')) {
-                setPercentageFontSize(fontSize.left(fontSize.length() - 1).toDouble());
+                setPercentageFontSize(fontSize.leftRef(fontSize.length() - 1).toDouble());
             } else {
                 setFontPointSize(KoUnit::parseValue(fontSize));
             }
@@ -1693,7 +1693,7 @@ void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         else {
             QRegExp re("(-?[\\d.]+)%.*");
             if (re.exactMatch(textPosition)) {
-                int percent = re.capturedTexts()[1].toInt();
+                int percent = re.capturedTexts().at(1).toInt();
                 if (percent > 0)
                     setVerticalAlignment(QTextCharFormat::AlignSuperScript);
                 else if (percent < 0)

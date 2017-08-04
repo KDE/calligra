@@ -31,6 +31,7 @@ class KoTextSharedSavingData;
 
 class KOTEXT_EXPORT KoTextTableTemplate : public QObject
 {
+Q_OBJECT
 public:
     enum Property {
         StyleId = 0,

@@ -570,7 +570,7 @@ void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length, const Q
     }
     QHash<int, KoTextRange *> ranges = textRangeManager()->textRangesChangingWithin(effectiveDocument, pos, pos+length, pos, pos+length);
 
-    foreach(KoTextRange *range, ranges.values()) {
+    foreach(KoTextRange *range, ranges) {
         KoAnchorTextRange *anchorRange = dynamic_cast<KoAnchorTextRange *>(range);
         if (anchorRange) {
             // We need some special treatment for anchors as they need to position their object during

@@ -1,5 +1,7 @@
-/* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+/*
+ * Copyright (c) 2005-2009 Thomas Zander <zander@kde.org>
+ * Copyright (c) 2009 Peter Simonsson <peter.simonsson@gmail.com>
+ * Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,20 +18,10 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOLINESTYLEITEMDELEGATE_H
-#define KOLINESTYLEITEMDELEGATE_H
+#include "KoToolBoxLayout_p.h"
 
-#include <QAbstractItemDelegate>
-
-/// The line style item delegate for rendering the styles
-class KoLineStyleItemDelegate : public QAbstractItemDelegate
+KoToolBoxLayout::~KoToolBoxLayout()
 {
-Q_OBJECT
-public:
-    explicit KoLineStyleItemDelegate(QObject *parent = 0);
-    ~KoLineStyleItemDelegate() {}
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    QSize sizeHint (const QStyleOptionViewItem &option, const QModelIndex &index) const;
-};
-
-#endif
+    qDeleteAll( m_sections );
+    m_sections.clear();
+}

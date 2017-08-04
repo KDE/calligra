@@ -59,7 +59,6 @@ static QString fontProperties(const QTextCharFormat &textFormat)
     QStringList fontProps;
     // add only font properties here
     foreach(int id, properties.keys()) {
-        QString key, value;
         switch (id) {
         case QTextFormat::FontFamily:
             fontProps.append(properties[id].toString());

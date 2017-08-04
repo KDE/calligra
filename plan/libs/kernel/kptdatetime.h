@@ -46,18 +46,16 @@ public:
     /// Create a DateTime.
     DateTime();
     /// Constructs a datetime with the given date, a valid time(00:00:00.000), and sets the timeSpec() to Qt::LocalTime.
-    explicit DateTime( const QDate & );
+    explicit DateTime( QDate  );
     ///Constructs a datetime with the given date and time, and sets the timeSpec() to Qt::LocalTime.
     /// If date is valid and time is not, the time will be set to midnight.
-    DateTime( const QDate &, const QTime &);
+    DateTime( QDate , QTime );
     ///Constructs a datetime with the given date and time in the given timezone.
     /// If @p timeZone is not valid, local time is used.
     /// If @p date is valid and @p time is not, the time will be set to midnight.
-    DateTime( const QDate &, const QTime &, const QTimeZone &timeZone);
+    DateTime( QDate , QTime , const QTimeZone &timeZone);
     /// Constructs a copy of the @p other QDateTime
     DateTime( const QDateTime &other );
-    /// Constructs a copy of the @p other DateTime.
-    DateTime( const DateTime &other );
     /// Constructs a datetime from @p dt, reinterpreting it to be from timezone @p timeZone.
     /// dt must be of timespec LocalTime.
     DateTime( const QDateTime &dt, const QTimeZone &timeZone );

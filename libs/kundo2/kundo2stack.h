@@ -245,6 +245,7 @@ private:
 
 class KUNDO2_EXPORT KUndo2Stack : public KUndo2QStack
 {
+Q_OBJECT
 public:
     explicit KUndo2Stack(QObject *parent = 0);
 

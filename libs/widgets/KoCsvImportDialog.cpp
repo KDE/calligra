@@ -39,6 +39,7 @@
 
 class KoCsvImportWidget : public QWidget, public Ui::KoCsvImportWidget
 {
+Q_OBJECT
 public:
     explicit KoCsvImportWidget(QWidget* parent) : QWidget(parent) { setupUi(this); }
 };
@@ -281,7 +282,7 @@ void KoCsvImportDialog::setDelimiter(const QString& delimit)
 void KoCsvImportDialog::Private::loadSettings()
 {
     KConfigGroup configGroup =  KSharedConfig::openConfig()->group("CSVDialog Settings");
-    textQuote = configGroup.readEntry("textQuote", "\"")[0];
+    textQuote = configGroup.readEntry("textQuote", "\"").at(0);
     delimiter = configGroup.readEntry("delimiter", ",");
     ignoreDuplicates = configGroup.readEntry("ignoreDups", false);
     const QString codecText = configGroup.readEntry("codec", "");
@@ -782,3 +783,4 @@ void KoCsvImportDialog::encodingChanged(const QString &)
         d->fillTable();
     }
 }
+#include "KoCsvImportDialog.moc"

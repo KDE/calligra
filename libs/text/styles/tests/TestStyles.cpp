@@ -109,8 +109,8 @@ void TestStyles::testTabsStorage()
 
     paragStyle.setTabPositions(tabs);
     QCOMPARE(paragStyle.tabPositions().count(), 2);
-    QCOMPARE(paragStyle.tabPositions()[0], tab);
-    QCOMPARE(paragStyle.tabPositions()[1], tab2);
+    QCOMPARE(paragStyle.tabPositions().at(0), tab);
+    QCOMPARE(paragStyle.tabPositions().at(1), tab2);
 }
 
 void TestStyles::testApplyParagraphStyle()

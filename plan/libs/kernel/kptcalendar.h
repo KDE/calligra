@@ -96,9 +96,9 @@ public:
         return limitedTo( interval.first, interval.second );
     }
     QString toString() const {
-        return QString( "%1 to %2" )
-                    .arg( first.isValid()?first.toString():"''" )
-                    .arg( second.isValid()?second.toString():"''" );
+        return QStringLiteral( "%1 to %2" )
+                    .arg( first.isValid()?first.toString():QStringLiteral("''") )
+                    .arg( second.isValid()?second.toString():QStringLiteral("''") );
     }
 };
 
@@ -110,12 +110,12 @@ public:
     TimeInterval()
     : QPair<QTime, int>( QTime(), -1 )
     {}
-    explicit TimeInterval( const QPair<QTime, int> &value )
+    explicit TimeInterval( QPair<QTime, int> value )
     : QPair<QTime, int>( value )
     {
         init();
     }
-    TimeInterval( const QTime &start, int length )
+    TimeInterval( QTime start, int length )
     : QPair<QTime, int>( start, length )
     {
         init();
@@ -178,7 +178,7 @@ public:
     
     CalendarDay();
     explicit CalendarDay(int state);
-    explicit CalendarDay(const QDate& date, int state=Undefined);
+    explicit CalendarDay(QDate date, int state=Undefined);
     explicit CalendarDay(CalendarDay *day);
     ~CalendarDay();
 
@@ -186,7 +186,7 @@ public:
     void save(QDomElement &element) const;
 
     QList<TimeInterval*> timeIntervals() const { return m_timeIntervals; }
-    void addInterval( const QTime &t1, int length ) { addInterval( new TimeInterval( t1, length ) ); }
+    void addInterval( QTime t1, int length ) { addInterval( new TimeInterval( t1, length ) ); }
     /**
      * Caller needs to ensure that intervals are not overlapping.
      */
@@ -205,7 +205,7 @@ public:
     DateTime end() const;
     
     QDate date() const { return m_date; }
-    void setDate(const QDate& date) { m_date = date; }
+    void setDate(QDate date) { m_date = date; }
     int state() const { return m_state; }
     void setState(int state) { m_state = state; }
 
@@ -219,26 +219,26 @@ public:
      * Returns the amount of 'worktime' that can be done on
      * this day between the times start and end.
      */
-    Duration effort(const QTime &start, int length, const QTimeZone &timeZone, Schedule *sch=0);
+    Duration effort(QTime start, int length, const QTimeZone &timeZone, Schedule *sch=0);
     /**
      * Returns the amount of 'worktime' that can be done on
      * this day between the times start and end.
      */
-    Duration effort(const QDate &date, const QTime &start, int length, const QTimeZone &timeZone, Schedule *sch=0);
+    Duration effort(QDate date, QTime start, int length, const QTimeZone &timeZone, Schedule *sch=0);
 
     /**
      * Returns the actual 'work interval' for the interval start to end.
      * If no 'work interval' exists, returns the interval start, end.
      * Use @ref hasInterval() to check if a 'work interval' exists.
      */
-    TimeInterval interval(const QTime &start, int length, const QTimeZone &timeZone,  Schedule *sch=0) const;
+    TimeInterval interval(QTime start, int length, const QTimeZone &timeZone,  Schedule *sch=0) const;
     
     /**
      * Returns the actual 'work interval' for the interval start to end.
      * If no 'work interval' exists, returns the interval start, end.
      * Use @ref hasInterval() to check if a 'work interval' exists.
      */
-    TimeInterval interval(const QDate &date, const QTime &start, int length, const QTimeZone &timeZone, Schedule *sch=0) const;
+    TimeInterval interval(QDate date, QTime start, int length, const QTimeZone &timeZone, Schedule *sch=0) const;
     
     bool hasInterval() const;
 
@@ -246,7 +246,7 @@ public:
      * Returns true if at least a part of a 'work interval' exists 
      * for the interval start to end.
      */
-    bool hasInterval(const QTime &start, int length, const QTimeZone &timeZone, Schedule *sch=0) const;
+    bool hasInterval(QTime start, int length, const QTimeZone &timeZone, Schedule *sch=0) const;
     
     /**
      * Returns true if at least a part of a 'work interval' exists 
@@ -254,7 +254,7 @@ public:
      * Assumes this day is date. (Used by weekday hasInterval().)
      * If @p sch is not 0, the schedule is checked for availability.
      */
-    bool hasInterval(const QDate &date, const QTime &start, int length, const QTimeZone &timeZone, Schedule *sch=0) const;
+    bool hasInterval(QDate date, QTime start, int length, const QTimeZone &timeZone, Schedule *sch=0) const;
     
     Duration duration() const;
     
@@ -292,7 +292,7 @@ public:
      * @param day The weekday number, must be between 1 (monday) and 7 (sunday)
      */
     CalendarDay *weekday(int day) const;
-    CalendarDay *weekday(const QDate &date) const { return weekday(date.dayOfWeek()); }
+    CalendarDay *weekday(QDate date) const { return weekday(date.dayOfWeek()); }
 
     static int dayOfWeek( const QString &name );
 
@@ -302,7 +302,7 @@ public:
     
 //    void setWeekday(IntMap::iterator it, int state) { m_weekdays.at(it.key())->setState(state); }
 
-    int state(const QDate &date) const;
+    int state(QDate date) const;
     int state(int weekday) const;
     void setState(int weekday, int state);
     
@@ -313,7 +313,7 @@ public:
     bool operator==(const CalendarWeekdays *weekdays) const;
     bool operator!=(const CalendarWeekdays *weekdays) const;
 
-    Duration effort(const QDate &date, const QTime &start, int length, const QTimeZone &timeZone, Schedule *sch=0);
+    Duration effort(QDate date, QTime start, int length, const QTimeZone &timeZone, Schedule *sch=0);
     
     /**
      * Returns the actual 'work interval' on the weekday defined by date
@@ -322,12 +322,12 @@ public:
      * Use @ref hasInterval() to check if a 'work interval' exists.
      * If @p sch is not 0, the schedule is checked for availability.
      */
-    TimeInterval interval(const QDate &date, const QTime &start, int length, const QTimeZone &timeZone, Schedule *sch) const;
+    TimeInterval interval(QDate date, QTime start, int length, const QTimeZone &timeZone, Schedule *sch) const;
     /**
      * Returns true if at least a part of a 'work interval' exists 
      * on the weekday defined by date for the interval start to end.
      */
-    bool hasInterval(const QDate &date, const QTime &start, int length, const QTimeZone &timeZone, Schedule *sch) const;
+    bool hasInterval(QDate date, QTime start, int length, const QTimeZone &timeZone, Schedule *sch) const;
     bool hasInterval() const;
 
     Duration duration() const;
@@ -410,7 +410,7 @@ public:
     bool load( KoXmlElement &element, XMLLoaderObject &status );
     void save(QDomElement &element) const;
 
-    int state(const QDate &date) const;
+    int state(QDate date) const;
     void setState( CalendarDay *day, CalendarDay::State state );
     void addWorkInterval( CalendarDay *day, TimeInterval *ti );
     void takeWorkInterval( CalendarDay *day, TimeInterval *ti );
@@ -420,7 +420,7 @@ public:
      * Find the definition for the day @p date.
      * If @p skipUndefined = true the day is NOT returned if it has state Undefined.
      */
-    CalendarDay *findDay(const QDate &date, bool skipUndefined=false) const;
+    CalendarDay *findDay(QDate date, bool skipUndefined=false) const;
     void addDay(CalendarDay *day);
     CalendarDay *takeDay(CalendarDay *day);
     const QList<CalendarDay*> &days() const { return m_days; }
@@ -429,8 +429,8 @@ public:
     int indexOf( const CalendarDay *day ) const { return m_days.indexOf( const_cast<CalendarDay*>( day ) ); }
     CalendarDay *dayAt( int index ) { return m_days.value( index ); }
     int numDays() const { return m_days.count(); }
-    void setDate( CalendarDay *day, const QDate &date );
-    CalendarDay *day( const QDate &date ) const;
+    void setDate( CalendarDay *day, QDate date );
+    CalendarDay *day( QDate date ) const;
     
     IntMap weekdayStateMap() const;
     
@@ -516,7 +516,7 @@ public:
     void setShared(bool on);
 
 #ifdef HAVE_KHOLIDAYS
-    bool isHoliday(const QDate &date) const;
+    bool isHoliday(QDate date) const;
     KHolidays::HolidayRegion *holidayRegion() const;
     void setHolidayRegion(const QString &code);
     QString holidayRegionCode() const;
@@ -553,7 +553,7 @@ protected:
      * The date and times are in timespecification @p spec.
      * If @p sch is not 0, the schedule is checked for availability.
      */
-    Duration effort(const QDate &date, const QTime &start, int length, Schedule *sch=0) const;
+    Duration effort(QDate date, QTime start, int length, Schedule *sch=0) const;
     /**
      * Returns the amount of 'worktime' that can be done in the
      * interval from @p start to @p end
@@ -568,7 +568,7 @@ protected:
      * The date and times are in timespecification spec.
      * If @p sch is not 0, the schedule is checked for availability.
      */
-    TimeInterval firstInterval(const QDate &date, const QTime &start, int length, Schedule *sch=0) const;
+    TimeInterval firstInterval(QDate date, QTime start, int length, Schedule *sch=0) const;
     /**
      * Returns the first 'work interval' for the interval
      * starting at @p start and ending at @p end.
@@ -581,7 +581,7 @@ protected:
      * for the interval on date, starting at @p start and ending at @p start + @p length.
      * If @p sch is not 0, the schedule is checked for availability.
      */
-    bool hasInterval(const QDate &date, const QTime &start, int length, Schedule *sch=0) const;
+    bool hasInterval(QDate date, QTime start, int length, Schedule *sch=0) const;
 
     /**
      * Returns the work intervals in the interval from @p start to @p end

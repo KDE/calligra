@@ -214,7 +214,7 @@ public:
             block = block.document()->findBlock(start);
 
         QList<QTextCursor> cursors;
-        QList<QTextCharFormat> formats;
+        QVector<QTextCharFormat> formats;
         // now loop over all blocks that the selection contains and alter the text fragments where applicable.
         while (block.isValid() && block.position() < end) {
             QTextBlock::iterator iter = block.begin();
@@ -253,7 +253,7 @@ public:
             }
             block = block.next();
         }
-        QList<QTextCharFormat>::Iterator iter = formats.begin();
+        QVector<QTextCharFormat>::Iterator iter = formats.begin();
         foreach(QTextCursor cursor, cursors) {
             cursor.setCharFormat(*iter);
             ++iter;

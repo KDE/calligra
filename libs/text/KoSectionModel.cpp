@@ -134,7 +134,7 @@ QModelIndex KoSectionModel::index(int row, int column, const QModelIndex &parent
     }
 
     KoSection *parent = static_cast<KoSection *>(parentIdx.internalPointer());
-    return createIndex(row, column, parent->children()[row]);
+    return createIndex(row, column, parent->children().at(row));
 }
 
 QModelIndex KoSectionModel::parent(const QModelIndex &child) const

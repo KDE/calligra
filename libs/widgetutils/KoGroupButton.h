@@ -35,8 +35,6 @@
 class KOWIDGETUTILS_EXPORT KoGroupButton : public QToolButton
 {
     Q_OBJECT
-    Q_ENUMS( GroupPosition )
-    Q_PROPERTY( GroupPosition groupPosition READ groupPosition WRITE setGroupPosition )
 public:
     /**
      * Position of the button within the button group what affects the appearance.
@@ -47,6 +45,10 @@ public:
         GroupRight,  //!< The button is at the right of the group, so it would have rounded the right part
         GroupCenter  //!< The button is on the center of the group, so it would have separators on both sides
     };
+private:
+    Q_ENUM( GroupPosition )
+    Q_PROPERTY( GroupPosition groupPosition READ groupPosition WRITE setGroupPosition )
+public:
 
     explicit KoGroupButton(GroupPosition position, QWidget* parent = 0);
 

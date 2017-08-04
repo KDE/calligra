@@ -52,7 +52,7 @@ public:
     static OdfTextTrackStyles *instance(KoStyleManager *manager);
 
 private:
-    static QMap<QObject *, OdfTextTrackStyles *> instances;
+    static QHash<QObject *, OdfTextTrackStyles *> instances;
 
     explicit OdfTextTrackStyles(KoStyleManager *manager);
 

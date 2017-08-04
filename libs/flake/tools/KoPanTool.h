@@ -33,6 +33,7 @@ class KoCanvasController;
  */
 class KoPanTool : public KoToolBase
 {
+Q_OBJECT
 public:
     /**
      * Constructor.

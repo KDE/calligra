@@ -52,10 +52,10 @@ void TestKoColor::testForModel(QString model)
             KoColor kcu = KoColor::fromXML(elt.firstChildElement(), depthId.id(), QHash<QString, QString>());
             QVERIFY2(*(kc.colorSpace()) == *(kcu.colorSpace()),
                      QString("Not identical color space (colorModelId = %1 depthId = %2) != (colorModelId = %3 depthId = %4) ")
-                     .arg(kc.colorSpace()->colorModelId().id())
-                     .arg(kc.colorSpace()->colorDepthId().id())
-                     .arg(kcu.colorSpace()->colorModelId().id())
-                     .arg(kcu.colorSpace()->colorDepthId().id()).toLatin1());
+                     .arg(kc.colorSpace()->colorModelId().id(),
+                          kc.colorSpace()->colorDepthId().id(),
+                          kcu.colorSpace()->colorModelId().id(),
+                          kcu.colorSpace()->colorDepthId().id()).toLatin1());
             QVERIFY(cs->difference(kcu.data(), kc.data()) <= 1);
         }
     }

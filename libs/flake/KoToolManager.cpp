@@ -888,7 +888,7 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
 void KoToolManager::addController(KoCanvasController *controller)
 {
     Q_ASSERT(controller);
-    if (d->canvasses.keys().contains(controller))
+    if (d->canvasses.contains(controller))
         return;
     d->setup();
     d->attachCanvas(controller);
@@ -915,12 +915,12 @@ void KoToolManager::attemptCanvasControllerRemoval(QObject* controller)
 
 void KoToolManager::updateShapeControllerBase(KoShapeBasedDocumentBase *shapeController, KoCanvasController *canvasController)
 {
-    if (!d->canvasses.keys().contains(canvasController))
+    if (!d->canvasses.contains(canvasController))
         return;
 
     QList<CanvasData *> canvasses = d->canvasses[canvasController];
     foreach(CanvasData *canvas, canvasses) {
-        foreach(KoToolBase *tool, canvas->allTools.values()) {
+        foreach(KoToolBase *tool, canvas->allTools) {
             tool->updateShapeController(shapeController);
         }
     }

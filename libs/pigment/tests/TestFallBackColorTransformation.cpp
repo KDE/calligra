@@ -44,7 +44,7 @@ void TestFallBackColorTransformation::parametersForward()
                                                                               KoColorSpaceRegistry::instance()->rgb16(),
                                                                               dummy);
   QCOMPARE(fallback->parameters().size(), 1);
-  QCOMPARE(fallback->parameters()[0], QString("test"));
+  QCOMPARE(fallback->parameters().at(0), QString("test"));
   QCOMPARE(fallback->parameterId("test"), 1);
   QCOMPARE(fallback->parameterId("other"), 0);
   fallback->setParameter(0, -1);

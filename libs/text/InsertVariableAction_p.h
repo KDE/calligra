@@ -29,6 +29,7 @@ struct KoInlineObjectTemplate;
 /// \internal
 class InsertVariableAction : public InsertInlineObjectActionBase
 {
+Q_OBJECT
 public:
     InsertVariableAction(KoCanvasBase *base, KoInlineObjectFactoryBase *factory, const KoInlineObjectTemplate &templ);
 

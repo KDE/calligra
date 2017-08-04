@@ -166,7 +166,7 @@ public:
         if (scaleOnly && dynamic_cast<const KoColorSpaceAbstract*>(dstColorSpace)) {
             typedef typename _CSTrait::channels_type channels_type;
             
-            switch(dstColorSpace->channels()[0]->channelValueType())
+            switch(dstColorSpace->channels().at(0)->channelValueType())
             {
             case KoChannelInfo::UINT8:
                 scalePixels<_CSTrait::pixelSize, 1, channels_type, quint8>(src, dst, numPixels);

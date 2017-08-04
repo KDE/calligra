@@ -30,12 +30,12 @@ DateTime::DateTime()
 {
 }
 
-DateTime::DateTime( const QDate &date )
+DateTime::DateTime( QDate date )
     : QDateTime( date )
 {
 }
 
-DateTime::DateTime( const QDate &date, const QTime &time)
+DateTime::DateTime( QDate date, QTime time)
     : QDateTime( date, time, Qt::LocalTime)
 {
     if (!isValid() && this->date().isValid() && this->time().isValid()) {
@@ -46,7 +46,7 @@ DateTime::DateTime( const QDate &date, const QTime &time)
     }
 }
 
-DateTime::DateTime(const QDate &date, const QTime &time, const QTimeZone &timeZone)
+DateTime::DateTime(QDate date, QTime time, const QTimeZone &timeZone)
     : QDateTime( timeZone.isValid() ? QDateTime(date, time, timeZone) : QDateTime(date, time, Qt::LocalTime) )
 {
     // If we ended inside DST, DateTime is not valid, but date(), time() and timeSpec() should be valid
@@ -59,11 +59,6 @@ DateTime::DateTime(const QDate &date, const QTime &time, const QTimeZone &timeZo
 }
 
 DateTime::DateTime( const QDateTime& other )
-    : QDateTime( other )
-{
-}
-
-DateTime::DateTime( const DateTime& other )
     : QDateTime( other )
 {
 }

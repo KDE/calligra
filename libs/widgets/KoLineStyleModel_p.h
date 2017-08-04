@@ -26,6 +26,7 @@
 /// The line style model managing the style data
 class KoLineStyleModel : public QAbstractListModel
 {
+Q_OBJECT
 public:
     explicit KoLineStyleModel(QObject *parent = 0);
     virtual ~KoLineStyleModel() {}

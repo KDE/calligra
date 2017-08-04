@@ -77,10 +77,10 @@ void KoShapeReorderCommand::undo()
     }
 }
 
-static void prepare(KoShape *s, QMap<KoShape*, QList<KoShape*> > &newOrder, KoShapeManager *manager, KoShapeReorderCommand::MoveShapeType move)
+static void prepare(KoShape *s, QHash<KoShape*, QList<KoShape*> > &newOrder, KoShapeManager *manager, KoShapeReorderCommand::MoveShapeType move)
 {
     KoShapeContainer *parent = s->parent();
-    QMap<KoShape*, QList<KoShape*> >::iterator it(newOrder.find(parent));
+    QHash<KoShape*, QList<KoShape*> >::iterator it(newOrder.find(parent));
     if (it == newOrder.end()) {
         QList<KoShape*> children;
         if (parent != 0) {
@@ -127,7 +127,7 @@ KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*
 {
     QList<int> newIndexes;
     QList<KoShape*> changedShapes;
-    QMap<KoShape*, QList<KoShape*> > newOrder;
+    QHash<KoShape*, QList<KoShape*> > newOrder;
     QList<KoShape*> sortedShapes(shapes);
     qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
     if (move == BringToFront || move == LowerShape) {
@@ -141,7 +141,7 @@ KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*
         }
     }
 
-    QMap<KoShape*, QList<KoShape*> >::ConstIterator newIt(newOrder.constBegin());
+    QHash<KoShape*, QList<KoShape*> >::ConstIterator newIt(newOrder.constBegin());
     for (; newIt!= newOrder.constEnd(); ++newIt) {
         QList<KoShape*> order(newIt.value());
         order.removeAll(0);

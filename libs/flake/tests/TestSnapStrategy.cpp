@@ -202,7 +202,6 @@ void TestSnapStrategy::testIntersectionSnap()
 
     qreal paramSnapDistanceTwo = 8;
     KoPathShape pathShapeOne;
-    QVector<QPointF> firstSnapPointList;
 
     pathShapeOne.moveTo(QPointF(1,2));
     pathShapeOne.lineTo(QPointF(2,2));
@@ -215,7 +214,6 @@ void TestSnapStrategy::testIntersectionSnap()
     ShapeManager->addShape(&pathShapeOne);
 
     KoPathShape pathShapeTwo;
-    QVector<QPointF> secondSnapPointList;
 
     pathShapeTwo.moveTo(QPointF(1,1));
     pathShapeTwo.lineTo(QPointF(2,2));
@@ -228,7 +226,6 @@ void TestSnapStrategy::testIntersectionSnap()
     ShapeManager->addShape(&pathShapeTwo);
 
     KoPathShape pathShapeThree;
-    QVector<QPointF> thirdSnapPointList;
     pathShapeThree.moveTo(QPointF(5,5));
     pathShapeThree.lineTo(QPointF(6,6));
     pathShapeThree.lineTo(QPointF(7,7));
@@ -291,7 +288,6 @@ void TestSnapStrategy::testBoundingBoxSnap()
 
     qreal paramSnapDistanceTwo = 8;
     KoPathShape pathShapeOne;
-    QVector<QPointF> firstSnapPointList;
 
     pathShapeOne.moveTo(QPointF(1,2));
     pathShapeOne.lineTo(QPointF(2,2));
@@ -302,7 +298,6 @@ void TestSnapStrategy::testBoundingBoxSnap()
     ShapeManager->addShape(&pathShapeOne);
 
     KoPathShape pathShapeTwo;
-    QVector<QPointF> secondSnapPointList;
 
     pathShapeTwo.moveTo(QPointF(1,1));
     pathShapeTwo.lineTo(QPointF(2,2));
@@ -313,7 +308,6 @@ void TestSnapStrategy::testBoundingBoxSnap()
     ShapeManager->addShape(&pathShapeTwo);
 
     KoPathShape pathShapeThree;
-    QVector<QPointF> thirdSnapPointList;
     pathShapeThree.moveTo(QPointF(5,5));
     pathShapeThree.lineTo(QPointF(6,6));
     pathShapeThree.lineTo(QPointF(7,7));

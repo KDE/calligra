@@ -27,6 +27,7 @@ class KoMarker;
 
 class KoMarkerModel : public QAbstractListModel
 {
+Q_OBJECT
 public:
     KoMarkerModel(const QList<KoMarker*> markers, KoMarkerData::MarkerPosition position, QObject *parent = 0);
     virtual ~KoMarkerModel();

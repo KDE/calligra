@@ -25,7 +25,7 @@
 
 class KoIconToolTip: public KoItemToolTip
 {
-
+Q_OBJECT
     public:
         KoIconToolTip() {}
         virtual ~KoIconToolTip() {}

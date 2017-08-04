@@ -63,7 +63,7 @@ protected:
 
 
 class TestJob : public QThread {
-
+Q_OBJECT
 public:
 
     TestJob( QPointer<KoUpdater> updater, int steps = 10 )
@@ -286,3 +286,4 @@ void KoProgressUpdaterTest::jobDone(ThreadWeaver::JobPointer job)
 }
 
 QTEST_GUILESS_MAIN(KoProgressUpdaterTest)
+#include "KoProgressUpdater_test.moc"

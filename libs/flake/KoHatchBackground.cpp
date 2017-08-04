@@ -179,7 +179,7 @@ bool KoHatchBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF &sh
         QString style = styleStack.property(KoXmlNS::draw, "fill-hatch-name");
         debugFlake << " hatch style is  :" << style;
 
-        KoXmlElement* draw = context.stylesReader().drawStyles("hatch")[style];
+        KoXmlElement* draw = context.stylesReader().drawStyles("hatch").value(style);
         if (draw) {
             debugFlake << "Hatch style found for:" << style;
 

@@ -462,7 +462,7 @@ int KoChangeTracker::getLoadedChangeId(const QString &odfId) const
 int KoChangeTracker::getDeletedChanges(QVector<KoChangeTrackerElement *>& deleteVector) const
 {
     int numAppendedItems = 0;
-    foreach (KoChangeTrackerElement *element, d->changes.values()) {
+    foreach (KoChangeTrackerElement *element, d->changes) {
         if(element->getChangeType() == KoGenChange::DeleteChange && !element->acceptedRejected()) {
           deleteVector << element;
           numAppendedItems++;

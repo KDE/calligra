@@ -180,7 +180,6 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
         return;
 
     QPointF newPosition = child->position() + move/* + relation.anchor->offset()*/;
-    const QRectF parentShapeRect(QPointF(0, 0), child->parent()->size());
 //warnTextLayout <<"proposeMove:" /*<< move <<" |"*/ << newPosition <<" |" << parentShapeRect;
 
     QTextLayout *layout = 0;
