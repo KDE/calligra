@@ -86,7 +86,6 @@ bool RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft
 
     // Too little width because of  wrapping is handled in the remainder of this method
     line.setLineWidth(maxLineWidth);
-    qInfo()<<"line:"<<line.lineNumber()<<"start:"<<line.textStart()<<"lenght:"<<line.textLength();
     const qreal maxLineHeight = line.height();
     const qreal maxNaturalTextWidth = line.naturalTextWidth();
     QRectF lineRect(position, QSizeF(maxLineWidth, maxLineHeight));
