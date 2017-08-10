@@ -81,7 +81,15 @@ KoTextBlockData::~KoTextBlockData()
 
 void KoTextBlockData::appendMarkup(MarkupType type, int firstChar, int lastChar)
 {
-    Q_ASSERT(d->markupRangesMap[type].isEmpty() || d->markupRangesMap[type].last().lastChar < firstChar);
+    if (type == KoTextBlockData::Grammar) {
+        Q_ASSERT(d->markupRangesMap[type].isEmpty() || d->markupRangesMap[type].last().lastChar < firstChar);
+    } else if (!d->markupRangesMap[type].isEmpty() && d->markupRangesMap[type].last().lastChar >= firstChar) {
+        // Character positions from spellchecker are not in sync with document.
+        // I have only seen this in connection with dropcaps, so could be caused by
+        // large amount to spellcheck combined with large changes to the document.
+        // Anyway, returning here just means markup will be incorrect/missing until next spellcheck is run.
+        return;
+    }
 
     MarkupRange range;
     range.firstChar = firstChar;

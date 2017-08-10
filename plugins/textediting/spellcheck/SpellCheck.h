@@ -86,7 +86,7 @@ private Q_SLOTS:
     void configureSpellCheck();
     void runQueue();
     void setBackgroundSpellChecking(bool b);
-    void documentChanged(int from, int min, int plus);
+    void documentChanged(int from, int charsRemoved, int charsAdded);
 
 private:
     Sonnet::Speller m_speller;
@@ -111,7 +111,8 @@ private:
     QTextStream stream;
     SpellCheckMenu *m_spellCheckMenu;
     SpellSections m_activeSection; // the section we are currently doing a run on;
-    bool m_simpleEdit; //set when user is doing a simple edit, meaning we should ignore documentCanged
+    bool m_simpleEdit; //set when user is doing a simple edit, meaning we should not start spellchecking
+    int m_cursorPosition; // simple edit cursor position
 };
 
 #endif

@@ -52,6 +52,7 @@ SpellCheck::SpellCheck()
     , m_spellCheckMenu(0)
     , m_activeSection(0, 0, 0)
     , m_simpleEdit(false)
+    , m_cursorPosition(0)
 {
     /* setup actions for this plugin */
     QAction *configureAction = new QAction(i18n("Configure &Spell Checking..."), this);
@@ -102,8 +103,7 @@ void SpellCheck::startingSimpleEdit(QTextDocument *document, int cursorPosition)
 {
     m_simpleEdit = true;
     setDocument(document);
-    Q_UNUSED(document);
-    Q_UNUSED(cursorPosition);
+    m_cursorPosition = cursorPosition;
 }
 
 void SpellCheck::checkSection(QTextDocument *document, int startPosition, int endPosition)
@@ -241,8 +241,9 @@ static_cast<MyThread*>(QThread::currentThread())->mySleep(400);
     blockData.appendMarkup(KoTextBlockData::Misspell, startPosition - block.position(), startPosition - block.position() + word.trimmed().length());
 }
 
-void SpellCheck::documentChanged(int from, int min, int plus)
+void SpellCheck::documentChanged(int from, int charsRemoved, int charsAdded)
 {
+    Q_UNUSED(charsRemoved);
     QTextDocument *document = qobject_cast<QTextDocument*>(sender());
     if (document == 0)
         return;
@@ -255,9 +256,13 @@ void SpellCheck::documentChanged(int from, int min, int plus)
         KoTextBlockData blockData(block);
         if (m_enableSpellCheck) {
             blockData.setMarkupsLayoutValidity(KoTextBlockData::Misspell, false);
-            if (m_simpleEdit) {
-                // if it's a simple edit we will wait until finishedWord
-                blockData.rebaseMarkups(KoTextBlockData::Misspell, from, plus - min);
+            // We cannot safely handle combined remove/add in case it spans words.
+            // This should probably never be defined as a simple edit anyway,
+            // but atm lines with dropcaps trigger this behaviour. See KoTextLayoutArea.
+            if (m_simpleEdit && (charsRemoved == 0 || charsAdded == 0)) {
+                // If it's a simple edit we will wait until finishedWord before spellchecking
+                // but we need to adjust all markups behind the added/removed character(s)
+                blockData.rebaseMarkups(KoTextBlockData::Misspell, from - block.position(), charsAdded - charsRemoved);
             } else {
                 checkSection(document, block.position(), block.position() + block.length() - 1);
             }
@@ -265,7 +270,7 @@ void SpellCheck::documentChanged(int from, int min, int plus)
             blockData.clearMarkups(KoTextBlockData::Misspell);
         }
         block = block.next();
-    } while(block.isValid() && block.position() <= from + plus);
+    } while(block.isValid() && block.position() <= from + charsAdded);
 
     m_simpleEdit = false;
 }
