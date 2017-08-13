@@ -137,5 +137,5 @@ X-DocPath=http://userbase.kde.org/Special:MyLanguage/Words
 X-KDE-StartupNotify=true
 X-DBUS-StartupType=Multi
 X-DBUS-ServiceName=org.kde.calligrawords
-Categories=Qt;KDE;Office;
+Categories=Qt;KDE;Office;WordProcessor;
 InitialPreference=4
