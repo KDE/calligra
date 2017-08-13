@@ -104,4 +104,4 @@ X-DocPath=http://userbase.kde.org/Special:MyLanguage/Flow
 X-KDE-StartupNotify=true
 X-DBUS-StartupType=Multi
 X-DBUS-ServiceName=org.calligra.flow
-Categories=Qt;KDE;Office;
+Categories=Qt;KDE;Office;FlowChart;
