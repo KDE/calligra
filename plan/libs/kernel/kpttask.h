@@ -54,7 +54,7 @@ public:
             class KPLATOKERNEL_EXPORT ActualEffort : public QPair<Duration, Duration>
             {
                 public:
-                    explicit ActualEffort( const Duration &ne = Duration::zeroDuration, const Duration &oe = Duration::zeroDuration )
+                    explicit ActualEffort( KPlato::Duration ne = Duration::zeroDuration, KPlato::Duration oe = Duration::zeroDuration )
                         : QPair<Duration, Duration>( ne, oe )
                     {}
                     ActualEffort( const ActualEffort &e )
@@ -62,12 +62,12 @@ public:
                     {}
                     ~ActualEffort() {}
                     Duration normalEffort() const { return first; }
-                    void setNormalEffort( const Duration &e ) { first = e; }
+                    void setNormalEffort( KPlato::Duration e ) { first = e; }
                     Duration overtimeEffort() const { return second; }
-                    void setOvertimeEffort( const Duration &e ) { second = e; }
+                    void setOvertimeEffort( KPlato::Duration e ) { second = e; }
                     /// Returns the sum of normalEffort + overtimeEffort
                     Duration effort() const { return first + second; }
-                    void setEffort( const Duration &ne, const Duration &oe = Duration::zeroDuration ) { first = ne; second = oe; }
+                    void setEffort( KPlato::Duration ne, KPlato::Duration oe = Duration::zeroDuration ) { first = ne; second = oe; }
             };
             UsedEffort();
             UsedEffort( const UsedEffort &e );
@@ -75,12 +75,12 @@ public:
             bool operator==( const UsedEffort &e ) const;
             bool operator!=( const UsedEffort &e ) const { return !operator==( e ); }
             void mergeEffort( const UsedEffort &value );
-            void setEffort( const QDate &date, const ActualEffort &value );
+            void setEffort( QDate date, const ActualEffort &value );
             /// Returns the total effort up to @p date
-            Duration effortTo( const QDate &date ) const;
+            Duration effortTo( QDate date ) const;
             /// Returns the total effort on @p date
-            ActualEffort effort( const QDate &date ) const { return m_actual.value( date ); }
-            ActualEffort takeEffort( const QDate &date ) { return m_actual.take( date ); }
+            ActualEffort effort( QDate date ) const { return m_actual.value( date ); }
+            ActualEffort takeEffort( QDate date ) { return m_actual.take( date ); }
             /// Returns the total effort for all registered dates
             Duration effort() const;
             QMap<QDate, ActualEffort> actualEffortMap() const { return m_actual; }
@@ -89,7 +89,7 @@ public:
             bool loadXML(KoXmlElement &element, XMLLoaderObject &status );
             /// Save to document
             void saveXML(QDomElement &element) const;
-            bool contains( const QDate &date ) const { return m_actual.contains( date ); }
+            bool contains( QDate date ) const { return m_actual.contains( date ); }
 
         private:
             QMap<QDate, ActualEffort> m_actual;
@@ -158,36 +158,36 @@ public:
     void setStartTime( const DateTime &dt );
     DateTime finishTime() const { return m_finishTime; }
     void setFinishTime( const DateTime &dt );
-    void setPercentFinished( const QDate &date, int value );
-    void setRemainingEffort( const QDate &date, const Duration &value );
-    void setActualEffort( const QDate &date, const Duration &value );
+    void setPercentFinished( QDate date, int value );
+    void setRemainingEffort( QDate date, Duration value );
+    void setActualEffort( QDate date, Duration value );
     
     /// Return a list of the resource that has done any work on this task
     QList<const Resource*> resources() { return m_usedEffort.keys(); }
     
     const EntryList &entries() const { return m_entries; }
-    void addEntry( const QDate &date, Entry *entry );
-    Entry *takeEntry( const QDate &date ) { return m_entries.take( date ); changed(); }
-    Entry *entry( const QDate &date ) const { return m_entries[ date ]; }
+    void addEntry( QDate date, Entry *entry );
+    Entry *takeEntry( QDate date ) { return m_entries.take( date ); changed(); }
+    Entry *entry( QDate date ) const { return m_entries[ date ]; }
     
     /// Returns the date of the latest entry
     QDate entryDate() const;
     /// Returns the percentFinished of the latest entry
     int percentFinished() const;
     /// Returns the percentFinished on @p date
-    int percentFinished( const QDate &date ) const;
+    int percentFinished( QDate date ) const;
     /// Returns the estimated remaining effort
     Duration remainingEffort() const;
     /// Returns the estimated remaining effort on @p date
-    Duration remainingEffort( const QDate &date ) const;
+    Duration remainingEffort( QDate date ) const;
     /// Returns the total actual effort
     Duration actualEffort() const;
     /// Returns the total actual effort on @p date
-    Duration actualEffort( const QDate &date ) const;
+    Duration actualEffort( QDate date ) const;
     /// Returns the total actual effort upto and including @p date
-    Duration actualEffortTo( const QDate &date ) const;
+    Duration actualEffortTo( QDate date ) const;
     /// Returns the actual effort for @p resource on @p date
-    Duration actualEffort( const Resource *resource, const QDate &date ) const;
+    Duration actualEffort( const Resource *resource, QDate date ) const;
     /// TODO
     QString note() const;
     /// TODO
@@ -198,11 +198,11 @@ public:
     /// Returns the actual cost for @p resource
     double actualCost( const Resource *resource ) const;
     /// Returns the actual cost on @p date
-    double actualCost( const QDate &date ) const;
+    double actualCost( QDate date ) const;
     /// Returns the total actual cost for @p resource on @p date
-    double actualCost( const Resource *resource, const QDate &date ) const;
+    double actualCost( const Resource *resource, QDate date ) const;
     /// Returns the total actual effort and cost upto and including @p date
-    EffortCost actualCostTo(  long int id, const QDate &date ) const;
+    EffortCost actualCostTo(  long int id, QDate date ) const;
     
     /**
      * Returns a map of all actual effort and cost entered
@@ -225,13 +225,13 @@ public:
     QString entryModeToString() const;
     QStringList entrymodeList() const;
     
-    EffortCostMap effortCostPrDay(const QDate &start, const QDate &end, long id = -1 ) const;
+    EffortCostMap effortCostPrDay(QDate start, QDate end, long id = -1 ) const;
     /// Returns the actual effort and cost pr day used by @p resource
-    EffortCostMap effortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id = CURRENTSCHEDULE ) const;
+    EffortCostMap effortCostPrDay(const Resource *resource, QDate start, QDate end, long id = CURRENTSCHEDULE ) const;
 
 protected:
     void copy( const Completion &copy);
-    double averageCostPrHour( const QDate &date, long id ) const;
+    double averageCostPrHour( QDate date, long id ) const;
     QPair<QDate, QDate> actualStartEndDates() const;
 
 private:
@@ -341,8 +341,8 @@ public:
     WorkPackageSettings();
     bool loadXML( const KoXmlElement &element );
     void saveXML( QDomElement &element) const;
-    bool operator==( const WorkPackageSettings &settings ) const;
-    bool operator!=( const WorkPackageSettings &settings ) const;
+    bool operator==( WorkPackageSettings settings ) const;
+    bool operator!=( WorkPackageSettings settings ) const;
     bool usedEffort;
     bool progress;
     bool documents;
@@ -408,63 +408,63 @@ public:
      * Returns a list of planned effort and cost for this task
      * for the interval start, end inclusive
      */
-    virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end,  long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
+    virtual EffortCostMap plannedEffortCostPrDay(QDate start, QDate end,  long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /**
      * Returns a list of planned effort and cost for the @p resource
      * for the interval @p start, @p end inclusive, useing schedule with identity @p id
      */
-    virtual EffortCostMap plannedEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end,  long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
+    virtual EffortCostMap plannedEffortCostPrDay(const Resource *resource, QDate start, QDate end,  long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     
     /// Returns the total planned effort for @p reosurce on this task (or subtasks)
     virtual Duration plannedEffort( const Resource *resource, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Returns the total planned effort for this task (or subtasks) 
     virtual Duration plannedEffort( long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Returns the total planned effort for this task (or subtasks) on date
-    virtual Duration plannedEffort(const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
+    virtual Duration plannedEffort(QDate date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Returns the total planned effort for @p resource on this task (or subtasks) on date
-    virtual Duration plannedEffort( const Resource *resource, const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
+    virtual Duration plannedEffort( const Resource *resource, QDate date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Returns the planned effort up to and including date
-    virtual Duration plannedEffortTo(const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
+    virtual Duration plannedEffortTo(QDate date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Returns the planned effort for @p resource up to and including date
-    virtual Duration plannedEffortTo( const Resource *resource, const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
+    virtual Duration plannedEffortTo( const Resource *resource, QDate date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     
     /// Returns the total actual effort for this task (or subtasks) 
     virtual Duration actualEffort() const;
     /// Returns the total actual effort for this task (or subtasks) on date
-    virtual Duration actualEffort(const QDate &date ) const;
+    virtual Duration actualEffort(QDate date ) const;
     /// Returns the actual effort up to and including date
-    virtual Duration actualEffortTo(const QDate &date ) const;
+    virtual Duration actualEffortTo(QDate date ) const;
     
     /**
      * Returns the total planned cost for this task (or subtasks)
      */
     virtual EffortCost plannedCost( long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Planned cost up to and including date
-    virtual double plannedCostTo(const QDate &/*date*/, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
+    virtual double plannedCostTo(QDate /*date*/, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     
     /// Returns actual effort and cost up to and including @p date
-    virtual EffortCost actualCostTo(  long int id, const QDate &date ) const;
+    virtual EffortCost actualCostTo(  long int id, QDate date ) const;
 
     /**
      * Returns a list of actual effort and cost for this task
      * for the interval start, end inclusive
      */
-    virtual EffortCostMap actualEffortCostPrDay( const QDate &start, const QDate &end,  long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
+    virtual EffortCostMap actualEffortCostPrDay( QDate start, QDate end,  long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Returns the actual effort and cost pr day used by @p resource
-    virtual EffortCostMap actualEffortCostPrDay( const Resource *resource, const QDate &start, const QDate &end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
+    virtual EffortCostMap actualEffortCostPrDay( const Resource *resource, QDate start, QDate end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
 
     /// Returns the effort planned to be used to reach the actual percent finished
-    virtual Duration budgetedWorkPerformed( const QDate &date, long id = CURRENTSCHEDULE ) const;
+    virtual Duration budgetedWorkPerformed( QDate date, long id = CURRENTSCHEDULE ) const;
 
     /// Returns the cost planned to be used to reach the actual percent finished
-    virtual double budgetedCostPerformed( const QDate &date, long id = CURRENTSCHEDULE ) const;
+    virtual double budgetedCostPerformed( QDate date, long id = CURRENTSCHEDULE ) const;
 
     using Node::bcwsPrDay;
     /// Return map of Budgeted Cost of Work Scheduled pr day
     virtual EffortCostMap bcwsPrDay( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All );
     
     /// Budgeted Cost of Work Scheduled
-    virtual double bcws( const QDate &date, long id = CURRENTSCHEDULE ) const;
+    virtual double bcws( QDate date, long id = CURRENTSCHEDULE ) const;
 
     using Node::bcwpPrDay;
     /// Return map of Budgeted Cost of Work Performed pr day (also includes bcwsPrDay)
@@ -472,21 +472,21 @@ public:
     /// Budgeted Cost of Work Performed
     virtual double bcwp( long id = CURRENTSCHEDULE ) const;
     /// Budgeted Cost of Work Performed ( up to @p date )
-    virtual double bcwp( const QDate &date, long id = CURRENTSCHEDULE ) const;
+    virtual double bcwp( QDate date, long id = CURRENTSCHEDULE ) const;
 
     using Node::acwp;
     /// Map of Actual Cost of Work Performed
     virtual EffortCostMap acwp( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All );
     /// Actual Cost of Work Performed up to dat
-    virtual EffortCost acwp( const QDate &date, long id = CURRENTSCHEDULE ) const;
+    virtual EffortCost acwp( QDate date, long id = CURRENTSCHEDULE ) const;
 
     /// Effort based performance index
-    virtual double effortPerformanceIndex( const QDate &date, long id = CURRENTSCHEDULE ) const;
+    virtual double effortPerformanceIndex( QDate date, long id = CURRENTSCHEDULE ) const;
 
     /// Schedule performance index
-    virtual double schedulePerformanceIndex( const QDate &date, long id = CURRENTSCHEDULE ) const;
+    virtual double schedulePerformanceIndex( QDate date, long id = CURRENTSCHEDULE ) const;
     /// Cost performance index
-    virtual double costPerformanceIndex(  long int id, const QDate &date, bool *error=0 ) const;
+    virtual double costPerformanceIndex(  long int id, QDate date, bool *error=0 ) const;
     
     /**
      * Return the duration that an activity's start can be delayed 
@@ -495,21 +495,21 @@ public:
      * @param id Schedule identity. If id is CURRENTSCHEDULE, use current schedule.
      */
     Duration positiveFloat( long id = CURRENTSCHEDULE ) const;
-    void setPositiveFloat( const Duration &fl, long id = CURRENTSCHEDULE ) const;
+    void setPositiveFloat( Duration fl, long id = CURRENTSCHEDULE ) const;
     /**
      * Return the duration by which the duration of an activity or path 
      * has to be reduced in order to fullfil a timing- or dependency constraint.
      * @param id Schedule identity. If id is CURRENTSCHEDULE, use current schedule.
      */
     Duration negativeFloat( long id = CURRENTSCHEDULE ) const;
-    void setNegativeFloat( const Duration &fl, long id = CURRENTSCHEDULE ) const;
+    void setNegativeFloat( Duration fl, long id = CURRENTSCHEDULE ) const;
     /**
      * Return the duration by which an activity can be delayed or extended 
      * without affecting the start of any succeeding activity.
      * @param id Schedule identity. If id is CURRENTSCHEDULE, use current schedule.
      */
     Duration freeFloat( long id = CURRENTSCHEDULE ) const;
-    void setFreeFloat( const Duration &fl, long id = CURRENTSCHEDULE ) const;
+    void setFreeFloat( Duration fl, long id = CURRENTSCHEDULE ) const;
     /**
      * Return the duration from Early Start to Late Start.
      * @param id Schedule identity. If id is CURRENTSCHEDULE, use current schedule.
@@ -582,8 +582,8 @@ public:
     /**
      * Return the duration calculated on bases of the estimates calendar
      */
-    Duration length(const DateTime &time, const Duration &duration, bool backward);
-    Duration length(const DateTime &time, const Duration &duration, Schedule *sch, bool backward);
+    Duration length(const DateTime &time, Duration duration, bool backward);
+    Duration length(const DateTime &time, Duration uration, Schedule *sch, bool backward);
 
     /// Copy info from parent schedule
     void copySchedule();
@@ -715,7 +715,7 @@ protected:
     /**
      * Return the duration calculated on bases of the requested resources
      */
-    Duration calcDuration(const DateTime &time, const Duration &effort, bool backward);
+    Duration calcDuration(const DateTime &time, Duration effort, bool backward);
 
 private:
     DateTime calculateSuccessors(const QList<Relation*> &list, int use);

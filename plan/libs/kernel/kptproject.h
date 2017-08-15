@@ -203,52 +203,52 @@ public:
     /// Returns a list of all resources
     QList<Resource*> resourceList() const { return resourceIdDict.values(); }
 
-    virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
-    virtual EffortCostMap plannedEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
+    virtual EffortCostMap plannedEffortCostPrDay( QDate start, QDate end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
+    virtual EffortCostMap plannedEffortCostPrDay(const Resource *resource, QDate start, QDate end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
 
     using Node::plannedEffort;
     /// Returns the total planned effort for this project (or subproject)
     virtual Duration plannedEffort( long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Returns the total planned effort for this project (or subproject) on date
-    virtual Duration plannedEffort( const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All  ) const;
+    virtual Duration plannedEffort( QDate date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All  ) const;
     using Node::plannedEffortTo;
     /// Returns the planned effort up to and including date
-    virtual Duration plannedEffortTo( const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All  ) const;
+    virtual Duration plannedEffortTo( QDate date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All  ) const;
 
     /// Returns the actual effort up to and including @p date
-    virtual Duration actualEffortTo( const QDate &date ) const;
+    virtual Duration actualEffortTo( QDate date ) const;
     /**
      * Planned cost up to and including date
      * @param date The cost is calculated from the start of the project upto including date.
      * @param id Identity of the schedule to be used.
      */
-    virtual double plannedCostTo( const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All  ) const;
+    virtual double plannedCostTo( QDate date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All  ) const;
 
     /**
      * Actual cost up to and including @p date
      * @param date The cost is calculated from the start of the project upto including date.
      */
-    virtual EffortCost actualCostTo(  long int id, const QDate &date ) const;
+    virtual EffortCost actualCostTo(  long int id, QDate date ) const;
 
-    virtual EffortCostMap actualEffortCostPrDay( const QDate &start, const QDate &end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
+    virtual EffortCostMap actualEffortCostPrDay( QDate start, QDate end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
 
-    virtual EffortCostMap actualEffortCostPrDay( const Resource *resource, const QDate &start, const QDate &end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
+    virtual EffortCostMap actualEffortCostPrDay( const Resource *resource, QDate start, QDate end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
 
-    double effortPerformanceIndex( const QDate &date, long id ) const;
+    double effortPerformanceIndex( QDate date, long id ) const;
 
-    double schedulePerformanceIndex( const QDate &date, long id ) const;
+    double schedulePerformanceIndex( QDate date, long id ) const;
 
     /// Returns the effort planned to be used to reach the actual percent finished
-    virtual Duration budgetedWorkPerformed( const QDate &date, long id = CURRENTSCHEDULE ) const;
+    virtual Duration budgetedWorkPerformed( QDate date, long id = CURRENTSCHEDULE ) const;
     /// Returns the cost planned to be used to reach the actual percent finished
-    virtual double budgetedCostPerformed( const QDate &date, long id = CURRENTSCHEDULE ) const;
+    virtual double budgetedCostPerformed( QDate date, long id = CURRENTSCHEDULE ) const;
 
     /// Budgeted Cost of Work Scheduled ( up to @p date )
-    virtual double bcws( const QDate &date, long id = BASELINESCHEDULE ) const;
+    virtual double bcws( QDate date, long id = BASELINESCHEDULE ) const;
     /// Budgeted Cost of Work Performed
     virtual double bcwp( long id = BASELINESCHEDULE ) const;
     /// Budgeted Cost of Work Performed ( up to @p date )
-    virtual double bcwp( const QDate &date, long id = BASELINESCHEDULE ) const;
+    virtual double bcwp( QDate date, long id = BASELINESCHEDULE ) const;
 
     Calendar *defaultCalendar() const { return m_defaultCalendar; }
     void setDefaultCalendar( Calendar *cal );

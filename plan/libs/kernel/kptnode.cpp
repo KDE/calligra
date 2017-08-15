@@ -1269,7 +1269,7 @@ Duration Node::plannedEffort( const Resource *resource, long id, EffortCostCalcu
     return e;
 }
 
-Duration Node::plannedEffort( const Resource *resource, const QDate &date, long id, EffortCostCalculationType type ) const
+Duration Node::plannedEffort( const Resource *resource, QDate date, long id, EffortCostCalculationType type ) const
 {
     Duration e;
     foreach ( Node *n, m_nodes ) {
@@ -1278,7 +1278,7 @@ Duration Node::plannedEffort( const Resource *resource, const QDate &date, long 
     return e;
 }
 
-Duration Node::plannedEffortTo( const Resource *resource, const QDate &date, long id, EffortCostCalculationType type ) const
+Duration Node::plannedEffortTo( const Resource *resource, QDate date, long id, EffortCostCalculationType type ) const
 {
     Duration e;
     foreach ( Node *n, m_nodes ) {
@@ -1362,7 +1362,7 @@ EffortCostMap Node::acwp( long id, EffortCostCalculationType type )
     return ec.effortcostmap;
 }
 
-EffortCost Node::acwp( const QDate &date, long id ) const
+EffortCost Node::acwp( QDate date, long id ) const
 {
     EffortCost ec;
     foreach ( Node *n, m_nodes ) {
