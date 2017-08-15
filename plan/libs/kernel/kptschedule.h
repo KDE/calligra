@@ -225,9 +225,9 @@ public:
     void setNotScheduled( bool on ) { notScheduled = on; }
     void setSchedulingError( bool on ) { schedulingError = on; }
 
-    void setPositiveFloat( const Duration &f ) { positiveFloat = f; }
-    void setNegativeFloat( const Duration &f ) { negativeFloat = f; }
-    void setFreeFloat( const Duration &f ) { freeFloat = f; }
+    void setPositiveFloat( KPlato::Duration f ) { positiveFloat = f; }
+    void setNegativeFloat( KPlato::Duration f ) { negativeFloat = f; }
+    void setFreeFloat( KPlato::Duration f ) { freeFloat = f; }
 
     void setInCriticalPath( bool on = true ) { inCriticalPath = on; }
 
