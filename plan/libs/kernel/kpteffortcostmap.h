@@ -41,7 +41,7 @@ public:
         m_bcwpEffort(0.0),
         m_bcwpCost(0.0)
     {}
-    EffortCost(const Duration &effort, const double cost)
+    EffortCost(KPlato::Duration effort, const double cost)
         : m_effort(effort),
         m_cost(cost),
         m_bcwpEffort(0.0),
@@ -54,7 +54,7 @@ public:
     }
     double hours() const { return m_effort.toDouble( Duration::Unit_h ); }
     Duration effort() const { return m_effort; }
-    void setEffort( const Duration &effort ) { m_effort = effort; }
+    void setEffort( KPlato::Duration effort ) { m_effort = effort; }
     double cost() const { return m_cost; }
     void setCost(double cost) { m_cost = cost; }
     void setBcwpEffort( double value ) { m_bcwpEffort = value; }
@@ -95,7 +95,7 @@ public:
     
     void clear() { m_days.clear(); }
     
-    EffortCost effortCost(const QDate &date) const {
+    EffortCost effortCost(QDate date) const {
         EffortCost ec;
         if (!date.isValid()) {
             //errorPlan<<"Date not valid";
@@ -108,7 +108,7 @@ public:
     }
     void insert(const QDate &date, const EffortCost &ec );
 
-    void insert(const QDate &date, const Duration &effort, const double cost) {
+    void insert(QDate date, KPlato::Duration effort, const double cost) {
         if (!date.isValid()) {
             //errorPlan<<"Date not valid";
             return;
@@ -119,14 +119,14 @@ public:
      * If data for this date already exists add the new values to the old,
      * else the new values are inserted.
      */
-    EffortCost &add(const QDate &date, const Duration &effort, const double cost) {
+    EffortCost &add(QDate date, KPlato::Duration effort, const double cost) {
         return add(date, EffortCost(effort, cost));
     }
     /** 
      * If data for this date already exists add the new values to the old,
      * else the new value is inserted.
      */
-    EffortCost &add(const QDate &date, const EffortCost &ec) {
+    EffortCost &add(QDate date, const EffortCost &ec) {
         if (!date.isValid()) {
             //errorPlan<<"Date not valid";
             return zero();
@@ -143,18 +143,18 @@ public:
     
     EffortCostMap &operator=(const EffortCostMap &ec);
     EffortCostMap &operator+=(const EffortCostMap &ec);
-    EffortCost &effortCostOnDate(const QDate &date) {
+    EffortCost &effortCostOnDate(QDate date) {
         return m_days[date];
     }
     /// Return total cost for the next num days starting at date
-    double cost(const QDate &date, int num=7) {
+    double cost(QDate date, int num=7) {
         double r=0.0;
         for (int i=0; i < num; ++i) {
             r += costOnDate(date.addDays(i));
         }
         return r;
     }
-    double costOnDate(const QDate &date) const {
+    double costOnDate(QDate date) const {
         if (!date.isValid()) {
             //errorPlan<<"Date not valid";
             return 0.0;
@@ -164,7 +164,7 @@ public:
         }
         return 0.0;
     }
-    Duration effortOnDate(const QDate &date) const {
+    Duration effortOnDate(QDate date) const {
         if (!date.isValid()) {
             errorPlan<<"Date not valid";
             return Duration::zeroDuration;
@@ -174,7 +174,7 @@ public:
         }
         return Duration::zeroDuration;
     }
-    double hoursOnDate(const QDate &date) const {
+    double hoursOnDate(QDate date) const {
         if (!date.isValid()) {
             errorPlan<<"Date not valid";
             return 0.0;
@@ -186,7 +186,7 @@ public:
     }
     void addBcwpCost( const QDate &date, double cost );
 
-    double bcwpCostOnDate(const QDate &date) const {
+    double bcwpCostOnDate(QDate date) const {
         if (!date.isValid()) {
             //errorPlan<<"Date not valid";
             return 0.0;
@@ -196,7 +196,7 @@ public:
         }
         return 0.0;
     }
-    double bcwpEffortOnDate(const QDate &date) const {
+    double bcwpEffortOnDate(QDate date) const {
         if (!date.isValid()) {
             //errorPlan<<"Date not valid";
             return 0.0;
@@ -223,7 +223,7 @@ public:
         return eff;
     }
     
-    double costTo( const QDate &date ) const {
+    double costTo( QDate date ) const {
         double cost = 0.0;
         EffortCostDayMap::const_iterator it;
         for(it = m_days.constBegin(); it != m_days.constEnd(); ++it) {
@@ -234,7 +234,7 @@ public:
         }
         return cost;
     }
-    Duration effortTo( const QDate &date ) const {
+    Duration effortTo( QDate date ) const {
         Duration eff;
         EffortCostDayMap::const_iterator it;
         for(it = m_days.constBegin(); it != m_days.constEnd(); ++it) {
@@ -245,7 +245,7 @@ public:
         }
         return eff;
     }
-    double hoursTo( const QDate &date ) const {
+    double hoursTo( QDate date ) const {
         double eff = 0.0;
         EffortCostDayMap::const_iterator it;
         for(it = m_days.constBegin(); it != m_days.constEnd(); ++it) {
