@@ -126,5 +126,7 @@ install(TARGETS calligra_shape_formula  DESTINATION ${PLUGIN_INSTALL_DIR}/callig
 add_subdirectory( pics ) 
 # TODO: those font files seem unused currently, investigate if still needed
 # add_subdirectory( fonts )
-add_subdirectory( tests )
+if(BUILD_TESTING)
+    add_subdirectory( tests )
+endif()
 add_subdirectory( templates )

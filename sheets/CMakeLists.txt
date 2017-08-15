@@ -21,7 +21,9 @@ add_subdirectory( plugins )
 add_definitions(-DTRANSLATION_DOMAIN=\"calligrasheets\")
 
 add_subdirectory( data )
-add_subdirectory( tests )
+if(BUILD_TESTING)
+    add_subdirectory( tests )
+endif()
 add_subdirectory( dtd )
 add_subdirectory( functions )
 

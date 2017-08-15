@@ -1,6 +1,8 @@
 include_directories(${TEXTLAYOUT_INCLUDES})
 
-add_subdirectory( tests )
+if(BUILD_TESTING)
+    add_subdirectory( tests )
+endif()
 
 ########### next target ###############
 set(textlayout_LIB_SRCS

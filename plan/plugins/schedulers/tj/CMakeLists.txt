@@ -4,7 +4,9 @@ set(LIBTJ_INCLUDE_DIR taskjuggler)
 include_directories( ${LIBTJ_INCLUDE_DIR} ${KOODF_INCLUDES} ${CMAKE_SOURCE_DIR}/plan/libs/kernel  )
 
 #add_subdirectory( taskjuggler )
-add_subdirectory( tests )
+if(BUILD_TESTING)
+    add_subdirectory( tests )
+endif()
 
 set ( TJScheduler_SRCS
     PlanTJPlugin.cpp

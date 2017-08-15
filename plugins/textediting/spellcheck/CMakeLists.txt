@@ -2,7 +2,9 @@ project(spellcheck)
 
 add_definitions(-DTRANSLATION_DOMAIN=\"calligra_textediting_spellcheck\")
 
-add_subdirectory( tests )
+if(BUILD_TESTING)
+    add_subdirectory( tests )
+endif()
 
 include_directories(   ${TEXTLAYOUT_INCLUDES} ${FLAKE_INCLUDES} )
 

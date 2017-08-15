@@ -8,7 +8,9 @@ include_directories(
 add_subdirectory( fonts )
 add_subdirectory( pics )
 add_subdirectory( core )
-add_subdirectory( tests)
+if(BUILD_TESTING)
+    add_subdirectory( tests)
+endif()
 
 ########### Flake Plugin library ###############
 
