@@ -1162,7 +1162,7 @@ QString Node::generateWBSCode( QList<int> &indexes, bool sortable ) const {
         return QString();
     }
     indexes.insert( 0, m_parent->indexOf( this ) );
-    return m_parent->generateWBSCode( indexes );
+    return m_parent->generateWBSCode( indexes, sortable );
 }
 
 QString Node::wbsCode(bool sortable) const {
