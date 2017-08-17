@@ -92,6 +92,7 @@ GenericName[wa]=Manaedjmint di pordjet
 GenericName[x-test]=xxProject Managementxx
 GenericName[zh_CN]=项目管理
 GenericName[zh_TW]=專案管理
+Comment=Work Package handler for the Plan project planning tool
 Exec=calligraplanwork %u
 MimeType=application/x-vnd.kde.plan.work;application/x-vnd.kde.kplato.work;
 Type=Application
