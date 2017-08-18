@@ -43,14 +43,14 @@ public:
     /**
      * @brief Set the begin time for the animation
      *
-     * @param timeMS time in miliseconds
+     * @param timeMS time in milliseconds
      */
     void setBeginTime(int timeMS) {m_beginTime = timeMS;}
 
     /**
      * @brief Set duration time for the animation
      *
-     * @param timeMS time in miliseconds
+     * @param timeMS time in milliseconds
      */
     void setGlobalDuration(int timeMS) {m_duration = timeMS;}
 

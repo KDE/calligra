@@ -150,8 +150,8 @@ public:
      * @brief Set animation begin and duration
      *
      * @param index index of the animation
-     * @param begin time in miliseconds
-     * @param duration time in miliseconds
+     * @param begin time in milliseconds
+     * @param duration time in milliseconds
      */
     void setTimeRange(KPrShapeAnimation *item, const int begin, const int duration);
 
@@ -159,7 +159,7 @@ public:
      * Get the end time for the given animation
      *
      * @param index of the animation
-     * @return the time in miliseconds of the animation end
+     * @return the time in milliseconds of the animation end
      */
     int animationEnd(const QModelIndex &index) const;
 
@@ -167,7 +167,7 @@ public:
      * Get the scale begin time for the given animation
      *
      * @param index of the animation
-     * @return the time in miliseconds where the scale begin (relative to the parent onclik animation)
+     * @return the time in milliseconds where the scale begin (relative to the parent onclik animation)
      */
     int animationStart(const QModelIndex &index) const;
 
