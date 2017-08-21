@@ -81,19 +81,19 @@ KoTextBlockData::~KoTextBlockData()
 
 void KoTextBlockData::appendMarkup(MarkupType type, int firstChar, int lastChar)
 {
-    if (type == KoTextBlockData::Grammar) {
-        Q_ASSERT(d->markupRangesMap[type].isEmpty() || d->markupRangesMap[type].last().lastChar < firstChar);
-    } else if (!d->markupRangesMap[type].isEmpty() && d->markupRangesMap[type].last().lastChar >= firstChar) {
-        // Character positions from spellchecker are not in sync with document.
-        // I have only seen this in connection with dropcaps, so could be caused by
-        // large amount to spellcheck combined with large changes to the document.
-        // Anyway, returning here just means markup will be incorrect/missing until next spellcheck is run.
-        return;
-    }
+    Q_ASSERT(d->markupRangesMap[type].isEmpty() || firstChar > d->markupRangesMap[type].last().lastChar + d->markupRangesMap[type].last().lastRebased);
 
     MarkupRange range;
     range.firstChar = firstChar;
     range.lastChar = lastChar;
+    range.firstRebased = 0;
+    range.lastRebased = 0;
+    if (!d->markupRangesMap[type].isEmpty()) {
+        // The document may have been changed (and thus markup has moved) while
+        // the plugin has done its job in the background
+        range.firstChar += d->markupRangesMap[type].last().firstRebased;
+        range.lastChar += d->markupRangesMap[type].last().lastRebased;
+    }
     d->layoutedMarkupRanges[type] = false;
 
     d->markupRangesMap[type].append(range);
@@ -108,9 +108,9 @@ void KoTextBlockData::clearMarkups(MarkupType type)
 KoTextBlockData::MarkupRange KoTextBlockData::findMarkup(MarkupType type, int positionWithin) const
 {
     foreach (const MarkupRange &range, d->markupRangesMap[type]) {
-        if (positionWithin <= range.lastChar) {
+        if (positionWithin <= range.lastChar + range.lastRebased) {
             // possible hit
-            if (positionWithin >= range.firstChar) {
+            if (positionWithin >= range.firstChar + range.firstRebased) {
                 return range;
             } else {
                 return MarkupRange(); // we have passed it without finding
@@ -128,10 +128,12 @@ void KoTextBlockData::rebaseMarkups(MarkupType type, int fromPosition, int delta
         if (fromPosition <= markIt->lastChar) {
             // we need to modify the end of this
             markIt->lastChar += delta;
+            markIt->lastRebased += delta;
         }
         if (fromPosition < markIt->firstChar) {
             // we need to modify the end of this
             markIt->firstChar += delta;
+            markIt->firstRebased += delta;
         }
         ++markIt;
     }
