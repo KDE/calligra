@@ -30,11 +30,11 @@
         <entry name="GenerateWeekChoice" type="Enum">
             <label>Generate working week options</label>
             <choices>
-                <choice name="Always">
-                    <label>Always</label>
-                </choice>
                 <choice name="NoneExists">
                     <label>If none exists</label>
+                </choice>
+                <choice name="Always">
+                    <label>Always</label>
                 </choice>
                 <default>NoneExists</default>
             </choices>
