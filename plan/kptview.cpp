@@ -317,9 +317,11 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
     actionCollection()->addAction( "config_currency", actionCurrencyConfig );
     connect( actionCurrencyConfig, SIGNAL(triggered(bool)), SLOT(slotCurrencyConfig()) );
 
+#ifdef PLAN_USE_KREPORT
     actionOpenReportFile  = new QAction(koIcon("document-open"), i18n("Open Report Definition File..."), this);
     actionCollection()->addAction( "reportdesigner_open_file", actionOpenReportFile );
     connect( actionOpenReportFile, SIGNAL(triggered(bool)), SLOT(slotOpenReportFile()) );
+#endif
 
     // ------ Help
     actionIntroduction  = new QAction(koIcon("dialog-information"), i18n("Introduction to Plan"), this);
