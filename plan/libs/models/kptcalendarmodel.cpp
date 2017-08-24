@@ -185,6 +185,9 @@ Qt::ItemFlags CalendarItemModel::flags( const QModelIndex &index ) const
             case Name:
                 flags |= ( Qt::ItemIsEditable | Qt::ItemIsUserCheckable );
                 break;
+            case Scope:
+                flags &= ~Qt::ItemIsEditable;
+                break;
             case TimeZone:
                 if ( parent( index ).isValid() ) {
                     flags &= ~Qt::ItemIsEditable;
@@ -318,6 +321,10 @@ QVariant CalendarItemModel::scope( const Calendar *a, int role ) const
                 return xi18nc( "@info:tooltip 1=calendar name", "%1 is a <emphasis>Local</emphasis> calendar", a->name() );
             }
             return xi18nc( "@info:tooltip 1=calendar name", "%1 is a <emphasis>Shared</emphasis> calendar", a->name() );
+        case Role::EnumList:
+            return QStringList() << i18n("Shared") << i18n("Local");
+        case Role::EnumListValue:
+            return a->isShared() ? 0 : 1;
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
