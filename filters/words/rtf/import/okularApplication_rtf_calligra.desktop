@@ -1,0 +1,11 @@
+[Desktop Entry]
+MimeType=text/rtf;application/rtf;
+Terminal=false
+Name=okular
+GenericName=Document Viewer
+Exec=okular %U %i -qwindowtitle %c
+Icon=okular
+Type=Application
+InitialPreference=3
+Categories=Qt;KDE;Graphics;Viewer;
+NoDisplay=true

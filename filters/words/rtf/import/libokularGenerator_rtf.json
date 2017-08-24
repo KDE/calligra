@@ -1,0 +1,32 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "sven.langkamp@gmail.com",
+                "Name": "Sven Langkamp",
+                "Name[x-test]": "xxSven Langkampxx"
+            },
+            {
+                "Email": "kossebau@kde.org",
+                "Name": "Friedrich W. H. Kossebau",
+                "Name[x-test]": "xxFriedrich W. H. Kossebauxx"
+            }
+        ],
+        "Copyright": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
+        "Description": "RTF file renderer",
+        "Id": "okularGenerator_docx_calligra",
+        "License": "GPL",
+        "MimeTypes": [
+            "application/rtf",
+            "text/rtf"
+        ],
+        "Name": "RTF Backend",
+        "ServiceTypes": [
+            "okular/Generator"
+        ],
+        "Version": "2.99.5"
+    },
+    "X-KDE-Priority": 1,
+    "X-KDE-okularAPIVersion": 1,
+    "X-KDE-okularHasInternalSettings": false
+}

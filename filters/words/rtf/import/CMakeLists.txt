@@ -14,3 +14,18 @@ install(TARGETS calligra_filter_rtf2odt  DESTINATION ${PLUGIN_INSTALL_DIR}/calli
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES  words_rtf_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 endif()
+
+if(SHOULD_BUILD_OKULAR_GENERATOR_RTF)
+    kcoreaddons_add_plugin(okularGenerator_rtf_calligra
+        JSON libokularGenerator_rtf.json
+        INSTALL_NAMESPACE "okular/generators"
+        SOURCES OkularRtfGeneratorPlugin.cpp
+    )
+
+    target_link_libraries( okularGenerator_rtf_calligra
+        kookularGenerator_odt
+    )
+
+    install( FILES okularRtf_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+    install( PROGRAMS okularApplication_rtf_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+endif()
