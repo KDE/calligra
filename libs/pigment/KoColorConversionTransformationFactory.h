@@ -33,7 +33,7 @@ class PIGMENTCMS_EXPORT KoColorConversionTransformationFactory : public KoColorC
 {
 public:
     /**
-     * Create a color conversion tranformation factory, that can create
+     * Create a color conversion transformation factory, that can create
      * KoColorConversionTrasnformation object between a source colorspace
      * and a destination colorspace.
      *

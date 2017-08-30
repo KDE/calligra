@@ -62,6 +62,8 @@ public:
         int lastChar;
         qreal startX;
         qreal endX;
+        int firstRebased;
+        int lastRebased;
     };
 
     /**

@@ -34,8 +34,10 @@ if(HAVE_VC)
     endif ()
 endif()
 
-add_subdirectory(tests)
-add_subdirectory(benchmarks)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+    add_subdirectory(benchmarks)
+endif()
 
 set(pigmentcms_SRCS
     DebugPigment.cpp

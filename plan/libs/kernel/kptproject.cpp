@@ -2003,7 +2003,7 @@ QStringList Project::resourceNameList() const
     return lst;
 }
 
-EffortCostMap Project::plannedEffortCostPrDay( const QDate & start, const QDate &end, long id, EffortCostCalculationType typ ) const
+EffortCostMap Project::plannedEffortCostPrDay( QDate  start, QDate end, long id, EffortCostCalculationType typ ) const
 {
     //debugPlan<<start<<end<<id;
     Schedule *s = schedule( id );
@@ -2018,7 +2018,7 @@ EffortCostMap Project::plannedEffortCostPrDay( const QDate & start, const QDate 
     return ec;
 }
 
-EffortCostMap Project::plannedEffortCostPrDay( const Resource *resource, const QDate & start, const QDate &end, long id, EffortCostCalculationType typ ) const
+EffortCostMap Project::plannedEffortCostPrDay( const Resource *resource, QDate  start, QDate end, long id, EffortCostCalculationType typ ) const
 {
     //debugPlan<<start<<end<<id;
     EffortCostMap ec;
@@ -2029,7 +2029,7 @@ EffortCostMap Project::plannedEffortCostPrDay( const Resource *resource, const Q
     return ec;
 }
 
-EffortCostMap Project::actualEffortCostPrDay( const QDate & start, const QDate &end, long id, EffortCostCalculationType typ ) const
+EffortCostMap Project::actualEffortCostPrDay( QDate  start, QDate end, long id, EffortCostCalculationType typ ) const
 {
     //debugPlan<<start<<end<<id;
     EffortCostMap ec;
@@ -2040,7 +2040,7 @@ EffortCostMap Project::actualEffortCostPrDay( const QDate & start, const QDate &
     return ec;
 }
 
-EffortCostMap Project::actualEffortCostPrDay( const Resource *resource, const QDate & start, const QDate &end, long id,  EffortCostCalculationType typ ) const
+EffortCostMap Project::actualEffortCostPrDay( const Resource *resource, QDate  start, QDate end, long id,  EffortCostCalculationType typ ) const
 {
     //debugPlan<<start<<end<<id;
     EffortCostMap ec;
@@ -2064,7 +2064,7 @@ Duration Project::plannedEffort( long id, EffortCostCalculationType typ ) const
 }
 
 // Returns the total planned effort for this project (or subproject) on date
-Duration Project::plannedEffort( const QDate &date, long id, EffortCostCalculationType typ ) const
+Duration Project::plannedEffort( QDate date, long id, EffortCostCalculationType typ ) const
 {
     //debugPlan;
     Duration eff;
@@ -2076,7 +2076,7 @@ Duration Project::plannedEffort( const QDate &date, long id, EffortCostCalculati
 }
 
 // Returns the total planned effort for this project (or subproject) upto and including date
-Duration Project::plannedEffortTo( const QDate &date, long id, EffortCostCalculationType typ ) const
+Duration Project::plannedEffortTo( QDate date, long id, EffortCostCalculationType typ ) const
 {
     //debugPlan;
     Duration eff;
@@ -2088,7 +2088,7 @@ Duration Project::plannedEffortTo( const QDate &date, long id, EffortCostCalcula
 }
 
 // Returns the total actual effort for this project (or subproject) upto and including date
-Duration Project::actualEffortTo( const QDate &date ) const
+Duration Project::actualEffortTo( QDate date ) const
 {
     //debugPlan;
     Duration eff;
@@ -2101,7 +2101,7 @@ Duration Project::actualEffortTo( const QDate &date ) const
 }
 
 // Returns the total planned effort for this project (or subproject) upto and including date
-double Project::plannedCostTo( const QDate &date, long id, EffortCostCalculationType typ ) const
+double Project::plannedCostTo( QDate date, long id, EffortCostCalculationType typ ) const
 {
     //debugPlan;
     double c = 0;
@@ -2114,7 +2114,7 @@ double Project::plannedCostTo( const QDate &date, long id, EffortCostCalculation
 }
 
 // Returns the total actual cost for this project (or subproject) upto and including date
-EffortCost Project::actualCostTo(  long int id, const QDate &date ) const
+EffortCost Project::actualCostTo(  long int id, QDate date ) const
 {
     //debugPlan;
     EffortCost c;
@@ -2125,7 +2125,7 @@ EffortCost Project::actualCostTo(  long int id, const QDate &date ) const
     return c;
 }
 
-Duration Project::budgetedWorkPerformed( const QDate &date, long id ) const
+Duration Project::budgetedWorkPerformed( QDate date, long id ) const
 {
     //debugPlan;
     Duration e;
@@ -2135,7 +2135,7 @@ Duration Project::budgetedWorkPerformed( const QDate &date, long id ) const
     return e;
 }
 
-double Project::budgetedCostPerformed( const QDate &date, long id ) const
+double Project::budgetedCostPerformed( QDate date, long id ) const
 {
     //debugPlan;
     double c = 0.0;
@@ -2145,7 +2145,7 @@ double Project::budgetedCostPerformed( const QDate &date, long id ) const
     return c;
 }
 
-double Project::effortPerformanceIndex( const QDate &date, long id ) const
+double Project::effortPerformanceIndex( QDate date, long id ) const
 {
     //debugPlan;
     debugPlan<<date<<id;
@@ -2160,7 +2160,7 @@ double Project::effortPerformanceIndex( const QDate &date, long id ) const
     return b.toDouble() / a.toDouble();
 }
 
-double Project::schedulePerformanceIndex( const QDate &date, long id ) const
+double Project::schedulePerformanceIndex( QDate date, long id ) const
 {
     //debugPlan;
     double r = 1.0;
@@ -2173,7 +2173,7 @@ double Project::schedulePerformanceIndex( const QDate &date, long id ) const
     return r;
 }
 
-double Project::bcws( const QDate &date, long id ) const
+double Project::bcws( QDate date, long id ) const
 {
     //debugPlan;
     double c = plannedCostTo( date, id, ECCT_EffortWork );
@@ -2187,7 +2187,7 @@ double Project::bcwp( long id ) const
     return bcwp( date, id );
 }
 
-double Project::bcwp( const QDate &date, long id ) const
+double Project::bcwp( QDate date, long id ) const
 {
     debugPlan<<date<<id;
     QDate start = startTime( id ).date();

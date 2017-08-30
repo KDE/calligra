@@ -6,7 +6,9 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
 endif ()
 
 
-add_subdirectory( tests )
+if(BUILD_TESTING)
+    add_subdirectory( tests )
+endif()
 
 
 include_directories( ${CMAKE_SOURCE_DIR}/plugins/chartshape

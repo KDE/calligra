@@ -68,15 +68,15 @@ public:
         m_starttime = QDateTime::currentDateTime();
         m_errors = m_warnings = 0;
         m_log.clear();
-        addMsg(QString("Loading started at %1").arg(m_starttime.toString()));
+        addMsg(QStringLiteral("Loading started at %1").arg(m_starttime.toString()));
     }
     void stopLoad() { 
         m_elapsed = m_timer.elapsed();
-        addMsg(QString("Loading finished at %1, took %2").arg(QDateTime::currentDateTime().toString()).arg(formatElapsed()));
+        addMsg(QStringLiteral("Loading finished at %1, took %2").arg(QDateTime::currentDateTime().toString()).arg(formatElapsed()));
     }
     QDateTime lastLoaded() const { return m_starttime; }
     int elapsed() const { return m_elapsed; }
-    QString formatElapsed() { return QString("%1 seconds").arg((double)m_elapsed/1000); }
+    QString formatElapsed() { return QStringLiteral("%1 seconds").arg((double)m_elapsed/1000); }
     
     void setLogLevel(Severity sev) { m_logLevel = sev; }
     const QStringList &log() const { return m_log; }
@@ -89,12 +89,12 @@ public:
         increment(sev);
         if (m_logLevel < sev) return;
         QString s;
-        if (sev == Errors) s = "ERROR";
-        else if (sev == Warnings) s = "WARNING";
-        else if (sev == Diagnostics) s = "Diagnostic";
-        else if (sev == Debug) s = "Debug";
-        else s = "Message";
-        m_log<<QString("%1: %2").arg(s, 13).arg(msg);
+        if (sev == Errors) s = QLatin1String("ERROR");
+        else if (sev == Warnings) s = QLatin1String("WARNING");
+        else if (sev == Diagnostics) s = QLatin1String("Diagnostic");
+        else if (sev == Debug) s = QLatin1String("Debug");
+        else s = QLatin1String("Message");
+        m_log<<QStringLiteral("%1: %2").arg(s, 13).arg(msg);
     }
     void addMsg(const QString &msg) { m_log<<msg; }
     void increment(int sev) {

@@ -1004,9 +1004,12 @@ void TestBlockLayout::testEmptyParag()
     QVERIFY(qAbs(lay->lineAt(0).position().y() - (14.4 + 100.0)) < ROUNDING);
 }
 
-void TestBlockLayout::testDropCaps()
+void TestBlockLayout::testDropCapsLongText()
 {
-    setupTest(QString("Lorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam\nsome more text")); // some not too long text so the dropcap will be bigger than the block
+    // This text should be so long that it is split into more lines
+    // than the number of dropcap lines.
+    // This is the normal use case, with a shorter line dropcaps doesn't work well
+    setupTest(m_loremIpsum);
 
     KoParagraphStyle style;
     style.setFontPointSize(12.0);
@@ -1015,19 +1018,18 @@ void TestBlockLayout::testDropCaps()
     style.setDropCapsLines(4);
     style.setDropCapsDistance(9.0);
     QTextBlock block = m_doc->begin();
-    QTextBlock secondblock = block.next();
     style.applyStyle(block);
 
-    qInfo()<<"Font:"<<style.font()<<"Text"<<block.text();
+    qInfo()<<"Font:"<<style.font();
     qInfo()<<"Dropcaps off";
 
     m_layout->layout();
 
     // dummy version, caps is still false.
-    QTextLayout *blockLayout =block.layout();
-    QVERIFY(blockLayout->lineCount() > 2);
+    QTextLayout *blockLayout = block.layout();
+    QVERIFY(blockLayout->lineCount() > 4);
     QTextLine line = blockLayout->lineAt(0);
-    QVERIFY(line.textLength() > 3);
+    QVERIFY(line.textLength() > 1);
 
     qInfo()<<"Dropcaps on";
     style.setDropCaps(true);
@@ -1035,31 +1037,42 @@ void TestBlockLayout::testDropCaps()
     m_layout->layout();
 
     // test that the first text line is the dropcaps and the positions are right.
-    QVERIFY(blockLayout->lineCount() > 2);
+    QVERIFY(blockLayout->lineCount() > 4);
     line = blockLayout->lineAt(0);
     QCOMPARE(line.textLength(), 1);
 
-    QCOMPARE(line.position().x(), 100.0);
-    QVERIFY(line.position().y() <= 100.0); // can't get a tight-boundingrect here.
+    QCOMPARE(line.x(), 100.0);
+    QVERIFY(line.y() <= 100.0); // can't get a tight-boundingrect here.
+
+    qInfo()<<"dropcaps:"<<line.rect();
+    qreal dropCapsRight = line.rect().right();
+    qreal dropCapsBottom = 100.0 - line.y() + line.height();
+
+    line = blockLayout->lineAt(1);
+    QVERIFY(line.textLength() > 1);
+    qreal heightNormalLine = line.height();
+    QCOMPARE(line.y(), 100.0); // aligned top
+    QCOMPARE(line.x(), dropCapsRight + style.dropCapsDistance());
 
     line = blockLayout->lineAt(1);
     QVERIFY(line.textLength() > 2);
-    qreal heightNormalLine = line.height();
-    qreal linexpos = line.position().x();
-    QCOMPARE(line.position().y(), 100.0); // aligned top
-    //qDebug()<<line.position().x();
-    QVERIFY(line.position().x() > 149.0); // can't get a tight-boundingrect here.
-    QVERIFY(line.position().x() < 154.0); // can't get a tight-boundingrect here.
+    QCOMPARE(line.y(), 100.0); // aligned top
+    QCOMPARE(line.x(), dropCapsRight + style.dropCapsDistance());
 
-    // Now test that a following block is moved inward by the same about since
-    // it should still be influenced by the dropcap
-    blockLayout = secondblock.layout();
-    QVERIFY(blockLayout->lineCount() == 1);
-    line = blockLayout->lineAt(0);
-    QVERIFY(line.textLength() > 3);
-    QCOMPARE(line.position().x(), linexpos);
-    QVERIFY(line.position().x() > 149.0); // can't get a tight-boundingrect here.
-    QVERIFY(line.position().x() < 154.0); // can't get a tight-boundingrect here.
+    line = blockLayout->lineAt(3);
+    QVERIFY(line.textLength() > 0);
+    QCOMPARE(line.x(), dropCapsRight + style.dropCapsDistance());
+
+    line = blockLayout->lineAt(4);
+    QVERIFY(line.textLength() > 0);
+    QCOMPARE(line.x(), dropCapsRight + style.dropCapsDistance());
+
+    // This should be below the dropcap and thus not indented
+    line = blockLayout->lineAt(5);
+    QVERIFY(line.textLength() > 0);
+    QCOMPARE(line.x(), 100.0); // aligned left
+    qInfo()<<"dropCapsBottom"<<dropCapsBottom<<line.y();
+    QVERIFY(line.y() >= dropCapsBottom);
 
     qInfo()<<"Dropcaps off";
     style.setDropCaps(false); // remove it
@@ -1068,11 +1081,147 @@ void TestBlockLayout::testDropCaps()
     blockLayout = block.layout();
 
     // test that the first text line is no longer dropcaps
-    QVERIFY(blockLayout->lineCount() > 2);
+    QVERIFY(blockLayout->lineCount() > 1);
     line = blockLayout->lineAt(0);
     QVERIFY(line.textLength() > 1);
     QCOMPARE(line.height(), heightNormalLine);
 }
 
+void TestBlockLayout::testDropCapsShortText()
+{
+    setupTest(QString("Lorem ipsum")); // short enough to only get one line
+
+    KoParagraphStyle style;
+    style.setFontPointSize(12.0);
+    style.setDropCaps(false);
+    style.setDropCapsLength(1);
+    style.setDropCapsLines(4);
+    style.setDropCapsDistance(9.0);
+    QTextBlock block = m_doc->begin();
+    style.applyStyle(block);
+
+    qInfo()<<"Font:"<<style.font()<<"Text"<<block.text();
+    qInfo()<<"Dropcaps off";
+
+    m_layout->layout();
+
+    // dummy version, caps is still false.
+    QTextLayout *blockLayout = block.layout();
+    int lineCount = blockLayout->lineCount();
+
+    QVERIFY(lineCount > 0);
+    QTextLine line = blockLayout->lineAt(0);
+    QVERIFY(line.textLength() > 1);
+
+    qInfo()<<"Dropcaps on";
+    style.setDropCaps(true);
+    style.applyStyle(block);
+    m_layout->layout();
+
+    // test that the first text line is the dropcaps and the positions are right.
+    QCOMPARE(blockLayout->lineCount(), lineCount + 1);
+    line = blockLayout->lineAt(0);
+    QCOMPARE(line.textLength(), 1);
+
+    QCOMPARE(line.x(), 100.0);
+    QVERIFY(line.y() <= 100.0); // can't get a tight-boundingrect here.
+
+    qreal dropCapsRight = line.rect().right();
+
+    line = blockLayout->lineAt(1);
+    QVERIFY(line.textLength() > 1);
+    qreal heightNormalLine = line.height();
+    QCOMPARE(line.y(), 100.0); // aligned top
+    QCOMPARE(line.x(), dropCapsRight + style.dropCapsDistance());
+
+    qInfo()<<"Dropcaps off";
+    style.setDropCaps(false); // remove it
+    style.applyStyle(block);
+    m_layout->layout();
+    blockLayout = block.layout();
+
+    // test that the first text line is no longer dropcaps
+    QCOMPARE(blockLayout->lineCount(), lineCount);
+    line = blockLayout->lineAt(0);
+    QVERIFY(line.textLength() > 1);
+    QCOMPARE(line.height(), heightNormalLine);
+}
+
+void TestBlockLayout::testDropCapsWithNewline()
+{
+    // Some not too long text so the dropcap will be bigger than the block.
+    // The text after newline will be in a separate block, but
+    // shall also be indeneted by the dropcap.
+    // Note that we cannot be certain of the number of lines we will get
+    // as it depends on the actual available font.
+    setupTest(QString("Lorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam\nsome more text"));
+
+    KoParagraphStyle style;
+    style.setFontPointSize(12.0);
+    style.setDropCaps(false);
+    style.setDropCapsLength(1);
+    style.setDropCapsLines(4);
+    style.setDropCapsDistance(9.0);
+    QTextBlock block = m_doc->begin();
+    QTextBlock secondblock = block.next(); // "some more text"
+    style.applyStyle(block);
+
+    qInfo()<<"Font:"<<style.font()<<"Text"<<block.text();
+    qInfo()<<"Dropcaps off";
+
+    m_layout->layout();
+
+    // dummy version, caps is still false.
+    QTextLayout *blockLayout = block.layout();
+    int lineCount = blockLayout->lineCount();
+    // lineCount must be >= 1 and <= 3 for this test to work
+    if (lineCount == 0 || lineCount >= 3) {
+        qWarning()<<"The text was not layouted in the required number of lines, so this test will fail";
+    }
+    QVERIFY(blockLayout->lineCount() >= 1);
+    QVERIFY(blockLayout->lineCount() <= 3);
+    QTextLine line = blockLayout->lineAt(0);
+    QVERIFY(line.textLength() > 1);
+
+    qInfo()<<"Dropcaps on";
+    style.setDropCaps(true);
+    style.applyStyle(block);
+    m_layout->layout();
+
+    // test that the first text line is the dropcaps and the positions are right.
+    QVERIFY(blockLayout->lineCount() > 1);
+    line = blockLayout->lineAt(0);
+    QCOMPARE(line.textLength(), 1);
+
+    QCOMPARE(line.x(), 100.0);
+    QVERIFY(line.y() <= 100.0); // can't get a tight-boundingrect here.
+
+    qreal dropCapsRight = line.rect().right();
+
+    line = blockLayout->lineAt(1);
+    QVERIFY(line.textLength() > 2);
+    qreal heightNormalLine = line.height();
+    QCOMPARE(line.y(), 100.0); // aligned top
+    QCOMPARE(line.x(), dropCapsRight + style.dropCapsDistance());
+
+    // Now test that a following block is indented by the same amount
+    // since it also should be influenced by the dropcap
+    blockLayout = secondblock.layout();
+    QVERIFY(blockLayout->lineCount() >= 1);
+    line = blockLayout->lineAt(0);
+    QCOMPARE(line.x(), dropCapsRight + style.dropCapsDistance());
+
+    qInfo()<<"Dropcaps off";
+    style.setDropCaps(false); // remove it
+    style.applyStyle(block);
+    m_layout->layout();
+    blockLayout = block.layout();
+
+    // test that the first text line is no longer dropcaps
+    QCOMPARE(blockLayout->lineCount(), lineCount);
+    line = blockLayout->lineAt(0);
+    QVERIFY(line.textLength() > 1);
+    QCOMPARE(line.height(), heightNormalLine);
+}
 
 QTEST_MAIN(TestBlockLayout)

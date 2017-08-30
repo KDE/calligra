@@ -130,4 +130,4 @@ X-DBUS-StartupType=multi
 X-DBUS-ServiceName=org.kde.calligrasheets
 X-DocPath=sheets/index.html
 X-KDE-StartupNotify=true
-Categories=Qt;KDE;Office;
+Categories=Qt;KDE;Office;Spreadsheet;

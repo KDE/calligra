@@ -135,4 +135,4 @@ X-DBUS-StartupType=multi
 X-DBUS-ServiceName=org.kde.calligrastage
 X-DocPath=stage/index.html
 X-KDE-StartupNotify=true
-Categories=Qt;KDE;Office;
+Categories=Qt;KDE;Office;Presentation;

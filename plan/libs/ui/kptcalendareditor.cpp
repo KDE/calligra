@@ -65,6 +65,7 @@ CalendarTreeView::CalendarTreeView( QWidget *parent )
     setSelectionMode( QAbstractItemView::SingleSelection );
     setSelectionModel( new QItemSelectionModel( model() ) );
 
+    setItemDelegateForColumn( CalendarItemModel::Scope, new EnumDelegate( this ) );
     setItemDelegateForColumn( CalendarItemModel::TimeZone, new EnumDelegate( this ) ); // timezone
 #ifdef HAVE_KHOLIDAYS
     setItemDelegateForColumn( CalendarItemModel::HolidayRegion, new EnumDelegate( this ) );

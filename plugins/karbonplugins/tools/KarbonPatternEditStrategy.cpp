@@ -130,7 +130,7 @@ KarbonPatternEditStrategy::KarbonPatternEditStrategy(KoShape * s, KoImageCollect
     QSizeF size = shape()->size();
     // the fixed length of half the average shape dimension
     m_normalizedLength = 0.25 * (size.width() + size.height());
-    // get the brush tranformation matrix
+    // get the brush transformation matrix
     QTransform brushMatrix;
     QSharedPointer<KoPatternBackground>  fill = qSharedPointerDynamicCast<KoPatternBackground>(shape()->background());
     if (fill)

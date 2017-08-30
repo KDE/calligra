@@ -4,7 +4,9 @@ set(LIBRCPS_INCLUDE_DIR 3rdparty/LibRCPS/src)
 include_directories( ${LIBRCPS_INCLUDE_DIR} ${KOODF_INCLUDES} ${CMAKE_SOURCE_DIR}/plan/libs/kernel  )
 
 add_subdirectory( 3rdparty )
-add_subdirectory( tests )
+if(BUILD_TESTING)
+    add_subdirectory( tests )
+endif()
 
 set ( RCPSScheduler_SRCS
     KPlatoRCPSPlugin.cpp

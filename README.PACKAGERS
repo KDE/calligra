@@ -171,16 +171,16 @@ runtime dependency on the Stage engine and the respective filters.
 
 5.3. Support for DOC, DOCX, WPD and more runtime dependency
 -----------------------------------------------------------
-The Okular ODT plugin also supports the formats DOC, DOCX and WPD, if the
-respective filters FILTER_DOC_TO_ODT, FILTER_DOCX_TO_ODT and
-FILTER_WORDPERFECT_TO_ODT are built, by the products OKULAR_GENERATOR_DOC,
-OKULAR_GENERATOR_DOCX and OKULAR_GENERATOR_WORDPERFECT.
+The Okular ODT plugin also supports the formats DOC, DOCX, RTF and WPD, if the
+respective filters FILTER_DOC_TO_ODT, FILTER_DOCX_TO_ODT, FILTER_RTF_TO_ODT 
+and FILTER_WORDPERFECT_TO_ODT are built, by the products OKULAR_GENERATOR_DOC,
+OKULAR_GENERATOR_DOCX, OKULAR_GENERATOR_RTF and OKULAR_GENERATOR_WORDPERFECT.
 
 In that case the files
-* libokularGenerator_{doc,docx,wpd}_calligra.desktop
-* okular{Doc,Doxx,Wpd}_calligra.desktop
-* okularApplication_{doc,docx,wpd}_calligra.desktop
-will be installed from the filters/word/{msword-odf,docx/import,wordperfect/import}.
+* libokularGenerator_{doc,docx,rtf,wpd}_calligra.desktop
+* okular{Doc,Doxx,Rtf,Wpd}_calligra.desktop
+* okularApplication_{doc,docx,rtf,wpd}_calligra.desktop
+will be installed from the filters/word/{msword-odf,docx/import,rtf/import,wordperfect/import}.
 
 So with those desktop files and the Okular ODT plugin installed there is a
 runtime dependency on the respective filters.

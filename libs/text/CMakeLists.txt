@@ -2,8 +2,10 @@ include_directories(${KOTEXT_INCLUDES}
                     ${FONTCONFIG_INCLUDE_DIR}
                     ${FREETYPE_INCLUDE_DIRS})
 
-add_subdirectory( tests )
-add_subdirectory( styles/tests )
+if(BUILD_TESTING)
+    add_subdirectory( tests )
+    add_subdirectory( styles/tests )
+endif()
 
 ########### next target ###############
 set(kotext_LIB_SRCS

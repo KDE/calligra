@@ -7,7 +7,9 @@ include_directories(
 )
 
 add_subdirectory( scripts )
-add_subdirectory( tests )
+if(BUILD_TESTING)
+    add_subdirectory( tests )
+endif()
 
 set(krossmoduleplan_PART_SRCS
     Account.cpp

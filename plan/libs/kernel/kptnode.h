@@ -302,31 +302,31 @@ public:
     /// The assigned resources can not fullfil the estimated effort.
     virtual bool effortMetError( long /*id*/ = CURRENTSCHEDULE ) const { return false; }
     
-    virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const=0;
-    virtual EffortCostMap plannedEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const=0;
+    virtual EffortCostMap plannedEffortCostPrDay(QDate start, QDate end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const=0;
+    virtual EffortCostMap plannedEffortCostPrDay(const Resource *resource, QDate start, QDate end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const=0;
 
     /// Returns the total planned effort for @p resource on this task (or subtasks)
     virtual Duration plannedEffort( const Resource *resource, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Returns the total planned effort for this task (or subtasks) 
     virtual Duration plannedEffort( long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const { Q_UNUSED(id); return Duration::zeroDuration; }
     /// Returns the total planned effort for this task (or subtasks) on date
-    virtual Duration plannedEffort(const QDate &, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const { Q_UNUSED(id); return Duration::zeroDuration; }
+    virtual Duration plannedEffort(QDate , long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const { Q_UNUSED(id); return Duration::zeroDuration; }
     /// Returns the total planned effort for @p resource on this task (or subtasks) on date
-    virtual Duration plannedEffort( const Resource *resource, const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
+    virtual Duration plannedEffort( const Resource *resource, QDate date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Returns the planned effort up to and including date
-    virtual Duration plannedEffortTo(const QDate &, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const { Q_UNUSED(id); return Duration::zeroDuration; }
+    virtual Duration plannedEffortTo(QDate , long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const { Q_UNUSED(id); return Duration::zeroDuration; }
     /// Returns the planned effort for @p resource up to and including date
-    virtual Duration plannedEffortTo( const Resource *resource, const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
+    virtual Duration plannedEffortTo( const Resource *resource, QDate date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     
     /// Returns the total actual effort for this task (or subtasks) 
     virtual Duration actualEffort() const { return Duration::zeroDuration; }
     /// Returns the total actual effort for this task (or subtasks) on date
-    virtual Duration actualEffort(const QDate &/*date*/ ) const { return Duration::zeroDuration; }
+    virtual Duration actualEffort(QDate /*date*/ ) const { return Duration::zeroDuration; }
     /// Returns the total actual effort for this task (or subtasks) up to and including date
-    virtual Duration actualEffortTo(const QDate &/*date*/ ) const { return Duration::zeroDuration; }
-    virtual EffortCostMap actualEffortCostPrDay(const QDate &start, const QDate &end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const=0;
+    virtual Duration actualEffortTo(QDate /*date*/ ) const { return Duration::zeroDuration; }
+    virtual EffortCostMap actualEffortCostPrDay(QDate start, QDate end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const=0;
     /// Returns the actual effort and cost pr day used by @p resource
-    virtual EffortCostMap actualEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const=0;
+    virtual EffortCostMap actualEffortCostPrDay(const Resource *resource, QDate start, QDate end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const=0;
     
     /**
      * Planned cost is the sum total of all resources and other costs
@@ -338,21 +338,21 @@ public:
      * Planned cost from start of activity up to and including date
      * is the sum of all resource costs and other costs planned for this node.
      */
-    virtual double plannedCostTo(const QDate &/*date*/, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const { Q_UNUSED(id); return 0; }
+    virtual double plannedCostTo(QDate /*date*/, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const { Q_UNUSED(id); return 0; }
     /// Actual cost up to and including date
-    virtual EffortCost actualCostTo( long int /*id*/, const QDate &/*date*/) const { return EffortCost(); }
+    virtual EffortCost actualCostTo( long int /*id*/, QDate /*date*/) const { return EffortCost(); }
     
     /// Returns the effort planned to be used to reach the actual percent finished
-    virtual Duration budgetedWorkPerformed( const QDate &, long = CURRENTSCHEDULE ) const = 0;
+    virtual Duration budgetedWorkPerformed( QDate , long = CURRENTSCHEDULE ) const = 0;
     /// Returns the cost planned to be used to reach the actual percent finished
-    virtual double budgetedCostPerformed( const QDate &, long = CURRENTSCHEDULE ) const { return 0.0; };
+    virtual double budgetedCostPerformed( QDate , long = CURRENTSCHEDULE ) const { return 0.0; };
 
     /// Return map of Budgeted Cost of Work Scheduled pr day
     virtual EffortCostMap bcwsPrDay( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All );
     /// Return map of Budgeted Cost of Work Scheduled pr day
     virtual EffortCostMap bcwsPrDay( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All ) const;
     /// Budgeted Cost of Work Scheduled
-    virtual double bcws( const QDate &/*date*/, long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return 0.0; }
+    virtual double bcws( QDate /*date*/, long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return 0.0; }
 
     /// Return map of Budgeted Cost of Work Scheduled pr day (also includes bcws pr day)
     virtual EffortCostMap bcwpPrDay( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All );
@@ -361,21 +361,21 @@ public:
     /// Budgeted Cost of Work Performed
     virtual double bcwp( long id ) const { Q_UNUSED(id); return 0.0; }
     /// Budgeted Cost of Work Performed ( up to @p date )
-    virtual double bcwp( const QDate &/*date*/, long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return 0.0; }
+    virtual double bcwp( QDate /*date*/, long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return 0.0; }
 
     /// Return a map of Actual effort and Cost of Work Performed
     virtual EffortCostMap acwp( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All );
     /// Return a map of Actual effort and Cost of Work Performed
     virtual EffortCostMap acwp( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All ) const;
     /// Return Actual effort and Cost of Work Performed upto @date
-    virtual EffortCost acwp( const QDate &date, long id = CURRENTSCHEDULE ) const;
+    virtual EffortCost acwp( QDate date, long id = CURRENTSCHEDULE ) const;
 
     /// Effort based performance index
-    virtual double effortPerformanceIndex(const QDate &/*date*/, long /*id*/ = CURRENTSCHEDULE ) const { return 0.0; }
+    virtual double effortPerformanceIndex(QDate /*date*/, long /*id*/ = CURRENTSCHEDULE ) const { return 0.0; }
     /// Schedule performance index
-    virtual double schedulePerformanceIndex(const QDate &/*date*/, long /*id*/ = CURRENTSCHEDULE ) const { return 0.0; }
+    virtual double schedulePerformanceIndex(QDate /*date*/, long /*id*/ = CURRENTSCHEDULE ) const { return 0.0; }
     /// Cost performance index
-    virtual double costPerformanceIndex(  long int /*id*/, const QDate &/*date*/, bool * /*error=0*/ ) const { return 0.0; }
+    virtual double costPerformanceIndex(  long int /*id*/, QDate /*date*/, bool * /*error=0*/ ) const { return 0.0; }
     
     virtual void initiateCalculationLists(MainSchedule &sch) = 0;
     virtual DateTime calculateForward(int /*use*/) = 0;

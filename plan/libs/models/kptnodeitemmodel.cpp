@@ -1238,7 +1238,7 @@ QVariant NodeModel::finishFloat( const Node *node, int role ) const
         case Qt::ToolTipRole:
             return t->finishFloat( id() ).toString( Duration::Format_i18nDayTime );
         case Qt::EditRole:
-            t->finishFloat( id() ).toDouble( Duration::Unit_h );
+            return t->finishFloat( id() ).toDouble( Duration::Unit_h );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -4250,8 +4250,10 @@ int NodeItemModel::sortRole( int column ) const
         case NodeModel::NodeConstraintStart:
         case NodeModel::NodeConstraintEnd:
             v = Qt::EditRole;
+            break;
         case NodeModel::NodeWBSCode:
             v = NodeModel::SortableRole;
+            break;
         default:
             break;
     }

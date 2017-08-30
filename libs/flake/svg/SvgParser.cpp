@@ -721,7 +721,7 @@ void SvgParser::applyFilter(KoShape *shape)
 
     // parse filter region
     QRectF bound(shape->position(), shape->size());
-    // work on bounding box without viewbox tranformation applied
+    // work on bounding box without viewbox transformation applied
     // so user space coordinates of bounding box and filter region match up
     bound = gc->viewboxTransform.inverted().mapRect(bound);
 
@@ -1313,7 +1313,7 @@ KoShape * SvgParser::createShape(const QString &shapeID)
     if (shape->shapeId().isEmpty())
         shape->setShapeId(factory->id());
 
-    // reset tranformation that might come from the default shape
+    // reset transformation that might come from the default shape
     shape->setTransformation(QTransform());
 
     // reset border

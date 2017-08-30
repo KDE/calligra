@@ -1,5 +1,7 @@
 
-add_subdirectory( tests )
+if(BUILD_TESTING)
+    add_subdirectory( tests )
+endif()
 
 include_directories(${KOODF_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgetutils

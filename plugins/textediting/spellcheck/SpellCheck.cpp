@@ -52,6 +52,7 @@ SpellCheck::SpellCheck()
     , m_spellCheckMenu(0)
     , m_activeSection(0, 0, 0)
     , m_simpleEdit(false)
+    , m_cursorPosition(0)
 {
     /* setup actions for this plugin */
     QAction *configureAction = new QAction(i18n("Configure &Spell Checking..."), this);
@@ -102,8 +103,7 @@ void SpellCheck::startingSimpleEdit(QTextDocument *document, int cursorPosition)
 {
     m_simpleEdit = true;
     setDocument(document);
-    Q_UNUSED(document);
-    Q_UNUSED(cursorPosition);
+    m_cursorPosition = cursorPosition;
 }
 
 void SpellCheck::checkSection(QTextDocument *document, int startPosition, int endPosition)
@@ -225,6 +225,9 @@ bool SpellCheck::skipRunTogetherWords()
     return m_speller.testAttribute(Speller::SkipRunTogether);
 }
 
+// TODO:
+// 1) When editing a misspelled word it should be spellchecked on the fly so the markup is removed when it is OK.
+// 2) Deleting a character should be treated as a simple edit
 void SpellCheck::highlightMisspelled(const QString &word, int startPosition, bool misspelled)
 {
     if (!misspelled)
@@ -241,31 +244,47 @@ static_cast<MyThread*>(QThread::currentThread())->mySleep(400);
     blockData.appendMarkup(KoTextBlockData::Misspell, startPosition - block.position(), startPosition - block.position() + word.trimmed().length());
 }
 
-void SpellCheck::documentChanged(int from, int min, int plus)
+void SpellCheck::documentChanged(int from, int charsRemoved, int charsAdded)
 {
     QTextDocument *document = qobject_cast<QTextDocument*>(sender());
     if (document == 0)
         return;
 
-    QTextBlock block = document->findBlock(from);
+    // If a simple edit, we use the cursor position to determine where
+    // the change occured. This makes it possible to handle cases
+    // where formatting of a block has changed, eg. when dropcaps is used.
+    // QTextDocument then reports the change as if the whole block has changed.
+    // Ex: Having a 10 char line and you add a char at pos 7:
+    // from = block->postion()
+    // charsRemoved = 10
+    // charsAdded = 11
+    // m_cursorPosition = 7
+    int pos = m_simpleEdit ? m_cursorPosition : from;
+    QTextBlock block = document->findBlock(pos);
     if (!block.isValid())
         return;
 
     do {
         KoTextBlockData blockData(block);
         if (m_enableSpellCheck) {
+            // This block and all blocks after this must be relayouted
             blockData.setMarkupsLayoutValidity(KoTextBlockData::Misspell, false);
+            // If it's a simple edit we will wait until finishedWord before spellchecking
+            // but we need to adjust all markups behind the added/removed character(s)
             if (m_simpleEdit) {
-                // if it's a simple edit we will wait until finishedWord
-                blockData.rebaseMarkups(KoTextBlockData::Misspell, from, plus - min);
+                // Since markups work on positions within each block only the edited block must be rebased
+                if (block.position() <= pos) {
+                    blockData.rebaseMarkups(KoTextBlockData::Misspell, pos - block.position(), charsAdded - charsRemoved);
+                }
             } else {
+                // handle not so simple edits (like cut/paste etc)
                 checkSection(document, block.position(), block.position() + block.length() - 1);
             }
         } else {
             blockData.clearMarkups(KoTextBlockData::Misspell);
         }
         block = block.next();
-    } while(block.isValid() && block.position() <= from + plus);
+    } while(block.isValid() && block.position() <= from + charsAdded);
 
     m_simpleEdit = false;
 }

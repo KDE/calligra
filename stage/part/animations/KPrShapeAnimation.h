@@ -91,14 +91,14 @@ public:
     /**
      * @brief Set the begin time for the animation
      *
-     * @param timeMS time in miliseconds
+     * @param timeMS time in milliseconds
      */
     virtual void setBeginTime(int timeMS);
 
     /**
      * @brief Set duration time for the animation
      *
-     * @param timeMS time in miliseconds
+     * @param timeMS time in milliseconds
      */
     virtual void setGlobalDuration(int timeMS);
 

@@ -1,7 +1,9 @@
 project(wordspart)
 
 #TODO port to textlayout-rework
-add_subdirectory( tests )
+if(BUILD_TESTING)
+    add_subdirectory( tests )
+endif()
 
 include_directories( ${KORDF_INCLUDES} ${KOTEXT_INCLUDES} ${TEXTLAYOUT_INCLUDES})
 

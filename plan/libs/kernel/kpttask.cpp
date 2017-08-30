@@ -266,28 +266,28 @@ void Task::calcResourceOverbooked() {
 bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
     QString s;
     bool ok = false;
-    m_id = element.attribute("id");
+    m_id = element.attribute(QStringLiteral("id"));
 
-    setName( element.attribute("name") );
-    m_leader = element.attribute("leader");
-    m_description = element.attribute("description");
+    setName( element.attribute(QStringLiteral("name")) );
+    m_leader = element.attribute(QStringLiteral("leader"));
+    m_description = element.attribute(QStringLiteral("description"));
     //debugPlan<<m_name<<": id="<<m_id;
 
     // Allow for both numeric and text
-    QString constraint = element.attribute("scheduling","0");
+    QString constraint = element.attribute(QStringLiteral("scheduling"),QStringLiteral("0"));
     m_constraint = (Node::ConstraintType)constraint.toInt(&ok);
     if (!ok)
         Node::setConstraint(constraint); // hmmm, why do I need Node::?
 
-    s = element.attribute("constraint-starttime");
+    s = element.attribute(QStringLiteral("constraint-starttime"));
     if (!s.isEmpty())
         m_constraintStartTime = DateTime::fromString(s, status.projectTimeZone());
-    s = element.attribute("constraint-endtime");
+    s = element.attribute(QStringLiteral("constraint-endtime"));
     if (!s.isEmpty())
         m_constraintEndTime = DateTime::fromString(s, status.projectTimeZone());
 
-    m_startupCost = element.attribute("startup-cost", "0.0").toDouble();
-    m_shutdownCost = element.attribute("shutdown-cost", "0.0").toDouble();
+    m_startupCost = element.attribute(QStringLiteral("startup-cost"), QStringLiteral("0.0")).toDouble();
+    m_shutdownCost = element.attribute(QStringLiteral("shutdown-cost"), QStringLiteral("0.0")).toDouble();
 
     // Load the task children
     KoXmlNode n = element.firstChild();
@@ -296,7 +296,7 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
             continue;
         }
         KoXmlElement e = n.toElement();
-        if (e.tagName() == "project") {
+        if (e.tagName() == QLatin1String("project")) {
             // Load the subproject
 /*                Project *child = new Project(this, status);
             if (child->load(e)) {
@@ -307,7 +307,7 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
                 // TODO: Complain about this
                 delete child;
             }*/
-        } else if (e.tagName() == "task") {
+        } else if (e.tagName() == QLatin1String("task")) {
             // Load the task
             Task *child = new Task(this);
             if (child->load(e, status)) {
@@ -318,16 +318,16 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
                 // TODO: Complain about this
                 delete child;
             }
-        } else if (e.tagName() == "resource") {
+        } else if (e.tagName() == QLatin1String("resource")) {
             // TODO: Load the resource (projects don't have resources yet)
-        } else if (e.tagName() == "estimate" ||
-                   ( /*status.version() < "0.6" &&*/ e.tagName() == "effort" ) ) {
+        } else if (e.tagName() == QLatin1String("estimate") ||
+                   ( /*status.version() < "0.6" &&*/ e.tagName() == QLatin1String("effort") ) ) {
             //  Load the estimate
             m_estimate->load(e, status);
-        } else if (e.tagName() == "resourcegroup-request") {
+        } else if (e.tagName() == QLatin1String("resourcegroup-request")) {
             // Load the resource request
             // Handle multiple requests to same group gracefully (Not really allowed)
-            ResourceGroupRequest *r = m_requests.findGroupRequestById( e.attribute("group-id") );
+            ResourceGroupRequest *r = m_requests.findGroupRequestById( e.attribute(QStringLiteral("group-id")) );
             if ( r ) {
                 warnPlan<<"Multiple requests to same group, loading into existing group";
                 if ( ! r->load( e, status ) ) {
@@ -342,18 +342,18 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
                     delete r;
                 }
             }
-        } else if (e.tagName() == "workpackage") {
+        } else if (e.tagName() == QLatin1String("workpackage")) {
             m_workPackage.loadXML( e, status );
-        } else if (e.tagName() == "progress") {
+        } else if (e.tagName() == QLatin1String("progress")) {
             completion().loadXML( e, status );
-        } else if (e.tagName() == "schedules") {
+        } else if (e.tagName() == QLatin1String("schedules")) {
             KoXmlNode n = e.firstChild();
             for ( ; ! n.isNull(); n = n.nextSibling() ) {
                 if ( ! n.isElement() ) {
                     continue;
                 }
                 KoXmlElement el = n.toElement();
-                if (el.tagName() == "schedule") {
+                if (el.tagName() == QLatin1String("schedule")) {
                     NodeSchedule *sch = new NodeSchedule();
                     if (sch->loadXML(el, status)) {
                         sch->setNode(this);
@@ -364,16 +364,16 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
                     }
                 }
             }
-        } else if (e.tagName() == "documents") {
+        } else if (e.tagName() == QLatin1String("documents")) {
             m_documents.load( e, status );
-        } else if (e.tagName() == "workpackage-log") {
+        } else if (e.tagName() == QLatin1String("workpackage-log")) {
             KoXmlNode n = e.firstChild();
             for ( ; ! n.isNull(); n = n.nextSibling() ) {
                 if ( ! n.isElement() ) {
                     continue;
                 }
                 KoXmlElement el = n.toElement();
-                if (el.tagName() == "workpackage") {
+                if (el.tagName() == QLatin1String("workpackage")) {
                     WorkPackage *wp = new WorkPackage( this );
                     if ( wp->loadLoggedXML( el, status ) ) {
                         m_packageLog << wp;
@@ -390,29 +390,29 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
 }
 
 void Task::save(QDomElement &element)  const {
-    QDomElement me = element.ownerDocument().createElement("task");
+    QDomElement me = element.ownerDocument().createElement(QStringLiteral("task"));
     element.appendChild(me);
 
-    me.setAttribute("id", m_id);
-    me.setAttribute("name", m_name);
-    me.setAttribute("leader", m_leader);
-    me.setAttribute("description", m_description);
+    me.setAttribute(QStringLiteral("id"), m_id);
+    me.setAttribute(QStringLiteral("name"), m_name);
+    me.setAttribute(QStringLiteral("leader"), m_leader);
+    me.setAttribute(QStringLiteral("description"), m_description);
 
-    me.setAttribute("scheduling",constraintToString());
-    me.setAttribute("constraint-starttime",m_constraintStartTime.toString( Qt::ISODate ));
-    me.setAttribute("constraint-endtime",m_constraintEndTime.toString( Qt::ISODate ));
+    me.setAttribute(QStringLiteral("scheduling"),constraintToString());
+    me.setAttribute(QStringLiteral("constraint-starttime"),m_constraintStartTime.toString( Qt::ISODate ));
+    me.setAttribute(QStringLiteral("constraint-endtime"),m_constraintEndTime.toString( Qt::ISODate ));
 
-    me.setAttribute("startup-cost", QString::number(m_startupCost));
-    me.setAttribute("shutdown-cost", QString::number(m_shutdownCost));
+    me.setAttribute(QStringLiteral("startup-cost"), QString::number(m_startupCost));
+    me.setAttribute(QStringLiteral("shutdown-cost"), QString::number(m_shutdownCost));
 
-    me.setAttribute("wbs", wbsCode()); //NOTE: included for information
+    me.setAttribute(QStringLiteral("wbs"), wbsCode()); //NOTE: included for information
 
     m_estimate->save(me);
     m_workPackage.saveXML(me);
     completion().saveXML( me );
 
     if (!m_schedules.isEmpty()) {
-        QDomElement schs = me.ownerDocument().createElement("schedules");
+        QDomElement schs = me.ownerDocument().createElement(QStringLiteral("schedules"));
         me.appendChild(schs);
         foreach (const Schedule *s, m_schedules) {
             if (!s->isDeleted()) {
@@ -428,7 +428,7 @@ void Task::save(QDomElement &element)  const {
 
     // The workpackage log
     if (!m_packageLog.isEmpty()) {
-        QDomElement log = me.ownerDocument().createElement("workpackage-log");
+        QDomElement log = me.ownerDocument().createElement(QStringLiteral("workpackage-log"));
         me.appendChild(log);
         foreach (const WorkPackage *wp, m_packageLog) {
             wp->saveLoggedXML( log );
@@ -453,36 +453,36 @@ void Task::saveAppointments(QDomElement &element, long id) const {
 
 void Task::saveWorkPackageXML(QDomElement &element, long id )  const
 {
-    QDomElement me = element.ownerDocument().createElement("task");
+    QDomElement me = element.ownerDocument().createElement(QStringLiteral("task"));
     element.appendChild(me);
 
-    me.setAttribute("id", m_id);
-    me.setAttribute("name", m_name);
-    me.setAttribute("leader", m_leader);
-    me.setAttribute("description", m_description);
+    me.setAttribute(QStringLiteral("id"), m_id);
+    me.setAttribute(QStringLiteral("name"), m_name);
+    me.setAttribute(QStringLiteral("leader"), m_leader);
+    me.setAttribute(QStringLiteral("description"), m_description);
 
-    me.setAttribute("scheduling",constraintToString());
-    me.setAttribute("constraint-starttime",m_constraintStartTime.toString( Qt::ISODate ));
-    me.setAttribute("constraint-endtime",m_constraintEndTime.toString( Qt::ISODate ));
+    me.setAttribute(QStringLiteral("scheduling"),constraintToString());
+    me.setAttribute(QStringLiteral("constraint-starttime"),m_constraintStartTime.toString( Qt::ISODate ));
+    me.setAttribute(QStringLiteral("constraint-endtime"),m_constraintEndTime.toString( Qt::ISODate ));
 
-    me.setAttribute("startup-cost", QString::number(m_startupCost));
-    me.setAttribute("shutdown-cost", QString::number(m_shutdownCost));
+    me.setAttribute(QStringLiteral("startup-cost"), QString::number(m_startupCost));
+    me.setAttribute(QStringLiteral("shutdown-cost"), QString::number(m_shutdownCost));
 
-    me.setAttribute("wbs", wbsCode()); // NOTE: included for information
+    me.setAttribute(QStringLiteral("wbs"), wbsCode()); // NOTE: included for information
 
     m_estimate->save(me);
 
     completion().saveXML( me );
 
     if ( m_schedules.contains( id ) && ! m_schedules[ id ]->isDeleted() ) {
-        QDomElement schs = me.ownerDocument().createElement("schedules");
+        QDomElement schs = me.ownerDocument().createElement(QStringLiteral("schedules"));
         me.appendChild(schs);
         m_schedules[ id ]->saveXML( schs );
     }
     m_documents.save( me ); // TODO: copying documents
 }
 
-EffortCostMap Task::plannedEffortCostPrDay(const QDate &start, const QDate &end, long id, EffortCostCalculationType typ ) const {
+EffortCostMap Task::plannedEffortCostPrDay(QDate start, QDate end, long id, EffortCostCalculationType typ ) const {
     //debugPlan<<m_name;
     if ( type() == Node::Type_Summarytask ) {
         EffortCostMap ec;
@@ -499,7 +499,7 @@ EffortCostMap Task::plannedEffortCostPrDay(const QDate &start, const QDate &end,
     return EffortCostMap();
 }
 
-EffortCostMap Task::plannedEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id, EffortCostCalculationType typ ) const {
+EffortCostMap Task::plannedEffortCostPrDay(const Resource *resource, QDate start, QDate end, long id, EffortCostCalculationType typ ) const {
     //debugPlan<<m_name;
     if ( type() == Node::Type_Summarytask ) {
         EffortCostMap ec;
@@ -516,7 +516,7 @@ EffortCostMap Task::plannedEffortCostPrDay(const Resource *resource, const QDate
     return EffortCostMap();
 }
 
-EffortCostMap Task::actualEffortCostPrDay(const QDate &start, const QDate &end, long id, EffortCostCalculationType typ ) const {
+EffortCostMap Task::actualEffortCostPrDay(QDate start, QDate end, long id, EffortCostCalculationType typ ) const {
     //debugPlan<<m_name;
     if ( type() == Node::Type_Summarytask ) {
         EffortCostMap ec;
@@ -535,7 +535,7 @@ EffortCostMap Task::actualEffortCostPrDay(const QDate &start, const QDate &end, 
     return EffortCostMap();
 }
 
-EffortCostMap Task::actualEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id, EffortCostCalculationType typ ) const {
+EffortCostMap Task::actualEffortCostPrDay(const Resource *resource, QDate start, QDate end, long id, EffortCostCalculationType typ ) const {
     //debugPlan<<m_name;
     if ( type() == Node::Type_Summarytask ) {
         EffortCostMap ec;
@@ -589,7 +589,7 @@ Duration Task::plannedEffort( long id, EffortCostCalculationType typ ) const {
 }
 
 // Returns the total planned effort for this task (or subtasks) on date
-Duration Task::plannedEffort( const Resource *resource, const QDate &date, long id, EffortCostCalculationType typ ) const {
+Duration Task::plannedEffort( const Resource *resource, QDate date, long id, EffortCostCalculationType typ ) const {
    //debugPlan;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
@@ -606,7 +606,7 @@ Duration Task::plannedEffort( const Resource *resource, const QDate &date, long 
 }
 
 // Returns the total planned effort for this task (or subtasks) on date
-Duration Task::plannedEffort(const QDate &date, long id, EffortCostCalculationType typ ) const {
+Duration Task::plannedEffort(QDate date, long id, EffortCostCalculationType typ ) const {
    //debugPlan;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
@@ -623,7 +623,7 @@ Duration Task::plannedEffort(const QDate &date, long id, EffortCostCalculationTy
 }
 
 // Returns the total planned effort for this task (or subtasks) upto and including date
-Duration Task::plannedEffortTo( const QDate &date, long id, EffortCostCalculationType typ ) const {
+Duration Task::plannedEffortTo( QDate date, long id, EffortCostCalculationType typ ) const {
     //debugPlan;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
@@ -640,7 +640,7 @@ Duration Task::plannedEffortTo( const QDate &date, long id, EffortCostCalculatio
 }
 
 // Returns the total planned effort for this task (or subtasks) upto and including date
-Duration Task::plannedEffortTo( const Resource *resource, const QDate &date, long id, EffortCostCalculationType typ ) const {
+Duration Task::plannedEffortTo( const Resource *resource, QDate date, long id, EffortCostCalculationType typ ) const {
     //debugPlan;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
@@ -669,7 +669,7 @@ Duration Task::actualEffort() const {
 }
 
 // Returns the total actual effort for this task (or subtasks) on date
-Duration Task::actualEffort( const QDate &date ) const {
+Duration Task::actualEffort( QDate date ) const {
    //debugPlan;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
@@ -682,7 +682,7 @@ Duration Task::actualEffort( const QDate &date ) const {
 }
 
 // Returns the total actual effort for this task (or subtasks) to date
-Duration Task::actualEffortTo( const QDate &date ) const {
+Duration Task::actualEffortTo( QDate date ) const {
    //debugPlan;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
@@ -707,7 +707,7 @@ EffortCost Task::plannedCost( long id, EffortCostCalculationType typ ) const {
     return c;
 }
 
-double Task::plannedCostTo( const QDate &date, long id, EffortCostCalculationType typ ) const {
+double Task::plannedCostTo( QDate date, long id, EffortCostCalculationType typ ) const {
     //debugPlan;
     double c = 0;
     if (type() == Node::Type_Summarytask) {
@@ -730,13 +730,13 @@ double Task::plannedCostTo( const QDate &date, long id, EffortCostCalculationTyp
     return c;
 }
 
-EffortCost Task::actualCostTo(  long int id, const QDate &date ) const {
+EffortCost Task::actualCostTo(  long int id, QDate date ) const {
     //debugPlan;
     EffortCostMap ecm = acwp( id );
     return EffortCost( ecm.effortTo( date ), ecm.costTo( date ) );
 }
 
-double Task::bcws( const QDate &date, long id ) const
+double Task::bcws( QDate date, long id ) const
 {
     //debugPlan;
     double c = plannedCostTo( date, id );
@@ -842,7 +842,7 @@ EffortCostMap Task::bcwpPrDay( long int id, EffortCostCalculationType typ )
     return cache.effortcostmap;
 }
 
-Duration Task::budgetedWorkPerformed( const QDate &date, long id ) const
+Duration Task::budgetedWorkPerformed( QDate date, long id ) const
 {
     //debugPlan;
     Duration e;
@@ -858,7 +858,7 @@ Duration Task::budgetedWorkPerformed( const QDate &date, long id ) const
     return e;
 }
 
-double Task::budgetedCostPerformed( const QDate &date, long id ) const
+double Task::budgetedCostPerformed( QDate date, long id ) const
 {
     //debugPlan;
     double c = 0.0;
@@ -885,7 +885,7 @@ double Task::bcwp( long id ) const
     return bcwp( QDate::currentDate(), id );
 }
 
-double Task::bcwp( const QDate &date, long id ) const
+double Task::bcwp( QDate date, long id ) const
 {
     return budgetedCostPerformed( date, id );
 }
@@ -929,7 +929,7 @@ EffortCostMap Task::acwp( long int id, KPlato::EffortCostCalculationType typ )
     return ec.effortcostmap;
 }
 
-EffortCost Task::acwp( const QDate &date, long id ) const
+EffortCost Task::acwp( QDate date, long id ) const
 {
     //debugPlan;
     if (type() == Node::Type_Summarytask) {
@@ -946,7 +946,7 @@ EffortCost Task::acwp( const QDate &date, long id ) const
     return c;
 }
 
-double Task::schedulePerformanceIndex( const QDate &date, long id ) const {
+double Task::schedulePerformanceIndex( QDate date, long id ) const {
     //debugPlan;
     double r = 1.0;
     double s = bcws( date, id );
@@ -957,7 +957,7 @@ double Task::schedulePerformanceIndex( const QDate &date, long id ) const {
     return r;
 }
 
-double Task::effortPerformanceIndex( const QDate &date, long id ) const {
+double Task::effortPerformanceIndex( QDate date, long id ) const {
     //debugPlan;
     double r = 1.0;
     Duration a, b;
@@ -979,7 +979,7 @@ double Task::effortPerformanceIndex( const QDate &date, long id ) const {
 
 
 //FIXME Handle summarytasks
-double Task::costPerformanceIndex(  long int id, const QDate &date, bool *error ) const
+double Task::costPerformanceIndex(  long int id, QDate date, bool *error ) const
 {
     double res = 0.0;
     double ac = actualCostTo( id, date ).cost();
@@ -1065,7 +1065,7 @@ DateTime Task::calculatePredeccessors(const QList<Relation*> &list, int use) {
                 Schedule::OBState obs = m_currentSchedule->allowOverbookingState();
                 m_currentSchedule->setAllowOverbookingState( Schedule::OBS_Allow );
 #ifndef PLAN_NLOGDEBUG
-                m_currentSchedule->logDebug( "FinishFinish: get duration to calculate early finish" );
+                m_currentSchedule->logDebug( QStringLiteral("FinishFinish: get duration to calculate early finish") );
 #endif
                 t -= duration(t, use, true);
                 m_currentSchedule->setAllowOverbookingState( obs );
@@ -1128,7 +1128,7 @@ DateTime Task::calculateEarlyFinish(int use) {
 #ifndef PLAN_NLOGDEBUG
     QTime timer;
     timer.start();
-    cs->logDebug( QString( "Start calculate forward: %1 " ).arg( constraintToString( true ) ) );
+    cs->logDebug( QStringLiteral( "Start calculate forward: %1 " ).arg( constraintToString( true ) ) );
 #endif
     QLocale locale;
     cs->logInfo( i18n( "Calculate early finish " ) );
@@ -1307,7 +1307,7 @@ DateTime Task::calculateEarlyFinish(int use) {
     cs->logInfo( i18n( "Early finish calculated: %1", locale.toString(cs->earlyFinish, QLocale::ShortFormat) ) );
     cs->incProgress();
 #ifndef PLAN_NLOGDEBUG
-    cs->logDebug( QString( "Finished calculate forward: %1 ms" ).arg( timer.elapsed() ) );
+    cs->logDebug( QStringLiteral( "Finished calculate forward: %1 ms" ).arg( timer.elapsed() ) );
 #endif
     return m_earlyFinish;
 }
@@ -1328,7 +1328,7 @@ DateTime Task::calculateSuccessors(const QList<Relation*> &list, int use) {
                 Schedule::OBState obs = m_currentSchedule->allowOverbookingState();
                 m_currentSchedule->setAllowOverbookingState( Schedule::OBS_Allow );
 #ifndef PLAN_NLOGDEBUG
-                m_currentSchedule->logDebug( "StartStart: get duration to calculate late start" );
+                m_currentSchedule->logDebug( QStringLiteral("StartStart: get duration to calculate late start") );
 #endif
                 t += duration(t, use, false);
                 m_currentSchedule->setAllowOverbookingState( obs );
@@ -1393,11 +1393,11 @@ DateTime Task::calculateLateStart(int use) {
 #ifndef PLAN_NLOGDEBUG
     QTime timer;
     timer.start();
-    cs->logDebug( QString( "Start calculate backward: %1 " ).arg( constraintToString( true ) ) );
+    cs->logDebug( QStringLiteral( "Start calculate backward: %1 " ).arg( constraintToString( true ) ) );
 #endif
     QLocale locale;
     cs->logInfo( i18n( "Calculate late start" ) );
-    cs->logDebug( QString( "%1: late finish= %2" ).arg( constraintToString() ).arg( cs->lateFinish.toString() ) );
+    cs->logDebug( QStringLiteral( "%1: late finish= %2" ).arg( constraintToString() ).arg( cs->lateFinish.toString() ) );
     //debugPlan<<m_name<<" id="<<cs->id()<<" mode="<<cs->calculationMode()<<": latestFinish="<<cs->lateFinish;
     if (type() == Node::Type_Task) {
         m_durationBackward = m_estimate->value(use, pert);
@@ -1551,7 +1551,7 @@ DateTime Task::calculateLateStart(int use) {
     cs->logInfo( i18n( "Late start calculated: %1", locale.toString(cs->lateStart, QLocale::ShortFormat) ) );
     cs->incProgress();
 #ifndef PLAN_NLOGDEBUG
-    cs->logDebug( QString( "Finished calculate backward: %1 ms" ).arg( timer.elapsed() ) );
+    cs->logDebug( QStringLiteral( "Finished calculate backward: %1 ms" ).arg( timer.elapsed() ) );
 #endif
     return cs->lateStart;
 }
@@ -1575,7 +1575,7 @@ DateTime Task::schedulePredeccessors(const QList<Relation*> &list, int use) {
                 // I can't end before my predecessor, so
                 // I can't start before it's endtime - my duration
 #ifndef PLAN_NLOGDEBUG
-                m_currentSchedule->logDebug( "FinishFinish: get duration to calculate earliest start" );
+                m_currentSchedule->logDebug( QStringLiteral("FinishFinish: get duration to calculate earliest start") );
 #endif
                 t -= duration(t + r->lag(), use, true);
                 break;
@@ -1776,7 +1776,7 @@ DateTime Task::scheduleFromStartTime(int use) {
             cs->duration = duration(cs->startTime, use, false);
             cs->endTime = cs->startTime + cs->duration;
 #ifndef PLAN_NLOGDEBUG
-            cs->logDebug( QString( "%1: Schedule from %2 to %3" ).arg( constraintToString() ).arg( cs->startTime.toString() ).arg( cs->endTime.toString() ) );
+            cs->logDebug( QStringLiteral( "%1: Schedule from %2 to %3" ).arg( constraintToString() ).arg( cs->startTime.toString() ).arg( cs->endTime.toString() ) );
 #endif
             makeAppointments();
             if ( cs->recalculate() && completion().isStarted() ) {
@@ -1883,7 +1883,7 @@ DateTime Task::scheduleFromStartTime(int use) {
             //debugPlan<<"MustStartOn:"<<m_constraintStartTime<<cs->startTime;
             DateTime contime = m_constraint == Node::MustFinishOn ? m_constraintEndTime : m_constraintStartTime;
 #ifndef PLAN_NLOGDEBUG
-            cs->logDebug( QString( "%1: constraint time=%2, start time=%3" ).arg( constraintToString() ).arg( contime.toString() ).arg( cs->startTime.toString() ) );
+            cs->logDebug( QStringLiteral( "%1: constraint time=%2, start time=%3" ).arg( constraintToString() ).arg( contime.toString() ).arg( cs->startTime.toString() ) );
 #endif
             if ( cs->startTime < contime ) {
                 if ( contime <= cs->lateFinish || contime <= cs->earlyFinish ) {
@@ -1976,7 +1976,7 @@ DateTime Task::scheduleSuccessors(const QList<Relation*> &list, int use) {
                 // I can't start before my successor, so
                 // I can't finish later than it's starttime + my duration
 #ifndef PLAN_NLOGDEBUG
-                m_currentSchedule->logDebug( "StartStart: get duration to calculate late finish" );
+                m_currentSchedule->logDebug( QStringLiteral("StartStart: get duration to calculate late finish") );
 #endif
                 t += duration(t - r->lag(), use, false);
                 break;
@@ -2039,7 +2039,7 @@ DateTime Task::scheduleFromEndTime(int use) {
 #ifndef PLAN_NLOGDEBUG
     QTime timer;
     timer.start();
-    cs->logDebug( QString( "Start schedule backward: %1 " ).arg( constraintToString( true ) ) );
+    cs->logDebug( QStringLiteral( "Start schedule backward: %1 " ).arg( constraintToString( true ) ) );
 #endif
     QLocale locale;
     cs->logInfo( i18n( "Schedule from end time: %1", cs->endTime.toString() ) );
@@ -2058,7 +2058,7 @@ DateTime Task::scheduleFromEndTime(int use) {
                 e = cs->startTime + cs->duration;
             } else {
 #ifndef PLAN_NLOGDEBUG
-                cs->logDebug( QString( "%1: Latest allowed end time earlier than early start").arg( constraintToString() ) );
+                cs->logDebug( QStringLiteral( "%1: Latest allowed end time earlier than early start").arg( constraintToString() ) );
 #endif
                 cs->duration = duration( cs->endTime, use, true );
                 e = cs->endTime;
@@ -2315,7 +2315,7 @@ DateTime Task::scheduleFromEndTime(int use) {
     cs->incProgress();
     m_requests.resetDynamicAllocations();
 #ifndef PLAN_NLOGDEBUG
-    cs->logDebug( QString( "Finished schedule backward: %1 ms" ).arg( timer.elapsed() ) );
+    cs->logDebug( QStringLiteral( "Finished schedule backward: %1 ms" ).arg( timer.elapsed() ) );
 #endif
     return cs->startTime;
 }
@@ -2350,7 +2350,7 @@ Duration Task::duration(const DateTime &time, int use, bool backward) {
     }
     if (!time.isValid()) {
 #ifndef PLAN_NLOGDEBUG
-        m_currentSchedule->logDebug( "Calculate duration: Start time is not valid" );
+        m_currentSchedule->logDebug( QStringLiteral("Calculate duration: Start time is not valid") );
 #endif
         return Duration::zeroDuration;
     }
@@ -2369,7 +2369,7 @@ Duration Task::duration(const DateTime &time, int use, bool backward) {
 }
 
 
-Duration Task::calcDuration(const DateTime &time, const Duration &effort, bool backward) {
+Duration Task::calcDuration(const DateTime &time, KPlato::Duration effort, bool backward) {
     //debugPlan<<"--------> calcDuration"<<(backward?"(B)":"(F)")<<m_name<<" time="<<time<<" effort="<<effort.toString(Duration::Format_Day);
 
     // Already checked: m_currentSchedule and time.
@@ -2395,18 +2395,18 @@ Duration Task::calcDuration(const DateTime &time, const Duration &effort, bool b
     return dur;
 }
 
-Duration Task::length(const DateTime &time, const Duration &duration, bool backward)
+Duration Task::length(const DateTime &time, KPlato::Duration duration, bool backward)
 {
     return length( time, duration, m_currentSchedule, backward );
 }
 
-Duration Task::length(const DateTime &time, const Duration &duration, Schedule *sch, bool backward) {
+Duration Task::length(const DateTime &time, KPlato::Duration duration, Schedule *sch, bool backward) {
     //debugPlan<<"--->"<<(backward?"(B)":"(F)")<<m_name<<""<<time.toString()<<": duration:"<<duration.toString(Duration::Format_Day)<<" ("<<duration.milliseconds()<<")";
 
     Duration l;
     if ( duration == Duration::zeroDuration ) {
 #ifndef PLAN_NLOGDEBUG
-        if ( sch ) sch->logDebug( "Calculate length: estimate == 0" );
+        if ( sch ) sch->logDebug( QStringLiteral("Calculate length: estimate == 0") );
 #else
         Q_UNUSED(sch)
 #endif
@@ -2658,7 +2658,7 @@ DateTime Task::workTimeAfter(const DateTime &dt, Schedule *sch) const {
     } else {
         t = m_requests.workTimeAfter(dt, sch);
 #ifndef PLAN_NLOGDEBUG
-        if ( sch ) sch->logDebug( QString( "workTimeAfter: %1 = %2" ).arg( dt.toString() ).arg( t.toString() ) );
+        if ( sch ) sch->logDebug( QStringLiteral( "workTimeAfter: %1 = %2" ).arg( dt.toString() ).arg( t.toString() ) );
 #endif
     }
     return t.isValid() ? t : dt;
@@ -2682,7 +2682,7 @@ Duration Task::positiveFloat( long id ) const
     return s == 0 ? Duration::zeroDuration : s->positiveFloat;
 }
 
-void Task::setPositiveFloat( const Duration &fl, long id ) const
+void Task::setPositiveFloat( KPlato::Duration fl, long id ) const
 {
     Schedule *s = schedule( id );
     if ( s )
@@ -2695,7 +2695,7 @@ Duration Task::negativeFloat( long id ) const
     return s == 0 ? Duration::zeroDuration : s->negativeFloat;
 }
 
-void Task::setNegativeFloat( const Duration &fl, long id ) const
+void Task::setNegativeFloat( KPlato::Duration fl, long id ) const
 {
     Schedule *s = schedule( id );
     if ( s )
@@ -2708,7 +2708,7 @@ Duration Task::freeFloat( long id ) const
     return s == 0 ? Duration::zeroDuration : s->freeFloat;
 }
 
-void Task::setFreeFloat( const Duration &fl, long id ) const
+void Task::setFreeFloat( KPlato::Duration fl, long id ) const
 {
     Schedule *s = schedule( id );
     if ( s )
@@ -3007,7 +3007,7 @@ void Completion::setFinishTime( const DateTime &dt )
      changed(Node::CompletionFinishTime);
 }
 
-void Completion::setPercentFinished( const QDate &date, int value )
+void Completion::setPercentFinished( QDate date, int value )
 {
     Entry *e = 0;
     if ( m_entries.contains( date ) ) {
@@ -3020,7 +3020,7 @@ void Completion::setPercentFinished( const QDate &date, int value )
     changed(Node::CompletionPercentage);
 }
 
-void Completion::setRemainingEffort( const QDate &date, const Duration &value )
+void Completion::setRemainingEffort( QDate date, KPlato::Duration value )
 {
     Entry *e = 0;
     if ( m_entries.contains( date ) ) {
@@ -3033,7 +3033,7 @@ void Completion::setRemainingEffort( const QDate &date, const Duration &value )
     changed(Node::CompletionRemainingEffort);
 }
 
-void Completion::setActualEffort( const QDate &date, const Duration &value )
+void Completion::setActualEffort( QDate date, KPlato::Duration value )
 {
     Entry *e = 0;
     if ( m_entries.contains( date ) ) {
@@ -3046,7 +3046,7 @@ void Completion::setActualEffort( const QDate &date, const Duration &value )
     changed(Node::CompletionActualEffort);
 }
 
-void Completion::addEntry( const QDate &date, Entry *entry )
+void Completion::addEntry( QDate date, Entry *entry )
 {
      m_entries.insert( date, entry );
      //debugPlan<<m_entries.count()<<" added:"<<date;
@@ -3063,10 +3063,10 @@ int Completion::percentFinished() const
     return m_entries.isEmpty() ? 0 : m_entries.values().last()->percentFinished;
 }
 
-int Completion::percentFinished( const QDate &date ) const
+int Completion::percentFinished( QDate date ) const
 {
     int x = 0;
-    foreach ( const QDate &d, m_entries.keys() ) {
+    foreach ( QDate d, m_entries.keys() ) {
         if ( d <= date ) {
             x = m_entries[ d ]->percentFinished;
         }
@@ -3082,7 +3082,7 @@ Duration Completion::remainingEffort() const
     return m_entries.isEmpty() ? Duration::zeroDuration : m_entries.values().last()->remainingEffort;
 }
 
-Duration Completion::remainingEffort( const QDate &date ) const
+Duration Completion::remainingEffort( QDate date ) const
 {
     Duration x;
     foreach ( const QDate &d, m_entries.keys() ) {
@@ -3111,7 +3111,7 @@ Duration Completion::actualEffort() const
     return eff;
 }
 
-Duration Completion::actualEffort( const Resource *resource, const QDate &date ) const
+Duration Completion::actualEffort( const Resource *resource, QDate date ) const
 {
     UsedEffort *ue = usedEffort( resource );
     if ( ue == 0 ) {
@@ -3121,7 +3121,7 @@ Duration Completion::actualEffort( const Resource *resource, const QDate &date )
     return ae.effort();
 }
 
-Duration Completion::actualEffort( const QDate &date ) const
+Duration Completion::actualEffort( QDate date ) const
 {
     Duration eff;
     if ( m_entrymode == EnterEffortPerResource ) {
@@ -3139,7 +3139,7 @@ Duration Completion::actualEffort( const QDate &date ) const
     return eff;
 }
 
-Duration Completion::actualEffortTo( const QDate &date ) const
+Duration Completion::actualEffortTo( QDate date ) const
 {
     //debugPlan<<date;
     Duration eff;
@@ -3161,7 +3161,7 @@ Duration Completion::actualEffortTo( const QDate &date ) const
     return eff;
 }
 
-double Completion::averageCostPrHour( const QDate &date, long id ) const
+double Completion::averageCostPrHour( QDate date, long id ) const
 {
     Schedule *s = m_node->schedule( id );
     if ( s == 0 ) {
@@ -3189,7 +3189,7 @@ double Completion::averageCostPrHour( const QDate &date, long id ) const
     return cost;
 }
 
-EffortCostMap Completion::effortCostPrDay(const QDate &start, const QDate &end, long id ) const
+EffortCostMap Completion::effortCostPrDay(QDate start, QDate end, long id ) const
 {
     //debugPlan<<m_node->name()<<start<<end;
     EffortCostMap ec;
@@ -3237,7 +3237,7 @@ EffortCostMap Completion::effortCostPrDay(const QDate &start, const QDate &end, 
     return ec;
 }
 
-EffortCostMap Completion::effortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id ) const
+EffortCostMap Completion::effortCostPrDay(const Resource *resource, QDate start, QDate end, long id ) const
 {
     Q_UNUSED(id);
     //debugPlan<<m_node->name()<<start<<end;
@@ -3309,7 +3309,7 @@ QPair<QDate, QDate> Completion::actualStartEndDates() const
     return p;
 }
 
-double Completion::actualCost( const QDate &date ) const
+double Completion::actualCost( QDate date ) const
 {
     //debugPlan<<date;
     double c = 0.0;
@@ -3350,7 +3350,7 @@ double Completion::actualCost() const
     return c;
 }
 
-double Completion::actualCost( const Resource *resource, const QDate &date ) const
+double Completion::actualCost( const Resource *resource, QDate date ) const
 {
     UsedEffort *ue = usedEffort( resource );
     if ( ue == 0 ) {
@@ -3435,7 +3435,7 @@ EffortCostMap Completion::actualEffortCost( long int id, KPlato::EffortCostCalcu
     return map;
 }
 
-EffortCost Completion::actualCostTo(  long int id, const QDate &date ) const
+EffortCost Completion::actualCostTo(  long int id, QDate date ) const
 {
     //debugPlan<<date;
     EffortCostMap ecm = actualEffortCost( id );
@@ -3445,10 +3445,10 @@ EffortCost Completion::actualCostTo(  long int id, const QDate &date ) const
 QStringList Completion::entrymodeList() const
 {
     return QStringList()
-            << "FollowPlan"
-            << "EnterCompleted"
-            << "EnterEffortPerTask"
-            << "EnterEffortPerResource";
+            << QStringLiteral("FollowPlan")
+            << QStringLiteral("EnterCompleted")
+            << QStringLiteral("EnterEffortPerTask")
+            << QStringLiteral("EnterEffortPerResource");
 
 }
 
@@ -3469,21 +3469,21 @@ bool Completion::loadXML( KoXmlElement &element, XMLLoaderObject &status )
 {
     //debugPlan;
     QString s;
-    m_started = (bool)element.attribute("started", "0").toInt();
-    m_finished = (bool)element.attribute("finished", "0").toInt();
-    s = element.attribute("startTime");
+    m_started = (bool)element.attribute(QStringLiteral("started"), QStringLiteral("0")).toInt();
+    m_finished = (bool)element.attribute(QStringLiteral("finished"), QStringLiteral("0")).toInt();
+    s = element.attribute(QStringLiteral("startTime"));
     if (!s.isEmpty()) {
         m_startTime = DateTime::fromString(s, status.projectTimeZone());
     }
-    s = element.attribute("finishTime");
+    s = element.attribute(QStringLiteral("finishTime"));
     if (!s.isEmpty()) {
         m_finishTime = DateTime::fromString(s, status.projectTimeZone());
     }
-    setEntrymode( element.attribute( "entrymode" ) );
-    if (status.version() < "0.6") {
+    setEntrymode( element.attribute( QStringLiteral("entrymode") ) );
+    if (status.version() < QLatin1String("0.6")) {
         if ( m_started ) {
-            Entry *entry = new Entry( element.attribute("percent-finished", "0").toInt(), Duration::fromString(element.attribute("remaining-effort")),  Duration::fromString(element.attribute("performed-effort")) );
-            entry->note = element.attribute("note");
+            Entry *entry = new Entry( element.attribute(QStringLiteral("percent-finished"), QStringLiteral("0")).toInt(), Duration::fromString(element.attribute(QStringLiteral("remaining-effort"))),  Duration::fromString(element.attribute(QStringLiteral("performed-effort"))) );
+            entry->note = element.attribute(QStringLiteral("note"));
             QDate date = m_startTime.date();
             if ( m_finished ) {
                 date = m_finishTime.date();
@@ -3494,9 +3494,9 @@ bool Completion::loadXML( KoXmlElement &element, XMLLoaderObject &status )
     } else {
         KoXmlElement e;
         forEachElement(e, element) {
-                if (e.tagName() == "completion-entry") {
+                if (e.tagName() == QLatin1String("completion-entry")) {
                     QDate date;
-                    s = e.attribute("date");
+                    s = e.attribute(QStringLiteral("date"));
                     if ( !s.isEmpty() ) {
                         date = QDate::fromString( s, Qt::ISODate );
                     }
@@ -3504,13 +3504,13 @@ bool Completion::loadXML( KoXmlElement &element, XMLLoaderObject &status )
                         warnPlan<<"Invalid date: "<<date<<s;
                         continue;
                     }
-                    Entry *entry = new Entry( e.attribute("percent-finished", "0").toInt(), Duration::fromString(e.attribute("remaining-effort")),  Duration::fromString(e.attribute("performed-effort")) );
+                    Entry *entry = new Entry( e.attribute(QStringLiteral("percent-finished"), QStringLiteral("0")).toInt(), Duration::fromString(e.attribute(QStringLiteral("remaining-effort"))),  Duration::fromString(e.attribute(QStringLiteral("performed-effort"))) );
                     addEntry( date, entry );
-                } else if (e.tagName() == "used-effort") {
+                } else if (e.tagName() == QLatin1String("used-effort")) {
                     KoXmlElement el;
                     forEachElement(el, e) {
-                            if (el.tagName() == "resource") {
-                                QString id = el.attribute( "id" );
+                            if (el.tagName() == QLatin1String("resource")) {
+                                QString id = el.attribute( QStringLiteral("id") );
                                 Resource *r = status.project().resource( id );
                                 if ( r == 0 ) {
                                     warnPlan<<"Cannot find resource, id="<<id;
@@ -3529,34 +3529,34 @@ bool Completion::loadXML( KoXmlElement &element, XMLLoaderObject &status )
 
 void Completion::saveXML(QDomElement &element )  const
 {
-    QDomElement el = element.ownerDocument().createElement("progress");
+    QDomElement el = element.ownerDocument().createElement(QStringLiteral("progress"));
     element.appendChild(el);
-    el.setAttribute("started", QString::number(m_started));
-    el.setAttribute("finished", QString::number(m_finished));
-    el.setAttribute("startTime", m_startTime.toString( Qt::ISODate ));
-    el.setAttribute("finishTime", m_finishTime.toString( Qt::ISODate ));
-    el.setAttribute("entrymode", entryModeToString());
+    el.setAttribute(QStringLiteral("started"), QString::number(m_started));
+    el.setAttribute(QStringLiteral("finished"), QString::number(m_finished));
+    el.setAttribute(QStringLiteral("startTime"), m_startTime.toString( Qt::ISODate ));
+    el.setAttribute(QStringLiteral("finishTime"), m_finishTime.toString( Qt::ISODate ));
+    el.setAttribute(QStringLiteral("entrymode"), entryModeToString());
     foreach( const QDate &date, m_entries.uniqueKeys() ) {
-        QDomElement elm = el.ownerDocument().createElement("completion-entry");
+        QDomElement elm = el.ownerDocument().createElement(QStringLiteral("completion-entry"));
         el.appendChild(elm);
         Entry *e = m_entries[ date ];
-        elm.setAttribute( "date", date.toString( Qt::ISODate ) );
-        elm.setAttribute( "percent-finished", e->percentFinished );
-        elm.setAttribute( "remaining-effort", e->remainingEffort.toString() );
-        elm.setAttribute( "performed-effort", e->totalPerformed.toString() );
-        elm.setAttribute( "note", e->note );
+        elm.setAttribute( QStringLiteral("date"), date.toString( Qt::ISODate ) );
+        elm.setAttribute( QStringLiteral("percent-finished"), e->percentFinished );
+        elm.setAttribute( QStringLiteral("remaining-effort"), e->remainingEffort.toString() );
+        elm.setAttribute( QStringLiteral("performed-effort"), e->totalPerformed.toString() );
+        elm.setAttribute( QStringLiteral("note"), e->note );
     }
     if ( ! m_usedEffort.isEmpty() ) {
-        QDomElement elm = el.ownerDocument().createElement("used-effort");
+        QDomElement elm = el.ownerDocument().createElement(QStringLiteral("used-effort"));
         el.appendChild(elm);
         ResourceUsedEffortMap::ConstIterator i = m_usedEffort.constBegin();
         for ( ; i != m_usedEffort.constEnd(); ++i ) {
             if ( i.value() == 0 ) {
                 continue;
             }
-            QDomElement e = elm.ownerDocument().createElement("resource");
+            QDomElement e = elm.ownerDocument().createElement(QStringLiteral("resource"));
             elm.appendChild(e);
-            e.setAttribute( "id", i.key()->id() );
+            e.setAttribute( QStringLiteral("id"), i.key()->id() );
             i.value()->saveXML( e );
         }
     }
@@ -3583,12 +3583,12 @@ void Completion::UsedEffort::mergeEffort( const Completion::UsedEffort &value )
     }
 }
 
-void Completion::UsedEffort::setEffort( const QDate &date, const ActualEffort &value )
+void Completion::UsedEffort::setEffort( QDate date, const ActualEffort &value )
 {
     m_actual.insert( date, value );
 }
 
-Duration Completion::UsedEffort::effortTo( const QDate &date ) const
+Duration Completion::UsedEffort::effortTo( QDate date ) const
 {
     Duration eff;
     foreach ( const QDate &d, m_actual.keys() ) {
@@ -3619,12 +3619,12 @@ bool Completion::UsedEffort::loadXML(KoXmlElement &element, XMLLoaderObject & )
     //debugPlan;
     KoXmlElement e;
     forEachElement(e, element) {
-            if (e.tagName() == "actual-effort") {
-                QDate date = QDate::fromString( e.attribute("date"), Qt::ISODate );
+            if (e.tagName() == QLatin1String("actual-effort")) {
+                QDate date = QDate::fromString( e.attribute(QStringLiteral("date")), Qt::ISODate );
                 if ( date.isValid() ) {
                     ActualEffort a;
-                    a.setNormalEffort( Duration::fromString( e.attribute( "normal-effort" ) ) );
-                    a.setOvertimeEffort( Duration::fromString( e.attribute( "overtime-effort" ) ) );
+                    a.setNormalEffort( Duration::fromString( e.attribute( QStringLiteral("normal-effort") ) ) );
+                    a.setOvertimeEffort( Duration::fromString( e.attribute( QStringLiteral("overtime-effort") ) ) );
                     setEffort( date, a );
                 }
             }
@@ -3639,11 +3639,11 @@ void Completion::UsedEffort::saveXML(QDomElement &element ) const
     }
     DateUsedEffortMap::ConstIterator i = m_actual.constBegin();
     for ( ; i != m_actual.constEnd(); ++i ) {
-        QDomElement el = element.ownerDocument().createElement("actual-effort");
+        QDomElement el = element.ownerDocument().createElement(QStringLiteral("actual-effort"));
         element.appendChild( el );
-        el.setAttribute( "overtime-effort", i.value().overtimeEffort().toString() );
-        el.setAttribute( "normal-effort", i.value().normalEffort().toString() );
-        el.setAttribute( "date", i.key().toString( Qt::ISODate ) );
+        el.setAttribute( QStringLiteral("overtime-effort"), i.value().overtimeEffort().toString() );
+        el.setAttribute( QStringLiteral("normal-effort"), i.value().normalEffort().toString() );
+        el.setAttribute( QStringLiteral("date"), i.key().toString( Qt::ISODate ) );
     }
 }
 
@@ -3674,36 +3674,36 @@ WorkPackage::~WorkPackage()
 bool WorkPackage::loadXML(KoXmlElement &element, XMLLoaderObject &status )
 {
     Q_UNUSED(status);
-    m_ownerName = element.attribute( "owner" );
-    m_ownerId = element.attribute( "owner-id" );
+    m_ownerName = element.attribute( QStringLiteral("owner") );
+    m_ownerId = element.attribute( QStringLiteral("owner-id") );
     return true;
 }
 
 void WorkPackage::saveXML(QDomElement &element) const
 {
-    QDomElement el = element.ownerDocument().createElement("workpackage");
+    QDomElement el = element.ownerDocument().createElement(QStringLiteral("workpackage"));
     element.appendChild(el);
-    el.setAttribute( "owner", m_ownerName );
-    el.setAttribute( "owner-id", m_ownerId );
+    el.setAttribute( QStringLiteral("owner"), m_ownerName );
+    el.setAttribute( QStringLiteral("owner-id"), m_ownerId );
 }
 
 bool WorkPackage::loadLoggedXML(KoXmlElement &element, XMLLoaderObject &status )
 {
-    m_ownerName = element.attribute( "owner" );
-    m_ownerId = element.attribute( "owner-id" );
-    m_transmitionStatus = transmitionStatusFromString( element.attribute( "status" ) );
-    m_transmitionTime = DateTime( QDateTime::fromString( element.attribute( "time" ), Qt::ISODate ) );
+    m_ownerName = element.attribute( QStringLiteral("owner") );
+    m_ownerId = element.attribute( QStringLiteral("owner-id") );
+    m_transmitionStatus = transmitionStatusFromString( element.attribute( QStringLiteral("status") ) );
+    m_transmitionTime = DateTime( QDateTime::fromString( element.attribute( QStringLiteral("time") ), Qt::ISODate ) );
     return m_completion.loadXML( element, status );
 }
 
 void WorkPackage::saveLoggedXML(QDomElement &element) const
 {
-    QDomElement el = element.ownerDocument().createElement("workpackage");
+    QDomElement el = element.ownerDocument().createElement(QStringLiteral("workpackage"));
     element.appendChild(el);
-    el.setAttribute( "owner", m_ownerName );
-    el.setAttribute( "owner-id", m_ownerId );
-    el.setAttribute( "status", transmitionStatusToString( m_transmitionStatus ) );
-    el.setAttribute( "time", m_transmitionTime.toString( Qt::ISODate ) );
+    el.setAttribute( QStringLiteral("owner"), m_ownerName );
+    el.setAttribute( QStringLiteral("owner-id"), m_ownerId );
+    el.setAttribute( QStringLiteral("status"), transmitionStatusToString( m_transmitionStatus ) );
+    el.setAttribute( QStringLiteral("time"), m_transmitionTime.toString( Qt::ISODate ) );
     m_completion.saveXML( el );
 }
 
@@ -3750,13 +3750,13 @@ void WorkPackage::setScheduleManager( ScheduleManager *sm )
 
 QString WorkPackage::transmitionStatusToString( WorkPackage::WPTransmitionStatus sts, bool trans )
 {
-    QString s = trans ? i18n( "None" ) : "None";
+    QString s = trans ? i18n( "None" ) : QStringLiteral("None");
     switch ( sts ) {
         case TS_Send:
-            s = trans ? i18n( "Send" ) : "Send";
+            s = trans ? i18n( "Send" ) : QStringLiteral("Send");
             break;
         case TS_Receive:
-            s = trans ? i18n( "Receive" ) : "Receive";
+            s = trans ? i18n( "Receive" ) : QStringLiteral("Receive");
             break;
         default:
             break;
@@ -3767,7 +3767,7 @@ QString WorkPackage::transmitionStatusToString( WorkPackage::WPTransmitionStatus
 WorkPackage::WPTransmitionStatus WorkPackage::transmitionStatusFromString( const QString &sts )
 {
     QStringList lst;
-    lst << "None" << "Send" << "Receive";
+    lst << QStringLiteral("None") << QStringLiteral("Send") << QStringLiteral("Receive");
     int s = lst.indexOf( sts );
     return s < 0 ? TS_None : static_cast<WPTransmitionStatus>( s );
 }
@@ -3797,29 +3797,29 @@ WorkPackageSettings::WorkPackageSettings()
 
 void WorkPackageSettings::saveXML( QDomElement &element ) const
 {
-    QDomElement el = element.ownerDocument().createElement("settings");
+    QDomElement el = element.ownerDocument().createElement(QStringLiteral("settings"));
     element.appendChild( el );
-    el.setAttribute( "used-effort", QString::number(usedEffort) );
-    el.setAttribute( "progress", QString::number(progress) );
-    el.setAttribute( "documents", QString::number(documents) );
+    el.setAttribute( QStringLiteral("used-effort"), QString::number(usedEffort) );
+    el.setAttribute( QStringLiteral("progress"), QString::number(progress) );
+    el.setAttribute( QStringLiteral("documents"), QString::number(documents) );
 }
 
 bool WorkPackageSettings::loadXML( const KoXmlElement &element )
 {
-    usedEffort = (bool)element.attribute( "used-effort" ).toInt();
-    progress = (bool)element.attribute( "progress" ).toInt();
-    documents = (bool)element.attribute( "documents" ).toInt();
+    usedEffort = (bool)element.attribute( QStringLiteral("used-effort") ).toInt();
+    progress = (bool)element.attribute( QStringLiteral("progress") ).toInt();
+    documents = (bool)element.attribute( QStringLiteral("documents") ).toInt();
     return true;
 }
 
-bool WorkPackageSettings::operator==( const WorkPackageSettings &s ) const
+bool WorkPackageSettings::operator==( KPlato::WorkPackageSettings s ) const
 {
     return usedEffort == s.usedEffort &&
             progress == s.progress &&
             documents == s.documents;
 }
 
-bool WorkPackageSettings::operator!=( const WorkPackageSettings &s ) const
+bool WorkPackageSettings::operator!=( KPlato::WorkPackageSettings s ) const
 {
     return ! operator==( s );
 }
@@ -3830,7 +3830,7 @@ bool WorkPackageSettings::operator!=( const WorkPackageSettings &s ) const
 #ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<( QDebug dbg, const KPlato::Completion::UsedEffort::ActualEffort &ae )
 {
-    dbg << QString( "%1" ).arg( ae.normalEffort().toDouble( KPlato::Duration::Unit_h ), 1 );
+    dbg << QStringLiteral( "%1" ).arg( ae.normalEffort().toDouble( KPlato::Duration::Unit_h ), 1 );
     return dbg;
 }
 #endif

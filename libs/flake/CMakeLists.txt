@@ -3,7 +3,9 @@ project(flake)
 include_directories(${FLAKE_INCLUDES} )
 
 add_subdirectory(styles)
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 add_subdirectory(pics)
 
 set(flake_SRCS
