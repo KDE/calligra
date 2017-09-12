@@ -94,6 +94,7 @@ GenericName[zh_CN]=项目管理
 GenericName[zh_TW]=專案管理
 Comment=Work Package handler for the Plan project planning tool
 Comment[ca]=Gestor de paquets de feina per a l'eina de planificació de projectes Plan
+Comment[ca@valencia]=Gestor de paquets de faena per a l'eina de planificació de projectes Plan
 Comment[de]=Arbeitspaketverwaltung für das Plan-Projektplanungsprogramm
 Comment[es]=Gestor de paquetes de trabajo para la herramienta de planificación de proyectos Plan
 Comment[it]=Gestore dei pacchetti di lavoro dello strumento di pianificazione dei progetti Plan
