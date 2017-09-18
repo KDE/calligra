@@ -22,7 +22,6 @@
   <name xml:lang="sv">Calligra Sheets</name>
   <name xml:lang="uk">Calligra Sheets</name>
   <name xml:lang="x-test">xxCalligra Sheetsxx</name>
-  <name xml:lang="zh-CN">Calligra Sheets</name>
   <summary>Spreadsheet</summary>
   <summary xml:lang="bs">Tablica</summary>
   <summary xml:lang="ca">Full de càlcul</summary>
@@ -97,7 +96,6 @@
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
-    <p xml:lang="zh-CN">功能：</p>
     <ul>
       <li>Use shapes to take notes or mind maps</li>
       <li xml:lang="bs">Koristite likove za uzimanje zabilješki ili mapa uma</li>
