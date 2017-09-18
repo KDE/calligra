@@ -18,6 +18,7 @@
 */
 
 #include "icalendarexport.h"
+#include "KoConfig.h"
 
 #include <kptmaindocument.h>
 #include <kpttask.h>
@@ -48,6 +49,12 @@ using namespace KPlato;
 
 K_PLUGIN_FACTORY_WITH_JSON(ICalendarExportFactory, "plan_icalendar_export.json",
                            registerPlugin<ICalendarExport>();)
+
+#ifdef HAVE_QDATETIME_KCALCORE
+#define KQDT QDateTime
+#else
+#define KQDT KDateTime
+#endif
 
 ICalendarExport::ICalendarExport(QObject* parent, const QVariantList &)
         : KoFilter(parent)
@@ -141,10 +148,10 @@ void ICalendarExport::createTodos(KCalCore::Calendar::Ptr cal, const Node *node,
     DateTime st = node->startTime(id);
     DateTime et = node->endTime(id);
     if (st.isValid()) {
-        todo->setDtStart( KDateTime( st ) );
+        todo->setDtStart( KQDT( st ) );
     }
     if (et.isValid()) {
-        todo->setDtDue( KDateTime( et ) );
+        todo->setDtDue( KQDT( et ) );
     }
     if (node->type() == Node::Type_Task) {
         const Task *task = qobject_cast<Task*>(const_cast<Node*>(node));
@@ -167,7 +174,7 @@ void ICalendarExport::createTodos(KCalCore::Calendar::Ptr cal, const Node *node,
         }
     } else if (node->type() == Node::Type_Milestone) {
         const Task *task = qobject_cast<Task*>(const_cast<Node*>(node));
-        todo->setDtStart(KDateTime());
+        todo->setDtStart(KQDT());
         todo->setPercentComplete(task->completion().percentFinished());
     }
     foreach(const Document *doc, node->documents().documents()) {
