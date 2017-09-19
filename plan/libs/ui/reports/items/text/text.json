@@ -57,6 +57,7 @@
         "Name[pt_BR]": "Texto",
         "Name[uk]": "Текст",
         "Name[x-test]": "xxTextxx",
+        "Name[zh_CN]": "文字",
         "ServiceTypes": [
             "KReport/Element"
         ],
