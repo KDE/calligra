@@ -513,6 +513,8 @@ public:
     void setSharedResourcesLoaded(bool on);
     void setSharedResourcesFile(const QString &file);
     QString sharedResourcesFile() const;
+    void setSharedProjectsUrl(const QUrl &url);
+    QUrl sharedProjectsUrl() const;
 
 public Q_SLOTS:
     /// Sets m_progress to @p progress and emits signal sigProgress()
@@ -701,6 +703,7 @@ private:
     bool m_useSharedResources;
     bool m_sharedResourcesLoaded;
     QString m_sharedResourcesFile;
+    QUrl m_sharedProjectsUrl;
 };
 
 

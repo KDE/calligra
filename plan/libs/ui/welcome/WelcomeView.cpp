@@ -32,6 +32,7 @@
 #include <QItemSelection>
 #include <QUrl>
 #include <QIcon>
+#include <QStandardPaths>
 
 const QLoggingCategory &PLANWELCOME_LOG()
 {
@@ -87,11 +88,21 @@ WelcomeView::WelcomeView(KoPart *part, KoDocument *doc, QWidget *parent)
     widget.setupUi(this);
     widget.recentProjects->setBackgroundRole(QPalette::Midlight);
 
+    widget.createResourceFileBtn->hide(); // disable this for now
+    widget.createResourceFileBtn->setWhatsThis(xi18nc("@info:whatsthis",
+                                           "<title>Shared resources</title>"
+                                           "Create a shared resources file."
+                                           "Resources can be shared between projects"
+                                           " to avoid overbooking resources across projects."
+                                           " Shared resources must be defined in a separate file."
+                                           ));
+
     m_model = new RecentFilesModel(this);
     widget.recentProjects->setModel(m_model);
     setupGui();
 
     connect(widget.newProjectBtn, SIGNAL(clicked(bool)), this, SLOT(slotNewProject()));
+    connect(widget.createResourceFileBtn, SIGNAL(clicked(bool)), this, SLOT(slotCreateResourceFile()));
     connect(widget.openProjectBtn, SIGNAL(clicked(bool)), this, SLOT(slotOpenProject()));
     connect(widget.introductionBtn, SIGNAL(clicked(bool)), this, SIGNAL(showIntroduction()));
 
@@ -173,7 +184,7 @@ void WelcomeView::slotNewProject()
         if (!m_projectdialog) {
             m_projectdialog =  new MainProjectDialog(*p, this);
             connect(m_projectdialog, SIGNAL(dialogFinished(int)), SLOT(slotProjectEditFinished(int)));
-            connect(m_projectdialog, SIGNAL(sigLoadSharedResources(const QString&)), this, SLOT(slotLoadSharedResources(const QString&)));
+            connect(m_projectdialog, SIGNAL(sigLoadSharedResources(const QString&, const QUrl&)), this, SLOT(slotLoadSharedResources(const QString&, const QUrl&)));
         }
         m_projectdialog->show();
         m_projectdialog->raise();
@@ -202,9 +213,17 @@ void WelcomeView::slotProjectEditFinished(int result)
     dia->deleteLater();
 }
 
+void WelcomeView::slotCreateResourceFile()
+{
+    QString file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "templates/.source/SharedResources.plant");
+    emit openTemplate(QUrl::fromUserInput(file));
+    emit finished();
+}
+
 void WelcomeView::slotOpenProject()
 {
     if (m_projectdialog) {
+        qWarning()<<Q_FUNC_INFO<<"Project dialog is open";
         return;
     }
     Project *p = project();
@@ -237,14 +256,14 @@ void WelcomeView::slotOpenFileFinished(int result)
     dia->deleteLater();
 }
 
-void WelcomeView::slotLoadSharedResources(const QString &file)
+void WelcomeView::slotLoadSharedResources(const QString &file, const QUrl &projects)
 {
     QUrl url(file);
     if (url.scheme().isEmpty()) {
         url.setScheme("file");
     }
     if (url.isValid()) {
-        emit loadSharedResources(url);
+        emit loadSharedResources(url, projects);
     }
 }
 

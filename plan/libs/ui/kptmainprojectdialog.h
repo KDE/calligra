@@ -44,9 +44,10 @@ public:
 
 Q_SIGNALS:
     void dialogFinished(int);
-    void sigLoadSharedResources(const QString &file);
+    void sigLoadSharedResources(const QString &file, const QUrl &projects);
 
 protected Q_SLOTS:
+    void slotRejected();
     void slotOk();
 
 private:

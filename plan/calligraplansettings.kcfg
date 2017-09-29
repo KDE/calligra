@@ -167,6 +167,9 @@
       <entry name="SharedResourcesFile" type="String">
           <label>File to contain shared resources</label>
       </entry>
+      <entry name="SharedProjectsPlace" type="String">
+          <label>Directory that contains projects that sjares resources</label>
+      </entry>
       <entry name="ProjectDescription" type="String">
           <label>Project description</label>
       </entry>

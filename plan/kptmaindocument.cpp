@@ -71,6 +71,7 @@ MainDocument::MainDocument(KoPart *part)
         m_project( 0 ),
         m_context( 0 ), m_xmlLoader(),
         m_loadingTemplate( false ),
+        m_loadingSharedResourcesTemplate( false ),
         m_viewlistModified( false ),
         m_checkingForWorkPackages( false )
 {
@@ -82,6 +83,8 @@ MainDocument::MainDocument(KoPart *part)
     setProject( new Project( m_config ) ); // after config & plugins are loaded
     m_project->setId( m_project->uniqueNodeId() );
     m_project->registerNodeId( m_project ); // register myself
+
+    connect(this, &MainDocument::insertSharedProject, this, &MainDocument::slotInsertSharedProject);
 
     QTimer::singleShot ( 5000, this, SLOT(autoCheckForWorkPackages()) );
 }
@@ -842,6 +845,11 @@ void MainDocument::setLoadingTemplate(bool loading)
     m_loadingTemplate = loading;
 }
 
+void MainDocument::setLoadingSharedResourcesTemplate(bool loading)
+{
+    m_loadingSharedResourcesTemplate = loading;
+}
+
 bool MainDocument::completeLoading( KoStore *store )
 {
     // If we get here the new project is loaded and set
@@ -860,10 +868,14 @@ bool MainDocument::completeLoading( KoStore *store )
 
         //m_project->generateUniqueNodeIds();
     }
+    if (m_loadingSharedResourcesTemplate && m_project->calendarCount() > 0) {
+        Calendar *c = m_project->calendarAt(0);
+        c->setTimeZone(QTimeZone::systemTimeZone());
+    }
     if (m_project->useSharedResources() && !m_project->sharedResourcesFile().isEmpty()) {
         QUrl url = QUrl::fromLocalFile(m_project->sharedResourcesFile());
         if (url.isValid()) {
-            insertResourcesFile(url);
+            insertResourcesFile(url, m_project->sharedProjectsUrl());
         }
     }
     if ( store == 0 ) {
@@ -973,18 +985,21 @@ void MainDocument::insertFileCompleted()
     }
 }
 
-void MainDocument::insertResourcesFile(const QUrl &url)
+void MainDocument::insertResourcesFile(const QUrl &url, const QUrl &projects)
 {
+    insertSharedProjects(projects); // prepare for insertion after shared resources
+    m_sharedProjectsFiles.removeAll(url); // resource file is not a project
+
     Part *part = new Part( this );
     MainDocument *doc = new MainDocument( part );
     part->setDocument( doc );
     doc->disconnect(); // doc shall not handle feedback from openUrl()
     doc->setAutoSave( 0 ); //disable
-    doc->m_insertFileInfo.url = url;
     connect(doc, SIGNAL(completed()), SLOT(insertResourcesFileCompleted()));
     connect(doc, SIGNAL(canceled(QString)), SLOT(insertFileCancelled(QString)));
 
     doc->openUrl( url );
+
 }
 
 void MainDocument::insertResourcesFileCompleted()
@@ -996,12 +1011,105 @@ void MainDocument::insertResourcesFileCompleted()
         mergeResources(p);
         m_project->setSharedResourcesLoaded(true);
         doc->documentPart()->deleteLater(); // also deletes document
+        slotInsertSharedProject(); // insert shared bookings
     } else {
         KMessageBox::error( 0, i18n("Internal error, failed to insert file.") );
     }
 }
 
 void MainDocument::insertFileCancelled( const QString &error )
+{
+    debugPlan<<sender()<<"error="<<error;
+    if ( ! error.isEmpty() ) {
+        KMessageBox::error( 0, error );
+    }
+    MainDocument *doc = qobject_cast<MainDocument*>( sender() );
+    if ( doc ) {
+        doc->documentPart()->deleteLater(); // also deletes document
+    }
+}
+
+void MainDocument::insertSharedProjects(const QUrl &url)
+{
+    m_sharedProjectsFiles.clear();
+    QFileInfo fi(url.path());
+    if (!fi.exists()) {
+        qInfo()<<Q_FUNC_INFO<<"Invalid:"<<url;
+        return;
+    }
+    if (fi.isFile()) {
+        m_sharedProjectsFiles = QList<QUrl>() << url;
+        debugPlan<<"Get all projects in file:"<<url;
+    } else if (fi.isDir()) {
+        // Get all plan files in this directory
+        qInfo()<<"Get all projects in dir:"<<url;
+        QDir dir = fi.dir();
+        for (const QString &f : dir.entryList(QStringList()<<"*.plan")) {
+            QString path = dir.canonicalPath();
+            if (path.isEmpty()) {
+                continue;
+            }
+            path += '/' + f;
+            QUrl u(path);
+            u.setScheme("file");
+            m_sharedProjectsFiles << u;
+        }
+        qInfo()<<dir.entryList(QStringList()<<"*.plan")<<endl<<m_sharedProjectsFiles;
+    } else {
+        warnPlan<<"Unknown url:"<<url<<url.path()<<url.fileName();
+        return;
+    }
+    for (Resource *r : m_project->resourceList()) {
+        r->clearExternalAppointments();
+    }
+}
+
+void MainDocument::slotInsertSharedProject()
+{
+    debugPlan<<m_sharedProjectsFiles;
+    if (m_sharedProjectsFiles.isEmpty()) {
+        return;
+    }
+    Part *part = new Part( this );
+    MainDocument *doc = new MainDocument( part );
+    part->setDocument( doc );
+    doc->disconnect(); // doc shall not handle feedback from openUrl()
+    doc->setAutoSave( 0 ); //disable
+    connect(doc, SIGNAL(completed()), SLOT(insertSharedProjectCompleted()));
+    connect(doc, SIGNAL(canceled(QString)), SLOT(insertSharedProjectCancelled(QString)));
+
+    doc->openUrl(m_sharedProjectsFiles.takeFirst());
+}
+
+void MainDocument::insertSharedProjectCompleted()
+{
+    debugPlan<<sender();
+    MainDocument *doc = qobject_cast<MainDocument*>( sender() );
+    if (doc) {
+        Project &p = doc->getProject();
+        debugPlan<<m_project->id()<<"Loaded project:"<<p.id()<<p.name();
+        if (p.id() != m_project->id()) {
+            for (Resource *r : p.resourceList()) {
+                Resource *res = m_project->resource(r->id());
+                debugPlan<<"Resource:"<<r->name()<<"->"<<res;
+                if (res && res->isShared()) {
+                    for (const Appointment *a : r->appointments()) {
+                        Appointment *app = new Appointment(*a);
+                        app->setAuxcilliaryInfo(p.name());
+                        res->addExternalAppointment(p.id(), app);
+                        debugPlan<<res->name()<<"added:"<<app->auxcilliaryInfo()<<app;
+                    }
+                }
+            }
+        }
+        doc->documentPart()->deleteLater(); // also deletes document
+        emit insertSharedProject(); // do next file
+    } else {
+        KMessageBox::error( 0, i18n("Internal error, failed to insert file.") );
+    }
+}
+
+void MainDocument::insertSharedProjectCancelled( const QString &error )
 {
     debugPlan<<sender()<<"error="<<error;
     if ( ! error.isEmpty() ) {
@@ -1086,13 +1194,13 @@ bool MainDocument::mergeResources(Project &project)
     QList<Calendar*> removedCalendars;
     QStringList removed;
     for (ResourceGroup *g : m_project->resourceGroups()) {
-        if (!project.findResourceGroup(g->id())) {
+        if (g->isShared() && !project.findResourceGroup(g->id())) {
             removedGroups << g;
             removed << "Group: " + g->name();
         }
     }
     for (Resource *r : m_project->resourceList()) {
-        if (!project.findResource(r->id())) {
+        if (r->isShared() && !project.findResource(r->id())) {
             removedResources << r;
             removed << "Resource: " + r->name();
         }
@@ -1102,24 +1210,18 @@ bool MainDocument::mergeResources(Project &project)
         removed << "Calendar: " + c->name();
     }
     if (!removedCalendars.isEmpty() || !removedResources.isEmpty() || !removedGroups.isEmpty()) {
-        // TODO maybe show what has changed
-        if (QMessageBox::question(0, i18n("Shared resources removed"), i18n("Shall the removed shared resources be deleted?")) == QMessageBox::Yes) {
+        // TODO show what has changed and give more detailed control
+        if (QMessageBox::question(0, i18n("Shared resources removed"), i18n("Shall the removed shared resources be converted to local resources?")) == QMessageBox::Yes) {
             for (Resource *r : removedResources) {
-                RemoveResourceCmd cc(r->parentGroup(), r);
-                cc.execute();
+                r->setShared(false);
             }
             for (ResourceGroup *g : removedGroups) {
                 if (g->resources().isEmpty()) {
-                    RemoveResourceGroupCmd cc(m_project, g);
-                    cc.execute();
+                    g->setShared(false);
                 }
             }
-            while (!removedCalendars.isEmpty()) {
-                Calendar *c = removedCalendars.takeLast();
-                if (canRemoveCalendar(c, removedCalendars)) {
-                    CalendarRemoveCmd cc(m_project, c);
-                    cc.execute();
-                }
+            for (Calendar *c : removedCalendars) {
+                c->setShared(false);
             }
         }
     }

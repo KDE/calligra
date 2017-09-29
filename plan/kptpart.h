@@ -58,9 +58,9 @@ protected Q_SLOTS:
     void finish();
     void slotShowIntroduction();
     void slotOpenUrlRequest( HtmlView *v, const QUrl &url );
+    virtual void openTemplate( const QUrl& url );
 
 protected:
-    virtual void openTemplate( const QUrl& url );
     void createStarUpWidget(KoMainWindow *parent);
     QWidget *createWelcomeView(KoMainWindow *parent);
     QWidget *createIntroductionView();

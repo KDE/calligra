@@ -32,6 +32,7 @@
 #include "kpttask.h"
 #include "kptdatetime.h"
 #include "kptintervaledit.h"
+#include "kptitemviewsettup.h"
 #include "kptdebug.h"
 
 #include <KoIcon.h>
@@ -75,12 +76,11 @@ CalendarTreeView::CalendarTreeView( QWidget *parent )
 
 void CalendarTreeView::headerContextMenuRequested( const QPoint &pos )
 {
-    debugPlan<<header()->logicalIndexAt(pos)<<" at"<<pos;
+    emit contextMenuRequested(QModelIndex(), mapToGlobal(pos));
 }
 
 void CalendarTreeView::contextMenuEvent ( QContextMenuEvent *event )
 {
-    //debugPlan;
     emit contextMenuRequested( indexAt(event->pos()), event->globalPos() );
 }
 
@@ -531,8 +531,12 @@ void CalendarEditor::slotContextMenuDate( QMenu *menu, const QDate &date )
     menu->addAction( actionSetUndefined );
 }
 
-void CalendarEditor::slotContextMenuCalendar( const QModelIndex &/*index*/, const QPoint& pos )
+void CalendarEditor::slotContextMenuCalendar( const QModelIndex &index, const QPoint& pos )
 {
+    if (!index.isValid()) {
+        slotHeaderContextMenuRequested(pos);
+        return;
+    }
     if ( ! isReadWrite() || !currentCalendar() ) {
         return;
     }
@@ -546,6 +550,7 @@ void CalendarEditor::slotContextMenuCalendar( const QModelIndex &/*index*/, cons
     }*/
     //debugPlan<<name;
     if ( name.isEmpty() ) {
+        slotHeaderContextMenuRequested(pos);
         return;
     }
     emit requestPopupMenu( name, pos );
@@ -568,6 +573,16 @@ void CalendarEditor::slotContextMenuDay( const QModelIndex &index, const QPoint&
         return;
     }
     emit requestPopupMenu( name, pos );*/
+}
+
+bool CalendarEditor::loadContext( const KoXmlElement &context )
+{
+    return m_calendarview->loadContext(m_calendarview->model()->columnMap(), context);
+}
+
+void CalendarEditor::saveContext( QDomElement &context ) const
+{
+    m_calendarview->saveContext(m_calendarview->model()->columnMap(), context);
 }
 
 Calendar *CalendarEditor::currentCalendar() const
@@ -647,6 +662,16 @@ void CalendarEditor::setupGui()
     actionSetUndefined = new QAction( i18n( "Undefined" ), this );
     connect( actionSetUndefined, SIGNAL(triggered(bool)), SLOT(slotSetUndefined()) );
 
+    createOptionAction();
+}
+
+void CalendarEditor::slotOptions()
+{
+    ItemViewSettupDialog *dlg = new ItemViewSettupDialog( this, m_calendarview, this );
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
 }
 
 void CalendarEditor::updateReadWrite( bool readwrite )

@@ -43,8 +43,14 @@ MainProjectDialog::MainProjectDialog(Project &p, QWidget *parent, const char */*
     enableButtonOk(false);
     resize( QSize(500, 410).expandedTo(minimumSizeHint()));
 
+    connect(this, SIGNAL(rejected()), SLOT(slotRejected()));
     connect(this, SIGNAL(accepted()), SLOT(slotOk()));
     connect(panel, SIGNAL(obligatedFieldsFilled(bool)), SLOT(enableButtonOk(bool)));
+}
+
+void MainProjectDialog::slotRejected()
+{
+    emit dialogFinished(QDialog::Rejected);
 }
 
 void MainProjectDialog::slotOk() {
@@ -56,7 +62,12 @@ void MainProjectDialog::slotOk() {
         if (file.startsWith('/')) {
             file.prepend("file:/");
         }
-        emit sigLoadSharedResources(file);
+        QString place = panel->projectsPlace->text();
+        if (panel->projectsType->currentIndex() == 0 /*dir*/ && !place.isEmpty() && !place.endsWith('/')) {
+            place.append('/');
+        }
+        QUrl url(place);
+        emit sigLoadSharedResources(file, url);
     }
     emit dialogFinished(QDialog::Accepted);
 }

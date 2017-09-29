@@ -986,6 +986,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
         } else if (e.tagName() == "shared-resources") {
             m_useSharedResources = e.attribute("use", "0").toInt();
             m_sharedResourcesFile = e.attribute("file");
+            m_sharedProjectsUrl = QUrl(e.attribute("projects-url"));
         }
     }
     QList<Calendar*> cals;
@@ -1253,6 +1254,8 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
             // handled earlier
         } else if ( e.tagName() == "task" ) {
             // handled earlier
+        } else if ( e.tagName() == "shared-resources" ) {
+            // handled earlier
         } else {
             warnPlan<<"Unhandled tag:"<<e.tagName();
         }
@@ -1295,6 +1298,7 @@ void Project::save( QDomElement &element ) const
     me.appendChild(share);
     share.setAttribute("use", m_useSharedResources);
     share.setAttribute("file", m_sharedResourcesFile);
+    share.setAttribute("projects-url", QString(m_sharedProjectsUrl.toEncoded()));
 
     m_accounts.save( me );
 
@@ -2886,6 +2890,16 @@ void Project::setSharedResourcesFile(const QString &file)
 QString Project::sharedResourcesFile() const
 {
     return m_sharedResourcesFile;
+}
+
+void Project::setSharedProjectsUrl(const QUrl &url)
+{
+    m_sharedProjectsUrl = url;
+}
+
+QUrl Project::sharedProjectsUrl() const
+{
+    return m_sharedProjectsUrl;
 }
 
 }  //KPlato namespace

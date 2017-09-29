@@ -40,6 +40,7 @@ public:
 
 public Q_SLOTS:
     void resourceFileBrowseBtnClicked();
+    void projectsPlaceBrowseBtnClicked();
 };
 
 class KPLATO_EXPORT ConfigProjectPanel : public ConfigProjectPanelImpl
