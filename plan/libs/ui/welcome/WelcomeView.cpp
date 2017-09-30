@@ -92,7 +92,7 @@ WelcomeView::WelcomeView(KoPart *part, KoDocument *doc, QWidget *parent)
     widget.createResourceFileBtn->setWhatsThis(xi18nc("@info:whatsthis",
                                            "<title>Shared resources</title>"
                                            "Create a shared resources file."
-                                           "Resources can be shared between projects"
+                                           " Resources can be shared between projects"
                                            " to avoid overbooking resources across projects."
                                            " Shared resources must be defined in a separate file."
                                            ));
