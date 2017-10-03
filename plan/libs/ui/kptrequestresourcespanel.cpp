@@ -57,18 +57,17 @@ bool RequestResourcesPanel::ok()
 
 MacroCommand *RequestResourcesPanel::buildCommand()
 {
-    Task *t = m_view->task();
-    if ( t == 0 ) {
+    Task *task = m_view->task();
+    if ( task == 0 ) {
         return 0;
     }
     MacroCommand *cmd = new MacroCommand( kundo2_i18n( "Modify resource allocations" ) );
-    /*Project *p = */m_view->project();
     const QMap<const Resource*, ResourceRequest*> &rmap = m_view->resourceCache();
 
     // First remove all that should be removed
     for( QMap<const Resource*, ResourceRequest*>::const_iterator rit = rmap.constBegin(); rit != rmap.constEnd(); ++rit ) {
         if ( rit.value()->units() == 0 ) {
-            ResourceRequest *rr = t->requests().find( rit.key() );
+            ResourceRequest *rr = task->requests().find( rit.key() );
             if ( rr ) {
                 cmd->addCommand( new RemoveResourceRequestCmd( rr->parent(), rr ) );
             }
@@ -79,11 +78,11 @@ MacroCommand *RequestResourcesPanel::buildCommand()
     // Add/modify
     const QMap<const ResourceGroup*, ResourceGroupRequest*> &gmap = m_view->groupCache();
     for( QMap<const ResourceGroup*, ResourceGroupRequest*>::const_iterator git = gmap.constBegin(); git != gmap.constEnd(); ++git ) {
-        ResourceGroupRequest *gr = t->requests().find( git.key() );
+        ResourceGroupRequest *gr = task->requests().find( git.key() );
         if ( gr == 0 ) {
             if ( git.value()->units() > 0 ) {
                 gr = new ResourceGroupRequest( const_cast<ResourceGroup*>( git.key() ), git.value()->units() );
-                cmd->addCommand( new AddResourceGroupRequestCmd( *t, gr ) );
+                cmd->addCommand( new AddResourceGroupRequestCmd( *task, gr ) );
                 groups[ git.key() ] = gr;
             } // else nothing
         } else {
@@ -94,16 +93,16 @@ MacroCommand *RequestResourcesPanel::buildCommand()
         Resource *resource = const_cast<Resource*>( rit.key() );
         ResourceGroup *group = resource->parentGroup();
         if ( rit.value()->units() > 0 ) {
-            ResourceRequest *rr = t->requests().find( resource );
+            ResourceRequest *rr = task->requests().find( resource );
             if ( rr == 0 ) {
-                ResourceGroupRequest *gr = t->requests().find( group );
+                ResourceGroupRequest *gr = task->requests().find( group );
                 if ( gr == 0 ) {
                     if ( groups.contains( group ) ) {
                         gr = groups[ group ];
                     } else {
                         gr = new ResourceGroupRequest( group, 0 );
                         groups[ group ] = gr;
-                        cmd->addCommand( new AddResourceGroupRequestCmd( *t, gr ) );
+                        cmd->addCommand( new AddResourceGroupRequestCmd( *task, gr ) );
                     }
                 }
                 ResourceRequest *rr = new ResourceRequest( resource, rit.value()->units() );
@@ -121,7 +120,55 @@ MacroCommand *RequestResourcesPanel::buildCommand()
     }
     if ( cmd->isEmpty() ) {
         delete cmd;
+        cmd = 0;
+    }
+    return cmd;
+}
+
+
+MacroCommand *RequestResourcesPanel::buildCommand(Task *task)
+{
+    if ( task == 0 ) {
         return 0;
+    }
+    MacroCommand *cmd = new MacroCommand( kundo2_i18n( "Modify resource allocations" ) );
+    const QMap<const Resource*, ResourceRequest*> &rmap = m_view->resourceCache();
+
+    // First remove all
+    for (ResourceGroupRequest *g : task->requests().requests()) {
+        cmd->addCommand(new RemoveResourceGroupRequestCmd(g));
+    }
+
+    QMap<const ResourceGroup*, ResourceGroupRequest*> groups;
+    // Add possible requests to groups
+    const QMap<const ResourceGroup*, ResourceGroupRequest*> &gmap = m_view->groupCache();
+    for( QMap<const ResourceGroup*, ResourceGroupRequest*>::const_iterator git = gmap.constBegin(); git != gmap.constEnd(); ++git ) {
+        if (git.value()->units() > 0) {
+            ResourceGroupRequest *gr = new ResourceGroupRequest(const_cast<ResourceGroup*>(git.key() ), git.value()->units());
+            cmd->addCommand(new AddResourceGroupRequestCmd(*task, gr));
+            groups[git.key()] = gr;
+        }
+    }
+    // Add possible requests to resources
+    for( QMap<const Resource*, ResourceRequest*>::const_iterator rit = rmap.constBegin(); rit != rmap.constEnd(); ++rit ) {
+        Resource *resource = const_cast<Resource*>(rit.key());
+        ResourceGroup *group = resource->parentGroup();
+        if ( rit.value()->units() > 0 ) {
+            ResourceGroupRequest *gr = groups.value(group);
+            // Check if there is already a request to the group
+            if (gr == 0) {
+                gr = new ResourceGroupRequest(group, 0);
+                cmd->addCommand(new AddResourceGroupRequestCmd(*task, gr));
+                groups[group] = gr;
+            }
+            ResourceRequest *rr = new ResourceRequest(resource, rit.value()->units());
+            rr->setRequiredResources(rit.value()->requiredResources());
+            cmd->addCommand( new AddResourceRequestCmd(gr, rr));
+        }
+    }
+    if (cmd->isEmpty()) {
+        delete cmd;
+        cmd = 0;
     }
     return cmd;
 }

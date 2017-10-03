@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 - 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2002 Bo Thorsen  bo@sonofthor.dk
+   Copyright (C) 2004 -2010 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,44 +18,57 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPTREQUESTRESOURCESPANEL_H
-#define KPTREQUESTRESOURCESPANEL_H
+#ifndef TASKSEDITCONTROLLER_H
+#define TASKSEDITCONTROLLER_H
 
 #include "kplatoui_export.h"
 
-#include <QWidget>
+#include <QObject>
+
+class KUndo2Command;
 
 namespace KPlato
 {
 
+class Accounts;
+class TaskGeneralPanel;
+class RequestResourcesPanel;
+class DocumentsPanel;
+class TaskCostPanel;
+class TaskDescriptionPanel;
+class Node;
 class Task;
 class Project;
-class Resource;
 class MacroCommand;
-class ResourceAllocationTreeView;
 
-class RequestResourcesPanel : public QWidget
+class TasksEditDialog;
+
+/**
+ * The dialog that allows you to alter multiple tasks.
+ */
+class KPLATOUI_EXPORT TasksEditController : public QObject
 {
     Q_OBJECT
 public:
-    RequestResourcesPanel(QWidget *parent, Project &project, Task &task, bool baseline=false);
+    TasksEditController(Project &project, const QList<Task*> &tasks, QObject *parent = 0);
+    ~TasksEditController();
 
-    /// Builds an undocommand for the current task
-    /// only for changes (removals and/or additions)
-    MacroCommand *buildCommand();
-    /// Builds an undo command for @p task
-    /// that clears all current requests and adds the new ones (if any)
-    MacroCommand *buildCommand(Task *task);
-
-    bool ok();
+public Q_SLOTS:
+    void activate();
 
 Q_SIGNALS:
-    void changed();
+    void addCommand(KUndo2Command *cmd);
+
+private Q_SLOTS:
+    void finish(int result);
 
 private:
-    ResourceAllocationTreeView *m_view;
+    Project &m_project;
+    const QList<Task*> m_tasks;
+    TasksEditDialog *m_dlg;
 };
 
-}  //KPlato namespace
 
-#endif
+} //KPlato namespace
+
+#endif // TASKSEDITCONTROLLER_H

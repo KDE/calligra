@@ -1413,8 +1413,8 @@ QModelIndex TreeViewBase::moveCursor( const QModelIndex &index, CursorAction cur
 
 void TreeViewBase::contextMenuEvent ( QContextMenuEvent *event )
 {
-    //debugPlan;
-    emit contextMenuRequested( indexAt(event->pos()), event->globalPos() );
+    debugPlan<<selectionModel()->selectedRows();
+    emit contextMenuRequested( indexAt(event->pos()), event->globalPos(), selectionModel()->selectedRows() );
 }
 
 void TreeViewBase::slotCurrentChanged( const QModelIndex &current, const QModelIndex & )
@@ -1912,10 +1912,10 @@ void DoubleTreeViewBase::init()
 
     m_leftview->setTreePosition(-1); // always visual index 0
 
-    connect( m_leftview, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SIGNAL(contextMenuRequested(QModelIndex,QPoint)) );
+    connect( m_leftview, SIGNAL(contextMenuRequested(QModelIndex,QPoint,QModelIndexList)), SIGNAL(contextMenuRequested(QModelIndex,QPoint,QModelIndexList)) );
     connect( m_leftview, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotLeftHeaderContextMenuRequested(QPoint)) );
 
-    connect( m_rightview, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SIGNAL(contextMenuRequested(QModelIndex,QPoint)) );
+    connect( m_rightview, SIGNAL(contextMenuRequested(QModelIndex,QPoint,QModelIndexList)), SIGNAL(contextMenuRequested(QModelIndex,QPoint,QModelIndexList)) );
     connect( m_rightview, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotRightHeaderContextMenuRequested(QPoint)) );
 
     connect( m_leftview->verticalScrollBar(), SIGNAL(valueChanged(int)), m_rightview->verticalScrollBar(), SLOT(setValue(int)) );

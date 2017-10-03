@@ -419,7 +419,7 @@ public:
 
 Q_SIGNALS:
     /// Context menu requested from viewport at global position @p pos
-    void contextMenuRequested( const QModelIndex&, const QPoint &pos );
+    void contextMenuRequested( const QModelIndex&, const QPoint &pos, const QModelIndexList& );
     /// Context menu requested from header at global position @p pos
     void headerContextMenuRequested( const QPoint &pos );
 
@@ -593,7 +593,7 @@ public:
 
 Q_SIGNALS:
     /// Context menu requested from the viewport, pointer over @p index at global position @p pos
-    void contextMenuRequested( const QModelIndex &index, const QPoint& pos );
+    void contextMenuRequested( const QModelIndex &index, const QPoint& pos, const QModelIndexList& );
     /// Context menu requested from master- or slave header at global position @p pos
     void headerContextMenuRequested( const QPoint &pos );
     /// Context menu requested from master header at global position @p pos
