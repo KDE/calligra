@@ -1753,11 +1753,11 @@ QVariant AllocatedResourceItemModel::allocation( const ResourceGroup *res, int r
         case Qt::EditRole:
             return QString( "%1 (%2)" ).arg( gr->units() ).arg( gr->count() );
         case Qt::ToolTipRole: {
-            QString s1 = xi18ncp( "@info:tooltip",
+            QString s1 = i18ncp( "@info:tooltip",
                                  "%1 resource requested for dynamic allocation",
                                  "%1 resources requested for dynamic allocation",
                                  gr->units() );
-            QString s2 = xi18ncp( "@info:tooltip",
+            QString s2 = i18ncp( "@info:tooltip",
                                  "%1 resource allocated",
                                  "%1 resources allocated",
                                  gr->count() );
