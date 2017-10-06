@@ -280,6 +280,9 @@ TaskEditor::TaskEditor(KoPart *part, KoDocument *doc, QWidget *parent)
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new TaskEditorTreeView( this );
+    connect(this, SIGNAL(expandAll()), m_view, SLOT(slotExpand()));
+    connect(this, SIGNAL(collapseAll()), m_view, SLOT(slotCollapse()));
+
     l->addWidget( m_view );
     debugPlan<<m_view->actionSplitView();
     setupGui();
@@ -579,12 +582,15 @@ void TaskEditor::slotContextMenuRequested( const QModelIndex& index, const QPoin
         name = "node_popup";
         break;
     }
+    m_view->setContextMenuIndex(index);
     if ( name.isEmpty() ) {
         slotHeaderContextMenuRequested( pos );
+        m_view->setContextMenuIndex(QModelIndex());
         return;
     }
     debugPlan<<name;
     emit requestPopupMenu( name, pos );
+    m_view->setContextMenuIndex(QModelIndex());
 }
 
 void TaskEditor::editTasks(const QList<Task*> &tasks, const QPoint &pos)
@@ -1035,6 +1041,9 @@ TaskView::TaskView(KoPart *part, KoDocument *doc, QWidget *parent)
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new NodeTreeView( this );
+    connect(this, SIGNAL(expandAll()), m_view, SLOT(slotExpand()));
+    connect(this, SIGNAL(collapseAll()), m_view, SLOT(slotCollapse()));
+
     NodeSortFilterProxyModel *p = new NodeSortFilterProxyModel( m_view->baseModel(), m_view );
     m_view->setModel( p );
     l->addWidget( m_view );
@@ -1205,7 +1214,9 @@ void TaskView::slotContextMenuRequested( const QModelIndex& index, const QPoint&
         slotHeaderContextMenuRequested( pos );
         return;
     }
+    m_view->setContextMenuIndex(index);
     emit requestPopupMenu( name, pos );
+    m_view->setContextMenuIndex(QModelIndex());
 }
 
 void TaskView::setScheduleManager( ScheduleManager *sm )
@@ -1326,6 +1337,8 @@ TaskWorkPackageView::TaskWorkPackageView(KoPart *part, KoDocument *doc, QWidget 
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new WorkPackageTreeView( this );
+    connect(this, SIGNAL(expandAll()), m_view, SLOT(slotExpand()));
+    connect(this, SIGNAL(collapseAll()), m_view, SLOT(slotCollapse()));
 
     l->addWidget( m_view );
     setupGui();
@@ -1502,7 +1515,9 @@ void TaskWorkPackageView::slotContextMenuRequested( const QModelIndex& index, co
         slotHeaderContextMenuRequested( pos );
         return;
     }
+    m_view->setContextMenuIndex(index);
     emit requestPopupMenu( name, pos );
+    m_view->setContextMenuIndex(QModelIndex());
 }
 
 void TaskWorkPackageView::setScheduleManager( ScheduleManager *sm )

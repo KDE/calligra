@@ -311,6 +311,9 @@ Q_SIGNALS:
     void projectChanged( Project *project );
     void readWriteChanged( bool );
 
+    void expandAll();
+    void collapseAll();
+
 protected Q_SLOTS:
     virtual void slotOptions() {}
     virtual void slotOptionsFinished( int result );
@@ -417,6 +420,12 @@ public:
 
     ItemModelBase *itemModel() const;
 
+    void setContextMenuIndex(const QModelIndex &idx);
+
+public Q_SLOTS:
+    void slotExpand();
+    void slotCollapse();
+
 Q_SIGNALS:
     /// Context menu requested from viewport at global position @p pos
     void contextMenuRequested( const QModelIndex&, const QPoint &pos, const QModelIndexList& );
@@ -450,6 +459,8 @@ protected:
     void dropEvent( QDropEvent *e );
     void updateSelection( const QModelIndex &oldidx, const QModelIndex &newidx, QKeyEvent *event );
 
+    void expandRecursive(const QModelIndex &parent, bool xpand);
+
 protected Q_SLOTS:
     /// Close the @p editor, using sender()->endEditHint().
     /// Use @p hint if sender is not of type ItemDelegate.
@@ -476,6 +487,8 @@ protected:
     QList<int> m_hideList;
     bool m_readWrite;
     QList<int> m_defaultColumns;
+
+    QPersistentModelIndex m_contextMenuIndex;
 };
 
 //------------------
@@ -591,6 +604,8 @@ public:
         }
     }
 
+    void setContextMenuIndex(const QModelIndex &idx);
+
 Q_SIGNALS:
     /// Context menu requested from the viewport, pointer over @p index at global position @p pos
     void contextMenuRequested( const QModelIndex &index, const QPoint& pos, const QModelIndexList& );
@@ -608,8 +623,9 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void edit( const QModelIndex &index );
-    void expandAll();
-    
+    void slotExpand();
+    void slotCollapse();
+
 protected Q_SLOTS:
     void slotSelectionChanged( const QItemSelection &sel, const QItemSelection & );
     void slotToRightView( const QModelIndex &index );

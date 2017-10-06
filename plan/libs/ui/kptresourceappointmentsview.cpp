@@ -184,6 +184,9 @@ ResourceAppointmentsView::ResourceAppointmentsView(KoPart *part, KoDocument *doc
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new ResourceAppointmentsTreeView( this );
+    connect(this, SIGNAL(expandAll()), m_view, SLOT(slotExpand()));
+    connect(this, SIGNAL(collapseAll()), m_view, SLOT(slotCollapse()));
+
     l->addWidget( m_view );
 
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
@@ -239,11 +242,14 @@ void ResourceAppointmentsView::slotContextMenuRequested( const QModelIndex &inde
             name = "taskview_popup";
         }
     }
+    m_view->setContextMenuIndex(index);
     if ( name.isEmpty() ) {
         slotHeaderContextMenuRequested( pos );
+        m_view->setContextMenuIndex(QModelIndex());
         return;
     }
     emit requestPopupMenu( name, pos );
+    m_view->setContextMenuIndex(QModelIndex());
 }
 
 Node *ResourceAppointmentsView::currentNode() const

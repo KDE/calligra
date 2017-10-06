@@ -412,6 +412,8 @@ CalendarEditor::CalendarEditor(KoPart *part, KoDocument *doc, QWidget *parent )
     l->addWidget( sp );
 
     m_calendarview = new CalendarTreeView( sp );
+    connect(this, SIGNAL(expandAll()), m_calendarview, SLOT(slotExpand()));
+    connect(this, SIGNAL(collapseAll()), m_calendarview, SLOT(slotCollapse()));
 
     QFrame *f = new QFrame( sp );
     l = new QVBoxLayout( f );
@@ -549,11 +551,14 @@ void CalendarEditor::slotContextMenuCalendar( const QModelIndex &index, const QP
         }
     }*/
     //debugPlan<<name;
+    m_calendarview->setContextMenuIndex(index);
     if ( name.isEmpty() ) {
         slotHeaderContextMenuRequested(pos);
+        m_calendarview->setContextMenuIndex(QModelIndex());
         return;
     }
     emit requestPopupMenu( name, pos );
+    m_calendarview->setContextMenuIndex(QModelIndex());
 }
 
 void CalendarEditor::slotContextMenuDay( const QModelIndex &index, const QPoint& pos )

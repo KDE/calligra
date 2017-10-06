@@ -180,10 +180,12 @@ void AccountsView::setupGui()
     createOptionAction();
 }
 
-void AccountsView::slotContextMenuRequested( const QModelIndex&, const QPoint &pos )
+void AccountsView::slotContextMenuRequested( const QModelIndex &index, const QPoint &pos )
 {
     debugPlan;
+    m_view->setContextMenuIndex(index);
     slotHeaderContextMenuRequested( pos );
+    m_view->setContextMenuIndex(QModelIndex());
 }
 
 void AccountsView::slotHeaderContextMenuRequested( const QPoint &pos )

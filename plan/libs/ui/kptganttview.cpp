@@ -418,8 +418,9 @@ GanttViewBase::GanttViewBase( QWidget *parent )
 
 GanttTreeView *GanttViewBase::treeView() const
 {
-    QAbstractItemView *v = const_cast<QAbstractItemView*>( leftView() );
-    return static_cast<GanttTreeView*>( v );
+    GanttTreeView *tv = qobject_cast<GanttTreeView*>(const_cast<QAbstractItemView*>(leftView()));
+    Q_ASSERT(tv);
+    return tv;
 }
 
 bool GanttViewBase::eventFilter(QObject *obj, QEvent *event)
@@ -714,6 +715,8 @@ GanttView::GanttView(KoPart *part, KoDocument *doc, QWidget *parent, bool readWr
     m_splitter->setOrientation( Qt::Vertical );
 
     m_gantt = new MyKGanttView( m_splitter );
+    connect(this, SIGNAL(expandAll()), m_gantt->treeView(), SLOT(slotExpand()));
+    connect(this, SIGNAL(collapseAll()), m_gantt->treeView(), SLOT(slotCollapse()));
 
     setupGui();
 
@@ -865,12 +868,15 @@ void GanttView::slotContextMenuRequested( const QModelIndex &idx, const QPoint &
                 break;
         }
     } else debugPlan<<"No node";
+    m_gantt->treeView()->setContextMenuIndex(idx);
     if ( name.isEmpty() ) {
         slotHeaderContextMenuRequested( pos );
+        m_gantt->treeView()->setContextMenuIndex(QModelIndex());
         debugPlan<<"No menu";
         return;
     }
     emit requestPopupMenu( name, pos );
+    m_gantt->treeView()->setContextMenuIndex(QModelIndex());
 }
 
 bool GanttView::loadContext( const KoXmlElement &settings )
@@ -1131,12 +1137,15 @@ void MilestoneGanttView::slotContextMenuRequested( const QModelIndex &idx, const
                 break;
         }
     } else debugPlan<<"No node";
+    m_gantt->treeView()->setContextMenuIndex(idx);
     if ( name.isEmpty() ) {
         debugPlan<<"No menu";
         slotHeaderContextMenuRequested( pos );
+        m_gantt->treeView()->setContextMenuIndex(QModelIndex());
         return;
     }
     emit requestPopupMenu( name, pos );
+    m_gantt->treeView()->setContextMenuIndex(QModelIndex());
 }
 
 void MilestoneGanttView::slotOptions()
@@ -1208,6 +1217,7 @@ ResourceAppointmentsGanttView::ResourceAppointmentsGanttView(KoPart *part, KoDoc
     debugPlan <<" ---------------- KPlato: Creating ResourceAppointmentsGanttView ----------------";
 
     m_gantt = new GanttViewBase( this );
+
     m_gantt->graphicsView()->setItemDelegate( new ResourceGanttItemDelegate( m_gantt ) );
 
     GanttTreeView *tv = new GanttTreeView( m_gantt );
@@ -1215,6 +1225,8 @@ ResourceAppointmentsGanttView::ResourceAppointmentsGanttView(KoPart *part, KoDoc
     tv->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     tv->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel ); // needed since qt 4.2
     m_gantt->setLeftView( tv );
+    connect(this, SIGNAL(expandAll()), tv, SLOT(slotExpand()));
+    connect(this, SIGNAL(collapseAll()), tv, SLOT(slotCollapse()));
     m_rowController = new KGantt::TreeViewRowController( tv, m_gantt->ganttProxyModel() );
     m_gantt->setRowController( m_rowController );
     tv->header()->setStretchLastSection( true );
@@ -1282,7 +1294,7 @@ Node *ResourceAppointmentsGanttView::currentNode() const
 
 void ResourceAppointmentsGanttView::slotContextMenuRequested( const QModelIndex &idx, const QPoint &pos )
 {
-    debugPlan;
+    debugPlan<<idx;
     QString name;
     if ( idx.isValid() ) {
         Node *n = m_model->node( idx );
@@ -1290,11 +1302,14 @@ void ResourceAppointmentsGanttView::slotContextMenuRequested( const QModelIndex 
             name = "taskview_popup";
         }
     }
+    m_gantt->treeView()->setContextMenuIndex(idx);
     if ( name.isEmpty() ) {
         slotHeaderContextMenuRequested( pos );
+        m_gantt->treeView()->setContextMenuIndex(QModelIndex());
         return;
     }
     emit requestPopupMenu( name, pos );
+    m_gantt->treeView()->setContextMenuIndex(QModelIndex());
 }
 
 void ResourceAppointmentsGanttView::slotOptions()

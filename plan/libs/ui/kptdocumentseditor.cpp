@@ -160,7 +160,9 @@ void DocumentsEditor::slotContextMenuRequested( const QModelIndex &index, const 
             name = "documentseditor_popup";
         }
     }
+    m_view->setContextMenuIndex(index);
     emit requestPopupMenu( name, pos );
+    m_view->setContextMenuIndex(QModelIndex());
 }
 
 void DocumentsEditor::slotHeaderContextMenuRequested( const QPoint &pos )

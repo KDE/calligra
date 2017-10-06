@@ -671,6 +671,18 @@ void ViewBase::createOptionAction()
     actionOptions = new QAction(koIcon("configure"), i18n("Configure View..."), this);
     connect(actionOptions, SIGNAL(triggered(bool)), SLOT(slotOptions()));
     addContextAction( actionOptions );
+
+    QAction *separator = new QAction(this);
+    separator->setSeparator(true);
+    addContextAction(separator);
+
+    QAction *actionExpand = new QAction(koIcon("arrow-down"), i18n("Expand All"), this);
+    connect(actionExpand, SIGNAL(triggered(bool)), this, SIGNAL(expandAll()));
+    addContextAction(actionExpand);
+
+    QAction *actionCollapse = new QAction(koIcon("arrow-up"), i18n("Collapse All"), this);
+    connect(actionCollapse, SIGNAL(triggered(bool)), this, SIGNAL(collapseAll()));
+    addContextAction(actionCollapse);
 }
 
 void ViewBase::slotOptionsFinished( int result )
@@ -1622,6 +1634,50 @@ ItemModelBase *TreeViewBase::itemModel() const
     return qobject_cast<ItemModelBase*>( m );
 }
 
+void TreeViewBase::expandRecursive(const QModelIndex &idx, bool xpand)
+{
+    int rowCount = idx.model()->rowCount(idx);
+    if (rowCount == 0) {
+        return;
+    }
+    xpand ? expand(idx) : collapse(idx);
+    for (int r = 0; r < rowCount; ++r) {
+        expandRecursive(idx.child(r, 0), xpand);
+    }
+}
+
+void TreeViewBase::slotExpand()
+{
+    if (!m_contextMenuIndex.isValid()) {
+        expandAll();
+        return;
+    }
+    QModelIndex idx = m_contextMenuIndex;
+    if (!idx.column() != 0) {
+        idx.model()->index(idx.row(), idx.column(), idx.parent());
+    }
+    expandRecursive(idx, true);
+}
+
+void TreeViewBase::slotCollapse()
+{
+    if (!m_contextMenuIndex.isValid()) {
+        collapseAll();
+        return;
+    }
+    QModelIndex idx = m_contextMenuIndex;
+    if (!idx.column() != 0) {
+        idx.model()->index(idx.row(), idx.column(), idx.parent());
+    }
+    expandRecursive(idx, false);
+}
+
+
+void TreeViewBase::setContextMenuIndex(const QModelIndex &idx)
+{
+    m_contextMenuIndex = idx;
+}
+
 //----------------------
 DoubleTreeViewPrintingDialog::DoubleTreeViewPrintingDialog( ViewBase *view, DoubleTreeViewBase *treeview, Project *project )
     : PrintingDialog( view ),
@@ -1875,9 +1931,14 @@ KoPrintJob *DoubleTreeViewBase::createPrintJob( ViewBase *parent )
     return dia;
 }
 
-void DoubleTreeViewBase::expandAll()
+void DoubleTreeViewBase::slotExpand()
 {
-    m_leftview->expandAll();
+    m_leftview->slotExpand();
+}
+
+void DoubleTreeViewBase::slotCollapse()
+{
+    m_leftview->slotCollapse();
 }
 
 void DoubleTreeViewBase::setParentsExpanded( const QModelIndex &idx, bool expanded )
@@ -2335,5 +2396,10 @@ QModelIndex DoubleTreeViewBase::indexAt( const QPoint &pos ) const
     return idx;
 }
 
+void DoubleTreeViewBase::setContextMenuIndex(const QModelIndex &idx)
+{
+    m_leftview->setContextMenuIndex(idx);
+    m_rightview->setContextMenuIndex(idx);
+}
 
 } // namespace KPlato
