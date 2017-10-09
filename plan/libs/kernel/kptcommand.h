@@ -1957,6 +1957,19 @@ private:
     bool m_newValue;
 };
 
+class  KPLATOKERNEL_EXPORT SharedProjectsUrlCmd : public NamedCommand
+{
+public:
+    explicit SharedProjectsUrlCmd(Project *project, const QUrl &newValue, const KUndo2MagicString& name = KUndo2MagicString());
+    void execute();
+    void unexecute();
+
+private:
+    Project *m_project;
+    QUrl m_oldValue;
+    QUrl m_newValue;
+};
+
 }  //KPlato namespace
 
 #endif //COMMAND_H

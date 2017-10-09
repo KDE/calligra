@@ -720,11 +720,11 @@ QVariant ResourceAllocationItemModel::allocation( const ResourceGroup *res, int 
         case Qt::EditRole:
             return qMax( m_groupCache[ res ]->units(), allocation( res, Role::Minimum ).toInt() );
         case Qt::ToolTipRole: {
-            QString s1 = xi18ncp( "@info:tooltip",
+            QString s1 = i18ncp( "@info:tooltip",
                                  "%1 resource requested for dynamic allocation",
                                  "%1 resources requested for dynamic allocation",
                                  allocation( res, Qt::EditRole ).toInt() );
-            QString s2 = xi18ncp( "@info:tooltip",
+            QString s2 = i18ncp( "@info:tooltip",
                                  "%1 resource allocated",
                                  "%1 resources allocated",
                                  requestedResources( res ) );

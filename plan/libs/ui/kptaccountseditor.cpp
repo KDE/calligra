@@ -162,6 +162,9 @@ AccountsEditor::AccountsEditor(KoPart *part, KoDocument *doc, QWidget *parent)
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new AccountTreeView( this );
+    connect(this, SIGNAL(expandAll()), m_view, SLOT(slotExpand()));
+    connect(this, SIGNAL(collapseAll()), m_view, SLOT(slotCollapse()));
+
     l->addWidget( m_view );
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
@@ -205,7 +208,9 @@ void AccountsEditor::setGuiActive( bool activate )
 void AccountsEditor::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
     debugPlan<<index.row()<<","<<index.column()<<":"<<pos;
+    m_view->setContextMenuIndex(index);
     slotHeaderContextMenuRequested( pos );
+    m_view->setContextMenuIndex(QModelIndex());
 }
 
 void AccountsEditor::slotHeaderContextMenuRequested( const QPoint &pos )

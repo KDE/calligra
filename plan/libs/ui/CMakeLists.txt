@@ -37,6 +37,9 @@ endif()
 set(kplatoui_LIB_SRCS
     ${planreports_LIB_SRC}
 
+    TasksEditController.cpp
+    TasksEditDialog.cpp
+
     welcome/WelcomeView.cpp
 
     reportsgenerator/ReportsGeneratorView.cpp

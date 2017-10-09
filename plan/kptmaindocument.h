@@ -148,9 +148,13 @@ public Q_SLOTS:
     void checkForWorkPackages( bool keep = false );
 
     void setLoadingTemplate( bool );
+    void setLoadingSharedResourcesTemplate( bool );
 
-    void insertResourcesFile(const QUrl &url);
+    void insertResourcesFile(const QUrl &url, const QUrl &projects = QUrl());
     void slotProjectCreated();
+
+    /// Prepare for insertion of resource bookings of shared resources from the project(s) in @p url
+    void insertSharedProjects(const QUrl &url);
 
 Q_SIGNALS:
     void changed();
@@ -158,6 +162,8 @@ Q_SIGNALS:
     void viewlistModified( bool );
     void viewListItemAdded(const ViewListItem *item, const ViewListItem *parent, int index);
     void viewListItemRemoved(const ViewListItem *item);
+
+    void insertSharedProject();
 
 protected:
     /// Load kplato specific files
@@ -186,6 +192,10 @@ protected Q_SLOTS:
     void insertResourcesFileCompleted();
     void insertFileCancelled( const QString& );
 
+    void slotInsertSharedProject();
+    void insertSharedProjectCompleted();
+    void insertSharedProjectCancelled( const QString& );
+
     void workPackageMergeDialogFinished( int result );
 
 private:
@@ -202,6 +212,7 @@ private:
 
     XMLLoaderObject m_xmlLoader;
     bool m_loadingTemplate;
+    bool m_loadingSharedResourcesTemplate;
 
     QMap<QString, SchedulerPlugin*> m_schedulerPlugins;
     QMap<QDateTime, Package*> m_workpackages;
@@ -216,6 +227,8 @@ private:
     bool m_checkingForWorkPackages;
 
     QList<QPointer<View> > m_views;
+
+    QList<QUrl> m_sharedProjectsFiles;
 };
 
 

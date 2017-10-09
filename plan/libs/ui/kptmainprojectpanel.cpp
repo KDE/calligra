@@ -62,7 +62,8 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent)
  //   useSharedResources->setEnabled(!project.isSharedResourcesLoaded());
     useSharedResources->setChecked(project.useSharedResources());
     resourcesFile->setText(project.sharedResourcesFile());
-
+    projectsPlace->setText(project.sharedProjectsUrl().toDisplayString());
+    qInfo()<<Q_FUNC_INFO<<project.sharedProjectsUrl();
     m_description = new TaskDescriptionPanel( p, tabWidget->widget(1) );
     m_description->namefield->hide();
     m_description->namelabel->hide();
@@ -82,6 +83,26 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent)
     enableDateTime();
     namefield->setFocus();
 
+    useSharedResources->setToolTip(xi18nc("@info:tooltip", "Enables sharing resources with other projects"));
+    useSharedResources->setWhatsThis(xi18nc("@info:whatsthis",
+                                           "<title>Shared resources</title>"
+                                           "Resources can be shared between projects"
+                                           " to avoid overbooking resources across projects."
+                                           " Shared resources must be defined in a separate file,"
+                                           " and you must have at least read access to it."
+                                           " The projects that share the resources must also be"
+                                           " accessible by you."
+                                           ));
+    s = xi18nc("@info:tooltip", "File where shared resources are defined");
+    resourcesLabel->setToolTip(s);
+    resourcesType->setToolTip(s);
+    resourcesFile->setToolTip(s);
+
+    s = xi18nc("@info:tooltip", "Directory where all the projects that share resources can be found");
+    projectsLabel->setToolTip(s);
+    projectsType->setToolTip(s);
+    projectsPlace->setToolTip(s);
+
     // signals and slots connections
     connect( m_description, SIGNAL(textChanged(bool)), this, SLOT(slotCheckAllFieldsFilled()) );
     connect( endDate, SIGNAL(dateChanged(QDate)), this, SLOT(slotCheckAllFieldsFilled()) );
@@ -92,9 +113,11 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent)
     connect( leaderfield, SIGNAL(textChanged(QString)), this, SLOT(slotCheckAllFieldsFilled()) );
     connect( useSharedResources, SIGNAL(toggled(bool)), this, SLOT(slotCheckAllFieldsFilled()) );
     connect( resourcesFile, SIGNAL(textChanged(const QString&)), this, SLOT(slotCheckAllFieldsFilled()) );
+    connect( projectsPlace, SIGNAL(textChanged(const QString&)), this, SLOT(slotCheckAllFieldsFilled()) );
     connect( chooseLeader, SIGNAL(clicked()), this, SLOT(slotChooseLeader()) );
 
     connect(resourcesBrowseBtn, SIGNAL(clicked()), this, SLOT(openResourcesFile()));
+    connect(projectsBrowseBtn, SIGNAL(clicked()), this, SLOT(openProjectsPlace()));
 
 }
 
@@ -132,6 +155,15 @@ MacroCommand *MainProjectPanel::buildCommand() {
     if (project.sharedResourcesFile() != resourcesFile->text()) {
         if (!m) m = new MacroCommand(c);
         m->addCommand(new SharedResourcesFileCmd( &project, resourcesFile->text()));
+    }
+    QString place = projectsPlace->text();
+    if (projectsType->currentIndex() == 0 /*dir*/ && !place.isEmpty() && !place.endsWith('/')) {
+        place.append('/');
+    }
+    QUrl sharedProjectsUrl(place);
+    if (project.sharedProjectsUrl() != sharedProjectsUrl) {
+        if (!m) m = new MacroCommand(c);
+        m->addCommand(new SharedProjectsUrlCmd( &project, sharedProjectsUrl));
     }
     MacroCommand *cmd = m_description->buildCommand();
     if ( cmd ) {
@@ -220,6 +252,22 @@ void MainProjectPanel::openResourcesFile()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open Resources"), "", tr("Resources file (*.plan)"));
     resourcesFile->setText(fileName);
+}
+
+void MainProjectPanel::openProjectsPlace()
+{
+    if (projectsType->currentIndex() == 0 /*Directory*/) {
+        qInfo()<<Q_FUNC_INFO<<"Directory";
+        QString dirName = QFileDialog::getExistingDirectory(this, tr("Projects Directory"));
+        projectsPlace->setText(dirName);
+        return;
+    }
+    if (projectsType->currentIndex() == 1 /*File*/) {
+        QString fileName = QFileDialog::getOpenFileName(this, tr("Open Projects"), "", tr("Projects file (*)"));
+        projectsPlace->setText(fileName);
+        return;
+    }
+    Q_ASSERT(false); // Unimplemented projects type
 }
 
 bool MainProjectPanel::loadSharedResources() const

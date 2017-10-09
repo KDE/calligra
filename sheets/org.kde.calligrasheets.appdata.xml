@@ -120,6 +120,7 @@
       <li xml:lang="sv">Använd former för att göra anteckningar eller tankekartor</li>
       <li xml:lang="uk">Використання форм для зберігання нотаток або записів на пам’ять.</li>
       <li xml:lang="x-test">xxUse shapes to take notes or mind mapsxx</li>
+      <li xml:lang="zh-CN">使用图形来做笔记或脑图</li>
       <li>Large range of pre-defined templates</li>
       <li xml:lang="bs">Širok opseg predefinisanih predložaka</li>
       <li xml:lang="ca">Àmplia gamma de plantilles predefinides</li>
@@ -142,6 +143,7 @@
       <li xml:lang="sv">Stort antal fördefinierade mallar</li>
       <li xml:lang="uk">Широкий діапазон попередньо визначених шаблонів.</li>
       <li xml:lang="x-test">xxLarge range of pre-defined templatesxx</li>
+      <li xml:lang="zh-CN">大范围的预定义的模板</li>
       <li>Powerful and comprehensive formula list</li>
       <li xml:lang="bs">Moćna i kompaktna lista formula</li>
       <li xml:lang="ca">Llista de fórmules potent i extensa</li>
@@ -164,6 +166,7 @@
       <li xml:lang="sv">Kraftfull och omfattande formellista</li>
       <li xml:lang="uk">Потужний і повний список функцій.</li>
       <li xml:lang="x-test">xxPowerful and comprehensive formula listxx</li>
+      <li xml:lang="zh-CN">强大的和全面的公式列表</li>
       <li>Work in a familiar environment</li>
       <li xml:lang="bs">Rad u poznatom okruženju</li>
       <li xml:lang="ca">Treball en un entorn familiar</li>
@@ -186,6 +189,7 @@
       <li xml:lang="sv">Arbeta i en välbekant omgivning</li>
       <li xml:lang="uk">Робота у знайомому середовищі.</li>
       <li xml:lang="x-test">xxWork in a familiar environmentxx</li>
+      <li xml:lang="zh-CN">在熟悉的环境中工作</li>
     </ul>
   </description>
   <url type="homepage">http://www.calligra.org/sheets/</url>

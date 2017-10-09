@@ -115,7 +115,7 @@ PertResult::PertResult(KoPart *part, KoDocument *doc, QWidget *parent)
     widget.treeWidgetTaskResult->masterView()->setDefaultColumns( QList<int>() << 0 );
     widget.treeWidgetTaskResult->slaveView()->setDefaultColumns( show );
     
-    connect( widget.treeWidgetTaskResult, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
+    connect( widget.treeWidgetTaskResult, SIGNAL(contextMenuRequested(QModelIndex,QPoint,QModelIndexList)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
     
     connect( widget.treeWidgetTaskResult, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 }
@@ -339,7 +339,7 @@ PertCpmView::PertCpmView(KoPart *part, KoDocument *doc, QWidget *parent)
     }
     widget.cpmTable->slaveView()->setDefaultColumns( show );
     
-    connect( widget.cpmTable, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
+    connect( widget.cpmTable, SIGNAL(contextMenuRequested(QModelIndex,QPoint,QModelIndexList)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
     connect( widget.cpmTable, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
     

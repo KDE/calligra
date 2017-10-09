@@ -58,6 +58,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void openResourcesFile();
+    void openProjectsPlace();
 
 Q_SIGNALS:
     void obligatedFieldsFilled(bool);

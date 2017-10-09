@@ -1506,9 +1506,9 @@ void View::slotViewSelector( bool show )
     m_viewlist->setVisible( show );
 }
 
-void View::slotInsertResourcesFile(const QString &file)
+void View::slotInsertResourcesFile(const QString &file, const QUrl &projects)
 {
-    getPart()->insertResourcesFile(QUrl(file));
+    getPart()->insertResourcesFile(QUrl(file), projects);
 }
 
 void View::slotInsertFile()
@@ -2034,7 +2034,7 @@ void View::slotOpenNode( Node *node )
                 Project * project = static_cast<Project *>( node );
                 MainProjectDialog *dia = new MainProjectDialog( *project, this );
                 connect(dia, SIGNAL(dialogFinished(int)), SLOT(slotProjectEditFinished(int)));
-                connect(dia, SIGNAL(sigLoadSharedResources(const QString&)), this, SLOT(slotInsertResourcesFile(const QString&)));
+                connect(dia, SIGNAL(sigLoadSharedResources(const QString&, const QUrl&)), this, SLOT(slotInsertResourcesFile(const QString&, const QUrl&)));
                 dia->show();
                 dia->raise();
                 dia->activateWindow();

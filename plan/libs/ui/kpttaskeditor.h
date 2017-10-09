@@ -154,6 +154,7 @@ protected:
     void updateActionsEnabled( bool on );
     int selectedRowCount() const;
     QModelIndexList selectedRows() const;
+    void editTasks(const QList<Task*> &tasks, const QPoint &pos);
 
 protected Q_SLOTS:
     virtual void slotOptions();
@@ -161,7 +162,7 @@ protected Q_SLOTS:
 private Q_SLOTS:
     void slotSelectionChanged( const QModelIndexList& );
     void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
-    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
+    void slotContextMenuRequested(const QModelIndex &index, const QPoint& pos , const QModelIndexList &rows);
 
     void slotEnableActions();
 

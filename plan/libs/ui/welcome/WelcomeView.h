@@ -64,11 +64,13 @@ Q_SIGNALS:
     void recentProject(const QUrl &file);
     void showIntroduction();
     void selectDefaultView();
-    void loadSharedResources(const QUrl &url);
+    void loadSharedResources(const QUrl &url, const QUrl &projects);
     void openExistingFile(const QUrl &url);
 
     void projectCreated();
     void finished();
+
+    void openTemplate(QUrl);
 
 protected:
     void updateActionsEnabled( bool on = true);
@@ -81,10 +83,12 @@ private Q_SLOTS:
 
     void slotNewProject();
     void slotOpenProject();
-    void slotLoadSharedResources(const QString &file);
+    void slotLoadSharedResources(const QString &file, const QUrl &projects);
 
     void slotProjectEditFinished(int result);
     void slotOpenFileFinished(int result);
+
+    void slotCreateResourceFile();
 
 private:
     Ui::WelcomeView widget;

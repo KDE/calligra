@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 - 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2002 Bo Thorsen  bo@sonofthor.dk
+   Copyright (C) 2004 -2010 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,44 +18,57 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPTMAINPROJECTDIALOG_H
-#define KPTMAINPROJECTDIALOG_H
+#ifndef TASKSEDITCONTROLLER_H
+#define TASKSEDITCONTROLLER_H
 
 #include "kplatoui_export.h"
 
-#include <KoDialog.h>
+#include <QObject>
 
+class KUndo2Command;
 
 namespace KPlato
 {
 
+class Accounts;
+class TaskGeneralPanel;
+class RequestResourcesPanel;
+class DocumentsPanel;
+class TaskCostPanel;
+class TaskDescriptionPanel;
+class Node;
+class Task;
 class Project;
-class MainProjectPanel;
 class MacroCommand;
 
+class TasksEditDialog;
 
-class KPLATOUI_EXPORT MainProjectDialog : public KoDialog {
+/**
+ * The dialog that allows you to alter multiple tasks.
+ */
+class KPLATOUI_EXPORT TasksEditController : public QObject
+{
     Q_OBJECT
 public:
-    explicit MainProjectDialog(Project &project, QWidget *parent=0, const char *name=0);
+    TasksEditController(Project &project, const QList<Task*> &tasks, QObject *parent = 0);
+    ~TasksEditController();
 
-    MacroCommand *buildCommand();
-
-    bool loadSharedResources();
+public Q_SLOTS:
+    void activate();
 
 Q_SIGNALS:
-    void dialogFinished(int);
-    void sigLoadSharedResources(const QString &file, const QUrl &projects);
+    void addCommand(KUndo2Command *cmd);
 
-protected Q_SLOTS:
-    void slotRejected();
-    void slotOk();
+private Q_SLOTS:
+    void finish(int result);
 
 private:
-    Project &project;
-    MainProjectPanel *panel;
+    Project &m_project;
+    const QList<Task*> m_tasks;
+    TasksEditDialog *m_dlg;
 };
 
-}  //KPlato namespace
 
-#endif // MAINPROJECTDIALOG_H
+} //KPlato namespace
+
+#endif // TASKSEDITCONTROLLER_H

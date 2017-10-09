@@ -727,6 +727,7 @@ Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
     }
     Resource *r = qobject_cast<Resource*>( object ( index ) );
     if ( r != 0 ) {
+        flags |= Qt::ItemIsDragEnabled;
         if (r->isShared()) {
             flags &= ~Qt::ItemIsEditable;
             if (index.column() == ResourceModel::ResourceName) {
@@ -734,7 +735,6 @@ Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
             }
             return flags;
         }
-        flags |= Qt::ItemIsDragEnabled;
         switch ( index.column() ) {
             case ResourceModel::ResourceName:
                 flags |= Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
@@ -1287,7 +1287,16 @@ Qt::DropActions ResourceItemModel::supportedDropActions() const
 
 bool ResourceItemModel::dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data )
 {
-    Q_UNUSED(data);
+    if ( data->hasFormat( "application/x-vnd.kde.plan.resourceitemmodel.internal" ) ) {
+        QByteArray encodedData = data->data( "application/x-vnd.kde.plan.resourceitemmodel.internal" );
+        QDataStream stream(&encodedData, QIODevice::ReadOnly);
+        int i = 0;
+        foreach ( Resource *r, resourceList( stream ) ) {
+            if (r->isShared()) {
+                return false;
+            }
+        }
+    }
 
     //debugPlan<<index<<data;
     // TODO: if internal, don't allow dropping on my own parent
@@ -1744,11 +1753,11 @@ QVariant AllocatedResourceItemModel::allocation( const ResourceGroup *res, int r
         case Qt::EditRole:
             return QString( "%1 (%2)" ).arg( gr->units() ).arg( gr->count() );
         case Qt::ToolTipRole: {
-            QString s1 = xi18ncp( "@info:tooltip",
+            QString s1 = i18ncp( "@info:tooltip",
                                  "%1 resource requested for dynamic allocation",
                                  "%1 resources requested for dynamic allocation",
                                  gr->units() );
-            QString s2 = xi18ncp( "@info:tooltip",
+            QString s2 = i18ncp( "@info:tooltip",
                                  "%1 resource allocated",
                                  "%1 resources allocated",
                                  gr->count() );

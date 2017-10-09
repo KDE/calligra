@@ -44,6 +44,7 @@ ConfigProjectPanelImpl::ConfigProjectPanelImpl(QWidget *p )
     initDescription();
 
     connect(resourceFileBrowseBtn, SIGNAL(clicked()), this, SLOT(resourceFileBrowseBtnClicked()));
+    connect(projectsPlaceBrowseBtn, SIGNAL(clicked()), this, SLOT(projectsPlaceBrowseBtnClicked()));
 
 }
 
@@ -54,6 +55,15 @@ void ConfigProjectPanelImpl::resourceFileBrowseBtnClicked()
     dialog.setNameFilters(QStringList()<<tr("Plan file (*.plan)"));
     if (dialog.exec()) {
         kcfg_SharedResourcesFile->setText(dialog.selectedFiles().value(0));
+    }
+}
+
+void ConfigProjectPanelImpl::projectsPlaceBrowseBtnClicked()
+{
+    QFileDialog dialog(this, tr("Shared projects place"));
+    dialog.setFileMode(QFileDialog::Directory);
+    if (dialog.exec()) {
+        kcfg_SharedProjectsPlace->setText(dialog.directory().absolutePath());
     }
 }
 

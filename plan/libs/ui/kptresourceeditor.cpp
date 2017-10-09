@@ -128,6 +128,9 @@ ResourceEditor::ResourceEditor(KoPart *part, KoDocument *doc, QWidget *parent)
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new ResourceTreeView( this );
+    connect(this, SIGNAL(expandAll()), m_view, SLOT(slotExpand()));
+    connect(this, SIGNAL(collapseAll()), m_view, SLOT(slotCollapse()));
+
     l->addWidget( m_view );
     setupGui();
     
@@ -156,7 +159,7 @@ ResourceEditor::ResourceEditor(KoPart *part, KoDocument *doc, QWidget *parent)
 
     connect( m_view, SIGNAL(selectionChanged(QModelIndexList)), this, SLOT(slotSelectionChanged(QModelIndexList)) );
 
-    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), this, SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
+    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint,QModelIndexList)), this, SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
     
     connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 
@@ -200,11 +203,14 @@ void ResourceEditor::slotContextMenuRequested( const QModelIndex &index, const Q
             }
         }
     }
+    m_view->setContextMenuIndex(index);
     if ( name.isEmpty() ) {
         slotHeaderContextMenuRequested( pos );
+        m_view->setContextMenuIndex(QModelIndex());
         return;
     }
     emit requestPopupMenu( name, pos );
+    m_view->setContextMenuIndex(QModelIndex());
 }
 
 Resource *ResourceEditor::currentResource() const

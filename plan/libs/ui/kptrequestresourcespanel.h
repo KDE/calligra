@@ -39,8 +39,13 @@ class RequestResourcesPanel : public QWidget
 public:
     RequestResourcesPanel(QWidget *parent, Project &project, Task &task, bool baseline=false);
 
+    /// Builds an undocommand for the current task
+    /// only for changes (removals and/or additions)
     MacroCommand *buildCommand();
-    
+    /// Builds an undo command for @p task
+    /// that clears all current requests and adds the new ones (if any)
+    MacroCommand *buildCommand(Task *task);
+
     bool ok();
 
 Q_SIGNALS:

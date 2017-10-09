@@ -127,6 +127,9 @@ ScheduleEditor::ScheduleEditor(KoPart *part, KoDocument *doc, QWidget *parent)
     m_schedulingRange = new SchedulingRange(doc, this);
     l->addWidget( m_schedulingRange );
     m_view = new ScheduleTreeView( this );
+    connect(this, SIGNAL(expandAll()), m_view, SLOT(slotExpand()));
+    connect(this, SIGNAL(collapseAll()), m_view, SLOT(slotCollapse()));
+
     l->addWidget( m_view );
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
@@ -160,7 +163,7 @@ ScheduleEditor::ScheduleEditor(KoPart *part, KoDocument *doc, QWidget *parent)
 
     connect( model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(updateActionsEnabled(QModelIndex)) );
 
-    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), this, SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
+    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint,QModelIndexList)), this, SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
     connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 }
@@ -188,12 +191,15 @@ void ScheduleEditor::slotContextMenuRequested( const QModelIndex &index, const Q
 {
     debugPlan<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
+    m_view->setContextMenuIndex(index);
     if ( name.isEmpty() ) {
         slotHeaderContextMenuRequested( pos );
+        m_view->setContextMenuIndex(QModelIndex());
         return;
     }
     debugPlan<<name;
     emit requestPopupMenu( name, pos );
+    m_view->setContextMenuIndex(QModelIndex());
 }
 
 void ScheduleEditor::slotCurrentChanged(  const QModelIndex & )

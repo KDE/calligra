@@ -7,14 +7,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>358</width>
-    <height>400</height>
+    <width>387</width>
+    <height>460</height>
    </rect>
   </property>
   <property name="locale">
    <locale language="C" country="AnyCountry"/>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_3">
+  <layout class="QVBoxLayout" name="verticalLayout_4">
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -37,18 +37,6 @@
        <string>General</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
        <item>
         <layout class="QGridLayout" name="gridLayout">
          <item row="0" column="0">
@@ -239,11 +227,18 @@
          <property name="checked">
           <bool>false</bool>
          </property>
-         <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="0" colspan="2">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
            <widget class="QWidget" name="resourcesWidget" native="true">
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
-             <item>
+            <layout class="QGridLayout" name="gridLayout_3">
+             <item row="0" column="0">
+              <widget class="QLabel" name="resourcesLabel">
+               <property name="text">
+                <string>Resources:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
               <widget class="QComboBox" name="resourcesType">
                <item>
                 <property name="text">
@@ -252,16 +247,47 @@
                </item>
               </widget>
              </item>
-             <item>
+             <item row="1" column="1">
               <widget class="QLineEdit" name="resourcesFile"/>
              </item>
-             <item>
+             <item row="1" column="2">
               <widget class="QPushButton" name="resourcesBrowseBtn">
                <property name="text">
                 <string>Browse...</string>
                </property>
                <property name="icon">
-                <iconset theme="document-open"/>
+                <iconset theme="document-open">
+                 <normaloff>.</normaloff>.</iconset>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QComboBox" name="projectsType">
+               <item>
+                <property name="text">
+                 <string>Directory</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QLineEdit" name="projectsPlace"/>
+             </item>
+             <item row="3" column="2">
+              <widget class="QPushButton" name="projectsBrowseBtn">
+               <property name="text">
+                <string>Browse...</string>
+               </property>
+               <property name="icon">
+                <iconset theme="document-open">
+                 <normaloff>.</normaloff>.</iconset>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="projectsLabel">
+               <property name="text">
+                <string>Projects:</string>
                </property>
               </widget>
              </item>
@@ -270,19 +296,6 @@
           </item>
          </layout>
         </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
@@ -306,6 +319,19 @@
       </layout>
      </widget>
     </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

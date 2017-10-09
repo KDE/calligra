@@ -32,6 +32,8 @@
 #include "kptresourcemodel.h"
 #include "kptresourceallocationmodel.h"
 #include "ResourceAllocationView.h"
+#include "kpttaskdialog.h"
+#include "TasksEditController.h"
 
 #include <KoXmlReader.h>
 #include <KoDocument.h>
@@ -42,6 +44,7 @@
 #include <QVBoxLayout>
 #include <QDragMoveEvent>
 #include <QAction>
+#include <QMenu>
 
 #include <kactionmenu.h>
 #include <KLocalizedString>
@@ -277,6 +280,9 @@ TaskEditor::TaskEditor(KoPart *part, KoDocument *doc, QWidget *parent)
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new TaskEditorTreeView( this );
+    connect(this, SIGNAL(expandAll()), m_view, SLOT(slotExpand()));
+    connect(this, SIGNAL(collapseAll()), m_view, SLOT(slotCollapse()));
+
     l->addWidget( m_view );
     debugPlan<<m_view->actionSplitView();
     setupGui();
@@ -332,7 +338,7 @@ TaskEditor::TaskEditor(KoPart *part, KoDocument *doc, QWidget *parent)
 
     connect( m_view, SIGNAL(selectionChanged(QModelIndexList)), this, SLOT(slotSelectionChanged(QModelIndexList)) );
 
-    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
+    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint,QModelIndexList)), SLOT(slotContextMenuRequested(QModelIndex,QPoint,QModelIndexList)) );
 
     connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 
@@ -526,37 +532,82 @@ Node *TaskEditor::currentNode() const {
     return n;
 }
 
-void TaskEditor::slotContextMenuRequested( const QModelIndex& index, const QPoint& pos )
+void TaskEditor::slotContextMenuRequested( const QModelIndex& index, const QPoint& pos, const QModelIndexList &rows )
 {
+    QString name;
+    if (rows.count() > 1) {
+        debugPlan<<rows;
+        QList<Task*> summarytasks;
+        QList<Task*> tasks;
+        QList<Task*> milestones;
+        for (const QModelIndex &idx : rows) {
+            Node *node = m_view->baseModel()->node( idx );
+            if (node) {
+                switch ( node->type() ) {
+                    case Node::Type_Task:
+                        tasks << static_cast<Task*>(node); break;
+                    case Node::Type_Milestone:
+                        milestones << static_cast<Task*>(node); break;
+                    case Node::Type_Summarytask:
+                        summarytasks << static_cast<Task*>(node); break;
+                    default: break;
+                }
+            }
+        }
+        if (!tasks.isEmpty()) {
+            editTasks(tasks, pos);
+            return;
+        }
+        return;
+    }
     Node *node = m_view->baseModel()->node( index );
     if ( node == 0 ) {
         return;
     }
     debugPlan<<node->name()<<" :"<<pos;
-    QString name;
     switch ( node->type() ) {
-        case Node::Type_Project:
-            name = "task_edit_popup";
-            break;
-        case Node::Type_Task:
-            name = node->isScheduled( baseModel()->id() ) ? "task_popup" : "task_edit_popup";
-            break;
-        case Node::Type_Milestone:
-            name = node->isScheduled( baseModel()->id() ) ? "taskeditor_milestone_popup" : "task_edit_popup";
-            break;
-        case Node::Type_Summarytask:
-            name = "summarytask_popup";
-            break;
-        default:
-            name = "node_popup";
-            break;
+    case Node::Type_Project:
+        name = "task_edit_popup";
+        break;
+    case Node::Type_Task:
+        name = node->isScheduled( baseModel()->id() ) ? "task_popup" : "task_edit_popup";
+        break;
+    case Node::Type_Milestone:
+        name = node->isScheduled( baseModel()->id() ) ? "taskeditor_milestone_popup" : "task_edit_popup";
+        break;
+    case Node::Type_Summarytask:
+        name = "summarytask_popup";
+        break;
+    default:
+        name = "node_popup";
+        break;
     }
+    m_view->setContextMenuIndex(index);
     if ( name.isEmpty() ) {
         slotHeaderContextMenuRequested( pos );
+        m_view->setContextMenuIndex(QModelIndex());
         return;
     }
     debugPlan<<name;
     emit requestPopupMenu( name, pos );
+    m_view->setContextMenuIndex(QModelIndex());
+}
+
+void TaskEditor::editTasks(const QList<Task*> &tasks, const QPoint &pos)
+{
+    QList<QAction*> lst;
+    QAction tasksEdit("Edit...");
+    if (!tasks.isEmpty()) {
+        TasksEditController *ted = new TasksEditController(*project(), tasks, this);
+        connect(&tasksEdit, SIGNAL(triggered(bool)), ted, SLOT(activate()));
+        connect(ted, SIGNAL(addCommand(KUndo2Command*)), koDocument(), SLOT(addCommand(KUndo2Command*)));
+        lst << &tasksEdit;
+    }
+    lst += contextActionList();
+    if (!lst.isEmpty()) {
+        QMenu::exec( lst, pos, lst.first() );
+    }
+
 }
 
 void TaskEditor::setScheduleManager( ScheduleManager *sm )
@@ -990,6 +1041,9 @@ TaskView::TaskView(KoPart *part, KoDocument *doc, QWidget *parent)
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new NodeTreeView( this );
+    connect(this, SIGNAL(expandAll()), m_view, SLOT(slotExpand()));
+    connect(this, SIGNAL(collapseAll()), m_view, SLOT(slotCollapse()));
+
     NodeSortFilterProxyModel *p = new NodeSortFilterProxyModel( m_view->baseModel(), m_view );
     m_view->setModel( p );
     l->addWidget( m_view );
@@ -1056,7 +1110,7 @@ TaskView::TaskView(KoPart *part, KoDocument *doc, QWidget *parent)
 
     connect( m_view, SIGNAL(selectionChanged(QModelIndexList)), this, SLOT(slotSelectionChanged(QModelIndexList)) );
 
-    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
+    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint,QModelIndexList)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
     connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 }
@@ -1160,7 +1214,9 @@ void TaskView::slotContextMenuRequested( const QModelIndex& index, const QPoint&
         slotHeaderContextMenuRequested( pos );
         return;
     }
+    m_view->setContextMenuIndex(index);
     emit requestPopupMenu( name, pos );
+    m_view->setContextMenuIndex(QModelIndex());
 }
 
 void TaskView::setScheduleManager( ScheduleManager *sm )
@@ -1281,6 +1337,8 @@ TaskWorkPackageView::TaskWorkPackageView(KoPart *part, KoDocument *doc, QWidget 
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new WorkPackageTreeView( this );
+    connect(this, SIGNAL(expandAll()), m_view, SLOT(slotExpand()));
+    connect(this, SIGNAL(collapseAll()), m_view, SLOT(slotCollapse()));
 
     l->addWidget( m_view );
     setupGui();
@@ -1342,7 +1400,7 @@ TaskWorkPackageView::TaskWorkPackageView(KoPart *part, KoDocument *doc, QWidget 
 
     connect( m_view, SIGNAL(selectionChanged(QModelIndexList)), this, SLOT(slotSelectionChanged(QModelIndexList)) );
 
-    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
+    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint,QModelIndexList)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
     connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 }
@@ -1457,7 +1515,9 @@ void TaskWorkPackageView::slotContextMenuRequested( const QModelIndex& index, co
         slotHeaderContextMenuRequested( pos );
         return;
     }
+    m_view->setContextMenuIndex(index);
     emit requestPopupMenu( name, pos );
+    m_view->setContextMenuIndex(QModelIndex());
 }
 
 void TaskWorkPackageView::setScheduleManager( ScheduleManager *sm )

@@ -27,6 +27,4 @@ install(TARGETS calligra_filter_odt2docx DESTINATION ${PLUGIN_INSTALL_DIR}/calli
 #install(FILES calligra_filter_odt2docx.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 calligra_filter_desktop_to_json(calligra_filter_odt2docx calligra_filter_odt2docx.desktop)
 
-install( PROGRAMS  calligra_filter_odt2docx.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
-
 endif()

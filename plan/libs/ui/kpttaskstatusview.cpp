@@ -200,12 +200,15 @@ TaskStatusView::TaskStatusView(KoPart *part, KoDocument *doc, QWidget *parent )
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new TaskStatusTreeView( this );
+    connect(this, SIGNAL(expandAll()), m_view, SLOT(slotExpand()));
+    connect(this, SIGNAL(collapseAll()), m_view, SLOT(slotCollapse()));
+
     l->addWidget( m_view );
     setupGui();
 
     connect( model(), SIGNAL(executeCommand(KUndo2Command*)), doc, SLOT(addCommand(KUndo2Command*)) );
 
-    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
+    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint,QModelIndexList)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
     connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 }
@@ -251,12 +254,15 @@ void TaskStatusView::slotContextMenuRequested( const QModelIndex &index, const Q
         slotHeaderContextMenuRequested( pos );
         return;
     }
+    m_view->setContextMenuIndex(index);
     Node *node = m_view->model()->node( index );
     if ( node == 0 ) {
         slotHeaderContextMenuRequested( pos );
+        m_view->setContextMenuIndex(QModelIndex());
         return;
     }
     slotContextMenuRequested( node, pos );
+    m_view->setContextMenuIndex(QModelIndex());
 }
 
 void TaskStatusView::slotContextMenuRequested( Node *node, const QPoint& pos )
@@ -1022,6 +1028,7 @@ PerformanceStatusTreeView::PerformanceStatusTreeView( QWidget *parent )
     : QSplitter( parent )
 {
     m_tree = new TreeViewBase( this );
+
     NodeItemModel *m = new NodeItemModel( m_tree );
     m_tree->setModel( m );
     QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in tree view
@@ -1127,6 +1134,9 @@ PerformanceStatusView::PerformanceStatusView(KoPart *part, KoDocument *doc, QWid
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new PerformanceStatusTreeView( this );
+    connect(this, SIGNAL(expandAll()), m_view->treeView(), SLOT(slotExpand()));
+    connect(this, SIGNAL(collapseAll()), m_view->treeView(), SLOT(slotCollapse()));
+
     l->addWidget( m_view );
 
     setupGui();
@@ -1134,12 +1144,13 @@ PerformanceStatusView::PerformanceStatusView(KoPart *part, KoDocument *doc, QWid
     connect( m_view->treeView(), SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
     connect( m_view->chartView(), SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 
-    connect( m_view->treeView(), SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
+    connect( m_view->treeView(), SIGNAL(contextMenuRequested(QModelIndex,QPoint,QModelIndexList)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 }
 
 void PerformanceStatusView::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
     debugPlan<<index<<pos;
+    m_view->treeView()->setContextMenuIndex(index);
     if ( ! index.isValid() ) {
         slotHeaderContextMenuRequested( pos );
         return;
@@ -1147,9 +1158,11 @@ void PerformanceStatusView::slotContextMenuRequested( const QModelIndex &index, 
     Node *node = m_view->nodeModel()->node( index );
     if ( node == 0 ) {
         slotHeaderContextMenuRequested( pos );
+        m_view->treeView()->setContextMenuIndex(QModelIndex());
         return;
     }
     slotContextMenuRequested( node, pos );
+    m_view->treeView()->setContextMenuIndex(QModelIndex());
 }
 
 Node *PerformanceStatusView::currentNode() const

@@ -285,7 +285,7 @@ protected Q_SLOTS:
     void slotCurrentChanged( int );
     void slotSelectDefaultView();
 
-    void slotInsertResourcesFile(const QString&);
+    void slotInsertResourcesFile(const QString&, const QUrl &projects);
     void slotInsertFile();
 
     void slotWorkPackageLoaded();

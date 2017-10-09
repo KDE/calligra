@@ -152,7 +152,12 @@ public:
     virtual void updateReadWrite( bool readwrite );
 
     virtual Calendar *currentCalendar() const;
-    
+
+    /// Loads context info into this view.
+    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    /// Save context info from this view.
+    virtual void saveContext( QDomElement &/*context*/ ) const;
+
 Q_SIGNALS:
     void addCalendar( Calendar *calendar );
     void deleteCalendar( const QList<Calendar*>& );
@@ -167,6 +172,7 @@ protected:
     
 protected Q_SLOTS:
     void slotIntervalEditDialogFinished( int result );
+    void slotOptions();
 
 private Q_SLOTS:
     void slotContextMenuCalendar( const QModelIndex& index, const QPoint& pos );
