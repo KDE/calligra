@@ -178,7 +178,11 @@ void GitOpsThread::performPush()
     // refresh it, and add the file
     error = git_index_read(index, true);
     if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Push 3, error code from git2 was" << error << "which is described as" << err->message; return; }
+#ifdef Q_OS_WIN
     QString relative = d->currentFile.mid(d->gitDir.length() + 9); // That is, 1 for the leading slash, and 8 for the file:///
+#else
+    QString relative = d->currentFile.mid(d->gitDir.length() + 8); // That is, 1 for the leading slash, and 8 for the file://
+#endif
     error = git_index_add_bypath(index, relative.toLocal8Bit());
     if(error != 0) { const git_error* err = giterr_last(); qDebug() << "Push 4, error code from git2 was" << error << "which is described as" << err->message; return; }
     error = git_index_write(index);
@@ -663,7 +667,7 @@ void GitController::commitAndPushCurrentFile()
         return;
     }
 
-    if(d->currentFile.startsWith(QString("file:///%1").arg(d->cloneDir))) {
+    if(d->currentFile.startsWith(QString("file:///%1").arg(d->cloneDir)) || d->currentFile.startsWith(QString("file://%1").arg(d->cloneDir))) {
         // ask commit message and checkbox for push (default on, remember?)
         bool ok = false;
         QString message = QInputDialog::getMultiLineText(0,
