@@ -1682,14 +1682,14 @@ void View::slotViewSchedule( QAction *act )
         Schedule *sch = m_scheduleActions.value( act, 0 );
         sm = sch->manager();
     }
-    emit currentScheduleManagerChanged( 0 );
+    //emit currentScheduleManagerChanged( 0 );
     setLabel( 0 );
     m_nextScheduleManager = sm;
     // Performance is very dependent on schedule manager change since a lot is recalculated
     // In case of multiple changes, only issue the last change
     if ( ! m_trigged ) {
         m_trigged = true;
-        emit currentScheduleManagerChanged( 0 );
+        //emit currentScheduleManagerChanged( 0 );
         QTimer::singleShot( 0, this, SLOT(slotViewScheduleManager()) );
     }
 }

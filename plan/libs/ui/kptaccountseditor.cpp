@@ -350,4 +350,15 @@ KoPrintJob *AccountsEditor::createPrintJob()
     return m_view->createPrintJob( this );
 }
 
+bool AccountsEditor::loadContext(const KoXmlElement &context)
+{
+    m_view->loadContext(model()->columnMap(), context);
+    return true;
+}
+
+void AccountsEditor::saveContext(QDomElement &context) const
+{
+    m_view->saveContext(model()->columnMap(), context);
+}
+
 } // namespace KPlato

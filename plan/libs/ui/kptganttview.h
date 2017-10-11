@@ -320,6 +320,7 @@ private:
     Project *m_project;
 
     QAction *actionShowProject;
+    QDomDocument m_domdoc;
 };
 
 class MilestoneGanttViewSettingsDialog : public ItemViewSettupDialog
@@ -467,6 +468,7 @@ private:
     Project *m_project;
     ResourceAppointmentsGanttModel *m_model;
     KGantt::TreeViewRowController *m_rowController;
+    QDomDocument m_domdoc;
 
 };
 

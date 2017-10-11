@@ -159,6 +159,9 @@ void TaskStatusItemModel::setProject( Project *project )
 
 void TaskStatusItemModel::setScheduleManager( ScheduleManager *sm )
 {
+    if (sm == m_nodemodel.manager()) {
+        return;
+    }
     clear();
     if ( m_nodemodel.manager() ) {
     }

@@ -76,6 +76,7 @@ MainDocument::MainDocument(KoPart *part)
         m_checkingForWorkPackages( false )
 {
     Q_ASSERT(part);
+    setAlwaysAllowSaving(true);
     m_config.setReadWrite( true );
 
     loadSchedulerPlugins();

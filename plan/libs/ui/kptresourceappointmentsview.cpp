@@ -143,6 +143,7 @@ bool ResourceAppointmentsTreeView::loadContext( const KoXmlElement &context )
         model()->setShowInternalAppointments( (bool)( e.attribute( "show-internal-appointments", "0" ).toInt() ) );
         model()->setShowExternalAppointments( (bool)( e.attribute( "show-external-appointments", "0" ).toInt() ) );
     }
+    DoubleTreeViewBase::loadContext(QMetaEnum(), context);
     return true;
 }
 
@@ -153,6 +154,8 @@ void ResourceAppointmentsTreeView::saveContext( QDomElement &settings ) const
     settings.appendChild( e );
     e.setAttribute( "show-internal-appointments", QString::number(model()->showInternalAppointments()) );
     e.setAttribute( "show-external-appointments", QString::number(model()->showExternalAppointments()) );
+
+    DoubleTreeViewBase::saveContext(QMetaEnum(), settings);
 }
 
 void ResourceAppointmentsTreeView::slotRefreshed()
@@ -215,7 +218,30 @@ void ResourceAppointmentsView::setProject( Project *project )
 
 void ResourceAppointmentsView::setScheduleManager( ScheduleManager *sm )
 {
+    if (!sm && scheduleManager()) {
+        // we should only get here if the only schedule manager is scheduled,
+        // or when last schedule manager is deleted
+        m_domdoc.clear();
+        QDomElement element = m_domdoc.createElement("expanded");
+        m_domdoc.appendChild(element);
+        m_view->masterView()->saveExpanded(element);
+    }
+    bool tryexpand = sm && !scheduleManager();
+    bool expand = sm && scheduleManager() && sm != scheduleManager();
+    QDomDocument doc;
+    if (expand) {
+        QDomElement element = doc.createElement("expanded");
+        doc.appendChild(element);
+        m_view->masterView()->saveExpanded(element);
+    }
+    ViewBase::setScheduleManager(sm);
     m_view->setScheduleManager( sm );
+
+    if (expand) {
+        m_view->masterView()->doExpand(doc);
+    } else if (tryexpand) {
+        m_view->masterView()->doExpand(m_domdoc);
+    }
 }
 
 void ResourceAppointmentsView::draw()

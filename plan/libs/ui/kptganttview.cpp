@@ -826,8 +826,30 @@ void GanttView::setProject( Project *project )
 
 void GanttView::setScheduleManager( ScheduleManager *sm )
 {
-    //debugPlan<<id<<endl;
+    if (!sm && scheduleManager()) {
+        // we should only get here if the only schedule manager is scheduled,
+        // or when last schedule manager is deleted
+        m_domdoc.clear();
+        QDomElement element = m_domdoc.createElement("expanded");
+        m_domdoc.appendChild(element);
+        m_gantt->treeView()->saveExpanded(element);
+    }
+    bool tryexpand = sm && !scheduleManager();
+    bool expand = sm && scheduleManager() && sm != scheduleManager();
+    QDomDocument doc;
+    if (expand) {
+        QDomElement element = doc.createElement("expanded");
+        doc.appendChild(element);
+        m_gantt->treeView()->saveExpanded(element);
+    }
+    ViewBase::setScheduleManager(sm);
     m_gantt->setScheduleManager( sm );
+
+    if (expand) {
+        m_gantt->treeView()->doExpand(doc);
+    } else if (tryexpand) {
+        m_gantt->treeView()->doExpand(m_domdoc);
+    }
 }
 
 void GanttView::draw( Project &project )
@@ -1278,7 +1300,30 @@ void ResourceAppointmentsGanttView::setProject( Project *project )
 void ResourceAppointmentsGanttView::setScheduleManager( ScheduleManager *sm )
 {
     //debugPlan<<id<<endl;
+    if (!sm && scheduleManager()) {
+        // we should only get here if the only schedule manager is scheduled,
+        // or when last schedule manager is deleted
+        m_domdoc.clear();
+        QDomElement element = m_domdoc.createElement("expanded");
+        m_domdoc.appendChild(element);
+        treeView()->saveExpanded(element);
+    }
+    bool tryexpand = sm && !scheduleManager();
+    bool expand = sm && scheduleManager() && sm != scheduleManager();
+    QDomDocument doc;
+    if (expand) {
+        QDomElement element = doc.createElement("expanded");
+        doc.appendChild(element);
+        treeView()->saveExpanded(element);
+    }
+    ViewBase::setScheduleManager(sm);
     m_model->setScheduleManager( sm );
+
+    if (expand) {
+        treeView()->doExpand(doc);
+    } else if (tryexpand) {
+        treeView()->doExpand(m_domdoc);
+    }
 }
 
 void ResourceAppointmentsGanttView::setupGui()

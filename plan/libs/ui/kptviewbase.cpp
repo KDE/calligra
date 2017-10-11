@@ -54,6 +54,7 @@
 #include <QMouseEvent>
 #include <QContextMenuEvent>
 #include <QDragMoveEvent>
+#include <QTimer>
 
 namespace KPlato
 {
@@ -1519,7 +1520,7 @@ QModelIndex TreeViewBase::firstVisibleIndex( const QModelIndex &idx ) const
 }
 
 
-bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &element )
+bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &element, bool expand )
 {
     //debugPlan<<objectName();
     header()->setStretchLastSection( (bool)( element.attribute( "stretch-last-column", "1" ).toInt() ) );
@@ -1584,10 +1585,13 @@ bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &elemen
             }
         }
     }
+    if (expand) {
+        loadExpanded(element);
+    }
     return true;
 }
 
-void TreeViewBase::saveContext( const QMetaEnum &map, QDomElement &element ) const
+void TreeViewBase::saveContext( const QMetaEnum &map, QDomElement &element, bool expand ) const
 {
     //debugPlan<<objectName();
     element.setAttribute( "stretch-last-column", QString::number(header()->stretchLastSection()) );
@@ -1620,6 +1624,11 @@ void TreeViewBase::saveContext( const QMetaEnum &map, QDomElement &element ) con
                 }
             }
         }
+    }
+    if (expand) {
+        QDomElement expanded = element.ownerDocument().createElement("expanded");
+        element.appendChild(expanded);
+        saveExpanded(expanded);
     }
 }
 
@@ -1672,10 +1681,77 @@ void TreeViewBase::slotCollapse()
     expandRecursive(idx, false);
 }
 
-
 void TreeViewBase::setContextMenuIndex(const QModelIndex &idx)
 {
     m_contextMenuIndex = idx;
+}
+
+void TreeViewBase::loadExpanded(const KoXmlElement &element)
+{
+    // we get here on loadContext()
+    m_loadContextDoc.clear();
+    KoXmlElement expanded = element.namedItem("expanded").toElement();
+    if (expanded.isNull()) {
+        return;
+    }
+    KoXml::asQDomElement(m_loadContextDoc, expanded);
+
+    // FIXME:
+    // if data is dependent on schedule manger
+    // we cannot do anything until schedulemanger is set,
+    // so we wait a bit and hope everything is ok
+    QTimer::singleShot(500, this, SLOT(doContextExpanded()));
+}
+
+void TreeViewBase::expandRecursivly(QDomElement element, const QModelIndex &parent)
+{
+    if (element.isNull()) {
+        return;
+    }
+    for(QDomNode n = element.firstChild(); !n.isNull(); n = n.nextSibling()) {
+        QDomElement e = n.toElement();
+        if (e.tagName() != "item") {
+            continue;
+        }
+        int childRow = e.attribute("row", "-1").toInt();
+        if (childRow > -1) {
+            QModelIndex idx = model()->index(childRow, 0, parent);
+            if (idx.isValid()) {
+                setExpanded(idx, true);
+                expandRecursivly(e, idx);
+            }
+        }
+    }
+}
+
+void TreeViewBase::doExpand(QDomDocument &doc)
+{
+    // we get here on setScheduleManager()
+    m_expandDoc = doc;
+    QTimer::singleShot(0, this, SLOT(doExpanded()));
+}
+
+void TreeViewBase::doContextExpanded()
+{
+    expandRecursivly(m_loadContextDoc.documentElement());
+}
+
+void TreeViewBase::doExpanded()
+{
+    expandRecursivly(m_expandDoc.documentElement());
+}
+
+void TreeViewBase::saveExpanded(QDomElement &element, const QModelIndex &parent) const
+{
+    for (int r = 0; r < model()->rowCount(parent); ++r) {
+        QModelIndex idx = model()->index(r, 0, parent);
+        if (isExpanded(idx)) {
+            QDomElement e = element.ownerDocument().createElement("item");
+            e.setAttribute("row", r);
+            element.appendChild(e);
+            saveExpanded(e, idx);
+        }
+    }
 }
 
 //----------------------
@@ -2300,34 +2376,34 @@ bool DoubleTreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &
     //debugPlan;
     QList<int> lst1;
     QList<int> lst2;
-    KoXmlElement e = element.namedItem( "slave" ).toElement();
-    if ( ! e.isNull() ) {
-        if ( e.attribute( "hidden", "false" ) == "true" ) {
-            setViewSplitMode( false );
+    KoXmlElement slave = element.namedItem( "slave" ).toElement();
+    if (!slave.isNull()) {
+        if (slave.attribute("hidden", "false") == "true") {
+            setViewSplitMode(false);
         } else {
             setStretchFactors();
         }
-        m_rightview->loadContext( map, e );
+        m_rightview->loadContext(map, slave, false);
     }
-    e = element.namedItem( "master" ).toElement();
-    if ( ! e.isNull() ) {
-        m_leftview->loadContext( map, e );
+    KoXmlElement master = element.namedItem("master").toElement();
+    if (!master.isNull()) {
+        m_leftview->loadContext(map, master);
     }
     return true;
 }
 
 void DoubleTreeViewBase::saveContext( const QMetaEnum &map, QDomElement &element ) const
 {
-    //debugPlan<<objectName();
-    QDomElement e = element.ownerDocument().createElement( "master" );
-    element.appendChild( e );
-    m_leftview->saveContext( map, e );
-    e = element.ownerDocument().createElement( "slave" );
-    element.appendChild( e );
-    if ( m_rightview->isHidden() ) {
-        e.setAttribute( "hidden", "true" );
+    QDomElement master = element.ownerDocument().createElement( "master" );
+    element.appendChild(master);
+    m_leftview->saveContext(map, master);
+
+    QDomElement slave = element.ownerDocument().createElement( "slave" );
+    element.appendChild(slave);
+    if (m_rightview->isHidden()) {
+        slave.setAttribute("hidden", "true");
     }
-    m_rightview->saveContext( map, e );
+    m_rightview->saveContext(map, slave, false);
 }
 
 void DoubleTreeViewBase::setViewSplitMode( bool split )

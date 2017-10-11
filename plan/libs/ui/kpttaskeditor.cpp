@@ -612,8 +612,31 @@ void TaskEditor::editTasks(const QList<Task*> &tasks, const QPoint &pos)
 
 void TaskEditor::setScheduleManager( ScheduleManager *sm )
 {
-    //debugPlan<<endl;
+    if (!sm && scheduleManager()) {
+        // we should only get here if the only schedule manager is scheduled,
+        // or when last schedule manager is deleted
+        m_domdoc.clear();
+        QDomElement element = m_domdoc.createElement("expanded");
+        m_domdoc.appendChild(element);
+        m_view->masterView()->saveExpanded(element);
+    }
+    bool tryexpand = sm && !scheduleManager();
+    QDomDocument doc;
+    bool expand = sm && scheduleManager();
+    if (expand) {
+        m_view->masterView()->setObjectName("TaskEditor");
+        QDomElement element = doc.createElement("expanded");
+        doc.appendChild(element);
+        m_view->masterView()->saveExpanded(element);
+    }
+    ViewBase::setScheduleManager(sm);
     m_view->baseModel()->setScheduleManager( sm );
+
+    if (expand) {
+        m_view->masterView()->doExpand(doc);
+    } else if (tryexpand) {
+        m_view->masterView()->doExpand(m_domdoc);
+    }
 }
 
 void TaskEditor::slotEnableActions()
@@ -1013,12 +1036,12 @@ void TaskEditor::slotMoveTaskDown()
 
 bool TaskEditor::loadContext( const KoXmlElement &context )
 {
-    debugPlan;
     ViewBase::loadContext( context );
     bool show = (bool)(context.attribute( "show-project", "0" ).toInt() );
     actionShowProject->setChecked( show );
     baseModel()->setShowProject( show ); // why is this not called by the action?
-    return m_view->loadContext( baseModel()->columnMap(), context );
+    bool res = m_view->loadContext( baseModel()->columnMap(), context );
+    return res;
 }
 
 void TaskEditor::saveContext( QDomElement &context ) const
@@ -1222,7 +1245,31 @@ void TaskView::slotContextMenuRequested( const QModelIndex& index, const QPoint&
 void TaskView::setScheduleManager( ScheduleManager *sm )
 {
     //debugPlan<<endl;
+    if (!sm && scheduleManager()) {
+        // we should only get here if the only schedule manager is scheduled,
+        // or when last schedule manager is deleted
+        m_domdoc.clear();
+        QDomElement element = m_domdoc.createElement("expanded");
+        m_domdoc.appendChild(element);
+        m_view->masterView()->saveExpanded(element);
+    }
+    bool tryexpand = sm && !scheduleManager();
+    QDomDocument doc;
+    bool expand = sm && scheduleManager() && sm != scheduleManager();
+    if (expand) {
+        m_view->masterView()->setObjectName("TaskEditor");
+        QDomElement element = doc.createElement("expanded");
+        doc.appendChild(element);
+        m_view->masterView()->saveExpanded(element);
+    }
+    ViewBase::setScheduleManager(sm);
     m_view->baseModel()->setScheduleManager( sm );
+
+    if (expand) {
+        m_view->masterView()->doExpand(doc);
+    } else if (tryexpand) {
+        m_view->masterView()->doExpand(m_domdoc);
+    }
 }
 
 void TaskView::slotEnableActions()
