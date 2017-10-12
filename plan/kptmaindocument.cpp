@@ -54,6 +54,7 @@
 #include <QMutableMapIterator>
 #include <QTemporaryFile>
 
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <KIO/CopyJob>
 
@@ -1035,7 +1036,6 @@ void MainDocument::insertSharedProjects(const QUrl &url)
     m_sharedProjectsFiles.clear();
     QFileInfo fi(url.path());
     if (!fi.exists()) {
-        qInfo()<<Q_FUNC_INFO<<"Invalid:"<<url;
         return;
     }
     if (fi.isFile()) {
@@ -1043,7 +1043,7 @@ void MainDocument::insertSharedProjects(const QUrl &url)
         debugPlan<<"Get all projects in file:"<<url;
     } else if (fi.isDir()) {
         // Get all plan files in this directory
-        qInfo()<<"Get all projects in dir:"<<url;
+        debugPlan<<"Get all projects in dir:"<<url;
         QDir dir = fi.dir();
         for (const QString &f : dir.entryList(QStringList()<<"*.plan")) {
             QString path = dir.canonicalPath();
@@ -1055,7 +1055,6 @@ void MainDocument::insertSharedProjects(const QUrl &url)
             u.setScheme("file");
             m_sharedProjectsFiles << u;
         }
-        qInfo()<<dir.entryList(QStringList()<<"*.plan")<<endl<<m_sharedProjectsFiles;
     } else {
         warnPlan<<"Unknown url:"<<url<<url.path()<<url.fileName();
         return;
@@ -1160,7 +1159,7 @@ bool canRemoveCalendar(const Calendar *c, const QList<Calendar*> &lst)
 QList<Calendar*> sortedRemoveCalendars(Project &shared, const QList<Calendar*> &lst) {
     QList<Calendar*> result;
     for (Calendar *c : lst) {
-        if (!shared.calendar(c->id())) {
+        if (c->isShared() && !shared.calendar(c->id())) {
             result << c;
         }
         result += sortedRemoveCalendars(shared, c->calendars());
@@ -1197,33 +1196,78 @@ bool MainDocument::mergeResources(Project &project)
     for (ResourceGroup *g : m_project->resourceGroups()) {
         if (g->isShared() && !project.findResourceGroup(g->id())) {
             removedGroups << g;
-            removed << "Group: " + g->name();
+            removed << i18n("Group: %1", g->name());
         }
     }
     for (Resource *r : m_project->resourceList()) {
         if (r->isShared() && !project.findResource(r->id())) {
             removedResources << r;
-            removed << "Resource: " + r->name();
+            removed << i18n("Resource: %1", r->name());
         }
     }
     removedCalendars = sortedRemoveCalendars(project, m_project->calendars());
     for (Calendar *c : removedCalendars) {
-        removed << "Calendar: " + c->name();
+        removed << i18n("Calendar: %1", c->name());
     }
-    if (!removedCalendars.isEmpty() || !removedResources.isEmpty() || !removedGroups.isEmpty()) {
-        // TODO show what has changed and give more detailed control
-        if (QMessageBox::question(0, i18n("Shared resources removed"), i18n("Shall the removed shared resources be converted to local resources?")) == QMessageBox::Yes) {
+    if (!removed.isEmpty()) {
+        KMessageBox::ButtonCode result = KMessageBox::warningYesNoCancelList(
+                    0,
+                    i18n("Shared resources has been removed from the shared resources file."
+                         "\nSelect how they shall be treated in this project."),
+                    removed,
+                    xi18nc("@title:window", "Shared resources"),
+                    KStandardGuiItem::remove(),
+                    KGuiItem(i18n("Convert")),
+                    KGuiItem(i18n("Keep"))
+                    );
+        switch (result) {
+        case KMessageBox::Yes: // Remove
             for (Resource *r : removedResources) {
-                r->setShared(false);
+                RemoveResourceCmd cmd(r->parentGroup(), r);
+                cmd.redo();
             }
             for (ResourceGroup *g : removedGroups) {
                 if (g->resources().isEmpty()) {
+                    RemoveResourceGroupCmd cmd(m_project, g);
+                    cmd.redo();
+                } else {
+                    // we may have put local resource(s) in this group
+                    // so we need to keep it
                     g->setShared(false);
+                    m_project->removeResourceGroupId(g->id());
+                    g->setId(m_project->uniqueResourceGroupId());
+                    m_project->insertResourceGroupId(g->id(), g);
                 }
             }
             for (Calendar *c : removedCalendars) {
-                c->setShared(false);
+                CalendarRemoveCmd cmd(m_project, c);
+                cmd.redo();
             }
+            break;
+        case KMessageBox::No: // Convert
+            for (Resource *r : removedResources) {
+                r->setShared(false);
+                m_project->removeResourceId(r->id());
+                r->setId(m_project->uniqueResourceId());
+                m_project->insertResourceId(r->id(), r);
+            }
+            for (ResourceGroup *g : removedGroups) {
+                g->setShared(false);
+                m_project->removeResourceGroupId(g->id());
+                g->setId(m_project->uniqueResourceGroupId());
+                m_project->insertResourceGroupId(g->id(), g);
+            }
+            for (Calendar *c : removedCalendars) {
+                c->setShared(false);
+                m_project->removeCalendarId(c->id());
+                c->setId(m_project->uniqueCalendarId());
+                m_project->insertCalendarId(c->id(), c);
+            }
+            break;
+        case KMessageBox::Cancel: // Keep
+            break;
+        default:
+            break;
         }
     }
     // update values of already existsing objects
