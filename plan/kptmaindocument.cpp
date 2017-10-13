@@ -74,7 +74,8 @@ MainDocument::MainDocument(KoPart *part)
         m_loadingTemplate( false ),
         m_loadingSharedResourcesTemplate( false ),
         m_viewlistModified( false ),
-        m_checkingForWorkPackages( false )
+        m_checkingForWorkPackages( false ),
+        m_loadingSharedProject(false)
 {
     Q_ASSERT(part);
     setAlwaysAllowSaving(true);
@@ -855,6 +856,12 @@ void MainDocument::setLoadingSharedResourcesTemplate(bool loading)
 bool MainDocument::completeLoading( KoStore *store )
 {
     // If we get here the new project is loaded and set
+    if (m_loadingSharedProject) {
+        // this file is loaded by another project
+        // to read resource appointments,
+        // so we must not load any extra stuff
+        return true;
+    }
     if ( m_loadingTemplate ) {
         //debugPlan<<"Loading template, generate unique ids";
         m_project->generateUniqueIds();
@@ -1075,6 +1082,7 @@ void MainDocument::slotInsertSharedProject()
     part->setDocument( doc );
     doc->disconnect(); // doc shall not handle feedback from openUrl()
     doc->setAutoSave( 0 ); //disable
+    doc->m_loadingSharedProject = true;
     connect(doc, SIGNAL(completed()), SLOT(insertSharedProjectCompleted()));
     connect(doc, SIGNAL(canceled(QString)), SLOT(insertSharedProjectCancelled(QString)));
 

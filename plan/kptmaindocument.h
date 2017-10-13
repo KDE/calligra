@@ -228,6 +228,7 @@ private:
 
     QList<QPointer<View> > m_views;
 
+    bool m_loadingSharedProject;
     QList<QUrl> m_sharedProjectsFiles;
 };
 
