@@ -492,6 +492,7 @@ void View::slotCreateNewProject()
                              "All scheduling information is removed.<nl/>"
                              "<nl/>Do you want to continue?" ) ) )
     {
+        emit currentScheduleManagerChanged(0);
         getPart()->createNewProject();
         slotOpenNode( &getProject() );
     }
