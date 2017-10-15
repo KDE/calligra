@@ -49,6 +49,8 @@ public:
     /// Save context info from this view. Reimplement.
     virtual void saveContext( QDomElement &/*context*/ ) const;
 
+    static QStringList addOptions();
+    static QStringList addTags();
 
 public Q_SLOTS:
     /// Activate/deactivate the gui

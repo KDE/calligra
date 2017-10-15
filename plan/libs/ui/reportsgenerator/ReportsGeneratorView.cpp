@@ -157,13 +157,11 @@ public:
     void setEditorData(QWidget *editor, const QModelIndex &index) const;
     void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
 
-    QStringList options;
 };
 
 FileNameExtensionDelegate::FileNameExtensionDelegate(QObject *parent)
 : QStyledItemDelegate(parent)
 {
-    options << "Nothing" << "Date" << "Number";
 }
 
 QWidget *FileNameExtensionDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -171,23 +169,39 @@ QWidget *FileNameExtensionDelegate::createEditor(QWidget *parent, const QStyleOp
     Q_UNUSED(option);
     Q_UNUSED(index);
     QComboBox *cb = new QComboBox(parent);
-    cb->addItems(options);
+    for (int i = 0; i < ReportsGeneratorView::addOptions().count(); ++i) {
+        cb->addItem(ReportsGeneratorView::addOptions().at(i), ReportsGeneratorView::addTags().value(i));
+    }
     return cb;
 }
 
 void FileNameExtensionDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
     QComboBox *cb = qobject_cast<QComboBox*>(editor);
-    QString data = index.data().toString();
-    cb->setCurrentText(data.isEmpty() ? options.at(0) : data);
+    if (cb) {
+        int idx = ReportsGeneratorView::addTags().indexOf(index.data(Qt::UserRole).toString());
+        cb->setCurrentIndex(idx < 0 ? 0 : idx);
+    }
 }
 
 void FileNameExtensionDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
     QComboBox *cb = qobject_cast<QComboBox*>(editor);
     if (cb && index.isValid()) {
+        model->setData(index, cb->currentData(), Qt::UserRole);
         model->setData(index, cb->currentText());
     }
+}
+
+QStringList ReportsGeneratorView::addOptions()
+{
+    return QStringList() << i18n("Nothing") << i18n("Date") << i18n("Number");
+}
+
+QStringList ReportsGeneratorView::addTags()
+{
+    return QStringList() << "Nothing" << "Date" << "Number";
+
 }
 
 ReportsGeneratorView::ReportsGeneratorView(KoPart *part, KoDocument *doc, QWidget *parent)
@@ -334,20 +348,35 @@ void ReportsGeneratorView::slotAddReport()
     int row = m->rowCount();
     m->insertRow(row);
     QModelIndex idx = m->index(row, 0);
-    m->setData(idx, "New report");
+    m->setData(idx, i18n("New report"));
+    QModelIndex add = m->index(row, 3);
+    m->setData(add, ReportsGeneratorView::addOptions().at(0));
+    m->setData(add, ReportsGeneratorView::addTags().at(0), Qt::UserRole);
 
     m_view->selectionModel()->setCurrentIndex(idx, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect);
     m_view->edit(idx);
+    emit optionsModified();
 }
 
 void ReportsGeneratorView::slotRemoveReport()
 {
-    debugPlan;
+    debugPlan<<selectedRows();
     QAbstractItemModel *m = m_view->model();
-    for (QModelIndexList lst = selectedRows(); !lst.isEmpty(); lst = selectedRows()) {
-        QModelIndex idx = lst.first();
+    QModelIndexList lst = selectedRows();
+    if (lst.isEmpty()) {
+        return;
+    }
+    // Assumption: model is flat
+    // We must do this in descending row order
+    QMap<int, QModelIndex> map;
+    for (int i = 0; i < lst.count(); ++i) {
+        map.insert(-lst.at(i).row(), lst.at(i)); // sort descending
+    }
+    for (const QModelIndex &idx : map) {
+        Q_ASSERT(!idx.parent().isValid()); // must be flat
         m->removeRow(idx.row(), idx.parent());
     }
+    emit optionsModified();
 }
 
 void ReportsGeneratorView::slotGenerateReport()
@@ -358,15 +387,31 @@ void ReportsGeneratorView::slotGenerateReport()
         QString name = model->index(idx.row(), 0).data().toString();
         QString tmp = model->index(idx.row(), 1).data(FULLPATHROLE).toString();
         QString file = model->index(idx.row(), 2).data().toString();
-        if (tmp.isEmpty() || file.isEmpty()) {
-            debugPlan<<"No files for report:"<<name<<tmp<<file;
+        if (tmp.isEmpty()) {
+            QMessageBox::information(this, xi18nc("@title:window", "Generate Report"),
+                                     i18n("Failed to generate %1."
+                                          "\nTemplate file name is empty.", name));
             continue;
         }
-        QString addition = model->index(idx.row(), 3).data().toString();
+        if (file.isEmpty()) {
+            debugPlan<<"No files for report:"<<name<<tmp<<file;
+            QMessageBox::information(this, xi18nc("@title:window", "Generate Report"),
+                                     i18n("Failed to generate %1."
+                                          "\nReport file name is empty.", name));
+            continue;
+        }
+        QString addition = model->index(idx.row(), 3).data(Qt::UserRole).toString();
         if (addition == "Date") {
-
+            int dotpos = file.lastIndexOf('.');
+            QString date = QDate::currentDate().toString();
+            file = file.insert(dotpos, date.prepend('-'));
         } else if (addition == "Number") {
-
+            int dotpos = file.lastIndexOf('.');
+            QString fn = file;
+            for (int i = 1; QFile::exists(fn); ++i) {
+                fn = file.insert(dotpos, QString::number(i).prepend('-'));
+            }
+            file = fn;
         }
         generateReport(tmp, file);
     }
@@ -431,8 +476,9 @@ bool ReportsGeneratorView::loadContext(const KoXmlElement &context)
             idx = model->index(row, 2);
             model->setData(idx, file);
             idx = model->index(row, 3);
-            model->setData(idx, add);
-            debugPlan<<"Load row:"<<name<<tmp<<file<<add;
+            model->setData(idx, add, Qt::UserRole);
+            model->setData(idx, ReportsGeneratorView::addOptions().value(ReportsGeneratorView::addTags().indexOf(add)));
+            ++row;
         }
     }
     ViewBase::loadContext(context);
@@ -455,7 +501,7 @@ void ReportsGeneratorView::saveContext(QDomElement &context) const
     QDomElement data = context.ownerDocument().createElement("data");
     context.appendChild(data);
     const QAbstractItemModel *model = m_view->model();
-    for (int row = 0; row < m_view->model()->rowCount(); ++row) {
+    for (int row = 0; row < model->rowCount(); ++row) {
         e = data.ownerDocument().createElement("row");
         data.appendChild(e);
         QModelIndex idx = model->index(row, 0);
@@ -465,7 +511,7 @@ void ReportsGeneratorView::saveContext(QDomElement &context) const
         idx = model->index(row, 2);
         e.setAttribute("file", idx.data().toString());
         idx = model->index(row, 3);
-        e.setAttribute("add", idx.data().toString());
+        e.setAttribute("add", idx.data(Qt::UserRole).toString());
     }
     ViewBase::saveContext(context);
 }
