@@ -215,8 +215,30 @@ void AccountsView::setProject( Project *project )
 
 void AccountsView::setScheduleManager( ScheduleManager *sm )
 {
+    if (!sm && m_manager) {
+        // we should only get here if the only schedule manager is scheduled,
+        // or when last schedule manager is deleted
+        m_domdoc.clear();
+        QDomElement element = m_domdoc.createElement("expanded");
+        m_domdoc.appendChild(element);
+        m_view->masterView()->saveExpanded(element);
+    }
+    bool tryexpand = sm && !m_manager;
+    bool expand = sm && m_manager && sm != m_manager;
+    QDomDocument doc;
+    if (expand) {
+        QDomElement element = doc.createElement("expanded");
+        doc.appendChild(element);
+        m_view->masterView()->saveExpanded(element);
+    }
     m_manager = sm;
     model()->setScheduleManager( sm );
+
+    if (expand) {
+        m_view->masterView()->doExpand(doc);
+    } else if (tryexpand) {
+        m_view->masterView()->doExpand(m_domdoc);
+    }
 }
 
 CostBreakdownItemModel *AccountsView::model() const
@@ -266,6 +288,8 @@ bool AccountsView::loadContext( const KoXmlElement &context )
     m_view->setEndMode( context.attribute( "end-mode", "0" ).toInt() );
     
     //debugPlan<<m_view->startMode()<<m_view->startDate()<<m_view->endMode()<<m_view->endDate();
+    m_view->masterView()->setObjectName("AccountsView");
+    m_view->loadContext(model()->columnMap(), context);
     return true;
 }
 
@@ -281,6 +305,8 @@ void AccountsView::saveContext( QDomElement &context ) const
     context.setAttribute( "start-date", m_view->startDate().toString( Qt::ISODate ) );
     context.setAttribute( "end-mode", QString::number(m_view->endMode()) );
     context.setAttribute( "end-date", m_view->endDate().toString( Qt::ISODate ) );
+
+    m_view->saveContext(model()->columnMap(), context);
 }
 
 KoPrintJob *AccountsView::createPrintJob()

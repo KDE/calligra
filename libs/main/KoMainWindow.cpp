@@ -1100,7 +1100,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
                 (needConfirm && exportConfirmation(oldOutputFormat /* not so old :) */))
                 ) {
             // be sure d->rootDocument has the correct outputMimeType!
-            if (isExporting() || d->rootDocument->isModified()) {
+            if (isExporting() || d->rootDocument->isModified() || d->rootDocument->alwaysAllowSaving()) {
                 ret = d->rootDocument->save();
             }
 

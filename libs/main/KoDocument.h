@@ -601,6 +601,17 @@ public:
      */
     void setProfileReferenceTime(const QTime& referenceTime);
 
+    /// If set, the document shall be saved even if it is not marked as modified.
+    /// @see setAlwaysAllowSaving()
+    bool alwaysAllowSaving() const;
+
+    /// Set alwaysAllowSaving to @p allow.
+    /// Enables applications to always allow saving even when document is not modified.
+    /// This makes it possible to save settings/context info without marking
+    /// the document as modified.
+    /// @see alwaysAllowSaving()
+    void setAlwaysAllowSaving(bool allow);
+
 public Q_SLOTS:
 
     /**

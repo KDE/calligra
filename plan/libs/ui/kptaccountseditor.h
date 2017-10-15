@@ -105,7 +105,10 @@ public:
     virtual Account *currentAccount() const;
     
     KoPrintJob *createPrintJob();
-    
+
+    bool loadContext(const KoXmlElement &context);
+    void saveContext(QDomElement &context) const;
+
 Q_SIGNALS:
     void addAccount( Account *account );
     void deleteAccounts( const QList<Account*>& );

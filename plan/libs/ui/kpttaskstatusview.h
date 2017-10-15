@@ -141,6 +141,7 @@ private:
     Project *m_project;
     int m_id;
     TaskStatusTreeView *m_view;
+    QDomDocument m_domdoc;
 
 };
 
@@ -402,6 +403,8 @@ protected Q_SLOTS:
 private:
     TreeViewBase *m_tree;
     PerformanceStatusBase *m_chart;
+    ScheduleManager *m_manager;
+    QDomDocument m_domdoc;
 };
 
 

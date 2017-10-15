@@ -3259,6 +3259,9 @@ void NodeItemModel::setProject( Project *project )
 
 void NodeItemModel::setScheduleManager( ScheduleManager *sm )
 {
+    if (sm == m_nodemodel.manager()) {
+        return;
+    }
     if ( m_nodemodel.manager() ) {
     }
     m_nodemodel.setManager( sm );

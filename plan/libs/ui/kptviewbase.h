@@ -36,9 +36,12 @@
 #include <QSplitter>
 #include <QList>
 #include <QDockWidget>
+#include <QDomDocument>
 
 class QMetaEnum;
 class QAbstractItemModel;
+class QDomElement;
+class QModelIndex;
 
 class KoDocument;
 class KoPrintJob;
@@ -395,9 +398,9 @@ public:
     void setColumnsHidden( const QList<int> &list );
 
     /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const QMetaEnum &map, const KoXmlElement &element );
+    virtual bool loadContext(const QMetaEnum &map, const KoXmlElement &element, bool expand = true);
     /// Save context info from this view. Reimplement.
-    virtual void saveContext( const QMetaEnum &map, QDomElement &context ) const;
+    virtual void saveContext(const QMetaEnum &map, QDomElement &context , bool expand = true) const;
 
     /**
       Reimplemented to fix qt bug 160083: Doesn't scroll horisontally.
@@ -421,6 +424,11 @@ public:
     ItemModelBase *itemModel() const;
 
     void setContextMenuIndex(const QModelIndex &idx);
+
+    void loadExpanded(const KoXmlElement &element);
+    void saveExpanded(QDomElement &element, const QModelIndex &parent = QModelIndex()) const;
+    void expandRecursivly(QDomElement element, const QModelIndex &parent = QModelIndex());
+    void doExpand(QDomDocument &doc);
 
 public Q_SLOTS:
     void slotExpand();
@@ -479,6 +487,9 @@ protected Q_SLOTS:
         }
     }
 
+    void doContextExpanded();
+    void doExpanded();
+
 protected:
     virtual void focusInEvent(QFocusEvent *event);
     
@@ -489,6 +500,8 @@ protected:
     QList<int> m_defaultColumns;
 
     QPersistentModelIndex m_contextMenuIndex;
+    QDomDocument m_loadContextDoc;
+    QDomDocument m_expandDoc;
 };
 
 //------------------

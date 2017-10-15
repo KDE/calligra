@@ -198,6 +198,7 @@ private:
     QAction *actionUnindentTask;
 
     QAction *actionShowProject;
+    QDomDocument m_domdoc;
 };
 
 class KPLATOUI_EXPORT TaskView : public ViewBase
@@ -255,7 +256,7 @@ private Q_SLOTS:
 private:
     NodeTreeView *m_view;
     QAction *actionShowProject;
-
+    QDomDocument m_domdoc;
 };
 
 //-----------------------------------

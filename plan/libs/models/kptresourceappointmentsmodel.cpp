@@ -315,6 +315,9 @@ QDate ResourceAppointmentsItemModel::endDate() const
 
 void ResourceAppointmentsItemModel::setScheduleManager( ScheduleManager *sm )
 {
+    if (sm == m_manager) {
+        return;
+    }
     debugPlan<<sm;
     m_manager = sm;
     refreshData();

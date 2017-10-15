@@ -29,6 +29,8 @@
 
 #include <kpagedialog.h>
 
+#include <QDomDocument>
+
 class KoPageLayoutWidget;
 class KoDocument;
 
@@ -169,6 +171,7 @@ private:
     QAction *actionAddResource;
     QAction *actionAddGroup;
     QAction *actionDeleteSelection;
+    QDomDocument m_domdoc;
 
 };
 

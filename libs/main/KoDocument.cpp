@@ -167,6 +167,7 @@ public:
         undoStack(0),
         modified(false),
         readwrite(true),
+        alwaysAllowSaving(false),
         disregardAutosaveFailure(false)
     {
         m_job = 0;
@@ -252,7 +253,7 @@ public:
 
     bool modified;
     bool readwrite;
-
+    bool alwaysAllowSaving;
     bool disregardAutosaveFailure;
 
     bool openFile()
@@ -2063,6 +2064,16 @@ void KoDocument::setModified(bool mod)
     // This influences the title
     setTitleModified();
     emit modified(mod);
+}
+
+bool KoDocument::alwaysAllowSaving() const
+{
+    return d->alwaysAllowSaving;
+}
+
+void KoDocument::setAlwaysAllowSaving(bool allow)
+{
+    d->alwaysAllowSaving = allow;
 }
 
 int KoDocument::queryCloseDia()

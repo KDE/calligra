@@ -106,6 +106,7 @@ private:
     QDate m_date;
     int m_period;
     bool m_cumulative;
+    QDomDocument m_domdoc;
     
 };
 

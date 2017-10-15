@@ -221,7 +221,30 @@ void TaskStatusView::updateReadWrite( bool rw )
 void TaskStatusView::setScheduleManager( ScheduleManager *sm )
 {
     //debugPlan;
+    if (!sm && scheduleManager()) {
+        // we should only get here if the only schedule manager is scheduled,
+        // or when last schedule manager is deleted
+        m_domdoc.clear();
+        QDomElement element = m_domdoc.createElement("expanded");
+        m_domdoc.appendChild(element);
+        m_view->masterView()->saveExpanded(element);
+    }
+    bool tryexpand = sm && !scheduleManager();
+    bool expand = sm && scheduleManager() && sm != scheduleManager();
+    QDomDocument doc;
+    if (expand) {
+        QDomElement element = doc.createElement("expanded");
+        doc.appendChild(element);
+        m_view->masterView()->saveExpanded(element);
+    }
+    ViewBase::setScheduleManager(sm);
     static_cast<TaskStatusItemModel*>( m_view->model() )->setScheduleManager( sm );
+
+    if (expand) {
+        m_view->masterView()->doExpand(doc);
+    } else if (tryexpand) {
+        m_view->masterView()->doExpand(m_domdoc);
+    }
 }
 
 Node *TaskStatusView::currentNode() const
@@ -920,6 +943,9 @@ void PerformanceStatusBase::slotUpdate()
 void PerformanceStatusBase::setScheduleManager( ScheduleManager *sm )
 {
     //debugPlan;
+    if (sm == m_manager) {
+        return;
+    }
     m_manager = sm;
     m_chartmodel.setScheduleManager( sm );
     static_cast<PerformanceDataCurrentDateModel*>( ui_performancetable->model() )->setScheduleManager( sm );
@@ -1026,6 +1052,7 @@ void PerformanceStatusBase::setNodes( const QList<Node *> &nodes )
 //-----------------------------------
 PerformanceStatusTreeView::PerformanceStatusTreeView( QWidget *parent )
     : QSplitter( parent )
+    , m_manager(0)
 {
     m_tree = new TreeViewBase( this );
 
@@ -1066,8 +1093,31 @@ NodeItemModel *PerformanceStatusTreeView::nodeModel() const
 
 void PerformanceStatusTreeView::setScheduleManager( ScheduleManager *sm )
 {
+    if (!sm && m_manager) {
+        // we should only get here if the only schedule manager is scheduled,
+        // or when last schedule manager is deleted
+        m_domdoc.clear();
+        QDomElement element = m_domdoc.createElement("expanded");
+        m_domdoc.appendChild(element);
+        treeView()->saveExpanded(element);
+    }
+    bool tryexpand = sm && !m_manager;
+    bool expand = sm && m_manager && sm != m_manager;
+    QDomDocument doc;
+    if (expand) {
+        QDomElement element = doc.createElement("expanded");
+        doc.appendChild(element);
+        treeView()->saveExpanded(element);
+    }
+    m_manager = sm;
     nodeModel()->setScheduleManager( sm );
     m_chart->setScheduleManager( sm );
+
+    if (expand) {
+        treeView()->doExpand(doc);
+    } else if (tryexpand) {
+        treeView()->doExpand(m_domdoc);
+    }
 }
 
 Project *PerformanceStatusTreeView::project() const
@@ -1199,6 +1249,7 @@ void PerformanceStatusView::slotContextMenuRequested( Node *node, const QPoint& 
 void PerformanceStatusView::setScheduleManager( ScheduleManager *sm )
 {
     //debugPlan;
+    ViewBase::setScheduleManager(sm);
     m_view->setScheduleManager( sm );
 }
 
