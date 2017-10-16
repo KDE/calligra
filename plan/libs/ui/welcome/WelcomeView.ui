@@ -194,6 +194,13 @@
     </layout>
    </item>
    <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -240,9 +247,22 @@
       </layout>
      </item>
      <item>
+      <spacer name="verticalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; font-weight:600;&quot;&gt;Context help&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Many functions has help and hints that can be displayed with &lt;span style=&quot; font-style:italic;&quot;&gt;What's this&lt;/span&gt;.&lt;/p&gt;&lt;p&gt;Activate it by selecting &lt;span style=&quot; font-style:italic;&quot;&gt;Help-&amp;gt;What's this&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;Shift+F1&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Context Help&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Many functions has help and hints that can be displayed with &lt;span style=&quot; font-style:italic;&quot;&gt;What's this&lt;/span&gt;.&lt;/p&gt;&lt;p&gt;Activate it by selecting &lt;span style=&quot; font-style:italic;&quot;&gt;Help-&amp;gt;What's this&lt;/span&gt; or &lt;span style=&quot; font-style:italic;&quot;&gt;Shift+F1&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -267,6 +287,55 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Other resources&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>&lt;a href=&quot;https://userbase.kde.org/Plan&quot;&gt;Plan&lt;/a&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="openExternalLinks">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>&lt;a href=&quot;https://forum.kde.org/viewforum.php?f=203&quot;&gt;Community&lt;/a&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="openExternalLinks">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>&lt;a href=&quot;https://calligra.org&quot;&gt;Calligra&lt;/a&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="openExternalLinks">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

@@ -114,8 +114,7 @@ QString KPlatoAboutPage::intro()
     res = res.arg( i18n("Plan is a Project Planning and Management application.") )
     .arg( i18n(
         "Plan is intended for managing moderately large projects with multiple resources. To enable you to model your project adequately, Plan offers different types of task dependencies and timing constraints. Usually you will define your tasks, estimate the effort needed to perform each task, allocate resources and then schedule the project according to the dependency network and resource availability."
-        "<p>You can find more information in the <a href=\"help:plan\">documentation</a> "
-        "or online at <a href=\"http://www.calligra.org/plan\">http://www.calligra.org/plan</a></p>"
+        "<p>You can find more information online at <a href=\"https://userbase.kde.org/Plan\">https://userbase.kde.org/Plan</a></p>"
         ) )
     .arg( icon_up )
     .arg( i18n( "Close" ) )
