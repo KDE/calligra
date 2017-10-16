@@ -1096,16 +1096,29 @@ void MainDocument::insertSharedProjectCompleted()
     if (doc) {
         Project &p = doc->getProject();
         debugPlan<<m_project->id()<<"Loaded project:"<<p.id()<<p.name();
-        if (p.id() != m_project->id()) {
-            for (Resource *r : p.resourceList()) {
-                Resource *res = m_project->resource(r->id());
-                debugPlan<<"Resource:"<<r->name()<<"->"<<res;
-                if (res && res->isShared()) {
-                    for (const Appointment *a : r->appointments()) {
-                        Appointment *app = new Appointment(*a);
-                        app->setAuxcilliaryInfo(p.name());
-                        res->addExternalAppointment(p.id(), app);
-                        debugPlan<<res->name()<<"added:"<<app->auxcilliaryInfo()<<app;
+        if (p.id() != m_project->id() && p.isScheduled(ANYSCHEDULED)) {
+            // FIXME: improve!
+            // find a suitable schedule
+            ScheduleManager *sm = 0;
+            for (ScheduleManager *m : p.allScheduleManagers()) {
+                if (m->isBaselined()) {
+                    sm = m;
+                    break;
+                }
+                if (m->isScheduled()) {
+                    sm = m; // take the last one, more likely to be subschedule
+                }
+            }
+            if (sm) {
+                for (Resource *r : p.resourceList()) {
+                    Resource *res = m_project->resource(r->id());
+                    if (res && res->isShared()) {
+                        for (const Appointment *a : r->appointments(sm->scheduleId())) {
+                            Appointment *app = new Appointment(*a);
+                            app->setAuxcilliaryInfo(p.name());
+                            res->addExternalAppointment(p.id(), app);
+                            debugPlan<<res->name()<<"added:"<<app->auxcilliaryInfo()<<app;
+                        }
                     }
                 }
             }
