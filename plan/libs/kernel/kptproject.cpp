@@ -51,7 +51,8 @@ Project::Project( Node *parent )
         m_defaultCalendar( 0 ),
         m_config( &emptyConfig ),
         m_schedulerPlugins(),
-        m_sharedResourcesLoaded(false)
+        m_sharedResourcesLoaded(false),
+        m_loadProjectsAtStartup(false)
 {
     //debugPlan<<"("<<this<<")";
     init();
@@ -62,7 +63,9 @@ Project::Project( ConfigBase &config, Node *parent )
         m_accounts( *this ),
         m_defaultCalendar( 0 ),
         m_config( &config ),
-        m_schedulerPlugins()
+        m_schedulerPlugins(),
+        m_sharedResourcesLoaded(false),
+        m_loadProjectsAtStartup(false)
 {
     debugPlan<<"("<<this<<")";
     init();
@@ -987,6 +990,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
             m_useSharedResources = e.attribute("use", "0").toInt();
             m_sharedResourcesFile = e.attribute("file");
             m_sharedProjectsUrl = QUrl(e.attribute("projects-url"));
+            m_loadProjectsAtStartup = (bool)e.attribute("projects-loadatstartup", "0").toInt();
         }
     }
     QList<Calendar*> cals;
@@ -1299,6 +1303,7 @@ void Project::save( QDomElement &element ) const
     share.setAttribute("use", m_useSharedResources);
     share.setAttribute("file", m_sharedResourcesFile);
     share.setAttribute("projects-url", QString(m_sharedProjectsUrl.toEncoded()));
+    share.setAttribute("projects-loadatstartup", m_loadProjectsAtStartup);
 
     m_accounts.save( me );
 
@@ -2900,6 +2905,16 @@ void Project::setSharedProjectsUrl(const QUrl &url)
 QUrl Project::sharedProjectsUrl() const
 {
     return m_sharedProjectsUrl;
+}
+
+void Project::setLoadProjectsAtStartup(bool value)
+{
+    m_loadProjectsAtStartup = value;
+}
+
+bool Project::loadProjectsAtStartup() const
+{
+    return m_loadProjectsAtStartup;
 }
 
 }  //KPlato namespace

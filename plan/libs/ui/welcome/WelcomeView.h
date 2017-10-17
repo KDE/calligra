@@ -83,7 +83,7 @@ private Q_SLOTS:
 
     void slotNewProject();
     void slotOpenProject();
-    void slotLoadSharedResources(const QString &file, const QUrl &projects);
+    void slotLoadSharedResources(const QString &file, const QUrl &projects, bool loadProjectsAtStartup);
 
     void slotProjectEditFinished(int result);
     void slotOpenFileFinished(int result);

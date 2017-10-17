@@ -103,6 +103,12 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent)
     projectsType->setToolTip(s);
     projectsPlace->setToolTip(s);
 
+    projectsLoadAtStartup->setChecked(project.loadProjectsAtStartup());
+    projectsLoadAtStartup->setToolTip(xi18nc("@info:tooltip", "Load shared resource assignments at startup"));
+
+    projectsLoadBtn->setToolTip(xi18nc("@info:tooltip", "Load (or re-load) shared resource assignments"));
+    projectsClearBtn->setToolTip(xi18nc("@info:tooltip", "Clear shared resource assignments"));
+
     // signals and slots connections
     connect( m_description, SIGNAL(textChanged(bool)), this, SLOT(slotCheckAllFieldsFilled()) );
     connect( endDate, SIGNAL(dateChanged(QDate)), this, SLOT(slotCheckAllFieldsFilled()) );
@@ -114,11 +120,14 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent)
     connect( useSharedResources, SIGNAL(toggled(bool)), this, SLOT(slotCheckAllFieldsFilled()) );
     connect( resourcesFile, SIGNAL(textChanged(const QString&)), this, SLOT(slotCheckAllFieldsFilled()) );
     connect( projectsPlace, SIGNAL(textChanged(const QString&)), this, SLOT(slotCheckAllFieldsFilled()) );
+    connect(projectsLoadAtStartup, SIGNAL(toggled(bool)), this, SLOT(slotCheckAllFieldsFilled()));
     connect( chooseLeader, SIGNAL(clicked()), this, SLOT(slotChooseLeader()) );
 
     connect(resourcesBrowseBtn, SIGNAL(clicked()), this, SLOT(openResourcesFile()));
     connect(projectsBrowseBtn, SIGNAL(clicked()), this, SLOT(openProjectsPlace()));
 
+    connect(projectsLoadBtn, SIGNAL(clicked()), this, SLOT(loadProjects()));
+    connect(projectsClearBtn, SIGNAL(clicked()), this, SLOT(clearProjects()));
 }
 
 
@@ -164,6 +173,10 @@ MacroCommand *MainProjectPanel::buildCommand() {
     if (project.sharedProjectsUrl() != sharedProjectsUrl) {
         if (!m) m = new MacroCommand(c);
         m->addCommand(new SharedProjectsUrlCmd( &project, sharedProjectsUrl));
+    }
+    if (project.loadProjectsAtStartup() != projectsLoadAtStartup->isChecked()) {
+        if (!m) m = new MacroCommand(c);
+        m->addCommand(new LoadProjectsAtStartupCmd( &project, projectsLoadAtStartup->isChecked()));
     }
     MacroCommand *cmd = m_description->buildCommand();
     if ( cmd ) {
@@ -273,6 +286,21 @@ void MainProjectPanel::openProjectsPlace()
 bool MainProjectPanel::loadSharedResources() const
 {
     return useSharedResources->isChecked();
+}
+
+void MainProjectPanel::loadProjects()
+{
+    QString place = projectsPlace->text();
+    if (projectsType->currentIndex() == 0 /*dir*/ && !place.isEmpty() && !place.endsWith('/')) {
+        place.append('/');
+    }
+    QUrl url(place);
+    emit loadResourceAssignments(url);
+}
+
+void MainProjectPanel::clearProjects()
+{
+    emit clearResourceAssignments();
 }
 
 }  //KPlato namespace

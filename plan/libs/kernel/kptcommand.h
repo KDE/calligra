@@ -1970,6 +1970,19 @@ private:
     QUrl m_newValue;
 };
 
+class  KPLATOKERNEL_EXPORT LoadProjectsAtStartupCmd : public NamedCommand
+{
+public:
+    explicit LoadProjectsAtStartupCmd(Project *project, bool newValue, const KUndo2MagicString& name = KUndo2MagicString());
+    void execute();
+    void unexecute();
+
+private:
+    Project *m_project;
+    bool m_oldValue;
+    bool m_newValue;
+};
+
 }  //KPlato namespace
 
 #endif //COMMAND_H

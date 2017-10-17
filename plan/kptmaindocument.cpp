@@ -884,7 +884,7 @@ bool MainDocument::completeLoading( KoStore *store )
     if (m_project->useSharedResources() && !m_project->sharedResourcesFile().isEmpty()) {
         QUrl url = QUrl::fromLocalFile(m_project->sharedResourcesFile());
         if (url.isValid()) {
-            insertResourcesFile(url, m_project->sharedProjectsUrl());
+            insertResourcesFile(url, m_project->loadProjectsAtStartup() ? m_project->sharedProjectsUrl() : QUrl());
         }
     }
     if ( store == 0 ) {
@@ -1038,6 +1038,19 @@ void MainDocument::insertFileCancelled( const QString &error )
     }
 }
 
+void MainDocument::clearResourceAssignments()
+{
+    for (Resource *r : m_project->resourceList()) {
+        r->clearExternalAppointments();
+    }
+}
+
+void MainDocument::loadResourceAssignments(QUrl url)
+{
+    insertSharedProjects(url);
+    slotInsertSharedProject();
+}
+
 void MainDocument::insertSharedProjects(const QUrl &url)
 {
     m_sharedProjectsFiles.clear();
@@ -1066,9 +1079,7 @@ void MainDocument::insertSharedProjects(const QUrl &url)
         warnPlan<<"Unknown url:"<<url<<url.path()<<url.fileName();
         return;
     }
-    for (Resource *r : m_project->resourceList()) {
-        r->clearExternalAppointments();
-    }
+    clearResourceAssignments();
 }
 
 void MainDocument::slotInsertSharedProject()

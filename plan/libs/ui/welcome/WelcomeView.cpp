@@ -182,9 +182,9 @@ void WelcomeView::slotNewProject()
     Project *p = project();
     if (p) {
         if (!m_projectdialog) {
-            m_projectdialog =  new MainProjectDialog(*p, this);
+            m_projectdialog =  new MainProjectDialog(*p, this, false /*edit*/);
             connect(m_projectdialog, SIGNAL(dialogFinished(int)), SLOT(slotProjectEditFinished(int)));
-            connect(m_projectdialog, SIGNAL(sigLoadSharedResources(const QString&, const QUrl&)), this, SLOT(slotLoadSharedResources(const QString&, const QUrl&)));
+            connect(m_projectdialog, SIGNAL(sigLoadSharedResources(const QString&, const QUrl&, bool)), this, SLOT(slotLoadSharedResources(const QString&, const QUrl&, bool)));
         }
         m_projectdialog->show();
         m_projectdialog->raise();
@@ -256,14 +256,14 @@ void WelcomeView::slotOpenFileFinished(int result)
     dia->deleteLater();
 }
 
-void WelcomeView::slotLoadSharedResources(const QString &file, const QUrl &projects)
+void WelcomeView::slotLoadSharedResources(const QString &file, const QUrl &projects, bool loadProjectsAtStartup)
 {
     QUrl url(file);
     if (url.scheme().isEmpty()) {
         url.setScheme("file");
     }
     if (url.isValid()) {
-        emit loadSharedResources(url, projects);
+        emit loadSharedResources(url, loadProjectsAtStartup ? projects :QUrl());
     }
 }
 

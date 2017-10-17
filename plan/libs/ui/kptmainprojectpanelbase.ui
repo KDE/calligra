@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>387</width>
-    <height>460</height>
+    <width>489</width>
+    <height>520</height>
    </rect>
   </property>
   <property name="locale">
@@ -261,6 +261,13 @@
                </property>
               </widget>
              </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="projectsLabel">
+               <property name="text">
+                <string>Projects:</string>
+               </property>
+              </widget>
+             </item>
              <item row="3" column="0">
               <widget class="QComboBox" name="projectsType">
                <item>
@@ -284,12 +291,36 @@
                </property>
               </widget>
              </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="projectsLabel">
-               <property name="text">
-                <string>Projects:</string>
-               </property>
-              </widget>
+             <item row="4" column="0" colspan="3">
+              <layout class="QHBoxLayout" name="horizontalLayout_2">
+               <item>
+                <widget class="QCheckBox" name="projectsLoadAtStartup">
+                 <property name="text">
+                  <string>Load resource assignments at startup</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="projectsLoadBtn">
+                 <property name="text">
+                  <string>Load</string>
+                 </property>
+                 <property name="icon">
+                  <iconset theme="document-import"/>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="projectsClearBtn">
+                 <property name="text">
+                  <string>Clear</string>
+                 </property>
+                 <property name="icon">
+                  <iconset theme="edit-clear"/>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </item>
             </layout>
            </widget>

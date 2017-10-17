@@ -59,10 +59,14 @@ public Q_SLOTS:
 private Q_SLOTS:
     void openResourcesFile();
     void openProjectsPlace();
+    void loadProjects();
+    void clearProjects();
 
 Q_SIGNALS:
     void obligatedFieldsFilled(bool);
     void changed();
+    void loadResourceAssignments(QUrl url);
+    void clearResourceAssignments();
 
 private:
     TaskDescriptionPanel *m_description;
