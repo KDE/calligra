@@ -21,6 +21,7 @@
 
 #include "kptcommand.h"
 #include "kptdebug.h"
+#include "WhatsThis.h"
 
 #include <KoMainWindow.h>
 #include <KoDocument.h>
@@ -33,6 +34,7 @@
 #include <QUrl>
 #include <QIcon>
 #include <QStandardPaths>
+#include <QEvent>
 
 const QLoggingCategory &PLANWELCOME_LOG()
 {
@@ -88,14 +90,61 @@ WelcomeView::WelcomeView(KoPart *part, KoDocument *doc, QWidget *parent)
     widget.setupUi(this);
     widget.recentProjects->setBackgroundRole(QPalette::Midlight);
 
-    widget.createResourceFileBtn->hide(); // disable this for now
-    widget.createResourceFileBtn->setWhatsThis(xi18nc("@info:whatsthis",
-                                           "<title>Shared resources</title>"
-                                           "Create a shared resources file."
-                                           " Resources can be shared between projects"
-                                           " to avoid overbooking resources across projects."
-                                           " Shared resources must be defined in a separate file."
-                                           ));
+    WhatsThis::add(widget.newProjectBtn,
+                   i18nc("whatsthis",
+                         "<html><head/><body>"
+                         "<p><span style='font-weight:600;'>Create a new project</span></p><p>"
+                         "Creates a new project with default values defined in"
+                         " <span style='font-style:italic;'>Settings</span>."
+                         "<br>Opens the <span style='font-style:italic;'>project dialog</span>"
+                         " so you can define project specific properties like"
+                         " <span style='font-style:italic;whitespace:nobreak'>Project Name</span>,"
+                         " <span style='font-style:italic;whitespace:nobreak'>Target Start</span>"
+                         " and <span style='font-style:italic;whitespace:nobreak'>- End</span> times."
+                         "<br><a href='https://userbase.kde.org/Plan/Howto/'>More...</a>"
+                         "</p></body></html>"));
+
+    WhatsThis::add(widget.createResourceFileBtn,
+                   i18nc("whatsthis",
+                         "<html><head/><body>"
+                         "<p><span style='font-weight:600;'>Shared resources</span></p><p>"
+                         "Create a shared resources file."
+                         "<br>This enables you to only create your resources once,"
+                         " you just refer to your resources file when you create a new project."
+                         "<br>Resources can also be shared between projects"
+                         " to avoid overbooking resources across projects."
+                         "<br>Shared resources must be defined in a separate file."
+                         "<br><a href='https://userbase.kde.org/Plan/Howto/Create_Shared_Resources'>More...</a>"
+                         "</p></body></html>"));
+
+    WhatsThis::add(widget.recentProjects,
+                   i18nc("whatsthis",
+                         "<html><head/><body>"
+                         "<p><span style='font-weight:600;'>Recent Projects</span></p><p>"
+                         "<p>A list of the 10 most recent project files opened.</p>"
+                         "<br>This enables you to quickly open projects you have worked on recently."
+                         "<br><a href='https://userbase.kde.org/Plan/Howto/'>More...</a>"
+                         "</p></body></html>"));
+
+    WhatsThis::add(widget.contextHelp,
+                   i18nc("whatsthis",
+                         "<html><head/><body>"
+                         "<p><span style=' font-weight:600;'>Context help</span></p><p>"
+                         "Help is available many places using <span style='font-style:italic;white-space:nowrap'>What's This</span>."
+                         "<p>It is activated using the menu entry <span style='font-style:italic;white-space:nowrap'>Help->What's this?</span>"
+                         " or the keybord shortcut <span style='font-style:italic;white-space:nowrap'>Shift+F1</span>.</p>"
+                         "<p>In dialogs it is available via the <span style='font-style:bold;'>?</span> in the dialog title bar."
+                         "<p>If you see <a href='https://userbase.kde.org/Plan/Howto'>More...</a> in the text,"
+                         " pressing it will display more information from online resources in you browser."
+                         "</p></body></html>"));
+
+    WhatsThis::add(widget.otherResourcesLabel,
+                   i18nc("whatsthis",
+                         "<html><head/><body>"
+                         "<p><span style='font-weight:600;'>Other resources</span></p><p>"
+                         "Here you find links to online resources."
+                         " Information will be opened in you browser."
+                         "</p></body></html>"));
 
     m_model = new RecentFilesModel(this);
     widget.recentProjects->setModel(m_model);
