@@ -130,12 +130,12 @@ WelcomeView::WelcomeView(KoPart *part, KoDocument *doc, QWidget *parent)
                    i18nc("whatsthis",
                          "<html><head/><body>"
                          "<p><span style=' font-weight:600;'>Context help</span></p><p>"
-                         "Help is available many places using <span style='font-style:italic;white-space:nowrap'>What's This</span>."
+                         "Help is available many places using <span style='font-style:italic;white-space:nowrap'>What's This</span>.</p>"
                          "<p>It is activated using the menu entry <span style='font-style:italic;white-space:nowrap'>Help->What's this?</span>"
-                         " or the keybord shortcut <span style='font-style:italic;white-space:nowrap'>Shift+F1</span>.</p>"
-                         "<p>In dialogs it is available via the <span style='font-style:bold;'>?</span> in the dialog title bar."
+                         " or the keyboard shortcut <span style='font-style:italic;white-space:nowrap'>Shift+F1</span>.</p>"
+                         "<p>In dialogs it is available via the <span style='font-style:bold;'>?</span> in the dialog title bar.</p>"
                          "<p>If you see <a href='https://userbase.kde.org/Plan/Howto'>More...</a> in the text,"
-                         " pressing it will display more information from online resources in you browser."
+                         " pressing it will display more information from online resources in your browser."
                          "</p></body></html>"));
 
     WhatsThis::add(widget.otherResourcesLabel,
