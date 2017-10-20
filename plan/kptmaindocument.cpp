@@ -75,7 +75,8 @@ MainDocument::MainDocument(KoPart *part)
         m_loadingSharedResourcesTemplate( false ),
         m_viewlistModified( false ),
         m_checkingForWorkPackages( false ),
-        m_loadingSharedProject(false)
+        m_loadingSharedProject(false),
+        m_isTaskModule(false)
 {
     Q_ASSERT(part);
     setAlwaysAllowSaving(true);
@@ -1483,4 +1484,13 @@ void MainDocument::createNewProject()
     }
 }
 
+void MainDocument::setIsTaskModule(bool value)
+{
+    m_isTaskModule = value;
+}
+
+bool MainDocument::isTaskModule() const
+{
+    return m_isTaskModule;
+}
 }  //KPlato namespace

@@ -5030,10 +5030,11 @@ TaskModuleModel::TaskModuleModel( QObject *parent )
 {
 }
 
-void TaskModuleModel::addTaskModule( Project *project )
+void TaskModuleModel::addTaskModule( Project *project, const QUrl &url )
 {
     beginInsertRows( QModelIndex(), m_modules.count(), m_modules.count() );
     m_modules << project;
+    m_urls << url;
     endInsertRows();
 }
 
@@ -5058,10 +5059,14 @@ int TaskModuleModel::rowCount( const QModelIndex &idx ) const
 
 QVariant TaskModuleModel::data( const QModelIndex& idx, int role ) const
 {
+    if (!idx.isValid() || idx.row() >= m_modules.count()) {
+        return QVariant();
+    }
     switch ( role ) {
         case Qt::DisplayRole: return m_modules.value( idx.row() )->name();
         case Qt::ToolTipRole: return m_modules.value( idx.row() )->description();
         case Qt::WhatsThisRole: return m_modules.value( idx.row() )->description();
+        case Qt::UserRole: return m_urls.value(idx.row());
         default: break;
     }
     return QVariant();
@@ -5141,7 +5146,7 @@ bool TaskModuleModel::importProject( const QUrl &url, bool emitsignal )
     status.setProject( project );
     if ( project->load( element, status ) ) {
         stripProject( project );
-        addTaskModule( project );
+        addTaskModule( project, url );
         if ( emitsignal ) {
             // FIXME: save destroys the project, so give it a copy (see kptview.cpp)
             Project p;
@@ -5188,9 +5193,13 @@ void TaskModuleModel::stripProject( Project *project ) const
 void TaskModuleModel::loadTaskModules( const QStringList &files )
 {
     debugPlan<<files;
+    beginResetModel();
+    m_modules.clear();
+    m_urls.clear();
     foreach ( const QString &file, files ) {
         importProject( QUrl::fromLocalFile(file), false );
     }
+    endResetModel();
 }
 
 

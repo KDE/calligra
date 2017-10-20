@@ -104,6 +104,15 @@ void Part::openTemplate(const QUrl &url)
     m_document->setLoadingTemplate(false);
 }
 
+void Part::openTaskModule(const QUrl &url)
+{
+    Part *part = new Part(0);
+    MainDocument *doc = new MainDocument(part);
+    part->setDocument(doc);
+    doc->setIsTaskModule(true);
+    mainWindows().first()->openDocument(part, url);
+}
+
 void Part::createStarUpWidget(KoMainWindow *parent)
 {
     startUpWidget = new QStackedWidget(parent);

@@ -437,8 +437,12 @@ void TaskEditor::createDockers()
         ds->setToolTip( xi18nc( "@info:tooltip", "Drag a task module into the <emphasis>Task Editor</emphasis> to add it to the project" ) );
         ds->setLocation( Qt::LeftDockWidgetArea );
         QTreeView *e = new QTreeView( ds );
-        TaskModuleModel *m = new TaskModuleModel( e );
-        e->setModel( m );
+        QSortFilterProxyModel *sf = new QSortFilterProxyModel(e);
+        TaskModuleModel *m = new TaskModuleModel(sf);
+        sf->setSourceModel(m);
+        e->setModel(sf);
+        e->sortByColumn(0, Qt::AscendingOrder);
+        e->setSortingEnabled(true);
         e->setHeaderHidden( true );
         e->setRootIsDecorated( false );
         e->setSelectionBehavior( QAbstractItemView::SelectRows );
@@ -448,10 +452,19 @@ void TaskEditor::createDockers()
         e->setAcceptDrops( true );
         e->setDragEnabled ( true );
         ds->setWidget( e );
+        connect(e, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(taskModuleDoubleClicked(QModelIndex)));
         connect(this, SIGNAL(loadTaskModules(QStringList)), m, SLOT(loadTaskModules(QStringList)));
         connect(m, SIGNAL(saveTaskModule(QUrl,Project*)), this, SIGNAL(saveTaskModule(QUrl,Project*)));
         connect(m, SIGNAL(removeTaskModule(QUrl)), this, SIGNAL(removeTaskModule(QUrl)));
         addDocker( ds );
+    }
+}
+
+void TaskEditor::taskModuleDoubleClicked(QModelIndex idx)
+{
+    QUrl url = idx.data(Qt::UserRole).toUrl();
+    if (url.isValid()) {
+        emit openDocument(url);
     }
 }
 

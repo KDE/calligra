@@ -27,8 +27,8 @@
 #include <QDate>
 #include <QMetaEnum>
 #include <QSortFilterProxyModel>
+#include <QUrl>
 
-class QUrl;
 class QMimeData;
 class KUndo2Command;
 class KoXmlWriter;
@@ -496,7 +496,7 @@ class KPLATOMODELS_EXPORT TaskModuleModel : public QAbstractItemModel
 public:
     explicit TaskModuleModel(QObject *parent = 0);
 
-    void addTaskModule( Project *project );
+    void addTaskModule(Project *project , const QUrl &url);
 
     Qt::ItemFlags flags( const QModelIndex &idx ) const;
     int columnCount( const QModelIndex &idx = QModelIndex() ) const;
@@ -524,6 +524,7 @@ protected:
 
 private:
     QList<Project*> m_modules;
+    QList<QUrl> m_urls;
 };
 
 } //namespace KPlato

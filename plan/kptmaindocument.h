@@ -161,6 +161,9 @@ public Q_SLOTS:
     /// Load resource assignments of shared resources from the project(s) in @p url
     void loadResourceAssignments(QUrl url);
 
+    void setIsTaskModule(bool value);
+    bool isTaskModule() const;
+
 Q_SIGNALS:
     void changed();
     void workPackageLoaded();
@@ -235,6 +238,8 @@ private:
 
     bool m_loadingSharedProject;
     QList<QUrl> m_sharedProjectsFiles;
+
+    bool m_isTaskModule;
 };
 
 
