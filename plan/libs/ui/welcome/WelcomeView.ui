@@ -219,9 +219,6 @@
        </item>
        <item>
         <widget class="QPushButton" name="introductionBtn">
-         <property name="whatsThis">
-          <string comment="@info:whatsthis">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;A Short Introduction to Plan&lt;/span&gt;&lt;/p&gt;&lt;p&gt;These introductory pages gives you hints and tips on what you can use Plan for, and how to use it.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
          <property name="text">
           <string>Introduction</string>
          </property>
@@ -289,12 +286,9 @@
       </spacer>
      </item>
      <item>
-      <widget class="QLabel" name="otherResourcesLabel">
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Other resources&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
+      <widget class="Line" name="line_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
@@ -304,7 +298,7 @@
         <string>https://userbase.kde.org/Plan</string>
        </property>
        <property name="text">
-        <string>&lt;a href=&quot;https://userbase.kde.org/Plan&quot;&gt;Plan user documentation&lt;/a&gt;</string>
+        <string comment="@action:button">&lt;a href=&quot;https://userbase.kde.org/Plan&quot;&gt;Plan user documentation&lt;/a&gt;</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -320,7 +314,7 @@
         <string>https://forum.kde.org/viewforum.php?f=203</string>
        </property>
        <property name="text">
-        <string>&lt;a href=&quot;https://forum.kde.org/viewforum.php?f=203&quot;&gt;Community forum&lt;/a&gt;</string>
+        <string comment="@action:button">&lt;a href=&quot;https://forum.kde.org/viewforum.php?f=203&quot;&gt;Community forum&lt;/a&gt;</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -336,7 +330,7 @@
         <string>https://calligra.org</string>
        </property>
        <property name="text">
-        <string>&lt;a href=&quot;https://calligra.org&quot;&gt;Calligra&lt;/a&gt;</string>
+        <string comment="@action:button">&lt;a href=&quot;https://calligra.org&quot;&gt;Calligra&lt;/a&gt;</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
