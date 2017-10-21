@@ -139,9 +139,9 @@ WelcomeView::WelcomeView(KoPart *part, KoDocument *doc, QWidget *parent)
                    xi18nc("@info:whatsthis",
                           "<title>Context help</title>"
                           "<para>"
-                          "Help is available many places using <empasis>What's This</emphasis>."
+                          "Help is available many places using <emphasis>What's This</emphasis>."
                           "<nl/>It is activated using the menu entry <interface>Help->What's this?</interface>"
-                          " or the keybord shortcut <shortcut>Shift+F1</shortcut>."
+                          " or the keyboard shortcut <shortcut>Shift+F1</shortcut>."
                           "</para><para>"
                           "In dialogs it is available via the <interface>?</interface> in the dialog title bar."
                           "</para><para>"
