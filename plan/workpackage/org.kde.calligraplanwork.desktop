@@ -103,6 +103,7 @@ Comment[pl]=Program obsługujący pakiety pracy dla narzędzia planowania projek
 Comment[pt]=Tratamento de pacotes de trabalho para a ferramenta de gestão de projectos Plan
 Comment[sk]=Spracovač pracovných balíkov pre nástroj plánovania projektov Plan
 Comment[sv]=Hantering av arbetspaket för projektplaneringsverktyget Plan
+Comment[tr]=Plan proje planlama aracı için Çalışma Paketi işleyici
 Comment[uk]=Обробник робочих пакунків для засобу планування проектів Plan
 Comment[x-test]=xxWork Package handler for the Plan project planning toolxx
 Exec=calligraplanwork %u
