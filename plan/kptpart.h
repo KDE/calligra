@@ -61,6 +61,8 @@ protected Q_SLOTS:
     virtual void openTemplate( const QUrl& url );
     void openTaskModule(const QUrl& url);
 
+    void slotHelpContents();
+
 protected:
     void createStarUpWidget(KoMainWindow *parent);
     QWidget *createWelcomeView(KoMainWindow *parent);

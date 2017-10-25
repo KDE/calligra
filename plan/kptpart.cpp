@@ -36,6 +36,7 @@
 #include <KRun>
 
 #include <QStackedWidget>
+#include <QDesktopServices>
 
 Part::Part(QObject *parent)
     : KoPart(Factory::global(), parent)
@@ -72,7 +73,20 @@ KoView *Part::createViewInstance(KoDocument *document, QWidget *parent)
 
 KoMainWindow *Part::createMainWindow()
 {
-    return new KoMainWindow(PLAN_MIME_TYPE, componentData());
+    KoMainWindow *w = new KoMainWindow(PLAN_MIME_TYPE, componentData());
+    QAction *handbookAction = w->action("help_contents");
+    if (handbookAction) {
+        // we do not want to use khelpcenter as we do not install docs
+        disconnect(handbookAction, 0, 0, 0);
+        connect(handbookAction, &QAction::triggered, this, &Part::slotHelpContents);
+    }
+    return w;
+}
+
+void Part::slotHelpContents()
+{
+    // TODO: make url configurable to enable users to install their own docs
+    QDesktopServices::openUrl(QUrl(QStringLiteral("https://userbase.kde.org/Plan/Manual")));
 }
 
 void Part::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
