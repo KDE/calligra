@@ -38,6 +38,7 @@
 #include "kptviewlistdialog.h"
 #include "kptviewlistdocker.h"
 #include "kptschedulemodel.h"
+#include "WhatsThis.h"
 #include <kptdebug.h>
 
 #include <assert.h>
@@ -194,16 +195,6 @@ void ViewListItem::save( QDomElement &element ) const
 ViewListTreeWidget::ViewListTreeWidget( QWidget *parent )
     : QTreeWidget( parent )
 {
-    setWhatsThis( xi18nc( "@info:whatsthis",
-        "<para>This is the list of available views and editors.</para>"
-        "<para>You can configure the list by using the context menu:"
-        "<list>"
-        "<item>Rename categories or views</item>"
-        "<item>Configure. Move, remove, rename or edit tool tip for categories or views</item>"
-        "<item>Insert categories and views</item>"
-        "</list></para>"
-    ) );
-
     header() ->hide();
     setRootIsDecorated( false );
     setItemDelegate( new ViewCategoryDelegate( this, this ) );
@@ -351,6 +342,19 @@ ViewListWidget::ViewListWidget( MainDocument *part, QWidget *parent )//QString n
     m_temp( 0 )
 {
     setObjectName("ViewListWidget");
+    WhatsThis::add(this,
+                   xi18nc("@info:whatsthis",
+                          "<title>View Selector</title>"
+                          "<para>This is the list of views and editors.</para>"
+                          "<para>You can configure the list by using the context menu:"
+                          "<list>"
+                          "<item>Rename categories or views</item>"
+                          "<item>Configure. Move, remove, rename or edit tool tip for categories or views</item>"
+                          "<item>Insert categories and views</item>"
+                          "</list>"
+                          "<nl/><link url='%1'>More...</link>"
+                          "</para>", "https://userbase.kde.org/Plan/Manual/View_Selector"));
+
     m_viewlist = new ViewListTreeWidget( this );
     m_viewlist->setEditTriggers( QAbstractItemView::NoEditTriggers );
     connect(m_viewlist, SIGNAL(modified()), this, SIGNAL(modified()));
@@ -364,6 +368,15 @@ ViewListWidget::ViewListWidget( MainDocument *part, QWidget *parent )//QString n
     m_sfModel.setDynamicSortFilter ( true );
     m_sfModel.setSourceModel( &m_model );
     m_currentSchedule->setModel( &m_sfModel );
+    WhatsThis::add(m_currentSchedule,
+                   xi18nc("@info:whatsthis",
+                          "<title>Schedule selector</title>"
+                          "<para>"
+                          "Select the schedule to be used."
+                          "<nl/><note>Unscheduled tasks are anly shown in editors</note>"
+                          "<nl/><link url='%1'>More...</link>"
+                          "</para>", "https://userbase.kde.org/Plan/Howto/"));
+
 
     QVBoxLayout *l = new QVBoxLayout( this );
     l->setMargin( 0 );

@@ -27,7 +27,7 @@ namespace KPlato
 {
 namespace WhatsThis
 {
-    void add(QWidget *widget, const QString &text);
+    KPLATOUI_EXPORT void add(QWidget *widget, const QString &text);
 
 class KPLATOUI_EXPORT WhatsThisClickedEventHandler : public QObject
 {
