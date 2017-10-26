@@ -2333,6 +2333,10 @@ RemoveAccountCmd::RemoveAccountCmd( Project &project, Account *account, const KU
     }
     m_mine = false;
     m_isDefault = account == project.accounts().defaultAccount();
+
+    for (int i = account->accountList().count()-1; i >= 0; --i) {
+        m_cmd.addCommand(new RemoveAccountCmd(project, account->accountList().at(i)));
+    }
 }
 
 RemoveAccountCmd::~RemoveAccountCmd()
@@ -2343,11 +2347,12 @@ RemoveAccountCmd::~RemoveAccountCmd()
 
 void RemoveAccountCmd::execute()
 {
+    m_cmd.execute(); // remove children
+
     if ( m_isDefault ) {
         m_project.accounts().setDefaultAccount( 0 );
     }
     m_project.accounts().take( m_account );
-
 
     m_mine = true;
 }
@@ -2357,8 +2362,9 @@ void RemoveAccountCmd::unexecute()
     if ( m_isDefault ) {
         m_project.accounts().setDefaultAccount( m_account );
     }
-
     m_mine = false;
+
+    m_cmd.unexecute(); // add children
 }
 
 RenameAccountCmd::RenameAccountCmd( Account *account, const QString& value, const KUndo2MagicString& name )

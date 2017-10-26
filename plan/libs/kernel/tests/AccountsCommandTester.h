@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2017 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,50 +17,41 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPlato_AccountsTester_h
-#define KPlato_AccountsTester_h
+#ifndef KPlato_AccountsCommandTester_h
+#define KPlato_AccountsCommandTester_h
 
-#include "kptproject.h"
+#include <QObject>
 
 namespace KPlato
 {
 
 class Task;
+class Project;
+class Resource;
+class Calendar;
+class ScheduleManager;
 
-class AccountsTester : public QObject
+class AccountsCommandTester : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void init();
-    void cleanup();
-    void defaultAccount();
-    void costPlaces();
-
-    void startupDefault();
-    void startupAccount();
+    void initTestCase();
+    void cleanupTestCase();
     
-    void shutdownAccount();
-
-    void subaccounts();
-
-    void deleteAccount();
+    void addAccount();
+    void removeAccount();
 
 private:
-    Project *project;
-    Task *t;
-    Resource *r;
-    ScheduleManager *sm;
-    Account *topaccount;
-    
-    QDate today;
-    QDate tomorrow;
-    QDate yesterday;
-    QDate nextweek;
-    QTime t1;
-    QTime t2;
-    int length;
+    void printDebug( long id ) const;
+    void printSchedulingLog( const ScheduleManager &sm ) const;
+
+    Project *m_project;
+    Calendar *m_calendar;
+    Task *m_task;
+    Resource *m_resource;
+
 };
 
-}
+} //namespace KPlato
 
 #endif

@@ -54,17 +54,16 @@ Account::Account(const QString& name, const QString& description)
 
 Account::~Account() {
     //debugPlan<<m_name;
-    if (findAccount() == this) {
-        removeId(); // only remove myself (I may be just a working copy)
+    if (m_list) {
+        m_list->accountDeleted(this); // default account
     }
-    if (m_list)
-        m_list->accountDeleted(this);
-
-    while (!m_accountList.isEmpty())
+    while (!m_accountList.isEmpty()) {
         delete m_accountList.takeFirst();
-    
-    while (!m_costPlaces.isEmpty())
+    }
+    while (!m_costPlaces.isEmpty()) {
         delete m_costPlaces.takeFirst();
+    }
+    take(this);
 }
     
 bool Account::isDefaultAccount() const
@@ -116,14 +115,20 @@ void Account::take(Account *account) {
     if (account == 0) {
         return;
     }
-    if (account->parent() == this) {
-        int i = m_accountList.indexOf(account);
-        if (i != -1)
-            m_accountList.removeAt(i);
-    } else if (account->parent()) {
-        account->parent()->take(account);
-    } else {
-        m_list->take(account);
+    if (account->parent()) {
+        if (account->m_list) {
+            // emits remove signals,
+            // sets account->m_list = 0,
+            // calls us again
+            account->m_list->take(account);
+        } else {
+            // child account has been removed from Accounts
+            // so now we can remove child account from us
+            m_accountList.removeAt(m_accountList.indexOf(account));
+        }
+    } else if (account->m_list) {
+        // we are top level so just needs Accounts to remove us
+        account->m_list->take(account);
     }
     //debugPlan<<account->name();
 }
@@ -671,6 +676,7 @@ Accounts::Accounts(Project &project)
 
 Accounts::~Accounts() {
     //debugPlan;
+    m_defaultAccount = 0;
     while (!m_accountList.isEmpty()) {
         delete m_accountList.takeFirst();
     }
@@ -719,6 +725,7 @@ void Accounts::take(Account *account){
     if (account == 0) {
         return;
     }
+    account->m_list = 0;
     removeId(account->name());
     if (account->parent()) {
         emit accountToBeRemoved( account );
@@ -872,6 +879,13 @@ void Accounts::setDefaultAccount(Account *account)
     }
     if ( a != account ) {
         emit defaultAccountChanged();
+    }
+}
+
+void Accounts::accountDeleted(Account *account)
+{
+    if (account == m_defaultAccount) {
+        m_defaultAccount = 0;
     }
 }
 

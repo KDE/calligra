@@ -1356,7 +1356,7 @@ private:
     int m_index;
     bool m_isDefault;
     bool m_mine;
-
+    MacroCommand m_cmd;
 };
 
 class KPLATOKERNEL_EXPORT RenameAccountCmd : public NamedCommand

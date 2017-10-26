@@ -52,6 +52,10 @@ plankernel_add_unit_test(AccountsTester AccountsTester.cpp  LINK_LIBRARIES planp
 
 ########### next target ###############
 
+plankernel_add_unit_test(AccountsCommandTester AccountsCommandTester.cpp  LINK_LIBRARIES kplatokernel Qt5::Test)
+
+########### next target ###############
+
 plankernel_add_unit_test(PerformanceTester PerformanceTester.cpp  LINK_LIBRARIES planprivate kplatokernel Qt5::Test)
 
 ########### next target ###############
