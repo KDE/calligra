@@ -35,11 +35,12 @@ class AccountsCommandTester : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void initTestCase();
-    void cleanupTestCase();
-    
+    void init();
+    void cleanup();
+
     void addAccount();
     void removeAccount();
+    void costPlace();
 
 private:
     void printDebug( long id ) const;

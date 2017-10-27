@@ -52,7 +52,7 @@ plankernel_add_unit_test(AccountsTester AccountsTester.cpp  LINK_LIBRARIES planp
 
 ########### next target ###############
 
-plankernel_add_unit_test(AccountsCommandTester AccountsCommandTester.cpp  LINK_LIBRARIES kplatokernel Qt5::Test)
+plankernel_add_unit_test(AccountsCommandTester AccountsCommandTester.cpp  LINK_LIBRARIES kplatokernel komain Qt5::Test)
 
 ########### next target ###############
 

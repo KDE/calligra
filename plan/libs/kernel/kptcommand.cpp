@@ -2321,10 +2321,10 @@ void AddAccountCmd::unexecute()
 }
 
 RemoveAccountCmd::RemoveAccountCmd( Project &project, Account *account, const KUndo2MagicString& name )
-        : NamedCommand( name ),
-        m_project( project ),
-        m_account( account ),
-        m_parent( account->parent() )
+    : NamedCommand( name ),
+    m_project( project ),
+    m_account( account ),
+    m_parent( account->parent() )
 {
     if ( m_parent ) {
         m_index = m_parent->accountList().indexOf( account );
@@ -2334,6 +2334,21 @@ RemoveAccountCmd::RemoveAccountCmd( Project &project, Account *account, const KU
     m_mine = false;
     m_isDefault = account == project.accounts().defaultAccount();
 
+    for (Account::CostPlace *cp : m_account->costPlaces()) {
+        if (cp->node()) {
+            if (cp->running()) {
+                m_cmd.addCommand(new NodeModifyRunningAccountCmd(*cp->node(), cp->node()->runningAccount(), 0));
+            }
+            if (cp->startup()) {
+                m_cmd.addCommand(new NodeModifyStartupAccountCmd(*cp->node(), cp->node()->startupAccount(), 0));
+            }
+            if (cp->shutdown()) {
+                m_cmd.addCommand(new NodeModifyShutdownAccountCmd(*cp->node(), cp->node()->shutdownAccount(), 0));
+            }
+        } else if (cp->resource()) {
+            m_cmd.addCommand(new ResourceModifyAccountCmd(*cp->resource(), cp->resource()->account(), 0));
+        }
+    }
     for (int i = account->accountList().count()-1; i >= 0; --i) {
         m_cmd.addCommand(new RemoveAccountCmd(project, account->accountList().at(i)));
     }
@@ -2347,11 +2362,11 @@ RemoveAccountCmd::~RemoveAccountCmd()
 
 void RemoveAccountCmd::execute()
 {
-    m_cmd.execute(); // remove children
-
     if ( m_isDefault ) {
         m_project.accounts().setDefaultAccount( 0 );
     }
+    m_cmd.execute(); // remove costplaces and children
+
     m_project.accounts().take( m_account );
 
     m_mine = true;
@@ -2359,12 +2374,14 @@ void RemoveAccountCmd::execute()
 void RemoveAccountCmd::unexecute()
 {
     m_project.accounts().insert( m_account, m_parent, m_index );
+
+    m_cmd.unexecute(); // add costplaces && children
+
     if ( m_isDefault ) {
         m_project.accounts().setDefaultAccount( m_account );
     }
-    m_mine = false;
 
-    m_cmd.unexecute(); // add children
+    m_mine = false;
 }
 
 RenameAccountCmd::RenameAccountCmd( Account *account, const QString& value, const KUndo2MagicString& name )

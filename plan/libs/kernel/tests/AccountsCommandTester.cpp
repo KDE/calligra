@@ -28,6 +28,7 @@
 #include "kptschedule.h"
 
 #include <QTest>
+#include <kundo2stack.h>
 
 namespace QTest
 {
@@ -73,7 +74,7 @@ void AccountsCommandTester::printSchedulingLog( const ScheduleManager &sm ) cons
     }
 }
 
-void AccountsCommandTester::initTestCase()
+void AccountsCommandTester::init()
 {
     m_project = new Project();
     m_project->setName( "P1" );
@@ -116,7 +117,7 @@ void AccountsCommandTester::initTestCase()
     m_task->estimate()->setType( Estimate::Type_Effort );
 }
 
-void AccountsCommandTester::cleanupTestCase()
+void AccountsCommandTester::cleanup()
 {
     delete m_project;
 }
@@ -165,6 +166,8 @@ void AccountsCommandTester::removeAccount()
     m_project->accounts().insert(a1);
     QCOMPARE(m_project->accounts().allAccounts().count(), 1);
 
+
+
     RemoveAccountCmd *cmd1 = new RemoveAccountCmd(*m_project, a1);
     cmd1->redo();
     QCOMPARE(m_project->accounts().allAccounts().count(), 0);
@@ -205,6 +208,114 @@ void AccountsCommandTester::removeAccount()
     delete cmd1; // should not delete a1
 }
 
+void AccountsCommandTester::costPlace()
+{
+    KUndo2QStack cmds;
+    Account *a1 = new Account();
+    a1->setName("a1");
+    cmds.push(new AddAccountCmd(*m_project, a1));
+    QCOMPARE(m_project->accounts().allAccounts().count(), 1);
+
+    Account *a2 = new Account();
+    a2->setName("a2");
+    cmds.push(new AddAccountCmd(*m_project, a2));
+    QCOMPARE(m_project->accounts().allAccounts().count(), 2);
+
+    Account *a3 = new Account();
+    a3->setName("a3");
+    cmds.push(new AddAccountCmd(*m_project, a3));
+    QCOMPARE(m_project->accounts().allAccounts().count(), 3);
+
+    cmds.push(new NodeModifyRunningAccountCmd(*m_task, 0, a1));
+    QCOMPARE(m_task->runningAccount(), a1);
+    cmds.push(new NodeModifyStartupAccountCmd(*m_task, 0, a2));
+    QCOMPARE(m_task->startupAccount(), a2);
+    cmds.push(new NodeModifyShutdownAccountCmd(*m_task, 0, a3));
+    QCOMPARE(m_task->shutdownAccount(), a3);
+
+    cmds.push(new RemoveAccountCmd(*m_project, a1));
+    QVERIFY(m_task->runningAccount() == 0);
+    QCOMPARE(m_task->startupAccount(), a2);
+    QCOMPARE(m_task->shutdownAccount(), a3);
+    cmds.undo();
+    QCOMPARE(m_task->runningAccount(), a1);
+    QCOMPARE(m_task->startupAccount(), a2);
+    QCOMPARE(m_task->shutdownAccount(), a3);
+
+    cmds.push(new RemoveAccountCmd(*m_project, a2));
+    QVERIFY(m_task->startupAccount() == 0);
+    QCOMPARE(m_task->runningAccount(), a1);
+    QCOMPARE(m_task->shutdownAccount(), a3);
+    cmds.undo();
+    QCOMPARE(m_task->runningAccount(), a1);
+    QCOMPARE(m_task->startupAccount(), a2);
+    QCOMPARE(m_task->shutdownAccount(), a3);
+
+    cmds.push(new RemoveAccountCmd(*m_project, a3));
+    QVERIFY(m_task->shutdownAccount() == 0);
+    QCOMPARE(m_task->runningAccount(), a1);
+    QCOMPARE(m_task->startupAccount(), a2);
+    cmds.undo();
+    QCOMPARE(m_task->runningAccount(), a1);
+    QCOMPARE(m_task->startupAccount(), a2);
+    QCOMPARE(m_task->shutdownAccount(), a3);
+
+    cmds.push(new ResourceModifyAccountCmd(*m_resource, 0, a1));
+    QCOMPARE(m_resource->account(), a1);
+
+    cmds.push(new RemoveAccountCmd(*m_project, a1));
+    QVERIFY(m_task->runningAccount() == 0);
+    QVERIFY(m_resource->account() == 0);
+    cmds.undo();
+    QCOMPARE(m_task->runningAccount(), a1);
+    QCOMPARE(m_resource->account(), a1);
+
+    // test when same account is used for running/startup/shutdown
+    while (cmds.canUndo()) {
+        cmds.undo();
+    }
+    a1 = new Account();
+    a1->setName("a1");
+    cmds.push(new AddAccountCmd(*m_project, a1));
+    QCOMPARE(m_project->accounts().allAccounts().count(), 1);
+
+    cmds.push(new NodeModifyRunningAccountCmd(*m_task, 0, a1));
+    QCOMPARE(m_task->runningAccount(), a1);
+    cmds.push(new NodeModifyStartupAccountCmd(*m_task, 0, a1));
+    QCOMPARE(m_task->startupAccount(), a1);
+    cmds.push(new NodeModifyShutdownAccountCmd(*m_task, 0, a1));
+    QCOMPARE(m_task->shutdownAccount(), a1);
+
+    cmds.undo();
+    QCOMPARE(m_task->runningAccount(), a1);
+    QCOMPARE(m_task->startupAccount(), a1);
+    QVERIFY(m_task->shutdownAccount() == 0);
+
+    cmds.undo();
+    QCOMPARE(m_task->runningAccount(), a1);
+    QVERIFY(m_task->startupAccount() == 0);
+    QVERIFY(m_task->shutdownAccount() == 0);
+
+    cmds.undo();
+    QVERIFY(m_task->runningAccount() == 0);
+    QVERIFY(m_task->startupAccount() == 0);
+    QVERIFY(m_task->shutdownAccount() == 0);
+
+    cmds.redo();
+    QCOMPARE(m_task->runningAccount(), a1);
+    QVERIFY(m_task->startupAccount() == 0);
+    QVERIFY(m_task->shutdownAccount() == 0);
+
+    cmds.redo();
+    QCOMPARE(m_task->runningAccount(), a1);
+    QCOMPARE(m_task->startupAccount(), a1);
+    QVERIFY(m_task->shutdownAccount() == 0);
+
+    cmds.redo();
+    QCOMPARE(m_task->runningAccount(), a1);
+    QCOMPARE(m_task->startupAccount(), a1);
+    QCOMPARE(m_task->shutdownAccount(), a1);
+}
 
 } //namespace KPlato
 
