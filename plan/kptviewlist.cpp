@@ -373,7 +373,7 @@ ViewListWidget::ViewListWidget( MainDocument *part, QWidget *parent )//QString n
                           "<title>Schedule selector</title>"
                           "<para>"
                           "Select the schedule to be used."
-                          "<nl/><note>Unscheduled tasks are anly shown in editors</note>"
+                          "<nl/><note>Unscheduled tasks are only shown in editors</note>"
                           "<nl/><link url='%1'>More...</link>"
                           "</para>", "https://userbase.kde.org/Plan/Howto/"));
 
