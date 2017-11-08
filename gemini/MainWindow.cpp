@@ -87,7 +87,7 @@
 
 #ifdef Q_OS_WIN
 // Slate mode/docked detection stuff
-#include <shellapi.h>
+#include <Shellapi.h>
 #define SM_CONVERTIBLESLATEMODE 0x2003
 #define SM_SYSTEMDOCKED         0x2004
 #endif
