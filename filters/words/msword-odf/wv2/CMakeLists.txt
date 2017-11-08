@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.0)
 
-add_definitions("-DUNICODE -D_UNICODE")
+add_definitions(-DUNICODE -D_UNICODE)
 
 #cmake_policy CMP0017 was introduced in version 2.8.4
 if(${CMAKE_VERSION} VERSION_GREATER 2.8.3)
