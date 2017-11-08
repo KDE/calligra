@@ -26,6 +26,7 @@
 #include <QTimer>
 #include <QVBoxLayout>
 
+<<<<<<< HEAD
 #ifdef Q_OS_WIN
 // Slate mode/docked detection stuff
 #include <Shellapi.h>
@@ -33,6 +34,8 @@
 #define SM_SYSTEMDOCKED         0x2004
 #endif
 
+=======
+>>>>>>> master
 struct View {
     View() : quickView(0), widget(0) {}
     QQuickView* quickView;

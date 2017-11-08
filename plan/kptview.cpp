@@ -404,6 +404,20 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
             object->deleteLater();
         }
     }
+    // do not watch task module changes if we are editing one
+    if (!doc->isTaskModule()) {
+        QString dir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+        if (!dir.isEmpty()) {
+            dir += "/taskmodules";
+            m_dirwatch.addDir(dir, KDirWatch::WatchFiles);
+            QStringList modules = KoResourcePaths::findAllResources( "calligraplan_taskmodules", "*.plan", KoResourcePaths::NoDuplicates|KoResourcePaths::Recursive );
+            for (const QString &f : modules) {
+                m_dirwatch.addFile(f);
+            }
+            connect(&m_dirwatch, SIGNAL(created(QString)), this, SLOT(taskModuleFileChanged(QString)));
+            connect(&m_dirwatch, SIGNAL(deleted(QString)), this, SLOT(taskModuleFileChanged(QString)));
+        }
+    }
     //debugPlan<<" end";
 }
 
@@ -492,6 +506,7 @@ void View::slotCreateNewProject()
                              "All scheduling information is removed.<nl/>"
                              "<nl/>Do you want to continue?" ) ) )
     {
+        emit currentScheduleManagerChanged(0);
         getPart()->createNewProject();
         slotOpenNode( &getProject() );
     }
@@ -921,6 +936,8 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString &tag, const Q
 
     connect(taskeditor, SIGNAL(saveTaskModule(QUrl,Project*)), SLOT(saveTaskModule(QUrl,Project*)));
     connect(taskeditor, SIGNAL(removeTaskModule(QUrl)), SLOT(removeTaskModule(QUrl)));
+    connect(taskeditor, SIGNAL(openDocument(QUrl)), static_cast<Part*>(m_partpart), SLOT(openTaskModule(QUrl)));
+    connect(this, SIGNAL(taskModulesChanged(QStringList)), taskeditor, SLOT(setTaskModules(QStringList)));
 
     connect( taskeditor, SIGNAL(requestPopupMenu(QString,QPoint)), this, SLOT(slotPopupMenu(QString,QPoint)) );
     taskeditor->updateReadWrite( m_readWrite );
@@ -2034,7 +2051,9 @@ void View::slotOpenNode( Node *node )
                 Project * project = static_cast<Project *>( node );
                 MainProjectDialog *dia = new MainProjectDialog( *project, this );
                 connect(dia, SIGNAL(dialogFinished(int)), SLOT(slotProjectEditFinished(int)));
-                connect(dia, SIGNAL(sigLoadSharedResources(const QString&, const QUrl&)), this, SLOT(slotInsertResourcesFile(const QString&, const QUrl&)));
+                connect(dia, SIGNAL(sigLoadSharedResources(const QString&, const QUrl&, bool)), this, SLOT(slotInsertResourcesFile(const QString&, const QUrl&)));
+                connect(dia, &MainProjectDialog::loadResourceAssignments, getPart(), &MainDocument::loadResourceAssignments);
+                connect(dia, &MainProjectDialog::clearResourceAssignments, getPart(), &MainDocument::clearResourceAssignments);
                 dia->show();
                 dia->raise();
                 dia->activateWindow();
@@ -3113,6 +3132,20 @@ void View::saveTaskModule( const QUrl &url, Project *project )
 void View::removeTaskModule( const QUrl &url )
 {
     debugPlan<<url;
+}
+
+void View::taskModuleFileChanged(const QString &path)
+{
+    if (!path.endsWith(".plan")) {
+        return;
+    }
+    m_dirwatch.stopScan();
+    int result = QMessageBox::question(this, xi18nc("@title", "Task module changed"), i18n("Do you want to reload task modules?"));
+    if (result == QMessageBox::Yes) {
+        QStringList modules = KoResourcePaths::findAllResources( "calligraplan_taskmodules", "*.plan", KoResourcePaths::NoDuplicates|KoResourcePaths::Recursive );
+        emit taskModulesChanged(modules);
+    }
+    m_dirwatch.startScan();
 }
 
 QString View::standardTaskStatusReport() const

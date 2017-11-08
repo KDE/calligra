@@ -22,6 +22,7 @@
 #include "kptviewlist.h"
 
 #include "kptview.h"
+#include "WhatsThis.h"
 #include "kptdebug.h"
 
 #include <KLocalizedString>
@@ -52,6 +53,7 @@ void ViewListDocker::setView(View *view)
     if (wdg)
         delete wdg;
     m_viewlist = new ViewListWidget(view->getPart(), this);
+    setWhatsThis(m_viewlist->whatsThis());
     setWidget(m_viewlist);
     m_viewlist->setProject( &( view->getProject() ) );
     connect( m_viewlist, SIGNAL(selectionChanged(ScheduleManager*)), view, SLOT(slotSelectionChanged(ScheduleManager*)) );

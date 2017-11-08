@@ -574,6 +574,49 @@ void AccountsTester::subaccounts()
     QCOMPARE( ec.totalCost(), 426.0 );
 }
 
+void AccountsTester::deleteAccount()
+{
+    QVERIFY(project->accounts().allAccounts().isEmpty());
+
+    qInfo()<<"Add/delete one account";
+    Account *a1 = new Account( "Account" );
+    project->accounts().insert( a1 );
+
+    QCOMPARE(project->accounts().allAccounts().count(), 1);
+    QCOMPARE(project->accounts().allAccounts().first(), a1);
+
+    delete a1;
+    QVERIFY(project->accounts().allAccounts().isEmpty());
+
+    qInfo()<<"Add/delete one account with one sub-account";
+    a1 = new Account( "Account 1" );
+    project->accounts().insert( a1 );
+    Account *a2 = new Account( "Account 1.1" );
+    project->accounts().insert(a2, a1);
+    QCOMPARE(project->accounts().allAccounts().count(), 2);
+
+    qInfo()<<"Delete top account";
+    delete a1;
+    QVERIFY(project->accounts().allAccounts().isEmpty());
+
+    qInfo()<<"Add/delete one account with one sub-account";
+    a1 = new Account( "Account 1" );
+    project->accounts().insert( a1 );
+    a2 = new Account( "Account 1.1" );
+    project->accounts().insert(a2, a1);
+    project->accounts().setDefaultAccount(a2);
+    QCOMPARE(project->accounts().allAccounts().count(), 2);
+
+    qInfo()<<"Delete sub account";
+    delete a2;
+    QVERIFY(project->accounts().defaultAccount() == 0);
+    QCOMPARE(project->accounts().allAccounts().count(), 1);
+
+    qInfo()<<"Delete top account";
+    delete a1;
+    QVERIFY(project->accounts().allAccounts().isEmpty());
+}
+
 } //namespace KPlato
 
 QTEST_GUILESS_MAIN( KPlato::AccountsTester )

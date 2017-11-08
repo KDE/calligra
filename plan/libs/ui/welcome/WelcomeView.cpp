@@ -21,6 +21,7 @@
 
 #include "kptcommand.h"
 #include "kptdebug.h"
+#include "WhatsThis.h"
 
 #include <KoMainWindow.h>
 #include <KoDocument.h>
@@ -33,6 +34,7 @@
 #include <QUrl>
 #include <QIcon>
 #include <QStandardPaths>
+#include <QEvent>
 
 const QLoggingCategory &PLANWELCOME_LOG()
 {
@@ -88,14 +90,64 @@ WelcomeView::WelcomeView(KoPart *part, KoDocument *doc, QWidget *parent)
     widget.setupUi(this);
     widget.recentProjects->setBackgroundRole(QPalette::Midlight);
 
-    widget.createResourceFileBtn->hide(); // disable this for now
-    widget.createResourceFileBtn->setWhatsThis(xi18nc("@info:whatsthis",
-                                           "<title>Shared resources</title>"
-                                           "Create a shared resources file."
-                                           " Resources can be shared between projects"
-                                           " to avoid overbooking resources across projects."
-                                           " Shared resources must be defined in a separate file."
-                                           ));
+    WhatsThis::add(widget.newProjectBtn,
+                   xi18nc("@info:whatsthis",
+                          "<title>Create a new project</title>"
+                          "<para>"
+                          "Creates a new project with default values defined in"
+                          " <emphasis>Settings</emphasis>."
+                          "<nl/>Opens the <emphasis>project dialog</emphasis>"
+                          " so you can define project specific properties like"
+                          " <resource>Project Name</resource>,"
+                          " <resource>Target Start</resource>"
+                          " and <resource>- End</resource> times."
+                          "<nl/><link url='%1'>More...</link>"
+                          "</para>", "https://userbase.kde.org/Plan/Howto/Create_New_Project"));
+
+    WhatsThis::add(widget.createResourceFileBtn,
+                   xi18nc("@info:whatsthis",
+                          "<title>Shared resources</title>"
+                          "<para>"
+                          "Create a shared resources file."
+                          "<nl/>This enables you to only create your resources once,"
+                          " you just refer to your resources file when you create a new project."
+                          "<nl/>These resources can then be shared between projects"
+                          " to avoid overbooking resources across projects."
+                          "<nl/>Shared resources must be defined in a separate file."
+                          "<nl/><link url='%1'>More...</link>"
+                          "</para>", "https://userbase.kde.org/Plan/Howto/Create_Shared_Resources"));
+
+    WhatsThis::add(widget.recentProjects,
+                   xi18nc("@info:whatsthis",
+                          "<title>Recent Projects</title>"
+                          "<para>"
+                          "A list of the 10 most recent project files opened."
+                          "</para><para>"
+                          "<nl/>This enables you to quickly open projects you have worked on recently."
+                          "<nl/><link url='%1'>More...</link>"
+                          "</para>", "https://userbase.kde.org/Plan/Howto"));
+
+    WhatsThis::add(widget.introductionBtn,
+                   xi18nc("@info:whatsthis",
+                          "<title>Introduction to <application>Plan</application></title>"
+                          "<para>"
+                          "These introductory pages gives you hints and tips on what"
+                          " you can use <application>Plan</application> for, and how to use it."
+                          "</para>"));
+
+    WhatsThis::add(widget.contextHelp,
+                   xi18nc("@info:whatsthis",
+                          "<title>Context help</title>"
+                          "<para>"
+                          "Help is available many places using <emphasis>What's This</emphasis>."
+                          "<nl/>It is activated using the menu entry <interface>Help->What's this?</interface>"
+                          " or the keyboard shortcut <shortcut>Shift+F1</shortcut>."
+                          "</para><para>"
+                          "In dialogs it is available via the <interface>?</interface> in the dialog title bar."
+                          "</para><para>"
+                          "If you see <link url='%1'>More...</link> in the text,"
+                          " pressing it will display more information from online resources in your browser."
+                          "</para>", "https://userbase.kde.org/Plan/Howto"));
 
     m_model = new RecentFilesModel(this);
     widget.recentProjects->setModel(m_model);
@@ -182,9 +234,9 @@ void WelcomeView::slotNewProject()
     Project *p = project();
     if (p) {
         if (!m_projectdialog) {
-            m_projectdialog =  new MainProjectDialog(*p, this);
+            m_projectdialog =  new MainProjectDialog(*p, this, false /*edit*/);
             connect(m_projectdialog, SIGNAL(dialogFinished(int)), SLOT(slotProjectEditFinished(int)));
-            connect(m_projectdialog, SIGNAL(sigLoadSharedResources(const QString&, const QUrl&)), this, SLOT(slotLoadSharedResources(const QString&, const QUrl&)));
+            connect(m_projectdialog, SIGNAL(sigLoadSharedResources(const QString&, const QUrl&, bool)), this, SLOT(slotLoadSharedResources(const QString&, const QUrl&, bool)));
         }
         m_projectdialog->show();
         m_projectdialog->raise();
@@ -256,14 +308,14 @@ void WelcomeView::slotOpenFileFinished(int result)
     dia->deleteLater();
 }
 
-void WelcomeView::slotLoadSharedResources(const QString &file, const QUrl &projects)
+void WelcomeView::slotLoadSharedResources(const QString &file, const QUrl &projects, bool loadProjectsAtStartup)
 {
     QUrl url(file);
     if (url.scheme().isEmpty()) {
         url.setScheme("file");
     }
     if (url.isValid()) {
-        emit loadSharedResources(url, projects);
+        emit loadSharedResources(url, loadProjectsAtStartup ? projects :QUrl());
     }
 }
 

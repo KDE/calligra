@@ -74,7 +74,9 @@ MainDocument::MainDocument(KoPart *part)
         m_loadingTemplate( false ),
         m_loadingSharedResourcesTemplate( false ),
         m_viewlistModified( false ),
-        m_checkingForWorkPackages( false )
+        m_checkingForWorkPackages( false ),
+        m_loadingSharedProject(false),
+        m_isTaskModule(false)
 {
     Q_ASSERT(part);
     setAlwaysAllowSaving(true);
@@ -855,6 +857,12 @@ void MainDocument::setLoadingSharedResourcesTemplate(bool loading)
 bool MainDocument::completeLoading( KoStore *store )
 {
     // If we get here the new project is loaded and set
+    if (m_loadingSharedProject) {
+        // this file is loaded by another project
+        // to read resource appointments,
+        // so we must not load any extra stuff
+        return true;
+    }
     if ( m_loadingTemplate ) {
         //debugPlan<<"Loading template, generate unique ids";
         m_project->generateUniqueIds();
@@ -877,7 +885,7 @@ bool MainDocument::completeLoading( KoStore *store )
     if (m_project->useSharedResources() && !m_project->sharedResourcesFile().isEmpty()) {
         QUrl url = QUrl::fromLocalFile(m_project->sharedResourcesFile());
         if (url.isValid()) {
-            insertResourcesFile(url, m_project->sharedProjectsUrl());
+            insertResourcesFile(url, m_project->loadProjectsAtStartup() ? m_project->sharedProjectsUrl() : QUrl());
         }
     }
     if ( store == 0 ) {
@@ -1031,6 +1039,19 @@ void MainDocument::insertFileCancelled( const QString &error )
     }
 }
 
+void MainDocument::clearResourceAssignments()
+{
+    for (Resource *r : m_project->resourceList()) {
+        r->clearExternalAppointments();
+    }
+}
+
+void MainDocument::loadResourceAssignments(QUrl url)
+{
+    insertSharedProjects(url);
+    slotInsertSharedProject();
+}
+
 void MainDocument::insertSharedProjects(const QUrl &url)
 {
     m_sharedProjectsFiles.clear();
@@ -1059,9 +1080,7 @@ void MainDocument::insertSharedProjects(const QUrl &url)
         warnPlan<<"Unknown url:"<<url<<url.path()<<url.fileName();
         return;
     }
-    for (Resource *r : m_project->resourceList()) {
-        r->clearExternalAppointments();
-    }
+    clearResourceAssignments();
 }
 
 void MainDocument::slotInsertSharedProject()
@@ -1075,6 +1094,7 @@ void MainDocument::slotInsertSharedProject()
     part->setDocument( doc );
     doc->disconnect(); // doc shall not handle feedback from openUrl()
     doc->setAutoSave( 0 ); //disable
+    doc->m_loadingSharedProject = true;
     connect(doc, SIGNAL(completed()), SLOT(insertSharedProjectCompleted()));
     connect(doc, SIGNAL(canceled(QString)), SLOT(insertSharedProjectCancelled(QString)));
 
@@ -1088,16 +1108,29 @@ void MainDocument::insertSharedProjectCompleted()
     if (doc) {
         Project &p = doc->getProject();
         debugPlan<<m_project->id()<<"Loaded project:"<<p.id()<<p.name();
-        if (p.id() != m_project->id()) {
-            for (Resource *r : p.resourceList()) {
-                Resource *res = m_project->resource(r->id());
-                debugPlan<<"Resource:"<<r->name()<<"->"<<res;
-                if (res && res->isShared()) {
-                    for (const Appointment *a : r->appointments()) {
-                        Appointment *app = new Appointment(*a);
-                        app->setAuxcilliaryInfo(p.name());
-                        res->addExternalAppointment(p.id(), app);
-                        debugPlan<<res->name()<<"added:"<<app->auxcilliaryInfo()<<app;
+        if (p.id() != m_project->id() && p.isScheduled(ANYSCHEDULED)) {
+            // FIXME: improve!
+            // find a suitable schedule
+            ScheduleManager *sm = 0;
+            for (ScheduleManager *m : p.allScheduleManagers()) {
+                if (m->isBaselined()) {
+                    sm = m;
+                    break;
+                }
+                if (m->isScheduled()) {
+                    sm = m; // take the last one, more likely to be subschedule
+                }
+            }
+            if (sm) {
+                for (Resource *r : p.resourceList()) {
+                    Resource *res = m_project->resource(r->id());
+                    if (res && res->isShared()) {
+                        for (const Appointment *a : r->appointments(sm->scheduleId())) {
+                            Appointment *app = new Appointment(*a);
+                            app->setAuxcilliaryInfo(p.name());
+                            res->addExternalAppointment(p.id(), app);
+                            debugPlan<<res->name()<<"added:"<<app->auxcilliaryInfo()<<app;
+                        }
                     }
                 }
             }
@@ -1451,4 +1484,13 @@ void MainDocument::createNewProject()
     }
 }
 
+void MainDocument::setIsTaskModule(bool value)
+{
+    m_isTaskModule = value;
+}
+
+bool MainDocument::isTaskModule() const
+{
+    return m_isTaskModule;
+}
 }  //KPlato namespace

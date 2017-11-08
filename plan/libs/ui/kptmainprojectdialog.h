@@ -36,7 +36,7 @@ class MacroCommand;
 class KPLATOUI_EXPORT MainProjectDialog : public KoDialog {
     Q_OBJECT
 public:
-    explicit MainProjectDialog(Project &project, QWidget *parent=0, const char *name=0);
+    explicit MainProjectDialog(Project &project, QWidget *parent=0, bool edit=true);
 
     MacroCommand *buildCommand();
 
@@ -44,7 +44,9 @@ public:
 
 Q_SIGNALS:
     void dialogFinished(int);
-    void sigLoadSharedResources(const QString &file, const QUrl &projects);
+    void sigLoadSharedResources(const QString &file, const QUrl &projects, bool loadProjects=false);
+    void loadResourceAssignments(QUrl url);
+    void clearResourceAssignments();
 
 protected Q_SLOTS:
     void slotRejected();

@@ -1356,7 +1356,7 @@ private:
     int m_index;
     bool m_isDefault;
     bool m_mine;
-
+    MacroCommand m_cmd;
 };
 
 class KPLATOKERNEL_EXPORT RenameAccountCmd : public NamedCommand
@@ -1968,6 +1968,19 @@ private:
     Project *m_project;
     QUrl m_oldValue;
     QUrl m_newValue;
+};
+
+class  KPLATOKERNEL_EXPORT LoadProjectsAtStartupCmd : public NamedCommand
+{
+public:
+    explicit LoadProjectsAtStartupCmd(Project *project, bool newValue, const KUndo2MagicString& name = KUndo2MagicString());
+    void execute();
+    void unexecute();
+
+private:
+    Project *m_project;
+    bool m_oldValue;
+    bool m_newValue;
 };
 
 }  //KPlato namespace

@@ -125,8 +125,6 @@ public:
 
     virtual KoPrintJob *createPrintJob();
 
-    void setTaskModules( const QStringList &files );
-
 Q_SIGNALS:
     void taskSelected( Task *task );
     void openNode();
@@ -150,6 +148,8 @@ public Q_SLOTS:
 
     void setScheduleManager( ScheduleManager *sm );
     
+    void setTaskModules( const QStringList &files );
+
 protected:
     void updateActionsEnabled( bool on );
     int selectedRowCount() const;
@@ -178,6 +178,8 @@ private Q_SLOTS:
 
     void slotSplitView();
     void slotProjectShown( bool );
+
+    void taskModuleDoubleClicked(QModelIndex idx);
 
 private:
     void edit( const QModelIndex &index );

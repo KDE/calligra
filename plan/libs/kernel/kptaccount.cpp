@@ -54,17 +54,16 @@ Account::Account(const QString& name, const QString& description)
 
 Account::~Account() {
     //debugPlan<<m_name;
-    if (findAccount() == this) {
-        removeId(); // only remove myself (I may be just a working copy)
+    if (m_list) {
+        m_list->accountDeleted(this); // default account
     }
-    if (m_list)
-        m_list->accountDeleted(this);
-
-    while (!m_accountList.isEmpty())
+    while (!m_accountList.isEmpty()) {
         delete m_accountList.takeFirst();
-    
-    while (!m_costPlaces.isEmpty())
+    }
+    while (!m_costPlaces.isEmpty()) {
         delete m_costPlaces.takeFirst();
+    }
+    take(this);
 }
     
 bool Account::isDefaultAccount() const
@@ -116,14 +115,20 @@ void Account::take(Account *account) {
     if (account == 0) {
         return;
     }
-    if (account->parent() == this) {
-        int i = m_accountList.indexOf(account);
-        if (i != -1)
-            m_accountList.removeAt(i);
-    } else if (account->parent()) {
-        account->parent()->take(account);
-    } else {
-        m_list->take(account);
+    if (account->parent()) {
+        if (account->m_list) {
+            // emits remove signals,
+            // sets account->m_list = 0,
+            // calls us again
+            account->m_list->take(account);
+        } else {
+            // child account has been removed from Accounts
+            // so now we can remove child account from us
+            m_accountList.removeAt(m_accountList.indexOf(account));
+        }
+    } else if (account->m_list) {
+        // we are top level so just needs Accounts to remove us
+        account->m_list->take(account);
     }
     //debugPlan<<account->name();
 }
@@ -192,16 +197,8 @@ void Account::save(QDomElement &element) const {
     }
 }
 
-Account::CostPlace *Account::findCostPlace(const Node &node) const {
-    foreach (Account::CostPlace *cp, m_costPlaces) {
-        if (&node == cp->node()) {
-            return cp;
-        }
-    }
-    return 0;
-}
-
-Account::CostPlace *Account::findCostPlace(const Resource &resource) const {
+Account::CostPlace *Account::findCostPlace(const Resource &resource) const
+{
     foreach (Account::CostPlace *cp, m_costPlaces) {
         if (&resource == cp->resource()) {
             return cp;
@@ -211,13 +208,17 @@ Account::CostPlace *Account::findCostPlace(const Resource &resource) const {
 }
 
 Account::CostPlace *Account::findRunning(const Resource &resource) const {
-    Account::CostPlace *cp = findCostPlace(resource);
-    return cp && cp->running() ? cp : 0;
+    foreach (Account::CostPlace *cp, m_costPlaces) {
+        if (&resource == cp->resource() && cp->running()) {
+            return cp;
+        }
+    }
+    return 0;
 }
 
 void Account::removeRunning(const Resource &resource) {
     Account::CostPlace *cp = findRunning(resource);
-    if (cp) {
+    if (cp && cp->running()) {
         cp->setRunning(false);
         if (cp->isEmpty()) {
             deleteCostPlace(cp);
@@ -226,7 +227,7 @@ void Account::removeRunning(const Resource &resource) {
 }
 
 void Account::addRunning(Resource &resource) {
-    Account::CostPlace *cp = findCostPlace(resource);
+    Account::CostPlace *cp = findRunning(resource);
     if (cp) {
         cp->setRunning(true);
         changed();
@@ -237,18 +238,34 @@ void Account::addRunning(Resource &resource) {
     changed();
 }
 
-Account::CostPlace *Account::findRunning(const Node &node) const {
-    Account::CostPlace *cp = findCostPlace(node);
-    return cp && cp->running() ? cp : 0;
+Account::CostPlace *Account::findCostPlace(const Node &node) const
+{
+    foreach (Account::CostPlace *cp, m_costPlaces) {
+        if (&node == cp->node()) {
+            return cp;
+        }
+    }
+    return 0;
+}
+
+Account::CostPlace *Account::findRunning(const Node &node) const
+{
+    for (CostPlace *cp : m_costPlaces) {
+        if (cp->node() == &node && cp->running()) {
+            return cp;
+        }
+    }
+    return 0;
 }
 
 void Account::removeRunning(const Node &node) {
-    Account::CostPlace *cp = findRunning(node);
+    CostPlace *cp = findRunning(node);
     if (cp) {
         cp->setRunning(false);
         if (cp->isEmpty()) {
             deleteCostPlace(cp);
         }
+        changed();
     }
 }
 
@@ -266,8 +283,12 @@ void Account::addRunning(Node &node) {
 
 
 Account::CostPlace *Account::findStartup(const Node &node) const {
-    Account::CostPlace *cp = findCostPlace(node);
-    return cp && cp->startup() ? cp : 0;
+    for (CostPlace *cp : m_costPlaces) {
+        if (cp->node() == &node && cp->startup()) {
+            return cp;
+        }
+    }
+    return 0;
 }
 
 void Account::removeStartup(const Node &node) {
@@ -294,8 +315,12 @@ void Account::addStartup(Node &node) {
 }
 
 Account::CostPlace *Account::findShutdown(const Node &node) const {
-    Account::CostPlace *cp = findCostPlace(node);
-    return cp && cp->shutdown() ? cp : 0;
+    for (CostPlace *cp : m_costPlaces) {
+        if (cp->node() == &node && cp->shutdown()) {
+            return cp;
+        }
+    }
+    return 0;
 }
 
 void Account::removeShutdown(const Node &node) {
@@ -534,17 +559,26 @@ Account::CostPlace::CostPlace(Account *acc, Resource *resource, bool running)
 }
 
 Account::CostPlace::~CostPlace() {
+
     if (m_node) {
-        if (m_running)
+        if (m_running) {
+            m_running = false;
             m_node->setRunningAccount(0);
-        if (m_startup)
+        }
+        if (m_startup) {
+            m_startup = false;
             m_node->setStartupAccount(0);
-        if (m_shutdown)
+        }
+        if (m_shutdown) {
+            m_shutdown = false;
             m_node->setShutdownAccount(0);
+        }
     }
     if (m_resource) {
-        if (m_running)
+        if (m_running) {
+            m_running = false;
             m_resource->setAccount(0);
+        }
     }
 }
 
@@ -589,7 +623,11 @@ void Account::CostPlace::setResource(Resource* resource)
     m_resource = resource;
 }
 
-void Account::CostPlace::setRunning(bool on ) { 
+void Account::CostPlace::setRunning(bool on )
+{
+    if (m_running == on) {
+        return;
+    }
     m_running = on;
     if (m_node) {
         m_node->setRunningAccount(on ? m_account : 0);
@@ -598,13 +636,21 @@ void Account::CostPlace::setRunning(bool on ) {
     }
 }
 
-void Account::CostPlace::setStartup(bool on ) { 
+void Account::CostPlace::setStartup(bool on )
+{
+    if (m_startup == on) {
+        return;
+    }
     m_startup = on;
     if (m_node)
         m_node->setStartupAccount(on ? m_account : 0);
 }
 
-void Account::CostPlace::setShutdown(bool on ) { 
+void Account::CostPlace::setShutdown(bool on )
+{
+    if (m_shutdown == on) {
+        return;
+    }
     m_shutdown = on;
     if (m_node)
         m_node->setShutdownAccount(on ? m_account : 0);
@@ -671,6 +717,7 @@ Accounts::Accounts(Project &project)
 
 Accounts::~Accounts() {
     //debugPlan;
+    m_defaultAccount = 0;
     while (!m_accountList.isEmpty()) {
         delete m_accountList.takeFirst();
     }
@@ -719,6 +766,7 @@ void Accounts::take(Account *account){
     if (account == 0) {
         return;
     }
+    account->m_list = 0;
     removeId(account->name());
     if (account->parent()) {
         emit accountToBeRemoved( account );
@@ -872,6 +920,13 @@ void Accounts::setDefaultAccount(Account *account)
     }
     if ( a != account ) {
         emit defaultAccountChanged();
+    }
+}
+
+void Accounts::accountDeleted(Account *account)
+{
+    if (account == m_defaultAccount) {
+        m_defaultAccount = 0;
     }
 }
 

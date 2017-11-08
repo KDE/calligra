@@ -317,6 +317,7 @@ Q_SIGNALS:
     void expandAll();
     void collapseAll();
 
+    void openDocument(const QUrl &url);
 protected Q_SLOTS:
     virtual void slotOptions() {}
     virtual void slotOptionsFinished( int result );

@@ -198,6 +198,7 @@ protected:
 private:
     QString m_name;
     QString m_description;
+    friend class Accounts;
     Accounts *m_list;
     Account *m_parent;
     QList<Account*> m_accountList;
@@ -265,8 +266,7 @@ public:
     bool removeId(const QString &id);
     QString uniqueId( const QString &seed ) const;
     
-    void accountDeleted(Account *account) 
-        { if (account == m_defaultAccount) m_defaultAccount = 0; }
+    void accountDeleted(Account *account);
 
     void accountChanged( Account *account );
     QList<Account*> allAccounts() const { return m_idDict.values(); }

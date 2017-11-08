@@ -32,6 +32,7 @@
 #include <QMap>
 
 #include <kconfigdialog.h>
+#include <KDirWatch>
 
 class QMenu;
 class QPrintDialog;
@@ -203,6 +204,7 @@ public:
 
 Q_SIGNALS:
     void currentScheduleManagerChanged( ScheduleManager *sm );
+    void taskModulesChanged(const QStringList &modules);
 
 public Q_SLOTS:
     void slotUpdate();
@@ -302,6 +304,8 @@ protected Q_SLOTS:
 
     void saveTaskModule( const QUrl &url, Project *project );
     void removeTaskModule( const QUrl &url );
+
+    void taskModuleFileChanged(const QString &path);
 
 protected:
     virtual void guiActivateEvent( bool activated );
@@ -445,6 +449,7 @@ private:
     QMap<ViewListItem*, QAction*> m_reportActionMap;
 
     KoPart *m_partpart;
+    KDirWatch m_dirwatch;
 };
 
 

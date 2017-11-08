@@ -29,7 +29,7 @@
 namespace KPlato
 {
 
-MainProjectDialog::MainProjectDialog(Project &p, QWidget *parent, const char */*name*/)
+MainProjectDialog::MainProjectDialog(Project &p, QWidget *parent, bool edit)
     : KoDialog( parent),
       project(p)
 {
@@ -38,6 +38,8 @@ MainProjectDialog::MainProjectDialog(Project &p, QWidget *parent, const char */*
     setDefaultButton( Ok );
     showButtonSeparator( true );
     panel = new MainProjectPanel(project, this);
+    panel->projectsLoadBtn->setVisible(edit);
+    panel->projectsClearBtn->setVisible(edit);
 
     setMainWidget(panel);
     enableButtonOk(false);
@@ -46,6 +48,9 @@ MainProjectDialog::MainProjectDialog(Project &p, QWidget *parent, const char */*
     connect(this, SIGNAL(rejected()), SLOT(slotRejected()));
     connect(this, SIGNAL(accepted()), SLOT(slotOk()));
     connect(panel, SIGNAL(obligatedFieldsFilled(bool)), SLOT(enableButtonOk(bool)));
+
+    connect(panel, SIGNAL(loadResourceAssignments(QUrl)), this, SIGNAL(loadResourceAssignments(QUrl)));
+    connect(panel, SIGNAL(clearResourceAssignments()), this, SIGNAL(clearResourceAssignments()));
 }
 
 void MainProjectDialog::slotRejected()
@@ -67,7 +72,7 @@ void MainProjectDialog::slotOk() {
             place.append('/');
         }
         QUrl url(place);
-        emit sigLoadSharedResources(file, url);
+        emit sigLoadSharedResources(file, url, panel->projectsLoadAtStartup->isChecked());
     }
     emit dialogFinished(QDialog::Accepted);
 }

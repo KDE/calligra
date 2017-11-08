@@ -153,8 +153,16 @@ public Q_SLOTS:
     void insertResourcesFile(const QUrl &url, const QUrl &projects = QUrl());
     void slotProjectCreated();
 
-    /// Prepare for insertion of resource bookings of shared resources from the project(s) in @p url
+    /// Prepare for insertion of resource assignments of shared resources from the project(s) in @p url
     void insertSharedProjects(const QUrl &url);
+
+    /// Clear resource assignments of shared resources
+    void clearResourceAssignments();
+    /// Load resource assignments of shared resources from the project(s) in @p url
+    void loadResourceAssignments(QUrl url);
+
+    void setIsTaskModule(bool value);
+    bool isTaskModule() const;
 
 Q_SIGNALS:
     void changed();
@@ -228,7 +236,10 @@ private:
 
     QList<QPointer<View> > m_views;
 
+    bool m_loadingSharedProject;
     QList<QUrl> m_sharedProjectsFiles;
+
+    bool m_isTaskModule;
 };
 
 

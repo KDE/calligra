@@ -102,6 +102,7 @@ Comment[nl]=Werkpakketbeheerder voor het Plan-projectplanninghulpmiddel
 Comment[pl]=Program obsługujący pakiety pracy dla narzędzia planowania projektów Plan
 Comment[pt]=Tratamento de Pacotes de Trabalho para a ferramenta de gestão de projectos Plan
 Comment[sv]=Hantering av arbetspaket för projektplaneringsverktyget Plan
+Comment[tr]=Plan proje planlama aracı için Çalışma Paketi işleyici
 Comment[uk]=Обробник робочих пакунків для засобу планування проектів Plan
 Comment[x-test]=xxWork Package handler for the Plan project planning toolxx
 Exec=calligraplanwork %u
