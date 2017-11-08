@@ -57,6 +57,7 @@ int main( int argc, char** argv )
                          QStringLiteral("https://www.calligra.org"),
                          QStringLiteral("submit@bugs.kde.org"));
 
+    app.setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
     KAboutData::setApplicationData(aboutData);
 
     QCommandLineParser parser;
@@ -77,23 +78,14 @@ int main( int argc, char** argv )
         }
     }
 
-    KIconLoader::global()->addAppDir("calligrawords");
-    KIconLoader::global()->addAppDir("words");
-    KIconLoader::global()->addAppDir("calligrastage");
-    KIconLoader::global()->addAppDir("stage");
-
 #ifdef Q_OS_WIN
     QDir appdir(app.applicationDirPath());
     appdir.cdUp();
 
     QString envStringSet;
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    if (!env.contains("KDESYCOCA")) {
-        _putenv_s("KDESYCOCA", QString(appdir.absolutePath() + "/sycoca").toLocal8Bit());
-        envStringSet.append("KDESYCOCA ");
-    }
     if (!env.contains("XDG_DATA_DIRS")) {
-        _putenv_s("XDG_DATA_DIRS", QString(appdir.absolutePath() + "/share").toLocal8Bit());
+        _putenv_s("XDG_DATA_DIRS", QString(appdir.absolutePath() + "/bin/data").toLocal8Bit());
         envStringSet.append("XDG_DATA_DIRS ");
     }
     _putenv_s("PATH", QString(appdir.absolutePath() + "/bin" + ";"
@@ -104,7 +96,11 @@ int main( int argc, char** argv )
     if(envStringSet.length() > 0) {
         qDebug() << envStringSet << "were set from main, restarting application in new environment!";
         // Pass all the arguments along, but don't include the application name...
-        QProcess::startDetached(app.applicationFilePath(), KCmdLineArgs::allArguments().mid(1));
+        QStringList allArguments;
+        for(int i = 0; i < argc; i++) {
+            allArguments << argv[i];
+        }
+        QProcess::startDetached(app.applicationFilePath(), allArguments.mid(1));
         exit(0);
     }
 
@@ -112,26 +108,14 @@ int main( int argc, char** argv )
     app.addLibraryPath(appdir.absolutePath() + "/bin");
     app.addLibraryPath(appdir.absolutePath() + "/lib");
     app.addLibraryPath(appdir.absolutePath() + "/lib/kde4");
-
-    QStringList iconThemePaths;
-    iconThemePaths << appdir.absolutePath() + "/share/icons";
-    QIcon::setThemeSearchPaths(iconThemePaths);
-    QIcon::setThemeName("oxygen");
 #endif
 
-    if (qgetenv("KDE_FULL_SESSION").isEmpty()) {
-        // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
-        qobject_cast<QApplication*>(QApplication::instance())->setStyle("Plastique");
-        qobject_cast<QApplication*>(QApplication::instance())->setStyle("Oxygen");
-    }
+    KIconLoader::global()->addAppDir("calligra");
+    KIconLoader::global()->addAppDir("calligragemini");
+    KIconLoader::global()->addAppDir("calligrawords");
+    KIconLoader::global()->addAppDir("calligrastage");
+    KIconLoader::global()->addAppDir("calligrasheets");
 
-    // then create the pixmap from an xpm: we cannot get the
-    // location of our datadir before we've started our components,
-    // so use an xpm.
-//     QPixmap pm(splash_screen_xpm);
-//     QSplashScreen splash(pm);
-//     splash.show();
-//     splash.showMessage(".");
     app.processEvents();
 
     MainWindow window(fileNames);
@@ -145,7 +129,6 @@ int main( int argc, char** argv )
 #else
     window.show();
 #endif
-//    splash.finish(&window);
 
     return app.exec();
 }

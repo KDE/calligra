@@ -283,10 +283,11 @@ bool ViewController::event(QEvent* event)
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
 
             if (d->canvasController) {
-                syncObject->documentOffset = d->canvasController->documentOffset();
+                syncObject->scrollBarValue = d->canvasController->documentOffset();
                 syncObject->zoomLevel = zoom();
                 syncObject->activeToolId = KoToolManager::instance()->activeToolId();
                 syncObject->shapes = d->canvasController->canvas()->shapeManager()->shapes();
+                syncObject->currentIndex = d->view->document()->currentIndex();
                 syncObject->initialized = true;
             }
 
@@ -304,7 +305,13 @@ bool ViewController::event(QEvent* event)
                 setZoom(syncObject->zoomLevel);
 
                 qApp->processEvents();
-                emit d->canvasController->proxyObject->moveDocumentOffset(syncObject->documentOffset);
+                if(syncObject->scrollBarValue.isNull()) {
+                    d->view->document()->setCurrentIndex(syncObject->currentIndex);
+                }
+                else {
+                    d->canvasController->setScrollBarValue(syncObject->scrollBarValue);
+                }
+                emit d->view->document()->requestViewUpdate();
             }
 
             return true;

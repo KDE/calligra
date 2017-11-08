@@ -17,6 +17,7 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Controls 1.4 as QtControls
 import org.calligra 1.0
 
 Item {
@@ -199,7 +200,7 @@ Item {
                 color: Settings.theme.color("components/dialog/progress/bar");
             }
         }
-        BusyIndicator {
+        QtControls.BusyIndicator {
             id: busy;
             anchors.fill: progressBase;
             opacity: (progress > -1 && progressBase.opacity === 0) ? 1 : 0;

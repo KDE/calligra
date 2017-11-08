@@ -323,6 +323,11 @@ QUrl Theme::icon(const QString& name, bool useSystemFallback)
     return QUrl::fromLocalFile(url);
 }
 
+QIcon Theme::iconActual(const QString& name)
+{
+    return QIcon(icon(name).toLocalFile());
+}
+
 QString Theme::imagePath() const
 {
     return d->imagePath;
@@ -368,7 +373,7 @@ Theme* Theme::load(const QString& id, QObject* parent)
 
     // for now, the app in bin/ and we still use the env.bat script
     appdir.cdUp();
-    qml = QString("%1/share/apps/calligragemini/themes/%2/theme.qml").arg(appdir.canonicalPath(), id);
+    qml = QString("%1/bin/data/calligragemini/themes/%2/theme.qml").arg(appdir.canonicalPath(), id);
 #else
     const QString qmlFileSubPath = QStringLiteral("calligragemini/themes/") + id + QStringLiteral("/theme.qml");
     qml = QStandardPaths::locate(QStandardPaths::GenericDataLocation, qmlFileSubPath);

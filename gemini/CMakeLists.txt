@@ -1,9 +1,9 @@
 project(calligragemini)
 
 # TEMPORARY: for  Qt5/KF5 build porting phase deprecation warnings are only annoying noise
-if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
-    add_definitions(-Wno-deprecated -Wno-deprecated-declarations)
-endif ()
+# if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    # add_definitions(-Wno-deprecated -Wno-deprecated-declarations)
+# endif ()
 add_subdirectory(lib)
 
 if (WIN32)
@@ -55,12 +55,8 @@ set(thumbnailhelper_SRCS
     ThumbnailHelperImpl.cpp
 )
 
-if (WIN32)
-    set(calligragemini_SRCS ${calligragemini_SRCS} calligrageminiwin.rc)
-else ()
-    file(GLOB ICONS_SRCS "pics/*-apps-calligragemini.png")
-    ecm_add_app_icon(calligragemini_SRCS ICONS ${ICONS_SRCS})
-endif ()
+file(GLOB ICONS_SRCS "pics/*-apps-calligragemini.png")
+ecm_add_app_icon(calligragemini_SRCS ICONS ${ICONS_SRCS})
 
 # Thumbnail helper application
 # =============================================================================
@@ -78,6 +74,7 @@ add_executable(calligragemini ${calligragemini_SRCS})
 
 target_link_libraries(calligragemini
     Qt5::Quick
+    Qt5::QuickWidgets
     Qt5::Qml
     Qt5::Gui
     Qt5::Core

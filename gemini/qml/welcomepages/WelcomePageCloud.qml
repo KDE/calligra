@@ -23,6 +23,7 @@ import "cloud"
 
 Page {
     id: base;
+    objectName: "WelcomePageCloud";
 /*    ListModel {
         id: cloudAccounts;
         ListElement { text: "Dropbox"; selected: false; accountType: "DropBox"; stackComponent: "accountsPageDropbox"; accountDetails: [ ListElement { userkey: "asfdoijfdshaloiuhs" } ] }
@@ -112,7 +113,16 @@ Page {
             bottomMargin: 0;
         }
     }
-    Component { id: accountsPage; CloudAccounts { accountsList: cloudAccounts; } }
+    Component { id: accountsPage;
+        CloudAccounts {
+            accountsList: cloudAccounts;
+            onShowAccount: {
+                cloudAccounts.selectIndex(index);
+                cloudStack.replace(accountsRow.elementFromName(stackComponent));
+                cloudStack.currentPage.accountDetails = accountDetails;
+            }
+        }
+    }
     Component { id: accountsPageDropbox; Dropbox { } }
     Component { id: accountsPageWebdav; Webdav { } }
     Component { id: accountsPageGit; Git { } }

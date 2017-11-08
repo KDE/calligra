@@ -23,7 +23,7 @@
 #include <QMessageBox>
 #include <QPainter>
 #include <QDir>
-#include <QWebFrame>
+// #include <QWebFrame>
 #include <QUrl>
 #include <QFileDialog>
 #include <QFileInfo>
@@ -51,7 +51,7 @@ KPrHtmlExportDialog::KPrHtmlExportDialog(const QList<KoPAPageBase*> &slides, con
 
     connect(ui.pushbuttonBrowseTemplate, SIGNAL(clicked()), this, SLOT(browserAction()));
 
-    connect(&preview, SIGNAL(loadFinished(bool)), this, SLOT(renderPreview()));
+//     connect(&preview, SIGNAL(loadFinished(bool)), this, SLOT(renderPreview()));
     connect(ui.klineedit_title, SIGNAL(editingFinished()), this, SLOT(generatePreview()));
     connect(ui.klineedit_author, SIGNAL(editingFinished()), this, SLOT(generatePreview()));
     connect(ui.kListBox_slides, SIGNAL(currentRowChanged(int)), this, SLOT(generatePreview(int)));
@@ -262,22 +262,22 @@ void KPrHtmlExportDialog::generatePreview(int item)
 
     QUrl url = previewGenerator.exportPreview(KPrHtmlExport::Parameter(templateUrl(), static_cast<KPrView*>(parentWidget()), slides, QUrl(),
                                               this->author(), ui.klineedit_title->text(), slidesNames, false));
-    preview.mainFrame()->load(url);
+//     preview.mainFrame()->load(url);
 }
 
 void KPrHtmlExportDialog::renderPreview()
 {
-    preview.currentFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
-    preview.currentFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
-    preview.setViewportSize(preview.currentFrame()->contentsSize());
-    QImage image(preview.currentFrame()->contentsSize(), QImage::Format_ARGB32);
-    QPainter painter(&image);
+//     preview.currentFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
+//     preview.currentFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
+//     preview.setViewportSize(preview.currentFrame()->contentsSize());
+//     QImage image(preview.currentFrame()->contentsSize(), QImage::Format_ARGB32);
+//     QPainter painter(&image);
 
-    preview.mainFrame()->render(&painter);
-    painter.end();
+//     preview.mainFrame()->render(&painter);
+//     painter.end();
 
-    QImage thumbnail = image.scaled(ui.qLabel_preview->size(), Qt::KeepAspectRatio);
-    ui.qLabel_preview->setPixmap(QPixmap::fromImage(thumbnail));
+//     QImage thumbnail = image.scaled(ui.qLabel_preview->size(), Qt::KeepAspectRatio);
+//     ui.qLabel_preview->setPixmap(QPixmap::fromImage(thumbnail));
 }
 
 bool KPrHtmlExportDialog::selectedTemplateIsFavorite()

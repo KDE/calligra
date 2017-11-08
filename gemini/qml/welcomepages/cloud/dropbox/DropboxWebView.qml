@@ -18,7 +18,8 @@
 
 import QtQuick 2.0
 import QtWebKit 3.0
-import "../../../components"
+import org.kde.kirigami 2.1 as Kirigami
+import QtQuick.Controls 1.4 as QtControls
 
 WebView {
     id: webView
@@ -33,13 +34,13 @@ WebView {
         }
     }
 
-    Label {
+    Kirigami.Label {
         id: tryingText
         anchors.centerIn: parent;
         text: "Trying to load login page..."
         color: "Grey"
         z: 10
-        BusyIndicator {
+        QtControls.BusyIndicator {
             id: b_indicator
             anchors {
                 top: parent.verticalCenter

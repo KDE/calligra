@@ -17,6 +17,7 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Controls 1.4 as QtControls
 import org.calligra 1.0
 import "../components"
 
@@ -172,10 +173,9 @@ Page {
                 width: parent.width;
                 text: "Unit:"
             }
-            ExpandingListView {
+            QtControls.ComboBox {
                 id: unitList;
                 width: parent.width;
-                expandedHeight: Constants.GridHeight * 3;
                 currentIndex: 6;
                 model: ListModel {
                     id: unitModel;
@@ -192,11 +192,10 @@ Page {
                 width: parent.width;
                 text: "Size:"
             }
-            ExpandingListView {
+            QtControls.ComboBox {
                 id: paperSizeList;
                 width: parent.width;
-                expandedHeight: Constants.GridHeight * 6;
-                currentIndex: 7;
+                Component.onCompleted: currentIndex = 7;
                 onCurrentIndexChanged: {
                     if(widthInput !== null) {
                         widthInput.text = paperSizeModel.get(currentIndex).width;
@@ -245,7 +244,7 @@ Page {
                 opacity: paperSizeList.currentIndex === 0 ? 1 : 0;
                 Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
                 clip: true;
-                PanelTextField {
+                QtControls.TextField {
                     id: widthInput;
                     anchors {
                         top: parent.top;
@@ -253,11 +252,11 @@ Page {
                         right: parent.horizontalCenter;
                     }
                     width: parent.width;
-                    placeholder: landscapeCheck.checked ? "Height" : "Width";
+                    placeholderText: landscapeCheck.checked ? "Height" : "Width";
                     validator: DoubleValidator{ bottom: 1; top: 999999; decimals: 2; }
-                    numeric: true;
+                    inputMethodHints: Qt.ImhFormattedNumbersOnly;
                 }
-                PanelTextField {
+                QtControls.TextField {
                     id: heightInput;
                     anchors {
                         top: parent.top;
@@ -265,9 +264,9 @@ Page {
                         right: parent.right;
                     }
                     width: parent.width;
-                    placeholder: landscapeCheck.checked ? "Width" : "Height";
+                    placeholderText: landscapeCheck.checked ? "Width" : "Height";
                     validator: DoubleValidator{ bottom: 1; top: 999999; decimals: 2; }
-                    numeric: true;
+                    inputMethodHints: Qt.ImhFormattedNumbersOnly;
                 }
             }
             Label {
@@ -363,7 +362,6 @@ Page {
                     id: columnSpacing;
                     width: parent.width / 2;
                     placeholder: "Spacing";
-                    useExponentialValue: true;
                     min: 0;
                     max: (heightInput.text > widthInput.text ? heightInput.text : widthInput.text) / columnCount.value;
                     decimals: 2;
@@ -386,7 +384,6 @@ Page {
                     id: marginTop;
                     width: parent.width / 3;
                     placeholder: "Top";
-                    useExponentialValue: true;
                     min: 1; max: 999; decimals: 2;
                     value: 20;
                 }
@@ -398,7 +395,6 @@ Page {
                     id: marginLeft;
                     width: parent.width / 3;
                     placeholder: facingCheck.checked ? "Binding" : "Left";
-                    useExponentialValue: true;
                     min: 1; max: 999; decimals: 2;
                     value: 20;
                 }
@@ -413,7 +409,6 @@ Page {
                     id: marginRight;
                     width: parent.width / 3;
                     placeholder: facingCheck.checked ? "Outside" : "Right";
-                    useExponentialValue: true;
                     min: 1; max: 999; decimals: 2;
                     value: 20;
                 }
@@ -429,14 +424,13 @@ Page {
                     id: marginBottom;
                     width: parent.width / 3;
                     placeholder: "Bottom";
-                    useExponentialValue: true;
                     min: 1; max: 999; decimals: 2;
                     value: 20;
                 }
             }
         }
     }
-    CohereButton {
+    QtControls.Button {
         id: createDocButton;
         anchors {
             right: parent.right;
@@ -444,9 +438,6 @@ Page {
             margins: Constants.DefaultMargin;
         }
         text: "Create Document";
-        textColor: "white";
-        textSize: Settings.theme.adjustedPixel(18);
-        color: "#4e5359";
         onClicked: {
             var queryString = "newfile:///";
             queryString += "?mimetype=" + WORDS_MIME_TYPE;

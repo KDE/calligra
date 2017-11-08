@@ -23,7 +23,7 @@
 
 #include "ui_KPrHtmlExport.h"
 
-#include <QWebPage>
+// #include <QWebPage>
 
 #include <KoPAPageBase.h>
 #include <KoDialog.h>
@@ -67,7 +67,7 @@ private:
     QList<KoPAPageBase*> m_allSlides;
     QString m_title;
     Ui::KPrHtmlExport ui;
-    QWebPage preview;
+//     QWebPage preview;
     int frameToRender;
 
 

@@ -61,7 +61,8 @@ Settings::~Settings()
 
 QString Settings::currentFile() const
 {
-    return d->currentFile;
+    QUrl url = QUrl::fromLocalFile(d->currentFile);
+    return  url.toString();
 }
 
 QString Settings::currentFileClass() const

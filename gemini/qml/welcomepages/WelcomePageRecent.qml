@@ -22,13 +22,14 @@ import "../components"
 
 Page {
     id: base;
+    objectName: "WelcomePageRecent";
     GridView {
         id: docList;
-        clip: true;
         contentWidth: width;
         anchors {
             margins: Constants.DefaultMargin;
             top: parent.top;
+            topMargin: Constants.DefaultMargin * 3;
             left: parent.left;
             right: parent.right;
             bottom: parent.bottom;
@@ -54,7 +55,18 @@ Page {
         Item {
             width: docList.cellWidth;
             height: docList.cellHeight
+            Rectangle {
+                x: documentImage.x - Constants.DefaultMargin + (documentImage.width - documentImage.paintedWidth) / 2;
+                y: documentImage.y - Constants.DefaultMargin + (documentImage.height - documentImage.paintedHeight) / 2;
+                width: documentImage.paintedWidth + Constants.DefaultMargin * 2;
+                height: documentImage.paintedHeight + Constants.DefaultMargin * 2;
+                border {
+                    color: "silver";
+                    width: 1;
+                }
+            }
             Image {
+                id: documentImage;
                 source: model.image;
                 anchors {
                     top: parent.top;

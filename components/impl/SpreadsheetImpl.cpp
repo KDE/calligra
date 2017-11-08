@@ -238,3 +238,8 @@ QUrl SpreadsheetImpl::urlAtPoint(QPoint point)
     }
     return QUrl();
 }
+
+QObject* SpreadsheetImpl::part() const
+{
+    return d->part;
+}

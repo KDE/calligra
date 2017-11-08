@@ -19,6 +19,7 @@
 import QtQuick 2.0
 import org.calligra 1.0
 import Calligra.Gemini.Git 1.0
+import QtQuick.Controls 1.4 as QtControls
 import "../../../components"
 
 Item {
@@ -80,30 +81,27 @@ Item {
                 right: parent.right;
             }
             height: childrenRect.height;
-            TextField {
+            QtControls.TextField {
                 id: userName;
                 width: parent.width;
-                placeholder: "Username";
+                placeholderText: "Username";
             }
             Item {
                 height: privateKey.height;
                 width: parent.width;
-                TextField {
+                QtControls.TextField {
                     id: privateKey;
                     width: parent.width - privateKeyBrowse.width;
                     anchors.right: privateKeyBrowse.left;
-                    placeholder: "Private Key File";
+                    placeholderText: "Private Key File";
                 }
-                CohereButton {
+                QtControls.Button {
                     id: privateKeyBrowse;
                     anchors {
                         verticalCenter: privateKey.verticalCenter;
                         right: parent.right;
                     }
                     text: "Browse...";
-                    textColor: "#5b6573";
-                    textSize: Settings.theme.adjustedPixel(18);
-                    color: "#D2D4D5";
                     onClicked: {
                         var newFile = GitCheckoutCreator.getFile("Private Key File", "*", ".ssh");
                         if(newFile !== "") {
@@ -115,22 +113,19 @@ Item {
             Item {
                 height: publicKey.height;
                 width: parent.width;
-                TextField {
+                QtControls.TextField {
                     id: publicKey;
                     width: parent.width - privateKeyBrowse.width;
                     anchors.right: publicKeyBrowse.left;
-                    placeholder: "Public Key File";
+                    placeholderText: "Public Key File";
                 }
-                CohereButton {
+                QtControls.Button {
                     id: publicKeyBrowse;
                     anchors {
                         verticalCenter: publicKey.verticalCenter;
                         right: parent.right;
                     }
                     text: "Browse...";
-                    textColor: "#5b6573";
-                    textSize: Settings.theme.adjustedPixel(18);
-                    color: "#D2D4D5";
                     onClicked: {
                         var newFile = GitCheckoutCreator.getFile("Public Key File", "*.pub", ".ssh");
                         if(newFile !== "") {
@@ -157,7 +152,7 @@ Item {
         }
     }
 
-    CohereButton {
+    QtControls.Button {
         id: acceptButton;
         anchors {
             top: pageContent.bottom;
@@ -165,12 +160,9 @@ Item {
             margins: Settings.theme.adjustedPixel(8);
         }
         text: "Accept";
-        textColor: "#5b6573";
-        textSize: Settings.theme.adjustedPixel(18);
-        color: "#D2D4D5";
         onClicked: base.accepted();
     }
-    CohereButton {
+    QtControls.Button {
         id: cancelButton;
         anchors {
             top: pageContent.bottom;
@@ -178,9 +170,6 @@ Item {
             margins: Settings.theme.adjustedPixel(8);
         }
         text: "Cancel";
-        textColor: "#5b6573";
-        textSize: Settings.theme.adjustedPixel(18);
-        color: "#D2D4D5";
         onClicked: base.cancelled();
     }
 }

@@ -17,6 +17,8 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Controls 1.4 as QtControls
+import org.kde.kirigami 2.1 as Kirigami
 import org.calligra 1.0
 import Calligra.Gemini.Dropbox 1.0
 import "../../components"
@@ -27,6 +29,7 @@ Page {
     id: base;
     property string pageName: "accountsPage";
     property QtObject accountsList;
+    signal showAccount(var index, var stackComponent, var accountDetails);
 
     Connections {
         target: controllerMIT;
@@ -57,15 +60,24 @@ Page {
         delegate: Item {
             height: Settings.theme.adjustedPixel(64);
             width: ListView.view.width;
-            Label {
-                anchors.fill: parent;
+            Kirigami.Label {
+                anchors {
+                    top: parent.top;
+                    left: parent.left;
+                    right: accountControls.left;
+                    bottom: parent.bottom;
+                }
                 text: model.text;
                 horizontalAlignment: Text.AlignLeft;
                 verticalAlignment: Text.AlignVCenter;
                 font: Settings.theme.font("templateLabel");
-                color: "#5b6573";
+                MouseArea {
+                    anchors.fill: parent;
+                    onClicked: base.showAccount(model.index, model.stackComponent, model.accountDetails);
+                }
             }
             Row {
+                id: accountControls;
                 anchors {
                     verticalCenter: parent.verticalCenter;
                     right: parent.right;
@@ -82,12 +94,9 @@ Page {
                     color: "#5b6573";
                     visible: model.accountType !== "DropBox";
                 }
-                CohereButton {
+                QtControls.Button {
                     anchors.verticalCenter: parent.verticalCenter;
                     text: (model.accountType === "DropBox") ? "Sign Out" : "Edit Account";
-                    textColor: "#5b6573";
-                    textSize: Settings.theme.adjustedPixel(18);
-                    color: "#D2D4D5";
                     onClicked: {
                         dlgStack.replace(base.editComponentFromName(model.accountType));
                         if(dlgStack.currentPage.accountIndex !== undefined) {
@@ -96,12 +105,9 @@ Page {
                         }
                     }
                 }
-                CohereButton {
+                QtControls.Button {
                     anchors.verticalCenter: parent.verticalCenter;
                     text: "Remove";
-                    textColor: "#5b6573";
-                    textSize: Settings.theme.adjustedPixel(18);
-                    color: "#D2D4D5";
                     visible: model.accountType !== "DropBox";
                     onClicked: {
                         dlgStack.replace(removeAccountDlg);
@@ -114,13 +120,11 @@ Page {
             }
         }
     }
-    Label {
+    Kirigami.Label {
         anchors.fill: accountsView;
         text: "You have no cloud accounts defined. Please add one by clicking on your service of choice below.";
         horizontalAlignment: Text.AlignHCenter;
         verticalAlignment: Text.AlignVCenter;
-        font: Settings.theme.font("templateLabel");
-        color: "#5b6573";
         opacity: accountsList.count === 0 ? 1 : 0;
         Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
     }
@@ -132,13 +136,11 @@ Page {
             bottom: parent.bottom;
         }
         height: bottomButtonRow.height + Settings.theme.adjustedPixel(8);
-        Label {
+        Kirigami.Label {
             anchors.fill: parent;
             text: "Add new account:";
             horizontalAlignment: Text.AlignLeft;
             verticalAlignment: Text.AlignVCenter;
-            font: Settings.theme.font("templateLabel");
-            color: "#5b6573";
         }
         Row {
             id: bottomButtonRow;
@@ -157,11 +159,8 @@ Page {
                     //ListElement { text: "GitHub"; accountType: "Git"; serviceName: "github"; }
                     //ListElement { text: "bitbucket (git)"; accountType: "Git"; serviceName: "bitbucket"; }
                 }
-                CohereButton {
+                QtControls.Button {
                     text: model.text
-                    textColor: "#5b6573";
-                    textSize: Settings.theme.adjustedPixel(18);
-                    color: "#D2D4D5";
                     onClicked: {
                         dlgStack.replace(base.addComponentFromName(model.accountType));
                         dlgStack.currentPage.serviceName = model.serviceName;
@@ -172,7 +171,10 @@ Page {
     }
     PageStack {
         id: dlgStack;
-        anchors.fill: base;
+        anchors {
+            fill: base;
+            margins: -Settings.theme.adjustedPixel(8);
+        }
         initialPage: addEmptyComp;
     }
     function addComponentFromName(name) {

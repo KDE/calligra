@@ -24,9 +24,9 @@
 #include "gitlogmodel.h"
 #include "checkoutcreator.h"
 
-#include <qdeclarative.h>
-#include <QDeclarativeEngine>
-#include <QDeclarativeContext>
+#include <QtQml/QtQml>
+#include <QQmlEngine>
+#include <QQmlContext>
 #include <QApplication>
 
 void GitPlugin::registerTypes(const char* uri)
@@ -38,15 +38,13 @@ void GitPlugin::registerTypes(const char* uri)
     qmlRegisterType<QAbstractListModel>();
 }
 
-void GitPlugin::initializeEngine(QDeclarativeEngine* engine, const char* uri)
+void GitPlugin::initializeEngine(QQmlEngine* engine, const char* uri)
 {
     Q_UNUSED(uri)
     Q_ASSERT( uri == QLatin1String( "Calligra.Gemini.Git" ) );
 
     CheckoutCreator* ac = new CheckoutCreator(qApp);
 
-    QDeclarativeContext *context = engine->rootContext();
+    QQmlContext *context = engine->rootContext();
     context->setContextProperty("GitCheckoutCreator", ac);
 }
-
-#include "gitplugin.moc"

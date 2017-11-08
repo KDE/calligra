@@ -31,9 +31,14 @@ struct GeminiModeSynchronisationObject {
 class GeminiModeSwitchEvent : public QEvent
 {
 public:
+    /**
+     * Which type of event you are dealing with. You will only receive this in two cases:
+     * When you are about to switch away from a particular mode (sent to fromView before switching)
+     * When you have been made the current mode (sent to toView after switching)
+     */
     enum GeminiModeEventType {
-        AboutToSwitchViewModeEvent = QEvent::User + 1,
-        SwitchedToThisModeEvent ///< This is the case when 
+        AboutToSwitchViewModeEvent = QEvent::User + 1, ///< Write information into the event (and mark the sync object as initialized)
+        SwitchedToThisModeEvent ///< Read information out of the event
     };
 
     inline GeminiModeSwitchEvent(GeminiModeEventType type, QObject* fromView, QObject* toView, GeminiModeSynchronisationObject* syncObject)

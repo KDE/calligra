@@ -17,6 +17,8 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Controls 1.4 as QtControls
+import org.kde.kirigami 2.1 as Kirigami
 import org.calligra 1.0
 import Calligra.Gemini.Git 1.0
 import "../../../components"
@@ -41,6 +43,7 @@ Item {
             if(DocumentManager.doc()) {
                 DocumentManager.doc().sigProgress(progress);
             }
+            console.log("Transfer progress: " + progress);
         }
         onOperationBegun: {
             console.log(message);
@@ -68,23 +71,20 @@ Item {
             bottomMargin: 0;
         }
         width: (parent.width / 4) - Constants.DefaultMargin;
-        CohereButton {
+        QtControls.Button {
             id: pullButton;
             anchors {
                 top: parent.top;
                 horizontalCenter: parent.horizontalCenter;
                 margins: Settings.theme.adjustedPixel(8);
             }
-            textColor: "#5b6573";
-            textSize: Settings.theme.adjustedPixel(18);
-            color: "#D2D4D5";
             text: "Pull from upstream";
             onClicked: {
                 enabled = false;
                 pullInProgress.opacity = 1;
                 gitController.pull();
             }
-            BusyIndicator {
+            QtControls.BusyIndicator {
                 id: pullInProgress;
                 opacity: 0;
                 running: true;
@@ -99,7 +99,7 @@ Item {
                 }
             }
         }
-        Label {
+        Kirigami.Label {
             id: updatedLabel;
             opacity: 0;
             Behavior on opacity {
@@ -116,8 +116,6 @@ Item {
                 right: parent.right;
             }
             text: "Update Completed!";
-            font: Settings.theme.font("templateLabel");
-            color: "#5b6573";
             verticalAlignment: Text.AlignVCenter;
             horizontalAlignment: Text.AlignHCenter;
             Timer { id: hideUpdate; running: false; repeat: false; interval: 1000; onTriggered: { updatedLabel.opacity = 0; pullButton.enabled = true; } }
@@ -133,41 +131,35 @@ Item {
                 right: parent.right;
                 bottom: parent.bottom;
             }
-            header: Label {
+            header: Kirigami.Label {
                 width: logListView.width;
                 height: Constants.GridHeight / 2;
                 text: "Recent Changes";
-                font: Settings.theme.font("templateLabel");
-                color: "#5b6573";
                 verticalAlignment: Text.AlignVCenter;
                 horizontalAlignment: Text.AlignHCenter;
             }
             delegate: Column {
                 width: logListView.width;
                 height: childrenRect.height;
-                Text {
+                Kirigami.Label {
                     id: messageText;
                     width: parent.width;
                     height: paintedHeight;
-                    font: Settings.theme.font("templateLabel");
-                    color: "#5b6573";
                     text: model.shortMessage;
                     wrapMode: Text.Wrap;
                 }
-                Text {
+                Kirigami.Label {
                     id: timeText;
                     width: parent.width;
                     height: paintedHeight;
-                    font: Settings.theme.font("applicationLight");
-                    color: "#5b6573";
+                    opacity: 0.7;
                     text: "on " + model.time;
                 }
-                Text {
+                Kirigami.Label {
                     id: nameText;
                     width: parent.width;
                     height: paintedHeight;
-                    font: Settings.theme.font("applicationLight");
-                    color: "#5b6573";
+                    opacity: 0.7
                     text: "by " + model.authorName;
                 }
                 Item {
@@ -183,6 +175,7 @@ Item {
                 }
             }
         }
+        ScrollDecorator { flickableItem: logListView; anchors.fill: logListView; }
     }
     GridView {
         id: docList;
@@ -191,6 +184,7 @@ Item {
         anchors {
             margins: Constants.DefaultMargin;
             top: parent.top;
+            topMargin: Constants.DefaultMargin * 2;
             left: parent.left;
             right: logSidebar.left;
             bottom: parent.bottom;
@@ -202,13 +196,11 @@ Item {
         delegate: documentTile;
         ScrollDecorator { flickableItem: docList; }
     }
-    Label {
+    Kirigami.Label {
         anchors.fill: parent;
         text: "No Documents\n\nPlease add some documents to your reporitory.\n(%1)".arg(docList.model.documentsFolder);
         horizontalAlignment: Text.AlignHCenter;
         verticalAlignment: Text.AlignVCenter;
-        font: Settings.theme.font("templateLabel");
-        color: "#5b6573";
         visible: docList.count === 0;
     }
     Component {
@@ -216,20 +208,31 @@ Item {
         Item {
             width: docList.cellWidth;
             height: docList.cellHeight
+            Rectangle {
+                x: documentImage.x - Constants.DefaultMargin + (documentImage.width - documentImage.paintedWidth) / 2;
+                y: documentImage.y - Constants.DefaultMargin + (documentImage.height - documentImage.paintedHeight) / 2;
+                width: documentImage.paintedWidth + Constants.DefaultMargin * 2;
+                height: documentImage.paintedHeight + Constants.DefaultMargin * 2;
+                border {
+                    color: "silver";
+                    width: 1;
+                }
+            }
             Image {
+                id: documentImage;
                 source: "image://recentimage/" + model.filePath;
                 anchors {
                     top: parent.top;
                     left: parent.left;
                     right: parent.right;
-                    margins: Constants.DefaultMargin / 2;
+                    margins: Constants.DefaultMargin;
                 }
                 height: parent.width;
                 fillMode: Image.PreserveAspectFit;
                 smooth: true;
                 asynchronous: true;
             }
-            Label {
+            Kirigami.Label {
                 id: lblName;
                 anchors {
                     left: parent.left;
@@ -242,8 +245,6 @@ Item {
                 horizontalAlignment: Text.AlignHCenter;
                 verticalAlignment: Text.AlignVCenter;
                 text: model.fileName ? model.fileName : "";
-                font: Settings.theme.font("templateLabel");
-                color: "#5b6573";
             }
             MouseArea {
                 anchors.fill: parent;

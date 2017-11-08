@@ -40,6 +40,7 @@ public:
     virtual void setCurrentIndex(int newValue);
     virtual int indexCount() const;
     virtual QUrl urlAtPoint(QPoint point);
+    virtual QObject* part() const;
 
 private Q_SLOTS:
     void updateDocumentSize(const QSize& size);

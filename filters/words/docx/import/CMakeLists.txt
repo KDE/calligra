@@ -22,7 +22,6 @@ set(docx2odt_PART_SRCS
     DocxXmlSettingsReader.cpp
     DocxImport.cpp
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxChartOdfWriter.cpp
-    ${CMAKE_SOURCE_DIR}/filters/libodf2/chart/KoOdfChartWriter.cpp
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxXmlChartReader.cpp
 )
 

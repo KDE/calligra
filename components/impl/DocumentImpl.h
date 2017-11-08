@@ -62,6 +62,7 @@ public:
     KoZoomController* zoomController() const;
     QSize documentSize() const;
     KoDocument* koDocument() const;
+    virtual QObject* part() const = 0;
 
 Q_SIGNALS:
     void documentSizeChanged();

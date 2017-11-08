@@ -186,7 +186,7 @@ KoZoomController* Document::zoomController() const
 
 QObject* Document::part() const
 {
-    return nullptr;
+    return d->impl->part();
 }
 
 QObject* Document::document() const

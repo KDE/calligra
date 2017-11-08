@@ -23,7 +23,7 @@ import org.kde.calligra 1.0 as Calligra
 Item {
     id: base;
     signal canvasInteractionStarted();
-    property alias document: wordsDocument.document;
+    property alias document: wordsDocument;
     property alias textEditor: wordsDocument.textEditor;
     property QtObject canvas: wordsCanvas;
     property alias source: wordsDocument.source;

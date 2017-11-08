@@ -241,7 +241,7 @@ void CloudAccountsModel::removeAccountByName(QString text)
 
 void CloudAccountsModel::removeAccount(int index)
 {
-    if(index > -1 && index < d->entries.count() - 1)
+    if(index > -1 && index < d->entries.count())
     {
         beginRemoveRows(QModelIndex(), index, index);
         delete(d->entries.takeAt(index));

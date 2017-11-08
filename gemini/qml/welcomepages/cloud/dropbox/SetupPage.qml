@@ -18,6 +18,8 @@
 
 import QtQuick 2.0
 import Calligra.Gemini.Dropbox 1.0
+import QtQuick.Controls 1.4 as QtControls
+import org.kde.kirigami 2.1 as Kirigami
 import "../../../components"
 
 Item {
@@ -58,14 +60,13 @@ Item {
                     signOutNow();
                 }
             }
-            Text {
+            Kirigami.Label {
                 anchors {
                     top: parent.bottom;
                     topMargin: Settings.theme.adjustedPixel(16);
                     horizontalCenter: parent.horizontalCenter;
                 }
                 visible: !controllerMIT.needAuthenticate;
-                font: Settings.theme.font("application");
                 width: parent.parent.width / 2;
                 height: font.pixelSize * 6;
                 horizontalAlignment: Text.AlignHCenter;
@@ -87,15 +88,13 @@ Item {
             anchors.margins: Settings.theme.adjustedPixel(16);
             radius: Settings.theme.adjustedPixel(8);
             color: "white";
-            Text {
+            Kirigami.Label {
                 anchors {
                     bottom: signoutButtonsRow.top;
                     left: parent.left;
                     right: parent.right;
                     margins: Constants.DefaultMargin;
                 }
-                color: "black"
-                font: Settings.theme.font("application");
                 wrapMode: Text.Wrap
                 horizontalAlignment: Text.AlignHCenter
                 text: "Do you really want to log out of DropBox?"
@@ -105,20 +104,14 @@ Item {
                 anchors.centerIn: parent;
                 width: childrenRect.width;
                 spacing: Settings.theme.adjustedPixel(8);
-                CohereButton {
-                    textColor: "#5b6573";
-                    textSize: Settings.theme.adjustedPixel(18);
-                    color: "#D2D4D5";
+                QtControls.Button {
                     text: "Yes"
                     onClicked: {
                         controllerMIT.logout()
                         pageStack.pop()
                     }
                 }
-                CohereButton {
-                    textColor: "#5b6573";
-                    textSize: Settings.theme.adjustedPixel(18);
-                    color: "#D2D4D5";
+                QtControls.Button {
                     text: "No"
                     onClicked: {
                         pageStack.pop()

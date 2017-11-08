@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include <QVariantMap>
+#include <QIcon>
 
 class Theme : public QObject
 {
@@ -221,6 +222,10 @@ public:
      * Get an icon from the theme.
      */
     Q_INVOKABLE QUrl icon(const QString& name, bool useSystemFallback = false);
+    /**
+     * Get an icon from the theme.
+     */
+    Q_INVOKABLE QIcon iconActual(const QString& name);
     /**
      * Get a font from the theme.
      */

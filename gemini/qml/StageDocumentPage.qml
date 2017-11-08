@@ -23,7 +23,7 @@ import org.kde.calligra 1.0 as Calligra
 Item {
     id: base;
     signal canvasInteractionStarted();
-    property alias document: stageDocument.document;
+    property alias document: stageDocument;
     property alias textEditor: stageDocument.textEditor;
     property QtObject canvas: stageCanvas;
     property alias source: stageDocument.source;
@@ -36,8 +36,8 @@ Item {
                 baseLoadingDialog.visible = true;
             }
             else if(status == Calligra.DocumentStatus.Loaded) {
-                console.debug("doc and part: " + stageDocument.doc + " " + stageDocument.part);
-                mainWindow.setDocAndPart(stageDocument.doc, stageDocument.part);
+                console.debug("doc and part: " + stageDocument.document + " " + stageDocument.part);
+                mainWindow.setDocAndPart(stageDocument.document, stageDocument.part);
                 baseLoadingDialog.hideMe();
 //                 thumbnailSize = Qt.size(Settings.theme.adjustedPixel(280), Settings.theme.adjustedPixel(360));
             }

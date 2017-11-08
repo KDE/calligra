@@ -39,6 +39,8 @@
 #include <QTextDocument>
 #include <QTextFrame>
 #include <QTextLayout>
+#include <QDebug>
+#include <QPointer>
 
 #include "ComponentsKoCanvasController.h"
 #include <libs/textlayout/KoTextShapeData.h>
@@ -51,9 +53,9 @@ public:
     Private() : part{nullptr}, document{nullptr}
     { }
 
-    KWPart* part;
-    KWDocument* document;
-    KWCanvasItem* canvas;
+    QPointer<KWPart> part;
+    QPointer<KWDocument> document;
+    QPointer<KWCanvasItem> canvas;
     QTimer indexChangedDelay;
 
     QList< QPair< QRectF, QUrl > > links;
@@ -184,6 +186,7 @@ bool TextDocumentImpl::load(const QUrl& url)
     d->document->setCheckAutoSaveFile(false);
 
     bool retval = d->document->openUrl(url);
+    qDebug() << "Attempting to open" << url << "and our success was" << retval;
 
     d->canvas = static_cast<KWCanvasItem*>(d->part->canvasItem(d->document));
 

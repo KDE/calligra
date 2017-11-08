@@ -19,6 +19,8 @@
 import QtQuick 2.0
 import org.calligra 1.0
 import Calligra.Gemini.Dropbox 1.0
+import QtQuick.Controls 1.4 as QtControls
+import org.kde.kirigami 2.1 as Kirigami
 import "../../../components"
 
 Item {
@@ -49,11 +51,14 @@ Item {
     InfoBanner { id: i_infobanner; }
     Component {
         id: itemDelegate;
-        Button {
+        MouseArea {
             width: folderListView.cellWidth;
             height: folderListView.cellHeight;
             enabled: model.is_dir ? true : Settings.mimeTypeToDocumentClass(model.mime_type) !== DocumentListModel.UnknownType;
-            opacity: enabled ? 1 : 0.3
+            Rectangle {
+                anchors.fill: parent;
+                opacity: parent.enabled ? 1 : 0.3
+            }
 
             Image {
                 id: icon;
@@ -87,7 +92,7 @@ Item {
                 sourceSize.width: width;
                 sourceSize.height: height;
             }
-            Label {
+            Kirigami.Label {
                 id: lblName;
                 anchors {
                     left: parent.left;
@@ -162,7 +167,7 @@ Item {
                         height: Constants.DefaultMargin;
                     }
 
-                    Label {
+                    Kirigami.Label {
                         id: l_name
                         anchors.horizontalCenter: parent.horizontalCenter;
                         height: font.pixelSize;
@@ -171,25 +176,22 @@ Item {
                             var filename2 = filename1[filename1.length-1];
                             return filename2;
                         }
-                        color: "black"
                     }
 
-                    ProgressBar {
+                    QtControls.ProgressBar {
                         id: pb_updown
                         anchors.horizontalCenter: parent.horizontalCenter;
                         visible: !is_finished && !in_queue
                         width: parent.width - 120
                         height: 18
-                        progress: progressing
+                        value: progressing
                     }
 
-                    Label {
+                    Kirigami.Label {
                         id: lb_updown_total
                         anchors.horizontalCenter: parent.horizontalCenter;
                         height: visible ? font.pixelSize : 0;
                         visible: !is_finished && !in_queue
-                        font: Settings.theme.font("templateLabel");
-                        color: "#5b6573";
                         text:""
                     }
 
@@ -229,7 +231,7 @@ Item {
             id: pageHeader;
             height: currentDir !== "/" ? backToRootButton.height : 0;
             width: page.width;
-            Button {
+            QtControls.Button {
                 id: backToRootButton;
                 anchors {
                     top: parent.top;
@@ -239,10 +241,8 @@ Item {
                 height: Settings.theme.adjustedPixel(64);
                 opacity: currentDir !== "/" ? 1 : 0;
                 Behavior on opacity{ PropertyAnimation{ duration: Constants.AnimationDuration; } }
-                image: Settings.theme.icon("SVG-Icon-MenuBack-1");
-                imageMargin: Settings.theme.adjustedPixel(8);
+                iconSource: Settings.theme.icon("SVG-Icon-MenuBack-1");
                 text: "Back to parent folder"
-                textColor: "#5B6573";
                 onClicked: {
                     controllerMIT.backtoRootDir()
                     controllerMIT.getlistoffolder()
@@ -256,7 +256,7 @@ Item {
         id:this_folder_is_empty
         visible: false
         anchors.fill: parent
-        Label {
+        Kirigami.Label {
             anchors.centerIn: parent
             text:"This Folder is Empty"
             color: "grey"
@@ -269,7 +269,7 @@ Item {
         anchors.centerIn: parent
         width: parent.width - fakeTheme.paddingLarge
         height: r_label_x.height + r_button_x.height;
-        Label {
+        Kirigami.Label {
             id: r_label_x
             anchors {
                 bottom: r_button_x.top;
@@ -281,7 +281,7 @@ Item {
             text: "There was a problem loading your Dropbox. It could be lost connection or a slow network. Check your connection or try again later. The reported error was: " + errorText;
             wrapMode: Text.Wrap;
         }
-        Button {
+        QtControls.Button {
             id:r_button_x
             text:"Retry"
             anchors {
@@ -297,7 +297,7 @@ Item {
         }
     }
 
-    BusyIndicator {
+    QtControls.BusyIndicator {
         id: b_indicator
         anchors.centerIn: parent
         running: b_indicator.visible;

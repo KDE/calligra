@@ -22,6 +22,7 @@ import "../components"
 
 Page {
     id: base;
+    objectName: "WelcomePageWords"
     Label {
         id: docTypeSelectorRow;
         anchors {

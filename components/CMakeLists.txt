@@ -28,7 +28,11 @@ set(components_SRCS
     impl/ComponentsKoCanvasController.cpp
 )
 
+if(WIN32)
+add_library(CalligraComponentsPlugin MODULE ${components_SRCS})
+else()
 add_library(CalligraComponentsPlugin SHARED ${components_SRCS})
+endif()
 target_include_directories(CalligraComponentsPlugin
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -45,5 +49,5 @@ target_link_libraries( CalligraComponentsPlugin
     koplugin
 )
 
-install(TARGETS CalligraComponentsPlugin DESTINATION ${QML_INSTALL_DIR}/org/kde/calligra)
-install(FILES qmldir DESTINATION ${QML_INSTALL_DIR}/org/kde/calligra)
+install(TARGETS CalligraComponentsPlugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/calligra)
+install(FILES qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/calligra)

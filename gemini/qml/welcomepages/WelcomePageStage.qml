@@ -22,6 +22,7 @@ import "../components"
 
 Page {
     id: base;
+    objectName: "WelcomePageStage";
     function activateTemplate(templateFile) {
         console.debug(templateFile);
         if(templateFile.slice(-1) === "/" || templateFile === "") {

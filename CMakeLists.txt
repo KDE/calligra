@@ -267,10 +267,17 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} QUIET
         DBus
         OpenGL
         Quick
+        QuickWidgets
         Sql
         WebKit
-        WebKitWidgets
+#         WebKitWidgets
 )
+message("**********************************************************************************************************************")
+message("**********************************************************************************************************************")
+message("Qt WebKitWidgets is required for Stage's html export preview. This will need porting, as that module no longer exists.")
+message("**********************************************************************************************************************")
+message("**********************************************************************************************************************")
+
 # Qt5Declarative was removed in Qt 5.6.0 so search for it in a separate call
 # Including it in a collected find_package(Qt5 ...) call can lead to a fatal not-found error:
 # * Qt5 (required version >= 5.3.0)
@@ -289,6 +296,10 @@ set_package_properties(Qt5OpenGL PROPERTIES
 )
 set_package_properties(Qt5Quick PROPERTIES
     PURPOSE "Required for QtQuick2 components"
+    TYPE RECOMMENDED
+)
+set_package_properties(Qt5QuickWidgets PROPERTIES
+    PURPOSE "Required for Calligra Gemini"
     TYPE RECOMMENDED
 )
 set_package_properties(Qt5Sql PROPERTIES
@@ -360,9 +371,11 @@ endif()
 
 # overcome some platform incompatibilities
 if(WIN32)
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/winquirks)
-    add_definitions(-D_USE_MATH_DEFINES)
-    add_definitions(-DNOMINMAX)
+	if(NOT MINGW)
+		include_directories(${CMAKE_CURRENT_SOURCE_DIR}/winquirks)
+		add_definitions(-D_USE_MATH_DEFINES)
+		add_definitions(-DNOMINMAX)
+	endif()
     set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
 endif()
 
@@ -816,10 +829,9 @@ set_package_properties(PopplerXPDFHeaders PROPERTIES
 
 
 ##
-## Test for libgit2 and Libqgit2
+## Test for libgit2
 ##
 macro_optional_find_package(Libgit2)
-macro_optional_find_package(Libqgit2)
 
 ##
 ## Generate a file for prefix information
@@ -987,9 +999,9 @@ calligra_drop_product_on_bad_condition( FEATURE_RDF
     Soprano_FOUND "Soprano not found"
 )
 
-calligra_drop_product_on_bad_condition( PART_STAGE
-    Qt5WebKitWidgets_FOUND "Qt5WebKitWidgets devel not found"
-)
+# calligra_drop_product_on_bad_condition( PART_STAGE
+#     Qt5WebKitWidgets_FOUND "Qt5WebKitWidgets devel not found"
+# )
 
 calligra_drop_product_on_bad_condition( PART_SHEETS
     EIGEN3_FOUND "Eigen devel not found"
@@ -1081,7 +1093,6 @@ calligra_drop_product_on_bad_condition( APP_PLAN
 
 calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
     LIBGIT2_FOUND  "libgit2 devel not found"
-    LIBQGIT2_FOUND "libqgit2 devel not found"
 )
 
 calligra_drop_product_on_bad_condition( PART_QTQUICK
