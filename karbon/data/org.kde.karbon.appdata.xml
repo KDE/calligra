@@ -24,6 +24,7 @@
   <name xml:lang="pl">Karbon</name>
   <name xml:lang="pt">Karbon</name>
   <name xml:lang="pt-BR">Karbon</name>
+  <name xml:lang="ru">Karbon</name>
   <name xml:lang="sk">Karbon</name>
   <name xml:lang="sv">Karbon</name>
   <name xml:lang="uk">Karbon</name>
@@ -48,6 +49,7 @@
   <summary xml:lang="pl">Skalowalna grafika</summary>
   <summary xml:lang="pt">Gráficos Vectoriais</summary>
   <summary xml:lang="pt-BR">Imagens vetoriais</summary>
+  <summary xml:lang="ru">Редактор векторной графики</summary>
   <summary xml:lang="sk">Škálovateľná grafika</summary>
   <summary xml:lang="sv">Skalbar grafik</summary>
   <summary xml:lang="uk">Програма для роботи з масштабованою графікою</summary>
@@ -97,6 +99,7 @@
     <p xml:lang="pl">Możliwości:</p>
     <p xml:lang="pt">Funcionalidades:</p>
     <p xml:lang="pt-BR">Funcionalidades:</p>
+    <p xml:lang="ru">Возможности:</p>
     <p xml:lang="sk">Funkcie:</p>
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="uk">Можливості:</p>

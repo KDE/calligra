@@ -16,6 +16,7 @@
   <name xml:lang="pl">Słowa Calligra</name>
   <name xml:lang="pt">Calligra Words</name>
   <name xml:lang="pt-BR">Calligra Words</name>
+  <name xml:lang="ru">Calligra Words</name>
   <name xml:lang="sk">Calligra Words</name>
   <name xml:lang="sv">Calligra Words</name>
   <name xml:lang="tr">Calligra Kelime İşlemci</name>
@@ -42,6 +43,7 @@
   <summary xml:lang="pl">Edytor tekstu</summary>
   <summary xml:lang="pt">Processador de Texto</summary>
   <summary xml:lang="pt-BR">Processador de Texto</summary>
+  <summary xml:lang="ru">Текстовый процессор</summary>
   <summary xml:lang="sk">Textový procesor</summary>
   <summary xml:lang="sv">Ordbehandlare</summary>
   <summary xml:lang="tr">Kelime İşlemci</summary>
@@ -94,6 +96,7 @@
     <p xml:lang="pl">Cechy:</p>
     <p xml:lang="pt">Funcionalidades:</p>
     <p xml:lang="pt-BR">Funcionalidades:</p>
+    <p xml:lang="ru">Возможности:</p>
     <p xml:lang="sk">Funkcie:</p>
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="tr">Özellikler:</p>

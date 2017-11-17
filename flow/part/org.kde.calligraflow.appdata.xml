@@ -24,6 +24,7 @@
   <name xml:lang="pl">Przepływ</name>
   <name xml:lang="pt">Flow</name>
   <name xml:lang="pt-BR">Flow</name>
+  <name xml:lang="ru">Flow</name>
   <name xml:lang="sk">Flow</name>
   <name xml:lang="sv">Flow</name>
   <name xml:lang="uk">Flow</name>
@@ -97,6 +98,7 @@
     <p xml:lang="pl">Cechy:</p>
     <p xml:lang="pt">Funcionalidades:</p>
     <p xml:lang="pt-BR">Funcionalidades:</p>
+    <p xml:lang="ru">Возможности:</p>
     <p xml:lang="sk">Funkcie:</p>
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="uk">Можливості:</p>

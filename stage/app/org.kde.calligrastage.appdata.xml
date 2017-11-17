@@ -16,6 +16,7 @@
   <name xml:lang="pl">Scena Calligra</name>
   <name xml:lang="pt">Calligra Stage</name>
   <name xml:lang="pt-BR">Calligra Stage</name>
+  <name xml:lang="ru">Calligra Stage</name>
   <name xml:lang="sk">Calligra Stage</name>
   <name xml:lang="sv">Calligra Stage</name>
   <name xml:lang="uk">Calligra Stage</name>
@@ -87,6 +88,7 @@
     <p xml:lang="pl">Cechy:</p>
     <p xml:lang="pt">Funcionalidades:</p>
     <p xml:lang="pt-BR">Funcionalidades:</p>
+    <p xml:lang="ru">Возможности:</p>
     <p xml:lang="sk">Funkcie:</p>
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="uk">Можливості:</p>
