@@ -24,6 +24,7 @@
   <name xml:lang="pl">Plan</name>
   <name xml:lang="pt">Plan</name>
   <name xml:lang="pt-BR">Plan</name>
+  <name xml:lang="ru">Plan</name>
   <name xml:lang="sk">Plan</name>
   <name xml:lang="sv">Plan</name>
   <name xml:lang="uk">Plan</name>
@@ -48,6 +49,7 @@
   <summary xml:lang="pl">Zarządzanie projektem</summary>
   <summary xml:lang="pt">Gestão de Projectos</summary>
   <summary xml:lang="pt-BR">Gerenciamento de Projetos</summary>
+  <summary xml:lang="ru">Управление проектами</summary>
   <summary xml:lang="sk">Správa projektov</summary>
   <summary xml:lang="sv">Projekthantering</summary>
   <summary xml:lang="uk">Керування проектами</summary>
@@ -97,6 +99,7 @@
     <p xml:lang="pl">Cechy:</p>
     <p xml:lang="pt">Funcionalidades:</p>
     <p xml:lang="pt-BR">Funcionalidades:</p>
+    <p xml:lang="ru">Возможности:</p>
     <p xml:lang="sk">Funkcie:</p>
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="uk">Можливості:</p>

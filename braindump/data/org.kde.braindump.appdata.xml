@@ -25,6 +25,7 @@
   <name xml:lang="pl">Braindump</name>
   <name xml:lang="pt">BrainDump</name>
   <name xml:lang="pt-BR">Braindump</name>
+  <name xml:lang="ru">Braindump</name>
   <name xml:lang="sk">Braindump</name>
   <name xml:lang="sv">Braindump</name>
   <name xml:lang="tr">Braindump</name>
@@ -46,6 +47,7 @@
   <summary xml:lang="pl">Zbieranie uwag i pomysłów</summary>
   <summary xml:lang="pt">Recolha de notas e ideias</summary>
   <summary xml:lang="pt-BR">Juntando notas e ideias</summary>
+  <summary xml:lang="ru">Программа для хранения заметок и идей</summary>
   <summary xml:lang="sk">Zbieranie poznámok a nápadov</summary>
   <summary xml:lang="sv">Anteckningar och idéinsamling</summary>
   <summary xml:lang="tr">Notları ve fikirleri Toplama</summary>
