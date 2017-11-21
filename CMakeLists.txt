@@ -423,6 +423,11 @@ set_package_properties(KF5CalendarCore PROPERTIES
     TYPE OPTIONAL
 )
 
+if ("${KF5CalendarCore_VERSION}" VERSION_GREATER 5.6.40)
+    set(HAVE_QDATETIME_KCALCORE TRUE)
+endif()
+
+
 ##
 ## Test for KF5Contacts
 ##
