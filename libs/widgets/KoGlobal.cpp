@@ -112,7 +112,7 @@ void KoGlobal::createListOfLanguages()
     // currently have en_GB or en_US etc.
 
     const QStringList translationList = KoResourcePaths::findAllResources("locale",
-                                        QString::fromLatin1("*/entry.desktop"));
+                                        QString::fromLatin1("*/kf5_entry.desktop"));
     for (QStringList::ConstIterator it = translationList.begin();
             it != translationList.end(); ++it) {
         // Extract the language tag from the directory name
