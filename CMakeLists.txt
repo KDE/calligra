@@ -153,6 +153,9 @@ endif ()
 # finally choose products/features to build
 calligra_set_productset(${PRODUCTSET})
 
+# Leave this line as is, it is used to enable removal of Plan when releasing Calligra
+#calligra_disable_product(APP_PLAN "Plan is released separatly")
+
  ##########################
 ###########################
 ## Look for ECM, Qt, KF5 ##

@@ -4,6 +4,7 @@
 # Ruby script for generating tarball releases of the Calligra repository
 # This script can create signed tarballs with source code, translations and documentation
 #
+# (c) 2017 Dag Andersen <danders@get2net.dk>
 # (c) 2016 Dag Andersen <danders@get2net.dk>
 #
 # Parts of this script is from create_tarball_kf5.rb, copyright by:
@@ -19,11 +20,46 @@ require 'ostruct'
 require 'find'
 require 'fileutils'
 
+# Compare two version strings
+# The strings must have the format "<major>.<minor>.<release>"
+# e.g "3.0.1"
+# Returns:
+#   1   v1 > v2
+#   0   v1 == v2
+#   -1  v1 < v2
+def compare_versions(v1, v2)
+    if v1 == "HEAD"
+        return 1
+    end
+    vA = v1.split('.')
+    vB = v2.split('.')
+    if (vA[0] > vB[0])
+        return 1
+    end
+    if (vA[0] < vB[0])
+        return -1
+    end
+    if (vA[1] > vB[1])
+        return 1
+    end
+    if (vA[1] < vB[1])
+        return -1
+    end
+    if (vA[2] > vB[2])
+        return 1
+    end
+    if (vA[2] < vB[2])
+        return -1
+    end
+    return 0
+end
+
 # check command line parameters
 options = OpenStruct.new
 options.help  = false
 options.sign  = false
 options.program = "gpg2"
+options.branch = "trunk"
 options.translations = true
 options.docs = false
 options.languages = []
@@ -45,6 +81,9 @@ opts = OptionParser.new do |opts|
         options.checkversion = false;
     end
     opts.on("-g", "--gittag <tag>", "Git tag (Default: 'HEAD')") do |g|
+        options.tag = g
+    end
+    opts.on("-b", "--branch <tag>", "Svn branch for translations [trunk | stable] (Default: 'trunk')") do |g|
         options.tag = g
     end
     opts.on("-t", "--no-translations", "Do not include translations (Default: translations included)") do |t|
@@ -132,9 +171,10 @@ if !File.exist?("CMakeLists.txt")
     exit
 end
 
+# get the version
+cversion=`grep '(CALLIGRA_VERSION_STRING' CMakeLists.txt | cut -d'"' -f2`
+cversion = cversion.delete("\n").delete("\r").strip
 if options.checkversion
-    cversion=`grep '(CALLIGRA_VERSION_STRING' CMakeLists.txt | cut -d'"' -f2`
-    cversion = cversion.delete("\n").delete("\r").strip
     cstring = options.version
     if options.cstring
         cstring = options.cstring
@@ -153,13 +193,26 @@ if options.checkversion
     end
 end
 
+# From release 3.0.89, Plan is not released as part of calligra
+if compare_versions(cversion, "3.0.89") >= 0
+    if (options.infolevel > 2)
+        puts "Removing plan, version is: #{cversion}"
+    end
+    `sed -i 's/\#calligra_disable_product(APP_PLAN/calligra_disable_product(APP_PLAN/g' CMakeLists.txt`
+    `sed -i 's/add_subdirectory(plan)/\#add_subdirectory(plan)/g' CMakeLists.txt`
+    `rm -rf plan`
+end
+
 # translations
 if options.translations
     
     svnbase = "svn+ssh://svn@svn.kde.org/home/kde"
-    
     # atm trunk and no revision is assumed
-    svnroot = "#{svnbase}/trunk"
+    if options.branch == "trunk"
+        svnroot = "#{svnbase}/trunk"
+    else
+        svnroot = "#{svnbase}/branches/stable"
+    end
     rev = ""
     
     puts "-> Fetching po file names .."
