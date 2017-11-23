@@ -52,7 +52,7 @@ public:
 };
 #endif
 
-extern "C" KARBONUI_EXPORT int kdemain( int argc, char* argv[] )
+extern "C" Q_DECL_EXPORT int kdemain( int argc, char* argv[] )
 {
     /**
      * Disable debug output by default, only log warnings.

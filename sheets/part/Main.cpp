@@ -20,8 +20,6 @@
 #include "AboutData.h"
 #include "DocBase.h"
 
-#include "sheets_common_export.h"
-
 #include <KoApplication.h>
 #include <Calligra2Migration.h>
 
@@ -29,7 +27,7 @@
 
 using namespace Calligra::Sheets;
 
-extern "C" CALLIGRA_SHEETS_COMMON_EXPORT int kdemain(int argc, char **argv)
+extern "C" Q_DECL_EXPORT int kdemain(int argc, char **argv)
 {
     /**
      * Disable debug output by default, only log warnings.
