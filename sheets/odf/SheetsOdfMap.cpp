@@ -235,7 +235,7 @@ bool Odf::loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfCo
     map->styleManager()->clearOasisStyles();
 
     // Load databases. This needs the sheets to be loaded.
-#warning TODO new style odf
+///TODO new style odf
     map->databaseManager()->loadOdf(body); // table:database-ranges
     loadNamedAreas(map->namedAreaManager(), body); // table:named-expressions
 
@@ -303,7 +303,7 @@ bool Odf::saveMap(Map *map, KoXmlWriter & xmlWriter, KoShapeSavingContext & savi
     tableContext.valStyle.writeStyle(xmlWriter);
 
     saveNamedAreas(map->namedAreaManager(), savingContext.xmlWriter());
-#warning TODO new style odf
+///TODO new style odf
     map->databaseManager()->saveOdf(savingContext.xmlWriter());
     return true;
 }
