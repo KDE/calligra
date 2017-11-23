@@ -18,7 +18,7 @@
 
 import QtQuick 2.0
 import org.calligra 1.0
-import QtQuick.Controls 1.4 as QtControls
+import QtQuick.Controls 2.2 as QtControls
 
 Rectangle {
     anchors.fill: parent;

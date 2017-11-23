@@ -18,8 +18,7 @@
 
 import QtQuick 2.0
 import org.calligra 1.0
-import QtQuick.Controls 1.4 as QtControls
-import org.kde.kirigami 2.1 as Kirigami
+import QtQuick.Controls 2.2 as QtControls
 
 Rectangle {
     anchors.fill: parent;
@@ -39,7 +38,7 @@ Rectangle {
         MouseArea { anchors.fill: parent; onClicked: { /*nothing */ } }
         SimpleTouchArea { anchors.fill: parent; onTouched: { /*nothing */ } }
     }
-    Kirigami.Label {
+    QtControls.Label {
         anchors.fill: parent;
         horizontalAlignment: Text.AlignHCenter;
         text: "Sorry, support for WebDav is not yet implemented.";

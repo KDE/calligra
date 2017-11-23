@@ -18,8 +18,7 @@
  */
 
 import QtQuick 2.0
-import QtQuick.Controls 1.4 as QtControls
-import org.kde.kirigami 2.1 as Kirigami
+import QtQuick.Controls 2.2 as QtControls
 import org.calligra 1.0
 
 Rectangle {
@@ -45,7 +44,7 @@ Rectangle {
         MouseArea { anchors.fill: parent; onClicked: { /*nothing */ } }
         SimpleTouchArea { anchors.fill: parent; onTouched: { /*nothing */ } }
     }
-    Kirigami.Label {
+    QtControls.Label {
         anchors {
             bottom: parent.verticalCenter;
             left: parent.left;
@@ -56,7 +55,7 @@ Rectangle {
         horizontalAlignment: Text.AlignHCenter;
         text: "Do you wish to remove this account?";
     }
-    Kirigami.Label {
+    QtControls.Label {
         id: nameField;
         anchors {
             top: parent.verticalCenter;
@@ -67,7 +66,7 @@ Rectangle {
         verticalAlignment: Text.AlignVCenter;
         horizontalAlignment: Text.AlignHCenter;
     }
-    Kirigami.Label {
+    QtControls.Label {
         anchors {
             top: nameField.bottom;
             left: parent.left;

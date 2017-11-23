@@ -17,7 +17,7 @@
  */
 
 import QtQuick 2.0
-import org.kde.kirigami 2.1 as Kirigami
+import QtQuick.Controls 2.2 as QtControls
 import org.calligra 1.0
 import "../components"
 
@@ -98,7 +98,7 @@ Page {
             }
         }
     }
-    Kirigami.Label {
+    QtControls.Label {
         anchors.fill: parent;
         text: "No %1\n\nPlease drop some into your Documents folder\n(%2)".arg(base.categoryUIName).arg(docList.model.documentsFolder);
         horizontalAlignment: Text.AlignHCenter;
@@ -134,7 +134,7 @@ Page {
                 smooth: true;
                 asynchronous: true;
             }
-            Kirigami.Label {
+            QtControls.Label {
                 id: lblName;
                 anchors {
                     left: parent.left;

@@ -17,8 +17,7 @@
  */
 
 import QtQuick 2.0
-import QtQuick.Controls 1.4 as QtControls
-import org.kde.kirigami 2.1 as Kirigami
+import QtQuick.Controls 2.2 as QtControls
 import org.calligra 1.0
 import Calligra.Gemini.Dropbox 1.0
 import "../../components"
@@ -60,7 +59,7 @@ Page {
         delegate: Item {
             height: Settings.theme.adjustedPixel(64);
             width: ListView.view.width;
-            Kirigami.Label {
+            QtControls.Label {
                 anchors {
                     top: parent.top;
                     left: parent.left;
@@ -120,7 +119,7 @@ Page {
             }
         }
     }
-    Kirigami.Label {
+    QtControls.Label {
         anchors.fill: accountsView;
         text: "You have no cloud accounts defined. Please add one by clicking on your service of choice below.";
         horizontalAlignment: Text.AlignHCenter;
@@ -136,7 +135,7 @@ Page {
             bottom: parent.bottom;
         }
         height: bottomButtonRow.height + Settings.theme.adjustedPixel(8);
-        Kirigami.Label {
+        QtControls.Label {
             anchors.fill: parent;
             text: "Add new account:";
             horizontalAlignment: Text.AlignLeft;

@@ -17,7 +17,7 @@
  */
 
 import QtQuick 2.0
-import QtQuick.Controls 1.4 as QtControls
+import QtQuick.Controls 2.2 as QtControls
 import org.kde.kirigami 2.1 as Kirigami
 import org.calligra 1.0
 import Calligra.Gemini.Git 1.0
@@ -99,7 +99,7 @@ Item {
                 }
             }
         }
-        Kirigami.Label {
+        QtControls.Label {
             id: updatedLabel;
             opacity: 0;
             Behavior on opacity {
@@ -131,7 +131,7 @@ Item {
                 right: parent.right;
                 bottom: parent.bottom;
             }
-            header: Kirigami.Label {
+            header: QtControls.Label {
                 width: logListView.width;
                 height: Constants.GridHeight / 2;
                 text: "Recent Changes";
@@ -141,21 +141,21 @@ Item {
             delegate: Column {
                 width: logListView.width;
                 height: childrenRect.height;
-                Kirigami.Label {
+                QtControls.Label {
                     id: messageText;
                     width: parent.width;
                     height: paintedHeight;
                     text: model.shortMessage;
                     wrapMode: Text.Wrap;
                 }
-                Kirigami.Label {
+                QtControls.Label {
                     id: timeText;
                     width: parent.width;
                     height: paintedHeight;
                     opacity: 0.7;
                     text: "on " + model.time;
                 }
-                Kirigami.Label {
+                QtControls.Label {
                     id: nameText;
                     width: parent.width;
                     height: paintedHeight;
@@ -196,7 +196,7 @@ Item {
         delegate: documentTile;
         ScrollDecorator { flickableItem: docList; }
     }
-    Kirigami.Label {
+    QtControls.Label {
         anchors.fill: parent;
         text: "No Documents\n\nPlease add some documents to your reporitory.\n(%1)".arg(docList.model.documentsFolder);
         horizontalAlignment: Text.AlignHCenter;
@@ -232,7 +232,7 @@ Item {
                 smooth: true;
                 asynchronous: true;
             }
-            Kirigami.Label {
+            QtControls.Label {
                 id: lblName;
                 anchors {
                     left: parent.left;
