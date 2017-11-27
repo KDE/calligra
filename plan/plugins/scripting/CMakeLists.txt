@@ -41,8 +41,8 @@ target_link_libraries(krossmoduleplan
     planprivate
     kplatokernel
     kplatomodels
-    komain
-    kokross
+    planmain
+    plankross
 )
 
 install(TARGETS krossmoduleplan DESTINATION ${PLUGIN_INSTALL_DIR}/calligraplan/extensions)

@@ -27,7 +27,6 @@
 #include <kptdebug.h>
 
 #include <KoComponentData.h>
-#include <KoOpenPane.h>
 
 #include <KRecentFilesAction>
 #include <KXMLGUIFactory>
@@ -89,10 +88,8 @@ void Part::slotHelpContents()
     QDesktopServices::openUrl(QUrl(QStringLiteral("https://userbase.kde.org/Plan/Manual")));
 }
 
-void Part::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
+void Part::showStartUpWidget(KoMainWindow *parent)
 {
-    Q_UNUSED(alwaysShow);
-
     m_toolbarVisible = parent->factory()->container("mainToolBar", parent)->isVisible();
     if (m_toolbarVisible) {
         parent->factory()->container("mainToolBar", parent)->hide();

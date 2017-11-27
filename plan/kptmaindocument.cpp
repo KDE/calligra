@@ -39,7 +39,6 @@
 #include "kptworkpackagemergedialog.h"
 #include "kptdebug.h"
 
-#include <KoZoomHandler.h>
 #include <KoStore.h>
 #include <KoXmlReader.h>
 #include <KoStoreDevice.h>

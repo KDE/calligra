@@ -36,7 +36,6 @@
 #include "kptdocuments.h"
 #include "kptcommand.h"
 
-#include <KoZoomHandler.h>
 #include <KoXmlReader.h>
 #include <KoStore.h>
 #include <KoDocumentInfo.h>

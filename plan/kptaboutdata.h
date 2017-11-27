@@ -21,11 +21,11 @@
 #ifndef KPTABOUTDATA_H
 #define KPTABOUTDATA_H
 
+#include "config.h"
+
 #include <KAboutData>
 #include <KLocalizedString>
 #include <kcoreaddons_version.h>
-
-#include <calligraversion.h>
 
 namespace KPlato
 {
@@ -35,16 +35,18 @@ KAboutData * newAboutData()
     KAboutData *aboutData = new KAboutData(
         QStringLiteral("calligraplan"),
         i18nc("application name", "Plan"),
-        QStringLiteral(CALLIGRA_VERSION_STRING),
+        QStringLiteral(PLAN_VERSION_STRING),
         i18n("Project Planning and Management Tool"),
         KAboutLicense::GPL,
-        i18n("Copyright 1998-%1, The Plan Team", QStringLiteral(CALLIGRA_YEAR)),
+        i18n("Copyright 1998-%1, The Plan Team", QStringLiteral(PLAN_YEAR)),
         QString(),
         QStringLiteral("https://www.calligra.org/plan/"));
+
+    aboutData->addAuthor(i18n("Dag Andersen"), QString(), "danders@get2net.dk");
     aboutData->addAuthor(i18n("Thomas Zander")); // please don't re-add, I don't like getting personal emails :)
     aboutData->addAuthor(i18n("Bo Thorsen"), QString(), "bo@sonofthor.dk");
-    aboutData->addAuthor(i18n("Dag Andersen"), QString(), "danders@get2net.dk");
     aboutData->addAuthor(i18n("Raphael Langerhorst"),QString(),"raphael.langerhorst@kdemail.net");
+
     // standard ki18n translator strings
     aboutData->setTranslator(i18nc("NAME OF TRANSLATORS", "Your names"),
                              i18nc("EMAIL OF TRANSLATORS", "Your emails"));

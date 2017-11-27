@@ -25,23 +25,23 @@
 #include <KLocalizedString>
 #include <kcoreaddons_version.h>
 
-#include <calligraversion.h>
+#include <config.h>
 
 namespace KPlatoWork
 {
 
 static const char PLANWORK_DESCRIPTION[] = I18N_NOOP("PlanWork - Work Package handler for the Plan Project Planning Tool");
-static const char PLANWORK_VERSION[] = CALLIGRA_VERSION_STRING;
+static const char PLANWORK_VERSION[] = PLAN_VERSION_STRING;
 
 KAboutData * newAboutData()
 {
     KAboutData * aboutData = new KAboutData(
         QStringLiteral("calligraplanwork"),
         i18nc("application name", "Plan WorkPackage Handler"),
-        QStringLiteral(CALLIGRA_VERSION_STRING),
+        QStringLiteral(PLAN_VERSION_STRING),
         i18n("PlanWork - Work Package handler for the Plan Project Planning Tool"),
         KAboutLicense::GPL,
-        i18n("Copyright 1998-%1, The Plan Team", QStringLiteral(CALLIGRA_YEAR)),
+        i18n("Copyright 1998-%1, The Plan Team", QStringLiteral(PLAN_YEAR)),
         QString(),
         QStringLiteral("https://www.calligra.org/plan/"));
 

@@ -28,9 +28,6 @@
 
 #include <QMimeData>
 
-
-class KoDocument;
-
 namespace KPlato
 {
 

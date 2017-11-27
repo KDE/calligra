@@ -36,7 +36,7 @@ plankernel_add_unit_test(CalendarTester CalendarTester.cpp  LINK_LIBRARIES kplat
 
 ########## next target ###############
 
-plankernel_add_unit_test(ResourceTester ResourceTester.cpp  LINK_LIBRARIES kplatokernel kundo2 koodf Qt5::Test)
+plankernel_add_unit_test(ResourceTester ResourceTester.cpp  LINK_LIBRARIES kplatokernel plankundo2 planodf Qt5::Test)
 
 ########### next target ###############
 
@@ -52,7 +52,7 @@ plankernel_add_unit_test(AccountsTester AccountsTester.cpp  LINK_LIBRARIES planp
 
 ########### next target ###############
 
-plankernel_add_unit_test(AccountsCommandTester AccountsCommandTester.cpp  LINK_LIBRARIES kplatokernel komain Qt5::Test)
+plankernel_add_unit_test(AccountsCommandTester AccountsCommandTester.cpp  LINK_LIBRARIES kplatokernel planmain Qt5::Test)
 
 ########### next target ###############
 
@@ -60,7 +60,7 @@ plankernel_add_unit_test(PerformanceTester PerformanceTester.cpp  LINK_LIBRARIES
 
 ########### next target ###############
 
-plankernel_add_unit_test(CommandsTester CommandsTester.cpp  LINK_LIBRARIES planprivate kplatokernel kundo2 Qt5::Test)
+plankernel_add_unit_test(CommandsTester CommandsTester.cpp  LINK_LIBRARIES planprivate kplatokernel plankundo2 Qt5::Test)
 
 ########### next target ###############
 

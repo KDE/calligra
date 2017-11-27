@@ -23,6 +23,7 @@
 #include <KoApplication.h>
 #include <Calligra2Migration.h>
 
+#include <QApplication>
 #include <QLoggingCategory>
 
 extern "C" KPLATO_EXPORT int kdemain( int argc, char **argv )
@@ -39,6 +40,7 @@ extern "C" KPLATO_EXPORT int kdemain( int argc, char **argv )
     QLoggingCategory::setFilterRules("calligra.*.debug=false\n"
                                      "calligra.*.warning=true");
 
+    QApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
     KoApplication app(PLAN_MIME_TYPE, QStringLiteral("calligraplan"), KPlato::newAboutData, argc, argv);
 
     // Migrate data from kde4 to kf5 locations

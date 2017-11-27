@@ -3,9 +3,8 @@ if(BUILD_TESTING)
     add_subdirectory( tests )
 endif()
 
-include_directories(${KOODF_INCLUDES}
-                    ${CMAKE_SOURCE_DIR}/libs/widgetutils
-                   ${KUNDO2_INCLUDES})
+include_directories(${PLANODF_INCLUDES}
+                    ${PLANKUNDO2_INCLUDES})
 
 
 ########### KPlato kernel library ###############
@@ -43,16 +42,17 @@ generate_export_header(kplatokernel)
 
 target_link_libraries(kplatokernel
     PUBLIC
-        koodf
-        kowidgetutils
-        kundo2
-        KF5::KIOWidgets
+        plankundo2
+        planstore
+        planwidgetutils
+#         KF5::I18n
+#         KF5::CoreAddons
 )
 if(KF5Holidays_FOUND)
     target_link_libraries(kplatokernel PUBLIC KF5::Holidays)
 endif()
 
-set_target_properties(kplatokernel PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+set_target_properties(kplatokernel PROPERTIES VERSION ${GENERIC_PLAN_LIB_VERSION} SOVERSION ${GENERIC_PLAN_LIB_SOVERSION} )
 
 install(TARGETS kplatokernel ${INSTALL_TARGETS_DEFAULT_ARGS})
 

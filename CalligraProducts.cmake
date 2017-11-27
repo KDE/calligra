@@ -94,7 +94,7 @@ calligra_define_product(APP_STAGE "Stage app (for Desktop)"  UNMAINTAINED   REQU
 calligra_define_product(APP_SHEETS "Sheets app (for Desktop)" REQUIRES PART_SHEETS)
 calligra_define_product(APP_KARBON "Karbon app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
 calligra_define_product(APP_FLOW "Flow app (for Desktop)" UNPORTED  REQUIRES LIB_CALLIGRA LIB_KOMAIN LIB_KOPAGEAPP)
-calligra_define_product(APP_PLAN "Plan app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
+calligra_define_product(APP_PLAN "Plan app (for Desktop)")
 calligra_define_product(APP_BRAINDUMP "Braindump app (for Desktop)"  UNMAINTAINED  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
 calligra_define_product(DOC "Calligra Documentations" STAGING)
 
@@ -395,8 +395,6 @@ calligra_define_productset(KARBON "Full Karbon (for Desktop)"
 calligra_define_productset(PLAN "Full Plan (for Desktop)"
     REQUIRES
         APP_PLAN
-    OPTIONAL
-        FEATURE_SCRIPTING
 )
 calligra_define_productset(SHEETS "Full Sheets (for Desktop)"
     REQUIRES

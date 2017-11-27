@@ -20,5 +20,5 @@ planschedulers_tj_add_unit_test(TJTester
 
 planschedulers_tj_add_unit_test(SchedulerTester
     SchedulerTester.cpp
-    LINK_LIBRARIES plantjscheduler planprivate kplatokernel koodf Qt5::Test
+    LINK_LIBRARIES plantjscheduler planprivate kplatokernel planodf Qt5::Test
 )

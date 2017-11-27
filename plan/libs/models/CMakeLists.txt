@@ -4,10 +4,10 @@ if(BUILD_TESTING)
 endif()
 
 include_directories(
-    ../kernel 
-    ${CMAKE_SOURCE_DIR}/libs/widgetutils
-    ${KOODF_INCLUDES}
-    ${KUNDO2_INCLUDES}
+    ${PLANKERNEL_INCLUDES}
+    ${PLANWIDGETS_INCLUDES}
+    ${PLANODF_INCLUDES}
+    ${PLANKUNDO2_INCLUDES}
 )
 
 if (KF5Contacts_FOUND)
@@ -54,12 +54,11 @@ generate_export_header(kplatomodels)
 target_link_libraries(kplatomodels
     PUBLIC
         kplatokernel
-        koodf
-        kundo2
+        planodf
         KChart
+        KGantt
         KF5::KIOWidgets
     PRIVATE
-        KGantt
         KF5::Notifications
         KF5::TextWidgets
 )
@@ -67,7 +66,7 @@ if(KF5Contacts_FOUND)
     target_link_libraries(kplatomodels  PRIVATE KF5::Contacts)
 endif()
 
-set_target_properties(kplatomodels PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+set_target_properties(kplatomodels PROPERTIES VERSION ${GENERIC_PLAN_LIB_VERSION} SOVERSION ${GENERIC_PLAN_LIB_SOVERSION} )
 
 install(TARGETS kplatomodels ${INSTALL_TARGETS_DEFAULT_ARGS})
 

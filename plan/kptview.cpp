@@ -58,7 +58,6 @@
 #include <krun.h>
 #include <khelpclient.h>
 
-#include <KoTemplateCreateDia.h>
 #include <KoPart.h>
 #include <KoComponentData.h>
 #include <KoPluginLoader.h>
@@ -267,10 +266,10 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
 
     // The menu items
     // ------ File
-    actionCreateTemplate = new QAction( i18n( "&Create Template From Document..." ), this );
+/*    actionCreateTemplate = new QAction( i18n( "&Create Template From Document..." ), this );
     actionCollection()->addAction("file_createtemplate", actionCreateTemplate );
     connect( actionCreateTemplate, SIGNAL(triggered(bool)), SLOT(slotCreateTemplate()) );
-
+*/
     actionCreateNewProject = new QAction( i18n( "&Create New Project..." ), this );
     actionCollection()->addAction("file_createnewproject", actionCreateNewProject );
     connect( actionCreateNewProject, SIGNAL(triggered(bool)), SLOT(slotCreateNewProject()) );
@@ -486,12 +485,6 @@ void View::initiateViews()
     loadContext();
 
     QApplication::restoreOverrideCursor();
-}
-
-void View::slotCreateTemplate()
-{
-    KoTemplateCreateDia::createTemplate(koDocument()->documentPart()->templatesResourcePath(), ".plant",
-                                        getPart(), this);
 }
 
 void View::slotCreateNewProject()

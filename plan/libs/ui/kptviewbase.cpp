@@ -21,6 +21,7 @@
 #include "kptitemmodelbase.h"
 #include "kptproject.h"
 #include "kptdebug.h"
+#include "config.h"
 
 #include <kmessagebox.h>
 #include <kactioncollection.h>
@@ -28,11 +29,9 @@
 #include <kzip.h>
 
 #include <KoIcon.h>
-#include "calligraversion.h"
 #include <KoDocument.h>
 #include <KoPart.h>
 #include <KoMainWindow.h>
-#include <KoShape.h>
 #include <KoPageLayoutWidget.h>
 #include <KoPagePreviewWidget.h>
 #include <KoUnit.h>
@@ -329,10 +328,10 @@ QList<QWidget*> PrintingDialog::createOptionWidgets() const
     return QList<QWidget*>() << w;
 }
 
-QList<KoShape*> PrintingDialog::shapesOnPage(int)
+/*QList<KoShape*> PrintingDialog::shapesOnPage(int)
 {
     return QList<KoShape*>();
-}
+}*/
 
 void PrintingDialog::drawRect( QPainter &p, const QRect &r, Qt::Edges edges )
 {
@@ -979,7 +978,7 @@ void TreeViewBase::dropEvent( QDropEvent *e )
 KoPrintJob * TreeViewBase::createPrintJob( ViewBase *parent )
 {
     TreeViewPrintingDialog *dia = new TreeViewPrintingDialog( parent, this, parent->project() );
-    dia->printer().setCreator( QString( "Plan %1" ).arg( CALLIGRA_VERSION_STRING ) );
+    dia->printer().setCreator( QString( "Plan %1" ).arg( PLAN_VERSION_STRING ) );
 //    dia->printer().setFullPage(true); // ignore printer margins
     return dia;
 }
@@ -2002,7 +2001,7 @@ DoubleTreeViewBase::~DoubleTreeViewBase()
 KoPrintJob *DoubleTreeViewBase::createPrintJob( ViewBase *parent )
 {
     DoubleTreeViewPrintingDialog *dia = new DoubleTreeViewPrintingDialog( parent, this, parent->project() );
-    dia->printer().setCreator( QString( "Plan %1" ).arg( CALLIGRA_VERSION_STRING ) );
+    dia->printer().setCreator( QString( "Plan %1" ).arg( PLAN_VERSION_STRING ) );
 //    dia->printer().setFullPage(true); // ignore printer margins
     return dia;
 }

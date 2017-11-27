@@ -23,6 +23,7 @@
 #include "kptdebug.h"
 #include "WhatsThis.h"
 
+#include <KoApplication.h>
 #include <KoMainWindow.h>
 #include <KoDocument.h>
 #include <KoFileDialog.h>
@@ -280,27 +281,26 @@ void WelcomeView::slotOpenProject()
     }
     Project *p = project();
     if (p) {
-        if (!m_filedialog) {
-            m_filedialog = new QFileDialog(this,i18n("Open Document"));
-            m_filedialog->setFileMode(QFileDialog::ExistingFile);
-            m_filedialog->setNameFilters(QStringList()<<"Plan files (*.plan)");
-            m_filedialog->setOption(QFileDialog::HideNameFilterDetails, true);
-            connect(m_filedialog, SIGNAL(finished(int)), this, SLOT(slotOpenFileFinished(int)));
+        KoFileDialog filedialog(this, KoFileDialog::OpenFile, "OpenDocument");
+        filedialog.setCaption(i18n("Open Document"));
+        filedialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+        filedialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
+        filedialog.setHideNameFilterDetailsOption();
+        QUrl url = QUrl::fromUserInput(filedialog.filename());
+        if (!url.isEmpty() && mainWindow()->openDocument(url)) {
+            emit finished();
         }
-        m_filedialog->show();
-        m_filedialog->raise();
-        m_filedialog->activateWindow();
     }
 }
 
 void WelcomeView::slotOpenFileFinished(int result)
 {
-    QFileDialog *dia = qobject_cast<QFileDialog*>(sender());
+    KoFileDialog *dia = qobject_cast<KoFileDialog*>(sender());
     if (dia == 0) {
         return;
     }
     if (result == QDialog::Accepted) {
-        QUrl url = dia->selectedUrls().value(0);
+        QUrl url = QUrl::fromUserInput(dia->filename());
         if (!url.isEmpty() && mainWindow()->openDocument(url)) {
             emit finished();
         }

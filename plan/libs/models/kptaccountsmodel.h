@@ -1,4 +1,4 @@
-/* This file is KoDocument of the KDE project
+/* This file is part of the KDE project
   Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
   Copyright (C) 2011 Dag Andersen <danders@get2net.dk>
 

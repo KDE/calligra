@@ -18,7 +18,7 @@
 */
 
 #include "icalendarexport.h"
-#include "KoConfig.h"
+#include "config.h"
 
 #include <kptmaindocument.h>
 #include <kpttask.h>

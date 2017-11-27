@@ -46,14 +46,14 @@ target_link_libraries(planworkfactory
         kplatomodels
         kplatoui
         planprivate
-        komain
+        planmain
         KGantt
         KF5::Parts
     PRIVATE
         KF5::IconThemes
 )
 
-set_target_properties(planworkfactory PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+set_target_properties(planworkfactory PROPERTIES VERSION ${GENERIC_PLAN_LIB_VERSION} SOVERSION ${GENERIC_PLAN_LIB_SOVERSION} )
 
 install(TARGETS planworkfactory ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES calligraplanworksettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
@@ -94,7 +94,7 @@ target_link_libraries(
 
     planworkfactory
     kplatokernel
-    komain
+    planmain
     KF5::Parts
     KF5::IconThemes
     KF5::WindowSystem

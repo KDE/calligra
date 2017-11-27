@@ -25,7 +25,7 @@
 #include "ui_WelcomeView.h"
 #include "kptmainprojectdialog.h"
 
-#include <QFileDialog>
+#include <KoFileDialog.h>
 
 class KoDocument;
 
@@ -94,7 +94,7 @@ private:
     Ui::WelcomeView widget;
     RecentFilesModel *m_model;
     QPointer<MainProjectDialog> m_projectdialog;
-    QPointer<QFileDialog> m_filedialog;
+    QPointer<KoFileDialog> m_filedialog;
 };
 
 }  //KPlato namespace

@@ -198,17 +198,12 @@ public:
     KoPrintJob * createPrintJob();
     QPrintDialog* createPrintDialog(KoPrintJob*, QWidget*);
 
-    virtual KoZoomController *zoomController() const {
-        return 0;
-    }
-
 Q_SIGNALS:
     void currentScheduleManagerChanged( ScheduleManager *sm );
     void taskModulesChanged(const QStringList &modules);
 
 public Q_SLOTS:
     void slotUpdate();
-    void slotCreateTemplate();
     void slotCreateNewProject();
     void slotEditResource();
     void slotEditResource( Resource *resource );

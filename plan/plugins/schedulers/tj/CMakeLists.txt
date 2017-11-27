@@ -1,7 +1,7 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"calligraplan_scheduler_tj\")
 
 set(LIBTJ_INCLUDE_DIR taskjuggler)
-include_directories( ${LIBTJ_INCLUDE_DIR} ${KOODF_INCLUDES} ${CMAKE_SOURCE_DIR}/plan/libs/kernel  )
+include_directories(${LIBTJ_INCLUDE_DIR} ${PLANODF_INCLUDES} ${PLANKERNEL_INCLUDES})
 
 #add_subdirectory( taskjuggler )
 if(BUILD_TESTING)
@@ -39,7 +39,15 @@ set ( TJScheduler_SRCS
 
 # TODO: plugin should not be SHARED, but MODULE. Needs to be SHARED because tests link to it -> fix with util lib/objects
 add_library(plantjscheduler SHARED ${TJScheduler_SRCS} )
-calligraplan_scheduler_desktop_to_json(plantjscheduler plantjscheduler.desktop)
+# calligraplan_scheduler_desktop_to_json(plantjscheduler plantjscheduler.desktop)
+if(${KF5_VERSION} VERSION_LESS "5.16.0")
+    kcoreaddons_desktop_to_json(plantjscheduler plantjscheduler.desktop)
+else()
+    kcoreaddons_desktop_to_json(plantjscheduler plantjscheduler.desktop
+        SERVICE_TYPES ${PLAN_SOURCE_DIR}/libs/kernel/plan_schedulerplugin.desktop
+    )
+endif()
+
 # TODO: only export symbols for tests, not release
 generate_export_header(plantjscheduler BASE_NAME kplatotj)
 

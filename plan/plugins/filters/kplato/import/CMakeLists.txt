@@ -11,8 +11,15 @@ set(kplatoimport_PART_SRCS
 
 
 add_library(plankplatoimport MODULE ${kplatoimport_PART_SRCS})
-calligra_filter_desktop_to_json(plankplatoimport plan_kplato_import.desktop)
+# calligraplan_filter_desktop_to_json(plankplatoimport plan_kplato_import.desktop)
+if(${KF5_VERSION} VERSION_LESS "5.16.0")
+    kcoreaddons_desktop_to_json(plankplatoimport plan_kplato_import.desktop)
+else()
+    kcoreaddons_desktop_to_json(plankplatoimport plan_kplato_import.desktop
+        SERVICE_TYPES ${PLAN_SOURCE_DIR}/servicetypes/calligra_filter.desktop
+    )
+endif()
 
-target_link_libraries(plankplatoimport planprivate kplatokernel komain)
+target_link_libraries(plankplatoimport planprivate kplatokernel planmain)
 
-install(TARGETS plankplatoimport  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
+install(TARGETS plankplatoimport  DESTINATION ${PLUGIN_INSTALL_DIR}/calligraplan/formatfilters)

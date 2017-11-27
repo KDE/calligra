@@ -15,6 +15,6 @@ ecm_add_test(
         krossmoduleplan
         planprivate
         kplatokernel
-        kokross
+        plankross
         Qt5::Test
 )

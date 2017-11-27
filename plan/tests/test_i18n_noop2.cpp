@@ -1,0 +1,1 @@
+I18N_NOOP2("I18N_NOOP2 context", "I18N_NOOP2 text");

@@ -52,7 +52,7 @@ public:
     /// reimplemented
     virtual KoMainWindow *createMainWindow();
 
-    virtual void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
+    virtual void showStartUpWidget(KoMainWindow *parent);
 
 protected Q_SLOTS:
     void finish();

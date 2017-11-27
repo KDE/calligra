@@ -29,7 +29,7 @@
 #include <KoView.h>
 #include <KoPrintingDialog.h>
 #include <KoPageLayout.h>
-#include <KoDockFactoryBase.h>
+//#include <KoDockFactoryBase.h>
 
 #include <QMap>
 #include <QTreeView>
@@ -153,7 +153,7 @@ public:
     ~PrintingDialog();
 
     virtual QList<QWidget*> createOptionWidgets() const;
-    virtual QList<KoShape*> shapesOnPage(int);
+//    virtual QList<KoShape*> shapesOnPage(int);
 
     QRect headerRect() const;
     QRect footerRect() const;
@@ -269,7 +269,7 @@ public:
     /// Reimplement if your view handles relations
     virtual Relation *currentRelation() const { return 0; }
     /// Reimplement if your view handles zoom
-    virtual KoZoomController *zoomController() const { return 0; }
+//    virtual KoZoomController *zoomController() const { return 0; }
 
     /// Loads context info (printer settings) into this view.
     virtual bool loadContext( const KoXmlElement &context );

@@ -1,12 +1,9 @@
 
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/plan/libs/kernel
-    ${CMAKE_SOURCE_DIR}/plan/libs/models
-    ${CMAKE_BINARY_DIR}/plan/libs/models
-    ${CMAKE_BINARY_DIR}/plan/libs/ui
-
-    ${KOMAIN_INCLUDES}
+    ${PLANKERNEL_INCLUDES}
+    ${PLANMODELS_INCLUDES}
+    ${PLANMAIN_INCLUDES}
     ${KDEPIMLIBS_INCLUDE_DIR}
 )
 
@@ -154,17 +151,15 @@ generate_export_header(kplatoui)
 
 target_link_libraries(kplatoui
     PUBLIC
-        komain
-        kplatokernel
+        planmain
         kplatomodels
-        KGantt
         KF5::KHtml
     PRIVATE
         KChart
         KF5::ItemViews
         KF5::IconThemes
         KF5::Archive
-        Qt5::Sql
+#         Qt5::Sql
 )
 if (PLAN_BUILD_REPORTS)
     target_link_libraries(kplatoui PUBLIC KReport PRIVATE KPropertyWidgets)
@@ -174,7 +169,7 @@ if(KF5AkonadiContact_FOUND)
     target_link_libraries(kplatoui  PRIVATE KF5::AkonadiContact)
 endif()
 
-set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_PLAN_LIB_VERSION} SOVERSION ${GENERIC_PLAN_LIB_SOVERSION} )
 
 install(TARGETS kplatoui ${INSTALL_TARGETS_DEFAULT_ARGS})
 

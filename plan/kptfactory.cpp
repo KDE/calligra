@@ -80,10 +80,10 @@ const KoComponentData &Factory::global()
         KoResourcePaths::addResourceType("calligraplan_taskmodules", "data", "calligraplan/taskmodules/");
 
         // Tell the iconloader about share/apps/calligra/icons
-        KIconLoader::global()->addAppDir("calligra");
+//        KIconLoader::global()->addAppDir("calligra");
 
-        KoDockRegistry *dockRegistry = KoDockRegistry::instance();
-        dockRegistry->remove("StencilBox"); //don't want this in plan
+//        KoDockRegistry *dockRegistry = KoDockRegistry::instance();
+//        dockRegistry->remove("StencilBox"); //don't want this in plan
     }
     return *s_global;
 }

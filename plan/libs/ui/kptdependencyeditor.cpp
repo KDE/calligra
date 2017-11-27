@@ -27,8 +27,8 @@
 #include "kptrelation.h"
 #include "kptschedule.h"
 #include "kptdebug.h"
+#include "config.h"
 
-#include "calligraversion.h"
 #include "KoPageLayoutWidget.h"
 #include <KoIcon.h>
 
@@ -2420,7 +2420,7 @@ void DependencyEditor::slotDeleteTask()
 KoPrintJob *DependencyEditor::createPrintJob()
 {
     DependecyViewPrintingDialog *dia = new DependecyViewPrintingDialog( this, m_view );
-    dia->printer().setCreator( QString( "Plan %1" ).arg( CALLIGRA_VERSION_STRING ) );
+    dia->printer().setCreator( QString( "Plan %1" ).arg( PLAN_VERSION_STRING ) );
 //    dia->printer().setFullPage(true); // ignore printer margins
     return dia;
 }
