@@ -1085,6 +1085,7 @@ calligra_drop_product_on_bad_condition( FILTER_KSPREAD_TO_LATEX
 
 calligra_drop_product_on_bad_condition( APP_BRAINDUMP
     NOT_WIN "unmaintained on Windows"
+    Qt5WebKitWidgets_FOUND "QWebPage needed for webpage plugin"
 )
 
 calligra_drop_product_on_bad_condition( APP_PLAN
