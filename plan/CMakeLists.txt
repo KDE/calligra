@@ -308,11 +308,6 @@ if ("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
         TYPE OPTIONAL
     )
 
-    if ("${KF5CalendarCore_VERSION}" VERSION_GREATER 5.6.40)
-        set(HAVE_QDATETIME_KCALCORE TRUE)
-    endif()
-
-
     ##
     ## Test for KF5Contacts
     ##
@@ -370,6 +365,10 @@ if ("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
     include(MacroCalligraAddBenchmark)
 
 endif ("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
+
+if ("${KF5CalendarCore_VERSION}" VERSION_GREATER 5.6.40)
+    set(HAVE_QDATETIME_KCALCORE TRUE)
+endif()
 
 ####################
 #####################
