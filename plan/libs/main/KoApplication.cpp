@@ -207,16 +207,9 @@ bool KoApplication::start()
     parser.addHelpOption();
     parser.addVersionOption();
 
-//    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("print"), i18n("Only print and exit")));
-//    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("template"), i18n("Open a new document based on the given template (desktopfile name)")));
-//    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("new"), i18n("Open a new document based on the given template file")));
-//    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("dpi"), i18n("Override display DPI"), QStringLiteral("dpiX,dpiY")));
-//    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("export-pdf"), i18n("Only export to PDF and exit")));
-//    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("export-filename"), i18n("Filename for export-pdf"), QStringLiteral("filename")));
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("benchmark-loading"), i18n("just load the file and then exit")));
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("benchmark-loading-show-window"), i18n("load the file, show the window and progressbar and then exit")));
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("profile-filename"), i18n("Filename to write profiling information into."), QStringLiteral("filename")));
-//    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("roundtrip-filename"), i18n("Load a file and save it as an ODF file. Meant for debugging."), QStringLiteral("filename")));
     parser.addPositionalArgument(QStringLiteral("[file(s)]"), i18n("File(s) or URL(s) to open"));
 
     parser.process(*this);
@@ -423,22 +416,11 @@ bool KoApplication::start()
 
     }
     else {
-//        const bool print = parser.isSet("print");
-//        const bool exportAsPdf = parser.isSet("export-pdf");
-//        const QString pdfFileName = parser.value("export-filename");
-        const QString roundtripFileName = parser.value("roundtrip-filename");
-//        const bool doTemplate = parser.isSet("template");
-//        const bool doNew = parser.isSet("new");
         const bool benchmarkLoading = parser.isSet("benchmark-loading")
-                || parser.isSet("benchmark-loading-show-window")
-                || !roundtripFileName.isEmpty();
+                || parser.isSet("benchmark-loading-show-window");
         // only show the mainWindow when no command-line mode option is passed
-        const bool showmainWindow =
-                parser.isSet("benchmark-loading-show-window") || (
-                    !parser.isSet("export-pdf")
-                    && !parser.isSet("benchmark-loading")
-                    && !parser.isSet("roundtrip-filename")
-                    && roundtripFileName.isEmpty());
+        const bool showmainWindow = parser.isSet("benchmark-loading-show-window")
+                || !parser.isSet("benchmark-loading");
         const QString profileFileName = parser.value("profile-filename");
 
         QTextStream profileoutput;
@@ -450,7 +432,6 @@ bool KoApplication::start()
         // Loop through arguments
 
         short int numberOfOpenDocuments = 0; // number of documents open
-//        short int nPrinted = 0;
         // TODO: remove once Qt has proper handling itself
         const QRegExp withProtocolChecker( QStringLiteral("^[a-zA-Z]+:") );
         for (int argNumber = 0; argNumber < fileUrls.size(); ++argNumber) {
@@ -557,25 +538,9 @@ bool KoApplication::start()
                                           << appStartTime.msecsTo(QTime::currentTime())
                                           <<"\t100" << endl;
                         }
-                        if (!roundtripFileName.isEmpty()) {
-                            part->document()->saveAs(QUrl("file:"+roundtripFileName));
-                        }
                         // close the document
                         mainWindow->slotFileQuit();
                         return true; // only load one document!
-#if 0
-                    }
-                    else if (print) {
-                        mainWindow->slotFilePrint();
-                        // delete mainWindow; done by ~KoDocument
-                        nPrinted++;
-                    } else if (exportAsPdf) {
-                        KoPrintJob *job = mainWindow->exportToPdf(pdfFileName);
-                        if (job)
-                            connect (job, SIGNAL(destroyed(QObject*)), mainWindow,
-                                     SLOT(slotFileQuit()), Qt::QueuedConnection);
-                        nPrinted++;
-#endif
                     } else {
                         // Normal case, success
                         numberOfOpenDocuments++;
@@ -597,10 +562,9 @@ bool KoApplication::start()
         if (benchmarkLoading) {
             return false; // no valid urls found.
         }
-//        if (print || exportAsPdf)
-//            return nPrinted > 0;
-        if (numberOfOpenDocuments == 0) // no doc, e.g. all URLs were malformed
+        if (numberOfOpenDocuments == 0) { // no doc, e.g. all URLs were malformed
             return false;
+        }
     }
 
     // not calling this before since the program will quit there.
