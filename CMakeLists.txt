@@ -1135,6 +1135,8 @@ calligra_drop_products_on_old_flag(words  PART_WORDS APP_WORDS)
 # e.g.:
 # calligra_disable_product(APP_FOO "isn't buildable at the moment")
 
+calligra_disable_product(APP_BRAINDUMP "Disabled, will (probably) be removed from Calligra")
+
 #############################################
 ####     Calculate buildable products    ####
 #############################################
