@@ -1,8 +1,8 @@
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/plan
-    ${CMAKE_SOURCE_DIR}/plan/libs/kernel
-    ${KOMAIN_INCLUDES}
+    ${PLAN_SOURCE_DIR}
+    ${PLAN_SOURCE_DIR}
+    ${PLANMAIN_INCLUDES}
 )
 
 set(kplatoimport_PART_SRCS 

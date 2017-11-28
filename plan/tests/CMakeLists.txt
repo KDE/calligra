@@ -88,5 +88,5 @@ if (BASH_PROGRAM AND XGETTEXT_PROGRAM AND MSGCAT_PROGRAM)
     PLAN_ADD_TEST_COMMAND(test_i18n_mixed)
 
     # add test of Messages.sh
-    add_test(test_Messages ${BASH_PROGRAM} "${CMAKE_CURRENT_SOURCE_DIR}/test_messages.sh" "${CMAKE_SOURCE_DIR}")
+    add_test(test_Messages ${BASH_PROGRAM} "${CMAKE_CURRENT_SOURCE_DIR}/test_messages.sh" "${PLAN_SOURCE_DIR}")
 endif()

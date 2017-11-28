@@ -1,9 +1,9 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"krossmoduleplan\")
 
 include_directories( 
-    ${CMAKE_SOURCE_DIR}/plan
+    ${PLAN_SOURCE_DIR}
     ${KPLATO_INCLUDES}
-    ${KOKROSS_INCLUDES}
+    ${PLANKROSS_INCLUDES}
 )
 
 add_subdirectory( scripts )

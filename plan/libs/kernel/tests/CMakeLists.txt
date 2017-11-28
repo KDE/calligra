@@ -1,9 +1,9 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(
-    ..
-    ${CMAKE_SOURCE_DIR}/libs/widgetutils
-    ${KOODF_INCLUDES}
-    ${KUNDO2_INCLUDES}
+    ${PLANKERNEL_INCLUDES}
+    ${PLAN_SOURCE_DIR}/libs/widgetutils
+    ${PLANODF_INCLUDES}
+    ${PLANKUNDO2_INCLUDES}
 )
 
 # call: plankernel_add_unit_test(<test-name> <sources> LINK_LIBRARIES <library> [<library> [...]] [GUI])

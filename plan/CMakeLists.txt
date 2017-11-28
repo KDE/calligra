@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 2.8.12)
 set(PLAN_SOURCE_DIR ${PROJECT_SOURCE_DIR})
 
 if ("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PLAN_SOURCE_DIR}/cmake/modules")
 endif()
 message(STATUS "CMake module path:" ${CMAKE_MODULE_PATH})
 
