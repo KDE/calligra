@@ -600,65 +600,71 @@ endif()
 ## Test for Vc
 ##
 
-set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 set(HAVE_VC FALSE)
-if( NOT MSVC)
-    macro_optional_find_package(Vc 1.1.0)
-    set_package_properties(Vc PROPERTIES
-        DESCRIPTION "Portable, zero-overhead SIMD library for C++"
-        URL "https://github.com/VcDevel/Vc"
-        PURPOSE "Required by the pigment for vectorization"
-        TYPE OPTIONAL
-    )
-    macro_bool_to_01(Vc_FOUND HAVE_VC)
-    macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
-endif()
-configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
-
-if(HAVE_VC)
-    message(STATUS "Vc found!")
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
-                        "${CMAKE_SOURCE_DIR}/cmake/vc")
-
-    include (VcMacros)
-
-    if(Vc_COMPILER_IS_CLANG)
-        set(ADDITIONAL_VC_FLAGS "-Wabi -ffp-contract=fast -fPIC")
-    elseif (NOT MSVC)
-        set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast -fPIC")
+if (BUILD_VC)
+    # NOTE: This tampers with cmake variables (at least cmake_minimum_required), so may give build problems
+    set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
+    set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
+    if( NOT MSVC)
+        macro_optional_find_package(Vc 1.1.0)
+        set_package_properties(Vc PROPERTIES
+            DESCRIPTION "Portable, zero-overhead SIMD library for C++"
+            URL "https://github.com/VcDevel/Vc"
+            PURPOSE "Required by the pigment for vectorization"
+            TYPE OPTIONAL
+        )
+        macro_bool_to_01(Vc_FOUND HAVE_VC)
+        macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
     endif()
+    configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
 
-    #Handle Vc master
-    if(Vc_COMPILER_IS_GCC OR Vc_COMPILER_IS_CLANG)
-        AddCompilerFlag("-std=c++11" _ok)
-        if(NOT _ok)
-            AddCompilerFlag("-std=c++0x" _ok)
+    if(HAVE_VC)
+        message(STATUS "Vc found!")
+        set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
+                            "${CMAKE_SOURCE_DIR}/cmake/vc")
+
+        include (VcMacros)
+
+        if(Vc_COMPILER_IS_CLANG)
+            set(ADDITIONAL_VC_FLAGS "-Wabi -ffp-contract=fast -fPIC")
+        elseif (NOT MSVC)
+            set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast -fPIC")
         endif()
-    endif()
 
-    macro(ko_compile_for_all_implementations_no_scalar _objs _src)
-    if(PACKAGERS_BUILD)
-        vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY SSE2 SSSE3 SSE4_1 AVX AVX2+FMA+BMI2)
-    else()
-        set(${_objs} ${_src})
-    endif()
-    endmacro()
+        #Handle Vc master
+        if(Vc_COMPILER_IS_GCC OR Vc_COMPILER_IS_CLANG)
+            AddCompilerFlag("-std=c++11" _ok)
+            if(NOT _ok)
+                AddCompilerFlag("-std=c++0x" _ok)
+            endif()
+        endif()
 
-    macro(ko_compile_for_all_implementations _objs _src)
-    if(PACKAGERS_BUILD)
-        vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY Scalar SSE2 SSSE3 SSE4_1 AVX AVX2+FMA+BMI2)
-    else()
-        set(${_objs} ${_src})
-    endif()
-    endmacro()
+        macro(ko_compile_for_all_implementations_no_scalar _objs _src)
+        if(PACKAGERS_BUILD)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY SSE2 SSSE3 SSE4_1 AVX AVX2+FMA+BMI2)
+        else()
+            set(${_objs} ${_src})
+        endif()
+        endmacro()
 
-    if (NOT PACKAGERS_BUILD)
-      # Optimize the whole Calligra for current architecture
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
-    endif ()
-endif()
-set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
+        macro(ko_compile_for_all_implementations _objs _src)
+        if(PACKAGERS_BUILD)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY Scalar SSE2 SSSE3 SSE4_1 AVX AVX2+FMA+BMI2)
+        else()
+            set(${_objs} ${_src})
+        endif()
+        endmacro()
+
+        if (NOT PACKAGERS_BUILD)
+        # Optimize the whole Calligra for current architecture
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
+        endif ()
+    endif()
+    set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
+
+else(BUILD_VC)
+    configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
+endif(BUILD_VC)
 
 if(WIN32)
     set(LIB_INSTALL_DIR ${LIB_INSTALL_DIR}
