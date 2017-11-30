@@ -42,7 +42,7 @@ find_program(MSGCAT_PROGRAM msgcat)
 
 if (BASH_PROGRAM AND XGETTEXT_PROGRAM AND MSGCAT_PROGRAM)
     macro(PLAN_ADD_TEST_COMMAND _TEST_NAME)
-        add_test("plan-${_TEST_NAME}" ${BASH_PROGRAM} "${CMAKE_CURRENT_SOURCE_DIR}/${_TEST_NAME}.sh"
+        add_test("Plan${_TEST_NAME}" ${BASH_PROGRAM} "${CMAKE_CURRENT_SOURCE_DIR}/${_TEST_NAME}.sh"
                                 "${PLAN_SOURCE_DIR}/kundo2_aware_xgettext.sh"
                                 "${XGETTEXT_PROGRAM}"
                                 "${MSGCAT_PROGRAM}"
@@ -50,7 +50,7 @@ if (BASH_PROGRAM AND XGETTEXT_PROGRAM AND MSGCAT_PROGRAM)
         )
     endmacro()
     macro(PLAN_ADD_UNIT_TEST _TEST_NAME)
-        add_custom_target(${_TEST_NAME} ALL
+        add_custom_target(Plan${_TEST_NAME} ALL
             COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/${_TEST_NAME}.cpp" "${CMAKE_CURRENT_BINARY_DIR}/${_TEST_NAME}.cpp"
             COMMENT "Copy test files" VERBATIM
         )
@@ -58,11 +58,11 @@ if (BASH_PROGRAM AND XGETTEXT_PROGRAM AND MSGCAT_PROGRAM)
     endmacro()
 
     # create the podir
-    add_custom_target(podir ALL
+    add_custom_target(Planpodir ALL
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/po
         COMMENT "Create podir" VERBATIM)
     # copy parameters script
-    add_custom_target(parameters ALL
+    add_custom_target(Planparameters ALL
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/parameters.sh ${CMAKE_CURRENT_BINARY_DIR}/parameters.sh
         COMMENT "Copy parameters script" VERBATIM)
 

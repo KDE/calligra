@@ -6,7 +6,7 @@ add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
 # call: planmain_add_unit_test(<test-name> <sources> LINK_LIBRARIES <library> [<library> [...]] [GUI])
 macro(PLANMAIN_ADD_UNIT_TEST _TEST_NAME)
     ecm_add_test( ${ARGN}
-        TEST_NAME "${_TEST_NAME}"
+        TEST_NAME "Plan${_TEST_NAME}"
         NAME_PREFIX "plan-main-"
     )
 endmacro()

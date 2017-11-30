@@ -4,7 +4,7 @@ include_directories( ${PLANODF_INCLUDES} )
 # call: planstore_add_unit_test(<test-name> <sources> LINK_LIBRARIES <library> [<library> [...]] [GUI])
 macro(PLANSTORE_ADD_UNIT_TEST _TEST_NAME)
     ecm_add_test( ${ARGN}
-        TEST_NAME "${_TEST_NAME}"
+        TEST_NAME "Plan${_TEST_NAME}"
         NAME_PREFIX "plan-store-"
     )
 endmacro()
@@ -22,8 +22,8 @@ planstore_add_unit_test(TestKoXmlVector ${xmlvectortest_SRCS}  LINK_LIBRARIES Qt
 ########### next target ###############
 
 set(storedroptest_SRCS storedroptest.cpp )
-add_executable(storedroptest ${storedroptest_SRCS})
-ecm_mark_as_test(storedroptest)
-target_link_libraries(storedroptest planstore KF5::I18n Qt5::Widgets)
+add_executable(Planstoredroptest ${storedroptest_SRCS})
+ecm_mark_as_test(Planstoredroptest)
+target_link_libraries(Planstoredroptest planstore KF5::I18n Qt5::Widgets)
 
 

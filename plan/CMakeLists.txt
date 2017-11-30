@@ -2,19 +2,27 @@
 project(calligraplan)
 
 cmake_minimum_required(VERSION 2.8.12)
-
-set(PLAN_SOURCE_DIR ${PROJECT_SOURCE_DIR})
-
-if ("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PLAN_SOURCE_DIR}/cmake/modules")
+if (POLICY CMP0002)
+    cmake_policy(SET CMP0002 NEW)
+endif ()
+if (POLICY CMP0017)
+    cmake_policy(SET CMP0017 NEW)
+endif ()
+if (POLICY CMP0022)
+    cmake_policy(SET CMP0022 NEW)
+endif ()
+if (POLICY CMP0026)
+    cmake_policy(SET CMP0026 OLD)
 endif()
-message(STATUS "CMake module path:" ${CMAKE_MODULE_PATH})
-
-######################
-#######################
-## Constants defines ##
-#######################
-######################
+if (POLICY CMP0046)
+    cmake_policy(SET CMP0046 NEW)
+endif ()
+if (POLICY CMP0059)
+    cmake_policy(SET CMP0059 OLD)
+endif()
+if (POLICY CMP0063)
+    cmake_policy(SET CMP0063 NEW)
+endif()
 
 # define the version of Plan
 # update these version for every release:
@@ -23,8 +31,6 @@ set(PLAN_VERSION_STRING "3.0.89")
 set(PLAN_STABLE_VERSION_MAJOR 3) # 3 for 3.x, 4 for 4.x, etc.
 set(PLAN_STABLE_VERSION_MINOR 0) # 0 for 3.0, 1 for 3.1, etc.
 set(PLAN_VERSION_RELEASE 89)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
-
-message(STATUS "Calligra Plan version: ${PLAN_VERSION_STRING}")
 
 # Define the generic version of the Calligra Plan libraries here
 # This makes it easy to advance it when the next release comes.
@@ -39,32 +45,15 @@ endif()
 set(GENERIC_PLAN_LIB_VERSION "${GENERIC_PLAN_LIB_VERSION_MAJOR}.0.0")
 set(GENERIC_PLAN_LIB_SOVERSION "${GENERIC_PLAN_LIB_VERSION_MAJOR}")
 
+message(STATUS "")
+message(STATUS "Build Calligra Plan ${PLAN_VERSION_STRING} with cmake version: ${CMAKE_VERSION}, required version: ${CMAKE_MINIMUM_REQUIRED_VERSION}")
+message(STATUS "")
 
-if ("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
+set(PLAN_SOURCE_DIR ${PROJECT_SOURCE_DIR})
 
-    message(STATUS "Using CMake version: ${CMAKE_VERSION}")
+string(COMPARE EQUAL "${CMAKE_PROJECT_NAME}" "${PROJECT_NAME}" PLAN_IS_MAIN_PROJECT)
 
-    if (POLICY CMP0002)
-        cmake_policy(SET CMP0002 OLD)
-    endif()
-    if (POLICY CMP0017)
-        cmake_policy(SET CMP0017 NEW)
-    endif ()
-    if (POLICY CMP0022)
-        cmake_policy(SET CMP0022 OLD)
-    endif ()
-    if (POLICY CMP0026)
-        cmake_policy(SET CMP0026 OLD)
-    endif()
-    if (POLICY CMP0046)
-        cmake_policy(SET CMP0046 OLD)
-    endif ()
-    if (POLICY CMP0059)
-        cmake_policy(SET CMP0059 OLD)
-    endif()
-    if (POLICY CMP0063)
-        cmake_policy(SET CMP0063 NEW)
-    endif()
+if (PLAN_IS_MAIN_PROJECT)
 
     # ensure out-of-source build
     string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_BINARY_DIR}" isBuildInSource)
@@ -72,18 +61,6 @@ if ("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
         message(FATAL_ERROR "Compiling Plan inside the source folder is not possible.\nPlease refer to the build instruction: https://community.kde.org/Calligra/Building/3\nYou need to clean up the source folder from all build artifacts just created, otherwise further building attempts will fail again: With a git repo, you can use \"git clean -df\" in the toplevel source folder (attention! will remove also uncommited changes to the source code). With sources from a file bundle (like a zip file), delete the source folder and unbundle the sources again.")
     endif()
 
-    if(NOT DEFINED RELEASE_BUILD)
-        # estimate mode by CMAKE_BUILD_TYPE content if not set on cmdline
-        string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_TOLOWER)
-        set(RELEASE_BUILD_TYPES "release" "relwithdebinfo" "minsizerel")
-        list(FIND RELEASE_BUILD_TYPES "${CMAKE_BUILD_TYPE_TOLOWER}" INDEX)
-        if (INDEX EQUAL -1)
-            set(RELEASE_BUILD FALSE)
-        else()
-            set(RELEASE_BUILD TRUE)
-        endif()
-    endif()
-    message(STATUS "Release build: ${RELEASE_BUILD}")
 
     ############
     #############
@@ -123,10 +100,10 @@ if ("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
     include(ECMMarkAsTest)
     include(ECMMarkNonGuiExecutable)
     include(ECMGenerateHeaders)
-    # own macros
-    include(MacroBoolTo01)
+    # Own macros
+    # This macro is a copy from calligra so only needs to be included when plan is build stand alone
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PLAN_SOURCE_DIR}/cmake/modules)
     include(MacroOptionalFindPackage)
-    include(MacroEnsureVersion)
 
 
     set(REQUIRED_KF5_VERSION "5.7.0")
@@ -134,13 +111,13 @@ if ("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
     find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED
         COMPONENTS
             Archive
-            Codecs
-            Completion
+#             Codecs
+#             Completion
             Config
             ConfigWidgets
             CoreAddons
             DBusAddons
-            DocTools
+#             DocTools
             GuiAddons
             I18n
             IconThemes
@@ -149,8 +126,8 @@ if ("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
             KCMUtils
     #         KDELibs4Support
             KIO
-            Notifications
-            NotifyConfig
+#             Notifications
+#             NotifyConfig
             Parts
 #             Sonnet
             TextWidgets
@@ -362,9 +339,8 @@ if ("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
     ################################
     ###############################
 
-    include(MacroCalligraAddBenchmark)
 
-endif ("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
+endif (PLAN_IS_MAIN_PROJECT)
 
 if ("${KF5CalendarCore_VERSION}" VERSION_GREATER 5.6.40)
     set(HAVE_QDATETIME_KCALCORE TRUE)
@@ -611,12 +587,11 @@ configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
 
 #add_custom_target(apidox doc/api/gendocs.pl WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
-if ("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
+if (PLAN_IS_MAIN_PROJECT)
 
     ### Summarize findings ####
     feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
-endif ("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
+endif (PLAN_IS_MAIN_PROJECT)
 
-
-
+# set(${CMAKE_MODULE_PATH} ${SAVED_CMAKE_MODULE_PATH})

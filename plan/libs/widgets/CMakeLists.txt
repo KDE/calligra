@@ -44,8 +44,8 @@ target_link_libraries(planwidgets
         KF5::GuiAddons
         KF5::WidgetsAddons
         KF5::ConfigCore
-        KF5::Codecs
-        KF5::Completion
+#         KF5::Codecs
+#         KF5::Completion
         KF5::IconThemes
         KF5::I18n
 )
