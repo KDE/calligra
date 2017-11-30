@@ -124,6 +124,11 @@ public:
     virtual KoPageLayout pageLayout() const;
 
     /**
+     * Sets the page layout to @p pageLayout
+     */
+    virtual void setPageLayout(const KoPageLayout &pageLayout);
+
+    /**
      * Create a QPrintDialog based on the @p printJob
      */
     virtual QPrintDialog *createPrintDialog(KoPrintJob *printJob, QWidget *parent);

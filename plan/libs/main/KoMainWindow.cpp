@@ -1403,21 +1403,13 @@ void KoMainWindow::slotFilePrintPreview()
     delete preview;
 }
 
-KoPrintJob* KoMainWindow::exportToPdf(const QString &pdfFileName)
+KoPrintJob* KoMainWindow::exportToPdf(const QString &_pdfFileName)
 {
     if (!rootView())
         return 0;
     KoPageLayout pageLayout;
     pageLayout = rootView()->pageLayout();
-    return exportToPdf(pageLayout, pdfFileName);
-}
 
-KoPrintJob* KoMainWindow::exportToPdf(const KoPageLayout &_pageLayout, const QString &_pdfFileName)
-{
-    if (!rootView())
-        return 0;
-
-    KoPageLayout pageLayout = _pageLayout;
     QString pdfFileName = _pdfFileName;
 
     if (pdfFileName.isEmpty()) {
@@ -1488,6 +1480,9 @@ KoPrintJob* KoMainWindow::exportToPdf(const KoPageLayout &_pageLayout, const QSt
     }
 
     printJob->startPrinting(KoPrintJob::DeleteWhenDone);
+
+    rootView()->setPageLayout(pageLayout);
+
     return printJob;
 }
 

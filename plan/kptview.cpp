@@ -2864,6 +2864,11 @@ KoPageLayout View::pageLayout() const
     return currentView()->pageLayout();
 }
 
+void View::setPageLayout(const KoPageLayout &pageLayout)
+{
+    currentView()->setPageLayout(pageLayout);
+}
+
 QPrintDialog *View::createPrintDialog( KoPrintJob *printJob, QWidget *parent )
 {
     debugPlan<<printJob;

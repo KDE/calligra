@@ -325,6 +325,11 @@ KoPageLayout KoView::pageLayout() const
     return koDocument()->pageLayout();
 }
 
+void KoView::setPageLayout(const KoPageLayout &pageLayout)
+{
+    koDocument()->setPageLayout(pageLayout);
+}
+
 QPrintDialog *KoView::createPrintDialog(KoPrintJob *printJob, QWidget *parent)
 {
     QPrintDialog *printDialog = new QPrintDialog(&printJob->printer(), parent);
