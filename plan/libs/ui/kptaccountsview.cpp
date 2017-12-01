@@ -177,7 +177,7 @@ void AccountsView::init()
 
 void AccountsView::setupGui()
 {
-    createOptionAction();
+    createOptionActions(ViewBase::OptionAll);
 }
 
 void AccountsView::slotContextMenuRequested( const QModelIndex &index, const QPoint &pos )
@@ -200,7 +200,7 @@ void AccountsView::slotHeaderContextMenuRequested( const QPoint &pos )
 void AccountsView::slotOptions()
 {
     debugPlan;
-    AccountsviewConfigDialog *dlg = new AccountsviewConfigDialog( this, m_view, this );
+    AccountsviewConfigDialog *dlg = new AccountsviewConfigDialog( this, m_view, this, sender()->objectName() == "print options" );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();

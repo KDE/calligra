@@ -70,7 +70,7 @@ class ResourceAppointmentsSettingsDialog : public KPageDialog
 {
     Q_OBJECT
 public:
-    explicit ResourceAppointmentsSettingsDialog( ViewBase *view, ResourceAppointmentsItemModel *model, QWidget *parent = 0 );
+    explicit ResourceAppointmentsSettingsDialog( ViewBase *view, ResourceAppointmentsItemModel *model, QWidget *parent = 0, bool selectPrint = false );
 
 public Q_SLOTS:
     void slotOk();

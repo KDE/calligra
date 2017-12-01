@@ -1953,7 +1953,7 @@ void DependencyView::slotAutoScroll()
 }
 
 //-----------------------------------
-DependencyeditorConfigDialog::DependencyeditorConfigDialog( ViewBase *view, QWidget *p)
+DependencyeditorConfigDialog::DependencyeditorConfigDialog( ViewBase *view, QWidget *p, bool selectPrint)
     : KPageDialog(p),
     m_view( view )
 {
@@ -1972,7 +1972,9 @@ DependencyeditorConfigDialog::DependencyeditorConfigDialog( ViewBase *view, QWid
 
     KPageWidgetItem *page = addPage( tab, i18n( "Printing" ) );
     page->setHeader( i18n( "Printing Options" ) );
-
+    if (selectPrint) {
+        setCurrentPage(page);
+    }
     connect( this, SIGNAL(accepted()), this, SLOT(slotOk()));
 }
 
@@ -2329,13 +2331,13 @@ void DependencyEditor::setupGui()
     connect( actionDeleteTask, SIGNAL(triggered(bool)), SLOT(slotDeleteTask()) );
     addAction( name, actionDeleteTask );
 
-    createOptionAction();
+    createOptionActions(ViewBase::OptionPrint | ViewBase::OptionPrintPreview | ViewBase::OptionPrintPdf | ViewBase::OptionPrintConfig);
 }
 
 void DependencyEditor::slotOptions()
 {
     debugPlan;
-    DependencyeditorConfigDialog *dlg = new DependencyeditorConfigDialog( this, this );
+    DependencyeditorConfigDialog *dlg = new DependencyeditorConfigDialog( this, this, sender()->objectName() == "print options" );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();

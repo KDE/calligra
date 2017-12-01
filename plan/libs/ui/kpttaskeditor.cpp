@@ -849,7 +849,7 @@ void TaskEditor::setupGui()
     connect(m_view->actionSplitView(), SIGNAL(triggered(bool)), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
 
-    createOptionAction();
+    createOptionActions(ViewBase::OptionAll);
 
     createDockers();
 }
@@ -866,7 +866,7 @@ void TaskEditor::slotOptions()
 {
     debugPlan;
     SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, m_view, this );
-    dlg->addPrintingOptions();
+    dlg->addPrintingOptions(sender()->objectName() == "print options");
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -1307,7 +1307,7 @@ void TaskView::setupGui()
     connect(m_view->actionSplitView(), SIGNAL(triggered(bool)), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
 
-    createOptionAction();
+    createOptionActions(ViewBase::OptionAll);
 }
 
 void TaskView::slotSplitView()
@@ -1321,7 +1321,7 @@ void TaskView::slotOptions()
 {
     debugPlan;
     SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, m_view, this );
-    dlg->addPrintingOptions();
+    dlg->addPrintingOptions(sender()->objectName() == "print options");
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -1612,7 +1612,7 @@ void TaskWorkPackageView::setupGui()
     connect(m_view->actionSplitView(), SIGNAL(triggered(bool)), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
 
-    createOptionAction();
+    createOptionActions(ViewBase::OptionAll);
 }
 
 void TaskWorkPackageView::slotMailWorkpackage()
@@ -1659,7 +1659,7 @@ void TaskWorkPackageView::slotOptions()
 {
     debugPlan;
     SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, m_view, this );
-    dlg->addPrintingOptions();
+    dlg->addPrintingOptions(sender()->objectName() == "print options");
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();

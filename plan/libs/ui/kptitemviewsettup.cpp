@@ -183,7 +183,7 @@ KPageWidgetItem *ItemViewSettupDialog::insertWidget( int index, QWidget *widget,
     return page;
 }
 
-void ItemViewSettupDialog::addPrintingOptions()
+void ItemViewSettupDialog::addPrintingOptions(bool setAsCurrent)
 {
     if ( ! m_view ) {
         return;
@@ -197,7 +197,10 @@ void ItemViewSettupDialog::addPrintingOptions()
     m_headerfooter = ViewBase::createHeaderFooterWidget( m_view );
     tab->addTab( m_headerfooter, m_headerfooter->windowTitle() );
 
-    insertWidget( -1, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
+    KPageWidgetItem *itm = insertWidget( -1, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
+    if (setAsCurrent) {
+        setCurrentPage(itm);
+    }
 }
 
 //-------------------------------
@@ -262,7 +265,7 @@ KPageWidgetItem *SplitItemViewSettupDialog::insertWidget( int index, QWidget *wi
     return page;
 }
 
-void SplitItemViewSettupDialog::addPrintingOptions()
+void SplitItemViewSettupDialog::addPrintingOptions(bool setAsCurrent)
 {
     if ( ! m_view ) {
         return;
@@ -278,7 +281,10 @@ void SplitItemViewSettupDialog::addPrintingOptions()
     tab->addTab( m_headerfooter, m_headerfooter->windowTitle() );
     m_headerfooter->setOptions( m_view->printingOptions() );
 
-    insertWidget( -1, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
+    KPageWidgetItem *itm = insertWidget( -1, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
+    if (setAsCurrent) {
+        setCurrentPage(itm);
+    }
 }
 
 } //namespace KPlato

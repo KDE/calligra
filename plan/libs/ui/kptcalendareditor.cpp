@@ -667,7 +667,7 @@ void CalendarEditor::setupGui()
     actionSetUndefined = new QAction( i18n( "Undefined" ), this );
     connect( actionSetUndefined, SIGNAL(triggered(bool)), SLOT(slotSetUndefined()) );
 
-    createOptionAction();
+    createOptionActions(ViewBase::OptionExpand | ViewBase::OptionCollapse | ViewBase::OptionViewConfig);
 }
 
 void CalendarEditor::slotOptions()

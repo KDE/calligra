@@ -48,7 +48,7 @@ namespace KPlato
 {
 
 
-AccountseditorConfigDialog::AccountseditorConfigDialog( ViewBase *view, AccountTreeView *treeview, QWidget *p)
+AccountseditorConfigDialog::AccountseditorConfigDialog( ViewBase *view, AccountTreeView *treeview, QWidget *p, bool selectPrint)
     : KPageDialog(p),
     m_view( view ),
     m_treeview( treeview )
@@ -68,7 +68,9 @@ AccountseditorConfigDialog::AccountseditorConfigDialog( ViewBase *view, AccountT
 
     KPageWidgetItem *page = addPage( tab, i18n( "Printing" ) );
     page->setHeader( i18n( "Printing Options" ) );
-
+    if (selectPrint) {
+        setCurrentPage(page);
+    }
     connect( this, SIGNAL(accepted()), this, SLOT(slotOk()));
 }
 
@@ -278,7 +280,7 @@ void AccountsEditor::setupGui()
     connect( actionDeleteSelection, SIGNAL(triggered(bool)), SLOT(slotDeleteSelection()) );
     addAction( name, actionDeleteSelection );
 
-    createOptionAction();
+    createOptionActions(ViewBase::OptionExpand | ViewBase::OptionCollapse | ViewBase::OptionPrint | ViewBase::OptionPrintPreview | ViewBase::OptionPrintPdf | ViewBase::OptionPrintConfig);
 }
 
 void AccountsEditor::slotOptions()

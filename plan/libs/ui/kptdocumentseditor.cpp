@@ -232,7 +232,7 @@ void DocumentsEditor::setupGui()
     addAction( name, actionDeleteSelection );*/
     
     // Add the context menu actions for the view options
-    createOptionAction();
+    createOptionActions(ViewBase::OptionExpand | ViewBase::OptionCollapse | ViewBase::OptionViewConfig);
 }
 
 void DocumentsEditor::slotOptions()

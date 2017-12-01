@@ -226,6 +226,16 @@ class KPLATOUI_EXPORT ViewBase : public KoView, public ViewActionLists
 {
     Q_OBJECT
 public:
+    enum OptionTypes {
+        OptionExpand = 1,
+        OptionCollapse = 2,
+        OptionPrint = 4,
+        OptionPrintPreview = 8,
+        OptionPrintPdf = 16,
+        OptionPrintConfig = 32,
+        OptionViewConfig = 64,
+        OptionAll = 0xffff
+    };
     /// Contructor
     ViewBase(KoPart *part, KoDocument *doc, QWidget *parent);
     /// Destructor
@@ -323,7 +333,7 @@ protected Q_SLOTS:
     virtual void slotOptionsFinished( int result );
 
 protected:
-    void createOptionAction();
+    void createOptionActions(int actions);
     
     bool m_readWrite;
     PrintingOptions m_printingOptions;

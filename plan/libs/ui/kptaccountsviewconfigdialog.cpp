@@ -36,7 +36,7 @@
 namespace KPlato
 {
 
-AccountsviewConfigDialog::AccountsviewConfigDialog( ViewBase *view, AccountsTreeView *treeview, QWidget *p)
+AccountsviewConfigDialog::AccountsviewConfigDialog( ViewBase *view, AccountsTreeView *treeview, QWidget *p, bool selectPrint)
     : KPageDialog(p),
     m_view( view ),
     m_treeview( treeview )
@@ -87,7 +87,9 @@ AccountsviewConfigDialog::AccountsviewConfigDialog( ViewBase *view, AccountsTree
 
     page = addPage( tab, i18n( "Printing" ) );
     page->setHeader( i18n( "Printing Options" ) );
-
+    if (selectPrint) {
+        setCurrentPage(page);
+    }
     connect( this, SIGNAL(accepted()), this, SLOT(slotOk()));
 
     connect(m_panel, SIGNAL(changed(bool)), SLOT(enableOkButton(bool)));

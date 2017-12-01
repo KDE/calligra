@@ -27,6 +27,7 @@
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kzip.h>
+#include <KStandardAction>
 
 #include <KoIcon.h>
 #include <KoDocument.h>
@@ -666,27 +667,61 @@ void ViewBase::slotHeaderContextMenuRequested( const QPoint &pos )
     }
 }
 
-void ViewBase::createOptionAction()
+void ViewBase::createOptionActions(int actions)
 {
-    QAction *separator = new QAction(this);
-    separator->setSeparator(true);
-    addContextAction(separator);
+    QAction *action;
+    action = new QAction(this);
+    action->setSeparator(true);
+    addContextAction(action);
 
-    QAction *actionExpand = new QAction(koIcon("arrow-down"), i18n("Expand All"), this);
-    connect(actionExpand, SIGNAL(triggered(bool)), this, SIGNAL(expandAll()));
-    addContextAction(actionExpand);
+    if (actions & OptionExpand) {
+        action = new QAction(koIcon("arrow-down"), i18n("Expand All"), this);
+        connect(action, SIGNAL(triggered(bool)), this, SIGNAL(expandAll()));
+        addContextAction(action);
+    }
+    if (actions & OptionExpand) {
+        action = new QAction(koIcon("arrow-up"), i18n("Collapse All"), this);
+        connect(action, SIGNAL(triggered(bool)), this, SIGNAL(collapseAll()));
+        addContextAction(action);
+    }
 
-    QAction *actionCollapse = new QAction(koIcon("arrow-up"), i18n("Collapse All"), this);
-    connect(actionCollapse, SIGNAL(triggered(bool)), this, SIGNAL(collapseAll()));
-    addContextAction(actionCollapse);
+    action = new QAction(this);
+    action->setSeparator(true);
+    addContextAction(action);
 
-    separator = new QAction(this);
-    separator->setSeparator(true);
-    addContextAction(separator);
+    if (actions & OptionPrint) {
+        action = KStandardAction::create(KStandardAction::Print, mainWindow(), SLOT(slotFilePrint()), this);
+        action->setObjectName("print");
+        addContextAction(action);
+    }
+    if (actions & OptionPrintPreview) {
+        action = KStandardAction::create(KStandardAction::PrintPreview, mainWindow(), SLOT(slotFilePrintPreview()), this);
+        action->setObjectName("print preview");
+        addContextAction(action);
+    }
+    if (actions & OptionPrintPdf) {
+        action = new QAction(koIcon("application-pdf"), i18n("Print to PDF..."), this);
+        action->setObjectName("print pdf");
+        connect(action, SIGNAL(triggered()), mainWindow(), SLOT(exportToPdf()));
+        addContextAction(action);
+    }
+    if (actions & OptionPrintConfig) {
+        action = new QAction(koIcon("configure"), i18n("Print Options..."), this);
+        action->setObjectName("print options");
+        connect(action, SIGNAL(triggered(bool)), SLOT(slotOptions()));
+        addContextAction(action);
+    }
 
-    actionOptions = new QAction(koIcon("configure"), i18n("Configure View..."), this);
-    connect(actionOptions, SIGNAL(triggered(bool)), SLOT(slotOptions()));
-    addContextAction( actionOptions );
+    action = new QAction(this);
+    action->setSeparator(true);
+    addContextAction(action);
+
+    if (actions & OptionViewConfig) {
+        action = new QAction(koIcon("configure"), i18n("Configure View..."), this);
+        action->setObjectName("configure view");
+        connect(action, SIGNAL(triggered(bool)), SLOT(slotOptions()));
+        addContextAction(action);
+    }
 }
 
 void ViewBase::slotOptionsFinished( int result )

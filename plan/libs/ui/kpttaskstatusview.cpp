@@ -319,7 +319,7 @@ void TaskStatusView::setupGui()
     connect(m_view->actionSplitView(), SIGNAL(triggered(bool)), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
 
-    createOptionAction();
+    createOptionActions(ViewBase::OptionAll);
 }
 
 void TaskStatusView::slotSplitView()
@@ -338,7 +338,7 @@ void TaskStatusView::slotOptions()
 {
     debugPlan;
     TaskStatusViewSettingsDialog *dlg = new TaskStatusViewSettingsDialog( this, m_view, this );
-    dlg->addPrintingOptions();
+    dlg->addPrintingOptions(sender()->objectName() == "print options");
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -482,12 +482,12 @@ void ProjectStatusView::setGuiActive( bool activate )
 void ProjectStatusView::setupGui()
 {
     // Add the context menu actions for the view options
-    createOptionAction();
+    createOptionActions(ViewBase::OptionPrint | ViewBase::OptionPrintPreview | ViewBase::OptionPrintConfig | ViewBase::OptionViewConfig);
 }
 
 void ProjectStatusView::slotOptions()
 {
-    ProjectStatusViewSettingsDialog *dlg = new ProjectStatusViewSettingsDialog( this, m_view, this );
+    ProjectStatusViewSettingsDialog *dlg = new ProjectStatusViewSettingsDialog( this, m_view, this, sender()->objectName() == "print options" );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -1268,13 +1268,13 @@ void PerformanceStatusView::setGuiActive( bool activate )
 void PerformanceStatusView::setupGui()
 {
     // Add the context menu actions for the view options
-    createOptionAction();
+    createOptionActions(ViewBase::OptionAll);
 }
 
 void PerformanceStatusView::slotOptions()
 {
     debugPlan;
-    PerformanceStatusViewSettingsDialog *dlg = new PerformanceStatusViewSettingsDialog( this, m_view, this );
+    PerformanceStatusViewSettingsDialog *dlg = new PerformanceStatusViewSettingsDialog( this, m_view, this, sender()->objectName() == "print options" );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -1401,13 +1401,13 @@ void PerformanceStatusViewSettingsPanel::switchStackWidget()
 }
 
 //-----------------
-PerformanceStatusViewSettingsDialog::PerformanceStatusViewSettingsDialog( PerformanceStatusView *view, PerformanceStatusTreeView *treeview, QWidget *parent )
+PerformanceStatusViewSettingsDialog::PerformanceStatusViewSettingsDialog( PerformanceStatusView *view, PerformanceStatusTreeView *treeview, QWidget *parent, bool selectPrint )
     : ItemViewSettupDialog( view, treeview->treeView(), true, parent )
 {
     PerformanceStatusViewSettingsPanel *panel = new PerformanceStatusViewSettingsPanel( treeview->chartView(), this );
     KPageWidgetItem *page = insertWidget( 0, panel, i18n( "Chart" ), i18n( "Chart Settings" ) );
     setCurrentPage( page );
-    addPrintingOptions();
+    addPrintingOptions(selectPrint);
     //connect( panel, SIGNAL(changed(bool)), this, SLOT(enableButtonOk(bool)) );
 
     connect( this, SIGNAL(accepted()), panel, SLOT(slotOk()) );
@@ -1415,7 +1415,7 @@ PerformanceStatusViewSettingsDialog::PerformanceStatusViewSettingsDialog( Perfor
 }
 
 //-----------------
-ProjectStatusViewSettingsDialog::ProjectStatusViewSettingsDialog( ViewBase *base, PerformanceStatusBase *view, QWidget *parent )
+ProjectStatusViewSettingsDialog::ProjectStatusViewSettingsDialog( ViewBase *base, PerformanceStatusBase *view, QWidget *parent, bool selectPrint )
     : KPageDialog( parent ),
     m_base( base )
 {
@@ -1437,7 +1437,9 @@ ProjectStatusViewSettingsDialog::ProjectStatusViewSettingsDialog( ViewBase *base
 
     page = addPage( tab, i18n( "Printing" ) );
     page->setHeader( i18n( "Printing Options" ) );
-
+    if (selectPrint) {
+        setCurrentPage(page);
+    }
     connect( this, SIGNAL(accepted()), panel, SLOT(slotOk()) );
     //TODO: there was no default button configured, should there?
 //     connect( button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), panel, SLOT(setDefault()) );

@@ -88,7 +88,7 @@ class GanttViewSettingsDialog : public ItemViewSettupDialog
 {
     Q_OBJECT
 public:
-    explicit GanttViewSettingsDialog( GanttViewBase *gantt, GanttItemDelegate *delegate, ViewBase *view );
+    explicit GanttViewSettingsDialog( GanttViewBase *gantt, GanttItemDelegate *delegate, ViewBase *view, bool selectPrint = false );
 
 protected Q_SLOTS:
     void slotOk();
@@ -327,7 +327,7 @@ class MilestoneGanttViewSettingsDialog : public ItemViewSettupDialog
 {
     Q_OBJECT
 public:
-    MilestoneGanttViewSettingsDialog( GanttViewBase *gantt, ViewBase *view );
+    MilestoneGanttViewSettingsDialog( GanttViewBase *gantt, ViewBase *view, bool selectPrint = false );
 
 protected Q_SLOTS:
     virtual void slotOk();
@@ -418,7 +418,7 @@ class ResourceAppointmentsGanttViewSettingsDialog : public ItemViewSettupDialog
 {
     Q_OBJECT
 public:
-    ResourceAppointmentsGanttViewSettingsDialog(GanttViewBase *gantt, ViewBase *view);
+    ResourceAppointmentsGanttViewSettingsDialog(GanttViewBase *gantt, ViewBase *view, bool selectPrint = false);
 
 public Q_SLOTS:
     void slotOk();

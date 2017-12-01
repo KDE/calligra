@@ -126,7 +126,7 @@ void GanttChartDisplayOptionsPanel::setDefault()
 }
 
 //----
-GanttViewSettingsDialog::GanttViewSettingsDialog( GanttViewBase *gantt, GanttItemDelegate *delegate, ViewBase *view )
+GanttViewSettingsDialog::GanttViewSettingsDialog( GanttViewBase *gantt, GanttItemDelegate *delegate, ViewBase *view, bool selectPrint )
     : ItemViewSettupDialog( view, gantt->treeView(), true, view ),
     m_gantt( gantt )
 {
@@ -141,8 +141,10 @@ GanttViewSettingsDialog::GanttViewSettingsDialog( GanttViewBase *gantt, GanttIte
     m_printingoptions = new GanttPrintingOptionsWidget( this );
     m_printingoptions->setOptions( gantt->printingOptions() );
     tab->addTab( m_printingoptions, m_printingoptions->windowTitle() );
-    /*KPageWidgetItem *page = */insertWidget( 2, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
-
+    KPageWidgetItem *page = insertWidget( 2, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
+    if (selectPrint) {
+        setCurrentPage(page);
+    }
     connect( this, SIGNAL(accepted()), this, SLOT(slotOk()) );
     connect( this, SIGNAL(accepted()), panel, SLOT(slotOk()) );
     connect( button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), panel, SLOT(setDefault()) );
@@ -747,13 +749,13 @@ void GanttView::setupGui()
     connect(actionShowProject, SIGNAL(triggered(bool)), m_gantt->model(), SLOT(setShowProject(bool)));
     addContextAction( actionShowProject );
 
-    createOptionAction();
+    createOptionActions(ViewBase::OptionAll);
 }
 
 void GanttView::slotOptions()
 {
     debugPlan;
-    GanttViewSettingsDialog *dlg = new GanttViewSettingsDialog( m_gantt, m_gantt->delegate(), this );
+    GanttViewSettingsDialog *dlg = new GanttViewSettingsDialog( m_gantt, m_gantt->delegate(), this, sender()->objectName() == "print options" );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -929,7 +931,7 @@ void GanttView::updateReadWrite( bool on )
 }
 
 //----
-MilestoneGanttViewSettingsDialog::MilestoneGanttViewSettingsDialog( GanttViewBase *gantt, ViewBase *view )
+MilestoneGanttViewSettingsDialog::MilestoneGanttViewSettingsDialog( GanttViewBase *gantt, ViewBase *view, bool selectPrint )
     : ItemViewSettupDialog( view, gantt->treeView(), true, view ),
     m_gantt( gantt )
 {
@@ -942,8 +944,10 @@ MilestoneGanttViewSettingsDialog::MilestoneGanttViewSettingsDialog( GanttViewBas
     m_printingoptions = new GanttPrintingOptionsWidget( this );
     m_printingoptions->setOptions( gantt->printingOptions() );
     tab->addTab( m_printingoptions, m_printingoptions->windowTitle() );
-    /*KPageWidgetItem *page = */insertWidget( -1, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
-
+    KPageWidgetItem *page = insertWidget( -1, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
+    if (selectPrint) {
+        setCurrentPage(page);
+    }
     connect( this, SIGNAL(accepted()), this, SLOT(slotOk()) );
 }
 
@@ -1136,7 +1140,7 @@ Node *MilestoneGanttView::currentNode() const
 
 void MilestoneGanttView::setupGui()
 {
-    createOptionAction();
+    createOptionActions(ViewBase::OptionAll);
 }
 
 void MilestoneGanttView::slotContextMenuRequested( const QModelIndex &idx, const QPoint &pos )
@@ -1173,7 +1177,7 @@ void MilestoneGanttView::slotContextMenuRequested( const QModelIndex &idx, const
 void MilestoneGanttView::slotOptions()
 {
     debugPlan;
-    MilestoneGanttViewSettingsDialog *dlg =  new MilestoneGanttViewSettingsDialog( m_gantt, this );
+    MilestoneGanttViewSettingsDialog *dlg =  new MilestoneGanttViewSettingsDialog( m_gantt, this, sender()->objectName() == "print options" );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -1205,7 +1209,7 @@ KoPrintJob *MilestoneGanttView::createPrintJob()
 }
 
 //--------------------
-ResourceAppointmentsGanttViewSettingsDialog::ResourceAppointmentsGanttViewSettingsDialog( GanttViewBase *gantt,  ViewBase *view )
+ResourceAppointmentsGanttViewSettingsDialog::ResourceAppointmentsGanttViewSettingsDialog( GanttViewBase *gantt,  ViewBase *view, bool selectPrint )
     : ItemViewSettupDialog( view, gantt->treeView(), true, view )
     , m_gantt(gantt)
 {
@@ -1217,8 +1221,10 @@ ResourceAppointmentsGanttViewSettingsDialog::ResourceAppointmentsGanttViewSettin
     m_printingoptions = new GanttPrintingOptionsWidget( this );
     m_printingoptions->setOptions( gantt->printingOptions() );
     tab->addTab( m_printingoptions, m_printingoptions->windowTitle() );
-    /*KPageWidgetItem *page = */insertWidget( -1, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
-
+    KPageWidgetItem *page = insertWidget( -1, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
+    if (selectPrint) {
+        setCurrentPage(page);
+    }
     connect( this, SIGNAL(accepted()), this, SLOT(slotOk()) );
 }
 
@@ -1328,7 +1334,7 @@ void ResourceAppointmentsGanttView::setScheduleManager( ScheduleManager *sm )
 
 void ResourceAppointmentsGanttView::setupGui()
 {
-    createOptionAction();
+    createOptionActions(ViewBase::OptionAll);
 }
 
 Node *ResourceAppointmentsGanttView::currentNode() const
@@ -1360,7 +1366,7 @@ void ResourceAppointmentsGanttView::slotContextMenuRequested( const QModelIndex 
 void ResourceAppointmentsGanttView::slotOptions()
 {
     debugPlan;
-    ItemViewSettupDialog *dlg = new ResourceAppointmentsGanttViewSettingsDialog(m_gantt, this);
+    ItemViewSettupDialog *dlg = new ResourceAppointmentsGanttViewSettingsDialog(m_gantt, this, sender()->objectName() == "print options");
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();

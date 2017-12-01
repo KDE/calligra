@@ -67,6 +67,9 @@ PertEditor::PertEditor(KoPart *part, KoDocument *doc, QWidget *parent)
     connect( widget.removeBtn, SIGNAL(clicked()), this, SLOT(slotRemoveClicked()) );
 
     connect( this, SIGNAL(executeCommand(KUndo2Command*)), doc, SLOT(addCommand(KUndo2Command*)) );
+
+    connect(this, SIGNAL(expandAll()), m_tasktree, SLOT(slotExpand()));
+    connect(this, SIGNAL(collapseAll()), m_tasktree, SLOT(slotCollapse()));
 }
 
 void PertEditor::slotCurrentTaskChanged( QTreeWidgetItem *curr, QTreeWidgetItem *prev )

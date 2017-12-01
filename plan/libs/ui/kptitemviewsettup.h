@@ -74,7 +74,7 @@ public:
     explicit ItemViewSettupDialog( ViewBase *view, TreeViewBase *treeview, bool includeColumn0 = false, QWidget *parent = 0 );
 
     KPageWidgetItem *insertWidget( int before, QWidget *widget, const QString &name, const QString &header );
-    void addPrintingOptions();
+    void addPrintingOptions(bool setAsCurrent = false);
 
 protected Q_SLOTS:
     virtual void slotOk();
@@ -95,7 +95,7 @@ public:
     explicit SplitItemViewSettupDialog( ViewBase *view, DoubleTreeViewBase *treeview, QWidget *parent = 0 );
 
     KPageWidgetItem *insertWidget( int before, QWidget *widget, const QString &name, const QString &header );
-    void addPrintingOptions();
+    void addPrintingOptions(bool setAsCurrent = false);
 
 protected Q_SLOTS:
     virtual void slotOk();

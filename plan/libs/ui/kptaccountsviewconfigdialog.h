@@ -46,7 +46,7 @@ public:
 class AccountsviewConfigDialog : public KPageDialog {
     Q_OBJECT
 public:
-    AccountsviewConfigDialog( ViewBase *view, AccountsTreeView *treeview, QWidget *parent );
+    AccountsviewConfigDialog( ViewBase *view, AccountsTreeView *treeview, QWidget *parent, bool selectPrint = false );
 
 public Q_SLOTS:
     void slotOk();

@@ -486,7 +486,7 @@ private:
 class DependencyeditorConfigDialog : public KPageDialog {
     Q_OBJECT
 public:
-    DependencyeditorConfigDialog( ViewBase *view, QWidget *parent );
+    DependencyeditorConfigDialog( ViewBase *view, QWidget *parent, bool selectPrint = false );
 
 public Q_SLOTS:
     void slotOk();

@@ -157,7 +157,7 @@ void RelationEditor::setupGui()
     connect(m_view->actionSplitView(), SIGNAL(triggered(bool)), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
 
-    createOptionAction();
+    createOptionActions(ViewBase::OptionExpand | ViewBase::OptionCollapse | ViewBase::OptionViewConfig);
 }
 
 void RelationEditor::slotSplitView()

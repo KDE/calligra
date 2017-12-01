@@ -300,7 +300,7 @@ void ResourceEditor::setupGui()
     connect(m_view->actionSplitView(), SIGNAL(triggered(bool)), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
     
-    createOptionAction();
+    createOptionActions(ViewBase::OptionAll);
 }
 
 void ResourceEditor::slotSplitView()
@@ -314,7 +314,7 @@ void ResourceEditor::slotOptions()
 {
     debugPlan;
     SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, m_view, this );
-    dlg->addPrintingOptions();
+    dlg->addPrintingOptions(sender()->objectName() == "print options");
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();

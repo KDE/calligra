@@ -318,7 +318,7 @@ void ScheduleEditor::setupGui()
 
 
     // Add the context menu actions for the view options
-    createOptionAction();
+    createOptionActions(ViewBase::OptionExpand | ViewBase::OptionCollapse | ViewBase::OptionViewConfig);
 }
 
 void ScheduleEditor::updateReadWrite( bool readwrite )
@@ -675,7 +675,7 @@ void ScheduleLogView::slotEnableActions( const ScheduleManager * )
 void ScheduleLogView::setupGui()
 {
     // Add the context menu actions for the view options
-    createOptionAction();
+    createOptionActions(0);
 }
 
 void ScheduleLogView::updateReadWrite( bool readwrite )

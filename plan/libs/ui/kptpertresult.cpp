@@ -118,6 +118,9 @@ PertResult::PertResult(KoPart *part, KoDocument *doc, QWidget *parent)
     connect( widget.treeWidgetTaskResult, SIGNAL(contextMenuRequested(QModelIndex,QPoint,QModelIndexList)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
     
     connect( widget.treeWidgetTaskResult, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
+
+    connect(this, SIGNAL(expandAll()), widget.treeWidgetTaskResult, SLOT(slotExpand()));
+    connect(this, SIGNAL(collapseAll()), widget.treeWidgetTaskResult, SLOT(slotCollapse()));
 }
 
 void PertResult::draw( Project &project)
@@ -153,7 +156,7 @@ void PertResult::setupGui()
     connect(widget.treeWidgetTaskResult->actionSplitView(), SIGNAL(triggered(bool)), SLOT(slotSplitView()));
     addContextAction( widget.treeWidgetTaskResult->actionSplitView() );
     
-    createOptionAction();
+    createOptionActions(ViewBase::OptionAll);
 }
 
 void PertResult::slotSplitView()
@@ -215,7 +218,7 @@ void PertResult::slotOptions()
 {
     debugPlan;
     SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, widget.treeWidgetTaskResult, this );
-    dlg->addPrintingOptions();
+    dlg->addPrintingOptions(sender()->objectName() == "print options");
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -354,7 +357,7 @@ void PertCpmView::setupGui()
     connect(widget.cpmTable->actionSplitView(), SIGNAL(triggered(bool)), SLOT(slotSplitView()));
     addContextAction( widget.cpmTable->actionSplitView() );
     
-    createOptionAction();
+    createOptionActions(ViewBase::OptionAll);
 }
 
 void PertCpmView::slotSplitView()
@@ -416,7 +419,7 @@ void PertCpmView::slotOptions()
 {
     debugPlan;
     SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, widget.cpmTable, this );
-    dlg->addPrintingOptions();
+    dlg->addPrintingOptions(sender()->objectName() == "print options");
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();

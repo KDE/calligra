@@ -81,7 +81,7 @@ void ResourceAppointmentsDisplayOptionsPanel::setDefault()
 }
 
 //----
-ResourceAppointmentsSettingsDialog::ResourceAppointmentsSettingsDialog( ViewBase *view, ResourceAppointmentsItemModel *model, QWidget *parent )
+ResourceAppointmentsSettingsDialog::ResourceAppointmentsSettingsDialog( ViewBase *view, ResourceAppointmentsItemModel *model, QWidget *parent, bool selectPrint )
     : KPageDialog( parent ),
     m_view( view )
 {
@@ -102,7 +102,9 @@ ResourceAppointmentsSettingsDialog::ResourceAppointmentsSettingsDialog( ViewBase
 
     page = addPage( tab, i18n( "Printing" ) );
     page->setHeader( i18n( "Printing Options" ) );
-
+    if (selectPrint) {
+        setCurrentPage(page);
+    }
     connect( this, SIGNAL(accepted()), this, SLOT(slotOk()));
     connect( this, SIGNAL(accepted()), panel, SLOT(slotOk()));
     //TODO: there was no default button configured, should there?
@@ -333,13 +335,13 @@ void ResourceAppointmentsView::updateActionsEnabled(  bool /*on*/ )
 void ResourceAppointmentsView::setupGui()
 {
     // Add the context menu actions for the view options
-    createOptionAction();
+    createOptionActions(ViewBase::OptionAll);
 }
 
 void ResourceAppointmentsView::slotOptions()
 {
     debugPlan;
-    ResourceAppointmentsSettingsDialog *dlg = new ResourceAppointmentsSettingsDialog( this, m_view->model(), this );
+    ResourceAppointmentsSettingsDialog *dlg = new ResourceAppointmentsSettingsDialog( this, m_view->model(), this, sender()->objectName() == "print options" );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
