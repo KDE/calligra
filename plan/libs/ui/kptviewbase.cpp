@@ -668,10 +668,6 @@ void ViewBase::slotHeaderContextMenuRequested( const QPoint &pos )
 
 void ViewBase::createOptionAction()
 {
-    actionOptions = new QAction(koIcon("configure"), i18n("Configure View..."), this);
-    connect(actionOptions, SIGNAL(triggered(bool)), SLOT(slotOptions()));
-    addContextAction( actionOptions );
-
     QAction *separator = new QAction(this);
     separator->setSeparator(true);
     addContextAction(separator);
@@ -683,6 +679,14 @@ void ViewBase::createOptionAction()
     QAction *actionCollapse = new QAction(koIcon("arrow-up"), i18n("Collapse All"), this);
     connect(actionCollapse, SIGNAL(triggered(bool)), this, SIGNAL(collapseAll()));
     addContextAction(actionCollapse);
+
+    separator = new QAction(this);
+    separator->setSeparator(true);
+    addContextAction(separator);
+
+    actionOptions = new QAction(koIcon("configure"), i18n("Configure View..."), this);
+    connect(actionOptions, SIGNAL(triggered(bool)), SLOT(slotOptions()));
+    addContextAction( actionOptions );
 }
 
 void ViewBase::slotOptionsFinished( int result )
