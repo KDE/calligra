@@ -155,8 +155,8 @@ void PertResult::setupGui()
     // Add the context menu actions for the view options
     connect(widget.treeWidgetTaskResult->actionSplitView(), SIGNAL(triggered(bool)), SLOT(slotSplitView()));
     addContextAction( widget.treeWidgetTaskResult->actionSplitView() );
-    
-    createOptionActions(ViewBase::OptionAll);
+
+    createOptionActions(ViewBase::OptionExpand | ViewBase::OptionCollapse | ViewBase::OptionViewConfig);
 }
 
 void PertResult::slotSplitView()
@@ -218,7 +218,8 @@ void PertResult::slotOptions()
 {
     debugPlan;
     SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, widget.treeWidgetTaskResult, this );
-    dlg->addPrintingOptions(sender()->objectName() == "print options");
+    // Note: printing needs fixes in SplitterView/ScheduleHandlerView
+    //dlg->addPrintingOptions(sender()->objectName() == "print options");
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -356,8 +357,8 @@ void PertCpmView::setupGui()
     // Add the context menu actions for the view options
     connect(widget.cpmTable->actionSplitView(), SIGNAL(triggered(bool)), SLOT(slotSplitView()));
     addContextAction( widget.cpmTable->actionSplitView() );
-    
-    createOptionActions(ViewBase::OptionAll);
+
+    createOptionActions(ViewBase::OptionExpand | ViewBase::OptionCollapse | ViewBase::OptionViewConfig);
 }
 
 void PertCpmView::slotSplitView()
@@ -419,7 +420,8 @@ void PertCpmView::slotOptions()
 {
     debugPlan;
     SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, widget.cpmTable, this );
-    dlg->addPrintingOptions(sender()->objectName() == "print options");
+    // Note: printing needs fixes in SplitterView/ScheduleHandlerView
+    //dlg->addPrintingOptions(sender()->objectName() == "print options");
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
