@@ -333,6 +333,9 @@ add_subdirectory(src)
 
 add_subdirectory(devtools)
 
+if (BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 
 #add_custom_target(apidox doc/api/gendocs.pl WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
