@@ -23,14 +23,16 @@ require 'fileutils'
 # check command line parameters
 options = OpenStruct.new
 options.help  = false
-options.sign  = false
+options.sign  = true
 options.program = "gpg2"
 options.translations = true
 options.docs = false
 options.languages = []
 options.tag = "HEAD"
-options.infolevel = 0
 options.checkversion = true
+options.version = ""
+options.cstring = ""
+options.infolevel = 0
 
 opts = OptionParser.new do |opts|
     opts.on_tail("-h", "--help", "Show this usage statement") do |h|
@@ -51,12 +53,12 @@ opts = OptionParser.new do |opts|
     opts.on("-t", "--no-translations", "Do not include translations (Default: translations included)") do |t|
         options.translations = false
     end
-    opts.on("-d", "--docs", "TODO Include documentation (Default: docs not included)") do |d|
+#    opts.on("-d", "--docs", "TODO Include documentation (Default: docs not included)") do |d|
         # TODO
         #options.translations = true
-    end
-    opts.on("-s", "--sign", "Sign tarball (Default: tarball is not signed)") do |s|
-        options.sign = true
+#    end
+    opts.on("-s", "--no-sign", "Do not sign tarball (Default: tarball is signed)") do |s|
+        options.sign = false
     end
     opts.on("-p", "--program <program>", "Which program to use for signing (Default: gpg2)") do |p|
         options.program = p
@@ -88,21 +90,46 @@ end
     
 app = "calligraplan"
 
+if options.checkversion
+    if options.cstring.empty?
+        options.cstring = options.version
+    end
+else
+    options.cstring = "No check"
+end
+
 puts
 puts "-> Processing " + app
 puts  "            Git tag: #{options.tag}"
 puts  "            Version: #{options.version}"
-puts  "     Version string: #{options.cstring}"
+puts  "      Version check: #{options.cstring}"
 puts  "             Signed: #{options.sign}"
 puts  "            Program: #{options.program}"
 puts  "       Translations: #{options.translations}"
 print "          Languages: "
-if (options.languages.empty?)
-    puts "all"
+if options.translations
+    if (options.languages.empty?)
+        puts "all"
+    else
+        puts "#{options.languages}"
+    end
 else
-    puts "#{options.languages}"
+    # no translation, so no languages
+    puts
 end
-puts "      Documentation: #{options.docs}"
+# TODO
+# puts "      Documentation: #{options.docs}"
+# puts
+
+print "Continue? [Y/n]: "
+answer = gets
+answer = answer.lstrip.rstrip.chomp
+if answer.empty?
+    answer = "Y"
+end
+if not answer == "Y"
+    exit
+end
 puts
 
 gitdir = "calligraplan"
@@ -111,6 +138,8 @@ if options.version
 end
 gittar = "#{gitdir}.tar.xz"
 gitsig = "#{gittar}.sig"
+
+puts "-- Create tarball of Calligra Plan: " + gittar
 
 # clean up first, in case
 calligradir = ".calligra"

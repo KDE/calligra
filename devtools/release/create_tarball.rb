@@ -57,15 +57,17 @@ end
 # check command line parameters
 options = OpenStruct.new
 options.help  = false
-options.sign  = false
+options.sign  = true
 options.program = "gpg2"
 options.branch = "trunk"
 options.translations = true
 options.docs = false
 options.languages = []
 options.tag = "HEAD"
-options.infolevel = 0
 options.checkversion = true
+options.version = ""
+options.cstring = ""
+options.infolevel = 0
 
 opts = OptionParser.new do |opts|
     opts.on_tail("-h", "--help", "Show this usage statement") do |h|
@@ -89,12 +91,12 @@ opts = OptionParser.new do |opts|
     opts.on("-t", "--no-translations", "Do not include translations (Default: translations included)") do |t|
         options.translations = false
     end
-    opts.on("-d", "--docs", "TODO Include documentation (Default: docs not included)") do |d|
+#     opts.on("-d", "--docs", "TODO Include documentation (Default: docs not included)") do |d|
         # TODO
         #options.translations = true
-    end
+#     end
     opts.on("-s", "--sign", "Sign tarball (Default: tarball is not signed)") do |s|
-        options.sign = true
+        options.sign = false
     end
     opts.on("-p", "--program <program>", "Which program to use for signing (Default: gpg2)") do |p|
         options.program = p
@@ -102,7 +104,7 @@ opts = OptionParser.new do |opts|
     opts.on("-l", "--languages <language,..>", "Include comma separated list of languages only (Default: All available languages)") do |l|
         options.languages = l.split(/\s*,\s*/)
     end
-    opts.on("-i", "--infolevel <level>", "Select amount of info to print during processing (0-2) (Default: 0)") do |i|
+    opts.on("-i", "--infolevel <level>", "Select amount of info to print during processing (0-3) (Default: 0)") do |i|
         options.infolevel = i.to_i
     end
 end
@@ -126,21 +128,46 @@ end
     
 app = "calligra"
 
+if options.checkversion
+    if options.cstring.empty?
+        options.cstring = options.version
+    end
+else
+    options.cstring = "No check"
+end
+
 puts
 puts "-> Processing " + app
 puts  "            Git tag: #{options.tag}"
 puts  "            Version: #{options.version}"
-puts  "     Version string: #{options.cstring}"
+puts  "      Version check: #{options.cstring}"
 puts  "             Signed: #{options.sign}"
 puts  "            Program: #{options.program}"
 puts  "       Translations: #{options.translations}"
 print "          Languages: "
-if (options.languages.empty?)
-    puts "all"
+if options.translations
+    if (options.languages.empty?)
+        puts "all"
+    else
+        puts "#{options.languages}"
+    end
 else
-    puts "#{options.languages}"
+    # no translation, so no languages
+    puts
 end
-puts "      Documentation: #{options.docs}"
+# TODO
+# puts "      Documentation: #{options.docs}"
+# puts
+
+print "Continue? [Y/n]: "
+answer = gets
+answer = answer.lstrip.rstrip.chomp
+if answer.empty?
+    answer = "Y"
+end
+if not answer == "Y"
+    exit
+end
 puts
 
 gitdir = "calligra"
@@ -149,6 +176,8 @@ if options.version
 end
 gittar = "#{gitdir}.tar.xz"
 gitsig = "#{gittar}.sig"
+
+puts "-- Create tarball of Calligra: " + gittar
 
 `rm -rf #{gitdir} 2> /dev/null`
 if File.exist?(gittar)
@@ -196,7 +225,7 @@ end
 # From release 3.0.89, Plan is not released as part of calligra
 if compare_versions(cversion, "3.0.89") >= 0
     if (options.infolevel > 2)
-        puts "Removing plan, version is: #{cversion}"
+        puts "--> Removing plan, version is: #{cversion}"
     end
     `sed -i 's/\#calligra_disable_product(APP_PLAN/calligra_disable_product(APP_PLAN/g' CMakeLists.txt`
     `sed -i 's/add_subdirectory(plan)/\#add_subdirectory(plan)/g' CMakeLists.txt`
