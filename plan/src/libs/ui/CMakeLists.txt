@@ -173,4 +173,10 @@ set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_PLAN_LIB_VERSION} SO
 
 install(TARGETS kplatoui ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-#
+# reports files
+install(FILES
+        reportsgenerator/ProjectPerformanceCost.odt
+        reportsgenerator/ProjectPerformance.odt
+        reportsgenerator/TaskStatus.odt
+    DESTINATION ${DATA_INSTALL_DIR}/calligraplan/reports
+)
