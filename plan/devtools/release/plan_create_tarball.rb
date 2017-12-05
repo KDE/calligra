@@ -28,6 +28,7 @@ options.program = "gpg2"
 options.translations = true
 options.docs = false
 options.languages = []
+options.branch = "trunk"
 options.tag = "HEAD"
 options.checkversion = true
 options.version = ""
@@ -53,7 +54,10 @@ opts = OptionParser.new do |opts|
     opts.on("-t", "--no-translations", "Do not include translations (Default: translations included)") do |t|
         options.translations = false
     end
-#    opts.on("-d", "--docs", "TODO Include documentation (Default: docs not included)") do |d|
+    opts.on("-b", "--branch", "Translation branch [trunk/stable] (Default: 'trunk')") do |t|
+        options.translations = false
+    end
+    #    opts.on("-d", "--docs", "TODO Include documentation (Default: docs not included)") do |d|
         # TODO
         #options.translations = true
 #    end
@@ -106,6 +110,7 @@ puts  "      Version check: #{options.cstring}"
 puts  "             Signed: #{options.sign}"
 puts  "            Program: #{options.program}"
 puts  "       Translations: #{options.translations}"
+puts  "             Branch: #{options.branch}"
 print "          Languages: "
 if options.translations
     if (options.languages.empty?)
