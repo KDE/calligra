@@ -372,6 +372,8 @@ bool ReportGeneratorOdt::createReportOdt()
     dbgRG << endl << "---- treat main content.xml ----" << endl;
     QBuffer buffer;
     KoXmlWriter *writer = KoOdfWriteStore::createOasisXmlWriter(&buffer, "office:document-content");
+    // HACK: add loext namespace in case template is created using libreoffice
+    writer->addAttribute("xmlns:loext", "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0");
 
     KoXmlDocument kodoc = reader.contentDoc();
     KoXmlElement parent = kodoc.documentElement();
