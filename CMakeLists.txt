@@ -506,29 +506,6 @@ set_package_properties(KChart PROPERTIES
     TYPE RECOMMENDED
 )
 
-#### Disable kreport for now, reconsidder when it is stable ####
-##
-## Test for KReport
-##
-# macro_optional_find_package(KReport 3.0 QUIET)
-# set_package_properties(KReport PROPERTIES
-#     DESCRIPTION "A framework for the creation and generation of reports in multiple formats"
-#     URL "https://community.kde.org/KReport"
-#     PURPOSE "Required for KReports support in Plan"
-#     TYPE OPTIONAL
-# )
-# 
-# ##
-# ## Test for KPropertyWidgets
-# ##
-# macro_optional_find_package(KPropertyWidgets 3.0 QUIET)
-# set_package_properties(KPropertyWidgets PROPERTIES
-#     DESCRIPTION "A property editing framework with editor widget"
-#     URL "https://community.kde.org/KProperty"
-#     PURPOSE "Required for KReports support in Plan"
-#     TYPE OPTIONAL
-# )
-
 ##
 ## Test for eigen3
 ##
