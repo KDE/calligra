@@ -79,8 +79,7 @@
       <widget class="QLabel" name="leaderlabel">
        <property name="whatsThis">
         <string>The person responsible for this task.
-
-This is not limited to persons available in a resource group but can be anyone. You can even directly access your address book with the Choose button.</string>
+        </string>
        </property>
        <property name="text">
         <string>Responsible:</string>

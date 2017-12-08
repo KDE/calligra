@@ -27,6 +27,7 @@
 #include "kptproject.h"
 #include "kptschedule.h"
 #include "kpteffortcostmap.h"
+#include "WhatsThis.h"
 #include "kptdebug.h"
 
 #include <KoXmlReader.h>
@@ -211,6 +212,25 @@ TaskStatusView::TaskStatusView(KoPart *part, KoDocument *doc, QWidget *parent )
     connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint,QModelIndexList)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
     connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
+
+    Help::add(this,
+              xi18nc("@info:whatsthis", 
+                     "<title>Task Status View</title>"
+                     "<para>"
+                     "The Task Status View is used to inspect task progress information."
+                     "The tasks are divided into groups dependent on the tasks status:"
+                     "<ul>"
+                     "<li>Not Started 	Tasks that should have been started by now.</li>"
+                     "<li>Running 	Tasks that has been started, but not yet finished.</li>"
+                     "<li>Finished 	Tasks that where finished in this period.</li>"
+                     "<li>Next Period 	Tasks that is scheduled to be started in the next period.</li>"
+                     "</ul>"
+                     "The time period is configurable."
+                     "</para><para>"
+                     "This view supports configuration and printing using the context menu."
+                     "<nl/><link url='%1'>More...</link>"
+                     "</para>", Help::page("Manual/Task_Status_View")));
+    
 }
 
 void TaskStatusView::updateReadWrite( bool rw )
@@ -452,7 +472,15 @@ ProjectStatusView::ProjectStatusView(KoPart *part, KoDocument *doc, QWidget *par
 
     connect( m_view, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 
-
+    Help::add(this,
+              xi18nc("@info:whatsthis", 
+                     "<title>Project Performance View</title>"
+                     "<para>"
+                     "Displays performance data agregated to the project level."
+                     "</para><para>"
+                     "This view supports configuration and printing using the context menu."
+                     "<nl/><link url='%1'>More...</link>"
+                     "</para>", Help::page("Manual/Project_Performance_View")));
 }
 
 void ProjectStatusView::setScheduleManager( ScheduleManager *sm )
@@ -1195,6 +1223,16 @@ PerformanceStatusView::PerformanceStatusView(KoPart *part, KoDocument *doc, QWid
     connect( m_view->chartView(), SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 
     connect( m_view->treeView(), SIGNAL(contextMenuRequested(QModelIndex,QPoint,QModelIndexList)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
+
+    Help::add(this,
+              xi18nc("@info:whatsthis", 
+                     "<title>Task Performance View</title>"
+                     "<para>"
+                     "Displays performance data agregated to the selected task."
+                     "</para><para>"
+                     "This view supports configuration and printing using the context menu."
+                     "<nl/><link url='%1'>More...</link>"
+                     "</para>", Help::page("Manual/Task_Performance_View")));
 }
 
 void PerformanceStatusView::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )

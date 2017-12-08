@@ -24,6 +24,7 @@
 #include "kptproject.h"
 #include "kpteffortcostmap.h"
 #include "kptaccountsmodel.h"
+#include "WhatsThis.h"
 #include "kptdebug.h"
 
 #include <KoDocument.h>
@@ -61,6 +62,16 @@ AccountsTreeView::AccountsTreeView( QWidget *parent )
     slotModelReset();
     
     connect( m, SIGNAL(modelReset()), SLOT(slotModelReset()) );
+
+    Help::add(this,
+              xi18nc("@info:whatsthis",
+                     "<title>Cost Breakdown View</title>"
+                     "<para>"
+                     "Displays aggregated total cost as well as cost distribution over time."
+                     "</para><para>"
+                     "This view supports configuration and printing using the context menu."
+                     "<nl/><link url='%1'>More...</link>"
+                     "</para>", Help::page("Manual/Cost_Breakdown_View")));
 }
 
 void AccountsTreeView::slotModelReset()

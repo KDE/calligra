@@ -30,6 +30,7 @@
 #include "kptresource.h"
 #include "kptdatetime.h"
 #include "kptitemviewsettup.h"
+#include "WhatsThis.h"
 #include "kptdebug.h"
 
 #include <KoDocument.h>
@@ -115,15 +116,16 @@ QList<Resource*> ResourceTreeView::selectedResources() const
 ResourceEditor::ResourceEditor(KoPart *part, KoDocument *doc, QWidget *parent)
     : ViewBase(part, doc, parent)
 {
-    setWhatsThis( xi18nc( "@info:whatsthis", 
-        "<title>Resource Editor</title>"
-        "<para>"
-        "Resources are organized in a Resource Breakdown Structure. "
-        "Resources can be of type <emphasis>Work</emphasis> or <emphasis>Material</emphasis>. "
-        "When assigned to a task, a resource of type <emphasis>Work</emphasis> can affect the duration of the task, while a resource of type <emphasis>Material</emphasis> does not. "
-        "A resource must refer to a <emphasis>Calendar</emphasis> that defines the working hours."
-        "</para>"
-        ) );
+    Help::add(this,
+        xi18nc("@info:whatsthis", 
+               "<title>Resource Editor</title>"
+               "<para>"
+               "Resources are organized in a Resource Breakdown Structure. "
+               "Resources can be of type <emphasis>Work</emphasis> or <emphasis>Material</emphasis>. "
+               "When assigned to a task, a resource of type <emphasis>Work</emphasis> can affect the duration of the task, while a resource of type <emphasis>Material</emphasis> does not. "
+               "A resource must refer to a <emphasis>Calendar</emphasis> defined in the <emphasis>Work and Vacation Editor</emphasis>."
+               "<nl/><link url='%1'>More...</link>"
+               "</para>", Help::page("Manual/Resource_Editor")));
 
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );

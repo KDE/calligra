@@ -28,13 +28,25 @@
 namespace KPlato
 {
 
-namespace WhatsThis {
+namespace Help
+{
 
 void add(QWidget *widget, const QString &text)
 {
     widget->installEventFilter(new WhatsThisClickedEventHandler(widget));
     widget->setWhatsThis(text);
 }
+
+QString page(const QString &page)
+{
+    QString url = "https://userbase.kde.org/Plan";
+    if (!page.isEmpty()) {
+        url = QString("%1/%2").arg(url, page);
+    }
+    return url;
+}
+
+} // namespace Help
 
 WhatsThisClickedEventHandler::WhatsThisClickedEventHandler(QObject *parent)
     : QObject(parent)
@@ -54,8 +66,6 @@ bool WhatsThisClickedEventHandler::eventFilter(QObject *object, QEvent *event)
         return true;
     }
     return false;
-}
-
 }
 
 } // namespace KPlato

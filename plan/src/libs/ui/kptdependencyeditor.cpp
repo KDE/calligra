@@ -28,6 +28,7 @@
 #include "kptschedule.h"
 #include "kptdebug.h"
 #include "config.h"
+#include "WhatsThis.h"
 
 #include "KoPageLayoutWidget.h"
 #include <KoIcon.h>
@@ -2005,6 +2006,18 @@ DependencyEditor::DependencyEditor(KoPart *part, KoDocument *doc, QWidget *paren
 
     connect( m_view, SIGNAL(contextMenuRequested(QGraphicsItem*,QPoint)), this, SLOT(slotContextMenuRequested(QGraphicsItem*,QPoint)) );
 
+    Help::add(this,
+              xi18nc("@info:whatsthis",
+                     "<title>Task Dependency Editor</title>"
+                     "<para>"
+                     "Edit dependencies between tasks."
+                     "Dependencies can be added by dragging a connection area (start or finish)"
+                     " from one task to a connection area of a different task."
+                     " You can edit or delete a dependency using the context menu."
+                     "</para><para>"
+                     "This view supports printing using the context menu."
+                     "<nl/><link url='%1'>More...</link>"
+                     "</para>", Help::page("Manual/Task_Dependency_Editor_(Graphical)")));
 }
 
 void DependencyEditor::updateReadWrite( bool on )

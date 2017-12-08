@@ -28,6 +28,7 @@
 #include "kpttask.h"
 #include "kptaccount.h"
 #include "kptdatetime.h"
+#include "WhatsThis.h"
 #include "kptdebug.h"
 
 #include <KoDocument.h>
@@ -178,6 +179,20 @@ AccountsEditor::AccountsEditor(KoPart *part, KoDocument *doc, QWidget *parent)
     
     connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), this, SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
     connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
+
+    Help::add(this,
+              xi18nc("@info:whatsthis",
+                     "<title>Cost Breakdown Structure Editor</title>"
+                     "<para>"
+                     "The Cost Breakdown Structure (CBS) consists of accounts"
+                     " organized into a tree structure."
+                     " Accounts can be tied to tasks or resources."
+                     " Usually there will be two top accounts, one for aggregating costs from tasks"
+                     " and one for aggregating costs from resources."
+                     "</para><para>"
+                     "This view supports printing using the context menu."
+                     "<nl/><link url='%1'>More...</link>"
+                     "</para>", Help::page("Manual/Cost_Breakdown_Structure_Editor")));
 }
 
 void AccountsEditor::updateReadWrite( bool readwrite )

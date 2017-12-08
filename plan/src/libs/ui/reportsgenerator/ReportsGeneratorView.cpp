@@ -20,6 +20,7 @@
 #include "ReportsGeneratorView.h"
 
 #include "reportgenerator/ReportGenerator.h"
+#include "WhatsThis.h"
 #include "kptdebug.h"
 
 #include <KoIcon.h>
@@ -248,6 +249,16 @@ ReportsGeneratorView::ReportsGeneratorView(KoPart *part, KoDocument *doc, QWidge
 
     connect(m_view->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(slotSelectionChanged()));
     setupGui();
+
+    Help::add(this,
+                   xi18nc("@info:whatsthis",
+                          "<title>Add and generate reports</title>"
+                          "<para>"
+                          "Enables you to add and generate reports based on Open Document (.odf) files."
+                          "</para><para>"
+                          "You can create a report template using any Open Document text editor."
+                          "<nl/><link url='%1'>More...</link>"
+                          "</para>", Help::page("Manual/Reports_Generator_View")));
 }
 
 void ReportsGeneratorView::setGuiActive(bool activate)

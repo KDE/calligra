@@ -91,7 +91,7 @@ WelcomeView::WelcomeView(KoPart *part, KoDocument *doc, QWidget *parent)
     widget.setupUi(this);
     widget.recentProjects->setBackgroundRole(QPalette::Midlight);
 
-    WhatsThis::add(widget.newProjectBtn,
+    Help::add(widget.newProjectBtn,
                    xi18nc("@info:whatsthis",
                           "<title>Create a new project</title>"
                           "<para>"
@@ -103,9 +103,9 @@ WelcomeView::WelcomeView(KoPart *part, KoDocument *doc, QWidget *parent)
                           " <resource>Target Start</resource>"
                           " and <resource>- End</resource> times."
                           "<nl/><link url='%1'>More...</link>"
-                          "</para>", "https://userbase.kde.org/Plan/Howto/Create_New_Project"));
+                          "</para>", Help::page("Howto/Create_New_Project")));
 
-    WhatsThis::add(widget.createResourceFileBtn,
+    Help::add(widget.createResourceFileBtn,
                    xi18nc("@info:whatsthis",
                           "<title>Shared resources</title>"
                           "<para>"
@@ -116,9 +116,9 @@ WelcomeView::WelcomeView(KoPart *part, KoDocument *doc, QWidget *parent)
                           " to avoid overbooking resources across projects."
                           "<nl/>Shared resources must be defined in a separate file."
                           "<nl/><link url='%1'>More...</link>"
-                          "</para>", "https://userbase.kde.org/Plan/Howto/Create_Shared_Resources"));
+                          "</para>", Help::page("Howto/Create_Shared_Resources")));
 
-    WhatsThis::add(widget.recentProjects,
+    Help::add(widget.recentProjects,
                    xi18nc("@info:whatsthis",
                           "<title>Recent Projects</title>"
                           "<para>"
@@ -126,9 +126,9 @@ WelcomeView::WelcomeView(KoPart *part, KoDocument *doc, QWidget *parent)
                           "</para><para>"
                           "<nl/>This enables you to quickly open projects you have worked on recently."
                           "<nl/><link url='%1'>More...</link>"
-                          "</para>", "https://userbase.kde.org/Plan/Howto"));
+                          "</para>", Help::page("Howto")));
 
-    WhatsThis::add(widget.introductionBtn,
+    Help::add(widget.introductionBtn,
                    xi18nc("@info:whatsthis",
                           "<title>Introduction to <application>Plan</application></title>"
                           "<para>"
@@ -136,7 +136,7 @@ WelcomeView::WelcomeView(KoPart *part, KoDocument *doc, QWidget *parent)
                           " you can use <application>Plan</application> for, and how to use it."
                           "</para>"));
 
-    WhatsThis::add(widget.contextHelp,
+    Help::add(widget.contextHelp,
                    xi18nc("@info:whatsthis",
                           "<title>Context help</title>"
                           "<para>"
@@ -148,7 +148,7 @@ WelcomeView::WelcomeView(KoPart *part, KoDocument *doc, QWidget *parent)
                           "</para><para>"
                           "If you see <link url='%1'>More...</link> in the text,"
                           " pressing it will display more information from online resources in your browser."
-                          "</para>", "https://userbase.kde.org/Plan/Howto"));
+                          "</para>", Help::page("Howto")));
 
     m_model = new RecentFilesModel(this);
     widget.recentProjects->setModel(m_model);

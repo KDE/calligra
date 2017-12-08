@@ -17,6 +17,9 @@
   Boston, MA 02110-1301, USA.
 */
 
+#ifndef WHATSTHIS_H
+#define WHATSTHIS_H
+
 #include "kplatoui_export.h"
 
 #include <QObject>
@@ -25,9 +28,12 @@ class QEvent;
 
 namespace KPlato
 {
-namespace WhatsThis
+namespace Help
 {
     KPLATOUI_EXPORT void add(QWidget *widget, const QString &text);
+    KPLATOUI_EXPORT QString page(const QString &page = QString());
+} // namespace Help
+
 
 class KPLATOUI_EXPORT WhatsThisClickedEventHandler : public QObject
 {
@@ -39,6 +45,7 @@ public:
 
 };
 
-} // namespace WhatsThis
 
 } // namespace KPlato
+
+#endif // WHATSTHIS_H

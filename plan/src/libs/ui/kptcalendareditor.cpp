@@ -33,6 +33,7 @@
 #include "kptdatetime.h"
 #include "kptintervaledit.h"
 #include "kptitemviewsettup.h"
+#include "WhatsThis.h"
 #include "kptdebug.h"
 
 #include <KoIcon.h>
@@ -388,21 +389,22 @@ CalendarEditor::CalendarEditor(KoPart *part, KoDocument *doc, QWidget *parent )
     : ViewBase(part, doc, parent ),
     m_model( new DateTableDataModel( this ) )
 {
-    setWhatsThis( xi18nc( "@info:whatsthis",
-        "<title>Work & Vacation Editor</title>"
-        "<para>"
-        "A calendar defines availability for resources or tasks of type <emphasis>Duration</emphasis>. "
-        "A calendar can be specific to a resource or task, or shared by multiple resources or tasks. "
-        "A day can be of type <emphasis>Undefined</emphasis>, <emphasis>Non-working day</emphasis> or <emphasis>Working day</emphasis>. "
-        "A working day has one or more work intervals defined. "
-        "</para><para>"
-        "A calendar can have sub calendars. If a day is undefined in a calendar, the parent calendar is checked. "
-        "An <emphasis>Undefined</emphasis> day defaults to <emphasis>Non-working</emphasis> if used by a resource, or <emphasis>available all day</emphasis> if used by a task."
-        "</para><para>"
-        "A calendar can be defined as the <emphasis>Default calendar</emphasis>. "
-        "The default calendar is used by a working resource, when the resources calendar is not explicitly set."
-        "</para>"
-        ) );
+    Help::add(this,
+              xi18nc( "@info:whatsthis",
+                      "<title>Work & Vacation Editor</title>"
+                      "<para>"
+                      "A calendar defines availability for resources or tasks of type <emphasis>Duration</emphasis>. "
+                      "A calendar can be specific to a resource or task, or shared by multiple resources or tasks. "
+                      "A day can be of type <emphasis>Undefined</emphasis>, <emphasis>Non-working day</emphasis> or <emphasis>Working day</emphasis>. "
+                      "A working day has one or more work intervals defined. "
+                      "</para><para>"
+                      "A calendar can have sub calendars. If a day is undefined in a calendar, the parent calendar is checked. "
+                      "An <emphasis>Undefined</emphasis> day defaults to <emphasis>Non-working</emphasis> if used by a resource, or <emphasis>available all day</emphasis> if used by a task."
+                      "</para><para>"
+                      "A calendar can be defined as the <emphasis>Default calendar</emphasis>. "
+                      "The default calendar is used by a working resource, when the resources calendar is not explicitly set."
+                      "<nl/><link url='%1'>More...</link>"
+                      "</para>", Help::page("Manual/Work_and_Vacation_Editor")));
 
     setupGui();
 

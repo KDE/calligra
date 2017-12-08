@@ -33,6 +33,7 @@
 #include "kptduration.h"
 #include "kptdatetime.h"
 #include "kptresourceappointmentsmodel.h"
+#include "WhatsThis.h"
 #include "kptdebug.h"
 
 #include <KGanttProxyModel>
@@ -729,6 +730,16 @@ GanttView::GanttView(KoPart *part, KoDocument *doc, QWidget *parent, bool readWr
     connect( m_gantt->treeView(), SIGNAL(contextMenuRequested(QModelIndex,QPoint,QModelIndexList)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
     connect( m_gantt->treeView(), SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
+
+    Help::add(this,
+              xi18nc("@info:whatsthis",
+                     "<title>Gantt View</title>"
+                     "<para>"
+                     "Displays scheduled tasks in a Gantt diagram."
+                     "</para><para>"
+                     "This view supports configuration and printing using the context menu."
+                     "<nl/><link url='%1'>More...</link>"
+                     "</para>", Help::page("Manual/Gantt_View")));
 }
 
 KoPrintJob *GanttView::createPrintJob()
@@ -1007,6 +1018,16 @@ MilestoneKGanttView::MilestoneKGanttView( QWidget *parent )
     // TODO: add to context
     treeView()->sortByColumn(NodeModel::NodeWBSCode, Qt::AscendingOrder);
     treeView()->setSortingEnabled(true);
+
+    Help::add(this,
+              xi18nc("@info:whatsthis",
+                     "<title>Milestone Gantt View</title>"
+                     "<para>"
+                     "Displays scheduled milestones in a Gantt diagram."
+                     "</para><para>"
+                     "This view supports configuration and printing using the context menu."
+                     "<nl/><link url='%1'>More...</link>"
+                     "</para>", Help::page("Manual/Milestone_Gantt_View")));
 }
 
 MilestoneItemModel *MilestoneKGanttView::model() const
@@ -1280,6 +1301,16 @@ ResourceAppointmentsGanttView::ResourceAppointmentsGanttView(KoPart *part, KoDoc
     connect( m_gantt->leftView(), SIGNAL(contextMenuRequested(QModelIndex,QPoint,QModelIndexList)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
     connect( m_gantt->leftView(), SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
+
+    Help::add(this,
+              xi18nc("@info:whatsthis",
+                     "<title>Resource Assignments (Gantt)</title>"
+                     "<para>"
+                     "Displays the scheduled resource - task assignments in a Gantt diagram."
+                     "</para><para>"
+                     "This view supports configuration and printing using the context menu."
+                     "<nl/><link url='%1'>More...</link>"
+                     "</para>", Help::page("Manual/Resource_Assignment_Gantt_View")));
 }
 
 ResourceAppointmentsGanttView::~ResourceAppointmentsGanttView()

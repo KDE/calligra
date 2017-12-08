@@ -32,6 +32,7 @@
 #include "kptdatetime.h"
 #include "kptitemviewsettup.h"
 #include "kptviewbase.h"
+#include "WhatsThis.h"
 #include "kptdebug.h"
 
 #include "KoPageLayoutWidget.h"
@@ -206,6 +207,15 @@ ResourceAppointmentsView::ResourceAppointmentsView(KoPart *part, KoDocument *doc
 
     connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 
+    Help::add(this,
+              xi18nc("@info:whatsthis",
+                     "<title>Resource Assignments View</title>"
+                     "<para>"
+                     "Displays the scheduled resource - task assignments."
+                     "</para><para>"
+                     "This view supports configuration and printing using the context menu."
+                     "<nl/><link url='%1'>More...</link>"
+                     "</para>", Help::page("Manual/Resource_Assignment_Gantt_View")));
 }
 
 void ResourceAppointmentsView::draw( Project &project )

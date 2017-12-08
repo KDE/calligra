@@ -34,6 +34,7 @@
 #include "ResourceAllocationView.h"
 #include "kpttaskdialog.h"
 #include "TasksEditController.h"
+#include "WhatsThis.h"
 
 #include <KoXmlReader.h>
 #include <KoDocument.h>
@@ -344,6 +345,17 @@ TaskEditor::TaskEditor(KoPart *part, KoDocument *doc, QWidget *parent)
 
     connect(baseModel(), SIGNAL(projectShownChanged(bool)), SLOT(slotProjectShown(bool)));
     connect(model(), SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), this, SLOT(slotEnableActions()));
+
+    Help::add(this,
+              xi18nc("@info:whatsthis", 
+                     "<title>Task Editor</title>"
+                     "<para>"
+                     "The Task Editor is used to create, edit, and delete tasks."
+                     "Tasks are origanized into a Work Breakdown Structure (WBS) to any depth."
+                     "</para><para>"
+                     "This view supports configuration and printing using the context menu."
+                     "<nl/><link url='%1'>More...</link>"
+                     "</para>", Help::page("Manual/Task_Editor")));
 }
 
 void TaskEditor::slotProjectShown( bool on )
@@ -1149,6 +1161,16 @@ TaskView::TaskView(KoPart *part, KoDocument *doc, QWidget *parent)
     connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint,QModelIndexList)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
     connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
+
+    Help::add(this,
+              xi18nc("@info:whatsthis", 
+                     "<title>Task Execution View</title>"
+                     "<para>"
+                     "The view is used to edit and inspect task progress during project execution."
+                     "</para><para>"
+                     "This view supports configuration and printing using the context menu."
+                     "<nl/><link url='%1'>More...</link>"
+                     "</para>", Help::page("Manual/Task_Execution_View")));
 }
 
 void TaskView::updateReadWrite( bool rw )

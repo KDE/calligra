@@ -30,6 +30,7 @@
 #include "kptpertresult.h"
 #include "kptitemviewsettup.h"
 #include "kptrecalculatedialog.h"
+#include "WhatsThis.h"
 #include "kptdebug.h"
 
 #include <KoDocument.h>
@@ -166,6 +167,17 @@ ScheduleEditor::ScheduleEditor(KoPart *part, KoDocument *doc, QWidget *parent)
     connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint,QModelIndexList)), this, SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
     connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
+
+    Help::add(this,
+        xi18nc("@info:whatsthis", 
+               "<title>Schedule Editor</title>"
+               "<para>"
+               "The Schedule Editor is used to create, edit, calculate and delete schedules."
+               "A schedule can have sub-schedules. A sub-schedule can use the projects progress data"
+               " in order to reschedule only tasks that is not yet finished."
+               " Rescheduling will then use e.g. actual start and remaining effort for the tasks."
+               "<nl/><link url='%1'>More...</link>"
+               "</para>", Help::page("Manual/Schedule_Editor")));
 }
 
 void ScheduleEditor::draw( Project &project )
