@@ -172,9 +172,9 @@ ScheduleEditor::ScheduleEditor(KoPart *part, KoDocument *doc, QWidget *parent)
         xi18nc("@info:whatsthis", 
                "<title>Schedule Editor</title>"
                "<para>"
-               "The Schedule Editor is used to create, edit, calculate and delete schedules."
+               "The Schedule Editor is used to create, edit, calculate and delete schedules. "
                "A schedule can have sub-schedules. A sub-schedule can use the projects progress data"
-               " in order to reschedule only tasks that is not yet finished."
+               " in order to reschedule only tasks that are not yet finished."
                " Rescheduling will then use e.g. actual start and remaining effort for the tasks."
                "<nl/><link url='%1'>More...</link>"
                "</para>", Help::page("Manual/Schedule_Editor")));

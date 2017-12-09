@@ -217,8 +217,8 @@ TaskStatusView::TaskStatusView(KoPart *part, KoDocument *doc, QWidget *parent )
               xi18nc("@info:whatsthis", 
                      "<title>Task Status View</title>"
                      "<para>"
-                     "The Task Status View is used to inspect task progress information."
-                     "The tasks are divided into groups dependent on the tasks status:"
+                     "The Task Status View is used to inspect task progress information. "
+                     "The tasks are divided into groups dependent on the task status:"
                      "<ul>"
                      "<li>Not Started 	Tasks that should have been started by now.</li>"
                      "<li>Running 	Tasks that has been started, but not yet finished.</li>"
