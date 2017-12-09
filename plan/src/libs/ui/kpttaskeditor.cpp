@@ -351,7 +351,7 @@ TaskEditor::TaskEditor(KoPart *part, KoDocument *doc, QWidget *parent)
                      "<title>Task Editor</title>"
                      "<para>"
                      "The Task Editor is used to create, edit, and delete tasks."
-                     "Tasks are origanized into a Work Breakdown Structure (WBS) to any depth."
+                     "Tasks are organized into a Work Breakdown Structure (WBS) to any depth."
                      "</para><para>"
                      "This view supports configuration and printing using the context menu."
                      "<nl/><link url='%1'>More...</link>"
