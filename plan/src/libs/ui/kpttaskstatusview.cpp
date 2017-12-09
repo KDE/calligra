@@ -476,7 +476,7 @@ ProjectStatusView::ProjectStatusView(KoPart *part, KoDocument *doc, QWidget *par
               xi18nc("@info:whatsthis", 
                      "<title>Project Performance View</title>"
                      "<para>"
-                     "Displays performance data agregated to the project level."
+                     "Displays performance data aggregated to the project level."
                      "</para><para>"
                      "This view supports configuration and printing using the context menu."
                      "<nl/><link url='%1'>More...</link>"
@@ -1228,7 +1228,7 @@ PerformanceStatusView::PerformanceStatusView(KoPart *part, KoDocument *doc, QWid
               xi18nc("@info:whatsthis", 
                      "<title>Task Performance View</title>"
                      "<para>"
-                     "Displays performance data agregated to the selected task."
+                     "Displays performance data aggregated to the selected task."
                      "</para><para>"
                      "This view supports configuration and printing using the context menu."
                      "<nl/><link url='%1'>More...</link>"
