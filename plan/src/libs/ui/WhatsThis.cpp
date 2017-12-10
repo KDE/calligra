@@ -28,25 +28,41 @@
 namespace KPlato
 {
 
-namespace Help
-{
+Help* Help::self = 0;
 
-void add(QWidget *widget, const QString &text)
+Help::Help(const QString &docpath)
+{
+    qInfo()<<Q_FUNC_INFO<<self<<docpath;
+    if (!self) {
+        self = this;
+        m_docpath = docpath;
+    }
+}
+
+Help::~Help()
+{
+    qInfo()<<Q_FUNC_INFO;
+    self = 0;
+}
+
+void Help::add(QWidget *widget, const QString &text)
 {
     widget->installEventFilter(new WhatsThisClickedEventHandler(widget));
     widget->setWhatsThis(text);
 }
 
-QString page(const QString &page)
+QString Help::page(const QString &page)
 {
-    QString url = "https://userbase.kde.org/Plan";
+    if (!self) {
+        new Help("https://userbase.kde.org/Plan");
+    }
+    QString url = self->m_docpath;
     if (!page.isEmpty()) {
         url = QString("%1/%2").arg(url, page);
     }
     return url;
 }
 
-} // namespace Help
 
 WhatsThisClickedEventHandler::WhatsThisClickedEventHandler(QObject *parent)
     : QObject(parent)

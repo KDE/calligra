@@ -25,6 +25,7 @@
 #include "welcome/WelcomeView.h"
 #include "kpthtmlview.h"
 #include <kptdebug.h>
+#include "WhatsThis.h"
 
 #include <KoComponentData.h>
 
@@ -33,6 +34,8 @@
 #include <KConfigGroup>
 #include <KHelpClient>
 #include <KRun>
+#include <KDesktopFile>
+#include <KAboutData>
 
 #include <QStackedWidget>
 #include <QDesktopServices>
@@ -42,6 +45,9 @@ Part::Part(QObject *parent)
     , startUpWidget(0)
 {
     setTemplatesResourcePath(QLatin1String("calligraplan/templates/"));
+
+    KDesktopFile df(componentData().aboutData().desktopFileName() + ".desktop");
+    new Help(df.readDocPath());
 }
 
 Part::~Part()
@@ -84,8 +90,7 @@ KoMainWindow *Part::createMainWindow()
 
 void Part::slotHelpContents()
 {
-    // TODO: make url configurable to enable users to install their own docs
-    QDesktopServices::openUrl(QUrl(QStringLiteral("https://userbase.kde.org/Plan/Manual")));
+    QDesktopServices::openUrl(QUrl(Help::page("Manual")));
 }
 
 void Part::showStartUpWidget(KoMainWindow *parent)

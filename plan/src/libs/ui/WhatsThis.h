@@ -26,13 +26,24 @@
 
 class QEvent;
 
+// FIXME: do not leak this
 namespace KPlato
 {
-namespace Help
+
+class KPLATOUI_EXPORT Help
 {
-    KPLATOUI_EXPORT void add(QWidget *widget, const QString &text);
-    KPLATOUI_EXPORT QString page(const QString &page = QString());
-} // namespace Help
+public:
+    Help(const QString &docpath);
+    static void add(QWidget *widget, const QString &text);
+    static QString page(const QString &page = QString());
+
+protected:
+    ~Help();
+
+private:
+    static Help* self;
+    QString m_docpath;
+};
 
 
 class KPLATOUI_EXPORT WhatsThisClickedEventHandler : public QObject
