@@ -30,7 +30,7 @@
 #include "kptpertresult.h"
 #include "kptitemviewsettup.h"
 #include "kptrecalculatedialog.h"
-#include "WhatsThis.h"
+#include "Help.h"
 #include "kptdebug.h"
 
 #include <KoDocument.h>

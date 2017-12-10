@@ -20,7 +20,7 @@
 #include "ReportsGeneratorView.h"
 
 #include "reportgenerator/ReportGenerator.h"
-#include "WhatsThis.h"
+#include "Help.h"
 #include "kptdebug.h"
 
 #include <KoIcon.h>

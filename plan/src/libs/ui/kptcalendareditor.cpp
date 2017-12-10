@@ -33,7 +33,7 @@
 #include "kptdatetime.h"
 #include "kptintervaledit.h"
 #include "kptitemviewsettup.h"
-#include "WhatsThis.h"
+#include "Help.h"
 #include "kptdebug.h"
 
 #include <KoIcon.h>

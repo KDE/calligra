@@ -38,7 +38,7 @@
 #include "kptviewlistdialog.h"
 #include "kptviewlistdocker.h"
 #include "kptschedulemodel.h"
-#include "WhatsThis.h"
+#include "Help.h"
 #include <kptdebug.h>
 
 #include <assert.h>

@@ -28,7 +28,7 @@
 #include "kpttask.h"
 #include "kptaccount.h"
 #include "kptdatetime.h"
-#include "WhatsThis.h"
+#include "Help.h"
 #include "kptdebug.h"
 
 #include <KoDocument.h>

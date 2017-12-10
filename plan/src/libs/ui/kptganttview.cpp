@@ -33,7 +33,7 @@
 #include "kptduration.h"
 #include "kptdatetime.h"
 #include "kptresourceappointmentsmodel.h"
-#include "WhatsThis.h"
+#include "Help.h"
 #include "kptdebug.h"
 
 #include <KGanttProxyModel>

@@ -34,7 +34,7 @@
 #include "ResourceAllocationView.h"
 #include "kpttaskdialog.h"
 #include "TasksEditController.h"
-#include "WhatsThis.h"
+#include "Help.h"
 
 #include <KoXmlReader.h>
 #include <KoDocument.h>

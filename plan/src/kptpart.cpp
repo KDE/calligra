@@ -24,8 +24,8 @@
 #include "kptfactory.h"
 #include "welcome/WelcomeView.h"
 #include "kpthtmlview.h"
-#include <kptdebug.h>
-#include "WhatsThis.h"
+#include "Help.h"
+#include "kptdebug.h"
 
 #include <KoComponentData.h>
 

@@ -24,7 +24,7 @@
 #include "kptproject.h"
 #include "kpteffortcostmap.h"
 #include "kptaccountsmodel.h"
-#include "WhatsThis.h"
+#include "Help.h"
 #include "kptdebug.h"
 
 #include <KoDocument.h>

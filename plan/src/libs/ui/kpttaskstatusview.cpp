@@ -27,7 +27,7 @@
 #include "kptproject.h"
 #include "kptschedule.h"
 #include "kpteffortcostmap.h"
-#include "WhatsThis.h"
+#include "Help.h"
 #include "kptdebug.h"
 
 #include <KoXmlReader.h>

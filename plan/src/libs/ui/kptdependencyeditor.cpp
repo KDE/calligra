@@ -28,7 +28,7 @@
 #include "kptschedule.h"
 #include "kptdebug.h"
 #include "config.h"
-#include "WhatsThis.h"
+#include "Help.h"
 
 #include "KoPageLayoutWidget.h"
 #include <KoIcon.h>

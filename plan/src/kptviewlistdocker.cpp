@@ -22,7 +22,7 @@
 #include "kptviewlist.h"
 
 #include "kptview.h"
-#include "WhatsThis.h"
+#include "Help.h"
 #include "kptdebug.h"
 
 #include <KLocalizedString>

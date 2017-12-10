@@ -21,7 +21,7 @@
 
 #include "kptcommand.h"
 #include "kptdebug.h"
-#include "WhatsThis.h"
+#include "Help.h"
 
 #include <KoApplication.h>
 #include <KoMainWindow.h>

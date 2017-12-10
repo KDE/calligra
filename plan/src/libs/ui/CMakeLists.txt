@@ -34,7 +34,7 @@ endif()
 set(kplatoui_LIB_SRCS
     ${planreports_LIB_SRC}
 
-    WhatsThis.cpp
+    Help.cpp
 
     TasksEditController.cpp
     TasksEditDialog.cpp

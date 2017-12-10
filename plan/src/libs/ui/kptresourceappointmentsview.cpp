@@ -32,7 +32,7 @@
 #include "kptdatetime.h"
 #include "kptitemviewsettup.h"
 #include "kptviewbase.h"
-#include "WhatsThis.h"
+#include "Help.h"
 #include "kptdebug.h"
 
 #include "KoPageLayoutWidget.h"
