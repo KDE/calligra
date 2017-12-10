@@ -612,13 +612,16 @@ void View::createViews()
         createReportsGeneratorView(cat, "ReportsGeneratorView", i18n("Generate reports"), TIP_USE_DEFAULT_TEXT);
 
 #ifdef PLAN_USE_KREPORT
+        // Let user add reports explicitly, we prefer reportsgenerator now
         // A little hack to get the user started...
+#if 0
         ReportView *rv = qobject_cast<ReportView*>( createReportView( cat, "ReportView", i18n( "Task Status Report" ), TIP_USE_DEFAULT_TEXT ) );
         if ( rv ) {
             QDomDocument doc;
             doc.setContent( standardTaskStatusReport() );
             rv->loadXML( doc );
         }
+#endif
 #endif
     }
 }
