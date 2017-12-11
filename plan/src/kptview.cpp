@@ -576,7 +576,8 @@ void View::createViews()
 
         createDependencyEditor( cat, "DependencyEditor", QString(), TIP_USE_DEFAULT_TEXT );
 
-        createPertEditor( cat, "PertEditor", QString(), TIP_USE_DEFAULT_TEXT );
+        // Do not show by default
+        // createPertEditor( cat, "PertEditor", QString(), TIP_USE_DEFAULT_TEXT );
 
         createScheduleHandler( cat, "ScheduleHandlerView", QString(), TIP_USE_DEFAULT_TEXT );
 
