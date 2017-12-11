@@ -31,6 +31,11 @@ int setenv(const char* var, const char* val, int ignore);
 int unsetenv (const char *var);
 #endif
 
+#if _MSC_VER >= 1900
+#define tzname _tzname
+#define tzset _tzset
+#endif
+
 namespace TJ
 {
 
@@ -179,7 +184,7 @@ setTimezone(const char* tZone)
 {
     UtilityError.clear();
 
-    if (setenv("TZ", tZone, 1) < 0)
+    if (!qputenv("TZ", tZone))
         qFatal("Ran out of space in environment section while "
                "setting timezone.");
 
@@ -825,7 +830,7 @@ date2time(const QString& date)
         }
         else
         {
-            if (setenv("TZ", tz, 1) < 0)
+            if (!qputenv("TZ", tz))
                 qFatal("date2time: Ran out of space in environment section.");
             restoreTZ = true;
         }
@@ -880,7 +885,7 @@ date2time(const QString& date)
         return 0;
     }
 
-#if defined(Q_WS_WIN) || defined(__CYGWIN__) || (defined(__SVR4) && defined(__sun))
+#if defined(Q_OS_WIN) || defined(__CYGWIN__) || (defined(__SVR4) && defined(__sun))
     struct tm t = { sec, min, hour, d, m - 1, y - 1900, 0, 0, -1 };
 #else
     struct tm t = { sec, min, hour, d, m - 1, y - 1900, 0, 0, -1, 0, 0 };
@@ -891,11 +896,11 @@ date2time(const QString& date)
     {
         if (!savedTZ.empty())
         {
-            if (setenv("TZ", savedTZ.c_str(), 1) < 0)
+            if (!qputenv("TZ", savedTZ.c_str()))
                 qFatal("date2time: Ran out of space in environment section.");
         }
         else
-            unsetenv("TZ");
+            qunsetenv("TZ");
     }
 
     return localTime;
@@ -916,7 +921,7 @@ time2qdate(time_t t)
 time_t
 qdate2time(const QDate& d)
 {
-#if defined(Q_WS_WIN) || defined(__CYGWIN__) || (defined(__SVR4) && defined(__sun))
+#if defined(Q_OS_WIN) || defined(__CYGWIN__) || (defined(__SVR4) && defined(__sun))
     struct tm t = { 0, 0, 0, d.day(), d.month() - 1, d.year() - 1900,
                     0, 0, -1 };
 #else

@@ -3221,7 +3221,7 @@ EffortCostMap Completion::effortCostPrDay(QDate start, QDate end, long id ) cons
             break;
         }
         case EnterEffortPerResource: {
-            QPair<QDate, QDate> dates = actualStartEndDates();
+            std::pair<QDate, QDate> dates = actualStartEndDates();
             if ( ! dates.first.isValid() ) {
                 // no data, so just break
                 break;
@@ -3254,7 +3254,7 @@ EffortCostMap Completion::effortCostPrDay(const Resource *resource, QDate start,
             break;
         }
         case EnterEffortPerResource: {
-            QPair<QDate, QDate> dates = actualStartEndDates();
+            std::pair<QDate, QDate> dates = actualStartEndDates();
             if ( ! dates.first.isValid() ) {
                 // no data, so just break
                 break;
@@ -3295,9 +3295,9 @@ void Completion::setNote( const QString &str )
     }
 }
 
-QPair<QDate, QDate> Completion::actualStartEndDates() const
+std::pair<QDate, QDate> Completion::actualStartEndDates() const
 {
-    QPair<QDate, QDate> p;
+    std::pair<QDate, QDate> p;
     foreach ( const Resource *r, m_usedEffort.keys() ) {
         if ( ! m_usedEffort[ r ]->actualEffortMap().isEmpty() ) {
             QDate d = m_usedEffort[ r ]->actualEffortMap().keys().first();

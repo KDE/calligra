@@ -1523,10 +1523,10 @@ CalendarDay *Calendar::takeDay(CalendarDay *day)
     return day;
 }
 
-QList<QPair<CalendarDay*, CalendarDay*> > Calendar::consecutiveVacationDays() const
+QList<std::pair<CalendarDay*, CalendarDay*> > Calendar::consecutiveVacationDays() const
 {
-    QList<QPair<CalendarDay*, CalendarDay*> > lst;
-    QPair<CalendarDay*, CalendarDay*> interval( 0, 0 );
+    QList<std::pair<CalendarDay*, CalendarDay*> > lst;
+    std::pair<CalendarDay*, CalendarDay*> interval( 0, 0 );
     foreach ( CalendarDay* day, m_days ) {
         if ( day->state() == CalendarDay::NonWorking ) {
             if ( interval.first == 0 ) {
@@ -1535,7 +1535,7 @@ QList<QPair<CalendarDay*, CalendarDay*> > Calendar::consecutiveVacationDays() co
             interval.second = day;
         } else {
             if ( interval.first != 0 ) {
-                lst << QPair<CalendarDay*, CalendarDay*>( interval );
+                lst << std::pair<CalendarDay*, CalendarDay*>( interval );
             }
             interval.first = interval.second = 0;
         }

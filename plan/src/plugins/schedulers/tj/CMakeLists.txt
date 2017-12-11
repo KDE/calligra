@@ -50,7 +50,7 @@ endif()
 
 # TODO: only export symbols for tests, not release
 generate_export_header(plantjscheduler BASE_NAME kplatotj)
-
+add_definitions(-Dplantjscheduler_EXPORTS)
 target_link_libraries(
     plantjscheduler
     kplatokernel

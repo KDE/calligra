@@ -33,7 +33,7 @@
 
 #include <QList>
 #include <QMap>
-#include <QPair>
+#include <utility>
 
 /// The main namespace.
 namespace KPlato
@@ -51,14 +51,14 @@ public:
     class KPLATOKERNEL_EXPORT UsedEffort
     {
         public:
-            class KPLATOKERNEL_EXPORT ActualEffort : public QPair<Duration, Duration>
+            class KPLATOKERNEL_EXPORT ActualEffort : public std::pair<Duration, Duration>
             {
                 public:
                     explicit ActualEffort( KPlato::Duration ne = Duration::zeroDuration, KPlato::Duration oe = Duration::zeroDuration )
-                        : QPair<Duration, Duration>( ne, oe )
+                        : std::pair<Duration, Duration>( ne, oe )
                     {}
                     ActualEffort( const ActualEffort &e )
-                        : QPair<Duration, Duration>( e.first, e.second )
+                        : std::pair<Duration, Duration>( e.first, e.second )
                     {}
                     ~ActualEffort() {}
                     Duration normalEffort() const { return first; }
@@ -232,7 +232,7 @@ public:
 protected:
     void copy( const Completion &copy);
     double averageCostPrHour( QDate date, long id ) const;
-    QPair<QDate, QDate> actualStartEndDates() const;
+    std::pair<QDate, QDate> actualStartEndDates() const;
 
 private:
     Node *m_node;

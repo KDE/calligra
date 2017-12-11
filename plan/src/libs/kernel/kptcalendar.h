@@ -26,7 +26,7 @@
 #include "kptdebug.h"
 #include "kplatokernel_export.h"
 
-#include <QPair>
+#include <utility>
 #include <QList>
 #include <QMap>
 #include <QTimeZone>
@@ -52,20 +52,20 @@ namespace KPlato
 class Calendar;
 class Project;
 class IntMap;
-class DateTime;
+//class DateTime;
 class Project;
 class Schedule;
 class XMLLoaderObject;
 class AppointmentIntervalList;
 
-class KPLATOKERNEL_EXPORT DateTimeInterval : public QPair<DateTime, DateTime>
+class KPLATOKERNEL_EXPORT DateTimeInterval : public std::pair<DateTime, DateTime>
 {
 public:
     DateTimeInterval()
-    : QPair<DateTime, DateTime>()
+    : std::pair<DateTime, DateTime>()
     {}
     DateTimeInterval( const DateTime &t1, const DateTime &t2 )
-    : QPair<DateTime, DateTime>( t1, t2 )
+    : std::pair<DateTime, DateTime>( t1, t2 )
     {}
     DateTimeInterval &operator=( const DateTimeInterval &other ) {
         first = other.first; second = other.second;
@@ -104,24 +104,24 @@ public:
 
 /// TimeInterval is defined as a start time and a length.
 /// The end time (start + length) must not exceed midnight
-class KPLATOKERNEL_EXPORT TimeInterval : public QPair<QTime, int>
+class KPLATOKERNEL_EXPORT TimeInterval : public std::pair<QTime, int>
 {
 public:
     TimeInterval()
-    : QPair<QTime, int>( QTime(), -1 )
+    : std::pair<QTime, int>( QTime(), -1 )
     {}
-    explicit TimeInterval( QPair<QTime, int> value )
-    : QPair<QTime, int>( value )
+    explicit TimeInterval( std::pair<QTime, int> value )
+    : std::pair<QTime, int>( value )
     {
         init();
     }
     TimeInterval( QTime start, int length )
-    : QPair<QTime, int>( start, length )
+    : std::pair<QTime, int>( start, length )
     {
         init();
     }
     TimeInterval( const TimeInterval &value )
-    : QPair<QTime, int>( value.first, value.second )
+    : std::pair<QTime, int>( value.first, value.second )
     {
         init();
     }
@@ -424,7 +424,7 @@ public:
     void addDay(CalendarDay *day);
     CalendarDay *takeDay(CalendarDay *day);
     const QList<CalendarDay*> &days() const { return m_days; }
-    QList<QPair<CalendarDay*, CalendarDay*> > consecutiveVacationDays() const;
+    QList<std::pair<CalendarDay*, CalendarDay*> > consecutiveVacationDays() const;
     QList<CalendarDay*> workingDays() const;
     int indexOf( const CalendarDay *day ) const { return m_days.indexOf( const_cast<CalendarDay*>( day ) ); }
     CalendarDay *dayAt( int index ) { return m_days.value( index ); }
