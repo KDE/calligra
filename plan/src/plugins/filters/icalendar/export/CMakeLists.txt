@@ -17,7 +17,7 @@ if(${KF5_VERSION} VERSION_LESS "5.16.0")
     kcoreaddons_desktop_to_json(planicalexport plan_icalendar_export.desktop)
 else()
     kcoreaddons_desktop_to_json(planicalexport plan_icalendar_export.desktop
-#         SERVICE_TYPES ${PLAN_SOURCE_DIR}/servicetypes/calligraplan_filter.desktop
+        SERVICE_TYPES ${PLAN_SOURCE_DIR}/servicetypes/calligraplan_filter.desktop
     )
 endif()
 
