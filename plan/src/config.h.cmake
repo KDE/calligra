@@ -42,4 +42,4 @@
 #cmakedefine PLAN_YEAR "${PLAN_YEAR}"
 
 /* Defines use of KReport */
-#cmakedefine PLAN_USE_KREPORT "${PLAN_USE_KREPORT}"
+#cmakedefine PLAN_USE_KREPORT 1

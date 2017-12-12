@@ -11,7 +11,7 @@ include_directories(
 
 ########### KPlato private library ###############
 
-if (PLAN_BUILD_REPORTS)
+if (PLAN_USE_KREPORT)
     message(STATUS "-- Building plan with reports capability")
     add_subdirectory(reports/items)
 
@@ -161,7 +161,7 @@ target_link_libraries(kplatoui
         KF5::Archive
 #         Qt5::Sql
 )
-if (PLAN_BUILD_REPORTS)
+if (PLAN_USE_KREPORT)
     target_link_libraries(kplatoui PUBLIC KReport PRIVATE KPropertyWidgets)
 endif()
 

@@ -335,8 +335,6 @@ if (TEST_FOR_KREPORT)
     #
     macro_optional_find_package(KReport 3.1 QUIET)
     set_package_properties(KReport PROPERTIES
-        DESCRIPTION "A framework for the creation and generation of reports in multiple formats"
-        URL "https://community.kde.org/KReport"
         PURPOSE "Required for KReports support in Plan"
         TYPE OPTIONAL
     )
@@ -346,12 +344,10 @@ if (TEST_FOR_KREPORT)
     ##
     macro_optional_find_package(KPropertyWidgets 3.1 QUIET)
     set_package_properties(KPropertyWidgets PROPERTIES
-        DESCRIPTION "A property editing framework with editor widget"
-        URL "https://community.kde.org/KProperty"
         PURPOSE "Required for KReports support in Plan"
         TYPE OPTIONAL
     )
-    if (HAVE_KREPORT AND HAVE_KPROPERTYWIDGETS)
+    if (KReport_FOUND AND KPropertyWidgets_FOUND)
         set(PLAN_USE_KREPORT TRUE)
     endif()
 endif (TEST_FOR_KREPORT)
