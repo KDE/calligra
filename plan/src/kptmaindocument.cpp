@@ -1380,6 +1380,9 @@ void MainDocument::viewlistModified()
 // called after user has created a new project in welcome view
 void MainDocument::slotProjectCreated()
 {
+    if (url().isEmpty() && !m_project->name().isEmpty()) {
+        setUrl(QUrl(m_project->name() + ".plan"));
+    }
     Calendar *week = 0;
 
     if (KPlatoSettings::generateWeek()) {

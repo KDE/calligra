@@ -904,7 +904,19 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
                                                  d->rootDocument->extraNativeMimeTypes());
 
 
-    if (!mimeFilter.contains(oldOutputFormat) && !isExporting()) {
+    if (oldOutputFormat.isEmpty() && !d->rootDocument->url().isEmpty()) {
+        // Not been saved yet, but there is a default url so open dialog with this url
+        if (suggestedURL.path() == suggestedURL.fileName()) {
+            // only a filename has been given, so add the default dir
+            KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
+            QString path = group.readEntry("SaveDocument");
+            path += '/' + suggestedURL.fileName();
+            suggestedURL.setPath(path);
+            suggestedURL.setScheme("file");
+        }
+        saveas = true;
+        debugMain << "KoMainWindow::saveDocument: newly created doc, default file name:" << d->rootDocument->url() << "save to:" << suggestedURL;
+    } else if (!mimeFilter.contains(oldOutputFormat) && !isExporting()) {
         debugMain << "KoMainWindow::saveDocument no export filter for" << oldOutputFormat;
 
         // --- don't setOutputMimeType in case the user cancels the Save As
