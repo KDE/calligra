@@ -2118,19 +2118,12 @@ QString KoDocument::prettyPathOrUrl() const
     return _url;
 }
 
-// Get caption from document info (title(), in about page)
+// Note: We do not: Get caption from document info (title(), in about page)
 QString KoDocument::caption() const
 {
-    QString c;
-    if (documentInfo()) {
-        c = documentInfo()->aboutInfo("title");
-    }
-    const QString _url(url().fileName());
-    if (!c.isEmpty() && !_url.isEmpty()) {
-        c = QString("%1 - %2").arg(c).arg(_url);
-    }
-    else if (c.isEmpty()) {
-        c = _url; // Fall back to document URL
+    QString c  = url().fileName();
+    if (!c.isEmpty() && c.endsWith(".plan")) {
+        c.remove(c.lastIndexOf(".plan"), 5);
     }
     return c;
 }
