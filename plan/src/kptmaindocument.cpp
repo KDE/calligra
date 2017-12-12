@@ -178,7 +178,7 @@ bool MainDocument::loadXML( const KoXmlDocument &document, KoStore* )
         }
         m_xmlLoader.setMimetype( value );
         QString message;
-        Project *newProject = new Project( m_config );
+        Project *newProject = new Project();
         KPlatoXmlLoader loader( m_xmlLoader, newProject );
         bool ok = loader.load( plan );
         if ( ok ) {
@@ -248,7 +248,7 @@ This test does not work any longer. KoXml adds a couple of elements not present 
         }
         KoXmlElement e = n.toElement();
         if ( e.tagName() == "project" ) {
-            Project *newProject = new Project( m_config );
+            Project *newProject = new Project();
             m_xmlLoader.setProject( newProject );
             if ( newProject->load( e, m_xmlLoader ) ) {
                 if ( newProject->id().isEmpty() ) {
