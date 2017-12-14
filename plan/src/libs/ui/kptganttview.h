@@ -243,10 +243,9 @@ public:
     void setProject( Project *project );
     void setScheduleManager( ScheduleManager *sm );
 
+public Q_SLOTS:
     void clearDependencies();
     void createDependencies();
-
-public Q_SLOTS:
     void addDependency( Relation *rel );
     void removeDependency( Relation *rel );
     void slotProjectCalculated( ScheduleManager *sm );

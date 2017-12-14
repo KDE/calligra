@@ -757,7 +757,10 @@ void GanttView::setupGui()
 {
     // create context menu actions
     actionShowProject = new KToggleAction( i18n( "Show Project" ), this );
+    // FIXME: Dependencies depend on these methods being called in the correct order
+    connect(actionShowProject, SIGNAL(triggered(bool)), m_gantt, SLOT(clearDependencies()));
     connect(actionShowProject, SIGNAL(triggered(bool)), m_gantt->model(), SLOT(setShowProject(bool)));
+    connect(actionShowProject, SIGNAL(triggered(bool)), m_gantt, SLOT(createDependencies()));
     addContextAction( actionShowProject );
 
     createOptionActions(ViewBase::OptionAll);
