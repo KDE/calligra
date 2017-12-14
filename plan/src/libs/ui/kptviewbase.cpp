@@ -1683,38 +1683,42 @@ ItemModelBase *TreeViewBase::itemModel() const
 
 void TreeViewBase::expandRecursive(const QModelIndex &idx, bool xpand)
 {
-    int rowCount = idx.model()->rowCount(idx);
+    int rowCount = model()->rowCount(idx);
     if (rowCount == 0) {
         return;
     }
     xpand ? expand(idx) : collapse(idx);
     for (int r = 0; r < rowCount; ++r) {
-        expandRecursive(idx.child(r, 0), xpand);
+        QModelIndex i = model()->index(r, 0, idx);
+        Q_ASSERT(i.isValid());
+        expandRecursive(i, xpand);
     }
 }
 
 void TreeViewBase::slotExpand()
 {
-    if (!m_contextMenuIndex.isValid()) {
-        expandAll();
-        return;
-    }
+// NOTE: Do not use this, KGantt does not like it
+//     if (!m_contextMenuIndex.isValid()) {
+//         expandAll();
+//         return;
+//     }
     QModelIndex idx = m_contextMenuIndex;
-    if (!idx.column() != 0) {
-        idx.model()->index(idx.row(), idx.column(), idx.parent());
+    if (idx.column() > 0) {
+        idx = idx.model()->index(idx.row(), idx.column(), idx.parent());
     }
     expandRecursive(idx, true);
 }
 
 void TreeViewBase::slotCollapse()
 {
-    if (!m_contextMenuIndex.isValid()) {
-        collapseAll();
-        return;
-    }
+// NOTE: Do not use this, KGantt does not like it
+//     if (!m_contextMenuIndex.isValid()) {
+//         collapseAll();
+//         return;
+//     }
     QModelIndex idx = m_contextMenuIndex;
-    if (!idx.column() != 0) {
-        idx.model()->index(idx.row(), idx.column(), idx.parent());
+    if (idx.column() > 0) {
+        idx = idx.model()->index(idx.row(), 0, idx.parent());
     }
     expandRecursive(idx, false);
 }
