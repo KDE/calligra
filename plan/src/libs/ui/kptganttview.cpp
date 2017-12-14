@@ -736,10 +736,13 @@ GanttView::GanttView(KoPart *part, KoDocument *doc, QWidget *parent, bool readWr
                      "<title>Gantt View</title>"
                      "<para>"
                      "Displays scheduled tasks in a Gantt diagram."
+                     " The chart area can be zoomed in and out with a slider"
+                     " positioned in the upper left corner of the time scale."
+                     " <note>You need to hoover over it with the mouse for it to show.</note>"
                      "</para><para>"
-                     "This view supports configuration and printing using the context menu."
+                     "This view supports configuration and printing using the context menu of the tree view."
                      "<nl/><link url='%1'>More...</link>"
-                     "</para>", Help::page("Manual/Gantt_View")));
+                     "</para>", Help::page("Manual/Task_Gantt_View")));
 }
 
 KoPrintJob *GanttView::createPrintJob()
@@ -1027,6 +1030,9 @@ MilestoneKGanttView::MilestoneKGanttView( QWidget *parent )
                      "<title>Milestone Gantt View</title>"
                      "<para>"
                      "Displays scheduled milestones in a Gantt diagram."
+                     " The chart area can be zoomed in and out with a slider"
+                     " positioned in the upper left corner of the time scale."
+                     " <note>You need to hoover over it with the mouse for it to show.</note>"
                      "</para><para>"
                      "This view supports configuration and printing using the context menu."
                      "<nl/><link url='%1'>More...</link>"
@@ -1310,6 +1316,9 @@ ResourceAppointmentsGanttView::ResourceAppointmentsGanttView(KoPart *part, KoDoc
                      "<title>Resource Assignments (Gantt)</title>"
                      "<para>"
                      "Displays the scheduled resource - task assignments in a Gantt diagram."
+                     " The chart area can be zoomed in and out with a slider"
+                     " positioned in the upper left corner of the time scale."
+                     " <note>You need to hoover over it with the mouse for it to show.</note>"
                      "</para><para>"
                      "This view supports configuration and printing using the context menu."
                      "<nl/><link url='%1'>More...</link>"

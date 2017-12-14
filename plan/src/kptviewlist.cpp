@@ -375,7 +375,7 @@ ViewListWidget::ViewListWidget( MainDocument *part, QWidget *parent )//QString n
                      "Selects the schedule to be used when displaying schedule dependent data."
                      "<nl/><note>Unscheduled tasks are only shown in editors.</note>"
                      "<nl/><link url='%1'>More...</link>"
-                     "</para>", Help::page("Howto")));
+                     "</para>", Help::page("Manual/Main_Work_Space#Schedule_Selector")));
     
 
     QVBoxLayout *l = new QVBoxLayout( this );
