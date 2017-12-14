@@ -32,7 +32,6 @@ Help* Help::self = 0;
 
 Help::Help(const QString &docpath)
 {
-    qInfo()<<Q_FUNC_INFO<<self<<docpath;
     if (!self) {
         self = this;
         m_docpath = docpath;
@@ -41,7 +40,6 @@ Help::Help(const QString &docpath)
 
 Help::~Help()
 {
-    qInfo()<<Q_FUNC_INFO;
     self = 0;
 }
 
