@@ -17,20 +17,20 @@
  */
 
 import QtQuick 2.0
-import QtWebKit 3.0
+import QtWebEngine 1.5
 import org.kde.kirigami 2.1 as Kirigami
 import QtQuick.Controls 1.4 as QtControls
 
-WebView {
+WebEngineView {
     id: webView
     anchors.fill: parent
 
 //    experimental.userAgent: "Mozilla/5.0 (Linux; U; like Android 4.0.3; ko-kr; Jolla Build/Alpha) AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
     onLoadingChanged: {
-        if(status == WebView.LoadSucceededStatus) {
+        if(loadRequest.status == WebEngineView.LoadSucceededStatus) {
             tryingText.visible = false;
-            if(url.toString().length === 48) {  controllerMIT.oauth_v1_access_token() }
-    //        if(url.toString().length === 140) experimental.test.touchTap(webView, 100, 150)
+            if(loadRequest.url.toString().length === 48) {  controllerMIT.oauth_v1_access_token() }
+    //        if(loadRequest.url.toString().length === 140) experimental.test.touchTap(webView, 100, 150)
         }
     }
 
