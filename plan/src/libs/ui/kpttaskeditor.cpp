@@ -448,6 +448,7 @@ void TaskEditor::createDockers()
         ds = new DockWidget( this, "Taskmodules", xi18nc( "@title", "Task Modules" ) );
         ds->setToolTip( xi18nc( "@info:tooltip", "Drag a task module into the <emphasis>Task Editor</emphasis> to add it to the project" ) );
         ds->setLocation( Qt::LeftDockWidgetArea );
+        ds->setShown(false); // hide by default
         QTreeView *e = new QTreeView( ds );
         QSortFilterProxyModel *sf = new QSortFilterProxyModel(e);
         TaskModuleModel *m = new TaskModuleModel(sf);
