@@ -9,7 +9,9 @@ set(words_KDEINIT_SRCS main.cpp )
 
 file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/*-apps-calligrawords.png")
 ecm_add_app_icon(kdeinit_app_ICONS_SRCS ICONS ${ICONS_SRCS})
-set(_resourcefile "${CMAKE_CURRENT_BINARY_DIR}/kdeinit_app_ICONS_SRCS.rc")
+if(WIN32)
+    set(_resourcefile "${CMAKE_CURRENT_BINARY_DIR}/kdeinit_app_ICONS_SRCS.rc")
+endif()
 
 kf5_add_kdeinit_executable( calligrawords ${words_KDEINIT_SRCS})
 

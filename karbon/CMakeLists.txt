@@ -52,7 +52,9 @@ ecm_install_icons(ICONS ${karbon_icons} DESTINATION ${DATA_INSTALL_DIR}/karbon/i
 
 file(GLOB karbon_app_icons "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/*-apps-calligrakarbon.png")
 ecm_add_app_icon(kdeinit_app_ICONS_SRCS ICONS ${karbon_app_icons})
-set(_resourcefile "${CMAKE_CURRENT_BINARY_DIR}/kdeinit_app_ICONS_SRCS.rc")
+if(WIN32)
+    set(_resourcefile "${CMAKE_CURRENT_BINARY_DIR}/kdeinit_app_ICONS_SRCS.rc")
+endif()
 ecm_install_icons(ICONS
     ${karbon_app_icons}
     "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/sc-apps-calligrakarbon.svgz"
