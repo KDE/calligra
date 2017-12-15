@@ -664,16 +664,16 @@ void KoMainWindow::updateCaption()
 void KoMainWindow::updateCaption(const QString & caption, bool mod)
 {
     debugMain << "KoMainWindow::updateCaption(" << caption << "," << mod << ")";
-#ifdef CALLIGRA_ALPHA
-    setCaption(QString("ALPHA %1: %2").arg(CALLIGRA_ALPHA).arg(caption), mod);
+#ifdef PLAN_ALPHA
+    setCaption(QString("ALPHA %1: %2").arg(PLAN_ALPHA).arg(caption), mod);
     return;
 #endif
-#ifdef CALLIGRA_BETA
-    setCaption(QString("BETA %1: %2").arg(CALLIGRA_BETA).arg(caption), mod);
+#ifdef PLAN_BETA
+    setCaption(QString("BETA %1: %2").arg(PLAN_BETA).arg(caption), mod);
     return;
 #endif
-#ifdef CALLIGRA_RC
-    setCaption(QString("RELEASE CANDIDATE %1: %2").arg(CALLIGRA_RC).arg(caption), mod);
+#ifdef PLAN_RC
+    setCaption(QString("RELEASE CANDIDATE %1: %2").arg(PLAN_RC).arg(caption), mod);
     return;
 #endif
 

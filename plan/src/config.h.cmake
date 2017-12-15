@@ -41,5 +41,10 @@
 /* Defines Plan year */
 #cmakedefine PLAN_YEAR "${PLAN_YEAR}"
 
+/* Defines Plan release status */
+#cmakedefine PLAN_ALPHA "${PLAN_ALPHA}"
+#cmakedefine PLAN_BETA "${PLAN_BETA}"
+#cmakedefine PLAN_RC "${PLAN_RC}"
+
 /* Defines use of KReport */
 #cmakedefine PLAN_USE_KREPORT 1
