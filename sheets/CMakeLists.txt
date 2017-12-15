@@ -462,7 +462,8 @@ if (SHOULD_BUILD_APP_SHEETS)
 set (calligrasheets_KDEINIT_SRCS part/Main.cpp )
 
 file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/*-apps-calligrasheets.png")
-ecm_add_app_icon(calligrasheets_KDEINIT_SRCS ICONS ${ICONS_SRCS})
+ecm_add_app_icon(kdeinit_app_ICONS_SRCS ICONS ${ICONS_SRCS})
+set(_resourcefile "${CMAKE_CURRENT_BINARY_DIR}/kdeinit_app_ICONS_SRCS.rc")
 
 kf5_add_kdeinit_executable( calligrasheets ${calligrasheets_KDEINIT_SRCS})
 

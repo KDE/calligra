@@ -194,7 +194,8 @@ install(TARGETS calligraplanpart DESTINATION ${PLUGIN_INSTALL_DIR}/calligraplan/
 set(calligraplan_KDEINIT_SRCS main.cpp )
 
 file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/*-apps-calligraplan.png")
-ecm_add_app_icon(calligraplan_KDEINIT_SRCS ICONS ${ICONS_SRCS})
+ecm_add_app_icon(kdeinit_app_ICONS_SRCS ICONS ${ICONS_SRCS})
+set(_resourcefile "${CMAKE_CURRENT_BINARY_DIR}/kdeinit_app_ICONS_SRCS.rc")
 
 kf5_add_kdeinit_executable( calligraplan ${calligraplan_KDEINIT_SRCS})
 
