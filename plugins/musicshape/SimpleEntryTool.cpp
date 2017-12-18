@@ -813,8 +813,9 @@ void SimpleEntryTool::exportSheet()
             w.writeStartDocument();
         } else if (xml.isStartElement()) {
             w.writeStartElement(xml.name().toString());
-            foreach (const QXmlStreamAttribute & attr, xml.attributes()) {
-                w.writeAttribute(attr.name().toString(), attr.value().toString());
+            QXmlStreamAttributes attr = xml.attributes();
+            for  (int a = 0; a < attr.count(); a++) {
+                w.writeAttribute(attr[a].name().toString(), attr[a].value().toString());
             }
         }
     }
