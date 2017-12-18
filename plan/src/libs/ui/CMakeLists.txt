@@ -159,6 +159,7 @@ target_link_libraries(kplatoui
         KF5::ItemViews
         KF5::IconThemes
         KF5::Archive
+        KF5::TextWidgets
 #         Qt5::Sql
 )
 if (PLAN_USE_KREPORT)
