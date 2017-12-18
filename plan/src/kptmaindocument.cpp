@@ -1013,7 +1013,7 @@ void MainDocument::insertResourcesFile(const QUrl &url, const QUrl &projects)
 
 void MainDocument::insertResourcesFileCompleted()
 {
-    debugPlan<<sender();
+    debugPlanShared<<sender();
     MainDocument *doc = qobject_cast<MainDocument*>( sender() );
     if (doc) {
         Project &p = doc->getProject();
@@ -1102,11 +1102,11 @@ void MainDocument::slotInsertSharedProject()
 
 void MainDocument::insertSharedProjectCompleted()
 {
-    debugPlan<<sender();
+    debugPlanShared<<sender();
     MainDocument *doc = qobject_cast<MainDocument*>( sender() );
     if (doc) {
         Project &p = doc->getProject();
-        debugPlan<<m_project->id()<<"Loaded project:"<<p.id()<<p.name();
+        debugPlanShared<<m_project->id()<<"Loaded project:"<<p.id()<<p.name();
         if (p.id() != m_project->id() && p.isScheduled(ANYSCHEDULED)) {
             // FIXME: improve!
             // find a suitable schedule
@@ -1124,11 +1124,16 @@ void MainDocument::insertSharedProjectCompleted()
                 for (Resource *r : p.resourceList()) {
                     Resource *res = m_project->resource(r->id());
                     if (res && res->isShared()) {
+                        Appointment *app = new Appointment();
+                        app->setAuxcilliaryInfo(p.name());
                         for (const Appointment *a : r->appointments(sm->scheduleId())) {
-                            Appointment *app = new Appointment(*a);
-                            app->setAuxcilliaryInfo(p.name());
+                            *app += *a;
+                        }
+                        if (app->isEmpty()) {
+                            delete app;
+                        } else {
                             res->addExternalAppointment(p.id(), app);
-                            debugPlan<<res->name()<<"added:"<<app->auxcilliaryInfo()<<app;
+                            debugPlanShared<<res->name()<<"added:"<<app->auxcilliaryInfo()<<app;
                         }
                     }
                 }
@@ -1143,7 +1148,7 @@ void MainDocument::insertSharedProjectCompleted()
 
 void MainDocument::insertSharedProjectCancelled( const QString &error )
 {
-    debugPlan<<sender()<<"error="<<error;
+    debugPlanShared<<sender()<<"error="<<error;
     if ( ! error.isEmpty() ) {
         KMessageBox::error( 0, error );
     }
@@ -1201,7 +1206,7 @@ QList<Calendar*> sortedRemoveCalendars(Project &shared, const QList<Calendar*> &
 
 bool MainDocument::mergeResources(Project &project)
 {
-    debugPlan<<&project;
+    debugPlanShared<<&project;
     // Just in case, remove stuff not related to resources
     for (Node *n :  project.childNodeIterator()) {
         delete n;

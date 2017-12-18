@@ -45,4 +45,10 @@ extern const KPLATOKERNEL_EXPORT QLoggingCategory &PLANXML_LOG();
 #define warnPlanXml qCWarning(PLANXML_LOG)
 #define errorPlanXml qCCritical(PLANXML_LOG)
 
+extern const KPLATOKERNEL_EXPORT QLoggingCategory &PLANSHARED_LOG();
+
+#define debugPlanShared qCDebug(PLANSHARED_LOG)
+#define warnPlanShared qCWarning(PLANSHARED_LOG)
+#define errorPlanShared qCCritical(PLANSHARED_LOG)
+
 #endif

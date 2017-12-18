@@ -19,6 +19,12 @@
 
 #include "kptdebug.h"
 
+const QLoggingCategory &PLANSHARED_LOG()
+{
+    static const QLoggingCategory category("calligra.plan.shared");
+    return category;
+}
+
 const QLoggingCategory &PLANDEPEDITOR_LOG()
 {
     static const QLoggingCategory category("calligra.plan.dependencyeditor");

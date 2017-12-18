@@ -1263,15 +1263,17 @@ QVariant ResourceAppointmentsRowModel::Private::intervalData( int column, int ro
         }
     } else if ( role == Qt::ToolTipRole ) {
         Appointment *a = static_cast<Appointment*>( parent->ptr );
-        Node *n = a->node()->node();
-        return xi18nc( "@info:tooltip", "%1: %2<nl/>%3: %4<nl/>Assigned: %5<nl/>Available: %6",
-                                n->wbsCode(),
-                                n->name(),
-                                QLocale().toString( a->startTime(), QLocale::ShortFormat ),
-                                KFormat().formatDuration( ( a->endTime() - a->startTime() ).milliseconds() ),
-                                interval.load(),
-                                a->resource()->resource()->units()
-                            );
+        if (a && a->node() && a->node()->node()) {
+            Node *n = a->node()->node();
+            return xi18nc( "@info:tooltip", "%1: %2<nl/>%3: %4<nl/>Assigned: %5<nl/>Available: %6",
+                           n->wbsCode(),
+                           n->name(),
+                           QLocale().toString( a->startTime(), QLocale::ShortFormat ),
+                           KFormat().formatDuration( ( a->endTime() - a->startTime() ).milliseconds() ),
+                           interval.load(),
+                           a->resource()->resource()->units()
+            );
+        }
     } else if ( role == Role::Maximum ) {
         return parent->appointmentData( column, role );
     }
