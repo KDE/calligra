@@ -79,6 +79,7 @@ class KPLATOKERNEL_EXPORT Project : public Node
 public:
     explicit Project( Node *parent = 0 );
     explicit Project( ConfigBase &config, Node *parent = 0 );
+    explicit Project( ConfigBase &config, bool useDefaultValues, Node *parent = 0 );
     ~Project();
 
     /// Reference this project.

@@ -178,7 +178,7 @@ bool MainDocument::loadXML( const KoXmlDocument &document, KoStore* )
         }
         m_xmlLoader.setMimetype( value );
         QString message;
-        Project *newProject = new Project();
+        Project *newProject = new Project(m_config, false);
         KPlatoXmlLoader loader( m_xmlLoader, newProject );
         bool ok = loader.load( plan );
         if ( ok ) {
@@ -248,7 +248,7 @@ This test does not work any longer. KoXml adds a couple of elements not present 
         }
         KoXmlElement e = n.toElement();
         if ( e.tagName() == "project" ) {
-            Project *newProject = new Project();
+            Project *newProject = new Project(m_config, false);
             m_xmlLoader.setProject( newProject );
             if ( newProject->load( e, m_xmlLoader ) ) {
                 if ( newProject->id().isEmpty() ) {
@@ -483,7 +483,7 @@ Package *MainDocument::loadWorkPackageXML( Project &project, QIODevice *, const 
     } else if ( value == "application/x-vnd.kde.kplato.work" ) {
         m_xmlLoader.setMimetype( value );
         m_xmlLoader.setWorkVersion( plan.attribute( "version", "0.0.0" ) );
-        proj = new Project( m_config );
+        proj = new Project();
         KPlatoXmlLoader loader( m_xmlLoader, proj );
         ok = loader.loadWorkpackage( plan );
         if ( ! ok ) {

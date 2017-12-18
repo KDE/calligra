@@ -71,6 +71,22 @@ Project::Project( ConfigBase &config, Node *parent )
     init();
 }
 
+Project::Project( ConfigBase &config, bool useDefaultValues, Node *parent )
+        : Node( parent ),
+        m_accounts( *this ),
+        m_defaultCalendar( 0 ),
+        m_config( &config ),
+        m_schedulerPlugins(),
+        m_sharedResourcesLoaded(false),
+        m_loadProjectsAtStartup(false)
+{
+    debugPlan<<"("<<this<<")";
+    init();
+    if (useDefaultValues) {
+        m_config->setDefaultValues(*this);
+    }
+}
+
 void Project::init()
 {
     m_refCount = 1; // always used by createor
@@ -84,7 +100,6 @@ void Project::init()
         m_constraintStartTime = DateTime( QDate::currentDate() );
         m_constraintEndTime = m_constraintStartTime.addYears( 2 );
     }
-    m_config->setDefaultValues(*this);
 }
 
 void Project::deref()
