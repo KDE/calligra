@@ -1074,6 +1074,7 @@ calligra_drop_product_on_bad_condition( APP_BRAINDUMP
 calligra_drop_product_on_bad_condition( APP_PLAN
     KGantt_FOUND "KGantt devel not found"
     KChart_FOUND "KChart devel not found"
+    KF5KHtml_FOUND "KF5KHtml devel not found"
 #     KReport_WithScripting_FOUND "KReport with scripting support not found"
 #     KPropertyWidgets_FOUND "KPropertyWidgets not found"
 )
