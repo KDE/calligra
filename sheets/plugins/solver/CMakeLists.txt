@@ -25,7 +25,8 @@ calligrasheets_viewplugin_desktop_to_json(sheetssolver sheetssolver.desktop)
 
 
 target_link_libraries( sheetssolver
-	${GSL_LIBRARIES}
+        ${GSL_LIBRARIES}
+        ${GSL_CBLAS_LIBRARIES}
         calligrasheetscommon
 )
 
