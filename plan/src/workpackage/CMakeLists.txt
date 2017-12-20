@@ -81,6 +81,12 @@ install(TARGETS calligraplanworkpart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(calligraplanwork_KDEINIT_SRCS main.cpp commandlineparser.cpp)
 
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/*-apps-calligraplanwork.png")
+ecm_add_app_icon(kdeinit_app_ICONS_SRCS ICONS ${ICONS_SRCS})
+if(WIN32)
+    set(_resourcefile "${CMAKE_CURRENT_BINARY_DIR}/kdeinit_app_ICONS_SRCS.rc")
+endif()
+
 kf5_add_kdeinit_executable(calligraplanwork ${calligraplanwork_KDEINIT_SRCS})
 
 if (APPLE)
