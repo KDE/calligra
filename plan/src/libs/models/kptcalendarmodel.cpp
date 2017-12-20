@@ -73,6 +73,7 @@ void CalendarDayItemModelBase::setCalendar( Calendar *calendar )
 
 void CalendarDayItemModelBase::setProject( Project *project )
 {
+    beginResetModel();
     setCalendar( 0 );
     if ( m_project ) {
         disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
@@ -83,7 +84,7 @@ void CalendarDayItemModelBase::setProject( Project *project )
         connect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         connect( m_project, SIGNAL(calendarToBeRemoved(const Calendar*)), this, SLOT(slotCalendarToBeRemoved(const Calendar*)) );
     }
-    reset();
+    endResetModel();
 }
 
 
@@ -138,6 +139,7 @@ void CalendarItemModel::slotCalendarRemoved( const Calendar * )
 
 void CalendarItemModel::setProject( Project *project )
 {
+    beginResetModel();
     if ( m_project ) {
         disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         disconnect( m_project , SIGNAL(calendarChanged(Calendar*)), this, SLOT(slotCalendarChanged(Calendar*)) );
@@ -159,7 +161,7 @@ void CalendarItemModel::setProject( Project *project )
         connect( m_project, SIGNAL(calendarRemoved(const Calendar*)), this, SLOT(slotCalendarRemoved(const Calendar*)) );
         connect( m_project, SIGNAL(calendarToBeRemoved(const Calendar*)), this, SLOT(slotCalendarToBeRemoved(const Calendar*)) );
     }
-    reset();
+    endResetModel();
 }
 
 Qt::ItemFlags CalendarItemModel::flags( const QModelIndex &index ) const
@@ -773,6 +775,7 @@ void CalendarDayItemModel::slotTimeIntervalChanged( TimeInterval *ti )
 
 void CalendarDayItemModel::setCalendar( Calendar *calendar )
 {
+    beginResetModel();
     //debugPlan<<m_calendar<<" -->"<<calendar;
     if ( m_calendar ) {
         disconnect( m_calendar, SIGNAL(changed(CalendarDay*)), this, SLOT(slotDayChanged(CalendarDay*)) );
@@ -789,7 +792,7 @@ void CalendarDayItemModel::setCalendar( Calendar *calendar )
         connect( m_calendar, SIGNAL(workIntervalAdded(CalendarDay*,TimeInterval*)), this, SLOT(slotWorkIntervalAdded(CalendarDay*,TimeInterval*)) );
         connect( m_calendar, SIGNAL(workIntervalRemoved(CalendarDay*,TimeInterval*)), this, SLOT(slotWorkIntervalRemoved(CalendarDay*,TimeInterval*)) );
     }
-    reset();
+    endResetModel();
 }
 
 Qt::ItemFlags CalendarDayItemModel::flags( const QModelIndex &index ) const

@@ -302,6 +302,7 @@ QVariant ChartItemModel::headerData( int section, Qt::Orientation orientation, i
 
 void ChartItemModel::setProject( Project *project )
 {
+    beginResetModel();
     m_bcws.clear();
     m_acwp.clear();
     if ( m_project ) {
@@ -321,45 +322,49 @@ void ChartItemModel::setProject( Project *project )
         connect( m_project, SIGNAL(resourceRemoved(const Resource*)), this, SLOT(slotResourceChanged(const Resource*)) );
         connect( m_project, SIGNAL(resourceChanged(Resource*)), this, SLOT(slotResourceChanged(Resource*)) );
     }
-    reset();
+    endResetModel();
 }
 
 void ChartItemModel::setScheduleManager( ScheduleManager *sm )
 {
+    beginResetModel();
     m_manager = sm;
     calculate();
-    reset();
+    endResetModel();
 }
 
 void ChartItemModel::setNodes( const QList<Node*> &nodes )
 {
+    beginResetModel();
     debugPlan<<nodes;
     m_nodes = nodes;
     calculate();
-    reset();
+    endResetModel();
 }
 
 void ChartItemModel::addNode( Node *node )
 {
+    beginResetModel();
     m_nodes.append( node );
     calculate();
-    reset();
+    endResetModel();
 }
 
 void ChartItemModel::clearNodes()
 {
+    beginResetModel();
     m_nodes.clear();
     calculate();
-    reset();
+    endResetModel();
 }
 
 void ChartItemModel::slotNodeRemoved( Node *node )
 {
     if ( m_nodes.contains( node ) ) {
+        beginResetModel();
         m_nodes.removeAt( m_nodes.indexOf( node ) );
         calculate();
-        reset();
-        return;
+        endResetModel();
     }
 }
 
@@ -367,14 +372,16 @@ void ChartItemModel::slotNodeChanged( Node *node )
 {
     //debugPlan<<this<<node;
     if ( m_nodes.contains( node ) ) {
+        beginResetModel();
         calculate();
-        reset();
+        endResetModel();
         return;
     }
     foreach ( Node *n, m_nodes ) {
         if ( node->isChildOf( n ) ) {
+            beginResetModel();
             calculate();
-            reset();
+            endResetModel();
             return;
         }
     }
@@ -382,14 +389,16 @@ void ChartItemModel::slotNodeChanged( Node *node )
 
 void ChartItemModel::slotResourceChanged( Resource* )
 {
+    beginResetModel();
     calculate();
-    reset();
+    endResetModel();
 }
 
 void ChartItemModel::slotResourceChanged( const Resource* )
 {
+    beginResetModel();
     calculate();
-    reset();
+    endResetModel();
 }
 
 QDate ChartItemModel::startDate() const

@@ -260,13 +260,14 @@ void DocumentItemModel::slotDocumentRemoved( Document *doc )
 
 void DocumentItemModel::setDocuments( Documents *docs )
 {
+    beginResetModel();
     //debugPlan<<m_documents<<docs;
     if ( m_documents ) {
     }
     m_documents = docs;
     if ( m_documents ) {
     }
-    reset();
+    endResetModel();
 }
 
 Documents *DocumentItemModel::documents() const

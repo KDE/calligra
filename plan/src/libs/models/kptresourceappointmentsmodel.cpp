@@ -146,8 +146,9 @@ void ResourceAppointmentsItemModel::slotAppointmentInserted( Resource *r, Appoin
 {
     Q_UNUSED(r);
     Q_UNUSED(a);
+    beginResetModel();
     refreshData();
-    reset();
+    endResetModel();
 }
 
 void ResourceAppointmentsItemModel::slotAppointmentToBeRemoved( Resource *r, int row )
@@ -158,8 +159,9 @@ void ResourceAppointmentsItemModel::slotAppointmentToBeRemoved( Resource *r, int
 
 void ResourceAppointmentsItemModel::slotAppointmentRemoved()
 {
+    beginResetModel();
     refreshData();
-    reset();
+    endResetModel();
 }
 
 void ResourceAppointmentsItemModel::slotAppointmentChanged( Resource *r, Appointment *a )
@@ -201,9 +203,10 @@ void ResourceAppointmentsItemModel::setShowInternalAppointments( bool show )
     if ( m_showInternal == show ) {
         return;
     }
+    beginResetModel();
     m_showInternal = show;
     refreshData();
-    reset();
+    endResetModel();
 }
 
 void ResourceAppointmentsItemModel::setShowExternalAppointments( bool show )
@@ -211,13 +214,15 @@ void ResourceAppointmentsItemModel::setShowExternalAppointments( bool show )
     if ( m_showExternal == show ) {
         return;
     }
+    beginResetModel();
     m_showExternal = show;
     refreshData();
-    reset();
+    endResetModel();
 }
 
 void ResourceAppointmentsItemModel::setProject( Project *project )
 {
+    beginResetModel();
     debugPlan;
     if ( m_project ) {
         disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
@@ -293,7 +298,7 @@ void ResourceAppointmentsItemModel::setProject( Project *project )
         }
     }
     refreshData();
-    reset();
+    endResetModel();
     emit refreshed();
 }
 
@@ -318,10 +323,11 @@ void ResourceAppointmentsItemModel::setScheduleManager( ScheduleManager *sm )
     if (sm == m_manager) {
         return;
     }
+    beginResetModel();
     debugPlan<<sm;
     m_manager = sm;
     refreshData();
-    reset();
+    endResetModel();
     emit refreshed();
 }
 
@@ -1358,6 +1364,7 @@ ResourceAppointmentsRowModel::~ResourceAppointmentsRowModel()
 
 void ResourceAppointmentsRowModel::setProject( Project *project )
 {
+    beginResetModel();
     //debugPlan<<project;
     if ( m_project ) {
         disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
@@ -1418,18 +1425,19 @@ void ResourceAppointmentsRowModel::setProject( Project *project )
             connect( r, SIGNAL(externalAppointmentChanged(Resource*,Appointment*)), this, SLOT(slotAppointmentChanged(Resource*,Appointment*)) );
         }
     }
-    reset();
+    endResetModel();
 }
 
 void ResourceAppointmentsRowModel::setScheduleManager( ScheduleManager *sm )
 {
     debugPlan<<"ResourceAppointmentsRowModel::setScheduleManager:"<<sm;
     if ( sm == 0 || sm != m_manager || sm->expected() != m_schedule ) {
+        beginResetModel();
         m_manager = sm;
         m_schedule = sm ? sm->expected() : 0;
         qDeleteAll( m_datamap );
         m_datamap.clear();
-        reset();
+        endResetModel();
     }
 }
 
@@ -1800,12 +1808,13 @@ void ResourceAppointmentsRowModel::slotAppointmentToBeInserted( Resource *r, int
 void ResourceAppointmentsRowModel::slotAppointmentInserted( Resource *r, Appointment *a )
 {
     Q_UNUSED(a);
+    beginResetModel();
     // external appointments only, (Internal handled in slotProjectCalculated)
     Private *p = m_datamap.value( r );
     if ( p ) {
         p->externalCached = false;
     }
-    reset();
+    endResetModel();
 }
 
 void ResourceAppointmentsRowModel::slotAppointmentToBeRemoved( Resource *r, int row )
@@ -1821,7 +1830,9 @@ void ResourceAppointmentsRowModel::slotAppointmentToBeRemoved( Resource *r, int 
 void ResourceAppointmentsRowModel::slotAppointmentRemoved()
 {
     // external appointments only, (Internal handled in slotProjectCalculated)
-    reset();
+    beginResetModel();
+    endResetModel();
+    
 }
 
 void ResourceAppointmentsRowModel::slotAppointmentChanged( Resource *r, Appointment *a )

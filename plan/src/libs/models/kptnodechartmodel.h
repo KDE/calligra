@@ -69,7 +69,7 @@ public:
     void setZeroColumns( const QList<int> &columns ) { m_zerocolumns = columns; }
     QList<int> zeroColumns() const { return m_zerocolumns; }
 
-    void reset() { QSortFilterProxyModel::reset(); }
+    void reset() { beginResetModel(); endResetModel(); }
 
 protected:
     bool filterAcceptsColumn ( int source_column, const QModelIndex &/*source_parent */) const {

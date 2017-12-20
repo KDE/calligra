@@ -479,9 +479,10 @@ void ResourceAllocationItemModel::setTask( Task *task )
         return;
     }
     if ( m_model.task() == 0 ) {
+        beginResetModel();
         filldata( task );
         m_model.setTask( task );
-        reset();
+        endResetModel();
         return;
     }
     if ( task ) {

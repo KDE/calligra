@@ -567,9 +567,10 @@ void CostBreakdownItemModel::setScheduleManager( ScheduleManager *sm )
 {
     debugPlan<<m_project<<m_manager<<sm;
     if ( m_manager != sm ) {
+        beginResetModel();
         m_manager = sm;
         fetchData();
-        reset();
+        endResetModel();
     }
 }
 
@@ -917,8 +918,9 @@ int CostBreakdownItemModel::periodType() const
 void CostBreakdownItemModel::setPeriodType( int period )
 {
     if ( m_periodtype != period ) {
+        beginResetModel();
         m_periodtype = period;
-        reset();
+        endResetModel();
     }
 }
 
@@ -929,8 +931,9 @@ int CostBreakdownItemModel::startMode() const
 
 void CostBreakdownItemModel::setStartMode( int mode )
 {
+    beginResetModel();
     m_startmode = mode;
-    reset();
+    endResetModel();
 }
 
 int CostBreakdownItemModel::endMode() const
@@ -940,8 +943,9 @@ int CostBreakdownItemModel::endMode() const
 
 void CostBreakdownItemModel::setEndMode( int mode )
 {
+    beginResetModel();
     m_endmode = mode;
-    reset();
+    endResetModel();
 }
 
 QDate CostBreakdownItemModel::startDate() const
@@ -968,8 +972,9 @@ QDate CostBreakdownItemModel::startDate() const
 
 void CostBreakdownItemModel::setStartDate( const QDate &date )
 {
+    beginResetModel();
     m_start = date;
-    reset();
+    endResetModel();
 }
 
 QDate CostBreakdownItemModel::endDate() const
@@ -996,8 +1001,9 @@ QDate CostBreakdownItemModel::endDate() const
 
 void CostBreakdownItemModel::setEndDate( const QDate &date )
 {
+    beginResetModel();
     m_end = date;
-    reset();
+    endResetModel();
 }
 
 bool CostBreakdownItemModel::cumulative() const
@@ -1007,8 +1013,9 @@ bool CostBreakdownItemModel::cumulative() const
 
 void CostBreakdownItemModel::setCumulative( bool on )
 {
+    beginResetModel();
     m_cumulative = on;
-    reset();
+    endResetModel();
 }
 
 int CostBreakdownItemModel::showMode() const

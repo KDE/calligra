@@ -256,6 +256,7 @@ QModelIndex UsedEffortItemModel::index ( int row, int column, const QModelIndex 
 
 void UsedEffortItemModel::setCompletion( Completion *completion )
 {
+    beginResetModel();
     m_completion = completion;
     m_resourcelist.clear();
     QMap<QString, const Resource*> lst;
@@ -263,7 +264,7 @@ void UsedEffortItemModel::setCompletion( Completion *completion )
         lst.insertMulti( r->name(), r );
     }
     m_resourcelist = lst.values();
-    reset();
+    endResetModel();
 }
 
 const Resource *UsedEffortItemModel::resource(const QModelIndex &index ) const
@@ -286,12 +287,13 @@ Completion::UsedEffort *UsedEffortItemModel::usedEffort(const QModelIndex &index
 
 void UsedEffortItemModel::setCurrentMonday( const QDate &date )
 {
+    beginResetModel();
     m_dates.clear();
     for ( int i = 0; i < 7; ++i ) {
         m_dates << date.addDays( i );
     }
+    endResetModel();
     emit headerDataChanged ( Qt::Horizontal, 1, 7 );
-    reset();
 }
 
 QModelIndex UsedEffortItemModel::addRow()
@@ -727,6 +729,7 @@ void CompletionEntryItemModel::setCompletion( Completion *completion )
 
 void CompletionEntryItemModel::refresh()
 {
+    beginResetModel();
     m_datelist.clear();
     m_flags[ Property_UsedEffort ] = Qt::NoItemFlags;
     if ( m_completion ) {
@@ -736,7 +739,7 @@ void CompletionEntryItemModel::refresh()
         }
     }
     debugPlan<<m_datelist<<endl;
-    reset();
+    endResetModel();
 }
 
 QModelIndex CompletionEntryItemModel::addRow()

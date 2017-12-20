@@ -38,10 +38,10 @@ class Q_DECL_HIDDEN KoFilterManager::Private
 public:
     bool batch;
     QByteArray importMimeType;
-    QWeakPointer<KoProgressUpdater> progressUpdater;
+//     QWeakPointer<KoProgressUpdater> progressUpdater;
 
-    Private(KoProgressUpdater *progressUpdater_ = 0)
-        : progressUpdater(progressUpdater_)
+    Private(/*KoProgressUpdater *progressUpdater_ = 0*/)
+//         : progressUpdater(progressUpdater_)
     {
     }
 

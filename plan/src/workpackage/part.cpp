@@ -542,8 +542,7 @@ bool Part::loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& 
         << " In line: " << errorLine << ", column: " << errorColumn << endl
         << " Error message: " << errorMsg;
         KMessageBox::error( 0, i18n("Parsing error in file '%1' at line %2, column %3<br>Error message: %4", filename  , errorLine, errorColumn ,
-                                   QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0,
-                                                               QCoreApplication::UnicodeUTF8)) );
+                                   QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0) ) );
         return false;
     }
     return true;

@@ -27,8 +27,8 @@ namespace KPlato
 PerformanceTableWidget::PerformanceTableWidget( QWidget *parent )
     : QTableWidget( parent )
 {
-    horizontalHeader()->setResizeMode( QHeaderView::Stretch );
-    verticalHeader()->setResizeMode( QHeaderView::Fixed );
+    horizontalHeader()->setSectionResizeMode( QHeaderView::Stretch );
+    verticalHeader()->setSectionResizeMode( QHeaderView::Fixed );
 }
 
 QSize PerformanceTableWidget::sizeHint() const
@@ -53,8 +53,8 @@ QSize PerformanceTableWidget::minimumSizeHint() const
 PerformanceTableView::PerformanceTableView( QWidget *parent )
     : QTableView( parent )
 {
-    horizontalHeader()->setResizeMode( QHeaderView::Stretch );
-    verticalHeader()->setResizeMode( QHeaderView::Fixed );
+    horizontalHeader()->setSectionResizeMode( QHeaderView::Stretch );
+    verticalHeader()->setSectionResizeMode( QHeaderView::Fixed );
 }
 
 QSize PerformanceTableView::sizeHint() const

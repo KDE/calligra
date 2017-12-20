@@ -236,6 +236,7 @@ void RelationItemModel::slotLayoutChanged()
 
 void RelationItemModel::setProject( Project *project )
 {
+    beginResetModel();
     if ( m_project ) {
         disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         disconnect( m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );
@@ -263,13 +264,14 @@ void RelationItemModel::setProject( Project *project )
 
         connect( m_project, SIGNAL(relationModified(Relation*)), this, SLOT(slotRelationModified(Relation*)) );
     }
-    reset();
+    endResetModel();
 }
 
 void RelationItemModel::setNode( Node *node )
 {
+    beginResetModel();
     m_node = node;
-    reset();
+    endResetModel();
 }
 
 Qt::ItemFlags RelationItemModel::flags( const QModelIndex &index ) const
@@ -444,7 +446,8 @@ Relation *RelationItemModel::relation( const QModelIndex &index ) const
 void RelationItemModel::slotNodeChanged( Node *node )
 {
     Q_UNUSED(node);
-    reset();
+    beginResetModel();
+    endResetModel();
 }
 
 

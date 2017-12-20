@@ -3131,8 +3131,9 @@ NodeItemModel::~NodeItemModel()
 
 void NodeItemModel::setShowProject( bool on )
 {
+    beginResetModel();
     m_projectshown = on;
-    reset();
+    endResetModel();
     emit projectShownChanged( on );
 }
 
@@ -3221,6 +3222,7 @@ void NodeItemModel::slotWbsDefinitionChanged()
 
 void NodeItemModel::setProject( Project *project )
 {
+    beginResetModel();
     if ( m_project ) {
         disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         disconnect( m_project, SIGNAL(localeChanged()), this, SLOT(slotLayoutChanged()) );
@@ -3254,11 +3256,12 @@ void NodeItemModel::setProject( Project *project )
         connect( m_project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotNodeRemoved(Node*)) );
         connect( m_project, SIGNAL(projectCalculated(ScheduleManager*)), this, SLOT(slotProjectCalculated(ScheduleManager*)));
     }
-    reset();
+    endResetModel();
 }
 
 void NodeItemModel::setScheduleManager( ScheduleManager *sm )
 {
+    beginResetModel();
     if (sm == m_nodemodel.manager()) {
         return;
     }
@@ -3269,7 +3272,7 @@ void NodeItemModel::setScheduleManager( ScheduleManager *sm )
     if ( sm ) {
     }
     debugPlan<<this<<sm;
-    reset();
+    endResetModel();
 }
 
 Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
@@ -4560,8 +4563,9 @@ bool MilestoneItemModel::resetData()
 
 void MilestoneItemModel::resetModel()
 {
+    beginResetModel();
     resetData();
-    reset();
+    endResetModel();
 }
 
 Qt::ItemFlags MilestoneItemModel::flags( const QModelIndex &index ) const
@@ -4928,18 +4932,9 @@ void MilestoneItemModel::slotNodeChanged( Node *node )
     if ( node == 0 ) {
         return;
     }
-//    if ( ! m_nodemap.contains( node->wbsCode() ) || m_nodemap.value( node->wbsCode() ) != node ) {
-        emit layoutAboutToBeChanged();
-        if ( resetData() ) {
-            reset();
-        } else {
-            emit layoutChanged();
-        }
-        return;
-/*    }
-    int row = m_nodemap.values().indexOf( node );
-    debugPlan<<node->name()<<": "<<node->typeToString()<<row;
-    emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount()-1, node ) );*/
+    beginResetModel();
+    resetData();
+    endResetModel();
 }
 
 void MilestoneItemModel::slotWbsDefinitionChanged()
@@ -4949,9 +4944,9 @@ void MilestoneItemModel::slotWbsDefinitionChanged()
         return;
     }
     if ( ! m_nodemap.isEmpty() ) {
-        emit layoutAboutToBeChanged();
+        beginResetModel();
         resetData();
-        emit layoutChanged();
+        endResetModel();
     }
 }
 

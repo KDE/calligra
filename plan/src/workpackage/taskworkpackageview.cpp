@@ -61,9 +61,9 @@ TaskWorkPackageTreeView::TaskWorkPackageTreeView( Part *part, QWidget *parent )
 {
     setContextMenuPolicy( Qt::CustomContextMenu );
     masterView()->header()->setSortIndicatorShown( true );
-    masterView()->header()->setClickable( true );
+    masterView()->header()->setSectionsClickable( true );
     slaveView()->header()->setSortIndicatorShown( true );
-    slaveView()->header()->setClickable( true );
+    slaveView()->header()->setSectionsClickable( true );
 
     QSortFilterProxyModel *sf = new QSortFilterProxyModel( this );
     TaskWorkPackageModel *m = new TaskWorkPackageModel( part, sf );
@@ -100,7 +100,7 @@ TaskWorkPackageTreeView::TaskWorkPackageTreeView( Part *part, QWidget *parent )
     masterView()->setFocus();
 
     debugPlanWork<<PlanWorkSettings::self()->taskWorkPackageView();
-    masterView()->header()->setClickable( true );
+    masterView()->header()->setSectionsClickable( true );
     slaveView()->header()->setSortIndicatorShown( true );
 
     connect(masterView()->header(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), SLOT(setSortOrder(int,Qt::SortOrder)));

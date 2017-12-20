@@ -51,11 +51,11 @@ AccountsTreeView::AccountsTreeView( QWidget *parent )
     
     QHeaderView *v = m_leftview->header();
     v->setStretchLastSection( false );
-    v->setResizeMode( 1, QHeaderView::Stretch );
-    v->setResizeMode ( 2, QHeaderView::ResizeToContents );
+    v->setSectionResizeMode( 1, QHeaderView::Stretch );
+    v->setSectionResizeMode ( 2, QHeaderView::ResizeToContents );
     
     v = m_rightview->header();
-    v->setResizeMode ( QHeaderView::ResizeToContents );
+    v->setSectionResizeMode ( QHeaderView::ResizeToContents );
     v->setStretchLastSection( false );
             
     hideColumns( m_rightview, QList<int>() << 0 << 1 << 2 );

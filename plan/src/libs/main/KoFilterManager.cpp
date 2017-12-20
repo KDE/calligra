@@ -50,7 +50,7 @@ QMap<QString, bool> KoFilterManager::m_filterAvailable;
 KoFilterManager::KoFilterManager(KoDocument* document,
                                  KoProgressUpdater* progressUpdater) :
         m_document(document), m_parentChain(0), m_graph(""),
-        d(new Private(progressUpdater))
+        d(new Private())
 {
     d->batch = false;
 }
@@ -554,9 +554,10 @@ bool KoFilterManager::getBatchMode(void) const
 
 KoProgressUpdater* KoFilterManager::progressUpdater() const
 {
-    if (d->progressUpdater.isNull()) {
-        // somebody, probably its parent, deleted our progress updater for us
-        return 0;
-    }
-    return d->progressUpdater.data();
+    return 0;
+//     if (d->progressUpdater.isNull()) {
+//         // somebody, probably its parent, deleted our progress updater for us
+//         return 0;
+//     }
+//     return d->progressUpdater.data();
 }

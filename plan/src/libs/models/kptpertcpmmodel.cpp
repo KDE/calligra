@@ -85,6 +85,7 @@ void CriticalPathItemModel::slotNodeRemoved( Node *node )
 
 void CriticalPathItemModel::setProject( Project *project )
 {
+    beginResetModel();
     if ( m_project ) {
         disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         disconnect( m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );
@@ -109,11 +110,12 @@ void CriticalPathItemModel::setProject( Project *project )
         connect( m_project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotNodeRemoved(Node*)) );
         connect( m_project, SIGNAL(nodeMoved(Node*)), this, SLOT(slotLayoutChanged()) );
     }
-    reset();
+    endResetModel();
 }
 
 void CriticalPathItemModel::setManager( ScheduleManager *sm )
 {
+    beginResetModel();
     debugPlan<<this;
     m_manager = sm;
     m_nodemodel.setManager( sm );
@@ -123,7 +125,7 @@ void CriticalPathItemModel::setManager( ScheduleManager *sm )
         m_path = m_project->criticalPath( m_manager->scheduleId(), 0 );
     }
     debugPlan<<m_path;
-    reset();
+    endResetModel();
 }
 
 QModelIndex CriticalPathItemModel::parent( const QModelIndex & ) const

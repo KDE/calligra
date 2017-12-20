@@ -192,7 +192,7 @@ CalendarDayView::CalendarDayView( QWidget *parent )
 {
     setTabKeyNavigation( false );
     setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
-    horizontalHeader()->setResizeMode( QHeaderView::Stretch );
+    horizontalHeader()->setSectionResizeMode( QHeaderView::Stretch );
     m_model = new CalendarDayItemModel( this );
     setModel(m_model);
     verticalHeader()->hide();

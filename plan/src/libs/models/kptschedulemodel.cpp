@@ -170,6 +170,7 @@ void ScheduleItemModel::slotScheduleRemoved( const MainSchedule * )
 
 void ScheduleItemModel::setProject( Project *project )
 {
+    beginResetModel();
     if ( m_project ) {
         disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
 
@@ -226,7 +227,7 @@ void ScheduleItemModel::setProject( Project *project )
         connect( m_project, SIGNAL(scheduleRemoved(const MainSchedule*)), this, SLOT(slotScheduleRemoved(const MainSchedule*)) );
     }
     setFlat( m_flat ); // update m_managerlist
-    reset();
+    endResetModel();
 }
 
 void ScheduleItemModel::slotManagerChanged( ScheduleManager *sch )

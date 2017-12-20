@@ -124,6 +124,7 @@ void TaskStatusItemModel::slotNodeMoved( Node * /*node*/ )
 
 void TaskStatusItemModel::setProject( Project *project )
 {
+    beginResetModel();
     clear();
     if ( m_project ) {
         disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
@@ -154,11 +155,12 @@ void TaskStatusItemModel::setProject( Project *project )
         connect(m_project, SIGNAL(nodeMoved(Node*)), this, SLOT(slotNodeMoved(Node*)));
 
     }
-    reset();
+    endResetModel();
 }
 
 void TaskStatusItemModel::setScheduleManager( ScheduleManager *sm )
 {
+    beginResetModel();
     if (sm == m_nodemodel.manager()) {
         return;
     }
@@ -169,7 +171,7 @@ void TaskStatusItemModel::setScheduleManager( ScheduleManager *sm )
     ItemModelBase::setScheduleManager( sm );
     if ( sm ) {
     }
-    reset();
+    endResetModel();
     refresh();
 }
 

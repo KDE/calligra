@@ -277,7 +277,7 @@ DependencyLinkItem::DependencyLinkItem( DependencyNodeItem *predecessor, Depende
     : DependencyLinkItemBase( predecessor, successor, rel, parent )
 {
     setZValue( 100.0 );
-    setAcceptsHoverEvents( true );
+    setAcceptHoverEvents( true );
     //debugPlanDepEditor<<predecessor->text()<<"("<<predecessor->column()<<") -"<<successor->text();
     predItem->addChildRelation( this );
     succItem->addParentRelation( this );
@@ -476,7 +476,7 @@ DependencyConnectorItem::DependencyConnectorItem( DependencyNodeItem::ConnectorT
     m_editable( false )
 {
     setCursor( ConnectCursor);
-    setAcceptsHoverEvents( true );
+    setAcceptHoverEvents( true );
     setZValue( 500.0 );
 
     setFlag( QGraphicsItem::ItemIsFocusable );
@@ -621,7 +621,7 @@ DependencyNodeItem::DependencyNodeItem( Node *node, DependencyNodeItem *parent )
     m_parent( 0 ),
     m_editable( false )
 {
-    setAcceptsHoverEvents( true );
+    setAcceptHoverEvents( true );
     setZValue( 400.0 );
     setParentItem( parent );
     m_start = new DependencyConnectorItem( DependencyNodeItem::Start, this );
@@ -679,8 +679,8 @@ QPointF DependencyNodeItem::connectorPoint( DependencyNodeItem::ConnectorType ty
 
 void DependencyNodeItem::setConnectorHoverMode( bool mode )
 {
-    m_start->setAcceptsHoverEvents( mode );
-    m_finish->setAcceptsHoverEvents( mode );
+    m_start->setAcceptHoverEvents( mode );
+    m_finish->setAcceptHoverEvents( mode );
 }
 
 void DependencyNodeItem::setParentItem( DependencyNodeItem *parent )
@@ -1053,7 +1053,7 @@ void DependencyScene::setFromItem( DependencyConnectorItem *item )
     if ( item ) {
         foreach ( QGraphicsItem *i, items() ) {
             if ( i != m_connectionitem && i->type() != DependencyConnectorItem::Type ) {
-                i->setAcceptsHoverEvents( false );
+                i->setAcceptHoverEvents( false );
                 if ( i->type() == DependencyLinkItem::Type ) {
                     static_cast<DependencyLinkItem*>( i )->resetHooverIndication();
                 }
@@ -1065,7 +1065,7 @@ void DependencyScene::setFromItem( DependencyConnectorItem *item )
     } else {
         foreach ( QGraphicsItem *i, items() ) {
             if ( i != m_connectionitem && i->type() != DependencyConnectorItem::Type )
-                i->setAcceptsHoverEvents( true );
+                i->setAcceptHoverEvents( true );
         }
     }
     if ( item && item->parentItem() ) {
@@ -1585,14 +1585,14 @@ void DependencyScene::mouseDoubleClickEvent ( QGraphicsSceneMouseEvent *event )
 {
     //debugPlanDepEditor<<event->pos()<<event->scenePos()<<event->screenPos();
     QGraphicsScene::mouseDoubleClickEvent( event );
-    emit itemDoubleClicked( itemAt( event->scenePos() ) );
+    emit itemDoubleClicked( itemAt( event->scenePos(), QTransform() ) );
 }
 
 void DependencyScene::contextMenuEvent ( QGraphicsSceneContextMenuEvent *event )
 {
     if ( event->reason() == QGraphicsSceneContextMenuEvent::Mouse ) {
-        debugPlanDepEditor<<"Mouse:"<<itemAt( event->scenePos())<<event->pos()<<event->scenePos()<<event->screenPos();
-        emit contextMenuRequested( itemAt( event->scenePos() ), event->screenPos() );
+        debugPlanDepEditor<<"Mouse:"<<itemAt( event->scenePos(), QTransform())<<event->pos()<<event->scenePos()<<event->screenPos();
+        emit contextMenuRequested( itemAt( event->scenePos(), QTransform() ), event->screenPos() );
         return;
     }
     if ( focusItem() ) {

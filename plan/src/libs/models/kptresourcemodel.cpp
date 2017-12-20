@@ -661,6 +661,7 @@ void ResourceItemModel::slotLayoutChanged()
 
 void ResourceItemModel::setProject( Project *project )
 {
+    beginResetModel();
     if ( m_project ) {
         disconnect(m_project, SIGNAL(aboutToBeDeleted()), this, SLOT(projectDeleted()));
         disconnect( m_project, SIGNAL(localeChanged()), this, SLOT(slotLayoutChanged()) );
@@ -711,7 +712,7 @@ void ResourceItemModel::setProject( Project *project )
         connect( m_project, SIGNAL(defaultCalendarChanged(Calendar*)), this, SLOT(slotCalendarChanged(Calendar*)) );
     }
     m_model.setProject( m_project );
-    reset();
+    endResetModel();
 }
 
 Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
@@ -1656,7 +1657,8 @@ void AllocatedResourceItemModel::setProject( Project *project )
 
 void AllocatedResourceItemModel::reset()
 {
-    QSortFilterProxyModel::reset();
+    beginResetModel();
+    endResetModel();
     emit expandAll();
     emit resizeColumnToContents( 0 );
 }
