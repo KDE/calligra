@@ -79,7 +79,7 @@ if (PLAN_IS_MAIN_PROJECT)
     ##########################
 
     find_package(ECM 5.19 REQUIRED NO_MODULE)
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
 
     # ECM KDE macros (include first, to have their policies and settings effect all other macros)
     include(KDEInstallDirs)
@@ -107,11 +107,11 @@ if (PLAN_IS_MAIN_PROJECT)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
     include(MacroOptionalFindPackage)
 
-
     set(REQUIRED_KF5_VERSION "5.7.0")
 
     find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED
         COMPONENTS
+            Init
             Archive
 #             Codecs
 #             Completion
@@ -126,9 +126,8 @@ if (PLAN_IS_MAIN_PROJECT)
             ItemViews
             JobWidgets
             KCMUtils
-    #         KDELibs4Support
             KIO
-#             Notifications
+            Notifications
 #             NotifyConfig
             Parts
 #             Sonnet
