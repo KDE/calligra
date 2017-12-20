@@ -12,7 +12,16 @@
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -55,7 +64,7 @@
         <string>The name of the Task.</string>
        </property>
        <property name="text">
-        <string>Name:</string>
+        <string>N&amp;ame:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -82,7 +91,7 @@
         </string>
        </property>
        <property name="text">
-        <string>Responsible:</string>
+        <string>Responsi&amp;ble:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -97,17 +106,20 @@
      </item>
      <item row="2" column="1">
       <layout class="QHBoxLayout">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
-        <widget class="KLineEdit" name="leaderfield">
-         <property name="whatsThis">
-          <string>The person responsible for this task.
-
-This is not limited to persons available in a resource group but can be anyone. You can even directly access your address book with the Choose button.</string>
-         </property>
-        </widget>
+        <widget class="KLineEdit" name="leaderfield"/>
        </item>
        <item>
         <widget class="QPushButton" name="chooseLeader">
@@ -149,13 +161,22 @@ The estimation can be either effort based or duration based. If it is effort bas
          <enum>QFrame::Raised</enum>
         </property>
         <layout class="QGridLayout">
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item row="0" column="0">
           <widget class="QLabel" name="textLabel3">
            <property name="text">
-            <string>Schedule:</string>
+            <string>&amp;Schedule:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -261,7 +282,7 @@ The estimation can be either effort based or duration based. If it is effort bas
          <item row="0" column="0">
           <widget class="QLabel" name="textLabel3_2">
            <property name="text">
-            <string>Estimate:</string>
+            <string>Esti&amp;mate:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -365,7 +386,7 @@ The estimation can be either effort based or duration based. If it is effort bas
          <item row="1" column="2">
           <widget class="QLabel" name="textLabel1_2">
            <property name="text">
-            <string>Optimistic:</string>
+            <string>Optimisti&amp;c:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -394,7 +415,7 @@ The estimation can be either effort based or duration based. If it is effort bas
          <item row="1" column="5">
           <widget class="QLabel" name="textLabel2_2">
            <property name="text">
-            <string>Pessimistic:</string>
+            <string>&amp;Pessimistic:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
