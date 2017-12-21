@@ -24,6 +24,7 @@
 #include "PresentationKoPAView.h"
 
 #include <QGraphicsWidget>
+#include <QMimeDatabase>
 #include <QTextDocument>
 #include <QTextFrame>
 #include <QTextLayout>
@@ -70,7 +71,7 @@ public:
     {
         links.clear();
 
-        if(!koPaView)
+        if(!koPaView || !koPaView->activePage())
             return;
 
         foreach(const KoShape* shape, koPaView->activePage()->shapes()) {
@@ -168,7 +169,28 @@ bool PresentationImpl::load(const QUrl& url)
     setKoDocument(d->document);
     d->part->setDocument(d->document);
 
-    bool retval = d->document->openUrl(url);
+    bool retval = false;
+    if (url.scheme() == QStringLiteral("theme")) {
+        bool ok = d->document->loadNativeFormat(url.toLocalFile());
+        d->document->setModified(false);
+        d->document->undoStack()->clear();
+
+        if (ok) {
+            QString mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
+            // in case this is a open document template remove the -template from the end
+            mimeType.remove( QRegExp( "-template$" ) );
+            d->document->setMimeTypeAfterLoading(mimeType);
+            d->document->resetURL();
+            d->document->setEmpty();
+        } else {
+            // some kind of error reporting thing here... failed to load template, tell the user
+            // why their canvas is so terribly empty.
+            d->document->initEmpty();
+        }
+        retval = true;
+    } else {
+        retval = d->document->openUrl(url);
+    }
 
     auto canvas = static_cast<KoPACanvasItem*>(d->part->canvasItem(d->document));
 
@@ -181,7 +203,10 @@ bool PresentationImpl::load(const QUrl& url)
     d->koPaView->setZoomController(zoomController());
     d->koPaView->connectToZoomController();
 
-    d->koPaView->doUpdateActivePage(d->document->pageByIndex(0, false));
+    KoPAPageBase* page = d->document->pageByIndex(0, false);
+    if(page) {
+        d->koPaView->doUpdateActivePage(page);
+    }
     d->updateLinkTargets();
 
     setCanvas(canvas);

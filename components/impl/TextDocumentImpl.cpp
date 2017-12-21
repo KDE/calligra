@@ -29,10 +29,12 @@
 #include <KWPart.h>
 #include <KWDocument.h>
 #include <KWCanvasItem.h>
+#include <KoColumns.h>
 #include <KoFindText.h>
 #include <KoShape.h>
 #include <KoShapeContainer.h>
 #include <KoToolManager.h>
+#include <KoUnit.h>
 #include <KoZoomController.h>
 #include <KoZoomHandler.h>
 
@@ -77,7 +79,7 @@ public:
     {
         links.clear();
 
-        if(!canvas)
+        if(!canvas || !canvas->shapeManager())
             return;
 
         foreach(const KoShape* shape, canvas->shapeManager()->shapes()) {
@@ -185,7 +187,62 @@ bool TextDocumentImpl::load(const QUrl& url)
     d->document->setAutoSave(0);
     d->document->setCheckAutoSaveFile(false);
 
-    bool retval = d->document->openUrl(url);
+    bool retval = false;
+    if (url.scheme() == QStringLiteral("newfile")) {
+        d->document->initEmpty();
+        KWPageStyle style = d->document->pageManager()->defaultPageStyle();
+        Q_ASSERT(style.isValid());
+
+        KoColumns columns;
+        columns.count = url.queryItemValue("columncount").toInt();
+        columns.gapWidth = url.queryItemValue("columngap").toDouble();
+        style.setColumns(columns);
+
+        KoPageLayout layout = style.pageLayout();
+        layout.format = KoPageFormat::formatFromString(url.queryItemValue("pageformat"));
+        layout.orientation = (KoPageFormat::Orientation)url.queryItemValue("pageorientation").toInt();
+        layout.height = MM_TO_POINT(url.queryItemValue("height").toDouble());
+        layout.width = MM_TO_POINT(url.queryItemValue("width").toDouble());
+        if (url.queryItemValue("facingpages").toInt() == 1) {
+            layout.bindingSide = MM_TO_POINT(url.queryItemValue("leftmargin").toDouble());
+            layout.pageEdge = MM_TO_POINT(url.queryItemValue("rightmargin").toDouble());
+            layout.leftMargin = layout.rightMargin = -1;
+        }
+        else {
+            layout.bindingSide = layout.pageEdge = -1;
+            layout.leftMargin = MM_TO_POINT(url.queryItemValue("leftmargin").toDouble());
+            layout.rightMargin = MM_TO_POINT(url.queryItemValue("rightmargin").toDouble());
+        }
+        layout.topMargin = MM_TO_POINT(url.queryItemValue("topmargin").toDouble());
+        layout.bottomMargin = MM_TO_POINT(url.queryItemValue("bottommargin").toDouble());
+        style.setPageLayout(layout);
+
+        d->document->setUnit(KoUnit::fromSymbol(url.queryItemValue("unit")));
+        d->document->relayout();
+        retval = true;
+    }
+    else if (url.scheme() == QStringLiteral("template")) {
+        // Nip away the manually added template:// bit of the uri passed from the caller
+        bool ok = d->document->loadNativeFormat(url.toString().mid(11));
+        d->document->setModified(false);
+        d->document->undoStack()->clear();
+
+        if (ok) {
+            QString mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
+            // in case this is a open document template remove the -template from the end
+            mimeType.remove( QRegExp( "-template$" ) );
+            d->document->setMimeTypeAfterLoading(mimeType);
+            d->document->resetURL();
+            d->document->setEmpty();
+        } else {
+            d->document->showLoadingErrorDialog();
+            d->document->initEmpty();
+        }
+        retval = true;
+    }
+    else {
+        retval = d->document->openUrl(url);
+    }
     qDebug() << "Attempting to open" << url << "and our success was" << retval;
 
     d->canvas = static_cast<KWCanvasItem*>(d->part->canvasItem(d->document));

@@ -30,6 +30,11 @@
 
 #include <KoPluginLoader.h>
 
+// For the mimetype names
+#include <KWDocument.h>
+#include <DocBase.h>
+#include <KPrDocument.h>
+
 using namespace Calligra::Components;
 
 static const QStringList staticTextTypes{ "application/pdf" };
@@ -48,32 +53,47 @@ int Global::documentType(const QUrl& document)
 {
     int result = DocumentType::Unknown;
 
-    QMimeType mime = QMimeDatabase{}.mimeTypeForUrl(document);
-
-    // TODO: see if KoPluginLoader could provide this info via some metadata query instead
-    QList<QPluginLoader*> plugins = KoPluginLoader::pluginLoaders(QStringLiteral("calligra/parts"), mime.name());
-
-    for (int i = 0; i < plugins.count(); i++) {
-        QPluginLoader* loader = plugins.at(i);
-
-        if(loader->fileName().contains("words")) {
+    // First, check if the URL gives us specific information on this topic (such as asking for a new file)
+    if(document.hasQueryItem("mimetype")) {
+        QString mime = document.queryItemValue("mimetype");
+        if(mime == WORDS_MIME_TYPE) {
             result = DocumentType::TextDocument;
-            break;
-        } else if(loader->fileName().contains("sheets")) {
+        }
+        else if(mime == SHEETS_MIME_TYPE) {
             result = DocumentType::Spreadsheet;
-            break;
-        } else if(loader->fileName().contains("stage")) {
+        }
+        else if(mime == STAGE_MIME_TYPE) {
             result = DocumentType::Presentation;
-            break;
         }
     }
+    else {
+        QMimeType mime = QMimeDatabase{}.mimeTypeForUrl(document);
 
-    // cleanup
-    qDeleteAll(plugins);
+        // TODO: see if KoPluginLoader could provide this info via some metadata query instead
+        QList<QPluginLoader*> plugins = KoPluginLoader::pluginLoaders(QStringLiteral("calligra/parts"), mime.name());
 
-    // Since we don't actually have a Calligra plugin that handles these...
-    if ((result == DocumentType::Unknown) && staticTextTypes.contains(mime.name())) {
-        result = DocumentType::StaticTextDocument;
+        for (int i = 0; i < plugins.count(); i++) {
+            QPluginLoader* loader = plugins.at(i);
+
+            if(loader->fileName().contains("words")) {
+                result = DocumentType::TextDocument;
+                break;
+            } else if(loader->fileName().contains("sheets")) {
+                result = DocumentType::Spreadsheet;
+                break;
+            } else if(loader->fileName().contains("stage")) {
+                result = DocumentType::Presentation;
+                break;
+            }
+        }
+
+        // cleanup
+        qDeleteAll(plugins);
+
+        // Since we don't actually have a Calligra plugin that handles these...
+        if ((result == DocumentType::Unknown) && staticTextTypes.contains(mime.name())) {
+            result = DocumentType::StaticTextDocument;
+        }
     }
 
     return result;
