@@ -31,7 +31,7 @@ options.languages = []
 options.branch = "trunk"
 options.tag = "HEAD"
 options.checkversion = true
-options.version = ""
+#options.version = ""
 options.cstring = ""
 options.infolevel = 0
 
@@ -143,6 +143,7 @@ if options.version
 end
 gittar = "#{gitdir}.tar.xz"
 gitsig = "#{gittar}.sig"
+sumsfile = "#{gittar}.sums"
 
 puts "-- Create tarball of Calligra Plan: " + gittar
 
@@ -155,6 +156,9 @@ if File.exist?(gittar)
 end
 if File.exist?(gitsig)
     File.delete(gitsig)
+end
+if File.exist?(sumsfile)
+    File.delete(sumsfile)
 end
 
 Dir.mkdir(calligradir)
@@ -312,12 +316,20 @@ print "-> Compressing ..  "
 `tar -Jcf #{gittar} --group=root --owner=root  #{gitdir}`
 puts " done."
 puts ""
-print "md5sum: ", `md5sum #{gittar}`
-print "sha256sum: ", `sha256sum #{gittar}`
+
+sums = File.open(sumsfile, 'w')
+sums << "sha1sum  : " << `sha1sum #{gittar}`
+sums << "sha256sum: " << `sha256sum #{gittar}`
 
 if (options.sign)
     puts "-> Signing ..  "
     `#{options.program} -a --output #{gitsig} --detach-sign #{gittar}`
-    puts ""
-    print "sha256sum: ", `sha256sum #{gitsig}`
+
+    sums << "sha1sum  : " << `sha1sum #{gitsig}`
+    sums << "sha256sum: " << `sha256sum #{gitsig}`
 end
+
+sums.close()
+
+puts "Sums have been written too: #{sumsfile}"
+puts
