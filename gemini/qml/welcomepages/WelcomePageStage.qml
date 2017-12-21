@@ -29,7 +29,7 @@ Page {
             return;
         }
         baseLoadingDialog.visible = true;
-        openFile(templateFile);
+        openFile("template://" + templateFile);
     }
     TemplatesModel {
         id: stageTemplates;

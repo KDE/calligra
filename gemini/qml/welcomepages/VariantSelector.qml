@@ -123,9 +123,7 @@ Item {
                             onClicked: {
                                 base.opacity = 0;
                                 var file = "";
-                                if(base.selectorType === "stage") {
-                                    file = model.url;
-                                } else if(base.selectorType === "words") {
+                                if(base.selectorType === "stage" || base.selectorType === "words") {
                                     file = "template://" + model.url;
                                 }
                                 if(file.slice(-1) === "/" || file === "") {

@@ -38,7 +38,11 @@ Page {
                 }
             }
             if(viewLoader.item) {
-                viewLoader.item.source = Settings.currentFile;
+                if(Settings.currentFile.indexOf("://") > 0) {
+                    viewLoader.item.source = Settings.currentFile;
+                } else {
+                    viewLoader.item.source = "file://" + Settings.currentFile;
+                }
             }
         }
     }
