@@ -1209,10 +1209,19 @@ bool MainDocument::mergeResources(Project &project)
     debugPlanShared<<&project;
     // Just in case, remove stuff not related to resources
     for (Node *n :  project.childNodeIterator()) {
-        delete n;
+        debugPlanShared<<"Project not empty, delete node:"<<n<<n->name();
+        NodeDeleteCmd cmd(n);
+        cmd.execute();
     }
-    for (ScheduleManager *m :  project.allScheduleManagers()) {
-        delete m;
+    for (ScheduleManager *m :  project.scheduleManagers()) {
+        debugPlanShared<<"Project not empty, delete schedule:"<<m<<m->name();
+        DeleteScheduleManagerCmd cmd(project, m);
+        cmd.execute();
+    }
+    for (Account *a : project.accounts().accountList()) {
+        debugPlanShared<<"Project not empty, delete account:"<<a<<a->name();
+        RemoveAccountCmd cmd(project, a);
+        cmd.execute();
     }
     // Mark all resources / groups as shared
     for (ResourceGroup *g : project.resourceGroups()) {
@@ -1308,16 +1317,44 @@ bool MainDocument::mergeResources(Project &project)
         }
     }
     // update values of already existsing objects
+    QStringList l1;
+    for (ResourceGroup *g : project.resourceGroups()) {
+        l1 << g->id();
+    }
+    QStringList l2;
+    for (ResourceGroup *g : m_project->resourceGroups()) {
+        l2 << g->id();
+    }
+    debugPlanShared<<endl<<"  This:"<<l2<<endl<<"Shared:"<<l1;
+    QList<ResourceGroup*> removegroups;
     for (ResourceGroup *g : project.resourceGroups()) {
         ResourceGroup *group = m_project->findResourceGroup(g->id());
         if (group) {
+            if (!group->isShared()) {
+                // User has probably created shared resources from this project,
+                // so the resources exists but are local ones.
+                // Convert to shared and do not load the group from shared.
+                removegroups << g;
+                group->setShared(true);
+                debugPlanShared<<"Set group to shared:"<<group<<group->id();
+            }
             group->setName(g->name());
             group->setType(g->type());
+            debugPlanShared<<"Updated group:"<<group<<group->id();
         }
     }
+    QList<Resource*> removeresources;
     for (Resource *r : project.resourceList()) {
         Resource *resource = m_project->findResource(r->id());
         if (resource) {
+            if (!resource->isShared()) {
+                // User has probably created shared resources from this project,
+                // so the resources exists but are local ones.
+                // Convert to shared and do not load the resource from shared.
+                removeresources << r;
+                resource->setShared(true);
+                debugPlanShared<<"Set resource to shared:"<<resource<<resource->id();
+            }
             resource->setName(r->name());
             resource->setInitials(r->initials());
             resource->setEmail(r->email());
@@ -1338,15 +1375,49 @@ bool MainDocument::mergeResources(Project &project)
             resource->setRequiredIds(r->requiredIds());
 
             resource->setTeamMemberIds(r->teamMemberIds());
+            debugPlanShared<<"Updated resource:"<<resource<<resource->id();
         }
     }
+    QList<Calendar*> removecalendars;
     for (Calendar *c : project.allCalendars()) {
         Calendar *calendar = m_project->findCalendar(c->id());
         if (calendar) {
+            if (!calendar->isShared()) {
+                // User has probably created shared resources from this project,
+                // so the calendar exists but are local ones.
+                // Convert to shared and do not load the resource from shared.
+                removecalendars << c;
+                calendar->setShared(true);
+                debugPlanShared<<"Set calendar to shared:"<<calendar<<calendar->id();
+            }
             *calendar = *c;
+            debugPlanShared<<"Updated calendar:"<<calendar<<calendar->id();
         }
     }
+    debugPlanShared<<"Remove:"<<endl<<"calendars:"<<removecalendars<<endl<<"resources:"<<removeresources<<endl<<"groups:"<<removegroups;
+    while (!removecalendars.isEmpty()) {
+        for (int i = 0; i < removecalendars.count(); ++i) {
+            Calendar *c = removecalendars.at(i);
+            if (c->childCount() == 0) {
+                removecalendars.removeAt(i);
+                debugPlanShared<<"Delete calendar:"<<c<<c->id();
+                CalendarRemoveCmd cmd(&project, c);
+                cmd.execute();
+            }
+        }
+    }
+    for (Resource *r : removeresources) {
+        debugPlanShared<<"Delete resource:"<<r<<r->id();
+        RemoveResourceCmd cmd(r->parentGroup(), r);
+        cmd.execute();
+    }
+    for (ResourceGroup *g : removegroups) {
+        debugPlanShared<<"Delete group:"<<g<<g->id();
+        RemoveResourceGroupCmd cmd(&project, g);
+        cmd.execute();
+    }
     // insert new objects
+    Q_ASSERT(project.childNodeIterator().isEmpty());
     InsertProjectCmd cmd(project, m_project, 0);
     cmd.execute();
     return true;
@@ -1455,7 +1526,7 @@ void MainDocument::createNewProject()
     info->setProperty( "title", "" );
     setTitleModified();
 
-    m_project->generateUniqueIds();
+    m_project->generateUniqueNodeIds();
     Duration dur = m_project->constraintEndTime() - m_project->constraintStartTime();
     m_project->setConstraintStartTime( QDateTime(QDate::currentDate(), QTime(0, 0, 0), Qt::LocalTime) );
     m_project->setConstraintEndTime( m_project->constraintStartTime() +  dur );
