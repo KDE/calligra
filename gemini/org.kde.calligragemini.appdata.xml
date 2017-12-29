@@ -8,6 +8,7 @@
   <name xml:lang="ca-valencia">Gemini</name>
   <name xml:lang="en-GB">Gemini</name>
   <name xml:lang="fr">Gémeaux</name>
+  <name xml:lang="it">Gemini</name>
   <name xml:lang="nl">Gemini</name>
   <name xml:lang="pl">Bliźnięta</name>
   <name xml:lang="pt">Gemini</name>
@@ -20,6 +21,7 @@
   <summary xml:lang="ca">Suite d'oficina</summary>
   <summary xml:lang="ca-valencia">Suite d'oficina</summary>
   <summary xml:lang="en-GB">Office Suite</summary>
+  <summary xml:lang="it">Office Suite</summary>
   <summary xml:lang="nl">Kantoor-suite</summary>
   <summary xml:lang="pl">Pakiet biurowy</summary>
   <summary xml:lang="pt">Pacote de Escritório</summary>
@@ -32,6 +34,7 @@
     <p xml:lang="ca">La suite d'oficina del KDE per a dispositius 2 en 1.</p>
     <p xml:lang="ca-valencia">La suite d'oficina del KDE per a dispositius 2 en 1.</p>
     <p xml:lang="en-GB">The KDE Office suite for 2-in-1 devices.</p>
+    <p xml:lang="it">La suite Office di KDE per i dispositivi 2-in-1.</p>
     <p xml:lang="nl">De KDE kantoor-suite voor 2-in-1 apparaten.</p>
     <p xml:lang="pl">Pakiet biurowy KDE dla urządzeń 2 w 1.</p>
     <p xml:lang="pt">O pacote de Escritório do KDE para os dispositivos 2-em-1.</p>
@@ -80,6 +83,7 @@
       <li xml:lang="ca">Característiques comunes</li>
       <li xml:lang="ca-valencia">Característiques comunes</li>
       <li xml:lang="en-GB">Common Features</li>
+      <li xml:lang="it">Funzionalità comuni</li>
       <li xml:lang="nl">Gemeenschappelijke functies</li>
       <li xml:lang="pt">Funcionalidades Comuns</li>
       <li xml:lang="sv">Vanliga funktioner</li>
@@ -100,6 +104,7 @@
       <li xml:lang="ca">Objectes incrustables</li>
       <li xml:lang="ca-valencia">Objectes incrustables</li>
       <li xml:lang="en-GB">Embeddable Objects</li>
+      <li xml:lang="it">Oggetti integrabili</li>
       <li xml:lang="nl">In te bedden objecten</li>
       <li xml:lang="pt">Objectos Incorporados</li>
       <li xml:lang="sv">Inbäddningsbara objekt</li>
@@ -120,6 +125,7 @@
       <li xml:lang="ca">Format estàndard de fitxer</li>
       <li xml:lang="ca-valencia">Format estàndard de fitxer</li>
       <li xml:lang="en-GB">Standard file format</li>
+      <li xml:lang="it">Formato standard dei file</li>
       <li xml:lang="nl">Standaard bestandsformaat</li>
       <li xml:lang="pt">Formato-padrão de ficheiros</li>
       <li xml:lang="sv">Standardfilformat</li>
@@ -130,6 +136,7 @@
     <p xml:lang="ca">El Calligra usa l'Open Document Format (ODF) com a format de fitxer principal, que el fa compatible amb la majoria d'altres aplicacions ofimàtiques, incloent-hi l'OpenOffice.org, el LibreOffice i l'Office de Microsoft. També pot importar els formats de fitxer natius de l'Office de Microsoft amb molta precisió, en molts casos el millor que trobareu.</p>
     <p xml:lang="ca-valencia">El Calligra usa l'Open Document Format (ODF) com a format de fitxer principal, que el fa compatible amb la majoria d'altres aplicacions ofimàtiques, incloent-hi l'OpenOffice.org, el LibreOffice i l'Office de Microsoft. També pot importar els formats de fitxer natius de l'Office de Microsoft amb molta precisió, en molts casos el millor que trobareu.</p>
     <p xml:lang="en-GB">Calligra uses the Open Document Format (ODF) as its main file format which makes it compatible with most other office applications including OpenOffice.org, LibreOffice and Microsoft Office. It can also import the native file formats of Microsoft Office with great accuracy, in many cases the best you can find.</p>
+    <p xml:lang="it">Calligra utilizza l'Open Document Format (ODF) come suo formato principale dei file che lo rende compatibile con la maggior parte delle altre applicazioni da ufficio tra cui OpenOffice.org, LibreOffice e Microsoft Office. Può inoltre importare i formati di file nativi di Microsoft Office con grande accuratezza, in molti casi il meglio che tu possa trovare.</p>
     <p xml:lang="nl">Calligra gebruikt het Open Document Format (ODF) als zijn hoofd bestandsformaat die het compatibel maakt met de meeste andere kantoortoepassingen inclusief OpenOffice.org, LibreOffice en Microsoft Office. Het kan ook de inheemse bestandsformaten van Microsoft Office met een grote accuraatheid importeren, in vele gevallen het beste wat u kunt vinden.</p>
     <p xml:lang="pt">O Calligra usa o Open Document Format (ODF) como formato de ficheiro principal, o que o torna compatível com a maioria das outras aplicações de escritório, incluindo o  OpenOffice.org, LibreOffice e Microsoft Office. Também consegue importar os formatos de ficheiros nativos do Microsoft Office com grande precisão, sendo em muitos casos o melhor que poderá encontrar.</p>
     <p xml:lang="sv">Calligra använder Open Document Format (ODF) som huvudfilformat, vilket gör det kompatibelt med de flesta kontorsprogram, inklusive OpenOffice.org,LibreOffice och Microsoft Office. Det kan också importera Microsoft Office egna filformat med stor noggrannhet, i många fall den bästa som går att finna.</p>
