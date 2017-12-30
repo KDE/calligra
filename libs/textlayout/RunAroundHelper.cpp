@@ -89,8 +89,14 @@ bool RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft
     const qreal maxLineHeight = line.height();
     const qreal maxNaturalTextWidth = line.naturalTextWidth();
     QRectF lineRect(position, QSizeF(maxLineWidth, maxLineHeight));
+
+    if (!lineRect.isValid()) {
+        line.setPosition(position);
+        return false;
+    }
+
     QRectF lineRectPart;
-    qreal movedDown = 10;
+    const qreal movedDown = 10;
 
     while (!lineRectPart.isValid()) {
         // The line rect could be split into no further linerectpart, so we have
@@ -103,9 +109,7 @@ bool RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft
         lineRectPart = getLineRect(lineRect, maxNaturalTextWidth);
         if (!lineRectPart.isValid()) {
             m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
-            lineRect = QRectF(position, QSizeF(maxLineWidth, maxLineHeight));
             lineRect.setY(lineRect.y() + movedDown);
-            movedDown += 10;
         }
     }
 
