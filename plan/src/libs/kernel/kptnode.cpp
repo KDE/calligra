@@ -87,10 +87,10 @@ Node::~Node() {
         removeId(); // only remove myself (I may be just a working copy)
     }
     while (!m_dependParentNodes.isEmpty()) {
-        delete m_dependParentNodes.takeFirst();
+        delete m_dependParentNodes.value(0);
     }
     while (!m_dependChildNodes.isEmpty()) {
-        delete m_dependChildNodes.takeFirst();
+        delete m_dependChildNodes.value(0);
     }
     if (m_runningAccount)
         m_runningAccount->removeRunning(*this);

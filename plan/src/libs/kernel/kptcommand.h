@@ -375,7 +375,7 @@ private:
     bool m_mine;
     QList<Appointment*> m_appointments;
     MacroCommand *m_cmd;
-    MacroCommand m_relCmd;
+    MacroCommand *m_relCmd;
 };
 
 class KPLATOKERNEL_EXPORT TaskAddCmd : public NamedCommand

@@ -95,13 +95,11 @@ QStringList Relation::typeList( bool trans )
 
 void Relation::setParent( Node* node )
 {
-    Q_ASSERT( ! m_parent );
     m_parent = node;
 }
 
 void Relation::setChild( Node* node )
 {
-    Q_ASSERT( ! m_child );
     m_child = node;
 }
 

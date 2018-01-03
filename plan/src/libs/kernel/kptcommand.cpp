@@ -582,7 +582,8 @@ void ProjectModifyDefaultCalendarCmd::unexecute()
 NodeDeleteCmd::NodeDeleteCmd( Node *node, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node ),
-        m_index( -1 )
+        m_index( -1 ),
+        m_relCmd(0)
 {
 
     m_parent = node->parentNode();
@@ -618,8 +619,10 @@ NodeDeleteCmd::NodeDeleteCmd( Node *node, const KUndo2MagicString& name )
 }
 NodeDeleteCmd::~NodeDeleteCmd()
 {
-    if ( m_mine )
+    delete m_relCmd; // before node
+    if ( m_mine ) {
         delete m_node;
+    }
     delete m_cmd;
     while ( !m_appointments.isEmpty() )
         delete m_appointments.takeFirst();
@@ -629,17 +632,18 @@ void NodeDeleteCmd::execute()
     if ( m_parent && m_project ) {
         m_index = m_parent->findChildNode( m_node );
         //debugPlan<<m_node->name()<<""<<m_index;
-        if ( m_relCmd.isEmpty() ) {
+        if ( !m_relCmd ) {
+            m_relCmd = new MacroCommand();
             // Only add delete relation commands if we (still) have relations
             // The other node might have deleted them...
             foreach ( Relation * r, m_node->dependChildNodes() ) {
-                m_relCmd.addCommand( new DeleteRelationCmd( *m_project, r ) );
+                m_relCmd->addCommand( new DeleteRelationCmd( *m_project, r ) );
             }
             foreach ( Relation * r, m_node->dependParentNodes() ) {
-                m_relCmd.addCommand( new DeleteRelationCmd( *m_project, r ) );
+                m_relCmd->addCommand( new DeleteRelationCmd( *m_project, r ) );
             }
         }
-        m_relCmd.execute();
+        m_relCmd->execute();
         if ( m_cmd ) {
             m_cmd->execute();
         }
@@ -656,7 +660,7 @@ void NodeDeleteCmd::unexecute()
         if ( m_cmd ) {
             m_cmd->unexecute();
         }
-        m_relCmd.unexecute();
+        m_relCmd->unexecute();
         m_mine = false;
         setSchScheduled();
     }
@@ -1155,8 +1159,12 @@ DeleteRelationCmd::DeleteRelationCmd( Project &project, Relation *rel, const KUn
 }
 DeleteRelationCmd::~DeleteRelationCmd()
 {
-    if ( m_taken )
+    if ( m_taken ) {
+        // do not access nodes, the may already be deleted
+        m_rel->setParent(0);
+        m_rel->setChild(0);
         delete m_rel;
+    }
 }
 void DeleteRelationCmd::execute()
 {
