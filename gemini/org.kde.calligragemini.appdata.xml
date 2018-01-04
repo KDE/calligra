@@ -20,6 +20,7 @@
   <summary>Office Suite</summary>
   <summary xml:lang="ca">Suite d'oficina</summary>
   <summary xml:lang="ca-valencia">Suite d'oficina</summary>
+  <summary xml:lang="cs">Kancelářská sada</summary>
   <summary xml:lang="en-GB">Office Suite</summary>
   <summary xml:lang="it">Office Suite</summary>
   <summary xml:lang="nl">Kantoor-suite</summary>
@@ -124,6 +125,7 @@
       <li>Standard file format</li>
       <li xml:lang="ca">Format estàndard de fitxer</li>
       <li xml:lang="ca-valencia">Format estàndard de fitxer</li>
+      <li xml:lang="cs">Standardní formát souboru</li>
       <li xml:lang="en-GB">Standard file format</li>
       <li xml:lang="it">Formato standard dei file</li>
       <li xml:lang="nl">Standaard bestandsformaat</li>
