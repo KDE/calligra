@@ -1103,7 +1103,6 @@ calligra_drop_product_on_bad_condition( APP_SLIDECOMPARE
 # workaround: disable directly all products which might be activated by internal
 # dependencies, but belong to scope of old flag
 calligra_drop_products_on_old_flag(braindump APP_BRAINDUMP)
-calligra_drop_products_on_old_flag(flow APP_FLOW)
 calligra_drop_products_on_old_flag(karbon APP_KARBON)
 calligra_drop_products_on_old_flag(plan  APP_PLAN)
 calligra_drop_products_on_old_flag(sheets PART_SHEETS APP_SHEETS)
@@ -1144,9 +1143,7 @@ endif()
 
 add_subdirectory(words)
 
-if (SHOULD_BUILD_APP_FLOW)
     add_subdirectory(flow)
-endif ()
 
 add_subdirectory(stage)
 

@@ -28,7 +28,7 @@ class FlowDocument;
 class QGraphicsItem;
 class KoView;
 
-class FLOW_EXPORT FlowPart : public KoPart
+class /*FLOW_EXPORT*/ FlowPart : public KoPart
 {
     Q_OBJECT
 

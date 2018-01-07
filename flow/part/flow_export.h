@@ -21,7 +21,7 @@
 #define FLOW_EXPORT_H
 
 /* needed for KDE_EXPORT and KDE_IMPORT macros */
-#include <kdemacros.h>
+//#include <kdemacros.h>
 
 /* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
 #if defined _WIN32 || defined _WIN64

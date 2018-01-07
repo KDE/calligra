@@ -15,7 +15,7 @@ set(flowprivate_LIB_SRCS
 
 add_library(flowprivate SHARED ${flowprivate_LIB_SRCS})
 
-target_link_libraries(flowprivate kopageapp)
+target_link_libraries(flowprivate kopageapp KF5::KDELibs4Support koplugin)
 target_link_libraries(flowprivate LINK_INTERFACE_LIBRARIES kopageapp)
 
 set_target_properties(flowprivate PROPERTIES
