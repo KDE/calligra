@@ -86,6 +86,7 @@
       <li xml:lang="en-GB">Common Features</li>
       <li xml:lang="it">Funzionalità comuni</li>
       <li xml:lang="nl">Gemeenschappelijke functies</li>
+      <li xml:lang="pl">Wspólne funkcje</li>
       <li xml:lang="pt">Funcionalidades Comuns</li>
       <li xml:lang="sv">Vanliga funktioner</li>
       <li xml:lang="uk">Загальні можливості</li>
@@ -107,6 +108,7 @@
       <li xml:lang="en-GB">Embeddable Objects</li>
       <li xml:lang="it">Oggetti integrabili</li>
       <li xml:lang="nl">In te bedden objecten</li>
+      <li xml:lang="pl">Osadzalne obiekty</li>
       <li xml:lang="pt">Objectos Incorporados</li>
       <li xml:lang="sv">Inbäddningsbara objekt</li>
       <li xml:lang="uk">Вмонтовані об'єкти</li>
@@ -129,6 +131,7 @@
       <li xml:lang="en-GB">Standard file format</li>
       <li xml:lang="it">Formato standard dei file</li>
       <li xml:lang="nl">Standaard bestandsformaat</li>
+      <li xml:lang="pl">Standardowy format plików</li>
       <li xml:lang="pt">Formato-padrão de ficheiros</li>
       <li xml:lang="sv">Standardfilformat</li>
       <li xml:lang="uk">Стандартизований формат файлів</li>
