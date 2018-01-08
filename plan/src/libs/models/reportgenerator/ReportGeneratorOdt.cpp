@@ -60,6 +60,13 @@ const QLoggingCategory &PLANRG_LOG()
 }
 #define dbgRG qCDebug(PLANRG_LOG)<<Q_FUNC_INFO
 
+const QLoggingCategory &PLANRG_TMP_LOG()
+{
+    static const QLoggingCategory category("calligra.plan.reportodt.template");
+    return category;
+}
+#define dbgRGTmp qCDebug(PLANRG_TMP_LOG)<<Q_FUNC_INFO
+
 const QLoggingCategory &PLANRG_TABLE_LOG()
 {
     static const QLoggingCategory category("calligra.plan.reportodt.table");
@@ -371,10 +378,12 @@ bool ReportGeneratorOdt::createReportOdt()
     }
     dbgRG << endl << "---- treat main content.xml ----" << endl;
     QBuffer buffer;
-    KoXmlWriter *writer = KoOdfWriteStore::createOasisXmlWriter(&buffer, "office:document-content");
-    // HACK: add loext namespace in case template is created using libreoffice
-    writer->addAttribute("xmlns:loext", "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0");
+    KoXmlWriter *writer = createOasisXmlWriter(reader, &buffer, "content.xml", "office:document-content");
 
+    if (!writer) {
+        dbgRG<<"Failed to create content.xml writer";
+        return false;
+    }
     KoXmlDocument kodoc = reader.contentDoc();
     KoXmlElement parent = kodoc.documentElement();
     writeChildElements(*writer, parent);
@@ -394,7 +403,11 @@ bool ReportGeneratorOdt::createReportOdt()
     if (m_manifestfiles.contains("styles.xml")) {
         dbgRG << endl << "---- treat styles.xml (for master-page headers/footers) ----" << endl;
         QBuffer buffer2;
-        KoXmlWriter *styles = KoOdfWriteStore::createOasisXmlWriter(&buffer2, "office:document-styles");
+        KoXmlWriter *styles = createOasisXmlWriter(reader, &buffer2, "styles.xml", "office:document-styles");
+        if (!styles) {
+            dbgRG<<"Failed to create styles.xml writer";
+            return false;
+        }
         KoXmlDocument stylesDoc;
         if (!reader.loadAndParse("styles.xml", stylesDoc, m_lastError)) {
             debugPlan<<"Failed to read styles.xml"<<m_lastError;
@@ -833,7 +846,7 @@ KoStore *ReportGeneratorOdt::copyStore(KoOdfReadStore &reader, const QString &ou
     if (!url.isLocalFile()) {
         // FIXME: KoStore only handles local files
         dbgRG<<"KoStore only handles local files";
-        m_lastError = i18n("Report generator can only handle local files");
+        m_lastError = i18n("Report generator can only generate local files");
         return 0;
     }
     KoStore *out = KoStore::createStore(url.path(), KoStore::Write);
@@ -872,6 +885,55 @@ KoStore *ReportGeneratorOdt::copyStore(KoOdfReadStore &reader, const QString &ou
         }
     }
     return out;
+}
+
+KoXmlWriter *ReportGeneratorOdt::createOasisXmlWriter(KoOdfReadStore &reader, QBuffer *buffer, const QString fileName, const char *rootElementName)
+{
+    if (!reader.store()) {
+        m_lastError = i18n("No store backend");
+        dbgRG<<"No store";
+        return 0;
+    }
+    dbgRGTmp<<fileName<<rootElementName<<"has file:"<<reader.store()->hasFile(fileName);
+    if (reader.store()->isOpen()) {
+        reader.store()->close();
+    }
+    if (!reader.store()->open(fileName)) {
+        dbgRG << "Entry " << fileName << " not found!";
+        m_lastError = xi18nc("@info", "Failed to open file <filename>%1</filename> from store.", fileName);
+        return 0;
+    }
+    if (!reader.store()->device()->isOpen()) {
+        reader.store()->device()->open(QIODevice::ReadOnly);
+    }
+    KoXmlWriter *writer = 0;
+    QXmlStreamReader xml(reader.store()->device());
+    xml.setNamespaceProcessing(true);
+    while (!xml.atEnd()) {
+        xml.readNext();
+        if (xml.tokenType() == QXmlStreamReader::StartElement && !xml.namespaceDeclarations().isEmpty()) {
+            writer = new KoXmlWriter(buffer);
+            writer->startDocument(rootElementName);
+            writer->startElement(rootElementName);
+            writer->addAttribute("xmlns:calligra", KoXmlNS::calligra);
+
+            QString s = "xmlns:";
+            for (const QXmlStreamNamespaceDeclaration &ns : xml.namespaceDeclarations()) {
+                writer->addAttribute((s + ns.prefix()).toLatin1(), ns.namespaceUri().toUtf8());
+                dbgRGTmp<<"add namespace:"<<(s + ns.prefix())<<ns.namespaceUri();
+            }
+            for (const QXmlStreamAttribute &a : xml.attributes()) {
+                dbgRGTmp<<"add attribute:"<<a.qualifiedName()<<a.value();
+                writer->addAttribute(a.qualifiedName().toLatin1(), a.value().toUtf8());
+            }
+        }
+    }
+    reader.store()->close();
+    if (!writer) {
+        dbgRG<<"Failed to find a start elemet with namespace declarations in"<<fileName;
+        m_lastError = xi18nc("@info", "Missing namespace declarations:<nl/><filename>%1</filename>", fileName);
+    }
+    return writer;
 }
 
 void ReportGeneratorOdt::treatEmbededObjects(KoOdfReadStore &reader, KoStore &outStore)
@@ -933,7 +995,7 @@ void ReportGeneratorOdt::treatChart(KoOdfReadStore &reader, KoStore &outStore, c
 
     }
     QBuffer buffer;
-    KoXmlWriter *writer = KoOdfWriteStore::createOasisXmlWriter(&buffer, "office:document-content");
+    KoXmlWriter *writer = createOasisXmlWriter(reader, &buffer, file, "office:document-content");
 
     writeChartElements(*writer, doc.documentElement());
 
@@ -1171,12 +1233,12 @@ bool ReportGeneratorOdt::UserField::next()
         currentIndex = model.index(0, column(columns.value(0)), currentIndex);
     } else {
         do {
-            QModelIndex idx = model.index(currentIndex.row()+1, column(columns.value(0)), currentIndex.parent());
+            QModelIndex idx = currentIndex.sibling(currentIndex.row()+1, column(columns.value(0)));
             if (idx.isValid()) {
                 currentIndex = idx;
                 break;
             }
-            currentIndex = currentIndex.parent();
+            currentIndex = model.parent(currentIndex);
         } while (currentIndex.isValid());
     }
     return currentIndex.isValid();

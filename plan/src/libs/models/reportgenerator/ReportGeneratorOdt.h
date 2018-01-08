@@ -31,6 +31,7 @@
 
 class QIODevice;
 class QString;
+class QBuffer;
 
 class KoXmlWriter;
 class KoStore;
@@ -69,6 +70,7 @@ protected:
     void writeChildElements(KoXmlWriter &writer, const KoXmlElement &parent);
     bool copyFile(KoStore &from, KoStore &to, const QString &file);
     KoStore *copyStore(KoOdfReadStore &reader, const QString &outfile);
+    KoXmlWriter *createOasisXmlWriter(KoOdfReadStore &reader, QBuffer *buffer, const QString fileName, const char *rootElementName);
 
     void treatEmbededObjects(KoOdfReadStore &reader, KoStore &outStore);
     void treatChart(KoOdfReadStore &reader, KoStore &outStore, const QString &name, const QString &file);
