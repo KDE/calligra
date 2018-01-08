@@ -29,7 +29,7 @@
 
 class KoPart;
 
-class /*FLOW_EXPORT*/ FlowDocument : public KoPADocument
+class FLOW_EXPORT FlowDocument : public KoPADocument
 {
     Q_OBJECT
 

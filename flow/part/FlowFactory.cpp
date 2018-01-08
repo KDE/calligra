@@ -71,12 +71,12 @@ QObject* FlowFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, 
     return part;
 }
 
-const KComponentData FlowFactory::componentData()
+const KComponentData &FlowFactory::componentData()
 {
   if (!s_instance) {
-    //s_instance = new KComponentData(aboutData());
+    s_instance = new KComponentData(aboutData());
 
-    //s_instance->dirs()->addResourceType("app_shape_collections", "data", "flow/stencils/");
+    s_instance->dirs()->addResourceType("app_shape_collections", "data", "flow/stencils/");
     KIconLoader::global()->addAppDir("calligra");
   }
 

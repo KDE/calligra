@@ -21,15 +21,14 @@
 #define FLOWABOUTDATA_H
 
 #include <kaboutdata.h>
-//#include <klocale.h>
+#include <klocale.h>
 #include <calligraversion.h>
 
-//static const char FLOW_DESCRIPTION[] = I18N_NOOP("Calligra Flowchart And Diagram Tool");
+static const char FLOW_DESCRIPTION[] = I18N_NOOP("Calligra Flowchart And Diagram Tool");
 static const char FLOW_VERSION[] = CALLIGRA_VERSION_STRING;
 
 KAboutData* newFlowAboutData()
 {
-/*
   KAboutData* aboutData = new KAboutData("flow", 0, ki18nc("application name", "Flow"),
                                 FLOW_VERSION, ki18n(FLOW_DESCRIPTION), KAboutData::License_LGPL,
                                 ki18n("© 2000-%1, The Flow Team").subs(CALLIGRA_YEAR),
@@ -41,8 +40,6 @@ KAboutData* newFlowAboutData()
   aboutData->addAuthor(ki18n("Peter Simonsson"), ki18n("Former Maintainer"), "peter.simonsson@gmail.com");
 
   return aboutData;
-*/
-return {};
 }
 
 #endif

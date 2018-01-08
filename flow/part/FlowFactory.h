@@ -26,7 +26,7 @@
 class KComponentData;
 class KAboutData;
 
-class /*FLOW_EXPORT*/ FlowFactory : public KPluginFactory
+class FLOW_EXPORT FlowFactory : public KPluginFactory
 {
   Q_OBJECT
 
@@ -37,7 +37,7 @@ class /*FLOW_EXPORT*/ FlowFactory : public KPluginFactory
 
     virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
 
-    static const KComponentData componentData();
+    static const KComponentData &componentData();
 
     /// Creates a KAboutData but doesn't keep ownership
     static KAboutData* aboutData();

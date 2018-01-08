@@ -22,7 +22,6 @@
 #include "FlowView.h"
 #include "FlowDocument.h"
 #include "FlowFactory.h"
-#include <KComponentData>
 
 #include <KoPACanvasItem.h>
 #include <KoCanvasBase.h>
@@ -31,10 +30,10 @@
 #include <kmessagebox.h>
 
 FlowPart::FlowPart(QObject *parent)
-    //: KoPart({}, parent)
+    : KoPart(parent)
 {
     setTemplatesResourcePath(QLatin1String("flow/templates/"));
-    //setComponentData(FlowFactory::componentData());
+    setComponentData(FlowFactory::componentData());
 }
 
 FlowPart::~FlowPart()
@@ -62,8 +61,7 @@ QGraphicsItem *FlowPart::createCanvasItem(KoDocument *document)
 
 KoMainWindow *FlowPart::createMainWindow()
 {
-    //return new KoMainWindow(QByteArray(FLOW_MIME_TYPE), componentData());
-    return {};
+    return new KoMainWindow(FLOW_MIME_TYPE, componentData());
 }
 
 void FlowPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)

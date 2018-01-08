@@ -24,7 +24,7 @@
 
 #include <KoSelection.h>
 
-#include <KLocalizedString>
+#include <klocale.h>
 #include <kactioncollection.h>
 
 FlowView::FlowView(FlowPart *part, FlowDocument* document, QWidget* parent)
