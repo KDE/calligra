@@ -76,7 +76,7 @@ KoProgressUpdater::KoProgressUpdater(KoProgressProxy *progressBar,
     : d (new Private(this, progressBar, mode, output))
 {
     Q_ASSERT(d->progressBar);
-    connect(&d->updateGuiTimer, SIGNAL(timeout()), SLOT(updateUi()));
+    connect(&d->updateGuiTimer, SIGNAL(timeout()), SLOT(updateUi()), Qt::QueuedConnection);
 }
 
 KoProgressUpdater::~KoProgressUpdater()
