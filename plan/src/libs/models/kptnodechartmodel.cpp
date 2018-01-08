@@ -60,9 +60,9 @@ int ChartItemModel::columnCount( const QModelIndex &/*parent*/ ) const
     return columnMap().keyCount();
 }
 
-int ChartItemModel::rowCount( const QModelIndex &/*parent */) const
+int ChartItemModel::rowCount( const QModelIndex &parent ) const
 {
-    return startDate().daysTo( endDate() ) + 1;
+    return parent.isValid() ? 0 : startDate().daysTo( endDate() ) + 1;
 }
 
 QModelIndex ChartItemModel::index( int row, int column, const QModelIndex &parent ) const
