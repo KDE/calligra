@@ -424,6 +424,12 @@ void ReportsGeneratorView::slotGenerateReport()
             }
             file = fn;
         }
+        // warn if file exists
+        if (QFile::exists(QUrl(file).path())) {
+            if (QMessageBox::question(this, i18n("Report Generation"), i18n("File exists. Continue?")) == QMessageBox::No) {
+                return;
+            }
+        }
         generateReport(tmp, file);
     }
 }
@@ -445,6 +451,7 @@ bool ReportsGeneratorView::generateReport(const QString &templateFile, const QSt
         QMessageBox::warning(this, i18n("Failed to create report"), rg.lastError());
         return false;
     }
+    QMessageBox::information(this, i18n("Report Generation"), i18n("Report file generated: %1", file));
     return true;
 }
 
