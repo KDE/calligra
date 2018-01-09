@@ -1169,6 +1169,22 @@ void ReportGeneratorOdt::writeChartElements(KoXmlWriter &writer, const KoXmlElem
                 }
             }
             writer.endElement();
+        } else if (tag == "chart:legend") {
+            writer.startElement(tag.constData());
+            if (!e.hasAttributeNS(KoXmlNS::chart, "legend-align") && e.hasAttributeNS(KoXmlNS::chart, "legend-position")) {
+                // lowriter does not specify this attribute
+                // If legend-postion is start, end, top or bottom
+                // we need to have legend-align == center so that words
+                // repositions the legend correctly
+                QStringList lst = QStringList() << "start" << "end" << "top" << "bottom";
+                if (lst.contains(e.attributeNS(KoXmlNS::chart, "legend-position"))) {
+                    writer.addAttribute("chart:legend-align", "center");
+                    dbgRGChart<<"adding legend-align";
+                }
+            }
+            writeElementAttributes(writer, e);
+            writeChartElements(writer, e);
+            writer.endElement();
         } else {
             writer.startElement(tag.constData());
             writeElementAttributes(writer, e);
