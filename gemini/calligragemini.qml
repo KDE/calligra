@@ -30,6 +30,7 @@ Item {
         mainPageStack.push(mainPage);
         Settings.currentFile = "";
         Settings.currentFile = fileName;
+        mainPageStack.currentItem.openFileReal(fileName);
         RecentFileManager.addRecent(fileName);
         mainWindow.setAlternativeSaveAction(alternativeSaveAction);
     }

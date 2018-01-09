@@ -25,24 +25,21 @@ import org.kde.calligra 1.0 as Calligra
 Page {
     id: base;
     property string pageName: "MainPage";
-    Connections {
-        target: Settings;
-        onCurrentFileChanged: {
-            if(Settings.currentFileClass === WORDS_MIME_TYPE) {
-                viewLoader.sourceComponent = wordsView;
-            } else if(Settings.currentFileClass === STAGE_MIME_TYPE) {
-                viewLoader.sourceComponent = stageView;
-            } else {
-                if(Settings.currentFile !== "") {
-                    console.debug("BANG!");
-                }
+    function openFileReal(fileName) {
+        if(Settings.currentFileClass === WORDS_MIME_TYPE) {
+            viewLoader.sourceComponent = wordsView;
+        } else if(Settings.currentFileClass === STAGE_MIME_TYPE) {
+            viewLoader.sourceComponent = stageView;
+        } else {
+            if(Settings.currentFile !== "") {
+                console.debug("BANG!");
             }
-            if(viewLoader.item) {
-                if(Settings.currentFile.indexOf("://") > 0) {
-                    viewLoader.item.source = Settings.currentFile;
-                } else {
-                    viewLoader.item.source = "file://" + Settings.currentFile;
-                }
+        }
+        if(viewLoader.item) {
+            if(fileName.indexOf("://") > 0) {
+                viewLoader.item.source = fileName;
+            } else {
+                viewLoader.item.source = "file://" + fileName;
             }
         }
     }
