@@ -109,6 +109,9 @@ RecentFileManager* DocumentManager::recentFileManager() const
 
 bool DocumentManager::isTemporaryFile() const
 {
+    if(d->document->url().isEmpty()) {
+        return true;
+    }
     return d->temporaryFile;
 }
 
