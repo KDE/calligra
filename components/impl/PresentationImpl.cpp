@@ -170,8 +170,8 @@ bool PresentationImpl::load(const QUrl& url)
     d->part->setDocument(d->document);
 
     bool retval = false;
-    if (url.scheme() == QStringLiteral("theme")) {
-        bool ok = d->document->loadNativeFormat(url.toLocalFile());
+    if (url.scheme() == QStringLiteral("template")) {
+        bool ok = d->document->loadNativeFormat(url.toString().mid(11));
         d->document->setModified(false);
         d->document->undoStack()->clear();
 
@@ -187,6 +187,7 @@ bool PresentationImpl::load(const QUrl& url)
             // why their canvas is so terribly empty.
             d->document->initEmpty();
         }
+        d->document->setModified(true);
         retval = true;
     } else {
         retval = d->document->openUrl(url);
