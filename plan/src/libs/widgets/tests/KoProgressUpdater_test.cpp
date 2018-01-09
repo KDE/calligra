@@ -154,11 +154,10 @@ void KoProgressUpdaterTest::testSimpleProgress()
     pu.start();
     QPointer<KoUpdater> updater = pu.startSubtask();
     updater->setProgress(50);
-    QTest::qSleep(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES); // allow the action to do its job.
-    QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
+    QTest::qWait(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES); // allow the action to do its job.
+    QCOMPARE(bar.value, 50);
     updater->setProgress(100);
-    QTest::qSleep(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES); // allow the action to do its job.
-    QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
+    QTest::qWait(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES); // allow the action to do its job.
     QCOMPARE(bar.value, 100);
 }
 void KoProgressUpdaterTest::testSimpleThreadedProgress()
@@ -170,9 +169,12 @@ void KoProgressUpdaterTest::testSimpleThreadedProgress()
     TestJob t(u);
     t.start();
     while (!t.isFinished()) {
-        QTest::qSleep(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES); // allow the action to do its job.
-        QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
+        QTest::qWait(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES); // allow the action to do its job.
     }
+    for (int i = 0; i < 10 && bar.value < 100; ++i) {
+        QTest::qWait(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES); // allow the action to do its job.
+    }
+    QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
     QCOMPARE(bar.value, 100);
 }
 
@@ -184,11 +186,11 @@ void KoProgressUpdaterTest::testSubUpdaters()
     QPointer<KoUpdater> u1 = pu.startSubtask(4);
     QPointer<KoUpdater> u2 = pu.startSubtask(6);
     u1->setProgress(100);
-    QTest::qSleep(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES); // allow the action to do its job.
+    QTest::qWait(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES); // allow the action to do its job.
     QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
     QCOMPARE(bar.value, 40);
     u2->setProgress(100);
-    QTest::qSleep(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES); // allow the action to do its job.
+    QTest::qWait(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES); // allow the action to do its job.
     QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
     QCOMPARE(bar.value, 100);
 }
@@ -206,8 +208,10 @@ void KoProgressUpdaterTest::testThreadedSubUpdaters()
     t1.start();
     t2.start();
     while ( t1.isRunning() || t2.isRunning() ) {
-        QTest::qSleep(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES); // allow the action to do its job.
-        QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
+        QTest::qWait(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES); // allow the action to do its job.
+    }
+    for (int i = 0; i < 10 && bar.value < 100; ++i) {
+        QTest::qWait(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES); // allow the action to do its job.
     }
     QCOMPARE(bar.value, 100);
 }
@@ -224,9 +228,8 @@ void KoProgressUpdaterTest::testRecursiveProgress()
     QPointer<KoUpdater> u2 = pu2.startSubtask();
     u2->setProgress(50);
     u2->setProgress(100);
-    while(bar.value < 100) {
-        QCoreApplication::processEvents();
-        QTest::qSleep(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES);
+    for (int i = 0; i < 10 && bar.value < 100; ++i) {
+        QTest::qWait(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES); // allow the action to do its job.
     }
     QCOMPARE(bar.value, 100);
 }
@@ -246,13 +249,10 @@ void KoProgressUpdaterTest::testThreadedRecursiveProgress()
     t1.start();
 
     while (t1.isRunning() ) {
-        QTest::qSleep(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES); // allow the action to do its job.
-        QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
+        QTest::qWait(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES); // allow the action to do its job.
     }
-
-    while(bar.value < 100) {
-        QCoreApplication::processEvents();
-        QTest::qSleep(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES);
+    for (int i = 0; i < 10 && bar.value < 100; ++i) {
+        QTest::qWait(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES); // allow the action to do its job.
     }
     QCOMPARE(bar.value, 100);
 }
@@ -272,10 +272,12 @@ void KoProgressUpdaterTest::testFromWeaver()
         ThreadWeaver::Queue::instance()->enqueue(ThreadWeaver::make_job_raw(job));
     }
     while (!ThreadWeaver::Queue::instance()->isIdle()) {
-         QTest::qSleep(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES);
-         QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+         QTest::qWait(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES);
     }
     ThreadWeaver::Queue::instance()->finish();
+    for (int i = 0; i < 10 && jobsdone < 10; ++i) {
+        QTest::qWait(WAIT_FOR_PROGRESSUPDATER_UI_UPDATES); // allow the action to do its job.
+    }
     QCOMPARE(jobsdone, 10);
 }
 
