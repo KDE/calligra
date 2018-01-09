@@ -314,9 +314,9 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
 void MainWindow::resetWindowTitle()
 {
-    QUrl url(DocumentManager::instance()->settingsManager()->currentFile());
+    QUrl url = DocumentManager::instance()->document()->url();
     QString fileName = url.fileName();
-    if(url.scheme() == "temp")
+    if(url.scheme() == "temp" || url.isEmpty())
         fileName = i18n("Untitled");
 
     KoDialog::CaptionFlags flags = KoDialog::HIGCompliantCaption;
@@ -472,6 +472,7 @@ void MainWindow::setDocAndPart(QObject* document, QObject* part)
         QAction* redo = qobject_cast<KoPart*>(part)->views().at(0)->action("edit_redo");
         d->touchView->rootContext()->setContextProperty("redoaction", redo);
     }
+    resetWindowTitle();
 }
 
 void MainWindow::documentChanged()
