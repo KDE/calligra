@@ -238,6 +238,7 @@ private:
 
     bool m_loadingSharedProject;
     QList<QUrl> m_sharedProjectsFiles;
+    bool m_skipSharedProjects;
 
     bool m_isTaskModule;
 };

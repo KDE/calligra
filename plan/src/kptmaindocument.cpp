@@ -75,6 +75,7 @@ MainDocument::MainDocument(KoPart *part)
         m_viewlistModified( false ),
         m_checkingForWorkPackages( false ),
         m_loadingSharedProject(false),
+        m_skipSharedProjects(false),
         m_isTaskModule(false)
 {
     Q_ASSERT(part);
@@ -881,7 +882,7 @@ bool MainDocument::completeLoading( KoStore *store )
         Calendar *c = m_project->calendarAt(0);
         c->setTimeZone(QTimeZone::systemTimeZone());
     }
-    if (m_project->useSharedResources() && !m_project->sharedResourcesFile().isEmpty()) {
+    if (m_project->useSharedResources() && !m_project->sharedResourcesFile().isEmpty() && !m_skipSharedProjects) {
         QUrl url = QUrl::fromLocalFile(m_project->sharedResourcesFile());
         if (url.isValid()) {
             insertResourcesFile(url, m_project->loadProjectsAtStartup() ? m_project->sharedProjectsUrl() : QUrl());
@@ -1001,6 +1002,7 @@ void MainDocument::insertResourcesFile(const QUrl &url, const QUrl &projects)
 
     Part *part = new Part( this );
     MainDocument *doc = new MainDocument( part );
+    doc->m_skipSharedProjects = true; // should not have shared projects, but...
     part->setDocument( doc );
     doc->disconnect(); // doc shall not handle feedback from openUrl()
     doc->setAutoSave( 0 ); //disable
@@ -1090,6 +1092,7 @@ void MainDocument::slotInsertSharedProject()
     }
     Part *part = new Part( this );
     MainDocument *doc = new MainDocument( part );
+    doc->m_skipSharedProjects = true; // never load recursivly
     part->setDocument( doc );
     doc->disconnect(); // doc shall not handle feedback from openUrl()
     doc->setAutoSave( 0 ); //disable
