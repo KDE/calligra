@@ -162,7 +162,10 @@ QVariant NodeModel::allocation( const Node *node, int role ) const
                 if ( sl.count() == 1 ) {
                     return xi18nc( "@info:tooltip 1=resource name", "Allocated resource:<nl/>%1", sl.first() );
                 }
-                return xi18nc( "@info:tooltip 1=list of resources", "Allocated resources:<nl/>%1", sl.join( "<nl/>" ) );
+                KLocalizedString ks = kxi18nc( "@info:tooltip 1=list of resources", "Allocated resources:<nl/>%1");
+                // Hack to get around ks escaping '<' and '>'
+                QString s = ks.subs(sl.join("#¤#")).toString();
+                return s.replace("#¤#", "<br/>");
             }
             case Qt::StatusTipRole:
             case Qt::WhatsThisRole:
