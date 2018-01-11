@@ -837,7 +837,7 @@ void SchedulingRange::slotStartChanged()
     if (targetStartTime->dateTime() == m_project->constraintStartTime()) {
         return;
     }
-    NodeModifyConstraintStartTimeCmd *cmd = new NodeModifyConstraintStartTimeCmd(*m_project, targetStartTime->dateTime(), kundo2_i18n("Modify project target start time"));
+    ProjectModifyStartTimeCmd *cmd = new ProjectModifyStartTimeCmd(*m_project, targetStartTime->dateTime(), kundo2_i18n("Modify project target start time"));
     m_doc->addCommand(cmd);
 }
 
@@ -849,7 +849,7 @@ void SchedulingRange::slotEndChanged()
     if (targetEndTime->dateTime() == m_project->constraintEndTime()) {
         return;
     }
-    NodeModifyConstraintEndTimeCmd *cmd = new NodeModifyConstraintEndTimeCmd(*m_project, targetEndTime->dateTime(), kundo2_i18n("Modify project target end time"));
+    ProjectModifyEndTimeCmd *cmd = new ProjectModifyEndTimeCmd(*m_project, targetEndTime->dateTime(), kundo2_i18n("Modify project target end time"));
     m_doc->addCommand(cmd);
 }
 
