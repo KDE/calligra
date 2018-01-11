@@ -1006,6 +1006,7 @@ void MainDocument::insertResourcesFile(const QUrl &url, const QUrl &projects)
     part->setDocument( doc );
     doc->disconnect(); // doc shall not handle feedback from openUrl()
     doc->setAutoSave( 0 ); //disable
+    doc->setCheckAutoSaveFile(false);
     connect(doc, SIGNAL(completed()), SLOT(insertResourcesFileCompleted()));
     connect(doc, SIGNAL(canceled(QString)), SLOT(insertFileCancelled(QString)));
 
@@ -1096,6 +1097,7 @@ void MainDocument::slotInsertSharedProject()
     part->setDocument( doc );
     doc->disconnect(); // doc shall not handle feedback from openUrl()
     doc->setAutoSave( 0 ); //disable
+    doc->setCheckAutoSaveFile(false);
     doc->m_loadingSharedProject = true;
     connect(doc, SIGNAL(completed()), SLOT(insertSharedProjectCompleted()));
     connect(doc, SIGNAL(canceled(QString)), SLOT(insertSharedProjectCancelled(QString)));
