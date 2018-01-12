@@ -917,14 +917,16 @@ KoXmlWriter *ReportGeneratorOdt::createOasisXmlWriter(KoOdfReadStore &reader, QB
             writer->startElement(rootElementName);
             writer->addAttribute("xmlns:calligra", KoXmlNS::calligra);
 
-            QString s = "xmlns:";
-            for (const QXmlStreamNamespaceDeclaration &ns : xml.namespaceDeclarations()) {
-                writer->addAttribute((s + ns.prefix()).toLatin1(), ns.namespaceUri().toUtf8());
-                dbgRGTmp<<"add namespace:"<<(s + ns.prefix())<<ns.namespaceUri();
+            // Note: windows needs this type of iteration
+            QXmlStreamNamespaceDeclarations dcl = xml.namespaceDeclarations();
+            for (int ns = 0; ns < dcl.count(); ++ns) {
+                dbgRGTmp<<"add namespace:"<<("xmlns:" + dcl[ns].prefix())<<dcl[ns].namespaceUri();
+                writer->addAttribute(("xmlns:" + dcl[ns].prefix()).toLatin1(), dcl[ns].namespaceUri().toUtf8());
             }
-            for (const QXmlStreamAttribute &a : xml.attributes()) {
-                dbgRGTmp<<"add attribute:"<<a.qualifiedName()<<a.value();
-                writer->addAttribute(a.qualifiedName().toLatin1(), a.value().toUtf8());
+            QXmlStreamAttributes attr = xml.attributes();
+            for (int a = 0; a < attr.count(); ++a) {
+                dbgRGTmp<<"add attribute:"<<attr[a].qualifiedName().toString()<<attr[a].value().toString();
+                writer->addAttribute(attr[a].qualifiedName().toLatin1(), attr[a].value().toUtf8());
             }
         }
     }
