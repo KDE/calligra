@@ -116,7 +116,7 @@ WelcomeView::WelcomeView(KoPart *part, KoDocument *doc, QWidget *parent)
                           " to avoid overbooking resources across projects."
                           "<nl/>Shared resources must be defined in a separate file."
                           "<nl/><link url='%1'>More...</link>"
-                          "</para>", Help::page("Manual/Creating_a_Project")));
+                          "</para>", Help::page("Manual/Managing_Resources")));
 
     Help::add(widget.recentProjects,
                    xi18nc("@info:whatsthis",
