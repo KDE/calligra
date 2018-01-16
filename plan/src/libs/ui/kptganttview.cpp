@@ -688,6 +688,9 @@ void MyKGanttView::removeDependency( Relation *rel )
 void MyKGanttView::clearDependencies()
 {
     constraintModel()->clear();
+    // Remove old deps from view
+    // NOTE: This should be handled by KGantt
+    graphicsView()->updateScene();
 }
 
 void MyKGanttView::createDependencies()
