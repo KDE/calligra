@@ -92,6 +92,7 @@
     <p xml:lang="x-test">xxCalligra itself is a large suite of applications, split into three main categories: Office applications, Graphics Applications and Project Management. Please visit the Calligra website to see full descriptions of the many tools.xx</p>
     <ul>
       <li>Common Features</li>
+      <li xml:lang="ast">Carauterístiques comunes</li>
       <li xml:lang="ca">Característiques comunes</li>
       <li xml:lang="ca-valencia">Característiques comunes</li>
       <li xml:lang="en-GB">Common Features</li>
