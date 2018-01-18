@@ -208,8 +208,6 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
         : KoView(part, doc, parent),
         m_currentEstimateType( Estimate::Use_Expected ),
         m_scheduleActionGroup( new QActionGroup( this ) ),
-        m_trigged( false ),
-        m_nextScheduleManager( 0 ),
         m_readWrite( false ),
         m_defaultView(1),
         m_partpart (part)
@@ -1678,13 +1676,11 @@ QAction *View::addScheduleAction( Schedule *sch )
     return act;
 }
 
-void View::slotViewScheduleManager()
+void View::slotViewScheduleManager(ScheduleManager *sm)
 {
     QApplication::setOverrideCursor( Qt::WaitCursor );
-    setLabel( m_nextScheduleManager );
-    emit currentScheduleManagerChanged( m_nextScheduleManager );
-    m_nextScheduleManager = 0;
-    m_trigged = false;
+    setLabel(sm);
+    emit currentScheduleManagerChanged(sm);
     QApplication::restoreOverrideCursor();
 }
 
@@ -1696,16 +1692,8 @@ void View::slotViewSchedule( QAction *act )
         Schedule *sch = m_scheduleActions.value( act, 0 );
         sm = sch->manager();
     }
-    //emit currentScheduleManagerChanged( 0 );
     setLabel( 0 );
-    m_nextScheduleManager = sm;
-    // Performance is very dependent on schedule manager change since a lot is recalculated
-    // In case of multiple changes, only issue the last change
-    if ( ! m_trigged ) {
-        m_trigged = true;
-        //emit currentScheduleManagerChanged( 0 );
-        QTimer::singleShot( 0, this, SLOT(slotViewScheduleManager()) );
-    }
+    slotViewScheduleManager(sm);
 }
 
 void View::slotActionDestroyed( QObject *o )
