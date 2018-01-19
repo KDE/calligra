@@ -188,6 +188,7 @@ class KPLATOUI_EXPORT GanttViewBase : public KGantt::View
     Q_OBJECT
 public:
     explicit GanttViewBase(QWidget *parent);
+    ~GanttViewBase();
 
     GanttTreeView *treeView() const;
     GanttPrintingOptions printingOptions() const { return m_printOptions; }

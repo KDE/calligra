@@ -59,6 +59,7 @@
 #include <QAction>
 #include <QMenu>
 #include <QHoverEvent>
+#include <QScrollBar>
 
 #include <ktoggleaction.h>
 
@@ -417,6 +418,15 @@ GanttViewBase::GanttViewBase( QWidget *parent )
 
     graphicsView()->installEventFilter(this);
     graphicsView()->setMouseTracking(true);
+}
+
+GanttViewBase::~GanttViewBase()
+{
+    // HACK: avoid crash due to access of graphicsview scrollbar after death
+    // KGantt tries to sync leftview scrollbar with graphicsview scrollbar
+    // and seems sometimes graphicsview has already been deleted.
+    // Note: this will be fixed in next KGantt release
+    leftView()->verticalScrollBar()->disconnect();
 }
 
 GanttTreeView *GanttViewBase::treeView() const
