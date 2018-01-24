@@ -96,9 +96,16 @@ void CropWidget::paintEvent(QPaintEvent *event)
     painter.scale(m_imageRect.width(), m_imageRect.height());
 
     painter.drawImage(QRectF(0, 0, 1, 1), image);
+
+    painter.setBrush(QColor(0, 0, 0, 127));
+    painter.setPen(Qt::NoPen);
+    painter.drawPolygon(QPolygonF(QRectF(0, 0, 1 , 1)).subtracted(m_selectionRect.getRect()));
+
+    painter.setBrush(Qt::NoBrush);
+    painter.setPen(QPen(this->palette().color(QPalette::Highlight), 0));
     painter.drawRect(m_selectionRect.getRect());
 
-    painter.setBrush(QBrush(Qt::yellow));
+    painter.setBrush(QBrush(this->palette().color(QPalette::Highlight).darker()));
     for (int i=0; i<m_selectionRect.getNumHandles(); ++i)
         painter.drawRect(m_selectionRect.getHandleRect(m_selectionRect.getHandleFlags(i)));
 
