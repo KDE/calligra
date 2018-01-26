@@ -51,6 +51,7 @@ Project::Project( Node *parent )
         m_defaultCalendar( 0 ),
         m_config( &emptyConfig ),
         m_schedulerPlugins(),
+        m_useSharedResources(false),
         m_sharedResourcesLoaded(false),
         m_loadProjectsAtStartup(false)
 {
@@ -64,11 +65,13 @@ Project::Project( ConfigBase &config, Node *parent )
         m_defaultCalendar( 0 ),
         m_config( &config ),
         m_schedulerPlugins(),
+        m_useSharedResources(false),
         m_sharedResourcesLoaded(false),
         m_loadProjectsAtStartup(false)
 {
     debugPlan<<"("<<this<<")";
     init();
+    m_config->setDefaultValues(*this);
 }
 
 Project::Project( ConfigBase &config, bool useDefaultValues, Node *parent )
@@ -77,6 +80,7 @@ Project::Project( ConfigBase &config, bool useDefaultValues, Node *parent )
         m_defaultCalendar( 0 ),
         m_config( &config ),
         m_schedulerPlugins(),
+        m_useSharedResources(false),
         m_sharedResourcesLoaded(false),
         m_loadProjectsAtStartup(false)
 {
