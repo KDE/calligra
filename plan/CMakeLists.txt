@@ -27,12 +27,12 @@ endif()
 # define the version of Plan
 # update these version for every release:
 set(PLAN_YEAR 2018) # update every year
-set(PLAN_VERSION_STRING "3.0.91")
+set(PLAN_VERSION_STRING "3.1.0")
 set(PLAN_STABLE_VERSION_MAJOR 3) # 3 for 3.x, 4 for 4.x, etc.
-set(PLAN_STABLE_VERSION_MINOR 0) # 0 for 3.0, 1 for 3.1, etc.
-set(PLAN_VERSION_RELEASE 90)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+set(PLAN_STABLE_VERSION_MINOR 1) # 0 for 3.0, 1 for 3.1, etc.
+set(PLAN_VERSION_RELEASE 0)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
 #set(PLAN_ALPHA 1) # uncomment only for Alpha
-set(PLAN_BETA 2) # uncomment only for Beta
+#set(PLAN_BETA 2) # uncomment only for Beta
 #set(PLAN_RC 1) # uncomment only for RC
 
 # Define the generic version of the Calligra Plan libraries here
