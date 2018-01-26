@@ -190,8 +190,11 @@ void MainProjectPanel::slotCheckAllFieldsFilled()
 {
     emit changed();
     bool state = !namefield->text().isEmpty();
-    if (!project.isSharedResourcesLoaded()) {
-        state = !useSharedResources->isChecked() || !resourcesFile->text().isEmpty();
+    if (state && useSharedResources->isChecked()) {
+        state = !resourcesFile->text().isEmpty();
+        if (state && projectsLoadAtStartup->isChecked()) {
+            state = !projectsPlace->text().isEmpty();
+        }
     }
     emit obligatedFieldsFilled(state);
 }
