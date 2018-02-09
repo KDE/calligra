@@ -259,6 +259,9 @@ bool PlanTJScheduler::kplatoToTJ()
     addRequests();
     addStartEndJob();
 
+    if (result != -1) {
+        return false;
+    }
     return check();
 }
 
@@ -596,6 +599,7 @@ TJ::Resource *PlanTJScheduler::addResource( KPlato::Resource *r)
         res->setEfficiency( (double)(r->units()) / 100. );
     }
     Calendar *cal = r->calendar();
+    Q_ASSERT(cal);
     DateTime start = qMax( r->availableFrom(), m_project->constraintStartTime() );
     DateTime end = m_project->constraintEndTime();
     if ( r->availableUntil().isValid() && end > r->availableUntil() ) {
@@ -887,6 +891,11 @@ void PlanTJScheduler::addRequest( TJ::Task *job, Task *task )
         return;
     }
     foreach ( ResourceRequest *rr, task->requests().resourceRequests( true /*resolveTeam*/ ) ) {
+        if (!rr->resource()->calendar()) {
+            result = 1; // stops scheduling
+            logError(task, 0, i18n("No working hours defined for resource: %1",rr->resource()->name()));
+            continue; // may happen if no calendar is set, and no default calendar
+        }
         TJ::Resource *tjr = addResource( rr->resource() );
         TJ::Allocation *a = new TJ::Allocation();
         a->setSelectionMode( TJ::Allocation::order );
