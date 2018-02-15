@@ -264,6 +264,9 @@ bool TextDocumentImpl::load(const QUrl& url)
 
 int TextDocumentImpl::currentIndex()
 {
+    if(!d->canvas || !d->canvas->viewConverter()) {
+        return 0;
+    }
     QPointF newPoint = d->canvas->viewConverter()->viewToDocument(canvasController()->documentOffset());
     KWPage page = d->document->pageManager()->page(newPoint.y());
     return page.pageNumber();
