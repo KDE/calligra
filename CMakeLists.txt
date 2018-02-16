@@ -695,7 +695,7 @@ test_big_endian(CMAKE_WORDS_BIGENDIAN)
 ##
 ## Test SharedMimeInfo
 ##
-macro_optional_find_package(SharedMimeInfo)
+macro_optional_find_package(SharedMimeInfo 1.3)
 set_package_properties(SharedMimeInfo PROPERTIES
     PURPOSE "Required to determine file types SVM or all of MSOOXML."
     TYPE RECOMMENDED

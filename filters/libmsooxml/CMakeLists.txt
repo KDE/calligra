@@ -60,11 +60,6 @@ endif()
 set_target_properties(komsooxml PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS komsooxml ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-if (SharedMimeInfo_FOUND)
-    install(FILES msooxml-all.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
-    update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})
-endif()
-
 if (FALSE) # these headers are private for now
 install( FILES
     ${CMAKE_CURRENT_BINARY_DIR}/komsooxml_export.h
