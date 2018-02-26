@@ -3266,6 +3266,7 @@ void NodeItemModel::setScheduleManager( ScheduleManager *sm )
 {
     beginResetModel();
     if (sm == m_nodemodel.manager()) {
+        endResetModel();
         return;
     }
     if ( m_nodemodel.manager() ) {
