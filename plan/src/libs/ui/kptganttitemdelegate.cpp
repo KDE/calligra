@@ -570,6 +570,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt::StyleOp
                 painter->restore();
             }
             const Qt::Alignment ta = qAlignment( opt.displayPosition );
+            painter->setPen(QPen(opt.palette.text().color()));
             painter->drawText( textRect, ta, txt );
         }
         break;
@@ -597,6 +598,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt::StyleOp
             painter->drawPath( path );
             painter->restore();
             const Qt::Alignment ta = qAlignment( opt.displayPosition );
+            painter->setPen(QPen(opt.palette.text().color()));
             painter->drawText( textRect, ta | Qt::AlignVCenter, txt );
         }
         break;
@@ -707,6 +709,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt::StyleOp
             }
 
             const Qt::Alignment ta = qAlignment( opt.displayPosition );
+            painter->setPen(QPen(opt.palette.text().color()));
             painter->drawText( textRect, ta | Qt::AlignVCenter, txt );
         }
         break;
@@ -810,10 +813,12 @@ void GanttItemDelegate::paintConstraintItem( QPainter* painter, const  QStyleOpt
     if ( ! showTaskLinks ) {
         return;
     }
-    if ( ! showCriticalPath ) {
-        return KGantt::ItemDelegate::paintConstraintItem( painter, opt, start, end, constraint );
-    }
     KGantt::Constraint c( constraint );
+    QPen pen(opt.palette.text().color());
+    c.setData( KGantt::Constraint::ValidConstraintPen, pen );
+    if ( ! showCriticalPath ) {
+        return KGantt::ItemDelegate::paintConstraintItem( painter, opt, start, end, c );
+    }
     if ( data( c.startIndex(), NodeModel::NodeCriticalPath ).toBool() &&
          data( c.endIndex(), NodeModel::NodeCriticalPath ).toBool() )
     {
@@ -884,6 +889,7 @@ void ResourceGanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt:
             painter->drawRect( r );
             painter->restore();
             const Qt::Alignment ta = qAlignment( opt.displayPosition );
+            painter->setPen(QPen(opt.palette.text().color()));
             painter->drawText( boundingRect, ta, txt );
         }
         break;
@@ -911,6 +917,7 @@ void ResourceGanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt:
             painter->drawPath( path );
             painter->restore();
             const Qt::Alignment ta = qAlignment( opt.displayPosition );
+            painter->setPen(QPen(opt.palette.text().color()));
             painter->drawText( boundingRect, ta | Qt::AlignVCenter, txt );
         }
         break;
@@ -931,6 +938,7 @@ void ResourceGanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt:
             painter->drawPath( path );
             painter->restore();
             const Qt::Alignment ta = qAlignment( opt.displayPosition );
+            painter->setPen(QPen(opt.palette.text().color()));
             painter->drawText( boundingRect, ta | Qt::AlignVCenter, txt );
         }
         break;
@@ -990,6 +998,7 @@ void ResourceGanttItemDelegate::paintResourceItem( QPainter* painter, const KGan
 
     painter->restore();
     const Qt::Alignment ta = qAlignment( opt.displayPosition );
+    painter->setPen(QPen(opt.palette.text().color()));
     painter->drawText( boundingRect, ta, opt.text );
 }
 
