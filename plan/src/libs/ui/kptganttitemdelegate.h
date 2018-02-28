@@ -82,6 +82,7 @@ protected:
 protected:
     QBrush m_criticalBrush;
     QBrush m_schedulingErrorBrush;
+    qreal m_constraintXOffset;
 
 private:
     Q_DISABLE_COPY(GanttItemDelegate)
