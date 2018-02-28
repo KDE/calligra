@@ -63,7 +63,8 @@ GanttItemDelegate::GanttItemDelegate( QObject *parent )
     showCriticalTasks( false ),
     showAppointments( false ),
     showTimeConstraint( false ),
-    showSchedulingError( false )
+    showSchedulingError( false ),
+    m_constraintXOffset(0.0)
 {
     QLinearGradient b( 0., 0., 0., QApplication::fontMetrics().height() );
     b.setColorAt( 0., Qt::red );
@@ -663,6 +664,11 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt::StyleOp
             }
 
             const qreal delta = static_cast< int >( ( itemRect.height() - pw ) / 2 );
+            // HACK: KGantt uses constraint start/end for more than painting,
+            // so to avoid mudling the waters we store an offset here to enable
+            // us to not paint the constraint on top/under the milestone.
+            // This only works if we use the same delegate to paint constraints, of course...
+            m_constraintXOffset = delta;
             QPainterPath path;
             path.moveTo( 0., 0. );
             path.lineTo( delta, delta );
@@ -815,19 +821,41 @@ void GanttItemDelegate::paintConstraintItem( QPainter* painter, const  QStyleOpt
     }
     KGantt::Constraint c( constraint );
     QPen pen(opt.palette.text().color());
-    c.setData( KGantt::Constraint::ValidConstraintPen, pen );
-    if ( ! showCriticalPath ) {
-        return KGantt::ItemDelegate::paintConstraintItem( painter, opt, start, end, c );
-    }
-    if ( data( c.startIndex(), NodeModel::NodeCriticalPath ).toBool() &&
+    if ( showCriticalPath &&
+         data( c.startIndex(), NodeModel::NodeCriticalPath ).toBool() &&
          data( c.endIndex(), NodeModel::NodeCriticalPath ).toBool() )
     {
         //debugPlan<<data( c.startIndex(), NodeModel::NodeName ).toString()<<data( c.endIndex(), NodeModel::NodeName ).toString()<<"critical path";
-        QPen pen( Qt::red );
-        c.setData( KGantt::Constraint::ValidConstraintPen, pen );
+        pen = QPen( Qt::red );
         // FIXME How to make sure it's not obscured by other constraints?
     }
-    KGantt::ItemDelegate::paintConstraintItem( painter, opt, start, end, c );
+    c.setData( KGantt::Constraint::ValidConstraintPen, pen );
+    c.setData( KGantt::Constraint::InvalidConstraintPen, pen );
+    QPointF sp = start;
+    QPointF ep = end;
+    // HACK: to fix painting of dependencies ending at a milestone
+    if (m_constraintXOffset != 0.0) {
+        switch (constraint.relationType()) {
+            case KGantt::Constraint::FinishStart:
+            case KGantt::Constraint::StartStart: {
+                QModelIndex idx = constraint.endIndex();
+                idx = idx.sibling(idx.row(), NodeModel::NodeType);
+                if (idx.data(KGantt::ItemTypeRole).toInt() == KGantt::TypeEvent) {
+                    ep.setX(ep.x() - m_constraintXOffset);
+                }
+                break;
+            }
+            case KGantt::Constraint::FinishFinish:
+            case KGantt::Constraint::StartFinish:
+                QModelIndex idx = constraint.endIndex();
+                idx = idx.sibling(idx.row(), NodeModel::NodeType);
+                if (idx.data(KGantt::ItemTypeRole).toInt() == KGantt::TypeEvent) {
+                    ep.setX(ep.x() + m_constraintXOffset);
+                }
+                break;
+        }
+    }
+    KGantt::ItemDelegate::paintConstraintItem( painter, opt, sp, ep, c );
 }
 
 //------------------------
