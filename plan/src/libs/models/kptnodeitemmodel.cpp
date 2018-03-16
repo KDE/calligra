@@ -4418,6 +4418,10 @@ QVariant GanttItemModel::data( const QModelIndex &index, int role ) const
             return 0; // task of some type
         }
         if ( idx.column() == NodeModel::NodeType && role == KGantt::ItemTypeRole ) {
+            QModelIndex notScheduled = idx.sibling(idx.row(), NodeModel::NodeNotScheduled);
+            if (notScheduled.data(Qt::EditRole).toBool()) {
+                return QVariant();
+            }
             QVariant result = NodeItemModel::data( idx, Qt::EditRole );
             switch ( result.toInt() ) {
                 case Node::Type_Project: return KGantt::TypeSummary;
