@@ -28,6 +28,7 @@
 #include "kptcontext.h"
 #include "kptviewbase.h"
 
+#include <QActionGroup>
 #include <QDockWidget>
 #include <QMap>
 

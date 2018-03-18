@@ -24,6 +24,7 @@
 
 // Qt
 #include <QAbstractItemModel>
+#include <QAction>
 
 // Calligra
 #include <KoIcon.h>

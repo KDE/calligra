@@ -28,6 +28,8 @@
 
 #include <kundo2command.h>
 
+#include <QButtonGroup>
+
 KWRunAroundProperties::KWRunAroundProperties(FrameConfigSharedState *state)
         : m_state(state)
 {

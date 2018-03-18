@@ -30,6 +30,7 @@
 #include <QWidgetAction>
 #include <QTableWidget>
 #include <QAction>
+#include <QHeaderView>
 #include <QMenu>
 
 FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )

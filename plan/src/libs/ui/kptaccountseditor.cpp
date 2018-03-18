@@ -40,6 +40,7 @@
 #include <QContextMenuEvent>
 #include <QMenu>
 #include <QAction>
+#include <QHeaderView>
 
 #include <KLocalizedString>
 #include <kactioncollection.h>

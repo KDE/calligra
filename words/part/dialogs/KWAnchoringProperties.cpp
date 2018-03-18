@@ -35,6 +35,7 @@
 
 #include <kundo2command.h>
 
+#include <QButtonGroup>
 #include <QComboBox>
 
 const int KWAnchoringProperties::vertRels[4][20] = {

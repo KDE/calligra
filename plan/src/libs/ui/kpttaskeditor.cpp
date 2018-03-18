@@ -45,6 +45,7 @@
 #include <QVBoxLayout>
 #include <QDragMoveEvent>
 #include <QAction>
+#include <QHeaderView>
 #include <QMenu>
 
 #include <kactionmenu.h>
