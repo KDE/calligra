@@ -622,7 +622,7 @@ void TaskEditor::slotContextMenuRequested( const QModelIndex& index, const QPoin
 void TaskEditor::editTasks(const QList<Task*> &tasks, const QPoint &pos)
 {
     QList<QAction*> lst;
-    QAction tasksEdit(QStringLiteral("Edit..."), nullptr);
+    QAction tasksEdit(i18n( "Edit..."), nullptr);
     if (!tasks.isEmpty()) {
         TasksEditController *ted = new TasksEditController(*project(), tasks, this);
         connect(&tasksEdit, SIGNAL(triggered(bool)), ted, SLOT(activate()));
