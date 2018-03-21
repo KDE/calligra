@@ -182,18 +182,9 @@ PlotArea::Private::Private(PlotArea *q, ChartShape *parent)
     gridAttributes.setGridVisible(false);
     gridAttributes.setGridGranularitySequence(KChartEnums::GranularitySequence_10_50);
     kdCartesianPlanePrimary->setGlobalGridAttributes(gridAttributes);
-    // Old workaround for broken behaviour in CartesianCoordinatePlane::drawingArea()
-    // with a custom patch to the local KChart copy:
-    // Disable odd default of (1, 1, -3, -3) which only produces weird offsets
-    // between axes and plot area frame.
-    // kdCartesianPlanePrimary->setDrawingAreaMargins(0, 0, 0, 0);
-    // TODO: Needs proper fixing in KChart in general
 
     // --- Prepare Secondary Cartesian Coordinate Plane ---
     kdCartesianPlaneSecondary->setGlobalGridAttributes(gridAttributes);
-    // TODO: Needs proper fixing in KChart in general
-    // see similar call a few lines above
-    // kdCartesianPlaneSecondary->setDrawingAreaMargins(0, 0, 0, 0);
 
     // --- Prepare Polar Coordinate Plane ---
     KChart::GridAttributes polarGridAttributes;
