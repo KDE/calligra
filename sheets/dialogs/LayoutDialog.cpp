@@ -36,6 +36,7 @@
 #include <math.h>
 
 #include <QIntValidator>
+#include <QButtonGroup>
 #include <QCheckBox>
 #include <QFrame>
 #include <QLabel>

@@ -21,6 +21,7 @@
 #include "KoCsvImportDialog.h"
 
 // Qt
+#include <QButtonGroup>
 #include <QTextCodec>
 #include <QTextStream>
 

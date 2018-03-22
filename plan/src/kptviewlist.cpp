@@ -25,6 +25,7 @@
 #include <QStyle>
 #include <QBrush>
 #include <QContextMenuEvent>
+#include <QHeaderView>
 #include <QMenu>
 
 #include <kmessagebox.h>

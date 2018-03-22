@@ -31,6 +31,7 @@
 #include <KFile>
 
 #include <QAction>
+#include <QHeaderView>
 #include <QTreeView>
 #include <QStandardItemModel>
 #include <QModelIndex>

@@ -26,6 +26,7 @@
 
 #include "kptdocuments.h"
 
+#include <QModelIndexList>
 #include <QWidget>
 #include <kundo2qstack.h>
 
