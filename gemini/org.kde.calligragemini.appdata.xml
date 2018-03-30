@@ -6,6 +6,7 @@
   <name>Gemini</name>
   <name xml:lang="ca">Gemini</name>
   <name xml:lang="ca-valencia">Gemini</name>
+  <name xml:lang="cs">Blíženec</name>
   <name xml:lang="de">Gemini</name>
   <name xml:lang="en-GB">Gemini</name>
   <name xml:lang="es">Gemini</name>
@@ -22,6 +23,7 @@
   <summary>Office Suite</summary>
   <summary xml:lang="ca">Suite d'oficina</summary>
   <summary xml:lang="ca-valencia">Suite d'oficina</summary>
+  <summary xml:lang="cs">Kancelářská sada</summary>
   <summary xml:lang="de">Büroprogramme</summary>
   <summary xml:lang="en-GB">Office Suite</summary>
   <summary xml:lang="es">Suite ofimática</summary>
@@ -151,6 +153,7 @@
       <li>Standard file format</li>
       <li xml:lang="ca">Format estàndard de fitxer</li>
       <li xml:lang="ca-valencia">Format estàndard de fitxer</li>
+      <li xml:lang="cs">Standardní formát souboru</li>
       <li xml:lang="en-GB">Standard file format</li>
       <li xml:lang="es">Formato de archivos estándar</li>
       <li xml:lang="it">Formato standard dei file</li>
