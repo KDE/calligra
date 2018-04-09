@@ -21,10 +21,11 @@
 #define FLOWFACTORY_H
 
 #include <kpluginfactory.h>
-#include "flow_export.h"
+#include "flow_generated_export.h"
 
 class KComponentData;
 class KAboutData;
+class KoComponentData;
 
 class FLOW_EXPORT FlowFactory : public KPluginFactory
 {
@@ -32,19 +33,14 @@ class FLOW_EXPORT FlowFactory : public KPluginFactory
 
   public:
     explicit FlowFactory();
-    ~FlowFactory();
+    ~FlowFactory() override;
 
 
-    virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
+    QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword) override;
 
-    static const KComponentData &componentData();
-
-    /// Creates a KAboutData but doesn't keep ownership
-    static KAboutData* aboutData();
-
-  private:
-    static KComponentData* s_instance;
-    static KAboutData* s_aboutData;
+    static const KoComponentData &global();
+private:
+    static KoComponentData* s_global;
 };
 
 #endif

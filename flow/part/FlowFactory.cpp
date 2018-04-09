@@ -25,19 +25,17 @@
 
 #include <KoPluginLoader.h>
 
-#include <kcomponentdata.h>
-#include <kstandarddirs.h>
 #include <kiconloader.h>
+#include <KoComponentData.h>
 
-KComponentData* FlowFactory::s_instance = 0;
-KAboutData* FlowFactory::s_aboutData = 0;
+KoComponentData* FlowFactory::s_global = nullptr;
 
 static int factoryCount = 0;
 
 FlowFactory::FlowFactory()
     : KPluginFactory()
 {
-    (void) componentData();
+    (void)global();
 
     if (factoryCount == 0) {
 
@@ -52,10 +50,6 @@ FlowFactory::FlowFactory()
 
 FlowFactory::~FlowFactory()
 {
-  delete s_instance;
-  s_instance = 0;
-  delete s_aboutData;
-  s_aboutData = 0;
 }
 
 QObject* FlowFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent,
@@ -65,31 +59,25 @@ QObject* FlowFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, 
     Q_UNUSED( keyword );
     FlowPart *part = new FlowPart(parent);
     FlowDocument* doc = new FlowDocument(part);
-    doc->setDefaultStylesResourcePath(QLatin1String("flow/styles/"));
+    doc->setDefaultStylesResourcePath(QStringLiteral("flow/styles/"));
     part->setDocument(doc);
 
     return part;
 }
 
-const KComponentData &FlowFactory::componentData()
+const KoComponentData &FlowFactory::global()
 {
-  if (!s_instance) {
-    s_instance = new KComponentData(aboutData());
+    if (!s_global) {
+        KAboutData *about = newFlowAboutData();
+        s_global = new KoComponentData(*about);
+        delete about;
 
-    s_instance->dirs()->addResourceType("app_shape_collections", "data", "flow/stencils/");
-    KIconLoader::global()->addAppDir("calligra");
-  }
+        // Add any application-specific resource directories here
 
-  return *s_instance;
-}
-
-KAboutData* FlowFactory::aboutData()
-{
-  if(!s_aboutData) {
-    s_aboutData = newFlowAboutData();
-  }
-
-  return s_aboutData;
+        // Tell the iconloader about share/apps/calligra/icons
+        KIconLoader::global()->addAppDir(QStringLiteral("calligra"));
+    }
+    return *s_global;
 }
 
 #include "FlowFactory.moc"

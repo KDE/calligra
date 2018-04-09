@@ -23,7 +23,7 @@
 #define FLOWDOCUMENT_H
 
 #include <KoPADocument.h>
-#include "flow_export.h"
+#include "flow_generated_export.h"
 
 #define FLOW_MIME_TYPE "application/vnd.oasis.opendocument.graphics"
 
@@ -37,15 +37,15 @@ public:
     explicit FlowDocument(KoPart *part);
     ~FlowDocument();
 
-    virtual KoOdf::DocumentType documentType() const;
+    KoOdf::DocumentType documentType() const override;
 
 
     /// reimplemented from KoDocument
-    virtual QByteArray nativeFormatMimeType() const { return FLOW_MIME_TYPE; }
+    QByteArray nativeFormatMimeType() const override { return FLOW_MIME_TYPE; }
     /// reimplemented from KoDocument
-    virtual QByteArray nativeOasisMimeType() const {return FLOW_MIME_TYPE;}
+    QByteArray nativeOasisMimeType() const override {return FLOW_MIME_TYPE;}
     /// reimplemented from KoDocument
-    virtual QStringList extraNativeMimeTypes() const
+    QStringList extraNativeMimeTypes() const override
     {
         return QStringList() << "application/vnd.oasis.opendocument.graphics-template";
     }

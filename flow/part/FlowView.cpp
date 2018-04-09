@@ -24,7 +24,7 @@
 
 #include <KoSelection.h>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kactioncollection.h>
 
 FlowView::FlowView(FlowPart *part, FlowDocument* document, QWidget* parent)
@@ -32,7 +32,7 @@ FlowView::FlowView(FlowPart *part, FlowDocument* document, QWidget* parent)
 {
     Q_ASSERT(m_document);
 
-    setXMLFile("flow.rc");
+    setXMLFile(QStringLiteral("flow.rc"));
 
     initializeActions();
     initializeGUI();
@@ -57,8 +57,8 @@ void FlowView::initializeGUI()
 
 void FlowView::initializeActions()
 {
-    actionCollection()->action("configure")->setText(i18n("Configure Flow..."));
-    actionCollection()->action("configure")->setMenuRole(QAction::PreferencesRole);
+    actionCollection()->action(QStringLiteral("configure"))->setText(i18n("Configure Flow..."));
+    actionCollection()->action(QStringLiteral("configure"))->setMenuRole(QAction::PreferencesRole);
 }
 
 void FlowView::updateGui()

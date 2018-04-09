@@ -1,7 +1,5 @@
 /* This file is part of the KDE project
    Copyright (C)  2006 Peter Simonsson <peter.simonsson@gmail.com>
-   Copyright (C)  2007 Thorsten Zachmann <zachmann@kde.okde.org>
-   Copyright (C) 2010 Boudewijn Rempt <boud@valdyas.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,30 +16,20 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+#ifndef FLOWFACTORYINIT_H
+#define FLOWFACTORYINIT_H
 
-#include "FlowDocument.h"
+#include <FlowFactory.h>
 
-#include "FlowView.h"
-#include "FlowFactory.h"
-
-FlowDocument::FlowDocument(KoPart *part)
-  : KoPADocument(part)
+class FlowFactoryInit : public FlowFactory
 {
-}
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID KPluginFactory_iid FILE "flowpart.json")
+    Q_INTERFACES(KPluginFactory)
 
-FlowDocument::~FlowDocument()
-{
-}
+public:
+    explicit FlowFactoryInit() : FlowFactory() {}
+    virtual ~FlowFactoryInit() {}
+};
 
-KoOdf::DocumentType FlowDocument::documentType() const
-{
-    return KoOdf::Graphics;
-}
-
-const char * FlowDocument::odfTagName(bool withNamespace)
-{
-    return withNamespace ? "office:drawing": "drawing";
-}
-
-
-#include "FlowDocument.moc"
+#endif

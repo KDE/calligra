@@ -22,7 +22,7 @@
 
 #include <KoPart.h>
 
-#include "flow_export.h"
+#include "flow_generated_export.h"
 
 class FlowDocument;
 class QGraphicsItem;

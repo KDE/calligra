@@ -17,8 +17,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <kcmdlineargs.h>
-
 #include <KoApplication.h>
 #include <Calligra2Migration.h>
 #include <memory>
@@ -26,17 +24,9 @@
 #include "FlowAboutData.h"
 #include "FlowDocument.h"
 
-extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
+extern "C" Q_DECL_EXPORT int kdemain( int argc, char* argv[] )
 {
-  std::auto_ptr<KAboutData> about( newFlowAboutData() );
-  KCmdLineArgs::init( argc, argv, about.get() );
-
-  KCmdLineOptions options;
-  options.add("+[file]", ki18n("File to open"));
-  KCmdLineArgs::addCmdLineOptions( options );
-
-  KoApplication app(FLOW_MIME_TYPE);
-
+  KoApplication app(QByteArray(FLOW_MIME_TYPE), QStringLiteral("calligraflow"), newFlowAboutData, argc, argv);
   // Migrate data from kde4 to kf5 locations
   Calligra2Migration m("flow");
   m.setConfigFiles(QStringList() << QStringLiteral("flowrc"));
@@ -45,7 +35,5 @@ extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
 
   if (!app.start())
       return 1;
-  app.exec();
-
-  return 0;
+  return app.exec();
 }

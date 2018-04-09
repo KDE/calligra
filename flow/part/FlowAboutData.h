@@ -21,25 +21,32 @@
 #define FLOWABOUTDATA_H
 
 #include <kaboutdata.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <calligraversion.h>
-
-static const char FLOW_DESCRIPTION[] = I18N_NOOP("Calligra Flowchart And Diagram Tool");
-static const char FLOW_VERSION[] = CALLIGRA_VERSION_STRING;
+#include <kcoreaddons_version.h>
 
 KAboutData* newFlowAboutData()
 {
-  KAboutData* aboutData = new KAboutData("flow", 0, ki18nc("application name", "Flow"),
-                                FLOW_VERSION, ki18n(FLOW_DESCRIPTION), KAboutData::License_LGPL,
-                                ki18n("© 2000-%1, The Flow Team").subs(CALLIGRA_YEAR),
-                                KLocalizedString(),
-                                "https://www.calligra.org/flow/");
-  aboutData->setProductName("calligraflow"); // for bugs.kde.org
-  aboutData->setProgramIconName(QLatin1String("calligraflow"));
-  aboutData->addAuthor(ki18n("Yue Liu"), ki18n("Maintainer"), "yue.liu@mail.com");
-  aboutData->addAuthor(ki18n("Peter Simonsson"), ki18n("Former Maintainer"), "peter.simonsson@gmail.com");
-
-  return aboutData;
+    KAboutData *aboutData = new KAboutData(
+        QStringLiteral("flow"),
+        i18n("Flow"),
+        QStringLiteral(CALLIGRA_VERSION_STRING),
+        i18n("Calligra Flowchart And Diagram Tool"),
+        KAboutLicense::LGPL,
+        i18n("(c) 2001-2018, The Flow Team"),
+        i18n("Unmaintained at the time of release of this version. The Calligra community welcomes interested persons to take over maintainership."),
+        QStringLiteral("https://www.calligra.org/karbon/"));
+    aboutData->setProductName("flow"); // for bugs.kde.org
+    aboutData->setOrganizationDomain("kde.org");
+#if KCOREADDONS_VERSION >= 0x051600
+    aboutData->setDesktopFileName(QStringLiteral("org.kde.flow"));
+#endif
+    aboutData->addAuthor(i18n("Yue Liu"), i18n("Maintainer"), QStringLiteral("yue.liu@mail.com"));
+    aboutData->addAuthor(i18n("Peter Simonsson"), i18n("Former Maintainer"), QStringLiteral("peter.simonsson@gmail.com"));
+    aboutData->addAuthor(i18n("Laurent Montel"), i18n("KF5 Porting"), QStringLiteral("montel@kde.org"));
+    aboutData->setTranslator(i18nc("NAME OF TRANSLATORS", "Your names"),
+                             i18nc("EMAIL OF TRANSLATORS", "Your emails"));
+    return aboutData;
 }
 
 #endif

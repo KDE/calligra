@@ -15,7 +15,12 @@ set(flowprivate_LIB_SRCS
 
 add_library(flowprivate SHARED ${flowprivate_LIB_SRCS})
 
-target_link_libraries(flowprivate kopageapp)
+generate_export_header(flowprivate
+    BASE_NAME flow
+    EXPORT_FILE_NAME flow_generated_export.h
+    )
+
+target_link_libraries(flowprivate kopageapp KF5::KDELibs4Support koplugin)
 target_link_libraries(flowprivate LINK_INTERFACE_LIBRARIES kopageapp)
 
 set_target_properties(flowprivate PROPERTIES
@@ -27,6 +32,8 @@ install(TARGETS flowprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 set(flowpart_PART_SRCS FlowFactoryInit.cpp )
 
 add_library(flowpart MODULE ${flowpart_PART_SRCS})
+
+calligra_part_desktop_to_json(flowpart flowpart.desktop)
 
 target_link_libraries(flowpart flowprivate)
 

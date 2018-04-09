@@ -22,18 +22,19 @@
 #include "FlowView.h"
 #include "FlowDocument.h"
 #include "FlowFactory.h"
+#include <KComponentData>
 
 #include <KoPACanvasItem.h>
 #include <KoCanvasBase.h>
 #include <KoShapeRegistry.h>
+#include <KoComponentData.h>
 
 #include <kmessagebox.h>
 
 FlowPart::FlowPart(QObject *parent)
-    : KoPart(parent)
+    : KoPart(FlowFactory::global(), parent)
 {
-    setTemplatesResourcePath(QLatin1String("flow/templates/"));
-    setComponentData(FlowFactory::componentData());
+    setTemplatesResourcePath(QStringLiteral("flow/templates/"));
 }
 
 FlowPart::~FlowPart()
@@ -70,19 +71,19 @@ void FlowPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
     bool error = false;
     KoShapeFactoryBase *factory;
 
-    factory = KoShapeRegistry::instance()->value("TextShapeID");
+    factory = KoShapeRegistry::instance()->value(QStringLiteral("TextShapeID"));
     if (!factory) {
         m_errorMessage = i18n("Can not find needed text component, Calligra Flow will quit now.");
         error = true;
     }
-    factory = KoShapeRegistry::instance()->value("PictureShape");
+    factory = KoShapeRegistry::instance()->value(QStringLiteral("PictureShape"));
     if (!factory) {
         m_errorMessage = i18n("Can not find needed picture component, Calligra Flow will quit now.");
         error = true;
     }
 
     if (error) {
-        QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
+        QTimer::singleShot(0, this, &FlowPart::showErrorAndDie);
     } else {
         KoPart::showStartUpWidget(parent, alwaysShow);
     }
@@ -90,7 +91,7 @@ void FlowPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
 
 void FlowPart::showErrorAndDie()
 {
-    KMessageBox::error(0, m_errorMessage, i18n( "Installation Error"));
+    KMessageBox::error(nullptr, m_errorMessage, i18n( "Installation Error"));
     // This means "the environment is incorrect" on Windows
     // FIXME: Is this uniform on all platforms?
     QCoreApplication::exit(10);
