@@ -36,6 +36,9 @@ Page {
             }
         }
         if(viewLoader.item) {
+            if(fileName[0] !== "/") {
+                fileName = "/" + fileName;
+            }
             if(fileName.indexOf("://") > 0) {
                 viewLoader.item.source = fileName;
             } else {
