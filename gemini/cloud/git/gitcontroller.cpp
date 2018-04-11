@@ -675,7 +675,7 @@ void GitController::commitAndPushCurrentFile()
         // we explicitly leave the action enabled here because we want the user to be able to
         // regret their cancellation and commit anyway
         if(ok) {
-            qDebug() << "Attempting to push" << d->currentFile "in the clone dir" << d->cloneDir;
+            qDebug() << "Attempting to push" << d->currentFile << "in the clone dir" << d->cloneDir;
             emit operationBegun(QString("Pushing local changes to remote storage"));
             d->opThread = new GitOpsThread(d->privateKey, d->publicKey, d->userForRemote, d->needsPrivateKeyPassphrase, d->signature, d->cloneDir, GitOpsThread::PushOperation, d->currentFile, message, this);
             connect(d->opThread, SIGNAL(destroyed()), this, SLOT(clearOpThread()));
