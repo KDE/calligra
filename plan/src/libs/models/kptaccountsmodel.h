@@ -111,14 +111,25 @@ private:
 class KPLATOMODELS_EXPORT CostBreakdownItemModel : public ItemModelBase
 {
     Q_OBJECT
+    Q_ENUMS( Properties )
 public:
     enum PeriodType { Period_Day = 0, Period_Week = 1, Period_Month = 2 };
     enum StartMode { StartMode_Project = 0, StartMode_Date = 1 };
     enum EndMode { EndMode_Project = 0, EndMode_Date = 1, EndMode_CurrentDate = 2 };
     enum ShowMode { ShowMode_Actual = 0, ShowMode_Planned = 1, ShowMode_Both = 2, ShowMode_Deviation = 3 };
-    
+
     explicit CostBreakdownItemModel( QObject *parent = 0 );
     ~CostBreakdownItemModel();
+
+    enum Properties {
+        Name = 0,
+        Description,
+        Total,
+        Planned,
+        Actual
+    };
+    const QMetaEnum columnMap() const;
+    int propertyCount() const;
 
     virtual void setProject( Project *project );
     virtual void setScheduleManager( ScheduleManager *sm );

@@ -51,14 +51,14 @@ AccountsTreeView::AccountsTreeView( QWidget *parent )
     
     QHeaderView *v = m_leftview->header();
     v->setStretchLastSection( false );
-    v->setSectionResizeMode( 1, QHeaderView::Stretch );
-    v->setSectionResizeMode ( 2, QHeaderView::ResizeToContents );
+    v->setSectionResizeMode( CostBreakdownItemModel::Description, QHeaderView::Stretch );
+    v->setSectionResizeMode ( CostBreakdownItemModel::Total, QHeaderView::ResizeToContents );
     
     v = m_rightview->header();
     v->setSectionResizeMode ( QHeaderView::ResizeToContents );
     v->setStretchLastSection( false );
-            
-    hideColumns( m_rightview, QList<int>() << 0 << 1 << 2 );
+
+    m_leftHidden = QList<int>() << CostBreakdownItemModel::Planned << CostBreakdownItemModel::Actual << -1;
     slotModelReset();
     
     connect( m, SIGNAL(modelReset()), SLOT(slotModelReset()) );
@@ -76,11 +76,16 @@ AccountsTreeView::AccountsTreeView( QWidget *parent )
 
 void AccountsTreeView::slotModelReset()
 {
-    hideColumns( m_leftview, QList<int>() << 3 << -1 );
+    hideColumns( m_leftHidden );
     QHeaderView *v = m_leftview->header();
     debugPlan<<v->sectionSize(2)<<v->sectionSizeHint(2)<<v->defaultSectionSize()<<v->minimumSectionSize();
 
-    hideColumns( m_rightview, QList<int>() << 0 << 1 << 2 );
+    CostBreakdownItemModel *m = static_cast<CostBreakdownItemModel*>(model());
+    QList<int> cols;
+    for (int c = 0; c < m->propertyCount(); ++c) {
+        cols << c;
+    }
+    hideColumns( m_rightview,  cols);
 }
 
 CostBreakdownItemModel *AccountsTreeView::model() const
@@ -166,7 +171,10 @@ AccountsView::AccountsView(KoPart *part, Project *project, KoDocument *doc, QWid
     init();
 
     setupGui();
-    
+
+    connect(this, SIGNAL(expandAll()), m_view, SLOT(slotExpand()));
+    connect(this, SIGNAL(collapseAll()), m_view, SLOT(slotCollapse()));
+
     connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint,QModelIndexList)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
     
     connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );

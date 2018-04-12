@@ -480,6 +480,16 @@ CostBreakdownItemModel::~CostBreakdownItemModel()
 {
 }
 
+const QMetaEnum CostBreakdownItemModel::columnMap() const
+{
+    return metaObject()->enumerator( metaObject()->indexOfEnumerator("Properties") );
+}
+
+int CostBreakdownItemModel::propertyCount() const
+{
+    return columnMap().keyCount();
+}
+
 void CostBreakdownItemModel::slotAccountToBeInserted( const Account *parent, int row )
 {
     //debugPlan<<parent->name();
@@ -691,7 +701,7 @@ QModelIndex CostBreakdownItemModel::index( const Account *account ) const
 
 int CostBreakdownItemModel::columnCount( const QModelIndex & ) const
 {
-    int c = 3;
+    int c = propertyCount();
     if ( startDate().isValid() && endDate().isValid() ) {
         switch ( m_periodtype ) {
             case Period_Day: {
@@ -758,13 +768,17 @@ QVariant CostBreakdownItemModel::data( const QModelIndex &index, int role ) cons
     }
     if ( role == Qt::DisplayRole ) {
         switch ( index.column() ) {
-            case 0: return a->name();
-            case 1: return a->description();
-            case 2: {
+            case Name: return a->name();
+            case Description: return a->description();
+            case Total: {
                 return formatMoney( m_plannedCostMap.value( a ).totalCost(), m_actualCostMap.value( a ).totalCost() );
             }
+            case Planned:
+                return m_project->locale()->formatMoney( m_plannedCostMap.value( a ).totalCost(), "", 0 );
+            case Actual:
+                return m_project->locale()->formatMoney( m_actualCostMap.value( a ).totalCost(), "", 0 );
             default: {
-                int col = index.column() - 3;
+                int col = index.column() - propertyCount();
                 EffortCostMap pc = m_plannedCostMap.value( a );
                 EffortCostMap ac = m_actualCostMap.value( a );
                 switch ( m_periodtype ) {
@@ -833,23 +847,27 @@ QVariant CostBreakdownItemModel::data( const QModelIndex &index, int role ) cons
         }
     } else if ( role == Qt::ToolTipRole ) {
         switch ( index.column() ) {
-            case 0: return a->name();
-            case 1: return a->description();
-            case 2: {
+            case Name: return a->name();
+            case Description: return a->description();
+            case Total: {
                 double act = m_actualCostMap.value( a ).totalCost();
                 double pl = m_plannedCostMap.value( a ).totalCost();
                 return i18n( "Actual total cost: %1, planned total cost: %2", m_project->locale()->formatMoney( act, "", 0 ), m_project->locale()->formatMoney( pl, "", 0 ) );
             }
+            case Planned:
+            case Actual:
             default: break;
         }
     } else if ( role == Qt::TextAlignmentRole ) {
         return headerData( index.column(), Qt::Horizontal, role );
     } else {
         switch ( index.column() ) {
-            case 0:
-            case 1: return QVariant();
+            case Name:
+            case Description:
+            case Planned:
+            case Actual: return QVariant();
             default: {
-                return cost( a, index.column() - 3, role );
+                return cost( a, index.column() - propertyCount(), role );
             }
         }
     }
@@ -1031,16 +1049,15 @@ QVariant CostBreakdownItemModel::headerData( int section, Qt::Orientation orient
 {
     if ( orientation == Qt::Horizontal ) {
         if ( role == Qt::DisplayRole ) {
-            if ( section == 0 ) {
-                return i18n( "Name" );
+            switch (section) {
+                case Name: return i18n( "Name" );
+                case Description: return i18n( "Description" );
+                case Total: return i18n( "Total" );
+                case Planned: return i18n("Planned");
+                case Actual: return i18n("Actual");
+                default: break;
             }
-            if ( section == 1 ) {
-                return i18n( "Description" );
-            }
-            if ( section == 2 ) {
-                return i18n( "Total" );
-            }
-            int col = section - 3;
+            int col = section - propertyCount();
             switch ( m_periodtype ) {
                 case Period_Day: {
                     return startDate().addDays( col ).toString( Qt::ISODate );
@@ -1064,16 +1081,15 @@ QVariant CostBreakdownItemModel::headerData( int section, Qt::Orientation orient
             return QVariant();
         }
         if ( role == Qt::EditRole ) {
-            if ( section == 0 ) {
-                return "Name";
+            switch (section) {
+                case Name: return QStringLiteral( "Name" );
+                case Description: return QStringLiteral( "Description" );
+                case Total: return QStringLiteral( "Total" );
+                case Planned: return QStringLiteral("Planned");
+                case Actual: return QStringLiteral("Actual");
+                default: break;
             }
-            if ( section == 1 ) {
-                return "Description";
-            }
-            if ( section == 2 ) {
-                return "Total";
-            }
-            int col = section - 3;
+            int col = section - propertyCount();
             switch ( m_periodtype ) {
                 case Period_Day: {
                     return startDate().addDays( col );
@@ -1098,16 +1114,18 @@ QVariant CostBreakdownItemModel::headerData( int section, Qt::Orientation orient
         }
         if ( role == Qt::ToolTipRole ) {
             switch ( section ) {
-                case 0: return ToolTip::accountName();
-                case 1: return ToolTip::accountDescription();
-                case 2: return i18n( "The total cost for the account shown as: Actual cost [ Planned cost ]" );
+                case Name: return ToolTip::accountName();
+                case Description: return ToolTip::accountDescription();
+                case Total: return i18n( "The total cost for the account shown as: Actual cost [ Planned cost ]" );
+                case Planned:
+                case Actual:
                 default: return QVariant();
             }
         }
         if ( role == Qt::TextAlignmentRole ) {
             switch ( section ) {
-                case 0: return QVariant();
-                case 1: return QVariant();
+                case Name: return QVariant();
+                case Description: return QVariant();
                 default: return (int)(Qt::AlignRight|Qt::AlignVCenter);
             }
             return QVariant();

@@ -66,6 +66,8 @@ public:
 protected Q_SLOTS:
     void slotModelReset();
 
+private:
+    QList<int> m_leftHidden;
 };
 
 class KPLATOUI_EXPORT AccountsView : public ViewBase
