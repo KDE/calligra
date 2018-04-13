@@ -519,8 +519,6 @@ ChartConfigWidget::ChartConfigWidget()
     // "Legend" tab
     connect(d->ui.legendTitle, SIGNAL(textChanged(QString)),
             this, SIGNAL(legendTitleChanged(QString)));
-    connect(d->ui.legendShowFrame, SIGNAL(toggled(bool)),
-            this, SIGNAL(legendShowFrameChanged(bool)));
     connect(d->ui.legendOrientationIsVertical, SIGNAL(toggled(bool)),
             this, SLOT(setLegendOrientationIsVertical(bool)));
 
@@ -1258,10 +1256,6 @@ void ChartConfigWidget::update()
 
         d->ui.legendTitle->blockSignals(true);
         d->ui.legendTitle->setText(d->shape->legend()->title());
-        d->ui.legendTitle->blockSignals(false);
-
-        d->ui.legendTitle->blockSignals(true);
-        d->ui.legendShowFrame->setChecked(d->shape->legend()->showFrame());
         d->ui.legendTitle->blockSignals(false);
 
         if (d->shape->legend()->expansion() == HighLegendExpansion) {

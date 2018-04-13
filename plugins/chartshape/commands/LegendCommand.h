@@ -74,7 +74,6 @@ public:
     void setLegendFixedPosition(Position);
     void setLegendBackgroundColor(QColor &color);
     void setLegendFrameColor(QColor &color);*/
-    void setLegendShowFrame(bool show);
 
 private:
     Legend *m_legend;
@@ -86,8 +85,6 @@ private:
     int m_newFontSize;
     LegendExpansion m_oldExpansion;
     LegendExpansion m_newExpansion;
-    bool m_oldShowFrame;
-    bool m_newShowFrame;
     ChartShape *m_chart;
 };
 

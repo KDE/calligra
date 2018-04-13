@@ -70,9 +70,6 @@ public:
 
     // Properties of the Legend
     QString title;
-    bool showFrame;
-    QPen framePen;
-    QBrush backgroundBrush;
     LegendExpansion expansion;
     Position position;
     QFont font;
@@ -95,9 +92,6 @@ public:
 Legend::Private::Private()
 {
     lineBorder = new KoShapeStroke(0.5, Qt::black);
-    showFrame = false;
-    framePen = QPen();
-    backgroundBrush = QBrush();
     expansion = HighLegendExpansion;
     alignment = Qt::AlignCenter;
     pixmapRepaintRequested = true;
@@ -122,6 +116,11 @@ Legend::Legend(ChartShape *parent)
 
     d->kdLegend = new KChart::Legend();
     d->kdLegend->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+
+    // we use the shape to display frame and background
+    KChart::FrameAttributes frameAttr = d->kdLegend->frameAttributes();
+    frameAttr.setVisible(false);
+    d->kdLegend->setFrameAttributes(frameAttr);
 
     setTitleFontSize(10);
     setTitle(QString());
@@ -156,94 +155,6 @@ void Legend::setTitle(const QString &title)
     d->pixmapRepaintRequested = true;
 
     emit updateConfigWidget();
-}
-
-bool Legend::showFrame() const
-{
-    return d->showFrame;
-}
-
-void Legend::setShowFrame(bool show)
-{
-    d->showFrame = show;
-    setStroke(show ? d->lineBorder : 0);
-
-    emit updateConfigWidget();
-}
-
-QPen Legend::framePen() const
-{
-    return d->framePen;
-}
-
-void Legend::setFramePen(const QPen &pen)
-{
-    d->framePen = pen;
-
-    // KChart
-    KChart::FrameAttributes attributes = d->kdLegend->frameAttributes();
-    attributes.setPen(pen);
-    d->kdLegend->setFrameAttributes(attributes);
-
-    d->pixmapRepaintRequested = true;
-}
-
-QColor Legend::frameColor() const
-{
-    return d->framePen.color();
-}
-
-void Legend::setFrameColor(const QColor &color)
-{
-    d->framePen.setColor(color);
-
-    // KChart
-    KChart::FrameAttributes attributes = d->kdLegend->frameAttributes();
-    attributes.setVisible(true);
-    QPen pen = attributes.pen();
-    pen.setColor(color);
-    attributes.setPen(pen);
-    d->kdLegend->setFrameAttributes(attributes);
-
-    d->pixmapRepaintRequested = true;
-}
-
-QBrush Legend::backgroundBrush() const
-{
-    return d->backgroundBrush;
-}
-
-void Legend::setBackgroundBrush(const QBrush &brush)
-{
-    d->backgroundBrush = brush;
-
-    // KChart
-    KChart::BackgroundAttributes attributes = d->kdLegend->backgroundAttributes();
-    attributes.setVisible(true);
-    attributes.setBrush(brush);
-    d->kdLegend->setBackgroundAttributes(attributes);
-
-    d->pixmapRepaintRequested = true;
-}
-
-QColor Legend::backgroundColor() const
-{
-    return d->backgroundBrush.color();
-}
-
-void Legend::setBackgroundColor(const QColor &color)
-{
-    d->backgroundBrush.setColor(color);
-
-    // KChart
-    KChart::BackgroundAttributes attributes = d->kdLegend->backgroundAttributes();
-    attributes.setVisible(true);
-    QBrush brush = attributes.brush();
-    brush.setColor(color);
-    attributes.setBrush(brush);
-    d->kdLegend->setBackgroundAttributes(attributes);
-
-    d->pixmapRepaintRequested = true;
 }
 
 QFont Legend::font() const

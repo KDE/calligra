@@ -43,11 +43,6 @@ public:
     ~Legend();
 
     QString title() const;
-    bool showFrame() const;
-    QPen framePen() const;
-    QColor frameColor() const;
-    QBrush backgroundBrush() const;
-    QColor backgroundColor() const;
     QFont font() const;
     qreal fontSize() const;
     QColor fontColor() const;
@@ -58,11 +53,6 @@ public:
     Position legendPosition() const;
 
     void setTitle(const QString &title);
-    void setShowFrame(bool show);
-    void setFramePen(const QPen &pen);
-    void setFrameColor(const QColor &color);
-    void setBackgroundBrush(const QBrush &brush);
-    void setBackgroundColor(const QColor &color);
     void setFont(const QFont &font);
     void setFontSize(qreal size);
     void setFontColor(const QColor &color);

@@ -44,7 +44,6 @@ LegendCommand::LegendCommand(KoChart::Legend* legend)
     m_newTitle = legend->title();
     m_newFontSize = legend->fontSize();
     m_newExpansion = legend->expansion();
-    m_newShowFrame = legend->showFrame();
 }
 
 LegendCommand::~LegendCommand()
@@ -58,9 +57,8 @@ void LegendCommand::redo()
     m_oldFont = m_legend->font();
     m_oldFontSize = m_legend->fontSize();
     m_oldExpansion = m_legend->expansion();
-    m_oldShowFrame = m_legend->showFrame();
     if (m_oldTitle == m_newTitle && m_oldFont == m_newFont && m_oldFontSize == m_newFontSize
-            && m_oldExpansion == m_newExpansion && m_oldShowFrame == m_newShowFrame)
+            && m_oldExpansion == m_newExpansion)
         return;
 
     // Actually do the work
@@ -68,35 +66,21 @@ void LegendCommand::redo()
     m_legend->setFont(m_newFont);
     m_legend->setFontSize(m_newFontSize);
     m_legend->setExpansion(m_newExpansion);
-    m_legend->setShowFrame(m_newShowFrame);
 
-    // FIXME: temporary hack, this needs proper undo command
-    QMap<KoShape*, QRectF> map = m_chart->layout()->calculateLayout(m_legend, m_legend->isVisible());
-    for (KoShape *s : map.keys()) {
-        s->setPosition(map[s].topLeft());
-        s->setSize(map[s].size());
-    }
     m_legend->update();
 }
 
 void LegendCommand::undo()
 {
     if (m_oldTitle == m_newTitle && m_oldFont == m_newFont && m_oldFontSize == m_newFontSize
-            && m_oldExpansion == m_newExpansion && m_oldShowFrame == m_newShowFrame)
+            && m_oldExpansion == m_newExpansion)
         return;
 
     m_legend->setTitle(m_oldTitle);
     m_legend->setFont(m_oldFont);
     m_legend->setFontSize(m_oldFontSize);
     m_legend->setExpansion(m_oldExpansion);
-    m_legend->setShowFrame(m_oldShowFrame);
 
-    // FIXME: temporary hack, this needs proper undo command
-    QMap<KoShape*, QRectF> map = m_chart->layout()->calculateLayout(m_legend, m_legend->isVisible());
-    for (KoShape *s : map.keys()) {
-        s->setPosition(map[s].topLeft());
-        s->setSize(map[s].size());
-    }
     m_legend->update();
 }
 
@@ -127,15 +111,4 @@ void LegendCommand::setLegendExpansion(LegendExpansion expansion)
     m_newExpansion = expansion;
 
     setText(kundo2_i18n("Set Legend Orientation"));
-}
-
-void LegendCommand::setLegendShowFrame(bool show)
-{
-    m_newShowFrame = show;
-
-    if (show) {
-        setText(kundo2_i18n("Show Legend Frame"));
-    } else {
-        setText(kundo2_i18n("Hide Legend Frame"));
-    }
 }

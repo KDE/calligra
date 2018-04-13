@@ -116,10 +116,6 @@ private Q_SLOTS:
     void setLegendFontSize(int size);
     void setLegendOrientation(Qt::Orientation);
     void setLegendAlignment(Qt::Alignment);
-    void setLegendFixedPosition(Position position);
-    void setLegendBackgroundColor(const QColor& color);
-    void setLegendFrameColor(const QColor& color);
-    void setLegendShowFrame(bool show);
 
     // Called upon shape manager's selectionChanged() signal
     void shapeSelectionChanged();

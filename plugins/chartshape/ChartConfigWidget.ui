@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>296</width>
-    <height>483</height>
+    <width>311</width>
+    <height>541</height>
    </rect>
   </property>
   <layout class="QGridLayout">
@@ -35,7 +35,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -248,7 +248,16 @@ p, li { white-space: pre-wrap; }
        <item row="14" column="0" colspan="2">
         <widget class="QWidget" name="barProperties" native="true">
          <layout class="QGridLayout">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <property name="spacing">
@@ -551,7 +560,16 @@ p, li { white-space: pre-wrap; }
           </size>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -684,20 +702,13 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item row="3" column="0" colspan="2">
-        <widget class="QCheckBox" name="legendShowFrame">
-         <property name="text">
-          <string>Show Frame</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0" colspan="2">
         <widget class="QLabel" name="label">
          <property name="text">
           <string>Orientation</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
+       <item row="3" column="2">
         <widget class="QRadioButton" name="legendOrientationIsVertical">
          <property name="text">
           <string>v</string>
@@ -707,7 +718,7 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="4" column="3">
+       <item row="3" column="3">
         <widget class="QRadioButton" name="legendOrientationIsHorizontal">
          <property name="layoutDirection">
           <enum>Qt::LeftToRight</enum>
@@ -721,7 +732,14 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="6" column="0" colspan="2">
+       <item row="4" column="0" colspan="4">
+        <widget class="QPushButton" name="legendEditFontButton">
+         <property name="text">
+          <string>Edit Fonts...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="2">
         <spacer>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -733,13 +751,6 @@ p, li { white-space: pre-wrap; }
           </size>
          </property>
         </spacer>
-       </item>
-       <item row="5" column="0" colspan="4">
-        <widget class="QPushButton" name="legendEditFontButton">
-         <property name="text">
-          <string>Edit Fonts...</string>
-         </property>
-        </widget>
        </item>
       </layout>
      </widget>

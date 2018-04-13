@@ -353,16 +353,6 @@ QWidget *ChartTool::createOptionWidget()
     connect(widget, SIGNAL(legendAlignmentChanged(Qt::Alignment)),
             this,   SLOT(setLegendAlignment(Qt::Alignment)));
 
-    connect(widget, SIGNAL(legendFixedPositionChanged(Position)),
-            this,   SLOT(setLegendFixedPosition(Position)));
-    
-    connect(widget, SIGNAL(legendBackgroundColorChanged(QColor)) ,
-            this,   SLOT(setLegendBackgroundColor(QColor)));
-    connect(widget, SIGNAL(legendFrameColorChanged(QColor)) ,
-            this,   SLOT(setLegendFrameColor(QColor)));
-    connect(widget, SIGNAL(legendShowFrameChanged(bool)) ,
-            this,   SLOT(setLegendShowFrame(bool)));
-
     connect(d->shape, SIGNAL(updateConfigWidget()),
             widget,   SLOT(update()));
     connect(d->shape->legend(), SIGNAL(updateConfigWidget()),
@@ -699,49 +689,6 @@ void ChartTool::setLegendAlignment(Qt::Alignment alignment)
     d->shape->legend()->setAlignment(alignment);
     d->shape->legend()->update();
 }
-
-void ChartTool::setLegendFixedPosition(Position position)
-{
-    Q_ASSERT(d->shape);
-    Q_ASSERT(d->shape->legend());
-
-    d->shape->legend()->setLegendPosition(position);
-
-    foreach (QWidget *w, optionWidgets()) {
-        ((ChartConfigWidget*) w)->updateFixedPosition(position);
-    }
-
-    d->shape->legend()->update();
-}
-
-void ChartTool::setLegendBackgroundColor(const QColor& color)
-{
-    Q_ASSERT(d->shape);
-    Q_ASSERT(d->shape->legend());
-
-    d->shape->legend()->setBackgroundColor(color);
-    d->shape->legend()->update();
-}
-
-void ChartTool::setLegendFrameColor(const QColor& color)
-{
-    Q_ASSERT(d->shape);
-    Q_ASSERT(d->shape->legend());
-
-    d->shape->legend()->setFrameColor(color);
-    d->shape->legend()->update();
-}
-
-void ChartTool::setLegendShowFrame(bool show)
-{
-    Q_ASSERT(d->shape);
-    Q_ASSERT(d->shape->legend());
-
-    LegendCommand *command = new LegendCommand(d->shape->legend());
-    command->setLegendShowFrame(show);
-    canvas()->addCommand(command);
-}
-
 
 void ChartTool::addAxis(AxisDimension dimension, const QString& title)
 {
