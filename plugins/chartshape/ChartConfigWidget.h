@@ -180,9 +180,6 @@ Q_SIGNALS:
     void legendOrientationChanged(Qt::Orientation orientation);
     void legendAlignmentChanged(Qt::Alignment alignment);
     void legendFixedPositionChanged(Position position);
-    void legendBackgroundColorChanged(const QColor& color);
-    void legendFrameColorChanged(const QColor& color);
-    void legendShowFrameChanged(bool show);
 
 private:
     void setupDialogs();
