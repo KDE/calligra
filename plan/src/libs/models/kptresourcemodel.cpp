@@ -1358,14 +1358,15 @@ bool ResourceItemModel::createResources( ResourceGroup *group, const QByteArray 
     KContacts::VCardConverter vc;
     KContacts::Addressee::List lst = vc.parseVCards( data );
     MacroCommand *m = new MacroCommand( kundo2_i18np( "Add resource from address book", "Add %1 resources from address book", lst.count() ) );
-    foreach( const KContacts::Addressee &a, lst ) {
+    // Note: windows needs this type of iteration
+    for (int a = 0; a < lst.count(); ++a) {
         Resource *r = new Resource();
-        QString uid = a.uid();
+        QString uid = lst[a].uid();
         if ( ! m_project->findResource( uid ) ) {
             r->setId( uid );
         }
-        r->setName( a.formattedName() );
-        r->setEmail( a.preferredEmail() );
+        r->setName( lst[a].formattedName() );
+        r->setEmail( lst[a].preferredEmail() );
         m->addCommand( new AddResourceCmd( group, r ) );
     }
     if ( m->isEmpty() ) {
