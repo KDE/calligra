@@ -32,7 +32,7 @@ if(isBuildInSource)
     message(FATAL_ERROR "Compiling Calligra inside the source folder is not possible.\nPlease refer to the build instruction: https://community.kde.org/Calligra/Building/3\nYou need to clean up the source folder from all build artifacts just created, otherwise further building attempts will fail again: With a git repo, you can use \"git clean -df\" in the toplevel source folder (attention! will remove also uncommited changes to the source code). With sources from a file bundle (like a zip file), delete the source folder and unbundle the sources again.")
 endif()
 
- ######################
+######################
 #######################
 ## Constants defines ##
 #######################
@@ -69,7 +69,7 @@ set(GENERIC_CALLIGRA_LIB_VERSION "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}.0.0")
 set(GENERIC_CALLIGRA_LIB_SOVERSION "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
-                      "${CMAKE_SOURCE_DIR}/cmake/modules")
+    "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 message("Module path:" ${CMAKE_MODULE_PATH})
 
@@ -94,14 +94,14 @@ if(NOT DEFINED RELEASE_BUILD)
     set(RELEASE_BUILD_TYPES "release" "relwithdebinfo" "minsizerel")
     list(FIND RELEASE_BUILD_TYPES "${CMAKE_BUILD_TYPE_TOLOWER}" INDEX)
     if (INDEX EQUAL -1)
-        set(RELEASE_BUILD FALSE)
+	set(RELEASE_BUILD FALSE)
     else()
-        set(RELEASE_BUILD TRUE)
+	set(RELEASE_BUILD TRUE)
     endif()
 endif()
 message(STATUS "Release build: ${RELEASE_BUILD}")
 
- ############
+############
 #############
 ## Options ##
 #############
@@ -110,7 +110,7 @@ message(STATUS "Release build: ${RELEASE_BUILD}")
 option(GHNS "support Get Hot New Stuff" OFF)
 option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." ON)
 
- #######################
+#######################
 ########################
 ## Productset setting ##
 ########################
@@ -141,9 +141,9 @@ endif()
 if (RELEASE_BUILD)
     set(CALLIGRA_SHOULD_BUILD_STAGING FALSE)
     if(BUILD_UNMAINTAINED)
-        set(CALLIGRA_SHOULD_BUILD_UNMAINTAINED TRUE)
+	set(CALLIGRA_SHOULD_BUILD_UNMAINTAINED TRUE)
     else()
-        set(CALLIGRA_SHOULD_BUILD_UNMAINTAINED FALSE)
+	set(CALLIGRA_SHOULD_BUILD_UNMAINTAINED FALSE)
     endif()
 else ()
     set(CALLIGRA_SHOULD_BUILD_STAGING TRUE)
@@ -156,7 +156,7 @@ calligra_set_productset(${PRODUCTSET})
 # Leave this line as is, it is used to enable removal of Plan when releasing Calligra
 #calligra_disable_product(APP_PLAN "Plan is released separatly")
 
- ##########################
+##########################
 ###########################
 ## Look for ECM, Qt, KF5 ##
 ###########################
@@ -197,44 +197,44 @@ set(REQUIRED_KF5_VERSION "5.7.0")
 
 find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED
     COMPONENTS
-        Archive
-        Codecs
-        Completion
-        Config
-        ConfigWidgets
-        CoreAddons
-        DBusAddons
-        DocTools
-        GuiAddons
-        I18n
-        IconThemes
-        ItemViews
-        JobWidgets
-        KCMUtils
-        KDELibs4Support
-        KIO
-        Kross
-        Notifications
-        NotifyConfig
-        Parts
-        Sonnet
-        TextWidgets
-        Wallet
-        WidgetsAddons
-        WindowSystem
-        XmlGui
-)
+    Archive
+    Codecs
+    Completion
+    Config
+    ConfigWidgets
+    CoreAddons
+    DBusAddons
+    DocTools
+    GuiAddons
+    I18n
+    IconThemes
+    ItemViews
+    JobWidgets
+    KCMUtils
+    KDELibs4Support
+    KIO
+    Kross
+    Notifications
+    NotifyConfig
+    Parts
+    Sonnet
+    TextWidgets
+    Wallet
+    WidgetsAddons
+    WindowSystem
+    XmlGui
+    )
 
 find_package(KF5Activities)
 find_package(KF5KHtml)
 
 set_package_properties(KF5Activities PROPERTIES
     TYPE OPTIONAL
-)
+    )
 set_package_properties(KF5KHtml PROPERTIES
     PURPOSE "Required for HTML2ODS import filter"
     TYPE OPTIONAL
-)
+    )
 
 if(KF5Activities_FOUND)
     set(HAVE_KACTIVITIES TRUE)
@@ -245,7 +245,7 @@ set_package_properties(KF5Holidays PROPERTIES
     DESCRIPTION "Library for generation of public holidays"
     PURPOSE "Required by Plan"
     TYPE RECOMMENDED
-)
+    )
 
 if(${KF5_VERSION} VERSION_LESS "5.16.0")
     set(CALLIGRA_OLD_PLUGIN_METADATA TRUE)
@@ -256,25 +256,25 @@ set(REQUIRED_QT_VERSION "5.3.0")
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED
     COMPONENTS
-        Core
-        Gui
-        Network
-        PrintSupport
-        Svg
-        Test
-        Widgets
-        Xml
-)
+    Core
+    Gui
+    Network
+    PrintSupport
+    Svg
+    Test
+    Widgets
+    Xml
+    )
 find_package(Qt5 ${REQUIRED_QT_VERSION} QUIET
     COMPONENTS
-        DBus
-        OpenGL
-        Quick
-        QuickWidgets
-        Sql
-        WebKit
-#         WebKitWidgets
-)
+    DBus
+    OpenGL
+    Quick
+    QuickWidgets
+    Sql
+    WebKit
+    #         WebKitWidgets
+    )
 message("**********************************************************************************************************************")
 message("**********************************************************************************************************************")
 message("Qt WebKitWidgets is required for Stage's html export preview. This will need porting, as that module no longer exists.")
@@ -288,35 +288,35 @@ find_package(Qt5Declarative ${REQUIRED_QT_VERSION} QUIET)
 
 set_package_properties(Qt5DBus PROPERTIES
     TYPE RECOMMENDED
-)
+    )
 set_package_properties(Qt5Declarative PROPERTIES
     PURPOSE "Required for QtQuick1 components"
     TYPE RECOMMENDED
-)
+    )
 set_package_properties(Qt5OpenGL PROPERTIES
     PURPOSE "Required for QtQuick1 components"
     TYPE RECOMMENDED
-)
+    )
 set_package_properties(Qt5Quick PROPERTIES
     PURPOSE "Required for QtQuick2 components"
     TYPE RECOMMENDED
-)
+    )
 set_package_properties(Qt5QuickWidgets PROPERTIES
     PURPOSE "Required for Calligra Gemini"
     TYPE RECOMMENDED
-)
+    )
 set_package_properties(Qt5Sql PROPERTIES
     PURPOSE "Optional for Sheets' database connection"
     TYPE OPTIONAL
-)
+    )
 set_package_properties(Qt5WebKit PROPERTIES
     PURPOSE "Required for Braindump's Web shape"
     TYPE OPTIONAL
-)
+    )
 set_package_properties(Qt5WebKitWidget PROPERTIES
     PURPOSE "Required for Stage"
     TYPE RECOMMENDED
-)
+    )
 
 if(Qt5WebKit_FOUND)
     add_definitions( -DCAN_USE_QTWEBKIT )
@@ -329,24 +329,24 @@ if (GHNS)
     find_package(Attica 3.0)
     find_package(NewStuff)
     set_package_properties(Attica PROPERTIES
-        DESCRIPTION "Attica is used for Get Hot New Stuff."
-        URL "https://projects.kde.org/projects/kdesupport/attica"
-        TYPE OPTIONAL
-    )
+	DESCRIPTION "Attica is used for Get Hot New Stuff."
+	URL "https://projects.kde.org/projects/kdesupport/attica"
+	TYPE OPTIONAL
+	)
 
     if (NOT LIBATTICA_FOUND)
-        set(GHNS FALSE)
+	set(GHNS FALSE)
     else ()
-        message(STATUS "WARNING: You are compiling with Get Hot New Stuff enabled. Do not do that when building distribution packages. GHNS is unusable these days until someone starts maintaining it again.")
+	message(STATUS "WARNING: You are compiling with Get Hot New Stuff enabled. Do not do that when building distribution packages. GHNS is unusable these days until someone starts maintaining it again.")
     endif ()
 endif ()
 
 find_package(X11)
 if(X11_FOUND)
     find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED
-        COMPONENTS
-            X11Extras
-    )
+	COMPONENTS
+	X11Extras
+	)
     set(HAVE_X11 TRUE)
     add_definitions(-DHAVE_X11)
 else()
@@ -355,14 +355,14 @@ endif()
 
 # use sane compile flags
 add_definitions(
-  -DQT_USE_QSTRINGBUILDER
-  -DQT_STRICT_ITERATORS
-  -DQT_NO_SIGNALS_SLOTS_KEYWORDS
-  -DQT_USE_FAST_OPERATOR_PLUS
-  -DQT_USE_FAST_CONCATENATION
-  -DQT_NO_URL_CAST_FROM_STRING
-  -DQT_NO_CAST_TO_ASCII
-)
+    -DQT_USE_QSTRINGBUILDER
+    -DQT_STRICT_ITERATORS
+    -DQT_NO_SIGNALS_SLOTS_KEYWORDS
+    -DQT_USE_FAST_OPERATOR_PLUS
+    -DQT_USE_FAST_CONCATENATION
+    -DQT_NO_URL_CAST_FROM_STRING
+    -DQT_NO_CAST_TO_ASCII
+    )
 
 # only with this definition will all the FOO_TEST_EXPORT macro do something
 # TODO: check if this can be moved to only those places which make use of it,
@@ -374,15 +374,15 @@ endif()
 
 # overcome some platform incompatibilities
 if(WIN32)
-	if(NOT MINGW)
-		include_directories(${CMAKE_CURRENT_SOURCE_DIR}/winquirks)
-		add_definitions(-D_USE_MATH_DEFINES)
-		add_definitions(-DNOMINMAX)
-	endif()
+    if(NOT MINGW)
+	include_directories(${CMAKE_CURRENT_SOURCE_DIR}/winquirks)
+	add_definitions(-D_USE_MATH_DEFINES)
+	add_definitions(-DNOMINMAX)
+    endif()
     set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
 endif()
 
- ###########################
+###########################
 ############################
 ## Required dependencies  ##
 ############################
@@ -397,7 +397,7 @@ if (NOT Boost_FOUND)
     message(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, sheets.")
 endif ()
 
- ###########################
+###########################
 ############################
 ## Optional dependencies  ##
 ############################
@@ -420,7 +420,7 @@ set_package_properties(GSL_FOUND PROPERTIES
     URL "https://www.gnu.org/software/gsl"
     PURPOSE "Required by Sheets' solver plugin"
     TYPE OPTIONAL
-)
+    )
 macro_bool_to_01(GSL_FOUND HAVE_GSL)
 configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
 
@@ -433,7 +433,7 @@ set_package_properties(Phonon4Qt5 PROPERTIES
     URL "https://www.kde.org/"
     PURPOSE "Required by Stage event actions and Videoshape plugin"
     TYPE OPTIONAL
-)
+    )
 
 ##
 ## Test for KF5CalendarCore
@@ -444,7 +444,7 @@ set_package_properties(KF5CalendarCore PROPERTIES
     URL "https://www.kde.org/"
     PURPOSE "Required by Plan Ical export and optionally used by semantic item Event"
     TYPE OPTIONAL
-)
+    )
 
 if ("${KF5CalendarCore_VERSION}" VERSION_GREATER 5.6.40)
     set(HAVE_QDATETIME_KCALCORE TRUE)
@@ -460,7 +460,7 @@ set_package_properties(KF5Contacts PROPERTIES
     URL "https://www.kde.org/"
     PURPOSE "Optionally used by semantic item Contact"
     TYPE OPTIONAL
-)
+    )
 
 ##
 ## Test for KF5AkonadiContact
@@ -471,7 +471,7 @@ set_package_properties(KF5AkonadiContact PROPERTIES
     URL "https://www.kde.org/"
     PURPOSE "Optionally used by Plan"
     TYPE OPTIONAL
-)
+    )
 
 ##
 ## Test for KF5AkonadiCore
@@ -482,7 +482,7 @@ set_package_properties(KF5Akonadi PROPERTIES
     URL "https://www.kde.org/"
     PURPOSE "Optionally used by semantic items Event and Contact"
     TYPE OPTIONAL
-)
+    )
 
 ##
 ## Test for KGantt
@@ -493,7 +493,7 @@ set_package_properties(KGantt PROPERTIES
     URL "https://www.kde.org/"
     PURPOSE "Required by Plan"
     TYPE RECOMMENDED
-)
+    )
 
 ##
 ## Test for KChart
@@ -504,7 +504,7 @@ set_package_properties(KChart PROPERTIES
     URL "https://www.kde.org/"
     PURPOSE "Required by Chart shape and Plan"
     TYPE RECOMMENDED
-)
+    )
 
 ##
 ## Test for eigen3
@@ -515,7 +515,7 @@ set_package_properties(Eigen3 PROPERTIES
     URL "http://eigen.tuxfamily.org"
     PURPOSE "Required by Calligra Sheets"
     TYPE RECOMMENDED
-)
+    )
 
 ##
 ## Test for QCA2
@@ -526,7 +526,7 @@ set_package_properties(Qca-qt5 PROPERTIES
     URL "http:/download.kde.org/stable/qca-qt5"
     PURPOSE "Required for encrypted OpenDocument files and encrypted xls files support (available as a module in kdesupport)"
     TYPE OPTIONAL
-)
+    )
 
 ##
 ## Test for soprano
@@ -539,7 +539,7 @@ set_package_properties(Soprano PROPERTIES
     URL "http://soprano.sourceforge.net/"
     PURPOSE "Required to handle RDF metadata in ODF"
     TYPE OPTIONAL
-)
+    )
 if(NOT Soprano_FOUND)
     set(SOPRANO_INCLUDE_DIR "")
 endif()
@@ -553,7 +553,7 @@ set_package_properties(Marble PROPERTIES
     URL "https://marble.kde.org/"
     PURPOSE "Required by RDF to show locations on a map"
     TYPE OPTIONAL
-)
+    )
 
 ##
 ## Test for lcms
@@ -564,10 +564,10 @@ set_package_properties(LCMS2 PROPERTIES
     URL "http://www.littlecms.com"
     PURPOSE "Will be used for color management"
     TYPE OPTIONAL
-)
+    )
 if(LCMS2_FOUND)
     if(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
-        set(HAVE_LCMS24 TRUE)
+	set(HAVE_LCMS24 TRUE)
     endif()
     set(HAVE_REQUIRED_LCMS_VERSION TRUE)
     set(HAVE_LCMS2 TRUE)
@@ -583,59 +583,59 @@ if (BUILD_VC)
     set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
     set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
     if( NOT MSVC)
-        macro_optional_find_package(Vc 1.1.0)
-        set_package_properties(Vc PROPERTIES
-            DESCRIPTION "Portable, zero-overhead SIMD library for C++"
-            URL "https://github.com/VcDevel/Vc"
-            PURPOSE "Required by the pigment for vectorization"
-            TYPE OPTIONAL
-        )
-        macro_bool_to_01(Vc_FOUND HAVE_VC)
-        macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
+	macro_optional_find_package(Vc 1.1.0)
+	set_package_properties(Vc PROPERTIES
+	    DESCRIPTION "Portable, zero-overhead SIMD library for C++"
+	    URL "https://github.com/VcDevel/Vc"
+	    PURPOSE "Required by the pigment for vectorization"
+	    TYPE OPTIONAL
+	    )
+	macro_bool_to_01(Vc_FOUND HAVE_VC)
+	macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
     endif()
     configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
 
     if(HAVE_VC)
-        message(STATUS "Vc found!")
-        set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
-                            "${CMAKE_SOURCE_DIR}/cmake/vc")
+	message(STATUS "Vc found!")
+	set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
+	    "${CMAKE_SOURCE_DIR}/cmake/vc")
 
-        include (VcMacros)
+	include (VcMacros)
 
-        if(Vc_COMPILER_IS_CLANG)
-            set(ADDITIONAL_VC_FLAGS "-Wabi -ffp-contract=fast -fPIC")
-        elseif (NOT MSVC)
-            set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast -fPIC")
-        endif()
+	if(Vc_COMPILER_IS_CLANG)
+	    set(ADDITIONAL_VC_FLAGS "-Wabi -ffp-contract=fast -fPIC")
+	elseif (NOT MSVC)
+	    set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast -fPIC")
+	endif()
 
-        #Handle Vc master
-        if(Vc_COMPILER_IS_GCC OR Vc_COMPILER_IS_CLANG)
-            AddCompilerFlag("-std=c++11" _ok)
-            if(NOT _ok)
-                AddCompilerFlag("-std=c++0x" _ok)
-            endif()
-        endif()
+	#Handle Vc master
+	if(Vc_COMPILER_IS_GCC OR Vc_COMPILER_IS_CLANG)
+	    AddCompilerFlag("-std=c++11" _ok)
+	    if(NOT _ok)
+		AddCompilerFlag("-std=c++0x" _ok)
+	    endif()
+	endif()
 
-        macro(ko_compile_for_all_implementations_no_scalar _objs _src)
-        if(PACKAGERS_BUILD)
-            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY SSE2 SSSE3 SSE4_1 AVX AVX2+FMA+BMI2)
-        else()
-            set(${_objs} ${_src})
-        endif()
-        endmacro()
+	macro(ko_compile_for_all_implementations_no_scalar _objs _src)
+	    if(PACKAGERS_BUILD)
+		vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY SSE2 SSSE3 SSE4_1 AVX AVX2+FMA+BMI2)
+	    else()
+		set(${_objs} ${_src})
+	    endif()
+	endmacro()
 
-        macro(ko_compile_for_all_implementations _objs _src)
-        if(PACKAGERS_BUILD)
-            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY Scalar SSE2 SSSE3 SSE4_1 AVX AVX2+FMA+BMI2)
-        else()
-            set(${_objs} ${_src})
-        endif()
-        endmacro()
+	macro(ko_compile_for_all_implementations _objs _src)
+	    if(PACKAGERS_BUILD)
+		vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY Scalar SSE2 SSSE3 SSE4_1 AVX AVX2+FMA+BMI2)
+	    else()
+		set(${_objs} ${_src})
+	    endif()
+	endmacro()
 
-        if (NOT PACKAGERS_BUILD)
-        # Optimize the whole Calligra for current architecture
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
-        endif ()
+	if (NOT PACKAGERS_BUILD)
+	    # Optimize the whole Calligra for current architecture
+	    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
+	endif ()
     endif()
     set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
 
@@ -645,9 +645,9 @@ endif(BUILD_VC)
 
 if(WIN32)
     set(LIB_INSTALL_DIR ${LIB_INSTALL_DIR}
-                        RUNTIME DESTINATION ${BIN_INSTALL_DIR}
-                        LIBRARY ${INSTALL_TARGETS_DEFAULT_ARGS}
-                        ARCHIVE ${INSTALL_TARGETS_DEFAULT_ARGS} )
+	RUNTIME DESTINATION ${BIN_INSTALL_DIR}
+	LIBRARY ${INSTALL_TARGETS_DEFAULT_ARGS}
+	ARCHIVE ${INSTALL_TARGETS_DEFAULT_ARGS} )
 endif()
 
 ##
@@ -657,11 +657,11 @@ endif()
 if(NOT WIN32 AND NOT APPLE)
     macro_optional_find_package(Fontconfig)
     set_package_properties(Fontconfig PROPERTIES
-        DESCRIPTION "Library for configuring and customizing font access"
-        URL "http://fontconfig.org"
-        PURPOSE "Required to handle exact font size"
-        TYPE RECOMMENDED
-    )
+	DESCRIPTION "Library for configuring and customizing font access"
+	URL "http://fontconfig.org"
+	PURPOSE "Required to handle exact font size"
+	TYPE RECOMMENDED
+	)
 endif()
 
 ##
@@ -671,11 +671,11 @@ endif()
 if(NOT WIN32 AND NOT APPLE)
     macro_optional_find_package(Freetype)
     set_package_properties(Freetype PROPERTIES
-        DESCRIPTION "A Free, High-Quality, and Portable Font Engine"
-        URL "http://www.freetype.org/"
-        PURPOSE "Required to handle exact font size"
-        TYPE RECOMMENDED
-    )
+	DESCRIPTION "A Free, High-Quality, and Portable Font Engine"
+	URL "http://www.freetype.org/"
+	PURPOSE "Required to handle exact font size"
+	TYPE RECOMMENDED
+	)
 endif()
 
 if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
@@ -699,7 +699,7 @@ macro_optional_find_package(SharedMimeInfo 1.3)
 set_package_properties(SharedMimeInfo PROPERTIES
     PURPOSE "Required to determine file types SVM or all of MSOOXML."
     TYPE RECOMMENDED
-)
+    )
 
 ##
 ## Test for Okular
@@ -710,7 +710,7 @@ set_package_properties(Okular5 PROPERTIES
     URL "https://okular.kde.org/"
     PURPOSE "Required to build the plugins for Okular"
     TYPE OPTIONAL
-)
+    )
 
 ##
 ## Test for librevenge
@@ -721,7 +721,7 @@ set_package_properties(LibRevenge PROPERTIES
     URL "http://sf.net/p/libwpd/librevenge/"
     PURPOSE "Required by various import filters"
     TYPE OPTIONAL
-)
+    )
 
 ##
 ## Test for libodfgen
@@ -732,7 +732,7 @@ set_package_properties(LibOdfGen PROPERTIES
     URL "http://sf.net/p/libwpd/libodfgen/"
     PURPOSE "Required by various import filters"
     TYPE OPTIONAL
-)
+    )
 
 ##
 ## Test for WordPerfect Document Library
@@ -743,7 +743,7 @@ set_package_properties(LibWpd PROPERTIES
     URL "http://libwpd.sourceforge.net/"
     PURPOSE "Required by the Words WPD import filter"
     TYPE OPTIONAL
-)
+    )
 
 ##
 ## Test for WordPerfect Graphics Library
@@ -754,7 +754,7 @@ set_package_properties(LibWpg PROPERTIES
     URL "http://libwpg.sourceforge.net/"
     PURPOSE "Required by the Karbon WPG import filter"
     TYPE OPTIONAL
-)
+    )
 
 ##
 ## Test for Microsoft Works Document Library
@@ -765,7 +765,7 @@ set_package_properties(LibWps PROPERTIES
     URL "http://libwps.sourceforge.net/"
     PURPOSE "Required by the Words WPS import filter"
     TYPE OPTIONAL
-)
+    )
 
 ##
 ## Test for Microsoft Visio Document Library
@@ -776,7 +776,7 @@ set_package_properties(LibVisio PROPERTIES
     URL "https://wiki.documentfoundation.org/DLP/Libraries/libvisio"
     PURPOSE "Required by the Flow visio import filter"
     TYPE OPTIONAL
-)
+    )
 
 ##
 ## Test for Apple Keynote Document Library
@@ -787,7 +787,7 @@ set_package_properties(LibEtonyek PROPERTIES
     URL "https://wiki.documentfoundation.org/DLP/Libraries/libetonyek"
     PURPOSE "Required by the Stage keynote import filter"
     TYPE OPTIONAL
-)
+    )
 
 ##
 ## Test for qt-poppler
@@ -798,7 +798,7 @@ set_package_properties(Poppler PROPERTIES
     URL "http://poppler.freedesktop.org"
     PURPOSE "Required by the Karbon PDF import filter and CSTester PDF feature"
     TYPE OPTIONAL
-)
+    )
 
 ##
 ## Test for qt-poppler not-officially-supported XPDF Headers
@@ -811,7 +811,7 @@ set_package_properties(PopplerXPDFHeaders PROPERTIES
     URL "http://poppler.freedesktop.org"
     PURPOSE "Required by the Karbon PDF import filter"
     TYPE OPTIONAL
-)
+    )
 
 
 ##
@@ -823,7 +823,7 @@ macro_optional_find_package(Libgit2)
 ## Generate a file for prefix information
 ##
 
- ###############################
+###############################
 ################################
 ## Add Calligra helper macros ##
 ################################
@@ -831,7 +831,7 @@ macro_optional_find_package(Libgit2)
 
 include(MacroCalligraAddBenchmark)
 
- ####################
+####################
 #####################
 ## Define includes ##
 #####################
@@ -845,8 +845,8 @@ include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DI
 
 
 set(KOVERSION_INCLUDES ${CMAKE_SOURCE_DIR}/libs/version 
-                       ${CMAKE_BINARY_DIR}/libs/version 
-)
+    ${CMAKE_BINARY_DIR}/libs/version
+    )
 
 include_directories(${KOVERSION_INCLUDES})
 
@@ -854,101 +854,101 @@ include_directories(${KOVERSION_INCLUDES})
 set(KOPLUGIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/plugin)
 
 set(KUNDO2_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kundo2
-                    ${CMAKE_BINARY_DIR}/libs/kundo2)
+    ${CMAKE_BINARY_DIR}/libs/kundo2)
 
 # koodf is at the bottom of the stack
 set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
-                   ${CMAKE_SOURCE_DIR}/libs/store
-                   ${CMAKE_BINARY_DIR}/libs/odf
-                   ${CMAKE_BINARY_DIR}/libs/store
-                   ${KOVERSION_INCLUDES} 
-                   )
+    ${CMAKE_SOURCE_DIR}/libs/store
+    ${CMAKE_BINARY_DIR}/libs/odf
+    ${CMAKE_BINARY_DIR}/libs/store
+    ${KOVERSION_INCLUDES}
+    )
 
 # pigment depends on koplugin and lcms
 set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
-                   ${KOVERSION_INCLUDES} 
-                   ${CMAKE_SOURCE_DIR}/libs/pigment
-                   ${CMAKE_BINARY_DIR}/libs/pigment
-                   ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
-                   ${CMAKE_SOURCE_DIR}/libs/pigment/resources
-                   ${Boost_INCLUDE_DIRS}
-                   
-                   )
+    ${KOVERSION_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/libs/pigment
+    ${CMAKE_BINARY_DIR}/libs/pigment
+    ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
+    ${CMAKE_SOURCE_DIR}/libs/pigment/resources
+    ${Boost_INCLUDE_DIRS}
+
+    )
 
 # flake depends on koodf and pigment
 set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
-                   ${KOODF_INCLUDES}
-                   ${PIGMENT_INCLUDES}
-                   ${KUNDO2_INCLUDES}
-                   ${CMAKE_SOURCE_DIR}/libs/widgetutils
-                   ${CMAKE_SOURCE_DIR}/libs/flake/commands
-                   ${CMAKE_SOURCE_DIR}/libs/flake/tools
-                   ${CMAKE_SOURCE_DIR}/libs/flake/svg
-                   ${CMAKE_BINARY_DIR}/libs/flake)
+    ${KOODF_INCLUDES}
+    ${PIGMENT_INCLUDES}
+    ${KUNDO2_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/libs/widgetutils
+    ${CMAKE_SOURCE_DIR}/libs/flake/commands
+    ${CMAKE_SOURCE_DIR}/libs/flake/tools
+    ${CMAKE_SOURCE_DIR}/libs/flake/svg
+    ${CMAKE_BINARY_DIR}/libs/flake)
 
 # vectorimage
 set(VECTORIMAGE_INCLUDES
-                   ${CMAKE_SOURCE_DIR}/libs/vectorimage
-                   ${CMAKE_SOURCE_DIR}/libs/vectorimage/libemf
-                   ${CMAKE_SOURCE_DIR}/libs/vectorimage/libsvm
-                   ${CMAKE_SOURCE_DIR}/libs/vectorimage/libwmf)
+    ${CMAKE_SOURCE_DIR}/libs/vectorimage
+    ${CMAKE_SOURCE_DIR}/libs/vectorimage/libemf
+    ${CMAKE_SOURCE_DIR}/libs/vectorimage/libsvm
+    ${CMAKE_SOURCE_DIR}/libs/vectorimage/libwmf)
 
 # KoText depends on koplugin, odf
 set(KOTEXT_INCLUDES
-                   ${CMAKE_SOURCE_DIR}/libs/text
-                   ${CMAKE_BINARY_DIR}/libs/text
-                   ${CMAKE_SOURCE_DIR}/libs/text/changetracker
-                   ${CMAKE_SOURCE_DIR}/libs/text/styles
-                   ${CMAKE_SOURCE_DIR}/libs/text/opendocument
-                   ${SOPRANO_INCLUDE_DIR}
-                   ${FLAKE_INCLUDES}
-                   ${KOODF_INCLUDES})
+    ${CMAKE_SOURCE_DIR}/libs/text
+    ${CMAKE_BINARY_DIR}/libs/text
+    ${CMAKE_SOURCE_DIR}/libs/text/changetracker
+    ${CMAKE_SOURCE_DIR}/libs/text/styles
+    ${CMAKE_SOURCE_DIR}/libs/text/opendocument
+    ${SOPRANO_INCLUDE_DIR}
+    ${FLAKE_INCLUDES}
+    ${KOODF_INCLUDES})
 
 # TextLayout depends on kotext
 set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}
-                   ${CMAKE_SOURCE_DIR}/libs/textlayout
-                   ${CMAKE_BINARY_DIR}/libs/textlayout)
+    ${CMAKE_SOURCE_DIR}/libs/textlayout
+    ${CMAKE_BINARY_DIR}/libs/textlayout)
 
 # Widgets depends on kotext and flake
 set(KOWIDGETS_INCLUDES ${KOTEXT_INCLUDES}
-                   ${CMAKE_SOURCE_DIR}/libs/widgetutils
-                   ${CMAKE_BINARY_DIR}/libs/widgetutils
-                   ${CMAKE_SOURCE_DIR}/libs/widgets
-                   ${CMAKE_BINARY_DIR}/libs/widgets)
+    ${CMAKE_SOURCE_DIR}/libs/widgetutils
+    ${CMAKE_BINARY_DIR}/libs/widgetutils
+    ${CMAKE_SOURCE_DIR}/libs/widgets
+    ${CMAKE_BINARY_DIR}/libs/widgets)
 
 # BasicFlakes depends on flake, widgets
 set(BASICFLAKES_INCLUDES ${KOWIDGETS_INCLUDES}
-                   ${CMAKE_SOURCE_DIR}/libs/basicflakes
-                   ${CMAKE_SOURCE_DIR}/libs/basicflakes/tools)
+    ${CMAKE_SOURCE_DIR}/libs/basicflakes
+    ${CMAKE_SOURCE_DIR}/libs/basicflakes/tools)
 
 
 # komain depends on kotext & flake
 set(KOMAIN_INCLUDES 
-                    ${KOWIDGETS_INCLUDES}
-                    ${TEXTLAYOUT_INCLUDES}
-                    ${CMAKE_SOURCE_DIR}/libs/main
-                    ${CMAKE_BINARY_DIR}/libs/main
-                    ${CMAKE_SOURCE_DIR}/libs/main/config)
+    ${KOWIDGETS_INCLUDES}
+    ${TEXTLAYOUT_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/libs/main
+    ${CMAKE_BINARY_DIR}/libs/main
+    ${CMAKE_SOURCE_DIR}/libs/main/config)
 
 set(KORDF_INCLUDES ${KOMAIN_INCLUDES}
-                   ${CMAKE_SOURCE_DIR}/libs/rdf
-)
+    ${CMAKE_SOURCE_DIR}/libs/rdf
+    )
 set(KORDF_LIBS kordf)
 
 if(SHOULD_BUILD_FEATURE_SCRIPTING)
-  set(KOKROSS_INCLUDES
-                    ${CMAKE_SOURCE_DIR}/libs/kross
-                    ${CMAKE_BINARY_DIR}/libs/kross)
+    set(KOKROSS_INCLUDES
+	${CMAKE_SOURCE_DIR}/libs/kross
+	${CMAKE_BINARY_DIR}/libs/kross)
 endif()
 
 # kopageapp
 set(KOPAGEAPP_INCLUDES ${TEXTLAYOUT_INCLUDES}
-                    ${PIGMENT_INCLUDES}
-                    ${KOMAIN_INCLUDES}
-                    ${CMAKE_SOURCE_DIR}/libs/widgets
-                    ${CMAKE_SOURCE_DIR}/libs/pageapp
-                    ${CMAKE_SOURCE_DIR}/libs/pageapp/commands
-                    ${CMAKE_BINARY_DIR}/libs/pageapp )
+    ${PIGMENT_INCLUDES}
+    ${KOMAIN_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/libs/widgets
+    ${CMAKE_SOURCE_DIR}/libs/pageapp
+    ${CMAKE_SOURCE_DIR}/libs/pageapp/commands
+    ${CMAKE_BINARY_DIR}/libs/pageapp )
 
 #############################################
 ####           filter libraries          ####
@@ -958,14 +958,14 @@ set(KOPAGEAPP_INCLUDES ${TEXTLAYOUT_INCLUDES}
 set(KOODF2_INCLUDES
     ${CMAKE_SOURCE_DIR}/filters/libodf2
     ${CMAKE_SOURCE_DIR}/filters/libodf2/chart
-)
+    )
 
 # libodfreader
 set(KOODFREADER_INCLUDES
     ${CMAKE_SOURCE_DIR}/filters/libodfreader
-)
+    )
 
- ###################################################
+###################################################
 ####################################################
 ## Detect which products/features can be compiled ##
 ####################################################
@@ -983,7 +983,7 @@ endif()
 
 calligra_drop_product_on_bad_condition( FEATURE_RDF
     Soprano_FOUND "Soprano not found"
-)
+    )
 
 # calligra_drop_product_on_bad_condition( PART_STAGE
 #     Qt5WebKitWidgets_FOUND "Qt5WebKitWidgets devel not found"
@@ -991,110 +991,110 @@ calligra_drop_product_on_bad_condition( FEATURE_RDF
 
 calligra_drop_product_on_bad_condition( PART_SHEETS
     EIGEN3_FOUND "Eigen devel not found"
-)
+    )
 
 calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODP
     Okular5_FOUND "Okular devel not found"
-)
+    )
 
 calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODT
     Okular5_FOUND "Okular devel not found"
-)
+    )
 
 calligra_drop_product_on_bad_condition( PLUGIN_CHARTSHAPE
     KChart_FOUND "KChart devel not found"
-)
+    )
 
 calligra_drop_product_on_bad_condition( PLUGIN_VIDEOSHAPE
     Phonon4Qt5_FOUND "Phonon4Qt5 devel not found"
-)
+    )
 
 calligra_drop_product_on_bad_condition( FILTER_KEY_TO_ODP
     LIBODFGEN_FOUND "libodfgen devel not found"
     LIBETONYEK_FOUND "libetonyek devel not found"
     LIBREVENGE_FOUND "librevenge devel not found"
-)
+    )
 
 calligra_drop_product_on_bad_condition( FILTER_VISIO_TO_ODG
     LIBODFGEN_FOUND "libodfgen devel not found"
     LIBVISIO_FOUND "libvisio devel not found"
     LIBREVENGE_FOUND "librevenge devel not found"
-)
+    )
 
 calligra_drop_product_on_bad_condition( FILTER_WORDPERFECT_TO_ODT
     LIBODFGEN_FOUND "libodfgen devel not found"
     LIBWPD_FOUND "libwpd devel not found"
     LIBWPG_FOUND "libwpg devel not found"
     LIBREVENGE_FOUND "librevenge devel not found"
-)
+    )
 
 calligra_drop_product_on_bad_condition( FILTER_WORKS_TO_ODT
     LIBODFGEN_FOUND "libodfgen devel not found"
     LIBWPS_FOUND "libwps devel not found"
     LIBREVENGE_FOUND "librevenge devel not found"
-)
+    )
 
 calligra_drop_product_on_bad_condition( FILTER_WPG_TO_SVG
     LIBWPG_FOUND "libwpg devel not found"
     LIBREVENGE_FOUND "librevenge devel not found"
-)
+    )
 
 calligra_drop_product_on_bad_condition( FILTER_WPG_TO_ODG
     LIBODFGEN_FOUND "libodfgen devel not found"
     LIBWPG_FOUND "libwpg devel not found"
     LIBREVENGE_FOUND "librevenge devel not found"
-)
+    )
 
 calligra_drop_product_on_bad_condition( FILTER_PDF_TO_SVG
     NOT_WIN "not supported on Windows"
     PopplerXPDFHeaders_FOUND "poppler xpdf headers not found"
-)
+    )
 
 calligra_drop_product_on_bad_condition( FILTER_HTML_TO_ODS
     NOT_WIN "not supported on Windows"
     NOT_COCOA "not supported with Qt Cocoa"
     KF5KHtml_FOUND "KF5KHtml devel not found"
-)
+    )
 
 calligra_drop_product_on_bad_condition( FILTER_SHEETS_TO_HTML
     NOT_WIN "not supported on Windows"
     NOT_COCOA "not supported with Qt Cocoa"
-)
+    )
 
 calligra_drop_product_on_bad_condition( FILTER_KSPREAD_TO_LATEX
     NOT_WIN "not supported on Windows"
     NOT_COCOA "not supported with Qt Cocoa"
-)
+    )
 
 calligra_drop_product_on_bad_condition( APP_BRAINDUMP
     NOT_WIN "unmaintained on Windows"
     Qt5WebKitWidgets_FOUND "QWebPage needed for webpage plugin"
-)
+    )
 
 calligra_drop_product_on_bad_condition( APP_PLAN
     KGantt_FOUND "KGantt devel not found"
     KChart_FOUND "KChart devel not found"
     KF5KHtml_FOUND "KF5KHtml devel not found"
-#     KReport_WithScripting_FOUND "KReport with scripting support not found"
-#     KPropertyWidgets_FOUND "KPropertyWidgets not found"
-)
+    #     KReport_WithScripting_FOUND "KReport with scripting support not found"
+    #     KPropertyWidgets_FOUND "KPropertyWidgets not found"
+    )
 
 calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
     LIBGIT2_FOUND  "libgit2 devel not found"
-)
+    )
 
 calligra_drop_product_on_bad_condition( PART_QTQUICK
     Qt5OpenGL_FOUND "Qt OpenGL not found"
     Qt5Declarative_FOUND "QtDeclarative not found"
-)
+    )
 
 calligra_drop_product_on_bad_condition( PART_COMPONENTS
     Qt5Quick_FOUND "QtQuick not found"
-)
+    )
 
 calligra_drop_product_on_bad_condition( APP_SLIDECOMPARE
     Qt5OpenGL_FOUND "Qt OpenGL not found"
-)
+    )
 
 #############################################
 ####  Backward compatibility BUILD_x=off ####
@@ -1132,10 +1132,10 @@ calligra_drop_unbuildable_products()
 #############################################
 
 if(SHOULD_BUILD_FEATURE_RDF)
-   add_definitions( -DSHOULD_BUILD_RDF )
+    add_definitions( -DSHOULD_BUILD_RDF )
 endif()
 
- ###################
+###################
 ####################
 ## Subdirectories ##
 ####################
@@ -1154,11 +1154,11 @@ endif()
 add_subdirectory(sheets)
 
 if(SHOULD_BUILD_APP_KARBON)
-  add_subdirectory(karbon)
+    add_subdirectory(karbon)
 endif()
 
 if(SHOULD_BUILD_APP_BRAINDUMP)
-  add_subdirectory(braindump)
+    add_subdirectory(braindump)
 endif()
 
 if(SHOULD_BUILD_DOC)
@@ -1197,7 +1197,7 @@ add_custom_target(apidox doc/api/gendocs.pl WORKING_DIRECTORY ${CMAKE_SOURCE_DIR
 
 configure_file(KoConfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h )
 if (SHOULD_BUILD_DEVEL_HEADERS)
-install( FILES  ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
+    install( FILES  ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 endif()
 
 if (BUILD_TESTING)
