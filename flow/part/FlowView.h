@@ -27,28 +27,28 @@ class FlowPart;
 
 class FlowView : public KoPAView
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     explicit FlowView(FlowPart *part, FlowDocument *document, QWidget *parent);
     ~FlowView();
 
     /// Returns the document
     FlowDocument* document() const;
 
-  protected Q_SLOTS:
+protected Q_SLOTS:
     /// Called when the doc emits updateGui
     void updateGui();
 
     void replaceActivePage(KoPAPageBase *page, KoPAPageBase *newActivePage);
 
-  protected:
+protected:
     /// Creates and initializes the GUI.
     void initializeGUI();
     /// Initializes all the actions
     void initializeActions();
 
-  private:
+private:
     FlowDocument* m_document;
 };
 

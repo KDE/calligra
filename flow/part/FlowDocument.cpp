@@ -25,7 +25,7 @@
 #include "FlowFactory.h"
 
 FlowDocument::FlowDocument(KoPart *part)
-  : KoPADocument(part)
+    : KoPADocument(part)
 {
 }
 

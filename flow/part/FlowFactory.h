@@ -29,9 +29,9 @@ class KoComponentData;
 
 class FLOW_EXPORT FlowFactory : public KPluginFactory
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     explicit FlowFactory();
     ~FlowFactory() override;
 

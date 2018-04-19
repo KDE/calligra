@@ -26,14 +26,14 @@
 
 extern "C" Q_DECL_EXPORT int kdemain( int argc, char* argv[] )
 {
-  KoApplication app(QByteArray(FLOW_MIME_TYPE), QStringLiteral("calligraflow"), newFlowAboutData, argc, argv);
-  // Migrate data from kde4 to kf5 locations
-  Calligra2Migration m("flow");
-  m.setConfigFiles(QStringList() << QStringLiteral("flowrc"));
-  m.setUiFiles(QStringList() << QStringLiteral("flow.rc"));
-  m.migrate();
+    KoApplication app(QByteArray(FLOW_MIME_TYPE), QStringLiteral("calligraflow"), newFlowAboutData, argc, argv);
+    // Migrate data from kde4 to kf5 locations
+    Calligra2Migration m("flow");
+    m.setConfigFiles(QStringList() << QStringLiteral("flowrc"));
+    m.setUiFiles(QStringList() << QStringLiteral("flow.rc"));
+    m.migrate();
 
-  if (!app.start())
-      return 1;
-  return app.exec();
+    if (!app.start())
+        return 1;
+    return app.exec();
 }
