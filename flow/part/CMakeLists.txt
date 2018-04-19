@@ -17,7 +17,7 @@ generate_export_header(flowprivate
     EXPORT_FILE_NAME flow_generated_export.h
     )
 
-target_link_libraries(flowprivate kopageapp KF5::KDELibs4Support koplugin)
+target_link_libraries(flowprivate kopageapp  koplugin KF5::IconThemes)
 target_link_libraries(flowprivate LINK_INTERFACE_LIBRARIES kopageapp)
 
 set_target_properties(flowprivate PROPERTIES

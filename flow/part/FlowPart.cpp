@@ -22,7 +22,6 @@
 #include "FlowView.h"
 #include "FlowDocument.h"
 #include "FlowFactory.h"
-#include <KComponentData>
 
 #include <KoPACanvasItem.h>
 #include <KoCanvasBase.h>
