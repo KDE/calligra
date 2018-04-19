@@ -26,7 +26,7 @@
 class QRectF;
 
 class KoShape;
-
+class Layout;
 class FlowLayout : public QObject {
   Q_OBJECT
   public:

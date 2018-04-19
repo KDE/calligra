@@ -30,7 +30,7 @@ class FlowView : public KoPAView
   Q_OBJECT
 
   public:
-    FlowView(FlowPart *part, FlowDocument *document, QWidget *parent);
+    explicit FlowView(FlowPart *part, FlowDocument *document, QWidget *parent);
     ~FlowView();
 
     /// Returns the document

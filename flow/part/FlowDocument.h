@@ -35,7 +35,7 @@ class FLOW_EXPORT FlowDocument : public KoPADocument
 
 public:
     explicit FlowDocument(KoPart *part);
-    ~FlowDocument();
+    ~FlowDocument() override;
 
     KoOdf::DocumentType documentType() const override;
 
@@ -55,7 +55,7 @@ Q_SIGNALS:
     void updateGui();
 
 protected:
-    const char *odfTagName( bool withNamespace );
+    const char *odfTagName( bool withNamespace ) override;
 };
 
 #endif
