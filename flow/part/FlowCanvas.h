@@ -21,13 +21,8 @@
 #define FLOWCANVAS_H
 
 #include "FlowDocument.h"
-
-#include <FlowView.h>
-
+#include "KoPACanvas.h"
 #include <QWidget>
-#include <QList>
-
-class FlowView;
 
 class FlowCanvas : public QWidget, public KoPACanvas
 {
@@ -36,7 +31,6 @@ class FlowCanvas : public QWidget, public KoPACanvas
 public:
     FlowCanvas();
     virtual ~FlowCanvas();
-    
 };
 
 

@@ -57,8 +57,9 @@ void FlowView::initializeGUI()
 
 void FlowView::initializeActions()
 {
-    actionCollection()->action(QStringLiteral("configure"))->setText(i18n("Configure Flow..."));
-    actionCollection()->action(QStringLiteral("configure"))->setMenuRole(QAction::PreferencesRole);
+    QAction *act = actionCollection()->action(QStringLiteral("configure"));
+    act->setText(i18n("Configure Flow..."));
+    act->setMenuRole(QAction::PreferencesRole);
 }
 
 void FlowView::updateGui()
