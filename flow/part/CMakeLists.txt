@@ -8,9 +8,6 @@ set(flowprivate_LIB_SRCS
   FlowPart.cpp
   FlowDocument.cpp
   FlowView.cpp
-  #FlowCanvas.cpp
-  #FlowPage.cpp
-  #FlowLayout.cpp
 )
 
 add_library(flowprivate SHARED ${flowprivate_LIB_SRCS})
