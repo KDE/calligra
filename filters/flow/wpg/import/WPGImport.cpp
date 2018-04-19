@@ -118,7 +118,7 @@ KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByt
     QByteArray inputFile = m_chain->inputFile().toLocal8Bit();
     QByteArray outputFile = m_chain->outputFile().toLocal8Bit();
 
-    OdgOutputFileHelper helper(outputFile.constData(), 0);
+    OdgOutputFileHelper helper(outputFile.constData(), nullptr);
     librevenge::RVNGFileStream input(inputFile.constData());
     if (!helper.isSupportedFormat(input))
     {
@@ -126,7 +126,7 @@ KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByt
         return KoFilter::ParsingError;
     }
 
-    if (!helper.convertDocument(input, outputFile.constData()==0))
+    if (!helper.convertDocument(input, outputFile.constData()==nullptr))
     {
         fprintf(stderr, "ERROR : Couldn't write convert the document\n");
         return KoFilter::ParsingError;

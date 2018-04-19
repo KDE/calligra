@@ -25,12 +25,9 @@
 
 class WPGImport : public KoFilter
 {
-
     Q_OBJECT
-
 public:
-
-    WPGImport(QObject *parent, const QVariantList&);
+    explicit WPGImport(QObject *parent, const QVariantList&);
     virtual ~WPGImport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
