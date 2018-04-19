@@ -249,6 +249,7 @@ private:
 #ifdef COMPILING_TESTS
 public:
 #endif
+    QString dbg(const QList<KoShape*> &shapes) const;
     QString dbg(const KoShape *shape) const;
     static qreal relativePosition(qreal start1, qreal length1, qreal start2, qreal length2, qreal start, qreal length);
     static QPointF itemPosition(const KoShape *shape);

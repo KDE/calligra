@@ -36,7 +36,6 @@
 
 using namespace KoChart;
 
-
 class ChartLayout::LayoutData
 {
 public:
@@ -44,12 +43,14 @@ public:
     Position pos;
     bool clipped;
     bool inheritsTransform;
+    int alignment;
 
     LayoutData(int _itemType, Position _pos)
         : itemType(_itemType)
         , pos(_pos)
         , clipped(true)
         , inheritsTransform(true)
+        , alignment(Qt::AlignCenter)
     {}
 };
 
@@ -558,7 +559,7 @@ QMap<KoShape*, QRectF> ChartLayout::calculateLayout(const KoShape *shape, bool s
 
 QMap<KoShape*, QRectF> ChartLayout::calculateLayoutTop(KoShape *shape, KoShape *plotArea, bool hide) const
 {
-    debugChartLayout<<Q_FUNC_INFO;
+    debugChartLayout<<Q_FUNC_INFO<<dbg(shape);
     QRectF area = layoutArea(TopPosition, plotArea);
     QRectF plotAreaRect(itemRect(plotArea));
     QMap<KoShape*, QRectF> newlayout;
@@ -626,7 +627,7 @@ QMap<KoShape*, QRectF> ChartLayout::calculateLayoutTop(KoShape *shape, KoShape *
                 }
             }
         }
-        debugChartLayout<<"in area:"<<area<<shapesInArea;
+        debugChartLayout<<"in area:"<<area<<dbg(shapesInArea);
         // calculate where to put shape
         QRectF itmRect(itemRect(shape));
         debugChartLayout<<"item"<<dbg(shape)<<"at"<<itmRect;
@@ -1321,8 +1322,25 @@ qreal ChartLayout::itemDefaultPosition(const KoShape *shape, qreal defaultValue,
                     result = areastart + (0.5 * (areaend - areastart)) - (0.5 * (itemend - itemstart)); break;
                 }
                 break;
+            case TitleLabelType:
+            case SubTitleLabelType:
+            case FooterLabelType:
+                if (!shape->isVisible()) {
+                    switch (data->alignment) {
+                        case Qt::AlignLeft:
+                            result = areastart;
+                            break;
+                        case Qt::AlignRight:
+                            result = areaend - itemRect(shape).height();
+                            break;
+                        case Qt::AlignCenter:
+                            result = areastart + (0.5 * (areaend - areastart)) - (0.5 * (itemend - itemstart));
+                            break;
+                        default:
+                            break; // default value
+                    }
+                }
             default:
-                // Leave these were they are, user might have moved them
                 break;
         }
     }
@@ -1485,5 +1503,16 @@ QString ChartLayout::dbg(const KoShape *shape) const
         case SecondaryYAxisTitleType: s = "KoShape[SYAxisTitle]"; break;
         default: s = "KoShape[Unknown]"; break;
     }
+    return s;
+}
+
+QString ChartLayout::dbg(const QList<KoShape*> &shapes) const
+{
+    QString s = "(";
+    for (int i = 0; i < shapes.count(); ++i) {
+        if (i > 0) s += ',';
+        s += dbg(shapes.at(i));
+    }
+    s += ')';
     return s;
 }
