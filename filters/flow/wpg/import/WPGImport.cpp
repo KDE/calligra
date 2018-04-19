@@ -96,7 +96,6 @@ public:
             return false;
         }
     }
-private:
 };
 
 K_PLUGIN_FACTORY_WITH_JSON(VSDXImportFactory, "calligra_filter_wpg2odg.json", registerPlugin<WPGImport>();)
@@ -112,7 +111,7 @@ WPGImport::~WPGImport()
 
 KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if (from != "application/x-wpg" || to != KoOdf::mimeType(KoOdf::Graphics))
+    if (from != QByteArrayLiteral("application/x-wpg") || to != KoOdf::mimeType(KoOdf::Graphics))
         return KoFilter::NotImplemented;
 
     QByteArray inputFile = m_chain->inputFile().toLocal8Bit();

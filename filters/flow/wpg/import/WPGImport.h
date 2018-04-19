@@ -28,9 +28,9 @@ class WPGImport : public KoFilter
     Q_OBJECT
 public:
     explicit WPGImport(QObject *parent, const QVariantList&);
-    virtual ~WPGImport();
+    ~WPGImport() override;
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 };
 
 #endif // WPGIMPORT_H

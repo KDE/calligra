@@ -112,7 +112,7 @@ VSDXImport::~VSDXImport()
 
 KoFilter::ConversionStatus VSDXImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if (from != "application/vnd.visio" || to != KoOdf::mimeType(KoOdf::Graphics))
+    if (from != QByteArrayLiteral("application/vnd.visio") || to != KoOdf::mimeType(KoOdf::Graphics))
         return KoFilter::NotImplemented;
 
     QByteArray inputFile = m_chain->inputFile().toLocal8Bit();

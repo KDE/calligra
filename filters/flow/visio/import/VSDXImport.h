@@ -28,9 +28,9 @@ class VSDXImport : public KoFilter
     Q_OBJECT
 public:
     explicit VSDXImport(QObject *parent, const QVariantList&);
-    virtual ~VSDXImport();
+    ~VSDXImport() override;
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 };
 
 #endif // VSDXIMPORT_H
