@@ -591,19 +591,27 @@ void ChartConfigWidget::open(KoShape* shape)
         PlotArea *plotArea = dynamic_cast<PlotArea*>(shape);
         if (plotArea) {
             d->shape = plotArea->parent();
-            d->ui.tabWidget->setCurrentIndex(0);
+            d->ui.tabWidget->setCurrentIndex(1);
         }
         else {
-            // And finally try if it was the legend.
             Legend *legend = dynamic_cast<Legend*>(shape);
-#ifdef NDEBUG
-            Q_UNUSED(legend);
-#else
-            Q_ASSERT(legend);
-#endif
-            d->shape = dynamic_cast<ChartShape*>(shape->parent());
-            Q_ASSERT(d->shape);
-            d->ui.tabWidget->setCurrentIndex(2);
+            if (legend) {
+                d->shape = dynamic_cast<ChartShape*>(shape->parent());
+                Q_ASSERT(d->shape);
+                d->ui.tabWidget->setCurrentIndex(2);
+            } else if (shape->parent()) {
+                // might be one of the text shapes
+                d->shape = dynamic_cast<ChartShape*>(shape->parent());
+                if (d->shape) {
+                    d->ui.tabWidget->setCurrentIndex(0);
+                } else {
+                    // might be an axis label
+                    d->shape = dynamic_cast<ChartShape*>(shape->parent()->parent());
+                    if (d->shape) {
+                        d->ui.tabWidget->setCurrentIndex(0);
+                    }
+                }
+            }
         }
     }
 

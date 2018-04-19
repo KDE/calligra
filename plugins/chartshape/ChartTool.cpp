@@ -146,6 +146,18 @@ void ChartTool::shapeSelectionChanged()
                 if (legend) {
                     selectedShape = legend;
                     d->shape = dynamic_cast<ChartShape*>(shape->parent());
+                } else if (shape->parent()) {
+                    // might be one of the text shapes
+                    d->shape = dynamic_cast<ChartShape*>(shape->parent());
+                    if (d->shape) {
+                        selectedShape = shape;
+                    } else {
+                        // might be an axis label
+                        d->shape = dynamic_cast<ChartShape*>(shape->parent()->parent());
+                        if (d->shape) {
+                            selectedShape = shape;
+                        }
+                    }
                 }
             }
         // The selected shape is the chart

@@ -435,6 +435,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     setClipped(d->plotArea, true);
     setInheritsTransform(d->plotArea, true);
     d->plotArea->setDeletable(false);
+    d->plotArea->setToolDelegates(QSet<KoShape*>()<<this); // Enable chart tool
 
     // Configure the legend.
     d->legend->setVisible(true);
@@ -442,6 +443,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     setClipped(d->legend, true);
     setInheritsTransform(d->legend, true);
     d->legend->setDeletable(false);
+    d->legend->setToolDelegates(QSet<KoShape*>()<<this); // Enable chart tool
 
     // A few simple defaults (chart type and subtype in this case)
     setChartType(BarChartType);
@@ -491,6 +493,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     setClipped(d->title, true);
     setInheritsTransform(d->title, true);
     d->title->setDeletable(false);
+    d->title->setToolDelegates(QSet<KoShape*>()<<this<<d->title); // Enable chart tool
 
     // Create the Subtitle and add it to the shape.
     if (textShapeFactory)
@@ -519,6 +522,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     setClipped(d->subTitle, true);
     setInheritsTransform(d->subTitle, true);
     d->subTitle->setDeletable(false);
+    d->subTitle->setToolDelegates(QSet<KoShape*>()<<this<<d->subTitle); // Enable chart tool
 
     // Create the Footer and add it to the shape.
     if (textShapeFactory)
@@ -547,6 +551,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     setClipped(d->footer, true);
     setInheritsTransform(d->footer, true);
     d->footer->setDeletable(false);
+    d->footer->setToolDelegates(QSet<KoShape*>()<<this<<d->footer); // Enable chart tool
 
     // Set default contour (for how text run around is done around this shape)
     // to prevent a crash in LO
