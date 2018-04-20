@@ -577,9 +577,6 @@ void ChartConfigWidget::open(KoShape* shape)
         return;
     }
 
-    // There are 3 shapes that we can select: the full chart shape,
-    // the plotarea and the legend.
-    //
     // Find the selected shape and adapt the tool option window to
     // which of the subshapes of the chart widget that was actually
     // selected.  Then select the tab depending on which one it was.
@@ -604,17 +601,11 @@ void ChartConfigWidget::open(KoShape* shape)
                 d->shape = dynamic_cast<ChartShape*>(shape->parent());
                 if (d->shape) {
                     d->ui.tabWidget->setCurrentIndex(0);
-                } else {
-                    // might be an axis label
-                    d->shape = dynamic_cast<ChartShape*>(shape->parent()->parent());
-                    if (d->shape) {
-                        d->ui.tabWidget->setCurrentIndex(0);
-                    }
                 }
             }
         }
     }
-
+    Q_ASSERT(d->shape);
     d->tableSource = d->shape->tableSource();
 
 // NOTE: There's no single source table anymore, a Calligra Sheets workbook allows multiple to be used with a chart.

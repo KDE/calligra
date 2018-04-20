@@ -886,6 +886,7 @@ Axis::Axis(PlotArea *parent, AxisDimension dimension)
     d->plotArea->parent()->setClipped(d->title, true);
     d->plotArea->parent()->setInheritsTransform(d->title, true);
     d->title->setDeletable(false);
+    d->title->setZIndex(5);
     d->title->setToolDelegates(QSet<KoShape*>()<<parent->parent()<<d->title); // Enable chart tool
 
     connect(d->plotArea, SIGNAL(gapBetweenBarsChanged(int)),

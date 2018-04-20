@@ -28,6 +28,7 @@
 
 
 class KoShape;
+class KoShapeManager;
 
 
 namespace KoChart
@@ -45,7 +46,7 @@ public:
     /**
      * Constructor.
      */
-    AddRemoveAxisCommand(Axis *axis, ChartShape *chart, bool add, KUndo2Command *parent = 0);
+    AddRemoveAxisCommand(Axis *axis, ChartShape *chart, bool add, KoShapeManager *shapeManager, KUndo2Command *parent = 0);
 
     /**
      * Destructor.
@@ -71,6 +72,7 @@ private:
     ChartShape *m_chart;
     bool m_add;
     bool mine;
+    KoShapeManager *m_shapeManager;
 };
 
 } // namespace KoChart

@@ -151,12 +151,6 @@ void ChartTool::shapeSelectionChanged()
                     d->shape = dynamic_cast<ChartShape*>(shape->parent());
                     if (d->shape) {
                         selectedShape = shape;
-                    } else {
-                        // might be an axis label
-                        d->shape = dynamic_cast<ChartShape*>(shape->parent()->parent());
-                        if (d->shape) {
-                            selectedShape = shape;
-                        }
                     }
                 }
             }
@@ -181,7 +175,6 @@ void ChartTool::shapeSelectionChanged()
         break;
         }
     }
-
     // If we couldn't determine a chart shape, then there is nothing to do.
     if (!d->shape) { // none found
         emit done();
@@ -709,7 +702,7 @@ void ChartTool::addAxis(AxisDimension dimension, const QString& title)
     Axis *axis = new Axis(d->shape->plotArea(), dimension); // automatically adds axis to plot area
     d->shape->plotArea()->takeAxis(axis); // so we remove it again, sigh
     axis->setTitleText(title);
-    AddRemoveAxisCommand *command = new AddRemoveAxisCommand(axis, d->shape, true);
+    AddRemoveAxisCommand *command = new AddRemoveAxisCommand(axis, d->shape, true, canvas()->shapeManager());
     canvas()->addCommand(command);
 }
 
@@ -717,7 +710,7 @@ void ChartTool::removeAxis(Axis *axis)
 {
     Q_ASSERT(d->shape);
 
-    AddRemoveAxisCommand *command = new AddRemoveAxisCommand(axis, d->shape, false);
+    AddRemoveAxisCommand *command = new AddRemoveAxisCommand(axis, d->shape, false, canvas()->shapeManager());
     canvas()->addCommand(command);
 }
 

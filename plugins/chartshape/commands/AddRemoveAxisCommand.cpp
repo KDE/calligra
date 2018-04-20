@@ -26,6 +26,7 @@
 #include "KoShape.h"
 #include "KoShapeMoveCommand.h"
 #include "KoShapeSizeCommand.h"
+#include "KoShapeManager.h"
 
 // KoChart
 #include "ChartShape.h"
@@ -37,12 +38,13 @@
 
 using namespace KoChart;
 
-AddRemoveAxisCommand::AddRemoveAxisCommand(Axis *axis, ChartShape *chart, bool add, KUndo2Command *parent)
+AddRemoveAxisCommand::AddRemoveAxisCommand(Axis *axis, ChartShape *chart, bool add, KoShapeManager *shapeManager, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_axis(axis)
     , m_chart(chart)
     , m_add(add)
     , mine(add)
+    , m_shapeManager(shapeManager)
 {
     if (add) {
         setText(kundo2_i18n("Add Axis"));
@@ -66,7 +68,9 @@ void AddRemoveAxisCommand::redo()
     mine = !mine;
     if (m_add) {
         m_axis->plotArea()->addAxis(m_axis);
+        m_shapeManager->addShape(m_axis->title(), KoShapeManager::AddWithoutRepaint);
     } else {
+        m_shapeManager->remove(m_axis->title());
         m_axis->plotArea()->takeAxis(m_axis);
     }
     KUndo2Command::redo();
@@ -77,9 +81,11 @@ void AddRemoveAxisCommand::undo()
 {
     mine = !mine;
     if (m_add) {
+        m_shapeManager->remove(m_axis->title());
         m_axis->plotArea()->takeAxis(m_axis);
     } else {
         m_axis->plotArea()->addAxis(m_axis);
+        m_shapeManager->addShape(m_axis->title(), KoShapeManager::AddWithoutRepaint);
     }
     KUndo2Command::undo();
     m_chart->update();
