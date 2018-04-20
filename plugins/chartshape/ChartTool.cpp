@@ -239,7 +239,7 @@ void ChartTool::mouseReleaseEvent(KoPointerEvent *event)
 }
 
 
-void ChartTool::activate(ToolActivation, const QSet<KoShape*> &)
+void ChartTool::activate(ToolActivation, const QSet<KoShape*> &shapes)
 {
     useCursor(Qt::ArrowCursor);
 
@@ -359,9 +359,9 @@ QWidget *ChartTool::createOptionWidget()
             this,   SLOT(setLegendAlignment(Qt::Alignment)));
 
     connect(d->shape, SIGNAL(updateConfigWidget()),
-            widget,   SLOT(update()));
+            widget,   SLOT(updateData()));
     connect(d->shape->legend(), SIGNAL(updateConfigWidget()),
-            widget,             SLOT(update()));
+            widget,             SLOT(updateData()));
 
 
     return widget;
@@ -380,8 +380,12 @@ void ChartTool::setChartType(ChartType type, ChartSubtype subtype)
         canvas()->addCommand(command);
     }
 
-    foreach (QWidget *w, optionWidgets())
-        w->update();
+    foreach (QWidget *w, optionWidgets()) {
+        ChartConfigWidget *cw = dynamic_cast<ChartConfigWidget*>(w);
+        if (cw) {
+            cw->updateData();
+        }
+    }
 }
 
 

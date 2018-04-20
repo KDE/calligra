@@ -74,7 +74,7 @@ public:
 public Q_SLOTS:
     void chartTypeSelected(QAction *action);
     void setThreeDMode(bool threeD);
-    void update();
+    void updateData();
 
     void slotShowTableEditor();
     void slotShowCellRegionDialog();

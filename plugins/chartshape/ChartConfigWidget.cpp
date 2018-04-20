@@ -568,7 +568,7 @@ void ChartConfigWidget::open(KoShape* shape)
     d->selectedDataSet = 0;
     d->shape = 0;
     d->tableSource = 0;
-    // these are recalculated in update() anyway
+    // these are recalculated in updateData() anyway
     d->dataSetAxes.clear();
     d->axes.clear();
     d->dataSets.clear();
@@ -658,7 +658,7 @@ void ChartConfigWidget::open(KoShape* shape)
                 this,           SLOT(slotShowTableEditor()));
     }
 
-    update();
+    updateData();
 }
 
 void ChartConfigWidget::save()
@@ -810,7 +810,7 @@ void ChartConfigWidget::chartTypeSelected(QAction *action)
 
 
     emit chartTypeChanged(type, subtype);
-    update();
+    updateData();
 }
 
 /**
@@ -965,7 +965,7 @@ void ChartConfigWidget::dataSetChartTypeSelected(QAction *action)
     emit dataSetChartTypeChanged(dataSet, type);
     emit dataSetChartSubTypeChanged(dataSet, subtype);
 
-    update();
+    updateData();
 }
 
 void ChartConfigWidget::datasetMarkerSelected(QAction *action)
@@ -1035,7 +1035,7 @@ void ChartConfigWidget::datasetMarkerSelected(QAction *action)
     }
     emit dataSetMarkerChanged(dataSet, style);
 
-    update();
+    updateData();
 }
 
 void ChartConfigWidget::datasetBrushSelected(const QColor& color)
@@ -1061,7 +1061,7 @@ void ChartConfigWidget::setThreeDMode(bool threeD)
     d->threeDMode = threeD;
     emit threeDModeToggled(threeD);
 
-    update();
+    updateData();
 }
 
 /**
@@ -1091,7 +1091,7 @@ static QString nonEmptyAxisTitle(Axis *axis, int index)
     return title;
 }
 
-void ChartConfigWidget::update()
+void ChartConfigWidget::updateData()
 {
     if (!d->shape)
         return;
@@ -1808,7 +1808,7 @@ void ChartConfigWidget::ui_axisAdded()
         dimension = YAxisDimension;
 
     emit axisAdded(dimension, d->newAxisDialog.title->text());
-    update();
+    updateData();
 
     if(d->ui.axes->count() > 0)
         d->ui.axes->setCurrentIndex(d->ui.axes->count() - 1);
@@ -1827,7 +1827,7 @@ void ChartConfigWidget::ui_removeAxisClicked()
         return;
 
     emit axisRemoved(d->axes[index]);
-    update();
+    updateData();
 
     // Select the axis after the current selection, if possible
     if (d->ui.axes->count() > 0) {
