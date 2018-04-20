@@ -312,7 +312,7 @@ template<typename T>
 class RTree<T>::LeafNode : public RTree<T>::Node, public KoRTree<T>::LeafNode
 {
 public:
-    LeafNode(int capacity, int level, Node * parent)
+    LeafNode(int capacity, int level, RTree<T>::Node * parent)
             : KoRTree<T>::Node(capacity, level, parent)
             , RTree<T>::Node(capacity, level, parent)
             , KoRTree<T>::LeafNode(capacity, level, parent) {}
@@ -347,7 +347,7 @@ template<typename T>
 class RTree<T>::NonLeafNode : public RTree<T>::Node, public KoRTree<T>::NonLeafNode
 {
 public:
-    NonLeafNode(int capacity, int level, Node * parent)
+    NonLeafNode(int capacity, int level, RTree<T>::Node * parent)
             : KoRTree<T>::Node(capacity, level, parent)
             , RTree<T>::Node(capacity, level, parent)
             , KoRTree<T>::NonLeafNode(capacity, level, parent) {}
