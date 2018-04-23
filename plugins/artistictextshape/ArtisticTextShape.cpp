@@ -83,7 +83,7 @@ void ArtisticTextShape::saveOdf(KoShapeSavingContext &context) const
         return;
 
     if(!svgWriter.save(fileContentDevice)) {
-        qWarning() << "Could not write svg content";
+        qWarning() << "ArtisticTextShape::saveOdf: Could not write svg content";
         return;
     }
 
@@ -91,13 +91,14 @@ void ArtisticTextShape::saveOdf(KoShapeSavingContext &context) const
     const QString mimeType = "image/svg+xml";
 
     context.xmlWriter().startElement("draw:frame");
+    saveOdfAttributes(context, OdfAllAttributes);
     context.embeddedSaver().embedFile(context.xmlWriter(), "draw:image", fileName, mimeType.toLatin1(), fileContent);
     context.xmlWriter().endElement(); // draw:frame
 }
 
-bool ArtisticTextShape::loadOdf(const KoXmlElement &/*element*/, KoShapeLoadingContext &/*context*/)
+bool ArtisticTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    return false;
+    return loadOdfAttributes(element, context, OdfAllAttributes);
 }
 
 QSizeF ArtisticTextShape::size() const
