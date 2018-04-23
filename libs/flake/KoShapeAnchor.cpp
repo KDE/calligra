@@ -380,6 +380,9 @@ bool KoShapeAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &
     // during initial layout. This is because only when we layout it's final page is
     // the shape moved away from page 1
     // in KWRootAreaProvider of textlayout it's set back to visible
+    //
+    // FIXME: asfaics svg shapes can be invisible if display=none
+    // see: https://www.w3.org/TR/SVG11/painting.html#VisibilityControl
     shape()->setVisible(false);
 
     // load settings from graphic style
