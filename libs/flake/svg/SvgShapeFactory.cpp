@@ -143,7 +143,6 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
                 delete shape;
                 return 0;
             }
-            qInfo()<<Q_FUNC_INFO<<shape<<shape->shapeId()<<shape->isVisible();
             return shape;
         }
         // FIXME: should this not be created form the draw:g element?
