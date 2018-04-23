@@ -24,6 +24,7 @@
 #include "KoShapeLoadingContext.h"
 #include "KoShapeRegistry.h"
 #include <KoOdfLoadingContext.h>
+#include <KoStyleStack.h>
 #include <KoXmlNS.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
@@ -82,7 +83,7 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
     }
 
     if (imageElement.tagName() == "image") {
-        debugFlake << "trying to create shapes form svg image";
+        debugFlake << "trying to create shapes from svg image";
         QString href = imageElement.attribute("href");
         if (href.isEmpty())
             return 0;
@@ -132,9 +133,20 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
         if (shapes.count() == 1) {
             KoShape *shape = shapes.first();
             shape->setZIndex(zIndex);
+
+            // TODO: This needs to be reviewed, in case more than one shape
+            context.odfLoadingContext().styleStack().save();
+            bool loaded = shape->loadOdf(element, context);
+            context.odfLoadingContext().styleStack().restore();
+            if (!loaded) {
+                errorFlake << "Failed to load svg shape: "<<shape->shapeId();
+                delete shape;
+                return 0;
+            }
+            qInfo()<<Q_FUNC_INFO<<shape<<shape->shapeId()<<shape->isVisible();
             return shape;
         }
-
+        // FIXME: should this not be created form the draw:g element?
         KoShapeGroup *svgGroup = new KoShapeGroup;
         KoShapeGroupCommand cmd(svgGroup, shapes);
         cmd.redo();
