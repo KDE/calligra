@@ -1103,9 +1103,19 @@ void ChartConfigWidget::updateData()
     blockSignals(true);
 
     // Update cartesian diagram-specific properties
-    // Always update, as e.g. name of axis could have changed
-    // if (d->axes != d->shape->plotArea()->axes()) {
+    bool axesChanged =  d->axes != d->shape->plotArea()->axes();
+    if (!axesChanged) {
+        // check titles
+        for (int i = 0; i < d->axes.count(); ++i) {
+            if (d->axes.at(i)->titleText() != d->shape->plotArea()->axes().at(i)->titleText()) {
+                axesChanged = true;
+                break;
+            }
+        }
+    }
+    if (axesChanged) {
         // Remove old items from the combo box
+        int cindex = d->ui.axes->currentIndex();
         d->ui.axes->clear();
         d->ui.dataSetAxes->clear();
         // Sync the internal list
@@ -1125,6 +1135,9 @@ void ChartConfigWidget::updateData()
                     d->ui.dataSetAxes->blockSignals(false);
                 }
             }
+            if (cindex >= 0 && cindex < d->axes.count()) {
+                d->ui.axes->setCurrentIndex(cindex);
+            }
         } else {
             d->ui.axisShowGridLines->blockSignals(true);
             d->ui.axisShowGridLines->setChecked(false);
@@ -1141,7 +1154,7 @@ void ChartConfigWidget::updateData()
             d->ui.axisTitle->setEnabled(false);
             d->ui.axisTitle->blockSignals(false);
         }
-    // }
+    }
 
     // Update "Labels" section in "Plot Area" tab
     d->ui.showTitle->setChecked(d->shape->title()->isVisible());
