@@ -492,7 +492,7 @@ void ArtisticTextTool::activate(ToolActivation toolActivation, const QSet<KoShap
         emit done();
         return;
     }
-
+    useCursor(Qt::ArrowCursor);
     m_hoverText = 0;
     m_hoverPath = 0;
 
