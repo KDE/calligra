@@ -479,6 +479,7 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
 
 void KoToolManager::Private::switchCanvasData(CanvasData *cd)
 {
+
     Q_ASSERT(cd);
 
     KoCanvasBase *oldCanvas = 0;
@@ -716,8 +717,18 @@ void KoToolManager::Private::selectionChanged(const QList<KoShape*> &shapes)
             switchTool(KoInteractionTool_ID, false);
         }
     }
-
     emit q->toolCodesSelected(types);
+    // First time the tool is activated, it is not shown
+    // because activetool must be set before optionwidgets are set.
+    // Activetool is not set until q->toolCodesSelected() is emitted above,
+    // so the setting in postSwitchTool() does not work.
+    // NOTE: May only be true for non-default tools like for chart, formula etc,
+    // so do not remove the postSwitchTool() setting until you are absolutely certain.
+    QList<QPointer<QWidget> > optionWidgetList = canvasData->activeTool->optionWidgets();
+    KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
+    if (canvasControllerWidget && !optionWidgetList.isEmpty()) {
+        canvasControllerWidget->setToolOptionWidgets(optionWidgetList);
+    }
 }
 
 void KoToolManager::Private::currentLayerChanged(const KoShapeLayer *layer)
