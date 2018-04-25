@@ -181,9 +181,7 @@ public:
     // that belongs to a horizontal bar chart
     bool centerDataPoints;
 
-    // TODO: Save to ODF
     int gapBetweenBars;
-    // TODO: Save to ODF
     int gapBetweenSets;
 
     // TODO: Save
@@ -526,8 +524,8 @@ void Axis::Private::createBarDiagram()
     }
 
     // Set default bar diagram attributes
-    q->setGapBetweenBars(0);
-    q->setGapBetweenSets(100);
+    q->setGapBetweenBars(gapBetweenBars);
+    q->setGapBetweenSets(gapBetweenSets);
 
     // Propagate existing settings
     KChart::ThreeDBarAttributes attributes(kdBarDiagram->threeDBarAttributes());
@@ -1576,10 +1574,10 @@ bool Axis::loadOdfChartSubtypeProperties(const KoXmlElement &axisElement,
     // no effect if their respective chart type is not in use.
     // However, they'll be saved back to ODF that way.
     if (styleStack.hasProperty(KoXmlNS::chart, "gap-width"))
-        setGapBetweenSets(KoUnit::parseValue(styleStack.property(KoXmlNS::chart, "gap-width")));
+        plotArea()->setGapBetweenSets(KoUnit::parseValue(styleStack.property(KoXmlNS::chart, "gap-width")));
     if (styleStack.hasProperty(KoXmlNS::chart, "overlap"))
         // The minus is intended!
-        setGapBetweenBars(-KoUnit::parseValue(styleStack.property(KoXmlNS::chart, "overlap")));
+        plotArea()->setGapBetweenBars(-KoUnit::parseValue(styleStack.property(KoXmlNS::chart, "overlap")));
 
     return true;
 }
@@ -1611,8 +1609,8 @@ void Axis::saveOdf(KoShapeSavingContext &context)
     axisStyle.addProperty("chart:display-label", showLabels());
     axisStyle.addProperty("chart:text-overlap", showOverlappingDataLabels());
     axisStyle.addProperty("chart:visible", isVisible());
-    axisStyle.addPropertyPt("chart:gap-width", d->gapBetweenSets);
-    axisStyle.addPropertyPt("chart:overlap", -d->gapBetweenBars);
+    axisStyle.addProperty("chart:gap-width", d->gapBetweenSets);
+    axisStyle.addProperty("chart:overlap", -d->gapBetweenBars);
 
     if (!d->useAutomaticMinimumRange) {
         const qreal minimum = orientation() == Qt::Vertical
