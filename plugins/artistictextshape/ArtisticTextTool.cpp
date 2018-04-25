@@ -236,22 +236,21 @@ void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
 {
     if (m_hoverHandle) {
         m_currentStrategy = new MoveStartOffsetStrategy(this, m_currentShape);
+        event->accept();
+        return;
     }
     if (m_hoverText) {
-        KoSelection *selection = canvas()->shapeManager()->selection();
-        if(m_hoverText != m_currentShape) {
-            // if we hit another text shape, select that shape
-            selection->deselectAll();
-            setCurrentShape(m_hoverText);
-            selection->select( m_currentShape );
+        if(m_hoverText == m_currentShape) {
+            // change the text cursor position
+            int hitCursorPos = cursorFromMousePosition(event->point);
+            if (hitCursorPos >= 0) {
+                setTextCursorInternal(hitCursorPos);
+                m_selection.clear();
+            }
+            m_currentStrategy = new SelectTextStrategy(this, m_textCursor);
+            event->accept();
+            return;
         }
-        // change the text cursor position
-        int hitCursorPos = cursorFromMousePosition(event->point);
-        if (hitCursorPos >= 0) {
-            setTextCursorInternal(hitCursorPos);
-            m_selection.clear();
-        }
-        m_currentStrategy = new SelectTextStrategy(this, m_textCursor);
     }
     event->ignore();
 }
@@ -334,8 +333,11 @@ void ArtisticTextTool::mouseReleaseEvent( KoPointerEvent *event )
             canvas()->addCommand(cmd);
         delete m_currentStrategy;
         m_currentStrategy = 0;
+        event->accept();
+        return;
     }
     updateActions();
+    event->ignore();
 }
 
 void ArtisticTextTool::shortcutOverrideEvent(QKeyEvent *event)
