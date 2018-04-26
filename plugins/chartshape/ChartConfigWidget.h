@@ -157,8 +157,8 @@ Q_SIGNALS:
     void datasetShowPercentChanged(DataSet *dataSet, bool b);
     void datasetShowSymbolChanged(DataSet *dataSet, bool b);
     void dataSetAxisChanged(DataSet *dataSet, Axis *axis);
-    void gapBetweenBarsChanged(int percent);
-    void gapBetweenSetsChanged(int percent);
+    void gapBetweenBarsChanged(Axis *axis, int percent);
+    void gapBetweenSetsChanged(Axis *axis, int percent);
     void pieExplodeFactorChanged(DataSet *dataSet, int percent);
     
     void showLegendChanged(bool b);

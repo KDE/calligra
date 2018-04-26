@@ -887,10 +887,6 @@ Axis::Axis(PlotArea *parent, AxisDimension dimension)
     d->title->setZIndex(5);
     d->title->setToolDelegates(QSet<KoShape*>()<<parent->parent()<<d->title); // Enable chart tool
 
-    connect(d->plotArea, SIGNAL(gapBetweenBarsChanged(int)),
-            this,        SLOT(setGapBetweenBars(int)));
-    connect(d->plotArea, SIGNAL(gapBetweenSetsChanged(int)),
-            this,        SLOT(setGapBetweenSets(int)));
     connect(d->plotArea, SIGNAL(pieAngleOffsetChanged(qreal)),
             this,        SLOT(setPieAngleOffset(qreal)));
 
@@ -1574,10 +1570,10 @@ bool Axis::loadOdfChartSubtypeProperties(const KoXmlElement &axisElement,
     // no effect if their respective chart type is not in use.
     // However, they'll be saved back to ODF that way.
     if (styleStack.hasProperty(KoXmlNS::chart, "gap-width"))
-        plotArea()->setGapBetweenSets(KoUnit::parseValue(styleStack.property(KoXmlNS::chart, "gap-width")));
+        setGapBetweenSets(KoUnit::parseValue(styleStack.property(KoXmlNS::chart, "gap-width")));
     if (styleStack.hasProperty(KoXmlNS::chart, "overlap"))
         // The minus is intended!
-        plotArea()->setGapBetweenBars(-KoUnit::parseValue(styleStack.property(KoXmlNS::chart, "overlap")));
+        setGapBetweenBars(-KoUnit::parseValue(styleStack.property(KoXmlNS::chart, "overlap")));
 
     return true;
 }
@@ -1609,8 +1605,10 @@ void Axis::saveOdf(KoShapeSavingContext &context)
     axisStyle.addProperty("chart:display-label", showLabels());
     axisStyle.addProperty("chart:text-overlap", showOverlappingDataLabels());
     axisStyle.addProperty("chart:visible", isVisible());
-    axisStyle.addProperty("chart:gap-width", d->gapBetweenSets);
-    axisStyle.addProperty("chart:overlap", -d->gapBetweenBars);
+    if (dimension() == YAxisDimension) {
+        axisStyle.addProperty("chart:gap-width", d->gapBetweenSets);
+        axisStyle.addProperty("chart:overlap", -d->gapBetweenBars);
+    }
 
     if (!d->useAutomaticMinimumRange) {
         const qreal minimum = orientation() == Qt::Vertical
@@ -2071,6 +2069,11 @@ void Axis::layoutPlanes()
     d->kdRadarPlane->layoutPlanes();
 }
 
+int Axis::gapBetweenBars() const
+{
+    return d->gapBetweenBars;
+}
+
 void Axis::setGapBetweenBars(int percent)
 {
     // This method is also used to override KChart's default attributes.
@@ -2084,6 +2087,11 @@ void Axis::setGapBetweenBars(int percent)
     }
 
     requestRepaint();
+}
+
+int Axis::gapBetweenSets() const
+{
+    return d->gapBetweenSets;
 }
 
 void Axis::setGapBetweenSets(int percent)

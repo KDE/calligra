@@ -558,12 +558,18 @@ ChartConfigWidget::~ChartConfigWidget()
 
 void ChartConfigWidget::slotGapBetweenBars()
 {
-    emit gapBetweenBarsChanged(d->ui.gapBetweenBars->value());
+    Axis *axis = d->dataSetAxes.value(d->ui.dataSetAxes->currentIndex());
+    if (axis) {
+        emit gapBetweenBarsChanged(axis, d->ui.gapBetweenBars->value());
+    }
 }
 
 void ChartConfigWidget::slotGapBetweenSets()
 {
-    emit gapBetweenSetsChanged(d->ui.gapBetweenSets->value());
+    Axis *axis = d->dataSetAxes.value(d->ui.dataSetAxes->currentIndex());
+    if (axis) {
+        emit gapBetweenSetsChanged(axis, d->ui.gapBetweenSets->value());
+    }
 }
 
 void ChartConfigWidget::deleteSubDialogs()
@@ -1174,10 +1180,16 @@ void ChartConfigWidget::updateData()
     // Update properties in "Data Sets" tab
     ui_dataSetSelectionChanged(d->selectedDataSet);
 
-    // Update "Bar Properties" in "Data Sets" tab
-    d->ui.gapBetweenBars->setValue(d->shape->plotArea()->gapBetweenBars());
-    d->ui.gapBetweenSets->setValue(d->shape->plotArea()->gapBetweenSets());
-
+    if (d->type == BarChartType) {
+        // Update "Bar Properties" in "Data Sets" tab
+        Axis *axis = d->dataSetAxes.value(d->ui.dataSetAxes->currentIndex());
+        if (axis) {
+            d->ui.gapBetweenBars->setValue(axis->gapBetweenBars());
+            d->ui.gapBetweenSets->setValue(axis->gapBetweenSets());
+        }
+        d->ui.gapBetweenBars->setEnabled((bool)axis);
+        d->ui.gapBetweenSets->setEnabled((bool)axis);
+    }
     // This is used in a couple of places.
     QList<DataSet*> newDataSets = d->shape->plotArea()->dataSets();
 

@@ -30,15 +30,16 @@
 namespace KoChart
 {
 
+class Axis;
 class ChartShape;
-    
+
 class GapCommand : public KUndo2Command
 {
 public:
     /**
      * Constructor.
      */
-    GapCommand(ChartShape* chart);
+    GapCommand(Axis *axis, ChartShape *chart);
 
     /**
      * Destructor.
@@ -59,6 +60,7 @@ public:
     void setGapBetweenSets(int percent);
 
 private:
+    Axis *m_axis;
     ChartShape *m_chart;
 
     int m_oldGapBetweenBars;

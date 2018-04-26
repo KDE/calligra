@@ -92,8 +92,8 @@ private Q_SLOTS:
     void setDataSetAxis(DataSet *dataSet, Axis *axis);
     
     // Plot Area
-    void setGapBetweenBars(int percent);
-    void setGapBetweenSets(int percent);
+    void setGapBetweenBars(Axis *axis, int percent);
+    void setGapBetweenSets(Axis *axis, int percent);
     void setPieExplodeFactor(DataSet *dataSet, int percent);
     
     // Axes

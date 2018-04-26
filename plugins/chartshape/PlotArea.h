@@ -114,8 +114,6 @@ public:
      * So this specifies whether the axis is *not* swapped.
      */
     bool isVertical() const;
-    int gapBetweenBars() const;
-    int gapBetweenSets() const;
 
     /**
      * Defines at what angle, relative to the right-most point
@@ -124,9 +122,6 @@ public:
      * See chart:angle-offset property, as defined in ODF v1.2.
      */
     qreal pieAngleOffset() const;
-
-    void setGapBetweenBars(int percent);
-    void setGapBetweenSets(int percent);
 
     /**
      * @see pieAngleOffset
@@ -167,8 +162,6 @@ public Q_SLOTS:
     void plotAreaUpdate() const;
     
 Q_SIGNALS:
-    void gapBetweenBarsChanged(int);
-    void gapBetweenSetsChanged(int);
     void pieAngleOffsetChanged(qreal);
 
 private:

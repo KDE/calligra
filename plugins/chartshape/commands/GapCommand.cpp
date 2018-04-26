@@ -23,16 +23,17 @@
 #include <klocalizedstring.h>
 
 // KoChart
+#include "Axis.h"
 #include "ChartShape.h"
-#include "PlotArea.h"
 #include "ChartDebug.h"
 
 
 namespace KoChart {
 
 
-GapCommand::GapCommand(ChartShape* chart)
-    : m_chart(chart)
+GapCommand::GapCommand(Axis *axis, ChartShape *chart)
+    : m_axis(axis)
+    , m_chart(chart)
 {
     m_oldGapBetweenBars = 0;
     m_newGapBetweenBars = 0;
@@ -47,33 +48,35 @@ GapCommand::~GapCommand()
 void GapCommand::redo()
 {
     if (m_oldGapBetweenBars != m_newGapBetweenBars) {
-        m_chart->plotArea()->setGapBetweenBars(m_newGapBetweenBars);
+        m_axis->setGapBetweenBars(m_newGapBetweenBars);
     }
     if (m_oldGapBetweenSets != m_newGapBetweenSets) {
-        m_chart->plotArea()->setGapBetweenSets(m_newGapBetweenSets);
+        m_axis->setGapBetweenSets(m_newGapBetweenSets);
     }
+    m_chart->update();
 }
 
 void GapCommand::undo()
 {
     if (m_oldGapBetweenBars != m_newGapBetweenBars) {
-        m_chart->plotArea()->setGapBetweenBars(m_oldGapBetweenBars);
+        m_axis->setGapBetweenBars(m_oldGapBetweenBars);
     }
     if (m_oldGapBetweenSets != m_newGapBetweenSets) {
-        m_chart->plotArea()->setGapBetweenSets(m_oldGapBetweenSets);
+        m_axis->setGapBetweenSets(m_oldGapBetweenSets);
     }
+    m_chart->update();
 }
 
 void GapCommand::setGapBetweenBars(int percent)
 {
-    m_oldGapBetweenBars = m_chart->plotArea()->gapBetweenBars();
+    m_oldGapBetweenBars = m_axis->gapBetweenBars();
     m_newGapBetweenBars = percent;
     setText(kundo2_i18n("Set Gap Between Bars"));
 }
 
 void GapCommand::setGapBetweenSets(int percent)
 {
-    m_oldGapBetweenSets = m_chart->plotArea()->gapBetweenSets();
+    m_oldGapBetweenSets = m_axis->gapBetweenSets();
     m_newGapBetweenSets = percent;
     setText(kundo2_i18n("Set Gap Between Sets"));
 }

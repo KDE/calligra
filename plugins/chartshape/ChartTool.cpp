@@ -301,10 +301,10 @@ QWidget *ChartTool::createOptionWidget()
             this, SLOT(setDataSetShowSymbol(DataSet*,bool)));
     connect(widget, SIGNAL(dataSetAxisChanged(DataSet*,Axis*)),
             this, SLOT(setDataSetAxis(DataSet*,Axis*)));
-    connect(widget, SIGNAL(gapBetweenBarsChanged(int)),
-            this,   SLOT(setGapBetweenBars(int)));
-    connect(widget, SIGNAL(gapBetweenSetsChanged(int)),
-            this,   SLOT(setGapBetweenSets(int)));
+    connect(widget, SIGNAL(gapBetweenBarsChanged(Axis*,int)),
+            this,   SLOT(setGapBetweenBars(Axis*,int)));
+    connect(widget, SIGNAL(gapBetweenSetsChanged(Axis*,int)),
+            this,   SLOT(setGapBetweenSets(Axis*,int)));
     connect(widget, SIGNAL(pieExplodeFactorChanged(DataSet*,int)),
             this,   SLOT(setPieExplodeFactor(DataSet*,int)));
     
@@ -819,20 +819,20 @@ void ChartTool::setAxisLabelsFont(Axis *axis, const QFont &font)
 }
 
 
-void ChartTool::setGapBetweenBars(int percent)
+void ChartTool::setGapBetweenBars(Axis *axis, int percent)
 {
     Q_ASSERT(d->shape);
 
-    GapCommand *command = new GapCommand(d->shape);
+    GapCommand *command = new GapCommand(axis, d->shape);
     command->setGapBetweenBars(percent);
     canvas()->addCommand(command);
 }
 
-void ChartTool::setGapBetweenSets(int percent)
+void ChartTool::setGapBetweenSets(Axis *axis, int percent)
 {
     Q_ASSERT(d->shape);
 
-    GapCommand *command = new GapCommand(d->shape);
+    GapCommand *command = new GapCommand(axis, d->shape);
     command->setGapBetweenSets(percent);
     canvas()->addCommand(command);
 }

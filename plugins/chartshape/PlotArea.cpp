@@ -123,8 +123,6 @@ public:
     // these style attributes.
     // chart:vertical attribute: see ODF v1.2, $19.63
     bool  vertical;
-    int   gapBetweenBars;
-    int   gapBetweenSets;
 
     // 2. Pie charts
     // TODO: Load+Save
@@ -161,9 +159,6 @@ PlotArea::Private::Private(PlotArea *q, ChartShape *parent)
     , threeDScene(0)
     // By default, x and y axes are not swapped.
     , vertical(false)
-    // Data specific for bar charts
-    , gapBetweenBars(0)
-    , gapBetweenSets(100)
     // OpenOffice.org's default. It means the first pie slice starts at the
     // very top (and then going counter-clockwise).
     , pieAngleOffset(90.0)
@@ -408,16 +403,6 @@ bool PlotArea::isVertical() const
 Ko3dScene *PlotArea::threeDScene() const
 {
     return d->threeDScene;
-}
-
-int PlotArea::gapBetweenBars() const
-{
-    return d->gapBetweenBars;
-}
-
-int PlotArea::gapBetweenSets() const
-{
-    return d->gapBetweenSets;
 }
 
 qreal PlotArea::pieAngleOffset() const
@@ -963,20 +948,6 @@ void PlotArea::saveOdfSubType(KoXmlWriter& xmlWriter,
         // FIXME
         break;
     }
-}
-
-void PlotArea::setGapBetweenBars(int percent)
-{
-    d->gapBetweenBars = percent;
-
-    emit gapBetweenBarsChanged(percent);
-}
-
-void PlotArea::setGapBetweenSets(int percent)
-{
-    d->gapBetweenSets = percent;
-
-    emit gapBetweenSetsChanged(percent);
 }
 
 void PlotArea::setPieAngleOffset(qreal angle)
