@@ -126,6 +126,10 @@ public Q_SLOTS:
     void ui_axisEditFontButtonClicked();
     void ui_axisLabelsFontChanged();
 
+private Q_SLOTS:
+    void slotGapBetweenBars();
+    void slotGapBetweenSets();
+
 Q_SIGNALS:
     void chartTypeChanged(ChartType type, ChartSubtype subType);
     void chartSubTypeChanged(ChartSubtype subType);

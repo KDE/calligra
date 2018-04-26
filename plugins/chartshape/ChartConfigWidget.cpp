@@ -509,10 +509,10 @@ ChartConfigWidget::ChartConfigWidget()
             this, SLOT(ui_datasetShowPercentChanged(bool)));
     connect(d->ui.datasetShowSymbol, SIGNAL(toggled(bool)),
             this, SLOT(ui_datasetShowSymbolChanged(bool)));
-    connect(d->ui.gapBetweenBars, SIGNAL(valueChanged(int)),
-            this, SIGNAL(gapBetweenBarsChanged(int)));
-    connect(d->ui.gapBetweenSets, SIGNAL(valueChanged(int)),
-            this, SIGNAL(gapBetweenSetsChanged(int)));
+    connect(d->ui.gapBetweenBars, SIGNAL(editingFinished()),
+            this, SLOT(slotGapBetweenBars()));
+    connect(d->ui.gapBetweenSets, SIGNAL(editingFinished()),
+            this, SLOT(slotGapBetweenSets()));
     connect(d->ui.pieExplodeFactor, SIGNAL(valueChanged(int)),
             this, SLOT(ui_dataSetPieExplodeFactorChanged(int)));
 
@@ -554,6 +554,16 @@ ChartConfigWidget::ChartConfigWidget()
 ChartConfigWidget::~ChartConfigWidget()
 {
     delete d;
+}
+
+void ChartConfigWidget::slotGapBetweenBars()
+{
+    emit gapBetweenBarsChanged(d->ui.gapBetweenBars->value());
+}
+
+void ChartConfigWidget::slotGapBetweenSets()
+{
+    emit gapBetweenSetsChanged(d->ui.gapBetweenSets->value());
 }
 
 void ChartConfigWidget::deleteSubDialogs()

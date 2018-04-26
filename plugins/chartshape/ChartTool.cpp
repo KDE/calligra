@@ -66,6 +66,7 @@
 #include "commands/DatasetCommand.h"
 #include "commands/ChartTextShapeCommand.h"
 #include "commands/AddRemoveAxisCommand.h"
+#include "commands/GapCommand.h"
 #include "ChartDebug.h"
 
 
@@ -822,16 +823,18 @@ void ChartTool::setGapBetweenBars(int percent)
 {
     Q_ASSERT(d->shape);
 
-    d->shape->plotArea()->setGapBetweenBars(percent);
-    d->shape->update();
+    GapCommand *command = new GapCommand(d->shape);
+    command->setGapBetweenBars(percent);
+    canvas()->addCommand(command);
 }
 
 void ChartTool::setGapBetweenSets(int percent)
 {
     Q_ASSERT(d->shape);
 
-    d->shape->plotArea()->setGapBetweenSets(percent);
-    d->shape->update();
+    GapCommand *command = new GapCommand(d->shape);
+    command->setGapBetweenSets(percent);
+    canvas()->addCommand(command);
 }
 
 void ChartTool::setPieExplodeFactor(DataSet *dataSet, int percent)
