@@ -504,9 +504,9 @@ void ChartTool::setDataSetAxis(DataSet *dataSet, Axis *axis)
     if (!dataSet || !axis)
         return;
 
-    dataSet->attachedAxis()->detachDataSet(dataSet);
-    axis->attachDataSet(dataSet);
-    d->shape->update();
+    DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
+    command->setDataSetAxis(axis);
+    canvas()->addCommand(command);
 }
 
 void ChartTool::Private::setDataSetShowLabel(DataSet *dataSet, bool *number, bool *percentage, bool *category, bool *symbol)

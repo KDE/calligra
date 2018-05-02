@@ -24,6 +24,7 @@
 
 // KoChart
 #include "DataSet.h"
+#include "Axis.h"
 #include "ChartDebug.h"
 
 using namespace KoChart;
@@ -66,7 +67,8 @@ void DatasetCommand::redo()
 
     if (m_oldShowCategory == m_newShowCategory && m_oldShowNumber == m_newShowNumber
             && m_oldShowPercent == m_newShowPercent && m_oldShowSymbol == m_newShowSymbol
-            && m_oldBrushColor == m_newBrushColor && m_oldPenColor == m_newPenColor && m_oldMarkerStyle == m_newMarkerStyle)
+            && m_oldBrushColor == m_newBrushColor && m_oldPenColor == m_newPenColor && m_oldMarkerStyle == m_newMarkerStyle
+            && m_oldAxis == m_newAxis)
         return;
 
     // Actually do the work
@@ -80,7 +82,12 @@ void DatasetCommand::redo()
     m_dataSet->setBrush(QBrush(m_newBrushColor));
     m_dataSet->setPen(QPen(m_newPenColor, 0));
     m_dataSet->setMarkerStyle(m_newMarkerStyle);
-    m_dataSet->setAttachedAxis(m_newAxis);
+
+    if (m_newAxis != m_oldAxis) {
+        m_oldAxis->detachDataSet(m_dataSet);
+        m_newAxis->attachDataSet(m_dataSet);
+    }
+
     m_chart->update();
 }
 
@@ -88,7 +95,8 @@ void DatasetCommand::undo()
 {
     if (m_oldShowCategory == m_newShowCategory && m_oldShowNumber == m_newShowNumber
             && m_oldShowPercent == m_newShowPercent && m_oldShowSymbol == m_newShowSymbol
-            && m_oldBrushColor == m_newBrushColor && m_oldPenColor == m_newPenColor && m_oldMarkerStyle == m_newMarkerStyle)
+            && m_oldBrushColor == m_newBrushColor && m_oldPenColor == m_newPenColor && m_oldMarkerStyle == m_newMarkerStyle
+            && m_oldAxis == m_newAxis)
         return;
 
     DataSet::ValueLabelType valueLabelType = m_dataSet->valueLabelType();
@@ -101,7 +109,12 @@ void DatasetCommand::undo()
     m_dataSet->setBrush(QBrush(m_oldBrushColor));
     m_dataSet->setPen(QPen(m_oldPenColor, 0));
     m_dataSet->setMarkerStyle(m_oldMarkerStyle);
-    m_dataSet->setAttachedAxis(m_oldAxis);
+
+    if (m_newAxis != m_oldAxis) {
+        m_newAxis->detachDataSet(m_dataSet);
+        m_oldAxis->attachDataSet(m_dataSet);
+    }
+
     m_chart->update();
 }
 
