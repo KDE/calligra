@@ -558,16 +558,16 @@ ChartConfigWidget::~ChartConfigWidget()
 
 void ChartConfigWidget::slotGapBetweenBars()
 {
-    Axis *axis = d->dataSetAxes.value(d->ui.dataSetAxes->currentIndex());
-    if (axis) {
+    Axis *axis = d->axes.value(d->ui.axes->currentIndex());
+    if (axis && axis->dimension() == YAxisDimension) {
         emit gapBetweenBarsChanged(axis, d->ui.gapBetweenBars->value());
     }
 }
 
 void ChartConfigWidget::slotGapBetweenSets()
 {
-    Axis *axis = d->dataSetAxes.value(d->ui.dataSetAxes->currentIndex());
-    if (axis) {
+    Axis *axis = d->axes.value(d->ui.axes->currentIndex());
+    if (axis && axis->dimension() == YAxisDimension) {
         emit gapBetweenSetsChanged(axis, d->ui.gapBetweenSets->value());
     }
 }
@@ -1177,19 +1177,21 @@ void ChartConfigWidget::updateData()
     d->ui.showSubTitle->setChecked(d->shape->subTitle()->isVisible());
     d->ui.showFooter->setChecked(d->shape->footer()->isVisible());
 
+    d->ui.barProperties->hide();
+    if (d->shape->chartType() == BarChartType) {
+        // Update "Bar Properties" in "Plot Area" tab
+        Axis *axis = d->axes.value(d->ui.axes->currentIndex());
+        if (axis && axis->dimension() == YAxisDimension) {
+            d->ui.gapBetweenBars->setValue(axis->gapBetweenBars());
+            d->ui.gapBetweenSets->setValue(axis->gapBetweenSets());
+
+            d->ui.barProperties->show();
+        }
+    }
+
     // Update properties in "Data Sets" tab
     ui_dataSetSelectionChanged(d->selectedDataSet);
 
-    if (d->type == BarChartType) {
-        // Update "Bar Properties" in "Data Sets" tab
-        Axis *axis = d->dataSetAxes.value(d->ui.dataSetAxes->currentIndex());
-        if (axis) {
-            d->ui.gapBetweenBars->setValue(axis->gapBetweenBars());
-            d->ui.gapBetweenSets->setValue(axis->gapBetweenSets());
-        }
-        d->ui.gapBetweenBars->setEnabled((bool)axis);
-        d->ui.gapBetweenSets->setEnabled((bool)axis);
-    }
     // This is used in a couple of places.
     QList<DataSet*> newDataSets = d->shape->plotArea()->dataSets();
 
@@ -1204,22 +1206,18 @@ void ChartConfigWidget::updateData()
         // Update the chart type specific settings in the "Data Sets" tab
         bool needPropertiesSeparator = false;
         if (d->shape->chartType() == BarChartType) {
-            d->ui.barProperties->show();
             d->ui.pieProperties->hide();
             d->ui.errorBarProperties->show();
             needPropertiesSeparator = true;
         } else if (d->shape->chartType() == LineChartType || d->shape->chartType() == AreaChartType
                    || d->shape->chartType() == ScatterChartType) {
-            d->ui.barProperties->hide();
             d->ui.pieProperties->hide();
             d->ui.errorBarProperties->show();
         } else if (d->shape->chartType() == CircleChartType || d->shape->chartType() == RingChartType) {
-            d->ui.barProperties->hide();
             d->ui.pieProperties->show();
             d->ui.errorBarProperties->hide();
             needPropertiesSeparator = true;
         } else {
-            d->ui.barProperties->hide();
             d->ui.pieProperties->hide();
             d->ui.errorBarProperties->hide();
         }
@@ -1538,6 +1536,10 @@ void ChartConfigWidget::ui_axisSelectionChanged(int index)
     d->axisScalingDialog.automaticSubStepWidth->setChecked(axis->useAutomaticMinorInterval());
     d->axisScalingDialog.subStepWidth->setEnabled(!axis->useAutomaticMinorInterval());
     d->axisScalingDialog.automaticSubStepWidth->blockSignals(false);
+
+    d->ui.gapBetweenBars->setValue(axis->gapBetweenBars());
+    d->ui.gapBetweenSets->setValue(axis->gapBetweenSets());
+    d->ui.barProperties->setVisible(axis->dimension() == YAxisDimension);
 }
 
 
