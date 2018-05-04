@@ -1108,6 +1108,7 @@ calligra_drop_products_on_old_flag(plan  APP_PLAN)
 calligra_drop_products_on_old_flag(sheets PART_SHEETS APP_SHEETS)
 calligra_drop_products_on_old_flag(stage  PART_STAGE APP_STAGE)
 calligra_drop_products_on_old_flag(words  PART_WORDS APP_WORDS)
+calligra_drop_products_on_old_flag(flow  APP_FLOW)
 
 #############################################
 ####      Temporarily broken products    ####
@@ -1143,7 +1144,9 @@ endif()
 
 add_subdirectory(words)
 
-add_subdirectory(flow)
+if(SHOULD_BUILD_APP_FLOW)
+    add_subdirectory(flow)
+endif()
 
 add_subdirectory(stage)
 
