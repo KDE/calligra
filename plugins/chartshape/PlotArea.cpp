@@ -201,6 +201,11 @@ PlotArea::Private::Private(PlotArea *q, ChartShape *parent)
 
 PlotArea::Private::~Private()
 {
+    // remove first to avoid crash
+    while (!kdChart->coordinatePlanes().isEmpty()) {
+        kdChart->takeCoordinatePlane(kdChart->coordinatePlanes().last());
+    }
+
     qDeleteAll(axes);
     delete kdCartesianPlanePrimary;
     delete kdCartesianPlaneSecondary;
@@ -748,6 +753,17 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
         else if (n.localName() != "axis" && n.localName() != "series") {
             warnChart << "PlotArea::loadOdf(): Unknown tag name " << n.localName();
         }
+    }
+    // Connect axes to datasets and cleanup
+    foreach(DataSet *ds, d->shape->proxyModel()->dataSets()) {
+        foreach(Axis *axis, d->axes) {
+            if (axis->name() == ds->axisName()) {
+                axis->attachDataSet(ds);
+            }
+        }
+    }
+    foreach(Axis *axis, d->axes) {
+        axis->setName(QString());
     }
 
     requestRepaint();

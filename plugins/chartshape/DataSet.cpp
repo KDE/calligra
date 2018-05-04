@@ -190,6 +190,7 @@ public:
     ChartSubtype  chartSubType;
 
     Axis *attachedAxis;
+    QString axisName;
     bool showMeanValue;
     QPen meanValuePen;
     bool showLowerErrorIndicator;
@@ -1525,7 +1526,9 @@ bool DataSet::loadOdf(const KoXmlElement &n,
             cn = cn.nextSibling();
         }
     }
-
+    if (n.hasAttributeNS(KoXmlNS::chart, "attached-axis")) {
+        d->axisName = n.attributeNS(KoXmlNS::chart, "attached-axis");
+    }
     if (n.hasAttributeNS(KoXmlNS::chart, "values-cell-range-address") && !ignoreCellRanges) {
         const QString regionString = n.attributeNS(KoXmlNS::chart, "values-cell-range-address", QString());
         const CellRegion region(helper->tableSource, regionString);
@@ -1826,6 +1829,9 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
             bodyWriter.endElement();
         }
     }
+    if (d->attachedAxis) {
+        bodyWriter.addAttribute("chart:attached-axis", d->attachedAxis->name());
+    }
 
     bodyWriter.endElement(); // chart:series
 }
@@ -1875,4 +1881,9 @@ static KChart::MarkerAttributes::MarkerStyle odf2kdMarker(OdfMarkerStyle style) 
     }
 
     return KChart::MarkerAttributes::MarkerSquare;
+}
+
+QString DataSet::axisName() const
+{
+    return d->axisName;
 }

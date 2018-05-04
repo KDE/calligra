@@ -190,6 +190,7 @@ public:
     bool showOverlappingDataLabels;
 
     bool isVisible;
+    QString name;
 };
 
 class CartesianAxis : public KChart::CartesianAxis
@@ -1401,8 +1402,8 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
         }
 
         if (axisElement.hasAttributeNS(KoXmlNS::chart, "axis-name")) {
-            const QString name = axisElement.attributeNS(KoXmlNS::chart, "axis-name", QString());
-            //setTitleText(name);
+            const QString name = axisElement.attributeNS(KoXmlNS::chart, "name", QString());
+            setName(name);
         }
 
         // NOTE: chart:dimension already handled by PlotArea before and passed
@@ -1580,6 +1581,48 @@ bool Axis::loadOdfChartSubtypeProperties(const KoXmlElement &axisElement,
     return true;
 }
 
+void Axis::setName(const QString &name)
+{
+    d->name = name;
+}
+
+// NOTE: only used during save/load to enable attaching axis to datasets
+QString Axis::name() const
+{
+    if (!d->name.isEmpty()) {
+        return d->name;
+    }
+    QString name;
+    switch(dimension()) {
+        case XAxisDimension:
+            name = QLatin1Char('x');
+            break;
+        case YAxisDimension:
+            name = QLatin1Char('y');
+            break;
+        case ZAxisDimension:
+            name = QLatin1Char('z');
+            break;
+    }
+    int i = 1;
+    foreach (Axis *axis, d->plotArea->axes()) {
+        if (axis == this)
+            break;
+        if (axis->dimension() == dimension())
+            i++;
+    }
+    if (i == 1)
+        name = "primary-" + name;
+    else if (i == 2)
+        name = "secondary-" + name;
+    // Usually, there's not more than two axes of the same dimension.
+    // But use a fallback name here nevertheless.
+    else
+        name = QString::number(i) + '-' + name;
+
+    return name;
+}
+
 void Axis::saveOdf(KoShapeSavingContext &context)
 {
     KoXmlWriter &bodyWriter = context.xmlWriter();
@@ -1644,34 +1687,7 @@ void Axis::saveOdf(KoShapeSavingContext &context)
     else if (dimension() == YAxisDimension)
         bodyWriter.addAttribute("chart:dimension", "y");
 
-    QString name;
-    switch(dimension()) {
-    case XAxisDimension:
-        name = QLatin1Char('x');
-        break;
-    case YAxisDimension:
-        name = QLatin1Char('y');
-        break;
-    case ZAxisDimension:
-        name = QLatin1Char('z');
-        break;
-    }
-    int i = 1;
-    foreach (Axis *axis, d->plotArea->axes()) {
-        if (axis == this)
-            break;
-        if (axis->dimension() == dimension())
-            i++;
-    }
-    if (i == 1)
-        name = "primary-" + name;
-    else if (i == 2)
-        name = "secondary-" + name;
-    // Usually, there's not more than two axes of the same dimension.
-    // But use a fallback name here nevertheless.
-    else
-        name = QString::number(i) + '-' + name;
-    bodyWriter.addAttribute("chart:name", name);
+    bodyWriter.addAttribute("chart:name", name());
 
     bodyWriter.startElement("chart:title");
 

@@ -242,6 +242,8 @@ public:
      */
     void saveOdf(KoShapeSavingContext &context) const;
 
+    QString axisName() const;
+
 private:
     class Private;
     Private *const d;

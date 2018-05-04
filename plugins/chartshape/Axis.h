@@ -55,7 +55,11 @@ class Axis : public QObject
 public:
     Axis(PlotArea *parent, AxisDimension dimension);
     ~Axis();
-	
+
+    // odf chart:name that identifies the axis
+    QString name() const;
+    void setName(const QString &name);
+
     PlotArea *plotArea() const;
     KoShape *title() const;
     QString titleText() const;
