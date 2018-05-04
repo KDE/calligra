@@ -1009,6 +1009,19 @@ bool PlotArea::deregisterKdDiagram(KChart::AbstractDiagram *diagram)
     return true;
 }
 
+// HACK to get kdChart to recognize secondary planes
+void PlotArea::registerKdPlane(KChart::AbstractCoordinatePlane *plane)
+{
+    int pos = d->kdChart->coordinatePlanes().indexOf(plane);
+    if (pos >= 1) {
+        // secondary plane
+        d->kdChart->takeCoordinatePlane(plane);
+        d->kdChart->insertCoordinatePlane(pos, plane);
+    } else if (pos < 0) {
+        d->kdChart->addCoordinatePlane(plane);
+    }
+}
+
 void PlotArea::plotAreaUpdate() const
 {
     parent()->legend()->update();

@@ -155,7 +155,9 @@ public:
     bool deregisterKdDiagram(KChart::AbstractDiagram *diagram);
     
     void relayout() const;
-    
+
+    void registerKdPlane(KChart::AbstractCoordinatePlane *plane);
+
 public Q_SLOTS:
     void requestRepaint() const;
     void proxyModelStructureChanged();
