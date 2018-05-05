@@ -1504,6 +1504,27 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
                 setFont(f);
             }
         }
+        if (styleStack.hasProperty(KoXmlNS::fo, "font-style")) {
+            QString fontStyle = styleStack.property(KoXmlNS::fo, "font-style");
+            if (fontStyle == "italic") {
+                QFont f = this->font();
+                f.setItalic(true);
+                setFont(f);
+            } else if (fontStyle == "oblique") {
+                // TODO
+            }
+        }
+        if (styleStack.hasProperty(KoXmlNS::fo, "font-weight")) {
+            QString fontWeight = styleStack.property(KoXmlNS::fo, "font-weight");
+            //fo:font-weight attribute are normal, bold, 100, 200, 300, 400, 500, 600, 700, 800 or 900.
+            if (fontWeight == "bold") {
+                QFont f = this->font();
+                f.setBold(true);
+                setFont(f);
+            } else {
+                // TODO
+            }
+        }
     } else {
         setShowLabels(KoOdfWorkaround::fixMissingStyle_DisplayLabel(axisElement, context));
     }
@@ -1675,6 +1696,14 @@ void Axis::saveOdf(KoShapeSavingContext &context)
     axisStyle.addProperty("fo:font-color", pen.color().name(), KoGenStyle::TextType);
     axisStyle.addProperty("fo:font-family", tatt.font().family(), KoGenStyle::TextType);
     axisStyle.addPropertyPt("fo:font-size", fontSize(), KoGenStyle::TextType);
+    if (font().bold()) {
+        axisStyle.addProperty("fo:font-weight", "bold" , KoGenStyle::TextType);
+        // TODO support other weights
+    }
+    if (font().italic()) {
+        axisStyle.addProperty("fo:font-style", "italic" , KoGenStyle::TextType);
+        // TODO oblique
+    }
 
     const QString styleName = mainStyles.insert(axisStyle, "ch");
     bodyWriter.addAttribute("chart:style-name", styleName);
