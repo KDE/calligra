@@ -199,7 +199,7 @@ void saveOdfLabel(KoShape *label, KoXmlWriter &bodyWriter,
 
     KoGenStyle autoStyle(KoGenStyle::ChartAutoStyle, "chart", 0);
     autoStyle.addPropertyPt("style:rotation-angle", 360 - label->rotation());
-    saveOdfFont(autoStyle, labelFont, QColor());
+    saveOdfFont(autoStyle, labelFont, cursor.charFormat().foreground().color());
     bodyWriter.addAttribute("chart:style-name", mainStyles.insert(autoStyle, "ch"));
 
     bodyWriter.startElement("text:p");
@@ -318,13 +318,11 @@ bool ChartShape::Private::loadOdfLabel(KoShape *label, KoXmlElement &labelElemen
     // a frame while our text:p is not within a frame. So, let's just not call loadOdf then...
     //label->loadOdf(labelElement, context);
 
-    // 1. set the text
-    KoXmlElement  pElement = KoXml::namedItemNS(labelElement, KoXmlNS::text, "p");
-
     QTextDocument* doc = labelData->document();
-    doc->setPlainText(pElement.text());
+    QTextCursor cursor(doc);
+    QTextCharFormat charFormat = cursor.charFormat();
 
-    // 2. set the position
+    // Set the position
     QPointF pos = label->position();
     bool posChanged = false;
     if (labelElement.hasAttributeNS(KoXmlNS::svg, "x")) {
@@ -339,7 +337,7 @@ bool ChartShape::Private::loadOdfLabel(KoShape *label, KoXmlElement &labelElemen
         label->setPosition(pos);
     }
 
-    // 3. set the styles
+    // Set the styles
     if (labelElement.hasAttributeNS(KoXmlNS::chart, "style-name")) {
         KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
         styleStack.clear();
@@ -366,9 +364,19 @@ bool ChartShape::Private::loadOdfLabel(KoShape *label, KoXmlElement &labelElemen
             font.setFamily(fontFamily);
             doc->setDefaultFont(font);
         }
+
+        if (styleStack.hasProperty(KoXmlNS::fo, "color")) {
+            const QColor color(styleStack.property(KoXmlNS::fo, "color"));
+            charFormat.setForeground(color);
+        }
     }
 
-    // 4. set the size
+    // Set text
+    KoXmlElement pElement = KoXml::namedItemNS(labelElement, KoXmlNS::text, "p");
+    cursor.select(QTextCursor::Document); // remove any default text
+    cursor.insertText(pElement.text(), charFormat);
+
+    // Set the size
     if (labelElement.hasAttributeNS(KoXmlNS::svg, "width")
         && labelElement.hasAttributeNS(KoXmlNS::svg, "height"))
     {
