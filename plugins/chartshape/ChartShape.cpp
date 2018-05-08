@@ -89,6 +89,7 @@
 #include <KoTextDocument.h>
 #include <KoUnit.h>
 #include <KoShapePaintingContext.h>
+#include <KoTextShapeDataBase.h>
 
 // KoChart
 #include "Axis.h"
@@ -170,7 +171,7 @@ QString saveOdfFont(KoGenStyles& mainStyles,
 
 
 void saveOdfLabel(KoShape *label, KoXmlWriter &bodyWriter,
-                  KoGenStyles &mainStyles, ItemType labelType)
+                  KoGenStyles &mainStyles, ItemType labelType, KoShapeSavingContext &context)
 {
     // Don't save hidden labels, as that's the way of removing them
     // from a chart.
@@ -193,18 +194,24 @@ void saveOdfLabel(KoShape *label, KoXmlWriter &bodyWriter,
     bodyWriter.addAttributePt("svg:width", label->size().width());
     bodyWriter.addAttributePt("svg:height", label->size().height());
 
-    // TODO: Save text label color
     QTextCursor cursor(labelData->document());
     QFont labelFont = cursor.charFormat().font();
+    QColor color = cursor.charFormat().foreground().color();
 
     KoGenStyle autoStyle(KoGenStyle::ChartAutoStyle, "chart", 0);
     autoStyle.addPropertyPt("style:rotation-angle", 360 - label->rotation());
-    saveOdfFont(autoStyle, labelFont, cursor.charFormat().foreground().color());
+    saveOdfFont(autoStyle, labelFont, color);
     bodyWriter.addAttribute("chart:style-name", mainStyles.insert(autoStyle, "ch"));
 
-    bodyWriter.startElement("text:p");
-    bodyWriter.addTextNode(labelData->document()->toPlainText());
-    bodyWriter.endElement(); // text:p
+    bool libreOfficeCompatible = true; // TODO any good ideas?
+    if (libreOfficeCompatible) {
+        // lo does not support formatted text :(
+        bodyWriter.startElement("text:p");
+        bodyWriter.addTextNode(labelData->document()->toPlainText());
+        bodyWriter.endElement(); // text:p
+    } else {
+        labelData->saveOdf(context);
+    }
     bodyWriter.endElement(); // chart:title/subtitle/footer
 }
 
@@ -319,6 +326,7 @@ bool ChartShape::Private::loadOdfLabel(KoShape *label, KoXmlElement &labelElemen
     //label->loadOdf(labelElement, context);
 
     QTextDocument* doc = labelData->document();
+    doc->setPlainText(QString()); // remove default text
     QTextCursor cursor(doc);
     QTextCharFormat charFormat = cursor.charFormat();
 
@@ -369,12 +377,11 @@ bool ChartShape::Private::loadOdfLabel(KoShape *label, KoXmlElement &labelElemen
             const QColor color(styleStack.property(KoXmlNS::fo, "color"));
             charFormat.setForeground(color);
         }
+        cursor.insertText(QString(), charFormat);
     }
 
-    // Set text
-    KoXmlElement pElement = KoXml::namedItemNS(labelElement, KoXmlNS::text, "p");
-    cursor.select(QTextCursor::Document); // remove any default text
-    cursor.insertText(pElement.text(), charFormat);
+    // load text
+    labelData->loadOdf(labelElement, context, 0, label);
 
     // Set the size
     if (labelElement.hasAttributeNS(KoXmlNS::svg, "width")
@@ -476,11 +483,12 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     // In both cases we need a KoTextShapeData instance to function. This is
     // enough for unit tests, so there has to be no TextShape plugin doing the
     // actual text rendering, we just need KoTextShapeData which is in the libs.
-    if (dynamic_cast<TextLabelData*>(d->title->userData()) == 0) {
-        TextLabelData *dataDummy = new TextLabelData;
-        KoTextDocumentLayout *documentLayout = new KoTextDocumentLayout(dataDummy->document());
-        dataDummy->document()->setDocumentLayout(documentLayout);
-        d->title->setUserData(dataDummy);
+    TextLabelData *labelData = dynamic_cast<TextLabelData*>(d->title->userData());
+    if (labelData == 0) {
+        labelData = new TextLabelData;
+        KoTextDocumentLayout *documentLayout = new KoTextDocumentLayout(labelData->document());
+        labelData->document()->setDocumentLayout(documentLayout);
+        d->title->setUserData(labelData);
     }
 
     // Start with a reasonable default size that we can base all following relative
@@ -502,6 +510,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     setInheritsTransform(d->title, true);
     d->title->setDeletable(false);
     d->title->setToolDelegates(QSet<KoShape*>()<<this<<d->title); // Enable chart tool
+    labelData->setResizeMethod(KoTextShapeDataBase::AutoResize);
 
     // Create the Subtitle and add it to the shape.
     if (textShapeFactory)
@@ -509,11 +518,12 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     if (!d->subTitle) {
         d->subTitle = new TextLabelDummy;
     }
-    if (dynamic_cast<TextLabelData*>(d->subTitle->userData()) == 0) {
-        TextLabelData *dataDummy = new TextLabelData;
-        KoTextDocumentLayout *documentLayout = new KoTextDocumentLayout(dataDummy->document());
-        dataDummy->document()->setDocumentLayout(documentLayout);
-        d->subTitle->setUserData(dataDummy);
+    labelData = dynamic_cast<TextLabelData*>(d->subTitle->userData());
+    if (labelData == 0) {
+        labelData = new TextLabelData;
+        KoTextDocumentLayout *documentLayout = new KoTextDocumentLayout(labelData->document());
+        labelData->document()->setDocumentLayout(documentLayout);
+        d->subTitle->setUserData(labelData);
     }
     addShape(d->subTitle);
     font = subTitleData()->document()->defaultFont();
@@ -531,6 +541,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     setInheritsTransform(d->subTitle, true);
     d->subTitle->setDeletable(false);
     d->subTitle->setToolDelegates(QSet<KoShape*>()<<this<<d->subTitle); // Enable chart tool
+    labelData->setResizeMethod(KoTextShapeDataBase::AutoResize);
 
     // Create the Footer and add it to the shape.
     if (textShapeFactory)
@@ -538,11 +549,12 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     if (!d->footer) {
         d->footer = new TextLabelDummy;
     }
-    if (dynamic_cast<TextLabelData*>(d->footer->userData()) == 0) {
-        TextLabelData *dataDummy = new TextLabelData;
-        KoTextDocumentLayout *documentLayout = new KoTextDocumentLayout(dataDummy->document());
-        dataDummy->document()->setDocumentLayout(documentLayout);
-        d->footer->setUserData(dataDummy);
+    labelData = dynamic_cast<TextLabelData*>(d->footer->userData());
+    if (labelData == 0) {
+        labelData = new TextLabelData;
+        KoTextDocumentLayout *documentLayout = new KoTextDocumentLayout(labelData->document());
+        labelData->document()->setDocumentLayout(documentLayout);
+        d->footer->setUserData(labelData);
     }
     addShape(d->footer);
     font = footerData()->document()->defaultFont();
@@ -560,6 +572,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     setInheritsTransform(d->footer, true);
     d->footer->setDeletable(false);
     d->footer->setToolDelegates(QSet<KoShape*>()<<this<<d->footer); // Enable chart tool
+    labelData->setResizeMethod(KoTextShapeDataBase::AutoResize);
 
     // Set default contour (for how text run around is done around this shape)
     // to prevent a crash in LO
@@ -1238,15 +1251,15 @@ void ChartShape::saveOdf(KoShapeSavingContext & context) const
 
     // 2. Write the title.
     if (d->title->isVisible())
-        saveOdfLabel(d->title, bodyWriter, mainStyles, TitleLabelType);
+        saveOdfLabel(d->title, bodyWriter, mainStyles, TitleLabelType, context);
 
     // 3. Write the subtitle.
     if (d->subTitle->isVisible())
-        saveOdfLabel(d->subTitle, bodyWriter, mainStyles, SubTitleLabelType);
+        saveOdfLabel(d->subTitle, bodyWriter, mainStyles, SubTitleLabelType, context);
 
     // 4. Write the footer.
     if (d->footer->isVisible())
-        saveOdfLabel(d->footer, bodyWriter, mainStyles, FooterLabelType);
+        saveOdfLabel(d->footer, bodyWriter, mainStyles, FooterLabelType, context);
 
     // 5. Write the legend.
     if (d->legend->isVisible())
