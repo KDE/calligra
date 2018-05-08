@@ -500,7 +500,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     QFont font = titleData()->document()->defaultFont();
     font.setPointSizeF(12.0);
     titleData()->document()->setDefaultFont(font);
-    titleData()->document()->setHtml("<html><div align=\"center\">" + i18n("Title") + "</font></div></html>");
+    titleData()->document()->setPlainText(i18n("Title"));
     // Position the title center at the very top.
     d->title->setSize(QSizeF(CM_TO_POINT(5), CM_TO_POINT(0.7)));
     d->title->setPosition(QPointF(size().width() / 2.0 - d->title->size().width() / 2.0, 0.0));
@@ -529,7 +529,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     font = subTitleData()->document()->defaultFont();
     font.setPointSizeF(10.0);
     subTitleData()->document()->setDefaultFont(font);
-    subTitleData()->document()->setHtml("<html><div align=\"center\">" + i18n("Subtitle") + "</div></html>");
+    subTitleData()->document()->setPlainText(i18n("Subtitle"));
 
     // Position it in the center, just below the title.
     d->subTitle->setSize(QSizeF(CM_TO_POINT(5), CM_TO_POINT(0.6)));
@@ -560,7 +560,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     font = footerData()->document()->defaultFont();
     font.setPointSizeF(10.0);
     footerData()->document()->setDefaultFont(font);
-    footerData()->document()->setHtml("<html><div align=\"center\">" + i18n("Footer") + "</div></html>");
+    footerData()->document()->setPlainText(i18n("Footer"));
 
     // Position the footer in the center, at the bottom.
     d->footer->setSize(QSizeF(CM_TO_POINT(5), CM_TO_POINT(0.6)));
