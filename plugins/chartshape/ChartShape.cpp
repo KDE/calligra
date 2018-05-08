@@ -150,6 +150,9 @@ static const ChartSubtype defaultSubtypes[NUM_CHARTTYPES] = {
 };
 
 
+// TODO: what todo?
+static bool libreOfficeCompatible = true;
+
 void saveOdfFont(KoGenStyle &style, const QFont& font, const QColor& color)
 {
     style.addProperty("fo:font-family", font.family(), KoGenStyle::TextType);
@@ -191,8 +194,10 @@ void saveOdfLabel(KoShape *label, KoXmlWriter &bodyWriter,
 
     bodyWriter.addAttributePt("svg:x", label->position().x());
     bodyWriter.addAttributePt("svg:y", label->position().y());
-    bodyWriter.addAttributePt("svg:width", label->size().width());
-    bodyWriter.addAttributePt("svg:height", label->size().height());
+    if (labelData->resizeMethod() == KoTextShapeDataBase::NoResize) {
+        bodyWriter.addAttributePt("svg:width", label->size().width());
+        bodyWriter.addAttributePt("svg:height", label->size().height());
+    }
 
     QTextCursor cursor(labelData->document());
     QFont labelFont = cursor.charFormat().font();
@@ -203,7 +208,6 @@ void saveOdfLabel(KoShape *label, KoXmlWriter &bodyWriter,
     saveOdfFont(autoStyle, labelFont, color);
     bodyWriter.addAttribute("chart:style-name", mainStyles.insert(autoStyle, "ch"));
 
-    bool libreOfficeCompatible = true; // TODO any good ideas?
     if (libreOfficeCompatible) {
         // lo does not support formatted text :(
         bodyWriter.startElement("text:p");
@@ -372,6 +376,27 @@ bool ChartShape::Private::loadOdfLabel(KoShape *label, KoXmlElement &labelElemen
             font.setFamily(fontFamily);
             doc->setDefaultFont(font);
         }
+        if (styleStack.hasProperty(KoXmlNS::fo, "font-style")) {
+            QString fontStyle = styleStack.property(KoXmlNS::fo, "font-style");
+            if (fontStyle == "italic") {
+                QFont font = doc->defaultFont();
+                font.setItalic(true);
+                doc->setDefaultFont(font);
+            } else if (fontStyle == "oblique") {
+                // TODO
+            }
+        }
+        if (styleStack.hasProperty(KoXmlNS::fo, "font-weight")) {
+            QString fontWeight = styleStack.property(KoXmlNS::fo, "font-weight");
+            //fo:font-weight attribute are normal, bold, 100, 200, 300, 400, 500, 600, 700, 800 or 900.
+            if (fontWeight == "bold") {
+                QFont font = doc->defaultFont();
+                font.setBold(true);
+                doc->setDefaultFont(font);
+            } else {
+                // TODO
+            }
+        }
 
         if (styleStack.hasProperty(KoXmlNS::fo, "color")) {
             const QColor color(styleStack.property(KoXmlNS::fo, "color"));
@@ -381,7 +406,22 @@ bool ChartShape::Private::loadOdfLabel(KoShape *label, KoXmlElement &labelElemen
     }
 
     // load text
-    labelData->loadOdf(labelElement, context, 0, label);
+    if (libreOfficeCompatible) {
+        const KoXmlElement textElement = KoXml::namedItemNS(labelElement, KoXmlNS::text, "p");
+        if (!textElement.isNull()) {
+            label->setVisible(true);
+            cursor.insertText(textElement.text(), charFormat);
+        }
+    } else if (context.documentResourceManager()) {
+        labelData->loadOdf(labelElement, context, 0, label);
+    } else {
+        // at least unit test can use this
+        const KoXmlElement textElement = KoXml::namedItemNS(labelElement, KoXmlNS::text, "p");
+        if (!textElement.isNull()) {
+            label->setVisible(true);
+            labelData->document()->setPlainText(textElement.text());
+        }
+    }
 
     // Set the size
     if (labelElement.hasAttributeNS(KoXmlNS::svg, "width")
@@ -577,13 +617,6 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     // Set default contour (for how text run around is done around this shape)
     // to prevent a crash in LO
     setTextRunAroundContour(KoShape::ContourBox);
-
-    // Enable auto-resizing of chart labels
-    foreach(KoShape *label, labels()) {
-        TextLabelData *labelData = qobject_cast<TextLabelData*>(label->userData());
-        KoTextDocument doc(labelData->document());
-//FIXME        doc.setResizeMethod(KoTextDocument::AutoResize);
-    }
 
     QSharedPointer<KoColorBackground> background(new KoColorBackground(Qt::white));
     setBackground(background);
