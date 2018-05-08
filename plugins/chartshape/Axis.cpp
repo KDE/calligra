@@ -887,6 +887,7 @@ Axis::Axis(PlotArea *parent, AxisDimension dimension)
     d->title->setDeletable(false);
     d->title->setZIndex(5);
     d->title->setToolDelegates(QSet<KoShape*>()<<parent->parent()<<d->title); // Enable chart tool
+    d->titleData->setResizeMethod(KoTextShapeDataBase::AutoResize);
 
     connect(d->plotArea, SIGNAL(pieAngleOffsetChanged(qreal)),
             this,        SLOT(setPieAngleOffset(qreal)));
@@ -1722,8 +1723,10 @@ void Axis::saveOdf(KoShapeSavingContext &context)
 
     bodyWriter.addAttributePt("svg:x", d->title->position().x());
     bodyWriter.addAttributePt("svg:y", d->title->position().y());
-    bodyWriter.addAttributePt("svg:width", d->title->size().width());
-    bodyWriter.addAttributePt("svg:height", d->title->size().height());
+    if (d->titleData->resizeMethod() == KoTextShapeDataBase::NoResize) {
+        bodyWriter.addAttributePt("svg:width", d->title->size().width());
+        bodyWriter.addAttributePt("svg:height", d->title->size().height());
+    }
 
     KoGenStyle axisTitleStyle(KoGenStyle::ChartAutoStyle, "chart");
     axisTitleStyle.addPropertyPt("style:rotation-angle", 360 - d->title->rotation());
