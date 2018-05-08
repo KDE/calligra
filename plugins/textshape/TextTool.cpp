@@ -402,6 +402,11 @@ void TextTool::createActions()
     addAction("format_backgroundcolor", m_actionFormatBackgroundColor);
     connect(m_actionFormatBackgroundColor, SIGNAL(colorChanged(KoColor)), this, SLOT(setBackgroundColor(KoColor)));
 
+    m_autoResizeAction = new QAction(koIcon("zoom-fit-best"), i18n("Auto Resize To Content"), this);
+    addAction("auto_resize", m_autoResizeAction);
+    m_autoResizeAction->setCheckable(true);
+    connect(m_autoResizeAction, SIGNAL(triggered(bool)), this, SLOT(setAutoResize(bool)));
+
     m_growWidthAction = new QAction(koIcon("zoom-fit-best"), i18n("Grow To Fit Width"), this);
     addAction("grow_to_fit_width", m_growWidthAction);
     m_growWidthAction->setCheckable(true);
@@ -2863,6 +2868,12 @@ void TextTool::setTextColor(const KoColor &color)
 void TextTool::setBackgroundColor(const KoColor &color)
 {
     m_textEditor.data()->setTextBackgroundColor(color.toQColor());
+}
+
+void TextTool::setAutoResize(bool enabled)
+{
+    m_textEditor.data()->addCommand(new AutoResizeCommand(m_textShapeData, KoTextShapeData::AutoResize, enabled));
+    updateActions();
 }
 
 void TextTool::setGrowWidthToFit(bool enabled)

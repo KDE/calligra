@@ -263,6 +263,8 @@ private Q_SLOTS:
     void setTextColor(const KoColor &color);
     /// change background color of a selected text
     void setBackgroundColor(const KoColor &color);
+    /// Enable or disable auto-resize
+    void setAutoResize(bool enabled);
     /// Enable or disable grow-width-to-fit-text.
     void setGrowWidthToFit(bool enabled);
     /// Enable or disable grow-height-to-fit-text.
@@ -369,6 +371,7 @@ private:
     QAction *m_actionFormatSub;
     QAction *m_actionFormatIncreaseIndent;
     QAction *m_actionFormatDecreaseIndent;
+    QAction *m_autoResizeAction;
     QAction *m_growWidthAction;
     QAction *m_growHeightAction;
     QAction *m_shrinkToFitAction;

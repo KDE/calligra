@@ -77,23 +77,28 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
     }
     if (m_textShapeData->verticalAlignment() & Qt::AlignVCenter) {
     }
-    if (m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
-        ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
-        qreal height = rootArea->bottom() - rootArea->top();
-        if (height > newSize.height()) {
-            newSize.setHeight(height);
-        }
-        if (m_textShape->shapeId() == "AnnotationTextShapeID") {
-            if (height < newSize.height()) {
-                newSize.setHeight(rootArea->bottom() - rootArea->top());
+
+    if (m_textShapeData->resizeMethod() == KoTextShapeData::AutoResize) {
+        newSize = QSizeF(rootArea->right() - rootArea->left(), rootArea->bottom() - rootArea->top());
+    } else {
+        if (m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
+            ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
+            qreal height = rootArea->bottom() - rootArea->top();
+            if (height > newSize.height()) {
+                newSize.setHeight(height);
+            }
+            if (m_textShape->shapeId() == "AnnotationTextShapeID") {
+                if (height < newSize.height()) {
+                    newSize.setHeight(rootArea->bottom() - rootArea->top());
+                }
             }
         }
-    }
-    if (m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
-        ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
-        qreal width = rootArea->right() - rootArea->left();
-        if (width > newSize.width()) {
-            newSize.setWidth(rootArea->right() - rootArea->left());
+        if (m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
+            ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
+            qreal width = rootArea->right() - rootArea->left();
+            if (width > newSize.width()) {
+                newSize.setWidth(rootArea->right() - rootArea->left());
+            }
         }
     }
 
@@ -163,7 +168,8 @@ QRectF SimpleRootAreaProvider::suggestRect(KoTextLayoutRootArea *rootArea)
     rect.setHeight(1E6);
 
     if (m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
-        ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
+        ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidth
+        ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoResize) {
         rootArea->setNoWrap(1E6);
     }
 
