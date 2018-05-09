@@ -733,7 +733,9 @@ void ChartTool::setAxisTitle(Axis *axis, const QString& title)
 void ChartTool::setAxisShowTitle(Axis *axis, bool show)
 {
     Q_ASSERT(d->shape);
-
+    if (show && axis->titleText().isEmpty()) {
+        axis->setTitleText(i18n("Axistitle"));
+    }
     AxisCommand *command = new AxisCommand(axis, d->shape);
     command->setAxisShowTitle(show);
     canvas()->addCommand(command);

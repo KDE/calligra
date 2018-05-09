@@ -527,8 +527,6 @@ ChartConfigWidget::ChartConfigWidget()
     d->ui.addAxis->setIcon(koIcon("list-add"));
     d->ui.removeAxis->setIcon(koIcon("list-remove"));
 
-    connect(d->ui.axisTitle, SIGNAL(editingFinished()),
-            this, SLOT(ui_axisEditingFinished()));
     connect(d->ui.axisShowTitle, SIGNAL(toggled(bool)),
             this, SLOT(ui_axisShowTitleChanged(bool)));
     connect(d->ui.axisShowGridLines, SIGNAL(toggled(bool)),
@@ -630,9 +628,6 @@ void ChartConfigWidget::open(KoShape* shape)
 //    ChartTableModel *tableModel = qobject_cast<ChartTableModel*>(d->shape->model());
 //    d->isExternalDataSource = (spreadSheetModel != 0 && tableModel == 0);
 
-    // Update the axis titles
-    //d->ui.xAxisTitle->setText(((KChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[0]->titleText());
-    //d->ui.yAxisTitle->setText(((KChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[1]->titleText());
 
     // Update the legend title
     //d->ui.legendTitle->setText(d->shape->legend()->title());
@@ -1164,11 +1159,6 @@ void ChartConfigWidget::updateData()
             d->ui.axisShowTitle->setChecked(false);
             d->ui.axisShowTitle->setEnabled(false);
             d->ui.axisShowTitle->blockSignals(false);
-
-            d->ui.axisTitle->blockSignals(true);
-            d->ui.axisTitle->setText("");
-            d->ui.axisTitle->setEnabled(false);
-            d->ui.axisTitle->blockSignals(false);
         }
     }
 
@@ -1502,9 +1492,6 @@ void ChartConfigWidget::ui_axisSelectionChanged(int index)
     // KChart do not support removing x- or y-axis
     d->ui.removeAxis->setEnabled(index >= 2);
 
-    d->ui.axisTitle->blockSignals(true);
-    d->ui.axisTitle->setText(axis->titleText());
-    d->ui.axisTitle->blockSignals(false);
     d->ui.axisShowTitle->blockSignals(true);
     d->ui.axisShowTitle->setChecked(axis->title()->isVisible());
     d->ui.axisShowTitle->blockSignals(false);
@@ -1782,26 +1769,6 @@ void ChartConfigWidget::ui_dataSetAxisSelectionChanged(int index)
     Axis *axis = d->dataSetAxes[index];
 
     emit dataSetAxisChanged(dataSet, axis);
-}
-
-void ChartConfigWidget::ui_axisEditingFinished()
-{
-    if (d->ui.axes->currentIndex() < 0 || d->ui.axes->currentIndex() >= d->axes.size()) {
-        return;
-    }
-    const int index = d->ui.axes->currentIndex();
-    Axis *axis = d->axes[index];
-    // Seems to get multiple editingFinished signals
-    if (axis->titleText() == d->ui.axisTitle->text()) {
-        return;
-    }
-    emit axisTitleChanged(axis, d->ui.axisTitle->text());
-
-    // TODO: This should be triggered by the actual change to the title (so undo/redo works)
-    QString nonEmptyTitle = nonEmptyAxisTitle(axis, index);
-    int dataSetAxisIndex = d->dataSetAxes.indexOf(axis);
-    d->ui.dataSetAxes->setItemText(dataSetAxisIndex, nonEmptyTitle);
-    d->ui.axes->setItemText(index, nonEmptyTitle);
 }
 
 void ChartConfigWidget::ui_axisShowTitleChanged(bool b)

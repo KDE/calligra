@@ -98,7 +98,7 @@ p, li { white-space: pre-wrap; }
        </item>
        <item>
         <widget class="QWidget" name="axisConfiguration" native="true">
-         <layout class="QGridLayout">
+         <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0" colspan="3">
            <widget class="Line" name="line_2">
             <property name="orientation">
@@ -106,7 +106,7 @@ p, li { white-space: pre-wrap; }
             </property>
            </widget>
           </item>
-          <item row="1" column="0" colspan="3">
+          <item row="1" column="0">
            <widget class="QLabel" name="label_2">
             <property name="text">
              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -134,28 +134,21 @@ p, li { white-space: pre-wrap; }
             </property>
            </widget>
           </item>
-          <item row="3" column="0" colspan="3">
-           <layout class="QHBoxLayout" name="horizontalLayout_5">
-            <item>
-             <widget class="QCheckBox" name="axisShowTitle">
-              <property name="text">
-               <string>Axis Title</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="axisTitle"/>
-            </item>
-           </layout>
+          <item row="3" column="0">
+           <widget class="QCheckBox" name="axisShowTitle">
+            <property name="text">
+             <string>Show Axis Title</string>
+            </property>
+           </widget>
           </item>
-          <item row="4" column="0" colspan="3">
+          <item row="4" column="0">
            <widget class="QCheckBox" name="axisShowGridLines">
             <property name="text">
              <string>Show Grid Lines</string>
             </property>
            </widget>
           </item>
-          <item row="7" column="0" colspan="3">
+          <item row="5" column="0" colspan="2">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
              <widget class="QPushButton" name="axisScalingButton">
@@ -173,7 +166,7 @@ p, li { white-space: pre-wrap; }
             </item>
            </layout>
           </item>
-          <item row="8" column="0">
+          <item row="6" column="0">
            <widget class="QWidget" name="barProperties" native="true">
             <layout class="QGridLayout" name="_2">
              <property name="leftMargin">

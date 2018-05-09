@@ -111,7 +111,6 @@ public Q_SLOTS:
     void updateFixedPosition(Position position);
     
     void ui_axisSelectionChanged(int index);
-    void ui_axisEditingFinished();
     void ui_axisShowTitleChanged(bool b);
     void ui_axisShowGridLinesChanged(bool b);
     void ui_axisUseLogarithmicScalingChanged(bool b);
@@ -166,7 +165,6 @@ Q_SIGNALS:
     void axisAdded(AxisDimension, const QString& title);
     void axisRemoved(Axis *axis);
     void axisShowTitleChanged(Axis *axis, bool b);
-    void axisTitleChanged(Axis *axis, const QString& title);
     void axisShowGridLinesChanged(Axis *axis, bool b);
     void axisUseLogarithmicScalingChanged(Axis *axis, bool b);
     void axisStepWidthChanged(Axis *axis, qreal width);
