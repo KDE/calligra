@@ -1305,9 +1305,9 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
                 if (OdfHelper::loadOdfTitle(d->title, n, context)) {
                     qreal rotationAngle = d->title->rotation();
                     if (kdAxis()->position() == KChart::CartesianAxis::Left) {
-                        d->title->rotate(90 + d->title->rotation());
-                    } else if (kdAxis()->position() == KChart::CartesianAxis::Right) {
                         d->title->rotate(-90 + d->title->rotation());
+                    } else if (kdAxis()->position() == KChart::CartesianAxis::Right) {
+                        d->title->rotate(90 + d->title->rotation());
                     }
                 }
             }
