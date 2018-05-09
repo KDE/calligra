@@ -58,6 +58,7 @@
 #include "ScreenConversions.h"
 #include "ChartLayout.h"
 #include "OdfLoadingHelper.h"
+#include "OdfHelper.h"
 
 using namespace KoChart;
 
@@ -513,7 +514,7 @@ void Legend::saveOdf(KoShapeSavingContext &context) const
 
     // Legend style FIXME: Check if more styling then just the font goes here.
     KoGenStyle style(KoGenStyle::ChartAutoStyle, "chart", 0);
-    saveOdfFont(style, d->font, d->fontColor);
+    OdfHelper::saveOdfFont(style, d->font, d->fontColor);
     bodyWriter.addAttribute("chart:style-name", saveStyle(style, context));
 
     QString  lexpansion;

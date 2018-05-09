@@ -25,6 +25,9 @@
 
 #include <QDebug>
 
+#include <KoTextShapeData.h>
+typedef KoTextShapeData TextLabelData;
+
 namespace KoChart
 {
 

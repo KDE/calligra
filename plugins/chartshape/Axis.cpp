@@ -79,6 +79,7 @@
 #include "TextLabelDummy.h"
 #include "ChartLayout.h"
 #include "OdfLoadingHelper.h"
+#include "OdfHelper.h"
 #include "ChartDebug.h"
 
 
@@ -1301,65 +1302,13 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
             if (n.namespaceURI() != KoXmlNS::chart)
                 continue;
             if (n.localName() == "title") {
-                if (n.hasAttributeNS(KoXmlNS::svg, "x")
-                    && n.hasAttributeNS(KoXmlNS::svg, "y"))
-                {
-                    const qreal x = KoUnit::parseValue(n.attributeNS(KoXmlNS::svg, "x"));
-                    const qreal y = KoUnit::parseValue(n.attributeNS(KoXmlNS::svg, "y"));
-                    d->title->setPosition(QPointF(x, y));
-                }
-
-                if (n.hasAttributeNS(KoXmlNS::chart, "style-name")) {
-                    styleStack.clear();
-                    context.odfLoadingContext().fillStyleStack(n, KoXmlNS::chart, "style-name", "chart");
-
-                    if (styleStack.hasProperty(KoXmlNS::style, "rotation-angle")) {
-                        qreal rotationAngle = 360 - KoUnit::parseValue(styleStack.property(KoXmlNS::style, "rotation-angle"));
-
-                        if (kdAxis()->position() == KChart::CartesianAxis::Left)
-                            rotationAngle = 90 + rotationAngle;
-                        else if (kdAxis()->position() == KChart::CartesianAxis::Right)
-                            rotationAngle = -90 + rotationAngle;
-                        d->title->rotate(rotationAngle);
+                if (OdfHelper::loadOdfTitle(d->title, n, context)) {
+                    qreal rotationAngle = d->title->rotation();
+                    if (kdAxis()->position() == KChart::CartesianAxis::Left) {
+                        d->title->rotate(90 + d->title->rotation());
+                    } else if (kdAxis()->position() == KChart::CartesianAxis::Right) {
+                        d->title->rotate(-90 + d->title->rotation());
                     }
-
-                    styleStack.setTypeProperties("text");
-
-                    if (styleStack.hasProperty(KoXmlNS::fo, "font-size")) {
-                        const qreal fontSize = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "font-size"));
-                        QFont font = d->titleData->document()->defaultFont();
-                        font.setPointSizeF(fontSize);
-                        d->titleData->document()->setDefaultFont(font);
-                    }
-
-                    if (styleStack.hasProperty(KoXmlNS::fo, "font-family")) {
-                        const QString fontFamily = styleStack.property(KoXmlNS::fo, "font-family");
-                        QFont font = d->titleData->document()->defaultFont();
-                        font.setFamily(fontFamily);
-                        d->titleData->document()->setDefaultFont(font);
-                    }
-                }
-
-                const KoXmlElement textElement = KoXml::namedItemNS(n, KoXmlNS::text, "p");
-                if (!textElement.isNull()) {
-                    d->title->setVisible(true);
-                    setTitleText(textElement.text());
-                }
-                else {
-                    // Note: Not an error, just mean do not show
-                    //warnChart << "Error: Axis' <chart:title> element contains no <text:p>";
-                }
-
-                if (n.hasAttributeNS(KoXmlNS::svg, "width")
-                    && n.hasAttributeNS(KoXmlNS::svg, "height"))
-                {
-                    const qreal width = KoUnit::parseValue(n.attributeNS(KoXmlNS::svg, "width"));
-                    const qreal height = KoUnit::parseValue(n.attributeNS(KoXmlNS::svg, "height"));
-                    d->title->setSize(QSizeF(width, height));
-                }  else {
-                    QTextDocument* doc = d->titleData->document();
-                    QRect r = QFontMetrics(doc->defaultFont()).boundingRect(doc->toPlainText());
-                    d->title->setSize(r.size());
                 }
             }
             else if (n.localName() == "grid") {
@@ -1719,36 +1668,7 @@ void Axis::saveOdf(KoShapeSavingContext &context)
 
     bodyWriter.addAttribute("chart:name", name());
 
-    bodyWriter.startElement("chart:title");
-
-    bodyWriter.addAttributePt("svg:x", d->title->position().x());
-    bodyWriter.addAttributePt("svg:y", d->title->position().y());
-    if (d->titleData->resizeMethod() == KoTextShapeDataBase::NoResize) {
-        bodyWriter.addAttributePt("svg:width", d->title->size().width());
-        bodyWriter.addAttributePt("svg:height", d->title->size().height());
-    }
-
-    KoGenStyle axisTitleStyle(KoGenStyle::ChartAutoStyle, "chart");
-    axisTitleStyle.addPropertyPt("style:rotation-angle", 360 - d->title->rotation());
-
-    QTextCursor cursor(d->titleData->document());
-    QFont titleFont = cursor.charFormat().font();
-    axisTitleStyle.addProperty("fo:font-family", titleFont.family(), KoGenStyle::TextType);
-    axisTitleStyle.addPropertyPt("fo:font-size", titleFont.pointSize(), KoGenStyle::TextType);
-
-    const QString titleStyleName = mainStyles.insert(axisTitleStyle, "ch");
-    bodyWriter.addAttribute("chart:style-name", titleStyleName);
-
-    if (d->title->isVisible()) {
-        QString axisLabel = d->titleData->document()->toPlainText();
-        if (!axisLabel.isEmpty()) {
-            bodyWriter.startElement("text:p");
-            bodyWriter.addTextNode(axisLabel);
-            bodyWriter.endElement(); // text:p
-        }
-    }
-
-    bodyWriter.endElement(); // chart:title
+    OdfHelper::saveOdfTitle(d->title, bodyWriter, "chart:title", context);
 
     if (plotArea()->proxyModel()->categoryDataRegion().isValid()) {
         bodyWriter.startElement("chart:categories");

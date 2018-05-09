@@ -71,7 +71,6 @@ namespace KChart {
 class KoTextShapeData;
 #define TextShapeId "TextShapeID"
 #define OdfLoadingHelperId "OdfLoadingHelperId"
-typedef KoTextShapeData TextLabelData;
 
 namespace KoChart {
 

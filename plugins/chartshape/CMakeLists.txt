@@ -48,6 +48,7 @@ set (chartshape_LIB_SRCS
     ChartLayout.cpp
     SingleModelHelper.cpp
     OdfLoadingHelper.cpp
+    OdfHelper.cpp
     dialogs/TableEditorDialog.cpp
     dialogs/NewAxisDialog.cpp
     dialogs/AxisScalingDialog.cpp
