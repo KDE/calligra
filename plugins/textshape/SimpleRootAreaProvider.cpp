@@ -24,6 +24,7 @@
 #include <KoBorder.h>
 #include <KoTextLayoutRootArea.h>
 #include <KoTextLayoutObstruction.h>
+#include <KoInsets.h>
 
 SimpleRootAreaProvider::SimpleRootAreaProvider(KoTextShapeData *data, TextShape *textshape)
     : m_textShape(textshape)
@@ -67,9 +68,11 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
                              m_textShapeData->topPadding() + m_textShapeData->bottomPadding());
 
     KoBorder *border = m_textShape->border();
-
     if (border) {
         newSize -= QSizeF(border->borderWidth(KoBorder::LeftBorder) + border->borderWidth(KoBorder::RightBorder), border->borderWidth(KoBorder::TopBorder) + border->borderWidth(KoBorder::BottomBorder));
+    } else {
+        KoInsets inset = m_textShape->strokeInsets();
+        newSize -= QSizeF((inset.right+inset.left), (inset.bottom+inset.top));
     }
 
 
@@ -121,6 +124,9 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
                       m_textShapeData->topPadding() + m_textShapeData->bottomPadding());
     if (border) {
         newSize += QSizeF(border->borderWidth(KoBorder::LeftBorder) + border->borderWidth(KoBorder::RightBorder), border->borderWidth(KoBorder::TopBorder) + border->borderWidth(KoBorder::BottomBorder));
+    } else {
+        KoInsets inset = m_textShape->strokeInsets();
+        newSize += QSizeF((inset.right+inset.left), (inset.bottom+inset.top));
     }
 
     if (newSize != m_textShape->size()) {
@@ -161,6 +167,9 @@ QRectF SimpleRootAreaProvider::suggestRect(KoTextLayoutRootArea *rootArea)
     if (border) {
         rect.adjust(border->borderWidth(KoBorder::LeftBorder),  border->borderWidth(KoBorder::TopBorder),
               -border->borderWidth(KoBorder::RightBorder), - border->borderWidth(KoBorder::BottomBorder));
+    } else {
+        KoInsets inset = m_textShape->strokeInsets();
+        rect.adjust(inset.left, inset.top, -inset.right, -inset.bottom);
     }
 
     // In simple cases we always set height way too high so that we have no breaking
@@ -173,7 +182,7 @@ QRectF SimpleRootAreaProvider::suggestRect(KoTextLayoutRootArea *rootArea)
         rootArea->setNoWrap(1E6);
     }
 
-    // Make sure the size is not negative due to padding and border with
+    // Make sure the size is not negative due to padding and border width
     // This can happen on vertical lines containing text on shape.
     if (rect.width() < 0) {
         rect.setWidth(0);
