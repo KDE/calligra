@@ -61,12 +61,20 @@
 #include <KoUnit.h>
 #include <KoShapePaintingContext.h>
 #include <KoTextShapeDataBase.h>
+#include <KoShapeShadow.h>
+#include <KoBorder.h>
+#include <KoHatchBackground.h>
+#include <KoOdfGradientBackground.h>
+#include <KoPatternBackground.h>
+#include <KoGradientBackground.h>
+#include <KoOdfWorkaround.h>
+#include <KoOdfGraphicStyles.h>
 
 #include "kochart_global.h"
 
 namespace KoChart {
 namespace OdfHelper {
-        
+
 // TODO: what todo?
 static bool libreOfficeCompatible = true;
 
@@ -89,6 +97,41 @@ QString saveOdfFont(KoGenStyles& mainStyles,
     return mainStyles.insert(autoStyle, "ch");
 }
 
+void saveOdfTitleStyle(KoShape *title, KoGenStyle &style, KoShapeSavingContext &context)
+{
+    TextLabelData *titleData = qobject_cast<TextLabelData*>(title->userData());
+    Q_ASSERT(titleData);
+    QTextCursor cursor(titleData->document());
+    QFont titleFont = cursor.charFormat().font();
+    QColor color = cursor.charFormat().foreground().color();
+
+    saveOdfFont(style, titleFont, color);
+
+    // title->saveStyle(style, context) is protected,
+    // so we duplicate some code:
+    KoShapeStrokeModel *sm = title->stroke();
+    if (sm) {
+        sm->fillStyle(style, context);
+    } else {
+        style.addProperty("draw:stroke", "none", KoGenStyle::GraphicType);
+    }
+    KoShapeShadow *s = title->shadow();
+    if (s) {
+        s->fillStyle(style, context);
+    }
+    QSharedPointer<KoShapeBackground> bg = title->background();
+    if (bg) {
+        bg->fillStyle(style, context);
+    } else {
+        style.addProperty("draw:fill", "none", KoGenStyle::GraphicType);
+    }
+
+    KoBorder *b = title->border();
+    if (b) {
+        b->saveOdf(style);
+    }
+
+}
 
 void saveOdfTitle(KoShape *title, KoXmlWriter &bodyWriter, const char *titleType, KoShapeSavingContext &context)
 {
@@ -110,13 +153,10 @@ void saveOdfTitle(KoShape *title, KoXmlWriter &bodyWriter, const char *titleType
         bodyWriter.addAttributePt("svg:height", title->size().height());
     }
 
-    QTextCursor cursor(titleData->document());
-    QFont titleFont = cursor.charFormat().font();
-    QColor color = cursor.charFormat().foreground().color();
-
     KoGenStyle autoStyle(KoGenStyle::ChartAutoStyle, "chart", 0);
     autoStyle.addPropertyPt("style:rotation-angle", 360 - title->rotation());
-    saveOdfFont(autoStyle, titleFont, color);
+    saveOdfTitleStyle(title, autoStyle, context);
+
     bodyWriter.addAttribute("chart:style-name", context.mainStyles().insert(autoStyle, "ch"));
 
     if (libreOfficeCompatible) {
@@ -128,6 +168,148 @@ void saveOdfTitle(KoShape *title, KoXmlWriter &bodyWriter, const char *titleType
         titleData->saveOdf(context);
     }
     bodyWriter.endElement(); // chart:title/subtitle/footer
+}
+
+QString getStyleProperty(const char *property, KoShapeLoadingContext &context)
+{
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+    QString value;
+
+    if (styleStack.hasProperty(KoXmlNS::draw, property)) {
+        value = styleStack.property(KoXmlNS::draw, property);
+    }
+
+    return value;
+}
+
+QSharedPointer<KoShapeBackground> loadOdfFill(KoShape *title, KoShapeLoadingContext &context)
+{
+    QString fill = getStyleProperty("fill", context);
+    QSharedPointer<KoShapeBackground> bg;
+    if (fill == "solid") {
+        bg = QSharedPointer<KoShapeBackground>(new KoColorBackground());
+    }
+    else if (fill == "hatch") {
+        bg = QSharedPointer<KoShapeBackground>(new KoHatchBackground());
+    } else if (fill == "gradient") {
+        QString styleName = getStyleProperty("fill-gradient-name", context);
+        KoXmlElement *e = context.odfLoadingContext().stylesReader().drawStyles("gradient").value(styleName);
+        QString style;
+        if (e) {
+            style = e->attributeNS(KoXmlNS::draw, "style", QString());
+        }
+        if ((style == "rectangular") || (style == "square")) {
+            bg = QSharedPointer<KoShapeBackground>(new KoOdfGradientBackground());
+        } else {
+            QGradient *gradient = new QLinearGradient();
+            gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
+            bg = QSharedPointer<KoShapeBackground>(new KoGradientBackground(gradient));
+        }
+    } else if (fill == "bitmap") {
+        bg = QSharedPointer<KoShapeBackground>(new KoPatternBackground(context.imageCollection()));
+#ifndef NWORKAROUND_ODF_BUGS
+    } else if (fill.isEmpty()) {
+        bg = QSharedPointer<KoShapeBackground>(KoOdfWorkaround::fixBackgroundColor(title, context));
+        return bg;
+#endif
+    } else {
+        return QSharedPointer<KoShapeBackground>(0);
+    }
+
+    if (!bg->loadStyle(context.odfLoadingContext(), title->size())) {
+        return QSharedPointer<KoShapeBackground>(0);
+    }
+
+    return bg;
+}
+
+KoShapeStrokeModel *loadOdfStroke(KoShape *title, const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+    KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
+
+    QString stroke = getStyleProperty("stroke", context);
+    if (stroke == "solid" || stroke == "dash") {
+        QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle(styleStack, stroke, stylesReader);
+
+        KoShapeStroke *stroke = new KoShapeStroke();
+
+        if (styleStack.hasProperty(KoXmlNS::calligra, "stroke-gradient")) {
+            QString gradientName = styleStack.property(KoXmlNS::calligra, "stroke-gradient");
+            QBrush brush = KoOdfGraphicStyles::loadOdfGradientStyleByName(stylesReader, gradientName, title->size());
+            stroke->setLineBrush(brush);
+        } else {
+            stroke->setColor(pen.color());
+        }
+
+#ifndef NWORKAROUND_ODF_BUGS
+        KoOdfWorkaround::fixPenWidth(pen, context);
+#endif
+        stroke->setLineWidth(pen.widthF());
+        stroke->setJoinStyle(pen.joinStyle());
+        stroke->setLineStyle(pen.style(), pen.dashPattern());
+        stroke->setCapStyle(pen.capStyle());
+
+        return stroke;
+#ifndef NWORKAROUND_ODF_BUGS
+    } else if (stroke.isEmpty()) {
+        QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle(styleStack, "solid", stylesReader);
+        if (KoOdfWorkaround::fixMissingStroke(pen, element, context, title)) {
+            KoShapeStroke *stroke = new KoShapeStroke();
+
+#ifndef NWORKAROUND_ODF_BUGS
+            KoOdfWorkaround::fixPenWidth(pen, context);
+#endif
+            stroke->setLineWidth(pen.widthF());
+            stroke->setJoinStyle(pen.joinStyle());
+            stroke->setLineStyle(pen.style(), pen.dashPattern());
+            stroke->setCapStyle(pen.capStyle());
+            stroke->setColor(pen.color());
+
+            return stroke;
+        }
+#endif
+    }
+
+    return 0;
+}
+
+KoShapeShadow *loadOdfShadow(KoShape *title, KoShapeLoadingContext &context)
+{
+    Q_UNUSED(title);
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+    QString shadowStyle = getStyleProperty("shadow", context);
+    if (shadowStyle == "visible" || shadowStyle == "hidden") {
+        KoShapeShadow *shadow = new KoShapeShadow();
+        QColor shadowColor(styleStack.property(KoXmlNS::draw, "shadow-color"));
+        qreal offsetX = KoUnit::parseValue(styleStack.property(KoXmlNS::draw, "shadow-offset-x"));
+        qreal offsetY = KoUnit::parseValue(styleStack.property(KoXmlNS::draw, "shadow-offset-y"));
+        shadow->setOffset(QPointF(offsetX, offsetY));
+        qreal blur = KoUnit::parseValue(styleStack.property(KoXmlNS::calligra, "shadow-blur-radius"));
+        shadow->setBlur(blur);
+
+        QString opacity = styleStack.property(KoXmlNS::draw, "shadow-opacity");
+        if (! opacity.isEmpty() && opacity.right(1) == "%")
+            shadowColor.setAlphaF(opacity.leftRef(opacity.length() - 1).toFloat() / 100.0);
+        shadow->setColor(shadowColor);
+        shadow->setVisible(shadowStyle == "visible");
+
+        return shadow;
+    }
+    return 0;
+}
+
+KoBorder *loadOdfBorder(KoShape *title, KoShapeLoadingContext &context)
+{
+    Q_UNUSED(title);
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+
+    KoBorder *border = new KoBorder();
+    if (border->loadOdf(styleStack)) {
+        return border;
+    }
+    delete border;
+    return 0;
 }
 
 bool loadOdfTitle(KoShape *title, KoXmlElement &titleElement, KoShapeLoadingContext &context)
@@ -171,6 +353,24 @@ bool loadOdfTitle(KoShape *title, KoXmlElement &titleElement, KoShapeLoadingCont
             qreal rotationAngle = 360 - KoUnit::parseValue(styleStack.property(KoXmlNS::style, "rotation-angle"));
             title->rotate(rotationAngle);
         }
+
+        // title->laodStyle(titleElement, context) is protected
+        // so we duplicate some code:
+        styleStack.setTypeProperties("graphic");
+
+//         d->fill.clear();
+//         if (d->stroke && !d->stroke->deref()) {
+//             delete d->stroke;
+//             d->stroke = 0;
+//         }
+//         if (d->shadow && !d->shadow->deref()) {
+//             delete d->shadow;
+//             d->shadow = 0;
+//         }
+        title->setBackground(loadOdfFill(title, context));
+        title->setStroke(loadOdfStroke(title, titleElement, context));
+        title->setShadow(loadOdfShadow(title, context));
+        title->setBorder(loadOdfBorder(title, context));
 
         styleStack.setTypeProperties("text");
 

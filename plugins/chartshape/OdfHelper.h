@@ -23,7 +23,7 @@
 
 
 // Qt
-#include <Qt>
+#include <QSharedPointer>
 
 // Calligra
 #include <KoShapeContainer.h>
@@ -60,7 +60,16 @@ namespace OdfHelper {
 void saveOdfFont(KoGenStyle &style, const QFont& font, const QColor& color);
 QString saveOdfFont(KoGenStyles& mainStyles, const QFont& font, const QColor& color);
 
+void saveOdfTitleStyle(KoShape *title, KoGenStyle &style, KoShapeSavingContext &context);
+
 void saveOdfTitle(KoShape *title, KoXmlWriter &bodyWriter, const char *titleType, KoShapeSavingContext &context);
+
+QString getStyleProperty(const char *property, KoShapeLoadingContext &context);
+QSharedPointer<KoShapeBackground> loadOdfFill(KoShape *title, KoShapeLoadingContext &context);
+KoShapeStrokeModel *loadOdfStroke(KoShape *title, const KoXmlElement &element, KoShapeLoadingContext &context);
+KoShapeShadow *loadOdfShadow(KoShape *title, KoShapeLoadingContext &context);
+KoBorder *loadOdfBorder(KoShape *title, KoShapeLoadingContext &context);
+
 bool loadOdfTitle(KoShape *title, KoXmlElement &titleElement, KoShapeLoadingContext &context);
 
 }
