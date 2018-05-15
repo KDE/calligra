@@ -705,6 +705,9 @@ void ChartTool::addAxis(AxisDimension dimension, const QString& title)
     Q_ASSERT(d->shape);
 
     Axis *axis = new Axis(d->shape->plotArea(), dimension); // automatically adds axis to plot area
+    if (axis == d->shape->plotArea()->secondaryYAxis()) {
+        axis->title()->rotate(90);
+    }
     d->shape->plotArea()->takeAxis(axis); // so we remove it again, sigh
     axis->setTitleText(title);
     AddRemoveAxisCommand *command = new AddRemoveAxisCommand(axis, d->shape, true, canvas()->shapeManager());

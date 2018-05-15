@@ -235,6 +235,7 @@ void PlotArea::Private::initAxes()
     new Axis(q, XAxisDimension);
     Axis *yAxis = new Axis(q, YAxisDimension);
     yAxis->setShowMajorGrid(true);
+    yAxis->title()->rotate(-90);
 }
 
 PlotArea::PlotArea(ChartShape *parent)

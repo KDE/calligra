@@ -1302,14 +1302,7 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
             if (n.namespaceURI() != KoXmlNS::chart)
                 continue;
             if (n.localName() == "title") {
-                if (OdfHelper::loadOdfTitle(d->title, n, context)) {
-                    qreal rotationAngle = d->title->rotation();
-                    if (kdAxis()->position() == KChart::CartesianAxis::Left) {
-                        d->title->rotate(-90 + d->title->rotation());
-                    } else if (kdAxis()->position() == KChart::CartesianAxis::Right) {
-                        d->title->rotate(90 + d->title->rotation());
-                    }
-                }
+                OdfHelper::loadOdfTitle(d->title, n, context);
             }
             else if (n.localName() == "grid") {
                 bool major = false;
@@ -1928,11 +1921,6 @@ void Axis::Private::updatePosition()
         position = first ? StartPosition : EndPosition;
         type = first ? YAxisTitleType : SecondaryYAxisTitleType;
     }
-    if (position == StartPosition)
-        title->rotate(-90 - title->rotation());
-    else if (position == EndPosition)
-        title->rotate(90 - title->rotation());
-
     // KChart
     kdAxis->setPosition(PositionToKChartAxisPosition(position));
     ChartLayout *layout = plotArea->parent()->layout();
