@@ -32,7 +32,7 @@ class KoGenStyles;
 class KoGenStyle;
 
 /// Gradients from odf that are not native to Qt
-class KoOdfGradientBackground : public KoShapeBackground {
+class FLAKE_EXPORT KoOdfGradientBackground : public KoShapeBackground {
 public:
     // constructor
     KoOdfGradientBackground();

@@ -28,7 +28,7 @@ class KoHatchBackgroundPrivate;
 /**
  * A hatch shape background
  */
-class KoHatchBackground : public KoColorBackground
+class FLAKE_EXPORT KoHatchBackground : public KoColorBackground
 {
 public:
     enum HatchStyle {
