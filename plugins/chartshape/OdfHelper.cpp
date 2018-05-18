@@ -78,13 +78,70 @@ namespace OdfHelper {
 // TODO: what todo?
 static bool libreOfficeCompatible = true;
 
+// HACK: To get correct position also for rotated titles
+QPointF itemPosition(const KoShape *shape)
+{
+    return QPointF(shape->transformation().m31(), shape->transformation().m32());
+}
+
+//fo:font-weight attribute are normal, bold, 100, 200, 300, 400, 500, 600, 700, 800 or 900.
+int fromOdfFontWeight(const QString &odfweight) {
+    if (odfweight.isEmpty() || odfweight == "normal") {
+        return QFont::Normal;
+    }
+    if (odfweight == "bold") {
+        return QFont::Bold;
+    }
+    bool ok;
+    int weight = odfweight.toInt(&ok);
+    if (!ok) {
+        return 50;
+    }
+    switch (weight) {
+        case 100: weight = 1; break;
+        case 200: weight = 17; break;
+        case 300: weight = 33; break;
+        case 400: weight = 50; break;
+        case 500: weight = 58; break;
+        case 600: weight = 66; break;
+        case 700: weight = 75; break;
+        case 800: weight = 87; break;
+        case 900: weight = 99; break;
+        default: weight = 50; break;
+    }
+    return weight;
+}
+
+QString toOdfFontWeight(int weight) {
+    QString w;
+    if (weight < 8) {
+        w = "100";
+    } else if (weight < 25) {
+        w = "200";
+    } else if (weight < 41) {
+        w = "300";
+    } else if (weight < 54) {
+        w = "normal";
+    } else if (weight < 62) {
+        w = "500";
+    } else if (weight < 70) {
+        w = "600";
+    } else if (weight < 81) {
+        w = "bold";
+    } else if (weight < 92) {
+        w = "800";
+    } else {
+        w = "900";
+    }
+    return w;
+}
+
 void saveOdfFont(KoGenStyle &style, const QFont& font, const QColor& color)
 {
     style.addProperty("fo:font-family", font.family(), KoGenStyle::TextType);
     style.addPropertyPt("fo:font-size", font.pointSize(), KoGenStyle::TextType);
     style.addProperty("fo:color", color.isValid() ? color.name() : "#000000", KoGenStyle::TextType);
-    int w = font.weight();
-    style.addProperty("fo:font-weight", w == 50 ? "normal" : w == 75 ? "bold" : QString::number(qRound(w / 10.0) * 100), KoGenStyle::TextType);
+    style.addProperty("fo:font-weight", toOdfFontWeight(font.weight()), KoGenStyle::TextType);
     style.addProperty("fo:font-style", font.italic() ? "italic" : "normal", KoGenStyle::TextType);
 }
 
@@ -146,16 +203,19 @@ void saveOdfTitle(KoShape *title, KoXmlWriter &bodyWriter, const char *titleType
 
     bodyWriter.startElement(titleType);
 
-    bodyWriter.addAttributePt("svg:x", title->position().x());
-    bodyWriter.addAttributePt("svg:y", title->position().y());
-    if (titleData->resizeMethod() == KoTextShapeDataBase::NoResize) {
-        bodyWriter.addAttributePt("svg:width", title->size().width());
-        bodyWriter.addAttributePt("svg:height", title->size().height());
-    }
-
     KoGenStyle autoStyle(KoGenStyle::ChartAutoStyle, "chart", 0);
     autoStyle.addPropertyPt("style:rotation-angle", 360 - title->rotation());
     saveOdfTitleStyle(title, autoStyle, context);
+
+    QPointF position = itemPosition(title);
+    bodyWriter.addAttribute("svg:x", QString("%1cm").arg(KoUnit::toCentimeter(position.x())));
+    bodyWriter.addAttribute("svg:y", QString("%1cm").arg(KoUnit::toCentimeter(position.y())));
+    // chart title should always be AutoResize, so size shall not be saved
+//     if (titleData->resizeMethod() == KoTextShapeDataBase::NoResize) {
+//         QSizeF size = title->size();
+//         bodyWriter.addAttributePt("svg:width", size.width());
+//         bodyWriter.addAttributePt("svg:height", size.height());
+//     }
 
     bodyWriter.addAttribute("chart:style-name", context.mainStyles().insert(autoStyle, "ch"));
 
@@ -327,21 +387,29 @@ bool loadOdfTitle(KoShape *title, KoXmlElement &titleElement, KoShapeLoadingCont
     QTextCursor cursor(doc);
     QTextCharFormat charFormat = cursor.charFormat();
 
+    title->setSize(QSize(0,0));
+    title->setPosition(QPointF(0,0));
     // Set the position
     QPointF pos = title->position();
     bool posChanged = false;
     if (titleElement.hasAttributeNS(KoXmlNS::svg, "x")) {
         pos.setX(KoUnit::parseValue(titleElement.attributeNS(KoXmlNS::svg, "x", QString())));
+        if (pos.x() < 0) {
+            pos.setX(0);
+        }
         posChanged = true;
     }
     if (titleElement.hasAttributeNS(KoXmlNS::svg, "y")) {
         pos.setY(KoUnit::parseValue(titleElement.attributeNS(KoXmlNS::svg, "y", QString())));
+        if (pos.y() < 0) {
+            pos.setY(0);
+        }
         posChanged = true;
     }
     if (posChanged) {
         title->setPosition(pos);
     }
-
+    qreal rotationAngle = title->rotation();
     // Set the styles
     if (titleElement.hasAttributeNS(KoXmlNS::chart, "style-name")) {
         KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
@@ -350,23 +418,15 @@ bool loadOdfTitle(KoShape *title, KoXmlElement &titleElement, KoShapeLoadingCont
 
         styleStack.setTypeProperties("chart");
         if (styleStack.hasProperty(KoXmlNS::style, "rotation-angle")) {
-            qreal rotationAngle = 360 - KoUnit::parseValue(styleStack.property(KoXmlNS::style, "rotation-angle"));
-            title->rotate(rotationAngle);
+            rotationAngle = 360 - KoUnit::parseValue(styleStack.property(KoXmlNS::style, "rotation-angle"));
+            if (rotationAngle != title->rotation()) {
+                title->rotate(rotationAngle);
+            }
         }
-
-        // title->laodStyle(titleElement, context) is protected
+        // title->loadStyle(titleElement, context) is protected
         // so we duplicate some code:
         styleStack.setTypeProperties("graphic");
 
-//         d->fill.clear();
-//         if (d->stroke && !d->stroke->deref()) {
-//             delete d->stroke;
-//             d->stroke = 0;
-//         }
-//         if (d->shadow && !d->shadow->deref()) {
-//             delete d->shadow;
-//             d->shadow = 0;
-//         }
         title->setBackground(loadOdfFill(title, context));
         title->setStroke(loadOdfStroke(title, titleElement, context));
         title->setShadow(loadOdfShadow(title, context));
@@ -380,7 +440,6 @@ bool loadOdfTitle(KoShape *title, KoXmlElement &titleElement, KoShapeLoadingCont
             font.setPointSizeF(fontSize);
             doc->setDefaultFont(font);
         }
-
         if (styleStack.hasProperty(KoXmlNS::fo, "font-family")) {
             const QString fontFamily = styleStack.property(KoXmlNS::fo, "font-family");
             QFont font = doc->defaultFont();
@@ -394,19 +453,16 @@ bool loadOdfTitle(KoShape *title, KoXmlElement &titleElement, KoShapeLoadingCont
                 font.setItalic(true);
                 doc->setDefaultFont(font);
             } else if (fontStyle == "oblique") {
-                // TODO
+                QFont font = doc->defaultFont();
+                font.setStyle(QFont::StyleOblique);
+                doc->setDefaultFont(font);
             }
         }
         if (styleStack.hasProperty(KoXmlNS::fo, "font-weight")) {
             QString fontWeight = styleStack.property(KoXmlNS::fo, "font-weight");
-            //fo:font-weight attribute are normal, bold, 100, 200, 300, 400, 500, 600, 700, 800 or 900.
-            if (fontWeight == "bold") {
-                QFont font = doc->defaultFont();
-                font.setBold(true);
-                doc->setDefaultFont(font);
-            } else {
-                // TODO
-            }
+            QFont font = doc->defaultFont();
+            font.setWeight(fromOdfFontWeight(fontWeight));
+            doc->setDefaultFont(font);
         }
 
         if (styleStack.hasProperty(KoXmlNS::fo, "color")) {
@@ -434,13 +490,12 @@ bool loadOdfTitle(KoShape *title, KoXmlElement &titleElement, KoShapeLoadingCont
         }
     }
 
-    // Set the size
-    if (titleElement.hasAttributeNS(KoXmlNS::svg, "width") && titleElement.hasAttributeNS(KoXmlNS::svg, "height")) {
-        const qreal width = KoUnit::parseValue(titleElement.attributeNS(KoXmlNS::svg, "width"));
-        const qreal height = KoUnit::parseValue(titleElement.attributeNS(KoXmlNS::svg, "height"));
-        title->setSize(QSizeF(width, height));
-    }
-
+    // Size should not be present, as all titles are AutoResize
+//     if (titleElement.hasAttributeNS(KoXmlNS::svg, "width") && titleElement.hasAttributeNS(KoXmlNS::svg, "height")) {
+//         const qreal width = KoUnit::parseValue(titleElement.attributeNS(KoXmlNS::svg, "width"));
+//         const qreal height = KoUnit::parseValue(titleElement.attributeNS(KoXmlNS::svg, "height"));
+//         title->setSize(QSizeF(width, height));
+//     }
     return true;
 }
 
