@@ -841,6 +841,7 @@ bool ChartShape::loadOdf(const KoXmlElement &element,
         layout()->scheduleRelayout();
     }
 
+    qInfo()<<Q_FUNC_INFO<<position()<<size()<<boundingRect();
     return r;
 }
 
@@ -865,10 +866,11 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
     // this method with a call to endLoading proxyModel()->endLoading()
     struct ProxyModelLoadState {
         ChartProxyModel *m;
-        ProxyModelLoadState(ChartProxyModel *m) : m(m) { m->beginLoading(); }
-        ~ProxyModelLoadState() { m->endLoading(); }
+        ChartLayout *l;
+        ProxyModelLoadState(ChartProxyModel *m, ChartLayout *l) : m(m), l(l) { m->beginLoading(); l->setLayoutingEnabled(false); }
+        ~ProxyModelLoadState() { m->endLoading(); l->setLayoutingEnabled(true); }
     };
-    ProxyModelLoadState proxyModelLoadState(proxyModel());
+    ProxyModelLoadState proxyModelLoadState(proxyModel(), layout());
 
     // The shared data will automatically be deleted in the destructor
     // of KoShapeLoadingContext
@@ -1243,6 +1245,11 @@ KoDocumentResourceManager *ChartShape::resourceManager() const
 void ChartShape::setEnableUserInteraction(bool enable)
 {
     ENABLE_USER_INTERACTION = enable;
+}
+
+void ChartShape::shapeChanged(ChangeType type, KoShape *shape)
+{
+    layout()->containerChanged(this, type);
 }
 
 } // Namespace KoChart

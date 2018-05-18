@@ -235,6 +235,9 @@ Q_SIGNALS:
     void chartTypeChanged(ChartType);
     void updateConfigWidget() const;
 
+protected:
+    virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
+
 private:
     bool loadEmbeddedDocument(KoStore *store, const KoXmlElement &objectElement,
                               const KoOdfLoadingContext &loadingContext);

@@ -60,6 +60,7 @@ ChartLayout::ChartLayout()
     , m_hMargin(5)
     , m_vMargin(5)
     , m_autoLayoutEnabled(true)
+    , m_layoutingEnabled(true)
 {
     m_spacing = QPointF(m_hMargin, m_vMargin);
 }
@@ -164,6 +165,11 @@ void ChartLayout::setAutoLayoutEnabled(bool on)
     m_autoLayoutEnabled = on;
 }
 
+void ChartLayout::setLayoutingEnabled(bool value)
+{
+    m_layoutingEnabled = value;
+}
+
 void ChartLayout::proposeMove(KoShape *child, QPointF &move)
 {
     QRectF current = itemRect(child);
@@ -210,7 +216,7 @@ void ChartLayout::layout()
 {
     Q_ASSERT(!m_doingLayout);
 
-    if (!m_relayoutScheduled)
+    if (!m_layoutingEnabled || !m_relayoutScheduled)
         return;
 
     m_doingLayout = true;

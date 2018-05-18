@@ -194,6 +194,9 @@ public:
     /// Enable/disable automatic layout
     void setAutoLayoutEnabled(bool on);
 
+    /// Enable/disable layouting
+    void setLayoutingEnabled(bool value);
+
 private:
     /// Set the chart size to @p size and schedule relayout
     void setContainerSize(const QSizeF &size);
@@ -269,6 +272,7 @@ private:
     qreal m_vMargin;
     QPointF m_spacing;
     bool m_autoLayoutEnabled;
+    bool m_layoutingEnabled;
     class LayoutData;
     QMap<KoShape*, LayoutData*> m_layoutItems;
 };
