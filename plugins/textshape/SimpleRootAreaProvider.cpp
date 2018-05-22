@@ -83,6 +83,14 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
 
     if (m_textShapeData->resizeMethod() == KoTextShapeData::AutoResize) {
         newSize = QSizeF(rootArea->right() - rootArea->left(), rootArea->bottom() - rootArea->top());
+        // HACK: The size we get from the shape will cut descents,
+        // so we add some reasonable (aproximate) value that works ok in normal cases
+        QSizeF s(0.0, 0.0);
+        int lines = m_textShapeData->document()->lineCount();
+        if (lines > 0) {
+            s.setHeight(newSize.height() / lines * 0.2);
+        }
+        newSize += s;
     } else {
         if (m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
             ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
