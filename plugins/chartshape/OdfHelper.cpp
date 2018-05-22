@@ -69,7 +69,6 @@
 #include <KoGradientBackground.h>
 #include <KoOdfWorkaround.h>
 #include <KoOdfGraphicStyles.h>
-
 #include "kochart_global.h"
 
 namespace KoChart {
@@ -434,42 +433,35 @@ bool loadOdfTitle(KoShape *title, KoXmlElement &titleElement, KoShapeLoadingCont
 
         styleStack.setTypeProperties("text");
 
+        QFont font = doc->defaultFont();
         if (styleStack.hasProperty(KoXmlNS::fo, "font-size")) {
             const qreal fontSize = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "font-size"));
-            QFont font = doc->defaultFont();
             font.setPointSizeF(fontSize);
-            doc->setDefaultFont(font);
         }
         if (styleStack.hasProperty(KoXmlNS::fo, "font-family")) {
             const QString fontFamily = styleStack.property(KoXmlNS::fo, "font-family");
-            QFont font = doc->defaultFont();
             font.setFamily(fontFamily);
-            doc->setDefaultFont(font);
         }
         if (styleStack.hasProperty(KoXmlNS::fo, "font-style")) {
             QString fontStyle = styleStack.property(KoXmlNS::fo, "font-style");
             if (fontStyle == "italic") {
-                QFont font = doc->defaultFont();
                 font.setItalic(true);
-                doc->setDefaultFont(font);
             } else if (fontStyle == "oblique") {
-                QFont font = doc->defaultFont();
                 font.setStyle(QFont::StyleOblique);
-                doc->setDefaultFont(font);
             }
         }
         if (styleStack.hasProperty(KoXmlNS::fo, "font-weight")) {
             QString fontWeight = styleStack.property(KoXmlNS::fo, "font-weight");
-            QFont font = doc->defaultFont();
             font.setWeight(fromOdfFontWeight(fontWeight));
-            doc->setDefaultFont(font);
         }
+        doc->setDefaultFont(font);
+        charFormat.setFont(doc->defaultFont());
 
         if (styleStack.hasProperty(KoXmlNS::fo, "color")) {
             const QColor color(styleStack.property(KoXmlNS::fo, "color"));
             charFormat.setForeground(color);
         }
-        cursor.insertText(QString(), charFormat);
+        cursor.setCharFormat(charFormat);
     }
 
     // load text
