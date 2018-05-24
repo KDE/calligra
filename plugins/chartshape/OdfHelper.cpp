@@ -21,6 +21,8 @@
 
 #include "OdfHelper.h"
 
+#include "ChartDebug.h"
+
 // Posix
 #include <float.h> // For basic data types characteristics.
 
@@ -187,6 +189,11 @@ void saveOdfTitleStyle(KoShape *title, KoGenStyle &style, KoShapeSavingContext &
         b->saveOdf(style);
     }
 
+    QMap<QByteArray, QString>::const_iterator it(title->additionalStyleAttributes().constBegin());
+    for (; it != title->additionalStyleAttributes().constEnd(); ++it) {
+        style.addProperty(it.key(), it.value(), KoGenStyle::ChartType);
+    }
+    style.addProperty("chart:auto-size", (titleData->resizeMethod() == KoTextShapeDataBase::AutoResize), KoGenStyle::ChartType);
 }
 
 void saveOdfTitle(KoShape *title, KoXmlWriter &bodyWriter, const char *titleType, KoShapeSavingContext &context)
@@ -206,15 +213,14 @@ void saveOdfTitle(KoShape *title, KoXmlWriter &bodyWriter, const char *titleType
     autoStyle.addPropertyPt("style:rotation-angle", 360 - title->rotation());
     saveOdfTitleStyle(title, autoStyle, context);
 
+    // always save position and size and let consumer decide if they are used
     QPointF position = itemPosition(title);
-    bodyWriter.addAttribute("svg:x", QString("%1cm").arg(KoUnit::toCentimeter(position.x())));
-    bodyWriter.addAttribute("svg:y", QString("%1cm").arg(KoUnit::toCentimeter(position.y())));
-    // chart title should always be AutoResize, so size shall not be saved
-//     if (titleData->resizeMethod() == KoTextShapeDataBase::NoResize) {
-//         QSizeF size = title->size();
-//         bodyWriter.addAttributePt("svg:width", size.width());
-//         bodyWriter.addAttributePt("svg:height", size.height());
-//     }
+    bodyWriter.addAttributePt("svg:x", position.x());
+    bodyWriter.addAttributePt("svg:y", position.y());
+
+    const QSizeF size = title->size();
+    bodyWriter.addAttributePt("svg:width", size.width());
+    bodyWriter.addAttributePt("svg:height", size.height());
 
     bodyWriter.addAttribute("chart:style-name", context.mainStyles().insert(autoStyle, "ch"));
 
@@ -388,26 +394,9 @@ bool loadOdfTitle(KoShape *title, KoXmlElement &titleElement, KoShapeLoadingCont
 
     title->setSize(QSize(0,0));
     title->setPosition(QPointF(0,0));
-    // Set the position
-    QPointF pos = title->position();
-    bool posChanged = false;
-    if (titleElement.hasAttributeNS(KoXmlNS::svg, "x")) {
-        pos.setX(KoUnit::parseValue(titleElement.attributeNS(KoXmlNS::svg, "x", QString())));
-        if (pos.x() < 0) {
-            pos.setX(0);
-        }
-        posChanged = true;
-    }
-    if (titleElement.hasAttributeNS(KoXmlNS::svg, "y")) {
-        pos.setY(KoUnit::parseValue(titleElement.attributeNS(KoXmlNS::svg, "y", QString())));
-        if (pos.y() < 0) {
-            pos.setY(0);
-        }
-        posChanged = true;
-    }
-    if (posChanged) {
-        title->setPosition(pos);
-    }
+
+    bool autoPosition = !(titleElement.hasAttributeNS(KoXmlNS::svg, "x") && titleElement.hasAttributeNS(KoXmlNS::svg, "y"));
+    bool autoSize = !(titleElement.hasAttributeNS(KoXmlNS::svg, "width") && titleElement.hasAttributeNS(KoXmlNS::svg, "height"));
     qreal rotationAngle = title->rotation();
     // Set the styles
     if (titleElement.hasAttributeNS(KoXmlNS::chart, "style-name")) {
@@ -421,6 +410,12 @@ bool loadOdfTitle(KoShape *title, KoXmlElement &titleElement, KoShapeLoadingCont
             if (rotationAngle != title->rotation()) {
                 title->rotate(rotationAngle);
             }
+        }
+        if (styleStack.hasProperty(KoXmlNS::style, "auto-position")) {
+            autoPosition |= styleStack.property(KoXmlNS::style, "auto-position") == "true";
+        }
+        if (styleStack.hasProperty(KoXmlNS::style, "auto-size")) {
+            autoSize |= styleStack.property(KoXmlNS::style, "auto-size") == "true" ;
         }
         // title->loadStyle(titleElement, context) is protected
         // so we duplicate some code:
@@ -463,6 +458,30 @@ bool loadOdfTitle(KoShape *title, KoXmlElement &titleElement, KoShapeLoadingCont
         }
         cursor.setCharFormat(charFormat);
     }
+    title->setAdditionalStyleAttribute("chart:auto-position", autoPosition ? "true" : "false");
+    if (!autoPosition) {
+        QPointF pos;
+        pos.setX(KoUnit::parseValue(titleElement.attributeNS(KoXmlNS::svg, "x", QString())));
+        if (pos.x() < 0) {
+            pos.setX(0);
+        }
+        pos.setY(KoUnit::parseValue(titleElement.attributeNS(KoXmlNS::svg, "y", QString())));
+        if (pos.y() < 0) {
+            pos.setY(0);
+        }
+        title->setPosition(pos);
+        debugChartOdf<<"position:"<<"odf:"<<pos<<"title"<<title->position();
+    }
+    if (autoSize) {
+        titleData->setResizeMethod(KoTextShapeDataBase::AutoResize);
+    } else {
+        titleData->setResizeMethod(KoTextShapeDataBase::NoResize);
+        QSizeF size;
+        size.setWidth(KoUnit::parseValue(titleElement.attributeNS(KoXmlNS::svg, "width")));
+        size.setHeight(KoUnit::parseValue(titleElement.attributeNS(KoXmlNS::svg, "height")));
+        title->setSize(size);
+        debugChartOdf<<"size:"<<"odf:"<<size<<"title"<<title->size();
+    }
 
     // load text
     if (libreOfficeCompatible) {
@@ -481,13 +500,7 @@ bool loadOdfTitle(KoShape *title, KoXmlElement &titleElement, KoShapeLoadingCont
             titleData->document()->setPlainText(textElement.text());
         }
     }
-
-    // Size should not be present, as all titles are AutoResize
-//     if (titleElement.hasAttributeNS(KoXmlNS::svg, "width") && titleElement.hasAttributeNS(KoXmlNS::svg, "height")) {
-//         const qreal width = KoUnit::parseValue(titleElement.attributeNS(KoXmlNS::svg, "width"));
-//         const qreal height = KoUnit::parseValue(titleElement.attributeNS(KoXmlNS::svg, "height"));
-//         title->setSize(QSizeF(width, height));
-//     }
+    debugChartOdf<<title->position()<<title->size()<<titleData->document()->toPlainText();
     return true;
 }
 

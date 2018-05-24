@@ -357,6 +357,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     d->title->setDeletable(false);
     d->title->setToolDelegates(QSet<KoShape*>()<<this<<d->title); // Enable chart tool
     labelData->setResizeMethod(KoTextShapeDataBase::AutoResize);
+    d->title->setAdditionalStyleAttribute("chart:auto-position", "true");
 
     // Create the Subtitle and add it to the shape.
     if (textShapeFactory)
@@ -388,6 +389,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     d->subTitle->setDeletable(false);
     d->subTitle->setToolDelegates(QSet<KoShape*>()<<this<<d->subTitle); // Enable chart tool
     labelData->setResizeMethod(KoTextShapeDataBase::AutoResize);
+    d->subTitle->setAdditionalStyleAttribute("chart:auto-position", "true");
 
     // Create the Footer and add it to the shape.
     if (textShapeFactory)
@@ -419,6 +421,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     d->footer->setDeletable(false);
     d->footer->setToolDelegates(QSet<KoShape*>()<<this<<d->footer); // Enable chart tool
     labelData->setResizeMethod(KoTextShapeDataBase::AutoResize);
+    d->footer->setAdditionalStyleAttribute("chart:auto-position", "true");
 
     // Set default contour (for how text run around is done around this shape)
     // to prevent a crash in LO
@@ -430,6 +433,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     KoShapeStroke *stroke = new KoShapeStroke(0, Qt::black);
     setStroke(stroke);
 
+    // TODO: use shapes lyaout properties
     // set the default positioning, and do initial layout
     ChartLayout *l = layout();
     l->setPosition(d->plotArea, CenterPosition, PlotAreaType);

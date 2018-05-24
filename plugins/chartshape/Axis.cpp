@@ -889,6 +889,7 @@ Axis::Axis(PlotArea *parent, AxisDimension dimension)
     d->title->setZIndex(5);
     d->title->setToolDelegates(QSet<KoShape*>()<<parent->parent()<<d->title); // Enable chart tool
     d->titleData->setResizeMethod(KoTextShapeDataBase::AutoResize);
+    d->title->setAdditionalStyleAttribute("chart:auto-position", "true");
 
     connect(d->plotArea, SIGNAL(pieAngleOffsetChanged(qreal)),
             this,        SLOT(setPieAngleOffset(qreal)));
