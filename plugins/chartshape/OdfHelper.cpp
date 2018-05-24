@@ -76,8 +76,6 @@
 namespace KoChart {
 namespace OdfHelper {
 
-// TODO: what todo?
-static bool libreOfficeCompatible = true;
 
 // HACK: To get correct position also for rotated titles
 QPointF itemPosition(const KoShape *shape)
@@ -224,14 +222,16 @@ void saveOdfTitle(KoShape *title, KoXmlWriter &bodyWriter, const char *titleType
 
     bodyWriter.addAttribute("chart:style-name", context.mainStyles().insert(autoStyle, "ch"));
 
-    if (libreOfficeCompatible) {
-        // lo does not support formatted text :(
-        bodyWriter.startElement("text:p");
-        bodyWriter.addTextNode(titleData->document()->toPlainText());
-        bodyWriter.endElement(); // text:p
-    } else {
-        titleData->saveOdf(context);
-    }
+    // lo (and odf?) does not support formatted text :(
+    bodyWriter.startElement("text:p");
+    bodyWriter.addTextNode(titleData->document()->toPlainText());
+    bodyWriter.endElement(); // text:p
+
+    // save calligra specific formatted text
+    bodyWriter.startElement("chartcalligra:text");
+    titleData->saveOdf(context);
+    bodyWriter.endElement(); // chartcalligra:text
+
     bodyWriter.endElement(); // chart:title/subtitle/footer
 }
 
@@ -484,20 +484,19 @@ bool loadOdfTitle(KoShape *title, KoXmlElement &titleElement, KoShapeLoadingCont
     }
 
     // load text
-    if (libreOfficeCompatible) {
-        const KoXmlElement textElement = KoXml::namedItemNS(titleElement, KoXmlNS::text, "p");
+    bool loaded = false;
+    if (context.documentResourceManager()) {
+        const KoXmlElement textElement = KoXml::namedItemNS(titleElement, KoXmlNS::chartcalligra, "text");
         if (!textElement.isNull()) {
+            loaded = titleData->loadOdf(textElement, context, 0, title);
             title->setVisible(true);
-            cursor.insertText(textElement.text(), charFormat);
         }
-    } else if (context.documentResourceManager()) {
-        titleData->loadOdf(titleElement, context, 0, title);
-    } else {
-        // at least unit test can use this
+    }
+    if (!loaded) {
         const KoXmlElement textElement = KoXml::namedItemNS(titleElement, KoXmlNS::text, "p");
         if (!textElement.isNull()) {
+            cursor.insertText(textElement.text(), charFormat);
             title->setVisible(true);
-            titleData->document()->setPlainText(textElement.text());
         }
     }
     debugChartOdf<<title->position()<<title->size()<<titleData->document()->toPlainText();
