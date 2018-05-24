@@ -80,7 +80,7 @@ namespace OdfHelper {
 // HACK: To get correct position also for rotated titles
 QPointF itemPosition(const KoShape *shape)
 {
-    return QPointF(shape->transformation().m31(), shape->transformation().m32());
+    return QPointF(shape->transformation().dx(), shape->transformation().dy());
 }
 
 //fo:font-weight attribute are normal, bold, 100, 200, 300, 400, 500, 600, 700, 800 or 900.
