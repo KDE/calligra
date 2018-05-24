@@ -1082,7 +1082,6 @@ void KoTextWriter::Private::addNameSpaceDefinitions(QString &generatedXmlString)
     nameSpacesStream << "xmlns:anim=\"" << KoXmlNS::anim << "\" ";
     nameSpacesStream << "xmlns:smil=\"" << KoXmlNS::smil << "\" ";
     nameSpacesStream << "xmlns:calligra=\"" << KoXmlNS::calligra << "\" ";
-    nameSpacesStream << "xmlns:chartcalligra=\"" << KoXmlNS::chartcalligra << "\" ";
     nameSpacesStream << "xmlns:officeooo=\"" << KoXmlNS::officeooo << "\" ";
     nameSpacesStream << "xmlns:split=\"" << KoXmlNS::split << "\" ";
     nameSpacesStream << "xmlns:ac=\"" << KoXmlNS::ac << "\" ";
