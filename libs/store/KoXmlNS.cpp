@@ -48,6 +48,7 @@ const QString KoXmlNS::xhtml("http://www.w3.org/1999/xhtml");
 const QString KoXmlNS::xml("http://www.w3.org/XML/1998/namespace");
 
 const QString KoXmlNS::calligra = "http://www.calligra.org/2005/";
+const QString KoXmlNS::chartcalligra = "http://www.calligra.org/2018/chart";
 const QString KoXmlNS::officeooo = "http://openoffice.org/2009/office";
 const QString KoXmlNS::ooo = "http://openoffice.org/2004/office";
 
