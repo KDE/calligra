@@ -37,4 +37,10 @@ extern const QLoggingCategory &CHARTLAYOUT_LOG();
 #define warnChartLayout qCWarning(CHARTLAYOUT_LOG)
 #define errorChartLayout qCCritical(CHARTLAYOUT_LOG)
 
+extern const QLoggingCategory &CHARTODF_LOG();
+
+#define debugChartOdf qCDebug(CHARTODF_LOG)<<Q_FUNC_INFO
+#define warnChartOdf qCWarning(CHARTODF_LOG)
+#define errorChartOdf qCCritical(CHARTODF_LOG)
+
 #endif

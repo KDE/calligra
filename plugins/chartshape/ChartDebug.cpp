@@ -22,12 +22,18 @@
 
 const QLoggingCategory &CHART_LOG()
 {
-    static const QLoggingCategory category("calligra.plugin.chartshape");
+    static const QLoggingCategory category("calligra.plugin.chart.shape");
     return category;
 }
 
 const QLoggingCategory &CHARTLAYOUT_LOG()
 {
-    static const QLoggingCategory category("calligra.plugin.chartlayout");
+    static const QLoggingCategory category("calligra.plugin.chart.layout");
+    return category;
+}
+
+const QLoggingCategory &CHARTODF_LOG()
+{
+    static const QLoggingCategory category("calligra.plugin.chart.odf");
     return category;
 }
