@@ -2288,6 +2288,18 @@ void KoShape::removeAdditionalStyleAttribute(const char *name)
     d->additionalStyleAttributes.remove(name);
 }
 
+QString KoShape::additionalStyleAttribute(const QByteArray &name) const
+{
+    Q_D(const KoShape);
+    return d->additionalStyleAttributes.value(name);
+}
+
+QMap<QByteArray, QString> KoShape::additionalStyleAttributes() const
+{
+    Q_D(const KoShape);
+    return d->additionalStyleAttributes;
+}
+
 KoFilterEffectStack *KoShape::filterEffectStack() const
 {
     Q_D(const KoShape);

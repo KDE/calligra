@@ -1049,6 +1049,10 @@ public:
 
     void removeAdditionalStyleAttribute(const char *name);
 
+    QString additionalStyleAttribute(const QByteArray &name) const;
+
+    QMap<QByteArray, QString> additionalStyleAttributes() const;
+
     /**
      * Returns the filter effect stack of the shape
      *
