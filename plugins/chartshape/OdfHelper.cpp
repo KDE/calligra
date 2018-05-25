@@ -228,9 +228,9 @@ void saveOdfTitle(KoShape *title, KoXmlWriter &bodyWriter, const char *titleType
     bodyWriter.endElement(); // text:p
 
     // save calligra specific formatted text
-    bodyWriter.startElement("chartcalligra:text");
+    bodyWriter.startElement("calligra:text");
     titleData->saveOdf(context);
-    bodyWriter.endElement(); // chartcalligra:text
+    bodyWriter.endElement(); // calligra:text
 
     bodyWriter.endElement(); // chart:title/subtitle/footer
 }
@@ -486,7 +486,7 @@ bool loadOdfTitle(KoShape *title, KoXmlElement &titleElement, KoShapeLoadingCont
     // load text
     bool loaded = false;
     if (context.documentResourceManager()) {
-        const KoXmlElement textElement = KoXml::namedItemNS(titleElement, KoXmlNS::chartcalligra, "text");
+        const KoXmlElement textElement = KoXml::namedItemNS(titleElement, KoXmlNS::calligra, "text");
         if (!textElement.isNull()) {
             loaded = titleData->loadOdf(textElement, context, 0, title);
             title->setVisible(true);
