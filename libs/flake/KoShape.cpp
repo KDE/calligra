@@ -1427,7 +1427,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
         style.addPropertyPt("fo:margin-bottom", textRunAroundDistanceBottom(), KoGenStyle::GraphicType);
     }
 
-    return context.mainStyles().insert(style, context.isSet(KoShapeSavingContext::PresentationShape) ? "pr" : "gr");
+    return context.mainStyles().insert(style, context.styleFamily());
 }
 
 void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context)

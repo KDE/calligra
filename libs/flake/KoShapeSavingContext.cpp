@@ -65,7 +65,7 @@ public:
     QMap<const void*, KoElementReference> references;
     QMap<QString, int> referenceCounters;
     QMap<QString, QList<const void*> > prefixedReferences;
-
+    QString styleFamily;
 };
 
 KoShapeSavingContextPrivate::KoShapeSavingContextPrivate(KoXmlWriter &w,
@@ -344,4 +344,20 @@ void KoShapeSavingContext::removeShapeOffset(const KoShape *shape)
 QTransform KoShapeSavingContext::shapeOffset(const KoShape *shape) const
 {
     return d->shapeOffsets.value(shape, QTransform());
+}
+
+void KoShapeSavingContext::setStyleFamily(const QString &name)
+{
+    d->styleFamily = name;
+}
+
+QString KoShapeSavingContext::styleFamily() const
+{
+    if (isSet(PresentationShape)) {
+        return "pr";
+    }
+    if (!d->styleFamily.isEmpty()) {
+        return d->styleFamily;
+    }
+    return "gr";
 }

@@ -52,8 +52,7 @@ public:
     /// The Style used for saving the shape
     enum ShapeSavingOption {
         /**
-         * If set the style of family presentation is used, when not set the
-         * family graphic is used.
+         * If set the style of family presentation ('pr') is used,
          * See OpenDocument 9.2.15 Common Drawing Shape Attributes / Style
          */
         PresentationShape = 1,
@@ -281,6 +280,20 @@ public:
      * @return the saved offset or QTransform() when offset is not set.
      */
     QTransform shapeOffset(const KoShape *shape) const;
+
+    /**
+     * Set stylen family to @p name
+     * E.g "ch" for chart family
+     */
+    void setStyleFamily(const QString &name);
+    /**
+     * @return the style family
+     * If PresentationShape is set the style of family presentation is used,
+     * else if style family is not empty, it is used,
+     * else family graphic is used.
+     * See OpenDocument 9.2.15 Common Drawing Shape Attributes / Style
+     */
+    QString styleFamily() const;
 
 private:
     KoShapeSavingContextPrivate * const d;
