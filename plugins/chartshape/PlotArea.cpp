@@ -778,8 +778,6 @@ void PlotArea::saveOdf(KoShapeSavingContext &context) const
     //KoGenStyles &mainStyles = context.mainStyles();
     bodyWriter.startElement("chart:plot-area");
 
-    // FIXME: Somehow this style gets the name gr2 instead of ch2.
-    //        Fix that as well.
     KoGenStyle plotAreaStyle(KoGenStyle::ChartAutoStyle, "chart");
 
     // Data direction

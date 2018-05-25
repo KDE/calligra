@@ -1086,7 +1086,8 @@ void ChartShape::saveOdf(KoShapeSavingContext & context) const
 
     saveOdfAttributes(context, OdfSize);
 
-    KoGenStyle style(KoGenStyle::GraphicAutoStyle, "chart");
+    context.setStyleFamily("ch");
+    KoGenStyle style(KoGenStyle::ChartAutoStyle, "chart");
     bodyWriter.addAttribute("chart:style-name", saveStyle(style, context));
 
     // 1. Write the chart type.
