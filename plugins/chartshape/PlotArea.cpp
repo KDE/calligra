@@ -248,6 +248,9 @@ PlotArea::PlotArea(ChartShape *parent)
     Q_ASSERT(d->shape);
     Q_ASSERT(d->shape->proxyModel());
 
+    setAdditionalStyleAttribute("chart:auto-position", "true");
+    setAdditionalStyleAttribute("chart:auto-size", "true");
+
     connect(d->shape->proxyModel(), SIGNAL(modelReset()),
             this,                   SLOT(proxyModelStructureChanged()));
     connect(d->shape->proxyModel(), SIGNAL(rowsInserted(QModelIndex,int,int)),
@@ -603,6 +606,9 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
 //         parent()->layout()->setPosition(this, FloatingPosition);
 //     }
 
+    bool autoPosition = !(plotAreaElement.hasAttributeNS(KoXmlNS::svg, "x") && plotAreaElement.hasAttributeNS(KoXmlNS::svg, "y"));
+    bool autoSize = !(plotAreaElement.hasAttributeNS(KoXmlNS::svg, "width") && plotAreaElement.hasAttributeNS(KoXmlNS::svg, "height"));
+
     context.odfLoadingContext().fillStyleStack(plotAreaElement, KoXmlNS::chart, "style-name", "chart");
     loadOdfAttributes(plotAreaElement, context, OdfAllAttributes);
 
@@ -631,6 +637,21 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
 
         styleStack.setTypeProperties("graphic");
         styleStack.setTypeProperties("chart");
+
+        if (styleStack.hasProperty(KoXmlNS::chart, "auto-position")) {
+            autoPosition |= styleStack.property(KoXmlNS::chart, "auto-position") == "true";
+        } else {
+            // To be backwards compatible we set auto-position to true as this was the original behaviour
+            // and is the way LO works
+            autoPosition = true;
+        }
+        if (styleStack.hasProperty(KoXmlNS::chart, "auto-size")) {
+            autoSize |= styleStack.property(KoXmlNS::chart, "auto-size") == "true" ;
+        } else {
+            // To be backwards compatible we set auto-size to true as this was the original behaviour
+            // and is the way LO works
+            autoSize = true;
+        }
 
         if (styleStack.hasProperty(KoXmlNS::chart, "angle-offset")) {
             bool ok;
@@ -672,6 +693,8 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
         styleStack.clear();
         context.odfLoadingContext().fillStyleStack(plotAreaElement, KoXmlNS::chart, "style-name", "chart");
     }
+    setAdditionalStyleAttribute("chart:auto-position", autoPosition ? "true" : "false");
+    setAdditionalStyleAttribute("chart:auto-size", autoSize ? "true" : "false");
 
     // Now create and load the axis from the ODF. This needs to happen
     // AFTER we did set some of the basic settings above so the axis
@@ -788,6 +811,13 @@ void PlotArea::saveOdf(KoShapeSavingContext &context) const
     // Save chart subtype
     saveOdfSubType(bodyWriter, plotAreaStyle);
 
+    // Save extra stuff (like auto-position)
+    QMap<QByteArray, QString>::const_iterator it(additionalStyleAttributes().constBegin());
+    for (; it != additionalStyleAttributes().constEnd(); ++it) {
+        plotAreaStyle.addProperty(it.key(), it.value(), KoGenStyle::ChartType);
+    }
+
+    // save graphic-properties and insert style
     bodyWriter.addAttribute("chart:style-name",
                              saveStyle(plotAreaStyle, context));
 
