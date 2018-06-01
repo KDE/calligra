@@ -81,30 +81,4 @@ void ChartTextShapeCommand::undo()
 
 void ChartTextShapeCommand::init()
 {
-    const QMap<KoShape*, QRectF> map = m_chart->layout()->calculateLayout(m_textShape, m_newIsVisible);
-    QVector<QPointF> oldpositions;
-    QVector<QPointF> newpositions;
-    QVector<QSizeF> oldsizes;
-    QVector<QSizeF> newsizes;
-    QList<KoShape*> positionshapes;
-    QList<KoShape*> sizeshapes;
-    QMap<KoShape*, QRectF>::const_iterator it = map.constBegin();
-    for (; it != map.constEnd(); ++it) {
-        if (it.key()->position() != it.value().topLeft()) {
-            positionshapes << it.key();
-            oldpositions << it.key()->position();
-            newpositions << it.value().topLeft();
-        }
-        if (it.key()->size() != it.value().size()) {
-            sizeshapes << it.key();
-            oldsizes << it.key()->size();
-            newsizes << it.value().size();
-        }
-    }
-    if (!positionshapes.isEmpty()) {
-        new KoShapeMoveCommand(positionshapes, oldpositions, newpositions, this);
-    }
-    if (!sizeshapes.isEmpty()) {
-        new KoShapeSizeCommand(sizeshapes, oldsizes, newsizes, this);
-    }
 }
