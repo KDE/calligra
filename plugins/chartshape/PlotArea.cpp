@@ -91,6 +91,7 @@ public:
     ~Private();
 
     void initAxes();
+    void updateAxesPosition();
     CoordinatePlaneList coordinatePlanesForChartType(ChartType type);
 
     PlotArea *q;
@@ -236,6 +237,15 @@ void PlotArea::Private::initAxes()
     Axis *yAxis = new Axis(q, YAxisDimension);
     yAxis->setShowMajorGrid(true);
     yAxis->title()->rotate(-90);
+
+    updateAxesPosition();
+}
+
+void PlotArea::Private::updateAxesPosition()
+{
+    for (int i = 0; i < axes.count(); ++i) {
+        axes.at(i)->updateKChartAxisPosition();
+    }
 }
 
 PlotArea::PlotArea(ChartShape *parent)
@@ -790,6 +800,8 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
         axis->setName(QString());
     }
 
+    // update kchart axis position for all axes
+    d->updateAxesPosition();
     requestRepaint();
 
     return true;
