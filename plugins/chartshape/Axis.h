@@ -29,6 +29,8 @@
 // KoChart
 #include "ChartShape.h"
 
+#include <KChartCartesianAxis.h>
+
 namespace KoOdfNumberStyles {
     struct NumericStyleFormat;
 }
@@ -80,7 +82,7 @@ public:
     bool scalingIsLogarithmic() const;
     bool showMajorGrid() const;
     bool showMinorGrid() const;
-    Qt::Orientation orientation();
+    Qt::Orientation orientation() const;
     QFont font() const;
     qreal fontSize() const;
     bool isVisible() const;
@@ -175,11 +177,37 @@ public:
      */
     int gapBetweenSets() const;
 
+    /**
+     * Set axis position to @p odfpos
+     * odfpos can be "start", "end" or a double value
+     */
+    void setOdfAxisPosition(const QString &odfpos);
+    /// @return the axis position in odf format
+    /// @see setOdfAxisPosition()
+    QString odfAxisPosition() const;
+    /**
+     * Update the chart axis position from the odf position
+     * ODF defines:
+     * end: Translates to Top for x-axes and Right for y-axes
+     *      If reversed: Translates to Bottom for x-axes and Left for y-axes
+     * start: Translates to Bottom for x-axes and Left for y-axes
+     *        If reversed: Translates to Top for x-axes and Right for y-axes
+     * value: Not supported, defaults to "start"
+     * 
+     * @see odfAxisPosition()
+     */
+    void updateKChartAxisPosition();
+    /// @return the KChart axis position
+    KChart::CartesianAxis::Position kchartAxisPosition() const;
+
+    /// @return true if direction is reversed
+    bool axisDirectionReversed() const;
+
 public Q_SLOTS:
     void setGapBetweenBars(int percent);
     void setGapBetweenSets(int percent);
     void setPieAngleOffset(qreal angle);
-    
+
 private:
     class Private;
     Private *const d;

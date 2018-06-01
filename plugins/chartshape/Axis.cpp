@@ -192,6 +192,8 @@ public:
 
     bool isVisible;
     QString name;
+
+    QString axisPosition;
 };
 
 class CartesianAxis : public KChart::CartesianAxis
@@ -1254,7 +1256,7 @@ void Axis::setShowOverlappingDataLabels(bool show)
     d->showOverlappingDataLabels = show;
 }
 
-Qt::Orientation Axis::orientation()
+Qt::Orientation Axis::orientation() const
 {
     bool chartIsVertical = d->plotArea->isVertical();
     bool horizontal = d->dimension == (chartIsVertical ? YAxisDimension
@@ -1469,6 +1471,9 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
                 // TODO
             }
         }
+        if (styleStack.hasProperty(KoXmlNS::chart, "axis-position")) {
+            d->axisPosition = styleStack.property(KoXmlNS::chart, "axis-position");
+        }
     } else {
         setShowLabels(KoOdfWorkaround::fixMissingStyle_DisplayLabel(axisElement, context));
     }
@@ -1516,7 +1521,7 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
             else // Qt::Vertical
                 plane->setVerticalRangeReversed(reverseAxis);
         }
-    }   
+    }
 
     // Style of axis is still in styleStack
     if (!loadOdfChartSubtypeProperties(axisElement, context))
@@ -1597,15 +1602,11 @@ void Axis::saveOdf(KoShapeSavingContext &context)
     KoGenStyle axisStyle(KoGenStyle::ChartAutoStyle, "chart");
     axisStyle.addProperty("chart:logarithmic", scalingIsLogarithmic());
 
-    KChart::CartesianCoordinatePlane *plane = dynamic_cast<KChart::CartesianCoordinatePlane*>(kdPlane());
-    bool reverseAxis = false;
-    if (plane) {
-        if (orientation() == Qt::Horizontal)
-            reverseAxis = plane->isHorizontalRangeReversed();
-        else // Qt::Vertical
-            reverseAxis = plane->isVerticalRangeReversed();
+
+    axisStyle.addProperty("chart:reverse-direction", axisDirectionReversed());
+    if (!d->axisPosition.isEmpty()) {
+        axisStyle.addProperty("chart:axis-position", odfAxisPosition());
     }
-    axisStyle.addProperty("chart:reverse-direction", reverseAxis);
 
     axisStyle.addProperty("chart:tick-marks-minor-inner", showInnerMinorTicks());
     axisStyle.addProperty("chart:tick-marks-minor-outer", showOuterMinorTicks());
@@ -1909,26 +1910,26 @@ void Axis::plotAreaIsVerticalChanged()
 
 void Axis::Private::updatePosition()
 {
-    // Is the first x or y axis?
-    bool first = (dimension == XAxisDimension) ? plotArea->xAxis() == q
-                                               : plotArea->yAxis() == q;
-
-    Position position;
-    ItemType type = GenericItemType;
-    if (q->orientation() == Qt::Horizontal) {
-        position = first ? BottomPosition : TopPosition;
-        type = first ? XAxisTitleType : SecondaryXAxisTitleType;
-    } else {
-        position = first ? StartPosition : EndPosition;
-        type = first ? YAxisTitleType : SecondaryYAxisTitleType;
-    }
-    // KChart
-    kdAxis->setPosition(PositionToKChartAxisPosition(position));
-    ChartLayout *layout = plotArea->parent()->layout();
-    layout->setPosition(title, position, type);
-    layout->layout();
-
-    q->requestRepaint();
+//     // Is the first x or y axis?
+//     bool first = (dimension == XAxisDimension) ? plotArea->xAxis() == q
+//                                                : plotArea->yAxis() == q;
+//
+//     Position position;
+//     ItemType type = GenericItemType;
+//     if (q->orientation() == Qt::Horizontal) {
+//         position = first ? BottomPosition : TopPosition;
+//         type = first ? XAxisTitleType : SecondaryXAxisTitleType;
+//     } else {
+//         position = first ? StartPosition : EndPosition;
+//         type = first ? YAxisTitleType : SecondaryYAxisTitleType;
+//     }
+//     // KChart
+//     kdAxis->setPosition(PositionToKChartAxisPosition(position));
+//     ChartLayout *layout = plotArea->parent()->layout();
+//     layout->setPosition(title, position, type);
+//     layout->layout();
+//
+//     q->requestRepaint();
 }
 
 void Axis::registerKdAxis(KChart::CartesianAxis *axis)
@@ -2134,4 +2135,77 @@ void Axis::SetNumericStyleFormat(KoOdfNumberStyles::NumericStyleFormat *numericS
 {
     delete d->numericStyleFormat;
     d->numericStyleFormat = numericStyleFormat;
+}
+
+void Axis::setOdfAxisPosition(const QString &odfpos)
+{
+    d->axisPosition = odfpos;
+}
+
+QString Axis::odfAxisPosition() const
+{
+    return d->axisPosition;
+}
+
+void Axis::updateKChartAxisPosition()
+{
+    if (d->plotArea->xAxis() == this) {
+        KChart::CartesianAxis::Position pos = KChart::CartesianAxis::Bottom;
+        if (d->axisPosition == "end") {
+            pos = KChart::CartesianAxis::Top;
+        }
+        Axis *yAxis = d->plotArea->yAxis();
+        if (yAxis && yAxis->axisDirectionReversed()) {
+            pos = pos == KChart::CartesianAxis::Bottom ? KChart::CartesianAxis::Top : KChart::CartesianAxis::Bottom;
+        }
+        d->kdAxis->setPosition(pos);
+    } else if (d->plotArea->yAxis() == this) {
+        KChart::CartesianAxis::Position pos = KChart::CartesianAxis::Left;
+        if (d->axisPosition == "end") {
+            pos = KChart::CartesianAxis::Right;
+        }
+        Axis *xAxis = d->plotArea->xAxis();
+        if (xAxis && xAxis->axisDirectionReversed()) {
+            pos = pos == KChart::CartesianAxis::Left ? KChart::CartesianAxis::Right : KChart::CartesianAxis::Left;
+        }
+        d->kdAxis->setPosition(pos);
+    } else if (d->plotArea->secondaryXAxis() == this) {
+        KChart::CartesianAxis::Position pos = KChart::CartesianAxis::Top;
+        if (d->axisPosition == "start") {
+            pos = KChart::CartesianAxis::Bottom;
+        }
+        Axis *yAxis = d->plotArea->secondaryYAxis();
+        if (yAxis && yAxis->axisDirectionReversed()) {
+            pos = pos == KChart::CartesianAxis::Top ? KChart::CartesianAxis::Bottom : KChart::CartesianAxis::Top;
+        }
+        d->kdAxis->setPosition(pos);
+    } else if (d->plotArea->secondaryYAxis() == this) {
+        KChart::CartesianAxis::Position pos = KChart::CartesianAxis::Right;
+        if (d->axisPosition == "start") {
+            pos = KChart::CartesianAxis::Left;
+        }
+        Axis *xAxis = d->plotArea->secondaryXAxis();
+        if (xAxis && xAxis->axisDirectionReversed()) {
+            pos = pos == KChart::CartesianAxis::Right ? KChart::CartesianAxis::Left : KChart::CartesianAxis::Right;
+        }
+        d->kdAxis->setPosition(pos);
+    }
+}
+
+CartesianAxis::Position Axis::kchartAxisPosition() const
+{
+    return d->kdAxis->position();
+}
+
+bool Axis::axisDirectionReversed() const
+{
+    bool reversed = false;
+    KChart::CartesianCoordinatePlane *plane = dynamic_cast<KChart::CartesianCoordinatePlane*>(kdPlane());
+    if (plane) {
+        if (orientation() == Qt::Horizontal)
+            reversed = plane->isHorizontalRangeReversed();
+        else // Qt::Vertical
+            reversed = plane->isVerticalRangeReversed();
+    }
+    return reversed;
 }
