@@ -172,10 +172,8 @@ KoShape *ChartShapeFactory::createDefaultShape(KoDocumentResourceManager *docume
     shape->plotArea()->xAxis()->setTitleText(i18n("Month"));
     shape->plotArea()->yAxis()->setTitleText(i18n("Growth in %"));
 
-    shape->layout()->setAutoLayoutEnabled(true);
     shape->layout()->scheduleRelayout();
     shape->layout()->layout();
-    shape->layout()->setAutoLayoutEnabled(false);
 
     return shape;
 }

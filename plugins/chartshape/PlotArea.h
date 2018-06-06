@@ -43,14 +43,14 @@ namespace KoChart {
 
 /**
  * @brief The PlotArea class is the central chart element. It plots the data and draws the axes.
- * 
+ *
  * There always exists exactly one instance of this class, owned by
  * the chart shape. The plot area itself takes ownership of the axes
  * and the chart wall.
- * 
+ *
  * 3D support is not yet fully implemented, a chart floor is not
  * supported at all yet.
- * 
+ *
  * This class also plays a central role when loading from or saving to
  * ODF. Though it does not handle anything in particular itself, it
  * utilizes the DataSet, ChartTableModel, Axis, Surface, and
@@ -63,20 +63,20 @@ class PlotArea : public QObject, public KoShape
     friend class Surface;
     friend class Axis;
     Q_OBJECT
-    
+
 public:
     explicit PlotArea(ChartShape *parent);
     ~PlotArea();
-    
+
     void plotAreaInit();
-    
+
     ChartProxyModel *proxyModel() const;
 
     ChartType    chartType() const;
     ChartSubtype chartSubType() const;
     void         setChartType(ChartType type);
     void         setChartSubType(ChartSubtype subType);
-    
+
     QList<Axis*>    axes() const;
     QList<DataSet*> dataSets() const;
     int             dataSetCount() const;
@@ -130,11 +130,11 @@ public:
 
     bool loadOdf(const KoXmlElement &plotAreaElement, KoShapeLoadingContext &context);
     bool loadOdfSeries(const KoXmlElement &seriesElement, KoShapeLoadingContext &context);
-    
+
     void saveOdf(KoShapeSavingContext &context) const;
     void saveOdfSubType(KoXmlWriter &bodyWriter, KoGenStyle &plotAreaStyle) const;
-    
-    
+
+
     void setThreeD(bool threeD);
 
     /**
@@ -146,27 +146,30 @@ public:
      * @see isVertical
      */
     void setVertical(bool vertical);
-    
+
     ChartShape *parent() const;
 
     void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
-    
+
     bool registerKdDiagram(KChart::AbstractDiagram *diagram);
     bool deregisterKdDiagram(KChart::AbstractDiagram *diagram);
-    
+
     void relayout() const;
 
     void registerKdPlane(KChart::AbstractCoordinatePlane *plane);
+
+    void addTitleToLayout();
 
 public Q_SLOTS:
     void requestRepaint() const;
     void proxyModelStructureChanged();
     void plotAreaUpdate() const;
-    
+
 Q_SIGNALS:
     void pieAngleOffsetChanged(qreal);
 
 private:
+    void addAxesTitlesToLayout();
     void paintPixmap(QPainter &painter, const KoViewConverter &converter);
 
     // For class Axis
@@ -174,7 +177,7 @@ private:
     KChart::PolarCoordinatePlane *kdPolarPlane() const;
     KChart::RadarCoordinatePlane *kdRadarPlane() const;
     KChart::Chart *kdChart() const;
-    
+
     class Private;
     Private *const d;
 };

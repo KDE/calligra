@@ -47,23 +47,16 @@ private Q_SLOTS:
     void init();
     void cleanup();
 
-    void testRelativePositioning();
+    void testDefaultDiagram();
 
-    void testLayoutTop();
-    void testLayoutBottom();
-    void testLayoutStart();
-    void testLayoutEnd();
-
-    void testLayoutTopStart();
-    void testLayoutTopEnd();
-    void testLayoutBottomStart();
-    void testLayoutBottomEnd();
-
+private:
+    bool compareLayout(const QString &test = QString());
 private:
     QtMessageHandler msgHandler;
     KoDocumentResourceManager *drm;
     KoChart::ChartShape *chart;
     KoChart::ChartLayout *layout;
+    QRectF area;
     KoShape *chartTitle;
     QRectF chartTitleRect;
     KoShape *chartSubTitle;
@@ -82,6 +75,7 @@ private:
     QRectF secondaryXAxisTitleRect;
     KoShape *secondaryYAxisTitle;
     QRectF secondaryYAxisTitleRect;
+
 };
 
 #endif // KCHART_TESTCHARTLAYOUT_H

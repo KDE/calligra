@@ -337,19 +337,14 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
         d->title->setUserData(labelData);
     }
 
-    // Start with a reasonable default size that we can base all following relative
-    // positions of chart elements on.
-    setSize(QSizeF(CM_TO_POINT(8), CM_TO_POINT(5)));
-
     // Add the title to the shape
     addShape(d->title);
     QFont font = titleData()->document()->defaultFont();
     font.setPointSizeF(12.0);
     titleData()->document()->setDefaultFont(font);
     titleData()->document()->setPlainText(i18n("Title"));
-    // Position the title center at the very top.
+    // Set a reasonable size, it will be resized automatically
     d->title->setSize(QSizeF(CM_TO_POINT(5), CM_TO_POINT(0.7)));
-    d->title->setPosition(QPointF(size().width() / 2.0 - d->title->size().width() / 2.0, 0.0));
     d->title->setVisible(false);
     d->title->setZIndex(2);
     setClipped(d->title, true);
@@ -377,11 +372,8 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     font.setPointSizeF(10.0);
     subTitleData()->document()->setDefaultFont(font);
     subTitleData()->document()->setPlainText(i18n("Subtitle"));
-
-    // Position it in the center, just below the title.
-    d->subTitle->setSize(QSizeF(CM_TO_POINT(5), CM_TO_POINT(0.6)));
-    d->subTitle->setPosition(QPointF(size().width() / 2.0 - d->title->size().width() / 2.0,
-                                       d->title->size().height()));
+    // Set a reasonable size, it will be resized automatically
+    d->subTitle->setSize(QSizeF(CM_TO_POINT(5), CM_TO_POINT(0.7)));
     d->subTitle->setVisible(false);
     d->subTitle->setZIndex(3);
     setClipped(d->subTitle, true);
@@ -409,11 +401,8 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     font.setPointSizeF(10.0);
     footerData()->document()->setDefaultFont(font);
     footerData()->document()->setPlainText(i18n("Footer"));
-
-    // Position the footer in the center, at the bottom.
-    d->footer->setSize(QSizeF(CM_TO_POINT(5), CM_TO_POINT(0.6)));
-    d->footer->setPosition(QPointF(size().width() / 2.0 - d->footer->size().width() / 2.0,
-                                   size().height() - d->footer->size().height()));
+    // Set a reasonable size, it will be resized automatically
+    d->footer->setSize(QSizeF(CM_TO_POINT(5), CM_TO_POINT(0.7)));
     d->footer->setVisible(false);
     d->footer->setZIndex(4);
     setClipped(d->footer, true);
@@ -433,20 +422,14 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     KoShapeStroke *stroke = new KoShapeStroke(0, Qt::black);
     setStroke(stroke);
 
-    // TODO: use shapes lyaout properties
-    // set the default positioning, and do initial layout
+    // Tell layout about item types
     ChartLayout *l = layout();
-    l->setPosition(d->plotArea, CenterPosition, PlotAreaType);
-    l->setPosition(d->title,    TopPosition, TitleLabelType);
-    l->setPosition(d->subTitle, TopPosition, SubTitleLabelType);
-    l->setPosition(d->footer,   BottomPosition, FooterLabelType);
-    l->setPosition(d->legend,   d->legend->legendPosition(), LegendType);
-    l->scheduleRelayout();
+    l->setItemType(d->plotArea, PlotAreaType);
+    l->setItemType(d->title, TitleLabelType);
+    l->setItemType(d->subTitle, SubTitleLabelType);
+    l->setItemType(d->footer, FooterLabelType);
+    l->setItemType(d->legend, LegendType);
     l->layout();
-
-    // Let user/odf control positioning
-    l->setAutoLayoutEnabled(false);
-
     requestRepaint();
 }
 
@@ -829,23 +812,6 @@ bool ChartShape::loadOdf(const KoXmlElement &element,
     loadOdfAttributes(element, context, OdfAllAttributes);
     bool r = loadOdfFrame(element, context);
 
-    if (d->legend->isVisible() && d->legend->alignment() != Qt::AlignJustify) {
-        // The legend is positioned into an area, not using the x,y coordinates,
-        // so we need to let ChartLayout ley it out accordingly
-        // This may move/resize other components, but maybe that is ok
-        d->legend->setVisible(false);
-        const QMap<KoShape*, QRectF> map = layout()->calculateLayout(d->legend, true);
-        qDebug()<<"loadOdf:"<<d->legend<<"legend:"<<d->legend->position()<<map;
-        QMap<KoShape*, QRectF>::const_iterator it;
-        for (it = map.constBegin(); it != map.constEnd(); ++it) {
-            it.key()->setPosition(it.value().topLeft());
-            it.key()->setSize(it.value().size());
-        }
-        d->legend->setVisible(true);
-        layout()->scheduleRelayout();
-    }
-
-    qInfo()<<Q_FUNC_INFO<<position()<<size()<<boundingRect();
     return r;
 }
 

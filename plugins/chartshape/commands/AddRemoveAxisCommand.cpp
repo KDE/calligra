@@ -69,6 +69,7 @@ void AddRemoveAxisCommand::redo()
     if (m_add) {
         m_axis->plotArea()->addAxis(m_axis);
         m_shapeManager->addShape(m_axis->title(), KoShapeManager::AddWithoutRepaint);
+        m_axis->plotArea()->addTitleToLayout();
     } else {
         m_shapeManager->remove(m_axis->title());
         m_axis->plotArea()->takeAxis(m_axis);
@@ -86,6 +87,7 @@ void AddRemoveAxisCommand::undo()
     } else {
         m_axis->plotArea()->addAxis(m_axis);
         m_shapeManager->addShape(m_axis->title(), KoShapeManager::AddWithoutRepaint);
+        m_axis->plotArea()->addTitleToLayout();
     }
     KUndo2Command::undo();
     m_chart->update();

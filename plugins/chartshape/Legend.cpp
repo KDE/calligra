@@ -282,7 +282,7 @@ void Legend::setLegendPosition(Position position)
     d->position = position;
     d->pixmapRepaintRequested = true;
 
-    d->shape->layout()->setPosition(this, position, LegendType);
+    d->shape->layout()->setItemType(this, LegendType);
 }
 
 void Legend::setSize(const QSizeF &newSize)

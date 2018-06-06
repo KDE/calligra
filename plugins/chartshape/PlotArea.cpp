@@ -93,6 +93,7 @@ public:
     void initAxes();
     void updateAxesPosition();
     CoordinatePlaneList coordinatePlanesForChartType(ChartType type);
+    void autoHideAxisTitles();
 
     PlotArea *q;
     // The parent chart shape
@@ -299,6 +300,8 @@ void PlotArea::plotAreaInit()
     //d->floor = new Surface(this);
 
     d->initAxes();
+
+    addAxesTitlesToLayout();
 }
 
 void PlotArea::proxyModelStructureChanged()
@@ -522,6 +525,18 @@ CoordinatePlaneList PlotArea::Private::coordinatePlanesForChartType(ChartType ty
     return result;
 }
 
+
+void PlotArea::Private::autoHideAxisTitles()
+{
+    automaticallyHiddenAxisTitles.clear();
+    foreach (Axis *axis, axes) {
+        if (axis->title()->isVisible()) {
+            axis->title()->setVisible(false);
+            automaticallyHiddenAxisTitles.append(axis->title());
+        }
+    }
+}
+
 void PlotArea::setChartType(ChartType type)
 {
     if (d->chartType == type)
@@ -530,13 +545,7 @@ void PlotArea::setChartType(ChartType type)
     // Lots of things to do if the old and new types of coordinate
     // systems don't match.
     if (!isPolar(d->chartType) && isPolar(type)) {
-        foreach (Axis *axis, d->axes) {
-            if (!axis->title()->isVisible())
-                continue;
-
-            axis->title()->setVisible(false);
-            d->automaticallyHiddenAxisTitles.append(axis->title());
-        }
+        d->autoHideAxisTitles();
     }
     else if (isPolar(d->chartType) && !isPolar(type)) {
         foreach (KoShape *title, d->automaticallyHiddenAxisTitles) {
@@ -563,7 +572,6 @@ void PlotArea::setChartType(ChartType type)
     foreach (Axis *axis, d->axes) {
         axis->plotAreaChartTypeChanged(type);
     }
-
     requestRepaint();
 }
 
@@ -796,12 +804,19 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
             }
         }
     }
+    debugChartOdf<<d->chartType<<d->chartSubtype<<d->axes;
+    if (isPolar(d->chartType)) {
+        d->autoHideAxisTitles();
+    }
     foreach(Axis *axis, d->axes) {
         axis->setName(QString());
     }
 
     // update kchart axis position for all axes
     d->updateAxesPosition();
+    // add axes titles to layout
+    addAxesTitlesToLayout();
+
     requestRepaint();
 
     return true;
@@ -1199,4 +1214,39 @@ void PlotArea::relayout() const
     d->kdPolarPlane->relayout();
     d->kdRadarPlane->relayout();
     update();
+}
+
+void PlotArea::addTitleToLayout()
+{
+    qInfo()<<Q_FUNC_INFO<<d->chartType<<d->axes;
+    addAxesTitlesToLayout(); // for now
+}
+
+void PlotArea::addAxesTitlesToLayout()
+{
+    ChartLayout *layout = d->shape->layout();
+    Axis *axis = xAxis();
+    if (axis) {
+        qInfo()<<Q_FUNC_INFO<<'X'<<d->chartType<<axis->titleText()<<axis->title()->isVisible();
+        layout->remove(axis->title());
+        layout->setItemType(axis->title(), XAxisTitleType);
+    }
+    axis = yAxis();
+    if (axis) {
+        qInfo()<<Q_FUNC_INFO<<'Y'<<d->chartType<<axis->titleText()<<axis->title()->isVisible();
+        layout->remove(axis->title());
+        layout->setItemType(axis->title(), YAxisTitleType);
+    }
+    axis = secondaryXAxis();
+    if (axis) {
+        qInfo()<<Q_FUNC_INFO<<"SX"<<d->chartType<<axis->titleText()<<axis->title()->isVisible();
+        layout->remove(axis->title());
+        layout->setItemType(axis->title(), SecondaryXAxisTitleType);
+    }
+    axis = secondaryYAxis();
+    if (axis) {
+        qInfo()<<Q_FUNC_INFO<<"SY"<<d->chartType<<axis->titleText()<<axis->title()->isVisible();
+        layout->remove(axis->title());
+        layout->setItemType(axis->title(), SecondaryYAxisTitleType);
+    }
 }
