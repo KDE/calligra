@@ -867,7 +867,33 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
     styleStack.clear();
     if (chartElement.hasAttributeNS(KoXmlNS::chart, "style-name")) {
         context.odfLoadingContext().fillStyleStack(chartElement, KoXmlNS::chart, "style-name", "chart");
+
         styleStack.setTypeProperties("graphic");
+        KoInsets padding = layout()->padding();
+        if (styleStack.hasProperty(KoXmlNS::fo, "padding")) {
+            padding.left = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "padding"));
+            padding.top = padding.left;
+            padding.right = padding.left;
+            padding.bottom = padding.left;
+            debugChartOdf<<"load padding"<<padding.left;
+        }
+        if (styleStack.hasProperty(KoXmlNS::fo, "padding-left")) {
+            padding.left = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "padding-left"));
+            debugChartOdf<<"load padding-left"<<padding.left;
+        }
+        if (styleStack.hasProperty(KoXmlNS::fo, "padding-top")) {
+            padding.top = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "padding-top"));
+            debugChartOdf<<"load padding-top"<<padding.top;
+        }
+        if (styleStack.hasProperty(KoXmlNS::fo, "padding-right")) {
+            padding.right = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "padding-right"));
+            debugChartOdf<<"load padding-right"<<padding.right;
+        }
+        if (styleStack.hasProperty(KoXmlNS::fo, "padding-bottom")) {
+            padding.bottom = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "padding-bottom"));
+            debugChartOdf<<"load padding-bottom"<<padding.bottom;
+        }
+        layout()->setPadding(padding);
     }
     // Also load the size here as it, if specified here, overwrites the frame's size,
     // See ODF specs for chart:chart element for more details.
@@ -1054,6 +1080,12 @@ void ChartShape::saveOdf(KoShapeSavingContext & context) const
 
     context.setStyleFamily("ch");
     KoGenStyle style(KoGenStyle::ChartAutoStyle, "chart");
+    KoInsets padding = layout()->padding();
+    style.addPropertyPt("fo:padding-left", padding.left, KoGenStyle::GraphicType);
+    style.addPropertyPt("fo:padding-top", padding.top, KoGenStyle::GraphicType);
+    style.addPropertyPt("fo:padding-right", padding.right, KoGenStyle::GraphicType);
+    style.addPropertyPt("fo:padding-bottom", padding.bottom, KoGenStyle::GraphicType);
+    debugChartOdf<<"save padding:"<<padding;
     bodyWriter.addAttribute("chart:style-name", saveStyle(style, context));
 
     // 1. Write the chart type.

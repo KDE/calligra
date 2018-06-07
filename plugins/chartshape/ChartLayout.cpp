@@ -64,11 +64,10 @@ bool ChartLayout::autoSize(const KoShape *shape)
 ChartLayout::ChartLayout()
     : m_doingLayout(false)
     , m_relayoutScheduled(false)
-    , m_hMargin(5)
-    , m_vMargin(5)
+    , m_padding(5., 5., 5., 5.)
+    , m_spacing(5., 5.)
     , m_layoutingEnabled(true)
 {
-    m_spacing = QPointF(m_hMargin, m_vMargin);
 }
 
 ChartLayout::~ChartLayout()
@@ -261,7 +260,7 @@ void ChartLayout::calculateLayout()
 {
     QRectF area;
     area.setSize(m_containerSize);
-    area.adjust(m_hMargin, m_vMargin, -m_hMargin, -m_vMargin);
+    area.adjust(m_padding.left, m_padding.top, -m_padding.right, -m_padding.bottom);
 
     if (area.size().width() < 0 && area.size().height() < 0) {
         debugChartLayout<<"invalid size:"<<area;
@@ -670,16 +669,15 @@ void ChartLayout::layout()
 }
 
 
-void ChartLayout::setMargins(qreal hMargin, qreal vMargin)
+void ChartLayout::setPadding(const KoInsets &padding)
 {
-    m_vMargin = vMargin;
-    m_hMargin = hMargin;
+    m_padding = padding;
     scheduleRelayout();
 }
 
-QPointF ChartLayout::margins() const
+KoInsets ChartLayout::padding() const
 {
-    return QPointF(m_hMargin, m_vMargin);
+    return m_padding;
 }
 
 void ChartLayout::setSpacing(qreal hSpacing, qreal vSpacing)

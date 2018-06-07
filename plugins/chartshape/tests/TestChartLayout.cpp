@@ -121,15 +121,13 @@ void TestChartLayout::init()
 
     chart->setSize(area.size());
 
-    // use asymetric margins/spacing
-    layout->setMargins(2, 4);
-    layout->setSpacing(6, 8);
+    // use asymetric padding/spacing
+    layout->setPadding(KoInsets(2., 4., 6., 8.));
+    layout->setSpacing(10, 12);
 
-    area.adjust(layout->margins().x(), layout->margins().y(), -layout->margins().x(), -layout->margins().y());
+    area.adjust(layout->padding().left, layout->padding().top, -layout->padding().right, -layout->padding().bottom);
 
     layout->layout();
-
-//     qInfo()<<"area:"<<area<<"margins:"<<layout->margins()<<"spacing:"<<layout->spacing();
 
     chartTitle = chart->title();
     chartTitleRect = itemRect(chartTitle);

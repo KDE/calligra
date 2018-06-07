@@ -29,6 +29,7 @@
 
 // Calligra
 #include <KoShapeContainerModel.h>
+#include <KoInsets.h>
 
 // KoChart
 #include "kochart_global.h"
@@ -170,15 +171,14 @@ public:
      */
     void scheduleRelayout();
     /**
-     * Sets the horizontal and vertical margin that will be applied during layout
+     * Sets the padding to @p padding that will be applied during layout
      */
-    void setMargins (qreal hMargin, qreal vMargin);
-    /// Returns the margins defined for this layout
-    QPointF margins() const;
+    void setPadding (const KoInsets &padding);
+    /// Returns the padding defined for this layout
+    KoInsets padding() const;
     /// Set spacing in points to @p hSpacing, @p vSpacing to be used for this layout
     void setSpacing(qreal hSpacing, qreal vSpacing);
     /// Returns the horizontal and vertical spacing in points defined for this layout
-    /// Default: uses the margins
     QPointF spacing() const;
 
     /// Enable/disable layouting (ex: used during odf loading)
@@ -214,8 +214,7 @@ private:
     bool m_doingLayout;
     bool m_relayoutScheduled;
     QSizeF m_containerSize;
-    qreal m_hMargin;
-    qreal m_vMargin;
+    KoInsets m_padding;
     QPointF m_spacing;
     bool m_layoutingEnabled;
     class LayoutData;
