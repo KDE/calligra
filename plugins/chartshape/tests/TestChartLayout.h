@@ -48,9 +48,11 @@ private Q_SLOTS:
     void cleanup();
 
     void testDefaultDiagram();
+    void testLegendPositioning();
 
 private:
     bool compareLayout(const QString &test = QString());
+    void updateRects();
 private:
     QtMessageHandler msgHandler;
     KoDocumentResourceManager *drm;

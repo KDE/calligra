@@ -188,8 +188,8 @@ private:
     /// Set the chart size to @p size and schedule relayout
     void setContainerSize(const QSizeF &size);
 
-    qreal xCenterOffset(const QRectF &left, const QRectF &right) const;
-    qreal yCenterOffset(const QRectF &top, const QRectF &bottom) const;
+    qreal xOffset(const QRectF &left, const QRectF &right, bool center = false) const;
+    qreal yOffset(const QRectF &top, const QRectF &bottom, bool center = false) const;
 
 #ifdef COMPILING_TESTS
 public:

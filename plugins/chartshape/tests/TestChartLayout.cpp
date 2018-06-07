@@ -54,15 +54,6 @@ static void filterMessages(QtMsgType type, const QMessageLogContext &context, co
     }
 }
 
-static void updateItems(const QMap<KoShape*, QRectF> &map)
-{
-    QMap<KoShape*, QRectF>::const_iterator it;
-    for (it = map.constBegin(); it != map.constEnd(); ++it) {
-        it.key()->setPosition(it.value().topLeft());
-        it.key()->setSize(it.value().size());
-    }
-}
-
 static QRectF itemRect(const KoShape *shape)
 {
     return ChartLayout::itemRect(shape);
@@ -88,6 +79,9 @@ void TestChartLayout::initTestCase()
     // If changed tests may have to be changed too
     init();
 
+    qreal spaceX = layout->spacing().x();
+    qreal spaceY = layout->spacing().y();
+
     QVERIFY(plotArea->isVisible());
     QVERIFY(legend->isVisible());
     QVERIFY(!chartTitle->isVisible());
@@ -104,9 +98,9 @@ void TestChartLayout::initTestCase()
     QCOMPARE(yAxisTitleRect.left(), area.left());
     QCOMPARE(legendRect.right(), area.right());
     QCOMPARE(plotAreaRect.top(), area.top());
-    QCOMPARE(plotAreaRect.left(), yAxisTitleRect.right() + layout->spacing().x());
-    QCOMPARE(plotAreaRect.bottom(), xAxisTitleRect.top() - layout->spacing().y());
-    QCOMPARE(plotAreaRect.right(), legendRect.left() - layout->spacing().x());
+    QCOMPARE(plotAreaRect.left(), yAxisTitleRect.right() + spaceX);
+    QCOMPARE(plotAreaRect.bottom(), xAxisTitleRect.top() - spaceY);
+    QCOMPARE(plotAreaRect.right(), legendRect.left() - spaceX);
 
     cleanup();
 }
@@ -120,6 +114,9 @@ void TestChartLayout::init()
 {
     area = QRectF(0., 0., 300., 400.);
     chart = new ChartShape(drm);
+    // create a non-square legend
+//     chart->legend()->setTitle("Legend");
+
     layout = chart->layout();
 
     chart->setSize(area.size());
@@ -158,6 +155,19 @@ void TestChartLayout::init()
 void TestChartLayout::cleanup()
 {
     delete chart;
+}
+
+void TestChartLayout::updateRects()
+{
+    chartTitleRect = chartTitle && chartTitle->isVisible() ? itemRect(chartTitle) : QRectF();
+    chartSubTitleRect = chartSubTitle && chartSubTitle->isVisible() ? itemRect(chartSubTitle) : QRectF();
+    chartFooterRect = chartFooter && chartFooter->isVisible() ? itemRect(chartFooter) : QRectF();
+    legendRect = legend && legend->isVisible() ? itemRect(legend) : QRectF();
+    plotAreaRect = plotArea && plotArea->isVisible() ? itemRect(plotArea) : QRectF();
+    xAxisTitleRect = xAxisTitle && xAxisTitle->isVisible() ? itemRect(xAxisTitle) : QRectF();
+    yAxisTitleRect = yAxisTitle && yAxisTitle->isVisible() ? itemRect(yAxisTitle) : QRectF();
+    secondaryXAxisTitleRect = secondaryXAxisTitle && secondaryXAxisTitle->isVisible() ? itemRect(secondaryXAxisTitle) : QRectF();
+    secondaryYAxisTitleRect = secondaryYAxisTitle && secondaryYAxisTitle->isVisible() ? itemRect(secondaryYAxisTitle) : QRectF();
 }
 
 void dbg(const QString &test, const QString topic, const QRectF &expected, const QRectF &actual)
@@ -241,7 +251,10 @@ bool TestChartLayout::compareLayout(const QString &test)
 
 void TestChartLayout::testDefaultDiagram()
 {
-    qreal height = itemRect(xAxisTitle).height() + layout->spacing().y();
+    qreal spaceX = layout->spacing().x();
+    qreal spaceY = layout->spacing().y();
+
+    qreal height = itemRect(xAxisTitle).height() + spaceY;
     plotAreaRect.setBottom(plotAreaRect.bottom() + height);
     legendRect.moveTop(plotAreaRect.center().y() - legendRect.height() / 2);
     yAxisTitleRect.moveTop(plotAreaRect.center().y() - yAxisTitleRect.height() / 2);
@@ -250,7 +263,7 @@ void TestChartLayout::testDefaultDiagram()
     layout->layout();
     COMPARELAYOUT("Hide x axis title");
 
-    qreal width = itemRect(yAxisTitle).width() + layout->spacing().x();
+    qreal width = itemRect(yAxisTitle).width() + spaceX;
     plotAreaRect.setLeft(plotAreaRect.left() - width);
     yAxisTitle->setVisible(false);
     layout->scheduleRelayout();
@@ -262,7 +275,7 @@ void TestChartLayout::testDefaultDiagram()
     layout->layout();
     chartTitleRect = itemRect(chartTitle);
     chartTitleRect.moveTop(area.top());
-    plotAreaRect.setTop(chartTitleRect.bottom() + layout->spacing().y());
+    plotAreaRect.setTop(chartTitleRect.bottom() + spaceY);
     legendRect.moveTop(plotAreaRect.center().y() - legendRect.height() / 2);
     COMPARELAYOUT("Show title");
 
@@ -270,8 +283,8 @@ void TestChartLayout::testDefaultDiagram()
     layout->scheduleRelayout();
     layout->layout();
     chartSubTitleRect = itemRect(chartSubTitle);
-    chartSubTitleRect.moveTop(chartTitleRect.bottom() + layout->spacing().y());
-    plotAreaRect.setTop(chartSubTitleRect.bottom() + layout->spacing().y());
+    chartSubTitleRect.moveTop(chartTitleRect.bottom() + spaceY);
+    plotAreaRect.setTop(chartSubTitleRect.bottom() + spaceY);
     legendRect.moveTop(plotAreaRect.center().y() - legendRect.height() / 2);
     COMPARELAYOUT("Show subtitle");
 
@@ -280,7 +293,7 @@ void TestChartLayout::testDefaultDiagram()
     layout->layout();
     chartFooterRect = itemRect(chartFooter);
     chartFooterRect.moveBottom(area.bottom());
-    plotAreaRect.setBottom(chartFooterRect.top() - layout->spacing().y());
+    plotAreaRect.setBottom(chartFooterRect.top() - spaceY);
     legendRect.moveTop(plotAreaRect.center().y() - legendRect.height() / 2);
     COMPARELAYOUT("Show footer");
 
@@ -294,7 +307,7 @@ void TestChartLayout::testDefaultDiagram()
     layout->scheduleRelayout();
     layout->layout();
     chartSubTitleRect.moveTop(chartTitleRect.top());
-    plotAreaRect.setTop(chartSubTitleRect.bottom() + layout->spacing().y());
+    plotAreaRect.setTop(chartSubTitleRect.bottom() + spaceY);
     COMPARELAYOUT("Hide title");
 
     chartSubTitle->setVisible(false);
@@ -319,7 +332,7 @@ void TestChartLayout::testDefaultDiagram()
     layout->layout();
     secondaryXAxisTitleRect = itemRect(secondaryXAxisTitle);
     secondaryXAxisTitleRect.moveTop(area.top());
-    plotAreaRect.setTop(secondaryXAxisTitleRect.bottom() + layout->spacing().y());
+    plotAreaRect.setTop(secondaryXAxisTitleRect.bottom() + spaceY);
     COMPARELAYOUT("Show secondary x axis");
 
     a = new KoChart::Axis(plotArea, KoChart::YAxisDimension);
@@ -333,7 +346,7 @@ void TestChartLayout::testDefaultDiagram()
     layout->layout();
     secondaryYAxisTitleRect = itemRect(secondaryYAxisTitle);
     secondaryYAxisTitleRect.moveRight(area.right());
-    plotAreaRect.setRight(secondaryYAxisTitleRect.left() - layout->spacing().x());
+    plotAreaRect.setRight(secondaryYAxisTitleRect.left() - spaceX);
     secondaryXAxisTitleRect.moveLeft(plotAreaRect.center().x() - secondaryXAxisTitleRect.width() / 2);
     COMPARELAYOUT("Show secondary y axis");
 
@@ -374,23 +387,212 @@ void TestChartLayout::testDefaultDiagram()
 
     chartTitleRect.moveTop(area.top());
 
-    chartSubTitleRect.moveTop(chartTitleRect.bottom() + layout->spacing().y());
+    chartSubTitleRect.moveTop(chartTitleRect.bottom() + spaceY);
 
     chartFooterRect.moveBottom(area.bottom());
 
-    xAxisTitleRect.moveBottom(chartFooterRect.top() - layout->spacing().y());
+    xAxisTitleRect.moveBottom(chartFooterRect.top() - spaceY);
     xAxisTitleRect.moveLeft(plotAreaRect.center().x() - xAxisTitleRect.width() / 2);
 
     yAxisTitleRect.moveBottom(area.left());
     yAxisTitleRect.moveTop(plotAreaRect.center().y() - yAxisTitleRect.height() / 2);
 
-    secondaryXAxisTitleRect.moveTop(chartSubTitleRect.bottom() + layout->spacing().y());
+    secondaryXAxisTitleRect.moveTop(chartSubTitleRect.bottom() + spaceY);
     secondaryXAxisTitleRect.moveLeft(plotAreaRect.center().x() - secondaryXAxisTitleRect.width() / 2);
 
-    secondaryYAxisTitleRect.moveLeft(plotAreaRect.right() + layout->spacing().x());
+    secondaryYAxisTitleRect.moveLeft(plotAreaRect.right() + spaceX);
     secondaryYAxisTitleRect.moveTop(plotAreaRect.center().y() - secondaryYAxisTitleRect.height() / 2);
 
     COMPARELAYOUT("Show everyting in one go");
+}
+
+void TestChartLayout::testLegendPositioning()
+{
+    qreal spaceX = layout->spacing().x();
+    qreal spaceY = layout->spacing().y();
+
+    legend->setLegendPosition(KoChart::TopPosition);
+
+    legend->setVisible(true);
+    legend->setAlignment(Qt::AlignCenter);
+    layout->scheduleRelayout();
+    layout->layout();
+    updateRects();
+    legendRect.moveTop(area.top());
+    legendRect.moveLeft(plotAreaRect.center().x() - legendRect.width() / 2);
+    plotAreaRect.setTop(legendRect.bottom() + spaceY);
+    xAxisTitleRect.moveLeft(plotAreaRect.center().x() - xAxisTitleRect.width() / 2);
+    yAxisTitleRect.moveTop(plotAreaRect.center().y() - yAxisTitleRect.height() / 2);
+    COMPARELAYOUT("Legend position: top, alignment: center");
+
+    legend->setVisible(true);
+    legend->setAlignment(Qt::AlignLeft);
+    layout->scheduleRelayout();
+    layout->layout();
+    legendRect.moveLeft(plotAreaRect.left());
+    COMPARELAYOUT("Legend position: top, alignment: left");
+
+    legend->setVisible(true);
+    legend->setAlignment(Qt::AlignRight);
+    layout->scheduleRelayout();
+    layout->layout();
+    legendRect.moveRight(plotAreaRect.right());
+    COMPARELAYOUT("Legend position: top, alignment: right");
+
+    legend->setLegendPosition(KoChart::BottomPosition);
+
+    legend->setVisible(true);
+    legend->setAlignment(Qt::AlignCenter);
+    layout->scheduleRelayout();
+    layout->layout();
+    updateRects();
+    legendRect.moveBottom(area.bottom());
+    legendRect.moveLeft(plotAreaRect.center().x() - legendRect.width() / 2);
+    xAxisTitleRect.setBottom(legendRect.top() - spaceY);
+    plotAreaRect.setBottom(xAxisTitleRect.top() - spaceY);
+    xAxisTitleRect.moveLeft(plotAreaRect.center().x() - xAxisTitleRect.width() / 2);
+    yAxisTitleRect.moveTop(plotAreaRect.center().y() - yAxisTitleRect.height() / 2);
+    COMPARELAYOUT("Legend position: bottom, alignment: center");
+
+    legend->setVisible(true);
+    legend->setAlignment(Qt::AlignLeft);
+    layout->scheduleRelayout();
+    layout->layout();
+    legendRect.moveLeft(plotAreaRect.left());
+    COMPARELAYOUT("Legend position: bottom, alignment: left");
+
+    legend->setVisible(true);
+    legend->setAlignment(Qt::AlignRight);
+    layout->scheduleRelayout();
+    layout->layout();
+    legendRect.moveRight(plotAreaRect.right());
+    COMPARELAYOUT("Legend position: bottom, alignment: right");
+
+    legend->setLegendPosition(KoChart::EndPosition);
+
+    legend->setVisible(true);
+    legend->setAlignment(Qt::AlignCenter);
+    layout->scheduleRelayout();
+    layout->layout();
+    updateRects();
+    legendRect.moveTop(area.top());
+    legendRect.moveTop(plotAreaRect.center().y() - legendRect.height() / 2);
+    plotAreaRect.setRight(legendRect.left() - spaceX);
+    xAxisTitleRect.moveLeft(plotAreaRect.center().x() - xAxisTitleRect.width() / 2);
+    yAxisTitleRect.moveTop(plotAreaRect.center().y() - yAxisTitleRect.height() / 2);
+    COMPARELAYOUT("Legend position: end, alignment: center");
+
+    legend->setVisible(true);
+    legend->setAlignment(Qt::AlignLeft); // means top
+    layout->scheduleRelayout();
+    layout->layout();
+    legendRect.moveTop(plotAreaRect.top());
+    COMPARELAYOUT("Legend position: end, alignment: top");
+
+    legend->setVisible(true);
+    legend->setAlignment(Qt::AlignRight); // means bottom
+    layout->scheduleRelayout();
+    layout->layout();
+    legendRect.moveBottom(plotAreaRect.bottom());
+    COMPARELAYOUT("Legend position: end, alignment: bottom");
+
+    legend->setLegendPosition(KoChart::StartPosition);
+
+    legend->setVisible(true);
+    legend->setAlignment(Qt::AlignCenter);
+    layout->scheduleRelayout();
+    layout->layout();
+    updateRects();
+    legendRect.moveLeft(area.left());
+    legendRect.moveTop(plotAreaRect.center().y() - legendRect.height() / 2);
+    yAxisTitleRect.moveLeft(legendRect.right() + spaceX);
+    plotAreaRect.setLeft(yAxisTitleRect.right() + spaceX);
+    xAxisTitleRect.moveLeft(plotAreaRect.center().x() - xAxisTitleRect.width() / 2);
+    yAxisTitleRect.moveTop(plotAreaRect.center().y() - yAxisTitleRect.height() / 2);
+    COMPARELAYOUT("Legend position: left, alignment: center");
+
+    legend->setVisible(true);
+    legend->setAlignment(Qt::AlignLeft); // means top
+    layout->scheduleRelayout();
+    layout->layout();
+    legendRect.moveTop(plotAreaRect.top());
+    COMPARELAYOUT("Legend position: left, alignment: top");
+
+    legend->setVisible(true);
+    legend->setAlignment(Qt::AlignRight); // means bottom
+    layout->scheduleRelayout();
+    layout->layout();
+    legendRect.moveBottom(plotAreaRect.bottom());
+    COMPARELAYOUT("Legend position: left, alignment: bottom");
+
+    legend->setLegendPosition(KoChart::TopStartPosition);
+
+    legend->setVisible(true);
+    layout->scheduleRelayout();
+    layout->layout();
+    updateRects();
+    legendRect.moveLeft(area.left());
+    legendRect.moveTop(area.top());
+    yAxisTitleRect.moveRight(area.left() + spaceX); // preliminary
+    plotAreaRect.setLeft(qMax(legendRect.right(), yAxisTitleRect.right()) + spaceX);
+    yAxisTitleRect.moveRight(plotAreaRect.left() - spaceX);
+    plotAreaRect.setTop(legendRect.bottom() + spaceY);
+    xAxisTitleRect.moveLeft(plotAreaRect.center().x() - xAxisTitleRect.width() / 2);
+    yAxisTitleRect.moveTop(plotAreaRect.center().y() - yAxisTitleRect.height() / 2);
+    COMPARELAYOUT("Legend position: top/start");
+
+    legend->setLegendPosition(KoChart::TopEndPosition);
+
+    legend->setVisible(true);
+    layout->scheduleRelayout();
+    layout->layout();
+    updateRects();
+    legendRect.moveRight(area.right());
+    legendRect.moveTop(area.top());
+    yAxisTitleRect.moveLeft(area.left());
+    plotAreaRect.setRight(legendRect.left() - spaceX);
+    plotAreaRect.setTop(legendRect.bottom() + spaceY);
+    xAxisTitleRect.moveLeft(plotAreaRect.center().x() - xAxisTitleRect.width() / 2);
+    yAxisTitleRect.moveTop(plotAreaRect.center().y() - yAxisTitleRect.height() / 2);
+    COMPARELAYOUT("Legend position: top/end");
+
+    legend->setLegendPosition(KoChart::BottomStartPosition);
+
+    legend->setVisible(true);
+    layout->scheduleRelayout();
+    layout->layout();
+    updateRects();
+    legendRect.moveBottomLeft(area.bottomLeft());
+
+    yAxisTitleRect.moveLeft(area.left()); // preliminary
+    plotAreaRect.setLeft(qMax(legendRect.right(), yAxisTitleRect.right()) + spaceX);
+    yAxisTitleRect.moveRight(plotAreaRect.left() - spaceX);
+
+    xAxisTitleRect.moveBottom(area.bottom());
+    plotAreaRect.setBottom(qMin(legendRect.top(), xAxisTitleRect.top()) - spaceY);
+    xAxisTitleRect.moveTop(plotAreaRect.bottom() + spaceY);
+
+    xAxisTitleRect.moveLeft(plotAreaRect.center().x() - xAxisTitleRect.width() / 2);
+    yAxisTitleRect.moveTop(plotAreaRect.center().y() - yAxisTitleRect.height() / 2);
+    COMPARELAYOUT("Legend position: bottom/start");
+
+    legend->setLegendPosition(KoChart::BottomEndPosition);
+
+    legend->setVisible(true);
+    layout->scheduleRelayout();
+    layout->layout();
+    updateRects();
+    legendRect.moveBottomRight(area.bottomRight());
+
+    plotAreaRect.setRight(legendRect.left() - spaceX);
+
+    xAxisTitleRect.moveBottom(area.bottom());
+    plotAreaRect.setBottom(qMin(legendRect.top(), xAxisTitleRect.top()) - spaceY);
+    xAxisTitleRect.moveTop(plotAreaRect.bottom() + spaceY);
+
+    xAxisTitleRect.moveLeft(plotAreaRect.center().x() - xAxisTitleRect.width() / 2);
+    yAxisTitleRect.moveTop(plotAreaRect.center().y() - yAxisTitleRect.height() / 2);
+    COMPARELAYOUT("Legend position: bottom/end");
 }
 
 QTEST_MAIN(TestChartLayout)
