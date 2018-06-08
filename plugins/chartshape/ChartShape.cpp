@@ -422,6 +422,8 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     KoShapeStroke *stroke = new KoShapeStroke(0, Qt::black);
     setStroke(stroke);
 
+    setSize(QSizeF(CM_TO_POINT(8), CM_TO_POINT(5)));
+
     // Tell layout about item types
     ChartLayout *l = layout();
     l->setItemType(d->plotArea, PlotAreaType);
