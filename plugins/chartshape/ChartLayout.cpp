@@ -43,9 +43,13 @@ class ChartLayout::LayoutData
 public:
     int  itemType;
     QRectF rect;
+    bool inheritsTransform;
+    bool clipped;
 
     LayoutData(int _itemType = GenericItemType)
         : itemType(_itemType)
+        , inheritsTransform(true)
+        , clipped(true)
     {}
 };
 
@@ -96,23 +100,23 @@ void ChartLayout::remove(KoShape *shape)
 void ChartLayout::setClipped(const KoShape *shape, bool clipping)
 {
     Q_ASSERT(m_layoutItems.contains(const_cast<KoShape*>(shape)));
-//     m_layoutItems.value(const_cast<KoShape*>(shape))->clipped = clipping;
+    m_layoutItems.value(const_cast<KoShape*>(shape))->clipped = clipping;
 }
 
 bool ChartLayout::isClipped(const KoShape *shape) const
 {
     Q_ASSERT(m_layoutItems.contains(const_cast<KoShape*>(shape)));
-    return false;//m_layoutItems.value(const_cast<KoShape*>(shape))->clipped;
+    return m_layoutItems.value(const_cast<KoShape*>(shape))->clipped;
 }
 
 void ChartLayout::setInheritsTransform(const KoShape *shape, bool inherit)
 {
-//     m_layoutItems.value(const_cast<KoShape*>(shape))->inheritsTransform = inherit;
+    m_layoutItems.value(const_cast<KoShape*>(shape))->inheritsTransform = inherit;
 }
 
 bool ChartLayout::inheritsTransform(const KoShape *shape) const
 {
-    return false;//m_layoutItems.value(const_cast<KoShape*>(shape))->inheritsTransform;
+    return m_layoutItems.value(const_cast<KoShape*>(shape))->inheritsTransform;
 }
 
 int ChartLayout::count() const
