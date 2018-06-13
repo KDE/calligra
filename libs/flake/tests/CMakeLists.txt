@@ -11,6 +11,10 @@ endmacro()
 
 ########### next target ###############
 
+flake_add_unit_test(TestAllowedInteraction TestAllowedInteraction.cpp  LINK_LIBRARIES flake Qt5::Test)
+
+########### next target ###############
+
 flake_add_unit_test(TestPosition TestPosition.cpp  LINK_LIBRARIES flake Qt5::Test)
 
 ########### next target ###############

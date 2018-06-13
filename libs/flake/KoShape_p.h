@@ -94,12 +94,8 @@ public:
     int runThrough : 16;
     int visible : 1;
     int printable : 1;
-    int geometryProtected : 1;
     int keepAspect : 1;
-    int selectable : 1;
-    int deletable : 1;
     int detectCollision : 1;
-    int protectContent : 1;
 
     KoShape::TextRunAroundSide textRunAroundSide;
     qreal textRunAroundDistanceLeft;
@@ -116,6 +112,8 @@ public:
 
     /// Convert connection point position to shape coordinates, taking alignment into account
     void convertToShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const;
+
+    KoShape::AllowedInteractions allowedInteractions;
 
     Q_DECLARE_PUBLIC(KoShape)
 };

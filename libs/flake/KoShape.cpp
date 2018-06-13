@@ -93,12 +93,8 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       runThrough(0),
       visible(true),
       printable(true),
-      geometryProtected(false),
       keepAspect(false),
-      selectable(true),
-      deletable(true),
       detectCollision(false),
-      protectContent(false),
       textRunAroundSide(KoShape::BiggestRunAroundSide),
       textRunAroundDistanceLeft(0.0),
       textRunAroundDistanceTop(0.0),
@@ -109,6 +105,15 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       anchor(0),
       minimumHeight(0.0)
 {
+    // All interactions allowed by default
+    allowedInteractions = KoShape::MoveAllowed
+                        | KoShape::ResizeAllowed
+                        | KoShape::ShearingAllowed
+                        | KoShape::RotationAllowed
+                        | KoShape::SelectionAllowed
+                        | KoShape::ContentChangeAllowed
+                        | KoShape::DeletionAllowed;
+
     connectors[KoConnectionPoint::TopConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::TopConnectionPoint);
     connectors[KoConnectionPoint::RightConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::RightConnectionPoint);
     connectors[KoConnectionPoint::BottomConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::BottomConnectionPoint);
@@ -673,12 +678,9 @@ void KoShape::copySettings(const KoShape *shape)
     else
         d->printable = shape->isPrintable();
 
-    d->geometryProtected = shape->isGeometryProtected();
-    d->protectContent = shape->isContentProtected();
-    d->selectable = shape->isSelectable();
+    d->allowedInteractions = shape->allowedInteractions();
     d->keepAspect = shape->keepAspectRatio();
     d->localMatrix = shape->d_ptr->localMatrix;
-    d->deletable = shape->isDeletable();
 }
 
 void KoShape::notifyChanged()
@@ -1099,49 +1101,84 @@ bool KoShape::isPrintable() const
 void KoShape::setSelectable(bool selectable)
 {
     Q_D(KoShape);
-    d->selectable = selectable;
+    d->allowedInteractions.setFlag(SelectionAllowed, selectable);
 }
 
 bool KoShape::isSelectable() const
 {
     Q_D(const KoShape);
-    return d->selectable;
+    return d->allowedInteractions.testFlag(SelectionAllowed);
 }
 
 void KoShape::setGeometryProtected(bool on)
 {
     Q_D(KoShape);
-    d->geometryProtected = on;
+    d->allowedInteractions.setFlag(MoveAllowed, !on);
+    d->allowedInteractions.setFlag(ResizeAllowed, !on);
 }
 
 bool KoShape::isGeometryProtected() const
 {
     Q_D(const KoShape);
-    return d->geometryProtected;
+    return !d->allowedInteractions.testFlag(MoveAllowed) || !d->allowedInteractions.testFlag(ResizeAllowed);
 }
 
 void KoShape::setContentProtected(bool protect)
 {
     Q_D(KoShape);
-    d->protectContent = protect;
+    d->allowedInteractions.setFlag(ContentChangeAllowed, !protect);
 }
 
 bool KoShape::isContentProtected() const
 {
     Q_D(const KoShape);
-    return d->protectContent;
+    return !d->allowedInteractions.testFlag(ContentChangeAllowed);
 }
 
 void KoShape::setDeletable(bool deletable)
 {
     Q_D(KoShape);
-    d->deletable = deletable;
+    d->allowedInteractions.setFlag(DeletionAllowed, deletable);
 }
 
 bool KoShape::isDeletable() const
 {
     Q_D(const KoShape);
-    return d->deletable;
+    return d->allowedInteractions.testFlag(DeletionAllowed);
+}
+
+void KoShape::setAllowedInteraction(KoShape::AllowedInteraction flag, bool value)
+{
+    Q_D(KoShape);
+    d->allowedInteractions.setFlag(flag, value);
+}
+
+bool KoShape::allowedInteraction(KoShape::AllowedInteraction flag, bool recursive) const
+{
+    return allowedInteractions(recursive).testFlag(flag);
+}
+
+void KoShape::setAllowedInteractions(KoShape::AllowedInteractions interactions)
+{
+    Q_D(KoShape);
+    d->allowedInteractions = interactions;
+}
+
+KoShape::AllowedInteractions KoShape::allowedInteractions(bool recursive) const
+{
+    Q_D(const KoShape);
+    if (!recursive) {
+        return d->allowedInteractions;
+    }
+    AllowedInteractions state;
+    if (!d->visible) {
+        return state;
+    }
+    state = d->allowedInteractions;
+    if (state && d->parent) {
+        state &= d->parent->allowedInteractions(this);
+    }
+    return state;
 }
 
 KoShapeContainer *KoShape::parent() const
@@ -1285,7 +1322,7 @@ void KoShape::waitUntilReady(const KoViewConverter &converter, bool asynchronous
 bool KoShape::isEditable() const
 {
     Q_D(const KoShape);
-    if (!d->visible || d->geometryProtected)
+    if (!d->visible || isGeometryProtected())
         return false;
 
     if (d->parent && d->parent->isChildLocked(this))
@@ -1343,8 +1380,13 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
     }
 
     QString value;
-    if (isGeometryProtected()) {
-        value = "position size";
+    if (!d->allowedInteractions.testFlag(MoveAllowed)) {
+        value = "position";
+    }
+    if (!d->allowedInteractions.testFlag(ResizeAllowed)) {
+        if (! value.isEmpty())
+            value += ' ';
+        value += "size";
     }
     if (isContentProtected()) {
         if (! value.isEmpty())
@@ -1452,7 +1494,8 @@ void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &cont
     setBorder(d->loadOdfBorder(context));
 
     QString protect(styleStack.property(KoXmlNS::style, "protect"));
-    setGeometryProtected(protect.contains("position") || protect.contains("size"));
+    d->allowedInteractions.setFlag(MoveAllowed, !protect.contains("position"));
+    d->allowedInteractions.setFlag(ResizeAllowed, !protect.contains("size"));
     setContentProtected(protect.contains("content"));
 
     QString margin = styleStack.property(KoXmlNS::fo, "margin");

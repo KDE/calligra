@@ -121,7 +121,10 @@ public:
      * @param child the shape that the user wants to move.
      */
     virtual bool isChildLocked(const KoShape *child) const = 0;
-
+    /**
+     * Return the AllowedInteractions for @p child.
+     */
+    virtual KoShape::AllowedInteractions allowedInteractions(const KoShape *child) const;
     /**
      * Return the current number of children registered.
      * @return the current number of children registered.

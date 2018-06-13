@@ -157,6 +157,19 @@ public:
         Foreground
     };
 
+    /// Fine grained control of allowed user interactions
+    enum AllowedInteraction {
+        MoveAllowed = 1,            ///< Moving the shape is allowed
+        ResizeAllowed = 2,          ///< Resizing the shape is allowed
+        ShearingAllowed = 4,        ///< Sharing the shape is allowed
+        RotationAllowed = 8,        ///< Rotating the shape is allowed
+        SelectionAllowed = 16,      ///< Selecting the shape is allowed
+        ContentChangeAllowed = 32,  ///< Editing the content is allowed
+        DeletionAllowed = 64        ///< Deleting the shape is allowed
+    };
+    Q_DECLARE_FLAGS(AllowedInteractions, AllowedInteraction)
+    Q_FLAGS(AllowedInteractions)
+
     /**
      * @brief Constructor
      */
@@ -1121,6 +1134,23 @@ public:
      */
     bool isDeletable() const;
 
+    /// Sets the AllowedInteraction @p flag to @p value
+    void setAllowedInteraction(AllowedInteraction flag, bool value);
+    /// @return the AllowedInteraction state for @p flag.
+    /// Convenience method that just calls allowedInteractions(recursive).testFlag(flag).
+    /// @see allowedInteractions()
+    bool allowedInteraction(AllowedInteraction flag, bool recursive = true) const;
+    /// Sets the interactions the user is allowed to perform on this shape to @p interactions
+    void setAllowedInteractions(AllowedInteractions interactions);
+    /// @return the interactions the user is allowed to perform on this shape.
+    /// If @p recursive is false, the shapes flags are returned as is. Use this e.g. for ui.
+    /// If @p recursive is true:
+    ///     If the shape is not visible, no interactions are allowed.
+    ///     If there is a parent, the parent is checked.
+    ///
+    /// @see KoShapeContainer::allowedInteractions()
+    AllowedInteractions allowedInteractions(bool recursive = true) const;
+
     /**
      * \internal
      * Returns the private object for use within the flake lib
@@ -1222,5 +1252,6 @@ private:
 };
 
 Q_DECLARE_METATYPE(KoShape*)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KoShape::AllowedInteractions)
 
 #endif

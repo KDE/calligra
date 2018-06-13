@@ -72,9 +72,9 @@ public:
 
     /**
      * Constructor with custom model to be used for maintaining the list of children.
-     * For all the normal cases you don't need a custom model. Only when you want to respond
-     * to moves of the container to do something special, or disable one of the features the
-     * container normally has (like clipping).  Use the default constructor in those cases.
+     * For all the normal cases you don't need a custom model. Use the default constructor in this case.
+     * Provide a custom model when you e.g. want to respond to moves of the container to do something special,
+     * or disable one of the features the container normally has (like clipping).
      * @param model the custom model to be used for maintaining the list of children.
      */
     explicit KoShapeContainer(KoShapeContainerModel *model = 0);
@@ -152,6 +152,15 @@ public:
      */
     bool isChildLocked(const KoShape *child) const;
 
+    /**
+     * Return the allowed interactions set for this container
+     * If we (or our parent(s)) are not visible, no interaction is allowed.
+     * If we have a model the model is called, else the childs interaction flags is returned.
+     * 
+     * @see KoShapeContainerModel::allowedInteractions()
+     */
+    KoShape::AllowedInteractions allowedInteractions(const KoShape *child) const;
+    using KoShape::allowedInteractions;
 
     /**
      * Set the shape to inherit the container transform.

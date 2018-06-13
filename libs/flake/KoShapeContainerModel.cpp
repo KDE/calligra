@@ -48,3 +48,12 @@ void KoShapeContainerModel::childChanged(KoShape *child, KoShape::ChangeType typ
         }
     }
 }
+
+KoShape::AllowedInteractions KoShapeContainerModel::allowedInteractions(const KoShape *child) const
+{
+    KoShape::AllowedInteractions state = child->allowedInteractions(false);
+    if (child->parent()) {
+        state &= child->parent()->allowedInteractions();
+    }
+    return state;
+}

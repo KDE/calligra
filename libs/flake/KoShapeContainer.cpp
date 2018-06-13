@@ -124,6 +124,16 @@ bool KoShapeContainer::isChildLocked(const KoShape *child) const
     return d->model->isChildLocked(child);
 }
 
+KoShape::AllowedInteractions KoShapeContainer::allowedInteractions(const KoShape *child) const
+{
+    Q_D(const KoShapeContainer);
+    KoShape::AllowedInteractions state;
+    if (!d->model) {
+        return child->allowedInteractions(false);
+    }
+    return d->model->allowedInteractions(child);
+}
+
 void KoShapeContainer::setClipped(const KoShape *child, bool clipping)
 {
     Q_D(KoShapeContainer);
