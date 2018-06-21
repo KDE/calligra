@@ -22,6 +22,7 @@
 
 // Own
 #include "LegendConfigWidget.h"
+#include "ui_LegendConfigWidget.h"
 
 // KF5
 #include <klocalizedstring.h>
@@ -29,7 +30,6 @@
 
 // KoChart
 #include "Legend.h"
-#include "ui_LegendConfigWidget.h"
 #include "FontEditorDialog.h"
 #include "commands/ChartTypeCommand.h"
 #include "ChartDebug.h"

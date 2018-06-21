@@ -22,6 +22,7 @@
 
 // Own
 #include "DataSetConfigWidget.h"
+#include "ui_DataSetConfigWidget.h"
 
 // Qt
 #include <QAction>
@@ -56,7 +57,6 @@
 #include "DataSet.h"
 #include "Axis.h"
 #include "ui_ChartTableEditor.h"
-#include "ui_DataSetConfigWidget.h"
 #include "NewAxisDialog.h"
 #include "AxisScalingDialog.h"
 #include "FontEditorDialog.h"

@@ -26,7 +26,6 @@
 
 #include "ConfigWidgetBase.h"
 #include "ChartShape.h"
-#include "ui_AxesConfigWidget.h"
 
 #include <QObject>
 

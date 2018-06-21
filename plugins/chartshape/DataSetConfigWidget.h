@@ -27,7 +27,6 @@
 
 #include "ConfigWidgetBase.h"
 #include "ChartShape.h"
-#include "ui_DataSetConfigWidget.h"
 
 
 class KoShape;

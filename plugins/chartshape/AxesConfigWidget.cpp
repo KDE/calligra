@@ -21,6 +21,7 @@
 
 // Own
 #include "AxesConfigWidget.h"
+#include "ui_AxesConfigWidget.h"
 
 // Qt
 #include <QAction>

@@ -21,6 +21,7 @@
 
 // Own
 #include "PlotAreaConfigWidget.h"
+#include "ui_PlotAreaConfigWidget.h"
 
 // Qt
 #include <QButtonGroup>
