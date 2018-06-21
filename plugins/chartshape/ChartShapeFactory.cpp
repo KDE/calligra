@@ -40,7 +40,6 @@
 
 // Chart shape
 #include "ChartToolFactory.h"
-#include "ChartConfigWidget.h"
 #include "ChartProxyModel.h"
 #include "PlotArea.h"
 #include "Axis.h"
