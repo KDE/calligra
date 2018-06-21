@@ -42,7 +42,11 @@ set (chartshape_LIB_SRCS
     ChartShape.cpp
     ChartTool.cpp
     ChartToolFactory.cpp
-    ChartConfigWidget.cpp
+    TitlesConfigWidget.cpp
+    LegendConfigWidget.cpp
+    PlotAreaConfigWidget.cpp
+    AxesConfigWidget.cpp
+    DataSetConfigWidget.cpp
     ChartTableView.cpp
     ScreenConversions.cpp
     ChartLayout.cpp
@@ -65,7 +69,11 @@ set (chartshape_LIB_SRCS
 )
 
 ki18n_wrap_ui(chartshape_LIB_SRCS
-    ChartConfigWidget.ui
+    TitlesConfigWidget.ui
+    LegendConfigWidget.ui
+    PlotAreaConfigWidget.ui
+    AxesConfigWidget.ui
+    DataSetConfigWidget.ui
     dialogs/ChartTableEditor.ui
     dialogs/NewAxisDialog.ui
     dialogs/AxisScalingDialog.ui

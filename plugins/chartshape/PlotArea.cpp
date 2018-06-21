@@ -2,6 +2,7 @@
 
    Copyright 2007-2008 Johannes Simon <johannes.simon@gmail.com>
    Copyright 2009-2010 Inge Wallin <inge@lysator.liu.se>
+   Copyright 2018 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -123,7 +124,7 @@ public:
     // FIXME: OpenOffice stores these attributes in the axes' elements.
     // The specs don't say anything at all about what elements can have
     // these style attributes.
-    // chart:vertical attribute: see ODF v1.2, $19.63
+    // chart:vertical attribute: see ODF v1.2,19.63
     bool  vertical;
 
     // 2. Pie charts

@@ -391,180 +391,176 @@ void ChartLayout::calculateLayout()
     plotareaRect.setBottom(bottomcenter.y());
 
     if (!legendRect.isNull()) {
-        if (legend->alignment() == Qt::AlignJustify) {
-            if (plotarea) {
-                // try to be backwards compatible with loaded shapes
-                QRectF pr = itemRect(plotarea); // use actual plotarea rect here
-                debugChartLayout<<"legend:"<<legendRect<<"plot:"<<pr<<legendRect.intersects(pr);
-                if (!legendRect.intersects(pr) && legendRect.intersects(plotareaRect)) {
-                    if (legendRect.right() < pr.left()) {
-                        plotareaRect.setLeft(qMax(plotareaRect.left(), legendRect.right() + m_spacing.x()));
-                    } else if (legendRect.left() > pr.right()) {
-                        plotareaRect.setRight(qMin(plotareaRect.right(), legendRect.left() - m_spacing.x()));
-                    } else if (legendRect.bottom() < pr.top()) {
-                        plotareaRect.setTop(qMax(plotareaRect.top(), legendRect.bottom() + m_spacing.y()));
-                    } else if (legendRect.top() > pr.bottom()) {
-                        plotareaRect.setBottom(qMin(plotareaRect.bottom(), legendRect.top() - m_spacing.y()));
+        // Legend is aligned with plot area so axis titles may resize plot area
+        switch (legend->legendPosition()) {
+            case StartPosition:
+                switch(legend->alignment()) {
+                    case Qt::AlignLeft: {
+                        // Align at top of the area to the left of plot area
+                        qreal offset = yOffset(topTitleRect, QRectF());
+                        legendRect.moveTop(plotareaRect.top() + offset);
+                        break;
                     }
-                    debugChartLayout<<"legend:"<<legendRect<<"plot moved to:"<<plotareaRect;
+                    case Qt::AlignCenter: {
+                        qreal centerOffset = yOffset(topTitleRect, bottomTitleRect, true);
+                        legendRect.moveTop(plotareaRect.center().y() + centerOffset - legendRect.height() / 2.0);
+                        break;
+                    }
+                    case Qt::AlignRight: {
+                        // Align at bottom of the area to the left of plot area
+                        qreal offset = yOffset(QRectF(), bottomTitleRect);
+                        legendRect.moveBottom(plotareaRect.bottom() + offset);
+                        break;
+                    }
                 }
+                legendRect.moveLeft(plotareaRect.left());
+                plotareaRect.setLeft(legendRect.right() + m_spacing.x());
+                break;
+            case TopPosition:
+                switch(legend->alignment()) {
+                    case Qt::AlignLeft: {
+                        // Align at left of the area on top of plot area
+                        qreal offset = xOffset(leftTitleRect, QRectF());
+                        legendRect.moveLeft(plotareaRect.left() + offset);
+                        break;
+                    }
+                    case Qt::AlignCenter: {
+                        qreal centerOffset = xOffset(leftTitleRect, rightTitleRect, true);
+                        legendRect.moveLeft(plotareaRect.center().x() + centerOffset - legendRect.width() / 2.0);
+                        debugChartLayout<<"legend top/center:"<<"to"<<legendRect.left()<<"coffs="<<centerOffset<<"h/2"<<(legendRect.height()/2.0);
+                        break;
+                    }
+                    case Qt::AlignRight: {
+                        // Align at right of the area on top of plot area
+                        qreal offset = xOffset(QRectF(), rightTitleRect);
+                        legendRect.moveRight(plotareaRect.right() + offset);
+                        break;
+                    }
+                }
+                legendRect.moveTop(plotareaRect.top());
+                plotareaRect.setTop(legendRect.bottom() + m_spacing.y());
+                break;
+            case EndPosition:
+                switch(legend->alignment()) {
+                    case Qt::AlignLeft: {
+                        // Align at top of the area right of plot area
+                        qreal offset = yOffset(topTitleRect, QRectF());
+                        legendRect.moveTop(plotareaRect.top() + offset);
+                        debugChartLayout<<"legend end/top:"<<"to"<<legendRect.top()<<"offs="<<offset;
+                        break;
+                    }
+                    case Qt::AlignCenter: {
+                        qreal centerOffset = yOffset(topTitleRect, bottomTitleRect, true);
+                        legendRect.moveTop(plotareaRect.center().y() + centerOffset - legendRect.height() / 2.0);
+                        debugChartLayout<<"legend end/center:"<<"to"<<legendRect.top()<<"coffs="<<centerOffset<<"h/2"<<(legendRect.height()/2.0)<<"pa:"<<plotareaRect.center().y();
+                        break;
+                    }
+                    case Qt::AlignRight: {
+                        // Align at bottom of the area right of plot area
+                        qreal offset = yOffset(QRectF(), bottomTitleRect);
+                        legendRect.moveBottom(plotareaRect.bottom() + offset);
+                        debugChartLayout<<"legend end/bottom:"<<"to"<<legendRect.bottom()<<"offs="<<offset;
+                        break;
+                    }
+                }
+                legendRect.moveRight(plotareaRect.right());
+                plotareaRect.setRight(legendRect.left() - m_spacing.x());
+                debugChartLayout<<"legend end:"<<legendRect;
+                break;
+            case BottomPosition:
+                switch(legend->alignment()) {
+                    case Qt::AlignLeft: {
+                        // Align at left of the area below of plot area
+                        qreal offset = xOffset(leftTitleRect, QRectF());
+                        legendRect.moveLeft(plotareaRect.left() + offset);
+                        break;
+                    }
+                    case Qt::AlignCenter: {
+                        qreal centerOffset = xOffset(leftTitleRect, rightTitleRect, true);
+                        legendRect.moveLeft(bottomcenter.x() + centerOffset - legendRect.width() / 2.0);
+                        break;
+                    }
+                    case Qt::AlignRight: {
+                        // Align at right of the area on below plot area
+                        qreal offset = xOffset(QRectF(), rightTitleRect);
+                        legendRect.moveRight(plotareaRect.right() + offset);
+                        break;
+                    }
+                }
+                legendRect.moveBottom(plotareaRect.bottom());
+                plotareaRect.setBottom(legendRect.top() - m_spacing.y());
+                break;
+            case TopStartPosition: {
+                qreal xoffset = xOffset(leftTitleRect, QRectF());
+                qreal yoffset = yOffset(topTitleRect, QRectF());
+                legendRect.moveTopLeft(area.topLeft());
+                if (legendRect.right() + m_spacing.x() - xoffset > plotareaRect.left()) {
+                    plotareaRect.setLeft(legendRect.right() + m_spacing.x() - xoffset);
+                }
+                if (legendRect.bottom() + m_spacing.y() - yoffset > plotareaRect.top()) {
+                    plotareaRect.setTop(legendRect.bottom() + m_spacing.y() - yoffset);
+                }
+                debugChartLayout<<"legend top/start"<<legendRect<<plotareaRect<<"xo:"<<xoffset<<"yo:"<<yoffset;
+                break;
             }
-        } else {
-            // Legend is aligned with plot area so axis titles may resize plot area
-            switch (legend->legendPosition()) {
-                case StartPosition:
-                    switch(legend->alignment()) {
-                        case Qt::AlignLeft: {
-                            // Align at top of the area to the left of plot area
-                            qreal offset = yOffset(topTitleRect, QRectF());
-                            legendRect.moveTop(plotareaRect.top() + offset);
-                            break;
-                        }
-                        case Qt::AlignCenter: {
-                            qreal centerOffset = yOffset(topTitleRect, bottomTitleRect, true);
-                            legendRect.moveTop(plotareaRect.center().y() + centerOffset - legendRect.height() / 2.0);
-                            break;
-                        }
-                        case Qt::AlignRight: {
-                            // Align at bottom of the area to the left of plot area
-                            qreal offset = yOffset(QRectF(), bottomTitleRect);
-                            legendRect.moveBottom(plotareaRect.bottom() + offset);
-                            break;
-                        }
-                    }
-                    legendRect.moveLeft(plotareaRect.left());
-                    plotareaRect.setLeft(legendRect.right() + m_spacing.x());
-                    break;
-                case TopPosition:
-                    switch(legend->alignment()) {
-                        case Qt::AlignLeft: {
-                            // Align at left of the area on top of plot area
-                            qreal offset = xOffset(leftTitleRect, QRectF());
-                            legendRect.moveLeft(plotareaRect.left() + offset);
-                            break;
-                        }
-                        case Qt::AlignCenter: {
-                            qreal centerOffset = xOffset(leftTitleRect, rightTitleRect, true);
-                            legendRect.moveLeft(plotareaRect.center().x() + centerOffset - legendRect.width() / 2.0);
-                            debugChartLayout<<"legend top/center:"<<"to"<<legendRect.left()<<"coffs="<<centerOffset<<"h/2"<<(legendRect.height()/2.0);
-                            break;
-                        }
-                        case Qt::AlignRight: {
-                            // Align at right of the area on top of plot area
-                            qreal offset = xOffset(QRectF(), rightTitleRect);
-                            legendRect.moveRight(plotareaRect.right() + offset);
-                            break;
-                        }
-                    }
-                    legendRect.moveTop(plotareaRect.top());
-                    plotareaRect.setTop(legendRect.bottom() + m_spacing.y());
-                    break;
-                case EndPosition:
-                    switch(legend->alignment()) {
-                        case Qt::AlignLeft: {
-                            // Align at top of the area right of plot area
-                            qreal offset = yOffset(topTitleRect, QRectF());
-                            legendRect.moveTop(plotareaRect.top() + offset);
-                            debugChartLayout<<"legend end/top:"<<"to"<<legendRect.top()<<"offs="<<offset;
-                            break;
-                        }
-                        case Qt::AlignCenter: {
-                            qreal centerOffset = yOffset(topTitleRect, bottomTitleRect, true);
-                            legendRect.moveTop(plotareaRect.center().y() + centerOffset - legendRect.height() / 2.0);
-                            debugChartLayout<<"legend end/center:"<<"to"<<legendRect.top()<<"coffs="<<centerOffset<<"h/2"<<(legendRect.height()/2.0)<<"pa:"<<plotareaRect.center().y();
-                            break;
-                        }
-                        case Qt::AlignRight: {
-                            // Align at bottom of the area right of plot area
-                            qreal offset = yOffset(QRectF(), bottomTitleRect);
-                            legendRect.moveBottom(plotareaRect.bottom() + offset);
-                            debugChartLayout<<"legend end/bottom:"<<"to"<<legendRect.bottom()<<"offs="<<offset;
-                            break;
-                        }
-                    }
-                    legendRect.moveRight(plotareaRect.right());
-                    plotareaRect.setRight(legendRect.left() - m_spacing.x());
-                    debugChartLayout<<"legend end:"<<legendRect;
-                    break;
-                case BottomPosition:
-                    switch(legend->alignment()) {
-                        case Qt::AlignLeft: {
-                            // Align at left of the area below of plot area
-                            qreal offset = xOffset(leftTitleRect, QRectF());
-                            legendRect.moveLeft(plotareaRect.left() + offset);
-                            break;
-                        }
-                        case Qt::AlignCenter: {
-                            qreal centerOffset = xOffset(leftTitleRect, rightTitleRect, true);
-                            legendRect.moveLeft(bottomcenter.x() + centerOffset - legendRect.width() / 2.0);
-                            break;
-                        }
-                        case Qt::AlignRight: {
-                            // Align at right of the area on below plot area
-                            qreal offset = xOffset(QRectF(), rightTitleRect);
-                            legendRect.moveRight(plotareaRect.right() + offset);
-                            break;
-                        }
-                    }
-                    legendRect.moveBottom(plotareaRect.bottom());
-                    plotareaRect.setBottom(legendRect.top() - m_spacing.y());
-                    break;
-                case TopStartPosition: {
-                    qreal xoffset = xOffset(leftTitleRect, QRectF());
-                    qreal yoffset = yOffset(topTitleRect, QRectF());
-                    legendRect.moveTopLeft(area.topLeft());
-                    if (legendRect.right() + m_spacing.x() - xoffset > plotareaRect.left()) {
-                        plotareaRect.setLeft(legendRect.right() + m_spacing.x() - xoffset);
-                    }
-                    if (legendRect.bottom() + m_spacing.y() - yoffset > plotareaRect.top()) {
-                        plotareaRect.setTop(legendRect.bottom() + m_spacing.y() - yoffset);
-                    }
-                    debugChartLayout<<"legend top/start"<<legendRect<<plotareaRect<<"xo:"<<xoffset<<"yo:"<<yoffset;
-                    break;
+            case TopEndPosition: {
+                qreal xoffset = xOffset(QRectF(), rightTitleRect);
+                qreal yoffset = yOffset(topTitleRect, QRectF());
+                legendRect.moveTopRight(area.topRight());
+                if (legendRect.left() - m_spacing.x() + xoffset < plotareaRect.right()) {
+                    plotareaRect.setRight(legendRect.left() - m_spacing.x() + xoffset);
                 }
-                case TopEndPosition: {
-                    qreal xoffset = xOffset(QRectF(), rightTitleRect);
-                    qreal yoffset = yOffset(topTitleRect, QRectF());
-                    legendRect.moveTopRight(area.topRight());
-                    if (legendRect.left() - m_spacing.x() + xoffset < plotareaRect.right()) {
-                        plotareaRect.setRight(legendRect.left() - m_spacing.x() + xoffset);
-                    }
-                    if (legendRect.bottom() + m_spacing.y() - yoffset > plotareaRect.top()) {
-                        plotareaRect.setTop(legendRect.bottom() + m_spacing.y() - yoffset);
-                    }
-                    debugChartLayout<<"legend top/end"<<legendRect<<plotareaRect;
-                    break;
+                if (legendRect.bottom() + m_spacing.y() - yoffset > plotareaRect.top()) {
+                    plotareaRect.setTop(legendRect.bottom() + m_spacing.y() - yoffset);
                 }
-                case BottomStartPosition: {
-                    qreal xoffset = xOffset(leftTitleRect, QRectF());
-                    qreal yoffset = yOffset(QRectF(), bottomTitleRect);
-                    legendRect.moveBottomLeft(area.bottomLeft());
-                    if (legendRect.right() + m_spacing.x() - xoffset > plotareaRect.left()) {
-                        plotareaRect.setLeft(legendRect.right() + m_spacing.x() - xoffset);
-                    }
-                    if (legendRect.top() - m_spacing.y() + yoffset < plotareaRect.bottom()) {
-                        plotareaRect.setBottom(legendRect.top() - m_spacing.y() - yoffset);
-                    }
-                    debugChartLayout<<"legend bottom/start"<<legendRect<<plotareaRect<<"offs:"<<xoffset<<','<<yoffset;
-                    break;
-                }
-                case BottomEndPosition: {
-                    qreal xoffset = xOffset(QRectF(), rightTitleRect);
-                    qreal yoffset = yOffset(QRectF(), bottomTitleRect);
-                    legendRect.moveBottomRight(area.bottomRight());
-                    if (legendRect.left() - m_spacing.x() + xoffset < plotareaRect.right()) {
-                        plotareaRect.setRight(legendRect.left() - m_spacing.x() + xoffset);
-                    }
-                    if (legendRect.top() - m_spacing.y() + yoffset < plotareaRect.bottom()) {
-                        plotareaRect.setBottom(legendRect.top() - m_spacing.y() - yoffset);
-                    }
-                    debugChartLayout<<"legend bottom/end"<<legendRect<<plotareaRect;
-                    break;
-                }
-                default:
-                    Q_ASSERT(false);
-                    break;
+                debugChartLayout<<"legend top/end"<<legendRect<<plotareaRect;
+                break;
             }
+            case BottomStartPosition: {
+                qreal xoffset = xOffset(leftTitleRect, QRectF());
+                qreal yoffset = yOffset(QRectF(), bottomTitleRect);
+                legendRect.moveBottomLeft(area.bottomLeft());
+                if (legendRect.right() + m_spacing.x() - xoffset > plotareaRect.left()) {
+                    plotareaRect.setLeft(legendRect.right() + m_spacing.x() - xoffset);
+                }
+                if (legendRect.top() - m_spacing.y() + yoffset < plotareaRect.bottom()) {
+                    plotareaRect.setBottom(legendRect.top() - m_spacing.y() - yoffset);
+                }
+                debugChartLayout<<"legend bottom/start"<<legendRect<<plotareaRect<<"offs:"<<xoffset<<','<<yoffset;
+                break;
+            }
+            case BottomEndPosition: {
+                qreal xoffset = xOffset(QRectF(), rightTitleRect);
+                qreal yoffset = yOffset(QRectF(), bottomTitleRect);
+                legendRect.moveBottomRight(area.bottomRight());
+                if (legendRect.left() - m_spacing.x() + xoffset < plotareaRect.right()) {
+                    plotareaRect.setRight(legendRect.left() - m_spacing.x() + xoffset);
+                }
+                if (legendRect.top() - m_spacing.y() + yoffset < plotareaRect.bottom()) {
+                    plotareaRect.setBottom(legendRect.top() - m_spacing.y() - yoffset);
+                }
+                debugChartLayout<<"legend bottom/end"<<legendRect<<plotareaRect;
+                break;
+            }
+            default:
+                if (plotarea) {
+                    // try to be backwards compatible with loaded shapes
+                    QRectF pr = itemRect(plotarea); // use actual plotarea rect here
+                    debugChartLayout<<"legend:"<<legendRect<<"plot:"<<pr<<legendRect.intersects(pr);
+                    if (!legendRect.intersects(pr) && legendRect.intersects(plotareaRect)) {
+                        if (legendRect.right() < pr.left()) {
+                            plotareaRect.setLeft(qMax(plotareaRect.left(), legendRect.right() + m_spacing.x()));
+                        } else if (legendRect.left() > pr.right()) {
+                            plotareaRect.setRight(qMin(plotareaRect.right(), legendRect.left() - m_spacing.x()));
+                        } else if (legendRect.bottom() < pr.top()) {
+                            plotareaRect.setTop(qMax(plotareaRect.top(), legendRect.bottom() + m_spacing.y()));
+                        } else if (legendRect.top() > pr.bottom()) {
+                            plotareaRect.setBottom(qMin(plotareaRect.bottom(), legendRect.top() - m_spacing.y()));
+                        }
+                        debugChartLayout<<"legend manual:"<<legendRect<<"plot moved to:"<<plotareaRect;
+                    }
+                }
+                break;
         }
         debugChartLayout<<"legend:"<<legendRect<<"pos:"<<legend->legendPosition()<<"align:"<<legend->alignment();
     }

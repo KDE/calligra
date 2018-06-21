@@ -68,7 +68,9 @@ public:
 
     void setAxisShowTitle(bool show);
     void setAxisTitle(const QString& title);
-    void setAxisShowGridLines(bool show);
+    void setShowAxis(bool show);
+    void setAxisShowMajorGridLines(bool show);
+    void setAxisShowMinorGridLines(bool show);
     void setAxisUseLogarithmicScaling(bool b);
     void setAxisStepWidth(qreal width);
     void setAxisSubStepWidth(qreal width);
@@ -83,8 +85,12 @@ private:
     bool m_newShowTitle;
     QString m_oldTitleText;
     QString m_newTitleText;
-    bool m_oldShowGridLines;
-    bool m_newShowGridLines;
+    bool m_oldShowAxis;
+    bool m_newShowAxis;
+    bool m_oldShowMajorGridLines;
+    bool m_oldShowMinorGridLines;
+    bool m_newShowMajorGridLines;
+    bool m_newShowMinorGridLines;
     bool m_oldUseLogarithmicScaling;
     bool m_newUseLogarithmicScaling;
     qreal m_oldStepWidth;

@@ -77,13 +77,13 @@ void DatasetCommand::redo()
         valueLabelType.symbol = m_newShowSymbol;
         m_dataSet->setValueLabelType(valueLabelType);
     }
-    if (m_oldBrushColor == m_newBrushColor) {
+    if (m_oldBrushColor != m_newBrushColor) {
         m_dataSet->setBrush(QBrush(m_newBrushColor));
     }
-    if (m_oldPenColor == m_newPenColor) {
+    if (m_oldPenColor != m_newPenColor) {
         m_dataSet->setPen(QPen(m_newPenColor, 0));
     }
-    if (m_oldMarkerStyle == m_newMarkerStyle) {
+    if (m_oldMarkerStyle != m_newMarkerStyle) {
         m_dataSet->setMarkerStyle(m_newMarkerStyle);
     }
     if (m_newAxis != m_oldAxis) {
@@ -108,13 +108,13 @@ void DatasetCommand::undo()
         valueLabelType.symbol = m_oldShowSymbol;
         m_dataSet->setValueLabelType(valueLabelType);
     }
-    if (m_oldBrushColor == m_newBrushColor) {
+    if (m_oldBrushColor != m_newBrushColor) {
         m_dataSet->setBrush(QBrush(m_oldBrushColor));
     }
-    if (m_oldPenColor == m_newPenColor) {
+    if (m_oldPenColor != m_newPenColor) {
         m_dataSet->setPen(QPen(m_oldPenColor, 0));
     }
-    if (m_oldMarkerStyle == m_newMarkerStyle) {
+    if (m_oldMarkerStyle != m_newMarkerStyle) {
         m_dataSet->setMarkerStyle(m_oldMarkerStyle);
     }
     if (m_newAxis != m_oldAxis) {

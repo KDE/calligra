@@ -91,9 +91,10 @@ enum Position {
 };
 
 enum LegendExpansion {
-	WideLegendExpansion,
-	HighLegendExpansion,
-	BalancedLegendExpansion
+    HighLegendExpansion,
+    WideLegendExpansion,
+    BalancedLegendExpansion,
+    CustomLegendExpansion
 };
 
 enum ErrorCategory {

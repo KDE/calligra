@@ -44,7 +44,7 @@ enum OdfGridClass {
 
 /**
  * @brief The Axis class handles axis as well as grid settings.
- * 
+ *
  * Data series can be attached to axes that represent an
  * ordinate. This is done to customize the scaling, i.e., the relation
  * in which the data of a series is visualized.
@@ -53,7 +53,7 @@ enum OdfGridClass {
 class Axis : public QObject
 {
     Q_OBJECT
-    
+
 public:
     Axis(PlotArea *parent, AxisDimension dimension);
     ~Axis();
@@ -138,24 +138,24 @@ public:
     // KChart stuff
     KChart::CartesianAxis *kdAxis() const;
     KChart::AbstractCoordinatePlane *kdPlane() const;
-    
+
     void plotAreaChartTypeChanged(ChartType chartType);
     void plotAreaChartSubTypeChanged(ChartSubtype chartSubType);
     void plotAreaIsVerticalChanged();
 
     void registerKdAxis(KChart::CartesianAxis *axis);
     void deregisterKdAxis(KChart::CartesianAxis *axis);
-    
+
     void update() const;
     void requestRepaint() const;
     void layoutPlanes();
 
     /**
      * Returns the gap between bars as a  percent of the width of one bar
-     * 
+     *
      * Negative numbers signify that bars overlap
      * This is the negative representation of the chart:overlap property.
-     * 
+     *
      * From odf 1.2 spec:
      * The chart:overlap attribute specifies how much bars within the same category in a bar chart overlap.
      * The attribute value is an integer that is interpreted as a percentage relative to the width of a single bar.
@@ -167,7 +167,7 @@ public:
     /**
      * Returns the gap between sets of bars as a  percent of the width of one bar
      * This represents the chart:gap-width property.
-     * 
+     *
      * From the odf 1.2 spec:
      * The chart:gap-width attribute specifies a gap between neighboring groups of bars in a bar chart
      * (that is the distance between the last bar in one category and t*he first bar in the following category).
@@ -193,7 +193,7 @@ public:
      * start: Translates to Bottom for x-axes and Left for y-axes
      *        If reversed: Translates to Top for x-axes and Right for y-axes
      * value: Not supported, defaults to "start"
-     * 
+     *
      * @see odfAxisPosition()
      */
     void updateKChartAxisPosition();

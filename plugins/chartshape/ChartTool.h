@@ -60,7 +60,7 @@ public:
     /// reimplemented from superclass
     virtual void deactivate();
     /// reimplemented from superclass
-    virtual QWidget *createOptionWidget();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
 private Q_SLOTS:
     void setChartType(ChartType type, ChartSubtype subtype);
@@ -99,9 +99,11 @@ private Q_SLOTS:
     // Axes
     void addAxis(AxisDimension, const QString& title = QString());
     void removeAxis(Axis *axis);
+    void setShowAxis(Axis *axis, bool show);
     void setAxisShowTitle(Axis *axis, bool show);
     void setAxisTitle(Axis *axis, const QString& title);
-    void setAxisShowGridLines(Axis *axis, bool b = true);
+    void setAxisShowMajorGridLines(Axis *axis, bool b = true);
+    void setAxisShowMinorGridLines(Axis *axis, bool b = true);
     void setAxisUseLogarithmicScaling(Axis *axis, bool b = true);
     void setAxisStepWidth(Axis *axis, qreal width);
     void setAxisSubStepWidth(Axis *axis, qreal width);
@@ -115,6 +117,7 @@ private Q_SLOTS:
     void setLegendFont(const QFont& font);
     void setLegendFontSize(int size);
     void setLegendOrientation(Qt::Orientation);
+    void setLegendPosition(Position);
     void setLegendAlignment(Qt::Alignment);
 
     // Called upon shape manager's selectionChanged() signal

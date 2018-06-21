@@ -297,6 +297,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     setInheritsTransform(d->plotArea, true);
     d->plotArea->setDeletable(false);
     d->plotArea->setToolDelegates(QSet<KoShape*>()<<this); // Enable chart tool
+    d->plotArea->setAllowedInteraction(KoShape::ShearingAllowed, false);
 
     // Configure the legend.
     d->legend->setVisible(true);
@@ -305,6 +306,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     setInheritsTransform(d->legend, true);
     d->legend->setDeletable(false);
     d->legend->setToolDelegates(QSet<KoShape*>()<<this); // Enable chart tool
+    d->legend->setAllowedInteraction(KoShape::ShearingAllowed, false);
 
     // A few simple defaults (chart type and subtype in this case)
     setChartType(BarChartType);
@@ -353,6 +355,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     d->title->setToolDelegates(QSet<KoShape*>()<<this<<d->title); // Enable chart tool
     labelData->setResizeMethod(KoTextShapeDataBase::AutoResize);
     d->title->setAdditionalStyleAttribute("chart:auto-position", "true");
+    d->title->setAllowedInteraction(KoShape::ShearingAllowed, false);
 
     // Create the Subtitle and add it to the shape.
     if (textShapeFactory)
@@ -382,6 +385,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     d->subTitle->setToolDelegates(QSet<KoShape*>()<<this<<d->subTitle); // Enable chart tool
     labelData->setResizeMethod(KoTextShapeDataBase::AutoResize);
     d->subTitle->setAdditionalStyleAttribute("chart:auto-position", "true");
+    d->subTitle->setAllowedInteraction(KoShape::ShearingAllowed, false);
 
     // Create the Footer and add it to the shape.
     if (textShapeFactory)
@@ -411,6 +415,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     d->footer->setToolDelegates(QSet<KoShape*>()<<this<<d->footer); // Enable chart tool
     labelData->setResizeMethod(KoTextShapeDataBase::AutoResize);
     d->footer->setAdditionalStyleAttribute("chart:auto-position", "true");
+    d->footer->setAllowedInteraction(KoShape::ShearingAllowed, false);
 
     // Set default contour (for how text run around is done around this shape)
     // to prevent a crash in LO

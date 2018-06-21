@@ -43,4 +43,46 @@ extern const QLoggingCategory &CHARTODF_LOG();
 #define warnChartOdf qCWarning(CHARTODF_LOG)
 #define errorChartOdf qCCritical(CHARTODF_LOG)
 
+extern const QLoggingCategory &CHARTTOOL_LOG();
+
+#define debugChartTool qCDebug(CHARTTOOL_LOG)<<Q_FUNC_INFO
+#define warnChartTool qCWarning(CHARTTOOL_LOG)
+#define errorChartTool qCCritical(CHARTTOOL_LOG)
+
+extern const QLoggingCategory &CHARTAXIS_LOG();
+
+#define debugChartAxis qCDebug(CHARTAXIS_LOG)<<Q_FUNC_INFO
+#define warnChartAxis qCWarning(CHARTAXIS_LOG)
+#define errorChartAxis qCCritical(CHARTAXIS_LOG)
+
+extern const QLoggingCategory &CHARTUI_TITLES_LOG();
+
+#define debugChartUiTitles qCDebug(CHARTUI_TITLES_LOG)<<Q_FUNC_INFO
+#define warnChartUiTitles qCWarning(CHARTUI_TITLES_LOG)
+#define errorChartUiTitles qCCritical(CHARTUI_TITLES_LOG)
+
+extern const QLoggingCategory &CHARTUI_LEGEND_LOG();
+
+#define debugChartUiLegend qCDebug(CHARTUI_LEGEND_LOG)<<Q_FUNC_INFO
+#define warnChartUiLegend qCWarning(CHARTUI_LEGEND_LOG)
+#define errorChartUiLegend qCCritical(CHARTUI_LEGEND_LOG)
+
+extern const QLoggingCategory &CHARTUI_PLOTAREA_LOG();
+
+#define debugChartUiPlotArea qCDebug(CHARTUI_PLOTAREA_LOG)<<Q_FUNC_INFO
+#define warnChartUiPlotArea qCWarning(CHARTUI_PLOTAREA_LOG)
+#define errorChartUiPlotArea qCCritical(CHARTUI_PLOTAREA_LOG)
+
+extern const QLoggingCategory &CHARTUI_AXES_LOG();
+
+#define debugChartUiAxes qCDebug(CHARTUI_AXES_LOG)<<Q_FUNC_INFO
+#define warnChartUiAxes qCWarning(CHARTUI_AXES_LOG)
+#define errorChartUiAxes qCCritical(CHARTUI_AXES_LOG)
+
+extern const QLoggingCategory &CHARTUI_DATASET_LOG();
+
+#define debugChartUiDataSet qCDebug(CHARTUI_DATASET_LOG)<<Q_FUNC_INFO
+#define warnChartUiDataSet qCWarning(CHARTUI_DATASET_LOG)
+#define errorChartUiDataSet qCCritical(CHARTUI_DATASET_LOG)
+
 #endif

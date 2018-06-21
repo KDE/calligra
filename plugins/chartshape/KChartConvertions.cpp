@@ -141,14 +141,16 @@ Position KChartPositionValueToPosition(KChartEnums::PositionValue position)
 Qt::Orientation LegendExpansionToQtOrientation(LegendExpansion expansion)
 {
     switch (expansion) {
-    case WideLegendExpansion:
-        return Qt::Horizontal;
-    case HighLegendExpansion:
-        return Qt::Vertical;
-        
-    // KChart doesn't allow a balanced expansion
-    case BalancedLegendExpansion:
-        return Qt::Vertical;
+        case HighLegendExpansion:
+            return Qt::Vertical;
+        case WideLegendExpansion:
+            return Qt::Horizontal;
+        case BalancedLegendExpansion:
+            // KChart doesn't allow a balanced expansion
+            return Qt::Vertical;
+        case CustomLegendExpansion:
+            // KChart doesn't allow a custom expansion
+            return Qt::Vertical;
     }
     
     Q_ASSERT("Unknown Qt::Orientation!");

@@ -131,6 +131,9 @@ Legend::Legend(ChartShape *parent)
 
     parent->addShape(this);
 
+    setAllowedInteraction(KoShape::ResizeAllowed, false);
+    setAllowedInteraction(KoShape::RotationAllowed, false);
+
     connect (d->kdLegend, SIGNAL(propertiesChanged()),
              this,        SLOT(slotKdLegendChanged()));
     connect (parent, SIGNAL(chartTypeChanged(ChartType)),
@@ -281,8 +284,6 @@ void Legend::setLegendPosition(Position position)
 {
     d->position = position;
     d->pixmapRepaintRequested = true;
-
-    d->shape->layout()->setItemType(this, LegendType);
 }
 
 void Legend::setSize(const QSizeF &newSize)
@@ -403,7 +404,7 @@ bool Legend::loadOdf(const KoXmlElement &legendElement,
         int attributesToLoad = OdfAllAttributes;
         QString lp = legendElement.attributeNS(KoXmlNS::chart, "legend-position", QString());
 
-        // Note: load position even if it might not be used (if alignment is specified)
+        // Note: load position even if it might not be used
         loadOdfAttributes(legendElement, context, attributesToLoad);
 
         QString lalign = legendElement.attributeNS(KoXmlNS::chart, "legend-align", QString());
@@ -424,10 +425,8 @@ bool Legend::loadOdf(const KoXmlElement &legendElement,
         else if (lalign == "end") {
             setAlignment(Qt::AlignRight);
         }
-        else if (lalign == "center") {
-            setAlignment(Qt::AlignCenter);
-        } else {
-            setAlignment(Qt::AlignJustify); // Means: use shapes position
+        else {
+            setAlignment(Qt::AlignCenter); // default
         }
 
         if (lp == "start") {
@@ -438,6 +437,9 @@ bool Legend::loadOdf(const KoXmlElement &legendElement,
         }
         else if (lp == "bottom") {
             setLegendPosition(BottomPosition);
+        }
+        else if (lp == "end") {
+            setLegendPosition(EndPosition);
         }
         else if (lp == "top-start") {
             setLegendPosition(TopStartPosition);
@@ -450,9 +452,8 @@ bool Legend::loadOdf(const KoXmlElement &legendElement,
         }
         else if (lp == "bottom-end") {
             setLegendPosition(BottomEndPosition);
-        }
-        else {
-            setLegendPosition(EndPosition);
+        } else {
+            setLegendPosition(FloatingPosition);
         }
 
         if (legendElement.hasAttributeNS(KoXmlNS::office, "title")) {

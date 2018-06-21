@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>Johannes Simon</author>
+ <class>LegendConfigWidget</class>
+ <widget class="QWidget" name="LegendConfigWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>321</width>
+    <height>160</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="2" column="2" colspan="2">
+    <widget class="QComboBox" name="legendOrientation">
+     <item>
+      <property name="text">
+       <string>Vertical</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Horizontal</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="3" column="3">
+    <widget class="QComboBox" name="legendAlignment">
+     <item>
+      <property name="text">
+       <string>Start</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Center</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>End</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="3" column="2">
+    <widget class="QComboBox" name="legendPosition">
+     <item>
+      <property name="text">
+       <string>Right</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Top</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Bottom</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Left</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Top-left</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Top-right</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Bottom-left</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Bottom-right</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Manual</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Position</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QCheckBox" name="showLegend">
+     <property name="text">
+      <string>Show Legend</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_8">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Title</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Orientation</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" colspan="3">
+    <widget class="QLineEdit" name="legendTitle">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="QPushButton" name="legendEditFontButton">
+     <property name="text">
+      <string>Fonts...</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -92,7 +92,7 @@ public:
         PieAttributesRole,
         DataValueAttributesRole
     };
-    
+
     /**
      * Specifies in what direction a data set 'points'. More specifically,
      * if the data direction is Qt::Vertical, a data set occupies one
@@ -115,13 +115,13 @@ public Q_SLOTS:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
     void slotColumnsInserted(const QModelIndex& parent, int start, int end);
-    
+
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     QModelIndex parent(const QModelIndex &index) const;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    
+
     void setDataDimensions(int dataDimensions);
     int dataDimensions() const;
 

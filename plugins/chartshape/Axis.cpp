@@ -27,6 +27,7 @@
 #include <QList>
 #include <QString>
 #include <QTextDocument>
+#include <QPointer>
 
 // Calligra
 #include <KoShapeLoadingContext.h>
@@ -103,6 +104,7 @@ public:
     KChart::AbstractDiagram *getDiagramAndCreateIfNeeded(ChartType chartType);
     KChart::AbstractDiagram *getDiagram(ChartType chartType);
     void deleteDiagram(ChartType chartType);
+    void deleteDiagram(KChart::AbstractDiagram *diagram);
 
     void createBarDiagram();
     void createLineDiagram();
@@ -150,15 +152,15 @@ public:
     KChart::RadarCoordinatePlane     *kdRadarPlane;
     KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat;
 
-    KChart::BarDiagram   *kdBarDiagram;
-    KChart::LineDiagram  *kdLineDiagram;
-    KChart::LineDiagram  *kdAreaDiagram;
-    KChart::PieDiagram   *kdCircleDiagram;
-    KChart::RingDiagram  *kdRingDiagram;
-    KChart::RadarDiagram *kdRadarDiagram;
-    KChart::Plotter      *kdScatterDiagram;
-    KChart::StockDiagram *kdStockDiagram;
-    KChart::Plotter      *kdBubbleDiagram;
+    QPointer<KChart::BarDiagram> kdBarDiagram;
+    QPointer<KChart::LineDiagram> kdLineDiagram;
+    QPointer<KChart::LineDiagram> kdAreaDiagram;
+    QPointer<KChart::PieDiagram>  kdCircleDiagram;
+    QPointer<KChart::RingDiagram>  kdRingDiagram;
+    QPointer<KChart::RadarDiagram> kdRadarDiagram;
+    QPointer<KChart::Plotter>     kdScatterDiagram;
+    QPointer<KChart::StockDiagram> kdStockDiagram;
+    QPointer<KChart::Plotter>  kdBubbleDiagram;
     // FIXME BUG: Somehow we need to visualize something for these
     //            missing chart types.  We have some alternatives:
     //            1. Show an empty area
@@ -169,8 +171,8 @@ public:
     // NOTE: Whatever we do, we should always store the data so that
     //       it can be saved back into the file for a perfect
     //       roundtrip.
-    KChart::BarDiagram   *kdSurfaceDiagram;
-    KChart::BarDiagram   *kdGanttDiagram;
+    QPointer<KChart::BarDiagram> kdSurfaceDiagram;
+    QPointer<KChart::BarDiagram> kdGanttDiagram;
 
     ChartType     plotAreaChartType;
     ChartSubtype  plotAreaChartSubType;
@@ -246,18 +248,6 @@ Axis::Private::Private(Axis *axis, AxisDimension dim)
 
     showOverlappingDataLabels = false;
     showLabels = true;
-
-    kdBarDiagram     = 0;
-    kdLineDiagram    = 0;
-    kdAreaDiagram    = 0;
-    kdCircleDiagram  = 0;
-    kdRingDiagram    = 0;
-    kdRadarDiagram   = 0;
-    kdScatterDiagram = 0;
-    kdStockDiagram   = 0;
-    kdBubbleDiagram  = 0;
-    kdSurfaceDiagram = 0;
-    kdGanttDiagram   = 0;
 
     title = 0;
     titleData = 0;
@@ -436,64 +426,23 @@ KChart::AbstractDiagram *Axis::Private::getDiagram(ChartType chartType)
     return 0;
 }
 
+void Axis::Private::deleteDiagram(KChart::AbstractDiagram *diagram)
+{
+    Q_ASSERT(diagram);
+    deregisterDiagram(diagram);
+    if (diagram->coordinatePlane()) {
+        diagram->coordinatePlane()->takeDiagram(diagram);
+    }
+    delete diagram;
+    adjustAllDiagrams();
+}
 
 void Axis::Private::deleteDiagram(ChartType chartType)
 {
-    KChart::AbstractDiagram **diagram = 0;
-
-    switch (chartType) {
-    case BarChartType:
-        diagram = (KChart::AbstractDiagram**)&kdBarDiagram;
-        break;
-    case LineChartType:
-        diagram = (KChart::AbstractDiagram**)&kdLineDiagram;
-        break;
-    case AreaChartType:
-        diagram = (KChart::AbstractDiagram**)&kdAreaDiagram;
-        break;
-    case CircleChartType:
-        diagram = (KChart::AbstractDiagram**)&kdCircleDiagram;
-        break;
-    case RingChartType:
-        diagram = (KChart::AbstractDiagram**)&kdRingDiagram;
-        break;
-    case RadarChartType:
-    case FilledRadarChartType:
-        diagram = (KChart::AbstractDiagram**)&kdRadarDiagram;
-        break;
-    case ScatterChartType:
-        diagram = (KChart::AbstractDiagram**)&kdScatterDiagram;
-        break;
-    case StockChartType:
-        diagram = (KChart::AbstractDiagram**)&kdStockDiagram;
-        break;
-    case BubbleChartType:
-        diagram = (KChart::AbstractDiagram**)&kdBubbleDiagram;
-        break;
-    case SurfaceChartType:
-        diagram = (KChart::AbstractDiagram**)&kdSurfaceDiagram;
-        break;
-    case GanttChartType:
-        diagram = (KChart::AbstractDiagram**)&kdGanttDiagram;
-        break;
-    case LastChartType:
-        Q_ASSERT("There is no diagram with type LastChartType");
-    // Compiler warning for unhandled chart type is intentional.
+    KChart::AbstractDiagram *diagram = getDiagram(chartType);
+    if (diagram) {
+        deleteDiagram(diagram);
     }
-
-    Q_ASSERT(diagram);
-    Q_ASSERT(*diagram);
-
-    deregisterDiagram(*diagram);
-    // remove digram from the plane before we delete it or else KChart crashes
-    if ((*diagram)->coordinatePlane()) {
-        (*diagram)->coordinatePlane()->takeDiagram(*diagram);
-    }
-    delete *diagram;
-
-    *diagram = 0;
-
-    adjustAllDiagrams();
 }
 
 
@@ -892,6 +841,7 @@ Axis::Axis(PlotArea *parent, AxisDimension dimension)
     d->title->setToolDelegates(QSet<KoShape*>()<<parent->parent()<<d->title); // Enable chart tool
     d->titleData->setResizeMethod(KoTextShapeDataBase::AutoResize);
     d->title->setAdditionalStyleAttribute("chart:auto-position", "true");
+    d->title->setAllowedInteraction(KoShape::ShearingAllowed, false);
 
     connect(d->plotArea, SIGNAL(pieAngleOffsetChanged(qreal)),
             this,        SLOT(setPieAngleOffset(qreal)));
@@ -1745,6 +1695,7 @@ void Axis::plotAreaChartTypeChanged(ChartType newChartType)
 
     ChartType oldChartType = d->plotAreaChartType;
 
+    debugChartAxis<<oldChartType<<"->"<<newChartType;
     // Change only the fill in case of type change from RadarChartType to FilledRadarChartType
     // or viceversa as rest of the properties remain same
     if (newChartType == RadarChartType && oldChartType == FilledRadarChartType) {
@@ -1752,7 +1703,14 @@ void Axis::plotAreaChartTypeChanged(ChartType newChartType)
     } else if (newChartType == FilledRadarChartType && oldChartType == RadarChartType) {
         d->kdRadarDiagram->setFillAlpha(0.4);
     } else {
-        KChart::AbstractDiagram *newDiagram = d->getDiagramAndCreateIfNeeded(newChartType);
+        KChart::AbstractDiagram *newDiagram = d->getDiagram(newChartType);
+        if (newDiagram) {
+            debugChartAxis<<"already exists:"<<newDiagram;
+            // Some dataset(s) have been attached to this diagram,
+            // we delete it to get a fresh start
+            d->deleteDiagram(newDiagram);
+        }
+        newDiagram = d->getDiagramAndCreateIfNeeded(newChartType);
 
         KChartModel *newModel = dynamic_cast<KChartModel*>(newDiagram->model());
         // FIXME: This causes a crash on unimplemented types. We should
@@ -1774,27 +1732,17 @@ void Axis::plotAreaChartTypeChanged(ChartType newChartType)
         Q_ASSERT(oldModel);
 
         foreach (DataSet *dataSet, d->dataSets) {
-            if (dataSet->chartType() != LastChartType)
+            if (dataSet->chartType() != LastChartType) {
                 continue;
-
-    // FIXME: What does this do? Only the user may set a data set's pen through
-    // a proper UI, in any other case the pen falls back to a default
-    // which depends on the chart type, so setting it here will break the default
-    // for other chart types.
-    #if 0
-            Qt::PenStyle newPenStyle = newDiagram->pen().style();
-            QPen newPen = dataSet->pen();
-            newPen.setStyle(newPenStyle);
-            dataSet->setPen( newPen);
-    #endif
+            }
             newModel->addDataSet(dataSet);
             const int dataSetCount = oldModel->dataDirection() == Qt::Vertical
                                      ? oldModel->columnCount() : oldModel->rowCount();
-            if (dataSetCount == oldModel->dataDimensions())
-                // We need to call this method so set it sets d->kd[TYPE]Diagram to NULL
+            if (dataSetCount == oldModel->dataDimensions()) {
                 d->deleteDiagram(oldChartType);
-            else
+            } else {
                 oldModel->removeDataSet(dataSet);
+            }
         }
 
     }

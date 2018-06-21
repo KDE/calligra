@@ -37,3 +37,45 @@ const QLoggingCategory &CHARTODF_LOG()
     static const QLoggingCategory category("calligra.plugin.chart.odf");
     return category;
 }
+
+const QLoggingCategory &CHARTTOOL_LOG()
+{
+    static const QLoggingCategory category("calligra.plugin.chart.tool");
+    return category;
+}
+
+const QLoggingCategory &CHARTAXIS_LOG()
+{
+    static const QLoggingCategory category("calligra.plugin.chart.axis");
+    return category;
+}
+
+const QLoggingCategory &CHARTUI_TITLES_LOG()
+{
+    static const QLoggingCategory category("calligra.plugin.chart.ui.titles");
+    return category;
+}
+
+const QLoggingCategory &CHARTUI_LEGEND_LOG()
+{
+    static const QLoggingCategory category("calligra.plugin.chart.ui.legend");
+    return category;
+}
+
+const QLoggingCategory &CHARTUI_PLOTAREA_LOG()
+{
+    static const QLoggingCategory category("calligra.plugin.chart.ui.plotarea");
+    return category;
+}
+
+const QLoggingCategory &CHARTUI_AXES_LOG()
+{
+    static const QLoggingCategory category("calligra.plugin.chart.ui.axes");
+    return category;
+}
+
+const QLoggingCategory &CHARTUI_DATASET_LOG()
+{
+    static const QLoggingCategory category("calligra.plugin.chart.ui.dataset");
+    return category;
+}
