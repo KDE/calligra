@@ -1219,7 +1219,6 @@ void PlotArea::relayout() const
 
 void PlotArea::addTitleToLayout()
 {
-    qInfo()<<Q_FUNC_INFO<<d->chartType<<d->axes;
     addAxesTitlesToLayout(); // for now
 }
 
@@ -1228,25 +1227,21 @@ void PlotArea::addAxesTitlesToLayout()
     ChartLayout *layout = d->shape->layout();
     Axis *axis = xAxis();
     if (axis) {
-        qInfo()<<Q_FUNC_INFO<<'X'<<d->chartType<<axis->titleText()<<axis->title()->isVisible();
         layout->remove(axis->title());
         layout->setItemType(axis->title(), XAxisTitleType);
     }
     axis = yAxis();
     if (axis) {
-        qInfo()<<Q_FUNC_INFO<<'Y'<<d->chartType<<axis->titleText()<<axis->title()->isVisible();
         layout->remove(axis->title());
         layout->setItemType(axis->title(), YAxisTitleType);
     }
     axis = secondaryXAxis();
     if (axis) {
-        qInfo()<<Q_FUNC_INFO<<"SX"<<d->chartType<<axis->titleText()<<axis->title()->isVisible();
         layout->remove(axis->title());
         layout->setItemType(axis->title(), SecondaryXAxisTitleType);
     }
     axis = secondaryYAxis();
     if (axis) {
-        qInfo()<<Q_FUNC_INFO<<"SY"<<d->chartType<<axis->titleText()<<axis->title()->isVisible();
         layout->remove(axis->title());
         layout->setItemType(axis->title(), SecondaryYAxisTitleType);
     }

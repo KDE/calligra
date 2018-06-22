@@ -92,7 +92,6 @@ LegendConfigWidget::~LegendConfigWidget()
 
 void LegendConfigWidget::open(KoShape* shape)
 {
-    qInfo()<<Q_FUNC_INFO<<shape;
     d->shape = dynamic_cast<ChartShape*>(shape);
     if (!d->shape) {
         // a child may have been clicked
@@ -139,7 +138,6 @@ int toIndex(Qt::Alignment align)
         default:
             break;
     }
-    qInfo()<<Q_FUNC_INFO<<align<<index;
     return index;
 }
 
@@ -213,7 +211,6 @@ void LegendConfigWidget::setLegendPosition(int index)
             pos = CenterPosition;
             break;
     }
-    qInfo()<<Q_FUNC_INFO<<index<<pos;
     emit legendPositionChanged(pos);
 }
 
