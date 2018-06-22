@@ -23,9 +23,9 @@
 #define KOCHART_CONFIGWIDGETBASE
 
 
-// Calligra
 #include <KoShapeConfigWidgetBase.h>
 
+#include <QWidget>
 
 namespace KoChart
 {
@@ -43,6 +43,16 @@ public:
     virtual void updateData() {}
     // reimplement if you open any dialogs
     virtual void deleteSubDialogs() {}
+
+    void blockSignals(bool block) {
+        blockSignals(this, block);
+    }
+    void blockSignals(QWidget *w, bool block) {
+        QList<QWidget*> lst = w->findChildren<QWidget*>();
+        for (int i = 0; i < lst.count(); ++i) {
+            lst.at(i)->blockSignals(block);
+        }
+    }
 };
 
 }  // namespace KoChart
