@@ -124,7 +124,6 @@ Axis *AxesConfigWidget::Private::axis(int index) const
 
 AxesConfigWidget::AxesConfigWidget()
     : d(new Private(this))
-    , signalBlocked(false)
 {
     setObjectName("AxesConfigWidget");
     d->ui.setupUi(this);
@@ -189,7 +188,7 @@ void AxesConfigWidget::updateData()
     if (!d->shape) {
         return;
     }
-    signalBlocked = true;
+    blockSignals(true);
     d->ui.axisShow->setChecked(false);
     d->ui.axisShowMajorGridLines->setChecked(false);
     d->ui.axisShowMinorGridLines->setChecked(false);
@@ -198,7 +197,7 @@ void AxesConfigWidget::updateData()
     if (d->ui.axes->currentIndex() < 0) {
         d->ui.axes->setCurrentIndex(0);
     }
-    signalBlocked = false;
+    blockSignals(false);
     ui_axisSelectionChanged(d->ui.axes->currentIndex());
 }
 
@@ -267,7 +266,7 @@ void AxesConfigWidget::ui_axisSelectionChanged(int index)
             Q_ASSERT(false);
             break;
     }
-    signalBlocked = true;
+    blockSignals(true);
     d->ui.axisShow->setChecked(axis->isVisible());
     d->ui.axisShowTitle->setChecked(axis->title()->isVisible());
     d->ui.axisShowMajorGridLines->setChecked(axis->showMajorGrid());
@@ -292,14 +291,14 @@ void AxesConfigWidget::ui_axisSelectionChanged(int index)
     d->ui.gapBetweenBars->setValue(axis->gapBetweenBars());
     d->ui.gapBetweenSets->setValue(axis->gapBetweenSets());
     d->ui.barProperties->setVisible(axis->dimension() == YAxisDimension);
-    signalBlocked = false;
+    blockSignals(false);
 }
 
 
 void AxesConfigWidget::ui_axisShowTitleChanged(bool b)
 {
     Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis && !signalBlocked) {
+    if (axis) {
         emit axisShowTitleChanged(axis, b);
     }
 }
@@ -307,7 +306,7 @@ void AxesConfigWidget::ui_axisShowTitleChanged(bool b)
 void AxesConfigWidget::ui_axisShowChanged(bool b)
 {
     Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis && !signalBlocked) {
+    if (axis) {
         debugChartUiAxes<<axis<<b;
         emit axisShowChanged(axis, b);
     }
@@ -316,7 +315,7 @@ void AxesConfigWidget::ui_axisShowChanged(bool b)
 void AxesConfigWidget::ui_axisShowMajorGridLinesChanged(bool b)
 {
     Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis && !signalBlocked) {
+    if (axis) {
         debugChartUiAxes<<axis<<b;
         emit axisShowMajorGridLinesChanged(axis, b);
     }
@@ -325,7 +324,7 @@ void AxesConfigWidget::ui_axisShowMajorGridLinesChanged(bool b)
 void AxesConfigWidget::ui_axisShowMinorGridLinesChanged(bool b)
 {
     Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis && !signalBlocked) {
+    if (axis) {
         debugChartUiAxes<<axis<<b;
         emit axisShowMinorGridLinesChanged(axis, b);
     }
@@ -335,7 +334,7 @@ void AxesConfigWidget::ui_axisLabelsFontChanged()
 {
     QFont font = d->axisFontEditorDialog.fontChooser->font();
     Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis && !signalBlocked) {
+    if (axis) {
         debugChartUiAxes<<axis<<font;
         emit axisLabelsFontChanged(axis, font);
     }
@@ -344,7 +343,7 @@ void AxesConfigWidget::ui_axisLabelsFontChanged()
 void AxesConfigWidget::ui_axisUseLogarithmicScalingChanged(bool b)
 {
     Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis && !signalBlocked) {
+    if (axis) {
         debugChartUiAxes<<axis<<b;
         emit axisUseLogarithmicScalingChanged(axis, b);
     }
@@ -353,7 +352,7 @@ void AxesConfigWidget::ui_axisUseLogarithmicScalingChanged(bool b)
 void AxesConfigWidget::ui_axisStepWidthChanged(double width)
 {
     Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis && !signalBlocked) {
+    if (axis) {
         debugChartUiAxes<<axis<<width;
         emit axisStepWidthChanged(axis, width);
     }
@@ -362,7 +361,7 @@ void AxesConfigWidget::ui_axisStepWidthChanged(double width)
 void AxesConfigWidget::ui_axisSubStepWidthChanged(double width)
 {
     Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis && !signalBlocked) {
+    if (axis) {
         debugChartUiAxes<<axis<<width;
         emit axisSubStepWidthChanged(axis, width);
     }
@@ -371,7 +370,7 @@ void AxesConfigWidget::ui_axisSubStepWidthChanged(double width)
 void AxesConfigWidget::ui_axisUseAutomaticStepWidthChanged(bool b)
 {
     Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis && !signalBlocked) {
+    if (axis) {
         debugChartUiAxes<<axis<<b;
         emit axisUseAutomaticStepWidthChanged(axis, b);
     }
@@ -380,7 +379,7 @@ void AxesConfigWidget::ui_axisUseAutomaticStepWidthChanged(bool b)
 void AxesConfigWidget::ui_axisUseAutomaticSubStepWidthChanged(bool b)
 {
     Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis && !signalBlocked) {
+    if (axis) {
         debugChartUiAxes<<axis<<b;
         emit axisUseAutomaticSubStepWidthChanged(axis, b);
     }
@@ -404,7 +403,7 @@ void AxesConfigWidget::ui_axisEditFontButtonClicked()
 void AxesConfigWidget::slotGapBetweenBars()
 {
     Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis && !signalBlocked && axis->dimension() == YAxisDimension) {
+    if (axis && axis->dimension() == YAxisDimension) {
         debugChartUiAxes<<axis<<d->ui.gapBetweenBars->value();
         emit gapBetweenBarsChanged(axis, d->ui.gapBetweenBars->value());
     }
@@ -413,7 +412,7 @@ void AxesConfigWidget::slotGapBetweenBars()
 void AxesConfigWidget::slotGapBetweenSets()
 {
     Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis && !signalBlocked && axis->dimension() == YAxisDimension) {
+    if (axis && axis->dimension() == YAxisDimension) {
         debugChartUiAxes<<axis<<d->ui.gapBetweenSets->value();
         emit gapBetweenSetsChanged(axis, d->ui.gapBetweenSets->value());
     }

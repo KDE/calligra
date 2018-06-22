@@ -107,8 +107,6 @@ private:
 
     class Private;
     Private * const d;
-
-    bool signalBlocked;
 };
 
 }  // namespace KoChart

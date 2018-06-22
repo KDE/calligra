@@ -691,20 +691,12 @@ void DataSetConfigWidget::datasetPenSelected(const QColor& color)
     updateMarkers();
 }
 
-void block_signals(QWidget *w, bool block)
-{
-    QList<QWidget*> lst = w->findChildren<QWidget*>();
-    for (int i = 0; i < lst.count(); ++i) {
-        lst.at(i)->blockSignals(block);
-    }
-}
-
 void DataSetConfigWidget::updateData()
 {
     if (!d->shape) {
         return;
     }
-    block_signals(this, true);
+    blockSignals(true);
     d->dataSetAxes.clear();
     d->ui.dataSets->clear();
     // This is used in a couple of places.
@@ -781,7 +773,7 @@ void DataSetConfigWidget::updateData()
                             || chartType == RingChartType || chartType == BubbleChartType);
     d->ui.datasetMarkerMenu->setEnabled(enableMarkers);
 
-    block_signals(this, false);
+    blockSignals(false);
 
     ui_dataSetSelectionChanged(d->selectedDataSet);
 }
@@ -812,7 +804,7 @@ void DataSetConfigWidget::ui_dataSetSelectionChanged(int index)
     if (index < 0 || index >= d->dataSets.size()) {
         return;
     }
-    block_signals(this, true);
+    blockSignals(true);
 
     DataSet *dataSet = d->dataSets[index];
     //d->ui.datasetColor->setText(axis->titleText());
@@ -910,7 +902,7 @@ void DataSetConfigWidget::ui_dataSetSelectionChanged(int index)
     }
     d->selectedDataSet = index;
 
-    block_signals(this, false);
+    blockSignals(false);
 
     updateMarkers();
 }
