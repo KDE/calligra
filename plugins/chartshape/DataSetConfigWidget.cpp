@@ -763,19 +763,20 @@ void DataSetConfigWidget::updateData()
         d->ui.dataSetChartTypeMenu->setEnabled(true);
     }
 
-    // If the datasets have changed, set up the new ones.
-    if (newDataSets != d->dataSets) {
-        d->dataSets = newDataSets;
-        foreach (DataSet *dataSet, d->dataSets) {
-            QString title = dataSet->labelData().toString();
-            if (title.isEmpty())
-                title = i18n("Data Set %1", d->ui.dataSets->count() + 1);
-            d->ui.dataSets->addItem(title);
-        }
-        debugChartUiDataSet<<d->dataSets;
-        // Select the first data set
-        d->selectedDataSet = 0;
+    // always update, in case titles have changed
+    foreach (DataSet *dataSet, newDataSets) {
+        QString title = dataSet->labelData().toString();
+        if (title.isEmpty())
+            title = i18n("Data Set %1", d->ui.dataSets->count() + 1);
+        d->ui.dataSets->addItem(title);
     }
+    if (newDataSets != d->dataSets) {
+        d->selectedDataSet = 0; // new datasets, select the first
+        d->dataSets = newDataSets;
+        debugChartUiDataSet<<"new datasets"<<newDataSets;
+    }
+    d->ui.dataSets->setCurrentIndex(d->selectedDataSet);
+
     bool enableMarkers = !(chartType == BarChartType || chartType == StockChartType || chartType == CircleChartType
                             || chartType == RingChartType || chartType == BubbleChartType);
     d->ui.datasetMarkerMenu->setEnabled(enableMarkers);
@@ -807,6 +808,7 @@ void DataSetConfigWidget::createActions()
 void DataSetConfigWidget::ui_dataSetSelectionChanged(int index)
 {
     // Check for valid index
+    debugChartUiDataSet<<index<<d->dataSets;
     if (index < 0 || index >= d->dataSets.size()) {
         return;
     }

@@ -405,6 +405,7 @@ void PlotAreaConfigWidget::open(KoShape* shape)
         d->cellRegionDialog.categoryDataRegion->setValidator(d->cellRegionStringValidator);
 #endif
 
+        debugChartUiPlotArea<<"external data source";
         // If the data source is external, the editData button opens a
         // dialog to edit the data ranges instead of the data itself.
         d->ui.editData->setText(i18n("Data Ranges..."));
@@ -572,6 +573,7 @@ void PlotAreaConfigWidget::updateData()
     if (!d->shape) {
         return;
     }
+    blockSignals(true);
     if (d->type != d->shape->chartType() || d->subtype != d->shape->chartSubType()) {
         // Set the chart type icon in the chart type button.
         const QString iconName = QLatin1String(chartTypeIconName(d->shape->chartType(), d->shape->chartSubType()));
@@ -589,7 +591,18 @@ void PlotAreaConfigWidget::updateData()
     d->ui.threeDLook->setChecked(d->threeDMode);
     d->ui.threeDLook->setEnabled(enableThreeDOption);
 
+    d->cellRegionDialog.hide();
     d->dataSets = d->shape->plotArea()->dataSets();
+    d->cellRegionDialog.dataSets->clear();
+    int i = 1;
+    foreach (DataSet *dataSet, d->dataSets) {
+        QString title = dataSet->labelData().toString();
+        if (title.isEmpty())
+            title = i18n("Data Set %1", i++);
+        d->cellRegionDialog.dataSets->addItem(title);
+    }
+    blockSignals(false);
+    debugChartUiPlotArea<<"datasets blocked:"<<d->cellRegionDialog.dataSets->signalsBlocked();
     ui_dataSetSelectionChanged_CellRegionDialog(0);
 }
 
@@ -698,11 +711,20 @@ void PlotAreaConfigWidget::ui_dataSetLabelDataRegionChanged()
     DataSet *dataSet = d->dataSets[d->selectedDataSet_CellRegionDialog];
 
     emit dataSetLabelDataRegionChanged(dataSet, region);
+
+    // label may have changed
+    QString title = dataSet->labelData().toString();
+    if (title.isEmpty()) {
+        title = i18n("Data Set %1", d->selectedDataSet_CellRegionDialog);
+    }
+    d->cellRegionDialog.dataSets->setItemText(d->selectedDataSet_CellRegionDialog, title);
 }
+
 
 void PlotAreaConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog(int index)
 {
     // Check for valid index
+    debugChartUiPlotArea<<index<<d->dataSets;
     if (index < 0 || index >= d->dataSets.size())
         return;
 
@@ -710,13 +732,13 @@ void PlotAreaConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog(int index
     const int dimensions = dataSet->dimension();
 
     d->cellRegionDialog.labelDataRegion->setText(dataSet->labelDataRegion().toString());
-    if (dimensions > 1)
-    {
+    debugChartUiPlotArea<<"dim"<<dimensions;
+    if (dimensions > 1) {
         d->cellRegionDialog.xDataRegion->setEnabled(true);
         d->cellRegionDialog.xDataRegion->setText(dataSet->xDataRegion().toString());
-    }
-    else
+    } else {
         d->cellRegionDialog.xDataRegion->setEnabled(false);
+    }
     d->cellRegionDialog.yDataRegion->setText(dataSet->yDataRegion().toString());
     d->cellRegionDialog.categoryDataRegion->setText(dataSet->categoryDataRegion().toString());
 

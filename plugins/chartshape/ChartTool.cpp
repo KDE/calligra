@@ -365,6 +365,8 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
     connect(dataset, SIGNAL(axisAdded(AxisDimension,QString)),
             this,   SLOT(addAxis(AxisDimension,QString)));
 
+    connect(plotarea, SIGNAL(dataSetLabelDataRegionChanged(DataSet*, const CellRegion&)), dataset, SLOT(updateData()));
+
     connect(dataset, SIGNAL(pieExplodeFactorChanged(DataSet*,int)),
             this,   SLOT(setPieExplodeFactor(DataSet*,int)));
 
