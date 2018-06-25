@@ -272,6 +272,7 @@ void AxesConfigWidget::ui_axisSelectionChanged(int index)
     d->ui.axisShowMajorGridLines->setChecked(axis->showMajorGrid());
     d->ui.axisShowMinorGridLines->setChecked(axis->showMinorGrid());
 
+    blockSignals(&d->axisScalingDialog, true);
     if (axis->dimension() == YAxisDimension) {
         d->axisScalingDialog.logarithmicScaling->setEnabled(true);
     } else {
@@ -287,6 +288,7 @@ void AxesConfigWidget::ui_axisSelectionChanged(int index)
 
     d->axisScalingDialog.automaticSubStepWidth->setChecked(axis->useAutomaticMinorInterval());
     d->axisScalingDialog.subStepWidth->setEnabled(!axis->useAutomaticMinorInterval());
+    blockSignals(&d->axisScalingDialog, false);
 
     d->ui.gapBetweenBars->setValue(axis->gapBetweenBars());
     d->ui.gapBetweenSets->setValue(axis->gapBetweenSets());
