@@ -147,6 +147,7 @@ void LegendConfigWidget::updateData()
         return;
     }
     if (d->shape->legend()) {
+        blockSignals(true);
         d->ui.showLegend->setChecked(d->shape->legend()->isVisible());
 
         d->ui.legendTitle->setText(d->shape->legend()->title());
@@ -154,6 +155,7 @@ void LegendConfigWidget::updateData()
         d->ui.legendOrientation->setCurrentIndex(d->shape->legend()->expansion());
         d->ui.legendPosition->setCurrentIndex(toIndex(d->shape->legend()->legendPosition()));
         d->ui.legendAlignment->setCurrentIndex(toIndex(d->shape->legend()->alignment()));
+        blockSignals(false);
     }
 }
 

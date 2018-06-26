@@ -66,9 +66,11 @@ void TitlesConfigWidget::updateData()
     if (!m_shape) {
         return;
     }
+    blockSignals(true);
     m_ui.showTitle->setChecked(m_shape->title()->isVisible());
     m_ui.showSubTitle->setChecked(m_shape->subTitle()->isVisible());
     m_ui.showFooter->setChecked(m_shape->footer()->isVisible());
+    blockSignals(false);
 }
 
 
