@@ -513,9 +513,10 @@ QString CellRegion::toString() const
             result.append(d->pointToString(range.bottomRight()));
         }
 
-        // Separate ranges by a comma, except for the last one
+        // Separate ranges by a space
+        // See odf 18.3.6cellRangeAddressList
         if (i < d->rects.count() - 1)
-            result.append(';');
+            result.append(' ');
     }
     return result;
 }
