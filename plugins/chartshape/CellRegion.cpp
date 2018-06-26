@@ -370,7 +370,11 @@ CellRegion::CellRegion(TableSource *source, const QString& regions)
     const bool success = parser.parse();
     if (!success)
         debugChart << "Parsing cell region failed";
-    d->rects = parser.getResult().toVector();
+
+    QVector<QRect> rects = parser.getResult().toVector();
+    for (int i = 0; i < rects.count(); ++i) {
+        add(rects.at(i));
+    }
     d->table = source->get(parser.tableName());
 //     QStringList regionsList = regions.split(' ', QString::SkipEmptyParts);
 //     Q_FOREACH(const QString& region, regionsList) {
