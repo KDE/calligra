@@ -43,7 +43,6 @@ public:
     Private(QWidget *parent);
     ~Private();
 
-    ChartShape *shape;
     Ui::LegendConfigWidget ui;
 
     FontEditorDialog legendFontEditorDialog;
@@ -53,7 +52,6 @@ public:
 
 LegendConfigWidget::Private::Private(QWidget *parent)
 {
-    shape = 0;
 }
 
 LegendConfigWidget::Private::~Private()
@@ -88,19 +86,6 @@ LegendConfigWidget::LegendConfigWidget()
 LegendConfigWidget::~LegendConfigWidget()
 {
     delete d;
-}
-
-void LegendConfigWidget::open(KoShape* shape)
-{
-    d->shape = dynamic_cast<ChartShape*>(shape);
-    if (!d->shape) {
-        // a child may have been clicked
-        d->shape = dynamic_cast<ChartShape*>(shape->parent());
-        if (!d->shape) {
-            return;
-        }
-    }
-    updateData();
 }
 
 QAction * LegendConfigWidget::createAction()
@@ -143,18 +128,18 @@ int toIndex(Qt::Alignment align)
 
 void LegendConfigWidget::updateData()
 {
-    if (!d->shape) {
+    if (!chart) {
         return;
     }
-    if (d->shape->legend()) {
+    if (chart->legend()) {
         blockSignals(true);
-        d->ui.showLegend->setChecked(d->shape->legend()->isVisible());
+        d->ui.showLegend->setChecked(chart->legend()->isVisible());
 
-        d->ui.legendTitle->setText(d->shape->legend()->title());
+        d->ui.legendTitle->setText(chart->legend()->title());
 
-        d->ui.legendOrientation->setCurrentIndex(d->shape->legend()->expansion());
-        d->ui.legendPosition->setCurrentIndex(toIndex(d->shape->legend()->legendPosition()));
-        d->ui.legendAlignment->setCurrentIndex(toIndex(d->shape->legend()->alignment()));
+        d->ui.legendOrientation->setCurrentIndex(chart->legend()->expansion());
+        d->ui.legendPosition->setCurrentIndex(toIndex(chart->legend()->legendPosition()));
+        d->ui.legendAlignment->setCurrentIndex(toIndex(chart->legend()->alignment()));
         blockSignals(false);
     }
 }
@@ -222,7 +207,7 @@ void LegendConfigWidget::createActions()
 
 void LegendConfigWidget::ui_legendEditFontButtonClicked()
 {
-    QFont font = d->shape->legend()->font();
+    QFont font = chart->legend()->font();
     d->legendFontEditorDialog.fontChooser->setFont(font);
     d->legendFontEditorDialog.show();
 }

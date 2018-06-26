@@ -25,6 +25,8 @@
 
 #include <KoShapeConfigWidgetBase.h>
 
+#include "ChartShape.h"
+
 #include <QWidget>
 
 namespace KoChart
@@ -36,6 +38,19 @@ public:
     ConfigWidgetBase() {}
     ~ConfigWidgetBase() {}
 
+    // reimplemented from KoShapeConfigWidgetBase
+    void open(KoShape *shape) {
+        chart = dynamic_cast<ChartShape*>(shape);
+        if (!chart) {
+            chart = dynamic_cast<ChartShape*>(shape->parent());
+            if (!chart) {
+                return;
+            }
+        }
+        if (chart) {
+            updateData();
+        }
+    }
     // reimplemented from KoShapeConfigWidgetBase
     void save() { Q_ASSERT(false); }
 
@@ -53,6 +68,9 @@ public:
             lst.at(i)->blockSignals(block);
         }
     }
+
+public:
+    ChartShape *chart;
 };
 
 }  // namespace KoChart

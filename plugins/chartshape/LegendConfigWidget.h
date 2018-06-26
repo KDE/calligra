@@ -53,7 +53,6 @@ public:
     LegendConfigWidget();
     ~LegendConfigWidget();
 
-    void open(KoShape* shape);
     QAction * createAction();
 
     /// reimplemented

@@ -102,6 +102,7 @@ private Q_SLOTS:
     void slotGapBetweenSets();
 
 private:
+    Axis *axis(int index) const;
     void setupDialogs();
     void createActions();
 

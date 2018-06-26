@@ -83,9 +83,6 @@ public:
     Private(QWidget *parent);
     ~Private();
 
-    // The owner of this struct.
-    ChartShape            *shape;
-
     // Basic properties of the chart.
     ChartType              type;
     ChartSubtype           subtype;
@@ -180,7 +177,6 @@ PlotAreaConfigWidget::Private::Private(QWidget *parent)
 
 {
     selectedDataSet = 0;
-    shape = 0;
     tableSource = 0;
 
     type = KoChart::LastChartType;
@@ -375,26 +371,25 @@ void PlotAreaConfigWidget::deleteSubDialogs()
 
 void PlotAreaConfigWidget::open(KoShape* shape)
 {
-    d->shape = 0;
     d->tableSource = 0;
-    d->shape = dynamic_cast<ChartShape*>(shape);
-    if (!d->shape) {
+    ConfigWidgetBase::open(shape);
+    if (!chart) {
         return;
     }
-    d->tableSource = d->shape->tableSource();
+    d->tableSource = chart->tableSource();
 
 // NOTE: There's no single source table anymore, a Calligra Sheets workbook allows multiple to be used with a chart.
-//    KoChart::ChartModel *spreadSheetModel = qobject_cast<KoChart::ChartModel*>(d->shape->internalModel());
+//    KoChart::ChartModel *spreadSheetModel = qobject_cast<KoChart::ChartModel*>(chart->internalModel());
 // NOTE: This is obsolete, ChartShape::usesInternalModelOnly() is now used instead.
-//    ChartTableModel *tableModel = qobject_cast<ChartTableModel*>(d->shape->model());
+//    ChartTableModel *tableModel = qobject_cast<ChartTableModel*>(chart->model());
 //    d->isExternalDataSource = (spreadSheetModel != 0 && tableModel == 0);
 
 
     // Update the legend title
-    //d->ui.legendTitle->setText(d->shape->legend()->title());
+    //d->ui.legendTitle->setText(chart->legend()->title());
 
     // Fill the data table
-    if (!d->shape->usesInternalModelOnly()) {
+    if (!chart->usesInternalModelOnly()) {
  // FIXME: CellRegion itself together with a TableSource should now be used
  // to validate  the correctness of a table range address.
 #if 0
@@ -570,29 +565,29 @@ static bool supportsThreeD(ChartType type)
 
 void PlotAreaConfigWidget::updateData()
 {
-    if (!d->shape) {
+    if (!chart) {
         return;
     }
     blockSignals(true);
-    if (d->type != d->shape->chartType() || d->subtype != d->shape->chartSubType()) {
+    if (d->type != chart->chartType() || d->subtype != chart->chartSubType()) {
         // Set the chart type icon in the chart type button.
-        const QString iconName = QLatin1String(chartTypeIconName(d->shape->chartType(), d->shape->chartSubType()));
+        const QString iconName = QLatin1String(chartTypeIconName(chart->chartType(), chart->chartSubType()));
         if (!iconName.isEmpty()) {
             d->ui.chartTypeMenu->setIcon(QIcon::fromTheme(iconName));
         }
-        d->type = d->shape->chartType();
-        d->subtype = d->shape->chartSubType();
+        d->type = chart->chartType();
+        d->subtype = chart->chartSubType();
     }
 
     // If the "3D" checkbox is checked, then adapt the chart to that.
     bool enableThreeDOption = supportsThreeD(d->type);
-    d->threeDMode = enableThreeDOption && d->shape->isThreeD();
-    d->shape->setThreeD(d->threeDMode);
+    d->threeDMode = enableThreeDOption && chart->isThreeD();
+    chart->setThreeD(d->threeDMode);
     d->ui.threeDLook->setChecked(d->threeDMode);
     d->ui.threeDLook->setEnabled(enableThreeDOption);
 
     d->cellRegionDialog.hide();
-    d->dataSets = d->shape->plotArea()->dataSets();
+    d->dataSets = chart->plotArea()->dataSets();
     d->cellRegionDialog.dataSets->clear();
     int i = 1;
     foreach (DataSet *dataSet, d->dataSets) {
@@ -611,8 +606,8 @@ void PlotAreaConfigWidget::slotShowTableEditor()
 {
     if (!d->tableEditorDialog) {
         d->tableEditorDialog = new TableEditorDialog;
-        d->tableEditorDialog->setProxyModel(d->shape->proxyModel());
-        d->tableEditorDialog->setModel(d->shape->internalModel());
+        d->tableEditorDialog->setProxyModel(chart->proxyModel());
+        d->tableEditorDialog->setModel(chart->internalModel());
     }
 
     d->tableEditorDialog->show();

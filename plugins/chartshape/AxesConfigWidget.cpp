@@ -73,9 +73,6 @@ public:
     Private(QWidget *parent);
     ~Private();
 
-    // The owner of this struct.
-    ChartShape            *shape;
-
     Ui::AxesConfigWidget  ui;
 
     QList<Axis*>    dataSetAxes;
@@ -87,33 +84,16 @@ public:
     AxisScalingDialog axisScalingDialog;
     FontEditorDialog axisFontEditorDialog;
 
-    Axis *axis(int index) const;
 };
 
 
 AxesConfigWidget::Private::Private(QWidget *parent)
     : newAxisDialog(parent)
 {
-    shape = 0;
 }
 
 AxesConfigWidget::Private::~Private()
 {
-}
-
-Axis *AxesConfigWidget::Private::axis(int index) const
-{
-    Axis *axis = 0;
-    switch (index) {
-        case 0: axis = shape->plotArea()->xAxis(); break;
-        case 1: axis = shape->plotArea()->yAxis(); break;
-        case 2: axis = shape->plotArea()->secondaryXAxis(); break;
-        case 3: axis = shape->plotArea()->secondaryYAxis(); break;
-        default:
-            Q_ASSERT(false);
-            break;
-    }
-    return axis;
 }
 
 // ================================================================
@@ -147,6 +127,21 @@ AxesConfigWidget::~AxesConfigWidget()
     delete d;
 }
 
+Axis *AxesConfigWidget::axis(int index) const
+{
+    Axis *a = 0;
+    switch (index) {
+        case 0: a = chart->plotArea()->xAxis(); break;
+        case 1: a = chart->plotArea()->yAxis(); break;
+        case 2: a = chart->plotArea()->secondaryXAxis(); break;
+        case 3: a = chart->plotArea()->secondaryYAxis(); break;
+        default:
+            Q_ASSERT(false);
+            break;
+    }
+    return a;
+}
+
 void AxesConfigWidget::deleteSubDialogs()
 {
 }
@@ -154,17 +149,8 @@ void AxesConfigWidget::deleteSubDialogs()
 void AxesConfigWidget::open(KoShape* shape)
 {
     debugChartUiAxes<<shape;
-    d->shape = 0;
     d->axes.clear();
-
-    d->shape = dynamic_cast<ChartShape*>(shape);
-    if (!d->shape) {
-        d->shape = dynamic_cast<ChartShape*>(shape->parent());
-        if (!d->shape) {
-            return;
-        }
-    }
-    updateData();
+    ConfigWidgetBase::open(shape);
 }
 
 QAction * AxesConfigWidget::createAction()
@@ -184,8 +170,8 @@ static QString nonEmptyAxisTitle(Axis *axis, int index)
 
 void AxesConfigWidget::updateData()
 {
-    debugChartUiAxes<<d->shape<<d->ui.axes->currentIndex();
-    if (!d->shape) {
+    debugChartUiAxes<<chart<<d->ui.axes->currentIndex();
+    if (!chart) {
         return;
     }
     blockSignals(true);
@@ -232,7 +218,7 @@ void AxesConfigWidget::createActions()
 
 void AxesConfigWidget::ui_axisSelectionChanged(int index)
 {
-    Q_ASSERT(d->shape);
+    Q_ASSERT(chart);
     // Check for valid index
     if (index < 0 || index > 3) {
         warnChartUiAxes<<"Invalid axis index"<<index;
@@ -241,13 +227,13 @@ void AxesConfigWidget::ui_axisSelectionChanged(int index)
     Axis *axis = 0;
     switch (index) {
         case 0:
-            axis = d->shape->plotArea()->xAxis();
+            axis = chart->plotArea()->xAxis();
             break;
         case 1:
-            axis = d->shape->plotArea()->yAxis();
+            axis = chart->plotArea()->yAxis();
             break;
         case 2:
-            axis = d->shape->plotArea()->secondaryXAxis();
+            axis = chart->plotArea()->secondaryXAxis();
             if (!axis) {
                 debugChartUiAxes<<"create secondary x axis";
                 emit axisAdded(XAxisDimension, "TITLE");
@@ -255,7 +241,7 @@ void AxesConfigWidget::ui_axisSelectionChanged(int index)
             }
             break;
         case 3:
-            axis = d->shape->plotArea()->secondaryYAxis();
+            axis = chart->plotArea()->secondaryYAxis();
             if (!axis) {
                 debugChartUiAxes<<"create secondary y axis";
                 emit axisAdded(YAxisDimension, "TITLE");
@@ -299,91 +285,91 @@ void AxesConfigWidget::ui_axisSelectionChanged(int index)
 
 void AxesConfigWidget::ui_axisShowTitleChanged(bool b)
 {
-    Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis) {
-        emit axisShowTitleChanged(axis, b);
+    Axis *a = axis(d->ui.axes->currentIndex());
+    if (a) {
+        emit axisShowTitleChanged(a, b);
     }
 }
 
 void AxesConfigWidget::ui_axisShowChanged(bool b)
 {
-    Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis) {
-        debugChartUiAxes<<axis<<b;
-        emit axisShowChanged(axis, b);
+    Axis *a = axis(d->ui.axes->currentIndex());
+    if (a) {
+        debugChartUiAxes<<a<<b;
+        emit axisShowChanged(a, b);
     }
 }
 
 void AxesConfigWidget::ui_axisShowMajorGridLinesChanged(bool b)
 {
-    Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis) {
-        debugChartUiAxes<<axis<<b;
-        emit axisShowMajorGridLinesChanged(axis, b);
+    Axis *a = axis(d->ui.axes->currentIndex());
+    if (a) {
+        debugChartUiAxes<<a<<b;
+        emit axisShowMajorGridLinesChanged(a, b);
     }
 }
 
 void AxesConfigWidget::ui_axisShowMinorGridLinesChanged(bool b)
 {
-    Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis) {
-        debugChartUiAxes<<axis<<b;
-        emit axisShowMinorGridLinesChanged(axis, b);
+    Axis *a = axis(d->ui.axes->currentIndex());
+    if (a) {
+        debugChartUiAxes<<a<<b;
+        emit axisShowMinorGridLinesChanged(a, b);
     }
 }
 
 void AxesConfigWidget::ui_axisLabelsFontChanged()
 {
     QFont font = d->axisFontEditorDialog.fontChooser->font();
-    Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis) {
-        debugChartUiAxes<<axis<<font;
-        emit axisLabelsFontChanged(axis, font);
+    Axis *a = axis(d->ui.axes->currentIndex());
+    if (a) {
+        debugChartUiAxes<<a<<font;
+        emit axisLabelsFontChanged(a, font);
     }
 }
 
 void AxesConfigWidget::ui_axisUseLogarithmicScalingChanged(bool b)
 {
-    Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis) {
-        debugChartUiAxes<<axis<<b;
-        emit axisUseLogarithmicScalingChanged(axis, b);
+    Axis *a = axis(d->ui.axes->currentIndex());
+    if (a) {
+        debugChartUiAxes<<a<<b;
+        emit axisUseLogarithmicScalingChanged(a, b);
     }
 }
 
 void AxesConfigWidget::ui_axisStepWidthChanged(double width)
 {
-    Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis) {
-        debugChartUiAxes<<axis<<width;
-        emit axisStepWidthChanged(axis, width);
+    Axis *a = axis(d->ui.axes->currentIndex());
+    if (a) {
+        debugChartUiAxes<<a<<width;
+        emit axisStepWidthChanged(a, width);
     }
 }
 
 void AxesConfigWidget::ui_axisSubStepWidthChanged(double width)
 {
-    Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis) {
-        debugChartUiAxes<<axis<<width;
-        emit axisSubStepWidthChanged(axis, width);
+    Axis *a = axis(d->ui.axes->currentIndex());
+    if (a) {
+        debugChartUiAxes<<a<<width;
+        emit axisSubStepWidthChanged(a, width);
     }
 }
 
 void AxesConfigWidget::ui_axisUseAutomaticStepWidthChanged(bool b)
 {
-    Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis) {
-        debugChartUiAxes<<axis<<b;
-        emit axisUseAutomaticStepWidthChanged(axis, b);
+    Axis *a = axis(d->ui.axes->currentIndex());
+    if (a) {
+        debugChartUiAxes<<a<<b;
+        emit axisUseAutomaticStepWidthChanged(a, b);
     }
 }
 
 void AxesConfigWidget::ui_axisUseAutomaticSubStepWidthChanged(bool b)
 {
-    Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis) {
-        debugChartUiAxes<<axis<<b;
-        emit axisUseAutomaticSubStepWidthChanged(axis, b);
+    Axis *a = axis(d->ui.axes->currentIndex());
+    if (a) {
+        debugChartUiAxes<<a<<b;
+        emit axisUseAutomaticSubStepWidthChanged(a, b);
     }
 }
 
@@ -394,9 +380,9 @@ void AxesConfigWidget::ui_axisScalingButtonClicked()
 
 void AxesConfigWidget::ui_axisEditFontButtonClicked()
 {
-    Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis) {
-        QFont font = axis->font();
+    Axis *a = axis(d->ui.axes->currentIndex());
+    if (a) {
+        QFont font = a->font();
         d->axisFontEditorDialog.fontChooser->setFont(font);
         d->axisFontEditorDialog.show();
     }
@@ -404,18 +390,18 @@ void AxesConfigWidget::ui_axisEditFontButtonClicked()
 
 void AxesConfigWidget::slotGapBetweenBars()
 {
-    Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis && axis->dimension() == YAxisDimension) {
-        debugChartUiAxes<<axis<<d->ui.gapBetweenBars->value();
-        emit gapBetweenBarsChanged(axis, d->ui.gapBetweenBars->value());
+    Axis *a = axis(d->ui.axes->currentIndex());
+    if (a && a->dimension() == YAxisDimension) {
+        debugChartUiAxes<<a<<d->ui.gapBetweenBars->value();
+        emit gapBetweenBarsChanged(a, d->ui.gapBetweenBars->value());
     }
 }
 
 void AxesConfigWidget::slotGapBetweenSets()
 {
-    Axis *axis = d->axis(d->ui.axes->currentIndex());
-    if (axis && axis->dimension() == YAxisDimension) {
-        debugChartUiAxes<<axis<<d->ui.gapBetweenSets->value();
-        emit gapBetweenSetsChanged(axis, d->ui.gapBetweenSets->value());
+    Axis *a = axis(d->ui.axes->currentIndex());
+    if (a && a->dimension() == YAxisDimension) {
+        debugChartUiAxes<<a<<d->ui.gapBetweenSets->value();
+        emit gapBetweenSetsChanged(a, d->ui.gapBetweenSets->value());
     }
 }

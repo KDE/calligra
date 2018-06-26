@@ -54,8 +54,7 @@ public:
     TitlesConfigWidget();
     ~TitlesConfigWidget();
 
-    void open(KoShape* shape);
-    QAction * createAction();
+    QAction *createAction();
 
     /// reimplemented
     virtual bool showOnShapeCreate() { return true; }
@@ -69,7 +68,6 @@ Q_SIGNALS:
     void showFooterChanged(bool);
 
 private:
-    ChartShape *m_shape;
     Ui::TitlesConfigWidget  m_ui;
 };
 

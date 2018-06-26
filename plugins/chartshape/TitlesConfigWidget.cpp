@@ -31,7 +31,6 @@ using namespace KoChart;
 
 
 TitlesConfigWidget::TitlesConfigWidget()
-    : m_shape(0)
 {
     setObjectName("TitlesConfigWdget");
     m_ui.setupUi(this);
@@ -46,30 +45,15 @@ TitlesConfigWidget::~TitlesConfigWidget()
 {
 }
 
-void TitlesConfigWidget::open(KoShape* shape)
-{
-    qInfo()<<Q_FUNC_INFO<<shape;
-    m_shape = dynamic_cast<ChartShape*>(shape);
-    if (!m_shape) {
-        // a child may have been clicked
-        m_shape = dynamic_cast<ChartShape*>(shape->parent());
-        if (!m_shape) {
-            return;
-        }
-    }
-    updateData();
-}
-
-
 void TitlesConfigWidget::updateData()
 {
-    if (!m_shape) {
+    if (!chart) {
         return;
     }
     blockSignals(true);
-    m_ui.showTitle->setChecked(m_shape->title()->isVisible());
-    m_ui.showSubTitle->setChecked(m_shape->subTitle()->isVisible());
-    m_ui.showFooter->setChecked(m_shape->footer()->isVisible());
+    m_ui.showTitle->setChecked(chart->title()->isVisible());
+    m_ui.showSubTitle->setChecked(chart->subTitle()->isVisible());
+    m_ui.showFooter->setChecked(chart->footer()->isVisible());
     blockSignals(false);
 }
 

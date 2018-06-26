@@ -78,8 +78,6 @@ public:
     Private(QWidget *parent);
     ~Private();
 
-    ChartShape *shape;
-
     Ui::DataSetConfigWidget ui;
 
     QList<Axis*> dataSetAxes;
@@ -177,7 +175,6 @@ DataSetConfigWidget::Private::Private(QWidget *parent)
     : formatErrorBarDialog(parent)
 
 {
-    shape = 0;
     selectedDataSet = 0;
 
     dataSetBarChartMenu = 0;
@@ -400,22 +397,14 @@ void DataSetConfigWidget::open(KoShape* shape)
     debugChartUiDataSet<<shape;
 
     // reset these so we do not risc using old, deleted data
-    d->shape = 0;
     // these are recalculated in updateData() anyway
     d->dataSetAxes.clear();
     d->dataSets.clear();
 
-    d->shape = dynamic_cast<ChartShape*>(shape);
-    if (!d->shape) {
-        d->shape = dynamic_cast<ChartShape*>(shape->parent());
-        if (!d->shape) {
-            return;
-        }
-    }
-    updateData();
+    ConfigWidgetBase::open(shape);
 }
 
-QAction * DataSetConfigWidget::createAction()
+QAction *DataSetConfigWidget::createAction()
 {
     return 0;
 }
@@ -511,8 +500,8 @@ void DataSetConfigWidget::ui_dataSetHasChartTypeChanged(bool b)
     if (!dataSet) {
         return;
     }
-    emit dataSetChartTypeChanged(dataSet, b ? d->shape->chartType() : LastChartType);
-    emit dataSetChartSubTypeChanged(dataSet, b ? d->shape->chartSubType() : NoChartSubtype);
+    emit dataSetChartTypeChanged(dataSet, b ? chart->chartType() : LastChartType);
+    emit dataSetChartSubTypeChanged(dataSet, b ? chart->chartSubType() : NoChartSubtype);
 }
 
 void DataSetConfigWidget::dataSetChartTypeSelected(QAction *action)
@@ -693,14 +682,14 @@ void DataSetConfigWidget::datasetPenSelected(const QColor& color)
 
 void DataSetConfigWidget::updateData()
 {
-    if (!d->shape) {
+    if (!chart) {
         return;
     }
     blockSignals(true);
     d->dataSetAxes.clear();
     d->ui.dataSets->clear();
     // This is used in a couple of places.
-    QList<DataSet*> newDataSets = d->shape->plotArea()->dataSets();
+    QList<DataSet*> newDataSets = chart->plotArea()->dataSets();
     debugChartUiDataSet<<d->selectedDataSet<<d->dataSets<<':'<<newDataSets;
 
     // Update "Pie Properties" in "Data Sets" tab
@@ -708,7 +697,7 @@ void DataSetConfigWidget::updateData()
         d->ui.pieExplodeFactor->setValue((int)(newDataSets.at(0)->pieAttributes().explodeFactor()*100));
     }
 
-    ChartType chartType = d->shape->chartType();
+    ChartType chartType = chart->chartType();
 
     // Update the chart type specific settings in the "Data Sets" tab
     if (chartType == BarChartType) {
@@ -746,9 +735,9 @@ void DataSetConfigWidget::updateData()
 
         // All the cartesian chart types have axes.
 //         d->ui.axisConfiguration->setEnabled(true);
-        d->dataSetAxes.append(d->shape->plotArea()->yAxis());
-        if (d->shape->plotArea()->secondaryYAxis() && d->shape->plotArea()->secondaryYAxis()->isVisible()) {
-            d->dataSetAxes.append(d->shape->plotArea()->secondaryYAxis());
+        d->dataSetAxes.append(chart->plotArea()->yAxis());
+        if (chart->plotArea()->secondaryYAxis() && chart->plotArea()->secondaryYAxis()->isVisible()) {
+            d->dataSetAxes.append(chart->plotArea()->secondaryYAxis());
         }
         d->ui.dataSetAxes->setEnabled(true);
         d->ui.dataSetHasChartType->setEnabled(true);
