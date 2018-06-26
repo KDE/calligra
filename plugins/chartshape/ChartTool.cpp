@@ -441,10 +441,18 @@ void ChartTool::setDataSetLabelDataRegion(DataSet *dataSet, const CellRegion &re
 
 void ChartTool::setDataSetCategoryDataRegion(DataSet *dataSet, const CellRegion &region)
 {
-    if (!dataSet)
+    if (!dataSet) {
         return;
-
-    dataSet->setCategoryDataRegion(region);
+    }
+    if (isCartesian(d->shape->chartType())) {
+        // FIXME: Seems strange the way things are stored in multiple places
+        // Categories are labels on the categories axis
+        dataSet->setCategoryDataRegion(region); // probaly should not be stored here, as datasets cannot have individulal categories
+        d->shape->plotArea()->proxyModel()->setCategoryDataRegion(region); // this seems to be for odf only!?
+    } else {
+        // Categories are legend texts
+        dataSet->setCategoryDataRegion(region);
+    }
 }
 
 
