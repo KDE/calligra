@@ -194,8 +194,15 @@
   <url type="help">http://userbase.kde.org/Gemini/Manual</url>
   <screenshots>
     <screenshot type="default">
+      <caption>A presentation loaded directly from DropBox, in Edit mode</caption>
       <image>https://cdn.kde.org/screenshots/calligra/presentation-loaded-from-dropbox.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>A text document in the traditional desktop style UI (Create mode)</caption>
       <image>https://cdn.kde.org/screenshots/calligra/words-desktop-mode.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>A text document in Create mode with the notes panel shown</caption>
       <image>https://cdn.kde.org/screenshots/calligra/words-touch-mode-with-notes-panel.png</image>
     </screenshot>
   </screenshots>
