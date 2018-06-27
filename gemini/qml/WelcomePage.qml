@@ -36,6 +36,8 @@ Kirigami.ApplicationItem {
         id: welcomeSidebar;
         title: "Calligra Gemini"
         titleIcon: Settings.theme.iconActual("Calligra-MockIcon-1");
+        drawerOpen: true;
+        modal: false;
         actions: [
             Kirigami.Action  {
                 text: "OPEN"
