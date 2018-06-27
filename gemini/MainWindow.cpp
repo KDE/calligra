@@ -154,6 +154,13 @@ public:
     void initTouchView(QObject* parent)
     {
         touchView = new QQuickWidget();
+        // See https://bugreports.qt.io/browse/QTBUG-66718
+        static QVersionNumber qtVersion = QVersionNumber::fromString(qVersion());
+        static bool shouldAcceptTouchEvents = qtVersion > QVersionNumber(5, 9, 3) && qtVersion.normalized() != QVersionNumber(5, 10);
+        if(shouldAcceptTouchEvents)
+        {
+            touchView->setAttribute(Qt::WA_AcceptTouchEvents);
+        }
         QmlGlobalEngine::instance()->setEngine(touchView->engine());
         touchView->engine()->addImageProvider(QLatin1String("recentimage"), new RecentImageImageProvider);
         touchView->engine()->rootContext()->setContextProperty("mainWindow", parent);
