@@ -151,16 +151,20 @@ public:
     QAction* alternativeSaveAction;
     QTimer* fullScreenThrottle;
 
+    void shouldAcceptTouchEvents(QWidget* widget) {
+        // See https://bugreports.qt.io/browse/QTBUG-66718
+        static QVersionNumber qtVersion = QVersionNumber::fromString(qVersion());
+        static bool shouldWidgetAcceptTouchEvents = qtVersion > QVersionNumber(5, 9, 3) && qtVersion.normalized() != QVersionNumber(5, 10);
+        if(shouldWidgetAcceptTouchEvents)
+        {
+            widget->setAttribute(Qt::WA_AcceptTouchEvents, true);
+        }
+    }
+
     void initTouchView(QObject* parent)
     {
         touchView = new QQuickWidget();
-        // See https://bugreports.qt.io/browse/QTBUG-66718
-        static QVersionNumber qtVersion = QVersionNumber::fromString(qVersion());
-        static bool shouldAcceptTouchEvents = qtVersion > QVersionNumber(5, 9, 3) && qtVersion.normalized() != QVersionNumber(5, 10);
-        if(shouldAcceptTouchEvents)
-        {
-            touchView->setAttribute(Qt::WA_AcceptTouchEvents);
-        }
+        shouldAcceptTouchEvents(touchView);
         QmlGlobalEngine::instance()->setEngine(touchView->engine());
         touchView->engine()->addImageProvider(QLatin1String("recentimage"), new RecentImageImageProvider);
         touchView->engine()->rootContext()->setContextProperty("mainWindow", parent);
@@ -296,6 +300,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     setWindowTitle(i18n("Calligra Gemini"));
     setWindowIcon(koIcon("calligragemini"));//gemini"));
     resize(QApplication::desktop()->availableGeometry().size() * 3/4);
+    d->shouldAcceptTouchEvents(this);
 
     foreach(const QString &fileName, fileNames) {
         DocumentManager::instance()->recentFileManager()->addRecent( QDir::current().absoluteFilePath( fileName ) );
