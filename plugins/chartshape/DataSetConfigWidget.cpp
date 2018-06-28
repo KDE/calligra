@@ -27,6 +27,7 @@
 // Qt
 #include <QAction>
 #include <QMenu>
+#include <QLatin1String>
 
 // KF5
 #include <klocalizedstring.h>
@@ -212,62 +213,6 @@ DataSetConfigWidget::Private::~Private()
 // ================================================================
 //                     class DataSetConfigWidget
 
-/**
- * Returns, if existent, the name of the icon representing
- * a given chart type, following the KDE4 icon naming convention.
- */
-static const char * chartTypeIconName(ChartType type, ChartSubtype subtype)
-{
-    switch(type) {
-    case BarChartType:
-        switch(subtype) {
-        case NormalChartSubtype:
-            return koIconNameCStr("office-chart-bar");
-        case StackedChartSubtype:
-            return koIconNameCStr("office-chart-bar-stacked");
-        case PercentChartSubtype:
-            return koIconNameCStr("office-chart-bar-percentage");
-        default:
-            Q_ASSERT("Invalid bar chart subtype!");
-        }
-    case LineChartType:
-        switch(subtype) {
-        case NormalChartSubtype:
-            return koIconNameCStr("office-chart-line");
-        case StackedChartSubtype:
-            return koIconNameCStr("office-chart-line-stacked");
-        case PercentChartSubtype:
-            return koIconNameCStr("office-chart-line-percentage");
-        default:
-            Q_ASSERT("Invalid line chart subtype!");
-        }
-    case AreaChartType:
-        switch(subtype) {
-        case NormalChartSubtype:
-            return koIconNameCStr("office-chart-area");
-        case StackedChartSubtype:
-            return koIconNameCStr("office-chart-area-stacked");
-        case PercentChartSubtype:
-            return koIconNameCStr("office-chart-area-percentage");
-        default:
-            Q_ASSERT("Invalid area chart subtype!");
-        }
-    case CircleChartType:
-        return koIconNameCStr("office-chart-pie");
-    case RingChartType:
-        return koIconNameCStr("office-chart-ring");
-    case RadarChartType:
-        return koIconNameCStr("office-chart-polar");
-    case FilledRadarChartType:
-        return koIconNameCStr("office-chart-polar-filled");
-    case ScatterChartType:
-        return koIconNameCStr("office-chart-scatter");
-    default:
-        return "";
-    }
-
-    return "";
-}
 
 DataSetConfigWidget::DataSetConfigWidget()
     : d(new Private(this))
@@ -276,42 +221,42 @@ DataSetConfigWidget::DataSetConfigWidget()
     d->ui.setupUi(this);
 
     // Data set chart type button
-    QMenu *dataSetChartTypeMenu = new QMenu(this);
+    QMenu *dataSetChartTypeMenu = new QMenu(i18n("Chart Type"), this);
 
     // Default chart type is a bar chart
-    dataSetChartTypeMenu->setIcon(koIcon("office-chart-bar"));
+    dataSetChartTypeMenu->setIcon(ICON1(BarChartType));
 
 
-    d->dataSetBarChartMenu = dataSetChartTypeMenu->addMenu(koIcon("office-chart-bar"), "Bar Chart");
-    d->dataSetNormalBarChartAction  = d->dataSetBarChartMenu->addAction(koIcon("office-chart-bar"), i18n("Normal"));
-    d->dataSetStackedBarChartAction = d->dataSetBarChartMenu->addAction(koIcon("office-chart-bar-stacked"), i18n("Stacked"));
-    d->dataSetPercentBarChartAction = d->dataSetBarChartMenu->addAction(koIcon("office-chart-bar-percentage"), i18n("Percent"));
+    d->dataSetBarChartMenu = dataSetChartTypeMenu->addMenu(ICON1(BarChartType), i18n("Bar Chart"));
+    d->dataSetNormalBarChartAction  = d->dataSetBarChartMenu->addAction(ICON2(BarChartType, NormalChartSubtype), i18n("Normal"));
+    d->dataSetStackedBarChartAction = d->dataSetBarChartMenu->addAction(ICON2(BarChartType, StackedChartSubtype), i18n("Stacked"));
+    d->dataSetPercentBarChartAction = d->dataSetBarChartMenu->addAction(ICON2(BarChartType, PercentChartSubtype), i18n("Percent"));
 
-    d->dataSetLineChartMenu = dataSetChartTypeMenu->addMenu(koIcon("office-chart-line"), "Line Chart");
-    d->dataSetNormalLineChartAction  = d->dataSetLineChartMenu->addAction(koIcon("office-chart-line"), i18n("Normal"));
-    d->dataSetStackedLineChartAction = d->dataSetLineChartMenu->addAction(koIcon("office-chart-line-stacked"), i18n("Stacked"));
-    d->dataSetPercentLineChartAction = d->dataSetLineChartMenu->addAction(koIcon("office-chart-line-percentage"), i18n("Percent"));
+    d->dataSetLineChartMenu = dataSetChartTypeMenu->addMenu(ICON1(LineChartType), i18n("Line Chart"));
+    d->dataSetNormalLineChartAction  = d->dataSetLineChartMenu->addAction(ICON2(LineChartType, NormalChartSubtype), i18n("Normal"));
+    d->dataSetStackedLineChartAction = d->dataSetLineChartMenu->addAction(ICON2(LineChartType, NormalChartSubtype), i18n("Stacked"));
+    d->dataSetPercentLineChartAction = d->dataSetLineChartMenu->addAction(ICON2(LineChartType, NormalChartSubtype), i18n("Percent"));
 
-    d->dataSetAreaChartMenu = dataSetChartTypeMenu->addMenu(koIcon("office-chart-area"), "Area Chart");
-    d->dataSetNormalAreaChartAction  = d->dataSetAreaChartMenu->addAction(koIcon("office-chart-area"), i18n("Normal"));
-    d->dataSetStackedAreaChartAction = d->dataSetAreaChartMenu->addAction(koIcon("office-chart-area-stacked"), i18n("Stacked"));
-    d->dataSetPercentAreaChartAction = d->dataSetAreaChartMenu->addAction(koIcon("office-chart-area-percentage"), i18n("Percent"));
+    d->dataSetAreaChartMenu = dataSetChartTypeMenu->addMenu(ICON1(AreaChartType), i18n("Area Chart"));
+    d->dataSetNormalAreaChartAction  = d->dataSetAreaChartMenu->addAction(ICON2(AreaChartType, NormalChartSubtype), i18n("Normal"));
+    d->dataSetStackedAreaChartAction = d->dataSetAreaChartMenu->addAction(ICON2(AreaChartType, StackedChartSubtype), i18n("Stacked"));
+    d->dataSetPercentAreaChartAction = d->dataSetAreaChartMenu->addAction(ICON2(AreaChartType, PercentChartSubtype), i18n("Percent"));
 
-    d->dataSetCircleChartAction = dataSetChartTypeMenu->addAction(koIcon("office-chart-pie"), i18n("Pie Chart"));
-    d->dataSetRingChartAction = dataSetChartTypeMenu->addAction(koIcon("office-chart-ring"), i18n("Ring Chart"));
+    d->dataSetCircleChartAction = dataSetChartTypeMenu->addAction(ICON1(CircleChartType), i18n("Pie Chart"));
+    d->dataSetRingChartAction = dataSetChartTypeMenu->addAction(ICON1(RingChartType), i18n("Ring Chart"));
 
-    d->dataSetRadarChartMenu = dataSetChartTypeMenu->addMenu(koIcon("office-chart-polar"), "Polar Chart");
-    d->dataSetRadarChartAction = d->dataSetRadarChartMenu->addAction(koIcon("office-chart-polar"), i18n("Normal"));
-    d->dataSetFilledRadarChartAction = d->dataSetRadarChartMenu->addAction(koIcon("office-chart-polar-filled"), i18n("Filled"));
+    d->dataSetRadarChartMenu = dataSetChartTypeMenu->addMenu(ICON1(RadarChartType), i18n("Polar Chart"));
+    d->dataSetRadarChartAction = d->dataSetRadarChartMenu->addAction(ICON2(RadarChartType, NoChartSubtype), i18n("Normal"));
+    d->dataSetFilledRadarChartAction = d->dataSetRadarChartMenu->addAction(ICON2(FilledRadarChartType, NoChartSubtype), i18n("Filled"));
 
-    d->dataSetStockChartMenu = dataSetChartTypeMenu->addMenu("Stock Chart");
-    d->dataSetHLCStockChartAction = d->dataSetStockChartMenu->addAction(i18n("HighLowClose"));
-    d->dataSetOHLCStockChartAction = d->dataSetStockChartMenu->addAction(i18n("OpenHighLowClose"));
-    d->dataSetCandlestickStockChartAction = d->dataSetStockChartMenu->addAction(i18n("Candlestick"));
+    d->dataSetStockChartMenu = dataSetChartTypeMenu->addMenu(ICON1(StockChartType), i18n("Stock Chart"));
+    d->dataSetHLCStockChartAction = d->dataSetStockChartMenu->addAction(ICON2(StockChartType, HighLowCloseChartSubtype), i18n("HighLowClose"));
+    d->dataSetOHLCStockChartAction = d->dataSetStockChartMenu->addAction(ICON2(StockChartType, OpenHighLowCloseChartSubtype), i18n("OpenHighLowClose"));
+    d->dataSetCandlestickStockChartAction = d->dataSetStockChartMenu->addAction(ICON2(StockChartType, CandlestickChartSubtype), i18n("Candlestick"));
 
-    d->dataSetBubbleChartAction = dataSetChartTypeMenu->addAction(i18n("Bubble Chart"));
+    d->dataSetBubbleChartAction = dataSetChartTypeMenu->addAction(ICON1(BubbleChartType), i18n("Bubble Chart"));
 
-    d->dataSetScatterChartAction = dataSetChartTypeMenu->addAction(koIcon("office-chart-scatter"), i18n("Scatter Chart"));
+    d->dataSetScatterChartAction = dataSetChartTypeMenu->addAction(ICON1(ScatterChartType), i18n("Scatter Chart"));
 
     d->ui.dataSetChartTypeMenu->setMenu(dataSetChartTypeMenu);
 
@@ -582,7 +527,7 @@ void DataSetConfigWidget::dataSetChartTypeSelected(QAction *action)
     if (!dataSet)
         return;
 
-    const QString iconName = QLatin1String(chartTypeIconName(type, subtype));
+    const QLatin1String iconName = chartTypeIconName(type, subtype);
     if (!iconName.isEmpty())
         d->ui.dataSetChartTypeMenu->setIcon(QIcon::fromTheme(iconName));
 
@@ -816,79 +761,8 @@ void DataSetConfigWidget::ui_dataSetSelectionChanged(int index)
 
     Q_ASSERT(d->ui.dataSetChartTypeMenu->menu());
 
-    if (dataSet->chartType() == LastChartType) {
-        d->ui.dataSetChartTypeMenu->setIcon(QIcon());
-    } else {
-        switch (dataSet->chartType()) {
-        case BarChartType:
-            switch (dataSet->chartSubType()) {
-            case StackedChartSubtype:
-                d->ui.dataSetChartTypeMenu->setIcon(koIcon("office-chart-bar-stacked"));
-                break;
-            case PercentChartSubtype:
-                d->ui.dataSetChartTypeMenu->setIcon(koIcon("office-chart-bar-percentage"));
-                break;
-            default:
-                d->ui.dataSetChartTypeMenu->setIcon(koIcon("office-chart-bar"));
-            }
-            break;
-        case LineChartType:
-            switch (dataSet->chartSubType()) {
-            case StackedChartSubtype:
-                d->ui.dataSetChartTypeMenu->setIcon(koIcon("office-chart-line-stacked"));
-                break;
-            case PercentChartSubtype:
-                d->ui.dataSetChartTypeMenu->setIcon(koIcon("office-chart-line-percentage"));
-                break;
-            default:
-                d->ui.dataSetChartTypeMenu->setIcon(koIcon("office-chart-line"));
-            }
-            break;
-        case AreaChartType:
-            switch (dataSet->chartSubType()) {
-            case StackedChartSubtype:
-                d->ui.dataSetChartTypeMenu->setIcon(koIcon("office-chart-area-stacked"));
-                break;
-            case PercentChartSubtype:
-                d->ui.dataSetChartTypeMenu->setIcon(koIcon("office-chart-area-percentage"));
-                break;
-            default:
-                d->ui.dataSetChartTypeMenu->setIcon(koIcon("office-chart-area"));
-            }
-            break;
-        case CircleChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(koIcon("office-chart-pie"));
-            break;
-        case RingChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(koIcon("office-chart-ring"));
-            break;
-        case ScatterChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(koIcon("office-chart-scatter"));
-            break;
-        case RadarChartType:
-            d->ui.dataSetChartTypeMenu->setIcon(koIcon("office-chart-polar"));
-            break;
-        case FilledRadarChartType:
-            d->ui.dataSetChartTypeMenu->setIcon(koIcon("office-chart-polar-filled"));
-            break;
-        case StockChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(koIcon("office-chart-stock"));
-            break;
-        case BubbleChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(koIcon("office-chart-bubble"));
-            break;
-        case SurfaceChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(koIcon("office-chart-surface"));
-            break;
-        case GanttChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(koIcon("office-chart-gantt"));
-            break;
+    d->ui.dataSetChartTypeMenu->setIcon(ICON2(dataSet->chartType(), dataSet->chartSubType()));
 
-            // Fixes a warning that LastChartType isn't handled.
-        default:
-            break;
-        }
-    }
     d->selectedDataSet = index;
 
     blockSignals(false);

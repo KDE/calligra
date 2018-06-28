@@ -75,8 +75,71 @@ int numDimensions(ChartType type)
     case LastChartType:
         dimensions = 1;
     }
-    
+
     return dimensions;
+}
+
+QMap<QPair<qint64, qint64>, QLatin1String> chartTypeIconMap;
+
+void insertIcon(ChartType type, ChartSubtype subtype, const QLatin1String &name)
+{
+    chartTypeIconMap[QPair<qint64, qint64>((qint64)(type), (qint64)(subtype))] = name;
+}
+
+void initchartTypeIconMap()
+{
+    // Bar charts
+    insertIcon(BarChartType, NoChartSubtype, QLatin1String("office-chart-bar"));
+    insertIcon(BarChartType, NormalChartSubtype, QLatin1String("office-chart-bar"));
+    insertIcon(BarChartType, StackedChartSubtype, QLatin1String("office-chart-bar-stacked"));
+    insertIcon(BarChartType, PercentChartSubtype, QLatin1String("office-chart-bar-percent"));
+
+    // Line charts
+    insertIcon(LineChartType, NoChartSubtype, QLatin1String("office-chart-line"));
+    insertIcon(LineChartType, NormalChartSubtype, QLatin1String("office-chart-line"));
+    insertIcon(LineChartType, StackedChartSubtype, QLatin1String("office-chart-line-stacked"));
+    insertIcon(LineChartType, PercentChartSubtype, QLatin1String("office-chart-line-percent"));
+
+    // Area charts
+    insertIcon(AreaChartType, NoChartSubtype, QLatin1String("office-chart-area"));
+    insertIcon(AreaChartType, NormalChartSubtype, QLatin1String("office-chart-area"));
+    insertIcon(AreaChartType, StackedChartSubtype, QLatin1String("office-chart-area-stacked"));
+    insertIcon(AreaChartType, PercentChartSubtype, QLatin1String("office-chart-area-percent"));
+
+    // Circular charts: pie and ring
+    insertIcon(CircleChartType, NoChartSubtype, QLatin1String("office-chart-pie"));
+    insertIcon(CircleChartType, NormalChartSubtype, QLatin1String("office-chart-pie"));
+
+    insertIcon(RingChartType, NoChartSubtype, QLatin1String("office-chart-ring"));
+    insertIcon(RingChartType, NormalChartSubtype, QLatin1String("office-chart-ring"));
+
+    // Polar charts: radar
+    insertIcon(RadarChartType, NoChartSubtype, QLatin1String("office-chart-polar"));
+    insertIcon(FilledRadarChartType, NoChartSubtype, QLatin1String("office-chart-polar-filled"));
+
+    // X/Y charts: scatter and bubble
+    insertIcon(ScatterChartType, NoChartSubtype, QLatin1String("office-chart-scatter"));
+    insertIcon(ScatterChartType, NormalChartSubtype, QLatin1String("office-chart-scatter"));
+
+    insertIcon(BubbleChartType, NoChartSubtype, QLatin1String("skg-chart-bubble"));
+    insertIcon(BubbleChartType, NormalChartSubtype, QLatin1String("skg-chart-bubble"));
+
+    // Stock Charts
+    insertIcon(StockChartType, NoChartSubtype, QLatin1String());
+    insertIcon(StockChartType, HighLowCloseChartSubtype, QLatin1String());
+    insertIcon(StockChartType, OpenHighLowCloseChartSubtype, QLatin1String());
+    insertIcon(StockChartType, CandlestickChartSubtype, QLatin1String());
+
+    // TODO surface/gantt
+}
+
+QLatin1String chartTypeIconName(ChartType type, ChartSubtype subtype)
+{
+    QPair<qint64, qint64> entry((qint64)(type), (qint64)(subtype));
+    if (chartTypeIconMap.isEmpty()) {
+        initchartTypeIconMap();
+    }
+    return chartTypeIconMap.value(entry);
 }
 
 } // namespace KoChart

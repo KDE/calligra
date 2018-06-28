@@ -23,6 +23,7 @@
 #ifndef KCHART_GLOBAL_H
 #define KCHART_GLOBAL_H
 
+#include <QLatin1String>
 #include <QDebug>
 
 #include <KoTextShapeData.h>
@@ -64,6 +65,11 @@ enum ChartSubtype {
     OpenHighLowCloseChartSubtype,
     CandlestickChartSubtype
 };
+
+QLatin1String chartTypeIconName(ChartType type, ChartSubtype subtype);
+#define ICON1(charttype) QIcon::fromTheme(chartTypeIconName(charttype, NoChartSubtype))
+#define ICON2(charttype, chartsubtype) QIcon::fromTheme(chartTypeIconName(charttype, chartsubtype))
+
 
 enum AxisDimension {
     XAxisDimension,

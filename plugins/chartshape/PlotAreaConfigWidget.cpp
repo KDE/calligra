@@ -31,6 +31,8 @@
 #include <QVBoxLayout>
 #include <QToolButton>
 #include <QMenu>
+#include <QPair>
+#include <QLatin1String>
 
 // KF5
 #include <klocalizedstring.h>
@@ -75,7 +77,6 @@
 #include "ChartDebug.h"
 
 using namespace KoChart;
-
 
 class PlotAreaConfigWidget::Private
 {
@@ -221,63 +222,6 @@ PlotAreaConfigWidget::Private::~Private()
 // ================================================================
 //                     class PlotAreaConfigWidget
 
-/**
- * Returns, if existent, the name of the icon representing
- * a given chart type, following the KDE icon naming convention.
- */
-static const char * chartTypeIconName(ChartType type, ChartSubtype subtype)
-{
-    switch(type) {
-    case BarChartType:
-        switch(subtype) {
-        case NormalChartSubtype:
-            return koIconNameCStr("office-chart-bar");
-        case StackedChartSubtype:
-            return koIconNameCStr("office-chart-bar-stacked");
-        case PercentChartSubtype:
-            return koIconNameCStr("office-chart-bar-percentage");
-        default:
-            Q_ASSERT("Invalid bar chart subtype!");
-        }
-    case LineChartType:
-        switch(subtype) {
-        case NormalChartSubtype:
-            return koIconNameCStr("office-chart-line");
-        case StackedChartSubtype:
-            return koIconNameCStr("office-chart-line-stacked");
-        case PercentChartSubtype:
-            return koIconNameCStr("office-chart-line-percentage");
-        default:
-            Q_ASSERT("Invalid line chart subtype!");
-        }
-    case AreaChartType:
-        switch(subtype) {
-        case NormalChartSubtype:
-            return koIconNameCStr("office-chart-area");
-        case StackedChartSubtype:
-            return koIconNameCStr("office-chart-area-stacked");
-        case PercentChartSubtype:
-            return koIconNameCStr("office-chart-area-percentage");
-        default:
-            Q_ASSERT("Invalid area chart subtype!");
-        }
-    case CircleChartType:
-        return koIconNameCStr("office-chart-pie");
-    case RingChartType:
-        return koIconNameCStr("office-chart-ring");
-    case RadarChartType:
-        return koIconNameCStr("office-chart-polar");
-    case FilledRadarChartType:
-        return koIconNameCStr("office-chart-polar-filled");
-    case ScatterChartType:
-        return koIconNameCStr("office-chart-scatter");
-    default:
-        return "";
-    }
-
-    return "";
-}
-
 PlotAreaConfigWidget::PlotAreaConfigWidget()
     : d(new Private(this))
 {
@@ -285,57 +229,58 @@ PlotAreaConfigWidget::PlotAreaConfigWidget()
     d->ui.setupUi(this);
 
     // Chart type button with its associated menu
-    QMenu *chartTypeMenu = new QMenu(this);
-    chartTypeMenu->setIcon(koIcon("office-chart-bar"));
+    QMenu *chartTypeMenu = new QMenu(i18n("Chart Type"), this);
+    chartTypeMenu->setIcon(ICON1(BarChartType));
 
     // Bar charts
-    QMenu *barChartMenu = chartTypeMenu->addMenu(koIcon("office-chart-bar"), i18n("Bar Chart"));
-    d->normalBarChartAction  = barChartMenu->addAction(koIcon("office-chart-bar"), i18n("Normal"));
-    d->stackedBarChartAction = barChartMenu->addAction(koIcon("office-chart-bar-stacked"), i18n("Stacked"));
-    d->percentBarChartAction = barChartMenu->addAction(koIcon("office-chart-bar-percentage"), i18n("Percent"));
+    QMenu *barChartMenu = chartTypeMenu->addMenu(ICON1(BarChartType), i18n("Bar Chart"));
+    d->normalBarChartAction  = barChartMenu->addAction(ICON2(BarChartType, NormalChartSubtype), i18n("Normal"));
+    d->stackedBarChartAction = barChartMenu->addAction(ICON2(BarChartType, StackedChartSubtype), i18n("Stacked"));
+    d->percentBarChartAction = barChartMenu->addAction(ICON2(BarChartType, PercentChartSubtype), i18n("Percent"));
 
     // Line charts
-    QMenu *lineChartMenu = chartTypeMenu->addMenu(koIcon("office-chart-line"), i18n("Line Chart"));
-    d->normalLineChartAction  = lineChartMenu->addAction(koIcon("office-chart-line"), i18n("Normal"));
-    d->stackedLineChartAction = lineChartMenu->addAction(koIcon("office-chart-line-stacked"), i18n("Stacked"));
-    d->percentLineChartAction = lineChartMenu->addAction(koIcon("office-chart-line-percentage"), i18n("Percent"));
+    QMenu *lineChartMenu = chartTypeMenu->addMenu(ICON1(LineChartType), i18n("Line Chart"));
+    d->normalLineChartAction  = lineChartMenu->addAction(ICON2(LineChartType, NormalChartSubtype), i18n("Normal"));
+    d->stackedLineChartAction = lineChartMenu->addAction(ICON2(LineChartType, StackedChartSubtype), i18n("Stacked"));
+    d->percentLineChartAction = lineChartMenu->addAction(ICON2(LineChartType, PercentChartSubtype), i18n("Percent"));
 
     // Area charts
-    QMenu *areaChartMenu = chartTypeMenu->addMenu(koIcon("office-chart-area"), i18n("Area Chart"));
-    d->normalAreaChartAction  = areaChartMenu->addAction(koIcon("office-chart-area"), i18n("Normal"));
-    d->stackedAreaChartAction = areaChartMenu->addAction(koIcon("office-chart-area-stacked"), i18n("Stacked"));
-    d->percentAreaChartAction = areaChartMenu->addAction(koIcon("office-chart-area-percentage"), i18n("Percent"));
+    QMenu *areaChartMenu = chartTypeMenu->addMenu(ICON1(AreaChartType), i18n("Area Chart"));
+    d->normalAreaChartAction  = areaChartMenu->addAction(ICON2(AreaChartType, NormalChartSubtype), i18n("Normal"));
+    d->stackedAreaChartAction = areaChartMenu->addAction(ICON2(AreaChartType, StackedChartSubtype), i18n("Stacked"));
+    d->percentAreaChartAction = areaChartMenu->addAction(ICON2(AreaChartType, PercentChartSubtype), i18n("Percent"));
 
     chartTypeMenu->addSeparator();
 
     // Circular charts: pie and ring
-    d->circleChartAction = chartTypeMenu->addAction(koIcon("office-chart-pie"), i18n("Pie Chart"));
-    d->ringChartAction = chartTypeMenu->addAction(koIcon("office-chart-ring"), i18n("Ring Chart"));
+    d->circleChartAction = chartTypeMenu->addAction(ICON1(CircleChartType), i18n("Pie Chart"));
+    d->ringChartAction = chartTypeMenu->addAction(ICON1(RingChartType), i18n("Ring Chart"));
 
     chartTypeMenu->addSeparator();
 
     // Polar charts: radar
-    QMenu *radarChartMenu = chartTypeMenu->addMenu(koIcon("office-chart-polar"), i18n("Polar Chart"));
-    d->radarChartAction = radarChartMenu->addAction(koIcon("office-chart-polar"), i18n("Normal"));
-    d->filledRadarChartAction = radarChartMenu->addAction(koIcon("office-chart-polar-filled"), i18n("Filled"));
+    QMenu *radarChartMenu = chartTypeMenu->addMenu(ICON1(RadarChartType), i18n("Polar Chart"));
+    d->radarChartAction = radarChartMenu->addAction(ICON2(RadarChartType, NoChartSubtype), i18n("Normal"));
+    d->filledRadarChartAction = radarChartMenu->addAction(ICON2(FilledRadarChartType, NoChartSubtype), i18n("Filled")); // Whay is Filled... not subtype?
 
     chartTypeMenu->addSeparator();
 
     // X/Y charts: scatter and bubble
-    d->scatterChartAction = chartTypeMenu->addAction(koIcon("office-chart-scatter"), i18n("Scatter Chart"));
-    d->bubbleChartAction = chartTypeMenu->addAction(i18n("Bubble Chart"));
+    d->scatterChartAction = chartTypeMenu->addAction(ICON1(ScatterChartType), i18n("Scatter Chart"));
+    d->bubbleChartAction = chartTypeMenu->addAction(ICON1(BubbleChartType), i18n("Bubble Chart"));
 
     chartTypeMenu->addSeparator();
 
     // Stock Charts
     QMenu *stockChartMenu = chartTypeMenu->addMenu(i18n("Stock Chart"));
     d->hlcStockChartAction  = stockChartMenu->addAction(i18n("HighLowClose"));
-    d->hlcStockChartAction->setEnabled(false);
+//     d->hlcStockChartAction->setEnabled(false);
     d->ohlcStockChartAction = stockChartMenu->addAction(i18n("OpenHighLowClose"));
-    d->ohlcStockChartAction->setEnabled(false);
+//     d->ohlcStockChartAction->setEnabled(false);
     d->candlestickStockChartAction = stockChartMenu->addAction(i18n("Candlestick"));
-    d->candlestickStockChartAction->setEnabled(false);
+//     d->candlestickStockChartAction->setEnabled(false);
 
+    // Not supported
     d->surfaceChartAction = chartTypeMenu->addAction(i18n("Surface Chart"));
     d->surfaceChartAction->setEnabled(false);
     d->ganttChartAction = chartTypeMenu->addAction(i18n("Gantt Chart"));
@@ -569,9 +514,11 @@ void PlotAreaConfigWidget::updateData()
         return;
     }
     blockSignals(true);
+    debugChartUiPlotArea<<"chart:"<<chart->chartType()<<','<<chart->chartSubType()<<"current:"<<d->type<<','<<d->subtype;
     if (d->type != chart->chartType() || d->subtype != chart->chartSubType()) {
         // Set the chart type icon in the chart type button.
-        const QString iconName = QLatin1String(chartTypeIconName(chart->chartType(), chart->chartSubType()));
+        const QLatin1String iconName = chartTypeIconName(chart->chartType(), chart->chartSubType());
+        debugChartUiPlotArea<<iconName;
         if (!iconName.isEmpty()) {
             d->ui.chartTypeMenu->setIcon(QIcon::fromTheme(iconName));
         }
