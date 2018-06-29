@@ -519,7 +519,7 @@ void PlotAreaConfigWidget::updateData()
         // Set the chart type icon in the chart type button.
         const QLatin1String iconName = chartTypeIconName(chart->chartType(), chart->chartSubType());
         debugChartUiPlotArea<<iconName;
-        if (!iconName.isEmpty()) {
+        if (iconName.size() > 0) {
             d->ui.chartTypeMenu->setIcon(QIcon::fromTheme(iconName));
         }
         d->type = chart->chartType();

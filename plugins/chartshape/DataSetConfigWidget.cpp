@@ -528,7 +528,7 @@ void DataSetConfigWidget::dataSetChartTypeSelected(QAction *action)
         return;
 
     const QLatin1String iconName = chartTypeIconName(type, subtype);
-    if (!iconName.isEmpty())
+    if (iconName.size() > 0)
         d->ui.dataSetChartTypeMenu->setIcon(QIcon::fromTheme(iconName));
 
     emit dataSetChartTypeChanged(dataSet, type);
