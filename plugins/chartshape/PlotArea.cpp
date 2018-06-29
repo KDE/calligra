@@ -736,6 +736,13 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
             else if (dimension == "z") dim = ZAxisDimension;
             else continue;
             Axis *axis = new Axis(this, dim);
+            if (dim == YAxisDimension) {
+                if (axis == yAxis()) {
+                    axis->title()->rotate(-90);
+                } else if (axis == secondaryYAxis()) {
+                    axis->title()->rotate(90);
+                }
+            }
             axis->loadOdf(n, context);
         }
     }
