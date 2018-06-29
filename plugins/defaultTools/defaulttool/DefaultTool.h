@@ -24,6 +24,7 @@
 
 #include <KoInteractionTool.h>
 #include <KoFlake.h>
+#include <KoShape.h>
 #include <commands/KoShapeAlignCommand.h>
 #include <commands/KoShapeReorderCommand.h>
 
@@ -152,10 +153,18 @@ private:
     void selectGuideAtPosition( const QPointF &position );
 
     /// Returns list of editable shapes from the given list of shapes
-    QList<KoShape*> filterEditableShapes( const QList<KoShape*> &shapes );
+    QList<KoShape*> filterEditableShapes( const QList<KoShape*> &shapes ) const;
 
     /// Returns the number of editable shapes from the given list of shapes
-    uint editableShapesCount( const QList<KoShape*> &shapes );
+    uint editableShapesCount( const QList<KoShape*> &shapes ) const;
+
+    /// Return true if @p shape is editable.
+    /// For now, this is just reimplemented using AllowedInteraction flags
+    /// TODO: Check more flags
+    bool isEditable(const KoShape *shape) const;
+
+    /// Returns the interactions allowed on any of the @p shapes
+    KoShape::AllowedInteractions allowedInteractions(const QList<KoShape*> &shapes) const;
 
     KoFlake::SelectionHandle m_lastHandle;
     KoFlake::Position m_hotPosition;

@@ -396,7 +396,7 @@ void DefaultTool::updateCursor()
     QString statusText;
 
     if (koSelection()->count() > 0) { // has a selection
-        bool editable=editableShapesCount(koSelection()->selectedShapes(KoFlake::StrippedSelection));
+        KoShape::AllowedInteractions interactions = allowedInteractions(koSelection()->selectedShapes(KoFlake::StrippedSelection));
 
         if (!m_mouseWasInsideHandles) {
             m_angle = rotationOfHandle(m_lastHandle, true);
@@ -406,36 +406,52 @@ void DefaultTool::updateCursor()
             bool shearHandle = false;
             switch(m_lastHandle) {
             case KoFlake::TopMiddleHandle:
-                cursor = m_shearCursors[(0 +rotOctant)%8];
-                shearHandle = true;
+                if (interactions.testFlag(KoShape::ShearingAllowed)) {
+                    cursor = m_shearCursors[(0 +rotOctant)%8];
+                    shearHandle = true;
+                }
                 break;
             case KoFlake::TopRightHandle:
-                cursor = m_rotateCursors[(1 +rotOctant)%8];
-                rotateHandle = true;
+                if (interactions.testFlag(KoShape::RotationAllowed)) {
+                    cursor = m_rotateCursors[(1 +rotOctant)%8];
+                    rotateHandle = true;
+                }
                 break;
             case KoFlake::RightMiddleHandle:
-                cursor = m_shearCursors[(2 +rotOctant)%8];
-                shearHandle = true;
+                if (interactions.testFlag(KoShape::ShearingAllowed)) {
+                    cursor = m_shearCursors[(2 +rotOctant)%8];
+                    shearHandle = true;
+                }
                 break;
             case KoFlake::BottomRightHandle:
-                cursor = m_rotateCursors[(3 +rotOctant)%8];
-                rotateHandle = true;
+                if (interactions.testFlag(KoShape::RotationAllowed)) {
+                    cursor = m_rotateCursors[(3 +rotOctant)%8];
+                    rotateHandle = true;
+                }
                 break;
             case KoFlake::BottomMiddleHandle:
-                cursor = m_shearCursors[(4 +rotOctant)%8];
-                shearHandle = true;
+                if (interactions.testFlag(KoShape::ShearingAllowed)) {
+                    cursor = m_shearCursors[(4 +rotOctant)%8];
+                    shearHandle = true;
+                }
                 break;
             case KoFlake::BottomLeftHandle:
-                cursor = m_rotateCursors[(5 +rotOctant)%8];
-                rotateHandle = true;
+                if (interactions.testFlag(KoShape::RotationAllowed)) {
+                    cursor = m_rotateCursors[(5 +rotOctant)%8];
+                    rotateHandle = true;
+                }
                 break;
             case KoFlake::LeftMiddleHandle:
-                cursor = m_shearCursors[(6 +rotOctant)%8];
-                shearHandle = true;
+                if (interactions.testFlag(KoShape::ShearingAllowed)) {
+                    cursor = m_shearCursors[(6 +rotOctant)%8];
+                    shearHandle = true;
+                }
                 break;
             case KoFlake::TopLeftHandle:
-                cursor = m_rotateCursors[(7 +rotOctant)%8];
-                rotateHandle = true;
+                if (interactions.testFlag(KoShape::RotationAllowed)) {
+                    cursor = m_rotateCursors[(7 +rotOctant)%8];
+                    rotateHandle = true;
+                }
                 break;
             case KoFlake::NoHandle:
                 if (m_guideLine->isValid()) {
@@ -458,43 +474,59 @@ void DefaultTool::updateCursor()
             bool cornerHandle = false;
             switch(m_lastHandle) {
             case KoFlake::TopMiddleHandle:
-                cursor = m_sizeCursors[(0 +rotOctant)%8];
+                if (interactions.testFlag(KoShape::ResizeAllowed)) {
+                    cursor = m_sizeCursors[(0 +rotOctant)%8];
+                }
                 break;
             case KoFlake::TopRightHandle:
-                cursor = m_sizeCursors[(1 +rotOctant)%8];
-                cornerHandle = true;
+                if (interactions.testFlag(KoShape::ResizeAllowed)) {
+                    cursor = m_sizeCursors[(1 +rotOctant)%8];
+                    cornerHandle = true;
+                }
                 break;
             case KoFlake::RightMiddleHandle:
-                cursor = m_sizeCursors[(2 +rotOctant)%8];
+                if (interactions.testFlag(KoShape::ResizeAllowed)) {
+                    cursor = m_sizeCursors[(2 +rotOctant)%8];
+                }
                 break;
             case KoFlake::BottomRightHandle:
-                cursor = m_sizeCursors[(3 +rotOctant)%8];
-                cornerHandle = true;
+                if (interactions.testFlag(KoShape::ResizeAllowed)) {
+                    cursor = m_sizeCursors[(3 +rotOctant)%8];
+                    cornerHandle = true;
+                }
                 break;
             case KoFlake::BottomMiddleHandle:
-                cursor = m_sizeCursors[(4 +rotOctant)%8];
+                if (interactions.testFlag(KoShape::ResizeAllowed)) {
+                    cursor = m_sizeCursors[(4 +rotOctant)%8];
+                }
                 break;
             case KoFlake::BottomLeftHandle:
-                cursor = m_sizeCursors[(5 +rotOctant)%8];
-                cornerHandle = true;
+                if (interactions.testFlag(KoShape::ResizeAllowed)) {
+                    cursor = m_sizeCursors[(5 +rotOctant)%8];
+                    cornerHandle = true;
+                }
                 break;
             case KoFlake::LeftMiddleHandle:
-                cursor = m_sizeCursors[(6 +rotOctant)%8];
+                if (interactions.testFlag(KoShape::ResizeAllowed)) {
+                    cursor = m_sizeCursors[(6 +rotOctant)%8];
+                }
                 break;
             case KoFlake::TopLeftHandle:
-                cursor = m_sizeCursors[(7 +rotOctant)%8];
-                cornerHandle = true;
+                if (interactions.testFlag(KoShape::ResizeAllowed)) {
+                    cursor = m_sizeCursors[(7 +rotOctant)%8];
+                    cornerHandle = true;
+                }
                 break;
             case KoFlake::NoHandle:
-                cursor = Qt::SizeAllCursor;
-                statusText = i18n("Click and drag to move selection.");
+                if (interactions.testFlag(KoShape::MoveAllowed)) {
+                    cursor = Qt::SizeAllCursor;
+                    statusText = i18n("Click and drag to move selection.");
+                }
                 break;
             }
             if (cornerHandle)
                 statusText = i18n("Click and drag to resize selection. Middle click to set highlighted position.");
         }
-        if (!editable)
-            cursor = Qt::ArrowCursor;
     }
     else {
         if (m_guideLine->isValid()) {
@@ -1010,7 +1042,7 @@ void DefaultTool::selectionGroup()
 
     // only group shapes with an unselected parent
     foreach (KoShape* shape, selectedShapes) {
-        if (! selectedShapes.contains(shape->parent()) && shape->isEditable()) {
+        if (! selectedShapes.contains(shape->parent()) && isEditable(shape)) {
             groupedShapes << shape;
         }
     }
@@ -1037,7 +1069,7 @@ void DefaultTool::selectionUngroup()
 
     // only ungroup shape groups with an unselected parent
     foreach (KoShape* shape, selectedShapes) {
-        if (!selectedShapes.contains(shape->parent()) && shape->isEditable()) {
+        if (!selectedShapes.contains(shape->parent()) && isEditable(shape)) {
             containerSet << shape;
         }
     }
@@ -1181,6 +1213,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
     KoFlake::SelectionHandle handle = handleAt(event->point, &insideSelection);
 
     bool editableShape = editableShapesCount(select->selectedShapes());
+    KoShape::AllowedInteractions interactions = allowedInteractions(select->selectedShapes());
 
     if (event->buttons() & Qt::MidButton) {
         // change the hot selection position when middle clicking on a handle
@@ -1221,16 +1254,24 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
         if (handle != KoFlake::NoHandle) {
             if (event->buttons() == Qt::LeftButton) {
                 // resizing or shearing only with left mouse button
-                if (insideSelection)
-                    return new ShapeResizeStrategy(this, event->point, handle);
-                if (handle == KoFlake::TopMiddleHandle || handle == KoFlake::RightMiddleHandle ||
-                        handle == KoFlake::BottomMiddleHandle || handle == KoFlake::LeftMiddleHandle)
-                    return new ShapeShearStrategy(this, event->point, handle);
+                if (insideSelection) {
+                    if (interactions.testFlag(KoShape::ResizeAllowed)) {
+                        return new ShapeResizeStrategy(this, event->point, handle);
+                    }
+                } else if (interactions.testFlag(KoShape::ShearingAllowed)) {
+                    if (handle == KoFlake::TopMiddleHandle || handle == KoFlake::RightMiddleHandle ||
+                            handle == KoFlake::BottomMiddleHandle || handle == KoFlake::LeftMiddleHandle)
+                    {
+                        return new ShapeShearStrategy(this, event->point, handle);
+                    }
+                }
             }
             // rotating is allowed for rigth mouse button too
-            if (handle == KoFlake::TopLeftHandle || handle == KoFlake::TopRightHandle ||
-                handle == KoFlake::BottomLeftHandle || handle == KoFlake::BottomRightHandle)
-                return new ShapeRotateStrategy(this, event->point, event->buttons());
+            if (interactions.testFlag(KoShape::RotationAllowed)) {
+                if (handle == KoFlake::TopLeftHandle || handle == KoFlake::TopRightHandle ||
+                    handle == KoFlake::BottomLeftHandle || handle == KoFlake::BottomRightHandle)
+                    return new ShapeRotateStrategy(this, event->point, event->buttons());
+            }
         }
         if (! (selectMultiple || selectNextInStack) && event->buttons() == Qt::LeftButton) {
             const QPainterPath outlinePath = select->transformation().map(select->outline());
@@ -1329,24 +1370,38 @@ KoToolSelection* DefaultTool::selection()
     return m_selectionHandler;
 }
 
-QList<KoShape*> DefaultTool::filterEditableShapes( const QList<KoShape*> &shapes )
+QList<KoShape*> DefaultTool::filterEditableShapes( const QList<KoShape*> &shapes ) const
 {
     QList<KoShape*> editableShapes;
     foreach( KoShape * shape, shapes ) {
-        if (shape->isEditable())
+        if (isEditable(shape))
             editableShapes.append(shape);
     }
 
     return editableShapes;
 }
 
-uint DefaultTool::editableShapesCount( const QList<KoShape*> &shapes )
+uint DefaultTool::editableShapesCount( const QList<KoShape*> &shapes ) const
 {
     uint count = 0;
     foreach( KoShape * shape, shapes ) {
-        if (shape->isEditable())
+        if (isEditable(shape))
             count++;
     }
 
     return count;
+}
+
+bool DefaultTool::isEditable(const KoShape *shape) const
+{
+    return shape->allowedInteractions() & (KoShape::MoveAllowed | KoShape::ResizeAllowed); // TODO: check more flags
+}
+
+KoShape::AllowedInteractions DefaultTool::allowedInteractions(const QList<KoShape*> &shapes) const
+{
+    KoShape::AllowedInteractions interactions;
+    foreach(KoShape *shape, shapes) {
+        interactions |= shape->allowedInteractions();
+    }
+    return interactions;
 }

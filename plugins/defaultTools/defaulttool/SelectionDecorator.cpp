@@ -79,6 +79,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     pen.setJoinStyle(Qt::RoundJoin);
     painter.setPen( pen );
     bool editable=false;
+    KoShape::AllowedInteractions interactions;
     foreach (KoShape *shape, m_selection->selectedShapes(KoFlake::StrippedSelection)) {
         // apply the shape transformation on top of the old painter transformation
         painter.setWorldTransform( shape->absoluteTransformation(&converter) * painterMatrix );
@@ -87,8 +88,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
         // draw the shape bounding rect
         painter.drawRect( QRectF( QPointF(), shape->size() ) );
 
-        if (!shape->isGeometryProtected())
-            editable = true;
+        interactions |= shape->allowedInteractions();
     }
 
     if (m_selection->count() > 1) {
@@ -113,9 +113,13 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     painterMatrix = painter.worldTransform();
     painter.restore();
 
+    KoShape::AllowedInteractions corner = interactions & (KoShape::ResizeAllowed | KoShape::RotationAllowed);
+    KoShape::AllowedInteractions middle = interactions & (KoShape::ResizeAllowed | KoShape::ShearingAllowed);
+
     // if we have no editable shape selected there is no need drawing the selection handles
-    if (!editable)
+    if (!corner && !middle) {
         return;
+    }
 
     painter.save();
 
@@ -129,22 +133,26 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
 
     // the 8 move rects
     QRectF rect( QPointF(0.5,0.5), QSizeF(2*m_handleRadius,2*m_handleRadius) );
-    rect.moveCenter(outline.value(0));
-    painter.drawRect(rect);
-    rect.moveCenter(outline.value(1));
-    painter.drawRect(rect);
-    rect.moveCenter(outline.value(2));
-    painter.drawRect(rect);
-    rect.moveCenter(outline.value(3));
-    painter.drawRect(rect);
-    rect.moveCenter((outline.value(0)+outline.value(1))/2);
-    painter.drawRect(rect);
-    rect.moveCenter((outline.value(1)+outline.value(2))/2);
-    painter.drawRect(rect);
-    rect.moveCenter((outline.value(2)+outline.value(3))/2);
-    painter.drawRect(rect);
-    rect.moveCenter((outline.value(3)+outline.value(0))/2);
-    painter.drawRect(rect);
+    if (corner) {
+        rect.moveCenter(outline.value(0));
+        painter.drawRect(rect);
+        rect.moveCenter(outline.value(1));
+        painter.drawRect(rect);
+        rect.moveCenter(outline.value(2));
+        painter.drawRect(rect);
+        rect.moveCenter(outline.value(3));
+        painter.drawRect(rect);
+    }
+    if (middle) {
+        rect.moveCenter((outline.value(0)+outline.value(1))/2);
+        painter.drawRect(rect);
+        rect.moveCenter((outline.value(1)+outline.value(2))/2);
+        painter.drawRect(rect);
+        rect.moveCenter((outline.value(2)+outline.value(3))/2);
+        painter.drawRect(rect);
+        rect.moveCenter((outline.value(3)+outline.value(0))/2);
+        painter.drawRect(rect);
+    }
 
     // draw the hot position
     painter.setBrush(Qt::red);
