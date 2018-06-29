@@ -68,9 +68,15 @@ private Q_SLOTS:
     void setThreeDMode(bool threeD);
     void setDataDirection(Qt::Orientation);
     void setShowTitle(bool show);
+    void setTitlePositioning(int index);
+    void setTitleResize(int index);
     void setShowSubTitle(bool show);
+    void setSubTitlePositioning(int index);
+    void setSubTitleResize(int index);
     void setShowFooter(bool show);
-
+    void setFooterPositioning(int index);
+    void setFooterResize(int index);
+    
     // Datasets
     void setDataSetXDataRegion(DataSet *dataSet, const CellRegion &region);
     void setDataSetYDataRegion(DataSet *dataSet, const CellRegion &region);

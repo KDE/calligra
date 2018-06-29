@@ -33,12 +33,7 @@ using namespace KoChart;
 TitlesConfigWidget::TitlesConfigWidget()
 {
     setObjectName("TitlesConfigWdget");
-    m_ui.setupUi(this);
-
-    connect(m_ui.showTitle, SIGNAL(toggled(bool)), this, SIGNAL(showTitleChanged(bool)));
-    connect(m_ui.showSubTitle, SIGNAL(toggled(bool)), this, SIGNAL(showSubTitleChanged(bool)));
-    connect(m_ui.showFooter, SIGNAL(toggled(bool)), this, SIGNAL(showFooterChanged(bool)));
-
+    ui.setupUi(this);
 }
 
 TitlesConfigWidget::~TitlesConfigWidget()
@@ -51,9 +46,16 @@ void TitlesConfigWidget::updateData()
         return;
     }
     blockSignals(true);
-    m_ui.showTitle->setChecked(chart->title()->isVisible());
-    m_ui.showSubTitle->setChecked(chart->subTitle()->isVisible());
-    m_ui.showFooter->setChecked(chart->footer()->isVisible());
+
+    ui.showTitle->setChecked(chart->title()->isVisible());
+    ui.titlePositioning->setCurrentIndex(chart->title()->additionalStyleAttribute("chart:auto-position") == "true" ? 0 : 1);
+
+    ui.showSubTitle->setChecked(chart->subTitle()->isVisible());
+    ui.subtitlePositioning->setCurrentIndex(chart->subTitle()->additionalStyleAttribute("chart:auto-position") == "true" ? 0 : 1);
+
+    ui.showFooter->setChecked(chart->footer()->isVisible());
+    ui.footerPositioning->setCurrentIndex(chart->footer()->additionalStyleAttribute("chart:auto-position") == "true" ? 0 : 1);
+
     blockSignals(false);
 }
 

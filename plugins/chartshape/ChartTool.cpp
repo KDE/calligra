@@ -272,12 +272,15 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
     TitlesConfigWidget *titles = new TitlesConfigWidget();
     titles->setWindowTitle(i18n("Titles"));
     widgets.append(titles);
-    connect(titles, SIGNAL(showTitleChanged(bool)),
-            this,   SLOT(setShowTitle(bool)));
-    connect(titles, SIGNAL(showSubTitleChanged(bool)),
-            this,   SLOT(setShowSubTitle(bool)));
-    connect(titles, SIGNAL(showFooterChanged(bool)),
-            this,   SLOT(setShowFooter(bool)));
+    connect(titles->ui.showTitle, SIGNAL(toggled(bool)), this, SLOT(setShowTitle(bool)));
+    connect(titles->ui.titlePositioning, SIGNAL(currentIndexChanged(int)), this, SLOT(setTitlePositioning(int)));
+    connect(titles->ui.titleResize, SIGNAL(currentIndexChanged(int)), this, SLOT(setTitleResize(int)));
+    connect(titles->ui.showSubTitle, SIGNAL(toggled(bool)), this, SLOT(setShowSubTitle(bool)));
+    connect(titles->ui.subtitlePositioning, SIGNAL(currentIndexChanged(int)), this, SLOT(setSubTitlePositioning(int)));
+    connect(titles->ui.subtitleResize, SIGNAL(currentIndexChanged(int)), this, SLOT(setSubTitleResize(int)));
+    connect(titles->ui.showFooter, SIGNAL(toggled(bool)), this, SLOT(setShowFooter(bool)));
+    connect(titles->ui.footerPositioning, SIGNAL(currentIndexChanged(int)), this, SLOT(setFooterPositioning(int)));
+    connect(titles->ui.footerResize, SIGNAL(currentIndexChanged(int)), this, SLOT(setFooterResize(int)));
 
     connect(d->shape, SIGNAL(updateConfigWidget()), titles, SLOT(updateData()));
 
@@ -629,6 +632,36 @@ void ChartTool::setShowTitle(bool show)
     d->shape->update();
 }
 
+void ChartTool::setTitlePositioning(int index)
+{
+    Q_ASSERT(d->shape);
+    if (!d->shape) {
+        return;
+    }
+    // TODD: undo command
+    d->shape->title()->setAdditionalStyleAttribute("chart:auto-position", index == 0 ? "true" : "false");
+    d->shape->layout()->scheduleRelayout();
+    d->shape->layout()->layout();
+    d->shape->update();
+}
+
+void ChartTool::setTitleResize(int index)
+{
+    Q_ASSERT(d->shape);
+    if (!d->shape) {
+        return;
+    }
+    // TODD: undo command
+    TextLabelData *labelData = dynamic_cast<TextLabelData*>(d->shape->title()->userData());
+    if (labelData == 0) {
+        return;
+    }
+    labelData->setResizeMethod(index == 0 ? KoTextShapeDataBase::AutoResize : KoTextShapeDataBase::NoResize);
+    d->shape->layout()->scheduleRelayout();
+    d->shape->layout()->layout();
+    d->shape->update();
+}
+
 void ChartTool::setShowSubTitle(bool show)
 {
     Q_ASSERT(d->shape);
@@ -641,6 +674,36 @@ void ChartTool::setShowSubTitle(bool show)
     d->shape->update();
 }
 
+void ChartTool::setSubTitlePositioning(int index)
+{
+    Q_ASSERT(d->shape);
+    if (!d->shape) {
+        return;
+    }
+    // TODD: undo command
+    d->shape->subTitle()->setAdditionalStyleAttribute("chart:auto-position", index == 0 ? "true" : "false");
+    d->shape->layout()->scheduleRelayout();
+    d->shape->layout()->layout();
+    d->shape->update();
+}
+
+void ChartTool::setSubTitleResize(int index)
+{
+    Q_ASSERT(d->shape);
+    if (!d->shape) {
+        return;
+    }
+    // TODD: undo command
+    TextLabelData *labelData = dynamic_cast<TextLabelData*>(d->shape->subTitle()->userData());
+    if (labelData == 0) {
+        return;
+    }
+    labelData->setResizeMethod(index == 0 ? KoTextShapeDataBase::AutoResize : KoTextShapeDataBase::NoResize);
+    d->shape->layout()->scheduleRelayout();
+    d->shape->layout()->layout();
+    d->shape->update();
+}
+
 void ChartTool::setShowFooter(bool show)
 {
     Q_ASSERT(d->shape);
@@ -650,6 +713,36 @@ void ChartTool::setShowFooter(bool show)
     ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->footer(), d->shape, show);
     canvas()->addCommand(command);
 
+    d->shape->update();
+}
+
+void ChartTool::setFooterPositioning(int index)
+{
+    Q_ASSERT(d->shape);
+    if (!d->shape) {
+        return;
+    }
+    // TODD: undo command
+    d->shape->footer()->setAdditionalStyleAttribute("chart:auto-position", index == 0 ? "true" : "false");
+    d->shape->layout()->scheduleRelayout();
+    d->shape->layout()->layout();
+    d->shape->update();
+}
+
+void ChartTool::setFooterResize(int index)
+{
+    Q_ASSERT(d->shape);
+    if (!d->shape) {
+        return;
+    }
+    // TODD: undo command
+    TextLabelData *labelData = dynamic_cast<TextLabelData*>(d->shape->footer()->userData());
+    if (labelData == 0) {
+        return;
+    }
+    labelData->setResizeMethod(index == 0 ? KoTextShapeDataBase::AutoResize : KoTextShapeDataBase::NoResize);
+    d->shape->layout()->scheduleRelayout();
+    d->shape->layout()->layout();
     d->shape->update();
 }
 

@@ -42,6 +42,7 @@ namespace KChart
 namespace KoChart
 {
 class ChartShape;
+class ChartTool;
 
 /**
  * Titles configuration widget.
@@ -62,13 +63,9 @@ public:
 public Q_SLOTS:
     void updateData();
 
-Q_SIGNALS:
-    void showTitleChanged(bool);
-    void showSubTitleChanged(bool);
-    void showFooterChanged(bool);
-
 private:
-    Ui::TitlesConfigWidget  m_ui;
+    friend ChartTool;
+    Ui::TitlesConfigWidget  ui;
 };
 
 }  // namespace KoChart
