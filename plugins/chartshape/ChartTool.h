@@ -106,6 +106,8 @@ private Q_SLOTS:
     void addAxis(AxisDimension, const QString& title = QString());
     void removeAxis(Axis *axis);
     void setShowAxis(Axis *axis, bool show);
+    void setAxisPosition(Axis *axis, const QString &pos);
+    void setAxisLabelsPosition(Axis *axis, const QString &pos);
     void setAxisShowTitle(Axis *axis, bool show);
     void setAxisTitle(Axis *axis, const QString& title);
     void setAxisShowMajorGridLines(Axis *axis, bool b = true);

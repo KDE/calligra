@@ -315,6 +315,11 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
             this,   SLOT(setAxisShowTitle(Axis*,bool)));
     connect(axes, SIGNAL(axisShowChanged(Axis*,bool)),
             this,   SLOT(setShowAxis(Axis*,bool)));
+    connect(axes, SIGNAL(axisPositionChanged(Axis*,QString)),
+            this,   SLOT(setAxisPosition(Axis*,QString)));
+    connect(axes, SIGNAL(axisLabelsPositionChanged(Axis*,QString)),
+            this,   SLOT(setAxisLabelsPosition(Axis*,QString)));
+
     connect(axes, SIGNAL(axisShowMajorGridLinesChanged(Axis*,bool)),
             this,   SLOT(setAxisShowMajorGridLines(Axis*,bool)));
     connect(axes, SIGNAL(axisShowMinorGridLinesChanged(Axis*,bool)),
@@ -881,6 +886,28 @@ void ChartTool::setShowAxis(Axis *axis, bool show)
     command->setShowAxis(show);
     canvas()->addCommand(command);
 
+    d->shape->update();
+}
+
+void ChartTool::setAxisPosition(Axis *axis, const QString &pos)
+{
+    Q_ASSERT(d->shape);
+    debugChartTool<<axis<<pos;
+    // TODO undo command
+    axis->setOdfAxisPosition(pos);
+    d->shape->layout()->scheduleRelayout();
+    d->shape->layout()->layout();
+    d->shape->update();
+}
+
+void ChartTool::setAxisLabelsPosition(Axis *axis, const QString &pos)
+{
+    Q_ASSERT(d->shape);
+    debugChartTool<<axis<<pos;
+    // TODO undo command
+    axis->setOdfAxisPosition(pos);
+    d->shape->layout()->scheduleRelayout();
+    d->shape->layout()->layout();
     d->shape->update();
 }
 

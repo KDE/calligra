@@ -203,6 +203,9 @@ public:
     /// @return true if direction is reversed
     bool axisDirectionReversed() const;
 
+    void setOdfAxisLabelsPosition(const QString &odfpos);
+    QString odfAxisLabelsPosition() const;
+
 public Q_SLOTS:
     void setGapBetweenBars(int percent);
     void setGapBetweenSets(int percent);

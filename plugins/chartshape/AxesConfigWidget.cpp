@@ -108,9 +108,19 @@ AxesConfigWidget::AxesConfigWidget()
     setObjectName("AxesConfigWidget");
     d->ui.setupUi(this);
 
+    d->ui.axisPosition->insertItem(0, i18n("Start"), "start");
+    d->ui.axisPosition->insertItem(1, i18n("End"), "end");
+
+    d->ui.axislabelPosition->insertItem(0, i18n("Near-axis"), "near-axis");
+    d->ui.axislabelPosition->insertItem(1, i18n("Other-side"), "near-axis-other-side");
+    d->ui.axislabelPosition->insertItem(2, i18n("End"), "outside-end");
+    d->ui.axislabelPosition->insertItem(3, i18n("Start"), "outside-start");
+
 
     connect(d->ui.axisShowTitle, SIGNAL(toggled(bool)), this, SLOT(ui_axisShowTitleChanged(bool)));
     connect(d->ui.axisShow, SIGNAL(toggled(bool)), this, SLOT(ui_axisShowChanged(bool)));
+    connect(d->ui.axisPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(ui_axisPositionChanged(int)));
+    connect(d->ui.axislabelPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(ui_axisLabelsPositionChanged(int)));
     connect(d->ui.axisShowMajorGridLines, SIGNAL(toggled(bool)), this, SLOT(ui_axisShowMajorGridLinesChanged(bool)));
     connect(d->ui.axisShowMinorGridLines, SIGNAL(toggled(bool)), this, SLOT(ui_axisShowMinorGridLinesChanged(bool)));
     connect(d->ui.axes, SIGNAL(currentIndexChanged(int)),this, SLOT(ui_axisSelectionChanged(int)));
@@ -255,6 +265,18 @@ void AxesConfigWidget::ui_axisSelectionChanged(int index)
     blockSignals(true);
     d->ui.axisShow->setChecked(axis->isVisible());
     d->ui.axisShowTitle->setChecked(axis->title()->isVisible());
+    for (int i = 0; i < d->ui.axisPosition->count(); ++i) {
+        if (d->ui.axisPosition->itemData(i).toString() == axis->odfAxisPosition()) {
+            d->ui.axisPosition->setCurrentIndex(i);
+            break;
+        }
+    }
+    for (int i = 0; i < d->ui.axislabelPosition->count(); ++i) {
+        if (d->ui.axislabelPosition->itemData(i).toString() == axis->odfAxisLabelsPosition()) {
+            d->ui.axislabelPosition->setCurrentIndex(i);
+            break;
+        }
+    }
     d->ui.axisShowMajorGridLines->setChecked(axis->showMajorGrid());
     d->ui.axisShowMinorGridLines->setChecked(axis->showMinorGrid());
 
@@ -299,6 +321,25 @@ void AxesConfigWidget::ui_axisShowChanged(bool b)
         emit axisShowChanged(a, b);
     }
 }
+
+void AxesConfigWidget::ui_axisPositionChanged(int index)
+{
+    Axis *a = axis(d->ui.axisPosition->currentIndex());
+    if (a) {
+        debugChartUiAxes<<a<<index;
+        emit axisPositionChanged(a, d->ui.axisPosition->currentData().toString());
+    }
+}
+
+void AxesConfigWidget::ui_axisLabelsPositionChanged(int index)
+{
+    Axis *a = axis(d->ui.axislabelPosition->currentIndex());
+    if (a) {
+        debugChartUiAxes<<a<<index;
+        emit axisLabelsPositionChanged(a, d->ui.axislabelPosition->currentData().toString());
+    }
+}
+
 
 void AxesConfigWidget::ui_axisShowMajorGridLinesChanged(bool b)
 {

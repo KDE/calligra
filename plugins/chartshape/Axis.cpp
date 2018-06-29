@@ -196,6 +196,7 @@ public:
     QString name;
 
     QString axisPosition;
+    QString axisLabelsPosition;
 };
 
 class CartesianAxis : public KChart::CartesianAxis
@@ -1424,6 +1425,9 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
         if (styleStack.hasProperty(KoXmlNS::chart, "axis-position")) {
             d->axisPosition = styleStack.property(KoXmlNS::chart, "axis-position");
         }
+        if (styleStack.hasProperty(KoXmlNS::chart, "axis-label-position")) {
+            d->axisLabelsPosition = styleStack.property(KoXmlNS::chart, "axis-label-position");
+        }
     } else {
         setShowLabels(KoOdfWorkaround::fixMissingStyle_DisplayLabel(axisElement, context));
     }
@@ -1555,7 +1559,10 @@ void Axis::saveOdf(KoShapeSavingContext &context)
 
     axisStyle.addProperty("chart:reverse-direction", axisDirectionReversed());
     if (!d->axisPosition.isEmpty()) {
-        axisStyle.addProperty("chart:axis-position", odfAxisPosition());
+        axisStyle.addProperty("chart:axis-position", d->axisPosition);
+    }
+    if (!d->axisLabelsPosition.isEmpty()) {
+        axisStyle.addProperty("chart:axis-label-position", d->axisLabelsPosition);
     }
 
     axisStyle.addProperty("chart:tick-marks-minor-inner", showInnerMinorTicks());
@@ -2156,4 +2163,14 @@ bool Axis::axisDirectionReversed() const
             reversed = plane->isVerticalRangeReversed();
     }
     return reversed;
+}
+
+void Axis::setOdfAxisLabelsPosition(const QString &odfpos)
+{
+    d->axisLabelsPosition = odfpos;
+}
+
+QString Axis::odfAxisLabelsPosition() const
+{
+    return d->axisLabelsPosition;
 }
