@@ -803,8 +803,10 @@ void ChartTool::setLegendPosition(Position pos)
     Q_ASSERT(d->shape);
     Q_ASSERT(d->shape->legend());
 
+    // TODO undo command
     d->shape->legend()->setLegendPosition(pos);
     d->shape->legend()->update();
+    d->shape->layout()->scheduleRelayout();
     d->shape->layout()->layout();
 }
 
@@ -813,6 +815,7 @@ void ChartTool::setLegendAlignment(Qt::Alignment alignment)
     Q_ASSERT(d->shape);
     Q_ASSERT(d->shape->legend());
 
+    // TODO undo command
     d->shape->legend()->setAlignment(alignment);
     d->shape->legend()->update();
     d->shape->layout()->scheduleRelayout();
