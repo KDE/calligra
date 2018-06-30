@@ -197,6 +197,7 @@
       <caption>A presentation loaded directly from DropBox, in Edit mode</caption>
       <caption xml:lang="ca">Una presentació carregada directament des del DropBox, en mode d'edició</caption>
       <caption xml:lang="ca-valencia">Una presentació carregada directament des del DropBox, en mode d'edició</caption>
+      <caption xml:lang="it">Una presentazione caricata direttamente da DropBox, in modalità Modifica</caption>
       <caption xml:lang="nl">Een directly van DropBox geladen presentatie, in bewerkingsmodus</caption>
       <caption xml:lang="pt">Uma apresentação carregada directamente do DropBox, no modo de Edição</caption>
       <caption xml:lang="uk">Презентація, завантажена безпосередньо з DropBox, у режимі редагування</caption>
@@ -207,6 +208,7 @@
       <caption>A text document in the traditional desktop style UI (Create mode)</caption>
       <caption xml:lang="ca">Un document de text en la IU d'estil d'escriptori tradicional (mode creació)</caption>
       <caption xml:lang="ca-valencia">Un document de text en la IU d'estil d'escriptori tradicional (mode creació)</caption>
+      <caption xml:lang="it">Un documento di testo nell'interfaccia in stile desktop tradizionale (modalità Crea)</caption>
       <caption xml:lang="nl">Een tekstdocument in de traditionele bureaubladstijl UI (aanmaakmodus)</caption>
       <caption xml:lang="pt">Um documento de texto no estilo gráfico tradicional (modo de Criação)</caption>
       <caption xml:lang="uk">Текстовий документ у традиційному інтерфейсі стільниці (режим створення)</caption>
@@ -217,6 +219,7 @@
       <caption>A text document in Create mode with the notes panel shown</caption>
       <caption xml:lang="ca">Un document de text en mode creació mostrant el plafó de les notes</caption>
       <caption xml:lang="ca-valencia">Un document de text en mode creació mostrant el plafó de les notes</caption>
+      <caption xml:lang="it">Un documento di testo in modalità Crea con il pannello delle note visibile</caption>
       <caption xml:lang="nl">Een tekstdocument in de aanmaakmodus met de paneel met notities getoond</caption>
       <caption xml:lang="pt">Um documento de texto no modo de Criação com o painel de notas visível</caption>
       <caption xml:lang="uk">Текстовий документ у режимі створення із показаною панеллю нотаток</caption>
