@@ -99,7 +99,6 @@ public:
     void updatePosition();
 
     void registerDiagram(KChart::AbstractDiagram *diagram);
-    void deregisterDiagram(KChart::AbstractDiagram *diagram);
 
     KChart::AbstractDiagram *getDiagramAndCreateIfNeeded(ChartType chartType);
     KChart::AbstractDiagram *getDiagram(ChartType chartType);
@@ -284,11 +283,8 @@ Axis::Private::~Private()
 
 void Axis::Private::registerDiagram(KChart::AbstractDiagram *diagram)
 {
-    KChartModel *model = new KChartModel(plotArea);
-    diagram->setModel(model);
-
     QObject::connect(plotArea->proxyModel(), SIGNAL(columnsInserted(QModelIndex,int,int)),
-                     model,                  SLOT(slotColumnsInserted(QModelIndex,int,int)));
+                     diagram->model(), SLOT(slotColumnsInserted(QModelIndex,int,int)));
 
     QObject::connect(diagram, SIGNAL(propertiesChanged()),
                      plotArea, SLOT(plotAreaUpdate()));
@@ -298,26 +294,6 @@ void Axis::Private::registerDiagram(KChart::AbstractDiagram *diagram)
                      plotArea, SLOT(plotAreaUpdate()));
     QObject::connect(diagram, SIGNAL(dataHidden()),
                      plotArea, SLOT(plotAreaUpdate()));
-}
-
-void Axis::Private::deregisterDiagram(KChart::AbstractDiagram *diagram)
-{
-    KChartModel *model = dynamic_cast<KChartModel*>(diagram->model());
-    Q_ASSERT(model);
-
-    QObject::disconnect(plotArea->proxyModel(), SIGNAL(columnsInserted(QModelIndex,int,int)),
-                        model,                  SLOT(slotColumnsInserted(QModelIndex,int,int)));
-
-    QObject::disconnect(diagram, SIGNAL(propertiesChanged()),
-                        plotArea, SLOT(plotAreaUpdate()));
-    QObject::disconnect(diagram, SIGNAL(layoutChanged(AbstractDiagram*)),
-                        plotArea, SLOT(plotAreaUpdate()));
-    QObject::disconnect(diagram, SIGNAL(modelsChanged()),
-                        plotArea, SLOT(plotAreaUpdate()));
-    QObject::disconnect(diagram, SIGNAL(dataHidden()),
-                        plotArea, SLOT(plotAreaUpdate()));
-
-    delete model;
 }
 
 KChart::AbstractDiagram *Axis::Private::getDiagramAndCreateIfNeeded(ChartType chartType)
@@ -430,7 +406,6 @@ KChart::AbstractDiagram *Axis::Private::getDiagram(ChartType chartType)
 void Axis::Private::deleteDiagram(KChart::AbstractDiagram *diagram)
 {
     Q_ASSERT(diagram);
-    deregisterDiagram(diagram);
     if (diagram->coordinatePlane()) {
         diagram->coordinatePlane()->takeDiagram(diagram);
     }
@@ -452,7 +427,10 @@ void Axis::Private::createBarDiagram()
     Q_ASSERT(kdBarDiagram == 0);
 
     kdBarDiagram = new KChart::BarDiagram(plotArea->kdChart(), kdPlane);
+    KChartModel *model = new KChartModel(plotArea, kdBarDiagram);
+    kdBarDiagram->setModel(model);
     registerDiagram(kdBarDiagram);
+
     // By 'vertical', KChart means the orientation of a chart's bars,
     // not the orientation of the x axis.
     kdBarDiagram->setOrientation(plotArea->isVertical() ? Qt::Horizontal : Qt::Vertical);
@@ -495,6 +473,8 @@ void Axis::Private::createLineDiagram()
     Q_ASSERT(kdLineDiagram == 0);
 
     kdLineDiagram = new KChart::LineDiagram(plotArea->kdChart(), kdPlane);
+    KChartModel *model = new KChartModel(plotArea, kdLineDiagram);
+    kdLineDiagram->setModel(model);
     registerDiagram(kdLineDiagram);
 
     kdLineDiagram->setAllowOverlappingDataValueTexts(showOverlappingDataLabels);
@@ -533,6 +513,8 @@ void Axis::Private::createAreaDiagram()
     Q_ASSERT(kdAreaDiagram == 0);
 
     kdAreaDiagram = new KChart::LineDiagram(plotArea->kdChart(), kdPlane);
+    KChartModel *model = new KChartModel(plotArea, kdAreaDiagram);
+    kdAreaDiagram->setModel(model);
     registerDiagram(kdAreaDiagram);
     KChart::LineAttributes attr = kdAreaDiagram->lineAttributes();
     // Draw the area under the lines. This makes this diagram an area chart.
@@ -578,9 +560,10 @@ void Axis::Private::createCircleDiagram()
     Q_ASSERT(kdCircleDiagram == 0);
 
     kdCircleDiagram = new KChart::PieDiagram(plotArea->kdChart(), kdPolarPlane);
+    KChartModel *model = new KChartModel(plotArea, kdCircleDiagram);
+    kdCircleDiagram->setModel(model);
     registerDiagram(kdCircleDiagram);
-    KChartModel *model = dynamic_cast<KChartModel*>(kdCircleDiagram->model());
-    Q_ASSERT(model);
+
     model->setDataDirection(Qt::Horizontal);
 
     plotArea->parent()->legend()->kdLegend()->addDiagram(kdCircleDiagram);
@@ -602,9 +585,10 @@ void Axis::Private::createRingDiagram()
     Q_ASSERT(kdRingDiagram == 0);
 
     kdRingDiagram = new KChart::RingDiagram(plotArea->kdChart(), kdPolarPlane);
+    KChartModel *model = new KChartModel(plotArea, kdRingDiagram);
+    kdRingDiagram->setModel(model);
     registerDiagram(kdRingDiagram);
-    KChartModel *model = dynamic_cast<KChartModel*>(kdRingDiagram->model());
-    Q_ASSERT(model);
+
     model->setDataDirection(Qt::Horizontal);
 
     plotArea->parent()->legend()->kdLegend()->addDiagram(kdRingDiagram);
@@ -629,7 +613,10 @@ void Axis::Private::createRadarDiagram(bool filled)
     //kdRadarDiagramModel->setDataDirection(Qt::Horizontal);
 
     kdRadarDiagram = new KChart::RadarDiagram(plotArea->kdChart(), kdRadarPlane);
+    KChartModel *model = new KChartModel(plotArea, kdRadarDiagram);
+    kdRadarDiagram->setModel(model);
     registerDiagram(kdRadarDiagram);
+
     kdRadarDiagram->setCloseDatasets(true);
 
     if (filled) {
@@ -656,10 +643,10 @@ void Axis::Private::createScatterDiagram()
     Q_ASSERT(plotArea);
 
     kdScatterDiagram = new KChart::Plotter(plotArea->kdChart(), kdPlane);
+    KChartModel *model = new KChartModel(plotArea, kdScatterDiagram);
+    kdScatterDiagram->setModel(model);
     registerDiagram(kdScatterDiagram);
 
-    KChartModel *model = dynamic_cast<KChartModel*>(kdScatterDiagram->model());
-    Q_ASSERT(model);
     model->setDataDimensions(2);
 
     kdScatterDiagram->setPen(Qt::NoPen);
@@ -689,10 +676,10 @@ void Axis::Private::createStockDiagram()
     Q_ASSERT(kdStockDiagram == 0);
 
     kdStockDiagram = new KChart::StockDiagram(plotArea->kdChart(), kdPlane);
+    KChartModel *model = new KChartModel(plotArea, kdStockDiagram);
+    kdStockDiagram->setModel(model);
     registerDiagram(kdStockDiagram);
 
-    KChartModel *model = dynamic_cast<KChartModel*>(kdStockDiagram->model());
-    Q_ASSERT(model);
     model->setDataDimensions(3);
 
 #if 0  // Stacked and Percent not supported by KChart.
@@ -723,10 +710,10 @@ void Axis::Private::createBubbleDiagram()
     Q_ASSERT(plotArea);
 
     kdBubbleDiagram = new KChart::Plotter(plotArea->kdChart(), kdPlane);
+    KChartModel *model = new KChartModel(plotArea, kdBubbleDiagram);
+    kdBubbleDiagram->setModel(model);
     registerDiagram(kdBubbleDiagram);
 
-    KChartModel *model = dynamic_cast<KChartModel*>(kdBubbleDiagram->model());
-    Q_ASSERT(model);
     model->setDataDimensions(2);
 
     kdPlane->addDiagram(kdBubbleDiagram);
@@ -752,6 +739,8 @@ void Axis::Private::createSurfaceDiagram()
     // This is a so far a by KChart unsupported chart type.
     // Fall back to bar diagram for now.
     kdSurfaceDiagram = new KChart::BarDiagram(plotArea->kdChart(), kdPlane);
+    KChartModel *model = new KChartModel(plotArea, kdSurfaceDiagram);
+    kdSurfaceDiagram->setModel(model);
     registerDiagram(kdSurfaceDiagram);
     plotArea->parent()->legend()->kdLegend()->addDiagram(kdSurfaceDiagram);
     kdPlane->addDiagram(kdSurfaceDiagram);
@@ -765,6 +754,8 @@ void Axis::Private::createGanttDiagram()
     // This is a so far a by KChart unsupported chart type.
     // Fall back to bar diagram for now.
     kdGanttDiagram = new KChart::BarDiagram(plotArea->kdChart(), kdPlane);
+    KChartModel *model = new KChartModel(plotArea, kdGanttDiagram);
+    kdGanttDiagram->setModel(model);
     registerDiagram(kdGanttDiagram);
     plotArea->parent()->legend()->kdLegend()->addDiagram(kdGanttDiagram);
     kdPlane->addDiagram(kdGanttDiagram);
@@ -1751,7 +1742,6 @@ void Axis::plotAreaChartTypeChanged(ChartType newChartType)
                 oldModel->removeDataSet(dataSet);
             }
         }
-
     }
 
     d->plotAreaChartType = newChartType;
