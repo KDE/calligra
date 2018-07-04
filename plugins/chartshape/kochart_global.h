@@ -150,5 +150,7 @@ enum OdfMarkerStyle { MarkerSquare         = 0,
 } // Namespace KoChart
 
 QDebug operator<<(QDebug dbg, KoChart::Position p);
+QDebug operator<<(QDebug dbg, KoChart::ChartType ct);
+QDebug operator<<(QDebug dbg, KoChart::ChartSubtype st);
 
 #endif
