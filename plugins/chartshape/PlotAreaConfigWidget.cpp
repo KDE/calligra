@@ -304,6 +304,7 @@ PlotAreaConfigWidget::PlotAreaConfigWidget()
 
 PlotAreaConfigWidget::~PlotAreaConfigWidget()
 {
+    deleteSubDialogs();
     delete d;
 }
 
