@@ -50,6 +50,12 @@ const QLoggingCategory &CHARTAXIS_LOG()
     return category;
 }
 
+const QLoggingCategory &CHARTDADASET_LOG()
+{
+    static const QLoggingCategory category("calligra.plugin.chart.dataset");
+    return category;
+}
+
 const QLoggingCategory &CHARTUI_TITLES_LOG()
 {
     static const QLoggingCategory category("calligra.plugin.chart.ui.titles");

@@ -55,6 +55,12 @@ extern const QLoggingCategory &CHARTAXIS_LOG();
 #define warnChartAxis qCWarning(CHARTAXIS_LOG)
 #define errorChartAxis qCCritical(CHARTAXIS_LOG)
 
+extern const QLoggingCategory &CHARTDADASET_LOG();
+
+#define debugChartDataset qCDebug(CHARTDADASET_LOG)<<Q_FUNC_INFO
+#define warnChartDataset qCWarning(CHARTDADASET_LOG)
+#define errorChartDataset qCCritical(CHARTDADASET_LOG)
+
 extern const QLoggingCategory &CHARTUI_TITLES_LOG();
 
 #define debugChartUiTitles qCDebug(CHARTUI_TITLES_LOG)<<Q_FUNC_INFO
