@@ -510,7 +510,7 @@ void DataSetConfigWidget::dataSetChartTypeSelected(QAction *action)
     } else if (action == d->dataSetStackedAreaChartAction) {
         type    = StockChartType;
         subtype = OpenHighLowCloseChartSubtype;
-    } else if (action == d->dataSetPercentAreaChartAction) {
+    } else if (action == d->dataSetCandlestickStockChartAction) {
         type    = StockChartType;
         subtype = CandlestickChartSubtype;
     }
