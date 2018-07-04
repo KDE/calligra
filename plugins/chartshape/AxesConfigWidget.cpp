@@ -246,7 +246,7 @@ void AxesConfigWidget::ui_axisSelectionChanged(int index)
             axis = chart->plotArea()->secondaryXAxis();
             if (!axis) {
                 debugChartUiAxes<<"create secondary x axis";
-                emit axisAdded(XAxisDimension, "TITLE");
+                emit axisAdded(XAxisDimension, i18n("Axistitle"));
                 return;
             }
             break;
@@ -254,7 +254,7 @@ void AxesConfigWidget::ui_axisSelectionChanged(int index)
             axis = chart->plotArea()->secondaryYAxis();
             if (!axis) {
                 debugChartUiAxes<<"create secondary y axis";
-                emit axisAdded(YAxisDimension, "TITLE");
+                emit axisAdded(YAxisDimension, i18n("Axistitle"));
                 return;
             }
             break;
