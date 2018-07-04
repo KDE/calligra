@@ -121,7 +121,9 @@ void TableEditorDialog::setProxyModel( ChartProxyModel* proxyModel )
         return;
 
     // Disconnect the old proxy model.
-    m_proxyModel->disconnect( this );
+    if (m_proxyModel) {
+        m_proxyModel->disconnect( this );
+    }
 
     m_proxyModel = proxyModel;
 
