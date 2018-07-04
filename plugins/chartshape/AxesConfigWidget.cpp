@@ -168,16 +168,6 @@ QAction * AxesConfigWidget::createAction()
     return 0;
 }
 
-
-static QString nonEmptyAxisTitle(Axis *axis, int index)
-{
-    QString title = axis->titleText();
-    if (title.isEmpty())
-        // TODO (post-2.3): Use "X Axis" or "Y Axis" as default labels instead
-        title = i18n("Axis %1", index + 1);
-    return title;
-}
-
 void AxesConfigWidget::updateData()
 {
     debugChartUiAxes<<chart<<d->ui.axes->currentIndex();
