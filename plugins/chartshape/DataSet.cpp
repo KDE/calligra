@@ -25,6 +25,7 @@
 
 // Own
 #include "DataSet.h"
+#include "ChartDebug.h"
 
 // Qt
 #include <QAbstractItemModel>
@@ -72,24 +73,24 @@ const int numDefaultMarkerTypes = 15;
 // These are the values that are defined for chart:symbol-name
 // Ref: ODF 1.2 20.54 chart:symbol-name, page 716
 const QByteArray symbolNames[] = {
-    "square", 
-    "diamond", 
+    "square",
+    "diamond",
     "arrow-down",
-    "arrow-up", 
-    "arrow-right", 
-    "arrow-left", 
-    "bow-tie", 
-    "hourglass", 
-    "circle", 
-    "star", 
-    "x", 
+    "arrow-up",
+    "arrow-right",
+    "arrow-left",
+    "bow-tie",
+    "hourglass",
+    "circle",
+    "star",
+    "x",
     "plus",
-    "asterisk", 
-    "horizontal-bar", 
+    "asterisk",
+    "horizontal-bar",
     "vertical-bar"
 };
 
-const KChart::MarkerAttributes::MarkerStyle defaultMarkerTypes[]= { 
+const KChart::MarkerAttributes::MarkerStyle defaultMarkerTypes[]= {
     KChart::MarkerAttributes::MarkerSquare,     // 0
     KChart::MarkerAttributes::MarkerDiamond,    // 1
     KChart::MarkerAttributes::MarkerArrowDown,  // 2
@@ -689,7 +690,7 @@ void DataSet::setChartType(ChartType type)
     d->setAttributesAccordingToType();
 
     if (axis)
-        axis->attachDataSet(this);    
+        axis->attachDataSet(this);
 }
 
 void DataSet::setChartSubType(ChartSubtype subType)
@@ -830,7 +831,7 @@ KChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */)
     {
         Q_ASSERT(attachedAxis());
         Q_ASSERT(attachedAxis()->plotArea());
-        ma.setMarkerStyle(KChart::MarkerAttributes::MarkerCircle);        
+        ma.setMarkerStyle(KChart::MarkerAttributes::MarkerCircle);
         ma.setThreeD(attachedAxis()->plotArea()->isThreeD());
         qreal maxSize = d->maxBubbleSize();
         if (section >= 0) {
@@ -877,21 +878,41 @@ KChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */)
         if (!s.isEmpty()) dataLabel += s + QLatin1Char(' ');
     }
     if (type.number) {
-        QString s = d->formatData(d->yDataRegion, section, Qt::DisplayRole);
+        QString s;
+        if (d->effectiveChartType() == BubbleChartType) {
+            s = d->formatData(d->customDataRegion, section, Qt::DisplayRole);
+        } else {
+            s = d->formatData(d->yDataRegion, section, Qt::DisplayRole);
+        }
         if (!s.isEmpty()) dataLabel += s + QLatin1Char(' ');
     }
     if (type.percentage) {
         bool ok;
-        qreal value = yData(section, Qt::EditRole).toDouble(&ok);
-        if (ok) {
-            qreal sum = 0.0;
-            for(int i = 0; i < d->yDataRegion.cellCount(); ++i) {
-                sum += yData(i, Qt::EditRole).toDouble();
+        qreal value;
+        if (d->effectiveChartType() == BubbleChartType) {
+            value = customData(section, Qt::EditRole).toDouble(&ok);
+            if (ok) {
+                qreal sum = 0.0;
+                for(int i = 0; i < d->customDataRegion.cellCount(); ++i) {
+                    sum += customData(i, Qt::EditRole).toDouble();
+                }
+                if (sum == 0.0)
+                    ok = false;
+                else
+                    value = value / sum * 100.0;
             }
-            if (sum == 0.0)
-                ok = false;
-            else
-                value = value / sum * 100.0;
+        } else {
+            value = yData(section, Qt::EditRole).toDouble(&ok);
+            if (ok) {
+                qreal sum = 0.0;
+                for(int i = 0; i < d->yDataRegion.cellCount(); ++i) {
+                    sum += yData(i, Qt::EditRole).toDouble();
+                }
+                if (sum == 0.0)
+                    ok = false;
+                else
+                    value = value / sum * 100.0;
+            }
         }
         if (ok)
             dataLabel += QString::number(value, 'f', 0) + "% ";
@@ -954,7 +975,7 @@ void DataSet::setPen(const QPen &pen)
 //         mattr.setMarkerColor(pen.color());
 //         it->setMarkerAttributes(mattr);
 //     }
-    
+
 }
 
 void DataSet::setBrush(const QBrush &brush)
@@ -1089,6 +1110,9 @@ QVariant DataSet::xData(int index, int role) const
     // 2 data sets in total afterwards. The first column is y data, the second
     // bubble width. Same for the second data set. So there is nothing left
     // for x data. Instead use a fall-back to the data points index.
+    // Note by danders:
+    // ODF spec says bubble charts *must* have xdata, ydata and bubble width.
+    // However LO allows for no xdata in which case it used data index (as we do here).
     QVariant data = d->data(d->xDataRegion, index, role);
     if (data.isValid() && data.canConvert< double >() && data.convert(QVariant::Double) )
         return data;
@@ -1226,7 +1250,7 @@ void DataSet::setCustomDataRegion(const CellRegion &region)
 {
     d->customDataRegion = region;
     d->updateSize();
-    
+
     if (d->kdChartModel)
         d->kdChartModel->dataSetChanged(this, KChartModel::CustomDataRole);
 }
@@ -1516,7 +1540,7 @@ bool DataSet::loadOdf(const KoXmlElement &n,
                     setXDataRegion(CellRegion(helper->tableSource, region));
                 }
                 else {
-                    const QString region = elem.attributeNS(KoXmlNS::table, "cell-range-address", QString());                    
+                    const QString region = elem.attributeNS(KoXmlNS::table, "cell-range-address", QString());
                     setYDataRegion(CellRegion(helper->tableSource, region));
                 }
                 ++domainCount;
@@ -1533,7 +1557,7 @@ bool DataSet::loadOdf(const KoXmlElement &n,
         const QString regionString = n.attributeNS(KoXmlNS::chart, "values-cell-range-address", QString());
         const CellRegion region(helper->tableSource, regionString);
         if (bubbleChart) {
-            setCustomDataRegion(region);            
+            setCustomDataRegion(region);
         }
         else {
             setYDataRegion(region);
@@ -1800,10 +1824,11 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
     bodyWriter.addAttribute("chart:style-name", styleName);
 
     // Save cell regions for values if defined.
-    QString values = yDataRegion().toString();
-    if (!values.isEmpty())
-        bodyWriter.addAttribute("chart:values-cell-range-address", values);
-
+    if (chartType() != KoChart::BubbleChartType) {
+        QString values = yDataRegion().toString();
+        if (!values.isEmpty())
+            bodyWriter.addAttribute("chart:values-cell-range-address", values);
+    }
     // Save cell regions for labels if defined. If not defined then the internal
     // table:table "local-table" (the data is stored in the ChartTableModel) is used.
     QString label = labelDataRegion().toString();
@@ -1832,7 +1857,24 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
     if (d->attachedAxis) {
         bodyWriter.addAttribute("chart:attached-axis", d->attachedAxis->name());
     }
-
+    if (chartType() == KoChart::BubbleChartType) {
+        // Custom data shall contain bubble size
+        QString values = customDataRegion().toString();
+        bodyWriter.addAttribute("chart:values-cell-range-address", values);
+        bodyWriter.startElement("chart:domain");
+        // Y-data shall be the first domain
+        values = yDataRegion().toString();
+        bodyWriter.addAttribute("table:cell-range-address", values);
+        bodyWriter.endElement();
+        // X-data shall be the second domain
+        values = xDataRegion().toString();
+        if (!values.isEmpty()) {
+            // Note, this is contrary to ODF but in line with LO
+            bodyWriter.startElement("chart:domain");
+            bodyWriter.addAttribute("table:cell-range-address", values);
+            bodyWriter.endElement();
+        }
+    }
     bodyWriter.endElement(); // chart:series
 }
 
@@ -1886,4 +1928,34 @@ static KChart::MarkerAttributes::MarkerStyle odf2kdMarker(OdfMarkerStyle style) 
 QString DataSet::axisName() const
 {
     return d->axisName;
+}
+
+QDebug operator<<(QDebug dbg, KoChart::DataSet *ds)
+{
+    if (ds) {
+        QVariantList x;
+        for (int i = 0; i < ds->size(); ++i) {
+            x << ds->xData(i);
+        }
+        QVariantList y;
+        for (int i = 0; i < ds->size(); ++i) {
+            y << ds->yData(i);
+        }
+        QVariantList cust;
+        for (int i = 0; i < ds->size(); ++i) {
+            cust << ds->customData(i);
+        }
+        QVariantList cat;
+        for (int i = 0; i < ds->size(); ++i) {
+            cat << ds->categoryData(i);
+        }
+        return dbg.nospace()<<endl
+        <<"\tDataSet[chart:"<<ds->chartType()<<" size:"<<ds->size()<<" label:"<<ds->labelData()<<endl
+        <<"\t  X:"<<ds->xDataRegion().toString()<<':'<<x<<endl
+        <<"\t  Y:"<<ds->yDataRegion().toString()<<':'<<y<<endl
+        <<"\t  Cust:"<<ds->customDataRegion().toString()<<':'<<cust<<endl
+        <<"\t  Cat:"<<ds->categoryDataRegion().toString()<<':'<<cat<<endl
+        <<"\t]";
+    }
+    return dbg.noquote()<<"DataSet(0x0)";
 }

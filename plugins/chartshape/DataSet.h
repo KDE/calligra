@@ -28,6 +28,7 @@
 
 // Qt
 #include <QPen>
+#include <QDebug>
 
 // KoChart
 #include "ChartShape.h"
@@ -250,6 +251,8 @@ private:
 };
 
 } // Namespace KoChart
+
+QDebug operator<<(QDebug dbg, KoChart::DataSet* ds);
 
 #endif // KCHART_DATASET_H
 
