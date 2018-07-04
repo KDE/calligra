@@ -662,9 +662,6 @@ void DataSetConfigWidget::updateData()
 
     // Make sure we only allow legal chart type combinations
     if (isPolar(chartType)) {
-        setPolarChartTypesEnabled(true);
-        setCartesianChartTypesEnabled(false);
-
         // TODO: check out this claim:
         // Pie charts and ring charts have no axes but radar charts do.
         // Disable choosing of attached axis if there is none.
@@ -675,9 +672,6 @@ void DataSetConfigWidget::updateData()
         d->ui.dataSetHasChartType->setEnabled(hasAxes);
         d->ui.dataSetChartTypeMenu->setEnabled(hasAxes);
     } else {
-        setPolarChartTypesEnabled(false);
-        setCartesianChartTypesEnabled(true);
-
         // All the cartesian chart types have axes.
 //         d->ui.axisConfiguration->setEnabled(true);
         d->dataSetAxes.append(chart->plotArea()->yAxis());
@@ -765,39 +759,93 @@ void DataSetConfigWidget::ui_dataSetSelectionChanged(int index)
 
     d->selectedDataSet = index;
 
+    enableChartTypes();
+
     blockSignals(false);
 
     updateMarkers();
 }
 
-/**
- * Enabled/Disabled menu actions to set a polar chart type
+/*
+ * Enabled/Disabled menu actions depends on main chart type
  */
-void DataSetConfigWidget::setPolarChartTypesEnabled(bool enabled)
+void DataSetConfigWidget::enableChartTypes()
 {
-    d->dataSetCircleChartAction->setEnabled(enabled);
-    d->dataSetRingChartAction->setEnabled(enabled);
-    d->dataSetRadarChartAction->setEnabled(enabled);
-    d->dataSetFilledRadarChartAction->setEnabled(enabled);
-}
+    d->ui.dataSetChartTypeMenu->setEnabled(false);
 
-/**
- * Enabled/Disabled menu actions to set a cartesian chart type
- */
-void DataSetConfigWidget::setCartesianChartTypesEnabled(bool enabled)
-{
-    d->dataSetBarChartMenu->setEnabled(enabled);
-    d->dataSetLineChartMenu->setEnabled(enabled);
-    d->dataSetAreaChartMenu->setEnabled(enabled);
-    d->dataSetRadarChartMenu->setEnabled(enabled);
-    d->dataSetScatterChartAction->setEnabled(enabled);
-    d->dataSetStockChartMenu->setEnabled(enabled);
-    d->dataSetBubbleChartAction->setEnabled(enabled);
-    // FIXME: Enable for:
-    // pie, ring?
-    //NYI:
-    //surface
-    //gantt
+    d->dataSetBarChartMenu->setEnabled(false);
+    d->dataSetLineChartMenu->setEnabled(false);
+    d->dataSetAreaChartMenu->setEnabled(false);
+    d->dataSetRadarChartMenu->setEnabled(false);
+    d->dataSetStockChartMenu->setEnabled(false);
+    d->dataSetCircleChartAction->setEnabled(false);
+    d->dataSetRingChartAction->setEnabled(false);
+    d->dataSetScatterChartAction->setEnabled(false);
+    d->dataSetBubbleChartAction->setEnabled(false);
+
+    DataSet *dataSet = d->dataSets.value(d->selectedDataSet);
+    if (!dataSet) {
+        debugChartUiDataSet<<"No dataset selected";
+        return;
+    }
+    ChartType ctype = dataSet->chartType();
+    switch (chart->chartType()) {
+        case BarChartType:
+            d->ui.dataSetChartTypeMenu->setEnabled(true);
+            d->dataSetBarChartMenu->setEnabled(ctype != BarChartType);
+            d->dataSetLineChartMenu->setEnabled(ctype != LineChartType);
+            d->dataSetAreaChartMenu->setEnabled(ctype != AreaChartType);
+            break;
+        case LineChartType:
+            d->ui.dataSetChartTypeMenu->setEnabled(true);
+            d->dataSetLineChartMenu->setEnabled(ctype != LineChartType);
+            d->dataSetBarChartMenu->setEnabled(ctype != BubbleChartType);
+            d->dataSetAreaChartMenu->setEnabled(ctype != AreaChartType);
+            break;
+        case AreaChartType:
+            d->ui.dataSetChartTypeMenu->setEnabled(true);
+            d->dataSetAreaChartMenu->setEnabled(ctype != AreaChartType);
+            d->dataSetBarChartMenu->setEnabled(ctype != BubbleChartType);
+            d->dataSetLineChartMenu->setEnabled(ctype != LineChartType);
+            break;
+        case CircleChartType:
+            break;
+        case RingChartType:
+            break;
+        case ScatterChartType:
+            break;
+        case RadarChartType:
+            d->ui.dataSetChartTypeMenu->setEnabled(true);
+            d->dataSetRadarChartMenu->setEnabled(true);
+            d->dataSetRadarChartAction->setEnabled(ctype != RadarChartType);
+            d->dataSetFilledRadarChartAction->setEnabled(ctype != FilledRadarChartType);
+            break;
+        case FilledRadarChartType:
+            d->ui.dataSetChartTypeMenu->setEnabled(true);
+            d->dataSetRadarChartMenu->setEnabled(true);
+            d->dataSetFilledRadarChartAction->setEnabled(ctype != FilledRadarChartType);
+            d->dataSetRadarChartAction->setEnabled(ctype != RadarChartType);
+            break;
+        case StockChartType:
+            d->ui.dataSetChartTypeMenu->setEnabled(true);
+            d->dataSetStockChartMenu->setEnabled(ctype != StockChartType);
+            d->dataSetBarChartMenu->setEnabled(ctype != BarChartType);
+            d->dataSetLineChartMenu->setEnabled(ctype != LineChartType);
+            d->dataSetAreaChartMenu->setEnabled(ctype != AreaChartType);
+            break;
+        case BubbleChartType:
+            d->ui.dataSetChartTypeMenu->setEnabled(true);
+            d->dataSetBubbleChartAction->setEnabled(ctype != BubbleChartType);
+            d->dataSetBarChartMenu->setEnabled(ctype != BarChartType);
+            d->dataSetLineChartMenu->setEnabled(ctype != LineChartType);
+            d->dataSetAreaChartMenu->setEnabled(ctype != AreaChartType);
+            d->dataSetScatterChartAction->setEnabled(ctype != ScatterChartType);
+            break;
+        default:
+            debugChartUiDataSet<<"Unhandled chart type:"<<ctype;
+            break;
+
+    }
 }
 
 void DataSetConfigWidget::ui_datasetShowCategoryChanged(bool b)

@@ -108,8 +108,7 @@ private:
     void setupDialogs();
     void createActions();
 
-    void setPolarChartTypesEnabled(bool enabled);
-    void setCartesianChartTypesEnabled(bool enabled);
+    void enableChartTypes();
 
     class Private;
     Private * const d;
