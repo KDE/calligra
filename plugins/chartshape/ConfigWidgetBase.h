@@ -57,7 +57,7 @@ public:
     // reimplement to update the ui
     virtual void updateData() {}
     // reimplement if you open any dialogs
-    virtual void deleteSubDialogs() {}
+    virtual void deleteSubDialogs(ChartType type = LastChartType) {Q_UNUSED(type)}
 
     void blockSignals(bool block) {
         blockSignals(this, block);

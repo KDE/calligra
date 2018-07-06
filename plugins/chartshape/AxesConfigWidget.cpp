@@ -70,7 +70,7 @@ using namespace KoChart;
 class AxesConfigWidget::Private
 {
 public:
-    Private(QWidget *parent);
+    Private(AxesConfigWidget *parent);
     ~Private();
 
     Ui::AxesConfigWidget  ui;
@@ -87,9 +87,29 @@ public:
 };
 
 
-AxesConfigWidget::Private::Private(QWidget *parent)
+AxesConfigWidget::Private::Private(AxesConfigWidget *parent)
     : newAxisDialog(parent)
 {
+    ui.setupUi(parent);
+    ui.axisPosition->insertItem(0, i18n("Start"), "start");
+    ui.axisPosition->insertItem(1, i18n("End"), "end");
+
+    ui.axislabelPosition->insertItem(0, i18n("Near-axis"), "near-axis");
+    ui.axislabelPosition->insertItem(1, i18n("Other-side"), "near-axis-other-side");
+    ui.axislabelPosition->insertItem(2, i18n("End"), "outside-end");
+    ui.axislabelPosition->insertItem(3, i18n("Start"), "outside-start");
+
+
+    connect(ui.axisShowTitle, SIGNAL(toggled(bool)), parent, SLOT(ui_axisShowTitleChanged(bool)));
+    connect(ui.axisShow, SIGNAL(toggled(bool)), parent, SLOT(ui_axisShowChanged(bool)));
+    connect(ui.axisPosition, SIGNAL(currentIndexChanged(int)), parent, SLOT(ui_axisPositionChanged(int)));
+    connect(ui.axislabelPosition, SIGNAL(currentIndexChanged(int)), parent, SLOT(ui_axisLabelsPositionChanged(int)));
+    connect(ui.axisShowMajorGridLines, SIGNAL(toggled(bool)), parent, SLOT(ui_axisShowMajorGridLinesChanged(bool)));
+    connect(ui.axisShowMinorGridLines, SIGNAL(toggled(bool)), parent, SLOT(ui_axisShowMinorGridLinesChanged(bool)));
+    connect(ui.axes, SIGNAL(currentIndexChanged(int)),parent, SLOT(ui_axisSelectionChanged(int)));
+
+    connect(ui.gapBetweenBars, SIGNAL(editingFinished()), parent, SLOT(slotGapBetweenBars()));
+    connect(ui.gapBetweenSets, SIGNAL(editingFinished()), parent, SLOT(slotGapBetweenSets()));
 }
 
 AxesConfigWidget::Private::~Private()
@@ -102,31 +122,21 @@ AxesConfigWidget::Private::~Private()
 // TODO:
 // 1) Allow user to change axis' "visible" property
 
-AxesConfigWidget::AxesConfigWidget()
-    : d(new Private(this))
+AxesConfigWidget::AxesConfigWidget(QWidget *parent)
+    : ConfigObjectBase(parent)
+    , d(new Private(this))
 {
     setObjectName("AxesConfigWidget");
-    d->ui.setupUi(this);
 
-    d->ui.axisPosition->insertItem(0, i18n("Start"), "start");
-    d->ui.axisPosition->insertItem(1, i18n("End"), "end");
+    setupDialogs();
+    createActions();
+}
 
-    d->ui.axislabelPosition->insertItem(0, i18n("Near-axis"), "near-axis");
-    d->ui.axislabelPosition->insertItem(1, i18n("Other-side"), "near-axis-other-side");
-    d->ui.axislabelPosition->insertItem(2, i18n("End"), "outside-end");
-    d->ui.axislabelPosition->insertItem(3, i18n("Start"), "outside-start");
-
-
-    connect(d->ui.axisShowTitle, SIGNAL(toggled(bool)), this, SLOT(ui_axisShowTitleChanged(bool)));
-    connect(d->ui.axisShow, SIGNAL(toggled(bool)), this, SLOT(ui_axisShowChanged(bool)));
-    connect(d->ui.axisPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(ui_axisPositionChanged(int)));
-    connect(d->ui.axislabelPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(ui_axisLabelsPositionChanged(int)));
-    connect(d->ui.axisShowMajorGridLines, SIGNAL(toggled(bool)), this, SLOT(ui_axisShowMajorGridLinesChanged(bool)));
-    connect(d->ui.axisShowMinorGridLines, SIGNAL(toggled(bool)), this, SLOT(ui_axisShowMinorGridLinesChanged(bool)));
-    connect(d->ui.axes, SIGNAL(currentIndexChanged(int)),this, SLOT(ui_axisSelectionChanged(int)));
-
-    connect(d->ui.gapBetweenBars, SIGNAL(editingFinished()), this, SLOT(slotGapBetweenBars()));
-    connect(d->ui.gapBetweenSets, SIGNAL(editingFinished()), this, SLOT(slotGapBetweenSets()));
+AxesConfigWidget::AxesConfigWidget(QList<ChartType> types, QWidget *parent)
+    : ConfigObjectBase(types, parent)
+    , d(new Private(this))
+{
+    setObjectName("AxesConfigWidget");
 
     setupDialogs();
     createActions();
@@ -156,24 +166,22 @@ void AxesConfigWidget::deleteSubDialogs()
 {
 }
 
-void AxesConfigWidget::open(KoShape* shape)
+void AxesConfigWidget::open(ChartShape* shape)
 {
     debugChartUiAxes<<shape;
     d->axes.clear();
-    ConfigWidgetBase::open(shape);
+    ConfigObjectBase::open(shape);
 }
 
-QAction * AxesConfigWidget::createAction()
+void AxesConfigWidget::updateData(ChartType type, ChartSubtype subtype)
 {
-    return 0;
-}
+    Q_UNUSED(subtype);
 
-void AxesConfigWidget::updateData()
-{
     debugChartUiAxes<<chart<<d->ui.axes->currentIndex();
-    if (!chart) {
+    if (!chart || !chartTypes.contains(type)) {
         return;
     }
+    show();
     blockSignals(true);
     d->ui.axisShow->setChecked(false);
     d->ui.axisShowMajorGridLines->setChecked(false);
@@ -290,7 +298,7 @@ void AxesConfigWidget::ui_axisSelectionChanged(int index)
 
     d->ui.gapBetweenBars->setValue(axis->gapBetweenBars());
     d->ui.gapBetweenSets->setValue(axis->gapBetweenSets());
-    d->ui.barProperties->setVisible(axis->dimension() == YAxisDimension);
+    d->ui.barProperties->setVisible(chart->chartType() == BarChartType && axis->dimension() == YAxisDimension);
     blockSignals(false);
 }
 

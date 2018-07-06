@@ -42,11 +42,13 @@ set (chartshape_LIB_SRCS
     ChartShape.cpp
     ChartTool.cpp
     ChartToolFactory.cpp
+    ConfigObjectBase.cpp
     TitlesConfigWidget.cpp
     LegendConfigWidget.cpp
     PlotAreaConfigWidget.cpp
     AxesConfigWidget.cpp
     DataSetConfigWidget.cpp
+    PieConfigWidget.cpp
     ChartTableView.cpp
     ScreenConversions.cpp
     ChartLayout.cpp
@@ -59,6 +61,7 @@ set (chartshape_LIB_SRCS
     dialogs/CellRegionDialog.cpp
     dialogs/FontEditorDialog.cpp
     dialogs/FormatErrorBarDialog.cpp
+    dialogs/PieDataEditor.cpp
     commands/ChartTypeCommand.cpp
     commands/LegendCommand.cpp
     commands/AxisCommand.cpp
@@ -74,11 +77,13 @@ ki18n_wrap_ui(chartshape_LIB_SRCS
     PlotAreaConfigWidget.ui
     AxesConfigWidget.ui
     DataSetConfigWidget.ui
+    PieConfigWidget.ui
     dialogs/ChartTableEditor.ui
     dialogs/NewAxisDialog.ui
     dialogs/AxisScalingDialog.ui
     dialogs/CellRegionDialog.ui
     dialogs/FormatErrorBarDialog.ui
+    dialogs/PieDataEditor.ui
 )
 
 add_library(chartshapecore STATIC ${chartshape_LIB_SRCS})

@@ -70,10 +70,15 @@
 #include "FormatErrorBarDialog.h"
 #include "CellRegionDialog.h"
 #include "TableEditorDialog.h"
+#include "PieDataEditor.h"
 #include "commands/ChartTypeCommand.h"
 #include "CellRegionStringValidator.h"
 #include "ChartTableModel.h"
 #include "TableSource.h"
+#include "AxesConfigWidget.h"
+#include "DataSetConfigWidget.h"
+#include "PieConfigWidget.h"
+#include "ConfigObjectBase.h"
 #include "ChartDebug.h"
 
 using namespace KoChart;
@@ -228,6 +233,7 @@ PlotAreaConfigWidget::PlotAreaConfigWidget()
     setObjectName("Chart Type");
     d->ui.setupUi(this);
 
+    setupWidgets();
     // Chart type button with its associated menu
     QMenu *chartTypeMenu = new QMenu(i18n("Chart Type"), this);
     chartTypeMenu->setIcon(ICON1(BarChartType));
@@ -308,11 +314,46 @@ PlotAreaConfigWidget::~PlotAreaConfigWidget()
     delete d;
 }
 
-
-void PlotAreaConfigWidget::deleteSubDialogs()
+AxesConfigWidget *PlotAreaConfigWidget::cartesianAxesConfigWidget() const
 {
-    delete d->tableEditorDialog;
-    d->tableEditorDialog = 0;
+    return d->ui.cartesianAxes;
+}
+
+DataSetConfigWidget *PlotAreaConfigWidget::cartesianDataSetConfigWidget() const
+{
+    return d->ui.cartesianDataSets;
+}
+
+PieConfigWidget *PlotAreaConfigWidget::pieConfigWidget() const
+{
+    return d->ui.pieConfigWidget;
+}
+
+void PlotAreaConfigWidget::deleteSubDialogs(ChartType type)
+{
+    switch (type) {
+        case BarChartType:
+        case LineChartType:
+        case AreaChartType:
+        case RingChartType:
+        case RadarChartType:
+        case FilledRadarChartType:
+        case ScatterChartType:
+        case SurfaceChartType:
+        case BubbleChartType:
+        case StockChartType:
+            delete findChildren<PieDataEditor*>().value(0);
+            break;
+        case CircleChartType:
+            delete d->tableEditorDialog;
+            d->tableEditorDialog = 0;
+            break;
+        default:
+            delete d->tableEditorDialog;
+            d->tableEditorDialog = 0;
+            delete findChildren<PieDataEditor*>().value(0);
+            break;
+    }
 }
 
 void PlotAreaConfigWidget::open(KoShape* shape)
@@ -322,6 +363,10 @@ void PlotAreaConfigWidget::open(KoShape* shape)
     if (!chart) {
         return;
     }
+    for (ConfigObjectBase *w : findChildren<ConfigObjectBase*>()) {
+        w->open(chart);
+    }
+
     d->tableSource = chart->tableSource();
 
 // NOTE: There's no single source table anymore, a Calligra Sheets workbook allows multiple to be used with a chart.
@@ -375,7 +420,20 @@ void PlotAreaConfigWidget::open(KoShape* shape)
     updateData();
 }
 
-QAction * PlotAreaConfigWidget::createAction()
+void PlotAreaConfigWidget::setupWidgets()
+{
+    QList<ChartType> types;
+    types << BarChartType << LineChartType << AreaChartType;
+    // TODO: temporary, these should have different widgets
+    types << RingChartType << RadarChartType << FilledRadarChartType << ScatterChartType << BubbleChartType;
+    cartesianAxesConfigWidget()->setChartTypes(types);
+
+    cartesianDataSetConfigWidget()->setChartTypes(types);
+
+    pieConfigWidget()->setChartTypes(QList<ChartType>()<<CircleChartType);
+}
+
+QAction *PlotAreaConfigWidget::createAction()
 {
     return 0;
 }
@@ -477,7 +535,6 @@ void PlotAreaConfigWidget::chartTypeSelected(QAction *action)
         subtype = NoChartSubtype;
     }
 
-
     emit chartTypeChanged(type, subtype);
     updateData();
 }
@@ -514,6 +571,15 @@ void PlotAreaConfigWidget::updateData()
     if (!chart) {
         return;
     }
+    deleteSubDialogs(chart->chartType());
+    switch (chart->chartType()) {
+        case CircleChartType:
+            d->ui.stackedWidget->setCurrentIndex(1);
+            break;
+        default:
+            d->ui.stackedWidget->setCurrentIndex(0);
+            break;
+    }
     blockSignals(true);
     debugChartUiPlotArea<<"chart:"<<chart->chartType()<<','<<chart->chartSubType()<<"current:"<<d->type<<','<<d->subtype;
     if (d->type != chart->chartType() || d->subtype != chart->chartSubType()) {
@@ -547,18 +613,38 @@ void PlotAreaConfigWidget::updateData()
     blockSignals(false);
     debugChartUiPlotArea<<"datasets blocked:"<<d->cellRegionDialog.dataSets->signalsBlocked();
     ui_dataSetSelectionChanged_CellRegionDialog(0);
+
+    for (ConfigObjectBase *w : findChildren<ConfigObjectBase*>()) {
+        w->updateData(d->type, d->subtype);
+    }
 }
 
 
 void PlotAreaConfigWidget::slotShowTableEditor()
 {
-    if (!d->tableEditorDialog) {
-        d->tableEditorDialog = new TableEditorDialog;
-        d->tableEditorDialog->setProxyModel(chart->proxyModel());
-        d->tableEditorDialog->setModel(chart->internalModel());
+    debugChartUiPlotArea;
+    switch (chart->chartType()) {
+        case CircleChartType: {
+            PieDataEditor *dlg = findChildren<PieDataEditor*>().value(0);
+            if (!dlg) {
+                dlg = new PieDataEditor(this);
+                dlg->setModel(chart->internalModel());
+                connect(dlg, SIGNAL(finished()), dlg, SLOT(close()));
+            }
+            dlg->show();
+            dlg->raise();
+            return;
+        }
+        default:
+            if (!d->tableEditorDialog) {
+                d->tableEditorDialog = new TableEditorDialog;
+                d->tableEditorDialog->setProxyModel(chart->proxyModel());
+                d->tableEditorDialog->setModel(chart->internalModel());
+            }
+            d->tableEditorDialog->show();
+            d->tableEditorDialog->raise();
+            return;
     }
-
-    d->tableEditorDialog->show();
 }
 
 

@@ -31,18 +31,19 @@ using namespace KoChart;
 using namespace KChart;
 
 
-DatasetCommand::DatasetCommand(DataSet* dataSet, ChartShape* chart)
+DatasetCommand::DatasetCommand(DataSet* dataSet, ChartShape* chart, int section)
     : m_dataSet(dataSet)
     , m_chart(chart)
+    , m_section(section)
 {
     m_newType = dataSet->chartType();
     m_newSubtype = dataSet->chartSubType();
-    m_newShowCategory = dataSet->valueLabelType().category;
-    m_newShowNumber = dataSet->valueLabelType().number;
-    m_newShowPercent = dataSet->valueLabelType().percentage;
-    m_newShowSymbol = dataSet->valueLabelType().symbol;
-    m_newBrushColor = dataSet->brush().color();
-    m_newPenColor = dataSet->pen().color();
+    m_newShowCategory = dataSet->valueLabelType(section).category;
+    m_newShowNumber = dataSet->valueLabelType(section).number;
+    m_newShowPercent = dataSet->valueLabelType(section).percentage;
+    m_newShowSymbol = dataSet->valueLabelType(section).symbol;
+    m_newBrushColor = dataSet->brush(section).color();
+    m_newPenColor = dataSet->pen(section).color();
     m_newMarkerStyle = dataSet->markerStyle();
     m_newAxis = dataSet->attachedAxis();
 }
@@ -56,12 +57,12 @@ void DatasetCommand::redo()
     // save the old type
     /*m_oldType = m_dataSet->chartType();
     m_oldSubtype = m_dataSet->chartSubType();*/
-    m_oldShowCategory = m_dataSet->valueLabelType().category;
-    m_oldShowNumber = m_dataSet->valueLabelType().number;
-    m_oldShowPercent = m_dataSet->valueLabelType().percentage;
-    m_oldShowSymbol = m_dataSet->valueLabelType().symbol;
-    m_oldBrushColor = m_dataSet->brush().color();
-    m_oldPenColor = m_dataSet->pen().color();
+    m_oldShowCategory = m_dataSet->valueLabelType(m_section).category;
+    m_oldShowNumber = m_dataSet->valueLabelType(m_section).number;
+    m_oldShowPercent = m_dataSet->valueLabelType(m_section).percentage;
+    m_oldShowSymbol = m_dataSet->valueLabelType(m_section).symbol;
+    m_oldBrushColor = m_dataSet->brush(m_section).color();
+    m_oldPenColor = m_dataSet->pen(m_section).color();
     m_oldMarkerStyle = m_dataSet->markerStyle();
     m_oldAxis = m_dataSet->attachedAxis();
 
@@ -70,18 +71,18 @@ void DatasetCommand::redo()
         m_oldShowPercent != m_newShowPercent ||
         m_oldShowSymbol != m_newShowSymbol)
     {
-        DataSet::ValueLabelType valueLabelType = m_dataSet->valueLabelType();
+        DataSet::ValueLabelType valueLabelType = m_dataSet->valueLabelType(m_section);
         valueLabelType.category = m_newShowCategory;
         valueLabelType.number = m_newShowNumber;
         valueLabelType.percentage = m_newShowPercent;
         valueLabelType.symbol = m_newShowSymbol;
-        m_dataSet->setValueLabelType(valueLabelType);
+        m_dataSet->setValueLabelType(valueLabelType, m_section);
     }
     if (m_oldBrushColor != m_newBrushColor) {
-        m_dataSet->setBrush(QBrush(m_newBrushColor));
+        m_dataSet->setBrush(m_section, QBrush(m_newBrushColor));
     }
     if (m_oldPenColor != m_newPenColor) {
-        m_dataSet->setPen(QPen(m_newPenColor, 0));
+        m_dataSet->setPen(m_section, QPen(m_newPenColor, 0));
     }
     if (m_oldMarkerStyle != m_newMarkerStyle) {
         m_dataSet->setMarkerStyle(m_newMarkerStyle);
@@ -101,18 +102,18 @@ void DatasetCommand::undo()
         m_oldShowPercent != m_newShowPercent ||
         m_oldShowSymbol != m_newShowSymbol)
     {
-        DataSet::ValueLabelType valueLabelType = m_dataSet->valueLabelType();
+        DataSet::ValueLabelType valueLabelType = m_dataSet->valueLabelType(m_section);
         valueLabelType.category = m_oldShowCategory;
         valueLabelType.number = m_oldShowNumber;
         valueLabelType.percentage = m_oldShowPercent;
         valueLabelType.symbol = m_oldShowSymbol;
-        m_dataSet->setValueLabelType(valueLabelType);
+        m_dataSet->setValueLabelType(valueLabelType, m_section);
     }
     if (m_oldBrushColor != m_newBrushColor) {
-        m_dataSet->setBrush(QBrush(m_oldBrushColor));
+        m_dataSet->setBrush(m_section, QBrush(m_oldBrushColor));
     }
     if (m_oldPenColor != m_newPenColor) {
-        m_dataSet->setPen(QPen(m_oldPenColor, 0));
+        m_dataSet->setPen(m_section, QPen(m_oldPenColor, 0));
     }
     if (m_oldMarkerStyle != m_newMarkerStyle) {
         m_dataSet->setMarkerStyle(m_oldMarkerStyle);

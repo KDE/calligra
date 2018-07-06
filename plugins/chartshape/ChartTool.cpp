@@ -49,6 +49,7 @@
 #include <KChartAbstractCartesianDiagram>
 #include <KChartCartesianCoordinatePlane>
 #include <KChartPosition>
+#include <KChartPieAttributes>
 
 // KoChart
 #include "Surface.h"
@@ -63,6 +64,7 @@
 #include "PlotAreaConfigWidget.h"
 #include "AxesConfigWidget.h"
 #include "DataSetConfigWidget.h"
+#include "PieConfigWidget.h"
 #include "KChartConvertions.h"
 #include "commands/ChartTypeCommand.h"
 #include "commands/LegendCommand.h"
@@ -88,7 +90,6 @@ public:
     QPen         datasetSelectionPen;
     QBrush       datasetSelectionBrush;
 
-    void setDataSetShowLabel(DataSet *dataSet, bool *number, bool *percentage, bool *category, bool *symbol);
 };
 
 ChartTool::Private::Private()
@@ -245,30 +246,6 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
 {
     QList<QPointer<QWidget> > widgets;
 
-    PlotAreaConfigWidget  *plotarea = new PlotAreaConfigWidget();
-    plotarea->setWindowTitle(i18n("Chart"));
-    widgets.append(plotarea);
-    connect(plotarea, SIGNAL(chartTypeChanged(ChartType,ChartSubtype)),
-            this,   SLOT(setChartType(ChartType,ChartSubtype)));
-    connect(plotarea, SIGNAL(chartSubTypeChanged(ChartSubtype)),
-            this,   SLOT(setChartSubType(ChartSubtype)));
-    connect(plotarea, SIGNAL(threeDModeToggled(bool)),
-            this,   SLOT(setThreeDMode(bool)));
-
-    // data set edit dialog
-    connect(plotarea, SIGNAL(dataSetXDataRegionChanged(DataSet*,CellRegion)),
-            this,   SLOT(setDataSetXDataRegion(DataSet*,CellRegion)));
-    connect(plotarea, SIGNAL(dataSetYDataRegionChanged(DataSet*,CellRegion)),
-            this,   SLOT(setDataSetYDataRegion(DataSet*,CellRegion)));
-    connect(plotarea, SIGNAL(dataSetCustomDataRegionChanged(DataSet*,CellRegion)),
-            this,   SLOT(setDataSetCustomDataRegion(DataSet*,CellRegion)));
-    connect(plotarea, SIGNAL(dataSetLabelDataRegionChanged(DataSet*,CellRegion)),
-            this,   SLOT(setDataSetLabelDataRegion(DataSet*,CellRegion)));
-    connect(plotarea, SIGNAL(dataSetCategoryDataRegionChanged(DataSet*,CellRegion)),
-            this,   SLOT(setDataSetCategoryDataRegion(DataSet*,CellRegion)));
-
-    connect(d->shape, SIGNAL(updateConfigWidget()), plotarea, SLOT(updateData()));
-
     TitlesConfigWidget *titles = new TitlesConfigWidget();
     titles->setWindowTitle(i18n("Titles"));
     widgets.append(titles);
@@ -304,9 +281,30 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
 
     connect(d->shape->legend(), SIGNAL(updateConfigWidget()), legend, SLOT(updateData()));
 
-    AxesConfigWidget *axes = new AxesConfigWidget();
-    axes->setWindowTitle(i18n("Axes"));
-    widgets.append(axes);
+    PlotAreaConfigWidget  *plotarea = new PlotAreaConfigWidget();
+    plotarea->setWindowTitle(i18n("Plot Area"));
+    widgets.append(plotarea);
+
+    connect(plotarea, SIGNAL(chartTypeChanged(ChartType,ChartSubtype)),
+            this,   SLOT(setChartType(ChartType,ChartSubtype)));
+    connect(plotarea, SIGNAL(chartSubTypeChanged(ChartSubtype)),
+            this,   SLOT(setChartSubType(ChartSubtype)));
+    connect(plotarea, SIGNAL(threeDModeToggled(bool)),
+            this,   SLOT(setThreeDMode(bool)));
+
+    // data set edit dialog
+    connect(plotarea, SIGNAL(dataSetXDataRegionChanged(DataSet*,CellRegion)),
+            this,   SLOT(setDataSetXDataRegion(DataSet*,CellRegion)));
+    connect(plotarea, SIGNAL(dataSetYDataRegionChanged(DataSet*,CellRegion)),
+            this,   SLOT(setDataSetYDataRegion(DataSet*,CellRegion)));
+    connect(plotarea, SIGNAL(dataSetCustomDataRegionChanged(DataSet*,CellRegion)),
+            this,   SLOT(setDataSetCustomDataRegion(DataSet*,CellRegion)));
+    connect(plotarea, SIGNAL(dataSetLabelDataRegionChanged(DataSet*,CellRegion)),
+            this,   SLOT(setDataSetLabelDataRegion(DataSet*,CellRegion)));
+    connect(plotarea, SIGNAL(dataSetCategoryDataRegionChanged(DataSet*,CellRegion)),
+            this,   SLOT(setDataSetCategoryDataRegion(DataSet*,CellRegion)));
+
+    AxesConfigWidget *axes = plotarea->cartesianAxesConfigWidget();
     connect(axes, SIGNAL(axisAdded(AxisDimension,QString)),
             this,   SLOT(addAxis(AxisDimension,QString)));
     connect(axes, SIGNAL(axisRemoved(Axis*)),
@@ -344,41 +342,42 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
     connect(axes, SIGNAL(gapBetweenSetsChanged(Axis*,int)),
             this,   SLOT(setGapBetweenSets(Axis*,int)));
 
-    connect(d->shape, SIGNAL(updateConfigWidget()), axes, SLOT(updateData()));
 
-    DataSetConfigWidget  *dataset = new DataSetConfigWidget();
-    dataset->setWindowTitle(i18n("Data Sets"));
-    widgets.append(dataset);
-
+    DataSetConfigWidget *dataset = plotarea->cartesianDataSetConfigWidget();
     connect(dataset, SIGNAL(dataSetChartTypeChanged(DataSet*,ChartType)),
             this,   SLOT(setDataSetChartType(DataSet*,ChartType)));
     connect(dataset, SIGNAL(dataSetChartSubTypeChanged(DataSet*,ChartSubtype)),
             this,   SLOT(setDataSetChartSubType(DataSet*,ChartSubtype)));
-    connect(dataset, SIGNAL(datasetBrushChanged(DataSet*,QColor)),
-            this, SLOT(setDataSetBrush(DataSet*,QColor)));
+    connect(dataset, SIGNAL(datasetBrushChanged(DataSet*,QColor,int)),
+            this, SLOT(setDataSetBrush(DataSet*,QColor,int)));
     connect(dataset, SIGNAL(dataSetMarkerChanged(DataSet*,OdfMarkerStyle)),
             this, SLOT(setDataSetMarker(DataSet*,OdfMarkerStyle)));
-    connect(dataset, SIGNAL(datasetPenChanged(DataSet*,QColor)),
-            this, SLOT(setDataSetPen(DataSet*,QColor)));
-    connect(dataset, SIGNAL(datasetShowCategoryChanged(DataSet*,bool)),
-            this, SLOT(setDataSetShowCategory(DataSet*,bool)));
-    connect(dataset, SIGNAL(dataSetShowNumberChanged(DataSet*,bool)),
-            this, SLOT(setDataSetShowNumber(DataSet*,bool)));
-    connect(dataset, SIGNAL(datasetShowPercentChanged(DataSet*,bool)),
-            this, SLOT(setDataSetShowPercent(DataSet*,bool)));
-    connect(dataset, SIGNAL(datasetShowSymbolChanged(DataSet*,bool)),
-            this, SLOT(setDataSetShowSymbol(DataSet*,bool)));
+    connect(dataset, SIGNAL(datasetPenChanged(DataSet*,QColor,int)),
+            this, SLOT(setDataSetPen(DataSet*,QColor,int)));
+    connect(dataset, SIGNAL(datasetShowCategoryChanged(DataSet*,bool,int)),
+            this, SLOT(setDataSetShowCategory(DataSet*,bool,int)));
+    connect(dataset, SIGNAL(dataSetShowNumberChanged(DataSet*,bool,int)),
+            this, SLOT(setDataSetShowNumber(DataSet*,bool,int)));
+    connect(dataset, SIGNAL(datasetShowPercentChanged(DataSet*,bool,int)),
+            this, SLOT(setDataSetShowPercent(DataSet*,bool,int)));
+    connect(dataset, SIGNAL(datasetShowSymbolChanged(DataSet*,bool,int)),
+            this, SLOT(setDataSetShowSymbol(DataSet*,bool,int)));
     connect(dataset, SIGNAL(dataSetAxisChanged(DataSet*,Axis*)),
             this, SLOT(setDataSetAxis(DataSet*,Axis*)));
     connect(dataset, SIGNAL(axisAdded(AxisDimension,QString)),
             this,   SLOT(addAxis(AxisDimension,QString)));
 
-    connect(plotarea, SIGNAL(dataSetLabelDataRegionChanged(DataSet*, const CellRegion&)), dataset, SLOT(updateData()));
 
-    connect(dataset, SIGNAL(pieExplodeFactorChanged(DataSet*,int)),
-            this,   SLOT(setPieExplodeFactor(DataSet*,int)));
+    PieConfigWidget *pie = plotarea->pieConfigWidget();
+    connect(pie, SIGNAL(explodeFactorChanged(DataSet*,int, int)), this, SLOT(setPieExplodeFactor(DataSet*,int, int)));
+    connect(pie, SIGNAL(brushChanged(DataSet*,QColor,int)), this, SLOT(setDataSetBrush(DataSet*,QColor,int)));
+    connect(pie, SIGNAL(penChanged(DataSet*,QColor,int)), this, SLOT(setDataSetPen(DataSet*,QColor,int)));
+    connect(pie, SIGNAL(showCategoryChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowCategory(DataSet*,bool,int)));
+    connect(pie, SIGNAL(showNumberChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowNumber(DataSet*,bool,int)));
+    connect(pie, SIGNAL(showPercentChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowPercent(DataSet*,bool,int)));
+    connect(pie, SIGNAL(showSymbolChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowSymbol(DataSet*,bool,int)));
 
-    connect(d->shape, SIGNAL(updateConfigWidget()), dataset, SLOT(updateData()));
+    connect(d->shape, SIGNAL(updateConfigWidget()), plotarea, SLOT(updateData()));
 
     return widgets;
 }
@@ -483,25 +482,27 @@ void ChartTool::setDataSetChartSubType(DataSet *dataSet, ChartSubtype subType)
 }
 
 
-void ChartTool::setDataSetBrush(DataSet *dataSet, const QColor& color)
+void ChartTool::setDataSetBrush(DataSet *dataSet, const QColor& color, int section)
 {
     Q_ASSERT(d->shape);
-    if (!dataSet)
+    if (!dataSet) {
         return;
-
-    DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
+    }
+    debugChartTool<<color<<section;
+    DatasetCommand *command = new DatasetCommand(dataSet, d->shape, section);
     command->setDataSetBrush(color);
     canvas()->addCommand(command);
 
     d->shape->update();
 }
-void ChartTool::setDataSetPen(DataSet *dataSet, const QColor& color)
+void ChartTool::setDataSetPen(DataSet *dataSet, const QColor& color, int section)
 {
     Q_ASSERT(d->shape);
-    if (!dataSet)
+    if (!dataSet) {
         return;
-
-    DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
+    }
+    debugChartTool<<color<<section;
+    DatasetCommand *command = new DatasetCommand(dataSet, d->shape, section);
     command->setDataSetPen(color);
     canvas()->addCommand(command);
 
@@ -531,88 +532,60 @@ void ChartTool::setDataSetAxis(DataSet *dataSet, Axis *axis)
     canvas()->addCommand(command);
 }
 
-void ChartTool::Private::setDataSetShowLabel(DataSet *dataSet, bool *number, bool *percentage, bool *category, bool *symbol)
+void ChartTool::setDataSetShowCategory(DataSet *dataSet, bool b, int section)
 {
-    Q_ASSERT(shape);
-    if (!dataSet)
-        return;
-
-    DataSet::ValueLabelType type = dataSet->valueLabelType();
-    if (number) type.number = *number;
-    if (percentage) type.percentage = *percentage;
-    if (category) type.category = *category;
-    if (symbol) type.symbol = *symbol;
-    dataSet->setValueLabelType(type);
-
-    // its necessary to set this for all data value
-    //TODO we need to allow to differ in the UI between the datasets vs
-    //     the global setting and then allow to edit them separatly.
-    for (int i = 0; i < dataSet->size(); ++i) {
-        DataSet::ValueLabelType type = dataSet->valueLabelType(i);
-        if (number) type.number = *number;
-        if (percentage) type.percentage = *percentage;
-        if (category) type.category = *category;
-        if (symbol) type.symbol = *symbol;
-        dataSet->setValueLabelType(type, i);
-    }
-
-    shape->update();
-}
-
-void ChartTool::setDataSetShowCategory(DataSet *dataSet, bool b)
-{
-    //d->setDataSetShowLabel(dataSet, 0, 0, &b, 0);
     Q_ASSERT(d->shape);
-    if (!dataSet)
+    if (!dataSet) {
         return;
-
-    DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
+    }
+    DatasetCommand *command = new DatasetCommand(dataSet, d->shape, section);
     command->setDataSetShowCategory(b);
     canvas()->addCommand(command);
 
     d->shape->update();
+    debugChartTool<<section<<b<<':'<<dataSet->valueLabelType(section).category;
 }
 
-void ChartTool::setDataSetShowNumber(DataSet *dataSet, bool b)
+void ChartTool::setDataSetShowNumber(DataSet *dataSet, bool b, int section)
 {
-    //d->setDataSetShowLabel(dataSet, &b, 0, 0, 0);
     Q_ASSERT(d->shape);
-    if (!dataSet)
+    if (!dataSet) {
         return;
-
-    DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
+    }
+    DatasetCommand *command = new DatasetCommand(dataSet, d->shape, section);
     command->setDataSetShowNumber(b);
     canvas()->addCommand(command);
 
     d->shape->update();
+    debugChartTool<<section<<b<<':'<<dataSet->valueLabelType(section).number;
 }
 
-void ChartTool::setDataSetShowPercent(DataSet *dataSet, bool b)
+void ChartTool::setDataSetShowPercent(DataSet *dataSet, bool b, int section)
 {
-    //d->setDataSetShowLabel(dataSet, 0, &b, 0, 0);
     Q_ASSERT(d->shape);
-    if (!dataSet)
+    if (!dataSet) {
         return;
-
-    DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
+    }
+    DatasetCommand *command = new DatasetCommand(dataSet, d->shape, section);
     command->setDataSetShowPercent(b);
     canvas()->addCommand(command);
 
     d->shape->update();
+    debugChartTool<<section<<b<<':'<<dataSet->valueLabelType(section).percentage;
 }
 
-void ChartTool::setDataSetShowSymbol(DataSet *dataSet, bool b)
+void ChartTool::setDataSetShowSymbol(DataSet *dataSet, bool b, int section)
 {
-    //d->setDataSetShowLabel(dataSet, 0, 0, 0, &b);
     Q_ASSERT(d->shape);
-    if (!dataSet)
+    if (!dataSet) {
         return;
-
-    DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
+    }
+    DatasetCommand *command = new DatasetCommand(dataSet, d->shape, section);
     command->setDataSetShowSymbol(b);
     canvas()->addCommand(command);
 
     d->shape->update();
+    debugChartTool<<section<<b<<':'<<dataSet->valueLabelType(section).symbol;
 }
 
 void ChartTool::setThreeDMode(bool threeD)
@@ -1018,12 +991,13 @@ void ChartTool::setGapBetweenSets(Axis *axis, int percent)
     canvas()->addCommand(command);
 }
 
-void ChartTool::setPieExplodeFactor(DataSet *dataSet, int percent)
+void ChartTool::setPieExplodeFactor(DataSet *dataSet, int section, int percent)
 {
     Q_ASSERT(d->shape);
 
-    dataSet->setPieExplodeFactor(percent);
+    dataSet->setPieExplodeFactor(section, percent);
     d->shape->update();
+    qInfo()<<Q_FUNC_INFO<<dataSet->pieAttributes(section).explodeFactor();
 }
 
 void ChartTool::setShowLegend(bool show)

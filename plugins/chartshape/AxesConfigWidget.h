@@ -24,7 +24,7 @@
 #define KOCHART_AXESCONFIGWIDGET
 
 
-#include "ConfigWidgetBase.h"
+#include "ConfigObjectBase.h"
 #include "ChartShape.h"
 
 #include <QObject>
@@ -45,26 +45,23 @@ class ChartShape;
 /**
  * Chart type configuration widget.
  */
-class AxesConfigWidget : public ConfigWidgetBase
+class AxesConfigWidget : public ConfigObjectBase
 {
     Q_OBJECT
 
 public:
-    AxesConfigWidget();
+    AxesConfigWidget(QWidget *parent = 0);
+    AxesConfigWidget(QList<ChartType> types, QWidget *parent = 0);
     ~AxesConfigWidget();
 
-    void open(KoShape* shape);
-    QAction * createAction();
-
-    /// reimplemented
-    virtual bool showOnShapeCreate() { return true; }
+    void open(ChartShape* shape);
 
     /// Delete all open dialogs.
     /// This is called when e.g. the tool is deactivated.
     void deleteSubDialogs();
 
 public Q_SLOTS:
-    void updateData();
+    void updateData(ChartType type, ChartSubtype subtype);
 
     void ui_axisSelectionChanged(int index);
     void ui_axisShowTitleChanged(bool b);

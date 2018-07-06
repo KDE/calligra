@@ -87,20 +87,20 @@ private Q_SLOTS:
     void setDataSetChartType(DataSet *dataSet, ChartType type);
     void setDataSetChartSubType(DataSet *dataSet, ChartSubtype subType);
 
-    void setDataSetShowCategory(DataSet *dataSet, bool b);
-    void setDataSetShowNumber(DataSet *dataSet, bool b);
-    void setDataSetShowPercent(DataSet *dataSet, bool b);
-    void setDataSetShowSymbol(DataSet *dataSet, bool b);
+    void setDataSetShowCategory(DataSet *dataSet, bool b, int section = -1);
+    void setDataSetShowNumber(DataSet *dataSet, bool b, int section = -1);
+    void setDataSetShowPercent(DataSet *dataSet, bool b, int section = -1);
+    void setDataSetShowSymbol(DataSet *dataSet, bool b, int section = -1);
 
-    void setDataSetPen(DataSet *dataSet, const QColor& color);
-    void setDataSetBrush(DataSet *dataSet, const QColor& color);
+    void setDataSetPen(DataSet *dataSet, const QColor& color, int section = -1);
+    void setDataSetBrush(DataSet *dataSet, const QColor& color, int section = -1);
     void setDataSetMarker(DataSet *dataSet, OdfMarkerStyle style);
     void setDataSetAxis(DataSet *dataSet, Axis *axis);
     
     // Plot Area
     void setGapBetweenBars(Axis *axis, int percent);
     void setGapBetweenSets(Axis *axis, int percent);
-    void setPieExplodeFactor(DataSet *dataSet, int percent);
+    void setPieExplodeFactor(DataSet *dataSet, int section, int percent);
     
     // Axes
     void addAxis(AxisDimension, const QString& title = QString());

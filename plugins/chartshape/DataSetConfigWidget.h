@@ -21,11 +21,11 @@
 */
 
 
-#ifndef KOCHART_DATASETCONFIGWIDGET
-#define KOCHART_DATASETCONFIGWIDGET
+#ifndef KOCHART_DATACONFIGWIDGET
+#define KOCHART_DATACONFIGWIDGET
 
 
-#include "ConfigWidgetBase.h"
+#include "ConfigObjectBase.h"
 #include "ChartShape.h"
 
 
@@ -45,15 +45,16 @@ class ChartShape;
 /**
  * Chart type configuration widget.
  */
-class DataSetConfigWidget : public ConfigWidgetBase
+class DataSetConfigWidget : public ConfigObjectBase
 {
     Q_OBJECT
 
 public:
-    DataSetConfigWidget();
+    DataSetConfigWidget(QWidget *parent = 0);
+    DataSetConfigWidget(QList<ChartType> types, QWidget *parent = 0);
     ~DataSetConfigWidget();
 
-    void open(KoShape* shape);
+    void open(ChartShape* shape);
     QAction * createAction();
 
     /// reimplemented
@@ -66,7 +67,7 @@ public:
     void updateMarkers();
 
 public Q_SLOTS:
-    void updateData();
+    void updateData(ChartType type, ChartSubtype subtype);
 
     void slotShowFormatErrorBarDialog();
 
@@ -82,7 +83,6 @@ public Q_SLOTS:
     void ui_dataSetSelectionChanged(int index);
     void ui_dataSetAxisSelectionChanged(int index);
     void ui_dataSetHasChartTypeChanged(bool b);
-    void ui_dataSetPieExplodeFactorChanged(int percent);
     void ui_dataSetErrorBarTypeChanged();
 
 Q_SIGNALS:
@@ -92,15 +92,14 @@ Q_SIGNALS:
     void showVerticalLinesChanged(bool b);
     void showHorizontalLinesChanged(bool b);
 
-    void datasetPenChanged(DataSet *dataSet, const QColor& color);
-    void datasetBrushChanged(DataSet *dataSet, const QColor& color);
+    void datasetPenChanged(DataSet *dataSet, const QColor& color, int section);
+    void datasetBrushChanged(DataSet *dataSet, const QColor& color, int section);
     void dataSetMarkerChanged(DataSet *dataSet, OdfMarkerStyle style);
-    void datasetShowCategoryChanged(DataSet *dataSet, bool b);
-    void dataSetShowNumberChanged(DataSet *dataSet, bool b);
-    void datasetShowPercentChanged(DataSet *dataSet, bool b);
-    void datasetShowSymbolChanged(DataSet *dataSet, bool b);
+    void datasetShowCategoryChanged(DataSet *dataSet, bool b, int section);
+    void dataSetShowNumberChanged(DataSet *dataSet, bool b, int section);
+    void datasetShowPercentChanged(DataSet *dataSet, bool b, int section);
+    void datasetShowSymbolChanged(DataSet *dataSet, bool b, int section);
     void dataSetAxisChanged(DataSet *dataSet, Axis *axis);
-    void pieExplodeFactorChanged(DataSet *dataSet, int percent);
 
     void axisAdded(AxisDimension, const QString& title);
 

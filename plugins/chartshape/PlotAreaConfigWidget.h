@@ -40,6 +40,9 @@ namespace KChart
 namespace KoChart
 {
 class ChartShape;
+class AxesConfigWidget;
+class DataSetConfigWidget;
+class PieConfigWidget;
 
 /**
  * Chart type configuration widget.
@@ -60,8 +63,11 @@ public:
 
     /// Delete all open dialogs.
     /// This is called when e.g. the tool is deactivated.
-    void deleteSubDialogs();
+    void deleteSubDialogs(ChartType type = LastChartType);
 
+    AxesConfigWidget *cartesianAxesConfigWidget() const;
+    DataSetConfigWidget *cartesianDataSetConfigWidget() const;
+    PieConfigWidget *pieConfigWidget() const;
 
 public Q_SLOTS:
     void chartTypeSelected(QAction *action);
@@ -93,6 +99,7 @@ Q_SIGNALS:
     void dataSetLabelDataRegionChanged(DataSet *dataSet, const CellRegion &region);
 
 private:
+    void setupWidgets();
     void setupDialogs();
     void createActions();
 

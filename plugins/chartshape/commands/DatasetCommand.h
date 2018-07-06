@@ -50,7 +50,7 @@ public:
     /**
      * Constructor.
      */
-    DatasetCommand(DataSet* dataSet, ChartShape* chart);
+    DatasetCommand(DataSet* dataSet, ChartShape* chart, int section = -1);
 
     /**
      * Destructor.
@@ -82,6 +82,7 @@ public:
 private:
     DataSet *m_dataSet;
     ChartShape *m_chart;
+    int m_section;
 
     ChartType m_oldType;
     ChartType m_newType;
