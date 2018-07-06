@@ -361,7 +361,7 @@ void DataSetConfigWidget::ui_dataSetAxisSelectionChanged(int index)
     if (index >= d->dataSetAxes.count()) {
         // Add the axis
         debugChartUiDataSet<<"create secondary y axis";
-        emit axisAdded(YAxisDimension, "TITLE");
+        emit axisAdded(YAxisDimension, i18n("Axistitle"));
     }
     if (index < 0 || index >= d->dataSetAxes.count()) {
         return;
