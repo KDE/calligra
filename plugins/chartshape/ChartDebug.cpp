@@ -85,3 +85,9 @@ const QLoggingCategory &CHARTUI_DATASET_LOG()
     static const QLoggingCategory category("calligra.plugin.chart.ui.dataset");
     return category;
 }
+
+const QLoggingCategory &CHARTUI_BUBBLE_LOG()
+{
+    static const QLoggingCategory category("calligra.plugin.chart.ui.bubble");
+    return category;
+}
