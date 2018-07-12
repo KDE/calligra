@@ -71,6 +71,7 @@
 #include "CellRegionDialog.h"
 #include "TableEditorDialog.h"
 #include "PieDataEditor.h"
+#include "BubbleDataEditor.h"
 #include "commands/ChartTypeCommand.h"
 #include "CellRegionStringValidator.h"
 #include "ChartTableModel.h"
@@ -340,18 +341,21 @@ void PlotAreaConfigWidget::deleteSubDialogs(ChartType type)
         case FilledRadarChartType:
         case ScatterChartType:
         case SurfaceChartType:
-        case BubbleChartType:
         case StockChartType:
-            delete findChildren<PieDataEditor*>().value(0);
-            break;
-        case CircleChartType:
             delete d->tableEditorDialog;
             d->tableEditorDialog = 0;
+            break;
+        case CircleChartType:
+            delete findChildren<PieDataEditor*>().value(0);
+            break;
+        case BubbleChartType:
+            delete findChildren<BubbleDataEditor*>().value(0);
             break;
         default:
             delete d->tableEditorDialog;
             d->tableEditorDialog = 0;
             delete findChildren<PieDataEditor*>().value(0);
+            delete findChildren<BubbleDataEditor*>().value(0);
             break;
     }
 }
@@ -629,7 +633,20 @@ void PlotAreaConfigWidget::slotShowTableEditor()
             if (!dlg) {
                 dlg = new PieDataEditor(this);
                 dlg->setModel(chart->internalModel());
-                connect(dlg, SIGNAL(finished()), dlg, SLOT(close()));
+                connect(dlg, SIGNAL(finished()), dlg, SLOT(hide()));
+            }
+            dlg->show();
+            dlg->raise();
+            return;
+        }
+        case BubbleChartType: {
+            BubbleDataEditor *dlg = findChildren<BubbleDataEditor*>().value(0);
+            if (!dlg) {
+                dlg = new BubbleDataEditor(chart, this);
+                connect(dlg, SIGNAL(finished()), dlg, SLOT(hide()));
+                connect(dlg, &BubbleDataEditor::xDataChanged, this, &PlotAreaConfigWidget::dataSetXDataRegionChanged);
+                connect(dlg, &BubbleDataEditor::yDataChanged, this, &PlotAreaConfigWidget::dataSetYDataRegionChanged);
+                connect(dlg, &BubbleDataEditor::bubbleDataChanged, this, &PlotAreaConfigWidget::dataSetCustomDataRegionChanged);
             }
             dlg->show();
             dlg->raise();

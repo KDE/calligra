@@ -62,6 +62,8 @@ set (chartshape_LIB_SRCS
     dialogs/FontEditorDialog.cpp
     dialogs/FormatErrorBarDialog.cpp
     dialogs/PieDataEditor.cpp
+    dialogs/BubbleDataEditor.cpp
+    dialogs/DataSetTableModel.cpp
     commands/ChartTypeCommand.cpp
     commands/LegendCommand.cpp
     commands/AxisCommand.cpp
@@ -84,6 +86,7 @@ ki18n_wrap_ui(chartshape_LIB_SRCS
     dialogs/CellRegionDialog.ui
     dialogs/FormatErrorBarDialog.ui
     dialogs/PieDataEditor.ui
+    dialogs/BubbleDataEditor.ui
 )
 
 add_library(chartshapecore STATIC ${chartshape_LIB_SRCS})
