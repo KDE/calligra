@@ -43,6 +43,7 @@ class ChartShape;
 class AxesConfigWidget;
 class DataSetConfigWidget;
 class PieConfigWidget;
+class BubbleConfigWidget;
 
 /**
  * Chart type configuration widget.
@@ -68,7 +69,8 @@ public:
     AxesConfigWidget *cartesianAxesConfigWidget() const;
     DataSetConfigWidget *cartesianDataSetConfigWidget() const;
     PieConfigWidget *pieConfigWidget() const;
-
+    BubbleConfigWidget *bubbleConfigWidget() const;
+    
 public Q_SLOTS:
     void chartTypeSelected(QAction *action);
     void setThreeDMode(bool threeD);

@@ -49,6 +49,7 @@ set (chartshape_LIB_SRCS
     AxesConfigWidget.cpp
     DataSetConfigWidget.cpp
     PieConfigWidget.cpp
+    BubbleConfigWidget.cpp
     ChartTableView.cpp
     ScreenConversions.cpp
     ChartLayout.cpp
@@ -80,6 +81,7 @@ ki18n_wrap_ui(chartshape_LIB_SRCS
     AxesConfigWidget.ui
     DataSetConfigWidget.ui
     PieConfigWidget.ui
+    BubbleConfigWidget.ui
     dialogs/ChartTableEditor.ui
     dialogs/NewAxisDialog.ui
     dialogs/AxisScalingDialog.ui

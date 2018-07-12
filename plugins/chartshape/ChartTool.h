@@ -76,14 +76,14 @@ private Q_SLOTS:
     void setShowFooter(bool show);
     void setFooterPositioning(int index);
     void setFooterResize(int index);
-    
+
     // Datasets
     void setDataSetXDataRegion(DataSet *dataSet, const CellRegion &region);
     void setDataSetYDataRegion(DataSet *dataSet, const CellRegion &region);
     void setDataSetCustomDataRegion(DataSet *dataSet, const CellRegion &region);
     void setDataSetLabelDataRegion(DataSet *dataSet, const CellRegion &region);
     void setDataSetCategoryDataRegion(DataSet *dataSet, const CellRegion &region);
-    
+
     void setDataSetChartType(DataSet *dataSet, ChartType type);
     void setDataSetChartSubType(DataSet *dataSet, ChartSubtype subType);
 
@@ -96,12 +96,12 @@ private Q_SLOTS:
     void setDataSetBrush(DataSet *dataSet, const QColor& color, int section = -1);
     void setDataSetMarker(DataSet *dataSet, OdfMarkerStyle style);
     void setDataSetAxis(DataSet *dataSet, Axis *axis);
-    
+
     // Plot Area
     void setGapBetweenBars(Axis *axis, int percent);
     void setGapBetweenSets(Axis *axis, int percent);
     void setPieExplodeFactor(DataSet *dataSet, int section, int percent);
-    
+
     // Axes
     void addAxis(AxisDimension, const QString& title = QString());
     void removeAxis(Axis *axis);

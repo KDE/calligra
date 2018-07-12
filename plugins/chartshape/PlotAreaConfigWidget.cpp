@@ -79,6 +79,7 @@
 #include "AxesConfigWidget.h"
 #include "DataSetConfigWidget.h"
 #include "PieConfigWidget.h"
+#include "BubbleConfigWidget.h"
 #include "ConfigObjectBase.h"
 #include "ChartDebug.h"
 
@@ -330,6 +331,11 @@ PieConfigWidget *PlotAreaConfigWidget::pieConfigWidget() const
     return d->ui.pieConfigWidget;
 }
 
+BubbleConfigWidget *PlotAreaConfigWidget::bubbleConfigWidget() const
+{
+    return d->ui.bubbleConfigWidget;
+}
+
 void PlotAreaConfigWidget::deleteSubDialogs(ChartType type)
 {
     switch (type) {
@@ -429,12 +435,14 @@ void PlotAreaConfigWidget::setupWidgets()
     QList<ChartType> types;
     types << BarChartType << LineChartType << AreaChartType;
     // TODO: temporary, these should have different widgets
-    types << RingChartType << RadarChartType << FilledRadarChartType << ScatterChartType << BubbleChartType;
+    types << RingChartType << RadarChartType << FilledRadarChartType << ScatterChartType;
     cartesianAxesConfigWidget()->setChartTypes(types);
 
     cartesianDataSetConfigWidget()->setChartTypes(types);
 
     pieConfigWidget()->setChartTypes(QList<ChartType>()<<CircleChartType);
+
+    bubbleConfigWidget()->setChartTypes(QList<ChartType>()<<BubbleChartType);
 }
 
 QAction *PlotAreaConfigWidget::createAction()
@@ -579,6 +587,9 @@ void PlotAreaConfigWidget::updateData()
     switch (chart->chartType()) {
         case CircleChartType:
             d->ui.stackedWidget->setCurrentIndex(1);
+            break;
+        case BubbleChartType:
+            d->ui.stackedWidget->setCurrentIndex(2);
             break;
         default:
             d->ui.stackedWidget->setCurrentIndex(0);
