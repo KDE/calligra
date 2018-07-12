@@ -123,11 +123,15 @@ public:
     static int rangeStringToInt(const QString &string);
     static QString rangeIntToString(int i);
 
+    static QString columnName(uint column);
+
 private:
     class Private;
     Private *const d;
 };
 
 }
+
+QDebug operator<<(QDebug dbg, const KoChart::CellRegion &r);
 
 #endif // KCHART_CELLREGION_H

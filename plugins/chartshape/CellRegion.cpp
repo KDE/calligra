@@ -777,7 +777,7 @@ QString CellRegion::rangeIntToString(int i)
 }
 
 // Return the symbolic name of any column.
-static QString columnName(uint column)
+QString CellRegion::columnName(uint column)
 {
     if (column < 1 || column > 32767)
         return QString("@@@");
@@ -795,4 +795,10 @@ static QString columnName(uint column)
         str.prepend(QChar('A' + (col % 26)));
 
     return str;
+}
+
+QDebug operator<<(QDebug dbg, const KoChart::CellRegion &r)
+{
+    dbg << "CellRegion[" << r.toString() << ']';
+    return dbg;
 }
