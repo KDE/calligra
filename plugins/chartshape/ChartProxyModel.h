@@ -161,6 +161,19 @@ public:
     QList<DataSet*> dataSets() const;
 
     /**
+     * Insert @p count number of rows at position @p row.
+     * 
+     * Effectivly adds DataSet(s) to the model
+     */
+    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    /**
+     * Remove @p count number of rows at position @p row.
+     * 
+     * Effectivly removes DataSet(s) from the model
+     */
+    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+
+    /**
      * Clears the list of data sets, but keeps them in a list of "removed"
      * data sets for the next time that reset() is called. The latter list
      * will be re-used so that properties of data sets don't get lost.
@@ -192,6 +205,11 @@ public:
      */
     bool isLoading() const;
 
+    /**
+     * Returns true if changes to datasets or data does not result in auto calculating chages
+     */
+    bool manualControl();
+
 public Q_SLOTS:
     /**
      * Connected to dataChanged() signal of source models in TableSource.
@@ -212,8 +230,18 @@ public Q_SLOTS:
      */
     void removeTable(Table *table);
 
+    /**
+     * Set manual control to @p value
+     * 
+     * If false, dataset structure is recalculated on changes to base data.
+     */
+    void setManualControl(bool value);
+
 Q_SIGNALS:
     void dataChanged();
+
+private:
+    void addDataSet(int pos);
 
 private:
     class Private;

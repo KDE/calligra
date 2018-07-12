@@ -66,6 +66,8 @@ public:
     /// Used to avoid repeatedly updating data.
     bool isLoading;
 
+    bool manualControl;
+
     bool             firstRowIsLabel;
     bool             firstColumnIsLabel;
     Qt::Orientation  dataDirection;
@@ -104,6 +106,7 @@ ChartProxyModel::Private::Private(ChartProxyModel *parent, ChartShape *shape, Ta
     , shape(shape)
     , tableSource(source)
     , isLoading(false)
+    , manualControl(false)
 {
     firstRowIsLabel    = false;
     firstColumnIsLabel = false;
@@ -156,6 +159,9 @@ CellRegion ChartProxyModel::cellRangeAddress() const
 
 void ChartProxyModel::Private::rebuildDataMap()
 {
+    if (manualControl) {
+        return;
+    }
     // This was intended to speed up the loading process, by executing this
     // method only once in endLoading(), however the approach is actually
     // incorrect as it would potentially override a data set's regions
@@ -345,6 +351,9 @@ QMap<int, QVector<QRect> > sortDataRegions(Qt::Orientation dataDirection, QVecto
 QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion(QList<DataSet*> *dataSetsToRecycle,
                                                                     bool overrideCategories)
 {
+    if (manualControl) {
+        return dataSets;
+    }
     if (!selection.isValid())
         return QList<DataSet*>();
 
@@ -517,7 +526,6 @@ if(overrideCategories) categoryDataRegion = CellRegion();
         // Increment number at the very end!
         dataSetNumber++;
     }
-
     return createdDataSets;
 }
 
@@ -823,7 +831,11 @@ int ChartProxyModel::rowCount(const QModelIndex &/*parent  = QModelIndex() */) c
 int ChartProxyModel::columnCount(const QModelIndex &/*parent = QModelIndex() */) const
 {
     // FIXME: Replace this by the actual column count once the proxy is properly being used.
-    return INT_MAX;
+    int cols = 0;
+    for (int i = 0; i < d->dataSets.count(); ++i) {
+        cols = qMax(cols, d->dataSets.at(i)->size());
+    }
+    return cols;
 }
 
 void ChartProxyModel::setFirstRowIsLabel(bool b)
@@ -927,4 +939,74 @@ void ChartProxyModel::setCategoryDataRegion(const CellRegion &region)
 QList<DataSet*> ChartProxyModel::dataSets() const
 {
     return d->dataSets;
+}
+
+void ChartProxyModel::addDataSet(int pos)
+{
+    int dataSetNr = pos;
+    QMap<int, int> numbers;
+    for (int i = 0; i < d->dataSets.count(); ++i) {
+        numbers[d->dataSets.at(i)->number()] = i;
+    }
+    if (numbers.contains(pos)) {
+        // find first free one
+        for (int i = 1; i < numbers.count(); ++ i) {
+            if (!numbers.contains(i)) {
+                dataSetNr = i;
+                break;
+            }
+        }
+    }
+    DataSet *ds = new DataSet(dataSetNr);
+    if (!d->dataSets.isEmpty()) {
+        DataSet *copy = d->dataSets.first();
+        ds->setXDataRegion(copy->xDataRegion());
+        ds->setYDataRegion(copy->yDataRegion());
+        ds->setCustomDataRegion(copy->customDataRegion());
+        ds->setCategoryDataRegion(copy->categoryDataRegion());
+    }
+    d->dataSets.insert(pos, ds);
+}
+
+bool ChartProxyModel::insertRows(int row, int count, const QModelIndex &/*parent*/)
+{
+    if (count < 1 || row < 0 || row > d->dataSets.count()) {
+        return false;
+    }
+    beginResetModel();
+    for (int i = 0; i < count; ++i) {
+        addDataSet(row + i);
+    }
+    endResetModel();
+    dataChanged(QModelIndex(), QModelIndex());
+    return true;
+}
+
+bool ChartProxyModel::removeRows(int row, int count, const QModelIndex &/*parent*/)
+{
+    if (count < 1 || row < 0 || row >= d->dataSets.count()) {
+        return false;
+    }
+    beginResetModel();
+    QList<DataSet*> remove;
+    for (int i = 0;  i < count; ++i) {
+        remove <<  d->dataSets.at(row + i);
+    }
+    for (DataSet *ds : remove) {
+        d->dataSets.removeAll(ds);
+        delete ds;
+    }
+    endResetModel();
+    dataChanged(QModelIndex(), QModelIndex());
+    return true;
+}
+
+void ChartProxyModel::setManualControl(bool value)
+{
+    d->manualControl = value;
+}
+
+bool ChartProxyModel::manualControl()
+{
+    return d->manualControl;
 }
