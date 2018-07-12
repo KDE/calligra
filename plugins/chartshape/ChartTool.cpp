@@ -416,10 +416,12 @@ void ChartTool::setChartSubType(ChartSubtype subtype)
 
 void ChartTool::setDataSetXDataRegion(DataSet *dataSet, const CellRegion &region)
 {
+    debugChartTool<<dataSet<<region.toString();
     if (!dataSet)
         return;
 
     dataSet->setXDataRegion(region);
+    d->shape->update();
 }
 
 void ChartTool::setDataSetYDataRegion(DataSet *dataSet, const CellRegion &region)
@@ -428,6 +430,7 @@ void ChartTool::setDataSetYDataRegion(DataSet *dataSet, const CellRegion &region
         return;
 
     dataSet->setYDataRegion(region);
+    d->shape->update();
 }
 
 void ChartTool::setDataSetCustomDataRegion(DataSet *dataSet, const CellRegion &region)
@@ -444,6 +447,8 @@ void ChartTool::setDataSetLabelDataRegion(DataSet *dataSet, const CellRegion &re
         return;
 
     dataSet->setLabelDataRegion(region);
+    d->shape->update();
+    d->shape->legend()->update();
 }
 
 void ChartTool::setDataSetCategoryDataRegion(DataSet *dataSet, const CellRegion &region)
@@ -460,6 +465,8 @@ void ChartTool::setDataSetCategoryDataRegion(DataSet *dataSet, const CellRegion 
         // Categories are legend texts
         dataSet->setCategoryDataRegion(region);
     }
+    d->shape->update();
+    d->shape->legend()->update();
 }
 
 
