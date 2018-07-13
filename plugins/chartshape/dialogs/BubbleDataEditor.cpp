@@ -1,17 +1,17 @@
 /* This file is part of the KDE project
- * 
+ *
  * Copyright 2018 Dag Andersen <danders@get2net.dk>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Library General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Library General Public License
  * along with this library; see the file COPYING.LIB.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
@@ -121,13 +121,13 @@ BubbleDataEditor::BubbleDataEditor(ChartShape *chart, QWidget *parent)
     m_insertRowBelowAction = new QAction(m_ui.insertRowBelow->icon(), i18n("Insert Row Below"), m_ui.tableView);
     m_deleteAction = new QAction(m_ui.deleteSelection->icon(), i18n("Delete"), m_ui.tableView);
 
-    
+
     m_ui.tableView->addAction(m_insertColumnBeforeAction);
     m_ui.tableView->addAction(m_insertColumnAfterAction);
     m_ui.tableView->addAction(m_insertRowAboveAction);
     m_ui.tableView->addAction(m_insertRowBelowAction);
     m_ui.tableView->addAction(m_deleteAction);
-    
+
     m_ui.tableView->setContextMenuPolicy(Qt::ActionsContextMenu);
 
     m_ui.deleteSelection->setEnabled(false);
@@ -150,7 +150,7 @@ BubbleDataEditor::BubbleDataEditor(ChartShape *chart, QWidget *parent)
     connect(m_ui.insertRowAbove, SIGNAL(clicked()), this, SLOT(slotInsertRowAbove()));
     connect(m_ui.insertRowBelow, SIGNAL(clicked()), this, SLOT(slotInsertRowBelow()));
     connect(m_ui.deleteSelection,SIGNAL(clicked()), this, SLOT(slotDeleteSelection()));
-    
+
     connect(m_insertColumnBeforeAction, SIGNAL(triggered()), this, SLOT(slotInsertColumnBefore()));
     connect(m_insertColumnAfterAction, SIGNAL(triggered()), this, SLOT(slotInsertColumnAfter()));
     connect(m_insertRowAboveAction, SIGNAL(triggered()), this, SLOT(slotInsertRowAbove()));
@@ -172,6 +172,9 @@ BubbleDataEditor::BubbleDataEditor(ChartShape *chart, QWidget *parent)
     enableActions();
 
     connect(m_dataModel, SIGNAL(columnsInserted(const QModelIndex &, int, int)), this, SLOT(dataColumnsInserted(QModelIndex,int,int)));
+    connect(m_dataModel->sourceModel(), SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(dataRowCountChanged()));
+    connect(m_dataModel->sourceModel(), SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(dataRowCountChanged()));
+
     resize(sizeHint().expandedTo(QSize(600, 300)));
 
 }
@@ -286,7 +289,7 @@ void BubbleDataEditor::enableActions()
 //     QVariant value = idx.data();
 //     switch (idx.row()) {
 //         case 0:
-//             
+//
 //             break;
 //         case 1: {
 //             QString s = ds->customDataRegion().toString().split('.').value(0) + '.' + value.toString();
@@ -320,7 +323,7 @@ void BubbleDataEditor::dataColumnsInserted(const QModelIndex&, int first, int la
                 ds->setXDataRegion(CellRegion(region.table(), r.adjusted(1, 0, 1, 0)));
                 debugChartUiBubble<<"move X:"<<first<<';'<<r<<region.toString()<<':'<<ds->xDataRegion().toString();
                 break;
-            } 
+            }
         }
         region = ds->yDataRegion();
         for (QRect r : region.rects()) {
@@ -328,7 +331,7 @@ void BubbleDataEditor::dataColumnsInserted(const QModelIndex&, int first, int la
                 ds->setYDataRegion(CellRegion(region.table(), r.adjusted(1, 0, 1, 0)));
                 debugChartUiBubble<<"move Y:"<<first<<';'<<r<<region.toString()<<':'<<ds->xDataRegion().toString();
                 break;
-            } 
+            }
         }
         region = ds->customDataRegion();
         for (QRect r : region.rects()) {
@@ -336,7 +339,7 @@ void BubbleDataEditor::dataColumnsInserted(const QModelIndex&, int first, int la
                 debugChartUiBubble<<"move Cust:"<<first<<';'<<r;
                 ds->setCustomDataRegion(CellRegion(region.table(), r.adjusted(1, 0, 1, 0)));
                 break;
-            } 
+            }
         }
         region = ds->categoryDataRegion();
         for (QRect r : region.rects()) {
@@ -344,7 +347,7 @@ void BubbleDataEditor::dataColumnsInserted(const QModelIndex&, int first, int la
                 debugChartUiBubble<<"move Cat:"<<first<<';'<<r;
                 ds->setCategoryDataRegion(CellRegion(region.table(), r.adjusted(1, 0, 1, 0)));
                 break;
-            } 
+            }
         }
         region = ds->labelDataRegion();
         for (QRect r : region.rects()) {
@@ -352,8 +355,45 @@ void BubbleDataEditor::dataColumnsInserted(const QModelIndex&, int first, int la
                 debugChartUiBubble<<"move Lab:"<<first<<';'<<r;
                 ds->setLabelDataRegion(CellRegion(region.table(), r.adjusted(1, 0, 1, 0)));
                 break;
-            } 
+            }
         }
+    }
+}
+
+void BubbleDataEditor::dataRowCountChanged()
+{
+    if (!m_chart->proxyModel()->manualControl()) {
+        debugChartUiBubble<<"Not manual control";
+        return;
+    }
+    const QList<DataSet*> lst = m_chart->proxyModel()->dataSets();
+    for (int i = 0; i < lst.count(); ++i) {
+        DataSet *ds = lst.at(i);
+        CellRegion region = ds->xDataRegion();
+        if (!region.rects().isEmpty()) {
+            QRect r = region.rects().first();
+            r.setHeight(m_dataModel->rowCount());
+            ds->setXDataRegion(CellRegion(region.table(), r));
+        }
+        region = ds->yDataRegion();
+        if (!region.rects().isEmpty()) {
+            QRect r = region.rects().first();
+            r.setHeight(m_dataModel->rowCount());
+            ds->setYDataRegion(CellRegion(region.table(), r));
+        }
+        region = ds->customDataRegion();
+        if (!region.rects().isEmpty()) {
+            QRect r = region.rects().first();
+            r.setHeight(m_dataModel->rowCount());
+            ds->setCustomDataRegion(CellRegion(region.table(), r));
+        }
+        region = ds->categoryDataRegion();
+        if (!region.rects().isEmpty()) {
+            QRect r = region.rects().first();
+            r.setHeight(m_dataModel->rowCount());
+            ds->setCategoryDataRegion(CellRegion(region.table(), r));
+        }
+        debugChartUiBubble<<ds;
     }
 }
 

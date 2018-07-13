@@ -71,6 +71,8 @@ protected Q_SLOTS:
 //     void slotDataChanged(const QModelIndex &idx);
 
     void dataColumnsInserted(const QModelIndex&, int first, int last);
+    void dataRowCountChanged();
+
 private:
     ChartShape *m_chart;
 
