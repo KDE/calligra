@@ -32,8 +32,27 @@
 
 #include <QObject>
 #include <QModelIndex>
+#include <QStyledItemDelegate>
 
 namespace KoChart {
+
+class DataColumnDelegate : public QStyledItemDelegate
+{
+    Q_OBJECT
+public:
+    explicit DataColumnDelegate(QObject *parent = 0);
+
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+    void setEditorData(QWidget *editor, const QModelIndex &index) const;
+    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+
+    void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+public:
+    QAbstractItemModel *dataModel;
+};
+
 
 class DataSetTableModel : public QAbstractTableModel
 {

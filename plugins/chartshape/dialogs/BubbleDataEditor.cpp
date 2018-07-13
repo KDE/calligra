@@ -161,6 +161,11 @@ BubbleDataEditor::BubbleDataEditor(ChartShape *chart, QWidget *parent)
 
     m_ui.tableView->setModel(m_dataModel);
     m_ui.dataSetView->setModel(&m_dataSetModel);
+    DataColumnDelegate *delegate = new DataColumnDelegate(m_ui.dataSetView);
+    delegate->dataModel = m_dataModel;
+    m_ui.dataSetView->setItemDelegateForColumn(1, delegate);
+    m_ui.dataSetView->setItemDelegateForColumn(2, delegate);
+    m_ui.dataSetView->setItemDelegateForColumn(3, delegate);
 
     connect(m_ui.manualControl, SIGNAL(toggled(bool)), m_chart->proxyModel(), SLOT(setManualControl(bool)));
 

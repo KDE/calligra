@@ -24,23 +24,62 @@
 #include "ChartProxyModel.h"
 #include "ChartTableView.h"
 #include "DataSet.h"
+#include "TableSource.h"
 #include "ChartDebug.h"
 
 #include <KLocalizedString>
 
 #include <QObject>
 #include <QModelIndex>
+#include <QComboBox>
 
 using namespace KoChart;
+
+
+DataColumnDelegate::DataColumnDelegate(QObject *parent)
+    : QStyledItemDelegate(parent)
+    , dataModel(0)
+{
+}
+
+QWidget *DataColumnDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */, const QModelIndex &/* index */) const
+{
+    QComboBox *editor = new QComboBox(parent);
+    editor->installEventFilter(const_cast<DataColumnDelegate*>(this));
+    return editor;
+}
+
+void DataColumnDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+{
+    QStringList lst;
+    lst << QString();
+    for (int i = 0; i < dataModel->columnCount(); ++i) {
+        lst << dataModel->headerData(i, Qt::Horizontal).toString();
+    }
+    QComboBox *box = static_cast<QComboBox*>(editor);
+    box->addItems( lst );
+    box->setCurrentText(index.data().toString());
+}
+
+void DataColumnDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
+{
+    QComboBox *box = static_cast<QComboBox*>(editor);
+    model->setData(index, box->currentText());
+}
+
+void DataColumnDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+{
+    QRect r = option.rect;
+    editor->setGeometry(r);
+}
 
 DataSetTableModel::DataSetTableModel(QObject *parent)
     : QAbstractTableModel(parent)
     , chartModel(0)
     , tableSource(0)
 {
-    
-}
 
+}
 
 Qt::ItemFlags DataSetTableModel::flags(const QModelIndex &index) const
 {
@@ -89,16 +128,25 @@ QVariant DataSetTableModel::data(const QModelIndex &idx, int role/* = Qt::Displa
         switch (idx.column()) {
             case 0: return ds->labelData();
             case 1: {
-                QStringList s = ds->xDataRegion().toString().split('.', QString::SkipEmptyParts);
-                return s.value(1).remove('$');
+                QRect r = ds->xDataRegion().rects().value(0);
+                if (r.left() == 0) {
+                    return QVariant();
+                }
+                return CellRegion::rangeIntToString(r.left());
             }
             case 2: {
-                QStringList s = ds->yDataRegion().toString().split('.', QString::SkipEmptyParts);
-                return s.value(1).remove('$');
+                QRect r = ds->yDataRegion().rects().value(0);
+                if (r.left() == 0) {
+                    return QVariant();
+                }
+                return CellRegion::rangeIntToString(r.left());
             }
             case 3: {
-                QStringList s = ds->customDataRegion().toString().split('.', QString::SkipEmptyParts);
-                return s.value(1).remove('$');
+                QRect r = ds->customDataRegion().rects().value(0);
+                if (r.left() == 0) {
+                    return QVariant();
+                }
+                return CellRegion::rangeIntToString(r.left());
             }
         }
     }
@@ -146,22 +194,50 @@ void DataSetTableModel::chartModelChanged()
 bool DataSetTableModel::submitData(const QModelIndex &idx, const QVariant &value, int role)
 {
     DataSet *ds = chartModel->dataSets().value(idx.row());
-    QString s = ds->customDataRegion().toString().split('.').value(0)+ '.'; // table name
-    CellRegion region(tableSource, s + value.toString());
-    debugChartUiBubble<<region.toString()<<ds;
+    Table *table = tableSource->tableMap().first();
     switch (idx.column()) {
         case 0:
             
             break;
-        case 1:
-            ds->setXDataRegion(region);
+        case 1: {
+            if (ds->xDataRegion().table()) {
+                table = ds->xDataRegion().table();
+            }
+            QString v = value.toString();
+            if (!v.isEmpty()) {
+                v = QString("%1%2:%3%4").arg(v).arg(2).arg(v).arg(table->model()->rowCount());
+                ds->setXDataRegion(CellRegion(tableSource, table->name() + '.' + v));
+            } else {
+                ds->setXDataRegion(CellRegion());
+            }
             return true;
-        case 2:
-            ds->setYDataRegion(region);
+        }
+        case 2: {
+            if (ds->xDataRegion().table()) {
+                table = ds->xDataRegion().table();
+            }
+            QString v = value.toString();
+            if (!v.isEmpty()) {
+                v = QString("%1%2:%3%4").arg(v).arg(2).arg(v).arg(table->model()->rowCount());
+                ds->setYDataRegion(CellRegion(tableSource, table->name() + '.' + v));
+            } else {
+                ds->setYDataRegion(CellRegion(tableSource, table->name()));
+            }
             return true;
-        case 3:
-            ds->setCustomDataRegion(region);
+        }
+        case 3: {
+            if (ds->xDataRegion().table()) {
+                table = ds->xDataRegion().table();
+            }
+            QString v = value.toString();
+            if (!v.isEmpty()) {
+                v = QString("%1%2:%3%4").arg(v).arg(2).arg(v).arg(table->model()->rowCount());
+                ds->setCustomDataRegion(CellRegion(tableSource, table->name() + '.' + v));
+            } else {
+                ds->setCustomDataRegion(CellRegion(tableSource, table->name()));
+            }
             return true;
+        }
     }
     return false;
 }
