@@ -71,6 +71,7 @@ protected Q_SLOTS:
 //     void slotDataChanged(const QModelIndex &idx);
 
     void dataColumnsInserted(const QModelIndex&, int first, int last);
+    void dataColumnsRemoved(const QModelIndex&, int first, int last);
     void dataRowCountChanged();
 
 private:

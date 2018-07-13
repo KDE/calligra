@@ -172,6 +172,7 @@ BubbleDataEditor::BubbleDataEditor(ChartShape *chart, QWidget *parent)
     enableActions();
 
     connect(m_dataModel, SIGNAL(columnsInserted(const QModelIndex &, int, int)), this, SLOT(dataColumnsInserted(QModelIndex,int,int)));
+    connect(m_dataModel, SIGNAL(columnsRemoved(const QModelIndex &, int, int)), this, SLOT(dataColumnsRemoved(QModelIndex,int,int)));
     connect(m_dataModel->sourceModel(), SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(dataRowCountChanged()));
     connect(m_dataModel->sourceModel(), SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(dataRowCountChanged()));
 
@@ -321,7 +322,7 @@ void BubbleDataEditor::dataColumnsInserted(const QModelIndex&, int first, int la
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
                 ds->setXDataRegion(CellRegion(region.table(), r.adjusted(1, 0, 1, 0)));
-                debugChartUiBubble<<"move X:"<<first<<';'<<r<<region.toString()<<':'<<ds->xDataRegion().toString();
+                debugChartUiBubble<<"move X:"<<first<<':'<<r<<region.toString()<<':'<<ds->xDataRegion().toString();
                 break;
             }
         }
@@ -329,14 +330,14 @@ void BubbleDataEditor::dataColumnsInserted(const QModelIndex&, int first, int la
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
                 ds->setYDataRegion(CellRegion(region.table(), r.adjusted(1, 0, 1, 0)));
-                debugChartUiBubble<<"move Y:"<<first<<';'<<r<<region.toString()<<':'<<ds->xDataRegion().toString();
+                debugChartUiBubble<<"move Y:"<<first<<':'<<r<<region.toString()<<':'<<ds->xDataRegion().toString();
                 break;
             }
         }
         region = ds->customDataRegion();
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
-                debugChartUiBubble<<"move Cust:"<<first<<';'<<r;
+                debugChartUiBubble<<"move Cust:"<<first<<':'<<r;
                 ds->setCustomDataRegion(CellRegion(region.table(), r.adjusted(1, 0, 1, 0)));
                 break;
             }
@@ -344,7 +345,7 @@ void BubbleDataEditor::dataColumnsInserted(const QModelIndex&, int first, int la
         region = ds->categoryDataRegion();
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
-                debugChartUiBubble<<"move Cat:"<<first<<';'<<r;
+                debugChartUiBubble<<"move Cat:"<<first<<':'<<r;
                 ds->setCategoryDataRegion(CellRegion(region.table(), r.adjusted(1, 0, 1, 0)));
                 break;
             }
@@ -352,8 +353,59 @@ void BubbleDataEditor::dataColumnsInserted(const QModelIndex&, int first, int la
         region = ds->labelDataRegion();
         for (QRect r : region.rects()) {
             if (r.left() >= first) {
-                debugChartUiBubble<<"move Lab:"<<first<<';'<<r;
+                debugChartUiBubble<<"move Lab:"<<first<<':'<<r;
                 ds->setLabelDataRegion(CellRegion(region.table(), r.adjusted(1, 0, 1, 0)));
+                break;
+            }
+        }
+    }
+}
+
+void BubbleDataEditor::dataColumnsRemoved(const QModelIndex&, int first, int last)
+{
+    if (!m_ui.manualControl->isChecked()) {
+        return;
+    }
+    int count = last - first + 1;
+    first += 2; // column 0 is hidden and rects starts at 1 (A=1, B=2...)
+    for (DataSet *ds : m_chart->proxyModel()->dataSets()) {
+        CellRegion region = ds->xDataRegion();
+        for (QRect r : region.rects()) {
+            if (r.left() >= first) {
+                ds->setXDataRegion(CellRegion(region.table(), r.adjusted(-count, 0, -count, 0)));
+                debugChartUiBubble<<"move X:"<<first<<':'<<r<<region.toString()<<':'<<ds->xDataRegion().toString();
+                break;
+            }
+        }
+        region = ds->yDataRegion();
+        for (QRect r : region.rects()) {
+            if (r.left() >= first) {
+                ds->setYDataRegion(CellRegion(region.table(), r.adjusted(-count, 0, -count, 0)));
+                debugChartUiBubble<<"move Y:"<<first<<':'<<r<<region.toString()<<':'<<ds->xDataRegion().toString();
+                break;
+            }
+        }
+        region = ds->customDataRegion();
+        for (QRect r : region.rects()) {
+            if (r.left() >= first) {
+                debugChartUiBubble<<"move Cust:"<<first<<':'<<r;
+                ds->setCustomDataRegion(CellRegion(region.table(), r.adjusted(-count, 0, -count, 0)));
+                break;
+            }
+        }
+        region = ds->categoryDataRegion();
+        for (QRect r : region.rects()) {
+            if (r.left() >= first) {
+                debugChartUiBubble<<"move Cat:"<<first<<':'<<r;
+                ds->setCategoryDataRegion(CellRegion(region.table(), r.adjusted(-count, 0, -count, 0)));
+                break;
+            }
+        }
+        region = ds->labelDataRegion();
+        for (QRect r : region.rects()) {
+            if (r.left() >= first) {
+                debugChartUiBubble<<"move Lab:"<<first<<':'<<r;
+                ds->setLabelDataRegion(CellRegion(region.table(), r.adjusted(-count, 0, -count, 0)));
                 break;
             }
         }
