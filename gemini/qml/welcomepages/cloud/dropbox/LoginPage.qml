@@ -28,7 +28,16 @@ Page {
         controllerMIT.oauth_v1_request_token()
     }
 
-    DropboxWebView { id: webView }
+    Loader {
+        id: webView
+        anchors.fill: parent
+        source: "DropboxWebView.qml"
+        onStatusChanged: {
+            if(status === Loader.Error) {
+                i_infobanner.show("Failed to load Web View component.");
+            }
+        }
+    }
 
     InfoBanner { id: i_infobanner; }
 
@@ -42,7 +51,7 @@ Page {
             pageStack.pop();
         }
         onOpen_oauth_authorize_page : {
-            webView.url = "https://www.dropbox.com/1/oauth/authorize?display=mobile&oauth_token="+oauth_token
+            webView.item.url = "https://www.dropbox.com/1/oauth/authorize?display=mobile&oauth_token="+oauth_token
         }
     }
 }
