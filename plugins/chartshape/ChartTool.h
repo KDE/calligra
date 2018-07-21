@@ -128,9 +128,6 @@ private Q_SLOTS:
     void setLegendPosition(Position);
     void setLegendAlignment(Qt::Alignment);
 
-    // Called upon shape manager's selectionChanged() signal
-    void shapeSelectionChanged();
-
 private:
     class Private;
     Private * const d;

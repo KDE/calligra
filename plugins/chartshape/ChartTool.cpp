@@ -120,44 +120,14 @@ ChartTool::ChartTool(KoCanvasBase *canvas)
     connect(m_foo, SIGNAL(toggled(bool)), this, SLOT(catchBar(bool)));
 
 #endif
-    connect(canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
-            this, SLOT(shapeSelectionChanged()));
+//     connect(canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
+//             this, SLOT(shapeSelectionChanged()));
 }
 
 ChartTool::~ChartTool()
 {
     delete d;
 }
-
-void ChartTool::shapeSelectionChanged()
-{
-    // Get the chart shape that the tool is working on.
-    // Let d->shape point to it.
-    d->shape = 0; // to be sure we don't deal with an old value if nothing is found
-    KoSelection  *selection = canvas()->shapeManager()->selection();
-    foreach (KoShape *shape, selection->selectedShapes()) {
-        d->shape = dynamic_cast<ChartShape*>(shape);
-        if (!d->shape) {
-            d->shape = dynamic_cast<ChartShape*>(shape->parent());
-        }
-        if (d->shape) {
-            foreach (QWidget *w, optionWidgets()) {
-                ConfigWidgetBase *widget = dynamic_cast<ConfigWidgetBase*>(w);
-                Q_ASSERT(widget);
-                if (widget) {
-                    widget->open(d->shape);
-                }
-            }
-            break;
-        }
-    }
-    // If we couldn't determine a chart shape, then there is nothing to do.
-    if (!d->shape) { // none found
-        emit done();
-        return;
-    }
-}
-
 
 void ChartTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
@@ -217,30 +187,35 @@ void ChartTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void ChartTool::activate(ToolActivation, const QSet<KoShape*> &shapes)
 {
-    Q_UNUSED(shapes);
-
+    d->shape = 0;
+    for (KoShape *s : shapes) {
+        d->shape = dynamic_cast<ChartShape*>(s);
+    }
+    if (!d->shape) {
+        emit done();
+        return;
+    }
     useCursor(Qt::ArrowCursor);
 
-    // cause on ChartTool::deactivate we set d->shape to NULL it is needed
-    // to call shapeSelectionChanged() even if the selection did not change
-    // to be sure d->shape is proper set again.
-    shapeSelectionChanged();
+    foreach (QWidget *w, optionWidgets()) {
+        ConfigWidgetBase *widget = dynamic_cast<ConfigWidgetBase*>(w);
+        Q_ASSERT(widget);
+        if (widget) {
+            widget->open(d->shape);
+        }
+    }
 }
 
 void ChartTool::deactivate()
 {
-    d->shape = 0;
+    debugChartTool<<d->shape;
 
-    // Tell the config widget to delete all open dialogs.
-    //
-    // The reason why we want to do that explicitly here is because
-    // they are connected to the models, which may disappear when the
-    // chart shape is destructed.
     foreach (QWidget *w, optionWidgets()) {
         ConfigWidgetBase *configWidget = dynamic_cast<ConfigWidgetBase*>(w);
         if (configWidget)
-            configWidget->deleteSubDialogs();
+            configWidget->close();
     }
+    d->shape = 0;
 }
 
 QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
