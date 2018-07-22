@@ -122,11 +122,11 @@ void ParagraphIndentSpacing::setDisplay(KoParagraphStyle *style, bool directForm
         index = 4;
     } else if (style->hasProperty(KoParagraphStyle::PercentLineHeight) && style->lineHeightPercent() != 0) {
         int percent = style->lineHeightPercent();
-        if (percent == 120)
+        if (percent == 100)
             index = 0; // single
-        else if (percent == 180)
+        else if (percent == 150)
             index = 1; // 1.5
-        else if (percent == 240)
+        else if (percent == 200)
             index = 2; // double
         else
             index = 3; // proportional
@@ -230,9 +230,9 @@ void ParagraphIndentSpacing::save(KoParagraphStyle *style)
         style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, 0));
         style->setLineSpacing(0);
         switch (widget.lineSpacing->currentIndex()) {
-        case 0: style->setLineHeightPercent(120); break;
-        case 1: style->setLineHeightPercent(180); break;
-        case 2: style->setLineHeightPercent(240); break;
+        case 0: style->setLineHeightPercent(100); break;
+        case 1: style->setLineHeightPercent(150); break;
+        case 2: style->setLineHeightPercent(200); break;
         case 3: style->setLineHeightPercent(widget.proportional->value()); break;
         case 4:
             if (widget.custom->value() == 0.0) { // then we need to save it differently.

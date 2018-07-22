@@ -1791,9 +1791,8 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
                 qreal percent = format.doubleProperty(KoParagraphStyle::PercentLineHeight);
                 if (percent != 0) {
                     height *= percent / 100.0;
-                } else {
-                    height *= 1.2; // default
                 }
+                height *= 1.16; // default
             }
             height += lineSpacing;
         }
@@ -1804,7 +1803,7 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         }
     } else {
         // for drop caps we just work with a basic linespacing for the dropped characters
-        height *= 1.2;
+        height *= 1.16;
     }
     //rounding problems due to Qt-scribe internally using ints.
     //also used when line was moved down because of intersections with other shapes
