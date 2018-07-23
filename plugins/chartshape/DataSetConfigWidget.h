@@ -25,7 +25,7 @@
 #define KOCHART_DATACONFIGWIDGET
 
 
-#include "ConfigObjectBase.h"
+#include "ConfigSubWidgetBase.h"
 #include "ChartShape.h"
 
 
@@ -45,7 +45,7 @@ class ChartShape;
 /**
  * Chart type configuration widget.
  */
-class DataSetConfigWidget : public ConfigObjectBase
+class DataSetConfigWidget : public ConfigSubWidgetBase
 {
     Q_OBJECT
 

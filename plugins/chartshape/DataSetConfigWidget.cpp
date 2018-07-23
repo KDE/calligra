@@ -307,7 +307,7 @@ DataSetConfigWidget::Private::~Private()
 
 
 DataSetConfigWidget::DataSetConfigWidget(QWidget *parent)
-    : ConfigObjectBase(parent)
+    : ConfigSubWidgetBase(parent)
     , d(new Private(this))
 {
     setObjectName("DataSetConfigWidget");
@@ -317,7 +317,7 @@ DataSetConfigWidget::DataSetConfigWidget(QWidget *parent)
 }
 
 DataSetConfigWidget::DataSetConfigWidget(QList<ChartType> types, QWidget *parent)
-    : ConfigObjectBase(types, parent)
+    : ConfigSubWidgetBase(types, parent)
     , d(new Private(this))
 {
     setObjectName("DataSetConfigWidget");
@@ -345,7 +345,7 @@ void DataSetConfigWidget::open(ChartShape* shape)
     d->dataSetAxes.clear();
     d->dataSets.clear();
 
-    ConfigObjectBase::open(shape);
+    ConfigSubWidgetBase::open(shape);
 }
 
 QAction *DataSetConfigWidget::createAction()

@@ -123,7 +123,7 @@ AxesConfigWidget::Private::~Private()
 // 1) Allow user to change axis' "visible" property
 
 AxesConfigWidget::AxesConfigWidget(QWidget *parent)
-    : ConfigObjectBase(parent)
+    : ConfigSubWidgetBase(parent)
     , d(new Private(this))
 {
     setObjectName("AxesConfigWidget");
@@ -133,7 +133,7 @@ AxesConfigWidget::AxesConfigWidget(QWidget *parent)
 }
 
 AxesConfigWidget::AxesConfigWidget(QList<ChartType> types, QWidget *parent)
-    : ConfigObjectBase(types, parent)
+    : ConfigSubWidgetBase(types, parent)
     , d(new Private(this))
 {
     setObjectName("AxesConfigWidget");
@@ -171,7 +171,7 @@ void AxesConfigWidget::open(ChartShape* shape)
 {
     debugChartUiAxes<<shape;
     d->axes.clear();
-    ConfigObjectBase::open(shape);
+    ConfigSubWidgetBase::open(shape);
 }
 
 void AxesConfigWidget::updateData(ChartType type, ChartSubtype subtype)

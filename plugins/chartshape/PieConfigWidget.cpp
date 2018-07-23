@@ -57,13 +57,13 @@ using namespace KoChart;
 
 
 PieConfigWidget::PieConfigWidget(QWidget *parent)
-    : ConfigObjectBase(parent)
+    : ConfigSubWidgetBase(parent)
 {
     init();
 }
 
 PieConfigWidget::PieConfigWidget(QList<ChartType> types, QWidget *parent)
-    : ConfigObjectBase(types, parent)
+    : ConfigSubWidgetBase(types, parent)
 {
     init();
 }
@@ -88,7 +88,7 @@ void PieConfigWidget::init()
 }
 void PieConfigWidget::open(ChartShape* shape)
 {
-    ConfigObjectBase::open(shape);
+    ConfigSubWidgetBase::open(shape);
 }
 
 void PieConfigWidget::updateData(ChartType type, ChartSubtype subtype)

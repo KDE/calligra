@@ -24,7 +24,7 @@
 #define KOCHART_AXESCONFIGWIDGET
 
 
-#include "ConfigObjectBase.h"
+#include "ConfigSubWidgetBase.h"
 #include "ChartShape.h"
 
 #include <QObject>
@@ -45,7 +45,7 @@ class ChartShape;
 /**
  * Chart type configuration widget.
  */
-class AxesConfigWidget : public ConfigObjectBase
+class AxesConfigWidget : public ConfigSubWidgetBase
 {
     Q_OBJECT
 

@@ -19,18 +19,18 @@
 */
 
 
-#include "ConfigObjectBase.h"
+#include "ConfigSubWidgetBase.h"
 
 using namespace KoChart;
 
-ConfigObjectBase::ConfigObjectBase(QWidget *parent)
+ConfigSubWidgetBase::ConfigSubWidgetBase(QWidget *parent)
     : QWidget(parent)
     , chart(0)
 {
     
 }
 
-ConfigObjectBase::ConfigObjectBase(QList<ChartType> types, QWidget *parent)
+ConfigSubWidgetBase::ConfigSubWidgetBase(QList<ChartType> types, QWidget *parent)
     : QWidget(parent)
     , chart(0)
     , chartTypes(types)
@@ -38,45 +38,45 @@ ConfigObjectBase::ConfigObjectBase(QList<ChartType> types, QWidget *parent)
     
 }
 
-ConfigObjectBase::~ConfigObjectBase()
+ConfigSubWidgetBase::~ConfigSubWidgetBase()
 {
 
 }
 
-void ConfigObjectBase::setChartTypes(QList<ChartType> types)
+void ConfigSubWidgetBase::setChartTypes(QList<ChartType> types)
 {
     chartTypes = types;
 }
 
-void ConfigObjectBase::open(ChartShape *shape)
+void ConfigSubWidgetBase::open(ChartShape *shape)
 {
     chart = shape;
 }
 
-void ConfigObjectBase::deactivate()
+void ConfigSubWidgetBase::deactivate()
 {
     if (chart) {
         deleteSubDialogs();
     }
 }
 
-void ConfigObjectBase::deleteSubDialogs(ChartType type)
+void ConfigSubWidgetBase::deleteSubDialogs(ChartType type)
 {
     Q_UNUSED(type)
 }
 
-void ConfigObjectBase::updateData(ChartType type, ChartSubtype subtype)
+void ConfigSubWidgetBase::updateData(ChartType type, ChartSubtype subtype)
 {
     Q_UNUSED(type)
     Q_UNUSED(subtype)
 }
 
-void ConfigObjectBase::blockSignals(bool block)
+void ConfigSubWidgetBase::blockSignals(bool block)
 {
     blockSignals(this, block);
 }
 
-void ConfigObjectBase::blockSignals(QWidget *w, bool block)
+void ConfigSubWidgetBase::blockSignals(QWidget *w, bool block)
 {
     QList<QWidget*> lst = w->findChildren<QWidget*>();
     for (int i = 0; i < lst.count(); ++i) {

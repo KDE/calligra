@@ -42,7 +42,7 @@ set (chartshape_LIB_SRCS
     ChartShape.cpp
     ChartTool.cpp
     ChartToolFactory.cpp
-    ConfigObjectBase.cpp
+    ConfigSubWidgetBase.cpp
     TitlesConfigWidget.cpp
     LegendConfigWidget.cpp
     PlotAreaConfigWidget.cpp

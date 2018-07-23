@@ -26,7 +26,7 @@
 #include <KoShapeConfigWidgetBase.h>
 
 #include "ChartShape.h"
-#include "ConfigObjectBase.h"
+#include "ConfigSubWidgetBase.h"
 
 #include <QWidget>
 
@@ -61,7 +61,7 @@ public:
         }
     }
     virtual void deactivate() {
-        for (ConfigObjectBase *w : findChildren<ConfigObjectBase*>()) {
+        for (ConfigSubWidgetBase *w : findChildren<ConfigSubWidgetBase*>()) {
             w->deactivate();
         }
         if (chart) {

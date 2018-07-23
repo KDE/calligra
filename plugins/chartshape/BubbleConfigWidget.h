@@ -23,7 +23,7 @@
 #define KOCHART_BUBBLECONFIGWIDGET_H
 
 
-#include "ConfigObjectBase.h"
+#include "ConfigSubWidgetBase.h"
 #include "ui_BubbleConfigWidget.h"
 
 
@@ -34,7 +34,7 @@ class ChartShape;
 /**
  * Chart type configuration widget.
  */
-class BubbleConfigWidget : public ConfigObjectBase
+class BubbleConfigWidget : public ConfigSubWidgetBase
 {
     Q_OBJECT
 

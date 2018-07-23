@@ -25,7 +25,7 @@
 #define KOCHART_PIECONFIGWIDGET
 
 
-#include "ConfigObjectBase.h"
+#include "ConfigSubWidgetBase.h"
 #include "ui_PieConfigWidget.h"
 
 
@@ -36,7 +36,7 @@ class ChartShape;
 /**
  * Chart type configuration widget.
  */
-class PieConfigWidget : public ConfigObjectBase
+class PieConfigWidget : public ConfigSubWidgetBase
 {
     Q_OBJECT
 

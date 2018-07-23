@@ -80,7 +80,7 @@
 #include "DataSetConfigWidget.h"
 #include "PieConfigWidget.h"
 #include "BubbleConfigWidget.h"
-#include "ConfigObjectBase.h"
+#include "ConfigSubWidgetBase.h"
 #include "ChartDebug.h"
 
 using namespace KoChart;
@@ -409,7 +409,7 @@ void PlotAreaConfigWidget::open(KoShape* shape)
     if (!chart) {
         return;
     }
-    for (ConfigObjectBase *w : findChildren<ConfigObjectBase*>()) {
+    for (ConfigSubWidgetBase *w : findChildren<ConfigSubWidgetBase*>()) {
         w->open(chart);
     }
 
@@ -620,7 +620,7 @@ void PlotAreaConfigWidget::updateData()
 
     ui_dataSetSelectionChanged_CellRegionDialog(0);
 
-    for (ConfigObjectBase *w : findChildren<ConfigObjectBase*>()) {
+    for (ConfigSubWidgetBase *w : findChildren<ConfigSubWidgetBase*>()) {
         w->updateData(d->type, d->subtype);
     }
 }

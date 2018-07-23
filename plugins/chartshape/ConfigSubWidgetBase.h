@@ -19,8 +19,8 @@
 */
 
 
-#ifndef KOCHART_CONFIGOBJECTBASE
-#define KOCHART_CONFIGOBJECTBASE
+#ifndef KOCHART_CONFIGSUBWIDGETBASE
+#define KOCHART_CONFIGSUBWIDGETBASE
 
 
 #include "ChartShape.h"
@@ -30,15 +30,15 @@
 namespace KoChart
 {
 
-class ConfigObjectBase : public QWidget
+class ConfigSubWidgetBase : public QWidget
 {
     Q_OBJECT
 public:
-    ConfigObjectBase(QWidget *parent = 0);
+    ConfigSubWidgetBase(QWidget *parent = 0);
 
-    ConfigObjectBase(QList<ChartType> types, QWidget *parent = 0);
+    ConfigSubWidgetBase(QList<ChartType> types, QWidget *parent = 0);
 
-    ~ConfigObjectBase();
+    ~ConfigSubWidgetBase();
 
     void setChartTypes(QList<ChartType> types);
 
@@ -61,4 +61,4 @@ public:
 }  // namespace KoChart
 
 
-#endif // KOCHART_CONFIGOBJECTBASE
+#endif // KOCHART_CONFIGSUBWIDGETBASE

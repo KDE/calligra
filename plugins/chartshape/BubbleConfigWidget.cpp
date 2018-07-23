@@ -57,13 +57,13 @@ using namespace KoChart;
 
 
 BubbleConfigWidget::BubbleConfigWidget(QWidget *parent)
-    : ConfigObjectBase(parent)
+    : ConfigSubWidgetBase(parent)
 {
     init();
 }
 
 BubbleConfigWidget::BubbleConfigWidget(QList<ChartType> types, QWidget *parent)
-    : ConfigObjectBase(types, parent)
+    : ConfigSubWidgetBase(types, parent)
 {
     init();
 }
@@ -87,7 +87,7 @@ void BubbleConfigWidget::init()
 }
 void BubbleConfigWidget::open(ChartShape* shape)
 {
-    ConfigObjectBase::open(shape);
+    ConfigSubWidgetBase::open(shape);
 }
 
 void BubbleConfigWidget::updateData(ChartType type, ChartSubtype subtype)
