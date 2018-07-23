@@ -58,7 +58,7 @@ public:
 
     /// Delete all open dialogs.
     /// This is called when e.g. the tool is deactivated.
-    void deleteSubDialogs();
+    void deleteSubDialogs(ChartType type = LastChartType);
 
 public Q_SLOTS:
     void updateData(ChartType type, ChartSubtype subtype);

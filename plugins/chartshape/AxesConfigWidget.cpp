@@ -162,8 +162,9 @@ Axis *AxesConfigWidget::axis(int index) const
     return a;
 }
 
-void AxesConfigWidget::deleteSubDialogs()
+void AxesConfigWidget::deleteSubDialogs(ChartType type)
 {
+    Q_UNUSED(type)
 }
 
 void AxesConfigWidget::open(ChartShape* shape)
