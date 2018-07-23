@@ -25,6 +25,7 @@
 #include <QAction>
 #include <QMenu>
 #include <QLatin1String>
+#include <QColorDialog>
 
 // KF5
 #include <klocalizedstring.h>
@@ -113,6 +114,15 @@ void BubbleConfigWidget::updateData(ChartType type, ChartSubtype subtype)
     blockSignals(false);
 
     dataSetSelectionChanged(index < 0 ? 0 : index);
+}
+void BubbleConfigWidget::deleteSubDialogs(ChartType type)
+{
+    Q_UNUSED(type);
+    QList<QColorDialog*> lst = findChildren<QColorDialog*>();
+    qInfo()<<Q_FUNC_INFO<<lst;
+    for (QColorDialog *dlg : lst) {
+        dlg->reject();
+    }
 }
 
 void BubbleConfigWidget::dataSetSelectionChanged(int index)

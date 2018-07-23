@@ -47,6 +47,8 @@ public:
 
     void updateData(ChartType type, ChartSubtype subtype);
 
+    void deleteSubDialogs(ChartType type = LastChartType);
+
 public Q_SLOTS:
     void dataSetSelectionChanged(int index);
     void brushChanged(const QColor& color);
