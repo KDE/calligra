@@ -331,8 +331,9 @@ DataSetConfigWidget::~DataSetConfigWidget()
     delete d;
 }
 
-void DataSetConfigWidget::deleteSubDialogs()
+void DataSetConfigWidget::deleteSubDialogs(ChartType type)
 {
+    Q_UNUSED(type)
 }
 
 void DataSetConfigWidget::open(ChartShape* shape)
