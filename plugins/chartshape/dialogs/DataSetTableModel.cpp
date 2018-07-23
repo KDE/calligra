@@ -45,6 +45,8 @@ DataColumnDelegate::DataColumnDelegate(QObject *parent)
 QWidget *DataColumnDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */, const QModelIndex &/* index */) const
 {
     QComboBox *editor = new QComboBox(parent);
+    editor->setEditable(true);
+    editor->setInsertPolicy(QComboBox::InsertAtTop);
     editor->installEventFilter(const_cast<DataColumnDelegate*>(this));
     return editor;
 }
@@ -53,6 +55,10 @@ void DataColumnDelegate::setEditorData(QWidget *editor, const QModelIndex &index
 {
     QStringList lst;
     lst << QString();
+    QString s = index.data().toString();
+    if (!s.isEmpty()) {
+        lst << s;
+    }
     for (int i = 0; i < dataModel->columnCount(); ++i) {
         lst << dataModel->headerData(i, Qt::Horizontal).toString();
     }
@@ -128,25 +134,13 @@ QVariant DataSetTableModel::data(const QModelIndex &idx, int role/* = Qt::Displa
         switch (idx.column()) {
             case 0: return ds->labelData();
             case 1: {
-                QRect r = ds->xDataRegion().rects().value(0);
-                if (r.left() == 0) {
-                    return QVariant();
-                }
-                return CellRegion::rangeIntToString(r.left());
+                return ds->xDataRegion().toString();
             }
             case 2: {
-                QRect r = ds->yDataRegion().rects().value(0);
-                if (r.left() == 0) {
-                    return QVariant();
-                }
-                return CellRegion::rangeIntToString(r.left());
+                return ds->yDataRegion().toString();
             }
             case 3: {
-                QRect r = ds->customDataRegion().rects().value(0);
-                if (r.left() == 0) {
-                    return QVariant();
-                }
-                return CellRegion::rangeIntToString(r.left());
+                return ds->customDataRegion().toString();
             }
         }
     }
@@ -204,11 +198,13 @@ bool DataSetTableModel::submitData(const QModelIndex &idx, const QVariant &value
                 table = ds->xDataRegion().table();
             }
             QString v = value.toString();
-            if (!v.isEmpty()) {
-                v = QString("%1%2:%3%4").arg(v).arg(2).arg(v).arg(table->model()->rowCount());
+            if (v.length() == 1) {
+                if (v.length() == 1) {
+                    v = QString("%1%2:%3%4").arg(v).arg(2).arg(v).arg(table->model()->rowCount());
+                }
                 ds->setXDataRegion(CellRegion(tableSource, table->name() + '.' + v));
             } else {
-                ds->setXDataRegion(CellRegion());
+                ds->setXDataRegion(CellRegion(tableSource, v));
             }
             return true;
         }
@@ -217,11 +213,11 @@ bool DataSetTableModel::submitData(const QModelIndex &idx, const QVariant &value
                 table = ds->xDataRegion().table();
             }
             QString v = value.toString();
-            if (!v.isEmpty()) {
+            if (v.length() == 1) {
                 v = QString("%1%2:%3%4").arg(v).arg(2).arg(v).arg(table->model()->rowCount());
                 ds->setYDataRegion(CellRegion(tableSource, table->name() + '.' + v));
             } else {
-                ds->setYDataRegion(CellRegion(tableSource, table->name()));
+                ds->setYDataRegion(CellRegion(tableSource, v));
             }
             return true;
         }
@@ -230,11 +226,11 @@ bool DataSetTableModel::submitData(const QModelIndex &idx, const QVariant &value
                 table = ds->xDataRegion().table();
             }
             QString v = value.toString();
-            if (!v.isEmpty()) {
+            if (v.length() == 1) {
                 v = QString("%1%2:%3%4").arg(v).arg(2).arg(v).arg(table->model()->rowCount());
                 ds->setCustomDataRegion(CellRegion(tableSource, table->name() + '.' + v));
             } else {
-                ds->setCustomDataRegion(CellRegion(tableSource, table->name()));
+                ds->setCustomDataRegion(CellRegion(tableSource, v));
             }
             return true;
         }
