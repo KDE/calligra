@@ -78,7 +78,7 @@ public:
         }
         for (int r = 1; r < model->rowCount(); ++r) {
             QModelIndex idx = model->index(r, scolumn);
-            model->setData(idx, r);
+            model->setData(idx, (double)r);
         }
         return true;
     }
@@ -98,7 +98,7 @@ public:
         }
         for (int c = 1; c < model->columnCount(); ++c) {
             QModelIndex idx = model->index(srow, c);
-            model->setData(idx, c);
+            model->setData(idx, (double)c);
         }
         return true;
     }
