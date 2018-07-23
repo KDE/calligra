@@ -53,6 +53,18 @@ void ConfigObjectBase::open(ChartShape *shape)
     chart = shape;
 }
 
+void ConfigObjectBase::deactivate()
+{
+    if (chart) {
+        deleteSubDialogs();
+    }
+}
+
+void ConfigObjectBase::deleteSubDialogs(ChartType type)
+{
+    Q_UNUSED(type)
+}
+
 void ConfigObjectBase::updateData(ChartType type, ChartSubtype subtype)
 {
     Q_UNUSED(type)

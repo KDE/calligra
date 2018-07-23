@@ -42,7 +42,10 @@ public:
 
     void setChartTypes(QList<ChartType> types);
 
-    void open(ChartShape *shape);
+    virtual void open(ChartShape *shape);
+    virtual void deactivate();
+    virtual void deleteSubDialogs(ChartType type = LastChartType);
+
     // reimplement to update the ui
     virtual void updateData(ChartType type, ChartSubtype subtype);
 

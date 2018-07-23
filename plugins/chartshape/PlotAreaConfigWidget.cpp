@@ -173,7 +173,7 @@ public:
 
 
     // Dialogs
-    CellRegionDialog  cellRegionDialog;
+    CellRegionDialog *cellRegionDialog;
 
     CellRegionStringValidator *cellRegionStringValidator;
 };
@@ -181,8 +181,7 @@ public:
 
 PlotAreaConfigWidget::Private::Private(QWidget *parent)
     : tableEditorDialog(0)
-    , cellRegionDialog(parent)
-
+    , cellRegionDialog(0)
 {
     selectedDataSet = 0;
     tableSource = 0;
@@ -232,7 +231,7 @@ PlotAreaConfigWidget::Private::~Private()
 PlotAreaConfigWidget::PlotAreaConfigWidget()
     : d(new Private(this))
 {
-    setObjectName("Chart Type");
+    setObjectName("PlotArea");
     d->ui.setupUi(this);
 
     setupWidgets();
@@ -312,7 +311,7 @@ PlotAreaConfigWidget::PlotAreaConfigWidget()
 
 PlotAreaConfigWidget::~PlotAreaConfigWidget()
 {
-    deleteSubDialogs();
+    deactivate();
     delete d;
 }
 
@@ -338,37 +337,74 @@ BubbleConfigWidget *PlotAreaConfigWidget::bubbleConfigWidget() const
 
 void PlotAreaConfigWidget::deleteSubDialogs(ChartType type)
 {
-    switch (type) {
-        case BarChartType:
-        case LineChartType:
-        case AreaChartType:
-        case RingChartType:
-        case RadarChartType:
-        case FilledRadarChartType:
-        case ScatterChartType:
-        case SurfaceChartType:
-        case StockChartType:
-            delete d->tableEditorDialog;
-            d->tableEditorDialog = 0;
-            break;
-        case CircleChartType:
-            delete findChildren<PieDataEditor*>().value(0);
-            break;
-        case BubbleChartType:
-            delete findChildren<BubbleDataEditor*>().value(0);
-            break;
-        default:
-            delete d->tableEditorDialog;
-            d->tableEditorDialog = 0;
-            delete findChildren<PieDataEditor*>().value(0);
-            delete findChildren<BubbleDataEditor*>().value(0);
-            break;
+    if (!chart->usesInternalModelOnly()) {
+        switch (type) {
+            case BarChartType:
+            case LineChartType:
+            case AreaChartType:
+            case RingChartType:
+            case RadarChartType:
+            case FilledRadarChartType:
+            case ScatterChartType:
+            case SurfaceChartType:
+            case StockChartType:
+            case CircleChartType:
+                delete d->cellRegionDialog;
+                d->cellRegionDialog = 0;
+                break;
+//             case BubbleChartType:
+//                 delete findChildren<ExternalBubbleDataEditor*>().value(0);
+//                 break;
+            default:
+                delete d->cellRegionDialog;
+                d->cellRegionDialog = 0;
+//                 delete findChildren<ExternalBubbleDataEditor*>().value(0);
+                break;
+        }
+    } else {
+        switch (type) {
+            case BarChartType:
+            case LineChartType:
+            case AreaChartType:
+            case RingChartType:
+            case RadarChartType:
+            case FilledRadarChartType:
+            case ScatterChartType:
+            case SurfaceChartType:
+            case StockChartType:
+                delete d->tableEditorDialog;
+                d->tableEditorDialog = 0;
+                break;
+            case CircleChartType:
+                delete findChildren<PieDataEditor*>().value(0);
+                break;
+            case BubbleChartType:
+                delete findChildren<BubbleDataEditor*>().value(0);
+                break;
+            default:
+                delete d->tableEditorDialog;
+                d->tableEditorDialog = 0;
+                delete findChildren<PieDataEditor*>().value(0);
+                delete findChildren<BubbleDataEditor*>().value(0);
+                break;
+        }
     }
 }
 
+void PlotAreaConfigWidget::deactivate()
+{
+    debugChartUiPlotArea;
+    disconnect(d->ui.editData);
+    d->tableSource = 0;
+    ConfigWidgetBase::deactivate();
+}
 void PlotAreaConfigWidget::open(KoShape* shape)
 {
-    d->tableSource = 0;
+    debugChartUiPlotArea;
+    if (chart && chart == shape) {
+        updateData();
+        return;
+    }
     ConfigWidgetBase::open(shape);
     if (!chart) {
         return;
@@ -379,54 +415,7 @@ void PlotAreaConfigWidget::open(KoShape* shape)
 
     d->tableSource = chart->tableSource();
 
-// NOTE: There's no single source table anymore, a Calligra Sheets workbook allows multiple to be used with a chart.
-//    KoChart::ChartModel *spreadSheetModel = qobject_cast<KoChart::ChartModel*>(chart->internalModel());
-// NOTE: This is obsolete, ChartShape::usesInternalModelOnly() is now used instead.
-//    ChartTableModel *tableModel = qobject_cast<ChartTableModel*>(chart->model());
-//    d->isExternalDataSource = (spreadSheetModel != 0 && tableModel == 0);
-
-
-    // Update the legend title
-    //d->ui.legendTitle->setText(chart->legend()->title());
-
-    // Fill the data table
-    if (!chart->usesInternalModelOnly()) {
- // FIXME: CellRegion itself together with a TableSource should now be used
- // to validate  the correctness of a table range address.
-#if 0
-        d->cellRegionStringValidator = new CellRegionStringValidator(spreadSheetModel);
-        d->cellRegionDialog.labelDataRegion->setValidator(d->cellRegionStringValidator);
-        d->cellRegionDialog.xDataRegion->setValidator(d->cellRegionStringValidator);
-        d->cellRegionDialog.yDataRegion->setValidator(d->cellRegionStringValidator);
-        d->cellRegionDialog.categoryDataRegion->setValidator(d->cellRegionStringValidator);
-#endif
-
-        debugChartUiPlotArea<<"external data source";
-        // If the data source is external, the editData button opens a
-        // dialog to edit the data ranges instead of the data itself.
-        d->ui.editData->setText(i18n("Data Ranges..."));
-        connect(d->ui.editData, SIGNAL(clicked(bool)),
-                this, SLOT(slotShowCellRegionDialog()));
-        connect(d->cellRegionDialog.xDataRegion, SIGNAL(editingFinished()),
-                this, SLOT(ui_dataSetXDataRegionChanged()));
-        connect(d->cellRegionDialog.yDataRegion, SIGNAL(editingFinished()),
-                this, SLOT(ui_dataSetYDataRegionChanged()));
-        connect(d->cellRegionDialog.labelDataRegion, SIGNAL(editingFinished()),
-                this, SLOT(ui_dataSetLabelDataRegionChanged()));
-        //connect(d->cellRegionDialog.customDataRegion, SIGNAL(textEdited(QString)),
-        //        this, SLOT(ui_dataSetCustomDataRegionChanged(QString)));
-        connect(d->cellRegionDialog.categoryDataRegion, SIGNAL(editingFinished()),
-                this, SLOT(ui_dataSetCategoryDataRegionChanged()));
-        connect(d->cellRegionDialog.dataSets, SIGNAL(currentIndexChanged(int)),
-                this, SLOT(ui_dataSetSelectionChanged_CellRegionDialog(int)));
-    }
-    else {
-        // This part is run when the data source is not external,
-        // i.e. the data is handled by the chart shape itself.
-        connect(d->ui.editData, SIGNAL(clicked(bool)),
-                this,           SLOT(slotShowTableEditor()));
-    }
-
+    connect(d->ui.editData, &QPushButton::clicked, this, &PlotAreaConfigWidget::slotShowTableEditor);
     updateData();
 }
 
@@ -615,18 +604,20 @@ void PlotAreaConfigWidget::updateData()
     d->ui.threeDLook->setChecked(d->threeDMode);
     d->ui.threeDLook->setEnabled(enableThreeDOption);
 
-    d->cellRegionDialog.hide();
-    d->dataSets = chart->plotArea()->dataSets();
-    d->cellRegionDialog.dataSets->clear();
-    int i = 1;
-    foreach (DataSet *dataSet, d->dataSets) {
-        QString title = dataSet->labelData().toString();
-        if (title.isEmpty())
-            title = i18n("Data Set %1", i++);
-        d->cellRegionDialog.dataSets->addItem(title);
+    if (d->cellRegionDialog) {
+    //     d->cellRegionDialog->hide();
+        d->dataSets = chart->plotArea()->dataSets();
+        d->cellRegionDialog->dataSets->clear();
+        int i = 1;
+        foreach (DataSet *dataSet, d->dataSets) {
+            QString title = dataSet->labelData().toString();
+            if (title.isEmpty())
+                title = i18n("Data Set %1", i++);
+            d->cellRegionDialog->dataSets->addItem(title);
+        }
     }
     blockSignals(false);
-    debugChartUiPlotArea<<"datasets blocked:"<<d->cellRegionDialog.dataSets->signalsBlocked();
+
     ui_dataSetSelectionChanged_CellRegionDialog(0);
 
     for (ConfigObjectBase *w : findChildren<ConfigObjectBase*>()) {
@@ -637,41 +628,101 @@ void PlotAreaConfigWidget::updateData()
 
 void PlotAreaConfigWidget::slotShowTableEditor()
 {
-    debugChartUiPlotArea;
-    switch (chart->chartType()) {
-        case CircleChartType: {
-            PieDataEditor *dlg = findChildren<PieDataEditor*>().value(0);
-            if (!dlg) {
-                dlg = new PieDataEditor(this);
-                dlg->setModel(chart->internalModel());
-                connect(dlg, SIGNAL(finished()), dlg, SLOT(hide()));
+    if (!chart->usesInternalModelOnly()) {
+        debugChartUiPlotArea<<"external";
+        switch (chart->chartType()) {
+//             case BubbleChartType: {
+//                 ExternalBubbleDataEditor *dlg = findChildren<ExternalBubbleDataEditor*>().value(0);
+//                 if (!dlg) {
+//                     dlg = new ExternalBubbleDataEditor(chart, this);
+//                     connect(dlg, SIGNAL(finished()), dlg, SLOT(hide()));
+//                     connect(dlg, &ExternalBubbleDataEditor::xDataChanged, this, &PlotAreaConfigWidget::dataSetXDataRegionChanged);
+//                     connect(dlg, &ExternalBubbleDataEditor::yDataChanged, this, &PlotAreaConfigWidget::dataSetYDataRegionChanged);
+//                     connect(dlg, &ExternalBubbleDataEditor::bubbleDataChanged, this, &PlotAreaConfigWidget::dataSetCustomDataRegionChanged);
+//                 }
+//                 dlg->show();
+//                 dlg->raise();
+//                 return;
+//             }
+            default: {
+                if (!d->cellRegionDialog) {
+                    d->cellRegionDialog = new CellRegionDialog;
+                    // FIXME: CellRegion itself together with a TableSource should now be used
+                    // to validate  the correctness of a table range address.
+#if 0
+                    d->cellRegionStringValidator = new CellRegionStringValidator(spreadSheetModel);
+                    d->cellRegionDialog->labelDataRegion->setValidator(d->cellRegionStringValidator);
+                    d->cellRegionDialog->xDataRegion->setValidator(d->cellRegionStringValidator);
+                    d->cellRegionDialog->yDataRegion->setValidator(d->cellRegionStringValidator);
+                    d->cellRegionDialog->categoryDataRegion->setValidator(d->cellRegionStringValidator);
+#endif
+                    d->dataSets = chart->plotArea()->dataSets();
+                    d->cellRegionDialog->dataSets->clear();
+                    int i = 1;
+                    foreach (DataSet *dataSet, d->dataSets) {
+                        QString title = dataSet->labelData().toString();
+                        if (title.isEmpty())
+                            title = i18n("Data Set %1", i++);
+                        d->cellRegionDialog->dataSets->addItem(title);
+                    }
+
+                    debugChartUiPlotArea<<"external data source";
+                    connect(d->cellRegionDialog->xDataRegion, SIGNAL(editingFinished()),
+                            this, SLOT(ui_dataSetXDataRegionChanged()));
+                    connect(d->cellRegionDialog->yDataRegion, SIGNAL(editingFinished()),
+                            this, SLOT(ui_dataSetYDataRegionChanged()));
+                    connect(d->cellRegionDialog->labelDataRegion, SIGNAL(editingFinished()),
+                            this, SLOT(ui_dataSetLabelDataRegionChanged()));
+//                     connect(d->cellRegionDialog->bubbleDataRegion, SIGNAL(textEdited(QString)),
+//                             this, SLOT(ui_dataSetCustomDataRegionChanged(QString)));
+                    connect(d->cellRegionDialog->categoryDataRegion, SIGNAL(editingFinished()),
+                            this, SLOT(ui_dataSetCategoryDataRegionChanged()));
+                    connect(d->cellRegionDialog->dataSets, SIGNAL(currentIndexChanged(int)),
+                            this, SLOT(ui_dataSetSelectionChanged_CellRegionDialog(int)));
+                }
+                d->cellRegionDialog->show();
+                d->cellRegionDialog->raise();
+                return;
             }
-            dlg->show();
-            dlg->raise();
-            return;
         }
-        case BubbleChartType: {
-            BubbleDataEditor *dlg = findChildren<BubbleDataEditor*>().value(0);
-            if (!dlg) {
-                dlg = new BubbleDataEditor(chart, this);
-                connect(dlg, SIGNAL(finished()), dlg, SLOT(hide()));
-                connect(dlg, &BubbleDataEditor::xDataChanged, this, &PlotAreaConfigWidget::dataSetXDataRegionChanged);
-                connect(dlg, &BubbleDataEditor::yDataChanged, this, &PlotAreaConfigWidget::dataSetYDataRegionChanged);
-                connect(dlg, &BubbleDataEditor::bubbleDataChanged, this, &PlotAreaConfigWidget::dataSetCustomDataRegionChanged);
+    } else {
+        debugChartUiPlotArea<<"internal only";
+        switch (chart->chartType()) {
+            case CircleChartType: {
+                PieDataEditor *dlg = findChildren<PieDataEditor*>().value(0);
+                if (!dlg) {
+                    dlg = new PieDataEditor(this);
+                    dlg->setModel(chart->internalModel());
+                    connect(dlg, SIGNAL(finished()), dlg, SLOT(hide()));
+                }
+                dlg->show();
+                dlg->raise();
+                return;
             }
-            dlg->show();
-            dlg->raise();
-            return;
+            case BubbleChartType: {
+                BubbleDataEditor *dlg = findChildren<BubbleDataEditor*>().value(0);
+                if (!dlg) {
+                    dlg = new BubbleDataEditor(chart, this);
+                    connect(dlg, SIGNAL(finished()), dlg, SLOT(hide()));
+                    connect(dlg, &BubbleDataEditor::xDataChanged, this, &PlotAreaConfigWidget::dataSetXDataRegionChanged);
+                    connect(dlg, &BubbleDataEditor::yDataChanged, this, &PlotAreaConfigWidget::dataSetYDataRegionChanged);
+                    connect(dlg, &BubbleDataEditor::bubbleDataChanged, this, &PlotAreaConfigWidget::dataSetCustomDataRegionChanged);
+                }
+                dlg->show();
+                dlg->raise();
+                return;
+            }
+            default: {
+                if (!d->tableEditorDialog) {
+                    d->tableEditorDialog = new TableEditorDialog;
+                    d->tableEditorDialog->setProxyModel(chart->proxyModel());
+                    d->tableEditorDialog->setModel(chart->internalModel());
+                }
+                d->tableEditorDialog->show();
+                d->tableEditorDialog->raise();
+                return;
+            }
         }
-        default:
-            if (!d->tableEditorDialog) {
-                d->tableEditorDialog = new TableEditorDialog;
-                d->tableEditorDialog->setProxyModel(chart->proxyModel());
-                d->tableEditorDialog->setModel(chart->internalModel());
-            }
-            d->tableEditorDialog->show();
-            d->tableEditorDialog->raise();
-            return;
     }
 }
 
@@ -679,10 +730,10 @@ void PlotAreaConfigWidget::slotShowTableEditor()
 void PlotAreaConfigWidget::slotShowCellRegionDialog()
 {
     // Update regions of selected dataset
-    int selectedDataSet = d->cellRegionDialog.dataSets->currentIndex();
+    int selectedDataSet = d->cellRegionDialog->dataSets->currentIndex();
     ui_dataSetSelectionChanged_CellRegionDialog(selectedDataSet);
 
-    d->cellRegionDialog.show();
+    d->cellRegionDialog->show();
 }
 
 void PlotAreaConfigWidget::setupDialogs()
@@ -701,7 +752,7 @@ void PlotAreaConfigWidget::ui_dataSetXDataRegionChanged()
     if (d->selectedDataSet_CellRegionDialog < 0)
         return;
 
-    const QString regionString = d->cellRegionDialog.xDataRegion->text();
+    const QString regionString = d->cellRegionDialog->xDataRegion->text();
     const CellRegion region(d->tableSource, regionString);
 
     DataSet *dataSet = d->dataSets[d->selectedDataSet_CellRegionDialog];
@@ -715,7 +766,7 @@ void PlotAreaConfigWidget::ui_dataSetYDataRegionChanged()
     if (d->selectedDataSet_CellRegionDialog < 0)
         return;
 
-    const QString regionString = d->cellRegionDialog.yDataRegion->text();
+    const QString regionString = d->cellRegionDialog->yDataRegion->text();
     const CellRegion region(d->tableSource, regionString);
 
     DataSet *dataSet = d->dataSets[d->selectedDataSet_CellRegionDialog];
@@ -725,21 +776,17 @@ void PlotAreaConfigWidget::ui_dataSetYDataRegionChanged()
 
 void PlotAreaConfigWidget::ui_dataSetCustomDataRegionChanged()
 {
-    // Only makes sense when bubble charts are implemented
-    // TODO: ui_dataSetCustomDataRegionChanged
-    return;
-
-  /*
     // Check for valid index
     if (d->selectedDataSet_CellRegionDialog < 0)
         return;
 
-    const QString region = d->cellRegionDialog.customDataRegion->text();
-
-    DataSet *dataSet = d->dataSets[d->selectedDataSet_CellRegionDialog];
-
-    emit dataSetCustomDataRegionChanged(dataSet, region);
-    */
+//     const QString regionString = d->cellRegionDialog->bubbleDataRegion->text();
+//     const CellRegion region(d->tableSource, regionString);
+//     
+//     DataSet *dataSet = d->dataSets[d->selectedDataSet_CellRegionDialog];
+// 
+//     emit dataSetCustomDataRegionChanged(dataSet, region);
+    
 }
 
 void PlotAreaConfigWidget::ui_dataSetCategoryDataRegionChanged()
@@ -748,7 +795,7 @@ void PlotAreaConfigWidget::ui_dataSetCategoryDataRegionChanged()
     if (d->selectedDataSet_CellRegionDialog < 0)
         return;
 
-    const QString regionString = d->cellRegionDialog.categoryDataRegion->text();
+    const QString regionString = d->cellRegionDialog->categoryDataRegion->text();
     const CellRegion region(d->tableSource, regionString);
 
     DataSet *dataSet = d->dataSets[d->selectedDataSet_CellRegionDialog];
@@ -759,10 +806,10 @@ void PlotAreaConfigWidget::ui_dataSetCategoryDataRegionChanged()
 void PlotAreaConfigWidget::ui_dataSetLabelDataRegionChanged()
 {
     // Check for valid index
-    if (d->selectedDataSet_CellRegionDialog < 0)
+    if (d->selectedDataSet_CellRegionDialog < 0 || d->selectedDataSet_CellRegionDialog >= d->dataSets.count()) {
         return;
-
-    const QString regionString = d->cellRegionDialog.labelDataRegion->text();
+    }
+    const QString regionString = d->cellRegionDialog->labelDataRegion->text();
     const CellRegion region(d->tableSource, regionString);
 
     DataSet *dataSet = d->dataSets[d->selectedDataSet_CellRegionDialog];
@@ -774,7 +821,7 @@ void PlotAreaConfigWidget::ui_dataSetLabelDataRegionChanged()
     if (title.isEmpty()) {
         title = i18n("Data Set %1", d->selectedDataSet_CellRegionDialog);
     }
-    d->cellRegionDialog.dataSets->setItemText(d->selectedDataSet_CellRegionDialog, title);
+    d->cellRegionDialog->dataSets->setItemText(d->selectedDataSet_CellRegionDialog, title);
 }
 
 
@@ -788,16 +835,16 @@ void PlotAreaConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog(int index
     DataSet *dataSet = d->dataSets[index];
     const int dimensions = dataSet->dimension();
 
-    d->cellRegionDialog.labelDataRegion->setText(dataSet->labelDataRegion().toString());
+    d->cellRegionDialog->labelDataRegion->setText(dataSet->labelDataRegion().toString());
     debugChartUiPlotArea<<"dim"<<dimensions;
     if (dimensions > 1) {
-        d->cellRegionDialog.xDataRegion->setEnabled(true);
-        d->cellRegionDialog.xDataRegion->setText(dataSet->xDataRegion().toString());
+        d->cellRegionDialog->xDataRegion->setEnabled(true);
+        d->cellRegionDialog->xDataRegion->setText(dataSet->xDataRegion().toString());
     } else {
-        d->cellRegionDialog.xDataRegion->setEnabled(false);
+        d->cellRegionDialog->xDataRegion->setEnabled(false);
     }
-    d->cellRegionDialog.yDataRegion->setText(dataSet->yDataRegion().toString());
-    d->cellRegionDialog.categoryDataRegion->setText(dataSet->categoryDataRegion().toString());
+    d->cellRegionDialog->yDataRegion->setText(dataSet->yDataRegion().toString());
+    d->cellRegionDialog->categoryDataRegion->setText(dataSet->categoryDataRegion().toString());
 
     d->selectedDataSet_CellRegionDialog = index;
 }

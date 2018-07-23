@@ -56,6 +56,7 @@ public:
     PlotAreaConfigWidget();
     ~PlotAreaConfigWidget();
 
+    void deactivate();
     void open(KoShape* shape);
     QAction * createAction();
 

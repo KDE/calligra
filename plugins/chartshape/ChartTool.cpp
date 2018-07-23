@@ -191,6 +191,7 @@ void ChartTool::activate(ToolActivation, const QSet<KoShape*> &shapes)
     for (KoShape *s : shapes) {
         d->shape = dynamic_cast<ChartShape*>(s);
     }
+    debugChartTool<<shapes<<d->shape;
     if (!d->shape) {
         emit done();
         return;
@@ -213,7 +214,7 @@ void ChartTool::deactivate()
     foreach (QWidget *w, optionWidgets()) {
         ConfigWidgetBase *configWidget = dynamic_cast<ConfigWidgetBase*>(w);
         if (configWidget)
-            configWidget->close();
+            configWidget->deactivate();
     }
     d->shape = 0;
 }

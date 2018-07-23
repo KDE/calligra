@@ -26,8 +26,11 @@
 #include <KoShapeConfigWidgetBase.h>
 
 #include "ChartShape.h"
+#include "ConfigObjectBase.h"
 
 #include <QWidget>
+
+#include "ChartDebug.h"
 
 namespace KoChart
 {
@@ -38,12 +41,18 @@ public:
     ConfigWidgetBase() {}
     ~ConfigWidgetBase() {}
 
-    // reimplemented from KoShapeConfigWidgetBase
+    /// Calling open() with @p shape will call deactivate()
+    /// reimplemented from KoShapeConfigWidgetBase
     void open(KoShape *shape) {
+        if (!shape) {
+            deactivate();
+            return;
+        }
         chart = dynamic_cast<ChartShape*>(shape);
         if (!chart) {
             chart = dynamic_cast<ChartShape*>(shape->parent());
             if (!chart) {
+                deactivate();
                 return;
             }
         }
@@ -51,12 +60,23 @@ public:
             updateData();
         }
     }
-    // reimplemented from KoShapeConfigWidgetBase
+    virtual void deactivate() {
+        for (ConfigObjectBase *w : findChildren<ConfigObjectBase*>()) {
+            w->deactivate();
+        }
+        if (chart) {
+            deleteSubDialogs();
+        }
+        chart = 0;
+    }
+
+    /// reimplemented from KoShapeConfigWidgetBase
     void save() { Q_ASSERT(false); }
 
-    // reimplement to update the ui
+    /// Reimplement to update the ui
     virtual void updateData() {}
-    // reimplement if you open any dialogs
+    /// Reimplement if you open any dialogs
+    /// This is called from close()
     virtual void deleteSubDialogs(ChartType type = LastChartType) {Q_UNUSED(type)}
 
     void blockSignals(bool block) {
