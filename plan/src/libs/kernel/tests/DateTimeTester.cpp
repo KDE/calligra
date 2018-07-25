@@ -178,7 +178,8 @@ void DateTimeTester::timeZones()
     dt4 += Duration(1, 0, 0, 0, 0);
     qDebug()<<dt4;
     QCOMPARE(dt4.timeSpec(), Qt::UTC);
-    
+
+    unsetenv("TZ");
 }
 
 } //namespace KPlato

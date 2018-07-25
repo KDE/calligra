@@ -358,7 +358,8 @@ void CalendarTester::dstSpring()
     QCOMPARE( ai.startTime(),  DateTime(wdate, QTime(2,0,0)));
     QCOMPARE( ai.endTime(),  DateTime(wdate, QTime(4,0,0)));
     QCOMPARE( ai.effort().toHours(),  1.); // Missing DST hour is skipped
-    
+
+    unsetenv("TZ");
 }
 
 } //namespace KPlato

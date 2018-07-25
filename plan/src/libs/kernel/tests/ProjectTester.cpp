@@ -66,6 +66,7 @@ void ProjectTester::initTestCase()
 
 void ProjectTester::cleanupTestCase()
 {
+    unsetenv("TZ");
     delete m_project;
 }
 

@@ -320,6 +320,8 @@ qDebug() << DateTime( wdate, QTime( 23, 0, 0 ) );
     wdate = wdate.addDays( 1 );
     QCOMPARE( wic.intervals.map().value( wdate ).startTime(), DateTime( wdate, QTime( 0, 0, 0 ) ) );
     QCOMPARE( wic.intervals.map().value( wdate ).endTime(), DateTime( wdate, QTime( 1, 0, 0 ) ) );
+
+    unsetenv("TZ");
 }
 
 void WorkInfoCacheTester::doubleTimeZones()
@@ -381,6 +383,7 @@ void WorkInfoCacheTester::doubleTimeZones()
     QCOMPARE( wic2.intervals.map().value( wdate ).startTime(), DateTime( wdate, QTime( 13, 0, 0 ) ) );
     QCOMPARE( wic2.intervals.map().value( wdate ).endTime(), DateTime( wdate, QTime( 15, 0, 0 ) ) );
     
+    unsetenv("TZ");
 }
 
 } //namespace KPlato
