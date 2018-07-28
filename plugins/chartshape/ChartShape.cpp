@@ -90,6 +90,7 @@
 #include <KoUnit.h>
 #include <KoShapePaintingContext.h>
 #include <KoTextShapeDataBase.h>
+#include <KoCanvasResourceIdentities.h>
 
 // KoChart
 #include "Axis.h"
@@ -857,9 +858,8 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
 
     // Get access to sheets in Calligra Sheets
     QAbstractItemModel *sheetAccessModel = 0;
-    if (resourceManager() &&
-         resourceManager()->hasResource(75751149)) { // duplicated from Calligra Sheets
-        QVariant var = resourceManager()->resource(75751149);
+    if (resourceManager() && resourceManager()->hasResource(Sheets::CanvasResource::AccessModel)) {
+        QVariant var = resourceManager()->resource(Sheets::CanvasResource::AccessModel);
         sheetAccessModel = static_cast<QAbstractItemModel*>(var.value<void*>());
         if (sheetAccessModel) {
             // We're embedded in Calligra Sheets, which means Calligra Sheets provides the data

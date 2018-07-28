@@ -22,13 +22,13 @@
 
 #include "ui_ChartDatabaseSelector.h"
 
+#include "KoCanvasResourceIdentities.h"
 #include "KoCanvasResourceManager.h"
 #include "KoShape.h"
 
 #include "KoChartInterface.h"
 
 #include "Binding.h"
-#include "CanvasResources.h"
 #include "CellStorage.h"
 #include "Region.h"
 #include "ui/Selection.h"
@@ -92,6 +92,6 @@ void ChartDatabaseSelector::showEvent(QShowEvent* event)
 {
     Q_UNUSED(event);
     Q_ASSERT(m_resourceManager);
-    d->selection = static_cast<Selection*>(m_resourceManager->resource(CanvasResource::Selection).value<void*>());
+    d->selection = static_cast<Selection*>(m_resourceManager->resource(::Sheets::CanvasResource::Selection).value<void*>());
     d->widget.m_cellRegion->setText(d->selection->Region::name());
 }

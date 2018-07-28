@@ -30,6 +30,7 @@
 #include <KoShape.h>
 #include <KoDocumentResourceManager.h>
 #include <KoUnit.h>
+#include <KoCanvasResourceIdentities.h>
 
 #include "CellStorage.h"
 #include "Cluster.h"
@@ -129,7 +130,7 @@ Sheet::Sheet(Map* map, const QString &sheetName)
         resourceManager()->setUndoStack(map->doc()->undoStack());
         QVariant variant;
         variant.setValue<void*>(map->doc()->sheetAccessModel());
-        resourceManager()->setResource(75751149, variant); // duplicated in kochart.
+        resourceManager()->setResource(::Sheets::CanvasResource::AccessModel, variant);
     }
     d->model = new SheetModel(this);
 

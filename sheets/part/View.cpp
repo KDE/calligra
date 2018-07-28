@@ -90,13 +90,14 @@
 #include <KoToolProxy.h>
 #include <KoModeBoxFactory.h>
 #include <KoIcon.h>
+#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceIdentities.h>
 
 // Sheets includes
 #include "SheetsDebug.h"
 #include "ApplicationSettings.h"
 #include "BindingManager.h"
 #include "CalculationSettings.h"
-#include "CanvasResources.h"
 #include "CellStorage.h"
 #include "Damages.h"
 #include "DependencyManager.h"
@@ -719,7 +720,7 @@ void View::initView()
     // Let the selection pointer become a canvas resource.
     QVariant variant;
     variant.setValue<void*>(d->selection);
-    d->canvas->resourceManager()->setResource(CanvasResource::Selection, variant);
+    d->canvas->resourceManager()->setResource(::Sheets::CanvasResource::Selection, variant);
     variant.setValue<QObject*>(doc()->map()->bindingManager());
 
     // Load the Calligra Sheets Tools
