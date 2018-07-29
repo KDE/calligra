@@ -572,7 +572,9 @@ void PlotAreaConfigWidget::updateData()
     if (!chart) {
         return;
     }
-    deleteSubDialogs(chart->chartType());
+    if (chart->chartType() != d->type) {
+        deleteSubDialogs(chart->chartType());
+    }
     switch (chart->chartType()) {
         case CircleChartType:
             d->ui.stackedWidget->setCurrentIndex(1);
@@ -605,20 +607,24 @@ void PlotAreaConfigWidget::updateData()
     d->ui.threeDLook->setEnabled(enableThreeDOption);
 
     if (d->cellRegionDialog) {
-    //     d->cellRegionDialog->hide();
-        d->dataSets = chart->plotArea()->dataSets();
-        d->cellRegionDialog->dataSets->clear();
-        int i = 1;
-        foreach (DataSet *dataSet, d->dataSets) {
-            QString title = dataSet->labelData().toString();
-            if (title.isEmpty())
-                title = i18n("Data Set %1", i++);
-            d->cellRegionDialog->dataSets->addItem(title);
+        int idx = d->cellRegionDialog->dataSets->currentIndex();
+        if (d->dataSets != chart->plotArea()->dataSets()) {
+            blockSignals(d->cellRegionDialog, true);
+            idx = 0;
+            d->dataSets = chart->plotArea()->dataSets();
+            d->cellRegionDialog->dataSets->clear();
+            int i = 1;
+            foreach (DataSet *dataSet, d->dataSets) {
+                QString title = dataSet->labelData().toString();
+                if (title.isEmpty())
+                    title = i18n("Data Set %1", i++);
+                d->cellRegionDialog->dataSets->addItem(title);
+            }
+            blockSignals(d->cellRegionDialog, false);
         }
+        ui_dataSetSelectionChanged_CellRegionDialog(idx);
     }
     blockSignals(false);
-
-    ui_dataSetSelectionChanged_CellRegionDialog(0);
 
     for (ConfigSubWidgetBase *w : findChildren<ConfigSubWidgetBase*>()) {
         w->updateData(d->type, d->subtype);
@@ -665,6 +671,7 @@ void PlotAreaConfigWidget::slotShowTableEditor()
                             title = i18n("Data Set %1", i++);
                         d->cellRegionDialog->dataSets->addItem(title);
                     }
+                    ui_dataSetSelectionChanged_CellRegionDialog(0);
 
                     debugChartUiPlotArea<<"external data source";
                     connect(d->cellRegionDialog->xDataRegion, SIGNAL(editingFinished()),
@@ -835,6 +842,8 @@ void PlotAreaConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog(int index
     DataSet *dataSet = d->dataSets[index];
     const int dimensions = dataSet->dimension();
 
+    blockSignals(d->cellRegionDialog, true);
+
     d->cellRegionDialog->labelDataRegion->setText(dataSet->labelDataRegion().toString());
     debugChartUiPlotArea<<"dim"<<dimensions;
     if (dimensions > 1) {
@@ -847,5 +856,7 @@ void PlotAreaConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog(int index
     d->cellRegionDialog->categoryDataRegion->setText(dataSet->categoryDataRegion().toString());
 
     d->selectedDataSet_CellRegionDialog = index;
+
+    blockSignals(d->cellRegionDialog, false);
 }
 
