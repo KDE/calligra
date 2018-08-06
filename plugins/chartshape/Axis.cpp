@@ -678,9 +678,20 @@ void Axis::Private::createStockDiagram()
     kdStockDiagram = new KChart::StockDiagram(plotArea->kdChart(), kdPlane);
     KChartModel *model = new KChartModel(plotArea, kdStockDiagram);
     kdStockDiagram->setModel(model);
+    switch (plotAreaChartSubType) {
+        case HighLowCloseChartSubtype:
+            kdStockDiagram->setType(KChart::StockDiagram::HighLowClose);
+            break;
+        case OpenHighLowCloseChartSubtype:
+            kdStockDiagram->setType(KChart::StockDiagram::OpenHighLowClose);
+            break;
+        case CandlestickChartSubtype:
+            kdStockDiagram->setType(KChart::StockDiagram::Candlestick);
+            break;
+    }
     registerDiagram(kdStockDiagram);
 
-    model->setDataDimensions(3);
+    model->setDataDimensions(numDimensions(StockChartType, plotAreaChartSubType));
 
 #if 0  // Stacked and Percent not supported by KChart.
     if (plotAreaChartSubType == StackedChartSubtype)

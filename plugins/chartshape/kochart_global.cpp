@@ -42,7 +42,7 @@ bool isCartesian(ChartType type)
     return !isPolar(type);
 }
 
-int numDimensions(ChartType type)
+int numDimensions(ChartType type, ChartSubtype subtype)
 {
     int dimensions = 1;
 
@@ -64,10 +64,20 @@ int numDimensions(ChartType type)
         dimensions = 3;
         break;
     case StockChartType:
-        // High, Low, Close. Also supported by KD Chart are Open, High, Low,
-        // Close, but we only use the first so far.
-        dimensions = 3;
-        break;
+        switch (subtype) {
+            case HighLowCloseChartSubtype:
+                dimensions = 3;
+                break;
+            case OpenHighLowCloseChartSubtype:
+                dimensions = 4;
+                break;
+            case CandlestickChartSubtype:
+                dimensions = 4;
+                break;
+            default:
+                dimensions = 3;
+                break;
+        }
     case GanttChartType:
         // FIXME: Figure out correct number of dimensions
         dimensions = 1;
