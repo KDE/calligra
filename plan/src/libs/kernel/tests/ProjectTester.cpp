@@ -3243,7 +3243,8 @@ void ProjectTester::scheduleTimeZone()
     QCOMPARE( t2->endTime(), t2->startTime() + Duration( 0, 8, 0 ) );
     QCOMPARE( t2->plannedEffort().toHours(), 8.0 );
     QVERIFY( t2->schedulingError() == false );
-    
+
+    unsetenv("TZ");
 }
 
 } //namespace KPlato
