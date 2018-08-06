@@ -46,7 +46,7 @@
 #include "Legend.h"
 #include "TableSource.h"
 #include "ChartLayout.h"
-
+#include "ChartCreationWidget.h"
 
 using namespace KoChart;
 
@@ -179,7 +179,7 @@ KoShape *ChartShapeFactory::createDefaultShape(KoDocumentResourceManager *docume
 
 QList<KoShapeConfigWidgetBase*> ChartShapeFactory::createShapeOptionPanels()
 {
-    return QList<KoShapeConfigWidgetBase*>();
+    return QList<KoShapeConfigWidgetBase*>() << new ChartCreationWidget();
 }
 
 void ChartShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *manager) const
