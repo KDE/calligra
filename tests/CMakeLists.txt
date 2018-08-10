@@ -1,6 +1,6 @@
 
 ## Some tests do not work on freeBSD, so disable these tests until we found out why
-STRING (REGEX MATCH "BSD" OS_BSD ${CMAKE_SYSTEM_NAME})
+STRING (REGEX MATCH "BSD$" OS_BSD ${CMAKE_SYSTEM_NAME})
 if (OS_BSD)
     message (WARNING "OS is ${CMAKE_SYSTEM_NAME}. Some i18n tests are disabled.")
 endif()
