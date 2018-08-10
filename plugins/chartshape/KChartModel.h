@@ -34,6 +34,8 @@
 
 namespace KoChart {
 
+class DataSet;
+
 /**
  * Takes a list of DataSet's and compiles them into a
  * QAbstractItemModel for use with KChart.

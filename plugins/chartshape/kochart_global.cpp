@@ -42,6 +42,33 @@ bool isCartesian(ChartType type)
     return !isPolar(type);
 }
 
+ChartSubtype defaultChartSubtype(ChartType type)
+{
+    switch (type) {
+        case BarChartType:
+        case LineChartType:
+        case AreaChartType:
+            return NormalChartSubtype;
+        case CircleChartType:
+        case RingChartType:
+            return NoChartSubtype;
+        case RadarChartType:
+        case FilledRadarChartType:
+            return NormalChartSubtype;
+        case ScatterChartType:
+            return NoChartSubtype;
+        case SurfaceChartType:
+            return NoChartSubtype;
+        case BubbleChartType:
+            return NoChartSubtype;
+        case StockChartType:
+            return HighLowCloseChartSubtype;
+        default:
+            break;
+    }
+    return NoChartSubtype;
+}
+
 int numDimensions(ChartType type, ChartSubtype subtype)
 {
     int dimensions = 1;
@@ -64,20 +91,8 @@ int numDimensions(ChartType type, ChartSubtype subtype)
         dimensions = 3;
         break;
     case StockChartType:
-        switch (subtype) {
-            case HighLowCloseChartSubtype:
-                dimensions = 3;
-                break;
-            case OpenHighLowCloseChartSubtype:
-                dimensions = 4;
-                break;
-            case CandlestickChartSubtype:
-                dimensions = 4;
-                break;
-            default:
-                dimensions = 3;
-                break;
-        }
+        dimensions = 1;
+        break;
     case GanttChartType:
         // FIXME: Figure out correct number of dimensions
         dimensions = 1;
@@ -135,10 +150,10 @@ void initchartTypeIconMap()
     insertIcon(BubbleChartType, NormalChartSubtype, QLatin1String("skg-chart-bubble"));
 
     // Stock Charts
-    insertIcon(StockChartType, NoChartSubtype, QLatin1String());
-    insertIcon(StockChartType, HighLowCloseChartSubtype, QLatin1String());
-    insertIcon(StockChartType, OpenHighLowCloseChartSubtype, QLatin1String());
-    insertIcon(StockChartType, CandlestickChartSubtype, QLatin1String());
+    insertIcon(StockChartType, NoChartSubtype, QLatin1String("office-chart-stock"));
+    insertIcon(StockChartType, HighLowCloseChartSubtype, QLatin1String("office-chart-stock-hlc"));
+    insertIcon(StockChartType, OpenHighLowCloseChartSubtype, QLatin1String("office-chart-stock-ohlc"));
+    insertIcon(StockChartType, CandlestickChartSubtype, QLatin1String("office-chart-stock-candle-stick"));
 
     // TODO surface/gantt
 }

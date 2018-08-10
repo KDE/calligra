@@ -208,7 +208,7 @@ QVariant KChartModel::data(const QModelIndex &index,
     // In other words, with one data dimension, there's only y data. With two data
     // dimensions, there's x and y data, and the x data comes before the y data,
     // each data set thus occupying two rows/columns.
-    // With three data dimensions (though we don't support that yet) there will be
+    // With three data dimensions there will be
     // x, y and some kind of custom data. Like the size of a bubble in a bubble chart.
     int dataSection;
 
@@ -225,8 +225,7 @@ QVariant KChartModel::data(const QModelIndex &index,
     if (dataSetNumber >= d->dataSets.size())
         return QVariant();
 
-    DataSet  *dataSet       = d->dataSets[ dataSetNumber ];
-
+    DataSet *dataSet = d->dataSets[dataSetNumber];
     switch (role) {
     case Qt::DisplayRole:
         if (d->dataDimensions > 1 && dataSection == 0)

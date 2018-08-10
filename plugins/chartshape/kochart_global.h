@@ -65,6 +65,7 @@ enum ChartSubtype {
     CandlestickChartSubtype
 };
 
+ChartSubtype defaultChartSubtype(ChartType type);
 int numDimensions(ChartType type, ChartSubtype subtype = NoChartSubtype);
 
 QLatin1String chartTypeIconName(ChartType type, ChartSubtype subtype);

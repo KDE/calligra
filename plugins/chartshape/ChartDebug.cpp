@@ -91,3 +91,9 @@ const QLoggingCategory &CHARTUI_BUBBLE_LOG()
     static const QLoggingCategory category("calligra.plugin.chart.ui.bubble");
     return category;
 }
+
+const QLoggingCategory &CHARTUI_STOCK_LOG()
+{
+    static const QLoggingCategory category("calligra.plugin.chart.ui.stock");
+    return category;
+}

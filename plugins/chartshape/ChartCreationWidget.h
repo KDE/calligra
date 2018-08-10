@@ -64,6 +64,11 @@ protected Q_SLOTS:
     void toggled(bool);
 
 private:
+    void createData();
+    void createStockData();
+    void createRadarData();
+
+private:
     ChartShape *m_chart;
     ChartType m_type;
     ChartSubtype m_subType;

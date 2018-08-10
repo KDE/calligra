@@ -21,7 +21,17 @@
 #include "ChartCreationWidget.h"
 
 #include "ChartShape.h"
+#include "TableSource.h"
+#include "ChartProxyModel.h"
+#include "CellRegion.h"
+#include "Legend.h"
+#include "Axis.h"
+#include "PlotArea.h"
+#include "ChartLayout.h"
+#include "DataSet.h"
 #include "ChartDebug.h"
+
+#include <QStandardItemModel>
 
 using namespace KoChart;
 
@@ -76,6 +86,8 @@ void ChartCreationWidget::save()
     }
     m_chart->setChartType(m_type);
     m_chart->setChartSubType(m_subType);
+    createData();
+    m_chart->proxyModel()->reset(m_chart->proxyModel()->cellRangeAddress());
 }
 
 void ChartCreationWidget::toggled(bool value)
@@ -143,5 +155,112 @@ void ChartCreationWidget::toggled(bool value)
         m_subType = NoChartSubtype;
     } else {
         Q_ASSERT(true);
+    }
+}
+
+void ChartCreationWidget::createStockData()
+{
+    Table *internalTable = 0;
+    QStandardItemModel *data = qobject_cast<QStandardItemModel*>(m_chart->internalModel());
+    if (data) {
+        data->clear();
+    } else {
+        data = new QStandardItemModel();
+        internalTable = m_chart->tableSource()->add("internal-model", data);
+        m_chart->setInternalModel(data);
+    }
+
+    data->setRowCount(4);
+    data->setColumnCount(5);
+
+    // Vertical header data
+    data->setData(data->index(1, 0), i18n("Share A"));
+    data->setData(data->index(2, 0), i18n("Share B"));
+    data->setData(data->index(3, 0), i18n("Share C"));
+
+    // Horizontal header data
+    data->setData(data->index(0, 1), i18n("Column %1", 1));
+    data->setData(data->index(0, 2), i18n("Column %1", 2));
+    data->setData(data->index(0, 3), i18n("Column %1", 3));
+    data->setData(data->index(0, 4), i18n("Column %1", 4));
+
+    // First row
+    data->setData(data->index(1, 1), 5.7);
+    data->setData(data->index(1, 2), 6.5);
+    data->setData(data->index(1, 3), 1.2);
+    data->setData(data->index(1, 4), 6.0);
+
+    // Second row
+    data->setData(data->index(2, 1), 2.1);
+    data->setData(data->index(2, 2), 6.5);
+    data->setData(data->index(2, 3), 0.9);
+    data->setData(data->index(2, 4), 1.5);
+
+    // Third row
+    data->setData(data->index(3, 1), 7.9);
+    data->setData(data->index(3, 2), 8.5);
+    data->setData(data->index(3, 3), 4.6);
+    data->setData(data->index(3, 4), 8.3);
+
+    m_chart->legend()->setVisible(false);
+    m_chart->plotArea()->xAxis()->setTitleText(QString());
+    m_chart->plotArea()->yAxis()->setTitleText(QString());
+
+    ChartProxyModel *proxyModel = m_chart->proxyModel();
+    proxyModel->removeRows(0, proxyModel->rowCount());
+
+    proxyModel->setFirstRowIsLabel(true);
+    proxyModel->setFirstColumnIsLabel(true);
+    proxyModel->setDataDirection(Qt::Vertical);
+//     int row = 1;
+//     int col = 2;
+//     switch (m_subType) {
+//         case HighLowCloseChartSubtype:
+//             for (DataSet *ds : proxyModel->dataSets()) {
+//                 ds->setYDataRegion(CellRegion(internalTable, QRect(3, col, 5, col)));
+//                 ds->setCategoryDataRegion(CellRegion(internalTable, QRect(row, 1, row, 1)));
+//                 ++row;
+//                 ++ col;
+//             }
+//             break;
+//         case OpenHighLowCloseChartSubtype:
+//         case CandlestickChartSubtype:
+//             for (DataSet *ds : proxyModel->dataSets()) {
+//                 ds->setYDataRegion(CellRegion(internalTable, QRect(2, col, 5, col)));
+//                 ds->setCategoryDataRegion(CellRegion(internalTable, QRect(row, 1, row, 1)));
+//                 ++row;
+//                 ++col;
+//             }
+//             break;
+//     }
+}
+
+void ChartCreationWidget::createRadarData()
+{
+
+}
+
+void ChartCreationWidget::createData()
+{
+    switch (m_type) {
+        case BarChartType:
+        case LineChartType:
+        case AreaChartType:
+        case CircleChartType:
+        case RingChartType:
+            break;
+        case StockChartType:
+            createStockData();
+            break;
+        case RadarChartType:
+        case FilledRadarChartType:
+            createRadarData();
+            break;
+        case BubbleChartType:
+        case ScatterChartType:
+            break;
+        default:
+            break;
+
     }
 }

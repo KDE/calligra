@@ -931,13 +931,15 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
     bool  knownType = false;
     for (int type = 0; type < (int)LastChartType; ++type) {
         if (chartClass == ODF_CHARTTYPES[(ChartType)type]) {
-            //debugChart <<"found chart of type" << chartClass;
-
             chartType = (ChartType)type;
             // Set the dimensionality of the data points, we can not call
             // setType here as we bubble charts requires that the datasets already exist
             proxyModel()->setDataDimensions(numDimensions(chartType));
+            if (chartType != BubbleChartType) {
+                setChartSubType(defaultChartSubtype(chartType));
+            }
             knownType = true;
+            debugChartOdf <<"found chart of type" << chartClass<<chartType;
             break;
         }
     }
@@ -947,6 +949,7 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
         // FIXME: Find out what the equivalent of
         //        KoDocument::setErrorMessage() is for KoShape.
         //setErrorMessage(i18n("Unknown chart type %1" ,chartClass));
+        warnChartOdf<<"Unknown chart type:"<<chartClass;
         return false;
     }
 
@@ -1009,11 +1012,17 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
 
     // 8. Sets the chart type
     setChartType(chartType);
+    // since chart type in plot area is already set, we need to do axes here
+    for (Axis *a : d->plotArea->axes()) {
+        a->plotAreaChartTypeChanged(chartType);
+    }
+    setChartSubType(chartSubType());
 
     d->legend->update();
 
     requestRepaint();
 
+    debugChartOdf<<"loaded:"<<this->chartType()<<chartSubType();
     return true;
 }
 

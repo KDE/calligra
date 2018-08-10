@@ -362,7 +362,7 @@ KChart::AbstractDiagram *Axis::Private::getDiagramAndCreateIfNeeded(ChartType ch
     }
 
     adjustAllDiagrams();
-
+    debugChartAxis<<"created diagram"<<diagram<<"for"<<chartType;
     return diagram;
 }
 
@@ -691,7 +691,7 @@ void Axis::Private::createStockDiagram()
     }
     registerDiagram(kdStockDiagram);
 
-    model->setDataDimensions(numDimensions(StockChartType, plotAreaChartSubType));
+    model->setDataDimensions(numDimensions(StockChartType));
 
 #if 0  // Stacked and Percent not supported by KChart.
     if (plotAreaChartSubType == StackedChartSubtype)
@@ -1838,14 +1838,15 @@ void Axis::plotAreaChartSubTypeChanged(ChartSubtype subType)
         if (d->kdStockDiagram) {
             KChart::StockDiagram::Type type;
             switch (subType) {
-#if 0
             case CandlestickChartSubtype:
-                type = KChart::StockDiagram::Candlestick; break;
+                type = KChart::StockDiagram::Candlestick;
+                break;
             case OpenHighLowCloseChartSubtype:
-                type = KChart::StockDiagram::OpenHighLowClose; break;
-#endif
+                type = KChart::StockDiagram::OpenHighLowClose;
+                break;
             default:
                 type = KChart::StockDiagram::HighLowClose;
+                break;
             }
             d->kdStockDiagram->setType(type);
         }

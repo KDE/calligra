@@ -531,8 +531,14 @@ if(overrideCategories) categoryDataRegion = CellRegion();
 
 void ChartProxyModel::saveOdf(KoShapeSavingContext &context) const
 {
-    foreach (DataSet *dataSet, d->dataSets)
-        dataSet->saveOdf(context);
+    int dataSetCount = rowCount();
+    if (d->shape->chartType() == StockChartType && d->shape->chartSubType() == HighLowCloseChartSubtype && dataSetCount > 3) {
+        // When loading, stock chart subtype is determined by number of datasets (sigh)
+        dataSetCount = 3;
+    }
+    for (int i = 0; i < dataSetCount; ++i) {
+        d->dataSets.at(i)->saveOdf(context);
+    }
 }
 
 // This loads the properties of the datasets (chart:series).

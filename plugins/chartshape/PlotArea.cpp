@@ -650,6 +650,7 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
     // Note that this has to happen BEFORE we create a axis and call
     // there loadOdf method cause the axis will evaluate settings
     // like the PlotArea::isVertical boolean.
+    bool candleStick = false;
     if (plotAreaElement.hasAttributeNS(KoXmlNS::chart, "style-name")) {
         styleStack.clear();
         context.odfLoadingContext().fillStyleStack(plotAreaElement, KoXmlNS::chart, "style-name", "chart");
@@ -700,6 +701,11 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
         // Data specific to bar charts
         if (styleStack.hasProperty(KoXmlNS::chart, "vertical"))
             setVertical(styleStack.property(KoXmlNS::chart, "vertical") == "true");
+
+        // Data specific to stock charts
+        if (styleStack.hasProperty(KoXmlNS::chart, "japanese-candle-stick")) {
+            candleStick = styleStack.property(KoXmlNS::chart, "japanese-candle-stick") == "true";
+        }
 
         // Special properties for various chart types
 #if 0
@@ -762,7 +768,7 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
     // actual data is not stored here.
     //
     // FIXME: Isn't the proxy model a strange place to store this data?
-    proxyModel()->loadOdf(plotAreaElement, context, d->chartType == StockChartType ? 3 : 1, d->chartType);
+    proxyModel()->loadOdf(plotAreaElement, context, numDimensions(d->chartType), d->chartType);
 
     // Now load the surfaces (wall and possibly floor)
     // FIXME: Use named tags instead of looping?
@@ -804,6 +810,17 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
             warnChart << "PlotArea::loadOdf(): Unknown tag name " << n.localName();
         }
     }
+    if (d->chartType == StockChartType) {
+        // The number of data sets determines stock chart subtype
+        if (proxyModel()->rowCount() > 3) {
+            if (candleStick) {
+                setChartSubType(CandlestickChartSubtype);
+            } else {
+                setChartSubType(OpenHighLowCloseChartSubtype);
+            }
+        }
+    }
+
     // Connect axes to datasets and cleanup
     foreach(DataSet *ds, d->shape->proxyModel()->dataSets()) {
         foreach(Axis *axis, d->axes) {
@@ -1010,6 +1027,7 @@ void PlotArea::saveOdfSubType(KoXmlWriter& xmlWriter,
         case NoChartSubtype:
         case HighLowCloseChartSubtype:
         case OpenHighLowCloseChartSubtype:
+            plotAreaStyle.addProperty("chart:japanese-candle-stick", "false");
             break;
         case CandlestickChartSubtype:
             plotAreaStyle.addProperty("chart:japanese-candle-stick", "true");

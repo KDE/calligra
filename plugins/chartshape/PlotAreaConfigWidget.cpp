@@ -280,11 +280,11 @@ PlotAreaConfigWidget::PlotAreaConfigWidget()
 
     // Stock Charts
     QMenu *stockChartMenu = chartTypeMenu->addMenu(i18n("Stock Chart"));
-    d->hlcStockChartAction  = stockChartMenu->addAction(i18n("HighLowClose"));
+    d->hlcStockChartAction  = stockChartMenu->addAction(ICON2(StockChartType, HighLowCloseChartSubtype), i18n("HighLowClose"));
 //     d->hlcStockChartAction->setEnabled(false);
-    d->ohlcStockChartAction = stockChartMenu->addAction(i18n("OpenHighLowClose"));
+    d->ohlcStockChartAction = stockChartMenu->addAction(ICON2(StockChartType, OpenHighLowCloseChartSubtype), i18n("OpenHighLowClose"));
 //     d->ohlcStockChartAction->setEnabled(false);
-    d->candlestickStockChartAction = stockChartMenu->addAction(i18n("Candlestick"));
+    d->candlestickStockChartAction = stockChartMenu->addAction(ICON2(StockChartType, CandlestickChartSubtype), i18n("Candlestick"));
 //     d->candlestickStockChartAction->setEnabled(false);
 
     // Not supported
