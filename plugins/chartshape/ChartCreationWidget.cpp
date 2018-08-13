@@ -77,6 +77,7 @@ bool ChartCreationWidget::showOnShapeCreate()
 void ChartCreationWidget::open(KoShape *shape)
 {
     m_chart = dynamic_cast<ChartShape*>(shape);
+    updateTypes(m_ui.chartBar);
 }
 
 void ChartCreationWidget::save()
@@ -99,6 +100,10 @@ void ChartCreationWidget::toggled(bool value)
     if (!btn) {
         return;
     }
+    updateTypes(btn);
+}
+
+void ChartCreationWidget::updateTypes(const QToolButton *btn) {
     if (btn == m_ui.chartBar) {
         m_type = BarChartType;
         m_subType = NormalChartSubtype;

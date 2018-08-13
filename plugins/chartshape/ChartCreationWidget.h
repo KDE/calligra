@@ -64,6 +64,7 @@ protected Q_SLOTS:
     void toggled(bool);
 
 private:
+    void updateTypes(const QToolButton *btn);
     void createData();
     void createStockData();
     void createRadarData();
