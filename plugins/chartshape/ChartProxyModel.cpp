@@ -543,8 +543,7 @@ void ChartProxyModel::saveOdf(KoShapeSavingContext &context) const
 
 // This loads the properties of the datasets (chart:series).
 // FIXME: This is a strange place to load them (the proxy model)
-bool ChartProxyModel::loadOdf(const KoXmlElement &element,
-                              KoShapeLoadingContext &context, int seriesPerDataset, ChartType type)
+bool ChartProxyModel::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context, ChartType type)
 {
     Q_ASSERT(d->isLoading);
 
@@ -609,16 +608,14 @@ bool ChartProxyModel::loadOdf(const KoXmlElement &element,
         d->firstColumnIsLabel = false;
     }
 
-    // For every data set, there must be an explicit <chart:series> element,
+    // For every dataset, there must be an explicit <chart:series> element,
     // which we will load later.
     d->dataSets.clear();
     d->removedDataSets.clear();
 
     // A cell range for all data is optional.
     // If cell ranges are in addition specified for one or more of these
-    // data series, they'll be overwritten by these values.
-    // Note: In case ignoreCellRanges is true, ChartShape::loadOdf() has
-    // already made sure the proxy is reset with data from the internal model.
+    // data series, they'll be overwritten by the data loaded from the series
     if (!ignoreCellRanges
         && element.hasAttributeNS(KoXmlNS::table, "cell-range-address"))
     {
@@ -648,110 +645,47 @@ bool ChartProxyModel::loadOdf(const KoXmlElement &element,
 
     int loadedDataSetCount = 0;
     KoXmlElement n;
-    QPen p;
-    QBrush brush;
-    bool penLoaded = false;
-    bool brushLoaded = false;
-    int stockSeriesCounter = 0;
     forEachElement (n, element) {
-        if (n.namespaceURI() != KoXmlNS::chart)
+        if (n.namespaceURI() != KoXmlNS::chart) {
             continue;
-
+        }
         if (n.localName() == "series") {
-            if (stockSeriesCounter == 0) {
-                DataSet *dataSet;
-                if (loadedDataSetCount < createdDataSets.size()) {
-                    dataSet = createdDataSets[loadedDataSetCount];
+            DataSet *dataSet;
+            if (loadedDataSetCount < createdDataSets.size()) {
+                dataSet = createdDataSets[loadedDataSetCount];
+            } else {
+                // the datasetnumber needs to be known at construction time, to ensure
+                // default colors are set correctly
+                dataSet = new DataSet(d->dataSets.size());
+            }
+            dataSet->setChartType(type);
+            d->dataSets.append(dataSet);
+            if (d->categoryDataRegion.isValid()) {
+                dataSet->setCategoryDataRegion(d->categoryDataRegion);
+            }
+            dataSet->loadOdf(n, context);
+
+            if (isBubble || isScatter) {
+                // bubble- and scatter-charts have chart:domain's that define the
+                // x- and y-data. But if they are not defined in the series then
+                // a previous defined one needs to be used.
+                // NOTE: This is not quite what odf specifies, but imho better (danders)
+                if (dataSet->xDataRegion().isValid()) {
+                    prevXData = dataSet->xDataRegion();
                 }
                 else {
-                    // the datasetnumber needs to be known at construction time, to ensure
-                    // default colors are set correctly
-                    dataSet = new DataSet(d->dataSets.size());
-                    // add the newly created dataSet to the createdDataSets list so our
-                    // stockSeriesCounter != 0 condition below is able to pick it up.
-                    createdDataSets.append(dataSet);
+                    dataSet->setXDataRegion(prevXData);
                 }
-                dataSet->setChartType(type);
-                d->dataSets.append(dataSet);
-                if (d->categoryDataRegion.isValid()) {
-                    dataSet->setCategoryDataRegion(d->categoryDataRegion);
-                }
-                dataSet->loadOdf(n, context);
-
-                if (isBubble || isScatter) {
-                    // bubble- and scatter-charts have chart:domain's that define the
-                    // x- and y-data. But if they are not defined in the series then
-                    // a previous defined one needs to be used.
-                    if (dataSet->xDataRegion().isValid()) {
-                        prevXData = dataSet->xDataRegion();
+                if (isBubble) {
+                    if (dataSet->yDataRegion().isValid()) {
+                        prevYData = dataSet->yDataRegion();
                     }
                     else {
-                        dataSet->setXDataRegion(prevXData);
-                    }
-                    if (isBubble) {
-                        if (dataSet->yDataRegion().isValid()) {
-                            prevYData = dataSet->yDataRegion();
-                        }
-                        else {
-                            dataSet->setYDataRegion(prevYData);
-                        }
-                    }
-                }
-
-                if (penLoaded)
-                    dataSet->setPen(p);
-                if (brushLoaded)
-                    dataSet->setBrush(brush);
-            }
-            else {
-                DataSet *dataSet;
-                if (loadedDataSetCount < createdDataSets.size())
-                    dataSet = createdDataSets[loadedDataSetCount];
-                else {
-                    Q_ASSERT_X(false, __FUNCTION__, "Unexpected series. Is the document broken?");
-                    continue; // be sure we don't crash in release-mode if that happens
-                }
-                dataSet->loadSeriesIntoDataset(n, context);
-            }
-            stockSeriesCounter = (stockSeriesCounter + 1) %  seriesPerDataset;
-            if (stockSeriesCounter == 0)
-                ++loadedDataSetCount;
-        } else if (n.localName() == "stock-range-line") {
-            KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
-            styleStack.clear();
-
-            context.odfLoadingContext().fillStyleStack(n, KoXmlNS::chart, "style-name", "chart");
-            if (n.hasAttributeNS(KoXmlNS::chart, "style-name")) {
-                KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
-                brushLoaded = false;
-                penLoaded = false;
-
-                styleStack.setTypeProperties("graphic");
-
-                if (styleStack.hasProperty(KoXmlNS::svg, "stroke-color")) {
-                    QString stroke = "solid";/*styleStack.property(KoXmlNS::svg, "stroke-color");*/
-                    p = KoOdfGraphicStyles::loadOdfStrokeStyle(styleStack, stroke, odfLoadingContext.stylesReader());
-                    penLoaded = true;
-                    Q_FOREACH(DataSet* set, d->dataSets) {
-                        set->setPen(p);
-                        set->setBrush(p.color());
-                    }
-                }
-
-                if (styleStack.hasProperty(KoXmlNS::draw, "fill")) {
-                    QString fill = styleStack.property(KoXmlNS::draw, "fill");
-                    if (fill == "solid" || fill == "hatch") {
-                        brush = KoOdfGraphicStyles::loadOdfFillStyle(styleStack, fill, odfLoadingContext.stylesReader());
-                        brushLoaded = true;
-                    } else if (fill == "gradient") {
-                        brush = KoOdfGraphicStyles::loadOdfGradientStyle(styleStack, odfLoadingContext.stylesReader(), QSizeF(5.0, 60.0));
-                        brushLoaded = true;
-                    }
-                    Q_FOREACH(DataSet* set, d->dataSets) {
-                        set->setBrush(brush);
+                        dataSet->setYDataRegion(prevYData);
                     }
                 }
             }
+            ++loadedDataSetCount;
         }
     }
 
