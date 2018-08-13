@@ -85,6 +85,7 @@ class CellRegion;
 class ChartTableModel;
 class ChartLayout;
 class TableSource;
+class ChartDocument;
 
 void saveOdfFont(KoGenStyle &style, const QFont& font, const QColor& color);
 QString saveOdfFont(KoGenStyles& mainStyles, const QFont& font, const QColor& color);
@@ -230,6 +231,8 @@ public:
 
     /// the document resource manager we got on construction
     KoDocumentResourceManager *resourceManager() const;
+
+    ChartDocument *document() const;
 
 Q_SIGNALS:
     void chartTypeChanged(ChartType);

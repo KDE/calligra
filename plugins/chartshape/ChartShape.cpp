@@ -1271,4 +1271,9 @@ void ChartShape::shapeChanged(ChangeType type, KoShape *shape)
     layout()->containerChanged(this, type);
 }
 
+ChartDocument *ChartShape::document() const
+{
+    return d->document;
+}
+
 } // Namespace KoChart
