@@ -369,7 +369,7 @@ CellRegion::CellRegion(TableSource *source, const QString& regions)
     Parser parser(regions);
     const bool success = parser.parse();
     if (!success)
-        debugChart << "Parsing cell region failed";
+        warnChart << "Parsing cell region failed:"<<regions;
 
     QVector<QRect> rects = parser.getResult().toVector();
     for (int i = 0; i < rects.count(); ++i) {
