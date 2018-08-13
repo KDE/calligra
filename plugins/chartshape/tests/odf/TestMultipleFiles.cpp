@@ -54,8 +54,9 @@ static void filterMessages(QtMsgType type, const QMessageLogContext &context, co
 using namespace KoChart;
 
 TestMultipleFiles::TestMultipleFiles()
-    : TestLoadingBase()
+    : QObject()
 {
+    ChartShape::setEnableUserInteraction(false);
 }
 
 void TestMultipleFiles::initTestCase()

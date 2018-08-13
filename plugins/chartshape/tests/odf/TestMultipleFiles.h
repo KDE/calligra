@@ -33,7 +33,7 @@ namespace KoChart {
 /**
  * Base class for testing of multiple files in one test
  */
-class TestMultipleFiles : public TestLoadingBase
+class TestMultipleFiles : public QObject, public LoadingTests
 {
     Q_OBJECT
 

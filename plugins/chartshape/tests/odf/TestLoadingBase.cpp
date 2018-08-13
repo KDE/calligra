@@ -53,12 +53,11 @@ TestLoadingBase::TestLoadingBase()
 {
     // No message boxes please.
     ChartShape::setEnableUserInteraction(false);
+    m_chart = new ChartShape(0);
 }
 
 void TestLoadingBase::initTestCase()
 {
-    m_chart = new ChartShape(0);
-    
     ChartDocument *document = m_chart->document();
 
     QDir srcdir(QFINDTESTDATA("doc"));
@@ -84,13 +83,17 @@ void TestLoadingBase::cleanupTestCase()
     delete m_chart;
 }
 
-void TestLoadingBase::testElementIsVisible(KoShape *element, bool shouldBeVisible)
+LoadingTests::LoadingTests()
+{
+}
+
+void LoadingTests::testElementIsVisible(KoShape *element, bool shouldBeVisible)
 {
     QVERIFY(element);
     QCOMPARE(element->isVisible(), shouldBeVisible);
 }
 
-void TestLoadingBase::testLegendElements(QStringList labels)
+void LoadingTests::testLegendElements(QStringList labels)
 {
     QVERIFY(m_chart->legend());
     QVERIFY(m_chart->legend()->kdLegend());
@@ -109,7 +112,7 @@ void TestLoadingBase::testLegendElements(QStringList labels)
     QVERIFY(labels.isEmpty());
 }
 
-void TestLoadingBase::testDataSetCellRegions(int dataSetNr,
+void LoadingTests::testDataSetCellRegions(int dataSetNr,
                                              CellRegion yDataRegion,
                                              CellRegion labelDataRegion,
                                              CellRegion categoryDataRegion,
@@ -137,13 +140,13 @@ void TestLoadingBase::testDataSetCellRegions(int dataSetNr,
     QCOMPARE(dataSet->customDataRegion(),   customDataRegion);
 }
 
-void TestLoadingBase::testHasOnlyInternalTable()
+void LoadingTests::testHasOnlyInternalTable()
 {
     QVERIFY(m_chart->usesInternalModelOnly());
     QVERIFY(internalTable());
 }
 
-void TestLoadingBase::testInternalTableSize(int rowCount, int colCount)
+void LoadingTests::testInternalTableSize(int rowCount, int colCount)
 {
     QAbstractItemModel *model = m_chart->internalModel();
     QVERIFY(model);
@@ -152,7 +155,7 @@ void TestLoadingBase::testInternalTableSize(int rowCount, int colCount)
     QCOMPARE(model->columnCount(), colCount);
 }
 
-void TestLoadingBase::testTitleText(const QString &text)
+void LoadingTests::testTitleText(const QString &text)
 {
     QVERIFY(m_chart->title());
     KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase*>(m_chart->title()->userData());
@@ -161,7 +164,7 @@ void TestLoadingBase::testTitleText(const QString &text)
     QCOMPARE(data->document()->toPlainText(), text);
 }
 
-void TestLoadingBase::testSubTitleText(const QString &text)
+void LoadingTests::testSubTitleText(const QString &text)
 {
     QVERIFY(m_chart->subTitle());
     KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase*>(m_chart->subTitle()->userData());
@@ -170,7 +173,7 @@ void TestLoadingBase::testSubTitleText(const QString &text)
     QCOMPARE(data->document()->toPlainText(), text);
 }
 
-void TestLoadingBase::testFooterText(const QString &text)
+void LoadingTests::testFooterText(const QString &text)
 {
     QVERIFY(m_chart->footer());
     KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase*>(m_chart->footer()->userData());
@@ -179,7 +182,7 @@ void TestLoadingBase::testFooterText(const QString &text)
     QCOMPARE(data->document()->toPlainText(), text);
 }
 
-void TestLoadingBase::testAxisTitle(Axis *axis, const QString &text)
+void LoadingTests::testAxisTitle(Axis *axis, const QString &text)
 {
     QVERIFY(axis);
     QVERIFY(axis->title());
@@ -189,7 +192,7 @@ void TestLoadingBase::testAxisTitle(Axis *axis, const QString &text)
     QCOMPARE(data->document()->toPlainText(), text);
 }
 
-Table *TestLoadingBase::internalTable()
+Table *LoadingTests::internalTable()
 {
     QAbstractItemModel *internalModel = m_chart->internalModel();
     if (!internalModel)
@@ -197,7 +200,7 @@ Table *TestLoadingBase::internalTable()
     return m_chart->tableSource()->get(internalModel);
 }
 
-TableSource *TestLoadingBase::tableSource()
+TableSource *LoadingTests::tableSource()
 {
     return m_chart->tableSource();
 }

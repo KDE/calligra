@@ -41,30 +41,12 @@ class Table;
 class TableSource;
 class Axis;
 
-/**
- * Base class for every ODF-loading related unit test.
- *
- * The philosophy is basically to do as many tests as possible by
- * using a helper method from this base class. Lines like these:
-
- * testLegendElements(QStringList() << "Row 1" << "Row 2" << "Row 3");
- *
- * are much more readable than using flat code by using copy&paste and doing
- * the same gets and checks over again in multiple unit tests.
- *
- */
-class TestLoadingBase : public QObject
+/// Class to hold common test methods and data
+class LoadingTests
 {
-    Q_OBJECT
-
 public:
-    TestLoadingBase();
+    LoadingTests();
 
-protected Q_SLOTS:
-    virtual void initTestCase();
-    virtual void cleanupTestCase();
-
-protected:
     // Helper methods to be used by test functions
 
     // 0) Generics
@@ -97,6 +79,30 @@ protected:
     TableSource* tableSource();
 
     ChartShape *m_chart;
+};
+
+/**
+ * Base class for every ODF-loading related unit test.
+ *
+ * The philosophy is basically to do as many tests as possible by
+ * using a helper method from this base class. Lines like these:
+
+ * testLegendElements(QStringList() << "Row 1" << "Row 2" << "Row 3");
+ *
+ * are much more readable than using flat code by using copy&paste and doing
+ * the same gets and checks over again in multiple unit tests.
+ *
+ */
+class TestLoadingBase : public QObject, public LoadingTests
+{
+    Q_OBJECT
+
+public:
+    TestLoadingBase();
+
+protected Q_SLOTS:
+    virtual void initTestCase();
+    virtual void cleanupTestCase();
 };
 
 } // namespace KoChart
