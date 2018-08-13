@@ -768,7 +768,7 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
     // actual data is not stored here.
     //
     // FIXME: Isn't the proxy model a strange place to store this data?
-    proxyModel()->loadOdf(plotAreaElement, context, numDimensions(d->chartType), d->chartType);
+    proxyModel()->loadOdf(plotAreaElement, context, 1, d->chartType);
 
     // Now load the surfaces (wall and possibly floor)
     // FIXME: Use named tags instead of looping?
