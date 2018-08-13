@@ -62,6 +62,7 @@ public:
 
 protected Q_SLOTS:
     virtual void initTestCase();
+    virtual void cleanupTestCase();
 
 protected:
     // Helper methods to be used by test functions

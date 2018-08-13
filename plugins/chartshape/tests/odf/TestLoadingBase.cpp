@@ -53,12 +53,13 @@ TestLoadingBase::TestLoadingBase()
 {
     // No message boxes please.
     ChartShape::setEnableUserInteraction(false);
-    m_chart = new ChartShape(0);
 }
 
 void TestLoadingBase::initTestCase()
 {
-    ChartDocument document(m_chart);
+    m_chart = new ChartShape(0);
+    
+    ChartDocument *document = m_chart->document();
 
     QDir srcdir(QFINDTESTDATA("doc"));
     QVERIFY(srcdir.exists());
@@ -75,7 +76,12 @@ void TestLoadingBase::initTestCase()
     if (!success)
         qDebug() << "Error in odfReadStore.loadAndParse(): " << errorMsg;
     QVERIFY(success);
-    QVERIFY(document.loadOdf(odfReadStore));
+    QVERIFY(document->loadOdf(odfReadStore));
+}
+
+void TestLoadingBase::cleanupTestCase()
+{
+    delete m_chart;
 }
 
 void TestLoadingBase::testElementIsVisible(KoShape *element, bool shouldBeVisible)

@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
 
-   @@COPYRIGHT@@
+   Copyright 2010 Johannes Simon <johannes.simon@gmail.com>
+   Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+     Contact: Suresh Chande suresh.chande@nokia.com
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,33 +20,37 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KCHART_TESTLOADING_H_BUBBLE_CHART
-#define KCHART_TESTLOADING_H_BUBBLE_CHART
+#ifndef KOCHART_TESTMULTIPLEFILES_H
+#define KOCHART_TESTMULTIPLEFILES_H
 
-#include "../TestMultipleFiles.h"
+#include "TestLoadingBase.h"
+
+
+class QStringList;
 
 namespace KoChart {
 
-class TestLoading : public TestMultipleFiles
+/**
+ * Base class for testing of multiple files in one test
+ */
+class TestMultipleFiles : public TestLoadingBase
 {
     Q_OBJECT
 
 public:
-    TestLoading();
+    TestMultipleFiles();
 
-private Q_SLOTS:
-    void testInvalidOOChart();
-    void testValidOOChart();
+protected Q_SLOTS:
+    void initTestCase();
+    void cleanupTestCase();
+    void init();
+    void cleanup();
 
-private:
-    void testLabels();
-    void testInternalTable();
-    void testDataSets();
-    void testPlotArea();
-    void testLegend();
-    void testAxes();
+protected:
+    int currentDoc;
+    QStringList documents;
 };
 
 } // namespace KoChart
 
-#endif // KCHART_TESTLOADING_H_BUBBLE_CHART
+#endif // KOCHART_TESTMULTIPLEFILES_H

@@ -30,10 +30,34 @@
 using namespace KoChart;
 
 TestLoading::TestLoading()
-    : TestLoadingBase()
+    : TestMultipleFiles()
 {
+    documents
+        << "invalidOODoc"   // OO produce(d) invalid cell range address format
+        << "validOODoc";    // Same document where cell range format has been fixed
 }
 
+void TestLoading::testInvalidOOChart()
+{
+    testLabels();
+    testInternalTable();
+    testDataSets();
+    testPlotArea();
+    testLegend();
+    testAxes();
+}
+
+void TestLoading::testValidOOChart()
+{
+    testLabels();
+    testInternalTable();
+    testDataSets();
+    testPlotArea();
+    testLegend();
+    testAxes();
+}
+
+// privates:
 void TestLoading::testLabels()
 {
     testElementIsVisible(m_chart->title(), false);
