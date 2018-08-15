@@ -869,11 +869,9 @@ void ChartTool::setAxisLabelsPosition(Axis *axis, const QString &pos)
 {
     Q_ASSERT(d->shape);
     debugChartTool<<axis<<pos;
-    // TODO undo command
-    axis->setOdfAxisPosition(pos);
-    d->shape->layout()->scheduleRelayout();
-    d->shape->layout()->layout();
-    d->shape->update();
+    AxisCommand *command = new AxisCommand(axis, d->shape);
+    command->setAxisLabelsPosition(pos);
+    canvas()->addCommand(command);
 }
 
 void ChartTool::setAxisShowMajorGridLines(Axis *axis, bool b)

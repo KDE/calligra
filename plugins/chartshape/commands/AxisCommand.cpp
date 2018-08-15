@@ -41,6 +41,7 @@ AxisCommand::AxisCommand(Axis* axis, ChartShape* chart)
     m_newLabelsFont = m_axis->font();
     m_newShowAxis = m_axis->isVisible();
     m_newPosition = m_axis->odfAxisPosition();
+    m_newLabelsPosition = m_axis->odfAxisLabelsPosition();
 }
 
 AxisCommand::~AxisCommand()
@@ -59,6 +60,8 @@ void AxisCommand::redo()
     m_oldSubStepWidth = m_axis->minorInterval();
     m_oldUseAutomaticStepWidth = m_axis->useAutomaticMajorInterval();
     m_oldUseAutomaticSubStepWidth = m_axis->useAutomaticMinorInterval();*/
+
+    m_oldLabelsPosition = m_axis->odfAxisLabelsPosition();
 
     KUndo2Command::redo();
 
@@ -82,6 +85,7 @@ void AxisCommand::redo()
     m_axis->setUseAutomaticMajorInterval(m_newUseAutomaticStepWidth);
     m_axis->setUseAutomaticMinorInterval(m_newUseAutomaticSubStepWidth);*/
     m_axis->setOdfAxisPosition(m_newPosition);
+    m_axis->setOdfAxisLabelsPosition(m_newLabelsPosition);
 
     m_chart->update();
     m_chart->relayout();
@@ -108,6 +112,7 @@ void AxisCommand::undo()
     m_axis->setUseAutomaticMajorInterval(m_oldUseAutomaticStepWidth);
     m_axis->setUseAutomaticMinorInterval(m_oldUseAutomaticSubStepWidth);*/
     m_axis->setOdfAxisPosition(m_oldPosition);
+    m_axis->setOdfAxisLabelsPosition(m_oldLabelsPosition);
 
     m_chart->update();
     m_chart->relayout();
@@ -214,4 +219,10 @@ void AxisCommand::setAxisPosition(const QString &pos)
 {
     m_newPosition = pos;
     setText(kundo2_i18n("Set Axis Position"));
+}
+
+void AxisCommand::setAxisLabelsPosition(const QString &pos)
+{
+    m_newLabelsPosition = pos;
+    setText(kundo2_i18n("Set Axis Labels Position"));
 }
