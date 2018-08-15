@@ -264,6 +264,7 @@ void AxesConfigWidget::ui_axisSelectionChanged(int index)
     blockSignals(true);
     d->ui.axisShow->setChecked(axis->isVisible());
     d->ui.axisShowTitle->setChecked(axis->title()->isVisible());
+    debugChartUiAxes<<axis<<axis->odfAxisPosition()<<axis->odfAxisLabelsPosition();
     for (int i = 0; i < d->ui.axisPosition->count(); ++i) {
         if (d->ui.axisPosition->itemData(i).toString() == axis->odfAxisPosition()) {
             d->ui.axisPosition->setCurrentIndex(i);
@@ -323,7 +324,7 @@ void AxesConfigWidget::ui_axisShowChanged(bool b)
 
 void AxesConfigWidget::ui_axisPositionChanged(int index)
 {
-    Axis *a = axis(d->ui.axisPosition->currentIndex());
+    Axis *a = axis(d->ui.axes->currentIndex());
     if (a) {
         debugChartUiAxes<<a<<index;
         emit axisPositionChanged(a, d->ui.axisPosition->currentData().toString());
@@ -332,7 +333,7 @@ void AxesConfigWidget::ui_axisPositionChanged(int index)
 
 void AxesConfigWidget::ui_axisLabelsPositionChanged(int index)
 {
-    Axis *a = axis(d->ui.axislabelPosition->currentIndex());
+    Axis *a = axis(d->ui.axes->currentIndex());
     if (a) {
         debugChartUiAxes<<a<<index;
         emit axisLabelsPositionChanged(a, d->ui.axislabelPosition->currentData().toString());
