@@ -303,6 +303,7 @@ PlotAreaConfigWidget::PlotAreaConfigWidget()
     connect(d->ui.threeDLook, SIGNAL(toggled(bool)),
             this,             SLOT(setThreeDMode(bool)));
 
+    connect(d->ui.chartOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(ui_chartOrientationChanged(int)));
 
     setupDialogs();
     createActions();
@@ -424,7 +425,7 @@ void PlotAreaConfigWidget::setupWidgets()
     QList<ChartType> types;
     types << BarChartType << LineChartType << AreaChartType;
     // TODO: temporary, these should have different widgets
-    types << RingChartType << RadarChartType << FilledRadarChartType << ScatterChartType;
+    types << RingChartType << RadarChartType << FilledRadarChartType << ScatterChartType << StockChartType;
     cartesianAxesConfigWidget()->setChartTypes(types);
 
     cartesianDataSetConfigWidget()->setChartTypes(types);
@@ -548,6 +549,11 @@ void PlotAreaConfigWidget::setThreeDMode(bool threeD)
     updateData();
 }
 
+void PlotAreaConfigWidget::ui_chartOrientationChanged(int value)
+{
+    emit chartOrientationChanged(static_cast<Qt::Orientation>(value+1));
+}
+
 /**
  * Only some chart types support a 3D mode in KD Chart.
  */
@@ -598,7 +604,8 @@ void PlotAreaConfigWidget::updateData()
         d->type = chart->chartType();
         d->subtype = chart->chartSubType();
     }
-
+    // Only bar chart has orientation
+    d->ui.chartOrientation->setVisible(d->type == BarChartType);
     // If the "3D" checkbox is checked, then adapt the chart to that.
     bool enableThreeDOption = supportsThreeD(d->type);
     d->threeDMode = enableThreeDOption && chart->isThreeD();

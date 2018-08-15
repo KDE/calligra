@@ -67,6 +67,7 @@ private Q_SLOTS:
     void setChartSubType(ChartSubtype subtype);
     void setThreeDMode(bool threeD);
     void setDataDirection(Qt::Orientation);
+    void setChartOrientation(Qt::Orientation);
     void setShowTitle(bool show);
     void setTitlePositioning(int index);
     void setTitleResize(int index);
@@ -109,7 +110,6 @@ private Q_SLOTS:
     void setAxisPosition(Axis *axis, const QString &pos);
     void setAxisLabelsPosition(Axis *axis, const QString &pos);
     void setAxisShowTitle(Axis *axis, bool show);
-    void setAxisTitle(Axis *axis, const QString& title);
     void setAxisShowMajorGridLines(Axis *axis, bool b = true);
     void setAxisShowMinorGridLines(Axis *axis, bool b = true);
     void setAxisUseLogarithmicScaling(Axis *axis, bool b = true);

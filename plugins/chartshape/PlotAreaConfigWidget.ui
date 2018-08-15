@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>203</width>
-    <height>303</height>
+    <width>292</width>
+    <height>310</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -60,6 +60,20 @@
        <property name="text">
         <string>3D</string>
        </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="chartOrientation">
+       <item>
+        <property name="text">
+         <string>Vertical Bars</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Horizontal Bars</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item>

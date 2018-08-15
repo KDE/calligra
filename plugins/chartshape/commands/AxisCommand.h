@@ -67,7 +67,6 @@ public:
     virtual void undo();
 
     void setAxisShowTitle(bool show);
-    void setAxisTitle(const QString& title);
     void setShowAxis(bool show);
     void setAxisShowMajorGridLines(bool show);
     void setAxisShowMinorGridLines(bool show);
@@ -81,10 +80,6 @@ public:
 private:
     ChartShape *m_chart;
     Axis *m_axis;
-    bool m_oldShowTitle;
-    bool m_newShowTitle;
-    QString m_oldTitleText;
-    QString m_newTitleText;
     bool m_oldShowAxis;
     bool m_newShowAxis;
     bool m_oldShowMajorGridLines;

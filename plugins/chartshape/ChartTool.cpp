@@ -268,6 +268,8 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
             this,   SLOT(setChartSubType(ChartSubtype)));
     connect(plotarea, SIGNAL(threeDModeToggled(bool)),
             this,   SLOT(setThreeDMode(bool)));
+    connect(plotarea, SIGNAL(chartOrientationChanged(Qt::Orientation)),
+            this,   SLOT(setChartOrientation(Qt::Orientation)));
 
     // data set edit dialog
     connect(plotarea, SIGNAL(dataSetXDataRegionChanged(DataSet*,CellRegion)),
@@ -727,6 +729,16 @@ void ChartTool::setDataDirection(Qt::Orientation direction)
     d->shape->relayout();
 }
 
+void ChartTool::setChartOrientation(Qt::Orientation direction)
+{
+    Q_ASSERT(d->shape);
+    if (!d->shape)
+        return;
+
+    d->shape->plotArea()->setVertical(direction == Qt::Vertical);
+    d->shape->update();
+    d->shape->relayout();
+}
 
 void ChartTool::setLegendTitle(const QString &title)
 {
@@ -818,17 +830,6 @@ void ChartTool::removeAxis(Axis *axis)
 
     AddRemoveAxisCommand *command = new AddRemoveAxisCommand(axis, d->shape, false, canvas()->shapeManager());
     canvas()->addCommand(command);
-}
-
-void ChartTool::setAxisTitle(Axis *axis, const QString& title)
-{
-    Q_ASSERT(d->shape);
-
-    AxisCommand *command = new AxisCommand(axis, d->shape);
-    command->setAxisTitle(title);
-    canvas()->addCommand(command);
-
-    d->shape->update();
 }
 
 void ChartTool::setAxisShowTitle(Axis *axis, bool show)

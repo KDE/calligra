@@ -88,11 +88,14 @@ private Q_SLOTS:
     void ui_dataSetCategoryDataRegionChanged();
     void ui_dataSetCustomDataRegionChanged();
 
+    void ui_chartOrientationChanged(int value);
+
 Q_SIGNALS:
     void chartTypeChanged(ChartType type, ChartSubtype subType);
     void chartSubTypeChanged(ChartSubtype subType);
 
     void threeDModeToggled(bool threeD);
+    void chartOrientationChanged(Qt::Orientation);
 
 
     void dataSetXDataRegionChanged(DataSet *dataSet, const CellRegion &region);

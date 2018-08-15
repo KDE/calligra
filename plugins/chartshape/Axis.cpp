@@ -1868,7 +1868,9 @@ void Axis::plotAreaChartSubTypeChanged(ChartSubtype subType)
 
 void Axis::plotAreaIsVerticalChanged()
 {
-    d->updatePosition();
+    if (d->kdBarDiagram) {
+        d->kdBarDiagram->setOrientation(d->plotArea->isVertical() ? Qt::Horizontal : Qt::Vertical);
+    }
 }
 
 void Axis::Private::updatePosition()

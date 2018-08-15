@@ -35,8 +35,6 @@ AxisCommand::AxisCommand(Axis* axis, ChartShape* chart)
     : m_chart(chart)
     , m_axis(axis)
 {
-    m_newShowTitle = m_axis->title()->isVisible();
-    m_newTitleText = m_axis->titleText();
     m_newShowMajorGridLines = m_axis->showMajorGrid();
     m_newShowMinorGridLines = m_axis->showMinorGrid();
     m_newUseLogarithmicScaling = m_axis->scalingIsLogarithmic();
@@ -51,8 +49,6 @@ AxisCommand::~AxisCommand()
 void AxisCommand::redo()
 {
     // save the old type
-    m_oldShowTitle = m_axis->title()->isVisible();
-    m_oldTitleText = m_axis->titleText();
     m_oldShowMajorGridLines = m_axis->showMajorGrid();
     m_oldShowMinorGridLines = m_axis->showMinorGrid();
     m_oldUseLogarithmicScaling = m_axis->scalingIsLogarithmic();
@@ -63,8 +59,9 @@ void AxisCommand::redo()
     m_oldUseAutomaticStepWidth = m_axis->useAutomaticMajorInterval();
     m_oldUseAutomaticSubStepWidth = m_axis->useAutomaticMinorInterval();*/
 
-    if (m_oldShowTitle == m_newShowTitle && m_oldTitleText == m_newTitleText
-        && m_oldShowMajorGridLines == m_newShowMajorGridLines && m_oldShowMinorGridLines == m_newShowMinorGridLines
+    KUndo2Command::redo();
+
+    if (m_oldShowMajorGridLines == m_newShowMajorGridLines && m_oldShowMinorGridLines == m_newShowMinorGridLines
         && m_oldUseLogarithmicScaling == m_newUseLogarithmicScaling && m_oldLabelsFont == m_newLabelsFont
         && m_oldShowAxis == m_newShowAxis)
         {
@@ -72,7 +69,6 @@ void AxisCommand::redo()
         }
 
     // Actually do the work
-    m_axis->setTitleText(m_newTitleText);
     m_axis->setShowMajorGrid(m_newShowMajorGridLines);
     m_axis->setShowMinorGrid(m_newShowMinorGridLines);
     m_axis->setScalingLogarithmic(m_oldUseLogarithmicScaling);
@@ -84,21 +80,18 @@ void AxisCommand::redo()
     m_axis->setUseAutomaticMajorInterval(m_newUseAutomaticStepWidth);
     m_axis->setUseAutomaticMinorInterval(m_newUseAutomaticSubStepWidth);*/
 
-    KUndo2Command::redo();
     m_chart->update();
 }
 
 void AxisCommand::undo()
 {
-    if (m_oldShowTitle == m_newShowTitle && m_oldTitleText == m_newTitleText
-        && m_oldShowMajorGridLines == m_newShowMajorGridLines && m_oldShowMinorGridLines == m_newShowMinorGridLines
+    KUndo2Command::undo();
+    if (m_oldShowMajorGridLines == m_newShowMajorGridLines && m_oldShowMinorGridLines == m_newShowMinorGridLines
         && m_oldUseLogarithmicScaling == m_newUseLogarithmicScaling && m_oldLabelsFont == m_newLabelsFont
         && m_oldShowAxis == m_newShowAxis)
     {
         return;
     }
-
-    m_axis->setTitleText(m_oldTitleText);
     m_axis->setShowMajorGrid(m_oldShowMajorGridLines);
     m_axis->setShowMinorGrid(m_oldShowMinorGridLines);
     m_axis->setScalingLogarithmic(m_oldUseLogarithmicScaling);
@@ -110,30 +103,17 @@ void AxisCommand::undo()
     m_axis->setUseAutomaticMajorInterval(m_oldUseAutomaticStepWidth);
     m_axis->setUseAutomaticMinorInterval(m_oldUseAutomaticSubStepWidth);*/
 
-    KUndo2Command::undo();
     m_chart->update();
 }
 
 void AxisCommand::setAxisShowTitle(bool show)
 {
-    m_newShowTitle = show;
-
     if (show) {
         setText(kundo2_i18n("Show Axis Title"));
     } else {
         setText(kundo2_i18n("Hide Axis Title"));
     }
     new ChartTextShapeCommand(m_axis->title(), m_chart, show, this);
-}
-
-void AxisCommand::setAxisTitle(const QString &title)
-{
-    // Note:
-    // As long as changing the title do not require a relayout of the chart,
-    // we do not need to use ChartTextShapeCommand
-    m_newTitleText = title;
-
-    setText(kundo2_i18n("Set Axis Title"));
 }
 
 void AxisCommand::setShowAxis(bool show)
