@@ -218,4 +218,6 @@ private:
 
 } // Namespace KoChart
 
+QDebug operator<<(QDebug dbg, KoChart::Axis *a);
+
 #endif

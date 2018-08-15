@@ -2187,3 +2187,9 @@ QString Axis::odfAxisLabelsPosition() const
 {
     return d->axisLabelsPosition;
 }
+
+QDebug operator<<(QDebug dbg, KoChart::Axis *a)
+{
+    dbg.nospace().noquote() <<"Axis["<<a->name()<<']';
+    return dbg.space().quote();
+}
