@@ -813,6 +813,9 @@ Axis::Axis(PlotArea *parent, AxisDimension dimension)
     d->plotAreaChartType    = d->plotArea->chartType();
     d->plotAreaChartSubType = d->plotArea->chartSubType();
 
+    setOdfAxisPosition("start");
+    setOdfAxisLabelsPosition("near-axis");
+
     KoShapeFactoryBase *textShapeFactory = KoShapeRegistry::instance()->value(TextShapeId);
     if (textShapeFactory)
         d->title = textShapeFactory->createDefaultShape(parent->parent()->resourceManager());
