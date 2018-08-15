@@ -61,6 +61,7 @@ void AxisCommand::redo()
     m_oldUseAutomaticStepWidth = m_axis->useAutomaticMajorInterval();
     m_oldUseAutomaticSubStepWidth = m_axis->useAutomaticMinorInterval();*/
 
+    m_oldPosition = m_axis->odfAxisPosition();
     m_oldLabelsPosition = m_axis->odfAxisLabelsPosition();
 
     KUndo2Command::redo();
@@ -85,6 +86,7 @@ void AxisCommand::redo()
     m_axis->setUseAutomaticMajorInterval(m_newUseAutomaticStepWidth);
     m_axis->setUseAutomaticMinorInterval(m_newUseAutomaticSubStepWidth);*/
     m_axis->setOdfAxisPosition(m_newPosition);
+    m_axis->updateKChartAxisPosition();
     m_axis->setOdfAxisLabelsPosition(m_newLabelsPosition);
 
     m_chart->update();
@@ -112,6 +114,7 @@ void AxisCommand::undo()
     m_axis->setUseAutomaticMajorInterval(m_oldUseAutomaticStepWidth);
     m_axis->setUseAutomaticMinorInterval(m_oldUseAutomaticSubStepWidth);*/
     m_axis->setOdfAxisPosition(m_oldPosition);
+    m_axis->updateKChartAxisPosition();
     m_axis->setOdfAxisLabelsPosition(m_oldLabelsPosition);
 
     m_chart->update();
