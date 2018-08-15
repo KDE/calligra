@@ -67,6 +67,7 @@ void ChartTextShapeCommand::redo()
     KUndo2Command::redo();
     m_textShape->setVisible(m_newIsVisible); // after redo()
     m_chart->update();
+    m_chart->relayout();
 }
 
 void ChartTextShapeCommand::undo()
@@ -77,6 +78,7 @@ void ChartTextShapeCommand::undo()
     KUndo2Command::undo();
     m_textShape->setVisible(m_oldIsVisible); // after undo()
     m_chart->update();
+    m_chart->relayout();
 }
 
 void ChartTextShapeCommand::init()
