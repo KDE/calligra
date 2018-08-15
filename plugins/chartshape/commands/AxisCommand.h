@@ -76,6 +76,7 @@ public:
     void setAxisUseAutomaticStepWidth(bool automatic);
     void setAxisUseAutomaticSubStepWidth(bool automatic);
     void setAxisLabelsFont(const QFont& font);
+    void setAxisPosition(const QString &pos);
 
 private:
     ChartShape *m_chart;
@@ -98,6 +99,8 @@ private:
     bool m_newUseAutomaticSubStepWidth;
     QFont m_oldLabelsFont;
     QFont m_newLabelsFont;
+    QString m_oldPosition;
+    QString m_newPosition;
 };
 
 } // namespace KoChart

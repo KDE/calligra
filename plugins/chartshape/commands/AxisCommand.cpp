@@ -40,6 +40,7 @@ AxisCommand::AxisCommand(Axis* axis, ChartShape* chart)
     m_newUseLogarithmicScaling = m_axis->scalingIsLogarithmic();
     m_newLabelsFont = m_axis->font();
     m_newShowAxis = m_axis->isVisible();
+    m_newPosition = m_axis->odfAxisPosition();
 }
 
 AxisCommand::~AxisCommand()
@@ -63,7 +64,8 @@ void AxisCommand::redo()
 
     if (m_oldShowMajorGridLines == m_newShowMajorGridLines && m_oldShowMinorGridLines == m_newShowMinorGridLines
         && m_oldUseLogarithmicScaling == m_newUseLogarithmicScaling && m_oldLabelsFont == m_newLabelsFont
-        && m_oldShowAxis == m_newShowAxis)
+        && m_oldShowAxis == m_newShowAxis
+        && m_oldPosition == m_newPosition)
         {
             return;
         }
@@ -79,8 +81,10 @@ void AxisCommand::redo()
     m_axis->setMinorInterval(m_newSubStepWidth);
     m_axis->setUseAutomaticMajorInterval(m_newUseAutomaticStepWidth);
     m_axis->setUseAutomaticMinorInterval(m_newUseAutomaticSubStepWidth);*/
+    m_axis->setOdfAxisPosition(m_newPosition);
 
     m_chart->update();
+    m_chart->relayout();
 }
 
 void AxisCommand::undo()
@@ -88,7 +92,8 @@ void AxisCommand::undo()
     KUndo2Command::undo();
     if (m_oldShowMajorGridLines == m_newShowMajorGridLines && m_oldShowMinorGridLines == m_newShowMinorGridLines
         && m_oldUseLogarithmicScaling == m_newUseLogarithmicScaling && m_oldLabelsFont == m_newLabelsFont
-        && m_oldShowAxis == m_newShowAxis)
+        && m_oldShowAxis == m_newShowAxis
+        && m_oldPosition == m_newPosition)
     {
         return;
     }
@@ -102,8 +107,10 @@ void AxisCommand::undo()
     m_axis->setMinorInterval(m_oldSubStepWidth);
     m_axis->setUseAutomaticMajorInterval(m_oldUseAutomaticStepWidth);
     m_axis->setUseAutomaticMinorInterval(m_oldUseAutomaticSubStepWidth);*/
+    m_axis->setOdfAxisPosition(m_oldPosition);
 
     m_chart->update();
+    m_chart->relayout();
 }
 
 void AxisCommand::setAxisShowTitle(bool show)
@@ -201,4 +208,10 @@ void AxisCommand::setAxisLabelsFont(const QFont &font)
     m_newLabelsFont = font;
 
     setText(kundo2_i18n("Set Axis Label Font"));
+}
+
+void AxisCommand::setAxisPosition(const QString &pos)
+{
+    m_newPosition = pos;
+    setText(kundo2_i18n("Set Axis Position"));
 }
