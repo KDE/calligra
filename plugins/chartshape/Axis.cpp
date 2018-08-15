@@ -1259,6 +1259,8 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
                 continue;
             if (n.localName() == "title") {
                 OdfHelper::loadOdfTitle(d->title, n, context);
+                // title shall *always* have AutoResize
+                d->titleData->setResizeMethod(KoTextShapeDataBase::AutoResize);
             }
             else if (n.localName() == "grid") {
                 bool major = false;
@@ -1480,9 +1482,13 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
     }
 
     // Style of axis is still in styleStack
-    if (!loadOdfChartSubtypeProperties(axisElement, context))
+    if (!loadOdfChartSubtypeProperties(axisElement, context)) {
         return false;
-
+    }
+    if (titleText().isEmpty()) {
+        // do not allow visible empty text
+        d->title->setVisible(false);
+    }
     requestRepaint();
 
     return true;
