@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+ * Copyright (C) 2018 Dag Andersen <danders@get2net.dk>
  * Copyright (C) 2008 Peter Simonsson <peter.simonsson@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -237,12 +238,12 @@ void ShapeCollectionDocker::unsetCanvas()
     setEnabled(false);
 }
 
-static
-bool operator<(const KoShapeTemplate &left, const KoShapeTemplate &right)
+inline bool operator<(const struct KoShapeTemplate &a, const struct KoShapeTemplate &b)
 {
-    const auto &leftId = left.templateId.isEmpty() ? left.id : left.templateId;
-    const auto &rightId = right.templateId.isEmpty() ? right.id : right.templateId;
-    return leftId < rightId;
+    if (a.id != b.id) {
+        return a.id < b.id;
+    }
+    return a.templateId < b.templateId;
 }
 
 void ShapeCollectionDocker::loadDefaultShapes()
@@ -252,6 +253,9 @@ void ShapeCollectionDocker::loadDefaultShapes()
     QMap<KoShapeTemplate, KoCollectionItem> funnyList;
     QMap<KoShapeTemplate, KoCollectionItem> geometricList;
     QMap<KoShapeTemplate, KoCollectionItem> quicklist;
+    QMap<QString, QMap<KoShapeTemplate, KoCollectionItem> > extras;
+    QMap<QString, QString> extraNames;
+
     int quickCount=0;
 
     QStringList quickShapes;
@@ -285,8 +289,12 @@ void ShapeCollectionDocker::loadDefaultShapes()
                 arrowList[shapeTemplate] = temp;
             else if(shapeTemplate.family == "geometric")
                 geometricList[shapeTemplate] = temp;
-            else
+            else if (factory->family() == "default" || factory->family().isEmpty()) {
                 defaultList[shapeTemplate] = temp;
+            } else {
+                extras[factory->family()][shapeTemplate] = temp;
+                extraNames[factory->family()] = factory->name();
+            }
 
             QString id= temp.id;
             if (!shapeTemplate.templateId.isEmpty()) {
@@ -331,6 +339,13 @@ void ShapeCollectionDocker::loadDefaultShapes()
     model = new CollectionItemModel(this);
     model->setShapeTemplateList(geometricList.values());
     addCollection("geometric", i18n("Geometrics"), model);
+
+    QMap<QString, QMap<KoShapeTemplate, KoCollectionItem> >::const_iterator it;
+    for (it = extras.constBegin(); it != extras.constEnd(); ++it) {
+        model = new CollectionItemModel(this);
+        model->setShapeTemplateList(it.value().values());
+        addCollection(it.key(), extraNames[it.key()], model);
+    }
 
     model = new CollectionItemModel(this);
     model->setShapeTemplateList(arrowList.values());
