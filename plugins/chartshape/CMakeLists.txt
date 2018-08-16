@@ -72,8 +72,6 @@ set (chartshape_LIB_SRCS
     commands/ChartTextShapeCommand.cpp
     commands/AddRemoveAxisCommand.cpp
     commands/GapCommand.cpp
-
-    ChartCreationWidget.cpp
 )
 
 ki18n_wrap_ui(chartshape_LIB_SRCS
@@ -91,8 +89,6 @@ ki18n_wrap_ui(chartshape_LIB_SRCS
     dialogs/FormatErrorBarDialog.ui
     dialogs/PieDataEditor.ui
     dialogs/BubbleDataEditor.ui
-
-    ChartCreationWidget.ui
 )
 
 add_library(chartshapecore STATIC ${chartshape_LIB_SRCS})
