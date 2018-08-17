@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
 
+   Copyright 2018 Dag Andersen <danders@get2net.dk>
    Copyright 2008 Johannes Simon <johannes.simon@gmail.com>
    Copyright 2009 Inge Wallin    <inge@lysator.liu.se>
 
@@ -57,57 +58,53 @@ void TableEditorDialog::init()
 {
     tableViewContainer->addWidget( m_tableView );
 
-    const QIcon insertRowIcon = koIcon("edit-table-insert-row-above");
-    const QIcon deleteRowIcon = koIcon("edit-table-delete-row");
-    const QIcon insertColIcon = koIcon("edit-table-insert-column-left");
-    const QIcon deleteColIcon = koIcon("edit-table-delete-column");
+    const QIcon insertRowAboveIcon = koIcon("edit-table-insert-row-above");
+    const QIcon insertRowBelowIcon = koIcon("edit-table-insert-row-below");
+    const QIcon insertColLeftIcon = koIcon("edit-table-insert-column-left");
+    const QIcon insertColRightIcon = koIcon("edit-table-insert-column-right");
+    const QIcon deleteSelectionIcon = koIcon("edit-delete");
 
     // Create actions.
-    m_insertRowsAction    = new QAction( insertRowIcon, i18n( "Insert Rows" ), m_tableView );
-    m_deleteRowsAction    = new QAction( deleteRowIcon, i18n( "Delete Rows" ), m_tableView );
-    m_insertColumnsAction = new QAction( insertColIcon, i18n( "Insert Columns" ), m_tableView );
-    m_deleteColumnsAction = new QAction( deleteColIcon, i18n( "Delete Columns" ), m_tableView );
+    m_insertRowAboveAction    = new QAction( insertRowAboveIcon, i18n( "Insert Above" ), m_tableView );
+    m_insertRowBelowAction    = new QAction( insertRowBelowIcon, i18n( "Insert Below" ), m_tableView );
+    m_insertColumnLeftAction = new QAction( insertColLeftIcon, i18n( "Insert Before" ), m_tableView );
+    m_insertColumnRightAction = new QAction( insertColRightIcon, i18n( "Insert After" ), m_tableView );
+    m_deleteSelectionAction = new QAction( deleteSelectionIcon, i18n( "Delete Selection" ), m_tableView );
 
-    // Set icons on buttons(?).
-    insertRow->setIcon( insertRowIcon );
-    deleteRow->setIcon( deleteRowIcon );
-    insertColumn->setIcon( insertColIcon );
-    deleteColumn->setIcon( deleteColIcon );
 
     // Initially, no index is selected. Deletion only works with legal
     // selections.  They will automatically be enabled when an index
     // is selected.
-    deleteRow->setEnabled( false );
-    deleteColumn->setEnabled( false );
+    deleteSelection->setEnabled( false );
 
     // Buttons
-    connect( insertRow,    SIGNAL(pressed()), this, SLOT(slotInsertRowPressed()) );
-    connect( insertColumn, SIGNAL(pressed()), this, SLOT(slotInsertColumnPressed()) );
-    connect( deleteRow,    SIGNAL(pressed()), this, SLOT(slotDeleteRowPressed()) );
-    connect( deleteColumn, SIGNAL(pressed()), this, SLOT(slotDeleteColumnPressed()) );
+    connect(insertRowAbove, SIGNAL(pressed()), this, SLOT(slotInsertRowAbovePressed()));
+    connect(insertRowBelow, SIGNAL(pressed()), this, SLOT(slotInsertRowBelowPressed()));
+    connect(insertColumnLeft, SIGNAL(pressed()), this, SLOT(slotInsertColumnLeftPressed()));
+    connect(insertColumnRight, SIGNAL(pressed()), this, SLOT(slotInsertColumnRightPressed()));
+    connect(deleteSelection, SIGNAL(pressed()), this, SLOT(slotDeleteSelectionPressed()));
 
     // Context Menu Actions
-    connect( m_insertRowsAction,    SIGNAL(triggered()), this, SLOT(slotInsertRowPressed()) );
-    connect( m_insertColumnsAction, SIGNAL(triggered()), this, SLOT(slotInsertColumnPressed()) );
-    connect( m_deleteRowsAction,    SIGNAL(triggered()), this, SLOT(slotDeleteRowPressed()) );
-    connect( m_deleteColumnsAction, SIGNAL(triggered()), this, SLOT(slotDeleteColumnPressed()) );
-    connect( m_tableView,  SIGNAL(currentIndexChanged(QModelIndex)),
-             this,         SLOT(slotCurrentIndexChanged(QModelIndex)) );
-    // We only need to connect one of the data direction buttons, since
-    // they are mutually exclusive.
-    connect( dataSetsInRows, SIGNAL(toggled(bool)),
-             this,           SLOT(slotDataSetsInRowsToggled(bool)) );
+    connect(m_insertRowAboveAction,    SIGNAL(triggered()), this, SLOT(slotInsertRowAbovePressed()));
+    connect(m_insertRowBelowAction,    SIGNAL(triggered()), this, SLOT(slotInsertRowBelowPressed()));
+    connect(m_insertColumnLeftAction, SIGNAL(triggered()), this, SLOT(slotInsertColumnLeftPressed()));
+    connect(m_insertColumnRightAction, SIGNAL(triggered()), this, SLOT(slotInsertColumnRightPressed()));
+    connect(m_deleteSelectionAction, SIGNAL(triggered()), this, SLOT(slotDeleteSelectionPressed()));
+    connect(m_tableView,  SIGNAL(currentIndexChanged(QModelIndex)), this, SLOT(slotCurrentIndexChanged(QModelIndex)));
+
+    // We only need to connect one of the data direction buttons, since they are mutually exclusive.
+    connect(dataSetsInRows, SIGNAL(toggled(bool)), this, SLOT(slotDataSetsInRowsToggled(bool)));
 
     // FIXME: QAction to create a separator??
     QAction *separator = new QAction( m_tableView );
     separator->setSeparator( true );
 
     // Add all the actions to the view.
-    m_tableView->addAction( m_deleteRowsAction );
-    m_tableView->addAction( m_insertRowsAction );
-    m_tableView->addAction( separator );
-    m_tableView->addAction( m_deleteColumnsAction );
-    m_tableView->addAction( m_insertColumnsAction );
+    m_tableView->addAction( m_insertRowAboveAction );
+    m_tableView->addAction( m_insertRowBelowAction );
+    m_tableView->addAction( m_insertColumnLeftAction );
+    m_tableView->addAction( m_insertColumnRightAction );
+    m_tableView->addAction( m_deleteSelectionAction );
 
     m_tableView->setContextMenuPolicy( Qt::ActionsContextMenu );
 
@@ -139,6 +136,7 @@ void TableEditorDialog::setProxyModel( ChartProxyModel* proxyModel )
 void TableEditorDialog::setModel( QAbstractItemModel *model )
 {
     m_tableView->setModel( model );
+    connect(m_tableView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(slotSelectionChanged()));
 }
 
 void TableEditorDialog::slotUpdateDialog()
@@ -163,54 +161,109 @@ void TableEditorDialog::slotUpdateDialog()
 //                             slots
 
 
-void TableEditorDialog::slotInsertRowPressed()
+void TableEditorDialog::slotInsertRowAbovePressed()
 {
     Q_ASSERT( m_tableView->model() );
 
     QAbstractItemModel *model = m_tableView->model();
-    QModelIndex         currIndex = m_tableView->currentIndex();
+    QModelIndex currIndex = m_tableView->currentIndex();
 
-    int selectedRow;
-    if ( model->rowCount() == 0 )
-        // +1 is added below.
-        selectedRow = -1;
-    else if ( currIndex.isValid() )
-        selectedRow = currIndex.row();
-    else
-        selectedRow = m_tableView->model()->rowCount() - 1;
-
-    // Insert the row *after* the selection, thus +1
-    model->insertRow( selectedRow + 1 );
+    int row = 0;
+    if (currIndex.isValid()) {
+        row = currIndex.row();
+    }
+    if (model->rowCount() > 0 && row == 0) {
+        row = 1;
+    }
+    if (model->insertRow(row)) {
+        model->setData(model->index(row, 0), i18n("New Row"));
+        for (int i = 1; i < model->columnCount(); ++i) {
+            model->setData(model->index(row, i), 1.0);
+        }
+        m_tableView->scrollTo(model->index(row, 0));
+        m_tableView->selectionModel()->setCurrentIndex(model->index(row, 0), QItemSelectionModel::Clear|QItemSelectionModel::SelectCurrent);
+    }
 }
 
-void TableEditorDialog::slotInsertColumnPressed()
+void TableEditorDialog::slotInsertRowBelowPressed()
 {
     Q_ASSERT( m_tableView->model() );
-    
+
     QAbstractItemModel *model = m_tableView->model();
-    QModelIndex         currIndex = m_tableView->currentIndex();
+    QModelIndex currIndex = m_tableView->currentIndex();
 
-    int selectedColumn;
-    if ( model->columnCount() == 0 )
-        // +1 is added below.
-        selectedColumn = -1;
-    if ( currIndex.isValid() )
-        selectedColumn = currIndex.column();
-    else
-        selectedColumn = m_tableView->model()->columnCount() - 1;
-
-    // Insert the column *after* the selection, thus +1
-    model->insertColumn( selectedColumn + 1 );
+    int row = model->rowCount();
+    if (currIndex.isValid()) {
+        row = currIndex.row() + 1;
+    }
+    if (model->rowCount() > 0 && row == 0) {
+        row = 1;
+    }
+    if (model->insertRow(row)) {
+        model->setData(model->index(row, 0), i18n("New Row"));
+        for (int i = 1; i < model->columnCount(); ++i) {
+            model->setData(model->index(row, i), 1.0);
+        }
+        m_tableView->scrollTo(model->index(row, 0));
+        m_tableView->selectionModel()->setCurrentIndex(model->index(row, 0), QItemSelectionModel::Clear|QItemSelectionModel::SelectCurrent);
+    }
 }
 
-void TableEditorDialog::slotDeleteRowPressed()
+void TableEditorDialog::slotInsertColumnRightPressed()
 {
-    deleteSelectedRowsOrColumns( Qt::Horizontal );
+    Q_ASSERT( m_tableView->model() );
+
+    QAbstractItemModel *model = m_tableView->model();
+    QModelIndex currIndex = m_tableView->currentIndex();
+
+    int col = model->columnCount();;
+    if (currIndex.isValid()) {
+        col = currIndex.column() + 1;
+    }
+    if (model->columnCount() > 0 && col == 0) {
+        col = 1;
+    }
+    if (model->insertColumn(col)) {
+        model->setData(model->index(0, col), i18n("New Column"));
+        for (int i = 1; i < model->rowCount(); ++i) {
+            model->setData(model->index(i, col), 1.0);
+        }
+        m_tableView->scrollTo(model->index(0, col));
+        m_tableView->selectionModel()->setCurrentIndex(model->index(0, col), QItemSelectionModel::Clear|QItemSelectionModel::SelectCurrent);
+    }
 }
 
-void TableEditorDialog::slotDeleteColumnPressed()
+void TableEditorDialog::slotInsertColumnLeftPressed()
 {
-    deleteSelectedRowsOrColumns( Qt::Vertical );
+    Q_ASSERT( m_tableView->model() );
+
+    QAbstractItemModel *model = m_tableView->model();
+    QModelIndex currIndex = m_tableView->currentIndex();
+
+    int col = 0;
+    if (currIndex.isValid()) {
+        col = currIndex.column();
+    }
+    if (model->columnCount() > 0 && col == 0) {
+        col = 1;
+    }
+    if (model->insertColumn(col)) {
+        model->setData(model->index(0, col), i18n("New Column"));
+        for (int i = 1; i < model->rowCount(); ++i) {
+            model->setData(model->index(i, col), 1.0);
+        }
+        m_tableView->scrollTo(model->index(0, col));
+        m_tableView->selectionModel()->setCurrentIndex(model->index(0, col), QItemSelectionModel::Clear|QItemSelectionModel::SelectCurrent);
+    }
+}
+
+void TableEditorDialog::slotDeleteSelectionPressed()
+{
+    if (!m_tableView->selectionModel()->selectedRows().isEmpty()) {
+        deleteSelectedRowsOrColumns(Qt::Horizontal);
+    } else if (!m_tableView->selectionModel()->selectedColumns().isEmpty()) {
+        deleteSelectedRowsOrColumns(Qt::Vertical);
+    }
 }
 
 void TableEditorDialog::deleteSelectedRowsOrColumns( Qt::Orientation orientation )
@@ -249,17 +302,64 @@ void TableEditorDialog::deleteSelectedRowsOrColumns( Qt::Orientation orientation
 
 void TableEditorDialog::slotCurrentIndexChanged( const QModelIndex &index )
 {
-    const bool isValid = index.isValid();
+    qInfo()<<Q_FUNC_INFO<<index;
+    if (!index.isValid()) {
+        m_insertRowAboveAction->setEnabled(true);
+        insertRowAbove->setEnabled(true);
+        m_insertRowBelowAction->setEnabled(true);
+        insertRowBelow->setEnabled(true);
+        m_insertColumnLeftAction->setEnabled(true);
+        insertColumnLeft->setEnabled(true);
+        m_insertColumnRightAction->setEnabled(true);
+        insertColumnRight->setEnabled(true);
+        return;
+    }
+    if (index.row() == 0) {
+        m_insertRowAboveAction->setEnabled(false);
+        insertRowAbove->setEnabled(false);
+        m_insertRowBelowAction->setEnabled(true);
+        insertRowBelow->setEnabled(true);
+    } else {
+        m_insertRowAboveAction->setEnabled(true);
+        insertRowAbove->setEnabled(true);
+        m_insertRowBelowAction->setEnabled(true);
+        insertRowBelow->setEnabled(true);
+    }
+    if (index.column() == 0) {
+        m_insertColumnLeftAction->setEnabled(false);
+        insertColumnLeft->setEnabled(false);
+        m_insertColumnRightAction->setEnabled(true);
+        insertColumnRight->setEnabled(true);
+    } else {
+        m_insertColumnLeftAction->setEnabled(true);
+        insertColumnLeft->setEnabled(true);
+        m_insertColumnRightAction->setEnabled(true);
+        insertColumnRight->setEnabled(true);
+    }
+}
 
-    m_deleteRowsAction->setEnabled( isValid );
-    m_insertRowsAction->setEnabled( isValid );
-    deleteRow->setEnabled( isValid );
-    insertRow->setEnabled( isValid );
-
-    m_deleteColumnsAction->setEnabled( isValid );
-    m_insertColumnsAction->setEnabled( isValid );
-    deleteColumn->setEnabled( isValid );
-    insertColumn->setEnabled( isValid );
+void TableEditorDialog::slotSelectionChanged()
+{
+    QModelIndexList rows = m_tableView->selectionModel()->selectedRows();
+    QModelIndexList columns = m_tableView->selectionModel()->selectedColumns();
+    bool disableDelete = rows.isEmpty() && columns.isEmpty();
+    if (!disableDelete && !rows.isEmpty()) {
+        for (const QModelIndex &idx : rows) {
+            if (idx.row() == 0) {
+                disableDelete = true;
+            }
+        }
+    }
+    if (!disableDelete && !columns.isEmpty()) {
+        for (const QModelIndex &idx : columns) {
+            if (idx.column() == 0) {
+                disableDelete = true;
+                break;
+            }
+        }
+    }
+    m_deleteSelectionAction->setEnabled(!disableDelete);
+    deleteSelection->setEnabled(!disableDelete);
 }
 
 void TableEditorDialog::slotDataSetsInRowsToggled( bool enabled )
