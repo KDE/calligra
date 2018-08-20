@@ -189,8 +189,26 @@ void AxesConfigWidget::updateData(ChartType type, ChartSubtype subtype)
     d->ui.axisShowMinorGridLines->setChecked(false);
     d->ui.axisShowTitle->setChecked(false);
 
-    if (d->ui.axes->currentIndex() < 0) {
-        d->ui.axes->setCurrentIndex(0);
+    switch (d->ui.axes->currentIndex()) {
+        case 0:
+        case 1:
+            // always ok
+            break;
+        case 2:
+            // ensure we do not point to a removed axis
+            if (!chart->plotArea()->secondaryXAxis()) {
+                d->ui.axes->setCurrentIndex(0);
+            }
+            break;
+        case 3:
+            // ensure we do not point to a removed axis
+            if (!chart->plotArea()->secondaryYAxis()) {
+                d->ui.axes->setCurrentIndex(0);
+            }
+            break;
+        default:
+            d->ui.axes->setCurrentIndex(0);
+            break;
     }
     blockSignals(false);
     ui_axisSelectionChanged(d->ui.axes->currentIndex());
