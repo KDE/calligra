@@ -606,6 +606,7 @@ void PlotAreaConfigWidget::updateData()
     }
     // Only bar chart has orientation
     d->ui.chartOrientation->setVisible(d->type == BarChartType);
+    d->ui.chartOrientation->setCurrentIndex(chart->plotArea()->isVertical() ? 1 : 0);
     // If the "3D" checkbox is checked, then adapt the chart to that.
     bool enableThreeDOption = supportsThreeD(d->type);
     d->threeDMode = enableThreeDOption && chart->isThreeD();
