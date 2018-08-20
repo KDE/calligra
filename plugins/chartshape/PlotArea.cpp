@@ -376,7 +376,7 @@ Axis *PlotArea::secondaryXAxis() const
     bool firstXAxisFound = false;
 
     foreach(Axis *axis, d->axes) {
-        if (axis->orientation() == Qt::Horizontal) {
+        if (axis->dimension() == XAxisDimension) {
             if (firstXAxisFound)
                 return axis;
             else
@@ -392,7 +392,7 @@ Axis *PlotArea::secondaryYAxis() const
     bool firstYAxisFound = false;
 
     foreach(Axis *axis, d->axes) {
-        if (axis->orientation() == Qt::Vertical) {
+        if (axis->dimension() == YAxisDimension) {
             if (firstYAxisFound)
                 return axis;
             else
