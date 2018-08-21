@@ -276,6 +276,7 @@ void ChartLayout::calculateLayout()
 
     PlotArea *plotarea = dynamic_cast<PlotArea*>(m_shapes.value(PlotAreaType));
     QRectF plotareaRect = area;
+    if (plotarea->chartType() == BarChartType && plotarea->isVertical()) debugChartLayout<<"Vertical bar chart";
 
     QRectF titleRect;
     KoShape *title = m_shapes.value(TitleLabelType);
@@ -308,45 +309,92 @@ void ChartLayout::calculateLayout()
 
     KoShape *xtitle = m_shapes.value(XAxisTitleType);
     if (xtitle && xtitle->isVisible()) {
-        if (axisPosition(plotarea, XAxisTitleType) == KChart::CartesianAxis::Top) {
-            topTitleRect = itemRect(xtitle);
-            axisTitles.insert(3, xtitle);
+        if (plotarea->chartType() == BarChartType && plotarea->isVertical()) {
+            debugChartLayout<<"x-axis is vertical: position="<<axisPosition(plotarea, XAxisTitleType);
+            if (axisPosition(plotarea, XAxisTitleType) == KChart::CartesianAxis::Top) {
+                rightTitleRect = itemRect(xtitle);
+                axisTitles.insert(4, xtitle);
+            } else {
+                leftTitleRect = itemRect(xtitle);
+                axisTitles.insert(2, xtitle);
+            }
         } else {
-            bottomTitleRect = itemRect(xtitle);
-            axisTitles.insert(1, xtitle);
+            debugChartLayout<<"x-axis is horizontal: position="<<axisPosition(plotarea, XAxisTitleType);
+            if (axisPosition(plotarea, XAxisTitleType) == KChart::CartesianAxis::Top) {
+                topTitleRect = itemRect(xtitle);
+                axisTitles.insert(3, xtitle);
+            } else {
+                bottomTitleRect = itemRect(xtitle);
+                axisTitles.insert(1, xtitle);
+            }
         }
     }
     KoShape *ytitle = m_shapes.value(YAxisTitleType);
     if (ytitle && ytitle->isVisible()) {
-        if (axisPosition(plotarea, YAxisTitleType) == KChart::CartesianAxis::Left) {
-            leftTitleRect = itemRect(ytitle);
-            axisTitles.insert(2, ytitle);
-            debugChartLayout<<"ytitle: add to left"<<leftTitleRect;
+        if (plotarea->chartType() == BarChartType && plotarea->isVertical()) {
+            debugChartLayout<<"y-axis is horizontal: position="<<axisPosition(plotarea, YAxisTitleType);
+            if (axisPosition(plotarea, YAxisTitleType) == KChart::CartesianAxis::Left) {
+                bottomTitleRect = itemRect(ytitle);
+                axisTitles.insert(1, ytitle);
+                debugChartLayout<<"ytitle: add to left"<<leftTitleRect;
+            } else {
+                topTitleRect = itemRect(ytitle);
+                axisTitles.insert(3, ytitle);
+            }
         } else {
-            rightTitleRect = itemRect(ytitle);
-            axisTitles.insert(4, ytitle);
+            if (axisPosition(plotarea, YAxisTitleType) == KChart::CartesianAxis::Left) {
+                leftTitleRect = itemRect(ytitle);
+                axisTitles.insert(2, ytitle);
+                debugChartLayout<<"ytitle: add to left"<<leftTitleRect;
+            } else {
+                rightTitleRect = itemRect(ytitle);
+                axisTitles.insert(4, ytitle);
+            }
         }
     }
     KoShape *sxtitle = m_shapes.value(SecondaryXAxisTitleType);
     debugChartLayout<<sxtitle<<(sxtitle && sxtitle->isVisible()<<SecondaryXAxisTitleType);
     if (sxtitle && sxtitle->isVisible()) {
-        if (axisPosition(plotarea, SecondaryXAxisTitleType) == KChart::CartesianAxis::Bottom) {
-            bottomTitleRect = itemRect(sxtitle);
-            axisTitles.insert(1, sxtitle);
-            debugChartLayout<<"sxtitle: add to bottom";
+        if (plotarea->chartType() == BarChartType && plotarea->isVertical()) {
+            debugChartLayout<<"secondary-x-axis is vertical: position="<<axisPosition(plotarea, SecondaryXAxisTitleType);
+            if (axisPosition(plotarea, SecondaryXAxisTitleType) == KChart::CartesianAxis::Bottom) {
+                leftTitleRect = itemRect(sxtitle);
+                axisTitles.insert(2, sxtitle);
+            } else {
+                rightTitleRect = itemRect(sxtitle);
+                axisTitles.insert(4, sxtitle);
+            }
         } else {
-            topTitleRect = itemRect(sxtitle);
-            axisTitles.insert(3, sxtitle);
+            if (axisPosition(plotarea, SecondaryXAxisTitleType) == KChart::CartesianAxis::Bottom) {
+                bottomTitleRect = itemRect(sxtitle);
+                axisTitles.insert(1, sxtitle);
+                debugChartLayout<<"sxtitle: add to bottom";
+            } else {
+                topTitleRect = itemRect(sxtitle);
+                axisTitles.insert(3, sxtitle);
+            }
         }
     }
     KoShape *sytitle = m_shapes.value(SecondaryYAxisTitleType);
     if (sytitle && sytitle->isVisible()) {
-        if (axisPosition(plotarea, SecondaryYAxisTitleType) == KChart::CartesianAxis::Right) {
-            rightTitleRect = itemRect(sytitle);
-            axisTitles.insert(4, sytitle);
+        if (plotarea->chartType() == BarChartType && plotarea->isVertical()) {
+            debugChartLayout<<"secondary-y-axis is horizontal: position="<<axisPosition(plotarea, SecondaryYAxisTitleType);
+            if (axisPosition(plotarea, SecondaryYAxisTitleType) == KChart::CartesianAxis::Right) {
+                topTitleRect = itemRect(sytitle);
+                axisTitles.insert(3, sytitle);
+                debugChartLayout<<"sytitle: add to top"<<topTitleRect;
+            } else {
+                bottomTitleRect = itemRect(sytitle);
+                axisTitles.insert(1, sytitle);
+            }
         } else {
-            leftTitleRect = itemRect(sytitle);
-            axisTitles.insert(2, sytitle);
+            if (axisPosition(plotarea, SecondaryYAxisTitleType) == KChart::CartesianAxis::Right) {
+                rightTitleRect = itemRect(sytitle);
+                axisTitles.insert(4, sytitle);
+            } else {
+                leftTitleRect = itemRect(sytitle);
+                axisTitles.insert(2, sytitle);
+            }
         }
     }
 
