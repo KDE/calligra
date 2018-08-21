@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
 
+   Copyright 2018 Dag Andersen <danders@get2net.dk>
    Copyright 2009 Johannes Simon <johannes.simon@gmail.com>
    Copyright 2009 Inge Wallin    <inge@lysator.liu.se>
 
@@ -50,26 +51,29 @@ public:
 
 protected Q_SLOTS:
     void slotUpdateDialog();
-    void slotInsertRowPressed();
-    void slotDeleteRowPressed();
-    void slotInsertColumnPressed();
-    void slotDeleteColumnPressed();
+    void slotInsertRowAbovePressed();
+    void slotInsertRowBelowPressed();
+    void slotInsertColumnLeftPressed();
+    void slotInsertColumnRightPressed();
+    void slotDeleteSelectionPressed();
 
     void deleteSelectedRowsOrColumns(Qt::Orientation orientation);
     void slotCurrentIndexChanged(const QModelIndex &index);
+    void slotSelectionChanged();
     void slotDataSetsInRowsToggled(bool enabled);
 
 private:
     ChartProxyModel *m_proxyModel;
-    ChartTableView  *const m_tableView;
+    ChartTableView *const m_tableView;
 
-    QAction         *m_deleteRowsAction;
-    QAction         *m_deleteColumnsAction;
-    QAction         *m_insertRowsAction;
-    QAction         *m_insertColumnsAction;
+    QAction *m_deleteSelectionAction;
+    QAction *m_insertRowAboveAction;
+    QAction *m_insertColumnLeftAction;
+    QAction *m_insertRowBelowAction;
+    QAction *m_insertColumnRightAction;
 };
 
 } // Namespace KoChart
 
-#endif // KCHART_AXIS_SCALING_DIALOG_H
+#endif // KCHART_TABLE_EDITOR_DIALOG_H
 

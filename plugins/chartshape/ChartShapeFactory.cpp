@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright (C) 2018 Dag Andersen <danders@get2net.dk>
    Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
 
    This library is free software; you can redistribute it and/or
@@ -37,8 +38,10 @@
 #include <KoOdfLoadingContext.h>
 #include <KoDocumentResourceManager.h>
 #include <KoStyleStack.h>
+#include <KoProperties.h>
 
 // Chart shape
+#include "ChartShape.h"
 #include "ChartToolFactory.h"
 #include "ChartProxyModel.h"
 #include "PlotArea.h"
@@ -46,7 +49,6 @@
 #include "Legend.h"
 #include "TableSource.h"
 #include "ChartLayout.h"
-#include "ChartCreationWidget.h"
 
 using namespace KoChart;
 
@@ -78,6 +80,194 @@ ChartShapeFactory::ChartShapeFactory()
     QList<KoShapeConfigFactoryBase*> panelFactories;
     // panelFactories.append(new ChartDataConfigFactory());
     setOptionPanels(panelFactories);
+
+    setFamily("chart");
+
+    int templateId = 0;
+    KoShapeTemplate params;
+    params.id = ChartShapeId;
+    params.family = family();
+
+    // NOTE: templateId is used for sorting by the docker
+    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.name = i18n("Bar Chart");
+    params.toolTip = i18n("Normal bar chart");
+    params.iconName = chartTypeIconName(BarChartType, NormalChartSubtype);
+    KoProperties *properties = new KoProperties();
+    properties->setProperty("chart-type", BarChartType);
+    properties->setProperty("chart-sub-type", NormalChartSubtype);
+    params.properties = properties;
+    addTemplate(params);
+
+    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.name = i18n("Stacked Bar Chart");
+    params.toolTip = i18n("Stacked bar chart");
+    params.iconName = chartTypeIconName(BarChartType, StackedChartSubtype);
+    properties = new KoProperties();
+    properties->setProperty("chart-type", BarChartType);
+    properties->setProperty("chart-sub-type", StackedChartSubtype);
+    params.properties = properties;
+    addTemplate(params);
+
+    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.name = i18n("Percent Bar Chart");
+    params.toolTip = i18n("Percent bar chart");
+    params.iconName = chartTypeIconName(BarChartType, PercentChartSubtype);
+    properties = new KoProperties();
+    properties->setProperty("chart-type", BarChartType);
+    properties->setProperty("chart-sub-type", PercentChartSubtype);
+    params.properties = properties;
+    addTemplate(params);
+
+    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.name = i18n("Line Chart");
+    params.toolTip = i18n("Normal line chart");
+    params.iconName = chartTypeIconName(LineChartType, NormalChartSubtype);
+    properties = new KoProperties();
+    properties->setProperty("chart-type", LineChartType);
+    properties->setProperty("chart-sub-type", NormalChartSubtype);
+    params.properties = properties;
+    addTemplate(params);
+
+    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.name = i18n("Stacked Line Chart");
+    params.toolTip = i18n("Stacked line chart");
+    params.iconName = chartTypeIconName(LineChartType, StackedChartSubtype);
+    properties = new KoProperties();
+    properties->setProperty("chart-type", LineChartType);
+    properties->setProperty("chart-sub-type", StackedChartSubtype);
+    params.properties = properties;
+    addTemplate(params);
+
+    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.name = i18n("Percent Line Chart");
+    params.toolTip = i18n("Percent line chart");
+    params.iconName = chartTypeIconName(LineChartType, PercentChartSubtype);
+    properties = new KoProperties();
+    properties->setProperty("chart-type", LineChartType);
+    properties->setProperty("chart-sub-type", PercentChartSubtype);
+    params.properties = properties;
+    addTemplate(params);
+
+    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.name = i18n("Area Chart");
+    params.toolTip = i18n("Normal area chart");
+    params.iconName = chartTypeIconName(AreaChartType, NormalChartSubtype);
+    properties = new KoProperties();
+    properties->setProperty("chart-type", AreaChartType);
+    properties->setProperty("chart-sub-type", NormalChartSubtype);
+    params.properties = properties;
+    addTemplate(params);
+
+    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.name = i18n("Stacked Area Chart");
+    params.toolTip = i18n("Stacked area chart");
+    params.iconName = chartTypeIconName(AreaChartType, StackedChartSubtype);
+    properties = new KoProperties();
+    properties->setProperty("chart-type", AreaChartType);
+    properties->setProperty("chart-sub-type", StackedChartSubtype);
+    params.properties = properties;
+    addTemplate(params);
+
+    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.name = i18n("Percent Area Chart");
+    params.toolTip = i18n("Percent area chart");
+    params.iconName = chartTypeIconName(AreaChartType, PercentChartSubtype);
+    properties = new KoProperties();
+    properties->setProperty("chart-type", AreaChartType);
+    properties->setProperty("chart-sub-type", PercentChartSubtype);
+    params.properties = properties;
+    addTemplate(params);
+
+    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.name = i18n("HLC Stock Chart");
+    params.toolTip = i18n("High Low Close stock chart");
+    params.iconName = chartTypeIconName(StockChartType, HighLowCloseChartSubtype);
+    properties = new KoProperties();
+    properties->setProperty("chart-type", StockChartType);
+    properties->setProperty("chart-sub-type", HighLowCloseChartSubtype);
+    params.properties = properties;
+    addTemplate(params);
+
+    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.name = i18n("OHLC Stock Chart");
+    params.toolTip = i18n("Open High Low Close stock chart");
+    params.iconName = chartTypeIconName(StockChartType, OpenHighLowCloseChartSubtype);
+    properties = new KoProperties();
+    properties->setProperty("chart-type", StockChartType);
+    properties->setProperty("chart-sub-type", OpenHighLowCloseChartSubtype);
+    params.properties = properties;
+    addTemplate(params);
+
+    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.name = i18n("Candle Stick Stock Chart");
+    params.toolTip = i18n("Japanese candle stick stock chart");
+    params.iconName = chartTypeIconName(StockChartType, CandlestickChartSubtype);
+    properties = new KoProperties();
+    properties->setProperty("chart-type", StockChartType);
+    properties->setProperty("chart-sub-type", CandlestickChartSubtype);
+    params.properties = properties;
+    addTemplate(params);
+
+    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.name = i18n("Pie Chart");
+    params.toolTip = i18n("Pie chart");
+    params.iconName = chartTypeIconName(CircleChartType, NoChartSubtype);
+    properties = new KoProperties();
+    properties->setProperty("chart-type", CircleChartType);
+    properties->setProperty("chart-sub-type", NoChartSubtype);
+    params.properties = properties;
+    addTemplate(params);
+
+    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.name = i18n("Ring Chart");
+    params.toolTip = i18n("Ring chart");
+    params.iconName = chartTypeIconName(RingChartType, NoChartSubtype);
+    properties = new KoProperties();
+    properties->setProperty("chart-type", RingChartType);
+    properties->setProperty("chart-sub-type", NoChartSubtype);
+    params.properties = properties;
+    addTemplate(params);
+
+    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.name = i18n("Bubble Chart");
+    params.toolTip = i18n("Bubble chart");
+    params.iconName = chartTypeIconName(BubbleChartType, NoChartSubtype);
+    properties = new KoProperties();
+    properties->setProperty("chart-type", BubbleChartType);
+    properties->setProperty("chart-sub-type", NoChartSubtype);
+    params.properties = properties;
+    addTemplate(params);
+
+    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.name = i18n("Scatter Chart");
+    params.toolTip = i18n("Scatter chart");
+    params.iconName = chartTypeIconName(ScatterChartType, NoChartSubtype);
+    properties = new KoProperties();
+    properties->setProperty("chart-type", ScatterChartType);
+    properties->setProperty("chart-sub-type", NoChartSubtype);
+    params.properties = properties;
+    addTemplate(params);
+
+    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.name = i18n("Radar Chart");
+    params.toolTip = i18n("Radar chart");
+    params.iconName = chartTypeIconName(RadarChartType, NoChartSubtype);
+    properties = new KoProperties();
+    properties->setProperty("chart-type", RadarChartType);
+    properties->setProperty("chart-sub-type", NoChartSubtype);
+    params.properties = properties;
+    addTemplate(params);
+
+    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.name = i18n("Filled Radar Chart");
+    params.toolTip = i18n("Filled radar chart");
+    params.iconName = chartTypeIconName(FilledRadarChartType, NoChartSubtype);
+    properties = new KoProperties();
+    properties->setProperty("chart-type", FilledRadarChartType);
+    properties->setProperty("chart-sub-type", NoChartSubtype);
+    params.properties = properties;
+    addTemplate(params);
 }
 
 
@@ -97,6 +287,37 @@ bool ChartShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingCont
         }
     }
     return false;
+}
+
+KoShape *ChartShapeFactory::createShape(const KoProperties* properties, KoDocumentResourceManager *documentResources) const
+{
+    qInfo()<<Q_FUNC_INFO<<properties->property("chart-type")<<properties->property("chart-sub-type");
+    switch (properties->intProperty("chart-type")) {
+        case BarChartType:
+            return createBarChart(documentResources, properties->intProperty("chart-sub-type"));
+        case LineChartType:
+            return createLineChart(documentResources, properties->intProperty("chart-sub-type"));
+        case AreaChartType:
+            return createAreaChart(documentResources, properties->intProperty("chart-sub-type"));
+        case StockChartType:
+            return createStockChart(documentResources, properties->intProperty("chart-sub-type"));
+        case CircleChartType:
+            return createPieChart(documentResources);
+        case RingChartType:
+            return createRingChart(documentResources);
+        case BubbleChartType:
+            return createBubbleChart(documentResources);
+        case ScatterChartType:
+            return createScatterChart(documentResources);
+        case RadarChartType:
+            return createRadarChart(documentResources);
+        case FilledRadarChartType:
+            return createFilledRadarChart(documentResources);
+        default:
+            return createDefaultShape(documentResources);
+    }
+    Q_ASSERT(false);
+    return 0;
 }
 
 KoShape *ChartShapeFactory::createShapeFromOdf(const KoXmlElement &element,
@@ -125,44 +346,44 @@ KoShape *ChartShapeFactory::createDefaultShape(KoDocumentResourceManager *docume
     ChartProxyModel *proxyModel = shape->proxyModel();
 
     // Fill cells with data.
-    QStandardItemModel  *m_chartData = new QStandardItemModel();
-    Table *internalTable = shape->tableSource()->add("internal-model", m_chartData);
+    QStandardItemModel  *chartData = new QStandardItemModel();
+    Table *internalTable = shape->tableSource()->add("local-data", chartData);
     Q_ASSERT(!shape->internalModel());
-    // setInternalModel() assumes that m_chartData has already been added to shape->tableSource().
-    shape->setInternalModel(m_chartData);
+    // setInternalModel() assumes that chartData has already been added to shape->tableSource().
+    shape->setInternalModel(chartData);
     // TODO (not implemented yet)
     // shape->tableSource()->setRenameOnNameClash(internalTable);
-    m_chartData->setRowCount(4);
-    m_chartData->setColumnCount(5);
+    chartData->setRowCount(4);
+    chartData->setColumnCount(5);
 
     // Vertical header data
-    m_chartData->setData(m_chartData->index(1, 0), i18n("January"));
-    m_chartData->setData(m_chartData->index(2, 0), i18n("July"));
-    m_chartData->setData(m_chartData->index(3, 0), i18n("December"));
+    chartData->setData(chartData->index(1, 0), i18n("January"));
+    chartData->setData(chartData->index(2, 0), i18n("July"));
+    chartData->setData(chartData->index(3, 0), i18n("December"));
 
     // Horizontal header data
-    m_chartData->setData(m_chartData->index(0, 1), i18n("Column %1", 1));
-    m_chartData->setData(m_chartData->index(0, 2), i18n("Column %1", 2));
-    m_chartData->setData(m_chartData->index(0, 3), i18n("Column %1", 3));
-    m_chartData->setData(m_chartData->index(0, 4), i18n("Column %1", 4));
+    chartData->setData(chartData->index(0, 1), i18n("Column %1", 1));
+    chartData->setData(chartData->index(0, 2), i18n("Column %1", 2));
+    chartData->setData(chartData->index(0, 3), i18n("Column %1", 3));
+    chartData->setData(chartData->index(0, 4), i18n("Column %1", 4));
 
     // First row
-    m_chartData->setData(m_chartData->index(1, 1), 5.7);
-    m_chartData->setData(m_chartData->index(1, 2), 3.4);
-    m_chartData->setData(m_chartData->index(1, 3), 1.2);
-    m_chartData->setData(m_chartData->index(1, 4), 8.4);
+    chartData->setData(chartData->index(1, 1), 5.7);
+    chartData->setData(chartData->index(1, 2), 3.4);
+    chartData->setData(chartData->index(1, 3), 1.2);
+    chartData->setData(chartData->index(1, 4), 8.4);
 
     // Second row
-    m_chartData->setData(m_chartData->index(2, 1), 2.1);
-    m_chartData->setData(m_chartData->index(2, 2), 6.5);
-    m_chartData->setData(m_chartData->index(2, 3), 0.9);
-    m_chartData->setData(m_chartData->index(2, 4), 1.5);
+    chartData->setData(chartData->index(2, 1), 2.1);
+    chartData->setData(chartData->index(2, 2), 6.5);
+    chartData->setData(chartData->index(2, 3), 0.9);
+    chartData->setData(chartData->index(2, 4), 1.5);
 
     // Third row
-    m_chartData->setData(m_chartData->index(3, 1), 7.9);
-    m_chartData->setData(m_chartData->index(3, 2), 3.5);
-    m_chartData->setData(m_chartData->index(3, 3), 8.6);
-    m_chartData->setData(m_chartData->index(3, 4), 4.3);
+    chartData->setData(chartData->index(3, 1), 7.9);
+    chartData->setData(chartData->index(3, 2), 3.5);
+    chartData->setData(chartData->index(3, 3), 8.6);
+    chartData->setData(chartData->index(3, 4), 4.3);
 
     proxyModel->setFirstRowIsLabel(true);
     proxyModel->setFirstColumnIsLabel(true);
@@ -179,12 +400,256 @@ KoShape *ChartShapeFactory::createDefaultShape(KoDocumentResourceManager *docume
 
 QList<KoShapeConfigWidgetBase*> ChartShapeFactory::createShapeOptionPanels()
 {
-    return QList<KoShapeConfigWidgetBase*>() << new ChartCreationWidget();
+    return QList<KoShapeConfigWidgetBase*>();
 }
 
 void ChartShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *manager) const
 {
     Q_UNUSED(manager);
+}
+
+ChartShape *ChartShapeFactory::createBarChart(KoDocumentResourceManager *documentResources, int subtype) const
+{
+    ChartShape* shape = static_cast<ChartShape*>(createDefaultShape(documentResources));
+    shape->setChartType(BarChartType);
+    shape->setChartSubType(static_cast<ChartSubtype>(subtype));
+    return shape;
+}
+
+ChartShape *ChartShapeFactory::createLineChart(KoDocumentResourceManager *documentResources, int subtype) const
+{
+    ChartShape* shape = static_cast<ChartShape*>(createDefaultShape(documentResources));
+    shape->setChartType(LineChartType);
+    shape->setChartSubType(static_cast<ChartSubtype>(subtype));
+    return shape;
+}
+
+ChartShape *ChartShapeFactory::createAreaChart(KoDocumentResourceManager *documentResources, int subtype) const
+{
+    ChartShape* shape = static_cast<ChartShape*>(createDefaultShape(documentResources));
+    shape->setChartType(AreaChartType);
+    shape->setChartSubType(static_cast<ChartSubtype>(subtype));
+    return shape;
+}
+
+ChartShape *ChartShapeFactory::createStockChart(KoDocumentResourceManager *documentResources, int subtype) const
+{
+    ChartShape* shape = new ChartShape(documentResources);
+    shape->setChartType(StockChartType);
+    shape->setChartSubType(static_cast<ChartSubtype>(subtype));
+    ChartProxyModel *proxyModel = shape->proxyModel();
+
+    // Fill cells with data.
+    QStandardItemModel  *chartData = new QStandardItemModel();
+    Table *internalTable = shape->tableSource()->add("local-data", chartData);
+    Q_ASSERT(!shape->internalModel());
+    // setInternalModel() assumes that chartData has already been added to shape->tableSource().
+    shape->setInternalModel(chartData);
+    // TODO (not implemented yet)
+    // shape->tableSource()->setRenameOnNameClash(internalTable);
+    chartData->setRowCount(4);
+    chartData->setColumnCount(5);
+
+    // Vertical header data (not used)
+    chartData->setData(chartData->index(1, 0), i18n("Share A"));
+    chartData->setData(chartData->index(2, 0), i18n("Share B"));
+    chartData->setData(chartData->index(3, 0), i18n("Share C"));
+
+    // Horizontal header data
+    chartData->setData(chartData->index(0, 1), i18n("Column %1", 1));
+    chartData->setData(chartData->index(0, 2), i18n("Column %1", 2));
+    chartData->setData(chartData->index(0, 3), i18n("Column %1", 3));
+    chartData->setData(chartData->index(0, 4), i18n("Column %1", 4));
+
+    QList<qreal> openValues; openValues << 10 << 15 << 20;
+    QList<qreal> highValues; highValues << 12 << 15 << 30;
+    QList<qreal> lowValues; lowValues << 6 << 13 << 20;
+    QList<qreal> closeValues; closeValues << 7 << 13 << 30;
+    int col = 1;
+    if (subtype == HighLowCloseChartSubtype) {
+        col = 4; // add last, proxymodel needs it (FIXME)
+    }
+    // Open
+    chartData->setData(chartData->index(1, col), openValues.at(0));
+    chartData->setData(chartData->index(2, col), openValues.at(1));
+    chartData->setData(chartData->index(3, col), openValues.at(2));
+    col = col == 4 ? 1 : 2;
+
+    // High
+    chartData->setData(chartData->index(1, col), highValues.at(0));
+    chartData->setData(chartData->index(2, col), highValues.at(1));
+    chartData->setData(chartData->index(3, col), highValues.at(2));
+    ++col;
+
+    // Low
+    chartData->setData(chartData->index(1, col), lowValues.at(0));
+    chartData->setData(chartData->index(2, col), lowValues.at(1));
+    chartData->setData(chartData->index(3, col), lowValues.at(2));
+    ++col;
+
+    // Close
+    chartData->setData(chartData->index(1, col), closeValues.at(0));
+    chartData->setData(chartData->index(2, col), closeValues.at(1));
+    chartData->setData(chartData->index(3, col), closeValues.at(2));
+
+    proxyModel->setFirstRowIsLabel(true);
+    proxyModel->setFirstColumnIsLabel(true);
+    proxyModel->reset(CellRegion(internalTable, QRect(1, 1, chartData->columnCount(), chartData->rowCount())));
+
+    shape->plotArea()->yAxis()->title()->setVisible(false);
+    shape->plotArea()->xAxis()->title()->setVisible(false);
+    shape->legend()->setVisible(false);
+
+    shape->layout()->scheduleRelayout();
+    shape->layout()->layout();
+
+    return shape;
+}
+
+ChartShape *ChartShapeFactory::createPieChart(KoDocumentResourceManager *documentResources) const
+{
+    ChartShape* shape = static_cast<ChartShape*>(createDefaultShape(documentResources));
+    shape->setChartType(CircleChartType);
+    shape->setChartSubType(NoChartSubtype);
+    return shape;
+}
+
+ChartShape *ChartShapeFactory::createRingChart(KoDocumentResourceManager *documentResources) const
+{
+    ChartShape* shape = static_cast<ChartShape*>(createDefaultShape(documentResources));
+    shape->setChartType(RingChartType);
+    shape->setChartSubType(NoChartSubtype);
+    return shape;
+}
+
+ChartShape *ChartShapeFactory::createBubbleChart(KoDocumentResourceManager *documentResources) const
+{
+    ChartShape* shape = new ChartShape(documentResources);
+    shape->setChartType(BubbleChartType);
+    shape->setChartSubType(NoChartSubtype);
+    ChartProxyModel *proxyModel = shape->proxyModel();
+
+    // Fill cells with data.
+    QStandardItemModel  *chartData = new QStandardItemModel();
+    Table *internalTable = shape->tableSource()->add("local-data", chartData);
+    Q_ASSERT(!shape->internalModel());
+    // setInternalModel() assumes that chartData has already been added to shape->tableSource().
+    shape->setInternalModel(chartData);
+    // TODO (not implemented yet)
+    // shape->tableSource()->setRenameOnNameClash(internalTable);
+    chartData->setRowCount(4);
+    chartData->setColumnCount(5);
+
+    // Vertical header data (not used)
+    chartData->setData(chartData->index(1, 0), i18n("January"));
+    chartData->setData(chartData->index(2, 0), i18n("July"));
+    chartData->setData(chartData->index(3, 0), i18n("December"));
+
+    // Horizontal header data
+    chartData->setData(chartData->index(0, 1), i18n("Column %1", 1));
+    chartData->setData(chartData->index(0, 2), i18n("Column %1", 2));
+    chartData->setData(chartData->index(0, 3), i18n("Column %1", 3)); // not used
+    chartData->setData(chartData->index(0, 4), i18n("Column %1", 4)); // not used
+
+    // First row
+    chartData->setData(chartData->index(1, 1), 4.7); // Y value series 1
+    chartData->setData(chartData->index(1, 2), 3.4); // bubble size series 1
+    chartData->setData(chartData->index(1, 3), 1.2); // Y value series 2
+    chartData->setData(chartData->index(1, 4), 8.4); // bubble size series 2
+
+    // Second row
+    chartData->setData(chartData->index(2, 1), 2.1);
+    chartData->setData(chartData->index(2, 2), 6.5);
+    chartData->setData(chartData->index(2, 3), 4.9);
+    chartData->setData(chartData->index(2, 4), 3.5);
+
+    // Third row
+    chartData->setData(chartData->index(3, 1), 7.9);
+    chartData->setData(chartData->index(3, 2), 1.5);
+    chartData->setData(chartData->index(3, 3), 4.6);
+    chartData->setData(chartData->index(3, 4), 4.3);
+
+    proxyModel->setFirstRowIsLabel(true);
+    proxyModel->setFirstColumnIsLabel(true);
+    proxyModel->reset(CellRegion(internalTable, QRect(1, 1, 5, 4)));
+
+    shape->plotArea()->xAxis()->title()->setVisible(false);
+    shape->plotArea()->yAxis()->setTitleText(i18n("Growth"));
+
+    shape->layout()->scheduleRelayout();
+    shape->layout()->layout();
+
+    return shape;
+}
+
+ChartShape *ChartShapeFactory::createScatterChart(KoDocumentResourceManager *documentResources) const
+{
+    ChartShape* shape = static_cast<ChartShape*>(createDefaultShape(documentResources));
+    shape->setChartType(ScatterChartType);
+    shape->setChartSubType(NoChartSubtype);
+    return shape;
+}
+
+ChartShape *ChartShapeFactory::createRadarChart(KoDocumentResourceManager *documentResources) const
+{
+    ChartShape* shape = new ChartShape(documentResources);
+    shape->setChartType(RadarChartType);
+    shape->setChartSubType(NoChartSubtype);
+    radarData(shape);
+    return shape;
+}
+
+ChartShape *ChartShapeFactory::createFilledRadarChart(KoDocumentResourceManager *documentResources) const
+{
+    ChartShape* shape = new ChartShape(documentResources);
+    shape->setChartType(FilledRadarChartType);
+    shape->setChartSubType(NoChartSubtype);
+    radarData(shape);
+    return shape;
+}
+
+void ChartShapeFactory::radarData(ChartShape *shape) const
+{
+    ChartProxyModel *proxyModel = shape->proxyModel();
+
+    // Fill cells with data.
+    QStandardItemModel  *chartData = new QStandardItemModel();
+    Table *internalTable = shape->tableSource()->add("local-data", chartData);
+    Q_ASSERT(!shape->internalModel());
+    // setInternalModel() assumes that chartData has already been added to shape->tableSource().
+    shape->setInternalModel(chartData);
+    // TODO (not implemented yet)
+    // shape->tableSource()->setRenameOnNameClash(internalTable);
+    chartData->setRowCount(4);
+    chartData->setColumnCount(3);
+
+    // Vertical header data (not used)
+    chartData->setData(chartData->index(1, 0), i18n("January"));
+    chartData->setData(chartData->index(2, 0), i18n("July"));
+    chartData->setData(chartData->index(3, 0), i18n("December"));
+
+    // Horizontal header data
+    chartData->setData(chartData->index(0, 1), i18n("Column %1", 1));
+    chartData->setData(chartData->index(0, 2), i18n("Column %1", 2));
+
+    // First row
+    chartData->setData(chartData->index(1, 1), 10);
+    chartData->setData(chartData->index(1, 2), 3);
+    chartData->setData(chartData->index(1, 3), 6);
+
+    // Second row
+    chartData->setData(chartData->index(2, 1), 4);
+    chartData->setData(chartData->index(2, 2), 8);
+    chartData->setData(chartData->index(2, 3), 10);
+
+    // Third row
+    chartData->setData(chartData->index(3, 1), 5);
+    chartData->setData(chartData->index(3, 2), 10);
+    chartData->setData(chartData->index(3, 3), 13);
+
+    proxyModel->setFirstRowIsLabel(true);
+    proxyModel->setFirstColumnIsLabel(true);
+    proxyModel->reset(CellRegion(internalTable, QRect(1, 1, chartData->columnCount(), chartData->rowCount())));
 }
 
 #include "ChartShapeFactory.moc"
