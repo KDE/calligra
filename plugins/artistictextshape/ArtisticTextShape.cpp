@@ -789,7 +789,16 @@ void ArtisticTextShape::insertText(int charIndex, const QList<ArtisticTextRange>
         }
     }
 
-    // TODO: merge ranges with same style
+    for (auto it = m_ranges.begin(); it != m_ranges.end(); ++it) {
+        for (auto itNext = it + 1; itNext != m_ranges.end();) {
+            if (it->hasEqualStyle(*itNext)) {
+                it->appendText(itNext->text());
+                itNext = m_ranges.erase(itNext);
+            } else {
+                ++itNext;
+            }
+        }
+    }
 
     finishTextUpdate();
 }
@@ -811,9 +820,18 @@ void ArtisticTextShape::appendText(const ArtisticTextRange &text)
 {
     beginTextUpdate();
 
-    m_ranges.append(text);
+    bool merged = false;
+    for (ArtisticTextRange &textRange : m_ranges) {
+        if (textRange.hasEqualStyle(text)) {
+            textRange.appendText(text.text());
+            merged = true;
+            break;
+        }
+    }
 
-    // TODO: merge ranges with same style
+    if (!merged) {
+        m_ranges.append(text);
+    }
 
     finishTextUpdate();
 }
