@@ -114,6 +114,11 @@ void TestChartLayout::init()
 {
     area = QRectF(0., 0., 300., 400.);
     chart = new ChartShape(drm);
+    plotArea = chart->plotArea();
+    xAxisTitle = plotArea->xAxis()->title();
+    xAxisTitle->setVisible(true);
+    yAxisTitle = plotArea->yAxis()->title();
+    yAxisTitle->setVisible(true);
     // create a non-square legend
 //     chart->legend()->setTitle("Legend");
 
@@ -135,13 +140,10 @@ void TestChartLayout::init()
     chartSubTitleRect = itemRect(chartSubTitle);
     chartFooter = chart->footer();
     chartFooterRect = itemRect(chartFooter);
-    plotArea = chart->plotArea();
     plotAreaRect = itemRect(plotArea);
     legend = chart->legend();
     legendRect = itemRect(legend);
-    xAxisTitle = plotArea->xAxis()->title();
     xAxisTitleRect = itemRect(xAxisTitle);
-    yAxisTitle = plotArea->yAxis()->title();
     yAxisTitleRect = itemRect(yAxisTitle);
 
     secondaryXAxisTitle = plotArea->secondaryXAxis() ? plotArea->secondaryXAxis()->title() : 0;
