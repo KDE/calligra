@@ -88,8 +88,10 @@ using namespace KoChart;
 class PlotAreaConfigWidget::Private
 {
 public:
-    Private(QWidget *parent);
+    Private(PlotAreaConfigWidget *parent);
     ~Private();
+
+    PlotAreaConfigWidget *q;
 
     // Basic properties of the chart.
     ChartType              type;
@@ -179,8 +181,9 @@ public:
 };
 
 
-PlotAreaConfigWidget::Private::Private(QWidget *parent)
-    : tableEditorDialog(0)
+PlotAreaConfigWidget::Private::Private(PlotAreaConfigWidget *parent)
+    : q(parent)
+    , tableEditorDialog(0)
     , cellRegionDialog(0)
 {
     selectedDataSet = 0;

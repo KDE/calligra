@@ -1268,6 +1268,7 @@ void ChartShape::setEnableUserInteraction(bool enable)
 
 void ChartShape::shapeChanged(ChangeType type, KoShape *shape)
 {
+    Q_UNUSED(shape)
     layout()->containerChanged(this, type);
 }
 

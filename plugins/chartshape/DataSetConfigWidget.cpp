@@ -612,6 +612,7 @@ void DataSetConfigWidget::datasetPenSelected(const QColor& color)
 
 void DataSetConfigWidget::updateData(ChartType chartType, ChartSubtype subtype)
 {
+    Q_UNUSED(subtype)
     if (!chart) {
         return;
     }
