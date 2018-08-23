@@ -72,6 +72,7 @@ set (chartshape_LIB_SRCS
     commands/ChartTextShapeCommand.cpp
     commands/AddRemoveAxisCommand.cpp
     commands/GapCommand.cpp
+    commands/PlotAreaCommand.cpp
 )
 
 ki18n_wrap_ui(chartshape_LIB_SRCS

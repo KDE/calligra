@@ -116,7 +116,6 @@ void AxisCommand::undo()
     m_axis->setOdfAxisPosition(m_oldPosition);
     m_axis->updateKChartAxisPosition();
     m_axis->setOdfAxisLabelsPosition(m_oldLabelsPosition);
-
     m_chart->update();
     m_chart->relayout();
 }
@@ -128,7 +127,22 @@ void AxisCommand::setAxisShowTitle(bool show)
     } else {
         setText(kundo2_i18n("Hide Axis Title"));
     }
-    new ChartTextShapeCommand(m_axis->title(), m_chart, show, this);
+    ChartTextShapeCommand *cmd = new ChartTextShapeCommand(m_axis->title(), m_chart, show, this);
+    if (show && m_chart->chartType() == BarChartType) {
+        debugChartUiAxes<<m_axis<<m_axis->actualAxisPosition();
+        switch (m_axis->actualAxisPosition()) {
+            case KChart::CartesianAxis::Bottom:
+            case KChart::CartesianAxis::Top:
+                cmd->setRotation(0);
+            break;
+            case KChart::CartesianAxis::Left:
+                cmd->setRotation(-90);
+                break;
+            case KChart::CartesianAxis::Right:
+                cmd->setRotation(90);
+                break;
+        }
+    }
 }
 
 void AxisCommand::setShowAxis(bool show)
@@ -222,6 +236,21 @@ void AxisCommand::setAxisPosition(const QString &pos)
 {
     m_newPosition = pos;
     setText(kundo2_i18n("Set Axis Position"));
+    if (m_axis->title()->isVisible()) {
+        ChartTextShapeCommand *cmd = new ChartTextShapeCommand(m_axis->title(), m_chart, true, this);
+        if (m_chart->chartType() == BarChartType) {
+            debugChartUiAxes<<m_axis->actualAxisPosition();
+            switch (m_axis->actualAxisPosition()) {
+                case KChart::CartesianAxis::Bottom:
+                case KChart::CartesianAxis::Top:
+                    break;
+                case KChart::CartesianAxis::Left:
+                case KChart::CartesianAxis::Right:
+                    cmd->setRotation(m_axis->title()->rotation() - 180);
+                    break;
+            }
+        }
+    }
 }
 
 void AxisCommand::setAxisLabelsPosition(const QString &pos)

@@ -70,13 +70,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QCheckBox" name="axisShowTitle">
-        <property name="text">
-         <string>Show Title</string>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0">
        <widget class="QCheckBox" name="axisShow">
         <property name="text">
@@ -86,6 +79,9 @@
       </item>
       <item row="2" column="1">
        <widget class="QComboBox" name="axisPosition"/>
+      </item>
+      <item row="3" column="1">
+       <widget class="QComboBox" name="axislabelPosition"/>
       </item>
       <item row="2" column="2">
        <widget class="QToolButton" name="axisScalingButton">
@@ -100,9 +96,6 @@
          <string>Show Labels</string>
         </property>
        </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QComboBox" name="axislabelPosition"/>
       </item>
       <item row="3" column="2">
        <widget class="QToolButton" name="axisEditFontButton">
@@ -223,6 +216,13 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
         </layout>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="axisShowTitle">
+        <property name="text">
+         <string>Show Title</string>
+        </property>
        </widget>
       </item>
      </layout>

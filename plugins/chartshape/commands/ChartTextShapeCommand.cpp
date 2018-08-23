@@ -43,8 +43,6 @@ ChartTextShapeCommand::ChartTextShapeCommand(KoShape* textShape, ChartShape *cha
     , m_oldIsVisible(textShape->isVisible())
     , m_newIsVisible(isVisible)
 {
-    Q_ASSERT(m_oldIsVisible != m_newIsVisible);
-
     init();
 
     if (m_newIsVisible) {
@@ -60,27 +58,39 @@ ChartTextShapeCommand::~ChartTextShapeCommand()
 
 void ChartTextShapeCommand::redo()
 {
-    if (m_oldIsVisible == m_newIsVisible) {
-        return;
-    }
-    // Actually do the work
     KUndo2Command::redo();
-    m_textShape->setVisible(m_newIsVisible); // after redo()
+    if (m_newRotation != m_oldRotation) {
+        m_textShape->rotate(-m_oldRotation);
+        m_textShape->rotate(m_newRotation);
+    }
+    if (m_oldIsVisible != m_newIsVisible) {
+        m_textShape->setVisible(m_newIsVisible); // after redo()
+    }
     m_chart->update();
     m_chart->relayout();
 }
 
 void ChartTextShapeCommand::undo()
 {
-    if (m_oldIsVisible == m_newIsVisible) {
-        return;
-    }
     KUndo2Command::undo();
-    m_textShape->setVisible(m_oldIsVisible); // after undo()
+    if (m_newRotation != m_oldRotation) {
+        m_textShape->rotate(-m_newRotation);
+        m_textShape->rotate(m_oldRotation);
+    }
+    if (m_oldIsVisible != m_newIsVisible) {
+        m_textShape->setVisible(m_oldIsVisible); // after undo()
+    }
     m_chart->update();
     m_chart->relayout();
 }
 
 void ChartTextShapeCommand::init()
 {
+    m_newRotation = m_oldRotation = m_textShape->rotation();
+}
+
+void ChartTextShapeCommand::setRotation(int angle)
+{
+    // Do not need a text here as rotation will only be done when textshape is made visible in some way
+    m_newRotation = angle;
 }

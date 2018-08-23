@@ -199,6 +199,9 @@ public:
     void updateKChartAxisPosition();
     /// @return the KChart axis position
     KChart::CartesianAxis::Position kchartAxisPosition() const;
+    // @return the actual KChart axis position
+    // This is not quite kchartAxisPosition() as it also depends on bar diagram orientation
+    KChart::CartesianAxis::Position actualAxisPosition() const;
 
     /// @return true if direction is reversed
     bool axisDirectionReversed() const;

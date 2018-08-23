@@ -68,42 +68,41 @@ void AddRemoveAxisCommand::redo()
     mine = !mine;
     if (m_add) {
         m_axis->plotArea()->addAxis(m_axis);
+        m_axis->updateKChartAxisPosition();
         m_shapeManager->addShape(m_axis->title(), KoShapeManager::AddWithoutRepaint);
         m_axis->plotArea()->addTitleToLayout();
     } else {
-        m_shapeManager->remove(m_axis->title());
+//         m_shapeManager->remove(m_axis->title());
         m_axis->plotArea()->takeAxis(m_axis);
     }
     KUndo2Command::redo();
+    m_axis->plotArea()->plotAreaUpdate();
     m_chart->update();
+    m_chart->relayout();
 }
 
 void AddRemoveAxisCommand::undo()
 {
     mine = !mine;
     if (m_add) {
-        m_shapeManager->remove(m_axis->title());
         m_axis->plotArea()->takeAxis(m_axis);
+//         m_shapeManager->remove(m_axis->title());
     } else {
         m_axis->plotArea()->addAxis(m_axis);
+        m_axis->updateKChartAxisPosition();
         m_shapeManager->addShape(m_axis->title(), KoShapeManager::AddWithoutRepaint);
         m_axis->plotArea()->addTitleToLayout();
     }
     KUndo2Command::undo();
+    m_axis->plotArea()->plotAreaUpdate();
     m_chart->update();
+    m_chart->relayout();
 }
 
 void AddRemoveAxisCommand::initAdd()
 {
-    m_axis->title()->setVisible(false);
-    if (!m_axis->titleText().isEmpty()) {
-        new ChartTextShapeCommand(m_axis->title(), m_chart, true, this);
-    }
 }
 
 void AddRemoveAxisCommand::initRemove()
 {
-    if (m_axis->title()->isVisible()) {
-        new ChartTextShapeCommand(m_axis->title(), m_chart, false, this);
-    }
 }

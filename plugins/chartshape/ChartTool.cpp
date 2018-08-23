@@ -74,6 +74,7 @@
 #include "commands/ChartTextShapeCommand.h"
 #include "commands/AddRemoveAxisCommand.h"
 #include "commands/GapCommand.h"
+#include "commands/PlotAreaCommand.h"
 #include "ChartDebug.h"
 
 
@@ -187,6 +188,7 @@ void ChartTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void ChartTool::activate(ToolActivation, const QSet<KoShape*> &shapes)
 {
+    debugChartTool<<shapes;
     d->shape = 0;
     for (KoShape *s : shapes) {
         d->shape = dynamic_cast<ChartShape*>(s);
@@ -732,12 +734,12 @@ void ChartTool::setDataDirection(Qt::Orientation direction)
 void ChartTool::setChartOrientation(Qt::Orientation direction)
 {
     Q_ASSERT(d->shape);
-    if (!d->shape)
+    if (!d->shape) {
         return;
-
-    d->shape->plotArea()->setVertical(direction == Qt::Vertical);
-    d->shape->update();
-    d->shape->relayout();
+    }
+    PlotAreaCommand *command = new PlotAreaCommand(d->shape->plotArea());
+    command->setOrientation(direction);
+    canvas()->addCommand(command);
 }
 
 void ChartTool::setLegendTitle(const QString &title)
@@ -813,7 +815,6 @@ void ChartTool::addAxis(AxisDimension dimension, const QString& title)
     if (axis == d->shape->plotArea()->secondaryYAxis()) {
         axis->title()->rotate(90);
         axis->setOdfAxisPosition("end"); // right
-        axis->updateKChartAxisPosition();
     } else if (axis == d->shape->plotArea()->secondaryXAxis()) {
         axis->setOdfAxisPosition("end"); // top
         axis->updateKChartAxisPosition();

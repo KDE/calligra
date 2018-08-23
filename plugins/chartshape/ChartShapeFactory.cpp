@@ -390,7 +390,9 @@ KoShape *ChartShapeFactory::createDefaultShape(KoDocumentResourceManager *docume
     proxyModel->reset(CellRegion(internalTable, QRect(1, 1, 5, 4)));
 
     shape->plotArea()->xAxis()->setTitleText(i18n("Month"));
+    shape->plotArea()->xAxis()->title()->setVisible(true);
     shape->plotArea()->yAxis()->setTitleText(i18n("Growth in %"));
+    shape->plotArea()->yAxis()->title()->setVisible(true);
 
     shape->layout()->scheduleRelayout();
     shape->layout()->layout();

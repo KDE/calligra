@@ -70,6 +70,8 @@ public:
      */
     virtual void undo();
 
+    void setRotation(int angle);
+
 private:
     void init();
 
@@ -78,6 +80,8 @@ private:
     ChartShape *m_chart;
     bool m_oldIsVisible;
     bool m_newIsVisible;
+    int m_oldRotation;
+    int m_newRotation;
 };
 
 } // namespace KoChart

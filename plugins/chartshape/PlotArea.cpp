@@ -245,6 +245,7 @@ void PlotArea::Private::initAxes()
 
 void PlotArea::Private::updateAxesPosition()
 {
+    debugChartAxis<<axes;
     for (int i = 0; i < axes.count(); ++i) {
         axes.at(i)->updateKChartAxisPosition();
     }

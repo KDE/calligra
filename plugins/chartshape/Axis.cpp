@@ -465,6 +465,8 @@ void Axis::Private::createBarDiagram()
     attributes.setThreeDBrushEnabled(plotArea->isThreeD());
     kdBarDiagram->setThreeDBarAttributes(attributes);
 
+    q->plotAreaIsVerticalChanged();
+
     plotArea->parent()->legend()->kdLegend()->addDiagram(kdBarDiagram);
 }
 
@@ -848,6 +850,7 @@ Axis::Axis(PlotArea *parent, AxisDimension dimension)
     d->titleData->setResizeMethod(KoTextShapeDataBase::AutoResize);
     d->title->setAdditionalStyleAttribute("chart:auto-position", "true");
     d->title->setAllowedInteraction(KoShape::ShearingAllowed, false);
+    d->title->setVisible(false); // Needed to avoid problems when creating secondary axes (Axis creation needs review/refactoring)
 
     connect(d->plotArea, SIGNAL(pieAngleOffsetChanged(qreal)),
             this,        SLOT(setPieAngleOffset(qreal)));
@@ -2117,6 +2120,9 @@ QString Axis::odfAxisPosition() const
 
 void Axis::updateKChartAxisPosition()
 {
+    if (!isCartesian(d->plotArea->chartType())) {
+        return;
+    }
     if (d->plotArea->xAxis() == this) {
         KChart::CartesianAxis::Position pos = KChart::CartesianAxis::Bottom;
         if (d->axisPosition == "end") {
@@ -2163,6 +2169,28 @@ void Axis::updateKChartAxisPosition()
 CartesianAxis::Position Axis::kchartAxisPosition() const
 {
     return d->kdAxis->position();
+}
+
+CartesianAxis::Position Axis::actualAxisPosition() const
+{
+    CartesianAxis::Position pos = d->kdAxis->position();
+    if (d->plotArea->isVertical()) {
+        switch (pos) {
+            case KChart::CartesianAxis::Bottom:
+                pos = KChart::CartesianAxis::Left;
+                break;
+            case KChart::CartesianAxis::Top:
+                pos = KChart::CartesianAxis::Right;
+                break;
+            case KChart::CartesianAxis::Left:
+                pos = KChart::CartesianAxis::Bottom;
+                break;
+            case KChart::CartesianAxis::Right:
+                pos = KChart::CartesianAxis::Top;
+                break;
+        }
+    }
+    return pos;
 }
 
 bool Axis::axisDirectionReversed() const
