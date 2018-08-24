@@ -2148,7 +2148,7 @@ void Axis::updateKChartAxisPosition()
         if (d->axisPosition == "start") {
             pos = KChart::CartesianAxis::Bottom;
         }
-        Axis *yAxis = d->plotArea->secondaryYAxis();
+        Axis *yAxis = d->plotArea->yAxis();
         if (yAxis && yAxis->axisDirectionReversed()) {
             pos = pos == KChart::CartesianAxis::Top ? KChart::CartesianAxis::Bottom : KChart::CartesianAxis::Top;
         }
@@ -2158,7 +2158,7 @@ void Axis::updateKChartAxisPosition()
         if (d->axisPosition == "start") {
             pos = KChart::CartesianAxis::Left;
         }
-        Axis *xAxis = d->plotArea->secondaryXAxis();
+        Axis *xAxis = d->plotArea->xAxis();
         if (xAxis && xAxis->axisDirectionReversed()) {
             pos = pos == KChart::CartesianAxis::Right ? KChart::CartesianAxis::Left : KChart::CartesianAxis::Right;
         }
