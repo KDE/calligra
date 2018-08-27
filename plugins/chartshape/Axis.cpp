@@ -804,6 +804,7 @@ Axis::Axis(PlotArea *parent, AxisDimension dimension)
     parent->addAxis(this);
 
     d->plotArea = parent;
+    d->kdAxis->setObjectName(name());
     KChart::BackgroundAttributes batt(d->kdAxis->backgroundAttributes());
     batt.setBrush(QBrush(Qt::white));
     d->kdAxis->setBackgroundAttributes(batt);
