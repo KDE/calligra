@@ -110,6 +110,7 @@ private Q_SLOTS:
     void setAxisPosition(Axis *axis, const QString &pos);
     void setAxisLabelsPosition(Axis *axis, const QString &pos);
     void setAxisShowTitle(Axis *axis, bool show);
+    void setAxisShowLabels(Axis *axis, bool b);
     void setAxisShowMajorGridLines(Axis *axis, bool b = true);
     void setAxisShowMinorGridLines(Axis *axis, bool b = true);
     void setAxisUseLogarithmicScaling(Axis *axis, bool b = true);

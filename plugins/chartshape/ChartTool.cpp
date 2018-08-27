@@ -298,6 +298,8 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
             this,   SLOT(setAxisPosition(Axis*,QString)));
     connect(axes, SIGNAL(axisLabelsPositionChanged(Axis*,QString)),
             this,   SLOT(setAxisLabelsPosition(Axis*,QString)));
+    connect(axes, SIGNAL(axisShowLabelsChanged(Axis*,bool)),
+            this,   SLOT(setAxisShowLabels(Axis*,bool)));
 
     connect(axes, SIGNAL(axisShowMajorGridLinesChanged(Axis*,bool)),
             this,   SLOT(setAxisShowMajorGridLines(Axis*,bool)));
@@ -873,6 +875,17 @@ void ChartTool::setAxisLabelsPosition(Axis *axis, const QString &pos)
     AxisCommand *command = new AxisCommand(axis, d->shape);
     command->setAxisLabelsPosition(pos);
     canvas()->addCommand(command);
+}
+
+void ChartTool::setAxisShowLabels(Axis *axis, bool b)
+{
+    Q_ASSERT(d->shape);
+
+    AxisCommand *command = new AxisCommand(axis, d->shape);
+    command->setAxisShowLabels(b);
+    canvas()->addCommand(command);
+
+    d->shape->update();
 }
 
 void ChartTool::setAxisShowMajorGridLines(Axis *axis, bool b)

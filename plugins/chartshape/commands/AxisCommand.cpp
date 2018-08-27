@@ -35,6 +35,7 @@ AxisCommand::AxisCommand(Axis* axis, ChartShape* chart)
     : m_chart(chart)
     , m_axis(axis)
 {
+    m_newShowLabels = m_axis->showLabels();
     m_newShowMajorGridLines = m_axis->showMajorGrid();
     m_newShowMinorGridLines = m_axis->showMinorGrid();
     m_newUseLogarithmicScaling = m_axis->scalingIsLogarithmic();
@@ -51,6 +52,7 @@ AxisCommand::~AxisCommand()
 void AxisCommand::redo()
 {
     // save the old type
+    m_oldShowLabels = m_axis->showLabels();
     m_oldShowMajorGridLines = m_axis->showMajorGrid();
     m_oldShowMinorGridLines = m_axis->showMinorGrid();
     m_oldUseLogarithmicScaling = m_axis->scalingIsLogarithmic();
@@ -66,7 +68,8 @@ void AxisCommand::redo()
 
     KUndo2Command::redo();
 
-    if (m_oldShowMajorGridLines == m_newShowMajorGridLines && m_oldShowMinorGridLines == m_newShowMinorGridLines
+    if (m_oldShowLabels == m_newShowLabels
+        && m_oldShowMajorGridLines == m_newShowMajorGridLines && m_oldShowMinorGridLines == m_newShowMinorGridLines
         && m_oldUseLogarithmicScaling == m_newUseLogarithmicScaling && m_oldLabelsFont == m_newLabelsFont
         && m_oldShowAxis == m_newShowAxis
         && m_oldPosition == m_newPosition)
@@ -75,6 +78,7 @@ void AxisCommand::redo()
         }
 
     // Actually do the work
+    m_axis->setShowLabels(m_newShowLabels);
     m_axis->setShowMajorGrid(m_newShowMajorGridLines);
     m_axis->setShowMinorGrid(m_newShowMinorGridLines);
     m_axis->setScalingLogarithmic(m_oldUseLogarithmicScaling);
@@ -96,13 +100,15 @@ void AxisCommand::redo()
 void AxisCommand::undo()
 {
     KUndo2Command::undo();
-    if (m_oldShowMajorGridLines == m_newShowMajorGridLines && m_oldShowMinorGridLines == m_newShowMinorGridLines
+    if (m_oldShowLabels == m_newShowLabels
+        && m_oldShowMajorGridLines == m_newShowMajorGridLines && m_oldShowMinorGridLines == m_newShowMinorGridLines
         && m_oldUseLogarithmicScaling == m_newUseLogarithmicScaling && m_oldLabelsFont == m_newLabelsFont
         && m_oldShowAxis == m_newShowAxis
         && m_oldPosition == m_newPosition)
     {
         return;
     }
+    m_axis->setShowLabels(m_oldShowLabels);
     m_axis->setShowMajorGrid(m_oldShowMajorGridLines);
     m_axis->setShowMinorGrid(m_oldShowMinorGridLines);
     m_axis->setScalingLogarithmic(m_oldUseLogarithmicScaling);
@@ -116,6 +122,7 @@ void AxisCommand::undo()
     m_axis->setOdfAxisPosition(m_oldPosition);
     m_axis->updateKChartAxisPosition();
     m_axis->setOdfAxisLabelsPosition(m_oldLabelsPosition);
+
     m_chart->update();
     m_chart->relayout();
 }
@@ -153,6 +160,17 @@ void AxisCommand::setShowAxis(bool show)
         setText(kundo2_i18n("Show Axis"));
     } else {
         setText(kundo2_i18n("Hide Axis"));
+    }
+}
+
+void AxisCommand::setAxisShowLabels(bool show)
+{
+    m_newShowLabels = show;
+
+    if (show) {
+        setText(kundo2_i18n("Show Axis Labels"));
+    } else {
+        setText(kundo2_i18n("Hide Axis Labels"));
     }
 }
 

@@ -68,6 +68,7 @@ public:
 
     void setAxisShowTitle(bool show);
     void setShowAxis(bool show);
+    void setAxisShowLabels(bool show);
     void setAxisShowMajorGridLines(bool show);
     void setAxisShowMinorGridLines(bool show);
     void setAxisUseLogarithmicScaling(bool b);
@@ -84,6 +85,8 @@ private:
     Axis *m_axis;
     bool m_oldShowAxis;
     bool m_newShowAxis;
+    bool m_oldShowLabels;
+    bool m_newShowLabels;
     bool m_oldShowMajorGridLines;
     bool m_oldShowMinorGridLines;
     bool m_newShowMajorGridLines;

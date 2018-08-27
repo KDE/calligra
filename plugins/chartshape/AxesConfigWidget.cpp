@@ -104,6 +104,7 @@ AxesConfigWidget::Private::Private(AxesConfigWidget *parent)
     connect(ui.axisShow, SIGNAL(toggled(bool)), parent, SLOT(ui_axisShowChanged(bool)));
     connect(ui.axisPosition, SIGNAL(currentIndexChanged(int)), parent, SLOT(ui_axisPositionChanged(int)));
     connect(ui.axislabelPosition, SIGNAL(currentIndexChanged(int)), parent, SLOT(ui_axisLabelsPositionChanged(int)));
+    connect(ui.axisShowLabels, SIGNAL(toggled(bool)), parent, SLOT(ui_axisShowLabelsChanged(bool)));
     connect(ui.axisShowMajorGridLines, SIGNAL(toggled(bool)), parent, SLOT(ui_axisShowMajorGridLinesChanged(bool)));
     connect(ui.axisShowMinorGridLines, SIGNAL(toggled(bool)), parent, SLOT(ui_axisShowMinorGridLinesChanged(bool)));
     connect(ui.axes, SIGNAL(currentIndexChanged(int)),parent, SLOT(ui_axisSelectionChanged(int)));
@@ -295,6 +296,7 @@ void AxesConfigWidget::ui_axisSelectionChanged(int index)
             break;
         }
     }
+    d->ui.axisShowLabels->setChecked(axis->showLabels());
     d->ui.axisShowMajorGridLines->setChecked(axis->showMajorGrid());
     d->ui.axisShowMinorGridLines->setChecked(axis->showMinorGrid());
 
@@ -358,6 +360,14 @@ void AxesConfigWidget::ui_axisLabelsPositionChanged(int index)
     }
 }
 
+void AxesConfigWidget::ui_axisShowLabelsChanged(bool value)
+{
+    Axis *a = axis(d->ui.axes->currentIndex());
+    if (a) {
+        debugChartUiAxes<<a<<value;
+        emit axisShowLabelsChanged(a, value);
+    }
+}
 
 void AxesConfigWidget::ui_axisShowMajorGridLinesChanged(bool b)
 {

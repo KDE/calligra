@@ -68,6 +68,7 @@ public Q_SLOTS:
     void ui_axisShowChanged(bool b);
     void ui_axisPositionChanged(int index);
     void ui_axisLabelsPositionChanged(int index);
+    void ui_axisShowLabelsChanged(bool value);
     void ui_axisShowMajorGridLinesChanged(bool b);
     void ui_axisShowMinorGridLinesChanged(bool b);
     void ui_axisUseLogarithmicScalingChanged(bool b);
@@ -86,6 +87,7 @@ Q_SIGNALS:
     void axisShowChanged(Axis *axis, bool b);
     void axisPositionChanged(Axis *axis, const QString &pos);
     void axisLabelsPositionChanged(Axis *axis, const QString &pos);
+    void axisShowLabelsChanged(Axis *axis, bool value);
     void axisShowMajorGridLinesChanged(Axis *axis, bool b);
     void axisShowMinorGridLinesChanged(Axis *axis, bool b);
     void axisUseLogarithmicScalingChanged(Axis *axis, bool b);
