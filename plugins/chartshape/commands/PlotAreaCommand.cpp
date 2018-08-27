@@ -74,6 +74,7 @@ void PlotAreaCommand::redo()
         }
     }
     m_chart->update();
+    m_chart->relayout();
 }
 
 void PlotAreaCommand::undo()
@@ -105,6 +106,7 @@ void PlotAreaCommand::undo()
     }
     KUndo2Command::undo();
     m_chart->update();
+    m_chart->relayout();
 }
 
 void PlotAreaCommand::setOrientation(Qt::Orientation orientation)

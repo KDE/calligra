@@ -1878,6 +1878,7 @@ void Axis::plotAreaIsVerticalChanged()
     if (d->kdBarDiagram) {
         d->kdBarDiagram->setOrientation(d->plotArea->isVertical() ? Qt::Horizontal : Qt::Vertical);
     }
+    updateKChartAxisPosition();
 }
 
 void Axis::Private::updatePosition()
@@ -2122,49 +2123,97 @@ QString Axis::odfAxisPosition() const
 void Axis::updateKChartAxisPosition()
 {
     if (!isCartesian(d->plotArea->chartType())) {
+        debugChartAxis<<name()<<"Not a catesian chart"<<d->plotArea->chartType();
         return;
     }
+    KChart::CartesianAxis::Position pos;
     if (d->plotArea->xAxis() == this) {
-        KChart::CartesianAxis::Position pos = KChart::CartesianAxis::Bottom;
-        if (d->axisPosition == "end") {
-            pos = KChart::CartesianAxis::Top;
-        }
-        Axis *yAxis = d->plotArea->yAxis();
-        if (yAxis && yAxis->axisDirectionReversed()) {
-            pos = pos == KChart::CartesianAxis::Bottom ? KChart::CartesianAxis::Top : KChart::CartesianAxis::Bottom;
+        if (d->plotArea->isVertical()) {
+            pos = KChart::CartesianAxis::Left;
+            if (d->axisPosition == "end") {
+                pos = KChart::CartesianAxis::Right;
+            }
+            Axis *yAxis = d->plotArea->yAxis();
+            if (yAxis && yAxis->axisDirectionReversed()) {
+                pos = pos == KChart::CartesianAxis::Left ? KChart::CartesianAxis::Right : KChart::CartesianAxis::Left;
+            }
+        } else {
+            pos = KChart::CartesianAxis::Bottom;
+            if (d->axisPosition == "end") {
+                pos = KChart::CartesianAxis::Top;
+            }
+            Axis *yAxis = d->plotArea->yAxis();
+            if (yAxis && yAxis->axisDirectionReversed()) {
+                pos = pos == KChart::CartesianAxis::Bottom ? KChart::CartesianAxis::Top : KChart::CartesianAxis::Bottom;
+            }
         }
         d->kdAxis->setPosition(pos);
     } else if (d->plotArea->yAxis() == this) {
-        KChart::CartesianAxis::Position pos = KChart::CartesianAxis::Left;
-        if (d->axisPosition == "end") {
-            pos = KChart::CartesianAxis::Right;
-        }
-        Axis *xAxis = d->plotArea->xAxis();
-        if (xAxis && xAxis->axisDirectionReversed()) {
-            pos = pos == KChart::CartesianAxis::Left ? KChart::CartesianAxis::Right : KChart::CartesianAxis::Left;
+        if (d->plotArea->isVertical()) {
+            pos = KChart::CartesianAxis::Bottom;
+            if (d->axisPosition == "end") {
+                pos = KChart::CartesianAxis::Top;
+            }
+            Axis *xAxis = d->plotArea->xAxis();
+            if (xAxis && xAxis->axisDirectionReversed()) {
+                pos = pos == KChart::CartesianAxis::Bottom ? KChart::CartesianAxis::Top : KChart::CartesianAxis::Bottom;
+            }
+        } else {
+            pos = KChart::CartesianAxis::Left;
+            if (d->axisPosition == "end") {
+                pos = KChart::CartesianAxis::Right;
+            }
+            Axis *xAxis = d->plotArea->xAxis();
+            if (xAxis && xAxis->axisDirectionReversed()) {
+                pos = pos == KChart::CartesianAxis::Left ? KChart::CartesianAxis::Right : KChart::CartesianAxis::Left;
+            }
         }
         d->kdAxis->setPosition(pos);
     } else if (d->plotArea->secondaryXAxis() == this) {
-        KChart::CartesianAxis::Position pos = KChart::CartesianAxis::Top;
-        if (d->axisPosition == "start") {
-            pos = KChart::CartesianAxis::Bottom;
-        }
-        Axis *yAxis = d->plotArea->yAxis();
-        if (yAxis && yAxis->axisDirectionReversed()) {
-            pos = pos == KChart::CartesianAxis::Top ? KChart::CartesianAxis::Bottom : KChart::CartesianAxis::Top;
+        if (d->plotArea->isVertical()) {
+            pos = KChart::CartesianAxis::Right;
+            if (d->axisPosition == "start") {
+                pos = KChart::CartesianAxis::Left;
+            }
+            Axis *yAxis = d->plotArea->yAxis();
+            if (yAxis && yAxis->axisDirectionReversed()) {
+                pos = pos == KChart::CartesianAxis::Left ? KChart::CartesianAxis::Right : KChart::CartesianAxis::Left;
+            }
+        } else {
+            pos = KChart::CartesianAxis::Top;
+            if (d->axisPosition == "start") {
+                pos = KChart::CartesianAxis::Bottom;
+            }
+            Axis *yAxis = d->plotArea->yAxis();
+            if (yAxis && yAxis->axisDirectionReversed()) {
+                pos = pos == KChart::CartesianAxis::Top ? KChart::CartesianAxis::Bottom : KChart::CartesianAxis::Top;
+            }
         }
         d->kdAxis->setPosition(pos);
     } else if (d->plotArea->secondaryYAxis() == this) {
-        KChart::CartesianAxis::Position pos = KChart::CartesianAxis::Right;
-        if (d->axisPosition == "start") {
-            pos = KChart::CartesianAxis::Left;
-        }
-        Axis *xAxis = d->plotArea->xAxis();
-        if (xAxis && xAxis->axisDirectionReversed()) {
-            pos = pos == KChart::CartesianAxis::Right ? KChart::CartesianAxis::Left : KChart::CartesianAxis::Right;
+        if (d->plotArea->isVertical()) {
+            pos = KChart::CartesianAxis::Top;
+            if (d->axisPosition == "start") {
+                pos = KChart::CartesianAxis::Bottom;
+            }
+            Axis *xAxis = d->plotArea->xAxis();
+            if (xAxis && xAxis->axisDirectionReversed()) {
+                pos = pos == KChart::CartesianAxis::Bottom ? KChart::CartesianAxis::Top : KChart::CartesianAxis::Bottom;
+            }
+        } else {
+            pos = KChart::CartesianAxis::Right;
+            if (d->axisPosition == "start") {
+                pos = KChart::CartesianAxis::Left;
+            }
+            Axis *xAxis = d->plotArea->xAxis();
+            if (xAxis && xAxis->axisDirectionReversed()) {
+                pos = pos == KChart::CartesianAxis::Right ? KChart::CartesianAxis::Left : KChart::CartesianAxis::Right;
+            }
         }
         d->kdAxis->setPosition(pos);
     }
+    debugChartAxis<<name()<<d->kdAxis<<pos;
+    d->plotArea->plotAreaUpdate();
 }
 
 CartesianAxis::Position Axis::kchartAxisPosition() const
