@@ -452,7 +452,7 @@ bool PlotArea::addAxis(Axis *axis)
         // let each axis know about the other axis
         foreach (Axis *_axis, d->axes) {
             if (_axis->isVisible())
-                _axis->registerKdAxis(axis->kdAxis());
+                _axis->registerAxis(axis);
         }
     }
 
@@ -487,11 +487,6 @@ bool PlotArea::takeAxis(Axis *axis)
     }
     d->axes.removeAll(axis);
     axis->removeAxisFromDiagrams(true);
-    if (axis->dimension() == XAxisDimension) {
-        foreach (Axis *_axis, d->axes) {
-            _axis->deregisterKdAxis(axis->kdAxis());
-        }
-    }
     requestRepaint();
     return true;
 }

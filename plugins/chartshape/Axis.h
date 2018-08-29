@@ -143,8 +143,9 @@ public:
     void plotAreaChartSubTypeChanged(ChartSubtype chartSubType);
     void plotAreaIsVerticalChanged();
 
-    void registerKdAxis(KChart::CartesianAxis *axis);
-    void deregisterKdAxis(KChart::CartesianAxis *axis);
+    void registerAxis(Axis *axis);
+    void registerDiagram(KChart::AbstractCartesianDiagram *diagram);
+    void removeAxisFromDiagrams(bool clear = false);
 
     void update() const;
     void requestRepaint() const;

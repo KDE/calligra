@@ -105,6 +105,8 @@ public:
     void deleteDiagram(ChartType chartType);
     void deleteDiagram(KChart::AbstractDiagram *diagram);
 
+    void restoreDiagrams();
+
     void createBarDiagram();
     void createLineDiagram();
     void createAreaDiagram();
@@ -150,6 +152,8 @@ public:
     KChart::PolarCoordinatePlane     *kdPolarPlane;
     KChart::RadarCoordinatePlane     *kdRadarPlane;
     KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat;
+
+    QList<QPointer<KChart::AbstractCartesianDiagram> > diagrams;
 
     QPointer<KChart::BarDiagram> kdBarDiagram;
     QPointer<KChart::LineDiagram> kdLineDiagram;
@@ -261,6 +265,8 @@ Axis::Private::~Private()
 {
     Q_ASSERT(plotArea);
 
+    q->removeAxisFromDiagrams();
+
     delete kdBarDiagram;
     delete kdLineDiagram;
     delete kdAreaDiagram;
@@ -362,7 +368,7 @@ KChart::AbstractDiagram *Axis::Private::getDiagramAndCreateIfNeeded(ChartType ch
     }
 
     adjustAllDiagrams();
-    debugChartAxis<<"created diagram"<<diagram<<"for"<<chartType;
+    debugChartAxis<<q->name()<<"created diagram"<<diagram<<"for"<<chartType;
     return diagram;
 }
 
@@ -445,14 +451,18 @@ void Axis::Private::createBarDiagram()
         kdBarDiagram->setUnitSuffix("%", kdBarDiagram->orientation());
     }
 
-    if (isVisible)
+    if (isVisible) {
         kdBarDiagram->addAxis(kdAxis);
+        q->registerDiagram(kdBarDiagram);
+    }
     kdPlane->addDiagram(kdBarDiagram);
 
     Q_ASSERT(plotArea);
     foreach (Axis *axis, plotArea->axes()) {
-        if (axis->isVisible() && axis->dimension() == XAxisDimension)
+        if (axis->isVisible() && axis->dimension() == XAxisDimension) {
             kdBarDiagram->addAxis(axis->kdAxis());
+            axis->registerDiagram(kdBarDiagram);
+        }
     }
 
     // Set default bar diagram attributes
@@ -486,15 +496,20 @@ void Axis::Private::createLineDiagram()
     else if (plotAreaChartSubType == PercentChartSubtype)
         kdLineDiagram->setType(KChart::LineDiagram::Percent);
 
-    if (isVisible)
+    if (isVisible) {
         kdLineDiagram->addAxis(kdAxis);
+        q->registerDiagram(kdLineDiagram);
+    }
     kdPlane->addDiagram(kdLineDiagram);
 
     Q_ASSERT(plotArea);
     foreach (Axis *axis, plotArea->axes()) {
-        if (axis->dimension() == XAxisDimension)
-            if (axis->isVisible())
+        if (axis->dimension() == XAxisDimension) {
+            if (axis->isVisible()) {
                 kdLineDiagram->addAxis(axis->kdAxis());
+                axis->registerDiagram(kdLineDiagram);
+            }
+        }
     }
 
     // Propagate existing settings
@@ -537,15 +552,20 @@ void Axis::Private::createAreaDiagram()
         kdAreaDiagram->setUnitSuffix("%", Qt::Vertical);
     }
 
-    if (isVisible)
+    if (isVisible) {
         kdAreaDiagram->addAxis(kdAxis);
+        q->registerDiagram(kdAreaDiagram);
+    }
     kdPlane->addDiagram(kdAreaDiagram);
 
     Q_ASSERT(plotArea);
     foreach (Axis *axis, plotArea->axes()) {
-        if (axis->dimension() == XAxisDimension)
-            if (axis->isVisible())
+        if (axis->dimension() == XAxisDimension) {
+            if (axis->isVisible()) {
                 kdAreaDiagram->addAxis(axis->kdAxis());
+                axis->registerDiagram(kdAreaDiagram);
+            }
+        }
     }
 
     // Propagate existing settings
@@ -653,15 +673,20 @@ void Axis::Private::createScatterDiagram()
 
     kdScatterDiagram->setPen(Qt::NoPen);
 
-    if (isVisible)
+    if (isVisible) {
         kdScatterDiagram->addAxis(kdAxis);
+        q->registerDiagram(kdScatterDiagram);
+    }
     kdPlane->addDiagram(kdScatterDiagram);
 
 
     foreach (Axis *axis, plotArea->axes()) {
-        if (axis->dimension() == XAxisDimension)
-            if (axis->isVisible())
+        if (axis->dimension() == XAxisDimension) {
+            if (axis->isVisible()) {
                 kdScatterDiagram->addAxis(axis->kdAxis());
+                axis->registerDiagram(kdScatterDiagram);
+            }
+        }
     }
 
     // Propagate existing settings
@@ -702,15 +727,20 @@ void Axis::Private::createStockDiagram()
         kdStockDiagram->setType(KChart::StockDiagram::Percent);
 #endif
 
-    if (isVisible)
+    if (isVisible) {
         kdStockDiagram->addAxis(kdAxis);
+        q->registerDiagram(kdStockDiagram);
+    }
     kdPlane->addDiagram(kdStockDiagram);
 
     Q_ASSERT(plotArea);
     foreach (Axis *axis, plotArea->axes()) {
-        if (axis->dimension() == XAxisDimension)
-            if (axis->isVisible())
+        if (axis->dimension() == XAxisDimension) {
+            if (axis->isVisible()) {
                 kdStockDiagram->addAxis(axis->kdAxis());
+                axis->registerDiagram(kdStockDiagram);
+            }
+        }
     }
 
     plotArea->parent()->legend()->kdLegend()->addDiagram(kdStockDiagram);
@@ -733,8 +763,10 @@ void Axis::Private::createBubbleDiagram()
 
     foreach (Axis *axis, plotArea->axes()) {
         //if (axis->dimension() == XAxisDimension)
-            if (axis->isVisible())
-                kdBubbleDiagram->addAxis(axis->kdAxis());
+        if (axis->isVisible()) {
+            kdBubbleDiagram->addAxis(axis->kdAxis());
+            q->registerDiagram(kdBubbleDiagram);
+        }
     }
 
      // disable the connecting line
@@ -1905,38 +1937,61 @@ void Axis::Private::updatePosition()
 //     q->requestRepaint();
 }
 
-void Axis::registerKdAxis(KChart::CartesianAxis *axis)
+void Axis::registerAxis(Axis *axis)
 {
-    if (d->kdBarDiagram)
-        d->kdBarDiagram->addAxis(axis);
-    if (d->kdLineDiagram)
-        d->kdLineDiagram->addAxis(axis);
-    if (d->kdAreaDiagram)
-        d->kdAreaDiagram->addAxis(axis);
-    if (d->kdScatterDiagram)
-        d->kdScatterDiagram->addAxis(axis);
-    if (d->kdStockDiagram)
-        d->kdStockDiagram->addAxis(axis);
-    if (d->kdBubbleDiagram)
-        d->kdBubbleDiagram->addAxis(axis);
+    if (d->kdBarDiagram) {
+        d->kdBarDiagram->addAxis(axis->kdAxis());
+        axis->registerDiagram(d->kdBarDiagram);
+    }
+    if (d->kdLineDiagram) {
+        d->kdLineDiagram->addAxis(axis->kdAxis());
+        axis->registerDiagram(d->kdLineDiagram);
+    }
+    if (d->kdAreaDiagram) {
+        d->kdAreaDiagram->addAxis(axis->kdAxis());
+        axis->registerDiagram(d->kdAreaDiagram);
+    }
+    if (d->kdScatterDiagram) {
+        d->kdScatterDiagram->addAxis(axis->kdAxis());
+        axis->registerDiagram(d->kdScatterDiagram);
+    }
+    if (d->kdStockDiagram) {
+        d->kdStockDiagram->addAxis(axis->kdAxis());
+        axis->registerDiagram(d->kdStockDiagram);
+    }
+    if (d->kdBubbleDiagram) {
+        d->kdBubbleDiagram->addAxis(axis->kdAxis());
+        axis->registerDiagram(d->kdBubbleDiagram);
+    }
     // FIXME: Add all diagrams here
+
 }
 
-void Axis::deregisterKdAxis(KChart::CartesianAxis *axis)
+void Axis::registerDiagram(KChart::AbstractCartesianDiagram *diagram)
 {
-    if (d->kdBarDiagram)
-        d->kdBarDiagram->takeAxis(axis);
-    if (d->kdLineDiagram)
-        d->kdLineDiagram->takeAxis(axis);
-    if (d->kdAreaDiagram)
-        d->kdAreaDiagram->takeAxis(axis);
-    if (d->kdScatterDiagram)
-        d->kdScatterDiagram->takeAxis(axis);
-    if (d->kdStockDiagram)
-        d->kdStockDiagram->takeAxis(axis);
-    if (d->kdBubbleDiagram)
-        d->kdBubbleDiagram->takeAxis(axis);
-    // FIXME: Add all diagrams here
+    if (!d->diagrams.contains(diagram)) {
+        d->diagrams << diagram;
+    }
+}
+
+void Axis::Private::restoreDiagrams()
+{
+    diagrams.removeAll(nullptr);
+    for (KChart::AbstractCartesianDiagram *diag : diagrams) {
+        diag->addAxis(kdAxis);
+    }
+}
+
+void Axis::removeAxisFromDiagrams(bool clear)
+{
+    // HACK to remove an x-axis from a y-axis diagram
+    d->diagrams.removeAll(nullptr);
+    for (KChart::AbstractCartesianDiagram *diag : d->diagrams) {
+        diag->takeAxis(d->kdAxis);
+    }
+    if (clear) {
+        d->diagrams.clear();
+    }
 }
 
 void Axis::setThreeD(bool threeD)
@@ -2091,12 +2146,13 @@ bool Axis::isVisible() const
 
 void Axis::setVisible(bool visible)
 {
+    debugChartAxis<<d->isVisible<<"->"<<visible<<d->kdBarDiagram;
     d->isVisible = visible;
-
-    if (visible)
-        registerKdAxis(d->kdAxis);
-    else
-        deregisterKdAxis(d->kdAxis);
+    if (visible) {
+        d->restoreDiagrams();
+    } else {
+        removeAxisFromDiagrams();
+    }
 }
 
 KoOdfNumberStyles::NumericStyleFormat *Axis::numericStyleFormat() const
