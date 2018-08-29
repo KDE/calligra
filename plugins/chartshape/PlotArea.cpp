@@ -486,6 +486,7 @@ bool PlotArea::takeAxis(Axis *axis)
         d->automaticallyHiddenAxisTitles.removeAll(axis->title());
     }
     d->axes.removeAll(axis);
+    axis->removeAxisFromDiagrams(true);
     if (axis->dimension() == XAxisDimension) {
         foreach (Axis *_axis, d->axes) {
             _axis->deregisterKdAxis(axis->kdAxis());
@@ -555,10 +556,21 @@ void PlotArea::setChartType(ChartType type)
         }
         d->automaticallyHiddenAxisTitles.clear();
     }
-
+    CellRegion region = d->shape->proxyModel()->cellRangeAddress();
+    if (type == CircleChartType || type == RingChartType) {
+        d->shape->proxyModel()->setManualControl(false);
+        xAxis()->clearDataSets();
+        yAxis()->clearDataSets();
+        if (secondaryYAxis()) {
+            secondaryYAxis()->clearDataSets();
+        }
+        if (secondaryXAxis()) {
+            secondaryXAxis()->clearDataSets();
+        }
+    }
     CoordinatePlaneList planesToRemove;
     // First remove secondary cartesian plane as it references the primary
-    // plane, otherwise KD Chart will come down crashing on us. Note that
+    // plane, otherwise KChart will come down crashing on us. Note that
     // removing a plane that's not in the chart is not a problem.
     planesToRemove << d->kdCartesianPlaneSecondary << d->kdCartesianPlanePrimary
                    << d->kdPolarPlane << d->kdRadarPlane;
@@ -573,6 +585,12 @@ void PlotArea::setChartType(ChartType type)
 
     foreach (Axis *axis, d->axes) {
         axis->plotAreaChartTypeChanged(type);
+    }
+    if (type == CircleChartType || type == RingChartType) {
+        d->shape->proxyModel()->reset(region);
+    }
+    if (type != BarChartType) {
+        setVertical(false); // Only supported by bar charts
     }
     requestRepaint();
 }
