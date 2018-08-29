@@ -1949,8 +1949,9 @@ QDebug operator<<(QDebug dbg, KoChart::DataSet *ds)
         for (int i = 0; i < ds->size(); ++i) {
             cat << ds->categoryData(i);
         }
+        QString axis = ds->attachedAxis() ? ds->attachedAxis()->name() : "0x0";
         return dbg.nospace()<<endl
-        <<"\tDataSet[chart:"<<ds->chartType()<<" size:"<<ds->size()<<" label:"<<ds->labelData()<<endl
+        <<"\tDataSet[chart:"<<ds->chartType()<<" axis:"<<axis<<" size:"<<ds->size()<<" label:"<<ds->labelData()<<endl
         <<"\t  X:"<<ds->xDataRegion().toString()<<':'<<x<<endl
         <<"\t  Y:"<<ds->yDataRegion().toString()<<':'<<y<<endl
         <<"\t  Cust:"<<ds->customDataRegion().toString()<<':'<<cust<<endl
