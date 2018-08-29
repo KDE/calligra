@@ -490,9 +490,8 @@ void ChartTool::setDataSetBrush(DataSet *dataSet, const QColor& color, int secti
     DatasetCommand *command = new DatasetCommand(dataSet, d->shape, section);
     command->setDataSetBrush(color);
     canvas()->addCommand(command);
-
-    d->shape->update();
 }
+
 void ChartTool::setDataSetPen(DataSet *dataSet, const QColor& color, int section)
 {
     Q_ASSERT(d->shape);
@@ -503,8 +502,6 @@ void ChartTool::setDataSetPen(DataSet *dataSet, const QColor& color, int section
     DatasetCommand *command = new DatasetCommand(dataSet, d->shape, section);
     command->setDataSetPen(color);
     canvas()->addCommand(command);
-
-    d->shape->update();
 }
 
 void ChartTool::setDataSetMarker(DataSet *dataSet, OdfMarkerStyle style)
@@ -516,8 +513,6 @@ void ChartTool::setDataSetMarker(DataSet *dataSet, OdfMarkerStyle style)
     DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
     command->setDataSetMarker(style);
     canvas()->addCommand(command);
-
-    d->shape->update();
 }
 void ChartTool::setDataSetAxis(DataSet *dataSet, Axis *axis)
 {
@@ -540,7 +535,6 @@ void ChartTool::setDataSetShowCategory(DataSet *dataSet, bool b, int section)
     command->setDataSetShowCategory(b);
     canvas()->addCommand(command);
 
-    d->shape->update();
     debugChartTool<<section<<b<<':'<<dataSet->valueLabelType(section).category;
 }
 
@@ -555,7 +549,6 @@ void ChartTool::setDataSetShowNumber(DataSet *dataSet, bool b, int section)
     command->setDataSetShowNumber(b);
     canvas()->addCommand(command);
 
-    d->shape->update();
     debugChartTool<<section<<b<<':'<<dataSet->valueLabelType(section).number;
 }
 
@@ -569,7 +562,6 @@ void ChartTool::setDataSetShowPercent(DataSet *dataSet, bool b, int section)
     command->setDataSetShowPercent(b);
     canvas()->addCommand(command);
 
-    d->shape->update();
     debugChartTool<<section<<b<<':'<<dataSet->valueLabelType(section).percentage;
 }
 
@@ -583,7 +575,6 @@ void ChartTool::setDataSetShowSymbol(DataSet *dataSet, bool b, int section)
     command->setDataSetShowSymbol(b);
     canvas()->addCommand(command);
 
-    d->shape->update();
     debugChartTool<<section<<b<<':'<<dataSet->valueLabelType(section).symbol;
 }
 
@@ -605,8 +596,6 @@ void ChartTool::setShowTitle(bool show)
 
     ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->title(), d->shape, show);
     canvas()->addCommand(command);
-
-    d->shape->update();
 }
 
 void ChartTool::setTitlePositioning(int index)
@@ -647,8 +636,6 @@ void ChartTool::setShowSubTitle(bool show)
 
     ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->subTitle(), d->shape, show);
     canvas()->addCommand(command);
-
-    d->shape->update();
 }
 
 void ChartTool::setSubTitlePositioning(int index)
@@ -689,8 +676,6 @@ void ChartTool::setShowFooter(bool show)
 
     ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->footer(), d->shape, show);
     canvas()->addCommand(command);
-
-    d->shape->update();
 }
 
 void ChartTool::setFooterPositioning(int index)
@@ -844,8 +829,6 @@ void ChartTool::setAxisShowTitle(Axis *axis, bool show)
     AxisCommand *command = new AxisCommand(axis, d->shape);
     command->setAxisShowTitle(show);
     canvas()->addCommand(command);
-
-    d->shape->update();
 }
 
 void ChartTool::setShowAxis(Axis *axis, bool show)
@@ -855,8 +838,6 @@ void ChartTool::setShowAxis(Axis *axis, bool show)
     AxisCommand *command = new AxisCommand(axis, d->shape);
     command->setShowAxis(show);
     canvas()->addCommand(command);
-
-    d->shape->update();
 }
 
 void ChartTool::setAxisPosition(Axis *axis, const QString &pos)
@@ -884,8 +865,6 @@ void ChartTool::setAxisShowLabels(Axis *axis, bool b)
     AxisCommand *command = new AxisCommand(axis, d->shape);
     command->setAxisShowLabels(b);
     canvas()->addCommand(command);
-
-    d->shape->update();
 }
 
 void ChartTool::setAxisShowMajorGridLines(Axis *axis, bool b)
@@ -895,8 +874,6 @@ void ChartTool::setAxisShowMajorGridLines(Axis *axis, bool b)
     AxisCommand *command = new AxisCommand(axis, d->shape);
     command->setAxisShowMajorGridLines(b);
     canvas()->addCommand(command);
-
-    d->shape->update();
 }
 
 void ChartTool::setAxisShowMinorGridLines(Axis *axis, bool b)
@@ -906,8 +883,6 @@ void ChartTool::setAxisShowMinorGridLines(Axis *axis, bool b)
     AxisCommand *command = new AxisCommand(axis, d->shape);
     command->setAxisShowMinorGridLines(b);
     canvas()->addCommand(command);
-
-    d->shape->update();
 }
 
 void ChartTool::setAxisUseLogarithmicScaling(Axis *axis, bool b)
@@ -917,8 +892,6 @@ void ChartTool::setAxisUseLogarithmicScaling(Axis *axis, bool b)
     AxisCommand *command = new AxisCommand(axis, d->shape);
     command->setAxisUseLogarithmicScaling(b);
     canvas()->addCommand(command);
-
-    d->shape->update();
 }
 
 void ChartTool::setAxisStepWidth(Axis *axis, qreal width)
@@ -928,8 +901,6 @@ void ChartTool::setAxisStepWidth(Axis *axis, qreal width)
     AxisCommand *command = new AxisCommand(axis, d->shape);
     command->setAxisStepWidth(width);
     canvas()->addCommand(command);
-
-    d->shape->update();
 }
 
 void ChartTool::setAxisSubStepWidth(Axis *axis, qreal width)
@@ -939,8 +910,6 @@ void ChartTool::setAxisSubStepWidth(Axis *axis, qreal width)
     AxisCommand *command = new AxisCommand(axis, d->shape);
     command->setAxisSubStepWidth(width);
     canvas()->addCommand(command);
-
-    d->shape->update();
 }
 
 void ChartTool::setAxisUseAutomaticStepWidth(Axis *axis, bool automatic)
@@ -950,8 +919,6 @@ void ChartTool::setAxisUseAutomaticStepWidth(Axis *axis, bool automatic)
     AxisCommand *command = new AxisCommand(axis, d->shape);
     command->setAxisUseAutomaticStepWidth(automatic);
     canvas()->addCommand(command);
-
-    d->shape->update();
 }
 
 void ChartTool::setAxisUseAutomaticSubStepWidth(Axis *axis, bool automatic)
@@ -961,8 +928,6 @@ void ChartTool::setAxisUseAutomaticSubStepWidth(Axis *axis, bool automatic)
     AxisCommand *command = new AxisCommand(axis, d->shape);
     command->setAxisUseAutomaticSubStepWidth(automatic);
     canvas()->addCommand(command);
-
-    d->shape->update();
 }
 
 void ChartTool::setAxisLabelsFont(Axis *axis, const QFont &font)
@@ -972,8 +937,6 @@ void ChartTool::setAxisLabelsFont(Axis *axis, const QFont &font)
     AxisCommand *command = new AxisCommand(axis, d->shape);
     command->setAxisLabelsFont(font);
     canvas()->addCommand(command);
-
-    d->shape->update();
 }
 
 
@@ -1015,6 +978,4 @@ void ChartTool::setShowLegend(bool show)
         command->setText(kundo2_i18n("Hide Legend"));
     }
     canvas()->addCommand(command);
-
-    d->shape->legend()->update();
 }
