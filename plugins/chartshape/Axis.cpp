@@ -366,9 +366,9 @@ KChart::AbstractDiagram *Axis::Private::getDiagramAndCreateIfNeeded(ChartType ch
     default:
         ;
     }
-
+    diagram->setObjectName(q->name()); // for debug
     adjustAllDiagrams();
-    debugChartAxis<<q->name()<<"created diagram"<<diagram<<"for"<<chartType;
+    debugChartAxis<<q->name()<<"diagram"<<diagram<<"for"<<chartType;
     return diagram;
 }
 
@@ -504,11 +504,9 @@ void Axis::Private::createLineDiagram()
 
     Q_ASSERT(plotArea);
     foreach (Axis *axis, plotArea->axes()) {
-        if (axis->dimension() == XAxisDimension) {
-            if (axis->isVisible()) {
-                kdLineDiagram->addAxis(axis->kdAxis());
-                axis->registerDiagram(kdLineDiagram);
-            }
+        if (axis->isVisible() && axis->dimension() == XAxisDimension) {
+            kdLineDiagram->addAxis(axis->kdAxis());
+            axis->registerDiagram(kdLineDiagram);
         }
     }
 
@@ -560,11 +558,9 @@ void Axis::Private::createAreaDiagram()
 
     Q_ASSERT(plotArea);
     foreach (Axis *axis, plotArea->axes()) {
-        if (axis->dimension() == XAxisDimension) {
-            if (axis->isVisible()) {
-                kdAreaDiagram->addAxis(axis->kdAxis());
-                axis->registerDiagram(kdAreaDiagram);
-            }
+        if (axis->isVisible() && axis->dimension() == XAxisDimension) {
+            kdAreaDiagram->addAxis(axis->kdAxis());
+            axis->registerDiagram(kdAreaDiagram);
         }
     }
 
@@ -681,11 +677,9 @@ void Axis::Private::createScatterDiagram()
 
 
     foreach (Axis *axis, plotArea->axes()) {
-        if (axis->dimension() == XAxisDimension) {
-            if (axis->isVisible()) {
-                kdScatterDiagram->addAxis(axis->kdAxis());
-                axis->registerDiagram(kdScatterDiagram);
-            }
+        if (axis->isVisible() && axis->dimension() == XAxisDimension) {
+            kdScatterDiagram->addAxis(axis->kdAxis());
+            axis->registerDiagram(kdScatterDiagram);
         }
     }
 
@@ -735,11 +729,9 @@ void Axis::Private::createStockDiagram()
 
     Q_ASSERT(plotArea);
     foreach (Axis *axis, plotArea->axes()) {
-        if (axis->dimension() == XAxisDimension) {
-            if (axis->isVisible()) {
-                kdStockDiagram->addAxis(axis->kdAxis());
-                axis->registerDiagram(kdStockDiagram);
-            }
+        if (axis->isVisible() && axis->dimension() == XAxisDimension) {
+            kdStockDiagram->addAxis(axis->kdAxis());
+            axis->registerDiagram(kdStockDiagram);
         }
     }
 
@@ -763,7 +755,7 @@ void Axis::Private::createBubbleDiagram()
 
     foreach (Axis *axis, plotArea->axes()) {
         //if (axis->dimension() == XAxisDimension)
-        if (axis->isVisible()) {
+        if (axis->isVisible() && axis->dimension() == XAxisDimension) {
             kdBubbleDiagram->addAxis(axis->kdAxis());
             q->registerDiagram(kdBubbleDiagram);
         }
@@ -2179,7 +2171,7 @@ QString Axis::odfAxisPosition() const
 void Axis::updateKChartAxisPosition()
 {
     if (!isCartesian(d->plotArea->chartType())) {
-        debugChartAxis<<name()<<"Not a catesian chart"<<d->plotArea->chartType();
+        debugChartAxis<<name()<<"Not a cartesian chart"<<d->plotArea->chartType();
         return;
     }
     KChart::CartesianAxis::Position pos;
@@ -2268,7 +2260,7 @@ void Axis::updateKChartAxisPosition()
         }
         d->kdAxis->setPosition(pos);
     }
-    debugChartAxis<<name()<<d->kdAxis<<pos;
+    debugChartAxis<<name()<<d->kdAxis<<pos<<d->kdAxis->isAbscissa();
     d->plotArea->plotAreaUpdate();
 }
 
