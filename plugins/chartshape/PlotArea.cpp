@@ -175,6 +175,8 @@ PlotArea::Private::Private(PlotArea *q, ChartShape *parent)
     , paintPixmap(true)
     , pixmapRepaintRequested(true)
 {
+    kdCartesianPlanePrimary->setObjectName("primary");
+    kdCartesianPlaneSecondary->setObjectName("secondary");
     // --- Prepare Primary Cartesian Coordinate Plane ---
     KChart::GridAttributes gridAttributes;
     gridAttributes.setGridVisible(false);
@@ -421,7 +423,7 @@ bool PlotArea::isThreeD() const
 
 bool PlotArea::isVertical() const
 {
-    return d->vertical;
+    return d->chartType == BarChartType && d->vertical;
 }
 
 Ko3dScene *PlotArea::threeDScene() const

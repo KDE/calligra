@@ -110,9 +110,7 @@ public:
      * Determines whether x and y axis are swapped. Default is 'false'.
      * See chart:vertical attribute in ODF v1.2, $19.63
      *
-     * FIXME: This is exactly the opposite of what ODF defines. ODF says
-     * vertical="true" is a regular bar chart, "false" a column chart.
-     * So this specifies whether the axis is *not* swapped.
+     * NOTE: Only bar charts can be vertical so only returns true if chartType() is BarChartType
      */
     bool isVertical() const;
 
