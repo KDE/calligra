@@ -44,10 +44,11 @@ public:
 
     virtual void open(ChartShape *shape);
     virtual void deactivate();
-    virtual void deleteSubDialogs(ChartType type = LastChartType);
 
     // reimplement to update the ui
     virtual void updateData(ChartType type, ChartSubtype subtype);
+
+    void deleteSubDialogs(ChartType type = LastChartType);
 
     void blockSignals(bool block);
 
@@ -56,6 +57,9 @@ public:
 public:
     ChartShape *chart;
     QList<ChartType> chartTypes;
+
+private Q_SLOTS:
+    void removeSubDialogs(ChartType type, ChartType prev = LastChartType);
 };
 
 }  // namespace KoChart

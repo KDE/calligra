@@ -57,6 +57,7 @@ public:
             }
         }
         if (chart) {
+            connect(chart, &ChartShape::chartTypeChanged, this, &ConfigWidgetBase::removeSubDialogs);
             updateData();
         }
     }
@@ -66,6 +67,7 @@ public:
         }
         if (chart) {
             deleteSubDialogs();
+            disconnect(chart, &ChartShape::chartTypeChanged, this, &ConfigWidgetBase::removeSubDialogs);
         }
         chart = 0;
     }
@@ -75,6 +77,7 @@ public:
 
     /// Reimplement to update the ui
     virtual void updateData() {}
+
     /// Reimplement if you open any dialogs
     /// This is called from close()
     virtual void deleteSubDialogs(ChartType type = LastChartType) {Q_UNUSED(type)}
@@ -91,6 +94,13 @@ public:
 
 public:
     ChartShape *chart;
+
+private Q_SLOTS:
+    void removeSubDialogs(ChartType type, ChartType prev = LastChartType) {
+        if (type != prev) {
+            deleteSubDialogs();
+        }
+    }
 };
 
 }  // namespace KoChart

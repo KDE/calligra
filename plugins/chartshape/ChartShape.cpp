@@ -618,9 +618,10 @@ void ChartShape::reset(const QString &region,
 void ChartShape::setChartType(ChartType type)
 {
     Q_ASSERT(d->plotArea);
+    ChartType prev = chartType();
     d->proxyModel->setDataDimensions(numDimensions(type));
     d->plotArea->setChartType(type);
-    emit chartTypeChanged(type);
+    emit chartTypeChanged(type, prev);
 }
 
 void ChartShape::setChartSubType(ChartSubtype subType)

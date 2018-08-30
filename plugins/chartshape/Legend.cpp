@@ -136,7 +136,7 @@ Legend::Legend(ChartShape *parent)
 
     connect (d->kdLegend, SIGNAL(propertiesChanged()),
              this,        SLOT(slotKdLegendChanged()));
-    connect (parent, SIGNAL(chartTypeChanged(ChartType)),
+    connect (parent, SIGNAL(chartTypeChanged(ChartType, ChartType)),
              this,   SLOT(slotChartTypeChanged(ChartType)));
 }
 

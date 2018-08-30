@@ -235,7 +235,7 @@ public:
     ChartDocument *document() const;
 
 Q_SIGNALS:
-    void chartTypeChanged(ChartType);
+    void chartTypeChanged(ChartType, ChartType prev = LastChartType);
     void updateConfigWidget() const;
 
 protected:
