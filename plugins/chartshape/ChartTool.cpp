@@ -65,7 +65,6 @@
 #include "AxesConfigWidget.h"
 #include "DataSetConfigWidget.h"
 #include "PieConfigWidget.h"
-#include "BubbleConfigWidget.h"
 #include "KChartConvertions.h"
 #include "commands/ChartTypeCommand.h"
 #include "commands/LegendCommand.h"
@@ -359,14 +358,6 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
     connect(pie, SIGNAL(showNumberChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowNumber(DataSet*,bool,int)));
     connect(pie, SIGNAL(showPercentChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowPercent(DataSet*,bool,int)));
     connect(pie, SIGNAL(showSymbolChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowSymbol(DataSet*,bool,int)));
-
-    BubbleConfigWidget *bubble = plotarea->bubbleConfigWidget();
-    connect(bubble, SIGNAL(penChanged(DataSet*,QColor,int)), this, SLOT(setDataSetPen(DataSet*,QColor,int)));
-    connect(bubble, SIGNAL(brushChanged(DataSet*,QColor,int)), this, SLOT(setDataSetBrush(DataSet*,QColor,int)));
-    connect(bubble, SIGNAL(showCategoryChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowCategory(DataSet*,bool,int)));
-    connect(bubble, SIGNAL(showNumberChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowNumber(DataSet*,bool,int)));
-    connect(bubble, SIGNAL(showPercentChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowPercent(DataSet*,bool,int)));
-    connect(bubble, SIGNAL(showSymbolChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowSymbol(DataSet*,bool,int)));
 
     connect(d->shape, SIGNAL(updateConfigWidget()), plotarea, SLOT(updateData()));
 
