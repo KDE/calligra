@@ -18,14 +18,14 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOCHART_BUBBLEDATAEDITOR_H
-#define KOCHART_BUBBLEDATAEDITOR_H
+#ifndef KOCHART_SCATTERDATAEDITOR_H
+#define KOCHART_SCATTERDATAEDITOR_H
 
 #include <KoDialog.h>
 
-#include "ui_BubbleDataEditor.h"
+#include "ui_ScatterDataEditor.h"
 
-#include "DataSetTableModel.h"
+#include "ScatterDataSetTableModel.h"
 
 class QSortFilterProxyModel;
 class QAbstractItemModel;
@@ -36,17 +36,19 @@ class QAction;
 namespace KoChart {
 
 class ChartShape;
+namespace Scatter {
 class DataProxy;
+}
 class DataSet;
 class CellRegion;
 
-class BubbleDataEditor : public KoDialog
+class ScatterDataEditor : public KoDialog
 {
     Q_OBJECT
 
 public:
-    BubbleDataEditor(ChartShape *chart, QWidget *parent = 0);
-    ~BubbleDataEditor();
+    ScatterDataEditor(ChartShape *chart, QWidget *parent = 0);
+    ~ScatterDataEditor();
 
 Q_SIGNALS:
     void labelChanged();
@@ -76,20 +78,20 @@ protected Q_SLOTS:
 private:
     ChartShape *m_chart;
 
-    DataProxy *m_dataModel;
     QAction *m_insertColumnBeforeAction;
     QAction *m_insertColumnAfterAction;
     QAction *m_insertRowAboveAction;
     QAction *m_insertRowBelowAction;
     QAction *m_deleteAction;
 
-    DataSetTableModel m_dataSetModel;
+    Scatter::DataSetTableModel m_dataSetModel;
+    Scatter::DataProxy *m_dataModel;
+    
 
-
-    Ui::BubbleDataEditor m_ui;
+    Ui::ScatterDataEditor m_ui;
 };
 
 } // Namespace KoChart
 
-#endif // KCHART_BUBBLEDATAEDITOR_H
+#endif // KOCHART_SCATTERDATAEDITOR_H
 

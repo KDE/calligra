@@ -97,6 +97,12 @@ extern const QLoggingCategory &CHARTUI_BUBBLE_LOG();
 #define warnChartUiBubble qCWarning(CHARTUI_BUBBLE_LOG)
 #define errorChartUiBubble qCCritical(CHARTUI_BUBBLE_LOG)
 
+extern const QLoggingCategory &CHARTUI_SCATTER_LOG();
+
+#define debugChartUiScatter qCDebug(CHARTUI_SCATTER_LOG)<<Q_FUNC_INFO
+#define warnChartUiScatter qCWarning(CHARTUI_SCATTER_LOG)
+#define errorChartUiScatter qCCritical(CHARTUI_SCATTER_LOG)
+
 extern const QLoggingCategory &CHARTUI_STOCK_LOG();
 
 #define debugChartUiStock qCDebug(CHARTUI_STOCK_LOG)<<Q_FUNC_INFO

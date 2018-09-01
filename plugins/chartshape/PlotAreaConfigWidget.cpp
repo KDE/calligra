@@ -72,6 +72,7 @@
 #include "TableEditorDialog.h"
 #include "PieDataEditor.h"
 #include "BubbleDataEditor.h"
+#include "ScatterDataEditor.h"
 #include "commands/ChartTypeCommand.h"
 #include "CellRegionStringValidator.h"
 #include "ChartTableModel.h"
@@ -367,7 +368,6 @@ void PlotAreaConfigWidget::deleteSubDialogs(ChartType type)
             case RingChartType:
             case RadarChartType:
             case FilledRadarChartType:
-            case ScatterChartType:
             case SurfaceChartType:
             case StockChartType:
                 delete d->tableEditorDialog;
@@ -379,11 +379,15 @@ void PlotAreaConfigWidget::deleteSubDialogs(ChartType type)
             case BubbleChartType:
                 delete findChildren<BubbleDataEditor*>().value(0);
                 break;
+            case ScatterChartType:
+                delete findChildren<ScatterDataEditor*>().value(0);
+                break;
             default:
                 delete d->tableEditorDialog;
                 d->tableEditorDialog = 0;
                 delete findChildren<PieDataEditor*>().value(0);
                 delete findChildren<BubbleDataEditor*>().value(0);
+                delete findChildren<ScatterDataEditor*>().value(0);
                 break;
         }
     }
@@ -420,9 +424,9 @@ void PlotAreaConfigWidget::open(KoShape* shape)
 void PlotAreaConfigWidget::setupWidgets()
 {
     QList<ChartType> types;
-    types << BarChartType << LineChartType << AreaChartType << BubbleChartType;
+    types << BarChartType << LineChartType << AreaChartType << BubbleChartType << ScatterChartType;
     // TODO: temporary, these should have different widgets
-    types << RingChartType << RadarChartType << FilledRadarChartType << ScatterChartType << StockChartType;
+    types << RingChartType << RadarChartType << FilledRadarChartType << StockChartType;
     cartesianAxesConfigWidget()->setChartTypes(types);
 
     cartesianDataSetConfigWidget()->setChartTypes(types);
@@ -714,6 +718,18 @@ void PlotAreaConfigWidget::slotShowTableEditor()
                     connect(dlg, &BubbleDataEditor::xDataChanged, this, &PlotAreaConfigWidget::dataSetXDataRegionChanged);
                     connect(dlg, &BubbleDataEditor::yDataChanged, this, &PlotAreaConfigWidget::dataSetYDataRegionChanged);
                     connect(dlg, &BubbleDataEditor::bubbleDataChanged, this, &PlotAreaConfigWidget::dataSetCustomDataRegionChanged);
+                }
+                dlg->show();
+                dlg->raise();
+                return;
+            }
+            case ScatterChartType: {
+                ScatterDataEditor *dlg = findChildren<ScatterDataEditor*>().value(0);
+                if (!dlg) {
+                    dlg = new ScatterDataEditor(chart, this);
+                    connect(dlg, SIGNAL(finished()), dlg, SLOT(hide()));
+                    connect(dlg, &ScatterDataEditor::xDataChanged, this, &PlotAreaConfigWidget::dataSetXDataRegionChanged);
+                    connect(dlg, &ScatterDataEditor::yDataChanged, this, &PlotAreaConfigWidget::dataSetYDataRegionChanged);
                 }
                 dlg->show();
                 dlg->raise();
