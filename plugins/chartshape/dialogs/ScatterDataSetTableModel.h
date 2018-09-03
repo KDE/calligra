@@ -91,6 +91,8 @@ public:
 protected Q_SLOTS:
     void chartModelChanged();
 
+    void emitDataChanged();
+
 protected:
     bool submitData(const QModelIndex &idx, const QVariant &value, int role);
     bool setRegionData(const CellRegion &region, int index, const QVariant &value, int role = Qt::EditRole) const;

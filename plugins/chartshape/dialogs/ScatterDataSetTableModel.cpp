@@ -33,6 +33,7 @@
 #include <QModelIndex>
 #include <QComboBox>
 #include <QAbstractProxyModel>
+#include <QTimer>
 
 namespace KoChart {
 namespace Scatter {
@@ -73,7 +74,7 @@ void LabelColumnDelegate::setEditorData(QWidget *editor, const QModelIndex &inde
         lst << pm->sourceModel()->index(0, i).data().toString();
     }
     QComboBox *box = static_cast<QComboBox*>(editor);
-    box->addItems( lst );
+    box->addItems(lst);
     box->setCurrentText(index.data().toString());
 }
 
@@ -89,7 +90,7 @@ void LabelColumnDelegate::setModelData(QWidget *editor, QAbstractItemModel *mode
             break;
         default:
             // point to new cellregion
-            model->setData(index, box->currentIndex()+1, Qt::EditRole);
+            model->setData(index, box->currentIndex(), Qt::EditRole);
             break;
     }
 }
@@ -229,13 +230,14 @@ bool DataSetTableModel::setData(const QModelIndex &index, const QVariant &value,
     debugChartUiScatter<<index<<value<<role;
     if (role == Qt::EditRole || role == LabelTextRole) {
         if (submitData(index, value, role)) {
-            chartModel->dataChanged(QModelIndex(), QModelIndex());
-            emit dataChanged(index, index);
+            // HACK to avoid crash in accessible
+            QTimer::singleShot(0, this, SLOT(emitDataChanged()));
             return true;
         }
     }
     return false;
 }
+
 
 bool DataSetTableModel::removeRows(int row, int count, const QModelIndex &parent)
 {
@@ -386,4 +388,9 @@ bool DataSetTableModel::setLabelCell(const QModelIndex &idx, int cell)
     ds->setLabelDataRegion(region);
     debugChartUiScatter<<idx<<cell<<region<<ds;
     return true;
+}
+
+void DataSetTableModel::emitDataChanged()
+{
+    chartModel->dataChanged(QModelIndex(), QModelIndex());
 }
