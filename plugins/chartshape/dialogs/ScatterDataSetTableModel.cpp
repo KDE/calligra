@@ -69,7 +69,7 @@ void LabelColumnDelegate::setEditorData(QWidget *editor, const QModelIndex &inde
         lst << s;
     }
     QAbstractProxyModel *pm = qobject_cast<QAbstractProxyModel*>(dataModel);
-    for (int i = 2; i < pm->sourceModel()->columnCount(); ++i) {
+    for (int i = 1; i < pm->sourceModel()->columnCount(); ++i) {
         lst << pm->sourceModel()->index(0, i).data().toString();
     }
     QComboBox *box = static_cast<QComboBox*>(editor);
