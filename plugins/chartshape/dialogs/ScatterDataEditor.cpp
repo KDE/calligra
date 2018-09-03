@@ -52,7 +52,7 @@ public:
             if (orientation == Qt::Horizontal) {
                 return CellRegion::columnName(section + 2);
             } else {
-                return section + 2;
+                return section + 1;
             }
         }
         return QSortFilterProxyModel::headerData(section, orientation, role);
@@ -63,7 +63,7 @@ public:
     }
     bool filterAcceptsRow(int source_row, const QModelIndex &/*source_parent*/) const
     {
-        return source_row != 0; // do not show names here
+        return true;//source_row != 0; // do not show names here
     }
     bool insertColumns(int column, int count, const QModelIndex &parent)
     {
@@ -181,6 +181,8 @@ ScatterDataEditor::ScatterDataEditor(ChartShape *chart, QWidget *parent)
     m_ui.dataSetView->setItemDelegateForColumn(1, delegate);
     m_ui.dataSetView->setItemDelegateForColumn(2, delegate);
     m_ui.dataSetView->setItemDelegateForColumn(3, delegate);
+
+    m_ui.dataSetView->verticalHeader()->hide();
 
     connect(m_ui.manualControl, SIGNAL(toggled(bool)), m_chart->proxyModel(), SLOT(setManualControl(bool)));
 

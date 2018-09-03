@@ -88,17 +88,14 @@ public:
     void setModel(QAbstractItemModel *m);
     ChartProxyModel *model() const;
 
-    void insertLabelRegion(int row);
-
-    void setText(const QModelIndex &idx, const QString &text);
-    void setCellRegion(const QModelIndex &idx, int cell);
 protected Q_SLOTS:
     void chartModelChanged();
 
 protected:
     bool submitData(const QModelIndex &idx, const QVariant &value, int role);
-
     bool setRegionData(const CellRegion &region, int index, const QVariant &value, int role = Qt::EditRole) const;
+    bool setLabelText(const QModelIndex &idx, const QString &text);
+    bool setLabelCell(const QModelIndex &idx, int cell);
 
 public:
     ChartProxyModel *chartModel;

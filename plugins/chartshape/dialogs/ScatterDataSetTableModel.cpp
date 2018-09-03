@@ -34,6 +34,14 @@
 #include <QComboBox>
 #include <QAbstractProxyModel>
 
+namespace KoChart {
+namespace Scatter {
+    enum Roles {
+        LabelTextRole = Qt::UserRole + 1
+    };
+}
+}
+
 using namespace KoChart;
 using namespace Scatter;
 
@@ -72,16 +80,16 @@ void LabelColumnDelegate::setEditorData(QWidget *editor, const QModelIndex &inde
 void LabelColumnDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
     QComboBox *box = static_cast<QComboBox*>(editor);
-    DataSetTableModel *tm = qobject_cast<DataSetTableModel*>(model);
+    debugChartUiScatter<<box->currentIndex()<<box->currentText();
     switch(box->currentIndex()) {
         case 0: // new text
-            tm->setText(index, box->currentText());
+            model->setData(index, box->currentText(), LabelTextRole);
             break;
         case 1: // current text
             break;
         default:
             // point to new cellregion
-            tm->setCellRegion(index, box->currentIndex()+1);
+            model->setData(index, box->currentIndex()+1, Qt::EditRole);
             break;
     }
 }
@@ -224,12 +232,10 @@ QVariant DataSetTableModel::data(const QModelIndex &idx, int role/* = Qt::Displa
 
 bool DataSetTableModel::setData(const QModelIndex &index, const QVariant &value, int role/* = Qt::EditRole*/)
 {
-    if (role == Qt::EditRole) {
-        DataSet *ds = chartModel->dataSets().value(index.row());
-        if (!ds) {
-            return false;
-        }
+    debugChartUiScatter<<index<<value<<role;
+    if (role == Qt::EditRole || role == LabelTextRole) {
         if (submitData(index, value, role)) {
+            chartModel->dataChanged(QModelIndex(), QModelIndex());
             emit dataChanged(index, index);
             return true;
         }
@@ -305,20 +311,26 @@ bool DataSetTableModel::setRegionData(const CellRegion &region, int index, const
 
 bool DataSetTableModel::submitData(const QModelIndex &idx, const QVariant &value, int role)
 {
-    Q_UNUSED(role)
     DataSet *ds = chartModel->dataSets().value(idx.row());
     Table *table = tableSource->tableMap().first();
+    if (!ds || !table) {
+        warnChartUiScatter<<"No dataset or table:"<<table<<ds;
+        return false;
+    }
     switch (idx.column()) {
-        case 0: {
-            CellRegion region = ds->labelDataRegion();
-            if (region.isValid()) {
-                return setRegionData(region, 0, value);
-            } else {
-                warnChartUiScatter<<"Invalid label cell region";
+        case 0: { // labels
+            if (role == LabelTextRole) {
+                return setLabelText(idx, value.toString());
             }
-            break;
+            if (role == Qt::EditRole) {
+                return setLabelCell(idx, value.toInt());
+            }
+            return false;
         }
-        case 1: {
+        case 1: { // x-values
+            if (role != Qt::EditRole) {
+                return false;
+            }
             if (ds->xDataRegion().table()) {
                 table = ds->xDataRegion().table();
             }
@@ -333,7 +345,10 @@ bool DataSetTableModel::submitData(const QModelIndex &idx, const QVariant &value
             }
             return true;
         }
-        case 2: {
+        case 2: { // y-values
+            if (role != Qt::EditRole) {
+                return false;
+            }
             if (ds->xDataRegion().table()) {
                 table = ds->xDataRegion().table();
             }
@@ -350,33 +365,31 @@ bool DataSetTableModel::submitData(const QModelIndex &idx, const QVariant &value
     return false;
 }
 
-void DataSetTableModel::insertLabelRegion(int row)
-{
-    debugChartUiScatter<<row;
-    DataSet *ds = chartModel->dataSets().value(row);
-    if (ds) {
-        CellRegion region = CellRegion(ds->yDataRegion().table(), QPoint(1, row));
-        ds->setLabelDataRegion(region);
-        debugChartUiScatter<<ds->labelData()<<ds->labelDataRegion();
-    }
-}
-
-void DataSetTableModel::setText(const QModelIndex &idx, const QString &text)
+bool DataSetTableModel::setLabelText(const QModelIndex &idx, const QString &text)
 {
     DataSet *ds = chartModel->dataSets().value(idx.row());
-    CellRegion region = ds->labelDataRegion();
-    if (region.isValid()) {
-        setRegionData(region, 0, text);
-    } else {
-        warnChartUiScatter<<"Invalid label cell region";
+    if (!ds) {
+        warnChartUiScatter<<"No dataset:"<<idx.row();
+        return false;
     }
+    CellRegion region = ds->labelDataRegion();
+    if (!region.isValid()) {
+        warnChartUiScatter<<"Invalid label cell region";
+        return false;
+    }
+    debugChartUiScatter<<ds->labelData()<<':'<<region<<text;
+    return setRegionData(region, 0, text);
 }
 
-void DataSetTableModel::setCellRegion(const QModelIndex &idx, int cell)
+bool DataSetTableModel::setLabelCell(const QModelIndex &idx, int cell)
 {
     DataSet *ds = chartModel->dataSets().value(idx.row());
     Table *table = tableSource->tableMap().first();
+    if (!ds || !table) {
+        return false;
+    }
     CellRegion region(table, QPoint(cell, 1));
     ds->setLabelDataRegion(region);
     debugChartUiScatter<<idx<<cell<<region<<ds;
+    return true;
 }
