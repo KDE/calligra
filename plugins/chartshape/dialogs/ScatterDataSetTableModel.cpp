@@ -203,27 +203,21 @@ QVariant DataSetTableModel::data(const QModelIndex &idx, int role/* = Qt::Displa
             case 2: {
                 return ds->yDataRegion().toString();
             }
-            case 3: {
-                return ds->customDataRegion().toString();
-            }
         }
     } else if (role == Qt::ToolTipRole) {
         switch (idx.column()) {
             case 0: {
                 CellRegion region = ds->labelDataRegion();
                 if (region.isValid()) {
-                    return region.toString();
+                    return i18nc("@info:tooltip", "Label cell region: %1", region.toString());
                 }
-                return "Default label";
+                return i18nc("@info:tooltip", "Default label: %1", ds->labelData().toString());
             }
             case 1: {
-                return ds->xDataRegion().toString();
+                return i18nc("@info:tooltip", "X-Values cell region: %1", ds->xDataRegion().toString());
             }
             case 2: {
-                return ds->yDataRegion().toString();
-            }
-            case 3: {
-                return ds->customDataRegion().toString();
+                return i18nc("@info:tooltip", "Y-Values cell region: %1", ds->xDataRegion().toString());
             }
         }
     }
