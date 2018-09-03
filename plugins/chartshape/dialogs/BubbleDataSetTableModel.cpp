@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <DataSetTableModel.h>
+#include <BubbleDataSetTableModel.h>
 
 #include "ChartShape.h"
 #include "ChartProxyModel.h"
@@ -35,6 +35,7 @@
 
 using namespace KoChart;
 
+using namespace Bubble;
 
 DataColumnDelegate::DataColumnDelegate(QObject *parent)
     : QStyledItemDelegate(parent)

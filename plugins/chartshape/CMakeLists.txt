@@ -64,7 +64,7 @@ set (chartshape_LIB_SRCS
     dialogs/PieDataEditor.cpp
     dialogs/BubbleDataEditor.cpp
     dialogs/ScatterDataEditor.cpp
-    dialogs/DataSetTableModel.cpp
+    dialogs/BubbleDataSetTableModel.cpp
     dialogs/ScatterDataSetTableModel.cpp
     commands/ChartTypeCommand.cpp
     commands/LegendCommand.cpp

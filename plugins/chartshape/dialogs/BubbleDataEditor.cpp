@@ -19,7 +19,6 @@
  */
 
 #include "BubbleDataEditor.h"
-// #include "DataSetTableModel.h"
 
 #include <QSortFilterProxyModel>
 #include <QAbstractTableModel>
@@ -36,6 +35,8 @@
 
 
 namespace KoChart {
+
+namespace Bubble {
 
 class DataProxy : public QSortFilterProxyModel
 {
@@ -104,6 +105,9 @@ public:
     }
 };
 
+} // namespace Bubble
+
+using namespace Bubble;
 
 BubbleDataEditor::BubbleDataEditor(ChartShape *chart, QWidget *parent)
     : KoDialog(parent)

@@ -25,7 +25,7 @@
 
 #include "ui_BubbleDataEditor.h"
 
-#include "DataSetTableModel.h"
+#include "BubbleDataSetTableModel.h"
 
 class QSortFilterProxyModel;
 class QAbstractItemModel;
@@ -36,9 +36,11 @@ class QAction;
 namespace KoChart {
 
 class ChartShape;
-class DataProxy;
 class DataSet;
 class CellRegion;
+namespace Bubble {
+class DataProxy;
+}
 
 class BubbleDataEditor : public KoDialog
 {
@@ -76,14 +78,14 @@ protected Q_SLOTS:
 private:
     ChartShape *m_chart;
 
-    DataProxy *m_dataModel;
     QAction *m_insertColumnBeforeAction;
     QAction *m_insertColumnAfterAction;
     QAction *m_insertRowAboveAction;
     QAction *m_insertRowBelowAction;
     QAction *m_deleteAction;
 
-    DataSetTableModel m_dataSetModel;
+    Bubble::DataProxy *m_dataModel;
+    Bubble::DataSetTableModel m_dataSetModel;
 
 
     Ui::BubbleDataEditor m_ui;

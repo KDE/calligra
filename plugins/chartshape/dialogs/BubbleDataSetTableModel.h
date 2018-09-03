@@ -36,6 +36,8 @@
 
 namespace KoChart {
 
+namespace Bubble {
+
 class DataColumnDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
@@ -80,6 +82,7 @@ public:
     TableSource *tableSource;
 };
 
+} // namespace Bubble
 
 } // namespace KoChart
 
