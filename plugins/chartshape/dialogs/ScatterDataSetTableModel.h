@@ -37,23 +37,6 @@
 namespace KoChart {
 namespace Scatter {
 
-class LabelColumnDelegate : public QStyledItemDelegate
-{
-    Q_OBJECT
-public:
-    explicit LabelColumnDelegate(QObject *parent = nullptr);
-    
-    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    
-    void setEditorData(QWidget *editor, const QModelIndex &index) const;
-    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
-    
-    void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    
-public:
-    QAbstractItemModel *dataModel;
-};
-
 class DataColumnDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
@@ -102,8 +85,6 @@ protected:
 public:
     ChartProxyModel *chartModel;
     TableSource *tableSource;
-
-    mutable bool blocksignals;
 };
 
 } // namespace Scatter

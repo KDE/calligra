@@ -61,10 +61,6 @@ public:
     {
         return source_column != 0; // skip categories
     }
-    bool filterAcceptsRow(int source_row, const QModelIndex &/*source_parent*/) const
-    {
-        return true;//source_row != 0; // do not show names here
-    }
     bool insertColumns(int column, int count, const QModelIndex &parent)
     {
         debugChartUiScatter<<column;
@@ -81,11 +77,14 @@ public:
             return false;
         }
         // Label
-        QModelIndex idx = model->index(0, scolumn);
-        model->setData(idx, i18n("Column %1", scolumn));
-        for (int r = 1; r < model->rowCount(); ++r) {
-            QModelIndex idx = model->index(r, scolumn);
-            model->setData(idx, (double)r);
+        for (int r = 0; r < model->rowCount(); ++r) {
+            if (r == 0) {
+                QModelIndex idx = model->index(0, scolumn);
+                model->setData(idx, i18n("Column %1", scolumn));
+            } else {
+                QModelIndex idx = model->index(r, scolumn);
+                model->setData(idx, (double)r);
+            }
         }
         return true;
     }
@@ -173,11 +172,10 @@ ScatterDataEditor::ScatterDataEditor(ChartShape *chart, QWidget *parent)
 
     m_ui.tableView->setModel(m_dataModel);
     m_ui.dataSetView->setModel(&m_dataSetModel);
-    LabelColumnDelegate *labeldelegate = new LabelColumnDelegate(m_ui.dataSetView);
-    labeldelegate->dataModel = m_dataModel;
-    m_ui.dataSetView->setItemDelegateForColumn(0, labeldelegate);
+
     DataColumnDelegate *delegate = new DataColumnDelegate(m_ui.dataSetView);
     delegate->dataModel = m_dataModel;
+    m_ui.dataSetView->setItemDelegateForColumn(0, delegate);
     m_ui.dataSetView->setItemDelegateForColumn(1, delegate);
     m_ui.dataSetView->setItemDelegateForColumn(2, delegate);
     m_ui.dataSetView->setItemDelegateForColumn(3, delegate);
@@ -294,6 +292,7 @@ void ScatterDataEditor::slotRemoveDataSet()
 void ScatterDataEditor::enableActions()
 {
     QItemSelectionModel *smodel = m_ui.tableView->selectionModel();
+    m_ui.insertRowAbove->setEnabled(smodel && smodel->currentIndex().row() > 0);
     m_ui.deleteSelection->setEnabled(smodel && (!smodel->selectedRows().isEmpty() || !smodel->selectedColumns().isEmpty()));
     m_deleteAction->setEnabled(m_ui.deleteSelection->isEnabled());
 
@@ -302,36 +301,6 @@ void ScatterDataEditor::enableActions()
     m_ui.addDataSetAfter->setEnabled(m_ui.manualControl->isChecked());
     m_ui.removeDataSet->setEnabled(m_ui.manualControl->isChecked() && smodel && smodel->currentIndex().isValid());
 }
-
-// void ScatterDataEditor::slotDataChanged(const QModelIndex &idx);
-// {
-//     debugChartUiScatter<<idx<<m_ui.tableView->itemDelegate(idx);
-//     DataSet *ds = m_chart->proxyModel()->dataSets().value(idx.column());
-//     if (!ds) {
-//         return;
-//     }
-//     QVariant value = idx.data();
-//     switch (idx.row()) {
-//         case 0:
-//
-//             break;
-//         case 1: {
-//             QString s = ds->customDataRegion().toString().split('.').value(0) + '.' + value.toString();
-//             emit xDataChanged(ds, CellRegion(m_chart->tableSource(), s));
-//             break;
-//         }
-//         case 2: {
-//             QString s = ds->customDataRegion().toString().split('.').value(0) + '.' + value.toString();
-//             emit yDataChanged(ds, CellRegion(m_chart->tableSource(), s));
-//             break;
-//         }
-//         case 3: {
-//             QString s = ds->customDataRegion().toString().split('.').value(0) + '.' + value.toString();
-//             emit bubbleDataChanged(ds, CellRegion(m_chart->tableSource(), s));
-//             break;
-//         }
-//     }
-// }
 
 void ScatterDataEditor::dataColumnsInserted(const QModelIndex&, int first, int last)
 {

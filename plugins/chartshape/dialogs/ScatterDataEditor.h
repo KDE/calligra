@@ -86,7 +86,6 @@ private:
 
     Scatter::DataSetTableModel m_dataSetModel;
     Scatter::DataProxy *m_dataModel;
-    
 
     Ui::ScatterDataEditor m_ui;
 };
