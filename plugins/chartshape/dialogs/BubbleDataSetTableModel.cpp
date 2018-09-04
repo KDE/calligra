@@ -32,9 +32,10 @@
 #include <QObject>
 #include <QModelIndex>
 #include <QComboBox>
+#include <QAbstractProxyModel>
+#include <QTimer>
 
 using namespace KoChart;
-
 using namespace Bubble;
 
 DataColumnDelegate::DataColumnDelegate(QObject *parent)
@@ -124,16 +125,22 @@ QVariant DataSetTableModel::headerData(int section, Qt::Orientation orientation,
 
 QVariant DataSetTableModel::data(const QModelIndex &idx, int role/* = Qt::DisplayRole*/) const
 {
+    if (!chartModel) {
+        return QVariant();
+    }
+    DataSet *ds = chartModel->dataSets().value(idx.row());
+    if (!ds) {
+        return QVariant();
+    }
     if (role == Qt::DisplayRole) {
-        if (!chartModel) {
-            return QVariant();
-        }
-        DataSet *ds = chartModel->dataSets().value(idx.row());
-        if (!ds) {
-            return QVariant();
-        }
         switch (idx.column()) {
-            case 0: return ds->labelData();
+            case 0: {
+                CellRegion region = ds->labelDataRegion();
+                if (region.isValid()) {
+                    return region.toString();
+                }
+                return ds->labelData();
+            }
             case 1: {
                 return ds->xDataRegion().toString();
             }
@@ -144,6 +151,37 @@ QVariant DataSetTableModel::data(const QModelIndex &idx, int role/* = Qt::Displa
                 return ds->customDataRegion().toString();
             }
         }
+    } else if (role == Qt::ToolTipRole) {
+        switch (idx.column()) {
+            case 0: {
+                CellRegion region = ds->labelDataRegion();
+                if (region.isValid()) {
+                    return i18nc("@info:tooltip", "Label: %1", ds->labelData().toString());
+                }
+                return i18nc("@info:tooltip", "Default label: %1", ds->labelData().toString());
+            }
+            case 1: {
+                CellRegion region = ds->xDataRegion();
+                if (region.isValid()) {
+                    return i18nc("@info:tooltip", "X-Values cell region: %1", region.toString());
+                }
+                return i18nc("@info:tooltip", "Default values used");
+            }
+            case 2: {
+                CellRegion region = ds->yDataRegion();
+                if (region.isValid()) {
+                    return i18nc("@info:tooltip", "Y-Values cell region: %1", region.toString());
+                }
+                return i18nc("@info:tooltip", "Default values used");
+            }
+            case 3: {
+                CellRegion region = ds->customDataRegion();
+                if (region.isValid()) {
+                    return i18nc("@info:tooltip", "Bubble size cell region: %1", region.toString());
+                }
+                return i18nc("@info:tooltip", "Default values used");
+            }
+        }
     }
     return QVariant();
 }
@@ -151,12 +189,9 @@ QVariant DataSetTableModel::data(const QModelIndex &idx, int role/* = Qt::Displa
 bool DataSetTableModel::setData(const QModelIndex &index, const QVariant &value, int role/* = Qt::EditRole*/)
 {
     if (role == Qt::EditRole) {
-        DataSet *ds = chartModel->dataSets().value(index.row());
-        if (!ds) {
-            return false;
-        }
         if (submitData(index, value, role)) {
-            emit dataChanged(index, index);
+            // HACK to avoid crash in accessible
+            QTimer::singleShot(0, this, SLOT(emitDataChanged()));
             return true;
         }
     }
@@ -174,10 +209,9 @@ void DataSetTableModel::setModel(QAbstractItemModel *m)
         disconnect(this);
     }
     chartModel = qobject_cast<ChartProxyModel*>(m);
+    Q_ASSERT(chartModel);
     connect(chartModel, SIGNAL(dataChanged()), this, SLOT(chartModelChanged()));
     connect(chartModel, SIGNAL(modelReset()), this, SLOT(chartModelChanged()));
-//     connect(chartModel, &ChartProxyModel::dataChanged, this, &DataSetTableModel::chartModelChanged);
-    Q_ASSERT(chartModel);
 }
 
 void DataSetTableModel::chartModelChanged()
@@ -190,22 +224,31 @@ bool DataSetTableModel::submitData(const QModelIndex &idx, const QVariant &value
 {
     DataSet *ds = chartModel->dataSets().value(idx.row());
     Table *table = tableSource->tableMap().first();
+    if (!ds || !table) {
+        warnChartUiBubble<<"No dataset or table:"<<table<<ds;
+        return false;
+    }
     switch (idx.column()) {
-        case 0:
-            
-            break;
+        case 0: {
+            QString v = value.toString();
+            if (v.length() == 1) {
+                v = QString("%1%2").arg(v).arg('1');
+                ds->setLabelDataRegion(CellRegion(tableSource, table->name() + '.' + v));
+            } else {
+                ds->setLabelDataRegion(CellRegion(tableSource, v));
+            }
+            return true;
+        }
         case 1: {
             if (ds->xDataRegion().table()) {
                 table = ds->xDataRegion().table();
             }
             QString v = value.toString();
             if (v.length() == 1) {
-                if (v.length() == 1) {
-                    v = QString("%1%2:%3%4").arg(v).arg(2).arg(v).arg(table->model()->rowCount());
-                }
-                ds->setXDataRegion(CellRegion(tableSource, table->name() + '.' + v));
+                v = QString("%1%2:%3%4").arg(v).arg(2).arg(v).arg(table->model()->rowCount());
+                ds->setYDataRegion(CellRegion(tableSource, table->name() + '.' + v));
             } else {
-                ds->setXDataRegion(CellRegion(tableSource, v));
+                ds->setYDataRegion(CellRegion(tableSource, v));
             }
             return true;
         }
@@ -239,3 +282,7 @@ bool DataSetTableModel::submitData(const QModelIndex &idx, const QVariant &value
     return false;
 }
 
+void DataSetTableModel::emitDataChanged()
+{
+    chartModel->dataChanged(QModelIndex(), QModelIndex());
+}

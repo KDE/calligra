@@ -74,6 +74,8 @@ public:
 protected Q_SLOTS:
     void chartModelChanged();
 
+    void emitDataChanged();
+
 protected:
     bool submitData(const QModelIndex &idx, const QVariant &value, int role);
 

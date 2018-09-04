@@ -87,7 +87,6 @@ private:
     Bubble::DataProxy *m_dataModel;
     Bubble::DataSetTableModel m_dataSetModel;
 
-
     Ui::BubbleDataEditor m_ui;
 };
 

@@ -49,7 +49,7 @@ public:
             if (orientation == Qt::Horizontal) {
                 return CellRegion::columnName(section + 2);
             } else {
-                return section + 2;
+                return section + 1;
             }
         }
         return QSortFilterProxyModel::headerData(section, orientation, role);
@@ -57,10 +57,6 @@ public:
     bool filterAcceptsColumn(int source_column, const QModelIndex &/*source_parent*/) const
     {
         return source_column != 0; // skip categories
-    }
-    bool filterAcceptsRow(int source_row, const QModelIndex &/*source_parent*/) const
-    {
-        return source_row != 0; // do not show names here
     }
     bool insertColumns(int column, int count, const QModelIndex &parent)
     {
@@ -77,9 +73,14 @@ public:
         if (!model->insertColumns(scolumn, 1)) {
             return false;
         }
-        for (int r = 1; r < model->rowCount(); ++r) {
-            QModelIndex idx = model->index(r, scolumn);
-            model->setData(idx, (double)r);
+        for (int r = 0; r < model->rowCount(); ++r) {
+            if (r == 0) {
+                QModelIndex idx = model->index(r, scolumn);
+                model->setData(idx, i18n("Column %1", scolumn));
+            } else {
+                QModelIndex idx = model->index(r, scolumn);
+                model->setData(idx, (double)r);
+            }
         }
         return true;
     }
@@ -165,11 +166,15 @@ BubbleDataEditor::BubbleDataEditor(ChartShape *chart, QWidget *parent)
 
     m_ui.tableView->setModel(m_dataModel);
     m_ui.dataSetView->setModel(&m_dataSetModel);
+
     DataColumnDelegate *delegate = new DataColumnDelegate(m_ui.dataSetView);
     delegate->dataModel = m_dataModel;
+    m_ui.dataSetView->setItemDelegateForColumn(0, delegate);
     m_ui.dataSetView->setItemDelegateForColumn(1, delegate);
     m_ui.dataSetView->setItemDelegateForColumn(2, delegate);
     m_ui.dataSetView->setItemDelegateForColumn(3, delegate);
+
+    m_ui.dataSetView->verticalHeader()->hide();
 
     connect(m_ui.manualControl, SIGNAL(toggled(bool)), m_chart->proxyModel(), SLOT(setManualControl(bool)));
 
@@ -280,6 +285,7 @@ void BubbleDataEditor::slotRemoveDataSet()
 void BubbleDataEditor::enableActions()
 {
     QItemSelectionModel *smodel = m_ui.tableView->selectionModel();
+    m_ui.insertRowAbove->setEnabled(smodel && smodel->currentIndex().row() > 0);
     m_ui.deleteSelection->setEnabled(smodel && (!smodel->selectedRows().isEmpty() || !smodel->selectedColumns().isEmpty()));
     m_deleteAction->setEnabled(m_ui.deleteSelection->isEnabled());
 
