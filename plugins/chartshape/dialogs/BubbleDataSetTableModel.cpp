@@ -222,6 +222,7 @@ void DataSetTableModel::chartModelChanged()
 
 bool DataSetTableModel::submitData(const QModelIndex &idx, const QVariant &value, int role)
 {
+    Q_UNUSED(role)
     DataSet *ds = chartModel->dataSets().value(idx.row());
     Table *table = tableSource->tableMap().first();
     if (!ds || !table) {
@@ -240,9 +241,6 @@ bool DataSetTableModel::submitData(const QModelIndex &idx, const QVariant &value
             return true;
         }
         case 1: {
-            if (ds->xDataRegion().table()) {
-                table = ds->xDataRegion().table();
-            }
             QString v = value.toString();
             if (v.length() == 1) {
                 v = QString("%1%2:%3%4").arg(v).arg(2).arg(v).arg(table->model()->rowCount());
@@ -253,9 +251,6 @@ bool DataSetTableModel::submitData(const QModelIndex &idx, const QVariant &value
             return true;
         }
         case 2: {
-            if (ds->xDataRegion().table()) {
-                table = ds->xDataRegion().table();
-            }
             QString v = value.toString();
             if (v.length() == 1) {
                 v = QString("%1%2:%3%4").arg(v).arg(2).arg(v).arg(table->model()->rowCount());
@@ -266,9 +261,6 @@ bool DataSetTableModel::submitData(const QModelIndex &idx, const QVariant &value
             return true;
         }
         case 3: {
-            if (ds->xDataRegion().table()) {
-                table = ds->xDataRegion().table();
-            }
             QString v = value.toString();
             if (v.length() == 1) {
                 v = QString("%1%2:%3%4").arg(v).arg(2).arg(v).arg(table->model()->rowCount());
