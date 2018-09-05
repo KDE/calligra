@@ -156,6 +156,49 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="stockPage">
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Axes</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="KoChart::AxesConfigWidget" name="stockAxes" native="true"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Data Sets</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="KoChart::StockConfigWidget" name="stockConfigWidget" native="true"/>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>
@@ -177,6 +220,12 @@
    <class>KoChart::PieConfigWidget</class>
    <extends>QWidget</extends>
    <header>PieConfigWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KoChart::StockConfigWidget</class>
+   <extends>QWidget</extends>
+   <header>StockConfigWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

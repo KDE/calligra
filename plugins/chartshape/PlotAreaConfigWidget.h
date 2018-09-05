@@ -43,6 +43,7 @@ class ChartShape;
 class AxesConfigWidget;
 class DataSetConfigWidget;
 class PieConfigWidget;
+class StockConfigWidget;
 
 /**
  * Chart type configuration widget.
@@ -69,6 +70,7 @@ public:
     AxesConfigWidget *cartesianAxesConfigWidget() const;
     DataSetConfigWidget *cartesianDataSetConfigWidget() const;
     PieConfigWidget *pieConfigWidget() const;
+    StockConfigWidget *stockConfigWidget() const;
     
 public Q_SLOTS:
     void chartTypeSelected(QAction *action);

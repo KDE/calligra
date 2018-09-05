@@ -49,6 +49,7 @@ set (chartshape_LIB_SRCS
     AxesConfigWidget.cpp
     DataSetConfigWidget.cpp
     PieConfigWidget.cpp
+    StockConfigWidget.cpp
     ChartTableView.cpp
     ScreenConversions.cpp
     ChartLayout.cpp
@@ -66,6 +67,7 @@ set (chartshape_LIB_SRCS
     dialogs/ScatterDataEditor.cpp
     dialogs/BubbleDataSetTableModel.cpp
     dialogs/ScatterDataSetTableModel.cpp
+    dialogs/StockDataEditor.cpp
     commands/ChartTypeCommand.cpp
     commands/LegendCommand.cpp
     commands/AxisCommand.cpp
@@ -77,6 +79,7 @@ set (chartshape_LIB_SRCS
 )
 
 ki18n_wrap_ui(chartshape_LIB_SRCS
+    StockConfigWidget.ui
     TitlesConfigWidget.ui
     LegendConfigWidget.ui
     PlotAreaConfigWidget.ui
@@ -91,6 +94,7 @@ ki18n_wrap_ui(chartshape_LIB_SRCS
     dialogs/PieDataEditor.ui
     dialogs/BubbleDataEditor.ui
     dialogs/ScatterDataEditor.ui
+    dialogs/StockDataEditor.ui
 )
 
 add_library(chartshapecore STATIC ${chartshape_LIB_SRCS})

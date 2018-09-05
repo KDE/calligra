@@ -73,6 +73,7 @@
 #include "PieDataEditor.h"
 #include "BubbleDataEditor.h"
 #include "ScatterDataEditor.h"
+#include "StockDataEditor.h"
 #include "commands/ChartTypeCommand.h"
 #include "CellRegionStringValidator.h"
 #include "ChartTableModel.h"
@@ -80,6 +81,7 @@
 #include "AxesConfigWidget.h"
 #include "DataSetConfigWidget.h"
 #include "PieConfigWidget.h"
+#include "StockConfigWidget.h"
 #include "ConfigSubWidgetBase.h"
 #include "ChartDebug.h"
 
@@ -334,6 +336,11 @@ PieConfigWidget *PlotAreaConfigWidget::pieConfigWidget() const
     return d->ui.pieConfigWidget;
 }
 
+StockConfigWidget *PlotAreaConfigWidget::stockConfigWidget() const
+{
+    return d->ui.stockConfigWidget;
+}
+
 void PlotAreaConfigWidget::deleteSubDialogs(ChartType type)
 {
     if (!chart->usesInternalModelOnly()) {
@@ -370,8 +377,7 @@ void PlotAreaConfigWidget::deleteSubDialogs(ChartType type)
             case FilledRadarChartType:
             case SurfaceChartType:
             case StockChartType:
-                delete d->tableEditorDialog;
-                d->tableEditorDialog = 0;
+                delete findChildren<StockDataEditor*>().value(0);
                 break;
             case CircleChartType:
                 delete findChildren<PieDataEditor*>().value(0);
@@ -388,6 +394,7 @@ void PlotAreaConfigWidget::deleteSubDialogs(ChartType type)
                 delete findChildren<PieDataEditor*>().value(0);
                 delete findChildren<BubbleDataEditor*>().value(0);
                 delete findChildren<ScatterDataEditor*>().value(0);
+                delete findChildren<StockDataEditor*>().value(0);
                 break;
         }
     }
@@ -426,12 +433,14 @@ void PlotAreaConfigWidget::setupWidgets()
     QList<ChartType> types;
     types << BarChartType << LineChartType << AreaChartType << BubbleChartType << ScatterChartType;
     // TODO: temporary, these should have different widgets
-    types << RingChartType << RadarChartType << FilledRadarChartType << StockChartType;
+    types << RingChartType << RadarChartType << FilledRadarChartType;
     cartesianAxesConfigWidget()->setChartTypes(types);
 
     cartesianDataSetConfigWidget()->setChartTypes(types);
 
     pieConfigWidget()->setChartTypes(QList<ChartType>()<<CircleChartType);
+    stockConfigWidget()->setChartTypes(QList<ChartType>()<<StockChartType);
+    d->ui.stockAxes->setChartTypes(QList<ChartType>()<<StockChartType);
 }
 
 QAction *PlotAreaConfigWidget::createAction()
@@ -584,6 +593,9 @@ void PlotAreaConfigWidget::updateData()
         case CircleChartType:
             d->ui.stackedWidget->setCurrentIndex(1);
             break;
+        case StockChartType:
+            d->ui.stackedWidget->setCurrentIndex(2);
+            break;
         default:
             d->ui.stackedWidget->setCurrentIndex(0);
             break;
@@ -730,6 +742,18 @@ void PlotAreaConfigWidget::slotShowTableEditor()
                     connect(dlg, SIGNAL(finished()), dlg, SLOT(hide()));
                     connect(dlg, &ScatterDataEditor::xDataChanged, this, &PlotAreaConfigWidget::dataSetXDataRegionChanged);
                     connect(dlg, &ScatterDataEditor::yDataChanged, this, &PlotAreaConfigWidget::dataSetYDataRegionChanged);
+                }
+                dlg->show();
+                dlg->raise();
+                return;
+            }
+            case StockChartType: {
+                StockDataEditor *dlg = findChildren<StockDataEditor*>().value(0);
+                if (!dlg) {
+                    dlg = new StockDataEditor(chart, this);
+                    connect(dlg, SIGNAL(finished()), dlg, SLOT(hide()));
+//                     connect(dlg, &StockDataEditor::xDataChanged, this, &PlotAreaConfigWidget::dataSetXDataRegionChanged);
+//                     connect(dlg, &StockDataEditor::yDataChanged, this, &PlotAreaConfigWidget::dataSetYDataRegionChanged);
                 }
                 dlg->show();
                 dlg->raise();
