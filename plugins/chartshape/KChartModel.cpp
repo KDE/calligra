@@ -38,6 +38,46 @@
 
 using namespace KoChart;
 
+/**
+ * Method for debugging purposes.
+ */
+QString roleToString(int role)
+{
+    switch (role) {
+        case Qt::DisplayRole:
+            return "Qt::DisplayRole";
+        case KChart::DatasetBrushRole:
+            return "KChart::DatasetBrushRole";
+        case KChart::DatasetPenRole:
+            return "KChart::DatasetPenRole";
+        case KChart::PieAttributesRole:
+            return "KChart::PieAttributesRole";
+        case KChart::DataValueLabelAttributesRole:
+            return "KChart::DataValueLabelAttributesRole";
+        case KChart::ThreeDAttributesRole:
+            return "KChart::ThreeDAttributesRole";
+        case KChart::LineAttributesRole:
+            return "KChart::LineAttributesRole";
+        case KChart::ThreeDLineAttributesRole:
+            return "KChart::ThreeDLineAttributesRole";
+        case KChart::BarAttributesRole:
+            return "KChart::BarAttributesRole";
+        case KChart::StockBarAttributesRole:
+            return "KChart::StockBarAttributesRole";
+        case KChart::ThreeDBarAttributesRole:
+            return "KChart::ThreeDBarAttributesRole";
+        case KChart::ThreeDPieAttributesRole:
+            return "KChart::ThreeDPieAttributesRole";
+        case KChart::DataHiddenRole:
+            return "KChart::DataHiddenRole";
+        case KChart::ValueTrackerAttributesRole:
+            return "KChart::ValueTrackerAttributesRole";
+        case KChart::CommentRole:
+            return "KChart::CommentRole";
+    }
+    return "Unknown DataRole";
+}
+
 class KChartModel::Private {
 public:
     Private(KChartModel *parent, PlotArea *plotArea);
@@ -200,7 +240,7 @@ QVariant KChartModel::data(const QModelIndex &index,
          !d->isKnownDataRole(role)) {
         return QVariant();
     }
-
+    if (!role == Qt::DisplayRole) {qInfo()<<Q_FUNC_INFO<<index.row()<<roleToString(role);}
     int dataSetNumber, section;
     // Offset from the data set's row or column (depending on the data direction).
     // With one data dimension, it's always 0. Otherwise it's 1 for y data, and
@@ -367,24 +407,6 @@ bool KChartModel::Private::isKnownDataRole(int role) const
     }
 
     return false;
-}
-
-/**
- * Method for debugging purposes.
- */
-QString roleToString(int role)
-{
-    switch (role) {
-    case Qt::DisplayRole:
-        return "Qt::DisplayRole";
-    case KChart::DatasetBrushRole:
-        return "KChart::DatasetBrushRole";
-    case KChart::DatasetPenRole:
-        return "KChart::DatasetPenRole";
-    case KChart::PieAttributesRole:
-        return "KChart::PieAttributesRole";
-    }
-    return "Unknown DataRole";
 }
 
 QVariant KChartModel::headerData(int section,
