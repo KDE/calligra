@@ -13,6 +13,7 @@ endif()
 
 include_directories( ${CMAKE_SOURCE_DIR}/plugins/chartshape
                      ${CMAKE_SOURCE_DIR}/plugins/chartshape/dialogs
+                     ${CMAKE_SOURCE_DIR}/plugins/chartshape/widgets
                      ${CMAKE_SOURCE_DIR}/interfaces
                      ${KDCHART_INCLUDES}
                      ${KOMAIN_INCLUDES}
@@ -76,6 +77,7 @@ set (chartshape_LIB_SRCS
     commands/AddRemoveAxisCommand.cpp
     commands/GapCommand.cpp
     commands/PlotAreaCommand.cpp
+    widgets/StrokeConfigWidget.cpp
 )
 
 ki18n_wrap_ui(chartshape_LIB_SRCS
@@ -98,7 +100,7 @@ ki18n_wrap_ui(chartshape_LIB_SRCS
 )
 
 add_library(chartshapecore STATIC ${chartshape_LIB_SRCS})
-target_link_libraries(chartshapecore  komain kotextlayout KChart)
+target_link_libraries(chartshapecore  komain kotextlayout kowidgets KChart)
 if(NOT MSVC AND NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
     set_target_properties(chartshapecore PROPERTIES COMPILE_FLAGS "-fPIC")
 endif()

@@ -341,6 +341,11 @@ StockConfigWidget *PlotAreaConfigWidget::stockConfigWidget() const
     return d->ui.stockConfigWidget;
 }
 
+AxesConfigWidget *PlotAreaConfigWidget::stockAxesConfigWidget() const
+{
+    return d->ui.stockAxes;
+}
+
 void PlotAreaConfigWidget::deleteSubDialogs(ChartType type)
 {
     if (!chart->usesInternalModelOnly()) {
@@ -440,7 +445,7 @@ void PlotAreaConfigWidget::setupWidgets()
 
     pieConfigWidget()->setChartTypes(QList<ChartType>()<<CircleChartType);
     stockConfigWidget()->setChartTypes(QList<ChartType>()<<StockChartType);
-    d->ui.stockAxes->setChartTypes(QList<ChartType>()<<StockChartType);
+    stockAxesConfigWidget()->setChartTypes(QList<ChartType>()<<StockChartType);
 }
 
 QAction *PlotAreaConfigWidget::createAction()

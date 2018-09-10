@@ -736,7 +736,7 @@ void Axis::Private::createStockDiagram()
     }
 
     plotArea->parent()->legend()->kdLegend()->addDiagram(kdStockDiagram);
-
+    q->updateKChartStockAttributes();
 }
 
 void Axis::Private::createBubbleDiagram()
@@ -2312,6 +2312,17 @@ void Axis::setOdfAxisLabelsPosition(const QString &odfpos)
 QString Axis::odfAxisLabelsPosition() const
 {
     return d->axisLabelsPosition;
+}
+
+void Axis::updateKChartStockAttributes()
+{
+    if (d->kdStockDiagram) {
+        d->kdStockDiagram->setLowHighLinePen(d->plotArea->stockRangeLinePen());
+        d->kdStockDiagram->setUpTrendCandlestickBrush(d->plotArea->stockGainBrush());
+        d->kdStockDiagram->setDownTrendCandlestickBrush(d->plotArea->stockLossBrush());
+        d->kdStockDiagram->setUpTrendCandlestickPen(d->plotArea->stockRangeLinePen());
+        d->kdStockDiagram->setDownTrendCandlestickPen(d->plotArea->stockRangeLinePen());
+    }
 }
 
 QDebug operator<<(QDebug dbg, KoChart::Axis *a)

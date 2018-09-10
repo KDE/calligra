@@ -48,13 +48,16 @@ public:
     void updateData(ChartType type, ChartSubtype subtype);
 
 public Q_SLOTS:
+    void gainClicked();
+    void lossClicked();
 
 Q_SIGNALS:
 
 private:
     void init();
 
-    QList<DataSet*> m_dataSets;
+    PlotArea *m_plotArea;
+
     Ui::StockConfigWidget m_ui;
 };
 

@@ -159,10 +159,19 @@ public:
 
     void addTitleToLayout();
 
+    void setStockRangeLinePen(const QPen &pen);
+    QPen stockRangeLinePen() const;
+    void setStockGainBrush(const QBrush &brush);
+    QBrush stockGainBrush() const;
+    void setStockLossBrush(const QBrush &brush);
+    QBrush stockLossBrush() const;
+
 public Q_SLOTS:
     void requestRepaint() const;
     void proxyModelStructureChanged();
-    void plotAreaUpdate() const;
+    void plotAreaUpdate();
+
+    void updateKChartStockAttributes();
 
 Q_SIGNALS:
     void pieAngleOffsetChanged(qreal);

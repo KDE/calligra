@@ -359,6 +359,41 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
     connect(pie, SIGNAL(showPercentChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowPercent(DataSet*,bool,int)));
     connect(pie, SIGNAL(showSymbolChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowSymbol(DataSet*,bool,int)));
 
+    axes = plotarea->stockAxesConfigWidget();
+    connect(axes, SIGNAL(axisAdded(AxisDimension,QString)),
+            this,   SLOT(addAxis(AxisDimension,QString)));
+    connect(axes, SIGNAL(axisRemoved(Axis*)),
+            this,   SLOT(removeAxis(Axis*)));
+    connect(axes, SIGNAL(axisShowTitleChanged(Axis*,bool)),
+            this,   SLOT(setAxisShowTitle(Axis*,bool)));
+    connect(axes, SIGNAL(axisShowChanged(Axis*,bool)),
+            this,   SLOT(setShowAxis(Axis*,bool)));
+    connect(axes, SIGNAL(axisPositionChanged(Axis*,QString)),
+            this,   SLOT(setAxisPosition(Axis*,QString)));
+    connect(axes, SIGNAL(axisLabelsPositionChanged(Axis*,QString)),
+            this,   SLOT(setAxisLabelsPosition(Axis*,QString)));
+    connect(axes, SIGNAL(axisShowLabelsChanged(Axis*,bool)),
+            this,   SLOT(setAxisShowLabels(Axis*,bool)));
+
+    connect(axes, SIGNAL(axisShowMajorGridLinesChanged(Axis*,bool)),
+            this,   SLOT(setAxisShowMajorGridLines(Axis*,bool)));
+    connect(axes, SIGNAL(axisShowMinorGridLinesChanged(Axis*,bool)),
+            this,   SLOT(setAxisShowMinorGridLines(Axis*,bool)));
+    // scaling dialog
+    connect(axes, SIGNAL(axisUseLogarithmicScalingChanged(Axis*,bool)),
+            this,   SLOT(setAxisUseLogarithmicScaling(Axis*,bool)));
+    connect(axes, SIGNAL(axisStepWidthChanged(Axis*,qreal)),
+            this,   SLOT(setAxisStepWidth(Axis*,qreal)));
+    connect(axes, SIGNAL(axisSubStepWidthChanged(Axis*,qreal)),
+            this,   SLOT(setAxisSubStepWidth(Axis*,qreal)));
+    connect(axes, SIGNAL(axisUseAutomaticStepWidthChanged(Axis*,bool)),
+            this,   SLOT(setAxisUseAutomaticStepWidth(Axis*,bool)));
+    connect(axes, SIGNAL(axisUseAutomaticSubStepWidthChanged(Axis*,bool)),
+            this,   SLOT(setAxisUseAutomaticSubStepWidth(Axis*,bool)));
+    // font dialog
+    connect(axes, SIGNAL(axisLabelsFontChanged(Axis*,QFont)),
+            this,   SLOT(setAxisLabelsFont(Axis*,QFont)));
+
     connect(d->shape, SIGNAL(updateConfigWidget()), plotarea, SLOT(updateData()));
 
     return widgets;

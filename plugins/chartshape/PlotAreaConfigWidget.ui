@@ -88,7 +88,7 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="cartesianPage">
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -159,6 +159,16 @@
      <widget class="QWidget" name="stockPage">
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
+        <widget class="KoChart::StockConfigWidget" name="stockConfigWidget" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QLabel" name="label_4">
          <property name="text">
           <string>Axes</string>
@@ -169,20 +179,14 @@
         </widget>
        </item>
        <item>
-        <widget class="KoChart::AxesConfigWidget" name="stockAxes" native="true"/>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>Data Sets</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
+        <widget class="KoChart::AxesConfigWidget" name="stockAxes" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
          </property>
         </widget>
-       </item>
-       <item>
-        <widget class="KoChart::StockConfigWidget" name="stockConfigWidget" native="true"/>
        </item>
        <item>
         <spacer name="verticalSpacer_2">

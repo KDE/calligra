@@ -240,7 +240,7 @@ QVariant KChartModel::data(const QModelIndex &index,
          !d->isKnownDataRole(role)) {
         return QVariant();
     }
-    if (!role == Qt::DisplayRole) {qInfo()<<Q_FUNC_INFO<<index.row()<<roleToString(role);}
+//     if (!role == Qt::DisplayRole) {qInfo()<<Q_FUNC_INFO<<index.row()<<roleToString(role);}
     int dataSetNumber, section;
     // Offset from the data set's row or column (depending on the data direction).
     // With one data dimension, it's always 0. Otherwise it's 1 for y data, and

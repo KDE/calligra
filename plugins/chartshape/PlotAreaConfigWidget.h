@@ -71,6 +71,7 @@ public:
     DataSetConfigWidget *cartesianDataSetConfigWidget() const;
     PieConfigWidget *pieConfigWidget() const;
     StockConfigWidget *stockConfigWidget() const;
+    AxesConfigWidget *stockAxesConfigWidget() const;
     
 public Q_SLOTS:
     void chartTypeSelected(QAction *action);

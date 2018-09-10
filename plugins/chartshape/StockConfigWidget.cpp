@@ -23,34 +23,22 @@
 #include "ui_StockConfigWidget.h"
 
 // Qt
-#include <QAction>
-#include <QMenu>
 #include <QLatin1String>
+#include <QToolButton>
+#include <QColorDialog>
 
 // KF5
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
-#include <kfontchooser.h>
 
 // Calligra
 #include <interfaces/KoChartModel.h>
 #include <KoIcon.h>
 
 // KChart
-#include <KChartChart>
-#include <KChartPosition>
-#include <KChartCartesianAxis>
-#include <KChartGridAttributes>
-#include <KChartPieAttributes>
-#include <KChartAbstractCartesianDiagram>
-#include <KChartLegend>
-#include <KChartDataValueAttributes>
-#include <KChartMeasure>
 
 // KoChart
 #include "ChartProxyModel.h"
 #include "PlotArea.h"
-#include "DataSet.h"
 #include "ChartDebug.h"
 
 using namespace KoChart;
@@ -77,11 +65,23 @@ void StockConfigWidget::init()
     setObjectName("StockConfigWidget");
     m_ui.setupUi(this);
 
+    m_plotArea = 0;
+
+    connect(m_ui.gainMarker, &QToolButton::clicked, this, &StockConfigWidget::gainClicked);
+    connect(m_ui.lossMarker, &QToolButton::clicked, this, &StockConfigWidget::lossClicked);
 }
 
 void StockConfigWidget::open(ChartShape* shape)
 {
     ConfigSubWidgetBase::open(shape);
+    m_plotArea = 0;
+    if (!chart) {
+        return;
+    }
+    m_plotArea = chart->plotArea();
+    m_ui.rangeLineStroke->open(shape);
+//     m_ui.gainMarker->open(shape);
+//     m_ui.lossMarker->open(shape);
 }
 
 void StockConfigWidget::updateData(ChartType type, ChartSubtype subtype)
@@ -91,5 +91,29 @@ void StockConfigWidget::updateData(ChartType type, ChartSubtype subtype)
     if (!chart || !chartTypes.contains(type)) {
         return;
     }
+    m_ui.rangeLineStroke->updateData();
+//     m_ui.gainMarker->updateData(chart->plotArea()->stockGainBrush());
+//     m_ui.lossMarker->updateData(chart->plotArea()->stockLossBrush());
 }
 
+void StockConfigWidget::gainClicked()
+{
+    QColorDialog dlg(m_plotArea->stockGainBrush().color());
+    if (dlg.exec() == QDialog::Accepted) {
+        QBrush brush = QBrush(dlg.selectedColor());
+        brush.setStyle(Qt::SolidPattern);
+        m_plotArea->setStockGainBrush(brush);
+        m_plotArea->plotAreaUpdate();
+    }
+}
+
+void StockConfigWidget::lossClicked()
+{
+    QColorDialog dlg(m_plotArea->stockLossBrush().color());
+    if (dlg.exec() == QDialog::Accepted) {
+        QBrush brush = QBrush(dlg.selectedColor());
+        brush.setStyle(Qt::SolidPattern);
+        m_plotArea->setStockLossBrush(brush);
+        m_plotArea->plotAreaUpdate();
+    }
+}

@@ -148,6 +148,10 @@ public:
     QPointF  lastZoomLevel;
     QSizeF   lastSize;
     mutable bool pixmapRepaintRequested;
+
+    QPen stockRangeLinePen;
+    QBrush stockGainBrush;
+    QBrush stockLossBrush;
 };
 
 PlotArea::Private::Private(PlotArea *q, ChartShape *parent)
@@ -202,6 +206,10 @@ PlotArea::Private::Private(PlotArea *q, ChartShape *parent)
     kdChart->takeCoordinatePlane(kdRadarPlane);
 
     shape->proxyModel()->setDataDimensions(1);
+
+    stockRangeLinePen.setWidthF(2.0);
+    stockGainBrush = QBrush(QColor(Qt::white));
+    stockLossBrush = QBrush(QColor(Qt::black));
 }
 
 PlotArea::Private::~Private()
@@ -630,6 +638,7 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
                        KoShapeLoadingContext &context)
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+    KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
 
     // The exact position defined in ODF overwrites the default layout position
     // NOTE: Do not do this as it means functionallity changes just because you save and load.
@@ -804,27 +813,37 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
             //if (!d->floor)
             //    d->floor = new Surface(this);
             //d->floor->loadOdf(n, context);
-        }
-        else if (d->chartType == StockChartType && n.localName() == "stock-gain-marker") {
-            // FIXME
-        }
-        else if (d->chartType == StockChartType && n.localName() == "stock-loss-marker") {
-            // FIXME
-        }
-        else if (d->chartType == StockChartType && n.localName() == "stock-range-line") {
-            if (n.hasAttributeNS(KoXmlNS::chart, "style-name")) {
-                styleStack.clear();
-                context.odfLoadingContext().fillStyleStack(n, KoXmlNS::chart, "style-name", "chart");
-
-                // stroke-color
-                const QString strokeColor = styleStack.property(KoXmlNS::svg, "stroke-color");
-                // FIXME: There seem to be no way to set this for the StockChart in KChart. :-/
-                //QPen(QColor(strokeColor));
-
-                // FIXME: svg:stroke-width
+        } else if (n.localName() == "stock-gain-marker") {
+            styleStack.clear();
+            context.odfLoadingContext().fillStyleStack(n, KoXmlNS::chart, "style-name", "chart");
+            styleStack.setTypeProperties("graphic");
+            if (styleStack.hasProperty(KoXmlNS::draw, "fill")) {
+                d->stockGainBrush = KoOdfGraphicStyles::loadOdfFillStyle(styleStack, styleStack.property(KoXmlNS::draw, "fill"), stylesReader);
+                debugChartOdf<<n.localName()<<d->stockGainBrush;
+            } else {
+                warnChartOdf<<n.localName()<<"Missing 'draw:fill' property in style"<<n.attributeNS(KoXmlNS::chart, "style-name");
             }
-        }
-        else if (n.localName() != "axis" && n.localName() != "series") {
+        } else if (n.localName() == "stock-loss-marker") {
+            styleStack.clear();
+            context.odfLoadingContext().fillStyleStack(n, KoXmlNS::chart, "style-name", "chart");
+            styleStack.setTypeProperties("graphic");
+            if (styleStack.hasProperty(KoXmlNS::draw, "fill")) {
+                d->stockLossBrush = KoOdfGraphicStyles::loadOdfFillStyle(styleStack, styleStack.property(KoXmlNS::draw, "fill"), stylesReader);
+                debugChartOdf<<n.localName()<<d->stockLossBrush;
+            } else {
+                warnChartOdf<<n.localName()<<"Missing 'draw:fill' property in style"<<n.attributeNS(KoXmlNS::chart, "style-name");
+            }
+        } else if (n.localName() == "stock-range-line") {
+            styleStack.clear();
+            context.odfLoadingContext().fillStyleStack(n, KoXmlNS::chart, "style-name", "chart");
+            styleStack.setTypeProperties("graphic");
+            if (styleStack.hasProperty(KoXmlNS::draw, "stroke")) {
+                d->stockRangeLinePen = KoOdfGraphicStyles::loadOdfStrokeStyle(styleStack, styleStack.property(KoXmlNS::draw, "stroke"), stylesReader);
+                debugChartOdf<<n.localName()<<d->stockRangeLinePen;
+            } else {
+                warnChartOdf<<n.localName()<<"Missing 'draw:stroke' property in style"<<n.attributeNS(KoXmlNS::chart, "style-name");
+            }
+        } else if (n.localName() != "axis" && n.localName() != "series") {
             warnChart << "PlotArea::loadOdf(): Unknown tag name " << n.localName();
         }
     }
@@ -860,8 +879,6 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
     // add axes titles to layout
     addAxesTitlesToLayout();
 
-    requestRepaint();
-
     return true;
 }
 
@@ -878,6 +895,7 @@ void PlotArea::saveOdf(KoShapeSavingContext &context) const
     plotAreaStyle.addProperty("chart:series-source",
                                (direction == Qt::Horizontal)
                                ? "rows" : "columns");
+
     // Save chart subtype
     saveOdfSubType(bodyWriter, plotAreaStyle);
 
@@ -920,6 +938,30 @@ void PlotArea::saveOdf(KoShapeSavingContext &context) const
 
     if (d->threeDScene) {
         d->threeDScene->saveOdfAttributes(bodyWriter);
+    }
+    if (d->chartType == StockChartType) {
+        QString styleName;
+
+        bodyWriter.startElement("chart:stock-gain-marker");
+        KoGenStyle stockGainStyle(KoGenStyle::ChartAutoStyle, "chart");
+        KoOdfGraphicStyles::saveOdfFillStyle(stockGainStyle, context.mainStyles(), d->stockGainBrush);
+        styleName = context.mainStyles().insert(stockGainStyle, "ch");
+        bodyWriter.addAttribute("chart:style-name", styleName);
+        bodyWriter.endElement(); // chart:stock-gain-marker
+
+        bodyWriter.startElement("chart:stock-loss-marker");
+        KoGenStyle stockLossStyle(KoGenStyle::ChartAutoStyle, "chart");
+        KoOdfGraphicStyles::saveOdfFillStyle(stockLossStyle, context.mainStyles(), d->stockLossBrush);
+        styleName = context.mainStyles().insert(stockLossStyle, "ch");
+        bodyWriter.addAttribute("chart:style-name", styleName);
+        bodyWriter.endElement(); // chart:stock-loss-marker
+
+        bodyWriter.startElement("chart:stock-range-line");
+        KoGenStyle stockRangeStyle(KoGenStyle::ChartAutoStyle, "chart");
+        KoOdfGraphicStyles::saveOdfStrokeStyle(stockRangeStyle, context.mainStyles(), d->stockRangeLinePen);
+        styleName = context.mainStyles().insert(stockRangeStyle, "ch");
+        bodyWriter.addAttribute("chart:style-name", styleName);
+        bodyWriter.endElement(); // chart:stock-range-line
     }
 
     // Done with the attributes, start writing the children.
@@ -1040,7 +1082,7 @@ void PlotArea::saveOdfSubType(KoXmlWriter& xmlWriter,
         }
         break;
 
-    case StockChartType:
+    case StockChartType: {
         switch(d->chartSubtype) {
         case NoChartSubtype:
         case HighLowCloseChartSubtype:
@@ -1051,6 +1093,7 @@ void PlotArea::saveOdfSubType(KoXmlWriter& xmlWriter,
             plotAreaStyle.addProperty("chart:japanese-candle-stick", "true");
             break;
         }
+    }
     case BubbleChartType:
     case SurfaceChartType:
     case GanttChartType:
@@ -1138,9 +1181,12 @@ void PlotArea::registerKdPlane(KChart::AbstractCoordinatePlane *plane)
     }
 }
 
-void PlotArea::plotAreaUpdate() const
+void PlotArea::plotAreaUpdate()
 {
     parent()->legend()->update();
+    if (d->chartType == StockChartType) {
+        updateKChartStockAttributes();
+    }
     requestRepaint();
     foreach(Axis* axis, d->axes)
         axis->update();
@@ -1287,5 +1333,42 @@ void PlotArea::addAxesTitlesToLayout()
     if (axis) {
         layout->remove(axis->title());
         layout->setItemType(axis->title(), SecondaryYAxisTitleType);
+    }
+}
+
+void PlotArea::setStockRangeLinePen(const QPen &pen)
+{
+    d->stockRangeLinePen = pen;
+}
+
+QPen PlotArea::stockRangeLinePen() const
+{
+    return d->stockRangeLinePen;
+}
+
+void PlotArea::setStockGainBrush(const QBrush &brush)
+{
+    d->stockGainBrush = brush;
+}
+
+QBrush PlotArea::stockGainBrush() const
+{
+    return d->stockGainBrush;
+}
+
+void PlotArea::setStockLossBrush(const QBrush &brush)
+{
+    d->stockLossBrush = brush;
+}
+
+QBrush PlotArea::stockLossBrush() const
+{
+    return d->stockLossBrush;
+}
+
+void PlotArea::updateKChartStockAttributes()
+{
+    for (Axis *a : d->axes) {
+        a->updateKChartStockAttributes();
     }
 }

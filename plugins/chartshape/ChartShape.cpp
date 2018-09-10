@@ -1018,12 +1018,13 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
         a->plotAreaChartTypeChanged(chartType);
     }
     setChartSubType(chartSubType());
+    debugChartOdf<<"loaded:"<<this->chartType()<<chartSubType();
 
+    d->plotArea->plotAreaUpdate();
     d->legend->update();
 
     requestRepaint();
 
-    debugChartOdf<<"loaded:"<<this->chartType()<<chartSubType();
     return true;
 }
 

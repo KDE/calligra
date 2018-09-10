@@ -215,6 +215,8 @@ public Q_SLOTS:
     void setGapBetweenSets(int percent);
     void setPieAngleOffset(qreal angle);
 
+    void updateKChartStockAttributes();
+
 private:
     class Private;
     Private *const d;
