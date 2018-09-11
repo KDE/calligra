@@ -30,7 +30,6 @@
 #include <QApplication>
 #include <QWidget>
 #include <QQmlComponent>
-#include <QUrl>
 #include <QStandardPaths>
 
 #include <KIconLoader>

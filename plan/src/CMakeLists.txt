@@ -68,7 +68,7 @@ if (KF5AkonadiContact_FOUND)
     # disable for now: there is a bug
     # it only works if you use kde contacts (of course) but many use other stuff, so gets dissapointed
     add_definitions(-DPLAN_KDEPIMLIBS_FOUND)
-    message(WARNING "AkonadiContacs available, but funtion is disabled due to Bug 311940")
+    message(WARNING "AkonadiContacs available, but function is disabled due to Bug 311940")
 endif ()
 
 if ("${KF5CalendarCore_VERSION}" VERSION_GREATER 5.6.40)

@@ -1,5 +1,5 @@
 ## Disable librcps for now
-## It has some bugs, and should be extended to be really usefull
+## It has some bugs, and should be extended to be really useful
 # set(LIBRCPS_MIN_VERSION "0.3")
 # # macro_optional_find_package(LibRCPS)
 # # 

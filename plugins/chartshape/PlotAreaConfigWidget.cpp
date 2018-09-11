@@ -63,7 +63,6 @@
 #include "DataSet.h"
 #include "Axis.h"
 #include "ui_ChartTableEditor.h"
-#include "ui_PlotAreaConfigWidget.h"
 #include "NewAxisDialog.h"
 #include "AxisScalingDialog.h"
 #include "FontEditorDialog.h"

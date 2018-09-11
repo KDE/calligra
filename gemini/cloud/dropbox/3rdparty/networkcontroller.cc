@@ -93,7 +93,7 @@ void NetworkController::sslErrors(QNetworkReply *reply, const QList<QSslError> &
     }
 
     if(errorDescription.length() > 0) {
-        QString error = QString("An error occured when attempting to make a secure connection:%1").arg(errorDescription);
+        QString error = QString("An error occurred when attempting to make a secure connection:%1").arg(errorDescription);
         QMessageBox::StandardButton result = QMessageBox::question(0, "Error establishing secure connection.", QString("%1\n Do you wish to continue?").arg(error), QMessageBox::Yes | QMessageBox::No);
 
         if(result == QMessageBox::Yes) {

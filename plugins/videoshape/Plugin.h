@@ -23,8 +23,6 @@
 #include <QObject>
 #include <QVariantList>
 
-#include <QVariantList>
-
 class Plugin : public QObject
 {
     Q_OBJECT

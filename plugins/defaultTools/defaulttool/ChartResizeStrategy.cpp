@@ -24,7 +24,6 @@
 #include <KoShapeContainer.h>
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
-#include <KoShapeContainer.h>
 #include <KoShapeContainerModel.h>
 #include <commands/KoShapeMoveCommand.h>
 #include <commands/KoShapeSizeCommand.h>

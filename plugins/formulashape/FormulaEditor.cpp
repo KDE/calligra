@@ -32,7 +32,6 @@
 #include "ElementFactory.h"
 #include "OperatorElement.h"
 #include "IdentifierElement.h"
-#include "ElementFactory.h"
 #include "FormulaCommand.h"
 #include "FormulaDebug.h"
 

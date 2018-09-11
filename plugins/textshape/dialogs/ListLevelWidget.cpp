@@ -173,7 +173,7 @@ void ListLevelWidget::setDisplay(const KoListLevelProperties &props)
     }
 
     widget.format->setCurrentIndex(props.numberFormat());
-    numberFormatChanged(props.numberFormat()); // enable/diable letterSynch checkbox
+    numberFormatChanged(props.numberFormat()); // enable/disable letterSynch checkbox
     widget.synchro->setChecked(props.letterSynchronization());
     widget.prefix->setText(props.listItemPrefix());
     widget.suffix->setText(props.listItemSuffix());

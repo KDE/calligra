@@ -49,7 +49,6 @@
 #include <QAction>
 #include <QDebug>
 
-#include <QAction>
 #include <QGridLayout>
 #include <QToolButton>
 #include <QCheckBox>

@@ -45,7 +45,6 @@
 #include <KoOdfWorkaround.h>
 #include <KoStyleStack.h>
 #include <KoUnit.h>
-#include <KoXmlNS.h>
 
 #include "CalculationSettings.h"
 #include "Condition.h"

@@ -64,7 +64,7 @@ ecm_add_app_icon(calligragemini_SRCS ICONS ${ICONS_SRCS})
 add_executable(calligrageminithumbnailhelper ${thumbnailhelper_SRCS})
 target_link_libraries(calligrageminithumbnailhelper
     komain
-    KF5::Crash # needed to explicitely disable drkonqi if any plugin links to kdelibs4support
+    KF5::Crash # needed to explicitly disable drkonqi if any plugin links to kdelibs4support
 )
 
 # Calligra Gemini application

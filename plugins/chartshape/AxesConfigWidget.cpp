@@ -51,7 +51,6 @@
 #include "ChartProxyModel.h"
 #include "PlotArea.h"
 #include "Axis.h"
-#include "ui_AxesConfigWidget.h"
 #include "NewAxisDialog.h"
 #include "AxisScalingDialog.h"
 #include "FontEditorDialog.h"

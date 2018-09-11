@@ -30,7 +30,7 @@
 # product or feature is missing another internal or external dependency. If
 # optional (OPTIONAL), the rest of the set will still be build in that case.
 # The products and features to include in a set can be listed directly or
-# indirectly: they can be named explicitely, but also by including other
+# indirectly: they can be named explicitly, but also by including other
 # productsets in a set, whose products and features will then be part of the
 # first set as well.
 # Products, features and productsets can be listed as dependencies in multiple
@@ -249,7 +249,7 @@ calligra_define_productset(FILTERS_FLOW_IMPORT "All Flow import filters"
         FILTER_VISIO_TO_ODG
         FILTER_WPG_TO_ODG
 )
-#calligra_define_productset(FILTERS_FLOW_EXPORT "All Flow export filters"  OPTIONAL ) noone currently
+#calligra_define_productset(FILTERS_FLOW_EXPORT "All Flow export filters"  OPTIONAL ) none currently
 calligra_define_productset(FILTERS_FLOW "All Flow filters"
     OPTIONAL
         FILTERS_FLOW_IMPORT
@@ -262,7 +262,7 @@ calligra_define_productset(FILTERS_STAGE_IMPORT "All Stage import filters"
         FILTER_PPT_TO_ODP
         FILTER_PPTX_TO_ODP
 )
-#calligra_define_productset(FILTERS_STAGE_EXPORT "All Stage export filters"  OPTIONAL ) noone currently
+#calligra_define_productset(FILTERS_STAGE_EXPORT "All Stage export filters"  OPTIONAL ) none currently
 calligra_define_productset(FILTERS_STAGE "All Stage filters"
     OPTIONAL
         FILTERS_STAGE_IMPORT

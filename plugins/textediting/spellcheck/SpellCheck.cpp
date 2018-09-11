@@ -251,7 +251,7 @@ void SpellCheck::documentChanged(int from, int charsRemoved, int charsAdded)
         return;
 
     // If a simple edit, we use the cursor position to determine where
-    // the change occured. This makes it possible to handle cases
+    // the change occurred. This makes it possible to handle cases
     // where formatting of a block has changed, eg. when dropcaps is used.
     // QTextDocument then reports the change as if the whole block has changed.
     // Ex: Having a 10 char line and you add a char at pos 7:

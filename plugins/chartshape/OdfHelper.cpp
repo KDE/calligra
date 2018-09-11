@@ -69,7 +69,6 @@
 #include <KoOdfGradientBackground.h>
 #include <KoPatternBackground.h>
 #include <KoGradientBackground.h>
-#include <KoOdfWorkaround.h>
 #include <KoOdfGraphicStyles.h>
 #include "kochart_global.h"
 
