@@ -623,7 +623,7 @@ uint Style::topPenValue() const
 QColor Style::fontColor() const
 {
     if (!d->subStyles.contains(FontColor))
-        return SubStyleOne<FontColor, QColor>().value1;
+        return SubStyleOne<FontColor, QColor>(Qt::black).value1;
     return static_cast<const SubStyleOne<FontColor, QColor>*>(d->subStyles[FontColor].data())->value1;
 }
 
@@ -679,7 +679,7 @@ QPen Style::goUpDiagonalPen() const
 QBrush Style::backgroundBrush() const
 {
     if (!d->subStyles.contains(BackgroundBrush))
-        return SubStyleOne<BackgroundBrush, QBrush>().value1;
+        return SubStyleOne<BackgroundBrush, QBrush>(Qt::white).value1;
     return static_cast<const SubStyleOne<BackgroundBrush, QBrush>*>(d->subStyles[BackgroundBrush].data())->value1;
 }
 
