@@ -10,6 +10,7 @@
  * Copyright (C) 2006 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
  * Copyright (C) 2011 Thorsten Zachmann <zachmann@kde.com>
+ * Copyright (C) 2018 Dag Andersen <danders@get2net.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -62,15 +63,11 @@ public:
     Qt::PenCapStyle capStyle() const;
     Qt::PenJoinStyle joinStyle() const;
 
-    void setCanvas(KoCanvasBase *canvas);
-    void setActive(bool active);
-
 private Q_SLOTS:
-    /// selection has changed
-    void selectionChanged();
-
     /// apply line changes to the selected shape
     void applyChanges();
+
+    void colorButtonClicked();
 
 private:
     void blockChildSignals(bool block);

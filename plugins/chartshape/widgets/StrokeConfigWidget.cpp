@@ -11,6 +11,7 @@
  * Copyright (C) 2006 Laurent Montel <montel@kde.org>
  * Copyright (C) 2007,2011 Thorsten Zachmann <t.zachmann@zagge.de>
  * Copyright (C) 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * Copyright (C) 2018 Dag Andersen <danders@get2net.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -42,6 +43,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QSizePolicy>
+#include <QColorDialog>
 
 // KF5
 #include <klocalizedstring.h>
@@ -88,59 +90,59 @@ CapNJoinMenu::CapNJoinMenu(QWidget *parent)
 {
     QGridLayout *mainLayout = new QGridLayout();
     mainLayout->setMargin(2);
-    
+
     // The cap group
     capGroup = new QButtonGroup(this);
     capGroup->setExclusive(true);
-    
+
     QToolButton *button = 0;
-    
+
     button = new QToolButton(this);
     button->setIcon(koIcon("stroke-cap-butt"));
     button->setCheckable(true);
     button->setToolTip(i18n("Butt cap"));
     capGroup->addButton(button, Qt::FlatCap);
     mainLayout->addWidget(button, 2, 0);
-    
+
     button = new QToolButton(this);
     button->setIcon(koIcon("stroke-cap-round"));
     button->setCheckable(true);
     button->setToolTip(i18n("Round cap"));
     capGroup->addButton(button, Qt::RoundCap);
     mainLayout->addWidget(button, 2, 1);
-    
+
     button = new QToolButton(this);
     button->setIcon(koIcon("stroke-cap-square"));
     button->setCheckable(true);
     button->setToolTip(i18n("Square cap"));
     capGroup->addButton(button, Qt::SquareCap);
     mainLayout->addWidget(button, 2, 2, Qt::AlignLeft);
-    
+
     // The join group
     joinGroup = new QButtonGroup(this);
     joinGroup->setExclusive(true);
-    
+
     button = new QToolButton(this);
     button->setIcon(koIcon("stroke-join-miter"));
     button->setCheckable(true);
     button->setToolTip(i18n("Miter join"));
     joinGroup->addButton(button, Qt::MiterJoin);
     mainLayout->addWidget(button, 3, 0);
-    
+
     button = new QToolButton(this);
     button->setIcon(koIcon("stroke-join-round"));
     button->setCheckable(true);
     button->setToolTip(i18n("Round join"));
     joinGroup->addButton(button, Qt::RoundJoin);
     mainLayout->addWidget(button, 3, 1);
-    
+
     button = new QToolButton(this);
     button->setIcon(koIcon("stroke-join-bevel"));
     button->setCheckable(true);
     button->setToolTip(i18n("Bevel join"));
     joinGroup->addButton(button, Qt::BevelJoin);
     mainLayout->addWidget(button, 3, 2, Qt::AlignLeft);
-    
+
     // Miter limit
     // set min/max/step and value in points, then set actual unit
     miterLimit = new KoUnitDoubleSpinBox(this);
@@ -149,7 +151,7 @@ CapNJoinMenu::CapNJoinMenu(QWidget *parent)
     miterLimit->setUnit(KoUnit(KoUnit::Point));
     miterLimit->setToolTip(i18n("Miter limit"));
     mainLayout->addWidget(miterLimit, 4, 0, 1, 3);
-    
+
     mainLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
     setLayout(mainLayout);
 }
@@ -166,8 +168,6 @@ public:
     Private()
         : chart(0)
         , plotArea(0)
-        , canvas(0)
-        , active(true)
     {
     }
 
@@ -179,13 +179,10 @@ public:
 
     CapNJoinMenu *capNJoinMenu;
     QToolButton *colorButton;
-    KoColorPopupAction *colorAction;
-
+    QColor color;
+    QIcon defaultIcon;
+    QIcon blackIcon;
     QWidget *spacer;
-
-    KoCanvasBase *canvas;
-
-    bool active;
 };
 
 StrokeConfigWidget::StrokeConfigWidget(QWidget * parent)
@@ -193,30 +190,21 @@ StrokeConfigWidget::StrokeConfigWidget(QWidget * parent)
     , d(new Private())
 {
     setObjectName("Stroke widget");
+
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setMargin(0);
 
     QHBoxLayout *firstLineLayout = new QHBoxLayout();
-
 
     // Line style
     d->lineStyle = new KoLineStyleSelector(this);
     d->lineStyle->setMinimumWidth(70);
     firstLineLayout->addWidget(d->lineStyle);
 
-    QHBoxLayout *secondLineLayout = new QHBoxLayout();
-
-    // Line width
-//     QLabel *l = new QLabel(this);
-//     l->setText(i18n("Thickness:"));
-//     l->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-//     l->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-//     firstLineLayout->addWidget(l);
-
-    // set min/max/step and value in points, then set actual unit
+    // Line width, NOTE: KChart does not handle points
     d->lineWidth = new KoUnitDoubleSpinBox(this);
-    d->lineWidth->setMinMaxStep(0.0, 1000.0, 0.5);
-    d->lineWidth->setDecimals(2);
+    d->lineWidth->setMinMaxStep(0.0, 1000.0, 1.0);
+    d->lineWidth->setDecimals(0);
     d->lineWidth->setUnit(KoUnit(KoUnit::Point));
     d->lineWidth->setToolTip(i18n("Set line width of actual selection"));
     firstLineLayout->addWidget(d->lineWidth);
@@ -227,37 +215,34 @@ StrokeConfigWidget::StrokeConfigWidget(QWidget * parent)
     capNJoinButton->setMenu(d->capNJoinMenu);
     capNJoinButton->setText("...");
     capNJoinButton->setPopupMode(QToolButton::InstantPopup);
-    
+
     firstLineLayout->addWidget(capNJoinButton);
 
     d->colorButton = new QToolButton(this);
+    d->colorButton->setObjectName("colorButton");
+    d->colorButton->setToolTip(i18n("Change the color of the line"));
+    d->colorButton->setIcon(koIcon("color-picker-white"));
+
     firstLineLayout->addWidget(d->colorButton);
-    d->colorAction = new KoColorPopupAction(this);
-    d->colorAction->setIcon(koIcon("format-stroke-color"));
-    d->colorAction->setToolTip(i18n("Change the color of the line/border"));
-    d->colorButton->setDefaultAction(d->colorAction);
 
     mainLayout->addLayout(firstLineLayout);
-    mainLayout->addLayout(secondLineLayout);
 
     // Spacer
     d->spacer = new QWidget();
     d->spacer->setObjectName("SpecialSpacer");
     mainLayout->addWidget(d->spacer);
 
-
     // set sensitive defaults
     d->lineStyle->setLineStyle(Qt::SolidLine);
     d->lineWidth->changeValue(1);
-    d->colorAction->setCurrentColor(Qt::black);
 
     // Make the signals visible on the outside of this widget.
-    connect(d->lineStyle,  SIGNAL(currentIndexChanged(int)), this, SLOT(applyChanges()));
-    connect(d->lineWidth,  SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyChanges()));
-    connect(d->capNJoinMenu->capGroup,   SIGNAL(buttonClicked(int)),       this, SLOT(applyChanges()));
-    connect(d->capNJoinMenu->joinGroup,  SIGNAL(buttonClicked(int)),       this, SLOT(applyChanges()));
-    connect(d->capNJoinMenu->miterLimit, SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyChanges()));
-    connect(d->colorAction, SIGNAL(colorChanged(KoColor)), this, SLOT(applyChanges()));
+    connect(d->lineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(applyChanges()));
+    connect(d->lineWidth, SIGNAL(valueChangedPt(qreal)), this, SLOT(applyChanges()));
+    connect(d->capNJoinMenu->capGroup, SIGNAL(buttonClicked(int)), this, SLOT(applyChanges()));
+    connect(d->capNJoinMenu->joinGroup, SIGNAL(buttonClicked(int)), this, SLOT(applyChanges()));
+    connect(d->capNJoinMenu->miterLimit, SIGNAL(valueChangedPt(qreal)), this, SLOT(applyChanges()));
+    connect(d->colorButton, &QToolButton::clicked, this, &StrokeConfigWidget::colorButtonClicked);
 }
 
 StrokeConfigWidget::~StrokeConfigWidget()
@@ -293,7 +278,9 @@ void StrokeConfigWidget::updateData()
     d->capNJoinMenu->miterLimit->changeValue(stroke.miterLimit());
     d->capNJoinMenu->miterLimit->setEnabled(stroke.joinStyle() == Qt::MiterJoin);
     d->lineStyle->setLineStyle(stroke.style(), stroke.dashPattern());
-    d->colorAction->setCurrentColor(stroke.color());
+    d->color = stroke.color();
+    QString style = QString("QToolButton#colorButton { background-color: %1 }").arg(d->color.name());
+    d->colorButton->setStyleSheet(style);
     
     blockChildSignals(false);
 }
@@ -316,7 +303,7 @@ qreal StrokeConfigWidget::lineWidth() const
 
 QColor StrokeConfigWidget::color() const
 {
-    return d->colorAction->currentColor();
+    return d->color;
 }
 
 qreal StrokeConfigWidget::miterLimit() const
@@ -336,7 +323,6 @@ Qt::PenJoinStyle StrokeConfigWidget::joinStyle() const
 
 void StrokeConfigWidget::blockChildSignals(bool block)
 {
-    d->colorAction->blockSignals(block);
     d->lineWidth->blockSignals(block);
     d->capNJoinMenu->capGroup->blockSignals(block);
     d->capNJoinMenu->joinGroup->blockSignals(block);
@@ -344,12 +330,6 @@ void StrokeConfigWidget::blockChildSignals(bool block)
     d->lineStyle->blockSignals(block);
 }
 
-void StrokeConfigWidget::setActive(bool active)
-{
-    d->active = active;
-}
-
-//------------------------
 void StrokeConfigWidget::applyChanges()
 {
     QPen pen;
@@ -366,51 +346,13 @@ void StrokeConfigWidget::applyChanges()
     d->chart->update();
 }
 
-// ----------------------------------------------------------------
-
-
-void StrokeConfigWidget::selectionChanged()
+void StrokeConfigWidget::colorButtonClicked()
 {
-    // see a comment in setUnit()
-//     setUnit(d->canvas->unit());
-
-
-//     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-//     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-//     KoShape * shape = selection->firstSelectedShape();
-//     if (shape && shape->stroke()) {
-//         KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
-//         if (pathShape) {
-//             updateControls(shape->stroke(), pathShape->marker(KoMarkerData::MarkerStart),
-//                                              pathShape->marker(KoMarkerData::MarkerEnd));
-//         }
-//         else {
-//             updateControls(shape->stroke(), 0 ,0);
-//         }
-//     }
-}
-
-void StrokeConfigWidget::setCanvas( KoCanvasBase *canvas )
-{
-    if (canvas) {
-//         connect(canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
-//                 this, SLOT(selectionChanged()));
-//         connect(canvas->shapeManager(), SIGNAL(selectionContentChanged()),
-//                 this, SLOT(selectionChanged()));
-//         connect(canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
-//                 this, SLOT(canvasResourceChanged(int,QVariant)));
-//         setUnit(canvas->unit());
-// 
-//         KoDocumentResourceManager *resourceManager = canvas->shapeController()->resourceManager();
-//         if (resourceManager) {
-//             KoMarkerCollection *collection = resourceManager->resource(KoDocumentResourceManager::MarkerCollection).value<KoMarkerCollection*>();
-//             if (collection) {
-//                 updateMarkers(collection->markers());
-//             }
-//         }
+    QColorDialog dlg;
+    if (dlg.exec() == QDialog::Accepted) {
+        d->color = dlg.selectedColor();
+        applyChanges();
     }
-
-    d->canvas = canvas;
 }
 
 #include "StrokeConfigWidget.moc"

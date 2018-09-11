@@ -65,6 +65,12 @@ void StockConfigWidget::init()
     setObjectName("StockConfigWidget");
     m_ui.setupUi(this);
 
+    m_ui.gainMarker->setIcon(koIcon("color-picker-black"));
+    m_ui.gainMarker->setToolTip(i18nc("@info:tooltip", "Select gain marker color"));
+
+    m_ui.lossMarker->setIcon(koIcon("color-picker-white"));
+    m_ui.lossMarker->setToolTip(i18nc("@info:tooltip", "Select loss marker color"));
+
     m_plotArea = 0;
 
     connect(m_ui.gainMarker, &QToolButton::clicked, this, &StockConfigWidget::gainClicked);
@@ -80,8 +86,6 @@ void StockConfigWidget::open(ChartShape* shape)
     }
     m_plotArea = chart->plotArea();
     m_ui.rangeLineStroke->open(shape);
-//     m_ui.gainMarker->open(shape);
-//     m_ui.lossMarker->open(shape);
 }
 
 void StockConfigWidget::updateData(ChartType type, ChartSubtype subtype)
@@ -92,8 +96,9 @@ void StockConfigWidget::updateData(ChartType type, ChartSubtype subtype)
         return;
     }
     m_ui.rangeLineStroke->updateData();
-//     m_ui.gainMarker->updateData(chart->plotArea()->stockGainBrush());
-//     m_ui.lossMarker->updateData(chart->plotArea()->stockLossBrush());
+
+    m_ui.gainMarker->setStyleSheet(QString("QToolButton#gainMarker { background-color: %1 }").arg(m_plotArea->stockGainBrush().color().name()));
+    m_ui.lossMarker->setStyleSheet(QString("QToolButton#lossMarker { background-color: %1 }").arg(m_plotArea->stockLossBrush().color().name()));
 }
 
 void StockConfigWidget::gainClicked()
@@ -104,6 +109,7 @@ void StockConfigWidget::gainClicked()
         brush.setStyle(Qt::SolidPattern);
         m_plotArea->setStockGainBrush(brush);
         m_plotArea->plotAreaUpdate();
+        chart->update();
     }
 }
 
@@ -115,5 +121,6 @@ void StockConfigWidget::lossClicked()
         brush.setStyle(Qt::SolidPattern);
         m_plotArea->setStockLossBrush(brush);
         m_plotArea->plotAreaUpdate();
+        chart->update();
     }
 }
