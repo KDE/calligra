@@ -41,6 +41,7 @@
 #include <KoPointerEvent.h>
 #include <KoTextShapeData.h>
 #include <KoViewConverter.h>
+#include <KoInteractionTool.h>
 
 // KChart
 #include <KChartChart>
@@ -120,13 +121,35 @@ ChartTool::ChartTool(KoCanvasBase *canvas)
     connect(m_foo, SIGNAL(toggled(bool)), this, SLOT(catchBar(bool)));
 
 #endif
-//     connect(canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
-//             this, SLOT(shapeSelectionChanged()));
+    connect(canvas->shapeManager(), SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 }
 
 ChartTool::~ChartTool()
 {
     delete d;
+}
+
+void ChartTool::shapeSelectionChanged()
+{
+    // When this chart tool is activated with one chart and a new chart is created,
+    // the new chart is selected but the deactivate method is not called,
+    // so this tool will still operate on the old chart.
+    // We activate the default tool to rectify this.
+    // FIXME: could probably be done in KoToolBase (or whereever approprieate)
+
+    if (!d->shape) {
+        return;
+    }
+    QList<KoShape*> lst = canvas()->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
+    if (lst.contains(d->shape)) {
+        return;
+    }
+    for (KoShape *s : lst) {
+        ChartShape *chart = dynamic_cast<ChartShape*>(s);
+        if (chart && chart != d->shape) {
+            activateTool(KoInteractionTool_ID);
+        }
+    }
 }
 
 void ChartTool::paint(QPainter &painter, const KoViewConverter &converter)
