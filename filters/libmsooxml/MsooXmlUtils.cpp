@@ -177,8 +177,7 @@ KoFilter::ConversionStatus Utils::loadAndParse(QIODevice* io, KoXmlDocument& doc
         errorMsooXml << "Parsing error in " << fileName << ", aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl
         << " Error message: " << errorMsg;
-        errorMessage = i18n("Parsing error in the main document at line %1, column %2.\n"
-                            "Error message: %3", errorLine , errorColumn , i18n(errorMsg));
+        errorMessage = i18n("Parsing error in the main document at line %1, column %2.\nError message: %3", errorLine , errorColumn , errorMsg);
         return KoFilter::ParsingError;
     }
     debugMsooXml << "File" << fileName << "loaded and parsed.";
