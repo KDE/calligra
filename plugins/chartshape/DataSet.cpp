@@ -360,6 +360,7 @@ KChart::DataValueAttributes DataSet::Private::defaultDataValueAttributes() const
 
 void DataSet::Private::insertDataValueAttributeSectionIfNecessary(int section)
 {
+    Q_ASSERT(section >= 0);
     if (!sectionsDataValueAttributes.contains(section))
         sectionsDataValueAttributes[section] = dataValueAttributes;
 }
@@ -637,6 +638,7 @@ void DataSet::Private::setAttributesAccordingToType()
     dataValueAttributes = attr;
 
     for (int i = 0; i < sectionsDataValueAttributes.count(); ++i) {
+        Q_ASSERT(sectionsDataValueAttributes.contains(i));
         KChart::DataValueAttributes attr = sectionsDataValueAttributes[i];
         KChart::RelativePosition positivePosition = attr.positivePosition();
         if (chartType ==  KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
@@ -1004,6 +1006,10 @@ void DataSet::setPieExplodeFactor(int factor)
 
 void DataSet::setPen(int section, const QPen &pen)
 {
+    if (section < 0) {
+        setPen(pen);
+        return;
+    }
     d->pens[section] = pen;
     if (d->kdChartModel)
         d->kdChartModel->dataSetChanged(this, KChartModel::PenDataRole, section);
@@ -1015,6 +1021,10 @@ void DataSet::setPen(int section, const QPen &pen)
 
 void DataSet::setBrush(int section, const QBrush &brush)
 {
+    if (section < 0) {
+        setBrush(brush);
+        return;
+    }
     d->brushes[section] = brush;
     if (d->kdChartModel)
         d->kdChartModel->dataSetChanged(this, KChartModel::BrushDataRole, section);
