@@ -955,8 +955,6 @@ bool Axis::attachDataSet(DataSet *dataSet)
         Q_ASSERT(model);
 
         model->addDataSet(dataSet);
-        // HACK: make sure kchart gets notified about the secondary plane
-        plotArea()->registerKdPlane(d->kdPlane);
 
         layoutPlanes();
         requestRepaint();
