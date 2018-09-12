@@ -1237,6 +1237,14 @@ void ChartShape::saveOdfData(KoXmlWriter &bodyWriter, KoGenStyles &mainStyles) c
     bodyWriter.endElement(); // table:table
 }
 
+void ChartShape::updateAll()
+{
+    d->legend->update();
+    d->plotArea->plotAreaUpdate();
+    relayout();
+    update();
+}
+
 void ChartShape::update() const
 {
     KoShape::update();

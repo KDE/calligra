@@ -238,6 +238,9 @@ Q_SIGNALS:
     void chartTypeChanged(ChartType, ChartType prev = LastChartType);
     void updateConfigWidget() const;
 
+public Q_SLOTS:
+    void updateAll();
+
 protected:
     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
 

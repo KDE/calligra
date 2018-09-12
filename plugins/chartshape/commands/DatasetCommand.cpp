@@ -92,7 +92,7 @@ void DatasetCommand::redo()
         m_newAxis->attachDataSet(m_dataSet);
     }
 
-    m_chart->update();
+    m_chart->updateAll();
 }
 
 void DatasetCommand::undo()
@@ -123,7 +123,7 @@ void DatasetCommand::undo()
         m_oldAxis->attachDataSet(m_dataSet);
     }
 
-    m_chart->update();
+    m_chart->updateAll();
 }
 
 void DatasetCommand::setDataSetChartType(ChartType type, ChartSubtype subtype)
