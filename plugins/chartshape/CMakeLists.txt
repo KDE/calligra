@@ -78,6 +78,7 @@ set (chartshape_LIB_SRCS
     commands/GapCommand.cpp
     commands/PlotAreaCommand.cpp
     widgets/StrokeConfigWidget.cpp
+    widgets/RadarDataSetConfigWidget.cpp
 )
 
 ki18n_wrap_ui(chartshape_LIB_SRCS
@@ -88,6 +89,7 @@ ki18n_wrap_ui(chartshape_LIB_SRCS
     AxesConfigWidget.ui
     DataSetConfigWidget.ui
     PieConfigWidget.ui
+    widgets/RadarDataSetConfigWidget.ui
     dialogs/ChartTableEditor.ui
     dialogs/NewAxisDialog.ui
     dialogs/AxisScalingDialog.ui

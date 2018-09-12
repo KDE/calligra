@@ -66,6 +66,7 @@
 #include "AxesConfigWidget.h"
 #include "DataSetConfigWidget.h"
 #include "PieConfigWidget.h"
+#include "RadarDataSetConfigWidget.h"
 #include "KChartConvertions.h"
 #include "commands/ChartTypeCommand.h"
 #include "commands/LegendCommand.h"
@@ -416,6 +417,23 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
     // font dialog
     connect(axes, SIGNAL(axisLabelsFontChanged(Axis*,QFont)),
             this,   SLOT(setAxisLabelsFont(Axis*,QFont)));
+
+    // Radar
+    RadarDataSetConfigWidget *rdataset = plotarea->radarDataSetConfigWidget();
+    connect(rdataset, SIGNAL(datasetBrushChanged(DataSet*,QColor,int)),
+            this, SLOT(setDataSetBrush(DataSet*,QColor,int)));
+    connect(rdataset, SIGNAL(dataSetMarkerChanged(DataSet*,OdfMarkerStyle)),
+            this, SLOT(setDataSetMarker(DataSet*,OdfMarkerStyle)));
+    connect(rdataset, SIGNAL(datasetPenChanged(DataSet*,QColor,int)),
+            this, SLOT(setDataSetPen(DataSet*,QColor,int)));
+    connect(rdataset, SIGNAL(datasetShowCategoryChanged(DataSet*,bool,int)),
+            this, SLOT(setDataSetShowCategory(DataSet*,bool,int)));
+    connect(rdataset, SIGNAL(dataSetShowNumberChanged(DataSet*,bool,int)),
+            this, SLOT(setDataSetShowNumber(DataSet*,bool,int)));
+    connect(rdataset, SIGNAL(datasetShowPercentChanged(DataSet*,bool,int)),
+            this, SLOT(setDataSetShowPercent(DataSet*,bool,int)));
+    connect(rdataset, SIGNAL(datasetShowSymbolChanged(DataSet*,bool,int)),
+            this, SLOT(setDataSetShowSymbol(DataSet*,bool,int)));
 
     connect(d->shape, SIGNAL(updateConfigWidget()), plotarea, SLOT(updateData()));
 

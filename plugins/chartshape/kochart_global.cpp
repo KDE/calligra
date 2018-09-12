@@ -140,7 +140,14 @@ void initchartTypeIconMap()
 
     // Polar charts: radar
     insertIcon(RadarChartType, NoChartSubtype, QLatin1String("office-chart-polar"));
+    insertIcon(RadarChartType, NormalChartSubtype, QLatin1String("office-chart-polar"));
+    insertIcon(RadarChartType, StackedChartSubtype, QLatin1String("office-chart-polar"));
+    insertIcon(RadarChartType, PercentChartSubtype, QLatin1String("office-chart-polar"));
+
     insertIcon(FilledRadarChartType, NoChartSubtype, QLatin1String("office-chart-polar-filled"));
+    insertIcon(FilledRadarChartType, NormalChartSubtype, QLatin1String("office-chart-polar-filled"));
+    insertIcon(FilledRadarChartType, StackedChartSubtype, QLatin1String("office-chart-polar-filled"));
+    insertIcon(FilledRadarChartType, PercentChartSubtype, QLatin1String("office-chart-polar-filled"));
 
     // X/Y charts: scatter and bubble
     insertIcon(ScatterChartType, NoChartSubtype, QLatin1String("office-chart-scatter"));

@@ -81,6 +81,7 @@
 #include "DataSetConfigWidget.h"
 #include "PieConfigWidget.h"
 #include "StockConfigWidget.h"
+#include "RadarDataSetConfigWidget.h"
 #include "ConfigSubWidgetBase.h"
 #include "ChartDebug.h"
 
@@ -345,6 +346,11 @@ AxesConfigWidget *PlotAreaConfigWidget::stockAxesConfigWidget() const
     return d->ui.stockAxes;
 }
 
+RadarDataSetConfigWidget *PlotAreaConfigWidget::radarDataSetConfigWidget() const
+{
+    return d->ui.radarDataSets;
+}
+
 void PlotAreaConfigWidget::deleteSubDialogs(ChartType type)
 {
     if (!chart->usesInternalModelOnly()) {
@@ -437,7 +443,7 @@ void PlotAreaConfigWidget::setupWidgets()
     QList<ChartType> types;
     types << BarChartType << LineChartType << AreaChartType << BubbleChartType << ScatterChartType;
     // TODO: temporary, these should have different widgets
-    types << RingChartType << RadarChartType << FilledRadarChartType;
+    types << RingChartType;
     cartesianAxesConfigWidget()->setChartTypes(types);
 
     cartesianDataSetConfigWidget()->setChartTypes(types);
@@ -445,6 +451,7 @@ void PlotAreaConfigWidget::setupWidgets()
     pieConfigWidget()->setChartTypes(QList<ChartType>()<<CircleChartType);
     stockConfigWidget()->setChartTypes(QList<ChartType>()<<StockChartType);
     stockAxesConfigWidget()->setChartTypes(QList<ChartType>()<<StockChartType);
+    radarDataSetConfigWidget()->setChartTypes(QList<ChartType>() << RadarChartType << FilledRadarChartType);
 }
 
 QAction *PlotAreaConfigWidget::createAction()
@@ -496,11 +503,11 @@ void PlotAreaConfigWidget::chartTypeSelected(QAction *action)
     // also known as polar chart.
     else if (action == d->radarChartAction) {
         type    = RadarChartType;
-        subtype = NoChartSubtype;
+        subtype = NormalChartSubtype;
     }
     else if (action == d->filledRadarChartAction) {
         type    = FilledRadarChartType;
-        subtype = NoChartSubtype;
+        subtype = NormalChartSubtype;
     }
 
     // Also known as pie chart
@@ -599,6 +606,10 @@ void PlotAreaConfigWidget::updateData()
             break;
         case StockChartType:
             d->ui.stackedWidget->setCurrentIndex(2);
+            break;
+        case RadarChartType:
+        case FilledRadarChartType:
+            d->ui.stackedWidget->setCurrentIndex(3);
             break;
         default:
             d->ui.stackedWidget->setCurrentIndex(0);

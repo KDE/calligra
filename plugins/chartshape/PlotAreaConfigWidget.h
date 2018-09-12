@@ -44,6 +44,7 @@ class AxesConfigWidget;
 class DataSetConfigWidget;
 class PieConfigWidget;
 class StockConfigWidget;
+class RadarDataSetConfigWidget;
 
 /**
  * Chart type configuration widget.
@@ -72,6 +73,7 @@ public:
     PieConfigWidget *pieConfigWidget() const;
     StockConfigWidget *stockConfigWidget() const;
     AxesConfigWidget *stockAxesConfigWidget() const;
+    RadarDataSetConfigWidget *radarDataSetConfigWidget() const;
     
 public Q_SLOTS:
     void chartTypeSelected(QAction *action);
