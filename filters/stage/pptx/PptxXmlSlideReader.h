@@ -29,6 +29,7 @@
 #include <MsooXmlDrawingTableStyle.h>
 #include <VmlDrawingReader.h>
 #include <KoGenStyle.h>
+#include <KoTable.h>
 
 class KoXmlWriter;
 class PptxXmlSlideReaderContext;
@@ -38,8 +39,6 @@ namespace MSOOXML
 class MsooXmlRelationships;
 class TableStyleList;
 }
-
-class KoTable;
 
 //! Data structure collecting information about single slide's shape (p:sp)
 class PptxShapeProperties

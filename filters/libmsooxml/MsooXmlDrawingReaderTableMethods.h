@@ -37,7 +37,7 @@ protected:
     uint m_currentTableRowNumber; //!< row counter, from 0, initialized in read_tbl()
     uint m_currentTableColumnNumber; //!< column counter, from 0, initialized in read_tr()
 
-    KoTable* m_table;
+    KoTable::Ptr m_table;
     QString m_currentTableName;
 
     MSOOXML::DrawingTableStyle* m_tableStyle;

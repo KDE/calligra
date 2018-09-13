@@ -30,6 +30,8 @@ using namespace MSOOXML;
 //! tbl (Table) §21.1.3.13
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
 {
+    m_table = KoTable::create();
+
     READ_PROLOGUE
 
     bool tableSetByMe = false;
@@ -55,8 +57,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
         m_context->import->loadAndParseDocument(&tableStyleReader, m_context->tableStylesFilePath, &tableStyleReaderContext);
     }
 
-    m_table = new KoTable;
-
     m_table->setName(QLatin1String("Table") + QString::number(m_currentTableNumber + 1));
     m_currentTableRowNumber = 0;
     m_currentTableColumnNumber = 0;
@@ -76,8 +76,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
     defineStyles();
 
     m_table->saveOdf(*body, *mainStyles);
-
-    delete m_table;
 
     m_currentTableNumber++;
 

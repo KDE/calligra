@@ -5438,13 +5438,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_background()
 //! @todo support all child elements
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 {
+    m_table = KoTable::create();
+
     READ_PROLOGUE
 
     // save current state of lists processing
     saveState();
-
-    KoTable table;
-    m_table = &table;
 
     m_table->setName(QLatin1String("Table") + QString::number(++m_currentTableNumber));
     m_currentTableRowNumber = 0;
@@ -6081,7 +6080,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
                 body = oldBody;
             }
             else if(QUALIFIED_NAME_IS(tbl)) {
-                KoTable* currentTable = m_table;
+                KoTable::Ptr currentTable = m_table;
                 int currentRow =  m_currentTableRowNumber;
                 int currentColumn = m_currentTableColumnNumber;
                 MSOOXML::TableStyleProperties* currentDefaultCellStyle = m_currentDefaultCellStyle;

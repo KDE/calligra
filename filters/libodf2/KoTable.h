@@ -49,6 +49,8 @@ class KoGenStyles;
 class KOODF2_EXPORT KoTable
 {
 public:
+    KOSTYLE_DECLARE_SHARED_POINTER(KoTable)
+
     KoTable();
     ~KoTable();
 

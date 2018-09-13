@@ -23,6 +23,8 @@
 
 #include <KoXmlWriter.h>
 
+KOSTYLE_DECLARE_SHARED_POINTER_IMPL(KoTable)
+
 KoTable::KoTable()
 : m_columns()
 , m_rows()

@@ -36,6 +36,7 @@
 #include <styles/KoCharacterStyle.h>
 #include <KoBorder.h>
 #include <KoTblStyle.h>
+#include <KoTable.h>
 
 //#define NO_DRAWINGML_PICTURE // disables pic:pic, etc. in MsooXmlCommonReader
 
@@ -47,8 +48,6 @@ class MsooXmlRelationships;
 struct TableStyleProperties;
 class LocalTableStyles;
 }
-
-class KoTable;
 
 //! A class reading MSOOXML DOCX markup - document.xml part.
 class DocxXmlDocumentReader : public MSOOXML::MsooXmlCommonReader
@@ -256,7 +255,7 @@ protected:
     // ! Used for setting up properties for border padding
     QMap<BorderSide, qreal> m_textBorderPaddings;
 
-    KoTable* m_table;
+    KoTable::Ptr m_table;
     QString m_currentTableStyleName;
     KoTblStyle::Ptr m_tableMainStyle;
 
