@@ -200,6 +200,7 @@ public:
 
     QString axisPosition;
     QString axisLabelsPosition;
+
 };
 
 class CartesianAxis : public KChart::CartesianAxis
@@ -595,7 +596,7 @@ void Axis::Private::createCircleDiagram()
 
     // Initialize with default values that are specified in PlotArea
     // Note: KChart takes an int here, though ODF defines the offset to be a double.
-    kdPolarPlane->setStartPosition((int)plotArea->pieAngleOffset());
+    kdPolarPlane->setStartPosition((int)plotArea->angleOffset());
 }
 
 void Axis::Private::createRingDiagram()
@@ -620,7 +621,7 @@ void Axis::Private::createRingDiagram()
 
     // Initialize with default values that are specified in PlotArea
     // Note: KChart takes an int here, though ODF defines the offset to be a double.
-    kdPolarPlane->setStartPosition((int)plotArea->pieAngleOffset());
+    kdPolarPlane->setStartPosition((int)plotArea->angleOffset());
 }
 
 void Axis::Private::createRadarDiagram(bool filled)
@@ -877,8 +878,8 @@ Axis::Axis(PlotArea *parent, AxisDimension dimension)
     d->title->setAllowedInteraction(KoShape::ShearingAllowed, false);
     d->title->setVisible(false); // Needed to avoid problems when creating secondary axes (Axis creation needs review/refactoring)
 
-    connect(d->plotArea, SIGNAL(pieAngleOffsetChanged(qreal)),
-            this,        SLOT(setPieAngleOffset(qreal)));
+    connect(d->plotArea, SIGNAL(angleOffsetChanged(qreal)), this, SLOT(setAngleOffset(qreal)));
+    connect(d->plotArea, SIGNAL(holeSizeChanged(qreal)), this, SLOT(setHoleSize(qreal)));
 
     d->updatePosition();
 }
@@ -2087,15 +2088,19 @@ void Axis::setGapBetweenSets(int percent)
     requestRepaint();
 }
 
-void Axis::setPieAngleOffset(qreal angle)
+void Axis::setAngleOffset(qreal angle)
 {
     // only set if we already have a diagram else the value will be picked up on creating the diagram
     if (d->kdPolarPlane->diagram()) {
-        // KChart takes an int here, though ODF defines it to be a double.
-        d->kdPolarPlane->setStartPosition((int)angle);
+        d->kdPolarPlane->setStartPosition(angle);
 
         requestRepaint();
     }
+}
+
+void Axis::setHoleSize(qreal value)
+{
+    //TODO KChart does not support
 }
 
 QFont Axis::font() const
@@ -2168,7 +2173,7 @@ QString Axis::odfAxisPosition() const
 
 void Axis::updateKChartAxisPosition()
 {
-    if (!isCartesian(d->plotArea->chartType())) {
+    if (isCartesian(d->plotArea->chartType())) {
         debugChartAxis<<name()<<"Not a cartesian chart"<<d->plotArea->chartType();
         return;
     }

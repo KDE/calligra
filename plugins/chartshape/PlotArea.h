@@ -120,12 +120,18 @@ public:
      * going counter-clockwise.
      * See chart:angle-offset property, as defined in ODF v1.2.
      */
-    qreal pieAngleOffset() const;
+    qreal angleOffset() const;
 
     /**
-     * @see pieAngleOffset
+     * @see angleOffset
      */
-    void setPieAngleOffset(qreal angle);
+    void setAngleOffset(qreal angle);
+
+    /// The chart:hole-size attribute specifies the diameter of the inner hole of a ring chart
+    /// as percentage of the outer diameter of the outermost ring.
+    qreal holeSize() const;
+    /// @see holeSize()
+    void setHoleSize(qreal value);
 
     bool loadOdf(const KoXmlElement &plotAreaElement, KoShapeLoadingContext &context);
     bool loadOdfSeries(const KoXmlElement &seriesElement, KoShapeLoadingContext &context);
@@ -174,7 +180,8 @@ public Q_SLOTS:
     void updateKChartStockAttributes();
 
 Q_SIGNALS:
-    void pieAngleOffsetChanged(qreal);
+    void angleOffsetChanged(qreal);
+    void holeSizeChanged(qreal);
 
 private:
     void addAxesTitlesToLayout();
