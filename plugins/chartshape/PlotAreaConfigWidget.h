@@ -43,6 +43,7 @@ class ChartShape;
 class AxesConfigWidget;
 class DataSetConfigWidget;
 class PieConfigWidget;
+class RingConfigWidget;
 class StockConfigWidget;
 class RadarDataSetConfigWidget;
 
@@ -71,6 +72,7 @@ public:
     AxesConfigWidget *cartesianAxesConfigWidget() const;
     DataSetConfigWidget *cartesianDataSetConfigWidget() const;
     PieConfigWidget *pieConfigWidget() const;
+    RingConfigWidget *ringConfigWidget() const;
     StockConfigWidget *stockConfigWidget() const;
     AxesConfigWidget *stockAxesConfigWidget() const;
     RadarDataSetConfigWidget *radarDataSetConfigWidget() const;

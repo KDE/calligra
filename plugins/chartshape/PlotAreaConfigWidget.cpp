@@ -80,6 +80,7 @@
 #include "AxesConfigWidget.h"
 #include "DataSetConfigWidget.h"
 #include "PieConfigWidget.h"
+#include "RingConfigWidget.h"
 #include "StockConfigWidget.h"
 #include "RadarDataSetConfigWidget.h"
 #include "ConfigSubWidgetBase.h"
@@ -336,6 +337,11 @@ PieConfigWidget *PlotAreaConfigWidget::pieConfigWidget() const
     return d->ui.pieConfigWidget;
 }
 
+RingConfigWidget *PlotAreaConfigWidget::ringConfigWidget() const
+{
+    return d->ui.ringConfigWidget;
+}
+
 StockConfigWidget *PlotAreaConfigWidget::stockConfigWidget() const
 {
     return d->ui.stockConfigWidget;
@@ -442,13 +448,11 @@ void PlotAreaConfigWidget::setupWidgets()
 {
     QList<ChartType> types;
     types << BarChartType << LineChartType << AreaChartType << BubbleChartType << ScatterChartType;
-    // TODO: temporary, these should have different widgets
-    types << RingChartType;
     cartesianAxesConfigWidget()->setChartTypes(types);
-
     cartesianDataSetConfigWidget()->setChartTypes(types);
 
     pieConfigWidget()->setChartTypes(QList<ChartType>()<<CircleChartType);
+    ringConfigWidget()->setChartTypes(QList<ChartType>()<<RingChartType);
     stockConfigWidget()->setChartTypes(QList<ChartType>()<<StockChartType);
     stockAxesConfigWidget()->setChartTypes(QList<ChartType>()<<StockChartType);
     radarDataSetConfigWidget()->setChartTypes(QList<ChartType>() << RadarChartType << FilledRadarChartType);
@@ -610,6 +614,9 @@ void PlotAreaConfigWidget::updateData()
         case RadarChartType:
         case FilledRadarChartType:
             d->ui.stackedWidget->setCurrentIndex(3);
+            break;
+        case RingChartType:
+            d->ui.stackedWidget->setCurrentIndex(4);
             break;
         default:
             d->ui.stackedWidget->setCurrentIndex(0);

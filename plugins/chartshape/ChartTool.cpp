@@ -66,6 +66,7 @@
 #include "AxesConfigWidget.h"
 #include "DataSetConfigWidget.h"
 #include "PieConfigWidget.h"
+#include "RingConfigWidget.h"
 #include "RadarDataSetConfigWidget.h"
 #include "KChartConvertions.h"
 #include "commands/ChartTypeCommand.h"
@@ -383,6 +384,15 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
     connect(pie, SIGNAL(showPercentChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowPercent(DataSet*,bool,int)));
     connect(pie, SIGNAL(showSymbolChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowSymbol(DataSet*,bool,int)));
 
+    RingConfigWidget *ring = plotarea->ringConfigWidget();
+    connect(ring, SIGNAL(explodeFactorChanged(DataSet*,int, int)), this, SLOT(setPieExplodeFactor(DataSet*,int, int)));
+    connect(ring, SIGNAL(brushChanged(DataSet*,QColor,int)), this, SLOT(setDataSetBrush(DataSet*,QColor,int)));
+    connect(ring, SIGNAL(penChanged(DataSet*,QColor,int)), this, SLOT(setDataSetPen(DataSet*,QColor,int)));
+    connect(ring, SIGNAL(showCategoryChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowCategory(DataSet*,bool,int)));
+    connect(ring, SIGNAL(showNumberChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowNumber(DataSet*,bool,int)));
+    connect(ring, SIGNAL(showPercentChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowPercent(DataSet*,bool,int)));
+    connect(ring, SIGNAL(showSymbolChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowSymbol(DataSet*,bool,int)));
+
     axes = plotarea->stockAxesConfigWidget();
     connect(axes, SIGNAL(axisAdded(AxisDimension,QString)),
             this,   SLOT(addAxis(AxisDimension,QString)));
@@ -550,33 +560,59 @@ void ChartTool::setDataSetChartSubType(DataSet *dataSet, ChartSubtype subType)
 void ChartTool::setDataSetBrush(DataSet *dataSet, const QColor& color, int section)
 {
     Q_ASSERT(d->shape);
+    Q_ASSERT(dataSet || section >= 0);
+    debugChartTool<<dataSet<<color<<section;
     if (!dataSet) {
-        return;
+        QList<DataSet*> lst = d->shape->proxyModel()->dataSets();
+        if (lst.isEmpty()) {
+            return;
+        }
+        // we set brush for section in all datasets
+        KUndo2Command *command = new KUndo2Command();
+        for (int i = 0; i < lst.count(); ++i) {
+            DatasetCommand *cmd = new DatasetCommand(lst.at(i), d->shape, section, command);
+            cmd->setDataSetBrush(color);
+            command->setText(cmd->text());
+        }
+        canvas()->addCommand(command);
+    } else {
+        DatasetCommand *command = new DatasetCommand(dataSet, d->shape, section);
+        command->setDataSetBrush(color);
+        canvas()->addCommand(command);
     }
-    debugChartTool<<color<<section;
-    DatasetCommand *command = new DatasetCommand(dataSet, d->shape, section);
-    command->setDataSetBrush(color);
-    canvas()->addCommand(command);
 }
 
 void ChartTool::setDataSetPen(DataSet *dataSet, const QColor& color, int section)
 {
     Q_ASSERT(d->shape);
-    if (!dataSet) {
-        return;
-    }
+    Q_ASSERT(dataSet || section >= 0);
     debugChartTool<<color<<section;
-    DatasetCommand *command = new DatasetCommand(dataSet, d->shape, section);
-    command->setDataSetPen(color);
-    canvas()->addCommand(command);
+    if (!dataSet) {
+        QList<DataSet*> lst = d->shape->proxyModel()->dataSets();
+        if (lst.isEmpty()) {
+            return;
+        }
+        // we set brush for section in all datasets
+        KUndo2Command *command = new KUndo2Command();
+        for (int i = 0; i < lst.count(); ++i) {
+            DatasetCommand *cmd = new DatasetCommand(lst.at(i), d->shape, section, command);
+            cmd->setDataSetPen(color);
+            command->setText(cmd->text());
+        }
+        canvas()->addCommand(command);
+    } else {
+        DatasetCommand *command = new DatasetCommand(dataSet, d->shape, section);
+        command->setDataSetPen(color);
+        canvas()->addCommand(command);
+    }
 }
 
 void ChartTool::setDataSetMarker(DataSet *dataSet, OdfMarkerStyle style)
 {
     Q_ASSERT(d->shape);
-    if (!dataSet)
+    if (!dataSet) {
         return;
-
+    }
     DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
     command->setDataSetMarker(style);
     canvas()->addCommand(command);
@@ -595,12 +631,25 @@ void ChartTool::setDataSetAxis(DataSet *dataSet, Axis *axis)
 void ChartTool::setDataSetShowCategory(DataSet *dataSet, bool b, int section)
 {
     Q_ASSERT(d->shape);
+    Q_ASSERT(dataSet || section >= 0);
     if (!dataSet) {
-        return;
+        QList<DataSet*> lst = d->shape->proxyModel()->dataSets();
+        if (lst.isEmpty()) {
+            return;
+        }
+        // we set brush for section in all datasets
+        KUndo2Command *command = new KUndo2Command();
+        for (int i = 0; i < lst.count(); ++i) {
+            DatasetCommand *cmd = new DatasetCommand(lst.at(i), d->shape, section, command);
+            cmd->setDataSetShowCategory(b);
+            command->setText(cmd->text());
+        }
+        canvas()->addCommand(command);
+    } else {
+        DatasetCommand *command = new DatasetCommand(dataSet, d->shape, section);
+        command->setDataSetShowCategory(b);
+        canvas()->addCommand(command);
     }
-    DatasetCommand *command = new DatasetCommand(dataSet, d->shape, section);
-    command->setDataSetShowCategory(b);
-    canvas()->addCommand(command);
 
     debugChartTool<<section<<b<<':'<<dataSet->valueLabelType(section).category;
 }
@@ -609,25 +658,50 @@ void ChartTool::setDataSetShowNumber(DataSet *dataSet, bool b, int section)
 {
     debugChartTool<<b<<section<<dataSet;
     Q_ASSERT(d->shape);
+    Q_ASSERT(dataSet || section >= 0);
     if (!dataSet) {
-        return;
+        QList<DataSet*> lst = d->shape->proxyModel()->dataSets();
+        if (lst.isEmpty()) {
+            return;
+        }
+        // we set brush for section in all datasets
+        KUndo2Command *command = new KUndo2Command();
+        for (int i = 0; i < lst.count(); ++i) {
+            DatasetCommand *cmd = new DatasetCommand(lst.at(i), d->shape, section, command);
+            cmd->setDataSetShowNumber(b);
+            command->setText(cmd->text());
+        }
+        canvas()->addCommand(command);
+    } else {
+        DatasetCommand *command = new DatasetCommand(dataSet, d->shape, section);
+        command->setDataSetShowNumber(b);
+        canvas()->addCommand(command);
     }
-    DatasetCommand *command = new DatasetCommand(dataSet, d->shape, section);
-    command->setDataSetShowNumber(b);
-    canvas()->addCommand(command);
-
     debugChartTool<<section<<b<<':'<<dataSet->valueLabelType(section).number;
 }
 
 void ChartTool::setDataSetShowPercent(DataSet *dataSet, bool b, int section)
 {
     Q_ASSERT(d->shape);
+    Q_ASSERT(dataSet || section >= 0);
     if (!dataSet) {
-        return;
+        QList<DataSet*> lst = d->shape->proxyModel()->dataSets();
+        if (lst.isEmpty()) {
+            return;
+        }
+        // we set brush for section in all datasets
+        KUndo2Command *command = new KUndo2Command();
+        for (int i = 0; i < lst.count(); ++i) {
+            DatasetCommand *cmd = new DatasetCommand(lst.at(i), d->shape, section, command);
+            cmd->setDataSetShowPercent(b);
+            command->setText(cmd->text());
+        }
+        canvas()->addCommand(command);
+    } else {
+        DatasetCommand *command = new DatasetCommand(dataSet, d->shape, section);
+        command->setDataSetShowPercent(b);
+        canvas()->addCommand(command);
     }
-    DatasetCommand *command = new DatasetCommand(dataSet, d->shape, section);
-    command->setDataSetShowPercent(b);
-    canvas()->addCommand(command);
 
     debugChartTool<<section<<b<<':'<<dataSet->valueLabelType(section).percentage;
 }
@@ -635,13 +709,25 @@ void ChartTool::setDataSetShowPercent(DataSet *dataSet, bool b, int section)
 void ChartTool::setDataSetShowSymbol(DataSet *dataSet, bool b, int section)
 {
     Q_ASSERT(d->shape);
+    Q_ASSERT(dataSet || section >= 0);
     if (!dataSet) {
-        return;
+        QList<DataSet*> lst = d->shape->proxyModel()->dataSets();
+        if (lst.isEmpty()) {
+            return;
+        }
+        // we set brush for section in all datasets
+        KUndo2Command *command = new KUndo2Command();
+        for (int i = 0; i < lst.count(); ++i) {
+            DatasetCommand *cmd = new DatasetCommand(lst.at(i), d->shape, section, command);
+            cmd->setDataSetShowSymbol(b);
+            command->setText(cmd->text());
+        }
+        canvas()->addCommand(command);
+    } else {
+        DatasetCommand *command = new DatasetCommand(dataSet, d->shape, section);
+        command->setDataSetShowSymbol(b);
+        canvas()->addCommand(command);
     }
-    DatasetCommand *command = new DatasetCommand(dataSet, d->shape, section);
-    command->setDataSetShowSymbol(b);
-    canvas()->addCommand(command);
-
     debugChartTool<<section<<b<<':'<<dataSet->valueLabelType(section).symbol;
 }
 
@@ -1031,7 +1117,6 @@ void ChartTool::setPieExplodeFactor(DataSet *dataSet, int section, int percent)
 
     dataSet->setPieExplodeFactor(section, percent);
     d->shape->update();
-    qInfo()<<Q_FUNC_INFO<<dataSet->pieAttributes(section).explodeFactor();
 }
 
 void ChartTool::setShowLegend(bool show)

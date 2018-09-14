@@ -8,7 +8,7 @@
     <x>0</x>
     <y>0</y>
     <width>334</width>
-    <height>310</height>
+    <height>179</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -88,7 +88,7 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>3</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="cartesianPage">
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -136,7 +136,14 @@
            </widget>
           </item>
           <item>
-           <widget class="KoChart::PieConfigWidget" name="pieConfigWidget" native="true"/>
+           <widget class="KoChart::PieConfigWidget" name="pieConfigWidget" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>40</height>
+             </size>
+            </property>
+           </widget>
           </item>
           <item>
            <spacer name="verticalSpacer">
@@ -216,7 +223,14 @@
         </widget>
        </item>
        <item>
-        <widget class="KoChart::RadarDataSetConfigWidget" name="radarDataSets" native="true"/>
+        <widget class="KoChart::RadarDataSetConfigWidget" name="radarDataSets" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>40</height>
+          </size>
+         </property>
+        </widget>
        </item>
        <item>
         <spacer name="verticalSpacer_3">
@@ -227,6 +241,33 @@
           <size>
            <width>20</width>
            <height>209</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="ringPage">
+      <layout class="QVBoxLayout" name="verticalLayout_7">
+       <item>
+        <widget class="KoChart::RingConfigWidget" name="ringConfigWidget" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>40</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
           </size>
          </property>
         </spacer>
@@ -266,6 +307,12 @@
    <class>KoChart::RadarDataSetConfigWidget</class>
    <extends>QWidget</extends>
    <header>RadarDataSetConfigWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KoChart::RingConfigWidget</class>
+   <extends>QWidget</extends>
+   <header>RingConfigWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

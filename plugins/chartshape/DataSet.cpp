@@ -1589,12 +1589,17 @@ bool DataSet::loadOdf(const KoXmlElement &n,
 
     if (n.hasAttributeNS(KoXmlNS::chart, "class") && !ignoreCellRanges) {
         const QString chartClass = n.attributeNS(KoXmlNS::chart, "class", QString());
-        KoChart::ChartType chartType = KoChart::BarChartType;
-        for (int type = 0; type < (int)LastChartType; ++type) {
-            if (chartClass == odfCharttype(type)) {
-                chartType = (ChartType)type;
-                setChartType(chartType);
-                break;
+        if (d->chartType == RingChartType && chartClass == "chart:circle") {
+            // LO marks all datasets in a ring chart as circle
+            // We do not use that for anything
+        } else {
+            KoChart::ChartType chartType = KoChart::BarChartType;
+            for (int type = 0; type < (int)LastChartType; ++type) {
+                if (chartClass == odfCharttype(type)) {
+                    chartType = (ChartType)type;
+                    setChartType(chartType);
+                    break;
+                }
             }
         }
     }
