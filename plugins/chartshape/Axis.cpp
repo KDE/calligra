@@ -2173,7 +2173,7 @@ QString Axis::odfAxisPosition() const
 
 void Axis::updateKChartAxisPosition()
 {
-    if (isCartesian(d->plotArea->chartType())) {
+    if (!isCartesian(d->plotArea->chartType())) {
         debugChartAxis<<name()<<"Not a cartesian chart"<<d->plotArea->chartType();
         return;
     }
