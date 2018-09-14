@@ -1046,6 +1046,10 @@ void DataSet::setMarkerStyle(OdfMarkerStyle style)
 
 void DataSet::setPieExplodeFactor(int section, int factor)
 {
+    if (section < 0) {
+        setPieExplodeFactor(factor);
+        return;
+    }
     KChart::PieAttributes &pieAttributes = d->sectionsPieAttributes[section];
     pieAttributes.setExplodeFactor((qreal)factor / (qreal)100);
     if (d->kdChartModel)
