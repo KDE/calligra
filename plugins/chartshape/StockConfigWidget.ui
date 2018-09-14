@@ -12,6 +12,26 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="datasetPenLabel">
+     <property name="text">
+      <string>Range line</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="KoChart::StrokeConfigWidget" name="rangeLineStroke" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </widget>
+   </item>
    <item row="1" column="0">
     <widget class="QLabel" name="datasetColorLabel">
      <property name="enabled">
@@ -31,30 +51,10 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="KoChart::StrokeConfigWidget" name="rangeLineStroke" native="true">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>30</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="datasetPenLabel">
+   <item row="1" column="1">
+    <widget class="KColorButton" name="gainMarker">
      <property name="text">
-      <string>Range line</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QToolButton" name="lossMarker">
-     <property name="text">
-      <string>...</string>
+      <string/>
      </property>
     </widget>
    </item>
@@ -77,10 +77,10 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QToolButton" name="gainMarker">
+   <item row="2" column="1">
+    <widget class="KColorButton" name="lossMarker">
      <property name="text">
-      <string>...</string>
+      <string/>
      </property>
     </widget>
    </item>
@@ -91,6 +91,12 @@
    <class>KoChart::StrokeConfigWidget</class>
    <extends>QWidget</extends>
    <header>StrokeConfigWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">kcolorbutton.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

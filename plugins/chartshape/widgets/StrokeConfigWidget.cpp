@@ -47,6 +47,7 @@
 
 // KF5
 #include <klocalizedstring.h>
+#include <KColorButton>
 
 // Calligra
 #include <KoIcon.h>
@@ -178,7 +179,7 @@ public:
     KoUnitDoubleSpinBox *lineWidth;
 
     CapNJoinMenu *capNJoinMenu;
-    QToolButton *colorButton;
+    KColorButton *colorButton;
     QColor color;
     QIcon defaultIcon;
     QIcon blackIcon;
@@ -198,7 +199,7 @@ StrokeConfigWidget::StrokeConfigWidget(QWidget * parent)
 
     // Line style
     d->lineStyle = new KoLineStyleSelector(this);
-    d->lineStyle->setMinimumWidth(70);
+    d->lineStyle->setMinimumWidth(50);
     firstLineLayout->addWidget(d->lineStyle);
 
     // Line width, NOTE: KChart does not handle points
@@ -218,10 +219,9 @@ StrokeConfigWidget::StrokeConfigWidget(QWidget * parent)
 
     firstLineLayout->addWidget(capNJoinButton);
 
-    d->colorButton = new QToolButton(this);
+    d->colorButton = new KColorButton(this);
     d->colorButton->setObjectName("colorButton");
     d->colorButton->setToolTip(i18n("Change the color of the line"));
-    d->colorButton->setIcon(koIcon("color-picker-white"));
 
     firstLineLayout->addWidget(d->colorButton);
 
@@ -242,7 +242,7 @@ StrokeConfigWidget::StrokeConfigWidget(QWidget * parent)
     connect(d->capNJoinMenu->capGroup, SIGNAL(buttonClicked(int)), this, SLOT(applyChanges()));
     connect(d->capNJoinMenu->joinGroup, SIGNAL(buttonClicked(int)), this, SLOT(applyChanges()));
     connect(d->capNJoinMenu->miterLimit, SIGNAL(valueChangedPt(qreal)), this, SLOT(applyChanges()));
-    connect(d->colorButton, &QToolButton::clicked, this, &StrokeConfigWidget::colorButtonClicked);
+    connect(d->colorButton, &KColorButton::changed, this, &StrokeConfigWidget::colorButtonClicked);
 }
 
 StrokeConfigWidget::~StrokeConfigWidget()
@@ -346,13 +346,10 @@ void StrokeConfigWidget::applyChanges()
     d->chart->update();
 }
 
-void StrokeConfigWidget::colorButtonClicked()
+void StrokeConfigWidget::colorButtonClicked(const QColor &color)
 {
-    QColorDialog dlg;
-    if (dlg.exec() == QDialog::Accepted) {
-        d->color = dlg.selectedColor();
-        applyChanges();
-    }
+    d->color = color;
+    applyChanges();
 }
 
 #include "StrokeConfigWidget.moc"

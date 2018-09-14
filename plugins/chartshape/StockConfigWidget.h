@@ -48,8 +48,8 @@ public:
     void updateData(ChartType type, ChartSubtype subtype);
 
 public Q_SLOTS:
-    void gainClicked();
-    void lossClicked();
+    void gainClicked(const QColor& color);
+    void lossClicked(const QColor& color);
 
 Q_SIGNALS:
 

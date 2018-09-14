@@ -67,7 +67,7 @@ private Q_SLOTS:
     /// apply line changes to the selected shape
     void applyChanges();
 
-    void colorButtonClicked();
+    void colorButtonClicked(const QColor &color);
 
 private:
     void blockChildSignals(bool block);
