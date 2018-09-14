@@ -1591,7 +1591,7 @@ bool DataSet::loadOdf(const KoXmlElement &n,
         const QString chartClass = n.attributeNS(KoXmlNS::chart, "class", QString());
         if (d->chartType == RingChartType && chartClass == "chart:circle") {
             // LO marks all datasets in a ring chart as circle
-            // We do not use that for anything
+            // We keep it as RingChartType
         } else {
             KoChart::ChartType chartType = KoChart::BarChartType;
             for (int type = 0; type < (int)LastChartType; ++type) {
@@ -1854,11 +1854,22 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
     if (!label.isEmpty())
         bodyWriter.addAttribute("chart:label-cell-address", label);
 
-    int charttype = (chartType() < LastChartType) ? chartType() : 0;
+    int charttype = LastChartType;
+    if (d->chartType == RingChartType || d->chartType == LastChartType) {
+        if (d->attachedAxis->plotArea()->chartType() == RingChartType) {
+            charttype = CircleChartType; // LO needs this
+        }
+    }
+    if (charttype == LastChartType) {
+        charttype = d->effectiveChartType();
+    }
     QString chartClass = odfCharttype(charttype);
-    if (!chartClass.isEmpty())
+    if (!chartClass.isEmpty()) {
         bodyWriter.addAttribute("chart:class", chartClass);
-
+    }
+    if (d->attachedAxis) {
+        bodyWriter.addAttribute("chart:attached-axis", d->attachedAxis->name());
+    }
     if (chartType() == KoChart::CircleChartType || chartType() == KoChart::RingChartType) {
         for (int j=0; j<yDataRegion().cellCount(); ++j) {
             bodyWriter.startElement("chart:data-point");
@@ -1872,9 +1883,6 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
 
             bodyWriter.endElement();
         }
-    }
-    if (d->attachedAxis) {
-        bodyWriter.addAttribute("chart:attached-axis", d->attachedAxis->name());
     }
     if (chartType() == KoChart::BubbleChartType) {
         // Custom data shall contain bubble size
