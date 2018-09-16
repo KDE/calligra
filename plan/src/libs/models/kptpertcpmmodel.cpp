@@ -511,7 +511,7 @@ QModelIndex PertResultItemModel::index( int row, int column, const QModelIndex &
             return idx;
         }
         if ( row >= m_top.count() ) {
-            return QModelIndex(); // shouldn't happend
+            return QModelIndex(); // shouldn't happened
         }
         QModelIndex idx = createIndex(row, column, ListItemId );
         //debugPlan<<parent<<", "<<idx;

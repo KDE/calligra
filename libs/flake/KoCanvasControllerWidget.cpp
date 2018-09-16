@@ -189,9 +189,9 @@ KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCol
     setAutoFillBackground(false);
     /*
       Fixes:   apps starting at zero zoom.
-      Details: Since the document is set on the mainwindow before loading commences the inial show/layout can choose
+      Details: Since the document is set on the mainwindow before loading commences the initial show/layout can choose
           to set the document to be very small, even to be zero pixels tall.  Setting a sane minimum size on the
-          widget means we no loger get rounding errors in zooming and we no longer end up with zero-zoom.
+          widget means we no longer get rounding errors in zooming and we no longer end up with zero-zoom.
       Note: KoPage apps should probably startup with a sane document size; for Krita that's impossible
      */
     setMinimumSize(QSize(50, 50));

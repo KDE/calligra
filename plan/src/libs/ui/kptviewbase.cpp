@@ -1125,7 +1125,7 @@ QModelIndex TreeViewBase::lastEditable( int row, const QModelIndex &parent )
     return moveToEditable( index, QAbstractItemView::MoveLeft );
 }
 
-// Reimplemented to fix qt bug 160083: Doesn't scroll horisontally.
+// Reimplemented to fix qt bug 160083: Doesn't scroll horizontally.
 void TreeViewBase::scrollTo(const QModelIndex &index, ScrollHint hint)
 {
     //debugPlan<<objectName()<<index<<hint;

@@ -968,7 +968,7 @@ Style StyleStorage::composeStyle(const QList<SharedSubStyle>& subStyles) const
             style.clearAttribute(Style::DefaultStyleKey);
         }
     }
-    // Implictly merge in any missing attributes from the family (table-cell) default style
+    // Implicitly merge in any missing attributes from the family (table-cell) default style
     // It might have been merged in via parent styles above, but we cannot rely on that.
     if (!styleManager()->defaultStyle()->isEmpty()) {
         // debugSheetsStyle << "StyleStorage: merging family default in";

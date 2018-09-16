@@ -668,13 +668,13 @@ struct TLP {
 
     /**
      * when ==1, apply properties from the selected table look to the header
-     * columns ofthe table
+     * columns of the table
      */
     U16 fHdrCols:1;
 
     /**
      * when ==1, apply properties from the selected table look to the last
-     * column ofthe table
+     * column of the table
      */
     U16 fLastCol:1;
 

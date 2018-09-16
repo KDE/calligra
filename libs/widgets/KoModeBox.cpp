@@ -550,7 +550,7 @@ void KoModeBox::setCurrentLayer(const KoCanvasController *canvas, const KoShapeL
 {
     Q_UNUSED(canvas);
     Q_UNUSED(layer);
-    //Since tageted application don't use this we won't bother implemeting
+    //Since targeted application don't use this we won't bother implementing
 }
 
 void KoModeBox::setCanvas(KoCanvasBase *canvas)

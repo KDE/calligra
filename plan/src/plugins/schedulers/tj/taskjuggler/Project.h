@@ -365,7 +365,7 @@ public:
 
     /**
      * Add a vacation interval to the vacation list. These global vacations
-     * are meant for events like Christmas, Eastern or corporate hollidays.
+     * are meant for events like Christmas, Eastern or corporate holidays.
      * A day that overlaps any of the intervals in the list is considered to
      * not be a working day. Vacation intervals may not overlap.
      * @param n Name of the vacation.

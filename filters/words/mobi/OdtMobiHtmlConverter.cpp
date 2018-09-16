@@ -1176,7 +1176,7 @@ void OdtMobiHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElemen
     // Image align
     attribute = propertiesElement.attribute("horizontal-pos");
     if (!attribute.isEmpty()) {
-        //debugMobi << "horisontal pos attribute" << attribute;
+        //debugMobi << "horizontal pos attribute" << attribute;
         if (attribute == "right" || attribute == "from-left") {
             styleInfo->attributes.insert("float", "right");
             styleInfo->attributes.insert("margin", "5px 0 5px 15px");

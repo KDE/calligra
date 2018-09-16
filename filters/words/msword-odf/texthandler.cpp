@@ -504,7 +504,7 @@ void WordsTextHandler::bookmarkStart( const wvWare::BookmarkData& data )
         writer = new KoXmlWriter(&buf);
     } else {
         if (!m_fld->m_afterSeparator) {
-            warnMsDoc << "bookmark interfers with field instructions, omitting";
+            warnMsDoc << "bookmark interferes with field instructions, omitting";
             return;
         } else {
             writer = m_fld->m_writer;
@@ -545,7 +545,7 @@ void WordsTextHandler::bookmarkEnd( const wvWare::BookmarkData& data )
         writer = new KoXmlWriter(&buf);
     } else {
         if (!m_fld->m_afterSeparator) {
-            warnMsDoc << "bookmark interfers with field instructions, omitting";
+            warnMsDoc << "bookmark interferes with field instructions, omitting";
             return;
         } else {
             writer = m_fld->m_writer;

@@ -142,7 +142,7 @@ void PerformanceTester::bcwsPrDayTask()
     d = d.addDays( 1 );
     ecm = t1->bcwsPrDay();
     qDebug()<<ecm;
-    QCOMPARE( ecm.effortOnDate( d ), Duration( 0, 16, 0 ) ); // work+materal resource
+    QCOMPARE( ecm.effortOnDate( d ), Duration( 0, 16, 0 ) ); // work+material resource
     QCOMPARE( ecm.costOnDate( d ), 8.0 ); //material resource cost == 0
     
     d = d.addDays( 1 );

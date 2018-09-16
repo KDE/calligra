@@ -337,7 +337,7 @@ QBrush KoOdfGraphicStyles::loadOdfGradientStyleByName(const KoOdfStylesReader &s
         qreal border = 0.01 * e->attributeNS(KoXmlNS::draw, "border", "0").remove('%').toDouble();
         QGradientStops stops;
         if (type != "axial") {
-            // In case of radial gradients the colors are reversed, because OOo saves them as the oppsite of the SVG direction
+            // In case of radial gradients the colors are reversed, because OOo saves them as the opposite of the SVG direction
             // see bug 137639
             QGradientStop start;
             start.first = (type != "radial") ? border : 1.0 - border;
@@ -525,13 +525,13 @@ QBrush KoOdfGraphicStyles::loadOdfFillStyle(const KoStyleStack &styleStack, cons
                 tmpBrush.setColor(draw->attributeNS(KoXmlNS::draw, "color", QString()));
             }
             if (draw->hasAttributeNS(KoXmlNS::draw, "distance")) {
-                //todo implemente it into Stage
+                //TODO: implement it into Stage
             }
             if (draw->hasAttributeNS(KoXmlNS::draw, "display-name")) {
-                //todo implement it into Stage
+                //TODO: implement it into Stage
             }
             if (draw->hasAttributeNS(KoXmlNS::draw, "style")) {
-                //todo implemente it into Stage
+                //TODO: implement it into Stage
                 QString styleHash = draw->attributeNS(KoXmlNS::draw, "style", QString());
                 if (styleHash == "single") {
                     switch (angle) {

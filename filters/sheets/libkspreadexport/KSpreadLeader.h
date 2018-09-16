@@ -56,7 +56,7 @@ public:
 
     /**
     * This constructor set up the Worker at initialization.
-    * convert can be called right away after instanciation of the Leader.
+    * convert can be called right away after instantiation of the Leader.
     *
     * @param filterChain the filter chain of the filter using the lib.
     * @param newWorker implementation of a class derived from KSpreadWorker.

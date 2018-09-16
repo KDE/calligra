@@ -1093,7 +1093,7 @@ QString Odf::saveSheetStyleName(Sheet *sheet, KoGenStyles &mainStyles)
     if( !sheet->backgroundImage().isNull() ) {
         QBuffer bgBuffer;
         bgBuffer.open(QIODevice::WriteOnly);
-        KoXmlWriter bgWriter(&bgBuffer); //TODO pass identation level
+        KoXmlWriter bgWriter(&bgBuffer); //TODO pass indentation level
         saveBackgroundImage(sheet, bgWriter);
 
         const QString bgContent = QString::fromUtf8(bgBuffer.buffer(), bgBuffer.size());

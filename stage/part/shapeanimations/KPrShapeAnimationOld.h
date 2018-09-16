@@ -72,7 +72,7 @@ public:
     /**
      * @brief Animate the shape
      *
-     * This is done by maniplating the painter used for painting the shape.
+     * This is done by manipulating the painter used for painting the shape.
      *
      * @param painter The painter used for painting the shape
      * @param converter The converter to convert between internal and view coordinates

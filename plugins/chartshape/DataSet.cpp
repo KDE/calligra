@@ -785,7 +785,7 @@ qreal DataSet::Private::maxBubbleSize() const
 {
     // TODO: Improve performance by caching. This is currently O(n^2).
     // this is not in O(n^2), its quite linear on the number of datapoints
-    // hoever it could be constant for any then the first case by implementing
+    // however it could be constant for any then the first case by implementing
     // cashing
     qreal max = 0.0;
     Q_ASSERT(kdChartModel);

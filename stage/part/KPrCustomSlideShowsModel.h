@@ -119,7 +119,7 @@ public:
     void setDocument(KPrDocument *document);
 
     /**
-     * @brief Deletes all the ocurrencies of a given list of slides indexes from current custom SlideShows
+     * @brief Deletes all the occurrences of a given list of slides indexes from current custom SlideShows
      *
      * @param slideIndexes list of slide indexes to be removed
      */

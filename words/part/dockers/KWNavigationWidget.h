@@ -37,7 +37,7 @@ class KWDocument;
 class StatisticsPreferencesPopup;
 
 /** KWNavigationWidget shows document structure by parsing
- *  headers levels. You can click on the header to momentally
+ *  headers levels. You can click on the header to momentarily
  *  get to another part of the document.
  */
 

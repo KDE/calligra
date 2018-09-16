@@ -662,7 +662,7 @@ QColor PptToOdp::DrawClient::toQColor(const MSO::OfficeArtCOLORREF& c)
             ret = ppttoodp->toQColor(c, tm, dc_data->presSlide);
         }
     }
-    //TODO: hande the case of a notes master slide/notes slide pair
+    //TODO: handle the case of a notes master slide/notes slide pair
 
     return ret;
 }
@@ -3221,7 +3221,7 @@ QColor PptToOdp::toQColor(const ColorIndexStruct &color)
             colorScheme = &tmc->slideSchemeColorSchemeAtom.rgSchemeColor;
         }
         if (!colorScheme) {
-            warnPpt << "Warning: Ivalid color scheme! Returning an invalid color!";
+            warnPpt << "Warning: Invalid color scheme! Returning an invalid color!";
             return ret;
         }
     }
@@ -3292,7 +3292,7 @@ QColor PptToOdp::toQColor(const MSO::OfficeArtCOLORREF& c,
                 colorScheme = &tmc->slideSchemeColorSchemeAtom.rgSchemeColor;
             }
             if (!colorScheme) {
-                warnPpt << "Warning: Ivalid color scheme! Returning an invalid color!";
+                warnPpt << "Warning: Invalid color scheme! Returning an invalid color!";
                 return ret;
             }
         }

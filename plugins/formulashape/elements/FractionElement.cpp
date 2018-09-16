@@ -119,7 +119,7 @@ void FractionElement::layout( const AttributeManager* am )
 void FractionElement::layoutBevelledFraction( const AttributeManager* am )
 {
     // the shown line should have a width that has 1/3 of the height
-    // the line is heigher as the content by 2*thinmathspace = 2*borderY
+    // the line is higher as the content by 2*thinmathspace = 2*borderY
 
     qreal borderY = am->layoutSpacing( this );
     setHeight( m_numerator->height() + m_denominator->height() + 2*borderY );

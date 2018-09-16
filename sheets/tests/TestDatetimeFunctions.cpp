@@ -36,7 +36,7 @@ void TestDatetimeFunctions::initTestCase()
 /////////////////////////////////////
 // 18.05.07
 // - fix typo in yearfrac
-// - indend
+// - indent
 // - added missing tests EOMONTH()
 // - added missing values in DATEDIF
 // 02.06.07

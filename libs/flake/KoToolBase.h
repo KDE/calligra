@@ -317,7 +317,7 @@ public:
 
     /**
      * Handle the dragLeaveEvent
-     * Basically just a noticification that the drag is no long relevant
+     * Basically just a notification that the drag is no long relevant
      * The tool should Accept the event if it is meaningful; Default implementation does not.
      */
     virtual void dragLeaveEvent(QDragLeaveEvent *event);

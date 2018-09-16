@@ -124,7 +124,7 @@ public:
     /// Setting this also indicates that we don't want wrapping.
     /// 0 means wrapping is allowed
     /// This has to be set before each layout(), and the layout() will change the reference rect
-    /// right value to fit snugly (minimum the old right value) and so that no wrapping occours up
+    /// right value to fit snugly (minimum the old right value) and so that no wrapping occurs up
     /// to maximumAllowedWidth
     void setNoWrap(qreal maximumAllowedWidth);
 

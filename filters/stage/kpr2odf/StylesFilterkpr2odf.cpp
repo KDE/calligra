@@ -55,7 +55,7 @@ const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
             if (bcType.isNull() || bcType.attribute("value") == "0") {
                 //background is a plain color
                 QString color = page.namedItem("BACKCOLOR1").toElement().attribute("color");
-                //if the backcolor is not present it's implicitally white
+                //if the backcolor is not present it's implicitly white
                 //unless a draw:fill is found, in which case even though a
                 //draw:fill-color is not present it's black in KPresenter2.0
                 style.addProperty("draw:fill", "solid");

@@ -127,14 +127,14 @@ public:
     void addSlidesToAll( const QList<KoPAPageBase*> &slideShow, unsigned int position );
 
     /**
-     * @brief Deletes all the ocurrencies of a given slide from all the known custom SlideShows
+     * @brief Deletes all the occurrences of a given slide from all the known custom SlideShows
      *
      * @param slide slide to be removed
      */
     void removeSlideFromAll(KoPAPageBase *page);
 
     /**
-     * @brief Deletes all the ocurrencies of a given list of slides from all the known custom SlideShows
+     * @brief Deletes all the occurrences of a given list of slides from all the known custom SlideShows
      *
      * @param slideShow list of slides to be removed
      */

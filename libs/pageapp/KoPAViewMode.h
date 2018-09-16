@@ -80,7 +80,7 @@ public:
     /**
      * @brief Check if the active view mode works on master/normal pages
      *
-     * The default impementation always returns false
+     * The default implementation always returns false
      *
      * @return false
      */

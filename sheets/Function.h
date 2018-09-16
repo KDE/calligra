@@ -79,7 +79,7 @@ public:
     /** is it okay for the function to receive this many parameters ? */
     bool paramCountOkay(int count);
     /** when set to true, the function can receive arrays. When set to
-    false, the auto-array mechamism will be used for arrays (so the
+    false, the auto-array mechanism will be used for arrays (so the
     function will receive simple values, not arrays). */
     void setAcceptArray(bool accept = true);
     bool needsExtra();

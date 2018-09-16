@@ -96,7 +96,7 @@ public:
     void  setWindow(int left, int top , int width, int height);
 
     // Clipping
-    // the 'CoordinateMode' parameter is ommitted : always CoordPainter in wmf
+    // the 'CoordinateMode' parameter is omitted : always CoordPainter in wmf
     // not yet implemented
     void  setClipRegion(const QRegion& r);
     void  clipping(bool enable);

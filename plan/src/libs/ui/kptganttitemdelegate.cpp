@@ -665,7 +665,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KGantt::StyleOp
 
             const qreal delta = static_cast< int >( ( itemRect.height() - pw ) / 2 );
             // HACK: KGantt uses constraint start/end for more than painting,
-            // so to avoid mudling the waters we store an offset here to enable
+            // so to avoid muddling the waters we store an offset here to enable
             // us to not paint the constraint on top/under the milestone.
             // This only works if we use the same delegate to paint constraints, of course...
             m_constraintXOffset = delta;

@@ -566,7 +566,7 @@ QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement &parent
         }
 
         // stylesmap's are embedded into a style and are pointing to another style that
-        // should be used insteat ot this style if the defined condition is true. E.g.;
+        // should be used instead of this style if the defined condition is true. E.g.;
         // <number:number-style style:name="N139P0" style:volatile="true"/>
         // <number:number-style style:name="N139P1" style:volatile="true"/>
         // <number:number-style style:name="N139P2" style:volatile="true"/>

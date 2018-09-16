@@ -66,7 +66,7 @@ public:
  
     /**
      * Insert a new child at the cursor position
-     * @param cursor The cursor holding the position where to inser
+     * @param cursor The cursor holding the position where to insert
      * @param child A BasicElement to insert
      */
     bool insertChild( int position, BasicElement* child );

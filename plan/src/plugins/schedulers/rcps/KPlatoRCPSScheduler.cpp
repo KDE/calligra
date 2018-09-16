@@ -172,7 +172,7 @@ int KPlatoRCPSScheduler::duration( int direction, int time, int nominal_duration
     int dur = 0;
     if ( info->task->constraint() == Node::FixedInterval ) {
         // duration may depend on daylight saving so we need to calculate
-        // NOTE: dur may not be correct if time != info->task->constraintStartTime, let's see what happends...
+        // NOTE: dur may not be correct if time != info->task->constraintStartTime, let's see what happens...
         dur = ( info->task->constraintEndTime() - info->task->constraintStartTime() ).seconds() / m_timeunit;
         info->task->schedule()->logDebug( QString( "Fixed interval: Time=%1, duration=%2 ( %3, %4 )" ).arg( time ).arg( dur ).arg( fromRcpsTime( time ).toString() ).arg( Duration( (qint64)(dur) * m_timeunit * 1000 ).toDouble( Duration::Unit_h ) ) );
     } else if ( info->estimatetype == Estimate::Type_Effort ) {

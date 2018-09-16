@@ -58,11 +58,11 @@ class KPlatoXmlLoaderBase;
 
 /**
  * Project is the main node in a project, it contains child nodes and
- * possibly sub-projects. A sub-project is just another instantion of this
+ * possibly sub-projects. A sub-project is just another instantiation of this
  * node however.
  *
  * A note on timezones:
- * To be able to handle resources working in diffierent timezones and
+ * To be able to handle resources working in different timezones and
  * to facilitate data exchange with other applications like PIMs or
  * and groupware servers, the project has a timezone that is used for
  * all datetimes in nodes and schedules.
@@ -71,7 +71,7 @@ class KPlatoXmlLoaderBase;
  * A resources timezone is defined by the associated calendar.
  *
  * Note that a projects datetimes are always displayed/modified in the timezone
- * it was originally created, not necessarly in your current local timezone.
+ * it was originally created, not necessarily in your current local timezone.
  */
 class KPLATOKERNEL_EXPORT Project : public Node
 {

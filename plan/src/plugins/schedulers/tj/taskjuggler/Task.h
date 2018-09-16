@@ -48,7 +48,7 @@ class Interval;
 
 /**
  * This class stores all task related information and provides methods to
- * manipulte them. It provides fundamental functions like the scheduler.
+ * manipulate them. It provides fundamental functions like the scheduler.
  *
  * @short The class that holds all task related information.
  * @see Resource

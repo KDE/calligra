@@ -104,7 +104,7 @@ bool KPrPageLayouts::loadOdf( KoPALoadingContext & context )
         }
     }
 
-    // handel default styles
+    // handle default styles
     layouts = context.odfLoadingContext().defaultStylesReader().presentationPageLayouts();
     it = layouts.begin();
     QList<KPrPageLayout *> defaultLayouts;

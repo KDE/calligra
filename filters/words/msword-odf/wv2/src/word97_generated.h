@@ -3113,7 +3113,7 @@ struct CHP : public Shared {
      * 2 background blink
      * 3 sparkle text
      * 4 marching ants
-     * 5 marchine red ants
+     * 5 marching red ants
      * 6 shimmer
      */
     U8 sfxtText;
@@ -8785,7 +8785,7 @@ struct SEP : public Shared {
 
     /**
      * array of 89 longs that determine bounds of irregular width columns [Changed that to a
-     * vector for obvoius reasons (Werner)]
+     * vector for obvious reasons (Werner)]
      */
     std::vector<U32> rgdxaColumnWidthSpacing;
 

@@ -80,7 +80,7 @@ private:
 
     QString handle_moveTo(QXmlStreamReader* reader);
 
-    // Storing the latest position where we are, this is needed in order to implment arcTo
+    // Storing the latest position where we are, this is needed in order to implement arcTo
     QString oldX, oldY;
 
     int pathWidth, pathHeight;

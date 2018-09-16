@@ -418,7 +418,7 @@ public:
         Dense5Pattern, ///< 25% gray
         Dense6Pattern, ///< 12.5% gray
         Dense7Pattern, ///< 6.25% gray
-        HorPattern,  ///< Horizonatal lines
+        HorPattern,  ///< Horizontal lines
         VerPattern,  ///< Vertical lines
         CrossPattern, ///< Horizontal and Vertical lines
         BDiagPattern, ///< Left-bottom to right-top diagonal lines

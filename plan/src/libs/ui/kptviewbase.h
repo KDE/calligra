@@ -414,7 +414,7 @@ public:
     virtual void saveContext(const QMetaEnum &map, QDomElement &context , bool expand = true) const;
 
     /**
-      Reimplemented to fix qt bug 160083: Doesn't scroll horisontally.
+      Reimplemented to fix qt bug 160083: Doesn't scroll horizontally.
     
       Scroll the contents of the tree view until the given model item
       \a index is visible. The \a hint parameter specifies more

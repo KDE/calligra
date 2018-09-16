@@ -242,7 +242,7 @@ namespace wvWare {
      * The TextHandler class is the main worker in this filter. It tells you
      * about sections, paragraphs, and characters inside the document. If
      * you want to have a fast filter, try to make those methods fast, they
-     * will get called very oftern.
+     * will get called very often.
      */
     class WV2_EXPORT TextHandler
     {

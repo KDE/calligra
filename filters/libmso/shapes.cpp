@@ -502,7 +502,7 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
 
     // NOTE: OpenOffice treats msosptNotchedCircularArrow as msosptArc.  The
     // msosptNotchedCircularArrow value SHOULD NOT be used according to the
-    // MS-ODRAW spec.  However it occures in many Word8 files.
+    // MS-ODRAW spec.  However it occurs in many Word8 files.
     case msosptArc:
         processNotchedCircularArrow(o, out);
         break;
