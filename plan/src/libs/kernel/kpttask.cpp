@@ -3131,7 +3131,7 @@ Duration Completion::actualEffort( QDate date ) const
             }
         }
     } else {
-        // Hmmm: How to really knowon a specific date?
+        // Hmmm: How to really know a specific date?
         if ( m_entries.contains( date ) ) {
             eff = m_entries[ date ]->totalPerformed;
         }

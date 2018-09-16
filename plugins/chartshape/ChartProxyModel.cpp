@@ -586,7 +586,7 @@ bool ChartProxyModel::loadOdf(const KoXmlElement &element, KoShapeLoadingContext
 
     // Do not ignore the data-source-has-labels in any case, even if a
     // category data region is specified for an axis, as the first
-    // column still has to be exluded from the actual data region if
+    // column still has to be excluded from the actual data region if
     // e.g. data-source-has-labels is set to "column" If an axis
     // contains the chart:categories element, the category data region
     // will automatically be set on every data set attached to that

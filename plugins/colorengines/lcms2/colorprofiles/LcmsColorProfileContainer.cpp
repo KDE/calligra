@@ -138,7 +138,7 @@ bool LcmsColorProfileContainer::init()
         cmsGetProfileInfo(d->profile, cmsInfoDescription, cmsNoLanguage, cmsNoCountry, buffer, _BUFFER_SIZE_);
         d->name = QString::fromWCharArray(buffer);
 
-        //apparantly this should give us a localised string??? Not sure about this.
+        //apparently this should give us a localised string??? Not sure about this.
         cmsGetProfileInfo(d->profile, cmsInfoModel, cmsNoLanguage, cmsNoCountry, buffer, _BUFFER_SIZE_);
         d->productDescription = QString::fromWCharArray(buffer);
 
@@ -167,8 +167,8 @@ bool LcmsColorProfileContainer::init()
                 double d3dummy [3] = {d->mediaWhitePoint.X, d->mediaWhitePoint.Y, d->mediaWhitePoint.Z};
                 QGenericMatrix<1, 3, double> whitePointMatrix(d3dummy);
                 QTransform invertDummy(CAM1[0].X, CAM1[0].Y, CAM1[0].Z, CAM1[1].X, CAM1[1].Y, CAM1[1].Z, CAM1[2].X, CAM1[2].Y, CAM1[2].Z);
-                //we then abuse QTransform's invert function because it probably does matrix invertion 20 times better than I can program.
-                //if the matrix is uninvertable, invertedDummy will be an identity matrix, which for us means that it won't give any noticeble
+                //we then abuse QTransform's invert function because it probably does matrix inversion 20 times better than I can program.
+                //if the matrix is uninvertable, invertedDummy will be an identity matrix, which for us means that it won't give any noticeable
                 //effect when we start multiplying.
                 QTransform invertedDummy = invertDummy.inverted();
                 //we then put the QTransform into a generic 3x3 matrix.

@@ -65,7 +65,7 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
     m_canvas = new KWCanvas(viewMode, static_cast<KWDocument*>(m_view->koDocument()), m_view, this);
     KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget(m_view->actionCollection(), this);
     m_canvasController = canvasController;
-    // We need to set this as QDeclarativeView sets them a bit differnt from QAbstractScrollArea
+    // We need to set this as QDeclarativeView sets them a bit different from QAbstractScrollArea
     canvasController->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     canvasController->setFocusPolicy(Qt::NoFocus);
         //setScene(0);

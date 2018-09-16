@@ -1907,7 +1907,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
   Parent elements, Child elements: sync to ins (Inserted Run Content)
 
  */
-//! @todo: read more attributes and child emenets
+//! @todo: read more attributes and child elements
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_del()
 {
     READ_PROLOGUE
@@ -2035,7 +2035,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_del()
   - sSubSup (Sub-Superscript Object) §22.1.2.103
   - sSup (Superscript Object) §22.1.2.105
 */
-//! @todo: read more attributes and child emenets
+//! @todo: read more attributes and child elements
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_ins()
 {
     READ_PROLOGUE

@@ -103,7 +103,7 @@ void PerformanceTester::init()
     r2 = new Resource();
     r2->setName( "Material" );
     r2->setType( Resource::Type_Material );
-    r2->setCalendar( c ); // limit availablity to working hours
+    r2->setCalendar( c ); // limit availability to working hours
     r2->setNormalRate( 0.0 ); // NOTE
     p1->addResource( m, r2 );
 

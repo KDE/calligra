@@ -938,7 +938,7 @@ Project::schedule(int sc)
     int maxProgress = 0;
 
     // The scheduling function only cares about leaf tasks. Container tasks
-    // are scheduled automatically when all their childern are scheduled. So
+    // are scheduled automatically when all their children are scheduled. So
     // we create a task list that only contains leaf tasks.
     TaskList allLeafTasks;
     foreach (CoreAttributes *t, taskList) {

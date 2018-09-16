@@ -411,7 +411,7 @@ void Selection::update(const QPoint& point)
     // These get removed, if multiple occurrences are not allowed. Store the old
     // amount of ranges, to figure out how many ranges have been removed later.
     const int count = cells().count();
-    // The update may have shrunk the range, which would be containend in
+    // The update may have shrunk the range, which would be contained in
     // the former range. Remove the latter before inserting the new range.
     delete cells().takeAt(d->activeElement);
     insert(d->activeElement, newRange, sheet, d->multipleOccurences);

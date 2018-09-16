@@ -127,7 +127,7 @@ void RoundCornersCommand::roundPath()
     *
     *        t = path[n]->param( path[n]->length() - m_radius )
     *
-    *    and add the first subsegment of the curent segment to newPath.
+    *    and add the first subsegment of the current segment to newPath.
     *
     *    path:                 new path:
     *

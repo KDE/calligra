@@ -30,7 +30,7 @@ class VoiceElement;
 
 /**
  * A VoiceBar contains the music elements in a specific voice in a specific bar. A VoiceBar is in many ways
- * simply a wrapper around a QList containging the actual music elements.
+ * simply a wrapper around a QList containing the actual music elements.
  */
 class VoiceBar : public QObject
 {

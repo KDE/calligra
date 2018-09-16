@@ -137,7 +137,7 @@ void ChartTool::shapeSelectionChanged()
     // the new chart is selected but the deactivate method is not called,
     // so this tool will still operate on the old chart.
     // We activate the default tool to rectify this.
-    // FIXME: could probably be done in KoToolBase (or whereever approprieate)
+    // FIXME: could probably be done in KoToolBase (or wherever appropriate)
 
     if (!d->shape) {
         return;

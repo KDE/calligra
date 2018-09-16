@@ -540,7 +540,7 @@ Task::propagateStart(int sc, time_t date)
         }
     }
     /* Propagate start time to sub tasks which have only an implicit
-     * dependancy on the parent task. Do not touch container tasks. */
+     * dependency on the parent task. Do not touch container tasks. */
     for (TaskListIterator tli(*sub); tli.hasNext();)
     {
         Task *t = static_cast<Task*>(tli.next());
@@ -606,7 +606,7 @@ Task::propagateEnd(int sc, time_t date)
         }
     }
     /* Propagate end time to sub tasks which have only an implicit
-     * dependancy on the parent task. Do not touch container tasks. */
+     * dependency on the parent task. Do not touch container tasks. */
     for (TaskListIterator tli(*sub); tli.hasNext();) {
         Task *t = static_cast<Task*>(tli.next());
         if (!t->hasEndDependency() && !t->schedulingDone)
@@ -2570,7 +2570,7 @@ Task::scheduleOk(int sc) const
     if (DEBUGPS(3))
         qDebug()<<"Checking task"<<name;
 
-    /* If any of the dependant tasks is a runAway, we can safely surpress all
+    /* If any of the dependent tasks is a runAway, we can safely suppress all
      * other error messages. */
     for (QListIterator<TaskDependency*> tdi(depends); tdi.hasNext();) {
         TaskDependency *td = static_cast<TaskDependency*>(tdi.next());
@@ -3062,7 +3062,7 @@ Task::computeCriticalness(int sc)
          * allocated no more and no less than the number of working days in
          * the expected project time the probability will be one. This
          * certainly neglects many things like vacations, shifts, parallel
-         * assignements and other factors. But we don't know enough about
+         * assignments and other factors. But we don't know enough about
          * these factors yet, to take them into account. So we have to live
          * with what we got. */
         overallAllocationProbability /=
@@ -3185,7 +3185,7 @@ bool
 Task::analyzePath(int sc, double minSlack, time_t pathStart, long busyTime,
                   long worstMinSlackTime, long& checks, long& found)
 {
-    /* Saveguard to limit the runtime for this NP hard algorithm. */
+    /* Safeguard to limit the runtime for this NP hard algorithm. */
     long maxPaths = project->getScenario(sc)->getMaxPaths();
     if (maxPaths > 0 && checks >= maxPaths)
         return false;

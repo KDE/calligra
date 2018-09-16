@@ -216,7 +216,7 @@ bool PlanTJScheduler::kplatoToTJ()
 {
     m_tjProject = new TJ::Project();
     m_tjProject->setScheduleGranularity( m_granularity / 1000 );
-    m_tjProject->getScenario( 0 )->setMinSlackRate( 0.0 ); // Do not caclulate critical path
+    m_tjProject->getScenario( 0 )->setMinSlackRate( 0.0 ); // Do not calculate critical path
 
     m_tjProject->setNow( m_project->constraintStartTime().toTime_t() );
     m_tjProject->setStart( m_project->constraintStartTime().toTime_t() );
@@ -273,7 +273,7 @@ void PlanTJScheduler::addStartEndJob()
         start->setSpecifiedStart( 0, m_tjProject->getStart() );
         start->setPriority( 999 );
     } else {
-        // bacwards: insert a new ms nefore start and make start an ALAP to push all other jobs ALAP
+        // backwards: insert a new ms before start and make start an ALAP to push all other jobs ALAP
         TJ::Task *bs = new TJ::Task( m_tjProject, "TJ::StartJob-B", "TJ::StartJob-B", 0, QString(), 0);
         bs->setMilestone( true );
         bs->setSpecifiedStart( 0, m_tjProject->getStart() );

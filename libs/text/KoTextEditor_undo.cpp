@@ -48,7 +48,7 @@
     These are:
     NoOp: this states indicates that the KoTextEditor is not editing the QTextDocument.
     KeyPress: this state indicates that the user is typing text. All text typed in succession should correspond to one undo command. To be used when entering text outside of an insertTextCommand.
-    Delete: this state indicates that the user is deleting characters. All deletions done in succession should correspond to one undo command. To be used for deleting outside a deleteCommand. Currently not in use, our deltion is done through a command because of inline objects.
+    Delete: this state indicates that the user is deleting characters. All deletions done in succession should correspond to one undo command. To be used for deleting outside a deleteCommand. Currently not in use, our deletion is done through a command because of inline objects.
     Format: this state indicates that we are formatting text. To be used when formatting outside of a command.
     Custom: this state indicates that the QTextDocument is changed through a KUndo2Command.
 
@@ -132,7 +132,7 @@ void KoTextEditor::Private::documentCommandAdded()
         debugText << "commandStack count is now: " << commandStack.count();
     }
     else if ((editorState == KeyPress || editorState == Delete) && !commandStack.isEmpty() && commandStack.top()->childCount()) {
-        //QTextDocument emits a signal on the first key press (or delte) and "merges" the subsequent ones, until an incompatible one is done. In which case it re-emit a signal.
+        //QTextDocument emits a signal on the first key press (or delete) and "merges" the subsequent ones, until an incompatible one is done. In which case it re-emit a signal.
         //Here we are in KeyPress (or Delete) state. The fact that the commandStack isn't empty and its top command has children means that we just received such a signal. We therefore need to pop the previous headCommand (which were either key press or delete) and create a new one to parent the UndoTextCommands. This command also need to be pushed on the application's stack.
         debugText << "we are in subsequent keyPress/delete state and still received a signal. we need to create a new headCommand: " << commandTitle;
         debugText << "so we pop the current one and push the new one on both the commandStack and the application's stack";

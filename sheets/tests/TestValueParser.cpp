@@ -66,7 +66,7 @@ void TestValueParser::initTestCase()
     *m_calcsettings->locale() = KLocale(locale, locale);
     QCOMPARE(m_calcsettings->locale()->country(), locale);
     QString s = ki18n("true").toString(QStringList()<<"nl");
-    QVERIFY2(s == QString("xxtruexx"), "Translation failed, check that you have the correct .mo file in the data directorey and that it installs correctly");
+    QVERIFY2(s == QString("xxtruexx"), "Translation failed, check that you have the correct .mo file in the data directory and that it installs correctly");
 }
 
 void TestValueParser::cleanupTestCase()

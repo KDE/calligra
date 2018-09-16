@@ -40,7 +40,7 @@ namespace wvWare
     public:
         /**
          * You shouldn't construct such objects yourself, the Parser interface
-         * provides accesst to the internal font collection.
+         * provides access to the internal font collection.
          * @param reader is either a table or a document stream (97+ / older versions)
          */
         FontCollection( OLEStreamReader* reader, const Word97::FIB& fib );

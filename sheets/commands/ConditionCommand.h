@@ -31,14 +31,14 @@ namespace Sheets
 {
 
 /**
- * \class CondtionCommand
+ * \class ConditionCommand
  * \ingroup Commands
- * \brief Adds/Removes condtional formatting to/of a cell region.
+ * \brief Adds/Removes conditional formatting to/of a cell region.
  */
-class CondtionCommand : public AbstractRegionCommand
+class ConditionCommand : public AbstractRegionCommand
 {
 public:
-    CondtionCommand();
+    ConditionCommand();
     void setConditionList(const QLinkedList<Conditional>& list);
 
 protected:

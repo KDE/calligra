@@ -37,7 +37,7 @@ class FLAKE_EXPORT KoShapePaste : public KoOdfPaste
 {
 public:
     /**
-     * Contructor
+     * Constructor
      *
      * @param canvas The canvas on which the paste is done
      * @param parentLayer The layer on which the shapes will be pasted

@@ -94,7 +94,7 @@ public Q_SLOTS:
     //!Serts the size of the label
     void setSize(const QSizeF&);
 
-    //!Load the contets for the text item from the given file
+    //!Load the contents for the text item from the given file
     void loadFromFile(const QString& fileName);
 private:
     PlanReportItemText *m_text;

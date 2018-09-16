@@ -92,7 +92,7 @@ void KoShapeRegistry::Private::init(KoShapeRegistry *q)
     q->add(new SvgShapeFactory);
 
     // Now all shape factories are registered with us, determine their
-    // assocated odf tagname & priority and prepare ourselves for
+    // associated odf tagname & priority and prepare ourselves for
     // loading ODF.
 
     QList<KoShapeFactoryBase*> factories = q->values();

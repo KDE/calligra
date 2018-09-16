@@ -121,7 +121,7 @@ public:
 
 public Q_SLOTS:
     /**
-     *  Notification that the page setup has changed exected when a page has been
+     *  Notification that the page setup has changed expected when a page has been
      * added or removed or just resized.
      */
     void pageSetupChanged();

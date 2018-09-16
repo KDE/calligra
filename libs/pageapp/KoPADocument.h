@@ -171,7 +171,7 @@ public:
      *
      * The page is created with new.
      *
-     * Reimplement when you need a derivered class in your kopageapplication
+     * Reimplement when you need a derived class in your kopageapplication
      */
     virtual KoPAPage *newPage(KoPAMasterPage *masterPage);
 
@@ -180,7 +180,7 @@ public:
      *
      * The page is created with new.
      *
-     * Reimplement when you need a derivered class in your kopageapplication
+     * Reimplement when you need a derived class in your kopageapplication
      */
     virtual KoPAMasterPage * newMasterPage();
 
@@ -272,21 +272,21 @@ protected:
 
 
     /**
-     * Load the epilouge
+     * Load the epilogue
      *
      * The default implementation is empty
      */
     virtual bool loadOdfEpilogue( const KoXmlElement & body, KoPALoadingContext & context );
 
     /**
-     * Save the prolog
+     * Save the prologue
      *
      * The default implementation is empty
      */
     virtual bool saveOdfProlog( KoPASavingContext & paContext );
 
     /**
-     * Save the epilouge
+     * Save the epilogue
      *
      * The default implementation is empty
      */
@@ -306,7 +306,7 @@ protected:
      * This function is called by at the end of addShape. This is used
      * e.g. for doing work on the application which is in the KoShapeAppData.
      *
-     * The default impementation does nothing
+     * The default implementation does nothing
      */
     virtual void postAddShape( KoPAPageBase * page, KoShape * shape );
 
@@ -314,7 +314,7 @@ protected:
      * This function is called by at the end of removeShape. This is used
      * e.g. for doing work on the application which is in the KoShapeAppData.
      *
-     * The default impementation does nothing
+     * The default implementation does nothing
      */
     virtual void postRemoveShape( KoPAPageBase * page, KoShape * shape );
 

@@ -128,13 +128,13 @@ public:
     bool bodyFound(void) const { return m_bodyFound; }
 
     /**
-     * Add a color item to the backgroud-color stack.
+     * Add a color item to the background-color stack.
      * @param color in the format "#RRGGBB"
      */
     void addBgColor(const QString& val) { m_bgColors.push(val); }
 
     /**
-     * Remove the last item from the backgroud-color stack.
+     * Remove the last item from the background-color stack.
      */
     void rmBgColor(void) { m_bgColors.pop(); }
 

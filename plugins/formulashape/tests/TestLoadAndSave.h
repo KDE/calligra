@@ -63,7 +63,7 @@ private Q_SLOTS:
     void color_data();
     void color();
     
-    // General layout eleemnts
+    // General layout elements
     void rowElement_data();
     void rowElement();
     void fractionElement_data();

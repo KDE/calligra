@@ -286,9 +286,9 @@ public:
     using Node::legalToLink;
 
     virtual const QHash<QString, Node*> &nodeDict() { return nodeIdDict; }
-    /// Return a list of all nodes in the project (exluding myself)
+    /// Return a list of all nodes in the project (excluding myself)
     QList<Node*> allNodes() const;
-    /// Return the number of all nodes in the project (exluding myself)
+    /// Return the number of all nodes in the project (excluding myself)
     int nodeCount() const { return nodeIdDict.count() - 1; }
 
     /// Return a list of all tasks and milestones int the wbs order

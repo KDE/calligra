@@ -251,7 +251,7 @@ void KoEncryptedStore::init(const QByteArray & appIdentification)
                 KoXmlNode xmlencattr = xmlencnode.firstChild();
                 bool algorithmFound = false;
                 bool keyDerivationFound = false;
-                // Search all data about encrption
+                // Search all data about encryption
                 while (!xmlencattr.isNull()) {
                     if (!xmlencattr.isElement()) {
                         xmlencattr = xmlencattr.nextSibling();

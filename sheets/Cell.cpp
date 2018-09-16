@@ -986,7 +986,7 @@ QDomElement Cell::save(QDomDocument& doc, int xOffset, int yOffset, bool era)
 
         } else if (!link().isEmpty()) {
             // KSpread pre 1.4 saves link as rich text, marked with first char '
-            // Have to be saved in some CDATA section because of too many special charatcers.
+            // Have to be saved in some CDATA section because of too many special characters.
             QDomElement txt = doc.createElement("text");
             QString qml = "!<a href=\"" + link() + "\">" + userInput() + "</a>";
             txt.appendChild(doc.createCDATASection(qml));
@@ -1262,7 +1262,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op, const QS
     // rich text ?
     else if ((!t.isEmpty()) && (t[0] == '!')) {
         // KSpread pre 1.4 stores hyperlink as rich text (first char is '!')
-        // extract the link and the correspoding text
+        // extract the link and the corresponding text
         // This is a rather dirty hack, but enough for Calligra Sheets generated XML
         bool inside_tag = false;
         QString qml_text;

@@ -330,7 +330,7 @@ void TestShapeAnimations::setTriggerEvent()
     QVERIFY(animations.rowCount() == ANIMATIONS_COUNT);
 
     // From On click
-    // To After Previous (with childrem)
+    // To After Previous (with children)
     animations.setNodeType(m_animation[3], KPrShapeAnimation::AfterPrevious);
     QCOMPARE(animations.data(animations.index(0, KPrShapeAnimations::NodeType)).toInt(),
              (int)KPrShapeAnimation::OnClick);

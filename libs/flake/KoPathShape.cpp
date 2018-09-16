@@ -673,7 +673,7 @@ int KoPathShape::arcToCurve(qreal rx, qreal ry, qreal startAngle, qreal sweepAng
         //TODO
     }
 
-    // split angles bigger than 90° so that it gives a good aproximation to the circle
+    // split angles bigger than 90° so that it gives a good approximation to the circle
     qreal parts = ceil(qAbs(sweepAngle / 90.0));
 
     qreal sa_rad = startAngle * M_PI / 180.0;
@@ -1643,7 +1643,7 @@ QPainterPath KoPathShape::pathStroke(const QPen &pen) const
         KoPathSegment lastSegment;
 
         /*
-         * if the path consits only of 2 point and it it has an marker on both ends
+         * if the path consists only of 2 point and it it has an marker on both ends
          * use the firstSegments.second as that is the path that needs to be shortened
          */
         if (twoPointPath && firstPoint) {

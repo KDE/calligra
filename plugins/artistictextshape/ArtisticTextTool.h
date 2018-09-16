@@ -95,7 +95,7 @@ private Q_SLOTS:
     void toggleFontBold(bool enabled);
     void toggleFontItalic(bool enabled);
     void anchorChanged(QAction*);
-    void setFontFamiliy(const QFont &font);
+    void setFontFamily(const QFont &font);
     void setFontSize(int size);
     void setSuperScript();
     void setSubScript();
@@ -115,7 +115,7 @@ private:
     enum FontProperty {
         BoldProperty,
         ItalicProperty,
-        FamiliyProperty,
+        FamilyProperty,
         SizeProperty
     };
 

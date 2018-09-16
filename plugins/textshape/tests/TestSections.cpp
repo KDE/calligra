@@ -104,7 +104,7 @@ void TestSections::testShrinkByMargin()
 
     m_layout->layout();
 
-    // a block in a section with margins (and no columns) should be exact amoung less wide
+    // a block in a section with margins (and no columns) should be exact amount less wide
     // as the reference (first) block.
     QTextLayout *blockLayout = m_doc->begin().layout();
     QCOMPARE(blockLayout->lineAt(0).width(), 200.0);

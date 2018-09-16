@@ -44,7 +44,7 @@ public:
                         KoTextRangeManager *textRangeManager);
     virtual ~AnnotationTextShape();
 
-    void setAnnotaionTextData(KoTextShapeData *textShape);
+    void setAnnotationTextData(KoTextShapeData *textShape);
 
     // reimplemented
     void paintComponent(QPainter &painter, const KoViewConverter &converter,
@@ -82,7 +82,7 @@ private:
 
     QString m_creator;
     QString m_date;
-    QString m_dateString;       // another wayof storing the date. Not sure when it is used.
+    QString m_dateString;       // another way of storing the date. Not sure when it is used.
 };
 
 #endif // ANNOTATIONTEXTSHAPE_H

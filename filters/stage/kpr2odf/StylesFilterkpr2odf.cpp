@@ -238,7 +238,7 @@ const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
         case 40: //PEF_MELTING
             effectName = "melt";
             break;
-        }//switch efect
+        }//switch effect
         style.addProperty("presentation:transition-style", effectName);
 
         //Add the sound
@@ -260,7 +260,7 @@ const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
             QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
             style.addChildElement("presentationSound", elementContents);
         }
-    }//if pageEfect is null
+    }//if pageEffect is null
 
     return m_styles.insert(style, "dp");
 }
@@ -791,7 +791,7 @@ const QString Filterkpr2odf::createHatchStyle(int brushStyle, const QString &fil
 {
     KoGenStyle style(KoGenStyle::HatchStyle);
 
-    //"Contaimnet" strings
+    //"Containment" strings
     QString displayName;
     QString styleString;
     QString distance;

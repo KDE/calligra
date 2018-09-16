@@ -163,7 +163,7 @@ void FixedDateFormat::customTextChanged(const QString& text)
     m_variable->setDefinition(text);
 
     if (widget.custom->isChecked()) {
-        // altering the custom text will deselect the list item so the user can easilly switch
+        // altering the custom text will deselect the list item so the user can easily switch
         // back by selecting one.
         QListWidgetItem * item = widget.formatList->currentItem();
         if (item) // deselect it.

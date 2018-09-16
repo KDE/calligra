@@ -335,7 +335,7 @@ int KPlatoRCPSScheduler::weight( int time, int duration, struct rcps_fitness *no
                 default:
                     break;
             }
-/*            const char *s = QString( "Backwrd: %1 %2 %3 %4 (target: %5)" ).arg( time, 10 ).arg( duration, 10 ).arg( w, 10 ).arg( info->task->name() ).arg( info->targettime ).toLatin1();
+/*            const char *s = QString( "Backward: %1 %2 %3 %4 (target: %5)" ).arg( time, 10 ).arg( duration, 10 ).arg( w, 10 ).arg( info->task->name() ).arg( info->targettime ).toLatin1();
             std::cout<<s<<"\n";*/
         } else {
             switch ( info->task->constraint() ) {
@@ -549,7 +549,7 @@ void KPlatoRCPSScheduler::taskFromRCPSForward( struct rcps_job *job, Task *task,
 
         cs->logDebug( QString( "Job %1: resource %2 is %3 available" ).arg( rcps_job_getname(job) ).arg( rcps_resource_getname(res) ).arg( amount ), 1 );
         
-        // do actual appoinments etc
+        // do actual appointments etc
         ResourceRequest *r = m_requestmap.value( req );
         if ( r == 0 ) {
             cs->logWarning( i18n( "No resource request is registered" ), 1 );
@@ -690,7 +690,7 @@ void KPlatoRCPSScheduler::taskFromRCPSBackward( struct rcps_job *job, Task *task
 
         cs->logDebug( QString( "Job %1: resource %2 is %3 available" ).arg( rcps_job_getname( job ) ).arg( rcps_resource_getname( res ) ).arg( amount ), 1 );
 
-        // do actual appoinments etc
+        // do actual appointments etc
         ResourceRequest *r = m_requestmap.value( req );
         if ( r == 0 ) {
             cs->logWarning( i18n( "No resource request is registered" ), 1 );

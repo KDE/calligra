@@ -88,7 +88,7 @@ void TestLogicFunctions::testAND()
     CHECK_EVAL("AND(TRUE())", Value(true));
     CHECK_EVAL("AND(FALSE())", Value(false));
 
-    // literal non-convertable text should give an error
+    // literal non-convertible text should give an error
     //CHECK_EVAL("AND(FALSE();\"a\")", Value::errorVALUE());
 }
 
@@ -170,7 +170,7 @@ void TestLogicFunctions::testOR()
     CHECK_EVAL("OR(TRUE())", Value(true));
     CHECK_EVAL("OR(FALSE())", Value(false));
 
-    // literal non-convertable text should give an error
+    // literal non-convertible text should give an error
     //CHECK_EVAL("OR(TRUE();\"a\")", Value::errorVALUE());
 }
 
@@ -221,7 +221,7 @@ void TestLogicFunctions::testXOR()
     CHECK_EVAL("XOR(TRUE())", Value(true));
     CHECK_EVAL("XOR(FALSE())", Value(false));
 
-    // literal non-convertable text should give an error
+    // literal non-convertible text should give an error
     //CHECK_EVAL("XOR(TRUE();\"a\")", Value::errorVALUE());
 }
 

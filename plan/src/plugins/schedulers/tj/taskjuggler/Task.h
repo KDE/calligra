@@ -472,16 +472,16 @@ private:
     TaskList successors;
 
     /**
-     * A list of all tasks that preceed this task. It's the combination of
+     * A list of all tasks that precede this task. It's the combination of
      * depends and predecessors. This is redundant information but stored for
-     * conveniance. Interdependent tasks are linked in a doubly linked list.
+     * convenience. Interdependent tasks are linked in a doubly linked list.
      */
     TaskList previous;
 
     /**
      * A list of all tasks that follow this task. It's the combination of
      * precedes and successors. This is redundant information but stored for
-     * conveniance. Interdependent tasks are linked in a doubly linked list.
+     * convenience. Interdependent tasks are linked in a doubly linked list.
      */
     TaskList followers;
 

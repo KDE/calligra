@@ -774,7 +774,7 @@ public:
     /**
      * Generate cross references between all data structures and run a
      * consistency check. This function must be called after the project data
-     * tree has been contructed.
+     * tree has been constructed.
      * @return Only if all tests were successful true is returned.
      */
     bool pass2(bool noDepCheck);

@@ -37,7 +37,7 @@ class KPrPageEffectStrategy;
 
 /**
  * This is the base class for all page effects.
- * It uses an internaly a QTimeLine for calulating the position. The timeline is
+ * It uses an internaly a QTimeLine for calculating the position. The timeline is
  * feed by the time of an external timeline.
  */
 class STAGE_EXPORT KPrPageEffect

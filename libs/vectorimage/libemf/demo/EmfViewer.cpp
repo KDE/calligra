@@ -49,7 +49,7 @@ EmfViewer::EmfViewer( QSize &size )
     // Set a suitably large size.
     resize( m_size + QSize( 50, 50 ) );
 
-    // ...and finably create the label that will show everything.
+    // ...and finally create the label that will show everything.
     m_label = new QLabel(this);
     setCentralWidget( m_label );
 }

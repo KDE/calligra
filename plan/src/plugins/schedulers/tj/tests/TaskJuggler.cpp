@@ -541,7 +541,7 @@ void TaskJuggler::scheduleDependencies()
         m1->setScheduling( TJ::Task::ASAP );
         m1->setSpecifiedStart( 0, proj->getStart() );
 
-        // ALAP milestone dependent on m1 to simulate bacwards
+        // ALAP milestone dependent on m1 to simulate backwards
         TJ::Task *m2 = new TJ::Task(proj, "M2-ALAP", "M2", 0, QString(), 0);
         m2->setMilestone( true );
         m2->setScheduling( TJ::Task::ASAP );

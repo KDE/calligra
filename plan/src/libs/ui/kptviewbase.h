@@ -236,7 +236,7 @@ public:
         OptionViewConfig = 64,
         OptionAll = 0xffff
     };
-    /// Contructor
+    /// Constructor
     ViewBase(KoPart *part, KoDocument *doc, QWidget *parent);
     /// Destructor
     virtual ~ViewBase();

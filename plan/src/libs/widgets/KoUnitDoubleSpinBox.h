@@ -32,12 +32,12 @@ class KoUnit;
  * Spin box for double precision numbers with unit display.
  * Use this widget for any value that represents a real measurable value for consistency throughout
  * Calligra.
- * This widget shows the value in the user-selected units (inch, milimeters, etc) but keeps the
+ * This widget shows the value in the user-selected units (inch, millimeters, etc) but keeps the
  * calligra-widget default measurement unit internally. This has the advantage that just setting and
  * getting a value will not change the value due to conversions.
  * The KoDocument class has a unit() method for consistent (document wide) configuration of the
  * used unit.
- * It is adviced to use a QDoubleSpinBox in QtDesigner and then use the context-menu item: 'Promote to Custom Widget' and use the values: 'classname=KoUnitDoubleSpinBox', 'headerfile=KoUnitDoubleSpinBox.h'
+ * It is advised to use a QDoubleSpinBox in QtDesigner and then use the context-menu item: 'Promote to Custom Widget' and use the values: 'classname=KoUnitDoubleSpinBox', 'headerfile=KoUnitDoubleSpinBox.h'
  * This will generate code that uses this spinbox in the correct manner.
  */
 class KOWIDGETS_EXPORT KoUnitDoubleSpinBox : public QDoubleSpinBox

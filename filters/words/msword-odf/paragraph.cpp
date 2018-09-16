@@ -903,7 +903,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
             //use the color context to set the proper font color
             color = Conversion::computeAutoColor(chp->shd, currentBgColor(), QString());
 
-            // NOTE: Have to specify fo:color explicitly becasue only
+            // NOTE: Have to specify fo:color explicitly because only
             // basic support of style:use-window-font-color is
             // implemented in calligra.  No support for text in shapes
             // with solid fill.

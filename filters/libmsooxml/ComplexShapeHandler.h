@@ -49,7 +49,7 @@ public:
     // Handles gdLst items and creates equations out of them
     QString handle_gdLst(QXmlStreamReader* reader);
 
-    // Handles rect item and creates cooridantes for text-areas out of them
+    // Handles rect item and creates coordinates for text-areas out of them
     QString handle_rect(QXmlStreamReader* reader);
 
     // Handles pathLst and creates a value which should be used for enhanced-path attribute

@@ -254,7 +254,7 @@ void ResourceAssignmentView::drawTasksAttributedToAResource (Resource *res, QTre
     started->setText( 0, i18n( "Started" ) );
     finished->setText( 0, i18n( "Finished" ) );
 
-    /*For each task attibuted to the current resource*/
+    /*For each task attributed to the current resource*/
     foreach ( ResourceRequest * rr , res->requests() ){
 
         /*get name*/

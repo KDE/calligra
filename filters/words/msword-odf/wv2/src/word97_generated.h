@@ -1543,7 +1543,7 @@ bool operator!=(const TAP &lhs, const TAP &rhs);
  */
 /* This structure has been commented out because we can't handle it correctly
  * Please don't try to fix it here in this file, but rather copy this broken
- * structure definition and fix it in some auxilliary file. If you want to
+ * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
 //struct TBD {
@@ -3217,7 +3217,7 @@ bool operator!=(const CHP &lhs, const CHP &rhs);
  */
 /* This structure has been commented out because we can't handle it correctly
  * Please don't try to fix it here in this file, but rather copy this broken
- * structure definition and fix it in some auxilliary file. If you want to
+ * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
 //struct CHPX {
@@ -3282,7 +3282,7 @@ bool operator!=(const CHP &lhs, const CHP &rhs);
  */
 /* This structure has been commented out because we can't handle it correctly
  * Please don't try to fix it here in this file, but rather copy this broken
- * structure definition and fix it in some auxilliary file. If you want to
+ * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
 //struct CHPXFKP {
@@ -4365,7 +4365,7 @@ bool operator!=(const DOP &lhs, const DOP &rhs);
  */
 /* This structure has been commented out because we can't handle it correctly
  * Please don't try to fix it here in this file, but rather copy this broken
- * structure definition and fix it in some auxilliary file. If you want to
+ * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
 //struct FFN {
@@ -5838,7 +5838,7 @@ bool operator!=(const FIBFCLCB &lhs, const FIBFCLCB &rhs);
  */
 /* This structure has been commented out because we can't handle it correctly
  * Please don't try to fix it here in this file, but rather copy this broken
- * structure definition and fix it in some auxilliary file. If you want to
+ * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
 //struct FLD {
@@ -7483,7 +7483,7 @@ bool operator!=(const PAP &lhs, const PAP &rhs);
  */
 /* This structure has been commented out because we can't handle it correctly
  * Please don't try to fix it here in this file, but rather copy this broken
- * structure definition and fix it in some auxilliary file. If you want to
+ * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
 //struct PAPX {
@@ -7565,7 +7565,7 @@ bool operator!=(const PAP &lhs, const PAP &rhs);
  */
 /* This structure has been commented out because we can't handle it correctly
  * Please don't try to fix it here in this file, but rather copy this broken
- * structure definition and fix it in some auxilliary file. If you want to
+ * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
 //struct PAPXFKP {
@@ -8146,7 +8146,7 @@ bool operator!=(const PICF &lhs, const PICF &rhs);
  */
 /* This structure has been commented out because we can't handle it correctly
  * Please don't try to fix it here in this file, but rather copy this broken
- * structure definition and fix it in some auxilliary file. If you want to
+ * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
 //struct PLCF {

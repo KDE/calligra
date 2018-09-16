@@ -168,7 +168,7 @@ public Q_SLOTS:
     * Return true if the current element has child nodes. Please note, that
     * text-nodes are not counted as children by this method. Fetch any text
     * by using the text() method which will return an empty string if there
-    * is actualy no text.
+    * is actually no text.
     */
     bool hasChildren() const;
 

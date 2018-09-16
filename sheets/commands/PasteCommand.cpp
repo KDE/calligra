@@ -445,7 +445,7 @@ bool PasteCommand::processXmlData(Element *element, KoXmlDocument *data)
     KoXmlElement e = root.firstChild().toElement(); // "columns", "rows" or "cell"
     for (; !e.isNull(); e = e.nextSibling().toElement()) {
         // If the element is not a cell, unset the pasteCellCommand pointer.
-        // If existing, it is attached as child commnand, so no leaking here.
+        // If existing, it is attached as child command, so no leaking here.
         if (e.tagName() != "cell") {
             pasteCellCommand = 0;
         }

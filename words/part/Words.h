@@ -36,7 +36,7 @@ namespace Words
         OtherFrameSet
     };
 
-    /// Each text frame set can be catogorized in one of these items
+    /// Each text frame set can be categorized in one of these items
     enum TextFrameSetType {
         OddPagesHeaderTextFrameSet,  ///< The frameSet that holds the headers for the odd pages
         EvenPagesHeaderTextFrameSet, ///< The frameSet that holds the headers for the even pages

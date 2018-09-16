@@ -117,7 +117,7 @@ bool DBase::load(const QString& filename)
     for (unsigned i = 1; i < m_headerLength / 32; ++i) {
         DBaseField* field = new DBaseField;
 
-        // columnn-name
+        // column-name
         quint8 colname[12];
         for (int j = 0; j < 11; ++j)
             m_stream >> colname[j];

@@ -175,7 +175,7 @@ KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCol
     , KoCanvasController(actionCollection)
     , d(new Private(this))
 {
-    // We need to set this as QDeclarativeView sets them a bit differnt from QAbstractScrollArea
+    // We need to set this as QDeclarativeView sets them a bit different from QAbstractScrollArea
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     // And then our own Viewport

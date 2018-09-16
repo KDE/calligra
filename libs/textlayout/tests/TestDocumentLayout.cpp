@@ -127,7 +127,7 @@ void TestDocumentLayout::testHitTest()
     QVERIFY(p->m_area->hitTest(QPointF(20, paragOffets[1] + 20), Qt::FuzzyHit).position >= 139);
     */
     Q_UNUSED(lineHeight); // used in the above commented piece of code
-    Q_UNUSED(paragOffets); // used in the above commentted piece of code
+    Q_UNUSED(paragOffets); // used in the above commented piece of code
 }
 
 void TestDocumentLayout::testRootAreaZeroWidth()

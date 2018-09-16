@@ -84,7 +84,7 @@ void TestValueConverter::initTestCase()
     *m_calcsettings->locale() = KLocale(locale, locale);
     QCOMPARE(m_calcsettings->locale()->country(), locale);
     QString s = ki18n("true").toString(QStringList()<<locale);
-    QVERIFY2(s == QString("xxtruexx"), "Translation failed, check that you have the correct .mo file in the data directorey and that it installs correctly");
+    QVERIFY2(s == QString("xxtruexx"), "Translation failed, check that you have the correct .mo file in the data directory and that it installs correctly");
 }
 
 void TestValueConverter::cleanupTestCase()

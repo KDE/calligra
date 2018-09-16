@@ -143,7 +143,7 @@ public:
     virtual void takeAppointment( Appointment *appointment, int type = Scheduling );
     Appointment *findAppointment( Schedule *resource, Schedule *node, int type = Scheduling );
     /// Attach the appointment to appropriate list (appointment->calculationMode() specifies list)
-    bool attatch( Appointment *appointment );
+    bool attach( Appointment *appointment );
     
     DateTime appointmentStartTime() const;
     DateTime appointmentEndTime() const;

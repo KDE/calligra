@@ -443,7 +443,7 @@ private:
         // Stores field instructions.
         QString m_instructions;
 
-        // Stores the field result. NOTE: Disabled, becasue we use either
+        // Stores the field result. NOTE: Disabled, because we use either
         // m_writer or save the result as vanilla text.
 /*         QString m_result; */
 

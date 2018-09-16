@@ -141,7 +141,7 @@ class ValueCache
 };
 
 /****************************************************************************************************
- * It follws the classes used within the data-model to build up a tree of data-nodes.
+ * It follows the classes used within the data-model to build up a tree of data-nodes.
  */
 
 /// The AbstractNode is the base class to handle the diagram data-model (content of data1.xml).

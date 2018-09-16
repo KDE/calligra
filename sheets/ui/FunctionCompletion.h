@@ -35,7 +35,7 @@ namespace Sheets
 class CellEditor;
 
 /**
-* Provides autocompletition facilities in formula editors.
+* Provides autocompletion facilities in formula editors.
 * When the user types in the first few characters of a
 * function name in a CellEditor which has a FunctionCompletion
 * object installed on it, the FunctionCompletion object

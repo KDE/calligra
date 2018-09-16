@@ -126,7 +126,7 @@ void TestChartLayout::init()
 
     chart->setSize(area.size());
 
-    // use asymetric padding/spacing
+    // use asymmetric padding/spacing
     layout->setPadding(KoInsets(2., 4., 6., 8.));
     layout->setSpacing(10, 12);
 

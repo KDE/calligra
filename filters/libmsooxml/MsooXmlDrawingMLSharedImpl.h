@@ -295,7 +295,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
                 TRY_READ(solidFill)
                 m_currentDrawStyle->addProperty("svg:stroke-color", m_currentColor.name());
 
-                // Opacity is disabled becasue there's a bug somewhere
+                // Opacity is disabled because there's a bug somewhere
                 // which makes even 1% opacity hide lines.
 
                 // if (m_currentAlpha > 0) {
@@ -822,8 +822,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
 // SysClr is bit controversial, it is supposed to use
 // color defined by the system at the moment, the document is read
 // however, it often means that when reading the document, it is not
-// using the same colors, the creater wished.
-// Sometimes sysclr saves attribue lastClr which tells which color
+// using the same colors, the creator wished.
+// Sometimes sysclr saves attribute lastClr which tells which color
 // the creator was using, the current implementation uses that
 // and ignores real system colors.
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sysClr()

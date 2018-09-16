@@ -283,7 +283,7 @@ void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
     }
     m_animations = kprPage->animations().steps();
 
-    // it can be that the pages have different sizes. So we need to recalulate
+    // it can be that the pages have different sizes. So we need to recalculate
     // the zoom when we change the page
     updateZoom( m_canvas->size() );
 }
@@ -468,7 +468,7 @@ void KPrAnimationDirector::previousStep()
             m_pageEffectRunner = 0;
         }
     }
-    // when going back you allway go to the end of the effect
+    // when going back you always go to the end of the effect
     finishAnimations();
 }
 
@@ -483,7 +483,7 @@ void KPrAnimationDirector::animate()
     if ( m_pageEffectRunner ) {
         m_pageEffectRunner->next( m_timeLine.currentTime() );
     }
-    else if ( hasAnimation() ) { //if there are animnations
+    else if ( hasAnimation() ) { //if there are animations
         // set current time, to the current step
         m_animationCache->next();
         m_animations.at(m_stepIndex)->setCurrentTime(m_timeLine.currentTime());

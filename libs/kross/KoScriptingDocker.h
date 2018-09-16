@@ -137,7 +137,7 @@ public:
     *
     * \param parent The parent QWidget of the \a KoScriptingDocker .
     * \param module The \a KoScriptingModule instance.
-    * \param action The action the docker should dacorate. This action
+    * \param action The action the docker should decorate. This action
     * will be used to create the widgets, etc. in the docker using scripts.
     */
     KoScriptingActionDocker(KoScriptingModule *module, Kross::Action *action, QWidget *parent = 0);

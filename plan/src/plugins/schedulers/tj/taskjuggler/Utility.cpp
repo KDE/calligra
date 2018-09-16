@@ -122,7 +122,7 @@ timezone2tz(const char* tzone)
         TZDict.insert("-1000", "GMT+10:00");
         TZDict.insert("-1100", "GMT+11:00");
         TZDict.insert("-1200", "GMT+12:00");
-        // Now some conveniance timezones. There will be more in the future.
+        // Now some convenience timezones. There will be more in the future.
         TZDict.insert("PST", "GMT+8:00");
         TZDict.insert("PDT", "GMT+7:00");
         TZDict.insert("MST", "GMT+7:00");

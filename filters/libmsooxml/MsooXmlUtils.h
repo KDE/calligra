@@ -208,7 +208,7 @@ private:
 };
 
 //! Helper that works like the @ref Setter class but also has behaviour of std::auto_ptr.
-//! When std::auto_ptr is used, the pointer of type T* is not set back to 0 on desctruction.
+//! When std::auto_ptr is used, the pointer of type T* is not set back to 0 on destruction.
 //! @todo replace with a shared code
 template <typename T>
 class AutoPtrSetter

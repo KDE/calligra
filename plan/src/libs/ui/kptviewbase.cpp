@@ -2014,7 +2014,7 @@ void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
 
 
 /**
- * DoubleTreeViewBase is a QSplitter contaning two treeviews.
+ * DoubleTreeViewBase is a QSplitter containing two treeviews.
  * This makes it possible to keep columns visible in one view when scrolling the other view horizontally.
  */
 

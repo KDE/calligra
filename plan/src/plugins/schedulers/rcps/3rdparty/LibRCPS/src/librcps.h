@@ -176,7 +176,7 @@ struct rcps_job* rcps_job_successor_get(struct rcps_job *j, int s);
 /* get successor type from this job */
 int rcps_job_successor_type_get(struct rcps_job *j, int s);
 
-/* remove the sucessor from this job. please note that it might be references 
+/* remove the successor from this job. please note that it might be references 
  * in other locations and should not be freed just like that */
 struct rcps_job* rcps_job_successor_remove(struct rcps_job *j, int s);
 
@@ -258,7 +258,7 @@ void rcps_alternative_setamount(struct rcps_alternative *a, int m);
 /* get the resource that is requested by this alternative */
 struct rcps_resource* rcps_alternative_getresource(struct rcps_alternative *a);
 
-/* set (overwrites) the resource used by this alterantive */
+/* set (overwrites) the resource used by this alternative */
 void rcps_alternative_setresource(struct rcps_alternative *a, 
 		struct rcps_resource *r);
 
@@ -268,10 +268,10 @@ void rcps_alternative_add(struct rcps_request *r, struct rcps_alternative *a);
 /* count the alternatives of a request */
 int rcps_alternative_count(struct rcps_request *r);
 
-/* get an alterantive from a request */
+/* get an alternative from a request */
 struct rcps_alternative* rcps_alternative_get(struct rcps_request *r, int a);
 
-/* remove, but don't free, an alterantive from a request */
+/* remove, but don't free, an alternative from a request */
 struct rcps_alternative* rcps_alternative_remove(struct rcps_request *r, 
 	int a);
 

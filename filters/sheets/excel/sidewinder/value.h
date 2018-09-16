@@ -34,7 +34,7 @@ class ValueData;
 /**
  * Provides a wrapper for cell value.
  *
- * Each cell in a worksheet must hold a value, either as enterred by user
+ * Each cell in a worksheet must hold a value, either as entered by user
  * or as a result of formula evaluation. Default cell holds empty value.
  *
  * Value uses implicit data sharing to reduce memory usage.

@@ -225,11 +225,11 @@ Sheet::Sheet(const Sheet &other)
 
 Sheet::~Sheet()
 {
-    //Disable automatic recalculation of dependancies on this sheet to prevent crashes
+    //Disable automatic recalculation of dependencies on this sheet to prevent crashes
     //in certain situations:
     //
     //For example, suppose a cell in SheetB depends upon a cell in SheetA.  If the cell in SheetB is emptied
-    //after SheetA has already been deleted, the program would try to remove dependancies from the cell in SheetA
+    //after SheetA has already been deleted, the program would try to remove dependencies from the cell in SheetA
     //causing a crash.
     setAutoCalculationEnabled(false);
 
@@ -369,7 +369,7 @@ bool Sheet::isAutoCalculationEnabled() const
 
 void Sheet::setAutoCalculationEnabled(bool enable)
 {
-    //Avoid possible recalculation of dependancies if the auto calc setting hasn't changed
+    //Avoid possible recalculation of dependencies if the auto calc setting hasn't changed
     if (d->autoCalc == enable)
         return;
 

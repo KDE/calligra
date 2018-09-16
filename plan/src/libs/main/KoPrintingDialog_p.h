@@ -189,7 +189,7 @@ public:
     QLabel *pageNumber;
     QPushButton *button;
     QList<int> pageRange; ///< user requested list of pages
-    QList<int> pages; ///< effecive list of pages
+    QList<int> pages; ///< effective list of pages
     QList< QPointer<KoUpdater> > updaters;
     QDialog *dialog;
     KoPrintJob::RemovePolicy removePolicy;

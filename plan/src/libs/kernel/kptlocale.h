@@ -52,7 +52,7 @@ public:
     /**
      * Changes the current currency symbol.
      *
-     * This symbol should be consistant with the selected Currency Code
+     * This symbol should be consistent with the selected Currency Code
      *
      * @param symbol The new currency symbol
      * @see currencyCode, KCurrency::currencySymbols

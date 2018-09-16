@@ -37,7 +37,7 @@ class FLAKE_EXPORT KoAnnotationLayoutManager: public QObject
 public:
     static const qreal shapeSpace; // Distance between annotation shapes.
     static const qreal shapeWidth; // Annotation shapes width.
-    //Connection point of lines from shape to this point and from this point to refText psoition.
+    //Connection point of lines from shape to this point and from this point to refText position.
     static const qreal connectionPointLines;
 
     explicit KoAnnotationLayoutManager(QObject *parent = 0);
@@ -50,7 +50,7 @@ public:
     void setViewContentWidth(qreal width);
 
     void paintConnections(QPainter &painter);
-    // Return true if shape is in annotaion shapes list.
+    // Return true if shape is in annotation shapes list.
     bool isAnnotationShape(KoShape *shape) const;
 
 public Q_SLOTS:

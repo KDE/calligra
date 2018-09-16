@@ -14,7 +14,7 @@ public:
     ~TestChangeTrackedDelete();
 
 private:
-    void insertSampleList(QTextDocument *documet);
+    void insertSampleList(QTextDocument *document);
     void insertSampleTable(QTextDocument *document);
 
 private Q_SLOTS:

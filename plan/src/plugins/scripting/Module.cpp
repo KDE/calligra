@@ -129,7 +129,7 @@ void Module::endCommand()
         KPlato::MacroCommand *c = new KPlato::MacroCommand( KUndo2MagicString() );
         doc()->addCommand( c );
         doc()->endMacro(); // executes c and enables undo/redo
-        c->addCommand( d->command ); // this command is already exectued
+        c->addCommand( d->command ); // this command is already executed
         d->command = 0;
     } else {
         delete d->command;

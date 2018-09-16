@@ -96,7 +96,7 @@ public:
     virtual void updateHandles() {}
 
 protected:
-    /// Returns the image collectio used to create new pattern background
+    /// Returns the image collection used to create new pattern background
     KoImageCollection * imageCollection();
 
     /// Flags the background as modified

@@ -51,7 +51,7 @@ class QDomDocument;
 // we pass references of in, when used by external modules
 // e.g.
 //     when building chartshapecore.lib, the forward-declaration
-//     appraoch lead to unresolved externals warnings when it used
+//     approach lead to unresolved externals warnings when it used
 //     the pagelayout functions.
 //     Also when building calligra_shape_formular.dll - FormulaDocument
 //     referenced the same two pagelayout functions incorrectly.

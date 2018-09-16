@@ -432,7 +432,7 @@ Token::Op matchOperator(const QString& text);
  * helper function to parse operator
  *
  * If a operator is found the data and out pointer are advanced by the number
- * of chars the operators consits of.
+ * of chars the operators consist of.
  * @param data pointer into the input string 
  * @param out pointer into the out string, The out string needs to be big enough
  * 

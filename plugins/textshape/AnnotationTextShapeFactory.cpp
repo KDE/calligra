@@ -111,7 +111,7 @@ KoShape *AnnotationTextShapeFactory::createDefaultShape(KoDocumentResourceManage
     // Should set if we don't set id it will set to TextShapeID.
     annotation->setShapeId(AnnotationShape_SHAPEID);
 
-    annotation->setAnnotaionTextData(annotation->textShapeData());
+    annotation->setAnnotationTextData(annotation->textShapeData());
     return annotation;
 }
 

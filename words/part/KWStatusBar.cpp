@@ -234,7 +234,7 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
 
 KWStatusBar::~KWStatusBar()
 {
-    // delete these as they are children of the statusBar but we want to delete them when the view dissapears
+    // delete these as they are children of the statusBar but we want to delete them when the view disappears
     delete m_modifiedLabel;
     delete m_pageLabel;
     delete m_mousePosLabel;

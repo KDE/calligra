@@ -141,7 +141,7 @@ namespace Scripting {
             /// Find resource group with identity @p id
             QObject *findResourceGroup( const QString &id );
             /// Create a copy of resource group @p group and insert it into the project
-            /// If a group with the same identy as the @p group already exixts, 0 is returned
+            /// If a group with the same identity as the @p group already exists, 0 is returned
             QObject *createResourceGroup( QObject *group );
             /// Create a new resource group and insert it into the project
             QObject *createResourceGroup();
@@ -150,7 +150,7 @@ namespace Scripting {
             QObject *findResource( const QString &id );
             /// Create a copy of @p resource and add to @p group
             /// If @p resource is a Team resource, the team members must exist.
-            /// If a resource with the same identy as the @p resource already exixts, 0 is returned
+            /// If a resource with the same identity as the @p resource already exists, 0 is returned
             QObject *createResource( QObject *group, QObject *resource );
             /// Create a new resource and add to @p group
             QObject *createResource( QObject *group );

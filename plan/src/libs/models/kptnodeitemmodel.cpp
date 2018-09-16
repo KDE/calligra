@@ -3561,7 +3561,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                     ResourceGroup *pargr = 0;
                     Resource *r = m_project->resourceByName( s );
                     if ( r == 0 ) {
-                        // Handle request to non exixting resource
+                        // Handle request to non existing resource
                         pargr = m_project->groupByName( i18n( "Resources" ) );
                         if ( pargr == 0 ) {
                             pargr = new ResourceGroup();

@@ -213,7 +213,7 @@ private:
 
 /**
   * Any resource that is used by a task. A resource can be a worker, or maybe wood.
-  * If the resources is a worker or a piece of equiment which can be reused but
+  * If the resources is a worker or a piece of equipment which can be reused but
   * can only be used by one node in time, then we can use the scheduling methods of the
   * resource to schedule the resource available time for the project.
   * The Idea is that all nodes which need this resource point to it and the scheduling
@@ -558,7 +558,7 @@ private:
     DateTime m_availableUntil;
     QMap<QString, Appointment*> m_externalAppointments;
 
-    int m_units; // avalable units in percent
+    int m_units; // available units in percent
 
     Type m_type;
 

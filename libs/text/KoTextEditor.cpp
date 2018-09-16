@@ -301,7 +301,7 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
         }
     } else {
         if (changeType != KoGenChange::DeleteChange) {
-            //first check if there already is an identical change registered just before or just after the selection. If so, merge appropriatly.
+            //first check if there already is an identical change registered just before or just after the selection. If so, merge appropriately.
             //TODO implement for format change. handle the prevFormat/newFormat check.
             QTextCursor checker = QTextCursor(selection);
             int idBefore = 0;

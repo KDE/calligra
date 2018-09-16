@@ -398,7 +398,7 @@ bool FormulaCursor::performMovement ( FormulaCursor& oldcursor )
                     m_position=m_currentElement->parentElement()->positionOfChild(m_currentElement);
                     m_currentElement=m_currentElement->parentElement();
                     if (m_direction==MoveRight || m_direction==MoveDown) {
-                        m_position++; //place the cursor behin
+                        m_position++; //place the cursor behind
                     }
                     if (m_direction==MoveRight || m_direction==MoveLeft) {
                         if (isAccepted()) {

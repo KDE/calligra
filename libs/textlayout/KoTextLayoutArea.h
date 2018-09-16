@@ -158,7 +158,7 @@ public:
     /// returns true if we have not yet added anything to the page
     bool virginPage() const;
 
-    /// Sets the amound the contenst should be vertically offset due to any outside induced
+    /// Sets the amount the contents should be vertically offset due to any outside induced
     /// vertical alignment
     void setVerticalAlignOffset(qreal offset);
     qreal verticalAlignOffset() const;
