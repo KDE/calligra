@@ -29,7 +29,7 @@
  * A \class KoRawCellChild is a Cell child that can take any given QBuffer 
  * and will insert its contents blindly.
  * 
- * It's porpuse is to allow the user to insert custom elements or elements for
+ * Its purpose is to allow the user to insert custom elements or elements for
  * which the appropriate class has not been provided.
  *
  * \note The class will insert its content "blindly," so, invalid XML or ODF *can* be created.

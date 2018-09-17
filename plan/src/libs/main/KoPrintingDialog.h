@@ -122,7 +122,7 @@ protected:
 
     /**
      * @returns the shapeManager.
-     * Retuns the shapeManager as it has been set on the setShapeManager()
+     * Returns the shapeManager as it has been set on the setShapeManager()
      * @see setShapeManager
      */
 //    KoShapeManager *shapeManager() const;
@@ -134,7 +134,7 @@ protected:
 
     /**
      * Return true if the user pressed stop.
-     * It is suggested to query this setting in long loops and abort the process as soon at it retuns yes.
+     * It is suggested to query this setting in long loops and abort the process as soon at it returns yes.
      */
     bool isStopped() const;
 

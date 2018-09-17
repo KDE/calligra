@@ -318,7 +318,7 @@ public Q_SLOTS:
 #if 0
     /***** Border *****/
 
-    /*TODO simplify border options even more. Propably just deal with a QVariantMap using QMetaEnum's, e.g.
+    /*TODO simplify border options even more. Probably just deal with a QVariantMap using QMetaEnum's, e.g.
     QVariantMap border() {
         QVariantMap map;
         for(int i = KoParagraphStyle::HasLeftBorder; i <= KoParagraphStyle::BottomBorderColor; i++)

@@ -146,9 +146,9 @@ public:
     /// return the partial text for this paragraphs counter
     QString partialCounterText() const;
 
-    /// set the plain counter text which equals the counterText minus prefix and sufix
+    /// set the plain counter text which equals the counterText minus prefix and suffix
     void setCounterPlainText(const QString &text);
-    /// return the plain counter text which equals the counterText minus prefix and sufix
+    /// return the plain counter text which equals the counterText minus prefix and suffix
     QString counterPlainText() const;
 
     void setCounterPrefix(const QString &text);

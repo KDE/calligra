@@ -85,7 +85,7 @@ namespace _Private
     /**
      * This method will create an outline path out of the image
      */
-    QPainterPath generateOutline(const QImage &imageIn, int treshold = 20);
+    QPainterPath generateOutline(const QImage &imageIn, int threshold = 20);
 }
 
 

@@ -28,7 +28,7 @@
 
 protected:
 void initInternal(); //!< should be called from ctor
-void doneInternal(); //!< sould be called from dtor
+void doneInternal(); //!< should be called from dtor
 
 KoFilter::ConversionStatus read_t();
 

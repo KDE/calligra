@@ -80,7 +80,7 @@ public:
 private:
     qreal elementScaleFactor( BasicElement* element ) const;
 
-    /// The attribute manager used for renderering and layouting
+    /// The attribute manager used for rendering and layouting
     AttributeManager* m_attributeManager;
 
     /// Used by update() to store the highest element in the tree that needs repaint

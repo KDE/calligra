@@ -76,12 +76,12 @@ public:
     QString name() const;
     static QString name(unsigned column, unsigned row);
 
-    // Retuns the column label. As example the column 4 has the label D.
+    // Returns the column label. As example the column 4 has the label D.
     QString columnLabel() const;
     static QString columnLabel(unsigned column);
     static QString columnLabel(int column);
 
-    // Retuns the value this cell has.
+    // Returns the value this cell has.
     Value value() const;
     void setValue(const Value& value);
 

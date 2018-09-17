@@ -166,7 +166,7 @@ public:
     /**
      * Update the tree for finding the shapes.
      * This will remove the shape from the tree and will reinsert it again.
-     * The update to the tree will be posponed until it is needed so that successive calls
+     * The update to the tree will be postponed until it is needed so that successive calls
      * will be merged into one.
      * @param shape the shape to updated its position in the tree.
      */

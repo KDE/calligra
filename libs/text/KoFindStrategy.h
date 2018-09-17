@@ -25,7 +25,7 @@
 class QWidget;
 
 /**
- * Stratagy used for implementing find
+ * Strategy used for implementing find
  */
 class KoFindStrategy : public KoFindStrategyBase
 {

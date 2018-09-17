@@ -33,7 +33,7 @@
  */
 class KOFORMULA_EXPORT FencedElement : public RowElement {
 public:
-    /// The standart constructor
+    /// The standard constructor
     explicit FencedElement(BasicElement *parent = 0);
 
     /**

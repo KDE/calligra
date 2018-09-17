@@ -203,7 +203,7 @@ class OdtHtmlConverter
     QHash<QString, KoXmlElement> m_footNotes;
     QHash<QString, KoXmlElement> m_endNotes;
 
-    // specifice valuse for mobi.
+    // specific values for mobi.
 
     // The format is QHash<QString source, int index>
     // In mobi we save images with index and as we can have repeated

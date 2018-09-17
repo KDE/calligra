@@ -218,7 +218,7 @@ bool KPrSlidesManagerView::eventFilter(QObject *watched, QEvent *event)
             QModelIndex item = indexAt(QWidget::mapFromGlobal(QCursor::pos()));
             QMouseEvent *mouseEv = static_cast<QMouseEvent *>(event);
 
-            //Left button is used to deselect, but rigth button needs a selected item for
+            //Left button is used to deselect, but right button needs a selected item for
             //context menu actions
             if ((item.row() < 0) && (mouseEv->button() != Qt::LeftButton)) {
                 // Selects the last item of the row

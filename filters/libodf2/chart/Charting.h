@@ -435,7 +435,7 @@ class Cell
 };
 
 
-/// cell data represetation of internal table
+/// cell data representation of internal table
 class InternalTable
 {
  public:

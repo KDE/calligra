@@ -87,7 +87,7 @@ public Q_SLOTS:
     void setLocation( Qt::DockWidgetArea area );
 
 private:
-    bool m_shown;                /// The dockers visivbility when the view is active
+    bool m_shown;                /// The dockers visibility when the view is active
 };
 
 //------------------

@@ -93,7 +93,7 @@ public:
      */
     virtual QString textFromValue( double value ) const;
     /**
-     * Transfrom a string into a double, while taking care of locale specific symbols.
+     * Transform a string into a double, while taking care of locale specific symbols.
      * @param str the string to transform into a number
      * @return the value as double
      */

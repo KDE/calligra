@@ -106,7 +106,7 @@ public Q_SLOTS: // METHODS
     Q_SCRIPTABLE QString documentInfoCity() const;
     Q_SCRIPTABLE QString documentInfoStreet() const;
     Q_SCRIPTABLE QString documentInfoInitial() const;
-    Q_SCRIPTABLE QString documentInfoAuthorPostion() const;
+    Q_SCRIPTABLE QString documentInfoAuthorPosition() const;
     Q_SCRIPTABLE void setDocumentInfoAuthorName(const QString & text);
     Q_SCRIPTABLE void setDocumentInfoEmail(const QString &text);
     Q_SCRIPTABLE void setDocumentInfoCompanyName(const QString &text);

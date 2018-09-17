@@ -70,7 +70,7 @@ void KoShapeMoveCommand::undo()
     }
 }
 
-/// update newPositions list with new postions.
+/// update newPositions list with new positions.
 void KoShapeMoveCommand::setNewPositions(const QVector<QPointF> &newPositions)
 {
     d->newPositions = newPositions;

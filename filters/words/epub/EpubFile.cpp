@@ -178,7 +178,7 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
     writer.endElement(); // dc:creator
 
     writer.startElement("dc:subject");
-    writer.addTextNode("");  // FIXME: Here should come suject info with form : Fiction &amp; Fantasy &amp; ...
+    writer.addTextNode("");  // FIXME: Here should come subject info with form : Fiction &amp; Fantasy &amp; ...
     writer.endElement(); // dc:subject
 
     // FIXME: many more (optional)

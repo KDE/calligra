@@ -78,7 +78,7 @@ public:
     hKoRdfBasicSemanticItem createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *docRdf, QObject *parent = 0) const;
 
     /**
-     * Returns if a semantic item could be principially created from the passed mimeData.
+     * Returns if a semantic item could be principally created from the passed mimeData.
      * Creation could still fail if actually tried.
      */
     bool canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const;

@@ -264,7 +264,7 @@ void ListDialog::slotRemove()
     int ret = KMessageBox::warningContinueCancel(this,
               i18n("Do you really want to remove this list?"),
               i18n("Remove List"), KStandardGuiItem::del());
-    if (ret == Cancel) { // reponse = No
+    if (ret == Cancel) { // response = No
         return;
     }
     delete d->list->takeItem(d->list->currentRow());
@@ -280,7 +280,7 @@ void ListDialog::slotOk()
 {
     if (!d->textEdit->toPlainText().isEmpty()) {
         int ret = KMessageBox::warningYesNo(this, i18n("Entry area is not empty.\nDo you want to continue?"));
-        if (ret == 4) { // reponse = No
+        if (ret == 4) { // response = No
             return;
         }
     }

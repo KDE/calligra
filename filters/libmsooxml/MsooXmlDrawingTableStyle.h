@@ -27,7 +27,7 @@
  * The idea behind these classes is the following:
  * > A document has a list of table styles identifiable by ID.
  * > A table style has a number of properties to be used if the
- * table that references the style toogles them on.
+ * table that references the style toggles them on.
  * > Those are stored on a table style properties.
  *
  * > Now the way a style for a cell is composed can be quite complex

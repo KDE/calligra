@@ -122,7 +122,7 @@ KoFilter::ConversionStatus VmlDrawingReader::read_xml()
                 TRY_READ(shapetype)
             }
             else if (name() == "shape") {
-                oldBody = body; // Body protetion starts
+                oldBody = body; // Body protection starts
                 QBuffer frameBuf;
                 KoXmlWriter frameWriter(&frameBuf);
                 body = &frameWriter;

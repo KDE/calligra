@@ -830,7 +830,7 @@ struct DPHEAD {
      * 0x0006 = polyline (DPPOLYLINE)
      * 0x0007 = callout textbox (DPCALLOUT)
      * 0x0008 = end of grouping of primitives
-     * 0x0009 = sample primitve holding default values (DPSAMPLE)
+     * 0x0009 = sample primitive holding default values (DPSAMPLE)
      */
     U16 dpk;
 
@@ -2168,7 +2168,7 @@ struct CHP : public Shared {
     /**
      * superscript/subscript indices
      * 0 means no super/subscripting
-     * 1 means text in run is superscrpted
+     * 1 means text in run is superscripted
      * 2 means text in run is subscripted
      */
     U8 iss:3;
@@ -5295,7 +5295,7 @@ struct PAP : public Shared {
     U8 pcHorz:2;
 
     /**
-     * rectangle border codes (the brcp and brcl fields have been superceded
+     * rectangle border codes (the brcp and brcl fields have been superseded
      * by the newly defined brcLeft, brcTop, etc. fields. They remain in the PAP
      * for compatibility with MacWord 3.0)
      * 0 none
@@ -5401,7 +5401,7 @@ struct PAP : public Shared {
     /**
      * when positive, is the horizontal distance from the reference frame
      * specified by pap.pcHorz. 0 means paragraph is positioned at the left with
-     * respect to the refence frame specified by pcHorz. Certain negative values
+     * respect to the reference frame specified by pcHorz. Certain negative values
      * have special meaning:
      * -4 paragraph centered horizontally within reference frame
      * -8 paragraph adjusted right within reference frame
@@ -5675,7 +5675,7 @@ bool operator!=(const PAP &lhs, const PAP &rhs);
 //     * width is 7980 dxas.
 //     * <p>The last six bytes of the BX is a PHE structure which stores the current
 //     * paragraph height for the paragraph corresponding to the BX. If a plcfphe
-//     * has an entry that maps to the FC for this paragraph, that entry?s PHE overides
+//     * has an entry that maps to the FC for this paragraph, that entry?s PHE overrides
 //     * the PHE stored in the FKP.
 //     */
 //    BX *rgbx;   //    BX rgbx[fkp.crun];

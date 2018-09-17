@@ -468,7 +468,7 @@ void KoFilterChain::storageInit(const QString& file, KoStore::Mode mode, KoStore
         // magic "applicationIndentifier" to the storage.
         // As only filters with a Calligra destination should query
         // for a storage to write to, we don't check the content of
-        // the mimetype here. It doesn't do a lot of harm if someome
+        // the mimetype here. It doesn't do a lot of harm if someone
         // "abuses" this method.
         appIdentification = m_chainLinks.current()->to();
     }

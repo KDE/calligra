@@ -83,7 +83,7 @@ bool KPrPageLayout::loadOdf( const KoXmlElement &element, const QRectF & pageRec
     }
     else {
         /* 
-         * do fixups for wrong saved data from OO somehow they save negative values for width and height somethimes
+         * do fixups for wrong saved data from OO somehow they save negative values for width and height sometimes
          * <style:presentation-page-layout style:name="AL10T12">
          *   <presentation:placeholder presentation:object="title" svg:x="2.057cm" svg:y="1.743cm" svg:width="23.911cm" svg:height="3.507cm"/>
          *   <presentation:placeholder presentation:object="outline" svg:x="2.057cm" svg:y="5.838cm" svg:width="11.669cm" svg:height="13.23cm"/>

@@ -851,17 +851,17 @@ void KoSegmentGradient::duplicateSegment(KoGradientSegment* segment)
     Q_ASSERT(segment != 0);
     QList<KoGradientSegment*>::iterator it = qFind(m_segments.begin(), m_segments.end(), segment);
     if (it != m_segments.end()) {
-        double middlePostionPercentage = (segment->middleOffset() - segment->startOffset()) / segment->length();
+        double middlePositionPercentage = (segment->middleOffset() - segment->startOffset()) / segment->length();
         double center = segment->startOffset() + segment->length() / 2;
         KoGradientSegment* newSegment = new KoGradientSegment(
             segment->interpolation(), segment->colorInterpolation(),
             segment ->startOffset(),
-            segment->length() / 2 * middlePostionPercentage + segment->startOffset(),
+            segment->length() / 2 * middlePositionPercentage + segment->startOffset(),
             center, segment->startColor(),
             segment->endColor());
         m_segments.insert(it, newSegment);
         segment->setStartOffset(center);
-        segment->setMiddleOffset(segment->length() * middlePostionPercentage  + segment->startOffset());
+        segment->setMiddleOffset(segment->length() * middlePositionPercentage  + segment->startOffset());
     }
 }
 
@@ -891,18 +891,18 @@ KoGradientSegment* KoSegmentGradient::removeSegment(KoGradientSegment* segment)
         return 0;
     QList<KoGradientSegment*>::iterator it = qFind(m_segments.begin(), m_segments.end(), segment);
     if (it != m_segments.end()) {
-        double middlePostionPercentage;
+        double middlePositionPercentage;
         KoGradientSegment* nextSegment;
         if (it == m_segments.begin()) {
             nextSegment = (*(it + 1));
-            middlePostionPercentage = (nextSegment->middleOffset() - nextSegment->startOffset()) / nextSegment->length();
+            middlePositionPercentage = (nextSegment->middleOffset() - nextSegment->startOffset()) / nextSegment->length();
             nextSegment->setStartOffset(segment->startOffset());
-            nextSegment->setMiddleOffset(middlePostionPercentage * nextSegment->length() + nextSegment->startOffset());
+            nextSegment->setMiddleOffset(middlePositionPercentage * nextSegment->length() + nextSegment->startOffset());
         } else {
             nextSegment = (*(it - 1));
-            middlePostionPercentage = (nextSegment->middleOffset() - nextSegment->startOffset()) / nextSegment->length();
+            middlePositionPercentage = (nextSegment->middleOffset() - nextSegment->startOffset()) / nextSegment->length();
             nextSegment->setEndOffset(segment->endOffset());
-            nextSegment->setMiddleOffset(middlePostionPercentage * nextSegment->length() + nextSegment->startOffset());
+            nextSegment->setMiddleOffset(middlePositionPercentage * nextSegment->length() + nextSegment->startOffset());
         }
 
         delete segment;

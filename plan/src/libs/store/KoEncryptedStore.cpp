@@ -232,7 +232,7 @@ void KoEncryptedStore::init(const QByteArray & appIdentification)
                         if (checksumType == "SHA1") {
                             encData.checksumShort = false;
                         }
-                        // For this particual hash-type: check KoEncryptedStore_encryptionData.checksumShort
+                        // For this particular hash-type: check KoEncryptedStore_encryptionData.checksumShort
                         else if (checksumType == "SHA1/1K") {
                             encData.checksumShort = true;
                         } else {

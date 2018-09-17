@@ -125,7 +125,7 @@ QString ResourceGroup::typeToString( bool trans ) const {
 }
 
 QStringList ResourceGroup::typeToStringList( bool trans ) {
-    // keep theese in the same order as the enum!
+    // keep these in the same order as the enum!
     return QStringList() 
             << (trans ? i18n("Work") : QString("Work"))
             << (trans ? i18n("Material") : QString("Material"));
@@ -465,7 +465,7 @@ QString Resource::typeToString( bool trans ) const {
 }
 
 QStringList Resource::typeToStringList( bool trans ) {
-    // keep theese in the same order as the enum!
+    // keep these in the same order as the enum!
     return QStringList() 
             << (trans ? xi18nc( "@item:inlistbox resource type", "Work" ) : QString( "Work") )
             << (trans ? xi18nc( "@item:inlistbox resource type", "Material" ) : QString( "Material" ) )

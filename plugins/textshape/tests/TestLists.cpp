@@ -266,7 +266,7 @@ void TestDocumentLayout::testNestedLists()
     llp2.setDisplayLevel(2);
     listStyle2.setLevelProperties(llp2);
     h2.setListStyle(&listStyle2);
-    // purpusfully leave this one out, as it should default to the only known one: // h2.setListLevel(2);
+    // purposfully leave this one out, as it should default to the only known one: // h2.setListLevel(2);
 
     KoListLevelProperties llp3;
     llp3.setStartValue(1);

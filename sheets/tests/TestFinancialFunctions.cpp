@@ -83,7 +83,7 @@ void TestFinancialFunctions::testACCRINT()
     // half-yearly (frequency is 2). The basis is the US method (0). How much interest has accrued?
     CHECK_EVAL("ACCRINT( \"2004-02-01\"; \"2004-04-01\"; \"2004-05-01\"; 0.1; 1000; 4; 0 )", Value(24.7222222222));     // leap year, quarterly, US (NASD) 30/360
     CHECK_EVAL_SHORT("ACCRINT( \"2004-02-01\"; \"2004-04-01\"; \"2004-05-01\"; 0.1; 1000; 4; 1 )", Value(24.590164));         // leap year, quarterly, actual/acual
-    CHECK_EVAL("ACCRINT( \"2004-02-01\"; \"2004-04-01\"; \"2004-05-01\"; 0.1; 1000; 4; 2 )", Value(25));                // leap year, quaterly, actual/360
+    CHECK_EVAL("ACCRINT( \"2004-02-01\"; \"2004-04-01\"; \"2004-05-01\"; 0.1; 1000; 4; 2 )", Value(25));                // leap year, quarterly, actual/360
     CHECK_EVAL_SHORT("ACCRINT( \"2004-02-01\"; \"2004-04-01\"; \"2004-05-01\"; 0.1; 1000; 4; 3 )", Value(24.657534));         // leap year, quaterly, actual/365
     CHECK_EVAL("ACCRINT( \"2004-02-01\"; \"2004-04-01\"; \"2004-05-01\"; 0.1; 1000; 4; 4 )", Value(25));                // leap year, quarterly, European 30/360
     CHECK_EVAL("ACCRINT( \"2004-02-01\"; \"2004-04-01\"; \"2004-05-01\"; 0.1; 1000; 1 )",    Value(24.7222222222));     // leap year, annual, US (NASD) 30/360

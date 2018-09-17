@@ -50,7 +50,7 @@ DocxFile::~DocxFile()
 {
 }
 
-// todo: commentsexist should be propably repalced with qlist qpair later
+// todo: commentsexist should be probably replaced with qlist qpair later
 KoFilter::ConversionStatus DocxFile::writeDocx(const QString &fileName,
                                                const QByteArray &appIdentification,
                                                const OdfReaderDocxContext &context,

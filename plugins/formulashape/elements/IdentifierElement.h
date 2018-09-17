@@ -31,7 +31,7 @@
  */
 class KOFORMULA_EXPORT IdentifierElement : public TokenElement {
 public:
-    /// The standart constructor
+    /// The standard constructor
     explicit IdentifierElement(BasicElement *parent = 0);
 
     /// @return The element's ElementType

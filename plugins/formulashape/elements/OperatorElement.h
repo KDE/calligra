@@ -33,7 +33,7 @@
  */
 class KOFORMULA_EXPORT OperatorElement : public TokenElement {
 public:
-    /// The standart constructor
+    /// The standard constructor
     explicit OperatorElement(BasicElement *parent = 0);
 
     /**

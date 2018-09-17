@@ -349,7 +349,7 @@ void KoModeBox::addItem(KoToolAction *toolAction)
     QWidget *oldwidget = d->addedWidgets[toolAction->buttonGroupId()];
     QWidget *widget;
 
-    // We need to create a new widget in all cases as QToolBox seeems to crash if we reuse
+    // We need to create a new widget in all cases as QToolBox seems to crash if we reuse
     // a widget (even though the item had been removed)
     QLayout *layout;
     if (!oldwidget) {

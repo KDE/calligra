@@ -181,7 +181,7 @@ Q_SIGNALS:
     /** Notify a change of the active custom slide show */
     void customSlideShowsChanged();
 
-    /** Notify a need of page slection after coping or moving pages */
+    /** Notify a need of page selection after coping or moving pages */
     void selectPages(int start, int number);
 
 private Q_SLOTS:

@@ -28,7 +28,7 @@
  */
 class KOFORMULA_EXPORT PhantomElement : public RowElement {
 public:
-    /// The standart constructor
+    /// The standard constructor
     explicit PhantomElement(BasicElement *parent = 0);
 
     /// @return The element's ElementType

@@ -95,7 +95,7 @@ public:
 
 
     void showGetHotNewStuff(bool showDownload, bool showUpload);
-    /// sets the visibilty of tagging KlineEdits.
+    /// sets the visibility of tagging KlineEdits.
     void showTaggingBar(bool show);
 
     ///Set a proxy model with will be used to filter the resources

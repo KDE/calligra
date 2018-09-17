@@ -332,11 +332,11 @@ protected:
     bool resourceOverbooked;
     /// Set if the requested resource is not available
     bool resourceNotAvailable;
-    /// Set if the task cannot be scheduled to fullfil all the constraints
+    /// Set if the task cannot be scheduled to fulfil all the constraints
     bool constraintError;
     /// Set if the node has not been scheduled
     bool notScheduled;
-    /// Set if the assigned resource cannot deliver the requered estimated effort
+    /// Set if the assigned resource cannot deliver the required estimated effort
     bool effortNotMet;
     /// Set if some other scheduling error occurs
     bool schedulingError;

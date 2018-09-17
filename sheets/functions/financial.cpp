@@ -1827,7 +1827,7 @@ Value func_nper(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() > 3) fv = calc->conv()->asFloat(args[3]).asFloat();
     if (args.count() == 5) type = calc->conv()->asFloat(args[4]).asFloat();
 
-    // if rate is 0, ther NPER solves this
+    // if rate is 0, then NPER solves this
     //   PV = -FV -( Payment*NPER )
     if (rate == 0.0)
         return Value(-(pv + fv) / pmt);

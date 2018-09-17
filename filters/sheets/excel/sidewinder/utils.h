@@ -32,7 +32,7 @@
 namespace Swinder
 {
 
-// The minimal number of rows and columns. This is used to fill remaming rows and columns with the
+// The minimal number of rows and columns. This is used to fill remaining rows and columns with the
 // default style what is needed cause Excel does always define the default for all rows and columns
 // while ODF does only for those that are explicit defined.
 static const uint minimumColumnCount = 1024;

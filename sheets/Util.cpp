@@ -747,7 +747,7 @@ QString Calligra::Sheets::MSOOXML::convertFormula(const QString& formula)
             if (!isCellnameCharacter(ch)) {
                 if (ch != '(') /* skip formula-names */ {
                     // Excel is able to use only the column-name to define a column
-                    // where all rows are selected. Since that is not supproted in
+                    // where all rows are selected. Since that is not supported in
                     // ODF we add to such definitions the minimum/maximum row-number.
                     // So, something like "A:B" would become "A$1:B$65536". Note that
                     // such whole column-definitions are only allowed for ranges like

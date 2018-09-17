@@ -884,7 +884,7 @@ void OdtHtmlConverter::handleTagNote(KoXmlElement &nodeElement, KoXmlWriter *htm
 
             htmlWriter->startElement("a", m_doIndent);
             if (noteClass == "footnote")
-                htmlWriter->addAttribute("href", "#" + id + "n"); // n rerence to note foot-note or end-note
+                htmlWriter->addAttribute("href", "#" + id + "n"); // n reference to note foot-note or end-note
             else { // endnote
                 QString endRef = "chapter-endnotes" + m_collector->fileSuffix() + '#' + id + 'n';
                 htmlWriter->addAttribute("href", endRef);
@@ -1304,7 +1304,7 @@ void OdtHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElement, S
 
         if (!attrVal.isEmpty()) {
 
-            // Book readers don't supprt pt unit to can zoom in document.
+            // Book readers don't support pt unit to can zoom in document.
             // We set em  for our font-size and margins value as unit
             if (attrName == "font-size" || attrName == "margin" || attrName == "margin-right" ||
                     attrName == "margin-left" || attrName == "margin-bottom" || attrName == "margin-top") {

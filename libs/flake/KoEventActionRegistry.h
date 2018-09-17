@@ -30,7 +30,7 @@ class KoEventActionFactoryBase;
 class KoShapeLoadingContext;
 
 /**
- * This singletion keeps a register of all available KoEventActionFactoryBase objects.
+ * This singleton keeps a register of all available KoEventActionFactoryBase objects.
  *
  * It creates the event actions when loaded from odf.
  */

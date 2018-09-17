@@ -42,7 +42,7 @@ public:
     void addCommand(Section* , KUndo2Command* command);
     void createActions(KActionCollection*);
     KUndo2Stack* undoStack(); // TODO remove when it is again possible to hide the undo stack
-    void setCurrentSection(Section*);  // TODO when the command statck is hidden again, remove
+    void setCurrentSection(Section*);  // TODO when the command stack is hidden again, remove
 Q_SIGNALS:
     /// This signal is emitted when a command is executed in the undo stack
     void commandExecuted();
@@ -53,7 +53,7 @@ private:
     ViewManager* m_viewManager;
     SectionsIO* m_sectionsSaver;
     QMap<const KUndo2Command*, Section* > m_commandsMap;
-    Section* m_currentSection; // TODO when the command statck is hidden again, remove
+    Section* m_currentSection; // TODO when the command stack is hidden again, remove
 };
 
 #endif

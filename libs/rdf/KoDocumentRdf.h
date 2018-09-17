@@ -228,7 +228,7 @@ public:
     /**
      * Look for the semitem that is at or surrounding the cursor given. Note that if there
      * are nested semitems, the extend for the most nested semitem is returned.
-     * for example, in the below senario the return value will be QPair< start-b, end-b >.
+     * for example, in the below scenario the return value will be QPair< start-b, end-b >.
      *
      * <start-a> ... <start-b> ... cursor ... <end-b> ... <end-a>
      */
@@ -427,7 +427,7 @@ Q_SIGNALS:
      * Emitted when a new semanticItem is created so that dockers can
      * update themselves accordingly. It is expected that when
      * semanticObjectViewSiteUpdated is emitted the view will take care
-     * of reflowing the semanitc item using it's stylesheet.
+     * of reflowing the semantic item using it's stylesheet.
      */
     void semanticObjectAdded(hKoRdfBasicSemanticItem item) const;
     void semanticObjectUpdated(hKoRdfBasicSemanticItem item) const;

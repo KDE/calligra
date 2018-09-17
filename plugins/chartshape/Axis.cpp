@@ -93,7 +93,7 @@ public:
     ~Private();
 
     void adjustAllDiagrams();
-    /// Updates the axis potition in the chart's layout
+    /// Updates the axis position in the chart's layout
     /// FIXME: We should instead implement a generic layout position method
     /// and have the layout find out about our position when it changes.
     void updatePosition();

@@ -644,7 +644,7 @@ void Engraver::rebeamBar(Part* part, VoiceBar* vb)
                                     int sTime = startTime[b];
                                     int eTime = sTime + sc->length();
                                     int preSTime = (sTime / factor) * factor; // largest multiple of factor <= sTime
-                                    int postETime = ((eTime + factor - 1) / factor) * factor; // smalles multiple of factor >= eTime
+                                    int postETime = ((eTime + factor - 1) / factor) * factor; // smallest multiple of factor >= eTime
                                     if (sTime - preSTime < postETime - eTime) {
                                         sc->setBeam(b, sc, ec, BeamForwardHook);
                                     } else {
@@ -674,7 +674,7 @@ void Engraver::rebeamBar(Part* part, VoiceBar* vb)
                             int sTime = startTime[b];
                             int eTime = sTime + sc->length();
                             int preSTime = (sTime / factor) * factor; // largest multiple of factor <= sTime
-                            int postETime = ((eTime + factor - 1) / factor) * factor; // smalles multiple of factor >= eTime
+                            int postETime = ((eTime + factor - 1) / factor) * factor; // smallest multiple of factor >= eTime
                             if (sTime - preSTime < postETime - eTime) {
                                 sc->setBeam(b, sc, ec, BeamForwardHook);
                             } else {

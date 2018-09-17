@@ -303,7 +303,7 @@ Value func_cell(valVector args, ValueCalc *calc, FuncExtra *e)
     if (type == "width")
     if (type == "type")
     if (type == "protect")
-    if (type == "parenthese")
+    if (type == "parenthesis")
     if (type == "prefix")
     */
 

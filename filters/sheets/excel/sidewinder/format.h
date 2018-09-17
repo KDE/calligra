@@ -687,7 +687,7 @@ public:
     void setBorders(const FormatBorders& border);
 
     /**
-     * Retursn a reference to the background information of this format.
+     * Returns a reference to the background information of this format.
      */
     FormatBackground& background() const;
 

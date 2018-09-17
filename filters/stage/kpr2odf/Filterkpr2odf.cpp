@@ -654,7 +654,7 @@ void Filterkpr2odf::appendParagraph(KoXmlWriter* content, const KoXmlElement& ob
 
 void Filterkpr2odf::appendText(KoXmlWriter* content, const KoXmlElement& objectElement)
 {
-    //Avoid the creation of so many unneded text:span
+    //Avoid the creation of so many unneeded text:span
     static QString lastStyle;
     static QString textChain;
     bool lastSpan = objectElement.nextSibling().isNull();
@@ -690,7 +690,7 @@ void Filterkpr2odf::appendText(KoXmlWriter* content, const KoXmlElement& objectE
 void Filterkpr2odf::appendPie(KoXmlWriter* content, const KoXmlElement& objectElement)
 {
     //NOTE: we cannot use set2dGeometry because we have to convert the
-    //given size and origen into the real ones before saving them
+    //given size and origin into the real ones before saving them
 
     KoXmlElement size = objectElement.namedItem("SIZE").toElement();
     double width = size.attribute("width").toDouble();

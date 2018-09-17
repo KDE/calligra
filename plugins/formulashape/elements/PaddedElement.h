@@ -31,7 +31,7 @@
  */
 class KOFORMULA_EXPORT PaddedElement : public RowElement {
 public:
-    /// The standart constructor
+    /// The standard constructor
     explicit PaddedElement(BasicElement *parent = 0);
 
     /**

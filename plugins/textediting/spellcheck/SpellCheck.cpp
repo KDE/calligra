@@ -255,7 +255,7 @@ void SpellCheck::documentChanged(int from, int charsRemoved, int charsAdded)
     // where formatting of a block has changed, eg. when dropcaps is used.
     // QTextDocument then reports the change as if the whole block has changed.
     // Ex: Having a 10 char line and you add a char at pos 7:
-    // from = block->postion()
+    // from = block->position()
     // charsRemoved = 10
     // charsAdded = 11
     // m_cursorPosition = 7

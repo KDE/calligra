@@ -99,14 +99,14 @@ void ChartResizeStrategy::setSize(const QSizeF &startSize, qreal scaleX, qreal s
             // keep distance to right edge
             diff.setX(diffX);
         } else if (m_overlapX.contains(shape)) {
-            // proportianl move, could be improved but works pretty well ;)
+            // proportional move, could be improved but works pretty well ;)
             diff.setX(diffX * 0.5);
         }
         if (m_belowY.contains(shape)) {
             // keep distance to bottom edge
             diff.setY(diffY);
         } else if (m_overlapY.contains(shape)) {
-            // proportianl move, could be improved but works pretty well ;)
+            // proportional move, could be improved but works pretty well ;)
             diff.setY(diffY * 0.5);
         }
         shape->update();

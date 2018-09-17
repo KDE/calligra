@@ -192,7 +192,7 @@ void KoList::setStyle(KoListStyle *style)
         d->invalidate(textList->item(0));
     }
 
-    //if this list is a heading list then update the style manager with the list proprerties
+    //if this list is a heading list then update the style manager with the list properties
     if (KoTextDocument(d->document).headingList() == this) {
         if (KoStyleManager *styleManager = KoTextDocument(d->document).styleManager()) {
             if (styleManager->outlineStyle()) {

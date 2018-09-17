@@ -146,7 +146,7 @@ public Q_SLOTS:
     void goToPreviousPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
     /// go to next page
     void goToNextPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
-    /// Call when "Exit Distraction-Free Mode" in staus bar clicked.
+    /// Call when "Exit Distraction-Free Mode" in status bar clicked.
     void exitDistractioFreeMode();
 
 protected:
@@ -209,7 +209,7 @@ private Q_SLOTS:
     /// "hasAnnotations" has changed ("notes" in the UI) - will cause showNotes above to change too
     void hasNotes(bool has);
     /**
-     * Set view into distraction free mode, hide menu bar, staus bar, tool bar, dockes
+     * Set view into distraction free mode, hide menu bar, status bar, tool bar, dockers
      * and set view into  full screen mode.
      */
     void setDistractionFreeMode(bool); /// Call after 4 seconds, user doesn't move cursor.
@@ -258,7 +258,7 @@ private:
 
     bool m_isDistractionFreeMode;
     QTimer *m_hideCursorTimer;
-    // The button will add to staus bar in distraction-free mode to let user come
+    // The button will add to status bar in distraction-free mode to let user come
     // back to standard view.
     QPushButton *m_dfmExitButton;
 };

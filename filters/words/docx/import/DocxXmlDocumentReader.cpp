@@ -2377,7 +2377,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
         else if (m_dropCapStatus == DropCapDone) {
             // In case of drop cap, we do not wish there to be a paragraph at
             // this point, this because two ooxml paragraphs with drop cap in
-            // first, trasnfer to one paragraph in odt with drop cap as style.
+            // first, transfer to one paragraph in odt with drop cap as style.
             body = textPBuf.releaseWriter();
         }
         else {
@@ -3568,12 +3568,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
             m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
         }
         else  if (m_relativeFromV == "bottomMargin") {
-            // Not supported propery by ODF, making a best guess
+            // Not supported properly by ODF, making a best guess
             m_currentDrawStyle->addProperty("style:vertical-rel", "page");
             m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
         }
         else  if (m_relativeFromV == "insideMargin") {
-            // Not supported propery by ODF, making a best guess
+            // Not supported properly by ODF, making a best guess
             m_currentDrawStyle->addProperty("style:vertical-rel", "page");
             m_currentDrawStyle->addProperty("style:vertical-pos", "top");
         }
@@ -3588,7 +3588,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
             }
         }
         else  if (m_relativeFromV == "outsideMargin") {
-            // Not supported propery by ODF, making a best guess
+            // Not supported properly by ODF, making a best guess
             m_currentDrawStyle->addProperty("style:vertical-rel", "page");
             m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
         }

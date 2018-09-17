@@ -472,7 +472,7 @@ const QString Filterkpr2odf::createGraphicStyle(const KoXmlElement& element)
         }
         style.addProperty("draw:stroke", stroke);
     } else {
-        //even if the pen is not pressent for some objects it has to have a black stroke
+        //even if the pen is not present for some objects it has to have a black stroke
         if (element.attribute("type") == "1"
                 || element.attribute("type") == "2"
                 || element.attribute("type") == "3"

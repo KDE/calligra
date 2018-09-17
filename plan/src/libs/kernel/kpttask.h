@@ -411,11 +411,11 @@ public:
     virtual EffortCostMap plannedEffortCostPrDay(QDate start, QDate end,  long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /**
      * Returns a list of planned effort and cost for the @p resource
-     * for the interval @p start, @p end inclusive, useing schedule with identity @p id
+     * for the interval @p start, @p end inclusive, useng schedule with identity @p id
      */
     virtual EffortCostMap plannedEffortCostPrDay(const Resource *resource, QDate start, QDate end,  long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     
-    /// Returns the total planned effort for @p reosurce on this task (or subtasks)
+    /// Returns the total planned effort for @p resource on this task (or subtasks)
     virtual Duration plannedEffort( const Resource *resource, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Returns the total planned effort for this task (or subtasks) 
     virtual Duration plannedEffort( long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
@@ -498,7 +498,7 @@ public:
     void setPositiveFloat( Duration fl, long id = CURRENTSCHEDULE ) const;
     /**
      * Return the duration by which the duration of an activity or path 
-     * has to be reduced in order to fullfil a timing- or dependency constraint.
+     * has to be reduced in order to fulfil a timing- or dependency constraint.
      * @param id Schedule identity. If id is CURRENTSCHEDULE, use current schedule.
      */
     Duration negativeFloat( long id = CURRENTSCHEDULE ) const;
@@ -534,7 +534,7 @@ public:
     virtual void setCurrentSchedule(long id);
     
     /**
-     * The assigned resources can not fullfil the estimated effort.
+     * The assigned resources can not fulfil the estimated effort.
      * @param id Schedule identity. If id is CURRENTSCHEDULE, use current schedule.
      */
     virtual bool effortMetError( long id = CURRENTSCHEDULE ) const;

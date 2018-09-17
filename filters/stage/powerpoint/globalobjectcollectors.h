@@ -164,7 +164,7 @@ public:
 
 /* /\** */
 /*  * Collector that retrieves all dash styles used in the document. */
-/*  * TODO: handle LineDashStyle and top, left, rigth and bottom line dashes */
+/*  * TODO: handle LineDashStyle and top, left, right and bottom line dashes */
 /*  *\/ */
 /* class StrokeDashCollector { */
 /* public: */

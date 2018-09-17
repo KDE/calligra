@@ -45,7 +45,7 @@ DBase::~DBase()
 //  unsigned long records           4-7    Number of records
 //  unsigned short header_length    8-9    headerlength
 //  unsigned short record_length    10-11  recordlength
-//  unsigned char reserved[20]      12-31  reserverd info from dBase
+//  unsigned char reserved[20]      12-31  reserved info from dBase
 //
 
 bool DBase::load(const QString& filename)

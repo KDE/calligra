@@ -715,7 +715,7 @@ Value ValueCalc::exp(const Value &number)
 
 Value ValueCalc::pi()
 {
-    // retun PI in double-precision
+    // return PI in double-precision
     // if arbitrary precision gets in, this should be extended to return
     // more if need be
     return Value(M_PI);

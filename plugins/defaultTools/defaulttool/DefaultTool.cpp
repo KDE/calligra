@@ -1266,7 +1266,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
                     }
                 }
             }
-            // rotating is allowed for rigth mouse button too
+            // rotating is allowed for right mouse button too
             if (interactions.testFlag(KoShape::RotationAllowed)) {
                 if (handle == KoFlake::TopLeftHandle || handle == KoFlake::TopRightHandle ||
                     handle == KoFlake::BottomLeftHandle || handle == KoFlake::BottomRightHandle)

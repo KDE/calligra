@@ -84,26 +84,26 @@ printf("D50X, D50Y, D50Z = %1.8f %1.8f %1.8f\n", cmsD50X, cmsD50Y, cmsD50Z);
 /* sRGB TRC */
 cmsFloat64Number srgb_parameters[5] = 
    { 2.4, 1.0 / 1.055,  0.055 / 1.055, 1.0 / 12.92, 0.04045 }; 
-cmsToneCurve *srgb_parametic_curve =
+cmsToneCurve *srgb_parametric_curve =
    cmsBuildParametricToneCurve(NULL, 4, srgb_parameters);
 cmsToneCurve *srgb_parametric[3] = 
-   {srgb_parametic_curve,srgb_parametic_curve,srgb_parametic_curve};
+   {srgb_parametric_curve,srgb_parametric_curve,srgb_parametric_curve};
 
 /* LAB "L" (perceptually uniform) TRC */
 cmsFloat64Number labl_parameters[5] = 
    { 3.0, 0.862076,  0.137924, 0.110703, 0.080002 }; 
-cmsToneCurve *labl_parametic_curve =
+cmsToneCurve *labl_parametric_curve =
    cmsBuildParametricToneCurve(NULL, 4, labl_parameters);
 cmsToneCurve *labl_parametric[3] = 
-   {labl_parametic_curve,labl_parametic_curve,labl_parametic_curve};
+   {labl_parametric_curve,labl_parametric_curve,labl_parametric_curve};
 
 /* Rec 709 TRC */
 cmsFloat64Number rec709_parameters[5] = 
    { 1.0 / 0.45, 1.0 / 1.099,  0.099 / 1.099,  1.0 / 4.5, 0.018 }; 
-cmsToneCurve *rec709_parametic_curve =
+cmsToneCurve *rec709_parametric_curve =
    cmsBuildParametricToneCurve(NULL, 4, rec709_parameters);
 cmsToneCurve *rec709_parametric[3] = 
-   {rec709_parametic_curve,rec709_parametic_curve,rec709_parametic_curve};
+   {rec709_parametric_curve,rec709_parametric_curve,rec709_parametric_curve};
    
 /* The following true gamma TRCs work in unbounded mode
  * for both V2 and V4 profiles, and quantization during ICC profile

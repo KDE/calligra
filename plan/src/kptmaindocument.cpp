@@ -905,7 +905,7 @@ bool MainDocument::completeLoading( KoStore *store )
 
 // TODO:
 // Due to splitting of KoDocument into a document and a part,
-// we simmulate the old behaviour by registering all views in the document.
+// we simulate the old behaviour by registering all views in the document.
 // Find a better solution!
 void MainDocument::registerView( View* view )
 {
@@ -1093,7 +1093,7 @@ void MainDocument::slotInsertSharedProject()
     }
     Part *part = new Part( this );
     MainDocument *doc = new MainDocument( part );
-    doc->m_skipSharedProjects = true; // never load recursivly
+    doc->m_skipSharedProjects = true; // never load recursively
     part->setDocument( doc );
     doc->disconnect(); // doc shall not handle feedback from openUrl()
     doc->setAutoSave( 0 ); //disable

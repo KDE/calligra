@@ -226,9 +226,9 @@ public:
     QVariant resourceIsOverbooked( const Node *node, int role ) const;
     /// Set if the requested resource is not available
     QVariant resourceIsNotAvailable( const Node *node, int role ) const;
-    /// Set if the task cannot be scheduled to fullfil all the constraints
+    /// Set if the task cannot be scheduled to fulfil all the constraints
     QVariant schedulingConstraintsError( const Node *node, int role ) const;
-    /// Resources could not fullfil estimate
+    /// Resources could not fulfil estimate
     QVariant effortNotMet( const Node *node, int role ) const;
     /// Other scheduling error occurred
     QVariant schedulingError( const Node *node, int role ) const;
@@ -366,7 +366,7 @@ protected:
     bool importProjectFile( const QUrl &url, Qt::DropAction action, int row, int column, const QModelIndex &parent );
 
 protected:
-    Node *m_node; // for sanety check
+    Node *m_node; // for sanity check
     NodeModel m_nodemodel;
     bool m_projectshown;
 };

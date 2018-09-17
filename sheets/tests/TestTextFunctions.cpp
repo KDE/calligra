@@ -26,7 +26,7 @@ void TestTextFunctions::initTestCase()
 }
 
 #define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
-// CHECK_EVAL has the side effect that the valuy 'y' is modified, e.g due to localization
+// CHECK_EVAL has the side effect that the value 'y' is modified, e.g due to localization
 // Use CHECK_VALUE2 where this this is a problem
 #define CHECK_EVAL2(x,y,r) { Value z(y); QCOMPARE(evaluate(x,z),r); }
 

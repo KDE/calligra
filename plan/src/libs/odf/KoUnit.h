@@ -245,7 +245,7 @@ public:
 
     /**
      * Get an approximate scale of a unit vector that was converted by
-     * the transfomation.
+     * the transformation.
      *
      * Please note that exact values are guaranteed only for
      * combinations of Translate, Rotation and Unifor Scale

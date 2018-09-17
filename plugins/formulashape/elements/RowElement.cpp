@@ -42,7 +42,7 @@ RowElement::~RowElement()
 
 void RowElement::paint( QPainter& painter, AttributeManager* am)
 {
-    /* RowElement has no visual representance so paint nothing */
+    /* RowElement has no visual representation so paint nothing */
     Q_UNUSED( painter )
     Q_UNUSED( am )
 }
@@ -66,7 +66,7 @@ void RowElement::layout( const AttributeManager* am )
     Q_UNUSED( am )          // there are no attributes that can be processed here
 
     if( m_childElements.isEmpty() ) {
-        //set standart values for empty formulas
+        //set standard values for empty formulas
         setOrigin( QPointF( 0.0, 0.0 ) );
         setWidth( 7.0 );       // standard values
         setHeight( 10.0 );

@@ -127,7 +127,7 @@ public:
 
     /**
      * Add the node @p task to the project, after node @p position
-     * If @p postition is zero or the project node, it will be added to this project.
+     * If @p position is zero or the project node, it will be added to this project.
      */
     bool addTask( Node* task, Node* position );
     /**

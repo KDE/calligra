@@ -115,7 +115,7 @@ const QString& Layout::id() const
 
 void Layout::replaceLayout(Layout* layout)
 {
-    layout->d->removeDependees(); // Avoid both layout to fight for the shapes possition
+    layout->d->removeDependees(); // Avoid both layout to fight for the shapes position
     addShapes(layout->d->shapes);
     d->triggerRelayout();
 }

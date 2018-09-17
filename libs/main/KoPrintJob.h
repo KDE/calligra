@@ -58,7 +58,7 @@ public:
     /// Returns the printer that is used for this print job so others can alter the details of the print-job.
     virtual QPrinter &printer() = 0;
     /// If this print job is used in combination with a printdialog the option widgets this method
-    /// retuns will be shown in the print dialog.
+    /// returns will be shown in the print dialog.
     virtual QList<QWidget*> createOptionWidgets() const = 0;
 
     virtual int documentFirstPage() const {

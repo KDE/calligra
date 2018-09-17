@@ -543,7 +543,7 @@ void ChartSubStreamHandler::handleChart(ChartRecord *record)
     m_chart->m_y2 = record->height() - m_chart->m_y1;
 }
 
-// secifies the begin of a collection of records
+// specifies the begin of a collection of records
 void ChartSubStreamHandler::handleBegin(BeginRecord *)
 {
     m_stack.push(m_currentObj);

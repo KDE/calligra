@@ -485,7 +485,7 @@ void TestStatisticalFunctions::testFISHER()
     CHECK_EVAL("FISHER(0)",                        Value(0));             // Fisher of 0.
     CHECK_EVAL("FISHER((EXP(1)-1)/(EXP(1)+1))",    Value(0.5));           // Argument chosen so that ln=1
     CHECK_EVAL_SHORT("FISHER(0.5)",                Value(0.54930614));    // TODO - be more precise - Some random value.
-    CHECK_EVAL("FISHER(0.47)+FISHER(-0.47)",       Value(0));             // Function is symetrical.
+    CHECK_EVAL("FISHER(0.47)+FISHER(-0.47)",       Value(0));             // Function is symmetrical.
 }
 
 void TestStatisticalFunctions::testFISHERINV()
@@ -494,7 +494,7 @@ void TestStatisticalFunctions::testFISHERINV()
     CHECK_EVAL("FISHERINV(0)",                     Value(0));             // Fisherinv of 0.
     CHECK_EVAL("FISHERINV(LN(2))",                 Value(0.6));           // e^(2*ln(2))=4
     CHECK_EVAL("FISHERINV(FISHER(0.5))",           Value(0.5));           // Some random value.
-    CHECK_EVAL("FISHERINV(0.47)+FISHERINV(-0.47)", Value(0));             // Function is symetrical.
+    CHECK_EVAL("FISHERINV(0.47)+FISHERINV(-0.47)", Value(0));             // Function is symmetrical.
 }
 
 void TestStatisticalFunctions::testFREQUENCY()

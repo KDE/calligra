@@ -197,7 +197,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblBg()
         if(isStartElement()) {
             TRY_READ_IF(fill)
             else if (name() == "fillRef") {
-                // NOTE: This is a heavy simplifiaction for the moment
+                // NOTE: This is a heavy simplification for the moment
                 // In reality we should use graphic properties in the cell-style
                 // but it is not supported atm.
                 TRY_READ(fillRef)
@@ -560,7 +560,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcStyle()
 //             TRY_READ_IF(cell3D)
             TRY_READ_IF(fill)
             else if (name() == "fillRef") {
-                // NOTE: This is a heavy simplifiaction for the moment
+                // NOTE: This is a heavy simplification for the moment
                 // In reality we should use graphic properties in the cell-style
                 // but it is not supported atm.
                 TRY_READ(fillRef)

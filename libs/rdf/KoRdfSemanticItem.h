@@ -104,12 +104,12 @@ public:
     virtual void insert(KoCanvasBase *host);
 
     /**
-     * Export the SemanticItem to MimeData. This mehtod is used by
+     * Export the SemanticItem to MimeData. This method is used by
      * Drag and Drop to allow the item to move to another application
      * or possibly onto the clipboard. Subclasses might like to use a
      * QTemporaryFile and call their exportToFile() method to export
      * themselves to MIME data. For maximum usability a plain text
-     * represenation should also be set with md->setText() so items
+     * representation should also be set with md->setText() so items
      * can be dragged to text editors and consoles.
      */
     virtual void exportToMime(QMimeData *md) const;
@@ -121,8 +121,8 @@ public:
     virtual void exportToFile(const QString &fileName = QString()) const = 0;
 
     /**
-     * Import the data in ba to the semnatic item. This is used for
-     * D&D Drop events to create a new semnatic item. Subclasses
+     * Import the data in ba to the semantic item. This is used for
+     * D&D Drop events to create a new semantic item. Subclasses
      * should set their internal state based on the data in 'ba' and
      * then call importFromDataComplete() at the end of the method to
      * update the Rdf and insert the semantic item into the document.

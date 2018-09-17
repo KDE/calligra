@@ -149,7 +149,7 @@ protected:
     bool setGranularity( const QModelIndex &index, const QVariant &value, int role );
 
 private:
-    ScheduleManager *m_manager; // for sanety check
+    ScheduleManager *m_manager; // for sanity check
     bool m_flat;
     ScheduleModel m_model;
 

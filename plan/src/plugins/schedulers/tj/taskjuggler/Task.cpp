@@ -3040,7 +3040,7 @@ Task::computeCriticalness(int sc)
                  a->getCandidatesIterator(); rli.hasNext();)
             {
                 /* If the candidate is a resource group we use the average
-                 * allocation probablility of all the resources of the group.
+                 * allocation probability of all the resources of the group.
                  */
                 int resources = 0;
                 double averageProbability = 0.0;

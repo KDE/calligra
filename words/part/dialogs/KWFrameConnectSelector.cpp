@@ -55,7 +55,7 @@ bool KWFrameConnectSelector::canOpen(KoShape *shape)
 
 void KWFrameConnectSelector::existingRadioClicked(bool on)
 {
-    // make sure there is a selcted frameset
+    // make sure there is a selected frameset
     if (on && !widget.framesList->currentItem() && widget.framesList->model()->rowCount() > 0) {
         QModelIndex curr = widget.framesList->model()->index(0, 0);
         widget.framesList->setCurrentIndex(curr);

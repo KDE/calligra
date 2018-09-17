@@ -2376,7 +2376,7 @@ QPair<QString, QString> PptToOdp::findHyperlink(const quint32 id)
             if (hyperlink->targetAtom) {
                 target = utf16ToString(hyperlink->targetAtom->target);
             }
-            // TODO currently location is ignored. Location referes to
+            // TODO currently location is ignored. Location refers to
             // position within a file
         }
     }

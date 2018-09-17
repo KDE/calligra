@@ -45,7 +45,7 @@ class FormulaCursor;
  */
 class KOFORMULA_EXPORT TokenElement : public BasicElement {
 public:
-    /// The standart constructor
+    /// The standard constructor
     explicit TokenElement(BasicElement *parent = 0);
 
     /**

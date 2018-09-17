@@ -71,7 +71,7 @@ void TestChangeTrackedDelete::testDeleteSelection()
     ChangeTrackedDeleteCommand *delCommand = new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, textTool);
     textEditor->addCommand(delCommand);
     QCOMPARE(document->characterAt(2).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
-    // This is weird. Without this loop present the succeeding call to inlineTextObject returs NULL. Why ??????
+    // This is weird. Without this loop present the succeeding call to inlineTextObject returns NULL. Why ??????
     for (int i=0; i<document->characterCount(); i++) {
         cursor->setPosition(i);
     }
@@ -98,7 +98,7 @@ void TestChangeTrackedDelete::testPrefixMerge()
     cursor->setPosition(4);
     delCommand = new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, textTool);
     textEditor->addCommand(delCommand);
-    // This is weird. Without this loop present the succeeding call to inlineTextObject returs NULL. Why ??????
+    // This is weird. Without this loop present the succeeding call to inlineTextObject returns NULL. Why ??????
     for (int i=0; i<document->characterCount(); i++) {
         cursor->setPosition(i);
     }
@@ -125,7 +125,7 @@ void TestChangeTrackedDelete::testSuffixMerge()
     cursor->setPosition(2);
     delCommand = new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, textTool);
     textEditor->addCommand(delCommand);
-    // This is weird. Without this loop present the succeeding call to inlineTextObject returs NULL. Why ??????
+    // This is weird. Without this loop present the succeeding call to inlineTextObject returns NULL. Why ??????
     for (int i=0; i<document->characterCount(); i++) {
         cursor->setPosition(i);
     }
@@ -156,7 +156,7 @@ void TestChangeTrackedDelete::testInterMerge()
     textEditor->addCommand(delCommand);
 
     QCOMPARE(document->characterAt(2).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
-    // This is weird. Without this loop present the succeeding call to inlineTextObject returs NULL. Why ??????
+    // This is weird. Without this loop present the succeeding call to inlineTextObject returns NULL. Why ??????
     for (int i=0; i<document->characterCount(); i++) {
         cursor->setPosition(i);
     }
@@ -183,7 +183,7 @@ void TestChangeTrackedDelete::testPartialListItemDelete()
     textEditor->addCommand(delCommand);
     QCOMPARE(document->characterAt(46).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
 
-    // This is weird. Without this loop present the succeeding call to inlineTextObject returs NULL. Why ??????
+    // This is weird. Without this loop present the succeeding call to inlineTextObject returns NULL. Why ??????
     for (int i=0; i<document->characterCount(); i++) {
         cursor->setPosition(i);
     }
@@ -232,7 +232,7 @@ void TestChangeTrackedDelete::testListItemDelete()
     textEditor->addCommand(delCommand);
     QCOMPARE(document->characterAt(46).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
 
-    // This is weird. Without this loop present the succeeding call to inlineTextObject returs NULL. Why ??????
+    // This is weird. Without this loop present the succeeding call to inlineTextObject returns NULL. Why ??????
     for (int i=0; i<document->characterCount(); i++) {
         cursor->setPosition(i);
     }
@@ -283,7 +283,7 @@ void TestChangeTrackedDelete::testListDelete()
     textEditor->addCommand(delCommand);
     QCOMPARE(document->characterAt(16).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
 
-    // This is weird. Without this loop present the succeeding call to inlineTextObject returs NULL. Why ??????
+    // This is weird. Without this loop present the succeeding call to inlineTextObject returns NULL. Why ??????
     for (int i=0; i<document->characterCount(); i++) {
         cursor->setPosition(i);
     }
@@ -340,7 +340,7 @@ void TestChangeTrackedDelete::testTableDelete()
     textEditor->addCommand(delCommand);
     QCOMPARE(document->characterAt(13).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
 
-    // This is weird. Without this loop present the succeeding call to inlineTextObject returs NULL. Why ??????
+    // This is weird. Without this loop present the succeeding call to inlineTextObject returns NULL. Why ??????
     for (int i=0; i<document->characterCount(); i++) {
         cursor->setPosition(i);
     }

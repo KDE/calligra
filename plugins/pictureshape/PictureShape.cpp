@@ -97,7 +97,7 @@ void _Private::PictureShapeProxy::setImage(const QString &key, const QImage &ima
 
 // ----------------------------------------------------------------- //
 
-QPainterPath _Private::generateOutline(const QImage &imageIn, int treshold)
+QPainterPath _Private::generateOutline(const QImage &imageIn, int threshold)
 {
     int leftArray[100];
     int rightArray[100];
@@ -110,7 +110,7 @@ QPainterPath _Private::generateOutline(const QImage &imageIn, int treshold)
         leftArray[y] = -1;
         for (int x = 0; x < 100; x++) {
             int a = qAlpha(image.pixel(x,y));
-            if (a > treshold) {
+            if (a > threshold) {
                 leftArray[y] = x;
                 break;
             }
@@ -121,7 +121,7 @@ QPainterPath _Private::generateOutline(const QImage &imageIn, int treshold)
         if (leftArray[y] != -1) {
             for (int x = 100-1; x >= 0; x--) {
                 int a = qAlpha(image.pixel(x,y));
-                if (a > treshold) {
+                if (a > threshold) {
                     rightArray[y] = x;
                     break;
                 }
@@ -481,7 +481,7 @@ QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context
         style.addProperty("draw:image-opacity", QString("%1%").arg((1.0 - transparency()) * 100.0));
     }
 
-    // this attribute is need to work around a bug in LO 3.4 to make it recognice us as an
+    // this attribute is need to work around a bug in LO 3.4 to make it recognize us as an
     // image and not just any shape. But we shouldn't produce illegal odf so: only for testing!
     // style.addAttribute("style:parent-style-name", "dummy");
 

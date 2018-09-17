@@ -41,7 +41,7 @@ class QString;
  * others.
  *
  * This class handles the contents of one .rels file, i.e. the
- * relations for one file inside the OPC store.  Lines in thany .rels
+ * relations for one file inside the OPC store.  Lines in that .rels
  * file looks like the following:
  *
  *   <Relationship

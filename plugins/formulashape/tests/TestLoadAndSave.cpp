@@ -294,7 +294,7 @@ void TestLoadAndSave::spaceElement_data()
 
     addRow( "<mspace/>" );
 
-    // Check operator attributes. Sefction 3.2.7.2
+    // Check operator attributes. Section 3.2.7.2
 
     addRow( "<mspace width=\"10em\"/>" );
     addRow( "<mspace width=\"10ex\"/>" );

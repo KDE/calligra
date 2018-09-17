@@ -435,7 +435,7 @@ public:
      */
     virtual QString pathShapeId() const;
 
-    /// Returns a odf/svg string represenatation of the path data with the given matrix applied.
+    /// Returns a odf/svg string representation of the path data with the given matrix applied.
     QString toString(const QTransform &matrix = QTransform()) const;
 
     /// Returns the fill rule for the path object

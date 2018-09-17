@@ -767,7 +767,7 @@ void OdtMobiHtmlConverter::handleTagNote(KoXmlElement &nodeElement, KoXmlWriter 
             htmlWriter->startElement("a", m_doIndent);
             m_refrencesList.insert(htmlWriter->device()->pos(), id);
 //            if (noteClass == "footnote")
-//                htmlWriter->addAttribute("href", "#" + id + "n"); // n rerence to note foot-note or end-note
+//                htmlWriter->addAttribute("href", "#" + id + "n"); // n reference to note foot-note or end-note
 //            else { // endnote
 //                QString endRef = "chapter-endnotes.xhtml#" + id + "n";
 //                htmlWriter->addAttribute("href", endRef);

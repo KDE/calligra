@@ -2642,7 +2642,7 @@ KoChart::MarkerType markerType(const QString &_val)
         return KoChart::SymbolXMarker;
     if ( val == "triangle" )
         return KoChart::TriangleMarker;
-    if ( val == "squre" )
+    if ( val == "square" )
         return KoChart::SquareMarker;
     if ( val == "diamond" )
         return KoChart::DiamondMarker;

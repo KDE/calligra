@@ -34,7 +34,7 @@ class FormulaCursor;
  * The mrow element is specified in the MathML spec section 3.3.1. It primarily
  * serves as container for other elements that are grouped together and aligned
  * in a row.
- * mrow has no own visual representance that is why the paint() method is empty.
+ * mrow has no own visual representation that is why the paint() method is empty.
  * The handling of background and other global attributes is done generically
  * inside FormulaRenderer.
  * The layout() method implements the layouting and size calculation for the mrow

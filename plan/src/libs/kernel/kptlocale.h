@@ -43,9 +43,9 @@ public:
      * Sets the locale used to get the currency symbol.
      */
     void setCurrencyLocale(QLocale::Language language, QLocale::Country country);
-    /// Return the language used when getting the currency synbol
+    /// Return the language used when getting the currency symbol
     QLocale::Language currencyLanguage() const;
-    /// Return the country used when getting the currency synbol
+    /// Return the country used when getting the currency symbol
     QLocale::Country currencyCountry() const;
 
 

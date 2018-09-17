@@ -142,7 +142,7 @@ const QString KPrDeclarations::declaration(Type type, const QString &key)
         QMap<QString, QVariant> dateTimeDefinition =
                 m_declarations.value(type).value(key).value<QMap<QString, QVariant> >();
 
-        // if there is no presenation declaration don't set a value
+        // if there is no presentation declaration don't set a value
         if (!dateTimeDefinition.isEmpty()) {
             if (dateTimeDefinition["fixed"].toBool()) {
                 retVal = dateTimeDefinition["fixed value"].toString();

@@ -96,7 +96,7 @@ public:
         if(ignore)
             return;
 
-        // Move toolbars to docker or back depending on visibllity of docker
+        // Move toolbars to docker or back depending on visibility of docker
         if(toolBarsDocker->isVisible()) {
             QList<KToolBar *> tmpList = mainWindow->toolBars();
             toolBarList.append(tmpList);

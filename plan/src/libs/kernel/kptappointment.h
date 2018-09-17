@@ -212,7 +212,7 @@ public:
     /**
      * Returns the planned effort and cost for the interval start to end (inclusive).
      * Only dates with any planned effort is returned.
-     * If start or end is not valid, startTime.date() respectivly endTime().date() is used.
+     * If start or end is not valid, startTime.date() respectively endTime().date() is used.
      */
     EffortCostMap plannedPrDay(QDate start, QDate end, EffortCostCalculationType type = ECCT_All) const;
     

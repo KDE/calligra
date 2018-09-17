@@ -474,7 +474,7 @@ public:
     bool operator==(const KoGenStyle &other) const;
 
     /**
-     * Returns a property of this style. In prinicpal this class is meant to be write-only, but
+     * Returns a property of this style. In principal this class is meant to be write-only, but
      * some exceptional cases having read-support as well is very useful.  Passing DefaultType
      * as property type uses a style-type specific property type.
      */
@@ -489,7 +489,7 @@ public:
     }
 
     /**
-     * Returns a property of this style. In prinicpal this class is meant to be write-only, but
+     * Returns a property of this style. In principal this class is meant to be write-only, but
      * some exceptional cases having read-support as well is very useful.  Passing DefaultType
      * as property type uses a style-type specific property type.
      */
@@ -503,7 +503,7 @@ public:
         return QString();
     }
 
-    /// Returns an attribute of this style. In prinicpal this class is meant to be write-only, but some exceptional cases having read-support as well is very useful.
+    /// Returns an attribute of this style. In principal this class is meant to be write-only, but some exceptional cases having read-support as well is very useful.
     QString attribute(const QString &propName) const {
         const QMap<QString, QString>::const_iterator it = m_attributes.constFind(propName);
         if (it != m_attributes.constEnd())

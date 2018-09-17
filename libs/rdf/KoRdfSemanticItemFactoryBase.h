@@ -74,7 +74,7 @@ public: // API to be implemented
     virtual hKoRdfBasicSemanticItem createSemanticItem(const KoDocumentRdf *rdf, QObject *parent) = 0;
 
     /**
-     * Returns if a semantic item could be principially created from the passed mimeData.
+     * Returns if a semantic item could be principally created from the passed mimeData.
      * Creation could still fail if actually tried.
      */
     virtual bool canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const = 0;

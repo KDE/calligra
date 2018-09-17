@@ -527,7 +527,7 @@ void TestFrameLayout::testCopyFramesForPage()
 void TestFrameLayout::testLargeHeaders()
 {
     // create a header with waaaaaaay to much text and do one page layout.
-    // Check if the header has been trunkated and no new page has been requested.
+    // Check if the header has been truncated and no new page has been requested.
     Helper helper;
     m_frames.clear();
     KWPage page = helper.pageManager->begin();

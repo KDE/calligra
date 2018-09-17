@@ -1175,7 +1175,7 @@ void ReportGeneratorOdt::writeChartElements(KoXmlWriter &writer, const KoXmlElem
             writer.startElement(tag.constData());
             if (!e.hasAttributeNS(KoXmlNS::chart, "legend-align") && e.hasAttributeNS(KoXmlNS::chart, "legend-position")) {
                 // lowriter does not specify this attribute
-                // If legend-postion is start, end, top or bottom
+                // If legend-position is start, end, top or bottom
                 // we need to have legend-align == center so that words
                 // repositions the legend correctly
                 QStringList lst = QStringList() << "start" << "end" << "top" << "bottom";

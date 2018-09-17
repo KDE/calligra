@@ -63,10 +63,10 @@ public:
     /**
      * Set the shape manager
      *
-     * This is needed in case you cannot set the shape manager when creating the paiting strategy.
+     * This is needed in case you cannot set the shape manager when creating the painting strategy.
      * It needs to be set before you paint otherwise nothing will be painted.
      *
-     * @param shapeManager The shape manager to use in the painting startegy
+     * @param shapeManager The shape manager to use in the painting strategy
      */
     void setShapeManager(KoShapeManager *shapeManager);
 

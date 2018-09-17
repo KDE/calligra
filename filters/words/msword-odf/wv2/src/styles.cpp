@@ -1029,7 +1029,7 @@ StyleSheet::StyleSheet( OLEStreamReader* tableStream, U32 fcStshf, U32 lcbStshf 
 
 #ifdef WV2_DEBUG_STYLESHEET
     wvlog << "Done reading the stylesheet: " <<
-             " stream postion:" << tableStream->tell() <<
+             " stream position:" << tableStream->tell() <<
              " expected:" << fcStshf + lcbStshf << endl;
 #endif
     if ( tableStream->tell() < static_cast<int>( fcStshf + lcbStshf ) ) {

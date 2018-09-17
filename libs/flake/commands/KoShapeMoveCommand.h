@@ -51,7 +51,7 @@ public:
     /// revert the actions done in redo
     void undo();
 
-    /// update newPositions list with new postions.
+    /// update newPositions list with new positions.
     void setNewPositions(const QVector<QPointF> &newPositions);
 
 private:

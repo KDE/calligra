@@ -187,7 +187,7 @@ public:
 
     /**
      * Save the .xml part of the picture (the picture itself isn't stored here)
-     * @return true if saving was sucessful
+     * @return true if saving was successful
      * */
     bool saveXml(KoXmlWriter *xmlWriter);
 

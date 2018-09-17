@@ -58,8 +58,8 @@ public:
         // Every 10 properties, the decimal number shown indicates the decimal offset over the QTextFormat::UserProperty enum value
         StyleId = QTextFormat::UserProperty + 1,
         // Linespacing properties
-        PercentLineHeight,  ///< this propery is used for a percentage of the highest character on that line
-        FixedLineHeight,    ///< this propery is used to use a non-default line height
+        PercentLineHeight,  ///< this property is used for a percentage of the highest character on that line
+        FixedLineHeight,    ///< this property is used to use a non-default line height
         MinimumLineHeight,  ///< this property is used to have a minimum line spacing
         LineSpacing,        ///< Hard leader height.
         LineSpacingFromFont,  ///< if false, use fontsize (in pt) solely, otherwise respect font settings
@@ -243,7 +243,7 @@ public:
     bool hasNormalLineHeight() const;
 
     /**
-     * If set to true the font-encoded height will be used instead of the font-size propery
+     * If set to true the font-encoded height will be used instead of the font-size property
      * This property influences setLineHeightPercent() behavior.
      * When off (default) a font of 12pt will always have a linespacing of 12pt times the
      * current linespacing percentage.  When on the linespacing embedded in the font

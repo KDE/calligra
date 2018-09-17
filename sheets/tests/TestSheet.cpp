@@ -174,7 +174,7 @@ void SheetTest::testDocumentToCellCoordinates()
 }
 
 #if 0
-// test if embedded objects are propare taken into account (tests for bug 287997)
+// test if embedded objects are prepare taken into account (tests for bug 287997)
 void SheetTest::testCompareRows()
 {
     CellStorage* storage = m_sheet->cellStorage();

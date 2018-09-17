@@ -46,7 +46,7 @@ public:
     /// Provides access to the shape writer
     KoXmlWriter &shapeWriter();
 
-    /// Create a unqiue id from the specified base text
+    /// Create a unuque id from the specified base text
     QString createUID(const QString &base);
 
     /// Returns the unique id for the given shape

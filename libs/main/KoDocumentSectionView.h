@@ -99,7 +99,7 @@ public:
      * specified menu.
      *
      * For instance, if a document section can be locked and visible,
-     * the menu will be expanded with locked and visilbe toggle
+     * the menu will be expanded with locked and visible toggle
      * actions.
      *
      * For instance
@@ -116,7 +116,7 @@ public:
      @endcode
      *
      * @param menu A pointer to the menu that will be expanded with
-     * the toglge actions
+     * the toggle actions
      * @param index The model index associated with the document
      * section that may or may not provide a number of toggle actions.
      */

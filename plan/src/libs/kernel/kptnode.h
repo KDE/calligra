@@ -78,8 +78,8 @@ public:
         State_Running = 64,
         State_RunningLate = 128,
         State_RunningEarly = 256,
-        State_ReadyToStart = 512, // all precceeding tasks finished (if any)
-        State_NotReadyToStart = 1024, // all precceeding tasks not finished (must be one or more)
+        State_ReadyToStart = 512, // all preceding tasks finished (if any)
+        State_NotReadyToStart = 1024, // all preceding tasks not finished (must be one or more)
         State_NotScheduled = 2048,
         State_Late = 4096
     };
@@ -291,7 +291,7 @@ public:
     virtual bool resourceOverbooked( long id = CURRENTSCHEDULE ) const;
     /// The requested resource is not available
     bool resourceNotAvailable( long id = CURRENTSCHEDULE ) const;
-    /// The task cannot be scheduled to fullfil all the constraints
+    /// The task cannot be scheduled to fulfil all the constraints
     virtual bool constraintError( long id = CURRENTSCHEDULE ) const;
     /// The task cannot be scheduled correctly
     virtual bool schedulingError( long id = CURRENTSCHEDULE ) const;
@@ -299,7 +299,7 @@ public:
     bool notScheduled( long id = CURRENTSCHEDULE ) const;
     /// Return a list of overbooked resources
     virtual QStringList overbookedResources( long id = CURRENTSCHEDULE ) const;
-    /// The assigned resources can not fullfil the estimated effort.
+    /// The assigned resources can not fulfil the estimated effort.
     virtual bool effortMetError( long /*id*/ = CURRENTSCHEDULE ) const { return false; }
     
     virtual EffortCostMap plannedEffortCostPrDay(QDate start, QDate end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const=0;
@@ -513,7 +513,7 @@ public:
     
     /// Set deleted = onoff for schedule with id
     void setScheduleDeleted(long id, bool onoff);
-    /// Set parent schedule recursivly
+    /// Set parent schedule recursively
     virtual void setParentSchedule(Schedule *sch);
     
     const ResourceRequestCollection &requests() const { return m_requests; }

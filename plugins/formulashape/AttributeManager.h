@@ -183,14 +183,14 @@ public:
 
     /**
      * Determine the maximal height of an given element's child elements
-     * @param element The element whos children are used
+     * @param element The element whose children are used
      * @return The maximal height
      */
     qreal maxHeightOfChildren( const BasicElement* element ) const;
 
     /**
      * Determine the maximal height of an given element's child elements
-     * @param element The element whos children are used
+     * @param element The element whose children are used
      * @return The maximal height
      */
     qreal maxWidthOfChildren( const BasicElement* element ) const;

@@ -72,7 +72,7 @@ const QList<BasicElement*> UnderOverElement::childElements() const
 
 void UnderOverElement::paint( QPainter& painter, AttributeManager* am)
 {
-    /*do nothing as UnderOverElement has no visual representance*/
+    /*do nothing as UnderOverElement has no visual representation*/
     Q_UNUSED(painter)
     Q_UNUSED(am)
 }

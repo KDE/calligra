@@ -60,7 +60,7 @@ CSVExportDialog::CSVExportDialog(QWidget * parent)
 
     // Invalid 'Other' delimiters
     // - Quotes
-    // - CR,LF,Vetical-tab,Formfeed,ASCII bel
+    // - CR,LF,Vertical-tab,Formfeed,ASCII bel
     QRegExp rx("^[^\"'\r\n\v\f\a]{0,1}$");
     m_delimiterValidator = new QRegExpValidator(rx, m_dialog->m_delimiterBox);
     m_dialog->m_delimiterEdit->setValidator(m_delimiterValidator);

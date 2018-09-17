@@ -27,7 +27,7 @@
  */
 class KOFORMULA_EXPORT ErrorElement : public RowElement {
 public:
-    /// The standart constructor
+    /// The standard constructor
     explicit ErrorElement(BasicElement *parent = 0);
 
     /**

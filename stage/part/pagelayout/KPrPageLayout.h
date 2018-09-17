@@ -81,7 +81,7 @@ public:
     /**
      * @brief Compare layout by content
      *
-     * The content is the same when the order of the placholder objects is the same
+     * The content is the same when the order of the placeholder objects is the same
      */
     static bool compareByContent( const KPrPageLayout & pl1, const KPrPageLayout & pl2 );
 

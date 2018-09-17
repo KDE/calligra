@@ -81,7 +81,7 @@ private:
     void readDefaultAnimations();
 
     /**
-      * Return a pritable animation name using animation id
+      * Return a printable animation name using animation id
       *
       * @param id QString holding the animation id
       * @return a QString holding the name

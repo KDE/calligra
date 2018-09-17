@@ -115,7 +115,7 @@ private:
     /// Resets the current edit mode to Idle, standard connector type
     void resetEditMode();
 
-    /// Returns the nearest connection shape within handle grab sensitiviy distance
+    /// Returns the nearest connection shape within handle grab sensitivity distance
     KoConnectionShape * nearestConnectionShape(const QList<KoShape*> &shapes, const QPointF &mousePos) const;
 
     /// Updates status text depending on edit mode

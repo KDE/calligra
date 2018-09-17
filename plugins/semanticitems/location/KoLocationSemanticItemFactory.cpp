@@ -146,7 +146,7 @@ void KoLocationSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemanti
     // remains (which are objects that existed in locObjects before and were rediscovered
     // during the query process).
     //
-    // Creating a list of locations each time similifies the query and discovery process
+    // Creating a list of locations each time simplifies the query and discovery process
     // at the expense of this little mess to merge the new and old with explicit pointer
     // and object lifetime handling
     QList<hKoRdfBasicSemanticItem> removeSet;

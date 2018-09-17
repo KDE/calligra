@@ -469,7 +469,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // style:wrap
     // style:wrap-contour
     // style:wrap-contour-mode
-    // style:wrap-dynamic-treshold
+    // style:wrap-dynamic-threshold
     // style:writing-mode
     // svg:fill-rule
     QString fillRule(getFillRule(ds.shapeType()));

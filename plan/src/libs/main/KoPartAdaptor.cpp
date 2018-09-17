@@ -148,7 +148,7 @@ QString KoPartAdaptor::documentInfoInitial() const
     return m_pDoc->document()->documentInfo()->authorInfo("initial");
 }
 
-QString KoPartAdaptor::documentInfoAuthorPostion() const
+QString KoPartAdaptor::documentInfoAuthorPosition() const
 {
     return m_pDoc->document()->documentInfo()->authorInfo("position");
 }

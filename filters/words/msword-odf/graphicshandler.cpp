@@ -241,7 +241,7 @@ QString WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data
     //TODO: It seems that both inline and floating objects have placement and
     //dimensions stored in SPA structures.  Check the OfficeArtClientAnchor for
     //the index into plcfSpa.  However the border information for inline
-    //msosptPictureFrame shapes is stored in the PICF struture.
+    //msosptPictureFrame shapes is stored in the PICF structure.
 
     debugMsDoc ;
     QString ret;
@@ -1198,7 +1198,7 @@ void WordsGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     definePositionAttributes(style, ds);
     //TODO: maybe wrapping related attributes have to be set
 
-    //NOTE: also the dxWidthHR propertie may store the width information
+    //NOTE: also the dxWidthHR properties may store the width information
     float width = ds.pctHR() / 10.0;
 
     QString hrAlign;

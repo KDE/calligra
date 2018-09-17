@@ -767,7 +767,7 @@ QString ExcelImport::Private::convertHeaderFooter(const QString& text)
     int lastPos;
     int pos = text.indexOf('&');
     int len = text.length();
-    if ((pos < 0) && (text.length() > 0))   // If ther is no &
+    if ((pos < 0) && (text.length() > 0))   // If there is no &
         result += text;
     else if (pos > 0) // Some text and '&'
         result += text.mid(0,  pos - 1);

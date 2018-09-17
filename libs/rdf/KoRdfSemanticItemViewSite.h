@@ -71,13 +71,13 @@ public:
 
     /**
      * Apply a stylesheet for the semantic item.
-     * Note that the setting is rememebered for this site too.
+     * Note that the setting is remembered for this site too.
      *
      * The application can be done separately using the setStylesheetWithoutReflow()
      * and reflowUsingCurrentStylesheet() methods. Performing the stylesheet
      * application in two parts is convenient if you are applying a stylesheet to many
      * semantic items at once, or to all the locations in the document which reference
-     * a single semanti item.
+     * a single semantic item.
      *
      * @see setStylesheetWithoutReflow()
      * @see reflowUsingCurrentStylesheet()

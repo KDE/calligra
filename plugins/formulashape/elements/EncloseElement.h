@@ -29,7 +29,7 @@
  */
 class KOFORMULA_EXPORT EncloseElement : public RowElement {
 public:
-    /// The standart constructor
+    /// The standard constructor
     explicit EncloseElement(BasicElement *parent = 0);
 
     /**

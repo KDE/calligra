@@ -26,7 +26,7 @@ class QWidget;
 class KReplaceDialog;
 
 /**
- * Stratagy used for implementing replace
+ * Strategy used for implementing replace
  */
 class KoReplaceStrategy : public KoFindStrategyBase
 {

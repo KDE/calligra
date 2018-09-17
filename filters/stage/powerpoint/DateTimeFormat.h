@@ -140,7 +140,7 @@ private:
 
     //Slide *master;
     /**
-     * @brief formatId - Date represtation format
+     * @brief formatId - Date representation format
      */
     int formatId;
     QString dateStyleName;

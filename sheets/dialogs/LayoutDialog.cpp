@@ -1660,7 +1660,7 @@ void CellFormatPageFloat::apply(StyleCommand* _obj)
         }
     }
     if (newFormatType == Format::Scientific) {
-        // FIXME: temprorary fix to at least get precision to work
+        // FIXME: temporary fix to at least get precision to work
         // TODO: Add min-exponent-digits to dialog
         // Custom format overrides precision, so create a proper one
         QString format = "0.";

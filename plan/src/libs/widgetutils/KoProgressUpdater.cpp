@@ -57,7 +57,7 @@ public:
     int currentProgress;
     bool updated;          // is true whenever the progress needs to be recomputed
     QTextStream *output;
-    QTimer updateGuiTimer; // fires regulary to update the progress bar widget
+    QTimer updateGuiTimer; // fires regularily to update the progress bar widget
     QList<QPointer<KoUpdaterPrivate> > subtasks;
     QList<QPointer<KoUpdater> > subTaskWrappers; // We delete these
     QTime referenceTime;
@@ -171,7 +171,7 @@ void KoProgressUpdater::updateUi()
 {
     // This function runs in the app main thread. All the progress
     // updates arrive at the KoUpdaterPrivate instances through
-    // queued connections, so until we relinguish control to the
+    // queued connections, so until we relinquish control to the
     // event loop, the progress values cannot change, and that
     // won't happen until we return from this function (which is
     // triggered by a timer)

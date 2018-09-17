@@ -1489,7 +1489,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_oval()
 
 #undef CURRENT_EL
 #define CURRENT_EL roundrect
-//! roundrect handler (Rouned rectangle)
+//! roundrect handler (Rounded rectangle)
 // For parents, children, look from rect
 // Note: this is atm. simplified, should in reality make a round rectangle
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
@@ -2523,7 +2523,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     body = frameBuf.originalWriter();
     bool makeFrameInstead = false;
 
-    // Checking for a special case where there is a picture and the shape is a rectange
+    // Checking for a special case where there is a picture and the shape is a rectangle
     // In this case we draw a simple frame, this because calligra atm. does not support
     // wmf/emf pictures are the background fill of an element
     if (!m_currentVMLProperties.imagedataPath.isEmpty() &&

@@ -55,7 +55,7 @@ public:
     /**
      * Fix wrongly saved data from OO
      *
-     * fix for wrong saved data from OO somehow they save negative values for width and height somethimes
+     * fix for wrong saved data from OO somehow they save negative values for width and height sometimes
      * It will take the values from rect to update the width or height if they are negative
      * <style:presentation-page-layout style:name="AL10T12">
      *   <presentation:placeholder presentation:object="title" svg:x="2.057cm" svg:y="1.743cm" svg:width="23.911cm" svg:height="3.507cm"/>

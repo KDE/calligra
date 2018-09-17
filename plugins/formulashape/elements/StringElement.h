@@ -28,7 +28,7 @@
  */
 class KOFORMULA_EXPORT StringElement : public TokenElement {
 public:
-    /// The standart constructor
+    /// The standard constructor
     explicit StringElement(BasicElement *parent = 0);
 
     /// @return The element's ElementType

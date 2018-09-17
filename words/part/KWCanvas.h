@@ -100,7 +100,7 @@ Q_SIGNALS:
     void documentSize(const QSizeF &size);
 
 protected: // QWidget
-    /// reimplemented method from superclss
+    /// reimplemented method from superclass
     virtual bool event(QEvent *);
     /// reimplemented method from superclass
     virtual void keyPressEvent(QKeyEvent *e);

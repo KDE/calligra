@@ -162,7 +162,7 @@ void ResourceModelTester::internalAppointments()
     QModelIndex gidx = m_model.index( 0, 0, idx );
     QVERIFY( gidx.isValid() );
 
-    // reosurce
+    // resource
     rows = m_model.rowCount( gidx );
     QCOMPARE( rows, 1 );
     QModelIndex ridx = m_model.index( 0, 0, gidx );

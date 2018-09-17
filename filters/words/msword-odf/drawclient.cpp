@@ -162,7 +162,7 @@ WordsGraphicsHandler::DrawClient::getOfficeArtDggContainer(void)
 const MSO::OfficeArtSpContainer*
 WordsGraphicsHandler::DrawClient::getMasterShapeContainer(quint32 spid)
 {
-    //TODO: No supoort for master shapes at the moment.
+    //TODO: No support for master shapes at the moment.
     Q_UNUSED(spid);
     return 0;
 }
