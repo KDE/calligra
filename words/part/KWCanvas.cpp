@@ -104,10 +104,6 @@ void KWCanvas::mouseMoveEvent(QMouseEvent *e)
 void KWCanvas::mousePressEvent(QMouseEvent *e)
 {
     m_toolProxy->mousePressEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
-    if (!e->isAccepted() && e->button() == Qt::RightButton) {
-        m_view->popupContextMenu(e->globalPos(), m_toolProxy->popupActionList());
-    }
-    e->setAccepted(true);
 }
 
 void KWCanvas::mouseReleaseEvent(QMouseEvent *e)
