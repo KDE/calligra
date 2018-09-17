@@ -1746,7 +1746,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
             }
             else if (qualifiedName() == QLatin1String("a:solidFill")) {
 #ifdef PPTXXMLSLIDEREADER_CPP
-                d->textBoxHasContent = true; // We count normal fill and gardient as content
+                d->textBoxHasContent = true; // We count normal fill and gradient as content
 #endif
                 TRY_READ(solidFill)
                 if (m_currentColor != QColor()) {
@@ -6149,7 +6149,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
         }
     }
 
-//! @todo more atributes
+//! @todo more attributes
 
     m_normAutofit =  MSOOXML::Utils::autoFitUnUsed;
 

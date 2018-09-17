@@ -76,7 +76,7 @@ protected:
     KoFilter::ConversionStatus read_notesSz();
     KoFilter::ConversionStatus read_defaultTextStyle();
 
-    // Locates slide layout informaitons for given slide. Caches the result.
+    // Locates slide layout information for given slide. Caches the result.
     PptxSlideProperties* slideLayoutProperties(const QString& slidePath, const QString& slideFile);
 
     KoOdfWriters *m_writers;

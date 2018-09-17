@@ -114,9 +114,9 @@ public:
     AppointmentIntervalList();
     AppointmentIntervalList( const QMultiMap<QDate, AppointmentInterval> &other );
 
-    /// Add @p interval to the list. Handle overlapping with existsing intervals.
+    /// Add @p interval to the list. Handle overlapping with existing intervals.
     void add( const AppointmentInterval &interval );
-    /// Add an interval to the list. Handle overlapping with existsing intervals.
+    /// Add an interval to the list. Handle overlapping with existing intervals.
     void add( const DateTime &st, const DateTime &et, double load );
     /// Load intervals from document
     bool loadXML(KoXmlElement &element, XMLLoaderObject &status);

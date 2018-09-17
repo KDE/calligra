@@ -351,8 +351,8 @@ void Schedule::insertBackwardNode( Node *node )
     }
 }
 
-// used (directly) when appointment wants to attatch itself again
-bool Schedule::attatch( Appointment *appointment )
+// used (directly) when appointment wants to attach itself again
+bool Schedule::attach( Appointment *appointment )
 {
     int mode = appointment->calculationMode();
     //debugPlan<<appointment<<mode;
@@ -395,7 +395,7 @@ bool Schedule::add( Appointment *appointment )
 {
     //debugPlan<<this;
     appointment->setCalculationMode( m_calculationMode );
-    return attatch( appointment );
+    return attach( appointment );
 }
 
 void Schedule::takeAppointment( Appointment *appointment, int mode )
@@ -1167,7 +1167,7 @@ DateTimeInterval ResourceSchedule::available( const DateTimeInterval &interval )
             if ( t < ci.second ) {
                 // check if rest of appointment is free
                 if ( units <= i.load() ) {
-                    ci.first = t; // fully booked, so move forvard to appointment end
+                    ci.first = t; // fully booked, so move forward to appointment end
                 }
                 res = ci;
                 //debugPlan<<"available next 2:"<<interval<<i<<":"<<ci<<res;

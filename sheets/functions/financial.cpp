@@ -1560,7 +1560,7 @@ Value func_fvschedule(valVector args, ValueCalc *calc, FuncExtra *)
 
 
 //
-// Function: FV_annnuity
+// Function: FV_annuity
 //
 Value func_fv_annuity(valVector args, ValueCalc *calc, FuncExtra *)
 {

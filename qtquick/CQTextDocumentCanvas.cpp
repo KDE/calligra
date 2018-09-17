@@ -489,7 +489,7 @@ QObject* CQTextDocumentCanvas::notes() const
 void CQTextDocumentCanvas::addSticker(const QString& imageUrl)
 {
     QSvgRenderer renderer(QUrl(imageUrl).toLocalFile());
-   // Prepare a QImage with desired characteritisc
+   // Prepare a QImage with desired characteristics
     QImage image(200, 200, QImage::Format_ARGB32);
     image.fill(Qt::transparent);
 

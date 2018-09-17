@@ -45,7 +45,7 @@ class KoList;
 /**
  * A container for all properties for the paragraph wide style.
  * Each paragraph in the main text either is based on a parag style, or its not. Where
- * it is based on a paragraph style this is indecated that it has a property 'StyleId'
+ * it is based on a paragraph style this is indicated that it has a property 'StyleId'
  * with an integer as value.  The integer value corresponds to the styleId() output of
  * a specific KoParagraphStyle.
  * @see KoStyleManager

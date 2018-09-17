@@ -340,7 +340,7 @@ template<class P>
 void Properties97::applyClxGrpprlImpl( const Word97::PCD* pcd, U32 fcClx, P* properties, const Style* style )
 {
     if ( !pcd ) {
-        wvlog << "Huh? This can't have happended, right?" << endl;
+        wvlog << "Huh? This can't have happened, right?" << endl;
         return;
     }
 

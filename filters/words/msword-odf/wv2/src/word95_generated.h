@@ -668,13 +668,13 @@ struct TLP {
 
     /**
      * when ==1, apply properties from the selected table look to the header
-     * columns ofthe table
+     * columns of the table
      */
     U16 fHdrCols:1;
 
     /**
      * when ==1, apply properties from the selected table look to the last
-     * column ofthe table
+     * column of the table
      */
     U16 fLastCol:1;
 
@@ -1283,7 +1283,7 @@ bool operator!=(const TAP &lhs, const TAP &rhs);
  */
 /* This structure has been commented out because we can't handle it correctly
  * Please don't try to fix it here in this file, but rather copy this broken
- * structure definition and fix it in some auxilliary file. If you want to
+ * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
 //struct TBD {
@@ -2388,7 +2388,7 @@ bool operator!=(const CHP &lhs, const CHP &rhs);
  */
 /* This structure has been commented out because we can't handle it correctly
  * Please don't try to fix it here in this file, but rather copy this broken
- * structure definition and fix it in some auxilliary file. If you want to
+ * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
 //struct CHPX {
@@ -2453,7 +2453,7 @@ bool operator!=(const CHP &lhs, const CHP &rhs);
  */
 /* This structure has been commented out because we can't handle it correctly
  * Please don't try to fix it here in this file, but rather copy this broken
- * structure definition and fix it in some auxilliary file. If you want to
+ * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
 //struct CHPXFKP {
@@ -3859,7 +3859,7 @@ bool operator!=(const FDOA &lhs, const FDOA &rhs);
  */
 /* This structure has been commented out because we can't handle it correctly
  * Please don't try to fix it here in this file, but rather copy this broken
- * structure definition and fix it in some auxilliary file. If you want to
+ * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
 //struct FFN {
@@ -4857,7 +4857,7 @@ bool operator!=(const FIB &lhs, const FIB &rhs);
  */
 /* This structure has been commented out because we can't handle it correctly
  * Please don't try to fix it here in this file, but rather copy this broken
- * structure definition and fix it in some auxilliary file. If you want to
+ * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
 //struct FLD {
@@ -5478,7 +5478,7 @@ struct PAP : public Shared {
     U8 wr;
 
     /**
-     * when 1, paragraph may not be editted
+     * when 1, paragraph may not be edited
      */
     U8 fLocked;
 
@@ -5537,7 +5537,7 @@ bool operator!=(const PAP &lhs, const PAP &rhs);
  */
 /* This structure has been commented out because we can't handle it correctly
  * Please don't try to fix it here in this file, but rather copy this broken
- * structure definition and fix it in some auxilliary file. If you want to
+ * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
 //struct PAPX {
@@ -5591,7 +5591,7 @@ bool operator!=(const PAP &lhs, const PAP &rhs);
 //    U8 cb;
 
 //    /**
-//     * index to style descriiptor of the style from which the paragraph inherits
+//     * index to style descriptor of the style from which the paragraph inherits
 //     * its paragraph and character properties
 //     */
 //    U8 istd;
@@ -5620,7 +5620,7 @@ bool operator!=(const PAP &lhs, const PAP &rhs);
  */
 /* This structure has been commented out because we can't handle it correctly
  * Please don't try to fix it here in this file, but rather copy this broken
- * structure definition and fix it in some auxilliary file. If you want to
+ * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
 //struct PAPXFKP {
@@ -6101,7 +6101,7 @@ bool operator!=(const PICF &lhs, const PICF &rhs);
  */
 /* This structure has been commented out because we can't handle it correctly
  * Please don't try to fix it here in this file, but rather copy this broken
- * structure definition and fix it in some auxilliary file. If you want to
+ * structure definition and fix it in some auxiliary file. If you want to
  * include that aux. file here, please change the template file.
  */
 //struct PLCF {
@@ -6382,13 +6382,13 @@ struct SEP : public Shared {
 
     /**
      * when fAutoPgn ==1, gives the x position of auto page number on page
-     * in twips (for Mac compatabilty only)
+     * in twips (for Mac compatibility only)
      */
     U16 dxaPgn;
 
     /**
      * when fAutoPgn ==1, gives the y position of auto page number on page
-     * in twips (for Mac compatabilty only)
+     * in twips (for Mac compatibility only)
      */
     U16 dyaPgn;
 

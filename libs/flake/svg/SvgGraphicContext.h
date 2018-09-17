@@ -64,7 +64,7 @@ public:
 
     qreal letterSpacing;    ///< additional spacing between characters of text elements
     qreal wordSpacing;      ///< additional spacing between words of text elements
-    QString baselineShift;  ///< basline shift mode for text elements
+    QString baselineShift;  ///< baseline shift mode for text elements
 
     bool display;           ///< controls display of shape
 };

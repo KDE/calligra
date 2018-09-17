@@ -365,7 +365,7 @@ public:
 
     /**
      * Add a vacation interval to the vacation list. These global vacations
-     * are meant for events like Christmas, Eastern or corporate hollidays.
+     * are meant for events like Christmas, Eastern or corporate holidays.
      * A day that overlaps any of the intervals in the list is considered to
      * not be a working day. Vacation intervals may not overlap.
      * @param n Name of the vacation.
@@ -774,7 +774,7 @@ public:
     /**
      * Generate cross references between all data structures and run a
      * consistency check. This function must be called after the project data
-     * tree has been contructed.
+     * tree has been constructed.
      * @return Only if all tests were successful true is returned.
      */
     bool pass2(bool noDepCheck);

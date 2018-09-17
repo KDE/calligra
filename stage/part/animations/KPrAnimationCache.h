@@ -124,17 +124,17 @@ public:
     //    This information should be kept in the first stack entry
     //    I think this is only needed for visibility as the other take only effect in the presentation step
     // 2. For the animation on 1. step
-    //    copy falues from previous step that are still there.
+    //    copy values from previous step that are still there.
     //    update values with the values from the animations of that current step
     //    when all is finished start with the next step
-    //    do the same for each time the effect is triggert until all effects in this step are finished.
+    //    do the same for each time the effect is triggered until all effects in this step are finished.
     // go on with step 2 until there are no more steps left
 
     // start a new step
     // copy over all what is at the end of the last step
 
     // if we go backward in a presentation we need to setup all steps
-    // if we go forward we can do it while we are at it but maybe it would be better to initilialize also
+    // if we go forward we can do it while we are at it but maybe it would be better to initialize also
     // everything right away.
 
     // initialize step with values that will be there at the end of the step

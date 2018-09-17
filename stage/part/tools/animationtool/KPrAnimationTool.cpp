@@ -241,7 +241,7 @@ void KPrAnimationTool::initMotionPathShapes()
                     KoPathShape *path = motion->getPath(1, pageSize);
                     m_animateMotionMap.insert(path, motion);
                     m_shapesMap.insert(path, anim->shape());
-                    // change stroke apparience
+                    // change stroke appearance
                     KoShapeStroke *stroke = new KoShapeStroke();
                     QVector<qreal> dashes;
                     qreal space = 8;

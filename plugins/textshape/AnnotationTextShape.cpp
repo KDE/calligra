@@ -53,7 +53,7 @@ AnnotationTextShape::~AnnotationTextShape()
 {
 }
 
-void AnnotationTextShape::setAnnotaionTextData(KoTextShapeData *textShapeData)
+void AnnotationTextShape::setAnnotationTextData(KoTextShapeData *textShapeData)
 {
     m_textShapeData = textShapeData;
     m_textShapeData->setTopPadding(HeaderSpace);

@@ -24,7 +24,7 @@
 namespace MusicCore {
     /**
      * This enum contains constants representing the lengths of various notes. The length of a 128th note is
-     * 1*2*3*4*5*7 ticks to allow n-tuples with n from 3..10. The length of the other notes are mutliples of
+     * 1*2*3*4*5*7 ticks to allow n-tuples with n from 3..10. The length of the other notes are multiples of
      * this number. All durations and time-stamps are calculated in these units.
      */
     enum NoteLength {

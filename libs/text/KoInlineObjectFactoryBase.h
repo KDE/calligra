@@ -54,7 +54,7 @@ class KOTEXT_EXPORT KoInlineObjectFactoryBase
 public:
     /// The type of inlineObject this factory creates.
     enum ObjectType {
-        TextVariable,   ///< The factory creates KoVariable inherting objects.
+        TextVariable,   ///< The factory creates KoVariable inheriting objects.
         Other = 0x100  ///< The factory creates objects that should not be shown in any menu
     };
 
@@ -97,7 +97,7 @@ public:
 
 protected:
     /**
-     * Add a template with the properties of a speficic type of object this factory can generate
+     * Add a template with the properties of a specific type of object this factory can generate
      * using the createInlineObject() method.
      * @param params The new template this factory knows to produce
      */

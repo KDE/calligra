@@ -41,7 +41,7 @@ class QVariant;
 /**
  * A container for all properties for the table wide style.
  * Each table in the main text either is based on a table style, or its not. Where
- * it is based on a table style this is indecated that it has a property 'StyleId'
+ * it is based on a table style this is indicated that it has a property 'StyleId'
  * with an integer as value.  The integer value corresponds to the styleId() output of
  * a specific KoTableStyle.
  * @see KoStyleManager

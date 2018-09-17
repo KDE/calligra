@@ -190,8 +190,8 @@ qreal EnhancedPathShape::evaluateReference(const QString &reference)
     // referenced formula
     case '?': {
         QString fname = reference.mid(1);
-        if (m_cacheResults && m_resultChache.contains(fname)) {
-            res = m_resultChache.value(fname);
+        if (m_cacheResults && m_resultCache.contains(fname)) {
+            res = m_resultCache.value(fname);
         } else {
             FormulaStore::const_iterator formulaIt = m_formulae.constFind(fname);
             if (formulaIt != m_formulae.constEnd()) {
@@ -199,7 +199,7 @@ qreal EnhancedPathShape::evaluateReference(const QString &reference)
                 if (formula) {
                     res = formula->evaluate();
                     if (m_cacheResults)
-                        m_resultChache.insert(fname, res);
+                        m_resultCache.insert(fname, res);
                 }
             }
         }
@@ -665,7 +665,7 @@ void EnhancedPathShape::updateTextArea()
 
 void EnhancedPathShape::enableResultCache(bool enable)
 {
-    m_resultChache.clear();
+    m_resultCache.clear();
     m_cacheResults = enable;
 }
 

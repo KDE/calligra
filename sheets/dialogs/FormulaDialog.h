@@ -121,7 +121,7 @@ private Q_SLOTS:
     void slotSelectionChanged();
     /**
      * Called if the button @ref #selectFunction was clicked. That
-     * insertes a new function call to the result.
+     * inserts a new function call to the result.
      */
     void slotSelectButton();
     /**

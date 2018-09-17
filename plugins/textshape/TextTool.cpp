@@ -1216,7 +1216,7 @@ void TextTool::dragMoveEvent(QDragMoveEvent *event, const QPointF &point)
 
             if (m_drag) {
                 // Make a selection that looks like the current cursor selection
-                // so we can move the real carent around freely
+                // so we can move the real caret around freely
                 QVector< QAbstractTextDocumentLayout::Selection > sels = KoTextDocument(m_textShapeData->document()).selections();
 
                 m_preDragSelection.format = QTextCharFormat();
@@ -1224,7 +1224,7 @@ void TextTool::dragMoveEvent(QDragMoveEvent *event, const QPointF &point)
                 m_preDragSelection.format.setForeground(qApp->palette().brush(QPalette::HighlightedText));
                 sels.append(m_preDragSelection);
                 KoTextDocument(m_textShapeData->document()).setSelections(sels);
-            } // else we wantt the selection ot disappaear
+            } // else we want the selection to disappear
         }
         repaintCaret(); // will erase caret
         m_textEditor.data()->setPosition(pointedAt.position);
@@ -2979,7 +2979,7 @@ void TextTool::debugTextDocument()
                 else if (fragment.length() > charStyleShort.length())
                     fragmentText += charStyleShort;
                 else if (fragment.length() >= 2)
-                    fragmentText += QChar(8230); // elipses
+                    fragmentText += QChar(8230); // ellipsis
 
 
 

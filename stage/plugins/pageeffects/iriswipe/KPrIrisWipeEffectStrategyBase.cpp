@@ -54,7 +54,7 @@ int KPrIrisWipeEffectStrategyBase::findMaxScaling( const KPrPageEffect::Data &da
         maxMeasure = height;
     }
 
-    //We now search from the previous point and incressing over and over till the shape fills
+    //We now search from the previous point and increasing over and over till the shape fills
     //the widget given
     int halfWidth = width / 2;
     int halfHeight = height / 2;

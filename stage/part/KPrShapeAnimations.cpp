@@ -574,7 +574,7 @@ bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShap
                  int currentSubStepIndex = animation->step()->indexOfAnimation(animation->subStep());
                  int subStepCount = animation->step()->animationCount();
 
-                 //Create new step to reparent currrent item and all following items.
+                 //Create new step to reparent current item and all following items.
                  newStep = new KPrAnimationStep();
 
                  // Add step after original one
@@ -595,7 +595,7 @@ bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShap
            if (type == KPrShapeAnimation::AfterPrevious) {
                // Get index of current substep
                int currentSubStepIndex = animation->step()->indexOfAnimation(animation->subStep());
-               //Create new substep to reparent currrent item and all following items.
+               //Create new substep to reparent current item and all following items.
                newSubStep = new KPrAnimationSubStep();
 
                // Add substep after original one
@@ -610,10 +610,10 @@ bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShap
                 int currentSubStepIndex = animation->step()->indexOfAnimation(animation->subStep());
                 int subStepCount = animation->step()->animationCount();
 
-                //Create new step to reparent currrent item and all following items.
+                //Create new step to reparent current item and all following items.
                 newStep = new KPrAnimationStep();
 
-                //Create new substep to reparent currrent item and all following items.
+                //Create new substep to reparent current item and all following items.
                 newSubStep = new KPrAnimationSubStep();
 
                 // Add step after original one

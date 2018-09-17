@@ -317,13 +317,11 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
             // shape properties
             const qreal pagePos = page.offsetInDocument();
 
-            shape->setAdditionalAttribute("text:anchor-type", "page");
             shape->setAdditionalAttribute("text:anchor-page-number", QString::number(page.pageNumber()));
             context.addShapeOffset(shape, QTransform(1, 0, 0 , 1, 0, -pagePos));
-            shape->saveOdf(context);
+            m_document->anchorOfShape(shape)->saveOdf(context);
             context.removeShapeOffset(shape);
             shape->removeAdditionalAttribute("fo:min-height");
-            shape->removeAdditionalAttribute("text:anchor-page-number");
             shape->removeAdditionalAttribute("text:anchor-page-number");
             shape->removeAdditionalAttribute("text:anchor-type");
         }

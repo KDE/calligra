@@ -210,7 +210,7 @@ Q_SIGNALS:
     void sectionsMoved();
 
 protected Q_SLOTS:
-    void slotSelectionChanged( const QItemSelection &selected, const QItemSelection &deselelected );
+    void slotSelectionChanged( const QItemSelection &selected, const QItemSelection &deselected );
     void slotRowsInserted( const QModelIndex &parent, int start, int end );
     void slotRowsRemoved( const QModelIndex &parent, int start, int end );
 

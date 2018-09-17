@@ -79,7 +79,7 @@ bool KPrAnimationLoader::loadOdf(const KoXmlElement &element, KoShapeLoadingCont
         }
         else {
             Q_ASSERT( 0 );
-            // accoring to spec there should be onla par elements
+            // according to spec there should be only par elements
         }
     }
 

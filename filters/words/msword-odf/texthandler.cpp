@@ -504,7 +504,7 @@ void WordsTextHandler::bookmarkStart( const wvWare::BookmarkData& data )
         writer = new KoXmlWriter(&buf);
     } else {
         if (!m_fld->m_afterSeparator) {
-            warnMsDoc << "bookmark interfers with field instructions, omitting";
+            warnMsDoc << "bookmark interferes with field instructions, omitting";
             return;
         } else {
             writer = m_fld->m_writer;
@@ -545,7 +545,7 @@ void WordsTextHandler::bookmarkEnd( const wvWare::BookmarkData& data )
         writer = new KoXmlWriter(&buf);
     } else {
         if (!m_fld->m_afterSeparator) {
-            warnMsDoc << "bookmark interfers with field instructions, omitting";
+            warnMsDoc << "bookmark interferes with field instructions, omitting";
             return;
         } else {
             writer = m_fld->m_writer;
@@ -644,7 +644,7 @@ void WordsTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvW
     // incremented by 1.  The values in the vector MUST be in non-decreasing
     // order, [MS-DOC] — v20101219, 514/621
     if ( (tap->itcMac < 0) || (tap->itcMac > 63) ) {
-        throw InvalidFormatException("Table row: INVALID num. of culumns!");
+        throw InvalidFormatException("Table row: INVALID num. of columns!");
     }
     if ( tap->rgdxaCenter.empty() ||
          (tap->rgdxaCenter.size() != (quint16)(tap->itcMac + 1)) )
@@ -1936,7 +1936,7 @@ bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
         }
     }
 
-    // A new style is required becasue text-properties of a
+    // A new style is required because text-properties of a
     // list-leve-style-* might differ.
 
     KoGenStyle listStyle(KoGenStyle::ListAutoStyle);
@@ -2146,7 +2146,7 @@ void WordsTextHandler::defineListStyle(KoGenStyle &style)
                     else {
                         depthFound = true;
                     }
-                    // really should never do anthing so why is it here??
+                    // really should never do anything so why is it here??
                     suffix.clear();
                 } else {
                     // Can't see how level 1 would have a <0> in it...

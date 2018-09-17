@@ -287,7 +287,7 @@ private:
 
     QString m_specialCharacters;
 
-    QColor m_backgroundColor; //Documet background color
+    QColor m_backgroundColor; //Document background color
 
     //! Reads CT_Border complex type (p.392), used by children of pgBorders and children of pBdr
     KoFilter::ConversionStatus readBorderElement(BorderSide borderSide, const char *borderSideName,

@@ -57,7 +57,7 @@ private Q_SLOTS:
     void testBasicLineSpacing2();
     /// Tests advanced linespacing options provided in our style.
     void testAdvancedLineSpacing();
-    /// test data integrety for multiple shapes.
+    /// test data integrity for multiple shapes.
     void testShapePosition();
     void testShapePosition2();
 

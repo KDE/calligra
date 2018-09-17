@@ -606,7 +606,7 @@ QList<QPointer<QWidget> > ArtisticTextTool::createOptionWidgets()
     ArtisticTextShapeConfigWidget * configWidget = new ArtisticTextShapeConfigWidget(this);
     configWidget->setObjectName("ArtisticTextConfigWidget");
     configWidget->setWindowTitle(i18n("Text Properties"));
-    connect(configWidget, SIGNAL(fontFamilyChanged(QFont)), this, SLOT(setFontFamiliy(QFont)));
+    connect(configWidget, SIGNAL(fontFamilyChanged(QFont)), this, SLOT(setFontFamily(QFont)));
     connect(configWidget, SIGNAL(fontSizeChanged(int)), this, SLOT(setFontSize(int)));
     connect(this, SIGNAL(shapeSelected()), configWidget, SLOT(updateWidget()));
     connect(canvas()->shapeManager(), SIGNAL(selectionContentChanged()),
@@ -831,7 +831,7 @@ void ArtisticTextTool::changeFontProperty(FontProperty property, const QVariant 
         case ItalicProperty:
             font.setItalic(value.toBool());
             break;
-        case FamiliyProperty:
+        case FamilyProperty:
             font.setFamily(value.toString());
             break;
         case SizeProperty:
@@ -871,9 +871,9 @@ void ArtisticTextTool::anchorChanged(QAction* action)
     }
 }
 
-void ArtisticTextTool::setFontFamiliy(const QFont &font)
+void ArtisticTextTool::setFontFamily(const QFont &font)
 {
-    changeFontProperty(FamiliyProperty, QVariant(font.family()));
+    changeFontProperty(FamilyProperty, QVariant(font.family()));
 }
 
 void ArtisticTextTool::setFontSize(int size)

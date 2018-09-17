@@ -188,7 +188,7 @@ public:
      * This can be done with a method like:
      * <code>
        painter.fillRect(converter.normalToView(QRectF(QPointF(0.0,0.0), size())), background());</code>
-     * Or equavalent for non-square objects.
+     * Or equivalent for non-square objects.
      * Do note that a shape's top-left is always at coordinate 0,0. Even if the shape itself is rotated
      * or translated.
      * @param painter used for painting the shape
@@ -712,7 +712,7 @@ public:
    /**
     * Returns if during compareShapeZIndex() how this shape portrays the values
     * of its children. The default behaviour is to let this shape's z values take
-    * the place of its childrens values, so you get a parent/child relationship.
+    * the place of its children values, so you get a parent/child relationship.
     * The children are naturally still ordered relatively to their z values
     *
     * But for special cases (like Calligra's TextShape) it can be overloaded to return
@@ -982,7 +982,7 @@ public:
      * until it is fully done processing.
      * Warning! This method can be blocking for a long time
      * @param asynchronous If set to true the processing will can take place in a different thread and the
-     *                     function will not block until the shape is finised.
+     *                     function will not block until the shape is finished.
      *                     In case of printing Flake will call this method from a non-main thread and only
      *                     start printing it when the in case of printing method returned.
      *                     If set to false the processing needs to be done synchronously and will

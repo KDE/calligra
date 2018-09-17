@@ -689,7 +689,7 @@ void Filterkpr2odf::appendText(KoXmlWriter* content, const KoXmlElement& objectE
 
 void Filterkpr2odf::appendPie(KoXmlWriter* content, const KoXmlElement& objectElement)
 {
-    //NOTE: we cannot use set2dGeometry becuse we have to convert the
+    //NOTE: we cannot use set2dGeometry because we have to convert the
     //given size and origen into the real ones before saving them
 
     KoXmlElement size = objectElement.namedItem("SIZE").toElement();
@@ -774,7 +774,7 @@ void Filterkpr2odf::setEndPoints(QPointF points[], const QSizeF& size, int start
         double x = 0;
         double y = 0;
 
-        // be carefull
+        // be careful
         if (angles[i] == 90) {
             y = radius2;
         } else if (angles[i] == 270) {
@@ -810,7 +810,7 @@ void Filterkpr2odf::getRealSizeAndOrig(QSizeF &size, QPointF &realOrig, int star
     // the rotation angle
     double angInRad = angle * M_PI / 180;
 
-    // 1. calulate position of end points
+    // 1. calculate position of end points
     QPointF points[2];
     setEndPoints(points, size, startAngle, endAngle);
 
@@ -833,7 +833,7 @@ void Filterkpr2odf::getRealSizeAndOrig(QSizeF &size, QPointF &realOrig, int star
     QPointF firstPoint(points[0]);
     QPointF secondPoint(points[1]);
 
-    // 2. calulate maximal points
+    // 2. calculate maximal points
     QPointF maxPoints[4];
     if (angle == 0) {
         maxPoints[0].setX(0);

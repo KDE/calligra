@@ -32,7 +32,7 @@ namespace Sheets
 
 /**
  * \ingroup Commands
- * \brief Applies a color to an exising border.
+ * \brief Applies a color to an existing border.
  */
 class BorderColorCommand : public AbstractRegionCommand
 {

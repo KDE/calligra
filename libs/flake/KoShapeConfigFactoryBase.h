@@ -43,7 +43,7 @@ public:
     virtual ~KoShapeConfigFactoryBase();
 
     /**
-     * create a new config widget, intialized with the param shape
+     * create a new config widget, initialized with the param shape
      * @param shape the shape that will be configured in the config widget.
      * @see KoShapeConfigWidgetBase::open()
      */

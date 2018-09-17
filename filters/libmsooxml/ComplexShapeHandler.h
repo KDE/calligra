@@ -49,7 +49,7 @@ public:
     // Handles gdLst items and creates equations out of them
     QString handle_gdLst(QXmlStreamReader* reader);
 
-    // Handles rect item and creates cooridantes for text-areas out of them
+    // Handles rect item and creates coordinates for text-areas out of them
     QString handle_rect(QXmlStreamReader* reader);
 
     // Handles pathLst and creates a value which should be used for enhanced-path attribute
@@ -80,7 +80,7 @@ private:
 
     QString handle_moveTo(QXmlStreamReader* reader);
 
-    // Storing the latest position where we are, this is needed in order to implment arcTo
+    // Storing the latest position where we are, this is needed in order to implement arcTo
     QString oldX, oldY;
 
     int pathWidth, pathHeight;

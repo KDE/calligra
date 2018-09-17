@@ -141,7 +141,7 @@ Value func_cary(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: DECSEX
 Value func_decsex(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    // original function was very compicated, but I see no reason for that,
+    // original function was very complicated, but I see no reason for that,
     // when it can be done as simply as this ...
     // maybe it was due to all the infrastructure not being ready back then
     return calc->conv()->asTime(calc->div(args[0], 24));

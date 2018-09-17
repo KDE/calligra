@@ -58,7 +58,7 @@ private:
     void  setViewportExt(int width, int height);
 
     // Clipping
-    // the 'CoordinateMode' is ommitted : always CoordPainter in wmf
+    // the 'CoordinateMode' is omitted : always CoordPainter in wmf
     // setClipRegion() is often used with save() and restore() => implement all or none
     void  setClipRegion(Libwmf::WmfDeviceContext &context, const QRegion &rec);
     QRegion clipRegion();

@@ -127,9 +127,9 @@ public:
     // chart:vertical attribute: see ODF v1.2,19.63
     bool  vertical;
 
-    // 2. Pie charts
-    // TODO: Load+Save
-    qreal pieAngleOffset;       // in degrees
+    // 2. Polar charts (pie/ring)
+    qreal angleOffset;       // in degrees
+    qreal holeSize;
 
     // ----------------------------------------------------------------
     // The embedded KD Chart
@@ -168,7 +168,8 @@ PlotArea::Private::Private(PlotArea *q, ChartShape *parent)
     , vertical(false)
     // OpenOffice.org's default. It means the first pie slice starts at the
     // very top (and then going counter-clockwise).
-    , pieAngleOffset(90.0)
+    , angleOffset(90.0)
+    , holeSize(50.0) // KCharts approx default
     // KD Chart stuff
     , kdChart(new KChart::Chart())
     , kdCartesianPlanePrimary(new KChart::CartesianCoordinatePlane(kdChart))
@@ -439,9 +440,19 @@ Ko3dScene *PlotArea::threeDScene() const
     return d->threeDScene;
 }
 
-qreal PlotArea::pieAngleOffset() const
+qreal PlotArea::angleOffset() const
 {
-    return d->pieAngleOffset;
+    return d->angleOffset;
+}
+
+qreal PlotArea::holeSize() const
+{
+    return d->holeSize;
+}
+
+void PlotArea::setHoleSize(qreal value)
+{
+    d->holeSize = value;
 }
 
 // FIXME: this should add the axxis as a child (set axis->parent())
@@ -703,11 +714,21 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
             autoSize = true;
         }
 
+        // ring and pie
         if (styleStack.hasProperty(KoXmlNS::chart, "angle-offset")) {
             bool ok;
-            const int angleOffset = styleStack.property(KoXmlNS::chart, "angle-offset").toInt(&ok);
-            if (ok)
-                setPieAngleOffset(angleOffset);
+            const qreal angleOffset = styleStack.property(KoXmlNS::chart, "angle-offset").toDouble(&ok);
+            if (ok) {
+                setAngleOffset(angleOffset);
+            }
+        }
+        // ring
+        if (styleStack.hasProperty(KoXmlNS::chart, "hole-size")) {
+            bool ok;
+            const qreal value = styleStack.property(KoXmlNS::chart, "hole-size").toDouble(&ok);
+            if (ok) {
+                setHoleSize(value);
+            }
         }
 
         // Check for 3D.
@@ -1059,11 +1080,12 @@ void PlotArea::saveOdfSubType(KoXmlWriter& xmlWriter,
         break;
 
     case CircleChartType:
-        // FIXME
+        plotAreaStyle.addProperty("chart:angle-offset", QString::number(d->angleOffset));
         break;
 
     case RingChartType:
-        // FIXME
+        plotAreaStyle.addProperty("chart:angle-offset", QString::number(d->angleOffset));
+        plotAreaStyle.addProperty("chart:hole-size", QString::number(d->holeSize));
         break;
 
     case ScatterChartType:
@@ -1112,11 +1134,11 @@ void PlotArea::saveOdfSubType(KoXmlWriter& xmlWriter,
     }
 }
 
-void PlotArea::setPieAngleOffset(qreal angle)
+void PlotArea::setAngleOffset(qreal angle)
 {
-    d->pieAngleOffset = angle;
+    d->angleOffset = angle;
 
-    emit pieAngleOffsetChanged(angle);
+    emit angleOffsetChanged(angle);
 }
 
 ChartShape *PlotArea::parent() const

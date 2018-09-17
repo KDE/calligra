@@ -105,7 +105,7 @@ public: // KoCanvasBase interface methods.
     virtual void setCacheEnabled(bool enabled, int cacheSize = 50, qreal maxZoom = 2.0);
 
     /**
-     * return whether annotatins are shown in the canvas.
+     * return whether annotations are shown in the canvas.
      */
     bool showAnnotations() const;
     void setShowAnnotations(bool doShow);

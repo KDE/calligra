@@ -383,7 +383,7 @@ void TestKoTextEditor::checkSectionModelLevel(TestDocument *doc)
         curBlock = curBlock.next();
     }
 
-    // Now lets compare builded tree with KoSectionModel
+    // Now lets compare built tree with KoSectionModel
     KoSectionModel *model = doc->sectionModel();
     QCOMPARE(model->rowCount(), rootSections.size());
     for (int i = 0; i < rootSections.size(); i++) {

@@ -943,7 +943,7 @@ QString Odf::saveStyle(const Style *style, KoGenStyle& xmlstyle, KoGenStyles& ma
         }
     }
 
-    // Calligra::Sheets::Style is definitly an OASIS auto style,
+    // Calligra::Sheets::Style is definitely an OASIS auto style,
     // but don't overwrite it, if it already exists
     if (xmlstyle.isEmpty())
         xmlstyle = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");

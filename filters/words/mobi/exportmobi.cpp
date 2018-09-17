@@ -119,7 +119,7 @@ KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QBy
         }
     }
 
-    // Start copression data.
+    // Start compression data.
     PalmDocCompression palmCompression;
     QByteArray compressContent;
     QList<qint32> recordOffset;
@@ -133,7 +133,7 @@ KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QBy
 
 
     // After each text block i should insert a zero byte, i use record offset to
-    // set them after each inser record offset move one byte to forward.
+    // set them after each insert record offset move one byte to forward.
     int move = 0;
     for (int i = 1; i < recordOffset.size(); i++) {
         compressContent.insert((recordOffset.at(i) + qint32(move)), '\0');

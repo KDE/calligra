@@ -538,7 +538,7 @@ void ConditionalDialog::slotOk()
         newList.append(newCondition);
 
     debugSheets << "Setting conditional list";
-    CondtionCommand* manipulator = new CondtionCommand();
+    ConditionCommand* manipulator = new ConditionCommand();
     manipulator->setSheet(m_selection->activeSheet());
     manipulator->setConditionList(newList);
     manipulator->add(*m_selection);

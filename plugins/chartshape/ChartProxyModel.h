@@ -162,13 +162,13 @@ public:
     /**
      * Insert @p count number of rows at position @p row.
      * 
-     * Effectivly adds DataSet(s) to the model
+     * Effectively adds DataSet(s) to the model
      */
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     /**
      * Remove @p count number of rows at position @p row.
      * 
-     * Effectivly removes DataSet(s) from the model
+     * Effectively removes DataSet(s) from the model
      */
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
@@ -205,7 +205,7 @@ public:
     bool isLoading() const;
 
     /**
-     * Returns true if changes to datasets or data does not result in auto calculating chages
+     * Returns true if changes to datasets or data does not result in auto calculating changes
      */
     bool manualControl();
 

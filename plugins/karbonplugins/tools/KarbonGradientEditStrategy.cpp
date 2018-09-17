@@ -493,7 +493,7 @@ QList<GradientStrategy::StopHandle> GradientStrategy::stopHandles(const KoViewCo
         ortho *= stopDistance / orthoLength;
 
     // make handles have always the same distance to the gradient line
-    // independent of acual zooming
+    // independent of actual zooming
     ortho = converter.viewToDocument(ortho);
 
     QList<StopHandle> handles;

@@ -1349,7 +1349,7 @@ void OdtHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElement, S
     // Image align
     attribute = propertiesElement.attribute("horizontal-pos");
     if (!attribute.isEmpty()) {
-        //debugSharedExport << "horisontal pos attribute" << attribute;
+        //debugSharedExport << "horizontal pos attribute" << attribute;
         if (attribute == "right" || attribute == "from-left") {
             styleInfo->attributes.insert("float", "right");
             styleInfo->attributes.insert("margin", "5px 0 5px 15px");

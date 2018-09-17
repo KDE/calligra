@@ -607,7 +607,7 @@ QString ValueFormatter::dateTimeFormat(const QDateTime &_dt, Format::Type fmtTyp
 
     Q_UNUSED(fmtType);
     QString result;
-    // pretty lame, just asssuming something for the format
+    // pretty lame, just assuming something for the format
     // TODO: locale-aware formatting
     result += dateFormat(_dt.date(), Format::ShortDate) + ' ' + timeFormat(_dt, Format::Time1);
     return result;

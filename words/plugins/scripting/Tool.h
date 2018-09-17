@@ -89,7 +89,7 @@ public:
 
 public Q_SLOTS:
 
-    /** Return true if there is actualy a selection. */
+    /** Return true if there is actually a selection. */
     bool hasSelection() const {
         return toolSelection() != 0;
     }

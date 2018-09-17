@@ -635,7 +635,7 @@ DependencyNodeItem::DependencyNodeItem( Node *node, DependencyNodeItem *parent )
 
     setFlags( QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsFocusable );
 
-    // do not attach this item to the scene as it gives continoues paint events when a node item is selected
+    // do not attach this item to the scene as it gives continuous paint events when a node item is selected
     m_symbol = new DependencyNodeSymbolItem();
     m_symbol->setZValue( zValue() + 10.0 );
     setSymbol();
@@ -1190,7 +1190,7 @@ void DependencyScene::moveItem( DependencyNodeItem *item, const QList<Node*> &ls
         newParent = 0;
     } else debugPlanDepEditor<<newParent->name()<<newParent->level();
     if ( idx != ndx || oldParent != newParent ) {
-        // If I have childeren, these must be moved too.
+        // If I have children, these must be moved too.
         QList<DependencyNodeItem*> items = removeChildItems( item );
 
         m_allItems.removeAt( idx );

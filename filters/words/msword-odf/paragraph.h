@@ -44,7 +44,7 @@ public:
      * Write the paragraph content into the @writer.
      *
      * While applying the paragraph style, store the tab leader (leader-text)
-     * chacter into @tabLeader if requested by the calling handler.
+     * character into @tabLeader if requested by the calling handler.
      *
      * @return the name of the last KoGenStyle inserted into the styles
      * collection.
@@ -152,13 +152,13 @@ public:
                                          const QString& bgColor = QString());
 
     /**
-     * Add a color item to the backgroud-color stack.
+     * Add a color item to the background-color stack.
      * @param color in the format "#RRGGBB"
      */
     static void pushBgColor(const QString& val) { m_bgColors.push(val); }
 
     /**
-     * Remove the last item from the backgroud-color stack.
+     * Remove the last item from the background-color stack.
      */
     static void popBgColor(void);
 
@@ -220,7 +220,7 @@ private:
     bool m_containsPageNumberField;
     bool m_combinedCharacters;            // is true when the next characters are combined
 
-    //A stack for backgroud-colors, which represets a background color context
+    //A stack for background-colors, which represents a background color context
     //for automatic colors.
     static QStack<QString> m_bgColors;
 

@@ -119,7 +119,7 @@ Q_SIGNALS:
 
 private:
     /**
-     * The rect of an items, essentialy used to have the size of the full icon
+     * The rect of an items, essentially used to have the size of the full icon
      *
      * @return the rect of the item
      */

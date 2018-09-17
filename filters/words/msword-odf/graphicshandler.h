@@ -147,7 +147,7 @@ public:
     virtual QString handleInlineObject(const wvWare::PictureData& data, const bool isBulletPicture = false);
 
     /**
-     * Get the DrawStyle to access document backgroud properties and defaults.
+     * Get the DrawStyle to access document background properties and defaults.
      *
      * DrawStyle ds(m_OfficeArtDggContainer, 0, m_pOfficeArtBodyDgContainer.shape)
      * @return ds

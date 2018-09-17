@@ -38,7 +38,7 @@ public Q_SLOTS:
     void updateWidget();
 
 Q_SIGNALS:
-    /// Triggered whenever the font familiy has changed
+    /// Triggered whenever the font family has changed
     void fontFamilyChanged(const QFont&);
 
     /// Triggered whenever the font size has changed

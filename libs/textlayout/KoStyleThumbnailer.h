@@ -47,7 +47,7 @@ public:
                                   ///     i.e the layout is done at the center of the area
         UseStyleNameText = 2, ///< Use the style name as the text that is layouted inside the thumbnail
         ScaleThumbnailFont = 4 ///< If set, then when the layout size is more than the size available
-                               ///  the font size is scaled down to fit the space availiable
+                               ///  the font size is scaled down to fit the space available
     };
     Q_DECLARE_FLAGS(KoStyleThumbnailerFlags, KoStyleThumbnailerFlag)
 
@@ -63,7 +63,7 @@ public:
 
     /**
      * @returns a thumbnail representing the @param style, constrained into the @param size.
-     * If there is no specified @param size, the thunbnail is the size specified with @fn setThumbnailSize or 250*48 pt if no size was provided.
+     * If there is no specified @param size, the thumbnail is the size specified with @fn setThumbnailSize or 250*48 pt if no size was provided.
      * If the given @param size is too small, the font size will be decreased, so the thumbnail fits.
      * The real font size is indicated in this case.
      * If @param recreateThumbnail is true, do not return the cached thumbnail if it exist, but recreate a new one.
@@ -76,7 +76,7 @@ public:
 
     /**
      * @returns a thumbnail representing the @param characterStyle applied on the given @param paragraphStyle, constrained into the @param size.
-     * If there is no specified @param size, the thunbnail is the size specified with @fn setThumbnailSize or 250*48 pt if no size was provided.
+     * If there is no specified @param size, the thumbnail is the size specified with @fn setThumbnailSize or 250*48 pt if no size was provided.
      * If the given @param size is too small, the font size will be decreased, so the thumbnail fits.
      * The real font size is indicated in this case.
      * If @param recreateThumbnail is true, do not return the cached thumbnail if it exist, but recreate a new one.

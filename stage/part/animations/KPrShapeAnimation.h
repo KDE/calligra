@@ -111,7 +111,7 @@ public:
 
     /// The following data are just for quick access
     /// to different params of the animation
-    /// Use set methods to mantain them in sync with the
+    /// Use set methods to maintain them in sync with the
     /// real animation data
 
     /**

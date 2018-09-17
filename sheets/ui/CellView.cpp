@@ -2205,7 +2205,7 @@ void CellView::Private::calculateRichTextSize(const QFont& font, const QFontMetr
     textWidth = textSize.width();
     textLinesCount = richText->lineCount();
     // TODO: linescount is not correct, and distributed vertical alignment doesn't
-    // work anyway for richtext at the momemnt
+    // work anyway for richtext at the moment
     fittingHeight = textHeight <= (height - 2 * s_borderSpace
                             - 0.5 * style.topBorderPen().widthF()
                             - 0.5 * style.bottomBorderPen().widthF());

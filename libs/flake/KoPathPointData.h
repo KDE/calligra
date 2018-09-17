@@ -29,7 +29,7 @@
 class KoPathPointData
 {
 public:
-    /// contructor
+    /// constructor
     KoPathPointData(KoPathShape * path, const KoPathPointIndex & pointIndex)
             : pathShape(path)
             , pointIndex(pointIndex) {}

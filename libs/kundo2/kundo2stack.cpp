@@ -224,7 +224,7 @@ bool KUndo2Command::mergeWith(const KUndo2Command *command)
     Applies a change to the document. This function must be implemented in
     the derived class. Calling KUndo2QStack::push(),
     KUndo2QStack::undo() or KUndo2QStack::redo() from this function leads to
-    undefined beahavior.
+    undefined behavior.
 
     The default implementation calls redo() on all child commands.
 
@@ -242,7 +242,7 @@ void KUndo2Command::redo()
     the document should be the same as before redo() was called. This function must
     be implemented in the derived class. Calling KUndo2QStack::push(),
     KUndo2QStack::undo() or KUndo2QStack::redo() from this function leads to
-    undefined beahavior.
+    undefined behavior.
 
     The default implementation calls undo() on all child commands in reverse order.
 

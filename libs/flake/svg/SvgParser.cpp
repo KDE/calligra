@@ -1055,7 +1055,7 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
                 continue;
             }
             if (b.hasAttribute("systemLanguage")) {
-                // not implemeted yet
+                // not implemented yet
             }
         }
 

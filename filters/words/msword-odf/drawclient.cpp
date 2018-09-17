@@ -30,7 +30,7 @@
 using namespace MSO;
 using namespace wvWare;
 
-//FIXME: duplicit in PptToOdp.cpp and graphicshandler.cpp
+//FIXME: duplicity in PptToOdp.cpp and graphicshandler.cpp
 namespace
 {
 QString format(double v) {

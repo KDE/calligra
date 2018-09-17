@@ -1288,7 +1288,7 @@ DateTime Resource::availableBefore(const DateTime &time, const DateTime &limit, 
     DateTime availableUntil = m_availableUntil.isValid() ? m_availableUntil : ( m_project ? m_project->constraintEndTime() : DateTime() );
     if ( ! availableUntil.isValid() ) {
 #ifndef PLAN_NLOGDEBUG
-        if ( sch ) sch->logDebug( "availabelUntil is invalid" );
+        if ( sch ) sch->logDebug( "availableUntil is invalid" );
 #endif
         t = time;
     } else {

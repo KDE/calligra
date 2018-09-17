@@ -103,7 +103,7 @@ void PerformanceTester::init()
     r2 = new Resource();
     r2->setName( "Material" );
     r2->setType( Resource::Type_Material );
-    r2->setCalendar( c ); // limit availablity to working hours
+    r2->setCalendar( c ); // limit availability to working hours
     r2->setNormalRate( 0.0 ); // NOTE
     p1->addResource( m, r2 );
 
@@ -142,7 +142,7 @@ void PerformanceTester::bcwsPrDayTask()
     d = d.addDays( 1 );
     ecm = t1->bcwsPrDay();
     qDebug()<<ecm;
-    QCOMPARE( ecm.effortOnDate( d ), Duration( 0, 16, 0 ) ); // work+materal resource
+    QCOMPARE( ecm.effortOnDate( d ), Duration( 0, 16, 0 ) ); // work+material resource
     QCOMPARE( ecm.costOnDate( d ), 8.0 ); //material resource cost == 0
     
     d = d.addDays( 1 );

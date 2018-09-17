@@ -154,7 +154,7 @@ namespace wvWare
         /**
          * In order to help users to detect when a new list starts we also
          * provide access to the (internal) unique ID of a list.
-         * @return 0 if it hasn't been initailized.
+         * @return 0 if it hasn't been initialized.
          */
         S32 lsid() const { return m_lsid; }
 

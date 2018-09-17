@@ -312,7 +312,7 @@ QString ComplexShapeHandler::handle_arcTo(QXmlStreamReader* reader)
     }
 
     QString wR = attrs.value("wR").toString(); // vertical radius
-    QString hR = attrs.value("hR").toString(); // horiziontal radius
+    QString hR = attrs.value("hR").toString(); // horizontal radius
     QString stAng = attrs.value("stAng").toString(); // start angle
     QString swAng = attrs.value("swAng").toString(); // swing angle
 

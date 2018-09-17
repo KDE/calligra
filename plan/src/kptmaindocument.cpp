@@ -1321,7 +1321,7 @@ bool MainDocument::mergeResources(Project &project)
             break;
         }
     }
-    // update values of already existsing objects
+    // update values of already existing objects
     QStringList l1;
     for (ResourceGroup *g : project.resourceGroups()) {
         l1 << g->id();

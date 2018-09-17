@@ -299,11 +299,11 @@ public:
     QMap<DateTime, QString> log() const;
     QStringList log();
 
-    /// Return a list of resources fetched from the appointements or requests
+    /// Return a list of resources fetched from the appointments or requests
     /// merged with resources added to completion
     QList<Resource*> fetchResources();
 
-    /// Return a list of resources fetched from the appointements or requests
+    /// Return a list of resources fetched from the appointments or requests
     /// merged with resources added to completion
     QList<Resource*> fetchResources( long id );
 

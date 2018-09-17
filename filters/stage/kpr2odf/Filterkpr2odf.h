@@ -78,7 +78,7 @@ private:
     void exportAnimation(const KoXmlElement& objectElement, int indentLevel);
 
     //The next functions are used to correctly export arcs, pies and chords
-    //And they were obteined from the 1.6 sources
+    //And they were obtained from the 1.6 sources
     void getRealSizeAndOrig(QSizeF& realSize, QPointF& realOrig, int startAngle, int endAngle, int angle, int pieType);
     void setEndPoints(QPointF points[], const QSizeF& size, int startAngle, int endAngle);
     void setMinMax(double &min_x, double &min_y, double &max_x, double &max_y, QPointF point);

@@ -353,7 +353,7 @@ void ChartLayout::calculateLayout()
         }
     }
     KoShape *sxtitle = m_shapes.value(SecondaryXAxisTitleType);
-    debugChartLayout<<sxtitle<<(sxtitle && sxtitle->isVisible()<<SecondaryXAxisTitleType);
+    debugChartLayout<<sxtitle<<(sxtitle && sxtitle->isVisible())<<SecondaryXAxisTitleType;
     if (sxtitle && sxtitle->isVisible()) {
         if (plotarea->chartType() == BarChartType && plotarea->isVertical()) {
             debugChartLayout<<"secondary-x-axis is vertical: position="<<axisPosition(plotarea, SecondaryXAxisTitleType);

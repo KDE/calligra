@@ -31,8 +31,9 @@ using namespace KoChart;
 using namespace KChart;
 
 
-DatasetCommand::DatasetCommand(DataSet* dataSet, ChartShape* chart, int section)
-    : m_dataSet(dataSet)
+DatasetCommand::DatasetCommand(DataSet* dataSet, ChartShape* chart, int section, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_dataSet(dataSet)
     , m_chart(chart)
     , m_section(section)
 {
@@ -92,7 +93,7 @@ void DatasetCommand::redo()
         m_newAxis->attachDataSet(m_dataSet);
     }
 
-    m_chart->update();
+    m_chart->updateAll();
 }
 
 void DatasetCommand::undo()
@@ -123,7 +124,7 @@ void DatasetCommand::undo()
         m_oldAxis->attachDataSet(m_dataSet);
     }
 
-    m_chart->update();
+    m_chart->updateAll();
 }
 
 void DatasetCommand::setDataSetChartType(ChartType type, ChartSubtype subtype)

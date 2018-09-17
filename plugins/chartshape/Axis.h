@@ -213,7 +213,8 @@ public:
 public Q_SLOTS:
     void setGapBetweenBars(int percent);
     void setGapBetweenSets(int percent);
-    void setPieAngleOffset(qreal angle);
+    void setAngleOffset(qreal angle);
+    void setHoleSize(qreal value);
 
     void updateKChartStockAttributes();
 

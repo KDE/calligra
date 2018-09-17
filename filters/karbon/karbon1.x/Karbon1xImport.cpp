@@ -1002,7 +1002,7 @@ void KarbonImport::loadStar(const KoXmlElement &element)
             int j = (edges % 2 == 0) ? (edges - 2) / 2 : (edges - 1) / 2;
             //innerRadius = getOptimalInnerRadius( outerRadius, edges, innerAngle );
             int jumpto = 0;
-            bool discontinueous = (edges % 4 == 2);
+            bool discontinuous = (edges % 4 == 2);
 
             qreal outerRoundness = (KarbonGlobal::twopi * outerRadius * roundness) / edges;
             qreal nextOuterAngle;
@@ -1047,7 +1047,7 @@ void KarbonImport::loadStar(const KoXmlElement &element)
                     data += QString("C%1,%2 %3,%4 %5,%6 ").arg(p2.x()).arg(p2.y())
                             .arg(p3.x()).arg(p3.y()).arg(p.x()).arg(p.y());
                 }
-                if (discontinueous && i == (edges / 2)) {
+                if (discontinuous && i == (edges / 2)) {
                     angle += KarbonGlobal::pi;
                     nextOuterAngle = angle + KarbonGlobal::pi_2 + KarbonGlobal::twopi / edges * jumpto;
                     p.setX(cx + outerRadius * cos(nextOuterAngle));

@@ -296,7 +296,7 @@ public:
      * @param p2 the first control point at t
      * @param p3 the new point at t
      * @param p4 the second control point at t
-     * @param p3 the new control point of the segment end (for cubic curbes only)
+     * @param p3 the new control point of the segment end (for cubic curves only)
      */
     void deCasteljau(qreal t, QPointF *p1, QPointF *p2, QPointF *p3, QPointF *p4, QPointF *p5) const;
 
@@ -394,7 +394,7 @@ QList<qreal> KoPathSegment::Private::extrema() const
     QList<qreal> params;
 
     /*
-     * The basic idea for calculating the extrama for bezier segments
+     * The basic idea for calculating the extrema for bezier segments
      * was found in comp.graphics.algorithms:
      *
      * Both the x coordinate and the y coordinate are polynomial. Newton told
@@ -419,13 +419,13 @@ QList<qreal> KoPathSegment::Private::extrema() const
          * r(t) = (P1 - P0) * t + P0
          */
 
-        // calcualting the differences between successive control points
+        // calculating the differences between successive control points
         QPointF cp = first->activeControlPoint2() ?
                      first->controlPoint2() : second->controlPoint1();
         QPointF x0 = cp - first->point();
         QPointF x1 = second->point() - cp;
 
-        // calculating the coefficents
+        // calculating the coefficients
         QPointF a = x1 - x0;
         QPointF c = x0;
 
@@ -824,7 +824,7 @@ QVector<QPointF> KoPathSegment::intersections(const KoPathSegment &segment) cons
      which forms another explicit bezier curve
      D(t) = (t,d(t)) = sum_i D_i B_{n,i}(t)
      now values of t for which P(t) lies outside of our fat line L
-     corrsponds to values of t for which D(t) lies above d = dmax or
+     corresponds to values of t for which D(t) lies above d = dmax or
      below d = dmin
      we can determine parameter ranges of t for which P(t) is guaranteed
      to lie outside of L by identifying ranges of t which the convex hull

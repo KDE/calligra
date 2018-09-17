@@ -55,7 +55,7 @@ const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
             if (bcType.isNull() || bcType.attribute("value") == "0") {
                 //background is a plain color
                 QString color = page.namedItem("BACKCOLOR1").toElement().attribute("color");
-                //if the backcolor is not present it's implicitally white
+                //if the backcolor is not present it's implicitly white
                 //unless a draw:fill is found, in which case even though a
                 //draw:fill-color is not present it's black in KPresenter2.0
                 style.addProperty("draw:fill", "solid");
@@ -238,7 +238,7 @@ const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
         case 40: //PEF_MELTING
             effectName = "melt";
             break;
-        }//switch efect
+        }//switch effect
         style.addProperty("presentation:transition-style", effectName);
 
         //Add the sound
@@ -260,7 +260,7 @@ const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
             QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
             style.addChildElement("presentationSound", elementContents);
         }
-    }//if pageEfect is null
+    }//if pageEffect is null
 
     return m_styles.insert(style, "dp");
 }
@@ -791,7 +791,7 @@ const QString Filterkpr2odf::createHatchStyle(int brushStyle, const QString &fil
 {
     KoGenStyle style(KoGenStyle::HatchStyle);
 
-    //"Contaimnet" strings
+    //"Containment" strings
     QString displayName;
     QString styleString;
     QString distance;

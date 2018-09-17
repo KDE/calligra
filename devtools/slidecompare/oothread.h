@@ -64,7 +64,7 @@ public:
     QString toOdp(const QString& path);
     /**
      * Read file at path and convert it to png files in a new temporary
-     * directory. The path of the direcotry where the files will occur is
+     * directory. The path of the directory where the files will occur is
      * returned.
      **/
     QString toPng(const QString& path, int pngwidth);

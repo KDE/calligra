@@ -42,7 +42,7 @@ class KPrAnimationData;
  * for running the same animation e.g. on different views or at a 
  * different time.
  * The state of the animation is kept in the animationData and is 
- * passed to the ainmation when it is run e.g. on a special view.
+ * passed to the animation when it is run e.g. on a special view.
  */
 class STAGE_TEST_EXPORT KPrShapeAnimationOld
 {
@@ -72,7 +72,7 @@ public:
     /**
      * @brief Animate the shape
      *
-     * This is done by maniplating the painter used for painting the shape.
+     * This is done by manipulating the painter used for painting the shape.
      *
      * @param painter The painter used for painting the shape
      * @param converter The converter to convert between internal and view coordinates
@@ -140,7 +140,7 @@ protected:
      */
     KPrShapeAnimationOld( KoShape * shape, int step, Type type );
 
-    // the shape for which is aminated
+    // the shape for which is animated
     KoShape * m_shape;
     // the timeline used for calculating the animation position
     QTimeLine m_timeLine;

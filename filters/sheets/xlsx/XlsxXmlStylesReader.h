@@ -132,7 +132,7 @@ public:
     //! Indicates whether if the text in the cell should be line-wrapped with the cell.
     bool wrapText;
 
-    //! Inidicates whether the displayed text in a cell should be shrunk to fit the cell width.
+    //! Indicates whether the displayed text in a cell should be shrunk to fit the cell width.
     bool shrinkToFit;
 
     //! Text rotation in cells, expressed in degrees. (Undocumented? special case: 255 means

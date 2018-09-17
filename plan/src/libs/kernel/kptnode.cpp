@@ -174,7 +174,7 @@ Node *Node::projectNode() {
     if (m_parent)
         return m_parent->projectNode();
 
-    // This happends for default tasks
+    // This happens for default tasks
     return 0;
 }
 
@@ -185,7 +185,7 @@ const Node *Node::projectNode() const {
     if (m_parent)
         return m_parent->projectNode();
 
-    // This happends for default tasks
+    // This happens for default tasks
     return 0;
 }
 

@@ -110,7 +110,7 @@ void KoFormulaTool::activate(ToolActivation toolActivation, const QSet<KoShape*>
         }
     }
     if (m_formulaEditor==0) {
-        //TODO: there should be a extra constructior for this
+        //TODO: there should be a extra constructor for this
         m_formulaEditor = new FormulaEditor( m_formulaShape->formulaData());
     }
     connect(m_formulaShape->formulaData(), SIGNAL(dataChanged(FormulaCommand*,bool)), this, SLOT(updateCursor(FormulaCommand*,bool)));

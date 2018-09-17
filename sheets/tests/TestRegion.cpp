@@ -110,7 +110,7 @@ void TestRegion::testSheet()
     region = Region("'Sheet 4'!A1", m_map, m_map->sheet(0));
     QCOMPARE(region.name(), QString("'Sheet 4'!A1"));
     QCOMPARE(region.firstSheet(), m_map->sheet(3));
-    // Multiple quotas should be compreseed, use-case that
+    // Multiple quotas should be compressed, use-case that
     // was visible in the xls from bug 284325.
     region = Region("'''Sheet 4'''!A1", m_map, m_map->sheet(0));
     QCOMPARE(region.name(), QString("'Sheet 4'!A1"));

@@ -360,6 +360,7 @@ KChart::DataValueAttributes DataSet::Private::defaultDataValueAttributes() const
 
 void DataSet::Private::insertDataValueAttributeSectionIfNecessary(int section)
 {
+    Q_ASSERT(section >= 0);
     if (!sectionsDataValueAttributes.contains(section))
         sectionsDataValueAttributes[section] = dataValueAttributes;
 }
@@ -637,6 +638,7 @@ void DataSet::Private::setAttributesAccordingToType()
     dataValueAttributes = attr;
 
     for (int i = 0; i < sectionsDataValueAttributes.count(); ++i) {
+        Q_ASSERT(sectionsDataValueAttributes.contains(i));
         KChart::DataValueAttributes attr = sectionsDataValueAttributes[i];
         KChart::RelativePosition positivePosition = attr.positivePosition();
         if (chartType ==  KoChart::BarChartType && chartSubType != KoChart::NormalChartSubtype) {
@@ -783,7 +785,7 @@ qreal DataSet::Private::maxBubbleSize() const
 {
     // TODO: Improve performance by caching. This is currently O(n^2).
     // this is not in O(n^2), its quite linear on the number of datapoints
-    // hoever it could be constant for any then the first case by implementing
+    // however it could be constant for any then the first case by implementing
     // cashing
     qreal max = 0.0;
     Q_ASSERT(kdChartModel);
@@ -1004,6 +1006,10 @@ void DataSet::setPieExplodeFactor(int factor)
 
 void DataSet::setPen(int section, const QPen &pen)
 {
+    if (section < 0) {
+        setPen(pen);
+        return;
+    }
     d->pens[section] = pen;
     if (d->kdChartModel)
         d->kdChartModel->dataSetChanged(this, KChartModel::PenDataRole, section);
@@ -1015,6 +1021,10 @@ void DataSet::setPen(int section, const QPen &pen)
 
 void DataSet::setBrush(int section, const QBrush &brush)
 {
+    if (section < 0) {
+        setBrush(brush);
+        return;
+    }
     d->brushes[section] = brush;
     if (d->kdChartModel)
         d->kdChartModel->dataSetChanged(this, KChartModel::BrushDataRole, section);
@@ -1036,6 +1046,10 @@ void DataSet::setMarkerStyle(OdfMarkerStyle style)
 
 void DataSet::setPieExplodeFactor(int section, int factor)
 {
+    if (section < 0) {
+        setPieExplodeFactor(factor);
+        return;
+    }
     KChart::PieAttributes &pieAttributes = d->sectionsPieAttributes[section];
     pieAttributes.setExplodeFactor((qreal)factor / (qreal)100);
     if (d->kdChartModel)
@@ -1575,12 +1589,17 @@ bool DataSet::loadOdf(const KoXmlElement &n,
 
     if (n.hasAttributeNS(KoXmlNS::chart, "class") && !ignoreCellRanges) {
         const QString chartClass = n.attributeNS(KoXmlNS::chart, "class", QString());
-        KoChart::ChartType chartType = KoChart::BarChartType;
-        for (int type = 0; type < (int)LastChartType; ++type) {
-            if (chartClass == odfCharttype(type)) {
-                chartType = (ChartType)type;
-                setChartType(chartType);
-                break;
+        if (d->chartType == RingChartType && chartClass == "chart:circle") {
+            // LO marks all datasets in a ring chart as circle
+            // We keep it as RingChartType
+        } else {
+            KoChart::ChartType chartType = KoChart::BarChartType;
+            for (int type = 0; type < (int)LastChartType; ++type) {
+                if (chartClass == odfCharttype(type)) {
+                    chartType = (ChartType)type;
+                    setChartType(chartType);
+                    break;
+                }
             }
         }
     }
@@ -1835,11 +1854,22 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
     if (!label.isEmpty())
         bodyWriter.addAttribute("chart:label-cell-address", label);
 
-    int charttype = (chartType() < LastChartType) ? chartType() : 0;
+    int charttype = LastChartType;
+    if (d->chartType == RingChartType || d->chartType == LastChartType) {
+        if (d->attachedAxis->plotArea()->chartType() == RingChartType) {
+            charttype = CircleChartType; // LO needs this
+        }
+    }
+    if (charttype == LastChartType) {
+        charttype = d->effectiveChartType();
+    }
     QString chartClass = odfCharttype(charttype);
-    if (!chartClass.isEmpty())
+    if (!chartClass.isEmpty()) {
         bodyWriter.addAttribute("chart:class", chartClass);
-
+    }
+    if (d->attachedAxis) {
+        bodyWriter.addAttribute("chart:attached-axis", d->attachedAxis->name());
+    }
     if (chartType() == KoChart::CircleChartType || chartType() == KoChart::RingChartType) {
         for (int j=0; j<yDataRegion().cellCount(); ++j) {
             bodyWriter.startElement("chart:data-point");
@@ -1853,9 +1883,6 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
 
             bodyWriter.endElement();
         }
-    }
-    if (d->attachedAxis) {
-        bodyWriter.addAttribute("chart:attached-axis", d->attachedAxis->name());
     }
     if (chartType() == KoChart::BubbleChartType) {
         // Custom data shall contain bubble size

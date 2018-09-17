@@ -147,7 +147,7 @@ public:
     }
 
     /**
-     * Modifiors
+     * Modifiers
      */
     void setFormat(TFormat f)  {
         _format       = f;

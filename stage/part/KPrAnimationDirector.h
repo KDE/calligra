@@ -163,7 +163,7 @@ private:
     int m_pageIndex;
     int m_stepIndex;
     int m_maxShapeDuration;
-    // true when there is an animtion in this step
+    // true when there is an animation in this step
     bool m_hasAnimation;
     KPrAnimationCache * m_animationCache;
 };

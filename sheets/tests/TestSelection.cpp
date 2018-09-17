@@ -399,7 +399,7 @@ void TestSelection::covering()
     QCOMPARE(selection.name(), QString("A1"));
 
     // normal mode:
-    // convered ranges get removed
+    // covered ranges get removed
 
     selection.initialize(Region("A3:A4;B2;C4:D5", &map, sheet1));
     QCOMPARE(selection.name(sheet1), QString("A3:A4;B2;C4:D5"));

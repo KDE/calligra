@@ -77,13 +77,13 @@ private:
     /// Time when the task ends
     time_t end;
 
-    /// Ealiest day when the task should start
+    /// Earliest day when the task should start
     time_t minStart;
 
     /// Latest day when the task should start
     time_t maxStart;
 
-    /// Ealiest day when the task should end
+    /// Earliest day when the task should end
     time_t minEnd;
 
     /// Latest day when the task should end

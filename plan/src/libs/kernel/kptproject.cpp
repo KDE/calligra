@@ -93,7 +93,7 @@ Project::Project( ConfigBase &config, bool useDefaultValues, Node *parent )
 
 void Project::init()
 {
-    m_refCount = 1; // always used by createor
+    m_refCount = 1; // always used by creator
 
     m_constraint = Node::MustStartOn;
     m_standardWorktime = new StandardWorktime();
@@ -1485,7 +1485,7 @@ Resource *Project::takeResource( ResourceGroup *group, Resource *resource )
     Resource *r = group->takeResource( resource );
     Q_ASSERT( resource == r );
     if (resource != r) {
-        warnPlan << "Cound not take resource from group";
+        warnPlan << "Could not take resource from group";
     }
     emit resourceRemoved( resource );
     emit projectChanged();

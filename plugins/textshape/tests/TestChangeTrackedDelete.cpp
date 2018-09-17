@@ -424,7 +424,7 @@ void TestChangeTrackedDelete::insertSampleTable(QTextDocument *document)
     table->cellAt(1,1).firstCursorPosition().insertText("fifth");
     table->cellAt(1,2).firstCursorPosition().insertText("sixth");
     table->cellAt(2,0).firstCursorPosition().insertText("seventh");
-    table->cellAt(2,1).firstCursorPosition().insertText("eigth");
+    table->cellAt(2,1).firstCursorPosition().insertText("eight");
     table->cellAt(2,2).firstCursorPosition().insertText("ninth");
 }
 

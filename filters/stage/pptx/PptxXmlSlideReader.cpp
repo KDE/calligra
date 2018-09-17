@@ -2168,7 +2168,7 @@ void PptxXmlSlideReader::inheritBodyProperties()
 
 
     if (m_context->type == SlideLayout) {
-        return; // No futher actions needed for layout
+        return; // No further actions needed for layout
     }
 
     inheritBodyPropertiesHelper(d->phType, m_context->slideLayoutProperties);

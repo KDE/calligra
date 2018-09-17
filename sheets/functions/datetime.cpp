@@ -782,7 +782,7 @@ Value func_weekNum(valVector args, ValueCalc *calc, FuncExtra *)
 
 // Function: DATEDIF
 //
-// interval difference |  type descrition
+// interval difference |  type description
 // --------------------|----------------------------------
 // default: m          |  months
 //              d      |  days
@@ -886,7 +886,7 @@ Value func_dateDif(valVector args, ValueCalc *calc, FuncExtra *)
 
 // Function: YEARFRAC
 //
-//            | basis  |  descritption day-count
+//            | basis  |  description day-count
 // -----------|--------|--------------------------------------------------------
 // default:   |   0    |  US (NASD) system. 30 days/month, 360 days/year (30/360)
 //            |   1    |  Actual/actual (Euro), also known as AFB

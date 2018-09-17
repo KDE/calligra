@@ -210,7 +210,7 @@ public:
     QString colorSpaceId(const KoID& colorModelId, const KoID& colorDepthId) const;
 
     /**
-     * @return a the identifiant of the color model for the given color space id.
+     * @return a the identifier of the color model for the given color space id.
      *
      * This function is a compatibility function used to get the color space from
      * all kra files.
@@ -218,7 +218,7 @@ public:
     KoID colorSpaceColorModelId(const QString & _colorSpaceId) const;
 
     /**
-     * @return a the identifiant of the color depth for the given color space id.
+     * @return a the identifier of the color depth for the given color space id.
      *
      * This function is a compatibility function used to get the color space from
      * all kra files.

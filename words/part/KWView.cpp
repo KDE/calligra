@@ -726,7 +726,7 @@ void KWView::viewMouseMoveEvent(QMouseEvent *e)
 
     m_gui->setCursor(Qt::ArrowCursor);
 
-    // Handle stause bar and horizonta scroll bar.
+    // Handle status bar and horizontal scroll bar.
     if (e->y() >= (m_gui->size().height() - statusBar()->size().height())) {
         mainWindow()->statusBar()->setVisible(true);
         static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);

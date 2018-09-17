@@ -28,12 +28,12 @@
 
 using namespace Calligra::Sheets;
 
-CondtionCommand::CondtionCommand()
+ConditionCommand::ConditionCommand()
         : AbstractRegionCommand()
 {
 }
 
-bool CondtionCommand::process(Element* element)
+bool ConditionCommand::process(Element* element)
 {
     if (!m_reverse) {
         // create undo
@@ -44,7 +44,7 @@ bool CondtionCommand::process(Element* element)
     return true;
 }
 
-bool CondtionCommand::mainProcessing()
+bool ConditionCommand::mainProcessing()
 {
     if (m_reverse) {
         m_sheet->cellStorage()->setConditions(*this, Conditions());
@@ -54,7 +54,7 @@ bool CondtionCommand::mainProcessing()
     return AbstractRegionCommand::mainProcessing();
 }
 
-void CondtionCommand::setConditionList(const QLinkedList<Conditional>& list)
+void ConditionCommand::setConditionList(const QLinkedList<Conditional>& list)
 {
     m_conditions.setConditionList(list);
     if (m_conditions.isEmpty())

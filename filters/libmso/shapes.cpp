@@ -105,7 +105,7 @@ void ODrawToOdf::processRectangle(const OfficeArtSpContainer& o, Writer& out)
 {
     // TODO: Use client->isPlaceholder - might require an update of the
     // placeholderAllowed function in the PPT filter.  Trying to save as many
-    // shapes into draw:text-box at the moment, becasue vertical alignment in
+    // shapes into draw:text-box at the moment, because vertical alignment in
     // draw:custom-shape does not work properly (bug 288047).
     if (o.clientData && client->processRectangleAsTextBox(*o.clientData)) {
         processTextBox(o, out);
@@ -502,7 +502,7 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
 
     // NOTE: OpenOffice treats msosptNotchedCircularArrow as msosptArc.  The
     // msosptNotchedCircularArrow value SHOULD NOT be used according to the
-    // MS-ODRAW spec.  However it occures in many Word8 files.
+    // MS-ODRAW spec.  However it occurs in many Word8 files.
     case msosptArc:
         processNotchedCircularArrow(o, out);
         break;

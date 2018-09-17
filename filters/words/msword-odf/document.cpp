@@ -506,7 +506,7 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     //TODO: Even page/Odd page section break support
 
     //FIXME: missing support for fo:break-before="page" in table properties so
-    //let's omitt the <style:master-page> element only in case of a continuous
+    //let's omit the <style:master-page> element only in case of a continuous
     //section break
 
     if ( !firstPage && !headersChanged() && (m_pageLayoutStyle_last == *pageLayoutStyle) ){

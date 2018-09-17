@@ -39,7 +39,7 @@ int main(int argc, char** argv)
     }
 
     MusicWidget w;
-    // Setup a simple sheet, with one part exising of one staff and one voice, and a single bar
+    // Setup a simple sheet, with one part existing of one staff and one voice, and a single bar
     MusicCore::Sheet* sheet = new MusicCore::Sheet(&w);
     MusicCore::Bar* bar = sheet->addBar();
     MusicCore::Part* part = sheet->addPart("Part 1");

@@ -153,8 +153,8 @@ protected:
                                             KoXmlDocument& doc, QString& errorMessage);
 
 private:
-    //! Opens file for converting and performs convertions.
-    //! @return status of convertion.
+    //! Opens file for converting and performs conversions.
+    //! @return status of conversion.
     KoFilter::ConversionStatus openFile(KoOdfWriters *writers, QString& errorMessage);
 
     KoFilter::ConversionStatus loadAndParseDocumentInternal(

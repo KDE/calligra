@@ -2473,7 +2473,7 @@ void CellFormatPageBorder::InitializeGrids()
     palette.setColor(area->backgroundRole(), this->palette().base().color());
     area->setPalette(palette);
 
-    /* initailize the buttons that are in this box */
+    /* initialize the buttons that are in this box */
     for (int i = BorderType_Top; i < BorderType_END; i++) {
         borderButtons[i] = new BorderButton(tmpQGroupBox,
                                             borderButtonNames[i]);
@@ -2602,7 +2602,7 @@ void CellFormatPageBorder::InitializeBorderButtons()
     for (int i = BorderType_Top; i < BorderType_END; i++) {
         if (dlg->borders[i].style != Qt::NoPen ||
                 !dlg->borders[i].bStyle) {
-            /* the horozontil and vertical buttons might be disabled depending on what
+            /* the horizontal and vertical buttons might be disabled depending on what
                kind of area is selected so check that first. */
             if ((dlg->oneRow == true && i == BorderType_Horizontal) ||
                     (dlg->oneCol == true && i == BorderType_Vertical)) {

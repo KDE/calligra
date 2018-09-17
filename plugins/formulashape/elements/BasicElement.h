@@ -176,7 +176,7 @@ public:
     /// @return The bounding rectangle of the element
     const QRectF& boundingRect() const;
 
-    /// @return The absoulte bounding rectangle of the element
+    /// @return The absolute bounding rectangle of the element
     const QRectF absoluteBoundingRect() const;
 
     /**
@@ -215,7 +215,7 @@ public:
     /// @return The parent element of this BasicElement
     BasicElement* parentElement() const;
 
-    /// @return The last cusor position (number of available cursor positions - 1)
+    /// @return The last cursor position (number of available cursor positions - 1)
     virtual int endPosition() const;
     
     /** 
@@ -323,7 +323,7 @@ private:
     /// The boundingRect storing the element's width, height, x and y
     QRectF m_boundingRect;
     
-    /** The boundingRect storing the childrens element's width, height, x and y
+    /** The boundingRect storing the child element's width, height, x and y
      *  The bottomRight hand corner will always be small that then size of
      *  m_boundingRect
      */

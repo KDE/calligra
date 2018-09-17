@@ -317,7 +317,7 @@ public:
 
     /**
      * Handle the dragLeaveEvent
-     * Basically just a noticification that the drag is no long relevant
+     * Basically just a notification that the drag is no long relevant
      * The tool should Accept the event if it is meaningful; Default implementation does not.
      */
     virtual void dragLeaveEvent(QDragLeaveEvent *event);
@@ -364,7 +364,7 @@ public Q_SLOTS:
      * @param shapes the set of shapes that are selected or suggested for editing by a
      *      selected shape for the tool to work on.  Not all shapes will be meant for this
      *      tool.
-     * @param toolActivation if TemporaryActivation, this tool is only temporarily actived
+     * @param toolActivation if TemporaryActivation, this tool is only temporarily activated
      *                  and should emit done when it is done.
      * @see deactivate()
      */
@@ -479,7 +479,7 @@ protected:
     /// Convenience function to get the current handle radius
     uint handleRadius() const;
 
-    /// Convencience function to get the current grab sensitivity
+    /// Convenience function to get the current grab sensitivity
     uint grabSensitivity() const;
 
     /**

@@ -38,10 +38,10 @@ class FormulaDocument;
  *
  * This class is basically the container for the formula and has also methods to paint,
  * load and save the formula. The formulaRenderer instance that is part of this class
- * serves to paint and layout the formula. The acutal formula data means the tree of
+ * serves to paint and layout the formula. The actual formula data means the tree of
  * elements is accessible through the root element which is constructed and destroyed
  * by this class that holds a pointer to it. Everything that goes into the area of
- * editing the formula data is implemented in KoFormulaTool respectivly FormulaCursor.
+ * editing the formula data is implemented in KoFormulaTool respectively FormulaCursor.
  *
  * @author Martin Pfeiffer <hubipete@gmx.net>
  */

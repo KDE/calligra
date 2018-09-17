@@ -914,8 +914,8 @@ double Appointment::plannedCostTo(QDate date, EffortCostCalculationType type) {
 bool Appointment::attach() {
     //debugPlan<<"("<<this<<")";
     if (m_resource && m_node) {
-        m_resource->attatch(this);
-        m_node->attatch(this);
+        m_resource->attach(this);
+        m_node->attach(this);
         return true;
     }
     warnPlan<<"Failed: "<<(m_resource ? "" : "resource=0 ")

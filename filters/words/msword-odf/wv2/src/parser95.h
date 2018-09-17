@@ -35,7 +35,7 @@ public:
     virtual ~Parser95();
 
 private:
-    // don't copy or assing us
+    // don't copy or assign us
     Parser95( const Parser95& rhs );
     Parser95& operator=( const Parser95& rhs );
 

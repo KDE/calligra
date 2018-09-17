@@ -2490,7 +2490,7 @@ void CellToolBase::clearConditionalStyles()
     if (selection()->activeSheet()->areaIsEmpty(*selection(), Sheet::ConditionalCellAttribute))
         return;
 
-    CondtionCommand* command = new CondtionCommand();
+    ConditionCommand* command = new ConditionCommand();
     command->setSheet(selection()->activeSheet());
     command->setConditionList(QLinkedList<Conditional>());
     command->add(*selection());

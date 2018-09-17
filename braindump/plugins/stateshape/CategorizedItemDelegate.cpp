@@ -80,7 +80,7 @@ void CategorizedItemDelegate::paint(QPainter * painter, const QStyleOptionViewIt
         int h = d->categoryDrawer->categoryHeight(index, *option);
         QRect rect = option->rect;
 
-        // Make sure the categroy isn't drawned as selected
+        // Make sure the category isn't drown as selected
         option->state &= (~QStyle::State_Selected);
         Q_ASSERT(!(option->state & QStyle::State_Selected));
         option->state &= (~QStyle::State_HasFocus);
@@ -89,7 +89,7 @@ void CategorizedItemDelegate::paint(QPainter * painter, const QStyleOptionViewIt
         Q_ASSERT(!(option->state & QStyle::State_MouseOver));
         option->rect.setHeight(h);
 
-        // draw the cateogry
+        // draw the category
         d->categoryDrawer->drawCategory(index, 0, *option, painter);
 
         // Prepare the rectangle for the item

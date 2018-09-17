@@ -42,7 +42,7 @@ namespace KPlato
 enum EffortCostCalculationType {
     ECCT_All, /// Include both work and material in both effort and cost calculations
     ECCT_EffortWork, /// Include only Work in effort calculations, both work and material in cost calculations
-    ECCT_Work /// Inlcude only Work in both effort and cost calculations
+    ECCT_Work /// Include only Work in both effort and cost calculations
 };
 
 enum ObjectType {

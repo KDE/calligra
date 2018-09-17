@@ -972,7 +972,7 @@ void TestStatisticalFunctions::testRANK()
     // ODF-tests
     CHECK_EVAL("RANK(A20;A19:A25;1)", Value(2));    // ascending
     CHECK_EVAL("RANK(A25;A19:A25;0)", Value(1));    // descending
-    CHECK_EVAL("RANK(A21;A19:A25  )", Value(5));    // ommitted equals descending order
+    CHECK_EVAL("RANK(A21;A19:A25  )", Value(5));    // omitted equals descending order
 }
 
 void TestStatisticalFunctions::testRSQ()

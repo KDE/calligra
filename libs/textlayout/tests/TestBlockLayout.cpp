@@ -316,7 +316,7 @@ void TestBlockLayout::testAdvancedLineSpacing()
     const qreal line4_y = line1_y + line1_height + line2_height + line3_height;
     const qreal line4_height = lineheight;
     const qreal line5_y = line1_y + line1_height + line2_height + line3_height + line4_height;
-    const qreal line5_height = lineheight + 8.0 /*spacing*/; // minimum of 5 is irelevant (Note: percentage of 1.2 has been removed)
+    const qreal line5_height = lineheight + 8.0 /*spacing*/; // minimum of 5 is irrelevant (Note: percentage of 1.2 has been removed)
     const qreal line6_y = line1_y + line1_height + line2_height + line3_height + line4_height + line5_height;
     const qreal line6_height = lineheight;
     const qreal line7_y = line1_y + line1_height + line2_height + line3_height + line4_height + line5_height + line6_height;
@@ -351,7 +351,7 @@ void TestBlockLayout::testAdvancedLineSpacing()
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    // minimum of 5 is irelevant and percentage of 1.2 was still there
+    // minimum of 5 is irrelevant and percentage of 1.2 was still there
     QVERIFY2(qAbs(blockLayout->lineAt(0).y() - line5_y) < ROUNDING, QString("Actual: %1 Expected: %2").arg(blockLayout->lineAt(0).y()).arg(line5_y).toLatin1());
 
     block = block.next(); // line6
@@ -461,7 +461,7 @@ void TestBlockLayout::testEmptyLineHeights()
 // Test that spacing between blocks are the max of bottomMargin and topMargin
 // of the top and bottom block respectively
 // If the block doesn't connect to another block (top and bottom of pages or
-// table cells, oif blocks are intersperced with say a table. Then it's
+// table cells, if blocks are intersected with say a table. Then it's
 // just the plain margin
 // For completeness sake we test with 3 blocks just to make sure it works
 void TestBlockLayout::testBlockSpacing()
@@ -1197,7 +1197,7 @@ void TestBlockLayout::testDropCapsWithNewline()
 {
     // Some not too long text so the dropcap will be bigger than the block.
     // The text after newline will be in a separate block, but
-    // shall also be indeneted by the dropcap.
+    // shall also be indented by the dropcap.
     // Note that we cannot be certain of the number of lines we will get
     // as it depends on the actual available font.
     setupTest(QString("Lorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam\nsome more text"));
