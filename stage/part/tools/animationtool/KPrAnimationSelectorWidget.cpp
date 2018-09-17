@@ -272,7 +272,7 @@ void KPrAnimationSelectorWidget::setAnimation(const QModelIndex &index)
 
 void KPrAnimationSelectorWidget::setPreviewState(bool isEnable)
 {
-    if ((m_showAutomaticPreview == isEnable)) {
+    if (m_showAutomaticPreview == isEnable) {
         return;
     }
     m_showAutomaticPreview = isEnable;
