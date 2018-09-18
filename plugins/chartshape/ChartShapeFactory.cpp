@@ -23,7 +23,6 @@
 
 // Qt
 #include <QStringList>
-#include <QStandardItemModel>
 
 // KF5
 #include <kiconloader.h>
@@ -44,6 +43,7 @@
 #include "ChartShape.h"
 #include "ChartToolFactory.h"
 #include "ChartProxyModel.h"
+#include "ChartTableModel.h"
 #include "PlotArea.h"
 #include "Axis.h"
 #include "Legend.h"
@@ -346,7 +346,7 @@ KoShape *ChartShapeFactory::createDefaultShape(KoDocumentResourceManager *docume
     ChartProxyModel *proxyModel = shape->proxyModel();
 
     // Fill cells with data.
-    QStandardItemModel  *chartData = new QStandardItemModel();
+    ChartTableModel *chartData = new ChartTableModel();
     Table *internalTable = shape->tableSource()->add("local-data", chartData);
     Q_ASSERT(!shape->internalModel());
     // setInternalModel() assumes that chartData has already been added to shape->tableSource().
@@ -442,7 +442,7 @@ ChartShape *ChartShapeFactory::createStockChart(KoDocumentResourceManager *docum
     ChartProxyModel *proxyModel = shape->proxyModel();
 
     // Fill cells with data.
-    QStandardItemModel  *chartData = new QStandardItemModel();
+    ChartTableModel  *chartData = new ChartTableModel();
     Table *internalTable = shape->tableSource()->add("local-data", chartData);
     Q_ASSERT(!shape->internalModel());
     // setInternalModel() assumes that chartData has already been added to shape->tableSource().
@@ -532,7 +532,7 @@ ChartShape *ChartShapeFactory::createBubbleChart(KoDocumentResourceManager *docu
     ChartProxyModel *proxyModel = shape->proxyModel();
 
     // Fill cells with data.
-    QStandardItemModel  *chartData = new QStandardItemModel();
+    ChartTableModel  *chartData = new ChartTableModel();
     Table *internalTable = shape->tableSource()->add("local-data", chartData);
     Q_ASSERT(!shape->internalModel());
     // setInternalModel() assumes that chartData has already been added to shape->tableSource().
@@ -615,7 +615,7 @@ void ChartShapeFactory::radarData(ChartShape *shape) const
     ChartProxyModel *proxyModel = shape->proxyModel();
 
     // Fill cells with data.
-    QStandardItemModel  *chartData = new QStandardItemModel();
+    ChartTableModel  *chartData = new ChartTableModel();
     Table *internalTable = shape->tableSource()->add("local-data", chartData);
     Q_ASSERT(!shape->internalModel());
     // setInternalModel() assumes that chartData has already been added to shape->tableSource().
