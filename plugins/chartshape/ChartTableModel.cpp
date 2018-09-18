@@ -55,6 +55,15 @@ ChartTableModel::~ChartTableModel()
 {
 }
 
+QVariant ChartTableModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (orientation == Qt::Horizontal) {
+        if (role == Qt::DisplayRole) {
+            return CellRegion::columnName(section+1);
+        }
+    }
+    return QStandardItemModel::headerData(section, orientation, role);
+}
 
 QHash<QString, QVector<QRect> > ChartTableModel::cellRegion() const
 {

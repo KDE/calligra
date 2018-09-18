@@ -53,6 +53,8 @@ public:
     explicit ChartTableModel(QObject *parent = 0);
     ~ChartTableModel();
 
+    QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const override;
+
     // KoChart::ChartModel interface
     virtual QHash<QString, QVector<QRect> > cellRegion() const;
     virtual bool setCellRegion(const QString& regionName);
