@@ -628,9 +628,10 @@ void DataSetConfigWidget::updateData(ChartType chartType, ChartSubtype subtype)
 
     // Update the chart type specific settings in the "Data Sets" tab
     d->ui.errorBarProperties->hide();
-    if (chartType == BarChartType || chartType == LineChartType || chartType == AreaChartType || chartType == ScatterChartType) {
-        d->ui.errorBarProperties->show();
-    }
+    // TODO: error indication is not implemented
+//     if (chartType == BarChartType || chartType == LineChartType || chartType == AreaChartType || chartType == ScatterChartType) {
+//         d->ui.errorBarProperties->show();
+//     }
 
     // Make sure we only allow legal chart type combinations
     if (isPolar(chartType)) {
