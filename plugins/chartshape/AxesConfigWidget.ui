@@ -39,37 +39,6 @@
       <property name="bottomMargin">
        <number>0</number>
       </property>
-      <item row="0" column="0">
-       <widget class="QComboBox" name="axes">
-        <item>
-         <property name="text">
-          <string>Primary X Axis</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Primary Y Axis</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Secondary X Axis</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Secondary Y Axis</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="editAxis">
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0">
        <widget class="QCheckBox" name="axisShow">
         <property name="text">
@@ -223,6 +192,30 @@ p, li { white-space: pre-wrap; }
         <property name="text">
          <string>Show Title</string>
         </property>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="3">
+       <widget class="QComboBox" name="axes">
+        <item>
+         <property name="text">
+          <string>Primary X Axis</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Primary Y Axis</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Secondary X Axis</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Secondary Y Axis</string>
+         </property>
+        </item>
        </widget>
       </item>
      </layout>
