@@ -83,7 +83,11 @@ public:
         /// Show legend key.
         bool symbol;
         /// Constructor.
-        explicit ValueLabelType(bool number = false, bool percentage = false, bool category = false, bool symbol = false) : number(number), percentage(percentage), category(category), symbol(symbol) {}
+        explicit ValueLabelType(bool number = false,
+                                bool percentage = false,
+                                bool category = false,
+                                bool symbol = true) // to keep old behaviour where symbols wher displayed by default
+            : number(number), percentage(percentage), category(category), symbol(symbol) {}
         /// Returns true if no label will be displayed.
         bool noLabel() const { return !number && !percentage && !category && !symbol; }
     };
@@ -252,7 +256,8 @@ private:
 
 } // Namespace KoChart
 
-QDebug operator<<(QDebug dbg, KoChart::DataSet* ds);
+QDebug operator<<(QDebug dbg, const KoChart::DataSet* ds);
+QDebug operator<<(QDebug dbg, const KoChart::DataSet::ValueLabelType &v);
 
 #endif // KCHART_DATASET_H
 

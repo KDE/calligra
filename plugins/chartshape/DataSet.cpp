@@ -871,10 +871,7 @@ KChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */)
 
     QString dataLabel = ""; // initialize with empty and NOT null!
     ValueLabelType type = valueLabelType(section);
-    if (type.symbol) {
-        //TODO is that correct?
-        ma.setVisible(true);
-    }
+    ma.setVisible(d->symbolsActivated && type.symbol);
     if (type.category) {
         QString s = categoryData(section, Qt::DisplayRole).toString().trimmed();
         if (!s.isEmpty()) dataLabel += s + QLatin1Char(' ');
@@ -1465,6 +1462,8 @@ void DataSet::Private::readValueLabelType(KoStyleStack &styleStack, int section 
     const QString symbol = styleStack.property(KoXmlNS::chart, "data-label-symbol");
     if (!symbol.isNull()) {
         type.symbol = (symbol == "true");
+    } else {
+        type.symbol = false; // FIXME LO seems to do this, but see loading of symbol-type below
     }
 
     parent->setValueLabelType(type, section);
@@ -1604,18 +1603,20 @@ bool DataSet::loadOdf(const KoXmlElement &n,
         }
     }
 
-    d->readValueLabelType(styleStack);
+    d->readValueLabelType(styleStack); // NOTE do this before symbol-type
 
     if (styleStack.hasProperty(KoXmlNS::chart, "symbol-type")) {
 
         const QString name = styleStack.property(KoXmlNS::chart, "symbol-type");
         if (name == "automatic") {
             d->symbolsActivated = true;
+            d->valueLabelType[-1].symbol = true; // LO uses this when  name != "none"
             d->symbolID = d->num % numDefaultMarkerTypes;
             d->markerIsAutoSet = true;
         }
         else if (name == "named-symbol") {
             d->symbolsActivated = true;
+            d->valueLabelType[-1].symbol = true; // LO uses this when  name != "none"
             d->markerIsAutoSet = false;
             if (styleStack.hasProperty(KoXmlNS::chart, "symbol-name")) {
 
@@ -1791,17 +1792,21 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
         style.addProperty("chart:pie-offset", pieExplode, KoGenStyle::ChartType);
     }
 
+    // atm we do as LO does
     DataSet::ValueLabelType type = valueLabelType();
-    if (type.number && type.percentage)
-        style.addProperty("chart:data-label-number", "value-and-percentage");
-    else if (type.number)
-        style.addProperty("chart:data-label-number", "value");
-    else if (type.percentage)
-        style.addProperty("chart:data-label-number", "percentage");
-    if (type.category)
-        style.addProperty("chart:data-label-text", "true");
-    if (type.symbol)
-        style.addProperty("chart:data-label-symbol", "true");
+    if (!type.noLabel()) {
+        if (type.number && type.percentage) {
+            style.addProperty("chart:data-label-number", "value-and-percentage");
+        } else if (type.number) {
+            style.addProperty("chart:data-label-number", "value");
+        } else if (type.percentage) {
+            style.addProperty("chart:data-label-number", "percentage");
+        } else {
+            style.addProperty("chart:data-label-number", "none");
+        }
+        style.addProperty("chart:data-label-text", type.category ? "true" : "false");
+        style.addProperty("chart:data-label-symbol", type.symbol ? "true" : "false");
+    }
 
     if (d->symbolsActivated) {
         QString symbolName;
@@ -1957,7 +1962,7 @@ QString DataSet::axisName() const
     return d->axisName;
 }
 
-QDebug operator<<(QDebug dbg, KoChart::DataSet *ds)
+QDebug operator<<(QDebug dbg, const KoChart::DataSet *ds)
 {
     if (ds) {
         QVariantList x;
@@ -1986,4 +1991,16 @@ QDebug operator<<(QDebug dbg, KoChart::DataSet *ds)
         <<"\t]";
     }
     return dbg.noquote()<<"DataSet(0x0)";
+}
+
+QDebug operator<<(QDebug dbg, const KoChart::DataSet::ValueLabelType &v)
+{
+    QStringList lst;
+    if (v.number) lst << "N";
+    if (v.percentage) lst << "%";
+    if (v.category) lst << "C";
+    if (v.symbol) lst << "S";
+    QString s = lst.isEmpty() ? QString("None") : lst.join(',');
+    dbg.nospace() << "ValueLabelType[" << s << ']';
+    return dbg.space();
 }
