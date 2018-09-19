@@ -29,6 +29,7 @@
 
 // ChartShape
 #include "ChartShape.h"
+#include "DataSet.h"
 
 namespace KChart {
     class CartesianCoordinatePlane;
@@ -171,6 +172,13 @@ public:
     QBrush stockGainBrush() const;
     void setStockLossBrush(const QBrush &brush);
     QBrush stockLossBrush() const;
+
+    QString symbolType() const;
+    void setSymbolType(const QString &type);
+    QString symbolName() const;
+    void setSymbolName(const QString &name);
+    DataSet::ValueLabelType valueLabelType() const;
+    void setValueLabelType(const DataSet::ValueLabelType &type);
 
 public Q_SLOTS:
     void requestRepaint() const;

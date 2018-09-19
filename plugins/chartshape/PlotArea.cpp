@@ -152,6 +152,10 @@ public:
     QPen stockRangeLinePen;
     QBrush stockGainBrush;
     QBrush stockLossBrush;
+
+    QString symbolType;
+    QString symbolName;
+    DataSet::ValueLabelType valueLabelType;
 };
 
 PlotArea::Private::Private(PlotArea *q, ChartShape *parent)
@@ -179,6 +183,7 @@ PlotArea::Private::Private(PlotArea *q, ChartShape *parent)
     // Cache
     , paintPixmap(true)
     , pixmapRepaintRequested(true)
+    , symbolType("automatic")
 {
     kdCartesianPlanePrimary->setObjectName("primary");
     kdCartesianPlaneSecondary->setObjectName("secondary");
@@ -1396,4 +1401,34 @@ void PlotArea::updateKChartStockAttributes()
     for (Axis *a : d->axes) {
         a->updateKChartStockAttributes();
     }
+}
+
+DataSet::ValueLabelType PlotArea::valueLabelType() const
+{
+    return d->valueLabelType;
+}
+
+QString PlotArea::symbolType() const
+{
+    return d->symbolType;
+}
+
+void PlotArea::setSymbolType(const QString &type)
+{
+    d->symbolType = type;
+}
+
+QString PlotArea::symbolName() const
+{
+    return d->symbolName;
+}
+
+void PlotArea::setSymbolName(const QString &name)
+{
+    d->symbolName = name;
+}
+
+void PlotArea::setValueLabelType(const DataSet::ValueLabelType &type)
+{
+    d->valueLabelType = type;
 }
