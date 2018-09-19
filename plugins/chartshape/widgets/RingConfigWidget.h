@@ -57,7 +57,6 @@ public Q_SLOTS:
     void showCategoryChanged(bool b);
     void showNumberChanged(bool b);
     void showPercentChanged(bool b);
-    void showSymbolChanged(bool b);
     void explodeFactorChanged(int percent);
 
 Q_SIGNALS:
@@ -66,7 +65,6 @@ Q_SIGNALS:
     void showCategoryChanged(DataSet *dataSet, bool b, int section);
     void showNumberChanged(DataSet *dataSet, bool b, int section);
     void showPercentChanged(DataSet *dataSet, bool b, int section);
-    void showSymbolChanged(DataSet *dataSet, bool b, int section);
     void explodeFactorChanged(DataSet *dataSet, int section, int percent);
 
 private:

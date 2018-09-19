@@ -56,7 +56,6 @@ public Q_SLOTS:
     void showCategoryChanged(bool b);
     void showNumberChanged(bool b);
     void showPercentChanged(bool b);
-    void showSymbolChanged(bool b);
     void explodeFactorChanged(int percent);
 
 Q_SIGNALS:

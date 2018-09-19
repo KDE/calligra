@@ -84,7 +84,6 @@ void PieConfigWidget::init()
     connect(m_ui.dataPointShowCategory, SIGNAL(toggled(bool)), this, SLOT(showCategoryChanged(bool)));
     connect(m_ui.dataPointShowNumber, SIGNAL(toggled(bool)), this, SLOT(showNumberChanged(bool)));
     connect(m_ui.dataPointShowPercent, SIGNAL(toggled(bool)), this, SLOT(showPercentChanged(bool)));
-    connect(m_ui.dataPointShowSymbol, SIGNAL(toggled(bool)), this, SLOT(showSymbolChanged(bool)));
 }
 void PieConfigWidget::open(ChartShape* shape)
 {
@@ -140,8 +139,6 @@ void PieConfigWidget::dataPointSelectionChanged(int index)
     m_ui.dataPointShowNumber->setChecked(m_dataSet->valueLabelType(index).number);
 
     m_ui.dataPointShowPercent->setChecked(m_dataSet->valueLabelType(index).percentage);
-
-    m_ui.dataPointShowSymbol->setChecked(m_dataSet->valueLabelType(index).symbol);
 
     m_ui.dataPoints->setCurrentIndex(index);
 
@@ -201,13 +198,4 @@ void PieConfigWidget::showPercentChanged(bool b)
         return;
     }
     emit showPercentChanged(m_dataSet, b, index);
-}
-
-void PieConfigWidget::showSymbolChanged(bool b)
-{
-    int index = m_ui.dataPoints->currentIndex();
-    if (index < 0) {
-        return;
-    }
-    emit showSymbolChanged(m_dataSet, b, index);
 }

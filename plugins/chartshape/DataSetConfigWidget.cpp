@@ -632,7 +632,11 @@ void DataSetConfigWidget::updateData(ChartType chartType, ChartSubtype subtype)
 //     if (chartType == BarChartType || chartType == LineChartType || chartType == AreaChartType || chartType == ScatterChartType) {
 //         d->ui.errorBarProperties->show();
 //     }
-
+    d->ui.datasetShowSymbol->hide();
+    if (chartType == LineChartType || chartType == AreaChartType || chartType == ScatterChartType || chartType == RadarChartType || chartType == FilledRadarChartType) {
+        d->ui.datasetShowSymbol->show();
+    }
+    
     // Make sure we only allow legal chart type combinations
     if (isPolar(chartType)) {
         // TODO: check out this claim:

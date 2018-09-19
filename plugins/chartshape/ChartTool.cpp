@@ -382,7 +382,6 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
     connect(pie, SIGNAL(showCategoryChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowCategory(DataSet*,bool,int)));
     connect(pie, SIGNAL(showNumberChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowNumber(DataSet*,bool,int)));
     connect(pie, SIGNAL(showPercentChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowPercent(DataSet*,bool,int)));
-    connect(pie, SIGNAL(showSymbolChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowSymbol(DataSet*,bool,int)));
 
     RingConfigWidget *ring = plotarea->ringConfigWidget();
     connect(ring, SIGNAL(explodeFactorChanged(DataSet*,int, int)), this, SLOT(setPieExplodeFactor(DataSet*,int, int)));
@@ -391,7 +390,6 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
     connect(ring, SIGNAL(showCategoryChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowCategory(DataSet*,bool,int)));
     connect(ring, SIGNAL(showNumberChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowNumber(DataSet*,bool,int)));
     connect(ring, SIGNAL(showPercentChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowPercent(DataSet*,bool,int)));
-    connect(ring, SIGNAL(showSymbolChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowSymbol(DataSet*,bool,int)));
 
     axes = plotarea->stockAxesConfigWidget();
     connect(axes, SIGNAL(axisAdded(AxisDimension,QString)),

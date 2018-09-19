@@ -85,7 +85,6 @@ void RingConfigWidget::init()
     connect(m_ui.dataSetShowCategory, SIGNAL(toggled(bool)), this, SLOT(showCategoryChanged(bool)));
     connect(m_ui.dataSetShowNumber, SIGNAL(toggled(bool)), this, SLOT(showNumberChanged(bool)));
     connect(m_ui.dataSetShowPercent, SIGNAL(toggled(bool)), this, SLOT(showPercentChanged(bool)));
-    connect(m_ui.dataSetShowSymbol, SIGNAL(toggled(bool)), this, SLOT(showSymbolChanged(bool)));
 }
 void RingConfigWidget::open(ChartShape* shape)
 {
@@ -153,8 +152,6 @@ void RingConfigWidget::categorySelectionChanged(int index)
     m_ui.dataSetShowNumber->setChecked(ds->valueLabelType(index).number);
 
     m_ui.dataSetShowPercent->setChecked(ds->valueLabelType(index).percentage);
-
-    m_ui.dataSetShowSymbol->setChecked(ds->valueLabelType(index).symbol);
 
     m_ui.categories->setCurrentIndex(index);
 
@@ -224,14 +221,5 @@ void RingConfigWidget::showPercentChanged(bool b)
     int section = m_ui.categories->currentIndex();
     if (ds && section >= 0) {
         emit showPercentChanged(ds, b, section);
-    }
-}
-
-void RingConfigWidget::showSymbolChanged(bool b)
-{
-    DataSet *ds = m_dataSets.value(0);
-    int section = m_ui.categories->currentIndex();
-    if (ds && section >= 0) {
-        emit showSymbolChanged(ds, b, section);
     }
 }
