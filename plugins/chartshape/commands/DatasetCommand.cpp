@@ -77,6 +77,7 @@ void DatasetCommand::redo()
         valueLabelType.number = m_newShowNumber;
         valueLabelType.percentage = m_newShowPercent;
         valueLabelType.symbol = m_newShowSymbol;
+        debugChartUiDataSet<<"section:"<<m_section<<m_dataSet->valueLabelType(m_section)<<"->"<<valueLabelType;
         m_dataSet->setValueLabelType(valueLabelType, m_section);
     }
     if (m_oldBrushColor != m_newBrushColor) {
@@ -108,6 +109,7 @@ void DatasetCommand::undo()
         valueLabelType.number = m_oldShowNumber;
         valueLabelType.percentage = m_oldShowPercent;
         valueLabelType.symbol = m_oldShowSymbol;
+        debugChartUiDataSet<<"section:"<<m_section<<m_dataSet->valueLabelType(m_section)<<"->"<<valueLabelType;
         m_dataSet->setValueLabelType(valueLabelType, m_section);
     }
     if (m_oldBrushColor != m_newBrushColor) {

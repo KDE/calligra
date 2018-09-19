@@ -719,6 +719,7 @@ void DataSetConfigWidget::ui_dataSetSelectionChanged(int index)
 
     d->ui.datasetPen->setColor(dataSet->pen().color());
 
+    debugChartUiDataSet<<dataSet->valueLabelType();
     d->ui.datasetShowCategory->setChecked(dataSet->valueLabelType().category);
 
     d->ui.dataSetShowNumber->setChecked(dataSet->valueLabelType().number);
