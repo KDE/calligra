@@ -23,7 +23,7 @@
 #include "KoTextCommandBase.h"
 #include <KoListStyle.h>
 #include <QList>
-#include <QWeakPointer>
+#include <QPointer>
 
 class QTextDocument;
 class QTextCursor;
@@ -52,7 +52,7 @@ public:
     virtual bool mergeWith ( const KUndo2Command *command);
 
 private:
-    QWeakPointer<QTextDocument> m_document;
+    QPointer<QTextDocument> m_document;
     KoDocumentRdfBase *m_rdf;
     KoShapeController *m_shapeController;
     bool m_first;

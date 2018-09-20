@@ -23,7 +23,7 @@
 #include "styles/KoListStyle.h"
 
 #include <QMetaType>
-#include <QWeakPointer>
+#include <QPointer>
 #include <QVector>
 #include <QTextList>
 
@@ -75,7 +75,7 @@ public:
     bool contains(QTextList *textList) const;
 
     /// Returns the QTextLists that form this list
-    QVector<QWeakPointer<QTextList> > textLists() const;
+    QVector<QPointer<QTextList> > textLists() const;
 
     QVector<KoListStyle::ListIdType> textListIds() const;
 

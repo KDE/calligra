@@ -27,7 +27,7 @@
 #include <QTextCharFormat>
 #include <QHash>
 #include <QSet>
-#include <QWeakPointer>
+#include <QPointer>
 
 class QTextDocument;
 
@@ -71,7 +71,7 @@ private:
         int childIdx; ///< Position of section in parent's children() list
     };
 
-    QWeakPointer<QTextDocument> m_document;
+    QPointer<QTextDocument> m_document;
     KoShapeController *m_shapeController;
 
     QSet<KoInlineObject *> m_invalidInlineObjects;

@@ -26,7 +26,7 @@
 #include <KoStyleManager.h>
 
 #include <QObject>
-#include <QWeakPointer>
+#include <QPointer>
 #include <QSet>
 #include <QTextDocument>
 
@@ -73,7 +73,7 @@ public:
 
 private:
     QList<QTextDocument *> m_documents;
-    QWeakPointer<KoStyleManager> m_styleManager;
+    QPointer<KoStyleManager> m_styleManager;
     ChangeStylesMacroCommand *m_changeCommand;
 };
 

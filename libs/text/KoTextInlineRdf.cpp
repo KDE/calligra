@@ -120,10 +120,10 @@ public:
     QTextBlock block;
 
     // or document and one of bookmark, annotation, kotextmeta, ...
-    QWeakPointer<const QTextDocument> document;
-    QWeakPointer<KoBookmark> bookmark;
-    QWeakPointer<KoAnnotation> annotation;
-    QWeakPointer<KoTextMeta> kotextmeta;
+    QPointer<const QTextDocument> document;
+    QPointer<KoBookmark> bookmark;
+    QPointer<KoAnnotation> annotation;
+    QPointer<KoTextMeta> kotextmeta;
     KoSection *section;
     QTextTableCell cell;
 

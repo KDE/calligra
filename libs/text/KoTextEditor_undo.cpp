@@ -30,7 +30,7 @@
 #include <klocalizedstring.h>
 
 #include <QTextDocument>
-#include <QWeakPointer>
+#include <QPointer>
 
 #include "TextDebug.h"
 
@@ -105,7 +105,7 @@ void KoTextEditor::Private::documentCommandAdded()
             m_p->emitTextFormatChanged();
         }
 
-        QWeakPointer<QTextDocument> m_document;
+        QPointer<QTextDocument> m_document;
         KoTextEditor::Private *m_p;
     };
 

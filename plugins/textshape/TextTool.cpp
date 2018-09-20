@@ -113,7 +113,7 @@ class TextToolSelection : public KoToolSelection
 {
 public:
 
-    TextToolSelection(QWeakPointer<KoTextEditor> editor)
+    TextToolSelection(QPointer<KoTextEditor> editor)
         : KoToolSelection(0)
         , m_editor(editor)
     {
@@ -127,7 +127,7 @@ public:
         return false;
     }
 
-    QWeakPointer<KoTextEditor> m_editor;
+    QPointer<KoTextEditor> m_editor;
 };
 
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut)

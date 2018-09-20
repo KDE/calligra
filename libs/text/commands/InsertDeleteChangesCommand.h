@@ -21,7 +21,7 @@
 #define INSERTDELETECHANGESCOMMAND_H
 
 #include <kundo2command.h>
-#include <QWeakPointer>
+#include <QPointer>
 
 class QTextDocument;
 
@@ -32,7 +32,7 @@ public:
     void redo();
 
 private:
-    QWeakPointer<QTextDocument> m_document;
+    QPointer<QTextDocument> m_document;
     void insertDeleteChanges();
 };
 

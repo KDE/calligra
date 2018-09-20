@@ -344,7 +344,7 @@ bool ChangeTrackedDeleteCommand::mergeWith( const KUndo2Command *command)
                 doc->redo(KoTextDocument(doc).textEditor()->cursor());
         }
 
-        QWeakPointer<QTextDocument> m_document;
+        QPointer<QTextDocument> m_document;
     };
 
     if (command->id() != id())

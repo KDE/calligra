@@ -32,13 +32,14 @@
 #include <KoTextCommandBase.h>
 #include <KoUnit.h>
 #include <KoBorder.h>
+#include <KoTextEditor.h>
 
 #include <QClipboard>
 #include <QHash>
 #include <QTextBlock>
 #include <QTextCursor>
 #include <QTimer>
-#include <QWeakPointer>
+#include <QPointer>
 #include <QRectF>
 #include <QPointer>
 
@@ -346,8 +347,8 @@ private:
 
     TextShape *m_textShape; // where caret of m_textEditor currently is
     KoTextShapeData *m_textShapeData; // where caret of m_textEditor currently is
-    QWeakPointer<KoTextEditor> m_textEditor;
-    QWeakPointer<KoTextEditor> m_oldTextEditor;
+    QPointer<KoTextEditor> m_textEditor;
+    QPointer<KoTextEditor> m_oldTextEditor;
     KoChangeTracker *m_changeTracker;
     KoUnit m_unit;
     bool m_allowActions;

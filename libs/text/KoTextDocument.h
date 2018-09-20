@@ -24,7 +24,7 @@
 #define KOTEXTDOCUMENT_H
 
 #include <QTextDocument>
-#include <QWeakPointer>
+#include <QPointer>
 #include <QAbstractTextDocumentLayout>
 #include <QUrl>
 
@@ -58,7 +58,7 @@ public:
     /// Constructor
     KoTextDocument(const QTextDocument *document); // krazy:exclude=explicit
     /// Constructor
-    KoTextDocument(QWeakPointer<QTextDocument> document); // krazy:exclude=explicit
+    KoTextDocument(QPointer<QTextDocument> document); // krazy:exclude=explicit
 
     /// Destructor
     ~KoTextDocument();

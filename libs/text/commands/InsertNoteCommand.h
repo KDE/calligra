@@ -25,7 +25,7 @@
 
 #include <kundo2command.h>
 
-#include <QWeakPointer>
+#include <QPointer>
 
 class QTextDocument;
 
@@ -41,7 +41,7 @@ public:
 
     KoInlineNote *m_inlineNote;
 private:
-    QWeakPointer<QTextDocument> m_document;
+    QPointer<QTextDocument> m_document;
     bool m_first;
     int m_framePosition; // a cursor position inside the frame at the time of creation
 };

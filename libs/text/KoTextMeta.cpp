@@ -26,7 +26,7 @@
 
 #include <QTextDocument>
 #include <QTextInlineObject>
-#include <QWeakPointer>
+#include <QPointer>
 
 #include "TextDebug.h"
 
@@ -41,7 +41,7 @@ public:
             posInDocument(0) { }
     const QTextDocument *document;
     int posInDocument;
-    QWeakPointer<KoTextMeta> endBookmark;
+    QPointer<KoTextMeta> endBookmark;
     BookmarkType type;
 };
 

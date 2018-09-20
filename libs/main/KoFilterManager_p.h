@@ -29,7 +29,7 @@ Boston, MA 02110-1301, USA.
 
 #include <QString>
 #include <QStringList>
-#include <QWeakPointer>
+#include <QPointer>
 
 class QListWidget;
 
@@ -38,7 +38,7 @@ class Q_DECL_HIDDEN KoFilterManager::Private
 public:
     bool batch;
     QByteArray importMimeType;
-    QWeakPointer<KoProgressUpdater> progressUpdater;
+    QPointer<KoProgressUpdater> progressUpdater;
 
     Private(KoProgressUpdater *progressUpdater_ = 0)
         : progressUpdater(progressUpdater_)

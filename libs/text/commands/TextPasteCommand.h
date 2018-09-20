@@ -21,7 +21,7 @@
 #define TEXTPASTECOMMAND_H
 
 #include <QClipboard>
-#include <QWeakPointer>
+#include <QPointer>
 #include <kundo2command.h>
 
 class QTextDocument;
@@ -46,7 +46,7 @@ public:
 
 private:
     const QMimeData *m_mimeData;
-    QWeakPointer<QTextDocument> m_document;
+    QPointer<QTextDocument> m_document;
     KoDocumentRdfBase *m_rdf;
     KoShapeController *m_shapeController;
     KoCanvasBase *m_canvas;

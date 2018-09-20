@@ -45,7 +45,7 @@ KoList::~KoList()
     delete d;
 }
 
-QVector<QWeakPointer<QTextList> > KoList::textLists() const
+QVector<QPointer<QTextList> > KoList::textLists() const
 {
     return d->textLists;
 }

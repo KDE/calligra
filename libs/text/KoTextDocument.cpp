@@ -80,7 +80,7 @@ KoTextDocument::KoTextDocument(const QTextDocument *document)
     Q_ASSERT(m_document);
 }
 
-KoTextDocument::KoTextDocument(QWeakPointer<QTextDocument> document)
+KoTextDocument::KoTextDocument(QPointer<QTextDocument> document)
     : m_document(document.data())
 {
     Q_ASSERT(m_document);

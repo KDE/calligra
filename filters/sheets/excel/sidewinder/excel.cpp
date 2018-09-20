@@ -1754,7 +1754,7 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
     if (ToXRunsPositionIndex > 0) {
         d->richText = QSharedPointer<QTextDocument>(new QTextDocument());
         // also add a textrangemanager, as KoTextWriter assumes one
-        KoTextDocument(d->richText).setTextRangeManager(new KoTextRangeManager);
+        KoTextDocument(d->richText.data()).setTextRangeManager(new KoTextRangeManager);
         d->richText->setPlainText(d->text);
         QTextCursor cursor(d->richText.data());
         //cursor.setVisualNavigation(true);

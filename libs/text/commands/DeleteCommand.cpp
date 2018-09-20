@@ -515,7 +515,7 @@ bool DeleteCommand::mergeWith(const KUndo2Command *command)
     public:
         UndoTextCommand(QTextDocument *document, KUndo2Command *parent = 0)
         : KUndo2Command(kundo2_i18n("Text"), parent),
-        m_document(document)
+          m_document(document)
         {}
 
         void undo() {
@@ -530,7 +530,7 @@ bool DeleteCommand::mergeWith(const KUndo2Command *command)
                 doc->redo(KoTextDocument(doc).textEditor()->cursor());
         }
 
-        QWeakPointer<QTextDocument> m_document;
+        QPointer<QTextDocument> m_document;
     };
 
     KoTextEditor *textEditor = KoTextDocument(m_document).textEditor();

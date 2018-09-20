@@ -30,6 +30,7 @@
 #include <QTextBlock>
 #include <QVector>
 #include <QVariant>
+#include <QPointer>
 #include <QTextList>
 
 class KoListPrivate
@@ -70,7 +71,7 @@ public:
     KoList *q;
     KoList::Type type;
     KoListStyle *style;
-    QVector<QWeakPointer<QTextList> > textLists;
+    QVector<QPointer<QTextList> > textLists;
     QVector<KoListStyle::ListIdType> textListIds;
     const QTextDocument *document;
     QMap<int, QVariant> properties;
