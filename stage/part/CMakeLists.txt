@@ -163,6 +163,7 @@ target_link_libraries(calligrastageprivate
         koplugin
         KF5::Archive
         KF5::IconThemes
+        KF5::Completion
         Qt5::Svg
 #         Qt5::WebKitWidgets
 )

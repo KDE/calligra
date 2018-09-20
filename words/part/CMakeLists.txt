@@ -123,6 +123,7 @@ target_link_libraries(wordsprivate
     PRIVATE
         kotextlayout
         KF5::IconThemes
+        KF5::Completion
 )
 if( SHOULD_BUILD_FEATURE_RDF )
     target_link_libraries(wordsprivate
@@ -145,7 +146,7 @@ add_library(calligrawordspart MODULE ${wordspart_PART_SRCS})
 
 calligra_part_desktop_to_json(calligrawordspart wordspart.desktop)
 
-target_link_libraries(calligrawordspart   wordsprivate )
+target_link_libraries(calligrawordspart   wordsprivate KF5::CoreAddons)
 
 install(TARGETS calligrawordspart  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)
 

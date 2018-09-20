@@ -124,6 +124,7 @@ target_link_libraries(kowidgets
         KF5::ConfigCore
         KF5::Codecs
         KF5::Completion
+        KF5::CoreAddons
         KF5::IconThemes
 )
 

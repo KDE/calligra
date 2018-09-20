@@ -230,6 +230,9 @@ target_link_libraries(flake
     PRIVATE
         koplugin
         KF5::IconThemes
+        KF5::ConfigCore
+        KF5::WidgetsAddons
+        KF5::CoreAddons
         Qt5::Svg
 )
 

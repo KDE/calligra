@@ -5,14 +5,14 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-deprecated -Wno-deprecated-declarations)
 endif ()
 
+if (SHOULD_BUILD_PART_SHEETS)
+
 include_directories( ${CMAKE_SOURCE_DIR}/interfaces
                     ${KOMAIN_INCLUDES}
                     ${KOTEXT_INCLUDES}
                     ${TEXTLAYOUT_INCLUDES}
                     ${Boost_INCLUDE_DIR}
                     ${EIGEN3_INCLUDE_DIR} )
-
-if (SHOULD_BUILD_PART_SHEETS)
 
 # have their own translation domain
 add_subdirectory( shape )
@@ -328,6 +328,7 @@ target_link_libraries(calligrasheetsodf
         KF5::KDELibs4Support
     PRIVATE
         koplugin
+        KF5::Completion
 )
 
 set_target_properties(calligrasheetsodf PROPERTIES
@@ -348,6 +349,8 @@ target_link_libraries(calligrasheetscommon
         calligrasheetsodf
     PRIVATE
         koplugin
+        KF5::Completion
+        KF5::GuiAddons
         KF5::SonnetCore
         KF5::SonnetUi
         KF5::NotifyConfig

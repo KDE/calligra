@@ -99,8 +99,11 @@ target_link_libraries(komain
     PRIVATE
         koplugin
         KF5::Notifications
+        KF5::CoreAddons
         KF5::ItemViews
         KF5::KIOFileWidgets
+        KF5::KIOCore
+        KF5::Completion
         KF5::IconThemes
         KF5::DBusAddons
 )

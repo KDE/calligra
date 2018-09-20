@@ -56,6 +56,8 @@ target_link_libraries(koodf
     PRIVATE
         koversion
         KF5::I18n
+        KF5::ConfigCore
+        KF5::CoreAddons
 )
 
 set_target_properties(koodf PROPERTIES

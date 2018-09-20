@@ -25,7 +25,7 @@ calligra_deferredplugin_desktop_to_json(calligra_shape_spreadsheet-deferred call
 add_library(calligra_shape_spreadsheet MODULE TableShapeFactory.cpp)
 calligra_shape_desktop_to_json(calligra_shape_spreadsheet calligra_shape_spreadsheet.desktop)
 
-target_link_libraries(calligra_shape_spreadsheet-deferred calligrasheetscommon)
+target_link_libraries(calligra_shape_spreadsheet-deferred PUBLIC calligrasheetscommon PRIVATE KF5::Completion)
 target_link_libraries(calligra_shape_spreadsheet flake KF5::KDELibs4Support)
 
 install(TARGETS calligra_shape_spreadsheet-deferred DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/deferred)
