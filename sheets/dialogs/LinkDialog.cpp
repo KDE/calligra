@@ -34,6 +34,7 @@
 
 #include <QLabel>
 #include <QUrl>
+#include <QUrlQuery>
 #include <QVBoxLayout>
 
 #include <kcombobox.h>
@@ -272,7 +273,7 @@ void LinkDialog::setLink(const QString& link)
         QUrl url(link);
         if (url.isValid()) {
             d->mailLink->setText(url.toString(QUrl::RemoveScheme | QUrl::RemoveQuery));
-            d->mailSubject->setText(url.queryItemValue("subject"));
+            d->mailSubject->setText(QUrlQuery(url).queryItemValue("subject"));
         } else {
             d->mailLink->setText(link.mid(7));
         }

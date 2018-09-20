@@ -25,6 +25,7 @@
 #include <QDebug>
 
 #include <QUrl>
+#include <QUrlQuery>
 #include <QMimeDatabase>
 #include <QPluginLoader>
 
@@ -52,10 +53,11 @@ void Global::loadPlugins()
 int Global::documentType(const QUrl& document)
 {
     int result = DocumentType::Unknown;
+    const QUrlQuery query(document);
 
     // First, check if the URL gives us specific information on this topic (such as asking for a new file)
-    if(document.hasQueryItem("mimetype")) {
-        QString mime = document.queryItemValue("mimetype");
+    if(query.hasQueryItem("mimetype")) {
+        QString mime = query.queryItemValue("mimetype");
         if(mime == WORDS_MIME_TYPE) {
             result = DocumentType::TextDocument;
         }

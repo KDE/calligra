@@ -43,6 +43,7 @@
 #include <QTextLayout>
 #include <QDebug>
 #include <QPointer>
+#include <QUrlQuery>
 
 #include "ComponentsKoCanvasController.h"
 #include <libs/textlayout/KoTextShapeData.h>
@@ -189,35 +190,37 @@ bool TextDocumentImpl::load(const QUrl& url)
 
     bool retval = false;
     if (url.scheme() == QStringLiteral("newfile")) {
+        QUrlQuery query(url);
+
         d->document->initEmpty();
         KWPageStyle style = d->document->pageManager()->defaultPageStyle();
         Q_ASSERT(style.isValid());
 
         KoColumns columns;
-        columns.count = url.queryItemValue("columncount").toInt();
-        columns.gapWidth = url.queryItemValue("columngap").toDouble();
+        columns.count = query.queryItemValue("columncount").toInt();
+        columns.gapWidth = query.queryItemValue("columngap").toDouble();
         style.setColumns(columns);
 
         KoPageLayout layout = style.pageLayout();
-        layout.format = KoPageFormat::formatFromString(url.queryItemValue("pageformat"));
-        layout.orientation = (KoPageFormat::Orientation)url.queryItemValue("pageorientation").toInt();
-        layout.height = MM_TO_POINT(url.queryItemValue("height").toDouble());
-        layout.width = MM_TO_POINT(url.queryItemValue("width").toDouble());
-        if (url.queryItemValue("facingpages").toInt() == 1) {
-            layout.bindingSide = MM_TO_POINT(url.queryItemValue("leftmargin").toDouble());
-            layout.pageEdge = MM_TO_POINT(url.queryItemValue("rightmargin").toDouble());
+        layout.format = KoPageFormat::formatFromString(query.queryItemValue("pageformat"));
+        layout.orientation = (KoPageFormat::Orientation)query.queryItemValue("pageorientation").toInt();
+        layout.height = MM_TO_POINT(query.queryItemValue("height").toDouble());
+        layout.width = MM_TO_POINT(query.queryItemValue("width").toDouble());
+        if (query.queryItemValue("facingpages").toInt() == 1) {
+            layout.bindingSide = MM_TO_POINT(query.queryItemValue("leftmargin").toDouble());
+            layout.pageEdge = MM_TO_POINT(query.queryItemValue("rightmargin").toDouble());
             layout.leftMargin = layout.rightMargin = -1;
         }
         else {
             layout.bindingSide = layout.pageEdge = -1;
-            layout.leftMargin = MM_TO_POINT(url.queryItemValue("leftmargin").toDouble());
-            layout.rightMargin = MM_TO_POINT(url.queryItemValue("rightmargin").toDouble());
+            layout.leftMargin = MM_TO_POINT(query.queryItemValue("leftmargin").toDouble());
+            layout.rightMargin = MM_TO_POINT(query.queryItemValue("rightmargin").toDouble());
         }
-        layout.topMargin = MM_TO_POINT(url.queryItemValue("topmargin").toDouble());
-        layout.bottomMargin = MM_TO_POINT(url.queryItemValue("bottommargin").toDouble());
+        layout.topMargin = MM_TO_POINT(query.queryItemValue("topmargin").toDouble());
+        layout.bottomMargin = MM_TO_POINT(query.queryItemValue("bottommargin").toDouble());
         style.setPageLayout(layout);
 
-        d->document->setUnit(KoUnit::fromSymbol(url.queryItemValue("unit")));
+        d->document->setUnit(KoUnit::fromSymbol(query.queryItemValue("unit")));
         d->document->relayout();
         retval = true;
     }
