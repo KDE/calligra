@@ -16,18 +16,14 @@
     <widget class="QWidget" name="datasetWidgets" native="true">
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="0">
-         <widget class="QComboBox" name="dataSets">
-          <property name="toolTip">
-           <string>Select a data set</string>
-          </property>
-          <property name="statusTip">
-           <string/>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QComboBox" name="dataSets">
+        <property name="toolTip">
+         <string>Select a data set</string>
+        </property>
+        <property name="statusTip">
+         <string/>
+        </property>
+       </widget>
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -149,32 +145,25 @@
        </layout>
       </item>
       <item>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
          <widget class="QCheckBox" name="datasetShowCategory">
           <property name="text">
            <string>Category</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
+        <item>
          <widget class="QCheckBox" name="dataSetShowNumber">
           <property name="text">
            <string>Number</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
+        <item>
          <widget class="QCheckBox" name="datasetShowPercent">
           <property name="text">
            <string>Percent</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QCheckBox" name="datasetShowSymbol">
-          <property name="text">
-           <string>Symbol</string>
           </property>
          </widget>
         </item>

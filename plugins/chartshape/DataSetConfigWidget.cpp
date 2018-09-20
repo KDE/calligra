@@ -289,7 +289,9 @@ DataSetConfigWidget::Private::Private(DataSetConfigWidget *parent)
     connect(ui.datasetShowErrorBar, SIGNAL(toggled(bool)), parent, SLOT(ui_datasetShowErrorBarChanged(bool)));
     connect(ui.dataSetShowNumber, SIGNAL(toggled(bool)), parent, SLOT(ui_dataSetShowNumberChanged(bool)));
     connect(ui.datasetShowPercent, SIGNAL(toggled(bool)), parent, SLOT(ui_datasetShowPercentChanged(bool)));
-    connect(ui.datasetShowSymbol, SIGNAL(toggled(bool)), parent, SLOT(ui_datasetShowSymbolChanged(bool)));
+
+    // TODO
+    // connect(ui.datasetShowSymbol, SIGNAL(toggled(bool)), parent, SLOT(ui_datasetShowSymbolChanged(bool)));
 
 
     connect(ui.dataSets, SIGNAL(currentIndexChanged(int)), parent, SLOT(ui_dataSetSelectionChanged(int)));
@@ -394,19 +396,20 @@ void DataSetConfigWidget::updateMarkers()
     d->dataSetMarkerHorizontalBarAction->setIcon(dataSet->markerIcon(MarkerHorizontalBar));
     d->dataSetMarkerVerticalBarAction->setIcon(dataSet->markerIcon(MarkerVerticalBar));
 
-    OdfMarkerStyle style = dataSet->markerStyle();
-    QIcon icon = dataSet->markerIcon(style);
-    if (!icon.isNull()) {
-        if (dataSet->markerAutoSet()) {
+    switch(dataSet->odfSymbolType()) {
+        case NoSymbol:
+            d->ui.datasetMarkerMenu->setText(i18n("None"));
+            d->ui.datasetMarkerMenu->setIcon(QIcon());
+            break;
+        case NamedSymbol:
+            d->ui.datasetMarkerMenu->setIcon(dataSet->markerIcon(dataSet->markerStyle()));
+            d->ui.datasetMarkerMenu->setText(QString());
+            break;
+        case ImageSymbol:
+        case AutomaticSymbol:
             d->ui.datasetMarkerMenu->setText(i18n("Auto"));
             d->ui.datasetMarkerMenu->setIcon(QIcon());
-        } else {
-            d->ui.datasetMarkerMenu->setIcon(icon);
-            d->ui.datasetMarkerMenu->setText(QString());
-        }
-    } else {
-        d->ui.datasetMarkerMenu->setText(i18n("None"));
-        d->ui.datasetMarkerMenu->setIcon(QIcon());
+            break;
     }
 }
 void DataSetConfigWidget::ui_dataSetErrorBarTypeChanged()
@@ -528,16 +531,16 @@ void DataSetConfigWidget::datasetMarkerSelected(QAction *action)
         return;
 
     const int numDefaultMarkerTypes = 15;
-    bool isAuto = false;
     OdfMarkerStyle style = MarkerSquare;
     QString type = QString("");
+    OdfSymbolType symbolType = NamedSymbol;
     if (action == d->dataSetNoMarkerAction) {
-        style = NoMarker;
+        symbolType = NoSymbol;
         type = "None";
     } else if (action == d->dataSetAutomaticMarkerAction) {
         style = (OdfMarkerStyle) (d->selectedDataSet % numDefaultMarkerTypes);
         type = "Auto";
-        isAuto = true;
+        symbolType = AutomaticSymbol;
     } else if (action == d->dataSetMarkerCircleAction) {
         style = MarkerCircle;
     } else if (action == d->dataSetMarkerSquareAction) {
@@ -579,7 +582,6 @@ void DataSetConfigWidget::datasetMarkerSelected(QAction *action)
     if (!dataSet)
         return;
 
-    dataSet->setAutoMarker(isAuto);
     if (type.isEmpty()) {
         d->ui.datasetMarkerMenu->setIcon(dataSet->markerIcon(style));
         d->ui.datasetMarkerMenu->setText("");
@@ -587,7 +589,7 @@ void DataSetConfigWidget::datasetMarkerSelected(QAction *action)
         d->ui.datasetMarkerMenu->setText(type);
         d->ui.datasetMarkerMenu->setIcon(QIcon());
     }
-    emit dataSetMarkerChanged(dataSet, style);
+    emit dataSetMarkerChanged(dataSet, symbolType, style);
 
     updateData(dataSet->chartType(), dataSet->chartSubType());
 }
@@ -632,10 +634,11 @@ void DataSetConfigWidget::updateData(ChartType chartType, ChartSubtype subtype)
 //     if (chartType == BarChartType || chartType == LineChartType || chartType == AreaChartType || chartType == ScatterChartType) {
 //         d->ui.errorBarProperties->show();
 //     }
-    d->ui.datasetShowSymbol->hide();
-    if (chartType == LineChartType || chartType == AreaChartType || chartType == ScatterChartType || chartType == RadarChartType || chartType == FilledRadarChartType) {
-        d->ui.datasetShowSymbol->show();
-    }
+    // TODO 
+//     d->ui.datasetShowSymbol->hide();
+//     if (chartType == LineChartType || chartType == AreaChartType || chartType == ScatterChartType || chartType == RadarChartType || chartType == FilledRadarChartType) {
+//         d->ui.datasetShowSymbol->show();
+//     }
     
     // Make sure we only allow legal chart type combinations
     if (isPolar(chartType)) {
@@ -726,7 +729,8 @@ void DataSetConfigWidget::ui_dataSetSelectionChanged(int index)
 
     d->ui.datasetShowPercent->setChecked(dataSet->valueLabelType().percentage);
 
-    d->ui.datasetShowSymbol->setChecked(dataSet->valueLabelType().symbol);
+    // TODO
+    // d->ui.datasetShowSymbol->setChecked(dataSet->valueLabelType().symbol);
 
     d->ui.dataSetHasChartType->setChecked(dataSet->chartType() != LastChartType);
     d->ui.dataSetChartTypeMenu->setEnabled(dataSet->chartType() != LastChartType);

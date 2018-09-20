@@ -76,18 +76,32 @@ public:
     public:
         /// Show value as number.
         bool number;
+        bool numberIsLoaded;
         /// Show value as percentage.
         bool percentage;
+        bool percentageIsLoaded;
         /// Show category.
         bool category;
+        bool categoryIsLoaded;
         /// Show legend key.
+        /// TODO: not supported by KChart
         bool symbol;
+        bool symbolIsLoaded;
         /// Constructor.
         explicit ValueLabelType(bool number = false,
                                 bool percentage = false,
                                 bool category = false,
-                                bool symbol = true) // to keep old behaviour where symbols wher displayed by default
-            : number(number), percentage(percentage), category(category), symbol(symbol) {}
+                                bool symbol = true) // to keep old behaviour where symbols were displayed by default
+            : number(number)
+            , numberIsLoaded(false)
+            , percentage(percentage)
+            , percentageIsLoaded(false)
+            , category(category)
+            , categoryIsLoaded(false)
+            , symbol(symbol)
+            , symbolIsLoaded(false)
+        {}
+
         /// Returns true if no label will be displayed.
         bool noLabel() const { return !number && !percentage && !category && !symbol; }
     };
@@ -108,7 +122,7 @@ public:
      * the series-wide value
      */
     ValueLabelType valueLabelType(int section = -1) const;
-    
+
     /**
      * Sets the marker attributes of the series
      *
@@ -129,7 +143,6 @@ public:
     // Graphics properties for the visualization of this dataset.
     QPen   pen() const;
     QBrush brush() const;
-    OdfMarkerStyle markerStyle() const;
     QIcon markerIcon(OdfMarkerStyle markerStyle);
     KChart::PieAttributes pieAttributes() const;
     QPen   pen(int section) const;
@@ -149,8 +162,13 @@ public:
     qreal errorMargin() const;
     qreal lowerErrorLimit() const;
     qreal upperErrorLimit() const;
-    bool markerAutoSet() const;
-
+    /// returns the marker symbol type to use
+    OdfSymbolType odfSymbolType() const;
+    /// Set symbol type to @p type and marker style to @p style
+    void setOdfSymbolType(OdfSymbolType type);
+    OdfMarkerStyle markerStyle() const;
+    void setMarkerStyle(OdfMarkerStyle style);
+   
     // Setter methods
     void setChartType(ChartType type);
     void setChartSubType(ChartSubtype type);
@@ -160,8 +178,6 @@ public:
     void setBrush(const QBrush &brush);
     void setPen(int section, const QPen &pen);
     void setBrush(int section, const QBrush &brush);
-    void setMarkerStyle(OdfMarkerStyle style);
-    void setAutoMarker(bool isAuto);
 
     void setPieExplodeFactor(int factor);
     void setPieExplodeFactor(int section, int factor);

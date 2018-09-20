@@ -206,8 +206,6 @@ public:
     bool penIsSet;
     // Determines whether brush has been set
     bool brushIsSet;
-    // Determines whether marker has been set automatically
-    bool markerIsAutoSet;
     QPen pen;
     QBrush brush;
     QMap<int, DataSet::ValueLabelType> valueLabelType;
@@ -244,8 +242,11 @@ public:
 
     /// Used if no data region for the label is specified
     const QString defaultLabel;
-    bool symbolsActivated;
+    // TODO markers can also apply to chart:data-point>, <chart:series> or <chart:plot-area>
     int symbolID;
+    OdfSymbolType odfSymbolType; // Used for markers
+    bool markersUsed;
+
     int loadedDimensions;
 
     KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat;
@@ -265,7 +266,6 @@ DataSet::Private::Private(DataSet *parent, int dataSetNr) :
     upperErrorLimit(0.0),
     penIsSet(false),
     brushIsSet(false),
-    markerIsAutoSet(true),
     pen(QPen(Qt::black)),
     brush(QColor(Qt::white)),
     dataValueAttributes(defaultDataValueAttributes()),
@@ -273,8 +273,9 @@ DataSet::Private::Private(DataSet *parent, int dataSetNr) :
     kdChartModel(0),
     size(0),
     defaultLabel(i18n("Series %1", dataSetNr + 1)),
-    symbolsActivated(true),
     symbolID(0),
+    odfSymbolType(AutomaticSymbol),
+    markersUsed(false),
     loadedDimensions(0),
     numericStyleFormat(0)
 {
@@ -693,6 +694,19 @@ void DataSet::setChartType(ChartType type)
 
     if (axis)
         axis->attachDataSet(this);
+
+    switch (type) {
+        case LineChartType:
+        case AreaChartType:
+        case ScatterChartType:
+        case RadarChartType:
+        case FilledRadarChartType:
+            d->markersUsed = true;
+            break;
+        default:
+            d->markersUsed = false;
+            break;
+    }
 }
 
 void DataSet::setChartSubType(ChartSubtype subType)
@@ -733,17 +747,14 @@ OdfMarkerStyle DataSet::markerStyle() const
 
 QIcon DataSet::markerIcon(OdfMarkerStyle markerStyle)
 {
-    if (markerStyle != NoMarker) {
-        QPixmap markerPixmap(16,16);
-        markerPixmap.fill(QColor(255,255,255,0));
-        QPainter painter(&markerPixmap);
-        KChart::MarkerAttributes matt;
-        matt.setMarkerStyle(odf2kdMarker(markerStyle));
-        MarkerPainterDummyDiagram().doPaintMarker(&painter, matt, brush(), pen(), QPointF(7,7), QSizeF(12,12));
-        QIcon markerIcon = QIcon(markerPixmap);
-        return markerIcon;
-    }
-    return QIcon();
+    QPixmap markerPixmap(16,16);
+    markerPixmap.fill(QColor(255,255,255,0));
+    QPainter painter(&markerPixmap);
+    KChart::MarkerAttributes matt;
+    matt.setMarkerStyle(odf2kdMarker(markerStyle));
+    MarkerPainterDummyDiagram().doPaintMarker(&painter, matt, brush(), pen(), QPointF(7,7), QSizeF(12,12));
+    QIcon markerIcon = QIcon(markerPixmap);
+    return markerIcon;
 }
 
 QPen DataSet::pen(int section) const
@@ -811,12 +822,6 @@ KChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */)
 
     // The chart type is a property of the plot area, check that.
     switch (d->effectiveChartType()) {
-//     case ScatterChartType:
-//         // TODO: Marker type should be customizable
-//         // TODO: Marker size should be customizable
-//         ma.setMarkerStyle(defaultMarkerTypes[number() % numDefaultMarkerTypes]);
-//         ma.setVisible(true);
-//         break;
     case BarChartType:
     case CircleChartType:
     case RingChartType:
@@ -825,8 +830,7 @@ KChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */)
         Q_ASSERT(attr.isVisible());
         ma.setMarkerStyle(KChart::MarkerAttributes::MarkerSquare);
         ma.setMarkerSize(QSize(10, 10));
-        ma.setVisible(true);
-        d->symbolsActivated = false;
+        ma.setVisible(true); // For legend
         break;
     }
     case BubbleChartType:
@@ -848,30 +852,32 @@ KChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */)
             ma.setMarkerSize(QSizeF(bubbleWidth, bubbleWidth));
         }
         ma.setVisible(true);
-        d->symbolsActivated = false;
         break;
     }
     default:
-        // TODO: Make markers customizable even for other types
         Q_ASSERT(attr.isVisible());
-        ma.setMarkerStyle(odf2kdMarker((OdfMarkerStyle)d->symbolID));
-        ma.setMarkerSize(QSize(10, 10));
-        ma.setVisible(true);
-        d->symbolsActivated = true;
-//             attr.setVisible(true);
-        // Do not overwrite visibility in this case. It could very well have
-        // been set to 'visible' on purpose by e.g. loadOdf().
-        //else
-        //    ma.setVisible(false);
+        switch (d->odfSymbolType) {
+            case NoSymbol:
+                ma.setVisible(false);
+                break;
+            case ImageSymbol: // Not supported
+            case AutomaticSymbol:
+                ma.setMarkerStyle(odf2kdMarker((OdfMarkerStyle)(d->num % numDefaultMarkerTypes)));
+                ma.setMarkerSize(QSize(10, 10));
+                ma.setVisible(true);
+            case NamedSymbol:
+                ma.setMarkerStyle(odf2kdMarker((OdfMarkerStyle)d->symbolID));
+                ma.setVisible(true);
+                break;
+        }
         break;
     }
 
     ma.setMarkerColor(brush(section).color());
     ma.setPen(pen(section));
 
-    QString dataLabel = ""; // initialize with empty and NOT null!
+    QString dataLabel = ""; // must not be isNull() because then KChart uses a default text
     ValueLabelType type = valueLabelType(section);
-    ma.setVisible(d->symbolsActivated && type.symbol);
     if (type.category) {
         QString s = categoryData(section, Qt::DisplayRole).toString().trimmed();
         if (!s.isEmpty()) dataLabel += s + QLatin1Char(' ');
@@ -938,11 +944,6 @@ KChart::MarkerAttributes DataSet::getMarkerAttributes(int section) const
     return ma;
 }
 
-bool DataSet::markerAutoSet() const
-{
-    return d->markerIsAutoSet;
-}
-
 void DataSet::setMarkerAttributes(const KChart::MarkerAttributes &attribs, int section)
 {
     KChart::DataValueAttributes attr(d->dataValueAttributes);
@@ -954,9 +955,14 @@ void DataSet::setMarkerAttributes(const KChart::MarkerAttributes &attribs, int s
     d->dataValueAttributes = attr;
 }
 
-void DataSet::setAutoMarker(bool isAuto)
+OdfSymbolType DataSet::odfSymbolType() const
 {
-    d->markerIsAutoSet = isAuto;
+    return d->odfSymbolType;
+}
+
+void DataSet::setOdfSymbolType(OdfSymbolType type)
+{
+    d->odfSymbolType = type;
 }
 
 void DataSet::setPen(const QPen &pen)
@@ -1037,7 +1043,6 @@ void DataSet::setMarkerStyle(OdfMarkerStyle style)
     matt.setMarkerStyle(odf2kdMarker(style));
     setMarkerAttributes(matt);
 
-    d->symbolsActivated = true;
     d->symbolID = style;
 }
 
@@ -1450,20 +1455,22 @@ void DataSet::Private::readValueLabelType(KoStyleStack &styleStack, int section 
 
     const QString number = styleStack.property(KoXmlNS::chart, "data-label-number");
     if (!number.isNull()) {
+        type.numberIsLoaded = true;
         type.number = (number == "value" || number == "value-and-percentage");
         type.percentage = (number == "percentage" || number == "value-and-percentage");
     }
 
     const QString text = styleStack.property(KoXmlNS::chart, "data-label-text");
     if (!text.isNull()) {
+        type.categoryIsLoaded = true;
         type.category = (text == "true");
     }
 
     const QString symbol = styleStack.property(KoXmlNS::chart, "data-label-symbol");
     if (!symbol.isNull()) {
+        warnChartOdf<<"data-label-symbol not supported";
+        type.symbolIsLoaded = true;
         type.symbol = (symbol == "true");
-    } else {
-        type.symbol = false; // FIXME LO seems to do this, but see loading of symbol-type below
     }
 
     parent->setValueLabelType(type, section);
@@ -1472,7 +1479,6 @@ void DataSet::Private::readValueLabelType(KoStyleStack &styleStack, int section 
 bool DataSet::loadOdf(const KoXmlElement &n,
                       KoShapeLoadingContext &context)
 {
-    d->symbolsActivated = false;
     KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
     KoOdfStylesReader &stylesReader = odfLoadingContext.stylesReader();
     KoStyleStack &styleStack = odfLoadingContext.styleStack();
@@ -1603,21 +1609,16 @@ bool DataSet::loadOdf(const KoXmlElement &n,
         }
     }
 
-    d->readValueLabelType(styleStack); // NOTE do this before symbol-type
+    d->readValueLabelType(styleStack);
 
     if (styleStack.hasProperty(KoXmlNS::chart, "symbol-type")) {
-
         const QString name = styleStack.property(KoXmlNS::chart, "symbol-type");
         if (name == "automatic") {
-            d->symbolsActivated = true;
-            d->valueLabelType[-1].symbol = true; // LO uses this when  name != "none"
+            d->odfSymbolType = AutomaticSymbol;
             d->symbolID = d->num % numDefaultMarkerTypes;
-            d->markerIsAutoSet = true;
         }
         else if (name == "named-symbol") {
-            d->symbolsActivated = true;
-            d->valueLabelType[-1].symbol = true; // LO uses this when  name != "none"
-            d->markerIsAutoSet = false;
+            d->odfSymbolType = NamedSymbol;
             if (styleStack.hasProperty(KoXmlNS::chart, "symbol-name")) {
 
                 const QString type = styleStack.property(KoXmlNS::chart, "symbol-name");
@@ -1655,9 +1656,12 @@ bool DataSet::loadOdf(const KoXmlElement &n,
                     d->symbolID = 0;
             }
         } else if (name == "none") {
-            d->symbolsActivated = false;
-            d->symbolID = 19;
-            d->markerIsAutoSet = false;
+            d->odfSymbolType = NoSymbol;
+        } else if (name == "image") {
+            // TODO: Not supported by KChart
+            warnChartOdf<<"symbol-type = image not supported";
+        } else {
+            errorChartOdf<<"Unknown symbol-type"<<name;
         }
     }
 
@@ -1697,7 +1701,6 @@ bool DataSet::loadOdf(const KoXmlElement &n,
 
 bool DataSet::loadSeriesIntoDataset(const KoXmlElement &n, KoShapeLoadingContext &context)
 {
-    d->symbolsActivated = false;
     KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
     KoStyleStack &styleStack = odfLoadingContext.styleStack();
     styleStack.clear();
@@ -1792,7 +1795,6 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
         style.addProperty("chart:pie-offset", pieExplode, KoGenStyle::ChartType);
     }
 
-    // atm we do as LO does
     DataSet::ValueLabelType type = valueLabelType();
     if (!type.noLabel()) {
         if (type.number && type.percentage) {
@@ -1805,40 +1807,51 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
             style.addProperty("chart:data-label-number", "none");
         }
         style.addProperty("chart:data-label-text", type.category ? "true" : "false");
-        style.addProperty("chart:data-label-symbol", type.symbol ? "true" : "false");
+        // TODO Not supported, should we write back if loaded?
+//         if (type.symbolIsLoaded) {
+//             style.addProperty("chart:data-label-symbol", type.symbol ? "true" : "false");
+//         }
     }
-
-    if (d->symbolsActivated) {
-        QString symbolName;
-        QString symbolType = "named-symbol";
-
-        if (!d->markerIsAutoSet) {
-            switch (d->symbolID) {
-            case 0: symbolName = "square"; break;
-            case 1: symbolName = "diamond"; break;
-            case 2: symbolName = "arrow-down"; break;
-            case 3: symbolName = "arrow-up"; break;
-            case 4: symbolName = "arrow-right"; break;
-            case 5: symbolName = "arrow-left"; break;
-            case 6: symbolName = "bow-tie"; break;
-            case 7: symbolName = "hourglass"; break;
-            case 8: symbolName = "circle"; break;
-            case 9: symbolName = "star"; break;
-            case 10: symbolName = 'x'; break;
-            case 11: symbolName = "plus"; break;
-            case 12: symbolName = "asterisk"; break;
-            case 13: symbolName = "horizontal-bar"; break;
-            case 14: symbolName = "vertical-bar"; break;
-            case 19: symbolType = "none"; break;
-            default: symbolType = "automatic"; break;
+    if (d->markersUsed) {
+        switch (d->odfSymbolType) {
+            case NoSymbol:
+                break;
+            case NamedSymbol: {
+                QString symbolType = "named-symbol";
+                QString symbolName;
+                switch (d->symbolID) {
+                    case MarkerSquare: symbolName = "square"; break;
+                    case MarkerDiamond: symbolName = "diamond"; break;
+                    case MarkerArrowDown: symbolName = "arrow-down"; break;
+                    case MarkerArrowUp: symbolName = "arrow-up"; break;
+                    case MarkerArrowRight: symbolName = "arrow-right"; break;
+                    case MarkerArrowLeft: symbolName = "arrow-left"; break;
+                    case MarkerBowTie: symbolName = "bow-tie"; break;
+                    case MarkerHourGlass: symbolName = "hourglass"; break;
+                    case MarkerCircle: symbolName = "circle"; break;
+                    case MarkerStar: symbolName = "star"; break;
+                    case MarkerX: symbolName = 'x'; break;
+                    case MarkerCross: symbolName = "plus"; break;
+                    case MarkerAsterisk: symbolName = "asterisk"; break;
+                    case MarkerHorizontalBar: symbolName = "horizontal-bar"; break;
+                    case MarkerVerticalBar: symbolName = "vertical-bar"; break;
+                    default:
+                        break;
+                }
+                if (!symbolName.isEmpty()) {
+                    style.addProperty("chart:symbol-type", symbolType, KoGenStyle::ChartType);
+                    style.addProperty("chart:symbol-name", symbolName, KoGenStyle::ChartType);
+                }
+                break;
             }
-        } else {
-            symbolType = "automatic";
+            case ImageSymbol: // TODO: Not supported
+            case AutomaticSymbol:
+                style.addProperty("chart:symbol-type", "automatic", KoGenStyle::ChartType);
+                break;
+            default:
+                Q_ASSERT(false);
+                break;
         }
-
-        style.addProperty("chart:symbol-type", symbolType, KoGenStyle::ChartType);
-        if (!symbolName.isEmpty())
-            style.addProperty("chart:symbol-name", symbolName, KoGenStyle::ChartType);
     }
 
     KoOdfGraphicStyles::saveOdfFillStyle(style, mainStyles, brush());
@@ -1950,8 +1963,6 @@ static KChart::MarkerAttributes::MarkerStyle odf2kdMarker(OdfMarkerStyle style) 
         return KChart::MarkerAttributes::Marker1Pixel;
     case Marker4Pixels:
         return KChart::MarkerAttributes::Marker4Pixels;
-    case NoMarker:
-        return KChart::MarkerAttributes::NoMarker;
     }
 
     return KChart::MarkerAttributes::MarkerSquare;

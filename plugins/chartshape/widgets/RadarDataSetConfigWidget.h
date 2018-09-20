@@ -76,7 +76,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void datasetPenChanged(DataSet *dataSet, const QColor& color, int section);
     void datasetBrushChanged(DataSet *dataSet, const QColor& color, int section);
-    void dataSetMarkerChanged(DataSet *dataSet, OdfMarkerStyle style);
+    void dataSetMarkerChanged(DataSet *dataSet, OdfSymbolType type, OdfMarkerStyle style);
     void datasetShowCategoryChanged(DataSet *dataSet, bool b, int section);
     void dataSetShowNumberChanged(DataSet *dataSet, bool b, int section);
     void datasetShowPercentChanged(DataSet *dataSet, bool b, int section);
