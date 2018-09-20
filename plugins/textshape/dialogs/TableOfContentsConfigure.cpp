@@ -115,8 +115,8 @@ void TableOfContentsConfigure::setDisplay()
     ui.configureToCEntryStyle->verticalHeader()->hide();
     ui.configureToCEntryStyle->setEditTriggers(QAbstractItemView::CurrentChanged | QAbstractItemView::DoubleClicked | QAbstractItemView::SelectedClicked);
     ui.configureToCEntryStyle->setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui.configureToCEntryStyle->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
-    ui.configureToCEntryStyle->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
+    ui.configureToCEntryStyle->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    ui.configureToCEntryStyle->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
 
     connect(this, SIGNAL(accepted()), this, SLOT(save()));
     connect(this, SIGNAL(rejected()), this, SLOT(cleanUp()));

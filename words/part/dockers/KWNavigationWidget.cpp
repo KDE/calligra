@@ -109,8 +109,8 @@ void KWNavigationWidget::updateData()
     m_model->setHorizontalHeaderLabels(head);
     m_model->setColumnCount(2);
 
-    m_treeView->header()->setResizeMode(0, QHeaderView::Stretch);
-    m_treeView->header()->setResizeMode(1, QHeaderView::ResizeToContents);
+    m_treeView->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    m_treeView->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
     m_treeView->header()->setStretchLastSection(false);
 
     QStack< QPair<QStandardItem *, int> > curChain;

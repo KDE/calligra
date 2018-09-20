@@ -68,7 +68,7 @@ void TableOfContentsStyleConfigure::initializeUi(KoTableOfContentsGeneratorInfo 
     ui->tableView->verticalHeader()->hide();
     ui->tableView->setEditTriggers(QAbstractItemView::CurrentChanged | QAbstractItemView::DoubleClicked | QAbstractItemView::SelectedClicked);
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui->tableView->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    ui->tableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
     ui->tableView->horizontalHeader()->resizeSection(1, 100);
 
     this->setVisible(true);

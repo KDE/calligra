@@ -338,8 +338,8 @@ SortDialog::SortDialog(QWidget* parent, Selection* selection)
     d->mainWidget.m_upButton->setIcon(koIcon("go-up"));
     d->mainWidget.m_downButton->setIcon(koIcon("go-down"));
     QHeaderView *const header = d->mainWidget.m_tableWidget->horizontalHeader();
-    header->setResizeMode(QHeaderView::ResizeToContents);
-    header->setResizeMode(0, QHeaderView::Stretch);
+    header->setSectionResizeMode(QHeaderView::ResizeToContents);
+    header->setSectionResizeMode(0, QHeaderView::Stretch);
     d->mainWidget.m_tableWidget->setItemDelegateForColumn(0, d);
 
     connect(d->mainWidget.m_useHeader, SIGNAL(toggled(bool)),
