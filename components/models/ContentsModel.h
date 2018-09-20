@@ -98,6 +98,7 @@ protected:
 
 private Q_SLOTS:
     void updateImpl();
+    void reset();
 
 private:
     class Private;

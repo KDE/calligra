@@ -26,7 +26,11 @@
 KPrCollectionItemModel::KPrCollectionItemModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    setSupportedDragActions(Qt::IgnoreAction);
+}
+
+Qt::DropActions KPrCollectionItemModel::supportedDragActions() const
+{
+    return Qt::IgnoreAction;
 }
 
 QVariant KPrCollectionItemModel::data(const QModelIndex &index, int role) const
@@ -63,8 +67,9 @@ int KPrCollectionItemModel::rowCount(const QModelIndex &parent) const
 
 void KPrCollectionItemModel::setAnimationClassList(const QVector<KPrCollectionItem> &newlist)
 {
+    beginResetModel();
     m_animationClassList = newlist;
-    reset();
+    endResetModel();
 }
 
 KoXmlElement KPrCollectionItemModel::animationContext(const QModelIndex &index) const

@@ -58,6 +58,7 @@ public:
 
     virtual QMimeData* mimeData(const QModelIndexList &indexes) const;
 
+    virtual Qt::DropActions supportedDragActions() const;
     virtual Qt::DropActions supportedDropActions() const;
 
     virtual bool removeRows(int row, int count, const QModelIndex &parent);

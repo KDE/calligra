@@ -58,7 +58,11 @@ KoShapeContainer *shapeToContainer(KoShape *shape)
 KarbonLayerModel::KarbonLayerModel(QObject * parent)
         : KoDocumentSectionModel(parent), m_document(0)
 {
-    setSupportedDragActions(Qt::MoveAction);
+}
+
+Qt::DropActions KarbonLayerModel::supportedDragActions() const
+{
+    return Qt::MoveAction;
 }
 
 void KarbonLayerModel::update()
@@ -69,8 +73,9 @@ void KarbonLayerModel::update()
 
 void KarbonLayerModel::setDocument(KarbonDocument * newDocument)
 {
+    beginResetModel();
     m_document = newDocument;
-    reset();
+    endResetModel();
 }
 
 int KarbonLayerModel::rowCount(const QModelIndex &parent) const

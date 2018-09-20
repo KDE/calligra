@@ -62,6 +62,7 @@ public:
     virtual QStringList mimeTypes() const;
     virtual QMimeData * mimeData( const QModelIndexList & indexes ) const;
     virtual bool dropMimeData( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent );
+    virtual Qt::DropActions supportedDragActions() const;
 
 public Q_SLOTS:
     /// Triggers an update of the complete model

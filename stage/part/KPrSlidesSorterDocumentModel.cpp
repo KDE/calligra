@@ -46,7 +46,11 @@ KPrSlidesSorterDocumentModel::KPrSlidesSorterDocumentModel(KPrViewModeSlidesSort
    , m_viewModeSlidesSorter(viewModeSlidesSorter)
 {
     setDocument(document);
-    setSupportedDragActions(Qt::MoveAction);
+}
+
+Qt::DropActions KPrSlidesSorterDocumentModel::supportedDragActions() const
+{
+    return Qt::MoveAction;
 }
 
 KPrSlidesSorterDocumentModel::~KPrSlidesSorterDocumentModel()
@@ -55,14 +59,14 @@ KPrSlidesSorterDocumentModel::~KPrSlidesSorterDocumentModel()
 
 void KPrSlidesSorterDocumentModel::setDocument(KoPADocument *document)
 {
+    beginResetModel();
     m_document = document;
+    endResetModel();
     if (m_document) {
         connect(m_document, SIGNAL(pageAdded(KoPAPageBase*)), this, SLOT(update()));
         connect(m_document, SIGNAL(pageRemoved(KoPAPageBase*)), this, SLOT(update()));
         connect(m_document, SIGNAL(update(KoPAPageBase*)), this, SLOT(update()));
     }
-
-    reset();
 }
 
 QModelIndex KPrSlidesSorterDocumentModel::index(int row, int column, const QModelIndex &parent) const

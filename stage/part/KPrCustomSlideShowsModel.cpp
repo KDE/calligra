@@ -237,9 +237,10 @@ QList<KoPAPageBase *> KPrCustomSlideShowsModel::decodeSlidesList(const QByteArra
 
 void KPrCustomSlideShowsModel::setCustomSlideShows(KPrCustomSlideShows *customShows)
 {
+    beginResetModel();
     m_customSlideShows = customShows;
     m_activeCustomSlideShowName.clear();
-    reset();
+    endResetModel();
 }
 
 
@@ -254,8 +255,9 @@ void KPrCustomSlideShowsModel::setActiveSlideShow(const QString &name)
         return;
     }
     if (m_customSlideShows->names().contains(name)) {
+        beginResetModel();
         m_activeCustomSlideShowName = name;
-        reset();
+        endResetModel();
     }
 }
 

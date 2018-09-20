@@ -58,7 +58,11 @@ KoPADocumentModel::KoPADocumentModel( QObject* parent, KoPADocument *document )
 , m_lastContainer( 0 )
 {
     setDocument( document );
-    setSupportedDragActions( Qt::MoveAction );
+}
+
+Qt::DropActions KoPADocumentModel::supportedDragActions() const
+{
+    return Qt::MoveAction;
 }
 
 void KoPADocumentModel::update()
@@ -644,6 +648,7 @@ void KoPADocumentModel::setDocument( KoPADocument* document )
     if (m_document == document) {
         return;
     }
+
     if (m_document) {
         disconnect( m_document, SIGNAL(pageAdded(KoPAPageBase*)), this, SLOT(update()) );
         disconnect( m_document, SIGNAL(pageRemoved(KoPAPageBase*)), this, SLOT(update()) );
@@ -651,7 +656,10 @@ void KoPADocumentModel::setDocument( KoPADocument* document )
         disconnect( m_document, SIGNAL(shapeAdded(KoShape*)), this, SLOT(update()) );
         disconnect( m_document, SIGNAL(shapeRemoved(KoShape*)), this, SLOT(update()) );
     }
+
+    beginResetModel();
     m_document = document;
+    endResetModel();
 
     if ( m_document ) {
         connect( m_document, SIGNAL(pageAdded(KoPAPageBase*)), this, SLOT(update()) );
@@ -660,8 +668,6 @@ void KoPADocumentModel::setDocument( KoPADocument* document )
         connect( m_document, SIGNAL(shapeAdded(KoShape*)), this, SLOT(update()) );
         connect( m_document, SIGNAL(shapeRemoved(KoShape*)), this, SLOT(update()) );
     }
-
-    reset();
 }
 
 void KoPADocumentModel::setMasterMode(bool master)

@@ -177,6 +177,12 @@ void ContentsModel::updateImpl()
     endResetModel();
 }
 
+void ContentsModel::reset()
+{
+    beginResetModel();
+    endResetModel();
+}
+
 QHash<int, QByteArray> ContentsModel::roleNames() const
 {
     QHash<int, QByteArray> roleNames;
