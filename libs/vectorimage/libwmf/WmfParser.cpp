@@ -679,7 +679,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                         //        it should be set to the new region.  /iw
                         region = newRegion;
                     } else {
-                        region = region.intersect(newRegion);
+                        region = region.intersected(newRegion);
                     }
 
                     mDeviceContext.clipRegion = region;

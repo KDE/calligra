@@ -101,7 +101,7 @@ QVector<KWViewMode::ViewMap> KWViewModeNormal::mapExposedRects(const QRectF &vie
 
         const QRectF targetPage(zoomedPage.x() + vm.distance.x(), zoomedPage.y() + vm.distance.y(),
                                 zoomedPage.width(), zoomedPage.height());
-        QRectF intersection = targetPage.intersect(viewRect);
+        QRectF intersection = targetPage.intersected(viewRect);
         if (! intersection.isEmpty()) {
             intersection.moveTopLeft(intersection.topLeft() - vm.distance);
             vm.clipRect = intersection.toRect();
@@ -131,7 +131,7 @@ QVector<KWViewMode::ViewMap> KWViewModeNormal::mapExposedRects(const QRectF &vie
             const QRectF targetAnnotation(zoomedAnnotation.x() + vm2.distance.x(),
                                           zoomedAnnotation.y() + vm2.distance.y(),
                                           zoomedAnnotation.width(), zoomedAnnotation.height());
-            intersection = targetAnnotation.intersect(viewRect);
+            intersection = targetAnnotation.intersected(viewRect);
             if (! intersection.isEmpty()) {
                 intersection.moveTopLeft(intersection.topLeft() - vm2.distance);
                 vm2.clipRect = intersection.toRect();
@@ -171,7 +171,7 @@ QVector<KWViewMode::ViewMap> KWViewModeNormal::mapExposedRects(const QRectF &vie
         vm.distance = viewConverter->documentToView(QPointF(offsetX, offsetY));
 #if 0
         const QRectF targetPage(zoomedPage.x() + vm.distance.x(), zoomedPage.y() + vm.distance.y(), zoomedPage.width() , zoomedPage.height());
-        QRectF intersection = targetPage.intersect(viewRect);
+        QRectF intersection = targetPage.intersected(viewRect);
         if (! intersection.isEmpty()) {
             intersection.moveTopLeft(intersection.topLeft() - vm.distance);
             vm.clipRect = intersection.toRect();

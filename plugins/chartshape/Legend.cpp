@@ -319,7 +319,7 @@ void Legend::paint(QPainter &painter, const KoViewConverter &converter, KoShapeP
 
     // Calculate the clipping rect
     QRectF paintRect = QRectF(QPointF(0, 0), size());
-    //clipRect.intersect(paintRect);
+    //clipRect.intersected(paintRect);
     painter.setClipRect(paintRect, Qt::IntersectClip);
 
     // Get the current zoom level

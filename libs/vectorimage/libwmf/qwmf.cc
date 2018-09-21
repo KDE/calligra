@@ -664,7 +664,7 @@ void QWinMetaFile::intersectClipRect(long, short* parm)
     QRegion region(bbox());
 
     QRegion newRegion(parm[ 3 ], parm[ 2 ], parm[ 1 ] - parm[ 3 ], parm[ 0 ] - parm[ 2 ]);
-    region = region.intersect(newRegion);
+    region = region.intersected(newRegion);
 
     mPainter.setClipRegion(region);
 }
