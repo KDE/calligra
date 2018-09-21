@@ -47,7 +47,7 @@
 
 using namespace Calligra::Sheets;
 
-ConditionalWidget::ConditionalWidget(QWidget* parent, const char* /*name*/, Qt::WFlags fl)
+ConditionalWidget::ConditionalWidget(QWidget* parent, const char* /*name*/, Qt::WindowFlags fl)
         : QWidget(parent, fl)
 {
     QGridLayout * Form1Layout = new QGridLayout(this);

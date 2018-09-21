@@ -26,7 +26,7 @@
 #include <QSet>
 #include <QStringList>
 
-LanguageTab::LanguageTab(/*KSpell2::Loader::Ptr loader,*/bool uniqueFormat, QWidget* parent, Qt::WFlags fl)
+LanguageTab::LanguageTab(/*KSpell2::Loader::Ptr loader,*/bool uniqueFormat, QWidget* parent, Qt::WindowFlags fl)
         : QWidget(parent),
         m_uniqueFormat(uniqueFormat)
 {

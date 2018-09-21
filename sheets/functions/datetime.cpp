@@ -246,7 +246,7 @@ Value func_eomonth(valVector args, ValueCalc *calc, FuncExtra *)
 
     // modDate is currently in Date format
     QDate date = modDate.asDate(calc->settings());
-    date.setYMD(date.year(), date.month(), date.daysInMonth());
+    date.setDate(date.year(), date.month(), date.daysInMonth());
 
     return Value(date, calc->settings());
 }
@@ -454,8 +454,8 @@ Value func_years(valVector args, ValueCalc *calc, FuncExtra *)
         return Value(0);
 
     if ((date1.month() != 1) || (date1.day() != 1))
-        date1.setYMD(date1.year() + 1, 1, 1);
-    date2.setYMD(date2.year(), 1, 1);
+        date1.setDate(date1.year() + 1, 1, 1);
+    date2.setDate(date2.year(), 1, 1);
 
     return Value(date2.year() - date1.year());
 }
@@ -483,10 +483,10 @@ Value func_months(valVector args, ValueCalc *calc, FuncExtra *)
     // type is now non-zero
     // the number of full months in between, starting on 1/XX/XXXX
     if (date1.month() == 12)
-        date1.setYMD(date1.year() + 1, 1, 1);
+        date1.setDate(date1.year() + 1, 1, 1);
     else
-        date1.setYMD(date1.year(), date1.month() + 1, 1);
-    date2.setYMD(date2.year(), date2.month(), 1);
+        date1.setDate(date1.year(), date1.month() + 1, 1);
+    date2.setDate(date2.year(), date2.month(), 1);
 
     int months = (date2.year() - date1.year()) * 12;
     months += date2.month() - date1.month();
