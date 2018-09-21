@@ -117,19 +117,19 @@ void initchartTypeIconMap()
     insertIcon(BarChartType, NoChartSubtype, QLatin1String("office-chart-bar"));
     insertIcon(BarChartType, NormalChartSubtype, QLatin1String("office-chart-bar"));
     insertIcon(BarChartType, StackedChartSubtype, QLatin1String("office-chart-bar-stacked"));
-    insertIcon(BarChartType, PercentChartSubtype, QLatin1String("office-chart-bar-percent"));
+    insertIcon(BarChartType, PercentChartSubtype, QLatin1String("office-chart-bar-percentage"));
 
     // Line charts
     insertIcon(LineChartType, NoChartSubtype, QLatin1String("office-chart-line"));
     insertIcon(LineChartType, NormalChartSubtype, QLatin1String("office-chart-line"));
     insertIcon(LineChartType, StackedChartSubtype, QLatin1String("office-chart-line-stacked"));
-    insertIcon(LineChartType, PercentChartSubtype, QLatin1String("office-chart-line-percent"));
+    insertIcon(LineChartType, PercentChartSubtype, QLatin1String("office-chart-line-percentage"));
 
     // Area charts
     insertIcon(AreaChartType, NoChartSubtype, QLatin1String("office-chart-area"));
     insertIcon(AreaChartType, NormalChartSubtype, QLatin1String("office-chart-area"));
     insertIcon(AreaChartType, StackedChartSubtype, QLatin1String("office-chart-area-stacked"));
-    insertIcon(AreaChartType, PercentChartSubtype, QLatin1String("office-chart-area-percent"));
+    insertIcon(AreaChartType, PercentChartSubtype, QLatin1String("office-chart-area-percentage"));
 
     // Circular charts: pie and ring
     insertIcon(CircleChartType, NoChartSubtype, QLatin1String("office-chart-pie"));
@@ -141,7 +141,7 @@ void initchartTypeIconMap()
     // Polar charts: radar
     insertIcon(RadarChartType, NoChartSubtype, QLatin1String("office-chart-polar"));
     insertIcon(RadarChartType, NormalChartSubtype, QLatin1String("office-chart-polar"));
-    insertIcon(RadarChartType, StackedChartSubtype, QLatin1String("office-chart-polar"));
+    insertIcon(RadarChartType, StackedChartSubtype, QLatin1String("office-chart-polar-stacked"));
     insertIcon(RadarChartType, PercentChartSubtype, QLatin1String("office-chart-polar"));
 
     insertIcon(FilledRadarChartType, NoChartSubtype, QLatin1String("office-chart-polar-filled"));
@@ -157,10 +157,10 @@ void initchartTypeIconMap()
     insertIcon(BubbleChartType, NormalChartSubtype, QLatin1String("skg-chart-bubble"));
 
     // Stock Charts
-    insertIcon(StockChartType, NoChartSubtype, QLatin1String("office-chart-stock"));
+    insertIcon(StockChartType, NoChartSubtype, QLatin1String("office-chart-stock-candlestick"));
     insertIcon(StockChartType, HighLowCloseChartSubtype, QLatin1String("office-chart-stock-hlc"));
     insertIcon(StockChartType, OpenHighLowCloseChartSubtype, QLatin1String("office-chart-stock-ohlc"));
-    insertIcon(StockChartType, CandlestickChartSubtype, QLatin1String("office-chart-stock-candle-stick"));
+    insertIcon(StockChartType, CandlestickChartSubtype, QLatin1String("office-chart-stock-candlestick"));
 
     // TODO surface/gantt
 }

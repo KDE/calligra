@@ -1,0 +1,17 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created using Karbon, part of Calligra: http://www.calligra.org/karbon -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="595.277pt" height="841.891pt">
+<defs/>
+<g id="layer0">
+  <path id="shape0" transform="translate(93.75, 143.352)" fill="#4d4d4d" d="M30.7692 658.685L0 658.685L0 705.734L30.7692 705.734L30.7692 752.783L61.5385 752.783L61.5385 705.734L492.308 705.734L492.308 658.685M61.5385 658.685L61.5385 611.636L61.5385 564.587L61.5385 423.441L61.5385 376.392L61.5385 329.343L61.5385 282.294L61.5385 141.147L61.5385 140.779L61.5385 94.0979L61.5385 0L30.7692 0L30.7692 282.294L30.7692 329.343L30.7692 564.587L31.8129 658.985M30.7692 611.636M30.7692 611.636L30.7692 658.685M123.077 658.685"/>
+  <path id="shape1" transform="translate(265.551, 512.661)" fill="none" stroke="#000000" stroke-width="28.34650580000" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2.00000000000" d="M1.12673 5.13398e-14L0 226.687L0 226.687L0 227.094"/>
+  <path id="shape2" transform="translate(477.79, 353.981)" fill="none" stroke="#000000" stroke-width="28.34650580000" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2.00000000000" d="M0 0"/>
+  <path id="shape3" transform="translate(479.479, 476.854)" fill="none" stroke="#000000" stroke-width="28.34650580000" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2.00000000000" d="M0 197.717C0 80.3302 0.23622 14.4245 0.708663 0C0.708663 0 0.708663 0 0.708663 0"/>
+  <path id="shape4" transform="translate(319.089, 601.599)" fill="none" stroke="#000000" stroke-width="28.34650580000" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2.00000000000" d="M0 0"/>
+  <path id="shape5" transform="translate(211.825, 322.244)" fill="none" stroke="#000000" stroke-width="28.34650580000" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="1.98425540600" d="M0 172.389C72.1106 172.389 108.166 172.389 108.166 172.389C108.166 57.4631 108.166 0 108.166 0C36.8065 0 1.12673 0 1.12673 0C1.12673 108.92 0.751152 163.378 0 163.376"/>
+  <path id="shape6" transform="translate(265.908, 210.698)" fill="none" stroke="#000000" stroke-width="28.34650580000" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="1.98425540600" d="M0 109.293C0 36.4309 0 0 0 0"/>
+  <path id="shape7" transform="translate(477.226, 172.637)" fill="none" stroke="#000000" stroke-width="28.34650580000" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2.00000000000" d="M0 87.8742C0 35.7022 0.11811 6.41087 0.354331 0C0.354331 0 0.354331 0 0.354331 0"/>
+  <path id="shape8" transform="translate(427.03, 278.302)" fill="none" stroke="#000000" stroke-width="28.34650580000" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2.00000000000" d="M0 172.279C71.7233 172.279 107.585 172.279 107.585 172.279C107.585 57.4263 107.585 0 107.585 0C36.6088 0 1.12068 0 1.12068 0C1.12068 108.85 0.747118 163.274 0 163.27"/>
+ </g>
+</svg>

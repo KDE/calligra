@@ -235,9 +235,9 @@ DataSetConfigWidget::Private::Private(DataSetConfigWidget *parent)
     dataSetFilledRadarChartAction = dataSetRadarChartMenu->addAction(ICON2(FilledRadarChartType, NoChartSubtype), i18n("Filled"));
 
     dataSetStockChartMenu = dataSetChartTypeMenu->addMenu(ICON1(StockChartType), i18n("Stock Chart"));
-    dataSetHLCStockChartAction = dataSetStockChartMenu->addAction(ICON2(StockChartType, HighLowCloseChartSubtype), i18n("HighLowClose"));
-    dataSetOHLCStockChartAction = dataSetStockChartMenu->addAction(ICON2(StockChartType, OpenHighLowCloseChartSubtype), i18n("OpenHighLowClose"));
     dataSetCandlestickStockChartAction = dataSetStockChartMenu->addAction(ICON2(StockChartType, CandlestickChartSubtype), i18n("Candlestick"));
+    dataSetOHLCStockChartAction = dataSetStockChartMenu->addAction(ICON2(StockChartType, OpenHighLowCloseChartSubtype), i18n("OpenHighLowClose"));
+    dataSetHLCStockChartAction = dataSetStockChartMenu->addAction(ICON2(StockChartType, HighLowCloseChartSubtype), i18n("HighLowClose"));
 
     dataSetBubbleChartAction = dataSetChartTypeMenu->addAction(ICON1(BubbleChartType), i18n("Bubble Chart"));
 

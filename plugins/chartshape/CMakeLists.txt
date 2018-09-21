@@ -5,6 +5,7 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-switch)
 endif ()
 
+add_subdirectory(icons)
 
 if(BUILD_TESTING)
     add_subdirectory( tests )
