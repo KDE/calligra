@@ -76,7 +76,7 @@ public:
 
     void setDataSetPen(const QColor& color);
     void setDataSetBrush(const QColor& color);
-    void setDataSetMarker(OdfMarkerStyle style);
+    void setDataSetMarker(OdfSymbolType type, OdfMarkerStyle style);
     void setDataSetAxis(Axis *axis);
 
 private:
@@ -102,6 +102,8 @@ private:
     QColor m_newPenColor;
     QColor m_oldBrushColor;
     QColor m_newBrushColor;
+    OdfSymbolType m_oldOdfSymbolType;
+    OdfSymbolType m_newOdfSymbolType;
     OdfMarkerStyle m_oldMarkerStyle;
     OdfMarkerStyle m_newMarkerStyle;
 

@@ -45,6 +45,7 @@ DatasetCommand::DatasetCommand(DataSet* dataSet, ChartShape* chart, int section,
     m_newShowSymbol = dataSet->valueLabelType(section).symbol;
     m_newBrushColor = dataSet->brush(section).color();
     m_newPenColor = dataSet->pen(section).color();
+    m_newOdfSymbolType = dataSet->odfSymbolType();
     m_newMarkerStyle = dataSet->markerStyle();
     m_newAxis = dataSet->attachedAxis();
 }
@@ -64,6 +65,7 @@ void DatasetCommand::redo()
     m_oldShowSymbol = m_dataSet->valueLabelType(m_section).symbol;
     m_oldBrushColor = m_dataSet->brush(m_section).color();
     m_oldPenColor = m_dataSet->pen(m_section).color();
+    m_oldOdfSymbolType = m_dataSet->odfSymbolType();
     m_oldMarkerStyle = m_dataSet->markerStyle();
     m_oldAxis = m_dataSet->attachedAxis();
 
@@ -85,6 +87,9 @@ void DatasetCommand::redo()
     }
     if (m_oldPenColor != m_newPenColor) {
         m_dataSet->setPen(m_section, QPen(m_newPenColor, 0));
+    }
+    if (m_oldOdfSymbolType != m_newOdfSymbolType) {
+        m_dataSet->setOdfSymbolType(m_newOdfSymbolType);
     }
     if (m_oldMarkerStyle != m_newMarkerStyle) {
         m_dataSet->setMarkerStyle(m_newMarkerStyle);
@@ -117,6 +122,9 @@ void DatasetCommand::undo()
     }
     if (m_oldPenColor != m_newPenColor) {
         m_dataSet->setPen(m_section, QPen(m_oldPenColor, 0));
+    }
+    if (m_oldOdfSymbolType != m_newOdfSymbolType) {
+        m_dataSet->setOdfSymbolType(m_oldOdfSymbolType);
     }
     if (m_oldMarkerStyle != m_newMarkerStyle) {
         m_dataSet->setMarkerStyle(m_oldMarkerStyle);
@@ -195,11 +203,16 @@ void DatasetCommand::setDataSetPen(const QColor &color)
     setText(kundo2_i18n("Set Dataset Pen Color"));
 }
 
-void DatasetCommand::setDataSetMarker(OdfMarkerStyle style)
+void DatasetCommand::setDataSetMarker(OdfSymbolType type, OdfMarkerStyle style)
 {
+    m_newOdfSymbolType = type;
     m_newMarkerStyle = style;
 
-    setText(kundo2_i18n("Set Dataset Marker Style"));
+    if (type == NoSymbol) {
+        setText(kundo2_i18n("Hide Dataset Marker"));
+    } else {
+        setText(kundo2_i18n("Show Dataset Marker Symbol"));
+    }
 }
 
 void DatasetCommand::setDataSetAxis(Axis *axis)

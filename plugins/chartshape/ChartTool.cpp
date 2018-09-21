@@ -357,8 +357,8 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
             this,   SLOT(setDataSetChartSubType(DataSet*,ChartSubtype)));
     connect(dataset, SIGNAL(datasetBrushChanged(DataSet*,QColor,int)),
             this, SLOT(setDataSetBrush(DataSet*,QColor,int)));
-    connect(dataset, SIGNAL(dataSetMarkerChanged(DataSet*,OdfMarkerStyle)),
-            this, SLOT(setDataSetMarker(DataSet*,OdfMarkerStyle)));
+    connect(dataset, SIGNAL(dataSetMarkerChanged(DataSet*,OdfSymbolType,OdfMarkerStyle)),
+            this, SLOT(setDataSetMarker(DataSet*,OdfSymbolType,OdfMarkerStyle)));
     connect(dataset, SIGNAL(datasetPenChanged(DataSet*,QColor,int)),
             this, SLOT(setDataSetPen(DataSet*,QColor,int)));
     connect(dataset, SIGNAL(datasetShowCategoryChanged(DataSet*,bool,int)),
@@ -430,8 +430,8 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
     RadarDataSetConfigWidget *rdataset = plotarea->radarDataSetConfigWidget();
     connect(rdataset, SIGNAL(datasetBrushChanged(DataSet*,QColor,int)),
             this, SLOT(setDataSetBrush(DataSet*,QColor,int)));
-    connect(rdataset, SIGNAL(dataSetMarkerChanged(DataSet*,OdfMarkerStyle)),
-            this, SLOT(setDataSetMarker(DataSet*,OdfMarkerStyle)));
+    connect(rdataset, SIGNAL(dataSetMarkerChanged(DataSet*,OdfSymbolType,OdfMarkerStyle)),
+            this, SLOT(setDataSetMarker(DataSet*,OdfSymbolType,OdfMarkerStyle)));
     connect(rdataset, SIGNAL(datasetPenChanged(DataSet*,QColor,int)),
             this, SLOT(setDataSetPen(DataSet*,QColor,int)));
     connect(rdataset, SIGNAL(datasetShowCategoryChanged(DataSet*,bool,int)),
@@ -605,14 +605,14 @@ void ChartTool::setDataSetPen(DataSet *dataSet, const QColor& color, int section
     }
 }
 
-void ChartTool::setDataSetMarker(DataSet *dataSet, OdfMarkerStyle style)
+void ChartTool::setDataSetMarker(DataSet *dataSet, OdfSymbolType type, OdfMarkerStyle style)
 {
     Q_ASSERT(d->shape);
     if (!dataSet) {
         return;
     }
     DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
-    command->setDataSetMarker(style);
+    command->setDataSetMarker(type, style);
     canvas()->addCommand(command);
 }
 void ChartTool::setDataSetAxis(DataSet *dataSet, Axis *axis)

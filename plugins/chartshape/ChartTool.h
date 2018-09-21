@@ -95,7 +95,7 @@ private Q_SLOTS:
 
     void setDataSetPen(DataSet *dataSet, const QColor& color, int section = -1);
     void setDataSetBrush(DataSet *dataSet, const QColor& color, int section = -1);
-    void setDataSetMarker(DataSet *dataSet, OdfMarkerStyle style);
+    void setDataSetMarker(DataSet *dataSet, OdfSymbolType type, OdfMarkerStyle style);
     void setDataSetAxis(DataSet *dataSet, Axis *axis);
 
     // Plot Area
