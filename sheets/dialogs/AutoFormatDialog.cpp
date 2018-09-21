@@ -33,7 +33,6 @@
 #include <QVBoxLayout>
 
 #include <kcombobox.h>
-#include <kglobal.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
 

@@ -23,7 +23,7 @@
 #include "Function.h"
 #include "FunctionRepository.h"
 
-#include <kglobal.h>
+#include <QGlobalStatic>
 #include <KSharedConfig>
 
 #ifndef SHEETS_NO_PLUGINMODULES
@@ -45,6 +45,8 @@
 #include "functions/TextModule.h"
 #include "functions/TrigonometryModule.h"
 #endif
+
+Q_GLOBAL_STATIC(Calligra::Sheets::FunctionModuleRegistry, s_instance)
 
 using namespace Calligra::Sheets;
 
@@ -100,7 +102,6 @@ FunctionModuleRegistry::~FunctionModuleRegistry()
 
 FunctionModuleRegistry* FunctionModuleRegistry::instance()
 {
-    K_GLOBAL_STATIC(FunctionModuleRegistry, s_instance)
     return s_instance;
 }
 

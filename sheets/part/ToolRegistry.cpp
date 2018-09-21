@@ -25,10 +25,12 @@
 #include <KSharedConfig>
 #include <KConfigGroup>
 #include <KPluginFactory>
-#include <kglobal.h>
+#include <QGlobalStatic>
 
 #include <KoPluginLoader.h>
 #include <KoToolRegistry.h>
+
+Q_GLOBAL_STATIC(Calligra::Sheets::ToolRegistry, s_instance)
 
 using namespace Calligra::Sheets;
 
@@ -55,7 +57,6 @@ ToolRegistry::~ToolRegistry()
 
 ToolRegistry* ToolRegistry::instance()
 {
-    K_GLOBAL_STATIC(ToolRegistry, s_instance)
     return s_instance;
 }
 

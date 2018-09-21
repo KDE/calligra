@@ -31,8 +31,10 @@
 #include <QFile>
 #include <QHash>
 
-#include <kglobal.h>
+#include <QGlobalStatic>
 #include <KLocalizedString>
+
+Q_GLOBAL_STATIC(Calligra::Sheets::FunctionRepository, s_instance)
 
 using namespace Calligra::Sheets;
 
@@ -48,7 +50,6 @@ public:
 
 FunctionRepository* FunctionRepository::self()
 {
-    K_GLOBAL_STATIC(FunctionRepository, s_instance)
     if (!s_instance.exists()) {
         *s_instance; // creates the global instance
 
