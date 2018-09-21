@@ -876,6 +876,7 @@ KChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */)
     ma.setMarkerColor(brush(section).color());
     ma.setPen(pen(section));
 
+    QLocale locale;
     QString dataLabel = ""; // must not be isNull() because then KChart uses a default text
     ValueLabelType type = valueLabelType(section);
     if (type.category) {
@@ -920,7 +921,7 @@ KChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */)
             }
         }
         if (ok)
-            dataLabel += QString::number(value, 'f', 0) + "% ";
+            dataLabel += locale.toString(value, 'f', 0) + locale.percent();
     }
     attr.setDataLabel(dataLabel.trimmed());
 
