@@ -34,6 +34,7 @@
         "Description[sv]": "RTF-filåtergivning",
         "Description[uk]": "Засіб показу вмісту файлів RTF",
         "Description[x-test]": "xxRTF file rendererxx",
+        "Description[zh_CN]": "RTF 文件渲染器",
         "Id": "okularGenerator_docx_calligra",
         "License": "GPL",
         "MimeTypes": [
@@ -56,6 +57,7 @@
         "Name[sv]": "RTF-gränssnitt",
         "Name[uk]": "Модуль обробки RTF",
         "Name[x-test]": "xxRTF Backendxx",
+        "Name[zh_CN]": "RTF 后端",
         "ServiceTypes": [
             "okular/Generator"
         ],

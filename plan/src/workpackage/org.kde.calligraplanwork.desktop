@@ -108,6 +108,7 @@ Comment[sv]=Hantering av arbetspaket för projektplaneringsverktyget Plan
 Comment[tr]=Plan proje planlama aracı için Çalışma Paketi işleyici
 Comment[uk]=Обробник робочих пакунків для засобу планування проектів Plan
 Comment[x-test]=xxWork Package handler for the Plan project planning toolxx
+Comment[zh_CN]=Plan 项目计划工具的工作包处理程序
 Exec=calligraplanwork %u
 MimeType=application/x-vnd.kde.plan.work;application/x-vnd.kde.kplato.work;
 Type=Application
