@@ -80,10 +80,11 @@ calligra_define_feature(FEATURE_RDF  UNMAINTAINED "RDF feature")
 
 # plugins
 calligra_define_product(PLUGIN_TEXTSHAPE "Text shape plugin"  REQUIRES LIB_CALLIGRA)
+calligra_define_product(PLUGIN_PICTURESHAPE "Picture shape plugin" REQUIRES LIB_CALLIGRA)
 
 # parts
 calligra_define_product(PART_WORDS "Words engine"  REQUIRES LIB_CALLIGRA LIB_KOMAIN PLUGIN_TEXTSHAPE)
-calligra_define_product(PART_STAGE "Stage engine"  REQUIRES LIB_CALLIGRA LIB_KOMAIN LIB_KOPAGEAPP)
+calligra_define_product(PART_STAGE "Stage engine"  REQUIRES LIB_CALLIGRA LIB_KOMAIN LIB_KOPAGEAPP PLUGIN_TEXTSHAPE PLUGIN_PICTURESHAPE)
 calligra_define_product(PART_SHEETS "Sheets engine"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
 calligra_define_product(PART_QTQUICK "QtQuick Plugin that provides Calligra components"  UNPORTED REQUIRES PART_WORDS PART_STAGE)# SHEETS_PART)
 calligra_define_product(PART_COMPONENTS "QtQuick2 Plugin that provides Calligra components"  REQUIRES PART_WORDS PART_STAGE PART_SHEETS)
@@ -123,7 +124,6 @@ calligra_define_product(PLUGIN_DEFAULTTOOLS "Default Flake tools plugin" REQUIRE
 calligra_define_product(PLUGIN_PATHSHAPES "Path shape plugins" REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_VARIABLES "Text variables plugin"  REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_CHARTSHAPE "Chart shape plugin"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
-calligra_define_product(PLUGIN_PICTURESHAPE "Picture shape plugin" REQUIRES LIB_CALLIGRA)
 calligra_define_product(PLUGIN_PLUGINSHAPE "Plugin shape plugin" REQUIRES LIB_CALLIGRA LIB_KOMAIN)
 calligra_define_product(PLUGIN_FORMULASHAPE "Formula shape plugin"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
 calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligra" REQUIRES LIB_CALLIGRA)
