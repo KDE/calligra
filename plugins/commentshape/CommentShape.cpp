@@ -48,10 +48,14 @@
 CommentShape::CommentShape(KoDocumentResourceManager* resourceManager)
 : KoShapeContainer()
 , m_active(false)
+, m_comment(nullptr)
 {
     KoShapeContainer::setSize(initialsBoxSize);
 
-    m_comment = KoShapeRegistry::instance()->value(TextShapeId)->createDefaultShape(resourceManager);
+    KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(TextShapeId);
+    if (factory) {
+        m_comment = factory->createDefaultShape(resourceManager);
+    }
     if ( !m_comment ) {
 //         m_comment = new KoShape;
         KMessageBox::error( 0, i18n("The plugin needed for displaying comments is not present."), i18n("Plugin Missing") );

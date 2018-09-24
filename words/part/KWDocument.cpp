@@ -114,7 +114,9 @@ KWDocument::KWDocument(KoPart *part)
     m_panelFactories = KWFrameDialog::panels(this);
     foreach (const QString &id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactoryBase *shapeFactory = KoShapeRegistry::instance()->value(id);
-        shapeFactory->setOptionPanels(m_panelFactories);
+        if (shapeFactory) {
+            shapeFactory->setOptionPanels(m_panelFactories);
+        }
     }
 
     resourceManager()->setUndoStack(undoStack());

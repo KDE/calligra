@@ -154,6 +154,8 @@ Doc::Doc(KoPart *part)
     if (chartShape) {
         QList<KoShapeConfigFactoryBase*> panels = ChartDialog::panels(d->map);
         chartShape->setOptionPanels(panels);
+    } else {
+        warnSheets << "chart shape factory not found";
     }
 
     connect(d->map, SIGNAL(commandAdded(KUndo2Command*)),

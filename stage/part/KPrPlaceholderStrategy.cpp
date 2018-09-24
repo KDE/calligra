@@ -123,6 +123,8 @@ KoShape *KPrPlaceholderStrategy::createShape(KoDocumentResourceManager *rm)
     Q_ASSERT( factory );
     if ( factory ) {
         shape = factory->createDefaultShape(rm);
+    } else {
+        warnStage << "no factory found for placeholder";
     }
     return shape;
 }

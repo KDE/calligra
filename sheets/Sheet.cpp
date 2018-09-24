@@ -211,9 +211,12 @@ Sheet::Sheet(const Sheet &other)
     KoShape* shape;
     const QList<KoShape*> shapes = other.d->shapes;
     for (int i = 0; i < shapes.count(); ++i) {
-        shape = KoShapeRegistry::instance()->value(shapes[i]->shapeId())->createDefaultShapeAndInit(0);
-        shape->copySettings(shapes[i]);
-        addShape(shape);
+        KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(shapes[i]->shapeId());
+        if (factory) {
+            shape = factory->createDefaultShapeAndInit(0);
+            shape->copySettings(shapes[i]);
+            addShape(shape);
+        }
     }
 #endif // CALLIGRA_SHEETS_WIP_COPY_SHEET_(SHAPES)
 

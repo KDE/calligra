@@ -299,7 +299,10 @@ void ConnectionTool::mousePressEvent(KoPointerEvent * event)
         // and start editing the new connection
         // create the new connection shape
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("KoConnectionShape");
-        KoShape *shape = factory->createDefaultShape(canvas()->shapeController()->resourceManager());
+        KoShape *shape = nullptr;
+        if (factory) {
+            shape = factory->createDefaultShape(canvas()->shapeController()->resourceManager());
+        }
         KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(shape);
         if (!connectionShape) {
             delete shape;

@@ -44,6 +44,8 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
+#include "StageDebug.h"
+
 KPrPlaceholderTextStrategy::KPrPlaceholderTextStrategy( const QString & presentationClass )
 : KPrPlaceholderStrategy( presentationClass )
 , m_textShape( 0 )
@@ -124,6 +126,10 @@ bool KPrPlaceholderTextStrategy::loadOdf( const KoXmlElement & element, KoShapeL
     if (KoTextSharedLoadingData *textSharedData = dynamic_cast<KoTextSharedLoadingData *>(context.sharedData(KOTEXT_SHARED_LOADING_ID))) {
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("TextShapeID");
         Q_ASSERT(factory);
+        if (!factory) {
+            warnStage << "text shape factory not found";
+            return false;
+        }
         delete m_textShape;
         m_textShape = factory->createDefaultShape(context.documentResourceManager());
 
@@ -164,6 +170,10 @@ void KPrPlaceholderTextStrategy::init(KoDocumentResourceManager *documentResourc
 {
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value( "TextShapeID" );
     Q_ASSERT( factory );
+    if (!factory) {
+        warnStage << "text shape factory not found";
+        return;
+    }
     KoProperties props;
     props.setProperty("text", text());
     delete m_textShape;

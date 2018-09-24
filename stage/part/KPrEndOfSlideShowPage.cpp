@@ -70,6 +70,8 @@ KPrEndOfSlideShowPage::KPrEndOfSlideShowPage( const QRectF & screenRect, KPrDocu
         textShape->setPosition( QPointF( 10.0, 10.0 ) );
         textShape->setSize( QSizeF( pageLayout.width - 20.0, pageLayout.height - 20.0 ) );
         layer->addShape( textShape );
+    } else {
+        warnStage << "text shape factory not found";
     }
 }
 

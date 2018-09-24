@@ -265,6 +265,9 @@ void ShapeCollectionDocker::loadDefaultShapes()
 
     foreach(const QString & id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(id);
+        if (!factory) {
+            continue;
+        }
         // don't show hidden factories
         if ( factory->hidden() ) {
             continue;

@@ -66,22 +66,29 @@ KPrNotes::KPrNotes( KPrPage *page, KPrDocument * document )
     // All sizes and positions are hardcoded for now
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("TextShapeID");
     Q_ASSERT(factory);
-    m_textShape = factory->createDefaultShape(m_doc->resourceManager());
-    m_textShape->setGeometryProtected(true);
-    m_textShape->setAdditionalAttribute( "presentation:class", "notes" );
-    m_textShape->setPosition(QPointF(62.22, 374.46));
-    m_textShape->setSize(QSizeF(489.57, 356.37));
+    if (factory) {
+        m_textShape = factory->createDefaultShape(m_doc->resourceManager());
+        m_textShape->setGeometryProtected(true);
+        m_textShape->setAdditionalAttribute( "presentation:class", "notes" );
+        m_textShape->setPosition(QPointF(62.22, 374.46));
+        m_textShape->setSize(QSizeF(489.57, 356.37));
+        layer->addShape( m_textShape );
+    } else {
+        warnStage << "text shape factory not found";
+    }
 
     factory = KoShapeRegistry::instance()->value("PictureShape");
     Q_ASSERT(factory);
-    m_thumbnailShape = factory->createDefaultShape(m_doc->resourceManager());
-    m_thumbnailShape->setGeometryProtected(true);
-    m_thumbnailShape->setAdditionalAttribute( "presentation:class", "page" );
-    m_thumbnailShape->setPosition(QPointF(108.00, 60.18));
-    m_thumbnailShape->setSize(QSizeF(396.28, 296.96));
-
-    layer->addShape( m_textShape );
-    layer->addShape( m_thumbnailShape );
+    if (factory) {
+        m_thumbnailShape = factory->createDefaultShape(m_doc->resourceManager());
+        m_thumbnailShape->setGeometryProtected(true);
+        m_thumbnailShape->setAdditionalAttribute( "presentation:class", "page" );
+        m_thumbnailShape->setPosition(QPointF(108.00, 60.18));
+        m_thumbnailShape->setSize(QSizeF(396.28, 296.96));
+        layer->addShape( m_thumbnailShape );
+    } else {
+        warnStage << "picture shape factory not found";
+    }
 }
 
 KPrNotes::~KPrNotes()
