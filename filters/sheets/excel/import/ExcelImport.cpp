@@ -30,7 +30,6 @@
 #include <QPair>
 #include <QTextCursor>
 
-#include <kdebug.h>
 #include <KoFilterChain.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
@@ -209,7 +208,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
 
     d->outputDoc = qobject_cast<Calligra::Sheets::DocBase*>(document);
     if (!d->outputDoc) {
-        kWarning() << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
+        qCWarning(lcExcelImport) << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
         return KoFilter::WrongFormat;
     }
 #else
@@ -286,7 +285,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
         }
         Calligra::Sheets::Region region(Calligra::Sheets::Odf::loadRegion(range), d->outputDoc->map());
         if (!region.isValid() || !region.lastSheet()) {
-            kDebug() << "invalid area" << range;
+            qCDebug(lcExcelImport) << "invalid area" << range;
             continue;
         }
         d->outputDoc->map()->namedAreaManager()->insert(region, it->first.second);
@@ -324,9 +323,9 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     d->shapesXml->device()->seek(0);
 
     QTextStream input(d->shapesXml->device());
-    qDebug() << "-- START SHAPES_XML -- size : " << d->shapesXml->device()->size();
-    qDebug() << input.readAll();
-    qDebug() << "-- SHAPES_XML --";
+    qCDebug(lcExcelImport) << "-- START SHAPES_XML -- size : " << d->shapesXml->device()->size();
+    qCDebug(lcExcelImport) << input.readAll();
+    qCDebug(lcExcelImport) << "-- SHAPES_XML --";
 #endif
 
     KoXmlDocument xmlDoc = d->endMemoryXmlWriter(d->shapesXml);
@@ -337,7 +336,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     for (unsigned i = 0; i < d->workbook->sheetCount(); ++i) {
         Sheet* sheet = d->workbook->sheet(i);
         Calligra::Sheets::Sheet* ksheet = map->sheet(i);
-        kDebug() << i << sheet->backgroundImage();
+        qCDebug(lcExcelImport) << i << sheet->backgroundImage();
         if (sheet->backgroundImage().isEmpty()) continue;
 
         QByteArray data;
@@ -361,7 +360,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     }
 
     // active sheet
-    kDebug() << "ACTIVE " << d->workbook->activeTab();
+    qCDebug(lcExcelImport) << "ACTIVE " << d->workbook->activeTab();
     d->outputDoc->map()->loadingInfo()->setInitialActiveSheet(d->outputDoc->map()->sheet(d->workbook->activeTab()));
     d->outputDoc->setModified(false);
 
@@ -724,7 +723,7 @@ void ExcelImport::Private::processSheetForConditionals(Sheet* is, Calligra::Shee
                 kc.cond = Calligra::Sheets::Conditional::InferiorEqual;
                 break;
             }
-            qDebug() << "FRM:" << c.cond << kc.cond;
+            qCDebug(lcExcelImport) << "FRM:" << c.cond << kc.cond;
             kc.value1 = convertValue(c.value1);
             kc.value2 = convertValue(c.value2);
             kc.baseCellAddress = Swinder::encodeAddress(is->name(), cf->region().boundingRect().left(), cf->region().boundingRect().top());
@@ -1000,7 +999,7 @@ void ExcelImport::Private::processCellObjects(Cell* ic, Calligra::Sheets::Cell o
     foreach(ChartObject *chart, ic->charts()) {
         Sheet* const sheet = ic->sheet();
         if(chart->m_chart->m_impl==0) {
-            kDebug() << "Invalid chart to be created, no implementation.";
+            qCDebug(lcExcelImport) << "Invalid chart to be created, no implementation.";
             continue;
         }
 
@@ -1386,7 +1385,7 @@ KoXmlDocument ExcelImport::Private::endMemoryXmlWriter(KoXmlWriter* writer)
     KoXmlDocument doc;
     QString errorMsg; int errorLine, errorColumn;
     if (!doc.setContent(b, true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug() << errorMsg << errorLine << errorColumn;
+        qCDebug(lcExcelImport) << errorMsg << errorLine << errorColumn;
     }
     delete b;
     delete writer;

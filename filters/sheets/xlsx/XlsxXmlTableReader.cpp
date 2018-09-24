@@ -21,6 +21,7 @@
  *
  */
 
+#include "XlsxUtils.h"
 #include "XlsxXmlTableReader.h"
 
 #define MSOOXML_CURRENT_CLASS XlsxXmlTableReader
@@ -29,8 +30,6 @@
 #include <MsooXmlReader_p.h>
 #include <MsooXmlUtils.h>
 #include <MsooXmlSchemas.h>
-
-#include <kdebug.h>
 
 XlsxXmlTableReaderContext::XlsxXmlTableReaderContext()
     : headerStyleIndex(-1),
@@ -61,7 +60,7 @@ KoFilter::ConversionStatus XlsxXmlTableReader::read(MSOOXML::MsooXmlReaderContex
     }
 
     readNext();
-    kDebug() << *this << namespaceUri();
+    qCDebug(lcXlsxImport) << *this << namespaceUri();
 
     if (!expectEl("table")) {
         return KoFilter::WrongFormat;
@@ -72,7 +71,7 @@ KoFilter::ConversionStatus XlsxXmlTableReader::read(MSOOXML::MsooXmlReaderContex
 
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
     for (int i = 0; i < namespaces.count(); i++) {
-        kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
+        qCDebug(lcXlsxImport) << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
@@ -84,7 +83,7 @@ KoFilter::ConversionStatus XlsxXmlTableReader::read(MSOOXML::MsooXmlReaderContex
 
     TRY_READ(table)
 
-    kDebug() << "===========finished============";
+    qCDebug(lcXlsxImport) << "===========finished============";
     return KoFilter::OK;
 }
 

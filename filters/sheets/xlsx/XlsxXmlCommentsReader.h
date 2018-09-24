@@ -24,10 +24,9 @@
 #ifndef XLSXXMLCOMMENTSREADER_H
 #define XLSXXMLCOMMENTSREADER_H
 
+#include "XlsxUtils.h"
 #include "XlsxXmlCommonReader.h"
 #include <MsooXmlTheme.h>
-
-#include <kdebug.h>
 
 class XlsxComments;
 class XlsxComment
@@ -54,7 +53,7 @@ public:
     QString author(uint id) const {
         const QString result(id < (uint)m_authors.count() ? m_authors.at(id) : QString());
         if (result.isEmpty()) {
-            kWarning() << "No author for ID" << id;
+            qCWarning(lcXlsxImport) << "No author for ID" << id;
         }
         return result;
     }

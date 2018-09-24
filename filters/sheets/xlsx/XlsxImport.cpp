@@ -23,6 +23,7 @@
  *
  */
 
+#include "XlsxUtils.h"
 #include "XlsxImport.h"
 #include "XlsxXmlDocumentReader.h"
 #include "XlsxXmlSharedStringsReader.h"
@@ -44,7 +45,6 @@
 #include <QRegExp>
 #include <QImage>
 
-#include <kdebug.h>
 #include <kpluginfactory.h>
 
 #include <KoEmbeddedDocumentSaver.h>
@@ -55,6 +55,8 @@
 #include <KoXmlWriter.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(XlsxImportFactory, "calligra_filter_xlsx2ods.json", registerPlugin<XlsxImport>();)
+
+Q_LOGGING_CATEGORY(lcXlsxImport, "calligra.filter.xlsx2ods")
 
 enum XlsxDocumentType {
     XlsxDocument,
@@ -93,7 +95,7 @@ XlsxImport::~XlsxImport()
 
 bool XlsxImport::acceptsSourceMimeType(const QByteArray& mime) const
 {
-    kDebug() << "Entering XLSX Import filter: from " << mime;
+    qCDebug(lcXlsxImport) << "Entering XLSX Import filter: from " << mime;
     if (mime == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
         d->type = XlsxDocument;
         d->macrosEnabled = false;
@@ -122,7 +124,7 @@ bool XlsxImport::acceptsSourceMimeType(const QByteArray& mime) const
 
 bool XlsxImport::acceptsDestinationMimeType(const QByteArray& mime) const
 {
-    kDebug() << "Entering XLSX Import filter: to " << mime;
+    qCDebug(lcXlsxImport) << "Entering XLSX Import filter: to " << mime;
     return mime == "application/vnd.oasis.opendocument.spreadsheet";
 }
 
@@ -575,7 +577,7 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
     const QString spreadThemePathAndFile(relationships->targetForType(
         spreadPath, spreadFile,
         QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme"));
-    kDebug() << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme";
+    qCDebug(lcXlsxImport) << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme";
 
     QString spreadThemePath, spreadThemeFile;
     MSOOXML::Utils::splitPathAndFile(spreadThemePathAndFile, &spreadThemePath, &spreadThemeFile);

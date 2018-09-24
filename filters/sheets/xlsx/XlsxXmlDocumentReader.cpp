@@ -22,6 +22,7 @@
  */
 
 // Own
+#include "XlsxUtils.h"
 #include "XlsxXmlDocumentReader.h"
 
 #include <KoBorder.h>  // needed by DrawingMLMethodso
@@ -106,7 +107,7 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
 
 KoFilter::ConversionStatus XlsxXmlDocumentReader::readInternal()
 {
-    kDebug() << "=============================";
+    qCDebug(lcXlsxImport) << "=============================";
     readNext();
     if (!isStartDocument()) {
         return KoFilter::WrongFormat;
@@ -114,7 +115,7 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::readInternal()
 
     // workbook
     readNext();
-    kDebug() << *this << namespaceUri();
+    qCDebug(lcXlsxImport) << *this << namespaceUri();
 
     if (!expectEl("workbook")) {
         return KoFilter::WrongFormat;
@@ -125,12 +126,12 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::readInternal()
     /*
         const QXmlStreamAttributes attrs( attributes() );
         for (int i=0; i<attrs.count(); i++) {
-            kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
+            qCDebug(lcXlsxImport) << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
         }*/
 
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
     for (int i = 0; i < namespaces.count(); i++) {
-        kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
+        qCDebug(lcXlsxImport) << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
@@ -147,7 +148,7 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::readInternal()
     mainStyles->insertFontFace(KoFontFace("Arial"));
     mainStyles->insertFontFace(KoFontFace("Tahoma"));
 
-    kDebug() << "===========finished============";
+    qCDebug(lcXlsxImport) << "===========finished============";
     return KoFilter::OK;
 }
 
@@ -186,12 +187,12 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_workbook()
 
     QXmlStreamNamespaceDeclarations namespaces = namespaceDeclarations();
     for (int i = 0; i < namespaces.count(); i++) {
-        kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
+        qCDebug(lcXlsxImport) << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        qCDebug(lcXlsxImport) << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(sheets)
@@ -226,7 +227,7 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheets()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        qCDebug(lcXlsxImport) << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (name() == "sheet") {
@@ -300,7 +301,7 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
     READ_ATTR_WITHOUT_NS(sheetId)
     READ_ATTR_WITHOUT_NS(name)
     TRY_READ_ATTR_WITHOUT_NS(state)
-    kDebug() << "r:id:" << r_id << "sheetId:" << sheetId << "name:" << name << "state:" << state;
+    qCDebug(lcXlsxImport) << "r:id:" << r_id << "sheetId:" << sheetId << "name:" << name << "state:" << state;
 
     unsigned numberOfWorkSheets = m_context->relationships->targetCountWithWord("worksheets") +
         m_context->relationships->targetCountWithWord("dialogsheets") +
@@ -309,7 +310,7 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
     QString path, file;
     QString filepath = m_context->relationships->target(m_context->path, m_context->file, r_id);
     MSOOXML::Utils::splitPathAndFile(filepath, &path, &file);
-    kDebug() << "path:" << path << "file:" << file;
+    qCDebug(lcXlsxImport) << "path:" << path << "file:" << file;
 
     // Loading potential ole replacements
     VmlDrawingReader vmlreader(this);

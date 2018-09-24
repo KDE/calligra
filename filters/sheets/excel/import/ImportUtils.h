@@ -25,6 +25,8 @@
 
 #include <QString>
 #include <QHash>
+#include <QDebug>
+#include <QLoggingCategory>
 
 #include "../sidewinder/format.h"
 #include "../sidewinder/value.h"
@@ -53,6 +55,8 @@ static inline uint qHash(const CellFormatKey& key)
 {
     return ::qHash(key.format) ^ ::qHash(key.decimalCount);
 }
+
+Q_DECLARE_LOGGING_CATEGORY(lcExcelImport);
 
 }
 

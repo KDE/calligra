@@ -21,6 +21,7 @@
  *
  */
 
+#include "XlsxUtils.h"
 #include "XlsxXmlSharedStringsReader.h"
 
 #include <MsooXmlSchemas.h>
@@ -32,8 +33,6 @@
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
 
 #include <MsooXmlReader_p.h>
-
-#include <kdebug.h>
 
 // -------------------------------------------------------------
 
@@ -87,7 +86,7 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read(MSOOXML::MsooXmlRead
 
 KoFilter::ConversionStatus XlsxXmlSharedStringsReader::readInternal()
 {
-    kDebug() << "=============================";
+    qCDebug(lcXlsxImport) << "=============================";
     readNext();
     if (!isStartDocument()) {
         return KoFilter::WrongFormat;
@@ -95,7 +94,7 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::readInternal()
 
     // sst
     readNext();
-    kDebug() << *this << namespaceUri();
+    qCDebug(lcXlsxImport) << *this << namespaceUri();
 
     if (!expectEl("sst")) {
         return KoFilter::WrongFormat;
@@ -106,7 +105,7 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::readInternal()
 
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
     for (int i = 0; i < namespaces.count(); i++) {
-        kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
+        qCDebug(lcXlsxImport) << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
@@ -117,7 +116,7 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::readInternal()
 //! @todo expect other namespaces too...
 
     TRY_READ(sst)
-    kDebug() << "===========finished============";
+    qCDebug(lcXlsxImport) << "===========finished============";
     return KoFilter::OK;
 }
 
@@ -177,7 +176,7 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_si()
 {
     READ_PROLOGUE
 
-    kDebug() << "#" << m_index << text().toString();
+    qCDebug(lcXlsxImport) << "#" << m_index << text().toString();
     if (m_index >= (uint)m_context->strings->size()) {
         raiseError(i18n("Declared number of shared strings too small (%1)", m_context->strings->size()));
         return KoFilter::WrongFormat;
@@ -192,7 +191,7 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_si()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        qCDebug(lcXlsxImport) << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(t)

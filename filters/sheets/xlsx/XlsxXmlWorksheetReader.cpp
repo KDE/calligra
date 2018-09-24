@@ -23,6 +23,7 @@
  */
 
 // Own
+#include "XlsxUtils.h"
 #include "XlsxXmlWorksheetReader.h"
 
 #include "XlsxXmlCommentsReader.h"
@@ -278,7 +279,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read(MSOOXML::MsooXmlReaderCo
 
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::readInternal()
 {
-    kDebug() << "=============================";
+    qCDebug(lcXlsxImport) << "=============================";
     Q_ASSERT(m_context);
 
     readNext();
@@ -288,7 +289,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::readInternal()
 
     // worksheet
     readNext();
-    //kDebug() << *this << namespaceUri();
+    //qCDebug(lcXlsxImport) << *this << namespaceUri();
 
     if (name() != "worksheet" && name() != "dialogsheet" && name() != "chartsheet") {
         return KoFilter::WrongFormat;
@@ -301,7 +302,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::readInternal()
 
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
     for (int i = 0; i < namespaces.count(); i++) {
-        kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
+        qCDebug(lcXlsxImport) << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
@@ -318,7 +319,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::readInternal()
         TRY_READ(dialogsheet)
     }
 
-    kDebug() << "===========finished============";
+    qCDebug(lcXlsxImport) << "===========finished============";
     return KoFilter::OK;
 }
 
@@ -332,11 +333,11 @@ QString XlsxXmlWorksheetReader::computeColumnWidth(qreal widthNumber) const
     //! For explanation of width, see p. 1778
     //simplified:
     //! @todo hardcoded, not 100% accurate
-    kDebug() << "PT_TO_PX(11.0):" << PT_TO_PX(11.0);
+    qCDebug(lcXlsxImport) << "PT_TO_PX(11.0):" << PT_TO_PX(11.0);
     const double realSize = round(PT_TO_PX(11.0)) * 0.75;
-    kDebug() << "realSize:" << realSize;
+    qCDebug(lcXlsxImport) << "realSize:" << realSize;
     const double averageDigitWidth = realSize * 2.0 / 3.0;
-    kDebug() << "averageDigitWidth:" << averageDigitWidth;
+    qCDebug(lcXlsxImport) << "averageDigitWidth:" << averageDigitWidth;
 
     QString result;
     if (averageDigitWidth * widthNumber == 0) {
@@ -355,7 +356,7 @@ void XlsxXmlWorksheetReader::showWarningAboutWorksheetSize()
     if (d->warningAboutWorksheetSizeDisplayed)
         return;
     d->warningAboutWorksheetSizeDisplayed = true;
-    kWarning() << i18n("The data could not be loaded completely because the maximum size of "
+    qCWarning(lcXlsxImport) << i18n("The data could not be loaded completely because the maximum size of "
         "sheet was exceeded.");
 }
 
@@ -367,11 +368,11 @@ inline static QString encodeLabelText(int col, int row)
 void XlsxXmlWorksheetReader::saveAnnotation(int col, int row)
 {
     QString ref(encodeLabelText(col + 1, row + 1));
-    kDebug() << ref;
+    qCDebug(lcXlsxImport) << ref;
     XlsxComment *comment = m_context->comments->value(ref);
     if (!comment)
         return;
-    //kDebug() << "Saving annotation for cell" << ref;
+    //qCDebug(lcXlsxImport) << "Saving annotation for cell" << ref;
     body->startElement("office:annotation");
     body->startElement("dc:creator");
     body->addTextNode(comment->author(m_context->comments));
@@ -494,7 +495,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        qCDebug(lcXlsxImport) << *this;
         if (isEndElement() && name() == type) {
             break;
         }
@@ -1057,7 +1058,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_cols()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        qCDebug(lcXlsxImport) << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(col)
@@ -1093,7 +1094,7 @@ void XlsxXmlWorksheetReader::saveColumnStyle(const QString& widthString)
 
 void XlsxXmlWorksheetReader::appendTableColumns(int columns, const QString& width)
 {
-    kDebug() << "columns:" << columns;
+    qCDebug(lcXlsxImport) << "columns:" << columns;
     if (columns <= 0)
         return;
     body->startElement("table:table-column");
@@ -1152,7 +1153,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_col()
             return KoFilter::WrongFormat;
 
         realWidthString = computeColumnWidth(widthNumber);
-        kDebug() << "realWidthString:" << realWidthString;
+        qCDebug(lcXlsxImport) << "realWidthString:" << realWidthString;
 //moved        saveColumnStyle(realWidthString);
 //! @todo hardcoded table:default-cell-style-name
 //moved        body->addAttribute("table:default-cell-style-name", "Excel_20_Built-in_20_Normal");
@@ -1199,7 +1200,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetData()
     m_currentRow = 0;
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        qCDebug(lcXlsxImport) << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(row)
@@ -1290,7 +1291,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
     int counter = 0;
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        qCDebug(lcXlsxImport) << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (counter == 40) {
@@ -1362,7 +1363,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        qCDebug(lcXlsxImport) << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(f)
@@ -1379,7 +1380,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
     if (cellFormat->applyNumberFormat)
         formattedStyle = m_context->styles->numberFormatStyleName( cellFormat->numFmtId );
 
-    //kDebug() << "type=" << t << "styleId=" << styleId << "applyNumberFormat=" << cellFormat->applyNumberFormat << "numberFormat=" << numberFormat << "value=" << m_value;
+    //qCDebug(lcXlsxImport) << "type=" << t << "styleId=" << styleId << "applyNumberFormat=" << cellFormat->applyNumberFormat << "numberFormat=" << numberFormat << "value=" << m_value;
 
     QString charStyleName;
 
@@ -1487,7 +1488,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
         if (charStyleName.isEmpty()) {
             KoGenStyle* fontStyle = m_context->styles->fontStyle(cellFormat->fontId);
             if (!fontStyle) {
-                kWarning() << "No font with ID:" << cellFormat->fontId;
+                qCWarning(lcXlsxImport) << "No font with ID:" << cellFormat->fontId;
             } else {
                 KoGenStyle::copyPropertiesFromStyle(*fontStyle, cellStyle, KoGenStyle::TextType);
             }
@@ -1702,16 +1703,16 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_mergeCell()
                 if (origCellStyle) {
                     cellStyle = *origCellStyle;
                 }
-                kDebug() << cell->rowsMerged << cell->columnsMerged << cell->styleName;
+                qCDebug(lcXlsxImport) << cell->rowsMerged << cell->columnsMerged << cell->styleName;
                 if (cell->rowsMerged > 1) {
                     Cell* lastCell = m_context->sheet->cell(fromCol, fromRow + cell->rowsMerged - 1, false);
-                    kDebug() << lastCell;
+                    qCDebug(lcXlsxImport) << lastCell;
                     if (lastCell) {
                         const KoGenStyle* style = mainStyles->style(lastCell->styleName, "table-cell");
-                        kDebug() << lastCell->styleName;
+                        qCDebug(lcXlsxImport) << lastCell->styleName;
                         if (style) {
                             QString val = style->property("fo:border-bottom");
-                            kDebug() << val;
+                            qCDebug(lcXlsxImport) << val;
                             if (!val.isEmpty()) cellStyle.addProperty("fo:border-bottom", val);
                             val = style->property("fo:border-line-width-bottom");
                             if (!val.isEmpty()) cellStyle.addProperty("fo:border-line-width-bottom", val);

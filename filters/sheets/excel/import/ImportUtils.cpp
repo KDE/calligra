@@ -26,6 +26,8 @@
 
 namespace XlsUtils {
 
+Q_LOGGING_CATEGORY(lcExcelImport, "calligra.filter.xls2ods")
+
 QString removeEscaped(const QString &text, bool removeOnlyEscapeChar)
 {
     QString s(text);

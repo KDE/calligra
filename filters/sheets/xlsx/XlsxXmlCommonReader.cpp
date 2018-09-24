@@ -21,6 +21,7 @@
  *
  */
 
+#include "XlsxUtils.h"
 #include "XlsxXmlCommonReader.h"
 
 #include <math.h>
@@ -35,8 +36,6 @@
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
 
 #include <MsooXmlReader_p.h>
-
-#include <kdebug.h>
 
 class XlsxXmlCommonReader::Private
 {
@@ -105,7 +104,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_t()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        qCDebug(lcXlsxImport) << *this;
         if (isCharacters()) {
             body->addTextSpan(text().toString());
         }

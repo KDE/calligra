@@ -76,7 +76,7 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read(MSOOXML::MsooXmlReaderCon
     const KoFilter::ConversionStatus result = readInternal();
     m_context = 0;
     if (result != KoFilter::OK) {
-        kWarning() << "Failure reading the comments";
+        qCWarning(lcXlsxImport) << "Failure reading the comments";
     }
     // We're not going to fail reading the whole file because the comments cannot be read
     return KoFilter::OK;
@@ -91,7 +91,7 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::readInternal()
 
     // comments
     readNext();
-    kDebug() << *this << namespaceUri();
+    qCDebug(lcXlsxImport) << *this << namespaceUri();
 
     if (!expectEl("comments")) {
         return KoFilter::WrongFormat;
@@ -102,7 +102,7 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::readInternal()
 
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
     for (int i = 0; i < namespaces.count(); i++) {
-        kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
+        qCDebug(lcXlsxImport) << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
@@ -114,7 +114,7 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::readInternal()
 
     TRY_READ(comments)
 
-    kDebug() << "===========finished============";
+    qCDebug(lcXlsxImport) << "===========finished============";
     return KoFilter::OK;
 }
 
@@ -185,7 +185,7 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_author()
     READ_PROLOGUE
     readNext();
     const QString author(text().toString().trimmed());
-    kDebug() << "Added author #" << (m_context->comments->count() + 1) << author;
+    qCDebug(lcXlsxImport) << "Added author #" << (m_context->comments->count() + 1) << author;
     m_context->comments->m_authors.append(author);
 
     readNext();
@@ -272,7 +272,7 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_comment()
     if (comment.get()) {
         comment.get()->texts = m_currentCommentText;
         m_context->comments->insert(ref, comment.release());
-        kDebug() << "Added comment for" << ref;
+        qCDebug(lcXlsxImport) << "Added comment for" << ref;
     }
     READ_EPILOGUE
 }

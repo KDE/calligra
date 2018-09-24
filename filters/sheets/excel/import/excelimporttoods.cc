@@ -28,7 +28,6 @@
 #include <QBuffer>
 #include <QFontMetricsF>
 #include <QPair>
-#include <kdebug.h>
 #include <KoFilterChain.h>
 #include <kpluginfactory.h>
 
@@ -215,7 +214,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     d->storeout = KoStore::createStore(d->outputFile, KoStore::Write,
                                     "application/vnd.oasis.opendocument.spreadsheet", KoStore::Zip);
     if (!d->storeout || d->storeout->bad()) {
-        kWarning() << "Couldn't open the requested file.";
+        qCWarning(lcExcelImport) << "Couldn't open the requested file.";
         delete d->workbook;
         delete d->storeout;
         return KoFilter::FileNotFound;
@@ -251,7 +250,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     // So creating content before styles
     // store document content
     if (!d->createContent(&oasisStore)) {
-        kWarning() << "Couldn't open the file 'content.xml'.";
+        qCWarning(lcExcelImport) << "Couldn't open the file 'content.xml'.";
         delete d->workbook;
         delete d->storeout;
         return KoFilter::CreationError;
@@ -259,7 +258,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
 
     // store document styles
     if (!d->createStyles(d->storeout, manifestWriter, d->mainStyles)) {
-        kWarning() << "Couldn't open the file 'styles.xml'.";
+        qCWarning(lcExcelImport) << "Couldn't open the file 'styles.xml'.";
         delete d->workbook;
         delete d->storeout;
         return KoFilter::CreationError;
@@ -267,7 +266,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
 
     // store meta content
     if (!d->createMeta(&oasisStore)) {
-        kWarning() << "Couldn't open the file 'meta.xml'.";
+        qCWarning(lcExcelImport) << "Couldn't open the file 'meta.xml'.";
         delete d->workbook;
         delete d->storeout;
         return KoFilter::CreationError;
@@ -275,7 +274,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
 
     // store settings
     if (!d->createSettings(&oasisStore)) {
-        kWarning() << "Couldn't open the file 'settings.xml'.";
+        qCWarning(lcExcelImport) << "Couldn't open the file 'settings.xml'.";
         delete d->workbook;
         delete d->storeout;
         return KoFilter::CreationError;
@@ -787,7 +786,7 @@ void ExcelImport::Private::processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWr
             xml.endElement(); // draw:g
         }
         sheetShapes[sheet] = b.data();
-        //qDebug() << b.data();
+        //qCDebug(lcExcelImport) << b.data();
     }
 }
 
@@ -1039,7 +1038,7 @@ QString extractConditional(const QString &_text)
         if (text[1] == '(') end = ')';
         else if (text[1] == '_') end = '_';
         else if (text[1] == ' ') end = ' ';
-        else kDebug() << "Probably unhandled condition=" << text[1] << "in text=" << text;
+        else qCDebug(lcExcelImport) << "Probably unhandled condition=" << text[1] << "in text=" << text;
         if (! end.isNull()) {
             {
                 QString regex = QString("^_%1(.*\"\\$\".*)%2;.*").arg(QString("\\%1").arg(text[1])).arg(QString("\\%1").arg(end));
@@ -1141,7 +1140,7 @@ static QTime convertToTime(double serialNo)
     // reference is midnight 30 Dec 1899
     QTime tt;
     tt = tt.addMSecs(qRound((serialNo - (int)serialNo) * 86400 * 1000));
-    qDebug() << tt;
+    qCDebug(lcExcelImport) << tt;
     return tt;
 }
 
@@ -1330,7 +1329,7 @@ void ExcelImport::Private::processCellContentForBody(Cell* cell,
     foreach(ChartObject *chart, cell->charts()) {
         Sheet* const sheet = cell->sheet();
         if(chart->m_chart->m_impl==0) {
-            kDebug() << "Invalid chart to be created, no implementation.";
+            qCDebug(lcExcelImport) << "Invalid chart to be created, no implementation.";
             continue;
         }
 
@@ -1418,7 +1417,7 @@ void ExcelImport::Private::processCellForStyle(Cell* cell, KoXmlWriter* xmlWrite
             odraw.processDrawingObject(o->object(), writer);
         }
         cellShapes[cell] = b.data();
-        //qDebug() << cell->columnLabel() << cell->row() << b.data();
+        //qCDebug(lcExcelImport) << cell->columnLabel() << cell->row() << b.data();
     }
 }
 

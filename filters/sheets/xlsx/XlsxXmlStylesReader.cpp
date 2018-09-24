@@ -21,6 +21,7 @@
  *
  */
 
+#include "XlsxUtils.h"
 #include "XlsxXmlStylesReader.h"
 #include "XlsxImport.h"
 
@@ -37,8 +38,6 @@
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
 
 #include <MsooXmlReader_p.h>
-
-#include <kdebug.h>
 
 #include <QMap>
 #include <QGlobalStatic>
@@ -67,7 +66,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::readAttributes(const QXmlStreamA
     else if (!s.isEmpty()) {
         borderStyle = QLatin1String("solid"); // fallback
     }
-    kDebug() << "style:" << s << "set to:" << borderStyle;
+    qCDebug(lcXlsxImport) << "style:" << s << "set to:" << borderStyle;
     return KoFilter::OK;
 }
 
@@ -284,14 +283,14 @@ bool XlsxCellFormat::setupCellStyle(
     const XlsxStyles *styles,
     KoGenStyle* cellStyle) const
 {
-    kDebug() << "fontId:" << fontId << "fillId:" << fillId << "borderId:" << borderId;
+    qCDebug(lcXlsxImport) << "fontId:" << fontId << "fillId:" << fillId << "borderId:" << borderId;
     if (applyAlignment) {
         setupCellStyleAlignment(cellStyle);
     }
     if (applyFont && fontId >= 0) {
         KoGenStyle* fontStyle = styles->fontStyle(fontId);
         if (!fontStyle) {
-            kWarning() << "No font with ID:" << fontId;
+            qCWarning(lcXlsxImport) << "No font with ID:" << fontId;
             return false;
         }
         KoGenStyle::copyPropertiesFromStyle(*fontStyle, *cellStyle, KoGenStyle::TextType);
@@ -299,7 +298,7 @@ bool XlsxCellFormat::setupCellStyle(
     if (applyFill && fillId >= 0) {
         KoGenStyle *fillStyle = styles->fillStyle(fillId);
         if (!fillStyle) {
-            kWarning() << "No fill with ID:" << fillId;
+            qCWarning(lcXlsxImport) << "No fill with ID:" << fillId;
             return false;
         }
         KoGenStyle::copyPropertiesFromStyle(*fillStyle, *cellStyle, KoGenStyle::TableCellType);
@@ -433,7 +432,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read(MSOOXML::MsooXmlReaderConte
 
 KoFilter::ConversionStatus XlsxXmlStylesReader::readInternal()
 {
-    kDebug() << "=============================";
+    qCDebug(lcXlsxImport) << "=============================";
     readNext();
     if (!isStartDocument()) {
         return KoFilter::WrongFormat;
@@ -441,7 +440,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::readInternal()
 
     // sst
     readNext();
-    kDebug() << *this << namespaceUri();
+    qCDebug(lcXlsxImport) << *this << namespaceUri();
 
     if (!expectEl("styleSheet")) {
         return KoFilter::WrongFormat;
@@ -452,7 +451,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::readInternal()
 
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
     for (int i = 0; i < namespaces.count(); i++) {
-        kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
+        qCDebug(lcXlsxImport) << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
@@ -478,7 +477,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::readInternal()
         }
     }
 
-    kDebug() << "===========finished============";
+    qCDebug(lcXlsxImport) << "===========finished============";
     return KoFilter::OK;
 }
 
@@ -508,7 +507,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_styleSheet()
     int counter = 0;
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        qCDebug(lcXlsxImport) << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             // In the first round we read potential color overrides
@@ -565,7 +564,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fonts()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        qCDebug(lcXlsxImport) << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(font)) {
@@ -877,7 +876,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_cellXfs()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        qCDebug(lcXlsxImport) << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(xf)
@@ -928,7 +927,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_xf()
         return KoFilter::WrongFormat;
     }
 
-    kDebug() << "cell format #" << m_cellFormatIndex;
+    qCDebug(lcXlsxImport) << "cell format #" << m_cellFormatIndex;
     m_currentCellFormat = new XlsxCellFormat;
     MSOOXML::Utils::AutoPtrSetter<XlsxCellFormat> currentCellFormatSetter(m_currentCellFormat);
 
@@ -961,7 +960,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_xf()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        qCDebug(lcXlsxImport) << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(alignment)
@@ -998,9 +997,9 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_alignment()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     m_currentCellFormat->setHorizontalAlignment(attrs.value("horizontal").toString());
-    kDebug() << "horizontalAlignment:" << m_currentCellFormat->horizontalAlignment;
+    qCDebug(lcXlsxImport) << "horizontalAlignment:" << m_currentCellFormat->horizontalAlignment;
     m_currentCellFormat->setVerticalAlignment(attrs.value("vertical").toString());
-    kDebug() << "verticalAlignment:" << m_currentCellFormat->verticalAlignment;
+    qCDebug(lcXlsxImport) << "verticalAlignment:" << m_currentCellFormat->verticalAlignment;
     const bool wrap = readBooleanAttr("wrapText", false);
     m_currentCellFormat->wrapText = wrap;
     const bool shrinkToFit = readBooleanAttr("shrinkToFit", false);
@@ -1041,7 +1040,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fills()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        qCDebug(lcXlsxImport) << *this;
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(fill)) {
@@ -1194,7 +1193,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_patternFill()
         percent = 0.875;
     }
     else {
-        kWarning() << "unknown value" << p << "of patterFill@patternType; defaulting to \"none\"";
+        qCWarning(lcXlsxImport) << "unknown value" << p << "of patterFill@patternType; defaulting to \"none\"";
         percent = 0;
     }
 
