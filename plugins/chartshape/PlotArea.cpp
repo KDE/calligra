@@ -309,6 +309,7 @@ void PlotArea::plotAreaInit()
     d->kdChart->resize(size().toSize());
     d->kdChart->replaceCoordinatePlane(d->kdCartesianPlanePrimary);
     d->kdCartesianPlaneSecondary->setReferenceCoordinatePlane(d->kdCartesianPlanePrimary);
+    d->kdChart->addCoordinatePlane(d->kdCartesianPlaneSecondary);
 
     KChart::FrameAttributes attr = d->kdChart->frameAttributes();
     attr.setVisible(false);
