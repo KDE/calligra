@@ -41,7 +41,6 @@
 #include <QTimer>
 #include <QPointer>
 #include <QRectF>
-#include <QPointer>
 
 #include <TextEditingPluginContainer.h>
 

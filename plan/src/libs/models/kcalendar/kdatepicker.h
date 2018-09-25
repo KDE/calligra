@@ -19,8 +19,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPTDATEPICKER_H
-#define KPTDATEPICKER_H
+#ifndef KP_KDATEPICKER_H
+#define KP_KDATEPICKER_H
 
 #include "kplatomodels_export.h"
 
@@ -184,4 +184,4 @@ private:
 
 } //namespace KPlato
 
-#endif //  KDATEPICKER_H
+#endif //  KP_KDATEPICKER_H

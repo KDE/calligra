@@ -57,7 +57,7 @@ public:
     int currentProgress;
     bool updated;          // is true whenever the progress needs to be recomputed
     QTextStream *output;
-    QTimer updateGuiTimer; // fires regularily to update the progress bar widget
+    QTimer updateGuiTimer; // fires regularly to update the progress bar widget
     QList<QPointer<KoUpdaterPrivate> > subtasks;
     QList<QPointer<KoUpdater> > subTaskWrappers; // We delete these
     QTime referenceTime;

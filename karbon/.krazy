@@ -1,3 +1,3 @@
 # should only skip [validate], but that fine-grained control seems not possible, so just skip desktop files completely
-SKIP stencils/.*/.*\.desktop$
+SKIP /stencils/
 

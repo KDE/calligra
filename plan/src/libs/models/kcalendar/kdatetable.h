@@ -19,8 +19,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPTDATETBL_H
-#define KPTDATETBL_H
+#ifndef KP_KDATETABLE_H
+#define KP_KDATETABLE_H
 
 #include "kplatomodels_export.h"
 
@@ -336,4 +336,4 @@ public:
 
 } //namespace KPlato
 
-#endif // KDATETBL_H
+#endif // KP_KDATETABLE_H
