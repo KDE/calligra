@@ -231,6 +231,13 @@ void ChartTool::activate(ToolActivation, const QSet<KoShape*> &shapes)
             widget->open(d->shape);
         }
     }
+    foreach (QWidget *w, optionWidgets()) {
+        ConfigWidgetBase *widget = dynamic_cast<ConfigWidgetBase*>(w);
+        Q_ASSERT(widget);
+        if (widget) {
+            widget->updateData();
+        }
+    }
 }
 
 void ChartTool::deactivate()

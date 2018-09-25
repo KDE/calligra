@@ -58,7 +58,6 @@ public:
         }
         if (chart) {
             connect(chart, &ChartShape::chartTypeChanged, this, &ConfigWidgetBase::removeSubDialogs);
-            updateData();
         }
     }
     virtual void deactivate() {

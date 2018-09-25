@@ -423,10 +423,6 @@ void PlotAreaConfigWidget::deactivate()
 void PlotAreaConfigWidget::open(KoShape* shape)
 {
     debugChartUiPlotArea;
-    if (chart && chart == shape) {
-        updateData();
-        return;
-    }
     ConfigWidgetBase::open(shape);
     if (!chart) {
         return;
