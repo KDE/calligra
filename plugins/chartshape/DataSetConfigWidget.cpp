@@ -677,10 +677,6 @@ void DataSetConfigWidget::updateData(ChartType chartType, ChartSubtype subtype)
     }
     d->ui.dataSets->setCurrentIndex(d->selectedDataSet);
 
-    bool enableMarkers = !(chartType == BarChartType || chartType == StockChartType || chartType == CircleChartType
-                            || chartType == RingChartType || chartType == BubbleChartType);
-    d->ui.datasetMarkerMenu->setEnabled(enableMarkers);
-
     blockSignals(false);
 
     ui_dataSetSelectionChanged(d->selectedDataSet);
@@ -741,93 +737,17 @@ void DataSetConfigWidget::ui_dataSetSelectionChanged(int index)
 
     d->selectedDataSet = index;
 
-    enableChartTypes();
-
     blockSignals(false);
 
     updateMarkers();
-}
 
-/*
- * Enabled/Disabled menu actions depends on main chart type
- */
-void DataSetConfigWidget::enableChartTypes()
-{
-    d->ui.dataSetChartTypeMenu->setEnabled(false);
-
-    d->dataSetBarChartMenu->setEnabled(false);
-    d->dataSetLineChartMenu->setEnabled(false);
-    d->dataSetAreaChartMenu->setEnabled(false);
-    d->dataSetRadarChartMenu->setEnabled(false);
-    d->dataSetStockChartMenu->setEnabled(false);
-    d->dataSetCircleChartAction->setEnabled(false);
-    d->dataSetRingChartAction->setEnabled(false);
-    d->dataSetScatterChartAction->setEnabled(false);
-    d->dataSetBubbleChartAction->setEnabled(false);
-
-    DataSet *dataSet = d->dataSets.value(d->selectedDataSet);
-    if (!dataSet) {
-        debugChartUiDataSet<<"No dataset selected";
-        return;
+    ChartType chartType = dataSet->chartType();
+    if (chartType == LastChartType) {
+        chartType = chart->chartType();
     }
-    ChartType ctype = dataSet->chartType();
-    switch (chart->chartType()) {
-        case BarChartType:
-            d->ui.dataSetChartTypeMenu->setEnabled(true);
-            d->dataSetBarChartMenu->setEnabled(ctype != BarChartType);
-            d->dataSetLineChartMenu->setEnabled(ctype != LineChartType);
-            d->dataSetAreaChartMenu->setEnabled(ctype != AreaChartType);
-            break;
-        case LineChartType:
-            d->ui.dataSetChartTypeMenu->setEnabled(true);
-            d->dataSetLineChartMenu->setEnabled(ctype != LineChartType);
-            d->dataSetBarChartMenu->setEnabled(ctype != BubbleChartType);
-            d->dataSetAreaChartMenu->setEnabled(ctype != AreaChartType);
-            break;
-        case AreaChartType:
-            d->ui.dataSetChartTypeMenu->setEnabled(true);
-            d->dataSetAreaChartMenu->setEnabled(ctype != AreaChartType);
-            d->dataSetBarChartMenu->setEnabled(ctype != BubbleChartType);
-            d->dataSetLineChartMenu->setEnabled(ctype != LineChartType);
-            break;
-        case CircleChartType:
-            break;
-        case RingChartType:
-            break;
-        case ScatterChartType:
-            break;
-        case RadarChartType:
-            d->ui.dataSetChartTypeMenu->setEnabled(true);
-            d->dataSetRadarChartMenu->setEnabled(true);
-            d->dataSetRadarChartAction->setEnabled(ctype != RadarChartType);
-            d->dataSetFilledRadarChartAction->setEnabled(ctype != FilledRadarChartType);
-            break;
-        case FilledRadarChartType:
-            d->ui.dataSetChartTypeMenu->setEnabled(true);
-            d->dataSetRadarChartMenu->setEnabled(true);
-            d->dataSetFilledRadarChartAction->setEnabled(ctype != FilledRadarChartType);
-            d->dataSetRadarChartAction->setEnabled(ctype != RadarChartType);
-            break;
-        case StockChartType:
-            d->ui.dataSetChartTypeMenu->setEnabled(true);
-            d->dataSetStockChartMenu->setEnabled(ctype != StockChartType);
-            d->dataSetBarChartMenu->setEnabled(ctype != BarChartType);
-            d->dataSetLineChartMenu->setEnabled(ctype != LineChartType);
-            d->dataSetAreaChartMenu->setEnabled(ctype != AreaChartType);
-            break;
-        case BubbleChartType:
-            d->ui.dataSetChartTypeMenu->setEnabled(true);
-            d->dataSetBubbleChartAction->setEnabled(ctype != BubbleChartType);
-            d->dataSetBarChartMenu->setEnabled(ctype != BarChartType);
-            d->dataSetLineChartMenu->setEnabled(ctype != LineChartType);
-            d->dataSetAreaChartMenu->setEnabled(ctype != AreaChartType);
-            d->dataSetScatterChartAction->setEnabled(ctype != ScatterChartType);
-            break;
-        default:
-            debugChartUiDataSet<<"Unhandled chart type:"<<ctype;
-            break;
-
-    }
+    bool disableMarkers = chartType == BarChartType || chartType == StockChartType || chartType == CircleChartType
+                            || chartType == RingChartType || chartType == BubbleChartType;
+    d->ui.datasetMarkerMenu->setDisabled(disableMarkers);
 }
 
 void DataSetConfigWidget::ui_datasetShowCategoryChanged(bool b)

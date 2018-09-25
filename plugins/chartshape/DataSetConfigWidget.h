@@ -107,8 +107,6 @@ private:
     void setupDialogs();
     void createActions();
 
-    void enableChartTypes();
-
     class Private;
     Private * const d;
 };
