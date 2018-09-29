@@ -25,6 +25,7 @@ Name[sv]=Karbon-insticksprogram för förfina kontur
 Name[tr]=Karbon Daraltılmış Yol eklentisi
 Name[uk]=Додаток покращення контурів для Karbon
 Name[x-test]=xxKarbon Refine Path pluginxx
+Name[zh_CN]=Karbon 细化路径工具
 X-KDE-ServiceTypes=Karbon/ViewPlugin
 Type=Service
 X-KDE-Library=karbon_refinepath

@@ -21,6 +21,7 @@ Name[sv]=CSV-exportfilter för Calligra Sheets
 Name[tr]=Calligra Sheets için CSV Dışa aktarma Filtresi
 Name[uk]=Фільтр експорту CSV для Calligra Sheets
 Name[x-test]=xxCSV Export Filter for Calligra Sheetsxx
+Name[zh_CN]=用于 Calligra Sheets 的 CSV 导出过滤器
 X-KDE-Export=text/csv,text/plain
 X-KDE-Import=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-Weight=50

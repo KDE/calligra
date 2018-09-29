@@ -25,6 +25,7 @@ Name[sv]=Karbon-insticksprogram för platta ut kontur
 Name[tr]=Karbon Düzleştirilmiş Yol eklentisi
 Name[uk]=Додаток спрощення контурів для Karbon
 Name[x-test]=xxKarbon Flatten Path pluginxx
+Name[zh_CN]=Karbon 拼合路径插件
 X-KDE-ServiceTypes=Karbon/ViewPlugin
 Type=Service
 X-KDE-Library=karbon_flattenpath
