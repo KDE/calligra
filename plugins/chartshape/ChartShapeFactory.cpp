@@ -438,7 +438,7 @@ ChartShape *ChartShapeFactory::createStockChart(KoDocumentResourceManager *docum
 {
     ChartShape* shape = new ChartShape(documentResources);
     shape->setChartType(StockChartType);
-    shape->setChartSubType(static_cast<ChartSubtype>(subtype));
+    shape->setChartSubType(CandlestickChartSubtype); // we create data for this by default, and switch below if needed
     ChartProxyModel *proxyModel = shape->proxyModel();
 
     // Fill cells with data.
@@ -458,24 +458,22 @@ ChartShape *ChartShapeFactory::createStockChart(KoDocumentResourceManager *docum
     chartData->setData(chartData->index(3, 0), i18n("Share C"));
 
     // Horizontal header data
-    chartData->setData(chartData->index(0, 1), i18n("Column %1", 1));
-    chartData->setData(chartData->index(0, 2), i18n("Column %1", 2));
-    chartData->setData(chartData->index(0, 3), i18n("Column %1", 3));
-    chartData->setData(chartData->index(0, 4), i18n("Column %1", 4));
+    chartData->setData(chartData->index(0, 1), i18n("Open"));
+    chartData->setData(chartData->index(0, 2), i18n("High"));
+    chartData->setData(chartData->index(0, 3), i18n("Low"));
+    chartData->setData(chartData->index(0, 4), i18n("Close"));
 
     QList<qreal> openValues; openValues << 10 << 15 << 20;
     QList<qreal> highValues; highValues << 12 << 15 << 30;
     QList<qreal> lowValues; lowValues << 6 << 13 << 20;
     QList<qreal> closeValues; closeValues << 7 << 13 << 30;
     int col = 1;
-    if (subtype == HighLowCloseChartSubtype) {
-        col = 4; // add last, proxymodel needs it (FIXME)
-    }
+
     // Open
     chartData->setData(chartData->index(1, col), openValues.at(0));
     chartData->setData(chartData->index(2, col), openValues.at(1));
     chartData->setData(chartData->index(3, col), openValues.at(2));
-    col = col == 4 ? 1 : 2;
+    ++col;
 
     // High
     chartData->setData(chartData->index(1, col), highValues.at(0));
@@ -496,11 +494,13 @@ ChartShape *ChartShapeFactory::createStockChart(KoDocumentResourceManager *docum
 
     proxyModel->setFirstRowIsLabel(true);
     proxyModel->setFirstColumnIsLabel(true);
-    proxyModel->reset(CellRegion(internalTable, QRect(1, 1, chartData->columnCount(), chartData->rowCount())));
+    proxyModel->reset(CellRegion(internalTable, QRect(1, 1, 5, 4)));
 
     shape->plotArea()->yAxis()->title()->setVisible(false);
     shape->plotArea()->xAxis()->title()->setVisible(false);
     shape->legend()->setVisible(false);
+
+    shape->setChartSubType(static_cast<ChartSubtype>(subtype), true);
 
     shape->layout()->scheduleRelayout();
     shape->layout()->layout();

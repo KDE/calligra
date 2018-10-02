@@ -82,8 +82,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset theme="edit-table-delete-row">
-           <normaloff>.</normaloff>.</iconset>
+          <iconset theme="edit-table-delete-row"/>
          </property>
          <property name="iconSize">
           <size>

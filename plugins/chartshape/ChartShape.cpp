@@ -33,7 +33,6 @@
 #include <QPainter>
 #include <QSizeF>
 #include <QTextDocument>
-#include <QStandardItemModel>
 #include <QUrl>
 
 // KF5
@@ -206,7 +205,7 @@ public:
 
     // Data
     ChartProxyModel     *proxyModel;	 /// What's presented to KChart
-    QAbstractItemModel  *internalModel;
+    ChartTableModel  *internalModel;
     TableSource          tableSource;
     SingleModelHelper   *internalModelHelper;
 
@@ -543,12 +542,12 @@ void ChartShape::showFooter(bool doShow)
     d->setChildVisible(d->footer, doShow);
 }
 
-QAbstractItemModel *ChartShape::internalModel() const
+ChartTableModel *ChartShape::internalModel() const
 {
     return d->internalModel;
 }
 
-void ChartShape::setInternalModel(QAbstractItemModel *model)
+void ChartShape::setInternalModel(ChartTableModel *model)
 {
     Table *table = d->tableSource.get(model);
     Q_ASSERT(table);
@@ -624,10 +623,25 @@ void ChartShape::setChartType(ChartType type)
     emit chartTypeChanged(type, prev);
 }
 
-void ChartShape::setChartSubType(ChartSubtype subType)
+void ChartShape::setChartSubType(ChartSubtype subType, bool reset)
 {
     Q_ASSERT(d->plotArea);
+    ChartSubtype prev = d->plotArea->chartSubType();
     d->plotArea->setChartSubType(subType);
+    if (reset && chartType() == StockChartType && prev != subType && d->internalModel  && d->usesInternalModelOnly) {
+        // HACK to get reasonable behaviour in most cases
+        // Stock charts are special because subtypes interpretes data differently from another:
+        // - HighLowCloseChartSubtype assumes High = row 0, Low = row 1 and Close = row 2
+        // - The other types assumes Open = row 0,  High = row 1, Low = row 2 and Close = row 3
+        // This makes switching between them a bit unintuitive.
+        if (subType == HighLowCloseChartSubtype && d->internalModel->rowCount() > 3) {
+            d->proxyModel->removeRows(0, 1); // remove Open
+        } else {
+            // just reset and hope for the best
+            CellRegion region(d->tableSource.get(d->internalModel), QRect(1, 1, d->internalModel->columnCount(), d->internalModel->rowCount()));
+            d->proxyModel->reset(region);
+        }
+    }
     emit updateConfigWidget();
 }
 
@@ -926,6 +940,10 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
 
 
     // 1. Load the chart type.
+    // NOTE: Chart type and -subtype is a bit tricky as stock charts and bubble charts
+    //       needs special treatment.
+    //       So we do not call the ChartShape::setChart... methods here in odf code,
+    //       but the plot area methods directly.
     const QString chartClass = chartElement.attributeNS(KoXmlNS::chart, "class", QString());
     KoChart::ChartType chartType = KoChart::BarChartType;
     // Find out what charttype the chart class corresponds to.
@@ -934,11 +952,8 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
         if (chartClass == ODF_CHARTTYPES[(ChartType)type]) {
             chartType = (ChartType)type;
             // Set the dimensionality of the data points, we can not call
-            // setType here as we bubble charts requires that the datasets already exist
+            // setChartType here as bubble charts requires that the datasets already exist
             proxyModel()->setDataDimensions(numDimensions(chartType));
-            if (chartType != BubbleChartType) {
-                setChartSubType(defaultChartSubtype(chartType));
-            }
             knownType = true;
             debugChartOdf <<"found chart of type" << chartClass<<chartType;
             break;
@@ -1012,17 +1027,13 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
     }
 
     // 8. Sets the chart type
-    setChartType(chartType);
-    // since chart type in plot area is already set, we need to do axes here
+    // since chart type in plot area is already set before axes were loaded, we need to do axes here
     for (Axis *a : d->plotArea->axes()) {
         a->plotAreaChartTypeChanged(chartType);
     }
-    setChartSubType(chartSubType());
     debugChartOdf<<"loaded:"<<this->chartType()<<chartSubType();
 
-    d->plotArea->plotAreaUpdate();
-    d->legend->update();
-
+    updateAll();
     requestRepaint();
 
     return true;
@@ -1193,7 +1204,7 @@ void ChartShape::saveOdfData(KoXmlWriter &bodyWriter, KoGenStyles &mainStyles) c
     Q_UNUSED(mainStyles);
 
     // FIXME: Move this method to a sane place
-    QAbstractItemModel *internalModel = d->internalModel;
+    ChartTableModel *internalModel = d->internalModel;
     Table *internalTable = d->tableSource.get(internalModel);
     Q_ASSERT(internalTable);
 

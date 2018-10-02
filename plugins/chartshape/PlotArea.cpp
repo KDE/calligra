@@ -624,13 +624,6 @@ void PlotArea::setChartSubType(ChartSubtype subType)
     foreach (Axis *axis, d->axes) {
         axis->plotAreaChartSubTypeChanged(subType);
     }
-    if (chartType() == StockChartType) {
-        // HACK: Trick to get KChart stock diagrams to fetch data when subtype changes
-        // TODO: Review this, it may interfere with odf loading
-        d->shape->proxyModel()->reset(d->shape->proxyModel()->cellRangeAddress());
-    }
-
-    requestRepaint();
 }
 
 void PlotArea::setThreeD(bool threeD)

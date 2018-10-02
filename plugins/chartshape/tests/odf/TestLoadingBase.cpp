@@ -40,6 +40,7 @@
 #include "Legend.h"
 #include "DataSet.h"
 #include "TableSource.h"
+#include "ChartTableModel.h"
 #include "Axis.h"
 
 // KD Chart

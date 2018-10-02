@@ -44,6 +44,7 @@
 #include "DataSet.h"
 #include "TableSource.h"
 #include "OdfLoadingHelper.h"
+#include "ChartTableModel.h"
 #include "ChartDebug.h"
 
 using namespace KoChart;

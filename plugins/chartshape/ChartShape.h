@@ -134,7 +134,7 @@ public:
     /**
      * Returns the internal data table if existent, otherwise null.
      */
-    QAbstractItemModel *internalModel() const;
+    ChartTableModel *internalModel() const;
 
     /**
      * Tells the ChartShape what model to use as internal table. When
@@ -143,7 +143,7 @@ public:
      * This method will assume that @a model has already been added to this
      * chart's TableSource.
      */
-    void setInternalModel(QAbstractItemModel *model);
+    void setInternalModel(ChartTableModel *model);
 
     /**
      * Returns a "map" containing all tables that are being used,
@@ -196,7 +196,7 @@ public:
                Qt::Orientation dataDirection);
 
     void setChartType(ChartType type);
-    void setChartSubType(ChartSubtype subType);
+    void setChartSubType(ChartSubtype subType, bool reset = false);
     void setThreeD(bool threeD);
 
     /// reimplemented

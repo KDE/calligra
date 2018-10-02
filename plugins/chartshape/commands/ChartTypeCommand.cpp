@@ -64,7 +64,7 @@ void ChartTypeCommand::redo()
 
     // Actually do the work
     m_chart->setChartType(m_newType);
-    m_chart->setChartSubType(m_newSubtype);
+    m_chart->setChartSubType(m_newSubtype, m_newType == StockChartType);
     m_chart->update();
     m_chart->legend()->update();
 }
@@ -75,7 +75,7 @@ void ChartTypeCommand::undo()
         return;
 
     m_chart->setChartType(m_oldType);
-    m_chart->setChartSubType(m_oldSubtype);
+    m_chart->setChartSubType(m_oldSubtype, m_oldType == StockChartType);
     m_chart->update();
     m_chart->legend()->update();
 }

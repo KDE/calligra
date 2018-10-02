@@ -29,6 +29,7 @@
 #include "ChartShape.h"
 #include "ChartProxyModel.h"
 #include "ChartTableView.h"
+#include "ChartTableModel.h"
 #include "DataSet.h"
 #include "ChartDebug.h"
 

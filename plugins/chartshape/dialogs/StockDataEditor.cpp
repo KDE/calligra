@@ -28,6 +28,7 @@
 
 #include "ChartShape.h"
 #include "CellRegion.h"
+#include "ChartTableModel.h"
 #include "ChartDebug.h"
 
 
@@ -41,6 +42,13 @@ public:
 
     DataProxy(QObject *parent = 0) : QSortFilterProxyModel(parent), chart(0) {}
 
+    Qt::ItemFlags flags(const QModelIndex &index) const override
+    {
+        if (index.row() == 0 && index.column() == 0) {
+            return QSortFilterProxyModel::flags(index) & ~Qt::ItemIsEditable;
+        }
+        return QSortFilterProxyModel::flags(index);
+    }
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const
     {
         if (role == Qt::DisplayRole) {
@@ -48,24 +56,6 @@ public:
                 return CellRegion::columnName(section + 1);
             } else {
                 return section + 1;
-            }
-        } else if (role == Qt::ToolTipRole) {
-            if (orientation == Qt::Horizontal) {
-                if (chart->chartSubType() == HighLowCloseChartSubtype) {
-                    switch (section) {
-                        case 1: return i18nc("info@tooltip", "High");
-                        case 2: return i18nc("info@tooltip", "Low");
-                        case 3: return i18nc("info@tooltip", "Close");
-                        case 4: return i18nc("info@tooltip", "Not used");
-                    }
-                } else {
-                    switch (section) {
-                        case 1: return i18nc("info@tooltip", "Open");
-                        case 2: return i18nc("info@tooltip", "High");
-                        case 3: return i18nc("info@tooltip", "Low");
-                        case 4: return i18nc("info@tooltip", "Close");
-                    }
-                }
             }
         }
         return QSortFilterProxyModel::headerData(section, orientation, role);
@@ -76,7 +66,7 @@ public:
     }
     bool filterAcceptsRow(int source_row, const QModelIndex &/*source_parent*/) const
     {
-        return source_row > 0;
+        return source_row >= 0;
     }
     bool insertRows(int row, int count, const QModelIndex &parent)
     {
@@ -111,7 +101,7 @@ StockDataEditor::StockDataEditor(ChartShape *chart, QWidget *parent)
     m_ui.setupUi(w);
     setMainWidget(w);
 
-    m_ui.tableView->verticalHeader()->hide();
+    //m_ui.tableView->verticalHeader()->hide();
 
     m_insertRowAboveAction = new QAction(m_ui.insertRowAbove->icon(), i18n("Insert Row Above"), m_ui.tableView);
     m_insertRowBelowAction = new QAction(m_ui.insertRowBelow->icon(), i18n("Insert Row Below"), m_ui.tableView);
@@ -189,7 +179,7 @@ void StockDataEditor::slotDeleteSelection()
 void StockDataEditor::enableActions()
 {
     QItemSelectionModel *smodel = m_ui.tableView->selectionModel();
-    m_ui.deleteSelection->setEnabled(smodel && (!smodel->selectedRows().isEmpty() || !smodel->selectedColumns().isEmpty()));
+    m_ui.deleteSelection->setEnabled(smodel && !smodel->selectedRows().isEmpty());
     m_deleteAction->setEnabled(m_ui.deleteSelection->isEnabled());
 }
 
