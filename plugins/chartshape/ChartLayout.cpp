@@ -129,10 +129,10 @@ QList<KoShape*> ChartLayout::shapes() const
     return m_layoutItems.keys();
 }
 
-void ChartLayout::setContainerSize(const QSizeF &size)
+void ChartLayout::setContainerRect(const QRectF &rect)
 {
-    if (size != m_containerSize) {
-        m_containerSize = size;
+    if (rect != m_containerRect) {
+        m_containerRect = rect;
         scheduleRelayout();
     }
 }
@@ -140,11 +140,19 @@ void ChartLayout::setContainerSize(const QSizeF &size)
 void ChartLayout::containerChanged(KoShapeContainer *container, KoShape::ChangeType type)
 {
     switch(type) {
-    case KoShape::SizeChanged:
-        setContainerSize(container->size());
-        break;
-    default:
-        break;
+        case KoShape::StrokeChanged:
+        case KoShape::SizeChanged: {
+            QRectF rect(QPointF(0,0), container->size());
+            KoInsets insets = container->strokeInsets();
+            rect.adjust(insets.left / 2., insets.top / 2., -insets.right / 2., -insets.bottom / 2.);
+            setContainerRect(rect);
+            break;
+        }
+        case KoShape::BorderChanged:
+            warnChartLayout<<"Border not handled";
+            break;
+        default:
+            break;
     }
 }
 
@@ -178,15 +186,15 @@ void ChartLayout::proposeMove(KoShape *child, QPointF &move)
 {
     QRectF current = itemRect(child);
     QRectF newRect = current.adjusted(move.x(), move.y(), move.x(), move.y());
-    if (newRect.left() < 0.0) {
-        move.setX(-current.left());
-    } else if (newRect.right() > m_containerSize.width()) {
-        move.setX(m_containerSize.width() - current.right());
+    if (newRect.left() < m_containerRect.left()) {
+        move.setX(m_containerRect.left() - current.left());
+    } else if (newRect.right() > m_containerRect.right()) {
+        move.setX(m_containerRect.right() - current.right());
     }
-    if (newRect.top() < 0.0) {
-        move.setY(-current.top());
-    } else if (newRect.bottom() > m_containerSize.height()) {
-        move.setY(m_containerSize.height() - current.bottom());
+    if (newRect.top() < m_containerRect.top()) {
+        move.setY(m_containerRect.top() - current.top());
+    } else if (newRect.bottom() > m_containerRect.bottom()) {
+        move.setY(m_containerRect.bottom() - current.bottom());
     }
 }
 
@@ -262,8 +270,7 @@ qreal ChartLayout::yOffset(const QRectF &top, const QRectF &bottom, bool center)
 
 void ChartLayout::calculateLayout()
 {
-    QRectF area;
-    area.setSize(m_containerSize);
+    QRectF area = m_containerRect;
     area.adjust(m_padding.left, m_padding.top, -m_padding.right, -m_padding.bottom);
 
     if (area.size().width() < 0 && area.size().height() < 0) {

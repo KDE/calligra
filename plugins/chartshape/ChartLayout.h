@@ -186,7 +186,7 @@ public:
 
 private:
     /// Set the chart size to @p size and schedule relayout
-    void setContainerSize(const QSizeF &size);
+    void setContainerRect(const QRectF &rect);
 
     qreal xOffset(const QRectF &left, const QRectF &right, bool center = false) const;
     qreal yOffset(const QRectF &top, const QRectF &bottom, bool center = false) const;
@@ -213,7 +213,7 @@ public:
 private:
     bool m_doingLayout;
     bool m_relayoutScheduled;
-    QSizeF m_containerSize;
+    QRectF m_containerRect;
     KoInsets m_padding;
     QPointF m_spacing;
     bool m_layoutingEnabled;
