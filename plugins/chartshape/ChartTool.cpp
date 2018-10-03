@@ -227,6 +227,17 @@ void ChartTool::activate(ToolActivation, const QSet<KoShape*> &shapes)
     d->shape = 0;
     for (KoShape *s : shapes) {
         d->shape = dynamic_cast<ChartShape*>(s);
+        if (!d->shape) {
+            for (KoShape *parent = s->parent(); parent; parent = parent->parent()) {
+                d->shape = dynamic_cast<ChartShape*>(parent);
+                if (d->shape) {
+                    break;
+                }
+            }
+        }
+        if (d->shape) {
+            break;
+        }
     }
     debugChartTool<<shapes<<d->shape;
     if (!d->shape) {
@@ -261,7 +272,9 @@ void ChartTool::deactivate()
         if (configWidget)
             configWidget->deactivate();
     }
-    d->shape->update(); // to get rid of decoration
+    if (d->shape) {
+        d->shape->update(); // to get rid of decoration
+    }
     d->shape = 0;
 }
 
