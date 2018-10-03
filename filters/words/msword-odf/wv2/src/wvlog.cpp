@@ -20,6 +20,6 @@
 
 const QLoggingCategory &WV_LOG()
 {
-    static const QLoggingCategory category("calligra.lib.wv2");
+    static const QLoggingCategory category("calligra.filter.wv2");
     return category;
 }

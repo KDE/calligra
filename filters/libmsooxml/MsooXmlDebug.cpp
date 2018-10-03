@@ -20,6 +20,6 @@
 
 const QLoggingCategory &MSOOXML_LOG()
 {
-    static const QLoggingCategory category("calligra.lib.msooxml");
+    static const QLoggingCategory category("calligra.filter.msooxml");
     return category;
 }

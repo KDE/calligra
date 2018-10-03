@@ -20,7 +20,7 @@
 
 const QLoggingCategory &ODF2_LOG()
 {
-    static const QLoggingCategory category("calligra.lib.odf2");
+    static const QLoggingCategory category("calligra.filter.odf2");
     return category;
 }
 

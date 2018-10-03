@@ -20,7 +20,7 @@
 
 const QLoggingCategory &ODFREADER_LOG()
 {
-    static const QLoggingCategory category("calligra.lib.odfreader");
+    static const QLoggingCategory category("calligra.filter.odfreader");
     return category;
 }
 
