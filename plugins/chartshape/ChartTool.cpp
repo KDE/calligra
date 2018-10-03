@@ -156,8 +156,19 @@ void ChartTool::shapeSelectionChanged()
 
 void ChartTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    Q_UNUSED(painter);
-    Q_UNUSED(converter);
+    if (d->shape) {
+        QPen pen;
+        //Use the #00adf5 color with 50% opacity
+        pen.setColor(QColor(0, 173, 245, 127));
+        pen.setWidth(qMax((uint)1, handleRadius() / 2));
+        pen.setJoinStyle(Qt::RoundJoin);
+        painter.setPen(pen);
+
+        QTransform painterMatrix = painter.worldTransform();
+        painter.setWorldTransform(d->shape->absoluteTransformation(&converter) * painterMatrix);
+        KoShape::applyConversion(painter, converter);
+        painter.drawRect(QRectF(QPointF(), d->shape->size()));
+    }
 }
 
 void ChartTool::mousePressEvent(KoPointerEvent *event)
@@ -167,7 +178,7 @@ void ChartTool::mousePressEvent(KoPointerEvent *event)
     return;
 #else
     // Select dataset
-    if (   !d->shape || !d->shape->kdChart() || ! d->shape->kdChart()->coordinatePlane()
+    if (!d->shape || !d->shape->kdChart() || ! d->shape->kdChart()->coordinatePlane()
         || !d->shape->kdChart()->coordinatePlane()->diagram())
         return;
     QPointF point = event->point - d->shape->position();
@@ -238,6 +249,7 @@ void ChartTool::activate(ToolActivation, const QSet<KoShape*> &shapes)
             widget->updateData();
         }
     }
+    d->shape->update(); // to paint decoration
 }
 
 void ChartTool::deactivate()
@@ -249,6 +261,7 @@ void ChartTool::deactivate()
         if (configWidget)
             configWidget->deactivate();
     }
+    d->shape->update(); // to get rid of decoration
     d->shape = 0;
 }
 
