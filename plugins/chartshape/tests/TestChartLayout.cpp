@@ -94,10 +94,10 @@ void TestChartLayout::initTestCase()
     QVERIFY(secondaryXAxisTitle == 0);
     QVERIFY(secondaryYAxisTitle == 0);
 
-    QCOMPARE(xAxisTitleRect.bottom(), area.bottom());
-    QCOMPARE(yAxisTitleRect.left(), area.left());
-    QCOMPARE(legendRect.right(), area.right());
-    QCOMPARE(plotAreaRect.top(), area.top());
+    QCOMPARE(xAxisTitleRect.bottom(), area.bottom()-1);
+    QCOMPARE(yAxisTitleRect.left(), area.left()+1);
+    QCOMPARE(legendRect.right(), area.right()-1);
+    QCOMPARE(plotAreaRect.top(), area.top()+1);
     QCOMPARE(plotAreaRect.left(), yAxisTitleRect.right() + spaceX);
     QCOMPARE(plotAreaRect.bottom(), xAxisTitleRect.top() - spaceY);
     QCOMPARE(plotAreaRect.right(), legendRect.left() - spaceX);
@@ -418,7 +418,7 @@ void TestChartLayout::testLegendPositioning()
     layout->scheduleRelayout();
     layout->layout();
     updateRects();
-    legendRect.moveTop(area.top());
+    legendRect.moveTop(area.top()+1);
     legendRect.moveLeft(plotAreaRect.center().x() - legendRect.width() / 2);
     plotAreaRect.setTop(legendRect.bottom() + spaceY);
     xAxisTitleRect.moveLeft(plotAreaRect.center().x() - xAxisTitleRect.width() / 2);
@@ -446,7 +446,7 @@ void TestChartLayout::testLegendPositioning()
     layout->scheduleRelayout();
     layout->layout();
     updateRects();
-    legendRect.moveBottom(area.bottom());
+    legendRect.moveBottom(area.bottom()-1);
     legendRect.moveLeft(plotAreaRect.center().x() - legendRect.width() / 2);
     xAxisTitleRect.setBottom(legendRect.top() - spaceY);
     plotAreaRect.setBottom(xAxisTitleRect.top() - spaceY);
@@ -503,7 +503,7 @@ void TestChartLayout::testLegendPositioning()
     layout->scheduleRelayout();
     layout->layout();
     updateRects();
-    legendRect.moveLeft(area.left());
+    legendRect.moveLeft(area.left()+1);
     legendRect.moveTop(plotAreaRect.center().y() - legendRect.height() / 2);
     yAxisTitleRect.moveLeft(legendRect.right() + spaceX);
     plotAreaRect.setLeft(yAxisTitleRect.right() + spaceX);
@@ -531,8 +531,8 @@ void TestChartLayout::testLegendPositioning()
     layout->scheduleRelayout();
     layout->layout();
     updateRects();
-    legendRect.moveLeft(area.left());
-    legendRect.moveTop(area.top());
+    legendRect.moveLeft(area.left()+1);
+    legendRect.moveTop(area.top()+1);
     yAxisTitleRect.moveRight(area.left() + spaceX); // preliminary
     plotAreaRect.setLeft(qMax(legendRect.right(), yAxisTitleRect.right()) + spaceX);
     yAxisTitleRect.moveRight(plotAreaRect.left() - spaceX);
@@ -547,9 +547,9 @@ void TestChartLayout::testLegendPositioning()
     layout->scheduleRelayout();
     layout->layout();
     updateRects();
-    legendRect.moveRight(area.right());
-    legendRect.moveTop(area.top());
-    yAxisTitleRect.moveLeft(area.left());
+    legendRect.moveRight(area.right()-1);
+    legendRect.moveTop(area.top()+1);
+    yAxisTitleRect.moveLeft(area.left()+1);
     plotAreaRect.setRight(legendRect.left() - spaceX);
     plotAreaRect.setTop(legendRect.bottom() + spaceY);
     xAxisTitleRect.moveLeft(plotAreaRect.center().x() - xAxisTitleRect.width() / 2);
@@ -562,7 +562,8 @@ void TestChartLayout::testLegendPositioning()
     layout->scheduleRelayout();
     layout->layout();
     updateRects();
-    legendRect.moveBottomLeft(area.bottomLeft());
+    legendRect.moveLeft(area.left()+1);
+    legendRect.moveBottom(area.bottom()-1);
 
     yAxisTitleRect.moveLeft(area.left()); // preliminary
     plotAreaRect.setLeft(qMax(legendRect.right(), yAxisTitleRect.right()) + spaceX);
@@ -582,7 +583,8 @@ void TestChartLayout::testLegendPositioning()
     layout->scheduleRelayout();
     layout->layout();
     updateRects();
-    legendRect.moveBottomRight(area.bottomRight());
+    legendRect.moveRight(area.right()-1);
+    legendRect.moveBottom(area.bottom()-1);
 
     plotAreaRect.setRight(legendRect.left() - spaceX);
 
