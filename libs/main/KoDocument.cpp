@@ -2037,7 +2037,7 @@ void KoDocument::setModified(bool mod)
     if (isAutosaving())   // ignore setModified calls due to autosaving
         return;
 
-    if ( !d->readwrite && d->modified ) {
+    if ( !d->readwrite && mod ) {
         qCritical(/*1000*/) << "Can't set a read-only document to 'modified' !" << endl;
         return;
     }
