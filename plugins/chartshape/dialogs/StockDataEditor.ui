@@ -42,8 +42,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset theme="edit-table-insert-row-under">
-           <normaloff>.</normaloff>.</iconset>
+          <iconset theme="edit-table-insert-row-under"/>
          </property>
          <property name="iconSize">
           <size>
@@ -62,8 +61,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset theme="edit-table-insert-row-above">
-           <normaloff>.</normaloff>.</iconset>
+          <iconset theme="edit-table-insert-row-above"/>
          </property>
          <property name="iconSize">
           <size>
@@ -76,7 +74,7 @@
        <item row="2" column="0">
         <widget class="QToolButton" name="deleteSelection">
          <property name="toolTip">
-          <string>Delete selection</string>
+          <string>Delete row</string>
          </property>
          <property name="text">
           <string>...</string>

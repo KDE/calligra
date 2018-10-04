@@ -105,7 +105,7 @@ StockDataEditor::StockDataEditor(ChartShape *chart, QWidget *parent)
 
     m_insertRowAboveAction = new QAction(m_ui.insertRowAbove->icon(), i18n("Insert Row Above"), m_ui.tableView);
     m_insertRowBelowAction = new QAction(m_ui.insertRowBelow->icon(), i18n("Insert Row Below"), m_ui.tableView);
-    m_deleteAction = new QAction(m_ui.deleteSelection->icon(), i18n("Delete"), m_ui.tableView);
+    m_deleteAction = new QAction(m_ui.deleteSelection->icon(), i18n("Delete Row"), m_ui.tableView);
 
 
     m_ui.tableView->addAction(m_insertRowAboveAction);
@@ -168,18 +168,20 @@ void StockDataEditor::slotInsertRowBelow()
 void StockDataEditor::slotDeleteSelection()
 {
     QAbstractItemModel *model = m_ui.tableView->model();
-    QModelIndexList lst = m_ui.tableView->selectionModel()->selectedRows();
-    if (!lst.isEmpty()) {
-        for (int i = lst.count() - 1; i >= 0; --i) {
-            model->removeRow(lst.at(i).row());
-        }
+    QModelIndexList lst = m_ui.tableView->selectionModel()->selectedIndexes();
+    QMap<int, int> rows;
+    for (int i = 0; i < lst.count(); ++i) {
+        rows.insert(lst.at(i).row(), lst.at(i).row());
+    }
+    while (!rows.isEmpty()) {
+        model->removeRow(rows.take(rows.lastKey()));
     }
 }
 
 void StockDataEditor::enableActions()
 {
     QItemSelectionModel *smodel = m_ui.tableView->selectionModel();
-    m_ui.deleteSelection->setEnabled(smodel && !smodel->selectedRows().isEmpty());
+    m_ui.deleteSelection->setEnabled(smodel && smodel->hasSelection());
     m_deleteAction->setEnabled(m_ui.deleteSelection->isEnabled());
 }
 
