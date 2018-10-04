@@ -274,7 +274,7 @@ void TestChartLayout::testDefaultDiagram()
     layout->scheduleRelayout();
     layout->layout();
     chartTitleRect = itemRect(chartTitle);
-    chartTitleRect.moveTop(area.top());
+    chartTitleRect.moveTop(area.top()+1);
     plotAreaRect.setTop(chartTitleRect.bottom() + spaceY);
     legendRect.moveTop(plotAreaRect.center().y() - legendRect.height() / 2);
     COMPARELAYOUT("Show title");
@@ -292,7 +292,7 @@ void TestChartLayout::testDefaultDiagram()
     layout->scheduleRelayout();
     layout->layout();
     chartFooterRect = itemRect(chartFooter);
-    chartFooterRect.moveBottom(area.bottom());
+    chartFooterRect.moveBottom(area.bottom()-1);
     plotAreaRect.setBottom(chartFooterRect.top() - spaceY);
     legendRect.moveTop(plotAreaRect.center().y() - legendRect.height() / 2);
     COMPARELAYOUT("Show footer");
@@ -300,26 +300,26 @@ void TestChartLayout::testDefaultDiagram()
     legend->setVisible(false);
     layout->scheduleRelayout();
     layout->layout();
-    plotAreaRect.setRight(area.right());
+    plotAreaRect.setRight(area.right()-1);
     COMPARELAYOUT("Hide legend");
 
     chartTitle->setVisible(false);
     layout->scheduleRelayout();
     layout->layout();
-    chartSubTitleRect.moveTop(chartTitleRect.top());
+    chartSubTitleRect.moveTop(area.top()+1);
     plotAreaRect.setTop(chartSubTitleRect.bottom() + spaceY);
     COMPARELAYOUT("Hide title");
 
     chartSubTitle->setVisible(false);
     layout->scheduleRelayout();
     layout->layout();
-    plotAreaRect.setTop(area.top());
+    plotAreaRect.setTop(area.top()+1);
     COMPARELAYOUT("Hide subtitle");
 
     chartFooter->setVisible(false);
     layout->scheduleRelayout();
     layout->layout();
-    plotAreaRect.setBottom(area.bottom());
+    plotAreaRect.setBottom(area.bottom()-1);
     COMPARELAYOUT("Hide footer");
 
     KoChart::Axis *a = new KoChart::Axis(plotArea, KoChart::XAxisDimension);
@@ -331,7 +331,7 @@ void TestChartLayout::testDefaultDiagram()
     layout->scheduleRelayout();
     layout->layout();
     secondaryXAxisTitleRect = itemRect(secondaryXAxisTitle);
-    secondaryXAxisTitleRect.moveTop(area.top());
+    secondaryXAxisTitleRect.moveTop(area.top()+1);
     plotAreaRect.setTop(secondaryXAxisTitleRect.bottom() + spaceY);
     COMPARELAYOUT("Show secondary x axis");
 
@@ -345,7 +345,7 @@ void TestChartLayout::testDefaultDiagram()
     layout->scheduleRelayout();
     layout->layout();
     secondaryYAxisTitleRect = itemRect(secondaryYAxisTitle);
-    secondaryYAxisTitleRect.moveRight(area.right());
+    secondaryYAxisTitleRect.moveRight(area.right()-1);
     plotAreaRect.setRight(secondaryYAxisTitleRect.left() - spaceX);
     secondaryXAxisTitleRect.moveLeft(plotAreaRect.center().x() - secondaryXAxisTitleRect.width() / 2);
     COMPARELAYOUT("Show secondary y axis");
@@ -353,14 +353,14 @@ void TestChartLayout::testDefaultDiagram()
     secondaryXAxisTitle->setVisible(false);
     layout->scheduleRelayout();
     layout->layout();
-    plotAreaRect.setTop(area.top());
+    plotAreaRect.setTop(area.top()+1);
     secondaryYAxisTitleRect.moveTop(plotAreaRect.center().y() - secondaryYAxisTitleRect.height() / 2);
     COMPARELAYOUT("Hide secondary x axis");
 
     secondaryYAxisTitle->setVisible(false);
     layout->scheduleRelayout();
     layout->layout();
-    plotAreaRect.setRight(area.right());
+    plotAreaRect.setRight(area.right()-1);
     COMPARELAYOUT("Hide secondary y axis");
 
     // show everyting in one go
@@ -385,16 +385,16 @@ void TestChartLayout::testDefaultDiagram()
     secondaryXAxisTitleRect = itemRect(secondaryXAxisTitle);
     secondaryYAxisTitleRect = itemRect(secondaryYAxisTitle);
 
-    chartTitleRect.moveTop(area.top());
+    chartTitleRect.moveTop(area.top()+1);
 
     chartSubTitleRect.moveTop(chartTitleRect.bottom() + spaceY);
 
-    chartFooterRect.moveBottom(area.bottom());
+    chartFooterRect.moveBottom(area.bottom()-1);
 
     xAxisTitleRect.moveBottom(chartFooterRect.top() - spaceY);
     xAxisTitleRect.moveLeft(plotAreaRect.center().x() - xAxisTitleRect.width() / 2);
 
-    yAxisTitleRect.moveBottom(area.left());
+    yAxisTitleRect.moveBottom(area.left()+1);
     yAxisTitleRect.moveTop(plotAreaRect.center().y() - yAxisTitleRect.height() / 2);
 
     secondaryXAxisTitleRect.moveTop(chartSubTitleRect.bottom() + spaceY);
@@ -475,7 +475,7 @@ void TestChartLayout::testLegendPositioning()
     layout->scheduleRelayout();
     layout->layout();
     updateRects();
-    legendRect.moveTop(area.top());
+    legendRect.moveTop(area.top()+1);
     legendRect.moveTop(plotAreaRect.center().y() - legendRect.height() / 2);
     plotAreaRect.setRight(legendRect.left() - spaceX);
     xAxisTitleRect.moveLeft(plotAreaRect.center().x() - xAxisTitleRect.width() / 2);
