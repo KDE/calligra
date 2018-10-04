@@ -1659,6 +1659,7 @@ void KoMainWindow::slotProgress(int value)
     if (!d->progress.isNull()) {
         d->progress->setValue(value);
     }
+    locker.unlock();
     qApp->processEvents();
 }
 
