@@ -135,6 +135,9 @@ Q_SIGNALS:
      */
     void documentClosed(const QString &ref);
 
+private Q_SLOTS:
+    void benchmarkLoadingFinished();
+
 protected:
 
     // Current application object.

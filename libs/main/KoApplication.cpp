@@ -89,6 +89,7 @@ public:
     QByteArray nativeMimeType;
     QWidget *splashScreen;
     QList<KoPart *> partList;
+    QString roundtripFileName;
 };
 
 class KoApplication::ResetStarting
@@ -445,19 +446,19 @@ bool KoApplication::start()
         const bool print = parser.isSet("print");
         const bool exportAsPdf = parser.isSet("export-pdf");
         const QString pdfFileName = parser.value("export-filename");
-        const QString roundtripFileName = parser.value("roundtrip-filename");
+        d->roundtripFileName = parser.value("roundtrip-filename");
         const bool doTemplate = parser.isSet("template");
         const bool doNew = parser.isSet("new");
         const bool benchmarkLoading = parser.isSet("benchmark-loading")
                 || parser.isSet("benchmark-loading-show-window")
-                || !roundtripFileName.isEmpty();
+                || !d->roundtripFileName.isEmpty();
         // only show the mainWindow when no command-line mode option is passed
         const bool showmainWindow =
                 parser.isSet("benchmark-loading-show-window") || (
                     !parser.isSet("export-pdf")
                     && !parser.isSet("benchmark-loading")
                     && !parser.isSet("roundtrip-filename")
-                    && roundtripFileName.isEmpty());
+                    && d->roundtripFileName.isEmpty());
         const QString profileFileName = parser.value("profile-filename");
 
         QTextStream profileoutput;
@@ -494,6 +495,8 @@ bool KoApplication::start()
                 }
                 if (benchmarkLoading) {
                     doc->setReadWrite(false);
+                    connect(mainWindow, &KoMainWindow::loadCompleted, this, &KoApplication::benchmarkLoadingFinished);
+                    connect(mainWindow, &KoMainWindow::loadCompleted, this, &KoApplication::benchmarkLoadingFinished);
                 }
 
                 if (profileoutput.device()) {
@@ -575,11 +578,6 @@ bool KoApplication::start()
                                           << appStartTime.msecsTo(QTime::currentTime())
                                           <<"\t100" << endl;
                         }
-                        if (!roundtripFileName.isEmpty()) {
-                            part->document()->saveAs(QUrl("file:"+roundtripFileName));
-                        }
-                        // close the document
-                        mainWindow->slotFileQuit();
                         return true; // only load one document!
                     }
                     else if (print) {
@@ -626,6 +624,23 @@ bool KoApplication::start()
 KoApplication::~KoApplication()
 {
     delete d;
+}
+
+void KoApplication::benchmarkLoadingFinished()
+{
+    KoPart *part = d->partList.value(0);
+    if (!part) {
+        return;
+    }
+    KoMainWindow *mainWindow = part->mainWindows().value(0);
+    if (!mainWindow) {
+        return;
+    }
+    if (!d->roundtripFileName.isEmpty()) {
+        part->document()->saveAs(QUrl("file:" + d->roundtripFileName));
+    }
+    // close the document
+    mainWindow->slotFileQuit();
 }
 
 void KoApplication::setSplashScreen(QWidget *splashScreen)
