@@ -178,6 +178,9 @@ Q_SIGNALS:
     /// and the document anymore.
     void loadCompleted();
 
+    /// This signal is emitted when this windows has canceled loading of a document.
+    void loadCanceled();
+
     /// This signal is emitted when the color theme changes
     void themeChanged();
 

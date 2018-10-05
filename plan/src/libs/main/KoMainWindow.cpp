@@ -140,6 +140,7 @@ public:
         m_activePart = 0;
 
         noCleanup = false;
+        openingDocument = false;
     }
 
     ~KoMainWindowPrivate() {
@@ -240,6 +241,7 @@ public:
     KHelpMenu *m_helpMenu;
 
     bool noCleanup;
+    bool openingDocument;
 
 };
 
@@ -737,12 +739,14 @@ bool KoMainWindow::openDocumentInternal(const QUrl &url, KoPart *newpart, KoDocu
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     connect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     connect(newdoc, SIGNAL(canceled(QString)), this, SLOT(slotLoadCanceled(QString)));
+    d->openingDocument = true;
     newpart->addMainWindow(this);   // used by openUrl
     bool openRet = (!isImporting()) ? newdoc->openUrl(url) : newdoc->importDocument(url);
     if (!openRet) {
         newpart->removeMainWindow(this);
         delete newdoc;
         delete newpart;
+        d->openingDocument = false;
         return false;
     }
     updateReloadFileAction(newdoc);
@@ -780,6 +784,7 @@ void KoMainWindow::slotLoadCompleted()
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     disconnect(newdoc, SIGNAL(canceled(QString)), this, SLOT(slotLoadCanceled(QString)));
+    d->openingDocument = false;
     emit loadCompleted();
 }
 
@@ -795,6 +800,8 @@ void KoMainWindow::slotLoadCanceled(const QString & errMsg)
     disconnect(doc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(doc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     disconnect(doc, SIGNAL(canceled(QString)), this, SLOT(slotLoadCanceled(QString)));
+    d->openingDocument = false;
+    emit loadCanceled();
 }
 
 void KoMainWindow::slotSaveCanceled(const QString &errMsg)
@@ -1120,7 +1127,9 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
 
 void KoMainWindow::closeEvent(QCloseEvent *e)
 {
-    if(rootDocument() && rootDocument()->isLoading()) {
+    // If we are in the process of opening a new document, rootDocument() may not have been set yet,
+    // so we must prevent closing to avoid crash.
+    if(d->openingDocument || (rootDocument() && rootDocument()->isLoading())) {
         e->setAccepted(false);
         return;
     }
@@ -1647,6 +1656,7 @@ void KoMainWindow::slotProgress(int value)
     if (!d->progress.isNull()) {
         d->progress->setValue(value);
     }
+    locker.unlock();
     qApp->processEvents();
 }
 

@@ -453,6 +453,8 @@ bool KoApplication::start()
                 }
                 if (benchmarkLoading) {
                     doc->setReadWrite(false);
+                    connect(mainWindow, &KoMainWindow::loadCompleted, this, &KoApplication::benchmarkLoadingFinished);
+                    connect(mainWindow, &KoMainWindow::loadCompleted, this, &KoApplication::benchmarkLoadingFinished);
                 }
 
                 if (profileoutput.device()) {
@@ -536,8 +538,6 @@ bool KoApplication::start()
                                           << appStartTime.msecsTo(QTime::currentTime())
                                           <<"\t100" << endl;
                         }
-                        // close the document
-                        mainWindow->slotFileQuit();
                         return true; // only load one document!
                     } else {
                         // Normal case, success
@@ -572,6 +572,20 @@ bool KoApplication::start()
 KoApplication::~KoApplication()
 {
     delete d;
+}
+
+void KoApplication::benchmarkLoadingFinished()
+{
+    KoPart *part = d->partList.value(0);
+    if (!part) {
+        return;
+    }
+    KoMainWindow *mainWindow = part->mainWindows().value(0);
+    if (!mainWindow) {
+        return;
+    }
+    // close the document
+    mainWindow->slotFileQuit();
 }
 
 void KoApplication::setSplashScreen(QWidget *splashScreen)
