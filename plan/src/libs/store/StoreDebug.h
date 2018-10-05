@@ -24,7 +24,7 @@
 
 extern const KOSTORE_EXPORT QLoggingCategory &STORE_LOG();
 
-#define debugStore qCDebug(STORE_LOG)
+#define debugStore qCDebug(STORE_LOG)<<Q_FUNC_INFO
 #define warnStore qCWarning(STORE_LOG)
 #define errorStore qCCritical(STORE_LOG)
 

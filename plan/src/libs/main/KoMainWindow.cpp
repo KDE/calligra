@@ -576,7 +576,7 @@ void KoMainWindow::setReadWrite(bool readwrite)
 
 void KoMainWindow::addRecentURL(const QUrl &url)
 {
-    debugMain << "KoMainWindow::addRecentURL url=" << url.toDisplayString();
+    debugMain << "url=" << url.toDisplayString();
     // Add entry to recent documents list
     // (call coming from KoDocument because it must work with cmd line, template dlg, file/open, etc.)
     if (!url.isEmpty()) {
@@ -645,7 +645,7 @@ KoPart* KoMainWindow::createPart() const
 
 void KoMainWindow::updateCaption()
 {
-    debugMain << "KoMainWindow::updateCaption()";
+    debugMain;
     if (!d->rootDocument) {
         updateCaption(QString(), false);
     }
@@ -665,7 +665,7 @@ void KoMainWindow::updateCaption()
 
 void KoMainWindow::updateCaption(const QString & caption, bool mod)
 {
-    debugMain << "KoMainWindow::updateCaption(" << caption << "," << mod << ")";
+    debugMain  << caption << "," << mod;
 #ifdef PLAN_ALPHA
     setCaption(QString("ALPHA %1: %2").arg(PLAN_ALPHA).arg(caption), mod);
     return;
@@ -724,7 +724,7 @@ bool KoMainWindow::openDocument(KoPart *newPart, const QUrl &url)
 
 bool KoMainWindow::openDocumentInternal(const QUrl &url, KoPart *newpart, KoDocument *newdoc)
 {
-    debugMain <<"KoMainWindow::openDocument" << url.url();
+    debugMain << url.url();
 
     if (!newpart)
         newpart = createPart();
@@ -761,7 +761,7 @@ bool KoMainWindow::openDocumentInternal(const QUrl &url, KoPart *newpart, KoDocu
 // Separate from openDocument to handle async loading (remote URLs)
 void KoMainWindow::slotLoadCompleted()
 {
-    debugMain << "KoMainWindow::slotLoadCompleted";
+    debugMain;
     KoDocument *newdoc = qobject_cast<KoDocument*>(sender());
     KoPart *newpart = newdoc->documentPart();
 
@@ -790,7 +790,7 @@ void KoMainWindow::slotLoadCompleted()
 
 void KoMainWindow::slotLoadCanceled(const QString & errMsg)
 {
-    debugMain << "KoMainWindow::slotLoadCanceled";
+    debugMain;
     if (!errMsg.isEmpty())   // empty when canceled by user
         KMessageBox::error(this, errMsg);
     // ... can't delete the document, it's the one who emitted the signal...
@@ -806,7 +806,7 @@ void KoMainWindow::slotLoadCanceled(const QString & errMsg)
 
 void KoMainWindow::slotSaveCanceled(const QString &errMsg)
 {
-    debugMain << "KoMainWindow::slotSaveCanceled";
+    debugMain;
     if (!errMsg.isEmpty())   // empty when canceled by user
         KMessageBox::error(this, errMsg);
     slotSaveCompleted();
@@ -814,7 +814,7 @@ void KoMainWindow::slotSaveCanceled(const QString &errMsg)
 
 void KoMainWindow::slotSaveCompleted()
 {
-    debugMain << "KoMainWindow::slotSaveCompleted";
+    debugMain;
     KoDocument* doc = qobject_cast<KoDocument*>(sender());
     Q_ASSERT(doc);
     disconnect(doc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
@@ -922,9 +922,9 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
             suggestedURL.setScheme("file");
         }
         saveas = true;
-        debugMain << "KoMainWindow::saveDocument: newly created doc, default file name:" << d->rootDocument->url() << "save to:" << suggestedURL;
+        debugMain << "newly created doc, default file name:" << d->rootDocument->url() << "save to:" << suggestedURL;
     } else if (!mimeFilter.contains(oldOutputFormat) && !isExporting()) {
-        debugMain << "KoMainWindow::saveDocument no export filter for" << oldOutputFormat;
+        debugMain << "no export filter for" << oldOutputFormat;
 
         // --- don't setOutputMimeType in case the user cancels the Save As
         // dialog and then tries to just plain Save ---
@@ -1162,7 +1162,7 @@ void KoMainWindow::saveWindowSettings()
 
         // Save window size into the config file of our componentData
         // TODO: check if this is ever read again, seems lost over the years
-        debugMain << "KoMainWindow::saveWindowSettings";
+        debugMain;
         KConfigGroup mainWindowConfigGroup = config->group("MainWindow");
         KWindowConfig::saveWindowSize(windowHandle(), mainWindowConfigGroup);
         config->sync();
@@ -1621,7 +1621,7 @@ void KoMainWindow::viewFullscreen(bool fullScreen)
 void KoMainWindow::slotProgress(int value)
 {
     QMutexLocker locker(&d->progressMutex);
-    debugMain << "KoMainWindow::slotProgress" << value;
+    debugMain << value;
     if (value <= -1 || value >= 100) {
         if (d->progress) {
             statusBar()->removeWidget(d->progress);
@@ -1750,7 +1750,7 @@ void KoMainWindow::slotReloadFile()
 
 void KoMainWindow::slotImportFile()
 {
-    debugMain << "slotImportFile()";
+    debugMain;
 
     d->isImporting = true;
     slotFileOpen();
@@ -1759,7 +1759,7 @@ void KoMainWindow::slotImportFile()
 
 void KoMainWindow::slotExportFile()
 {
-    debugMain << "slotExportFile()";
+    debugMain;
 
     d->isExporting = true;
     slotFileSaveAs();

@@ -24,7 +24,7 @@
 
 extern const KOWIDGETS_EXPORT QLoggingCategory &WIDGETS_LOG();
 
-#define debugWidgets qCDebug(WIDGETS_LOG)
+#define debugWidgets qCDebug(WIDGETS_LOG)<<Q_FUNC_INFO
 #define warnWidgets qCWarning(WIDGETS_LOG)
 #define errorWidgets qCCritical(WIDGETS_LOG)
 

@@ -1180,7 +1180,7 @@ bool KoDocument::importDocument(const QUrl &_url)
 {
     bool ret;
 
-    debugMain << Q_FUNC_INFO << "url=" << _url.url();
+    debugMain << "url=" << _url.url();
     d->isImporting = true;
 
     // open...
@@ -1202,7 +1202,7 @@ bool KoDocument::importDocument(const QUrl &_url)
 
 bool KoDocument::openUrl(const QUrl &_url)
 {
-    debugMain << Q_FUNC_INFO << "url=" << _url.url();
+    debugMain << "url=" << _url.url();
     d->lastErrorMessage.clear();
 
     // Reimplemented, to add a check for autosave files and to improve error reporting
