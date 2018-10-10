@@ -133,6 +133,7 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
                     return koIcon("after_previous");
                 if (nodeType == KPrShapeAnimation::WithPrevious)
                     return koIcon("with_previous");
+                return QVariant();
             case Name: return QVariant();
             case ShapeThumbnail: return getAnimationShapeThumbnail(thisAnimation);
             case AnimationIcon:  return getAnimationIcon(thisAnimation);
@@ -169,6 +170,7 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
                     return i18n("start after previous animation");
                 if (nodeType == KPrShapeAnimation::WithPrevious)
                     return i18n("start with previous animation");
+                return QVariant();
             case Name: return QVariant();
             case ShapeThumbnail: return thisAnimation->shape()->name();
             case AnimationIcon: return getAnimationName(thisAnimation);
