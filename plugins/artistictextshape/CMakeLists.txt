@@ -3,8 +3,7 @@ project( artistictextshape )
 add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_artistictext\")
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/libs/widgets
-    ${CMAKE_SOURCE_DIR}/libs/main # for KoFontComboBox.h
+    ${KOWIDGETS_INCLUDES}
     ${FLAKE_INCLUDES}
 )
 
@@ -41,6 +40,6 @@ add_library(calligra_shape_artistictext MODULE ${ArtisticTextShape_SRCS} )
 
 calligra_shape_desktop_to_json(calligra_shape_artistictext calligra_shape_artistictext.desktop)
 
-target_link_libraries(calligra_shape_artistictext flake)
+target_link_libraries(calligra_shape_artistictext flake kowidgets)
 
 install( TARGETS calligra_shape_artistictext DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes )
