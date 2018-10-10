@@ -169,12 +169,12 @@ public:
      * Return a QVector of floats with channels' values normalized
      * to floating point range 0 to 1.
      */
-    virtual void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const = 0;
+    virtual void normalisedChannelsValue(const quint8 *pixel, QVector<qreal> &channels) const = 0;
 
     /**
      * Write in the pixel the value from the normalized vector.
      */
-    virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) const = 0;
+    virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<qreal> &values) const = 0;
 
     /**
      * Convert the value of the channel at the specified position into
@@ -506,10 +506,10 @@ public:
     virtual void increaseGreen(quint8 * pixel, qreal step) const;
     virtual void increaseBlue(quint8 * pixel, qreal step) const;
     virtual void increaseYellow(quint8 * pixel, qreal step) const;
-    virtual void toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const = 0;
-    virtual QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const = 0;
-    virtual void toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const = 0;
-    virtual QVector <double> fromYUV(qreal *y, qreal *u, qreal *v) const = 0;
+    virtual void toHSY(const QVector<qreal> &channelValues, qreal *hue, qreal *sat, qreal *luma) const = 0;
+    virtual QVector <qreal> fromHSY(qreal *hue, qreal *sat, qreal *luma) const = 0;
+    virtual void toYUV(const QVector<qreal> &channelValues, qreal *y, qreal *u, qreal *v) const = 0;
+    virtual QVector <qreal> fromYUV(qreal *y, qreal *u, qreal *v) const = 0;
     /**
      * Compose two arrays of pixels together. If source and target
      * are not the same color model, the source pixels will be

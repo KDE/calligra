@@ -787,7 +787,7 @@ void RGBToHCY(const qreal r,const qreal g,const qreal b, qreal *h, qreal *c, qre
     if (chroma<0.0){chroma=0.0;}
     if (luma<0.0){luma=0.0;}
 
-    *h=qBound(0.0,hue,1.0);
+    *h=qBound<qreal>(0.0,hue,1.0);
     *c=chroma;
     *y=luma;
 
@@ -824,7 +824,7 @@ void LabToLCH(const qreal l, const qreal a, const qreal b, qreal *L, qreal *C, q
 {
     qreal atemp =  (a - 0.5)*10.0;//the multiplication is only so that we get out of floating-point maths
     qreal btemp =  (b - 0.5)*10.0;
-    *L=qBound(0.0,l,1.0);
+    *L=qBound<qreal>(0.0,l,1.0);
     *C=sqrt( pow(atemp,2.0) + pow(btemp,2.0) )*0.1;
     qreal hue = (atan2(btemp,atemp))* 180.0 / M_PI;
     
@@ -838,27 +838,27 @@ void LabToLCH(const qreal l, const qreal a, const qreal b, qreal *L, qreal *C, q
 
 void LCHToLab(const qreal L, const qreal C, const qreal H, qreal *l, qreal *a, qreal *b)
 {
-    qreal chroma = qBound(0.0,C,1.0);
-    qreal hue = (qBound(0.0,H,1.0)*360.0)* M_PI / 180.0;
-    *l=qBound(0.0,L,1.0);
+    qreal chroma = qBound<qreal>(0.0,C,1.0);
+    qreal hue = (qBound<qreal>(0.0,H,1.0)*360.0)* M_PI / 180.0;
+    *l=qBound<qreal>(0.0,L,1.0);
     *a=(chroma * cos(hue) ) + 0.5;
     *b=(chroma * sin(hue) ) + 0.5;
 }
 
 void XYZToxyY(const qreal X, const qreal Y, const qreal Z, qreal *x, qreal *y, qreal *yY)
 {
-    qBound(0.0,X,1.0);
-    qBound(0.0,Y,1.0);
-    qBound(0.0,Z,1.0);
+    qBound<qreal>(0.0,X,1.0);
+    qBound<qreal>(0.0,Y,1.0);
+    qBound<qreal>(0.0,Z,1.0);
     *x=X/(X+Y+Z);
     *y=Y/(X+Y+Z);
     *yY=Y;
 }  
 void xyYToXYZ(const qreal x, const qreal y, const qreal yY, qreal *X, qreal *Y, qreal *Z)
 {
-    qBound(0.0,x,1.0);
-    qBound(0.0,y,1.0);
-    qBound(0.0,yY,1.0);
+    qBound<qreal>(0.0,x,1.0);
+    qBound<qreal>(0.0,y,1.0);
+    qBound<qreal>(0.0,yY,1.0);
     *X=(x*yY)/y;
     *Z=((1.0-x-y)/yY)/y;
     *Y=yY;
@@ -885,10 +885,10 @@ void CMYToCMYK(qreal *c, qreal *m, qreal *y, qreal *k)
         yellow  = ( yellow  - key ) / ( 1.0 - key );
     }
     
-    *c=qBound(0.0,cyan   ,1.0);
-    *m=qBound(0.0,magenta,1.0);
-    *y=qBound(0.0,yellow ,1.0);
-    *k=qBound(0.0,key    ,1.0);
+    *c=qBound<qreal>(0.0,cyan   ,1.0);
+    *m=qBound<qreal>(0.0,magenta,1.0);
+    *y=qBound<qreal>(0.0,yellow ,1.0);
+    *k=qBound<qreal>(0.0,key    ,1.0);
 }
 
 /*code from easyrgb.com*/
@@ -903,7 +903,7 @@ void CMYKToCMY(qreal *c, qreal *m, qreal *y, qreal *k)
     magenta = ( magenta * ( 1.0 - key ) + key );
     yellow  = ( yellow  * ( 1.0 - key ) + key );
     
-    *c=qBound(0.0,cyan   ,1.0);
-    *m=qBound(0.0,magenta,1.0);
-    *y=qBound(0.0,yellow ,1.0);
+    *c=qBound<qreal>(0.0,cyan   ,1.0);
+    *m=qBound<qreal>(0.0,magenta,1.0);
+    *y=qBound<qreal>(0.0,yellow ,1.0);
 }

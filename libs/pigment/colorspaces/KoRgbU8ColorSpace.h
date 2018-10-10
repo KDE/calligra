@@ -48,10 +48,10 @@ public:
 
     virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const;
     
-    virtual void toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const;
-    virtual QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const;
-    virtual void toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const;
-    virtual QVector <double> fromYUV(qreal *y, qreal *u, qreal *v) const;
+    virtual void toHSY(const QVector<qreal> &channelValues, qreal *hue, qreal *sat, qreal *luma) const;
+    virtual QVector <qreal> fromHSY(qreal *hue, qreal *sat, qreal *luma) const;
+    virtual void toYUV(const QVector<qreal> &channelValues, qreal *y, qreal *u, qreal *v) const;
+    virtual QVector <qreal> fromYUV(qreal *y, qreal *u, qreal *v) const;
 
 };
 

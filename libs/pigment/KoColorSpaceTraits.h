@@ -144,7 +144,7 @@ struct KoColorSpaceTrait {
         return QString().setNum(100. *((qreal)c) / KoColorSpaceMathsTraits< channels_type>::unitValue);
     }
 
-    inline static void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) {
+    inline static void normalisedChannelsValue(const quint8 *pixel, QVector<qreal> &channels) {
         Q_ASSERT((int)channels.count() == (int)channels_nb);
         channels_type c;
         for (uint i = 0; i < channels_nb; i++) {
@@ -153,7 +153,7 @@ struct KoColorSpaceTrait {
         }
     }
 
-    inline static void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) {
+    inline static void fromNormalisedChannelsValue(quint8 *pixel, const QVector<qreal> &values) {
         Q_ASSERT((int)values.count() == (int)channels_nb);
         channels_type c;
         for (uint i = 0; i < channels_nb; i++) {

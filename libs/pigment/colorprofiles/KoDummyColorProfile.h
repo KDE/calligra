@@ -39,15 +39,15 @@ public:
     virtual bool supportsRelative() const;
     virtual bool hasColorants() const;
     virtual bool hasTRC() const;
-    virtual QVector <double> getColorantsXYZ() const;
-    virtual QVector <double> getColorantsxyY() const;
-    virtual QVector <double> getWhitePointXYZ() const;
-    virtual QVector <double> getWhitePointxyY() const;
-    virtual QVector <double> getEstimatedTRC() const;
-    virtual void linearizeFloatValue(QVector <double> & Value) const;
-    virtual void delinearizeFloatValue(QVector <double> & Value) const;
-    virtual void linearizeFloatValueFast(QVector <double> & Value) const;
-    virtual void delinearizeFloatValueFast(QVector <double> & Value) const;
+    virtual QVector <qreal> getColorantsXYZ() const;
+    virtual QVector <qreal> getColorantsxyY() const;
+    virtual QVector <qreal> getWhitePointXYZ() const;
+    virtual QVector <qreal> getWhitePointxyY() const;
+    virtual QVector <qreal> getEstimatedTRC() const;
+    virtual void linearizeFloatValue(QVector <qreal> & Value) const;
+    virtual void delinearizeFloatValue(QVector <qreal> & Value) const;
+    virtual void linearizeFloatValueFast(QVector <qreal> & Value) const;
+    virtual void delinearizeFloatValueFast(QVector <qreal> & Value) const;
     virtual bool operator==(const KoColorProfile&) const;
 };
 

@@ -79,54 +79,54 @@ bool KoDummyColorProfile::hasTRC() const
 {
     return true;
 }
-QVector<double> KoDummyColorProfile::getColorantsXYZ() const
+QVector<qreal> KoDummyColorProfile::getColorantsXYZ() const
 {
-    QVector<double> d50Dummy(3);
+    QVector<qreal> d50Dummy(3);
     d50Dummy<<0.34773<<0.35952<<1.0;
     return d50Dummy;
 }
 
-QVector<double> KoDummyColorProfile::getColorantsxyY() const
+QVector<qreal> KoDummyColorProfile::getColorantsxyY() const
 {
-    QVector<double> d50Dummy(3);
+    QVector<qreal> d50Dummy(3);
     d50Dummy<<0.34773<<0.35952<<1.0;
     return d50Dummy;
 }
 
-QVector<double> KoDummyColorProfile::getWhitePointXYZ() const
+QVector<qreal> KoDummyColorProfile::getWhitePointXYZ() const
 {
-    QVector<double> d50Dummy(3);
+    QVector<qreal> d50Dummy(3);
     d50Dummy<<0.9642<<1.0000<<0.8249;
     return d50Dummy;
 }
 
-QVector<double> KoDummyColorProfile::getWhitePointxyY() const
+QVector<qreal> KoDummyColorProfile::getWhitePointxyY() const
 {
-    QVector<double> d50Dummy(3);
+    QVector<qreal> d50Dummy(3);
     d50Dummy<<0.34773<<0.35952<<1.0;
     return d50Dummy;
 }
 
-QVector <double> KoDummyColorProfile::getEstimatedTRC() const
+QVector <qreal> KoDummyColorProfile::getEstimatedTRC() const
 
 {
-    QVector<double> Dummy(3);
+    QVector<qreal> Dummy(3);
     Dummy.fill(2.2);
     return Dummy;
 }
 
-void KoDummyColorProfile::linearizeFloatValue(QVector <double> & ) const
+void KoDummyColorProfile::linearizeFloatValue(QVector <qreal> & ) const
 {
 }
 
-void KoDummyColorProfile::delinearizeFloatValue(QVector <double> & ) const
+void KoDummyColorProfile::delinearizeFloatValue(QVector <qreal> & ) const
 {
 }
-void KoDummyColorProfile::linearizeFloatValueFast(QVector <double> & ) const
+void KoDummyColorProfile::linearizeFloatValueFast(QVector <qreal> & ) const
 {
 }
 
-void KoDummyColorProfile::delinearizeFloatValueFast(QVector <double> & ) const
+void KoDummyColorProfile::delinearizeFloatValueFast(QVector <qreal> & ) const
 {
 }
 bool KoDummyColorProfile::operator==(const KoColorProfile& rhs) const

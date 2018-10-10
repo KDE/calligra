@@ -77,11 +77,11 @@ public:
         return _CSTrait::normalisedChannelValueText(pixel, channelIndex);
     }
 
-    virtual void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const {
+    virtual void normalisedChannelsValue(const quint8 *pixel, QVector<qreal> &channels) const {
         return _CSTrait::normalisedChannelsValue(pixel, channels);
     }
 
-    virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) const {
+    virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<qreal> &values) const {
         return _CSTrait::fromNormalisedChannelsValue(pixel, values);
     }
 
