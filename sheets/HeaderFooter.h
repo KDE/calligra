@@ -66,22 +66,28 @@ public:
     }
 
     QString headLeft()const {
-        if (m_headLeft.isNull()) return ""; return m_headLeft;
+        if (m_headLeft.isNull()) return "";
+        return m_headLeft;
     }
     QString headMid()const {
-        if (m_headMid.isNull()) return ""; return m_headMid;
+        if (m_headMid.isNull()) return "";
+        return m_headMid;
     }
     QString headRight()const {
-        if (m_headRight.isNull()) return ""; return m_headRight;
+        if (m_headRight.isNull()) return "";
+        return m_headRight;
     }
     QString footLeft()const {
-        if (m_footLeft.isNull()) return ""; return m_footLeft;
+        if (m_footLeft.isNull()) return "";
+        return m_footLeft;
     }
     QString footMid()const {
-        if (m_footMid.isNull()) return ""; return m_footMid;
+        if (m_footMid.isNull()) return "";
+        return m_footMid;
     }
     QString footRight()const {
-        if (m_footRight.isNull()) return ""; return m_footRight;
+        if (m_footRight.isNull()) return "";
+        return m_footRight;
     }
 
     /**
