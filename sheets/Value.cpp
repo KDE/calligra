@@ -112,7 +112,8 @@ public:
 
     // static empty data to be shared
     static Private* null() {
-        if (!s_null) s_null = new Private; return s_null;
+        if (!s_null) s_null = new Private;
+        return s_null;
     }
 
     // true if it's null (which is shared)
