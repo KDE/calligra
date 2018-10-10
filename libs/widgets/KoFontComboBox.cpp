@@ -16,29 +16,27 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef _KO_FONT_COMBO_BOX_H_
-#define _KO_FONT_COMBO_BOX_H_
 
-#include "kowidgets_export.h"
-#include <QFontComboBox>
+#include "KoFontComboBox.h"
+#include "WidgetsDebug.h"
 
-/**
- * This class is neccessary to work around a suspected bug in QFontComboBox.
- * 
- * When setCurrentFont() is called, QFontComboBox seems to regenerate
- * the list of fonts and resets its model in the process, while the reset signal is blocked.
- * Anyhow, the result is that the QAccessible framework tries to use
- * an invalid index (which it does not check for validity!),
- * and this leads to a crash.
- */
-class KOWIDGETS_EXPORT KoFontComboBox : public QFontComboBox
+KoFontComboBox::KoFontComboBox(QWidget *parent)
+    : QFontComboBox(parent)
 {
-    Q_OBJECT
-public:
-    KoFontComboBox(QWidget *parent = nullptr);
+}
 
-public Q_SLOTS:
-    void setCurrentFont(const QFont &font);
-};
 
-#endif // _KO_FONT_COMBO_BOX_H_
+void KoFontComboBox::setCurrentFont(const QFont &font)
+{
+    if (font.family().toLower() == currentFont().family().toLower()) {
+        return;
+    }
+    for (int i = 0; i < count(); ++i) {
+        if (itemText(i).toLower() == font.family().toLower()) {
+            debugWidgets<<Q_FUNC_INFO<<"found:"<<i<<':'<<itemText(i);
+            setCurrentIndex(i);
+            return;
+        }
+    }
+    warnWidgets<<Q_FUNC_INFO<<"Failed to find:"<<font.family();
+}
