@@ -11,6 +11,7 @@ if (LIBATTICA_FOUND)
 endif ()
 
 set(kowidgets_LIB_SRCS
+    KoFontComboBox.cpp
     KoGradientEditWidget.cpp
     KoResourcePaths.cpp
     KoVBox.cpp
