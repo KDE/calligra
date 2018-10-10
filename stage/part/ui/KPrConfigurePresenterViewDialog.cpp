@@ -54,8 +54,7 @@ KPrConfigurePresenterViewDialog::KPrConfigurePresenterViewDialog( KPrDocument *d
     setCaption( i18n( "Configure Presenter View" ) );
 
     ui.monitorComboBox->setCurrentIndex( document->presentationMonitor() );
-    ui.presenterViewCheckBox->setChecked(
-            document->isPresenterViewEnabled() ? Qt::Checked : Qt::Unchecked );
+    ui.presenterViewCheckBox->setChecked(document->isPresenterViewEnabled());
 }
 
 int KPrConfigurePresenterViewDialog::presentationMonitor()
