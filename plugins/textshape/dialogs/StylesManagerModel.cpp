@@ -19,10 +19,11 @@
 
 #include "StylesManagerModel.h"
 
+#include "TextShapeDebug.h"
+
 #include <KoCharacterStyle.h>
 #include <KoStyleThumbnailer.h>
 
-#include <QDebug>
 
 StylesManagerModel::StylesManagerModel(QObject *parent)
 : QAbstractListModel(parent)
@@ -40,7 +41,7 @@ QVariant StylesManagerModel::data(const QModelIndex &index, int role) const
     if (row < 0 || row >= m_styles.size()) {
         return QVariant();
     }
-    //qDebug() << Q_FUNC_INFO << row << role;
+    //debugTextShape << row << role;
 
     QVariant retval;
     switch (role) {
@@ -107,7 +108,7 @@ void StylesManagerModel::removeStyle(KoCharacterStyle *style)
 
 void StylesManagerModel::replaceStyle(KoCharacterStyle *oldStyle, KoCharacterStyle *newStyle)
 {
-    qDebug() << Q_FUNC_INFO << oldStyle << "->" << newStyle;
+    debugTextShape << oldStyle << "->" << newStyle;
     int row = m_styles.indexOf(oldStyle);
     Q_ASSERT(row != -1);
     if (row != -1) {
@@ -122,7 +123,7 @@ void StylesManagerModel::updateStyle(KoCharacterStyle *style)
     int row = m_styles.indexOf(style);
     Q_ASSERT(row != -1);
     if (row != -1) {
-        qDebug() << Q_FUNC_INFO << style << style->name();
+        debugTextShape << style << style->name();
         m_styleThumbnailer->removeFromCache(style);
         QModelIndex index = this->index(row);
         emit dataChanged(index, index);

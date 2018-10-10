@@ -19,6 +19,8 @@
 
 #include "AnnotationTextShape.h"
 
+#include "TextShapeDebug.h"
+
 #include <KoInlineTextObjectManager.h>
 #include <KoTextRangeManager.h>
 #include <KoShapeLoadingContext.h>
@@ -35,8 +37,6 @@
 #include <QPainter>
 #include <QPen>
 #include <QTextLayout>
-
-#include <QDebug>
 
 AnnotationTextShape::AnnotationTextShape(KoInlineTextObjectManager *inlineTextObjectManager,
                                          KoTextRangeManager *textRangeManager)
@@ -84,7 +84,7 @@ void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverte
 
 bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    //qDebug() << "****** Start Load odf ******";
+    //debugTextShape << "****** Start Load odf ******";
 
     KoTextLoader textLoader(context);
     QTextCursor cursor(textShapeData()->document());
@@ -112,7 +112,7 @@ bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingCon
             }
         }
         textLoader.loadBody(element, cursor);
-        //qDebug() << "****** End Load ******";
+        //debugTextShape << "****** End Load ******";
     }
     else {
         // something pretty weird going on...
@@ -123,7 +123,7 @@ bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingCon
 
 void AnnotationTextShape::saveOdf(KoShapeSavingContext &context) const
 {
-    //qDebug() << " ****** Start saving annotation shape **********";
+    //debugTextShape << " ****** Start saving annotation shape **********";
     KoXmlWriter *writer = &context.xmlWriter();
 
     writer->startElement("dc:creator", false);

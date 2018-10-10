@@ -41,6 +41,7 @@
 #include "commands/ChangeListLevelCommand.h"
 #include "FontSizeAction.h"
 #include "FontFamilyAction.h"
+#include "TextShapeDebug.h"
 
 #include <KoOdf.h>
 #include <KoCanvasBase.h>
@@ -75,7 +76,6 @@
 //#include <ResizeTableCommand.h>
 #include <KoIcon.h>
 
-#include <QDebug>
 #include <krun.h>
 #include <kstandardshortcut.h>
 #include <kactionmenu.h>
@@ -2587,7 +2587,7 @@ void TextTool::formatParagraph()
 
 void TextTool::testSlot(bool on)
 {
-    qDebug() << "signal received. bool:" << on;
+    debugTextShape << "signal received. bool:" << on;
 }
 
 void TextTool::selectAll()
@@ -2739,7 +2739,7 @@ void TextTool::selectFont()
 
 void TextTool::shapeAddedToCanvas()
 {
-    qDebug();
+    debugTextShape;
     if (m_textShape) {
         KoSelection *selection = canvas()->shapeManager()->selection();
         KoShape *shape = selection->firstSelectedShape();
@@ -2807,13 +2807,13 @@ void TextTool::createStyleFromCurrentCharFormat(const QString &name)
 void TextTool::editingPluginEvents()
 {
     if (m_prevCursorPosition == -1 || m_prevCursorPosition == m_textEditor.data()->position()) {
-        qDebug()<<"m_prevCursorPosition="<<m_prevCursorPosition<<"m_textEditor.data()->position()="<<m_textEditor.data()->position();
+        debugTextShape<<"m_prevCursorPosition="<<m_prevCursorPosition<<"m_textEditor.data()->position()="<<m_textEditor.data()->position();
         return;
     }
 
     QTextBlock block = m_textEditor.data()->block();
     if (! block.contains(m_prevCursorPosition)) {
-        qDebug()<<"m_prevCursorPosition="<<m_prevCursorPosition;
+        debugTextShape<<"m_prevCursorPosition="<<m_prevCursorPosition;
         finishedWord();
         finishedParagraph();
         m_prevCursorPosition = -1;
@@ -2823,7 +2823,7 @@ void TextTool::editingPluginEvents()
         if (from > to)
             qSwap(from, to);
         QString section = block.text().mid(from - block.position(), to - from);
-        qDebug()<<"from="<<from<<"to="<<to;
+        debugTextShape<<"from="<<from<<"to="<<to;
         if (section.contains(' ')) {
             finishedWord();
             m_prevCursorPosition = -1;
@@ -2932,12 +2932,12 @@ void TextTool::debugTextDocument()
         QVariant var = block.blockFormat().property(KoParagraphStyle::StyleId);
         if (!var.isNull()) {
             KoParagraphStyle *ps = styleManager->paragraphStyle(var.toInt());
-            qDebug() << "--- Paragraph Style:" << (ps ? ps->name() : QString()) << var.toInt();
+            debugTextShape << "--- Paragraph Style:" << (ps ? ps->name() : QString()) << var.toInt();
         }
         var = block.charFormat().property(KoCharacterStyle::StyleId);
         if (!var.isNull()) {
             KoCharacterStyle *cs = styleManager->characterStyle(var.toInt());
-            qDebug() << "--- Character Style:" << (cs ? cs->name() : QString()) << var.toInt();
+            debugTextShape << "--- Character Style:" << (cs ? cs->name() : QString()) << var.toInt();
         }
         int lastPrintedChar = -1;
         QTextBlock::iterator it;
@@ -2948,7 +2948,7 @@ void TextTool::debugTextDocument()
             if (!fragment.isValid())
                 continue;
             QTextCharFormat fmt = fragment.charFormat();
-            qDebug() << "changeId: " << fmt.property(KoCharacterStyle::ChangeTrackerId);
+            debugTextShape << "changeId: " << fmt.property(KoCharacterStyle::ChangeTrackerId);
             const int fragmentStart = fragment.position() - block.position();
             for (int i = fragmentStart; i < fragmentStart + fragment.length(); i += CHARSPERLINE) {
                 if (lastPrintedChar == fragmentStart-1)
@@ -2958,7 +2958,7 @@ void TextTool::debugTextDocument()
                     lastPrintedChar += CHARSPERLINE;
                     if (lastPrintedChar > block.length())
                         debug += "\\n";
-                    qDebug() << debug;
+                    debugTextShape << debug;
                 }
                 var = fmt.property(KoCharacterStyle::StyleId);
                 QString charStyleLong, charStyleShort;
@@ -2990,30 +2990,30 @@ void TextTool::debugTextDocument()
                 if (rest >= 0)
                     fragmentText += '|';
                 if (fragmentText.length() >= CHARSPERLINE) {
-                    qDebug() << fragmentText;
+                    debugTextShape << fragmentText;
                     fragmentText.clear();
                 }
             }
         }
         if (!fragmentText.isEmpty()) {
-            qDebug() << fragmentText;
+            debugTextShape << fragmentText;
         }
         else if (block.length() == 1) { // no actual tet
-            qDebug() << "\\n";
+            debugTextShape << "\\n";
         }
         foreach (const QTextCharFormat &cf, inlineCharacters) {
             KoInlineObject *object= inlineManager->inlineTextObject(cf);
-            qDebug() << "At pos:" << cf.intProperty(CHARPOSITION) << object;
-            // qDebug() << "-> id:" << cf.intProperty(577297549);
+            debugTextShape << "At pos:" << cf.intProperty(CHARPOSITION) << object;
+            // debugTextShape << "-> id:" << cf.intProperty(577297549);
         }
         QTextList *list = block.textList();
         if (list) {
             if (list->format().hasProperty(KoListStyle::StyleId)) {
                 KoListStyle *ls = styleManager->listStyle(list->format().intProperty(KoListStyle::StyleId));
-                qDebug() << "   List style applied:" << ls->styleId() << ls->name();
+                debugTextShape << "   List style applied:" << ls->styleId() << ls->name();
             }
             else
-                qDebug() << " +- is a list..." << list;
+                debugTextShape << " +- is a list..." << list;
         }
     }
 #endif
@@ -3030,16 +3030,16 @@ void TextTool::debugTextStyles()
     QSet<int> seenStyles;
 
     foreach (KoParagraphStyle *style, styleManager->paragraphStyles()) {
-        qDebug() << style->styleId() << style->name() << (styleManager->defaultParagraphStyle() == style ? "[Default]" : "");
+        debugTextShape << style->styleId() << style->name() << (styleManager->defaultParagraphStyle() == style ? "[Default]" : "");
         KoListStyle *ls = style->listStyle();
         if (ls) { // optional ;)
-            qDebug() << "  +- ListStyle: " << ls->styleId() << ls->name()
+            debugTextShape << "  +- ListStyle: " << ls->styleId() << ls->name()
                 << (ls == styleManager->defaultListStyle() ? "[Default]":"");
             foreach (int level, ls->listLevels()) {
                 KoListLevelProperties llp = ls->levelProperties(level);
-                qDebug() << "  |  level" << llp.level() << " style (enum):" << llp.labelType();
+                debugTextShape << "  |  level" << llp.level() << " style (enum):" << llp.labelType();
                 if (llp.bulletCharacter().unicode() != 0) {
-                    qDebug() << "  |  bullet" << llp.bulletCharacter();
+                    debugTextShape << "  |  bullet" << llp.bulletCharacter();
                 }
             }
             seenStyles << ls->styleId();
@@ -3051,11 +3051,11 @@ void TextTool::debugTextStyles()
         if (seenStyles.contains(style->styleId()))
             continue;
         if (first) {
-            qDebug() << "--- Character styles ---";
+            debugTextShape << "--- Character styles ---";
             first = false;
         }
-        qDebug() << style->styleId() << style->name();
-        qDebug() << style->font();
+        debugTextShape << style->styleId() << style->name();
+        debugTextShape << style->font();
     }
 
     first = true;
@@ -3063,10 +3063,10 @@ void TextTool::debugTextStyles()
         if (seenStyles.contains(style->styleId()))
             continue;
         if (first) {
-            qDebug() << "--- List styles ---";
+            debugTextShape << "--- List styles ---";
             first = false;
         }
-        qDebug() << style->styleId() << style->name()
+        debugTextShape << style->styleId() << style->name()
                 << (style == styleManager->defaultListStyle() ? "[Default]":"");
     }
 #endif

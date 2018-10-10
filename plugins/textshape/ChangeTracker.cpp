@@ -20,8 +20,7 @@
 
 #include "ChangeTracker.h"
 #include "TextTool.h"
-
-#include <QDebug>
+#include "TextShapeDebug.h"
 
 ChangeTracker::ChangeTracker(TextTool *parent)
         : QObject(parent),
@@ -46,7 +45,7 @@ int ChangeTracker::getChangeId(QString title, int existingChangeId)
 {
     Q_UNUSED(title);
     Q_UNUSED(existingChangeId);
-    qDebug() << "ChangeTracker::changeId :" << m_changeId;
+    debugTextShape << "ChangeTracker::changeId :" << m_changeId;
     return m_changeId++;
 }
 
@@ -58,7 +57,7 @@ void ChangeTracker::contentsChange(int from, int charsRemoves, int charsAdded)
 /*
     if (! m_enableSignals) return;
     m_enableSignals = false;
-    qDebug() << "ChangeTracker::contentsChange" << from << "," << charsRemoves << "," << charsAdded;
+    debugTextShape << "ChangeTracker::contentsChange" << from << "," << charsRemoves << "," << charsAdded;
 
     if (charsRemoves == 0 && charsAdded == 0) {
         // I think we can quietly ignore this.
@@ -66,7 +65,7 @@ void ChangeTracker::contentsChange(int from, int charsRemoves, int charsAdded)
         QTextCursor cursor(m_document);
         cursor.setPosition(from);
         cursor.setPosition(from + charsAdded, QTextCursor::KeepAnchor);
-        qDebug() << "   added text:" << cursor.selectedText();
+        debugTextShape << "   added text:" << cursor.selectedText();
     } else {
         bool prev = m_tool->m_allowAddUndoCommand;
         m_tool->m_allowAddUndoCommand = false;
@@ -81,8 +80,8 @@ void ChangeTracker::contentsChange(int from, int charsRemoves, int charsAdded)
         cursor.setPosition(from);
         cursor.setPosition(from + charsAdded, QTextCursor::KeepAnchor);
 
-        qDebug() << "   - " << previousText;
-        qDebug() << "   + " << cursor.selectedText();
+        debugTextShape << "   - " << previousText;
+        debugTextShape << "   + " << cursor.selectedText();
     }
 
     m_enableSignals = true;

@@ -20,8 +20,8 @@
 
 #include <TextDocumentStructureModel.h>
 
+#include "TextShapeDebug.h"
 // Qt
-#include <QDebug>
 #include <QTextDocument>
 #include <QTextFrame>
 #include <QTextBlock>
@@ -75,7 +75,7 @@ int TextDocumentStructureModel::columnCount(const QModelIndex &index) const
 
 int TextDocumentStructureModel::rowCount(const QModelIndex &index) const
 {
-    qDebug() << "-------------------------- index:"<<index<<m_textDocument;
+    debugTextShape << "-------------------------- index:"<<index<<m_textDocument;
     if (! m_textDocument) {
         return 0;
     }
@@ -153,7 +153,7 @@ QVariant TextDocumentStructureModel::data(const QModelIndex &index, int role) co
 
 QModelIndex TextDocumentStructureModel::parent(const QModelIndex &index) const
 {
-    qDebug() << "-------------------------- index:"<<index<<m_textDocument;
+    debugTextShape << "-------------------------- index:"<<index<<m_textDocument;
     if (! m_textDocument || ! index.isValid()) {
         return QModelIndex();
     }
@@ -215,7 +215,7 @@ QModelIndex TextDocumentStructureModel::parent(const QModelIndex &index) const
 
 QModelIndex TextDocumentStructureModel::index(int row, int column, const QModelIndex &parentIndex) const
 {
-    qDebug() << "-------------------------- row:" << row << "column:"<<column << "index:"<<parentIndex<<m_textDocument;
+    debugTextShape << "-------------------------- row:" << row << "column:"<<column << "index:"<<parentIndex<<m_textDocument;
     if (! m_textDocument) {
         return QModelIndex();
     }
@@ -266,7 +266,7 @@ QModelIndex TextDocumentStructureModel::index(int row, int column, const QModelI
 
 bool TextDocumentStructureModel::hasChildren(const QModelIndex &parentIndex) const
 {
-    qDebug() << "-------------------------- parentIndex:"<<parentIndex<<m_textDocument;
+    debugTextShape << "-------------------------- parentIndex:"<<parentIndex<<m_textDocument;
     if (! m_textDocument) {
         return false;
     }
@@ -370,7 +370,7 @@ void TextDocumentStructureModel::onContentsChanged()
 
 void TextDocumentStructureModel::onModelReset()
 {
-    qDebug() << "-------------------------- "<<m_textDocument;
+    debugTextShape << "-------------------------- "<<m_textDocument;
     m_nodeDataTable.clear();
     m_blockNumberTable.clear();
     m_frameTable.clear();

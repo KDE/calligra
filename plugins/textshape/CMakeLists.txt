@@ -23,6 +23,7 @@ include_directories(
 ########### Flake Plugin library ###############
 
 set ( textshape_SRCS
+    TextShapeDebug.cpp
     TextPlugin.cpp
     TextShape.cpp
     TextShapeFactory.cpp
