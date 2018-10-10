@@ -52,13 +52,13 @@ struct FLAKE_EXPORT KoConnectionPoint
     enum Alignment {
         AlignNone,         ///< align to nothing
         AlignTopLeft,      ///< align to top and left edge
-        AlignTop,          ///< align to top edge
+        AlignTop,          ///< align to top edge, centered
         AlignTopRight,     ///< align to top and right edge
-        AlignLeft,         ///< align to left edge
+        AlignLeft,         ///< align to left edge, centered
         AlignCenter,       ///< align to center
-        AlignRight,        ///< align to right edge
+        AlignRight,        ///< align to right edge, centered
         AlignBottomLeft,   ///< align to bottom and left edge
-        AlignBottom,       ///< align to bottom edge
+        AlignBottom,       ///< align to bottom edge, centered
         AlignBottomRight   ///< align to bottom and right edge
     };
 
