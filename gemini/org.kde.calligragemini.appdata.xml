@@ -231,6 +231,7 @@
       <caption xml:lang="ca">Una presentació carregada directament des del DropBox, en mode d'edició</caption>
       <caption xml:lang="ca-valencia">Una presentació carregada directament des del DropBox, en mode d'edició</caption>
       <caption xml:lang="en-GB">A presentation loaded directly from DropBox, in Edit mode</caption>
+      <caption xml:lang="es">Una presentación cargada directamente de DropBox, en modo de edición</caption>
       <caption xml:lang="fi">DropBoxista suoraan muokkaustilaan ladattu esitys</caption>
       <caption xml:lang="it">Una presentazione caricata direttamente da DropBox, in modalità Modifica</caption>
       <caption xml:lang="nl">Een directly van DropBox geladen presentatie, in bewerkingsmodus</caption>
@@ -247,6 +248,7 @@
       <caption xml:lang="ca">Un document de text en la IU d'estil d'escriptori tradicional (mode creació)</caption>
       <caption xml:lang="ca-valencia">Un document de text en la IU d'estil d'escriptori tradicional (mode creació)</caption>
       <caption xml:lang="en-GB">A text document in the traditional desktop style UI (Create mode)</caption>
+      <caption xml:lang="es">Un documento de texto con la interfaz de estilo de escritorio tradicional (en modo de creación)</caption>
       <caption xml:lang="fi">Tekstiasiakirja perinteisessä työpöytäkäyttöliittymässä (luontitila)</caption>
       <caption xml:lang="it">Un documento di testo nell'interfaccia in stile desktop tradizionale (modalità Crea)</caption>
       <caption xml:lang="nl">Een tekstdocument in de traditionele bureaubladstijl UI (aanmaakmodus)</caption>
@@ -263,6 +265,7 @@
       <caption xml:lang="ca">Un document de text en mode creació mostrant el plafó de les notes</caption>
       <caption xml:lang="ca-valencia">Un document de text en mode creació mostrant el plafó de les notes</caption>
       <caption xml:lang="en-GB">A text document in Create mode with the notes panel shown</caption>
+      <caption xml:lang="es">Un documento de texto en el modo de creación que muestra el panel de notas</caption>
       <caption xml:lang="fi">Tekstiasiakirja luontitilassa muistiinpanopaneeli näkyvillä</caption>
       <caption xml:lang="it">Un documento di testo in modalità Crea con il pannello delle note visibile</caption>
       <caption xml:lang="nl">Een tekstdocument in de aanmaakmodus met de paneel met notities getoond</caption>
