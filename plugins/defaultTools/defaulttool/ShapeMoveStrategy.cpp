@@ -39,15 +39,16 @@ ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
     , m_canvas(tool->canvas())
     , m_firstMove(true)
 {
+    // FIXME: This test is also done in DefaultTool, so it should also be responsible for setting the shapes to operate on
     QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
     QRectF boundingRect;
     foreach(KoShape *shape, selectedShapes) {
-        if (! shape->isEditable()) // FIXME: this should check if the shape is movable
-            continue;
-        m_selectedShapes << shape;
-        m_previousPositions << shape->position();
-        m_newPositions << shape->position();
-        boundingRect = boundingRect.united( shape->boundingRect() );
+        if (shape->allowedInteraction(KoShape::MoveAllowed, false)) {
+            m_selectedShapes << shape;
+            m_previousPositions << shape->position();
+            m_newPositions << shape->position();
+            boundingRect = boundingRect.united( shape->boundingRect() );
+        }
     }
     KoSelection * selection = m_canvas->shapeManager()->selection();
     m_initialOffset = selection->absolutePosition( SelectionDecorator::hotPosition() ) - m_start;
