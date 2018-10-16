@@ -56,6 +56,8 @@ private:
     void moveSelection();
     QVector<QPointF> m_previousPositions;
     QVector<QPointF> m_newPositions;
+    QVector<QPointF> m_previousOffsets;
+    QVector<QPointF> m_newOffsets;
     QPointF m_start, m_diff, m_initialSelectionPosition, m_initialOffset;
     QList<KoShape*> m_selectedShapes;
     KoCanvasBase *m_canvas;

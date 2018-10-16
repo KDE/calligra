@@ -22,6 +22,7 @@
 #include "ShapeMoveStrategy.h"
 #include "SelectionDecorator.h"
 
+#include <KoShapeAnchor.h>
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoShapeContainer.h>
@@ -48,6 +49,13 @@ ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
             m_previousPositions << shape->position();
             m_newPositions << shape->position();
             boundingRect = boundingRect.united( shape->boundingRect() );
+            if (shape->anchor()) {
+                m_previousOffsets << shape->anchor()->offset();
+                m_newOffsets << shape->anchor()->offset();
+            } else {
+                m_previousOffsets << QPointF();
+                m_newOffsets << QPointF();
+            }
         }
     }
     KoSelection * selection = m_canvas->shapeManager()->selection();
@@ -123,6 +131,9 @@ void ShapeMoveStrategy::moveSelection()
         shape->update();
         shape->setPosition(newPos);
         shape->update();
+        if (shape->anchor()) {
+            m_newOffsets[i] = shape->anchor()->offset();
+        }
         i++;
     }
     tool()->canvas()->shapeManager()->selection()->setPosition(m_initialSelectionPosition + m_diff);
@@ -136,6 +147,8 @@ KUndo2Command* ShapeMoveStrategy::createCommand()
     // get the shapes that has actually been moved
     QVector<QPointF> oldPositions;
     QVector<QPointF> newPositions;
+    QVector<QPointF> newOffsets;
+    QVector<QPointF> oldOffsets;
     QList<KoShape*> movedShapes;
     for (int i = 0; i < m_selectedShapes.count(); ++i) {
         KoShape *shape = m_selectedShapes.at(i);
@@ -143,13 +156,17 @@ KUndo2Command* ShapeMoveStrategy::createCommand()
             movedShapes << shape;
             oldPositions << m_previousPositions.at(i);
             newPositions << m_newPositions.at(i);
+            if (shape->anchor()) {
+                oldOffsets << m_previousOffsets.at(i);
+                newOffsets << m_newOffsets.at(i);
+            }
         }
     }
     if (movedShapes.isEmpty()) {
         return 0;
     }
     tool()->canvas()->snapGuide()->reset();
-    return new KoShapeMoveCommand(movedShapes, oldPositions, newPositions);
+    return new KoShapeMoveCommand(movedShapes, oldPositions, newPositions, oldOffsets, newOffsets);
 }
 
 void ShapeMoveStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)

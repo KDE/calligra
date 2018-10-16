@@ -45,6 +45,25 @@ public:
     KoShapeMoveCommand(const QList<KoShape*> &shapes,
                        const QVector<QPointF> &previousPositions, const QVector<QPointF> &newPositions,
                        KUndo2Command *parent = 0);
+
+    /**
+     * Constructor.
+     * @param shapes the set of objects that are moved.
+     * @param previousPositions the known set of previous positions for each of the objects.
+     *  This list naturally must have the same amount of items as the @p shapes.
+     * @param newPositions the new positions for the shapes.
+     *  This list naturally must have the same amount of items as the shapes set.
+     * @param previousOffsets the old offsets for the shape anchors.
+     *  This list naturally must have the same amount of items as the @p shapes.
+     * @param newOffsets the new offsets for the shapes.
+     *  This list naturally must have the same amount of items as the @p shapes.
+     * @param parent the parent command used for macro commands
+     */
+    KoShapeMoveCommand(const QList<KoShape*> &shapes,
+                       const QVector<QPointF> &previousPositions, const QVector<QPointF> &newPositions,
+                       const QVector<QPointF> &previousOffsets, const QVector<QPointF> &newOffsets,
+                       KUndo2Command *parent = 0);
+    /// Destuctor.
     ~KoShapeMoveCommand();
     /// redo the command
     void redo();
