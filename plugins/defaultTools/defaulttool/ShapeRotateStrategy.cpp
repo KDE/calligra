@@ -40,16 +40,18 @@ ShapeRotateStrategy::ShapeRotateStrategy(KoToolBase *tool, const QPointF &clicke
 {
     m_initialSelectionMatrix = tool->canvas()->shapeManager()->selection()->transformation();
 
+    // FIXME: This test is also done in DefaultTool, so it should also be responsible for setting the shapes to operate on
     QList<KoShape*> selectedShapes = tool->canvas()->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
     foreach(KoShape *shape, selectedShapes) {
-        if( ! shape->isEditable() )
-            continue;
-        m_selectedShapes << shape;
-        if( m_selectedShapes.count() == 1 )
-            m_initialBoundingRect = shape->boundingRect();
-        else
-            m_initialBoundingRect = m_initialBoundingRect.united( shape->boundingRect() );
-        m_oldTransforms << shape->transformation();
+        if (shape->allowedInteraction(KoShape::RotationAllowed, false)) {
+            m_selectedShapes << shape;
+            if(m_selectedShapes.count() == 1) {
+                m_initialBoundingRect = shape->boundingRect();
+            } else {
+                m_initialBoundingRect = m_initialBoundingRect.united(shape->boundingRect());
+            }
+            m_oldTransforms << shape->transformation();
+        }
     }
 
     if( buttons & Qt::RightButton )
