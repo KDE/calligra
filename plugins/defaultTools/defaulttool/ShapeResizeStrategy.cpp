@@ -43,16 +43,17 @@ ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool,
         const QPointF &clicked, KoFlake::SelectionHandle direction )
     : KoInteractionStrategy(tool), m_lastScale(1.0,1.0)
 {
+    // FIXME: This test is also done in DefaultTool, so it should also be responsible for setting the shapes to operate on
     Q_ASSERT(tool->canvas()->shapeManager()->selection()->count() > 0);
     QList<KoShape*> selectedShapes = tool->canvas()->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
     foreach(KoShape *shape, selectedShapes) {
-        if ( ! shape->isEditable() )
-            continue;
-        m_selectedShapes << shape;
-        m_startPositions << shape->position();
-        m_oldTransforms << shape->transformation();
-        m_transformations << QTransform();
-        m_startSizes << shape->size();
+        if (shape->allowedInteraction(KoShape::ResizeAllowed, false)) {
+            m_selectedShapes << shape;
+            m_startPositions << shape->position();
+            m_oldTransforms << shape->transformation();
+            m_transformations << QTransform();
+            m_startSizes << shape->size();
+        }
     }
     m_start = clicked;
 
