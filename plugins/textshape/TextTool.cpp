@@ -2020,9 +2020,23 @@ void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sha
     m_caretTimer.start();
     m_caretTimerState = true;
     foreach (KoShape *shape, shapes) {
-        m_textShape = dynamic_cast<TextShape*>(shape);
-        if (m_textShape)
-            break;
+        TextShape *textShape = dynamic_cast<TextShape*>(shape);
+        if (textShape) {
+            if (!m_textEditor) {
+                m_textShape = textShape;
+                break;
+            }
+            // Since there is a text editor, we must select the shape that is edited,
+            // or else we get out of sync
+            KoTextShapeData *data = static_cast<KoTextShapeData*>(textShape->userData());
+            if (data && data->document() == m_textEditor->constCursor().document()) {
+                m_textShape = textShape;
+                break;
+            }
+            if (!m_textShape) {
+                m_textShape = textShape;
+            }
+        }
     }
     if (!m_textShape) { // none found
         emit done();
@@ -3103,6 +3117,12 @@ void TextTool::setListLevel(int level)
 
 void TextTool::insertAnnotation()
 {
+    // HACK to avoid crash when we try to add a comment to an annotation shape.
+    // We should not get here when the shape is an annotation shape,
+    // but just disabling the insert_annotation action somehow does not work.
+    if (m_textShape->shapeId() == AnnotationShape_SHAPEID) {
+        return;
+    }
     AnnotationTextShape *shape = (AnnotationTextShape*)KoShapeRegistry::instance()->value(AnnotationShape_SHAPEID)->createDefaultShape(canvas()->shapeController()->resourceManager());
     textEditor()->addAnnotation(shape);
 
