@@ -1394,14 +1394,14 @@ uint DefaultTool::editableShapesCount( const QList<KoShape*> &shapes ) const
 
 bool DefaultTool::isEditable(const KoShape *shape) const
 {
-    return shape->allowedInteractions() & (KoShape::MoveAllowed | KoShape::ResizeAllowed); // TODO: check more flags
+    return shape->allowedInteractions(false) & (KoShape::MoveAllowed | KoShape::ResizeAllowed); // TODO: check parents ContentChangeAllowed
 }
 
 KoShape::AllowedInteractions DefaultTool::allowedInteractions(const QList<KoShape*> &shapes) const
 {
     KoShape::AllowedInteractions interactions;
     foreach(KoShape *shape, shapes) {
-        interactions |= shape->allowedInteractions();
+        interactions |= shape->allowedInteractions(false);
     }
     return interactions;
 }
