@@ -42,13 +42,14 @@ ShapeShearStrategy::ShapeShearStrategy( KoToolBase *tool, const QPointF &clicked
 : KoInteractionStrategy(tool)
 , m_start(clicked)
 {
+    // FIXME: This test is also done in DefaultTool, so it should also be responsible for setting the shapes to operate on
     KoSelection *sel = tool->canvas()->shapeManager()->selection();
     QList<KoShape*> selectedShapes = sel->selectedShapes(KoFlake::StrippedSelection);
     foreach(KoShape *shape, selectedShapes) {
-        if( ! shape->isEditable() )
-            continue;
-        m_selectedShapes << shape;
-        m_oldTransforms << shape->transformation();
+        if (shape->allowedInteraction(KoShape::ShearingAllowed, false)) {
+            m_selectedShapes << shape;
+            m_oldTransforms << shape->transformation();
+        }
     }
 
     m_initialSelectionMatrix = sel->transformation();
