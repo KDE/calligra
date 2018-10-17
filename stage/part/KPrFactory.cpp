@@ -25,6 +25,7 @@
 
 #include <KoComponentData.h>
 #include <KoPluginLoader.h>
+#include <KoDockRegistry.h>
 
 KoComponentData* KPrFactory::s_instance = 0;
 KAboutData* KPrFactory::s_aboutData = 0;
@@ -80,6 +81,8 @@ const KoComponentData &KPrFactory::componentData()
     if ( !s_instance )
     {
         s_instance = new KoComponentData(*aboutData());
+
+        KoDockRegistry::instance()->remove("StencilBox");
     }
     return *s_instance;
 }
