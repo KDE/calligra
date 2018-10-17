@@ -46,7 +46,10 @@ AnnotationTextShape::AnnotationTextShape(KoInlineTextObjectManager *inlineTextOb
     , m_dateString()
 {
     setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(Qt::yellow)));
-    setGeometryProtected(true);
+    setAllowedInteraction(KoShape::ResizeAllowed, false);
+    setAllowedInteraction(KoShape::MoveAllowed, false);
+    setAllowedInteraction(KoShape::ShearingAllowed, false);
+    setAllowedInteraction(KoShape::RotationAllowed, false);
 }
 
 AnnotationTextShape::~AnnotationTextShape()
