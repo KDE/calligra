@@ -36,14 +36,17 @@ KAboutData * newKarbonAboutData()
         QStringLiteral(CALLIGRA_VERSION_STRING),
         i18n("A Vector Graphics Drawing Application."),
         KAboutLicense::LGPL,
-        i18n("(c) 2001-2013, The Karbon Developers"),
-        i18n("Unmaintained at the time of release of this version. The Calligra community welcomes interested persons to take over maintainership."),
+        i18n("(c) 2001-2018, The Karbon Developers"),
         QStringLiteral("https://www.calligra.org/karbon/"));
     aboutData->setProductName("karbon"); // for bugs.kde.org
     aboutData->setOrganizationDomain("kde.org");
 #if KCOREADDONS_VERSION >= 0x051600
     aboutData->setDesktopFileName(QStringLiteral("org.kde.karbon"));
 #endif
+    aboutData->addAuthor(
+        i18n("Anthony Fieroni"),
+        i18n("Maintainer"),
+        QString());
     aboutData->addAuthor(
         i18n("Rob Buis"),
         QString(),
