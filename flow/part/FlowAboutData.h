@@ -33,9 +33,8 @@ KAboutData* newFlowAboutData()
         QStringLiteral(CALLIGRA_VERSION_STRING),
         i18n("Calligra Flowchart And Diagram Tool"),
         KAboutLicense::LGPL,
-        i18n("(c) 2001-2018, The Flow Team"),
-        i18n("Unmaintained at the time of release of this version. The Calligra community welcomes interested persons to take over maintainership."),
-        QStringLiteral("https://www.calligra.org/karbon/"));
+        i18n("(c) 2001-%1, The Flow Team", QStringLiteral(CALLIGRA_YEAR)),
+        QStringLiteral("https://www.calligra.org/flow/"));
     aboutData->setProductName("flow"); // for bugs.kde.org
     aboutData->setOrganizationDomain("kde.org");
 #if KCOREADDONS_VERSION >= 0x051600
