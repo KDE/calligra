@@ -42,6 +42,3 @@ const char * FlowDocument::odfTagName(bool withNamespace)
 {
     return withNamespace ? "office:drawing": "drawing";
 }
-
-
-#include "FlowDocument.moc"

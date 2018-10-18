@@ -73,5 +73,3 @@ void FlowView::replaceActivePage(KoPAPageBase *page, KoPAPageBase *newActivePage
         viewMode()->updateActivePage(newActivePage);
     }
 }
-
-#include "FlowView.moc"

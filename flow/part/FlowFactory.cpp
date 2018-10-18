@@ -79,5 +79,3 @@ const KoComponentData &FlowFactory::global()
     }
     return *s_global;
 }
-
-#include "FlowFactory.moc"
