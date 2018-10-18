@@ -33,9 +33,7 @@ KAboutData * newKPresenterAboutData()
         QStringLiteral("calligrastage"),
         i18nc("application name", "Calligra Stage"),
         QStringLiteral(CALLIGRA_VERSION_STRING),
-        i18n("Presentation Tool")
-        + QLatin1String("\n\n")
-        + i18n("Unmaintained at the time of release of this version. The Calligra community welcomes interested persons to take over maintainership."),
+        i18n("Presentation Tool"),
         KAboutLicense::LGPL,
         i18n("Copyright 1998-%1, The Stage Team", QStringLiteral(CALLIGRA_YEAR)),
         QString(),
