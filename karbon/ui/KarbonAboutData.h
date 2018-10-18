@@ -36,7 +36,7 @@ KAboutData * newKarbonAboutData()
         QStringLiteral(CALLIGRA_VERSION_STRING),
         i18n("A Vector Graphics Drawing Application."),
         KAboutLicense::LGPL,
-        i18n("(c) 2001-2018, The Karbon Developers"),
+        i18n("(c) 2001-%1, The Karbon Developers", QStringLiteral(CALLIGRA_YEAR)),
         QStringLiteral("https://www.calligra.org/karbon/"));
     aboutData->setProductName("karbon"); // for bugs.kde.org
     aboutData->setOrganizationDomain("kde.org");
