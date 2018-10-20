@@ -24,8 +24,21 @@
 #include "FlowAboutData.h"
 #include "FlowDocument.h"
 
+#include <QLoggingCategory>
+
 extern "C" Q_DECL_EXPORT int kdemain( int argc, char* argv[] )
 {
+    /**
+     * Disable debug output by default, only log warnings.
+     * Debug logs can be controlled by the environment variable QT_LOGGING_RULES.
+     *
+     * For example, to get full debug output, run the following:
+     * QT_LOGGING_RULES="calligra.*=true" calligrafolw
+     *
+     * See: http://doc.qt.io/qt-5/qloggingcategory.html
+     */
+    QLoggingCategory::setFilterRules("calligra.*.debug=false\ncalligra.*.warning=true");
+
     KoApplication app(QByteArray(FLOW_MIME_TYPE), QStringLiteral("calligraflow"), newFlowAboutData, argc, argv);
     // Migrate data from kde4 to kf5 locations
     Calligra2Migration m("flow");
