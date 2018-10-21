@@ -233,6 +233,7 @@
       <caption xml:lang="en-GB">A presentation loaded directly from DropBox, in Edit mode</caption>
       <caption xml:lang="es">Una presentación cargada directamente de DropBox, en modo de edición</caption>
       <caption xml:lang="fi">DropBoxista suoraan muokkaustilaan ladattu esitys</caption>
+      <caption xml:lang="gl">Unha presentación cargada directamente de DropBox, en modo de edición</caption>
       <caption xml:lang="it">Una presentazione caricata direttamente da DropBox, in modalità Modifica</caption>
       <caption xml:lang="nl">Een directly van DropBox geladen presentatie, in bewerkingsmodus</caption>
       <caption xml:lang="pt">Uma apresentação carregada directamente do DropBox, no modo de Edição</caption>
@@ -250,6 +251,7 @@
       <caption xml:lang="en-GB">A text document in the traditional desktop style UI (Create mode)</caption>
       <caption xml:lang="es">Un documento de texto con la interfaz de estilo de escritorio tradicional (en modo de creación)</caption>
       <caption xml:lang="fi">Tekstiasiakirja perinteisessä työpöytäkäyttöliittymässä (luontitila)</caption>
+      <caption xml:lang="gl">Un documento de texto na interface de usuario tradicional de escritorio (modo de creación)</caption>
       <caption xml:lang="it">Un documento di testo nell'interfaccia in stile desktop tradizionale (modalità Crea)</caption>
       <caption xml:lang="nl">Een tekstdocument in de traditionele bureaubladstijl UI (aanmaakmodus)</caption>
       <caption xml:lang="pt">Um documento de texto no estilo gráfico tradicional (modo de Criação)</caption>
@@ -267,6 +269,7 @@
       <caption xml:lang="en-GB">A text document in Create mode with the notes panel shown</caption>
       <caption xml:lang="es">Un documento de texto en el modo de creación que muestra el panel de notas</caption>
       <caption xml:lang="fi">Tekstiasiakirja luontitilassa muistiinpanopaneeli näkyvillä</caption>
+      <caption xml:lang="gl">Un documento de texto no modo de creación co panel de notas visíbel</caption>
       <caption xml:lang="it">Un documento di testo in modalità Crea con il pannello delle note visibile</caption>
       <caption xml:lang="nl">Een tekstdocument in de aanmaakmodus met de paneel met notities getoond</caption>
       <caption xml:lang="pt">Um documento de texto no modo de Criação com o painel de notas visível</caption>
