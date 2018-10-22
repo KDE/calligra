@@ -530,13 +530,20 @@ endif()
 ##
 ## Test for marble
 ##
-macro_optional_find_package(Marble CONFIG)
-set_package_properties(Marble PROPERTIES
-    DESCRIPTION "World Globe Widget library"
-    URL "https://marble.kde.org/"
-    PURPOSE "Required by RDF to show locations on a map"
-    TYPE OPTIONAL
+# Temporary fix to avoid looking for Marble unneccessary
+# Its only used in RDF so until soprano is ported there is no use for Marble
+if (Soprano_FOUND)
+    macro_optional_find_package(Marble CONFIG)
+    set(Marble_FOUND FALSE)
+    set_package_properties(Marble PROPERTIES
+        DESCRIPTION "World Globe Widget library"
+        URL "https://marble.kde.org/"
+        PURPOSE "Required by RDF to show locations on a map"
+        TYPE OPTIONAL
     )
+else()
+    message(STATUS "Soprano not found. Skipped looking for Marble.")
+endif()
 
 ##
 ## Test for lcms
