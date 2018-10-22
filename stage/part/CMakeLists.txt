@@ -165,7 +165,6 @@ target_link_libraries(calligrastageprivate
         KF5::IconThemes
         KF5::Completion
         Qt5::Svg
-#         Qt5::WebKitWidgets
 )
 if(HAVE_OPENGL)
     target_link_libraries(calligrastageprivate PRIVATE Qt5::OpenGL)
