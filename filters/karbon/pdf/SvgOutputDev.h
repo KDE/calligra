@@ -84,7 +84,7 @@ public:
 private:
     QString convertPath(GfxPath *path);
     QString convertMatrix(const QMatrix &matrix);
-    QString convertMatrix(double * matrix);
+    QString convertMatrix(const double * matrix);
     QString printFill();
     QString printStroke();
 
