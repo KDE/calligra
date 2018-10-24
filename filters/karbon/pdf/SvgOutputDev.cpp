@@ -212,7 +212,7 @@ QString SvgOutputDev::convertMatrix(const QMatrix &matrix)
            .arg(matrix.dx()) .arg(matrix.dy());
 }
 
-QString SvgOutputDev::convertMatrix(double * matrix)
+QString SvgOutputDev::convertMatrix(const double * matrix)
 {
     return QString("matrix(%1 %2 %3 %4 %5 %6)")
            .arg(matrix[0]).arg(matrix[1])
@@ -402,7 +402,7 @@ void SvgOutputDev::drawString(GfxState * state, GooString * s)
 
     QString str;
 
-    char * p = s->getCString();
+    const char * p = s->getCString();
     int len = s->getLength();
     CharCode code;
     Unicode *u = nullptr;
@@ -429,7 +429,7 @@ void SvgOutputDev::drawString(GfxState * state, GooString * s)
     double x = state->getCurX();
     double y = state->getCurY();
 
-    double * ctm = state->getCTM();
+    const double * ctm = state->getCTM();
     QMatrix transform(ctm[0], ctm[1], ctm[2], ctm[3], ctm[4], ctm[5]);
 
     QMatrix mirror;
@@ -522,7 +522,7 @@ void SvgOutputDev::drawImage(GfxState *state, Object */*ref*/, Stream *str,
         return;
     }
 
-    double * ctm = state->getCTM();
+    const double * ctm = state->getCTM();
     QMatrix m;
     m.setMatrix(ctm[0] / width, ctm[1] / width, -ctm[2] / height, -ctm[3] / height, ctm[2] + ctm[4], ctm[3] + ctm[5]);
 

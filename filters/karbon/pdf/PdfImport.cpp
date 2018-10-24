@@ -102,9 +102,6 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from, const QByt
     delete globalParams;
     globalParams = 0;
 
-    // check for memory leaks
-    Object::memCheck(stderr);
-
     return KoFilter::OK;
 }
 
