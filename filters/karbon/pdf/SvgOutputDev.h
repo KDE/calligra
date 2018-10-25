@@ -44,11 +44,11 @@ public:
     explicit SvgOutputDev(const QString &fileName);
     virtual ~SvgOutputDev();
 
-    GBool isOk();
+    bool isOk();
 
-    GBool upsideDown() override;
-    GBool useDrawChar() override;
-    GBool interpretType3Chars() override;
+    bool upsideDown() override;
+    bool useDrawChar() override;
+    bool interpretType3Chars() override;
     void startPage(int pageNum, GfxState *state, XRef *xref) override;
     void endPage() override;
 
@@ -63,7 +63,7 @@ public:
     // images
     void drawImage(GfxState *state, Object *ref, Stream *str,
                            int width, int height, GfxImageColorMap *colorMap,
-                           GBool interpolate, int *maskColors, GBool inlineImg) override;
+                           bool interpolate, int *maskColors, bool inlineImg) override;
 
     // styles
     void updateAll(GfxState *state) override;
