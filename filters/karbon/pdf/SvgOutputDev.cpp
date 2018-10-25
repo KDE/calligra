@@ -52,7 +52,7 @@ public:
     QString defsData;
     QTextStream * defs;
     QTextStream * body;
-    GBool state;
+    bool state;
     QSizeF pageSize;
     QPen pen;
     QBrush brush;
@@ -75,22 +75,22 @@ SvgOutputDev::~SvgOutputDev()
     delete d;
 }
 
-GBool SvgOutputDev::isOk()
+bool SvgOutputDev::isOk()
 {
     return d->state;
 }
 
-GBool SvgOutputDev::upsideDown()
+bool SvgOutputDev::upsideDown()
 {
     return gTrue;
 }
 
-GBool SvgOutputDev::useDrawChar()
+bool SvgOutputDev::useDrawChar()
 {
     return gFalse;
 }
 
-GBool SvgOutputDev::interpretType3Chars()
+bool SvgOutputDev::interpretType3Chars()
 {
     return gFalse;
 }
@@ -476,7 +476,7 @@ void SvgOutputDev::drawString(GfxState * state, const GooString * s)
 
 void SvgOutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
                              int width, int height, GfxImageColorMap *colorMap,
-                             GBool /*interpolate*/, int *maskColors, GBool inlineImg)
+                             bool /*interpolate*/, int *maskColors, bool inlineImg)
 {
     ImageStream * imgStr = new ImageStream(str, width, colorMap->getNumPixelComps(), colorMap->getBits());
     imgStr->reset();
