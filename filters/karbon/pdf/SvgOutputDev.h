@@ -20,11 +20,6 @@
 #ifndef SVGOUTPUTDEV_H
 #define SVGOUTPUTDEV_H
 
-// Don't show this warning: it's an issue in poppler
-#ifdef __GNUC__
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#endif
-
 #include <poppler/Object.h>
 #include <poppler/OutputDev.h>
 

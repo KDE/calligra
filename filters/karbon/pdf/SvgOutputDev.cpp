@@ -474,9 +474,9 @@ void SvgOutputDev::drawString(GfxState * state, const GooString * s)
     *d->body << "</text>" << endl;
 }
 
-void SvgOutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
+void SvgOutputDev::drawImage(GfxState *state, Object */*ref*/, Stream *str,
                              int width, int height, GfxImageColorMap *colorMap,
-                             bool /*interpolate*/, int *maskColors, bool inlineImg)
+                             bool /*interpolate*/, int *maskColors, bool /*inlineImg*/)
 {
     ImageStream * imgStr = new ImageStream(str, width, colorMap->getNumPixelComps(), colorMap->getBits());
     imgStr->reset();
