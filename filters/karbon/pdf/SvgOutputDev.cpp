@@ -402,7 +402,11 @@ void SvgOutputDev::drawString(GfxState * state, GooString * s)
 
     QString str;
 
+#ifdef HAVE_POPPLER_PRE_0_64
+    char * p = s->getCString();
+#else
     const char * p = s->getCString();
+#endif
     int len = s->getLength();
     CharCode code;
     Unicode *u = nullptr;
