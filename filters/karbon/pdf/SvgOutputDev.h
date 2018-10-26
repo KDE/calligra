@@ -20,11 +20,6 @@
 #ifndef SVGOUTPUTDEV_H
 #define SVGOUTPUTDEV_H
 
-// Don't show this warning: it's an issue in poppler
-#ifdef __GNUC__
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#endif
-
 #include <poppler/Object.h>
 #include <poppler/OutputDev.h>
 
@@ -44,40 +39,37 @@ public:
     explicit SvgOutputDev(const QString &fileName);
     virtual ~SvgOutputDev();
 
-    GBool isOk();
+    bool isOk();
 
-    virtual GBool upsideDown();
-    virtual GBool useDrawChar();
-    virtual GBool interpretType3Chars();
-    virtual void startPage(int pageNum, GfxState *state, XRef *xref);
-    virtual void endPage();
+    bool upsideDown() override;
+    bool useDrawChar() override;
+    bool interpretType3Chars() override;
+    void startPage(int pageNum, GfxState *state, XRef *xref) override;
+    void endPage() override;
 
     // path painting
-    virtual void stroke(GfxState * state);
-    virtual void fill(GfxState * state);
-    virtual void eoFill(GfxState *state);
+    void stroke(GfxState * state) override;
+    void fill(GfxState * state) override;
+    void eoFill(GfxState *state) override;
 
     // text
-    virtual void drawString(GfxState * state, GooString * s);
+    void drawString(GfxState * state, const GooString * s) override;
 
     // images
-    virtual void drawImage(GfxState *state, Object *ref, Stream *str,
+    void drawImage(GfxState *state, Object *ref, Stream *str,
                            int width, int height, GfxImageColorMap *colorMap,
-                           int *maskColors, GBool inlineImg);
-    virtual void drawImage(GfxState *state, Object *ref, Stream *str,
-                           int width, int height, GfxImageColorMap *colorMap,
-                           GBool interpolate, int *maskColors, GBool inlineImg);
+                           bool interpolate, int *maskColors, bool inlineImg) override;
 
     // styles
-    virtual void updateAll(GfxState *state);
-    virtual void updateFillColor(GfxState *state);
-    virtual void updateStrokeColor(GfxState *state);
-    virtual void updateFillOpacity(GfxState *state);
-    virtual void updateStrokeOpacity(GfxState *state);
-    virtual void updateLineJoin(GfxState *state);
-    virtual void updateLineCap(GfxState *state);
-    virtual void updateMiterLimit(GfxState *state);
-    virtual void updateLineWidth(GfxState *state);
+    void updateAll(GfxState *state) override;
+    void updateFillColor(GfxState *state) override;
+    void updateStrokeColor(GfxState *state) override;
+    void updateFillOpacity(GfxState *state) override;
+    void updateStrokeOpacity(GfxState *state) override;
+    void updateLineJoin(GfxState *state) override;
+    void updateLineCap(GfxState *state) override;
+    void updateMiterLimit(GfxState *state) override;
+    void updateLineWidth(GfxState *state) override;
 
     /// Dumps content to svg file
     void dumpContent();
