@@ -53,7 +53,11 @@ public:
     void eoFill(GfxState *state) override;
 
     // text
+#ifdef HAVE_POPPLER_PRE_0_64
+    void drawString(GfxState * state, GooString * s) override;
+#else
     void drawString(GfxState * state, const GooString * s) override;
+#endif
 
     // images
     void drawImage(GfxState *state, Object *ref, Stream *str,
