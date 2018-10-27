@@ -387,7 +387,11 @@ QString SvgOutputDev::printStroke()
     return stroke;
 }
 
+#ifdef HAVE_POPPLER_PRE_0_64
+void SvgOutputDev::drawString(GfxState * state, GooString * s)
+#else
 void SvgOutputDev::drawString(GfxState * state, const GooString * s)
+#endif
 {
     int render = state->getRender();
     // check for invisible text -- this is used by Acrobat Capture
