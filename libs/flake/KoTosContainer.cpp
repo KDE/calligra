@@ -155,6 +155,9 @@ QString KoTosContainer::saveStyle(KoGenStyle &style, KoShapeSavingContext &conte
     }
 
     style.addProperty("draw:textarea-horizontal-align", horizontalAlignment);
+    // FIXME set these dependent on flags
+    style.addProperty("draw:auto-grow-height", "false");
+    style.addProperty("draw:auto-grow-width", "false");
 
     return KoShapeContainer::saveStyle(style, context);
 }
