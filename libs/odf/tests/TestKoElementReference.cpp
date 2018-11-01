@@ -21,6 +21,13 @@
 #include <KoElementReference.h>
 
 #include <QTest>
+#include <QLoggingCategory>
+
+void TestKoElementReference::initTestCase()
+{
+    QLoggingCategory::setFilterRules("*.debug=false\n"
+        "calligra.lib.store=true");
+}
 
 void TestKoElementReference::testElementReference()
 {

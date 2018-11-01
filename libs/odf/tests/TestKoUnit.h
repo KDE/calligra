@@ -29,6 +29,7 @@ class TestKoUnit : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
+    void initTestCase();
     void testSimpleConstructor();
     void testConstructor_data();
     void testConstructor();

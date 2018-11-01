@@ -23,10 +23,16 @@
 #include <KoUnit.h>
 
 #include <QTest>
+#include <QLoggingCategory>
 
 Q_DECLARE_METATYPE(KoUnit::Type)
 Q_DECLARE_METATYPE(KoUnit::ListOptions)
 
+void TestKoUnit::initTestCase()
+{
+    QLoggingCategory::setFilterRules("*.debug=false\n"
+    "calligra.lib.odf=true");
+}
 
 void TestKoUnit::testSimpleConstructor()
 {

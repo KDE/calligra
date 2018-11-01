@@ -34,6 +34,7 @@ class TestStorage : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void initTestCase();
     void storage_data();
     void storage();
     void storage2_data();
@@ -49,6 +50,12 @@ char TestStorage::getch(QIODevice * dev)
     char c = 0;
     dev->getChar(&c);
     return c;
+}
+
+void TestStorage::initTestCase()
+{
+    QLoggingCategory::setFilterRules("*.debug=false\n"
+            "calligra.lib.store=true");
 }
 
 void TestStorage::storage_data()

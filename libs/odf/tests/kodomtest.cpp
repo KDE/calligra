@@ -38,6 +38,9 @@ static QString const KoXmlNS_text() {
 
 void KoDomTest::initTestCase()
 {
+    QLoggingCategory::setFilterRules("*.debug=false\n"
+        "calligra.lib.store=true");
+
     const QByteArray xml = QByteArray("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                                       "<o:document-content xmlns:o=\"")
                            + KoXmlNS_office().toUtf8()

@@ -25,6 +25,9 @@ private:
 
 void TestOdfSettings::initTestCase()
 {
+    QLoggingCategory::setFilterRules("*.debug=false\n"
+        "calligra.lib.odf=true");
+
     const QString xml =
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
         "<office:document-settings xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\""

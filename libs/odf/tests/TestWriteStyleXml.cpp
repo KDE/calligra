@@ -26,6 +26,7 @@
 #include <QString>
 #include <QBuffer>
 #include <QTest>
+#include <QLoggingCategory>
 
 using namespace writeodf;
 
@@ -33,8 +34,15 @@ class TestWriteStyleXml : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void initTestCase();
     void testWriteRegionLeft();
 };
+
+void TestWriteStyleXml::initTestCase()
+{
+    QLoggingCategory::setFilterRules("*.debug=false\n"
+        "calligra.lib.odf=true\ncalligra.lib.store=true");
+}
 
 void TestWriteStyleXml::testWriteRegionLeft()
 {

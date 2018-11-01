@@ -22,11 +22,13 @@
 #include <QString>
 #include <QBuffer>
 #include <QTest>
+#include <QLoggingCategory>
 
 class TestXmlWriter : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void initTestCase();
     void testDocytype();
     void testEmtpyElement();
     void testAttributes();
@@ -49,6 +51,12 @@ private:
     KoXmlWriter *writer;
     QBuffer *buffer;
 };
+
+void TestXmlWriter::initTestCase()
+{
+    QLoggingCategory::setFilterRules("*.debug=false\n"
+        "calligra.lib.odf=true\ncalligra.lib.store=true");
+}
 
 void TestXmlWriter::setup(const char *publicId, const char *systemId)
 {
@@ -245,7 +253,7 @@ void TestXmlWriter::speedTest()
     }
     out.close();
     out.remove();
-    qDebug("writing %i XML elements using KoXmlWriter: %i ms", NumParagraphs, time.elapsed());
+    qInfo()<<"writing"<<NumParagraphs<<"XML elements using KoXmlWriter:"<<time.elapsed()<<"ms";
     // TODO we might want to convert this into a QBenchmark test
 }
 

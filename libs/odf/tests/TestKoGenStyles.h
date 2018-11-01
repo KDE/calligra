@@ -25,6 +25,7 @@ class TestKoGenStyles : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void initTestCase();
     void testLookup();
     void testLookupFlags();
     void testDefaultStyle();

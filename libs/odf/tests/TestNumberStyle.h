@@ -25,6 +25,7 @@ class TestNumberStyle : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void initTestCase();
     void testEmpty();
     void testText();
     void testNumber();

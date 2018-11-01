@@ -31,6 +31,13 @@
 #include <KoXmlWriter.h>
 
 #include <QTest>
+#include <QLoggingCategory>
+
+void TestKoOdfLoadingContext::initTestCase()
+{
+    QLoggingCategory::setFilterRules("*.debug=false\n"
+    "calligra.lib.odf=true");
+}
 
 void TestKoOdfLoadingContext::testFillStyleStack()
 {

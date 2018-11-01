@@ -14,6 +14,7 @@ class TestXmlReaderWithoutSpaces : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void initTestCase();
     void testNode();
     void testElement();
     void testAttributes();
@@ -37,6 +38,12 @@ private Q_SLOTS:
     void testLargeOpenDocumentSpreadsheet();
     void testExternalOpenDocumentSpreadsheet(const QString& filename);
 };
+
+void TestXmlReaderWithoutSpaces::initTestCase()
+{
+    QLoggingCategory::setFilterRules("*.debug=false\n"
+    "calligra.lib.odf=true\ncalligra.lib.store=true");
+}
 
 void TestXmlReaderWithoutSpaces::testNode()
 {
