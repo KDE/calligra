@@ -88,9 +88,9 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from, const QByt
     SvgOutputDev * dev = new SvgOutputDev(m_chain->outputFile());
     if (dev->isOk()) {
         int rotate = 0;
-        GBool useMediaBox = gTrue;
-        GBool crop = gFalse;
-        GBool printing = gFalse;
+        bool useMediaBox = true;
+        bool crop = false;
+        bool printing = false;
         pdfDoc->displayPages(dev, firstPage, lastPage, hDPI, vDPI, rotate, useMediaBox, crop, printing);
         dev->dumpContent();
     }

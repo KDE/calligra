@@ -39,7 +39,7 @@ class SvgOutputDev::Private
 {
 public:
     Private(const QString &fname)
-            : svgFile(fname), defs(0), body(0), state(gTrue)
+            : svgFile(fname), defs(0), body(0), state(true)
             , brush(Qt::SolidPattern) {}
 
     ~Private() {
@@ -62,7 +62,7 @@ SvgOutputDev::SvgOutputDev(const QString &fileName)
         : d(new Private(fileName))
 {
     if (! d->svgFile.open(QIODevice::WriteOnly)) {
-        d->state = gFalse;
+        d->state = false;
         return;
     }
 
@@ -82,17 +82,17 @@ bool SvgOutputDev::isOk()
 
 bool SvgOutputDev::upsideDown()
 {
-    return gTrue;
+    return true;
 }
 
 bool SvgOutputDev::useDrawChar()
 {
-    return gFalse;
+    return false;
 }
 
 bool SvgOutputDev::interpretType3Chars()
 {
-    return gFalse;
+    return false;
 }
 
 void SvgOutputDev::startPage(int pageNum, GfxState *state, XRef */*xref*/)
