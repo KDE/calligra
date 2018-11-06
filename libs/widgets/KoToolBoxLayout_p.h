@@ -28,6 +28,7 @@
 #include <QAbstractButton>
 #include <QDesktopWidget>
 #include <QApplication>
+#include <QMouseEvent>
 
 class SectionLayout : public QLayout
 {
@@ -38,7 +39,7 @@ public:
     {
     }
 
-    ~SectionLayout()
+    ~SectionLayout() 
     {
         qDeleteAll( m_items );
         m_items.clear();
@@ -47,9 +48,10 @@ public:
     void addButton(QAbstractButton *button, int priority)
     {
         addChildWidget(button);
+
         m_priorities.insert(button, priority);
         int index = 1;
-        foreach(QWidgetItem *item, m_items) {
+        foreach (QWidgetItem *item, m_items) {
             if (m_priorities.value(static_cast<QAbstractButton*>(item->widget())) > priority)
                 break;
             index++;
@@ -57,7 +59,7 @@ public:
         m_items.insert(index-1, new QWidgetItem(button));
     }
 
-    QSize sizeHint() const
+    QSize sizeHint() const 
     {
         Q_ASSERT(0);
         return QSize();
@@ -76,7 +78,7 @@ public:
 
     int count() const { return m_items.count(); }
 
-    void setGeometry (const QRect &rect)
+    void setGeometry (const QRect &rect) 
     {
         int x = 0;
         int y = 0;
@@ -206,28 +208,34 @@ class KoToolBoxLayout : public QLayout
 Q_OBJECT
 public:
     explicit KoToolBoxLayout(QWidget *parent)
-        : QLayout(parent), m_orientation(Qt::Vertical), m_currentHeight(0)
+        : QLayout(parent)
+        , m_orientation(Qt::Vertical)
     {
         setSpacing(6);
     }
+
     ~KoToolBoxLayout();
 
     QSize sizeHint() const
+    {
+        // Prefer showing one row/column by default
+        const QSize minSize = minimumSize();
+        if (!minSize.isValid()) {
+            return minSize;
+        }
+        if (m_orientation == Qt::Vertical) {
+            return QSize(minSize.width(), minSize.height() + spacing());
+        } else {
+            return QSize(minSize.height() + spacing(), minSize.width());
+        }
+    }
+
+    QSize minimumSize() const 
     {
         if (m_sections.isEmpty())
             return QSize();
         QSize oneIcon = static_cast<Section*> (m_sections[0]->widget())->iconSize();
         return oneIcon;
-    }
-    QSize minimumSize() const
-    {
-        QSize s = sizeHint();
-        if (m_orientation == Qt::Vertical) {
-            s.setHeight(m_currentHeight);
-        } else {
-            s.setWidth(m_currentHeight);
-        }
-        return s;
     }
 
     void addSection(Section *section)
@@ -249,95 +257,47 @@ public:
         Q_ASSERT(0); // don't let anything else be added. (code depends on this!)
     }
 
-    QLayoutItem* itemAt(int i) const
+    QLayoutItem* itemAt(int i) const 
     {
-        if (m_sections.count() >= i)
-            return 0;
-        return m_sections.at(i);
+        return m_sections.value(i);
     }
     QLayoutItem* takeAt(int i) { return m_sections.takeAt(i); }
     int count() const { return m_sections.count(); }
 
-    void setGeometry (const QRect &rect)
+    void setGeometry (const QRect &rect) 
     {
-        // nothing to do?
-        if (m_sections.isEmpty())
-        {
-            m_currentHeight = 0;
-            return;
+        QLayout::setGeometry(rect);
+        doLayout(rect.size(), true);
+    }
+
+    bool hasHeightForWidth() const override
+    {
+        return m_orientation == Qt::Vertical;
+    }
+
+    int heightForWidth(int width) const override
+    {
+        if (m_orientation == Qt::Vertical) {
+            const int height = doLayout(QSize(width, 0), false);
+            return height;
+        } else {
+            return -1;
         }
+    }
 
-        // the names of the variables assume a vertical orientation,
-        // but all calculations are done based on the real orientation
-
-        const QSize iconSize = static_cast<Section*> (m_sections.first()->widget())->iconSize();
-
-        const int maxWidth = (m_orientation == Qt::Vertical) ? rect.width() : rect.height();
-        // using min 1 as width to e.g. protect against div by 0 below
-        const int iconWidth = qMax(1, (m_orientation == Qt::Vertical) ? iconSize.width() : iconSize.height());
-        const int iconHeight = qMax(1, (m_orientation == Qt::Vertical) ? iconSize.height() : iconSize.width());
-
-        const int maxColumns = qMax(1, (maxWidth / iconWidth));
-
-        int x = 0;
-        int y = 0;
-        bool firstSection = true;
-        foreach (QWidgetItem *wi, m_sections) {
-            Section *section = static_cast<Section*> (wi->widget());
-            // Since sections can overlap (if a section occupies two rows, and there
-            // is space on the second row for all of the next section, the next section
-            // will be placed overlapping with the previous section), it's important that
-            // later sections will be higher in the widget z-order than previous
-            // sections, so raise it.
-            section->raise();
-            const int buttonCount = section->visibleButtonCount();
-            if (buttonCount == 0) {
-                // move out of view, not perfect TODO: better solution
-                section->setGeometry(1000, 1000, 0, 0);
-                continue;
-            }
-
-            // rows needed for the buttons (calculation gets the ceiling value of the plain div)
-            const int neededRowCount = ((buttonCount-1) / maxColumns) + 1;
-            const int availableButtonCount = (maxWidth - x + 1) / iconWidth;
-
-            if (firstSection) {
-                firstSection = false;
-            } else if (buttonCount > availableButtonCount) {
-                // start on a new row, set separator
-                x = 0;
-                y += iconHeight + spacing();
-                const Section::Separators separator =
-                    (m_orientation == Qt::Vertical) ? Section::SeparatorTop : Section::SeparatorLeft;
-                section->setSeparator( separator );
-            } else {
-                // append to last row, set separators (on first row only to the left side)
-                const bool isFirstRow = (y == 0);
-                const Section::Separators separators =
-                    isFirstRow ?
-                        ((m_orientation == Qt::Vertical) ? Section::SeparatorLeft : Section::SeparatorTop) :
-                        (Section::SeparatorTop | Section::SeparatorLeft);
-                section->setSeparator( separators );
-            }
-
-            const int usedColumns = qMin(buttonCount, maxColumns);
-            if (m_orientation == Qt::Vertical) {
-                section->setGeometry(x, y,
-                                     usedColumns * iconWidth, neededRowCount * iconHeight);
-            } else {
-                section->setGeometry(y, x,
-                                     neededRowCount * iconHeight, usedColumns * iconWidth);
-            }
-
-            // advance by the icons in the last row
-            const int lastRowColumnCount = buttonCount - ((neededRowCount-1) * maxColumns);
-            x += (lastRowColumnCount * iconWidth) + spacing();
-            // advance by all but the last used row
-            y += (neededRowCount - 1) * iconHeight;
+    /**
+     * For calculating the width from height by KoToolBoxScrollArea.
+     * QWidget doesn't actually support trading width for height, so it needs to
+     * be handled specifically.
+     */
+    int widthForHeight(int height) const
+    {
+        if (m_orientation == Qt::Horizontal) {
+            const int width = doLayout(QSize(0, height), false);
+            return width;
+        } else {
+            return -1;
         }
-
-        // cache total height (or width), adding the iconHeight for the current row
-        m_currentHeight = y + iconHeight;
     }
 
     void setOrientation (Qt::Orientation orientation)
@@ -347,9 +307,99 @@ public:
     }
 
 private:
+    int doLayout(const QSize &size, bool applyGeometry) const
+    {
+        // nothing to do?
+        if (m_sections.isEmpty()) {
+            return 0;
+        }
+
+        // the names of the variables assume a vertical orientation,
+        // but all calculations are done based on the real orientation
+        const bool isVertical = m_orientation == Qt::Vertical;
+
+        const QSize iconSize = static_cast<Section*> (m_sections.first()->widget())->iconSize();
+
+        const int maxWidth = isVertical ? size.width() : size.height();
+        // using min 1 as width to e.g. protect against div by 0 below
+        const int iconWidth = qMax(1, isVertical ? iconSize.width() : iconSize.height());
+        const int iconHeight = qMax(1, isVertical ? iconSize.height() : iconSize.width());
+
+        const int maxColumns = qMax(1, (maxWidth / iconWidth));
+
+        int x = 0;
+        int y = 0;
+        bool firstSection = true;
+        if (!applyGeometry) {
+            foreach (QWidgetItem *wi, m_sections) {
+                Section *section = static_cast<Section*> (wi->widget());
+                const int buttonCount = section->visibleButtonCount();
+                if (buttonCount == 0) {
+                    continue;
+                }
+
+                // rows needed for the buttons (calculation gets the ceiling value of the plain div)
+                const int neededRowCount = ((buttonCount-1) / maxColumns) + 1;
+
+                if (firstSection) {
+                    firstSection = false;
+                } else {
+                    // start on a new row, set separator
+                    x = 0;
+                    y += iconHeight + spacing();
+                }
+
+                // advance by the icons in the last row
+                const int lastRowColumnCount = buttonCount - ((neededRowCount-1) * maxColumns);
+                x += (lastRowColumnCount * iconWidth) + spacing();
+                // advance by all but the last used row
+                y += (neededRowCount - 1) * iconHeight;
+            }
+        } else {
+            foreach (QWidgetItem *wi, m_sections) {
+                Section *section = static_cast<Section*> (wi->widget());
+                const int buttonCount = section->visibleButtonCount();
+                if (buttonCount == 0) {
+                    section->hide();
+                    continue;
+                }
+
+                // rows needed for the buttons (calculation gets the ceiling value of the plain div)
+                const int neededRowCount = ((buttonCount-1) / maxColumns) + 1;
+
+                if (firstSection) {
+                    firstSection = false;
+                } else {
+                    // start on a new row, set separator
+                    x = 0;
+                    y += iconHeight + spacing();
+                    const Section::Separators separator =
+                        isVertical ? Section::SeparatorTop : Section::SeparatorLeft;
+                    section->setSeparator( separator );
+                }
+
+                const int usedColumns = qMin(buttonCount, maxColumns);
+                if (isVertical) {
+                    section->setGeometry(x, y,
+                                         usedColumns * iconWidth, neededRowCount * iconHeight);
+                } else {
+                    section->setGeometry(y, x,
+                                         neededRowCount * iconHeight, usedColumns * iconWidth);
+                }
+
+                // advance by the icons in the last row
+                const int lastRowColumnCount = buttonCount - ((neededRowCount-1) * maxColumns);
+                x += (lastRowColumnCount * iconWidth) + spacing();
+                // advance by all but the last used row
+                y += (neededRowCount - 1) * iconHeight;
+            }
+        }
+
+        return y + iconHeight;
+    }
+
     QList <QWidgetItem*> m_sections;
     Qt::Orientation m_orientation;
-    mutable int m_currentHeight;
 };
 
 #endif

@@ -21,45 +21,62 @@
 
 #include "KoToolBoxDocker_p.h"
 #include "KoToolBox_p.h"
-#include <KoDockWidgetTitleBar.h>
+#include "KoToolBoxScrollArea_p.h"
+#include "KoDockWidgetTitleBar.h"
+#include "KoDockRegistry.h"
 #include <klocalizedstring.h>
-
+#include <QLabel>
+#include <QFontMetrics>
+#include <QFrame>
 
 KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
     : QDockWidget(i18n("Toolbox"))
     , m_toolBox(toolBox)
+    , m_scrollArea(new KoToolBoxScrollArea(toolBox, this))
 {
     setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
-    setWidget(toolBox);
+    setWidget(m_scrollArea);
+
+    // create title bar
+    KoDockWidgetTitleBar* titleBar = new KoDockWidgetTitleBar(this);
+    titleBar->setTextVisibilityMode(KoDockWidgetTitleBar::TextCanBeInvisible);
+    titleBar->setToolTip(i18n("Tools"));
+    setTitleBarWidget(titleBar);
 
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(updateToolBoxOrientation(Qt::DockWidgetArea)));
     connect(this, SIGNAL(topLevelChanged(bool)),
             this, SLOT(updateFloating(bool)));
-    KoDockWidgetTitleBar* titleBar = new KoDockWidgetTitleBar(this);
-    titleBar->setTextVisibilityMode(KoDockWidgetTitleBar::TextCanBeInvisible);
-    titleBar->setToolTip(i18n("Tools"));
-    setTitleBarWidget(titleBar);
 }
 
 void KoToolBoxDocker::setCanvas(KoCanvasBase *canvas)
 {
-    setEnabled(canvas != 0);
+    Q_UNUSED(canvas);
 }
 
 void KoToolBoxDocker::unsetCanvas()
 {
-    setEnabled(false);
+}
+
+void KoToolBoxDocker::resizeEvent(QResizeEvent *event)
+{
+    QDockWidget::resizeEvent(event);
+    if (isFloating()) {
+        if (m_scrollArea->width() > m_scrollArea->height()) {
+            m_scrollArea->setOrientation(Qt::Horizontal);
+        } else {
+            m_scrollArea->setOrientation(Qt::Vertical);
+        }
+    }
 }
 
 void KoToolBoxDocker::updateToolBoxOrientation(Qt::DockWidgetArea area)
 {
     if (area == Qt::TopDockWidgetArea || area == Qt::BottomDockWidgetArea) {
-        m_toolBox->setOrientation(Qt::Horizontal);
+        m_scrollArea->setOrientation(Qt::Horizontal);
     } else {
-        m_toolBox->setOrientation(Qt::Vertical);
+        m_scrollArea->setOrientation(Qt::Vertical);
     }
-    m_toolBox->setFloating(area == Qt::NoDockWidgetArea);
 }
 
 void KoToolBoxDocker::updateFloating(bool v)

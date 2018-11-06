@@ -82,6 +82,7 @@ public:
     bool floating;
     QMap<QAction*,int> contextIconSizes;
     QMenu* contextSize;
+    Qt::Orientation orientation;
 };
 
 void KoToolBox::Private::addSection(Section *section, const QString &name)
@@ -117,7 +118,6 @@ KoToolBox::KoToolBox()
             SIGNAL(addedTool(KoToolAction*,KoCanvasController*)),
             this, SLOT(toolAdded(KoToolAction*,KoCanvasController*)));
 
-    QTimer::singleShot(0, this, SLOT(adjustToFit()));
 }
 
 KoToolBox::~KoToolBox()
@@ -251,16 +251,9 @@ void KoToolBox::paintEvent(QPaintEvent *)
     painter.end();
 }
 
-void KoToolBox::resizeEvent(QResizeEvent* event)
-{
-    QWidget::resizeEvent(event);
-    if (!d->floating) {
-        setMinimumSize(layout()->minimumSize()); // This enforces the minimum size on the widget
-    }
-}
-
 void KoToolBox::setOrientation(Qt::Orientation orientation)
 {
+    d->orientation = orientation;
     d->layout->setOrientation(orientation);
     QTimer::singleShot(0, this, SLOT(update()));
     foreach(Section* section, d->sections) {
@@ -270,7 +263,6 @@ void KoToolBox::setOrientation(Qt::Orientation orientation)
 
 void KoToolBox::setFloating(bool v)
 {
-    setMinimumSize(QSize(1,1));
     d->floating = v;
 }
 
@@ -280,20 +272,6 @@ void KoToolBox::toolAdded(KoToolAction *toolAction, KoCanvasController *canvas)
     addButton(toolAction);
     setButtonsVisible(QList<QString>());
 
-}
-
-void KoToolBox::adjustToFit()
-{
-    int newWidth = width() - (width() % layout()->minimumSize().width());
-    if (newWidth != width() && newWidth >= layout()->minimumSize().width()) {
-        setMaximumWidth(newWidth);
-        QTimer::singleShot(0, this, SLOT(resizeUnlock()));
-    }
-}
-
-void KoToolBox::resizeUnlock()
-{
-    setMaximumWidth(QWIDGETSIZE_MAX);
 }
 
 void KoToolBox::slotContextIconSize()
@@ -309,13 +287,11 @@ void KoToolBox::slotContextIconSize()
             button->setIconSize(QSize(iconSize, iconSize));
         }
 
-        foreach(Section *section, d->sections)  {
+        foreach(Section *section, d->sections) {
             section->setButtonSize(QSize(iconSize + BUTTON_MARGIN, iconSize + BUTTON_MARGIN));
         }
 
     }
-
-    adjustToFit();
 }
 
 void KoToolBox::contextMenuEvent(QContextMenuEvent *event)
@@ -356,3 +332,9 @@ void KoToolBox::contextMenuEvent(QContextMenuEvent *event)
 
     d->contextSize->exec(event->globalPos());
 }
+KoToolBoxLayout *KoToolBox::toolBoxLayout() const
+{
+    return d->layout;
+}
+
+#include "moc_KoToolBoxScrollArea_p.cpp"

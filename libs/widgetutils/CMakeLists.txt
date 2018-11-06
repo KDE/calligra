@@ -10,6 +10,7 @@ set(kowidgetutils_LIB_SRCS
     KoUpdaterPrivate_p.cpp
     KoProperties.cpp
     KoFileDialog.cpp
+    KoKineticScroller.cpp
 )
 
 
@@ -43,6 +44,7 @@ install(FILES
     KoUpdater.h
     KoProperties.h
     KoFileDialog.h
+    KoKineticScroller.h
     ${CMAKE_CURRENT_BINARY_DIR}/kowidgetutils_export.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/calligra
     COMPONENT Devel

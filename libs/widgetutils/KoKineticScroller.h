@@ -1,5 +1,6 @@
-/*
- * Copyright (c) 2015 Friedrich W. H. Kossebau <kossebau@kde.org>
+/* This file is part of the KDE project
+ * Copyright (C) 2018 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+ * Copyright (C) 2018 Eoin O'Neill <eoinoneill1991@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,24 +18,22 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KO_TOOLBOXBUTTON_H_
-#define _KO_TOOLBOXBUTTON_H_
+#ifndef KISKINECTICSCROLLER_H
+#define KISKINECTICSCROLLER_H
+#include <kowidgetutils_export.h>
+#include <QScroller>
 
-#include <QToolButton>
+class QAbstractScrollArea;
 
-class KoToolAction;
+/* This is a convenience namespace for setting up global kinetic scrolling
+ * with consistent settings across various UI elements within Krita. */
 
-class KoToolBoxButton : public QToolButton
-{
-    Q_OBJECT
-public:
-    explicit KoToolBoxButton(KoToolAction *toolAction, QWidget * parent);
-    void setHighlightColor();
+namespace KoKineticScroller {
+KOWIDGETUTILS_EXPORT QScroller* createPreconfiguredScroller(QAbstractScrollArea *target);
 
-private Q_SLOTS:
-    void setDataFromToolAction(); // Generates tooltips.
-private:
-    KoToolAction *m_toolAction;
-};
+KOWIDGETUTILS_EXPORT QScroller::ScrollerGestureType getConfiguredGestureType();
 
-#endif // _KO_TOOLBOXBUTTON_H_
+KOWIDGETUTILS_EXPORT void updateCursor(QWidget *source, QScroller::State state);
+}
+
+#endif // KISKINECTICSCROLLER_H
