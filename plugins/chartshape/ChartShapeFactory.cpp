@@ -83,13 +83,12 @@ ChartShapeFactory::ChartShapeFactory()
 
     setFamily("chart");
 
-    int templateId = 0;
+    int order = 0;
     KoShapeTemplate params;
     params.id = ChartShapeId;
     params.family = family();
 
-    // NOTE: templateId is used for sorting by the docker
-    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.templateId = "Bar";
     params.name = i18n("Bar Chart");
     params.toolTip = i18n("Normal bar chart");
     params.iconName = chartTypeIconName(BarChartType, NormalChartSubtype);
@@ -97,9 +96,10 @@ ChartShapeFactory::ChartShapeFactory()
     properties->setProperty("chart-type", BarChartType);
     properties->setProperty("chart-sub-type", NormalChartSubtype);
     params.properties = properties;
+    params.order = order++;
     addTemplate(params);
 
-    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.templateId = "BarPercent";
     params.name = i18n("Stacked Bar Chart");
     params.toolTip = i18n("Stacked bar chart");
     params.iconName = chartTypeIconName(BarChartType, StackedChartSubtype);
@@ -107,9 +107,10 @@ ChartShapeFactory::ChartShapeFactory()
     properties->setProperty("chart-type", BarChartType);
     properties->setProperty("chart-sub-type", StackedChartSubtype);
     params.properties = properties;
+    params.order = order++;
     addTemplate(params);
 
-    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.templateId = "BarStacked";
     params.name = i18n("Percent Bar Chart");
     params.toolTip = i18n("Percent bar chart");
     params.iconName = chartTypeIconName(BarChartType, PercentChartSubtype);
@@ -117,9 +118,10 @@ ChartShapeFactory::ChartShapeFactory()
     properties->setProperty("chart-type", BarChartType);
     properties->setProperty("chart-sub-type", PercentChartSubtype);
     params.properties = properties;
+    params.order = order++;
     addTemplate(params);
 
-    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.templateId = "Line";
     params.name = i18n("Line Chart");
     params.toolTip = i18n("Normal line chart");
     params.iconName = chartTypeIconName(LineChartType, NormalChartSubtype);
@@ -127,9 +129,10 @@ ChartShapeFactory::ChartShapeFactory()
     properties->setProperty("chart-type", LineChartType);
     properties->setProperty("chart-sub-type", NormalChartSubtype);
     params.properties = properties;
+    params.order = order++;
     addTemplate(params);
 
-    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.templateId = "LinePercent";
     params.name = i18n("Stacked Line Chart");
     params.toolTip = i18n("Stacked line chart");
     params.iconName = chartTypeIconName(LineChartType, StackedChartSubtype);
@@ -137,9 +140,10 @@ ChartShapeFactory::ChartShapeFactory()
     properties->setProperty("chart-type", LineChartType);
     properties->setProperty("chart-sub-type", StackedChartSubtype);
     params.properties = properties;
+    params.order = order++;
     addTemplate(params);
 
-    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.templateId = "LineStacked";
     params.name = i18n("Percent Line Chart");
     params.toolTip = i18n("Percent line chart");
     params.iconName = chartTypeIconName(LineChartType, PercentChartSubtype);
@@ -147,9 +151,10 @@ ChartShapeFactory::ChartShapeFactory()
     properties->setProperty("chart-type", LineChartType);
     properties->setProperty("chart-sub-type", PercentChartSubtype);
     params.properties = properties;
+    params.order = order++;
     addTemplate(params);
 
-    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.templateId = "Area";
     params.name = i18n("Area Chart");
     params.toolTip = i18n("Normal area chart");
     params.iconName = chartTypeIconName(AreaChartType, NormalChartSubtype);
@@ -157,9 +162,10 @@ ChartShapeFactory::ChartShapeFactory()
     properties->setProperty("chart-type", AreaChartType);
     properties->setProperty("chart-sub-type", NormalChartSubtype);
     params.properties = properties;
+    params.order = order++;
     addTemplate(params);
 
-    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.templateId = "AreaPercent";
     params.name = i18n("Stacked Area Chart");
     params.toolTip = i18n("Stacked area chart");
     params.iconName = chartTypeIconName(AreaChartType, StackedChartSubtype);
@@ -167,9 +173,10 @@ ChartShapeFactory::ChartShapeFactory()
     properties->setProperty("chart-type", AreaChartType);
     properties->setProperty("chart-sub-type", StackedChartSubtype);
     params.properties = properties;
+    params.order = order++;
     addTemplate(params);
 
-    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.templateId = "AreaStacked";
     params.name = i18n("Percent Area Chart");
     params.toolTip = i18n("Percent area chart");
     params.iconName = chartTypeIconName(AreaChartType, PercentChartSubtype);
@@ -177,39 +184,10 @@ ChartShapeFactory::ChartShapeFactory()
     properties->setProperty("chart-type", AreaChartType);
     properties->setProperty("chart-sub-type", PercentChartSubtype);
     params.properties = properties;
+    params.order = order++;
     addTemplate(params);
 
-    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
-    params.name = i18n("HLC Stock Chart");
-    params.toolTip = i18n("High Low Close stock chart");
-    params.iconName = chartTypeIconName(StockChartType, HighLowCloseChartSubtype);
-    properties = new KoProperties();
-    properties->setProperty("chart-type", StockChartType);
-    properties->setProperty("chart-sub-type", HighLowCloseChartSubtype);
-    params.properties = properties;
-    addTemplate(params);
-
-    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
-    params.name = i18n("OHLC Stock Chart");
-    params.toolTip = i18n("Open High Low Close stock chart");
-    params.iconName = chartTypeIconName(StockChartType, OpenHighLowCloseChartSubtype);
-    properties = new KoProperties();
-    properties->setProperty("chart-type", StockChartType);
-    properties->setProperty("chart-sub-type", OpenHighLowCloseChartSubtype);
-    params.properties = properties;
-    addTemplate(params);
-
-    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
-    params.name = i18n("Candle Stick Stock Chart");
-    params.toolTip = i18n("Japanese candle stick stock chart");
-    params.iconName = chartTypeIconName(StockChartType, CandlestickChartSubtype);
-    properties = new KoProperties();
-    properties->setProperty("chart-type", StockChartType);
-    properties->setProperty("chart-sub-type", CandlestickChartSubtype);
-    params.properties = properties;
-    addTemplate(params);
-
-    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.templateId = "Pie";
     params.name = i18n("Pie Chart");
     params.toolTip = i18n("Pie chart");
     params.iconName = chartTypeIconName(CircleChartType, NoChartSubtype);
@@ -217,9 +195,10 @@ ChartShapeFactory::ChartShapeFactory()
     properties->setProperty("chart-type", CircleChartType);
     properties->setProperty("chart-sub-type", NoChartSubtype);
     params.properties = properties;
+    params.order = order++;
     addTemplate(params);
 
-    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.templateId = "Ring";
     params.name = i18n("Ring Chart");
     params.toolTip = i18n("Ring chart");
     params.iconName = chartTypeIconName(RingChartType, NoChartSubtype);
@@ -227,9 +206,10 @@ ChartShapeFactory::ChartShapeFactory()
     properties->setProperty("chart-type", RingChartType);
     properties->setProperty("chart-sub-type", NoChartSubtype);
     params.properties = properties;
+    params.order = order++;
     addTemplate(params);
 
-    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.templateId = "Bubble";
     params.name = i18n("Bubble Chart");
     params.toolTip = i18n("Bubble chart");
     params.iconName = chartTypeIconName(BubbleChartType, NoChartSubtype);
@@ -237,9 +217,10 @@ ChartShapeFactory::ChartShapeFactory()
     properties->setProperty("chart-type", BubbleChartType);
     properties->setProperty("chart-sub-type", NoChartSubtype);
     params.properties = properties;
+    params.order = order++;
     addTemplate(params);
 
-    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.templateId = "Scatter";
     params.name = i18n("Scatter Chart");
     params.toolTip = i18n("Scatter chart");
     params.iconName = chartTypeIconName(ScatterChartType, NoChartSubtype);
@@ -247,9 +228,10 @@ ChartShapeFactory::ChartShapeFactory()
     properties->setProperty("chart-type", ScatterChartType);
     properties->setProperty("chart-sub-type", NoChartSubtype);
     params.properties = properties;
+    params.order = order++;
     addTemplate(params);
 
-    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.templateId = "Radar";
     params.name = i18n("Radar Chart");
     params.toolTip = i18n("Radar chart");
     params.iconName = chartTypeIconName(RadarChartType, NoChartSubtype);
@@ -257,9 +239,10 @@ ChartShapeFactory::ChartShapeFactory()
     properties->setProperty("chart-type", RadarChartType);
     properties->setProperty("chart-sub-type", NoChartSubtype);
     params.properties = properties;
+    params.order = order++;
     addTemplate(params);
 
-    params.templateId = QString("%1").arg(QString::number(++templateId), 4, QLatin1Char('0'));
+    params.templateId = "RadarFilled";
     params.name = i18n("Filled Radar Chart");
     params.toolTip = i18n("Filled radar chart");
     params.iconName = chartTypeIconName(FilledRadarChartType, NoChartSubtype);
@@ -267,6 +250,40 @@ ChartShapeFactory::ChartShapeFactory()
     properties->setProperty("chart-type", FilledRadarChartType);
     properties->setProperty("chart-sub-type", NoChartSubtype);
     params.properties = properties;
+    params.order = order++;
+    addTemplate(params);
+
+    params.templateId = "StockCandle";
+    params.name = i18n("Candle Stick Stock Chart");
+    params.toolTip = i18n("Japanese candle stick stock chart");
+    params.iconName = chartTypeIconName(StockChartType, CandlestickChartSubtype);
+    properties = new KoProperties();
+    properties->setProperty("chart-type", StockChartType);
+    properties->setProperty("chart-sub-type", CandlestickChartSubtype);
+    params.properties = properties;
+    params.order = order++;
+    addTemplate(params);
+
+    params.templateId = "StockOHLC";
+    params.name = i18n("OHLC Stock Chart");
+    params.toolTip = i18n("Open High Low Close stock chart");
+    params.iconName = chartTypeIconName(StockChartType, OpenHighLowCloseChartSubtype);
+    properties = new KoProperties();
+    properties->setProperty("chart-type", StockChartType);
+    properties->setProperty("chart-sub-type", OpenHighLowCloseChartSubtype);
+    params.properties = properties;
+    params.order = order++;
+    addTemplate(params);
+
+    params.templateId = "StockHLC";
+    params.name = i18n("HLC Stock Chart");
+    params.toolTip = i18n("High Low Close stock chart");
+    params.iconName = chartTypeIconName(StockChartType, HighLowCloseChartSubtype);
+    properties = new KoProperties();
+    properties->setProperty("chart-type", StockChartType);
+    properties->setProperty("chart-sub-type", HighLowCloseChartSubtype);
+    params.properties = properties;
+    params.order = order++;
     addTemplate(params);
 }
 
