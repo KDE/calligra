@@ -240,6 +240,9 @@ void ShapeCollectionDocker::unsetCanvas()
 
 inline bool operator<(const struct KoShapeTemplate &a, const struct KoShapeTemplate &b)
 {
+    if (a.order != b.order) {
+        return a.order < b.order;
+    }
     if (a.id != b.id) {
         return a.id < b.id;
     }
