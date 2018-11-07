@@ -70,4 +70,6 @@ class CollectionItemModel : public QAbstractListModel
         QString m_family;
 };
 
+QDebug operator<<(QDebug dbg, const KoCollectionItem &i);
+
 #endif //KIVIOSHAPETEMPLATEMODEL_H

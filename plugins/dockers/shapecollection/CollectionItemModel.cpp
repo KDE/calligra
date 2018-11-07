@@ -65,8 +65,9 @@ int CollectionItemModel::rowCount(const QModelIndex& parent) const
 
 void CollectionItemModel::setShapeTemplateList(const QList<KoCollectionItem>& newlist)
 {
+    beginResetModel();
     m_shapeTemplateList = newlist;
-    reset();
+    endResetModel();
 }
 
 QMimeData* CollectionItemModel::mimeData(const QModelIndexList& indexes) const
@@ -120,4 +121,9 @@ const KoProperties* CollectionItemModel::properties(const QModelIndex& index) co
         return 0;
 
     return m_shapeTemplateList[index.row()].properties;
+}
+
+QDebug operator<<(QDebug dbg, const KoCollectionItem &i)
+{
+    return dbg << "CollectionItem[" << i.id << ',' << i.name << "]";
 }
