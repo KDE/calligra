@@ -13,7 +13,7 @@ VisibleToolDockers=KSpreadCellToolId,DefaultToolArrangeWidget,DefaultToolWidget,
 
 # Set which shapes to show in the Add Shape dock
 [KoShapeCollection]
-QuickShapes=PictureShape,ChartShape
+QuickShapes=PictureShape,ChartShape_Bar
 
 # Positioning of the dockers
 [sheets]
