@@ -49,6 +49,7 @@ class KoDocumentResourceManager;
 struct FLAKE_EXPORT KoShapeTemplate {
     KoShapeTemplate() {
         properties = 0;
+        order = 0;
     }
     QString id;         ///< The id of the shape
     QString templateId;         ///< The id of this particular template - only has to be unique with the shape
@@ -61,6 +62,8 @@ struct FLAKE_EXPORT KoShapeTemplate {
      * result in the shape this template represents.
      */
     const KoProperties *properties;
+
+    int order; ///< If order differs between shapes, they are ordered in ascending order
 };
 
 /**
