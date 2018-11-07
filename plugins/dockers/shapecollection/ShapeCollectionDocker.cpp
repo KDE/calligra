@@ -262,7 +262,7 @@ void ShapeCollectionDocker::loadDefaultShapes()
     int quickCount=0;
 
     QStringList quickShapes;
-    quickShapes << "TextShapeID" << "PictureShape" << "ChartShape" << "ArtisticText";
+    quickShapes << "TextShapeID" << "PictureShape" << "ChartShape_Bar" << "ArtisticText";
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoShapeCollection");
     quickShapes = cfg.readEntry("QuickShapes", quickShapes);
 
