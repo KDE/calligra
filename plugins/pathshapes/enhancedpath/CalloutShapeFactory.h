@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2018 Dag Andersen <danders@get2net.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,35 +17,29 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOENHANCEDPATHSHAPEFACTORY_H
-#define KOENHANCEDPATHSHAPEFACTORY_H
+#ifndef CALLOUTSHAPEFACTORY_H
+#define CALLOUTSHAPEFACTORY_H
 
 #include <KoShapeFactoryBase.h>
 
 class KoShape;
 
-/// Factory for path shapes
-class EnhancedPathShapeFactory : public KoShapeFactoryBase
+/// Factory for callout shapes
+class CalloutShapeFactory : public KoShapeFactoryBase
 {
 public:
-    /// constructor
-    EnhancedPathShapeFactory();
-    ~EnhancedPathShapeFactory() {}
-    virtual KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const;
-    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
-    virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
+    CalloutShapeFactory();
+    ~CalloutShapeFactory() {}
+    KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const override;
+    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
+    bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
 private:
-    void addCross();
-    void addArrow();
-    void addSmiley();
-    void addCircularArrow();
-    void addGearhead();
+    void addCallout();
 
     typedef QMap<QString, QVariant > ComplexType;
     typedef QList<QVariant> ListType;
-    KoProperties* dataToProperties(const QString &modifiers, const QStringList &commands,
-        const ListType &handles, const ComplexType &formulae) const;
+    KoProperties* dataToProperties(const QString &modifiers, const QStringList &commands, const ListType &handles, const ComplexType &formulae) const;
 
 };
 
-#endif // KOENHANCEDPATHSHAPEFACTORY_H
+#endif // CALLOUTSHAPEFACTORY_H

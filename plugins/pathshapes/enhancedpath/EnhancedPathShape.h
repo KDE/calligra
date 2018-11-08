@@ -132,7 +132,6 @@ protected:
     // from KoParameterShape
     virtual void updatePath(const QSizeF &size);
 
-private:
     void evaluateHandles();
     void reset();
 

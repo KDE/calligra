@@ -30,6 +30,8 @@ set(pathshapes_PART_SRCS
     enhancedpath/EnhancedPathParameter.cpp
     enhancedpath/EnhancedPathFormula.cpp
     enhancedpath/EnhancedPathHandle.cpp
+    enhancedpath/CalloutShape.cpp
+    enhancedpath/CalloutShapeFactory.cpp
     PathShapesPlugin.cpp
 )
 
