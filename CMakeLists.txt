@@ -153,9 +153,6 @@ endif ()
 # finally choose products/features to build
 calligra_set_productset(${PRODUCTSET})
 
-# Leave this line as is, it is used to enable removal of Plan when releasing Calligra
-#calligra_disable_product(APP_PLAN "Plan is released separatly")
-
 ##########################
 ###########################
 ## Look for ECM, Qt, KF5 ##
@@ -239,13 +236,6 @@ set_package_properties(KF5KHtml PROPERTIES
 if(KF5Activities_FOUND)
     set(HAVE_KACTIVITIES TRUE)
 endif()
-
-find_package(KF5Holidays 5.3.3)
-set_package_properties(KF5Holidays PROPERTIES
-    DESCRIPTION "Library for generation of public holidays"
-    PURPOSE "Required by Plan"
-    TYPE RECOMMENDED
-    )
 
 if(${KF5_VERSION} VERSION_LESS "5.16.0")
     set(CALLIGRA_OLD_PLUGIN_METADATA TRUE)
@@ -425,14 +415,9 @@ find_package(KF5CalendarCore CONFIG QUIET)
 set_package_properties(KF5CalendarCore PROPERTIES
     DESCRIPTION "KDE Calendar Library"
     URL "https://www.kde.org/"
-    PURPOSE "Required by Plan Ical export and optionally used by semantic item Event"
+    PURPOSE "Optionally used by semantic item Event"
     TYPE OPTIONAL
     )
-
-if ("${KF5CalendarCore_VERSION}" VERSION_GREATER 5.6.40)
-    set(HAVE_QDATETIME_KCALCORE TRUE)
-endif()
-
 
 ##
 ## Test for KF5Contacts
@@ -442,17 +427,6 @@ set_package_properties(KF5Contacts PROPERTIES
     DESCRIPTION "KDE Address book Library"
     URL "https://www.kde.org/"
     PURPOSE "Optionally used by semantic item Contact"
-    TYPE OPTIONAL
-    )
-
-##
-## Test for KF5AkonadiContact
-##
-find_package(KF5AkonadiContact CONFIG QUIET)
-set_package_properties(KF5AkonadiContact PROPERTIES
-    DESCRIPTION "Library for Accessing Contacts stored in Akonadi"
-    URL "https://www.kde.org/"
-    PURPOSE "Optionally used by Plan"
     TYPE OPTIONAL
     )
 
@@ -468,24 +442,13 @@ set_package_properties(KF5Akonadi PROPERTIES
     )
 
 ##
-## Test for KGantt
-##
-macro_optional_find_package(KGantt 2.6.0 QUIET)
-set_package_properties(KGantt PROPERTIES
-    DESCRIPTION "Library for creating Gantt diagrams (part of KDiagram)"
-    URL "https://www.kde.org/"
-    PURPOSE "Required by Plan"
-    TYPE RECOMMENDED
-    )
-
-##
 ## Test for KChart
 ##
 macro_optional_find_package(KChart 2.6.0 QUIET)
 set_package_properties(KChart PROPERTIES
     DESCRIPTION "Library for creating business charts (part of KDiagram)"
     URL "https://www.kde.org/"
-    PURPOSE "Required by Chart shape and Plan"
+    PURPOSE "Required by Chart shape"
     TYPE RECOMMENDED
     )
 
@@ -1057,14 +1020,6 @@ calligra_drop_product_on_bad_condition( APP_BRAINDUMP
     Qt5WebKitWidgets_FOUND "QWebPage needed for webpage plugin"
     )
 
-calligra_drop_product_on_bad_condition( APP_PLAN
-    KGantt_FOUND "KGantt devel not found"
-    KChart_FOUND "KChart devel not found"
-    KF5KHtml_FOUND "KF5KHtml devel not found"
-    #     KReport_WithScripting_FOUND "KReport with scripting support not found"
-    #     KPropertyWidgets_FOUND "KPropertyWidgets not found"
-    )
-
 calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
     LIBGIT2_FOUND  "libgit2 devel not found"
     )
@@ -1090,7 +1045,6 @@ calligra_drop_product_on_bad_condition( APP_SLIDECOMPARE
 # dependencies, but belong to scope of old flag
 calligra_drop_products_on_old_flag(braindump APP_BRAINDUMP)
 calligra_drop_products_on_old_flag(karbon APP_KARBON)
-calligra_drop_products_on_old_flag(plan  APP_PLAN)
 calligra_drop_products_on_old_flag(sheets PART_SHEETS APP_SHEETS)
 calligra_drop_products_on_old_flag(stage  PART_STAGE APP_STAGE)
 calligra_drop_products_on_old_flag(words  PART_WORDS APP_WORDS)
@@ -1137,10 +1091,6 @@ if(SHOULD_BUILD_APP_FLOW)
 endif()
 
 add_subdirectory(stage)
-
-if(SHOULD_BUILD_APP_PLAN)
-    add_subdirectory(plan)
-endif()
 
 add_subdirectory(sheets)
 

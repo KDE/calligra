@@ -227,16 +227,6 @@ if options.checkversion
     end
 end
 
-# From release 3.0.89, Plan is not released as part of calligra
-if compare_versions(cversion, "3.0.89") >= 0
-    if (options.infolevel > 2)
-        puts "--> Removing plan, version is: #{cversion}"
-    end
-    `sed -i 's/\#calligra_disable_product(APP_PLAN/calligra_disable_product(APP_PLAN/g' CMakeLists.txt`
-    `sed -i 's/add_subdirectory(plan)/\#add_subdirectory(plan)/g' CMakeLists.txt`
-    `rm -rf plan`
-end
-
 # translations
 if options.translations
     

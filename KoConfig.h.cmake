@@ -56,6 +56,3 @@
 
 /* Defines if the old plugin metadata for mimetypes is used */
 #cmakedefine CALLIGRA_OLD_PLUGIN_METADATA 1
-
-/* Defines if KCalCore version with QDateTime-based API is available */
-#cmakedefine HAVE_QDATETIME_KCALCORE 1
