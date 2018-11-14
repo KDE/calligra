@@ -55,6 +55,7 @@
     <p xml:lang="pl">Pakiet biurowy KDE dla urządzeń 2 w 1.</p>
     <p xml:lang="pt">O pacote de Escritório do KDE para os dispositivos 2-em-1.</p>
     <p xml:lang="pt-BR">A suíte de escritório do KDE para dispositivos 2-em-1.</p>
+    <p xml:lang="sk">KDE kancelásky balík pre zariadenia 2 v 1.</p>
     <p xml:lang="sv">KDE:s kontorssvit för surfplattor med tangentbord.</p>
     <p xml:lang="uk">Офісний комплект KDE для пристроїв «два в одному».</p>
     <p xml:lang="x-test">xxThe KDE Office suite for 2-in-1 devices.xx</p>
@@ -134,6 +135,7 @@
       <li xml:lang="pl">Wspólne funkcje</li>
       <li xml:lang="pt">Funcionalidades Comuns</li>
       <li xml:lang="pt-BR">Funcionalidades comuns</li>
+      <li xml:lang="sk">Bežné funkcie</li>
       <li xml:lang="sv">Vanliga funktioner</li>
       <li xml:lang="uk">Загальні можливості</li>
       <li xml:lang="x-test">xxCommon Featuresxx</li>
@@ -167,6 +169,7 @@
       <li xml:lang="pl">Osadzalne obiekty</li>
       <li xml:lang="pt">Objectos Incorporados</li>
       <li xml:lang="pt-BR">Objetos incorporados</li>
+      <li xml:lang="sk">Vložiteľné objekty</li>
       <li xml:lang="sv">Inbäddningsbara objekt</li>
       <li xml:lang="uk">Вмонтовані об'єкти</li>
       <li xml:lang="x-test">xxEmbeddable Objectsxx</li>
@@ -201,6 +204,7 @@
       <li xml:lang="pl">Standardowy format plików</li>
       <li xml:lang="pt">Formato-padrão de ficheiros</li>
       <li xml:lang="pt-BR">Formato de arquivo padrão</li>
+      <li xml:lang="sk">Štandardný formát súboru</li>
       <li xml:lang="sv">Standardfilformat</li>
       <li xml:lang="uk">Стандартизований формат файлів</li>
       <li xml:lang="x-test">xxStandard file formatxx</li>
