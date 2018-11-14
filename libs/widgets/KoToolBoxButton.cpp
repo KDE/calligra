@@ -20,13 +20,14 @@
 #include "KoToolBoxButton_p.h"
 
 #include <KoToolManager.h>
+#include <KoIcon.h>
+
 #include <QIcon>
 #include <QPalette>
 #include <QApplication>
-#include <klocalizedstring.h>
 #include <QKeySequence>
-#include <KoIcon.h>
-#include <QStringLiteral>
+
+#include <klocalizedstring.h>
 
 KoToolBoxButton::KoToolBoxButton(KoToolAction *toolAction, QWidget *parent)
     : QToolButton(parent)
