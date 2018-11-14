@@ -511,6 +511,11 @@ public:
      */
     QSize minimumSizeHint() const Q_DECL_OVERRIDE;
 
+    /**
+     * Returns the status of the Details button.
+     */
+    bool isDetailsWidgetVisible() const;
+
 public Q_SLOTS:
     /**
      * Make a KDE compliant caption.
@@ -611,11 +616,6 @@ public Q_SLOTS:
      * KCMultiDialog::slotHelp() for more information.
      */
     void setHelp(const QString &anchor, const QString &appname = QString());
-
-    /**
-     * Returns the status of the Details button.
-     */
-    bool isDetailsWidgetVisible() const;
 
     /**
      * Sets the status of the Details button.
