@@ -111,15 +111,15 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy)
     d->pages = d->pageRange;
     if (d->pages.isEmpty()) { // auto-fill from min/max
         switch (d->printer->printRange()) {
-        case QAbstractPrintDialog::AllPages:
+        case QPrinter::AllPages:
             for (int i=documentFirstPage(); i <= documentLastPage(); i++)
                 d->pages.append(i);
             break;
-        case QAbstractPrintDialog::PageRange:
+        case QPrinter::PageRange:
             for (int i=d->printer->fromPage(); i <= d->printer->toPage(); i++)
                 d->pages.append(i);
             break;
-        case QAbstractPrintDialog::CurrentPage:
+        case QPrinter::CurrentPage:
             d->pages.append(documentCurrentPage());
             break;
         default:
