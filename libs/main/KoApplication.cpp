@@ -63,6 +63,7 @@
 #include <QPluginLoader>
 #include <QCommandLineParser>
 #include <QMimeDatabase>
+#include <QTimer>
 
 #include <stdlib.h>
 
@@ -495,8 +496,6 @@ bool KoApplication::start()
                 }
                 if (benchmarkLoading) {
                     doc->setReadWrite(false);
-                    connect(mainWindow, &KoMainWindow::loadCompleted, this, &KoApplication::benchmarkLoadingFinished);
-                    connect(mainWindow, &KoMainWindow::loadCompleted, this, &KoApplication::benchmarkLoadingFinished);
                 }
 
                 if (profileoutput.device()) {
@@ -578,6 +577,7 @@ bool KoApplication::start()
                                           << appStartTime.msecsTo(QTime::currentTime())
                                           <<"\t100" << endl;
                         }
+                        QTimer::singleShot(0, this, SLOT(benchmarkLoadingFinished()));
                         return true; // only load one document!
                     }
                     else if (print) {
