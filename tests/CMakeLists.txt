@@ -1,10 +1,4 @@
 
-## Some tests do not work on freeBSD, so disable these tests until we found out why
-STRING (REGEX MATCH "BSD$" OS_BSD ${CMAKE_SYSTEM_NAME})
-if (OS_BSD)
-    message (WARNING "OS is ${CMAKE_SYSTEM_NAME}. Some i18n tests are disabled.")
-endif()
-
 find_program(BASH_PROGRAM bash)
 find_program(XGETTEXT_PROGRAM xgettext)
 find_program(MSGCAT_PROGRAM msgcat)
@@ -36,11 +30,9 @@ if (BASH_PROGRAM AND XGETTEXT_PROGRAM AND MSGCAT_PROGRAM)
         COMMENT "Copy parameters script" VERBATIM)
 
     # add tests here
-    if (NOT OS_BSD)
-        CALLIGRA_ADD_UNIT_TEST(test_i18n)
-        CALLIGRA_ADD_UNIT_TEST(test_i18nc)
-        CALLIGRA_ADD_UNIT_TEST(test_i18nc_long)
-    endif()
+    CALLIGRA_ADD_UNIT_TEST(test_i18n)
+    CALLIGRA_ADD_UNIT_TEST(test_i18nc)
+    CALLIGRA_ADD_UNIT_TEST(test_i18nc_long)
 
     CALLIGRA_ADD_UNIT_TEST(test_i18np)
     CALLIGRA_ADD_UNIT_TEST(test_i18n_noop)
@@ -57,9 +49,7 @@ if (BASH_PROGRAM AND XGETTEXT_PROGRAM AND MSGCAT_PROGRAM)
     CALLIGRA_ADD_UNIT_TEST(test_kundo2_i18nc_long)
 
     # this uses cpp files from earlier tests
-    if (NOT OS_BSD)
-        CALLIGRA_ADD_TEST_COMMAND(test_i18n_mixed)
-    endif()
+    CALLIGRA_ADD_TEST_COMMAND(test_i18n_mixed)
 
     # add test of Messages.sh
     add_test(test_Messages ${BASH_PROGRAM} "${CMAKE_CURRENT_SOURCE_DIR}/test_messages.sh" "${CMAKE_SOURCE_DIR}")
