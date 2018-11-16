@@ -17,3 +17,7 @@ endif ()
 if (SHOULD_BUILD_APP_WORDS)
     add_subdirectory( app )
 endif ()
+
+if (BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
