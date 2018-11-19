@@ -432,14 +432,15 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
             saveOdfAttributes(context, OdfAllAttributes&~OdfSize);
         }
         else {
-            qInfo()<<Q_FUNC_INFO<<"fishy:"<<diff;
             // We get here if the path goes outside the viewbox.
             // Afaics, this is not allowed, see: http://docs.oasis-open.org/office/v1.2/os/OpenDocument-v1.2-os-part1.html#attribute-svg_viewBox.
-            // However, OO/LO uses this for callouts in order to get a shape size that covers the 'text part' only,
-            // excluding the 'arrow part' of the callout.
+            // However, OO/LO uses this for callouts in order to get a shape size that covers the 'bubble' part only,
+            // excluding the 'arrow' part of the callout.
             // OO/LO callouts are marked by eg: draw:type="round-rectangular-callout"
             // so this can be used to distinguish callouts from proper path shapes.
-            //FIXME: this needs to be fixed for shapes that are transformed by rotation or skewing
+            // Also there was a bug in stencil database.odg that giave the same problem.
+            // Handling this should not be neccessary anymore as callouts are treated in a separate class,
+            // and the database.odg has been fixe, but we keep it to be able to read old calligra documents.
             QTransform offset(context.shapeOffset(this));
             QTransform newOffset(offset);
             newOffset.translate(-diff.x(), -diff.y());

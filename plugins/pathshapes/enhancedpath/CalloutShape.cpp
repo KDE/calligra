@@ -100,18 +100,27 @@ void CalloutShape::saveOdf(KoShapeSavingContext &context) const
             rect.setRight(rightOffset);
         }
     }
-    qInfo()<<Q_FUNC_INFO<<"offsets:"<<rect;
-    //FIXME: this needs to be fixed for shapes that are transformed by rotation or skewing
-    saveOdfAttributes(context, OdfAllAttributes&~OdfSize&~OdfPosition&~OdfTransformation);
 
-    currentPos -= rect.topLeft();
-    context.xmlWriter().addAttributePt("svg:x", currentPos.x());
-    context.xmlWriter().addAttributePt("svg:y", currentPos.y());
+    if (!rect.topLeft().isNull()) {
+        // TODO:
+        // This does not work for sheared shapes, (only rotated)
+        // but then there are LO interop problems with
+        // sheared enhanced-path shapes in general.
+        qreal x = 0, y = 0;
+        QTransform trans = absoluteTransformation(0);
+        // remove translation
+        trans.setMatrix(trans.m11(), trans.m12(), trans.m13(), trans.m21(), trans.m22(), trans.m23(), qreal(0.0), qreal(0.0), trans.m33());
+        trans.map(rect.left(), rect.top(), &x, &y);
+        QTransform offset;
+        offset.translate(-x, -y);
+        context.addShapeOffset(this, offset);
+    }
+
+    saveOdfAttributes(context, OdfAllAttributes&~OdfSize&~OdfViewbox);
 
     currentSize -= rect.size();
     context.xmlWriter().addAttributePt("svg:width", currentSize.width());
     context.xmlWriter().addAttributePt("svg:height", currentSize.height());
-    qInfo()<<Q_FUNC_INFO<<"pos:"<<position()<<"size:"<<this->size()<<"saved:"<<currentPos<<currentSize;
 
     saveText(context);
 
@@ -246,8 +255,6 @@ bool CalloutShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
     loadOdfAttributes(element, context, OdfMandatories | OdfTransformation | OdfAdditionalAttributes | OdfCommonChildElements);
 
     loadText(element, context);
-
-    qInfo()<<Q_FUNC_INFO<<"pos:"<<pos<<"size:"<<size<<"->"<<position()<<this->size();
     return true;
 }
 
