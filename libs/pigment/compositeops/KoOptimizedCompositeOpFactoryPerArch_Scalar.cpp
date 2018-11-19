@@ -60,5 +60,5 @@ template<>
 KoReportCurrentArch::ReturnType
 KoReportCurrentArch::create<Vc::ScalarImpl>(ParamType)
 {
-    dbgPigment << "Legacy integer arithmetics implementation";
+//     dbgPigment << "Legacy integer arithmetics implementation";
 }
