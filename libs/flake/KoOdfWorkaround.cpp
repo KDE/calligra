@@ -39,6 +39,42 @@
 
 static bool s_workaroundPresentationPlaceholderBug = false;
 
+void KoOdfWorkaround::fixSkew(QStringList &params, KoShapeLoadingContext &context)
+{
+    if (context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice) {
+        debugFlake << "Work around OO bug: skewa clockwize and radians as default unit";
+        QString angle = params[0].trimmed();
+        if (angle.startsWith('-')) {
+            angle = angle.remove(0, 1);
+        } else {
+            angle = angle.prepend('-');
+        }
+        const QChar c = angle.at(angle.length() -1);
+        if (c.isDigit()) {
+            angle.append("rad");
+        }
+        params[0] = angle;
+    }
+}
+
+void KoOdfWorkaround::fixRotate(QStringList &params, KoShapeLoadingContext &context)
+{
+    if (context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice) {
+        debugFlake << "Work around OO bug: rotates clockwize and radians as default unit";
+        QString angle = params[0].trimmed();
+        if (angle.startsWith('-')) {
+            angle = angle.remove(0, 1);
+        } else {
+            angle = angle.prepend('-');
+        }
+        const QChar c = angle.at(angle.length() -1);
+        if (c.isDigit()) {
+            angle.append("rad");
+        }
+        params[0] = angle;
+    }
+}
+
 void KoOdfWorkaround::fixPenWidth(QPen & pen, KoShapeLoadingContext &context)
 {
     if (context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice && pen.widthF() == 0.0) {

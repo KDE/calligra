@@ -51,6 +51,19 @@ class KoColorBackground;
 namespace KoOdfWorkaround
 {
     /**
+     * OpenOffice rotates counterclockwize while odf/svg spec says clockwize,
+     * and OO also uses 'rad' as default unit while odf specifies 'deg'.
+     * See https://bugs.documentfoundation.org/show_bug.cgi?id=48342
+     */
+    FLAKE_EXPORT void fixRotate(QStringList &params, KoShapeLoadingContext &context);
+
+    /**
+     * OpenOffice skews counterclockwize while odf/svg spec says clockwize,
+     * and OO also uses 'rad' as default unit while odf specifies 'deg'.
+     */
+    FLAKE_EXPORT void fixSkew(QStringList &params, KoShapeLoadingContext &context);
+
+    /**
      * OpenOffice handles a line with the width of 0 as a cosmetic line but in svg it makes the line invisible.
      * To show it in calligra use a very small line width. However this is not a cosmetic line.
      */

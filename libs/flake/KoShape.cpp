@@ -1638,7 +1638,7 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
     if (attributes & OdfTransformation) {
         QString transform = element.attributeNS(KoXmlNS::draw, "transform", QString());
         if (! transform.isEmpty())
-            applyAbsoluteTransformation(parseOdfTransform(transform));
+            applyAbsoluteTransformation(parseOdfTransform(transform, context));
     }
 
     if (attributes & OdfAdditionalAttributes) {
@@ -1923,7 +1923,7 @@ void KoShape::loadOdfClipContour(const KoXmlElement &element, KoShapeLoadingCont
     }
 }
 
-QTransform KoShape::parseOdfTransform(const QString &transform)
+QTransform KoShape::parseOdfTransform(const QString &transform, KoShapeLoadingContext &context)
 {
     QTransform matrix;
 
@@ -1946,17 +1946,18 @@ QTransform KoShape::parseOdfTransform(const QString &transform)
 
         if (cmd == "rotate") {
             QTransform rotMatrix;
+#ifndef NWORKAROUND_ODF_BUGS
+            KoOdfWorkaround::fixRotate(params, context);
+#endif
             if (params.count() == 3) {
                 qreal x = KoUnit::parseValue(params[1]);
                 qreal y = KoUnit::parseValue(params[2]);
 
                 rotMatrix.translate(x, y);
-                // oo2 rotates by radians
-                rotMatrix.rotate(-params[0].toDouble()*180.0 / M_PI);
-                rotMatrix.translate(-x, -y);
+                rotMatrix.rotate(KoUnit::parseAngle(params[0], 0.0));
+                rotMatrix.translate(x, y);
             } else {
-                // oo2 rotates by radians
-                rotMatrix.rotate(-params[0].toDouble()*180.0 / M_PI);
+                rotMatrix.rotate(KoUnit::parseAngle(params[0], 0.0));
             }
             matrix = matrix * rotMatrix;
         } else if (cmd == "translate") {
@@ -1976,17 +1977,23 @@ QTransform KoShape::parseOdfTransform(const QString &transform)
                 scaleMatrix.scale(params[0].toDouble(), params[0].toDouble());
             matrix = matrix * scaleMatrix;
         } else if (cmd == "skewx") {
+#ifndef NWORKAROUND_ODF_BUGS
+            KoOdfWorkaround::fixSkew(params, context);
+#endif
             QPointF p = absolutePosition(KoFlake::TopLeftCorner);
             QTransform shearMatrix;
             shearMatrix.translate(p.x(), p.y());
-            shearMatrix.shear(tan(-params[0].toDouble()), 0.0F);
+            shearMatrix.shear(tan(KoUnit::parseAngle(params[0], 0.0F) * M_PI / 180), 0.0F);
             shearMatrix.translate(-p.x(), -p.y());
             matrix = matrix * shearMatrix;
         } else if (cmd == "skewy") {
+#ifndef NWORKAROUND_ODF_BUGS
+            KoOdfWorkaround::fixSkew(params, context);
+#endif
             QPointF p = absolutePosition(KoFlake::TopLeftCorner);
             QTransform shearMatrix;
             shearMatrix.translate(p.x(), p.y());
-            shearMatrix.shear(0.0F, tan(-params[0].toDouble()));
+            shearMatrix.shear(0.0F, tan(KoUnit::parseAngle(params[0], 0.0F) * M_PI / 180));
             shearMatrix.translate(-p.x(), -p.y());
             matrix = matrix * shearMatrix;
         } else if (cmd == "matrix") {

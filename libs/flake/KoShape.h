@@ -1196,9 +1196,10 @@ protected:
     /**
      * Parses the transformation attribute from the given string
      * @param transform the transform attribute string
+     * @param context the loading context
      * @return the resulting transformation matrix
      */
-    QTransform parseOdfTransform(const QString &transform);
+    QTransform parseOdfTransform(const QString &transform, KoShapeLoadingContext &context);
 
     /**
      * @brief Saves the style used for the shape
