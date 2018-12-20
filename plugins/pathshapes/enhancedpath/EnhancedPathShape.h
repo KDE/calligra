@@ -120,6 +120,10 @@ public:
     /// Returns parameter from given textual representation
     EnhancedPathParameter *parameter(const QString &text);
 
+    void saveEnhancedGeometry(KoShapeSavingContext &context) const;
+
+    bool loadEnhancedGeometry(const KoXmlElement & element, KoShapeLoadingContext &context);
+
 protected:
     // from KoShape
     virtual void saveOdf(KoShapeSavingContext &context) const;

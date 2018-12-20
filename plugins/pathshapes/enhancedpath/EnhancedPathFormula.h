@@ -138,6 +138,9 @@ public:
 
     /// returns string representation of the formula
     QString toString() const;
+
+    void resetCompiled() { m_compiled = false; }
+
 private:
     /// Separates the given formula text into tokens.
     TokenList scan(const QString &formula) const;

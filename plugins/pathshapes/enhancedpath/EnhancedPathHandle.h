@@ -119,6 +119,10 @@ public:
     void saveOdf(KoShapeSavingContext &context) const;
     /// load handle from given element
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+
+    QString positionX() const;
+    QString positionY() const;
+
 private:
     /// Returns if handle is polar
     bool isPolar() const;

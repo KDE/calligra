@@ -174,7 +174,8 @@ public:
     QVariant value(const QString &key) const;
 
     bool operator==(const KoProperties &other) const;
-
+    KoProperties operator=(const KoProperties &other) const;
+    
 private:
 
     class Private;

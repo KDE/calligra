@@ -210,3 +210,13 @@ bool EnhancedPathHandle::loadOdf(const KoXmlElement & element, KoShapeLoadingCon
 
     return hasPosition();
 }
+
+QString EnhancedPathHandle::positionX() const
+{
+    return m_positionX->toString();
+}
+
+QString EnhancedPathHandle::positionY() const
+{
+    return m_positionY->toString();
+}

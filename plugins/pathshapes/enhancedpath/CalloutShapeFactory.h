@@ -33,13 +33,16 @@ public:
     KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const override;
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
     bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const override;
-private:
-    void addCallout();
 
     typedef QMap<QString, QVariant > ComplexType;
     typedef QList<QVariant> ListType;
-    KoProperties* dataToProperties(const QString &modifiers, const QStringList &commands, const ListType &handles, const ComplexType &formulae) const;
 
+private:
+    void addCallout();
+    void addRoundedCallout();
+
+    KoProperties* dataToProperties(const QStringList &commands, const ListType &handles, const ComplexType &formulae) const;
+    KoProperties *squareProperties() const;
 };
 
 #endif // CALLOUTSHAPEFACTORY_H

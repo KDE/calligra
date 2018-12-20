@@ -128,7 +128,10 @@ public:
         TextRunAroundChanged, ///< used after a setTextRunAroundSide()
         ChildChanged, ///< a child of a container was changed/removed. This is propagated to all parents
         ConnectionPointChanged, ///< a connection point has changed
-        ClipPathChanged ///< the shapes clip path has changed
+        ClipPathChanged, ///< the shapes clip path has changed
+        ControlPointChanged, ///< a control point has changed
+        BeginResize, ///< used during resizing
+        EndResize ///< used during resizing
     };
 
     /// The behavior text should do when intersecting this shape.

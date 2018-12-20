@@ -129,7 +129,6 @@ void EnhancedPathShape::setSize(const QSizeF &newSize)
 {
     // handle offset
     KoParameterShape::setSize(newSize);
-
     // calculate scaling factors from viewbox size to shape size
     qreal xScale = m_viewBound.width() == 0 ? 1 : newSize.width()/m_viewBound.width();
     qreal yScale = m_viewBound.height() == 0 ? 1 : newSize.height()/m_viewBound.height();
@@ -464,55 +463,117 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
 
         saveText(context);
 
-        context.xmlWriter().startElement("draw:enhanced-geometry");
-        context.xmlWriter().addAttribute("svg:viewBox", QString("%1 %2 %3 %4").arg(m_viewBox.x()).arg(m_viewBox.y()).arg(m_viewBox.width()).arg(m_viewBox.height()));
-
-        if (m_pathStretchPointX != -1) {
-            context.xmlWriter().addAttribute("draw:path-stretchpoint-x", m_pathStretchPointX);
-        }
-        if (m_pathStretchPointY != -1) {
-            context.xmlWriter().addAttribute("draw:path-stretchpoint-y", m_pathStretchPointY);
-        }
-
-        if (m_mirrorHorizontally) {
-            context.xmlWriter().addAttribute("draw:mirror-horizontal", "true");
-        }
-        if (m_mirrorVertically) {
-            context.xmlWriter().addAttribute("draw:mirror-vertical", "true");
-        }
-
-        QString modifiers;
-        foreach (qreal modifier, m_modifiers)
-            modifiers += QString::number(modifier) + ' ';
-        context.xmlWriter().addAttribute("draw:modifiers", modifiers.trimmed());
-
-        if (m_textArea.size() >= 4) {
-            context.xmlWriter().addAttribute("draw:text-areas", m_textArea.join(" "));
-        }
-
-        QString path;
-        foreach (EnhancedPathCommand * c, m_commands)
-            path += c->toString() + ' ';
-        context.xmlWriter().addAttribute("draw:enhanced-path", path.trimmed());
-
-        FormulaStore::const_iterator i = m_formulae.constBegin();
-        for (; i != m_formulae.constEnd(); ++i) {
-            context.xmlWriter().startElement("draw:equation");
-            context.xmlWriter().addAttribute("draw:name", i.key());
-            context.xmlWriter().addAttribute("draw:formula", i.value()->toString());
-            context.xmlWriter().endElement(); // draw:equation
-        }
-
-        foreach (EnhancedPathHandle * handle, m_enhancedHandles)
-            handle->saveOdf(context);
-
-        context.xmlWriter().endElement(); // draw:enhanced-geometry
-        saveOdfCommonChildElements(context);
-        context.xmlWriter().endElement(); // draw:custom-shape
-
+        saveEnhancedGeometry(context);
     } else {
         KoPathShape::saveOdf(context);
     }
+}
+
+void EnhancedPathShape::saveEnhancedGeometry(KoShapeSavingContext &context) const
+{
+    context.xmlWriter().startElement("draw:enhanced-geometry");
+    context.xmlWriter().addAttribute("svg:viewBox", QString("%1 %2 %3 %4").arg(m_viewBox.x()).arg(m_viewBox.y()).arg(m_viewBox.width()).arg(m_viewBox.height()));
+
+    if (m_pathStretchPointX != -1) {
+        context.xmlWriter().addAttribute("draw:path-stretchpoint-x", m_pathStretchPointX);
+    }
+    if (m_pathStretchPointY != -1) {
+        context.xmlWriter().addAttribute("draw:path-stretchpoint-y", m_pathStretchPointY);
+    }
+
+    if (m_mirrorHorizontally) {
+        context.xmlWriter().addAttribute("draw:mirror-horizontal", "true");
+    }
+    if (m_mirrorVertically) {
+        context.xmlWriter().addAttribute("draw:mirror-vertical", "true");
+    }
+
+    QString modifiers;
+    foreach (qreal modifier, m_modifiers)
+        modifiers += QString::number(modifier) + ' ';
+    context.xmlWriter().addAttribute("draw:modifiers", modifiers.trimmed());
+
+    if (m_textArea.size() >= 4) {
+        context.xmlWriter().addAttribute("draw:text-areas", m_textArea.join(" "));
+    }
+
+    QString path;
+    foreach (EnhancedPathCommand * c, m_commands)
+        path += c->toString() + ' ';
+    context.xmlWriter().addAttribute("draw:enhanced-path", path.trimmed());
+
+    FormulaStore::const_iterator i = m_formulae.constBegin();
+    for (; i != m_formulae.constEnd(); ++i) {
+        context.xmlWriter().startElement("draw:equation");
+        context.xmlWriter().addAttribute("draw:name", i.key());
+        context.xmlWriter().addAttribute("draw:formula", i.value()->toString());
+        context.xmlWriter().endElement(); // draw:equation
+    }
+
+    foreach (EnhancedPathHandle * handle, m_enhancedHandles)
+        handle->saveOdf(context);
+
+    context.xmlWriter().endElement(); // draw:enhanced-geometry
+    saveOdfCommonChildElements(context);
+    context.xmlWriter().endElement(); // draw:custom-shape
+}
+
+bool EnhancedPathShape::loadEnhancedGeometry(const KoXmlElement & enhancedGeometry, KoShapeLoadingContext &context)
+{
+    setPathStretchPointX(enhancedGeometry.attributeNS(KoXmlNS::draw, "path-stretchpoint-x","-1").toDouble());
+    setPathStretchPointY(enhancedGeometry.attributeNS(KoXmlNS::draw, "path-stretchpoint-y","-1").toDouble());
+    
+    // load the modifiers
+    QString modifiers = enhancedGeometry.attributeNS(KoXmlNS::draw, "modifiers", "");
+    if (! modifiers.isEmpty()) {
+        addModifiers(modifiers);
+    }
+    
+    m_textArea = enhancedGeometry.attributeNS(KoXmlNS::draw, "text-areas", "").split(' ');
+    if (m_textArea.size() >= 4) {
+        setResizeBehavior(TextFollowsPreferredTextRect);
+    }
+    
+    KoXmlElement grandChild;
+    forEachElement(grandChild, enhancedGeometry) {
+        if (grandChild.namespaceURI() != KoXmlNS::draw)
+            continue;
+        if (grandChild.localName() == "equation") {
+            QString name = grandChild.attributeNS(KoXmlNS::draw, "name");
+            QString formula = grandChild.attributeNS(KoXmlNS::draw, "formula");
+            addFormula(name, formula);
+        } else if (grandChild.localName() == "handle") {
+            EnhancedPathHandle * handle = new EnhancedPathHandle(this);
+            if (handle->loadOdf(grandChild, context)) {
+                m_enhancedHandles.append(handle);
+                evaluateHandles();
+            } else {
+                delete handle;
+            }
+        }
+        
+    }
+    
+    setMirrorHorizontally(enhancedGeometry.attributeNS(KoXmlNS::draw, "mirror-horizontal") == "true");
+    setMirrorVertically(enhancedGeometry.attributeNS(KoXmlNS::draw, "mirror-vertical") == "true");
+    
+    // load the enhanced path data
+    QString path = enhancedGeometry.attributeNS(KoXmlNS::draw, "enhanced-path", "");
+    #ifndef NWORKAROUND_ODF_BUGS
+    KoOdfWorkaround::fixEnhancedPath(path, enhancedGeometry, context);
+    #endif
+    // load the viewbox
+    m_viewBox = loadOdfViewbox(enhancedGeometry);
+    
+    if (!path.isEmpty()) {
+        parsePathData(path);
+    }
+    
+    if (m_viewBox.isEmpty()) {
+        // if there is no view box defined make it is big as the path.
+        m_viewBox = m_viewBound.toAlignedRect();
+    }
+    return true;
 }
 
 bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
@@ -521,61 +582,7 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
 
     const KoXmlElement enhancedGeometry(KoXml::namedItemNS(element, KoXmlNS::draw, "enhanced-geometry" ) );
     if (!enhancedGeometry.isNull() ) {
-
-        setPathStretchPointX(enhancedGeometry.attributeNS(KoXmlNS::draw, "path-stretchpoint-x","-1").toDouble());
-        setPathStretchPointY(enhancedGeometry.attributeNS(KoXmlNS::draw, "path-stretchpoint-y","-1").toDouble());
-
-        // load the modifiers
-        QString modifiers = enhancedGeometry.attributeNS(KoXmlNS::draw, "modifiers", "");
-        if (! modifiers.isEmpty()) {
-            addModifiers(modifiers);
-        }
-
-        m_textArea = enhancedGeometry.attributeNS(KoXmlNS::draw, "text-areas", "").split(' ');
-        if (m_textArea.size() >= 4) {
-            setResizeBehavior(TextFollowsPreferredTextRect);
-        }
-
-        KoXmlElement grandChild;
-        forEachElement(grandChild, enhancedGeometry) {
-            if (grandChild.namespaceURI() != KoXmlNS::draw)
-                continue;
-            if (grandChild.localName() == "equation") {
-                QString name = grandChild.attributeNS(KoXmlNS::draw, "name");
-                QString formula = grandChild.attributeNS(KoXmlNS::draw, "formula");
-                addFormula(name, formula);
-            } else if (grandChild.localName() == "handle") {
-                EnhancedPathHandle * handle = new EnhancedPathHandle(this);
-                if (handle->loadOdf(grandChild, context)) {
-                    m_enhancedHandles.append(handle);
-                    evaluateHandles();
-                } else {
-                    delete handle;
-                }
-            }
-
-        }
-
-        setMirrorHorizontally(enhancedGeometry.attributeNS(KoXmlNS::draw, "mirror-horizontal") == "true");
-        setMirrorVertically(enhancedGeometry.attributeNS(KoXmlNS::draw, "mirror-vertical") == "true");
-
-        // load the enhanced path data
-        QString path = enhancedGeometry.attributeNS(KoXmlNS::draw, "enhanced-path", "");
-#ifndef NWORKAROUND_ODF_BUGS
-        KoOdfWorkaround::fixEnhancedPath(path, enhancedGeometry, context);
-#endif
-        // load the viewbox
-        m_viewBox = loadOdfViewbox(enhancedGeometry);
-
-        if (!path.isEmpty()) {
-            parsePathData(path);
-        }
-
-        if (m_viewBox.isEmpty()) {
-            // if there is no view box defined make it is big as the path.
-            m_viewBox = m_viewBound.toAlignedRect();
-        }
-
+        loadEnhancedGeometry(enhancedGeometry, context);
     }
 
     QSizeF size;

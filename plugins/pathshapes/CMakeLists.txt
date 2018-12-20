@@ -32,6 +32,9 @@ set(pathshapes_PART_SRCS
     enhancedpath/EnhancedPathHandle.cpp
     enhancedpath/CalloutShape.cpp
     enhancedpath/CalloutShapeFactory.cpp
+    enhancedpath/CalloutContainerModel.cpp
+    enhancedpath/CalloutToolFactory.cpp
+    enhancedpath/CalloutDebug.cpp
     PathShapesPlugin.cpp
 )
 

@@ -202,3 +202,9 @@ bool KoProperties::operator==(const KoProperties &other) const
     }
     return true;
 }
+
+KoProperties KoProperties::operator=(const KoProperties &other) const
+{
+    d->properties = other.d->properties;
+    return *this;
+}

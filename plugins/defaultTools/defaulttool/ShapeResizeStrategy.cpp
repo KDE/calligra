@@ -32,6 +32,8 @@
 #include <KoSnapGuide.h>
 #include <KoToolBase.h>
 #include <KoSelection.h>
+#include <KoShapeContainer.h>
+#include <KoShapeContainerModel.h>
 
 #include <klocalizedstring.h>
 #include <limits>
@@ -236,7 +238,15 @@ void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zo
     foreach(KoShape *shape, m_selectedShapes)
     {
         shape->update();
-
+        // HACK: Complex shapes like calloutshapes needs more control than setSize() gives
+        // as when resizing top/left it implies a positional change too.
+        // We cannot use the GenericMatrixChange above because it is used a number of times
+        // so it is impossible to know when it is relevant.
+        KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
+        if (container && container->model()) {
+            container->model()->containerChanged(container, KoShape::BeginResize);
+        }
+        
         // this uses resize for the zooming part
         shape->applyAbsoluteTransformation( m_unwindMatrix );
 
@@ -279,7 +289,9 @@ void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zo
         m_transformations[i] = shapeMatrix.inverted() * shape->absoluteTransformation(0);
 
         shape->applyAbsoluteTransformation( m_windMatrix );
-
+        if (container && container->model()) {
+            container->model()->containerChanged(container, KoShape::EndResize);
+        }
         shape->update();
         i++;
     }
@@ -301,7 +313,7 @@ KUndo2Command* ShapeResizeStrategy::createCommand()
         newSizes << m_selectedShapes[i]->size();
         transformations << m_selectedShapes[i]->transformation();
     }
-
+    qInfo()<<Q_FUNC_INFO<<transformations;
     KUndo2Command * cmd = new KUndo2Command(kundo2_i18n("Resize"));
     new KoShapeSizeCommand(m_selectedShapes, m_startSizes, newSizes, cmd );
     new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, transformations, cmd );

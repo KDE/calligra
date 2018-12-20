@@ -87,13 +87,13 @@ protected:
     /// reimplemented
     virtual QList<QPointer<QWidget> >  createOptionWidgets();
 
-private:
+protected:
     struct PathSegment;
 
     void updateOptionsWidget();
     PathSegment* segmentAtPoint(const QPointF &point);
 
-private Q_SLOTS:
+protected Q_SLOTS:
     void pointTypeChanged(QAction *type);
     void insertPoints();
     void removePoints();
@@ -114,15 +114,14 @@ protected:
     KoPathToolSelection m_pointSelection; ///< the point selection
     QCursor m_selectCursor;
 
-private:
-
+protected:
     KoPathToolHandle * m_activeHandle;       ///< the currently active handle
     int m_handleRadius;    ///< the radius of the control point handles
     uint m_grabSensitivity; ///< the grab sensitivity
     QPointF m_lastPoint; ///< needed for interaction strategy
     PathSegment *m_activeSegment;
 
-    // make a frind so that it can test private member/methods
+    // make a frind so that it can test protected member/methods
     friend class TestPathTool;
 
     KoInteractionStrategy *m_currentStrategy; ///< the rubber selection strategy
