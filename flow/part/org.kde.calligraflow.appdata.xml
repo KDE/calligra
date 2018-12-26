@@ -18,6 +18,7 @@
   <name xml:lang="fr">Flow</name>
   <name xml:lang="gl">Fluxo</name>
   <name xml:lang="ia">Flow (Fluxo)</name>
+  <name xml:lang="id">Flow</name>
   <name xml:lang="it">Flow</name>
   <name xml:lang="ja">Flow</name>
   <name xml:lang="nl">Flow</name>
@@ -43,6 +44,7 @@
   <summary xml:lang="fr">Édition de diagrammes</summary>
   <summary xml:lang="gl">Editor de diagramas</summary>
   <summary xml:lang="ia">Modifica de diagramma de fluxo &amp; diagramma</summary>
+  <summary xml:lang="id">Pengeditan Diagram &amp; Flowchart</summary>
   <summary xml:lang="it">Diagrammi di flusso e modifica di diagrammi</summary>
   <summary xml:lang="ja">フローチャートおよびダイアグラム図の作成</summary>
   <summary xml:lang="nl">Bewerking van stroomdiagrammen &amp; grafieken</summary>
@@ -71,6 +73,7 @@
     <p xml:lang="fr">Calligra Flow est une application de diagrammes et d'organigrammes facile à utiliser fortement intégrée avec les autres application Calligra. Elle vous permet de créer des plans de réseaux, des organigrammes, des graphiques, et autres.</p>
     <p xml:lang="gl">Calligra Flow é un aplicativo de diagramas fácil de usar e completamente integrado co resto de aplicativos de Calligra. Permítelle crear diagramas de rede, gráficas de organización, diagramas de fluxo, e moito máis.</p>
     <p xml:lang="ia">Calligra Flow es un application facile de usar pro facer diagrammas e diagrammas de fluxo con un forte integration con altere applicationes de Calligra. Illo permitte te crear diagrammas de rete, graphicos de organisation, diagrammas de fluxo e alteres.</p>
+    <p xml:lang="id">Calligra Flow adalah aplikasi diagram dan flowchart yang mudah digunakan dengan integrasi yang kuat ke aplikasi Calligra lainnya. Ini memungkinkan kamu untuk memciptakan diagram jaringan, bagan organisasi, bagan alir, dan lainnya.</p>
     <p xml:lang="it">Calligra Flow è un'applicazione di facile utilizzo per creare diagrammi di flusso e altro con una stretta integrazione con le altre applicazioni di Calligra. Ti consente di creare diagrammi di rete, organigrammi, diagrammi di flusso e altro.</p>
     <p xml:lang="ja">Calligra Flow は簡単にダイアグラムやフローチャートを作成する事ができるアプリケーションです。作成した図は他の Calligra アプリケーションでも使用する事ができます。</p>
     <p xml:lang="nl">Calligra Flow is een gemakkelijk te gebruiken toepassing voor het maken van diagrammen en flowcharts met nauwe integratie met de andere toepassingen van Calligra. Het stelt u in staat om netwerkdiagrammen, organisatiediagrammen, flowcharts en meer te maken.</p>
@@ -95,6 +98,7 @@
     <p xml:lang="fr">Fonctionnalités :</p>
     <p xml:lang="gl">Funcionalidades:</p>
     <p xml:lang="ia">Characteristicas</p>
+    <p xml:lang="id">Fitur:</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="ja">機能:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
@@ -121,6 +125,7 @@
       <li xml:lang="fr">Créez des plans de réseaux, des organigrammes, des graphiques et autres</li>
       <li xml:lang="gl">Cree diagramas de rede, gráficas de organización, diagramas de fluxo, e moito máis.</li>
       <li xml:lang="ia">Crea diagrammas de rete, graphicos de organisation, diagrammas de fluxo e alteres.</li>
+      <li xml:lang="id">Ciptakan diagram jaringan, bagan organisasi, bagan alir, dan lainnya</li>
       <li xml:lang="it">Crea diagrammi di rete, organigrammi, diagrammi di flusso e altro</li>
       <li xml:lang="ja">ネットワークダイアグラム、組織図、フローチャートなどの作成</li>
       <li xml:lang="nl">Netwerkdiagrammen, organisatiediagrammen, stroomdiagrammen en meer</li>
@@ -144,6 +149,7 @@
       <li xml:lang="fr">Création de pochoirs programmable en utilisant le langage Python</li>
       <li xml:lang="gl">Cree pinceis con Python.</li>
       <li xml:lang="ia">Creation de stencil de script usante Python</li>
+      <li xml:lang="id">Penciptaan stensil yang dapat diskrip menggunakan Python</li>
       <li xml:lang="it">Creazione forme con script utilizzando Python</li>
       <li xml:lang="ja">Python スクリプトでのステンシルの作成</li>
       <li xml:lang="nl">Maken van stencils met scripts met Python</li>
@@ -167,6 +173,7 @@
       <li xml:lang="fr">Prise en charge des pochoirs issus de Dia.</li>
       <li xml:lang="gl">Compatíbel con pinceis de Dia.</li>
       <li xml:lang="ia">Supporto pro stencils de Dia.</li>
+      <li xml:lang="id">Dukungan untuk stensilan Dia</li>
       <li xml:lang="it">Supporta le forme di Dia.</li>
       <li xml:lang="ja">Dia ステンシルのサポート</li>
       <li xml:lang="nl">Ondersteuning voor Dia-stencils.</li>
