@@ -137,7 +137,7 @@
       <li xml:lang="es">Características comunes</li>
       <li xml:lang="fi">Yhteiset ominaisuudet</li>
       <li xml:lang="gl">Funcionaliaddes comúns</li>
-      <li xml:lang="id">Fitur Umumnya</li>
+      <li xml:lang="id">Fitur Umum</li>
       <li xml:lang="it">Funzionalità comuni</li>
       <li xml:lang="nl">Gemeenschappelijke functies</li>
       <li xml:lang="pl">Wspólne funkcje</li>
@@ -173,7 +173,7 @@
       <li xml:lang="es">Objetos incrustables</li>
       <li xml:lang="fi">Upotettavat oliot</li>
       <li xml:lang="gl">Obxectos incrustábeis</li>
-      <li xml:lang="id">Objek Yang Dapat Disematkan</li>
+      <li xml:lang="id">Objek Yang Dapat Ditanamkan</li>
       <li xml:lang="it">Oggetti integrabili</li>
       <li xml:lang="nl">In te bedden objecten</li>
       <li xml:lang="pl">Osadzalne obiekty</li>
@@ -192,7 +192,7 @@
     <p xml:lang="es">Existen muchos objetos y formas que puede insertar en sus documentos, como formas geométricas, partituras musicales y gran cantidad de opciones interesantes. Todas estas formas están disponibles en todas las aplicaciones, lo que facilita la implementación de estos objetos.</p>
     <p xml:lang="fi">Tiedostoon voi lisätä monenlaisia olioita kuten geometrisia muotoja, nuotinnoksia ja paljon muuta. Kaikki hahmot ovat kaikkien sovellusten käytössä, mikä helpottaa niiden toteuttamista.</p>
     <p xml:lang="gl">Hai moitos obxectos e formas que pode inserir nos seus documentos, como formas xeométricas, partituras musicais, e moitas outras opcións xeniais. Todas estas formas están dispoñíbeis en todos os aplicativos, o que fai moito máis sinxelo crear estes obxectos.</p>
-    <p xml:lang="id">Ada banyak objek dan bentuk yang dapat kamu masukkan ke dalam dokumenmu, seperti bentuk geometris, skor lembaran musik, dan banyak lagi pilihan yang menakjubkan. Semua bentuk ini tersedia di semua aplikasi, yang membuat penerapan objek-objek ini jauh lebih mudah.</p>
+    <p xml:lang="id">Ada banyak objek dan bentuk yang dapat kamu masukkan ke dalam dokumen Anda, seperti bentuk geometris, skor lembaran musik, dan banyak lagi pilihan yang menakjubkan. Semua bentuk ini tersedia di semua aplikasi, yang membuat penerapan objek-objek ini jauh lebih mudah.</p>
     <p xml:lang="it">Puoi inserire numerosi oggetti e forme nei tuoi documenti, come forme geometriche, notazioni musicali e molte altre fantastiche opzioni. Tutte queste forme sono disponibili in tutte le applicazioni, che rende l'utilizzo di questi oggetti molto semplice.</p>
     <p xml:lang="nl">Er zijn veel objecten en vormen die u kunt invoegen in uw document, zoals geometrische vormen, bladmuziek en nog veel meer verbazingwekkende opties. Al deze vormen zijn beschikbaar in alle toepassingen, die het implementeren van deze objecten veel gemakkelijker maken.</p>
     <p xml:lang="pt">Existem diversos objectos e formas que poderá inserir no seu documento, como as formas geométricas, as formas de partituras musicais, entre muitas outras opções espantosas. Todas estas formas estão disponíveis em todas as aplicações, o que torna a implementação destes objectos muito mais simples.</p>
@@ -230,7 +230,7 @@
     <p xml:lang="es">Calligra usa el formato de Open Document (ODF) como principal formato de archivos, lo que la hace compatible con la mayoría de aplicaciones ofimáticas, como OpenOffice.org, LibreOffice y Microsoft Office. También puede importar los formatos de archivos nativos de Microsoft Office con gran precisión (en muchos casos, la mejor que podrá encontrar).</p>
     <p xml:lang="fi">Calligra käyttää ensisijaisesti Open Document Format (ODF) -tiedostomuotoa, joka on yhteensopiva useimpien muiden toimistosovellusten kuten OpenOffice.orgin, LibreOfficen ja Microsoftin Officen kanssa. Se voi myös tuoda muita kuten Microsoft Officen tiedostomuotoja tarkasti – usein paremmin kuin muut ohjelmat.</p>
     <p xml:lang="gl">Calligra usa o formato de documento aberto (ODF) como formato de ficheiro principal, o que o fai compatíbel coa meirande parte do resto de aplicativos de oficina, como OpenOffice.org, LibreOffice e Microsoft Office. Tamén pode importar os formatos de ficheiro nativos de Microsoft Office con gran exactitude, en moitos casos a mellor que se pode atopar.</p>
-    <p xml:lang="id">Calligra menggunakan Open Document Format (ODF) sebagai format file utamanya yang membuatnya kompatibel dengan sebagian besar aplikasi kantor lainnya termasuk OpenOffice.org, LibreOffice dan Microsoft Office. Itu juga dapat mengimpor format file asli Microsoft Office dengan akurasi tinggi, dalam banyak kasus yang terbaik yang bisa kamu temukan.</p>
+    <p xml:lang="id">Calligra menggunakan Open Document Format (ODF) sebagai format file utamanya yang membuatnya kompatibel dengan sebagian besar aplikasi kantor lainnya termasuk OpenOffice.org, LibreOffice dan Microsoft Office. Itu juga dapat mengimpor format file asli Microsoft Office dengan akurasi tinggi, dalam banyak kasus yang terbaik yang bisa Anda temukan.</p>
     <p xml:lang="it">Calligra utilizza l'Open Document Format (ODF) come suo formato principale dei file che lo rende compatibile con la maggior parte delle altre applicazioni da ufficio tra cui OpenOffice.org, LibreOffice e Microsoft Office. Può inoltre importare i formati di file nativi di Microsoft Office con grande accuratezza, in molti casi il meglio che tu possa trovare.</p>
     <p xml:lang="nl">Calligra gebruikt het Open Document Format (ODF) als zijn hoofd bestandsformaat die het compatibel maakt met de meeste andere kantoortoepassingen inclusief OpenOffice.org, LibreOffice en Microsoft Office. Het kan ook de inheemse bestandsformaten van Microsoft Office met een grote accuraatheid importeren, in vele gevallen het beste wat u kunt vinden.</p>
     <p xml:lang="pt">O Calligra usa o Open Document Format (ODF) como formato de ficheiro principal, o que o torna compatível com a maioria das outras aplicações de escritório, incluindo o  OpenOffice.org, LibreOffice e Microsoft Office. Também consegue importar os formatos de ficheiros nativos do Microsoft Office com grande precisão, sendo em muitos casos o melhor que poderá encontrar.</p>
