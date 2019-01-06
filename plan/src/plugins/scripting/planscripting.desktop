@@ -28,6 +28,7 @@ Name[sv]=Skript-insticksprogram för Plan
 Name[tr]=Plan betik desteği eklentisi
 Name[uk]=Додаток роботи зі скриптами для Plan
 Name[x-test]=xxPlan Scripting Pluginxx
+Name[zh_CN]=Plan 的脚本插件
 X-KDE-ServiceTypes=Plan/ViewPlugin
 Type=Service
 X-KDE-Library=krossmoduleplan
