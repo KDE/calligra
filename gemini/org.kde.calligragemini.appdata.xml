@@ -260,6 +260,7 @@
       <caption xml:lang="id">Presentasi dimuat langsung dari DropBox, dalam mode Edit</caption>
       <caption xml:lang="it">Una presentazione caricata direttamente da DropBox, in modalità Modifica</caption>
       <caption xml:lang="nl">Een directly van DropBox geladen presentatie, in bewerkingsmodus</caption>
+      <caption xml:lang="pl">Prezentacja wczytana bezpośrednio z DropBoksa, w trybie edycji</caption>
       <caption xml:lang="pt">Uma apresentação carregada directamente do DropBox, no modo de Edição</caption>
       <caption xml:lang="pt-BR">Uma apresentação carregada diretamente do DropBox, no modo Edição</caption>
       <caption xml:lang="sv">En presentation inläst direkt från DropBox, i redigeringsläge</caption>
@@ -279,6 +280,7 @@
       <caption xml:lang="id">Dokumen teks dalam UI gaya desktop tradisional (mode Ciptakan)</caption>
       <caption xml:lang="it">Un documento di testo nell'interfaccia in stile desktop tradizionale (modalità Crea)</caption>
       <caption xml:lang="nl">Een tekstdocument in de traditionele bureaubladstijl UI (aanmaakmodus)</caption>
+      <caption xml:lang="pl">Dokument tekstowy w tradycyjnym wyglądzie interfejsu użytkownika (tryb tworzenia)</caption>
       <caption xml:lang="pt">Um documento de texto no estilo gráfico tradicional (modo de Criação)</caption>
       <caption xml:lang="pt-BR">Um documento de texto no estilo gráfico tradicional (modo Criação)</caption>
       <caption xml:lang="sv">Ett textdokument i användargränssnitt med traditionell skrivbordsstil (skapandeläge)</caption>
@@ -298,6 +300,7 @@
       <caption xml:lang="id">Dokumen teks dalam mode Ciptakan dengan panel catatan yang ditampilkan</caption>
       <caption xml:lang="it">Un documento di testo in modalità Crea con il pannello delle note visibile</caption>
       <caption xml:lang="nl">Een tekstdocument in de aanmaakmodus met de paneel met notities getoond</caption>
+      <caption xml:lang="pl">Dokument tekstowy w trybie tworzenia z pokazanym panelem uwag</caption>
       <caption xml:lang="pt">Um documento de texto no modo de Criação com o painel de notas visível</caption>
       <caption xml:lang="pt-BR">Um documento de texto no modo Criação com o painel de notas visível</caption>
       <caption xml:lang="sv">Ett textdokument i skapandeläge med visad anteckningspanel</caption>
