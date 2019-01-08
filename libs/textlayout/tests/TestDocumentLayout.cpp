@@ -101,30 +101,30 @@ void TestDocumentLayout::testHitTest()
     m_layout->layout();
 
     MockRootAreaProvider *p = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
-    QVERIFY(p->m_area);
+    QVERIFY(p->area());
 
     QCOMPARE(lines, 8);
 
     /* Following is device-/font-dependent and therefore can be different on other computers
     // outside text
-    QCOMPARE(p->m_area->hitTest(QPointF(0, 0), Qt::FuzzyHit).position, 0);
-    QCOMPARE(p->m_area->hitTest(QPointF(0, 0), Qt::ExactHit).position, -1);
-    QCOMPARE(p->m_area->hitTest(QPointF(19, 49), Qt::ExactHit).position, 51);
-    QCOMPARE(p->m_area->hitTest(QPointF(71, 0), Qt::ExactHit).position, -1);
-    QCOMPARE(p->m_area->hitTest(QPointF(71, 51), Qt::ExactHit).position, 62);
+    QCOMPARE(p->area()->hitTest(QPointF(0, 0), Qt::FuzzyHit).position, 0);
+    QCOMPARE(p->area()->hitTest(QPointF(0, 0), Qt::ExactHit).position, -1);
+    QCOMPARE(p->area()->hitTest(QPointF(19, 49), Qt::ExactHit).position, 51);
+    QCOMPARE(p->area()->hitTest(QPointF(71, 0), Qt::ExactHit).position, -1);
+    QCOMPARE(p->area()->hitTest(QPointF(71, 51), Qt::ExactHit).position, 62);
 
     // first char
-    QCOMPARE(p->m_area->hitTest(QPointF(20, 51), Qt::ExactHit).position, 52);
-    QCOMPARE(p->m_area->hitTest(QPointF(20, 50), Qt::ExactHit).position, 52);
+    QCOMPARE(p->area()->hitTest(QPointF(20, 51), Qt::ExactHit).position, 52);
+    QCOMPARE(p->area()->hitTest(QPointF(20, 50), Qt::ExactHit).position, 52);
 
     // below line 1
-    //QCOMPARE(p->m_area->hitTest(QPointF(20, 51 + lineHeight), Qt::ExactHit).position, -1);
-    //QVERIFY(p->m_area->hitTest(QPointF(20, 51 + lineHeight), Qt::FuzzyHit).position > 0); // line 2
+    //QCOMPARE(p->area()->hitTest(QPointF(20, 51 + lineHeight), Qt::ExactHit).position, -1);
+    //QVERIFY(p->area()->hitTest(QPointF(20, 51 + lineHeight), Qt::FuzzyHit).position > 0); // line 2
 
     // parag2
-    QCOMPARE(p->m_area->hitTest(QPointF(20, paragOffets[1]), Qt::ExactHit).position, 139);
-    QCOMPARE(p->m_area->hitTest(QPointF(20, paragOffets[1]), Qt::FuzzyHit).position, 139);
-    QVERIFY(p->m_area->hitTest(QPointF(20, paragOffets[1] + 20), Qt::FuzzyHit).position >= 139);
+    QCOMPARE(p->area()->hitTest(QPointF(20, paragOffets[1]), Qt::ExactHit).position, 139);
+    QCOMPARE(p->area()->hitTest(QPointF(20, paragOffets[1]), Qt::FuzzyHit).position, 139);
+    QVERIFY(p->area()->hitTest(QPointF(20, paragOffets[1] + 20), Qt::FuzzyHit).position >= 139);
     */
     Q_UNUSED(lineHeight); // used in the above commented piece of code
     Q_UNUSED(paragOffets); // used in the above commented piece of code
@@ -140,15 +140,15 @@ void TestDocumentLayout::testRootAreaZeroWidth()
     m_layout->layout();
 
     QVERIFY(!provider->m_askedForMoreThenOneArea);
-    QVERIFY(provider->m_area);
-    QVERIFY(!provider->m_area->isDirty());
-    QVERIFY(!provider->m_area->virginPage());
-    QVERIFY(provider->m_area->nextStartOfArea());
-    QVERIFY(!provider->m_area->isStartingAt(provider->m_area->nextStartOfArea()));
-    QCOMPARE(provider->m_area->boundingRect().topLeft(), QPointF(10.,10.));
-    //QCOMPARE(provider->m_area->boundingRect().height(), qreal(14.4));
-    QCOMPARE(provider->m_area->referenceRect().topLeft(), QPointF(10.,10.));
-    //QCOMPARE(provider->m_area->referenceRect().bottomLeft(), QPointF(0.,14.4));
+    QVERIFY(provider->area());
+    QVERIFY(!provider->area()->isDirty());
+    QVERIFY(!provider->area()->virginPage());
+    QVERIFY(provider->area()->nextStartOfArea());
+    QVERIFY(!provider->area()->isStartingAt(provider->area()->nextStartOfArea()));
+    QCOMPARE(provider->area()->boundingRect().topLeft(), QPointF(10.,10.));
+    //QCOMPARE(provider->area()->boundingRect().height(), qreal(14.4));
+    QCOMPARE(provider->area()->referenceRect().topLeft(), QPointF(10.,10.));
+    //QCOMPARE(provider->area()->referenceRect().bottomLeft(), QPointF(0.,14.4));
 }
 
 void TestDocumentLayout::testRootAreaZeroHeight()
@@ -161,13 +161,13 @@ void TestDocumentLayout::testRootAreaZeroHeight()
     m_layout->layout();
 
     QVERIFY(!provider->m_askedForMoreThenOneArea); // we add the text anyways even if it does not match in height
-    QVERIFY(provider->m_area);
-    QVERIFY(!provider->m_area->isDirty());
-    QVERIFY(!provider->m_area->virginPage()); // should not be virigin any longer cause we added text
-    QVERIFY(provider->m_area->nextStartOfArea());
-    QVERIFY(!provider->m_area->isStartingAt(provider->m_area->nextStartOfArea())); // start- and end-iterator should not be equal cause we added text
-    QCOMPARE(provider->m_area->boundingRect(), QRectF(10.,10.,200.,0.));
-    QCOMPARE(provider->m_area->referenceRect(), QRectF(10.,10.,200.,0.));
+    QVERIFY(provider->area());
+    QVERIFY(!provider->area()->isDirty());
+    QVERIFY(!provider->area()->virginPage()); // should not be virigin any longer cause we added text
+    QVERIFY(provider->area()->nextStartOfArea());
+    QVERIFY(!provider->area()->isStartingAt(provider->area()->nextStartOfArea())); // start- and end-iterator should not be equal cause we added text
+    QCOMPARE(provider->area()->boundingRect(), QRectF(10.,10.,200.,0.));
+    QCOMPARE(provider->area()->referenceRect(), QRectF(10.,10.,200.,0.));
 }
 
 void TestDocumentLayout::testRootAreaZeroWidthAndHeight()
@@ -180,15 +180,15 @@ void TestDocumentLayout::testRootAreaZeroWidthAndHeight()
     m_layout->layout();
 
     QVERIFY(!provider->m_askedForMoreThenOneArea);
-    QVERIFY(provider->m_area);
-    QVERIFY(!provider->m_area->isDirty());
-    QVERIFY(!provider->m_area->virginPage());
-    QVERIFY(provider->m_area->nextStartOfArea());
-    QVERIFY(!provider->m_area->isStartingAt(provider->m_area->nextStartOfArea()));
-    QCOMPARE(provider->m_area->boundingRect().topLeft(), QPointF(10.,10.));
-    QCOMPARE(provider->m_area->boundingRect().height(), qreal(0.));
-    //QCOMPARE(provider->m_area->boundingRect().width(), qreal(6.67188));
-    QCOMPARE(provider->m_area->referenceRect(), QRectF(10.,10.,0.,0.));
+    QVERIFY(provider->area());
+    QVERIFY(!provider->area()->isDirty());
+    QVERIFY(!provider->area()->virginPage());
+    QVERIFY(provider->area()->nextStartOfArea());
+    QVERIFY(!provider->area()->isStartingAt(provider->area()->nextStartOfArea()));
+    QCOMPARE(provider->area()->boundingRect().topLeft(), QPointF(10.,10.));
+    QCOMPARE(provider->area()->boundingRect().height(), qreal(0.));
+    //QCOMPARE(provider->area()->boundingRect().width(), qreal(6.67188));
+    QCOMPARE(provider->area()->referenceRect(), QRectF(10.,10.,0.,0.));
 }
 
 QTEST_MAIN(TestDocumentLayout)

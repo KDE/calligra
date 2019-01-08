@@ -55,7 +55,6 @@ private Q_SLOTS:
      * exactly this case.
      */
     void testMergedCells();
-
     /**
      * If no column-width is defined then the available width should be distributed among
      * the available columns. Since the provided rootArea's have a width of 200 and we
@@ -98,9 +97,17 @@ private Q_SLOTS:
      */
     void testRowHeightMinimum();
 
+    void testOneTableNeedsTwoRootAreas();
+    void testTwoTablesNeedsTwoRootAreas();
+    void testMergedRowsSpansAreas();
+    void testMergedRowsSpansAreas2();
+    void testTwoTablesMergedRowsSpansAreas();
+    void testTwoTablesMergedRowsSpansThreeAreas();
+
 private:
     QTextCursor setupTest();
     void setupTest(const QString &mergedText, const QString &topRightText, const QString &midRightText, const QString &bottomLeftText, const QString &bottomMidText, const QString &bottomRightText, KoTableStyle* tableStyle = 0);
+    QTextTable *addTable(QTextCursor cursor, int rows, int columns, KoTableStyle* tableStyle = 0);
 
 private:
     QTextDocument *m_doc;

@@ -23,6 +23,7 @@
 #include "KoTextLayoutRootAreaProvider.h"
 
 #include <QRectF>
+#include <QMap>
 
 class MockRootAreaProvider : public KoTextLayoutRootAreaProvider
 {
@@ -39,7 +40,10 @@ public:
 
     void setSuggestedRect(QRectF rect);
 
-    KoTextLayoutRootArea *m_area;
+    KoTextLayoutRootArea *area(int pos = 0) const;
+
+    int maxPosition;
+    QMap<int, KoTextLayoutRootArea*> m_areas;
     QRectF m_suggestedRect;
     bool m_askedForMoreThenOneArea;
 };

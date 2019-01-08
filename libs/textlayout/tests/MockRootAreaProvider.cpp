@@ -21,23 +21,28 @@
 
 #include "KoTextLayoutRootArea.h"
 
+#include <QDebug>
+
 MockRootAreaProvider::MockRootAreaProvider()
-    : m_area(0),
-      m_suggestedRect(QRectF(100, 100, 200,1000)),
-    m_askedForMoreThenOneArea(false)
+    : maxPosition(0)
+    , m_suggestedRect(QRectF(100, 100, 200, 1000))
+    , m_askedForMoreThenOneArea(false)
 {
 }
 
-KoTextLayoutRootArea *MockRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &, int requestedPosition, bool *isNewRootArea)
+KoTextLayoutRootArea *MockRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraint, int requestedPosition, bool *isNewRootArea)
 {
-    if(m_area == 0) {
-        m_area = new KoTextLayoutRootArea(documentLayout);
-        *isNewRootArea = true;
-        return m_area;
+    if (maxPosition > 0 && requestedPosition > maxPosition) {
+        qInfo()<<"To many area requests:"<<maxPosition<<requestedPosition;
+        return 0; // guard against loop
     }
-    *isNewRootArea = false;
-    m_askedForMoreThenOneArea |= requestedPosition > 0;
-    return requestedPosition == 0 ? m_area : 0;
+    m_askedForMoreThenOneArea |= (m_areas.count() > 1);
+    *isNewRootArea = !m_areas.contains(requestedPosition);
+    if (!m_areas.contains(requestedPosition)) {
+        m_areas.insert(requestedPosition, new KoTextLayoutRootArea(documentLayout));
+        qInfo()<<"New area provided:"<<requestedPosition;
+    }
+    return m_areas.value(requestedPosition);
 }
 
 void MockRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea)
@@ -55,9 +60,8 @@ void MockRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
     Q_UNUSED(afterThis);
 }
 
-QRectF MockRootAreaProvider::suggestRect(KoTextLayoutRootArea *rootArea)
+QRectF MockRootAreaProvider::suggestRect(KoTextLayoutRootArea */*rootArea*/)
 {
-    Q_UNUSED(rootArea);
     return m_suggestedRect;
 }
 
@@ -71,4 +75,9 @@ QList<KoTextLayoutObstruction *> MockRootAreaProvider::relevantObstructions(KoTe
     Q_UNUSED(rootArea);
     QList<KoTextLayoutObstruction*> obstructions;
     return obstructions;
+}
+
+KoTextLayoutRootArea *MockRootAreaProvider::area(int pos) const
+{
+    return m_areas.value(pos);
 }
