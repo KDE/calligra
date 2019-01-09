@@ -33,7 +33,7 @@ public:
     /**
      * @brief Get the next shape in the tree
      *
-     * @param The current shape
+     * @param current The current shape
      *
      * @return The shape after the given one or 0 if there is no next shape
      */
@@ -53,7 +53,7 @@ public:
     /**
      * @brief Get the previous shape in the tree
      *
-     * @param The current shape
+     * @param current The current shape
      *
      * @return The shape before the given one
      */

@@ -84,8 +84,8 @@ protected:
     /**
      * Adds the given list of QImages as imageshapes to the view's document.
      *
-     * @param imageList: a list of QImages that can be inserted
-     * @param insertPosition: the position in screen pixels where the images
+     * @param imageList a list of QImages that can be inserted
+     * @param insertAt the position in screen pixels where the images
      * can be inserted.
      */
     virtual void addImages(const QVector<QImage> &imageList, const QPoint &insertAt);

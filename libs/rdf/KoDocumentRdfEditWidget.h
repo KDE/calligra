@@ -53,7 +53,6 @@ public:
 
     /**
      * The constructor
-     * @param parent a pointer to the parent widget
      * @param docRdf a pointer to the KoDocumentRdf to show/edit
      */
     explicit KoDocumentRdfEditWidget(KoDocumentRdf *docRdf);

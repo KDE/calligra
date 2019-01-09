@@ -464,8 +464,6 @@ protected:
      *
      * @param name The name by which the action be retrieved again from the collection.
      * @param action The action to add.
-     * @param readWrite set this to ReadOnlyAction to keep the action available on
-     *      read-only documents
      */
     void addAction(const QString &name, QAction *action);
 

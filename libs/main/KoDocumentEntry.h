@@ -82,10 +82,10 @@ public:
     KoPart *createKoPart(QString* errorMsg = 0) const;
 
     /**
-     *  This function will query ksycoca to find all available components.
+     *  This function will query ksycoca to find all available components for the requested mimetype.
      *  The result will only contain parts, which are embeddable into a document
      *
-     *  @param _constr is a constraint expression as used by KTrader.
+     *  @param mimetype is the MIME type expression as used by KTrader.
      *                 You can use it to set additional restrictions on the available
      *                 components.
      */

@@ -186,7 +186,7 @@ public:
     /**
      * Connect all the tools for the given canvas to the new shape controller.
      *
-     * @param shapecontroller the new shape controller
+     * @param shapeController the new shape controller
      * @param canvasController the canvas
      */
     void updateShapeControllerBase(KoShapeBasedDocumentBase *shapeController, KoCanvasController *canvasController);

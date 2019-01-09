@@ -60,8 +60,8 @@ public:
 
     /**
      * Create the new factory
-     * @param parent the parent QObject for memory management usage.
      * @param id a string that will be used internally for referencing the variable-type.
+     * @param type the factory type.
      */
     KoInlineObjectFactoryBase(const QString &id, ObjectType type);
     virtual ~KoInlineObjectFactoryBase();

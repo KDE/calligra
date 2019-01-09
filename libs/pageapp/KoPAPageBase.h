@@ -185,7 +185,7 @@ protected:
      *
      * See ODF 9.2 Drawing Shapes
      *
-     * @param paContext the pageapp saving context
+     * @param context the pageapp saving context
      * @return true on success, false otherwise
      */
     void saveOdfShapes( KoShapeSavingContext & context ) const;
@@ -233,7 +233,7 @@ protected:
      * @brief Load page data
      *
      * @param element the page element
-     * @param paContext the pageapp loading context
+     * @param loadingContext the pageapp loading context
      */
     virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );
 
@@ -244,7 +244,7 @@ protected:
      * The default implementation is empty
      *
      * @param element the page element
-     * @param paContext the pageapp loading context
+     * @param loadingContext the pageapp loading context
      */
     virtual void loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext & loadingContext );
 

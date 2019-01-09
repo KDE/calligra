@@ -159,7 +159,7 @@ public:
 
     /**
      * Load from an OASIS document
-     * @param metaDoc the QDomDocument with the metaInformation
+     * @param store the store with the metaInformation
      * @return true if success
      */
     bool loadOasis(KoStore *store);

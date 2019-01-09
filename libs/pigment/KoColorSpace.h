@@ -517,9 +517,11 @@ public:
      * colorspace.
      *
      * @param srcSpace the colorspace of the source pixels that will be composited onto "us"
-     * @param param the information needed for blitting e.g. the source and destination pixel data,
+     * @param params the information needed for blitting e.g. the source and destination pixel data,
      *        the opacity and flow, ...
      * @param op the composition operator to use, e.g. COPY_OVER
+     * @param renderingIntent the rendering intent
+     * @param conversionFlags the conversion flags
      *
      */
     virtual void bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::ParameterInfo& params, const KoCompositeOp* op,

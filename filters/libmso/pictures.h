@@ -73,7 +73,7 @@ QByteArray getRgbUid(const MSO::OfficeArtDggContainer& dgg, quint32 pib, quint32
 /**
  * Save pictures into the ODF store and write the appropriate manifest entry.
  *
- * @param ODF store
+ * @param store ODF store
  * @param manifest writer
  * @param rgfb list of records that specifies the BLIP data.  The rgfb list is
  * either part of the OfficeArtBStoreContainer or OfficeArtBStoreDelay.
@@ -86,7 +86,7 @@ QMap<QByteArray, QString> createPictures(KoStore* store, KoXmlWriter* manifest, 
  * the method convert the data into BMP and then into QImage
  *
  * Converts dib to QImage
- * @param QImage input which will be filled with converted dib pixels
+ * @param bmp QImage input which will be filled with converted dib pixels
  * @param dib dib bytes
  * @param size size of the dib in bytes
  * @return if the conversion was successful

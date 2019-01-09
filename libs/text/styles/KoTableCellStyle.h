@@ -130,7 +130,7 @@ public:
      *
      * \sa boundingRect()
      *
-     * @param the bounding rectangle.
+     * @param boundingRect the bounding rectangle.
      * @return the adjusted rectangle.
      */
     QRectF contentRect(const QRectF &boundingRect) const;

@@ -40,7 +40,8 @@ public:
     /**
      * Constructor
      * @param parent the parent widget
-     * @param templateType the template-type (group) that should be selected on creation.
+     * @param mimeFilter the MIME type filter that should be selected on creation.
+     * @param templatesResourcePath the path for template resources.
      */
     KoOpenPane(QWidget *parent, const QStringList& mimeFilter, const QString& templatesResourcePath = QString());
     virtual ~KoOpenPane();

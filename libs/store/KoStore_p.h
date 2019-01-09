@@ -51,7 +51,7 @@ public:
 
     /**
      * Conversion routine
-     * @param _internalNaming name used internally : "root", "tar:/0", ...
+     * @param internalNaming name used internally : "root", "tar:/0", ...
      * @return the name used in the file, more user-friendly ("maindoc.xml",
      *         "part0/maindoc.xml", ...)
      * Examples:

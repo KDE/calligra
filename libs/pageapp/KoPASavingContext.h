@@ -41,7 +41,7 @@ public:
      * @brief Constructor
      *
      * @param xmlWriter used for writing the data to
-     * @param context the saving context
+     * @param mainStyles the saving styles
      * @param embeddedSaver for saving embedded documents
      * @param page the starting page number
      */

@@ -42,7 +42,7 @@ public:
      * You can create and forget this class in order to gain find features for your application.
      * @param parent the parent widget, used both as an anchor for the find dialog and for
      *   memory management purposes.
-     * @param provider the resource provider for the canvas, used to signal the text shape.
+     * @param canvasResourceManager the resource provider for the canvas, used to signal the text shape.
      * @param ac the action collection that the find actions can be added to.
      */
     KoFind(QWidget *parent, KoCanvasResourceManager *canvasResourceManager, KActionCollection *ac);
