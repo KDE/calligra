@@ -65,7 +65,7 @@ public:
 
     /**
      * Set the current preview animations view mode
-     * @param pointer to the new KPrViewModePreviewShapeAnimations class
+     * @param previewMode pointer to the new KPrViewModePreviewShapeAnimations class
      */
     void setPreviewMode(KPrViewModePreviewShapeAnimations *previewMode);
 

@@ -38,14 +38,14 @@ public:
      * Add page layout style name
      *
      * @param pageLayout the page layout
-     * @param the styleName of the page layout style
+     * @param styleName the style name of the page layout style
      */
     void addPageLayoutStyle( KPrPageLayout * pageLayout, const QString & styleName );
 
     /**
      * Get page layout style
      *
-     * @param the pointer to the used page layout
+     * @param pageLayout the pointer to the used page layout
      * @return the style name for the page layout or an null string if it is not found
      */
     QString pageLayoutStyle( KPrPageLayout * pageLayout );

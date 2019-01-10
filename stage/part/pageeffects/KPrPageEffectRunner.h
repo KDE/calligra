@@ -48,7 +48,6 @@ public:
      * Paint the page effect
      *
      * @param painter painter used for painting the effect.
-     * @param currentTime The time for which the effect should be painted.
      * @return true if the effect is finished, false otherwise
      */
     bool paint( QPainter &painter );

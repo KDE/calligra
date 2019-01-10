@@ -149,7 +149,7 @@ public:
     /**
      * @brief Set animation begin and duration
      *
-     * @param index index of the animation
+     * @param item the animation
      * @param begin time in milliseconds
      * @param duration time in milliseconds
      */
@@ -220,10 +220,11 @@ public:
     QModelIndex moveDown(const QModelIndex &index);
 
     /**
-     * @brief Move animation from oldRow to newRow
+     * @brief Move animation from @p oldRow to @p newRow
      * Redefine trigger event if it's necessary
      *
-     * @param index of the animation
+     * @param oldRow the old index of the animation
+     * @param newRow the new index of the animation
      */
     QModelIndex moveAnimation(int oldRow, int newRow);
 

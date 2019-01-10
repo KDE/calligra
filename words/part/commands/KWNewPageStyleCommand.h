@@ -33,11 +33,11 @@ class WORDS_TEST_EXPORT KWNewPageStyleCommand : public KUndo2Command
 {
 public:
     /**
-     * The constructor for a command to insert a new page.
-     * @param document the document that gets a new page.
-     * @param afterPageNum we will insert a new page after the page indicated with pagenumber afterPageNum
+     * The constructor for a command to change page style.
+     * @param document the document that gets a new styled page.
+     * @param page we will change the style for this page
+     * @param newStyle the new style
      * @param parent the parent for command macros
-     * @param masterPageName the master page name for the new page
      */
     explicit KWNewPageStyleCommand(KWDocument *document, const KWPageStyle &newStyle, KUndo2Command *parent = 0);
 

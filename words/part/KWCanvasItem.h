@@ -48,7 +48,6 @@ public:
      * Creates a new canvas widget that can display pages and frames.
      * @param viewMode the initial KWViewMode this canvas should use
      * @param document as this is one view in the MVC design; the document holds all content
-     * @param parent the parent widget.
      */
     KWCanvasItem(const QString &viewMode, KWDocument *document);
     virtual ~KWCanvasItem();

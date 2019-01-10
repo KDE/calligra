@@ -66,7 +66,6 @@ public:
     /**
      * Generates a preview of 1 frame into a tempoary directory
      * @param parameters Presentation data (only 1 slide should be provided in "slides" filed)
-     * @param previewUrl  URL of output html
      */
     QUrl exportPreview(const Parameter &parameters);
 

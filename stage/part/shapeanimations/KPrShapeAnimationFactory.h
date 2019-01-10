@@ -40,8 +40,6 @@ public:
 
     /**
      * Create a shape animation
-     *
-     * @param properties The properties for creating a page effect
      */
     virtual KPrShapeAnimationOld * createShapeAnimation() const = 0;
 

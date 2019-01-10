@@ -30,10 +30,6 @@ public:
     virtual KoShape *createShape(KoDocumentResourceManager *documenResources);
 
 protected:
-    /**
-     * @param shapeId The id of the shape used for creating a shape of that type
-     * @param xmlElement The xml element used in saveOdf to write out the content of the frame
-     */
     KPrPlaceholderPictureStrategy();
 
     friend class KPrPlaceholderStrategy;

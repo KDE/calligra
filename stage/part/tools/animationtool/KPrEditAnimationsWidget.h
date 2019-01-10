@@ -59,7 +59,7 @@ public:
     /**
      * @brief Set proxy model for animations Time line View
      *
-     * @param model, KPrAniamtionGroupProxyModel to be used as base model for the
+     * @param model KPrAniamtionGroupProxyModel to be used as base model for the
      *        time line view
      */
     void setProxyModel(KPrAnimationGroupProxyModel *model);
@@ -119,7 +119,7 @@ protected Q_SLOTS:
 
     /**
      * @brief Display context menu for the time line view
-     * @param pos, position where the context menu need to be displayed
+     * @param pos position where the context menu need to be displayed
      */
     void showTimeLineCustomContextMenu(const QPoint &pos);
 

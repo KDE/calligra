@@ -103,9 +103,9 @@ public:
     virtual void setGlobalDuration(int timeMS);
 
     /**
-     * @brief asign text block data
+     * @brief assign text block data
      *
-     * @param textBlockData
+     * @param textBlockUserData
      */
     void setTextBlockUserData(QTextBlockUserData *textBlockUserData);
 
@@ -164,7 +164,7 @@ public:
     /**
      * @brief Set a pointer to the parent substep of the animation
      *
-     * @param step pointer to the substep that holds the animation
+     * @param subStep pointer to the substep that holds the animation
      */
     void setSubStep(KPrAnimationSubStep *subStep);
 

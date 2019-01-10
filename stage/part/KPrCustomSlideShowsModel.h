@@ -114,7 +114,7 @@ public:
     /**
      * @brief setter of the current document
      *
-     * @param the document
+     * @param document the document
      */
     void setDocument(KPrDocument *document);
 

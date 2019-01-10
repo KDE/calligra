@@ -57,7 +57,7 @@ public:
     /**
      * @brief Set the list of KoCollectionItem to be stored in the model
      *
-     * @param List of KPrCollectionItem
+     * @param newlist List of KPrCollectionItem
      */
     void setAnimationClassList(const QVector<KPrCollectionItem> &newlist);
 

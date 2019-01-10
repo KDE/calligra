@@ -110,7 +110,7 @@ public:
      * @brief Insert a slide to the right of the given position of all the known custom SlideShows.
      * If the position is higher than the size of the list of the SlideShow, the slide is inserted at the end.
      * 
-     * @param slide slide to be inserted
+     * @param page slide page to be inserted
      * @param position the position at which the slide will be inserted.
      * If it's 0 it will be prepended to the list, if it's the size it will be appended to the list.
      * Negative numbers can be used to count backwards.
@@ -129,7 +129,7 @@ public:
     /**
      * @brief Deletes all the occurrences of a given slide from all the known custom SlideShows
      *
-     * @param slide slide to be removed
+     * @param page slide page to be removed
      */
     void removeSlideFromAll(KoPAPageBase *page);
 
@@ -150,7 +150,7 @@ public:
     /**
      * @brief Load the slide shows
      *
-     * @param element The element containing the presentation:settings
+     * @param presentationSettings The element containing the presentation:settings
      * @param context The loading context
      */
     void loadOdf( const KoXmlElement & presentationSettings, KoPALoadingContext & context );

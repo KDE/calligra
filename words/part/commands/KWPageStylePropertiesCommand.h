@@ -40,11 +40,10 @@ class WORDS_TEST_EXPORT KWPageStylePropertiesCommand : public KUndo2Command
 {
 public:
     /**
-     * The command to alter the properties of a page.
+     * The command to alter the style of a page.
      * @param document the document the page belongs to.
-     * @param page the unchanged page.
-     * @param newLayout the new layout properties.
-     * @param direction the new page layout direction
+     * @param styleBefore the unchanged style.
+     * @param styleAfter the new style.
      * @param parent the parent for macro command functionality
      */
     explicit KWPageStylePropertiesCommand(KWDocument *document, const KWPageStyle &styleBefore, const KWPageStyle &styleAfter, KUndo2Command *parent = 0);

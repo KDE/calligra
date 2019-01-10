@@ -55,8 +55,8 @@ public:
 
     /**
      * loadOdfDeclaration
-     * @param KoXmlElement & body
-     * @param KoPALoadingContext
+     * @param body KoXmlElement & body
+     * @param context KoPALoadingContext
      * @return bool value
      */
     bool loadOdf(const KoXmlElement &body, KoPALoadingContext &context);

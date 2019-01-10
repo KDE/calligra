@@ -96,7 +96,6 @@ public:
      *  @endcode
      * @param viewModeType the type of viewMode
      * @param document
-     * @param viewConverter used to calculate the document->view and vv conversions
      */
     static KWViewMode *create(const QString& viewModeType, KWDocument *document);
 
@@ -106,14 +105,14 @@ public:
      * For a cliprect that overlaps various pages that same amount of arguments will
      * be created in the return value in the form of a ViewMap struct.
      * For example;
-     *   Imagine a viewmode that shows two pages side by side. And a cliprect parameter
-     * covering the * top half of both pages.  To repaint this correctly in the Canvas
+     *   Imagine a viewmode that shows two pages side by side. And a @p clipRect parameter
+     * covering the top half of both pages.  To repaint this correctly in the Canvas
      * this needs to be split into two clip rects since the document internally does not
      * have those two pages next to each other, but below one another.
      * Note that just like everything in the viewMode; the input and output will be in the
      * same zoom-level. This means that adding all the output rects should have the same repaint
      * area as the input rect.
-     * @param viewRect the clipping-rect as it was on the Canvas.
+     * @param clipRect the clipping-rect as it was on the Canvas.
      * @param viewConverter An optional viewconverter to override the viewconverter set on the viewmode.
      * @return a list of clipping-rects as it maps to the internal document.
      */

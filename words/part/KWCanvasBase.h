@@ -96,7 +96,7 @@ public: // KoCanvasBase interface methods.
      *
      * @param enabled: if true, we cache the contents of the document for this canvas,
      *  for the current zoomlevel
-     * @param cachesize: the maximum size for the cache. The cache will throw away
+     * @param cacheSize: the maximum size for the cache. The cache will throw away
      *  pages once this size is reached. Depending on Qt's implementation of QCache, the
      *  unit is pages.
      * @param maxZoom above this zoomlevel we'll paint a scaled version of the cache, instead

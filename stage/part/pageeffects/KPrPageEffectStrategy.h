@@ -34,7 +34,8 @@ public:
      * @param subType The sub type used for the UI
      * @param smilType The smil:type used for loading/saving
      * @param smilSubType The smil:subType used for loading/saving
-     * @param revers The flag for the smil:direction used for loading/saving true means reverse false means forward
+     * @param reverse The flag for the smil:direction used for loading/saving true means reverse false means forward
+     * @param graphicsView The flag for graphics view
      */
     KPrPageEffectStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse, bool graphicsView = false);
     virtual ~KPrPageEffectStrategy();

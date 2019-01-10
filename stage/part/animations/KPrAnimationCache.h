@@ -64,7 +64,7 @@ public:
      * The purpose of this method is to help the AnimationFramework populate the
      * cache initially. Everyone else should just ask with @ref value for the value they want.
      *
-     * @param textBlockData The QTextBlockUserData which the value is set on
+     * @param textBlockUserData The QTextBlockUserData which the value is set on
      * @param id The id of the value we are asking if is set
      * @return true if the value is already set.
      */
@@ -90,7 +90,7 @@ public:
      * The purpose of this method is to help the AnimationFramework set or update
      * values initially. Everyone else should just ask with @ref value for the value they want.
      *
-     * @param textBlockData The QTextBlockUserData which the value is set on
+     * @param textBlockUserData The QTextBlockUserData which the value is set on
      * @param id The id of the value
      * @param value The value is should have
      */
@@ -112,7 +112,7 @@ public:
      *
      * Everyone can use this method to query a value.
      *
-     * @param textBlockData The QTextBlockUserData which the value is set on
+     * @param textBlockUserData The QTextBlockUserData which the value is set on
      * @param id The id of the value we are asking if is set
      * @return the value as a QVariant
      */

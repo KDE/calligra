@@ -42,7 +42,7 @@ class KWFrameDialog : public KPageDialog
 public:
     /**
      * Constructor.
-     * @param selectedFrames all frames that this dialog will show for user modification
+     * @param selectedShapes all shapes that this dialog will show for user modification
      * @param document the parent document where the frames belong to
      * @param canvas the canvas for centering the dialog and providing undobuffer
      */

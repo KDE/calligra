@@ -120,7 +120,7 @@ Q_SIGNALS:
      */
     void shapeAdded(KoShape *shape);
     /**
-     * emitted whenever a shape that was formerly registerd is removed
+     * emitted whenever a shape that was formerly registered is removed
      * @param shape the shape that has just been removed
      */
     void shapeRemoved(KoShape *shape);
@@ -138,7 +138,7 @@ protected:
     }
 
     /**
-     * @param frame the frame that has just been added
+     * @param shape the shape that has just been added
      */
     virtual void cleanupShape(KoShape *shape) {
         Q_UNUSED(shape);
