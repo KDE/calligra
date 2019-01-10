@@ -50,7 +50,7 @@ public:
      * Tells if a value has ever been set
      *
      * The purpose of this method is to help the AnimationFramework populate the
-     * cache initially. Everyone else should just ask with @value for the value they want.
+     * cache initially. Everyone else should just ask with @ref value for the value they want.
      *
      * @param shape The shape on which the value might be set
      * @param id The id of the value we are asking if is set
@@ -62,7 +62,7 @@ public:
      * Tells if a value has ever been set
      *
      * The purpose of this method is to help the AnimationFramework populate the
-     * cache initially. Everyone else should just ask with @value for the value they want.
+     * cache initially. Everyone else should just ask with @ref value for the value they want.
      *
      * @param textBlockData The QTextBlockUserData which the value is set on
      * @param id The id of the value we are asking if is set
@@ -76,7 +76,7 @@ public:
      * Sets a value, either initially or updating it
      *
      * The purpose of this method is to help the AnimationFramework set or update
-     * values initially. Everyone else should just ask with @value for the value they want.
+     * values initially. Everyone else should just ask with @ref value for the value they want.
      *
      * @param shape The shape which the value is set on
      * @param id The id of the value
@@ -88,7 +88,7 @@ public:
      * Sets a value, either initially or updating it
      *
      * The purpose of this method is to help the AnimationFramework set or update
-     * values initially. Everyone else should just ask with @value for the value they want.
+     * values initially. Everyone else should just ask with @ref value for the value they want.
      *
      * @param textBlockData The QTextBlockUserData which the value is set on
      * @param id The id of the value

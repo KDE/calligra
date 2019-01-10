@@ -11,15 +11,15 @@
 <p>Painting is started by Canvas::paintEvent().  This method
 calls paintCell() on all visible cells, i.e. it always repaints the
 entire sheet.  This is inefficient, but is OK for most circumstances.
-There is a bug in bugzilla (#xxxx) which points this out.</p>
+There is a <a href="https://bugs.kde.org/show_bug.cgi?id=298497">bug</a> in bugzilla which points this out.</p>
 
 <p>Each cell can paint itself.  If a number of cells are explicitly
 merged by the user, then the merged cell is painted by a single call
 to paintCell() on its upper left corner cell, the "master" cell of the
 merged group.  If paintCell() is called on any of the other cells in
 the group, a recursive call to paintCell is done on the master cell.
-<br>
-<b>NOTE</b>: This is not yet implemented.</p>
+</p>
+<p><b>NOTE</b>: This is not yet implemented.</p>
 
 <p>If the content of a cell is wider than the cell itself, then we say
 that this cell <i>overflows</i> and expands into its neighbors (see
@@ -82,7 +82,6 @@ variables in a cell:</p>
   <td><pre>d->strOutText</pre></td>
   <td>The text that is shown in the cell.</td>
 </tr>
-</pre>
 </table>
 
 <p>After the layout process, paintCell() uses these

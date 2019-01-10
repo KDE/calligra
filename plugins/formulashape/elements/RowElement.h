@@ -80,7 +80,7 @@ public:
 
     /**
      * Remove a child element
-     * @param element The BasicElement to remove
+     * @param child The BasicElement to remove
      */
     bool removeChild( BasicElement* child);
 
@@ -89,7 +89,7 @@ public:
 
     /**
      * Implement the cursor behaviour for the element
-     * @param direction Indicates whether the cursor moves up, down, right or left
+     * @param cursor the cursor
      * @return A this pointer if the element accepts if not the element to asked instead
      */
     bool acceptCursor( const FormulaCursor& cursor );

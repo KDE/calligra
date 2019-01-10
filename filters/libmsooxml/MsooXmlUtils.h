@@ -358,19 +358,19 @@ KOMSOOXML_EXPORT void modifyColor(QColor& color, qreal tint, qreal shade, qreal 
             ST_PlaceholderType (Placeholder ID) value, p. 2987.
     @param ecmaType ECMA-376 shape type
     The conversion is useful e.g. for presentation:class attribute of draw:frame
-    out of ECMA-376's ph@type attribute.
+    out of ECMA-376's ph\@type attribute.
     By default (and for empty argument), "outline" is returned.
 */
 //! @todo or "object"?  ST_PlaceholderType docs day the default is "obj".
 //! CASE #P500
 KOMSOOXML_EXPORT QString ST_PlaceholderType_to_ODF(const QString& ecmaType);
 
-//! Sets up @a textStyleProperties with underline style matching MSOOXML name @a msooxmlName.
+//! Sets up @p textStyleProperties with underline style matching MSOOXML name @p msooxmlName.
 //! Based on 17.18.99 ST_Underline (Underline Patterns), WML ECMA-376 p.1681
 //! and on 20.1.10.82 ST_TextUnderlineType (Text Underline Types), DrawingML ECMA-376 p.3450 (merged)
 KOMSOOXML_EXPORT void setupUnderLineStyle(const QString& msooxmlName, KoCharacterStyle* textStyleProperties);
 
-//! @return the symbolic name of column @a column (counted from 0)
+//! @return the symbolic name of column @p column (counted from 0)
 //! This is similar to the notation of spreadsheet's column, e.g. 0th column is "A", 1st is "B", 26th is "AA".
 KOMSOOXML_EXPORT QString columnName(uint column);
 

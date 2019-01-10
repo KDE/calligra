@@ -165,9 +165,12 @@ public:
                                         const BasicElement* element ) const;
 
     /**
-     * Obtain the scaling level for @p parent's child element at index @p index
+     * Obtain the scaling level for @p parent 's child element at index @p index
      * Usually the first child is treated different.  For example in 
-     * <msup><mi>b</mi><mn>2</mn></msup>  to represent  b^2,  the 2 is smaller
+     * @verbatim
+     * <msup><mi>b</mi><mn>2</mn></msup>
+     * @endverbatim
+     * to represent  b^2,  the 2 is smaller
      * than the b.
      * @param element The parent of the element for which scaling is determined
      * @param index The index of the child element for which scaling is determined

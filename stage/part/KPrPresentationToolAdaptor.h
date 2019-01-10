@@ -51,15 +51,15 @@ public Q_SLOTS: // METHODS
 
     /**
      * Draw on presentation.
-     * @color can take the color values as a string. Eg: red, green, black.
+     * @p color can take the color values as a string. Eg: red, green, black.
      */
     void startDrawPresentation(int pointx, int pointy, int penSize, const QString &color);
 
     /**
      * Start drawing on presentation tool.
-     * The parameters pointx and pointy specify a point in the path.
+     * The parameters @p pointx and @p pointy specify a point in the path.
      */
-    Q_NOREPLY void drawOnPresentation(int pointx,int pointy);
+    Q_NOREPLY void drawOnPresentation(int pointx, int pointy);
 
     /**
      * Stop drawing path. The current path is stopped.

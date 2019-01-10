@@ -94,7 +94,7 @@ public:
     Conditions(const Conditions& other);
 
     /**
-     * Destructor..
+     * Destructor.
      */
     ~Conditions();
 

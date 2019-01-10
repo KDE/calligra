@@ -57,7 +57,7 @@ protected:
     void pushCurrentDrawStyle(KoGenStyle *newStyle);
     void popCurrentDrawStyle();
 
-    //! Used for creating style in w:pPr (style:style/@style:name attr)
+    //! Used for creating style in w:pPr (style:style/\@style:name attr)
     KoGenStyle m_currentParagraphStyle;
 
     void setupParagraphStyle();
@@ -78,13 +78,13 @@ protected:
     bool isDefaultTocStyle(const QString& name) const;
 
     //! Adds reference to a file in the ODF document to manifest.xml
-    //! The media-type attribute is based on the extension of @a path.
+    //! The media-type attribute is based on the extension of @p path.
     void addManifestEntryForFile(const QString& path);
 
     //! Adds manifest entry for "Pictures/"
     void addManifestEntryForPicturesDir();
 
-    //! value of recent pPr@lvl attribute; set by read_pPr()
+    //! value of recent pPr_lvl attribute; set by read_pPr()
     uint m_pPr_lvl;
 
     bool m_paragraphStyleNameWritten; //!< set by setupParagraphStyle()

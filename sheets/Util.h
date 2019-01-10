@@ -133,7 +133,7 @@ namespace Odf
 /**
  * \ingroup OpenDocument
  * Converts an OpenDocument representation of a formula to a localized formula.
- * @param expr The expression to convert from OpenDocument format.
+ * @param expression The expression to convert from OpenDocument format.
  * @param locale The locale to which the expression should be converted.
  * \note Use Odf::loadRegion() for plain cell references.
  */

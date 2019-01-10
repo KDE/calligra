@@ -66,20 +66,20 @@ public:
  
     /**
      * Insert a new child at the cursor position
-     * @param cursor The cursor holding the position where to insert
+     * @param position The cursor position where to insert
      * @param child A BasicElement to insert
      */
     bool insertChild( int position, BasicElement* child );
     
     /**
      * Remove a child element
-     * @param element The BasicElement to remove
+     * @param child The BasicElement to remove
      */ 
     bool removeChild( BasicElement* child );
 
     /**
      * Implement the cursor behaviour for the element
-     * @param direction Indicates whether the cursor moves up, down, right or left
+     * @param cursor The cursor
      * @return A this pointer if the element accepts if not the element to asked instead
      */
     bool acceptCursor( const FormulaCursor& cursor );

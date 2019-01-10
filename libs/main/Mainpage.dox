@@ -26,7 +26,7 @@ name. Will this be used later to run the program?
 A: No (by the time the KAboutData's constructor is called, the program
 is already running). The program name is in fact the "instance name",
 which is used to locate the application's own data
-(/share/apps/<application name>/...) and many other things.
+(/share/apps/\<application name\>/...) and many other things.
 
 
 

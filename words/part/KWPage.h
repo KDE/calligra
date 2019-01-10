@@ -177,8 +177,8 @@ public:
      *
      * @param size: the size in pixels of the thumbnail
      * @param shapeManager the shape manager containing the page's shapes
-     * @param asPrint set to @true if the rendering should be done like for print,
-     *                or @false if with the current view settings
+     * @param asPrint set to @c true if the rendering should be done like for print,
+     *                or @c false if with the current view settings
      * @returns the thumbnail
      */
     QImage thumbnail(const QSize &size, KoShapeManager *shapeManager, bool asPrint = false) const;

@@ -89,7 +89,7 @@ public:
 
     /**
      * Implement the cursor behaviour for the element
-     * @param direction Indicates whether the cursor moves up, down, right or left
+     * @param cursor The cursor
      * @return A this pointer if the element accepts if not the element to asked instead
      */
     bool acceptCursor( const FormulaCursor& cursor );

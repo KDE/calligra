@@ -108,18 +108,18 @@ thus requires the use of a syntax stack.</p>
 <p>The parser algorithm is given as follows:</p>
 
 <div style="margin-left: 4em">
-Repeat the following steps:<br>
-Step 1: Get next token<br>
-Step 2: If it is an identifier<br>
-- push it to syntax stack<br>
-- generated "Ref"<br>
-Step 3: If it is a Boolean, integer, float or string value<br>
-- push it to syntax stack<br>
-- generated "Load"<br>
-Step 4: If it is an operator<br>
-- check for reduce rules<br>
-<br>
-- when no more rules applies, push token to the syntax stack<br>
+Repeat the following steps:<br/>
+Step 1: Get next token<br/>
+Step 2: If it is an identifier<br/>
+- push it to syntax stack<br/>
+- generated "Ref"<br/>
+Step 3: If it is a Boolean, integer, float or string value<br/>
+- push it to syntax stack<br/>
+- generated "Load"<br/>
+Step 4: If it is an operator<br/>
+- check for reduce rules<br/>
+<br/>
+- when no more rules applies, push token to the syntax stack<br/>
 </div>
 
 <p>The reduce rules are:</p>

@@ -146,8 +146,7 @@ typedef rtlDigestError Digest_get_t(void * ctx, sal_uInt8 * Buffer, sal_uInt32 B
 #define RTL_DIGEST_LENGTH_SHA1 20
 
 /** Create a SHA1 Digest.handle.
-    @descr The SHA1 digest algorithm is specified in
-
+    @details The SHA1 digest algorithm is specified in
     FIPS PUB 180-1 (Supersedes FIPS PUB 180)
       Secure Hash Standard
 
@@ -175,7 +174,7 @@ rtlDigestError rtl_digest_getSHA1(rtlDigest Digest, sal_uInt8 * pBuffer, uint nB
 
 
 /** Evaluate a SHA1 digest value from given data.
-    @descr This function performs an optimized call sequence on a
+    @details This function performs an optimized call sequence on a
  single data buffer, avoiding digest creation and destruction.
 
  @see rtl_digest_updateSHA1()

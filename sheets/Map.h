@@ -289,7 +289,7 @@ public:
     /**
      * \ingroup OpenDocument
      * \ingroup NativeFormat
-     * \set whether the document is currently loading
+     * \param l whether the document is currently loading
      */
     void setLoading(bool l);
 

@@ -84,14 +84,14 @@ public:
      *
      * It the animation for this shape/step already exists it is replaced by the given one
      *
-     * @parama animation the animation to insert
+     * @param animation the animation to insert
      */
     void add(KPrShapeAnimation *animation);
 
     /**
      * Remove  animation to the animations
      *
-     * @parama animation the animation to remove
+     * @param animation the animation to remove
      */
     void remove(KPrShapeAnimation *animation);
 
