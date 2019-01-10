@@ -39,29 +39,29 @@ class KPluginFactory;
  * will be deleted, so do all you need in the constructor.  Things like
  * adding a factory to a registry make sense there.
  * Example header file;
-@code
-#include <QObject>
-
-class MyPlugin : public QObject {
-    Q_OBJECT
-public:
-    MyPlugin(QObject *parent, const QVariantList & );
-    ~MyPlugin() {}
-};
-@endcode
+ * @code
+ * #include <QObject>
+ * 
+ * class MyPlugin : public QObject {
+ *    Q_OBJECT
+ * public:
+ *    MyPlugin(QObject *parent, const QVariantList & );
+ *    ~MyPlugin() {}
+ * };
+ * @endcode
  * Example cpp file;
-@code
-#include "MyPlugin.h"
-#include <kpluginfactory.h>
-
-K_PLUGIN_FACTORY_WITH_JSON(MyPluginFactory, "myplugin.json", registerPlugin<MyPlugin>();)
-
-MyPlugin::MyPlugin( QObject *parent, const QVariantList& ) : QObject(parent) {
-    // do stuff like creating a factory and adding it to the
-    // registry instance.
-}
-#include <MyPlugin.moc>
-@endcode
+ * @code
+ * #include "MyPlugin.h"
+ * #include <kpluginfactory.h>
+ * 
+ * K_PLUGIN_FACTORY_WITH_JSON(MyPluginFactory, "myplugin.json", registerPlugin<MyPlugin>();)
+ * 
+ * MyPlugin::MyPlugin( QObject *parent, const QVariantList& ) : QObject(parent) {
+ *    // do stuff like creating a factory and adding it to the
+ *    // registry instance.
+ * }
+ * #include <MyPlugin.moc>
+ * @endcode
  */
 namespace KoPluginLoader
 {
