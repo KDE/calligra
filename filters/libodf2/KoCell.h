@@ -32,8 +32,8 @@ class KoGenStyles;
 #include <QList>
 
 /**
- * A \class KoCell represents a cell inside a table.
- *
+ * \class KoCell
+ * @brief represents a cell inside a table.
  **/
 class KOODF2_EXPORT KoCell
 {
@@ -64,7 +64,7 @@ public:
     KoCellValue* value() const;
 
     /**
-     * A \class KoCellChild represents all the items that can be
+     * A class KoCellChild represents all the items that can be
      * contained inside a KoCell.
      * \see ODF1.2 table:table-cell §9.1.4
      *

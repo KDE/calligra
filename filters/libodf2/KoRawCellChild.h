@@ -26,7 +26,8 @@
 
 
 /**
- * A \class KoRawCellChild is a Cell child that can take any given QBuffer 
+ * \class KoRawCellChild
+ * \brief This class is a Cell child that can take any given QBuffer 
  * and will insert its contents blindly.
  * 
  * Its purpose is to allow the user to insert custom elements or elements for

@@ -27,6 +27,10 @@ namespace Calligra
 namespace Sheets
 {
 
+/**
+ * @class CalendarTool
+ * @brief Class for inserting a calendar into a spreadsheet.
+ */
 class CalendarTool : public CellTool
 {
     Q_OBJECT

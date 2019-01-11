@@ -26,7 +26,8 @@
 
 
 /**
- * A \class KoCellStyle represents a style of a cell to be applied to one or more cells.
+ * \class KoCellStyle
+ * \brief represents a style of a cell to be applied to one or more cells.
  *
  * As all the styles it can be shared
  */

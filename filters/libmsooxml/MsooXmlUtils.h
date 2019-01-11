@@ -362,7 +362,7 @@ KOMSOOXML_EXPORT void modifyColor(QColor& color, qreal tint, qreal shade, qreal 
     By default (and for empty argument), "outline" is returned.
 */
 //! @todo or "object"?  ST_PlaceholderType docs day the default is "obj".
-//! CASE #P500
+//! CASE \#P500
 KOMSOOXML_EXPORT QString ST_PlaceholderType_to_ODF(const QString& ecmaType);
 
 //! Sets up @p textStyleProperties with underline style matching MSOOXML name @p msooxmlName.

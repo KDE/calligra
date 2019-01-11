@@ -168,7 +168,7 @@ public:
      * WARNING: this could be 0, if no docker have been assigned yet. In that case create one
       * and assign it.
      * Note This should only be called by KoView
-     * @ref setDockerManager to assign it.
+     * setDockerManager to assign it.
      */
     KoDockerManager * dockerManager() const;
 
@@ -311,7 +311,7 @@ public Q_SLOTS:
      * File --> Import
      *
      * This will call slotFileOpen().  To differentiate this from an ordinary
-     * call to slotFileOpen() call @ref isImporting().
+     * call to slotFileOpen() call isImporting().
      */
     void slotImportFile();
 
@@ -319,7 +319,7 @@ public Q_SLOTS:
      * File --> Export
      *
      * This will call slotFileSaveAs().  To differentiate this from an ordinary
-     * call to slotFileSaveAs() call @ref isExporting().
+     * call to slotFileSaveAs() call isExporting().
      */
     void slotExportFile();
 

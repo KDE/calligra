@@ -37,7 +37,8 @@ namespace Plugins
 {
 
 /**
- * \class Solver Function Optimizer
+ * \class Solver
+ * \brief Function Optimizer
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */
 class Solver : public QObject, public KXMLGUIClient

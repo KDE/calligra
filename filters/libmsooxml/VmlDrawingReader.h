@@ -26,6 +26,7 @@
 
 #include <MsooXmlCommonReader.h>
 #include <MsooXmlImport.h>
+#include <MsooXmlVmlReaderMethods.h>
 
 class KOMSOOXML_EXPORT VmlDrawingReaderContext : public MSOOXML::MsooXmlReaderContext
 {
@@ -49,8 +50,6 @@ public:
 
     QMap<QString, QString> content();
     QMap<QString, QString> frames();
-
-#include <MsooXmlVmlReaderMethods.h>
 
 protected:
     KoFilter::ConversionStatus read_xml();

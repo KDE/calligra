@@ -73,6 +73,8 @@ public:
      * Construct a new Writer.
      *
      * @param xmlWriter The xml writer that writes content.xml
+     * @param kostyles The styles for the writer.
+     * @param stylexml Defines whether the style is an XML style.
      */
     Writer(KoXmlWriter& xmlWriter, KoGenStyles& kostyles,
            bool stylexml = false);

@@ -23,7 +23,8 @@
 #include "koodf2_export.h"
 
 /**
- * A \class KoColumnStyle represents a style to be applied to one or more columns.
+ * \class KoColumnStyle
+ * \brief represents a style to be applied to one or more columns.
  * 
  * As all the styles it can be shared
  */

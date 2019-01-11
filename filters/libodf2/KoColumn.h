@@ -28,7 +28,8 @@ class KoXmlWriter;
 class KoGenStyles;
 
 /**
- * A \class KoColumn represents a column inside a table.
+ * \class KoColumn
+ * \brief represents a column inside a table.
  * its properties aren't shared unlike the KoStyle's it contains.
  */
 

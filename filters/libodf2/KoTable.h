@@ -34,15 +34,16 @@ class KoGenStyles;
 #include <QPair>
 
 /**
-* \class KoTable represents a table in an ODF element.
+* \class KoTable
+* \brief This represents a table in an ODF element.
 * Note that, at least for now, the class is meant to be used
-* only to write tables and as such lacks much of the functionallity
+* only to write tables and as such lacks much of the functionality
 * needed to read written tables.
 * 
 * All the pointers returned by this class are guaranteed to be not-null.
 * Do note, however, that there's no way to clear a cell, row or column.
 * 
-* The \class KoTable owns all the pointer objects returned by
+* The KoTable owns all the pointer objects returned by
 * its methods.
 **/
 

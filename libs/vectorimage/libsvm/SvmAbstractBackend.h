@@ -82,13 +82,20 @@ public:
        (unfilled polyline).
 
        \param context the graphics context to be used when drawing the polyline
-       \param polygon the sequence of points that describe the line
+       \param polyline the sequence of points that describe the line
 
        \note the line is not meant to be closed nor filled, i.e. do
        not connect the last point to the first point.
     */
     virtual void polyLine(SvmGraphicsContext &context, const QPolygon &polyline) = 0;
 
+    /**
+       This action type specifies how to output a multi-segment line
+       (unfilled polygon).
+
+       \param context the graphics context to be used when drawing the polygon
+       \param polygon the sequence of points that describe the polygon
+    */
     virtual void polygon(SvmGraphicsContext &context, const QPolygon &polygon) = 0;
 
     virtual void polyPolygon(SvmGraphicsContext &context, const QList<QPolygon> &polyPolygon) = 0;

@@ -25,7 +25,8 @@
 #include <QColor>
 
 /**
- * A \class KoRowStyle represents a style of a row to be applied to one or more rows.
+ * \class KoRowStyle
+ * \brief This class represents a style of a row to be applied to one or more rows.
  * 
  * As all the styles it can be shared
  */

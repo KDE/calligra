@@ -45,10 +45,12 @@ class QTextCursor;
  * The anchored-shape can be repositioned on the canvas if the text is relayouted (for example after
  * editing the text. This is dependent on how the text layout is implemented.
  *
- * Steps to use a KoAnchorTextRange are; <ol>
+ * Steps to use a KoAnchorTextRange are
+ * <ol>
  * <li> Create KoShapeAnchor *anchor = new KoShapeAnchor(shape);
  * <li> Use anchor->loadOdf() to load additional attributes like the "text:anchor-type"
  * <li> if type is char or paragraph create KoAnchorTextRange *anchorRange = new KoAnchorTextRange(anchor);
+ * </ol>
  */
 class KOTEXT_EXPORT KoAnchorTextRange : public KoTextRange, public KoShapeAnchor::TextLocation
 {

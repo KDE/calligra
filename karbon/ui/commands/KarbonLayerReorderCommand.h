@@ -46,6 +46,7 @@ public:
      * @param document the document containing the layer
      * @param layer the layer which is subject to the command
      * @param commandType the type of the command to redo
+     * @param parent the parent command used for stacking
      */
     KarbonLayerReorderCommand(KarbonDocument* document, KoShapeLayer* layer, ReorderType commandType, KUndo2Command* parent = 0);
 
@@ -54,6 +55,7 @@ public:
      * @param document the document containing the layer
      * @param layers the list of layers which are subject to the command
      * @param commandType the type of the command to redo
+     * @param parent the parent command used for stacking
      */
     KarbonLayerReorderCommand(KarbonDocument* document, QList<KoShapeLayer*> layers, ReorderType commandType, KUndo2Command* parent = 0);
 

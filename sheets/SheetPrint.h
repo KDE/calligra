@@ -56,6 +56,7 @@ public:
 
     /**
      * Sets the print \p settings.
+     * \param settings the print settings.
      * \param force Forces a relayout of the pages, if \c true.
      */
     void setSettings(const PrintSettings &settings, bool force = false);

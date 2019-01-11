@@ -22,7 +22,7 @@
 #include <QAbstractItemDelegate>
 
 /**
- * This delegate draw categories using information from a \ref KCategorizedSortFilterProxyModel .
+ * This delegate draw categories using information from a KCategorizedSortFilterProxyModel .
  */
 class CategorizedItemDelegate : public QAbstractItemDelegate
 {

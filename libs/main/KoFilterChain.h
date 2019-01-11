@@ -44,7 +44,7 @@ namespace CalligraFilter
 }
 
 /**
- * @brief This class represents a chain of plain @ref KoFilter instances.
+ * @brief This class represents a chain of plain KoFilter instances.
  *
  * Instances of this class are shared, so please just hold
  * KoFilterChain::Ptr pointers to it.
@@ -101,7 +101,7 @@ public:
      * This part of the API is for the filters in our chain.
      * If you call it multiple times with the same stream name
      * the stream will be closed and re-opened.
-     * Note: @em Don't delete that @ref KoStoreDevice we return.
+     * Note: @em Don't delete that KoStoreDevice we return.
      * @param name The name of the stream inside the storage
      * @param mode Whether we want to read or write from/to the stream
      * @return The storage device to access the stream. May be 0!
@@ -110,14 +110,14 @@ public:
 
     /**
      * This method allows your filter to work directly on the
-     * @ref KoDocument of the application.
+     * KoDocument of the application.
      * This part of the API is for the filters in our chain.
      * @return The document containing the data. May return 0 on error.
      */
     KoDocument* inputDocument();
     /**
      * This method allows your filter to work directly on the
-     * @ref KoDocument of the application.
+     * KoDocument of the application.
      * This part of the API is for the filters in our chain.
      * @return The document you have to write to. May return 0 on error.
      */

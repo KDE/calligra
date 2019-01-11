@@ -59,6 +59,7 @@ public:
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
+     * @param am The AttributeManager providing information about attributes values
      */
     void paint( QPainter& painter, AttributeManager* am );
 

@@ -172,7 +172,7 @@ public:
      * @endverbatim
      * to represent  b^2,  the 2 is smaller
      * than the b.
-     * @param element The parent of the element for which scaling is determined
+     * @param parent The parent of the element for which scaling is determined
      * @param index The index of the child element for which scaling is determined
      * @return The scaling level for the font size
      */

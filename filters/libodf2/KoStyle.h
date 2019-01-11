@@ -29,7 +29,8 @@
 
 
 /**
- * A \class KoStyle is the base for all of the styles used in KoOdf.
+ * \class KoStyle
+ * \brief This class is the base for all of the styles used in KoOdf.
  * Allows to easily share the styles among different components.
  *
  * As all the styles it can be shared

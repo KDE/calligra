@@ -111,6 +111,7 @@ protected:
     /**
      * This is a similar method to preparePage(), but is guaranteed to be called in the Ui thread.
      * @param pageNumber the number of the page to prepare.
+     * @param painter the painter.
      * @see isStopped()
      */
     virtual void printPage(int pageNumber, QPainter &painter);

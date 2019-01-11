@@ -35,7 +35,6 @@ public:
     /**
      * The constructor for a command to change page style.
      * @param document the document that gets a new styled page.
-     * @param page we will change the style for this page
      * @param newStyle the new style
      * @param parent the parent for command macros
      */

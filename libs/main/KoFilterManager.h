@@ -36,11 +36,11 @@ class KoProgressUpdater;
 /**
  *  @brief The class managing all the filters.
  *
- *  This class manages all filters for a %Calligra application. Normally
+ *  This class manages all filters for a Calligra application. Normally
  *  you will not have to use it, since KoMainWindow takes care of loading
  *  and saving documents.
  *
- *  @ref KoFilter
+ *  KoFilter
  *
  *  @author Kalle Dalheimer <kalle@kde.org>
  *  @author Torben Weis <weis@kde.org>

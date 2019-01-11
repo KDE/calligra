@@ -50,7 +50,7 @@ namespace KoResourcePaths
      * @param type Specifies a short descriptive string to access
      * files of this type.
      * @param basetype Specifies an already known type, or 0 if none
-     * @param relativename Specifies a directory relative to the basetype
+     * @param relativeName Specifies a directory relative to the basetype
      * @param priority if true, the directory is added before any other,
      * otherwise after
      */
@@ -68,7 +68,7 @@ namespace KoResourcePaths
      *
      * @param type Specifies a short descriptive string to access files
      * of this type.
-     * @param absdir Points to directory where to look for this specific
+     * @param dir Points to directory where to look for this specific
      * type. Non-existent directories may be saved but pruned.
      * @param priority if true, the directory is added before any other,
      * otherwise after
@@ -93,7 +93,7 @@ namespace KoResourcePaths
      * @endcode
      *
      * @param type The type of the wanted resource
-     * @param filename A relative filename of the resource.
+     * @param fileName A relative filename of the resource.
      *
      * @return A full path to the filename specified in the second
      *         argument, or QString() if not found.

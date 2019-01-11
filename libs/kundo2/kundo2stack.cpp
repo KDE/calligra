@@ -741,7 +741,7 @@ bool KUndo2QStack::push(KUndo2Command *cmd)
      *Every time a command is pushed -- it checks whether the command pushed was pushed after T1 seconds of the last merged command
      *Then the merging begins with each group depending on the time in between each command (T2).
      *
-     *@TODO : Currently it is not able to merge two merged commands together.
+     *TODO : Currently it is not able to merge two merged commands together.
     */
     if (!macro && m_command_list.size() > 1 && cmd->timedId() != -1 && m_useCumulativeUndoRedo) {
         KUndo2Command* lastcmd = m_command_list.last();
@@ -1129,12 +1129,10 @@ QAction *KUndo2QStack::createRedoAction(QObject *parent) const
     beginMacro() must have a matching call to endMacro().
 
     While a macro is composed, the stack is disabled. This means that:
-    \list
-    \i indexChanged() and cleanChanged() are not emitted,
-    \i canUndo() and canRedo() return false,
-    \i calling undo() or redo() has no effect,
-    \i the undo/redo actions are disabled.
-    \endlist
+    \li indexChanged() and cleanChanged() are not emitted,
+    \li canUndo() and canRedo() return false,
+    \li calling undo() or redo() has no effect,
+    \li the undo/redo actions are disabled.
 
     The stack becomes enabled and appropriate signals are emitted when endMacro()
     is called for the outermost macro.

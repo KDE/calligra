@@ -45,24 +45,24 @@ integer, floating-point or string value.</p>
 <p><i>Ref</i> means gets a value from a reference. Member variable 'index' will
 refers to a string value in the constant pools, i.e. the name of the reference.
 Typically the reference is either a cell (e.g. A1), range of cells (A1:B10)
-or possibly function name. Example: expression A2+B2 will be compiled as:<br>
-Constants:<br>
-#0: "A2"<br>
-#1: "B2"<br>
-Codes:<br>
-Ref #0<br>
-Ref #1<br>
+or possibly function name. Example: expression A2+B2 will be compiled as:<br/>
+Constants:<br/>
+#0: "A2"<br/>
+#1: "B2"<br/>
+Codes:<br/>
+Ref #0<br/>
+Ref #1<br/>
 Add
 </p>
 
 <p><i>Function</i>.
-Example: expression "sin(x)" will be compiled as:<br>
-Constants:<br>
-#0: "sin"<br>
-#1: "x"<br>
-Codes:<br>
-Ref #0<br>
-Ref #1<br>
+Example: expression "sin(x)" will be compiled as:<br/>
+Constants:<br/>
+#0: "sin"<br/>
+#1: "x"<br/>
+Codes:<br/>
+Ref #0<br/>
+Ref #1<br/>
 Function 1
 </p>
 
@@ -118,7 +118,6 @@ Step 3: If it is a Boolean, integer, float or string value<br/>
 - generated "Load"<br/>
 Step 4: If it is an operator<br/>
 - check for reduce rules<br/>
-<br/>
 - when no more rules applies, push token to the syntax stack<br/>
 </div>
 
@@ -219,4 +218,3 @@ When the parser finds the percent operator, it checks whether there's a non-oper
 token right before the percent. If yes, then the following code is generated:
 <tt>load 0.01</tt> followed by <tt>multiply</tt>.</p>
 
-*/

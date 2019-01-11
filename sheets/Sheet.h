@@ -412,7 +412,6 @@ public:
     const ValueStorage* valueStorage() const;
 
     /**
-     * \ingroup Coordinates
      * \ingroup Storage
      * Determines the used area, i.e. the area spanning from A1 to the maximum
      * occupied column and row.

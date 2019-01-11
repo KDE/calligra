@@ -75,7 +75,7 @@ inline QString cmString(qreal cm)
     to ODF-compliant "0.000cm" unit.
     "0" and "" is converted to "0cm".
     @return empty string on error. */
-//! CASE #P505
+//! CASE \#P505
 KOMSOOXML_EXPORT QString EMU_to_ODF(const QString& emuValue);
 
 //! Converts TWIP Unit of Measurement to cm.

@@ -280,14 +280,12 @@ public:
     int increaseLoadedRowsCounter(int i = 1);
 
     /**
-     * \ingroup OpenDocument
      * \ingroup NativeFormat
      * \return true if the document is currently loading.
      */
     bool isLoading() const;
 
     /**
-     * \ingroup OpenDocument
      * \ingroup NativeFormat
      * \param l whether the document is currently loading
      */
@@ -306,7 +304,6 @@ public:
     void setSyntaxVersion(int version);
 
     /**
-     * \ingroup OpenDocument
      * \ingroup NativeFormat
      * Creates the loading info, if it does not exist yet.
      * \return the loading info
@@ -314,7 +311,6 @@ public:
     LoadingInfo* loadingInfo() const;
 
     /**
-     * \ingroup OpenDocument
      * \ingroup NativeFormat
      * Deletes the loading info. Called after loading is complete.
      */

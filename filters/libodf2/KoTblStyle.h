@@ -25,7 +25,8 @@
 #include <QColor>
 
 /**
- * A \class KoTblStyle represents a style for a Table in
+ * \class KoTblStyle
+ * \brief This class represents a style for a Table in
  * a ODF document.
  *
  * As all the styles it can be shared.

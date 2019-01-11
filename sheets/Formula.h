@@ -63,7 +63,7 @@ public:
         Cell,        ///< $A$1, F4, Sheet2!B5, 'Sales Forecast'!Sum
         Range,       ///< C1:C100
         Identifier,  ///< function name or named area
-        Error        ///< error, like #REF!, #VALUE!, ...
+        Error        ///< error, like \#REF!, \#VALUE!, ...
     };
 
     /**

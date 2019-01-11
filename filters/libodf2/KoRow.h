@@ -29,7 +29,8 @@ class KoGenStyles;
 class KoXmlWriter;
 
 /**
- * A \class KoRow represents a row inside a table.
+ * \class KoRow
+ * \brief This class represents a row inside a table.
  * its properties aren't shared unlike the KoStyle's it contains.
  */
 

@@ -53,7 +53,7 @@ class KOWIDGETS_EXPORT KoResourceServerBase {
 public:
     /**
     * Constructs a KoResourceServerBase
-    * @param resource type, has to be the same as used by KoResourcePaths
+    * @param type type, has to be the same as used by KoResourcePaths
     * @param extensions the file extensions separate by ':', e.g. "*.kgr:*.svg:*.ggr"
     */
     KoResourceServerBase(const QString& type, const QString& extensions)

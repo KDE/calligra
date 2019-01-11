@@ -39,6 +39,7 @@ public:
      * be available to the passed actionCollection for usage by XMLGui.
      * @param controller the canvasController
      * @param actionCollection the action collection where the KoZoomAction is added to
+     * @param parent the parent QObject
      */
     KarbonZoomController(KoCanvasController *controller, KActionCollection *actionCollection, QObject *parent = 0);
 

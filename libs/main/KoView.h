@@ -40,7 +40,7 @@ class QDropEvent;
 class QPrintDialog;
 
 /**
- * This class is used to display a @ref KoDocument.
+ * This class is used to display a KoDocument.
  *
  * Multiple views can be attached to one document at a time.
  */
@@ -54,7 +54,7 @@ public:
      * since the Calligra components come with their own view classes which inherit
      * KoView.
      *
-     * The standard way to retrieve a KoView is to call @ref KoPart::createView.
+     * The standard way to retrieve a KoView is to call KoPart::createView.
      *
      * @param document is the document which should be displayed in this view. This pointer
      *                 must not be zero.
