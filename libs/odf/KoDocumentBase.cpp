@@ -23,10 +23,18 @@
 
 #include "KoDocumentBase.h"
 
+#include "KoOdfLoadingContext.h"
+#include "OdfDebug.h"
+
 #include <QtGlobal>
 
 class Q_DECL_HIDDEN KoDocumentBase::Private {
 public:
+    Private()
+    : storeInternal(false)
+    {}
+
+    bool storeInternal; // Store this doc internally even if url is external
 };
 
 KoDocumentBase::KoDocumentBase()
@@ -38,4 +46,15 @@ KoDocumentBase::KoDocumentBase()
 KoDocumentBase::~KoDocumentBase()
 {
     delete d;
+}
+
+void KoDocumentBase::setStoreInternal(bool i)
+{
+    d->storeInternal = i;
+    //debugMain<<"="<<d->storeInternal<<" doc:"<<url().url();
+}
+
+bool KoDocumentBase::storeInternal() const
+{
+    return d->storeInternal;
 }

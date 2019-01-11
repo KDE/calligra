@@ -515,16 +515,6 @@ public:
      */
     void resetURL();
 
-    /**
-     * Set when you want an external embedded document to be stored internally
-     */
-    void setStoreInternal(bool i);
-
-    /**
-     * @return true when external embedded documents are stored internally
-     */
-    bool storeInternal() const;
-
     bool hasExternURL() const;
 
     /**

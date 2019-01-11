@@ -162,7 +162,6 @@ public:
         backupFile(true),
         backupPath(QString()),
         doNotSaveExtDoc(false),
-        storeInternal(false),
         isLoading(false),
         undoStack(0),
         modified(false),
@@ -223,7 +222,6 @@ public:
     bool backupFile;
     QString backupPath;
     bool doNotSaveExtDoc; // makes it possible to save only internally stored child documents
-    bool storeInternal; // Store this doc internally even if url is external
     bool isLoading; // True while loading (openUrl is async)
 
     QList<KoVersionInfo> versionInfo;
@@ -2258,18 +2256,6 @@ void KoDocument::setBackupPath(const QString & _path)
 QString KoDocument::backupPath()const
 {
     return d->backupPath;
-}
-
-
-bool KoDocument::storeInternal() const
-{
-    return d->storeInternal;
-}
-
-void KoDocument::setStoreInternal(bool i)
-{
-    d->storeInternal = i;
-    //debugMain<<"="<<d->storeInternal<<" doc:"<<url().url();
 }
 
 bool KoDocument::hasExternURL() const

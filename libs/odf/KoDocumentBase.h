@@ -27,6 +27,8 @@ class KoStore;
 class KoOdfReadStore;
 class KoOdfWriteStore;
 class KoEmbeddedDocumentSaver;
+class KoXmlElement;
+class KoOdfLoadingContext;
 
 class QUrl;
 class QByteArray;
@@ -62,6 +64,16 @@ public:
      * delete this document
      */
     virtual ~KoDocumentBase();
+
+    /**
+     * Set when you want an external embedded document to be stored internally
+     */
+    void setStoreInternal(bool i);
+
+    /**
+     * @return true when external embedded documents are stored internally
+     */
+    bool storeInternal() const;
 
     /**
      * Return true if url() is a real filename, false if url() is
@@ -165,6 +177,9 @@ public:
      * to set the url to QUrl()
      */
     virtual void resetURL() = 0;
+
+    /// Re-implement to load odf document from @p store
+    virtual bool loadOasisFromStore(KoStore *store) = 0;
 
 private:
     class Private;
