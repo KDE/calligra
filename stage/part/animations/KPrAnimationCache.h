@@ -64,6 +64,7 @@ public:
      * The purpose of this method is to help the AnimationFramework populate the
      * cache initially. Everyone else should just ask with @ref value for the value they want.
      *
+     * @param step The step
      * @param textBlockUserData The QTextBlockUserData which the value is set on
      * @param id The id of the value we are asking if is set
      * @return true if the value is already set.
@@ -78,6 +79,7 @@ public:
      * The purpose of this method is to help the AnimationFramework set or update
      * values initially. Everyone else should just ask with @ref value for the value they want.
      *
+     * @param step The step
      * @param shape The shape which the value is set on
      * @param id The id of the value
      * @param value The value is should have
@@ -90,6 +92,7 @@ public:
      * The purpose of this method is to help the AnimationFramework set or update
      * values initially. Everyone else should just ask with @ref value for the value they want.
      *
+     * @param step The step
      * @param textBlockUserData The QTextBlockUserData which the value is set on
      * @param id The id of the value
      * @param value The value is should have
@@ -103,6 +106,7 @@ public:
      *
      * @param shape The shape on which the value might be set
      * @param id The id of the value we are asking if is set
+     * @param defaultValue The default value
      * @return the value as a QVariant
      */
     QVariant value(KoShape *shape, const QString &id, const QVariant &defaultValue) const;
@@ -114,6 +118,7 @@ public:
      *
      * @param textBlockUserData The QTextBlockUserData which the value is set on
      * @param id The id of the value we are asking if is set
+     * @param defaultValue The default value
      * @return the value as a QVariant
      */
     QVariant value(QTextBlockUserData *textBlockUserData, const QString &id, const QVariant &defaultValue) const;

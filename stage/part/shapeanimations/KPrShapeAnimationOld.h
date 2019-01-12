@@ -64,6 +64,8 @@ public:
      * animation.
      *
      * @param canvas The canvas on which the animation will take place
+     * @param shapeManager The shape manager
+     * @param pageRect The page rectangle
      * @return animationData the caller has to delete the animationData when
      *                       it is no longer used.
      */

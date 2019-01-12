@@ -94,8 +94,8 @@ public:
     /**
      * Setter of the zoom
      *
-     * @param zoom percent
-     * @param zoom mode
+     * @param zoomMode mode
+     * @param zoom zoom percent
      */
     void setZoom(KoZoomMode::Mode zoomMode, int zoom);
 

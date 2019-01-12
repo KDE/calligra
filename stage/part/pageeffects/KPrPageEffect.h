@@ -81,6 +81,7 @@ public:
      *
      * @param duration The duration in milliseconds
      * @param id The id of the page effect
+     * @param strategy The page effect strategy
      */
     KPrPageEffect( int duration, const QString & id, KPrPageEffectStrategy * strategy );
     virtual ~KPrPageEffect();

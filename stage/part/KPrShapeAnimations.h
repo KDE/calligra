@@ -248,14 +248,16 @@ public:
     /**
      * @brief Set begin time for the animation on index
      *
-     * @param index of the animation
+     * @param index index of the animation
+     * @param begin the begin time
      */
     void setBeginTime(const QModelIndex &index, const int begin);
 
     /**
      * @brief Set duration for the animation on index
      *
-     * @param index of the animation
+     * @param index index of the animation
+     * @param duration duration of the animation
      */
     void setDuration(const QModelIndex &index, const int duration);
 
