@@ -51,6 +51,7 @@ public:
     /**
     * Creates a new CellEditor.
     * \param cellTool the cell tool
+    * \param wordList the word list
     * \param parent the parent widget
     */
     explicit CellEditor(CellToolBase *cellTool, QHash<int, QString> &wordList, QWidget *parent = 0);

@@ -77,6 +77,7 @@ void addConfigItem(T& config, const QString & configName, short value)
 
 /**
  * Overloaded version of addTextSpan which takes an additional tabCache map.
+ * @param content the content of the paragraph group
  * @param text the text to write
  * @param tabCache optional map allowing to find a tab for a given character index
  */
@@ -90,6 +91,7 @@ void KOODF_EXPORT addTextSpan(group_paragraph_content& content,
  * It handles tabulations, linebreaks, and multiple spaces by using the
  * appropriate OASIS tags.
  *
+ * @param e the content of the paragraph group
  * @param text the text to write
  */
 void addTextSpan(group_paragraph_content& e, const QString& text)

@@ -186,6 +186,7 @@ public:
      * @param shape the shape to paint
      * @param painter the painter to paint to.
      * @param converter to convert between document and view coordinates.
+     * @param paintContext the painting context.
      */
     void paintShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
 

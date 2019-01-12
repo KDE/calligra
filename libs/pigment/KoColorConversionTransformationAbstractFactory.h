@@ -35,6 +35,8 @@ public:
      *
      * @param srcColorSpace source color space
      * @param dstColorSpace destination color space
+     * @param renderingIntent the rendering intent
+     * @param conversionFlags the conversion flags
      */
     virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
                                                                        const KoColorSpace* dstColorSpace,

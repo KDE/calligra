@@ -43,6 +43,7 @@ public:
 
     /**
      * Constructor.
+     * @param actionCollection the action collection for this widget
      * @param parent the parent this widget will belong to
      */
     explicit KoCanvasControllerWidget(KActionCollection * actionCollection, QWidget *parent = 0);
@@ -110,6 +111,7 @@ public:
     /**
      * Zoom document keeping point \p widgetPoint unchanged
      * \param widgetPoint sticky point in widget pixels
+     * \param zoomCoeff the zoom coefficient
      */
     virtual void zoomRelativeToPoint(const QPoint &widgetPoint, qreal zoomCoeff);
 

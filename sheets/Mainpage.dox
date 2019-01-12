@@ -15,7 +15,7 @@
  * \section plugins Plugins
  * \li \ref KSpreadScripting Sheets Scripting Plugin that offers flexible access
  *      to the Kross scripting framework.
- * \li \ref CalendarTool Plugin for inserting a calendar into a spreadsheet.
+ * \li CalendarTool Plugin for inserting a calendar into a spreadsheet.
  */
 
 /* NOTE Stefan:

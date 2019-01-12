@@ -36,6 +36,7 @@ public:
     /**
      * Creates a new StaffElement.
      *
+     * @param staff the staff which should be shown
      * @param startTime the starttime of the element
      */
     StaffElement(Staff* staff, int startTime);

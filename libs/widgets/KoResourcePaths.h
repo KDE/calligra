@@ -195,6 +195,7 @@ namespace KoResourcePaths
      *
      * @param type   The type of the wanted resource, see KStandardDirs
      * @param filename   A relative filename of the resource
+     * @param createDir Defines whether to create directory should it does not exist
      *
      * @return A full path to the filename specified in the second
      *         argument, or QString() if not found

@@ -50,6 +50,7 @@ public:
     /**
      * Adapt the rect the shape occupies
      *
+     * @param shape the shape
      * @param rect rect which will be updated to give the rect the shape occupies.
      */
     virtual void adapt(KoShape *shape, QRectF &rect);

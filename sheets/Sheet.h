@@ -755,6 +755,7 @@ Q_SIGNALS:
      * \ingroup Embedding
      * Emitted, if a \p shape was added.
      * \param sheet this sheet (for the View to determine, if it's the active one)
+     * \param shape the shape
      */
     void shapeAdded(Sheet *sheet, KoShape *shape);
 
@@ -762,6 +763,7 @@ Q_SIGNALS:
      * \ingroup Embedding
      * Emitted, if a \p shape was removed.
      * \param sheet this sheet (for the View to determine, if it's the active one)
+     * \param shape the shape
      */
     void shapeRemoved(Sheet *sheet, KoShape *shape);
 

@@ -37,6 +37,7 @@ public:
     /**
      * Creates a new note instance, displayed on the given staff.
      *
+     * @param chord the chord
      * @param staff the staff the note should be on
      * @param pitch the pitch of the new note
      * @param accidentals the accidentals of the new note

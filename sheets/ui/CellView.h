@@ -89,6 +89,7 @@ public:
     /**
      * Paints the cell's background.
      * \param painter the used painter
+     * \param clipRegion the clip region
      * \param coordinate the top left coordinate (scroll offset dependent)
      */
     void paintCellBackground(QPainter& painter, const QRegion &clipRegion, const QPointF& coordinate) const;
@@ -97,8 +98,10 @@ public:
      * Paints the cell.
      * \param paintRegion the portion of the canvas that is actually in view
      * \param painter the used painter
+     * \param clipRegion the clip region
      * \param coordinate the top left coordinate (scroll offset dependent)
      * \param cell the Cell
+     * \param sheetView the sheet view
      */
     virtual void paintCellContents(const QRectF& paintRegion, QPainter& painter, const QRegion &clipRegion,
                            const QPointF& coordinate,
@@ -108,6 +111,7 @@ public:
      * Paints the cell custom borders, the page borders, diagonal lines.
      * \param paintRegion the portion of the canvas that is actually in view
      * \param painter the used painter
+     * \param clipRegion the clip region
      * \param coordinate the top left coordinate (scroll offset dependent)
      * \param cellRange the cell range, that is painted
      * \param cell the Cell
@@ -121,6 +125,7 @@ public:
     /**
      * Paints the default cell borders.
      * \param painter the used painter
+     * \param clipRegion the clip region
      * \param paintRegion the portion of the canvas that is actually in view
      * \param coordinate the painting coordinate
      * \param paintBorder the borders, that should be painted (should be removed???)

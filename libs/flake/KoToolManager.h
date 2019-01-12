@@ -204,6 +204,7 @@ public:
      * Returns the tool for the given tool id.
      * @param canvas the canvas that is a child of a previously registered controller
      *    who's tool you want.
+     * @param id the given tool identifier.
      * @see addController()
      */
     KoToolBase *toolById(KoCanvasBase *canvas, const QString &id) const;

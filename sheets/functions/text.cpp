@@ -813,6 +813,7 @@ void lclAppendDigit(QString& rText, qint32 nDigit)
 }
 
 /** Appends a value raised to a power of 10: nDigit*10^nPow10.
+    @param rText   The result text.
     @param nDigit  A digit in the range from 1 to 9.
     @param nPow10  A value in the range from 2 to 5.
  */

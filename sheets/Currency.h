@@ -56,8 +56,8 @@ public:
      * Looks up the index.
      * If the code is found more than once: saved without country info.
      * If the code is not found, \p code is handled as custom unit.
-     * \p code e.g. EUR, USD,..
-     * \param format in Gnumeric the code is: [$EUR]
+     * \param code the code, e.g. EUR, USD,..
+     * \param format the format, e.g. the code in Gnumeric format is [$EUR]
      */
     explicit Currency(QString const & code, Format format = Native);
 

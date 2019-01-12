@@ -121,6 +121,7 @@ public:
     bool loadContourOdf(const KoXmlElement & element, KoShapeLoadingContext &context, const QSizeF &scaleFactor);
 
     /** basically the equivalent saveOdf but adapted to the contour cases
+     * @param context saving context
      * @param originalSize the original size of the unscaled image.
      */
     void saveContourOdf(KoShapeSavingContext &context, const QSizeF &originalSize) const;

@@ -34,8 +34,11 @@ public:
     /**
      * Create a new key signature instance that should be placed on a specific staff.
      *
+     * @param staff the staff on which the clef should be shown
+     * @param startTime the start time
      * @param accidentals the number of accidentals in this key signature, positive values for sharps, negative values
      * for flats.
+     * @param cancel the cancel
      */
     KeySignature(Staff* staff, int startTime, int accidentals, int cancel = 0);
 
@@ -76,7 +79,7 @@ public Q_SLOTS:
     void setCancel(int cancel);
 Q_SIGNALS:
     /**
-     * This signal is emitten when the number of accidentals change.
+     * This signal is emitted when the number of accidentals change.
      */
     void accidentalsChanged(int accidentals);
 private:

@@ -54,6 +54,7 @@ public:
     /**
      * This get called when a match was found
      *
+     * @param cursor The cursor
      * @param findDirection The find direction helper that can be used for highlighting
      */
     virtual bool foundMatch(QTextCursor & cursor, FindDirection * findDirection) = 0;

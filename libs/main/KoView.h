@@ -56,6 +56,7 @@ public:
      *
      * The standard way to retrieve a KoView is to call KoPart::createView.
      *
+     * @param part     is the KoPart for the document.
      * @param document is the document which should be displayed in this view. This pointer
      *                 must not be zero.
      * @param parent   parent widget for this view.

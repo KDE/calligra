@@ -58,6 +58,7 @@ public:
      * Paint an element and all its children
      * @param p The QPainter that should be used to paint the element
      * @param element The element to be painted
+     * @param hints Whether to show the hints
      */
     void paintElement( QPainter& p, BasicElement* element, bool hints=false );
 

@@ -52,6 +52,7 @@ public:
      * @param font will be filled when the user pressed Ok with the selected font.
      * @param character will be filled when the user pressed Ok with the selected character.
      * @param parent the parent widget this dialog will be associated with.
+     * @param name the char name.
      */
     static bool selectChar(QString &font, QChar &character, QWidget* parent = 0, const char* name = 0);
 

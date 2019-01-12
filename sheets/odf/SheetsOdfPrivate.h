@@ -85,7 +85,10 @@ namespace Odf {
      * among cells. So, preloading prevents a multiple loading of the same
      * auto style.
      * This method is called before the cell loading process.
+     * @param style the styles
      * @param stylesReader repository of styles
+     * @param conditionalStyles the conditional styles
+     * @param parser the parser
      * @return a hash of styles with the OpenDocument internal name as key
      */
     Styles loadAutoStyles(StyleManager *styles, KoOdfStylesReader& stylesReader,

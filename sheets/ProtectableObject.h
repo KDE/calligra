@@ -69,6 +69,8 @@ public:
      * Shows a dialog for entering the password.
      * If the password is correct, the protection is enabled for
      * \p mode being \c Lock, or it is disabled for \p mode being \c Unlock.
+     * \param parent the parent Qwidget
+     * \param mode the mode
      * \param title the window title
      * \return \c true on success; \c false on failure
      */

@@ -229,6 +229,7 @@ public Q_SLOTS:
 
     /**
      * Sets the currently displayed \p sheet.
+     * \param sheet the sheet
      * \param updateTabBar if \c true, updates the tab bar
      */
     void setActiveSheet(Sheet* sheet, bool updateTabBar = true);

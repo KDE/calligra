@@ -67,6 +67,7 @@ public:
     * @param zoomHandler the zoom handler (viewconverter with setter methods)
     * @param actionCollection the action collection where the KoZoomAction is added to
     * @param specialButtons controls which special buttons to show
+    * @param parent the parent QObject
     */
     KoZoomController(KoCanvasController *controller,
                      KoZoomHandler *zoomHandler,
@@ -80,8 +81,13 @@ public:
      * actions. The caller is supposed create and connect the
      * corresponding actions himself.
      *
+     * @param controller the canvasController
+     * @param zoomHandler the zoom handler (viewconverter with setter methods)
+     * @param actionCollection the action collection where the KoZoomAction is added to
      * @param createZoomShortcuts shows whether the zoom actions should be
      *                            created or not.
+     * @param specialButtons controls which special buttons to show
+     * @param parent the parent QObject
      *
      * Used in KisZoomController.
      */

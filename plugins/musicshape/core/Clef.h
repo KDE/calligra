@@ -50,6 +50,7 @@ public:
      * Convenience constructor that removes the need to call setStaff after creating the clef to set the staff.
      *
      * @param staff the staff on which the clef should be shown
+     * @param startTime the start time
      * @param shape the shape of the new clef
      * @param line the line at which to draw the clef
      * @param octaveChange the octaveChange to apply to notes following this clef

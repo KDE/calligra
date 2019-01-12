@@ -99,6 +99,7 @@ namespace KoPluginLoader
      * All entries of QCoreApplication::libraryPaths() will be checked with @p directory appended as a
      * subdirectory.
      * @param config when passing a valid config only the wanted plugins are actually loaded
+     * @param owner QObject owner
      * @return a list of services (by library name) that were not know in the config
      */
     KOPLUGIN_EXPORT void load(const QString & directory, const PluginsConfig &config = PluginsConfig(), QObject* owner = 0);

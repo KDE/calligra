@@ -35,6 +35,7 @@ public:
      * Command to ungroup a set of shapes from one parent container.
      * @param container the group to ungroup the shapes from.
      * @param shapes a list of all the shapes that should be ungrouped.
+     * @param topLevelShapes the top level shapes.
      * @param parent the parent command used for macro commands
      */
     KoShapeUngroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes,

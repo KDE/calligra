@@ -55,12 +55,15 @@ public:
     /**
      * Creates a textual representation of \p value with the explicit given
      * formattings.
+     * \param value the value
      * \param formatType the value format, e.g. number, date
      * \param precision the number of decimals
      * \param floatFormat the number format, i.e. signed/unsigned information
      * \param prefix the preceding text
      * \param postfix the subsequent text
      * \param currencySymbol the currency symbol
+     * \param formatString the Qt format string
+     * \param thousandsSep whether to use thousands separator
      */
     Value formatText(const Value& value,
                      Format::Type formatType, int precision = -1,
@@ -73,25 +76,32 @@ public:
 
     /**
      * Creates a date format.
+     * \param date the date
      * \param formatType the value format, e.g. number, date
+     * \param formatString the Qt format string
      */
     QString dateFormat(const QDate& date, Format::Type formatType, const QString& formatString = QString() );
 
     /**
      * Creates a time format.
+     * \param time the time
      * \param formatType the value format, e.g. number, date
+     * \param formatString the Qt format string
      */
     QString timeFormat(const QDateTime& time, Format::Type formatType, const QString& formatString = QString() );
 
     /**
      * Creates a date and time format.
+     * \param time the time
      * \param formatType the value format, e.g. number, date
+     * \param formatString the Qt format string
      */
     QString dateTimeFormat(const QDateTime& time, Format::Type formatType, const QString& formatString = QString() );
 
     /**
      * Determines the formatting type that should be used to format this value
      * in a cell with a given format type
+     * \param value the value
      * \param formatType the value format, e.g. number, date
      */
     Format::Type determineFormatting(const Value& value, Format::Type formatType);
@@ -100,10 +110,13 @@ protected:
 
     /**
      * Creates a number format.
+     * \param value the value
      * \param precision the number of decimals
      * \param formatType the value format, e.g. number, date
      * \param floatFormat the number format, i.e. signed/unsigned information
      * \param currencySymbol the currency symbol
+     * \param formatString the Qt format string
+     * \param thousandsSep whether to use thousands separator
      */
     QString createNumberFormat(Number value, int precision,
                                Format::Type formatType,
@@ -114,6 +127,7 @@ protected:
 
     /**
      * Creates a fraction format.
+     * \param value the value
      * \param formatType the value format, e.g. number, date
      */
     QString fractionFormat(Number value, Format::Type formatType);
