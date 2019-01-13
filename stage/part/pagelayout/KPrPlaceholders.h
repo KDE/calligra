@@ -89,7 +89,7 @@ public:
      * This function should only be used during loading
      * @param layout the layout that should be used from now. 
      *        If 0 no layout will be used.
-     * @param shape the shape for the layout
+     * @param shapes the shapes for the layout
      * TODO tz: maybe make privat and the classes that need to call it a friend
      */
     void init( KPrPageLayout * layout, const QList<KoShape *> & shapes );

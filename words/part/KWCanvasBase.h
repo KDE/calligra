@@ -126,6 +126,11 @@ protected:
 
     /**
      * paint one border along one of the 4 sides.
+     * @param painter the Qt painter
+     * @param borderData the border data
+     * @param lineStart the line start
+     * @param lineEnd the line end
+     * @param zoom the zoom quotient
      * @param inwardsX is the horizontal vector (with value -1, 0 or 1) for the vector
      * pointing inwards for the border part nearest the center of the page.
      * @param inwardsY is the vertical vector (with value -1, 0 or 1) for the vector

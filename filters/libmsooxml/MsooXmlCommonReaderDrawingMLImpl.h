@@ -3504,7 +3504,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chOff()
  - [done] xfrm (§20.1.7.6)
  - [done] xfrm (§20.5.2.36)
  - [done] xfrm (§19.3.1.53)
-
+ .
  No child elements.
 
  Attributes:
