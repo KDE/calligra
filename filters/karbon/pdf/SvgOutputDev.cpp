@@ -409,7 +409,11 @@ void SvgOutputDev::drawString(GfxState * state, const GooString * s)
 #ifdef HAVE_POPPLER_PRE_0_64
     char * p = s->getCString();
 #else
-    const char * p = s->getCString();
+    #ifdef HAVE_POPPLER_PRE_0_72
+        const char * p = s->getCString();
+    #else
+        const char * p = s->c_str();
+    #endif
 #endif
     int len = s->getLength();
     CharCode code;
@@ -459,10 +463,18 @@ void SvgOutputDev::drawString(GfxState * state, const GooString * s)
     *d->body << " y=\"" << y << "px\"";
 
     if (font && font->getFamily()) {
+#ifdef HAVE_POPPLER_PRE_0_72
         *d->body << " font-family=\"" << QString::fromLatin1(font->getFamily()->getCString()) << "\"";
+#else
+        *d->body << " font-family=\"" << QString::fromLatin1(font->getFamily()->c_str()) << "\"";
+#endif
         //debugPdf << "font family:" << QString::fromLatin1( font->getFamily()->getCString() );
     } else if (font && font->getName()) {
+#ifdef HAVE_POPPLER_PRE_0_72
         *d->body << " font-family=\"" << QString::fromLatin1(font->getName()->getCString()) << "\"";
+#else
+        *d->body << " font-family=\"" << QString::fromLatin1(font->getName()->c_str()) << "\"";
+#endif
         //debugPdf << "font name:" << QString::fromLatin1( font->getName()->getCString() );
     }
     *d->body << " font-size=\"" << qMax(state->getFontSize(), state->getTransformedFontSize()) << "px\"";
