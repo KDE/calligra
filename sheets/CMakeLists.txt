@@ -15,7 +15,10 @@ include_directories( ${CMAKE_SOURCE_DIR}/interfaces
                     ${EIGEN3_INCLUDE_DIR} )
 
 # have their own translation domain
-add_subdirectory( shape )
+### TODO: The tableshape needs a rewrite,
+### it has been obsoleted by the implementation of texttables
+#add_subdirectory( shape )
+
 add_subdirectory( plugins )
 
 add_definitions(-DTRANSLATION_DOMAIN=\"calligrasheets\")
