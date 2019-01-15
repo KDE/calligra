@@ -496,7 +496,7 @@ void SvgOutputDev::drawImage(GfxState *state, Object */*ref*/, Stream *str,
     if (maskColors) {
         for (int y = 0; y < height; y++) {
             dest = (unsigned int *)(buffer + y * 4 * width);
-            Guchar * pix = imgStr->getLine();
+            unsigned char * pix = imgStr->getLine();
             colorMap->getRGBLine(pix, dest, width);
 
             for (int x = 0; x < width; x++) {
@@ -515,7 +515,7 @@ void SvgOutputDev::drawImage(GfxState *state, Object */*ref*/, Stream *str,
     } else {
         for (int y = 0; y < height; y++) {
             dest = (unsigned int *)(buffer + y * 4 * width);
-            Guchar * pix = imgStr->getLine();
+            unsigned char * pix = imgStr->getLine();
             colorMap->getRGBLine(pix, dest, width);
         }
 
