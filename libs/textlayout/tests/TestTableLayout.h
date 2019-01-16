@@ -103,6 +103,7 @@ private Q_SLOTS:
     void testMergedRowsSpansAreas2();
     void testTwoTablesMergedRowsSpansAreas();
     void testTwoTablesMergedRowsSpansThreeAreas();
+    void testRowHeightLargerThanAreaHeight();
 
 private:
     QTextCursor setupTest();
