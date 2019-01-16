@@ -46,6 +46,12 @@
 
 #define FRAME_SPACING 10.0
 
+// NOTE: The first area seems to layout a line (or block) even when none has been added,
+// which means it must be taken into considderation when using hitTest() to find a table.
+// TODO: The offset needed are based on guesswork and experiments, so needs investigation.
+#define TABLE_OFFSET 10.
+#define BLOCK_HEIGHT 13.2
+#define TABLE_OFFSET_FIRST_AREA BLOCK_HEIGHT + 6
 
 void TestTableLayout::initTestCase()
 {
@@ -178,7 +184,7 @@ QTextBlock TestTableLayout::bottomRightCellBlock() const
 {
     return m_table->cellAt(2,2).firstCursorPosition().block();
 }
-    
+
 void TestTableLayout::testSetupTest()
 {
     setupTest("m","02","12","20","21","22");
@@ -211,7 +217,7 @@ void TestTableLayout::testMergedCells()
     for (int i = 0; i < provider->m_areas.count(); ++i) {
         qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
     }
-    QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., 20.);
+    QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., TABLE_OFFSET_FIRST_AREA);
     KoPointedAt p = provider->area(0)->hitTest(point, Qt::FuzzyHit);
     QVERIFY2(m_table == p.table, "m_table not found in area 0");
 }
@@ -409,22 +415,30 @@ void TestTableLayout::testOneTableNeedsTwoRootAreas()
 {
     QTextCursor c = setupTest();
     QTextTable *table1 = addTable(c, 6, 3);
-    
+
     MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
     QVERIFY(provider);
     provider->setSuggestedRect(QRect(100, 100, 200, 90));
     provider->maxPosition = 10; // guard against loop
 
     m_layout->layout();
-    
+
+    for (int i = 0; i < provider->m_areas.count(); ++i) {
+        qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
+        QPointF point = provider->area(i)->referenceRect().topLeft() + QPointF(0., i == 0 ? TABLE_OFFSET_FIRST_AREA : TABLE_OFFSET);
+        KoPointedAt p = provider->area(i)->hitTest(point, Qt::FuzzyHit);
+        if (table1 == p.table) qInfo()<<"table1 is in area"<<i;
+        else qInfo()<<"table1 is not in area"<<i;
+    }
+
     QCOMPARE(provider->m_areas.count(), 2);
-    
-    QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., 20.);
+
+    QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., TABLE_OFFSET_FIRST_AREA);
     KoPointedAt p = provider->area(0)->hitTest(point, Qt::FuzzyHit);
     QVERIFY2(table1 == p.table, "table1 not found in area 0");
-    
+
     // table2 starts in first area and continues into second area
-    point = provider->area(1)->referenceRect().topLeft() + QPointF(0., 10.);
+    point = provider->area(1)->referenceRect().topLeft() + QPointF(0., TABLE_OFFSET);
     p = provider->area(1)->hitTest(point, Qt::FuzzyHit);
     QVERIFY2(table1 == p.table, "table1 not found in area 1");
 }
@@ -443,16 +457,22 @@ void TestTableLayout::testTwoTablesNeedsTwoRootAreas()
 
     for (int i = 0; i < provider->m_areas.count(); ++i) {
         qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
+        QPointF point = provider->area(i)->referenceRect().topLeft() + QPointF(0., i == 0 ? TABLE_OFFSET_FIRST_AREA : TABLE_OFFSET);
+        KoPointedAt p = provider->area(i)->hitTest(point, Qt::FuzzyHit);
+        if (table1 == p.table) qInfo()<<"table1 is in area"<<i;
+        else qInfo()<<"table1 is not in area"<<i;
+        if (table2 == p.table) qInfo()<<"table2 is in area"<<i;
+        else qInfo()<<"table2 is not in area"<<i;
     }
 
     QCOMPARE(provider->m_areas.count(), 2);
 
-    QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., 20.);
+    QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., TABLE_OFFSET_FIRST_AREA);
     KoPointedAt p = provider->area(0)->hitTest(point, Qt::FuzzyHit);
     QVERIFY2(table1 == p.table, "table1 not found in area 0");
-    
+
     // table2 starts in first area and continues into second area
-    point = provider->area(1)->referenceRect().topLeft() + QPointF(0., 10.);
+    point = provider->area(1)->referenceRect().topLeft() + QPointF(0., TABLE_OFFSET);
     p = provider->area(1)->hitTest(point, Qt::FuzzyHit);
     QVERIFY2(table2 == p.table, "table2 not found in area 1");
 }
@@ -461,12 +481,12 @@ void TestTableLayout::testMergedRowsSpansAreas()
 {
     QTextCursor c = setupTest();
     QTextTable *table1 = addTable(c, 6, 3);
-    
+
     MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
     QVERIFY(provider);
     provider->setSuggestedRect(QRect(100, 100, 200, 90));
     provider->maxPosition = 10; // guard against loop
-    
+
     table1->mergeCells(0,0,2,1);
     table1->mergeCells(0,1,2,1);
     table1->mergeCells(0,2,2,1);
@@ -478,7 +498,7 @@ void TestTableLayout::testMergedRowsSpansAreas()
     table1->mergeCells(4,0,2,1);
     table1->mergeCells(4,1,2,1);
     table1->mergeCells(4,2,2,1);
-    
+
     m_layout->layout();
 
     for (int i = 0; i < provider->m_areas.count(); ++i) {
@@ -487,11 +507,11 @@ void TestTableLayout::testMergedRowsSpansAreas()
     // should be room in two areas (it is if cells are not merged)
     QCOMPARE(provider->m_areas.count(), 2);
 
-    QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., 20.);
+    QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., TABLE_OFFSET_FIRST_AREA);
     KoPointedAt p = provider->area(0)->hitTest(point, Qt::FuzzyHit);
     QVERIFY2(table1 == p.table, "table1 not found in area 0");
-    
-    point = provider->area(1)->referenceRect().topLeft() + QPointF(0., 10.);
+
+    point = provider->area(1)->referenceRect().topLeft() + QPointF(0., TABLE_OFFSET);
     p = provider->area(1)->hitTest(point, Qt::FuzzyHit);
     QVERIFY2(table1 == p.table, "table1 not found in area 1");
 }
@@ -500,24 +520,24 @@ void TestTableLayout::testMergedRowsSpansAreas2()
 {
     QTextCursor c = setupTest();
     QTextTable *table1 = addTable(c, 10, 3);
-    
+
     MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
     QVERIFY(provider);
     provider->setSuggestedRect(QRect(100, 100, 200, 110));
     provider->maxPosition = 10; // guard against loop
-    
+
     table1->mergeCells(0,0,2,1);
     table1->mergeCells(0,1,2,1);
     table1->mergeCells(0,2,2,1);
-    
+
     table1->mergeCells(2,0,2,1);
     table1->mergeCells(2,1,2,1);
     table1->mergeCells(2,2,2,1);
-    
+
     table1->mergeCells(4,0,2,1);
     table1->mergeCells(4,1,2,1);
     table1->mergeCells(4,2,2,1);
-    
+
     table1->mergeCells(6,0,2,1);
     table1->mergeCells(6,1,2,1);
     table1->mergeCells(6,2,2,1);
@@ -527,14 +547,14 @@ void TestTableLayout::testMergedRowsSpansAreas2()
     table1->mergeCells(8,2,2,1);
 
     m_layout->layout();
-    
+
     for (int i = 0; i < provider->m_areas.count(); ++i) {
         qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
     }
     QVERIFY2(provider->m_areas.count() <= 5, "Table should fit in max 5 areas, possibly in 3");
 
     // check if table is layed out at all
-    QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., 20.);
+    QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., TABLE_OFFSET_FIRST_AREA);
     KoPointedAt p = provider->area(0)->hitTest(point, Qt::FuzzyHit);
     QVERIFY2(table1 == p.table, "table1 not found in area 0");
 }
@@ -562,16 +582,16 @@ void TestTableLayout::testTwoTablesMergedRowsSpansAreas()
 
     QCOMPARE(provider->m_areas.count(), 2);
 
-    QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., 20.);
+    QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., TABLE_OFFSET_FIRST_AREA);
     KoPointedAt p = provider->area(0)->hitTest(point, Qt::FuzzyHit);
     QVERIFY2(table1 == p.table, "table1 not found in area 0");
 
     // intention: there should not be room left for another row in area 0, so table2 should start in next area
-    point = provider->area(0)->referenceRect().bottomLeft() + QPointF(0., -10.);
+    point = provider->area(0)->referenceRect().bottomLeft() + QPointF(0., -TABLE_OFFSET);
     p = provider->area(0)->hitTest(point, Qt::FuzzyHit);
     QVERIFY2(table2 != p.table, "table2 found in area 0, possibly due font size");
 
-    point = provider->area(1)->referenceRect().topLeft() + QPointF(0., 20.);
+    point = provider->area(1)->referenceRect().topLeft() + QPointF(0., TABLE_OFFSET);
     p = provider->area(1)->hitTest(point, Qt::FuzzyHit);
     QVERIFY2(table2 == p.table, "table2 not found in area 1");
 }
@@ -599,20 +619,20 @@ void TestTableLayout::testTwoTablesMergedRowsSpansThreeAreas()
 
     QCOMPARE(provider->m_areas.count(), 3);
 
-    QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., 20.);
+    QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., TABLE_OFFSET_FIRST_AREA);
     KoPointedAt p = provider->area(0)->hitTest(point, Qt::FuzzyHit);
     QVERIFY2(table1 == p.table, "table1 not found in area 0");
 
     // intention: there should not be room left for another row in area 0, so table2 should start in next area
-    point = provider->area(0)->referenceRect().bottomLeft() + QPointF(0., -10.);
+    point = provider->area(0)->referenceRect().bottomLeft() + QPointF(0., -TABLE_OFFSET);
     p = provider->area(0)->hitTest(point, Qt::FuzzyHit);
     QVERIFY2(table2 != p.table, "table2 found in area 0, possibly due font size");
 
-    point = provider->area(1)->referenceRect().topLeft() + QPointF(0., 20.);
+    point = provider->area(1)->referenceRect().topLeft() + QPointF(0., TABLE_OFFSET);
     p = provider->area(1)->hitTest(point, Qt::FuzzyHit);
     QVERIFY2(table2 == p.table, "table2 not found in area 1");
 
-    point = provider->area(2)->referenceRect().topLeft() + QPointF(0., 20.);
+    point = provider->area(2)->referenceRect().topLeft() + QPointF(0., TABLE_OFFSET);
     p = provider->area(2)->hitTest(point, Qt::FuzzyHit);
     QVERIFY2(table2 == p.table, "table2 not found in area 2");
 }
@@ -621,25 +641,175 @@ void TestTableLayout::testRowHeightLargerThanAreaHeight()
 {
     QTextCursor c = setupTest();
     QTextTable *table1 = addTable(c, 1, 3);
-    
+
     MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
     QVERIFY(provider);
-    provider->setSuggestedRect(QRect(100, 100, 200, 20));
+    provider->setSuggestedRect(QRect(100, 100, 200, 22));
     provider->maxPosition = 10; // guard against loop
-    
+
     m_layout->layout();
-    
+
     for (int i = 0; i < provider->m_areas.count(); ++i) {
         qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
-        QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., 10.);
+        QPointF point = provider->area(i)->referenceRect().topLeft() + QPointF(0., i == 0 ? TABLE_OFFSET_FIRST_AREA : TABLE_OFFSET);
         KoPointedAt p = provider->area(i)->hitTest(point, Qt::FuzzyHit);
         if (table1 == p.table) qInfo()<<"table1 is in area"<<i;
         else qInfo()<<"table1 is not in area"<<i;
     }
-    
-    QVERIFY2(provider->m_areas.count() == 1, "Row should have been placed in area 0");
 
-    QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., 10.);
+    QVERIFY2(provider->m_areas.count() == 1, "Table should have been placed in area 0");
+
+    QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., TABLE_OFFSET_FIRST_AREA);
+    KoPointedAt p = provider->area(0)->hitTest(point, Qt::FuzzyHit);
+    QVERIFY2(table1 == p.table, "table1 not found in area 0");
+}
+
+void TestTableLayout::testSingleHeaderRow()
+{
+    QTextCursor c = setupTest();
+    QTextTable *table1 = addTable(c, 1, 3);
+    QTextTableFormat f;
+    f.setHeaderRowCount(1);
+    table1->setFormat(f);
+
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    QVERIFY(provider);
+    provider->setSuggestedRect(QRect(100, 100, 200, 100));
+    provider->maxPosition = 10; // guard against loop
+
+    m_layout->layout();
+
+    for (int i = 0; i < provider->m_areas.count(); ++i) {
+        qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
+        QPointF point = provider->area(i)->referenceRect().topLeft() + QPointF(0., i == 0 ? TABLE_OFFSET_FIRST_AREA : TABLE_OFFSET);
+        KoPointedAt p = provider->area(i)->hitTest(point, Qt::FuzzyHit);
+        if (table1 == p.table) qInfo()<<"table1 is in area"<<i;
+        else qInfo()<<"table1 is not in area"<<i;
+    }
+
+    QVERIFY2(provider->m_areas.count() == 1, "Table should have been placed in area 0");
+
+    QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., TABLE_OFFSET_FIRST_AREA);
+    KoPointedAt p = provider->area(0)->hitTest(point, Qt::FuzzyHit);
+    QVERIFY2(table1 == p.table, "table1 not found in area 0");
+}
+
+void TestTableLayout::testMultipleHeaderRows()
+{
+    QTextCursor c = setupTest();
+    QTextTable *table1 = addTable(c, 2, 3);
+    QTextTableFormat f;
+    f.setHeaderRowCount(2);
+    table1->setFormat(f);
+
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    QVERIFY(provider);
+    provider->setSuggestedRect(QRect(100, 100, 200, 100));
+    provider->maxPosition = 10; // guard against loop
+
+    m_layout->layout();
+
+    for (int i = 0; i < provider->m_areas.count(); ++i) {
+        qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
+        QPointF point = provider->area(i)->referenceRect().topLeft() + QPointF(0., i == 0 ? TABLE_OFFSET_FIRST_AREA : TABLE_OFFSET);
+        KoPointedAt p = provider->area(i)->hitTest(point, Qt::FuzzyHit);
+        if (table1 == p.table) qInfo()<<"table1 is in area"<<i;
+        else qInfo()<<"table1 is not in area"<<i;
+    }
+
+    QVERIFY2(provider->m_areas.count() == 1, "Table should have been placed in area 0");
+
+    QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., TABLE_OFFSET_FIRST_AREA);
+    KoPointedAt p = provider->area(0)->hitTest(point, Qt::FuzzyHit);
+    QVERIFY2(table1 == p.table, "table1 not found in area 0");
+}
+
+void TestTableLayout::testTableWithSingleHeaderRow()
+{
+    QTextCursor c = setupTest();
+    QTextTable *table1 = addTable(c, 2, 3);
+    QTextTableFormat f;
+    f.setHeaderRowCount(1);
+    table1->setFormat(f);
+
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    QVERIFY(provider);
+    provider->setSuggestedRect(QRect(100, 100, 200, 100));
+    provider->maxPosition = 10; // guard against loop
+
+    m_layout->layout();
+
+    for (int i = 0; i < provider->m_areas.count(); ++i) {
+        qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
+        QPointF point = provider->area(i)->referenceRect().topLeft() + QPointF(0., (i == 0 ? TABLE_OFFSET_FIRST_AREA : TABLE_OFFSET));
+        KoPointedAt p = provider->area(i)->hitTest(point, Qt::FuzzyHit);
+        if (table1 == p.table) qInfo()<<"table1 is in area"<<i;
+        else qInfo()<<"table1 is not in area"<<i;
+    }
+
+    QVERIFY2(provider->m_areas.count() == 1, "Table should have been placed in area 0");
+
+    QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., TABLE_OFFSET_FIRST_AREA);
+    KoPointedAt p = provider->area(0)->hitTest(point, Qt::FuzzyHit);
+    QVERIFY2(table1 == p.table, "table1 not found in area 0");
+}
+
+void TestTableLayout::testTableWithMultipleHeaderRow()
+{
+    QTextCursor c = setupTest();
+    QTextTable *table1 = addTable(c, 3, 3);
+    QTextTableFormat f;
+    f.setHeaderRowCount(2);
+    table1->setFormat(f);
+
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    QVERIFY(provider);
+    provider->setSuggestedRect(QRect(100, 100, 200, 100));
+    provider->maxPosition = 10; // guard against loop
+
+    m_layout->layout();
+
+    for (int i = 0; i < provider->m_areas.count(); ++i) {
+        qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
+        QPointF point = provider->area(i)->referenceRect().topLeft() + QPointF(0., (i == 0 ? TABLE_OFFSET_FIRST_AREA : TABLE_OFFSET));
+        KoPointedAt p = provider->area(i)->hitTest(point, Qt::FuzzyHit);
+        if (table1 == p.table) qInfo()<<"table1 is in area"<<i;
+        else qInfo()<<"table1 is not in area"<<i;
+    }
+
+    QVERIFY2(provider->m_areas.count() == 1, "Table should have been placed in area 0");
+
+    QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., TABLE_OFFSET_FIRST_AREA);
+    KoPointedAt p = provider->area(0)->hitTest(point, Qt::FuzzyHit);
+    QVERIFY2(table1 == p.table, "table1 not found in area 0");
+}
+
+void TestTableLayout::testHeaderRowHeightLargerThanAreaHeight()
+{
+    QTextCursor c = setupTest();
+    QTextTable *table1 = addTable(c, 1, 3);
+    QTextTableFormat f;
+    f.setHeaderRowCount(1);
+    table1->setFormat(f);
+
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    QVERIFY(provider);
+    provider->setSuggestedRect(QRect(100, 100, 200, 20));
+    provider->maxPosition = 10; // guard against loop
+
+    m_layout->layout();
+
+    for (int i = 0; i < provider->m_areas.count(); ++i) {
+        qInfo()<<"area:"<<i<<"referenceRect:"<<provider->area(i)->referenceRect();
+        QPointF point = provider->area(i)->referenceRect().topLeft() + QPointF(0., (i == 0 ? TABLE_OFFSET_FIRST_AREA : TABLE_OFFSET));
+        KoPointedAt p = provider->area(i)->hitTest(point, Qt::FuzzyHit);
+        if (table1 == p.table) qInfo()<<"table1 is in area"<<i;
+        else qInfo()<<"table1 is not in area"<<i;
+    }
+
+    QVERIFY2(provider->m_areas.count() == 1, "Table should have been placed in area 0");
+
+    QPointF point = provider->area(0)->referenceRect().topLeft() + QPointF(0., TABLE_OFFSET_FIRST_AREA);
     KoPointedAt p = provider->area(0)->hitTest(point, Qt::FuzzyHit);
     QVERIFY2(table1 == p.table, "table1 not found in area 0");
 }

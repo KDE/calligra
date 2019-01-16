@@ -105,6 +105,19 @@ private Q_SLOTS:
     void testTwoTablesMergedRowsSpansThreeAreas();
     void testRowHeightLargerThanAreaHeight();
 
+    // With header rows
+    /// Table consisting of a single header row
+    void testSingleHeaderRow();
+    /// Table consisting of a two header rows
+    void testMultipleHeaderRows();
+    /// Table consisting two rows with a single header row
+    void testTableWithSingleHeaderRow();
+    /// Table consisting three rows with two header rows
+    void testTableWithMultipleHeaderRow();
+    /// Table consisting of a single header row
+    /// with height > root area height
+    void testHeaderRowHeightLargerThanAreaHeight();
+
 private:
     QTextCursor setupTest();
     void setupTest(const QString &mergedText, const QString &topRightText, const QString &midRightText, const QString &bottomLeftText, const QString &bottomMidText, const QString &bottomRightText, KoTableStyle* tableStyle = 0);
