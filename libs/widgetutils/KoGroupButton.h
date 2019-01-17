@@ -46,7 +46,7 @@ public:
         GroupCenter  //!< The button is on the center of the group, so it would have separators on both sides
     };
 private:
-    Q_ENUM( GroupPosition )
+    Q_ENUMS( GroupPosition )
     Q_PROPERTY( GroupPosition groupPosition READ groupPosition WRITE setGroupPosition )
 public:
 
