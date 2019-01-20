@@ -19,6 +19,7 @@
   <name xml:lang="fr">Plan</name>
   <name xml:lang="gl">Plan</name>
   <name xml:lang="ia">Plan</name>
+  <name xml:lang="id">Plan</name>
   <name xml:lang="it">Plan</name>
   <name xml:lang="nl">Plan</name>
   <name xml:lang="pl">Plan</name>
@@ -44,6 +45,7 @@
   <summary xml:lang="fr">Gestion de projet</summary>
   <summary xml:lang="gl">Xestión de proxectos</summary>
   <summary xml:lang="ia">Administration de projectos</summary>
+  <summary xml:lang="id">Pengelolaan Projek</summary>
   <summary xml:lang="it">Gestione progetti</summary>
   <summary xml:lang="nl">Projectbeheer</summary>
   <summary xml:lang="pl">Zarządzanie projektem</summary>
@@ -71,6 +73,7 @@
     <p xml:lang="fr">Plan est une application de gestion de projet. Cette application est prévue pour des projets de taille moyenne avec plusieurs ressources.</p>
     <p xml:lang="gl">Plan é un aplicativo de xestión de proxectos. Está pensado para xestionar proxectos moderadamente grandes con varios recursos.</p>
     <p xml:lang="ia">Plan es un application pro gerer projectos. Illo es destinate pro gerer projectos moderatemente grande con ressources multiple.</p>
+    <p xml:lang="id">Plan adalah aplikasi pengelolaan projek. Ini dimaksudkan untuk mengelola projek yang cukup besar dengan banyak sumberdaya</p>
     <p xml:lang="it">Plan è un'applicazione di gestione progetti. È pensato per gestire progetti abbastanza grandi con risorse multiple.</p>
     <p xml:lang="nl">Plan is een toepassing voor projectbeheer. Het is bedoeld voor het beheer van middelgrote projecten met meerdere hulpbronnen.</p>
     <p xml:lang="pl">Plan jest programem do zarządzania projektem. Jest przeznaczony do zarządzania umiarkowanie dużymi projektami zawierającymi wiele zasobów.</p>
@@ -94,6 +97,7 @@
     <p xml:lang="fr">Fonctionnalités :</p>
     <p xml:lang="gl">Funcionalidades:</p>
     <p xml:lang="ia">Characteristicas:</p>
+    <p xml:lang="id">Fitur:</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pl">Cechy:</p>
@@ -119,6 +123,7 @@
       <li xml:lang="fr">Vues multiples : diagrammes de Gantt, vue des ressources, vue des comptes</li>
       <li xml:lang="gl">Varias vistas: gráficos de Gant, vista de recursos, vista de contas.</li>
       <li xml:lang="ia">Vistas multiple: Diagrammas de Gantt, Vista de ressource, vista de contos</li>
+      <li xml:lang="id">Tampilan multipel: Bagan Gant, Tampilan Sumberdaya, Tampilan Akun</li>
       <li xml:lang="it">Viste multiple: diagrammi di Gantt, vista delle risorse, vista degli account</li>
       <li xml:lang="nl">Meerdere weergaven: Gant-kaarten, hulpbronweergave, accountweergave</li>
       <li xml:lang="pl">Wiele widoków: wykresy Ganta, widok zasobów, widok kont</li>
@@ -140,6 +145,7 @@
       <li xml:lang="fi">Vakiorakenteet käytettävissä: töiden (WBS), resurssien (RBS) ja kustannusten (CBS) jakautumisrakenteet</li>
       <li xml:lang="fr">Utilise les structures standard : décomposition des tâches (WBS), décomposition des ressources (RBS), décomposition des coûts (CBS)</li>
       <li xml:lang="gl">Usa estruturas estándar: estrutura de división do traballo (WBS), estrutura de división dos recursos (RBS), estrutura de división dos custos (CBS).</li>
+      <li xml:lang="id">Penggunaan struktur standar: Work breakdown structure (WBS), Resource breakdown structure (RBS), Cost breakdown structure (CBS)</li>
       <li xml:lang="it">Utilizza strutture standard: strutture di scomposizione del lavoro (WBS), strutture di scomposizione delle risorse (RBS), strutture di scomposizione dei costi (CBS)</li>
       <li xml:lang="nl">Gebruikt standaard structuren: Work breakdown structure (WBS), Resource breakdown structure (RBS), Cost breakdown structure (CBS)</li>
       <li xml:lang="pl">Używa standardowych struktur: Struktura podziału pracy (WBS),  Struktura podziału zasobów (RBS), Struktura podziału kosztów (CBS)</li>
@@ -162,6 +168,7 @@
       <li xml:lang="fr">Niveau de détail configurable pour les diagrammes de Gantt</li>
       <li xml:lang="gl">O gráfico de Gantt permite configurar o nivel de detalle.</li>
       <li xml:lang="ia">Nivello de detalios configurabile sur Diagramma de Gantt</li>
+      <li xml:lang="id">Level detail yang dapat dikonfigurasi pada Bagan Gant</li>
       <li xml:lang="it">Livello di dettaglio configurabile per i diagrammi di Gantt</li>
       <li xml:lang="nl">Instelbaar detailniveau op Gant-kaart</li>
       <li xml:lang="pl">Ustawialny poziom szczegółów na wykresach Gantta</li>
@@ -183,6 +190,7 @@
       <li xml:lang="fi">Yhteenvetotehtävien, tehtävien ja virstanpylväiden tuki</li>
       <li xml:lang="fr">Prends en charge les phases, les tâches et les jalons</li>
       <li xml:lang="gl">Permite definir tarefas de resumo, tarefas e fitos.</li>
+      <li xml:lang="id">Dukungan Summarytasks, Tasks, dan milestones</li>
       <li xml:lang="it">Supporta attività di riepilogo, attività e pietre miliari</li>
       <li xml:lang="nl">Ondersteunt Samenvattingstaken, taken en mijlpalen</li>
       <li xml:lang="pl">Obsługa dla zadań podsumowujących, zadań oraz kamieni milowych</li>
@@ -204,6 +212,7 @@
       <li xml:lang="fi">Mukautettavat aikataulutusehdot</li>
       <li xml:lang="fr">Contraintes d'ordonnancement configurables</li>
       <li xml:lang="gl">Restricións de planificación configurábeis.</li>
+      <li xml:lang="id">Kendala Penjadwalan Dapat Dikonfigurasi</li>
       <li xml:lang="it">Vincoli di pianificazione configurabili</li>
       <li xml:lang="nl">Instelbare voorwaarden voor planning</li>
       <li xml:lang="pl">Ustawialne ograniczenia w planowaniu</li>
