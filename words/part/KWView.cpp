@@ -122,7 +122,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
         , m_textMaxX(600)
         , m_minPageNum(1)
         , m_maxPageNum(1)
-        , m_isDistractionFreeMode(false)
+        , m_isFullscreenMode(false)
 {
     setAcceptDrops(true);
 
@@ -189,14 +189,14 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     m_zoomController->setZoom(m_document->config().zoomMode(), m_document->config().zoom() / 100.);
     connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), this, SLOT(zoomChanged(KoZoomMode::Mode,qreal)));
 
-    //Timer start in Distraction-Free mode view.
+    //Timer start in Fullscreen mode view.
     m_hideCursorTimer = new QTimer(this);
     connect(m_hideCursorTimer, SIGNAL(timeout()), this, SLOT(hideCursor()));
 
-    m_dfmExitButton = new QPushButton(i18n("Exit Distraction-Free Mode"));
+    m_dfmExitButton = new QPushButton(i18n("Exit Fullscreen Mode"));
     addStatusBarItem(m_dfmExitButton, 0);
     m_dfmExitButton->setVisible(false);
-    connect(m_dfmExitButton, SIGNAL(clicked()), this, SLOT(exitDistractioFreeMode()));
+    connect(m_dfmExitButton, SIGNAL(clicked()), this, SLOT(exitFullscreenMode()));
 
 #ifdef SHOULD_BUILD_RDF
     if (KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
@@ -374,11 +374,11 @@ void KWView::setupActions()
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
     mainWindow()->actionCollection()->action("view_fullscreen")->setEnabled(false);
-    tAction = new KToggleAction(i18n("Distraction Free Mode"), this);
-    tAction->setToolTip(i18n("Set view in distraction free mode"));
+    tAction = new KToggleAction(i18n("Fullscreen Mode"), this);
+    tAction->setToolTip(i18n("Set view in fullscreen mode"));
     tAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
-    actionCollection()->addAction("view_distractionfreemode", tAction);
-    connect(tAction, SIGNAL(toggled(bool)), this, SLOT(setDistractionFreeMode(bool)));
+    actionCollection()->addAction("view_fullscreen", tAction);
+    connect(tAction, SIGNAL(toggled(bool)), this, SLOT(setFullscreenMode(bool)));
 
 #ifdef SHOULD_BUILD_RDF
     action = new QAction(i18n("Semantic Stylesheets..."), this);
@@ -649,9 +649,9 @@ void KWView::showStatusBar(bool toggled)
     if (statusBar()) statusBar()->setVisible(toggled);
 }
 
-void KWView::setDistractionFreeMode(bool status)
+void KWView::setFullscreenMode(bool status)
 {
-    m_isDistractionFreeMode = status;
+    m_isFullscreenMode = status;
 
     mainWindow()->toggleDockersVisibility(!status);
     mainWindow()->menuBar()->setVisible(!status);
@@ -670,7 +670,7 @@ void KWView::setDistractionFreeMode(bool status)
          static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
          static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     }
-    // Exit Distraction-Free mode button.
+    // Exit Fullscreen mode button.
     m_dfmExitButton->setVisible(status);
 
     //Hide cursor.
@@ -685,7 +685,7 @@ void KWView::setDistractionFreeMode(bool status)
     // From time to time you can end up in a situation where the shape manager suddenly
     // looses track of the current shape selection. So, we trick it here. Logically,
     // it also makes sense to just make sure the text tool is active anyway when
-    // switching to/from distraction free (since that's explicitly for typing things
+    // switching to/from fullscreen (since that's explicitly for typing things
     // out, not layouting)
     const QList<KoShape*> selection = m_canvas->shapeManager()->selection()->selectedShapes();
     m_canvas->shapeManager()->selection()->deselectAll();
@@ -696,7 +696,7 @@ void KWView::setDistractionFreeMode(bool status)
 
 void KWView::hideUI()
 {
-    if (m_isDistractionFreeMode) {
+    if (m_isFullscreenMode) {
         mainWindow()->statusBar()->setVisible(false);
         // Hide vertical  and horizontal scroll bar.
         static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -709,19 +709,19 @@ void KWView::hideCursor(){
     m_gui->setCursor(Qt::BlankCursor);
 }
 
-void KWView::exitDistractioFreeMode()
+void KWView::exitFullscreenMode()
 {
-    if (m_isDistractionFreeMode) {
-        QAction *action = actionCollection()->action("view_distractionfreemode");
+    if (m_isFullscreenMode) {
+        QAction *action = actionCollection()->action("view_fullscreen");
         action->setChecked(false);
         m_gui->setCursor(Qt::ArrowCursor);
-        setDistractionFreeMode(false);
+        setFullscreenMode(false);
     }
 }
 
 void KWView::viewMouseMoveEvent(QMouseEvent *e)
 {
-    if (!m_isDistractionFreeMode)
+    if (!m_isFullscreenMode)
         return;
 
     m_gui->setCursor(Qt::ArrowCursor);

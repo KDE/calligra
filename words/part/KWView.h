@@ -146,8 +146,8 @@ public Q_SLOTS:
     void goToPreviousPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
     /// go to next page
     void goToNextPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
-    /// Call when "Exit Distraction-Free Mode" in status bar clicked.
-    void exitDistractioFreeMode();
+    /// Call when "Exit Fullscreen Mode" in status bar clicked.
+    void exitFullscreenMode();
 
 protected:
     /// reimplemented method from superclass
@@ -209,12 +209,12 @@ private Q_SLOTS:
     /// "hasAnnotations" has changed ("notes" in the UI) - will cause showNotes above to change too
     void hasNotes(bool has);
     /**
-     * Set view into distraction free mode, hide menu bar, status bar, tool bar, dockers
+     * Set view into fullscreen mode, hide menu bar, status bar, tool bar, dockers
      * and set view into  full screen mode.
      */
-    void setDistractionFreeMode(bool); /// Call after 4 seconds, user doesn't move cursor.
+    void setFullscreenMode(bool); /// Call after 4 seconds, user doesn't move cursor.
     void hideCursor();
-    /// Hide status bar and scroll bars after seconds in Distraction-Free mode.
+    /// Hide status bar and scroll bars after seconds in fullscreen mode.
     void hideUI();
 
 private:
@@ -256,9 +256,9 @@ private:
     void buildAssociatedWidget();
     KWStatisticsWidget *wordCount;
 
-    bool m_isDistractionFreeMode;
+    bool m_isFullscreenMode;
     QTimer *m_hideCursorTimer;
-    // The button will add to status bar in distraction-free mode to let user come
+    // The button will add to status bar in fullscreen mode to let user come
     // back to standard view.
     QPushButton *m_dfmExitButton;
 };
