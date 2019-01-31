@@ -252,9 +252,6 @@ KoMainWindow::KoMainWindow(const QByteArray &nativeMimeType, const KoComponentDa
     : KXmlGuiWindow()
     , d(new KoMainWindowPrivate(nativeMimeType, componentData, this))
 {
-#ifdef Q_OS_MAC
-    setUnifiedTitleAndToolBarOnMac(true);
-#endif
     setStandardToolBarMenuEnabled(true);
 
     setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
