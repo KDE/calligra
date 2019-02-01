@@ -167,6 +167,7 @@ public:
     /**
      * Save to an OASIS document
      * @param store a pointer to a KoStore to save in
+     * @param manifestWriter the document writer
      * @return true if success
      */
     bool saveOasis(KoStore *store, KoXmlWriter *manifestWriter);

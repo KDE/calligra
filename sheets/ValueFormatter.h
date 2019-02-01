@@ -134,10 +134,12 @@ protected:
 
     /**
      * Creates a complex number format.
+     * \param value the initial value
      * \param precision the number of decimals
      * \param formatType the value format, e.g. number, date
      * \param floatFormat the number format, i.e. signed/unsigned information
      * \param currencySymbol the currency symbol
+     * \param thousandsSep whether to use thousands separator
      */
     QString complexFormat(const Value& value, int precision,
                           Format::Type formatType,
