@@ -23,6 +23,7 @@
 #include <QApplication>
 
 #include "komain_export.h"
+#include "KoMainWindow.h"
 
 class KoPart;
 
@@ -137,6 +138,8 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void benchmarkLoadingFinished();
+    void slotFilePrint(KoMainWindow *view);
+    void slotExportToPdf(KoMainWindow *view);
 
 protected:
 

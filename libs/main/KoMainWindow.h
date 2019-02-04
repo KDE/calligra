@@ -187,7 +187,7 @@ Q_SIGNALS:
     /// document. The document may be opened in another window in the end.
     /// In this case, the signal means there is no link between the window
     /// and the document anymore.
-    void loadCompleted();
+    void loadCompleted(KoMainWindow *);
 
     /// This signal is emitted when this windows has canceled loading of a document.
     void loadCanceled();

@@ -784,6 +784,7 @@ void KoMainWindow::slotLoadCompleted()
     if (d->rootDocument && d->rootDocument->isEmpty()) {
         // Replace current empty document
         setRootDocument(newdoc);
+        emit loadCompleted(this);
     } else if (d->rootDocument && !d->rootDocument->isEmpty()) {
         // Open in a new main window
         // (Note : could create the main window first and the doc next for this
@@ -792,16 +793,18 @@ void KoMainWindow::slotLoadCompleted()
         s->show();
         newpart->removeMainWindow(this);
         s->setRootDocument(newdoc, newpart);
+        emit loadCompleted(s);
     } else {
         // We had no document, set the new one
         setRootDocument(newdoc);
+        emit loadCompleted(this);
     }
+
     slotProgress(-1);
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     disconnect(newdoc, SIGNAL(canceled(QString)), this, SLOT(slotLoadCanceled(QString)));
     d->openingDocument = false;
-    emit loadCompleted();
 }
 
 void KoMainWindow::slotLoadCanceled(const QString & errMsg)

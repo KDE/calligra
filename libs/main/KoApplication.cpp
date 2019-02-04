@@ -73,6 +73,7 @@
 #endif
 
 
+#include "MainDebug.h"
 #include <QDesktopWidget>
 
 KoApplication* KoApplication::KoApp = 0;
@@ -91,6 +92,7 @@ public:
     QWidget *splashScreen;
     QList<KoPart *> partList;
     QString roundtripFileName;
+    QString pdfFileName;
 };
 
 class KoApplication::ResetStarting
@@ -202,7 +204,6 @@ BOOL isWow64()
 bool KoApplication::start()
 {
     KAboutData aboutData = KAboutData::applicationData();
-
     // process commandline parameters
     QCommandLineParser parser;
     aboutData.setupCommandLine(&parser);
@@ -446,7 +447,7 @@ bool KoApplication::start()
     else {
         const bool print = parser.isSet("print");
         const bool exportAsPdf = parser.isSet("export-pdf");
-        const QString pdfFileName = parser.value("export-filename");
+        d->pdfFileName = parser.value("export-filename");
         d->roundtripFileName = parser.value("roundtrip-filename");
         const bool doTemplate = parser.isSet("template");
         const bool doNew = parser.isSet("new");
@@ -456,8 +457,8 @@ bool KoApplication::start()
         // only show the mainWindow when no command-line mode option is passed
         const bool showmainWindow =
                 parser.isSet("benchmark-loading-show-window") || (
-                    !parser.isSet("export-pdf")
-                    && !parser.isSet("benchmark-loading")
+                    parser.isSet("export-pdf")) || (
+                    !parser.isSet("benchmark-loading")
                     && !parser.isSet("roundtrip-filename")
                     && d->roundtripFileName.isEmpty());
         const QString profileFileName = parser.value("profile-filename");
@@ -570,34 +571,34 @@ bool KoApplication::start()
                         }
                     }
                 }
-                else if (mainWindow->openDocument(part, url)) {
-                    if (benchmarkLoading) {
-                        if (profileoutput.device()) {
-                            profileoutput << "KoApplication::start\t"
-                                          << appStartTime.msecsTo(QTime::currentTime())
-                                          <<"\t100" << endl;
-                        }
-                        QTimer::singleShot(0, this, SLOT(benchmarkLoadingFinished()));
-                        return true; // only load one document!
-                    }
-                    else if (print) {
-                        mainWindow->slotFilePrint();
-                        // delete mainWindow; done by ~KoDocument
-                        nPrinted++;
+                else {
+                    if (print) {
+                        connect(
+                            mainWindow, SIGNAL(loadCompleted(KoMainWindow *)),
+                            this, SLOT(slotFilePrint(KoMainWindow *)));
                     } else if (exportAsPdf) {
-                        KoPrintJob *job = mainWindow->exportToPdf(pdfFileName);
-                        if (job)
-                            connect (job, SIGNAL(destroyed(QObject*)), mainWindow,
-                                     SLOT(slotFileQuit()), Qt::QueuedConnection);
-                        nPrinted++;
-                    } else {
-                        // Normal case, success
-                        numberOfOpenDocuments++;
+                        connect(mainWindow, SIGNAL(loadCompleted(KoMainWindow*)),
+                                this, SLOT(slotExportToPdf(KoMainWindow*)));
                     }
-                } else {
-                    // .... if failed
-                    // delete doc; done by openDocument
-                    // delete mainWindow; done by ~KoDocument
+                    if (mainWindow->openDocument(part, url)) {
+                        if (benchmarkLoading) {
+                            if (profileoutput.device()) {
+                                profileoutput << "KoApplication::start\t"
+                                            << appStartTime.msecsTo(QTime::currentTime())
+                                            <<"\t100" << endl;
+                            }
+                            QTimer::singleShot(0, this, SLOT(benchmarkLoadingFinished()));
+                            return true; // only load one document!
+                        }
+                        if (print || exportAsPdf)
+                            nPrinted++;
+                        else
+                            numberOfOpenDocuments++;
+                    } else {
+                        // .... if failed
+                        // delete doc; done by openDocument
+                        // delete mainWindow; done by ~KoDocument
+                    }
                 }
 
                 if (profileoutput.device()) {
@@ -680,6 +681,18 @@ bool KoApplication::notify(QObject *receiver, QEvent *event)
     }
     return false;
 
+}
+
+void KoApplication::slotFilePrint(KoMainWindow *mainWindow)
+{
+    mainWindow->slotFilePrint();
+    //delete mainWindow; done by ~KoDocument
+}
+
+void KoApplication::slotExportToPdf(KoMainWindow *mainWindow)
+{
+    KoPrintJob *job = mainWindow->exportToPdf(d->pdfFileName);
+    // TODO: exit if all jobs over
 }
 
 KoApplication *KoApplication::koApplication()
