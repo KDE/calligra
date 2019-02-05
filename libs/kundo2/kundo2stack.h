@@ -132,6 +132,11 @@ public:
      */
     void setExtraData(KUndo2CommandExtraData *data);
 
+    /**
+     * Add the @p command as a child to this command
+     */
+    void addCommand(KUndo2Command *command);
+
 private:
     Q_DISABLE_COPY(KUndo2Command)
     friend class KUndo2QStack;

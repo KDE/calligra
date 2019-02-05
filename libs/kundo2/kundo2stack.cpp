@@ -415,6 +415,10 @@ void KUndo2Command::setExtraData(KUndo2CommandExtraData *data)
     d->extraData.reset(data);
 }
 
+void KUndo2Command::addCommand(KUndo2Command *command)
+{
+    d->child_list.append(command);
+}
 
 #endif // QT_NO_UNDOCOMMAND
 
