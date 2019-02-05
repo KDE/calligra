@@ -85,6 +85,7 @@ private Q_SLOTS:
     void escapeDirectionChanged();
     void connectionChanged();
     void getConnectionType(int type);
+    void slotShapeRemoved(KoShape*);
 
 private:
     /// reimplemented from superclass

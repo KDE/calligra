@@ -158,6 +158,8 @@ ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     connect(this, SIGNAL(connectionPointEnabled(bool)), m_alignRelative, SLOT(setEnabled(bool)));
     connect(this, SIGNAL(connectionPointEnabled(bool)), m_escapeDirections, SLOT(setEnabled(bool)));
 
+    connect(canvas->shapeManager(), SIGNAL(shapeRemoved(KoShape*)), this, SLOT(slotShapeRemoved(KoShape*)));
+
     resetEditMode();
 }
 
@@ -381,7 +383,7 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
                 updateStatusText();
                 useCursor(Qt::CrossCursor);
             }
-        }else {
+        } else {
             m_currentShape = 0;
             useCursor(Qt::ArrowCursor);
         }
@@ -421,6 +423,7 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
 void ConnectionTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     if (m_currentStrategy) {
+        KUndo2Command *createCmd = 0;
         if (m_editMode == CreateConnection) {
             // check if connection handles have a minimal distance
             KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(m_currentShape);
@@ -431,31 +434,39 @@ void ConnectionTool::mouseReleaseEvent(KoPointerEvent *event)
             int grabDistance = grabSensitivity();
             // use grabbing sensitivity as minimal distance threshold
             if (squareDistance(p1, p2) < grabDistance*grabDistance) {
-                // minimal distance was not reached, so we have to undo the started work:
-                // - cleanup and delete the strategy
-                // - remove connection shape from shape manager and delete it
-                // - reset edit mode to last state
-                delete m_currentStrategy;
-                m_currentStrategy = 0;
-                repaintDecorations();
-                canvas()->shapeManager()->remove(m_currentShape);
-                setEditMode(m_editMode, connectionShape->firstShape(), connectionShape->firstConnectionId());
-                repaintDecorations();
+                // minimal distance was not reached, so we have to undo the started work
+                canvas()->shapeManager()->remove(m_currentShape); // deactivate is called
                 delete connectionShape;
                 return;
             } else {
                 // finalize adding the new connection shape with an undo command
                 KUndo2Command * cmd = canvas()->shapeController()->addShape(m_currentShape);
-                canvas()->addCommand(cmd);
                 setEditMode(EditConnection, m_currentShape, KoConnectionShape::StartHandle);
+
+                createCmd = new KUndo2Command(kundo2_i18n("Create Connection"));
+                createCmd->addCommand(cmd);
             }
         }
         m_currentStrategy->finishInteraction(event->modifiers());
-        // TODO: Add parent command to KoInteractionStrategy::createCommand
-        // so that we can have a single command to undo for the user
         KUndo2Command *command = m_currentStrategy->createCommand();
-        if (command)
-            canvas()->addCommand(command);
+        if (command) {
+            if (createCmd) {
+                createCmd->addCommand(command);
+                canvas()->addCommand(createCmd);
+            } else {
+                canvas()->addCommand(command);
+            }
+        } else {
+            delete createCmd;
+            if (m_editMode == CreateConnection) {
+                // creation failed, so we have to undo the started work
+                KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(m_currentShape);
+                Q_ASSERT(connectionShape);
+                canvas()->shapeManager()->remove(m_currentShape); // deactivate is called
+                delete connectionShape;
+                return;
+            }
+        }
         delete m_currentStrategy;
         m_currentStrategy = 0;
     }
@@ -509,6 +520,12 @@ void ConnectionTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
+void ConnectionTool::slotShapeRemoved(KoShape *shape) {
+    if (m_currentShape && m_currentShape == shape) {
+        deactivate();
+    }
+}
+
 void ConnectionTool::activate(ToolActivation, const QSet<KoShape*> &)
 {
     // save old enabled snap strategies, set bounding box snap strategy
@@ -530,6 +547,7 @@ void ConnectionTool::deactivate()
     // restore previously set snap strategies
     canvas()->snapGuide()->enableSnapStrategies(m_oldSnapStrategies);
     canvas()->snapGuide()->reset();
+    m_currentShape = 0;
 }
 
 qreal ConnectionTool::squareDistance(const QPointF &p1, const QPointF &p2) const
