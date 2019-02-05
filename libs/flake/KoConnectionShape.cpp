@@ -552,8 +552,17 @@ void KoConnectionShape::updatePath(const QSizeF &size)
     Q_UNUSED(size);
     Q_D(KoConnectionShape);
 
-    const qreal MinimumEscapeLength = (qreal)20.;
     clear();
+    // Do not create a path when all handles point to the same point.
+    bool equal = true;
+    const QPointF first = d->handles.value(0);
+    for (int i = 1; equal && i < d->handles.count(); ++i) {
+        equal = d->handles[i] == first;
+    }
+    if (equal) {
+        return;
+    }
+    const qreal MinimumEscapeLength = (qreal)20.;
     switch (d->connectionType) {
     case Standard: {
         d->normalPath(MinimumEscapeLength);
