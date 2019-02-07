@@ -19,6 +19,7 @@
 
 #include "StencilBoxDocker.h"
 
+#include "StencilBoxDocker_p.h"
 #include "StencilShapeFactory.h"
 #include "CollectionItemModel.h"
 #include "CollectionTreeWidget.h"
@@ -115,13 +116,39 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     m_layout->addLayout(m_panelLayout);
     m_layout->addWidget(m_treeWidget);
 
-    loadShapeCollections();
+    // Load the stencils
+    m_loader = new StencilBoxDockerLoader(this);
+    m_loader->moveToThread(&loaderThread);
+    connect(&loaderThread, SIGNAL(started()), this, SLOT(threadStarted()));
+    connect(this , SIGNAL(startLoading()), m_loader, SLOT(loadShapeCollections()));
+    connect(&loaderThread, SIGNAL(finished()), m_loader, SLOT(deleteLater()));
+    connect(m_loader, SIGNAL(resultReady()), this, SLOT(collectionsLoaded()));
+    loaderThread.start();
+}
 
+StencilBoxDocker::~StencilBoxDocker()
+{
+    loaderThread.quit();
+    loaderThread.wait();
+    qDeleteAll(m_modelMap);
+}
+
+void StencilBoxDocker::threadStarted()
+{
+    Q_EMIT startLoading();
+}
+
+void StencilBoxDocker::collectionsLoaded()
+{
+    debugStencilBox;
+    m_modelMap = m_loader->m_modelMap;
     m_treeWidget->setFamilyMap(m_modelMap);
     m_treeWidget->regenerateFilteredMap();
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(locationChanged(Qt::DockWidgetArea)));
     connect(m_filterLineEdit, SIGNAL(textEdited(QString)), this, SLOT(reapplyFilter()));
+
+    loaderThread.quit();
 }
 
 #ifdef GHNS
@@ -205,7 +232,7 @@ void StencilBoxDocker::reapplyFilter()
 }
 
 /// Load shape collections to m_modelMap and register in the KoShapeRegistry
-void StencilBoxDocker::loadShapeCollections()
+void StencilBoxDockerLoader::loadShapeCollections()
 {
     const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("calligra/stencils"), QStandardPaths::LocateDirectory);
     foreach(const QString& path, dirs)
@@ -218,9 +245,10 @@ void StencilBoxDocker::loadShapeCollections()
             debugStencilBox << path + collectionDirName;
         }
     }
+    emit resultReady();
 }
 
-bool StencilBoxDocker::addCollection(const QString& path)
+bool StencilBoxDockerLoader::addCollection(const QString& path)
 {
     QDir dir(path);
 
@@ -232,7 +260,7 @@ bool StencilBoxDocker::addCollection(const QString& path)
     QString family = dg.readEntry("Name");
 
     if(!m_modelMap.contains(family)) {
-        CollectionItemModel* model = new CollectionItemModel(this);
+        CollectionItemModel* model = new CollectionItemModel();
         m_modelMap.insert(family, model);
     }
 
@@ -242,8 +270,8 @@ bool StencilBoxDocker::addCollection(const QString& path)
 
     KStatefulBrush brushForeground(KColorScheme::Window, KColorScheme::NormalText);
     KStatefulBrush brushBackground(KColorScheme::Window, KColorScheme::NormalBackground);
-    const QColor blackColor = brushForeground.brush(this).color();
-    const QColor whiteColor = brushBackground.brush(this).color();
+    const QColor blackColor = brushForeground.brush(q).color();
+    const QColor whiteColor = brushBackground.brush(q).color();
 
     foreach(const QString & stencil, stencils) {
         if(stencil == "collection.desktop")
