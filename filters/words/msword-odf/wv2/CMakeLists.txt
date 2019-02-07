@@ -64,13 +64,13 @@ if( NOT MSVC )
   set( CMAKE_REQUIRED_INCLUDES math.h )
 endif()
 
-check_function_exists( isinf HAVE_FUNC_ISINF )
-check_function_exists( isnan HAVE_FUNC_ISNAN )
+check_symbol_exists( isinf math.h HAVE_FUNC_ISINF )
+check_symbol_exists( isnan math.h HAVE_FUNC_ISNAN )
 if(MINGW)
 add_definitions( -DHAVE_FUNC_ISFINITE )
 endif()
-check_function_exists( finite HAVE_FUNC_FINITE )
-check_function_exists( _finite HAVE_FUNC__FINITE )
+check_symbol_exists( finite math.h HAVE_FUNC_FINITE )
+check_symbol_exists( _finite math.h HAVE_FUNC__FINITE )
 
 #
 # Check zlib is modern enough
@@ -78,9 +78,8 @@ check_function_exists( _finite HAVE_FUNC__FINITE )
 
 set( NEON_ZLIB 0 ) # By default, we are not modern enough
 set( CMAKE_REQUIRED_LIBRARIES ${ZLIB_LIBRARIES} )
-set( CMAKE_REQUIRED_INCLUDES zlib.h )
 
-check_function_exists( inflate ZLIB_HAS_INFLATE )
+check_symbol_exists( inflate zlib.h ZLIB_HAS_INFLATE )
 
 if( ZLIB_HAS_INFLATE )
   try_run( MODERN_ZLIB_RUN MODERN_ZLIB_COMPILE ${CMAKE_CURRENT_BINARY_DIR}/CMakeTmp ${CMAKE_SOURCE_DIR}/cmake/TestModernZlib.c )
