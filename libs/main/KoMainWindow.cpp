@@ -1831,7 +1831,7 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
             dockWidget->widget()->layout()->setContentsMargins(1, 1, 1, 1);
 
         Qt::DockWidgetArea side = Qt::RightDockWidgetArea;
-        bool visible = true;
+        bool visible = factory->defaultVisible();
 
         switch (factory->defaultDockPosition()) {
         case KoDockFactoryBase::DockTornOff:
