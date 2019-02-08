@@ -36,6 +36,9 @@ public:
     DockPosition defaultDockPosition() const {
         return DockLeft;
     }
+    bool defaultVisible() const {
+        return false;
+    }
 };
 
 #endif //STENCILBOXDOCKERFACTORY_H
