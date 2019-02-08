@@ -81,8 +81,6 @@ const KoComponentData &KPrFactory::componentData()
     if ( !s_instance )
     {
         s_instance = new KoComponentData(*aboutData());
-
-        KoDockRegistry::instance()->remove("StencilBox");
     }
     return *s_instance;
 }
