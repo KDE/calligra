@@ -700,9 +700,13 @@ KWTextFrameSet *KWFrameLayout::getOrCreate(Words::TextFrameSetType type, const K
 
 void KWFrameLayout::setup()
 {
-    if (m_setup)
+    // When framesets have been removed things needs to be updated
+    if (m_setup && ((m_maintext && !m_frameSets.contains(m_maintext)) || (m_backgroundFrameSet && !m_frameSets.contains(m_backgroundFrameSet)))) {
+        m_setup = false;
+    }
+    if (m_setup) {
         return;
-
+    }
     KWTextFrameSet *oldMainText = m_maintext;
     m_maintext = 0;
     m_backgroundFrameSet = 0;
