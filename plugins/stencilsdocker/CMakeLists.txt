@@ -23,3 +23,5 @@ endif()
 install(TARGETS calligra_docker_stencils DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/dockers)
 
 install(FILES calligra_stencils.knsrc DESTINATION ${CONFIG_INSTALL_DIR})
+
+add_subdirectory(stencils)

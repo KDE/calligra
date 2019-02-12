@@ -24,7 +24,6 @@ include_directories(
 add_subdirectory( common )
 add_subdirectory( ui )
 add_subdirectory( plugins )
-add_subdirectory( stencils )
 add_subdirectory( data )
 add_subdirectory( templates )
 
