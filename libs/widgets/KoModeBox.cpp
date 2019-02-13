@@ -130,22 +130,18 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
     d->stack = new QStackedWidget();
 
     d->tabBar = new QTabBar();
-    d->tabBar->setExpanding(false);
-    if (d->iconMode == IconAndText) {
-        if (d->horizontalMode) {
-            d->tabBar->setIconSize(QSize(38,32));
-        } else {
-            d->tabBar->setIconSize(QSize(32,64));
-        }
-    } else {
-        d->tabBar->setIconSize(QSize(22,22));
-    }
-    d->tabBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    d->tabBar->setIconSize(QSize(22,22));
     if (d->horizontalMode) {
+        d->tabBar->setExpanding(true);
         switchTabsSide(d->verticalTabsSide);
     } else {
+        d->tabBar->setExpanding(false);
+        if (d->iconMode == IconAndText) {
+            d->tabBar->setIconSize(QSize(32,64));
+        }
         switchTabsSide(d->horizontalTabsSide);
     }
+    d->tabBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     d->layout->addWidget(d->stack, 0, 1);
 
     d->layout->setContentsMargins(0,0,0,0);
@@ -213,19 +209,15 @@ void KoModeBox::locationChanged(Qt::DockWidgetArea area)
     d->layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
     d->layout->invalidate();
 
-    if (d->iconMode == IconAndText) {
-        if (d->horizontalMode) {
-            d->tabBar->setIconSize(QSize(42,32));
-        } else {
-            d->tabBar->setIconSize(QSize(32,64));
-        }
-    } else {
-        d->tabBar->setIconSize(QSize(22,22));
-    }
-
+    d->tabBar->setIconSize(QSize(22,22));
     if (d->horizontalMode) {
+        d->tabBar->setExpanding(true);
         switchTabsSide(d->verticalTabsSide);
     } else {
+        d->tabBar->setExpanding(false);
+        if (d->iconMode == IconAndText) {
+            d->tabBar->setIconSize(QSize(32,64));
+        }
         switchTabsSide(d->horizontalTabsSide);
     }
 }
@@ -259,6 +251,8 @@ void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
 
 QIcon KoModeBox::createTextIcon(KoToolAction *toolAction) const
 {
+    assert(!d->horizontalMode);
+
     QSize iconSize = d->tabBar->iconSize();
     QFont smallFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     qreal pointSize = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF();
@@ -268,25 +262,18 @@ QIcon KoModeBox::createTextIcon(KoToolAction *toolAction) const
     QImage pm(iconSize, QImage::Format_ARGB32_Premultiplied);
     pm.fill(Qt::transparent);
     QPainter p(&pm);
-    if (!d->horizontalMode) {
-        if (d->horizontalTabsSide == LeftSide ) {
-            p.rotate(90);
-            p.translate(0,-iconSize.width());
-        } else {
-            p.rotate(-90);
-            p.translate(-iconSize.height(),0);
-        }
+    if (d->horizontalTabsSide == LeftSide ) {
+        p.rotate(90);
+        p.translate(0,-iconSize.width());
+    } else {
+        p.rotate(-90);
+        p.translate(-iconSize.height(),0);
     }
 
     QIcon::fromTheme(toolAction->iconName()).paint(&p, 0, 0, iconSize.height(), 22);
 
     QTextLayout textLayout(toolAction->iconText(), smallFont, p.device());
-    QTextOption option;
-    if (d->horizontalMode) {
-        option = QTextOption(Qt::AlignVCenter | Qt::AlignHCenter);
-    } else {
-        option = QTextOption(Qt::AlignTop | Qt::AlignHCenter);
-    }
+    QTextOption option = QTextOption(Qt::AlignTop | Qt::AlignHCenter);
     option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
     textLayout.setTextOption(option);
     textLayout.beginLayout();
@@ -365,7 +352,11 @@ void KoModeBox::addItem(KoToolAction *toolAction)
 
     // Create a rotated icon with text
     if (d->iconMode == IconAndText) {
-        d->tabBar->addTab(createTextIcon(toolAction), QString());
+        if (d->horizontalMode) {
+            d->tabBar->addTab(QIcon::fromTheme(toolAction->iconName()), toolAction->iconText());
+        } else {
+            d->tabBar->addTab(createTextIcon(toolAction), QString());
+        }
     } else {
         int index = d->tabBar->addTab(createSimpleIcon(toolAction), QString());
         d->tabBar->setTabToolTip(index, toolAction->toolTip());
