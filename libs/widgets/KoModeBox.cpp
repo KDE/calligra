@@ -130,15 +130,11 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
     d->stack = new QStackedWidget();
 
     d->tabBar = new QTabBar();
-    d->tabBar->setIconSize(QSize(22,22));
+    setIconSize();
+    d->tabBar->setExpanding(d->horizontalMode);
     if (d->horizontalMode) {
-        d->tabBar->setExpanding(true);
         switchTabsSide(d->verticalTabsSide);
     } else {
-        d->tabBar->setExpanding(false);
-        if (d->iconMode == IconAndText) {
-            d->tabBar->setIconSize(QSize(32,64));
-        }
         switchTabsSide(d->horizontalTabsSide);
     }
     d->tabBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
@@ -209,15 +205,11 @@ void KoModeBox::locationChanged(Qt::DockWidgetArea area)
     d->layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
     d->layout->invalidate();
 
-    d->tabBar->setIconSize(QSize(22,22));
+    setIconSize();
+    d->tabBar->setExpanding(d->horizontalMode);
     if (d->horizontalMode) {
-        d->tabBar->setExpanding(true);
         switchTabsSide(d->verticalTabsSide);
     } else {
-        d->tabBar->setExpanding(false);
-        if (d->iconMode == IconAndText) {
-            d->tabBar->setIconSize(QSize(32,64));
-        }
         switchTabsSide(d->horizontalTabsSide);
     }
 }
@@ -614,15 +606,7 @@ void KoModeBox::slotContextMenuRequested(const QPoint &pos)
 void KoModeBox::switchIconMode(int mode)
 {
     d->iconMode = static_cast<IconMode>(mode);
-    if (d->iconMode == IconAndText) {
-        if (d->horizontalMode) {
-            d->tabBar->setIconSize(QSize(38,32));
-        } else {
-            d->tabBar->setIconSize(QSize(32,64));
-        }
-    } else {
-        d->tabBar->setIconSize(QSize(22,22));
-    }
+    setIconSize();
     updateShownTools(QList<QString>());
 
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("calligra");
@@ -662,4 +646,12 @@ void KoModeBox::switchTabsSide(int side)
         cfg.writeEntry("ModeBoxHorizontalTabsSide", (int)d->horizontalTabsSide);
     }
     updateShownTools(QList<QString>());
+}
+
+void KoModeBox::setIconSize() const {
+    if (!d->horizontalMode && d->iconMode == IconAndText) {
+        d->tabBar->setIconSize(QSize(32,64));
+    } else {
+        d->tabBar->setIconSize(QSize(22,22));
+    }
 }

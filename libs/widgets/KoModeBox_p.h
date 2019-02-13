@@ -143,6 +143,7 @@ private:
     QIcon createTextIcon(KoToolAction *toolAction) const;
     QIcon createSimpleIcon(KoToolAction *toolAction) const;
     void addItem(KoToolAction *toolAction);
+    void setIconSize() const;
 
 private:
     class Private;
