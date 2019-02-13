@@ -5,6 +5,8 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-deprecated -Wno-deprecated-declarations)
 endif ()
 
+list(APPEND CMAKE_AUTOMOC_MACRO_NAMES "CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE")
+
 if (SHOULD_BUILD_PART_SHEETS)
 
 include_directories( ${CMAKE_SOURCE_DIR}/interfaces
