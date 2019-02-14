@@ -419,7 +419,7 @@ and click the <guibutton>OK</guibutton> button. The Dialog will vanish and you
 will see the chart embedded into the worksheet.</para>
 <para>Now select <guibutton>Chart Editing Tool</guibutton> from the <guilabel>Tools</guilabel> 
 docker and edit the chart properties like chart type, labels and axis in the 
-<guilabel>Tools Options</guilabel>.</para>
+<guilabel>Chart editing</guilabel>.</para>
 <para>
 <mediaobject>
 <imageobject>
@@ -447,7 +447,7 @@ chart to where you want it to be.</para>
 <para>To restore the chart to its normal appearance simply click anywhere 
 outside of the chart area.</para>
 <para>To change the format of the chart itself <mousebutton>left</mousebutton> 
-click twice within the chart area. The chart <guilabel>Tools Options</guilabel> 
+click twice within the chart area. The chart <guilabel>Chart editing</guilabel> 
 should appear in the docker. You can then 
 use these tools to change the chart.</para>
 </sect1>
