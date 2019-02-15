@@ -87,6 +87,12 @@ void KoPACanvas::updateCanvas( const QRectF& rc )
 bool KoPACanvas::event(QEvent *e)
 {
     if(toolProxy()) {
+        if (e->type() == QEvent::TouchBegin ||
+            e->type() == QEvent::TouchUpdate ||
+            e->type() == QEvent::TouchEnd)
+        {
+            toolProxy()->touchEvent(dynamic_cast<QTouchEvent*>(e));
+        }
         toolProxy()->processEvent(e);
     }
     return QWidget::event(e);
