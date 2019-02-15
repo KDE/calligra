@@ -243,7 +243,7 @@ void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
 
 QIcon KoModeBox::createTextIcon(KoToolAction *toolAction) const
 {
-    assert(!d->horizontalMode);
+    Q_ASSERT(!d->horizontalMode);
 
     QSize iconSize = d->tabBar->iconSize();
     QFont smallFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
