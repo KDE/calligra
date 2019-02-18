@@ -41,8 +41,8 @@ public:
      */
     KoColor currentColor() const;
 protected:
-    virtual void drawContents( QPainter* );
-    virtual void drawArrow(QPainter *painter, const QPoint &pos);
+    void drawContents( QPainter* ) Q_DECL_OVERRIDE;
+    void drawArrow(QPainter *painter, const QPoint &pos) Q_DECL_OVERRIDE;
 
 protected:
     struct Private;

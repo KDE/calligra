@@ -51,7 +51,7 @@ public:
     /// @internal, for KoApplication
     static void setDPI(int x, int y);
 
-    ~KoDpi();
+    ~KoDpi() = default;
 
 private:
     static KoDpi* self();

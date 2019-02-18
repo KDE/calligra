@@ -35,9 +35,9 @@ class KoZoomWidget::Private
 public:
 
     Private()
-        : slider(0)
-        , input(0)
-        , aspectButton(0)
+        : slider(nullptr)
+        , input(nullptr)
+        , aspectButton(nullptr)
     {}
 
     QSlider* slider;

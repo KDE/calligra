@@ -46,7 +46,7 @@ protected:
     {
     }
 
-    virtual ~KoDialogPrivate() {}
+    virtual ~KoDialogPrivate() = default;
 
     KoDialog *q_ptr;
 

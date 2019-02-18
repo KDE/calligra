@@ -42,7 +42,7 @@ class KOWIDGETS_EXPORT KoFillConfigWidget : public QWidget
     };
 public:
     explicit KoFillConfigWidget(QWidget *parent);
-    ~KoFillConfigWidget();
+    ~KoFillConfigWidget() Q_DECL_OVERRIDE;
 
     void setCanvas(KoCanvasBase *canvas);
 

@@ -76,7 +76,7 @@ public Q_SLOTS:  // QDialog API
     void accept();
 
 protected:  // QWidget API
-    void hideEvent(QHideEvent * event);
+    void hideEvent(QHideEvent * event) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     /** Connected with clicked() from pbReset - Reset parts of the metadata */

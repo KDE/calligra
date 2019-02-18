@@ -87,11 +87,11 @@ class HorizontalPaintingStrategy : public PaintingStrategy
 public:
     HorizontalPaintingStrategy() : lengthInPixel(1) {}
 
-    virtual QRectF drawBackground(const KoRulerPrivate *ruler, QPainter &painter);
-    virtual void drawTabs(const KoRulerPrivate *ruler, QPainter &painter);
-    virtual void drawMeasurements(const KoRulerPrivate *ruler, QPainter &painter, const QRectF &rectangle);
-    virtual void drawIndents(const KoRulerPrivate *ruler, QPainter &painter);
-    virtual QSize sizeHint();
+    QRectF drawBackground(const KoRulerPrivate *ruler, QPainter &painter) Q_DECL_OVERRIDE;
+    void drawTabs(const KoRulerPrivate *ruler, QPainter &painter) Q_DECL_OVERRIDE;
+    void drawMeasurements(const KoRulerPrivate *ruler, QPainter &painter, const QRectF &rectangle) Q_DECL_OVERRIDE;
+    void drawIndents(const KoRulerPrivate *ruler, QPainter &painter) Q_DECL_OVERRIDE;
+    QSize sizeHint() Q_DECL_OVERRIDE;
 
 private:
     qreal lengthInPixel;

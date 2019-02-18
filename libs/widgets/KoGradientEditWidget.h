@@ -53,10 +53,10 @@ public:
      * Creates a new gradient tab widget with the given parent.
      * @param parent the widgets parent
      */
-    explicit KoGradientEditWidget(QWidget* parent = 0L);
+    explicit KoGradientEditWidget(QWidget* parent = nullptr);
 
     /// Destroys the widget
-    virtual ~KoGradientEditWidget();
+    ~KoGradientEditWidget() Q_DECL_OVERRIDE = default;
 
     /**
      * Sets a new gradient to edit.

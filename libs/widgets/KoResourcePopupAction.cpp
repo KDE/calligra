@@ -42,6 +42,8 @@
 #include <QRect>
 #include <QWidgetAction>
 
+#include <utility>
+
 class KoResourcePopupAction::Private
 {
 public:
@@ -110,7 +112,7 @@ KoResourcePopupAction::~KoResourcePopupAction()
      * This happens only if the actions are QWidgetAction, and we know they are since
      * the only ones added are in KoResourcePopupAction constructor. */
     int i = 0;
-    while(d->menu->actions().size() > 0) {
+    while(!d->menu->actions().empty()) {
         d->menu->removeAction(d->menu->actions().at(i));
         ++i;
     }
@@ -127,7 +129,7 @@ QSharedPointer<KoShapeBackground> KoResourcePopupAction::currentBackground() con
 
 void KoResourcePopupAction::setCurrentBackground(QSharedPointer<KoShapeBackground>  background)
 {
-    d->background = background;
+    d->background = std::move(background);
 
     updateIcon();
 }

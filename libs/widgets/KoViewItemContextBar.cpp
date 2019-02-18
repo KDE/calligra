@@ -72,10 +72,6 @@ KoViewItemContextBar::KoViewItemContextBar(QAbstractItemView *parent)
     m_view->setMouseTracking(true);
 }
 
-KoViewItemContextBar::~KoViewItemContextBar()
-{
-}
-
 bool KoViewItemContextBar::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_view->viewport()) {

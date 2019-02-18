@@ -43,7 +43,7 @@ class ScrollArea : public QScrollArea
 {
     Q_OBJECT
 protected:
-    void showEvent(QShowEvent *);
+    void showEvent(QShowEvent *) Q_DECL_OVERRIDE;
 };
 
 /**
@@ -60,7 +60,7 @@ class KoModeBox : public QWidget {
 public:
     /// constructor
     explicit KoModeBox(KoCanvasControllerWidget *canvas, const QString &applicationName);
-    ~KoModeBox();
+    ~KoModeBox() Q_DECL_OVERRIDE;
 
     /**
      * Should been called when the docker position has changed.

@@ -73,7 +73,7 @@ void KoMarkerSelector::paintEvent(QPaintEvent *pe)
     pathShape.lineTo(QPointF(rect.right(), rect.center().y()));
 
     KoMarker *marker = itemData(currentIndex(), Qt::DecorationRole).value<KoMarker*>();
-    if (marker != 0) {
+    if (marker != nullptr) {
         pathShape.setMarker(marker, d->model->position());
     }
 

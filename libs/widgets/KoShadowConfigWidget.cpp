@@ -182,7 +182,7 @@ void KoShadowConfigWidget::selectionChanged()
     KoSelection *selection = d->canvas->shapeManager()->selection();
     KoShape * shape = selection->firstSelectedShape(KoFlake::TopLevelSelection);
 
-    setEnabled(shape != 0);
+    setEnabled(shape != nullptr);
 
     if (! shape) {
         setShadowVisible(false);

@@ -30,9 +30,9 @@ class KOWIDGETS_EXPORT KoDocumentInfoPropsPage : public KPropertiesDialogPlugin
 public:
     explicit KoDocumentInfoPropsPage(KPropertiesDialog *props,
                                      const QVariantList & = QVariantList());
-    virtual ~KoDocumentInfoPropsPage();
+    ~KoDocumentInfoPropsPage() Q_DECL_OVERRIDE;
 
-    virtual void applyChanges();
+    void applyChanges() Q_DECL_OVERRIDE;
 
 private:
     class KoDocumentInfoPropsPagePrivate;

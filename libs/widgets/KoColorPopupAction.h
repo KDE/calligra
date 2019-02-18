@@ -42,12 +42,12 @@ public:
       *
       * @param parent The parent for this action.
       */
-    explicit KoColorPopupAction(QObject *parent = 0);
+    explicit KoColorPopupAction(QObject *parent = nullptr);
 
     /**
      * Destructor
      */
-    virtual ~KoColorPopupAction();
+    ~KoColorPopupAction() Q_DECL_OVERRIDE;
 
 public Q_SLOTS:
     /// Sets a new color to be displayed

@@ -287,8 +287,6 @@ void KoSliderCombo::setValue(qreal value)
     emit valueChanged(value, true);
 }
 
-KoSliderComboContainer::~KoSliderComboContainer() {}
-
 void KoSliderComboContainer::mousePressEvent(QMouseEvent *e)
 {
     QStyleOptionComboBox opt;

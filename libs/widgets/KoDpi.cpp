@@ -59,10 +59,6 @@ KoDpi::KoDpi()
 #endif
 }
 
-KoDpi::~KoDpi()
-{
-}
-
 void KoDpi::setDPI(int x, int y)
 {
     //debugWidgets << x <<"," << y;

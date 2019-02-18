@@ -44,19 +44,13 @@ KoContextBarButton::KoContextBarButton(const QString &iconName, QWidget* parent)
 : QToolButton(parent)
 , m_isHovered(false)
 , m_fadingValue(0)
-, m_fadingTimeLine(0)
+, m_fadingTimeLine(nullptr)
 {
     const int size = QApplication::style()->pixelMetric(QStyle::PM_ButtonIconSize);
     setIconSize(QSize(size, size));
     setAutoRaise(true);
     setIcon(QIcon::fromTheme(iconName));
 }
-
-
-KoContextBarButton::~KoContextBarButton()
-{
-}
-
 
 void KoContextBarButton::paintEvent(QPaintEvent*)
 {
@@ -135,7 +129,7 @@ void KoContextBarButton::stopFading()
     if (m_fadingTimeLine) {
         m_fadingTimeLine->stop();
         delete m_fadingTimeLine;
-        m_fadingTimeLine = 0;
+        m_fadingTimeLine = nullptr;
     }
     m_fadingValue = 0;
 }

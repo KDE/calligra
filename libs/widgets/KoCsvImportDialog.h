@@ -53,7 +53,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~KoCsvImportDialog();
+    ~KoCsvImportDialog() Q_DECL_OVERRIDE;
 
     /**
      * Set the data to import.

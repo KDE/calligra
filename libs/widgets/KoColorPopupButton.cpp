@@ -31,10 +31,6 @@ KoColorPopupButton::KoColorPopupButton(QWidget *parent)
     setToolButtonStyle(Qt::ToolButtonIconOnly);
 }
 
-KoColorPopupButton::~KoColorPopupButton()
-{
-}
-
 QSize KoColorPopupButton::sizeHint() const
 {
     QStyleOptionToolButton opt;

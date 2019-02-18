@@ -39,10 +39,6 @@ KoZoomHandler::KoZoomHandler()
     setDpi(KoDpi::dpiX(), KoDpi::dpiY());
 }
 
-KoZoomHandler::~KoZoomHandler()
-{
-}
-
 void KoZoomHandler::setResolutionToStandard()
 {
     setDpi(KoDpi::dpiX(), KoDpi::dpiY());

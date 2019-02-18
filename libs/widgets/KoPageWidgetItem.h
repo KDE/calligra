@@ -31,7 +31,7 @@ class QString;
 class KOWIDGETS_EXPORT KoPageWidgetItem
 {
 public:
-    virtual ~KoPageWidgetItem() {}
+    virtual ~KoPageWidgetItem() = default;
 
     virtual QWidget *widget() = 0;
     virtual QString name() const = 0;

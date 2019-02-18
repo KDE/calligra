@@ -44,7 +44,7 @@ class KOWIDGETS_EXPORT KoViewItemContextBar : public QObject
 
 public:
     explicit KoViewItemContextBar(QAbstractItemView *parent);
-    virtual ~KoViewItemContextBar();
+    ~KoViewItemContextBar() Q_DECL_OVERRIDE = default;
     virtual bool eventFilter(QObject *watched, QEvent *event);
 
     /**

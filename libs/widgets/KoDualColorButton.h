@@ -70,16 +70,16 @@ class KOWIDGETS_EXPORT KoDualColorButton : public QWidget
      * @param dialogParent The parent widget of the color selection dialog.
      */
     KoDualColorButton(const KoColor &foregroundColor, const KoColor &backgroundColor,
-                      QWidget *parent = 0, QWidget* dialogParent = 0 );
+                      QWidget *parent = nullptr, QWidget* dialogParent = nullptr );
 
     KoDualColorButton(const KoColor &foregroundColor, const KoColor &backgroundColor,
                       const KoColorDisplayRendererInterface *displayRenderer,
-                      QWidget *parent = 0, QWidget* dialogParent = 0 );
+                      QWidget *parent = nullptr, QWidget* dialogParent = nullptr);
 
     /**
      * Destroys the KoDualColorButton.
      */
-    ~KoDualColorButton();
+    ~KoDualColorButton() Q_DECL_OVERRIDE;
 
     /**
      * Returns the current foreground color.
@@ -102,7 +102,7 @@ class KOWIDGETS_EXPORT KoDualColorButton : public QWidget
      * Returns the minimum size needed to display the widget and all its
      * controls.
      */
-    virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
 
   public Q_SLOTS:
     /**
@@ -150,13 +150,13 @@ class KOWIDGETS_EXPORT KoDualColorButton : public QWidget
      */
     virtual void metrics( QRect &foregroundRect, QRect &backgroundRect );
 
-    virtual void paintEvent( QPaintEvent *event );
-    virtual void mousePressEvent( QMouseEvent *event );
-    virtual void mouseMoveEvent( QMouseEvent *event );
-    virtual void mouseReleaseEvent( QMouseEvent *event );
-    virtual void dragEnterEvent( QDragEnterEvent *event );
-    virtual void dropEvent( QDropEvent *event );
-    virtual void changeEvent(QEvent *event);
+    virtual void paintEvent( QPaintEvent *event ) Q_DECL_OVERRIDE;
+    virtual void mousePressEvent( QMouseEvent *event ) Q_DECL_OVERRIDE;
+    virtual void mouseMoveEvent( QMouseEvent *event ) Q_DECL_OVERRIDE;
+    virtual void mouseReleaseEvent( QMouseEvent *event ) Q_DECL_OVERRIDE;
+    virtual void dragEnterEvent( QDragEnterEvent *event ) Q_DECL_OVERRIDE;
+    virtual void dropEvent( QDropEvent *event ) Q_DECL_OVERRIDE;
+    virtual void changeEvent(QEvent *event) Q_DECL_OVERRIDE;
 
   private:
     class Private;

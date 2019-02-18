@@ -34,7 +34,7 @@ class ContextMenuExistingTagAction : public QAction
     Q_OBJECT
 public:
     explicit ContextMenuExistingTagAction( KoResource * resource, const QString &tag, QObject* parent = 0);
-    ~ContextMenuExistingTagAction();
+    ~ContextMenuExistingTagAction() Q_DECL_OVERRIDE = default;
 
 Q_SIGNALS:
     void triggered(KoResource * resource, const QString &tag);
@@ -56,7 +56,7 @@ class KoLineEditAction : public QWidgetAction
     Q_OBJECT
 public:
     explicit KoLineEditAction(QObject* parent);
-    virtual ~KoLineEditAction();
+    ~KoLineEditAction() Q_DECL_OVERRIDE = default;
     void setIcon(const QIcon &icon);
     void closeParentOnTrigger(bool closeParent);
     bool closeParentOnTrigger();
@@ -81,7 +81,7 @@ class NewTagAction : public KoLineEditAction
     Q_OBJECT
 public:
     explicit NewTagAction (KoResource* resource, QMenu* parent);
-    ~NewTagAction();
+    ~NewTagAction() Q_DECL_OVERRIDE = default;
 
     Q_SIGNALS:
     void triggered(KoResource * resource, const QString &tag);
@@ -104,7 +104,7 @@ public:
         const QString& currentlySelectedTag,
         const QStringList& allTags
     );
-    virtual ~KoResourceItemChooserContextMenu();
+    ~KoResourceItemChooserContextMenu() Q_DECL_OVERRIDE = default;
 
 Q_SIGNALS:
     /// Emitted when a resource should be added to an existing tag.

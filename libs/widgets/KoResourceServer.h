@@ -140,7 +140,7 @@ public:
         m_tagStore->loadTags();
     }
 
-    virtual ~KoResourceServer()
+    virtual ~KoResourceServer() Q_DECL_OVERRIDE
     {
         if (m_tagStore) {
             delete m_tagStore;
@@ -158,7 +158,7 @@ public:
 
     }
 
-    int resourceCount() const {
+    int resourceCount() const Q_DECL_OVERRIDE {
         return m_resources.size();
     }
 
@@ -168,7 +168,7 @@ public:
      * be loaded or and invalid aren't added to the server.
      * @param filenames list of filenames to be loaded
      */
-    void loadResources(QStringList filenames) {
+    void loadResources(QStringList filenames) Q_DECL_OVERRIDE {
 
         QStringList uniqueFiles;
 
@@ -290,11 +290,10 @@ public:
         if (m_blackListFileNames.contains(resource->filename())) {
             m_blackListFileNames.removeAll(resource->filename());
             writeBlackListFile();
-            }
-            else{
-                warnWidgets<<"Doesn't contain filename";
-                return false;
-            }
+        } else{
+            warnWidgets<<"Doesn't contain filename";
+            return false;
+        }
         
         
         //then return true//
@@ -479,7 +478,7 @@ public:
         notifyResourceChanged(resource);
     }
 
-    QStringList blackListedFiles() const
+    QStringList blackListedFiles() const Q_DECL_OVERRIDE
     {
         return m_blackListFileNames;
     }
@@ -543,7 +542,7 @@ public:
         }
     }
 
-    QStringList queryResources(const QString &query) const
+    QStringList queryResources(const QString &query) const Q_DECL_OVERRIDE
     {
         return m_tagStore->searchTag(query);
     }
@@ -671,12 +670,12 @@ protected:
 
 protected:
 
-    KoResource* byMd5(const QByteArray &md5) const
+    KoResource* byMd5(const QByteArray &md5) const Q_DECL_OVERRIDE
     {
         return Policy::toResourcePointer(resourceByMD5(md5));
     }
 
-    KoResource* byFileName(const QString &fileName) const
+    KoResource* byFileName(const QString &fileName) const Q_DECL_OVERRIDE
     {
         return Policy::toResourcePointer(resourceByFilename(fileName));
     }

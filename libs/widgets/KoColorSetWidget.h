@@ -47,12 +47,12 @@ public:
      *
      * @param parent parent QWidget
      */
-    explicit KoColorSetWidget(QWidget *parent=0);
+    explicit KoColorSetWidget(QWidget *parent = nullptr);
 
     /**
      * Destructor
      */
-    virtual ~KoColorSetWidget();
+    ~KoColorSetWidget() Q_DECL_OVERRIDE;
 
     /**
      * Sets the color set that this widget shows.
@@ -67,7 +67,7 @@ public:
     KoColorSet* colorSet();
 
 protected:
-    virtual void resizeEvent(QResizeEvent *event); ///< reimplemented from QFrame
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE; ///< reimplemented from QFrame
 
 Q_SIGNALS:
 

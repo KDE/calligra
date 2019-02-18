@@ -37,20 +37,20 @@ public:
 
     KoGenericRegistryModel(KoGenericRegistry<T>* registry);
 
-    virtual ~KoGenericRegistryModel();
+    ~KoGenericRegistryModel() Q_DECL_OVERRIDE = default;
 
 public:
 
     /**
      * @return the number of elements in the registry
      */
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
 
     /**
      * When role == Qt::DisplayRole, this function will return the name of the
      * element.
      */
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
 
     /**
      * @return the element at the given index
@@ -65,11 +65,6 @@ private:
 // -- Implementation --
 template<typename T>
 KoGenericRegistryModel<T>::KoGenericRegistryModel(KoGenericRegistry<T>* registry) : m_registry(registry)
-{
-}
-
-template<typename T>
-KoGenericRegistryModel<T>::~KoGenericRegistryModel()
 {
 }
 

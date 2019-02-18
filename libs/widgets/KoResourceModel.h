@@ -35,16 +35,16 @@ class KOWIDGETS_EXPORT KoResourceModel : public KoResourceModelBase
     Q_OBJECT
 public:
     explicit KoResourceModel(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QObject * parent = 0);
-    virtual ~KoResourceModel();
+    ~KoResourceModel() Q_DECL_OVERRIDE;
 
     /// reimplemented
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
     /// reimplemented
-    virtual int columnCount ( const QModelIndex & parent = QModelIndex() ) const;
+    int columnCount ( const QModelIndex & parent = QModelIndex() ) const Q_DECL_OVERRIDE;
     /// reimplemented
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
     /// reimplemented
-    virtual QModelIndex index ( int row, int column = 0, const QModelIndex & parent = QModelIndex() ) const;
+    QModelIndex index ( int row, int column = 0, const QModelIndex & parent = QModelIndex() ) const Q_DECL_OVERRIDE;
     /// Sets the number of columns to display
     void setColumnCount( int columnCount );
 
@@ -55,29 +55,29 @@ public:
         LargeThumbnailRole = 33
     };
 
-    QModelIndex indexFromResource(KoResource* resource) const;
+    QModelIndex indexFromResource(KoResource* resource) const Q_DECL_OVERRIDE;
 
     /// facade for KoAbstractResourceServerAdapter
     QString extensions() const;
     void importResourceFile(const QString &filename);
     void importResourceFile(const QString &filename, bool fileCreation);
-    bool removeResource(KoResource* resource);
+    bool removeResource(KoResource* resource) Q_DECL_OVERRIDE;
     void removeResourceFile(const QString & filename);
-    QStringList assignedTagsList(KoResource *resource) const;
-    void addTag(KoResource* resource, const QString& tag);
-    void deleteTag( KoResource* resource, const QString& tag);
-    QStringList tagNamesList() const;
+    QStringList assignedTagsList(KoResource *resource) const Q_DECL_OVERRIDE;
+    void addTag(KoResource* resource, const QString& tag) Q_DECL_OVERRIDE;
+    void deleteTag( KoResource* resource, const QString& tag) Q_DECL_OVERRIDE;
+    QStringList tagNamesList() const Q_DECL_OVERRIDE;
     QStringList searchTag(const QString& lineEditText);
-    void enableResourceFiltering(bool enable);
-    void setCurrentTag(const QString& currentTag);
-    void searchTextChanged(const QString& searchString);
-    void updateServer();
-    int resourcesCount() const;
-    QList<KoResource *> currentlyVisibleResources() const;
-    QList<KoResource *> serverResources() const;
-    void tagCategoryMembersChanged();
-    void tagCategoryAdded(const QString& tag);
-    void tagCategoryRemoved(const QString& tag);
+    void enableResourceFiltering(bool enable) Q_DECL_OVERRIDE;
+    void setCurrentTag(const QString& currentTag) Q_DECL_OVERRIDE;
+    void searchTextChanged(const QString& searchString) Q_DECL_OVERRIDE;
+    void updateServer() Q_DECL_OVERRIDE;
+    int resourcesCount() const Q_DECL_OVERRIDE;
+    QList<KoResource *> currentlyVisibleResources() const Q_DECL_OVERRIDE;
+    QList<KoResource *> serverResources() const Q_DECL_OVERRIDE;
+    void tagCategoryMembersChanged() Q_DECL_OVERRIDE;
+    void tagCategoryAdded(const QString& tag) Q_DECL_OVERRIDE;
+    void tagCategoryRemoved(const QString& tag) Q_DECL_OVERRIDE;
 
     QString serverType() const;
 

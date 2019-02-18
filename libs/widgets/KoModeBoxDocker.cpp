@@ -39,7 +39,7 @@ KoModeBoxDocker::KoModeBoxDocker(KoModeBox *modeBox)
 
 void KoModeBoxDocker::setCanvas(KoCanvasBase *canvas)
 {
-    setEnabled(canvas != 0);
+    setEnabled(canvas != nullptr);
     m_modeBox->setCanvas(canvas);
 }
 

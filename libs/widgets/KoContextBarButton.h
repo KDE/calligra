@@ -32,19 +32,18 @@ class QTimeLine;
 class KoContextBarButton : public QToolButton {
     Q_OBJECT
 public:
-    explicit KoContextBarButton(const QString &iconName, QWidget *parent = 0);
-    ~KoContextBarButton();
+    explicit KoContextBarButton(const QString &iconName, QWidget *parent = nullptr);
+    ~KoContextBarButton() override = default;
 
 public Q_SLOTS:
     void setFadingValue(int value);
 
 protected:
-    void paintEvent(QPaintEvent*);
-    virtual void enterEvent(QEvent *event);
-    virtual void leaveEvent(QEvent *event);
-    virtual void showEvent(QShowEvent *event);
-    virtual void hideEvent(QHideEvent *event);
-
+    void paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
+    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
+    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
 
 private:
     /** Starts button fading animation */

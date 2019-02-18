@@ -36,7 +36,7 @@ class KOWIDGETS_EXPORT KoResourceItemChooserSync : public QObject
     Q_OBJECT
 public:
     KoResourceItemChooserSync();
-    virtual ~KoResourceItemChooserSync();
+    ~KoResourceItemChooserSync() Q_DECL_OVERRIDE;
     static KoResourceItemChooserSync* instance();
 
     /// Gets the base length

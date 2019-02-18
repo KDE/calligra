@@ -47,7 +47,7 @@ public:
     /**
      * Destructor
      */
-    virtual ~KoResourcePopupAction();
+    ~KoResourcePopupAction() Q_DECL_OVERRIDE;
 
     QSharedPointer<KoShapeBackground> currentBackground() const;
     void setCurrentBackground(QSharedPointer<KoShapeBackground> background);

@@ -50,7 +50,7 @@ void KoToolBoxButton::setHighlightColor()
     QPalette p = qApp->palette();
     if (isChecked()) {
         QPalette palette_highlight(p);
-        QColor c = p.color(QPalette::Highlight);
+        const QColor &c = p.color(QPalette::Highlight);
         palette_highlight.setColor(QPalette::Button, c);
         setPalette(palette_highlight);
     }

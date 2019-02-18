@@ -101,8 +101,8 @@ private Q_SLOTS:
     void slotContextIconSize();
 
 protected:
-    void paintEvent(QPaintEvent *event);
-    void contextMenuEvent(QContextMenuEvent *event);
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+    void contextMenuEvent(QContextMenuEvent *event) Q_DECL_OVERRIDE;
 
 private:
     class Private;

@@ -32,7 +32,7 @@
 
 struct Q_DECL_HIDDEN KoColorSlider::Private
 {
-    Private() : upToDate(false), displayRenderer(0) {}
+    Private() : upToDate(false), displayRenderer(nullptr) {}
     KoColor minColor;
     KoColor maxColor;
     QPixmap pixmap;

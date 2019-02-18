@@ -50,8 +50,8 @@ public:
             /* default */                      QStandardPaths::GenericDataLocation;
     }
 
-    KoResourcePathsImpl();
-    ~KoResourcePathsImpl();
+    KoResourcePathsImpl() = default;
+    ~KoResourcePathsImpl() = default;
 
     void addResourceTypeInternal(const QString &type, const QString &basetype,
                                  const QString &relativeName, bool priority);
@@ -76,15 +76,6 @@ private:
     QHash<QString, QStringList> m_absolutes; // For each resource type, the list of absolute paths, from most local (most priority) to most global
     QHash<QString, QStringList> m_relatives; // Same with relative paths
 };
-
-KoResourcePathsImpl::KoResourcePathsImpl()
-{
-}
-
-KoResourcePathsImpl::~KoResourcePathsImpl()
-{
-}
-
 
 void KoResourcePathsImpl::addResourceTypeInternal(const QString &type, const QString &basetype,
                                                   const QString &relativename,

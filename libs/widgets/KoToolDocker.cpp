@@ -258,7 +258,7 @@ void KoToolDocker::setOptionWidgets(const QList<QPointer<QWidget> > &optionWidge
 
 void KoToolDocker::resizeEvent(QResizeEvent*)
 {
-    int fw = isFloating() ? style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, 0, this) : 0;
+    int fw = isFloating() ? style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, nullptr, this) : 0;
     d->tabButton->move(width() - d->tabButton->width() - d->scrollArea->verticalScrollBar()->sizeHint().width(), fw);
 }
 

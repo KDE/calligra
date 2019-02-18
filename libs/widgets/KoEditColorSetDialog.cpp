@@ -41,9 +41,9 @@
 KoEditColorSetWidget::KoEditColorSetWidget(const QList<KoColorSet *> &palettes, const QString &activePalette, QWidget *parent)
     : QWidget(parent),
     m_colorSets(palettes),
-    m_gridLayout(0),
-    m_activeColorSet(0),
-    m_activePatch(0),
+    m_gridLayout(nullptr),
+    m_activeColorSet(nullptr),
+    m_activePatch(nullptr),
     m_initialColorSetCount(palettes.count()),
     m_activeColorSetRequested(false)
 {
@@ -111,7 +111,7 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
 {
     if (m_gridLayout) {
         delete m_gridLayout;
-        m_activePatch = 0;
+        m_activePatch = nullptr;
     }
 
     QWidget *wdg = new QWidget(m_scrollArea);
@@ -197,7 +197,7 @@ void KoEditColorSetWidget::save()
 {
     Q_ASSERT(m_activeColorSet);
     if (!m_activeColorSet->save())
-        KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only. ", m_activeColorSet->filename()), i18n("Palette"));
+        KMessageBox::error(nullptr, i18n("Cannot write to palette file %1. Maybe it is read-only. ", m_activeColorSet->filename()), i18n("Palette"));
 }
 
 KoColorSet *KoEditColorSetWidget::activeColorSet()

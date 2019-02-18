@@ -78,7 +78,7 @@ private:
 
     friend class KoResourceBundle;
 
-    virtual KoAbstractGradient* createResource( const QString & filename ) {
+    KoAbstractGradient* createResource( const QString & filename ) Q_DECL_OVERRIDE {
 
         QString fileExtension;
         int index = filename.lastIndexOf('.');
@@ -96,7 +96,7 @@ private:
         return grad;
     }
 
-    virtual QList< KoAbstractGradient* > sortedResources() {
+    QList< KoAbstractGradient* > sortedResources() Q_DECL_OVERRIDE {
         QList< KoAbstractGradient* > resources = KoResourceServer<KoAbstractGradient>::sortedResources();
         QList< KoAbstractGradient* > sorted;
         if (m_foregroundToTransparent && resources.contains(m_foregroundToTransparent)) {
@@ -127,10 +127,6 @@ KoResourceLoaderThread::KoResourceLoaderThread(KoResourceServerBase * server)
         }
     }
     connect(qApp, SIGNAL(aboutToQuit()), SLOT(barrier()));
-}
-
-KoResourceLoaderThread::~KoResourceLoaderThread()
-{
 }
 
 void KoResourceLoaderThread::run()

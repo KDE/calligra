@@ -46,12 +46,12 @@ KoDocumentInfoPropsPage::KoDocumentInfoPropsPage(KPropertiesDialog *props,
 {
     d->m_info = new KoDocumentInfo(this);
     d->m_url = props->item().url();
-    d->m_dlg = 0;
+    d->m_dlg = nullptr;
 
     if (!d->m_url.isLocalFile())
         return;
 
-    d->m_dst = 0;
+    d->m_dst = nullptr;
 
     d->m_src = KoStore::createStore(d->m_url.toLocalFile(), KoStore::Read);
 

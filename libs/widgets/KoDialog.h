@@ -172,7 +172,7 @@ public:
     /**
      * Destroys the dialog.
      */
-    ~KoDialog();
+    ~KoDialog() Q_DECL_OVERRIDE;
 
     /**
      * Creates (or recreates) the button box and all the buttons in it.
@@ -821,7 +821,7 @@ protected Q_SLOTS:
     void updateGeometry();
 
 private:
-    KoDialog(KoDialogPrivate &dd, QWidget *parent, Qt::WindowFlags flags = 0);
+    KoDialog(KoDialogPrivate &dd, QWidget *parent, Qt::WindowFlags flags = nullptr);
     KoDialogPrivate *const d_ptr;
 
 private:

@@ -36,9 +36,9 @@ public:
     explicit KoModeBoxDocker(KoModeBox *modeBox);
 
     /// reimplemented from KoCanvasObserverBase
-    virtual QString observerName() const { return QStringLiteral("KoModeBoxDocker"); }
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    QString observerName() const Q_DECL_OVERRIDE { return QStringLiteral("KoModeBoxDocker"); }
+    void setCanvas(KoCanvasBase *canvas) Q_DECL_OVERRIDE;
+    void unsetCanvas() Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     /// Called when the docker changes area

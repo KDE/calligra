@@ -21,14 +21,6 @@
 #include "KoToolBox_p.h"
 #include "KoToolBoxDocker_p.h"
 
-
-KoToolBoxFactory::KoToolBoxFactory()
-{
-}
-
-KoToolBoxFactory::~KoToolBoxFactory() {
-}
-
 QString KoToolBoxFactory::id() const
 {
     return QLatin1String("ToolBox");

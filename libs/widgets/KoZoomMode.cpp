@@ -26,11 +26,11 @@ const char* const KoZoomMode::modes[] =
     I18N_NOOP("%1%"),
     I18N_NOOP("Fit Page Width"),
     I18N_NOOP("Fit Page"),
-    0,
+    nullptr,
     I18N_NOOP("Actual Pixels"),
-    0,
-    0,
-    0,
+    nullptr,
+    nullptr,
+    nullptr,
     I18N_NOOP("Fit Text Width")
 };
 
@@ -46,14 +46,11 @@ KoZoomMode::Mode KoZoomMode::toMode(const QString& mode)
 {
     if(mode == i18n(modes[ZOOM_WIDTH]))
         return ZOOM_WIDTH;
-    else
-    if(mode == i18n(modes[ZOOM_PAGE]))
+    else if(mode == i18n(modes[ZOOM_PAGE]))
         return ZOOM_PAGE;
-    else
-     if(mode == i18n(modes[ZOOM_PIXELS]))
+    else if(mode == i18n(modes[ZOOM_PIXELS]))
         return ZOOM_PIXELS;
-    else
-     if(mode == i18n(modes[ZOOM_TEXT]))
+    else if(mode == i18n(modes[ZOOM_TEXT]))
         return ZOOM_TEXT;
     else
        return ZOOM_CONSTANT;

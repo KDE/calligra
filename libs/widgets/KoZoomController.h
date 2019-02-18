@@ -72,8 +72,8 @@ public:
     KoZoomController(KoCanvasController *controller,
                      KoZoomHandler *zoomHandler,
                      KActionCollection *actionCollection,
-                     KoZoomAction::SpecialButtons specialButtons = 0,
-                     QObject *parent = 0);
+                     KoZoomAction::SpecialButtons specialButtons = nullptr,
+                     QObject *parent = nullptr);
 
     /**
      * A special override for for creation of a zoom controller
@@ -95,11 +95,11 @@ public:
                      KoZoomHandler *zoomHandler,
                      KActionCollection *actionCollection,
                      bool createZoomShortcuts,
-                     KoZoomAction::SpecialButtons specialButtons = 0,
-                     QObject *parent = 0);
+                     KoZoomAction::SpecialButtons specialButtons = nullptr,
+                     QObject *parent = nullptr);
 
     /// destructor
-    ~KoZoomController();
+    ~KoZoomController() Q_DECL_OVERRIDE;
 
     /// returns the zoomAction that is maintained by this controller
     KoZoomAction *zoomAction() const;

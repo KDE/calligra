@@ -34,8 +34,8 @@ class KOWIDGETS_EXPORT KoAbstractResourceServerAdapter : public QObject
 {
     Q_OBJECT
 public:
-    KoAbstractResourceServerAdapter(QObject *parent = 0);
-    virtual ~KoAbstractResourceServerAdapter();
+    KoAbstractResourceServerAdapter(QObject *parent = nullptr);
+    ~KoAbstractResourceServerAdapter() Q_DECL_OVERRIDE = default;
 
     virtual void connectToResourceServer() = 0;
     virtual QList<KoResource*> resources() = 0;
@@ -107,13 +107,13 @@ public:
     }
 
 
-    virtual ~KoResourceServerAdapter()
+    virtual ~KoResourceServerAdapter() Q_DECL_OVERRIDE
     {
         if (m_resourceServer)
             m_resourceServer->removeObserver(this);
     }
 
-    QString serverType() const
+    QString serverType() const Q_DECL_OVERRIDE
     {
         if (m_resourceServer) {
             return m_resourceServer->type();
@@ -126,13 +126,13 @@ public:
         m_resourceServer = 0;
     }
 
-    void connectToResourceServer()
+    void connectToResourceServer() Q_DECL_OVERRIDE
     {
         if (m_resourceServer)
             m_resourceServer->addObserver(this);
     }
 
-    virtual QList<KoResource*> resources()
+    QList<KoResource*> resources() Q_DECL_OVERRIDE
     {
         if (! m_resourceServer)
             return QList<KoResource*>();
@@ -155,7 +155,7 @@ public:
         return m_serverResources;
     }
 
-    bool addResource(KoResource* resource)
+    bool addResource(KoResource* resource) Q_DECL_OVERRIDE
     {
         if (! m_resourceServer)
             return false;
@@ -168,7 +168,7 @@ public:
         return false;
     }
 
-    bool removeResource(KoResource* resource)
+    bool removeResource(KoResource* resource) Q_DECL_OVERRIDE
     {
         if (! m_resourceServer)
             return false;
@@ -183,14 +183,14 @@ public:
         return false;
     }
 
-    void importResourceFile(const QString & filename , bool fileCreation = true)
+    void importResourceFile(const QString & filename , bool fileCreation = true) Q_DECL_OVERRIDE
     {
         if (! m_resourceServer)
             return;
         m_resourceServer->importResourceFile(filename, fileCreation);
     }
 
-    void removeResourceFile(const QString & filename)
+    void removeResourceFile(const QString & filename) Q_DECL_OVERRIDE
     {
         if (!m_resourceServer) {
             return;
@@ -228,86 +228,86 @@ public:
         emitTagCategoryWasRemoved(tag);
     }
 
-    QString extensions() const {
+    QString extensions() const Q_DECL_OVERRIDE {
         if (! m_resourceServer)
             return QString();
 
         return m_resourceServer->extensions();
     }
 
-    void setCurrentTag(const QString& resourceFileNames) {
+    void setCurrentTag(const QString& resourceFileNames) Q_DECL_OVERRIDE {
         serverResourceCacheInvalid(true);
         m_resourceFilter.setCurrentTag(resourceFileNames);
     }
 
-    void enableResourceFiltering(bool enable) {
+    void enableResourceFiltering(bool enable) Q_DECL_OVERRIDE {
         m_enableFiltering = enable;
     }
 
-    void updateServer() {
+    void updateServer() Q_DECL_OVERRIDE{
         emitRemovingResource(0);
     }
 
-    QStringList assignedTagsList(KoResource* resource) {
+    QStringList assignedTagsList(KoResource* resource) Q_DECL_OVERRIDE {
         return m_resourceServer->assignedTagsList(resource);
     }
 
-    QStringList tagNamesList() {
+    QStringList tagNamesList() Q_DECL_OVERRIDE{
         return m_resourceServer->tagNamesList();
     }
 
-    void addTag(const QString& tag) {
+    void addTag(const QString& tag) Q_DECL_OVERRIDE {
         m_resourceServer->addTag(0, tag);
     }
 
-    void addTag(KoResource* resource, const QString& tag) {
+    void addTag(KoResource* resource, const QString& tag) Q_DECL_OVERRIDE {
         m_resourceServer->addTag(resource, tag);
     }
 
-    void deleteTag(KoResource* resource, const QString& tag) {
+    void deleteTag(KoResource* resource, const QString& tag) Q_DECL_OVERRIDE {
         m_resourceServer->delTag(resource, tag);
     }
 
-    void setFilterIncludes(const QStringList& filteredNames) {
+    void setFilterIncludes(const QStringList& filteredNames) Q_DECL_OVERRIDE {
         m_resourceFilter.setInclusions(filteredNames);
     }
 
-    void searchTextChanged(const QString& searchString) {
+    void searchTextChanged(const QString& searchString) Q_DECL_OVERRIDE {
         m_resourceFilter.setFilters(searchString);
         serverResourceCacheInvalid(true);
     }
 
-    QStringList searchTag(const QString& lineEditText) {
+    QStringList searchTag(const QString& lineEditText) Q_DECL_OVERRIDE {
         return m_resourceServer->searchTag(lineEditText);
     }
 
     // called by model to notify server of change
-    void tagCategoryMembersChanged() {
+    void tagCategoryMembersChanged() Q_DECL_OVERRIDE {
         m_resourceServer->tagCategoryMembersChanged();
     }
 
-    void tagCategoryAdded(const QString& tag) {
+    void tagCategoryAdded(const QString& tag) Q_DECL_OVERRIDE {
         m_resourceServer->tagCategoryAdded(tag);
     }
 
-    void tagCategoryRemoved(const QString& tag) {
+    void tagCategoryRemoved(const QString& tag) Q_DECL_OVERRIDE {
         m_resourceServer->tagCategoryRemoved(tag);
     }
 
-    virtual QList<KoResource*> serverResources() {
+    virtual QList<KoResource*> serverResources() Q_DECL_OVERRIDE {
         return m_serverResources;
     }
 
-    void configureFilters(int filterType, bool enable){
+    void configureFilters(int filterType, bool enable) Q_DECL_OVERRIDE {
         m_resourceFilter.configure(filterType,enable);
     }
 
-    void setSortingEnabled(bool value) {
+    void setSortingEnabled(bool value) Q_DECL_OVERRIDE {
         m_sortingEnabled = value;
         serverResourceCacheInvalid(true);
     }
 
-    bool sortingEnabled() const {
+    bool sortingEnabled() const Q_DECL_OVERRIDE {
         return m_sortingEnabled;
     }
 

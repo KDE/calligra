@@ -164,7 +164,7 @@ class Q_DECL_HIDDEN KoFillConfigWidget::Private
 {
 public:
     Private()
-    : canvas(0)
+    : canvas(nullptr)
     {
     }
     /// Apply the gradient stops using the shape background
@@ -174,7 +174,7 @@ public:
             return QSharedPointer<KoShapeBackground>();
         }
 
-        KoGradientBackground *newGradient = 0;
+        KoGradientBackground *newGradient = nullptr;
         QSharedPointer<KoGradientBackground> oldGradient = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
         if (oldGradient) {
             // just copy the gradient and set the new stops
@@ -256,7 +256,7 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     d->colorButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     layout->addWidget(d->colorButton);
 
-    d->noFillAction = new QAction(0);
+    d->noFillAction = new QAction(nullptr);
 
     d->colorAction = new KoColorPopupAction(d->colorButton);
     d->colorAction->setToolTip(i18n("Change the filling color"));
@@ -376,7 +376,7 @@ void KoFillConfigWidget::colorChanged()
     }
 
     QSharedPointer<KoShapeBackground> fill(new KoColorBackground(d->colorAction->currentColor()));
-    KUndo2Command *firstCommand = 0;
+    KUndo2Command *firstCommand = nullptr;
     foreach (KoShape *shape, selectedShapes) {
         if (! firstCommand) {
             firstCommand = new KoShapeBackgroundCommand(shape, fill);
@@ -404,7 +404,7 @@ void KoFillConfigWidget::gradientChanged(QSharedPointer<KoShapeBackground>  back
     QGradientStops newStops = gradientBackground->gradient()->stops();
     gradientBackground.clear();
 
-    KUndo2Command *firstCommand = 0;
+    KUndo2Command *firstCommand = nullptr;
     foreach (KoShape *shape, selectedShapes) {
         QSharedPointer<KoShapeBackground> fill = d->applyFillGradientStops(shape, newStops);
         if (! fill) {

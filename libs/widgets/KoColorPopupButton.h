@@ -38,21 +38,21 @@ public:
      *
      * @param parent parent QWidget
      */
-    explicit KoColorPopupButton(QWidget *parent=0);
+    explicit KoColorPopupButton(QWidget *parent = nullptr);
 
     /**
      * Destructor
      */
-    virtual ~KoColorPopupButton();
+    ~KoColorPopupButton() Q_DECL_OVERRIDE = default;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     /// Emitted when a resource was selected
     void iconSizeChanged();
 
 protected:
-    virtual void resizeEvent(QResizeEvent *); ///< reimplemented from QToolButton
+    void resizeEvent(QResizeEvent *) Q_DECL_OVERRIDE; ///< reimplemented from QToolButton
 };
 
 #endif

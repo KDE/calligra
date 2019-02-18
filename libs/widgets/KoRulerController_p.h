@@ -119,7 +119,7 @@ public:
         if (docVar.isNull())
             return;
         QTextDocument *doc = static_cast<QTextDocument*>(docVar.value<void*>());
-        if (doc == 0)
+        if (doc == nullptr)
             return;
         const int position = resourceManager->intResource(KoText::CurrentTextPosition);
         const int anchor = resourceManager->intResource(KoText::CurrentTextAnchor);
@@ -180,7 +180,7 @@ public:
         if (docVar.isNull())
             return QTextBlock();
         QTextDocument *doc = static_cast<QTextDocument*>(docVar.value<void*>());
-        if (doc == 0)
+        if (doc == nullptr)
             return QTextBlock();
         return doc->findBlock(resourceManager->intResource(KoText::CurrentTextPosition));
     }
@@ -190,7 +190,7 @@ public:
         if (docVar.isNull())
             return false;
         QTextDocument *doc = static_cast<QTextDocument*>(docVar.value<void*>());
-        if (doc == 0)
+        if (doc == nullptr)
             return false;
         return KoTextDocument(doc).relativeTabs();
     }

@@ -24,10 +24,6 @@ KoAbstractResourceServerAdapter::KoAbstractResourceServerAdapter(QObject *parent
 {
 }
 
-KoAbstractResourceServerAdapter::~KoAbstractResourceServerAdapter()
-{
-}
-
 void KoAbstractResourceServerAdapter::emitResourceAdded(KoResource* resource)
 {
     emit resourceAdded(resource);

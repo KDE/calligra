@@ -28,10 +28,10 @@ class KoLineStyleModel : public QAbstractListModel
 {
 Q_OBJECT
 public:
-    explicit KoLineStyleModel(QObject *parent = 0);
-    virtual ~KoLineStyleModel() {}
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    explicit KoLineStyleModel(QObject *parent = nullptr);
+    ~KoLineStyleModel() Q_DECL_OVERRIDE = default;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
 
     /// adds the given style to the model
     bool addCustomStyle(const QVector<qreal> &style);

@@ -150,10 +150,6 @@ KoGradientEditWidget::KoGradientEditWidget(QWidget* parent)
     updateUI();
 }
 
-KoGradientEditWidget::~KoGradientEditWidget()
-{
-}
-
 void KoGradientEditWidget::setupUI()
 {
     QGridLayout* editLayout = new QGridLayout(this);

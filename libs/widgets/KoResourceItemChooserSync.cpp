@@ -36,9 +36,7 @@ KoResourceItemChooserSync::KoResourceItemChooserSync()
     d->baseLength = 50;
 }
 
-KoResourceItemChooserSync::~KoResourceItemChooserSync()
-{
-}
+KoResourceItemChooserSync::~KoResourceItemChooserSync() = default;
 
 KoResourceItemChooserSync* KoResourceItemChooserSync::instance()
 {

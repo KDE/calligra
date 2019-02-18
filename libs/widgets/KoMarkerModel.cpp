@@ -32,10 +32,6 @@ KoMarkerModel::KoMarkerModel(const QList<KoMarker*> markers, KoMarkerData::Marke
 {
 }
 
-KoMarkerModel::~KoMarkerModel()
-{
-}
-
 int KoMarkerModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)

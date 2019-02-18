@@ -26,10 +26,10 @@ class KoLineStyleItemDelegate : public QAbstractItemDelegate
 {
 Q_OBJECT
 public:
-    explicit KoLineStyleItemDelegate(QObject *parent = 0);
-    ~KoLineStyleItemDelegate() {}
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    QSize sizeHint (const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    explicit KoLineStyleItemDelegate(QObject *parent = nullptr);
+    ~KoLineStyleItemDelegate() Q_DECL_OVERRIDE = default;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const Q_DECL_OVERRIDE;
+    QSize sizeHint (const QStyleOptionViewItem &option, const QModelIndex &index) const Q_DECL_OVERRIDE;
 };
 
 #endif

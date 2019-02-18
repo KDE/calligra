@@ -46,7 +46,7 @@ public:
      * @param server the server the resources will be loaded for
      */
     explicit KoResourceLoaderThread(KoResourceServerBase *server);
-    ~KoResourceLoaderThread();
+    ~KoResourceLoaderThread() Q_DECL_OVERRIDE = default;
 public Q_SLOTS:
     /**
      * Checks whether the thread has finished loading and waits
@@ -58,7 +58,7 @@ protected:
     /**
      * Overridden from QThread
      */
-    void run();
+    void run() Q_DECL_OVERRIDE;
 
 private:
 
@@ -76,7 +76,7 @@ class KOWIDGETS_EXPORT KoResourceServerProvider : public QObject
 
 public:
     KoResourceServerProvider();
-    virtual ~KoResourceServerProvider();
+    ~KoResourceServerProvider() Q_DECL_OVERRIDE;
 
     static KoResourceServerProvider* instance();
 

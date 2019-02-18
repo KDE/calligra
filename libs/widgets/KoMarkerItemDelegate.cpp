@@ -32,10 +32,6 @@ KoMarkerItemDelegate::KoMarkerItemDelegate(KoMarkerData::MarkerPosition position
 {
 }
 
-KoMarkerItemDelegate::~KoMarkerItemDelegate()
-{
-}
-
 void KoMarkerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     painter->save();
@@ -52,7 +48,7 @@ void KoMarkerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     pathShape.moveTo(QPointF(option.rect.left(), option.rect.center().y()));
     pathShape.lineTo(QPointF(option.rect.right(), option.rect.center().y()));
     KoMarker *marker = index.data(Qt::DecorationRole).value<KoMarker*>();
-    if (marker != 0) {
+    if (marker != nullptr) {
         pathShape.setMarker(marker, m_position);
     }
 

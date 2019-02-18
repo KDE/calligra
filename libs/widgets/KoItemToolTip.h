@@ -40,7 +40,7 @@ class KOWIDGETS_EXPORT KoItemToolTip : public QFrame
     Q_OBJECT
 public:
     KoItemToolTip();
-    virtual ~KoItemToolTip();
+    ~KoItemToolTip() Q_DECL_OVERRIDE;
     void showTip(QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex &index);
 
 protected:
@@ -75,12 +75,12 @@ private:
     void updatePosition(QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option);
 
 public:
-    virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
 
 protected:
-    virtual void paintEvent(QPaintEvent *e);
-    virtual void timerEvent(QTimerEvent *e);
-    virtual bool eventFilter(QObject *object, QEvent *event);
+    virtual void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+    virtual void timerEvent(QTimerEvent *e) Q_DECL_OVERRIDE;
+    virtual bool eventFilter(QObject *object, QEvent *event) Q_DECL_OVERRIDE;
 };
 
 #endif

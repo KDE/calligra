@@ -35,13 +35,13 @@
 class KOWIDGETS_EXPORT KoToolBoxFactory : public KoDockFactoryBase
 {
 public:
-    explicit KoToolBoxFactory();
-    ~KoToolBoxFactory();
+    explicit KoToolBoxFactory() = default;
+    ~KoToolBoxFactory() Q_DECL_OVERRIDE = default;
 
-    virtual QString id() const;
-    KoDockFactoryBase::DockPosition defaultDockPosition() const;
-    QDockWidget* createDockWidget();
-    virtual bool isCollapsable() const { return false; }
+    QString id() const Q_DECL_OVERRIDE;
+    KoDockFactoryBase::DockPosition defaultDockPosition() const Q_DECL_OVERRIDE;
+    QDockWidget* createDockWidget() Q_DECL_OVERRIDE;
+    virtual bool isCollapsable() const Q_DECL_OVERRIDE { return false; }
 };
 
 #endif

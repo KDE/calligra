@@ -70,8 +70,8 @@ class CapNJoinMenu : public QMenu
 {
 Q_OBJECT
 public:
-    CapNJoinMenu(QWidget *parent = 0);
-    virtual QSize sizeHint() const;
+    CapNJoinMenu(QWidget *parent = nullptr);
+    QSize sizeHint() const Q_DECL_OVERRIDE;
 
     KoUnitDoubleSpinBox *miterLimit;
     QButtonGroup        *capGroup;
@@ -88,7 +88,7 @@ CapNJoinMenu::CapNJoinMenu(QWidget *parent)
     capGroup = new QButtonGroup(this);
     capGroup->setExclusive(true);
 
-    QToolButton *button = 0;
+    QToolButton *button = nullptr;
 
     button = new QToolButton(this);
     button->setIcon(koIcon("stroke-cap-butt"));
@@ -159,7 +159,7 @@ class Q_DECL_HIDDEN KoStrokeConfigWidget::Private
 {
 public:
     Private()
-        : canvas(0),
+        : canvas(nullptr),
         active(true)
     {
     }
@@ -453,7 +453,7 @@ void KoStrokeConfigWidget::applyChanges()
 
 void KoStrokeConfigWidget::applyMarkerChanges(KoMarkerData::MarkerPosition position)
 {
-    KoMarker *marker = 0;
+    KoMarker *marker = nullptr;
     if (position == KoMarkerData::MarkerStart) {
         marker = startMarker();
     }
@@ -470,14 +470,14 @@ void KoStrokeConfigWidget::applyMarkerChanges(KoMarkerData::MarkerPosition posit
 
     const QList<KoShape*> shapeList = selection->selectedShapes();
     QList<KoPathShape*> pathShapeList;
-    for (QList<KoShape*>::ConstIterator itShape = shapeList.begin(); itShape != shapeList.end(); ++itShape) {
-        KoPathShape* pathShape = dynamic_cast<KoPathShape*>(*itShape);
+    for (auto itShape : shapeList) {
+        KoPathShape* pathShape = dynamic_cast<KoPathShape*>(itShape);
         if (pathShape) {
             pathShapeList << pathShape;
         }
     }
 
-    if (pathShapeList.size()) {
+    if (!pathShapeList.empty()) {
         KoPathShapeMarkerCommand* cmdMarker = new KoPathShapeMarkerCommand(pathShapeList, marker, position);
         canvasController->canvas()->addCommand(cmdMarker);
     }

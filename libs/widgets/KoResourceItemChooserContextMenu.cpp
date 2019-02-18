@@ -34,10 +34,10 @@ KoLineEditAction::KoLineEditAction(QObject* parent)
     : QWidgetAction(parent)
     , m_closeParentOnTrigger(false)
 {
-    QWidget* pWidget = new QWidget (NULL);
+    QWidget* pWidget = new QWidget (nullptr);
     QHBoxLayout* pLayout = new QHBoxLayout();
-    m_label = new QLabel(NULL);
-    m_editBox = new KLineEdit(NULL);
+    m_label = new QLabel(nullptr);
+    m_editBox = new KLineEdit(nullptr);
     pLayout->addWidget(m_label);
     pLayout->addWidget(m_editBox);
     pWidget->setLayout(pLayout);
@@ -45,11 +45,6 @@ KoLineEditAction::KoLineEditAction(QObject* parent)
 
     connect (m_editBox, SIGNAL(returnPressed(QString)),
              this, SLOT(onTriggered(QString)));
-}
-
-KoLineEditAction::~KoLineEditAction()
-{
-
 }
 
 void KoLineEditAction::setIcon(const QIcon &icon)
@@ -113,18 +108,10 @@ ContextMenuExistingTagAction::ContextMenuExistingTagAction(KoResource* resource,
              this, SLOT(onTriggered()));
 }
 
-ContextMenuExistingTagAction::~ContextMenuExistingTagAction()
-{
-}
-
 void ContextMenuExistingTagAction::onTriggered()
 {
     emit triggered(m_resource, m_tag);
 }
-NewTagAction::~NewTagAction()
-{
-}
-
 NewTagAction::NewTagAction(KoResource* resource, QMenu* parent)
     :KoLineEditAction (parent)
 {
@@ -205,9 +192,4 @@ KoResourceItemChooserContextMenu::KoResourceItemChooserContextMenu(KoResource* r
     connect(addTagAction, SIGNAL(triggered(KoResource*,QString)),
             this, SIGNAL(resourceAssignmentToNewTagRequested(KoResource*,QString)));
     assignableTagsMenu->addAction(addTagAction);
-}
-
-KoResourceItemChooserContextMenu::~KoResourceItemChooserContextMenu()
-{
-
 }
