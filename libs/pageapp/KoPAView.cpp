@@ -135,6 +135,8 @@ public:
 
     KoZoomAction  *zoomAction;
 
+    KToggleAction *showPageMargins;
+
     KoFind *find;
 
     KoPAViewMode *viewModeNormal;
@@ -389,6 +391,12 @@ void KoPAView::initActions()
     connect(d->viewRulers, SIGNAL(triggered(bool)), proxyObject, SLOT(setShowRulers(bool)));
     setShowRulers(d->doc->rulersVisible());
 
+    d->showPageMargins  = new KToggleAction(i18n("Show Page Margins"), this);
+    actionCollection()->addAction("view_page_margins", d->showPageMargins);
+    d->showPageMargins->setToolTip(i18n("Show/hide the page margins"));
+    connect(d->showPageMargins, SIGNAL(toggled(bool)), SLOT(setShowPageMargins(bool)));
+    setShowPageMargins(d->doc->showPageMargins());
+
     d->actionInsertPage = new QAction(koIcon("document-new"), i18n("Insert Page"), this);
     actionCollection()->addAction( "page_insertpage", d->actionInsertPage );
     d->actionInsertPage->setToolTip( i18n( "Insert a new page after the current one" ) );
@@ -478,6 +486,13 @@ KoRuler* KoPAView::horizontalRuler()
 KoRuler* KoPAView::verticalRuler()
 {
     return d->verticalRuler;
+}
+
+void KoPAView::setShowPageMargins(bool state)
+{
+    d->showPageMargins->setChecked(state);
+    d->canvas->setShowPageMargins(state);
+    d->doc->setShowPageMargins(state);
 }
 
 KoZoomController* KoPAView::zoomController() const

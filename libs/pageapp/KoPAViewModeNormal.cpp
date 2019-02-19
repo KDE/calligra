@@ -232,6 +232,9 @@ void KoPAViewModeNormal::changePageLayout( const KoPageLayout &pageLayout, bool 
 
 void KoPAViewModeNormal::paintMargins( QPainter &painter, const KoViewConverter &converter )
 {
+    if (!canvas()->showPageMargins()) {
+        return;
+    }
     KoPAPageBase *page = m_view->activePage();
     KoPageLayout pl = page->pageLayout();
 

@@ -71,6 +71,7 @@ public:
     QPointer<KoUpdater> odfMasterPageProgressUpdater;
     QPointer<KoUpdater> odfPageProgressUpdater;
     QString defaultStylesResourcePath;
+    bool showPageMargins;
 };
 
 KoPADocument::KoPADocument(KoPart *part)
@@ -770,11 +771,15 @@ void KoPADocument::loadConfig()
         gridData().setGridColor( color );
     }
 
+    d->showPageMargins = true;
     if( config->hasGroup( "Interface" ) )
     {
         KConfigGroup configGroup = config->group( "Interface" );
         bool showRulers = configGroup.readEntry<bool>( "ShowRulers", true);
         setRulersVisible(showRulers);
+
+        bool showPageMargins = configGroup.readEntry<bool>( "ShowPageMargins", true);
+        setShowPageMargins(showPageMargins);
     }
 }
 
@@ -821,6 +826,13 @@ void KoPADocument::saveConfig()
         configGroup.revertToDefault("ShowRulers");
     else
         configGroup.writeEntry("ShowRulers", showRulers);
+
+    bool showMargins = showPageMargins();
+    if ((showMargins == true) && !configGroup.hasDefault("ShowPageMargins")) {
+        configGroup.revertToDefault("ShowPageMargins");
+    } else {
+        configGroup.writeEntry("ShowPageMargins", showMargins);
+    }
 }
 
 void KoPADocument::setRulersVisible(bool visible)
@@ -869,4 +881,14 @@ void KoPADocument::updateDocumentURL()
         KoInlineTextObjectManager *om = var.value<KoInlineTextObjectManager*>();
         om->setProperty(KoInlineObject::DocumentURL, url().url(QUrl::PreferLocalFile));
     }
+}
+
+void KoPADocument::setShowPageMargins(bool state)
+{
+    d->showPageMargins = state;
+}
+
+bool KoPADocument::showPageMargins() const
+{
+    return d->showPageMargins;
 }

@@ -220,6 +220,9 @@ public Q_SLOTS:
     /// Make sure the canvas size matches the content
     void updateCanvasSize(bool forceUpdate = false);
 
+    /// Show/hide page margins
+    void setShowPageMargins(bool state);
+
 protected Q_SLOTS:
 
     void pageUpdated(KoPAPageBase* page);

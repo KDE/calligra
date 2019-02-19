@@ -230,6 +230,9 @@ public:
     void setDefaultStylesResourcePath(const QString &defaultStylesResourcePath);
     QString defaultStylesResourcePath() const;
 
+    void setShowPageMargins(bool state);
+    bool showPageMargins() const;
+
 public Q_SLOTS:
     /// reimplemented
     virtual void initEmpty();

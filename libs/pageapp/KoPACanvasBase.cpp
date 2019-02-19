@@ -39,6 +39,7 @@ public:
     , shapeManager(0)
     , masterShapeManager(0)
     , toolProxy(0)
+    , showPageMargins(false)
     {}
 
     ~Private()
@@ -60,6 +61,7 @@ public:
     KoShapeManager * masterShapeManager;
     KoToolProxy * toolProxy;
     QPoint documentOffset;
+    bool showPageMargins;
 };
 
 KoPACanvasBase::KoPACanvasBase( KoPADocument * doc )
@@ -185,4 +187,14 @@ void KoPACanvasBase::paint(QPainter &painter, const QRectF &paintRect) {
         static_cast<KoPAPageProvider*>(var.value<void*>())->setPageData(pageNumber, activePage);
         d->view->viewMode()->paint(this, painter, paintRect);
     }
+}
+
+void KoPACanvasBase::setShowPageMargins(bool state)
+{
+    d->showPageMargins = state;
+}
+
+bool KoPACanvasBase::showPageMargins() const
+{
+    return d->showPageMargins;
 }
