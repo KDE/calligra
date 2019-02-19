@@ -1,5 +1,5 @@
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<gui name="stage" version="124" translationDomain="calligrastage">
+<gui name="stage" version="125" translationDomain="calligrastage">
     <MenuBar>
         <Menu name="file">
             <Action name="file_export_html" />
@@ -35,6 +35,7 @@
             <Separator/>
             <Action name="view_masterpages"/>
             <Separator/>
+            <Action name="view_page_margins"/>
             <Action name="view_rulers"/>
             <Action name="view_grid"/>
             <Action name="view_snaptogrid"/>
